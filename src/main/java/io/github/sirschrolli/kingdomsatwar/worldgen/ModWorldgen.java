@@ -2,6 +2,8 @@ package io.github.sirschrolli.kingdomsatwar.worldgen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -14,7 +16,10 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.TrapezoidInt;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -160,6 +165,10 @@ public final class ModWorldgen {
         }
     }
 
+    /** Biom-Modifikator für das Erscheinen der Banditen. */
+    public static final ResourceKey<BiomeModifier> BANDIT_SPAWNS =
+            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("add_bandit_spawns"));
+
     public static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> context) {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
@@ -177,5 +186,12 @@ public final class ModWorldgen {
                     HolderSet.direct(placed.getOrThrow(patch.placedKey())),
                     GenerationStep.Decoration.VEGETAL_DECORATION));
         }
+
+        // Banditen: nachts unter freiem Himmel, in kleinen Gruppen
+        context.register(BANDIT_SPAWNS, new BiomeModifiers.AddSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_BANDITS),
+                WeightedList.<MobSpawnSettings.SpawnerData>builder()
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.BANDIT.get(), UniformInt.of(2, 3)), 8)
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.BANDIT_ARCHER.get(), UniformInt.of(1, 2)), 5)
+                        .build()));
     }
 }

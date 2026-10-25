@@ -1,10 +1,13 @@
 package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -94,6 +97,17 @@ public final class ModGameTests {
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_BREATH =
             TEST_FUNCTIONS.register("dragon_breath", () -> ModGameTests::dragonBreath);
 
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_RECRUIT =
+            TEST_FUNCTIONS.register("soldier_recruit", () -> ModGameTests::soldierRecruit);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_FIGHTS =
+            TEST_FUNCTIONS.register("soldier_fights", () -> ModGameTests::soldierFights);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_ALLIES =
+            TEST_FUNCTIONS.register("soldier_allies", () -> ModGameTests::soldierAllies);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_HOLDS_POST =
+            TEST_FUNCTIONS.register("soldier_holds_post", () -> ModGameTests::soldierHoldsPost);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BANDIT_LOOT =
+            TEST_FUNCTIONS.register("bandit_loot", () -> ModGameTests::banditLoot);
+
     private ModGameTests() {}
 
     /** Wird nur auf dem Test-Server bzw. in der Entwicklungsumgebung ausgelöst. */
@@ -106,7 +120,8 @@ public final class ModGameTests {
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH)) {
+                List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
+                        SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -171,7 +186,8 @@ public final class ModGameTests {
         var recipes = helper.getLevel().getServer().getRecipeManager().recipeMap();
         for (String name : List.of("steel_blend", "steel_ingot_from_blasting", "dragon_egg_fragment", "fire_dragon_egg",
                 "medieval_stone_stairs", "red_roof_tile_stairs", "konterit_block", "vegetable_stew",
-                "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore")) {
+                "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore", "recruitment_table",
+                "command_baton")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
@@ -370,6 +386,93 @@ public final class ModGameTests {
             helper.assertTrue(target.getHealth() < target.getMaxHealth() || !target.isAlive(), "Ziel nimmt keinen Schaden");
             helper.assertTrue(target.getRemainingFireTicks() > 0 || !target.isAlive(), "Ziel brennt nicht");
         });
+    }
+
+    /** Am Rekrutierungstisch wirbt man Soldaten gegen ihren Preis an; ohne genug Smaragde geht es nicht. */
+    private static void soldierRecruit(GameTestHelper helper) {
+        arenaFloor(helper);
+        BlockPos table = new BlockPos(4, 1, 4);
+        helper.setBlock(table, ModBlocks.RECRUITMENT_TABLE.get());
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Vec3 stand = helper.absoluteVec(new Vec3(4.5, 1, 1.5));
+        player.snapTo(stand.x, stand.y, stand.z, 0.0f, 0.0f);
+        player.getInventory().add(new ItemStack(Items.EMERALD, 5));
+        BlockPos tablePos = helper.absolutePos(table);
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.RECRUITED,
+                "Schwertkämpfer lässt sich nicht anwerben");
+        helper.assertValueEqual(player.getInventory().countItem(Items.EMERALD), 0, "Smaragde nach dem Anwerben");
+        SoldierEntity soldier = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get());
+        helper.assertTrue(soldier.isOwnedBy(player), "Soldat gehört nicht dem Spieler");
+        helper.assertTrue(soldier.getMainHandItem().is(Items.IRON_SWORD), "Soldat hat kein Schwert");
+        helper.assertTrue(soldier.hasCustomName(), "Soldat hat keinen Namen");
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.NOT_ENOUGH,
+                "Anwerben ohne Smaragde muss scheitern");
+        // Ritter brauchen zusätzlich zwei Stahlbarren
+        player.getInventory().add(new ItemStack(Items.EMERALD, 12));
+        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.NOT_ENOUGH,
+                "Ritter ohne genug Stahl darf nicht erscheinen");
+        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.RECRUITED,
+                "Ritter lässt sich nicht anwerben");
+        SoldierEntity knight = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get());
+        helper.assertTrue(knight.getOffhandItem().is(Items.SHIELD), "Ritter hat keinen Schild");
+        // zu weit weg
+        player.snapTo(stand.x + 30, stand.y, stand.z, 0.0f, 0.0f);
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.TOO_FAR,
+                "Anwerben aus der Ferne muss scheitern");
+        helper.succeed();
+    }
+
+    /** Ein Ritter besiegt einen Wüstenzombie, der ihm zu nahe kommt. */
+    private static void soldierFights(GameTestHelper helper) {
+        arenaFloor(helper);
+        SoldierEntity knight = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(2, 1, 4));
+        knight.equip();
+        var husk = helper.spawn(EntityTypes.HUSK, new BlockPos(6, 1, 4));
+        helper.succeedWhen(() -> helper.assertTrue(!husk.isAlive(), "Der Zombie lebt noch"));
+    }
+
+    /** Soldaten verletzen weder ihren Besitzer noch einander; der Besitzer kann seine Soldaten nicht schlagen. */
+    private static void soldierAllies(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        Player owner = helper.makeMockPlayer(GameType.SURVIVAL);
+        SoldierEntity archer = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get(), new BlockPos(2, 1, 2));
+        SoldierEntity swordsman = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(6, 1, 6));
+        archer.setOwner(owner);
+        swordsman.setOwner(owner);
+        helper.assertTrue(archer.isAlliedTo(swordsman) && swordsman.isAlliedTo(owner), "Soldaten sind nicht verbündet");
+        float health = swordsman.getHealth();
+        swordsman.hurtServer(level, level.damageSources().mobAttack(archer), 6.0f);
+        swordsman.hurtServer(level, level.damageSources().playerAttack(owner), 6.0f);
+        helper.assertValueEqual(swordsman.getHealth(), health, "Leben des Schwertkämpfers nach Angriffen von Verbündeten");
+        float ownerHealth = owner.getHealth();
+        owner.hurtServer(level, level.damageSources().mobAttack(archer), 4.0f);
+        helper.assertValueEqual(owner.getHealth(), ownerHealth, "Leben des Besitzers nach einem Treffer des eigenen Soldaten");
+        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 6));
+        helper.assertTrue(swordsman.canAttack(zombie) && !swordsman.canAttack(archer), "Freund und Feind verwechselt");
+        helper.succeed();
+    }
+
+    /** Wer Stellung halten soll, geht zu seinem Posten und bleibt dort. */
+    private static void soldierHoldsPost(GameTestHelper helper) {
+        arenaFloor(helper);
+        SoldierEntity soldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(1, 1, 1));
+        BlockPos post = helper.absolutePos(new BlockPos(7, 1, 7));
+        soldier.setMode(SoldierEntity.MODE_HOLD, post);
+        helper.succeedWhen(() -> helper.assertTrue(soldier.blockPosition().closerThan(post, 1.6),
+                "Soldat ist nicht an seinem Posten: " + soldier.blockPosition()));
+    }
+
+    /** Banditen haben eine Beute-Tabelle mit Smaragden. */
+    private static void banditLoot(GameTestHelper helper) {
+        var registries = helper.getLevel().getServer().reloadableRegistries();
+        for (var type : List.of(ModEntities.BANDIT.get(), ModEntities.BANDIT_ARCHER.get())) {
+            ResourceKey<LootTable> key = type.getDefaultLootTable().orElseThrow();
+            helper.assertTrue(registries.getLootTable(key) != LootTable.EMPTY, "Beute fehlt: " + key.identifier());
+        }
+        helper.succeed();
     }
 
     // =====================================================================================

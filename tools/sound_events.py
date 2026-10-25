@@ -127,6 +127,35 @@ EVENTS: dict[str, dict] = {
         v("liquid/heavy_splash", 0, pitch=1.1),
         v("mob/glow_squid/squirt", 3, pitch=0.6),
     ),
+    # --- Soldaten und Banditen ---
+    "entity.soldier.hurt": event(
+        "entity.soldier.hurt",
+        v("damage/hit", 3),
+    ),
+    "entity.soldier.death": event(
+        "entity.soldier.death",
+        v("damage/hit", 3, pitch=0.85),
+    ),
+    "entity.soldier.armor": event(
+        "entity.soldier.armor",
+        v("block/chain/step", 6, volume=0.6),
+    ),
+    "entity.bandit.ambient": event(
+        "entity.bandit.ambient",
+        v("mob/pillager/idle", 4, pitch=0.92),
+    ),
+    "entity.bandit.hurt": event(
+        "entity.bandit.hurt",
+        v("mob/pillager/hurt", 3, pitch=0.92),
+    ),
+    "entity.bandit.death": event(
+        "entity.bandit.death",
+        v("mob/pillager/death", 2, pitch=0.92),
+    ),
+    "item.command_baton.command": event(
+        "item.command_baton.command",
+        v("note/bell", 0, pitch=1.19, volume=0.6),
+    ),
     # --- Dracheneier ---
     "block.dragon_egg.crack": event(
         "block.dragon_egg.crack",

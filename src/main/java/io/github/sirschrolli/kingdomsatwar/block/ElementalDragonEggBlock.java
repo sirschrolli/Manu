@@ -58,7 +58,7 @@ import org.jspecify.annotations.Nullable;
 public class ElementalDragonEggBlock extends Block implements SimpleWaterloggedBlock {
     public static final IntegerProperty HATCH = IntegerProperty.create("hatch", 0, 3);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    private static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
+    private static final VoxelShape SHAPE = Block.box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
     private final DragonType dragonType;
 

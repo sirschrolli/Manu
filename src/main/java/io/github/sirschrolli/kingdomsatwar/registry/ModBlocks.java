@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ModCropBlock;
+import io.github.sirschrolli.kingdomsatwar.block.RecruitmentTableBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,7 @@ public final class ModBlocks {
     static final List<Supplier<? extends ItemLike>> RESOURCE_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> DRAGON_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> FARMING_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> KINGDOM_TAB = new ArrayList<>();
 
     private static final List<BuildingSet> BUILDING_SETS_MUTABLE = new ArrayList<>();
     /** Alle Baustoff-Sets (Vollblock, Treppe, Stufe, Mauer). */
@@ -199,6 +201,18 @@ public final class ModBlocks {
         flowers.put(FROST_FLOWER, POTTED_FROST_FLOWER);
         FLOWERS = Collections.unmodifiableMap(flowers);
     }
+
+    // =====================================================================================
+    // Kingdoms at War – Armee
+    // =====================================================================================
+
+    /** Hier wirbt man Soldaten an. */
+    public static final DeferredBlock<RecruitmentTableBlock> RECRUITMENT_TABLE = blockWithItem("recruitment_table",
+            RecruitmentTableBlock::new,
+            p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5f).sound(SoundType.WOOD)
+                    .noOcclusion().ignitedByLava(),
+            ip -> ip.component(DataComponents.LORE, ModItems.lore("recruitment_table", 2)),
+            KINGDOM_TAB);
 
     private ModBlocks() {}
 

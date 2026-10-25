@@ -40,6 +40,35 @@ public class ModRecipeProvider extends RecipeProvider {
         resourceRecipes();
         dragonRecipes();
         foodRecipes();
+        armyRecipes();
+    }
+
+    // =====================================================================================
+    // Armee
+    // =====================================================================================
+
+    private void armyRecipes() {
+        // Rekrutierungstisch: Buch und Smaragde auf einem Holztisch
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.RECRUITMENT_TABLE.get())
+                .pattern("EBE")
+                .pattern("PPP")
+                .pattern("S S")
+                .define('E', Items.EMERALD)
+                .define('B', Items.BOOK)
+                .define('P', ItemTags.PLANKS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_emerald", has(Items.EMERALD))
+                .save(output, key("recruitment_table"));
+        // Kommandostab: Goldknauf, blaues Band, Stab
+        shaped(RecipeCategory.TOOLS, ModItems.COMMAND_BATON.get())
+                .pattern(" G")
+                .pattern("DS")
+                .pattern("S ")
+                .define('G', Items.GOLD_INGOT)
+                .define('D', Items.DYE.blue())
+                .define('S', Items.STICK)
+                .unlockedBy("has_recruitment_table", has(ModBlocks.RECRUITMENT_TABLE.get()))
+                .save(output, key("command_baton"));
     }
 
     // =====================================================================================

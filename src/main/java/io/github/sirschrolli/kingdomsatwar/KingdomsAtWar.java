@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar;
 
 import com.mojang.logging.LogUtils;
 import io.github.sirschrolli.kingdomsatwar.config.ModClientConfig;
+import io.github.sirschrolli.kingdomsatwar.config.ModServerConfig;
 import io.github.sirschrolli.kingdomsatwar.gametest.ModGameTests;
 import io.github.sirschrolli.kingdomsatwar.registry.ModAttachments;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
@@ -43,8 +44,10 @@ public final class KingdomsAtWar {
 
         modBus.addListener(ModGameTests::registerTests);
         modBus.addListener(ModEntities::registerAttributes);
+        modBus.addListener(ModEntities::registerSpawnPlacements);
         modBus.addListener(this::commonSetup);
         container.registerConfig(ModConfig.Type.CLIENT, ModClientConfig.SPEC);
+        container.registerConfig(ModConfig.Type.SYNCED, ModServerConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

@@ -47,6 +47,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME.get());
         dropSelf(ModBlocks.TIMBER_FRAME_DIAGONAL.get());
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
+        dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
 
         // Erze: mit Behutsamkeit der Erzblock, sonst der Rohstoff (Glück erhöht die Menge)
         ore(ModBlocks.CARBON_ORE, ModItems.CARBON.get());

@@ -1,11 +1,15 @@
 package io.github.sirschrolli.kingdomsatwar.client.dev;
 
+import io.github.sirschrolli.kingdomsatwar.client.army.RecruitScreen;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroController;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScreen;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
@@ -66,6 +70,8 @@ final class Showcase {
                 case "intro" -> intro(steps);
                 case "items" -> items(steps);
                 case "dragons" -> dragons(steps);
+                case "soldiers" -> soldiers(steps);
+                case "eggs" -> eggs(steps);
                 default -> { }
             }
         }
@@ -218,7 +224,7 @@ final class Showcase {
         steps.add(Step.waitTicks(20));
         steps.add(Step.once(minecraft -> IntroController.request()));
         steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen, 200));
-        double[] times = {3.5, 12.0, 24.0, 31.0, 47.0, 62.0, 70.5};
+        double[] times = {3.5, 10.0, 17.0, 23.0, 29.0, 35.0, 42.0, 48.0, 54.5, 58.0, 63.0, 70.5};
         for (int i = 0; i < times.length; i++) {
             double at = times[i];
             steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at, 2400));
@@ -376,6 +382,187 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
+    /** Die sechs Dracheneier neben dem echten Drachenei, aus Spielersicht. */
+    private static void eggs(Deque<Step> steps) {
+        int oz = 100;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-6, ground - 1, oz - 6), new BlockPos(18, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 6), new BlockPos(18, ground + 4, oz + 8), Blocks.AIR.defaultBlockState());
+            level.setBlock(new BlockPos(0, ground, oz), Blocks.DRAGON_EGG.defaultBlockState(), Block.UPDATE_CLIENTS);
+            int x = 2;
+            for (DragonType type : DragonType.values()) {
+                level.setBlock(new BlockPos(x, ground, oz), ModBlocks.DRAGON_EGGS.get(type).get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                x += 2;
+            }
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.hud(false));
+        steps.add(tp(6.5, 1.62, oz + 5.5, 180, 18));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("eggs_player_view"));
+        steps.add(tp(3.5, 1.2, oz + 2.6, 180, 20));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("eggs_close"));
+        steps.add(Step.hud(true));
+    }
+
+    /** Soldaten aller Arten und Gesichter, Banditen, Gesten, ein Gefecht und das Anwerbe-Fenster. */
+    private static void soldiers(Deque<Step> steps) {
+        int oz = -60;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-10, ground - 1, oz - 30), new BlockPos(40, ground - 1, oz + 14), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-10, ground, oz - 30), new BlockPos(40, ground + 6, oz + 14), Blocks.AIR.defaultBlockState());
+            // Reihe 1: Schwertkämpfer und Bogenschützen (alle Gesichter), Blick nach Süden zur Kamera
+            int x = 0;
+            for (SoldierType type : List.of(SoldierType.SWORDSMAN, SoldierType.ARCHER)) {
+                for (int v = 0; v < type.variants(); v++) {
+                    spawnSoldier(level, type, v, x, oz, 0, s -> { });
+                    x += 2;
+                }
+            }
+            // Reihe 2: Ritter, Hauptleute, Banditen
+            x = 0;
+            for (SoldierType type : List.of(SoldierType.KNIGHT, SoldierType.CAPTAIN)) {
+                for (int v = 0; v < type.variants(); v++) {
+                    spawnSoldier(level, type, v, x, oz - 6, 0, s -> { });
+                    x += 2;
+                }
+            }
+            for (boolean archer : new boolean[] {false, true}) {
+                for (int v = 0; v < BanditEntity.VARIANTS; v++) {
+                    BanditEntity bandit = (archer ? ModEntities.BANDIT_ARCHER : ModEntities.BANDIT).get()
+                            .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                    bandit.setVariant(v);
+                    bandit.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND,
+                            new net.minecraft.world.item.ItemStack(archer ? net.minecraft.world.item.Items.BOW : net.minecraft.world.item.Items.IRON_AXE));
+                    bandit.setNoAi(true);
+                    bandit.snapTo(x + 0.5, ground, oz - 12 + 0.5, 0, 0);
+                    bandit.setYBodyRot(0);
+                    bandit.setYHeadRot(0);
+                    bandit.setPersistenceRequired();
+                    level.addFreshEntity(bandit);
+                    x += 2;
+                }
+            }
+            // Reihe 3: Gesten und Kampfhaltungen
+            spawnSoldier(level, SoldierType.CAPTAIN, 0, 0, oz - 18, 0, s -> { });
+            spawnSoldier(level, SoldierType.SWORDSMAN, 0, 2, oz - 18, 0, s -> { });
+            spawnSoldier(level, SoldierType.KNIGHT, 1, 4, oz - 18, 0, s -> s.startUsingItem(net.minecraft.world.InteractionHand.OFF_HAND));
+            spawnSoldier(level, SoldierType.ARCHER, 0, 6, oz - 18, 0, s -> {
+                s.setAggressive(true);
+                s.startUsingItem(net.minecraft.world.InteractionHand.MAIN_HAND);
+            });
+            // Rekrutierungstisch
+            level.setBlock(new BlockPos(30, ground, oz), ModBlocks.RECRUITMENT_TABLE.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.RecruitmentTableBlock.FACING, Direction.SOUTH), Block.UPDATE_ALL);
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(7.0, 1.7, oz + 7.0, 180, 6));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("soldiers_line_1"));
+        steps.add(tp(7.0, 1.7, oz - 7.0 + 0.0, 0, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("soldiers_back_1"));
+        steps.add(tp(4.0, 1.7, oz + 1.0, 180, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("soldiers_line_2"));
+        steps.add(tp(15.0, 1.7, oz - 5.5, 180, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("soldiers_bandits"));
+        // Gesten: Salut und Jubel, Schild, Bogen
+        steps.add(tp(3.5, 1.6, oz - 13.5, 180, 4));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> level.getEntitiesOfClass(SoldierEntity.class,
+                new net.minecraft.world.phys.AABB(-1, ground - 1, oz - 19, 3, ground + 3, oz - 17)).forEach(s -> {
+                    if (s.getSoldierType() == SoldierType.CAPTAIN) {
+                        s.salute();
+                    } else {
+                        s.cheer();
+                    }
+                })));
+        steps.add(Step.waitTicks(5));
+        steps.add(Step.screenshot("soldiers_gestures_a"));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("soldiers_gestures"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("soldiers_gestures_c"));
+        // Rückansicht der Zusatzteile (Umhang, Feder, Köcher)
+        steps.add(tp(3.5, 1.9, oz - 22.0, 0, 6));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("soldiers_gestures_back"));
+        // Gefecht: vier Soldaten gegen vier Banditen
+        steps.add(Step.server(level -> {
+            int bx = 14;
+            int bz = oz - 24;
+            SoldierType[] army = {SoldierType.KNIGHT, SoldierType.SWORDSMAN, SoldierType.CAPTAIN, SoldierType.ARCHER};
+            for (int i = 0; i < army.length; i++) {
+                SoldierEntity soldier = ModEntities.SOLDIERS.get(army[i]).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                soldier.equip();
+                soldier.setVariant(i % army[i].variants());
+                soldier.snapTo(bx + i * 2 + 0.5, ground, bz + 0.5 + (army[i] == SoldierType.ARCHER ? -3 : 0), 0, 0);
+                soldier.setPersistenceRequired();
+                level.addFreshEntity(soldier);
+            }
+            for (int i = 0; i < 4; i++) {
+                BanditEntity bandit = (i == 3 ? ModEntities.BANDIT_ARCHER : ModEntities.BANDIT).get()
+                        .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                bandit.setVariant(i % BanditEntity.VARIANTS);
+                bandit.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND,
+                        new net.minecraft.world.item.ItemStack(i == 3 ? net.minecraft.world.item.Items.BOW : net.minecraft.world.item.Items.IRON_AXE));
+                bandit.snapTo(bx + i * 2 + 0.5, ground, bz + 9.5, 180, 0);
+                bandit.setPersistenceRequired();
+                level.addFreshEntity(bandit);
+            }
+        }));
+        steps.add(tp(25.0, 4.0, oz - 19.5, 125, 18));
+        steps.add(Step.waitTicks(45));
+        steps.add(Step.screenshot("soldiers_battle_1"));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("soldiers_battle_2"));
+        // Rekrutierungstisch und Anwerbe-Fenster
+        steps.add(tp(30.5, 1.4, oz + 2.6, 180, 32));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("recruitment_table"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.hud(true));
+        steps.add(Step.screen(minecraft -> new RecruitScreen(new BlockPos(30, ground, oz), 32)));
+        steps.add(Step.waitTicks(15));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(5));
+        steps.add(Step.screenshot("recruit_screen_1"));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof RecruitScreen screen) {
+                screen.select(SoldierType.KNIGHT);
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("recruit_screen_2"));
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.waitTicks(5));
+    }
+
+    private static void spawnSoldier(ServerLevel level, SoldierType type, int variant, int x, int z, float yaw,
+            java.util.function.Consumer<SoldierEntity> setup) {
+        SoldierEntity soldier = ModEntities.SOLDIERS.get(type).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        if (soldier == null) {
+            return;
+        }
+        soldier.equip();
+        soldier.setVariant(variant);
+        soldier.giveRandomName();
+        soldier.setNoAi(true);
+        soldier.snapTo(x + 0.5, ground, z + 0.5, yaw, 0);
+        soldier.setYBodyRot(yaw);
+        soldier.setYHeadRot(yaw);
+        level.addFreshEntity(soldier);
+        setup.accept(soldier);
+    }
+
     private static void spawnDragon(ServerLevel level, DragonType type, DragonStage stage, BlockPos pos, float yaw,
             java.util.function.Consumer<DragonEntity> setup) {
         DragonEntity dragon = ModEntities.DRAGONS.get(type).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
@@ -397,8 +584,8 @@ final class Showcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.waitTicks(10));
         List<CreativeModeTab> tabs = List.of(ModCreativeTabs.BUILDING.get(), ModCreativeTabs.RESOURCES.get(),
-                ModCreativeTabs.DRAGONS.get(), ModCreativeTabs.FARMING.get());
-        String[] names = {"tab_building", "tab_resources", "tab_dragons", "tab_farming"};
+                ModCreativeTabs.DRAGONS.get(), ModCreativeTabs.FARMING.get(), ModCreativeTabs.KINGDOM.get());
+        String[] names = {"tab_building", "tab_resources", "tab_dragons", "tab_farming", "tab_kingdom"};
         for (int i = 0; i < tabs.size(); i++) {
             CreativeModeTab tab = tabs.get(i);
             steps.add(Step.screen(minecraft -> new CreativeModeInventoryScreen(minecraft.player,

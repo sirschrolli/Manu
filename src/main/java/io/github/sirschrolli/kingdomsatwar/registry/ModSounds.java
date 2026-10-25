@@ -31,6 +31,15 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> DRAGON_EGG_HATCH = register("block.dragon_egg.hatch");
     public static final Map<DragonType, DeferredHolder<SoundEvent, SoundEvent>> DRAGON_BREATH = new EnumMap<>(DragonType.class);
 
+    // ---------------------------------------------------------------- Soldaten und Banditen
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOLDIER_HURT = register("entity.soldier.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOLDIER_DEATH = register("entity.soldier.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOLDIER_ARMOR = register("entity.soldier.armor");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BANDIT_AMBIENT = register("entity.bandit.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BANDIT_HURT = register("entity.bandit.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BANDIT_DEATH = register("entity.bandit.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> COMMAND_BATON = register("item.command_baton.command");
+
     static {
         for (DragonType type : DragonType.values()) {
             DRAGON_BREATH.put(type, register("entity.dragon.breath." + type.id()));

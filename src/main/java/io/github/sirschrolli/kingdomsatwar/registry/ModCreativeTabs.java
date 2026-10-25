@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Die vier Kreativ-Tabs – passend zu den vier Konzeptbildern.
+ * Die Kreativ-Tabs der Mod.
  */
 public final class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, KingdomsAtWar.MODID);
@@ -56,6 +56,17 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> {
                         accept(output, ModItems.FARMING_TAB);
                         accept(output, ModBlocks.FARMING_TAB);
+                    })
+                    .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> KINGDOM = TABS.register("kingdom",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.kingdom"))
+                    .icon(() -> ModItems.COMMAND_BATON.toStack())
+                    .withTabsBefore(FARMING.key())
+                    .displayItems((parameters, output) -> {
+                        accept(output, ModBlocks.KINGDOM_TAB);
+                        accept(output, ModItems.KINGDOM_TAB);
                     })
                     .build());
 

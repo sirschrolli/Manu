@@ -81,10 +81,14 @@ public class ModModelProvider extends ModelProvider {
 
     /** Risse eines brütenden Eis (dunkler Rand) und das leuchtende Innere. */
     private static final TextureSlot CRACKS = TextureSlot.create("cracks");
-    private static final int[][] EGG_LAYERS = {
-            {3, 0, 13, 2}, {2, 2, 14, 10}, {3, 10, 13, 12}, {4, 12, 12, 14}, {5, 14, 11, 15}, {6, 15, 10, 16}};
+    /**
+     * Eiform wie beim echten Drachenei: ineinander geschobene Quader (x/z von, y von, x/z bis, y bis) –
+     * am breitesten im unteren Drittel, nach oben spitz zulaufend.
+     */
+    private static final float[][] EGG_LAYERS = {
+            {3, 0, 13, 13}, {2, 1, 14, 11}, {1, 3, 15, 8}, {4, 13, 12, 14}, {5, 14, 11, 15}, {6, 15, 10, 16}};
 
-    /** Ei-Form aus übereinander gestapelten Quadern. */
+    /** Ei-Form aus ineinander geschobenen Quadern. */
     private static final ModelTemplate DRAGON_EGG = eggTemplate(false);
     /** Wie {@link #DRAGON_EGG}, mit Rissen und selbstleuchtendem Inneren darüber (brütendes Ei). */
     private static final ModelTemplate DRAGON_EGG_CRACKED = eggTemplate(true);
@@ -100,7 +104,7 @@ public class ModModelProvider extends ModelProvider {
             builder.requiredTextureSlot(CRACKS).requiredTextureSlot(GLOW);
         }
         for (TextureSlot slot : slots) {
-            for (int[] layer : EGG_LAYERS) {
+            for (float[] layer : EGG_LAYERS) {
                 builder.element(element -> eggLayer(element, slot, layer[0], layer[1], layer[2], layer[3]));
             }
         }
@@ -182,6 +186,20 @@ public class ModModelProvider extends ModelProvider {
             blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).with(stages));
         }
 
+        // --- Rekrutierungstisch (dreht sich zum Spieler) ---
+        Block table = ModBlocks.RECRUITMENT_TABLE.get();
+        Material spruce = new Material(Identifier.withDefaultNamespace("block/spruce_planks"));
+        TextureMapping tableTextures = new TextureMapping()
+                .put(RecruitmentTableModel.WOOD, spruce)
+                .put(RecruitmentTableModel.LEG, new Material(Identifier.withDefaultNamespace("block/stripped_spruce_log")))
+                .put(RecruitmentTableModel.CLOTH, new Material(KingdomsAtWar.id("block/recruitment_table_cloth")))
+                .put(RecruitmentTableModel.BANNER, new Material(KingdomsAtWar.id("block/recruitment_table_banner")))
+                .put(RecruitmentTableModel.ITEMS, new Material(KingdomsAtWar.id("block/recruitment_table_items")))
+                .put(TextureSlot.PARTICLE, spruce);
+        Identifier tableModel = RecruitmentTableModel.template().create(table, tableTextures, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(table, BlockModelGenerators.plainVariant(tableModel))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+
         // --- Feldfrüchte: 8 Altersstufen, 4 Texturen ---
         for (DeferredBlock<? extends CropBlock> crop : ModBlocks.CROPS) {
             blocks.createCropBlock(crop.get(), CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -206,6 +224,12 @@ public class ModModelProvider extends ModelProvider {
         for (DeferredItem<?> spawnEgg : ModItems.DRAGON_SPAWN_EGGS.values()) {
             flat(items, spawnEgg.get());
         }
+        for (DeferredItem<?> spawnEgg : ModItems.SOLDIER_SPAWN_EGGS.values()) {
+            flat(items, spawnEgg.get());
+        }
+        flat(items, ModItems.BANDIT_SPAWN_EGG.get());
+        flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
+        items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
     }
 
     private static void glowingCube(BlockModelGenerators blocks, Block block) {

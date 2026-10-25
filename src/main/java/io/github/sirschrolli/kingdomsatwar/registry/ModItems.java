@@ -1,7 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.army.CommandBatonItem;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -36,6 +38,7 @@ public final class ModItems {
     static final List<Supplier<? extends ItemLike>> RESOURCE_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> DRAGON_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> FARMING_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> KINGDOM_TAB = new ArrayList<>();
 
     // =====================================================================================
     // Dragon Warfare – Erze & Rohstoffe
@@ -118,6 +121,31 @@ public final class ModItems {
                     .usingConvertsTo(Items.BOWL).stacksTo(1), FARMING_TAB);
     public static final DeferredItem<Item> MEAT_PIE = food("meat_pie", 8, 0.8f, null);
     public static final DeferredItem<Item> APPLE_PIE = food("apple_pie", 7, 0.6f, null);
+
+    // =====================================================================================
+    // Kingdoms at War – Armee
+    // =====================================================================================
+
+    /** Kommandostab: Befehle an alle eigenen Soldaten in der Nähe. */
+    public static final DeferredItem<CommandBatonItem> COMMAND_BATON = addTo(KINGDOM_TAB, ITEMS.registerItem("command_baton",
+            CommandBatonItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)
+                    .component(DataComponents.LORE, lore("command_baton", 4))));
+
+    private static final Map<SoldierType, DeferredItem<SpawnEggItem>> SOLDIER_SPAWN_EGGS_MUTABLE = new EnumMap<>(SoldierType.class);
+    /** Spawn-Eier (Kreativmodus) für jede Soldatenart – der Soldat gehört dem, der das Ei benutzt. */
+    public static final Map<SoldierType, DeferredItem<SpawnEggItem>> SOLDIER_SPAWN_EGGS = Collections.unmodifiableMap(SOLDIER_SPAWN_EGGS_MUTABLE);
+
+    static {
+        for (SoldierType type : SoldierType.values()) {
+            SOLDIER_SPAWN_EGGS_MUTABLE.put(type, addTo(KINGDOM_TAB, ITEMS.registerItem(type.id() + "_spawn_egg", SpawnEggItem::new,
+                    p -> p.spawnEgg(ModEntities.SOLDIERS.get(type).get()))));
+        }
+    }
+
+    public static final DeferredItem<SpawnEggItem> BANDIT_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("bandit_spawn_egg",
+            SpawnEggItem::new, p -> p.spawnEgg(ModEntities.BANDIT.get())));
+    public static final DeferredItem<SpawnEggItem> BANDIT_ARCHER_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("bandit_archer_spawn_egg",
+            SpawnEggItem::new, p -> p.spawnEgg(ModEntities.BANDIT_ARCHER.get())));
 
     private ModItems() {}
 

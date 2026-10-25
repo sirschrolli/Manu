@@ -37,6 +37,57 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.dragon_egg.hatch"
   },
+  "entity.bandit.ambient": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/pillager/idle1",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/idle2",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/idle3",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/idle4",
+        "pitch": 0.92
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.bandit.ambient"
+  },
+  "entity.bandit.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/pillager/death1",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/death2",
+        "pitch": 0.92
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.bandit.death"
+  },
+  "entity.bandit.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/pillager/hurt1",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/hurt2",
+        "pitch": 0.92
+      },
+      {
+        "name": "minecraft:mob/pillager/hurt3",
+        "pitch": 0.92
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.bandit.hurt"
+  },
   "entity.dragon.ambient": {
     "sounds": [
       {
@@ -567,6 +618,60 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.step"
   },
+  "entity.soldier.armor": {
+    "sounds": [
+      {
+        "name": "minecraft:block/chain/step1",
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/chain/step2",
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/chain/step3",
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/chain/step4",
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/chain/step5",
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block/chain/step6",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soldier.armor"
+  },
+  "entity.soldier.death": {
+    "sounds": [
+      {
+        "name": "minecraft:damage/hit1",
+        "pitch": 0.85
+      },
+      {
+        "name": "minecraft:damage/hit2",
+        "pitch": 0.85
+      },
+      {
+        "name": "minecraft:damage/hit3",
+        "pitch": 0.85
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soldier.death"
+  },
+  "entity.soldier.hurt": {
+    "sounds": [
+      "minecraft:damage/hit1",
+      "minecraft:damage/hit2",
+      "minecraft:damage/hit3"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soldier.hurt"
+  },
   "intro.music": {
     "sounds": [
       {
@@ -683,6 +788,16 @@
       "kingdomsatwar:intro/narration_en_09"
     ],
     "subtitle": "subtitles.kingdomsatwar.intro.narration"
+  },
+  "item.command_baton.command": {
+    "sounds": [
+      {
+        "name": "minecraft:note/bell",
+        "pitch": 1.19,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.command_baton.command"
   },
   "voice.soldier.attack.de": {
     "sounds": [

@@ -2,22 +2,16 @@ package io.github.sirschrolli.kingdomsatwar.client.intro;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
-import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
-import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
-import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -27,23 +21,18 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Marker;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Erzähl-Intro beim ersten Betreten einer Welt: Eine Kamera kreist langsam steigend um den Spieler,
- * schwarze Kinobalken, der Erzähler spricht neun Zeilen (Text erscheint dazu), Musik läuft, im
- * Drachen-Teil fliegen drei Drachen über die Landschaft, am Ende die Titelkarte. Leertaste, Enter
- * oder Esc überspringen.
+ * Das Erzähl-Intro beim ersten Betreten einer Welt: eine Kamerafahrt hinter einem uralten Feuerdrachen
+ * über die Landschaft ({@link IntroFlight}), schwarze Kinobalken, der Erzähler spricht neun Zeilen (Text
+ * erscheint dazu), Musik läuft, am Ende die Titelkarte. Der Spieler selbst ist währenddessen nicht zu
+ * sehen. Leertaste, Enter oder Esc überspringen.
  *
- * <p>Die Drachen und die Kamera gibt es nur auf dem eigenen Bildschirm (nicht auf dem Server).
+ * <p>Die Drachen, die Soldaten und die Kamera gibt es nur auf dem eigenen Bildschirm (nicht auf dem Server).
  */
 public class IntroScreen extends Screen {
     private static final Identifier TITLE = KingdomsAtWar.id("textures/gui/intro_title.png");
@@ -53,24 +42,21 @@ public class IntroScreen extends Screen {
     private static final int DW_W = 565;
     private static final int DW_H = 103;
     private static final int TEXT_COLOR = 0xF3E7C8;
-    /** Eigene, negative Kennungen für die Drachen auf dem Bildschirm, damit sie keinem echten Wesen in die Quere kommen. */
-    private static final int FIRST_DRAGON_ID = -2_100_000_000;
 
     private final IntroScript script;
     private final List<IntroScript.Line> lines;
     private final Music music;
     private final boolean[] spoken;
     private final List<SoundInstance> voices = new ArrayList<>();
-    private final List<DragonEntity> dragons = new ArrayList<>();
     private long startNanos = -1;
     private int ticks;
     private @Nullable Marker camera;
-    private Vec3 center = Vec3.ZERO;
-    private double startAngle;
+    private @Nullable IntroFlight flight;
     private float lastYaw;
-    private double cameraLift;
+    private float lastPitch;
     private boolean hudWasHidden;
-    private boolean dragonsRoared;
+    private boolean roared;
+    private boolean finalRoar;
     private boolean cleanedUp;
 
     public IntroScreen(IntroScript script, String language) {
@@ -93,10 +79,8 @@ public class IntroScreen extends Screen {
             return;
         }
         LocalPlayer player = this.minecraft.player;
-        this.center = player.position();
-        double yaw = Math.toRadians(player.getYRot());
-        // Kamera beginnt hinter dem Spieler (Blickrichtung des Spielers = (-sin, cos))
-        this.startAngle = Math.atan2(-Math.cos(yaw), Math.sin(yaw));
+        this.flight = new IntroFlight(this.minecraft.level, player.position(), player.getYRot(), this.script);
+        this.flight.tick(0.0);
         this.lastYaw = player.getYRot();
         this.camera = new Marker(EntityTypes.MARKER, this.minecraft.level);
         this.updateCamera(0.0, true);
@@ -123,8 +107,11 @@ public class IntroScreen extends Screen {
                 }
             }
         }
+        if (this.flight != null) {
+            this.flight.tick(t);
+        }
         this.updateCamera(t, false);
-        this.updateDragons(t);
+        this.roars(t);
         if (t > this.script.length() + 0.3) {
             this.onClose();
         }
@@ -142,48 +129,25 @@ public class IntroScreen extends Screen {
     // =====================================================================================
 
     private void updateCamera(double t, boolean snap) {
-        ClientLevel level = this.minecraft.level;
-        if (this.camera == null || level == null) {
+        if (this.camera == null || this.flight == null) {
             return;
         }
-        double ease = smooth(t / this.script.length());
-        // im Drachen-Teil hebt sich der Blick zum Himmel und folgt dem großen Feuerdrachen
-        double dragonsStart = this.script.section("dragons", 20.0);
-        double dragonsEnd = this.script.section("wonder", 36.667);
-        double lookUp = smooth((t - dragonsStart) / 3.0) * (1.0 - smooth((t - dragonsEnd) / 3.0));
-        double radius = 4.5 + 11.5 * ease - 2.0 * lookUp;
-        double height = 1.6 + 15.0 * ease - 3.0 * lookUp;
-        double angle = this.startAngle + Math.toRadians(t * 3.0);
-        Vec3 head = this.center.add(0.0, 1.4 + 2.5 * ease, 0.0);
-        Vec3 target = head;
-        if (lookUp > 0.0 && !this.dragons.isEmpty()) {
-            Vec3 dragon = this.dragonPosition(0, t, dragonsStart - 1.0, dragonsEnd + 3.0).add(0.0, 2.0, 0.0);
-            target = head.lerp(dragon, lookUp * 0.85);
-        }
-        Vec3 wanted = new Vec3(this.center.x + Math.cos(angle) * radius, this.center.y + height, this.center.z + Math.sin(angle) * radius);
-        // Nicht in Bäumen oder Bergen stecken: so weit anheben, bis die Kamera frei ist (weich nachgeführt) ...
-        BlockPos.MutableBlockPos pos = BlockPos.containing(wanted).mutable();
-        int lift = 0;
-        while (lift < 24 && !level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()) {
-            pos.move(0, 1, 0);
-            lift++;
-        }
-        this.cameraLift = snap ? lift : this.cameraLift + (lift - this.cameraLift) * 0.25;
-        wanted = wanted.add(0.0, this.cameraLift, 0.0);
-        // ... und wenn Blätter oder Felsen zwischen Kamera und Spieler liegen, näher heranrücken
-        BlockHitResult hit = level.clip(new ClipContext(head, wanted, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, this.camera));
-        if (hit.getType() == HitResult.Type.BLOCK) {
-            Vec3 toCamera = wanted.subtract(head);
-            double free = Math.max(1.5, hit.getLocation().distanceTo(head) - 0.4);
-            wanted = head.add(toCamera.normalize().scale(Math.min(free, toCamera.length())));
-        }
+        Vec3[] view = this.flight.camera(t, snap);
+        Vec3 wanted = view[0];
+        Vec3 target = view[1];
         double dx = target.x - wanted.x;
         double dy = target.y - wanted.y;
         double dz = target.z - wanted.z;
         float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
         float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
         yaw = this.lastYaw + Mth.wrapDegrees(yaw - this.lastYaw);   // stetig, kein Sprung bei ±180°
+        if (!snap) {
+            // ruhige Kameraführung: Drehungen leicht nachziehen
+            yaw = this.lastYaw + (yaw - this.lastYaw) * 0.35f;
+            pitch = this.lastPitch + (pitch - this.lastPitch) * 0.35f;
+        }
         this.lastYaw = yaw;
+        this.lastPitch = pitch;
         if (snap) {
             this.camera.snapTo(wanted.x, wanted.y, wanted.z, yaw, pitch);
         } else {
@@ -194,78 +158,16 @@ public class IntroScreen extends Screen {
         }
     }
 
-    // =====================================================================================
-    // Drachen am Himmel
-    // =====================================================================================
-
-    private void updateDragons(double t) {
-        ClientLevel level = this.minecraft.level;
-        if (level == null) {
-            return;
-        }
-        double start = this.script.section("dragons", 20.0) - 1.0;
-        double end = this.script.section("wonder", 36.667) + 3.0;
-        if (this.dragons.isEmpty() && t >= start && t < end - 4.0) {
-            this.spawnDragons(level, start);
-        }
-        if (this.dragons.isEmpty()) {
-            return;
-        }
-        if (!this.dragonsRoared && t >= start + 1.2) {
-            this.dragonsRoared = true;
+    /** Brüllen, wenn die anderen Drachen dazustoßen und wenn der Drache am Ende in den Himmel steigt. */
+    private void roars(double t) {
+        if (!this.roared && t >= this.script.section("dragons", 20.0) + 1.2) {
+            this.roared = true;
             this.play(ModSounds.DRAGON_ROAR.get().location(), SoundSource.NEUTRAL, 0.9f, 0.85f);
         }
-        for (int i = 0; i < this.dragons.size(); i++) {
-            Vec3 position = this.dragonPosition(i, t, start, end);
-            Vec3 ahead = this.dragonPosition(i, t + 0.25, start, end);
-            float yaw = (float) Math.toDegrees(Math.atan2(-(ahead.x - position.x), ahead.z - position.z));
-            DragonEntity dragon = this.dragons.get(i);
-            dragon.moveOrInterpolateTo(position, yaw, 0.0f);
-            dragon.setYBodyRot(yaw);
-            dragon.setYHeadRot(yaw);
+        if (!this.finalRoar && t >= this.script.section("finale", 60.0) + 2.5) {
+            this.finalRoar = true;
+            this.play(ModSounds.DRAGON_ROAR.get().location(), SoundSource.NEUTRAL, 0.7f, 0.75f);
         }
-        if (t >= end) {
-            this.removeDragons();
-        }
-    }
-
-    /** Kreisbahn um den Spieler: anfliegen (4 s), kreisen, zum Schluss steigend davonfliegen. */
-    private Vec3 dragonPosition(int i, double t, double start, double end) {
-        double approach = 1.0 - smooth((t - start) / 4.0);
-        double leave = smooth((t - (end - 4.0)) / 4.0);
-        double radius = 24.0 + i * 7.0 + approach * 70.0 + leave * 90.0;
-        double height = 13.0 + i * 5.0 + Math.sin(t * 0.6 + i) * 1.5 + leave * 25.0;
-        double direction = i % 2 == 0 ? 1.0 : -1.0;
-        double angle = this.startAngle + i * 2.1 + direction * (t - start) * 0.32;
-        return new Vec3(this.center.x + Math.cos(angle) * radius, this.center.y + height, this.center.z + Math.sin(angle) * radius);
-    }
-
-    private void spawnDragons(ClientLevel level, double start) {
-        DragonType[] types = {DragonType.FIRE, DragonType.ICE, DragonType.LIGHTNING};
-        for (int i = 0; i < types.length; i++) {
-            DragonEntity dragon = ModEntities.DRAGONS.get(types[i]).get().create(level, EntitySpawnReason.COMMAND);
-            if (dragon == null) {
-                continue;
-            }
-            dragon.setId(FIRST_DRAGON_ID - i);
-            dragon.applyStage(i == 0 ? DragonStage.ELDER : DragonStage.ADULT, false);
-            dragon.setFlying(true);
-            dragon.setSilent(true);
-            Vec3 position = this.dragonPosition(i, start, start, start + 100.0);
-            dragon.snapTo(position.x, position.y, position.z, 0.0f, 0.0f);
-            level.addEntity(dragon);
-            this.dragons.add(dragon);
-        }
-    }
-
-    private void removeDragons() {
-        ClientLevel level = this.minecraft.level;
-        for (DragonEntity dragon : this.dragons) {
-            if (level != null) {
-                level.removeEntity(dragon.getId(), Entity.RemovalReason.DISCARDED);
-            }
-        }
-        this.dragons.clear();
     }
 
     // =====================================================================================
@@ -397,7 +299,9 @@ public class IntroScreen extends Screen {
             this.minecraft.getSoundManager().stop(voice);
         }
         this.minecraft.getMusicManager().stopPlaying(this.music);
-        this.removeDragons();
+        if (this.flight != null) {
+            this.flight.removeAll();
+        }
         if (this.minecraft.player != null) {
             this.minecraft.setCameraEntity(this.minecraft.player);
         }

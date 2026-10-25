@@ -80,6 +80,9 @@ public class DragonEntity extends TamableAnimal {
     public static final int MODE_SIT = 1;
     public static final int MODE_WANDER = 2;
     private static final int BREATH_DURATION = 36;
+    /** Eigene Entity-Ereignisse (weit oberhalb der von Minecraft benutzten Nummern). */
+    private static final byte EVENT_ROAR = 110;
+    private static final byte EVENT_BITE = 111;
 
     // Animationen (Client)
     public final AnimationState roarAnimation = new AnimationState();
@@ -489,15 +492,15 @@ public class DragonEntity extends TamableAnimal {
 
     /** Brüllen mit Animation. */
     public void roar() {
-        this.level().broadcastEntityEvent(this, (byte) 60);
+        this.level().broadcastEntityEvent(this, EVENT_ROAR);
         this.playSound(ModSounds.DRAGON_ROAR.get(), 1.0f + this.getStage().scale(), this.getVoicePitch());
     }
 
     @Override
     public void handleEntityEvent(byte id) {
-        if (id == 60) {
+        if (id == EVENT_ROAR) {
             this.roarAnimation.start(this.tickCount);
-        } else if (id == 61) {
+        } else if (id == EVENT_BITE) {
             this.biteAnimation.start(this.tickCount);
         } else {
             super.handleEntityEvent(id);
@@ -506,7 +509,7 @@ public class DragonEntity extends TamableAnimal {
 
     @Override
     public boolean doHurtTarget(ServerLevel level, Entity target) {
-        level.broadcastEntityEvent(this, (byte) 61);
+        level.broadcastEntityEvent(this, EVENT_BITE);
         this.playSound(ModSounds.DRAGON_BITE.get(), 1.0f, this.getVoicePitch());
         return super.doHurtTarget(level, target);
     }

@@ -5,6 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -37,6 +38,13 @@ public final class ModTags {
         }
 
         private Blocks() {}
+    }
+
+    public static final class Biomes {
+        /** Hier ziehen nachts Banditen umher. */
+        public static final TagKey<Biome> HAS_BANDITS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_bandits"));
+
+        private Biomes() {}
     }
 
     public static final class Items {

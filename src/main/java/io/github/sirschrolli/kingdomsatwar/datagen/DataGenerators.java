@@ -28,7 +28,8 @@ public final class DataGenerators {
                 .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
                 .lootTable(
                         new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
-                        new LootTableProvider.SubProviderEntry(ModExtraLootProvider::new, LootContextParamSets.BLOCK))
+                        new LootTableProvider.SubProviderEntry(ModExtraLootProvider::new, LootContextParamSets.BLOCK),
+                        new LootTableProvider.SubProviderEntry(ModEntityLootProvider::new, LootContextParamSets.ENTITY))
                 .recipe(ModRecipeProvider::new);
     }
 
@@ -41,5 +42,6 @@ public final class DataGenerators {
         event.createProvider(output -> new ModLanguageProvider(output, "de_de"));
         event.createProvider(ModLootModifierProvider::new);
         event.createProvider(ModDataMapProvider::new);
+        event.createProvider(ModBiomeTagsProvider::new);
     }
 }

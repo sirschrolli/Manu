@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_recruitment_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:recruitment_table"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:command_baton"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_recruitment_table"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:command_baton"
+    ]
+  }
+}

@@ -26,6 +26,7 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import block_textures  # noqa: E402
+import kingdom_textures  # noqa: E402
 import pixelart as pa  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
 
@@ -783,6 +784,7 @@ def preview(path: Path) -> None:
 def build_all() -> dict[str, Image.Image]:
     GENERATED.clear()
     block_textures.build(put)
+    kingdom_textures.build(put)
     dragon_spawn_eggs()
     plants()
     items()

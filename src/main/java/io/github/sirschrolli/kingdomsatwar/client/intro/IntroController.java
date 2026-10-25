@@ -8,6 +8,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -34,6 +35,16 @@ public final class IntroController {
     /** Intro sofort beim nächsten Tick öffnen (z. B. für die Screenshot-Automatik). */
     public static void request() {
         pending = true;
+    }
+
+    /** Während des Intros ist der Spieler selbst nicht zu sehen – die Kamera gehört dem Drachenflug. */
+    @SubscribeEvent
+    static void onRenderPlayer(RenderPlayerEvent.Pre<?> event) {
+        Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.gui.screen() instanceof IntroScreen && minecraft.player != null
+                && event.getRenderState().id == minecraft.player.getId()) {
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent

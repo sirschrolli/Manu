@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -30,6 +31,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("itemGroup.kingdomsatwar.resources", "Dragon Warfare: Ores & Resources", "Dragon Warfare: Erze & Rohstoffe");
         text("itemGroup.kingdomsatwar.dragons", "Dragon Warfare: Dragons", "Dragon Warfare: Drachen");
         text("itemGroup.kingdomsatwar.farming", "Kingdoms at War: Farming & Food", "Kingdoms at War: Landwirtschaft & Nahrung");
+        text("itemGroup.kingdomsatwar.kingdom", "Kingdoms at War: Army", "Kingdoms at War: Armee");
 
         // --- Steinblöcke ---
         set("medieval_stone", "medieval_stone", "Medieval Stone", "Mittelalterlicher Stein",
@@ -221,6 +223,9 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
 
+        // --- Armee: Soldaten, Banditen, Rekrutierungstisch, Kommandostab ---
+        army();
+
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");
         item(ModItems.TOMATO, "Tomato", "Tomate");
@@ -246,6 +251,104 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.POTTED_GARDEN_ROSE, "Potted Garden Rose", "Gartenrose im Topf");
         block(ModBlocks.POTTED_FIRE_LILY, "Potted Fire Lily", "Feuerlilie im Topf");
         block(ModBlocks.POTTED_FROST_FLOWER, "Potted Frost Flower", "Frostblume im Topf");
+    }
+
+    private void army() {
+        soldier(SoldierType.SWORDSMAN, "Swordsman", "Schwertkämpfer", "Schwertkämpfer", "Melee fighter", "Nahkämpfer",
+                "Chain mail, sword and the kingdom's tabard. Reliable and cheap – the backbone of any army.",
+                "Kettenhemd, Schwert und Wappenrock. Zuverlässig und günstig – das Rückgrat jeder Armee.");
+        soldier(SoldierType.ARCHER, "Archer", "Bogenschütze", "Bogenschützen", "Ranged fighter", "Fernkämpfer",
+                "Shoots from afar and never at friends. Lightly armoured – best kept behind the swordsmen.",
+                "Schießt aus der Ferne und nie auf Freunde. Leicht gerüstet – am besten hinter den Schwertkämpfern.");
+        soldier(SoldierType.KNIGHT, "Knight", "Ritter", "Ritter", "Armoured", "Gepanzert",
+                "Full plate armour and the kingdom's shield. Blocks arrows and holds the front line.",
+                "Plattenrüstung und Schild des Königreichs. Wehrt Pfeile ab und hält die vorderste Reihe.");
+        soldier(SoldierType.CAPTAIN, "Captain", "Hauptmann", "Hauptmann", "Leader", "Anführer",
+                "Makes all soldiers nearby stronger and tougher and leads them into battle.",
+                "Macht alle Soldaten in seiner Nähe stärker und zäher und führt sie in die Schlacht.");
+        text("soldier.kingdomsatwar.name", "%s %s", "%s %s");
+        add(ModEntities.BANDIT.get(), pick("Bandit", "Bandit"));
+        add(ModEntities.BANDIT_ARCHER.get(), pick("Bandit Archer", "Banditen-Bogenschütze"));
+        item(ModItems.BANDIT_SPAWN_EGG, "Bandit Spawn Egg", "Banditen-Spawn-Ei");
+        item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");
+
+        block(ModBlocks.RECRUITMENT_TABLE, "Recruitment Table", "Rekrutierungstisch");
+        text(ModItems.loreKey("recruitment_table", 1), "Recruit soldiers for emeralds", "Hier wirbst du Soldaten gegen Smaragde an");
+        text(ModItems.loreKey("recruitment_table", 2), "Knights also need steel, captains a gemstone",
+                "Ritter brauchen zusätzlich Stahl, Hauptleute einen Edelstein");
+        item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
+        text(ModItems.loreKey("command_baton", 1), "Point at an enemy: attack", "Auf einen Feind zeigen: Angriff");
+        text(ModItems.loreKey("command_baton", 2), "Point at the ground: hold position (sneak: patrol)",
+                "Auf den Boden zeigen: Stellung halten (Schleichen: Patrouille)");
+        text(ModItems.loreKey("command_baton", 3), "Point at the sky: everyone follows", "In den Himmel zeigen: alle folgen");
+        text(ModItems.loreKey("command_baton", 4), "Sneak + click your soldier: dismiss", "Schleichen + eigenen Soldaten anklicken: entlassen");
+
+        // Fenster des Rekrutierungstischs
+        text("gui.kingdomsatwar.recruitment.title", "Recruitment Table", "Rekrutierungstisch");
+        text("gui.kingdomsatwar.recruitment.army", "Army: %s / %s", "Armee: %s / %s");
+        text("gui.kingdomsatwar.recruitment.recruit", "Recruit", "Anwerben");
+        text("gui.kingdomsatwar.recruitment.health", "%s health", "%s Leben");
+        text("gui.kingdomsatwar.recruitment.armor", "%s armour", "%s Rüstung");
+        text("gui.kingdomsatwar.recruitment.melee", "Sword", "Schwert");
+        text("gui.kingdomsatwar.recruitment.ranged", "Bow", "Bogen");
+        text("gui.kingdomsatwar.recruitment.cost", "Price:", "Preis:");
+        text("gui.kingdomsatwar.recruitment.have", "You have %s", "Du hast %s");
+        text("gui.kingdomsatwar.recruitment.missing", "Missing: %s× %s", "Es fehlen: %s× %s");
+        text("gui.kingdomsatwar.recruitment.result.recruited", "Recruited!", "Angeworben!");
+        text("gui.kingdomsatwar.recruitment.result.too_far", "Too far away", "Zu weit weg");
+        text("gui.kingdomsatwar.recruitment.result.not_enough", "Too expensive", "Zu teuer");
+        text("gui.kingdomsatwar.recruitment.result.army_full", "Army full", "Armee voll");
+        text("gui.kingdomsatwar.recruitment.result.no_space", "No room", "Kein Platz");
+        text("message.kingdomsatwar.recruit.recruited", "Recruited! Your new soldier follows you.", "Angeworben! Dein neuer Soldat folgt dir.");
+        text("message.kingdomsatwar.recruit.too_far", "You are too far away from the table.", "Du bist zu weit vom Tisch entfernt.");
+        text("message.kingdomsatwar.recruit.not_enough", "You can't afford this soldier yet.", "Diesen Soldaten kannst du dir noch nicht leisten.");
+        text("message.kingdomsatwar.recruit.army_full", "Your army is complete – you can't lead more soldiers.",
+                "Deine Armee ist vollzählig – mehr Soldaten kannst du nicht führen.");
+        text("message.kingdomsatwar.recruit.no_space", "There is no room next to the table.", "Neben dem Tisch ist kein Platz.");
+
+        // Befehle und Zustand
+        text("message.kingdomsatwar.soldier_order.0", "%s follows you", "%s folgt dir");
+        text("message.kingdomsatwar.soldier_order.1", "%s holds this position", "%s hält diese Stellung");
+        text("message.kingdomsatwar.soldier_order.2", "%s patrols here", "%s patrouilliert hier");
+        text("message.kingdomsatwar.soldier_mode.0", "following", "folgt");
+        text("message.kingdomsatwar.soldier_mode.1", "holding position", "hält Stellung");
+        text("message.kingdomsatwar.soldier_mode.2", "on patrol", "auf Patrouille");
+        text("message.kingdomsatwar.soldier_status", "%s – %s/%s health – %s", "%s – %s/%s Leben – %s");
+        text("message.kingdomsatwar.soldier_price", "%s serves for %s emeralds", "%s dient für %s Smaragde");
+        text("message.kingdomsatwar.soldier_equipped", "%s now fights with: %s", "%s kämpft jetzt mit: %s");
+        text("message.kingdomsatwar.command.none", "No soldiers of yours nearby", "Keine eigenen Soldaten in der Nähe");
+        text("message.kingdomsatwar.command.attack", "%s soldiers attack %s!", "%s Soldaten greifen %s an!");
+        text("message.kingdomsatwar.command.hold", "%s soldiers hold this position", "%s Soldaten halten diese Stellung");
+        text("message.kingdomsatwar.command.patrol", "%s soldiers patrol here", "%s Soldaten patrouillieren hier");
+        text("message.kingdomsatwar.command.follow", "%s soldiers follow you", "%s Soldaten folgen dir");
+        text("message.kingdomsatwar.command.dismissed", "%s has left your service", "%s wurde aus dem Dienst entlassen");
+        text("message.kingdomsatwar.army_summoned", "%s × %s joined your army", "%s × %s sind deiner Armee beigetreten");
+
+        // Geräusche
+        subtitle("entity.soldier.hurt", "Soldier hurts", "Soldat nimmt Schaden");
+        subtitle("entity.soldier.death", "Soldier falls", "Soldat fällt");
+        subtitle("entity.soldier.armor", "Armour clinks", "Rüstung klirrt");
+        subtitle("entity.bandit.ambient", "Bandit mutters", "Bandit murmelt");
+        subtitle("entity.bandit.hurt", "Bandit hurts", "Bandit nimmt Schaden");
+        subtitle("entity.bandit.death", "Bandit dies", "Bandit stirbt");
+        subtitle("item.command_baton.command", "Order given", "Befehl erteilt");
+
+        // Einstellungen der Welt
+        text("kingdomsatwar.configuration.section.kingdomsatwar.synced.toml", "World settings", "Welt-Einstellungen");
+        text("kingdomsatwar.configuration.section.kingdomsatwar.synced.toml.title", "Kingdoms at War – World settings",
+                "Kingdoms at War – Welt-Einstellungen");
+        text("kingdomsatwar.configuration.armyLimit", "Army size limit", "Größte Armee");
+        text("kingdomsatwar.configuration.armyLimit.tooltip", "How many soldiers each player can recruit at most.",
+                "Wie viele Soldaten jeder Spieler höchstens anwerben kann.");
+    }
+
+    /** Soldat: Name, Spawn-Ei, Rolle und Beschreibung im Anwerbe-Fenster. */
+    private void soldier(SoldierType type, String english, String deutsch, String germanStem, String roleEn, String roleDe,
+            String descriptionEn, String descriptionDe) {
+        add(ModEntities.SOLDIERS.get(type).get(), pick(english, deutsch));
+        item(ModItems.SOLDIER_SPAWN_EGGS.get(type), english + " Spawn Egg", germanStem + "-Spawn-Ei");
+        text("soldier.kingdomsatwar." + type.id() + ".role", roleEn, roleDe);
+        text(type.descriptionKey(), descriptionEn, descriptionDe);
     }
 
     private String pick(String english, String deutsch) {

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": "minecraft:blue_dye",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " G",
+    "DS",
+    "S "
+  ],
+  "result": {
+    "id": "kingdomsatwar:command_baton"
+  }
+}
