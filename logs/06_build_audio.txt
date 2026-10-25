@@ -1,0 +1,133 @@
+sox WARN wav: wave header missing extended part of fmt chunk
+Erzählerstimme ...
+  Erzähler de 1: 2.77 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 2: 6.68 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 3: 6.05 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 4: 6.50 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 5: 7.32 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 6: 9.84 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 7: 5.49 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 8: 3.54 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler de 9: 2.27 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 1: 3.86 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 2: 6.04 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 3: 6.69 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 4: 6.10 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 5: 6.44 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 6: 9.68 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 7: 5.85 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 8: 3.62 s
+sox WARN wav: wave header missing extended part of fmt chunk
+  Erzähler en 9: 1.79 s
+Zeitplan: [('intro', 2), ('world', 4), ('dragons', 5), ('wonder', 7), ('knights', 3), ('finale', 2)] Gesamt 83.537 s
+Musik ...
+Datei                                           LUFS     TP  Dauer Kan.
+intro/intro_music.ogg                          -22.8   -6.9  83.54 2
+intro/narration_de_01.ogg                      -16.2   -2.0   4.12 1
+intro/narration_de_02.ogg                      -16.1   -1.5   8.01 1
+intro/narration_de_03.ogg                      -16.2   -1.5   7.37 1
+intro/narration_de_04.ogg                      -16.2   -1.7   7.79 1
+intro/narration_de_05.ogg                      -16.1   -1.5   8.70 1
+intro/narration_de_06.ogg                      -16.1   -1.7  11.17 1
+intro/narration_de_07.ogg                      -16.0   -1.6   6.87 1
+intro/narration_de_08.ogg                      -16.6   -1.4   4.80 1
+intro/narration_de_09.ogg                      -16.2   -1.7   3.64 1
+intro/narration_en_01.ogg                      -16.2   -1.7   5.16 1
+intro/narration_en_02.ogg                      -16.2   -1.6   7.39 1
+intro/narration_en_03.ogg                      -16.1   -1.7   8.00 1
+intro/narration_en_04.ogg                      -16.2   -1.7   7.40 1
+intro/narration_en_05.ogg                      -16.1   -1.8   7.79 1
+intro/narration_en_06.ogg                      -16.0   -1.4  11.10 1
+intro/narration_en_07.ogg                      -16.2   -1.4   7.19 1
+intro/narration_en_08.ogg                      -16.0   -1.6   5.02 1
+intro/narration_en_09.ogg                      -16.4   -1.7   3.14 1
+voice/soldier/attack_de_1a.ogg                 -14.7   -2.1   1.49 1
+voice/soldier/attack_de_1b.ogg                 -14.7   -1.9   1.67 1
+voice/soldier/attack_de_2a.ogg                 -15.0   -2.5   0.84 1
+voice/soldier/attack_de_2b.ogg                 -15.0   -3.7   0.81 1
+voice/soldier/attack_de_3a.ogg                 -14.5   -1.9   1.19 1
+voice/soldier/attack_de_3b.ogg                 -14.7   -3.3   1.36 1
+voice/soldier/attack_en_1a.ogg                 -15.0   -1.4   0.83 1
+voice/soldier/attack_en_1b.ogg                 -14.5   -2.3   0.68 1
+voice/soldier/attack_en_2a.ogg                 -16.1   -1.6   0.71 1
+voice/soldier/attack_en_2b.ogg                 -14.5   -1.8   0.56 1
+voice/soldier/attack_en_3a.ogg                 -15.0   -1.8   0.75 1
+voice/soldier/attack_en_3b.ogg                 -14.3   -2.9   0.67 1
+voice/soldier/follow_de_1a.ogg                 -15.2   -1.6   1.00 1
+voice/soldier/follow_de_1b.ogg                 -15.5   -1.7   1.01 1
+voice/soldier/follow_de_2a.ogg                 -14.8   -1.6   0.97 1
+voice/soldier/follow_de_2b.ogg                 -14.8   -1.7   1.06 1
+voice/soldier/follow_de_3a.ogg                 -15.4   -1.7   1.16 1
+voice/soldier/follow_de_3b.ogg                 -15.6   -1.5   1.30 1
+voice/soldier/follow_en_1a.ogg                 -14.6   -1.6   0.99 1
+voice/soldier/follow_en_1b.ogg                 -14.6   -1.8   0.79 1
+voice/soldier/follow_en_2a.ogg                 -14.7   -1.7   0.96 1
+voice/soldier/follow_en_2b.ogg                 -14.9   -3.8   0.91 1
+voice/soldier/follow_en_3a.ogg                 -15.0   -1.6   0.92 1
+voice/soldier/follow_en_3b.ogg                 -15.0   -1.7   0.84 1
+voice/soldier/hold_de_1a.ogg                   -15.2   -1.6   1.23 1
+voice/soldier/hold_de_1b.ogg                   -15.2   -1.8   1.24 1
+voice/soldier/hold_de_2a.ogg                   -15.0   -1.4   1.46 1
+voice/soldier/hold_de_2b.ogg                   -15.2   -1.6   1.61 1
+voice/soldier/hold_de_3a.ogg                   -15.8   -1.5   1.91 1
+voice/soldier/hold_de_3b.ogg                   -15.9   -1.4   2.11 1
+voice/soldier/hold_en_1a.ogg                   -15.1   -1.8   1.34 1
+voice/soldier/hold_en_1b.ogg                   -15.0   -1.8   1.22 1
+voice/soldier/hold_en_2a.ogg                   -14.7   -1.4   1.15 1
+voice/soldier/hold_en_2b.ogg                   -15.0   -1.9   1.05 1
+voice/soldier/hold_en_3a.ogg                   -15.1   -1.7   1.73 1
+voice/soldier/hold_en_3b.ogg                   -15.1   -1.9   1.43 1
+voice/soldier/idle_de_1a.ogg                   -15.0   -1.6   0.76 1
+voice/soldier/idle_de_1b.ogg                   -15.0   -1.4   0.82 1
+voice/soldier/idle_de_2a.ogg                   -14.9   -1.7   1.25 1
+voice/soldier/idle_de_2b.ogg                   -14.8   -1.6   1.46 1
+voice/soldier/idle_de_3a.ogg                   -15.1   -1.6   1.48 1
+voice/soldier/idle_de_3b.ogg                   -15.2   -1.7   1.62 1
+voice/soldier/idle_en_1a.ogg                   -16.4   -1.4   0.80 1
+voice/soldier/idle_en_1b.ogg                   -14.9   -1.6   0.71 1
+voice/soldier/idle_en_2a.ogg                   -14.7   -1.7   1.36 1
+voice/soldier/idle_en_2b.ogg                   -15.0   -2.8   1.13 1
+voice/soldier/idle_en_3a.ogg                   -15.1   -1.6   1.30 1
+voice/soldier/idle_en_3b.ogg                   -15.0   -2.1   1.03 1
+voice/soldier/recruit_de_1a.ogg                -14.8   -1.8   0.70 1
+voice/soldier/recruit_de_1b.ogg                -14.8   -1.5   0.77 1
+voice/soldier/recruit_de_2a.ogg                -14.8   -1.8   1.56 1
+voice/soldier/recruit_de_2b.ogg                -15.1   -1.6   1.65 1
+voice/soldier/recruit_de_3a.ogg                -15.5   -1.8   1.43 1
+voice/soldier/recruit_de_3b.ogg                -15.2   -1.7   1.57 1
+voice/soldier/recruit_en_1a.ogg                -15.1   -1.8   1.01 1
+voice/soldier/recruit_en_1b.ogg                -15.0   -3.0   0.91 1
+voice/soldier/recruit_en_2a.ogg                -15.0   -1.9   1.23 1
+voice/soldier/recruit_en_2b.ogg                -14.6   -2.3   1.08 1
+voice/soldier/recruit_en_3a.ogg                -14.7   -1.8   1.19 1
+voice/soldier/recruit_en_3b.ogg                -14.6   -3.4   1.10 1
+voice/soldier/victory_de_1a.ogg                -15.0   -1.6   1.66 1
+voice/soldier/victory_de_1b.ogg                -15.0   -1.6   1.81 1
+voice/soldier/victory_de_2a.ogg                -14.9   -5.4   0.54 1
+voice/soldier/victory_de_2b.ogg                -14.9   -4.8   0.60 1
+voice/soldier/victory_de_3a.ogg                -14.6   -5.5   1.08 1
+voice/soldier/victory_de_3b.ogg                -14.9   -6.1   1.23 1
+voice/soldier/victory_en_1a.ogg                -14.9   -1.6   1.37 1
+voice/soldier/victory_en_1b.ogg                -14.6   -2.5   1.15 1
+voice/soldier/victory_en_2a.ogg                -15.4   -1.7   0.68 1
+voice/soldier/victory_en_2b.ogg                -15.5   -1.5   0.57 1
+voice/soldier/victory_en_3a.ogg                -15.0   -1.7   0.92 1
+voice/soldier/victory_en_3b.ogg                -14.4   -2.6   0.78 1
+Untertitel-Schlüssel: subtitles.kingdomsatwar.intro.narration, subtitles.kingdomsatwar.intro.music, subtitles.kingdomsatwar.voice.soldier.recruit, subtitles.kingdomsatwar.voice.soldier.follow, subtitles.kingdomsatwar.voice.soldier.hold, subtitles.kingdomsatwar.voice.soldier.attack, subtitles.kingdomsatwar.voice.soldier.victory, subtitles.kingdomsatwar.voice.soldier.idle
+Fertig. Zwischendateien: out/audio-work

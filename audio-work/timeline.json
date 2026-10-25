@@ -1,0 +1,121 @@
+{
+ "lines": [
+  {
+   "index": 1,
+   "section": "world",
+   "start": 6.667,
+   "duration": {
+    "de": 2.774,
+    "en": 3.856
+   }
+  },
+  {
+   "index": 2,
+   "section": "world",
+   "start": 11.667,
+   "duration": {
+    "de": 6.682,
+    "en": 6.041
+   }
+  },
+  {
+   "index": 3,
+   "section": "dragons",
+   "start": 20.0,
+   "duration": {
+    "de": 6.054,
+    "en": 6.692
+   }
+  },
+  {
+   "index": 4,
+   "section": "dragons",
+   "start": 28.333,
+   "duration": {
+    "de": 6.499,
+    "en": 6.097
+   }
+  },
+  {
+   "index": 5,
+   "section": "wonder",
+   "start": 36.667,
+   "duration": {
+    "de": 7.318,
+    "en": 6.436
+   }
+  },
+  {
+   "index": 6,
+   "section": "wonder",
+   "start": 45.833,
+   "duration": {
+    "de": 9.843,
+    "en": 9.679
+   }
+  },
+  {
+   "index": 7,
+   "section": "knights",
+   "start": 60.0,
+   "duration": {
+    "de": 5.494,
+    "en": 5.847
+   }
+  },
+  {
+   "index": 8,
+   "section": "finale",
+   "start": 70.0,
+   "duration": {
+    "de": 3.541,
+    "en": 3.623
+   }
+  },
+  {
+   "index": 9,
+   "section": "finale",
+   "start": 76.667,
+   "duration": {
+    "de": 2.27,
+    "en": 1.787
+   }
+  }
+ ],
+ "total": 83.537,
+ "sections": [
+  [
+   "intro",
+   2
+  ],
+  [
+   "world",
+   4
+  ],
+  [
+   "dragons",
+   5
+  ],
+  [
+   "wonder",
+   7
+  ],
+  [
+   "knights",
+   3
+  ],
+  [
+   "finale",
+   2
+  ]
+ ],
+ "tail_bars": 3,
+ "section_starts": {
+  "world": 6.667,
+  "dragons": 20.0,
+  "wonder": 36.667,
+  "knights": 60.0,
+  "finale": 70.0
+ },
+ "final_chord": 76.667
+}

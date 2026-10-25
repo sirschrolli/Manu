@@ -1,0 +1,19 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+de 1 de_01_2.wav WER 0.0 | Einst lag diese Welt still und unberührt.
+de 2 de_02_0.wav WER 0.0 | Dann erhoben sich die Königreiche mit Mauern aus Stein und Türmen, die bis an die Wolken reichten.
+de 3 de_03_2.wav WER 0.0 | Doch tief in den Bergen, in Vulkanen, Eis und Meer erwachten die Drachen.
+de 4 de_04_1.wav WER 0.0 | Sechs Arten geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.
+de 5 de_05_1.wav WER 0.0 | Wer ihre Eier findet und sie mit Geduld aufzieht, gewinnt einen verbündeten, mächtiger als jede Armee.
+de 6 de_06_0.wav WER 0.125 | In der Tiefe warten seltene Erze, Drakonium, Atherit, Konterit, der Stoff aus dem Legenden geschmiedet werden.
+de 7 de_07_1.wav WER 0.0 | Sammle Ritter und Soldaten um dich, errichte deine Burg und verteidige dein Land.
+de 8 de_08_2.wav WER 0.0 | Die Welt ist bereit. Die Drachen warten.
+de 9 de_09_1.wav WER 0.0 | Dies ist dein Königreich.
+en 1 en_01_1.wav WER 0.0 | Once, this world lay silent and untouched.
+en 2 en_02_2.wav WER 0.0 | Then the kingdoms rose with walls of stone and towers that reached up to the clouds.
+en 3 en_03_0.wav WER 0.0 | But deep within the mountains, in volcanoes, ice and sea, the dragons awoke.
+en 4 en_04_1.wav WER 0.0 | Six kinds, born of fire, ice, lightning, nature, earth and water.
+en 5 en_05_0.wav WER 0.0 | Whoever finds their eggs and raises them with patience gains an ally mightier than any army.
+en 6 en_06_2.wav WER 0.25 | Deep below, rare oris lee waiting, draconium, etherite, conterite, the stuff that legends  are forged from.
+en 7 en_07_2.wav WER 0.0 | Gather knights and soldiers around you, raise your castle and defend your land.
+en 8 en_08_0.wav WER 0.0 | The world is ready. The dragons are waiting.
+en 9 en_09_0.wav WER 0.0 | This is your kingdom.

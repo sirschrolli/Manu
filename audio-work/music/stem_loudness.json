@@ -1,0 +1,18 @@
+{
+ "str_pad": -30.3,
+ "str_trem": -34.4,
+ "str_ost": -38.1,
+ "cello": -40.8,
+ "bass": -43.2,
+ "harp": -40.9,
+ "celesta": -47.7,
+ "flute": -41.7,
+ "oboe": -39.1,
+ "horns": -27.8,
+ "trombones": -29.5,
+ "tuba": -37.9,
+ "timpani": -40.6,
+ "choir": -36.6,
+ "bells": -39.0,
+ "perc": -45.0
+}
