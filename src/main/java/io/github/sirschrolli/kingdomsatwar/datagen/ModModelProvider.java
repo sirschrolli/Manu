@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.TableBlock;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -9,6 +10,7 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
 import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ModelTemplate;
@@ -148,6 +150,30 @@ public class ModModelProvider extends ModelProvider {
         blocks.createTrivialCube(ModBlocks.TIMBER_FRAME_DIAGONAL.get());
         blocks.createTrivialCube(ModBlocks.TIMBER_FRAME_CROSS.get());
 
+        // --- Fenster, Türen, Fensterläden und Licht ---
+        blocks.createGlassBlocks(ModBlocks.LEADED_GLASS.get(), ModBlocks.LEADED_GLASS_PANE.get());
+        blocks.createDoor(ModBlocks.CASTLE_DOOR.get());
+        // nicht "orientable": so steht das ausgesägte Herz im geöffneten Laden immer aufrecht
+        blocks.createTrapdoor(ModBlocks.GREEN_SHUTTERS.get());
+        blocks.createTrapdoor(ModBlocks.RED_SHUTTERS.get());
+        blocks.createLantern(ModBlocks.STEEL_LANTERN.get());
+        blocks.createLantern(ModBlocks.AETHERIT_LANTERN.get());
+        Block chandelier = ModBlocks.CHANDELIER.get();
+        Identifier chandelierModel = DecorModels.chandelier().create(chandelier,
+                TextureMapping.cube(chandelier).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE), blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(chandelier, BlockModelGenerators.plainVariant(chandelierModel)));
+        blocks.registerSimpleFlatItemModel(chandelier.asItem());
+
+        // --- Zinnen (Textur des Baustoffs) ---
+        ModelTemplate battlementTemplate = DecorModels.battlement();
+        ModBlocks.BATTLEMENTS.forEach((battlement, material) -> {
+            TextureMapping stone = TextureMapping.cube(material.base().get()).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE);
+            facing(blocks, battlement.get(), battlementTemplate.create(battlement.get(), stone, blocks.modelOutput));
+        });
+
+        // --- Möbel (Vanilla-Holztexturen) ---
+        furniture(blocks);
+
         // --- Erze (zweischichtig) ---
         ore(blocks, ModBlocks.CARBON_ORE, Blocks.STONE, "carbon");
         ore(blocks, ModBlocks.DEEPSLATE_CARBON_ORE, Blocks.DEEPSLATE, "carbon");
@@ -253,6 +279,48 @@ public class ModModelProvider extends ModelProvider {
             flat(items, item.get());
         }
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
+    }
+
+    /** Stuhl, Bank, Tisch und Thron. */
+    private static void furniture(BlockModelGenerators blocks) {
+        Material oakPlanks = vanilla("oak_planks");
+        TextureMapping oak = new TextureMapping().put(DecorModels.WOOD, oakPlanks).put(DecorModels.FRAME, vanilla("stripped_oak_log"))
+                .put(TextureSlot.PARTICLE, oakPlanks);
+        Block chair = ModBlocks.OAK_CHAIR.get();
+        facing(blocks, chair, DecorModels.chair().create(chair, oak, blocks.modelOutput));
+        Block bench = ModBlocks.OAK_BENCH.get();
+        facing(blocks, bench, DecorModels.bench().create(bench, oak, blocks.modelOutput));
+
+        // Tisch: Platte immer, Beine nur an Ecken ohne Nachbartisch
+        Block table = ModBlocks.OAK_TABLE.get();
+        MultiVariant top = BlockModelGenerators.plainVariant(DecorModels.tableTop().createWithSuffix(table, "_top", oak, blocks.modelOutput));
+        MultiVariant leg = BlockModelGenerators.plainVariant(DecorModels.tableLeg().createWithSuffix(table, "_leg", oak, blocks.modelOutput));
+        blocks.blockStateOutput.accept(MultiPartGenerator.multiPart(table)
+                .with(top)
+                .with(BlockModelGenerators.condition().term(TableBlock.NORTH, false).term(TableBlock.WEST, false), leg)
+                .with(BlockModelGenerators.condition().term(TableBlock.NORTH, false).term(TableBlock.EAST, false),
+                        leg.with(BlockModelGenerators.Y_ROT_90))
+                .with(BlockModelGenerators.condition().term(TableBlock.SOUTH, false).term(TableBlock.EAST, false),
+                        leg.with(BlockModelGenerators.Y_ROT_180))
+                .with(BlockModelGenerators.condition().term(TableBlock.SOUTH, false).term(TableBlock.WEST, false),
+                        leg.with(BlockModelGenerators.Y_ROT_270)));
+        blocks.registerSimpleItemModel(table, DecorModels.tableItem().create(table, oak, blocks.modelOutput));
+
+        Material darkOak = vanilla("dark_oak_planks");
+        TextureMapping royal = new TextureMapping().put(DecorModels.WOOD, darkOak).put(DecorModels.CLOTH, vanilla("red_wool"))
+                .put(DecorModels.GOLD, vanilla("gold_block")).put(TextureSlot.PARTICLE, darkOak);
+        Block throne = ModBlocks.THRONE.get();
+        facing(blocks, throne, DecorModels.throne().create(throne, royal, blocks.modelOutput));
+    }
+
+    /** Block, der sich nach der Blickrichtung beim Setzen dreht (Modell mit Blick nach Norden). */
+    private static void facing(BlockModelGenerators blocks, Block block, Identifier model) {
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, BlockModelGenerators.plainVariant(model))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+    }
+
+    private static Material vanilla(String texture) {
+        return new Material(Identifier.withDefaultNamespace("block/" + texture));
     }
 
     /** Rüstungsteile mit Rüstungsbesatz (Trims) aus dem Schmiedetisch. */

@@ -21,6 +21,7 @@ import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.WillOWispRen
 import io.github.sirschrolli.kingdomsatwar.client.renderer.DragonRenderer;
 import io.github.sirschrolli.kingdomsatwar.client.renderer.SoldierRenderer;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -53,8 +54,10 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
         event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEAT.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.WILL_O_WISP.get(), WillOWispRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
     }
 }
+

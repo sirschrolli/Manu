@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "kingdomsatwar:block/aetherit_lantern"
+    },
+    "hanging=true": {
+      "model": "kingdomsatwar:block/aetherit_lantern_hanging"
+    }
+  }
+}

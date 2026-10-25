@@ -36,6 +36,10 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(BlockItemTags.SLABS);
         copy(BlockItemTags.WALLS);
         copy(BlockItemTags.SMALL_FLOWERS);
+        copy(BlockItemTags.WOODEN_DOORS);
+        copy(BlockItemTags.WOODEN_TRAPDOORS);
+        copy(Tags.BlockItems.GLASS_BLOCKS);
+        copy(Tags.BlockItems.GLASS_PANES);
         copy(BlockItemTags.ORES);
         copy(Tags.BlockItems.ORES);
         copy(Tags.BlockItems.ORES_IN_GROUND_STONE);

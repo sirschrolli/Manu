@@ -230,6 +230,7 @@ public class ModLanguageProvider extends LanguageProvider {
         army();
         equipment();
         creatures();
+        decor();
 
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");
@@ -368,6 +369,32 @@ public class ModLanguageProvider extends LanguageProvider {
         item(set.get(2), english + " Scale Leggings", deutsch + "schuppen-Beinschutz");
         item(set.get(3), english + " Scale Boots", deutsch + "schuppen-Stiefel");
         lore("dragon_scale_armor_" + type.id(), bonusEn, bonusDe);
+    }
+
+    /** Einrichtung und Burgbau: Putz, Fenster, Türen, Läden, Licht, Zinnen, Möbel. */
+    private void decor() {
+        roof("white_plaster", "white_plaster", "White Plaster", "Kalkputz", "White Plaster", "Kalkputz");
+        roof("clay_plaster", "clay_plaster", "Clay Plaster", "Lehmputz", "Clay Plaster", "Lehmputz");
+        block(ModBlocks.LEADED_GLASS, "Leaded Glass", "Bleiglas");
+        block(ModBlocks.LEADED_GLASS_PANE, "Leaded Glass Pane", "Bleiglasscheibe");
+        block(ModBlocks.CASTLE_DOOR, "Castle Door", "Burgtür");
+        block(ModBlocks.GREEN_SHUTTERS, "Green Shutters", "Grüne Fensterläden");
+        block(ModBlocks.RED_SHUTTERS, "Red Shutters", "Rote Fensterläden");
+        block(ModBlocks.STEEL_LANTERN, "Steel Lantern", "Stahllaterne");
+        block(ModBlocks.AETHERIT_LANTERN, "Aetherit Lantern", "Aetheritlaterne");
+        block(ModBlocks.CHANDELIER, "Chandelier", "Kronleuchter");
+        block(ModBlocks.MEDIEVAL_STONE_BATTLEMENT, "Medieval Stone Battlement", "Mittelalterliche Steinzinne");
+        block(ModBlocks.DARK_STONE_BRICK_BATTLEMENT, "Dark Stone Brick Battlement", "Dunkle Steinziegelzinne");
+        block(ModBlocks.LIMESTONE_BRICK_BATTLEMENT, "Light Limestone Brick Battlement", "Helle Kalksteinziegelzinne");
+        block(ModBlocks.OAK_CHAIR, "Oak Chair", "Eichenstuhl");
+        block(ModBlocks.OAK_BENCH, "Oak Bench", "Eichenbank");
+        block(ModBlocks.OAK_TABLE, "Oak Table", "Eichentisch");
+        block(ModBlocks.THRONE, "Throne", "Thron");
+        lore("seat", "Right-click to sit down", "Rechtsklick zum Hinsetzen");
+        lore("throne", "Fit for a ruler – right-click to sit down", "Eines Herrschers würdig – Rechtsklick zum Hinsetzen");
+        text("block.kingdomsatwar.seat.occupied", "Someone is already sitting here.", "Hier sitzt schon jemand.");
+        text("block.kingdomsatwar.seat.obstructed", "There is no room to sit here.", "Hier ist kein Platz zum Sitzen.");
+        add(ModEntities.SEAT.get(), pick("Seat", "Sitz"));
     }
 
     private void army() {

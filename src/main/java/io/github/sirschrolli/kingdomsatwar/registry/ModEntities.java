@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.CaveTrollEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.DeerEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.GooseEntity;
@@ -73,6 +74,12 @@ public final class ModEntities {
             CaveTrollEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.9f).eyeHeight(2.45f).clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
             LindwormEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.6f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
+
+    // ---------------------------------------------------------------- Möbel
+    /** Unsichtbarer Sitz auf Stühlen, Bänken und dem Thron. */
+    public static final DeferredHolder<EntityType<?>, EntityType<SeatEntity>> SEAT = ENTITIES.registerEntityType("seat",
+            SeatEntity::new, MobCategory.MISC,
+            builder -> builder.sized(0.001f, 0.001f).noLootTable().noSummon().clientTrackingRange(10).updateInterval(20));
 
     private ModEntities() {}
 

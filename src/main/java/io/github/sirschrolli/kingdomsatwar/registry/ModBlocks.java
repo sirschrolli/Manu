@@ -1,9 +1,14 @@
 package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.block.BattlementBlock;
+import io.github.sirschrolli.kingdomsatwar.block.ChandelierBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.FurnitureShapes;
 import io.github.sirschrolli.kingdomsatwar.block.ModCropBlock;
 import io.github.sirschrolli.kingdomsatwar.block.RecruitmentTableBlock;
+import io.github.sirschrolli.kingdomsatwar.block.SeatBlock;
+import io.github.sirschrolli.kingdomsatwar.block.TableBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,24 +24,32 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.TransparentBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -114,6 +127,66 @@ public final class ModBlocks {
     public static final BuildingSet COPPER_ROOF = roofSet("copper_roof", "copper_roof",
             p -> p.mapColor(MapColor.COLOR_ORANGE)
                     .requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER), BuildingSet.Tool.PICKAXE);
+
+    // 4. Putz, Fenster, Türen und Fensterläden
+    public static final BuildingSet WHITE_PLASTER = roofSet("white_plaster", "white_plaster",
+            p -> p.mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.0f, 3.0f).sound(SoundType.STONE), BuildingSet.Tool.PICKAXE);
+    public static final BuildingSet CLAY_PLASTER = roofSet("clay_plaster", "clay_plaster",
+            p -> p.mapColor(MapColor.DIRT).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.0f, 3.0f).sound(SoundType.PACKED_MUD), BuildingSet.Tool.PICKAXE);
+
+    public static final DeferredBlock<TransparentBlock> LEADED_GLASS = blockWithItem("leaded_glass", TransparentBlock::new,
+            p -> p.instrument(NoteBlockInstrument.HAT).strength(0.3f).sound(SoundType.GLASS).noOcclusion()
+                    .isValidSpawn((state, level, pos, type) -> false).isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false),
+            UnaryOperator.identity(), BUILDING_TAB);
+    public static final DeferredBlock<IronBarsBlock> LEADED_GLASS_PANE = blockWithItem("leaded_glass_pane", IronBarsBlock::new,
+            p -> p.instrument(NoteBlockInstrument.HAT).strength(0.3f).sound(SoundType.GLASS).noOcclusion(),
+            UnaryOperator.identity(), BUILDING_TAB);
+
+    /** Schwere Eichentür mit Eisenbeschlägen und vergittertem Guckfenster. */
+    public static final DeferredBlock<DoorBlock> CASTLE_DOOR = door("castle_door");
+    public static final DeferredBlock<TrapDoorBlock> GREEN_SHUTTERS = shutters("green_shutters", MapColor.COLOR_GREEN);
+    public static final DeferredBlock<TrapDoorBlock> RED_SHUTTERS = shutters("red_shutters", MapColor.COLOR_RED);
+
+    // 5. Licht
+    public static final DeferredBlock<LanternBlock> STEEL_LANTERN = lantern("steel_lantern");
+    /** Leuchtet ohne Flamme: das Licht kommt vom Aetherit-Kristall. */
+    public static final DeferredBlock<LanternBlock> AETHERIT_LANTERN = lantern("aetherit_lantern");
+    public static final DeferredBlock<ChandelierBlock> CHANDELIER = blockWithItem("chandelier", ChandelierBlock::new,
+            p -> p.mapColor(MapColor.METAL).strength(2.0f).sound(SoundType.LANTERN).lightLevel(state -> 15)
+                    .noOcclusion().pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), BUILDING_TAB);
+
+    // 6. Zinnen für die Burgmauern
+    public static final DeferredBlock<BattlementBlock> MEDIEVAL_STONE_BATTLEMENT = battlement("medieval_stone_battlement", MEDIEVAL_STONE);
+    public static final DeferredBlock<BattlementBlock> DARK_STONE_BRICK_BATTLEMENT = battlement("dark_stone_brick_battlement", DARK_STONE_BRICKS);
+    public static final DeferredBlock<BattlementBlock> LIMESTONE_BRICK_BATTLEMENT = battlement("limestone_brick_battlement", LIMESTONE_BRICKS);
+
+    /** Zinnen mit dem Baustoff, aus dem sie gehauen werden (feste Reihenfolge). */
+    public static final Map<DeferredBlock<BattlementBlock>, BuildingSet> BATTLEMENTS;
+
+    static {
+        Map<DeferredBlock<BattlementBlock>, BuildingSet> battlements = new LinkedHashMap<>();
+        battlements.put(MEDIEVAL_STONE_BATTLEMENT, MEDIEVAL_STONE);
+        battlements.put(DARK_STONE_BRICK_BATTLEMENT, DARK_STONE_BRICKS);
+        battlements.put(LIMESTONE_BRICK_BATTLEMENT, LIMESTONE_BRICKS);
+        BATTLEMENTS = Collections.unmodifiableMap(battlements);
+    }
+
+    // 7. Möbel (zum Draufsetzen)
+    public static final DeferredBlock<SeatBlock> OAK_CHAIR = seat("oak_chair", FurnitureShapes.CHAIR, FurnitureShapes.CHAIR_SEAT, MapColor.WOOD);
+    public static final DeferredBlock<SeatBlock> OAK_BENCH = seat("oak_bench", FurnitureShapes.BENCH, FurnitureShapes.BENCH_SEAT, MapColor.WOOD);
+    public static final DeferredBlock<TableBlock> OAK_TABLE = blockWithItem("oak_table", TableBlock::new,
+            p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)
+                    .noOcclusion().ignitedByLava(),
+            UnaryOperator.identity(), BUILDING_TAB);
+    public static final DeferredBlock<SeatBlock> THRONE = blockWithItem("throne",
+            p -> new SeatBlock(FurnitureShapes.THRONE, FurnitureShapes.THRONE_SEAT, p),
+            p -> p.mapColor(MapColor.COLOR_RED).instrument(NoteBlockInstrument.BASS).strength(2.5f, 3.0f).sound(SoundType.WOOD)
+                    .noOcclusion().ignitedByLava(),
+            ip -> ip.rarity(Rarity.RARE).component(DataComponents.LORE, ModItems.lore("throne", 1)), BUILDING_TAB);
 
     // =====================================================================================
     // Dragon Warfare – Erze & Rohstoffe (Bild "Dragon Warfare – Erze")
@@ -217,12 +290,13 @@ public final class ModBlocks {
     private ModBlocks() {}
 
     /**
-     * Alle Holzblöcke: Holzbalken, Fachwerk und die Holzschindeln mit Treppe und Stufe.
-     * Sie fangen Feuer und brennen ab ({@code ModDataMapProvider}).
+     * Alle Holzblöcke: Holzbalken, Fachwerk, Möbel und die Holzschindeln mit Treppe und Stufe.
+     * Sie fangen Feuer und brennen ab ({@code ModDataMapProvider}). Türen und Fensterläden brennen wie
+     * die Vanilla-Türen nicht.
      */
     public static List<DeferredBlock<? extends Block>> woodenBlocks() {
         List<DeferredBlock<? extends Block>> blocks = new ArrayList<>(
-                List.of(TIMBER_BEAM, TIMBER_FRAME, TIMBER_FRAME_DIAGONAL, TIMBER_FRAME_CROSS));
+                List.of(TIMBER_BEAM, TIMBER_FRAME, TIMBER_FRAME_DIAGONAL, TIMBER_FRAME_CROSS, OAK_CHAIR, OAK_BENCH, OAK_TABLE, THRONE));
         for (BuildingSet set : BUILDING_SETS) {
             if (set.tool() == BuildingSet.Tool.AXE) {
                 blocks.addAll(set.all());
@@ -292,6 +366,43 @@ public final class ModBlocks {
         BuildingSet set = new BuildingSet(name, base, stairs, slab, wall, tool);
         BUILDING_SETS_MUTABLE.add(set);
         return set;
+    }
+
+    private static DeferredBlock<DoorBlock> door(String name) {
+        DeferredBlock<DoorBlock> block = BLOCKS.registerBlock(name, p -> new DoorBlock(BlockSetType.DARK_OAK, p),
+                p -> p.mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASS).strength(4.0f, 6.0f)
+                        .noOcclusion().ignitedByLava().pushReaction(PushReaction.POPPED));
+        // Wie bei Vanilla-Türen: ein Gegenstand, der beim Setzen auch die obere Hälfte freiräumt
+        ModItems.ITEMS.registerItem(name, p -> new DoubleHighBlockItem(block.get(), p), Item.Properties::useBlockDescriptionPrefix);
+        BUILDING_TAB.add(block);
+        return block;
+    }
+
+    private static DeferredBlock<TrapDoorBlock> shutters(String name, MapColor color) {
+        return blockWithItem(name, p -> new TrapDoorBlock(BlockSetType.SPRUCE, p),
+                p -> p.mapColor(color).instrument(NoteBlockInstrument.BASS).strength(3.0f).noOcclusion()
+                        .isValidSpawn((state, level, pos, type) -> false).ignitedByLava(),
+                UnaryOperator.identity(), BUILDING_TAB);
+    }
+
+    private static DeferredBlock<LanternBlock> lantern(String name) {
+        return blockWithItem(name, LanternBlock::new,
+                p -> p.mapColor(MapColor.METAL).forceSolidOn().strength(3.5f).sound(SoundType.LANTERN)
+                        .lightLevel(state -> 15).noOcclusion().pushReaction(PushReaction.POPPED),
+                UnaryOperator.identity(), BUILDING_TAB);
+    }
+
+    private static DeferredBlock<BattlementBlock> battlement(String name, BuildingSet material) {
+        return blockWithItem(name, BattlementBlock::new,
+                () -> BlockBehaviour.Properties.ofFullCopy(material.base().get()),
+                UnaryOperator.identity(), BUILDING_TAB);
+    }
+
+    private static DeferredBlock<SeatBlock> seat(String name, VoxelShape shape, double seatHeight, MapColor color) {
+        return blockWithItem(name, p -> new SeatBlock(shape, seatHeight, p),
+                p -> p.mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)
+                        .noOcclusion().ignitedByLava(),
+                ip -> ip.component(DataComponents.LORE, ModItems.lore("seat", 1)), BUILDING_TAB);
     }
 
     private static DeferredBlock<Block> timberFrame(String name) {

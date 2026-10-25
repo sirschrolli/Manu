@@ -13,6 +13,8 @@
     "kingdomsatwar:dark_slate_shingle_slab",
     "kingdomsatwar:wooden_shingle_slab",
     "kingdomsatwar:light_roof_tile_slab",
-    "kingdomsatwar:copper_roof_slab"
+    "kingdomsatwar:copper_roof_slab",
+    "kingdomsatwar:white_plaster_slab",
+    "kingdomsatwar:clay_plaster_slab"
   ]
 }

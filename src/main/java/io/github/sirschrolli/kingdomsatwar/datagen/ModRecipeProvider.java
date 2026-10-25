@@ -38,6 +38,7 @@ public class ModRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
         buildingRecipes();
+        decorRecipes();
         resourceRecipes();
         dragonRecipes();
         foodRecipes();
@@ -280,6 +281,143 @@ public class ModRecipeProvider extends RecipeProvider {
         cycle(ModBlocks.TIMBER_FRAME.get(), ModBlocks.TIMBER_FRAME_DIAGONAL.get(), "timber_frame_diagonal");
         cycle(ModBlocks.TIMBER_FRAME_DIAGONAL.get(), ModBlocks.TIMBER_FRAME_CROSS.get(), "timber_frame_cross");
         cycle(ModBlocks.TIMBER_FRAME_CROSS.get(), ModBlocks.TIMBER_FRAME.get(), "timber_frame_from_cross");
+    }
+
+    // =====================================================================================
+    // Einrichtung: Putz, Fenster, Türen, Licht, Zinnen, Möbel
+    // =====================================================================================
+
+    private void decorRecipes() {
+        // Putz: Kalkputz aus Sand, Ton und Knochenmehl (Kalk), Lehmputz aus Ton, Erde und Stroh
+        shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.WHITE_PLASTER.base().get(), 4)
+                .requires(Items.SAND, 2)
+                .requires(Items.CLAY_BALL)
+                .requires(Items.BONE_MEAL)
+                .unlockedBy("has_clay_ball", has(Items.CLAY_BALL))
+                .save(output, key("white_plaster"));
+        stonecut(ModBlocks.WHITE_PLASTER.base().get(), 1, Blocks.CALCITE);
+        shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CLAY_PLASTER.base().get(), 4)
+                .requires(Items.CLAY_BALL, 2)
+                .requires(Items.DIRT)
+                .requires(Items.WHEAT)
+                .unlockedBy("has_clay_ball", has(Items.CLAY_BALL))
+                .save(output, key("clay_plaster"));
+
+        // Bleiglas: acht Glasblöcke mit Eisen als "Blei", daraus Scheiben
+        Item leadedGlass = ModBlocks.LEADED_GLASS.get().asItem();
+        shaped(RecipeCategory.BUILDING_BLOCKS, leadedGlass, 8)
+                .pattern("GGG")
+                .pattern("GNG")
+                .pattern("GGG")
+                .define('G', Items.GLASS)
+                .define('N', Items.IRON_NUGGET)
+                .unlockedBy("has_glass", has(Items.GLASS))
+                .save(output, key("leaded_glass"));
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.LEADED_GLASS_PANE.get(), 16)
+                .pattern("GGG")
+                .pattern("GGG")
+                .define('G', leadedGlass)
+                .unlockedBy(getHasName(leadedGlass), has(leadedGlass))
+                .save(output, key("leaded_glass_pane"));
+
+        // Burgtür: Bretter mit einem eisernen Band
+        shaped(RecipeCategory.REDSTONE, ModBlocks.CASTLE_DOOR.get(), 2)
+                .pattern("PP")
+                .pattern("II")
+                .pattern("PP")
+                .define('P', ItemTags.PLANKS)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(output, key("castle_door"));
+        // Fensterläden: wie eine Falltür, mit Farbstoff
+        shutters(ModBlocks.GREEN_SHUTTERS.get(), Items.DYE.green());
+        shutters(ModBlocks.RED_SHUTTERS.get(), Items.DYE.red());
+
+        // Licht
+        Item steel = ModItems.STEEL_INGOT.get();
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.STEEL_LANTERN.get(), 2)
+                .pattern(" S ")
+                .pattern("STS")
+                .pattern(" S ")
+                .define('S', steel)
+                .define('T', Items.TORCH)
+                .unlockedBy(getHasName(steel), has(steel))
+                .save(output, key("steel_lantern"));
+        Item aetherit = ModItems.AETHERIT.get();
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.AETHERIT_LANTERN.get())
+                .pattern("NNN")
+                .pattern("NAN")
+                .pattern("NNN")
+                .define('N', Items.IRON_NUGGET)
+                .define('A', aetherit)
+                .unlockedBy(getHasName(aetherit), has(aetherit))
+                .save(output, key("aetherit_lantern"));
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.CHANDELIER.get())
+                .pattern("CHC")
+                .pattern("IGI")
+                .define('C', Items.CANDLE)
+                .define('H', Items.IRON_CHAIN)
+                .define('I', Items.IRON_INGOT)
+                .define('G', Items.GOLD_INGOT)
+                .unlockedBy("has_candle", has(Items.CANDLE))
+                .save(output, key("chandelier"));
+
+        // Zinnen: im Steinmetz oder an der Werkbank aus dem Baustoff
+        ModBlocks.BATTLEMENTS.forEach((battlement, material) -> {
+            ItemLike stone = material.base().get();
+            shaped(RecipeCategory.BUILDING_BLOCKS, battlement.get(), 4)
+                    .pattern("S S")
+                    .pattern("SSS")
+                    .define('S', stone)
+                    .unlockedBy(getHasName(stone), has(stone))
+                    .save(output, key(getItemName(battlement.get())));
+            stonecut(battlement.get(), 1, stone);
+        });
+
+        // Möbel
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.OAK_CHAIR.get(), 2)
+                .pattern("P  ")
+                .pattern("PPP")
+                .pattern("S S")
+                .define('P', Items.OAK_PLANKS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_oak_planks", has(Items.OAK_PLANKS))
+                .save(output, key("oak_chair"));
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.OAK_BENCH.get(), 2)
+                .pattern("PPP")
+                .pattern("PPP")
+                .pattern("S S")
+                .define('P', Items.OAK_PLANKS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_oak_planks", has(Items.OAK_PLANKS))
+                .save(output, key("oak_bench"));
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.OAK_TABLE.get())
+                .pattern("PPP")
+                .pattern("S S")
+                .pattern("S S")
+                .define('P', Items.OAK_PLANKS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_oak_planks", has(Items.OAK_PLANKS))
+                .save(output, key("oak_table"));
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.THRONE.get())
+                .pattern("GWG")
+                .pattern("PWP")
+                .pattern("PPP")
+                .define('G', Items.GOLD_INGOT)
+                .define('W', Items.WOOL.red())
+                .define('P', Items.DARK_OAK_PLANKS)
+                .unlockedBy("has_gold_ingot", has(Items.GOLD_INGOT))
+                .save(output, key("throne"));
+    }
+
+    private void shutters(ItemLike shutters, ItemLike dye) {
+        shaped(RecipeCategory.REDSTONE, shutters, 2)
+                .pattern("PPP")
+                .pattern("PDP")
+                .define('P', ItemTags.PLANKS)
+                .define('D', dye)
+                .unlockedBy(getHasName(dye), has(dye))
+                .save(output, key(getItemName(shutters)));
     }
 
     // =====================================================================================

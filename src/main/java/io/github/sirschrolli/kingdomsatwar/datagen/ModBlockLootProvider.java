@@ -49,6 +49,17 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
 
+        // Einrichtung: Glas nur mit Behutsamkeit (wie Vanilla-Glas), Türen nur aus der unteren Hälfte
+        dropWhenSilkTouch(ModBlocks.LEADED_GLASS.get());
+        dropWhenSilkTouch(ModBlocks.LEADED_GLASS_PANE.get());
+        add(ModBlocks.CASTLE_DOOR.get(), this::createDoorTable);
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.GREEN_SHUTTERS, ModBlocks.RED_SHUTTERS,
+                ModBlocks.STEEL_LANTERN, ModBlocks.AETHERIT_LANTERN, ModBlocks.CHANDELIER, ModBlocks.OAK_CHAIR, ModBlocks.OAK_BENCH,
+                ModBlocks.OAK_TABLE, ModBlocks.THRONE)) {
+            dropSelf(block.get());
+        }
+        ModBlocks.BATTLEMENTS.keySet().forEach(battlement -> dropSelf(battlement.get()));
+
         // Erze: mit Behutsamkeit der Erzblock, sonst der Rohstoff (Glück erhöht die Menge)
         ore(ModBlocks.CARBON_ORE, ModItems.CARBON.get());
         ore(ModBlocks.DEEPSLATE_CARBON_ORE, ModItems.CARBON.get());

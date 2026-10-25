@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "minecraft:glass",
+    "N": "minecraft:iron_nugget"
+  },
+  "pattern": [
+    "GGG",
+    "GNG",
+    "GGG"
+  ],
+  "result": {
+    "count": 8,
+    "id": "kingdomsatwar:leaded_glass"
+  }
+}

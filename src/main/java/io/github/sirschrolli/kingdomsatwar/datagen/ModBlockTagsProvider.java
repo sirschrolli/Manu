@@ -45,6 +45,17 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.TIMBER_BEAM, ModBlocks.TIMBER_FRAME,
                 ModBlocks.TIMBER_FRAME_DIAGONAL, ModBlocks.TIMBER_FRAME_CROSS);
 
+        // --- Einrichtung ---
+        add(Tags.BlockItems.GLASS_BLOCKS.block(), ModBlocks.LEADED_GLASS);
+        add(BlockTags.IMPERMEABLE, ModBlocks.LEADED_GLASS);
+        add(Tags.BlockItems.GLASS_PANES.block(), ModBlocks.LEADED_GLASS_PANE);
+        add(BlockItemTags.WOODEN_DOORS.block(), ModBlocks.CASTLE_DOOR);
+        add(BlockItemTags.WOODEN_TRAPDOORS.block(), ModBlocks.GREEN_SHUTTERS, ModBlocks.RED_SHUTTERS);
+        add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.CASTLE_DOOR, ModBlocks.GREEN_SHUTTERS, ModBlocks.RED_SHUTTERS,
+                ModBlocks.OAK_CHAIR, ModBlocks.OAK_BENCH, ModBlocks.OAK_TABLE, ModBlocks.THRONE);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STEEL_LANTERN, ModBlocks.AETHERIT_LANTERN, ModBlocks.CHANDELIER);
+        ModBlocks.BATTLEMENTS.keySet().forEach(battlement -> add(BlockTags.MINEABLE_WITH_PICKAXE, battlement));
+
         // --- Erze ---
         add(BlockTags.MINEABLE_WITH_PICKAXE,
                 ModBlocks.CARBON_ORE, ModBlocks.DEEPSLATE_CARBON_ORE,

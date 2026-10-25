@@ -82,6 +82,7 @@ final class Showcase {
                 case "eggs" -> eggs(steps);
                 case "equipment" -> equipment(steps);
                 case "creatures" -> creatures(steps);
+                case "decor" -> decor(steps);
                 default -> { }
             }
         }
@@ -520,6 +521,192 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
+    /**
+     * Ein Thronsaal aus den Einrichtungs-Blöcken: Putzwände mit Bleiglasfenstern und Fensterläden, Burgtür,
+     * Zinnen, Kronleuchter und Laternen, Tafeln mit Stühlen und Bänken, ein Ritter auf dem Thron.
+     */
+    private static void decor(Deque<Step> steps) {
+        int oz = 260;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-12, ground - 1, oz - 8), new BlockPos(22, ground - 1, oz + 18), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-12, ground, oz - 8), new BlockPos(22, ground + 9, oz + 18), Blocks.AIR.defaultBlockState());
+            fill(level, new BlockPos(0, ground - 1, oz), new BlockPos(10, ground - 1, oz + 7), Blocks.DARK_OAK_PLANKS.defaultBlockState());
+            BlockState plaster = ModBlocks.WHITE_PLASTER.base().get().defaultBlockState();
+            BlockState clay = ModBlocks.CLAY_PLASTER.base().get().defaultBlockState();
+            BlockState limestone = ModBlocks.LIMESTONE_BRICKS.base().get().defaultBlockState();
+            BlockState beam = ModBlocks.TIMBER_BEAM.get().defaultBlockState();
+            BlockState glass = ModBlocks.LEADED_GLASS.get().defaultBlockState();
+            // Rückwand (Kalkputz, zwei Fenster), Seitenwände (Lehmputz links, Kalkstein rechts), Ecken aus Balken
+            fill(level, new BlockPos(1, ground, oz), new BlockPos(9, ground + 4, oz), plaster);
+            fill(level, new BlockPos(0, ground, oz + 1), new BlockPos(0, ground + 4, oz + 6), clay);
+            fill(level, new BlockPos(10, ground, oz + 1), new BlockPos(10, ground + 4, oz + 6), limestone);
+            for (int[] corner : new int[][] {{0, oz}, {10, oz}, {0, oz + 7}, {10, oz + 7}}) {
+                fill(level, new BlockPos(corner[0], ground, corner[1]), new BlockPos(corner[0], ground + 4, corner[1]), beam);
+            }
+            fill(level, new BlockPos(2, ground + 1, oz), new BlockPos(3, ground + 2, oz), glass);
+            fill(level, new BlockPos(7, ground + 1, oz), new BlockPos(8, ground + 2, oz), glass);
+            // Fensterläden innen neben den Fenstern (geöffnet, flach an der Wand)
+            for (int x : new int[] {1, 4, 6, 9}) {
+                Block shutters = x < 5 ? ModBlocks.GREEN_SHUTTERS.get() : ModBlocks.RED_SHUTTERS.get();
+                for (int y = 1; y <= 2; y++) {
+                    level.setBlock(new BlockPos(x, ground + y, oz + 1), shutters.defaultBlockState()
+                            .setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING, Direction.SOUTH)
+                            .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN, true)
+                            .setValue(net.minecraft.world.level.block.TrapDoorBlock.HALF, y == 1 ? Half.BOTTOM : Half.TOP), Block.UPDATE_CLIENTS);
+                }
+            }
+            // Fenster mit Bleiglasscheiben in der linken Wand
+            for (int z = oz + 3; z <= oz + 4; z++) {
+                for (int y = 1; y <= 2; y++) {
+                    BlockPos pos = new BlockPos(0, ground + y, z);
+                    level.setBlock(pos, ModBlocks.LEADED_GLASS_PANE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+            // Burgtür in der rechten Wand
+            BlockState door = ModBlocks.CASTLE_DOOR.get().defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.DoorBlock.FACING, Direction.WEST);
+            level.setBlock(new BlockPos(10, ground, oz + 3), door, Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(10, ground + 1, oz + 3), door.setValue(net.minecraft.world.level.block.DoorBlock.HALF,
+                    net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER), Block.UPDATE_CLIENTS);
+            // Decke und Zinnen obenauf
+            fill(level, new BlockPos(0, ground + 5, oz), new BlockPos(10, ground + 5, oz + 7), Blocks.DARK_OAK_PLANKS.defaultBlockState());
+            for (int x = 0; x <= 10; x++) {
+                level.setBlock(new BlockPos(x, ground + 6, oz), ModBlocks.MEDIEVAL_STONE_BATTLEMENT.get().defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.BattlementBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+            }
+            for (int z = oz + 1; z <= oz + 7; z++) {
+                level.setBlock(new BlockPos(0, ground + 6, z), ModBlocks.DARK_STONE_BRICK_BATTLEMENT.get().defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.BattlementBlock.FACING, Direction.EAST), Block.UPDATE_CLIENTS);
+                level.setBlock(new BlockPos(10, ground + 6, z), ModBlocks.LIMESTONE_BRICK_BATTLEMENT.get().defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.BattlementBlock.FACING, Direction.WEST), Block.UPDATE_CLIENTS);
+            }
+            // Licht: Kronleuchter in der Mitte, Laternen an der Decke und auf den Tischen
+            level.setBlock(new BlockPos(5, ground + 4, oz + 4), ModBlocks.CHANDELIER.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            for (int[] spot : new int[][] {{2, oz + 6}, {8, oz + 6}}) {
+                level.setBlock(new BlockPos(spot[0], ground + 4, spot[1]), ModBlocks.AETHERIT_LANTERN.get().defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.LanternBlock.HANGING, true), Block.UPDATE_CLIENTS);
+            }
+            // Thron mit rotem Teppich
+            level.setBlock(new BlockPos(5, ground, oz + 1), ModBlocks.THRONE.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, Direction.SOUTH), Block.UPDATE_CLIENTS);
+            fill(level, new BlockPos(5, ground, oz + 2), new BlockPos(5, ground, oz + 9), Blocks.CARPET.red().defaultBlockState());
+            // Tafeln links und rechts, mit Stühlen und Bänken
+            for (int x : new int[] {2, 8}) {
+                for (int z = oz + 3; z <= oz + 5; z++) {
+                    BlockPos pos = new BlockPos(x, ground, z);
+                    level.setBlock(pos, ModBlocks.OAK_TABLE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+            for (int x : new int[] {2, 8}) {
+                for (int z = oz + 3; z <= oz + 5; z++) {
+                    BlockPos pos = new BlockPos(x, ground, z);
+                    level.setBlock(pos, Block.updateFromNeighbourShapes(level.getBlockState(pos), level, pos), Block.UPDATE_CLIENTS);
+                }
+                boolean left = x < 5;
+                Direction outer = left ? Direction.EAST : Direction.WEST;    // Stühle an der Wand schauen zum Tisch
+                for (int z = oz + 3; z <= oz + 5; z += 2) {
+                    level.setBlock(new BlockPos(left ? 1 : 9, ground, z), ModBlocks.OAK_CHAIR.get().defaultBlockState()
+                            .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, outer), Block.UPDATE_CLIENTS);
+                }
+                for (int z = oz + 3; z <= oz + 5; z++) {
+                    level.setBlock(new BlockPos(left ? 3 : 7, ground, z), ModBlocks.OAK_BENCH.get().defaultBlockState()
+                            .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, outer.getOpposite()), Block.UPDATE_CLIENTS);
+                }
+            }
+            level.setBlock(new BlockPos(2, ground + 1, oz + 4), ModBlocks.STEEL_LANTERN.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(8, ground + 1, oz + 4), ModBlocks.STEEL_LANTERN.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            // Ein Ritter auf dem Thron, Soldaten an der Tafel
+            spawnSoldier(level, SoldierType.CAPTAIN, 0, 5, oz + 1, 0, s -> seat(level, s, new BlockPos(5, ground, oz + 1)));
+            spawnSoldier(level, SoldierType.SWORDSMAN, 1, 3, oz + 4, 0, s -> seat(level, s, new BlockPos(3, ground, oz + 4)));
+            spawnSoldier(level, SoldierType.ARCHER, 0, 9, oz + 3, 0, s -> seat(level, s, new BlockPos(9, ground, oz + 3)));
+
+            // Ausstellung daneben: jedes Stück einzeln (Thron leer), Zinnenreihe, Tür offen und zu
+            Direction south = Direction.SOUTH;
+            level.setBlock(new BlockPos(15, ground, oz + 4), ModBlocks.THRONE.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, south), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(17, ground, oz + 4), ModBlocks.OAK_CHAIR.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, south), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(19, ground, oz + 4), ModBlocks.OAK_BENCH.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, south), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(20, ground, oz + 4), ModBlocks.OAK_BENCH.get().defaultBlockState()
+                    .setValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING, south), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(22, ground, oz + 4), ModBlocks.OAK_TABLE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(22, ground + 1, oz + 4), ModBlocks.AETHERIT_LANTERN.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(24, ground + 2, oz + 4), Blocks.DARK_OAK_PLANKS.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(24, ground + 1, oz + 4), ModBlocks.CHANDELIER.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            for (int x = 14; x <= 24; x++) {
+                Block battlement = x < 18 ? ModBlocks.MEDIEVAL_STONE_BATTLEMENT.get()
+                        : x < 22 ? ModBlocks.DARK_STONE_BRICK_BATTLEMENT.get() : ModBlocks.LIMESTONE_BRICK_BATTLEMENT.get();
+                level.setBlock(new BlockPos(x, ground, oz), battlement.defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.BattlementBlock.FACING, south), Block.UPDATE_CLIENTS);
+            }
+            for (int i = 0; i < 2; i++) {
+                BlockState castleDoor = ModBlocks.CASTLE_DOOR.get().defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.DoorBlock.FACING, south)
+                        .setValue(net.minecraft.world.level.block.DoorBlock.OPEN, i == 1);
+                level.setBlock(new BlockPos(14 + i * 2, ground, oz + 8), castleDoor, Block.UPDATE_CLIENTS);
+                level.setBlock(new BlockPos(14 + i * 2, ground + 1, oz + 8), castleDoor.setValue(net.minecraft.world.level.block.DoorBlock.HALF,
+                        net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER), Block.UPDATE_CLIENTS);
+                BlockState shutter = ModBlocks.RED_SHUTTERS.get().defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING, Direction.NORTH)
+                        .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN, i == 1);
+                level.setBlock(new BlockPos(19 + i * 2, ground, oz + 8), shutter, Block.UPDATE_CLIENTS);
+                level.setBlock(new BlockPos(19 + i * 2, ground + 1, oz + 8), ModBlocks.STEEL_LANTERN.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            level.setBlock(new BlockPos(23, ground, oz + 8), ModBlocks.LEADED_GLASS.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(new BlockPos(24, ground, oz + 8), ModBlocks.LEADED_GLASS_PANE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(5.5, 2.6, oz + 14.5, 180, 8));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("decor_hall"));
+        steps.add(tp(5.5, 1.7, oz + 6.6, 180, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_throne"));
+        steps.add(tp(7.2, 2.0, oz + 6.9, 120, 18));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_furniture"));
+        steps.add(tp(4.0, 1.6, oz + 3.5, -90, 4));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_door"));
+        steps.add(tp(5.5, 1.4, oz + 6.5, 180, -32));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_lights"));
+        steps.add(tp(-6.0, 5.0, oz + 13.0, 225, 18));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_outside"));
+        steps.add(tp(19.5, 2.4, oz + 13.5, 180, 14));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_display"));
+        steps.add(tp(17.5, 1.6, oz + 7.5, 160, 10));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_display_close"));
+        steps.add(tp(19.0, 2.4, oz + 3.0, 180, 30));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_battlements"));
+        steps.add(tp(19.5, 1.8, oz + 11.5, 180, 12));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("decor_doors"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(tp(5.5, 2.6, oz + 14.5, 180, 8));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("decor_hall_night"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.hud(true));
+    }
+
+    /** Setzt ein Lebewesen auf das Sitzmöbel bei {@code pos}. */
+    private static void seat(ServerLevel level, net.minecraft.world.entity.LivingEntity sitter, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof io.github.sirschrolli.kingdomsatwar.block.SeatBlock seat) {
+            io.github.sirschrolli.kingdomsatwar.entity.SeatEntity.sit(level, pos, seat.seatHeight(),
+                    state.getValue(io.github.sirschrolli.kingdomsatwar.block.SeatBlock.FACING), sitter);
+        }
+    }
+
     private static <T extends net.minecraft.world.entity.Mob> void spawnCreature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
             int x, int z, float yaw, java.util.function.Consumer<T> setup) {
         T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
@@ -751,6 +938,12 @@ final class Showcase {
             }));
             steps.add(Step.waitTicks(10));
             steps.add(Step.screenshot(names[i]));
+            if (i == 0) {
+                // Der Bau-Tab ist länger als eine Seite: ans Ende blättern
+                steps.add(Step.once(minecraft -> minecraft.gui.screen().mouseScrolled(100, 100, 0, -30)));
+                steps.add(Step.waitTicks(5));
+                steps.add(Step.screenshot(names[i] + "_2"));
+            }
             steps.add(Step.screen(minecraft -> null));
             steps.add(Step.waitTicks(5));
         }

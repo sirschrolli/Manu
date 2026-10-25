@@ -2,8 +2,12 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
+import io.github.sirschrolli.kingdomsatwar.block.BattlementBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.SeatBlock;
+import io.github.sirschrolli.kingdomsatwar.block.TableBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
@@ -131,6 +135,10 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("lindworm_hunts", () -> ModGameTests::lindwormHunts);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TROLL_FIGHTS_SOLDIERS =
             TEST_FUNCTIONS.register("troll_fights_soldiers", () -> ModGameTests::trollFightsSoldiers);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FURNITURE_SEATS =
+            TEST_FUNCTIONS.register("furniture_seats", () -> ModGameTests::furnitureSeats);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DECOR_BLOCKS =
+            TEST_FUNCTIONS.register("decor_blocks", () -> ModGameTests::decorBlocks);
 
     private ModGameTests() {}
 
@@ -147,7 +155,7 @@ public final class ModGameTests {
                 List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
-                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS)) {
+                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -215,7 +223,10 @@ public final class ModGameTests {
                 "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore", "recruitment_table",
                 "command_baton", "steel_sword", "steel_pickaxe", "steel_chestplate", "konterit_boots", "draconium_sword",
                 "draconium_axe", "fire_dragon_scale_helmet", "water_dragon_scale_boots", "wyvernit_glider", "gemstone_crown",
-                "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking")) {
+                "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking",
+                "white_plaster", "clay_plaster_stairs", "leaded_glass", "leaded_glass_pane", "castle_door", "green_shutters",
+                "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement",
+                "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
@@ -643,6 +654,105 @@ public final class ModGameTests {
         soldier.equip();
         helper.succeedWhen(() -> helper.assertTrue(soldier.getHealth() < soldier.getMaxHealth() || troll.getHealth() < troll.getMaxHealth(),
                 "Troll und Soldat kämpfen nicht"));
+    }
+
+    /**
+     * Sitzmöbel: Ein Klick setzt den Spieler mit Blick nach vorn auf den Stuhl, ein zweiter findet dort keinen Platz,
+     * auf dem Thron sitzt auch ein Ritter. Wird der Stuhl abgebaut, steht der Spieler wieder auf.
+     */
+    private static void furnitureSeats(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos chair = new BlockPos(2, 1, 2);
+        helper.setBlock(chair, ModBlocks.OAK_CHAIR.get().defaultBlockState().setValue(SeatBlock.FACING, Direction.SOUTH));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 4.5)));
+        helper.useBlock(chair, player);
+        helper.assertTrue(player.getVehicle() instanceof SeatEntity, "Spieler sitzt nicht auf dem Stuhl");
+        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(player.getYRot() - Direction.SOUTH.toYRot())) < 1.0f,
+                "Spieler schaut nicht nach vorn");
+        double seatTop = helper.absolutePos(chair).getY() + 9.0 / 16.0;
+        helper.assertTrue(Math.abs(player.getY() + 0.6 - seatTop) < 0.05, "Spieler sitzt nicht auf der Sitzfläche: " + player.getY());
+
+        SoldierEntity knight = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(5, 1, 5));
+        knight.setNoAi(true);
+        helper.assertFalse(SeatEntity.sit(level, helper.absolutePos(chair), 9.0 / 16.0, Direction.SOUTH, knight),
+                "Zwei sitzen auf demselben Stuhl");
+        BlockPos throne = new BlockPos(6, 1, 2);
+        helper.setBlock(throne, ModBlocks.THRONE.get());
+        SeatBlock throneBlock = ModBlocks.THRONE.get();
+        helper.assertTrue(SeatEntity.sit(level, helper.absolutePos(throne), throneBlock.seatHeight(), Direction.NORTH, knight),
+                "Der Ritter kann sich nicht auf den Thron setzen");
+
+        helper.destroyBlock(chair);
+        helper.runAfterDelay(3, () -> {
+            helper.assertFalse(player.isPassenger(), "Spieler sitzt noch, obwohl der Stuhl abgebaut ist");
+            helper.assertTrue(knight.isPassenger(), "Der Ritter ist vom Thron gefallen");
+            helper.assertTrue(level.getEntitiesOfClass(SeatEntity.class, new net.minecraft.world.phys.AABB(helper.absolutePos(chair))).isEmpty(),
+                    "Der Sitz des abgebauten Stuhls ist nicht verschwunden");
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Einrichtung: Tische verbinden sich zur Tafel, der Kronleuchter fällt ohne Halt herunter, Zinnen bilden
+     * Zahn und Scharte quer zur Blickrichtung, Burgtür und Fensterläden lassen sich öffnen.
+     */
+    private static void decorBlocks(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        // Tafel aus zwei Tischen: Beine nur an den äußeren Ecken
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        placeWithHand(helper, player, ModBlocks.OAK_TABLE.get(), new BlockPos(2, 0, 2));
+        placeWithHand(helper, player, ModBlocks.OAK_TABLE.get(), new BlockPos(3, 0, 2));
+        BlockState west = helper.getBlockState(new BlockPos(2, 1, 2));
+        BlockState east = helper.getBlockState(new BlockPos(3, 1, 2));
+        helper.assertTrue(west.is(ModBlocks.OAK_TABLE.get()) && west.getValue(TableBlock.EAST) && !west.getValue(TableBlock.WEST),
+                "Linker Tisch ist nicht mit dem rechten verbunden: " + west);
+        helper.assertTrue(east.getValue(TableBlock.WEST) && !east.getValue(TableBlock.EAST),
+                "Rechter Tisch ist nicht mit dem linken verbunden: " + east);
+
+        // Kronleuchter hängt an der Decke und fällt ohne sie herunter
+        BlockPos ceiling = new BlockPos(6, 4, 6);
+        helper.setBlock(ceiling, Blocks.OAK_PLANKS);
+        helper.setBlock(ceiling.below(), ModBlocks.CHANDELIER.get());
+        helper.assertTrue(helper.getBlockState(ceiling.below()).canSurvive(level, helper.absolutePos(ceiling.below())),
+                "Kronleuchter hält nicht an der Decke");
+        helper.setBlock(ceiling, Blocks.AIR);
+        helper.assertBlockNotPresent(ModBlocks.CHANDELIER.get(), ceiling.below());
+
+        // Zinnen: Mauerzahn über die volle Tiefe, Scharte an den Seiten
+        BlockState battlement = ModBlocks.MEDIEVAL_STONE_BATTLEMENT.get().defaultBlockState().setValue(BattlementBlock.FACING, Direction.NORTH);
+        var shape = battlement.getShape(level, BlockPos.ZERO);
+        helper.assertTrue(contains(shape, 0.5, 0.75, 0.05) && contains(shape, 0.5, 0.75, 0.95), "Mauerzahn fehlt");
+        helper.assertTrue(!contains(shape, 0.1, 0.75, 0.5) && contains(shape, 0.1, 0.25, 0.5), "Scharte fehlt");
+        var turned = battlement.setValue(BattlementBlock.FACING, Direction.EAST).getShape(level, BlockPos.ZERO);
+        helper.assertTrue(contains(turned, 0.05, 0.75, 0.5) && !contains(turned, 0.5, 0.75, 0.1), "Gedrehte Zinne falsch");
+
+        // Burgtür und Fensterläden öffnen sich per Hand
+        Player hand = helper.makeMockPlayer(GameType.SURVIVAL);
+        placeWithHand(helper, hand, ModBlocks.CASTLE_DOOR.get(), new BlockPos(1, 0, 6));
+        helper.assertBlockPresent(ModBlocks.CASTLE_DOOR.get(), new BlockPos(1, 2, 6));
+        helper.useBlock(new BlockPos(1, 1, 6), hand);
+        helper.assertTrue(helper.getBlockState(new BlockPos(1, 1, 6)).getValue(net.minecraft.world.level.block.DoorBlock.OPEN),
+                "Burgtür öffnet sich nicht");
+        helper.setBlock(new BlockPos(3, 1, 6), ModBlocks.GREEN_SHUTTERS.get());
+        helper.useBlock(new BlockPos(3, 1, 6), hand);
+        helper.assertTrue(helper.getBlockState(new BlockPos(3, 1, 6)).getValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN),
+                "Fensterladen öffnet sich nicht");
+        helper.succeed();
+    }
+
+    /** Setzt den Block wie ein Spieler mit dem Gegenstand in der Hand oben auf {@code below}. */
+    private static void placeWithHand(GameTestHelper helper, Player player, Block block, BlockPos below) {
+        ItemStack stack = new ItemStack(block);
+        player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+        helper.placeAt(player, stack, below, Direction.UP);
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+    }
+
+    private static boolean contains(net.minecraft.world.phys.shapes.VoxelShape shape, double x, double y, double z) {
+        return shape.toAabbs().stream().anyMatch(box -> box.contains(x, y, z));
     }
 
     // =====================================================================================

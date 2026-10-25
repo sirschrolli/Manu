@@ -1,5 +1,21 @@
 {
   "values": {
+    "kingdomsatwar:oak_bench": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:oak_chair": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:oak_table": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:throne": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
     "kingdomsatwar:timber_beam": {
       "burn_odds": 5,
       "ignite_odds": 5
