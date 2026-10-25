@@ -2,7 +2,8 @@
 """
 Erzeugt ALLE Audiodateien der Mod mit einem Befehl:
 
-  * Erzählerstimme für das Intro (Deutsch: Thorsten, Englisch: LibriTTS-R Sprecher 680)
+  * Erzählerstimme für das Intro: entweder vorab erzeugte Zeilen (--narration-source, epische Stimme nach den
+    frei gespendeten Aufnahmen von Thorsten Müller) oder Piper (Deutsch: Thorsten, Englisch: LibriTTS-R 680)
   * eigene Intro-Musik (komponiert in music.py, gespielt mit FluidR3_GM)
   * Zeitplan des Intros (assets/kingdomsatwar/intro/intro.json)
   * Soldaten-Sprachzeilen (Deutsch/Englisch, je zwei Stimmfärbungen)
@@ -17,6 +18,8 @@ Optionen:
     --only narration,music,voices   nur einzelne Teile neu erzeugen (Standard: alles;
                                     "--only none" schreibt nur intro.json und sounds.json neu)
     --work /pfad                    Ordner für Zwischendateien (MIDI, Stems, Spektrogramme, Bericht)
+    --narration-source /pfad        vorab erzeugte Erzählerzeilen narration_raw_<de|en>_<01..09>.wav verwenden
+                                    (epische Nachbearbeitung mit sox statt Piper)
 
 Benötigt: pip install piper-tts tinysoundfont mido numpy scipy soundfile pyloudnorm librosa matplotlib
           (tinysoundfont ggf. mit --no-deps installieren) sowie ffmpeg mit libvorbis.
@@ -132,6 +135,21 @@ def build_narration(models: Path, work: Path, takes: int = 3) -> dict:
             print(f"  Erzähler {lang} {i}: {info[(lang, i)]['speech']:.2f} s (Tempo {rate:.2f} W/s, length_scale {ls:.2f})",
                   flush=True)
     json.dump(log, open(work / "narration_takes.json", "w"), indent=1)
+    return info
+
+
+def load_narration(source: Path, work: Path) -> dict:
+    """Vorab erzeugte Erzählerzeilen (Chatterbox) übernehmen und episch nachbearbeiten."""
+    info = {}
+    for lang in ("de", "en"):
+        for i in range(1, len(NARRATION) + 1):
+            raw, sr = dsp.read_wav(source / f"narration_raw_{lang}_{i:02d}.wav")
+            y = tts.epic_narrator_chain(raw, sr, target_lufs=-16.0)
+            path = SOUNDS / "intro" / f"narration_{lang}_{i:02d}.ogg"
+            dsp.write_ogg(y, SR, path, quality=5)
+            dsp.write_wav(y, SR, work / "narration" / f"narration_{lang}_{i:02d}.wav")
+            info[(lang, i)] = dict(file=path, speech=speech_length(y, SR), length=len(y) / SR)
+            print(f"  Erzähler {lang} {i}: {info[(lang, i)]['speech']:.2f} s", flush=True)
     return info
 
 
@@ -420,6 +438,7 @@ def main() -> None:
     ap.add_argument("--models", default=os.environ.get("KAW_AUDIO_MODELS"))
     ap.add_argument("--only", default="narration,music,voices")
     ap.add_argument("--work", default=os.environ.get("KAW_AUDIO_WORK", str(ROOT / "build" / "audio-work")))
+    ap.add_argument("--narration-source", default=None)
     args = ap.parse_args()
     if not args.models:
         sys.exit("Bitte --models oder KAW_AUDIO_MODELS angeben (Ordner mit den Piper-Stimmen und FluidR3_GM.sf2).")
@@ -431,7 +450,10 @@ def main() -> None:
     narr_cache = work / "narration_timing.json"
     if "narration" in parts or "music" in parts and not narr_cache.exists():
         print("Erzählerstimme ...")
-        narr = build_narration(models, work)
+        if args.narration_source:
+            narr = load_narration(Path(args.narration_source), work)
+        else:
+            narr = build_narration(models, work)
         json.dump({f"{k[0]}:{k[1]}": {"speech": v["speech"], "length": v["length"]} for k, v in narr.items()},
                   open(narr_cache, "w"), indent=1)
     narr = {(k.split(":")[0], int(k.split(":")[1])): v for k, v in json.load(open(narr_cache)).items()}

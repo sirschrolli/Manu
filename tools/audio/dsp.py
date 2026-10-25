@@ -233,6 +233,12 @@ def write_ogg(x: np.ndarray, sr: int, path: Path, quality: float = 5.0) -> None:
                         "-q:a", str(quality), "-ar", str(sr), "-map_metadata", "-1", str(path)], check=True)
 
 
+def read_wav(path: Path) -> tuple[np.ndarray, int]:
+    """Liest eine Audiodatei als Mono-Float32."""
+    y, sr = sf.read(path, dtype="float32", always_2d=True)
+    return y.mean(axis=1).astype(np.float32), sr
+
+
 def write_wav(x: np.ndarray, sr: int, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     sf.write(path, as_2d(x), sr, subtype="FLOAT")
