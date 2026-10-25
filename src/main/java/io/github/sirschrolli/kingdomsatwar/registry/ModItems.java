@@ -1,12 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.CommandBatonItem;
-import io.github.sirschrolli.kingdomsatwar.item.DraconiumWeaponItem;
-import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
+import io.github.sirschrolli.kingdomsatwar.item.DraconiumWeaponItem;
+import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -20,6 +19,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -32,7 +32,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
@@ -111,6 +113,18 @@ public final class ModItems {
         }
     }
 
+    // Wilde Kreaturen: Spawn-Eier
+    public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
+    public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
+    public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());
+    public static final DeferredItem<SpawnEggItem> WILL_O_WISP_SPAWN_EGG = creatureEgg("will_o_wisp", () -> ModEntities.WILL_O_WISP.get());
+    public static final DeferredItem<SpawnEggItem> CAVE_TROLL_SPAWN_EGG = creatureEgg("cave_troll", () -> ModEntities.CAVE_TROLL.get());
+    public static final DeferredItem<SpawnEggItem> LINDWORM_SPAWN_EGG = creatureEgg("lindworm", () -> ModEntities.LINDWORM.get());
+
+    /** Irrlichtstaub: leuchtender Staub der Irrlichter – eine Zutat für Magie. */
+    public static final DeferredItem<Item> WISP_DUST = item("wisp_dust",
+            p -> p.rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore("wisp_dust", 1)), RESOURCE_TAB);
+
     // =====================================================================================
     // Kingdoms at War – Landwirtschaft & Nahrung
     // =====================================================================================
@@ -137,6 +151,9 @@ public final class ModItems {
                     .usingConvertsTo(Items.BOWL).stacksTo(1), FARMING_TAB);
     public static final DeferredItem<Item> MEAT_PIE = food("meat_pie", 8, 0.8f, null);
     public static final DeferredItem<Item> APPLE_PIE = food("apple_pie", 7, 0.6f, null);
+    /** Wildbret vom Hirsch – roh und gebraten. */
+    public static final DeferredItem<Item> VENISON = food("venison", 3, 0.3f, null);
+    public static final DeferredItem<Item> COOKED_VENISON = food("cooked_venison", 8, 0.8f, null);
 
     // =====================================================================================
     // Kingdoms at War – Armee
@@ -226,6 +243,20 @@ public final class ModItems {
                             EquipmentSlotGroup.HEAD))
                     .component(DataComponents.LORE, lore("gemstone_crown", 1))));
 
+    /** Trollkeule: schwer und langsam, schleudert Gegner weit weg und zerschmettert Schilde (seltene Beute der Höhlentrolle). */
+    public static final DeferredItem<Item> TROLL_CLUB = gear("troll_club", p -> p.durability(520).rarity(Rarity.RARE).enchantable(10)
+            .repairable(ItemTags.LOGS)
+            .component(DataComponents.WEAPON, new Weapon(1, 5.0f))
+            .attributes(ItemAttributeModifiers.builder()
+                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 10.0,
+                            AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -3.4,
+                            AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(KingdomsAtWar.id("troll_club_knockback"), 1.5,
+                            AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .build())
+            .component(DataComponents.LORE, lore("troll_club", 1)));
+
     // Drachenpanzer: Rüstung für den eigenen ausgewachsenen Drachen
     public static final DeferredItem<Item> STEEL_DRAGON_ARMOR = dragonArmor("steel_dragon_armor", ModEquipment.STEEL_DRAGON_ARMOR, false);
     public static final DeferredItem<Item> DRACONIUM_DRAGON_ARMOR = dragonArmor("draconium_dragon_armor", ModEquipment.DRACONIUM_DRAGON_ARMOR, true);
@@ -239,6 +270,10 @@ public final class ModItems {
     private static <T extends Supplier<? extends ItemLike>> T addTo(List<Supplier<? extends ItemLike>> tab, T entry) {
         tab.add(entry);
         return entry;
+    }
+
+    private static DeferredItem<SpawnEggItem> creatureEgg(String name, Supplier<EntityType<? extends net.minecraft.world.entity.Mob>> type) {
+        return addTo(DRAGON_TAB, ITEMS.registerItem(name + "_spawn_egg", SpawnEggItem::new, p -> p.spawnEgg(type.get())));
     }
 
     private static DeferredItem<Item> gear(String name, UnaryOperator<Item.Properties> properties) {

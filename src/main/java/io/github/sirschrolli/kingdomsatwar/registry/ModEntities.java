@@ -2,6 +2,12 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.CaveTrollEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.DeerEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.GooseEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.LindwormEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.WildBoarEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.WillOWispEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
@@ -11,6 +17,7 @@ import java.util.Map;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -52,6 +59,21 @@ public final class ModEntities {
             (entityType, level) -> new BanditEntity(entityType, level, true), MobCategory.MONSTER,
             builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(8));
 
+    // ---------------------------------------------------------------- Wilde Kreaturen
+    public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
+            WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<DeerEntity>> DEER = ENTITIES.registerEntityType("deer",
+            DeerEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.4f).eyeHeight(1.3f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<GooseEntity>> GOOSE = ENTITIES.registerEntityType("goose",
+            GooseEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.5f, 0.9f).eyeHeight(0.8f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WillOWispEntity>> WILL_O_WISP = ENTITIES.registerEntityType("will_o_wisp",
+            WillOWispEntity::new, MobCategory.AMBIENT,
+            builder -> builder.sized(0.45f, 0.45f).eyeHeight(0.22f).fireImmune().clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<CaveTrollEntity>> CAVE_TROLL = ENTITIES.registerEntityType("cave_troll",
+            CaveTrollEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.9f).eyeHeight(2.45f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
+            LindwormEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.6f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
+
     private ModEntities() {}
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -59,13 +81,30 @@ public final class ModEntities {
         SOLDIERS.values().forEach(type -> event.put(type.get(), SoldierEntity.createAttributes().build()));
         event.put(BANDIT.get(), BanditEntity.createAttributes().build());
         event.put(BANDIT_ARCHER.get(), BanditEntity.createAttributes().build());
+        event.put(WILD_BOAR.get(), WildBoarEntity.createAttributes().build());
+        event.put(DEER.get(), DeerEntity.createAttributes().build());
+        event.put(GOOSE.get(), GooseEntity.createAttributes().build());
+        event.put(WILL_O_WISP.get(), WillOWispEntity.createAttributes().build());
+        event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
+        event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
     }
 
-    /** Wo Banditen von selbst erscheinen dürfen: nachts unter freiem Himmel auf festem Boden. */
+    /**
+     * Wo Lebewesen von selbst erscheinen dürfen: Banditen nachts unter freiem Himmel, Tiere auf Gras,
+     * Irrlichter nachts im Dunkeln, Trolle tief unter der Erde, Lindwürmer unter freiem Himmel.
+     */
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        var replace = RegisterSpawnPlacementsEvent.Operation.REPLACE;
+        var ground = SpawnPlacementTypes.ON_GROUND;
+        var surface = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
         for (var bandit : java.util.List.of(BANDIT, BANDIT_ARCHER)) {
-            event.register(bandit.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                    BanditEntity::checkBanditSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+            event.register(bandit.get(), ground, surface, BanditEntity::checkBanditSpawnRules, replace);
         }
+        event.register(WILD_BOAR.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
+        event.register(DEER.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
+        event.register(GOOSE.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
+        event.register(WILL_O_WISP.get(), ground, surface, WillOWispEntity::checkWispSpawnRules, replace);
+        event.register(CAVE_TROLL.get(), ground, surface, CaveTrollEntity::checkTrollSpawnRules, replace);
+        event.register(LINDWORM.get(), ground, surface, LindwormEntity::checkLindwormSpawnRules, replace);
     }
 }

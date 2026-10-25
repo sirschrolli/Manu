@@ -123,6 +123,14 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("dragon_armor", () -> ModGameTests::dragonArmor);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GLIDER_AND_CROWN =
             TEST_FUNCTIONS.register("glider_and_crown", () -> ModGameTests::gliderAndCrown);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CREATURES_SPAWN =
+            TEST_FUNCTIONS.register("creatures_spawn", () -> ModGameTests::creaturesSpawn);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BOAR_RETALIATES =
+            TEST_FUNCTIONS.register("boar_retaliates", () -> ModGameTests::boarRetaliates);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LINDWORM_HUNTS =
+            TEST_FUNCTIONS.register("lindworm_hunts", () -> ModGameTests::lindwormHunts);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TROLL_FIGHTS_SOLDIERS =
+            TEST_FUNCTIONS.register("troll_fights_soldiers", () -> ModGameTests::trollFightsSoldiers);
 
     private ModGameTests() {}
 
@@ -138,7 +146,8 @@ public final class ModGameTests {
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
                 List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
-                        SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN)) {
+                        SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
+                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -206,7 +215,7 @@ public final class ModGameTests {
                 "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore", "recruitment_table",
                 "command_baton", "steel_sword", "steel_pickaxe", "steel_chestplate", "konterit_boots", "draconium_sword",
                 "draconium_axe", "fire_dragon_scale_helmet", "water_dragon_scale_boots", "wyvernit_glider", "gemstone_crown",
-                "steel_dragon_armor", "draconium_dragon_armor")) {
+                "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
@@ -578,6 +587,62 @@ public final class ModGameTests {
         helper.assertTrue(crown.getAttributeModifiers().compute(Attributes.ARMOR, 0.0, EquipmentSlot.HEAD) >= 2.0,
                 "Die Krone schützt nicht");
         helper.succeed();
+    }
+
+    /** Alle wilden Kreaturen erscheinen, leben und haben eine Beute-Tabelle. */
+    private static void creaturesSpawn(GameTestHelper helper) {
+        arenaFloor(helper);
+        var registries = helper.getLevel().getServer().reloadableRegistries();
+        List<net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob>> types = List.of(
+                ModEntities.WILD_BOAR.get(), ModEntities.DEER.get(), ModEntities.GOOSE.get(), ModEntities.WILL_O_WISP.get(),
+                ModEntities.CAVE_TROLL.get(), ModEntities.LINDWORM.get());
+        List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();
+        for (int i = 0; i < types.size(); i++) {
+            var type = types.get(i);
+            mobs.add(helper.spawnWithNoFreeWill(type, new BlockPos(1 + (i % 3) * 3, 1, 2 + (i / 3) * 4)));
+            ResourceKey<LootTable> key = type.getDefaultLootTable().orElseThrow();
+            helper.assertTrue(registries.getLootTable(key) != LootTable.EMPTY, "Beute fehlt: " + key.identifier());
+        }
+        helper.runAfterDelay(10, () -> {
+            for (var mob : mobs) {
+                helper.assertTrue(mob.isAlive(), mob.getType().getDescriptionId() + " lebt nicht mehr");
+                helper.assertValueEqual(mob.getHealth(), mob.getMaxHealth(), "Leben von " + mob.getType().getDescriptionId());
+            }
+            helper.succeed();
+        });
+    }
+
+    /** Ein angegriffenes Wildschwein greift den Angreifer an. */
+    private static void boarRetaliates(GameTestHelper helper) {
+        arenaFloor(helper);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        var boar = helper.spawn(ModEntities.WILD_BOAR.get(), new BlockPos(4, 1, 4));
+        player.snapTo(boar.getX() + 2, boar.getY(), boar.getZ(), 90.0f, 0.0f);
+        // erst nach ein paar Ticks angreifen (HurtByTargetGoal vergleicht den Zeitpunkt des Treffers)
+        helper.runAfterDelay(5, () -> boar.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 1.0f));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(boar.getTarget() == player, "Das Wildschwein wehrt sich nicht");
+            helper.assertTrue(boar.isCharging(), "Das Wildschwein stürmt nicht los");
+        });
+    }
+
+    /** Ein Lindwurm jagt Tiere. */
+    private static void lindwormHunts(GameTestHelper helper) {
+        arenaFloor(helper);
+        var lindworm = helper.spawn(ModEntities.LINDWORM.get(), new BlockPos(2, 1, 4));
+        var pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(5, 1, 4));
+        helper.succeedWhen(() -> helper.assertTrue(pig.getHealth() < pig.getMaxHealth() || !pig.isAlive(),
+                "Der Lindwurm greift das Schwein nicht an"));
+    }
+
+    /** Höhlentrolle und Soldaten bekämpfen sich. */
+    private static void trollFightsSoldiers(GameTestHelper helper) {
+        arenaFloor(helper);
+        var troll = helper.spawn(ModEntities.CAVE_TROLL.get(), new BlockPos(2, 1, 4));
+        SoldierEntity soldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(6, 1, 4));
+        soldier.equip();
+        helper.succeedWhen(() -> helper.assertTrue(soldier.getHealth() < soldier.getMaxHealth() || troll.getHealth() < troll.getMaxHealth(),
+                "Troll und Soldat kämpfen nicht"));
     }
 
     // =====================================================================================

@@ -246,6 +246,12 @@ public class ModModelProvider extends ModelProvider {
         items.generateElytra(ModItems.WYVERNIT_GLIDER.get());
         flat(items, ModItems.GEMSTONE_CROWN.get());
         flat(items, ModItems.STEEL_DRAGON_ARMOR.get());
+        items.generateFlatItem(ModItems.TROLL_CLUB.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,
+                ModItems.WILL_O_WISP_SPAWN_EGG, ModItems.CAVE_TROLL_SPAWN_EGG, ModItems.LINDWORM_SPAWN_EGG, ModItems.VENISON,
+                ModItems.COOKED_VENISON, ModItems.WISP_DUST)) {
+            flat(items, item.get());
+        }
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
     }
 

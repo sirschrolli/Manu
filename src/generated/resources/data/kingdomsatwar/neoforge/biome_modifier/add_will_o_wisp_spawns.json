@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_will_o_wisps",
+  "spawners": {
+    "type": "kingdomsatwar:will_o_wisp",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 1
+    },
+    "weight": 12
+  }
+}

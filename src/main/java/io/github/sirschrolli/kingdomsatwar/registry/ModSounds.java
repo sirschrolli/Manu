@@ -40,6 +40,36 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> BANDIT_DEATH = register("entity.bandit.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> COMMAND_BATON = register("item.command_baton.command");
 
+    // ---------------------------------------------------------------- Wilde Kreaturen
+    public static final DeferredHolder<SoundEvent, SoundEvent> WILD_BOAR_AMBIENT = register("entity.wild_boar.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WILD_BOAR_ANGRY = register("entity.wild_boar.angry");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WILD_BOAR_HURT = register("entity.wild_boar.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WILD_BOAR_DEATH = register("entity.wild_boar.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WILD_BOAR_STEP = register("entity.wild_boar.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEER_AMBIENT = register("entity.deer.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEER_HURT = register("entity.deer.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEER_DEATH = register("entity.deer.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DEER_STEP = register("entity.deer.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GOOSE_AMBIENT = register("entity.goose.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GOOSE_HISS = register("entity.goose.hiss");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GOOSE_HURT = register("entity.goose.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GOOSE_DEATH = register("entity.goose.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WISP_AMBIENT = register("entity.will_o_wisp.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WISP_HURT = register("entity.will_o_wisp.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WISP_DEATH = register("entity.will_o_wisp.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WISP_VANISH = register("entity.will_o_wisp.vanish");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_AMBIENT = register("entity.cave_troll.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_HURT = register("entity.cave_troll.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_DEATH = register("entity.cave_troll.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_STEP = register("entity.cave_troll.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_SMASH = register("entity.cave_troll.smash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TROLL_PETRIFY = register("entity.cave_troll.petrify");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_AMBIENT = register("entity.lindworm.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_HURT = register("entity.lindworm.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_DEATH = register("entity.lindworm.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_BITE = register("entity.lindworm.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_SLITHER = register("entity.lindworm.slither");
+
     static {
         for (DragonType type : DragonType.values()) {
             DRAGON_BREATH.put(type, register("entity.dragon.breath." + type.id()));

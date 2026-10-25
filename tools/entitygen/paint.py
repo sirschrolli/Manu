@@ -8,6 +8,7 @@ zugehörige Punkt im Modell berechnet; darauf beruhen durchgehende Muster über 
 from __future__ import annotations
 
 import colorsys
+import hashlib
 import math
 import random
 from typing import Callable
@@ -98,7 +99,11 @@ class Voronoi3D:
 
 
 def hash01(*args) -> float:
-    return (hash(args) & 0xFFFF) / 0xFFFF
+    """Fester Pseudo-Zufall 0..1. Zahlen-Tupel über hash() (in Python stabil), Texte über MD5
+    (hash() von Texten ändert sich bei jedem Programmstart)."""
+    if not any(isinstance(a, str) for a in args):
+        return (hash(args) & 0xFFFF) / 0xFFFF
+    return int.from_bytes(hashlib.md5(repr(args).encode()).digest()[:2], "little") / 0xFFFF
 
 
 # =============================================================================================
@@ -286,5 +291,89 @@ def stripes_painter(base: Painter, key: str, axis: int = 2, period: float = 6.0,
                 ctx.glow = col
             return col
         return base(ctx)
+
+    return paint
+
+
+# =============================================================================================
+# Fell, Federn, Haut (wilde Kreaturen)
+# =============================================================================================
+
+def noise3(x: float, y: float, z: float, seed: int = 0) -> float:
+    """Glattes Wertrauschen im Raum (0..1), trilinear zwischen Gitterpunkten."""
+    ix, iy, iz = math.floor(x), math.floor(y), math.floor(z)
+    fx, fy, fz = x - ix, y - iy, z - iz
+
+    def h(a, b, c):
+        return hash01(a, b, c, seed)
+
+    def lerp(a, b, t):
+        return a + (b - a) * (t * t * (3 - 2 * t))
+
+    c00 = lerp(h(ix, iy, iz), h(ix + 1, iy, iz), fx)
+    c10 = lerp(h(ix, iy + 1, iz), h(ix + 1, iy + 1, iz), fx)
+    c01 = lerp(h(ix, iy, iz + 1), h(ix + 1, iy, iz + 1), fx)
+    c11 = lerp(h(ix, iy + 1, iz + 1), h(ix + 1, iy + 1, iz + 1), fx)
+    return lerp(lerp(c00, c10, fy), lerp(c01, c11, fy), fz)
+
+
+def fur_painter(back: str = "fur", belly: str | None = "belly", belly_from: float = 0.62, scale: float = 0.45,
+                contrast: float = 0.5, top_dark: float = 0.12, seed: int = 5, streaks: float = 0.16) -> Painter:
+    """Fell: weiche Flecken (Rauschen) plus kurze Haarstriche, Rücken dunkler, Bauch heller."""
+
+    def paint(ctx: Ctx) -> RGBA:
+        x, y, z = ctx.world
+        n = noise3(x * scale, y * scale, z * scale, seed)
+        strand = hash01(int(math.floor(x * 1.0)), int(math.floor(y * 2.0)), int(math.floor(z * 0.5)), seed)
+        ry = rel_y(ctx) if ctx.face not in ("top", "bottom") else (0.0 if ctx.face == "top" else 1.0)
+        v = 0.5 + (n - 0.5) * contrast + (strand - 0.5) * streaks - (1.0 - ry) * top_dark
+        col = pick(ctx.pal[back], v)
+        if belly is not None and (ctx.face == "bottom" or (ry > belly_from and ctx.face in ("west", "east", "front", "back"))):
+            t = 1.0 if ctx.face == "bottom" else min(1.0, (ry - belly_from) / max(1e-3, 1.0 - belly_from) * 1.4)
+            col = mix(col, pick(ctx.pal[belly], 0.55 + (n - 0.5) * 0.3), t)
+        return col
+
+    return paint
+
+
+def feather_painter(key: str = "feather", rows: float = 1.6, seed: int = 9, tip: str | None = None) -> Painter:
+    """Federkleid: versetzte Reihen kleiner Bögen mit hellen Federkanten."""
+
+    def paint(ctx: Ctx) -> RGBA:
+        x, y, z = ctx.world
+        row = math.floor(z / rows) if ctx.face in ("top", "bottom") else math.floor(y / rows)
+        along = (x if ctx.face in ("top", "bottom", "front", "back") else z) + (row % 2) * 1.0
+        k = (along / 2.0) % 1.0
+        edge = (z / rows) % 1.0 if ctx.face in ("top", "bottom") else (y / rows) % 1.0
+        v = 0.55 + (hash01(int(along / 2.0), row, seed) - 0.5) * 0.18
+        if edge > 0.72:
+            v += 0.18                       # helle Federkante
+        if k < 0.12:
+            v -= 0.14
+        col = pick(ctx.pal[key], v)
+        if tip is not None and rel_y(ctx) > 0.8 and ctx.face in ("west", "east"):
+            col = pick(ctx.pal[tip], 0.4 + v * 0.3)
+        return col
+
+    return paint
+
+
+def skin_painter(key: str = "skin", moss: str | None = None, seed: int = 13, scale: float = 0.35) -> Painter:
+    """Raue, steinige Haut (Trolle): großflächige Flecken, Risse und Moosstellen."""
+    vor = Voronoi3D(3.2, seed)
+
+    def paint(ctx: Ctx) -> RGBA:
+        x, y, z = ctx.world
+        n = noise3(x * scale, y * scale, z * scale, seed)
+        val, edge = vor(x, y, z)
+        v = 0.48 + (n - 0.5) * 0.45 + (val - 0.5) * 0.18
+        if edge < 0.18:
+            v -= 0.2                        # Risse zwischen den "Steinplatten"
+        ry = rel_y(ctx) if ctx.face not in ("top", "bottom") else (0.0 if ctx.face == "top" else 1.0)
+        v += (0.5 - ry) * 0.12
+        col = pick(ctx.pal[key], v)
+        if moss is not None and ctx.face in ("top", "west", "east", "back") and noise3(x * 0.6, y * 0.6, z * 0.6, seed + 7) > 0.68:
+            col = pick(ctx.pal[moss], 0.35 + n * 0.4)
+        return col
 
     return paint

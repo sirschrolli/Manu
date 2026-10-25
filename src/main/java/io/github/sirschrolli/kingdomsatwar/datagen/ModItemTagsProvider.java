@@ -112,6 +112,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
         add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
         add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
+        add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.TROLL_CLUB);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, ModItems.TROLL_CLUB);
+        add(Tags.Items.MELEE_WEAPON_TOOLS, ModItems.TROLL_CLUB);
         add(ItemTags.PIGLIN_LOVED, ModItems.GEMSTONE_CROWN);
 
         // --- Landwirtschaft ---
@@ -139,6 +142,10 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(Tags.Items.FOODS_BREAD, ModItems.BREAD_ROLL);
         add(Tags.Items.FOODS_SOUP, ModItems.VEGETABLE_STEW);
         add(Tags.Items.FOODS_PIE, ModItems.MEAT_PIE, ModItems.APPLE_PIE);
+        add(ItemTags.MEAT, ModItems.VENISON, ModItems.COOKED_VENISON);
+        add(Tags.Items.FOODS_RAW_MEAT, ModItems.VENISON);
+        add(Tags.Items.FOODS_COOKED_MEAT, ModItems.COOKED_VENISON);
+        add(ItemTags.WOLF_FOOD, ModItems.VENISON, ModItems.COOKED_VENISON);
     }
 
     @SafeVarargs

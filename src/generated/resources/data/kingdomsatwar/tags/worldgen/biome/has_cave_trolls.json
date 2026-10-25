@@ -1,0 +1,17 @@
+{
+  "values": [
+    "#minecraft:is_forest",
+    "#minecraft:is_taiga",
+    "#minecraft:is_jungle",
+    "#minecraft:is_savanna",
+    "#minecraft:is_badlands",
+    "#minecraft:is_mountain",
+    "#minecraft:is_hill",
+    "#c:is_plains",
+    "#c:is_desert",
+    "#c:is_swamp",
+    "minecraft:dripstone_caves",
+    "minecraft:lush_caves",
+    "minecraft:meadow"
+  ]
+}

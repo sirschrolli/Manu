@@ -1,18 +1,24 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.stream.Stream;
 import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -20,7 +26,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 /**
  * Beute der Lebewesen. Drachen lassen ihre Schuppen über eigenen Code fallen (je nach Wachstumsstufe),
  * Soldaten nur die Ausrüstung, die ihnen der Spieler gegeben hat. Banditen tragen erbeutete Smaragde bei sich –
- * die fallen auch, wenn ein Soldat den Banditen besiegt.
+ * die fallen auch, wenn ein Soldat den Banditen besiegt. Wilde Kreaturen geben Fleisch, Leder, Federn,
+ * Irrlichtstaub, Erddrachen-Schuppen und (selten) Edelsteine, Draconium oder eine Trollkeule.
  */
 public class ModEntityLootProvider extends EntityLootSubProvider {
     public ModEntityLootProvider(LootTableSubProvider.Context output) {
@@ -33,6 +40,53 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         ModEntities.SOLDIERS.values().forEach(type -> this.add(type.get(), LootTable.lootTable()));
         this.add(ModEntities.BANDIT.get(), banditLoot(false));
         this.add(ModEntities.BANDIT_ARCHER.get(), banditLoot(true));
+
+        // Wilde Kreaturen
+        this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()
+                .withPool(meat(Items.PORKCHOP, 1, 3))
+                .withPool(drop(Items.LEATHER, 0, 2)));
+        this.add(ModEntities.DEER.get(), LootTable.lootTable()
+                .withPool(meat(ModItems.VENISON.get(), 1, 3))
+                .withPool(drop(Items.LEATHER, 0, 2)));
+        this.add(ModEntities.GOOSE.get(), LootTable.lootTable()
+                .withPool(drop(Items.FEATHER, 1, 3))
+                .withPool(meat(Items.CHICKEN, 1, 1)));
+        this.add(ModEntities.WILL_O_WISP.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.WISP_DUST.get(), 1, 2)));
+        this.add(ModEntities.CAVE_TROLL.get(), LootTable.lootTable()
+                .withPool(drop(Items.LEATHER, 1, 3))
+                .withPool(drop(Items.IRON_NUGGET, 3, 8))
+                .withPool(drop(Items.BONE, 0, 2))
+                .withPool(rare(ModItems.GEMSTONE.get(), 0.12f, 0.04f))
+                .withPool(rare(ModItems.TROLL_CLUB.get(), 0.08f, 0.03f)));
+        this.add(ModEntities.LINDWORM.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.EARTH).get(), 1, 3))
+                .withPool(drop(Items.BONE, 1, 3))
+                .withPool(rare(ModItems.DRACONIUM.get(), 0.1f, 0.03f)));
+    }
+
+    /** Fleisch: wird gebraten, wenn das Tier brennend stirbt; Plünderung bringt mehr. */
+    private LootPool.Builder meat(ItemLike item, int min, int max) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(item)
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)))
+                        .apply(SmeltItemFunction.smelted().when(this.shouldSmeltLoot()))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f))));
+    }
+
+    private LootPool.Builder drop(ItemLike item, int min, int max) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(item)
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f))));
+    }
+
+    /** Seltene Beute – nur, wenn ein Spieler das Lebewesen besiegt. */
+    private LootPool.Builder rare(ItemLike item, float chance, float lootingBonus) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(item))
+                .when(LootItemKilledByPlayerCondition.killedByPlayer())
+                .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.enchantments, chance, lootingBonus));
     }
 
     private LootTable.Builder banditLoot(boolean archer) {

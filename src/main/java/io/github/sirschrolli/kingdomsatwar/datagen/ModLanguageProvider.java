@@ -31,7 +31,7 @@ public class ModLanguageProvider extends LanguageProvider {
         // (kurz halten: längere Titel ragen im Kreativ-Inventar über den Rand)
         text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Building", "Kingdoms at War: Bauen");
         text("itemGroup.kingdomsatwar.resources", "Kingdoms at War: Resources", "Kingdoms at War: Rohstoffe");
-        text("itemGroup.kingdomsatwar.dragons", "Kingdoms at War: Dragons", "Kingdoms at War: Drachen");
+        text("itemGroup.kingdomsatwar.dragons", "Kingdoms at War: Creatures", "Kingdoms at War: Kreaturen");
         text("itemGroup.kingdomsatwar.farming", "Kingdoms at War: Food", "Kingdoms at War: Nahrung");
         text("itemGroup.kingdomsatwar.kingdom", "Kingdoms at War: Army", "Kingdoms at War: Armee");
         text("itemGroup.kingdomsatwar.equipment", "Kingdoms at War: Equipment", "Kingdoms at War: Ausrüstung");
@@ -229,6 +229,7 @@ public class ModLanguageProvider extends LanguageProvider {
         // --- Armee: Soldaten, Banditen, Rekrutierungstisch, Kommandostab ---
         army();
         equipment();
+        creatures();
 
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");
@@ -255,6 +256,58 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.POTTED_GARDEN_ROSE, "Potted Garden Rose", "Gartenrose im Topf");
         block(ModBlocks.POTTED_FIRE_LILY, "Potted Fire Lily", "Feuerlilie im Topf");
         block(ModBlocks.POTTED_FROST_FLOWER, "Potted Frost Flower", "Frostblume im Topf");
+    }
+
+    private void creatures() {
+        creature(ModEntities.WILD_BOAR, ModItems.WILD_BOAR_SPAWN_EGG, "Wild Boar", "Wildschwein", "Wildschwein");
+        creature(ModEntities.DEER, ModItems.DEER_SPAWN_EGG, "Red Deer", "Rothirsch", "Rothirsch");
+        creature(ModEntities.GOOSE, ModItems.GOOSE_SPAWN_EGG, "Goose", "Gans", "Gänse");
+        creature(ModEntities.WILL_O_WISP, ModItems.WILL_O_WISP_SPAWN_EGG, "Will-o'-the-Wisp", "Irrlicht", "Irrlicht");
+        creature(ModEntities.CAVE_TROLL, ModItems.CAVE_TROLL_SPAWN_EGG, "Cave Troll", "Höhlentroll", "Höhlentroll");
+        creature(ModEntities.LINDWORM, ModItems.LINDWORM_SPAWN_EGG, "Lindworm", "Lindwurm", "Lindwurm");
+
+        item(ModItems.VENISON, "Raw Venison", "Rohes Wildbret");
+        item(ModItems.COOKED_VENISON, "Cooked Venison", "Wildbraten");
+        item(ModItems.WISP_DUST, "Wisp Dust", "Irrlichtstaub");
+        lore("wisp_dust", "Glowing dust – an ingredient for magic", "Leuchtender Staub – eine Zutat für Magie");
+        item(ModItems.TROLL_CLUB, "Troll Club", "Trollkeule");
+        lore("troll_club", "Heavy: hurls enemies away and shatters shields", "Schwer: schleudert Gegner weg und zerschmettert Schilde");
+
+        subtitle("entity.wild_boar.ambient", "Wild boar grunts", "Wildschwein grunzt");
+        subtitle("entity.wild_boar.angry", "Wild boar snorts angrily", "Wildschwein schnaubt wütend");
+        subtitle("entity.wild_boar.hurt", "Wild boar squeals", "Wildschwein quiekt");
+        subtitle("entity.wild_boar.death", "Wild boar dies", "Wildschwein stirbt");
+        subtitle("entity.wild_boar.step", "Footsteps", "Schritte");
+        subtitle("entity.deer.ambient", "Deer calls", "Hirsch ruft");
+        subtitle("entity.deer.hurt", "Deer hurts", "Hirsch wird verletzt");
+        subtitle("entity.deer.death", "Deer dies", "Hirsch stirbt");
+        subtitle("entity.deer.step", "Hooves patter", "Hufe trappeln");
+        subtitle("entity.goose.ambient", "Goose honks", "Gans schnattert");
+        subtitle("entity.goose.hiss", "Goose hisses", "Gans zischt");
+        subtitle("entity.goose.hurt", "Goose hurts", "Gans wird verletzt");
+        subtitle("entity.goose.death", "Goose dies", "Gans stirbt");
+        subtitle("entity.will_o_wisp.ambient", "Will-o'-the-wisp chimes", "Irrlicht klingt");
+        subtitle("entity.will_o_wisp.hurt", "Will-o'-the-wisp flickers", "Irrlicht flackert");
+        subtitle("entity.will_o_wisp.death", "Will-o'-the-wisp goes out", "Irrlicht erlischt");
+        subtitle("entity.will_o_wisp.vanish", "Will-o'-the-wisp fades", "Irrlicht verblasst");
+        subtitle("entity.cave_troll.ambient", "Cave troll growls", "Höhlentroll grollt");
+        subtitle("entity.cave_troll.hurt", "Cave troll hurts", "Höhlentroll wird verletzt");
+        subtitle("entity.cave_troll.death", "Cave troll dies", "Höhlentroll stirbt");
+        subtitle("entity.cave_troll.step", "Heavy footsteps", "Schwere Schritte");
+        subtitle("entity.cave_troll.smash", "Club smashes", "Keulenhieb");
+        subtitle("entity.cave_troll.petrify", "Cave troll turns to stone", "Höhlentroll versteinert");
+        subtitle("entity.lindworm.ambient", "Lindworm hisses", "Lindwurm zischt");
+        subtitle("entity.lindworm.hurt", "Lindworm hurts", "Lindwurm wird verletzt");
+        subtitle("entity.lindworm.death", "Lindworm dies", "Lindwurm stirbt");
+        subtitle("entity.lindworm.bite", "Lindworm bites", "Lindwurm beißt");
+        subtitle("entity.lindworm.slither", "Lindworm slithers", "Lindwurm kriecht");
+    }
+
+    /** Kreatur mit Spawn-Ei ({@code eggStemDe}: Wortstamm für "...-Spawn-Ei"). */
+    private void creature(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, Supplier<? extends Item> egg,
+            String english, String deutsch, String eggStemDe) {
+        add(type.get(), pick(english, deutsch));
+        item(egg, english + " Spawn Egg", eggStemDe + "-Spawn-Ei");
     }
 
     private void equipment() {

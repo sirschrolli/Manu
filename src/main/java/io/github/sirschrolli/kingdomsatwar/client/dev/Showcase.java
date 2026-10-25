@@ -81,6 +81,7 @@ final class Showcase {
                 case "soldiers" -> soldiers(steps);
                 case "eggs" -> eggs(steps);
                 case "equipment" -> equipment(steps);
+                case "creatures" -> creatures(steps);
                 default -> { }
             }
         }
@@ -462,6 +463,76 @@ final class Showcase {
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("equipment_dragon_close"));
         steps.add(Step.hud(true));
+    }
+
+    /** Die wilden Kreaturen: alle Arten und Varianten, von vorne, von der Seite und das Irrlicht bei Nacht. */
+    private static void creatures(Deque<Step> steps) {
+        int oz = 200;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-6, ground - 1, oz - 20), new BlockPos(40, ground - 1, oz + 14), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 20), new BlockPos(40, ground + 8, oz + 14), Blocks.AIR.defaultBlockState());
+            int x = 0;
+            spawnCreature(level, ModEntities.WILD_BOAR.get(), x, oz, 0, m -> { });
+            spawnCreature(level, ModEntities.WILD_BOAR.get(), x + 2, oz, 0, m -> m.setBaby(true));
+            spawnCreature(level, ModEntities.DEER.get(), x + 5, oz, 0, m -> m.setStag(true));
+            spawnCreature(level, ModEntities.DEER.get(), x + 7, oz, 0, m -> m.setStag(false));
+            spawnCreature(level, ModEntities.DEER.get(), x + 9, oz, 0, m -> m.setBaby(true));
+            spawnCreature(level, ModEntities.GOOSE.get(), x + 11, oz, 0, m -> m.setVariant(0));
+            spawnCreature(level, ModEntities.GOOSE.get(), x + 12, oz, 0, m -> m.setVariant(1));
+            spawnCreature(level, ModEntities.GOOSE.get(), x + 13, oz, 0, m -> m.setBaby(true));
+            spawnCreature(level, ModEntities.WILL_O_WISP.get(), x + 15, oz, 0, m -> {
+                m.setNoGravity(true);
+                m.setPos(m.getX(), m.getY() + 1.2, m.getZ());
+            });
+            spawnCreature(level, ModEntities.CAVE_TROLL.get(), x + 18, oz, 0, m -> { });
+            spawnCreature(level, ModEntities.LINDWORM.get(), x + 24, oz, -90, m -> { });
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(13.0, 2.2, oz + 10.5, 180, 8));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.screenshot("creatures_overview"));
+        steps.add(tp(3.5, 1.3, oz + 4.2, 200, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_boars"));
+        steps.add(tp(8.0, 1.6, oz + 4.6, 180, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_animals"));
+        steps.add(tp(1.5, 1.6, oz - 3.0, -50, 8));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_animals_side"));
+        steps.add(tp(14.5, 1.0, oz + 3.2, 180, 4));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_geese_wisp"));
+        steps.add(tp(21.5, 2.2, oz + 6.5, 160, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_troll_lindworm"));
+        steps.add(tp(11.0, 1.5, oz - 5.5, -30, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("creatures_side"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(tp(15.5, 1.8, oz + 4.0, 180, 6));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("creatures_wisp_night"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.hud(true));
+    }
+
+    private static <T extends net.minecraft.world.entity.Mob> void spawnCreature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
+            int x, int z, float yaw, java.util.function.Consumer<T> setup) {
+        T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        if (mob == null) {
+            return;
+        }
+        mob.setNoAi(true);
+        mob.setPersistenceRequired();
+        mob.snapTo(x + 0.5, ground, z + 0.5, yaw, 0);
+        mob.setYBodyRot(yaw);
+        mob.setYHeadRot(yaw);
+        setup.accept(mob);
+        level.addFreshEntity(mob);
     }
 
     /** Die sechs Dracheneier neben dem echten Drachenei, aus Spielersicht. */

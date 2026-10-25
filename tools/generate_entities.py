@@ -14,7 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import dragon, dragon_armor  # noqa: E402
+from entitygen.models import cave_troll, deer, dragon, dragon_armor, goose, lindworm, wild_boar, will_o_wisp  # noqa: E402
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,6 +47,13 @@ def main():
     write_model(dragon_armor, "DragonArmorGeometry",
                 "Geometrie der Drachenpanzer (gleiche Knochen wie das Drachen-Modell, nur Panzerplatten).",
                 "dragon/armor", dragon_armor.PALETTES, preview)
+    # Wilde Kreaturen
+    write_model(wild_boar, "WildBoarGeometry", "Geometrie des Wildschweins.", "wild_boar", wild_boar.PALETTES, preview)
+    write_model(deer, "DeerGeometry", "Geometrie des Rothirschs (mit Geweih).", "deer", deer.PALETTES, preview)
+    write_model(goose, "GooseGeometry", "Geometrie der Gans.", "goose", goose.PALETTES, preview)
+    write_model(will_o_wisp, "WillOWispGeometry", "Geometrie des Irrlichts.", "will_o_wisp", will_o_wisp.PALETTES, preview)
+    write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)
+    write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
 
 
 if __name__ == "__main__":

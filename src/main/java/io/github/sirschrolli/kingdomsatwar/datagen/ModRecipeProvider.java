@@ -43,6 +43,7 @@ public class ModRecipeProvider extends RecipeProvider {
         foodRecipes();
         armyRecipes();
         equipmentRecipes();
+        cookVenison();
     }
 
     // =====================================================================================
@@ -119,6 +120,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('A', ModItems.STEEL_DRAGON_ARMOR.get())
                 .unlockedBy(getHasName(ModItems.STEEL_DRAGON_ARMOR.get()), has(ModItems.STEEL_DRAGON_ARMOR.get()))
                 .save(output, key("draconium_dragon_armor"));
+    }
+
+    private void cookVenison() {
+        Item raw = ModItems.VENISON.get();
+        Item cooked = ModItems.COOKED_VENISON.get();
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(raw), RecipeCategory.FOOD, CookingBookCategory.FOOD, cooked, 0.35f, 200)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_venison");
+        save(SimpleCookingRecipeBuilder.smoking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 100)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_smoking");
+        save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_campfire_cooking");
     }
 
     private void tools(Item material, Item sword, Item pickaxe, Item axe, Item shovel, Item hoe) {
