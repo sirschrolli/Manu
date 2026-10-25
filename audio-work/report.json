@@ -1,0 +1,730 @@
+[
+ {
+  "file": "intro/intro_music.ogg",
+  "lufs": -22.5,
+  "true_peak": -5.9,
+  "duration": 79.87898,
+  "channels": 2,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_01.ogg",
+  "lufs": -16.2,
+  "true_peak": -1.4,
+  "duration": 4.227234,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_02.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.6,
+  "duration": 7.823175,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_03.ogg",
+  "lufs": -16.3,
+  "true_peak": -1.2,
+  "duration": 7.156848,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_04.ogg",
+  "lufs": -16.2,
+  "true_peak": -1.7,
+  "duration": 7.503401,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_05.ogg",
+  "lufs": -16.0,
+  "true_peak": -1.7,
+  "duration": 8.005351,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_06.ogg",
+  "lufs": -16.2,
+  "true_peak": -1.5,
+  "duration": 10.993605,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_07.ogg",
+  "lufs": -16.3,
+  "true_peak": -1.7,
+  "duration": 6.516803,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_08.ogg",
+  "lufs": -16.5,
+  "true_peak": -1.7,
+  "duration": 4.557166,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_de_09.ogg",
+  "lufs": -16.2,
+  "true_peak": -1.5,
+  "duration": 3.352721,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_01.ogg",
+  "lufs": -16.3,
+  "true_peak": -1.8,
+  "duration": 5.265624,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_02.ogg",
+  "lufs": -16.0,
+  "true_peak": -1.1,
+  "duration": 7.410658,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_03.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.7,
+  "duration": 7.832268,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_04.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.6,
+  "duration": 6.504966,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_05.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.3,
+  "duration": 7.775578,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_06.ogg",
+  "lufs": -16.3,
+  "true_peak": -1.5,
+  "duration": 9.531587,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_07.ogg",
+  "lufs": -16.3,
+  "true_peak": -1.4,
+  "duration": 6.854626,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_08.ogg",
+  "lufs": -16.2,
+  "true_peak": -1.6,
+  "duration": 4.601905,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "intro/narration_en_09.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.6,
+  "duration": 2.900431,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_1a.ogg",
+  "lufs": -14.7,
+  "true_peak": -2.1,
+  "duration": 1.489977,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_1b.ogg",
+  "lufs": -14.7,
+  "true_peak": -1.9,
+  "duration": 1.67356,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_2a.ogg",
+  "lufs": -15.0,
+  "true_peak": -2.5,
+  "duration": 0.839819,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_2b.ogg",
+  "lufs": -15.0,
+  "true_peak": -3.7,
+  "duration": 0.807664,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_3a.ogg",
+  "lufs": -14.5,
+  "true_peak": -1.9,
+  "duration": 1.188118,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_de_3b.ogg",
+  "lufs": -14.7,
+  "true_peak": -3.3,
+  "duration": 1.355193,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_1a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.4,
+  "duration": 0.828209,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_1b.ogg",
+  "lufs": -14.5,
+  "true_peak": -2.3,
+  "duration": 0.677279,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_2a.ogg",
+  "lufs": -16.1,
+  "true_peak": -1.6,
+  "duration": 0.712109,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_2b.ogg",
+  "lufs": -14.5,
+  "true_peak": -1.8,
+  "duration": 0.561179,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_3a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.8,
+  "duration": 0.746939,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/attack_en_3b.ogg",
+  "lufs": -14.3,
+  "true_peak": -2.9,
+  "duration": 0.665669,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_1a.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.6,
+  "duration": 1.002358,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_1b.ogg",
+  "lufs": -15.5,
+  "true_peak": -1.7,
+  "duration": 1.011383,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_2a.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.6,
+  "duration": 0.967528,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_2b.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.7,
+  "duration": 1.062313,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_3a.ogg",
+  "lufs": -15.4,
+  "true_peak": -1.7,
+  "duration": 1.164898,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_de_3b.ogg",
+  "lufs": -15.6,
+  "true_peak": -1.5,
+  "duration": 1.304263,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_1a.ogg",
+  "lufs": -14.6,
+  "true_peak": -1.6,
+  "duration": 0.990748,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_1b.ogg",
+  "lufs": -14.6,
+  "true_peak": -1.8,
+  "duration": 0.793379,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_2a.ogg",
+  "lufs": -14.7,
+  "true_peak": -1.7,
+  "duration": 0.955918,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_2b.ogg",
+  "lufs": -14.9,
+  "true_peak": -3.8,
+  "duration": 0.909478,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_3a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.6,
+  "duration": 0.921088,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/follow_en_3b.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.7,
+  "duration": 0.839819,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_1a.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.6,
+  "duration": 1.234558,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_1b.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.8,
+  "duration": 1.24059,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_2a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.4,
+  "duration": 1.455147,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_2b.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.6,
+  "duration": 1.609887,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_3a.ogg",
+  "lufs": -15.8,
+  "true_peak": -1.5,
+  "duration": 1.907937,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_de_3b.ogg",
+  "lufs": -15.9,
+  "true_peak": -1.4,
+  "duration": 2.106531,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_1a.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.8,
+  "duration": 1.339048,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_1b.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.8,
+  "duration": 1.222948,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_2a.ogg",
+  "lufs": -14.7,
+  "true_peak": -1.4,
+  "duration": 1.153288,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_2b.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.9,
+  "duration": 1.048798,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_3a.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.7,
+  "duration": 1.733787,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/hold_en_3b.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.9,
+  "duration": 1.431927,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_1a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.6,
+  "duration": 0.758549,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_1b.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.4,
+  "duration": 0.820363,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_2a.ogg",
+  "lufs": -14.9,
+  "true_peak": -1.7,
+  "duration": 1.250658,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_2b.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.6,
+  "duration": 1.457098,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_3a.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.6,
+  "duration": 1.478367,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_de_3b.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.7,
+  "duration": 1.62263,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_1a.ogg",
+  "lufs": -16.4,
+  "true_peak": -1.4,
+  "duration": 0.804989,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_1b.ogg",
+  "lufs": -14.9,
+  "true_peak": -1.6,
+  "duration": 0.712109,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_2a.ogg",
+  "lufs": -14.7,
+  "true_peak": -1.7,
+  "duration": 1.362268,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_2b.ogg",
+  "lufs": -15.0,
+  "true_peak": -2.8,
+  "duration": 1.130068,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_3a.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.6,
+  "duration": 1.304218,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/idle_en_3b.ogg",
+  "lufs": -15.0,
+  "true_peak": -2.1,
+  "duration": 1.025578,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_1a.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.8,
+  "duration": 0.700499,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_1b.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.5,
+  "duration": 0.769433,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_2a.ogg",
+  "lufs": -14.8,
+  "true_peak": -1.8,
+  "duration": 1.559637,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_2b.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.6,
+  "duration": 1.648073,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_3a.ogg",
+  "lufs": -15.5,
+  "true_peak": -1.8,
+  "duration": 1.431927,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_de_3b.ogg",
+  "lufs": -15.2,
+  "true_peak": -1.7,
+  "duration": 1.571701,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_1a.ogg",
+  "lufs": -15.1,
+  "true_peak": -1.8,
+  "duration": 1.013968,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_1b.ogg",
+  "lufs": -15.0,
+  "true_peak": -3.0,
+  "duration": 0.909478,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_2a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.9,
+  "duration": 1.234558,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_2b.ogg",
+  "lufs": -14.6,
+  "true_peak": -2.3,
+  "duration": 1.083628,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_3a.ogg",
+  "lufs": -14.7,
+  "true_peak": -1.8,
+  "duration": 1.188118,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/recruit_en_3b.ogg",
+  "lufs": -14.6,
+  "true_peak": -3.4,
+  "duration": 1.095238,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_1a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.6,
+  "duration": 1.664127,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_1b.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.6,
+  "duration": 1.813651,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_2a.ogg",
+  "lufs": -14.9,
+  "true_peak": -5.4,
+  "duration": 0.537959,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_2b.ogg",
+  "lufs": -14.9,
+  "true_peak": -4.8,
+  "duration": 0.6039,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_3a.ogg",
+  "lufs": -14.6,
+  "true_peak": -5.5,
+  "duration": 1.083628,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_de_3b.ogg",
+  "lufs": -14.9,
+  "true_peak": -6.1,
+  "duration": 1.227846,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_1a.ogg",
+  "lufs": -14.9,
+  "true_peak": -1.6,
+  "duration": 1.373878,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_1b.ogg",
+  "lufs": -14.6,
+  "true_peak": -2.5,
+  "duration": 1.153288,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_2a.ogg",
+  "lufs": -15.4,
+  "true_peak": -1.7,
+  "duration": 0.677279,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_2b.ogg",
+  "lufs": -15.5,
+  "true_peak": -1.5,
+  "duration": 0.572789,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_3a.ogg",
+  "lufs": -15.0,
+  "true_peak": -1.7,
+  "duration": 0.921088,
+  "channels": 1,
+  "sample_rate": 44100
+ },
+ {
+  "file": "voice/soldier/victory_en_3b.ogg",
+  "lufs": -14.4,
+  "true_peak": -2.6,
+  "duration": 0.781769,
+  "channels": 1,
+  "sample_rate": 44100
+ }
+]

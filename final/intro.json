@@ -1,0 +1,151 @@
+{
+  "music": "kingdomsatwar:intro.music",
+  "length": 79.879,
+  "title_card_start": 75.679,
+  "fallback_language": "en_us",
+  "sections": [
+    {
+      "name": "intro",
+      "start": 0.0
+    },
+    {
+      "name": "world",
+      "start": 6.667
+    },
+    {
+      "name": "dragons",
+      "start": 20.0
+    },
+    {
+      "name": "wonder",
+      "start": 36.667
+    },
+    {
+      "name": "knights",
+      "start": 56.667
+    },
+    {
+      "name": "finale",
+      "start": 66.667
+    }
+  ],
+  "final_chord": 73.333,
+  "languages": {
+    "de_de": {
+      "lines": [
+        {
+          "key": "intro.kingdomsatwar.line1",
+          "sound": "kingdomsatwar:intro.narration.de.1",
+          "start": 6.667,
+          "duration": 2.839
+        },
+        {
+          "key": "intro.kingdomsatwar.line2",
+          "sound": "kingdomsatwar:intro.narration.de.2",
+          "start": 11.667,
+          "duration": 6.413
+        },
+        {
+          "key": "intro.kingdomsatwar.line3",
+          "sound": "kingdomsatwar:intro.narration.de.3",
+          "start": 20.0,
+          "duration": 5.724
+        },
+        {
+          "key": "intro.kingdomsatwar.line4",
+          "sound": "kingdomsatwar:intro.narration.de.4",
+          "start": 28.333,
+          "duration": 6.136
+        },
+        {
+          "key": "intro.kingdomsatwar.line5",
+          "sound": "kingdomsatwar:intro.narration.de.5",
+          "start": 36.667,
+          "duration": 6.687
+        },
+        {
+          "key": "intro.kingdomsatwar.line6",
+          "sound": "kingdomsatwar:intro.narration.de.6",
+          "start": 45.0,
+          "duration": 9.642
+        },
+        {
+          "key": "intro.kingdomsatwar.line7",
+          "sound": "kingdomsatwar:intro.narration.de.7",
+          "start": 56.667,
+          "duration": 5.179
+        },
+        {
+          "key": "intro.kingdomsatwar.line8",
+          "sound": "kingdomsatwar:intro.narration.de.8",
+          "start": 66.667,
+          "duration": 3.242
+        },
+        {
+          "key": "intro.kingdomsatwar.line9",
+          "sound": "kingdomsatwar:intro.narration.de.9",
+          "start": 73.333,
+          "duration": 1.946
+        }
+      ]
+    },
+    "en_us": {
+      "lines": [
+        {
+          "key": "intro.kingdomsatwar.line1",
+          "sound": "kingdomsatwar:intro.narration.en.1",
+          "start": 6.667,
+          "duration": 3.919
+        },
+        {
+          "key": "intro.kingdomsatwar.line2",
+          "sound": "kingdomsatwar:intro.narration.en.2",
+          "start": 11.667,
+          "duration": 6.041
+        },
+        {
+          "key": "intro.kingdomsatwar.line3",
+          "sound": "kingdomsatwar:intro.narration.en.3",
+          "start": 20.0,
+          "duration": 6.428
+        },
+        {
+          "key": "intro.kingdomsatwar.line4",
+          "sound": "kingdomsatwar:intro.narration.en.4",
+          "start": 28.333,
+          "duration": 5.07
+        },
+        {
+          "key": "intro.kingdomsatwar.line5",
+          "sound": "kingdomsatwar:intro.narration.en.5",
+          "start": 36.667,
+          "duration": 6.368
+        },
+        {
+          "key": "intro.kingdomsatwar.line6",
+          "sound": "kingdomsatwar:intro.narration.en.6",
+          "start": 45.0,
+          "duration": 8.165
+        },
+        {
+          "key": "intro.kingdomsatwar.line7",
+          "sound": "kingdomsatwar:intro.narration.en.7",
+          "start": 56.667,
+          "duration": 5.48
+        },
+        {
+          "key": "intro.kingdomsatwar.line8",
+          "sound": "kingdomsatwar:intro.narration.en.8",
+          "start": 66.667,
+          "duration": 3.175
+        },
+        {
+          "key": "intro.kingdomsatwar.line9",
+          "sound": "kingdomsatwar:intro.narration.en.9",
+          "start": 73.333,
+          "duration": 1.468
+        }
+      ]
+    }
+  }
+}
