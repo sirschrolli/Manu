@@ -1,6 +1,7 @@
 """
 Hörproben mit Qwen3-TTS (Apache-2.0): eine eigene, künstlich gestaltete Stimme (keine echte Person),
 beschrieben in Worten (VoiceDesign). Mehrere Beschreibungen und Zufallswerte; evaluate.py wählt aus.
+Runde 2: noch stärkere Betonung und natürlichere, menschlichere Sprechweise.
 
   qwen_samples.py <ordner>
 """
@@ -20,15 +21,16 @@ TEXT = ("Einst … lag diese Welt still und unberührt.\n"
         "Doch tief in den Bergen, in Vulkanen, Eis und Meer … erwachten die Drachen.")
 
 DESCRIPTIONS = {
-    "sage": "An old man in his late sixties with a deep, warm, slightly raspy voice narrates an epic fantasy legend. "
-            "Slow, solemn and dramatic, with strong emphasis on important words, rising and falling intonation and "
-            "meaningful pauses. Completely natural and human, full of emotion, like a great audiobook narrator.",
-    "king": "A deep-voiced elderly male storyteller, like a wise old king telling a heroic saga by the fire. "
-            "Powerful, resonant chest voice with a gravelly texture. Expressive, passionate delivery with dramatic "
-            "emphasis, suspenseful pauses and a sense of awe. Natural human speech, not robotic.",
-    "erzaehler": "Ein älterer Mann um die siebzig mit tiefer, rauer und warmer Stimme erzählt eine epische Sage. "
-                 "Langsam und feierlich, mit starker Betonung wichtiger Wörter, Spannung in der Stimme und "
-                 "dramatischen Pausen. Sehr menschlich und ausdrucksstark, wie ein Hörbuchsprecher.",
+    "bard": "An elderly male bard, around seventy, with a deep, weathered and husky voice, telling an ancient legend "
+            "to a hushed audience. He speaks slowly and theatrically: he stresses the key words heavily, lets his "
+            "voice swell with awe and then drop almost to a whisper, and pauses for suspense. Warm, breathy, with "
+            "natural breathing - completely human, like a real person.",
+    "grandfather": "A kind old grandfather with a low, warm and slightly trembling voice tells a magical story by the "
+                   "fireplace. Very natural, intimate and emotional speech with clear emphasis on important words, "
+                   "gentle dramatic pauses and lively intonation, exactly like a real person reading aloud.",
+    "trailer": "A mature male voice actor in his sixties with a rich, deep, cinematic baritone narrates an epic fantasy "
+               "film. Strong dynamic emphasis, building tension, powerfully stressed words, dramatic pauses and "
+               "audible breaths. Natural, human and expressive, not synthetic.",
 }
 
 model = Qwen3TTSModel.from_pretrained("Qwen/Qwen3-TTS-12Hz-1.7B-VoiceDesign", device_map="cpu", dtype=torch.float32)

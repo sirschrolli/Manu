@@ -8,6 +8,8 @@ import re
 import sys
 from pathlib import Path
 
+import subprocess
+
 import jiwer
 import numpy as np
 import parselmouth
@@ -34,7 +36,11 @@ def measure(path: Path) -> dict:
     point = parselmouth.praat.call(snd, "To PointProcess (periodic, cc)", 60, 300)
     jitter = parselmouth.praat.call(point, "Get jitter (local)", 0, 0, 0.0001, 0.02, 1.3)
     shimmer = parselmouth.praat.call([snd, point], "Get shimmer (local)", 0, 0, 0.0001, 0.02, 1.3, 1.6)
-    segments, _ = model.transcribe(str(path), language=lang, beam_size=5)
+    # selbst dekodieren (ffmpeg -> 16 kHz mono float), unabhängig von der PyAV-Version
+    pcm = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", str(path), "-f", "f32le", "-ac", "1", "-ar", "16000", "-"],
+                         check=True, capture_output=True).stdout
+    audio = np.frombuffer(pcm, dtype=np.float32)
+    segments, _ = model.transcribe(audio, language=lang, beam_size=5)
     heard = " ".join(s.text for s in segments).strip()
     duration = snd.get_total_duration()
     st = 12 * np.log2(f0 / np.median(f0)) if len(f0) else np.zeros(1)

@@ -36,6 +36,13 @@ jobs:
           { /tmp/vq/bin/pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -2
             /tmp/vq/bin/pip install --no-cache-dir -U qwen-tts soundfile 2>&1 | tail -4
             /tmp/vq/bin/pip list 2>/dev/null | grep -i -E "^(torch|transformers|qwen)"; } | tee out/logs/02_qwen_install.txt
+      - name: Hörproben der ersten Runde holen
+        run: |
+          set -o pipefail
+          git fetch -q origin ci/voice-out
+          mkdir -p /tmp/prev && git archive FETCH_HEAD | tar -x -C /tmp/prev
+          for f in /tmp/prev/qwen_*.mp3; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -ar 24000 -ac 1 "out/$(basename "${f%.mp3}").wav"; done
+          ls -la out | tee out/logs/00_prev.txt
       - name: Stimmen gestalten (Qwen3-TTS VoiceDesign)
         run: |
           set -o pipefail
