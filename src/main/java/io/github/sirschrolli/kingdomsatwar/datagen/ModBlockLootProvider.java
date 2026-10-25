@@ -90,6 +90,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         crop(ModBlocks.CABBAGES, ModItems.CABBAGE.get(), ModItems.CABBAGE_SEEDS.get());
         crop(ModBlocks.ONIONS, ModItems.ONION.get(), ModItems.ONION.get());
         crop(ModBlocks.BARLEY, ModItems.BARLEY.get(), ModItems.BARLEY_SEEDS.get());
+        crop(ModBlocks.HOPS, ModItems.HOPS.get(), ModItems.HOPS.get());
+        crop(ModBlocks.GRAPES, ModItems.GRAPES.get(), ModItems.GRAPES.get());
+        crop(ModBlocks.GARLIC_CROP, ModItems.GARLIC.get(), ModItems.GARLIC.get());
+        // Das Festmahl isst man auf, abgebaut bleibt nichts übrig (wie beim Kuchen)
+        add(ModBlocks.FEAST.get(), noDrop());
 
         // Zierblumen und Blumentöpfe
         ModBlocks.FLOWERS.forEach((flower, pot) -> {

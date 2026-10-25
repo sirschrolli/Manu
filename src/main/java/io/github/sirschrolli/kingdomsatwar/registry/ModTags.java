@@ -93,6 +93,9 @@ public final class ModTags {
         public static final TagKey<Item> CROPS_CABBAGE = common("crops/cabbage");
         public static final TagKey<Item> CROPS_ONION = common("crops/onion");
         public static final TagKey<Item> CROPS_BARLEY = common("crops/barley");
+        public static final TagKey<Item> CROPS_HOPS = common("crops/hops");
+        public static final TagKey<Item> CROPS_GRAPE = common("crops/grape");
+        public static final TagKey<Item> CROPS_GARLIC = common("crops/garlic");
         public static final TagKey<Item> SEEDS_TOMATO = common("seeds/tomato");
         public static final TagKey<Item> SEEDS_CABBAGE = common("seeds/cabbage");
         public static final TagKey<Item> SEEDS_BARLEY = common("seeds/barley");

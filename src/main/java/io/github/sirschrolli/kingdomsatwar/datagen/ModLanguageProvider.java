@@ -257,6 +257,25 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.POTTED_GARDEN_ROSE, "Potted Garden Rose", "Gartenrose im Topf");
         block(ModBlocks.POTTED_FIRE_LILY, "Potted Fire Lily", "Feuerlilie im Topf");
         block(ModBlocks.POTTED_FROST_FLOWER, "Potted Frost Flower", "Frostblume im Topf");
+        block(ModBlocks.MOONFLOWER, "Moonflower", "Mondblume");
+        block(ModBlocks.POTTED_MOONFLOWER, "Potted Moonflower", "Mondblume im Topf");
+
+        // --- Hopfen, Trauben, Knoblauch, Getränke, Festmahl ---
+        block(ModBlocks.HOPS, "Hops", "Hopfen");
+        block(ModBlocks.GRAPES, "Grapevine", "Weinrebe");
+        block(ModBlocks.GARLIC_CROP, "Garlic", "Knoblauch");
+        item(ModItems.HOPS, "Hops", "Hopfen");
+        item(ModItems.GRAPES, "Grapes", "Weintrauben");
+        item(ModItems.GARLIC, "Garlic", "Knoblauch");
+        item(ModItems.GARLIC_BREAD, "Garlic Bread", "Knoblauchbrot");
+        item(ModItems.ALE, "Ale", "Bier");
+        lore("ale", "Strength for a while – too much makes you dizzy", "Stärke für eine Weile – zu viel macht schwindelig");
+        item(ModItems.WINE, "Red Wine", "Rotwein");
+        lore("wine", "Warms the heart and slowly heals", "Wärmt das Herz und heilt langsam");
+        item(ModItems.MEAD, "Mead", "Met");
+        lore("mead", "The drink of heroes: extra hearts for two minutes", "Der Trank der Helden: Extraherzen für zwei Minuten");
+        block(ModBlocks.FEAST, "Feast", "Festmahl");
+        lore("feast", "Place it on the table – four hearty servings", "Auf die Tafel stellen – vier üppige Portionen");
     }
 
     private void creatures() {

@@ -83,6 +83,7 @@ final class Showcase {
                 case "equipment" -> equipment(steps);
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
+                case "farm" -> farm(steps);
                 default -> { }
             }
         }
@@ -693,6 +694,65 @@ final class Showcase {
         steps.add(tp(5.5, 2.6, oz + 14.5, 180, 8));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("decor_hall_night"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.hud(true));
+    }
+
+    /** Hopfen, Weinreben und Knoblauch in allen Wachstumsstufen, Mondblumen bei Nacht, Festmahl auf der Tafel. */
+    private static void farm(Deque<Step> steps) {
+        int oz = 320;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-8, ground - 1, oz - 10), new BlockPos(24, ground - 1, oz + 14), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-8, ground, oz - 10), new BlockPos(24, ground + 6, oz + 14), Blocks.AIR.defaultBlockState());
+            List<io.github.sirschrolli.kingdomsatwar.block.ModCropBlock> crops = List.of(ModBlocks.HOPS.get(), ModBlocks.GRAPES.get(),
+                    ModBlocks.GARLIC_CROP.get());
+            int[] ages = {0, 2, 5, 7};
+            for (int row = 0; row < crops.size(); row++) {
+                for (int i = 0; i < 8; i++) {
+                    BlockPos soil = new BlockPos(i, ground - 1, oz - row * 2);
+                    level.setBlock(soil, Blocks.FARMLAND.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    level.setBlock(soil.above(), crops.get(row).getStateForAge(ages[Math.min(3, i / 2)]), Block.UPDATE_CLIENTS);
+                }
+                level.setBlock(new BlockPos(8, ground - 1, oz - row * 2), Blocks.WATER.defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            // Mondblumen
+            for (int[] spot : new int[][] {{12, 0}, {13, 1}, {14, -1}, {15, 1}, {12, 2}, {16, 0}, {14, 2}}) {
+                level.setBlock(new BlockPos(spot[0], ground, oz + spot[1]), ModBlocks.MOONFLOWER.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            level.setBlock(new BlockPos(17, ground, oz + 2), ModBlocks.POTTED_MOONFLOWER.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            // Tafel mit vier Festmahlen (voll bis fast aufgegessen)
+            for (int i = 0; i < 4; i++) {
+                BlockPos table = new BlockPos(1 + i, ground, oz + 4);
+                level.setBlock(table, ModBlocks.OAK_TABLE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+            for (int i = 0; i < 4; i++) {
+                BlockPos table = new BlockPos(1 + i, ground, oz + 4);
+                level.setBlock(table, Block.updateFromNeighbourShapes(level.getBlockState(table), level, table), Block.UPDATE_CLIENTS);
+                level.setBlock(table.above(), ModBlocks.FEAST.get().defaultBlockState()
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.FeastBlock.FACING, Direction.SOUTH)
+                        .setValue(io.github.sirschrolli.kingdomsatwar.block.FeastBlock.EATEN, i), Block.UPDATE_CLIENTS);
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(4.0, 2.6, oz + 5.5, 180, 30));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.screenshot("farm_crops"));
+        steps.add(tp(4.0, 1.6, oz + 2.8, 180, 22));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_crops_close"));
+        steps.add(tp(3.0, 2.2, oz + 7.5, 180, 38));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_feast"));
+        steps.add(tp(2.6, 2.0, oz + 5.9, 180, 48));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_feast_close"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(tp(14.5, 1.6, oz + 5.0, 180, 20));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("farm_moonflowers_night"));
         steps.add(Step.command("time set 6000"));
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));

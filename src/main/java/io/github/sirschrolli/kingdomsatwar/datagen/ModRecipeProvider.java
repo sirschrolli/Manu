@@ -533,6 +533,45 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(Items.WHEAT)
                 .unlockedBy("has_apple", has(Items.APPLE))
                 .save(output, key("apple_pie"));
+
+        // Knoblauchbrot, Ale, Wein und Met
+        Item garlic = ModItems.GARLIC.get();
+        Item hops = ModItems.HOPS.get();
+        shapeless(RecipeCategory.FOOD, ModItems.GARLIC_BREAD.get())
+                .requires(Items.BREAD)
+                .requires(garlic)
+                .unlockedBy(getHasName(garlic), has(garlic))
+                .save(output, key("garlic_bread"));
+        shapeless(RecipeCategory.FOOD, ModItems.ALE.get())
+                .requires(ModItems.BARLEY.get(), 2)
+                .requires(hops)
+                .requires(Items.GLASS_BOTTLE)
+                .unlockedBy(getHasName(hops), has(hops))
+                .save(output, key("ale"));
+        shapeless(RecipeCategory.FOOD, ModItems.WINE.get())
+                .requires(ModItems.GRAPES.get(), 3)
+                .requires(Items.GLASS_BOTTLE)
+                .unlockedBy(getHasName(ModItems.GRAPES.get()), has(ModItems.GRAPES.get()))
+                .save(output, key("wine"));
+        shapeless(RecipeCategory.FOOD, ModItems.MEAD.get())
+                .requires(Items.HONEYCOMB, 2)
+                .requires(hops)
+                .requires(Items.GLASS_BOTTLE)
+                .unlockedBy("has_honeycomb", has(Items.HONEYCOMB))
+                .save(output, key("mead"));
+
+        // Festmahl: Braten, Geflügel und Wildbret mit Beilagen auf einem Holzbrett
+        shapeless(RecipeCategory.FOOD, ModBlocks.FEAST.get())
+                .requires(Items.COOKED_PORKCHOP)
+                .requires(ModItems.COOKED_VENISON.get())
+                .requires(Items.COOKED_CHICKEN)
+                .requires(Items.BAKED_POTATO, 2)
+                .requires(Items.CARROT)
+                .requires(garlic)
+                .requires(Items.APPLE)
+                .requires(ItemTags.WOODEN_SLABS)
+                .unlockedBy(getHasName(ModItems.COOKED_VENISON.get()), has(ModItems.COOKED_VENISON.get()))
+                .save(output, key("feast"));
     }
 
     // =====================================================================================

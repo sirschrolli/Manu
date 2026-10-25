@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.BattlementBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ChandelierBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.FeastBlock;
 import io.github.sirschrolli.kingdomsatwar.block.FurnitureShapes;
 import io.github.sirschrolli.kingdomsatwar.block.ModCropBlock;
 import io.github.sirschrolli.kingdomsatwar.block.RecruitmentTableBlock;
@@ -248,20 +249,27 @@ public final class ModBlocks {
     public static final DeferredBlock<ModCropBlock> CABBAGES = crop("cabbages", () -> ModItems.CABBAGE_SEEDS.get());
     public static final DeferredBlock<ModCropBlock> ONIONS = crop("onions", () -> ModItems.ONION.get());
     public static final DeferredBlock<ModCropBlock> BARLEY = crop("barley", () -> ModItems.BARLEY_SEEDS.get());
+    /** Hopfen rankt an einer Stange, Weintrauben an einem Rebpfahl; Knoblauch wächst wie Zwiebeln. */
+    public static final DeferredBlock<ModCropBlock> HOPS = crop("hops", () -> ModItems.HOPS.get());
+    public static final DeferredBlock<ModCropBlock> GRAPES = crop("grapes", () -> ModItems.GRAPES.get());
+    public static final DeferredBlock<ModCropBlock> GARLIC_CROP = crop("garlic_crop", () -> ModItems.GARLIC.get());
 
     /** Alle Feldfrüchte. */
-    public static final List<DeferredBlock<ModCropBlock>> CROPS = List.of(TOMATOES, CABBAGES, ONIONS, BARLEY);
+    public static final List<DeferredBlock<ModCropBlock>> CROPS = List.of(TOMATOES, CABBAGES, ONIONS, BARLEY, HOPS, GRAPES, GARLIC_CROP);
 
     // 5. Dekorative Pflanzen
     public static final DeferredBlock<FlowerBlock> LAVENDER = flower("lavender", MobEffects.REGENERATION, 8.0f);
     public static final DeferredBlock<FlowerBlock> GARDEN_ROSE = flower("garden_rose", MobEffects.NIGHT_VISION, 5.0f);
     public static final DeferredBlock<FlowerBlock> FIRE_LILY = flower("fire_lily", MobEffects.FIRE_RESISTANCE, 4.0f);
     public static final DeferredBlock<FlowerBlock> FROST_FLOWER = flower("frost_flower", MobEffects.SLOWNESS, 6.0f);
+    /** Leuchtet nachts schwach bläulich – wächst dort, wo auch Irrlichter tanzen. */
+    public static final DeferredBlock<FlowerBlock> MOONFLOWER = flower("moonflower", MobEffects.SLOW_FALLING, 7.0f, 7);
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_LAVENDER = pottedFlower("potted_lavender", LAVENDER);
     public static final DeferredBlock<FlowerPotBlock> POTTED_GARDEN_ROSE = pottedFlower("potted_garden_rose", GARDEN_ROSE);
     public static final DeferredBlock<FlowerPotBlock> POTTED_FIRE_LILY = pottedFlower("potted_fire_lily", FIRE_LILY);
     public static final DeferredBlock<FlowerPotBlock> POTTED_FROST_FLOWER = pottedFlower("potted_frost_flower", FROST_FLOWER);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_MOONFLOWER = pottedFlower("potted_moonflower", MOONFLOWER, 7);
 
     /** Zierblumen mit ihrem Blumentopf (feste Reihenfolge, damit die erzeugten Dateien gleich bleiben). */
     public static final Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> FLOWERS;
@@ -272,8 +280,14 @@ public final class ModBlocks {
         flowers.put(GARDEN_ROSE, POTTED_GARDEN_ROSE);
         flowers.put(FIRE_LILY, POTTED_FIRE_LILY);
         flowers.put(FROST_FLOWER, POTTED_FROST_FLOWER);
+        flowers.put(MOONFLOWER, POTTED_MOONFLOWER);
         FLOWERS = Collections.unmodifiableMap(flowers);
     }
+
+    /** Festmahl: Braten mit Beilagen auf einem Brett, vier Portionen zum Essen direkt vom Tisch. */
+    public static final DeferredBlock<FeastBlock> FEAST = blockWithItem("feast", FeastBlock::new,
+            p -> p.mapColor(MapColor.WOOD).strength(0.5f).sound(SoundType.WOOD).noOcclusion().pushReaction(PushReaction.POPPED),
+            ip -> ip.stacksTo(1).component(DataComponents.LORE, ModItems.lore("feast", 1)), FARMING_TAB);
 
     // =====================================================================================
     // Kingdoms at War – Armee
@@ -441,15 +455,23 @@ public final class ModBlocks {
     }
 
     private static DeferredBlock<FlowerBlock> flower(String name, Holder<MobEffect> stewEffect, float seconds) {
+        return flower(name, stewEffect, seconds, 0);
+    }
+
+    private static DeferredBlock<FlowerBlock> flower(String name, Holder<MobEffect> stewEffect, float seconds, int light) {
         return blockWithItem(name, p -> new FlowerBlock(stewEffect, seconds, p),
                 p -> p.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS)
-                        .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED),
+                        .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED).lightLevel(state -> light),
                 ip -> ip.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM), FARMING_TAB);
     }
 
     private static DeferredBlock<FlowerPotBlock> pottedFlower(String name, DeferredBlock<FlowerBlock> flower) {
+        return pottedFlower(name, flower, 0);
+    }
+
+    private static DeferredBlock<FlowerPotBlock> pottedFlower(String name, DeferredBlock<FlowerBlock> flower, int light) {
         return BLOCKS.registerBlock(name,
                 p -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, p),
-                p -> p.instabreak().noOcclusion().pushReaction(PushReaction.POPPED));
+                p -> p.instabreak().noOcclusion().pushReaction(PushReaction.POPPED).lightLevel(state -> light));
     }
 }

@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
@@ -131,19 +132,29 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ModTags.Items.CROPS_CABBAGE, ModItems.CABBAGE);
         add(ModTags.Items.CROPS_ONION, ModItems.ONION);
         add(ModTags.Items.CROPS_BARLEY, ModItems.BARLEY);
+        add(ModTags.Items.CROPS_HOPS, ModItems.HOPS);
+        add(ModTags.Items.CROPS_GRAPE, ModItems.GRAPES);
+        add(ModTags.Items.CROPS_GARLIC, ModItems.GARLIC);
         tag(Tags.Items.CROPS).addTag(ModTags.Items.CROPS_TOMATO).addTag(ModTags.Items.CROPS_CABBAGE)
-                .addTag(ModTags.Items.CROPS_ONION).addTag(ModTags.Items.CROPS_BARLEY);
+                .addTag(ModTags.Items.CROPS_ONION).addTag(ModTags.Items.CROPS_BARLEY).addTag(ModTags.Items.CROPS_HOPS)
+                .addTag(ModTags.Items.CROPS_GRAPE).addTag(ModTags.Items.CROPS_GARLIC);
 
         // Bauern-Dorfbewohner pflanzen unsere Samen an, Hühner fressen sie
         add(ItemTags.VILLAGER_PLANTABLE_SEEDS, ModItems.TOMATO_SEEDS, ModItems.CABBAGE_SEEDS, ModItems.BARLEY_SEEDS,
-                ModItems.ONION);
+                ModItems.ONION, ModItems.HOPS, ModItems.GRAPES, ModItems.GARLIC);
         add(ItemTags.VILLAGER_PICKS_UP, ModItems.TOMATO_SEEDS, ModItems.CABBAGE_SEEDS, ModItems.BARLEY_SEEDS,
-                ModItems.ONION, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY);
+                ModItems.ONION, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY, ModItems.HOPS, ModItems.GRAPES, ModItems.GARLIC);
         add(ItemTags.CHICKEN_FOOD, ModItems.TOMATO_SEEDS, ModItems.CABBAGE_SEEDS, ModItems.BARLEY_SEEDS);
 
         // --- Nahrung ---
-        add(Tags.Items.FOODS_VEGETABLE, ModItems.TOMATO, ModItems.CABBAGE, ModItems.ONION);
-        add(Tags.Items.FOODS_BREAD, ModItems.BREAD_ROLL);
+        add(Tags.Items.FOODS_VEGETABLE, ModItems.TOMATO, ModItems.CABBAGE, ModItems.ONION, ModItems.GARLIC);
+        add(Tags.Items.FOODS_FRUIT, ModItems.GRAPES);
+        add(Tags.Items.FOODS_BREAD, ModItems.BREAD_ROLL, ModItems.GARLIC_BREAD);
+        add(Tags.Items.DRINKS, ModItems.ALE, ModItems.WINE, ModItems.MEAD);
+        add(Tags.Items.DRINKS_HONEY, ModItems.MEAD);
+        add(Tags.Items.DRINK_CONTAINING_BOTTLE, ModItems.ALE, ModItems.WINE, ModItems.MEAD);
+        tag(Tags.Items.FOODS_EDIBLE_WHEN_PLACED).add(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.ITEM, ModBlocks.FEAST.getId()));
         add(Tags.Items.FOODS_SOUP, ModItems.VEGETABLE_STEW);
         add(Tags.Items.FOODS_PIE, ModItems.MEAT_PIE, ModItems.APPLE_PIE);
         add(ItemTags.MEAT, ModItems.VENISON, ModItems.COOKED_VENISON);

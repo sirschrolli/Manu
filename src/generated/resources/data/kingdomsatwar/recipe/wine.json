@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:grapes",
+    "kingdomsatwar:grapes",
+    "kingdomsatwar:grapes",
+    "minecraft:glass_bottle"
+  ],
+  "result": {
+    "id": "kingdomsatwar:wine"
+  }
+}

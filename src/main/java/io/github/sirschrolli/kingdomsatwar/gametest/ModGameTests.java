@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.block.BattlementBlock;
 import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.FeastBlock;
 import io.github.sirschrolli.kingdomsatwar.block.SeatBlock;
 import io.github.sirschrolli.kingdomsatwar.block.TableBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
@@ -139,6 +140,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("furniture_seats", () -> ModGameTests::furnitureSeats);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DECOR_BLOCKS =
             TEST_FUNCTIONS.register("decor_blocks", () -> ModGameTests::decorBlocks);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRINKS_AND_FEAST =
+            TEST_FUNCTIONS.register("drinks_and_feast", () -> ModGameTests::drinksAndFeast);
 
     private ModGameTests() {}
 
@@ -155,7 +158,7 @@ public final class ModGameTests {
                 List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
-                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS)) {
+                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -212,6 +215,9 @@ public final class ModGameTests {
         assertCropDrops(helper, ModBlocks.CABBAGES, ModItems.CABBAGE.get());
         assertCropDrops(helper, ModBlocks.ONIONS, ModItems.ONION.get());
         assertCropDrops(helper, ModBlocks.BARLEY, ModItems.BARLEY.get());
+        assertCropDrops(helper, ModBlocks.HOPS, ModItems.HOPS.get());
+        assertCropDrops(helper, ModBlocks.GRAPES, ModItems.GRAPES.get());
+        assertCropDrops(helper, ModBlocks.GARLIC_CROP, ModItems.GARLIC.get());
         helper.succeed();
     }
 
@@ -225,7 +231,8 @@ public final class ModGameTests {
                 "draconium_axe", "fire_dragon_scale_helmet", "water_dragon_scale_boots", "wyvernit_glider", "gemstone_crown",
                 "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking",
                 "white_plaster", "clay_plaster_stairs", "leaded_glass", "leaded_glass_pane", "castle_door", "green_shutters",
-                "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement",
+                "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement", "ale", "wine", "mead",
+                "garlic_bread", "feast",
                 "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
@@ -740,6 +747,36 @@ public final class ModGameTests {
         helper.useBlock(new BlockPos(3, 1, 6), hand);
         helper.assertTrue(helper.getBlockState(new BlockPos(3, 1, 6)).getValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN),
                 "Fensterladen öffnet sich nicht");
+        helper.succeed();
+    }
+
+    /**
+     * Festmahl: vier Portionen, dann ist es aufgegessen. Bier, Wein und Met wirken und lassen die Flasche übrig.
+     * Die Mondblume leuchtet.
+     */
+    private static void drinksAndFeast(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.getFoodData().setFoodLevel(0);
+        BlockPos feast = new BlockPos(2, 1, 2);
+        helper.setBlock(feast, ModBlocks.FEAST.get());
+        for (int i = 0; i < FeastBlock.SERVINGS; i++) {
+            helper.assertBlockPresent(ModBlocks.FEAST.get(), feast);
+            helper.useBlock(feast, player);
+        }
+        helper.assertBlockNotPresent(ModBlocks.FEAST.get(), feast);
+        helper.assertTrue(player.getFoodData().getFoodLevel() == 20, "Festmahl macht nicht satt: " + player.getFoodData().getFoodLevel());
+
+        java.util.Map<Item, net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect>> drinks = java.util.Map.of(
+                ModItems.ALE.get(), MobEffects.STRENGTH, ModItems.WINE.get(), MobEffects.REGENERATION,
+                ModItems.MEAD.get(), MobEffects.ABSORPTION);
+        drinks.forEach((drink, effect) -> {
+            ItemStack rest = new ItemStack(drink).finishUsingItem(level, player);
+            helper.assertTrue(player.hasEffect(effect), drink + " wirkt nicht");
+            helper.assertTrue(rest.is(Items.GLASS_BOTTLE), drink + " lässt keine leere Flasche übrig, sondern " + rest);
+        });
+        helper.assertTrue(ModBlocks.MOONFLOWER.get().defaultBlockState().getLightEmission() > 0, "Mondblume leuchtet nicht");
         helper.succeed();
     }
 

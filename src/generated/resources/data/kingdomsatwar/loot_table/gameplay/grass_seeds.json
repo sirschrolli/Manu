@@ -23,8 +23,20 @@
           "name": "kingdomsatwar:onion"
         },
         {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:hops"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:grapes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:garlic"
+        },
+        {
           "type": "minecraft:empty",
-          "weight": 36
+          "weight": 56
         }
       ],
       "rolls": 1

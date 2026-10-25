@@ -166,6 +166,51 @@ final class DecorModels {
             {2.5f, 8, 8.5f, 3}, {13.5f, 8, 8.5f, 3}, {8, 2.5f, 8.5f, 3}, {8, 13.5f, 8.5f, 3},
             {4, 4, 8.25f, 2}, {12, 4, 8.25f, 2}, {4, 12, 8.25f, 2}, {12, 12, 8.25f, 2}};
 
+    // ------------------------------------------------------------------ Festmahl
+
+    /** Holzbrett. */
+    static final TextureSlot BOARD = TextureSlot.create("board");
+    /**
+     * Speisen aus einer Textur ({@code block/feast}): Kruste (u0-8, v0-8), Anschnitt (u8-12, v0-4), Knochen
+     * (u12-16, v0-2), Möhre (u8-12, v4-6), Kartoffel (u12-16, v4-6), Kräuter (u8-10, v6-8), Apfel (u10-12, v6-8),
+     * Brotlaib (u12-16, v6-10).
+     */
+    static final TextureSlot FOOD = TextureSlot.create("food");
+
+    /**
+     * Festmahl mit {@code eaten} gegessenen Portionen (0-3): Der Braten wird von Westen her angeschnitten, die
+     * Beilagen bleiben liegen. Blick nach Norden.
+     */
+    static ModelTemplate feast(int eaten) {
+        ExtendedModelTemplateBuilder b = builder(BOARD, FOOD);
+        b.element(e -> box(e, 1, 0, 1, 15, 1, 15, BOARD));                                    // Brett
+        // Beilagen
+        b.element(e -> atlas(e, 2, 1, 2.5f, 5, 2, 3.5f, FOOD, 8, 4));                        // Möhren
+        b.element(e -> atlas(e, 11, 1, 12.5f, 14, 2, 13.5f, FOOD, 8, 4));
+        b.element(e -> atlas(e, 2, 1, 12, 4, 2.5f, 14, FOOD, 12, 4));                        // Kartoffeln
+        b.element(e -> atlas(e, 12, 1, 2, 14, 2.5f, 4, FOOD, 12, 4));
+        b.element(e -> atlas(e, 5.5f, 1, 12.5f, 7, 1.5f, 14, FOOD, 8, 6));                   // Kräuter
+        b.element(e -> atlas(e, 1.5f, 1, 6.5f, 3, 2.5f, 8, FOOD, 10, 6));                    // Apfel
+        b.element(e -> atlas(e, 5, 1, 1.5f, 8.5f, 3, 3.5f, FOOD, 12, 6));                    // Brotlaib
+        // Braten mit Knochen
+        float west = 4 + eaten * 2;
+        b.element(e -> roast(e, west, 1, 5, 11, 5, 11, eaten > 0));
+        if (5 + eaten * 2 < 10) {
+            b.element(e -> roast(e, 5 + eaten * 2, 5, 6, 10, 6, 10, eaten > 0));
+        }
+        b.element(e -> atlas(e, 11, 2.5f, 7.5f, 13.5f, 3.5f, 8.5f, FOOD, 12, 0));             // Knochen
+        b.element(e -> atlas(e, 13.5f, 2, 7, 14.5f, 4, 9, FOOD, 12, 0));
+        return b.build();
+    }
+
+    /** Bratenstück: Kruste rundherum, nach dem Anschneiden zeigt die Westseite das rosige Fleisch. */
+    private static void roast(ElementBuilder e, float x1, float y1, float z1, float x2, float y2, float z2, boolean cut) {
+        atlas(e, x1, y1, z1, x2, y2, z2, FOOD, 0, 0);
+        if (cut) {
+            e.face(Direction.WEST, f -> f.uvs(8, 0, 12, 4).texture(FOOD));
+        }
+    }
+
     // ------------------------------------------------------------------ Zinne
 
     /** Halbhohe Brüstung über die volle Breite, Mauerzahn mittig (Reihe in Ost-West-Richtung). */

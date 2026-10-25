@@ -236,6 +236,19 @@ public class ModModelProvider extends ModelProvider {
         ModBlocks.FLOWERS.forEach((flower, pot) ->
                 blocks.createPlantWithDefaultItem(flower.get(), pot.get(), BlockModelGenerators.PlantType.NOT_TINTED));
 
+        // --- Festmahl: vier Stufen, dreht sich zum Spieler ---
+        Block feast = ModBlocks.FEAST.get();
+        TextureMapping feastTextures = new TextureMapping().put(DecorModels.BOARD, vanilla("spruce_planks"))
+                .put(DecorModels.FOOD, new Material(KingdomsAtWar.id("block/feast"))).put(TextureSlot.PARTICLE, vanilla("spruce_planks"));
+        PropertyDispatch.C1<MultiVariant, Integer> servings = PropertyDispatch.initial(io.github.sirschrolli.kingdomsatwar.block.FeastBlock.EATEN);
+        for (int eaten = 0; eaten < io.github.sirschrolli.kingdomsatwar.block.FeastBlock.SERVINGS; eaten++) {
+            Identifier model = DecorModels.feast(eaten).createWithSuffix(feast, eaten == 0 ? "" : "_eaten_" + eaten, feastTextures,
+                    blocks.modelOutput);
+            servings.select(eaten, BlockModelGenerators.plainVariant(model));
+        }
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(feast).with(servings).with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+        blocks.registerSimpleFlatItemModel(feast.asItem());
+
         // --- Gegenstände (flache 2D-Modelle) ---
         // Samen und Zwiebel bekommen ihr Modell schon über createCropBlock (Gegenstand der Feldfrucht).
         for (DeferredItem<?> item : java.util.List.of(
@@ -275,7 +288,7 @@ public class ModModelProvider extends ModelProvider {
         items.generateFlatItem(ModItems.TROLL_CLUB.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,
                 ModItems.WILL_O_WISP_SPAWN_EGG, ModItems.CAVE_TROLL_SPAWN_EGG, ModItems.LINDWORM_SPAWN_EGG, ModItems.VENISON,
-                ModItems.COOKED_VENISON, ModItems.WISP_DUST)) {
+                ModItems.COOKED_VENISON, ModItems.WISP_DUST, ModItems.GARLIC_BREAD, ModItems.ALE, ModItems.WINE, ModItems.MEAD)) {
             flat(items, item.get());
         }
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());

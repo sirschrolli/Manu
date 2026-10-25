@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:cooked_porkchop",
+    "kingdomsatwar:cooked_venison",
+    "minecraft:cooked_chicken",
+    "minecraft:baked_potato",
+    "minecraft:baked_potato",
+    "minecraft:carrot",
+    "kingdomsatwar:garlic",
+    "minecraft:apple",
+    "#minecraft:wooden_slabs"
+  ],
+  "result": {
+    "id": "kingdomsatwar:feast"
+  }
+}

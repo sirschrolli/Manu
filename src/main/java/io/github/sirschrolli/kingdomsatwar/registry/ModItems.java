@@ -21,6 +21,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Unit;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -32,9 +34,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
@@ -154,6 +159,23 @@ public final class ModItems {
     /** Wildbret vom Hirsch – roh und gebraten. */
     public static final DeferredItem<Item> VENISON = food("venison", 3, 0.3f, null);
     public static final DeferredItem<Item> COOKED_VENISON = food("cooked_venison", 8, 0.8f, null);
+
+    // 3. Hopfen, Weintrauben und Knoblauch (werden direkt gepflanzt), Getränke und Festmahl
+    public static final DeferredItem<BlockItem> HOPS = plantable("hops", () -> ModBlocks.HOPS.get(), null);
+    public static final DeferredItem<BlockItem> GRAPES = plantable("grapes", () -> ModBlocks.GRAPES.get(),
+            new FoodProperties.Builder().nutrition(2).saturationModifier(0.3f).build());
+    public static final DeferredItem<BlockItem> GARLIC = plantable("garlic", () -> ModBlocks.GARLIC_CROP.get(),
+            new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).build());
+    public static final DeferredItem<Item> GARLIC_BREAD = food("garlic_bread", 7, 0.7f, null);
+    /** Ale aus Gerste und Hopfen: macht stark – aber wer zu viel trinkt, dem wird schwindelig. */
+    public static final DeferredItem<Item> ALE = drink("ale", 3, 0.3f, 0.3f,
+            new MobEffectInstance(MobEffects.STRENGTH, 900, 0));
+    /** Rotwein aus Weintrauben: wärmt und heilt langsam. */
+    public static final DeferredItem<Item> WINE = drink("wine", 2, 0.4f, 0.2f,
+            new MobEffectInstance(MobEffects.REGENERATION, 240, 0));
+    /** Honigmet, der Trank der Helden: ein Polster aus Lebenskraft. */
+    public static final DeferredItem<Item> MEAD = drink("mead", 4, 0.4f, 0.15f,
+            new MobEffectInstance(MobEffects.ABSORPTION, 2400, 0));
 
     // =====================================================================================
     // Kingdoms at War – Armee
@@ -322,6 +344,25 @@ public final class ModItems {
             @Nullable ResourceKey<ContextIntProvider> compostChance) {
         FoodProperties food = new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build();
         return item(name, p -> compostChance == null ? p.food(food) : p.food(food).compostable(compostChance), FARMING_TAB);
+    }
+
+    /** Frucht, die man direkt pflanzt (wie Karotten); mit {@code food} auch essbar. */
+    private static DeferredItem<BlockItem> plantable(String name, Supplier<? extends Block> crop, @Nullable FoodProperties food) {
+        return addTo(FARMING_TAB, ITEMS.registerItem(name, p -> new BlockItem(crop.get(), p), () -> {
+            Item.Properties properties = new Item.Properties().useItemDescriptionPrefix().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM);
+            return food == null ? properties : properties.food(food);
+        }));
+    }
+
+    /** Getränk in der Flasche: immer trinkbar, gibt seine Wirkung, mit etwas Glück auch Übelkeit; die Flasche bleibt. */
+    private static DeferredItem<Item> drink(String name, int nutrition, float saturation, float nauseaChance, MobEffectInstance effect) {
+        Consumable consumable = Consumables.defaultDrink()
+                .onConsume(new ApplyStatusEffectsConsumeEffect(effect))
+                .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 140, 0), nauseaChance))
+                .build();
+        FoodProperties food = new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).alwaysEdible().build();
+        return item(name, p -> p.food(food, consumable).usingConvertsTo(Items.GLASS_BOTTLE).stacksTo(16)
+                .component(DataComponents.LORE, lore(name, 1)), FARMING_TAB);
     }
 
     private static DeferredItem<BlockItem> seeds(String name, Supplier<? extends Block> crop) {
