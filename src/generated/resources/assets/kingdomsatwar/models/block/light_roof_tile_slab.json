@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "kingdomsatwar:block/light_roof_tiles",
+    "side": "kingdomsatwar:block/light_roof_tiles",
+    "top": "kingdomsatwar:block/light_roof_tiles"
+  }
+}

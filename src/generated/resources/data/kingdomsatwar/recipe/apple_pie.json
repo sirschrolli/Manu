@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:apple",
+    "minecraft:apple",
+    "minecraft:sugar",
+    "minecraft:egg",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "id": "kingdomsatwar:apple_pie"
+  }
+}

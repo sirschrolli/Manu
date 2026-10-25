@@ -16,6 +16,7 @@ import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -54,6 +56,10 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("recipes", () -> ModGameTests::recipes);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WORLDGEN =
             TEST_FUNCTIONS.register("worldgen", () -> ModGameTests::worldgen);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ORE_VEINS =
+            TEST_FUNCTIONS.register("ore_veins", () -> ModGameTests::oreVeins);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLOWER_PATCHES =
+            TEST_FUNCTIONS.register("flower_patches", () -> ModGameTests::flowerPatches);
 
     private ModGameTests() {}
 
@@ -61,7 +67,7 @@ public final class ModGameTests {
     public static void registerTests(RegisterGameTestsEvent event) {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(KingdomsAtWar.id("default"));
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN)) {
+                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN, ORE_VEINS, FLOWER_PATCHES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
@@ -145,9 +151,67 @@ public final class ModGameTests {
         helper.succeed();
     }
 
+    /** Jede Erzader setzt in massivem Stein (bzw. Tiefenschiefer) tatsächlich ihr Erz. */
+    private static void oreVeins(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var features = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        for (ModWorldgen.OreVein vein : ModWorldgen.ORE_VEINS) {
+            Feature feature = features.getOrThrow(vein.featureKey()).value();
+            for (Block rock : vein.deepslateOre() == null ? List.of(Blocks.STONE) : List.of(Blocks.STONE, Blocks.DEEPSLATE)) {
+                Block expected = rock == Blocks.STONE ? vein.stoneOre().get() : vein.deepslateOre().get();
+                boolean found = false;
+                for (int seed = 0; seed < 40 && !found; seed++) {
+                    fillPlatform(helper, rock);
+                    feature.place(level, level.getChunkSource().getGenerator(), RandomSource.create(seed),
+                            helper.absolutePos(TEST_POS));
+                    found = containsBlock(helper, expected);
+                }
+                helper.assertTrue(found, "Erzader " + vein.name() + " setzt kein " + expected + " in " + rock);
+            }
+        }
+        helper.succeed();
+    }
+
+    /** Die Blumenfelder setzen ihre Blume auf Gras. */
+    private static void flowerPatches(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var features = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        for (ModWorldgen.FlowerPatch patch : ModWorldgen.FLOWER_PATCHES) {
+            helper.setBlock(TEST_POS.below(), Blocks.GRASS_BLOCK);
+            helper.setBlock(TEST_POS, Blocks.AIR);
+            features.getOrThrow(patch.featureKey()).value()
+                    .place(level, level.getChunkSource().getGenerator(), RandomSource.create(0), helper.absolutePos(TEST_POS));
+            helper.assertBlockPresent(patch.flower().get(), TEST_POS);
+        }
+        helper.succeed();
+    }
+
     // =====================================================================================
     // Hilfsmethoden
     // =====================================================================================
+
+    private static void fillPlatform(GameTestHelper helper, Block block) {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 3; y++) {
+                for (int z = 0; z < 5; z++) {
+                    helper.setBlock(x, y, z, block);
+                }
+            }
+        }
+    }
+
+    private static boolean containsBlock(GameTestHelper helper, Block block) {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 3; y++) {
+                for (int z = 0; z < 5; z++) {
+                    if (helper.getBlockState(new BlockPos(x, y, z)).is(block)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     private static void assertDrops(GameTestHelper helper, DeferredBlock<? extends Block> block, Item expected) {
         ServerLevel level = helper.getLevel();

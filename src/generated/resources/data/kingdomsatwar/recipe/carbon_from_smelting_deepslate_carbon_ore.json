@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "group": "carbon",
+  "ingredient": "kingdomsatwar:deepslate_carbon_ore",
+  "result": {
+    "id": "kingdomsatwar:carbon"
+  }
+}

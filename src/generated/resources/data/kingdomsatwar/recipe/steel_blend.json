@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "kingdomsatwar:carbon",
+    "kingdomsatwar:carbon"
+  ],
+  "result": {
+    "id": "kingdomsatwar:steel_blend"
+  }
+}

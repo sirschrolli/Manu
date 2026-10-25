@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/timber_beam_top",
+    "side": "kingdomsatwar:block/timber_beam_side"
+  }
+}

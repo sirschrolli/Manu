@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": "kingdomsatwar:dragon_egg_fragment",
+    "N": "minecraft:moss_block"
+  },
+  "pattern": [
+    " F ",
+    "FNF",
+    " F "
+  ],
+  "result": {
+    "id": "kingdomsatwar:nature_dragon_egg"
+  }
+}

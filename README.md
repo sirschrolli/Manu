@@ -1,6 +1,6 @@
 # Kingdoms at War – Dragon Warfare
 
-![Kingdoms at War](src/main/resources/kingdomsatwar_logo.png)
+![Kingdoms at War](src/main/resources/kingdomsatwar_banner.png)
 
 Eine eigene, mittelalterliche Minecraft-Mod für **Minecraft Java 26.3** mit **NeoForge**.
 Baue dein Königreich, sammle Drachenerze, bereite dich auf die Drachen vor – und später auf Armeen,

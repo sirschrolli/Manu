@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_mountain",
+  "features": "kingdomsatwar:ore_wyvernit",
+  "step": "underground_ores"
+}

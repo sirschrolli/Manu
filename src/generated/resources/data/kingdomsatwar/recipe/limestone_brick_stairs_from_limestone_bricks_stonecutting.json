@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:limestone_bricks",
+  "result": {
+    "id": "kingdomsatwar:limestone_brick_stairs"
+  }
+}
