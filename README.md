@@ -12,6 +12,8 @@ Belagerungen und NPC-Baumeister.
 
 Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern).
 
+![Alle Inhalte der Testversion](docs/bilder/inhalte-phase-1.png)
+
 ---
 
 ## Entwicklungsstand
@@ -44,7 +46,8 @@ Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-jar** herunterladen und entpacken.
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-jar** herunterladen und entpacken
+   (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 
@@ -65,7 +68,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 
 | Erz | Fundort | Werkzeug | Ergibt | Verwendung |
 |---|---|---|---|---|
-| Kohlenstofferz | überall, Höhe 0 bis 192 | jede Spitzhacke | Kohlenstoff | Brennstoff, Fackeln, Stahl |
+| Kohlenstofferz | überall, Höhe 0 bis 192 | jede Spitzhacke | Kohlenstoff | Brennstoff, zählt als Kohle (z. B. für Fackeln), Stahl |
 | Edelstein-Erz | tief, Höhe −64 bis 16 | Eisenspitzhacke | Edelstein | Drachenei-Fragmente, Deko |
 | Konteriterz | Berge, Höhe 32 bis 256 | Eisenspitzhacke | Konterit | Drachenei-Fragmente, später Flugausrüstung |
 | Aetheriterz (leuchtet leicht) | Höhe −48 bis 48 | Eisenspitzhacke | Aetherit | Drachenei-Fragmente, später Magie |
@@ -136,7 +139,8 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
-| `python3 tools/generate_textures.py` | Alle Texturen neu zeichnen |
+| `python3 tools/generate_textures.py` | Alle Texturen neu zeichnen (`--preview datei.png` für eine Übersicht) |
+| `python3 tools/render_showcase.py` | Übersichtsbild `docs/bilder/inhalte-phase-1.png` neu erzeugen |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
