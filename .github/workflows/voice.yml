@@ -11,55 +11,74 @@ jobs:
     env:
       HF_HUB_DISABLE_PROGRESS_BARS: '1'
       PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Systempakete
-        run: sudo apt-get update -q && sudo apt-get install -y -q espeak-ng ffmpeg > /dev/null
+      - name: Vorbereiten
+        run: |
+          mkdir -p out/logs
+          sudo apt-get update -q > /dev/null && sudo apt-get install -y -q espeak-ng ffmpeg > /dev/null
+          df -h / | tee out/logs/disk.txt
       - name: Werkzeuge zum Bewerten
+        continue-on-error: true
         run: |
+          set -o pipefail
           python -m venv /tmp/vw
-          /tmp/vw/bin/pip install -q --no-cache-dir faster-whisper jiwer praat-parselmouth numpy
+          /tmp/vw/bin/pip install --no-cache-dir faster-whisper jiwer praat-parselmouth numpy 2>&1 | tail -5 | tee out/logs/01_eval_install.txt
       - name: Stimmen gestalten (Parler-TTS)
+        continue-on-error: true
         run: |
+          set -o pipefail
           python -m venv /tmp/vp
-          /tmp/vp/bin/pip install -q --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
-          /tmp/vp/bin/pip install -q --no-cache-dir git+https://github.com/huggingface/parler-tts.git soundfile
-          cd voice && /tmp/vp/bin/python parler_design.py design ../out de 11,22,33
+          { /tmp/vp/bin/pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
+            /tmp/vp/bin/pip install --no-cache-dir git+https://github.com/huggingface/parler-tts.git soundfile 2>&1 | tail -15
+            /tmp/vp/bin/pip list 2>/dev/null | grep -i -E "torch|transformers|parler|descript"; } 2>&1 | tee out/logs/02_parler_install.txt
+          cd voice && /tmp/vp/bin/python parler_design.py design ../out de 11,22,33 2>&1 | tee ../out/logs/03_parler_design.txt
       - name: Gestaltete Stimmen bewerten
+        continue-on-error: true
         run: |
-          cd voice && /tmp/vw/bin/python evaluate.py ../out 'parler_de_*.wav' de design eval_parler_de.json
-          python pick_refs.py ../out de
+          set -o pipefail
+          cd voice && /tmp/vw/bin/python evaluate.py ../out 'parler_de_*.wav' de design eval_parler_de.json 2>&1 | tee ../out/logs/04_eval_parler.txt
+          python pick_refs.py ../out de 2>&1 | tee ../out/logs/05_pick.txt
       - name: Hörprobe Parler
+        continue-on-error: true
         run: |
-          cd voice && /tmp/vp/bin/python parler_design.py sample ../out de
+          set -o pipefail
+          cd voice && /tmp/vp/bin/python parler_design.py sample ../out de 2>&1 | tee ../out/logs/06_parler_sample.txt
           rm -rf ~/.cache/huggingface/hub/models--parler-tts* /tmp/vp
       - name: Hörproben Chatterbox
+        continue-on-error: true
         run: |
+          set -o pipefail
           python -m venv /tmp/vc
-          /tmp/vc/bin/pip install -q --no-cache-dir chatterbox-tts
-          cd voice && /tmp/vc/bin/python chatterbox_gen.py ../out de
+          /tmp/vc/bin/pip install --no-cache-dir chatterbox-tts 2>&1 | tail -15 | tee out/logs/07_chatterbox_install.txt
+          cd voice && /tmp/vc/bin/python chatterbox_gen.py ../out de 2>&1 | tee ../out/logs/08_chatterbox.txt
           rm -rf ~/.cache/huggingface/hub/models--ResembleAI* /tmp/vc
       - name: Englische Hörproben (Kokoro)
+        continue-on-error: true
         run: |
+          set -o pipefail
           python -m venv /tmp/vk
-          /tmp/vk/bin/pip install -q --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
-          /tmp/vk/bin/pip install -q --no-cache-dir 'kokoro>=0.9.4' soundfile
-          cd voice && /tmp/vk/bin/python kokoro_gen.py ../out
+          { /tmp/vk/bin/pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
+            /tmp/vk/bin/pip install --no-cache-dir 'kokoro>=0.9.4' soundfile 2>&1 | tail -5; } | tee out/logs/09_kokoro_install.txt
+          cd voice && /tmp/vk/bin/python kokoro_gen.py ../out 2>&1 | tee ../out/logs/10_kokoro.txt
       - name: Hörproben bewerten
-        if: always()
+        continue-on-error: true
         run: |
           cd voice
-          /tmp/vw/bin/python evaluate.py ../out 'sample_*_de.wav' de sample eval_samples_de.json || true
-          /tmp/vw/bin/python evaluate.py ../out 'sample_*_en.wav' en sample eval_samples_en.json || true
+          /tmp/vw/bin/python evaluate.py ../out 'sample_*_de.wav' de sample eval_samples_de.json 2>&1 | tee ../out/logs/11_eval_de.txt
+          /tmp/vw/bin/python evaluate.py ../out 'sample_*_en.wav' en sample eval_samples_en.json 2>&1 | tee ../out/logs/12_eval_en.txt
       - name: Zurückgeben
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd out
+          mkdir -p out && cd out
           for f in sample_*.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 160k "${f%.wav}.mp3"; done
           ls -la
           git init -q && git checkout -q -b ci/voice-out && git add .
