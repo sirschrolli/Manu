@@ -46,7 +46,7 @@ Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-jar** herunterladen und entpacken
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.1.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
