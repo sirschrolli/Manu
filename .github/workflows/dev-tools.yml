@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  decompile:
+  localenv:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -16,32 +16,40 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         with:
           cache-provider: basic
-      - name: Minecraft-Artefakte
-        run: ./gradlew createMinecraftArtifacts --stacktrace
+      - name: Bauen und Starts vorbereiten
+        run: ./gradlew build prepareClientRun prepareServerRun prepareGameTestServerRun prepareDataRun exportClasspaths downloadAssets --no-configuration-cache --stacktrace
       - name: Dekompilieren
         run: |
-          set -x
           JAR=$(ls build/moddev/artifacts/minecraft-patched-*.jar | head -1)
           VF=$(curl -sS https://repo1.maven.org/maven2/org/vineflower/vineflower/maven-metadata.xml | grep -oP '(?<=<release>)[^<]+')
-          echo "Vineflower $VF"
           curl -sSL -o vineflower.jar "https://repo1.maven.org/maven2/org/vineflower/vineflower/$VF/vineflower-$VF.jar"
-          mkdir -p mcsrc devtools
-          java -Xmx6g -jar vineflower.jar -dgs=1 -rsy=1 -lit=1 -mpm=60 -log=WARN "$JAR" mcsrc/ > decompile.log 2>&1 || echo "Vineflower exit $?"
-          tail -50 decompile.log
-          ls -la mcsrc
-          (cd mcsrc && zip -qr ../devtools/mc-sources.zip .)
-          cp vineflower.jar devtools/
-          NF=$(find ~/.gradle/caches -name "neoforge-26.3*-universal.jar" 2>/dev/null | head -1); cp "$NF" devtools/ 2>/dev/null || true
-          tail -200 decompile.log > devtools/decompile-tail.log
-          ls -la devtools
-          tar czf devtools.tar.gz devtools
-          ls -la devtools.tar.gz
+          mkdir -p mcsrc
+          java -Xmx6g -jar vineflower.jar -dgs=1 -rsy=1 -lit=1 -mpm=60 -log=ERROR "$JAR" mcsrc/ > decompile.log 2>&1 || echo "Vineflower exit $?"
+          find mcsrc -name "*.java" | wc -l
+      - name: Sammeln
+        run: |
+          mkdir -p localenv/libs localenv/moddev
+          cp build/moddev/*.txt build/moddev/*.xml build/moddev/*.properties localenv/moddev/ 2>/dev/null || true
+          cp devtools-cp/*.txt localenv/
+          cat devtools-cp/compile.txt devtools-cp/runtime.txt build/moddev/*RunClasspath.txt 2>/dev/null | tr ':' '\n' | grep '\.jar$' | sort -u > localenv/alljars.txt
+          while read -r j; do
+            [ -f "$j" ] || continue
+            rel=$(echo "$j" | sed "s#^$HOME/##; s#^$GITHUB_WORKSPACE/#ws/#")
+            mkdir -p "localenv/libs/$(dirname "$rel")"
+            cp "$j" "localenv/libs/$rel"
+          done < localenv/alljars.txt
+          (cd mcsrc && zip -qr ../localenv/mc-sources.zip .)
+          cp vineflower.jar localenv/
+          echo "HOME=$HOME WS=$GITHUB_WORKSPACE" > localenv/paths.txt
+          du -sh localenv; du -sh localenv/libs
+          tar czf localenv.tar.gz localenv
+          ls -la localenv.tar.gz
       - name: Verschlüsselt zurückgeben
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          openssl cms -encrypt -stream -binary -aes256 -in devtools.tar.gz -out devtools.enc -outform DER ci/probe.crt
-          mkdir out && split -b 45m -d devtools.enc out/devtools.enc.part && ls -la out && cd out
+          openssl cms -encrypt -stream -binary -aes256 -in localenv.tar.gz -out localenv.enc -outform DER ci/probe.crt
+          mkdir out && split -b 45m -d localenv.enc out/localenv.enc.part && ls -la out && cd out
           git init -q && git checkout -q -b ci/probe-output && git add .
-          git -c user.name=ci -c user.email=ci@localhost commit -q -m "devtools ${{ github.run_id }}"
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "localenv ${{ github.run_id }}"
           git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/probe-output
