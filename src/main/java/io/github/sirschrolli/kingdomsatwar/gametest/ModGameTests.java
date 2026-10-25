@@ -8,6 +8,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -62,6 +64,10 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("ore_veins", () -> ModGameTests::oreVeins);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLOWER_PATCHES =
             TEST_FUNCTIONS.register("flower_patches", () -> ModGameTests::flowerPatches);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLOWER_POTS =
+            TEST_FUNCTIONS.register("flower_pots", () -> ModGameTests::flowerPots);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WOOD_BURNS =
+            TEST_FUNCTIONS.register("wood_burns", () -> ModGameTests::woodBurns);
 
     private ModGameTests() {}
 
@@ -69,7 +75,8 @@ public final class ModGameTests {
     public static void registerTests(RegisterGameTestsEvent event) {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(KingdomsAtWar.id("default"));
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN, ORE_VEINS, FLOWER_PATCHES)) {
+                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
+                        FLOWER_POTS, WOOD_BURNS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
@@ -194,6 +201,28 @@ public final class ModGameTests {
                     .place(level, level.getChunkSource().getGenerator(), RandomSource.create(0), helper.absolutePos(TEST_POS));
             helper.assertBlockPresent(patch.flower().get(), TEST_POS);
         }
+        helper.succeed();
+    }
+
+    /** Jede Zierblume passt in einen leeren Blumentopf (Rechtsklick mit der Blume). */
+    private static void flowerPots(GameTestHelper helper) {
+        FlowerPotBlock emptyPot = (FlowerPotBlock) Blocks.FLOWER_POT;
+        ModBlocks.FLOWERS.forEach((flower, pot) -> helper.assertTrue(emptyPot.getFullPot(flower.get()) == pot.get(),
+                flower.getId() + " passt nicht in den Blumentopf"));
+        helper.succeed();
+    }
+
+    /** Holzblöcke fangen Feuer, Steinblöcke nicht. */
+    private static void woodBurns(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(TEST_POS);
+        for (DeferredBlock<? extends Block> block : ModBlocks.woodenBlocks()) {
+            BlockState state = block.get().defaultBlockState();
+            helper.assertTrue(state.isFlammable(level, pos, Direction.UP) && state.getFlammability(level, pos, Direction.UP) > 0,
+                    block.getId() + " brennt nicht");
+        }
+        BlockState stone = ModBlocks.MEDIEVAL_STONE.base().get().defaultBlockState();
+        helper.assertTrue(!stone.isFlammable(level, pos, Direction.UP), "Mittelalterlicher Stein darf nicht brennen");
         helper.succeed();
     }
 

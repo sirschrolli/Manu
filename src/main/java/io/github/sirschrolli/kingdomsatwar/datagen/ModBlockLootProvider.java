@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.Set;
+import java.util.stream.Collectors;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
@@ -20,7 +21,14 @@ import net.neoforged.neoforge.registries.DeferredHolder;
  */
 public class ModBlockLootProvider extends BlockLootSubProvider {
     public ModBlockLootProvider(LootTableSubProvider.Context context) {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), context);
+        // Dracheneier fallen auch nach einer Explosion immer als Gegenstand heraus (wie das Vanilla-Drachenei).
+        super(explosionResistantItems(), FeatureFlags.REGISTRY.allFlags(), context);
+    }
+
+    private static Set<Item> explosionResistantItems() {
+        return ModBlocks.DRAGON_EGGS.values().stream()
+                .map(egg -> egg.get().asItem())
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     @Override

@@ -88,7 +88,7 @@ public final class ModBlocks {
             RotatedPillarBlock::new,
             p -> p.mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASS)
                     .strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava(),
-            UnaryOperator.identity(), BUILDING_TAB);
+            ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS), BUILDING_TAB);
     public static final DeferredBlock<Block> TIMBER_FRAME = timberFrame("timber_frame");
     public static final DeferredBlock<Block> TIMBER_FRAME_DIAGONAL = timberFrame("timber_frame_diagonal");
     public static final DeferredBlock<Block> TIMBER_FRAME_CROSS = timberFrame("timber_frame_cross");
@@ -202,6 +202,21 @@ public final class ModBlocks {
 
     private ModBlocks() {}
 
+    /**
+     * Alle Holzblöcke: Holzbalken, Fachwerk und die Holzschindeln mit Treppe und Stufe.
+     * Sie fangen Feuer und brennen ab ({@code ModDataMapProvider}).
+     */
+    public static List<DeferredBlock<? extends Block>> woodenBlocks() {
+        List<DeferredBlock<? extends Block>> blocks = new ArrayList<>(
+                List.of(TIMBER_BEAM, TIMBER_FRAME, TIMBER_FRAME_DIAGONAL, TIMBER_FRAME_CROSS));
+        for (BuildingSet set : BUILDING_SETS) {
+            if (set.tool() == BuildingSet.Tool.AXE) {
+                blocks.addAll(set.all());
+            }
+        }
+        return blocks;
+    }
+
     // =====================================================================================
     // Hilfsmethoden
     // =====================================================================================
@@ -239,14 +254,22 @@ public final class ModBlocks {
 
     private static BuildingSet buildingSet(String name, String variantPrefix,
             UnaryOperator<BlockBehaviour.Properties> properties, boolean withWall, BuildingSet.Tool tool) {
-        DeferredBlock<Block> base = blockWithItem(name, Block::new, properties, UnaryOperator.identity(), BUILDING_TAB);
+        // Holz-Sets (mit der Axt abzubauen) taugen wie Holzbretter als Brennstoff im Ofen.
+        boolean wooden = tool == BuildingSet.Tool.AXE;
+        UnaryOperator<Item.Properties> blockFuel = wooden
+                ? ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
+                : UnaryOperator.identity();
+        UnaryOperator<Item.Properties> slabFuel = wooden
+                ? ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
+                : UnaryOperator.identity();
+        DeferredBlock<Block> base = blockWithItem(name, Block::new, properties, blockFuel, BUILDING_TAB);
         DeferredBlock<StairBlock> stairs = blockWithItem(variantPrefix + "_stairs",
                 p -> new StairBlock(base.get().defaultBlockState(), p),
                 () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
-                UnaryOperator.identity(), BUILDING_TAB);
+                blockFuel, BUILDING_TAB);
         DeferredBlock<SlabBlock> slab = blockWithItem(variantPrefix + "_slab", SlabBlock::new,
                 () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
-                UnaryOperator.identity(), BUILDING_TAB);
+                slabFuel, BUILDING_TAB);
         DeferredBlock<WallBlock> wall = withWall
                 ? blockWithItem(variantPrefix + "_wall", WallBlock::new,
                         () -> BlockBehaviour.Properties.ofFullCopy(base.get()).forceSolidOn(),

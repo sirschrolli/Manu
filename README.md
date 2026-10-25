@@ -7,7 +7,7 @@ Baue dein Königreich, sammle Drachenerze, bereite dich auf die Drachen vor – 
 Belagerungen und NPC-Baumeister.
 
 > **Testversion 0.1.0 – Phase 1 („Technische Grundlage“).**
-> Das Grundprojekt kompiliert, startet in einem echten Minecraft-26.3-Server und besteht alle automatischen Tests.
+> Das Grundprojekt lässt sich bauen, läuft auf einem echten Minecraft-26.3-Server und besteht alle automatischen Tests.
 > Drachen als Lebewesen, NPCs, Armeen und das Bausystem folgen in den nächsten Phasen.
 
 Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern).
@@ -58,7 +58,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten. Im Kreativmodus gibt es vier neue Tabs.
 
-> Tipp: Für eine neue Welt lohnt sich ein Test in einer **neuen** Welt, damit die neuen Erze und Blumen generiert werden.
+> Tipp: Die neuen Erze und wilden Blumen entstehen nur in neu erzeugten Gebieten. Am einfachsten testest du die Mod in einer **neuen** Welt.
 
 ---
 
@@ -70,12 +70,14 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 |---|---|---|---|---|
 | Kohlenstofferz | überall, Höhe 0 bis 192 | jede Spitzhacke | Kohlenstoff | Brennstoff, zählt als Kohle (z. B. für Fackeln), Stahl |
 | Edelstein-Erz | tief, Höhe −64 bis 16 | Eisenspitzhacke | Edelstein | Drachenei-Fragmente, Deko |
-| Konteriterz | Berge, Höhe 32 bis 256 | Eisenspitzhacke | Konterit | Drachenei-Fragmente, später Flugausrüstung |
+| Konteriterz | Berge, Höhe −16 bis 320 (meist um 150) | Eisenspitzhacke | Konterit | Drachenei-Fragmente, später Flugausrüstung |
 | Aetheriterz (leuchtet leicht) | Höhe −48 bis 48 | Eisenspitzhacke | Aetherit | Drachenei-Fragmente, später Magie |
-| Draconiumerz (leuchtet) | ganz tief, Höhe −64 bis −16, sehr selten | Diamantspitzhacke | Draconium | Drachenei-Fragmente, später Drachenrüstung |
+| Draconiumerz (leuchtet) | ganz tief, Höhe −64 bis 8 (meist um −36), sehr selten | Diamantspitzhacke | Draconium | Drachenei-Fragmente, später Drachenrüstung |
 | Wyverniterz | hohe Berge, ab Höhe 100 | Eisenspitzhacke | Wyvernit | später Flugtechnik |
 
-Alle Erze gibt es auch als Tiefenschiefer-Variante (außer Wyvernit). Aus 9 Rohstoffen wird jeweils ein Speicherblock.
+Alle Erze gibt es in Stein und als Tiefenschiefer-Variante (außer Wyvernit). Tiefenschiefer liegt nur unterhalb von Höhe 8:
+Erze, die vor allem weiter oben vorkommen (Kohlenstoff, Konterit), sind in Tiefenschiefer darum selten –
+Draconium steckt dagegen fast immer im Tiefenschiefer. Aus 9 Rohstoffen wird jeweils ein Speicherblock.
 Glück (Fortune) erhöht die Ausbeute, Behutsamkeit (Silk Touch) liefert den Erzblock.
 
 **Stahl:** 1 Eisenbarren + 2 Kohlenstoff → Stahlmischung → im Hochofen → Stahlbarren. 9 Stahlbarren → Stahlblock.
@@ -93,37 +95,43 @@ Kohlenstoff gibt es auch aus Holzkohle (Hochofen).
 | Wasserdrache | Prismarin |
 
 - **Drachenei-Fragment:** Draconium + Aetherit + Konterit + Edelstein (formlos).
-- **Drachenschuppen** (6 Arten) und **Drachenfutter** sind schon da und werden mit den Drachen in Phase 4 wichtig.
-- Die Eier lassen sich setzen und abbauen. Das Ausbrüten kommt mit dem Drachensystem.
+- **Drachenfutter:** rohes Rindfleisch, rohes Schweinefleisch, rohes Hammelfleisch und Süßbeeren (formlos, ergibt 2).
+  Damit werden in Phase 4 die Drachen gezähmt.
+- **Drachenschuppen** (6 Arten) gibt es vorerst nur im Kreativmodus; mit den Drachen in Phase 4 werden sie für Rüstungen wichtig.
+- Die Eier lassen sich setzen und abbauen und gehen auch bei Explosionen nicht verloren. Das Ausbrüten kommt mit dem Drachensystem.
 
 ### Kingdoms at War – Burgen und Bauen
 
 | Baustoff | Herstellung | Varianten |
 |---|---|---|
 | Mittelalterlicher Stein | Steinmetz aus Stein oder Bruchstein | Treppe, Stufe, Mauer |
-| Grober Naturstein | Steinmetz aus Bruchstein, oder 2 Bruchstein + 2 Kies | Treppe, Stufe, Mauer |
-| Behauener Sandstein | Steinmetz aus Sandstein | Treppe, Stufe, Mauer |
-| Dunkle Steinziegel | Steinmetz aus Tiefenschiefer | Treppe, Stufe, Mauer |
+| Grober Naturstein | Steinmetz aus Bruchstein, oder 2 Bruchstein + 2 Kies (ergibt 4) | Treppe, Stufe, Mauer |
+| Behauener Sandstein | Steinmetz aus Sandstein oder geschnittenem Sandstein | Treppe, Stufe, Mauer |
+| Dunkle Steinziegel | Steinmetz aus Tiefenschiefer oder Bruchtiefenschiefer | Treppe, Stufe, Mauer |
 | Helle Kalksteinziegel | Steinmetz aus Kalzit | Treppe, Stufe, Mauer |
 | Verwitterte Steinziegel | Steinmetz aus Steinziegeln oder Stein | Treppe, Stufe, Mauer |
 | Moosige Mauersteine | Steinmetz aus bemoosten Steinziegeln oder bemoostem Bruchstein | Treppe, Stufe, Mauer |
 | Gerissene Steinblöcke | Steinmetz aus rissigen Steinziegeln oder Stein | Treppe, Stufe, Mauer |
-| Steinpfeiler | 2 mittelalterliche Steine übereinander oder Steinmetz | – |
-| Rote / Braune / Helle Dachziegel | Steinmetz aus gefärbter Keramik (rot auch aus Ziegeln) | Treppe, Stufe |
-| Dunkle Schieferplatten | Steinmetz aus Tiefenschieferfliesen | Treppe, Stufe |
-| Holzschindeln | 4 Holzstufen im Quadrat | Treppe, Stufe |
-| Kupferdach | Steinmetz aus Kupferblock (4 Stück) | Treppe, Stufe |
-| Holzbalken | 2 Stämme übereinander | – |
-| Fachwerk (gerade, diagonal, Kreuz) | Holzbalken + Kalzit; Muster durch erneutes Herstellen wechseln | – |
+| Steinpfeiler | 2 mittelalterliche Steine übereinander (ergibt 2), oder Steinmetz aus Stein bzw. mittelalterlichem Stein | – |
+| Rote Dachziegel | Steinmetz aus roter Keramik oder Ziegelsteinen, oder 5 Ziegel in U-Form (ergibt 4) | Treppe, Stufe |
+| Braune Dachziegel | Steinmetz aus brauner Keramik | Treppe, Stufe |
+| Helle Dachziegel | Steinmetz aus weißer oder hellgrauer Keramik | Treppe, Stufe |
+| Dunkle Schieferplatten | Steinmetz aus Tiefenschieferfliesen oder Bruchtiefenschiefer | Treppe, Stufe |
+| Holzschindeln | 4 Holzstufen im Quadrat (ergibt 4) | Treppe, Stufe |
+| Kupferdach | Steinmetz aus Kupferblock (ergibt 4) | Treppe, Stufe |
+| Holzbalken | 2 Stämme übereinander (ergibt 4) | – |
+| Fachwerk (gerade, diagonal, Kreuz) | Holzbalken + Kalzit (ergibt 2); Muster durch erneutes Herstellen wechseln | – |
 
 Treppen, Stufen und Mauern gehen auch an der Werkbank mit den üblichen Vanilla-Mustern.
+Holzbalken, Fachwerk und Holzschindeln fangen Feuer; Holzbalken und Holzschindeln taugen auch als Brennstoff im Ofen.
 
 ### Kingdoms at War – Landwirtschaft und Nahrung
 
 - **Tomaten, Kohl, Gerste, Zwiebeln:** Samen fallen manchmal beim Abbauen von Gras.
-  Bauern-Dorfbewohner pflanzen die neuen Samen ebenfalls an. Aus Tomaten und Kohl lassen sich wieder Samen herstellen.
-- **Brötchen:** 2 Gerste. **Gemüseeintopf:** Tomate, Kohl, Zwiebel, Karotte, Schüssel.
-  **Fleischpastete:** gebratenes Rindfleisch, Zwiebel, Weizen, Ei. **Apfelkuchen:** 2 Äpfel, Zucker, Ei, Weizen.
+  Dorfbewohner mit dem Beruf Bauer pflanzen die neuen Samen ebenfalls an. Aus Tomaten und Kohl lassen sich wieder Samen herstellen.
+- **Brötchen:** 2 Gerste nebeneinander (ergibt 2). **Gemüseeintopf:** Tomate, Kohl, Zwiebel, Karotte, Schüssel.
+  **Fleischpastete:** Steak, Zwiebel, Weizen, Ei. **Apfelkuchen:** 2 Äpfel, Zucker, Ei, Weizen.
+  Für die Rezepte mit Ei passt jede Eier-Sorte.
 - **Zierblumen** (wachsen wild, passen in Blumentöpfe):
   Lavendel (Ebenen), Gartenrose (Wälder), Feuerlilie (Savannen), Frostblume (verschneite Gebiete).
 

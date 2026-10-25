@@ -235,13 +235,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(Items.COOKED_BEEF)
                 .requires(ModItems.ONION.get())
                 .requires(Items.WHEAT)
-                .requires(Items.EGG)
+                .requires(ItemTags.EGGS) // alle Eier-Sorten, wie beim Vanilla-Kuchen
                 .unlockedBy("has_onion", has(ModItems.ONION.get()))
                 .save(output, key("meat_pie"));
         shapeless(RecipeCategory.FOOD, ModItems.APPLE_PIE.get())
                 .requires(Items.APPLE, 2)
                 .requires(Items.SUGAR)
-                .requires(Items.EGG)
+                .requires(ItemTags.EGGS)
                 .requires(Items.WHEAT)
                 .unlockedBy("has_apple", has(Items.APPLE))
                 .save(output, key("apple_pie"));

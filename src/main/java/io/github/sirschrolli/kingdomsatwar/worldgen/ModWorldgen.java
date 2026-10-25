@@ -85,6 +85,10 @@ public final class ModWorldgen {
     /**
      * Alle Erzadern. Höhen orientieren sich an den Beschreibungen im Konzeptbild:
      * Kohlenstoff überall, Konterit und Wyvernit in den Bergen, Draconium ganz tief und sehr selten.
+     *
+     * <p>Wie bei Vanilla (Smaragd, Diamant) reicht jede Höhenverteilung ein Stück in die andere
+     * Gesteinsschicht hinein. Tiefenschiefer gibt es nur bis etwa Höhe 8, Stein erst ab etwa Höhe 0.
+     * Darum ist Tiefenschiefer-Konteriterz sehr selten und Draconiumerz im normalen Stein ebenso.
      */
     public static final List<OreVein> ORE_VEINS = List.of(
             new OreVein("carbon", ModBlocks.CARBON_ORE, ModBlocks.DEEPSLATE_CARBON_ORE,
@@ -92,11 +96,11 @@ public final class ModWorldgen {
             new OreVein("gemstone", ModBlocks.GEMSTONE_ORE, ModBlocks.DEEPSLATE_GEMSTONE_ORE,
                     5, 0.5f, 3, true, -64, 16, BiomeTags.IS_OVERWORLD),
             new OreVein("konterit", ModBlocks.KONTERIT_ORE, ModBlocks.DEEPSLATE_KONTERIT_ORE,
-                    7, 0.0f, 10, false, 32, 256, BiomeTags.IS_MOUNTAIN),
+                    7, 0.0f, 10, true, -16, 320, BiomeTags.IS_MOUNTAIN),
             new OreVein("aetherit", ModBlocks.AETHERIT_ORE, ModBlocks.DEEPSLATE_AETHERIT_ORE,
                     5, 0.3f, 4, false, -48, 48, BiomeTags.IS_OVERWORLD),
             new OreVein("draconium", ModBlocks.DRACONIUM_ORE, ModBlocks.DEEPSLATE_DRACONIUM_ORE,
-                    3, 0.7f, 2, true, -64, -16, BiomeTags.IS_OVERWORLD),
+                    3, 0.7f, 2, true, -80, 8, BiomeTags.IS_OVERWORLD),
             new OreVein("wyvernit", ModBlocks.WYVERNIT_ORE, null,
                     4, 0.0f, 8, false, 100, 320, BiomeTags.IS_MOUNTAIN));
 

@@ -109,7 +109,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Habitat: volcanic regions, lava caves", "Lebensraum: Vulkanregionen, Lava-Höhlen");
         egg(DragonType.ICE, "Ice Dragon Egg", "Eisdrachen-Ei",
                 "The cold of eternity", "Die Kälte der Ewigkeit",
-                "Habitat: snowy regions, ice mountains", "Lebensraum: Schneeregionen, Eisberge");
+                "Habitat: snowy regions, icebergs", "Lebensraum: Schneeregionen, Eisberge");
         egg(DragonType.LIGHTNING, "Lightning Dragon Egg", "Blitzdrachen-Ei",
                 "The force of the storm", "Die Kraft des Sturms",
                 "Habitat: high mountains, storm regions", "Lebensraum: hohe Berge, Sturmregionen");
@@ -133,7 +133,7 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.DRAGON_SCALES.get(DragonType.NATURE), "Nature Dragon Scale", "Naturdrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.EARTH), "Earth Dragon Scale", "Erddrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.WATER), "Water Dragon Scale", "Wasserdrachen-Schuppe");
-        lore("dragon_scale", "For dragon armour (coming with the dragons)", "Für Drachenrüstungen (kommt mit den Drachen)");
+        lore("dragon_scale", "For dragon armour (coming with the dragons)", "Für Drachenrüstungen (kommen mit den Drachen)");
         item(ModItems.DRAGON_EGG_FRAGMENT, "Dragon Egg Fragment", "Drachenei-Fragment");
         lore("dragon_egg_fragment", "Very rare – used for dragon eggs", "Sehr selten – für Dracheneier");
         item(ModItems.DRAGON_FOOD, "Dragon Food", "Drachenfutter");

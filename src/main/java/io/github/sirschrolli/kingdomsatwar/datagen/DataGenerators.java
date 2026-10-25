@@ -32,7 +32,7 @@ public final class DataGenerators {
                 .recipe(ModRecipeProvider::new);
     }
 
-    /** Alle übrigen Daten: Modelle, Tags, Übersetzungen und Loot-Modifier. */
+    /** Alle übrigen Daten: Modelle, Tags, Übersetzungen, Loot-Modifier und Data Maps. */
     @SubscribeEvent
     public static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(ModModelProvider::new);
@@ -40,5 +40,6 @@ public final class DataGenerators {
         event.createProvider(output -> new ModLanguageProvider(output, "en_us"));
         event.createProvider(output -> new ModLanguageProvider(output, "de_de"));
         event.createProvider(ModLootModifierProvider::new);
+        event.createProvider(ModDataMapProvider::new);
     }
 }
