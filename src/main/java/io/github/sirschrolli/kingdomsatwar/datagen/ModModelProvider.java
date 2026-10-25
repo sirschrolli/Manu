@@ -30,6 +30,9 @@ import net.neoforged.neoforge.registries.DeferredItem;
 public class ModModelProvider extends ModelProvider {
     private static final TextureSlot BASE = TextureSlot.create("base");
     private static final TextureSlot OVERLAY = TextureSlot.create("overlay");
+    private static final TextureSlot GLOW = TextureSlot.create("glow");
+    /** Erze mit selbstleuchtendem Kern (eigene Glow-Textur, im Dunkeln voll hell). */
+    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium");
 
     /**
      * Erz-Modell aus zwei Schichten: unten die echte Vanilla-Textur (Stein oder Tiefenschiefer),
@@ -44,6 +47,21 @@ public class ModModelProvider extends ModelProvider {
                     .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(BASE).cullface(direction)))
             .element(element -> element.from(0, 0, 0).to(16, 16, 16)
                     .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(OVERLAY).cullface(direction)))
+            .build();
+
+    /** Wie {@link #ORE_OVERLAY}, mit dritter, selbstleuchtender Schicht für den Kristallkern. */
+    private static final ModelTemplate ORE_OVERLAY_GLOW = ExtendedModelTemplateBuilder.builder()
+            .parent(Identifier.withDefaultNamespace("block/block"))
+            .requiredTextureSlot(BASE)
+            .requiredTextureSlot(OVERLAY)
+            .requiredTextureSlot(GLOW)
+            .requiredTextureSlot(TextureSlot.PARTICLE)
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(BASE).cullface(direction)))
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(OVERLAY).cullface(direction)))
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16).lightEmission(15).ambientOcclusion(false)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(GLOW).cullface(direction)))
             .build();
 
     /** Ei-Form aus übereinander gestapelten Quadern. */
@@ -156,7 +174,12 @@ public class ModModelProvider extends ModelProvider {
                 .put(BASE, base)
                 .put(OVERLAY, new Material(KingdomsAtWar.id("block/" + material + "_ore_overlay")))
                 .put(TextureSlot.PARTICLE, base);
-        Identifier model = ORE_OVERLAY.create(ore.get(), mapping, blocks.modelOutput);
+        ModelTemplate template = ORE_OVERLAY;
+        if (GLOWING_ORES.contains(material)) {
+            mapping.put(GLOW, new Material(KingdomsAtWar.id("block/" + material + "_ore_glow")));
+            template = ORE_OVERLAY_GLOW;
+        }
+        Identifier model = template.create(ore.get(), mapping, blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(ore.get(), BlockModelGenerators.plainVariant(model)));
     }
 }

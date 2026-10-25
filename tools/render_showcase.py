@@ -10,10 +10,13 @@ Aufruf: python3 tools/render_showcase.py   (benötigt: pip install pillow)
 """
 from __future__ import annotations
 
-import random
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pixelart as pa  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 TEX = ROOT / "src" / "main" / "resources" / "assets" / "kingdomsatwar" / "textures"
@@ -38,12 +41,14 @@ def tex(kind: str, name: str) -> Image.Image:
 
 
 def fake_rock(dark: bool) -> Image.Image:
-    rng = random.Random(7 if dark else 3)
+    """Nachgemachter Stein bzw. Tiefenschiefer (eigene Pixel, keine Vanilla-Datei)."""
+    pal = pa.palette("#3a3a41", "#46464d", "#55555b", "#626267") if dark else \
+        pa.palette("#6a6a6a", "#767676", "#818181", "#8e8e8e")
+    noise = pa.fractal_noise(7 if dark else 3, ((4, 0.5), (2, 0.35), (8, 0.15)))
     img = Image.new("RGBA", (16, 16))
     for y in range(16):
         for x in range(16):
-            v = (58 if dark else 118) + rng.randint(-14, 14)
-            img.putpixel((x, y), (v, v, v + (6 if dark else 0), 255))
+            img.putpixel((x, y), pa.pick(pal, noise[y][x]))
     return img
 
 
@@ -97,6 +102,9 @@ def main() -> None:
     def ore(name: str, base: Image.Image) -> Image.Image:
         img = base.copy()
         img.alpha_composite(tex("block", f"{name}_ore_overlay"))
+        glow = TEX / "block" / f"{name}_ore_glow.png"
+        if glow.exists():  # Leuchtebene (im Spiel ohne Schatten gezeichnet)
+            img.alpha_composite(Image.open(glow).convert("RGBA"))
         return cube(img)
 
     sections: list[tuple[str, list[tuple[str, Image.Image]]]] = [

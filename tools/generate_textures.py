@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Erzeugt alle 16x16-Texturen der Mod "Kingdoms at War" als eigene Pixelkunst.
+Erzeugt alle 16x16-Texturen der Mod "Kingdoms at War" als eigene Pixelkunst im Vanilla-Stil.
 
 Es werden KEINE Original-Minecraft-Texturen verwendet. Die Erze bestehen nur aus
-"Erz-Flecken" mit transparentem Hintergrund – der Stein dahinter kommt zur Laufzeit
-aus dem Spiel (siehe ModModelProvider, Vorlage ORE_OVERLAY).
+"Erz-Kristallen" mit durchsichtigem Hintergrund – der Stein dahinter kommt zur Laufzeit
+aus dem Spiel (siehe ModModelProvider, Vorlage ORE_OVERLAY). Für Aetherit und Draconium gibt es
+zusätzlich "Leucht"-Ebenen (*_ore_glow.png) mit den hellsten Kristallpixeln.
+
+Die Bausteine (Paletten, ASCII-Sprites, Rauschen, Ränder) liegen in tools/pixelart.py.
 
 Aufruf (aus dem Projektordner):
-    python3 tools/generate_textures.py            # schreibt alle Texturen
-    python3 tools/generate_textures.py --preview  # zusätzlich eine vergrößerte Übersicht
+    python3 tools/generate_textures.py                       # schreibt alle Texturen
+    python3 tools/generate_textures.py --preview datei.png   # zusätzlich eine vergrößerte Übersicht
 
 Benötigt: Pillow (pip install pillow)
 """
@@ -21,1307 +24,1630 @@ from pathlib import Path
 
 from PIL import Image
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import pixelart as pa  # noqa: E402
+from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 TEXTURES = ROOT / "src" / "main" / "resources" / "assets" / "kingdomsatwar" / "textures"
-BLOCK = TEXTURES / "block"
-ITEM = TEXTURES / "item"
 
-Color = tuple[int, int, int, int]
-CLEAR: Color = (0, 0, 0, 0)
+# Alle erzeugten Texturen: "block/name" bzw. "item/name" -> Bild
+GENERATED: dict[str, Image.Image] = {}
 
 
-# =============================================================================
-# Farb-Hilfen
-# =============================================================================
-
-def hexc(value: str) -> Color:
-    value = value.lstrip("#")
-    return (int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16), 255)
-
-
-def mix(a: Color, b: Color, t: float) -> Color:
-    return tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3)) + (255,)
-
-
-def scale(c: Color, factor: float) -> Color:
-    return tuple(max(0, min(255, round(c[i] * factor))) for i in range(3)) + (c[3],)
-
-
-def ramp(*colors: str) -> list[Color]:
-    return [hexc(c) for c in colors]
-
-
-def pick(palette: list[Color], value: float) -> Color:
-    """value 0..1 -> Farbe aus der Palette (dunkel -> hell)."""
-    value = max(0.0, min(0.999, value))
-    return palette[int(value * len(palette))]
-
-
-def new(fill: Color = CLEAR) -> Image.Image:
-    return Image.new("RGBA", (16, 16), fill)
-
-
-def save(img: Image.Image, folder: Path, name: str) -> None:
-    folder.mkdir(parents=True, exist_ok=True)
-    img.save(folder / f"{name}.png")
-    GENERATED.append((folder.name, name, img))
-
-
-GENERATED: list[tuple[str, str, Image.Image]] = []
-
-
-def value_noise(rng: random.Random, cell: int = 4) -> list[list[float]]:
-    """Weiches, kachelbares Rauschen (0..1) für 16x16."""
-    n = 16 // cell
-    grid = [[rng.random() for _ in range(n)] for _ in range(n)]
-    out = [[0.0] * 16 for _ in range(16)]
-    for y in range(16):
-        for x in range(16):
-            gx, gy = x / cell, y / cell
-            x0, y0 = int(gx) % n, int(gy) % n
-            x1, y1 = (x0 + 1) % n, (y0 + 1) % n
-            tx, ty = gx - int(gx), gy - int(gy)
-            tx, ty = tx * tx * (3 - 2 * tx), ty * ty * (3 - 2 * ty)
-            a = grid[y0][x0] + (grid[y0][x1] - grid[y0][x0]) * tx
-            b = grid[y1][x0] + (grid[y1][x1] - grid[y1][x0]) * tx
-            out[y][x] = a + (b - a) * ty
-    return out
+def put(key: str, img: Image.Image) -> None:
+    if key in GENERATED:
+        raise ValueError(f"Textur doppelt erzeugt: {key}")
+    GENERATED[key] = img
 
 
 # =============================================================================
-# Mauerwerk-Muster (kachelbar)
+# 1. Steinblöcke für Burgen und Festungen
 # =============================================================================
 
-def masonry(rows: list[tuple[int, int, int]], palette: list[Color], mortar: Color, seed: int,
-            grain: float = 0.18, bevel: bool = True, stains: list[Color] | None = None,
-            stain_chance: float = 0.0) -> Image.Image:
+def masonry(layout, pal: list[Color], mortar: list[Color], seed: int, *, tone: float = 0.16,
+            grain: float = 0.22, bevel: float = 0.22, shadow: float = 0.2, pits: int = 1,
+            chips: float = 0.0, tint: float = 0.0) -> Image.Image:
     """
-    rows: Liste (Zeilenhöhe, Steinbreite, Versatz) von oben nach unten (Summe der Höhen = 16).
-    Fugen liegen oben und links jedes Steins, damit sich das Muster nahtlos wiederholt.
+    Mauerwerk aus einzelnen Steinen (kachelbar).
+    layout: siehe pixelart.bricks(); pal: Steinfarben dunkel->hell; mortar: [dunkel, hell].
+    tone: Helligkeitsunterschied zwischen den Steinen, grain: feines Rauschen im Stein,
+    bevel/shadow: Kante oben-links heller bzw. unten-rechts dunkler, pits: dunkle Poren je Stein,
+    chips: Anteil abgeschlagener Ecken, tint: leichte Farbabweichung je Stein (warm/kühl).
     """
     rng = random.Random(seed)
-    img = new()
+    grid = pa.bricks(layout)
+    dims = pa.stone_dims(grid)
+    base = {sid: 0.5 + rng.uniform(-tone, tone) for sid in dims}
+    hue = {sid: rng.choice([-1, 0, 0, 1]) * tint for sid in dims}
+    noise = pa.fractal_noise(seed, ((4, 0.55), (2, 0.3), (8, 0.15)))
+    img = pa.new()
     px = img.load()
-    y0 = 0
-    for height, width, offset in rows:
-        x = -offset
-        while x < 16:
-            base = 0.30 + rng.random() * 0.45
-            for dy in range(height):
-                for dx in range(width):
-                    gx, gy = (x + dx) % 16, y0 + dy
-                    if dy == 0 or dx == 0:
-                        px[gx, gy] = mortar
-                        continue
-                    v = base + (rng.random() - 0.5) * grain
-                    if bevel:
-                        if dy == 1 or dx == 1:
-                            v += 0.16
-                        if dy == height - 1 or dx == width - 1:
-                            v -= 0.14
-                    color = pick(palette, v)
-                    if stains and rng.random() < stain_chance:
-                        color = rng.choice(stains)
-                    px[gx, gy] = color
-            x += width
-        y0 += height
-    return img
-
-
-def cobble(palette: list[Color], gap: Color, seed: int, cells: int = 11) -> Image.Image:
-    """Unregelmäßige, runde Feldsteine (Voronoi, kachelbar)."""
-    rng = random.Random(seed)
-    points = [(rng.random() * 16, rng.random() * 16, 0.25 + rng.random() * 0.5) for _ in range(cells)]
-    img = new()
-    px = img.load()
-
-    def dist(ax, ay, bx, by):
-        dx = min(abs(ax - bx), 16 - abs(ax - bx))
-        dy = min(abs(ay - by), 16 - abs(ay - by))
-        return math.hypot(dx, dy)
-
     for y in range(16):
         for x in range(16):
-            ds = sorted((dist(x + 0.5, y + 0.5, p[0], p[1]), i) for i, p in enumerate(points))
-            (d1, i1), (d2, _) = ds[0], ds[1]
-            if d2 - d1 < 0.9:
-                px[x, y] = gap
+            sid, dx, dy = grid[y][x]
+            if sid < 0:
+                # Fuge: Kreuzungen etwas dunkler
+                vertical = grid[(y + 1) % 16][x][0] < 0 and grid[(y - 1) % 16][x][0] < 0
+                horizontal = grid[y][(x + 1) % 16][0] < 0 and grid[y][(x - 1) % 16][0] < 0
+                px[x, y] = mortar[0] if (vertical and horizontal) or noise[y][x] < 0.4 else mortar[1]
                 continue
-            cx, cy, base = points[i1]
-            # Licht von oben links
-            dx = ((x + 0.5 - cx + 8) % 16) - 8
-            dy = ((y + 0.5 - cy + 8) % 16) - 8
-            light = -(dx + dy) / 10.0
-            v = base + light * 0.35 + (rng.random() - 0.5) * 0.15
-            px[x, y] = pick(palette, v)
+            w, h = dims[sid]
+            v = base[sid] + (noise[y][x] - 0.5) * grain
+            if dy == 0 or dx == 0:
+                v += bevel
+            if dy == h - 1 or dx == w - 1:
+                v -= shadow
+            c = pick(pal, v)
+            if hue[sid]:
+                # warm (Richtung Ocker) bzw. kühl (Richtung Blaugrau)
+                c = pa.shift(c, hue=0.0, sat=abs(hue[sid]) * 0.6, light=0.0)
+                c = pa.mix(c, hexc("#a08060") if hue[sid] > 0 else hexc("#607080"), abs(hue[sid]))
+            px[x, y] = c
+    # dunkle Poren / Kerben
+    for sid, (w, h) in dims.items():
+        cells = [(x, y) for y in range(16) for x in range(16) if grid[y][x][0] == sid
+                 and 0 < grid[y][x][1] < w - 1 and 0 < grid[y][x][2] < h - 1]
+        for _ in range(pits):
+            if cells and rng.random() < 0.75:
+                x, y = rng.choice(cells)
+                px[x, y] = pal[max(0, pal.index(px[x, y]) - 2)] if px[x, y] in pal else pa.shift(px[x, y], light=-0.09)
+                if rng.random() < 0.5:
+                    x2 = (x + 1) % 16
+                    if grid[y][x2][0] == sid:
+                        px[x2, y] = pal[max(0, pal.index(px[x2, y]) - 1)] if px[x2, y] in pal else pa.shift(px[x2, y], light=-0.05)
+    # abgeschlagene Ecken
+    if chips > 0:
+        for y in range(16):
+            for x in range(16):
+                sid, dx, dy = grid[y][x]
+                if sid < 0:
+                    continue
+                w, h = dims[sid]
+                corner = (dx in (0, w - 1)) and (dy in (0, h - 1))
+                if corner and rng.random() < chips:
+                    px[x, y] = mortar[1]
     return img
 
 
-def cracked(img: Image.Image, crack: Color, seed: int, count: int = 3) -> Image.Image:
+def add_cracks(img: Image.Image, seed: int, count: int, dark: Color, light: Color, length: int = 7) -> None:
+    """Risse als Zufallspfade: dunkle Linie mit hellem Saum (Licht von oben links)."""
     rng = random.Random(seed)
     px = img.load()
     for _ in range(count):
         x, y = rng.randrange(16), rng.randrange(16)
-        for _ in range(rng.randrange(5, 9)):
-            px[x % 16, y % 16] = crack
-            x += rng.choice([-1, 0, 1, 1])
-            y += rng.choice([0, 1, 1])
-    return img
+        dx, dy = rng.choice([(1, 1), (1, 0), (0, 1), (1, -1)])
+        for _ in range(length + rng.randrange(4)):
+            px[x % 16, y % 16] = dark
+            hx, hy = (x - 1) % 16, (y - 1) % 16
+            if px[hx, hy] != dark and rng.random() < 0.5:
+                px[hx, hy] = light
+            if rng.random() < 0.45:
+                dx, dy = rng.choice([(1, 1), (1, 0), (0, 1), (1, -1), (dx, dy)])
+            x, y = x + dx, y + dy
 
 
-def moss(img: Image.Image, palette: list[Color], seed: int, amount: float = 0.45) -> Image.Image:
-    rng = random.Random(seed)
-    noise = value_noise(rng, 4)
+def add_growth(img: Image.Image, seed: int, pal: list[Color], amount: float, near: set | None = None,
+               bias_top: float = 0.0) -> None:
+    """Moos oder Flechten in Büscheln (kachelbar). near: Pixel, an denen Bewuchs bevorzugt wird."""
+    noise = pa.fractal_noise(seed, ((4, 0.6), (2, 0.4)))
+    detail = pa.value_noise(seed + 99, 2)
     px = img.load()
     for y in range(16):
         for x in range(16):
-            # Moos sammelt sich oben und in den Fugen
-            weight = noise[y][x] + (0.25 if y < 5 else 0.0)
-            if weight > 1.0 - amount:
-                px[x, y] = pick(palette, rng.random())
+            v = noise[y][x]
+            if near is not None and (x, y) in near:
+                v += 0.18
+            v += bias_top * (1 - y / 15)
+            if v > 1 - amount:
+                strength = (v - (1 - amount)) / amount + (detail[y][x] - 0.5) * 0.5
+                px[x, y] = pick(pal, 0.25 + strength * 0.75)
+
+
+STONE = palette("#5f5c5b", "#6d6a67", "#7a7672", "#87837e", "#95908a", "#a5a097")
+STONE_MORTAR = palette("#464343", "#545150")
+
+
+def stone_blocks() -> None:
+    # Mittelalterlicher Stein: unregelmäßige Quader in drei Lagen
+    put("block/medieval_stone", masonry(
+        [(6, [7, 9], 0), (5, [5, 6, 5], 3), (5, [9, 7], 6)], STONE, STONE_MORTAR, 11, pits=2, tint=0.07))
+
+    # Grober Naturstein: runde Feldsteine verschiedener Farben in dunklem Mörtel
+    put("block/rough_fieldstone", fieldstone(21))
+
+    # Behauener Sandstein: große glatte Blöcke mit feinen Sedimentlinien
+    sand = palette("#a3824f", "#b38f5b", "#c29d67", "#cfab74", "#dbb982", "#e6c793")
+    img = masonry([(8, [10, 6], 2), (8, [7, 9], 9)], sand, palette("#87683f", "#94764a"), 31,
+                  tone=0.1, grain=0.12, bevel=0.2, shadow=0.18, pits=0)
+    px = img.load()
+    for y in (2, 5, 10, 13):
+        for x in range(16):
+            c = px[x, y]
+            if c in sand and (x * 7 + y * 3) % 5 != 0:
+                px[x, y] = sand[max(0, sand.index(c) - 1)]
+    put("block/hewn_sandstone", img)
+
+    # Dunkle Steinziegel
+    dark = palette("#2b2c33", "#353741", "#40424c", "#4b4e58", "#575a65", "#666a75")
+    put("block/dark_stone_bricks", masonry(
+        [(4, [8, 8], 0), (4, [8, 8], 4), (4, [8, 8], 0), (4, [8, 8], 4)], dark, palette("#1a1b20", "#22232a"), 41,
+        tone=0.12, grain=0.16, bevel=0.26, shadow=0.16))
+
+    # Helle Kalksteinziegel
+    lime = palette("#b3ab9b", "#c2baa9", "#cfc8b7", "#dad4c4", "#e4dfd1", "#eeeae0")
+    put("block/limestone_bricks", masonry(
+        [(4, [8, 8], 2), (4, [8, 8], 6), (4, [8, 8], 2), (4, [8, 8], 6)], lime, palette("#9a9385", "#a69f91"), 51,
+        tone=0.1, grain=0.12, bevel=0.18, shadow=0.2, pits=0))
+
+    # Verwitterte Steinziegel: Flechten, abgeschlagene Ecken, kleiner Riss
+    weathered = palette("#5e5c55", "#6b6861", "#78746c", "#858077", "#918c82", "#9f998e")
+    img = masonry([(5, [9, 7], 0), (5, [7, 9], 5), (6, [8, 8], 2)], weathered, palette("#45433e", "#504d47"), 61,
+                  tone=0.2, grain=0.26, pits=2, chips=0.35, tint=0.06)
+    add_growth(img, 64, palette("#7d7b55", "#8f8c5e", "#a3a06b", "#b6b27a"), 0.16)
+    add_cracks(img, 62, 1, hexc("#3f3d39"), hexc("#a39d92"), 5)
+    put("block/weathered_stone_bricks", img)
+
+    # Moosige Mauersteine: Moos wächst bevorzugt in den Fugen und auf den Oberkanten
+    layout = [(6, [7, 9], 0), (5, [5, 6, 5], 3), (5, [9, 7], 6)]
+    img = masonry(layout, STONE, STONE_MORTAR, 71, pits=1, tint=0.06)
+    grid = pa.bricks(layout)
+    near = {(x, y) for y in range(16) for x in range(16)
+            if grid[y][x][0] < 0 or grid[(y - 1) % 16][x][0] < 0 or grid[y][(x - 1) % 16][0] < 0}
+    add_growth(img, 72, palette("#3a4f22", "#455e28", "#526e2e", "#617f36", "#70903f"), 0.27, near)
+    put("block/mossy_wall_stones", img)
+
+    # Gerissene Steinblöcke: große Blöcke mit durchgehenden Rissen
+    cool = palette("#5c5b5c", "#69686a", "#767578", "#838286", "#919094", "#a09fa3")
+    img = masonry([(8, [8, 8], 0), (8, [8, 8], 0)], cool, palette("#444346", "#504f52"), 81,
+                  tone=0.14, grain=0.24, pits=2, chips=0.2)
+    add_cracks(img, 82, 3, hexc("#38373a"), hexc("#a8a7aa"), 7)
+    put("block/cracked_stone_blocks", img)
+
+    # Steinpfeiler
+    pillar_side, pillar_top = stone_pillar()
+    put("block/stone_pillar_side", pillar_side)
+    put("block/stone_pillar_top", pillar_top)
+
+
+def fieldstone(seed: int) -> Image.Image:
+    """Feldsteine: Voronoi-Zellen mit runder Schattierung (Licht oben links)."""
+    rng = random.Random(seed)
+    cells, border, pts = pa.voronoi(seed, 9, metric="euclid")
+    families = [
+        palette("#55524e", "#64605b", "#736f69", "#827d76", "#928c84"),   # warmes Grau
+        palette("#4d4d52", "#5b5b61", "#69696f", "#78787e", "#88888e"),   # kühles Grau
+        palette("#5f574c", "#6e6559", "#7e7466", "#8e8474", "#9e9383"),   # beigegrau
+        palette("#564c43", "#655a4f", "#75695c", "#857869", "#958877"),   # braungrau
+    ]
+    weights = [0.4, 0.27, 0.18, 0.15]
+    choice = [rng.choices(families, weights)[0] for _ in pts]
+    gap = palette("#302b26", "#3c3630")
+    noise = pa.value_noise(seed + 5, 2)
+    img = pa.new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            i = cells[y][x]
+            if border[y][x] < 0.75:
+                px[x, y] = gap[0] if noise[y][x] < 0.5 else gap[1]
+                continue
+            cx, cy = pts[i]
+            ox = ((x + 0.5 - cx + 8) % 16) - 8
+            oy = ((y + 0.5 - cy + 8) % 16) - 8
+            v = 0.6 - (ox + oy) * 0.075 + (noise[y][x] - 0.5) * 0.16
+            if border[y][x] < 1.4:
+                v -= 0.2
+            px[x, y] = pick(choice[i], v)
     return img
 
 
-# =============================================================================
-# Baublöcke
-# =============================================================================
-
-def building_blocks() -> None:
-    stone = ramp("#5c5c5c", "#696969", "#767676", "#838383", "#919191")
-    save(masonry([(4, 8, 0), (4, 6, 3), (4, 8, 4), (4, 6, 1)], stone, hexc("#474747"), 11),
-         BLOCK, "medieval_stone")
-
-    field = ramp("#4f4a44", "#5e5850", "#6d665d", "#7d756a", "#8c8377")
-    save(cobble(field, hexc("#34302b"), 21), BLOCK, "rough_fieldstone")
-
-    sand = ramp("#b09862", "#c2aa72", "#cfb882", "#dcc792", "#e7d5a3")
-    save(masonry([(8, 16, 0), (8, 8, 4)], sand, hexc("#9a8250"), 31, grain=0.10), BLOCK, "hewn_sandstone")
-
-    dark = ramp("#2c2e35", "#363840", "#40434c", "#4b4e58", "#575a65")
-    save(masonry([(4, 8, 0), (4, 8, 4), (4, 8, 0), (4, 8, 4)], dark, hexc("#1d1e23"), 41), BLOCK, "dark_stone_bricks")
-
-    lime = ramp("#c8c1b0", "#d5cfc0", "#e0dbcd", "#eae6da", "#f3f0e7")
-    save(masonry([(4, 8, 2), (4, 8, 6), (4, 8, 2), (4, 8, 6)], lime, hexc("#a59e8d"), 51, grain=0.12),
-         BLOCK, "limestone_bricks")
-
-    weathered = ramp("#5a5751", "#67645d", "#74716a", "#817d75", "#8d8980")
-    img = masonry([(4, 8, 0), (4, 8, 4), (4, 8, 0), (4, 8, 4)], weathered, hexc("#46433e"), 61,
-                  grain=0.30, stains=ramp("#5d5c45", "#4f4a3e", "#6a6656"), stain_chance=0.10)
-    save(cracked(img, hexc("#3e3b36"), 62, 2), BLOCK, "weathered_stone_bricks")
-
-    mossy_stone = ramp("#5b5b5b", "#686868", "#757575", "#828282")
-    img = masonry([(5, 8, 0), (5, 8, 4), (6, 8, 2)], mossy_stone, hexc("#444444"), 71)
-    save(moss(img, ramp("#3c5f22", "#4a7529", "#5a8b32", "#6c9f3d"), 72, amount=0.28), BLOCK, "mossy_wall_stones")
-
-    crack_stone = ramp("#6a6a6a", "#777777", "#848484", "#919191", "#9d9d9d")
-    img = masonry([(8, 8, 0), (8, 8, 4)], crack_stone, hexc("#525252"), 81, grain=0.12)
-    save(cracked(img, hexc("#3b3b3b"), 82, 4), BLOCK, "cracked_stone_blocks")
-
-    # Steinpfeiler: Seite mit Rillen, oben ein Quadrat
-    pillar = ramp("#6f6f6f", "#7c7c7c", "#898989", "#969696", "#a3a3a3")
-    rng = random.Random(91)
-    side = new()
+def stone_pillar() -> tuple[Image.Image, Image.Image]:
+    """Kannelierter Pfeiler (Seite) und runde Deckplatte (oben)."""
+    pal = palette("#5b5856", "#6b6865", "#7b7773", "#8b8782", "#9b968f", "#aca69d")
+    noise = pa.fractal_noise(91, ((4, 0.6), (2, 0.4)))
+    side = pa.new()
     px = side.load()
+    # Profil quer zum Pfeiler: Kanten dunkel, Kanneluren (Rillen) im Wechsel hell/dunkel
+    profile = [0.12, 0.62, 0.78, 0.55, 0.35, 0.7, 0.82, 0.58, 0.36, 0.68, 0.8, 0.56, 0.34, 0.64, 0.5, 0.2]
     for y in range(16):
         for x in range(16):
-            band = x % 4
-            v = {0: 0.15, 1: 0.75, 2: 0.6, 3: 0.4}[band] + (rng.random() - 0.5) * 0.12
-            if y in (0, 15):
-                v = 0.2
-            if y in (1, 14):
-                v = 0.85
-            px[x, y] = pick(pillar, v)
-    save(side, BLOCK, "stone_pillar_side")
-    top = new()
+            v = profile[x] + (noise[y][x] - 0.5) * 0.14
+            px[x, y] = pick(pal, v)
+    top = pa.new()
     px = top.load()
     for y in range(16):
         for x in range(16):
-            d = max(abs(x - 7.5), abs(y - 7.5))
-            v = 0.55 + (rng.random() - 0.5) * 0.1
-            if d > 6.5:
-                v = 0.25
-            elif d > 5.5:
-                v = 0.8
-            elif d < 2.5:
-                v = 0.7
-            elif d < 3.5:
-                v = 0.35
-            px[x, y] = pick(pillar, v)
-    save(top, BLOCK, "stone_pillar_top")
-
-
-def timber() -> None:
-    wood = ramp("#3d2616", "#4a2f1c", "#573822", "#654229", "#754d31")
-    rng = random.Random(101)
-    # Holzbalken – Seite mit Maserung
-    side = new()
-    px = side.load()
-    lines = [rng.random() for _ in range(16)]
-    for y in range(16):
-        for x in range(16):
-            v = 0.35 + lines[x] * 0.4 + math.sin((y + x * 3) * 0.7) * 0.05 + (rng.random() - 0.5) * 0.08
-            if x in (0, 15):
-                v -= 0.25
-            px[x, y] = pick(wood, v)
-    save(side, BLOCK, "timber_beam_side")
-    # Hirnholz mit Jahresringen
-    top = new()
-    px = top.load()
-    end_grain = ramp("#5e3b22", "#6e472a", "#7d5434", "#8d613d", "#9c6d46")
-    for y in range(16):
-        for x in range(16):
+            v = 0.56 + (noise[y][x] - 0.5) * 0.12
             d = math.hypot(x - 7.5, y - 7.5)
-            v = 0.5 + 0.3 * math.sin(d * 1.6) + (rng.random() - 0.5) * 0.1
-            if max(abs(x - 7.5), abs(y - 7.5)) > 6.5:
-                px[x, y] = pick(wood, 0.25 + rng.random() * 0.2)
-            else:
-                px[x, y] = pick(end_grain, v)
-    save(top, BLOCK, "timber_beam_top")
-
-    # Fachwerk: heller Putz mit dunklen Balken
-    plaster = ramp("#d6cfbd", "#e0d9c8", "#e9e3d4", "#f1ecdf")
-    beam = ramp("#3b2416", "#4a2f1c", "#573822", "#64422a")
-
-    def frame(name: str, mask) -> None:
-        r = random.Random(hash(name) & 0xFFFF)
-        img = new()
-        p = img.load()
-        for y in range(16):
-            for x in range(16):
-                if x == 0 or y == 0 or x == 15 or y == 15 or mask(x, y):
-                    p[x, y] = pick(beam, 0.3 + r.random() * 0.6)
-                else:
-                    p[x, y] = pick(plaster, 0.3 + r.random() * 0.7)
-        save(img, BLOCK, name)
-
-    frame("timber_frame", lambda x, y: x in (7, 8))
-    frame("timber_frame_diagonal", lambda x, y: abs(x - (15 - y)) <= 1)
-    frame("timber_frame_cross", lambda x, y: abs(x - (15 - y)) <= 0 or abs(x - y) <= 0 or
-          abs(x - (15 - y)) == 1 and x < 15 or abs(x - y) == 1 and x < 15)
+            if x in (0, 15) or y in (0, 15):
+                v = 0.14
+            elif x == 1 or y == 1:
+                v = 0.8
+            elif x == 14 or y == 14:
+                v = 0.3
+            elif 5.4 < d < 6.4:
+                # eingemeißelter Kreis: oben links Schatten, unten rechts Licht (Vertiefung)
+                v = 0.28 if (x + y) < 15 else 0.78
+            elif d <= 5.4:
+                v = 0.62 - (x + y - 15) * 0.015 + (noise[y][x] - 0.5) * 0.1
+            px[x, y] = pick(pal, v)
+    return side, top
 
 
-def roof_tiles(name: str, palette: list[Color], gap: Color, seed: int, tile_w: int = 4,
-               row_h: int = 4, rounded: bool = True) -> None:
+# =============================================================================
+# 2. Holzblöcke und Fachwerk
+# =============================================================================
+
+WOOD = palette("#2f1f12", "#3e2918", "#4f3520", "#614229", "#735033", "#865f3d")
+PLASTER = palette("#c9bfa8", "#d6cdb8", "#e1d9c6", "#ebe5d5", "#f3eee3")
+
+
+def wood_grain(seed: int, vertical: bool = True, knots: int = 1) -> Image.Image:
+    """Holzmaserung entlang der Faser (kachelbar in Faserrichtung)."""
     rng = random.Random(seed)
-    img = new()
+    lines = pa.value_noise(seed, 4)
+    img = pa.new()
     px = img.load()
-    for row in range(16 // row_h):
+    stripe = [rng.uniform(0.25, 0.75) for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            a, b = (x, y) if vertical else (y, x)
+            wobble = math.sin((b + seed) * 0.8 + a) * 0.08
+            v = stripe[a] + (lines[y][x] - 0.5) * 0.3 + wobble
+            if a % 4 == 3:
+                v -= 0.18
+            px[x, y] = pick(WOOD, v)
+    for _ in range(knots):
+        kx, ky = rng.randrange(16), rng.randrange(16)
+        pa.stamp(img, [".a.", "aba", ".a."], {"a": WOOD[1], "b": WOOD[0]}, kx, ky)
+    return img
+
+
+def timber_blocks() -> None:
+    put("block/timber_beam_side", wood_grain(101, vertical=True, knots=1))
+    # Stirnseite: Jahresringe in einem quadratischen Balken
+    top = pa.new()
+    px = top.load()
+    noise = pa.value_noise(103, 2)
+    for y in range(16):
+        for x in range(16):
+            if x in (0, 15) or y in (0, 15):
+                px[x, y] = WOOD[1] if (x + y) % 3 else WOOD[0]
+                continue
+            d = math.hypot(x - 7.3, y - 7.8) + (noise[y][x] - 0.5) * 0.8
+            ring = int(d) % 3
+            v = (0.78, 0.6, 0.38)[ring] - d * 0.02
+            px[x, y] = pick(WOOD, v)
+    put("block/timber_beam_top", top)
+
+    for name, diagonals in (("timber_frame", []), ("timber_frame_diagonal", ["/"]), ("timber_frame_cross", ["/", "\\"])):
+        put(f"block/{name}", timber_frame(111 + len(diagonals), diagonals))
+
+
+def timber_frame(seed: int, diagonals: list[str]) -> Image.Image:
+    """Weißer Putz mit dunklen Holzbalken am Rand (2 px) und optionalen Diagonalen."""
+    noise = pa.fractal_noise(seed, ((4, 0.5), (2, 0.5)))
+    grain = wood_grain(seed + 7, vertical=True, knots=0)
+    grain_h = wood_grain(seed + 8, vertical=False, knots=0)
+    img = pa.new()
+    px = img.load()
+    beam = [[False] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            if x < 2 or x > 13 or y < 2 or y > 13:
+                beam[y][x] = True
+            for d in diagonals:
+                t = x - (15 - y) if d == "/" else x - y
+                if -1 <= t <= 0 and 1 < x < 14 and 1 < y < 14:
+                    beam[y][x] = True
+    for y in range(16):
+        for x in range(16):
+            if beam[y][x]:
+                horizontal = (y < 2 or y > 13) and 1 < x < 14
+                src = grain_h if horizontal else grain
+                c = src.getpixel((x, y))
+                # Balkenkante zum Putz hin etwas heller (Licht oben links)
+                if (x == 1 and 1 < y < 14) or (y == 1 and 1 < x < 14):
+                    c = pa.shift(c, light=0.05)
+                px[x, y] = c
+            else:
+                v = 0.55 + (noise[y][x] - 0.5) * 0.45
+                # Schatten der Balken auf dem Putz (unten/rechts eines Balkens)
+                if beam[y - 1][x] or beam[y][x - 1]:
+                    v -= 0.35
+                px[x, y] = pick(PLASTER, v)
+    return img
+
+
+# =============================================================================
+# 3. Dachblöcke
+# =============================================================================
+
+def roof_tiles(pal: list[Color], seed: int, tile_w: int = 4, row_h: int = 4) -> Image.Image:
+    """
+    Gewölbte Dachziegel in versetzten Reihen. Jede Reihe überlappt die darunterliegende:
+    oben Schattenkante, Mitte hell, unten gerundete Lippe.
+    pal: [Fuge, dunkel, mittel, hell, Glanz]
+    """
+    rng = random.Random(seed)
+    shape = [  # Werte je Ziegel (Breite 4, Höhe 4): 0 Fuge, 1 dunkel, 2 mittel, 3 hell, 4 Glanz
+        [1, 1, 1, 0],
+        [3, 4, 3, 1],
+        [3, 3, 2, 1],
+        [0, 2, 2, 0],
+    ]
+    img = pa.new()
+    px = img.load()
+    tones = {}
+    for y in range(16):
+        row = y // row_h
         offset = (row % 2) * (tile_w // 2)
-        for tile in range(16 // tile_w + 1):
-            base = 0.35 + rng.random() * 0.35
-            for dy in range(row_h):
-                for dx in range(tile_w):
-                    x = (tile * tile_w + dx - offset) % 16
-                    y = row * row_h + dy
-                    v = base + (0.25 if dy == 0 else 0) - (0.1 * dy / row_h) + (rng.random() - 0.5) * 0.12
-                    color = pick(palette, v)
-                    if dx == tile_w - 1:
-                        color = gap
-                    if dy == row_h - 1:
-                        color = scale(pick(palette, base), 0.72)
-                        if rounded and dx in (0, tile_w - 2):
-                            color = gap
-                    px[x, y] = color
-    save(img, BLOCK, name)
+        for x in range(16):
+            col = ((x + offset) // tile_w) % (16 // tile_w)
+            key = (row, col)
+            if key not in tones:
+                tones[key] = rng.choice([0, 0, 0, 1, -1])
+            v = shape[y % row_h][(x + offset) % tile_w]
+            if v > 0:
+                v = max(1, min(4, v + tones[key] if v > 1 else v))
+            px[x, y] = pal[v]
+    return img
 
 
 def roofs() -> None:
-    roof_tiles("red_roof_tiles", ramp("#8a2c20", "#a23827", "#b9442f", "#cd5139", "#df6347"), hexc("#561a12"), 201)
-    roof_tiles("brown_roof_tiles", ramp("#5a3a24", "#6b462c", "#7f5436", "#926240", "#a3714b"), hexc("#37210f"), 202)
-    roof_tiles("light_roof_tiles", ramp("#ad9d84", "#bdae96", "#ccbea7", "#dacdb8", "#e6dbc9"), hexc("#857862"), 203)
-    roof_tiles("dark_slate_shingles", ramp("#272c32", "#30363e", "#3a4049", "#454c56", "#515a65"), hexc("#16191d"), 204,
-               tile_w=8, rounded=False)
-    roof_tiles("wooden_shingles", ramp("#5e4026", "#6f4d2e", "#825b36", "#946840", "#a6764b"), hexc("#3c2a18"), 205,
-               rounded=False)
+    put("block/red_roof_tiles", roof_tiles(palette("#4e1a12", "#7a2919", "#9a3a22", "#b64c2c", "#d06a3e"), 201))
+    put("block/brown_roof_tiles", roof_tiles(palette("#35220f", "#56381f", "#6c4829", "#835a34", "#9c7044"), 202))
+    put("block/light_roof_tiles", roof_tiles(palette("#7b6648", "#9d8562", "#b39a74", "#c7b089", "#dccaa3"), 203))
 
-    # Kupferdach mit Stehfalz
-    copper = ramp("#8a4626", "#a5562f", "#bd6739", "#d27a46", "#e59358")
+    # Dunkle Schieferplatten: rechteckig, versetzt, kühles Blaugrau
+    slate = palette("#16181f", "#22252e", "#2c303a", "#373c47", "#434855", "#525866")
+    rng = random.Random(204)
+    img = pa.new()
+    px = img.load()
+    noise = pa.value_noise(205, 2)
+    for y in range(16):
+        row = y // 4
+        offset = (row % 2) * 3
+        for x in range(16):
+            col = ((x + offset) // 6)
+            local_x = (x + offset) % 6
+            local_y = y % 4
+            if local_y == 3 or local_x == 5 and col < 2 or (x + offset) % 16 == 15:
+                px[x, y] = slate[0]
+                continue
+            v = 0.5 + (noise[y][x] - 0.5) * 0.25 + ((row * 3 + col) % 3 - 1) * 0.08
+            if local_y == 0:
+                v += 0.25
+            if local_y == 2:
+                v -= 0.12
+            px[x, y] = pick(slate[1:], v)
+    put("block/dark_slate_shingles", img)
+
+    # Holzschindeln: schmale Brettchen mit Maserung
+    shingle = palette("#2f1e10", "#47301a", "#5b3e22", "#6f4d2b", "#835d35", "#966d40")
     rng = random.Random(206)
-    img = new()
+    img = pa.new()
     px = img.load()
+    widths_per_row = [[4, 3, 5, 4], [5, 4, 3, 4], [3, 5, 4, 4], [4, 4, 5, 3]]
+    for row in range(4):
+        widths = widths_per_row[row]
+        offset = (row * 5) % 16
+        x = offset
+        for w in widths:
+            tone = rng.uniform(-0.12, 0.12)
+            for dx in range(w):
+                for dy in range(4):
+                    gx, gy = (x + dx) % 16, row * 4 + dy
+                    if dx == w - 1 or dy == 3:
+                        px[gx, gy] = shingle[0]
+                        continue
+                    v = 0.55 + tone + (0.2 if dy == 0 else 0) - (0.12 if dy == 2 else 0)
+                    if (gx * 5 + dy * 2 + row) % 7 == 0:
+                        v -= 0.18
+                    px[gx, gy] = pick(shingle[1:], v)
+            x += w
+    put("block/wooden_shingles", img)
+
+    # Kupferdach: Stehfalz-Bahnen (zwei Bahnen je Block) mit Querfalz und leichtem Glanzverlauf
+    copper = palette("#5a2812", "#7a391e", "#964a27", "#b05a30", "#c66e3c", "#d9874e", "#eda872")
+    img = pa.new()
+    px = img.load()
+    noise = pa.fractal_noise(207, ((4, 0.6), (2, 0.4)))
     for y in range(16):
         for x in range(16):
-            band = x % 8
-            if band == 0:
-                v = 0.95
-            elif band == 1:
-                v = 0.15
+            lx = x % 8
+            if lx == 0:
+                c = copper[6] if y % 8 != 7 else copper[4]   # Falz (Glanzkante)
+            elif lx == 7:
+                c = copper[1]                                 # Schatten neben dem Falz
+            elif y % 8 == 7:
+                c = copper[2]                                 # Querfalz
+            elif y % 8 == 0:
+                c = copper[5] if lx < 5 else copper[4]
             else:
-                v = 0.45 + math.sin(y * 0.9 + x) * 0.08 + (rng.random() - 0.5) * 0.12
-            if y % 8 == 7 and band not in (0, 1):
-                v -= 0.15
-            px[x, y] = pick(copper, v)
-    save(img, BLOCK, "copper_roof")
+                v = 0.78 - lx * 0.075 + (noise[y][x] - 0.5) * 0.22
+                c = pick(copper[2:6], v)
+            px[x, y] = c
+    put("block/copper_roof", img)
 
 
 # =============================================================================
-# Erze, Rohstoffe, Speicherblöcke
+# 4. Erze (durchsichtige Ebenen über Vanilla-Stein bzw. -Tiefenschiefer)
 # =============================================================================
+# Jedes Erz besteht aus handgezeichneten Kristall-Stempeln. Zeichen:
+#   o = dunkler Rand, a/b/c/d = Töne dunkel -> hell, w = Glanz bzw. Leuchtkern
+#   weitere Buchstaben = Akzentfarben (siehe jeweilige Farbtabelle)
 
-ORE_PALETTES = {
-    "carbon": ramp("#0c0c0e", "#1b1c20", "#2a2c32", "#40434c", "#666a76"),
-    "konterit": ramp("#3a0e58", "#65229a", "#9343d2", "#bf76f2", "#e7cdff"),
-    "aetherit": ramp("#0a4864", "#1477a4", "#21acd8", "#6cdef6", "#d6fbff"),
-    "draconium": ramp("#470606", "#861010", "#c01f1f", "#ee4838", "#ffb0a0"),
-    "wyvernit": ramp("#3b6896", "#5d90c6", "#8bb9e6", "#bddffe", "#f2faff"),
+ORE_STAMPS: dict[str, dict[str, list[str]]] = {
+    "carbon": {
+        "big": [
+            ".oooo..",
+            "odcbbo.",
+            "odccbao",
+            "obcbbao",
+            ".oabaao",
+            "..oooo.",
+        ],
+        "mid": [
+            ".ooo..",
+            "odcbo.",
+            "ocbbao",
+            ".obaao",
+            "..ooo.",
+        ],
+        "small": [
+            "ooo.",
+            "odbo",
+            "obao",
+            ".ooo",
+        ],
+    },
+    "gemstone": {
+        "big": [
+            ".ooo.",
+            "ocwco",
+            "odcbo",
+            "obcao",
+            ".oao.",
+            "..o..",
+        ],
+        "mid": [
+            ".oo.",
+            "owco",
+            "ocao",
+            ".oo.",
+        ],
+        "green": [
+            ".qq.",
+            "qhgq",
+            "qggq",
+            ".qq.",
+        ],
+        "cyan": [
+            ".r.",
+            "rur",
+            "rtr",
+            ".r.",
+        ],
+    },
+    "konterit": {
+        "shard": [
+            "...oo",
+            "..owo",
+            ".odbo",
+            "ocbao",
+            "obao.",
+            ".oo..",
+        ],
+        "tall": [
+            ".o.",
+            "owo",
+            "odo",
+            "oco",
+            "obo",
+            "oao",
+            ".o.",
+        ],
+        "pair": [
+            ".o...",
+            "owo.o",
+            "odoow",
+            "ocodo",
+            "obobo",
+            ".oao.",
+            "..o..",
+        ],
+    },
+    "aetherit": {
+        "big": [
+            ".oo.",
+            "odwo",
+            "ocwo",
+            "ocwo",
+            "obco",
+            "oabo",
+            ".oo.",
+        ],
+        "twin": [
+            ".o...",
+            "owo..",
+            "owo.o",
+            "ocoow",
+            "oboco",
+            ".oabo",
+            "..oo.",
+        ],
+        "small": [
+            ".o.",
+            "owo",
+            "oco",
+            ".o.",
+        ],
+    },
+    "draconium": {
+        "big": [
+            ".o..o.",
+            "odo.oo",
+            "owcodo",
+            "ocwwco",
+            "obcwbo",
+            "oabbao",
+            ".oooo.",
+        ],
+        "mid": [
+            ".oo.",
+            "odwo",
+            "owco",
+            "obao",
+            ".oo.",
+        ],
+        "small": [
+            ".o.",
+            "owo",
+            "obo",
+            ".o.",
+        ],
+    },
+    "wyvernit": {
+        "shard": [
+            "oo...",
+            "owo..",
+            "odco.",
+            ".obco",
+            "..obo",
+            "...oo",
+        ],
+        "tall": [
+            "..o.",
+            ".owo",
+            ".odo",
+            "ocbo",
+            "obao",
+            ".oo.",
+        ],
+        "small": [
+            ".o.",
+            "owo",
+            "obo",
+            ".o.",
+        ],
+    },
 }
-GEM_COLORS = [
-    ramp("#4c1878", "#7c2fb8", "#a956e8", "#d8a6ff", "#f3e3ff"),
-    ramp("#12522a", "#1f8c44", "#36c463", "#9cf0b6", "#e6fff0"),
-    ramp("#0d5262", "#1b97ae", "#3fd2e8", "#a9f3ff", "#ecfdff"),
-]
 
-# Kleine Erz-Formen: 0 = dunkler Rand, 1-3 = Farbstufen, 4 = Glanzlicht
-ORE_SHAPES = [
-    ["0330", "3443", "0320"],
-    ["032", "343", "220"],
-    ["03", "42", "30"],
-    ["0330", "3442", "2320", "0200"],
-    ["30", "43", "02"],
-]
-
-
-def ore_overlay(name: str, palettes: list[list[Color]], seed: int, clusters: int = 5) -> None:
-    rng = random.Random(seed)
-    img = new()
-    px = img.load()
-    spots = [(2, 2), (9, 1), (5, 6), (12, 7), (1, 10), (8, 11), (13, 13), (4, 13)]
-    rng.shuffle(spots)
-    for i in range(clusters):
-        sx, sy = spots[i]
-        sx += rng.randint(-1, 1)
-        sy += rng.randint(-1, 1)
-        shape = rng.choice(ORE_SHAPES)
-        palette = palettes[i % len(palettes)]
-        for dy, row in enumerate(shape):
-            for dx, ch in enumerate(row):
-                x, y = sx + dx, sy + dy
-                if 0 <= x < 16 and 0 <= y < 16:
-                    px[x, y] = palette[int(ch)]
-    save(img, BLOCK, f"{name}_ore_overlay")
-
-
-def gem_block(name: str, palette: list[Color], seed: int) -> None:
-    rng = random.Random(seed)
-    img = new()
-    px = img.load()
-    for y in range(16):
-        for x in range(16):
-            if x in (0, 15) or y in (0, 15):
-                v = 0
-            elif x == 1 or y == 1:
-                v = 3
-            elif x == 14 or y == 14:
-                v = 1
-            else:
-                # Facetten: diagonales Rautenmuster
-                d = (x + y) % 6
-                e = (x - y) % 6
-                v = 2
-                if d == 0 or e == 0:
-                    v = 3
-                if (x + y) % 6 == 3 and (x - y) % 6 == 3:
-                    v = 4
-                if rng.random() < 0.06:
-                    v = 1
-            px[x, y] = palette[v]
-    save(img, BLOCK, f"{name}_block")
-
-
-def multicolor_gem_block() -> None:
-    img = new()
-    px = img.load()
-    rng = random.Random(311)
-    for y in range(16):
-        for x in range(16):
-            palette = GEM_COLORS[((x // 4) + (y // 4)) % 3]
-            if x in (0, 15) or y in (0, 15):
-                v = 0
-            elif x % 4 == 0 or y % 4 == 0:
-                v = 1
-            elif x % 4 == 1 and y % 4 == 1:
-                v = 4
-            else:
-                v = 2 + (rng.random() < 0.3)
-            px[x, y] = palette[v]
-    save(img, BLOCK, "gemstone_block")
-
-
-def resources_blocks() -> None:
-    ore_overlay("carbon", [ORE_PALETTES["carbon"]], 301, clusters=6)
-    ore_overlay("gemstone", GEM_COLORS, 302, clusters=5)
-    ore_overlay("konterit", [ORE_PALETTES["konterit"]], 303, clusters=5)
-    ore_overlay("aetherit", [ORE_PALETTES["aetherit"]], 304, clusters=5)
-    ore_overlay("draconium", [ORE_PALETTES["draconium"]], 305, clusters=4)
-    ore_overlay("wyvernit", [ORE_PALETTES["wyvernit"]], 306, clusters=5)
-
-    multicolor_gem_block()
-    gem_block("konterit", ORE_PALETTES["konterit"], 312)
-    gem_block("aetherit", ORE_PALETTES["aetherit"], 313)
-    gem_block("draconium", ORE_PALETTES["draconium"], 314)
-    gem_block("wyvernit", ORE_PALETTES["wyvernit"], 315)
-
-    # Kohlenstoffblock: dunkel mit glänzenden Bruchkanten
-    carbon = ORE_PALETTES["carbon"]
-    rng = random.Random(316)
-    img = new()
-    px = img.load()
-    noise = value_noise(rng, 4)
-    for y in range(16):
-        for x in range(16):
-            v = 1 + (noise[y][x] > 0.55) + (rng.random() < 0.08) * 2
-            if x in (0, 15) or y in (0, 15):
-                v = 0
-            px[x, y] = carbon[min(4, v)]
-    save(img, BLOCK, "carbon_block")
-
-    # Stahlblock: vier Platten mit Nieten
-    steel = ramp("#454c56", "#5f6873", "#79838e", "#949ea9", "#bcc5cf")
-    img = new()
-    px = img.load()
-    for y in range(16):
-        for x in range(16):
-            lx, ly = x % 8, y % 8
-            if lx == 0 or ly == 0:
-                v = 0
-            elif lx == 1 or ly == 1:
-                v = 4
-            elif lx == 7 or ly == 7:
-                v = 1
-            else:
-                v = 2 + ((x + y) % 7 == 0)
-            if (lx, ly) in ((2, 2), (5, 2), (2, 5), (5, 5)):
-                v = 4
-            px[x, y] = steel[v]
-    save(img, BLOCK, "steel_block")
-
-
-# =============================================================================
-# Dracheneier (Schuppenmuster in den Farben aus dem Konzeptbild)
-# =============================================================================
-
-DRAGON_PALETTES = {
-    # dunkel, Grundfarbe, Schuppe, hell, Glanz
-    "fire": ramp("#2a0d0b", "#7a1714", "#c4301a", "#f07a1e", "#ffc35a"),
-    "ice": ramp("#1d3c74", "#3f74b4", "#8fbfe8", "#dcefff", "#ffffff"),
-    "lightning": ramp("#141119", "#2c2838", "#4a4458", "#f2d21e", "#fff7b0"),
-    "nature": ramp("#1b3413", "#2f5a22", "#4f8a32", "#8ac84a", "#d2f59a"),
-    "earth": ramp("#33271b", "#5a4430", "#7a5c3e", "#a88a62", "#d0d0c8"),
-    "water": ramp("#0c3462", "#1a5a9a", "#2a8ac8", "#4ac4e0", "#b0f2fa"),
+# (Stempel, x, y, gespiegelt) – von Hand verteilt wie bei Vanilla-Erzen
+ORE_LAYOUT: dict[str, list[tuple[str, int, int, bool]]] = {
+    "carbon": [("mid", 1, 1, False), ("small", 11, 1, True), ("big", 5, 6, False), ("mid", 11, 9, True),
+               ("small", 1, 11, False)],
+    "gemstone": [("big", 2, 1, False), ("cyan", 11, 1, False), ("mid", 10, 6, False), ("green", 1, 9, False),
+                 ("big", 6, 9, False), ("green", 12, 12, False)],
+    "konterit": [("shard", 1, 1, False), ("tall", 12, 0, False), ("pair", 6, 5, False), ("shard", 11, 9, True),
+                 ("tall", 2, 9, False)],
+    "aetherit": [("big", 2, 1, False), ("small", 11, 2, False), ("twin", 9, 7, False), ("small", 6, 11, False),
+                 ("big", 1, 9, False)],
+    "draconium": [("big", 2, 2, False), ("small", 12, 1, False), ("mid", 10, 8, False), ("mid", 3, 10, True),
+                  ("small", 13, 13, False)],
+    "wyvernit": [("shard", 1, 1, False), ("small", 12, 2, False), ("tall", 7, 5, False), ("shard", 10, 9, True),
+                 ("small", 2, 11, False)],
 }
 
+ORE_COLORS: dict[str, dict[str, Color]] = {
+    "carbon": {"o": hexc("#101013"), "a": hexc("#1f2025"), "b": hexc("#2d2f35"), "c": hexc("#474c57"),
+               "d": hexc("#727a89")},
+    "gemstone": {"o": hexc("#2a0f3d"), "a": hexc("#4c1d6c"), "b": hexc("#7230a2"), "c": hexc("#9a50d2"),
+                 "d": hexc("#bf82ef"), "w": hexc("#f2dcff"),
+                 "q": hexc("#0b3a20"), "g": hexc("#239a52"), "h": hexc("#86eeac"),
+                 "r": hexc("#0a3946"), "t": hexc("#2aa4bc"), "u": hexc("#a8f4ff")},
+    "konterit": {"o": hexc("#33103a"), "a": hexc("#5a1a60"), "b": hexc("#87298e"), "c": hexc("#b443b8"),
+                 "d": hexc("#da76de"), "w": hexc("#ffd2fb")},
+    "aetherit": {"o": hexc("#0a3346"), "a": hexc("#125a73"), "b": hexc("#1c88a6"), "c": hexc("#37bcd8"),
+                 "d": hexc("#86e6f4"), "w": hexc("#e8ffff")},
+    "draconium": {"o": hexc("#1a0306"), "a": hexc("#3b070c"), "b": hexc("#650c14"), "c": hexc("#981a1d"),
+                  "d": hexc("#cf3a20"), "w": hexc("#ffa24a")},
+    "wyvernit": {"o": hexc("#34536f"), "a": hexc("#5f88ad"), "b": hexc("#8fb6d8"), "c": hexc("#bcdaf2"),
+                 "d": hexc("#e6f4ff"), "w": hexc("#ffffff")},
+}
 
-EGG_SCALE = [
-    "1331",
-    "2432",
-    "2322",
-    "0110",
-]
-
-
-def dragon_egg(kind: str, seed: int) -> None:
-    """Überlappende Drachenschuppen; jede zweite Reihe ist um eine halbe Schuppe versetzt."""
-    pal = DRAGON_PALETTES[kind]
-    rng = random.Random(seed)
-    img = new()
-    px = img.load()
-    for y in range(16):
-        offset = 2 if (y // 4) % 2 else 0
-        for x in range(16):
-            v = int(EGG_SCALE[y % 4][(x + offset) % 4])
-            if v == 2 and rng.random() < 0.12:
-                v = 3
-            px[x, y] = pal[v]
-    # Akzente je Art
-    if kind == "lightning":
-        for x, y in [(3, 1), (4, 2), (3, 3), (4, 4), (11, 9), (12, 10), (11, 11), (12, 12)]:
-            px[x, y] = pal[4]
-    elif kind == "fire":
-        for x, y in [(6, 5), (13, 13), (2, 10)]:
-            px[x, y] = pal[4]
-    save(img, BLOCK, f"{kind}_dragon_egg")
+# Diese Zeichen bilden die Leuchtebene (werden im Spiel ohne Schatten, also "leuchtend" gezeichnet)
+ORE_GLOW_KEYS = {"aetherit": "wd", "draconium": "wd"}
 
 
-def dragon_eggs() -> None:
-    for i, kind in enumerate(DRAGON_PALETTES):
-        dragon_egg(kind, 400 + i)
-
-
-# =============================================================================
-# Pixel-Sprites (Gegenstände, Pflanzen) – als Zeichenraster
-# =============================================================================
-
-def sprite(rows: list[str], colors: dict[str, Color]) -> Image.Image:
-    assert len(rows) == 16, f"16 Zeilen erwartet, nicht {len(rows)}"
-    img = new()
-    px = img.load()
-    for y, row in enumerate(rows):
-        assert len(row) == 16, f"Zeile {y} hat {len(row)} Zeichen: {row!r}"
-        for x, ch in enumerate(row):
-            if ch != ".":
-                px[x, y] = colors[ch]
+def ore_overlay(name: str) -> Image.Image:
+    img = pa.new()
+    for stamp_name, x, y, mirrored in ORE_LAYOUT[name]:
+        rows = ORE_STAMPS[name][stamp_name]
+        if mirrored:
+            rows = [r[::-1] for r in rows]
+        pa.stamp(img, rows, ORE_COLORS[name], x, y, wrap=False)
     return img
 
 
-def tone(palette: list[Color]) -> dict[str, Color]:
-    """Palette (5 Stufen) -> Zeichen o (Rand), d, m, l, h."""
-    return {"o": palette[0], "d": palette[1], "m": palette[2], "l": palette[3], "h": palette[4]}
+def ore_glow(name: str) -> Image.Image:
+    """Nur die hellsten Kristallpixel (gleiche Positionen wie in der Erz-Ebene)."""
+    keys = ORE_GLOW_KEYS[name]
+    colors = {k: (v if k in keys else CLEAR) for k, v in ORE_COLORS[name].items()}
+    img = pa.new()
+    for stamp_name, x, y, mirrored in ORE_LAYOUT[name]:
+        rows = ORE_STAMPS[name][stamp_name]
+        if mirrored:
+            rows = [r[::-1] for r in rows]
+        rows = ["".join(ch if ch in keys else "." for ch in r) for r in rows]
+        pa.stamp(img, rows, colors, x, y, wrap=False)
+    return img
+
+
+def ores() -> None:
+    for name in ORE_LAYOUT:
+        put(f"block/{name}_ore_overlay", ore_overlay(name))
+    for name in ORE_GLOW_KEYS:
+        put(f"block/{name}_ore_glow", ore_glow(name))
+
+
+# =============================================================================
+# 5. Speicherblöcke (veredelte Blöcke wie Diamant-/Eisenblock)
+# =============================================================================
+
+def frame_value(x: int, y: int) -> float | None:
+    """Rahmen eines veredelten Blocks (Licht oben links); None = Innenfläche."""
+    if x == 15 or y == 15:
+        return 0.12
+    if x == 0 or y == 0:
+        return 0.45
+    if x == 14 or y == 14:
+        return 0.3
+    if x == 1 or y == 1:
+        return 0.92
+    return None
+
+
+def polished(pal: list[Color], seed: int, shine: float = 0.22, grain: float = 0.12) -> Image.Image:
+    """Polierte Fläche mit diagonalen Lichtbändern (wie Vanilla-Diamantblock) und Rahmen."""
+    noise = pa.fractal_noise(seed, ((4, 0.6), (2, 0.4)))
+    img = pa.new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            f = frame_value(x, y)
+            if f is not None:
+                px[x, y] = pick(pal, f)
+                continue
+            v = 0.5 + shine * math.sin((x - y) * 0.55 + 1.0) + (noise[y][x] - 0.5) * grain * 2
+            v += (15 - x - y) * 0.012  # oben links etwas heller
+            px[x, y] = pick(pal, v)
+    return img
+
+
+def faceted(pal: list[Color], seed: int, points: int = 7, glints: int = 4) -> Image.Image:
+    """Kristallmasse aus Facetten: jede Facette eigener Ton, helle Kanten oben links, Glanzpunkte."""
+    rng = random.Random(seed)
+    cells, border, pts = pa.voronoi(seed, points)
+    tone = [rng.uniform(0.35, 0.68) for _ in pts]
+    img = pa.new()
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            f = frame_value(x, y)
+            if f is not None:
+                px[x, y] = pick(pal, f)
+                continue
+            i = cells[y][x]
+            v = tone[i] + (15 - x - y) * 0.01
+            if border[y][x] < 0.8:
+                # Facettenkante: oben/links an einer Kante heller, unten/rechts dunkler
+                up = cells[y - 1][x] != i or cells[y][x - 1] != i
+                v += 0.2 if up else -0.2
+            px[x, y] = pick(pal, v)
+    for _ in range(glints):
+        x, y = rng.randrange(3, 13), rng.randrange(3, 13)
+        px[x, y] = pal[-1]
+    return img
+
+
+GEM_PURPLE = palette("#2c0f40", "#47196a", "#65259a", "#8338c4", "#a157df", "#c385f0", "#ead2ff")
+KONTERIT = palette("#3a0f40", "#5a1862", "#7d238a", "#a233b0", "#c552cf", "#e07fe6", "#ffd0fb")
+AETHERIT = palette("#0a3448", "#11546e", "#19799a", "#25a4c4", "#47c9e2", "#8de8f4", "#e8ffff")
+DRACONIUM = palette("#1c0306", "#360609", "#560b10", "#7a1216", "#a11d1c", "#c9381f", "#ff9a42")
+WYVERNIT = palette("#3a5878", "#5a80a6", "#7fa3c6", "#a4c4e0", "#c4dcf0", "#e2f0fb", "#ffffff")
+CARBON = palette("#0e0e11", "#18191d", "#232429", "#2f3137", "#3c3f47", "#555a66", "#7c8494")
+STEEL = palette("#2b323b", "#3b444f", "#4c5763", "#5e6a77", "#717e8b", "#8895a1", "#aab6c1")
+
+
+def storage_blocks() -> None:
+    # Edelsteinblock: polierte violette Fläche mit eingesetztem Schliff-Edelstein und grünen/türkisen Akzenten
+    img = polished(GEM_PURPLE, 401)
+    pa.stamp(img, [
+        "..oooo..",
+        ".ocwwco.",
+        "ocwccbbo",
+        "ocdccbao",
+        "obcbbaao",
+        ".obbaao.",
+        "..oaao..",
+        "...oo...",
+    ], {"o": GEM_PURPLE[0], "a": GEM_PURPLE[2], "b": GEM_PURPLE[3], "c": GEM_PURPLE[4], "d": GEM_PURPLE[5],
+        "w": GEM_PURPLE[6]}, 4, 4, wrap=False)
+    accents = {"q": hexc("#0b3a20"), "g": hexc("#2fb060"), "r": hexc("#0a3946"), "t": hexc("#45c8de")}
+    for (x, y), (rim, fill) in zip([(3, 3), (11, 3), (3, 11), (11, 11)], [("q", "g"), ("r", "t"), ("r", "t"), ("q", "g")]):
+        pa.stamp(img, [fill + fill, fill + rim], accents, x, y, wrap=False)
+    put("block/gemstone_block", img)
+
+    put("block/konterit_block", faceted(KONTERIT, 402, points=6, glints=4))
+
+    # Aetheritblock: leuchtend türkis mit eingravierter Rune
+    img = polished(AETHERIT, 403, shine=0.16)
+    pa.stamp(img, [
+        "...w...",
+        "w..w..w",
+        ".w.w.w.",
+        "..www..",
+        "...w...",
+        "...w...",
+        "...w...",
+        "..d.d..",
+    ], {"w": AETHERIT[6], "d": AETHERIT[5]}, 4, 4, wrap=False)
+    put("block/aetherit_block", img)
+
+    # Draconiumblock: dunkles Blutrot mit glühenden, verzweigten Adern
+    img = polished(DRACONIUM[:6], 404, shine=0.12, grain=0.14)
+    pa.stamp(img, [
+        "....e.......",
+        "...ev.......",
+        "...ev...e...",
+        "....ve..ve..",
+        ".....vvev...",
+        "......vv....",
+        ".....ev.....",
+        "....ev......",
+        "...ev..e....",
+        "..ev...ve...",
+        ".ev.....ve..",
+        ".e.......e..",
+    ], {"v": DRACONIUM[6], "e": DRACONIUM[5]}, 2, 2, wrap=False)
+    put("block/draconium_block", img)
+
+    put("block/wyvernit_block", faceted(WYVERNIT, 406, points=7, glints=5))
+
+    # Kohlenstoffblock: gepresste Graphitplatten im Verband mit Glanzkanten
+    img = pa.new()
+    px = img.load()
+    noise = pa.value_noise(407, 2)
+    for y in range(16):
+        row = y // 4
+        for x in range(16):
+            ly = y % 4
+            lx = (x + (row % 2) * 4) % 8
+            v = (0.66, 0.44, 0.36, 0.1)[ly] + (noise[y][x] - 0.5) * 0.16
+            if lx == 7:
+                v = 0.06
+            elif lx == 0 and ly < 3:
+                v += 0.12
+            if ly == 0 and (x * 5 + row * 3) % 11 == 0:
+                v = 0.98
+            px[x, y] = pick(CARBON, v)
+    put("block/carbon_block", img)
+
+    # Stahlblock: vier genietete Platten
+    img = pa.new()
+    px = img.load()
+    noise = pa.value_noise(408, 4)
+    for y in range(16):
+        for x in range(16):
+            lx, ly = x % 8, y % 8
+            if lx == 7 or ly == 7:
+                v = 0.08
+            elif lx == 0 or ly == 0:
+                v = 0.86
+            elif lx == 6 or ly == 6:
+                v = 0.3
+            else:
+                v = 0.52 + (noise[y][x] - 0.5) * 0.14 + (5 - lx - ly) * 0.015
+            if (lx, ly) in ((1, 1), (5, 1), (1, 5), (5, 5)):
+                v = 0.98  # Nietkopf
+            elif (lx, ly) in ((2, 2), (6, 2), (2, 6)):
+                v = min(v, 0.25)  # Schatten der Niete
+            px[x, y] = pick(STEEL, v)
+    put("block/steel_block", img)
+
+
+# =============================================================================
+# 6. Dracheneier (Schuppenmuster je Element)
+# =============================================================================
+# Das Ei-Modell (siehe ModModelProvider) schneidet aus dieser Textur die Seiten der
+# übereinandergestapelten Quader aus. Die ganze Fläche ist daher ein durchgehendes Schuppenmuster,
+# oben etwas heller als unten.
+
+EGG_SCALE = [  # 4x4-Schuppe: 0 Fuge/Schatten .. 4 Glanz
+    [0, 3, 3, 0],
+    [2, 4, 3, 2],
+    [2, 3, 2, 1],
+    [0, 1, 1, 0],
+]
+
+EGG_PALETTES = {
+    "fire": palette("#3d0805", "#7a1508", "#b02a0c", "#e0521a", "#ffa43a"),
+    "ice": palette("#4a7ea6", "#7fb2d8", "#a8d2ee", "#cfe8f8", "#f6fcff"),
+    "lightning": palette("#121318", "#24262e", "#363944", "#4c505d", "#6a6f7e"),
+    "nature": palette("#15381a", "#22562a", "#33773a", "#4f9a48", "#8ccc62"),
+    "earth": palette("#2e1d10", "#4c331d", "#6a4b2c", "#8b673f", "#b08a5a"),
+    "water": palette("#062a4a", "#0c4a7a", "#1470a8", "#2a9ad0", "#7ad4f4"),
+}
+
+
+def dragon_egg(kind: str, seed: int) -> Image.Image:
+    pal = EGG_PALETTES[kind]
+    rng = random.Random(seed)
+    img = pa.new()
+    px = img.load()
+    tones = {}
+    for y in range(16):
+        row = y // 4
+        offset = (row % 2) * 2
+        for x in range(16):
+            key = (row, (x + offset) // 4 % 4)
+            if key not in tones:
+                tones[key] = rng.choice([0, 0, 0, 1, -1])
+            v = EGG_SCALE[y % 4][(x + offset) % 4]
+            if v > 0:
+                v += tones[key]
+            # oben heller, unten dunkler (runde Eiform)
+            if y < 4 and v > 0:
+                v += 1
+            if y > 11 and v > 1:
+                v -= 1
+            px[x, y] = pal[max(0, min(4, v))]
+
+    accent = {
+        "fire": [(hexc("#ffd36a"), 7)],                     # Glut in einzelnen Schuppen
+        "ice": [(hexc("#ffffff"), 6)],                      # Funkeln
+        "lightning": [(hexc("#ffe43a"), 0), (hexc("#fff8b0"), 0)],
+        "nature": [(hexc("#c6e86a"), 6), (hexc("#e86aa6"), 2)],  # helle Blätter, kleine Blüte
+        "earth": [(hexc("#d8b45a"), 5), (hexc("#9a9aa2"), 4)],    # Gold- und Eisenkörner
+        "water": [(hexc("#c8f4ff"), 6)],
+    }[kind]
+    for color, count in accent:
+        for _ in range(count):
+            x, y = rng.randrange(16), rng.randrange(2, 14)
+            if EGG_SCALE[y % 4][(x + (y // 4 % 2) * 2) % 4] >= 2:
+                px[x, y] = color
+    if kind == "lightning":
+        # gelbe Blitz-Adern im Zickzack über das Ei
+        bolt = [(3, 0), (4, 1), (4, 2), (3, 3), (4, 4), (5, 5), (5, 6), (4, 7), (5, 8), (6, 9), (6, 10), (5, 11),
+                (6, 12), (7, 13), (7, 14), (6, 15)]
+        for bx, by in bolt:
+            px[bx, by] = hexc("#ffd92a")
+            px[(bx + 1) % 16, by] = hexc("#b88a10")
+            px[(bx + 8) % 16, (by + 5) % 16] = hexc("#ffd92a")
+            px[(bx + 9) % 16, (by + 5) % 16] = hexc("#b88a10")
+    if kind == "water":
+        # helle Wellenlinien
+        for x in range(16):
+            y = 6 + round(math.sin(x * 0.8) * 1.2)
+            if px[x, y] != pal[0]:
+                px[x, y] = pal[4]
+    return img
+
+
+def dragon_eggs() -> None:
+    for i, kind in enumerate(EGG_PALETTES):
+        put(f"block/{kind}_dragon_egg", dragon_egg(kind, 501 + i))
+
+
+# =============================================================================
+# 7. Feldfrüchte (je 4 Wachstumsstufen) und Zierblumen
+# =============================================================================
+
+PLANT = {
+    "k": hexc("#1d4416"), "g": hexc("#2b6420"), "G": hexc("#3c842a"), "l": hexc("#56a238"), "L": hexc("#7cc24e"),
+    "s": hexc("#5a3c1e"), "S": hexc("#8a6236"),                                   # Stütz-Stab
+    "r": hexc("#8c1a10"), "R": hexc("#d2361e"), "h": hexc("#ff9070"),             # Tomate
+    "u": hexc("#6aa632"), "U": hexc("#9cd25a"),                                   # unreife Tomate
+    "y": hexc("#f4d23a"), "Y": hexc("#c4960e"),                                   # Blüte
+    "c": hexc("#7fbe52"), "C": hexc("#a8dc7c"), "w": hexc("#d6f0b8"), "v": hexc("#5e9a3e"),  # Kohlkopf
+    "o": hexc("#7a4a16"), "O": hexc("#c0822e"), "p": hexc("#e6b458"), "q": hexc("#f8dc98"),  # Zwiebel
+    "e": hexc("#b2b04a"),                                                         # vergilbtes Blatt
+    "a": hexc("#94722a"), "A": hexc("#c4a044"), "b": hexc("#dcbc60"), "B": hexc("#f2da88"), "n": hexc("#cfb468"),  # Gerste
+}
+
+CROPS: dict[str, list[list[str]]] = {
+    "tomatoes": [
+        ["", "", "", "", "", "", "", "", "", "", "",
+         "....L.L.........",
+         ".....G.....L.L..",
+         ".....g......G...",
+         "..L.Lg......g...",
+         "...Gg.......g..."],
+        ["", "", "", "", "", "",
+         ".......L........",
+         "......LGL....L..",
+         "...L...g....LGl.",
+         "..lGl..gL....g..",
+         "...g..lGl.L..g..",
+         "...gL..g.lG..gL.",
+         "..lG...g..g.lG..",
+         "...g...g..g..g..",
+         "...g...g..g..g..",
+         "...g...g..g..g.."],
+        ["",
+         ".......S........",
+         ".....L.SL.......",
+         "....LGlsGL......",
+         "...lGgysGgL.....",
+         "..lGgYyslGgl....",
+         "..Gg..Ls.LGgL...",
+         ".lGuUlGsgGuUg...",
+         ".gGuugGslGuugl..",
+         "..gg.lGsGg.gG...",
+         "..lGl.gsg.lGgl..",
+         ".lGgGLgsglGgGl..",
+         "..g.uU.s.uU.g...",
+         "..g.uu.s.uu.g...",
+         "..g....s....g...",
+         "..g....s....g..."],
+        ["",
+         ".......S........",
+         ".....L.SL.......",
+         "....LGlsGL......",
+         "...lGgRhGgL.....",
+         "..lGgrRslGgl....",
+         "..Gg..Ls.LGgL...",
+         ".lGRhlGsgGRhg...",
+         ".gGrRgGslGrRgl..",
+         "..gg.lGsGg.gG...",
+         "..lGl.gsg.lGgl..",
+         ".lGgGLgsglGgGl..",
+         "..g.Rh.s.Rh.g...",
+         "..g.rR.s.rR.g...",
+         "..g....s....g...",
+         "..g....s....g..."],
+    ],
+    "cabbages": [
+        ["", "", "", "", "", "", "", "", "", "", "", "",
+         "...L.L....L.L...",
+         "....G......G....",
+         "...lGl....lGl...",
+         "....g......g...."],
+        ["", "", "", "", "", "", "", "", "", "",
+         "................",
+         "..L.L.....L..L..",
+         ".lGlGl...lGllGl.",
+         "lGgGGGl.lGgGGgGl",
+         ".GgCgG...GgCgGg.",
+         "..ggg.....ggg..."],
+        ["", "", "", "", "", "", "",
+         "................",
+         "..L..L.....L..L.",
+         ".lGl.Gl...lGl.Gl",
+         "lGgGlGGl.lGgGlGG",
+         "GgGCCCgGlGgCCCgG",
+         "gGCwCCcGgGCwCCcG",
+         ".gGCCcgg.gGCCcgg",
+         "..gGGgg...gGGgg.",
+         "...ggg.....ggg.."],
+        ["", "", "", "", "",
+         "....L....L......",
+         "...lGl..lGl.....",
+         "..lGgGllGgGl....",
+         ".lGgCCCCCgGgl...",
+         ".GgCwwCCCcgGl...",
+         "lGCwCCvCCCcgGl..",
+         "GgCCvCCCvCcgGg..",
+         "gGcCCCvCCCcgGg..",
+         ".gGcCCCCCcggg...",
+         "..gGgcccgGgg....",
+         "...gggGggg......"],
+    ],
+    "onions": [
+        ["", "", "", "", "", "", "", "", "", "", "", "",
+         "...L.....L....L.",
+         "...l.....l....l.",
+         "...G.....G....G.",
+         "...g.....g....g."],
+        ["", "", "", "", "", "", "", "",
+         "..L.......L.....",
+         "..l..L....l...L.",
+         "..G..l...LG...l.",
+         "..G..G...lG...G.",
+         ".lG..G...G....G.",
+         ".G...g...G...gG.",
+         ".g...g...g...g..",
+         ".g...g...g...g.."],
+        ["", "", "",
+         "..L.........L...",
+         "..l...L.....l...",
+         "..G...l...L.G...",
+         ".lG...G...l.G..L",
+         ".G....G...G.G..l",
+         ".G...lG...G.G..G",
+         ".G...G....GlG..G",
+         ".g...G...lG.g..G",
+         ".g...g...G..g.lg",
+         ".g...g...g..g.g.",
+         ".pO..g...pO.g.g.",
+         "pOOo.....OOo.pOo",
+         ".oo.......o..oo."],
+        ["", "", "",
+         "..e.........e...",
+         "..e...L.....l...",
+         "..l...l...e.G...",
+         ".lG...G...e.G..L",
+         ".G....G...G.G..l",
+         ".G...lG...G.G..G",
+         ".G...G....GlG..G",
+         ".g...G...lG.g..G",
+         ".g..qg...G.qg.lg",
+         "qpOOpO..qpOOpOpO",
+         "pOOOOo..pOOOOopO",
+         ".OOoOo..OOOoOoOo",
+         "..oo......oo..o."],
+    ],
+    "barley": [
+        ["", "", "", "", "", "", "", "", "", "", "", "", "",
+         "..L....L...L..L.",
+         ".lG..L.G..lG..G.",
+         ".G..lG.g..G..lg."],
+        ["", "", "", "", "", "", "", "", "",
+         "..L......L......",
+         "..l...L..l...L..",
+         ".lG...l..G..lG..",
+         ".G...lG..G..G..L",
+         ".G...G..lG..G..l",
+         ".g...G..G..lg..G",
+         ".g...g..g..g...g"],
+        ["", "",
+         "..n.....n.......",
+         "..ln...nl....n..",
+         "..lL...Ll...nl..",
+         "..LG...lL...Ll..",
+         "..lL...GL...lL..",
+         "..G...lG....LG..",
+         ".lG...G....lG...",
+         ".G...lG....G....",
+         ".G...G....lG...l",
+         ".G...G....G....G",
+         ".g...G....G...lG",
+         ".g...g...lg...G.",
+         ".g...g...g....g.",
+         ".g...g...g....g."],
+        ["n.......n.......",
+         ".n.n.....n.n....",
+         "..nBn...nBn.....",
+         "..BbB...BbBn....",
+         "..bAb..nbAb.n.n.",
+         "..Bb....Bb...nBn",
+         "..bA....bA...BbB",
+         "..A.....A....bAb",
+         ".aA....aA....Bb.",
+         ".A.....A.....bA.",
+         ".A.....A....aA..",
+         ".A....aA....A...",
+         ".a....A.....A...",
+         ".a....A....aA...",
+         ".a....a....a....",
+         ".a....a....a...."],
+    ],
+}
+
+FLOWERS: dict[str, tuple[list[str], dict[str, Color]]] = {
+    "lavender": ([
+        "", "",
+        "......p...p.....",
+        ".....pPp.pPp....",
+        "..p..pPp.pPp....",
+        ".pPp.PpP.PpP.p..",
+        ".pPp.pPp.pPp.Pp.",
+        ".PpP..P...P.pPp.",
+        ".pPp..l...l.PpP.",
+        "..P...G..lG..P..",
+        "..l...G..G...l..",
+        "..G...G.lG...G..",
+        "..lG..GlG...Gl..",
+        "...G..GG...lG...",
+        "....GgGg..gG....",
+        ".....gg.gg......",
+    ], {"p": hexc("#c4a0f2"), "P": hexc("#8a5ccc")}),
+    "garden_rose": ([
+        "", "", "",
+        "......oRRo......",
+        ".....oRhrRo.....",
+        ".....RrRRrR.....",
+        ".....oRrrRo.....",
+        "......oRRo......",
+        ".......G........",
+        ".......G.lL.....",
+        "...Ll..GlGl.....",
+        "...lGl.G........",
+        ".....lGG........",
+        ".......G..lL....",
+        ".......GlGl.....",
+        ".......g........",
+    ], {"o": hexc("#5a0814"), "R": hexc("#b4162a"), "r": hexc("#e2364a"), "h": hexc("#ff8a96")}),
+    "fire_lily": ([
+        "", "",
+        "...o.......o....",
+        "...oR.....Ro....",
+        "....RR.y.RR.....",
+        ".....RrYyrR.....",
+        "...oRrryrrRRo...",
+        "..oR..RrrR..Ro..",
+        "......oRRo......",
+        ".......G........",
+        ".......G........",
+        "....lL.G........",
+        ".....lGG..Ll....",
+        ".......G.lG.....",
+        ".......GGl......",
+        ".......g........",
+    ], {"o": hexc("#7a1806"), "R": hexc("#e04a12"), "r": hexc("#ff9a2a"), "y": hexc("#ffe25a"),
+        "Y": hexc("#c8840e")}),
+    "frost_flower": ([
+        "", "",
+        ".......w........",
+        "...b...B...b....",
+        "....B..b..B.....",
+        ".....BbwbB......",
+        "..wbbwcCcwbbw...",
+        ".....BbwbB......",
+        "....B..b..B.....",
+        "...b...t...b....",
+        ".......t........",
+        "....T..t..T.....",
+        ".....TtT.tT.....",
+        ".......tTt......",
+        ".......t........",
+        ".......u........",
+    ], {"w": hexc("#ffffff"), "b": hexc("#c4e8ff"), "B": hexc("#7ab6e6"), "c": hexc("#5ad8f2"),
+        "C": hexc("#2a9cc4"), "t": hexc("#6a9eb0"), "T": hexc("#94c4d4"), "u": hexc("#3e6c7c")}),
+}
+
+
+def plants() -> None:
+    for crop, stages in CROPS.items():
+        for i, rows in enumerate(stages):
+            put(f"block/{crop}_stage{i}", pa.sprite(rows, PLANT))
+    for name, (rows, colors) in FLOWERS.items():
+        put(f"block/{name}", pa.sprite(rows, {**PLANT, **colors}))
+
+
+# =============================================================================
+# 8. Gegenstände (handgezeichnete Sprites)
+# =============================================================================
+# Zeichen: o = Rand (dunkler Ton der Eigenfarbe), a/b/c/d = Töne dunkel -> hell, w = Glanzlicht.
+
+def tones(o: str, a: str, b: str, c: str, d: str, w: str) -> dict[str, Color]:
+    return {"o": hexc(o), "a": hexc(a), "b": hexc(b), "c": hexc(c), "d": hexc(d), "w": hexc(w)}
 
 
 INGOT = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    ".....ooooooooo..",
-    "....ohhhhhhhhlo.",
-    "...ohlllllllldo.",
-    "..ooooooooooldo.",
-    "..ommmmmmmmmodo.",
-    "..ommmmmmmmmoo..",
-    "..oddddddddddo..",
-    "...oooooooooo...",
-    "................",
-    "................",
-    "................",
+    "", "", "",
+    "..........ooo...",
+    ".......ooowddo..",
+    "....ooowddddcbo.",
+    "..oowdddddcdcbo.",
+    ".owdddcddddcbbao",
+    ".ocddddddccbbaao",
+    ".obcccddcbbaaao.",
+    ".obbbccbbaaaoo..",
+    ".oabbbbaaaoo....",
+    "..oaaaaaoo......",
+    "...ooooo........",
+]
+
+POWDER = [
+    "", "", "", "", "", "",
+    "......ooo.......",
+    ".....ocwco......",
+    "....ocdccbo.....",
+    "...ocdcwcbbo....",
+    "..ocdcccbbbao...",
+    ".ocwccbbbbaaao..",
+    ".obcbbbbaaaaao..",
+    "..oabbaaaaaoo...",
+    "...ooooooooo....",
+]
+
+CHUNK = [
+    "", "", "",
+    "......oooo......",
+    "....oodwcbo.....",
+    "...odwdcbbbo....",
+    "..odccbbcbbao...",
+    "..ocbbbbcbaaao..",
+    ".odcbbbbbcaaao..",
+    ".ocbbbbbbbaaao..",
+    ".obbbbbbbaaaao..",
+    ".oabbbaaaaaao...",
+    "..oaaaaaaooo....",
+    "...oooooo.......",
+]
+
+GEM_ITEM = [
+    "", "",
+    "........ooooo...",
+    ".......ocwwdco..",
+    "......ocwdddcbo.",
+    "......odwdcccbo.",
+    "......obddccbao.",
+    "......obcccbbao.",
+    ".......obcbbao..",
+    "..qq....obbao...",
+    ".qhgq....oao....",
+    "qhggqq....o.....",
+    "qgggkq..........",
+    ".qgkq...........",
+    "..qq............",
 ]
 
 CRYSTAL_CLUSTER = [
-    "................",
-    ".......o........",
-    "......ohd.......",
-    "......ohmo......",
-    "..o...olmo..o...",
-    ".ohd..olmo.ohd..",
-    ".ohmo.olmd.olmo.",
-    ".olmo.olmd.olmd.",
-    ".olmd.ollmoolmd.",
-    ".ollmoolmmdolmd.",
-    "..olmdolmmdolmo.",
-    "..olmmolmmdlmdo.",
-    "...ollmmmmmmdo..",
-    "....oddmmmddo...",
-    ".....oooooooo...",
-    "................",
-]
-
-SHARD = [
-    "................",
+    "", "",
     "..........oo....",
-    ".........ohho...",
-    "........ohllmo..",
-    ".......ohllmmo..",
-    "......ohllmmdo..",
-    ".....ohllmmdo...",
-    "....ohllmmdo....",
-    "...ohllmmdo.....",
-    "..ohllmmdo......",
-    "..olmmmdo.......",
-    "..ommddo........",
-    "...oddo.........",
-    "....oo..........",
-    "................",
-    "................",
+    ".........owdo...",
+    "....oo...odco...",
+    "...owdo..ocbo...",
+    "...odcbo.ocbo.oo",
+    "....ocbo.obaoowo",
+    "....ocbaoobaodco",
+    ".....obaoobaocbo",
+    ".....obbaabaobao",
+    "......obbbbaobo.",
+    "......oaaaaaao..",
+    ".......oooooo...",
 ]
 
 TALL_CRYSTAL = [
-    "................",
+    "",
     ".......oo.......",
-    "......ohdo......",
-    "......ohmo......",
-    ".....ohlmdo.....",
-    ".....ohlmdo..h..",
-    ".....ohlmdo.hhh.",
-    ".h...olmmdo..h..",
-    "hhh..olmmdo.....",
-    ".h...olmmdo.....",
-    ".....olmmdo.....",
-    ".....olmmdo.....",
-    "......olmo......",
-    "......odmo......",
+    "......owdo......",
+    "......owdo...w..",
+    ".....owdcbo.wdw.",
+    ".....owdcbo..w..",
+    ".....odccbo.....",
+    ".....odcbbo.....",
+    ".....ocbbao.....",
+    ".....ocbbao.....",
+    ".w...obbaao.....",
+    "wdw..obbaao.....",
+    ".w...oabaao.....",
+    "......oaao......",
     ".......oo.......",
-    "................",
 ]
 
-TWIN_CRYSTAL = [
-    "................",
-    "...oo...........",
-    "...ohoo.........",
-    "...olhdo........",
-    "....olmdo...oo..",
-    "....olmmdo.ohdo.",
-    ".....olmmdohmdo.",
-    ".....olmmdolmdo.",
-    "......olmmlmmdo.",
-    "......olmmmmdo..",
-    ".......olmmmdo..",
-    ".......olmmdo...",
-    "......oddmmdo...",
-    ".....ooooooo....",
-    "................",
-    "................",
+FLAME_CRYSTAL = [
+    "", "",
+    "......o.........",
+    ".....odo...o....",
+    ".....odco.odo...",
+    "....odcwbodco...",
+    "....odwwcbcbo...",
+    "...odcwwcccbo...",
+    "...ocwwwccbbao..",
+    "...ocwcwcbbbao..",
+    "...obccccbbaao..",
+    "....obccbbbao...",
+    ".....obbbbao....",
+    "......oaaao.....",
+    ".......ooo......",
 ]
 
-LUMP = [
-    "................",
-    "................",
-    "................",
-    ".....oooo.......",
-    "....ohhlmoo.....",
-    "...ohllmmmdo....",
-    "..ohlhmmmmddo...",
-    "..olmmmlmmmdo...",
-    ".olmmmhlmmddo...",
-    ".olmmmmmmdmdo...",
-    ".odmmmmmddddo...",
-    "..odddmmdddo....",
-    "...oodddddo.....",
-    ".....ooooo......",
-    "................",
-    "................",
-]
-
-GEM_CLUSTER = [
-    "................",
-    "......PPPP......",
-    ".....PpwqqP.....",
-    "....PpwwqqrP....",
-    "....PPPPPPPP....",
-    ".....PqqqrrP....",
-    "......PqrrP.....",
-    "..GGGG.PrP.CCCC.",
-    ".GgwhhG.P.CcwhhC",
-    ".GGGGGG...CCCCCC",
-    "..GhhjG....ChhkC",
-    "...GjG......CkC.",
-    "....G........C..",
-    "................",
-    "................",
-    "................",
-]
-
-DUST = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    ".......hl.......",
-    ".....lmhmld.....",
-    "....lmmlmxmd....",
-    "...lmxmmlmmxd...",
-    "..lmmmlmmxmmmd..",
-    "..dmxmmmmmmxmd..",
-    "...ddmmxmmmdd...",
-    ".....dddddd.....",
-    "................",
-    "................",
-]
-
-SCALE = [
-    "................",
-    "................",
-    "...oooooooooo...",
-    "..ohhhhllllldo..",
-    "..ohhlllhlmmdo..",
-    "..ohllllhmmmdo..",
-    "..ollllmhmmmdo..",
-    "..ollllmhmmddo..",
-    "...ollmmhmmdo...",
-    "...ollmmhmddo...",
-    "....olmmhmdo....",
-    "....olmmhddo....",
-    ".....olmhdo.....",
-    "......olmo......",
-    ".......oo.......",
-    "................",
+SHARD = [
+    "", "",
+    "..........ooo...",
+    ".........owwdo..",
+    "........owddco..",
+    ".......odddcbo..",
+    "......odddcbo...",
+    ".....odddcbao...",
+    "....odddcbao....",
+    "...odddcbao.....",
+    "..occccbao......",
+    "..obcbbao.......",
+    "...obbao........",
+    "....ooo.........",
 ]
 
 EGG_FRAGMENT = [
-    "................",
-    "................",
-    "..........o.....",
-    "......o..oho....",
-    ".....ohooolmo...",
-    "....ohlllmmdo...",
-    "...ohlhlmmdmo...",
-    "...olllmdmmdo...",
-    "..ohlhmmmdmdo...",
-    "..olllmdmmmdio..",
-    "..olmmmmdmdiio..",
-    "..olmdmmmdiiio..",
-    "...oommdiiiioo..",
-    ".....ooooooo....",
-    "................",
-    "................",
+    "", "", "",
+    "..........oo....",
+    "........oodwo...",
+    ".....oo.odwdco..",
+    "...oodwoodcccbo.",
+    "..odwdcdcccbbbo.",
+    ".odwccccccbbbao.",
+    ".odcccbbbbbbao..",
+    ".ocbbbiiiiiiio..",
+    "..oiiiiiiiioo...",
+    "...oooooooo.....",
 ]
 
-MEAT = [
-    "................",
-    "................",
-    "...........ww...",
-    "..........wbbw..",
-    "...oooo..wbbw...",
-    "..oRRRRo.wbw....",
-    ".oRrrrrRowbw....",
-    ".oRrhrrrRbw.....",
-    ".oRrrrrrrRo.....",
-    ".oRrrrfrrRo..ee.",
-    ".oRrrrrrRRo.eEEe",
-    "..oRRrrRRo..eEEe",
-    "...ooRRRo....ee.",
-    ".....ooo........",
-    "................",
-    "................",
+MEAT_BONE = [
+    "", "",
+    "............ww..",
+    "...........wkkw.",
+    "......oooo.wkw..",
+    "....oorRRroww...",
+    "...orRhRRRro....",
+    "..orRhhRRrrro...",
+    "..oRRRRRrrrro...",
+    "..orRRRrrrro....",
+    "...orrrrrro.....",
+    ".bb.oooooo......",
+    "bBpb............",
+    "bppb.bb.........",
+    ".bb.bBpb........",
+    "....bppb........",
 ]
 
-TOMATO = [
-    "................",
-    "................",
-    "......g..g......",
-    ".......gg.......",
-    ".....ogGGgo.....",
-    "....oRgrrgRo....",
-    "...oRrhrrrrRo...",
-    "...oRhrrrrrRo...",
-    "...oRrrrrrrRo...",
-    "...oRrrrrrrRo...",
-    "...oRrrrrrRRo...",
-    "....oRRrrRRo....",
-    ".....oRRRRo.....",
-    "......oooo......",
-    "................",
-    "................",
-]
-
-CABBAGE = [
-    "................",
-    "................",
-    "................",
+SCALE = [
+    "",
     ".....oooooo.....",
-    "....oGgglggo....",
-    "...oGglhhlggo...",
-    "..oGglhlhhlgo...",
-    "..oGglhlhlggGo..",
-    "..oGgglhlggGGo..",
-    "..oGGgglgggGGo..",
-    "...oGGgggggGo...",
-    "...oGGGgGGGGo...",
-    "....ooGGGGoo....",
-    "......oooo......",
-    "................",
-    "................",
+    "....owwddcco....",
+    "...owddddcccbo..",
+    "...odddcccccbo..",
+    "..odddccccbbbao.",
+    "..odccccccbbbao.",
+    "..occcccxbbbbao.",
+    "..occcccxbbbaao.",
+    "...occccxbbbao..",
+    "...obcccxbbaao..",
+    "....obbbxbaao...",
+    ".....obbbaao....",
+    "......obaao.....",
+    ".......ooo......",
 ]
 
-ONION = [
-    "................",
-    "........g.......",
-    ".......gG.......",
-    ".......gG.......",
-    "......oyyo......",
-    ".....oyhyYo.....",
-    "....oyhyyyYo....",
-    "...oyhyyyyyYo...",
-    "...oyyyyyyyYo...",
-    "...oYyyyyyYYo...",
-    "....oYyyyYYo....",
-    ".....oYYYYo.....",
-    "......obbo......",
-    ".......bb.......",
-    "................",
-    "................",
-]
+SCALE_COLORS = {
+    "fire": tones("#3c0804", "#7a1508", "#b42a0c", "#e2541a", "#ff9a36", "#ffd88a"),
+    "ice": tones("#2e5a80", "#5f94c0", "#8fbde2", "#bcdcf4", "#e2f2ff", "#ffffff"),
+    "lightning": tones("#0c0d11", "#1e2027", "#30333d", "#454955", "#626877", "#ffe14a"),
+    "nature": tones("#0f3014", "#1d4f24", "#2e7234", "#4a9646", "#7cc25e", "#c8ec8a"),
+    "earth": tones("#26180c", "#47301a", "#664828", "#88643c", "#ae8a58", "#dcc08a"),
+    "water": tones("#05223e", "#0a4072", "#1266a0", "#228fca", "#5ec4ee", "#c4f2ff"),
+}
+SCALE_RIDGE = {"fire": "#ffc04a", "ice": "#ffffff", "lightning": "#ffd42a", "nature": "#a8dc6a",
+               "earth": "#c4a06a", "water": "#9ae4ff"}
+
+FOOD = {
+    "tomato": ([
+        "", "", "",
+        ".......kk.......",
+        "......kgGk......",
+        ".....oogkGoo....",
+        "...ooRRgRRRRoo..",
+        "..oRhhRRRRRRRro.",
+        "..oRhRRRRRRRrro.",
+        ".oRRRRRRRRRrrrro",
+        ".oRRRRRRRRrrrrro",
+        ".orRRRRRRrrrrrro",
+        "..orRRRrrrrrrro.",
+        "..oorrrrrrrrroo.",
+        "....oooooooo....",
+    ], {"o": hexc("#4e0a06"), "R": hexc("#c8301c"), "r": hexc("#9a2214"), "h": hexc("#ff8c6c"),
+        "k": hexc("#1d4416"), "g": hexc("#3c842a"), "G": hexc("#6ab442")}),
+    "cabbage": ([
+        "", "",
+        ".....oooooo.....",
+        "...ooLlLLlGoo...",
+        "..oLlCCCCClGgo..",
+        ".oLlCwwCCCClGgo.",
+        ".olCwCCvCCCcGgo.",
+        "oLlCCvCCCvCclGgo",
+        "olCCCCvCCCvclGgo",
+        "olcCCCCvCCcclGgo",
+        "oGlcCCCCvccllGgo",
+        ".oGlcccccclGggo.",
+        ".ogGllllllGggko.",
+        "..okgGGGGggkko..",
+        "....oooooooo....",
+    ], {"o": hexc("#1c3d12"), "k": hexc("#2a5a1c"), "g": hexc("#3a7a28"), "G": hexc("#4c9434"),
+        "l": hexc("#6eb04a"), "L": hexc("#8ccc5e"), "c": hexc("#9ad06c"), "C": hexc("#bfe496"),
+        "w": hexc("#e2f6cc"), "v": hexc("#7cb858")}),
+    "onion": ([
+        "",
+        ".......g.g......",
+        ".......GgG......",
+        "........G.......",
+        "......oooo......",
+        "....ooqpOOoo....",
+        "...oqpppOOOOo...",
+        "..oqppOOOOOOOo..",
+        "..opppOOOOOOOo..",
+        ".oqppOOOOOOOOOo.",
+        ".opOOOOOOOOOOOo.",
+        ".opOOOOOOOOOOro.",
+        "..oOOOOOOOOOro..",
+        "...ooOOOOOroo...",
+        ".....oooooo.....",
+        "......n.n.n.....",
+    ], {"o": hexc("#5a3410"), "O": hexc("#c0822e"), "p": hexc("#dea250"), "q": hexc("#f6d690"),
+        "r": hexc("#96601e"), "g": hexc("#3c842a"), "G": hexc("#6ab442"), "n": hexc("#d8c8a0")}),
+    "barley": ([
+        "...........n....",
+        "..........nBn.n.",
+        "........n.BbBnBn",
+        ".........nbAbBbB",
+        "......n..BbAbbAb",
+        ".....nBn.bAbAAb.",
+        ".....BbB.AbAbA..",
+        ".....bAb.bAAa...",
+        ".....BbA.AAa....",
+        ".....bAAaAa.....",
+        "......bAAa......",
+        ".....aAAa.......",
+        "....aAa.........",
+        "...aAa..........",
+        "..aAa...........",
+        "..aa............",
+    ], {"a": hexc("#8a6a22"), "A": hexc("#c49e40"), "b": hexc("#dcbc5e"), "B": hexc("#f4dc8c"),
+        "n": hexc("#d4ba6e")}),
+    "bread_roll": ([
+        "", "", "", "",
+        ".....oooooo.....",
+        "...oohwwhhcoo...",
+        "..ohwhhhhhcccbo.",
+        ".ohwhhcccccccbbo",
+        ".ohhccmcccmccbbo",
+        "ohhcccmmcmmcccbo",
+        "ohcccccmmmcccbbo",
+        "occcccccccccbbao",
+        ".obccccccccbbaao",
+        "..oabbbbbbbbaao.",
+        "...ooaaaaaaaoo..",
+        ".....oooooooo...",
+    ], {"o": hexc("#4a2a0c"), "a": hexc("#8a521c"), "b": hexc("#b06e28"), "c": hexc("#d4923a"),
+        "h": hexc("#ecb860"), "w": hexc("#f8dc98"), "m": hexc("#f2d090")}),
+    "vegetable_stew": ([
+        "", "", "", "", "",
+        "...oooooooooo...",
+        "..oSSSSSSSSSSo..",
+        ".oSRsRgSsTRSsSo.",
+        ".osSsTSRgsSsRso.",
+        ".oWsSsgSsSTsSWo.",
+        "..oWWWWWWWWWWo..",
+        "..owwWWWWWWwwo..",
+        "...owwwwwwwwo...",
+        "....oowwwwoo....",
+        "......oooo......",
+    ], {"o": hexc("#2e1a0c"), "W": hexc("#8a5a32"), "w": hexc("#6a4224"), "S": hexc("#c4501c"),
+        "s": hexc("#9a3612"), "R": hexc("#e8442a"), "g": hexc("#5aa83a"), "T": hexc("#f0a030")}),
+    "meat_pie": ([
+        "", "", "", "",
+        "....oooooooo....",
+        "..oohwwhhhhhoo..",
+        ".ohwhhcccchhcco.",
+        ".ohhcchmmhccccbo",
+        "ohccchmeemhcccbo",
+        "ohcccchmmhcccbbo",
+        "ocbccccccccccbao",
+        "oTTTTTTTTTTTTTTo",
+        "otTtTtTtTtTtTtto",
+        ".ottttttttttttto",
+        "..oooooooooooo..",
+    ], {"o": hexc("#4a280c"), "a": hexc("#7a4618"), "b": hexc("#a8682a"), "c": hexc("#cc8c3c"), "h": hexc("#e6b064"),
+        "w": hexc("#f8d896"), "m": hexc("#6a2e14"), "e": hexc("#3a1608"), "T": hexc("#9a6a3e"),
+        "t": hexc("#74482a")}),
+    "apple_pie": ([
+        "", "", "", "",
+        "....oooooooo....",
+        "..oohwhrhwhhoo..",
+        ".ohwRhRhRhRhcco.",
+        ".ohRhRhRhRhRhcbo",
+        "ohRhRhRhRhRhRhbo",
+        "ohcRhRhRhRhRhcbo",
+        "ocbcRcRcRcRcbbao",
+        "oTTTTTTTTTTTTTTo",
+        "otTtTtTtTtTtTtto",
+        ".ottttttttttttto",
+        "..oooooooooooo..",
+    ], {"o": hexc("#4a280c"), "a": hexc("#7a4618"), "b": hexc("#a8682a"), "c": hexc("#cc8c3c"), "h": hexc("#e6b064"),
+        "w": hexc("#f8d896"), "R": hexc("#b42a1c"), "r": hexc("#e2503a"), "T": hexc("#9a6a3e"),
+        "t": hexc("#74482a")}),
+}
 
 SEEDS = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "........oo......",
-    ".......ohlo.....",
-    "...oo..olmo.....",
-    "..ohlo..oo..oo..",
-    "..olmo.....ohlo.",
-    "...oo...oo.olmo.",
-    "........ohlo.oo.",
-    "........olmo....",
+    "", "", "", "", "",
     ".........oo.....",
-    "................",
-    "................",
-]
-
-BARLEY = [
-    "................",
-    "..y...y...y.....",
-    "...y..y..y......",
-    "..oyo.yoy.oyo...",
-    "..oYyoyYyoYyo...",
-    "...oYyoYyoYo....",
-    "...oYYoYYoYo....",
-    "....oYoYYoo.....",
-    ".....oSSSo......",
-    "......SSS.......",
-    "......SSS.......",
-    ".....sSSSs......",
-    "......SSS.......",
-    "......SSS.......",
-    "......sss.......",
-    "................",
-]
-
-BREAD_ROLL = [
-    "................",
-    "................",
-    "................",
-    "................",
-    ".....oooooo.....",
-    "...oohhllllo....",
-    "..ohlllcllllo...",
-    ".ohlllcllcllmo..",
-    ".olllcllcllmmo..",
-    ".olmllllcllmmo..",
-    ".ommmmmmmmmmdo..",
-    "..odmmmmmmmddo..",
-    "...ooddddddoo...",
-    ".....oooooo.....",
-    "................",
-    "................",
-]
-
-STEW = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "................",
-    "...ssssssssss...",
-    "..sRrrgrrrkrrs..",
-    ".sRrkrrrrgrrrrs.",
-    ".obrrrrkrrrrgro.",
-    ".obbbbbbbbbbbbo.",
-    "..obbhbbbbbbbo..",
-    "..obbbbbbbbbdo..",
-    "...obbbbbbbdo...",
-    "....oddddddo....",
-    ".....oooooo.....",
-    "................",
-]
-
-PIE = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "......oooo......",
-    "...oooccccooo...",
-    "..occcccccccco..",
-    ".occfcccccfccco.",
-    ".occcccfccccccc.",
-    ".oCcccccccccCCo.",
-    ".oFFFFFFFFFFFFo.",
-    ".oCCCCCCCCCCCCo.",
-    "..oCCCCCCCCCCo..",
-    "...oooooooooo...",
-    "................",
-    "................",
-]
-
-LATTICE_PIE = [
-    "................",
-    "................",
-    "................",
-    "................",
-    "......oooo......",
-    "...oooffffooo...",
-    "..occfccfccfco..",
-    ".occccffcccffco.",
-    ".offcccffccccco.",
-    ".oCcffcccffcCCo.",
-    ".oFFFFFFFFFFFFo.",
-    ".oCCCCCCCCCCCCo.",
-    "..oCCCCCCCCCCo..",
-    "...oooooooooo...",
-    "................",
-    "................",
+    "........odbo....",
+    "...oo...obao....",
+    "..odbo...oo.....",
+    "..obao.....oo...",
+    "...oo.....odbo..",
+    ".....oo...obao..",
+    "....odbo...oo...",
+    "....obao........",
+    ".....oo.........",
 ]
 
 
-def item_sprites() -> None:
-    steel = ramp("#2e333a", "#5d6670", "#7f8994", "#a6b0bb", "#d5dde6")
-    save(sprite(INGOT, tone(steel)), ITEM, "steel_ingot")
-    dust = {"h": hexc("#c4ccd4"), "l": hexc("#9aa3ad"), "m": hexc("#727b86"), "d": hexc("#4f5660"),
-            "x": hexc("#1a1b1e")}
-    save(sprite(DUST, dust), ITEM, "steel_blend")
-
-    save(sprite(LUMP, tone(ORE_PALETTES["carbon"])), ITEM, "carbon")
-    save(sprite(CRYSTAL_CLUSTER, tone(ORE_PALETTES["konterit"])), ITEM, "konterit")
-    save(sprite(TALL_CRYSTAL, tone(ORE_PALETTES["aetherit"])), ITEM, "aetherit")
-    save(sprite(TWIN_CRYSTAL, tone(ORE_PALETTES["draconium"])), ITEM, "draconium")
-    save(sprite(SHARD, tone(ORE_PALETTES["wyvernit"])), ITEM, "wyvernit")
-
-    purple, green, cyan = GEM_COLORS
-    gems = {
-        "P": purple[0], "p": purple[3], "w": purple[4], "q": purple[2], "r": purple[1],
-        "G": green[0], "g": green[3], "h": green[2], "j": green[1],
-        "C": cyan[0], "c": cyan[3], "k": cyan[1],
-    }
-    # Das "w" wird für die Glanzpunkte aller Steine verwendet
-    save(sprite(GEM_CLUSTER, gems), ITEM, "gemstone")
-
-    fragment = ramp("#2e0f44", "#5b2384", "#8a3cc0", "#b874ee", "#e6c8ff")
-    save(sprite(EGG_FRAGMENT, dict(tone(fragment), i=hexc("#f2e6d0"))), ITEM, "dragon_egg_fragment")
-
-    for kind, pal in DRAGON_PALETTES.items():
-        colors = {"o": pal[0], "d": pal[1], "m": pal[2], "l": pal[3], "h": pal[4]}
-        save(sprite(SCALE, colors), ITEM, f"{kind}_dragon_scale")
-
-    meat = {"o": hexc("#4a1010"), "R": hexc("#9a2020"), "r": hexc("#c8403a"), "h": hexc("#e8706a"),
-            "f": hexc("#f0d0c0"), "w": hexc("#5a4a3a"), "b": hexc("#e8e0cc"),
-            "e": hexc("#2a0a3a"), "E": hexc("#6a1a7a")}
-    save(sprite(MEAT, meat), ITEM, "dragon_food")
-
-    save(sprite(TOMATO, {"o": hexc("#5a0e08"), "R": hexc("#a8200f"), "r": hexc("#d8341e"), "h": hexc("#ff8a6a"),
-                         "g": hexc("#2f6a1a"), "G": hexc("#4f9a2a")}), ITEM, "tomato")
-    save(sprite(CABBAGE, {"o": hexc("#1f4a12"), "G": hexc("#3f7a24"), "g": hexc("#6aae44"), "l": hexc("#94d06a"),
-                          "h": hexc("#c4ef9e")}), ITEM, "cabbage")
-    save(sprite(ONION, {"o": hexc("#5a3812"), "y": hexc("#d8a84e"), "Y": hexc("#a8762a"), "h": hexc("#f4d48a"),
-                        "g": hexc("#4f9a2a"), "G": hexc("#2f6a1a"), "b": hexc("#8a6a4a")}), ITEM, "onion")
-
-    save(sprite(SEEDS, {"o": hexc("#6a5a1a"), "h": hexc("#f0e08a"), "l": hexc("#d8c25a"), "m": hexc("#b49a3a")}),
-         ITEM, "tomato_seeds")
-    save(sprite(SEEDS, {"o": hexc("#2a1a0e"), "h": hexc("#8a6a4a"), "l": hexc("#6a4a2e"), "m": hexc("#4a321e")}),
-         ITEM, "cabbage_seeds")
-    save(sprite(SEEDS, {"o": hexc("#5a4214"), "h": hexc("#e8cf8a"), "l": hexc("#c8a65a"), "m": hexc("#a0803a")}),
-         ITEM, "barley_seeds")
-    save(sprite(BARLEY, {"o": hexc("#7a5a14"), "y": hexc("#f0d878"), "Y": hexc("#d4ac3e"), "S": hexc("#b89a3e"),
-                         "s": hexc("#8a7228")}), ITEM, "barley")
-
-    save(sprite(BREAD_ROLL, {"o": hexc("#5a320e"), "h": hexc("#f2c47a"), "l": hexc("#dc9c4a"), "m": hexc("#b87a32"),
-                             "d": hexc("#8a5420"), "c": hexc("#f8e0b0")}), ITEM, "bread_roll")
-    save(sprite(STEW, {"o": hexc("#3a2414"), "b": hexc("#7a5030"), "h": hexc("#a0703e"), "d": hexc("#5a3a20"),
-                       "s": hexc("#4a2e18"), "R": hexc("#a83a1a"), "r": hexc("#d0602a"), "g": hexc("#5aa02a"),
-                       "k": hexc("#f0a030")}), ITEM, "vegetable_stew")
-    save(sprite(PIE, {"o": hexc("#5a3010"), "c": hexc("#e0a85a"), "f": hexc("#7a3a1a"), "C": hexc("#c08440"),
-                      "F": hexc("#8a3420")}), ITEM, "meat_pie")
-    save(sprite(LATTICE_PIE, {"o": hexc("#5a3010"), "c": hexc("#c83a2a"), "f": hexc("#f0c070"), "C": hexc("#c08440"),
-                              "F": hexc("#e8d070")}), ITEM, "apple_pie")
+def items() -> None:
+    put("item/steel_ingot", pa.sprite(INGOT, tones("#262d36", "#46515d", "#66737f", "#8e9ba7", "#c4cfd8", "#f2f6fa")))
+    put("item/steel_blend", pa.sprite(POWDER, tones("#1e2026", "#33363e", "#4a4e58", "#686d79", "#8f95a2", "#d4dbe6")))
+    put("item/carbon", pa.sprite(CHUNK, tones("#09090b", "#17181c", "#25272d", "#353840", "#525866", "#8a93a4")))
+    gem = tones("#2a0f3d", "#4c1d6c", "#7230a2", "#9a50d2", "#c486f0", "#f4e0ff")
+    put("item/gemstone", pa.sprite(GEM_ITEM, {**gem, "q": hexc("#0b3a20"), "k": hexc("#16683a"),
+                                              "g": hexc("#2fae60"), "h": hexc("#9af2bc")}))
+    put("item/konterit", pa.sprite(CRYSTAL_CLUSTER, tones("#33103a", "#5c1a62", "#8a2a90", "#b746bc", "#dc7ae0", "#ffd8fc")))
+    put("item/aetherit", pa.sprite(TALL_CRYSTAL, tones("#0a3346", "#125a73", "#1c88a6", "#37bcd8", "#86e6f4", "#efffff")))
+    put("item/draconium", pa.sprite(FLAME_CRYSTAL, tones("#1a0306", "#4a080e", "#7a1016", "#b4241c", "#e24a22", "#ffb04e")))
+    put("item/wyvernit", pa.sprite(SHARD, tones("#34536f", "#5f88ad", "#8fb6d8", "#bcdaf2", "#e6f4ff", "#ffffff")))
+    put("item/dragon_egg_fragment", pa.sprite(EGG_FRAGMENT, {
+        **tones("#2a1238", "#4a2266", "#6e3896", "#8e5cbc", "#b48ee0", "#e4d0fa"), "i": hexc("#efe6d6")}))
+    put("item/dragon_food", pa.sprite(MEAT_BONE, {
+        "o": hexc("#4a0e0c"), "r": hexc("#9a2a22"), "R": hexc("#c8443a"), "h": hexc("#f08a7a"),
+        "w": hexc("#f2ead8"), "k": hexc("#c8bca0"), "b": hexc("#3a0a1e"), "B": hexc("#c2304a"), "p": hexc("#8a1a34")}))
+    for kind, colors in SCALE_COLORS.items():
+        put(f"item/{kind}_dragon_scale", pa.sprite(SCALE, {**colors, "x": hexc(SCALE_RIDGE[kind])}))
+    for name, (rows, colors) in FOOD.items():
+        put(f"item/{name}", pa.sprite(rows, colors))
+    put("item/tomato_seeds", pa.sprite(SEEDS, {"o": hexc("#6a5a1a"), "a": hexc("#c8b04a"), "b": hexc("#f0e08a"),
+                                               "d": hexc("#fff4c0")}))
+    put("item/cabbage_seeds", pa.sprite(SEEDS, {"o": hexc("#1e140a"), "a": hexc("#4a321e"), "b": hexc("#6e4c30"),
+                                                "d": hexc("#9a7454")}))
+    put("item/barley_seeds", pa.sprite(SEEDS, {"o": hexc("#5a4214"), "a": hexc("#b08a3a"), "b": hexc("#d8b862"),
+                                               "d": hexc("#f2dc98")}))
 
 
 # =============================================================================
-# Feldfrüchte (vier Wachstumsstufen) und Zierblumen
-# =============================================================================
-
-PLANT = {"s": hexc("#2f6a18"), "S": hexc("#3f8a22"), "L": hexc("#5aa82e"), "l": hexc("#7ac84a"),
-         "k": hexc("#8a6a3a")}
-
-TOMATO_STAGES = [
-    ["................"] * 12 + [
-        "................",
-        "....l.....l.....",
-        "....S..l..S..l..",
-        "....s..S..s..S..",
-    ],
-    ["................"] * 8 + [
-        "......k.........",
-        "....l.k.l.......",
-        "...lLLkLl.......",
-        "....LSkS..l.....",
-        ".....SkS.lL.....",
-        "......k..S......",
-        "......k..s......",
-        "......k.........",
-    ],
-    ["................"] * 4 + [
-        "......k.........",
-        "....l.k.l.......",
-        "...lLLkLLl......",
-        "..lLSSkSSLl.....",
-        "...LSakSaL......",
-        "....SSkSS..l....",
-        "..lLLSkSLLlL....",
-        "...LSakSaSL.....",
-        "....SSkSSs......",
-        ".....SkS........",
-        "......k.........",
-        "......k.........",
-    ],
-    ["................"] * 3 + [
-        "......k.........",
-        "....l.k.l.......",
-        "...lLLkLLl......",
-        "..lLSrkSrLl.....",
-        "...LrRkSRrL.....",
-        "....rRkSrr.l....",
-        "..lLLSkSLLlL....",
-        "...LrrkrRSL.....",
-        "...rRRkRRr......",
-        "....rSkSr.......",
-        ".....SkS........",
-        "......k.........",
-        "......k.........",
-    ],
-]
-
-CABBAGE_STAGES = [
-    ["................"] * 13 + [
-        "................",
-        "......l..l......",
-        "......S..S......",
-    ],
-    ["................"] * 11 + [
-        "................",
-        "....l......l....",
-        "....LL.ll.LL....",
-        ".....LLSSLL.....",
-        "......SSSS......",
-    ],
-    ["................"] * 9 + [
-        "................",
-        "...l........l...",
-        "...LL.llll.LL...",
-        "....LLllllLL....",
-        "...lLLggggLLl...",
-        "....LLgGGgLL....",
-        ".....SSSSSS.....",
-    ],
-    ["................"] * 7 + [
-        "................",
-        "..l..........l..",
-        "..LL..gggg..LL..",
-        "...LLghhhhgLL...",
-        "..lLghhGhhhgLl..",
-        "...LghGhhGhgL...",
-        "...LgghhGhhgL...",
-        "....LggggggL....",
-        ".....SSSSSS.....",
-    ],
-]
-
-ONION_STAGES = [
-    ["................"] * 13 + [
-        "................",
-        "....l....l......",
-        "....S....S...l..",
-    ],
-    ["................"] * 10 + [
-        "....l.....l.....",
-        "....L..l..L.....",
-        "....L..L..L..l..",
-        "...lS..L..S..L..",
-        "....S..S..S..S..",
-        "....s..s..s..s..",
-    ],
-    ["................"] * 6 + [
-        "....l.....l.....",
-        "....L..l..L..l..",
-        "...lL..L..L..L..",
-        "....L..L.lL..L..",
-        "....L.lL..L.lL..",
-        "...lS..L..S..L..",
-        "....S..S..S..S..",
-        "....S..S..S..S..",
-        "....S..S..S..S..",
-        "....s..s..s..s..",
-    ],
-    ["................"] * 5 + [
-        "....l.....l.....",
-        "....L..l..L..l..",
-        "...lL..L..L..L..",
-        "....L..L.lL..L..",
-        "....L.lL..L.lL..",
-        "...lS..L..S..L..",
-        "....S..S..S..S..",
-        "....S..S..S..S..",
-        "...yYy.S.yYy.S..",
-        "..yhYYy.yhYYy...",
-        "..yYYYy.yYYYy...",
-    ],
-]
-
-BARLEY_STAGES = [
-    ["................"] * 13 + [
-        "................",
-        "..l...l...l..l..",
-        "..L...L...L..L..",
-    ],
-    ["................"] * 10 + [
-        "..l...l....l....",
-        "..L...L..l.L..l.",
-        "..L.l.L..L.L..L.",
-        "..L.L.L..L.L..L.",
-        "..S.L.S..L.S..L.",
-        "..S.S.S..S.S..S.",
-    ],
-    ["................"] * 6 + [
-        "..L...L....L....",
-        ".lLl.lLl..lLl...",
-        "..L...L....L..L.",
-        "..L.L.L..L.L.lLl",
-        "..L.L.L.lLlL..L.",
-        "..L.L.L..L.L..L.",
-        "..S.L.S..L.S..L.",
-        "..S.L.S..L.S..L.",
-        "..S.S.S..S.S..S.",
-        "..S.S.S..S.S..S.",
-    ],
-    ["................"] * 3 + [
-        ".y..y...y...y...",
-        "..y.y..y...y....",
-        "..Y...Y....Y....",
-        ".yYy.yYy..yYy...",
-        "..Y...Y....Y..Y.",
-        ".yYy.yYy..yYy.Y.",
-        "..Y.Y.Y..Y.Y.yYy",
-        "..b.Y.b.yYyb..Y.",
-        "..b.b.b..Y.b.yYy",
-        "..b.b.b..b.b..b.",
-        "..b.b.b..b.b..b.",
-        "..b.b.b..b.b..b.",
-        "..B.b.B..b.B..b.",
-    ],
-]
-
-
-def crop_sprites() -> None:
-    tomato = dict(PLANT, r=hexc("#d8341e"), R=hexc("#a8200f"), a=hexc("#8ac04a"))
-    cabbage = dict(PLANT, g=hexc("#7ac050"), G=hexc("#5aa03a"), h=hexc("#b8e88e"))
-    onion = dict(PLANT, y=hexc("#d8a84e"), Y=hexc("#a8762a"), h=hexc("#f4d48a"))
-    barley = dict(PLANT, y=hexc("#f0d878"), Y=hexc("#d4ac3e"), b=hexc("#c8a648"), B=hexc("#a0822e"))
-    for stages, name, colors in [(TOMATO_STAGES, "tomatoes", tomato), (CABBAGE_STAGES, "cabbages", cabbage),
-                                 (ONION_STAGES, "onions", onion), (BARLEY_STAGES, "barley", barley)]:
-        for i, rows in enumerate(stages):
-            save(sprite(rows, colors), BLOCK, f"{name}_stage{i}")
-
-
-LAVENDER = [
-    "................",
-    "...p......p.....",
-    "..pPp....pPp....",
-    "...P..p...P.....",
-    "..pPp.Pp.pPp....",
-    "...P.pPp..P..p..",
-    "..pPp.P..pPp.P..",
-    "...S.pPp..S.pPp.",
-    "...S..S...S..P..",
-    "...S..S..lS..S..",
-    "..lS..S..LS..S..",
-    "..LS..S...S.lS..",
-    "...S.lS...S.LS..",
-    "...S.LS...S..S..",
-    "...S..S...S..S..",
-    "...s..s...s..s..",
-]
-
-ROSE = [
-    "................",
-    "................",
-    "......oooo......",
-    ".....oRrrRo.....",
-    "....oRrhrrRo....",
-    "....oRrRrrRo....",
-    ".....oRRrRo.....",
-    "......oSSo......",
-    ".......S...ll...",
-    ".......S..lLL...",
-    "...ll..S.lL.....",
-    "..LLLl.SS.......",
-    ".....LlS........",
-    ".......S........",
-    ".......S........",
-    ".......s........",
-]
-
-LILY = [
-    "................",
-    "..o.........o...",
-    "..oRo.....oRo...",
-    "...oRo...oRo....",
-    "....oRrorRo.....",
-    ".oRRrryyrrRRo...",
-    "..oorryYyrroo...",
-    "....oRrSrRo.....",
-    "...oRo.S.oRo....",
-    "..oo...S...oo...",
-    ".......S..ll....",
-    "...ll..S.lL.....",
-    "....LL.S.L......",
-    ".....LlS........",
-    ".......S........",
-    ".......s........",
-]
-
-FROST = [
-    "................",
-    "................",
-    ".......w........",
-    "....w..b..w.....",
-    ".....bwBwb......",
-    "...wbBcCcBbw....",
-    ".....bwBwb......",
-    "....w..b..w.....",
-    ".......t........",
-    ".......t..tt....",
-    "...tt..t.tT.....",
-    "....TT.t.T......",
-    ".....TtT........",
-    ".......t........",
-    ".......t........",
-    ".......u........",
-]
-
-
-def flower_sprites() -> None:
-    save(sprite(LAVENDER, dict(PLANT, p=hexc("#b48ae8"), P=hexc("#7a48b8"))), BLOCK, "lavender")
-    save(sprite(ROSE, dict(PLANT, o=hexc("#5a0a14"), R=hexc("#a01224"), r=hexc("#d8283a"), h=hexc("#ff7a86"))),
-         BLOCK, "garden_rose")
-    save(sprite(LILY, dict(PLANT, o=hexc("#8a1e0a"), R=hexc("#e0501a"), r=hexc("#ff9a2a"), y=hexc("#ffe04a"),
-                           Y=hexc("#c88a10"))), BLOCK, "fire_lily")
-    save(sprite(FROST, {"w": hexc("#ffffff"), "b": hexc("#bfe6ff"), "B": hexc("#7ab8e8"), "c": hexc("#5ad8f0"),
-                        "C": hexc("#2a98c0"), "t": hexc("#5a8a9a"), "T": hexc("#7aaab8"), "u": hexc("#3a6a7a")}),
-         BLOCK, "frost_flower")
-
-
-# =============================================================================
-# Vorschau
+# Ausgabe
 # =============================================================================
 
 def preview(path: Path) -> None:
-    zoom, pad = 6, 4
-    cols = 12
+    """Übersicht aller Texturen, 6-fach vergrößert auf Schachbrett-Hintergrund."""
+    zoom, pad, cols = 6, 4, 12
     cell = 16 * zoom + pad
-    rows = math.ceil(len(GENERATED) / cols)
-    sheet = Image.new("RGBA", (cols * cell + pad, rows * cell + pad), (60, 70, 60, 255))
-    checker = Image.new("RGBA", (16 * zoom, 16 * zoom))
-    for y in range(16):
-        for x in range(16):
-            c = (120, 120, 120, 255) if (x + y) % 2 else (90, 90, 90, 255)
-            for yy in range(zoom):
-                for xx in range(zoom):
-                    checker.putpixel((x * zoom + xx, y * zoom + yy), c)
-    for i, (_, _, img) in enumerate(GENERATED):
+    entries = list(GENERATED.items())
+    rows = math.ceil(len(entries) / cols)
+    sheet = Image.new("RGBA", (cols * cell + pad, rows * cell + pad), (52, 56, 60, 255))
+    for i, (_, img) in enumerate(entries):
         x = pad + (i % cols) * cell
         y = pad + (i // cols) * cell
-        sheet.alpha_composite(checker, (x, y))
-        sheet.alpha_composite(img.resize((16 * zoom, 16 * zoom), Image.NEAREST), (x, y))
+        tile = pa.checker(16, 16)
+        tile.alpha_composite(img)
+        sheet.alpha_composite(pa.zoom(tile, zoom), (x, y))
     sheet.save(path)
 
 
-def main() -> None:
-    building_blocks()
-    timber()
+def build_all() -> dict[str, Image.Image]:
+    GENERATED.clear()
+    stone_blocks()
+    timber_blocks()
     roofs()
-    resources_blocks()
+    ores()
+    storage_blocks()
     dragon_eggs()
-    item_sprites()
-    crop_sprites()
-    flower_sprites()
+    plants()
+    items()
+    return GENERATED
+
+
+def main() -> None:
+    build_all()
+    for key, img in GENERATED.items():
+        target = TEXTURES / f"{key}.png"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        img.save(target)
     print(f"{len(GENERATED)} Texturen geschrieben nach {TEXTURES}")
     if "--preview" in sys.argv:
-        target = Path(sys.argv[sys.argv.index("--preview") + 1]) if len(sys.argv) > sys.argv.index("--preview") + 1 \
-            else ROOT / "build" / "texture_preview.png"
+        i = sys.argv.index("--preview")
+        target = Path(sys.argv[i + 1]) if len(sys.argv) > i + 1 else ROOT / "build" / "texture_preview.png"
         target.parent.mkdir(parents=True, exist_ok=True)
         preview(target)
         print(f"Vorschau: {target}")
