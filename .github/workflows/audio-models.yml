@@ -1,0 +1,35 @@
+name: Audio models (temporary)
+on:
+  push:
+    branches: [ 'ci/audio-models-req' ]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stimmen und Soundfont laden
+        run: |
+          mkdir -p models
+          base=https://huggingface.co/rhasspy/piper-voices/resolve/main
+          for v in de/de_DE/thorsten/high/de_DE-thorsten-high de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium \
+                   en/en_US/libritts_r/medium/en_US-libritts_r-medium; do
+            name=$(basename $v)
+            curl -sSL -o models/$name.onnx "$base/$v.onnx"
+            curl -sSL -o models/$name.onnx.json "$base/$v.onnx.json"
+            curl -sSL -o models/$name.MODEL_CARD "$base/$(dirname $v)/MODEL_CARD"
+          done
+          sudo apt-get update -q && sudo apt-get install -y -q fluid-soundfont-gm > /dev/null
+          cp /usr/share/sounds/sf2/FluidR3_GM.sf2 models/
+          cp /usr/share/doc/fluid-soundfont-gm/copyright models/FluidR3_GM.copyright 2>/dev/null || true
+          ls -la models
+          tar cf models.tar models
+          mkdir out && split -b 45m -d models.tar out/models.tar.part && ls -la out
+      - name: Zurückgeben
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          git init -q && git checkout -q -b ci/audio-models && git add .
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "audio models ${{ github.run_id }}"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/audio-models
