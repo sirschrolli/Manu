@@ -120,8 +120,17 @@ EPIC_SOX = ["gain", "-4", "highpass", "65", "lowpass", "12000", "bass", "+4", "1
             "pad", "0.03", "1.6", "reverb", "42", "45", "100", "0", "22", "-5"]
 
 
-def epic_narrator_chain(x: np.ndarray, sr: int, target_lufs: float = -16.0) -> np.ndarray:
-    """Nachbearbeitung der vorab erzeugten Erzählerzeilen (benötigt sox)."""
+# Natürlicher Erzähler: für Stimmen, die schon ausdrucksstark und menschlich klingen (Qwen3-TTS) – kein
+# Zeitstrecken, nur etwas Wärme, sanfte Kompression und ein Hauch großer Halle, damit nichts künstlich wirkt.
+NATURAL_SOX = ["gain", "-3", "highpass", "50", "lowpass", "14000", "equalizer", "120", "1.0q", "+2",
+               "compand", "0.01,0.20", "-70,-70,-40,-30,-15,-14,0,-8", "-2", "-90", "0.05",
+               "pad", "0.03", "1.4", "reverb", "24", "45", "80", "0", "12", "-7"]
+
+NARRATOR_CHAINS = {"epic": EPIC_SOX, "natural": NATURAL_SOX}
+
+
+def epic_narrator_chain(x: np.ndarray, sr: int, target_lufs: float = -16.0, style: str = "epic") -> np.ndarray:
+    """Nachbearbeitung der vorab erzeugten Erzählerzeilen (benötigt sox); style = "epic" oder "natural"."""
     if shutil.which("sox") is None:
         raise RuntimeError("Für die epische Erzählerstimme wird 'sox' benötigt (z. B. apt install sox).")
     y = dsp.resample(x, sr, OUT_SR)
@@ -129,7 +138,7 @@ def epic_narrator_chain(x: np.ndarray, sr: int, target_lufs: float = -16.0) -> n
     with tempfile.TemporaryDirectory() as tmp:
         src, dst = Path(tmp) / "in.wav", Path(tmp) / "out.wav"
         dsp.write_wav(y, OUT_SR, src)
-        subprocess.run(["sox", str(src), "-r", str(OUT_SR), "-c", "1", str(dst), *EPIC_SOX], check=True)
+        subprocess.run(["sox", str(src), "-r", str(OUT_SR), "-c", "1", str(dst), *NARRATOR_CHAINS[style]], check=True)
         y, _ = dsp.read_wav(dst)
     y = dsp.fade(y, OUT_SR, 0.01, 0.4)
     return dsp.normalize(y, OUT_SR, target_lufs, ceiling_db=-1.7)

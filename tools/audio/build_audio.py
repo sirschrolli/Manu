@@ -19,6 +19,7 @@ Optionen:
                                     "--only none" schreibt nur intro.json und sounds.json neu)
     --work /pfad                    Ordner für Zwischendateien (MIDI, Stems, Spektrogramme, Bericht)
     --narration-source /pfad        vorab erzeugte Erzählerzeilen narration_raw_<de|en>_<01..09>.wav verwenden
+    --narration-style natural       nur leichte Nachbearbeitung (für schon sehr natürliche Stimmen)
                                     (epische Nachbearbeitung mit sox statt Piper)
 
 Benötigt: pip install piper-tts tinysoundfont mido numpy scipy soundfile pyloudnorm librosa matplotlib
@@ -138,13 +139,13 @@ def build_narration(models: Path, work: Path, takes: int = 3) -> dict:
     return info
 
 
-def load_narration(source: Path, work: Path) -> dict:
-    """Vorab erzeugte Erzählerzeilen (Chatterbox) übernehmen und episch nachbearbeiten."""
+def load_narration(source: Path, work: Path, style: str = "epic") -> dict:
+    """Vorab erzeugte Erzählerzeilen übernehmen und nachbearbeiten (style: "epic" oder "natural")."""
     info = {}
     for lang in ("de", "en"):
         for i in range(1, len(NARRATION) + 1):
             raw, sr = dsp.read_wav(source / f"narration_raw_{lang}_{i:02d}.wav")
-            y = tts.epic_narrator_chain(raw, sr, target_lufs=-16.0)
+            y = tts.epic_narrator_chain(raw, sr, target_lufs=-16.0, style=style)
             path = SOUNDS / "intro" / f"narration_{lang}_{i:02d}.ogg"
             dsp.write_ogg(y, SR, path, quality=5)
             dsp.write_wav(y, SR, work / "narration" / f"narration_{lang}_{i:02d}.wav")
@@ -439,6 +440,7 @@ def main() -> None:
     ap.add_argument("--only", default="narration,music,voices")
     ap.add_argument("--work", default=os.environ.get("KAW_AUDIO_WORK", str(ROOT / "build" / "audio-work")))
     ap.add_argument("--narration-source", default=None)
+    ap.add_argument("--narration-style", default="epic", choices=["epic", "natural"])
     args = ap.parse_args()
     if not args.models:
         sys.exit("Bitte --models oder KAW_AUDIO_MODELS angeben (Ordner mit den Piper-Stimmen und FluidR3_GM.sf2).")
@@ -451,7 +453,7 @@ def main() -> None:
     if "narration" in parts or "music" in parts and not narr_cache.exists():
         print("Erzählerstimme ...")
         if args.narration_source:
-            narr = load_narration(Path(args.narration_source), work)
+            narr = load_narration(Path(args.narration_source), work, args.narration_style)
         else:
             narr = build_narration(models, work)
         json.dump({f"{k[0]}:{k[1]}": {"speech": v["speech"], "length": v["length"]} for k, v in narr.items()},
