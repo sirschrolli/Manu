@@ -133,12 +133,12 @@ public class ModModelProvider extends ModelProvider {
                 blocks.createPlantWithDefaultItem(flower.get(), pot.get(), BlockModelGenerators.PlantType.NOT_TINTED));
 
         // --- Gegenstände (flache 2D-Modelle) ---
+        // Samen und Zwiebel bekommen ihr Modell schon über createCropBlock (Gegenstand der Feldfrucht).
         for (DeferredItem<?> item : java.util.List.of(
                 ModItems.CARBON, ModItems.GEMSTONE, ModItems.KONTERIT, ModItems.AETHERIT, ModItems.DRACONIUM,
                 ModItems.WYVERNIT, ModItems.STEEL_BLEND, ModItems.STEEL_INGOT, ModItems.DRAGON_EGG_FRAGMENT,
-                ModItems.DRAGON_FOOD, ModItems.TOMATO_SEEDS, ModItems.TOMATO, ModItems.CABBAGE_SEEDS, ModItems.CABBAGE,
-                ModItems.ONION, ModItems.BARLEY_SEEDS, ModItems.BARLEY, ModItems.BREAD_ROLL, ModItems.VEGETABLE_STEW,
-                ModItems.MEAT_PIE, ModItems.APPLE_PIE)) {
+                ModItems.DRAGON_FOOD, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY, ModItems.BREAD_ROLL,
+                ModItems.VEGETABLE_STEW, ModItems.MEAT_PIE, ModItems.APPLE_PIE)) {
             flat(items, item.get());
         }
         for (DeferredItem<Item> scale : ModItems.DRAGON_SCALES.values()) {
