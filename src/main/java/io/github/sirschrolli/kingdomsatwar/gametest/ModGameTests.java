@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.worldgen.ModWorldgen;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -155,6 +157,15 @@ public final class ModGameTests {
     private static void oreVeins(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var features = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        // Erzadern prüfen bei der Weltgenerierung die Oberfläche (OCEAN_FLOOR_WG). In einer fertigen Welt
+        // gibt es diese Höhenkarte nicht mehr, darum wird sie für den Testbereich neu berechnet.
+        BlockPos center = helper.absolutePos(TEST_POS);
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                Heightmap.primeHeightmaps(level.getChunk(center.offset(dx * 16, 0, dz * 16)),
+                        EnumSet.of(Heightmap.Types.OCEAN_FLOOR_WG));
+            }
+        }
         for (ModWorldgen.OreVein vein : ModWorldgen.ORE_VEINS) {
             Feature feature = features.getOrThrow(vein.featureKey()).value();
             for (Block rock : vein.deepslateOre() == null ? List.of(Blocks.STONE) : List.of(Blocks.STONE, Blocks.DEEPSLATE)) {

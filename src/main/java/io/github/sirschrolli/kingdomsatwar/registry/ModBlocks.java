@@ -7,6 +7,7 @@ import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -187,12 +188,17 @@ public final class ModBlocks {
     public static final DeferredBlock<FlowerPotBlock> POTTED_FIRE_LILY = pottedFlower("potted_fire_lily", FIRE_LILY);
     public static final DeferredBlock<FlowerPotBlock> POTTED_FROST_FLOWER = pottedFlower("potted_frost_flower", FROST_FLOWER);
 
-    /** Zierblumen mit ihrem Blumentopf. */
-    public static final Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> FLOWERS = Map.of(
-            LAVENDER, POTTED_LAVENDER,
-            GARDEN_ROSE, POTTED_GARDEN_ROSE,
-            FIRE_LILY, POTTED_FIRE_LILY,
-            FROST_FLOWER, POTTED_FROST_FLOWER);
+    /** Zierblumen mit ihrem Blumentopf (feste Reihenfolge, damit die erzeugten Dateien gleich bleiben). */
+    public static final Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> FLOWERS;
+
+    static {
+        Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> flowers = new LinkedHashMap<>();
+        flowers.put(LAVENDER, POTTED_LAVENDER);
+        flowers.put(GARDEN_ROSE, POTTED_GARDEN_ROSE);
+        flowers.put(FIRE_LILY, POTTED_FIRE_LILY);
+        flowers.put(FROST_FLOWER, POTTED_FROST_FLOWER);
+        FLOWERS = Collections.unmodifiableMap(flowers);
+    }
 
     private ModBlocks() {}
 
