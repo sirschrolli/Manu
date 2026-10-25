@@ -1,0 +1,10 @@
+total 3588
+drwxr-xr-x 3 runner runner   4096 Oct 25 21:23 .
+drwxr-xr-x 6 runner runner   4096 Oct 25 21:21 ..
+drwxr-xr-x 2 runner runner   4096 Oct 25 21:23 logs
+-rw-r--r-- 1 runner runner 637518 Oct 25 21:23 qwen_erzaehler_11.wav
+-rw-r--r-- 1 runner runner 449358 Oct 25 21:23 qwen_erzaehler_23.wav
+-rw-r--r-- 1 runner runner 629838 Oct 25 21:23 qwen_king_11.wav
+-rw-r--r-- 1 runner runner 553038 Oct 25 21:23 qwen_king_23.wav
+-rw-r--r-- 1 runner runner 514638 Oct 25 21:23 qwen_sage_11.wav
+-rw-r--r-- 1 runner runner 867918 Oct 25 21:23 qwen_sage_23.wav

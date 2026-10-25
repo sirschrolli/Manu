@@ -1,0 +1,3 @@
+qwen_king_23.wav
+qwen_sage_11.wav
+qwen_bard_11.wav

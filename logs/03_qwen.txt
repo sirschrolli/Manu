@@ -1,0 +1,18 @@
+[0;93m2026-10-25 21:23:11.511649340 [W:onnxruntime:Default, device_discovery.cc:95 GetPciBusId] Skipping pci_bus_id for PCI path at "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/5620e0c7-8062-4dce-aeb7-520c7ef76171" because filename "5620e0c7-8062-4dce-aeb7-520c7ef76171" did not match expected pattern of [0-9a-f]+:[0-9a-f]+:[0-9a-f]+[.][0-9a-f]+[m
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+
+********
+Warning: flash-attn is not installed. Will only run the manual PyTorch version. Please install flash-attn for faster inference.
+********
+ 
+bard 11: 18.40 s Audio in 138 s
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+bard 23: 14.32 s Audio in 108 s
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+grandfather 11: 13.20 s Audio in 99 s
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+grandfather 23: 14.08 s Audio in 104 s
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+trailer 11: 11.52 s Audio in 85 s
+Setting `pad_token_id` to `eos_token_id`:2150 for open-end generation.
+trailer 23: 10.56 s Audio in 77 s
