@@ -16,6 +16,7 @@ public final class ModNetwork {
     @SubscribeEvent
     static void register(RegisterPayloadHandlersEvent event) {
         event.registrar(PROTOCOL)
-                .playToServer(DragonBreathPayload.TYPE, DragonBreathPayload.STREAM_CODEC, DragonBreathPayload::handle);
+                .playToServer(DragonBreathPayload.TYPE, DragonBreathPayload.STREAM_CODEC, DragonBreathPayload::handle)
+                .playToClient(StartIntroPayload.TYPE, StartIntroPayload.STREAM_CODEC);
     }
 }

@@ -207,6 +207,19 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Sammle Ritter und Soldaten um dich, errichte deine Burg und verteidige dein Land.");
         text("intro.kingdomsatwar.line8", "The world is ready. The dragons are waiting.", "Die Welt ist bereit. Die Drachen warten.");
         text("intro.kingdomsatwar.line9", "This is your kingdom.", "Dies ist dein Königreich.");
+        text("intro.kingdomsatwar.title", "Kingdoms at War – Intro", "Kingdoms at War – Intro");
+        text("intro.kingdomsatwar.skip", "Space: skip", "Leertaste: überspringen");
+        text("kingdomsatwar.intro.intro_music", "Kingdoms at War – The Dragons Awaken", "Kingdoms at War – Das Erwachen der Drachen");
+
+        // --- Einstellungen ---
+        text("kingdomsatwar.configuration.title", "Kingdoms at War – Settings", "Kingdoms at War – Einstellungen");
+        text("kingdomsatwar.configuration.section.kingdomsatwar.client.toml", "Game settings", "Spiel-Einstellungen");
+        text("kingdomsatwar.configuration.section.kingdomsatwar.client.toml.title", "Kingdoms at War – Game settings",
+                "Kingdoms at War – Spiel-Einstellungen");
+        text("kingdomsatwar.configuration.showIntro", "Show intro in new worlds", "Intro in neuen Welten zeigen");
+        text("kingdomsatwar.configuration.showIntro.tooltip",
+                "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
+                "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
 
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");

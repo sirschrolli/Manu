@@ -1,7 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar;
 
 import com.mojang.logging.LogUtils;
+import io.github.sirschrolli.kingdomsatwar.config.ModClientConfig;
 import io.github.sirschrolli.kingdomsatwar.gametest.ModGameTests;
+import io.github.sirschrolli.kingdomsatwar.registry.ModAttachments;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModCreativeTabs;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
@@ -11,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
@@ -31,6 +34,7 @@ public final class KingdomsAtWar {
 
     public KingdomsAtWar(IEventBus modBus, ModContainer container) {
         ModSounds.SOUNDS.register(modBus);
+        ModAttachments.ATTACHMENTS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
@@ -40,6 +44,7 @@ public final class KingdomsAtWar {
         modBus.addListener(ModGameTests::registerTests);
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(this::commonSetup);
+        container.registerConfig(ModConfig.Type.CLIENT, ModClientConfig.SPEC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

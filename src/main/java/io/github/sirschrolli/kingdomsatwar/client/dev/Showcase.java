@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
+import io.github.sirschrolli.kingdomsatwar.client.intro.IntroController;
+import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScreen;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
@@ -61,6 +63,7 @@ final class Showcase {
                 case "blocks" -> blocks(steps);
                 case "house" -> house(steps);
                 case "samples" -> samples(steps);
+                case "intro" -> intro(steps);
                 case "items" -> items(steps);
                 case "dragons" -> dragons(steps);
                 default -> { }
@@ -207,6 +210,23 @@ final class Showcase {
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("house_back"));
         steps.add(Step.hud(true));
+    }
+
+    /** Das Erzähl-Intro mit Screenshots zu festen Zeitpunkten (am besten zusammen mit "terrain"). */
+    private static void intro(Deque<Step> steps) {
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.once(minecraft -> IntroController.request()));
+        steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen, 200));
+        double[] times = {3.5, 12.0, 24.0, 31.0, 47.0, 62.0, 70.5};
+        for (int i = 0; i < times.length; i++) {
+            double at = times[i];
+            steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at, 2400));
+            steps.add(Step.screenshot("intro_%02d".formatted(i + 1)));
+        }
+        steps.add(Step.until(() -> !(Minecraft.getInstance().gui.screen() instanceof IntroScreen), 400));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("intro_after"));
     }
 
     /** Mauerproben (3x3 Blöcke) aus der Nähe – zum Vergleichen der Texturen. Kamera schaut nach Norden. */
