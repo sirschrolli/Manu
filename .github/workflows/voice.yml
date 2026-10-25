@@ -1,4 +1,4 @@
-name: Voice samples (temporary)
+name: Voice final (temporary)
 on:
   push:
     branches: [ 'ci/voice-req' ]
@@ -7,10 +7,15 @@ permissions:
 jobs:
   voice:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [ A, B, C ]
     env:
       HF_HUB_DISABLE_PROGRESS_BARS: '1'
       PIP_DISABLE_PIP_VERSION_CHECK: '1'
+      VOICE_TAKES: '3'
     defaults:
       run:
         shell: bash
@@ -19,11 +24,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Vorbereiten
+      - name: Werkzeuge und Texte aus dem Projekt holen
         run: |
+          git fetch -q --depth 1 origin phase-1-grundprojekt
+          git checkout FETCH_HEAD -- tools/audio src/main/resources/assets/kingdomsatwar/sounds src/main/resources/assets/kingdomsatwar/intro src/main/resources/assets/kingdomsatwar/sounds.json
           mkdir -p out/logs
-          sudo apt-get update -q > /dev/null && sudo apt-get install -y -q sox libsox-fmt-all ffmpeg > /dev/null
-          df -h / | tee out/logs/disk.txt; free -g | tee -a out/logs/disk.txt; nproc | tee -a out/logs/disk.txt
+          sudo apt-get update -q > /dev/null && sudo apt-get install -y -q sox libsox-fmt-all ffmpeg fluid-soundfont-gm > /dev/null
+          df -h / | tee out/logs/disk.txt; nproc | tee -a out/logs/disk.txt
       - name: Werkzeuge zum Bewerten
         run: |
           set -o pipefail
@@ -34,39 +41,41 @@ jobs:
           set -o pipefail
           python -m venv /tmp/vq
           { /tmp/vq/bin/pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -2
-            /tmp/vq/bin/pip install --no-cache-dir -U qwen-tts soundfile 2>&1 | tail -4
-            /tmp/vq/bin/pip list 2>/dev/null | grep -i -E "^(torch|transformers|qwen)"; } | tee out/logs/02_qwen_install.txt
-      - name: Hörproben der ersten Runde holen
+            /tmp/vq/bin/pip install --no-cache-dir -U qwen-tts soundfile 2>&1 | tail -4; } | tee out/logs/02_qwen_install.txt
+      - name: Alle Zeilen sprechen (Stimme ${{ matrix.variant }} geklont)
         run: |
           set -o pipefail
-          git fetch -q origin ci/voice-out
-          mkdir -p /tmp/prev && git archive FETCH_HEAD | tar -x -C /tmp/prev
-          for f in /tmp/prev/qwen_*.mp3; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -ar 24000 -ac 1 "out/$(basename "${f%.mp3}").wav"; done
-          ls -la out | tee out/logs/00_prev.txt
-      - name: Stimmen gestalten (Qwen3-TTS VoiceDesign)
+          cd voice && /tmp/vq/bin/python qwen_final.py refs/${{ matrix.variant }}.mp3 ../out "$VOICE_TAKES" 2>&1 | grep -v "it/s\]\|pad_token_id\|flash-attn\|^\*\+$\|^ $" | tee ../out/logs/03_takes.txt
+      - name: Beste Takes wählen
         run: |
           set -o pipefail
-          cd voice && /tmp/vq/bin/python qwen_samples.py ../out 2>&1 | grep -v "it/s\]" | tee ../out/logs/03_qwen.txt
-      - name: Bewerten und auswählen
+          /tmp/vw/bin/python voice/pick_takes.py out --no-slow 2>&1 | tee out/logs/04_pick.txt
+      - name: Intro bauen (Nachbearbeitung, Zeitplan, Musik)
         run: |
           set -o pipefail
-          cd voice
-          /tmp/vw/bin/python evaluate.py ../out 'qwen_*.wav' de sample eval_qwen.json 2>&1 | tee ../out/logs/04_eval.txt
-          python pick_best.py ../out eval_qwen.json 3 | tee ../out/logs/05_pick.txt
-      - name: Hörproben fertig machen
+          python -m venv /tmp/va
+          { /tmp/va/bin/pip install --no-cache-dir mido numpy scipy soundfile pyloudnorm librosa matplotlib 2>&1 | tail -2
+            /tmp/va/bin/pip install --no-cache-dir --no-deps tinysoundfont 2>&1 | tail -1; } | tee out/logs/05_audio_install.txt
+          mkdir -p /tmp/models && ln -sf /usr/share/sounds/sf2/FluidR3_GM.sf2 /tmp/models/FluidR3_GM.sf2
+          /tmp/va/bin/python tools/audio/build_audio.py --models /tmp/models --only narration,music \
+              --narration-source out/lines --narration-style natural --work out/audio-work 2>&1 | tee out/logs/06_build_audio.txt
+      - name: Vorschau mischen
+        continue-on-error: true
         run: |
-          set -o pipefail
-          cp voice/intro_music.ogg out/
-          bash voice/finish_samples.sh out $(cat out/chosen.txt | sed 's/$/ /' | tr -d '\n') 2>&1 | tee out/logs/06_finish.txt
-          rm -f out/intro_music.ogg
+          python voice/preview_mix.py src/main/resources/assets/kingdomsatwar de_de out/Intro_Vorschau_DE.wav
+          python voice/preview_mix.py src/main/resources/assets/kingdomsatwar en_us out/Intro_Preview_EN.wav
       - name: Zurückgeben
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p out && cd out
-          for f in *.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 192k "${f%.wav}.mp3" && rm "$f"; done
-          ls -la
-          git init -q && git checkout -q -b ci/voice-out && git add .
-          git -c user.name=ci -c user.email=ci@localhost commit -q -m "voice samples ${{ github.run_id }}"
-          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/voice-out
+          mkdir -p out/final
+          cp -r src/main/resources/assets/kingdomsatwar/sounds/intro out/final/ 2>/dev/null || true
+          cp src/main/resources/assets/kingdomsatwar/intro/intro.json src/main/resources/assets/kingdomsatwar/sounds.json out/final/ 2>/dev/null || true
+          cd out
+          rm -rf takes audio-work/stems 2>/dev/null || true
+          for f in Intro_*.wav lines/*.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 192k "${f%.wav}.mp3" && rm "$f"; done
+          du -sh . ; ls -la
+          git init -q && git checkout -q -b ci/voice-out-${{ matrix.variant }} && git add .
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "voice final ${{ matrix.variant }} ${{ github.run_id }}"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/voice-out-${{ matrix.variant }}
