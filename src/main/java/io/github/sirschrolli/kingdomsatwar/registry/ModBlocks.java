@@ -157,7 +157,7 @@ public final class ModBlocks {
             DRAGON_EGGS_MUTABLE.put(type, blockWithItem(name,
                     p -> new ElementalDragonEggBlock(type, p),
                     p -> p.mapColor(type.mapColor()).strength(3.0f, 9.0f).lightLevel(state -> 1)
-                            .noOcclusion().sound(SoundType.STONE).pushReaction(PushReaction.BLOCK),
+                            .noOcclusion().sound(SoundType.STONE).pushReaction(PushReaction.IMMOVEABLE),
                     ip -> ip.rarity(Rarity.EPIC).stacksTo(16)
                             .component(DataComponents.LORE, ModItems.lore(name, 3)),
                     DRAGON_TAB));
@@ -283,19 +283,19 @@ public final class ModBlocks {
     private static DeferredBlock<ModCropBlock> crop(String name, Supplier<? extends ItemLike> seed) {
         return BLOCKS.registerBlock(name, p -> new ModCropBlock(seed, p),
                 p -> p.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak()
-                        .sound(SoundType.CROP).pushReaction(PushReaction.DESTROY));
+                        .sound(SoundType.CROP).pushReaction(PushReaction.POPPED));
     }
 
     private static DeferredBlock<FlowerBlock> flower(String name, Holder<MobEffect> stewEffect, float seconds) {
         return blockWithItem(name, p -> new FlowerBlock(stewEffect, seconds, p),
                 p -> p.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS)
-                        .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY),
+                        .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED),
                 ip -> ip.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM), FARMING_TAB);
     }
 
     private static DeferredBlock<FlowerPotBlock> pottedFlower(String name, DeferredBlock<FlowerBlock> flower) {
         return BLOCKS.registerBlock(name,
                 p -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, p),
-                p -> p.instabreak().noOcclusion().pushReaction(PushReaction.DESTROY));
+                p -> p.instabreak().noOcclusion().pushReaction(PushReaction.POPPED));
     }
 }

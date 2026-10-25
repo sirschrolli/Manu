@@ -67,13 +67,13 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(ModTags.Blocks.ORES_DRACONIUM, ModBlocks.DRACONIUM_ORE, ModBlocks.DEEPSLATE_DRACONIUM_ORE);
         add(ModTags.Blocks.ORES_WYVERNIT, ModBlocks.WYVERNIT_ORE);
         for (TagKey<Block> oreTag : ORE_TAGS) {
-            tag(Tags.Blocks.ORES).addTag(oreTag);
+            tag(Tags.BlockItems.ORES.block()).addTag(oreTag);
             tag(BlockItemTags.ORES.block()).addTag(oreTag);
-            tag(Tags.Blocks.ORE_RATES_SINGULAR).addTag(oreTag);
+            tag(Tags.BlockItems.ORE_RATES_SINGULAR.block()).addTag(oreTag);
         }
-        add(Tags.Blocks.ORES_IN_GROUND_STONE, ModBlocks.CARBON_ORE, ModBlocks.GEMSTONE_ORE, ModBlocks.KONTERIT_ORE,
+        add(Tags.BlockItems.ORES_IN_GROUND_STONE.block(), ModBlocks.CARBON_ORE, ModBlocks.GEMSTONE_ORE, ModBlocks.KONTERIT_ORE,
                 ModBlocks.AETHERIT_ORE, ModBlocks.DRACONIUM_ORE, ModBlocks.WYVERNIT_ORE);
-        add(Tags.Blocks.ORES_IN_GROUND_DEEPSLATE, ModBlocks.DEEPSLATE_CARBON_ORE, ModBlocks.DEEPSLATE_GEMSTONE_ORE,
+        add(Tags.BlockItems.ORES_IN_GROUND_DEEPSLATE.block(), ModBlocks.DEEPSLATE_CARBON_ORE, ModBlocks.DEEPSLATE_GEMSTONE_ORE,
                 ModBlocks.DEEPSLATE_KONTERIT_ORE, ModBlocks.DEEPSLATE_AETHERIT_ORE, ModBlocks.DEEPSLATE_DRACONIUM_ORE);
 
         // --- Speicherblöcke ---
@@ -92,7 +92,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(ModTags.Blocks.STORAGE_BLOCKS_DRACONIUM, ModBlocks.DRACONIUM_BLOCK);
         add(ModTags.Blocks.STORAGE_BLOCKS_WYVERNIT, ModBlocks.WYVERNIT_BLOCK);
         add(ModTags.Blocks.STORAGE_BLOCKS_STEEL, ModBlocks.STEEL_BLOCK);
-        tag(Tags.Blocks.STORAGE_BLOCKS).addTag(ModTags.Blocks.STORAGE_BLOCKS_CARBON)
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_CARBON)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_GEMSTONE).addTag(ModTags.Blocks.STORAGE_BLOCKS_KONTERIT)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_AETHERIT).addTag(ModTags.Blocks.STORAGE_BLOCKS_DRACONIUM)
                 .addTag(ModTags.Blocks.STORAGE_BLOCKS_WYVERNIT).addTag(ModTags.Blocks.STORAGE_BLOCKS_STEEL);
