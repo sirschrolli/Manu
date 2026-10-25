@@ -37,6 +37,7 @@ public final class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(ModModelProvider::new);
+        event.createProvider(ModEquipmentAssetProvider::new);
         event.createBlockAndItemTags(ModBlockTagsProvider::new, ModItemTagsProvider::new);
         event.createProvider(output -> new ModLanguageProvider(output, "en_us"));
         event.createProvider(output -> new ModLanguageProvider(output, "de_de"));

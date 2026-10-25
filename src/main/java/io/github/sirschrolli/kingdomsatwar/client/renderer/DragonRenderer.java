@@ -44,6 +44,7 @@ public class DragonRenderer extends MobRenderer<DragonEntity, DragonRenderState,
                 return GLOW.get(this.current);
             }
         });
+        this.addLayer(new DragonArmorLayer(this, context.getModelSet()));
     }
 
     @Override
@@ -68,6 +69,7 @@ public class DragonRenderer extends MobRenderer<DragonEntity, DragonRenderState,
         state.ridden = entity.isVehicle();
         state.flapPhase = Mth.lerp(partialTicks, entity.flapPhaseO, entity.flapPhase);
         state.flightPitch = entity.isFlying() ? -entity.getXRot() : 0.0f;
+        state.armor = entity.getBodyArmorItem();
         state.roarAnimation.copyFrom(entity.roarAnimation);
         state.biteAnimation.copyFrom(entity.biteAnimation);
     }

@@ -26,6 +26,7 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import block_textures  # noqa: E402
+import equipment_textures  # noqa: E402
 import kingdom_textures  # noqa: E402
 import pixelart as pa  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
@@ -769,7 +770,7 @@ def preview(path: Path) -> None:
     """Übersicht aller Texturen, 6-fach vergrößert auf Schachbrett-Hintergrund."""
     zoom, pad, cols = 6, 4, 12
     cell = 16 * zoom + pad
-    entries = list(GENERATED.items())
+    entries = [(k, v) for k, v in GENERATED.items() if v.size == (16, 16)]
     rows = math.ceil(len(entries) / cols)
     sheet = Image.new("RGBA", (cols * cell + pad, rows * cell + pad), (52, 56, 60, 255))
     for i, (_, img) in enumerate(entries):
@@ -785,6 +786,8 @@ def build_all() -> dict[str, Image.Image]:
     GENERATED.clear()
     block_textures.build(put)
     kingdom_textures.build(put)
+    equipment_textures.build(put)
+    equipment_textures.build_entity(put)
     dragon_spawn_eggs()
     plants()
     items()

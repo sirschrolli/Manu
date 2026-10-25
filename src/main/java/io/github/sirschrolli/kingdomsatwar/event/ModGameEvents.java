@@ -7,6 +7,7 @@ import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
+import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.network.StartIntroPayload;
 import io.github.sirschrolli.kingdomsatwar.registry.ModAttachments;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
@@ -18,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -26,6 +28,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /** Spielereignisse auf dem Server. */
@@ -96,6 +99,19 @@ public final class ModGameEvents {
         if (event.getSource().getEntity() instanceof SoldierEntity soldier && soldier != event.getEntity()
                 && soldier.isAlliedTo(event.getEntity())) {
             event.setCanceled(true);
+        }
+    }
+
+    /** Voller Satz Drachenschuppen-Rüstung: jede Sekunde die Kraft des Elements erneuern. */
+    @SubscribeEvent
+    static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide() || player.tickCount % 20 != 0 || !player.isAlive()) {
+            return;
+        }
+        DragonType element = DragonScaleArmorItem.fullSet(player);
+        if (element != null) {
+            DragonScaleArmorItem.applySetBonus(player, element);
         }
     }
 

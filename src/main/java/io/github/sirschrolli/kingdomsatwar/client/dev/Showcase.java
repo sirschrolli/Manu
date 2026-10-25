@@ -12,8 +12,9 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
-import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModCreativeTabs;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,8 +24,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Rotations;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
@@ -72,6 +80,7 @@ final class Showcase {
                 case "dragons" -> dragons(steps);
                 case "soldiers" -> soldiers(steps);
                 case "eggs" -> eggs(steps);
+                case "equipment" -> equipment(steps);
                 default -> { }
             }
         }
@@ -382,6 +391,79 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
+    /** Rüstungen auf Rüstungsständern (vorne und hinten), Drachen mit Panzer und Waffen in der Hand. */
+    private static void equipment(Deque<Step> steps) {
+        int oz = 140;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-6, ground - 1, oz - 30), new BlockPos(40, ground - 1, oz + 12), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 30), new BlockPos(40, ground + 8, oz + 12), Blocks.AIR.defaultBlockState());
+            List<List<Item>> sets = new ArrayList<>();
+            sets.add(List.of(ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
+                    ModItems.STEEL_BOOTS.get(), ModItems.STEEL_SWORD.get()));
+            sets.add(List.of(ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(), ModItems.KONTERIT_LEGGINGS.get(),
+                    ModItems.KONTERIT_BOOTS.get(), ModItems.STEEL_PICKAXE.get()));
+            for (DragonType type : DragonType.values()) {
+                var set = ModItems.DRAGON_SCALE_ARMOR.get(type);
+                sets.add(List.of(set.get(0).get(), set.get(1).get(), set.get(2).get(), set.get(3).get(),
+                        type == DragonType.FIRE ? ModItems.DRACONIUM_SWORD.get() : type == DragonType.EARTH
+                                ? ModItems.DRACONIUM_AXE.get() : Items.AIR));
+            }
+            sets.add(List.of(ModItems.GEMSTONE_CROWN.get(), ModItems.WYVERNIT_GLIDER.get(), Items.AIR, Items.AIR, ModItems.STEEL_AXE.get()));
+            EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.MAINHAND};
+            for (int i = 0; i < sets.size(); i++) {
+                ArmorStand stand = EntityTypes.ARMOR_STAND.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (stand == null) {
+                    continue;
+                }
+                stand.setShowArms(true);
+                stand.setNoBasePlate(true);
+                stand.setRightArmPose(new Rotations(-20, 0, 10));
+                for (int j = 0; j < slots.length; j++) {
+                    stand.setItemSlot(slots[j], new ItemStack(sets.get(i).get(j)));
+                }
+                stand.snapTo(i * 2 + 0.5, ground, oz + 0.5, 0, 0);
+                stand.setYBodyRot(0);
+                level.addFreshEntity(stand);
+            }
+            // Drachen mit Panzer (Stahl und Draconium)
+            spawnDragon(level, DragonType.EARTH, DragonStage.ADULT, new BlockPos(4, ground, oz - 14), -90, d -> {
+                d.setTame(true, false);
+                d.setItemSlot(EquipmentSlot.BODY, new ItemStack(ModItems.STEEL_DRAGON_ARMOR.get()));
+            });
+            spawnDragon(level, DragonType.FIRE, DragonStage.ADULT, new BlockPos(16, ground, oz - 14), -90, d -> {
+                d.setTame(true, false);
+                d.setItemSlot(EquipmentSlot.BODY, new ItemStack(ModItems.DRACONIUM_DRAGON_ARMOR.get()));
+            });
+            spawnDragon(level, DragonType.ICE, DragonStage.ELDER, new BlockPos(28, ground + 3, oz - 14), -90, d -> {
+                d.setTame(true, false);
+                d.setFlying(true);
+                d.setItemSlot(EquipmentSlot.BODY, new ItemStack(ModItems.STEEL_DRAGON_ARMOR.get()));
+            });
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(8.5, 1.4, oz + 5.5, 180, 8));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("equipment_front"));
+        steps.add(tp(4.0, 1.5, oz + 3.2, 180, 10));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("equipment_front_close"));
+        steps.add(tp(13.0, 1.5, oz + 3.2, 180, 10));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("equipment_front_close_2"));
+        steps.add(tp(8.5, 1.6, oz - 4.5, 0, 8));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("equipment_back"));
+        steps.add(tp(16.5, 6, oz - 1, 180, 18));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("equipment_dragons"));
+        steps.add(tp(10.5, 3.5, oz - 6.5, 160, 15));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("equipment_dragon_close"));
+        steps.add(Step.hud(true));
+    }
+
     /** Die sechs Dracheneier neben dem echten Drachenei, aus Spielersicht. */
     private static void eggs(Deque<Step> steps) {
         int oz = 100;
@@ -584,8 +666,9 @@ final class Showcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.waitTicks(10));
         List<CreativeModeTab> tabs = List.of(ModCreativeTabs.BUILDING.get(), ModCreativeTabs.RESOURCES.get(),
-                ModCreativeTabs.DRAGONS.get(), ModCreativeTabs.FARMING.get(), ModCreativeTabs.KINGDOM.get());
-        String[] names = {"tab_building", "tab_resources", "tab_dragons", "tab_farming", "tab_kingdom"};
+                ModCreativeTabs.DRAGONS.get(), ModCreativeTabs.FARMING.get(), ModCreativeTabs.KINGDOM.get(),
+                ModCreativeTabs.EQUIPMENT.get());
+        String[] names = {"tab_building", "tab_resources", "tab_dragons", "tab_farming", "tab_kingdom", "tab_equipment"};
         for (int i = 0; i < tabs.size(); i++) {
             CreativeModeTab tab = tabs.get(i);
             steps.add(Step.screen(minecraft -> new CreativeModeInventoryScreen(minecraft.player,

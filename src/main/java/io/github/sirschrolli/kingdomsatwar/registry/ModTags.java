@@ -48,6 +48,20 @@ public final class ModTags {
     }
 
     public static final class Items {
+        public static final TagKey<Item> STEEL_TOOL_MATERIALS = mod("steel_tool_materials");
+        public static final TagKey<Item> DRACONIUM_TOOL_MATERIALS = mod("draconium_tool_materials");
+        public static final TagKey<Item> REPAIRS_STEEL_ARMOR = mod("repairs_steel_armor");
+        public static final TagKey<Item> REPAIRS_KONTERIT_ARMOR = mod("repairs_konterit_armor");
+        public static final TagKey<Item> REPAIRS_CROWN = mod("repairs_gemstone_crown");
+        public static final TagKey<Item> REPAIRS_GLIDER = mod("repairs_wyvernit_glider");
+        public static final TagKey<Item> REPAIRS_DRACONIUM = mod("repairs_draconium");
+        /** Alle Rüstungsteile aus Drachenschuppen. */
+        public static final TagKey<Item> DRAGON_SCALE_ARMOR = mod("dragon_scale_armor");
+
+        public static TagKey<Item> scaleArmorRepair(io.github.sirschrolli.kingdomsatwar.dragon.DragonType type) {
+            return mod("repairs_" + type.id() + "_dragon_scale_armor");
+        }
+
         public static final TagKey<Item> DRAGON_EGGS = mod("dragon_eggs");
         public static final TagKey<Item> DRAGON_SCALES = mod("dragon_scales");
         public static final TagKey<Item> ORES_CARBON = common("ores/carbon");

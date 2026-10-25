@@ -8,6 +8,7 @@ import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
@@ -27,6 +29,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
@@ -551,6 +554,32 @@ public class DragonEntity extends TamableAnimal {
             return InteractionResult.SUCCESS;
         }
 
+        // Drachenpanzer anlegen (nur ausgewachsene, gezähmte Drachen) oder mit dem Werkstoff ausbessern
+        if (owner && stack.has(DataComponents.EQUIPPABLE) && stack.get(DataComponents.EQUIPPABLE).slot() == EquipmentSlot.BODY) {
+            if (!this.isEquippableInSlot(stack, EquipmentSlot.BODY)) {
+                if (!this.level().isClientSide()) {
+                    player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.dragon_armor_too_young", this.getDisplayName()));
+                }
+                return InteractionResult.FAIL;
+            }
+            if (!this.isWearingBodyArmor()) {
+                if (!this.level().isClientSide()) {
+                    this.setItemSlotAndDropWhenKilled(EquipmentSlot.BODY, stack.copyWithCount(1));
+                    stack.consume(1, player);
+                }
+                return InteractionResult.SUCCESS;
+            }
+        }
+        ItemStack armor = this.getBodyArmorItem();
+        if (owner && armor.isDamaged() && armor.isValidRepairItem(stack)) {
+            if (!this.level().isClientSide()) {
+                armor.setDamageValue(Math.max(0, armor.getDamageValue() - armor.getMaxDamage() / 4));
+                stack.consume(1, player);
+                this.playSound(SoundEvents.ANVIL_USE, 0.6f, 1.2f);
+            }
+            return InteractionResult.SUCCESS;
+        }
+
         if (owner && stack.isEmpty()) {
             if (player.isSecondaryUseActive()) {
                 if (!this.level().isClientSide()) {
@@ -574,6 +603,27 @@ public class DragonEntity extends TamableAnimal {
             }
         }
         return super.mobInteract(player, hand);
+    }
+
+    // =====================================================================================
+    // Drachenpanzer (Körper-Platz)
+    // =====================================================================================
+
+    @Override
+    public boolean canUseSlot(EquipmentSlot slot) {
+        return slot == EquipmentSlot.BODY ? this.isTame() && this.getStage().rideable() : super.canUseSlot(slot);
+    }
+
+    /** Nur der Besitzer kann den Panzer mit einer Schere abnehmen. */
+    @Override
+    protected boolean canShearEquipment(Player player) {
+        return this.isOwnedBy(player) && !this.isVehicle();
+    }
+
+    /** Treffer nutzen den Panzer ab. */
+    @Override
+    protected void hurtArmor(DamageSource source, float damage) {
+        this.doHurtEquipment(source, damage, EquipmentSlot.BODY);
     }
 
     @Override

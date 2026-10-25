@@ -8,6 +8,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
+import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -28,7 +29,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -108,6 +113,17 @@ public final class ModGameTests {
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BANDIT_LOOT =
             TEST_FUNCTIONS.register("bandit_loot", () -> ModGameTests::banditLoot);
 
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> KONTERIT_ARMOR =
+            TEST_FUNCTIONS.register("konterit_armor", () -> ModGameTests::konteritArmor);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SCALE_ARMOR_SET =
+            TEST_FUNCTIONS.register("scale_armor_set", () -> ModGameTests::scaleArmorSet);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRACONIUM_IGNITES =
+            TEST_FUNCTIONS.register("draconium_ignites", () -> ModGameTests::draconiumIgnites);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_ARMOR =
+            TEST_FUNCTIONS.register("dragon_armor", () -> ModGameTests::dragonArmor);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GLIDER_AND_CROWN =
+            TEST_FUNCTIONS.register("glider_and_crown", () -> ModGameTests::gliderAndCrown);
+
     private ModGameTests() {}
 
     /** Wird nur auf dem Test-Server bzw. in der Entwicklungsumgebung ausgelöst. */
@@ -121,7 +137,8 @@ public final class ModGameTests {
         }
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
                 List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
-                        SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT)) {
+                        SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
+                        SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -187,7 +204,9 @@ public final class ModGameTests {
         for (String name : List.of("steel_blend", "steel_ingot_from_blasting", "dragon_egg_fragment", "fire_dragon_egg",
                 "medieval_stone_stairs", "red_roof_tile_stairs", "konterit_block", "vegetable_stew",
                 "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore", "recruitment_table",
-                "command_baton")) {
+                "command_baton", "steel_sword", "steel_pickaxe", "steel_chestplate", "konterit_boots", "draconium_sword",
+                "draconium_axe", "fire_dragon_scale_helmet", "water_dragon_scale_boots", "wyvernit_glider", "gemstone_crown",
+                "steel_dragon_armor", "draconium_dragon_armor")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
@@ -472,6 +491,92 @@ public final class ModGameTests {
             ResourceKey<LootTable> key = type.getDefaultLootTable().orElseThrow();
             helper.assertTrue(registries.getLootTable(key) != LootTable.EMPTY, "Beute fehlt: " + key.identifier());
         }
+        helper.succeed();
+    }
+
+    /** Konterit-Rüstung macht schneller und federt Stürze ab (je Teil). */
+    private static void konteritArmor(GameTestHelper helper) {
+        arenaFloor(helper);
+        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 4));
+        double speed = zombie.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        double safeFall = zombie.getAttributeValue(Attributes.SAFE_FALL_DISTANCE);
+        zombie.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.KONTERIT_HELMET.get()));
+        zombie.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ModItems.KONTERIT_CHESTPLATE.get()));
+        zombie.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ModItems.KONTERIT_LEGGINGS.get()));
+        zombie.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.KONTERIT_BOOTS.get()));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(zombie.getAttributeValue(Attributes.MOVEMENT_SPEED) > speed * 1.15,
+                    "Konterit macht nicht schneller: " + zombie.getAttributeValue(Attributes.MOVEMENT_SPEED));
+            helper.assertTrue(zombie.getAttributeValue(Attributes.SAFE_FALL_DISTANCE) >= safeFall + 4.0,
+                    "Konterit federt Stürze nicht ab");
+            helper.assertTrue(zombie.getArmorValue() >= 15, "Konterit-Rüstung schützt zu wenig: " + zombie.getArmorValue());
+        });
+    }
+
+    /** Der volle Satz Drachenschuppen schenkt die Kraft des Elements, ein unvollständiger nicht. */
+    private static void scaleArmorSet(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        var fire = ModItems.DRAGON_SCALE_ARMOR.get(DragonType.FIRE);
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+        for (int i = 0; i < 3; i++) {
+            player.setItemSlot(slots[i], new ItemStack(fire.get(i).get()));
+        }
+        player.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.DRAGON_SCALE_ARMOR.get(DragonType.ICE).get(3).get()));
+        helper.assertTrue(DragonScaleArmorItem.fullSet(player) == null, "Gemischter Satz zählt als voller Satz");
+        player.setItemSlot(EquipmentSlot.FEET, new ItemStack(fire.get(3).get()));
+        helper.assertTrue(DragonScaleArmorItem.fullSet(player) == DragonType.FIRE, "Voller Feuer-Satz nicht erkannt");
+        DragonScaleArmorItem.applySetBonus(player, DragonType.FIRE);
+        helper.assertTrue(player.hasEffect(MobEffects.FIRE_RESISTANCE), "Kein Feuerschutz durch den Feuer-Satz");
+        // Eis-Schuppen schützen schon einzeln vor Pulverschnee-Frost
+        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 4));
+        zombie.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.DRAGON_SCALE_ARMOR.get(DragonType.ICE).get(3).get()));
+        helper.assertFalse(zombie.canFreeze(), "Eis-Schuppen schützen nicht vor Frost");
+        helper.succeed();
+    }
+
+    /** Draconium-Waffen setzen das Ziel in Brand. */
+    private static void draconiumIgnites(GameTestHelper helper) {
+        arenaFloor(helper);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        var pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(4, 1, 4));
+        player.snapTo(pig.getX() - 1.5, pig.getY(), pig.getZ(), -90.0f, 0.0f);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.DRACONIUM_SWORD.get()));
+        player.attack(pig);
+        helper.assertTrue(pig.getRemainingFireTicks() > 0, "Das Draconiumschwert entzündet nicht");
+        helper.succeed();
+    }
+
+    /** Ausgewachsene, gezähmte Drachen tragen einen Panzer; Schlüpflinge nicht. */
+    private static void dragonArmor(GameTestHelper helper) {
+        arenaFloor(helper);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        DragonEntity young = helper.spawnWithNoFreeWill(ModEntities.DRAGONS.get(DragonType.EARTH).get(), new BlockPos(2, 1, 2));
+        young.tame(player);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.STEEL_DRAGON_ARMOR.get()));
+        young.mobInteract(player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(young.getBodyArmorItem().isEmpty(), "Ein Schlüpfling darf keinen Panzer tragen");
+
+        DragonEntity adult = helper.spawnWithNoFreeWill(ModEntities.DRAGONS.get(DragonType.EARTH).get(), new BlockPos(5, 1, 5));
+        adult.applyStage(DragonStage.ADULT, false);
+        adult.tame(player);
+        int armorBefore = adult.getArmorValue();
+        adult.mobInteract(player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(adult.getBodyArmorItem().is(ModItems.STEEL_DRAGON_ARMOR.get()), "Drache trägt den Panzer nicht");
+        helper.assertTrue(player.getMainHandItem().isEmpty(), "Der Panzer wurde nicht aus der Hand genommen");
+        helper.succeedWhen(() -> helper.assertTrue(adult.getArmorValue() >= armorBefore + 10,
+                "Der Panzer schützt nicht: " + armorBefore + " -> " + adult.getArmorValue()));
+    }
+
+    /** Der Wyvernit-Gleiter trägt wie Elytren, die Krone bringt Glück. */
+    private static void gliderAndCrown(GameTestHelper helper) {
+        ItemStack glider = new ItemStack(ModItems.WYVERNIT_GLIDER.get());
+        helper.assertTrue(LivingEntity.canGlideUsing(glider, EquipmentSlot.CHEST), "Mit dem Gleiter kann man nicht gleiten");
+        helper.assertFalse(LivingEntity.canGlideUsing(glider, EquipmentSlot.LEGS), "Gleiter funktioniert im falschen Platz");
+        ItemStack crown = new ItemStack(ModItems.GEMSTONE_CROWN.get());
+        helper.assertTrue(crown.getAttributeModifiers().compute(Attributes.LUCK, 0.0, EquipmentSlot.HEAD) >= 2.0,
+                "Die Krone bringt kein Glück");
+        helper.assertTrue(crown.getAttributeModifiers().compute(Attributes.ARMOR, 0.0, EquipmentSlot.HEAD) >= 2.0,
+                "Die Krone schützt nicht");
         helper.succeed();
     }
 

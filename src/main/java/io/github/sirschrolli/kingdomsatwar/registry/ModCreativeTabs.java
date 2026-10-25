@@ -70,6 +70,14 @@ public final class ModCreativeTabs {
                     })
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EQUIPMENT = TABS.register("equipment",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.equipment"))
+                    .icon(() -> ModItems.DRACONIUM_SWORD.toStack())
+                    .withTabsBefore(KINGDOM.key())
+                    .displayItems((parameters, output) -> accept(output, ModItems.EQUIPMENT_TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

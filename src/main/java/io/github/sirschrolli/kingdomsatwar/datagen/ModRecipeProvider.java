@@ -16,6 +16,7 @@ import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -41,6 +42,114 @@ public class ModRecipeProvider extends RecipeProvider {
         dragonRecipes();
         foodRecipes();
         armyRecipes();
+        equipmentRecipes();
+    }
+
+    // =====================================================================================
+    // Werkzeuge, Waffen und Rüstungen
+    // =====================================================================================
+
+    private void equipmentRecipes() {
+        // Stahl: Werkzeuge und Rüstung wie aus Eisen, nur aus Stahlbarren
+        Item steel = ModItems.STEEL_INGOT.get();
+        tools(steel, ModItems.STEEL_SWORD.get(), ModItems.STEEL_PICKAXE.get(), ModItems.STEEL_AXE.get(),
+                ModItems.STEEL_SHOVEL.get(), ModItems.STEEL_HOE.get());
+        armorSet(steel, ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
+                ModItems.STEEL_BOOTS.get());
+        // Konterit: leichte Rüstung
+        armorSet(ModItems.KONTERIT.get(), ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(),
+                ModItems.KONTERIT_LEGGINGS.get(), ModItems.KONTERIT_BOOTS.get());
+        // Drachenschuppen: je Art ein Satz
+        ModItems.DRAGON_SCALE_ARMOR.forEach((type, set) -> armorSet(ModItems.DRAGON_SCALES.get(type).get(),
+                set.get(0).get(), set.get(1).get(), set.get(2).get(), set.get(3).get()));
+
+        // Draconium-Waffen mit Lohenruten als Griff
+        Item draconium = ModItems.DRACONIUM.get();
+        shaped(RecipeCategory.COMBAT, ModItems.DRACONIUM_SWORD.get())
+                .pattern("D")
+                .pattern("D")
+                .pattern("B")
+                .define('D', draconium)
+                .define('B', Items.BLAZE_ROD)
+                .unlockedBy(getHasName(draconium), has(draconium))
+                .save(output, key("draconium_sword"));
+        shaped(RecipeCategory.COMBAT, ModItems.DRACONIUM_AXE.get())
+                .pattern("DD")
+                .pattern("DB")
+                .pattern(" B")
+                .define('D', draconium)
+                .define('B', Items.BLAZE_ROD)
+                .unlockedBy(getHasName(draconium), has(draconium))
+                .save(output, key("draconium_axe"));
+
+        // Wyvernit-Gleiter: Stahlrahmen, Wyvernit-Streben, Phantomhaut als Bespannung
+        shaped(RecipeCategory.TRANSPORTATION, ModItems.WYVERNIT_GLIDER.get())
+                .pattern("WSW")
+                .pattern("M M")
+                .pattern("M M")
+                .define('W', ModItems.WYVERNIT.get())
+                .define('S', steel)
+                .define('M', Items.PHANTOM_MEMBRANE)
+                .unlockedBy(getHasName(ModItems.WYVERNIT.get()), has(ModItems.WYVERNIT.get()))
+                .save(output, key("wyvernit_glider"));
+
+        // Königskrone: Gold mit Edelsteinen
+        shaped(RecipeCategory.COMBAT, ModItems.GEMSTONE_CROWN.get())
+                .pattern("EGE")
+                .pattern("GGG")
+                .define('E', ModItems.GEMSTONE.get())
+                .define('G', Items.GOLD_INGOT)
+                .unlockedBy(getHasName(ModItems.GEMSTONE.get()), has(ModItems.GEMSTONE.get()))
+                .save(output, key("gemstone_crown"));
+
+        // Drachenpanzer: Stahl (mit Stahlblock), Draconium als Aufwertung des Stahlpanzers
+        shaped(RecipeCategory.COMBAT, ModItems.STEEL_DRAGON_ARMOR.get())
+                .pattern("S S")
+                .pattern("SBS")
+                .pattern("SSS")
+                .define('S', steel)
+                .define('B', ModBlocks.STEEL_BLOCK.get())
+                .unlockedBy(getHasName(steel), has(steel))
+                .save(output, key("steel_dragon_armor"));
+        shaped(RecipeCategory.COMBAT, ModItems.DRACONIUM_DRAGON_ARMOR.get())
+                .pattern("D D")
+                .pattern("DAD")
+                .pattern("DDD")
+                .define('D', draconium)
+                .define('A', ModItems.STEEL_DRAGON_ARMOR.get())
+                .unlockedBy(getHasName(ModItems.STEEL_DRAGON_ARMOR.get()), has(ModItems.STEEL_DRAGON_ARMOR.get()))
+                .save(output, key("draconium_dragon_armor"));
+    }
+
+    private void tools(Item material, Item sword, Item pickaxe, Item axe, Item shovel, Item hoe) {
+        String has = getHasName(material);
+        shaped(RecipeCategory.COMBAT, sword).pattern("M").pattern("M").pattern("S")
+                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+                .save(output, key(getItemName(sword)));
+        shaped(RecipeCategory.TOOLS, pickaxe).pattern("MMM").pattern(" S ").pattern(" S ")
+                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+                .save(output, key(getItemName(pickaxe)));
+        shaped(RecipeCategory.TOOLS, axe).pattern("MM").pattern("MS").pattern(" S")
+                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+                .save(output, key(getItemName(axe)));
+        shaped(RecipeCategory.TOOLS, shovel).pattern("M").pattern("S").pattern("S")
+                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+                .save(output, key(getItemName(shovel)));
+        shaped(RecipeCategory.TOOLS, hoe).pattern("MM").pattern(" S").pattern(" S")
+                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+                .save(output, key(getItemName(hoe)));
+    }
+
+    private void armorSet(Item material, Item helmet, Item chestplate, Item leggings, Item boots) {
+        String has = getHasName(material);
+        shaped(RecipeCategory.COMBAT, helmet).pattern("MMM").pattern("M M")
+                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(helmet)));
+        shaped(RecipeCategory.COMBAT, chestplate).pattern("M M").pattern("MMM").pattern("MMM")
+                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(chestplate)));
+        shaped(RecipeCategory.COMBAT, leggings).pattern("MMM").pattern("M M").pattern("M M")
+                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(leggings)));
+        shaped(RecipeCategory.COMBAT, boots).pattern("M M").pattern("M M")
+                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(boots)));
     }
 
     // =====================================================================================

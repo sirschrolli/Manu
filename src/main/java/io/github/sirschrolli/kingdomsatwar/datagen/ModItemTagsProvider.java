@@ -3,6 +3,8 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import net.minecraft.core.HolderLookup;
@@ -71,6 +73,46 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
 
         // --- Drachen ---
         ModItems.DRAGON_SCALES.values().forEach(scale -> add(ModTags.Items.DRAGON_SCALES, scale));
+
+        // --- Werkzeuge, Waffen und Rüstungen ---
+        add(ModTags.Items.STEEL_TOOL_MATERIALS, ModItems.STEEL_INGOT);
+        add(ModTags.Items.REPAIRS_STEEL_ARMOR, ModItems.STEEL_INGOT);
+        add(ModTags.Items.DRACONIUM_TOOL_MATERIALS, ModItems.DRACONIUM);
+        add(ModTags.Items.REPAIRS_DRACONIUM, ModItems.DRACONIUM);
+        add(ModTags.Items.REPAIRS_KONTERIT_ARMOR, ModItems.KONTERIT);
+        add(ModTags.Items.REPAIRS_GLIDER, ModItems.WYVERNIT);
+        add(ModTags.Items.REPAIRS_CROWN, ModItems.GEMSTONE);
+        tag(ModTags.Items.REPAIRS_CROWN).addTag(Tags.Items.INGOTS_GOLD);
+        ModItems.DRAGON_SCALES.forEach((type, scale) -> add(ModTags.Items.scaleArmorRepair(type), scale));
+
+        add(ItemTags.SWORDS, ModItems.STEEL_SWORD, ModItems.DRACONIUM_SWORD);
+        add(ItemTags.PICKAXES, ModItems.STEEL_PICKAXE);
+        add(ItemTags.AXES, ModItems.STEEL_AXE, ModItems.DRACONIUM_AXE);
+        add(ItemTags.SHOVELS, ModItems.STEEL_SHOVEL);
+        add(ItemTags.HOES, ModItems.STEEL_HOE);
+        add(ItemTags.HEAD_ARMOR, ModItems.STEEL_HELMET, ModItems.KONTERIT_HELMET, ModItems.GEMSTONE_CROWN);
+        add(ItemTags.CHEST_ARMOR, ModItems.STEEL_CHESTPLATE, ModItems.KONTERIT_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, ModItems.STEEL_LEGGINGS, ModItems.KONTERIT_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, ModItems.STEEL_BOOTS, ModItems.KONTERIT_BOOTS);
+        add(ItemTags.TRIMMABLE_ARMOR, ModItems.STEEL_HELMET, ModItems.STEEL_CHESTPLATE, ModItems.STEEL_LEGGINGS,
+                ModItems.STEEL_BOOTS, ModItems.KONTERIT_HELMET, ModItems.KONTERIT_CHESTPLATE, ModItems.KONTERIT_LEGGINGS,
+                ModItems.KONTERIT_BOOTS);
+        List<TagKey<Item>> slots = List.of(ItemTags.HEAD_ARMOR, ItemTags.CHEST_ARMOR, ItemTags.LEG_ARMOR, ItemTags.FOOT_ARMOR);
+        ModItems.DRAGON_SCALE_ARMOR.forEach((type, set) -> {
+            for (int i = 0; i < set.size(); i++) {
+                add(slots.get(i), set.get(i));
+                add(ItemTags.TRIMMABLE_ARMOR, set.get(i));
+                add(ModTags.Items.DRAGON_SCALE_ARMOR, set.get(i));
+                if (type == DragonType.ICE) {
+                    add(ItemTags.FREEZE_IMMUNE_WEARABLES, set.get(i));
+                }
+            }
+        });
+        // Der Gleiter lässt sich wie Elytren verzaubern (Haltbarkeit, Reparatur, Flüche)
+        add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
+        add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
+        add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
+        add(ItemTags.PIGLIN_LOVED, ModItems.GEMSTONE_CROWN);
 
         // --- Landwirtschaft ---
         add(ModTags.Items.SEEDS_TOMATO, ModItems.TOMATO_SEEDS);

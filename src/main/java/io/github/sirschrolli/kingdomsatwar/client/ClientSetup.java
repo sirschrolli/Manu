@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.client;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.DragonArmorGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.DragonGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.SoldierModel;
 import io.github.sirschrolli.kingdomsatwar.client.renderer.BanditRenderer;
@@ -21,6 +22,7 @@ public final class ClientSetup {
     @SubscribeEvent
     static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.DRAGON, DragonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.DRAGON_ARMOR, DragonArmorGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
     }
 

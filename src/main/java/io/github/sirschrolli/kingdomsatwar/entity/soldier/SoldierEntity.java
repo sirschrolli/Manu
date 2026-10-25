@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.entity.soldier;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.EnumSet;
 import java.util.List;
@@ -453,10 +454,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             case SWORDSMAN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
             case ARCHER -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
             case KNIGHT -> {
-                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STEEL_SWORD.get()));
                 this.setItemSlot(EquipmentSlot.OFFHAND, this.kingdomShield());
             }
-            case CAPTAIN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+            case CAPTAIN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STEEL_SWORD.get()));
         }
     }
 

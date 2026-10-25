@@ -6,6 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
@@ -27,11 +28,13 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         // --- Kreativ-Tabs ---
-        text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Castles & Building", "Kingdoms at War: Burgen & Bauen");
-        text("itemGroup.kingdomsatwar.resources", "Dragon Warfare: Ores & Resources", "Dragon Warfare: Erze & Rohstoffe");
-        text("itemGroup.kingdomsatwar.dragons", "Dragon Warfare: Dragons", "Dragon Warfare: Drachen");
-        text("itemGroup.kingdomsatwar.farming", "Kingdoms at War: Farming & Food", "Kingdoms at War: Landwirtschaft & Nahrung");
+        // (kurz halten: längere Titel ragen im Kreativ-Inventar über den Rand)
+        text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Building", "Kingdoms at War: Bauen");
+        text("itemGroup.kingdomsatwar.resources", "Kingdoms at War: Resources", "Kingdoms at War: Rohstoffe");
+        text("itemGroup.kingdomsatwar.dragons", "Kingdoms at War: Dragons", "Kingdoms at War: Drachen");
+        text("itemGroup.kingdomsatwar.farming", "Kingdoms at War: Food", "Kingdoms at War: Nahrung");
         text("itemGroup.kingdomsatwar.kingdom", "Kingdoms at War: Army", "Kingdoms at War: Armee");
+        text("itemGroup.kingdomsatwar.equipment", "Kingdoms at War: Equipment", "Kingdoms at War: Ausrüstung");
 
         // --- Steinblöcke ---
         set("medieval_stone", "medieval_stone", "Medieval Stone", "Mittelalterlicher Stein",
@@ -104,7 +107,7 @@ public class ModLanguageProvider extends LanguageProvider {
         lore("wyvernit", "Found high up – for flight technology", "Kommt in großer Höhe vor – für Flugtechnik");
         item(ModItems.STEEL_BLEND, "Steel Blend", "Stahlmischung");
         item(ModItems.STEEL_INGOT, "Steel Ingot", "Stahlbarren");
-        lore("steel_ingot", "For future weapons and armour", "Für künftige Waffen und Rüstungen");
+        lore("steel_ingot", "For steel tools, weapons and armour", "Für Werkzeuge, Waffen und Rüstungen aus Stahl");
 
         // --- Drachen ---
         egg(DragonType.FIRE, "Fire Dragon Egg", "Feuerdrachen-Ei",
@@ -225,6 +228,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // --- Armee: Soldaten, Banditen, Rekrutierungstisch, Kommandostab ---
         army();
+        equipment();
 
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");
@@ -251,6 +255,66 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.POTTED_GARDEN_ROSE, "Potted Garden Rose", "Gartenrose im Topf");
         block(ModBlocks.POTTED_FIRE_LILY, "Potted Fire Lily", "Feuerlilie im Topf");
         block(ModBlocks.POTTED_FROST_FLOWER, "Potted Frost Flower", "Frostblume im Topf");
+    }
+
+    private void equipment() {
+        // Stahl
+        item(ModItems.STEEL_SWORD, "Steel Sword", "Stahlschwert");
+        item(ModItems.STEEL_PICKAXE, "Steel Pickaxe", "Stahlspitzhacke");
+        item(ModItems.STEEL_AXE, "Steel Axe", "Stahlaxt");
+        item(ModItems.STEEL_SHOVEL, "Steel Shovel", "Stahlschaufel");
+        item(ModItems.STEEL_HOE, "Steel Hoe", "Stahlhacke");
+        item(ModItems.STEEL_HELMET, "Steel Helmet", "Stahlhelm");
+        item(ModItems.STEEL_CHESTPLATE, "Steel Chestplate", "Stahlharnisch");
+        item(ModItems.STEEL_LEGGINGS, "Steel Leggings", "Stahlbeinschutz");
+        item(ModItems.STEEL_BOOTS, "Steel Boots", "Stahlstiefel");
+        // Konterit
+        item(ModItems.KONTERIT_HELMET, "Konterit Helmet", "Konterithelm");
+        item(ModItems.KONTERIT_CHESTPLATE, "Konterit Chestplate", "Konteritharnisch");
+        item(ModItems.KONTERIT_LEGGINGS, "Konterit Leggings", "Konteritbeinschutz");
+        item(ModItems.KONTERIT_BOOTS, "Konterit Boots", "Konteritstiefel");
+        lore("konterit_armor", "Light: +4% speed and softer falls per piece", "Leicht: je Teil +4 % Tempo und sanftere Stürze");
+        // Draconium
+        item(ModItems.DRACONIUM_SWORD, "Draconium Sword", "Draconiumschwert");
+        item(ModItems.DRACONIUM_AXE, "Draconium Axe", "Draconiumaxt");
+        lore("draconium_weapon", "Sets every enemy it hits on fire", "Setzt jeden getroffenen Gegner in Brand");
+        // Drachenschuppen
+        scaleArmor(DragonType.FIRE, "Fire", "Feuer", "Full set: fire resistance", "Voller Satz: Feuerresistenz");
+        scaleArmor(DragonType.ICE, "Ice", "Eis", "Full set: speed · every piece stops freezing",
+                "Voller Satz: Schnelligkeit · jedes Teil schützt vor Frost");
+        scaleArmor(DragonType.LIGHTNING, "Lightning", "Blitz", "Full set: great speed", "Voller Satz: große Schnelligkeit");
+        scaleArmor(DragonType.NATURE, "Nature", "Natur", "Full set: regeneration", "Voller Satz: Regeneration");
+        scaleArmor(DragonType.EARTH, "Earth", "Erd", "Full set: resistance", "Voller Satz: Resistenz");
+        scaleArmor(DragonType.WATER, "Water", "Wasser", "Full set: water breathing and dolphin's grace",
+                "Voller Satz: Unterwasseratmung und Gunst des Delfins");
+        // Wyvernit, Edelstein
+        item(ModItems.WYVERNIT_GLIDER, "Wyvernit Glider", "Wyvernit-Gleiter");
+        text(ModItems.loreKey("wyvernit_glider", 1), "Glide through the air like with elytra", "Gleite durch die Luft wie mit Elytren");
+        text(ModItems.loreKey("wyvernit_glider", 2), "Repair with Wyvernit", "Mit Wyvernit reparieren");
+        item(ModItems.GEMSTONE_CROWN, "Royal Crown", "Königskrone");
+        lore("gemstone_crown", "Luck +2 – fit for kings and queens", "Glück +2 – für Könige und Königinnen");
+        // Drachenpanzer
+        item(ModItems.STEEL_DRAGON_ARMOR, "Steel Dragon Armour", "Stahl-Drachenpanzer");
+        text(ModItems.loreKey("steel_dragon_armor", 1), "Armour for your fully grown dragon", "Rüstung für deinen ausgewachsenen Drachen");
+        text(ModItems.loreKey("steel_dragon_armor", 2), "Use on your dragon · remove with shears",
+                "Am Drachen benutzen · mit der Schere abnehmen");
+        item(ModItems.DRACONIUM_DRAGON_ARMOR, "Draconium Dragon Armour", "Draconium-Drachenpanzer");
+        text(ModItems.loreKey("draconium_dragon_armor", 1), "Glowing, fireproof armour for your dragon",
+                "Glühende, feuerfeste Rüstung für deinen Drachen");
+        text(ModItems.loreKey("draconium_dragon_armor", 2), "Use on your dragon · remove with shears",
+                "Am Drachen benutzen · mit der Schere abnehmen");
+        text("message.kingdomsatwar.dragon_armor_too_young", "%s must be tamed and fully grown to wear armour",
+                "%s muss gezähmt und ausgewachsen sein, um einen Panzer zu tragen");
+    }
+
+    /** Rüstungssatz aus Drachenschuppen: vier Teile und die Wirkung des vollen Satzes. */
+    private void scaleArmor(DragonType type, String english, String deutsch, String bonusEn, String bonusDe) {
+        List<? extends Supplier<? extends Item>> set = ModItems.DRAGON_SCALE_ARMOR.get(type);
+        item(set.get(0), english + " Scale Helmet", deutsch + "schuppen-Helm");
+        item(set.get(1), english + " Scale Chestplate", deutsch + "schuppen-Harnisch");
+        item(set.get(2), english + " Scale Leggings", deutsch + "schuppen-Beinschutz");
+        item(set.get(3), english + " Scale Boots", deutsch + "schuppen-Stiefel");
+        lore("dragon_scale_armor_" + type.id(), bonusEn, bonusDe);
     }
 
     private void army() {

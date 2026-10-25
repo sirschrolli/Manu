@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:blaze_rod",
+    "D": "kingdomsatwar:draconium"
+  },
+  "pattern": [
+    "D",
+    "D",
+    "B"
+  ],
+  "result": {
+    "id": "kingdomsatwar:draconium_sword"
+  }
+}

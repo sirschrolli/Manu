@@ -12,6 +12,7 @@ import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
@@ -230,6 +231,30 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.BANDIT_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+
+        // --- Werkzeuge, Waffen und Rüstungen ---
+        for (DeferredItem<?> tool : java.util.List.of(ModItems.STEEL_SWORD, ModItems.STEEL_PICKAXE, ModItems.STEEL_AXE,
+                ModItems.STEEL_SHOVEL, ModItems.STEEL_HOE, ModItems.DRACONIUM_SWORD, ModItems.DRACONIUM_AXE)) {
+            items.generateFlatItem(tool.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        }
+        armor(items, ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
+                ModItems.STEEL_BOOTS.get());
+        armor(items, ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(), ModItems.KONTERIT_LEGGINGS.get(),
+                ModItems.KONTERIT_BOOTS.get());
+        ModItems.DRAGON_SCALE_ARMOR.values().forEach(set ->
+                armor(items, set.get(0).get(), set.get(1).get(), set.get(2).get(), set.get(3).get()));
+        items.generateElytra(ModItems.WYVERNIT_GLIDER.get());
+        flat(items, ModItems.GEMSTONE_CROWN.get());
+        flat(items, ModItems.STEEL_DRAGON_ARMOR.get());
+        flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
+    }
+
+    /** Rüstungsteile mit Rüstungsbesatz (Trims) aus dem Schmiedetisch. */
+    private static void armor(ItemModelGenerators items, Item helmet, Item chestplate, Item leggings, Item boots) {
+        for (Item piece : java.util.List.of(helmet, chestplate, leggings, boots)) {
+            ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(piece), TextureMapping.layer0(piece), items.modelOutput);
+        }
+        items.generateDynamicTrimmableArmorSet(helmet, chestplate, leggings, boots, null);
     }
 
     private static void glowingCube(BlockModelGenerators blocks, Block block) {

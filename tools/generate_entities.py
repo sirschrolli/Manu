@@ -14,7 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import dragon  # noqa: E402
+from entitygen.models import dragon, dragon_armor  # noqa: E402
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -36,7 +36,7 @@ def write_model(module, class_name: str, doc: str, folder: str, variants: dict, 
         if glow.getbbox() is not None:
             glow.save(out / f"{variant}_glow.png")
         if preview:
-            img.resize((img.width * 3, img.height * 3)).save(f"/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/ent_{folder}_{variant}.png")
+            img.resize((img.width * 3, img.height * 3)).save(f"/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/ent_{folder.replace("/", "_")}_{variant}.png")
     print(f"{class_name}: {len(model.all_cubes())} Quader, {len(variants)} Varianten")
 
 
@@ -44,6 +44,9 @@ def main():
     preview = "--preview" in sys.argv
     write_model(dragon, "DragonGeometry", "Geometrie des Drachen-Modells (ausgewachsene Größe).", "dragon",
                 dragon.PALETTES, preview)
+    write_model(dragon_armor, "DragonArmorGeometry",
+                "Geometrie der Drachenpanzer (gleiche Knochen wie das Drachen-Modell, nur Panzerplatten).",
+                "dragon/armor", dragon_armor.PALETTES, preview)
 
 
 if __name__ == "__main__":

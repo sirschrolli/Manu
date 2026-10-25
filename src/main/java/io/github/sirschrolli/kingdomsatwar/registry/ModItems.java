@@ -1,7 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.CommandBatonItem;
+import io.github.sirschrolli.kingdomsatwar.item.DraconiumWeaponItem;
+import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import java.util.ArrayList;
@@ -11,9 +14,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Unit;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -21,6 +33,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
@@ -39,6 +54,7 @@ public final class ModItems {
     static final List<Supplier<? extends ItemLike>> DRAGON_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> FARMING_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> KINGDOM_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> EQUIPMENT_TAB = new ArrayList<>();
 
     // =====================================================================================
     // Dragon Warfare – Erze & Rohstoffe
@@ -147,6 +163,73 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> BANDIT_ARCHER_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("bandit_archer_spawn_egg",
             SpawnEggItem::new, p -> p.spawnEgg(ModEntities.BANDIT_ARCHER.get())));
 
+    // =====================================================================================
+    // Waffen, Werkzeuge und Rüstungen – jedes Erz hat seine Bestimmung
+    // =====================================================================================
+
+    // Stahl: Werkzeuge und Rüstung zwischen Eisen und Diamant
+    public static final DeferredItem<Item> STEEL_SWORD = gear("steel_sword", p -> p.sword(ModEquipment.STEEL_TOOLS, 3.0f, -2.4f));
+    public static final DeferredItem<Item> STEEL_PICKAXE = gear("steel_pickaxe", p -> p.pickaxe(ModEquipment.STEEL_TOOLS, 1.0f, -2.8f));
+    public static final DeferredItem<Item> STEEL_AXE = gear("steel_axe", p -> p.axe(ModEquipment.STEEL_TOOLS, 6.0f, -3.1f));
+    public static final DeferredItem<Item> STEEL_SHOVEL = gear("steel_shovel", p -> p.shovel(ModEquipment.STEEL_TOOLS, 1.5f, -3.0f));
+    public static final DeferredItem<Item> STEEL_HOE = gear("steel_hoe", p -> p.hoe(ModEquipment.STEEL_TOOLS, -2.0f, -0.5f));
+    public static final DeferredItem<Item> STEEL_HELMET = armor("steel_helmet", ModEquipment.STEEL, ArmorType.HELMET);
+    public static final DeferredItem<Item> STEEL_CHESTPLATE = armor("steel_chestplate", ModEquipment.STEEL, ArmorType.CHESTPLATE);
+    public static final DeferredItem<Item> STEEL_LEGGINGS = armor("steel_leggings", ModEquipment.STEEL, ArmorType.LEGGINGS);
+    public static final DeferredItem<Item> STEEL_BOOTS = armor("steel_boots", ModEquipment.STEEL, ArmorType.BOOTS);
+
+    // Konterit: leichte Rüstung – jedes Teil macht 4 % schneller und federt Stürze ab
+    public static final DeferredItem<Item> KONTERIT_HELMET = konterit("konterit_helmet", ArmorType.HELMET);
+    public static final DeferredItem<Item> KONTERIT_CHESTPLATE = konterit("konterit_chestplate", ArmorType.CHESTPLATE);
+    public static final DeferredItem<Item> KONTERIT_LEGGINGS = konterit("konterit_leggings", ArmorType.LEGGINGS);
+    public static final DeferredItem<Item> KONTERIT_BOOTS = konterit("konterit_boots", ArmorType.BOOTS);
+
+    // Draconium: Waffen, die ihr Ziel entflammen
+    public static final DeferredItem<DraconiumWeaponItem> DRACONIUM_SWORD = addTo(EQUIPMENT_TAB, ITEMS.registerItem("draconium_sword",
+            p -> new DraconiumWeaponItem(p, 4), () -> new Item.Properties().sword(ModEquipment.DRACONIUM_TOOLS, 3.0f, -2.4f)
+                    .rarity(Rarity.RARE).fireResistant().component(DataComponents.LORE, lore("draconium_weapon", 1))));
+    public static final DeferredItem<DraconiumWeaponItem> DRACONIUM_AXE = addTo(EQUIPMENT_TAB, ITEMS.registerItem("draconium_axe",
+            p -> new DraconiumWeaponItem(p, 5), () -> new Item.Properties().axe(ModEquipment.DRACONIUM_TOOLS, 5.5f, -3.0f)
+                    .rarity(Rarity.RARE).fireResistant().component(DataComponents.LORE, lore("draconium_weapon", 1))));
+
+    // Drachenschuppen: je Drachenart ein Rüstungssatz mit der Kraft des Elements
+    private static final Map<DragonType, List<DeferredItem<DragonScaleArmorItem>>> SCALE_ARMOR_MUTABLE = new EnumMap<>(DragonType.class);
+    public static final Map<DragonType, List<DeferredItem<DragonScaleArmorItem>>> DRAGON_SCALE_ARMOR = Collections.unmodifiableMap(SCALE_ARMOR_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            List<DeferredItem<DragonScaleArmorItem>> set = new ArrayList<>();
+            for (ArmorType piece : List.of(ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS)) {
+                String name = type.id() + "_dragon_scale_" + piece.getName();
+                set.add(addTo(EQUIPMENT_TAB, ITEMS.registerItem(name, p -> new DragonScaleArmorItem(p, type),
+                        () -> new Item.Properties().humanoidArmor(ModEquipment.SCALE_ARMOR.get(type), piece).rarity(Rarity.UNCOMMON)
+                                .component(DataComponents.LORE, lore("dragon_scale_armor_" + type.id(), 1)))));
+            }
+            SCALE_ARMOR_MUTABLE.put(type, List.copyOf(set));
+        }
+    }
+
+    // Wyvernit: der Gleiter (wie Elytren, aus dem Erz der Lüfte)
+    public static final DeferredItem<Item> WYVERNIT_GLIDER = addTo(EQUIPMENT_TAB, ITEMS.registerSimpleItem("wyvernit_glider",
+            p -> p.durability(360).rarity(Rarity.RARE)
+                    .component(DataComponents.GLIDER, Unit.INSTANCE)
+                    .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
+                            .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.GLIDER_ASSET).setDamageOnHurt(false).build())
+                    .repairable(ModTags.Items.REPAIRS_GLIDER)
+                    .component(DataComponents.LORE, lore("wyvernit_glider", 2))));
+
+    // Edelstein: die Königskrone – bringt Glück
+    public static final DeferredItem<Item> GEMSTONE_CROWN = addTo(EQUIPMENT_TAB, ITEMS.registerSimpleItem("gemstone_crown",
+            p -> p.humanoidArmor(ModEquipment.CROWN, ArmorType.HELMET).rarity(Rarity.EPIC)
+                    .attributes(ModEquipment.CROWN.createAttributes(ArmorType.HELMET).withModifierAdded(Attributes.LUCK,
+                            new AttributeModifier(KingdomsAtWar.id("crown_luck"), 2.0, AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.HEAD))
+                    .component(DataComponents.LORE, lore("gemstone_crown", 1))));
+
+    // Drachenpanzer: Rüstung für den eigenen ausgewachsenen Drachen
+    public static final DeferredItem<Item> STEEL_DRAGON_ARMOR = dragonArmor("steel_dragon_armor", ModEquipment.STEEL_DRAGON_ARMOR, false);
+    public static final DeferredItem<Item> DRACONIUM_DRAGON_ARMOR = dragonArmor("draconium_dragon_armor", ModEquipment.DRACONIUM_DRAGON_ARMOR, true);
+
     private ModItems() {}
 
     // =====================================================================================
@@ -156,6 +239,43 @@ public final class ModItems {
     private static <T extends Supplier<? extends ItemLike>> T addTo(List<Supplier<? extends ItemLike>> tab, T entry) {
         tab.add(entry);
         return entry;
+    }
+
+    private static DeferredItem<Item> gear(String name, UnaryOperator<Item.Properties> properties) {
+        return addTo(EQUIPMENT_TAB, ITEMS.registerSimpleItem(name, properties));
+    }
+
+    private static DeferredItem<Item> armor(String name, ArmorMaterial material, ArmorType type) {
+        return gear(name, p -> p.humanoidArmor(material, type));
+    }
+
+    /** Konterit-Rüstung: Rüstungswerte plus Schnelligkeit und sichere Fallhöhe je Teil. */
+    private static DeferredItem<Item> konterit(String name, ArmorType type) {
+        EquipmentSlotGroup slot = EquipmentSlotGroup.bySlot(type.getSlot());
+        return gear(name, p -> p.humanoidArmor(ModEquipment.KONTERIT, type).rarity(Rarity.UNCOMMON)
+                .attributes(ModEquipment.KONTERIT.createAttributes(type)
+                        .withModifierAdded(Attributes.MOVEMENT_SPEED, new AttributeModifier(KingdomsAtWar.id("konterit_speed_" + type.getName()),
+                                0.04, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), slot)
+                        .withModifierAdded(Attributes.SAFE_FALL_DISTANCE, new AttributeModifier(KingdomsAtWar.id("konterit_fall_" + type.getName()),
+                                1.0, AttributeModifier.Operation.ADD_VALUE), slot))
+                .component(DataComponents.LORE, lore("konterit_armor", 1)));
+    }
+
+    /** Drachenpanzer: passt nur Drachen (Körper-Platz) und fällt beim Tod des Drachen zu Boden. */
+    private static DeferredItem<Item> dragonArmor(String name, ArmorMaterial material, boolean fireproof) {
+        return gear(name, p -> {
+            Item.Properties properties = p.stacksTo(1).rarity(fireproof ? Rarity.EPIC : Rarity.RARE)
+                    .durability(ArmorType.BODY.getDurability(material.durability()))
+                    .attributes(material.createAttributes(ArmorType.BODY))
+                    .repairable(material.repairIngredient())
+                    .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.BODY)
+                            .setEquipSound(material.equipSound()).setAsset(material.assetId())
+                            .setAllowedEntities(HolderSet.direct(ModEntities.DRAGONS.values().stream()
+                                    .map(type -> (Holder<EntityType<?>>) type).toList()))
+                            .setCanBeSheared(true).build())
+                    .component(DataComponents.LORE, lore(name, 2));
+            return fireproof ? properties.fireResistant() : properties;
+        });
     }
 
     private static DeferredItem<Item> item(String name, UnaryOperator<Item.Properties> properties,
