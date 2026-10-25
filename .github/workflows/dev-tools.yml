@@ -5,7 +5,7 @@ on:
 permissions:
   contents: write
 jobs:
-  sources:
+  decompile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -16,129 +16,32 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         with:
           cache-provider: basic
-      - name: Minecraft-Artefakte und Assets
-        run: ./gradlew createMinecraftArtifacts downloadAssets --stacktrace
-      - name: Sammeln
-        run: bash ci/collect.sh
+      - name: Minecraft-Artefakte
+        run: ./gradlew createMinecraftArtifacts --stacktrace
+      - name: Dekompilieren
+        run: |
+          set -x
+          JAR=$(ls build/moddev/artifacts/minecraft-patched-*.jar | head -1)
+          VF=$(curl -sS https://repo1.maven.org/maven2/org/vineflower/vineflower/maven-metadata.xml | grep -oP '(?<=<release>)[^<]+')
+          echo "Vineflower $VF"
+          curl -sSL -o vineflower.jar "https://repo1.maven.org/maven2/org/vineflower/vineflower/$VF/vineflower-$VF.jar"
+          mkdir -p mcsrc devtools
+          java -Xmx6g -jar vineflower.jar -dgs=1 -rsy=1 -lit=1 -mpm=60 -log=WARN "$JAR" mcsrc/ > decompile.log 2>&1 || echo "Vineflower exit $?"
+          tail -50 decompile.log
+          ls -la mcsrc
+          cp "$JAR" devtools/
+          cp mcsrc/* devtools/ 2>/dev/null || true
+          NF=$(find ~/.gradle/caches -name "neoforge-26.3*-universal.jar" 2>/dev/null | head -1); cp "$NF" devtools/ 2>/dev/null || true
+          tail -200 decompile.log > devtools/decompile-tail.log
+          ls -la devtools
+          tar czf devtools.tar.gz devtools
+          ls -la devtools.tar.gz
       - name: Verschlüsselt zurückgeben
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           openssl cms -encrypt -stream -binary -aes256 -in devtools.tar.gz -out devtools.enc -outform DER ci/probe.crt
-          ls -la devtools.enc
-          mkdir out && split -b 45m -d devtools.enc out/devtools.enc.part && cd out
+          mkdir out && split -b 45m -d devtools.enc out/devtools.enc.part && ls -la out && cd out
           git init -q && git checkout -q -b ci/probe-output && git add .
           git -c user.name=ci -c user.email=ci@localhost commit -q -m "devtools ${{ github.run_id }}"
           git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/probe-output
-
-  client:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-java@v6
-        with:
-          java-version: '25'
-          distribution: 'temurin'
-      - uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-provider: basic
-      - name: Software-Grafik installieren
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q xvfb mesa-utils libgl1-mesa-dri libglx-mesa0 mesa-vulkan-drivers vulkan-tools imagemagick x11-apps > /dev/null
-      - name: Client vorbereiten
-        run: |
-          ./gradlew build -x test --stacktrace
-          mkdir -p run
-          printf 'onboardAccessibility:false\npauseOnLostFocus:false\nlang:de_de\nguiScale:2\nrenderDistance:6\nsoundCategory_master:0.0\ntutorialStep:none\njoinedFirstServer:true\nskipMultiplayerWarning:true\n' > run/options.txt
-      - name: Client unter Xvfb starten
-        run: |
-          mkdir -p clienttest
-          Xvfb :99 -screen 0 1280x720x24 > clienttest/xvfb.log 2>&1 &
-          sleep 3
-          export DISPLAY=:99
-          glxinfo -B > clienttest/glxinfo.txt 2>&1 || true
-          vulkaninfo --summary > clienttest/vulkaninfo.txt 2>&1 || true
-          (timeout 420 ./gradlew runClient --stacktrace > clienttest/runclient.log 2>&1; echo "exit $?" >> clienttest/runclient.log) &
-          for t in 60 120 180 240 300 360; do
-            sleep 60
-            import -window root clienttest/shot-${t}s.png 2>> clienttest/import.log || true
-          done
-          wait || true
-          cp run/logs/latest.log clienttest/latest.log 2>/dev/null || true
-          ls -la clienttest
-      - name: Ergebnis zurückgeben
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tar czf clienttest.tar.gz clienttest
-          openssl cms -encrypt -stream -binary -aes256 -in clienttest.tar.gz -out clienttest.enc -outform DER ci/probe.crt
-          mkdir out && cp clienttest.enc out/ && cd out
-          git init -q && git checkout -q -b ci/client-test && git add .
-          git -c user.name=ci -c user.email=ci@localhost commit -q -m "client test ${{ github.run_id }}"
-          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/client-test
-
-  audio:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - name: Werkzeuge installieren
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q ffmpeg fluidsynth fluid-soundfont-gm sox > /dev/null
-          pip install -q piper-tts mido numpy
-          ls -la /usr/share/sounds/sf2/ || true
-          piper --help | head -30 || true
-      - name: Stimmen laden und testen
-        run: |
-          mkdir -p audiotest voices
-          base=https://huggingface.co/rhasspy/piper-voices/resolve/main
-          for v in de/de_DE/thorsten/high/de_DE-thorsten-high de/de_DE/thorsten_emotional/medium/de_DE-thorsten_emotional-medium \
-                   en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium en/en_US/ryan/high/en_US-ryan-high \
-                   en/en_US/libritts_r/medium/en_US-libritts_r-medium en/en_GB/alan/medium/en_GB-alan-medium; do
-            name=$(basename $v)
-            curl -sSL -o voices/$name.onnx "$base/$v.onnx" || true
-            curl -sSL -o voices/$name.onnx.json "$base/$v.onnx.json" || true
-            curl -sSL -o audiotest/$name.MODEL_CARD.txt "$base/$(dirname $v)/MODEL_CARD" || true
-          done
-          ls -la voices
-          tts() { # Modell, Ausgabe, Text, [Sprecher]
-            local spk=""; [ -n "${4:-}" ] && spk="-s $4"
-            echo "$3" | piper -m "voices/$1.onnx" $spk -f "$2" 2>>audiotest/piper.log || piper -m "voices/$1.onnx" $spk -f "$2" -- "$3" 2>>audiotest/piper.log || echo "TTS fehlgeschlagen: $1" >> audiotest/piper.log
-          }
-          tts de_DE-thorsten-high audiotest/de_thorsten_high.wav "In einer Zeit, als Drachen noch über den Himmel zogen, erhoben sich die Königreiche."
-          tts de_DE-thorsten_emotional-medium audiotest/de_emotional_s1.wav "Für das Königreich!" 1
-          for v in en_GB-northern_english_male-medium en_US-ryan-high en_GB-alan-medium; do
-            tts $v audiotest/$v.wav "In an age when dragons still ruled the skies, the kingdoms rose."
-          done
-          tts en_US-libritts_r-medium audiotest/libritts_s20.wav "In an age when dragons still ruled the skies, the kingdoms rose." 20
-          python3 -c "import json;d=json.load(open('voices/de_DE-thorsten_emotional-medium.onnx.json'));print(d.get('speaker_id_map'))" > audiotest/emotional_speakers.txt 2>&1 || true
-          ls -la audiotest
-      - name: Musik testen
-        run: |
-          python3 - <<'EOF'
-          import mido
-          mid = mido.MidiFile(ticks_per_beat=480)
-          tr = mido.MidiTrack(); mid.tracks.append(tr)
-          tr.append(mido.Message('program_change', program=48, channel=0, time=0))
-          for chord in [(50,57,62,65),(46,53,58,62),(53,60,65,69),(48,55,60,64)]:
-              for n in chord: tr.append(mido.Message('note_on', note=n, velocity=80, channel=0, time=0))
-              tr.append(mido.Message('note_off', note=chord[0], velocity=0, channel=0, time=1920))
-              for n in chord[1:]: tr.append(mido.Message('note_off', note=n, velocity=0, channel=0, time=0))
-          mid.save('audiotest/test.mid')
-          EOF
-          fluidsynth -ni -F audiotest/test_music.wav -r 44100 /usr/share/sounds/sf2/FluidR3_GM.sf2 audiotest/test.mid || true
-          for f in audiotest/*.wav; do ffmpeg -loglevel error -y -i "$f" -c:a libvorbis -q:a 5 "${f%.wav}.ogg"; done
-          for f in audiotest/*.wav; do sox "$f" -n stat 2>&1 | sed "s#^#$(basename $f): #" | grep -E "Length|Maximum amplitude|RMS     amplitude"; done > audiotest/stats.txt || true
-          rm -f audiotest/*.wav
-          ls -la audiotest
-      - name: Ergebnis zurückgeben
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          mkdir out && cp -r audiotest out/ && cd out
-          git init -q && git checkout -q -b ci/audio-test && git add .
-          git -c user.name=ci -c user.email=ci@localhost commit -q -m "audio test ${{ github.run_id }}"
-          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/audio-test
