@@ -35,8 +35,8 @@ jobs:
         run: |
           set -o pipefail
           python -m venv /tmp/vp
-          { /tmp/vp/bin/pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
-            /tmp/vp/bin/pip install --no-cache-dir git+https://github.com/huggingface/parler-tts.git soundfile 2>&1 | tail -15
+          { /tmp/vp/bin/pip install --no-cache-dir torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
+            /tmp/vp/bin/pip install --no-cache-dir git+https://github.com/huggingface/parler-tts.git soundfile 'torch==2.6.0' 'torchaudio==2.6.0' --extra-index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -15
             /tmp/vp/bin/pip list 2>/dev/null | grep -i -E "torch|transformers|parler|descript"; } 2>&1 | tee out/logs/02_parler_install.txt
           cd voice && /tmp/vp/bin/python parler_design.py design ../out de 11,22,33 2>&1 | tee ../out/logs/03_parler_design.txt
       - name: Gestaltete Stimmen bewerten
@@ -56,7 +56,8 @@ jobs:
         run: |
           set -o pipefail
           python -m venv /tmp/vc
-          /tmp/vc/bin/pip install --no-cache-dir chatterbox-tts 2>&1 | tail -15 | tee out/logs/07_chatterbox_install.txt
+          { /tmp/vc/bin/pip install --no-cache-dir torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
+            /tmp/vc/bin/pip install --no-cache-dir chatterbox-tts --extra-index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -15; } | tee out/logs/07_chatterbox_install.txt
           cd voice && /tmp/vc/bin/python chatterbox_gen.py ../out de 2>&1 | tee ../out/logs/08_chatterbox.txt
           rm -rf ~/.cache/huggingface/hub/models--ResembleAI* /tmp/vc
       - name: Englische Hörproben (Kokoro)
@@ -65,7 +66,8 @@ jobs:
           set -o pipefail
           python -m venv /tmp/vk
           { /tmp/vk/bin/pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -3
-            /tmp/vk/bin/pip install --no-cache-dir 'kokoro>=0.9.4' soundfile 2>&1 | tail -5; } | tee out/logs/09_kokoro_install.txt
+            /tmp/vk/bin/pip install --no-cache-dir 'kokoro>=0.9.4' soundfile 'numpy<2' 'spacy==3.7.5' 2>&1 | tail -5
+            /tmp/vk/bin/python -m spacy download en_core_web_sm 2>&1 | tail -2; } | tee out/logs/09_kokoro_install.txt
           cd voice && /tmp/vk/bin/python kokoro_gen.py ../out 2>&1 | tee ../out/logs/10_kokoro.txt
       - name: Hörproben bewerten
         continue-on-error: true
