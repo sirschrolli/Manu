@@ -1,0 +1,67 @@
+name: Voice samples (temporary)
+on:
+  push:
+    branches: [ 'ci/voice-req' ]
+permissions:
+  contents: write
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      HF_HUB_DISABLE_PROGRESS_BARS: '1'
+      PIP_DISABLE_PIP_VERSION_CHECK: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Systempakete
+        run: sudo apt-get update -q && sudo apt-get install -y -q espeak-ng ffmpeg > /dev/null
+      - name: Werkzeuge zum Bewerten
+        run: |
+          python -m venv /tmp/vw
+          /tmp/vw/bin/pip install -q --no-cache-dir faster-whisper jiwer praat-parselmouth numpy
+      - name: Stimmen gestalten (Parler-TTS)
+        run: |
+          python -m venv /tmp/vp
+          /tmp/vp/bin/pip install -q --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+          /tmp/vp/bin/pip install -q --no-cache-dir git+https://github.com/huggingface/parler-tts.git soundfile
+          cd voice && /tmp/vp/bin/python parler_design.py design ../out de 11,22,33
+      - name: Gestaltete Stimmen bewerten
+        run: |
+          cd voice && /tmp/vw/bin/python evaluate.py ../out 'parler_de_*.wav' de design eval_parler_de.json
+          python pick_refs.py ../out de
+      - name: Hörprobe Parler
+        run: |
+          cd voice && /tmp/vp/bin/python parler_design.py sample ../out de
+          rm -rf ~/.cache/huggingface/hub/models--parler-tts* /tmp/vp
+      - name: Hörproben Chatterbox
+        run: |
+          python -m venv /tmp/vc
+          /tmp/vc/bin/pip install -q --no-cache-dir chatterbox-tts
+          cd voice && /tmp/vc/bin/python chatterbox_gen.py ../out de
+          rm -rf ~/.cache/huggingface/hub/models--ResembleAI* /tmp/vc
+      - name: Englische Hörproben (Kokoro)
+        run: |
+          python -m venv /tmp/vk
+          /tmp/vk/bin/pip install -q --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+          /tmp/vk/bin/pip install -q --no-cache-dir 'kokoro>=0.9.4' soundfile
+          cd voice && /tmp/vk/bin/python kokoro_gen.py ../out
+      - name: Hörproben bewerten
+        if: always()
+        run: |
+          cd voice
+          /tmp/vw/bin/python evaluate.py ../out 'sample_*_de.wav' de sample eval_samples_de.json || true
+          /tmp/vw/bin/python evaluate.py ../out 'sample_*_en.wav' en sample eval_samples_en.json || true
+      - name: Zurückgeben
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd out
+          for f in sample_*.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 160k "${f%.wav}.mp3"; done
+          ls -la
+          git init -q && git checkout -q -b ci/voice-out && git add .
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "voice samples ${{ github.run_id }}"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/voice-out
