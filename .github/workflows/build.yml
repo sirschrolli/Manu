@@ -1,0 +1,79 @@
+name: Build
+
+# Baut die Mod bei jedem Push und Pull Request:
+#   1. Datengenerierung (Modelle, Rezepte, Loot-Tables, Übersetzungen ...)
+#   2. Kompilieren und JAR bauen
+#   3. GameTests in einem echten Minecraft-26.3-Server
+# Die fertige JAR liegt danach unter "Artifacts" auf der Seite des Workflow-Laufs.
+
+on:
+  push:
+    branches-ignore: [ 'ci/**' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # "bash" (statt Standard) bricht auch ab, wenn ein Befehl vor "| tee" fehlschlägt
+        shell: bash
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Java 25 einrichten
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Gradle einrichten
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Datengenerierung
+        run: |
+          mkdir -p ci-logs
+          ./gradlew runData --stacktrace 2>&1 | tee ci-logs/datagen.log
+
+      - name: Prüfen, ob die erzeugten Dateien eingecheckt sind
+        run: |
+          git add -N src/generated
+          if ! git diff --quiet -- src/generated; then
+            echo "::warning::src/generated/resources ist nicht aktuell. Bitte 'gradlew runData' ausführen und die Änderungen einchecken."
+            git diff --stat -- src/generated | tail -20
+          fi
+
+      - name: Bauen
+        run: ./gradlew build --stacktrace 2>&1 | tee ci-logs/build.log
+
+      - name: GameTests im Minecraft-Server
+        run: ./gradlew runGameTestServer --stacktrace 2>&1 | tee ci-logs/gametest.log
+
+      - name: JAR hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: kingdomsatwar-jar
+          path: build/libs/*.jar
+          if-no-files-found: error
+
+      # Nur während der Entwicklung auf dem Arbeits-Branch: Ergebnisse auf einen Hilfs-Branch legen.
+      - name: Entwicklungs-Ergebnisse sichern
+        if: always() && github.ref == 'refs/heads/phase-1-grundprojekt'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p out/logs out/libs
+          cp -r ci-logs/. out/logs/ 2>/dev/null || true
+          cp run/logs/latest.log out/logs/game-latest.log 2>/dev/null || true
+          cp build/libs/*.jar out/libs/ 2>/dev/null || true
+          if [ -d src/generated/resources ]; then cp -r src/generated out/generated; fi
+          echo "${GITHUB_SHA}" > out/commit.txt
+          cd out
+          git init -q && git checkout -q -b ci/output && git add -A
+          git -c user.name=ci -c user.email=ci@localhost commit -q -m "CI-Ergebnis ${GITHUB_SHA} (Lauf ${GITHUB_RUN_ID})"
+          git push -f -q "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ci/output

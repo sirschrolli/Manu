@@ -1,0 +1,301 @@
+package io.github.sirschrolli.kingdomsatwar.registry;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.block.ElementalDragonEggBlock;
+import io.github.sirschrolli.kingdomsatwar.block.ModCropBlock;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+/**
+ * Alle Blöcke der Mod. Zu jedem Block mit Gegenstandsform wird hier auch das {@code BlockItem} registriert.
+ */
+public final class ModBlocks {
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(KingdomsAtWar.MODID);
+
+    // Reihenfolge der Einträge in den Kreativ-Tabs
+    static final List<Supplier<? extends ItemLike>> BUILDING_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> RESOURCE_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> DRAGON_TAB = new ArrayList<>();
+    static final List<Supplier<? extends ItemLike>> FARMING_TAB = new ArrayList<>();
+
+    private static final List<BuildingSet> BUILDING_SETS_MUTABLE = new ArrayList<>();
+    /** Alle Baustoff-Sets (Vollblock, Treppe, Stufe, Mauer). */
+    public static final List<BuildingSet> BUILDING_SETS = Collections.unmodifiableList(BUILDING_SETS_MUTABLE);
+
+    // =====================================================================================
+    // Kingdoms at War – Burgen & Bauen (Bild "Neue Blöcke")
+    // =====================================================================================
+
+    // 1. Neue Steinblöcke für Burgen und Festungen
+    public static final BuildingSet MEDIEVAL_STONE = stoneSet("medieval_stone", "medieval_stone",
+            MapColor.STONE, SoundType.STONE, 1.5f);
+    public static final BuildingSet ROUGH_FIELDSTONE = stoneSet("rough_fieldstone", "rough_fieldstone",
+            MapColor.STONE, SoundType.STONE, 2.0f);
+    public static final BuildingSet HEWN_SANDSTONE = stoneSet("hewn_sandstone", "hewn_sandstone",
+            MapColor.SAND, SoundType.STONE, 0.8f);
+    public static final BuildingSet DARK_STONE_BRICKS = stoneSet("dark_stone_bricks", "dark_stone_brick",
+            MapColor.DEEPSLATE, SoundType.DEEPSLATE_BRICKS, 2.5f);
+    public static final BuildingSet LIMESTONE_BRICKS = stoneSet("limestone_bricks", "limestone_brick",
+            MapColor.TERRACOTTA_WHITE, SoundType.CALCITE, 1.2f);
+    public static final BuildingSet WEATHERED_STONE_BRICKS = stoneSet("weathered_stone_bricks", "weathered_stone_brick",
+            MapColor.STONE, SoundType.STONE, 1.5f);
+    public static final BuildingSet MOSSY_WALL_STONES = stoneSet("mossy_wall_stones", "mossy_wall_stone",
+            MapColor.STONE, SoundType.STONE, 1.5f);
+    public static final BuildingSet CRACKED_STONE_BLOCKS = stoneSet("cracked_stone_blocks", "cracked_stone_block",
+            MapColor.STONE, SoundType.STONE, 1.5f);
+
+    public static final DeferredBlock<RotatedPillarBlock> STONE_PILLAR = blockWithItem("stone_pillar",
+            RotatedPillarBlock::new,
+            p -> p.mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.5f, 6.0f).sound(SoundType.STONE),
+            UnaryOperator.identity(), BUILDING_TAB);
+
+    // 2. Holzblöcke und Fachwerk
+    public static final DeferredBlock<RotatedPillarBlock> TIMBER_BEAM = blockWithItem("timber_beam",
+            RotatedPillarBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava(),
+            UnaryOperator.identity(), BUILDING_TAB);
+    public static final DeferredBlock<Block> TIMBER_FRAME = timberFrame("timber_frame");
+    public static final DeferredBlock<Block> TIMBER_FRAME_DIAGONAL = timberFrame("timber_frame_diagonal");
+    public static final DeferredBlock<Block> TIMBER_FRAME_CROSS = timberFrame("timber_frame_cross");
+
+    // 3. Dachblöcke
+    public static final BuildingSet RED_ROOF_TILES = roofSet("red_roof_tiles", "red_roof_tile",
+            p -> p.mapColor(MapColor.TERRACOTTA_RED).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.25f, 4.2f).sound(SoundType.STONE), BuildingSet.Tool.PICKAXE);
+    public static final BuildingSet BROWN_ROOF_TILES = roofSet("brown_roof_tiles", "brown_roof_tile",
+            p -> p.mapColor(MapColor.TERRACOTTA_BROWN).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.25f, 4.2f).sound(SoundType.STONE), BuildingSet.Tool.PICKAXE);
+    public static final BuildingSet DARK_SLATE_SHINGLES = roofSet("dark_slate_shingles", "dark_slate_shingle",
+            p -> p.mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(2.0f, 6.0f).sound(SoundType.DEEPSLATE_TILES), BuildingSet.Tool.PICKAXE);
+    public static final BuildingSet WOODEN_SHINGLES = roofSet("wooden_shingles", "wooden_shingle",
+            p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0f, 3.0f).sound(SoundType.WOOD).ignitedByLava(), BuildingSet.Tool.AXE);
+    public static final BuildingSet LIGHT_ROOF_TILES = roofSet("light_roof_tiles", "light_roof_tile",
+            p -> p.mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.25f, 4.2f).sound(SoundType.STONE), BuildingSet.Tool.PICKAXE);
+    public static final BuildingSet COPPER_ROOF = roofSet("copper_roof", "copper_roof",
+            p -> p.mapColor(MapColor.COLOR_ORANGE)
+                    .requiresCorrectToolForDrops().strength(3.0f, 6.0f).sound(SoundType.COPPER), BuildingSet.Tool.PICKAXE);
+
+    // =====================================================================================
+    // Dragon Warfare – Erze & Rohstoffe (Bild "Dragon Warfare – Erze")
+    // =====================================================================================
+
+    public static final DeferredBlock<DropExperienceBlock> CARBON_ORE = stoneOre("carbon_ore", 0, 2, 0);
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_CARBON_ORE = deepslateOre("deepslate_carbon_ore", 0, 2, 0);
+    public static final DeferredBlock<DropExperienceBlock> GEMSTONE_ORE = stoneOre("gemstone_ore", 3, 7, 0);
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_GEMSTONE_ORE = deepslateOre("deepslate_gemstone_ore", 3, 7, 0);
+    public static final DeferredBlock<DropExperienceBlock> KONTERIT_ORE = stoneOre("konterit_ore", 2, 5, 0);
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_KONTERIT_ORE = deepslateOre("deepslate_konterit_ore", 2, 5, 0);
+    public static final DeferredBlock<DropExperienceBlock> AETHERIT_ORE = stoneOre("aetherit_ore", 2, 5, 3);
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_AETHERIT_ORE = deepslateOre("deepslate_aetherit_ore", 2, 5, 3);
+    public static final DeferredBlock<DropExperienceBlock> DRACONIUM_ORE = stoneOre("draconium_ore", 4, 8, 5);
+    public static final DeferredBlock<DropExperienceBlock> DEEPSLATE_DRACONIUM_ORE = deepslateOre("deepslate_draconium_ore", 4, 8, 5);
+    /** Wyvernit kommt nur hoch in den Bergen vor, darum gibt es keine Tiefenschiefer-Variante. */
+    public static final DeferredBlock<DropExperienceBlock> WYVERNIT_ORE = stoneOre("wyvernit_ore", 3, 7, 0);
+
+    public static final DeferredBlock<Block> CARBON_BLOCK = blockWithItem("carbon_block", Block::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(5.0f, 6.0f).sound(SoundType.STONE),
+            ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_COAL_BLOCK), RESOURCE_TAB);
+    public static final DeferredBlock<Block> GEMSTONE_BLOCK = crystalBlock("gemstone_block", MapColor.COLOR_PURPLE, 0);
+    public static final DeferredBlock<Block> KONTERIT_BLOCK = crystalBlock("konterit_block", MapColor.COLOR_MAGENTA, 0);
+    public static final DeferredBlock<Block> AETHERIT_BLOCK = crystalBlock("aetherit_block", MapColor.COLOR_CYAN, 7);
+    public static final DeferredBlock<Block> DRACONIUM_BLOCK = crystalBlock("draconium_block", MapColor.COLOR_RED, 9);
+    public static final DeferredBlock<Block> WYVERNIT_BLOCK = crystalBlock("wyvernit_block", MapColor.COLOR_LIGHT_BLUE, 0);
+    public static final DeferredBlock<Block> STEEL_BLOCK = blockWithItem("steel_block", Block::new,
+            p -> p.mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .requiresCorrectToolForDrops().strength(5.0f, 6.0f).sound(SoundType.METAL),
+            UnaryOperator.identity(), RESOURCE_TAB);
+
+    // =====================================================================================
+    // Dragon Warfare – Drachen (Bild "Dragon Warfare – Sechs Drachenarten")
+    // =====================================================================================
+
+    private static final Map<DragonType, DeferredBlock<ElementalDragonEggBlock>> DRAGON_EGGS_MUTABLE = new EnumMap<>(DragonType.class);
+    /** Ein Drachenei je Drachenart. */
+    public static final Map<DragonType, DeferredBlock<ElementalDragonEggBlock>> DRAGON_EGGS = Collections.unmodifiableMap(DRAGON_EGGS_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            String name = type.id() + "_dragon_egg";
+            DRAGON_EGGS_MUTABLE.put(type, blockWithItem(name,
+                    p -> new ElementalDragonEggBlock(type, p),
+                    p -> p.mapColor(type.mapColor()).strength(3.0f, 9.0f).lightLevel(state -> 1)
+                            .noOcclusion().sound(SoundType.STONE).pushReaction(PushReaction.BLOCK),
+                    ip -> ip.rarity(Rarity.EPIC).stacksTo(16)
+                            .component(DataComponents.LORE, ModItems.lore(name, 3)),
+                    DRAGON_TAB));
+        }
+    }
+
+    // =====================================================================================
+    // Kingdoms at War – Landwirtschaft (Bild "Nahrung & Pflanzen")
+    // =====================================================================================
+
+    public static final DeferredBlock<ModCropBlock> TOMATOES = crop("tomatoes", () -> ModItems.TOMATO_SEEDS.get());
+    public static final DeferredBlock<ModCropBlock> CABBAGES = crop("cabbages", () -> ModItems.CABBAGE_SEEDS.get());
+    public static final DeferredBlock<ModCropBlock> ONIONS = crop("onions", () -> ModItems.ONION.get());
+    public static final DeferredBlock<ModCropBlock> BARLEY = crop("barley", () -> ModItems.BARLEY_SEEDS.get());
+
+    /** Alle Feldfrüchte. */
+    public static final List<DeferredBlock<ModCropBlock>> CROPS = List.of(TOMATOES, CABBAGES, ONIONS, BARLEY);
+
+    // 5. Dekorative Pflanzen
+    public static final DeferredBlock<FlowerBlock> LAVENDER = flower("lavender", MobEffects.REGENERATION, 8.0f);
+    public static final DeferredBlock<FlowerBlock> GARDEN_ROSE = flower("garden_rose", MobEffects.NIGHT_VISION, 5.0f);
+    public static final DeferredBlock<FlowerBlock> FIRE_LILY = flower("fire_lily", MobEffects.FIRE_RESISTANCE, 4.0f);
+    public static final DeferredBlock<FlowerBlock> FROST_FLOWER = flower("frost_flower", MobEffects.SLOWNESS, 6.0f);
+
+    public static final DeferredBlock<FlowerPotBlock> POTTED_LAVENDER = pottedFlower("potted_lavender", LAVENDER);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_GARDEN_ROSE = pottedFlower("potted_garden_rose", GARDEN_ROSE);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_FIRE_LILY = pottedFlower("potted_fire_lily", FIRE_LILY);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_FROST_FLOWER = pottedFlower("potted_frost_flower", FROST_FLOWER);
+
+    /** Zierblumen mit ihrem Blumentopf. */
+    public static final Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> FLOWERS = Map.of(
+            LAVENDER, POTTED_LAVENDER,
+            GARDEN_ROSE, POTTED_GARDEN_ROSE,
+            FIRE_LILY, POTTED_FIRE_LILY,
+            FROST_FLOWER, POTTED_FROST_FLOWER);
+
+    private ModBlocks() {}
+
+    // =====================================================================================
+    // Hilfsmethoden
+    // =====================================================================================
+
+    private static <B extends Block> DeferredBlock<B> blockWithItem(String name,
+            Function<BlockBehaviour.Properties, ? extends B> factory,
+            Supplier<BlockBehaviour.Properties> properties,
+            UnaryOperator<Item.Properties> itemProperties,
+            List<Supplier<? extends ItemLike>> tab) {
+        DeferredBlock<B> block = BLOCKS.registerBlock(name, factory, properties);
+        ModItems.ITEMS.registerSimpleBlockItem(name, block, itemProperties);
+        tab.add(block);
+        return block;
+    }
+
+    private static <B extends Block> DeferredBlock<B> blockWithItem(String name,
+            Function<BlockBehaviour.Properties, ? extends B> factory,
+            UnaryOperator<BlockBehaviour.Properties> properties,
+            UnaryOperator<Item.Properties> itemProperties,
+            List<Supplier<? extends ItemLike>> tab) {
+        return blockWithItem(name, factory, () -> properties.apply(BlockBehaviour.Properties.of()), itemProperties, tab);
+    }
+
+    private static BuildingSet stoneSet(String name, String variantPrefix, MapColor color, SoundType sound, float hardness) {
+        return buildingSet(name, variantPrefix,
+                p -> p.mapColor(color).instrument(NoteBlockInstrument.BASEDRUM)
+                        .requiresCorrectToolForDrops().strength(hardness, 6.0f).sound(sound),
+                true, BuildingSet.Tool.PICKAXE);
+    }
+
+    private static BuildingSet roofSet(String name, String variantPrefix,
+            UnaryOperator<BlockBehaviour.Properties> properties, BuildingSet.Tool tool) {
+        return buildingSet(name, variantPrefix, properties, false, tool);
+    }
+
+    private static BuildingSet buildingSet(String name, String variantPrefix,
+            UnaryOperator<BlockBehaviour.Properties> properties, boolean withWall, BuildingSet.Tool tool) {
+        DeferredBlock<Block> base = blockWithItem(name, Block::new, properties, UnaryOperator.identity(), BUILDING_TAB);
+        DeferredBlock<StairBlock> stairs = blockWithItem(variantPrefix + "_stairs",
+                p -> new StairBlock(base.get().defaultBlockState(), p),
+                () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
+                UnaryOperator.identity(), BUILDING_TAB);
+        DeferredBlock<SlabBlock> slab = blockWithItem(variantPrefix + "_slab", SlabBlock::new,
+                () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
+                UnaryOperator.identity(), BUILDING_TAB);
+        DeferredBlock<WallBlock> wall = withWall
+                ? blockWithItem(variantPrefix + "_wall", WallBlock::new,
+                        () -> BlockBehaviour.Properties.ofFullCopy(base.get()).forceSolidOn(),
+                        UnaryOperator.identity(), BUILDING_TAB)
+                : null;
+        BuildingSet set = new BuildingSet(name, base, stairs, slab, wall, tool);
+        BUILDING_SETS_MUTABLE.add(set);
+        return set;
+    }
+
+    private static DeferredBlock<Block> timberFrame(String name) {
+        return blockWithItem(name, Block::new,
+                p -> p.mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASS)
+                        .strength(1.5f, 3.0f).sound(SoundType.WOOD).ignitedByLava(),
+                UnaryOperator.identity(), BUILDING_TAB);
+    }
+
+    private static DeferredBlock<DropExperienceBlock> stoneOre(String name, int minXp, int maxXp, int light) {
+        return blockWithItem(name, p -> new DropExperienceBlock(UniformInt.of(minXp, maxXp), p),
+                p -> p.mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM)
+                        .requiresCorrectToolForDrops().strength(3.0f, 3.0f).lightLevel(state -> light),
+                UnaryOperator.identity(), RESOURCE_TAB);
+    }
+
+    private static DeferredBlock<DropExperienceBlock> deepslateOre(String name, int minXp, int maxXp, int light) {
+        return blockWithItem(name, p -> new DropExperienceBlock(UniformInt.of(minXp, maxXp), p),
+                p -> p.mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM)
+                        .requiresCorrectToolForDrops().strength(4.5f, 3.0f).sound(SoundType.DEEPSLATE)
+                        .lightLevel(state -> light),
+                UnaryOperator.identity(), RESOURCE_TAB);
+    }
+
+    private static DeferredBlock<Block> crystalBlock(String name, MapColor color, int light) {
+        return blockWithItem(name, Block::new,
+                p -> p.mapColor(color).requiresCorrectToolForDrops().strength(5.0f, 6.0f)
+                        .sound(SoundType.AMETHYST).lightLevel(state -> light),
+                UnaryOperator.identity(), RESOURCE_TAB);
+    }
+
+    private static DeferredBlock<ModCropBlock> crop(String name, Supplier<? extends ItemLike> seed) {
+        return BLOCKS.registerBlock(name, p -> new ModCropBlock(seed, p),
+                p -> p.mapColor(MapColor.PLANT).noCollision().randomTicks().instabreak()
+                        .sound(SoundType.CROP).pushReaction(PushReaction.DESTROY));
+    }
+
+    private static DeferredBlock<FlowerBlock> flower(String name, Holder<MobEffect> stewEffect, float seconds) {
+        return blockWithItem(name, p -> new FlowerBlock(stewEffect, seconds, p),
+                p -> p.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS)
+                        .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY),
+                ip -> ip.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM), FARMING_TAB);
+    }
+
+    private static DeferredBlock<FlowerPotBlock> pottedFlower(String name, DeferredBlock<FlowerBlock> flower) {
+        return BLOCKS.registerBlock(name,
+                p -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, flower, p),
+                p -> p.instabreak().noOcclusion().pushReaction(PushReaction.DESTROY));
+    }
+}

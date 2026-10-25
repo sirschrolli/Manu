@@ -1,0 +1,31 @@
+# Metadaten der Mod. Die ${...}-Platzhalter werden beim Bauen aus gradle.properties ersetzt.
+license="${mod_license}"
+issueTrackerURL="https://github.com/sirschrolli/Manu/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://github.com/sirschrolli/Manu"
+logoFile="kingdomsatwar_logo.png"
+authors="${mod_authors}"
+credits="Inspiriert von Ancient Warfare und Ice and Fire"
+description='''
+Kingdoms at War – Dragon Warfare: Baue dein mittelalterliches Königreich, sammle Drachenerze und bereite dich auf die Drachen vor.
+
+Phase 1 (Testversion): neue Erze und Rohstoffe mit Weltgenerierung, sechs Dracheneier, Drachenschuppen, mittelalterliche Baublöcke, Feldfrüchte, Gerichte und Zierpflanzen.
+'''
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"

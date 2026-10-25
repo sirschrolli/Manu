@@ -1,0 +1,84 @@
+package io.github.sirschrolli.kingdomsatwar.registry;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+
+/**
+ * Eigene Tags. Die {@code c:}-Tags sind die gemeinsamen Tags aller NeoForge-Mods –
+ * so können andere Mods im Modpack unsere Erze und Rohstoffe erkennen.
+ */
+public final class ModTags {
+    public static final class Blocks {
+        public static final TagKey<Block> DRAGON_EGGS = mod("dragon_eggs");
+        public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
+        public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
+        public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
+        public static final TagKey<Block> ORES_AETHERIT = common("ores/aetherit");
+        public static final TagKey<Block> ORES_DRACONIUM = common("ores/draconium");
+        public static final TagKey<Block> ORES_WYVERNIT = common("ores/wyvernit");
+        public static final TagKey<Block> STORAGE_BLOCKS_CARBON = common("storage_blocks/carbon");
+        public static final TagKey<Block> STORAGE_BLOCKS_GEMSTONE = common("storage_blocks/gemstone");
+        public static final TagKey<Block> STORAGE_BLOCKS_KONTERIT = common("storage_blocks/konterit");
+        public static final TagKey<Block> STORAGE_BLOCKS_AETHERIT = common("storage_blocks/aetherit");
+        public static final TagKey<Block> STORAGE_BLOCKS_DRACONIUM = common("storage_blocks/draconium");
+        public static final TagKey<Block> STORAGE_BLOCKS_WYVERNIT = common("storage_blocks/wyvernit");
+        public static final TagKey<Block> STORAGE_BLOCKS_STEEL = common("storage_blocks/steel");
+
+        private static TagKey<Block> mod(String path) {
+            return TagKey.create(Registries.BLOCK, KingdomsAtWar.id(path));
+        }
+
+        private static TagKey<Block> common(String path) {
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", path));
+        }
+
+        private Blocks() {}
+    }
+
+    public static final class Items {
+        public static final TagKey<Item> DRAGON_EGGS = mod("dragon_eggs");
+        public static final TagKey<Item> DRAGON_SCALES = mod("dragon_scales");
+        public static final TagKey<Item> ORES_CARBON = common("ores/carbon");
+        public static final TagKey<Item> ORES_GEMSTONE = common("ores/gemstone");
+        public static final TagKey<Item> ORES_KONTERIT = common("ores/konterit");
+        public static final TagKey<Item> ORES_AETHERIT = common("ores/aetherit");
+        public static final TagKey<Item> ORES_DRACONIUM = common("ores/draconium");
+        public static final TagKey<Item> ORES_WYVERNIT = common("ores/wyvernit");
+        public static final TagKey<Item> STORAGE_BLOCKS_CARBON = common("storage_blocks/carbon");
+        public static final TagKey<Item> STORAGE_BLOCKS_GEMSTONE = common("storage_blocks/gemstone");
+        public static final TagKey<Item> STORAGE_BLOCKS_KONTERIT = common("storage_blocks/konterit");
+        public static final TagKey<Item> STORAGE_BLOCKS_AETHERIT = common("storage_blocks/aetherit");
+        public static final TagKey<Item> STORAGE_BLOCKS_DRACONIUM = common("storage_blocks/draconium");
+        public static final TagKey<Item> STORAGE_BLOCKS_WYVERNIT = common("storage_blocks/wyvernit");
+        public static final TagKey<Item> STORAGE_BLOCKS_STEEL = common("storage_blocks/steel");
+        public static final TagKey<Item> GEMS_GEMSTONE = common("gems/gemstone");
+        public static final TagKey<Item> GEMS_KONTERIT = common("gems/konterit");
+        public static final TagKey<Item> GEMS_AETHERIT = common("gems/aetherit");
+        public static final TagKey<Item> GEMS_DRACONIUM = common("gems/draconium");
+        public static final TagKey<Item> GEMS_WYVERNIT = common("gems/wyvernit");
+        public static final TagKey<Item> INGOTS_STEEL = common("ingots/steel");
+        public static final TagKey<Item> CROPS_TOMATO = common("crops/tomato");
+        public static final TagKey<Item> CROPS_CABBAGE = common("crops/cabbage");
+        public static final TagKey<Item> CROPS_ONION = common("crops/onion");
+        public static final TagKey<Item> CROPS_BARLEY = common("crops/barley");
+        public static final TagKey<Item> SEEDS_TOMATO = common("seeds/tomato");
+        public static final TagKey<Item> SEEDS_CABBAGE = common("seeds/cabbage");
+        public static final TagKey<Item> SEEDS_BARLEY = common("seeds/barley");
+
+        private static TagKey<Item> mod(String path) {
+            return TagKey.create(Registries.ITEM, KingdomsAtWar.id(path));
+        }
+
+        private static TagKey<Item> common(String path) {
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", path));
+        }
+
+        private Items() {}
+    }
+
+    private ModTags() {}
+}
