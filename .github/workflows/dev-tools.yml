@@ -29,8 +29,8 @@ jobs:
           java -Xmx6g -jar vineflower.jar -dgs=1 -rsy=1 -lit=1 -mpm=60 -log=WARN "$JAR" mcsrc/ > decompile.log 2>&1 || echo "Vineflower exit $?"
           tail -50 decompile.log
           ls -la mcsrc
-          cp "$JAR" devtools/
-          cp mcsrc/* devtools/ 2>/dev/null || true
+          (cd mcsrc && zip -qr ../devtools/mc-sources.zip .)
+          cp vineflower.jar devtools/
           NF=$(find ~/.gradle/caches -name "neoforge-26.3*-universal.jar" 2>/dev/null | head -1); cp "$NF" devtools/ 2>/dev/null || true
           tail -200 decompile.log > devtools/decompile-tail.log
           ls -la devtools
