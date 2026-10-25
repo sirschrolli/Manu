@@ -4,7 +4,7 @@
     "minecraft:cooked_beef",
     "kingdomsatwar:onion",
     "minecraft:wheat",
-    "minecraft:egg"
+    "#minecraft:eggs"
   ],
   "result": {
     "id": "kingdomsatwar:meat_pie"

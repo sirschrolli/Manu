@@ -1,0 +1,30 @@
+name: Aufräumen (einmalig)
+
+# Entfernt die Hilfs-Branches und Test-Läufe aus der Entwicklung. Wird im nächsten Commit wieder gelöscht.
+on:
+  push:
+    branches: [ 'phase-1-grundprojekt' ]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Hilfs-Branches löschen
+        run: |
+          for b in ci/api-probe ci/probe-output ci/output; do
+            git push origin --delete "$b" || true
+          done
+      - name: Probe- und fehlgeschlagene Entwicklungs-Läufe löschen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs?per_page=100" --paginate \
+            -q '.workflow_runs[] | select(.name == "API probe (temporary)" or (.name == "Build" and .conclusion == "failure" and .head_branch == "phase-1-grundprojekt")) | .id' \
+          | while read -r id; do
+              gh api -X DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/${id}" && echo "Lauf ${id} gelöscht" || true
+            done

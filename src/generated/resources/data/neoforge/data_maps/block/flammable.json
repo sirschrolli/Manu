@@ -1,0 +1,32 @@
+{
+  "values": {
+    "kingdomsatwar:timber_beam": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame_cross": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:timber_frame_diagonal": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingle_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingle_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:wooden_shingles": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    }
+  }
+}
