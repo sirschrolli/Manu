@@ -14,7 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import cave_troll, deer, dragon, dragon_armor, goose, lindworm, wild_boar, will_o_wisp  # noqa: E402
+from entitygen.models import (boss_fire, cave_troll, deer, dragon, dragon_armor, goose, lindworm, wild_boar,  # noqa: E402
+                              will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -54,6 +55,9 @@ def main():
     write_model(will_o_wisp, "WillOWispGeometry", "Geometrie des Irrlichts.", "will_o_wisp", will_o_wisp.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
+    # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
+    write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
+                "boss", boss_fire.PALETTES, preview)
 
 
 if __name__ == "__main__":

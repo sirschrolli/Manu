@@ -9,6 +9,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModCreativeTabs;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import io.github.sirschrolli.kingdomsatwar.worldgen.ModFeatureTypes;
 import net.minecraft.resources.Identifier;
@@ -40,6 +41,7 @@ public final class KingdomsAtWar {
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
+        ModParticles.PARTICLE_TYPES.register(modBus);
         ModFeatureTypes.FEATURE_TYPES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);

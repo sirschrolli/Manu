@@ -18,5 +18,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation CAVE_TROLL = new ModelLayerLocation(KingdomsAtWar.id("cave_troll"), "main");
     public static final ModelLayerLocation LINDWORM = new ModelLayerLocation(KingdomsAtWar.id("lindworm"), "main");
 
+    /** Drachen-Bosse. */
+    public static final ModelLayerLocation PYRRHON = new ModelLayerLocation(KingdomsAtWar.id("fire_dragon_boss"), "main");
+
     private ModModelLayers() {}
 }

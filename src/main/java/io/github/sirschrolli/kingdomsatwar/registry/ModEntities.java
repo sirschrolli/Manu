@@ -3,6 +3,8 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossProjectile;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.fire.PyrrhonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.CaveTrollEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.DeerEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.GooseEntity;
@@ -75,6 +77,16 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
             LindwormEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.6f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Drachen-Bosse
+    /** Pyrrhon, der Aschenfürst (Feuer). */
+    public static final DeferredHolder<EntityType<?>, EntityType<PyrrhonEntity>> PYRRHON = ENTITIES.registerEntityType("fire_dragon_boss",
+            PyrrhonEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(6.0f, 6.0f).eyeHeight(7.0f).fireImmune().clientTrackingRange(16).updateInterval(2));
+    /** Geschosse der Bosse (Feuerbälle, Meteore …). */
+    public static final DeferredHolder<EntityType<?>, EntityType<BossProjectile>> BOSS_PROJECTILE = ENTITIES.registerEntityType("boss_projectile",
+            BossProjectile::new, MobCategory.MISC,
+            builder -> builder.sized(1.0f, 1.0f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
+
     // ---------------------------------------------------------------- Möbel
     /** Unsichtbarer Sitz auf Stühlen, Bänken und dem Thron. */
     public static final DeferredHolder<EntityType<?>, EntityType<SeatEntity>> SEAT = ENTITIES.registerEntityType("seat",
@@ -94,6 +106,7 @@ public final class ModEntities {
         event.put(WILL_O_WISP.get(), WillOWispEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
+        event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
     }
 
     /**

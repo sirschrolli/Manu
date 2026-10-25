@@ -27,6 +27,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        bosses();
         // --- Kreativ-Tabs ---
         // (kurz halten: längere Titel ragen im Kreativ-Inventar über den Rand)
         text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Building", "Kingdoms at War: Bauen");
@@ -277,6 +278,14 @@ public class ModLanguageProvider extends LanguageProvider {
         lore("mead", "The drink of heroes: extra hearts for two minutes", "Der Trank der Helden: Extraherzen für zwei Minuten");
         block(ModBlocks.FEAST, "Feast", "Festmahl");
         lore("feast", "Place it on the table – four hearty servings", "Auf die Tafel stellen – vier üppige Portionen");
+    }
+
+    private void bosses() {
+        add(ModEntities.PYRRHON.get(), pick("Pyrrhon", "Pyrrhon"));
+        text("boss.kingdomsatwar.fire", "Pyrrhon, the Ash Lord", "Pyrrhon, der Aschenfürst");
+        text("boss.kingdomsatwar.fire.title", "The Ash Lord", "Der Aschenfürst");
+        add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
+        text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
     }
 
     private void creatures() {

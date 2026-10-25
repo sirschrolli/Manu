@@ -38,6 +38,11 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
     public void generate() {
         ModEntities.DRAGONS.values().forEach(type -> this.add(type.get(), LootTable.lootTable()));
         ModEntities.SOLDIERS.values().forEach(type -> this.add(type.get(), LootTable.lootTable()));
+        // Drachen-Bosse: viele Schuppen, Draconium und Edelsteine (das Ei erscheint gesondert auf dem Nest)
+        this.add(ModEntities.PYRRHON.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         this.add(ModEntities.BANDIT.get(), banditLoot(false));
         this.add(ModEntities.BANDIT_ARCHER.get(), banditLoot(true));
 

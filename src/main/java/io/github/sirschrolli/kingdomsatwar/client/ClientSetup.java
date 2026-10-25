@@ -1,7 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.client;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.client.boss.BossProjectileRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.boss.DragonBossModel;
+import io.github.sirschrolli.kingdomsatwar.client.boss.DragonBossRenderer;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.PyrrhonGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.CaveTrollGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.DeerGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.DragonArmorGeometry;
@@ -26,6 +30,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import io.github.sirschrolli.kingdomsatwar.client.boss.BossParticle;
+import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 
 /** Anmeldung aller Client-Dinge: Modelle und Renderer der Lebewesen. */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
@@ -43,6 +50,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
+        event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
     }
 
     @SubscribeEvent
@@ -58,6 +66,21 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.WILL_O_WISP.get(), WillOWispRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
+        // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
+        event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,
+                new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 4, 8, true, 4, 32.0f),
+                KingdomsAtWar.id("textures/entity/boss/pyrrhon.png"), KingdomsAtWar.id("textures/entity/boss/pyrrhon_glow.png"),
+                2.1f, 4.4f, 4.5f));
+        event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
+    }
+
+    @SubscribeEvent
+    static void registerParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.BOSS_FLAME.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FLAME));
+        event.registerSpriteSet(ModParticles.BOSS_FROST.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FROST));
+        event.registerSpriteSet(ModParticles.BOSS_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SPARK));
+        event.registerSpriteSet(ModParticles.BOSS_SPORE.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SPORE));
+        event.registerSpriteSet(ModParticles.BOSS_DUST.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.DUST));
+        event.registerSpriteSet(ModParticles.BOSS_WATER.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.WATER));
     }
 }
-

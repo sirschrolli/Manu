@@ -68,7 +68,31 @@ public final class ModGameEvents {
                     PacketDistributor.sendToPlayer(player, new StartIntroPayload(true));
                     return 1;
                 }))
-                .then(army));
+                .then(army)
+                .then(Commands.literal("boss").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.literal("fire").executes(context -> summonBoss(context.getSource().getPlayerOrException())))));
+    }
+
+    /** Lässt einen Drachen-Boss vor dem Spieler erwachen (zum Testen; das Nest ist dort, wo er erwacht). */
+    private static int summonBoss(ServerPlayer player) {
+        ServerLevel level = player.level();
+        net.minecraft.world.phys.Vec3 look = player.getLookAngle().multiply(1, 0, 1);
+        look = look.lengthSqr() < 1.0e-4 ? new net.minecraft.world.phys.Vec3(0, 0, 1) : look.normalize();
+        net.minecraft.world.phys.Vec3 at = player.position().add(look.scale(26));
+        int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(at.x),
+                (int) Math.floor(at.z));
+        BlockPos home = BlockPos.containing(at.x, y, at.z);
+        var boss = ModEntities.PYRRHON.get().create(level, EntitySpawnReason.COMMAND);
+        if (boss == null) {
+            return 0;
+        }
+        boss.snapTo(home.getX() + 0.5, home.getY() - 11, home.getZ() + 0.5, player.getYRot() + 180.0f, 0.0f);
+        boss.yBodyRot = player.getYRot() + 180.0f;
+        boss.yHeadRot = boss.yBodyRot;
+        level.addFreshEntity(boss);
+        boss.beginAwakening(level, home);
+        player.sendSystemMessage(Component.translatable("command.kingdomsatwar.boss.summoned", boss.getDisplayName()));
+        return 1;
     }
 
     private static int summonArmy(ServerPlayer player, SoldierType type, int count) {

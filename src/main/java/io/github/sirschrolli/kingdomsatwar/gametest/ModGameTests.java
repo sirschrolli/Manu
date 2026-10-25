@@ -148,6 +148,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("staff_spells", () -> ModGameTests::staffSpells);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STRUCTURES_GENERATE =
             TEST_FUNCTIONS.register("structures_generate", () -> ModGameTests::structuresGenerate);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_BOSS_LIFECYCLE =
+            TEST_FUNCTIONS.register("dragon_boss_lifecycle", () -> ModGameTests::dragonBossLifecycle);
 
     private ModGameTests() {}
 
@@ -169,6 +171,9 @@ public final class ModGameTests {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
+        // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
+        event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     // =====================================================================================
@@ -668,6 +673,48 @@ public final class ModGameTests {
         soldier.equip();
         helper.succeedWhen(() -> helper.assertTrue(soldier.getHealth() < soldier.getMaxHealth() || troll.getHealth() < troll.getMaxHealth(),
                 "Troll und Soldat kämpfen nicht"));
+    }
+
+    /**
+     * Drachen-Boss: unverwundbar beim Erwachen, danach kämpfbereit; Schaden von Nicht-Spielern zählt nur zum Teil,
+     * Treffer am Kopf zählen mehr; nach dem Todesstoß folgt die Todesanimation, dann liegt das Ei im Nest.
+     */
+    private static void dragonBossLifecycle(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos homeRel = new BlockPos(4, 1, 4);
+        BlockPos home = helper.absolutePos(homeRel);
+        var boss = ModEntities.PYRRHON.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        helper.assertTrue(boss != null, "Boss lässt sich nicht erzeugen");
+        boss.snapTo(home.getX() + 0.5, home.getY() - 11, home.getZ() + 0.5, 0, 0);
+        level.addFreshEntity(boss);
+        boss.beginAwakening(level, home);
+        helper.assertTrue(boss.getBossState() == io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.State.AWAKENING,
+                "Boss erwacht nicht");
+        helper.assertFalse(boss.hurtServer(level, level.damageSources().magic(), 10.0f), "Boss ist beim Erwachen verwundbar");
+        int awake = boss.awakeningTicks() + 5;
+        helper.runAfterDelay(awake, () -> {
+            helper.assertTrue(boss.getBossState() == io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.State.FIGHT,
+                    "Boss ist nach dem Erwachen nicht kampfbereit: " + boss.getBossState());
+            helper.assertTrue(Math.abs(boss.getY() - home.getY()) < 1.5, "Boss ist nicht aus dem Nest gestiegen: " + boss.getY());
+            float before = boss.getHealth();
+            boss.hurtServer(level, level.damageSources().magic(), 50.0f);
+            float body = before - boss.getHealth();
+            helper.assertTrue(Math.abs(body - 50.0f * io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.NPC_DAMAGE_FACTOR) < 0.6f,
+                    "Schaden ohne Spieler sollte gemindert sein: " + body);
+            before = boss.getHealth();
+            boss.bossParts()[0].hurtServer(level, level.damageSources().magic(), 50.0f);
+            float head = before - boss.getHealth();
+            helper.assertTrue(head > body * 1.3f, "Kopftreffer zählen nicht mehr: " + head + " / " + body);
+            boss.setHealth(1.0f);
+            boss.hurtServer(level, level.damageSources().magic(), 50.0f);
+            helper.assertTrue(boss.isDeadOrDying(), "Boss stirbt nicht");
+        });
+        helper.runAfterDelay(awake + io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.DEATH_TICKS + 10, () -> {
+            helper.assertTrue(boss.isRemoved(), "Boss wurde nach der Todesanimation nicht entfernt");
+            helper.assertBlockPresent(ModBlocks.DRAGON_EGGS.get(DragonType.FIRE).get(), homeRel);
+            helper.succeed();
+        });
     }
 
     /**

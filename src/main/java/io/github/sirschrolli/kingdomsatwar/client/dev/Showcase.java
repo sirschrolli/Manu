@@ -6,6 +6,9 @@ import io.github.sirschrolli.kingdomsatwar.client.intro.IntroController;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScreen;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScript;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
@@ -70,6 +73,7 @@ final class Showcase {
         steps.add(Step.command("gamerule advance_time false"));
         steps.add(Step.command("gamerule advance_weather false"));
         steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("gamerule send_command_feedback false"));
         steps.add(Step.waitTicks(20));
         for (String scene : scenes.split(",")) {
             switch (scene.trim()) {
@@ -87,6 +91,7 @@ final class Showcase {
                 case "farm" -> farm(steps);
                 case "magic" -> magic(steps);
                 case "structures" -> structures(steps);
+                case "boss" -> boss(steps);
                 default -> { }
             }
         }
@@ -256,6 +261,163 @@ final class Showcase {
         steps.add(Step.until(() -> !(Minecraft.getInstance().gui.screen() instanceof IntroScreen), 400));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("intro_after"));
+    }
+
+    /** Drachen-Boss Pyrrhon: Erwachen aus dem Lavasee, Kampf gegen Soldaten (Odem, Flug, Meteorregen), Tod und Ei. */
+    private static void boss(Deque<Step> steps) {
+        int ox = 600;
+        int oz = 0;
+        DragonBossEntity[] boss = new DragonBossEntity[1];
+        steps.add(tp(ox, 30, oz - 40, 0, 30));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.command("time set 12600"));
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(ox - 45, ground - 3, oz - 45), new BlockPos(ox + 45, ground - 1, oz + 45), Blocks.BASALT.defaultBlockState());
+            fill(level, new BlockPos(ox - 45, ground, oz - 45), new BlockPos(ox + 45, ground + 30, oz + 45), Blocks.AIR.defaultBlockState());
+            for (BlockPos pos : BlockPos.betweenClosed(ox - 6, ground - 3, oz - 6, ox + 6, ground - 1, oz + 6)) {
+                if (pos.distSqr(new BlockPos(ox, pos.getY(), oz)) <= 30) {
+                    level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+            for (int i = 0; i < 40; i++) {
+                double a = i * Math.PI * 2 / 40;
+                BlockPos p = new BlockPos(ox + (int) Math.round(Math.cos(a) * 30), ground, oz + (int) Math.round(Math.sin(a) * 30));
+                fill(level, p, p.above(2 + (i % 3)), Blocks.BLACKSTONE.defaultBlockState());
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.server(level -> {
+            var b = ModEntities.PYRRHON.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            BlockPos home = new BlockPos(ox, ground, oz);
+            b.snapTo(ox + 0.5, ground - 11, oz + 0.5, 180, 0);
+            b.yBodyRot = 180;
+            b.yHeadRot = 180;
+            level.addFreshEntity(b);
+            b.beginAwakening(level, home);
+            boss[0] = b;
+        }));
+        // Erwachen: von unten, nah am Lavasee
+        steps.add(tp(ox + 3.5, 1.6, oz - 19, 5, -14));
+        steps.add(Step.hud(false));
+        for (double at : new double[] {3.2, 5.0, 6.9, 7.8}) {
+            steps.add(Step.until(() -> boss[0] != null && boss[0].getStateTicks() >= at * 20, 400));
+            steps.add(Step.screenshot("boss_awaken_" + (int) (at * 10)));
+        }
+        steps.add(Step.until(() -> boss[0].getBossState() == DragonBossEntity.State.FIGHT, 200));
+        // Soldaten treten an
+        steps.add(Step.server(level -> {
+            SoldierType[] types = {SoldierType.KNIGHT, SoldierType.SWORDSMAN, SoldierType.ARCHER, SoldierType.SWORDSMAN, SoldierType.KNIGHT,
+                    SoldierType.ARCHER, SoldierType.CAPTAIN};
+            for (int i = 0; i < types.length; i++) {
+                SoldierEntity s = ModEntities.SOLDIERS.get(types[i]).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                s.snapTo(ox - 12 + i * 4 + 0.5, ground, oz - 18.5, 0, 0);
+                s.finalizeSpawn(level, level.getCurrentDifficultyAt(s.blockPosition()), net.minecraft.world.entity.EntitySpawnReason.COMMAND, null);
+                s.setPersistenceRequired();
+                level.addFreshEntity(s);
+            }
+        }));
+        steps.add(tp(ox + 2.5, 7, oz - 36, 0, 6));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("boss_fight_bar"));
+        steps.add(Step.hud(false));
+        // Seitenansicht in voller Länge
+        steps.add(near(boss, 0, 30, 3, 4));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("boss_profile"));
+        // Odem, von schräg vorn und tief
+        steps.add(forceAttack(boss, BossAnims.BREATH));
+        steps.add(near(boss, 20, 12, 1.5, 6));
+        steps.add(Step.waitTicks(16));
+        steps.add(Step.screenshot("boss_breath_charge"));
+        steps.add(Step.waitTicks(22));
+        steps.add(Step.screenshot("boss_breath"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("boss_breath_2"));
+        steps.add(Step.waitTicks(40));
+        steps.add(forceAttack(boss, BossAnims.ROAR));
+        steps.add(near(boss, 16, -4, 1.0, 8));
+        steps.add(Step.waitTicks(18));
+        steps.add(Step.screenshot("boss_roar"));
+        steps.add(Step.waitTicks(30));
+        steps.add(forceAttack(boss, BossAnims.BITE));
+        steps.add(near(boss, 13, 9, 2.5, 6));
+        steps.add(Step.waitTicks(11));
+        steps.add(Step.screenshot("boss_bite"));
+        steps.add(Step.waitTicks(30));
+        steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
+        steps.add(near(boss, 26, 22, 2, 6));
+        steps.add(Step.waitTicks(16));
+        steps.add(Step.screenshot("boss_takeoff"));
+        steps.add(Step.waitTicks(50));
+        steps.add(tp(ox + 0.5, 1.6, oz + 4.5, 180, -38));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("boss_flying_below"));
+        steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
+        steps.add(Step.waitTicks(20));
+        steps.add(forceAttack(boss, BossAnims.RAIN));
+        steps.add(tp(ox + 26.5, 10, oz - 26, 45, 0));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("boss_meteor_rain"));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("boss_meteor_rain_2"));
+        steps.add(Step.waitTicks(60));
+        steps.add(forceAttack(boss, BossAnims.LAND));
+        steps.add(Step.until(() -> !boss[0].isFlying(), 200));
+        steps.add(Step.waitTicks(4));
+        steps.add(near(boss, 22, 10, 2, 5));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("boss_landed"));
+        // Der Todesstoß
+        steps.add(Step.server(level -> {
+            boss[0].setHealth(1.0f);
+            boss[0].hurtServer(level, level.damageSources().magic(), 100.0f);
+        }));
+        steps.add(near(boss, 20, 14, 3, 3));
+        for (double at : new double[] {0.8, 2.6, 4.5, 7.8}) {
+            steps.add(Step.until(() -> boss[0].deathTime >= at * 20, 300));
+            steps.add(Step.screenshot("boss_death_" + (int) (at * 10)));
+        }
+        steps.add(Step.until(() -> boss[0].isRemoved(), 200));
+        steps.add(Step.waitTicks(30));
+        steps.add(tp(ox + 0.5, 4, oz - 9, 0, 22));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("boss_egg"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.hud(true));
+    }
+
+    /** Kamera relativ zum Boss: {@code forward} Blöcke vor ihm, {@code side} nach links, {@code up} hoch, Blick auf seine Mitte. */
+    private static Step near(DragonBossEntity[] boss, double forward, double side, double up, double lookHeight) {
+        return Step.once(minecraft -> {
+            DragonBossEntity b = boss[0];
+            if (b == null) {
+                return;
+            }
+            net.minecraft.world.phys.Vec3 f = net.minecraft.world.phys.Vec3.directionFromRotation(0, b.yBodyRot);
+            net.minecraft.world.phys.Vec3 left = new net.minecraft.world.phys.Vec3(f.z, 0, -f.x);
+            net.minecraft.world.phys.Vec3 cam = b.position().add(f.scale(forward)).add(left.scale(side)).add(0, up, 0);
+            net.minecraft.world.phys.Vec3 look = b.position().add(0, lookHeight, 0).subtract(cam);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, look.horizontalDistance()) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cam.x, cam.y, cam.z, yaw, pitch));
+        });
+    }
+
+    private static Step forceAttack(DragonBossEntity[] boss, int anim) {
+        return Step.server(level -> {
+            DragonBossEntity b = boss[0];
+            BossAttack attack = b.findAttack(anim);
+            net.minecraft.world.entity.LivingEntity target = b.getTarget();
+            if (target == null) {
+                target = level.getEntitiesOfClass(SoldierEntity.class, b.getBoundingBox().inflate(60)).stream().findFirst().orElse(null);
+            }
+            if (attack != null && target != null) {
+                b.startAttack(level, attack, target);
+            }
+        });
     }
 
     /** Mauerproben (3x3 Blöcke) aus der Nähe – zum Vergleichen der Texturen. Kamera schaut nach Norden. */
