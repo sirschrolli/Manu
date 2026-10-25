@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:polished_deepslate",
+    "kingdomsatwar:aetherit",
+    "kingdomsatwar:wisp_dust",
+    "minecraft:packed_ice"
+  ],
+  "result": {
+    "id": "kingdomsatwar:ice_rune"
+  }
+}

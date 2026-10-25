@@ -44,6 +44,7 @@ public class ModRecipeProvider extends RecipeProvider {
         foodRecipes();
         armyRecipes();
         equipmentRecipes();
+        magicRecipes();
         cookVenison();
     }
 
@@ -121,6 +122,39 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('A', ModItems.STEEL_DRAGON_ARMOR.get())
                 .unlockedBy(getHasName(ModItems.STEEL_DRAGON_ARMOR.get()), has(ModItems.STEEL_DRAGON_ARMOR.get()))
                 .save(output, key("draconium_dragon_armor"));
+    }
+
+    // =====================================================================================
+    // Magie
+    // =====================================================================================
+
+    private void magicRecipes() {
+        Item aetherit = ModItems.AETHERIT.get();
+        Item dust = ModItems.WISP_DUST.get();
+        shaped(RecipeCategory.COMBAT, ModItems.AETHERIT_STAFF.get())
+                .pattern(" WA")
+                .pattern(" SW")
+                .pattern("S  ")
+                .define('A', aetherit)
+                .define('W', dust)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(aetherit), has(aetherit))
+                .save(output, key("aetherit_staff"));
+        // Runen: Schieferplatte, Aetherit, Irrlichtstaub und eine Zutat des Elements
+        java.util.Map<DragonType, ItemLike> essence = new java.util.EnumMap<>(DragonType.class);
+        essence.put(DragonType.FIRE, Items.BLAZE_POWDER);
+        essence.put(DragonType.ICE, Items.PACKED_ICE);
+        essence.put(DragonType.LIGHTNING, Items.COPPER_INGOT);
+        essence.put(DragonType.NATURE, Items.MOSS_BLOCK);
+        essence.put(DragonType.EARTH, Items.RAW_IRON);
+        essence.put(DragonType.WATER, Items.PRISMARINE_SHARD);
+        ModItems.RUNES.forEach((type, rune) -> shapeless(RecipeCategory.COMBAT, rune.get())
+                .requires(Items.POLISHED_DEEPSLATE)
+                .requires(aetherit)
+                .requires(dust)
+                .requires(essence.get(type))
+                .unlockedBy(getHasName(dust), has(dust))
+                .save(output, key(type.id() + "_rune")));
     }
 
     private void cookVenison() {

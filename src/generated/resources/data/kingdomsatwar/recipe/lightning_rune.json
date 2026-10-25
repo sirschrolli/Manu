@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "minecraft:polished_deepslate",
+    "kingdomsatwar:aetherit",
+    "kingdomsatwar:wisp_dust",
+    "minecraft:copper_ingot"
+  ],
+  "result": {
+    "id": "kingdomsatwar:lightning_rune"
+  }
+}

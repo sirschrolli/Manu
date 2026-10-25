@@ -6,6 +6,8 @@ import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.item.DraconiumWeaponItem;
 import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
+import io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem;
+import io.github.sirschrolli.kingdomsatwar.magic.RuneItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -282,6 +284,29 @@ public final class ModItems {
     // Drachenpanzer: Rüstung für den eigenen ausgewachsenen Drachen
     public static final DeferredItem<Item> STEEL_DRAGON_ARMOR = dragonArmor("steel_dragon_armor", ModEquipment.STEEL_DRAGON_ARMOR, false);
     public static final DeferredItem<Item> DRACONIUM_DRAGON_ARMOR = dragonArmor("draconium_dragon_armor", ModEquipment.DRACONIUM_DRAGON_ARMOR, true);
+
+    // =====================================================================================
+    // Magie: Aetherit-Stab und die sechs Runen der Drachen-Elemente
+    // =====================================================================================
+
+    /** Wirkt Zauber – ohne Rune einen Aether-Blitz, mit einer Rune in der anderen Hand deren Element. */
+    public static final DeferredItem<AetheritStaffItem> AETHERIT_STAFF = addTo(EQUIPMENT_TAB, ITEMS.registerItem("aetherit_staff",
+            AetheritStaffItem::new, p -> p.durability(320).rarity(Rarity.EPIC).enchantable(12)
+                    .repairable(ModTags.Items.GEMS_AETHERIT)
+                    .component(DataComponents.LORE, lore("aetherit_staff", 2))));
+
+    private static final Map<DragonType, DeferredItem<RuneItem>> RUNES_MUTABLE = new EnumMap<>(DragonType.class);
+    /** Eine Rune je Drachen-Element. */
+    public static final Map<DragonType, DeferredItem<RuneItem>> RUNES = Collections.unmodifiableMap(RUNES_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            String name = type.id() + "_rune";
+            RUNES_MUTABLE.put(type, addTo(EQUIPMENT_TAB, ITEMS.registerItem(name, p -> new RuneItem(type, p),
+                    p -> p.stacksTo(16).rarity(Rarity.RARE).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                            .component(DataComponents.LORE, lore(name, 1)))));
+        }
+    }
 
     private ModItems() {}
 

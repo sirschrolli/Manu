@@ -14,6 +14,8 @@ import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
+import io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem;
+import io.github.sirschrolli.kingdomsatwar.magic.Spell;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -142,6 +144,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("decor_blocks", () -> ModGameTests::decorBlocks);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRINKS_AND_FEAST =
             TEST_FUNCTIONS.register("drinks_and_feast", () -> ModGameTests::drinksAndFeast);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STAFF_SPELLS =
+            TEST_FUNCTIONS.register("staff_spells", () -> ModGameTests::staffSpells);
 
     private ModGameTests() {}
 
@@ -158,7 +162,8 @@ public final class ModGameTests {
                 List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
-                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST)) {
+                        LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST,
+                        STAFF_SPELLS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -232,7 +237,7 @@ public final class ModGameTests {
                 "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking",
                 "white_plaster", "clay_plaster_stairs", "leaded_glass", "leaded_glass_pane", "castle_door", "green_shutters",
                 "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement", "ale", "wine", "mead",
-                "garlic_bread", "feast",
+                "garlic_bread", "feast", "aetherit_staff", "fire_rune", "water_rune",
                 "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
@@ -776,7 +781,57 @@ public final class ModGameTests {
             helper.assertTrue(player.hasEffect(effect), drink + " wirkt nicht");
             helper.assertTrue(rest.is(Items.GLASS_BOTTLE), drink + " lässt keine leere Flasche übrig, sondern " + rest);
         });
-        helper.assertTrue(ModBlocks.MOONFLOWER.get().defaultBlockState().getLightEmission() > 0, "Mondblume leuchtet nicht");
+        helper.assertTrue(ModBlocks.MOONFLOWER.get().defaultBlockState().getLightEmission(level, BlockPos.ZERO) > 0, "Mondblume leuchtet nicht");
+        helper.succeed();
+    }
+
+    /**
+     * Aetherit-Stab: Der Aether-Blitz trifft das anvisierte Ziel, Frost verlangsamt, der Erdstoß verletzt Feinde,
+     * aber nicht den eigenen Wolf, Natur heilt, die Woge schenkt Wasseratmung, Feuer und Blitz erscheinen.
+     * Mit Rune in der zweiten Hand wirkt der Stab deren Zauber und kostet Haltbarkeit.
+     */
+    private static void staffSpells(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        Player mage = helper.makeMockPlayer(GameType.SURVIVAL);
+        mage.snapTo(helper.absoluteVec(new Vec3(4.5, 1, 1.5)), 0.0f, 8.0f);            // Blick nach Süden
+        var golem = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(4, 1, 5));         // vorn: Blitz und Frost
+        golem.setNoAi(true);
+        var flank = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(8, 1, 1));         // seitlich: Erdstoß
+        flank.setNoAi(true);
+        var wolf = helper.spawn(EntityTypes.WOLF, new BlockPos(6, 1, 2));
+        wolf.setNoAi(true);
+        wolf.tame(mage);
+
+        float health = golem.getHealth();
+        helper.assertTrue(Spell.AETHER_BOLT.cast(level, mage) && golem.getHealth() < health, "Der Aether-Blitz trifft nicht");
+        helper.assertTrue(flank.getHealth() == flank.getMaxHealth(), "Der Aether-Blitz trifft auch daneben");
+        Spell.ICE.cast(level, mage);
+        helper.assertTrue(golem.hasEffect(MobEffects.SLOWNESS) && !flank.hasEffect(MobEffects.SLOWNESS),
+                "Frosthauch trifft nicht (nur) den Kegel vor dem Zaubernden");
+        float wolfHealth = wolf.getHealth();
+        Spell.EARTH.cast(level, mage);
+        helper.assertTrue(flank.getHealth() < flank.getMaxHealth(), "Erdstoß trifft den Golem nicht");
+        helper.assertTrue(wolf.getHealth() == wolfHealth, "Erdstoß verletzt den eigenen Wolf");
+        Spell.NATURE.cast(level, mage);
+        helper.assertTrue(mage.hasEffect(MobEffects.REGENERATION) && wolf.hasEffect(MobEffects.REGENERATION), "Natur heilt nicht");
+        Spell.WATER.cast(level, mage);
+        helper.assertTrue(mage.hasEffect(MobEffects.WATER_BREATHING), "Woge schenkt keine Wasseratmung");
+        Spell.FIRE.cast(level, mage);
+        helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball.class,
+                mage.getBoundingBox().inflate(4)).isEmpty(), "Kein Feuerball");
+
+        // Mit dem Stab: Rune in der zweiten Hand bestimmt den Zauber, der Stab nutzt sich ab und braucht eine Pause
+        ItemStack staff = new ItemStack(ModItems.AETHERIT_STAFF.get());
+        mage.setItemInHand(InteractionHand.MAIN_HAND, staff);
+        mage.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.RUNES.get(DragonType.LIGHTNING).get()));
+        helper.assertTrue(AetheritStaffItem.runeInOtherHand(mage, InteractionHand.MAIN_HAND) == DragonType.LIGHTNING,
+                "Rune in der zweiten Hand wird nicht erkannt");
+        ModItems.AETHERIT_STAFF.get().use(level, mage, InteractionHand.MAIN_HAND);
+        helper.assertTrue(staff.getDamageValue() == 3, "Blitz kostet nicht 3 Haltbarkeit: " + staff.getDamageValue());
+        helper.assertTrue(mage.getCooldowns().isOnCooldown(staff), "Stab hat keine Abklingzeit");
+        helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.LightningBolt.class, golem.getBoundingBox().inflate(3)).isEmpty(),
+                "Kein Blitz am Ziel");
         helper.succeed();
     }
 

@@ -292,6 +292,10 @@ public class ModModelProvider extends ModelProvider {
             flat(items, item.get());
         }
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
+
+        // --- Magie ---
+        items.generateFlatItem(ModItems.AETHERIT_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        ModItems.RUNES.values().forEach(rune -> flat(items, rune.get()));
     }
 
     /** Stuhl, Bank, Tisch und Thron. */

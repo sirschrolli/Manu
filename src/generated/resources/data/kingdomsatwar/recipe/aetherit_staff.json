@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:aetherit",
+    "S": "minecraft:stick",
+    "W": "kingdomsatwar:wisp_dust"
+  },
+  "pattern": [
+    " WA",
+    " SW",
+    "S  "
+  ],
+  "result": {
+    "id": "kingdomsatwar:aetherit_staff"
+  }
+}

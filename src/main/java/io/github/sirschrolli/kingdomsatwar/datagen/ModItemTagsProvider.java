@@ -146,6 +146,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 ModItems.ONION, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY, ModItems.HOPS, ModItems.GRAPES, ModItems.GARLIC);
         add(ItemTags.CHICKEN_FOOD, ModItems.TOMATO_SEEDS, ModItems.CABBAGE_SEEDS, ModItems.BARLEY_SEEDS);
 
+        // --- Magie: Haltbarkeits-Verzauberungen (Haltbarkeit, Reparatur) für den Stab ---
+        add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.AETHERIT_STAFF);
+
         // --- Nahrung ---
         add(Tags.Items.FOODS_VEGETABLE, ModItems.TOMATO, ModItems.CABBAGE, ModItems.ONION, ModItems.GARLIC);
         add(Tags.Items.FOODS_FRUIT, ModItems.GRAPES);

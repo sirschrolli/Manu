@@ -84,6 +84,7 @@ final class Showcase {
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
+                case "magic" -> magic(steps);
                 default -> { }
             }
         }
@@ -756,6 +757,49 @@ final class Showcase {
         steps.add(Step.command("time set 6000"));
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));
+    }
+
+    /** Der Aetherit-Stab in Aktion: jeder Zauber einmal, kurz nach dem Wirken fotografiert. */
+    private static void magic(Deque<Step> steps) {
+        int oz = 380;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-8, ground - 1, oz - 16), new BlockPos(16, ground - 1, oz + 6), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-8, ground, oz - 16), new BlockPos(16, ground + 8, oz + 6), Blocks.AIR.defaultBlockState());
+            fill(level, new BlockPos(2, ground - 1, oz - 6), new BlockPos(7, ground - 1, oz - 3), Blocks.WATER.defaultBlockState());
+            for (int x : new int[] {1, 8}) {
+                var golem = net.minecraft.world.entity.EntityTypes.IRON_GOLEM.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                golem.setNoAi(true);
+                golem.snapTo(x + 0.5, ground, oz - 9 + 0.5, 0, 0);
+                level.addFreshEntity(golem);
+            }
+        }));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with kingdomsatwar:aetherit_staff"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:fire_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.2 with kingdomsatwar:ice_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.3 with kingdomsatwar:lightning_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.4 with kingdomsatwar:nature_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.5 with kingdomsatwar:earth_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.6 with kingdomsatwar:water_rune"));
+        steps.add(tp(4.5, 0, oz + 1.5, 180, 14));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(120));
+        String[][] casts = {{"", "AETHER_BOLT"}, {"fire_rune", "FIRE"}, {"ice_rune", "ICE"}, {"lightning_rune", "LIGHTNING"},
+                {"nature_rune", "NATURE"}, {"earth_rune", "EARTH"}, {"water_rune", "WATER"}};
+        for (String[] cast : casts) {
+            steps.add(Step.command(cast[0].isEmpty() ? "item replace entity @s weapon.offhand with air"
+                    : "item replace entity @s weapon.offhand with kingdomsatwar:" + cast[0]));
+            steps.add(Step.waitTicks(4));
+            steps.add(Step.server(level -> {
+                var player = level.getServer().getPlayerList().getPlayers().get(0);
+                io.github.sirschrolli.kingdomsatwar.magic.Spell.valueOf(cast[1]).cast(level, player);
+            }));
+            steps.add(Step.waitTicks(cast[1].equals("LIGHTNING") ? 2 : 5));
+            steps.add(Step.screenshot("magic_" + cast[1].toLowerCase(java.util.Locale.ROOT)));
+            steps.add(Step.waitTicks(30));
+        }
+        steps.add(Step.command("gamemode spectator"));
     }
 
     /** Setzt ein Lebewesen auf das Sitzmöbel bei {@code pos}. */
