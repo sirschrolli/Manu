@@ -49,6 +49,18 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_WILL_O_WISPS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_will_o_wisps"));
         public static final TagKey<Biome> HAS_CAVE_TROLLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_cave_trolls"));
         public static final TagKey<Biome> HAS_LINDWORMS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_lindworms"));
+        /** Wo Drachennester der jeweiligen Art entstehen. */
+        public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_DRAGON_NESTS = nestTags();
+        public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));
+
+        private static java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> nestTags() {
+            java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> tags =
+                    new java.util.EnumMap<>(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.class);
+            for (io.github.sirschrolli.kingdomsatwar.dragon.DragonType type : io.github.sirschrolli.kingdomsatwar.dragon.DragonType.values()) {
+                tags.put(type, TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_" + type.id() + "_dragon_nests")));
+            }
+            return java.util.Collections.unmodifiableMap(tags);
+        }
 
         private Biomes() {}
     }

@@ -85,6 +85,7 @@ final class Showcase {
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
                 case "magic" -> magic(steps);
+                case "structures" -> structures(steps);
                 default -> { }
             }
         }
@@ -800,6 +801,50 @@ final class Showcase {
             steps.add(Step.waitTicks(30));
         }
         steps.add(Step.command("gamemode spectator"));
+    }
+
+    /** Die sechs Drachennester und eine Burgruine, wie sie die Weltgenerierung baut. */
+    private static void structures(Deque<Step> steps) {
+        int oz = 440;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-10, ground - 3, oz - 14), new BlockPos(90, ground - 1, oz + 14), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-10, ground, oz - 14), new BlockPos(90, ground + 10, oz + 14), Blocks.AIR.defaultBlockState());
+            var generator = level.getChunkSource().getGenerator();
+            int x = 0;
+            for (DragonType type : DragonType.values()) {
+                new io.github.sirschrolli.kingdomsatwar.worldgen.DragonNestFeature(type)
+                        .place(level, generator, net.minecraft.util.RandomSource.create(5 + x), new BlockPos(x, ground, oz));
+                x += 14;
+            }
+            new io.github.sirschrolli.kingdomsatwar.worldgen.CastleRuinFeature()
+                    .place(level, generator, net.minecraft.util.RandomSource.create(3), new BlockPos(x + 2, ground, oz));
+            level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new net.minecraft.world.phys.AABB(-20, ground - 5, oz - 20, 120, ground + 20, oz + 20))
+                    .forEach(mob -> {
+                        mob.setNoAi(true);
+                        mob.setPersistenceRequired();
+                    });
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(0.5, 9.0, oz + 13.0, 180, 35));
+        steps.add(Step.waitForChunks(300));
+        steps.add(Step.waitTicks(100));
+        String[] names = {"fire", "ice", "lightning", "nature", "earth", "water"};
+        for (int i = 0; i < names.length; i++) {
+            steps.add(tp(i * 14 + 0.5, 7.0, oz + 10.0, 180, 35));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot("structure_nest_" + names[i]));
+        }
+        steps.add(tp(14.5, 2.2, oz + 3.0, 180, 30));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("structure_nest_ice_close"));
+        steps.add(tp(6 * 14 + 2.5, 9.0, oz + 13.0, 180, 32));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("structure_castle_ruin"));
+        steps.add(tp(6 * 14 + 10.0, 6.0, oz + 9.0, 135, 22));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("structure_castle_ruin_side"));
+        steps.add(Step.hud(true));
     }
 
     /** Setzt ein Lebewesen auf das Sitzmöbel bei {@code pos}. */

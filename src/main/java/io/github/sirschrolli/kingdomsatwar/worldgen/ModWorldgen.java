@@ -50,7 +50,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Weltgenerierung: neue Erze und wilde Zierblumen.
+ * Weltgenerierung: neue Erze, wilde Zierblumen, Drachennester und Burgruinen.
  *
  * <p>Die Einträge werden bei der Datengenerierung als JSON-Dateien geschrieben
  * ({@code worldgen/feature}, {@code worldgen/placed_feature}, {@code neoforge/biome_modifier}).
@@ -118,6 +118,33 @@ public final class ModWorldgen {
             new FlowerPatch("frost_flower", ModBlocks.FROST_FLOWER, 6, Tags.Biomes.IS_SNOWY),
             new FlowerPatch("moonflower", ModBlocks.MOONFLOWER, 5, ModTags.Biomes.HAS_WILL_O_WISPS));
 
+    /** Bauwerke: je Drachenart ein Nest, dazu Burgruinen. */
+    public record Ruin(String name, Feature feature, int rarity, TagKey<Biome> biomes) {
+        public ResourceKey<Feature> featureKey() {
+            return ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id(name));
+        }
+
+        public ResourceKey<PlacedFeature> placedKey() {
+            return ResourceKey.create(Registries.PLACED_FEATURE, KingdomsAtWar.id(name));
+        }
+
+        public ResourceKey<BiomeModifier> modifierKey() {
+            return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("add_" + name));
+        }
+    }
+
+    /** Alle Bauwerke (feste Reihenfolge). Seltenheit = im Mittel einmal je so vielen Chunks des passenden Bioms. */
+    public static final List<Ruin> STRUCTURES = structures();
+
+    private static List<Ruin> structures() {
+        List<Ruin> list = new ArrayList<>();
+        for (io.github.sirschrolli.kingdomsatwar.dragon.DragonType type : io.github.sirschrolli.kingdomsatwar.dragon.DragonType.values()) {
+            list.add(new Ruin(type.id() + "_dragon_nest", new DragonNestFeature(type), 90, ModTags.Biomes.HAS_DRAGON_NESTS.get(type)));
+        }
+        list.add(new Ruin("castle_ruin", new CastleRuinFeature(), 70, ModTags.Biomes.HAS_CASTLE_RUINS));
+        return List.copyOf(list);
+    }
+
     private ModWorldgen() {}
 
     public static void bootstrapFeatures(BootstrapContext<Feature> context) {
@@ -135,6 +162,10 @@ public final class ModWorldgen {
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));
+        }
+
+        for (Ruin ruin : STRUCTURES) {
+            context.register(ruin.featureKey(), ruin.feature());
         }
     }
 
@@ -164,6 +195,15 @@ public final class ModWorldgen {
                             BlockPredicate.ONLY_IN_AIR_PREDICATE,
                             BlockPredicate.wouldSurvive(patch.flower().get()))));
             context.register(patch.placedKey(), new PlacedFeature(features.getOrThrow(patch.featureKey()), placement));
+        }
+
+        for (Ruin ruin : STRUCTURES) {
+            List<PlacementModifier> placement = List.of(
+                    RarityFilter.onAverageOnceEvery(ruin.rarity()),
+                    InSquarePlacement.spread(),
+                    HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                    BiomeFilter.biome());
+            context.register(ruin.placedKey(), new PlacedFeature(features.getOrThrow(ruin.featureKey()), placement));
         }
     }
 
@@ -204,6 +244,13 @@ public final class ModWorldgen {
                     biomes.getOrThrow(patch.biomes()),
                     HolderSet.direct(placed.getOrThrow(patch.placedKey())),
                     GenerationStep.Decoration.VEGETAL_DECORATION));
+        }
+
+        for (Ruin ruin : STRUCTURES) {
+            context.register(ruin.modifierKey(), new BiomeModifiers.AddFeaturesBiomeModifier(
+                    biomes.getOrThrow(ruin.biomes()),
+                    HolderSet.direct(placed.getOrThrow(ruin.placedKey())),
+                    GenerationStep.Decoration.SURFACE_STRUCTURES));
         }
 
         // Banditen: nachts unter freiem Himmel, in kleinen Gruppen

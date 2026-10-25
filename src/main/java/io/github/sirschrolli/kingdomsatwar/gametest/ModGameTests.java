@@ -146,6 +146,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("drinks_and_feast", () -> ModGameTests::drinksAndFeast);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STAFF_SPELLS =
             TEST_FUNCTIONS.register("staff_spells", () -> ModGameTests::staffSpells);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STRUCTURES_GENERATE =
+            TEST_FUNCTIONS.register("structures_generate", () -> ModGameTests::structuresGenerate);
 
     private ModGameTests() {}
 
@@ -163,7 +165,7 @@ public final class ModGameTests {
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
                         LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST,
-                        STAFF_SPELLS)) {
+                        STAFF_SPELLS, STRUCTURES_GENERATE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -833,6 +835,69 @@ public final class ModGameTests {
         helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.LightningBolt.class, golem.getBoundingBox().inflate(3)).isEmpty(),
                 "Kein Blitz am Ziel");
         helper.succeed();
+    }
+
+    /**
+     * Bauwerke: Ein Eisdrachen-Nest entsteht aus Packeis und Schnee, mit Fundstücken im Kies; eine Burgruine hat
+     * Mauern aus Mod-Steinen und eine Truhe mit Beute. Wächter und Banditen werden für den Test gleich entfernt.
+     */
+    private static void structuresGenerate(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var generator = level.getChunkSource().getGenerator();
+        BlockPos center = helper.absolutePos(new BlockPos(4, 1, 4));
+        flatGround(helper);
+        helper.assertTrue(new io.github.sirschrolli.kingdomsatwar.worldgen.DragonNestFeature(DragonType.ICE)
+                .place(level, generator, RandomSource.create(7), center), "Das Nest wurde nicht gebaut");
+        removeSpawned(helper);
+        helper.assertTrue(countInArea(helper, Blocks.PACKED_ICE) + countInArea(helper, Blocks.SNOW_BLOCK) > 20, "Nest ohne Eis und Schnee");
+        helper.assertTrue(countInArea(helper, Blocks.SUSPICIOUS_GRAVEL) > 0, "Nest ohne Fundstücke im Kies");
+
+        flatGround(helper);
+        helper.assertTrue(new io.github.sirschrolli.kingdomsatwar.worldgen.CastleRuinFeature()
+                .place(level, generator, RandomSource.create(11), center), "Die Burgruine wurde nicht gebaut");
+        removeSpawned(helper);
+        helper.assertTrue(countInArea(helper, ModBlocks.STONE_PILLAR.get()) >= 4, "Ruine ohne Ecktürme");
+        boolean chest = false;
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-4, 0, -4), center.offset(4, 0, 4))) {
+            if (level.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity box
+                    && io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.CASTLE_RUIN_CHEST.equals(box.getLootTable())) {
+                chest = true;
+            }
+        }
+        helper.assertTrue(chest, "Ruine ohne Beutetruhe");
+        flatGround(helper);
+        helper.succeed();
+    }
+
+    /** Ebener Steinboden (13×13 um die Arena) und darüber freie Luft. */
+    private static void flatGround(GameTestHelper helper) {
+        for (int x = -2; x <= 10; x++) {
+            for (int z = -2; z <= 10; z++) {
+                helper.setBlock(x, 0, z, Blocks.STONE);
+                for (int y = 1; y <= 9; y++) {
+                    helper.setBlock(x, y, z, Blocks.AIR);
+                }
+            }
+        }
+    }
+
+    private static int countInArea(GameTestHelper helper, Block block) {
+        int count = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(-2, -1, -2)), helper.absolutePos(new BlockPos(10, 9, 10)))) {
+            if (helper.getLevel().getBlockState(pos).is(block)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /** Vom Bauwerk erzeugte Drachen und Banditen entfernen (sie sollen keine anderen Tests stören). */
+    private static void removeSpawned(GameTestHelper helper) {
+        net.minecraft.world.phys.AABB area = new net.minecraft.world.phys.AABB(Vec3.atLowerCornerOf(helper.absolutePos(new BlockPos(-3, -1, -3))),
+                Vec3.atLowerCornerOf(helper.absolutePos(new BlockPos(11, 10, 11))));
+        helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, area,
+                mob -> mob instanceof DragonEntity || mob instanceof io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity)
+                .forEach(net.minecraft.world.entity.Entity::discard);
     }
 
     /** Setzt den Block wie ein Spieler mit dem Gegenstand in der Hand oben auf {@code below}. */
