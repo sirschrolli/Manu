@@ -1,0 +1,416 @@
+{
+ "de_01": {
+  "take": "de_01_1.wav",
+  "wer": 0.0,
+  "heard": "Einst lag diese Welt still und unberührt.",
+  "duration": 3.2,
+  "alle": [
+   [
+    "de_01_1.wav",
+    0.0,
+    3.2
+   ],
+   [
+    "de_01_2.wav",
+    0.143,
+    3.76
+   ],
+   [
+    "de_01_0.wav",
+    0.143,
+    4.08
+   ]
+  ]
+ },
+ "de_02": {
+  "take": "de_02_0.wav",
+  "wer": 0.0,
+  "heard": "Dann erhoben sich die Königreiche mit Mauern aus Stein und Türmen, die bis an die Wolken reichten.",
+  "duration": 6.96,
+  "alle": [
+   [
+    "de_02_0.wav",
+    0.0,
+    6.96
+   ],
+   [
+    "de_02_1.wav",
+    0.0,
+    6.96
+   ],
+   [
+    "de_02_2.wav",
+    0.0,
+    6.32
+   ]
+  ]
+ },
+ "de_03": {
+  "take": "de_03_1.wav",
+  "wer": 0.0,
+  "heard": "Doch tief in den Bergen, in Vulkanen, Eis und Meer, erwachten die Drachen.",
+  "duration": 5.6,
+  "alle": [
+   [
+    "de_03_1.wav",
+    0.0,
+    5.6
+   ],
+   [
+    "de_03_2.wav",
+    0.0,
+    4.96
+   ],
+   [
+    "de_03_0.wav",
+    0.077,
+    5.44
+   ]
+  ]
+ },
+ "de_04": {
+  "take": "de_04_1.wav",
+  "wer": 0.091,
+  "heard": "6 Arten, geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.",
+  "duration": 6.08,
+  "alle": [
+   [
+    "de_04_1.wav",
+    0.091,
+    6.08
+   ],
+   [
+    "de_04_0.wav",
+    0.091,
+    7.2
+   ],
+   [
+    "de_04_2.wav",
+    0.182,
+    6.4
+   ]
+  ]
+ },
+ "de_05": {
+  "take": "de_05_2.wav",
+  "wer": 0.0,
+  "heard": "Wer ihre Eier findet und sie mit Geduld aufzieht, gewinnt einen verbündeten Mächtiger als jede Armee.",
+  "duration": 6.64,
+  "alle": [
+   [
+    "de_05_2.wav",
+    0.0,
+    6.64
+   ],
+   [
+    "de_05_1.wav",
+    0.0,
+    6.96
+   ],
+   [
+    "de_05_0.wav",
+    0.0,
+    6.24
+   ]
+  ]
+ },
+ "de_06": {
+  "take": "de_06_2.wav",
+  "wer": 0.125,
+  "heard": "In der Tiefe warten seltene Erze, Drakonium, Ätherit, Konterit, der Stoff aus dem Legenden geschmiedet werden.",
+  "duration": 10.24,
+  "alle": [
+   [
+    "de_06_2.wav",
+    0.125,
+    10.24
+   ],
+   [
+    "de_06_0.wav",
+    0.125,
+    9.04
+   ],
+   [
+    "de_06_1.wav",
+    0.188,
+    10.56
+   ]
+  ]
+ },
+ "de_07": {
+  "take": "de_07_0.wav",
+  "wer": 0.0,
+  "heard": "Sammle Ritter und Soldaten um dich, errichte deine Burg und verteidige dein Land.",
+  "duration": 5.92,
+  "alle": [
+   [
+    "de_07_0.wav",
+    0.0,
+    5.92
+   ],
+   [
+    "de_07_1.wav",
+    0.0,
+    6.56
+   ],
+   [
+    "de_07_2.wav",
+    0.077,
+    5.84
+   ]
+  ]
+ },
+ "de_08": {
+  "take": "de_08_0.wav",
+  "wer": 0.0,
+  "heard": "Die Welt ist bereit. Die Drachen warten.",
+  "duration": 3.52,
+  "alle": [
+   [
+    "de_08_0.wav",
+    0.0,
+    3.52
+   ],
+   [
+    "de_08_2.wav",
+    0.0,
+    3.36
+   ],
+   [
+    "de_08_1.wav",
+    0.0,
+    3.92
+   ]
+  ]
+ },
+ "de_09": {
+  "take": "de_09_1.wav",
+  "wer": 0.0,
+  "heard": "Dies ist dein Königreich.",
+  "duration": 2.4,
+  "alle": [
+   [
+    "de_09_1.wav",
+    0.0,
+    2.4
+   ],
+   [
+    "de_09_2.wav",
+    0.0,
+    2.4
+   ],
+   [
+    "de_09_0.wav",
+    0.0,
+    2.0
+   ]
+  ]
+ },
+ "en_01": {
+  "take": "en_01_1.wav",
+  "wer": 0.0,
+  "heard": "Once, this world lay silent and untouched.",
+  "duration": 4.32,
+  "alle": [
+   [
+    "en_01_1.wav",
+    0.0,
+    4.32
+   ],
+   [
+    "en_01_0.wav",
+    0.0,
+    3.92
+   ],
+   [
+    "en_01_2.wav",
+    0.0,
+    4.8
+   ]
+  ]
+ },
+ "en_02": {
+  "take": "en_02_1.wav",
+  "wer": 0.0,
+  "heard": "Then the kingdoms rose with walls of stone and towers that reached up to the clouds.",
+  "duration": 5.68,
+  "alle": [
+   [
+    "en_02_1.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "en_02_0.wav",
+    0.0,
+    5.6
+   ],
+   [
+    "en_02_2.wav",
+    0.0,
+    5.92
+   ]
+  ]
+ },
+ "en_03": {
+  "take": "en_03_2.wav",
+  "wer": 0.0,
+  "heard": "But deep within the mountains, in volcanoes, ice and sea, the dragons awoke.",
+  "duration": 5.12,
+  "alle": [
+   [
+    "en_03_2.wav",
+    0.0,
+    5.12
+   ],
+   [
+    "en_03_1.wav",
+    0.0,
+    6.72
+   ],
+   [
+    "en_03_0.wav",
+    0.077,
+    5.52
+   ]
+  ]
+ },
+ "en_04": {
+  "take": "en_04_2.wav",
+  "wer": 0.0,
+  "heard": "Six kinds born of fire, ice, lightning, nature, earth and water.",
+  "duration": 6.16,
+  "alle": [
+   [
+    "en_04_2.wav",
+    0.0,
+    6.16
+   ],
+   [
+    "en_04_0.wav",
+    0.091,
+    6.0
+   ],
+   [
+    "en_04_1.wav",
+    0.182,
+    6.08
+   ]
+  ]
+ },
+ "en_05": {
+  "take": "en_05_1.wav",
+  "wer": 0.0,
+  "heard": "Whoever finds their eggs and raises them with patience gains an ally mightier than any army.",
+  "duration": 5.68,
+  "alle": [
+   [
+    "en_05_1.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "en_05_2.wav",
+    0.0,
+    5.68
+   ],
+   [
+    "en_05_0.wav",
+    0.062,
+    6.16
+   ]
+  ]
+ },
+ "en_06": {
+  "take": "en_06_0.wav",
+  "wer": 0.188,
+  "heard": "Deep below rare auris lie waiting, draconium eterite, conterite, the stuff that legends  are forged from.",
+  "duration": 8.88,
+  "alle": [
+   [
+    "en_06_0.wav",
+    0.188,
+    8.88
+   ],
+   [
+    "en_06_1.wav",
+    0.25,
+    8.72
+   ],
+   [
+    "en_06_2.wav",
+    0.25,
+    7.76
+   ]
+  ]
+ },
+ "en_07": {
+  "take": "en_07_2.wav",
+  "wer": 0.0,
+  "heard": "gather knights and soldiers around you, raise your castle and defend your land.",
+  "duration": 5.28,
+  "alle": [
+   [
+    "en_07_2.wav",
+    0.0,
+    5.28
+   ],
+   [
+    "en_07_1.wav",
+    0.0,
+    5.44
+   ],
+   [
+    "en_07_0.wav",
+    0.077,
+    4.8
+   ]
+  ]
+ },
+ "en_08": {
+  "take": "en_08_0.wav",
+  "wer": 0.0,
+  "heard": "The world is ready. The dragons are waiting.",
+  "duration": 3.76,
+  "alle": [
+   [
+    "en_08_0.wav",
+    0.0,
+    3.76
+   ],
+   [
+    "en_08_2.wav",
+    0.0,
+    3.76
+   ],
+   [
+    "en_08_1.wav",
+    0.0,
+    3.6
+   ]
+  ]
+ },
+ "en_09": {
+  "take": "en_09_1.wav",
+  "wer": 0.0,
+  "heard": "This is your kingdom.",
+  "duration": 2.0,
+  "alle": [
+   [
+    "en_09_1.wav",
+    0.0,
+    2.0
+   ],
+   [
+    "en_09_2.wav",
+    0.0,
+    2.0
+   ],
+   [
+    "en_09_0.wav",
+    0.0,
+    1.84
+   ]
+  ]
+ }
+}
