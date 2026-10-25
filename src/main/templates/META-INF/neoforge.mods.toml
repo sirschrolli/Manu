@@ -1,4 +1,4 @@
-# Metadaten der Mod. Die ${...}-Platzhalter werden beim Bauen aus gradle.properties ersetzt.
+# Metadaten der Mod. Die Platzhalter (Dollarzeichen + geschweifte Klammern) werden beim Bauen aus gradle.properties ersetzt.
 license="${mod_license}"
 issueTrackerURL="https://github.com/sirschrolli/Manu/issues"
 
