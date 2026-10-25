@@ -2,8 +2,8 @@
 """
 Erzeugt ALLE Audiodateien der Mod mit einem Befehl:
 
-  * Erzählerstimme für das Intro: entweder vorab erzeugte Zeilen (--narration-source, epische Stimme nach den
-    frei gespendeten Aufnahmen von Thorsten Müller) oder Piper (Deutsch: Thorsten, Englisch: LibriTTS-R 680)
+  * Erzählerstimme für das Intro: entweder vorab erzeugte Zeilen (--narration-source, z. B. die Qwen3-TTS-Stimme
+    aus tools/audio/narrator) oder Piper (Deutsch: Thorsten, Englisch: LibriTTS-R 680)
   * eigene Intro-Musik (komponiert in music.py, gespielt mit FluidR3_GM)
   * Zeitplan des Intros (assets/kingdomsatwar/intro/intro.json)
   * Soldaten-Sprachzeilen (Deutsch/Englisch, je zwei Stimmfärbungen)
@@ -19,8 +19,8 @@ Optionen:
                                     "--only none" schreibt nur intro.json und sounds.json neu)
     --work /pfad                    Ordner für Zwischendateien (MIDI, Stems, Spektrogramme, Bericht)
     --narration-source /pfad        vorab erzeugte Erzählerzeilen narration_raw_<de|en>_<01..09>.wav verwenden
-    --narration-style natural       nur leichte Nachbearbeitung (für schon sehr natürliche Stimmen)
-                                    (epische Nachbearbeitung mit sox statt Piper)
+    --narration-style natural       dazu nur leichte Nachbearbeitung (für schon sehr natürliche Stimmen wie Qwen3-TTS;
+                                    Standard "epic": kräftigere Nachbearbeitung mit mehr Hall)
 
 Benötigt: pip install piper-tts tinysoundfont mido numpy scipy soundfile pyloudnorm librosa matplotlib
           (tinysoundfont ggf. mit --no-deps installieren) sowie ffmpeg mit libvorbis.

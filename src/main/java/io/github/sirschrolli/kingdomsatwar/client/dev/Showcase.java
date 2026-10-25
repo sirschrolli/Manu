@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.client.army.RecruitScreen;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroController;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScreen;
+import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScript;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonStage;
@@ -238,10 +239,18 @@ final class Showcase {
         steps.add(Step.waitTicks(20));
         steps.add(Step.once(minecraft -> IntroController.request()));
         steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen, 200));
+        // Zeitpunkte für ein Intro von 72,9 s – werden auf die tatsächliche Länge aus intro.json gestreckt
         double[] times = {3.5, 10.0, 17.0, 23.0, 29.0, 35.0, 42.0, 48.0, 54.5, 58.0, 63.0, 70.5};
+        double[] length = {0.0};
         for (int i = 0; i < times.length; i++) {
-            double at = times[i];
-            steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at, 2400));
+            double at = times[i] / 72.913;
+            steps.add(Step.until(() -> {
+                if (length[0] <= 0.0) {
+                    IntroScript script = IntroScript.load(Minecraft.getInstance().getResourceManager());
+                    length[0] = script != null ? script.length() : 72.913;
+                }
+                return Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at * length[0];
+            }, 2400));
             steps.add(Step.screenshot("intro_%02d".formatted(i + 1)));
         }
         steps.add(Step.until(() -> !(Minecraft.getInstance().gui.screen() instanceof IntroScreen), 400));

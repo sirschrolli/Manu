@@ -3,16 +3,17 @@
 ![Kingdoms at War](src/main/resources/kingdomsatwar_banner.png)
 
 Eine eigene, mittelalterliche Minecraft-Mod für **Minecraft Java 26.3** mit **NeoForge**.
-Baue dein Königreich, sammle Drachenerze, bereite dich auf die Drachen vor – und später auf Armeen,
-Belagerungen und NPC-Baumeister.
+Brüte Dracheneier aus und reite deinen eigenen Drachen, wirb Ritter und Soldaten an, baue deine Burg mit neuen
+Steinen, Fenstern, Möbeln und Zinnen, finde Drachennester und Burgruinen – und begegne Trollen, Lindwürmern und
+Irrlichtern.
 
-> **Testversion 0.1.0 – Phase 1 („Technische Grundlage“).**
-> Das Grundprojekt lässt sich bauen, läuft auf einem echten Minecraft-26.3-Server und besteht alle automatischen Tests.
-> Drachen als Lebewesen, NPCs, Armeen und das Bausystem folgen in den nächsten Phasen.
+> **Testversion 0.2.0 – Phase 2.**
+> Drachen, Soldaten, wilde Kreaturen, Ausrüstung, Magie, Bauwerke, neue Bau-Blöcke, Essen und ein erzähltes Intro.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (35 GameTests).
 
 Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern).
 
-![Alle Inhalte der Testversion](docs/bilder/inhalte-phase-1.png)
+![Thronsaal aus den neuen Blöcken](docs/bilder/thronsaal.jpg)
 
 ---
 
@@ -20,17 +21,20 @@ Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen
 
 | Bereich | Stand |
 |---|---|
-| NeoForge-Projekt für Minecraft 26.3, Java 25, Gradle | ✅ fertig |
-| Automatischer Build + Tests auf GitHub | ✅ fertig |
-| Neue Erze mit Weltgenerierung, Rohstoffe, Stahl | ✅ fertig |
-| Sechs Dracheneier, Drachenschuppen, Drachenei-Fragmente, Drachenfutter | ✅ fertig (Ausbrüten folgt in Phase 4) |
-| Mittelalterliche Baublöcke (Stein, Dächer, Fachwerk) mit Treppen, Stufen, Mauern | ✅ erster Teil |
-| Feldfrüchte, Gerichte, Zierblumen (wachsen auch wild) | ✅ erster Teil |
+| NeoForge-Projekt für Minecraft 26.3, Java 25, Gradle; Build und Tests auf GitHub | ✅ fertig |
+| Erzähltes Intro beim ersten Betreten einer Welt (Kameraflug mit Drachen, Musik, Erzähler DE/EN) | ✅ fertig |
+| Sechs Drachenarten: Ausbrüten, fünf Wachstumsstufen, Zähmen, Reiten, Fliegen, Odem, Drachenpanzer | ✅ fertig |
+| Ritter und Soldaten: Rekrutierungstisch, Befehle mit dem Kommandostab, Banditen | ✅ fertig |
+| Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
+| Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
+| Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
+| Magie: Aetherit-Stab mit sechs Runen | ✅ fertig |
+| Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
+| Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
+| Bauwerke in der Welt: Drachennester (6 Arten), Burgruinen mit Beute | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
-| NPCs, Soldaten, Rekrutierung mit Smaragden | ⏳ Phase 2 |
 | Dragon Architect (Gebäude scannen, NPCs bauen lassen, .litematic/.schem/.nbt) | ⏳ Phase 3 |
-| Drachen (Ausbrüten, 5 Wachstumsstufen, Zähmen, Reiten, Fliegen) | ⏳ Phase 4 |
-| Belagerungswaffen, Fahrzeuge, weitere Mobs, Modrinth-Veröffentlichung | ⏳ Phase 5 |
+| Belagerungswaffen, Fahrzeuge, Kriegssystem, Modrinth-Veröffentlichung | ⏳ Phase 5 |
 
 ---
 
@@ -46,7 +50,7 @@ Das vollständige Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.1.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.2.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -54,86 +58,172 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.1.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.2.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
-3. Minecraft mit dem NeoForge-Profil starten. Im Kreativmodus gibt es vier neue Tabs.
+3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Erze, Kreaturen, Blumen,
+   Drachennester und Burgruinen entstehen nur in neu erzeugten Gebieten.
 
-> Tipp: Die neuen Erze und wilden Blumen entstehen nur in neu erzeugten Gebieten. Am einfachsten testest du die Mod in einer **neuen** Welt.
+Beim ersten Betreten einer Welt läuft das **Intro**: ein Kameraflug über die Welt, die sechs Drachen und dein
+Königreich, mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder ansehen mit `/kaw intro`.
+Im Kreativmodus gibt es sechs neue Tabs.
 
 ---
 
-## Inhalte der Testversion
+## Inhalte
 
-### Dragon Warfare – Erze und Rohstoffe
+### Drachen
 
-| Erz | Fundort | Werkzeug | Ergibt | Verwendung |
-|---|---|---|---|---|
-| Kohlenstofferz | überall, Höhe 0 bis 192 | jede Spitzhacke | Kohlenstoff | Brennstoff, zählt als Kohle (z. B. für Fackeln), Stahl |
-| Edelstein-Erz | tief, Höhe −64 bis 16 | Eisenspitzhacke | Edelstein | Drachenei-Fragmente, Deko |
-| Konteriterz | Berge, Höhe −16 bis 320 (meist um 150) | Eisenspitzhacke | Konterit | Drachenei-Fragmente, später Flugausrüstung |
-| Aetheriterz (leuchtet leicht) | Höhe −48 bis 48 | Eisenspitzhacke | Aetherit | Drachenei-Fragmente, später Magie |
-| Draconiumerz (leuchtet) | ganz tief, Höhe −64 bis 8 (meist um −36), sehr selten | Diamantspitzhacke | Draconium | Drachenei-Fragmente, später Drachenrüstung |
-| Wyverniterz | hohe Berge, ab Höhe 100 | Eisenspitzhacke | Wyvernit | später Flugtechnik |
+![Die sechs Drachenarten](docs/bilder/drachen.jpg)
 
-Alle Erze gibt es in Stein und als Tiefenschiefer-Variante (außer Wyvernit). Tiefenschiefer liegt nur unterhalb von Höhe 8:
-Erze, die vor allem weiter oben vorkommen (Kohlenstoff, Konterit), sind in Tiefenschiefer darum selten –
-Draconium steckt dagegen fast immer im Tiefenschiefer. Aus 9 Rohstoffen wird jeweils ein Speicherblock.
-Glück (Fortune) erhöht die Ausbeute, Behutsamkeit (Silk Touch) liefert den Erzblock.
+| Drachenart | Ei-Rezept: 4 Drachenei-Fragmente im Kreuz um … | Zum Ausbrüten … | Odem |
+|---|---|---|---|
+| Feuerdrache | Magmablock | nahe Lava oder Feuer legen | Flammen, setzen in Brand |
+| Eisdrache | Blaueis | auf Eis oder Schnee legen | Frost, verlangsamt und lässt erstarren |
+| Blitzdrache | Blitzableiter | bei Gewitter oder neben einem Blitzableiter | Funken und Blitzschläge |
+| Naturdrache | Moosblock | im Hellen auf Gras, nahe Pflanzen | Sporen, vergiften |
+| Erddrache | Roheisenblock | unter der Erde auf Stein | Geröll, wirft zurück und lähmt |
+| Wasserdrache | Prismarin | unter Wasser | Wasserstrahl, wirft zurück und löscht Feuer |
 
-**Stahl:** 1 Eisenbarren + 2 Kohlenstoff → Stahlmischung → im Hochofen → Stahlbarren. 9 Stahlbarren → Stahlblock.
-Kohlenstoff gibt es auch aus Holzkohle (Hochofen).
+- **Drachenei-Fragment:** Draconium + Aetherit + Konterit + Edelstein (formlos). Dracheneier liegen auch in
+  **Drachennestern** in der Welt.
+- Ein Ei bekommt Risse und schlüpft, wenn es am richtigen Ort liegt; der Schlüpfling gehört dem nächsten Spieler.
+- **Fünf Wachstumsstufen:** Schlüpfling, Jungdrache, Halbwüchsiger (kann fliegen und Odem speien), Ausgewachsen
+  (reitbar), Uralt. Füttern mit Fleisch oder **Drachenfutter** (rohes Rind-, Schweine- und Hammelfleisch + Süßbeeren,
+  ergibt 2) lässt ihn schneller wachsen und heilt ihn.
+- Wilde Schlüpflinge lassen sich mit etwas Glück mit **Edelsteinen** zähmen. Ausgewachsene wilde Drachen greifen an!
+- **Schleichen + Rechtsklick:** folgen / sitzen / frei umherstreifen. **Rechtsklick** auf einen ausgewachsenen
+  Drachen: aufsitzen. Springen zum Abheben und Steigen, Schleichen zum Sinken, **R** speit Odem.
+- **Drachenpanzer** aus Stahl oder Draconium (feuerfest) für ausgewachsene Drachen; mit der Schere abnehmen.
+- **Drachenschuppen** fallen von Drachen und liegen in Drachennestern (mit dem Pinsel freilegen).
 
-### Dragon Warfare – Drachen
+### Ritter und Soldaten
 
-| Drachenart | Ei-Rezept: 4 Drachenei-Fragmente im Kreuz um … |
-|---|---|
-| Feuerdrache | Magmablock |
-| Eisdrache | Blaueis |
-| Blitzdrache | Blitzableiter |
-| Naturdrache | Moosblock |
-| Erddrache | Roheisenblock |
-| Wasserdrache | Prismarin |
+![Hauptmann, Schwertkämpfer, Ritter und Bogenschütze](docs/bilder/soldaten.jpg)
 
-- **Drachenei-Fragment:** Draconium + Aetherit + Konterit + Edelstein (formlos).
-- **Drachenfutter:** rohes Rindfleisch, rohes Schweinefleisch, rohes Hammelfleisch und Süßbeeren (formlos, ergibt 2).
-  Damit werden in Phase 4 die Drachen gezähmt.
-- **Drachenschuppen** (6 Arten) gibt es vorerst nur im Kreativmodus; mit den Drachen in Phase 4 werden sie für Rüstungen wichtig.
-- Die Eier lassen sich setzen und abbauen und gehen auch bei Explosionen nicht verloren. Das Ausbrüten kommt mit dem Drachensystem.
+Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Soldaten an:
 
-### Kingdoms at War – Burgen und Bauen
+| Soldat | Preis | Rolle |
+|---|---|---|
+| Schwertkämpfer | 5 Smaragde | Nahkämpfer – das Rückgrat jeder Armee |
+| Bogenschütze | 7 Smaragde | Fernkämpfer, schießt nie auf Freunde |
+| Ritter | 12 Smaragde + 2 Stahlbarren | Plattenrüstung und Schild, hält die vorderste Reihe |
+| Hauptmann | 20 Smaragde + 1 Edelstein | macht Soldaten in seiner Nähe stärker |
+
+Mit dem **Kommandostab** gibst du Befehle: auf einen Feind zeigen = Angriff, auf den Boden zeigen = Stellung halten
+(Schleichen: Patrouille), in den Himmel zeigen = alle folgen, Schleichen + eigenen Soldaten anklicken = entlassen.
+Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder dich noch deine Tiere und Drachen.
+**Banditen** streifen nachts durch die Lande und hausen manchmal in Burgruinen.
+
+### Wilde Kreaturen
+
+![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
+
+| Kreatur | Lebensraum | Besonderheit | Beute |
+|---|---|---|---|
+| Wildschwein | Wälder, Taiga | greift an, wenn man es reizt | Schweinefleisch, Leder |
+| Rothirsch | Wälder, Wiesen | scheu, Hirsche mit Geweih | Wildbret, Leder |
+| Gans | Flüsse, Sümpfe, Ebenen | grau oder weiß, legt Federn, faucht | Federn, Geflügel |
+| Irrlicht | Sümpfe, dunkle Wälder (nachts) | leuchtet, weicht aus, verblasst am Morgen | Irrlichtstaub |
+| Höhlentroll | tief unter der Erde | riesig und stark, versteinert im Sonnenlicht | Leder, Eisenklumpen, selten Edelstein oder Trollkeule |
+| Lindwurm | Berge, Tafelländer | flügelloser Drache, Biss und Schwanzhieb | Erddrachen-Schuppen, selten Draconium |
+
+### Erze und Rohstoffe
+
+| Erz | Fundort | Werkzeug | Verwendung |
+|---|---|---|---|
+| Kohlenstofferz | überall, Höhe 0 bis 192 | jede Spitzhacke | Brennstoff, **Stahl** |
+| Edelstein-Erz | tief, Höhe −64 bis 16 | Eisenspitzhacke | Drachenei-Fragmente, Königskrone, Hauptleute, Drachen zähmen |
+| Konteriterz | Berge, um Höhe 150 | Eisenspitzhacke | leichte **Konteritrüstung** |
+| Aetheriterz (leuchtet) | Höhe −48 bis 48 | Eisenspitzhacke | **Magie**: Aetherit-Stab, Runen, Aetheritlaterne |
+| Draconiumerz (leuchtet) | ganz tief, sehr selten | Diamantspitzhacke | **Draconium-Waffen** (setzen in Brand), Drachenpanzer |
+| Wyverniterz | hohe Berge, ab Höhe 100 | Eisenspitzhacke | **Wyvernit-Gleiter** |
+
+**Stahl:** 1 Eisenbarren + 2 Kohlenstoff → Stahlmischung → im Hochofen → Stahlbarren (auch Kohlenstoff aus Holzkohle).
+Aus 9 Rohstoffen wird jeweils ein Speicherblock.
+
+### Ausrüstung
+
+![Rüstungen aus Stahl, Konterit und Drachenschuppen](docs/bilder/ausruestung.jpg)
+
+- **Stahl:** Werkzeuge, Schwert und Rüstung – stärker als Eisen.
+- **Konteritrüstung:** leicht, je Teil +4 % Tempo und sanftere Stürze.
+- **Draconiumschwert und -axt:** mit Lohenruten als Griff, setzen Gegner in Brand.
+- **Drachenschuppen-Rüstung** (6 Arten) mit Set-Bonus: Feuerresistenz (Feuer), Tempo und Frostschutz (Eis),
+  doppeltes Tempo (Blitz), Regeneration (Natur), Resistenz (Erde), Wasseratmung und Delfinsgunst (Wasser).
+- **Wyvernit-Gleiter:** gleitet wie Elytren. **Königskrone:** Glück +2. **Trollkeule:** schwer, schleudert Gegner weg.
+
+### Magie
+
+![Der Aetherit-Stab mit der Blitzrune](docs/bilder/magie.jpg)
+
+Der **Aetherit-Stab** (Aetherit, Irrlichtstaub, Stöcke) wirkt per Rechtsklick einen **Aether-Blitz**.
+Hältst du eine **Rune** in der anderen Hand, wirkt er stattdessen deren Zauber:
+
+| Rune | Zutat (+ Tiefenschiefer, Aetherit, Irrlichtstaub) | Zauber |
+|---|---|---|
+| Feuerrune | Lohenstaub | Feuerball (verbrennt Wesen, aber keine Blöcke) |
+| Eisrune | Packeis | Frosthauch: verlangsamt, lässt erstarren, friert Wasser |
+| Blitzrune | Kupferbarren | ruft einen Blitz herab |
+| Naturrune | Moosblock | heilt dich und deine Verbündeten, Pflanzen sprießen |
+| Erdrune | Roheisen | Erdstoß: schleudert Feinde fort |
+| Wasserrune | Prismarinscherbe | Woge: drängt zurück, löscht Feuer, Wasseratmung |
+
+Zauber kosten Haltbarkeit und brauchen eine kurze Pause. Reparatur mit Aetherit; Haltbarkeit und Reparatur lassen sich
+anverzaubern.
+
+### Bauen und Einrichten
+
+![Eine Halle aus den neuen Bau-Blöcken](docs/bilder/burg.jpg)
 
 | Baustoff | Herstellung | Varianten |
 |---|---|---|
-| Mittelalterlicher Stein | Steinmetz aus Stein oder Bruchstein | Treppe, Stufe, Mauer |
-| Grober Naturstein | Steinmetz aus Bruchstein, oder 2 Bruchstein + 2 Kies (ergibt 4) | Treppe, Stufe, Mauer |
-| Behauener Sandstein | Steinmetz aus Sandstein oder geschnittenem Sandstein | Treppe, Stufe, Mauer |
-| Dunkle Steinziegel | Steinmetz aus Tiefenschiefer oder Bruchtiefenschiefer | Treppe, Stufe, Mauer |
-| Helle Kalksteinziegel | Steinmetz aus Kalzit | Treppe, Stufe, Mauer |
-| Verwitterte Steinziegel | Steinmetz aus Steinziegeln oder Stein | Treppe, Stufe, Mauer |
-| Moosige Mauersteine | Steinmetz aus bemoosten Steinziegeln oder bemoostem Bruchstein | Treppe, Stufe, Mauer |
-| Gerissene Steinblöcke | Steinmetz aus rissigen Steinziegeln oder Stein | Treppe, Stufe, Mauer |
-| Steinpfeiler | 2 mittelalterliche Steine übereinander (ergibt 2), oder Steinmetz aus Stein bzw. mittelalterlichem Stein | – |
-| Rote Dachziegel | Steinmetz aus roter Keramik oder Ziegelsteinen, oder 5 Ziegel in U-Form (ergibt 4) | Treppe, Stufe |
-| Braune Dachziegel | Steinmetz aus brauner Keramik | Treppe, Stufe |
-| Helle Dachziegel | Steinmetz aus weißer oder hellgrauer Keramik | Treppe, Stufe |
-| Dunkle Schieferplatten | Steinmetz aus Tiefenschieferfliesen oder Bruchtiefenschiefer | Treppe, Stufe |
-| Holzschindeln | 4 Holzstufen im Quadrat (ergibt 4) | Treppe, Stufe |
-| Kupferdach | Steinmetz aus Kupferblock (ergibt 4) | Treppe, Stufe |
-| Holzbalken | 2 Stämme übereinander (ergibt 4) | – |
-| Fachwerk (gerade, diagonal, Kreuz) | Holzbalken + Kalzit (ergibt 2); Muster durch erneutes Herstellen wechseln | – |
+| Mittelalterlicher Stein, Grober Naturstein, Behauener Sandstein, Dunkle Steinziegel, Helle Kalksteinziegel, Verwitterte Steinziegel, Moosige Mauersteine, Gerissene Steinblöcke | Steinmetz aus Vanilla-Gestein | Treppe, Stufe, Mauer |
+| Rote, braune und helle Dachziegel, Dunkle Schieferplatten, Holzschindeln, Kupferdach | Steinmetz bzw. Werkbank | Treppe, Stufe |
+| Steinpfeiler, Holzbalken, Fachwerk (gerade, diagonal, Kreuz) | Werkbank / Steinmetz | – |
+| Kalkputz (Sand, Ton, Knochenmehl) und Lehmputz (Ton, Erde, Weizen) | Werkbank (ergibt 4) | Treppe, Stufe |
+| Bleiglas (8 Glas + Eisenklumpen) und Bleiglasscheiben | Werkbank | – |
+| Burgtür (Bretter mit einem Eisenband), grüne und rote Fensterläden mit Herz | Werkbank | – |
+| Stahllaterne, Aetheritlaterne, Kronleuchter mit acht Kerzen | Werkbank | – |
+| Zinnen aus mittelalterlichem Stein, dunklen Steinziegeln oder hellen Kalksteinziegeln | Werkbank / Steinmetz | – |
+| Eichenstuhl, Eichenbank, Eichentisch (verbindet sich zur Tafel), Thron | Werkbank | – |
 
-Treppen, Stufen und Mauern gehen auch an der Werkbank mit den üblichen Vanilla-Mustern.
-Holzbalken, Fachwerk und Holzschindeln fangen Feuer; Holzbalken und Holzschindeln taugen auch als Brennstoff im Ofen.
+Auf **Stühle, Bänke und den Thron** setzt man sich per Rechtsklick. **Zinnen** in einer Reihe ergeben von selbst
+Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 
-### Kingdoms at War – Landwirtschaft und Nahrung
+### Landwirtschaft und Nahrung
 
-- **Tomaten, Kohl, Gerste, Zwiebeln:** Samen fallen manchmal beim Abbauen von Gras.
-  Dorfbewohner mit dem Beruf Bauer pflanzen die neuen Samen ebenfalls an. Aus Tomaten und Kohl lassen sich wieder Samen herstellen.
-- **Brötchen:** 2 Gerste nebeneinander (ergibt 2). **Gemüseeintopf:** Tomate, Kohl, Zwiebel, Karotte, Schüssel.
-  **Fleischpastete:** Steak, Zwiebel, Weizen, Ei. **Apfelkuchen:** 2 Äpfel, Zucker, Ei, Weizen.
-  Für die Rezepte mit Ei passt jede Eier-Sorte.
-- **Zierblumen** (wachsen wild, passen in Blumentöpfe):
-  Lavendel (Ebenen), Gartenrose (Wälder), Feuerlilie (Savannen), Frostblume (verschneite Gebiete).
+![Felder und Festmahle auf der Tafel](docs/bilder/landwirtschaft.jpg)
+
+- **Feldfrüchte:** Tomaten, Kohl, Gerste, Zwiebeln, **Hopfen**, **Weintrauben** und **Knoblauch** – Samen und
+  Pflanzknollen fallen manchmal beim Abbauen von Gras, Bauern-Dorfbewohner bauen sie an.
+- **Gerichte:** Brötchen, Gemüseeintopf, Fleischpastete, Apfelkuchen, Knoblauchbrot, Wildbret.
+- **Getränke** (die Flasche bleibt übrig): **Bier** (Gerste, Hopfen) macht stark, **Rotwein** (Trauben) heilt langsam,
+  **Met** (Honigwaben, Hopfen) schenkt Extraherzen – wer zu viel trinkt, dem wird schwindelig.
+- **Festmahl:** ein Braten mit Beilagen auf einem Brett für die Tafel – vier üppige Portionen, direkt vom Tisch.
+- **Zierblumen** (wachsen wild, passen in Blumentöpfe): Lavendel, Gartenrose, Feuerlilie, Frostblume und die
+  **Mondblume**, die nachts leuchtet.
+
+### Bauwerke in der Welt
+
+![Feuer- und Eisdrachennest, Wasserdrachennest und Burgruine](docs/bilder/bauwerke.jpg)
+
+- **Drachennester** aller sechs Arten (Badlands, verschneite Gipfel, hohe Berge, Dschungel, geröllige Hügel,
+  Strände): ein Wall aus dem Nestmaterial, Knochen, Fundstücke im Kies (mit dem Pinsel freilegen), oft Dracheneier –
+  und manchmal ein wilder Drache als Wächter.
+- **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
+  (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab oder die Königskrone) – und manchmal Banditen.
+
+---
+
+## Befehle, Tasten, Einstellungen
+
+| | |
+|---|---|
+| `/kaw intro` | das Intro noch einmal ansehen |
+| `/kaw army <swordsman\|archer\|knight\|captain> [Anzahl]` | (nur Operatoren) Soldaten sofort in den Dienst stellen, z. B. `/kaw army knight 4` |
+| **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
+| `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
+| `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32) |
 
 ---
 
@@ -143,12 +233,13 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.1.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.2.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
 | `python3 tools/generate_textures.py` | Alle Texturen neu zeichnen (`--preview datei.png` für eine Übersicht) |
-| `python3 tools/render_showcase.py` | Übersichtsbild `docs/bilder/inhalte-phase-1.png` neu erzeugen |
+| `python3 tools/generate_entities.py` | Modelle und Texturen der Lebewesen neu erzeugen |
+| `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
@@ -157,35 +248,39 @@ Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird be
 ```
 src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── KingdomsAtWar.java        Hauptklasse der Mod
-├── registry/                 Blöcke, Gegenstände, Kreativ-Tabs, Tags
-├── block/                    eigene Blockklassen (Drachenei, Feldfrucht)
-├── dragon/                   die sechs Drachenarten
-├── worldgen/                 Erzadern und wilde Blumen
-├── loot/                     eigene Loot-Tables
+├── registry/                 Blöcke, Gegenstände, Lebewesen, Geräusche, Kreativ-Tabs, Tags
+├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
+├── entity/                   Drachen, Soldaten, Banditen, wilde Kreaturen, Sitz
+├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
+├── item/                     besondere Ausrüstung
+├── worldgen/                 Erzadern, Blumen, Drachennester, Burgruinen
+├── client/                   Modelle, Renderer, Intro, Oberflächen
 ├── datagen/                  Datengenerierung (erzeugt src/generated/resources)
 └── gametest/                 automatische Tests
-src/main/resources/           Texturen, Logo, Teststruktur
+src/main/resources/           Texturen, Geräusche, Musik, Intro
 src/generated/resources/      von runData erzeugte Dateien (nicht von Hand bearbeiten)
-tools/                        Skripte für Texturen und Teststruktur
-docs/                         Konzept und Konzeptbilder
+tools/                        Skripte für Texturen, Modelle, Audio und Teststruktur
+docs/                         Konzept und Bilder
 ```
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.1.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.2.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
 ## Nächste Schritte (aus dem Konzept)
 
-1. **Phase 2 – NPCs und Gebäude:** erste NPCs und Soldaten, einfache KI, Rekrutierung mit Smaragden, erste Gebäude und Befehle (`/kaw`).
-2. **Phase 3 – Dragon Architect:** Bereiche markieren, Bauvorlagen speichern, NPC-Bauarbeiter (Block für Block oder abschnittsweise), Import von `.nbt`, `.schem` und `.litematic`.
-3. **Phase 4 – Drachen:** Ausbrüten, fünf Wachstumsstufen, Zähmen, Reiten, Fliegen, Drachen-KI; weitere Mobs, Pflanzen und Gerichte.
-4. **Phase 5 – Gesamtsystem:** Kriegssystem mit Belagerungswaffen und Fahrzeugen, alles verbinden, Modpack zusammenstellen, Modrinth.
+1. **Phase 3 – Dragon Architect:** Bereiche markieren, Bauvorlagen speichern, NPC-Bauarbeiter (Block für Block oder
+   abschnittsweise), Import von `.nbt`, `.schem` und `.litematic`.
+2. **Phase 5 – Gesamtsystem:** Kriegssystem mit Belagerungswaffen und Fahrzeugen, alles verbinden, Modpack
+   zusammenstellen, Modrinth.
 
 ## Danksagung
 
-- **Stimmen** (Erzähler und Soldaten): erzeugt mit der freien Sprachsynthese [Piper](https://github.com/rhasspy/piper).
+- **Erzählerstimme:** erzeugt mit dem freien Sprachmodell [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS)
+  (Apache-2.0) – eine eigens beschriebene, künstliche Stimme, keine echte Person.
+- **Soldatenstimmen:** erzeugt mit der freien Sprachsynthese [Piper](https://github.com/rhasspy/piper).
   Deutsche Stimmen: [Thorsten-Voice](https://github.com/thorstenMueller/Thorsten-Voice) von Thorsten Müller (CC0).
   Englische Stimmen: Piper-Stimme „libritts_r“, trainiert auf [LibriTTS-R](https://www.openslr.org/141/)
   (CC BY 4.0, Y. Koizumi u. a.; Sprecher 680, 248 und 788).
