@@ -18,51 +18,47 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Vorbereiten
         run: |
           mkdir -p out/logs
           sudo apt-get update -q > /dev/null && sudo apt-get install -y -q sox libsox-fmt-all ffmpeg > /dev/null
-          df -h / | tee out/logs/disk.txt
+          df -h / | tee out/logs/disk.txt; free -g | tee -a out/logs/disk.txt; nproc | tee -a out/logs/disk.txt
       - name: Werkzeuge zum Bewerten
-        continue-on-error: true
         run: |
           set -o pipefail
           python -m venv /tmp/vw
-          /tmp/vw/bin/pip install --no-cache-dir faster-whisper jiwer praat-parselmouth numpy 2>&1 | tail -3 | tee out/logs/01_eval_install.txt
-      - name: Referenzstimme (Thorsten-Voice, CC0)
+          /tmp/vw/bin/pip install --no-cache-dir faster-whisper jiwer praat-parselmouth numpy 2>&1 | tail -2 | tee out/logs/01_eval_install.txt
+      - name: Qwen3-TTS installieren
         run: |
           set -o pipefail
-          curl -sSL --retry 4 -o /tmp/thorsten.zip "https://zenodo.org/records/7265581/files/ThorstenVoice-Dataset_2022.10.zip?download=1"
-          ls -la /tmp/thorsten.zip | tee out/logs/02_download.txt
-          cd voice && python thorsten_ref.py /tmp/thorsten.zip ../out 2>&1 | tee ../out/logs/03_reference.txt
-          rm -rf ../out/thorsten /tmp/thorsten.zip
-      - name: Stimme erzeugen (Chatterbox)
+          python -m venv /tmp/vq
+          { /tmp/vq/bin/pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -2
+            /tmp/vq/bin/pip install --no-cache-dir -U qwen-tts soundfile 2>&1 | tail -4
+            /tmp/vq/bin/pip list 2>/dev/null | grep -i -E "^(torch|transformers|qwen)"; } | tee out/logs/02_qwen_install.txt
+      - name: Stimmen gestalten (Qwen3-TTS VoiceDesign)
         run: |
           set -o pipefail
-          python -m venv /tmp/vc
-          { /tmp/vc/bin/pip install --no-cache-dir torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -2
-            /tmp/vc/bin/pip install --no-cache-dir chatterbox-tts --extra-index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -4; } | tee out/logs/04_chatterbox_install.txt
-          cd voice && /tmp/vc/bin/python chatterbox_epic.py ../out de 2>&1 | tee ../out/logs/05_chatterbox_de.txt
-      - name: Episch nachbearbeiten
+          cd voice && /tmp/vq/bin/python qwen_samples.py ../out 2>&1 | grep -v "it/s\]" | tee ../out/logs/03_qwen.txt
+      - name: Bewerten und auswählen
+        run: |
+          set -o pipefail
+          cd voice
+          /tmp/vw/bin/python evaluate.py ../out 'qwen_*.wav' de sample eval_qwen.json 2>&1 | tee ../out/logs/04_eval.txt
+          python pick_best.py ../out eval_qwen.json 3 | tee ../out/logs/05_pick.txt
+      - name: Hörproben fertig machen
         run: |
           set -o pipefail
           cp voice/intro_music.ogg out/
-          bash voice/epic.sh out de 2>&1 | tee out/logs/06_epic.txt
+          bash voice/finish_samples.sh out $(cat out/chosen.txt | sed 's/$/ /' | tr -d '\n') 2>&1 | tee out/logs/06_finish.txt
           rm -f out/intro_music.ogg
-      - name: Bewerten
-        continue-on-error: true
-        run: |
-          cd voice
-          /tmp/vw/bin/python evaluate.py ../out 'raw_*_de.wav' de sample eval_raw_de.json 2>&1 | tee ../out/logs/07_eval.txt
-          /tmp/vw/bin/python evaluate.py ../out 'ref_*.wav' de design eval_ref.json > /dev/null 2>&1 || true
       - name: Zurückgeben
         if: always()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p out && cd out
-          for f in sample_*.wav music_*.wav ref_*.wav raw_*.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 192k "${f%.wav}.mp3" && rm "$f"; done
+          for f in *.wav; do [ -f "$f" ] && ffmpeg -loglevel error -y -i "$f" -c:a libmp3lame -b:a 192k "${f%.wav}.mp3" && rm "$f"; done
           ls -la
           git init -q && git checkout -q -b ci/voice-out && git add .
           git -c user.name=ci -c user.email=ci@localhost commit -q -m "voice samples ${{ github.run_id }}"

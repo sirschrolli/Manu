@@ -16,7 +16,7 @@ from faster_whisper import WhisperModel
 from texts import DESIGN, SAMPLE
 
 folder, pattern, lang, kind, report_name = Path(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]
-text = (DESIGN if kind == "design" else SAMPLE)[lang]
+text = (DESIGN if kind == "design" else SAMPLE)[lang].replace("…", "")
 model = WhisperModel("small", device="cpu", compute_type="int8")
 
 
@@ -37,8 +37,10 @@ def measure(path: Path) -> dict:
     segments, _ = model.transcribe(str(path), language=lang, beam_size=5)
     heard = " ".join(s.text for s in segments).strip()
     duration = snd.get_total_duration()
+    st = 12 * np.log2(f0 / np.median(f0)) if len(f0) else np.zeros(1)
     return {
         "f0_median": round(float(np.median(f0)), 1) if len(f0) else 0.0,
+        "betonung_st": round(float(np.std(st)), 2),       # Tonhöhen-Bewegung in Halbtönen (mehr = lebhafter)
         "f0_p10": round(float(np.percentile(f0, 10)), 1) if len(f0) else 0.0,
         "f0_p90": round(float(np.percentile(f0, 90)), 1) if len(f0) else 0.0,
         "hnr": round(float(np.mean(hnr_vals)), 1) if len(hnr_vals) else 0.0,
