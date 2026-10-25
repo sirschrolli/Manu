@@ -183,6 +183,16 @@ Ein Tag wie `v0.1.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 3. **Phase 4 – Drachen:** Ausbrüten, fünf Wachstumsstufen, Zähmen, Reiten, Fliegen, Drachen-KI; weitere Mobs, Pflanzen und Gerichte.
 4. **Phase 5 – Gesamtsystem:** Kriegssystem mit Belagerungswaffen und Fahrzeugen, alles verbinden, Modpack zusammenstellen, Modrinth.
 
+## Danksagung
+
+- **Stimmen** (Erzähler und Soldaten): erzeugt mit der freien Sprachsynthese [Piper](https://github.com/rhasspy/piper).
+  Deutsche Stimmen: [Thorsten-Voice](https://github.com/thorstenMueller/Thorsten-Voice) von Thorsten Müller (CC0).
+  Englische Stimmen: Piper-Stimme „libritts_r“, trainiert auf [LibriTTS-R](https://www.openslr.org/141/)
+  (CC BY 4.0, Y. Koizumi u. a.; Sprecher 680, 248 und 788).
+- **Musik:** eigene Komposition, gespielt mit dem Soundfont FluidR3_GM von Frank Wen (MIT-Lizenz).
+- **Geräusche der Lebewesen:** nutzen die Original-Geräusche von Minecraft mit veränderter Tonhöhe;
+  es werden keine Minecraft-Dateien mitgeliefert (siehe `tools/sound_events.py`).
+
 ## Lizenz
 
 Alle Rechte vorbehalten (siehe `mod_license` in `gradle.properties` – kann vor einer Veröffentlichung geändert werden).
