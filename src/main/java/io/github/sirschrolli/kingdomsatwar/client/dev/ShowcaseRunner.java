@@ -142,6 +142,13 @@ public final class ShowcaseRunner {
                 if (minecraft.gui.hud.isHidden() == visible) {
                     minecraft.gui.hud.toggle();
                 }
+                // Chat leeren und ausblenden, solange Screenshots entstehen (Befehlsrückmeldungen kämen sonst ins Bild)
+                minecraft.options.chatVisibility().set(visible
+                        ? net.minecraft.world.entity.player.ChatVisiblity.FULL
+                        : net.minecraft.world.entity.player.ChatVisiblity.HIDDEN);
+                if (!visible) {
+                    minecraft.gui.hud.getChat().clearMessages(false);
+                }
             });
         }
 
@@ -150,11 +157,16 @@ public final class ShowcaseRunner {
         }
 
         static Step screenshot(String name) {
-            return once(minecraft -> {
+            // drei Ticks warten, damit Änderungen (HUD aus, Chat geleert) sicher im Bild angekommen sind
+            return (minecraft, ticks) -> {
+                if (ticks < 3) {
+                    return false;
+                }
                 LOGGER.info("[Showcase] Screenshot {}", name);
                 Screenshot.grab(minecraft.gameDirectory, name + ".png", minecraft.gameRenderer.mainRenderTarget(), 1,
                         message -> LOGGER.info("[Showcase] {}", message.getString()));
-            });
+                return true;
+            };
         }
 
         static Step quit() {

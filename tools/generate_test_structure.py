@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Erzeugt die kleine Teststruktur für die automatischen GameTests:
-eine 5x3x5 große Fläche mit Steinboden (unten) und Luft darüber.
+Erzeugt die Teststrukturen für die automatischen GameTests (Steinboden unten, Luft darüber):
+  - test_platform: 5x3x5 für Block-Tests
+  - test_arena:    9x6x9 für Tests mit Drachen und anderen großen Lebewesen
 
 Aufruf: python3 tools/generate_test_structure.py   (benötigt: pip install nbtlib)
 """
@@ -11,24 +12,24 @@ import nbtlib
 from nbtlib.tag import Compound, Int, List, String
 
 ROOT = Path(__file__).resolve().parent.parent
-TARGET = ROOT / "src" / "main" / "resources" / "data" / "kingdomsatwar" / "structure" / "test_platform.nbt"
+STRUCTURES = ROOT / "src" / "main" / "resources" / "data" / "kingdomsatwar" / "structure"
 
 DATA_VERSION = 5023  # Minecraft 26.3
-SIZE_X, SIZE_Y, SIZE_Z = 5, 3, 5
+PLATFORMS = {"test_platform": (5, 3, 5), "test_arena": (9, 6, 9)}
 
 
-def main() -> None:
+def write_platform(name: str, size_x: int, size_y: int, size_z: int) -> None:
     blocks = List[Compound]()
-    for y in range(SIZE_Y):
-        for z in range(SIZE_Z):
-            for x in range(SIZE_X):
+    for y in range(size_y):
+        for z in range(size_z):
+            for x in range(size_x):
                 blocks.append(Compound({
                     "pos": List[Int]([Int(x), Int(y), Int(z)]),
                     "state": Int(0 if y == 0 else 1),
                 }))
     root = Compound({
         "DataVersion": Int(DATA_VERSION),
-        "size": List[Int]([Int(SIZE_X), Int(SIZE_Y), Int(SIZE_Z)]),
+        "size": List[Int]([Int(size_x), Int(size_y), Int(size_z)]),
         "palette": List[Compound]([
             Compound({"Name": String("minecraft:stone")}),
             Compound({"Name": String("minecraft:air")}),
@@ -36,9 +37,15 @@ def main() -> None:
         "blocks": blocks,
         "entities": List[Compound](),
     })
-    TARGET.parent.mkdir(parents=True, exist_ok=True)
-    nbtlib.File(root, gzipped=True).save(TARGET)
-    print(f"Geschrieben: {TARGET}")
+    target = STRUCTURES / f"{name}.nbt"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    nbtlib.File(root, gzipped=True).save(target)
+    print(f"Geschrieben: {target}")
+
+
+def main() -> None:
+    for name, size in PLATFORMS.items():
+        write_platform(name, *size)
 
 
 if __name__ == "__main__":

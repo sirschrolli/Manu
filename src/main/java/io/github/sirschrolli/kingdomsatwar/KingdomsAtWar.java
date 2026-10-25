@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import io.github.sirschrolli.kingdomsatwar.gametest.ModGameTests;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModCreativeTabs;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -28,12 +30,15 @@ public final class KingdomsAtWar {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public KingdomsAtWar(IEventBus modBus, ModContainer container) {
+        ModSounds.SOUNDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
+        ModEntities.ENTITIES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);
 
         modBus.addListener(ModGameTests::registerTests);
+        modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(this::commonSetup);
     }
 

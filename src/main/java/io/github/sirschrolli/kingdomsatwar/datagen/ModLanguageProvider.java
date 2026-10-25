@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.function.Supplier;
 import net.minecraft.data.PackOutput;
@@ -122,10 +123,33 @@ public class ModLanguageProvider extends LanguageProvider {
         egg(DragonType.WATER, "Water Dragon Egg", "Wasserdrachen-Ei",
                 "The depth of the ocean", "Die Tiefe des Ozeans",
                 "Habitat: oceans, deep lakes, underwater caves", "Lebensraum: Ozeane, tiefe Seen, Unterwasserhöhlen");
-        for (DragonType type : DragonType.values()) {
-            text(ModItems.loreKey(type.id() + "_dragon_egg", 3), "Hatching follows in a later version",
-                    "Ausbrüten folgt in einer späteren Version");
-        }
+        hatchHint(DragonType.FIRE, "To hatch: place near lava or fire", "Zum Ausbrüten: nahe Lava oder Feuer legen");
+        hatchHint(DragonType.ICE, "To hatch: place on ice or snow", "Zum Ausbrüten: auf Eis oder Schnee legen");
+        hatchHint(DragonType.LIGHTNING, "To hatch: thunderstorm or lightning rod", "Zum Ausbrüten: Gewitter oder Blitzableiter");
+        hatchHint(DragonType.NATURE, "To hatch: on grass in the light, near plants", "Zum Ausbrüten: im Hellen auf Gras, nahe Pflanzen");
+        hatchHint(DragonType.EARTH, "To hatch: underground on stone", "Zum Ausbrüten: unter der Erde auf Stein legen");
+        hatchHint(DragonType.WATER, "To hatch: place under water", "Zum Ausbrüten: unter Wasser legen");
+
+        dragon(DragonType.FIRE, "Fire Dragon", "Feuerdrache", "Feuerdrachen");
+        dragon(DragonType.ICE, "Ice Dragon", "Eisdrache", "Eisdrachen");
+        dragon(DragonType.LIGHTNING, "Lightning Dragon", "Blitzdrache", "Blitzdrachen");
+        dragon(DragonType.NATURE, "Nature Dragon", "Naturdrache", "Naturdrachen");
+        dragon(DragonType.EARTH, "Earth Dragon", "Erddrache", "Erddrachen");
+        dragon(DragonType.WATER, "Water Dragon", "Wasserdrache", "Wasserdrachen");
+        text("dragon.kingdomsatwar.stage.1", "Hatchling", "Schlüpfling");
+        text("dragon.kingdomsatwar.stage.2", "Young Dragon", "Jungdrache");
+        text("dragon.kingdomsatwar.stage.3", "Adolescent Dragon", "Halbstarker Drache");
+        text("dragon.kingdomsatwar.stage.4", "Adult Dragon", "Ausgewachsener Drache");
+        text("dragon.kingdomsatwar.stage.5", "Ancient Dragon", "Uralter Drache");
+        text("message.kingdomsatwar.dragon_grew", "%s has grown: %s!", "%s ist gewachsen: %s!");
+        text("message.kingdomsatwar.dragon_mode.0", "%s follows you", "%s folgt dir");
+        text("message.kingdomsatwar.dragon_mode.1", "%s stays here", "%s bleibt hier");
+        text("message.kingdomsatwar.dragon_mode.2", "%s roams freely", "%s streift frei umher");
+        text("message.kingdomsatwar.dragon_ride_hint", "%s: take off / climb · %s: breath · %s: dismount",
+                "%s: Abheben / Steigen · %s: Odem · %s: Absteigen");
+        text("key.category.kingdomsatwar.dragons", "Kingdoms at War: Dragons", "Kingdoms at War: Drachen");
+        text("key.kingdomsatwar.dragon_breath", "Dragon Breath (while riding)", "Drachenodem (beim Reiten)");
+        text("message.kingdomsatwar.dragon_hatched", "The %s has hatched and chosen you!", "Der %s ist geschlüpft und hat dich erwählt!");
 
         item(ModItems.DRAGON_SCALES.get(DragonType.FIRE), "Fire Dragon Scale", "Feuerdrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.ICE), "Ice Dragon Scale", "Eisdrachen-Schuppe");
@@ -133,11 +157,56 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.DRAGON_SCALES.get(DragonType.NATURE), "Nature Dragon Scale", "Naturdrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.EARTH), "Earth Dragon Scale", "Erddrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.WATER), "Water Dragon Scale", "Wasserdrachen-Schuppe");
-        lore("dragon_scale", "For dragon armour (coming with the dragons)", "Für Drachenrüstungen (kommen mit den Drachen)");
+        lore("dragon_scale", "Dragons shed scales as they grow", "Drachen verlieren beim Wachsen Schuppen");
         item(ModItems.DRAGON_EGG_FRAGMENT, "Dragon Egg Fragment", "Drachenei-Fragment");
         lore("dragon_egg_fragment", "Very rare – used for dragon eggs", "Sehr selten – für Dracheneier");
         item(ModItems.DRAGON_FOOD, "Dragon Food", "Drachenfutter");
-        lore("dragon_food", "Will be used to tame dragons", "Wird später zum Zähmen von Drachen gebraucht");
+        lore("dragon_food", "Heals dragons and makes them grow faster", "Heilt Drachen und lässt sie schneller wachsen");
+
+        // --- Geräusche (Untertitel) ---
+        subtitle("entity.dragon.ambient", "Dragon growls", "Drache knurrt");
+        subtitle("entity.dragon.baby_ambient", "Young dragon chirps", "Junger Drache fiept");
+        subtitle("entity.dragon.hurt", "Dragon hurts", "Drache nimmt Schaden");
+        subtitle("entity.dragon.death", "Dragon dies", "Drache stirbt");
+        subtitle("entity.dragon.roar", "Dragon roars", "Drache brüllt");
+        subtitle("entity.dragon.flap", "Dragon flaps its wings", "Drache schlägt mit den Flügeln");
+        subtitle("entity.dragon.step", "Dragon walks", "Drache läuft");
+        subtitle("entity.dragon.eat", "Dragon eats", "Drache frisst");
+        subtitle("entity.dragon.bite", "Dragon bites", "Drache beißt");
+        subtitle("entity.dragon.grow", "Dragon grows", "Drache wächst");
+        subtitle("entity.dragon.breath.fire", "Dragon breathes fire", "Drache speit Feuer");
+        subtitle("entity.dragon.breath.ice", "Dragon breathes frost", "Drache speit Frost");
+        subtitle("entity.dragon.breath.lightning", "Dragon breathes lightning", "Drache speit Blitze");
+        subtitle("entity.dragon.breath.nature", "Dragon breathes spores", "Drache speit Sporen");
+        subtitle("entity.dragon.breath.earth", "Dragon breathes rubble", "Drache speit Geröll");
+        subtitle("entity.dragon.breath.water", "Dragon breathes water", "Drache speit Wasser");
+        subtitle("block.dragon_egg.crack", "Dragon egg cracks", "Drachenei knackt");
+        subtitle("block.dragon_egg.hatch", "Dragon hatches", "Drache schlüpft");
+        subtitle("intro.narration", "Narrator speaks", "Erzähler spricht");
+        subtitle("intro.music", "Intro music plays", "Intro-Musik spielt");
+        subtitle("voice.soldier.recruit", "Soldier reports for duty", "Soldat meldet sich zum Dienst");
+        subtitle("voice.soldier.follow", "Soldier follows", "Soldat folgt");
+        subtitle("voice.soldier.hold", "Soldier holds position", "Soldat hält die Stellung");
+        subtitle("voice.soldier.attack", "Soldier battle cry", "Soldat ruft zum Angriff");
+        subtitle("voice.soldier.victory", "Soldier cheers", "Soldat jubelt");
+        subtitle("voice.soldier.idle", "Soldier mutters", "Soldat murmelt");
+
+        // --- Erzähl-Intro ---
+        text("intro.kingdomsatwar.line1", "Once, this world lay silent and untouched.", "Einst lag diese Welt still und unberührt.");
+        text("intro.kingdomsatwar.line2", "Then the kingdoms rose – with walls of stone and towers that reached up to the clouds.",
+                "Dann erhoben sich die Königreiche – mit Mauern aus Stein und Türmen, die bis an die Wolken reichten.");
+        text("intro.kingdomsatwar.line3", "But deep within the mountains, in volcanoes, ice and sea, the dragons awoke.",
+                "Doch tief in den Bergen, in Vulkanen, Eis und Meer, erwachten die Drachen.");
+        text("intro.kingdomsatwar.line4", "Six kinds – born of fire, ice, lightning, nature, earth and water.",
+                "Sechs Arten – geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.");
+        text("intro.kingdomsatwar.line5", "Whoever finds their eggs and raises them with patience gains an ally mightier than any army.",
+                "Wer ihre Eier findet und sie mit Geduld aufzieht, gewinnt einen Verbündeten, mächtiger als jede Armee.");
+        text("intro.kingdomsatwar.line6", "Deep below, rare ores lie waiting: Draconium, Aetherit, Konterit – the stuff that legends are forged from.",
+                "In der Tiefe warten seltene Erze: Draconium, Aetherit, Konterit – der Stoff, aus dem Legenden geschmiedet werden.");
+        text("intro.kingdomsatwar.line7", "Gather knights and soldiers around you, raise your castle and defend your land.",
+                "Sammle Ritter und Soldaten um dich, errichte deine Burg und verteidige dein Land.");
+        text("intro.kingdomsatwar.line8", "The world is ready. The dragons are waiting.", "Die Welt ist bereit. Die Drachen warten.");
+        text("intro.kingdomsatwar.line9", "This is your kingdom.", "Dies ist dein Königreich.");
 
         // --- Landwirtschaft ---
         item(ModItems.TOMATO_SEEDS, "Tomato Seeds", "Tomatensamen");
@@ -210,6 +279,20 @@ public class ModLanguageProvider extends LanguageProvider {
     /** "Moosige Mauerstein" + "treppe" -> "Moosige Mauersteintreppe". */
     private static String germanVariant(String stem, String suffix) {
         return stem + suffix;
+    }
+
+    private void hatchHint(DragonType type, String english, String deutsch) {
+        text(ModItems.loreKey(type.id() + "_dragon_egg", 3), english, deutsch);
+    }
+
+    /** Drache: Name des Lebewesens und des Spawn-Eis ("Feuerdrachen-Spawn-Ei"). */
+    private void dragon(DragonType type, String english, String deutsch, String germanStem) {
+        add(ModEntities.DRAGONS.get(type).get(), pick(english, deutsch));
+        item(ModItems.DRAGON_SPAWN_EGGS.get(type), english + " Spawn Egg", germanStem + "-Spawn-Ei");
+    }
+
+    private void subtitle(String sound, String english, String deutsch) {
+        text("subtitles." + KingdomsAtWar.MODID + "." + sound, english, deutsch);
     }
 
     private void egg(DragonType type, String nameEn, String nameDe, String line1En, String line1De,

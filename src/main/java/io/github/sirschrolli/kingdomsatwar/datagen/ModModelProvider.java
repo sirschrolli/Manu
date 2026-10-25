@@ -8,6 +8,9 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
@@ -64,34 +67,63 @@ public class ModModelProvider extends ModelProvider {
                     .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(GLOW).cullface(direction)))
             .build();
 
-    /** Ei-Form aus übereinander gestapelten Quadern. */
-    private static final ModelTemplate DRAGON_EGG = ExtendedModelTemplateBuilder.builder()
+    /** Vollblock mit zweiter, selbstleuchtender Schicht (glühende Adern bzw. Kristallkern). */
+    private static final ModelTemplate CUBE_GLOW = ExtendedModelTemplateBuilder.builder()
             .parent(Identifier.withDefaultNamespace("block/block"))
             .requiredTextureSlot(TextureSlot.ALL)
+            .requiredTextureSlot(GLOW)
             .requiredTextureSlot(TextureSlot.PARTICLE)
-            .ambientOcclusion(false)
-            .element(element -> eggLayer(element, 3, 0, 13, 2))
-            .element(element -> eggLayer(element, 2, 2, 14, 10))
-            .element(element -> eggLayer(element, 3, 10, 13, 12))
-            .element(element -> eggLayer(element, 4, 12, 12, 14))
-            .element(element -> eggLayer(element, 5, 14, 11, 15))
-            .element(element -> eggLayer(element, 6, 15, 10, 16))
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(TextureSlot.ALL).cullface(direction)))
+            .element(element -> element.from(0, 0, 0).to(16, 16, 16).lightEmission(15).ambientOcclusion(false)
+                    .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).texture(GLOW).cullface(direction)))
             .build();
+
+    /** Risse eines brütenden Eis (dunkler Rand) und das leuchtende Innere. */
+    private static final TextureSlot CRACKS = TextureSlot.create("cracks");
+    private static final int[][] EGG_LAYERS = {
+            {3, 0, 13, 2}, {2, 2, 14, 10}, {3, 10, 13, 12}, {4, 12, 12, 14}, {5, 14, 11, 15}, {6, 15, 10, 16}};
+
+    /** Ei-Form aus übereinander gestapelten Quadern. */
+    private static final ModelTemplate DRAGON_EGG = eggTemplate(false);
+    /** Wie {@link #DRAGON_EGG}, mit Rissen und selbstleuchtendem Inneren darüber (brütendes Ei). */
+    private static final ModelTemplate DRAGON_EGG_CRACKED = eggTemplate(true);
+
+    private static ModelTemplate eggTemplate(boolean cracked) {
+        ExtendedModelTemplateBuilder builder = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace("block/block"))
+                .requiredTextureSlot(TextureSlot.ALL)
+                .requiredTextureSlot(TextureSlot.PARTICLE)
+                .ambientOcclusion(false);
+        java.util.List<TextureSlot> slots = cracked ? java.util.List.of(TextureSlot.ALL, CRACKS, GLOW) : java.util.List.of(TextureSlot.ALL);
+        if (cracked) {
+            builder.requiredTextureSlot(CRACKS).requiredTextureSlot(GLOW);
+        }
+        for (TextureSlot slot : slots) {
+            for (int[] layer : EGG_LAYERS) {
+                builder.element(element -> eggLayer(element, slot, layer[0], layer[1], layer[2], layer[3]));
+            }
+        }
+        return builder.build();
+    }
 
     public ModModelProvider(PackOutput output) {
         super(output, KingdomsAtWar.MODID);
     }
 
     private static void eggLayer(net.neoforged.neoforge.client.model.generators.template.ElementBuilder element,
-            float min, float y1, float max, float y2) {
+            TextureSlot slot, float min, float y1, float max, float y2) {
         element.from(min, y1, min).to(max, y2, max)
                 .allFaces((direction, face) -> {
                     switch (direction) {
                         case UP, DOWN -> face.uvs(min, min, max, max);
                         default -> face.uvs(min, 16 - y2, max, 16 - y1);
                     }
-                    face.texture(TextureSlot.ALL);
+                    face.texture(slot);
                 });
+        if (slot == GLOW) {
+            element.lightEmission(15);
+        }
     }
 
     @Override
@@ -128,17 +160,26 @@ public class ModModelProvider extends ModelProvider {
         blocks.createTrivialCube(ModBlocks.CARBON_BLOCK.get());
         blocks.createTrivialCube(ModBlocks.GEMSTONE_BLOCK.get());
         blocks.createTrivialCube(ModBlocks.KONTERIT_BLOCK.get());
-        blocks.createTrivialCube(ModBlocks.AETHERIT_BLOCK.get());
-        blocks.createTrivialCube(ModBlocks.DRACONIUM_BLOCK.get());
+        glowingCube(blocks, ModBlocks.AETHERIT_BLOCK.get());
+        glowingCube(blocks, ModBlocks.DRACONIUM_BLOCK.get());
         blocks.createTrivialCube(ModBlocks.WYVERNIT_BLOCK.get());
         blocks.createTrivialCube(ModBlocks.STEEL_BLOCK.get());
 
-        // --- Dracheneier ---
+        // --- Dracheneier: heil (hatch=0) und drei Riss-Stufen beim Brüten ---
         for (DeferredBlock<ElementalDragonEggBlock> egg : ModBlocks.DRAGON_EGGS.values()) {
-            Block block = egg.get();
+            ElementalDragonEggBlock block = egg.get();
             TextureMapping mapping = TextureMapping.cube(block).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE);
-            Identifier model = DRAGON_EGG.create(block, mapping, blocks.modelOutput);
-            blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
+            Identifier whole = DRAGON_EGG.create(block, mapping, blocks.modelOutput);
+            String kind = block.getDragonType().id();
+            PropertyDispatch.C1<MultiVariant, Integer> stages = PropertyDispatch.initial(ElementalDragonEggBlock.HATCH)
+                    .select(0, BlockModelGenerators.plainVariant(whole));
+            for (int stage = 1; stage <= 3; stage++) {
+                TextureMapping cracked = mapping.copyAndUpdate(CRACKS, new Material(KingdomsAtWar.id("block/dragon_egg_cracks_" + stage)))
+                        .copyAndUpdate(GLOW, new Material(KingdomsAtWar.id("block/" + kind + "_dragon_egg_glow_" + stage)));
+                Identifier model = DRAGON_EGG_CRACKED.createWithSuffix(block, "_hatch_" + stage, cracked, blocks.modelOutput);
+                stages.select(stage, BlockModelGenerators.plainVariant(model));
+            }
+            blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).with(stages));
         }
 
         // --- Feldfrüchte: 8 Altersstufen, 4 Texturen ---
@@ -162,6 +203,16 @@ public class ModModelProvider extends ModelProvider {
         for (DeferredItem<Item> scale : ModItems.DRAGON_SCALES.values()) {
             flat(items, scale.get());
         }
+        for (DeferredItem<?> spawnEgg : ModItems.DRAGON_SPAWN_EGGS.values()) {
+            flat(items, spawnEgg.get());
+        }
+    }
+
+    private static void glowingCube(BlockModelGenerators blocks, Block block) {
+        TextureMapping mapping = TextureMapping.cube(block).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE)
+                .put(GLOW, TextureMapping.getBlockTexture(block, "_glow"));
+        Identifier model = CUBE_GLOW.create(block, mapping, blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
     }
 
     private static void flat(ItemModelGenerators items, Item item) {

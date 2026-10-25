@@ -51,22 +51,23 @@ def build() -> Model:
     m = Model("dragon", 256, 256)
 
     # ---------------------------------------------------------------- Rumpf
-    m.bone("body", pivot=(0, 4, 0))
-    m.cube("body", (-8, -8, -16), (16, 14, 30), "scales")
-    m.cube("body", (-6.5, -9.5, -13), (13, 2, 22), "scales")                 # Rückenwölbung
+    m.bone("body", pivot=(0, 7, 0))
+    m.cube("body", (-9, -9, -16), (18, 15, 30), "scales")
+    m.cube("body", (-7, -10.5, -13), (14, 2, 22), "scales")                  # Rückenwölbung
+    m.cube("body", (-7.5, 5, -14), (15, 2, 22), "scales")                    # Bauch
     for i, z in enumerate((-12, -5, 2, 9)):
-        m.cube("body", (-1, -13.5 + (i % 2), z), (2, 4.5 - (i % 2), 3), "spike")
-    m.cube("body", (0, -15, -14), (0, 6, 26), "crest")                        # Kamm (je nach Art sichtbar)
+        m.cube("body", (-1, -14.5 + (i % 2), z), (2, 4.5 - (i % 2), 3), "spike")
+    m.cube("body", (0, -16, -14), (0, 6, 26), "crest")                        # Kamm (je nach Art sichtbar)
 
     # ---------------------------------------------------------------- Hals und Kopf
-    m.bone("neck1", "body", pivot=(0, -3, -15), rotation=(-38, 0, 0))
-    m.cube("neck1", (-4.5, -4.5, -11), (9, 9, 11), "scales")
-    m.cube("neck1", (-1, -7.5, -8), (2, 3, 3), "spike")
+    m.bone("neck1", "body", pivot=(0, -3.5, -14), rotation=(-38, 0, 0))
+    m.cube("neck1", (-5.5, -5.5, -11), (11, 11, 11), "scales")
+    m.cube("neck1", (-1, -8.5, -8), (2, 3, 3), "spike")
     m.bone("neck2", "neck1", pivot=(0, 0, -10), rotation=(-8, 0, 0))
-    m.cube("neck2", (-4, -4, -10), (8, 8, 10), "scales")
-    m.cube("neck2", (-1, -6.5, -7), (2, 2.5, 3), "spike")
+    m.cube("neck2", (-4.5, -4.5, -10), (9, 9, 10), "scales")
+    m.cube("neck2", (-1, -7, -7), (2, 2.5, 3), "spike")
     m.bone("neck3", "neck2", pivot=(0, 0, -9), rotation=(18, 0, 0))
-    m.cube("neck3", (-3.5, -3.5, -9), (7, 7, 9), "scales")
+    m.cube("neck3", (-4, -4, -9), (8, 8, 9), "scales")
     m.bone("head", "neck3", pivot=(0, 0, -8), rotation=(28, 0, 0))
     m.cube("head", (-5, -5, -12), (10, 9, 12), "scales")                      # Schädel
     m.cube("head", (-3.5, -2.5, -22), (7, 5, 10), "scales")                   # Schnauze
@@ -92,7 +93,7 @@ def build() -> Model:
     sizes = [(10, 14), (8.5, 14), (7, 13), (5.5, 12), (4.5, 11), (3.5, 10)]
     rots = [-14, -6, 4, 6, 6, 6]
     parent = "body"
-    pivot = (0, -2, 13.5)
+    pivot = (0, -2.5, 13.5)
     for i, ((s, length), rot) in enumerate(zip(sizes, rots), start=1):
         name = f"tail{i}"
         m.bone(name, parent, pivot=pivot, rotation=(rot, 0, 0))
@@ -105,31 +106,32 @@ def build() -> Model:
     m.cube("tail4", (0, -6, 0), (0, 4, 12), "crest")
 
     # ---------------------------------------------------------------- Beine
+    # Rumpf-Drehpunkt liegt auf Höhe 7, der Boden auf Höhe 24.
     for side, sx in (("l", 1), ("r", -1)):
-        # Vorderbein
-        m.bone(f"front_leg_{side}", "body", pivot=(7.5 * sx, 2, -10), rotation=(8, 0, 0))
-        m.cube(f"front_leg_{side}", (-2.5, -2, -2.5), (5, 10, 5), "scales")
-        m.bone(f"front_shin_{side}", f"front_leg_{side}", pivot=(0, 8, 0), rotation=(-14, 0, 0))
-        m.cube(f"front_shin_{side}", (-2, 0, -2), (4, 8, 4), "scales")
-        m.bone(f"front_foot_{side}", f"front_shin_{side}", pivot=(0, 7.5, 0), rotation=(6, 0, 0))
-        m.cube(f"front_foot_{side}", (-2.5, 0, -5), (5, 2.5, 7), "scales")
-        for cx in (-2, -0.5, 1):
-            m.cube(f"front_foot_{side}", (cx, 1, -6.5), (1, 1.5, 2), "claw")
-        # Hinterbein
-        m.bone(f"hind_leg_{side}", "body", pivot=(7.5 * sx, 0, 9), rotation=(-12, 0, 0))
-        m.cube(f"hind_leg_{side}", (-3.5, -3, -4.5), (7, 12, 9), "scales")
-        m.bone(f"hind_shin_{side}", f"hind_leg_{side}", pivot=(0, 8, 2), rotation=(32, 0, 0))
-        m.cube(f"hind_shin_{side}", (-2.5, 0, -2.5), (5, 9, 5), "scales")
-        m.bone(f"hind_foot_{side}", f"hind_shin_{side}", pivot=(0, 8, 0), rotation=(-20, 0, 0))
-        m.cube(f"hind_foot_{side}", (-3, 0, -6), (6, 2.5, 8), "scales")
+        # Vorderbein: Schulter auf 10, Unterarm ab 15.5, Fuß von 21.5 bis 24
+        m.bone(f"front_leg_{side}", "body", pivot=(7.5 * sx, 3, -10), rotation=(4, 0, 0))
+        m.cube(f"front_leg_{side}", (-3, -2.5, -3), (6, 8, 6), "scales")
+        m.bone(f"front_shin_{side}", f"front_leg_{side}", pivot=(0, 5.5, 0), rotation=(-6, 0, 0))
+        m.cube(f"front_shin_{side}", (-2.5, 0, -2.5), (5, 6.5, 5), "scales")
+        m.bone(f"front_foot_{side}", f"front_shin_{side}", pivot=(0, 6, 0), rotation=(2, 0, 0))
+        m.cube(f"front_foot_{side}", (-3, 0, -5.5), (6, 2.5, 8), "scales")
         for cx in (-2.5, -0.5, 1.5):
-            m.cube(f"hind_foot_{side}", (cx, 1, -7.5), (1, 1.5, 2), "claw")
+            m.cube(f"front_foot_{side}", (cx, 1, -7), (1, 1.5, 2), "claw")
+        # Hinterbein: Hüfte auf 8, Unterschenkel ab 15, Fuß von 21.5 bis 24
+        m.bone(f"hind_leg_{side}", "body", pivot=(8 * sx, 1, 9), rotation=(-6, 0, 0))
+        m.cube(f"hind_leg_{side}", (-4, -3.5, -5), (8, 11, 10), "scales")
+        m.bone(f"hind_shin_{side}", f"hind_leg_{side}", pivot=(0, 7, 1.5), rotation=(10, 0, 0))
+        m.cube(f"hind_shin_{side}", (-3, 0, -3), (6, 6.5, 6), "scales")
+        m.bone(f"hind_foot_{side}", f"hind_shin_{side}", pivot=(0, 6.5, 0), rotation=(-4, 0, 0))
+        m.cube(f"hind_foot_{side}", (-3.5, 0, -6.5), (7, 2.5, 9), "scales")
+        for cx in (-3, -0.5, 2):
+            m.cube(f"hind_foot_{side}", (cx, 1, -8), (1, 1.5, 2), "claw")
 
     # ---------------------------------------------------------------- Flügel
     for side, sx in (("l", 1), ("r", -1)):
         arm = f"wing_{side}"
         fore = f"wing_tip_{side}"
-        m.bone(arm, "body", pivot=(7 * sx, -7, -9), rotation=(0, 0, 0))
+        m.bone(arm, "body", pivot=(8 * sx, -8, -9), rotation=(0, 0, 0))
         x0 = 0 if sx > 0 else -22
         m.cube(arm, (x0, -1.5, -1.5), (22, 3, 3), "scales")
         m.cube(arm, (x0, 0, 1), (22, 0, 24), "membrane_inner")

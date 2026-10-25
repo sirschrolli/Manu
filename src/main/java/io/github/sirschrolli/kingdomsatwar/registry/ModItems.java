@@ -17,6 +17,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -76,9 +77,20 @@ public final class ModItems {
         }
     }
 
-    /** Drachenfutter – wird später zum Zähmen und Aufziehen der Drachen gebraucht. */
+    /** Drachenfutter – heilt Drachen und lässt sie schneller wachsen. */
     public static final DeferredItem<Item> DRAGON_FOOD = item("dragon_food",
             p -> p.component(DataComponents.LORE, lore("dragon_food", 1)), DRAGON_TAB);
+
+    private static final Map<DragonType, DeferredItem<SpawnEggItem>> DRAGON_SPAWN_EGGS_MUTABLE = new EnumMap<>(DragonType.class);
+    /** Spawn-Eier (Kreativmodus) für einen Schlüpfling jeder Drachenart. */
+    public static final Map<DragonType, DeferredItem<SpawnEggItem>> DRAGON_SPAWN_EGGS = Collections.unmodifiableMap(DRAGON_SPAWN_EGGS_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            DRAGON_SPAWN_EGGS_MUTABLE.put(type, addTo(DRAGON_TAB, ITEMS.registerItem(type.id() + "_dragon_spawn_egg", SpawnEggItem::new,
+                    p -> p.spawnEgg(ModEntities.DRAGONS.get(type).get()))));
+        }
+    }
 
     // =====================================================================================
     // Kingdoms at War – Landwirtschaft & Nahrung
