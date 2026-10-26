@@ -74,7 +74,97 @@ public final class ModGameEvents {
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
-                        .then(Commands.literal("reset").executes(context -> resetLair(context.getSource().getPlayerOrException())))));
+                        .then(Commands.literal("reset").executes(context -> resetLair(context.getSource().getPlayerOrException()))))
+                .then(storyCommand())
+                .then(sealCommand()));
+    }
+
+    /** {@code /kaw story reset|card <Kapitel>|chronicle}: Geschichte zurücksetzen, Titelkarte zeigen, Chronik geben. */
+    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<net.minecraft.commands.CommandSourceStack> storyCommand() {
+        return Commands.literal("story").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .then(Commands.literal("reset").executes(context -> {
+                    io.github.sirschrolli.kingdomsatwar.story.Story.reset(context.getSource().getPlayerOrException());
+                    context.getSource().sendSuccess(() -> Component.translatable("command.kingdomsatwar.story.reset"), false);
+                    return 1;
+                }))
+                .then(Commands.literal("card").then(Commands.argument("chapter", IntegerArgumentType.integer(0, 10)).executes(context -> {
+                    io.github.sirschrolli.kingdomsatwar.story.Story.sendCard(context.getSource().getPlayerOrException(),
+                            io.github.sirschrolli.kingdomsatwar.story.Chapter.byIndex(IntegerArgumentType.getInteger(context, "chapter")), -1);
+                    return 1;
+                })))
+                .then(Commands.literal("chronicle").executes(context -> {
+                    io.github.sirschrolli.kingdomsatwar.story.Story.giveChronicle(context.getSource().getPlayerOrException());
+                    return 1;
+                }));
+    }
+
+    /**
+     * {@code /kaw seal}: Zustand des Siegels und Lage des Siegelkreises (anklickbar); {@code shard <Element>} gibt einen
+     * Siegelsplitter, {@code insert <Element>} setzt ihn direkt ein, {@code break} lässt das Siegel brechen,
+     * {@code reset} stellt alles wieder her.
+     */
+    private static com.mojang.brigadier.builder.LiteralArgumentBuilder<net.minecraft.commands.CommandSourceStack> sealCommand() {
+        var shard = Commands.literal("shard");
+        var insert = Commands.literal("insert");
+        for (DragonType type : DragonType.values()) {
+            shard.then(Commands.literal(type.id()).executes(context -> {
+                ServerPlayer player = context.getSource().getPlayerOrException();
+                net.minecraft.world.item.ItemStack stack = new net.minecraft.world.item.ItemStack(
+                        io.github.sirschrolli.kingdomsatwar.registry.ModItems.SEAL_SHARDS.get(type).get());
+                player.getInventory().placeItemBackInInventory(stack, net.minecraft.util.Prediction.SERVER_ONLY);
+                return 1;
+            }));
+            insert.then(Commands.literal(type.id()).executes(context -> {
+                boolean ok = io.github.sirschrolli.kingdomsatwar.world.SealCircle.insert(context.getSource().getLevel().getServer().overworld(), type);
+                if (!ok) {
+                    context.getSource().sendFailure(Component.translatable("command.kingdomsatwar.seal.insert_failed"));
+                }
+                return ok ? 1 : 0;
+            }));
+        }
+        return Commands.literal("seal").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .executes(context -> sealStatus(context.getSource()))
+                .then(shard)
+                .then(insert)
+                .then(Commands.literal("break").executes(context -> {
+                    ServerLevel overworld = context.getSource().getServer().overworld();
+                    io.github.sirschrolli.kingdomsatwar.world.SealState seal = io.github.sirschrolli.kingdomsatwar.world.SealState.of(overworld);
+                    BlockPos center = io.github.sirschrolli.kingdomsatwar.world.SealCircle.center(overworld);
+                    if (center == null || seal.isBroken() || seal.isBreaking()) {
+                        context.getSource().sendFailure(Component.translatable("command.kingdomsatwar.seal.insert_failed"));
+                        return 0;
+                    }
+                    seal.setCenter(center);
+                    for (DragonType type : DragonType.values()) {
+                        seal.insert(type);
+                    }
+                    seal.setBreakTicks(0);
+                    seal.save(overworld);
+                    return 1;
+                }))
+                .then(Commands.literal("reset").executes(context -> {
+                    io.github.sirschrolli.kingdomsatwar.world.SealCircle.reset(context.getSource().getServer().overworld());
+                    context.getSource().sendSuccess(() -> Component.translatable("command.kingdomsatwar.seal.reset"), false);
+                    return 1;
+                }));
+    }
+
+    private static int sealStatus(net.minecraft.commands.CommandSourceStack source) {
+        ServerLevel overworld = source.getServer().overworld();
+        BlockPos center = io.github.sirschrolli.kingdomsatwar.world.SealCircle.center(overworld);
+        if (center == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.seal.none"));
+            return 0;
+        }
+        io.github.sirschrolli.kingdomsatwar.world.SealState seal = io.github.sirschrolli.kingdomsatwar.world.SealState.of(overworld);
+        String tp = "/tp @s " + center.getX() + " " + (center.getY() + 2) + " " + (center.getZ() + 8);
+        Component coords = Component.literal(center.getX() + " " + center.getY() + " " + center.getZ()).withStyle(style -> style
+                .withUnderlined(true).withClickEvent(new net.minecraft.network.chat.ClickEvent.SuggestCommand(tp)));
+        Component state = Component.translatable(seal.isBroken() ? "command.kingdomsatwar.seal.state.broken"
+                : seal.isBreaking() ? "command.kingdomsatwar.seal.state.breaking" : "command.kingdomsatwar.seal.state.intact");
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.seal.status", coords, seal.insertedCount(), state)
+                .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), false);
+        return 1;
     }
 
     /** {@code /kaw lair}: alle Nester der Welt mit Lage und Zustand; die Koordinaten lassen sich anklicken (Teleport). */

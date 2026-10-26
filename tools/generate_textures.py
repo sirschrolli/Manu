@@ -36,6 +36,7 @@ import kingdom_textures  # noqa: E402
 import lair_textures  # noqa: E402
 import magic_textures  # noqa: E402
 import pixelart as pa  # noqa: E402
+import seal_textures  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -801,6 +802,7 @@ def build_all() -> dict[str, Image.Image]:
     boss_textures.build(put)
     lair_textures.build(put)
     ashlands_textures.build(put)
+    seal_textures.build(put)
     equipment_textures.build_entity(put)
     dragon_spawn_eggs()
     plants()

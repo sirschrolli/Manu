@@ -152,6 +152,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("dragon_boss_lifecycle", () -> ModGameTests::dragonBossLifecycle);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_COMPASS =
             TEST_FUNCTIONS.register("dragon_compass", () -> ModGameTests::dragonCompass);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SEAL_CIRCLE =
+            TEST_FUNCTIONS.register("seal_circle", () -> ModGameTests::sealCircle);
 
     private ModGameTests() {}
 
@@ -169,7 +171,7 @@ public final class ModGameTests {
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
                         LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST,
-                        STAFF_SPELLS, STRUCTURES_GENERATE)) {
+                        STAFF_SPELLS, STRUCTURES_GENERATE, SEAL_CIRCLE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -203,8 +205,8 @@ public final class ModGameTests {
         var registries = helper.getLevel().getServer().reloadableRegistries();
         for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
             Block block = holder.value();
-            if (block == ModBlocks.DRAGON_LAIR_CORE.get()) {
-                continue;
+            if (block.defaultDestroyTime() < 0.0f) {
+                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises): ohne Beute
             }
             ResourceKey<LootTable> key = block.getLootTable().orElseThrow(
                     () -> helper.assertionException("Block ohne Loot-Table: %s", holder.getId()));
@@ -767,6 +769,102 @@ public final class ModGameTests {
             }
             helper.assertTrue(found == 1, "Feld " + region + " hat " + found + " mögliche Chunks");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Siegelkreis: Der Grundriss passt zusammen (Sockel ↔ Mitte, Monolithen im Sechseck, 25 verschiedene Platten), ein
+     * erwachender Monolith lässt nur die Runen seines Elements leuchten und füllt den Sockel, und Siegel, Fortschritt und
+     * Chronik überstehen Speichern und Netz unverändert.
+     */
+    private static void sealCircle(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos origin = new BlockPos(1000, 64, -2000);
+        java.util.Set<BlockPos> monoliths = new java.util.HashSet<>();
+        for (DragonType element : DragonType.values()) {
+            BlockPos socket = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.socket(origin, element);
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.centerFromSocket(socket, element).equals(origin),
+                    "Mitte aus dem Sockel falsch: " + element);
+            BlockPos m = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.monolith(origin, element);
+            double d = Math.sqrt(m.distSqr(origin));
+            helper.assertTrue(Math.abs(d - io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.MONOLITH_RADIUS) < 1.0,
+                    "Monolith nicht auf dem Kreis: " + element + " " + d);
+            Direction in = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.inward(element);
+            helper.assertTrue((origin.getX() - m.getX()) * in.getStepX() + (origin.getZ() - m.getZ()) * in.getStepZ() > 0,
+                    "Sockel zeigt nicht zur Mitte: " + element);
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.inlays(origin, element).size() >= 6,
+                    "Zu wenige Bodenzeichen: " + element);
+            monoliths.add(m);
+        }
+        helper.assertTrue(monoliths.size() == 6, "Monolithen fallen zusammen");
+        java.util.Set<Integer> parts = new java.util.HashSet<>();
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                parts.add(io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.platePart(dx, dz));
+            }
+        }
+        helper.assertTrue(parts.size() == 25 && java.util.Collections.min(parts) == 0 && java.util.Collections.max(parts) == 24,
+                "Siegelplatten falsch nummeriert");
+
+        // Ein Monolith erwacht (nachgebaut mitten in der Arena)
+        DragonType fire = DragonType.FIRE;
+        BlockPos m = helper.absolutePos(new BlockPos(5, 0, 5));
+        BlockPos center = m.subtract(io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.monolith(BlockPos.ZERO, fire));
+        Direction in = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.inward(fire);
+        BlockState rune = ModBlocks.SEAL_RUNE.get().defaultBlockState().setValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.ELEMENT, fire);
+        for (int y = 4; y <= 7; y++) {
+            level.setBlock(m.relative(in).above(y), rune, Block.UPDATE_ALL);
+        }
+        BlockPos foreign = m.above(5);
+        level.setBlock(foreign, rune.setValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.ELEMENT, DragonType.ICE), Block.UPDATE_ALL);
+        BlockPos socket = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLayout.socket(center, fire);
+        level.setBlock(socket, ModBlocks.SEAL_SOCKET.get().defaultBlockState()
+                .setValue(io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock.ELEMENT, fire)
+                .setValue(io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock.FACING, in), Block.UPDATE_ALL);
+        io.github.sirschrolli.kingdomsatwar.world.SealCircle.light(level, center, fire);
+        for (int y = 4; y <= 7; y++) {
+            helper.assertTrue(level.getBlockState(m.relative(in).above(y)).getValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.LIT),
+                    "Rune des Feuers leuchtet nicht (Höhe " + y + ")");
+        }
+        helper.assertFalse(level.getBlockState(foreign).getValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.LIT),
+                "Fremde Rune leuchtet mit");
+        helper.assertTrue(level.getBlockState(socket).getValue(io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock.FILLED),
+                "Sockel nicht gefüllt");
+
+        // Speichern und Netz
+        io.github.sirschrolli.kingdomsatwar.world.SealState seal = new io.github.sirschrolli.kingdomsatwar.world.SealState();
+        seal.insert(fire);
+        seal.setCenter(origin);
+        var sealTag = io.github.sirschrolli.kingdomsatwar.world.SealState.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, seal).getOrThrow();
+        var sealBack = io.github.sirschrolli.kingdomsatwar.world.SealState.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, sealTag).getOrThrow();
+        helper.assertTrue(sealBack.isInserted(fire) && !sealBack.isInserted(DragonType.ICE) && origin.equals(sealBack.center())
+                && !sealBack.isBreaking() && !sealBack.isBroken(), "Siegel falsch gespeichert: " + sealTag);
+        io.github.sirschrolli.kingdomsatwar.story.StoryProgress progress = new io.github.sirschrolli.kingdomsatwar.story.StoryProgress();
+        progress.set(io.github.sirschrolli.kingdomsatwar.story.StoryProgress.Flag.RECRUITED);
+        progress.discover(DragonType.WATER);
+        progress.setLastCard(3);
+        var progressTag = io.github.sirschrolli.kingdomsatwar.story.StoryProgress.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, progress)
+                .getOrThrow();
+        var progressBack = io.github.sirschrolli.kingdomsatwar.story.StoryProgress.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, progressTag)
+                .getOrThrow();
+        helper.assertTrue(progressBack.has(io.github.sirschrolli.kingdomsatwar.story.StoryProgress.Flag.RECRUITED)
+                && !progressBack.has(io.github.sirschrolli.kingdomsatwar.story.StoryProgress.Flag.FOUND_CIRCLE)
+                && progressBack.hasDiscovered(DragonType.WATER) && progressBack.lastCard() == 3, "Fortschritt falsch gespeichert: " + progressTag);
+        var data = new io.github.sirschrolli.kingdomsatwar.story.ChronicleData(4, progress.flagBits(), 1, false,
+                new io.github.sirschrolli.kingdomsatwar.story.ChronicleData.Place(2, 340), List.of(
+                        new io.github.sirschrolli.kingdomsatwar.story.ChronicleData.Dragon(fire, 2, true, true,
+                                new io.github.sirschrolli.kingdomsatwar.story.ChronicleData.Place(
+                                        io.github.sirschrolli.kingdomsatwar.story.ChronicleData.HERE, 10)),
+                        new io.github.sirschrolli.kingdomsatwar.story.ChronicleData.Dragon(DragonType.ICE, 0, false, false,
+                                io.github.sirschrolli.kingdomsatwar.story.ChronicleData.Place.NONE)));
+        net.minecraft.network.RegistryFriendlyByteBuf buf = new net.minecraft.network.RegistryFriendlyByteBuf(io.netty.buffer.Unpooled.buffer(),
+                level.registryAccess());
+        io.github.sirschrolli.kingdomsatwar.story.ChronicleData.STREAM_CODEC.encode(buf, data);
+        var copy = io.github.sirschrolli.kingdomsatwar.story.ChronicleData.STREAM_CODEC.decode(buf);
+        helper.assertTrue(copy.equals(data), "Chronik übers Netz verändert: " + copy);
+        helper.assertTrue(copy.current() == io.github.sirschrolli.kingdomsatwar.story.Chapter.DRAGON_2 && copy.insertedCount() == 1,
+                "Kapitel oder Splitterzahl falsch");
         helper.succeed();
     }
 

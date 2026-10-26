@@ -104,6 +104,37 @@ Blöcken, Farben, Partikeln und Geräuschen:
 | Erde | Zerklüftete Weiten | Felsnadeln, Kristalldrusen, Staub |
 | Wasser | Abgrundgrotte | Tangwälder, leuchtende Tiefseepflanzen, Perlmuttfelsen |
 
+### Der Siegelkreis (umgesetzt in B3)
+- Liegt **genau einmal pro Welt** 220–640 Blöcke vom Weltursprung entfernt, auf möglichst **ebenem Land** (Ebenen,
+  Wiesen, lichte Wälder, Savanne, Taiga), mindestens 400 Blöcke von jedem Nest; Dörfer und andere Bauwerke halten
+  Abstand. Die Geländehöhe wird schon vor der Erzeugung über die „vorläufige Oberfläche“ des Generators geschätzt.
+- Runde Plattform (Ø 43) aus **Siegelstein** (neu: Siegelstein, Siegelsteinziegel, rissig, bemoost, poliert,
+  gemeißelt – mit Treppen, Stufen, Mauern), Stufen am Rand, sanft angeglichenes Gelände bis Radius 36, ein Ring
+  verfallener Säulen, Seelenlaternen.
+- **Sechs Monolithen** (unzerstörbar) im Sechseck – Gegensätze gegenüber: Feuer/Eis, Blitz/Wasser, Natur/Erde. Jeder
+  hat Runen seines Elements, einen **Siegelsockel** mit Nische und einen Deckstein; Zeichenreihen im Boden führen zur
+  Mitte. In der Mitte das **Siegel** aus 5×5 Platten (ein großes Bild: Goldringe, Hexagramm, sechs Edelsteine, das
+  versiegelte Dunkel).
+- Jeder besiegte Boss hinterlässt einen **Siegelsplitter** (schwebt über dem Ei, verbrennt nicht, verschwindet nicht).
+  Eingesetzt in seinen Sockel erwacht der Monolith: Runen, Deckstein und Bodenzeichen leuchten in seiner Farbe.
+- **Der sechste Splitter bricht das Siegel** (17 Sekunden): Lichtsäulen aus den Monolithen, Strahlen zu einer
+  wachsenden Lichtkugel über der Mitte, das Siegel bekommt Risse, ein Blitz schlägt ein, Strahlenkranz und Druckwelle,
+  eine Säule aus Schatten steigt auf, Gewitter zieht auf – die Platten werden zum **Schattentor** (wogender
+  Schattenstrudel). Das Tor führt in die Schattenwelt, sobald es sie gibt (Schritt F).
+
+### Die Chronik des Siegels (umgesetzt in B3)
+- Jeder Spieler bekommt sie beim ersten Betreten der Welt (Ersatz: Buch + Goldbarren).
+- Aufgeschlagenes Buch: links die Kapitel (erreicht ✔, aktuell ▶, künftige verborgen 🔒) und der Zustand des Siegels
+  (sechs Zeichen), rechts Ziele mit Kästchen, Hinweise und die Erzählung. Bei den sechs Drachen: Zustand jedes Drachen
+  (schläft / erwacht / besiegt / Splitter eingesetzt) und – solange sein Nest unentdeckt ist – ein Gerücht mit
+  ungefährer Richtung („weit im Nordwesten“), danach die genaue Entfernung.
+- Beim Beginn jedes Kapitels erscheint eine **Titelkarte** („KAPITEL IV – Der zweite Drache“ mit einer Zeile des
+  Erzählers; nach einem Sieg mit dem Namen des gefallenen Drachen).
+- Kapitel I und II gehören dem Spieler (erster Soldat, Siegelkreis gefunden), die Drachen und das Siegel der ganzen
+  Welt – wer später dazukommt, steigt dort ein, wo die Welt steht.
+- Befehle für Tests: `/kaw story reset|card <n>|chronicle`, `/kaw seal`, `/kaw seal shard|insert <Element>`,
+  `/kaw seal break`, `/kaw seal reset`.
+
 ---
 
 ## 3. Wirtschaft und Stadt
@@ -196,7 +227,7 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | B1b | Weiche, realistische Bewegungen für alle Drachen (Feder-Ketten, Atmen, Schrittfolge, Flügelwelle, Ausholen/Nachschwingen) | ✅ |
 | B2 | Riesige Nester als echte Bauwerke, eins je Welt im passenden Biom, Nestkern, Drachenkompass | ✅ |
 | B2b | Eigenes Biom um jedes Nest mit neuen Blöcken: **Aschelande** ✅, die übrigen mit B4–B8 | ✅ |
-| B3 | Story-Grundlage: Chronik, Kapitel, Siegelkreis, Fortschritt je Spieler | ⏳ |
+| B3 | Story-Grundlage: Chronik (Buch-Oberfläche), Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelsplitter, Siegelbruch mit Lichteffekten, Schattentor, Fortschritt je Spieler | ✅ |
 | B4–B8 | Glaciara, Voltarion, Verdantis, Terragon, Thalassa mit Nestern | ⏳ |
 | B9 | Alte Drachen-Mechanik umbauen (keine wilden Drachen, keine Ei-Rezepte), Tests, Bilder | ⏳ |
 | F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, Bauwerke, Nyxar | ⏳ |

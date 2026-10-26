@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": "kingdomsatwar:sealstone_brick_slab"
+  },
+  "pattern": [
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:chiseled_sealstone"
+  }
+}

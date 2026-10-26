@@ -336,6 +336,53 @@ public final class ModBlocks {
                     .sound(SoundType.TUFF).lightLevel(state -> 10).isValidSpawn((state, level, pos, type) -> type.fireImmune()),
             UnaryOperator.identity(), NATURE_TAB);
 
+    // =====================================================================================
+    // Siegelkreis: uralter Siegelstein, Monolithen, Runen, das Siegel und das Schattentor
+    // =====================================================================================
+
+    /** Uralter, dunkler Siegelstein (auch als Treppe, Stufe und Mauer). */
+    public static final BuildingSet SEALSTONE = stoneSet("sealstone", "sealstone", MapColor.TERRACOTTA_CYAN, SoundType.DEEPSLATE, 2.0f);
+    /** Ziegel aus Siegelstein. */
+    public static final BuildingSet SEALSTONE_BRICKS = stoneSet("sealstone_bricks", "sealstone_brick", MapColor.TERRACOTTA_CYAN,
+            SoundType.DEEPSLATE_BRICKS, 2.0f);
+    public static final DeferredBlock<Block> CRACKED_SEALSTONE_BRICKS = sealstone("cracked_sealstone_bricks");
+    public static final DeferredBlock<Block> MOSSY_SEALSTONE_BRICKS = sealstone("mossy_sealstone_bricks");
+    public static final DeferredBlock<Block> POLISHED_SEALSTONE = sealstone("polished_sealstone");
+    /** Gemeißelter Siegelstein mit dem Zeichen des Siegels. */
+    public static final DeferredBlock<Block> CHISELED_SEALSTONE = sealstone("chiseled_sealstone");
+    /** Stein der Monolithen am Siegelkreis (unzerstörbar). */
+    public static final DeferredBlock<Block> SEAL_MONOLITH = BLOCKS.registerBlock("seal_monolith", Block::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()
+                    .sound(SoundType.DEEPSLATE_BRICKS));
+    /** Rune eines Elements am Monolithen – leuchtet, sobald der Splitter eingesetzt ist (unzerstörbar). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock> SEAL_RUNE = BLOCKS.registerBlock("seal_rune",
+            io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()
+                    .sound(SoundType.DEEPSLATE_BRICKS)
+                    .lightLevel(s -> s.getValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.LIT) ? 13 : 2));
+    /** Eingelegtes Zeichen im Boden des Siegelkreises (unzerstörbar). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock> SEAL_INLAY = BLOCKS.registerBlock("seal_inlay",
+            io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()
+                    .sound(SoundType.DEEPSLATE_BRICKS)
+                    .lightLevel(s -> s.getValue(io.github.sirschrolli.kingdomsatwar.block.SealMarkBlock.LIT) ? 9 : 0));
+    /** Siegelsockel: hier wird der Splitter eingesetzt (unzerstörbar). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock> SEAL_SOCKET = BLOCKS.registerBlock("seal_socket",
+            io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()
+                    .sound(SoundType.DEEPSLATE_BRICKS)
+                    .lightLevel(s -> s.getValue(io.github.sirschrolli.kingdomsatwar.block.SealSocketBlock.FILLED) ? 11 : 3));
+    /** Eine der 25 Platten des Siegels (unzerstörbar). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SealPlateBlock> SEAL_PLATE = BLOCKS.registerBlock("seal_plate",
+            io.github.sirschrolli.kingdomsatwar.block.SealPlateBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()
+                    .sound(SoundType.DEEPSLATE_TILES).lightLevel(s -> 4));
+    /** Das Schattentor nach dem Siegelbruch. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ShadowPortalBlock> SHADOW_PORTAL = BLOCKS.registerBlock("shadow_portal",
+            io.github.sirschrolli.kingdomsatwar.block.ShadowPortalBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).noCollision().strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.GLASS)
+                    .lightLevel(s -> 11).pushReaction(PushReaction.IMMOVEABLE));
+
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock> DRAGON_LAIR_CORE = BLOCKS.registerBlock(
             "dragon_lair_core", io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLACK).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
@@ -386,6 +433,13 @@ public final class ModBlocks {
             UnaryOperator<Item.Properties> itemProperties,
             List<Supplier<? extends ItemLike>> tab) {
         return blockWithItem(name, factory, () -> properties.apply(BlockBehaviour.Properties.of()), itemProperties, tab);
+    }
+
+    private static DeferredBlock<Block> sealstone(String name) {
+        return blockWithItem(name, Block::new,
+                p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops()
+                        .strength(2.0f, 6.0f).sound(SoundType.DEEPSLATE_BRICKS),
+                UnaryOperator.identity(), BUILDING_TAB);
     }
 
     private static BuildingSet stoneSet(String name, String variantPrefix, MapColor color, SoundType sound, float hardness) {

@@ -75,6 +75,12 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(Biomes.WINDSWEPT_SAVANNA);
         this.tag(nests.get(DragonType.WATER)).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN);
 
+        // Siegelkreis: offenes, eher ebenes Land
+        this.tag(ModTags.Biomes.HAS_SEAL_CIRCLE)
+                .add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.MEADOW).add(Biomes.SAVANNA)
+                .add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.CHERRY_GROVE)
+                .add(Biomes.TAIGA).add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_TAIGA);
+
         this.tag(ModTags.Biomes.HAS_CASTLE_RUINS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)

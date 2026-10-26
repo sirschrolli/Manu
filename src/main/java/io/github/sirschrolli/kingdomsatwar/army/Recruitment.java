@@ -104,6 +104,9 @@ public final class Recruitment {
         level.addFreshEntity(soldier);
         soldier.recruitBy(player);
         level.playSound(null, tablePos, SoundEvents.ARMOR_EQUIP_CHAIN.value(), SoundSource.BLOCKS, 1.0f, 1.0f);
+        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            io.github.sirschrolli.kingdomsatwar.story.Story.onRecruited(serverPlayer);
+        }
         return Result.RECRUITED;
     }
 

@@ -141,7 +141,7 @@ public final class NestLocator {
                 if (!farFromOthers(x, z, taken)) {
                     continue;
                 }
-                if (fitsArea(resolver, sampler, p.biomes(), p.inland(), x, z)) {
+                if (fitsArea(resolver, sampler, p.biomes(), p.inland(), x, z, AREA)) {
                     return new int[] {x, z};
                 }
             }
@@ -160,18 +160,18 @@ public final class NestLocator {
         return true;
     }
 
-    /** Messringe um die Nestmitte: Radius und Zahl der Punkte (Abstand der Punkte höchstens ~24 Blöcke). */
-    private static final int[][] RINGS = {{16, 6}, {32, 10}, {AREA, 14}, {AREA + 14, 18}};
-
     /**
-     * Liegt das ganze Nest im passenden Biom? Geprüft werden die Mitte und 48 Punkte auf vier Ringen bis etwas über
-     * den Nestrand hinaus – so fallen auch schmale Flüsse oder Biomzipfel auf, die das Nest durchschneiden würden.
+     * Liegt die ganze Fläche (Radius {@code area}) im passenden Biom? Geprüft werden die Mitte und 48 Punkte auf vier
+     * Ringen bis etwas über den Rand hinaus – so fallen auch schmale Flüsse oder Biomzipfel auf, die das Bauwerk
+     * durchschneiden würden.
      */
-    private static boolean fitsArea(BiomeResolver resolver, Climate.Sampler sampler, HolderSet<Biome> biomes, boolean inland, int x, int z) {
+    public static boolean fitsArea(BiomeResolver resolver, Climate.Sampler sampler, HolderSet<Biome> biomes, boolean inland, int x, int z, int area) {
         if (!matches(resolver, sampler, biomes, inland, x, z)) {
             return false;
         }
-        for (int[] ring : RINGS) {
+        // Messringe: Radius und Zahl der Punkte (Abstand der Punkte höchstens ~24 Blöcke)
+        int[][] rings = {{area / 3, 6}, {area * 2 / 3, 10}, {area, 14}, {area + 14, 18}};
+        for (int[] ring : rings) {
             double r = ring[0];
             for (int k = 0; k < ring[1]; k++) {
                 double a = (k + 0.5 * (r / 16 % 2)) * Mth.TWO_PI / ring[1];
@@ -215,7 +215,7 @@ public final class NestLocator {
         return resolver.getNoiseBiome(qx, lo, qz);
     }
 
-    private static @Nullable BiomeSource biomeSource(ChunkGeneratorStructureState state) {
+    public static @Nullable BiomeSource biomeSource(ChunkGeneratorStructureState state) {
         try {
             if (biomeSourceField == null) {
                 Field f = ChunkGeneratorStructureState.class.getDeclaredField("biomeSource");

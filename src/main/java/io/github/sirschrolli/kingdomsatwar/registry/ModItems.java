@@ -300,6 +300,27 @@ public final class ModItems {
             ITEMS.registerItem("dragon_compass", io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem::new,
                     p -> p.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_compass", 1))));
 
+    /** Die Chronik des Siegels: Geschichte, Ziele und Hinweise. */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.ChronicleItem> CHRONICLE = addTo(EQUIPMENT_TAB,
+            ITEMS.registerItem("chronicle", io.github.sirschrolli.kingdomsatwar.item.ChronicleItem::new,
+                    p -> p.stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore("chronicle", 1))));
+
+    private static final Map<DragonType, DeferredItem<io.github.sirschrolli.kingdomsatwar.item.SealShardItem>> SEAL_SHARDS_MUTABLE =
+            new EnumMap<>(DragonType.class);
+    /** Ein Siegelsplitter je Drache – bleibt nach dem Sieg über den Boss zurück. */
+    public static final Map<DragonType, DeferredItem<io.github.sirschrolli.kingdomsatwar.item.SealShardItem>> SEAL_SHARDS =
+            Collections.unmodifiableMap(SEAL_SHARDS_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            String name = type.id() + "_seal_shard";
+            SEAL_SHARDS_MUTABLE.put(type, addTo(DRAGON_TAB, ITEMS.registerItem(name,
+                    p -> new io.github.sirschrolli.kingdomsatwar.item.SealShardItem(type, p),
+                    p -> p.stacksTo(1).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                            .component(DataComponents.LORE, lore("seal_shard", 2)))));
+        }
+    }
+
     private static final Map<DragonType, DeferredItem<RuneItem>> RUNES_MUTABLE = new EnumMap<>(DragonType.class);
     /** Eine Rune je Drachen-Element. */
     public static final Map<DragonType, DeferredItem<RuneItem>> RUNES = Collections.unmodifiableMap(RUNES_MUTABLE);

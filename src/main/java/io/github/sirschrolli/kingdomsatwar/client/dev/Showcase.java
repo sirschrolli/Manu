@@ -94,6 +94,7 @@ final class Showcase {
                 case "boss" -> boss(steps);
                 case "lair" -> lair(steps);
                 case "bossmotion" -> bossMotion(steps);
+                case "seal" -> seal(steps);
                 case "lairinfo" -> {
                     double[] nest = new double[4];
                     locateFireNest(steps, nest);
@@ -1355,6 +1356,165 @@ final class Showcase {
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("lair_compass"));
         steps.add(Step.command("gamemode spectator"));
+    }
+
+    /**
+     * Der Siegelkreis in einer echten Welt: aus der Luft, vom Boden, ein Monolith aus der Nähe, die Chronik, eine
+     * Kapitelkarte, drei leuchtende Monolithen in der Dämmerung und der ganze Siegelbruch als Bildfolge (Video).
+     */
+    private static void seal(Deque<Step> steps) {
+        double[] c = new double[4];   // x, z, Bodenhöhe der Mitte, gefunden (1) / keiner (-1)
+        steps.add(Step.server(level -> {
+            var chunk = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.find(level);
+            if (chunk == null) {
+                c[3] = -1;
+                return;
+            }
+            for (int x = chunk.x() - 4; x <= chunk.x() + 4; x++) {
+                for (int z = chunk.z() - 4; z <= chunk.z() + 4; z++) {
+                    level.getChunk(x, z);
+                }
+            }
+            BlockPos center = io.github.sirschrolli.kingdomsatwar.world.SealCircle.findCenter(level);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Siegelkreis: Chunk {} Mitte {}", chunk, center);
+            if (center == null) {
+                c[3] = -1;
+                return;
+            }
+            c[0] = center.getX() + 0.5;
+            c[1] = center.getZ() + 0.5;
+            c[2] = center.getY() + 1;
+            c[3] = 1;
+        }));
+        steps.add(Step.until(() -> c[3] != 0, 1200));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("time set 2000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(lookFrom(c, 0, 42, 48, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(2000));
+        steps.add(Step.waitTicks(200));
+        steps.add(Step.screenshot("seal_overview"));
+        steps.add(lookFrom(c, 34, 16, 26, 3));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.screenshot("seal_angle"));
+        steps.add(lookFrom(c, 4, 1.6, 19, 5));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.screenshot("seal_ground"));
+        // ein Monolith aus der Nähe: der Feuer-Monolith steht im Norden, sein Sockel zeigt zur Mitte
+        steps.add(lookAt(c, 2.5, 1.6, -7.0, 0.0, 3.0, -12.5));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("seal_monolith"));
+        // Chronik und Kapitelkarte (mit Anzeige) – im Kreativmodus gilt der Siegelkreis als gefunden
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.server(level -> level.players().forEach(player -> {
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+        })));
+        steps.add(Step.waitTicks(50));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.server(level -> level.players().forEach(player ->
+                io.github.sirschrolli.kingdomsatwar.story.Story.openChronicle(player))));
+        steps.add(Step.until(() -> Minecraft.getInstance().gui.screen()
+                instanceof io.github.sirschrolli.kingdomsatwar.client.story.ChronicleScreen, 100));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("chronicle_dragons"));
+        for (int part : new int[] {0, 1, 2}) {
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.story.ChronicleScreen screen) {
+                    screen.select(part);
+                }
+            }));
+            steps.add(Step.waitTicks(5));
+            steps.add(Step.screenshot("chronicle_part_" + part));
+        }
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
+        steps.add(lookFrom(c, 0, 9, 30, 4));
+        steps.add(Step.server(level -> level.players().forEach(player -> io.github.sirschrolli.kingdomsatwar.story.Story.sendCard(player,
+                io.github.sirschrolli.kingdomsatwar.story.Chapter.DRAGON_2, DragonType.FIRE.ordinal()))));
+        steps.add(Step.waitTicks(90));
+        steps.add(Step.screenshot("chapter_card"));
+        steps.add(Step.waitTicks(200));
+        steps.add(Step.hud(false));
+        // drei Splitter eingesetzt – in der Dämmerung leuchten Runen und Bodenzeichen
+        steps.add(Step.command("time set 13300"));
+        steps.add(Step.server(level -> {
+            for (DragonType type : new DragonType[] {DragonType.FIRE, DragonType.ICE, DragonType.NATURE}) {
+                boolean ok = io.github.sirschrolli.kingdomsatwar.world.SealCircle.insert(level, type);
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Splitter {} eingesetzt: {}", type, ok);
+            }
+        }));
+        steps.add(Step.waitTicks(60));
+        steps.add(lookFrom(c, 22, 13, 22, 3));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("seal_three_lit"));
+        steps.add(lookAt(c, 2.5, 1.6, -7.0, 0.0, 3.5, -12.5));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("seal_monolith_lit"));
+        // die letzten drei Splitter: das Siegel bricht (Bildfolge aus langsam kreisender Kamera)
+        steps.add(Step.command("time set 14500"));
+        double[] orbit = new double[1];
+        steps.add(lookFrom(c, 0, 16, 32, 6));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> {
+            for (DragonType type : new DragonType[] {DragonType.LIGHTNING, DragonType.EARTH, DragonType.WATER}) {
+                io.github.sirschrolli.kingdomsatwar.world.SealCircle.insert(level, type);
+            }
+        }));
+        steps.add(Step.record("seal_break", io.github.sirschrolli.kingdomsatwar.world.SealCircle.BREAK_TICKS + 20, minecraft -> {
+            orbit[0] += 0.0035;
+            double a = Math.PI / 2 + orbit[0];
+            double r = 31.0;
+            double cx = c[0] + Math.cos(a) * r;
+            double cz = c[1] + Math.sin(a) * r;
+            double cy = c[2] + 14.0;
+            double lx = c[0] - cx;
+            double ly = c[2] + 6.0 - cy;
+            double lz = c[1] - cz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cx, cy, cz, yaw, pitch));
+        }));
+        steps.add(Step.command("tick unfreeze"));
+        steps.add(Step.waitTicks(40));
+        steps.add(lookAt(c, 0.0, 6.5, 9.0, 0.0, 0.0, 0.0));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("seal_gate"));
+        steps.add(Step.hud(true));
+        steps.add(Step.server(level -> level.players().forEach(player ->
+                io.github.sirschrolli.kingdomsatwar.story.Story.openChronicle(player))));
+        steps.add(Step.until(() -> Minecraft.getInstance().gui.screen()
+                instanceof io.github.sirschrolli.kingdomsatwar.client.story.ChronicleScreen, 100));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("chronicle_seal"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.command("gamemode spectator"));
+    }
+
+    /** Kamera relativ zur Mitte (dx, dy, dz) setzen und auf einen Punkt relativ zur Mitte (tx, ty, tz) blicken lassen. */
+    private static Step lookAt(double[] c, double dx, double dy, double dz, double tx, double ty, double tz) {
+        return Step.once(minecraft -> {
+            double cx = c[0] + dx;
+            double cy = c[2] + dy;
+            double cz = c[1] + dz;
+            double lx = c[0] + tx - cx;
+            double ly = c[2] + ty - cy;
+            double lz = c[1] + tz - cz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cx, cy, cz, yaw, pitch));
+        });
     }
 
     /** Sucht das Feuernest dieser Welt (x, z, Bodenhöhe der Mitte, gefunden = 1 / keins = -1) und erzeugt seine Chunks. */

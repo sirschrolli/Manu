@@ -72,6 +72,7 @@ public final class ClientSetup {
                 KingdomsAtWar.id("textures/entity/boss/pyrrhon.png"), KingdomsAtWar.id("textures/entity/boss/pyrrhon_glow.png"),
                 2.1f, 4.4f, 4.5f));
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
     }
 
     @SubscribeEvent

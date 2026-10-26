@@ -7,7 +7,7 @@ import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 
 /**
- * Trifft auf die Chunks aller sechs Drachennester zu. Wird nur als Bezug für „Sperrzonen“ anderer Bauwerke genutzt
+ * Trifft auf die Chunks aller sechs Drachennester und des Siegelkreises zu. Wird nur als Bezug für „Sperrzonen“ anderer Bauwerke genutzt
  * (Strukturgruppe {@code kingdomsatwar:dragon_lairs} ohne eigene Bauwerke): So halten z. B. Dörfer über ihre
  * {@code exclusion_zone} Abstand zu den Nestern.
  */
@@ -22,7 +22,9 @@ public record AnyNestPlacement() implements StructurePlacement {
                 return true;
             }
         }
-        return false;
+        // auch der Siegelkreis bleibt frei von Dörfern und anderen Bauwerken
+        ChunkPos circle = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.find(state);
+        return circle != null && circle.x() == chunkX && circle.z() == chunkZ;
     }
 
     @Override

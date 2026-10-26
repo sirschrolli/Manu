@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:seal_circle",
+    "biomes": "#kingdomsatwar:has_seal_circle",
+    "max_distance": 640,
+    "min_distance": 220,
+    "salt": 51731
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:seal_circle",
+      "weight": 1
+    }
+  ]
+}

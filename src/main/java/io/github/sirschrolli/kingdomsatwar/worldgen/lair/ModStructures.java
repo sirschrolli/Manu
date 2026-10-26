@@ -39,6 +39,16 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> DRAGON_LAIR_PIECE =
             PIECES.register("dragon_lair", () -> (StructurePieceType.ContextlessType) DragonLairPiece::new);
 
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement>>
+            SEAL_CIRCLE_PLACEMENT = PLACEMENTS.register("seal_circle", () -> io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleStructure>> SEAL_CIRCLE =
+            TYPES.register("seal_circle", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SEAL_CIRCLE_PIECE =
+            PIECES.register("seal_circle", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePiece::new);
+
+    public static final ResourceKey<Structure> SEAL_CIRCLE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("seal_circle"));
+    public static final ResourceKey<StructureSet> SEAL_CIRCLE_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("seal_circle"));
+
     /** Entfernungsring um den Weltursprung je Art (Natur am nächsten, Feuer am weitesten). */
     private static int minDistance(DragonType type) {
         return switch (type) {
@@ -66,6 +76,11 @@ public final class ModStructures {
 
     public static void bootstrapStructures(BootstrapContext<Structure> context) {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+        context.register(SEAL_CIRCLE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(BiomeTags.IS_OVERWORLD))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
         for (DragonType type : DragonType.values()) {
             if (!LairDesigns.available(type)) {
                 continue;
@@ -82,6 +97,9 @@ public final class ModStructures {
         HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         context.register(ALL_LAIRS, new StructureSet(java.util.List.of(), new AnyNestPlacement()));
+        context.register(SEAL_CIRCLE_SET, new StructureSet(structures.getOrThrow(SEAL_CIRCLE_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement(220, 640,
+                        biomes.getOrThrow(ModTags.Biomes.HAS_SEAL_CIRCLE), 51_731)));
         for (DragonType type : DragonType.values()) {
             if (!LairDesigns.available(type)) {
                 continue;

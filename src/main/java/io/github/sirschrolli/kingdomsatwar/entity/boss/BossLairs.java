@@ -31,12 +31,34 @@ public final class BossLairs {
         level.sendParticles(boss.element().particle(), egg.getX() + 0.5, egg.getY() + 1.0, egg.getZ() + 0.5, 60, 1.2, 1.0, 1.2, 0.05);
         level.playSound(null, egg, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 2.0f, 0.7f);
         level.playSound(null, egg, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 2.0f, 0.6f);
+        spawnShard(level, egg, boss.element());
         if (boss.getLairCore() != null && level.getBlockEntity(boss.getLairCore()) instanceof DragonLairCoreBlockEntity core) {
             core.onBossDefeated(level);
         } else {
             io.github.sirschrolli.kingdomsatwar.world.LairRecords.update(level, boss.element(), home,
                     io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DEFEATED);
         }
+        io.github.sirschrolli.kingdomsatwar.story.Story.onDragonDefeated(level, boss.element());
+    }
+
+    /**
+     * Der Siegelsplitter schwebt über dem Ei: Er fällt nicht, verbrennt nicht, verschwindet nicht und kann nicht
+     * zerstört werden – bis ihn jemand aufhebt.
+     */
+    public static net.minecraft.world.entity.item.ItemEntity spawnShard(ServerLevel level, BlockPos egg, DragonType element) {
+        net.minecraft.world.item.ItemStack stack = new net.minecraft.world.item.ItemStack(
+                io.github.sirschrolli.kingdomsatwar.registry.ModItems.SEAL_SHARDS.get(element).get());
+        net.minecraft.world.entity.item.ItemEntity shard = new net.minecraft.world.entity.item.ItemEntity(level,
+                egg.getX() + 0.5, egg.getY() + 1.6, egg.getZ() + 0.5, stack, 0.0, 0.0, 0.0);
+        shard.setNoGravity(true);
+        shard.setUnlimitedLifetime();
+        shard.setPermanentlyInvulnerable(true);
+        shard.setGlowingTag(true);
+        shard.setPickUpDelay(40);
+        level.addFreshEntity(shard);
+        level.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD, shard.getX(), shard.getY(), shard.getZ(), 30, 0.3, 0.3, 0.3, 0.05);
+        level.playSound(null, egg, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 2.0f, 0.5f);
+        return shard;
     }
 
     /** Der Boss schläft wieder (keine Gegner mehr im Nest). */

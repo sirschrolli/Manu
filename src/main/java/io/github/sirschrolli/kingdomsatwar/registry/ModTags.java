@@ -52,6 +52,8 @@ public final class ModTags {
         /** Wo Drachennester der jeweiligen Art entstehen. */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_DRAGON_NESTS = nestTags();
         public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));
+        /** Wo der Siegelkreis liegen kann (ebenes, offenes Land). */
+        public static final TagKey<Biome> HAS_SEAL_CIRCLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_seal_circle"));
 
         private static java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> nestTags() {
             java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> tags =

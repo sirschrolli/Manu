@@ -21,5 +21,15 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.LairRecords::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.world.LairRecords.CODEC.fieldOf("lairs")).build());
 
+    /** Zustand des Siegels: eingesetzte Splitter, Lage des Siegelkreises, Siegelbruch (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.world.SealState>> SEAL = ATTACHMENTS.register("seal",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.SealState::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.world.SealState.CODEC.fieldOf("seal")).build());
+
+    /** Fortschritt des Spielers in der Geschichte „Das Siegel“. */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.story.StoryProgress>> STORY = ATTACHMENTS.register("story",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.story.StoryProgress::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.story.StoryProgress.CODEC.fieldOf("story")).copyOnDeath().build());
+
     private ModAttachments() {}
 }

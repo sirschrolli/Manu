@@ -298,6 +298,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
         lairs();
+        story();
     }
 
     /** Die sechs Drachennester: Namen, Warnungen beim Näherkommen, Nestkern, Drachenkompass und Befehle. */
@@ -355,6 +356,192 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.lair.cannot_awaken", "This dragon cannot awaken (yet).", "Dieser Drache kann (noch) nicht erwachen.");
         text("command.kingdomsatwar.lair.reset", "%s sleeps again – its dragon can be challenged anew.",
                 "%s schläft wieder – sein Drache kann erneut herausgefordert werden.");
+    }
+
+    /** Die Geschichte „Das Siegel“: Siegelkreis, Splitter, Chronik, Kapitel, Nachrichten und Befehle. */
+    private void story() {
+        // Drachen (Namen für Chronik und Nachrichten)
+        String[][] dragons = {
+                {"fire", "Pyrrhon", "Pyrrhon, the Ash Lord", "Pyrrhon, der Aschenfürst", "A dragon of fire", "Ein Drache des Feuers",
+                        "slumbers in a hot, dry land", "schläft in einem heißen, trockenen Land", "Pyrrhon's", "Pyrrhons"},
+                {"ice", "Glaciara", "Glaciara, the Frost Queen", "Glaciara, die Frostkönigin", "A dragon of ice", "Ein Drache des Eises",
+                        "rests in eternal ice and snow", "ruht in ewigem Eis und Schnee", "Glaciara's", "Glaciaras"},
+                {"lightning", "Voltarion", "Voltarion, the Stormbringer", "Voltarion, der Sturmbringer", "A dragon of storms",
+                        "Ein Drache der Stürme", "lurks high on the jagged peaks", "lauert hoch auf den zerklüfteten Gipfeln", "Voltarion's",
+                        "Voltarions"},
+                {"nature", "Verdantis", "Verdantis, Guardian of the Grove", "Verdantis, die Hüterin des Hains", "A dragon of the forest",
+                        "Ein Drache des Waldes", "watches deep within an ancient forest", "wacht tief in einem uralten Wald", "Verdantis'",
+                        "Verdantis'"},
+                {"earth", "Terragon", "Terragon, the Mountainbreaker", "Terragon, der Bergbrecher", "A dragon of stone",
+                        "Ein Drache des Gesteins", "sleeps among windswept hills and rocks", "schläft zwischen windgepeitschten Hügeln und Felsen",
+                        "Terragon's", "Terragons"},
+                {"water", "Thalassa", "Thalassa, Mistress of the Deep", "Thalassa, die Herrin der Tiefe", "A dragon of the deep",
+                        "Ein Drache der Tiefe", "circles at the bottom of the deep ocean", "zieht auf dem Grund des tiefen Ozeans seine Kreise",
+                        "Thalassa's", "Thalassas"}};
+        for (String[] d : dragons) {
+            text("lair.kingdomsatwar." + d[0] + ".dragon", d[1], d[1]);
+            if (!d[0].equals("fire")) {
+                text("boss.kingdomsatwar." + d[0], d[2], d[3]);
+            }
+            text("lair.kingdomsatwar." + d[0] + ".unknown", d[4], d[5]);
+            text("lair.kingdomsatwar." + d[0] + ".hint", d[6], d[7]);
+            item(ModItems.SEAL_SHARDS.get(DragonType.byId(d[0])), d[8] + " Seal Shard", d[9] + " Siegelsplitter");
+        }
+        lore("seal_shard", "A sixth of the ancient seal", "Ein Sechstel des uralten Siegels");
+        text(ModItems.loreKey("seal_shard", 2), "Belongs in its monolith at the Seal Circle", "Gehört in seinen Monolithen am Siegelkreis");
+
+        // Siegelkreis
+        set("sealstone", "sealstone", "Sealstone", "Siegelstein", "Sealstone", "Siegelstein");
+        set("sealstone_bricks", "sealstone_brick", "Sealstone Bricks", "Siegelsteinziegel", "Sealstone Brick", "Siegelsteinziegel");
+        block(ModBlocks.CRACKED_SEALSTONE_BRICKS, "Cracked Sealstone Bricks", "Rissige Siegelsteinziegel");
+        block(ModBlocks.MOSSY_SEALSTONE_BRICKS, "Mossy Sealstone Bricks", "Bemooste Siegelsteinziegel");
+        block(ModBlocks.POLISHED_SEALSTONE, "Polished Sealstone", "Polierter Siegelstein");
+        block(ModBlocks.CHISELED_SEALSTONE, "Chiseled Sealstone", "Gemeißelter Siegelstein");
+        block(ModBlocks.SEAL_MONOLITH, "Seal Monolith", "Siegelmonolith");
+        block(ModBlocks.SEAL_RUNE, "Seal Rune", "Siegelrune");
+        block(ModBlocks.SEAL_INLAY, "Seal Inlay", "Siegeleinlage");
+        block(ModBlocks.SEAL_SOCKET, "Seal Socket", "Siegelsockel");
+        block(ModBlocks.SEAL_PLATE, "Seal Plate", "Siegelplatte");
+        block(ModBlocks.SHADOW_PORTAL, "Shadow Gate", "Schattentor");
+        text("block.kingdomsatwar.seal_socket.wrong_shard", "This socket awaits the shard of %s.", "Dieser Sockel wartet auf den Splitter von %s.");
+        text("block.kingdomsatwar.seal_socket.empty", "The shard of %s belongs here.", "Hierher gehört der Splitter von %s.");
+        text("block.kingdomsatwar.seal_socket.filled", "The shard of %s rests in its monolith.", "Der Splitter von %s ruht in seinem Monolithen.");
+        text("block.kingdomsatwar.shadow_portal.sealed", "The gate swirls, but it lets no one through… yet.",
+                "Das Tor wogt, doch es lässt noch niemanden hindurch …");
+
+        // Chronik
+        item(ModItems.CHRONICLE, "Chronicle of the Seal", "Chronik des Siegels");
+        lore("chronicle", "The story of the seal – chapter by chapter", "Die Geschichte des Siegels – Kapitel für Kapitel");
+        text("gui.kingdomsatwar.chronicle.title", "Chronicle of the Seal", "Chronik des Siegels");
+        text("chapter.kingdomsatwar.label", "Chapter %s", "Kapitel %s");
+        text("chapter.kingdomsatwar.label.prolog", "Prologue", "Prolog");
+        text("chapter.kingdomsatwar.label.epilog", "Epilogue", "Epilog");
+        text("chapter.kingdomsatwar.prolog", "The Seal", "Das Siegel");
+        text("chapter.kingdomsatwar.kingdom", "A New Kingdom", "Ein neues Königreich");
+        text("chapter.kingdomsatwar.chronicle", "The Chronicle of the Seal", "Die Chronik des Siegels");
+        String[][] ordinals = {{"First", "erste"}, {"Second", "zweite"}, {"Third", "dritte"}, {"Fourth", "vierte"}, {"Fifth", "fünfte"},
+                {"Sixth", "sechste"}};
+        for (int i = 0; i < 6; i++) {
+            text("chapter.kingdomsatwar.dragon_" + (i + 1), "The " + ordinals[i][0] + " Dragon", "Der " + ordinals[i][1] + " Drache");
+        }
+        text("chapter.kingdomsatwar.dragons", "The Six Dragons", "Die sechs Drachen");
+        text("chapter.kingdomsatwar.seal", "The Seal Breaks", "Das Siegel bricht");
+        text("chapter.kingdomsatwar.crown", "The Crown", "Die Krone");
+        text("chapter.kingdomsatwar.prolog.card", "Long ago, six dragons sealed away the darkness.",
+                "Vor langer Zeit verschlossen sechs Drachen die Dunkelheit.");
+        text("chapter.kingdomsatwar.kingdom.card", "Every kingdom begins with a single step.", "Jedes Königreich beginnt mit einem einzigen Schritt.");
+        text("chapter.kingdomsatwar.chronicle.card", "The chronicle tells of a circle of six stones…",
+                "Die Chronik erzählt von einem Kreis aus sechs Steinen …");
+        text("chapter.kingdomsatwar.dragon_1.card", "Six dragons. Six shards. One seal.", "Sechs Drachen. Sechs Splitter. Ein Siegel.");
+        String[][] remaining = {{"Five", "fünf"}, {"Four", "vier"}, {"Three", "drei"}, {"Two", "zwei"}};
+        for (int i = 0; i < 4; i++) {
+            text("chapter.kingdomsatwar.dragon_" + (i + 2) + ".card", remaining[i][0] + " dragons still guard the seal.",
+                    "Noch " + remaining[i][1] + " Drachen bewachen das Siegel.");
+        }
+        text("chapter.kingdomsatwar.dragon_6.card", "Only one dragon still guards the seal.", "Nur noch ein Drache bewacht das Siegel.");
+        text("chapter.kingdomsatwar.seal.card", "The seal is broken. The gate stands open.", "Das Siegel ist gebrochen. Das Tor steht offen.");
+        text("chapter.kingdomsatwar.crown.card", "A realm awaits its ruler.", "Ein Reich wartet auf seinen Herrscher.");
+        text("chapter.kingdomsatwar.card.fallen", "%s has fallen. A monolith awaits its shard.", "%s ist gefallen. Ein Monolith wartet auf seinen Splitter.");
+
+        text("chronicle.kingdomsatwar.prolog.text",
+                "When the world was young, the Shadow World broke forth from the depths. Six elemental dragons – fire, ice, lightning, "
+                        + "nature, earth and water – stood against it and locked it away behind a seal. Ever since, each of them has carried "
+                        + "a sixth of that seal in its heart.\n\nBut the burden changed them. Over the centuries the guardians themselves "
+                        + "grew wild, and today they suffer no one near their lairs.",
+                "Als die Welt noch jung war, brach die Schattenwelt aus der Tiefe hervor. Sechs Elementardrachen – Feuer, Eis, Blitz, "
+                        + "Natur, Erde und Wasser – stellten sich ihr entgegen und verschlossen sie mit einem Siegel. Seitdem trägt jeder "
+                        + "von ihnen ein Sechstel dieses Siegels in seinem Herzen.\n\nDoch die Last hat sie verändert. Über die "
+                        + "Jahrhunderte wurden die Hüter selbst wild, und heute dulden sie niemanden mehr in der Nähe ihrer Nester.");
+        text("chronicle.kingdomsatwar.kingdom.text",
+                "You have arrived in a foreign land with little more than the clothes on your back. Yet this land is waiting for "
+                        + "someone to unite it.\n\nBuild a home, gather supplies and find people who will follow you. Every army begins "
+                        + "at a recruitment table.",
+                "Du bist in einem fremden Land angekommen, mit kaum mehr als dem, was du am Leib trägst. Doch dieses Land wartet auf "
+                        + "jemanden, der es eint.\n\nBaue dir ein Zuhause, sammle Vorräte und finde Menschen, die dir folgen. Jedes "
+                        + "Heer beginnt an einem Rekrutierungstisch.");
+        text("chronicle.kingdomsatwar.chronicle.text",
+                "This chronicle was written by the keepers of the seal, generation after generation. It tells of a circle of six "
+                        + "monoliths not far from the heart of the world: the Seal Circle. It was there that the seal was once forged."
+                        + "\n\nSeek out the circle. The pages themselves will show you the way.",
+                "Diese Chronik wurde von den Hütern des Siegels geschrieben, Generation um Generation. Sie erzählt von einem Kreis "
+                        + "aus sechs Monolithen, nicht weit vom Herzen der Welt: dem Siegelkreis. Dort wurde das Siegel einst geschmiedet."
+                        + "\n\nSuche den Kreis. Die Seiten selbst weisen dir den Weg.");
+        text("chronicle.kingdomsatwar.dragons.text",
+                "At the Seal Circle, a monolith awaits the shard of each dragon. The dragons slumber in their lairs, each in its own "
+                        + "land. None of them can be defeated alone – bring your army. The dragon compass will show you the way.\n\n"
+                        + "When a dragon falls, its egg and its seal shard remain. Bring the shard to its monolith.",
+                "Im Siegelkreis wartet zu jedem Drachen ein Monolith auf seinen Splitter. Die Drachen schlafen in ihren Nestern, "
+                        + "jeder in seinem eigenen Land. Keiner von ihnen lässt sich allein bezwingen – nimm dein Heer mit. Der "
+                        + "Drachenkompass weist dir den Weg.\n\nIst ein Drache gefallen, bleiben sein Ei und sein Siegelsplitter zurück. "
+                        + "Bring den Splitter zu seinem Monolithen.");
+        text("chronicle.kingdomsatwar.seal.text",
+                "When the last shard came to rest in its monolith, the seal shattered. What the dragons kept locked away for an age "
+                        + "now lies open: at the heart of the circle yawns the gate to the Shadow World.\n\nNo one knows what awaits you "
+                        + "on the other side.",
+                "Als der letzte Splitter in seinem Monolithen ruhte, zerbrach das Siegel. Was die Drachen ein Zeitalter lang "
+                        + "verschlossen hielten, liegt nun offen: Im Herzen des Kreises klafft das Tor in die Schattenwelt.\n\nNiemand "
+                        + "weiß, was dich auf der anderen Seite erwartet.");
+        text("chronicle.kingdomsatwar.crown.text",
+                "The land has seen a hero who defeated dragons and passed through the gate of shadows. Only one thing remains: the "
+                        + "crown.\n\nReturn home to your kingdom. Your people are waiting for you.",
+                "Das Land hat einen Helden gesehen, der Drachen bezwang und das Tor der Schatten durchschritt. Nun fehlt nur noch "
+                        + "eines: die Krone.\n\nKehre heim in dein Königreich. Dein Volk wartet auf dich.");
+        text("chronicle.kingdomsatwar.goals", "Goals", "Ziele");
+        text("chronicle.kingdomsatwar.goal.table", "Set up a recruitment table", "Stelle einen Rekrutierungstisch auf");
+        text("chronicle.kingdomsatwar.goal.recruit", "Recruit your first soldier", "Wirb deinen ersten Soldaten an");
+        text("chronicle.kingdomsatwar.goal.read", "Read the chronicle", "Lies die Chronik");
+        text("chronicle.kingdomsatwar.goal.find_circle", "Find the Seal Circle", "Finde den Siegelkreis");
+        text("chronicle.kingdomsatwar.goal.defeat", "Defeat the six dragons (%s/6)", "Besiege die sechs Drachen (%s/6)");
+        text("chronicle.kingdomsatwar.goal.insert", "Place the seal shards in their monoliths (%s/6)",
+                "Setze die Siegelsplitter in ihre Monolithen (%s/6)");
+        text("chronicle.kingdomsatwar.goal.enter_shadow", "Step through the Shadow Gate", "Schreite durch das Schattentor");
+        text("chronicle.kingdomsatwar.goal.crown", "Be crowned in your throne room", "Lass dich in deinem Thronsaal krönen");
+        text("chronicle.kingdomsatwar.circle.here", "You are standing in the Seal Circle.", "Du stehst im Siegelkreis.");
+        text("chronicle.kingdomsatwar.circle.unknown", "Only in the Overworld can the chronicle show you the way to the Seal Circle.",
+                "Nur in der Oberwelt kann dir die Chronik den Weg zum Siegelkreis zeigen.");
+        text("chronicle.kingdomsatwar.circle.distance", "The Seal Circle lies about %s blocks to the %s.",
+                "Der Siegelkreis liegt etwa %s Blöcke im %s.");
+        text("chronicle.kingdomsatwar.gate.here", "The Shadow Gate lies right before you.", "Das Schattentor liegt direkt vor dir.");
+        text("chronicle.kingdomsatwar.gate.unknown", "The Shadow Gate lies in the heart of the Seal Circle.",
+                "Das Schattentor liegt im Herzen des Siegelkreises.");
+        text("chronicle.kingdomsatwar.gate.distance", "The Shadow Gate lies about %s blocks to the %s, in the heart of the Seal Circle.",
+                "Das Schattentor liegt etwa %s Blöcke im %s, im Herzen des Siegelkreises.");
+        text("chronicle.kingdomsatwar.dragon.inserted", "Defeated – its shard rests in the monolith.", "Besiegt – sein Splitter ruht im Monolithen.");
+        text("chronicle.kingdomsatwar.dragon.defeated", "Defeated – its shard belongs in the Seal Circle.",
+                "Besiegt – sein Splitter gehört in den Siegelkreis.");
+        text("chronicle.kingdomsatwar.dragon.awake", "Has awakened!", "Ist erwacht!");
+        text("chronicle.kingdomsatwar.dragon.sleeps", "Sleeps in %s, %s.", "Schläft in %s, %s.");
+        text("chronicle.kingdomsatwar.dragon.rumor", "It %s, %s.", "Er %s, %s.");
+        text("chronicle.kingdomsatwar.where.exact", "about %s blocks to the %s", "etwa %s Blöcke im %s");
+        text("chronicle.kingdomsatwar.where.near", "not far to the %s", "nicht weit im %s");
+        text("chronicle.kingdomsatwar.where.some", "a few hundred blocks to the %s", "einige hundert Blöcke im %s");
+        text("chronicle.kingdomsatwar.where.far", "far to the %s", "weit im %s");
+        text("chronicle.kingdomsatwar.where.here", "very close by", "ganz in der Nähe");
+        text("chronicle.kingdomsatwar.where.unknown", "in the Overworld", "in der Oberwelt");
+        text("chronicle.kingdomsatwar.where.nowhere", "in a place the chronicle does not yet know", "an einem Ort, den die Chronik noch nicht kennt");
+        text("chronicle.kingdomsatwar.seal.count", "%s of 6 shards in place", "%s von 6 Splittern eingesetzt");
+        text("chronicle.kingdomsatwar.seal.broken", "The seal is broken", "Das Siegel ist gebrochen");
+
+        // Nachrichten
+        text("message.kingdomsatwar.seal.inserted", "The monolith of %s awakens. (%s/6)", "Der Monolith von %s erwacht. (%s/6)");
+        text("message.kingdomsatwar.seal.trembles", "The ground trembles… the seal begins to break!", "Der Boden bebt … das Siegel beginnt zu brechen!");
+        text("message.kingdomsatwar.seal.broken", "The seal is broken. The gate to the Shadow World stands open.",
+                "Das Siegel ist gebrochen. Das Tor in die Schattenwelt steht offen.");
+        text("message.kingdomsatwar.story.discovered", "New entry in the chronicle: %s", "Neuer Eintrag in der Chronik: %s");
+        text("message.kingdomsatwar.story.found_circle", "You have found the Seal Circle. Six monoliths stand silent around the ancient seal.",
+                "Du hast den Siegelkreis gefunden. Sechs Monolithen stehen stumm um das uralte Siegel.");
+        text("message.kingdomsatwar.story.dragon_fallen", "%s has fallen! Its seal shard belongs in the Seal Circle.",
+                "%s ist gefallen! Sein Siegelsplitter gehört in den Siegelkreis.");
+
+        // Befehle
+        text("command.kingdomsatwar.story.reset", "Your story progress has been reset.", "Dein Fortschritt in der Geschichte wurde zurückgesetzt.");
+        text("command.kingdomsatwar.seal.status", "Seal Circle at %s – %s of 6 shards – %s", "Siegelkreis bei %s – %s von 6 Splittern – %s");
+        text("command.kingdomsatwar.seal.state.intact", "seal intact", "Siegel unversehrt");
+        text("command.kingdomsatwar.seal.state.breaking", "the seal is breaking", "das Siegel bricht gerade");
+        text("command.kingdomsatwar.seal.state.broken", "seal broken", "Siegel gebrochen");
+        text("command.kingdomsatwar.seal.none", "This world has no Seal Circle.", "In dieser Welt gibt es keinen Siegelkreis.");
+        text("command.kingdomsatwar.seal.insert_failed", "Not possible – is the Seal Circle loaded?", "Nicht möglich – ist der Siegelkreis geladen?");
+        text("command.kingdomsatwar.seal.reset", "The seal is whole again.", "Das Siegel ist wieder ganz.");
     }
 
     private void lair(DragonType type, String nameEn, String nameDe, String warningEn, String warningDe) {

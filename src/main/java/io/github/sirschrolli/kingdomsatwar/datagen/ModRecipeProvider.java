@@ -151,6 +151,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('A', aetherit)
                 .unlockedBy(getHasName(ModItems.DRACONIUM.get()), has(ModItems.DRACONIUM.get()))
                 .save(output, key("dragon_compass"));
+        // Chronik des Siegels (falls verloren): Buch und Gold
+        shapeless(RecipeCategory.MISC, ModItems.CHRONICLE.get())
+                .requires(Items.BOOK)
+                .requires(Items.GOLD_INGOT)
+                .unlockedBy("has_book", has(Items.BOOK))
+                .save(output, key("chronicle"));
+        sealstoneRecipes();
         // Runen: Schieferplatte, Aetherit, Irrlichtstaub und eine Zutat des Elements
         java.util.Map<DragonType, ItemLike> essence = new java.util.EnumMap<>(DragonType.class);
         essence.put(DragonType.FIRE, Items.BLAZE_POWDER);
@@ -166,6 +173,52 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(essence.get(type))
                 .unlockedBy(getHasName(dust), has(dust))
                 .save(output, key(type.id() + "_rune")));
+    }
+
+    /**
+     * Siegelstein: aus Tiefenschiefer-Bruchstein und einer Amethystscherbe (die Hüter mischten Kristallstaub in ihren
+     * Stein); poliert, als Ziegel, gemeißelt, rissig (im Ofen) und bemoost.
+     */
+    private void sealstoneRecipes() {
+        ItemLike sealstone = ModBlocks.SEALSTONE.base().get();
+        ItemLike bricks = ModBlocks.SEALSTONE_BRICKS.base().get();
+        ItemLike polished = ModBlocks.POLISHED_SEALSTONE.get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, sealstone, 8)
+                .pattern("DDD")
+                .pattern("DAD")
+                .pattern("DDD")
+                .define('D', Items.COBBLED_DEEPSLATE)
+                .define('A', Items.AMETHYST_SHARD)
+                .unlockedBy("has_amethyst_shard", has(Items.AMETHYST_SHARD))
+                .save(output, key("sealstone"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, polished, 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', sealstone)
+                .unlockedBy(getHasName(sealstone), has(sealstone))
+                .save(output, key("polished_sealstone"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, bricks, 4)
+                .pattern("PP")
+                .pattern("PP")
+                .define('P', polished)
+                .unlockedBy(getHasName(polished), has(polished))
+                .save(output, key("sealstone_bricks"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CHISELED_SEALSTONE.get())
+                .pattern("S")
+                .pattern("S")
+                .define('S', ModBlocks.SEALSTONE_BRICKS.slab().get())
+                .unlockedBy(getHasName(bricks), has(bricks))
+                .save(output, key("chiseled_sealstone"));
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(bricks), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS,
+                ModBlocks.CRACKED_SEALSTONE_BRICKS.get(), 0.1f, 200).unlockedBy(getHasName(bricks), has(bricks)), "cracked_sealstone_bricks");
+        shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.MOSSY_SEALSTONE_BRICKS.get())
+                .requires(bricks)
+                .requires(Items.MOSS_BLOCK)
+                .unlockedBy(getHasName(bricks), has(bricks))
+                .save(output, key("mossy_sealstone_bricks"));
+        stonecut(polished, 1, sealstone);
+        stonecut(bricks, 1, sealstone, polished);
+        stonecut(ModBlocks.CHISELED_SEALSTONE.get(), 1, sealstone, polished);
     }
 
     private void cookVenison() {

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/sealstone_brick_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/sealstone_bricks"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/sealstone_brick_slab_top"
+    }
+  }
+}

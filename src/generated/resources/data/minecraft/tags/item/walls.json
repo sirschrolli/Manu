@@ -8,6 +8,8 @@
     "kingdomsatwar:weathered_stone_brick_wall",
     "kingdomsatwar:mossy_wall_stone_wall",
     "kingdomsatwar:cracked_stone_block_wall",
-    "kingdomsatwar:volcanic_rock_wall"
+    "kingdomsatwar:volcanic_rock_wall",
+    "kingdomsatwar:sealstone_wall",
+    "kingdomsatwar:sealstone_brick_wall"
   ]
 }

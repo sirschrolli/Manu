@@ -55,6 +55,14 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.DRAGON_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
 
+        // --- Siegelkreis ---
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
+                ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE);
+        add(BlockTags.DRAGON_IMMUNE, ModBlocks.SEAL_MONOLITH, ModBlocks.SEAL_RUNE, ModBlocks.SEAL_INLAY, ModBlocks.SEAL_SOCKET,
+                ModBlocks.SEAL_PLATE, ModBlocks.SHADOW_PORTAL);
+        add(BlockTags.WITHER_IMMUNE, ModBlocks.SEAL_MONOLITH, ModBlocks.SEAL_RUNE, ModBlocks.SEAL_INLAY, ModBlocks.SEAL_SOCKET,
+                ModBlocks.SEAL_PLATE, ModBlocks.SHADOW_PORTAL);
+
         // --- Einrichtung ---
         add(Tags.BlockItems.GLASS_BLOCKS.block(), ModBlocks.LEADED_GLASS);
         add(BlockTags.IMPERMEABLE, ModBlocks.LEADED_GLASS);

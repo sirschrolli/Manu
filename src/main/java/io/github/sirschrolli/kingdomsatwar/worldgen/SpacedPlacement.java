@@ -65,6 +65,13 @@ public record SpacedPlacement(int spacing, int separation, int salt, int nestDis
                 }
             }
         }
+        ChunkPos circle = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.find(state);
+        if (circle != null) {
+            double dx = circle.getMiddleBlockX() - x;
+            double dz = circle.getMiddleBlockZ() - z;
+            double keep = Math.min(distance, 128);
+            return dx * dx + dz * dz >= keep * keep;
+        }
         return true;
     }
 

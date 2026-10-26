@@ -55,6 +55,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(block.get());
         }
 
+        // Siegelstein (die heiligen Teile des Siegelkreises sind unzerstörbar und haben keine Beute)
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
+                ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE)) {
+            dropSelf(block.get());
+        }
+
         // Einrichtung: Glas nur mit Behutsamkeit (wie Vanilla-Glas), Türen nur aus der unteren Hälfte
         dropWhenSilkTouch(ModBlocks.LEADED_GLASS.get());
         dropWhenSilkTouch(ModBlocks.LEADED_GLASS_PANE.get());
