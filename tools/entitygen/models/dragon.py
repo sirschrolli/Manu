@@ -9,8 +9,8 @@ from __future__ import annotations
 import math
 
 from ..geometry import Model
-from ..paint import (Ctx, eye_painter, flat_painter, gradient_painter, hash01, membrane_painter, pick, ramp,
-                     scales_painter, stripes_painter, transparent_painter)
+from ..paint import (Ctx, belly_plates, eye_painter, flat_painter, gradient_painter, hash01, membrane_painter, mix,
+                     noise3, pick, ramp, rel_y, stripes_painter, transparent_painter)
 
 # Farbpaletten je Drachenart (angelehnt an die Farbpaletten im Konzeptbild)
 PALETTES = {
@@ -242,8 +242,47 @@ def _tail_tip(variant: str):
     return paint
 
 
+def _calm_scales(variant: str):
+    """
+    Schuppenkleid im Vanilla-Stil statt Pixelrauschen: ruhige Grundfarbe mit großen, weichen Helligkeitsflächen,
+    feine Schuppenreihen (versetzt, jede Schuppe unten eine Stufe heller), dunklere Flächenkanten, etwas dunklere
+    Rückenlinie und Bauchplatten bzw. hellerer Bauch an den Flanken.
+    """
+    seed = 11 + len(variant)
+
+    def paint(ctx: Ctx):
+        x, y, z = ctx.world
+        if ctx.face == "bottom":
+            return belly_plates(ctx, "belly")
+        ry = rel_y(ctx) if ctx.face != "top" else 0.0
+        v = 0.47 + (noise3(x * 0.12, y * 0.12, z * 0.12, seed) - 0.5) * 0.14 + (0.5 - ry) * 0.1
+        if ctx.face == "top":
+            row_pos = z / 3.0
+            across = x / 4.0
+        else:
+            row_pos = y / 3.0
+            across = (z if ctx.face in ("west", "east") else x) / 4.0
+        row = math.floor(row_pos)
+        fy = row_pos - row
+        shifted = across + (row % 2) * 0.5
+        fx = shifted - math.floor(shifted)
+        if fy > 0.66 and 0.18 < fx < 0.82:
+            v += 0.14                         # heller Bogen am unteren Rand jeder Schuppe
+        if ctx.face != "top" and (ctx.s == 0 or ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1):
+            v -= 0.06
+        if ctx.face == "top" and abs(x) < 1.2:
+            v -= 0.06                         # Rückenlinie
+        col = pick(ctx.pal["back"], v)
+        if ry > 0.72 and ctx.face in ("west", "east", "front", "back"):
+            t = (ry - 0.72) / 0.28
+            col = mix(col, pick(ctx.pal["belly"], 0.58), t * 0.85)
+        return col
+
+    return paint
+
+
 def materials(variant: str) -> dict:
-    body = scales_painter(cell=2.4, seed=11)
+    body = _calm_scales(variant)
     if variant == "lightning":
         body = stripes_painter(body, "accent", axis=2, period=9.0, width=1.1, glow=True)
     return {

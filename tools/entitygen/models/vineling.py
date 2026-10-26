@@ -65,13 +65,18 @@ def build() -> Model:
 
 
 def _vine(seed: int = 211):
+    """Verdrehte Ranken: breite, weich schattierte Stränge mit einer dunklen Furche dazwischen (keine Flimmerpixel)."""
+
     def paint(ctx: Ctx):
         x, y, z = ctx.world
-        twist = math.sin((y * 0.9 + (x + z) * 1.3))
-        v = 0.35 + 0.25 * twist + 0.15 * noise3(x * 0.5, y * 0.5, z * 0.5, seed)
+        phase = (y * 0.55 + (x + z) * 0.7) % (2 * math.pi)
+        twist = math.sin(phase)
+        v = 0.42 + 0.2 * twist + 0.08 * (noise3(x * 0.2, y * 0.2, z * 0.2, seed) - 0.5)
+        if ctx.face != "top" and (ctx.s == 0 or ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1):
+            v -= 0.06
         col = pick(ctx.pal["vine"], v)
-        if abs(twist) < 0.12:
-            col = pick(ctx.pal["vine"], 0.12)
+        if twist < -0.85:
+            col = pick(ctx.pal["vine"], 0.14)
         return col
 
     return paint
@@ -110,7 +115,12 @@ def _maw(ctx: Ctx):
 
 
 def _leaf(ctx: Ctx):
-    return pick(ctx.pal["leaf"], 0.35 + 0.35 * hash01(ctx.u, ctx.v) - (0.15 if ctx.s == ctx.w // 2 else 0))
+    # Blatt: hellere Spitze, dunkle Mittelrippe, ruhige Fläche
+    t = ctx.t / max(1, ctx.h - 1)
+    v = 0.4 + 0.3 * (1.0 - t) + 0.06 * (hash01(ctx.u // 2, ctx.v // 2) - 0.5)
+    if ctx.s == ctx.w // 2:
+        v -= 0.18
+    return pick(ctx.pal["leaf"], v)
 
 
 def materials(variant: str) -> dict:
