@@ -46,6 +46,15 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SEAL_CIRCLE_PIECE =
             PIECES.register("seal_circle", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePiece::new);
 
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure>>
+            UMBRER_VILLAGE = TYPES.register("umbrer_village", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> UMBRER_VILLAGE_PIECE =
+            PIECES.register("umbrer_village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece::new);
+
+    /** Die Dörfer der Umbrer in der Schattenwelt. */
+    public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
+    public static final ResourceKey<StructureSet> UMBRER_VILLAGES = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("umbrer_villages"));
+
     public static final ResourceKey<Structure> SEAL_CIRCLE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("seal_circle"));
     public static final ResourceKey<StructureSet> SEAL_CIRCLE_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("seal_circle"));
 
@@ -76,6 +85,11 @@ public final class ModStructures {
 
     public static void bootstrapStructures(BootstrapContext<Structure> context) {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+        context.register(UMBRER_VILLAGE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_UMBRER_VILLAGE))
+                        .generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
         context.register(SEAL_CIRCLE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(BiomeTags.IS_OVERWORLD))
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
@@ -97,6 +111,9 @@ public final class ModStructures {
         HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         context.register(ALL_LAIRS, new StructureSet(java.util.List.of(), new AnyNestPlacement()));
+        context.register(UMBRER_VILLAGES, new StructureSet(structures.getOrThrow(UMBRER_VILLAGE_STRUCTURE),
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 9,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 73_419_211)));
         context.register(SEAL_CIRCLE_SET, new StructureSet(structures.getOrThrow(SEAL_CIRCLE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement(220, 640,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SEAL_CIRCLE), 51_731)));

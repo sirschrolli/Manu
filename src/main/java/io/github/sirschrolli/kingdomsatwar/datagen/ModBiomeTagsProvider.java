@@ -81,6 +81,13 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.CHERRY_GROVE)
                 .add(Biomes.TAIGA).add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_TAIGA);
 
+        // Dörfer der Umbrer: offene Wiesen, lichte Wälder, die fahle Ödnis und die Ränder der Seelenmarsch
+        this.tag(ModTags.Biomes.HAS_UMBRER_VILLAGE)
+                .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.GLIMMER_MEADOWS)
+                .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)
+                .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.PALE_WASTES)
+                .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
+
         this.tag(ModTags.Biomes.HAS_CASTLE_RUINS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)

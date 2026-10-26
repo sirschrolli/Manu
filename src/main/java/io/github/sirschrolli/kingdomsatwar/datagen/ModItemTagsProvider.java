@@ -61,6 +61,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(ModTags.Blocks.STORAGE_BLOCKS_ABYSSITE, ModTags.Items.STORAGE_BLOCKS_ABYSSITE);
         copy(BlockItemTags.WOODEN_DOORS);
         copy(BlockItemTags.WOODEN_TRAPDOORS);
+        copy(BlockItemTags.WOODEN_FENCES);
+        copy(BlockItemTags.FENCE_GATES);
         copy(Tags.BlockItems.GLASS_BLOCKS);
         copy(Tags.BlockItems.GLASS_PANES);
         copy(BlockItemTags.ORES);

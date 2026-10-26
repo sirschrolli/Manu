@@ -50,6 +50,21 @@ public final class ShowcaseRunner {
         return SCENES != null && !SCENES.isBlank();
     }
 
+    /**
+     * Fügt Schritte direkt hinter dem gerade laufenden ein (für Szenen, deren Ablauf erst beim Spielen feststeht, z. B.
+     * je Gebäude eines Dorfs ein Bild). Nur aus einem laufenden Schritt heraus aufrufen.
+     */
+    static void insertSteps(Deque<Step> extra) {
+        Step current = STEPS.poll();
+        java.util.Iterator<Step> reversed = extra.descendingIterator();
+        while (reversed.hasNext()) {
+            STEPS.addFirst(reversed.next());
+        }
+        if (current != null) {
+            STEPS.addFirst(current);
+        }
+    }
+
     @SubscribeEvent
     static void onScreenInit(ScreenEvent.Init.Post event) {
         if (!enabled() || worldRequested || !(event.getScreen() instanceof TitleScreen title)) {
@@ -62,7 +77,9 @@ public final class ShowcaseRunner {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,
                     new LevelSettings.DifficultySettings(Difficulty.PEACEFUL, false, false), true, WorldDataConfiguration.DEFAULT);
-            WorldOptions options = new WorldOptions("kingdoms at war".hashCode(), !flat, false);
+            // Bauwerke: in echten Welten immer, in der flachen Testwelt nur für Szenen, die sie brauchen (z. B. Dörfer)
+            boolean structures = !flat || SCENES.contains("village");
+            WorldOptions options = new WorldOptions("kingdoms at war".hashCode(), structures, false);
             WorldOpenFlows flows = minecraft.createWorldOpenFlows();
             LOGGER.info("[Showcase] Erzeuge Welt '{}' (flach: {})", folder, flat);
             flows.createFreshLevel(folder, settings, options,

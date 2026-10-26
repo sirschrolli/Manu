@@ -45,6 +45,7 @@ import seal_textures  # noqa: E402
 import shadow_textures  # noqa: E402
 import shadow_gear_textures  # noqa: E402
 import shadow_creature_textures  # noqa: E402
+import shadow_village_textures  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -803,6 +804,7 @@ def build_all() -> dict[str, Image.Image]:
     shadow_textures.build(put)
     shadow_gear_textures.build(put)
     shadow_creature_textures.build(put)
+    shadow_village_textures.build(put)
     equipment_textures.build_entity(put)
     shadow_gear_textures.build_entity(put)
     dragon_spawn_eggs()

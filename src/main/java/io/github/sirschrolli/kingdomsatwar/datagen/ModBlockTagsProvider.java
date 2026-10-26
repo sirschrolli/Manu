@@ -95,7 +95,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_SHOVEL, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.SHADOW_SAND,
                 ShadowBlocks.ASH_SNOW_BLOCK, ShadowBlocks.ASH_SNOW);
         add(BlockTags.MINEABLE_WITH_AXE, ShadowBlocks.SHADOW_LOG, ShadowBlocks.SHADOW_WOOD, ShadowBlocks.STRIPPED_SHADOW_LOG,
-                ShadowBlocks.STRIPPED_SHADOW_WOOD);
+                ShadowBlocks.STRIPPED_SHADOW_WOOD, ShadowBlocks.SHADOW_DOOR, ShadowBlocks.SHADOW_TRAPDOOR, ShadowBlocks.SHADOW_FENCE,
+                ShadowBlocks.SHADOW_FENCE_GATE);
+        add(BlockItemTags.WOODEN_DOORS.block(), ShadowBlocks.SHADOW_DOOR);
+        add(BlockItemTags.WOODEN_TRAPDOORS.block(), ShadowBlocks.SHADOW_TRAPDOOR);
+        add(BlockItemTags.WOODEN_FENCES.block(), ShadowBlocks.SHADOW_FENCE);
+        add(BlockItemTags.FENCE_GATES.block(), ShadowBlocks.SHADOW_FENCE_GATE);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ShadowBlocks.SHADOW_FARMLAND, ShadowBlocks.SHADOW_PATH);
+        add(BlockTags.SUPPORTS_CROPS, ShadowBlocks.SHADOW_FARMLAND);
+        add(BlockTags.CROPS, ShadowBlocks.DUSKGRAIN);
+        add(BlockTags.MAINTAINS_FARMLAND, ShadowBlocks.DUSKGRAIN);
         add(BlockTags.MINEABLE_WITH_HOE, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS,
                 ShadowBlocks.GHOSTCAP);
@@ -155,7 +164,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockItemTags.LANTERNS.block(), ShadowBlocks.MOON_LANTERN);
         add(BlockTags.CLIMBABLE, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
         add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SOUL_BERRY_BUSH, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
-        add(BlockTags.BEE_GROWABLES, ShadowBlocks.SOUL_BERRY_BUSH);
+        add(BlockTags.BEE_GROWABLES, ShadowBlocks.DUSKGRAIN, ShadowBlocks.SOUL_BERRY_BUSH);
         tag(BlockTags.BASE_STONE_OVERWORLD).add(ShadowBlocks.SHADOW_STONE.base().key());
 
         // --- Einrichtung ---

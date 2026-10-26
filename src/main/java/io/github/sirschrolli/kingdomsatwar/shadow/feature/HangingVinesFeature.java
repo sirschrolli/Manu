@@ -37,7 +37,7 @@ public record HangingVinesFeature(int tries, int maxLength) implements Feature {
         for (int i = 0; i < this.tries; i++) {
             pos.set(origin.getX() + random.nextInt(9) - 4, origin.getY() + random.nextInt(5) - 2, origin.getZ() + random.nextInt(9) - 4);
             BlockPos start = findHangingSpot(level, pos);
-            if (start != null) {
+            if (start != null && !io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.isNearVillage(level, start, 1)) {
                 hang(level, random, start);
                 placed++;
             }

@@ -134,6 +134,12 @@ final class Showcase {
                         ShadowShowcase.creatures(steps, false);
                     } else if (scene.equals("shadowcreatures_live")) {
                         ShadowShowcase.creatures(steps, true);
+                    } else if (scene.equals("umbrerdebug")) {
+                        ShadowShowcase.villageDebug(steps);
+                    } else if (scene.equals("umbrervillage")) {
+                        ShadowShowcase.village(steps, false);
+                    } else if (scene.equals("umbrervillage_live")) {
+                        ShadowShowcase.village(steps, true);
                     } else if (scene.equals("shadow")) {
                         ShadowShowcase.tour(steps, "");
                     } else if (scene.startsWith("shadow_")) {

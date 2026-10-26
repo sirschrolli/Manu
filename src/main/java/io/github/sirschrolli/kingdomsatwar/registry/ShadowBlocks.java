@@ -12,7 +12,15 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ColoredFallingBlock;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.PathBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -104,6 +112,22 @@ public final class ShadowBlocks {
             p -> p.mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)
                     .ignitedByLava(),
             false, BuildingSet.Tool.AXE, TAB);
+    /** Tür, Falltür, Zaun und Zauntor aus Schattenholz (so bauen die Umbrer). */
+    public static final DeferredBlock<DoorBlock> SHADOW_DOOR = door("shadow_door");
+    public static final DeferredBlock<TrapDoorBlock> SHADOW_TRAPDOOR = ModBlocks.blockWithItem("shadow_trapdoor",
+            p -> new TrapDoorBlock(BlockSetType.DARK_OAK, p),
+            p -> p.mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(3.0f).noOcclusion()
+                    .isValidSpawn((state, level, pos, type) -> false).ignitedByLava(),
+            UnaryOperator.identity(), TAB);
+    public static final DeferredBlock<FenceBlock> SHADOW_FENCE = ModBlocks.blockWithItem("shadow_fence", FenceBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).forceSolidOn().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f)
+                    .sound(SoundType.WOOD).ignitedByLava(),
+            ip -> ip.cookingFuel(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COOKING_TIME_WOOD_BLOCKS), TAB);
+    public static final DeferredBlock<FenceGateBlock> SHADOW_FENCE_GATE = ModBlocks.blockWithItem("shadow_fence_gate",
+            p -> new FenceGateBlock(WoodType.DARK_OAK, p),
+            p -> p.mapColor(MapColor.COLOR_PURPLE).forceSolidOn().instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f)
+                    .ignitedByLava(),
+            ip -> ip.cookingFuel(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COOKING_TIME_WOOD_BLOCKS), TAB);
     /** Schattenlaub: violett, im Wald dunkler, auf den schwebenden Inseln heller (Farbe aus dem Biom). */
     public static final DeferredBlock<TintedParticleLeavesBlock> SHADOW_LEAVES = ModBlocks.blockWithItem("shadow_leaves",
             p -> new TintedParticleLeavesBlock(0.01f, p),
@@ -150,6 +174,23 @@ public final class ShadowBlocks {
                     .offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.POPPED),
             UnaryOperator.identity(), TAB);
 
+    /** Schattenackerland: mit der Hacke bearbeitete Schattenerde (wird bei Trockenheit wieder zu Erde). */
+    public static final DeferredBlock<FarmlandBlock> SHADOW_FARMLAND = ModBlocks.blockWithItem("shadow_farmland",
+            p -> new FarmlandBlock(SHADOW_SOIL.get(), p),
+            p -> p.mapColor(MapColor.TERRACOTTA_PURPLE).randomTicks().strength(0.6f).sound(SoundType.GRAVEL)
+                    .isViewBlocking((state, level, pos, box) -> true).isSuffocating((state, level, pos) -> true),
+            UnaryOperator.identity(), TAB);
+    /** Schattenpfad: festgetretene Schattenerde (mit der Schaufel aus Schattengras). */
+    public static final DeferredBlock<PathBlock> SHADOW_PATH = ModBlocks.blockWithItem("shadow_path",
+            p -> new PathBlock(SHADOW_SOIL.get(), p),
+            p -> p.mapColor(MapColor.TERRACOTTA_GRAY).strength(0.65f).sound(SoundType.GRASS)
+                    .isViewBlocking((state, level, pos, box) -> true).isSuffocating((state, level, pos) -> true),
+            UnaryOperator.identity(), TAB);
+    /** Dämmerkorn (das Feld; gesät wird mit Dämmerkorn-Saat). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.DuskgrainBlock> DUSKGRAIN =
+            ModBlocks.BLOCKS.registerBlock("duskgrain", io.github.sirschrolli.kingdomsatwar.block.DuskgrainBlock::new,
+                    p -> p.mapColor(MapColor.COLOR_PURPLE).noCollision().randomTicks().instabreak().sound(SoundType.CROP)
+                            .lightLevel(io.github.sirschrolli.kingdomsatwar.block.DuskgrainBlock::light).pushReaction(PushReaction.POPPED));
     /** Seelenbeerenstrauch (ohne eigenen Gegenstand – man pflanzt ihn mit den Beeren). */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock> SOUL_BERRY_BUSH =
             ModBlocks.BLOCKS.registerBlock("soul_berry_bush", io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock::new,
@@ -227,6 +268,16 @@ public final class ShadowBlocks {
     // =====================================================================================
     // Hilfsmethoden
     // =====================================================================================
+
+    private static DeferredBlock<DoorBlock> door(String name) {
+        DeferredBlock<DoorBlock> block = ModBlocks.BLOCKS.registerBlock(name, p -> new DoorBlock(BlockSetType.DARK_OAK, p),
+                p -> p.mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASS).strength(3.0f).noOcclusion().ignitedByLava()
+                        .pushReaction(PushReaction.POPPED));
+        // wie bei Vanilla-Türen: ein Gegenstand, der beim Setzen auch die obere Hälfte freiräumt
+        TAB.add(ModItems.ITEMS.registerItem(name, p -> new net.minecraft.world.item.DoubleHighBlockItem(block.get(), p),
+                net.minecraft.world.item.Item.Properties::useBlockDescriptionPrefix));
+        return block;
+    }
 
     private static DeferredBlock<DropExperienceBlock> ore(String name, boolean deep, int minXp, int maxXp, int light) {
         return ModBlocks.blockWithItem(name, p -> new DropExperienceBlock(UniformInt.of(minXp, maxXp), p),

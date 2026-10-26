@@ -277,6 +277,23 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, key("shadow_planks"));
         wood(ShadowBlocks.SHADOW_WOOD.get(), ShadowBlocks.SHADOW_LOG.get(), "shadow_wood");
         wood(ShadowBlocks.STRIPPED_SHADOW_WOOD.get(), ShadowBlocks.STRIPPED_SHADOW_LOG.get(), "stripped_shadow_wood");
+        Ingredient shadowPlanks = Ingredient.of(planks);
+        doorBuilder(ShadowBlocks.SHADOW_DOOR.get(), shadowPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("shadow_door"));
+        trapdoorBuilder(ShadowBlocks.SHADOW_TRAPDOOR.get(), shadowPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("shadow_trapdoor"));
+        fenceBuilder(ShadowBlocks.SHADOW_FENCE.get(), shadowPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("shadow_fence"));
+        fenceGateBuilder(ShadowBlocks.SHADOW_FENCE_GATE.get(), shadowPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("shadow_fence_gate"));
+
+        // Dämmerbrot: drei Ähren Dämmerkorn
+        Item duskgrain = ShadowItems.DUSKGRAIN.get();
+        shaped(RecipeCategory.FOOD, ShadowItems.DUSK_BREAD.get())
+                .pattern("###")
+                .define('#', duskgrain)
+                .unlockedBy(getHasName(duskgrain), has(duskgrain))
+                .save(output, key("dusk_bread"));
 
         // Aschschnee: drei Blöcke ergeben sechs Schichten, vier Schichten wieder einen Block
         shaped(RecipeCategory.BUILDING_BLOCKS, ShadowBlocks.ASH_SNOW.get(), 6)

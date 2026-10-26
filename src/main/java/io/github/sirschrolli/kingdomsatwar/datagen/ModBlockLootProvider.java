@@ -107,8 +107,26 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                         LootItem.lootTableItem(ShadowItems.NIGHT_CRYSTAL_SHARD.get())
                                 .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4)))
                                 .apply(ApplyBonusCount.addOreBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE))))));
-        add(ShadowBlocks.SHADOW_SPROUTS.get(), block -> this.createShearsOnlyDrop(block));
+        // Schattenhalme: mit der Schere die Halme, sonst manchmal Dämmerkorn-Saat (wie Weizensaat aus Gras)
+        add(ShadowBlocks.SHADOW_SPROUTS.get(), block -> this.createShearsDispatchTable(block,
+                (net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>) this.applyExplosionDecay(block,
+                        LootItem.lootTableItem(ShadowItems.DUSKGRAIN_SEEDS.get())
+                                .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.125f))
+                                .apply(ApplyBonusCount.addUniformBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE), 2)))));
         add(ShadowBlocks.PALE_GRASS.get(), block -> this.createShearsOnlyDrop(block));
+        // Schattenholz-Tür, -Falltür, -Zaun und -Zauntor
+        add(ShadowBlocks.SHADOW_DOOR.get(), this::createDoorTable);
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.SHADOW_TRAPDOOR, ShadowBlocks.SHADOW_FENCE,
+                ShadowBlocks.SHADOW_FENCE_GATE)) {
+            dropSelf(block.get());
+        }
+        // Ackerland und Pfad geben Schattenerde zurück
+        dropOther(ShadowBlocks.SHADOW_FARMLAND.get(), ShadowBlocks.SHADOW_SOIL.get());
+        dropOther(ShadowBlocks.SHADOW_PATH.get(), ShadowBlocks.SHADOW_SOIL.get());
+        // Dämmerkorn: reif Ähren und Saat (Glück bringt mehr Saat), sonst nur die Saat
+        add(ShadowBlocks.DUSKGRAIN.get(), createCropDrops(ShadowBlocks.DUSKGRAIN.get(), ShadowItems.DUSKGRAIN.get(),
+                ShadowItems.DUSKGRAIN_SEEDS.get(), MatchBlock.blockMatches(this.blocks, ShadowBlocks.DUSKGRAIN.get(),
+                        StatePropertiesPredicate.Builder.properties().hasProperty(net.minecraft.world.level.block.CropBlock.AGE, 7))));
 
         // Frostkessel (Gletschereis nur mit Behutsamkeit, wie Blaueis)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.FROST_CRYSTAL, ModBlocks.FROZEN_SOIL, ModBlocks.ICICLE)) {

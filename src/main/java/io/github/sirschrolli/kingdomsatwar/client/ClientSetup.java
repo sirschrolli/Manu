@@ -70,6 +70,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.CRYSTAL_CRAWLER, CrystalCrawlerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.NIGHT_WING, NightWingGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
     }
 
     @SubscribeEvent
@@ -120,6 +121,11 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.NIGHT_WING.get(), NightWingRenderer::new);
         event.registerEntityRenderer(ModEntities.MOON_STAG.get(), MoonStagRenderer::new);
         event.registerEntityRenderer(ModEntities.GLIMMER_MOTH.get(), GlimmerMothRenderer::new);
+        // die Umbrer
+        event.registerEntityRenderer(ModEntities.UMBRER.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);
+        event.registerEntityRenderer(ModEntities.UMBRER_GUARD.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity>::new);
     }
 
     @SubscribeEvent

@@ -101,6 +101,39 @@ GLIMMER_MOTH_EGG = [
     "......z..z......",
 ]
 
+# Umbrer: Kapuze, spitze Ohren, silbrig leuchtende Augen, Mondsilber-Saum
+UMBRER_EGG = [
+    "................",
+    "................",
+    "......hhhh......",
+    ".....h....h.....",
+    "..ee.h....h.ee..",
+    "...eeh.ss.hee...",
+    ".....h....h.....",
+    "......hhhh......",
+    "................",
+    "................",
+    "................",
+    "................",
+    "...tttttttttt...",
+    "....tttttttt....",
+]
+
+# Umbrer-Wächter: Helmkamm, Visier, Mondsilber-Rüstung
+UMBRER_GUARD_EGG = [
+    ".......pp.......",
+    "......pPPp......",
+    ".......pp.......",
+    "....mmmmmmmm....",
+    "....mMMMMMMm....",
+    "....m.s..s.m....",
+    "....mmmmmmmm....",
+    "................",
+    "...mmmmmmmmmm...",
+    "...mMMMMMMMMm...",
+    "....mmmmmmmm....",
+]
+
 SHADOW_ESSENCE = [
     "................",
     ".......o........",
@@ -132,6 +165,12 @@ def spawn_eggs(put: Callable[[str, Image.Image], None]) -> None:
         pal("#4a4672", "#6a6694", "#8a86b4", "#aeaad2", "#d4d0f0"), hexc("#2a2848"), MOON_STAG_EGG,
         {"a": hexc("#9ad8ff"), "A": hexc("#f4fcff"), "e": hexc("#6a66a0"), "k": hexc("#5ac8ff"), "w": hexc("#eeecfc"),
          "n": hexc("#2a2848")}))
+    put("item/umbrer_spawn_egg", egg(
+        pal("#3a2c5a", "#4e3c78", "#644e96", "#7c66b0", "#9682c8"), hexc("#1e1630"), UMBRER_EGG,
+        {"h": hexc("#2a1e44"), "e": hexc("#b8b0cc"), "s": hexc("#dff0ff"), "t": hexc("#c4d0ec")}))
+    put("item/umbrer_guard_spawn_egg", egg(
+        pal("#1a2240", "#26305a", "#343f72", "#465290", "#5a6aa0"), hexc("#0e1226"), UMBRER_GUARD_EGG,
+        {"p": hexc("#6a3aa0"), "P": hexc("#a070e0"), "m": hexc("#8a96b4"), "M": hexc("#dfe6f8"), "s": hexc("#dff0ff")}))
     put("item/glimmer_moth_spawn_egg", egg(
         pal("#141a30", "#222c4a", "#323e64", "#46547e", "#5a6a9a"), hexc("#0a0e1c"), GLIMMER_MOTH_EGG,
         {"a": hexc("#9adcff"), "z": hexc("#5ac8ff"), "Z": hexc("#f0fbff")}))

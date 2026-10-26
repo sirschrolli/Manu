@@ -29,6 +29,9 @@ public record RockSpireFeature(int minHeight, int maxHeight, float baseRadius) i
 
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        if (io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.isNearVillage(level, origin, 6)) {
+            return false;
+        }
         BlockState ground = level.getBlockState(origin.below());
         if (!ground.isSolidRender() || !level.getFluidState(origin).isEmpty()) {
             return false;

@@ -26,6 +26,9 @@ public record BoneArchFeature() implements Feature {
 
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        if (io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.isNearVillage(level, origin, 14)) {
+            return false;
+        }
         if (!level.getFluidState(origin).isEmpty() || !level.getBlockState(origin.below()).isSolidRender()) {
             return false;
         }

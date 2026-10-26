@@ -103,6 +103,16 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<GlimmerMothEntity>> GLIMMER_MOTH = ENTITIES.registerEntityType("glimmer_moth",
             GlimmerMothEntity::new, MobCategory.AMBIENT, builder -> builder.sized(0.5f, 0.4f).eyeHeight(0.2f).clientTrackingRange(8));
 
+    // ---------------------------------------------------------------- Die Umbrer (Volk der Schattenwelt)
+    /** Umbrer: Bewohner der Dörfer, tauschen gegen Mondsilber (Beruf je Tier). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>> UMBRER =
+            ENTITIES.registerEntityType("umbrer", io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 2.15f).eyeHeight(1.9f).clientTrackingRange(10));
+    /** Wächter der Umbrer: schützen die Dörfer. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity>> UMBRER_GUARD =
+            ENTITIES.registerEntityType("umbrer_guard", io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.6f, 2.15f).eyeHeight(1.9f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Drachen-Bosse
     /** Pyrrhon, der Aschenfürst (Feuer). */
     public static final DeferredHolder<EntityType<?>, EntityType<PyrrhonEntity>> PYRRHON = ENTITIES.registerEntityType("fire_dragon_boss",
@@ -187,6 +197,8 @@ public final class ModEntities {
         event.put(NIGHT_WING.get(), NightWingEntity.createAttributes().build());
         event.put(MOON_STAG.get(), DeerEntity.createAttributes().build());
         event.put(GLIMMER_MOTH.get(), GlimmerMothEntity.createAttributes().build());
+        event.put(UMBRER.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity.createAttributes().build());
+        event.put(UMBRER_GUARD.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity.createAttributes().build());
     }
 
     /**

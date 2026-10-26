@@ -72,6 +72,20 @@ final class ShadowModels {
                 blocks.createFlatItemModel(sprouts.asItem(), TextureMapping.getBlockTexture(sprouts)), ItemModelUtils.constantTint(GRASS_ITEM_TINT)));
         blocks.createCrossBlockWithDefaultItem(ShadowBlocks.PALE_GRASS.get(), BlockModelGenerators.PlantType.NOT_TINTED);
 
+        // Schattenholz: Tür, Falltür, Zaun, Zauntor
+        blocks.createDoor(ShadowBlocks.SHADOW_DOOR.get());
+        blocks.createOrientableTrapdoor(ShadowBlocks.SHADOW_TRAPDOOR.get());
+        blocks.familyWithExistingFullBlock(ShadowBlocks.SHADOW_PLANKS.base().get())
+                .fence(ShadowBlocks.SHADOW_FENCE.get())
+                .fenceGate(ShadowBlocks.SHADOW_FENCE_GATE.get());
+
+        // Ackerland, Pfad und Dämmerkorn
+        Material soil = TextureMapping.getBlockTexture(ShadowBlocks.SHADOW_SOIL.get());
+        blocks.createFarmland(ShadowBlocks.SHADOW_FARMLAND.get(), soil, soil, ModelTemplates.CUBE_BOTTOM_TOP_INDENTED);
+        blocks.createRotatedVariantBlock(ShadowBlocks.SHADOW_PATH.get(),
+                TexturedModel.CUBE_BOTTOM_TOP_INDENTED.updateTexture(m -> m.put(TextureSlot.BOTTOM, soil)));
+        blocks.createCropBlock(ShadowBlocks.DUSKGRAIN.get(), net.minecraft.world.level.block.CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
+
         // Erze: im Schattenstein bzw. Tiefschattenstein (Einschluss als eigene Ebene)
         Material stone = TextureMapping.getBlockTexture(ShadowBlocks.SHADOW_STONE.base().get());
         Material deep = TextureMapping.getBlockTexture(ShadowBlocks.DEEP_SHADOW_STONE.get(), "_side");
@@ -102,7 +116,7 @@ final class ShadowModels {
         for (var item : java.util.List.of(ShadowItems.RAW_MOONSILVER, ShadowItems.MOONSILVER_INGOT, ShadowItems.MOONSILVER_NUGGET,
                 ShadowItems.RAW_NIGHTSTEEL, ShadowItems.NIGHTSTEEL_INGOT, ShadowItems.SOUL_CRYSTAL, ShadowItems.ABYSSITE_SHARD,
                 ShadowItems.ABYSSITE_INGOT, ShadowItems.NIGHT_CRYSTAL_SHARD, ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE,
-                ShadowItems.SHADOW_ESSENCE)) {
+                ShadowItems.SHADOW_ESSENCE, ShadowItems.DUSKGRAIN, ShadowItems.DUSK_BREAD)) {
             ModModelProvider.flat(items, item.get());
         }
         for (var egg : ShadowItems.spawnEggs()) {

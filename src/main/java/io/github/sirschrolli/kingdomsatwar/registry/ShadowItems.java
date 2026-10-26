@@ -66,6 +66,17 @@ public final class ShadowItems {
                                     .build())
                     .compostable(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COMPOSTABLE_LOW)
                     .component(DataComponents.LORE, ModItems.lore("soul_berries", 1)));
+    /** Dämmerkorn: Saat, Ähren und das Brot der Umbrer. */
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DUSKGRAIN_SEEDS = register("duskgrain_seeds",
+            p -> new net.minecraft.world.item.BlockItem(ShadowBlocks.DUSKGRAIN.get(), p),
+            p -> p.useItemDescriptionPrefix()
+                    .compostable(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COMPOSTABLE_LOW));
+    public static final DeferredItem<Item> DUSKGRAIN = item("duskgrain",
+            p -> p.compostable(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COMPOSTABLE_MEDIUM));
+    public static final DeferredItem<Item> DUSK_BREAD = item("dusk_bread",
+            p -> p.food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).build())
+                    .compostable(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH)
+                    .component(DataComponents.LORE, ModItems.lore("dusk_bread", 1)));
     public static final DeferredItem<SmithingTemplateItem> ABYSSITE_UPGRADE_SMITHING_TEMPLATE = register("abyssite_upgrade_smithing_template",
             p -> new SmithingTemplateItem(
                     description("abyssite_upgrade.applies_to"),
@@ -140,10 +151,13 @@ public final class ShadowItems {
     public static final DeferredItem<SpawnEggItem> NIGHT_WING_SPAWN_EGG = egg("night_wing", () -> ModEntities.NIGHT_WING.get());
     public static final DeferredItem<SpawnEggItem> MOON_STAG_SPAWN_EGG = egg("moon_stag", () -> ModEntities.MOON_STAG.get());
     public static final DeferredItem<SpawnEggItem> GLIMMER_MOTH_SPAWN_EGG = egg("glimmer_moth", () -> ModEntities.GLIMMER_MOTH.get());
+    public static final DeferredItem<SpawnEggItem> UMBRER_SPAWN_EGG = egg("umbrer", () -> ModEntities.UMBRER.get());
+    public static final DeferredItem<SpawnEggItem> UMBRER_GUARD_SPAWN_EGG = egg("umbrer_guard", () -> ModEntities.UMBRER_GUARD.get());
 
     /** Alle Spawn-Eier der Schattenwelt (für Modelle und Übersetzungen). */
     public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
-        return List.of(SHADE_STALKER_SPAWN_EGG, CRYSTAL_CRAWLER_SPAWN_EGG, NIGHT_WING_SPAWN_EGG, MOON_STAG_SPAWN_EGG, GLIMMER_MOTH_SPAWN_EGG);
+        return List.of(SHADE_STALKER_SPAWN_EGG, CRYSTAL_CRAWLER_SPAWN_EGG, NIGHT_WING_SPAWN_EGG, MOON_STAG_SPAWN_EGG, GLIMMER_MOTH_SPAWN_EGG,
+                UMBRER_SPAWN_EGG, UMBRER_GUARD_SPAWN_EGG);
     }
 
     // =====================================================================================

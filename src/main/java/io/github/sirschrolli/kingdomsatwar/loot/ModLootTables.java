@@ -23,6 +23,14 @@ public final class ModLootTables {
     /** Truhen am Thron der Tiefe in Thalassas Versunkener Grotte. */
     public static final ResourceKey<LootTable> SUNKEN_GROTTO_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/sunken_grotto"));
+    /** Truhen und Fässer in den Dörfern der Umbrer (Wohnhaus, Schmiede, Kräuterhütte, Seherturm). */
+    public static final ResourceKey<LootTable> UMBRER_HOUSE = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_house"));
+    public static final ResourceKey<LootTable> UMBRER_SMITHY = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_smithy"));
+    public static final ResourceKey<LootTable> UMBRER_HERBALIST =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_herbalist"));
+    public static final ResourceKey<LootTable> UMBRER_SEER = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_seer"));
+    public static final ResourceKey<LootTable> UMBRER_WORKSHOP =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_workshop"));
     /** Was man mit dem Pinsel aus dem Kies eines Drachennests ausgräbt (je Art). */
     public static final Map<DragonType, ResourceKey<LootTable>> DRAGON_NEST_ARCHAEOLOGY;
 

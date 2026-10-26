@@ -114,6 +114,10 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 0, 1)));
         this.add(ModEntities.GLIMMER_MOTH.get(), LootTable.lootTable()
                 .withPool(drop(Items.GLOWSTONE_DUST, 0, 1)));
+        // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
+        this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
+        this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()
+                .withPool(drop(ShadowItems.MOONSILVER_NUGGET.get(), 0, 3)));
     }
 
     /** Fleisch: wird gebraten, wenn das Tier brennend stirbt; Plünderung bringt mehr. */

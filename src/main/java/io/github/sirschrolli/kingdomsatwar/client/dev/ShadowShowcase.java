@@ -610,6 +610,276 @@ final class ShadowShowcase {
         steps.add(Step.command("gamemode creative"));
     }
 
+    // =====================================================================================
+    // Dorf der Umbrer
+    // =====================================================================================
+
+    /** Ein Gebäude des Dorfs für die Kamera: Art, Mitte der Vorderseite (auf Fußbodenhöhe) und Blickrichtung nach vorn. */
+    private record Building(String kind, double x, double y, double z, int width, int depth, int height,
+            net.minecraft.core.Direction front) {
+        /** Kamera über der Straße vor dem Gebäude ({@code out} Blöcke vor der Tür, seitlich versetzt), Blick auf seine Mitte. */
+        Step street(double out, double along, double up) {
+            net.minecraft.core.Direction side = this.front.getClockWise();
+            double cx = this.x + this.front.getStepX() * out + side.getStepX() * along;
+            double cz = this.z + this.front.getStepZ() * out + side.getStepZ() * along;
+            double tx = this.x - this.front.getStepX() * this.depth / 2.0;
+            double tz = this.z - this.front.getStepZ() * this.depth / 2.0;
+            return look(cx, this.y + up, cz, tx, this.y + this.height / 3.0, tz);
+        }
+
+        /** Kamera im Gebäude (gleich hinter der Tür), Blick zur Rückwand. */
+        Step inside(double back, double eye, double sideways) {
+            net.minecraft.core.Direction right = this.front.getCounterClockWise();
+            double cx = this.x - this.front.getStepX() * back + right.getStepX() * sideways;
+            double cz = this.z - this.front.getStepZ() * back + right.getStepZ() * sideways;
+            double tx = this.x - this.front.getStepX() * (this.depth - 1.0) - right.getStepX() * sideways * 0.5;
+            double tz = this.z - this.front.getStepZ() * (this.depth - 1.0) - right.getStepZ() * sideways * 0.5;
+            return look(cx, this.y + eye - 1.62, cz, tx, this.y + 1.2, tz);
+        }
+    }
+
+    /** Kamera (Augen) an (x, y + 1.62, z) mit Blick auf (tx, ty, tz) – in der Schattenwelt. */
+    private static Step look(double x, double y, double z, double tx, double ty, double tz) {
+        return Step.once(minecraft -> {
+            double lx = tx - x;
+            double ly = ty - (y + 1.62);
+            double lz = tz - z;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f",
+                    DIM, x, y, z, yaw, pitch));
+        });
+    }
+
+    /**
+     * Das Dorf der Umbrer, das dem Ursprung der Schattenwelt am nächsten liegt: Überblick von oben, der Platz mit dem
+     * Mondbrunnen, jede Gebäudeart von vorn, Innenräume, der Handel mit einem Umbrer; mit {@code live} dazu ein Rundflug
+     * als Video.
+     */
+    static void village(Deque<Step> steps, boolean live) {
+        double[] c = new double[4];          // x, z, y (Platzmitte), bereit
+        List<Building> buildings = new java.util.ArrayList<>();
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.server(level -> {
+            ServerLevel shadow = shadow(level);
+            var holder = shadow.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                    .getOrThrow(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.UMBRER_VILLAGE_STRUCTURE);
+            Pair<BlockPos, Holder<net.minecraft.world.level.levelgen.structure.Structure>> found = shadow.getChunkSource().getGenerator()
+                    .findNearestMapStructure(shadow, net.minecraft.core.HolderSet.direct(holder), new BlockPos(0, 80, 0), 100, false);
+            if (found == null) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Kein Dorf der Umbrer gefunden");
+                c[3] = -1;
+                return;
+            }
+            var chunk = net.minecraft.world.level.ChunkPos.containing(found.getFirst());
+            for (int dx = -4; dx <= 4; dx++) {
+                for (int dz = -4; dz <= 4; dz++) {
+                    shadow.setChunkForced(chunk.x() + dx, chunk.z() + dz, true);
+                }
+            }
+            var start = shadow.structureManager().getStartForStructure(holder.value(), shadow.getChunk(chunk.x(), chunk.z()));
+            if (start == null) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Dorf bei {} hat keinen Start", chunk);
+                c[3] = -1;
+                return;
+            }
+            for (var piece : start.getPieces()) {
+                if (!(piece instanceof io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece village)) {
+                    continue;
+                }
+                var kind = village.kind();
+                BlockPos origin = village.origin();
+                if (kind == io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece.Kind.PLAZA) {
+                    c[0] = origin.getX() + 0.5;
+                    c[1] = origin.getZ() + 0.5;
+                    c[2] = origin.getY();
+                    continue;
+                }
+                if (kind == io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece.Kind.ROAD) {
+                    continue;
+                }
+                var rotation = village.rotation();
+                BlockPos door = origin.offset(new BlockPos(kind.width() / 2, 0, 0).rotate(rotation));
+                var front = rotation.rotate(net.minecraft.core.Direction.NORTH);
+                buildings.add(new Building(kind.name().toLowerCase(Locale.ROOT), door.getX() + 0.5, door.getY() + 1, door.getZ() + 0.5,
+                        kind.width(), kind.depth(), kind.height(), front));
+                KingdomsAtWar.LOGGER.info("[Showcase] Dorf: {} bei {} ({})", kind, origin, rotation);
+            }
+            // Bewohner zählen, sobald die Chunks stehen
+            c[3] = 1;
+            KingdomsAtWar.LOGGER.info("[Showcase] Dorf der Umbrer bei {} {} {} mit {} Gebäuden", c[0], c[2], c[1], buildings.size());
+        }));
+        steps.add(Step.until(() -> c[3] != 0, 20 * 300));
+        // Überblick von zwei Seiten
+        steps.add(view(c, -36, 30, -36, 0));
+        steps.add(Step.waitTicks(160));
+        steps.add(Step.waitForChunks(2400));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("umbrer_village_overview"));
+        steps.add(Step.server(level -> {
+            int umbrer = 0;
+            int guards = 0;
+            for (var entity : shadow(level).getAllEntities()) {
+                if (entity instanceof io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity) {
+                    guards++;
+                } else if (entity instanceof io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity) {
+                    umbrer++;
+                }
+            }
+            KingdomsAtWar.LOGGER.info("[Showcase] Bewohner: {} Umbrer, {} Wächter", umbrer, guards);
+        }));
+        steps.add(view(c, 40, 24, 30, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.screenshot("umbrer_village_overview_b"));
+        steps.add(view(c, 0, 70, 1, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.screenshot("umbrer_village_top"));
+        // der Platz mit dem Mondbrunnen
+        steps.add(view(c, 9, 3.5, -11, 2));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.screenshot("umbrer_village_plaza"));
+        // jede Gebäudeart einmal von vorn (und die Wohnhäuser von innen)
+        java.util.Set<String> seen = new java.util.HashSet<>();
+        steps.add(Step.once(minecraft -> {
+            Deque<Step> extra = new java.util.ArrayDeque<>();
+            for (Building building : buildings) {
+                if (!seen.add(building.kind())) {
+                    continue;
+                }
+                boolean tall = building.kind().equals("seer_tower") || building.kind().equals("watchtower");
+                extra.add(tall ? building.street(4.5, 5.0, building.kind().equals("seer_tower") ? 12.0 : 8.0)
+                        : building.street(4.5, 2.5, 5.0));
+                extra.add(Step.waitTicks(40));
+                extra.add(Step.waitForChunks(1200));
+                extra.add(Step.screenshot("umbrer_" + building.kind()));
+                if (!building.kind().equals("farm") && !building.kind().equals("crystal_garden")) {
+                    extra.add(building.inside(1.2, 2.4, 0.0));
+                    extra.add(Step.waitTicks(30));
+                    extra.add(Step.waitForChunks(600));
+                    extra.add(Step.screenshot("umbrer_" + building.kind() + "_inside"));
+                }
+            }
+            ShowcaseRunner.insertSteps(extra);
+        }));
+        // Handel: ein Umbrer am Platz öffnet seine Waren
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> {
+            ServerLevel shadow = shadow(level);
+            var player = level.getServer().getPlayerList().getPlayers().get(0);
+            io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity best = null;
+            double bestDistance = Double.MAX_VALUE;
+            for (var entity : shadow.getAllEntities()) {
+                if (entity instanceof io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity umbrer) {
+                    double d = umbrer.distanceToSqr(c[0], c[2], c[1]);
+                    if (d < bestDistance) {
+                        bestDistance = d;
+                        best = umbrer;
+                    }
+                }
+            }
+            if (best == null) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Kein Umbrer zum Handeln gefunden");
+                return;
+            }
+            best.setNoAi(true);
+            var look = best.position().add(best.getLookAngle().multiply(2.2, 0, 2.2));
+            player.teleportTo(shadow, look.x, best.getY(), look.z, java.util.Set.of(), best.getYRot() + 180.0f, 5.0f, true);
+            KingdomsAtWar.LOGGER.info("[Showcase] Handel mit {} ({})", best.getName().getString(), best.profession());
+            var umbrer = best;
+            level.getServer().execute(() -> umbrer.mobInteract(player, net.minecraft.world.InteractionHand.MAIN_HAND));
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("umbrer_trading"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.command("gamemode spectator"));
+        if (!live) {
+            steps.add(Step.command("gamemode creative"));
+            return;
+        }
+        // Rundflug um das Dorf
+        int[] frame = new int[1];
+        steps.add(view(c, 0, 24, -46, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.record("umbrer_village_flight", 260, minecraft -> {
+            double a = Math.PI + frame[0]++ * (Math.PI * 2.0 / 260.0) * 0.75;
+            double x = c[0] + Math.sin(a) * 46.0;
+            double z = c[1] + Math.cos(a) * 46.0;
+            double y = c[2] + 24.0 - 8.0 * Math.sin(frame[0] / 260.0 * Math.PI);
+            double lx = c[0] - x;
+            double ly = c[2] + 2.0 - (y + 1.62);
+            double lz = c[1] - z;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f",
+                    DIM, x, y, z, yaw, pitch));
+        }));
+        steps.add(Step.command("gamemode creative"));
+    }
+
+    /** Nur zur Fehlersuche: prüft viele mögliche Dorfplätze und zählt, warum sie abgelehnt werden. */
+    static void villageDebug(Deque<Step> steps) {
+        steps.add(Step.server(level -> {
+            ServerLevel shadow = shadow(level);
+            var holder = shadow.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                    .getOrThrow(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.UMBRER_VILLAGE_STRUCTURE);
+            var generator = shadow.getChunkSource().getGenerator();
+            var randomState = shadow.getChunkSource().randomState();
+            var sampler = randomState.createClimateSampler(
+                    net.minecraft.world.level.levelgen.densityfunction.SamplerContext.builder().enableCaches().build());
+            Map<String, Integer> reasons = new java.util.TreeMap<>();
+            io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.debug = r -> reasons.merge(r, 1, Integer::sum);
+            int ok = 0;
+            int noBiome = 0;
+            int total = 0;
+            Map<String, Integer> biomes = new java.util.TreeMap<>();
+            for (int cx = -64; cx <= 64; cx += 4) {
+                for (int cz = -64; cz <= 64; cz += 4) {
+                    total++;
+                    var pos = new net.minecraft.world.level.ChunkPos(cx, cz);
+                    var context = new net.minecraft.world.level.levelgen.structure.Structure.GenerationContext(shadow.registryAccess(),
+                            generator, generator.getBiomeSource(), sampler, randomState, level.getServer().getStructureTemplateManager(),
+                            shadow.getSeed(), pos, shadow, holder.value().biomes()::contains);
+                    int x = pos.getMiddleBlockX();
+                    int z = pos.getMiddleBlockZ();
+                    int y = generator.getBaseHeight(x, z, net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE_WG, shadow, randomState);
+                    var biome = generator.getBiomeSource().createResolver(sampler).getNoiseBiome(x >> 2, y >> 2, z >> 2);
+                    biomes.merge(biome.unwrapKey().map(k -> k.identifier().getPath()).orElse("?"), 1, Integer::sum);
+                    if (!context.couldValidBiomeExistOnTopOfChunkCenter()) {
+                        noBiome++;
+                        continue;
+                    }
+                    var stub = holder.value().findValidGenerationPoint(context);
+                    if (stub.isPresent()) {
+                        ok++;
+                        if (ok <= 5) {
+                            KingdomsAtWar.LOGGER.info("[Showcase] Dorfplatz möglich bei {}", stub.get().position());
+                        }
+                    } else {
+                        reasons.merge("biome-or-plan", 0, Integer::sum);
+                    }
+                }
+            }
+            // der Showcase-Ort im Einzelnen
+            io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.debug =
+                    r -> KingdomsAtWar.LOGGER.info("[Showcase] Plan bei Chunk (7,-16): {}", r);
+            var detail = new net.minecraft.world.level.levelgen.structure.Structure.GenerationContext(shadow.registryAccess(), generator,
+                    generator.getBiomeSource(), sampler, randomState, level.getServer().getStructureTemplateManager(), shadow.getSeed(),
+                    new net.minecraft.world.level.ChunkPos(7, -16), shadow, holder.value().biomes()::contains);
+            KingdomsAtWar.LOGGER.info("[Showcase] Plan bei Chunk (7,-16): {}", holder.value().findValidGenerationPoint(detail).isPresent());
+            io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.debug = null;
+            KingdomsAtWar.LOGGER.info("[Showcase] Dorfplätze: {} geprüft, {} ohne Biom, {} möglich; Gründe {}; Biome {}", total, noBiome, ok,
+                    reasons, biomes);
+        }));
+        steps.add(Step.waitTicks(200));
+    }
+
     /** Die Kreaturen der Bühne (am Merkmal erkennbar, auch wenn sie neu geladen wurden). */
     private static List<net.minecraft.world.entity.Mob> tagged(ServerLevel any) {
         List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();

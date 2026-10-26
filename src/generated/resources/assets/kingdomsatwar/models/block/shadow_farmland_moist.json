@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_cube_bottom_top_indented",
+  "textures": {
+    "bottom": "kingdomsatwar:block/shadow_soil",
+    "side": "kingdomsatwar:block/shadow_soil",
+    "top": "kingdomsatwar:block/shadow_farmland_moist"
+  }
+}

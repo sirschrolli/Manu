@@ -394,6 +394,19 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ShadowItems.SOUL_BERRIES, "Soul Berries", "Seelenbeeren");
         lore("soul_berries", "Lets you see in the dark for a while", "Lässt dich eine Weile im Dunkeln sehen");
 
+        // Schattenholz, Acker, Pfad, Dämmerkorn
+        block(ShadowBlocks.SHADOW_DOOR, "Shadow Door", "Schattenholztür");
+        block(ShadowBlocks.SHADOW_TRAPDOOR, "Shadow Trapdoor", "Schattenholzfalltür");
+        block(ShadowBlocks.SHADOW_FENCE, "Shadow Fence", "Schattenholzzaun");
+        block(ShadowBlocks.SHADOW_FENCE_GATE, "Shadow Fence Gate", "Schattenholzzauntor");
+        block(ShadowBlocks.SHADOW_FARMLAND, "Shadow Farmland", "Schattenackerland");
+        block(ShadowBlocks.SHADOW_PATH, "Shadow Path", "Schattenpfad");
+        block(ShadowBlocks.DUSKGRAIN, "Duskgrain", "Dämmerkorn");
+        item(ShadowItems.DUSKGRAIN_SEEDS, "Duskgrain Seeds", "Dämmerkorn-Saat");
+        item(ShadowItems.DUSKGRAIN, "Duskgrain", "Dämmerkorn");
+        item(ShadowItems.DUSK_BREAD, "Dusk Bread", "Dämmerbrot");
+        lore("dusk_bread", "The bread of the Umbrer – dark, hearty and filling", "Das Brot der Umbrer – dunkel, kräftig und sättigend");
+
         // Kreaturen
         creature(ModEntities.SHADE_STALKER, ShadowItems.SHADE_STALKER_SPAWN_EGG, "Shade Stalker", "Schattenpirscher", "Schattenpirscher");
         creature(ModEntities.CRYSTAL_CRAWLER, ShadowItems.CRYSTAL_CRAWLER_SPAWN_EGG, "Crystal Crawler", "Kristallkriecher", "Kristallkriecher");
@@ -401,6 +414,42 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.MOON_STAG, ShadowItems.MOON_STAG_SPAWN_EGG, "Moon Stag", "Mondhirsch", "Mondhirsch");
         creature(ModEntities.GLIMMER_MOTH, ShadowItems.GLIMMER_MOTH_SPAWN_EGG, "Glimmer Moth", "Glimmerfalter", "Glimmerfalter");
         item(ShadowItems.SHADOW_ESSENCE, "Shadow Essence", "Schattenessenz");
+
+        // Die Umbrer
+        creature(ModEntities.UMBRER, ShadowItems.UMBRER_SPAWN_EGG, "Umbrer", "Umbrer", "Umbrer");
+        creature(ModEntities.UMBRER_GUARD, ShadowItems.UMBRER_GUARD_SPAWN_EGG, "Umbrer Guard", "Umbrer-Wächter", "Umbrer-Wächter");
+        text("entity.kingdomsatwar.umbrer.moonsmith", "Moonsmith", "Mondschmied");
+        text("entity.kingdomsatwar.umbrer.herbalist", "Herbalist", "Kräuterkundige");
+        text("entity.kingdomsatwar.umbrer.crystal_cutter", "Crystal Cutter", "Kristallschleifer");
+        text("entity.kingdomsatwar.umbrer.seer", "Seer", "Seher");
+        text("entity.kingdomsatwar.umbrer.farmer", "Dusk Farmer", "Dämmerbauer");
+        text("entity.kingdomsatwar.umbrer.guard", "Umbrer Guard", "Umbrer-Wächter");
+        text("entity.kingdomsatwar.umbrer_guard.greeting1", "Welcome, wanderer from the light.", "Willkommen, Wanderer aus dem Licht.");
+        text("entity.kingdomsatwar.umbrer_guard.greeting2", "The lanterns keep the shadows away. Stay in their glow.",
+                "Die Laternen halten die Schatten fern. Bleib in ihrem Schein.");
+        text("entity.kingdomsatwar.umbrer_guard.greeting3", "We have kept watch ever since the seal was closed.",
+                "Wir halten Wache, seit das Siegel geschlossen wurde.");
+        text("entity.kingdomsatwar.umbrer_guard.greeting4", "Beware the stalkers. Look them in the eye – never look away.",
+                "Hüte dich vor den Pirschern. Sieh ihnen in die Augen – schau nie weg.");
+        text("entity.kingdomsatwar.umbrer_guard.greeting5", "Moonsilver opens every door in this village.",
+                "Mondsilber öffnet dir jede Tür in diesem Dorf.");
+        // Die Chronik der Umbrer (beim Seher zu haben)
+        text("book.kingdomsatwar.umbrer_chronicle.title", "Chronicle of the Umbrer", "Chronik der Umbrer");
+        text("book.kingdomsatwar.umbrer_chronicle.page1",
+                "THE CHRONICLE OF THE UMBRER\n\nwritten down by Ilvaren, seer of the Glimmer Meadows\n\nfor those who come from the light",
+                "DIE CHRONIK DER UMBRER\n\naufgeschrieben von Ilvaren, Seher der Glimmerweiten\n\nfür jene, die aus dem Licht kommen");
+        text("book.kingdomsatwar.umbrer_chronicle.page2",
+                "Before the seal, the world was one. We Umbrer lived in the valleys between light and dark – until Nyxar awoke, the dragon who devours light.",
+                "Vor dem Siegel war die Welt eins. Wir Umbrer lebten in den Tälern zwischen Licht und Dunkel – bis Nyxar erwachte, der Drache, der das Licht frisst.");
+        text("book.kingdomsatwar.umbrer_chronicle.page3",
+                "Six dragons stood against him. They could not slay him, but they locked him away – and with him this whole land – behind a seal. We stayed to guard him.",
+                "Sechs Drachen stellten sich ihm entgegen. Töten konnten sie ihn nicht, doch sie verschlossen ihn – und mit ihm dieses ganze Land – hinter einem Siegel. Wir blieben, um ihn zu bewachen.");
+        text("book.kingdomsatwar.umbrer_chronicle.page4",
+                "For centuries we have lived in eternal twilight. We build towers of shadow stone, grow duskgrain and trade in moonsilver. The shades that stalk between the trees are Nyxar's brood.",
+                "Seit Jahrhunderten leben wir im ewigen Zwielicht. Wir bauen Türme aus Schattenstein, ziehen Dämmerkorn und tauschen in Mondsilber. Die Schatten, die zwischen den Bäumen pirschen, sind Nyxars Brut.");
+        text("book.kingdomsatwar.umbrer_chronicle.page5",
+                "Now the seal is broken. Nyxar sleeps in his citadel, but he will wake. Wanderer from the light: gather nightsteel and abyssite. And never look away when a shadow looks at you.",
+                "Nun ist das Siegel gebrochen. Nyxar schläft in seiner Zitadelle, doch er wird erwachen. Wanderer aus dem Licht: Sammle Nachtstahl und Abyssit. Und schau nie weg, wenn dich ein Schatten ansieht.");
         lore("shadow_essence", "What remains of a shade – sought after by the Umbrer", "Was von einem Schatten bleibt – begehrt bei den Umbrern");
 
         // Erze und Speicherblöcke

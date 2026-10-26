@@ -61,6 +61,10 @@ public record ShadowTreeFeature(Kind kind) implements Feature {
 
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
+        // Dörfer der Umbrer liegen auf Lichtungen
+        if (io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.isNearVillage(level, origin, this.kind == Kind.GIANT ? 9 : 5)) {
+            return false;
+        }
         BlockState ground = level.getBlockState(origin.below());
         boolean wet = this.kind == Kind.MARSH && level.getFluidState(origin).isSource();
         if (!wet && !isSoil(ground) || !wet && !level.getBlockState(origin).canBeReplaced()) {

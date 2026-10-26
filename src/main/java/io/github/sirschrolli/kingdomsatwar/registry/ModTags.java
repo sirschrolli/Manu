@@ -75,6 +75,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));
         /** Wo der Siegelkreis liegen kann (ebenes, offenes Land). */
         public static final TagKey<Biome> HAS_SEAL_CIRCLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_seal_circle"));
+        /** Wo in der Schattenwelt Dörfer der Umbrer liegen können. */
+        public static final TagKey<Biome> HAS_UMBRER_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_umbrer_village"));
 
         private static java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> nestTags() {
             java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> tags =
