@@ -24,7 +24,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import armor_worn  # noqa: E402
+import armor_art  # noqa: E402
 import ashlands_textures  # noqa: E402
 import block_textures  # noqa: E402
 import boss_textures  # noqa: E402
@@ -346,7 +346,7 @@ def build_all() -> dict[str, Image.Image]:
     shadow_textures.build(put)
     shadow_gear_textures.build(put)
     equipment_textures.build_entity(put)
-    armor_worn.build(put)
+    armor_art.build(put)
     plants()
     items()
     items_gear.build(put)

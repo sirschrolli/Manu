@@ -644,9 +644,15 @@ final class Showcase {
         int oz = 180;
         steps.add(Step.command("difficulty easy"));
         steps.add(Step.server(level -> {
-            fill(level, new BlockPos(-6, ground - 1, oz - 12), new BlockPos(44, ground - 1, oz + 14), Blocks.STONE_BRICKS.defaultBlockState());
-            fill(level, new BlockPos(-6, ground, oz - 12), new BlockPos(44, ground + 8, oz + 14), Blocks.AIR.defaultBlockState());
+            fill(level, new BlockPos(-6, ground - 1, oz - 12), new BlockPos(50, ground - 1, oz + 18), Blocks.STONE_BRICKS.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 12), new BlockPos(50, ground + 8, oz + 18), Blocks.AIR.defaultBlockState());
             List<List<Item>> sets = new ArrayList<>();
+            // Vergleich: drei Vanilla-Rüstungen vorneweg
+            sets.add(List.of(Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.IRON_SWORD));
+            sets.add(List.of(Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS,
+                    Items.DIAMOND_SWORD));
+            sets.add(List.of(Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS,
+                    Items.NETHERITE_BOOTS, Items.NETHERITE_SWORD));
             sets.add(List.of(ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
                     ModItems.STEEL_BOOTS.get(), ModItems.STEEL_SWORD.get()));
             sets.add(List.of(ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(), ModItems.KONTERIT_LEGGINGS.get(),
@@ -696,29 +702,26 @@ final class Showcase {
         steps.add(Step.command("time set 6000"));
         steps.add(Step.waitTicks(40));
         steps.add(Step.hud(false));
-        steps.add(tp(9.5, 2.0, oz + 13.0, 180, 9));
+        steps.add(tp(12.5, 2.5, oz + 16.0, 180, 10));
         steps.add(Step.waitForChunks(200));
         steps.add(Step.waitTicks(100));
         steps.add(Step.screenshot("armor_all"));
-        double[] groups = {2.5, 8.5, 14.5};
+        double[] groups = {3.0, 9.0, 15.0, 21.0};
         for (int k = 0; k < groups.length; k++) {
             steps.add(tp(groups[k] + 0.5, 0, oz + 4.6, 180, 4));
             steps.add(Step.waitTicks(25));
             steps.add(Step.screenshot("armor_front_" + k));
         }
-        steps.add(tp(17.5, 0, oz + 4.2, 180, 4));
-        steps.add(Step.waitTicks(25));
-        steps.add(Step.screenshot("armor_front_3"));
-        steps.add(tp(5.5, 0, oz - 3.6, 0, 4));
+        steps.add(tp(4.5, 0, oz - 3.6, 0, 4));
         steps.add(Step.waitTicks(25));
         steps.add(Step.screenshot("armor_back"));
-        steps.add(tp(14.5, 0, oz - 3.6, 0, 4));
+        steps.add(tp(13.5, 0, oz - 3.6, 0, 4));
         steps.add(Step.waitTicks(25));
         steps.add(Step.screenshot("armor_back_2"));
         steps.add(tp(5.0, 0, oz + 10.0, 180, 22));
         steps.add(Step.waitTicks(25));
         steps.add(Step.screenshot("armor_babies"));
-        steps.add(tp(15.0, 0, oz + 10.0, 180, 22));
+        steps.add(tp(17.0, 0, oz + 10.0, 180, 22));
         steps.add(Step.waitTicks(25));
         steps.add(Step.screenshot("armor_babies_2"));
         steps.add(Step.hud(true));
