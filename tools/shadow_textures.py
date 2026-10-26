@@ -6,7 +6,7 @@ Texturen der Schattenwelt – Pflanzen und Kristalldrusen (die vollen Blöcke ko
   * block/ghostcap(_emissive)           – Geisterpilze mit leuchtenden Hüten
   * block/shadow_sprouts                – fedrige Schattenhalme (grau, Farbe aus dem Biom)
   * block/pale_grass                    – dürre, fahle Halme der Bleichen Öde
-  * block/soul_berry_bush_stage0..3, item/soul_berries – Seelenbeeren
+  * block/soul_berry_bush_stage0..3 – Seelenbeerenstrauch (die Beeren als Gegenstand: tools/items_food.py)
   * block/glimmer_vines(_plant)         – Glimmerranken
 
 Wird von tools/generate_textures.py aufgerufen (build(put)).
@@ -235,28 +235,6 @@ def soul_berry_bush(stage: int) -> Image.Image:
     return pa.sprite(SOUL_BUSH[stage], colors)
 
 
-SOUL_BERRIES_ITEM = [
-    "", "", "", "",
-    ".........ll.....",
-    "........lhl.....",
-    "......m.l.......",
-    ".....m..m.......",
-    "....bBb.bBb.....",
-    "...bBwbbBwbb....",
-    "...bbbbbbbbb....",
-    "....bbb.bbb.....",
-    "......bBb.......",
-    ".....bBwbb......",
-    ".....bbbbb......",
-    "......bbb.......",
-]
-
-
-def soul_berries_item() -> Image.Image:
-    return pa.sprite(SOUL_BERRIES_ITEM, {"l": BUSH_LEAF["l"], "h": BUSH_LEAF["h"], "m": BUSH_LEAF["m"],
-                                         "b": hexc("#1aa8a4"), "B": hexc("#4ae8e0"), "w": hexc("#e8fffd")})
-
-
 VINE_COLORS = {"d": hexc("#2a3450"), "m": hexc("#44587e"), "l": hexc("#6a86b0"), "h": hexc("#9cb6dc"),
                "g": hexc("#c8e0ff"), "G": hexc("#f2f8ff")}
 
@@ -320,7 +298,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/pale_grass", pale_grass())
     for stage in range(4):
         put(f"block/soul_berry_bush_stage{stage}", soul_berry_bush(stage))
-    put("item/soul_berries", soul_berries_item())
     head, plant = glimmer_vines()
     put("block/glimmer_vines", head)
     put("block/glimmer_vines_plant", plant)

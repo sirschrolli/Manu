@@ -11,7 +11,7 @@ Texturen rund um den Siegelkreis und die Geschichte „Das Siegel“:
   * block/seal_plate_00..24 (+ _glow) – das Siegel: ein großes Bild aus 5×5 Platten (Kreise, Hexagramm, sechs
     Edelsteine der Elemente, in der Mitte das versiegelte Dunkel)
   * block/shadow_portal          – das Schattentor (32 Bilder Animation, nahtlos)
-  * item/<element>_seal_shard, item/chronicle
+  * (Siegelsplitter und Chronik als Gegenstände: tools/items_materials.py und tools/items_misc.py)
   * gui/chronicle                – das aufgeschlagene Buch der Chronik mit Symbolen (512×256)
 
 Wird von tools/generate_textures.py aufgerufen (build(put)).
@@ -548,7 +548,6 @@ def seal_emblem() -> tuple[Image.Image, Image.Image]:
         for x in range(S):
             d = math.hypot(x - c, y - c)
             if d < 9.0:
-                v = d / 9.0
                 color = VOID[4] if d < 1.6 else VOID[3] if d < 3.2 else VOID[2] if d < 5.5 else VOID[1]
                 px[x, y] = color
                 if d < 3.2:
@@ -629,16 +628,6 @@ def shadow_portal(frames: int = 32) -> Image.Image:
 # Gegenstände
 # =============================================================================
 
-def seal_shard(element: str) -> Image.Image:
-    col = ELEMENT_COLORS[element]
-    img = pa.sprite(SHARD, {"o": col[0], "k": col[1], "h": col[2], "w": col[3]})
-    px = img.load()
-    # Glanzpunkt und dunkle Kante unten
-    px[8, 3] = col[3]
-    px[7, 2] = col[3]
-    return img
-
-
 CHRONICLE = """
 ................
 ..oooooooooooo..
@@ -657,25 +646,6 @@ CHRONICLE = """
 ..oooooooooooo..
 ................
 """
-
-
-def chronicle_item() -> Image.Image:
-    colors = {
-        "o": hexc("#1e0c08"), "R": hexc("#6e2418"), "d": hexc("#4a160e"), "p": hexc("#e8dcb8"),
-        "g": hexc("#c8a050"), "y": hexc("#f0d58e"),
-    }
-    img = pa.sprite(CHRONICLE, colors)
-    px = img.load()
-    # Lederstruktur: einige hellere Flecken
-    rng = random.Random(7801)
-    for _ in range(10):
-        x, y = rng.randrange(2, 14), rng.randrange(2, 13)
-        if px[x, y] == colors["R"]:
-            px[x, y] = hexc("#7e2c1e")
-    # Seitenränder (Papierlagen)
-    for y in range(2, 14):
-        px[14, y] = hexc("#d8caa0") if y % 2 else colors["p"]
-    return img
 
 
 # =============================================================================
@@ -990,10 +960,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
         put(f"block/seal_socket_{element}", empty)
         put(f"block/seal_socket_{element}_filled", filled)
         put(f"block/seal_socket_{element}_filled_glow", glow)
-        put(f"item/{element}_seal_shard", seal_shard(element))
     for i, (tile, glow) in enumerate(seal_plates()):
         put(f"block/seal_plate_{i:02d}", tile)
         put(f"block/seal_plate_{i:02d}_glow", glow)
     put("block/shadow_portal", shadow_portal())
-    put("item/chronicle", chronicle_item())
     put("gui/chronicle", chronicle_gui())

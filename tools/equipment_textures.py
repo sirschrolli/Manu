@@ -21,7 +21,7 @@ from typing import Callable
 from PIL import Image
 
 import pixelart as pa
-from pixelart import CLEAR, Color, hexc, mix
+from pixelart import CLEAR, Color, hexc
 
 # =============================================================================
 # Farben (o = Umriss, a..f = dunkel -> hell)
@@ -38,9 +38,6 @@ KONTERIT = tones("#2a0c30", "#4f1958", "#76287e", "#a03ea6", "#c763cc", "#e59ae8
 DRACONIUM = tones("#120406", "#33090d", "#5a1015", "#86191c", "#b42e22", "#e0582c", "#ffb052")
 WYVERNIT = tones("#1d3550", "#34577a", "#5683ab", "#80acd0", "#abcfe9", "#d4ebfa", "#ffffff")
 GOLD = {"g": hexc("#6e4a10"), "G": hexc("#c89432"), "y": hexc("#f6d978"), "Y": hexc("#fff4c4")}
-WOOD = {"h": hexc("#2e1d0e"), "i": hexc("#5a3b1e"), "j": hexc("#86592e"), "k": hexc("#b07c48")}
-DARK_WOOD = {"h": hexc("#140a0a"), "i": hexc("#2e1416"), "j": hexc("#4a2224"), "k": hexc("#6e3434")}
-LEATHER = {"l": hexc("#3a2414"), "L": hexc("#6e4628"), "m": hexc("#9a6a40")}
 BLUE = {"x": hexc("#14245a"), "X": hexc("#2c4ea8"), "z": hexc("#6a92e6")}
 EMBER = {"x": hexc("#7a1400"), "X": hexc("#e2541a"), "z": hexc("#ffd36a")}
 CRYSTAL = {"x": hexc("#5a1a62"), "X": hexc("#e070e8"), "z": hexc("#fff0ff")}
@@ -72,220 +69,9 @@ def h01(*args) -> float:
 # Werkzeuge und Waffen (16x16)
 # =============================================================================
 
-SWORD = [
-    "..............of",
-    ".............ofe",
-    "............ofdo",
-    "...........ofdco",
-    "..........oedco.",
-    ".........oedco..",
-    "........oedco...",
-    "...g...odcbo....",
-    "..gGg.odcbo.....",
-    "...gGodcbo......",
-    "....gyooo.......",
-    "...hjgGg........",
-    "..hjh.gGg.......",
-    ".hkh...g........",
-    "gGgh............",
-    ".g..............",
-]
-
-PICKAXE = [
-    "................",
-    "....oooooo......",
-    "...odeeeddoo....",
-    "....oocbbcdeo...",
-    "........oobdco..",
-    ".........hoodco.",
-    "........hkhobdo.",
-    ".......hkjh.obco",
-    "......hkjh..obco",
-    ".....hkjh....oco",
-    "....hkjh.....oo.",
-    "...hkjh.........",
-    "..hkjh..........",
-    ".hkjh...........",
-    ".hjh............",
-    "..h.............",
-]
-
-AXE = [
-    ".....oooo.......",
-    "....offeeoo.....",
-    "...ofeeeddcohh..",
-    "..ofeeddccbbkjh.",
-    "..ofeddccbbkjh..",
-    "..ofddccbakjh...",
-    "..ofdcbaokjh....",
-    "...ocbookjh.....",
-    "....oohkjh......",
-    ".....hkjh.......",
-    "....hkjh........",
-    "...hkjh.........",
-    "..hkjh..........",
-    ".hkjh...........",
-    ".hjh............",
-    "..h.............",
-]
-
-SHOVEL = [
-    "............oo..",
-    "...........ofeo.",
-    "..........ofeedo",
-    ".........ofeddco",
-    "........ofddcbo.",
-    "........oedcbo..",
-    "........ocboo...",
-    ".......hkjo.....",
-    "......hkjh......",
-    ".....hkjh.......",
-    "....hkjh........",
-    "...hkjh.........",
-    "..hkjh..........",
-    ".hkjh...........",
-    ".hjh............",
-    "..h.............",
-]
-
-HOE = [
-    "................",
-    ".....oooooo.....",
-    "....oeeedddoo...",
-    "....obccbbkhho..",
-    ".....ooo.hkjho..",
-    ".........hkjh...",
-    "........hkjh....",
-    ".......hkjh.....",
-    "......hkjh......",
-    ".....hkjh.......",
-    "....hkjh........",
-    "...hkjh.........",
-    "..hkjh..........",
-    ".hkjh...........",
-    ".hjh............",
-    "..h.............",
-]
-
-# Draconium-Schwert: gewellte Flammenklinge, goldene Parierstange mit Glutstein
-DRACONIUM_SWORD = [
-    ".............ooo",
-    "............ofXo",
-    "...........oeXdo",
-    "..........ofdco.",
-    ".........oeXco..",
-    "........ofdcbo..",
-    ".......oeXcbo...",
-    "..gg..ofdcbo....",
-    "..gYgoeXbbo.....",
-    "...gGXdcbo......",
-    "....gXzGg.......",
-    "...hjgGyGg......",
-    "..hjh.gGGg......",
-    ".hkh...gg.......",
-    "gXgh............",
-    ".g..............",
-]
-
-# Draconium-Axt: zweischneidige Bartaxt mit Glutadern
-DRACONIUM_AXE = [
-    ".....oooo.......",
-    "....oXzddoo.....",
-    "...oXdddccbogg..",
-    "..oXddccbbaaGyg.",
-    "..oXdccbbaaGyg..",
-    "..oXccbbaakjh...",
-    "..oXcbaaokjh....",
-    "...oxaookjh.....",
-    "....oohkjh......",
-    ".....hkjh.......",
-    "....hkjh........",
-    "...hkjh.........",
-    "..hkjh..........",
-    ".hkjh...........",
-    "gGjh............",
-    ".g..............",
-]
-
 # =============================================================================
 # Rüstungs-Symbole (Umrisse wie die üblichen Rüstungsteile)
 # =============================================================================
-
-HELMET = [
-    "................",
-    "................",
-    "................",
-    ".....oooooo.....",
-    "....oeffeedo....",
-    "...oeddddddco...",
-    "...odyyyyyycbo..",
-    "...odcccccbbao..",
-    "...ooooooooooo..",
-    "...odxdcdcxbao..",
-    "...ocdcdcdcbao..",
-    "....oao..oao....",
-    "................",
-    "................",
-    "................",
-    "................",
-]
-
-CHESTPLATE = [
-    "................",
-    "................",
-    ".ooooo....ooooo.",
-    ".oeffo....odcbo.",
-    ".oedcoo..oocbao.",
-    ".odcbbeooecbbao.",
-    ".oyyyyeffecyyyyo",
-    ".oaoodeffedooao.",
-    "...odeefeddco...",
-    "...odedfedcbo...",
-    "...odeefeddbo...",
-    "...oyyddfdyyyo..",
-    "...ocbyyyybbao..",
-    "....occdcbbao...",
-    ".....oooooooo...",
-    "................",
-]
-
-LEGGINGS = [
-    "................",
-    "................",
-    "....oooooooo....",
-    "...oyyyyyyyyo...",
-    "...oeffeedddo...",
-    "...odedcdcdco...",
-    "...oyydcdcyyo...",
-    "...oyyyooyyyo...",
-    "...oedco.odco...",
-    "...oedco.odbo...",
-    "...ofxco.oxbo...",
-    "...odcbo.ocbo...",
-    "...odcbo.ocbo...",
-    "...oooooooooo...",
-    "................",
-    "................",
-]
-
-BOOTS = [
-    "................",
-    "................",
-    "................",
-    "....ooo..ooo....",
-    "...oeeo..odco...",
-    "...oedo..odbo...",
-    "...yydo..odyy...",
-    "...yyyo..oyyy...",
-    "...oyyyo.yyyo...",
-    "..oddyyo.yybbo..",
-    ".oeeddco.oddcbo.",
-    ".oddccbo.ocbbao.",
-    ".oooooo...oooooo",
-    "................",
-    "................",
-    "................",
-]
 
 # Edelstein-Krone
 CROWN = [
@@ -374,69 +160,8 @@ def material_colors(base: dict[str, Color], *extra: dict[str, Color]) -> dict[st
     return colors
 
 
-def scale_pattern(img: Image.Image, colors: dict[str, Color], accent: dict[str, Color]) -> Image.Image:
-    """Legt ein Schuppenmuster über ein Rüstungssymbol (Bögen in versetzten Reihen)."""
-    out = img.copy()
-    px = out.load()
-    outline_col = colors["o"]
-    ramp = [colors[k] for k in "abcdef"]
-    gold_keys = {GOLD["y"], GOLD["G"], GOLD["g"], GOLD["Y"]}
-    for y in range(16):
-        for x in range(16):
-            c = px[x, y]
-            if c[3] == 0 or c == outline_col:
-                continue
-            if c in gold_keys:
-                # Zierbänder werden zum Grat der Drachenart
-                px[x, y] = accent["X"] if c in (GOLD["y"], GOLD["Y"]) else accent["x"]
-                continue
-            # Helligkeit des Originalpixels beibehalten, Schuppenkanten abdunkeln
-            try:
-                idx = ramp.index(c)
-            except ValueError:
-                continue
-            row = y // 2
-            offset = (row % 2) * 2
-            local = (x + offset) % 4
-            if y % 2 == 1 and local in (0, 3):
-                idx = max(0, idx - 1)
-            px[x, y] = ramp[idx]
-    return out
-
-
 def build(put: Callable[[str, Image.Image], None]) -> None:
-    # --- Stahl ---
-    steel_tools = material_colors(STEEL, WOOD, GOLD)
-    put("item/steel_sword", pa.sprite(SWORD, material_colors(STEEL, LEATHER, GOLD, {"h": LEATHER["l"], "j": LEATHER["L"], "k": LEATHER["m"]})))
-    put("item/steel_pickaxe", pa.sprite(PICKAXE, steel_tools))
-    put("item/steel_axe", pa.sprite(AXE, steel_tools))
-    put("item/steel_shovel", pa.sprite(SHOVEL, steel_tools))
-    put("item/steel_hoe", pa.sprite(HOE, steel_tools))
-    steel_armor = material_colors(STEEL, GOLD, BLUE)
-    put("item/steel_helmet", pa.sprite(HELMET, steel_armor))
-    put("item/steel_chestplate", pa.sprite(CHESTPLATE, steel_armor))
-    put("item/steel_leggings", pa.sprite(LEGGINGS, steel_armor))
-    put("item/steel_boots", pa.sprite(BOOTS, steel_armor))
-
-    # --- Konterit: leichte Rüstung, silbrige Kanten statt Gold, Kristall-Einlagen ---
-    silver = {"g": STEEL["b"], "G": STEEL["d"], "y": STEEL["e"], "Y": STEEL["f"]}
-    konterit = material_colors(KONTERIT, silver, CRYSTAL)
-    put("item/konterit_helmet", pa.sprite(HELMET, konterit))
-    put("item/konterit_chestplate", pa.sprite(CHESTPLATE, konterit))
-    put("item/konterit_leggings", pa.sprite(LEGGINGS, konterit))
-    put("item/konterit_boots", pa.sprite(BOOTS, konterit))
-
-    # --- Draconium-Waffen ---
-    draconium = material_colors(DRACONIUM, DARK_WOOD, GOLD, EMBER)
-    put("item/draconium_sword", pa.sprite(DRACONIUM_SWORD, draconium))
-    put("item/draconium_axe", pa.sprite(DRACONIUM_AXE, draconium))
-
-    # --- Drachenschuppen-Rüstungen ---
-    for kind, (pal, accent) in SCALES.items():
-        colors = material_colors(pal, GOLD, accent)
-        for name, art in (("helmet", HELMET), ("chestplate", CHESTPLATE), ("leggings", LEGGINGS), ("boots", BOOTS)):
-            put(f"item/{kind}_dragon_scale_{name}", scale_pattern(pa.sprite(art, colors), colors, accent))
-
+    # Waffen, Werkzeuge und Rüstungs-Symbole: siehe tools/items_gear.py und tools/items_armor.py
     # --- Gleiter, Krone, Drachenpanzer ---
     glider = material_colors(WYVERNIT, {"x": hexc("#e8dcc8")})
     put("item/wyvernit_glider", pa.sprite(GLIDER, glider))

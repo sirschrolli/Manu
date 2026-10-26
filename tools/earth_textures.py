@@ -19,7 +19,6 @@ from typing import Callable
 from PIL import Image
 
 import pixelart as pa
-from pixelart import hexc
 
 N = 16
 

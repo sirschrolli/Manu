@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Texturen rund um die Armee: Spawn-Eier der Soldaten und Banditen, Kommandostab, Rekrutierungstisch
-und das Anwerbe-Fenster. Wird von tools/generate_textures.py aufgerufen (build(put)).
+Texturen rund um die Armee: Kommandostab, Rekrutierungstisch und das Anwerbe-Fenster
+(Spawn-Eier der Soldaten und Banditen: tools/items_eggs.py). Wird von tools/generate_textures.py aufgerufen (build(put)).
 """
 from __future__ import annotations
 
@@ -10,152 +10,8 @@ from PIL import Image
 import pixelart as pa
 from pixelart import CLEAR, hexc
 
-STEEL = {"o": hexc("#23272e"), "a": hexc("#3f454f"), "b": hexc("#5c636e"), "c": hexc("#7e8692"), "d": hexc("#a3abb6"),
-         "e": hexc("#c9d0d8"), "f": hexc("#eef2f6")}
-CHAIN = {"k": hexc("#535a64"), "K": hexc("#6f7782")}
 BLUE = {"U": hexc("#121d44"), "u": hexc("#1f3373"), "V": hexc("#2a4796"), "v": hexc("#3a5fb8"), "w": hexc("#5a82d6")}
 GOLD = {"g": hexc("#8c5f16"), "G": hexc("#d8a63a"), "y": hexc("#f7dc80")}
-RED = {"Q": hexc("#4a0c10"), "q": hexc("#7a161b"), "R": hexc("#a82428"), "r": hexc("#cf4438"), "s": hexc("#ec8a74")}
-WHITE = {"W": hexc("#f0f0f0"), "Z": hexc("#0a0a0d"), "I": hexc("#3d5fae")}
-
-
-def skin(base: str = "light") -> dict:
-    tones = {
-        "light": ("#c98d6c", "#e3ae8b", "#f1c9a8"),
-        "tan": ("#8d5a39", "#a87251", "#bd8c69"),
-    }[base]
-    return {"1": hexc(tones[0]), "2": hexc(tones[1]), "3": hexc(tones[2])}
-
-
-def hair(name: str) -> dict:
-    tones = {"brown": ("#2a180e", "#5e3b22", "#7a5030"), "blond": ("#6e5020", "#c39c4a", "#ddc070"),
-             "black": ("#0f0c0d", "#2d2522", "#40362f")}[name]
-    return {"h": hexc(tones[0]), "H": hexc(tones[1]), "j": hexc(tones[2])}
-
-
-# =============================================================================
-# Spawn-Eier (Eiform mit Helm bzw. Kapuze, Gesicht und Kleidung der Lebewesen)
-# =============================================================================
-
-SWORDSMAN_EGG = [
-    "................",
-    "......oooo......",
-    "....oodeedoo....",
-    "...odeffeddco...",
-    "..odeefeedccbo..",
-    "..obbbbccbbbbo..",
-    ".okK223cb322Kko.",
-    ".oKkWI2cb2IWkKo.",
-    ".okK22211222Kko.",
-    ".oKkHHMMMMHHkKo.",
-    ".okKkHHHHHHkKko.",
-    "..oVVVVGGVVVVo..",
-    "..oGGGGyyGGGGo..",
-    "...oVVVGGVVVo...",
-    ".....ouGGuo.....",
-    "................",
-]
-
-ARCHER_EGG = [
-    "................",
-    "......oooo......",
-    "....ooFFFFoo....",
-    "...oFJJFFFFfo...",
-    "..oFJFFFFFFFfo..",
-    "..oFfjHjjHjfFo..",
-    ".oFFf2333322fFo.",
-    ".oFF2WI22IW2fFo.",
-    ".oFFf2221222fFo.",
-    ".oFFf22MM222fFo.",
-    ".oFFFf2222fFFFo.",
-    "..oLLLlxxLLLLo..",
-    "..oLLLLlxLLvGo..",
-    "...oLLLLlLLLo...",
-    ".....olLLlo.....",
-    "................",
-]
-
-KNIGHT_EGG = [
-    "................",
-    "......oooo......",
-    "....oodeedoo....",
-    "...odeffeedco...",
-    "..odeffffedcbo..",
-    "..odeeffeedcbo..",
-    ".obZZZZddZZZZbo.",
-    ".ocddeeffeedcco.",
-    ".ocdeeffeedZcZo.",
-    ".obcddeedddZcbo.",
-    ".oabbbccbbbbbao.",
-    "..oVVVVGGVVVVo..",
-    "..oGGGGyyGGGGo..",
-    "...oVVVGGVVVo...",
-    ".....ouGGuo.....",
-    "................",
-]
-
-CAPTAIN_EGG = [
-    "........rs......",
-    "......oorRo.....",
-    "....oodgGdoo....",
-    "...odeffeddco...",
-    "..odeefeedccbo..",
-    "..ogGGyyGGGGgo..",
-    ".odc22333322cbo.",
-    ".oec2WI22IW2cbo.",
-    ".odcH222122Hcbo.",
-    ".ocbHHMMMMHHbbo.",
-    ".obbjHHHHHHjbao.",
-    "..odRdeedcRcbo..",
-    "..oyyGGyyGGyyo..",
-    "...oRRRqqRRRo...",
-    ".....oqRRqo.....",
-    "................",
-]
-
-BANDIT_EGG = [
-    "................",
-    "......oooo......",
-    "....ooBBBBoo....",
-    "...oBnnBBBBbo...",
-    "..oBnBBBBBBBbo..",
-    "..oBbiiiiiibBo..",
-    ".oBBi1iiii1ibBo.",
-    ".oBBiWI22IWibBo.",
-    ".oBBSSSzSSSSbBo.",
-    ".oBBSSSSSSsSbBo.",
-    ".oBBbSsSSSSbbBo.",
-    "..oLLLlxxlLLLo..",
-    "..oLLLLxxLmLLo..",
-    "...oLLLxxLLLo...",
-    ".....olLLlo.....",
-    "................",
-]
-
-
-def egg(rows: list[str], colors: dict) -> Image.Image:
-    return pa.sprite(rows, colors)
-
-
-def spawn_eggs() -> dict[str, Image.Image]:
-    base = {**STEEL, **CHAIN, **BLUE, **GOLD, **WHITE}
-    out = {}
-    out["swordsman_spawn_egg"] = egg(SWORDSMAN_EGG, {**base, **skin("light"), **hair("brown"), "M": hexc("#6a2a22")})
-    archer = {**base, **skin("light"), "H": hexc("#c39c4a"), "j": hexc("#ddc070"), "M": hexc("#8a3a30"),
-              "F": hexc("#376838"), "J": hexc("#4a8248"), "f": hexc("#1c3a22"), "o": hexc("#13281a"),
-              "L": hexc("#774d2f"), "l": hexc("#3c2617"), "x": hexc("#c8bb96")}
-    out["archer_spawn_egg"] = egg(ARCHER_EGG, archer)
-    out["knight_spawn_egg"] = egg(KNIGHT_EGG, base)
-    captain = {**base, **RED, **skin("light"), "H": hexc("#5e3b22"), "j": hexc("#7a5030"), "M": hexc("#4a1e14")}
-    captain["s"] = hexc("#f2ece0")
-    out["captain_spawn_egg"] = egg(CAPTAIN_EGG, captain)
-    for name, hood, mask, s_ in (("bandit", ("#241a13", "#33261b", "#453425", "#584432"), ("#4c1614", "#6a201c", "#88302a"), "tan"),
-                                 ("bandit_archer", ("#20271a", "#2d3624", "#3c4730", "#4e5b3e"), ("#19191b", "#252528", "#333337"), "light")):
-        colors = {**base, **skin(s_), "o": hexc("#120d0a"), "b": hexc(hood[0]), "B": hexc(hood[1]), "n": hexc(hood[3]),
-                  "i": hexc("#0f0b08"), "S": hexc(mask[1]), "s": hexc(mask[0]), "z": hexc(mask[2]),
-                  "L": hexc("#583822"), "l": hexc("#3c2617"), "x": hexc("#80755e"), "m": hexc("#b0845a")}
-        out[f"{name}_spawn_egg"] = egg(BANDIT_EGG, colors)
-    return out
 
 
 # =============================================================================
@@ -348,8 +204,6 @@ def recruit_gui() -> Image.Image:
 
 
 def build(put) -> None:
-    for name, img in spawn_eggs().items():
-        put(f"item/{name}", img)
     put("item/command_baton", baton())
     put("block/recruitment_table_cloth", table_cloth())
     put("block/recruitment_table_banner", table_banner())
