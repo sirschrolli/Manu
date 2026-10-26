@@ -55,6 +55,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.VERDANTIS, io.github.sirschrolli.kingdomsatwar.client.model.geom.VerdantisGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.TERRAGON, io.github.sirschrolli.kingdomsatwar.client.model.geom.TerragonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.VOLTARION, io.github.sirschrolli.kingdomsatwar.client.model.geom.VoltarionGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.THALASSA, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThalassaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.VINELING, io.github.sirschrolli.kingdomsatwar.client.model.geom.VinelingGeometry::createLayer);
     }
 
@@ -92,6 +93,10 @@ public final class ClientSetup {
                 new io.github.sirschrolli.kingdomsatwar.client.boss.VoltarionModel(context.bakeLayer(ModModelLayers.VOLTARION)),
                 KingdomsAtWar.id("textures/entity/boss/voltarion.png"), KingdomsAtWar.id("textures/entity/boss/voltarion_glow.png"),
                 2.1f, 4.2f, 4.2f));
+        event.registerEntityRenderer(ModEntities.THALASSA.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.ThalassaModel(context.bakeLayer(ModModelLayers.THALASSA)),
+                KingdomsAtWar.id("textures/entity/boss/thalassa.png"), KingdomsAtWar.id("textures/entity/boss/thalassa_glow.png"),
+                2.0f, 1.5f, 4.0f));
         event.registerEntityRenderer(ModEntities.VINELING.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);

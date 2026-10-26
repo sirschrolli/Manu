@@ -38,6 +38,8 @@ public final class ModBiomes {
     public static final ResourceKey<Biome> ANCIENT_GROVE = key("ancient_grove");
     /** Sturmklippen um Voltarions Sturmgipfel. */
     public static final ResourceKey<Biome> STORM_CLIFFS = key("storm_cliffs");
+    /** Abgrundgrotte um Thalassas Versunkene Grotte (am Meeresgrund). */
+    public static final ResourceKey<Biome> ABYSSAL_GROTTO = key("abyssal_grotto");
 
     private ModBiomes() {}
 
@@ -53,13 +55,14 @@ public final class ModBiomes {
             case NATURE -> ANCIENT_GROVE;
             case EARTH -> RUGGED_WILDS;
             case LIGHTNING -> STORM_CLIFFS;
-            default -> null;
+            case WATER -> ABYSSAL_GROTTO;
         };
     }
 
     /** Ist das eines der Nest-Biome? */
     public static boolean isNestBiome(net.minecraft.core.Holder<Biome> biome) {
-        return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE) || biome.is(RUGGED_WILDS) || biome.is(STORM_CLIFFS);
+        return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE) || biome.is(RUGGED_WILDS) || biome.is(STORM_CLIFFS)
+                || biome.is(ABYSSAL_GROTTO);
     }
 
     public static void bootstrap(BootstrapContext<Biome> context) {
@@ -68,6 +71,36 @@ public final class ModBiomes {
         context.register(ANCIENT_GROVE, ancientGrove());
         context.register(RUGGED_WILDS, ruggedWilds());
         context.register(STORM_CLIFFS, stormCliffs());
+        context.register(ABYSSAL_GROTTO, abyssalGrotto());
+    }
+
+    /**
+     * Abgrundgrotte: tiefes, dunkles Petrol im Wasser, ein grünlich-blauer Dunst, die Musik unter Wasser und das ferne
+     * Rauschen der Tiefe – auch in der Luftblase der Grotte.
+     */
+    private static Biome abyssalGrotto() {
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .temperature(0.5f)
+                .downfall(0.5f)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x1E5A66)
+                        .grassColorOverride(0x3A7A6A)
+                        .foliageColorOverride(0x2E6A5A)
+                        .dryFoliageColorOverride(0x4A6A5A)
+                        .build())
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x6A9AA8))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x2A5A64))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x15404C))
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_UNDER_WATER))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(
+                        Optional.empty(),
+                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
+                        List.of(new AmbientAdditionsSettings(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT
+                                .wrapAsHolder(SoundEvents.AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE), 0.004))))
+                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .generationSettings(BiomeGenerationSettings.EMPTY)
+                .build();
     }
 
     /**

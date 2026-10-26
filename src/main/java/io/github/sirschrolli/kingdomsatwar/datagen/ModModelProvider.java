@@ -342,6 +342,11 @@ public class ModModelProvider extends ModelProvider {
         blocks.createTrivialCube(ModBlocks.CHARGED_STORMSTONE.get());
         blocks.woodProvider(ModBlocks.FULGURITE.get()).logWithHorizontal(ModBlocks.FULGURITE.get());
         blocks.createCrossBlockWithDefaultItem(ModBlocks.STORM_CRYSTAL.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+
+        // --- Abgrundgrotte ---
+        blocks.createTrivialCube(ModBlocks.ABYSSAL_SAND.get());
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.GLOW_CORAL.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        blocks.createTrivialCube(ModBlocks.NACRE_BLOCK.get());
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */

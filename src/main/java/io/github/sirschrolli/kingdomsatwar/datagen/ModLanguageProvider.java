@@ -71,6 +71,13 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.FULGURITE, "Fulgurite", "Fulgurit");
         block(ModBlocks.STORM_CRYSTAL, "Storm Crystal", "Sturmkristall");
 
+        // --- Abgrundgrotte ---
+        text("biome.kingdomsatwar.abyssal_grotto", "Abyssal Grotto", "Abgrundgrotte");
+        set("abyssal_stone", "abyssal_stone", "Abyssal Stone", "Abgrundstein", "Abyssal Stone", "Abgrundstein");
+        block(ModBlocks.ABYSSAL_SAND, "Abyssal Sand", "Abgrundsand");
+        block(ModBlocks.GLOW_CORAL, "Glow Coral", "Leuchtkoralle");
+        block(ModBlocks.NACRE_BLOCK, "Nacre Block", "Perlmuttblock");
+
         // --- Aschelande ---
         text("biome.kingdomsatwar.ashlands", "Ashlands", "Aschelande");
         block(ModBlocks.ASH_BLOCK, "Ash", "Asche");
@@ -341,6 +348,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.earth.title", "The Mountainbreaker", "Der Bergbrecher");
         add(ModEntities.VOLTARION.get(), pick("Voltarion", "Voltarion"));
         text("boss.kingdomsatwar.lightning.title", "The Stormbringer", "Der Sturmbringer");
+        add(ModEntities.THALASSA.get(), pick("Thalassa", "Thalassa"));
+        text("boss.kingdomsatwar.water.title", "Mistress of the Deep", "Die Herrin der Tiefe");
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");

@@ -98,6 +98,10 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity>> VOLTARION =
             ENTITIES.registerEntityType("lightning_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(5.0f, 6.0f).eyeHeight(7.5f).fireImmune().clientTrackingRange(16).updateInterval(2));
+    /** Thalassa, die Herrin der Tiefe (Wasser). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity>> THALASSA =
+            ENTITIES.registerEntityType("water_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(4.5f, 3.5f).eyeHeight(3.0f).clientTrackingRange(16).updateInterval(2));
     /** Rankling: Diener von Verdantis (wird nicht gespeichert). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity>> VINELING =
             ENTITIES.registerEntityType("vineling", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity::new,
@@ -121,6 +125,7 @@ public final class ModEntities {
             case NATURE -> VERDANTIS.get();
             case EARTH -> TERRAGON.get();
             case LIGHTNING -> VOLTARION.get();
+            case WATER -> THALASSA.get();
             default -> null;
         };
     }
@@ -149,6 +154,7 @@ public final class ModEntities {
         event.put(VERDANTIS.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity.createAttributes().build());
         event.put(TERRAGON.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.earth.TerragonEntity.createAttributes().build());
         event.put(VOLTARION.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity.createAttributes().build());
+        event.put(THALASSA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity.createAttributes().build());
         event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
     }
 

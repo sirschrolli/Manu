@@ -104,7 +104,9 @@ final class Showcase {
                     steps.add(Step.waitTicks(40));
                 }
                 default -> {
-                    if (scene.startsWith("lair_")) {
+                    if (scene.equals("lair_water")) {
+                        lairWater(steps);
+                    } else if (scene.startsWith("lair_")) {
                         lair(steps, DragonType.byId(scene.substring(5)));
                     } else if (scene.startsWith("bossmotion_")) {
                         bossMotion(steps, DragonType.byId(scene.substring(11)));
@@ -1386,6 +1388,90 @@ final class Showcase {
     }
 
     /**
+     * Thalassas Versunkene Grotte: Sie liegt unter dem Meer, darum andere Blickpunkte – zuerst in der Luftblase der
+     * Grotte (ohne Nachtsicht, so wie man sie sieht), dann mit Nachtsicht unter Wasser die Kuppel von außen, der
+     * Meeresgrund der Abgrundgrotte und zum Schluss das Erwachen.
+     */
+    private static void lairWater(Deque<Step> steps) {
+        String id = "water";
+        DragonType type = DragonType.WATER;
+        double[] nest = new double[4];
+        locateNest(steps, nest, type);
+        steps.add(Step.until(() -> nest[3] != 0, 1200));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(lookFrom(nest, 0, 40, 60, 0));
+        steps.add(Step.waitTicks(400));
+        steps.add(Step.waitForChunks(3000));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.server(level -> {
+            var entry = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}", entry);
+            if (entry != null) {
+                nest[2] = entry.center().getY();
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("weather clear"));
+        // in der Grotte
+        steps.add(lookFrom(nest, 0, 6, 21, -1));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("lair_" + id + "_inside"));
+        steps.add(lookFrom(nest, -16, 4, -13, 1));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_" + id + "_inside_2"));
+        steps.add(lookFrom(nest, 14, 3, -15, 2));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_" + id + "_inside_3"));
+        steps.add(lookFrom(nest, 2, 12, 3, -8));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_" + id + "_lake"));
+        // unter Wasser mit Nachtsicht
+        steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
+        steps.add(lookFrom(nest, 44, 10, 8, 6));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.screenshot("lair_" + id + "_dome"));
+        steps.add(lookFrom(nest, -30, 18, -38, 4));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_" + id + "_dome_2"));
+        steps.add(lookFrom(nest, 75, 8, 40, -2));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.screenshot("lair_" + id + "_zone"));
+        steps.add(lookFrom(nest, -60, 6, 70, -2));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(800));
+        steps.add(Step.screenshot("lair_" + id + "_zone_2"));
+        // Erwachen (in der Grotte, ohne Nachtsicht)
+        steps.add(Step.command("effect clear @s minecraft:night_vision"));
+        steps.add(lookFrom(nest, 0, 6, 21, -2));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.server(level -> {
+            var entry = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type);
+            BlockPos center = entry != null ? entry.center() : BlockPos.containing(nest[0], nest[2], nest[1]);
+            BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(type).corePos(center);
+            if (level.getBlockEntity(core) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity be) {
+                var boss = be.awaken(level);
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nestkern bei {} weckt {}", core, boss);
+            } else {
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Kein Nestkern bei {}: {}", core, level.getBlockState(core));
+            }
+        }));
+        steps.add(Step.waitTicks(85));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_1"));
+        steps.add(Step.waitTicks(45));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_2"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_3"));
+        steps.add(Step.command("kill @e[type=kingdomsatwar:" + id + "_dragon_boss]"));
+        steps.add(Step.command("gamemode spectator"));
+    }
+
+    /**
      * Der Siegelkreis in einer echten Welt: aus der Luft, vom Boden, ein Monolith aus der Nähe, die Chronik, eine
      * Kapitelkarte, drei leuchtende Monolithen in der Dämmerung und der ganze Siegelbruch als Bildfolge (Video).
      */
@@ -1581,6 +1667,7 @@ final class Showcase {
             case NATURE -> Blocks.GRASS_BLOCK.defaultBlockState();
             case EARTH -> Blocks.COARSE_DIRT.defaultBlockState();
             case LIGHTNING -> ModBlocks.STORMSTONE.base().get().defaultBlockState();
+            case WATER -> ModBlocks.ABYSSAL_SAND.get().defaultBlockState();
             default -> Blocks.BASALT.defaultBlockState();
         };
         BlockState poolBlock = switch (type) {
@@ -1588,6 +1675,7 @@ final class Showcase {
             case NATURE -> Blocks.MOSS_BLOCK.defaultBlockState();
             case EARTH -> Blocks.GRAVEL.defaultBlockState();
             case LIGHTNING -> ModBlocks.STORMSTONE.base().get().defaultBlockState();
+            case WATER -> ModBlocks.ABYSSAL_SAND.get().defaultBlockState();
             default -> Blocks.LAVA.defaultBlockState();
         };
         int ox = 600;
@@ -1615,6 +1703,25 @@ final class Showcase {
                         new net.minecraft.world.level.levelgen.structure.BoundingBox(ox - 40, ground - 8, oz - 40, ox + 40, ground + 20, oz + 40),
                         new BlockPos(ox, ground, oz), 1234L);
                 io.github.sirschrolli.kingdomsatwar.worldgen.lair.EarthLairDesign.mound(ctx, ox, ground, oz);
+            }
+            if (type == DragonType.WATER) {
+                // ein tiefer See (Halbmesser 17, 14 Blöcke tief) mit Ufer aus Abgrundstein
+                for (BlockPos pos : BlockPos.betweenClosed(ox - 18, ground - 17, oz - 18, ox + 18, ground - 1, oz + 18)) {
+                    double d = Math.sqrt(pos.distSqr(new BlockPos(ox, pos.getY(), oz)));
+                    if (d > 17.5) {
+                        continue;
+                    }
+                    BlockState state = pos.getY() == ground - 17 || d > 16.5 ? ModBlocks.ABYSSAL_STONE.base().get().defaultBlockState()
+                            : pos.getY() == ground - 16 ? ModBlocks.ABYSSAL_SAND.get().defaultBlockState()
+                            : pos.getY() == ground - 1 ? Blocks.AIR.defaultBlockState() : Blocks.WATER.defaultBlockState();
+                    level.setBlock(pos, state, Block.UPDATE_CLIENTS);
+                }
+                for (int k = 0; k < 24; k++) {
+                    double a = k * Math.PI * 2 / 24;
+                    BlockPos p = BlockPos.containing(ox + Math.cos(a) * 13, ground - 15, oz + Math.sin(a) * 13);
+                    level.setBlock(p, ModBlocks.GLOW_CORAL.get().defaultBlockState()
+                            .setValue(io.github.sirschrolli.kingdomsatwar.block.GlowCoralBlock.WATERLOGGED, true), Block.UPDATE_CLIENTS);
+                }
             }
             if (type == DragonType.LIGHTNING) {
                 // das Podest mit dem Blitzstern, auf das Voltarion herabfährt
@@ -1646,11 +1753,14 @@ final class Showcase {
             boss[0] = b;
         }));
         steps.add(Step.waitTicks(2));
-        if (type == DragonType.LIGHTNING) {
+        if (type == DragonType.WATER) {
+            // sie steigt aus der Tiefe: Die Kamera bleibt am Ufer
+            steps.add(Step.record("motion_" + id + "_awakening", 190, fixedCam(ox, oz, 17.0, 8.0, -15.0, 0.0)));
+        } else if (type == DragonType.LIGHTNING) {
             // er fährt aus dem Himmel herab: Die Kamera bleibt beim Podest
             steps.add(Step.record("motion_" + id + "_awakening", 195, fixedCam(ox, oz, 15.0, 6.5, -14.0, 5.0)));
         } else {
-            steps.add(Step.record("motion_" + id + "_awakening", type == DragonType.NATURE ? 200 : type == DragonType.EARTH ? 190 : 175,
+            steps.add(Step.record("motion_" + id + "_awakening", type == DragonType.NATURE ? 200 : type == DragonType.EARTH || type == DragonType.WATER ? 190 : 175,
                     follow(boss, 24.0, 8.0, 7.0)));
         }
         // Kampf: ein paar Soldaten, damit der Boss geht, sich dreht und angreift
@@ -1660,13 +1770,15 @@ final class Showcase {
                 SoldierType soldierType = i % 2 == 0 ? SoldierType.KNIGHT : SoldierType.ARCHER;
                 var soldier = ModEntities.SOLDIERS.get(soldierType).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
                 if (soldier != null) {
-                    soldier.snapTo(ox + Math.sin(a) * 14, ground, oz - Math.cos(a) * 14, 0, 0);
+                    double ring = type == DragonType.WATER ? 21 : 14;
+                    soldier.snapTo(ox + Math.sin(a) * ring, ground, oz - Math.cos(a) * ring, 0, 0);
                     soldier.setPermanentlyInvulnerable(true);
                     level.addFreshEntity(soldier);
                 }
             }
         }));
-        steps.add(Step.record("motion_" + id + "_fight", 300, follow(boss, 22.0, 6.0, 5.0)));
+        steps.add(Step.record("motion_" + id + "_fight", 300, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
+                : follow(boss, 22.0, 6.0, 5.0)));
         int[][] special = switch (type) {
             // Wurzelfessel, Rankensäulen, Giftsporen, Rankendiener, Heilung
             case NATURE -> new int[][] {{BossAnims.SPECIAL_1, 70}, {BossAnims.ERUPT, 60}, {BossAnims.RING, 60}, {BossAnims.STOMP, 70},
@@ -1681,6 +1793,19 @@ final class Showcase {
             steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
             steps.add(forceAttack(boss, anim));
             steps.add(Step.record("motion_" + id + "_special_" + i, special[i][1], follow(boss, 24.0, 7.0, 5.0)));
+        }
+        if (type == DragonType.WATER) {
+            // Flutwelle, Strudel, Blasenkäfig, Sprung aus der Tiefe, Wasserstrahl, Schwanzpeitsche
+            Object[][] waterAttacks = {{"tidal_wave", 62}, {"whirlpool", 122}, {"bubble_prison", 92}, {"depth_leap", 86}, {"breath", 76},
+                    {"tail_sweep", 40}};
+            int i = 0;
+            for (Object[] attack : waterAttacks) {
+                steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
+                steps.add(forceAttack(boss, (String) attack[0]));
+                steps.add(Step.record("motion_" + id + "_special_" + i++, (Integer) attack[1], followAbove(boss, 24.0, 9.0, 3.0, 5.0)));
+            }
+            steps.add(Step.hud(true));
+            return;
         }
         if (type == DragonType.LIGHTNING) {
             // Kettenblitz, Blitzfeld, Donnerschrei, Blitzodem – dann in der Luft: Gewitter und Sturzflug
@@ -1713,6 +1838,38 @@ final class Showcase {
             steps.add(Step.record("motion_" + id + "_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
         }
         steps.add(Step.hud(true));
+    }
+
+    /** Wie {@link #follow}, aber die Kamera bleibt mindestens {@code minAbove} Blöcke über dem Boden (für Thalassa im See). */
+    private static java.util.function.Consumer<net.minecraft.client.Minecraft> followAbove(DragonBossEntity[] boss, double distance, double up,
+            double lookUp, double minAbove) {
+        double[] cam = new double[4];
+        return minecraft -> {
+            DragonBossEntity b = boss[0];
+            if (b == null) {
+                return;
+            }
+            net.minecraft.world.phys.Vec3 center = b.position().add(0, 3.0, 0);
+            net.minecraft.world.phys.Vec3 side = net.minecraft.world.phys.Vec3.directionFromRotation(0, b.yBodyRot + 115.0f);
+            net.minecraft.world.phys.Vec3 want = center.add(side.scale(distance)).add(0, up, 0);
+            want = new net.minecraft.world.phys.Vec3(want.x, Math.max(want.y, ground + minAbove), want.z);
+            if (cam[3] == 0) {
+                cam[0] = want.x;
+                cam[1] = want.y;
+                cam[2] = want.z;
+                cam[3] = 1;
+            } else {
+                cam[0] += (want.x - cam[0]) * 0.06;
+                cam[1] += (want.y - cam[1]) * 0.06;
+                cam[2] += (want.z - cam[2]) * 0.06;
+            }
+            double lookY = Math.max(b.getY() + lookUp, ground - 2.0);
+            net.minecraft.world.phys.Vec3 look = new net.minecraft.world.phys.Vec3(b.getX(), lookY, b.getZ()).subtract(cam[0], cam[1], cam[2]);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, look.horizontalDistance()) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cam[0], cam[1], cam[2], yaw, pitch));
+        };
     }
 
     /** Feste Kamera (dx, dy, dz) neben dem Punkt (ox, Boden, oz), Blick auf (ox, Boden + lookUp, oz). */

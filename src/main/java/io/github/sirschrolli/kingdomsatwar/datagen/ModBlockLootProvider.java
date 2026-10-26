@@ -71,7 +71,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
 
         // Zerklüftete Weiten
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.AMBER_CRYSTAL, ModBlocks.AMBER_CLUSTER, ModBlocks.RUBBLE,
-                ModBlocks.RIFT_STONE, ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL)) {
+                ModBlocks.RIFT_STONE, ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL, ModBlocks.ABYSSAL_SAND,
+                ModBlocks.GLOW_CORAL, ModBlocks.NACRE_BLOCK)) {
             dropSelf(block.get());
         }
 

@@ -74,7 +74,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
         // --- Zerklüftete Weiten ---
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.AMBER_CRYSTAL, ModBlocks.AMBER_CLUSTER, ModBlocks.RIFT_STONE,
-                ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL);
+                ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL, ModBlocks.NACRE_BLOCK);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.ABYSSAL_SAND);
         add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.RUBBLE);
 
         // --- Siegelkreis ---

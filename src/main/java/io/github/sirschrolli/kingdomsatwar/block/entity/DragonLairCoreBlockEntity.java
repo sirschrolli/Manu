@@ -94,7 +94,9 @@ public class DragonLairCoreBlockEntity extends BlockEntity {
             double dz = player.getZ() - (c.getZ() + 0.5);
             double dy = player.getY() - c.getY();
             double dist = Math.sqrt(dx * dx + dz * dz);
-            if (dist < AWAKEN_RADIUS && dy > -16 && dy < 40) {
+            // Thalassa erwacht erst, wenn jemand aus dem See ans Ufer der Grotte steigt
+            double minDy = this.element == DragonType.WATER ? -2.5 : -16;
+            if (dist < AWAKEN_RADIUS && dy > minDy && dy < 40) {
                 this.awaken(level);
                 return;
             }

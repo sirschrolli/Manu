@@ -20,6 +20,9 @@ public final class ModLootTables {
     /** Truhe in der verfallenen Sturmwarte auf Voltarions Sturmgipfel. */
     public static final ResourceKey<LootTable> STORM_WATCHTOWER_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/storm_watchtower"));
+    /** Truhen am Thron der Tiefe in Thalassas Versunkener Grotte. */
+    public static final ResourceKey<LootTable> SUNKEN_GROTTO_CHEST =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/sunken_grotto"));
     /** Was man mit dem Pinsel aus dem Kies eines Drachennests ausgräbt (je Art). */
     public static final Map<DragonType, ResourceKey<LootTable>> DRAGON_NEST_ARCHAEOLOGY;
 

@@ -95,5 +95,28 @@ public class ModChestLootProvider implements LootTableSubProvider {
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
+        // Thron der Tiefe: Schätze des versunkenen Tempels – Perlmutt, Prismarin, Gold, mit Glück ein Dreizack
+        this.output.accept(ModLootTables.SUNKEN_GROTTO_CHEST, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(Items.PRISMARINE_SHARD, 10, 2, 8))
+                        .add(item(Items.PRISMARINE_CRYSTALS, 8, 2, 6))
+                        .add(item(Items.GOLD_INGOT, 6, 1, 4))
+                        .add(item(Items.GOLD_NUGGET, 8, 3, 9))
+                        .add(item(Items.NAUTILUS_SHELL, 3, 1, 2))
+                        .add(item(Items.HEART_OF_THE_SEA, 1, 1, 1))
+                        .add(item(ModBlocks.NACRE_BLOCK.get(), 6, 1, 3))
+                        .add(item(ModBlocks.GLOW_CORAL.get(), 6, 1, 4))
+                        .add(item(Items.SEA_LANTERN, 4, 1, 2))
+                        .add(item(ModItems.GEMSTONE.get(), 3, 1, 2)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.RUNES.get(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.WATER).get())
+                                .setWeight(3))
+                        .add(LootItem.lootTableItem(Items.TRIDENT).setWeight(1)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
+                                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(EmptyLootItem.emptyItem().setWeight(4))));
     }
 }

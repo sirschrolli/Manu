@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_abyssal_stone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:abyssal_stone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:abyssal_stone_wall"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_abyssal_stone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:abyssal_stone_wall"
+    ]
+  }
+}

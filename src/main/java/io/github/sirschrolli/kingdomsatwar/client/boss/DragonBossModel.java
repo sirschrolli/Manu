@@ -40,14 +40,19 @@ public class DragonBossModel extends EntityModel<BossRenderState> {
     protected final ModelPart[] tail;
     protected final @Nullable Leg frontL;
     protected final @Nullable Leg frontR;
-    protected final Leg hindL;
-    protected final Leg hindR;
+    protected final @Nullable Leg hindL;
+    protected final @Nullable Leg hindR;
     protected final @Nullable Wing wingL;
     protected final @Nullable Wing wingR;
     /** Höhe des Rumpfes über dem Boden in Modell-Einheiten (für Hinlegen und Zusammenbrechen). */
     protected final float bodyHeight;
 
     public DragonBossModel(ModelPart root, int necks, int tails, boolean quadruped, int fingers, float bodyHeight) {
+        this(root, necks, tails, quadruped, true, fingers, bodyHeight);
+    }
+
+    /** Mit freier Wahl der Glieder: Vorderbeine (oder Flossen) und Hinterbeine (eine Seeschlange hat keine). */
+    public DragonBossModel(ModelPart root, int necks, int tails, boolean front, boolean hind, int fingers, float bodyHeight) {
         super(root);
         Function<String, @Nullable ModelPart> part = root.createPartLookup();
         this.body = req(part, "body");
@@ -61,10 +66,10 @@ public class DragonBossModel extends EntityModel<BossRenderState> {
         for (int i = 0; i < tails; i++) {
             this.tail[i] = req(part, "tail" + (i + 1));
         }
-        this.frontL = quadruped ? leg(part, "front", "l", 1) : null;
-        this.frontR = quadruped ? leg(part, "front", "r", -1) : null;
-        this.hindL = leg(part, "hind", "l", 1);
-        this.hindR = leg(part, "hind", "r", -1);
+        this.frontL = front ? leg(part, "front", "l", 1) : null;
+        this.frontR = front ? leg(part, "front", "r", -1) : null;
+        this.hindL = hind ? leg(part, "hind", "l", 1) : null;
+        this.hindR = hind ? leg(part, "hind", "r", -1) : null;
         this.wingL = fingers > 0 ? wing(part, "l", 1, fingers) : null;
         this.wingR = fingers > 0 ? wing(part, "r", -1, fingers) : null;
         this.bodyHeight = bodyHeight;

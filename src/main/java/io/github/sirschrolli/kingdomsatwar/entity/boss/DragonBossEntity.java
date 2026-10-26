@@ -743,7 +743,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private boolean isWhere(BossAttack.Where where) {
         return switch (where) {
             case ANY -> true;
-            case GROUND -> this.getMoveMode() == MoveMode.GROUND || this.getMoveMode() == MoveMode.BURROW;
+            // „am Boden“ heißt hier: nicht in der Luft (eine Seeschlange beißt und peitscht auch im Wasser)
+            case GROUND -> this.getMoveMode() == MoveMode.GROUND || this.getMoveMode() == MoveMode.BURROW
+                    || this.getMoveMode() == MoveMode.WATER;
             case AIR -> this.getMoveMode() == MoveMode.AIR;
             case WATER -> this.getMoveMode() == MoveMode.WATER;
         };
@@ -886,7 +888,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         }
     }
 
-    private void hoverOrIdle(ServerLevel level) {
+    /** Ohne Ziel: in der Luft über dem Nest kreisen, sonst stehen bleiben. */
+    protected void hoverOrIdle(ServerLevel level) {
         if (this.isFlying() && this.home != null) {
             this.circleAround(level, Vec3.atCenterOf(this.home), 22.0, this.cruiseHeight(), 0.5);
         } else {
@@ -929,6 +932,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         }
         Vec3 home = Vec3.atBottomCenterOf(this.home);
         double dist = this.position().subtract(home).horizontalDistance();
+        if (this.returnHome(level, home, dist)) {
+            return;
+        }
         if (this.canFly() && !this.isFlying() && dist > 12 && this.onGround()) {
             this.setMoveMode(MoveMode.AIR);
             this.setDeltaMovement(0, 0.8, 0);
@@ -947,6 +953,19 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
                 this.setBossState(State.SLUMBER);
             }
         }
+    }
+
+    /**
+     * Eigene Heimkehr (z. B. schwimmend): {@code true}, wenn die Unterklasse die Bewegung übernimmt. Ist sie
+     * angekommen und geheilt, ruft sie {@link #fallAsleep()}.
+     */
+    protected boolean returnHome(ServerLevel level, Vec3 home, double dist) {
+        return false;
+    }
+
+    /** Schläft wieder ein (für eigene Heimkehr). */
+    protected void fallAsleep() {
+        this.setBossState(State.SLUMBER);
     }
 
     /** Effekte beim Einschlafen (Standard: Partikel). */

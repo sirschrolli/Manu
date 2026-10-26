@@ -62,6 +62,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.STORM_CRYSTAL.get(), 3, 6)));
+        this.add(ModEntities.THALASSA.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.WATER).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.NACRE_BLOCK.get(), 3, 6))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 6, 12)));
         this.add(ModEntities.VINELING.get(), LootTable.lootTable()
                 .withPool(drop(Items.VINE, 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));

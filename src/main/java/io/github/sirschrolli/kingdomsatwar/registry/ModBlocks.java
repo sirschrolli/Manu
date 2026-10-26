@@ -474,6 +474,29 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
 
     // =====================================================================================
+    // Abgrundgrotte: das Biom um Thalassas Versunkene Grotte
+    // =====================================================================================
+
+    /** Abgrundstein: dunkler, blaugrüner Fels der Tiefsee mit Muschelsplittern (auch als Treppe, Stufe und Mauer). */
+    public static final BuildingSet ABYSSAL_STONE = stoneSet("abyssal_stone", "abyssal_stone", MapColor.COLOR_CYAN, SoundType.DEEPSLATE, 1.8f);
+    /** Abgrundsand: feiner, dunkler Tiefseesand. */
+    public static final DeferredBlock<net.minecraft.world.level.block.ColoredFallingBlock> ABYSSAL_SAND = blockWithItem("abyssal_sand",
+            p -> new net.minecraft.world.level.block.ColoredFallingBlock(new net.minecraft.util.ColorRGBA(0xFF3A4242), p),
+            p -> p.mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.SNARE).strength(0.5f).sound(SoundType.SAND),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Leuchtkoralle: türkis leuchtend, im Wasser wie an der Luft. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.GlowCoralBlock> GLOW_CORAL = blockWithItem("glow_coral",
+            io.github.sirschrolli.kingdomsatwar.block.GlowCoralBlock::new,
+            p -> p.mapColor(MapColor.COLOR_CYAN).noCollision().noOcclusion().instabreak().sound(SoundType.WET_GRASS).lightLevel(s -> 10)
+                    .pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Perlmutt: schimmernde Schichten in Weiß, Rosa und Hellblau. */
+    public static final DeferredBlock<Block> NACRE_BLOCK = blockWithItem("nacre_block", Block::new,
+            p -> p.mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.CHIME).requiresCorrectToolForDrops().strength(1.5f, 6.0f)
+                    .sound(SoundType.CALCITE),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
     // Siegelkreis: uralter Siegelstein, Monolithen, Runen, das Siegel und das Schattentor
     // =====================================================================================
 
