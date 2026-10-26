@@ -22,23 +22,41 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Geschosse der Drachen-Bosse: Feuerbälle, Meteore usw. Sie explodieren beim Aufprall, ohne Blöcke zu zerstören,
- * und treffen nur Gegner des Bosses.
+ * Geschosse der Drachen-Bosse: Feuerbälle, Meteore, Eisspeere, Eiszapfen, Dornensaat, Felsbrocken, Blitzkugeln und
+ * Wasserblasen. Sie zerplatzen beim Aufprall, ohne Blöcke zu zerstören, und treffen nur Gegner des Bosses.
  */
 public class BossProjectile extends AbstractHurtingProjectile {
+    /**
+     * Art des Geschosses: Größe, Wirkungsradius, Wirkungsdauer in Sekunden (Brand, Frost, Gift, Betäubung …) und ob
+     * es wie ein Stein herabfällt.
+     */
     public enum Kind {
         FIREBALL(1.0f, 3.0, 4, false),
-        METEOR(2.2f, 4.2, 5, true);
+        METEOR(2.2f, 4.2, 5, true),
+        /** Eisspeer (Glaciara): schnell und gerade, lässt erstarren. */
+        ICE_SPEAR(1.0f, 2.6, 4, false),
+        /** Eiszapfen (Glaciara): stürzt vom Himmel. */
+        ICICLE(1.3f, 3.0, 4, true),
+        /** Dornensaat (Verdantis): vergiftet. */
+        THORN(0.8f, 2.4, 5, false),
+        /** Felsbrocken (Terragon): fliegt im Bogen, stößt weit weg. */
+        BOULDER(2.2f, 4.0, 0, true),
+        /** Blitzkugel (Voltarion): betäubt kurz. */
+        SPARK(1.1f, 3.2, 2, false),
+        /** Wasserblase (Thalassa): verlangsamt und stößt weg. */
+        BUBBLE(1.5f, 3.2, 4, false),
+        /** Dornensaat (Verdantis, vom Himmel): vergiftet, wo sie einschlägt, wächst kurz Dornengestrüpp. */
+        SEED(1.0f, 2.8, 4, true);
 
         public final float size;
         public final double radius;
-        public final int fireSeconds;
+        public final int effectSeconds;
         public final boolean falls;
 
-        Kind(float size, double radius, int fireSeconds, boolean falls) {
+        Kind(float size, double radius, int effectSeconds, boolean falls) {
             this.size = size;
             this.radius = radius;
-            this.fireSeconds = fireSeconds;
+            this.effectSeconds = effectSeconds;
             this.falls = falls;
         }
     }
@@ -97,20 +115,65 @@ public class BossProjectile extends AbstractHurtingProjectile {
     public void tick() {
         Kind kind = this.getKind();
         if (kind.falls && !this.level().isClientSide()) {
-            this.setDeltaMovement(this.getDeltaMovement().add(0, -0.04, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, kind == Kind.BOULDER ? -0.05 : -0.04, 0));
         }
         super.tick();
         if (this.level().isClientSide()) {
-            ParticleOptions trail = kind == Kind.METEOR ? ParticleTypes.LARGE_SMOKE : ParticleTypes.SMOKE;
-            for (int i = 0; i < (kind == Kind.METEOR ? 4 : 2); i++) {
-                this.level().addParticle(ParticleTypes.FLAME, this.getX() + (this.random.nextDouble() - 0.5) * kind.size,
-                        this.getY() + (this.random.nextDouble() - 0.5) * kind.size, this.getZ() + (this.random.nextDouble() - 0.5) * kind.size,
-                        0, 0, 0);
-            }
-            this.level().addParticle(trail, this.getX(), this.getY(), this.getZ(), 0, 0.02, 0);
+            this.trail(kind);
         } else if (++this.life > 200) {
             this.discard();
         }
+    }
+
+    /** Spur hinter dem Geschoss (nur auf dem Bildschirm). */
+    private void trail(Kind kind) {
+        ParticleOptions main;
+        ParticleOptions smoke;
+        int count;
+        switch (kind) {
+            case FIREBALL, METEOR -> {
+                main = ParticleTypes.FLAME;
+                smoke = kind == Kind.METEOR ? ParticleTypes.LARGE_SMOKE : ParticleTypes.SMOKE;
+                count = kind == Kind.METEOR ? 4 : 2;
+            }
+            case ICE_SPEAR, ICICLE -> {
+                main = ParticleTypes.SNOWFLAKE;
+                smoke = io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_FROST.get();
+                count = 2;
+            }
+            case THORN, SEED -> {
+                main = ParticleTypes.SPORE_BLOSSOM_AIR;
+                smoke = ParticleTypes.COMPOSTER;
+                count = 1;
+            }
+            case BOULDER -> {
+                main = new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState());
+                smoke = io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get();
+                count = 2;
+            }
+            case SPARK -> {
+                main = ParticleTypes.ELECTRIC_SPARK;
+                smoke = io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPARK.get();
+                count = 3;
+            }
+            case BUBBLE -> {
+                main = ParticleTypes.BUBBLE;
+                smoke = ParticleTypes.SPLASH;
+                count = 2;
+            }
+            default -> {
+                main = ParticleTypes.SMOKE;
+                smoke = ParticleTypes.SMOKE;
+                count = 1;
+            }
+        }
+        for (int i = 0; i < count; i++) {
+            this.level().addParticle(main, this.getX() + (this.random.nextDouble() - 0.5) * kind.size,
+                    this.getY() + (this.random.nextDouble() - 0.5) * kind.size, this.getZ() + (this.random.nextDouble() - 0.5) * kind.size,
+                    0, 0, 0);
+        }
+        this.level().addParticle(smoke, this.getX(), this.getY(), this.getZ(), 0, 0.02, 0);
     }
 
     @Override
@@ -133,11 +196,7 @@ public class BossProjectile extends AbstractHurtingProjectile {
     private void explode(ServerLevel level) {
         Kind kind = this.getKind();
         Vec3 c = this.position();
-        level.sendParticles(ParticleTypes.EXPLOSION, c.x, c.y, c.z, kind == Kind.METEOR ? 4 : 1, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0);
-        level.sendParticles(ParticleTypes.FLAME, c.x, c.y, c.z, 40, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.08);
-        level.sendParticles(ParticleTypes.LAVA, c.x, c.y, c.z, 12, kind.radius * 0.3, 0.2, kind.radius * 0.3, 0.1);
-        level.playSound(null, c.x, c.y, c.z, SoundEvents.GENERIC_EXPLODE.value(), net.minecraft.sounds.SoundSource.HOSTILE,
-                kind == Kind.METEOR ? 3.0f : 1.6f, 0.7f + this.random.nextFloat() * 0.2f);
+        this.impactEffects(level, kind, c);
         DragonBossEntity boss = this.getOwner() instanceof DragonBossEntity b ? b : null;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(kind.radius))) {
             if (boss != null ? !boss.isBossEnemy(e) : e instanceof DragonBossEntity) {
@@ -150,11 +209,97 @@ public class BossProjectile extends AbstractHurtingProjectile {
             float f = (float) Math.max(0.35, 1.0 - d / (kind.radius + 0.5));
             DamageSource source = boss != null ? this.damageSources().mobProjectile(this, boss) : this.damageSources().explosion(this, null);
             e.hurtServer(level, source, this.damage * f);
-            if (kind.fireSeconds > 0) {
-                e.igniteForSeconds(kind.fireSeconds);
-            }
-            DragonBossEntity.pushAway(e, c, 0.7 * f, 0.4 * f);
+            BossEffects.apply(e, kind, kind.effectSeconds);
+            double push = kind == Kind.BOULDER ? 1.4 : kind == Kind.BUBBLE ? 1.0 : 0.7;
+            DragonBossEntity.pushAway(e, c, push * f, 0.4 * f);
         }
+    }
+
+    private void impactEffects(ServerLevel level, Kind kind, Vec3 c) {
+        float volume = kind == Kind.METEOR || kind == Kind.BOULDER ? 3.0f : 1.6f;
+        float pitch = 0.7f + this.random.nextFloat() * 0.2f;
+        switch (kind) {
+            case FIREBALL, METEOR -> {
+                level.sendParticles(ParticleTypes.EXPLOSION, c.x, c.y, c.z, kind == Kind.METEOR ? 4 : 1, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0);
+                level.sendParticles(ParticleTypes.FLAME, c.x, c.y, c.z, 40, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.08);
+                level.sendParticles(ParticleTypes.LAVA, c.x, c.y, c.z, 12, kind.radius * 0.3, 0.2, kind.radius * 0.3, 0.1);
+                this.sound(level, c, SoundEvents.GENERIC_EXPLODE.value(), volume, pitch);
+            }
+            case ICE_SPEAR, ICICLE -> {
+                level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.PACKED_ICE.defaultBlockState()), c.x, c.y, c.z, 40, kind.radius * 0.3, 0.3,
+                        kind.radius * 0.3, 0.15);
+                level.sendParticles(ParticleTypes.SNOWFLAKE, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.05);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_FROST.get(), c.x, c.y, c.z, 12,
+                        kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.02);
+                this.sound(level, c, SoundEvents.GLASS_BREAK, volume, 0.6f + this.random.nextFloat() * 0.2f);
+                this.sound(level, c, SoundEvents.PLAYER_HURT_FREEZE, 1.0f, 0.8f);
+            }
+            case SEED -> {
+                level.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c.x, c.y, c.z, 10,
+                        kind.radius * 0.4, 0.3, kind.radius * 0.4, 0.02);
+                this.sound(level, c, SoundEvents.SWEET_BERRY_BUSH_PLACE, volume, 0.6f);
+                this.sound(level, c, SoundEvents.ROOTED_DIRT_BREAK, 1.2f, 0.7f);
+                this.growBrambles(level, c);
+            }
+            case THORN -> {
+                level.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
+                level.sendParticles(ParticleTypes.COMPOSTER, c.x, c.y, c.z, 20, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c.x, c.y, c.z, 14,
+                        kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
+                this.sound(level, c, SoundEvents.SWEET_BERRY_BUSH_BREAK, volume, pitch);
+            }
+            case BOULDER -> {
+                level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState()), c.x, c.y, c.z, 60, kind.radius * 0.35, 0.4,
+                        kind.radius * 0.35, 0.2);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get(), c.x, c.y, c.z, 24,
+                        kind.radius * 0.5, 0.4, kind.radius * 0.5, 0.03);
+                this.sound(level, c, SoundEvents.GENERIC_EXPLODE.value(), volume, 0.5f);
+                this.sound(level, c, SoundEvents.STONE_BREAK, 2.0f, 0.5f);
+            }
+            case SPARK -> {
+                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, c.x, c.y, c.z, 50, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.4);
+                level.sendParticles(net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFE8F4FF), c.x, c.y, c.z, 1, 0, 0, 0, 0);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPARK.get(), c.x, c.y, c.z, 16,
+                        kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
+                this.sound(level, c, SoundEvents.LIGHTNING_BOLT_IMPACT, volume, 1.2f);
+            }
+            case BUBBLE -> {
+                level.sendParticles(ParticleTypes.SPLASH, c.x, c.y, c.z, 60, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.2);
+                level.sendParticles(ParticleTypes.BUBBLE_POP, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.1);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_WATER.get(), c.x, c.y, c.z, 16,
+                        kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
+                this.sound(level, c, SoundEvents.GENERIC_SPLASH, volume, 0.6f);
+                this.sound(level, c, SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, 1.5f, 0.6f);
+            }
+        }
+    }
+
+    /** Dornengestrüpp schießt rund um den Einschlag aus dem Boden (verschwindet nach zehn Sekunden). */
+    private void growBrambles(ServerLevel level, Vec3 c) {
+        net.minecraft.core.BlockPos center = net.minecraft.core.BlockPos.containing(c.x, c.y + 0.2, c.z);
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (this.random.nextFloat() > 0.6f) {
+                    continue;
+                }
+                for (int dy = 1; dy >= -2; dy--) {
+                    net.minecraft.core.BlockPos pos = center.offset(dx, dy, dz);
+                    if (level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP)
+                            && io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.canReplace(level, pos)) {
+                        io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.place(level, pos,
+                                io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.BRAMBLE.get().defaultBlockState(), 200);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void sound(ServerLevel level, Vec3 c, net.minecraft.sounds.SoundEvent sound, float volume, float pitch) {
+        level.playSound(null, c.x, c.y, c.z, sound, net.minecraft.sounds.SoundSource.HOSTILE, volume, pitch);
     }
 
     @Override

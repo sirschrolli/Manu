@@ -311,6 +311,23 @@ public class ModModelProvider extends ModelProvider {
 
         // --- Siegelkreis, Siegelsplitter und Chronik ---
         SealModels.register(blocks, items);
+
+        // --- Frostkessel ---
+        Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();
+        Identifier crystalModel = ModelTemplates.CUBE_ALL.create(frostCrystal,
+                TextureMapping.cube(TextureMapping.getBlockTexture(frostCrystal).withForceTranslucent(true)), blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(frostCrystal, BlockModelGenerators.plainVariant(crystalModel)));
+        blocks.createTrivialCube(ModBlocks.GLACIER_ICE.get());
+        blocks.createTrivialBlock(ModBlocks.FROZEN_SOIL.get(), TexturedModel.CUBE_BOTTOM_TOP);
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.ICICLE.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+
+        // --- Uralter Hain ---
+        blocks.woodProvider(ModBlocks.ANCIENT_LOG.get()).logWithHorizontal(ModBlocks.ANCIENT_LOG.get());
+        blocks.createTrivialBlock(ModBlocks.ANCIENT_LEAVES.get(), TexturedModel.LEAVES);
+        blocks.createTrivialCube(ModBlocks.GLOWING_MOSS.get());
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.GLOWCAP.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.BRAMBLE.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        blocks.createTrivialBlock(ModBlocks.GNARLED_ROOTS.get(), TexturedModel.COLUMN);
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */

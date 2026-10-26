@@ -31,5 +31,10 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.story.StoryProgress::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.story.StoryProgress.CODEC.fieldOf("story")).copyOnDeath().build());
 
+    /** Zeitweilige Blöcke der Boss-Angriffe (je Welt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store>> TEMPORARY_BLOCKS =
+            ATTACHMENTS.register("temporary_blocks", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store.CODEC.fieldOf("blocks")).build());
+
     private ModAttachments() {}
 }

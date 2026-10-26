@@ -1,0 +1,46 @@
+{
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.frozen_peaks"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:snowflake"
+        },
+        "probability": 0.012
+      },
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.02
+      }
+    ],
+    "minecraft:visual/fog_color": "#d8e6f4",
+    "minecraft:visual/sky_color": "#b4cce6",
+    "minecraft:visual/water_fog_color": "#2a4a7a"
+  },
+  "carvers": [],
+  "downfall": 0.7,
+  "effects": {
+    "dry_foliage_color": "#8aa4a0",
+    "foliage_color": "#66a486",
+    "grass_color": "#86b69c",
+    "water_color": "#3a6ea5"
+  },
+  "features": [],
+  "has_precipitation": true,
+  "temperature": -0.9
+}

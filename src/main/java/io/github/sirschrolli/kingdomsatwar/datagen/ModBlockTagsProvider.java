@@ -55,6 +55,23 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.DRAGON_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
 
+        // --- Frostkessel ---
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.FROST_CRYSTAL, ModBlocks.GLACIER_ICE, ModBlocks.ICICLE);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.FROZEN_SOIL);
+        add(BlockTags.ICE, ModBlocks.GLACIER_ICE);
+        add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.FROZEN_SOIL);
+
+        // --- Uralter Hain ---
+        add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.ANCIENT_LOG, ModBlocks.GNARLED_ROOTS);
+        add(BlockTags.LOGS, ModBlocks.ANCIENT_LOG);
+        add(net.minecraft.tags.BlockItemTags.LOGS_THAT_BURN.block(), ModBlocks.ANCIENT_LOG);
+        add(BlockTags.OVERWORLD_NATURAL_LOGS, ModBlocks.ANCIENT_LOG);
+        add(BlockTags.LEAVES, ModBlocks.ANCIENT_LEAVES);
+        add(BlockTags.MINEABLE_WITH_HOE, ModBlocks.ANCIENT_LEAVES, ModBlocks.GLOWING_MOSS);
+        add(BlockTags.SWORD_EFFICIENT, ModBlocks.ANCIENT_LEAVES, ModBlocks.BRAMBLE, ModBlocks.GLOWCAP);
+        add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.GLOWING_MOSS);
+        add(BlockTags.MOSS_BLOCKS, ModBlocks.GLOWING_MOSS);
+
         // --- Siegelkreis ---
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE);

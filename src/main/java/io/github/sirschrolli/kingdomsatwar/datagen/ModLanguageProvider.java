@@ -38,6 +38,24 @@ public class ModLanguageProvider extends LanguageProvider {
         text("itemGroup.kingdomsatwar.equipment", "Kingdoms at War: Equipment", "Kingdoms at War: Ausrüstung");
         text("itemGroup.kingdomsatwar.nature", "Kingdoms at War: Wilds", "Kingdoms at War: Wildnis");
 
+        // --- Frostkessel ---
+        text("biome.kingdomsatwar.frostbasin", "Frost Basin", "Frostkessel");
+        block(ModBlocks.FROST_CRYSTAL, "Frost Crystal", "Frostkristall");
+        block(ModBlocks.GLACIER_ICE, "Glacier Ice", "Gletschereis");
+        set("rime_stone", "rime_stone", "Rime Stone", "Raureifstein", "Rime Stone", "Raureifstein");
+        block(ModBlocks.FROZEN_SOIL, "Frozen Soil", "Frosterde");
+        block(ModBlocks.ICICLE, "Icicle", "Eiszapfen");
+
+        // --- Uralter Hain ---
+        text("biome.kingdomsatwar.ancient_grove", "Ancient Grove", "Uralter Hain");
+        block(ModBlocks.ANCIENT_LOG, "Ancient Log", "Urholzstamm");
+        roof("ancient_planks", "ancient_plank", "Ancient Planks", "Urholzbretter", "Ancient Plank", "Urholz");
+        block(ModBlocks.ANCIENT_LEAVES, "Ancient Leaves", "Uraltes Laub");
+        block(ModBlocks.GLOWING_MOSS, "Glowing Moss", "Leuchtmoos");
+        block(ModBlocks.GLOWCAP, "Glowcap", "Leuchtkappe");
+        block(ModBlocks.BRAMBLE, "Bramble", "Dornengestrüpp");
+        block(ModBlocks.GNARLED_ROOTS, "Gnarled Roots", "Knorrige Wurzeln");
+
         // --- Aschelande ---
         text("biome.kingdomsatwar.ashlands", "Ashlands", "Aschelande");
         block(ModBlocks.ASH_BLOCK, "Ash", "Asche");
@@ -270,6 +288,10 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.POTTED_GARDEN_ROSE, "Potted Garden Rose", "Gartenrose im Topf");
         block(ModBlocks.POTTED_FIRE_LILY, "Potted Fire Lily", "Feuerlilie im Topf");
         block(ModBlocks.POTTED_FROST_FLOWER, "Potted Frost Flower", "Frostblume im Topf");
+        block(ModBlocks.GROVE_BELL, "Grove Bell", "Hainglocke");
+        block(ModBlocks.POTTED_GROVE_BELL, "Potted Grove Bell", "Hainglocke im Topf");
+        block(ModBlocks.LIFE_BLOSSOM, "Life Blossom", "Lebensblüte");
+        block(ModBlocks.POTTED_LIFE_BLOSSOM, "Potted Life Blossom", "Lebensblüte im Topf");
         block(ModBlocks.MOONFLOWER, "Moonflower", "Mondblume");
         block(ModBlocks.POTTED_MOONFLOWER, "Potted Moonflower", "Mondblume im Topf");
 
@@ -295,7 +317,13 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.PYRRHON.get(), pick("Pyrrhon", "Pyrrhon"));
         text("boss.kingdomsatwar.fire", "Pyrrhon, the Ash Lord", "Pyrrhon, der Aschenfürst");
         text("boss.kingdomsatwar.fire.title", "The Ash Lord", "Der Aschenfürst");
+        add(ModEntities.GLACIARA.get(), pick("Glaciara", "Glaciara"));
+        text("boss.kingdomsatwar.ice.title", "The Frost Queen", "Die Frostkönigin");
+        add(ModEntities.VERDANTIS.get(), pick("Verdantis", "Verdantis"));
+        text("boss.kingdomsatwar.nature.title", "Guardian of the Grove", "Die Hüterin des Hains");
+        add(ModEntities.VINELING.get(), pick("Vineling", "Rankling"));
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
+        add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
         lairs();
         story();

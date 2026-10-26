@@ -1,5 +1,33 @@
 {
   "values": {
+    "kingdomsatwar:ancient_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:ancient_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:ancient_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:bramble": {
+      "burn_odds": 100,
+      "ignite_odds": 60
+    },
+    "kingdomsatwar:gnarled_roots": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
     "kingdomsatwar:oak_bench": {
       "burn_odds": 20,
       "ignite_odds": 5

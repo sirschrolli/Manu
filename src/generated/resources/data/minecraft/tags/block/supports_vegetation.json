@@ -1,5 +1,7 @@
 {
   "values": [
-    "kingdomsatwar:cinder_soil"
+    "kingdomsatwar:cinder_soil",
+    "kingdomsatwar:frozen_soil",
+    "kingdomsatwar:glowing_moss"
   ]
 }

@@ -31,5 +31,10 @@ public class ModDataMapProvider extends DataMapProvider {
         for (DeferredBlock<? extends Block> block : ModBlocks.woodenBlocks()) {
             flammable.add(block.key(), block == ModBlocks.TIMBER_BEAM ? LIKE_LOGS : LIKE_PLANKS, false);
         }
+        // Uralter Hain: Urholz wie Stämme, Laub und Gestrüpp wie Laub
+        flammable.add(ModBlocks.ANCIENT_LOG.key(), LIKE_LOGS, false);
+        flammable.add(ModBlocks.GNARLED_ROOTS.key(), LIKE_LOGS, false);
+        flammable.add(ModBlocks.ANCIENT_LEAVES.key(), new Flammable(FireBlock.IGNITE_EASY, FireBlock.BURN_EASY), false);
+        flammable.add(ModBlocks.BRAMBLE.key(), new Flammable(FireBlock.IGNITE_INSTANT, FireBlock.BURN_INSTANT), false);
     }
 }

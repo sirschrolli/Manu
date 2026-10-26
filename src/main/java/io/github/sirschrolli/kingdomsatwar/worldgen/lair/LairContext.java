@@ -46,8 +46,17 @@ public final class LairContext {
         }
     }
 
+    /** Block an dieser Stelle (Luft, wenn der Chunk beim Erzeugen nicht erreichbar ist). */
     public BlockState get(int x, int y, int z) {
+        if (!this.reachable(x, z)) {
+            return net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+        }
         return this.level.getBlockState(new BlockPos(x, y, z));
+    }
+
+    /** Beim Erzeugen sind nur der aktuelle Chunk und seine direkten Nachbarn lesbar. */
+    public boolean reachable(int x, int z) {
+        return !(this.level instanceof net.minecraft.server.level.WorldGenRegion region) || region.hasChunk(x >> 4, z >> 4);
     }
 
     public void fill(int x, int y0, int y1, int z, BlockState state) {
@@ -58,6 +67,9 @@ public final class LairContext {
 
     /** Erste freie Höhe über dem ursprünglichen Gelände (vor dem Umbau dieser Säule abfragen!). */
     public int originalHeight(int x, int z, boolean oceanFloor) {
+        if (!this.reachable(x, z)) {
+            return this.center.getY();
+        }
         boolean worldgen = this.level instanceof net.minecraft.server.level.WorldGenRegion;
         Heightmap.Types type = oceanFloor
                 ? (worldgen ? Heightmap.Types.OCEAN_FLOOR_WG : Heightmap.Types.OCEAN_FLOOR)

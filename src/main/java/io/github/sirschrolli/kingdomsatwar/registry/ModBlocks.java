@@ -266,12 +266,22 @@ public final class ModBlocks {
     public static final DeferredBlock<FlowerBlock> FROST_FLOWER = flower("frost_flower", MobEffects.SLOWNESS, 6.0f);
     /** Leuchtet nachts schwach bläulich – wächst dort, wo auch Irrlichter tanzen. */
     public static final DeferredBlock<FlowerBlock> MOONFLOWER = flower("moonflower", MobEffects.SLOW_FALLING, 7.0f, 7);
+    /** Hainglocke: hohe Blume mit blassblauen, schwach leuchtenden Glocken – wächst im Uralten Hain. */
+    public static final DeferredBlock<FlowerBlock> GROVE_BELL = flower("grove_bell", MobEffects.LUCK, 8.0f, 5);
+    /** Lebensblüte: aus ihr schöpft Verdantis Heilung – wer sie zertritt, schwächt die Hüterin. */
+    public static final DeferredBlock<FlowerBlock> LIFE_BLOSSOM = blockWithItem("life_blossom",
+            p -> new io.github.sirschrolli.kingdomsatwar.block.LifeBlossomBlock(MobEffects.REGENERATION, 6.0f, p),
+            p -> p.mapColor(MapColor.COLOR_PINK).noCollision().instabreak().sound(SoundType.SPORE_BLOSSOM)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED).lightLevel(state -> 10),
+            ip -> ip.compostable(ContextIntProviders.COMPOSTABLE_MEDIUM), FARMING_TAB);
 
     public static final DeferredBlock<FlowerPotBlock> POTTED_LAVENDER = pottedFlower("potted_lavender", LAVENDER);
     public static final DeferredBlock<FlowerPotBlock> POTTED_GARDEN_ROSE = pottedFlower("potted_garden_rose", GARDEN_ROSE);
     public static final DeferredBlock<FlowerPotBlock> POTTED_FIRE_LILY = pottedFlower("potted_fire_lily", FIRE_LILY);
     public static final DeferredBlock<FlowerPotBlock> POTTED_FROST_FLOWER = pottedFlower("potted_frost_flower", FROST_FLOWER);
     public static final DeferredBlock<FlowerPotBlock> POTTED_MOONFLOWER = pottedFlower("potted_moonflower", MOONFLOWER, 7);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_GROVE_BELL = pottedFlower("potted_grove_bell", GROVE_BELL, 5);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_LIFE_BLOSSOM = pottedFlower("potted_life_blossom", LIFE_BLOSSOM, 10);
 
     /** Zierblumen mit ihrem Blumentopf (feste Reihenfolge, damit die erzeugten Dateien gleich bleiben). */
     public static final Map<DeferredBlock<FlowerBlock>, DeferredBlock<FlowerPotBlock>> FLOWERS;
@@ -283,6 +293,8 @@ public final class ModBlocks {
         flowers.put(FIRE_LILY, POTTED_FIRE_LILY);
         flowers.put(FROST_FLOWER, POTTED_FROST_FLOWER);
         flowers.put(MOONFLOWER, POTTED_MOONFLOWER);
+        flowers.put(GROVE_BELL, POTTED_GROVE_BELL);
+        flowers.put(LIFE_BLOSSOM, POTTED_LIFE_BLOSSOM);
         FLOWERS = Collections.unmodifiableMap(flowers);
     }
 
@@ -334,6 +346,78 @@ public final class ModBlocks {
             io.github.sirschrolli.kingdomsatwar.block.EmberVentBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0f, 6.0f)
                     .sound(SoundType.TUFF).lightLevel(state -> 10).isValidSpawn((state, level, pos, type) -> type.fireImmune()),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
+    // Frostkessel: das Biom um Glaciaras Gletscherkessel
+    // =====================================================================================
+
+    /** Frostkristall: durchscheinend, leuchtet eisblau. */
+    public static final DeferredBlock<net.minecraft.world.level.block.HalfTransparentBlock> FROST_CRYSTAL = blockWithItem("frost_crystal",
+            net.minecraft.world.level.block.HalfTransparentBlock::new,
+            p -> p.mapColor(MapColor.ICE).strength(1.5f).sound(SoundType.AMETHYST).noOcclusion().lightLevel(s -> 8)
+                    .isValidSpawn((state, level, pos, type) -> false).isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Gletschereis: uraltes, dichtes Eis in Schichten – schmilzt nie, sehr glatt. */
+    public static final DeferredBlock<Block> GLACIER_ICE = blockWithItem("glacier_ice", Block::new,
+            p -> p.mapColor(MapColor.ICE).strength(2.8f).friction(0.985f).sound(SoundType.GLASS),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Raureifstein: Stein unter einer Kruste aus Reif (auch als Treppe, Stufe und Mauer). */
+    public static final BuildingSet RIME_STONE = stoneSet("rime_stone", "rime_stone", MapColor.SNOW, SoundType.STONE, 1.5f);
+    /** Frosterde: gefrorener Boden, auf dem Frostblumen wachsen. */
+    public static final DeferredBlock<Block> FROZEN_SOIL = blockWithItem("frozen_soil", Block::new,
+            p -> p.mapColor(MapColor.SNOW).strength(0.7f).sound(SoundType.ROOTED_DIRT),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Eiszapfen, die unter Überhängen hängen. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.IcicleBlock> ICICLE = blockWithItem("icicle",
+            io.github.sirschrolli.kingdomsatwar.block.IcicleBlock::new,
+            p -> p.mapColor(MapColor.ICE).noCollision().noOcclusion().strength(0.3f).sound(SoundType.GLASS).pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
+    // Uralter Hain: das Biom um Verdantis' Nest
+    // =====================================================================================
+
+    /** Urholz: Stamm der uralten Hainbäume – graugrüne, tief gefurchte Borke mit Moos und Flechten. */
+    public static final DeferredBlock<RotatedPillarBlock> ANCIENT_LOG = blockWithItem("ancient_log", RotatedPillarBlock::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_GREEN).instrument(NoteBlockInstrument.BASS).strength(2.5f).sound(SoundType.WOOD).ignitedByLava(),
+            ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS), NATURE_TAB);
+    /** Urholzbretter (auch als Treppe und Stufe). */
+    public static final BuildingSet ANCIENT_PLANKS = roofSet("ancient_planks", "ancient_plank",
+            p -> p.mapColor(MapColor.TERRACOTTA_GREEN).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BuildingSet.Tool.AXE);
+    /** Uraltes Laub: tiefgrün mit goldenen Blättchen. */
+    public static final DeferredBlock<net.minecraft.world.level.block.UntintedParticleLeavesBlock> ANCIENT_LEAVES = blockWithItem("ancient_leaves",
+            p -> new net.minecraft.world.level.block.UntintedParticleLeavesBlock(0.02f,
+                    net.minecraft.core.particles.ColorParticleOption.create(net.minecraft.core.particles.ParticleTypes.TINTED_LEAVES, 0xFF2F6A32),
+                    net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer.noAmbientSound(), p),
+            p -> p.mapColor(MapColor.PLANT).strength(0.2f).randomTicks().sound(SoundType.AZALEA_LEAVES).noOcclusion()
+                    .isValidSpawn((state, level, pos, type) -> false).isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos, box) -> false).ignitedByLava().pushReaction(PushReaction.POPPED)
+                    .isRedstoneConductor((state, level, pos) -> false),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Leuchtmoos: dichtes Moos, dessen Sporen im Dunkeln schimmern. */
+    public static final DeferredBlock<Block> GLOWING_MOSS = blockWithItem("glowing_moss", Block::new,
+            p -> p.mapColor(MapColor.COLOR_GREEN).strength(0.1f).sound(SoundType.MOSS).lightLevel(state -> 6),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Leuchtkappen: kleine Pilze, die türkis leuchten. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.GlowcapBlock> GLOWCAP = blockWithItem("glowcap",
+            io.github.sirschrolli.kingdomsatwar.block.GlowcapBlock::new,
+            p -> p.mapColor(MapColor.COLOR_CYAN).noCollision().instabreak().sound(SoundType.FUNGUS).lightLevel(state -> 11)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED),
+            ip -> ip.compostable(ContextIntProviders.COMPOSTABLE_LOW), NATURE_TAB);
+    /** Dornengestrüpp: verschlungene Ranken voller Dornen – bremst und sticht. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.BrambleBlock> BRAMBLE = blockWithItem("bramble",
+            io.github.sirschrolli.kingdomsatwar.block.BrambleBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BROWN).noCollision().strength(0.3f).sound(SoundType.SWEET_BERRY_BUSH)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED).ignitedByLava(),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Knorrige Wurzeln: dick verschlungen, man sieht hindurch. */
+    public static final DeferredBlock<Block> GNARLED_ROOTS = blockWithItem("gnarled_roots", Block::new,
+            p -> p.mapColor(MapColor.PODZOL).instrument(NoteBlockInstrument.BASS).strength(1.2f).sound(SoundType.MANGROVE_ROOTS).noOcclusion()
+                    .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false).ignitedByLava(),
             UnaryOperator.identity(), NATURE_TAB);
 
     // =====================================================================================

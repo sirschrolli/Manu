@@ -55,6 +55,20 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(block.get());
         }
 
+        // Frostkessel (Gletschereis nur mit Behutsamkeit, wie Blaueis)
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.FROST_CRYSTAL, ModBlocks.FROZEN_SOIL, ModBlocks.ICICLE)) {
+            dropSelf(block.get());
+        }
+        dropWhenSilkTouch(ModBlocks.GLACIER_ICE.get());
+
+        // Uralter Hain (Laub wie Mangrovenlaub: Stöcke, mit Schere oder Behutsamkeit das Laub selbst)
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ANCIENT_LOG, ModBlocks.GLOWING_MOSS, ModBlocks.GLOWCAP,
+                ModBlocks.GNARLED_ROOTS)) {
+            dropSelf(block.get());
+        }
+        add(ModBlocks.ANCIENT_LEAVES.get(), this::createMangroveLeavesDrops);
+        add(ModBlocks.BRAMBLE.get(), block -> this.createShearsOnlyDrop(block));
+
         // Siegelstein (die heiligen Teile des Siegelkreises sind unzerstörbar und haben keine Beute)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE)) {

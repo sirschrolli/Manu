@@ -30,6 +30,10 @@ import org.jspecify.annotations.Nullable;
 public final class ModBiomes {
     /** Aschelande um Pyrrhons Vulkankrater. */
     public static final ResourceKey<Biome> ASHLANDS = key("ashlands");
+    /** Frostkessel um Glaciaras Gletscherkessel. */
+    public static final ResourceKey<Biome> FROSTBASIN = key("frostbasin");
+    /** Uralter Hain um Verdantis' Nest. */
+    public static final ResourceKey<Biome> ANCIENT_GROVE = key("ancient_grove");
 
     private ModBiomes() {}
 
@@ -39,16 +43,77 @@ public final class ModBiomes {
 
     /** Biom um das Nest dieser Art (oder null, solange die Art noch keins hat). */
     public static @Nullable ResourceKey<Biome> forNest(DragonType type) {
-        return type == DragonType.FIRE ? ASHLANDS : null;
+        return switch (type) {
+            case FIRE -> ASHLANDS;
+            case ICE -> FROSTBASIN;
+            case NATURE -> ANCIENT_GROVE;
+            default -> null;
+        };
     }
 
     /** Ist das eines der Nest-Biome? */
     public static boolean isNestBiome(net.minecraft.core.Holder<Biome> biome) {
-        return biome.is(ASHLANDS);
+        return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE);
     }
 
     public static void bootstrap(BootstrapContext<Biome> context) {
         context.register(ASHLANDS, ashlands());
+        context.register(FROSTBASIN, frostbasin());
+        context.register(ANCIENT_GROVE, ancientGrove());
+    }
+
+    /**
+     * Uralter Hain: sattes, tiefes Grün, ein goldgrüner Dunst unter dem Blätterdach, schwebende Sporen und
+     * Glühwürmchen, die Musik der üppigen Höhlen und das leise Rauschen der Wälder.
+     */
+    private static Biome ancientGrove() {
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .temperature(0.75f)
+                .downfall(0.9f)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x2E7A5A)
+                        .grassColorOverride(0x4E9A32)
+                        .foliageColorOverride(0x3A8A2A)
+                        .dryFoliageColorOverride(0x6A8A3A)
+                        .build())
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x8CC4A0))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xA8D49A))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x1E4A3A))
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(
+                        new AmbientParticle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.012f),
+                        new AmbientParticle(ParticleTypes.FIREFLY, 0.004f)))
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_LUSH_CAVES))
+                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .generationSettings(BiomeGenerationSettings.EMPTY)
+                .build();
+    }
+
+    /**
+     * Frostkessel: bitterkalt, ständiger Schneefall, ein fahler, weißlich-blauer Himmel, glitzernde Eiskristalle in der
+     * Luft und die Musik der vereisten Gipfel.
+     */
+    private static Biome frostbasin() {
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .temperature(-0.9f)
+                .downfall(0.7f)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x3A6EA5)
+                        .grassColorOverride(0x86B69C)
+                        .foliageColorOverride(0x66A486)
+                        .dryFoliageColorOverride(0x8AA4A0)
+                        .build())
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0xB4CCE6))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xD8E6F4))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x2A4A7A))
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(
+                        new AmbientParticle(ParticleTypes.SNOWFLAKE, 0.012f),
+                        new AmbientParticle(ParticleTypes.WHITE_ASH, 0.02f)))
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_FROZEN_PEAKS))
+                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .generationSettings(BiomeGenerationSettings.EMPTY)
+                .build();
     }
 
     /**

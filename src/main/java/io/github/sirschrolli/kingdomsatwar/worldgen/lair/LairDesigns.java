@@ -10,6 +10,8 @@ public final class LairDesigns {
 
     static {
         DESIGNS.put(DragonType.FIRE, new FireLairDesign());
+        DESIGNS.put(DragonType.ICE, new IceLairDesign());
+        DESIGNS.put(DragonType.NATURE, new NatureLairDesign());
     }
 
     private LairDesigns() {}

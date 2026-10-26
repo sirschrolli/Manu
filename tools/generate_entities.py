@@ -14,8 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import (boss_fire, cave_troll, deer, dragon, dragon_armor, goose, lindworm, wild_boar,  # noqa: E402
-                              will_o_wisp)
+from entitygen.models import (boss_fire, boss_ice, boss_nature, cave_troll, deer, dragon, dragon_armor, goose,  # noqa: E402
+                              lindworm, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,6 +58,12 @@ def main():
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)
+    write_model(boss_ice, "GlaciaraGeometry", "Geometrie von Glaciara, dem Eisdrachen-Boss (Grundgröße, im Spiel ×2,1).",
+                "boss", boss_ice.PALETTES, preview)
+    write_model(boss_nature, "VerdantisGeometry",
+                "Geometrie von Verdantis, dem Naturdrachen-Boss (Grundgröße, im Spiel ×2,0).", "boss", boss_nature.PALETTES, preview)
+    write_model(vineling, "VinelingGeometry", "Geometrie des Ranklings (Diener von Verdantis).", "vineling", vineling.PALETTES,
+                preview)
 
 
 if __name__ == "__main__":

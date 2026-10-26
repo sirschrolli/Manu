@@ -22,7 +22,9 @@ public class BossProjectileRenderer extends EntityRenderer<BossProjectile, BossP
 
     static {
         for (BossProjectile.Kind kind : BossProjectile.Kind.values()) {
-            TYPES.put(kind, RenderTypes.entityCutout(KingdomsAtWar.id("textures/entity/boss/projectile_" + kind.name().toLowerCase() + ".png")));
+            net.minecraft.resources.Identifier texture = KingdomsAtWar.id("textures/entity/boss/projectile_" + kind.name().toLowerCase() + ".png");
+            TYPES.put(kind, kind == BossProjectile.Kind.BUBBLE || kind == BossProjectile.Kind.ICE_SPEAR
+                    ? RenderTypes.entityTranslucent(texture) : RenderTypes.entityCutout(texture));
         }
     }
 

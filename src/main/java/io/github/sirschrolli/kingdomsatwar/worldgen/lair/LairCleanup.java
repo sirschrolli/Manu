@@ -75,7 +75,7 @@ public final class LairCleanup {
         return false;
     }
 
-    /** Entfernt Pflanzen und verkohlt Stämme auf allen Säulen des Chunks, deren Oberfläche im Nest-Biom liegt. */
+    /** Räumt auf allen Säulen des Chunks, deren Oberfläche in einem Nest-Biom liegt (je nach Biom). */
     private static void cleanup(ServerLevel level, LevelChunk chunk) {
         int minX = chunk.getPos().getMinBlockX();
         int minZ = chunk.getPos().getMinBlockZ();
@@ -85,30 +85,40 @@ public final class LairCleanup {
                 int x = minX + dx;
                 int z = minZ + dz;
                 int top = chunk.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
-                if (!ModBiomes.isNestBiome(chunk.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(top), QuartPos.fromBlock(z)))) {
-                    continue;
+                var biome = chunk.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(top), QuartPos.fromBlock(z));
+                if (!ModBiomes.isNestBiome(biome) || biome.is(ModBiomes.ANCIENT_GROVE)) {
+                    continue;   // im Uralten Hain dürfen Pflanzen und Bäume von nebenan bleiben
                 }
+                boolean frost = biome.is(ModBiomes.FROSTBASIN);
                 for (int y = top; y > top - 28 && y > level.getMinY(); y--) {
                     pos.set(x, y, z);
                     BlockState state = chunk.getBlockState(pos);
-                    if (state.isAir() || keep(state)) {
+                    if (state.isAir() || (frost ? keepFrost(state) : keep(state))) {
                         continue;
                     }
                     if (!state.getFluidState().isEmpty() || LairContext.isGround(state)) {
                         break;
                     }
                     if (state.is(BlockTags.LOGS)) {
-                        BlockState charred = ModBlocks.CHARRED_LOG.get().defaultBlockState();
-                        if (state.hasProperty(RotatedPillarBlock.AXIS)) {
-                            charred = charred.setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
+                        if (!frost) {
+                            BlockState charred = ModBlocks.CHARRED_LOG.get().defaultBlockState();
+                            if (state.hasProperty(RotatedPillarBlock.AXIS)) {
+                                charred = charred.setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
+                            }
+                            level.setBlock(pos, charred, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                         }
-                        level.setBlock(pos, charred, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                     } else {
                         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                     }
                 }
             }
         }
+    }
+
+    /** Was im Frostkessel hingehört: Schnee, Eis, Eiszapfen, Frostkristalle und -blumen. */
+    private static boolean keepFrost(BlockState state) {
+        return state.is(Blocks.SNOW) || state.is(ModBlocks.ICICLE.get()) || state.is(ModBlocks.FROST_FLOWER.get())
+                || state.is(ModBlocks.FROST_CRYSTAL.get()) || state.is(Blocks.STRIPPED_SPRUCE_LOG) || state.is(BlockTags.ICE);
     }
 
     /** Was in den Aschelanden hingehört (vom Nest selbst gesetzt). */

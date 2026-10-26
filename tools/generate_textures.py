@@ -32,6 +32,8 @@ import building_textures  # noqa: E402
 import creature_textures  # noqa: E402
 import equipment_textures  # noqa: E402
 import farm_textures  # noqa: E402
+import frost_textures  # noqa: E402
+import grove_textures  # noqa: E402
 import kingdom_textures  # noqa: E402
 import lair_textures  # noqa: E402
 import magic_textures  # noqa: E402
@@ -803,6 +805,8 @@ def build_all() -> dict[str, Image.Image]:
     lair_textures.build(put)
     ashlands_textures.build(put)
     seal_textures.build(put)
+    frost_textures.build(put)
+    grove_textures.build(put)
     equipment_textures.build_entity(put)
     dragon_spawn_eggs()
     plants()

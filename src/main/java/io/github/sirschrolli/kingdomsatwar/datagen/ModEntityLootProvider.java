@@ -43,6 +43,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
+        this.add(ModEntities.GLACIARA.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.ICE).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
+        this.add(ModEntities.VERDANTIS.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.NATURE).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.LIFE_BLOSSOM.get(), 2, 4)));
+        this.add(ModEntities.VINELING.get(), LootTable.lootTable()
+                .withPool(drop(Items.VINE, 0, 2))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));
         this.add(ModEntities.BANDIT.get(), banditLoot(false));
         this.add(ModEntities.BANDIT_ARCHER.get(), banditLoot(true));
 

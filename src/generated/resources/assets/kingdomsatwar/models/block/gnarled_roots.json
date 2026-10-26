@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/gnarled_roots_top",
+    "side": "kingdomsatwar:block/gnarled_roots_side"
+  }
+}

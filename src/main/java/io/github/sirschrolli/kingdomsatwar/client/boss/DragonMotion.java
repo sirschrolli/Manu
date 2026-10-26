@@ -290,9 +290,21 @@ public class DragonMotion {
             case BossAnims.RAIN -> this.rain(p, a);
             case BossAnims.RING -> this.ring(p, a);
             case BossAnims.ERUPT -> this.erupt(p, a);
+            case BossAnims.SPECIAL_1 -> this.special1(s, p, a);
+            case BossAnims.SPECIAL_2 -> this.special2(s, p, a);
             default -> {
             }
         }
+    }
+
+    /** Erster besonderer Angriff des Bosses (Standard: aufbäumen und mit offenen Flügeln brüllen). */
+    protected void special1(BossRenderState s, DragonPose p, float a) {
+        this.roar(p, a);
+    }
+
+    /** Zweiter besonderer Angriff des Bosses (Standard: wie der Odem). */
+    protected void special2(BossRenderState s, DragonPose p, float a) {
+        this.breath(p, a);
     }
 
     protected void bite(DragonPose p, float a) {

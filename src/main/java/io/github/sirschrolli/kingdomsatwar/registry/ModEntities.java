@@ -82,6 +82,18 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<PyrrhonEntity>> PYRRHON = ENTITIES.registerEntityType("fire_dragon_boss",
             PyrrhonEntity::new, MobCategory.MONSTER,
             builder -> builder.sized(6.0f, 6.0f).eyeHeight(7.0f).fireImmune().clientTrackingRange(16).updateInterval(2));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity>> GLACIARA =
+            ENTITIES.registerEntityType("ice_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(5.0f, 6.0f).eyeHeight(8.0f).fireImmune()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Verdantis, die Hüterin des Hains (Natur). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity>> VERDANTIS =
+            ENTITIES.registerEntityType("nature_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(6.0f, 5.5f).eyeHeight(6.5f).clientTrackingRange(16).updateInterval(2));
+    /** Rankling: Diener von Verdantis (wird nicht gespeichert). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity>> VINELING =
+            ENTITIES.registerEntityType("vineling", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(0.8f, 1.6f).eyeHeight(1.35f).noSave().clientTrackingRange(10));
     /** Geschosse der Bosse (Feuerbälle, Meteore …). */
     public static final DeferredHolder<EntityType<?>, EntityType<BossProjectile>> BOSS_PROJECTILE = ENTITIES.registerEntityType("boss_projectile",
             BossProjectile::new, MobCategory.MISC,
@@ -97,6 +109,8 @@ public final class ModEntities {
             DragonType element) {
         return switch (element) {
             case FIRE -> PYRRHON.get();
+            case ICE -> GLACIARA.get();
+            case NATURE -> VERDANTIS.get();
             default -> null;
         };
     }
@@ -121,6 +135,9 @@ public final class ModEntities {
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
+        event.put(GLACIARA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity.createAttributes().build());
+        event.put(VERDANTIS.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity.createAttributes().build());
+        event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
     }
 
     /**

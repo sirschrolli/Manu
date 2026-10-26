@@ -92,18 +92,24 @@ final class Showcase {
                 case "magic" -> magic(steps);
                 case "structures" -> structures(steps);
                 case "boss" -> boss(steps);
-                case "lair" -> lair(steps);
-                case "bossmotion" -> bossMotion(steps);
+                case "lair" -> lair(steps, DragonType.FIRE);
+                case "bossmotion" -> bossMotion(steps, DragonType.FIRE);
                 case "seal" -> seal(steps);
                 case "lairinfo" -> {
                     double[] nest = new double[4];
-                    locateFireNest(steps, nest);
+                    locateNest(steps, nest, DragonType.FIRE);
                     steps.add(Step.until(() -> nest[3] != 0, 1200));
                     steps.add(Step.waitTicks(100));
                     steps.add(Step.server(level -> debugAshlands(level, nest)));
                     steps.add(Step.waitTicks(40));
                 }
-                default -> { }
+                default -> {
+                    if (scene.startsWith("lair_")) {
+                        lair(steps, DragonType.byId(scene.substring(5)));
+                    } else if (scene.startsWith("bossmotion_")) {
+                        bossMotion(steps, DragonType.byId(scene.substring(11)));
+                    }
+                }
             }
         }
         steps.add(Step.waitTicks(40));
@@ -1274,9 +1280,10 @@ final class Showcase {
      * Pyrrhons Vulkankrater in einer echten (nicht flachen) Welt: Lage aus dem {@code NestLocator}, Bilder aus der Luft,
      * vom Kraterrand, in der Dämmerung und beim Erwachen des Bosses – zum Schluss der Drachenkompass in der Hand.
      */
-    private static void lair(Deque<Step> steps) {
+    private static void lair(Deque<Step> steps, DragonType type) {
+        String id = type.id();
         double[] nest = new double[4];   // x, z, Bodenhöhe der Mitte, gefunden (1) / keins (-1)
-        locateFireNest(steps, nest);
+        locateNest(steps, nest, type);
         steps.add(Step.until(() -> nest[3] != 0, 1200));
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
@@ -1286,43 +1293,43 @@ final class Showcase {
         steps.add(Step.waitForChunks(3000));
         steps.add(Step.waitTicks(60));
         steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}",
-                io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(DragonType.FIRE))));
-        steps.add(Step.screenshot("lair_fire_overview"));
+                io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type))));
+        steps.add(Step.screenshot("lair_" + id + "_overview"));
         // Aschelande: aus großer Höhe und vom Boden aus
         steps.add(lookFrom(nest, 40, 95, 150, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.waitTicks(40));
-        steps.add(Step.screenshot("lair_ashlands_aerial"));
-        groundView(steps, nest, 50, 52, 6.0, 14, "lair_ashlands_ground");
-        groundView(steps, nest, -78, 18, 7.0, 10, "lair_ashlands_ground_2");
-        groundView(steps, nest, 25, -82, 6.0, 12, "lair_ashlands_ground_3");
+        steps.add(Step.screenshot("lair_" + id + "_zone_aerial"));
+        groundView(steps, nest, 50, 52, 6.0, 14, "lair_" + id + "_zone_ground");
+        groundView(steps, nest, -78, 18, 7.0, 10, "lair_" + id + "_zone_ground_2");
+        groundView(steps, nest, 25, -82, 6.0, 12, "lair_" + id + "_zone_ground_3");
         steps.add(lookFrom(nest, -70, 55, -80, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.waitTicks(40));
-        steps.add(Step.screenshot("lair_fire_overview_2"));
+        steps.add(Step.screenshot("lair_" + id + "_overview_2"));
         steps.add(lookFrom(nest, -8, 27, 29, 0));
         steps.add(Step.waitTicks(40));
         steps.add(Step.waitForChunks(600));
-        steps.add(Step.screenshot("lair_fire_rim"));
+        steps.add(Step.screenshot("lair_" + id + "_rim"));
         steps.add(lookFrom(nest, 5, 5, 13, 2));
         steps.add(Step.waitTicks(40));
         steps.add(Step.waitForChunks(600));
-        steps.add(Step.screenshot("lair_fire_inside"));
+        steps.add(Step.screenshot("lair_" + id + "_inside"));
         // Dämmerung: die Lava leuchtet
         steps.add(Step.command("time set 13200"));
         steps.add(lookFrom(nest, 0, 45, 80, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(600));
-        steps.add(Step.screenshot("lair_fire_dusk"));
+        steps.add(Step.screenshot("lair_" + id + "_dusk"));
         // Erwachen über den Nestkern
         steps.add(lookFrom(nest, 2, 8, 23, 6));
         steps.add(Step.waitTicks(30));
         steps.add(Step.waitTicks(20));
         steps.add(Step.server(level -> {
             BlockPos center = BlockPos.containing(nest[0], nest[2], nest[1]);
-            BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(DragonType.FIRE).corePos(center);
+            BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(type).corePos(center);
             if (level.getBlockEntity(core) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity be) {
                 var boss = be.awaken(level);
                 io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nestkern bei {} weckt {}", core, boss);
@@ -1331,13 +1338,13 @@ final class Showcase {
             }
         }));
         steps.add(Step.waitTicks(70));
-        steps.add(Step.screenshot("lair_fire_awakening_1"));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_1"));
         steps.add(Step.waitTicks(55));
-        steps.add(Step.screenshot("lair_fire_awakening_2"));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_2"));
         steps.add(Step.waitTicks(55));
-        steps.add(Step.screenshot("lair_fire_awakening_3"));
+        steps.add(Step.screenshot("lair_" + id + "_awakening_3"));
         // Drachenkompass in der Hand, ein Stück außerhalb des Kraters (die Nadel zeigt zum Nest)
-        steps.add(Step.command("kill @e[type=kingdomsatwar:pyrrhon]"));
+        steps.add(Step.command("kill @e[type=kingdomsatwar:" + id + "_dragon_boss]"));
         steps.add(Step.command("time set 6000"));
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.command("clear @s"));
@@ -1354,7 +1361,7 @@ final class Showcase {
         steps.add(Step.hud(true));
         steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
         steps.add(Step.waitTicks(30));
-        steps.add(Step.screenshot("lair_compass"));
+        steps.add(Step.screenshot("lair_" + id + "_compass"));
         steps.add(Step.command("gamemode spectator"));
     }
 
@@ -1517,27 +1524,29 @@ final class Showcase {
         });
     }
 
-    /** Sucht das Feuernest dieser Welt (x, z, Bodenhöhe der Mitte, gefunden = 1 / keins = -1) und erzeugt seine Chunks. */
-    private static void locateFireNest(Deque<Step> steps, double[] nest) {
+    /** Sucht das Nest einer Art in dieser Welt (x, z, Bodenhöhe der Mitte, gefunden = 1 / keins = -1) und erzeugt seine Chunks. */
+    private static void locateNest(Deque<Step> steps, double[] nest, DragonType type) {
         steps.add(Step.server(level -> {
             var nests = io.github.sirschrolli.kingdomsatwar.worldgen.lair.NestLocator.all(level);
             io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nester dieser Welt: {}", nests);
-            var fire = nests.get(DragonType.FIRE);
-            if (fire == null) {
+            var chunk = nests.get(type);
+            if (chunk == null) {
                 nest[3] = -1;
                 return;
             }
-            nest[0] = fire.getMiddleBlockX() + 0.5;
-            nest[1] = fire.getMiddleBlockZ() + 0.5;
-            // das ganze Nest erzeugen lassen (dauert einen Moment) und den Lavasee messen
-            for (int x = fire.x() - 8; x <= fire.x() + 8; x++) {
-                for (int z = fire.z() - 8; z <= fire.z() + 8; z++) {
+            nest[0] = chunk.getMiddleBlockX() + 0.5;
+            nest[1] = chunk.getMiddleBlockZ() + 0.5;
+            // das ganze Nest erzeugen lassen (dauert einen Moment)
+            for (int x = chunk.x() - 8; x <= chunk.x() + 8; x++) {
+                for (int z = chunk.z() - 8; z <= chunk.z() + 8; z++) {
                     level.getChunk(x, z);
                 }
             }
-            nest[2] = level.getHeight(Heightmap.Types.MOTION_BLOCKING, fire.getMiddleBlockX(), fire.getMiddleBlockZ());
+            var entry = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type);
+            nest[2] = entry != null ? entry.center().getY()
+                    : level.getHeight(Heightmap.Types.MOTION_BLOCKING, chunk.getMiddleBlockX(), chunk.getMiddleBlockZ());
             nest[3] = 1;
-            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Feuernest bei {} {} {}", nest[0], nest[2], nest[1]);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nest {} bei {} {} {}", type.id(), nest[0], nest[2], nest[1]);
         }));
     }
 
@@ -1545,7 +1554,18 @@ final class Showcase {
      * Bewegungen des Drachen-Bosses als Bildfolgen (werden zu Videos zusammengesetzt): Erwachen, Kampf gegen ein paar
      * Soldaten (Gehen, Drehen, Angriffe, Launen) und Flug. Die Kamera folgt dem Boss von der Seite.
      */
-    private static void bossMotion(Deque<Step> steps) {
+    private static void bossMotion(Deque<Step> steps, DragonType type) {
+        String id = type.id();
+        BlockState floorBlock = switch (type) {
+            case ICE -> Blocks.SNOW_BLOCK.defaultBlockState();
+            case NATURE -> Blocks.GRASS_BLOCK.defaultBlockState();
+            default -> Blocks.BASALT.defaultBlockState();
+        };
+        BlockState poolBlock = switch (type) {
+            case ICE -> Blocks.PACKED_ICE.defaultBlockState();
+            case NATURE -> Blocks.MOSS_BLOCK.defaultBlockState();
+            default -> Blocks.LAVA.defaultBlockState();
+        };
         int ox = 600;
         int oz = 0;
         DragonBossEntity[] boss = new DragonBossEntity[1];
@@ -1554,18 +1574,33 @@ final class Showcase {
         steps.add(Step.waitTicks(40));
         steps.add(Step.command("time set 9000"));
         steps.add(Step.server(level -> {
-            fill(level, new BlockPos(ox - 60, ground - 3, oz - 60), new BlockPos(ox + 60, ground - 1, oz + 60), Blocks.BASALT.defaultBlockState());
+            fill(level, new BlockPos(ox - 60, ground - 3, oz - 60), new BlockPos(ox + 60, ground - 1, oz + 60), floorBlock);
             fill(level, new BlockPos(ox - 60, ground, oz - 60), new BlockPos(ox + 60, ground + 40, oz + 60), Blocks.AIR.defaultBlockState());
             for (BlockPos pos : BlockPos.betweenClosed(ox - 6, ground - 3, oz - 6, ox + 6, ground - 1, oz + 6)) {
                 if (pos.distSqr(new BlockPos(ox, pos.getY(), oz)) <= 30) {
-                    level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    level.setBlock(pos, poolBlock, Block.UPDATE_CLIENTS);
+                }
+            }
+            if (type == DragonType.ICE) {
+                // der Eiskristall, den Glaciara beim Erwachen sprengt
+                fill(level, new BlockPos(ox - 3, ground, oz - 3), new BlockPos(ox + 3, ground + 10, oz + 3),
+                        ModBlocks.FROST_CRYSTAL.get().defaultBlockState());
+            }
+            if (type == DragonType.NATURE) {
+                // der überwucherte Hügel und die Lebensblüten
+                var ctx = new io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairContext(level,
+                        new net.minecraft.world.level.levelgen.structure.BoundingBox(ox - 40, ground - 8, oz - 40, ox + 40, ground + 20, oz + 40),
+                        new BlockPos(ox, ground, oz), 1234L);
+                io.github.sirschrolli.kingdomsatwar.worldgen.lair.NatureLairDesign.mound(ctx, ox, ground, oz);
+                for (BlockPos spot : io.github.sirschrolli.kingdomsatwar.worldgen.lair.NatureLairDesign.blossomRing(new BlockPos(ox, ground, oz))) {
+                    io.github.sirschrolli.kingdomsatwar.worldgen.lair.NatureLairDesign.blossomBed(ctx, spot.getX(), ground, spot.getZ());
                 }
             }
         }));
         steps.add(Step.waitTicks(40));
         steps.add(Step.hud(false));
         steps.add(Step.server(level -> {
-            var b = ModEntities.PYRRHON.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            var b = ModEntities.bossType(type).create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
             b.snapTo(ox + 0.5, ground - 11, oz + 0.5, 200, 0);
             b.yBodyRot = 200;
             b.yHeadRot = 200;
@@ -1574,13 +1609,13 @@ final class Showcase {
             boss[0] = b;
         }));
         steps.add(Step.waitTicks(2));
-        steps.add(Step.record("motion_awakening", 175, follow(boss, 24.0, 8.0, 7.0)));
+        steps.add(Step.record("motion_" + id + "_awakening", type == DragonType.NATURE ? 200 : 175, follow(boss, 24.0, 8.0, 7.0)));
         // Kampf: ein paar Soldaten, damit der Boss geht, sich dreht und angreift
         steps.add(Step.server(level -> {
             for (int i = 0; i < 5; i++) {
                 double a = -0.6 + i * 0.3;
-                SoldierType type = i % 2 == 0 ? SoldierType.KNIGHT : SoldierType.ARCHER;
-                var soldier = ModEntities.SOLDIERS.get(type).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                SoldierType soldierType = i % 2 == 0 ? SoldierType.KNIGHT : SoldierType.ARCHER;
+                var soldier = ModEntities.SOLDIERS.get(soldierType).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
                 if (soldier != null) {
                     soldier.snapTo(ox + Math.sin(a) * 14, ground, oz - Math.cos(a) * 14, 0, 0);
                     soldier.setPermanentlyInvulnerable(true);
@@ -1588,9 +1623,20 @@ final class Showcase {
                 }
             }
         }));
-        steps.add(Step.record("motion_fight", 300, follow(boss, 22.0, 6.0, 5.0)));
+        steps.add(Step.record("motion_" + id + "_fight", 300, follow(boss, 22.0, 6.0, 5.0)));
+        if (type == DragonType.NATURE) {
+            // die besonderen Angriffe nacheinander (Wurzelfessel, Rankensäulen, Giftsporen, Rankendiener, Heilung)
+            int[][] special = {{BossAnims.SPECIAL_1, 70}, {BossAnims.ERUPT, 60}, {BossAnims.RING, 60}, {BossAnims.STOMP, 70},
+                    {BossAnims.SPECIAL_2, 125}};
+            for (int i = 0; i < special.length; i++) {
+                int anim = special[i][0];
+                steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
+                steps.add(forceAttack(boss, anim));
+                steps.add(Step.record("motion_" + id + "_special_" + i, special[i][1], follow(boss, 24.0, 7.0, 5.0)));
+            }
+        }
         steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
-        steps.add(Step.record("motion_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
+        steps.add(Step.record("motion_" + id + "_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
         steps.add(Step.hud(true));
     }
 

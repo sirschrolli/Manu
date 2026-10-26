@@ -51,6 +51,9 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GLACIARA, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlaciaraGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VERDANTIS, io.github.sirschrolli.kingdomsatwar.client.model.geom.VerdantisGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VINELING, io.github.sirschrolli.kingdomsatwar.client.model.geom.VinelingGeometry::createLayer);
     }
 
     @SubscribeEvent
@@ -71,6 +74,16 @@ public final class ClientSetup {
                 new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 6, 8, true, 4, 32.0f),
                 KingdomsAtWar.id("textures/entity/boss/pyrrhon.png"), KingdomsAtWar.id("textures/entity/boss/pyrrhon_glow.png"),
                 2.1f, 4.4f, 4.5f));
+        event.registerEntityRenderer(ModEntities.GLACIARA.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.GlaciaraModel(context.bakeLayer(ModModelLayers.GLACIARA)),
+                KingdomsAtWar.id("textures/entity/boss/glaciara.png"), KingdomsAtWar.id("textures/entity/boss/glaciara_glow.png"),
+                2.1f, 4.8f, 4.0f));
+        event.registerEntityRenderer(ModEntities.VERDANTIS.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.VerdantisModel(context.bakeLayer(ModModelLayers.VERDANTIS)),
+                KingdomsAtWar.id("textures/entity/boss/verdantis.png"), KingdomsAtWar.id("textures/entity/boss/verdantis_glow.png"),
+                2.0f, 4.2f, 4.8f));
+        event.registerEntityRenderer(ModEntities.VINELING.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
     }
