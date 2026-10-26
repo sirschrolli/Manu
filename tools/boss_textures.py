@@ -5,11 +5,7 @@ Füllung mit Element-Muster, Phasen-Markierungen) und die Geschosse (Feuerball, 
 
 Wird von tools/generate_textures.py aufgerufen (build(put)).
 
-Aufbau einer Bossleisten-Textur (256 x 64), siehe BossBarRenderer.java:
-  (0, 0)   232 x 30  Rahmen; das Fenster der Leiste liegt bei (25, 15), 182 x 7
-  (0, 32)  182 x 7   Füllung
-  (200,32)  12 x 7   Glanz (wandert über die Füllung)
-  (0, 40)  182 x 7   leere Leiste
+Die Bossleisten selbst entstehen in bossbar_textures.py (Aufbau der Textur siehe dort und BossBarRenderer.java).
 """
 from __future__ import annotations
 
@@ -269,8 +265,9 @@ def particle_frame(kind: str, frame: int) -> Image.Image:
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
+    import bossbar_textures
     for element in ELEMENTS:
-        put(f"gui/boss_bar/{element}", bossbar(element))
+        put(f"gui/boss_bar/{element}", bossbar_textures.bossbar(element))
     put("entity/boss/projectile_fireball", orb("#fff6c0", "#ffa42a", "#c42a08", flames=True, rough=False, seed=11))
     for kind in PARTICLE_RAMPS:
         for frame in range(8):

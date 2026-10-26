@@ -57,6 +57,9 @@ class Model:
         self.name = name
         self.tex_w = tex_w
         self.tex_h = tex_h
+        # Pixel je Modell-Einheit in der gemalten Textur. Die UVs im Java-Code bleiben in Einheiten (TEXTURE_WIDTH =
+        # tex_w); Minecraft rechnet mit normierten UVs, daher darf das PNG ein Vielfaches davon groß sein (feinere Details).
+        self.tex_res = 1
         self.root = Bone("root", None, (0.0, 0.0, 0.0))
         self.bones: dict[str, Bone] = {"root": self.root}
 
@@ -197,11 +200,13 @@ def face_rects(c: Cube) -> dict[str, tuple[int, int, int, int]]:
     }
 
 
-def texel_to_local(c: Cube, face: str, s: int, t: int) -> tuple[float, float, float]:
-    """Mittelpunkt eines Texels (Spalte s, Zeile t in der Seite) als Modellpunkt (Knochen-lokal)."""
+def texel_to_local(c: Cube, face: str, s: int, t: int, res: int = 1) -> tuple[float, float, float]:
+    """Mittelpunkt eines Texels (Spalte s, Zeile t in der Seite) als Modellpunkt (Knochen-lokal).
+
+    ``res``: Pixel je Einheit der Textur (s und t zählen dann in Pixeln)."""
     ox, oy, oz = c.origin
     w, h, d = c.size
-    fx = lambda i, n, length: (i + 0.5) / max(n, 1) * length  # noqa: E731
+    fx = lambda i, n, length: (i + 0.5) / max(n * res, 1) * length  # noqa: E731
     iw, ih, idd = c.int_size()
     if face == "top":
         return ox + fx(s, iw, w), oy, oz + d - fx(t, idd, d)

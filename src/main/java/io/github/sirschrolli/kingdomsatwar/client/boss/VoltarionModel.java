@@ -11,18 +11,19 @@ import org.jspecify.annotations.Nullable;
  * Flügel sind zugleich die Vorderglieder.
  *
  * <p>Am Boden legt er die Flügel nicht auf den Rücken wie die anderen Drachen, sondern stützt sich auf die
- * Handgelenke: Der Oberarm zeigt nach außen und hinten, der Unterarm fällt nach vorn zum Boden, die angelegten Finger
+ * Handgelenke: Der Oberarm zeigt nach außen und hinten, der Unterarm fällt schräg nach innen und vorn zum Boden (die
+ * Ellbogen stehen seitlich ab wie bei einer Fledermaus), die angelegten Finger
  * ragen nach hinten oben, die Flughäute sind gerafft. Beim Gehen setzt er die Handgelenke im Wechsel mit den
  * Hinterbeinen (Viertakt: hinten links, vorn links, hinten rechts, vorn rechts). Die Haltung ist mit
  * tools/entitygen (Kriechhaltung) berechnet: ZYX-Winkel für den linken Flügel, der rechte ist gespiegelt.
  */
 public class VoltarionModel extends DragonBossModel {
     /** Kriechhaltung (linker Flügel): Oberarm, Unterarm, Hand – x, y, z in Bogenmaß. */
-    private static final float[] ARM = {-1.4866f, -0.5496f, 0.5404f};
-    private static final float[] FORE = {-1.8441f, -0.7963f, 1.9446f};
-    private static final float[] HAND = {0.5991f, 0.0814f, -2.8987f};
+    private static final float[] ARM = {-1.6519f, -0.8654f, 0.4519f};
+    private static final float[] FORE = {-2.5316f, -1.2171f, 2.5612f};
+    private static final float[] HAND = {0.3782f, 0.2775f, -2.6978f};
     /** Achse des Ellbogens im Raum des Oberarms (linker Flügel): Knicken hebt das Handgelenk an. */
-    private static final float[] ELBOW = {0.0f, -0.7393f, 0.6734f};
+    private static final float[] ELBOW = {0.0f, -0.9801f, 0.1984f};
 
     private final Quaternionf[] armCrawl = new Quaternionf[2];
     private final Quaternionf[] foreCrawl = new Quaternionf[2];
@@ -77,11 +78,11 @@ public class VoltarionModel extends DragonBossModel {
         // Flughäute raffen (eigene Knochen – das Skelett bleibt unverzerrt)
         ModelPart arm = this.webArm[side];
         if (arm != null) {
-            arm.zScale *= 1.0f - 0.72f * fa;
+            arm.zScale *= 1.0f - 0.85f * fa;
         }
         ModelPart fore = this.webFore[side];
         if (fore != null) {
-            fore.zScale *= 1.0f - 0.72f * ff;
+            fore.zScale *= 1.0f - 0.85f * ff;
         }
         this.foldFingers(s, w, fh);
     }

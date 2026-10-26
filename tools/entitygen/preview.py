@@ -83,10 +83,31 @@ def _homography(src: list[tuple[float, float]], dst: list[tuple[float, float]]) 
     return list(sol)
 
 
+def _descendants(model: Model, names) -> set[str]:
+    out: set[str] = set()
+
+    def walk(b: Bone, inside: bool):
+        inside = inside or b.name in names
+        if inside:
+            out.add(b.name)
+        for ch in b.children:
+            walk(ch, inside)
+
+    walk(model.root, False)
+    return out
+
+
 def render(model: Model, texture: Image.Image, glow: Image.Image | None, yaw: float, pitch: float,
-           size: int = 640, pose: dict | None = None, background=(54, 58, 66, 255), zoom: float = 1.0) -> Image.Image:
-    """Ein Blickwinkel. yaw = Drehung um die Hochachse (0 = von vorn), pitch = von oben (positiv)."""
+           size: int = 640, pose: dict | None = None, background=(54, 58, 66, 255), zoom: float = 1.0,
+           focus=None) -> Image.Image:
+    """Ein Blickwinkel. yaw = Drehung um die Hochachse (0 = von vorn), pitch = von oben (positiv).
+
+    ``focus``: Knochen-Namen – der Ausschnitt richtet sich nur nach diesen Knochen (und ihren Kindern), z. B. ["head"]
+    für eine Nahaufnahme des Kopfes."""
+    focus_set = _descendants(model, set(focus)) if focus else None
+    focus_pts = []
     tf = _bone_transforms(model, pose)
+    res = max(1, texture.width // model.tex_w)
     cam = _rot_zyx(math.radians(pitch), 0, 0) @ _rot_zyx(0, math.radians(yaw), 0)
     light = np.array([0.35, -0.85, -0.4])
     light /= np.linalg.norm(light)
@@ -110,9 +131,11 @@ def render(model: Model, texture: Image.Image, glow: Image.Image | None, yaw: fl
             shade = 0.55 + 0.45 * max(0.0, float(-(n @ light))) if not flat else 0.85
             quads.append((sum(q[2] for q in cs) / 4, cs, (u0, v0, fw, fh), shade))
             all_pts.extend(cs)
+            if focus_set is not None and c.bone.name in focus_set:
+                focus_pts.extend(cs)
     if not all_pts:
         return Image.new("RGBA", (size, size), background)
-    pts = np.array(all_pts)
+    pts = np.array(focus_pts if focus_pts else all_pts)
     mn, mx = pts.min(axis=0), pts.max(axis=0)
     span = max(mx[0] - mn[0], mx[1] - mn[1]) or 1.0
     scale = size * 0.9 / span * zoom
@@ -132,12 +155,12 @@ def render(model: Model, texture: Image.Image, glow: Image.Image | None, yaw: fl
         if bx1 <= bx0 or by1 <= by0:
             continue
         local = [(s[0] - bx0, s[1] - by0) for s in scr]
-        dst = [(0, 0), (fw, 0), (fw, fh), (0, fh)]
+        dst = [(0, 0), (fw * res, 0), (fw * res, fh * res), (0, fh * res)]
         try:
             coeffs = _homography(local, dst)
         except np.linalg.LinAlgError:
             continue
-        tile = texture.crop((u0, v0, u0 + fw, v0 + fh))
+        tile = texture.crop((u0 * res, v0 * res, (u0 + fw) * res, (v0 + fh) * res))
         if shade < 0.999:
             arr = np.array(tile, dtype=np.float32)
             arr[..., :3] *= shade
@@ -148,7 +171,7 @@ def render(model: Model, texture: Image.Image, glow: Image.Image | None, yaw: fl
         if glow is not None:
             # Leuchten unter dieser Fläche löschen (verdeckt), dann ihr eigenes Leuchten eintragen
             glow_canvas.paste(Image.new("RGBA", warped.size, (0, 0, 0, 0)), (bx0, by0), warped.split()[3])
-            gt = glow.crop((u0, v0, u0 + fw, v0 + fh))
+            gt = glow.crop((u0 * res, v0 * res, (u0 + fw) * res, (v0 + fh) * res))
             if gt.getbbox():
                 gw = gt.transform((bx1 - bx0, by1 - by0), Image.PERSPECTIVE, coeffs, Image.NEAREST, fillcolor=(0, 0, 0, 0))
                 glow_canvas.alpha_composite(gw, (bx0, by0))
@@ -163,9 +186,9 @@ def render(model: Model, texture: Image.Image, glow: Image.Image | None, yaw: fl
 
 def render_views(model: Model, texture: Image.Image, glow: Image.Image | None, target: str,
                  views=((30, 20), (150, 20), (90, 0), (0, 80)), size: int = 640, pose: dict | None = None,
-                 zoom: float = 1.0) -> None:
+                 zoom: float = 1.0, focus=None) -> None:
     """Mehrere Blickwinkel nebeneinander in eine Datei (Standard: schräg vorn, schräg hinten, Seite, von oben)."""
-    imgs = [render(model, texture, glow, yaw, pitch, size, pose, zoom=zoom) for yaw, pitch in views]
+    imgs = [render(model, texture, glow, yaw, pitch, size, pose, zoom=zoom, focus=focus) for yaw, pitch in views]
     cols = 2
     rows = (len(imgs) + 1) // 2
     sheet = Image.new("RGBA", (cols * size, rows * size), (30, 32, 36, 255))

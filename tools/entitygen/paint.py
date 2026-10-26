@@ -124,8 +124,9 @@ class Ctx:
 def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: int = 1,
                 params: dict | None = None) -> tuple[Image.Image, Image.Image]:
     """Gibt (Textur, Leucht-Textur) zurück. Die Leucht-Textur enthält nur selbstleuchtende Texel."""
-    img = Image.new("RGBA", (model.tex_w, model.tex_h), (0, 0, 0, 0))
-    glow = Image.new("RGBA", (model.tex_w, model.tex_h), (0, 0, 0, 0))
+    res = getattr(model, "tex_res", 1)
+    img = Image.new("RGBA", (model.tex_w * res, model.tex_h * res), (0, 0, 0, 0))
+    glow = Image.new("RGBA", (model.tex_w * res, model.tex_h * res), (0, 0, 0, 0))
     px = img.load()
     gx = glow.load()
     rng = random.Random(seed)
@@ -140,11 +141,12 @@ def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: in
             painter = materials.get(mat)
             if painter is None:
                 raise KeyError(f"Material '{mat}' fehlt (Modell {model.name})")
+            u0, v0, fw, fh = u0 * res, v0 * res, fw * res, fh * res
             for t in range(fh):
                 for s in range(fw):
                     ctx = Ctx()
                     ctx.cube, ctx.face, ctx.s, ctx.t, ctx.w, ctx.h = cube, face, s, t, fw, fh
-                    lx, ly, lz = texel_to_local(cube, face, s, t)
+                    lx, ly, lz = texel_to_local(cube, face, s, t, res)
                     ctx.local = (lx, ly, lz)
                     ctx.world = (wp[0] + lx, wp[1] + ly, wp[2] + lz)
                     ctx.pal, ctx.rng, ctx.u, ctx.v = pal, rng, u0 + s, v0 + t

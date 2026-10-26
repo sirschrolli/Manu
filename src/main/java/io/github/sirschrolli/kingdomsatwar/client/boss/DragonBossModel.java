@@ -206,6 +206,8 @@ public class DragonBossModel extends EntityModel<BossRenderState> {
         for (ModelPart finger : w.fingers()) {
             finger.yRot *= 1.0f - 0.92f * fh + 0.18f * s.spread * openHand;
             finger.zScale *= 1.0f - 0.8f * fh;
+            // angelegt reichen die Finger nur bis zum Ellbogen zurück (sonst ragen sie wie Stöcke über den Rumpf hinaus)
+            finger.xScale *= 1.0f - 0.4f * fh;
         }
     }
 
@@ -219,12 +221,15 @@ public class DragonBossModel extends EntityModel<BossRenderState> {
         float sx = w.sx();
         float open = 1.0f - s.foldArm[side];
         float amp = s.flapAmp * open;
-        // Ausschlag: oben etwa 50°, unten etwa 35° unter die Waagerechte (Abschlag endet nicht senkrecht)
-        float armSwing = stroke > 0 ? stroke * 0.85f : stroke * 0.6f;
+        // Ausschlag: oben etwa 50°, unten nur etwa 23° unter die Waagerechte – Unterarm und Hand schwingen etwas nach,
+        // die Spitze endet bei gut 35° (der Flügel hängt nie senkrecht herab)
+        float armSwing = stroke > 0 ? stroke * 0.85f : stroke * 0.4f;
+        float lag = strokeLag < 0 ? strokeLag * 0.15f : strokeLag * 0.3f;
+        float lag2 = strokeLag2 < 0 ? strokeLag2 * 0.1f : strokeLag2 * 0.18f;
         w.arm().zRot += (-armSwing - s.raise * 0.6f) * sx * amp + (-s.raise * 0.6f) * sx * (1.0f - amp) * open;
         w.arm().xRot += stroke * 0.08f * amp;
-        w.fore().zRot += (-strokeLag * 0.3f + up * 0.6f) * sx * amp;
-        w.hand().zRot += (up * 0.5f - strokeLag2 * 0.18f) * sx * amp;
+        w.fore().zRot += (-lag + up * 0.6f) * sx * amp;
+        w.hand().zRot += (up * 0.5f - lag2) * sx * amp;
         w.arm().yRot += (s.sweep * 0.6f + up * 0.16f * amp) * -sx;
         for (int i = 0; i < w.fingers().length; i++) {
             ModelPart finger = w.fingers()[i];

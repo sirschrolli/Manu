@@ -13,104 +13,117 @@ from __future__ import annotations
 import math
 
 from ..geometry import Model
-from ..paint import Ctx, Voronoi3D, flat_painter, hash01, mix, noise3, pick, ramp, transparent_painter
-from .boss_common import (belly_plate, chain, facing_ry, glow_painter, glowing_eye, leg, mouth_painter, plates_painter,
-                          wing)
+from ..paint import Ctx, Voronoi3D, hash01, mix, noise3, pick, ramp, transparent_painter
+from .boss_style import (ScaleCells, chain2, edge_ao, eye, facing_down, fold_pose, keratin, leg2, mouth, pick_smooth,
+                         plate_color, plates, rbox, solid, spike, teeth, wing2)
 
 PALETTES = {
     "verdantis": {
-        "back": ramp("#2e261c", "#a8967a"), "belly": ramp("#3e4a22", "#b4c47a"),
-        "moss": ramp("#1c3a14", "#86c44a"), "leaf": ramp("#14361a", "#7cc24a"),
+        "back": ramp("#2a2016", "#a08a66"), "belly": ramp("#46502a", "#c8d48e"),
+        "moss": ramp("#1c3e16", "#8ccc4e"), "leaf": ramp("#14381a", "#84c64c"),
         "leaf_old": ramp("#4a3a12", "#d4a83a"), "vein": ramp("#2e5a10", "#d8ff8a"),
         "bark": ramp("#1e1610", "#7a6448"), "wood": ramp("#2a1e14", "#a08a64"),
         "lichen": ramp("#4a5a3a", "#c8d4a0"), "blossom": ramp("#c0407a", "#ffe0f0"),
         "blossom2": ramp("#d09a10", "#fff6b0"), "glow": ramp("#2a8a30", "#c8ff9a"),
         "mushroom": ramp("#1a6a6a", "#b0fff0"), "claw": ramp("#1a140e", "#8a7258"),
-        "eye": ramp("#e0a010", "#fffcc0"), "mouth": ramp("#2a1408", "#a0503a"),
+        "tusk": ramp("#7a6a50", "#f4ecd8"), "teeth": ramp("#8a8068", "#f0ead4"),
+        "eye": ramp("#e09010", "#fffcc0"), "mouth": ramp("#2a1408", "#a0503a"),
     },
 }
 
 TEX = (512, 512)
+FINGERS = [(46, 10), (43, 42), (36, 74)]
+FOLD_POSE = fold_pose(FINGERS)
+
+
+def bush(m: Model, bone: str, origin, size, mat: str = "foliage") -> None:
+    """Laubbüschel: abgerundeter Klumpen (zwei überlappende Quader)."""
+    rbox(m, bone, origin, size, mat, bevel=min(size) * 0.28)
 
 
 def build() -> Model:
     m = Model("verdantis", *TEX)
+    m.tex_res = 2
 
     # ---------------------------------------------------------------- Rumpf (breit und schwer)
     m.bone("body", pivot=(0, -8, 0))
-    m.cube("body", (-15, -12, -23), (30, 22, 46), "scales")                     # Rumpf
-    m.cube("body", (-12.5, -16, -20), (25, 4.5, 37), "moss")                    # Moospolster auf dem Rücken
-    m.cube("body", (-9, -18.5, -14), (18, 3, 23), "moss")
-    m.cube("body", (-13, 8, -22), (26, 5, 26), "plates")                        # Brust
-    m.cube("body", (-12, 8, 4), (24, 3.5, 17), "plates")                        # Bauch hinten
-    m.cube("body", (-17, -9, -21), (3, 14, 14), "scales")                       # Schultern
-    m.cube("body", (14, -9, -21), (3, 14, 14), "scales")
-    m.cube("body", (-16.5, -7, 8), (2.5, 14, 15), "scales")                     # Hüften
-    m.cube("body", (14, -7, 8), (2.5, 14, 15), "scales")
-    # der Garten auf dem Rücken: Laubbüschel, Blüten, Farne
-    for (x, y, z, w, h, d) in [(-10, -22, -17, 8, 5, 8), (2, -23.5, -11, 9, 6, 9), (-7, -22, -2, 7, 4.5, 7),
-                               (4, -21, 5, 8, 5, 7), (-4, -20, 12, 7, 4, 6), (8, -18.5, -19, 5, 3.5, 5)]:
-        m.cube("body", (x, y, z), (w, h, d), "foliage")
-    for (x, y, z) in [(-7, -23, -15), (5, -24.8, -8), (-4.5, -23, 0), (7, -22.2, 7), (-1.5, -21.2, 14), (-9, -23, -12),
-                      (3, -24.8, -12), (9.5, -19.8, -17)]:
-        m.cube("body", (x, y, z), (1.6, 1.6, 1.6), "blossom")
-    for (x, y, z) in [(-2, -22.6, -6), (10, -22.2, 3), (-8, -21.5, 6)]:
-        m.cube("body", (x, y, z), (1.6, 1.6, 1.6), "blossom2")
+    rbox(m, "body", (-14.5, -12, -23), (29, 22, 46), "scales", bevel=5.0, axis=2)
+    rbox(m, "body", (-16, -13, -24), (32, 24, 17), "scales", bevel=5.5, axis=2)           # Brustkorb
+    rbox(m, "body", (-15, -12.5, 9), (30, 21, 14), "scales", bevel=5.0, axis=2)           # Hüften
+    rbox(m, "body", (-11.5, -16, -20), (23, 5, 37), "moss", bevel=2.0, axis=2)            # Moospolster
+    rbox(m, "body", (-8, -18.2, -14), (16, 3, 24), "moss", bevel=1.2, axis=2)
+    rbox(m, "body", (-12, 9.5, -23), (24, 2.6, 19), "plates", bevel=1.2, axis=2)          # Brust
+    m.cube("body", (-11, 8.6, -4), (22, 2.5, 26), "plates")                               # Bauch
+    # der Garten auf dem Rücken: Laubbüschel und Blüten
+    for (x, y, z, w, h, d) in [(-10, -21.5, -17, 8, 5, 8), (2, -22.5, -11, 9, 6, 9), (-7, -21, -2, 7, 4.5, 7),
+                               (4, -20.5, 5, 8, 5, 7), (-4, -19.5, 12, 7, 4, 6)]:
+        bush(m, "body", (x, y, z), (w, h, d))
+    for k, (x, y, z) in enumerate([(-7, -22.6, -15), (5, -24.3, -8), (-4.5, -22.4, 0), (7, -21.8, 7), (-1.5, -20.8, 14),
+                                   (3, -24.3, -12)]):
+        m.cube("body", (x, y, z), (1.4, 1.4, 1.4), "blossom" if k % 3 else "blossom2")
     # Baumpilze an den Flanken (wie an einem alten Stamm)
     for sx in (1, -1):
-        for (y, z, w, d) in [(-4, -8, 3, 5), (-1, -3, 2.5, 4), (-6, 9, 3, 6), (0, 14, 2, 3.5)]:
-            x = 15 if sx > 0 else -15 - w
+        for (y, z, w, d) in [(-4, -8, 3, 5), (-6, 9, 3, 6), (0, 14, 2, 3.5)]:
+            x = 15.6 if sx > 0 else -15.6 - w
             m.cube("body", (x, y, z), (w, 1.2, d), "mushroom")
-    # zwei junge Bäume wachsen auf dem Rücken (Kronen aus mehreren Laubbüscheln), dazu ein abgestorbener Ast
+    # zwei junge Bäume wachsen auf dem Rücken, dazu ein abgestorbener Ast
     for i, (x, z, h, lean, yaw) in enumerate([(-4, -14, 11, -10, -20), (5, 2, 9, -16, 25)]):
         b = f"tree_{i}"
         m.bone(b, "body", pivot=(x, -18, z), rotation=(lean, yaw, 0))
-        m.cube(b, (-1.3, -h, -1.3), (2.6, h + 1, 2.6), "wood")
+        m.cube(b, (-1.5, -h * 0.5, -1.5), (3.0, h * 0.5 + 1, 3.0), "wood")
+        m.cube(b, (-1.1, -h - 0.5, -1.1), (2.2, h * 0.55, 2.2), "wood")
         m.bone(f"{b}_bough", b, pivot=(0, -h * 0.55, 0), rotation=(0, 0, 42 if i == 0 else -42))
         m.cube(f"{b}_bough", (-0.8, -5.5, -0.8), (1.6, 6, 1.6), "wood")
-        m.cube(f"{b}_bough", (-3.2, -9, -3.0), (6.4, 4.2, 6), "foliage")
-        m.cube(b, (-4.5, -h - 4.5, -4.2), (9, 5, 8.4), "foliage")
-        m.cube(b, (-3.0, -h - 7.5, -2.5), (6.4, 3.4, 5.6), "foliage")
-        m.cube(b, (1.5, -h - 3.0, -1.0), (5.0, 3.5, 5.0), "foliage")
+        bush(m, f"{b}_bough", (-3.2, -9, -3.0), (6.4, 4.4, 6))
+        bush(m, b, (-4.5, -h - 4.5, -4.2), (9, 5.2, 8.4))
+        bush(m, b, (-3.0, -h - 7.6, -2.5), (6.4, 3.6, 5.6))
+        bush(m, b, (1.5, -h - 3.0, -1.0), (5.0, 3.6, 5.0))
         m.cube(b, (-2.2, -h - 8.2, -0.6), (1.6, 1.6, 1.6), "blossom")
     m.bone("deadwood", "body", pivot=(-1, -17, 13), rotation=(-30, -8, 12))
-    m.cube("deadwood", (-1.1, -9, -1.1), (2.2, 10, 2.2), "wood")
+    m.cube("deadwood", (-1.2, -5, -1.2), (2.4, 6, 2.4), "wood")
+    m.cube("deadwood", (-0.9, -9.2, -0.9), (1.8, 4.6, 1.8), "wood")
     m.bone("deadwood_twig", "deadwood", pivot=(0, -6, 0), rotation=(10, 0, -45))
     m.cube("deadwood_twig", (-0.6, -5, -0.6), (1.2, 5.5, 1.2), "wood")
 
     # ---------------------------------------------------------------- Hals (kurz und dick) mit Moosmähne und Ranken
     neck_sizes = [(17, 16, 7.5), (15.5, 15, 7), (14, 14, 6.5), (13, 13, 6)]
-    neck = chain(m, "neck", "body", (0, -7, -22), neck_sizes, [-24, -10, 2, 10], direction=-1, belly="plates")
+    neck = chain2(m, "neck", "body", (0, -7, -22), neck_sizes, [-24, -10, 2, 10], direction=-1, bevel=0.3, mat="hide")
     for i, (name, (w, h, length)) in enumerate(zip(neck, neck_sizes)):
-        m.cube(name, (-w / 2 + 1.5, -h / 2 - 2.5, -length - 0.5), (w - 3, 3, length + 1), "moss")
+        rbox(m, name, (-w / 2 + 1.5, -h / 2 - 2.5, -length - 0.5), (w - 3, 3.2, length + 1), "moss", bevel=1.0, axis=2)
         for sx in (1, -1):
             x = (w / 2 + 0.3) * sx
-            m.cube(name, (x, -h / 2 + 3, -length), (0, h + 4 - i, length), "vines")
+            m.cube(name, (x, -h / 2 + 3, -length), (0, h + 2 - i, length), "vines")
 
-    # ---------------------------------------------------------------- Kopf (breit, stumpf) mit Geweih und Moosbart
+    # ---------------------------------------------------------------- Kopf (breit, stumpf) mit Geweih, Hauern und Moosbart
     m.bone("head", neck[-1], pivot=(0, 0, -6), rotation=(28, 0, 0))
-    m.cube("head", (-8, -7.5, -16), (16, 13, 16), "scales")                     # Schädel
-    m.cube("head", (-8.6, -9, -15.5), (17.2, 2.5, 8), "bark")                   # Brauenwulst aus Borke
-    m.cube("head", (-6.5, -4.5, -28.5), (13, 9, 13), "scales")                  # stumpfe Schnauze
-    m.cube("head", (-4.5, -6.5, -27), (9, 2.5, 10.5), "bark")                   # Nasenrücken
-    m.cube("head", (-5, -4.2, -28.8), (3, 2, 1.5), "nostril")
-    m.cube("head", (2, -4.2, -28.8), (3, 2, 1.5), "nostril")
-    m.cube("head", (-6, 4.0, -28), (12, 1.5, 12), "teeth")
-    m.cube("head", (-6, 3.9, -27.9), (12, 0.2, 13), "mouth")
-    m.cube("head", (7.6, -4.2, -14.5), (1, 2.4, 4), "eye")
-    m.cube("head", (-8.6, -4.2, -14.5), (1, 2.4, 4), "eye")
-    m.cube("head", (7.8, -1, -15), (1.6, 7, 10), "scales")                      # Wangen
-    m.cube("head", (-9.4, -1, -15), (1.6, 7, 10), "scales")
-    m.cube("head", (-5, -8.8, -8), (10, 2, 7), "moss")                          # Moos auf der Stirn
-    # Ohrwedel (Blätter)
+    rbox(m, "head", (-8, -7.5, -15.5), (16, 12.5, 16), "hide", bevel=3.0, axis=2)          # Schädel
+    rbox(m, "head", (-8.6, -9, -15.5), (17.2, 2.6, 8), "bark", bevel=1.0, axis=2)          # Brauenwulst aus Borke
+    rbox(m, "head", (-6.6, -5, -22), (13.2, 9.6, 8), "hide", bevel=2.2, axis=2)            # Schnauze hinten
+    rbox(m, "head", (-6.0, -4.5, -28.5), (12, 9, 7), "hide", bevel=2.0, axis=2)            # Schnauze vorn
+    rbox(m, "head", (-4.2, -6.6, -27), (8.4, 2.2, 11), "bark", bevel=0.8, axis=2)          # Nasenrücken
+    rbox(m, "head", (-4.6, -4.0, -29.2), (9.2, 5.4, 1.0), "hide", bevel=1.0, axis=0)       # Nasenspitze
+    rbox(m, "head", (-5, -9.4, -8), (10, 2.4, 7), "moss", bevel=0.9, axis=2)               # Moos auf der Stirn
     for sx in (1, -1):
-        m.bone(f"ear_{'l' if sx > 0 else 'r'}", "head", pivot=(7.5 * sx, -5, -5), rotation=(-20, 35 * sx, 0))
-        m.cube(f"ear_{'l' if sx > 0 else 'r'}", (-0.1, -3, 0), (0, 6, 9), "earleaf")
-    m.bone("jaw", "head", pivot=(0, 4.5, -13), rotation=(3, 0, 0))
-    m.cube("jaw", (-6, 0, -15.5), (12, 4.5, 15.5), "scales")
-    m.cube("jaw", (-5.2, -1.3, -15), (10.4, 1.3, 10), "teeth")
-    m.cube("jaw", (-4.6, -0.2, -14.5), (9.2, 0.4, 13), "mouth")
-    m.cube("jaw", (-4.5, 4.5, -11), (9, 7, 0), "beard")                         # Moosbart
+        s = "l" if sx > 0 else "r"
+        m.cube("head", ((1.6 if sx > 0 else -3.6), -3.6, -29.4), (2.0, 1.2, 0.5), "nostril")
+        m.cube("head", ((6.3 if sx > 0 else -8.15), -4.6, -15.9), (1.85, 2.2, 3.9), "eye")
+        rbox(m, "head", ((7.2 if sx > 0 else -9.2), -1.0, -15), (2, 6.5, 10), "hide", bevel=0.7, axis=2)    # Wangen
+        teeth(m, "head", 5.4 * sx, 4.5, -28, -16, 6, height=1.2, size=1.1)
+        m.bone(f"ear_{s}", "head", pivot=(7.5 * sx, -5, -5), rotation=(-20, 35 * sx, 0))
+        m.cube(f"ear_{s}", (-0.1, -3, 0), (0, 6, 9), "earleaf")
+    m.cube("head", (-5.4, 4.52, -28), (10.8, 0.3, 12), "mouth")                           # Gaumen
+
+    m.bone("jaw", "head", pivot=(0, 4.8, -13), rotation=(3, 0, 0))
+    rbox(m, "jaw", (-6, 0, -15.5), (12, 4.5, 15.5), "hide", bevel=1.6, axis=2)
+    rbox(m, "jaw", (-7, -0.4, -3), (14, 5, 4.5), "hide", bevel=1.6, axis=2)
+    for sx in (1, -1):
+        teeth(m, "jaw", 5.0 * sx, 0.1, -14.5, -4, 5, height=1.1, down=False, size=1.0)
+        # Hauer: krumm nach oben aus den Mundwinkeln vorn
+        spike(m, "jaw", f"tusk_{'l' if sx > 0 else 'r'}", (6.3 * sx, 0.8, -12.5), 5.2, 1.9, lean=12, roll=16 * sx,
+              mat="tusk", steps=3)
+    m.cube("jaw", (-5.2, -0.15, -15.2), (10.4, 0.3, 15), "mouth")
+    m.cube("jaw", (-3.6, -0.5, -13.5), (7.2, 0.6, 11), "mouth")
+    m.cube("jaw", (-4.5, 4.5, -11), (9, 7, 0), "beard")                                    # Moosbart
     m.cube("jaw", (-3.2, 4.5, -7), (6.4, 5.5, 0), "beard")
     # Geweih: kräftige Stangen, die nach oben, außen und hinten wachsen; die Enden zeigen nach vorn und oben
     for side, sx in (("l", 1), ("r", -1)):
@@ -123,7 +136,9 @@ def build() -> Model:
             name = f"antler_{side}{i}"
             rot, absr = _aim(parent_rot, head_rot, d)
             m.bone(name, parent, pivot=pivot, rotation=rot)
-            m.cube(name, (-th / 2, -th / 2, -0.4), (th, th, length + 0.8), "antler")
+            t2 = th * 0.82
+            m.cube(name, (-th / 2, -th / 2, -0.4), (th, th, length * 0.55 + 0.4), "antler")
+            m.cube(name, (-t2 / 2, -t2 / 2, length * 0.5), (t2, t2, length * 0.5 + 0.6), "antler")
             names.append(name)
             rots.append(absr)
             parent, parent_rot, pivot = name, absr, (0, 0, length)
@@ -135,22 +150,22 @@ def build() -> Model:
             name = f"antler_{side}_t{k}"
             rot, _ = _aim(rots[bi], head_rot, d)
             m.bone(name, names[bi], pivot=(0, 0, at), rotation=rot)
-            m.cube(name, (-1.1, -1.1, -0.3), (2.2, 2.2, length + 0.5), "antler")
+            m.cube(name, (-1.15, -1.15, -0.3), (2.3, 2.3, length * 0.55 + 0.3), "antler")
+            m.cube(name, (-0.8, -0.8, length * 0.5), (1.6, 1.6, length * 0.5 + 0.4), "antler")
             if k in (2, 4):
-                m.cube(name, (-2.4, -2.4, length - 2.0), (4.8, 3.6, 4.6), "foliage")
-                m.cube(name, (-1.6, -3.6, length - 0.6), (3.2, 2.0, 3.2), "foliage")
+                bush(m, name, (-2.6, -2.6, length - 2.2), (5.2, 4.0, 5.0))
             if k == 3:
-                m.cube(name, (-0.9, -0.9, length - 0.4), (1.8, 1.8, 1.8), "blossom")
-        m.cube(names[1], (-2.7, -2.7, 2), (5.4, 3.6, 4.5), "moss")              # Moos an der Stange
+                m.cube(name, (-0.65, -0.65, length - 0.3), (1.3, 1.3, 1.3), "blossom")
+        rbox(m, names[1], (-2.7, -2.7, 2), (5.4, 3.6, 4.5), "moss", bevel=0.9, axis=2)   # Moos an der Stange
 
     # ---------------------------------------------------------------- Schwanz mit Samenkolben und Farnwedeln
     tail_sizes = [(15, 13, 12), (13, 11, 11), (11, 9.5, 11), (9.5, 8, 10), (8, 7, 10), (6.5, 6, 9), (5.5, 5, 8)]
-    tail = chain(m, "tail", "body", (0, -4, 22), tail_sizes, [-12, -8, -4, 0, 3, 4, 3], direction=1, belly="plates")
+    tail = chain2(m, "tail", "body", (0, -4, 22), tail_sizes, [-12, -8, -4, 0, 3, 4, 3], direction=1, bevel=0.3)
     for i, (name, (w, h, length)) in enumerate(zip(tail[:5], tail_sizes)):
-        m.cube(name, (-w / 2 + 1.2, -h / 2 - 2.0, 0), (w - 2.4, 2.5, length), "moss")
-    m.cube(tail[-1], (-5.5, -5.5, 4.5), (11, 11, 10), "bark")                    # Samenkolben
-    m.cube(tail[-1], (-4.2, -6.8, 6), (8.4, 1.5, 7), "moss")
-    for (x, y, z) in [(-5.9, -2, 7), (4.3, 1, 9), (-1, -7, 10.5)]:
+        rbox(m, name, (-w / 2 + 1.2, -h / 2 - 2.0, -0.4), (w - 2.4, 2.6, length + 0.4), "moss", bevel=0.9, axis=2)
+    rbox(m, tail[-1], (-5.5, -5.5, 4.5), (11, 11, 10), "bark", bevel=2.6, axis=2)           # Samenkolben
+    rbox(m, tail[-1], (-4.2, -6.8, 6), (8.4, 1.8, 7), "moss", bevel=0.8, axis=2)
+    for (x, y, z) in [(-5.9, -2, 7), (4.3, 1, 9), (-1, -7.4, 10.5)]:
         m.cube(tail[-1], (x, y, z), (1.6, 1.6, 1.6), "blossom2")
     for k, (yaw, pitch, length) in enumerate([(-42, -12, 18), (-15, -28, 22), (15, -28, 22), (42, -12, 18), (0, 8, 20)]):
         b = f"tailfrond_{k}"
@@ -159,17 +174,18 @@ def build() -> Model:
 
     # ---------------------------------------------------------------- Beine (dick, Wurzelzehen)
     for side, sx in (("l", 1), ("r", -1)):
-        leg(m, side, sx, "front", "body", (12.5, 4, -15),
-            [(11, 13, 11, 8), (8.5, 11.5, 8.5, -14), (11, 3.5, 12, 6)], toes=4, toe_len=4.5, claw_mat="root")
-        leg(m, side, sx, "hind", "body", (12.5, 2, 14),
-            [(13, 15, 14, -12), (9.5, 12, 9.5, 34), (11.5, 3.5, 13, -22)], toes=4, toe_len=5, claw_mat="root")
+        leg2(m, side, sx, "front", "body", (12.5, 4, -15),
+             [(11, 13, 11, 8), (8.5, 11.5, 8.5, -14), (11, 3.5, 12, 6)], toe_count=4, toe_len=4.5, claw=1.6,
+             mat="limb", claw_mat="root")
+        leg2(m, side, sx, "hind", "body", (12.5, 2, 14),
+             [(13, 15, 14, -12), (9.5, 12, 9.5, 34), (11.5, 3.5, 13, -22)], toe_count=4, toe_len=5, claw=1.8,
+             mat="limb", claw_mat="root")
 
     # ---------------------------------------------------------------- Blattflügel (drei Finger, breite Flughaut)
     for side, sx in (("l", 1), ("r", -1)):
-        wing(m, side, sx, "body", (13, -11, -12), arm=22, fore=26,
-             fingers=[(46, 10), (43, 42), (36, 74)], arm_th=5.0, inner_chord=30, fore_chord=32, sag=0.05,
-             mats={"bone": "wingbone", "inner": "leaf_inner", "fore": "leaf_fore", "outer": "leaf_outer",
-                   "claw": "root"})
+        wing2(m, side, sx, "body", (13, -11, -12), arm=22, fore=26, fingers=FINGERS, arm_th=5.0, inner_chord=30,
+              fore_chord=32, sag=0.05, finger_th=2.6,
+              mats={"bone": "wingbone", "inner": "leaf_inner", "fore": "leaf_fore", "outer": "leaf_outer", "claw": "root"})
     return m
 
 
@@ -211,79 +227,82 @@ def _aim(parent_abs, frame_abs, direction):
 # Bemalung
 # =============================================================================================
 
-def _bark_scales(seed: int = 61):
-    """Borkenschuppen: grobe, längs gefurchte Rinde (Furchen folgen der Körperachse), auf den Oberseiten Moos,
-    vereinzelt Flechten und glimmende Lichtpunkte (Glühwürmchen-Moos)."""
-    vor = Voronoi3D(3.6, seed)
+def _bark_scales(seed: int = 61, moss_cap: bool = True, belly_from: float = 0.74, cell: float = 3.0, cap: float = 0.3):
+    """Borkenschuppen: längliche Rindenplatten (entlang der Körperachse) mit dunklen Furchen und leichter Wölbung;
+    oben trägt der Drache einen Mantel aus Moos mit sauberem, leicht welligem Rand (statt Tarnflecken)."""
+    cells = ScaleCells(cell, seed, stretch=1.9)
 
     def paint(ctx: Ctx):
         x, y, z = ctx.world
-        if ctx.face == "bottom":
-            return belly_plate(ctx, "belly")
-        ry = facing_ry(ctx)
-        val, edge = vor(x * 1.4, y, z * 0.55)            # längliche Borkenplatten
-        v = 0.38 + (val - 0.5) * 0.3 + (1.0 - ry) * 0.08
-        if edge < 0.2:
-            v = 0.12 + edge * 0.6                          # tiefe Furchen
-        col = pick(ctx.pal["back"], v)
-        # Moos wächst oben (Oberseiten und obere Flanken)
-        top = 1.0 if ctx.face == "top" else max(0.0, 0.55 - ry) * 1.8
-        mossy = noise3(x * 0.18, y * 0.18, z * 0.18, seed + 3)
-        if top > 0 and mossy + top * 0.35 > 0.72 and edge > 0.12:
-            mv = 0.35 + 0.4 * noise3(x * 0.7, y * 0.7, z * 0.7, seed + 4)
-            col = mix(col, pick(ctx.pal["moss"], mv), 0.85)
-            if hash01(round(x * 2), round(y * 2), round(z * 2), seed) > 0.985:
-                g = pick(ctx.pal["glow"], 0.9)
-                ctx.glow = g
-                return g
-        elif noise3(x * 0.4 + 9, y * 0.4, z * 0.4, seed + 5) > 0.8 and edge > 0.25:
-            col = mix(col, pick(ctx.pal["lichen"], 0.55), 0.6)
-        if ry > 0.78 and ctx.face in ("west", "east", "front", "back"):
-            col = mix(col, pick(ctx.pal["belly"], 0.45), (ry - 0.78) / 0.22 * 0.7)
-        return col
+        down = facing_down(ctx)
+        if moss_cap and ctx.face != "bottom":
+            limit = cap + 0.1 * (noise3(x * 0.12, y * 0.12, z * 0.12, seed + 3) - 0.5) * 2
+            if ctx.face == "top" or down < limit:
+                col = _moss_color(ctx, seed + 4)
+                if ctx.face != "top" and down > limit - 0.05:
+                    col = mix(col, pick_smooth(ctx.pal["moss"], 0.15), 0.6)      # Schattenkante am Moosrand
+                return col
+        val, edge, dx, dy, dz = cells(x, y, z)
+        rel = -dy * 0.8 + dz * 0.3 if ctx.face in ("west", "east") else dz * 0.6
+        v = 0.42 + (val - 0.5) * 0.14 + max(-0.5, min(0.5, rel)) * 0.14
+        if edge < 0.16:
+            v = 0.16 + edge * 1.2                      # Furchen
+        col = pick_smooth(ctx.pal["back"], v)
+        if ctx.face == "bottom" or (down > belly_from and ctx.face in ("west", "east", "front", "back")):
+            t = 1.0 if ctx.face == "bottom" else min(1.0, (down - belly_from) / max(1e-3, 1.0 - belly_from) * 1.5)
+            col = mix(col, plate_color(ctx, "belly"), t)
+        return edge_ao(ctx, col, 0.1)
 
     return paint
 
 
+_CLUMPS = {}
+
+
+def _moss_color(ctx: Ctx, seed: int):
+    """Polstermoos: kleine, gewölbte Büschel (hell in der Mitte, dunkle Lücken), großflächig leicht wechselnde Töne."""
+    vor = _CLUMPS.setdefault(seed, Voronoi3D(1.5, seed))
+    x, y, z = ctx.world
+    val, edge = vor(x, y, z)
+    n = noise3(x * 0.3, y * 0.3, z * 0.3, seed)
+    v = 0.3 + 0.28 * n + 0.1 * (val - 0.5) + 0.12 * min(1.0, edge * 1.6)
+    if edge < 0.1:
+        v -= 0.12
+    if ctx.face == "top":
+        v += 0.06
+    elif ctx.face == "bottom":
+        v -= 0.18
+    elif facing_down(ctx) > 0.7:
+        v -= 0.1
+    return pick_smooth(ctx.pal["moss"], v)
+
+
 def _moss(seed: int = 71):
-    """Dichtes Moospolster mit kleinen Blüten und Glühpunkten."""
+    """Dichtes Moospolster."""
 
     def paint(ctx: Ctx):
-        x, y, z = ctx.world
-        n = noise3(x * 0.5, y * 0.5, z * 0.5, seed)
-        fine = hash01(ctx.u, ctx.v, seed)
-        col = pick(ctx.pal["moss"], 0.3 + 0.45 * n + (fine - 0.5) * 0.18)
-        if ctx.face not in ("top",) and facing_ry(ctx) > 0.75:
-            col = pick(ctx.pal["moss"], 0.15 + 0.2 * n)
-        r = hash01(round(x * 1.5), round(y * 1.5), round(z * 1.5), seed + 1)
-        if r > 0.975:
-            return pick(ctx.pal["blossom" if r > 0.988 else "blossom2"], 0.7)
-        if r < 0.012:
-            g = pick(ctx.pal["glow"], 0.85)
-            ctx.glow = g
-            return g
-        return col
+        return _moss_color(ctx, seed)
 
     return paint
 
 
 def _foliage(seed: int = 81):
-    """Laubbüschel: einzelne Blätter in verschiedenen Grüntönen, dazwischen Schatten, ein paar Blätter schon gelb."""
-    vor = Voronoi3D(1.3, seed)
+    """Laubbüschel: einzelne Blätter in wenigen Grüntönen, dazwischen Schatten, vereinzelt ein gelbes Blatt."""
+    vor = Voronoi3D(1.4, seed)
 
     def paint(ctx: Ctx):
         x, y, z = ctx.world
         val, edge = vor(x, y, z)
-        if edge < 0.16:
-            return pick(ctx.pal["leaf"], 0.08)
-        v = 0.25 + 0.6 * val
+        if edge < 0.12:
+            return pick_smooth(ctx.pal["leaf"], 0.14)
+        v = 0.34 + 0.4 * val
         if ctx.face == "top":
             v += 0.1
         elif ctx.face == "bottom":
             v -= 0.15
-        col = pick(ctx.pal["leaf"], v)
-        if val > 0.93:
-            col = pick(ctx.pal["leaf_old"], 0.6)
+        col = pick_smooth(ctx.pal["leaf"], v)
+        if val > 0.95:
+            col = pick_smooth(ctx.pal["leaf_old"], 0.6)
         return col
 
     return paint
@@ -299,7 +318,7 @@ def _vines(seed: int = 91):
         rel = (ly - oy) / max(h, 1e-3)
         strand = math.floor((lz - oz) / 1.6)
         offset = ((lz - oz) / 1.6) % 1.0
-        length = 0.45 + 0.55 * hash01(strand, seed)
+        length = 0.35 + 0.45 * hash01(strand, seed)
         if rel > length:
             return None
         wiggle = 0.5 + 0.18 * math.sin(ly * 0.9 + strand)
@@ -310,12 +329,7 @@ def _vines(seed: int = 91):
             return None
         if rel < 0.15:
             return pick(ctx.pal["moss"], 0.4)
-        col = pick(ctx.pal["leaf"], 0.3 + 0.3 * hash01(strand, round(ly * 2), seed))
-        if rel > length - 0.04 and hash01(strand, seed + 7) > 0.6:
-            g = pick(ctx.pal["glow"], 0.8)                 # leuchtende Rankenenden
-            ctx.glow = g
-            return g
-        return col
+        return pick(ctx.pal["leaf"], 0.3 + 0.3 * hash01(strand, round(ly * 2), seed))
 
     return paint
 
@@ -506,10 +520,22 @@ def _wing_bone(seed: int = 161):
     return paint
 
 
+def _blossom(key: str):
+    def paint(ctx: Ctx):
+        edge = ctx.s == 0 or ctx.t == 0 or ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1
+        col = pick_smooth(ctx.pal[key], 0.55 if edge else 0.85)
+        ctx.glow = pick_smooth(ctx.pal[key], 0.3)
+        return col
+
+    return paint
+
+
 def materials(variant: str) -> dict:
     return {
         "scales": _bark_scales(),
-        "plates": plates_painter("belly"),
+        "hide": _bark_scales(seed=63, cell=2.4, cap=0.12),
+        "limb": _bark_scales(seed=65, moss_cap=False, belly_from=2.0, cell=2.6),
+        "plates": plates("belly"),
         "moss": _moss(),
         "foliage": _foliage(),
         "vines": _vines(),
@@ -518,15 +544,16 @@ def materials(variant: str) -> dict:
         "wood": _wood(),
         "antler": _antler(),
         "wingbone": _wing_bone(),
-        "blossom": glow_painter("blossom", 0.75),
-        "blossom2": glow_painter("blossom2", 0.75),
+        "blossom": _blossom("blossom"),
+        "blossom2": _blossom("blossom2"),
         "mushroom": _mushroom,
-        "root": flat_painter("claw", 0.45, 0.1),
-        "claw": flat_painter("claw", 0.6),
-        "teeth": flat_painter("lichen", 0.9, 0.05),
-        "eye": glowing_eye("eye"),
-        "nostril": flat_painter("bark", 0.05, 0.02),
-        "mouth": mouth_painter(),
+        "root": keratin("claw", base=0.25, span=0.4),
+        "claw": keratin("claw", base=0.35, span=0.5),
+        "tusk": keratin("tusk", base=0.35, span=0.6),
+        "teeth": solid("teeth", 0.8, noise=0.06),
+        "eye": eye("eye"),
+        "nostril": solid("bark", 0.04, noise=0.0, ao=0.0),
+        "mouth": mouth("mouth"),
         "earleaf": _ear_leaf,
         "frond": _frond(),
         "leaf_inner": _leaf_membrane("inner"),

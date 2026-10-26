@@ -93,8 +93,11 @@ final class Showcase {
                 case "structures" -> structures(steps);
                 case "boss" -> boss(steps);
                 case "lair" -> lair(steps, DragonType.FIRE);
-                case "bossmotion" -> bossMotion(steps, DragonType.FIRE);
+                case "bossmotion" -> bossMotion(steps, DragonType.FIRE, false);
                 case "seal" -> seal(steps);
+                case "bossbars" -> bossBars(steps);
+                case "bossmodels" -> bossModels(steps, false, null);
+                case "bossmodels_air" -> bossModels(steps, true, null);
                 case "lairinfo" -> {
                     double[] nest = new double[4];
                     locateNest(steps, nest, DragonType.FIRE);
@@ -109,7 +112,13 @@ final class Showcase {
                     } else if (scene.startsWith("lair_")) {
                         lair(steps, DragonType.byId(scene.substring(5)));
                     } else if (scene.startsWith("bossmotion_")) {
-                        bossMotion(steps, DragonType.byId(scene.substring(11)));
+                        bossMotion(steps, DragonType.byId(scene.substring(11)), false);
+                    } else if (scene.startsWith("bossrage_")) {
+                        bossMotion(steps, DragonType.byId(scene.substring(9)), true);
+                    } else if (scene.startsWith("bossmodel_")) {
+                        bossModels(steps, false, DragonType.byId(scene.substring(10)));
+                    } else if (scene.startsWith("bossmodelsky_")) {
+                        bossModels(steps, true, DragonType.byId(scene.substring(13)));
                     }
                 }
             }
@@ -1660,7 +1669,106 @@ final class Showcase {
      * Bewegungen des Drachen-Bosses als Bildfolgen (werden zu Videos zusammengesetzt): Erwachen, Kampf gegen ein paar
      * Soldaten (Gehen, Drehen, Angriffe, Launen) und Flug. Die Kamera folgt dem Boss von der Seite.
      */
-    private static void bossMotion(Deque<Step> steps, DragonType type) {
+    /**
+     * Alle sechs Drachen-Bosse in Ruhe nebeneinander (ohne KI), jeder von fünf Seiten fotografiert: schräg von vorn,
+     * von der Seite, schräg von hinten, von oben und der Kopf aus der Nähe – zum Begutachten von Modell und Textur.
+     */
+    private static void bossModels(Deque<Step> steps, boolean air, @org.jspecify.annotations.Nullable DragonType only) {
+        DragonType[] types = {DragonType.FIRE, DragonType.ICE, DragonType.LIGHTNING, DragonType.NATURE, DragonType.EARTH, DragonType.WATER};
+        for (int i = 0; i < types.length; i++) {
+            DragonType type = types[i];
+            if (only != null ? type != only : air && (type == DragonType.EARTH || type == DragonType.WATER)) {
+                continue;
+            }
+            int ox = 1000 + i * 80;
+            int oz = 0;
+            double lift = air ? 10.0 : 0.0;
+            DragonBossEntity[] boss = new DragonBossEntity[1];
+            steps.add(tp(ox, 20, oz - 30, 0, 20));
+            steps.add(Step.waitForChunks(400));
+            steps.add(Step.command("time set 6000"));
+            steps.add(Step.server(level -> {
+                fill(level, new BlockPos(ox - 40, ground - 3, oz - 40), new BlockPos(ox + 40, ground - 1, oz + 40), Blocks.GRASS_BLOCK.defaultBlockState());
+                fill(level, new BlockPos(ox - 40, ground, oz - 40), new BlockPos(ox + 40, ground + 40, oz + 40), Blocks.AIR.defaultBlockState());
+                var b = ModEntities.bossType(type).create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                b.snapTo(ox + 0.5, ground + lift, oz + 0.5, 180, 0);
+                b.yBodyRot = 180;
+                b.yHeadRot = 180;
+                b.setNoAi(true);
+                level.addFreshEntity(b);
+                b.devPose(air ? DragonBossEntity.MoveMode.AIR : DragonBossEntity.MoveMode.GROUND);
+                boss[0] = b;
+            }));
+            steps.add(Step.waitTicks(60));
+            steps.add(Step.hud(false));
+            String id = (air ? "air_" : "") + type.id();
+            // Der Boss blickt nach Norden (−Z): vorn ist −Z
+            double[][] cams = {
+                    {-17, 7 + lift, -17, 4 + lift},     // schräg von vorn links
+                    {-26, 5 + lift, 0, 4 + lift},       // von der Seite
+                    {17, 8 + lift, 19, 4 + lift},       // schräg von hinten rechts
+                    {0.5, 30 + lift, 3, 0 + lift},      // von oben
+                    {-5, 8 + lift, -14, 6 + lift},      // Kopf aus der Nähe
+            };
+            String[] names = {"front", "side", "back", "top", "head"};
+            for (int c = 0; c < cams.length; c++) {
+                double[] cam = cams[c];
+                steps.add(Step.once(fixedCam(ox, oz, cam[0], cam[1], cam[2], cam[3])));
+                steps.add(Step.waitTicks(c == 0 ? 30 : 12));
+                steps.add(Step.screenshot("model_" + id + "_" + names[c]));
+            }
+            steps.add(Step.server(level -> {
+                if (boss[0] != null) {
+                    boss[0].discard();
+                }
+            }));
+            steps.add(Step.hud(true));
+        }
+    }
+
+    /** Die Bossleisten aller sechs Bosse bei verschiedenen Lebensständen (oben im Bild). */
+    private static void bossBars(Deque<Step> steps) {
+        DragonType[] types = {DragonType.FIRE, DragonType.ICE, DragonType.LIGHTNING, DragonType.NATURE, DragonType.EARTH, DragonType.WATER};
+        for (int i = 0; i < types.length; i++) {
+            DragonType type = types[i];
+            int ox = 2000 + i * 120;
+            int oz = 0;
+            DragonBossEntity[] boss = new DragonBossEntity[1];
+            steps.add(tp(ox, 20, oz - 40, 0, 20));
+            steps.add(Step.waitForChunks(400));
+            steps.add(Step.server(level -> {
+                fill(level, new BlockPos(ox - 40, ground - 3, oz - 40), new BlockPos(ox + 40, ground - 1, oz + 40), Blocks.GRASS_BLOCK.defaultBlockState());
+                fill(level, new BlockPos(ox - 40, ground, oz - 40), new BlockPos(ox + 40, ground + 40, oz + 40), Blocks.AIR.defaultBlockState());
+                var b = ModEntities.bossType(type).create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                b.snapTo(ox + 0.5, ground, oz + 0.5, 180, 0);
+                b.yBodyRot = 180;
+                b.yHeadRot = 180;
+                b.setNoAi(true);
+                level.addFreshEntity(b);
+                b.devPose(DragonBossEntity.MoveMode.GROUND);
+                boss[0] = b;
+            }));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.once(fixedCam(ox, oz, -14, 9, -26, 6)));
+            for (float hp : new float[] {1.0f, 0.72f, 0.45f, 0.18f}) {
+                steps.add(Step.server(level -> {
+                    if (boss[0] != null) {
+                        boss[0].setHealth(boss[0].getMaxHealth() * hp);
+                        boss[0].devBossBar(level);
+                    }
+                }));
+                steps.add(Step.waitTicks(hp < 1.0f ? 9 : 30));
+                steps.add(Step.screenshot("bar_" + type.id() + "_" + Math.round(hp * 100)));
+            }
+            steps.add(Step.server(level -> {
+                if (boss[0] != null) {
+                    boss[0].discard();
+                }
+            }));
+        }
+    }
+
+    private static void bossMotion(Deque<Step> steps, DragonType type, boolean rage) {
         String id = type.id();
         BlockState floorBlock = switch (type) {
             case ICE -> Blocks.SNOW_BLOCK.defaultBlockState();
@@ -1777,6 +1885,25 @@ final class Showcase {
                 }
             }
         }));
+        if (rage) {
+            // Wut: volle Kraft, dann Phase 2 (Aufbäumen, Gefahren in der Arena), dann Phase 3 (Raserei)
+            steps.add(Step.hud(true));
+            steps.add(Step.record("motion_" + id + "_rage1", 120, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
+                    : follow(boss, 22.0, 6.0, 5.0)));
+            steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.55f)));
+            steps.add(Step.record("motion_" + id + "_rage2", 200, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
+                    : follow(boss, 22.0, 6.0, 5.0)));
+            steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.25f)));
+            steps.add(Step.record("motion_" + id + "_rage3", 240, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
+                    : follow(boss, 22.0, 6.0, 5.0)));
+            steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.1f)));
+            steps.add(Step.record("motion_" + id + "_rage4", 120, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
+                    : follow(boss, 22.0, 6.0, 5.0)));
+            // aufräumen, damit der nächste Boss die Arena für sich hat
+            steps.add(Step.command("kill @e[type=!minecraft:player]"));
+            steps.add(Step.waitTicks(10));
+            return;
+        }
         steps.add(Step.record("motion_" + id + "_fight", 300, type == DragonType.WATER ? followAbove(boss, 22.0, 8.0, 3.0, 5.0)
                 : follow(boss, 22.0, 6.0, 5.0)));
         int[][] special = switch (type) {
