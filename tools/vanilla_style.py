@@ -216,15 +216,15 @@ def streaks(g: Grid, rnd: random.Random, chance: float = 0.6, vertical: bool = F
 # Stein
 # =============================================================================
 
-def stone(seed: int, shares: Sequence[float] = (0.13, 0.32, 0.37, 0.18), grain: float = 0.7) -> Grid:
+def stone(seed: int, shares: Sequence[float] = (0.13, 0.32, 0.37, 0.18), grain: float = 0.75) -> Grid:
     """
-    Fels wie Vanilla-Stein: vier Stufen aus kurzen waagerechten Strichen (2-4 Pixel) und kleinen Flecken, darunter
-    eine leichte großflächige Schwankung. Allein stehende Pixel werden entfernt.
+    Fels wie Vanilla-Stein: vier Stufen aus kleinen, kurzen Flecken (2-3 Pixel, leicht waagerecht), darunter eine
+    leichte großflächige Schwankung. Keine langen Striche (die wirken wie Holzmaserung). Allein stehende Pixel weg.
     """
     rnd = random.Random(seed)
-    f = mix_fields((strokes(seed), grain), (layered(seed + 1, ((8, 4, 0.6), (4, 4, 0.4))), 1.0 - grain))
+    f = mix_fields((strokes(seed, (1, 2, 1), (1, 1)), grain), (layered(seed + 1, ((8, 4, 0.6), (4, 4, 0.4))), 1.0 - grain))
     g = quantize(f, shares)
-    g = streaks(g, rnd, 0.5)
+    g = streaks(g, rnd, 0.1)
     return despeckle(g)
 
 

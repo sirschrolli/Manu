@@ -2,7 +2,7 @@
 """
 Die vollen Blöcke der Schattenwelt im Vanilla-Stil (siehe tools/vanilla_style.py): Schattenstein in allen Formen,
 Tiefschattenstein, Erde, Gras, Sand, Aschschnee, Schattenholz, Laub, Nachtkristall, Glimmmoos, Ackerboden, Pfad, Tür
-und Falltür, die Metall- und Kristallblöcke und die Erzflecken.
+und Falltür, die Metall- und Kristallblöcke (die Erz-Einschlüsse kommen aus tools/ores_art.py).
 
 Farbwelt: kühles, gedämpftes Violettgrau für Stein, ein tiefes Pflaumenviolett für das Holz, blasses Lavendel für Sand
 und Asche – überall wenig Sättigung (die Schattenwelt färbt selbst schon violett), dafür klare Formen.
@@ -495,7 +495,7 @@ def shadow_trapdoor() -> Image.Image:
 
 
 # =============================================================================
-# Metall, Kristall, Erze
+# Metall und Kristall
 # =============================================================================
 
 def moonsilver_block() -> Image.Image:
@@ -545,47 +545,6 @@ def abyssite_block() -> tuple[Image.Image, Image.Image]:
     return img, glow
 
 
-def ore_overlay(seed: int, pal: list[Color], edge: Color, count: int = 5, size: tuple[int, int] = (3, 6)) -> Image.Image:
-    """Erzflecken als Auflage (der Stein darunter kommt vom Grundblock): 0 = dunkle Kante, 1..4 = Erz dunkel bis Glanz."""
-    g = vs.ore_blobs(seed, count, size)
-    img = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    for y in range(N):
-        for x in range(N):
-            v = g[y][x]
-            if v == 0:
-                img.putpixel((x, y), edge)
-            elif v > 0:
-                img.putpixel((x, y), pal[v - 1])
-    return img
-
-
-ORE_EDGE = hexc("#47405a")
-MOONSILVER_ORE = [hexc("#7d859e"), hexc("#a7b0c8"), hexc("#d3daea"), hexc("#f6f8ff")]
-NIGHTSTEEL_ORE = [hexc("#252838"), hexc("#3a4058"), hexc("#566082"), hexc("#8592bd")]
-SOUL_ORE = [hexc("#1f7f93"), hexc("#3fbccd"), hexc("#8eeef2"), hexc("#e6ffff")]
-ABYSS_ORE = [hexc("#3a1550"), hexc("#7a2aa8"), hexc("#c45cf2"), hexc("#ffc6ff")]
-
-
-def ores(put: Callable[[str, Image.Image], None]) -> None:
-    put("block/moonsilver_ore_overlay", ore_overlay(33401, MOONSILVER_ORE, ORE_EDGE, 4, (5, 8)))
-    put("block/nightsteel_ore_overlay", ore_overlay(33402, NIGHTSTEEL_ORE, ORE_EDGE, 4, (5, 9)))
-    soul = ore_overlay(33403, SOUL_ORE, ORE_EDGE, 4, (4, 7))
-    put("block/soul_crystal_ore_overlay", soul)
-    put("block/soul_crystal_ore_glow", _glow_of(soul, SOUL_ORE[2:]))
-    abyss = ore_overlay(33404, ABYSS_ORE, ORE_EDGE, 3, (4, 6))
-    put("block/abyssite_ore_overlay", abyss)
-    put("block/abyssite_ore_glow", _glow_of(abyss, ABYSS_ORE[2:]))
-
-
-def _glow_of(img: Image.Image, bright: list[Color]) -> Image.Image:
-    glow = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    for y in range(N):
-        for x in range(N):
-            if img.getpixel((x, y)) in bright:
-                glow.putpixel((x, y), img.getpixel((x, y)))
-    return glow
-
-
 # =============================================================================
 # Alles zusammen
 # =============================================================================
@@ -631,7 +590,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     abyss, abyss_glow = abyssite_block()
     put("block/abyssite_block", abyss)
     put("block/abyssite_block_glow", abyss_glow)
-    ores(put)
 
 
 if __name__ == "__main__":

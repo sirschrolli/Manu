@@ -46,6 +46,7 @@ import items_materials  # noqa: E402
 import items_misc  # noqa: E402
 import kingdom_textures  # noqa: E402
 import lair_textures  # noqa: E402
+import ores_art  # noqa: E402
 import pixelart as pa  # noqa: E402
 import region_blocks  # noqa: E402
 import seal_textures  # noqa: E402
@@ -342,6 +343,7 @@ def build_all() -> dict[str, Image.Image]:
     deep_textures.build(put)
     world_blocks.build(put)
     region_blocks.build(put)
+    ores_art.build(put)
     crops.build(put)
     shadow_textures.build(put)
     shadow_gear_textures.build(put)

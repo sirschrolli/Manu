@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Blöcke der Drachengebiete und die Erze der Oberwelt im Vanilla-Stil (siehe tools/vanilla_style.py):
+Blöcke der Drachengebiete im Vanilla-Stil (siehe tools/vanilla_style.py):
 
   * Glutland:   Asche, Schlackenerde, Vulkangestein (auch glühend), verkohlter Stamm
   * Eisland:    Raureifstein, gefrorene Erde
   * Urhain:     Urholz (Stamm, Bretter), Urlaub, Leuchtmoos
   * Sturmland:  Fulgurit
   * Tiefsee:    Abgrundstein, Abgrundsand
-  * Erze:       Kohlestein, Edelstein, Konterit, Aetherit, Draconium, Wyvernit (Auflagen auf Stein und Tiefenschiefer)
+  (die Erz-Einschlüsse kommen aus tools/ores_art.py)
 
 Wird von tools/generate_textures.py aufgerufen: build(put).
 """
@@ -320,64 +320,6 @@ def abyssal_sand() -> Image.Image:
 
 
 # =============================================================================
-# Erze der Oberwelt (Auflagen auf Stein und Tiefenschiefer)
-# =============================================================================
-
-ORE_EDGE = hexc("#555457")
-
-
-def _ore(seed: int, pal: list[Color], count: int, size: tuple[int, int], gems: bool = False) -> Image.Image:
-    g = vs.gem_blobs(seed, count) if gems else vs.ore_blobs(seed, count, size)
-    img = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    for y in range(N):
-        for x in range(N):
-            v = g[y][x]
-            if v == 0:
-                img.putpixel((x, y), ORE_EDGE)
-            elif v > 0:
-                img.putpixel((x, y), pal[v - 1])
-    return img
-
-
-def _glow_of(img: Image.Image, bright: list[Color]) -> Image.Image:
-    glow = Image.new("RGBA", (N, N), (0, 0, 0, 0))
-    for y in range(N):
-        for x in range(N):
-            if img.getpixel((x, y)) in bright:
-                glow.putpixel((x, y), img.getpixel((x, y)))
-    return glow
-
-
-CARBON = [hexc("#141416"), hexc("#26272b"), hexc("#3c3d43"), hexc("#6a6c74")]
-GEMSTONE = [hexc("#1f5a3c"), hexc("#2f9a5e"), hexc("#69d98f"), hexc("#d8ffe6")]
-GEMSTONE_VIOLET = [hexc("#3a1258"), hexc("#7230a2"), hexc("#a868e0"), hexc("#f0d8ff")]
-KONTERIT = [hexc("#3b1458"), hexc("#7a2aa8"), hexc("#b25ae6"), hexc("#f0c8ff")]
-AETHERIT = [hexc("#0b4a5c"), hexc("#18a0b4"), hexc("#5fe0ee"), hexc("#e0fdff")]
-DRACONIUM = [hexc("#4a0a0c"), hexc("#a3161c"), hexc("#e2442e"), hexc("#ffc39a")]
-WYVERNIT = [hexc("#2b4b6b"), hexc("#5d8dba"), hexc("#a2cdf0"), hexc("#f4fbff")]
-
-
-def ores(put: Callable[[str, Image.Image], None]) -> None:
-    put("block/carbon_ore_overlay", _ore(56001, CARBON, 5, (6, 10)))
-    # Edelstein: grüne und violette Steine nebeneinander (wie das Edelstein-Item)
-    gems = _ore(56002, GEMSTONE, 3, (5, 6), gems=True)
-    violet = _ore(56007, GEMSTONE_VIOLET, 3, (5, 6), gems=True)
-    for y in range(N):
-        for x in range(N):
-            if gems.getpixel((x, y))[3] == 0 and violet.getpixel((x, y))[3]:
-                gems.putpixel((x, y), violet.getpixel((x, y)))
-    put("block/gemstone_ore_overlay", gems)
-    put("block/konterit_ore_overlay", _ore(56003, KONTERIT, 5, (5, 7), gems=True))
-    aetherit = _ore(56004, AETHERIT, 5, (5, 7), gems=True)
-    put("block/aetherit_ore_overlay", aetherit)
-    put("block/aetherit_ore_glow", _glow_of(aetherit, AETHERIT[2:]))
-    draconium = _ore(56005, DRACONIUM, 4, (6, 10))
-    put("block/draconium_ore_overlay", draconium)
-    put("block/draconium_ore_glow", _glow_of(draconium, DRACONIUM[2:]))
-    put("block/wyvernit_ore_overlay", _ore(56006, WYVERNIT, 5, (5, 7), gems=True))
-
-
-# =============================================================================
 # Alles zusammen
 # =============================================================================
 
@@ -406,7 +348,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/fulgurite_top", fulgurite_top())
     put("block/abyssal_stone", abyssal_stone())
     put("block/abyssal_sand", abyssal_sand())
-    ores(put)
 
 
 if __name__ == "__main__":
