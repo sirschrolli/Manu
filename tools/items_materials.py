@@ -196,31 +196,62 @@ def lump(shape: str, slot: str, seed: int, grain: float = 0.25, cuts=(-0.1, 0.3,
     return st.despeckle(st.shaded(_mask(shape), slot, cuts=cuts, grain=grain, seed=seed, cell=2.0))
 
 
-PATCHES = (
-    ((0, 0, 6), (1, 0, 5), (0, 1, 5), (1, 1, 4), (2, 1, 3)),
-    ((0, 0, 6), (1, 0, 5), (2, 0, 4), (1, 1, 3)),
-    ((0, 0, 6), (0, 1, 5), (1, 1, 4)),
-    ((1, 0, 6), (0, 1, 6), (1, 1, 5), (2, 1, 4), (1, 2, 3)),
-)
+RAW_BIG = """
+................
+................
+.....#####......
+...########.....
+..##########....
+..##########....
+.###########....
+.###########....
+..#########.....
+...######.......
+"""
+
+RAW_SMALL = """
+................
+................
+................
+................
+................
+................
+................
+................
+.........#####..
+.......########.
+.......########.
+........######..
+.........####...
+"""
+
+RAW_TINY = """
+................
+................
+................
+................
+...........###..
+..........####..
+...........##...
+"""
+
+# Metalleinschlüsse (x, y, Stufe) auf den beleuchteten Seiten der Brocken
+RAW_SPOTS = ((4, 3, 6), (5, 3, 5), (4, 4, 5), (3, 5, 4), (8, 4, 6), (9, 4, 5), (8, 5, 4), (5, 7, 5), (6, 7, 4),
+             (10, 9, 6), (11, 9, 5), (10, 10, 5), (9, 11, 4), (12, 4, 6), (13, 5, 5))
 
 
-def spots(s: st.Spr, slot: str, where: list[tuple[int, int, int]]) -> st.Spr:
-    """Metalleinschlüsse: unregelmäßige glänzende Flecken (oben links Glanz, unten rechts dunkler)."""
-    for x, y, k in where:
-        for dx, dy, lvl in PATCHES[k]:
-            if s.opaque(x + dx, y + dy):
-                s.set(x + dx, y + dy, (slot, lvl))
+def raw_chunk() -> st.Spr:
+    """Roherz wie Vanilla-Roheisen: drei Brocken (groß, klein, winzig), jeder für sich gewölbt, mit Metallglanz."""
+    s = st.Spr()
+    big, small = _mask(RAW_BIG), _mask(RAW_SMALL)
+    for shape, seed in ((big, 1), (_mask(RAW_TINY), 3), (small, 2)):
+        s.over(st.shaded(shape, "A", cuts=(-0.05, 0.35, 0.68, 0.9), grain=0.18, seed=seed, cell=2.0))
+    for x, y in small:
+        if (x, y - 1) in big or (x - 1, y) in big:
+            s.set(x, y, ("A", 2))     # Spalte zwischen den Brocken
+    for x, y, lvl in RAW_SPOTS:
+        s.set(x, y, ("B", lvl))
     return s
-
-
-def raw_moonsilver() -> st.Spr:
-    s = lump(CHUNK, "A", 501)
-    return spots(s, "B", [(4, 5, 0), (10, 6, 1), (6, 9, 3), (11, 10, 2), (2, 9, 2)])
-
-
-def raw_nightsteel() -> st.Spr:
-    s = lump(CHUNK, "A", 502)
-    return spots(s, "B", [(5, 5, 1), (10, 7, 0), (4, 10, 3), (11, 11, 2)])
 
 
 def carbon() -> st.Spr:
@@ -654,8 +685,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("item/abyssite_ingot", render(ABYSSITE_INGOT, {"A": ABYSS, "D": ABYSS_GLOW}, override={"D": "A"}))
     put("item/moonsilver_ingot", render(MOONSILVER_INGOT, {"A": MOONSILVER, "E": MOON_TINT}, override={"E": "A"}))
     put("item/moonsilver_nugget", render(NUGGET, {"A": MOONSILVER}))
-    put("item/raw_moonsilver", render(raw_moonsilver(), {"A": RAW_ROCK_PALE, "B": MOONSILVER}, prefer=("A",)))
-    put("item/raw_nightsteel", render(raw_nightsteel(), {"A": RAW_ROCK_DARK, "B": NIGHT}, prefer=("A",)))
+    put("item/raw_moonsilver", render(raw_chunk(), {"A": RAW_ROCK_PALE, "B": MOONSILVER}, prefer=("A",)))
+    put("item/raw_nightsteel", render(raw_chunk(), {"A": RAW_ROCK_DARK, "B": NIGHT}, prefer=("A",)))
     put("item/carbon", render(carbon(), {"A": CARBON}))
     put("item/steel_blend", render(steel_blend(), {"A": STEEL_POWDER, "B": CARBON}, prefer=("A",)))
 
