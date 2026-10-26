@@ -88,19 +88,19 @@
         "probability": 6.0E-4
       }
     ],
-    "minecraft:visual/fog_color": "#2a3a3a",
+    "minecraft:visual/fog_color": "#2c5050",
     "minecraft:visual/fog_end_distance": 110.0,
     "minecraft:visual/fog_start_distance": 10.0,
-    "minecraft:visual/sky_color": "#1c2830",
-    "minecraft:visual/water_fog_color": "#081a16"
+    "minecraft:visual/sky_color": "#203c44",
+    "minecraft:visual/water_fog_color": "#0a1e1c"
   },
   "carvers": [],
   "downfall": 0.9,
   "effects": {
-    "dry_foliage_color": "#305e4a",
-    "foliage_color": "#305e4a",
-    "grass_color": "#3e5e4e",
-    "water_color": "#1a3a34"
+    "dry_foliage_color": "#2e7a62",
+    "foliage_color": "#2e7a62",
+    "grass_color": "#3e7a6a",
+    "water_color": "#2a5e58"
   },
   "features": [
     [],

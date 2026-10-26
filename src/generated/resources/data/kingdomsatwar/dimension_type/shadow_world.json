@@ -27,7 +27,7 @@
     "minecraft:gameplay/nether_portal_spawns_piglin": false,
     "minecraft:gameplay/respawn_anchor_works": false,
     "minecraft:gameplay/sky_light_level": 10.0,
-    "minecraft:visual/ambient_light_color": "#30264a",
+    "minecraft:visual/ambient_light_color": "#3a3256",
     "minecraft:visual/ambient_particles": [
       {
         "particle": {
@@ -38,15 +38,16 @@
     ],
     "minecraft:visual/cloud_color": "#9a3a2e58",
     "minecraft:visual/cloud_height": 300.0,
-    "minecraft:visual/fog_color": "#3a2c55",
+    "minecraft:visual/fog_color": "#46366e",
     "minecraft:visual/fog_end_distance": 220.0,
     "minecraft:visual/fog_start_distance": 32.0,
-    "minecraft:visual/moon_angle": 332.0,
-    "minecraft:visual/sky_color": "#24193a",
-    "minecraft:visual/sky_light_color": "#c4b6f6",
-    "minecraft:visual/sky_light_factor": 0.72,
+    "minecraft:visual/moon_angle": 300.0,
+    "minecraft:visual/moon_phase": "full_moon",
+    "minecraft:visual/sky_color": "#2e2252",
+    "minecraft:visual/sky_light_color": "#d4ccfa",
+    "minecraft:visual/sky_light_factor": 0.86,
     "minecraft:visual/star_angle": 71.0,
-    "minecraft:visual/star_brightness": 0.85,
+    "minecraft:visual/star_brightness": 1.0,
     "minecraft:visual/sun_angle": 180.0
   },
   "coordinate_scale": 1.0,

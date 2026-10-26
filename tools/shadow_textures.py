@@ -35,19 +35,34 @@ from pixelart import CLEAR, Color, hexc
 
 N = 16
 
-STONE = pa.palette("#131018", "#19151f", "#201b27", "#27212f", "#2e2738", "#362e41", "#3f364b", "#4a4057", "#584d66")
-STREAK = pa.palette("#625874", "#776c8a", "#9186a4")
-DEEP = pa.palette("#08070c", "#0d0b12", "#121018", "#17141e", "#1d1925", "#231e2c", "#2b2535", "#352e40")
-SOIL = pa.palette("#120c13", "#19111a", "#211722", "#2a1e2b", "#332534", "#3e2d3f", "#4a364b")
-PEBBLE = pa.palette("#4c4656", "#5e5868", "#736c7e")
+def _lift(pal: list[Color], factor: float, sat: float = 0.92) -> list[Color]:
+    """Hellt eine Palette auf (Helligkeit × factor, Sättigung leicht gedämpft) – Farbton bleibt erhalten."""
+    import colorsys
+    out = []
+    for r, g, b, a in pal:
+        h, s_, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+        v = min(1.0, v * factor)
+        s_ = s_ * sat
+        rr, gg, bb = colorsys.hsv_to_rgb(h, s_, v)
+        out.append((round(rr * 255), round(gg * 255), round(bb * 255), a))
+    return out
+
+
+# Die Grundtöne sind bewusst etwas heller als „schwarz“: im Zwielicht der Schattenwelt sollen Fels, Erde und Holz noch
+# Struktur zeigen (Schattenstein etwa so hell wie Tiefenschiefer, nur violett).
+STONE = _lift(pa.palette("#131018", "#19151f", "#201b27", "#27212f", "#2e2738", "#362e41", "#3f364b", "#4a4057", "#584d66"), 1.6)
+STREAK = _lift(pa.palette("#625874", "#776c8a", "#9186a4"), 1.3)
+DEEP = _lift(pa.palette("#08070c", "#0d0b12", "#121018", "#17141e", "#1d1925", "#231e2c", "#2b2535", "#352e40"), 1.7)
+SOIL = _lift(pa.palette("#120c13", "#19111a", "#211722", "#2a1e2b", "#332534", "#3e2d3f", "#4a364b"), 1.55)
+PEBBLE = _lift(pa.palette("#4c4656", "#5e5868", "#736c7e"), 1.25)
 SAND = pa.palette("#4a4454", "#585262", "#666070", "#746e7f", "#827c8e", "#918b9d", "#a19bac", "#b2adbc")
 ASH_SNOW = pa.palette("#6c6874", "#7b7783", "#8a8692", "#9995a1", "#a8a4b0", "#b7b3bf", "#c6c3cd", "#d6d3dc")
 ASH_FLECK = pa.palette("#2e2a33", "#3e3a44", "#524d58")
-BARK = pa.palette("#0b0910", "#110e17", "#18131f", "#1f1928", "#271f32", "#30263d", "#3b2e4a")
-SHEEN = pa.palette("#4a3a60", "#5c4876")
-WOOD = pa.palette("#221534", "#2c1b43", "#372252", "#432a61", "#4f3370", "#5d3d80", "#6c4791", "#7d53a3")
+BARK = _lift(pa.palette("#0b0910", "#110e17", "#18131f", "#1f1928", "#271f32", "#30263d", "#3b2e4a"), 1.5)
+SHEEN = _lift(pa.palette("#4a3a60", "#5c4876"), 1.3)
+WOOD = _lift(pa.palette("#221534", "#2c1b43", "#372252", "#432a61", "#4f3370", "#5d3d80", "#6c4791", "#7d53a3"), 1.25, 0.95)
 CRYSTAL = pa.palette("#17154a", "#232270", "#33339a", "#4846c4", "#635ee6", "#8a7ef8", "#b4a8ff", "#ddd6ff", "#f7f4ff")
-MOSS = pa.palette("#11151f", "#161c29", "#1c2434", "#232d40", "#2b374d", "#33425b")
+MOSS = _lift(pa.palette("#11151f", "#161c29", "#1c2434", "#232d40", "#2b374d", "#33425b"), 1.5)
 SILVER = pa.palette("#6c7c9c", "#97a8c8", "#c4d2ec", "#eef4ff")
 GHOST = pa.palette("#5a6a8a", "#8a9cbc", "#b8c8e4", "#e2ecfa", "#ffffff")
 GHOST_GLOW = pa.palette("#6ad0f0", "#a8ecff", "#e8fbff")

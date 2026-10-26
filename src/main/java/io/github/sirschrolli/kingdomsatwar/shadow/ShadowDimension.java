@@ -45,22 +45,23 @@ public final class ShadowDimension {
     public static void bootstrapType(BootstrapContext<DimensionType> context) {
         HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
         EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
-                .set(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x24193A))
-                .set(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x3A2C55))
+                .set(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x2E2252))
+                .set(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x46366E))
                 .set(EnvironmentAttributes.FOG_START_DISTANCE, 32.0f)
                 .set(EnvironmentAttributes.FOG_END_DISTANCE, 220.0f)
                 .set(EnvironmentAttributes.CLOUD_COLOR, ARGB.vector4fFromARGB32(0x9A3A2E58))
                 .set(EnvironmentAttributes.CLOUD_HEIGHT, 300.0f)
-                // keine Sonne, ein stiller Mond schräg über dem Land, fremd geneigte Sterne
+                // keine Sonne, ein großer, stiller Mond tief über dem Land, fremd geneigte Sterne
                 .set(EnvironmentAttributes.SUN_ANGLE, 180.0f)
-                .set(EnvironmentAttributes.MOON_ANGLE, 332.0f)
+                .set(EnvironmentAttributes.MOON_ANGLE, 300.0f)
+                .set(EnvironmentAttributes.MOON_PHASE, net.minecraft.world.level.MoonPhase.FULL_MOON)
                 .set(EnvironmentAttributes.STAR_ANGLE, 71.0f)
-                .set(EnvironmentAttributes.STAR_BRIGHTNESS, 0.85f)
-                // gedämpftes, lilafarbenes Zwielicht – hell genug, dass Felder reifen (Lichtstufe 10)
+                .set(EnvironmentAttributes.STAR_BRIGHTNESS, 1.0f)
+                // helles, kühles Mondlicht mit einem Hauch Violett – hell genug, dass Felder reifen (Lichtstufe 10)
                 .set(EnvironmentAttributes.SKY_LIGHT_LEVEL, 10.0f)
-                .set(EnvironmentAttributes.SKY_LIGHT_FACTOR, 0.72f)
-                .set(EnvironmentAttributes.SKY_LIGHT_COLOR, ARGB.vector3fFromRGB24(0xC4B6F6))
-                .set(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, ARGB.vector3fFromRGB24(0x30264A))
+                .set(EnvironmentAttributes.SKY_LIGHT_FACTOR, 0.86f)
+                .set(EnvironmentAttributes.SKY_LIGHT_COLOR, ARGB.vector3fFromRGB24(0xD4CCFA))
+                .set(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, ARGB.vector3fFromRGB24(0x3A3256))
                 .set(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.0015f)))
                 .set(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_DEEP_DARK))
                 .set(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(Optional.empty(),

@@ -120,48 +120,48 @@ public final class ShadowBiomes {
     public static void bootstrap(BootstrapContext<Biome> context) {
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<WorldCarver> carvers = context.lookup(Registries.CARVER);
-        context.register(SHADOW_FOREST, biome(new Look(0x241A3C, 0x2C2246, 0x2A2C5C, 0x0E1030, 0x5A3E8E, 0x6C3EA8)
+        context.register(SHADOW_FOREST, biome(new Look(0x2E2252, 0x3E2E66, 0x3A3C90, 0x101236, 0x6450A8, 0x7A4AC8)
                         .fog(20.0f, 150.0f).particles(new AmbientParticle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.0012f))
                         .music(SoundEvents.MUSIC_BIOME_DEEP_DARK).loop(SoundEvents.AMBIENT_WARPED_FOREST_LOOP)
                         .additions(SoundEvents.AMBIENT_WARPED_FOREST_ADDITIONS, 0.0111),
                 ShadowFeatures.forest(placed, carvers),
                 new Spawns().stalkers(100).crawlers(25).nightWings(8).moonStags(10).moths(25).worldGen(0.08f), false, 0.6f, 0.8f));
-        context.register(PALE_WASTES, biome(new Look(0x3A3448, 0x6A6278, 0x4A4A62, 0x1A1A2A, 0x8E879A, 0x8C8298)
+        context.register(PALE_WASTES, biome(new Look(0x4C4658, 0x8A8294, 0x5A5A7A, 0x1E1E30, 0xA49EAE, 0x9C94A8)
                         .fog(28.0f, 200.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.012f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_BASALT_DELTAS_LOOP),
                 ShadowFeatures.wastes(placed, carvers),
                 new Spawns().stalkers(90).crawlers(20).nightWings(30), false, 1.2f, 0.0f));
-        context.register(CRYSTAL_CHASMS, biome(new Look(0x20244A, 0x2A3264, 0x2A4A8A, 0x0C1838, 0x4A5C9C, 0x4C6CAC)
+        context.register(CRYSTAL_CHASMS, biome(new Look(0x26306A, 0x34488A, 0x2E5AAA, 0x0E1C42, 0x4A68B4, 0x4A7AC4)
                         .fog(24.0f, 180.0f).particles(new AmbientParticle(ParticleTypes.END_ROD, 0.0009f))
                         .music(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES),
                 ShadowFeatures.chasms(placed, carvers),
                 new Spawns().crawlers(100).stalkers(40).nightWings(10).moths(10), false, 0.8f, 0.4f));
-        context.register(SOUL_MARSH, biome(new Look(0x1C2830, 0x2A3A3A, 0x1A3A34, 0x081A16, 0x3E5E4E, 0x305E4A)
+        context.register(SOUL_MARSH, biome(new Look(0x203C44, 0x2C5050, 0x2A5E58, 0x0A1E1C, 0x3E7A6A, 0x2E7A62)
                         .fog(10.0f, 110.0f).particles(new AmbientParticle(ParticleTypes.SOUL, 0.0006f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_LOOP)
                         .additions(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_ADDITIONS, 0.0111),
                 ShadowFeatures.marsh(placed, carvers),
                 new Spawns().stalkers(80).crawlers(15).nightWings(10).moonStags(5).moths(35), true, 0.7f, 0.9f));
-        context.register(SHADOW_PEAKS, biome(new Look(0x2A283E, 0x48445E, 0x3A4062, 0x101830, 0x5E5874, 0x544C74)
+        context.register(SHADOW_PEAKS, biome(new Look(0x323A62, 0x5A5E80, 0x4A5A8A, 0x121A34, 0x6A70A0, 0x5E6898)
                         .fog(32.0f, 240.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.004f))
                         .music(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS),
                 ShadowFeatures.peaks(placed, carvers),
                 new Spawns().nightWings(50).stalkers(60).crawlers(25), true, -0.6f, 0.4f));
-        context.register(GLIMMER_MEADOWS, biome(new Look(0x2C2650, 0x3C3668, 0x3A3A7C, 0x12123A, 0x7C72BA, 0x8C7ACA)
+        context.register(GLIMMER_MEADOWS, biome(new Look(0x3A3C7A, 0x5A5C9E, 0x4A5CB8, 0x141A44, 0x7E88DC, 0x9A8ADA)
                         .fog(32.0f, 230.0f).particles(new AmbientParticle(ParticleTypes.FIREFLY, 0.0035f))
                         .music(SoundEvents.MUSIC_END),
                 ShadowFeatures.meadows(placed, carvers),
                 new Spawns().stalkers(60).crawlers(10).nightWings(12).moonStags(14).moths(45).worldGen(0.1f), false, 0.7f, 0.5f));
-        context.register(ABYSSAL_SEA, biome(new Look(0x181630, 0x1C1A36, 0x0E0E24, 0x04040E, 0x3A3460, 0x3A3466)
+        context.register(ABYSSAL_SEA, biome(new Look(0x1E1C46, 0x262658, 0x1A2468, 0x060A24, 0x4A4480, 0x4A4486)
                         .fog(24.0f, 200.0f).music(SoundEvents.MUSIC_UNDER_WATER),
                 ShadowFeatures.sea(placed, carvers),
                 new Spawns().nightWings(15), false, 0.5f, 0.5f));
-        context.register(FLOATING_ISLES, biome(new Look(0x382C64, 0x463A78, 0x4A4A9A, 0x16163E, 0x9C7CCC, 0xB28AE2)
+        context.register(FLOATING_ISLES, biome(new Look(0x3E2E72, 0x5E4C8E, 0x6A5AC8, 0x1A1846, 0xB07AD8, 0xC88AE8)
                         .fog(40.0f, 260.0f).particles(new AmbientParticle(ParticleTypes.END_ROD, 0.0007f))
                         .music(SoundEvents.MUSIC_END),
                 ShadowFeatures.isles(placed, carvers),
                 new Spawns().nightWings(70).stalkers(25).moonStags(6).moths(20), false, 0.7f, 0.5f));
-        context.register(SHADOW_DEPTHS, biome(new Look(0x120E1C, 0x16101E, 0x14183A, 0x06081A, 0x4A3E6A, 0x4A3E6A)
+        context.register(SHADOW_DEPTHS, biome(new Look(0x16122A, 0x1E1630, 0x1C2050, 0x080A1E, 0x5A4E80, 0x5A4E80)
                         .fog(12.0f, 90.0f).particles(new AmbientParticle(ParticleTypes.ASH, 0.002f))
                         .music(SoundEvents.MUSIC_BIOME_DEEP_DARK),
                 ShadowFeatures.depths(placed, carvers),
