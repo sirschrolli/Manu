@@ -531,9 +531,32 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.lightning.title", "The Stormbringer", "Der Sturmbringer");
         add(ModEntities.THALASSA.get(), pick("Thalassa", "Thalassa"));
         text("boss.kingdomsatwar.water.title", "Mistress of the Deep", "Die Herrin der Tiefe");
+        add(ModEntities.NYXAR.get(), pick("Nyxar", "Nyxar"));
+        text("boss.kingdomsatwar.shadow", "Nyxar, the Shadow Dragon", "Nyxar, der Schattendrache");
+        text("boss.kingdomsatwar.shadow.title", "Devourer of Light", "Der Lichtverschlinger");
+        subtitle("entity.nyxar.breath", "Nyxar exhales shadow", "Nyxar haucht Schatten");
+        subtitle("entity.nyxar.shriek", "Nyxar shrieks", "Nyxar kreischt");
+        text("citadel.kingdomsatwar.name", "The Shadow Citadel", "Die Schattenzitadelle");
+        text("citadel.kingdomsatwar.warning", "The shadows grow heavier… something on the throne is watching you.",
+                "Die Schatten werden schwerer … etwas auf dem Thron beobachtet dich.");
+        block(ModBlocks.SHADOW_THRONE_CORE, "Throne Core", "Thronkern");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_HEART, "Heart of Shadows", "Herz der Schatten");
+        lore("shadow_heart", "All that remains of Nyxar", "Alles, was von Nyxar blieb");
+        text(ModItems.loreKey("shadow_heart", 2), "A single soul still glimmers inside", "In ihm glimmt noch eine einzige Seele");
+        text("message.kingdomsatwar.story.nyxar_fallen", "%s has fallen! Light returns to the Shadow World.",
+                "%s ist gefallen! Das Licht kehrt in die Schattenwelt zurück.");
+        text("message.kingdomsatwar.story.ending_title", "The Seal is Avenged", "Das Siegel ist gerächt");
+        text("message.kingdomsatwar.story.ending_subtitle", "Nyxar is no more", "Nyxar ist nicht mehr");
+        text("message.kingdomsatwar.story.ending",
+                "The devourer of light is gone. Where his shadow lay, the Umbrer will light lanterns again – and your name will be in their chronicle.",
+                "Der Lichtverschlinger ist fort. Wo sein Schatten lag, werden die Umbrer wieder Laternen entzünden – und dein Name steht in ihrer Chronik.");
+        text("item.kingdomsatwar.dragon_compass.citadel", "Nyxar's Shadow Citadel", "Nyxars Schattenzitadelle");
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
+        text("command.kingdomsatwar.citadel.none", "There is no Shadow Citadel in this world.", "In dieser Welt gibt es keine Schattenzitadelle.");
+        text("command.kingdomsatwar.citadel.at", "The Shadow Citadel lies at x %s, z %s (Shadow World).",
+                "Die Schattenzitadelle liegt bei x %s, z %s (Schattenwelt).");
         lairs();
         story();
     }

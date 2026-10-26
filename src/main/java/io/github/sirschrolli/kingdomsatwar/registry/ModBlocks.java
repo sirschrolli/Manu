@@ -554,6 +554,11 @@ public final class ModBlocks {
             "dragon_lair_core", io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLACK).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
 
+    /** Thronkern unter Nyxars Thron in der Schattenzitadelle (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ShadowThroneCoreBlock> SHADOW_THRONE_CORE = BLOCKS.registerBlock(
+            "shadow_throne_core", io.github.sirschrolli.kingdomsatwar.block.ShadowThroneCoreBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
+
     public static final DeferredBlock<RecruitmentTableBlock> RECRUITMENT_TABLE = blockWithItem("recruitment_table",
             RecruitmentTableBlock::new,
             p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5f).sound(SoundType.WOOD)

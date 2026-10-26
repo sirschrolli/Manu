@@ -98,6 +98,10 @@ final class Showcase {
                 case "bossmotion" -> bossMotion(steps, DragonType.FIRE, false);
                 case "seal" -> seal(steps);
                 case "bossbars" -> bossBars(steps);
+                case "citadel" -> CitadelShowcase.citadel(steps, false);
+                case "nyxar" -> CitadelShowcase.citadel(steps, true);
+                case "citadelmap" -> CitadelShowcase.citadel(steps, false, true);
+                case "nyxarfight" -> CitadelShowcase.citadel(steps, true, false, true);
                 case "bossmodels" -> bossModels(steps, false, null);
                 case "bossmodels_air" -> bossModels(steps, true, null);
                 case "lairinfo" -> {

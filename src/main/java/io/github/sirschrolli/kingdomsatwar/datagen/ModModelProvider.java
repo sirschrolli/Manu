@@ -307,6 +307,7 @@ public class ModModelProvider extends ModelProvider {
 
         // --- Drachennester: Nestkern (verborgen, mit glimmendem Siegel) und Drachenkompass ---
         glowingCube(blocks, ModBlocks.DRAGON_LAIR_CORE.get());
+        glowingCube(blocks, ModBlocks.SHADOW_THRONE_CORE.get());
         dragonCompass(items, ModItems.DRAGON_COMPASS.get());
 
         // --- Siegelkreis, Siegelsplitter und Chronik ---

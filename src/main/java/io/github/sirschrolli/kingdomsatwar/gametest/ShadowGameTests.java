@@ -90,6 +90,11 @@ final class ShadowGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CRYSTAL_CRAWLER_SHARDS =
             ModGameTests.TEST_FUNCTIONS.register("crystal_crawler_shards", () -> ShadowGameTests::crystalCrawlerShards);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> NYXAR_LIFECYCLE =
+            ModGameTests.TEST_FUNCTIONS.register("nyxar_lifecycle", () -> ShadowGameTests::nyxarLifecycle);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_CITADEL =
+            ModGameTests.TEST_FUNCTIONS.register("shadow_citadel", () -> ShadowGameTests::shadowCitadel);
+
     private ShadowGameTests() {}
 
     /** Lädt die Klasse (meldet die Testfunktionen an). */
@@ -99,7 +104,11 @@ final class ShadowGameTests {
         for (var test : List.of(SHADOW_ORES, SHADOW_RECIPES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(), new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
-        for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS)) {
+        // Nyxar braucht Platz (seine Angriffe reichen weit) und Zeit (Erwachen, alle Angriffe, Todesanimation)
+        event.registerTest(NYXAR_LIFECYCLE.getId(), new FunctionGameTestInstance(NYXAR_LIFECYCLE.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 56)));
+        for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS,
+                SHADOW_CITADEL)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -169,6 +178,113 @@ final class ShadowGameTests {
             helper.assertTrue(ShadowGate.destination(overworld, player, BlockPos.ZERO) == null,
                     "Ohne Schattenwelt darf das Tor nirgendwohin führen");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Nyxar: erwacht über den Thronkern (beim Erwachen unverwundbar), kämpft dann; alle seine eigenen Angriffe laufen
+     * vollständig durch; Magie und Gift von Nicht-Spielern prallen an ihm ab; nach dem Todesstoß und der Todesanimation
+     * bleibt der Thron besiegt, die Welt zählt den Sieg und das Herz der Schatten schwebt im Thronhof.
+     */
+    private static void nyxarLifecycle(GameTestHelper helper) {
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, net.minecraft.world.level.block.Blocks.STONE);
+            }
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos home = helper.absolutePos(new BlockPos(4, 1, 4));
+        BlockPos corePos = home.below(5);
+        level.setBlock(corePos, ModBlocks.SHADOW_THRONE_CORE.get().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        var core = (io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity) level.getBlockEntity(corePos);
+        helper.assertTrue(core != null, "Thronkern ohne Blockobjekt");
+        core.setup(home);
+        int defeatsBefore = io.github.sirschrolli.kingdomsatwar.world.SealState.of(level).nyxarDefeats();
+        var boss = core.awaken(level);
+        helper.assertTrue(boss != null, "Nyxar lässt sich nicht erzeugen");
+        helper.assertTrue(boss.element() == null && "shadow".equals(boss.bossId()), "Nyxar hat ein Element");
+        helper.assertTrue(corePos.equals(boss.getLairCore()), "Nyxar kennt seinen Thron nicht");
+        helper.assertFalse(boss.hurtServer(level, level.damageSources().generic(), 10.0f), "Nyxar ist beim Erwachen verwundbar");
+        int awake = boss.awakeningTicks() + 5;
+        helper.runAfterDelay(awake, () -> {
+            helper.assertTrue(boss.getBossState() == io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.State.FIGHT,
+                    "Nyxar ist nach dem Erwachen nicht kampfbereit: " + boss.getBossState());
+            // ein unverwundbarer Ritter als Ziel
+            var knight = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SOLDIERS
+                    .get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get()
+                    .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            helper.assertTrue(knight != null, "Ritter lässt sich nicht erzeugen");
+            knight.snapTo(home.getX() + 10.5, home.getY(), home.getZ() + 0.5, 90, 0);
+            knight.setPermanentlyInvulnerable(true);
+            level.addFreshEntity(knight);
+            for (String name : List.of("shadow_shriek", "shadow_step", "shadow_claws", "eclipse", "soul_drain", "shadow_rain", "breath",
+                    "volley", "nova_ring")) {
+                var attack = boss.findAttack(name);
+                helper.assertTrue(attack != null, "Nyxar kennt den Angriff nicht: " + name);
+                attack.start(level, boss, knight);
+                for (int t = 0; t < attack.duration(); t++) {
+                    attack.tick(level, boss, knight, t);
+                }
+                attack.stop(level, boss);
+            }
+            helper.assertFalse(boss.isInvisible(), "Nyxar bleibt nach dem Schattensprung unsichtbar");
+            // Magie von Nicht-Spielern prallt ab, gewöhnlicher Schaden wirkt
+            float before = boss.getHealth();
+            boss.hurtServer(level, level.damageSources().magic(), 40.0f);
+            helper.assertTrue(boss.getHealth() >= before - 0.01f, "Magie von Nicht-Spielern schadet Nyxar");
+            before = boss.getHealth();
+            boss.hurtServer(level, level.damageSources().generic(), 40.0f);
+            helper.assertTrue(boss.getHealth() < before, "Gewöhnlicher Schaden wirkt nicht");
+            knight.discard();
+            boss.setHealth(1.0f);
+            boss.hurtServer(level, level.damageSources().generic(), 50.0f);
+            helper.assertTrue(boss.isDeadOrDying(), "Nyxar stirbt nicht");
+        });
+        helper.runAfterDelay(awake + io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.DEATH_TICKS + 10, () -> {
+            helper.assertTrue(boss.isRemoved(), "Nyxar wurde nach der Todesanimation nicht entfernt");
+            helper.assertTrue(core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DEFEATED,
+                    "Der Thron ist nach dem Sieg nicht besiegt: " + core.phase());
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.world.SealState.of(level).nyxarDefeats() == defeatsBefore + 1,
+                    "Die Welt zählt den Sieg über Nyxar nicht");
+            var hearts = level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, new net.minecraft.world.phys.AABB(home).inflate(40),
+                    item -> item.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_HEART.get()));
+            helper.assertTrue(!hearts.isEmpty(), "Kein Herz der Schatten nach dem Sieg");
+            hearts.forEach(net.minecraft.world.entity.Entity::discard);
+            core.reset(level);
+            helper.assertTrue(core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DORMANT, "Thron lässt sich nicht zurücksetzen");
+            level.setBlock(corePos, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Die Schattenzitadelle: Bauwerk und Gruppe sind registriert, ihr Ort lässt sich aus dem Startwert berechnen (einmal,
+     * im Ring 900–1700 Blöcke um die Mitte) und liegt auf passendem Land; Umbrer-Dörfer halten Abstand.
+     */
+    private static void shadowCitadel(GameTestHelper helper) {
+        var registries = helper.getLevel().getServer().registryAccess();
+        var set = registries.lookupOrThrow(Registries.STRUCTURE_SET).get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_CITADEL_SET);
+        helper.assertTrue(set.isPresent(), "Die Strukturgruppe der Zitadelle fehlt");
+        helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_CITADEL_STRUCTURE).isPresent(), "Das Bauwerk fehlt");
+        var placement = (io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement) set.get().value().placement();
+        Holder<NoiseGeneratorSettings> settings = registries.lookupOrThrow(Registries.NOISE_SETTINGS).getOrThrow(ShadowTerrain.SETTINGS);
+        var source = MultiNoiseBiomeSource.createFromList(ShadowBiomes.parameters(registries.lookupOrThrow(Registries.BIOME)));
+        RandomState random = RandomState.create(registries.lookupOrThrow(Registries.NOISE), 20_261_026L, settings.value());
+        var chunk = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.find(20_261_026L, source, random, placement);
+        helper.assertTrue(chunk != null, "Die Zitadelle hat keinen Ort");
+        double dist = Math.sqrt((double) chunk.getMiddleBlockX() * chunk.getMiddleBlockX() + (double) chunk.getMiddleBlockZ() * chunk.getMiddleBlockZ());
+        helper.assertTrue(dist >= 850 && dist <= 3500, "Die Zitadelle liegt außerhalb ihres Rings: " + dist);
+        var again = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.find(20_261_026L, source, random, placement);
+        helper.assertTrue(chunk.equals(again), "Der Ort der Zitadelle ist nicht beständig");
+        BiomeResolver biomes = source.createUncachedResolver(random);
+        var biome = io.github.sirschrolli.kingdomsatwar.worldgen.lair.NestLocator.surfaceBiome(source.createResolver(
+                random.createClimateSampler(net.minecraft.world.level.levelgen.densityfunction.SamplerContext.EMPTY_UNCACHED)),
+                random.createClimateSampler(net.minecraft.world.level.levelgen.densityfunction.SamplerContext.EMPTY_UNCACHED),
+                chunk.getMiddleBlockX(), chunk.getMiddleBlockZ());
+        helper.assertTrue(biome.is(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Biomes.HAS_SHADOW_CITADEL)
+                        || dist > 1700, "Die Zitadelle steht in einem unpassenden Biom: " + biome.getRegisteredName());
+        helper.assertTrue(biomes != null, "Keine Biome");
         helper.succeed();
     }
 

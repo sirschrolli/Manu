@@ -71,7 +71,8 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
         state.stateTime = (entity.tickCount - entity.clientStateStart + partialTicks) / 20.0f;
         state.deathSeconds = entity.isDeadOrDying() ? (entity.deathTime + partialTicks) / 20.0f : 0.0f;
         state.phase = entity.getPhase();
-        state.hidden = entity.getBossState() == DragonBossEntity.State.AWAKENING
+        // unsichtbar beim Erwachen (je nach Boss) und während Nyxars Schattensprung
+        state.hidden = entity.isInvisible() || entity.getBossState() == DragonBossEntity.State.AWAKENING
                 && entity.hiddenDuringAwakening(entity.tickCount - entity.clientStateStart);
         state.rage = entity.getMaxHealth() > 0 && entity.getBossState() == DragonBossEntity.State.FIGHT
                 ? Mth.clamp(1.0f - entity.getHealth() / entity.getMaxHealth(), 0.0f, 1.0f) : 0.0f;

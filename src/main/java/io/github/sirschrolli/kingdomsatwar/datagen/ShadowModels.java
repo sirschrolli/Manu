@@ -116,7 +116,7 @@ final class ShadowModels {
         for (var item : java.util.List.of(ShadowItems.RAW_MOONSILVER, ShadowItems.MOONSILVER_INGOT, ShadowItems.MOONSILVER_NUGGET,
                 ShadowItems.RAW_NIGHTSTEEL, ShadowItems.NIGHTSTEEL_INGOT, ShadowItems.SOUL_CRYSTAL, ShadowItems.ABYSSITE_SHARD,
                 ShadowItems.ABYSSITE_INGOT, ShadowItems.NIGHT_CRYSTAL_SHARD, ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE,
-                ShadowItems.SHADOW_ESSENCE, ShadowItems.DUSKGRAIN, ShadowItems.DUSK_BREAD)) {
+                ShadowItems.SHADOW_ESSENCE, ShadowItems.SHADOW_HEART, ShadowItems.DUSKGRAIN, ShadowItems.DUSK_BREAD)) {
             ModModelProvider.flat(items, item.get());
         }
         for (var egg : ShadowItems.spawnEggs()) {

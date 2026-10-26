@@ -60,6 +60,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.NYXAR, io.github.sirschrolli.kingdomsatwar.client.model.geom.NyxarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLACIARA, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlaciaraGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.VERDANTIS, io.github.sirschrolli.kingdomsatwar.client.model.geom.VerdantisGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.TERRAGON, io.github.sirschrolli.kingdomsatwar.client.model.geom.TerragonGeometry::createLayer);
@@ -111,6 +112,10 @@ public final class ClientSetup {
                 new io.github.sirschrolli.kingdomsatwar.client.boss.ThalassaModel(context.bakeLayer(ModModelLayers.THALASSA)),
                 KingdomsAtWar.id("textures/entity/boss/thalassa.png"), KingdomsAtWar.id("textures/entity/boss/thalassa_glow.png"),
                 2.0f, 1.5f, 4.0f));
+        event.registerEntityRenderer(ModEntities.NYXAR.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.NyxarModel(context.bakeLayer(ModModelLayers.NYXAR)),
+                KingdomsAtWar.id("textures/entity/boss/nyxar.png"), KingdomsAtWar.id("textures/entity/boss/nyxar_glow.png"),
+                2.3f, 4.8f, 5.0f));
         event.registerEntityRenderer(ModEntities.VINELING.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
@@ -136,5 +141,6 @@ public final class ClientSetup {
         event.registerSpriteSet(ModParticles.BOSS_SPORE.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SPORE));
         event.registerSpriteSet(ModParticles.BOSS_DUST.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.DUST));
         event.registerSpriteSet(ModParticles.BOSS_WATER.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.WATER));
+        event.registerSpriteSet(ModParticles.BOSS_SHADOW.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SHADOW));
     }
 }

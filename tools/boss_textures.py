@@ -206,6 +206,21 @@ def orb(core: str, mid: str, rim: str, flames: bool, rough: bool, seed: int) -> 
     return img
 
 
+def soul_bolt() -> Image.Image:
+    """Seelenpfeil (Nyxar): violette Kugel mit hellem Kern und zwei Schlieren, die sich um sie winden."""
+    img = orb("#fbf2ff", "#a65cff", "#2a0e52", flames=True, rough=False, seed=77)
+    px = img.load()
+    for i in range(22):
+        a = i * 0.42
+        for arm in (0, math.pi):
+            r = 2.0 + i * 0.25
+            x = int(7.5 + math.cos(a + arm) * r)
+            y = int(7.5 + math.sin(a + arm) * r)
+            if 0 <= x < 16 and 0 <= y < 16 and px[x, y][3]:
+                px[x, y] = hexc("#e6ccff") if i < 10 else hexc("#7a3ad0")
+    return img
+
+
 # =============================================================================================
 # Odem-Partikel (je 8 Bilder, 16 x 16): von hell und klein zu groß und verblassend
 # =============================================================================================
@@ -217,6 +232,7 @@ PARTICLE_RAMPS = {
     "spore": ["#e8ffb0", "#c8f07a", "#a6d85a", "#8ac24a", "#7aa848", "#8a7aa8", "#7a6a96", "#6a5a80"],
     "dust": ["#e8d8b8", "#d4c09a", "#c0a880", "#a88e6a", "#90785a", "#7a664e", "#665644", "#56483a"],
     "water": ["#ffffff", "#e8fbff", "#c0f0ff", "#90e0f8", "#60c8f0", "#3aaee0", "#2a90c8", "#2478b0"],
+    "shadow": ["#f2e0ff", "#d2a4ff", "#b06aff", "#8642d6", "#5c2a9a", "#3c1c68", "#281444", "#1a0e2c"],
 }
 
 
@@ -258,6 +274,14 @@ def particle_frame(kind: str, frame: int) -> Image.Image:
                 col = ramp[0]                       # Glitzern / Gischt
             if kind == "dust" and n > 0.8 and frame < 5:
                 col = hexc("#4a3a2a")               # kleine Steinchen
+            if kind == "shadow":
+                # Schattenrauch: weich auslaufend und löchrig, nur im Kern ein glimmender Seelenfunke
+                if n < 0.3 + 0.3 * t and inner < 0.6:
+                    continue
+                if n > 0.86 and inner > 0.45 and frame < 5:
+                    col = ramp[1]
+                a = int(255 * min(1.0, 0.3 + 0.9 * inner) * (1.0 - 0.35 * t))
+                col = (col[0], col[1], col[2], max(60, a))
             if kind == "spore" and n > 0.82:
                 col = hexc("#f4ffd0")
             px[x, y] = col
@@ -266,12 +290,13 @@ def particle_frame(kind: str, frame: int) -> Image.Image:
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
     import bossbar_textures
-    for element in ELEMENTS:
+    for element in bossbar_textures.ELEMENTS:
         put(f"gui/boss_bar/{element}", bossbar_textures.bossbar(element))
     put("entity/boss/projectile_fireball", orb("#fff6c0", "#ffa42a", "#c42a08", flames=True, rough=False, seed=11))
     for kind in PARTICLE_RAMPS:
         for frame in range(8):
             put(f"particle/boss_{kind}_{frame}", particle_frame(kind, frame))
+    put("entity/boss/projectile_soul_bolt", soul_bolt())
     put("entity/boss/projectile_meteor", orb("#ffe27a", "#e0520c", "#2a1410", flames=False, rough=True, seed=23))
 
 

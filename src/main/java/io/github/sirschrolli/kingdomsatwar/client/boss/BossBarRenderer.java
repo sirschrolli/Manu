@@ -2,7 +2,6 @@ package io.github.sirschrolli.kingdomsatwar.client.boss;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -46,14 +45,18 @@ public final class BossBarRenderer {
     /** Abstand vom oberen Rand der Leiste bis zum Rahmen (Platz für den Namen). */
     private static final int NAME_SPACE = 11;
     private static final float[] GEMS = {0.6f, 0.3f};
-    private static final Map<DragonType, Identifier> TEXTURES = new EnumMap<>(DragonType.class);
+    /** Aussehen einer Leiste: Textur und Farbe des Namens (je Element, dazu Nyxars Schattenleiste). */
+    private record Style(Identifier texture, int color) {}
+
+    private static final Map<String, Style> STYLES = new HashMap<>();
     private static final Map<UUID, Trail> TRAILS = new HashMap<>();
     private static final String PREFIX = "boss.kingdomsatwar.";
 
     static {
         for (DragonType type : DragonType.values()) {
-            TEXTURES.put(type, KingdomsAtWar.id("textures/gui/boss_bar/" + type.id() + ".png"));
+            STYLES.put(type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/" + type.id() + ".png"), type.color()));
         }
+        STYLES.put("shadow", new Style(KingdomsAtWar.id("textures/gui/boss_bar/shadow.png"), 0xB46CFF));
     }
 
     /** Spur des erlittenen Schadens: bleibt nach einem Treffer kurz stehen und schmilzt dann zur echten Füllung. */
@@ -69,14 +72,14 @@ public final class BossBarRenderer {
     @SubscribeEvent
     static void onBossBar(CustomizeGuiOverlayEvent.BossEventProgress event) {
         LerpingBossEvent boss = event.getBossEvent();
-        DragonType type = elementOf(boss.getName());
+        Style type = styleOf(boss.getName());
         if (type == null) {
             return;
         }
         event.setCanceled(true);
         GuiGraphicsExtractor g = event.getGuiGraphics();
         Minecraft mc = Minecraft.getInstance();
-        Identifier tex = TEXTURES.get(type);
+        Identifier tex = type.texture();
         long now = Util.getMillis();
         float progress = Mth.clamp(boss.getProgress(), 0.0f, 1.0f);
         float trail = trail(boss.getId(), progress, now);
@@ -169,15 +172,10 @@ public final class BossBarRenderer {
         return t.value;
     }
 
-    /** Element aus dem Namen der Bossleiste ({@code boss.kingdomsatwar.fire} usw.), sonst null. */
-    public static @Nullable DragonType elementOf(Component name) {
+    /** Aussehen aus dem Namen der Bossleiste ({@code boss.kingdomsatwar.fire}, {@code boss.kingdomsatwar.shadow} …), sonst null. */
+    private static @Nullable Style styleOf(Component name) {
         if (name.getContents() instanceof TranslatableContents contents && contents.getKey().startsWith(PREFIX)) {
-            String id = contents.getKey().substring(PREFIX.length());
-            for (DragonType type : DragonType.values()) {
-                if (type.id().equals(id)) {
-                    return type;
-                }
-            }
+            return STYLES.get(contents.getKey().substring(PREFIX.length()));
         }
         return null;
     }

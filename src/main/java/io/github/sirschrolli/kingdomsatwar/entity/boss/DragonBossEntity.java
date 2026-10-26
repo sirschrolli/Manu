@@ -93,7 +93,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     public static final int DEATH_TICKS = 170;
     private static final int SLUMBER_TICKS = 60;
 
-    protected final DragonType element;
+    /** Drachenart des Bosses – {@code null} bei Nyxar, dem Schattendrachen (keine der sechs Arten). */
+    protected final @Nullable DragonType element;
     protected final BossPart[] parts;
     private final List<BossAttack> attacks = new ArrayList<>();
     private final ServerBossEvent bossEvent;
@@ -139,12 +140,12 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     public float idleSide = 1.0f;
     private int nextIdleEvent = 60;
 
-    protected DragonBossEntity(EntityType<? extends DragonBossEntity> type, Level level, DragonType element) {
+    protected DragonBossEntity(EntityType<? extends DragonBossEntity> type, Level level, @Nullable DragonType element) {
         super(type, level);
         this.element = element;
         this.parts = this.createParts();
         this.bossEvent = new ServerBossEvent(Mth.createInsecureUUID(this.random),
-                Component.translatable("boss.kingdomsatwar." + element.id()), BossEvent.BossBarColor.RED,
+                Component.translatable("boss.kingdomsatwar." + this.bossId()), BossEvent.BossBarColor.RED,
                 BossEvent.BossBarOverlay.NOTCHED_10);
         this.bossEvent.setDarkenScreen(true);
         this.registerAttacks(this.attacks);
@@ -220,8 +221,45 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     /** Lage des Mauls in der Welt (für Odem und Geschosse). */
     public abstract Vec3 mouthPosition();
 
-    public DragonType element() {
+    public @Nullable DragonType element() {
         return element;
+    }
+
+    /** Kennung für Übersetzungen und Texturen, z. B. {@code fire} oder {@code shadow}. */
+    public String bossId() {
+        return this.element != null ? this.element.id() : "shadow";
+    }
+
+    /** Farbe des Namens in Titeln und Meldungen. */
+    public int bossColor() {
+        return this.element != null ? this.element.color() : 0xB46CFF;
+    }
+
+    /** Partikel des Elements (Atem, Wut, Schlaf). */
+    public net.minecraft.core.particles.ParticleOptions bossParticle() {
+        return this.element != null ? this.element.particle() : net.minecraft.core.particles.ParticleTypes.SCULK_SOUL;
+    }
+
+    /** Wirkung des Elements auf Gegner beim Phasenwechsel. */
+    protected void transitionEffect(LivingEntity e) {
+        if (this.element == null) {
+            e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.DARKNESS, 100, 0), this);
+            e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 60, 1), this);
+            return;
+        }
+        switch (this.element) {
+            case FIRE -> BossEffects.burn(e, 4);
+            case ICE -> BossEffects.freeze(e, 3);
+            case LIGHTNING -> BossEffects.stun(e, 2);
+            case NATURE -> BossEffects.poison(e, 4);
+            case WATER -> BossEffects.soak(e, 4);
+            case EARTH -> e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOWNESS, 60, 2), this);
+        }
+    }
+
+    /** Was nach dem Tod geschieht (Standard: Drachenei, Siegelsplitter, Nest wird still). */
+    protected void onDefeated(ServerLevel level, BlockPos home) {
+        BossLairs.onBossDefeated(level, this, home);
     }
 
     // =====================================================================================
@@ -415,9 +453,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     private void announce(ServerLevel level) {
         this.awakeningAnnounced = true;
-        Component title = Component.translatable("entity.kingdomsatwar." + this.element.id() + "_dragon_boss")
-                .withColor(this.element.color());
-        Component subtitle = Component.translatable("boss.kingdomsatwar." + this.element.id() + ".title")
+        Component title = Component.translatable("entity.kingdomsatwar." + this.bossId() + "_dragon_boss")
+                .withColor(this.bossColor());
+        Component subtitle = Component.translatable("boss.kingdomsatwar." + this.bossId() + ".title")
                 .withStyle(ChatFormatting.GRAY);
         for (ServerPlayer player : this.nearbyPlayers(level, 110.0)) {
             player.connection.send(new ClientboundSetTitlesAnimationPacket(20, 70, 30));
@@ -599,7 +637,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         }
         BossPart part = this.parts[this.random.nextInt(this.parts.length)];
         double w = part.getBbWidth();
-        this.level().addParticle(this.element.particle(),
+        this.level().addParticle(this.bossParticle(),
                 part.getX() + (this.random.nextDouble() - 0.5) * w, part.getY() + this.random.nextDouble() * part.getBbHeight(),
                 part.getZ() + (this.random.nextDouble() - 0.5) * w, 0.0, 0.04 + this.random.nextDouble() * 0.04, 0.0);
         if (phase >= 3 && this.tickCount % 16 == 0) {
@@ -785,7 +823,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         this.transitionPhase = phase;
         this.entityData.set(DATA_TEMPO, 1.0f);
         this.entityData.set(DATA_ATTACK, BossAnims.ROAR);
-        Component name = Component.translatable("entity.kingdomsatwar." + this.element.id() + "_dragon_boss").withColor(this.element.color());
+        Component name = Component.translatable("entity.kingdomsatwar." + this.bossId() + "_dragon_boss").withColor(this.bossColor());
         String key = phase >= 4 ? "boss.kingdomsatwar.last_stand" : phase == 3 ? "boss.kingdomsatwar.enraged" : "boss.kingdomsatwar.angered";
         for (ServerPlayer player : this.nearbyPlayers(level, ARENA_RADIUS * 1.5)) {
             player.sendOverlayMessage(Component.translatable(key, name).withStyle(phase >= 3 ? ChatFormatting.RED : ChatFormatting.GOLD));
@@ -811,22 +849,15 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
             this.shake(level, 70.0, this.transitionPhase >= 3 ? 1.0f : 0.7f, 30);
             double radius = this.transitionPhase >= 3 ? 14.0 : 11.0;
             for (int r = 3; r <= (int) radius; r += 3) {
-                BossFx.ring(level, this.element.particle(), feet.add(0, 0.4, 0), r, r * 7, 0.25);
+                BossFx.ring(level, this.bossParticle(), feet.add(0, 0.4, 0), r, r * 7, 0.25);
             }
-            BossFx.burst(level, this.element.particle(), feet.add(0, 4, 0), 80, 4.0, 0.25);
+            BossFx.burst(level, this.bossParticle(), feet.add(0, 4, 0), 80, 4.0, 0.25);
             for (LivingEntity e : this.enemiesAround(feet, radius, 8)) {
                 double d = e.position().subtract(feet).horizontalDistance();
                 float f = (float) Math.max(0.35, 1.0 - d / radius);
                 this.hurtTarget(level, e, 6.0f * f);
                 pushAway(e, feet, 2.2 * f, 0.7 * f);
-                switch (this.element) {
-                    case FIRE -> BossEffects.burn(e, 4);
-                    case ICE -> BossEffects.freeze(e, 3);
-                    case LIGHTNING -> BossEffects.stun(e, 2);
-                    case NATURE -> BossEffects.poison(e, 4);
-                    case WATER -> BossEffects.soak(e, 4);
-                    case EARTH -> e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOWNESS, 60, 2), this);
-                }
+                this.transitionEffect(e);
             }
         }
         if (this.transitionTicks <= 0) {
@@ -1150,7 +1181,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     /** Effekte beim Einschlafen (Standard: Partikel). */
     protected void tickSlumber(ServerLevel level, int tick) {
-        level.sendParticles(this.element.particle(), this.getX(), this.getY() + 3, this.getZ(), 8, 3, 2, 3, 0.02);
+        level.sendParticles(this.bossParticle(), this.getX(), this.getY() + 3, this.getZ(), 8, 3, 2, 3, 0.02);
     }
 
     /** Der Boss ist wieder eingeschlafen – das Nest wartet auf den nächsten Besucher. */
@@ -1303,7 +1334,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
             ExperienceOrb.award(level, this.position().add(0, 2, 0), xp / 12);
         }
         BlockPos eggPos = this.home != null ? this.home : this.blockPosition();
-        BossLairs.onBossDefeated(level, this, eggPos);
+        this.onDefeated(level, eggPos);
         this.shake(level, 90.0, 0.6f, 20);
         this.remove(Entity.RemovalReason.KILLED);
     }

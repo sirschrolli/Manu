@@ -73,6 +73,18 @@ public class DragonCompassItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (level instanceof ServerLevel server && server.dimension() == io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD) {
+            // in der Schattenwelt kennt der Kompass nur ein Ziel: Nyxars Zitadelle
+            BlockPos citadel = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.approximateCenter(server);
+            if (citadel == null) {
+                player.sendOverlayMessage(Component.translatable("item.kingdomsatwar.dragon_compass.no_nests").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.FAIL;
+            }
+            aimCitadel(stack, citadel);
+            player.sendOverlayMessage(describeCitadel(player, citadel));
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS, 1.0f, 0.5f);
+            return InteractionResult.SUCCESS;
+        }
         if (level instanceof ServerLevel server) {
             ServerLevel overworld = server.getServer().overworld();
             Map<DragonType, ChunkPos> nests = NestLocator.all(overworld);
@@ -102,6 +114,13 @@ public class DragonCompassItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         if ((level.getGameTime() + owner.getId()) % 20 != 0) {
+            return;
+        }
+        if (level.dimension() == io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD) {
+            BlockPos citadel = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.approximateCenter(level);
+            if (citadel != null) {
+                aimCitadel(stack, citadel);
+            }
             return;
         }
         ServerLevel overworld = level.getServer().overworld();
@@ -163,6 +182,37 @@ public class DragonCompassItem extends Item {
         if (!color.equals(stack.get(DataComponents.CUSTOM_MODEL_DATA))) {
             stack.set(DataComponents.CUSTOM_MODEL_DATA, color);
         }
+    }
+
+    /** Richtet den Kompass auf die Schattenzitadelle aus (violett). */
+    public static void aimCitadel(ItemStack stack, BlockPos citadel) {
+        LodestoneTracker tracker = new LodestoneTracker(Optional.of(GlobalPos.of(io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD,
+                citadel)), false);
+        if (!tracker.equals(stack.get(DataComponents.LODESTONE_TRACKER))) {
+            stack.set(DataComponents.LODESTONE_TRACKER, tracker);
+        }
+        CustomModelData color = new CustomModelData(List.of(), List.of(), List.of(), List.of(0xB46CFF));
+        if (!color.equals(stack.get(DataComponents.CUSTOM_MODEL_DATA))) {
+            stack.set(DataComponents.CUSTOM_MODEL_DATA, color);
+        }
+    }
+
+    /** „Nyxars Schattenzitadelle – etwa 1240 Blöcke im Nordosten“. */
+    private static Component describeCitadel(Player player, BlockPos center) {
+        MutableComponent name = Component.translatable("item.kingdomsatwar.dragon_compass.citadel").withColor(0xB46CFF);
+        double dx = center.getX() + 0.5 - player.getX();
+        double dz = center.getZ() + 0.5 - player.getZ();
+        int distance = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
+        MutableComponent where;
+        if (distance < 48) {
+            where = Component.translatable("item.kingdomsatwar.dragon_compass.here");
+        } else {
+            double bearing = Math.toDegrees(Math.atan2(dx, -dz));
+            int index = Mth.positiveModulo((int) Math.round(bearing / 45.0), 8);
+            where = Component.translatable("item.kingdomsatwar.dragon_compass.distance", Math.round(distance / 10.0) * 10,
+                    Component.translatable("direction.kingdomsatwar." + DIRECTIONS[index]));
+        }
+        return Component.translatable("item.kingdomsatwar.dragon_compass.aimed", name, where).withStyle(ChatFormatting.GOLD);
     }
 
     /** Mitte des Nests: genau, sobald das Nest erzeugt wurde, sonst die Mitte seines Chunks. */

@@ -44,6 +44,9 @@ public class UmbrerVillageStructure extends Structure {
         if (!context.couldValidBiomeExistOnTopOfChunkCenter()) {
             return Optional.empty();
         }
+        if (nearCitadel(context, chunk)) {
+            return Optional.empty();
+        }
         Terrain terrain = new Terrain(context);
         long seed = context.random().nextLong();
         List<UmbrerVillagePiece> pieces = plan(chunk.getMiddleBlockX(), chunk.getMiddleBlockZ(), seed, terrain);
@@ -52,6 +55,24 @@ public class UmbrerVillageStructure extends Structure {
         }
         UmbrerVillagePiece plaza = pieces.get(0);
         return Optional.of(new Structure.GenerationStub(plaza.origin(), builder -> pieces.forEach(builder::addPiece)));
+    }
+
+    /** Kein Dorf im Schatten der Zitadelle: mindestens 160 Blöcke Abstand zu Nyxars Festung. */
+    private static boolean nearCitadel(Structure.GenerationContext context, ChunkPos chunk) {
+        var set = context.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_CITADEL_SET);
+        if (set.isEmpty() || !(set.get().value().placement()
+                instanceof io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement placement)) {
+            return false;
+        }
+        ChunkPos citadel = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.find(context.seed(), context.biomeSource(),
+                context.randomState(), placement);
+        if (citadel == null) {
+            return false;
+        }
+        double dx = citadel.getMiddleBlockX() - chunk.getMiddleBlockX();
+        double dz = citadel.getMiddleBlockZ() - chunk.getMiddleBlockZ();
+        return dx * dx + dz * dz < 160.0 * 160.0;
     }
 
     // =====================================================================================
@@ -65,8 +86,13 @@ public class UmbrerVillageStructure extends Structure {
      * entfernt).
      */
     public static boolean isNearVillage(net.minecraft.world.level.WorldGenLevel level, BlockPos pos, int margin) {
-        Structure village = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                .getValue(ModStructures.UMBRER_VILLAGE_STRUCTURE);
+        // auch rund um Nyxars Zitadelle bleibt das Land frei (Bäume ragten sonst über die Mauern in den Thronhof)
+        return isNear(level, pos, margin, ModStructures.UMBRER_VILLAGE_STRUCTURE) || isNear(level, pos, margin, ModStructures.SHADOW_CITADEL_STRUCTURE);
+    }
+
+    private static boolean isNear(net.minecraft.world.level.WorldGenLevel level, BlockPos pos, int margin,
+            net.minecraft.resources.ResourceKey<Structure> structureKey) {
+        Structure village = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getValue(structureKey);
         if (village == null) {
             return false;
         }

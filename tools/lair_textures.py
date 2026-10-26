@@ -178,7 +178,24 @@ def lair_core_glow() -> Image.Image:
     return img
 
 
+THRONE_GLOW = [hexc("#6a2ab8"), hexc("#a868ff"), hexc("#f0e0ff")]
+
+
+def throne_core_glow() -> Image.Image:
+    """Der Thronkern der Schattenzitadelle: derselbe uralte Siegelstein, doch seine Runen glimmen violett."""
+    img = lair_core_glow()
+    px = img.load()
+    for y in range(N):
+        for x in range(N):
+            c = px[x, y]
+            if c[3]:
+                px[x, y] = THRONE_GLOW[min(2, CORE_GLOW.index(c))] if c in CORE_GLOW else THRONE_GLOW[1]
+    return img
+
+
 def build(put: Callable[[str, Image.Image], None]) -> None:
+    put("block/shadow_throne_core", lair_core())
+    put("block/shadow_throne_core_glow", throne_core_glow())
     for i, frame in enumerate(compass_frames()):
         put(f"item/dragon_compass_{i:02d}", frame)
     put("item/dragon_compass_gem", compass_gem())

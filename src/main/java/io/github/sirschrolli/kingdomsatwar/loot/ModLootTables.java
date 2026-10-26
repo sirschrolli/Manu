@@ -24,6 +24,9 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SUNKEN_GROTTO_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/sunken_grotto"));
     /** Truhen und Fässer in den Dörfern der Umbrer (Wohnhaus, Schmiede, Kräuterhütte, Seherturm). */
+    /** Truhen in den Türmen der Schattenzitadelle. */
+    public static final ResourceKey<LootTable> SHADOW_CITADEL_CHEST =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/shadow_citadel"));
     public static final ResourceKey<LootTable> UMBRER_HOUSE = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_house"));
     public static final ResourceKey<LootTable> UMBRER_SMITHY = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/umbrer_smithy"));
     public static final ResourceKey<LootTable> UMBRER_HERBALIST =

@@ -70,6 +70,9 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_BITE = register("entity.lindworm.bite");
     public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_SLITHER = register("entity.lindworm.slither");
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_BREATH = register("entity.nyxar.breath");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_SHRIEK = register("entity.nyxar.shriek");
+
     static {
         for (DragonType type : DragonType.values()) {
             DRAGON_BREATH.put(type, register("entity.dragon.breath." + type.id()));

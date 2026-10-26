@@ -70,7 +70,11 @@ public final class ModGameEvents {
                 }))
                 .then(army)
                 .then(Commands.literal("boss").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .then(Commands.literal("fire").executes(context -> summonBoss(context.getSource().getPlayerOrException()))))
+                        .then(Commands.literal("fire").executes(context -> summonBoss(context.getSource().getPlayerOrException(), false)))
+                        .then(Commands.literal("nyxar").executes(context -> summonBoss(context.getSource().getPlayerOrException(), true))))
+                .then(Commands.literal("citadel").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> citadel(context.getSource().getPlayerOrException(), false))
+                        .then(Commands.literal("tp").executes(context -> citadel(context.getSource().getPlayerOrException(), true))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
@@ -256,7 +260,24 @@ public final class ModGameEvents {
     }
 
     /** Lässt einen Drachen-Boss vor dem Spieler erwachen (zum Testen; das Nest ist dort, wo er erwacht). */
-    private static int summonBoss(ServerPlayer player) {
+    /** {@code /kaw citadel [tp]}: wo die Schattenzitadelle liegt (und auf Wunsch dorthin, an den Fuß der Freitreppe). */
+    private static int citadel(ServerPlayer player, boolean teleport) {
+        ServerLevel shadow = player.level().getServer().getLevel(io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD);
+        BlockPos center = shadow == null ? null : io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.approximateCenter(shadow);
+        if (center == null) {
+            player.sendSystemMessage(Component.translatable("command.kingdomsatwar.citadel.none").withStyle(net.minecraft.ChatFormatting.RED));
+            return 0;
+        }
+        player.sendSystemMessage(Component.translatable("command.kingdomsatwar.citadel.at", center.getX(), center.getZ()));
+        if (teleport) {
+            shadow.getChunk(center.getX() >> 4, (center.getZ() + 76) >> 4);
+            int y = shadow.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center.getX(), center.getZ() + 76);
+            player.teleportTo(shadow, center.getX() + 0.5, y, center.getZ() + 76.5, java.util.Set.of(), 180.0f, 0.0f, true);
+        }
+        return 1;
+    }
+
+    private static int summonBoss(ServerPlayer player, boolean nyxar) {
         ServerLevel level = player.level();
         net.minecraft.world.phys.Vec3 look = player.getLookAngle().multiply(1, 0, 1);
         look = look.lengthSqr() < 1.0e-4 ? new net.minecraft.world.phys.Vec3(0, 0, 1) : look.normalize();
@@ -264,11 +285,13 @@ public final class ModGameEvents {
         int y = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(at.x),
                 (int) Math.floor(at.z));
         BlockPos home = BlockPos.containing(at.x, y, at.z);
-        var boss = ModEntities.PYRRHON.get().create(level, EntitySpawnReason.COMMAND);
+        io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity boss = nyxar
+                ? ModEntities.NYXAR.get().create(level, EntitySpawnReason.COMMAND)
+                : ModEntities.PYRRHON.get().create(level, EntitySpawnReason.COMMAND);
         if (boss == null) {
             return 0;
         }
-        boss.snapTo(home.getX() + 0.5, home.getY() - 11, home.getZ() + 0.5, player.getYRot() + 180.0f, 0.0f);
+        boss.snapTo(home.getX() + 0.5, home.getY() - (nyxar ? 0 : 11), home.getZ() + 0.5, player.getYRot() + 180.0f, 0.0f);
         boss.yBodyRot = player.getYRot() + 180.0f;
         boss.yHeadRot = boss.yBodyRot;
         level.addFreshEntity(boss);

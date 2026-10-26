@@ -186,5 +186,24 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.SPYGLASS).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
+        this.output.accept(ModLootTables.SHADOW_CITADEL_CHEST, LootTable.lootTable()
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get(), 10, 1, 4))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_INGOT.get(), 8, 1, 3))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 1, 3))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 8, 2, 5))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHARD.get(), 4, 1, 2))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.DUSK_BREAD.get(), 6, 2, 5))
+                        .add(item(Items.EXPERIENCE_BOTTLE, 5, 1, 3))
+                        .add(item(Items.ECHO_SHARD, 3, 1, 2)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get())
+                                .setWeight(2))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
+                                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_SWORD.get()).setWeight(2))
+                        .add(EmptyLootItem.emptyItem().setWeight(3))));
     }
 }

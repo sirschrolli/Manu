@@ -57,6 +57,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.INFINIBURN_OVERWORLD, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
         add(BlockTags.DRAGON_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
+        add(BlockTags.DRAGON_IMMUNE, ModBlocks.SHADOW_THRONE_CORE);
+        add(BlockTags.WITHER_IMMUNE, ModBlocks.SHADOW_THRONE_CORE);
 
         // --- Frostkessel ---
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.FROST_CRYSTAL, ModBlocks.GLACIER_ICE, ModBlocks.ICICLE);

@@ -21,6 +21,7 @@ public final class BossEffects {
             case THORN, SEED -> poison(target, seconds);
             case SPARK -> stun(target, seconds);
             case BUBBLE -> soak(target, seconds);
+            case SOUL_BOLT -> wither(target, seconds);
             case BOULDER -> {
             }
         }
@@ -49,6 +50,12 @@ public final class BossEffects {
         target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, seconds * 20, 5));
         target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, seconds * 20, 2));
         target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, seconds * 20, 1));
+    }
+
+    /** Schatten zehren: Verdorren und kurz verdunkelte Sicht. */
+    public static void wither(LivingEntity target, int seconds) {
+        target.addEffect(new MobEffectInstance(MobEffects.WITHER, seconds * 20, 0));
+        target.addEffect(new MobEffectInstance(MobEffects.DARKNESS, seconds * 20 + 40, 0));
     }
 
     public static void soak(LivingEntity target, int seconds) {

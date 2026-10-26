@@ -51,6 +51,8 @@ ELEMENTS = {
                   f0="#5a2e08", f1="#b0661a", f2="#e8a440", f3="#fff0c0"),
     "water": dict(m0="#0e1a22", m1="#2e4a5a", m2="#8ab4c4", acc="#28c0f0", glow="#c8f6ff", deep="#04182a",
                   f0="#063a5e", f1="#0e78b8", f2="#3cc4ec", f3="#d8faff"),
+    "shadow": dict(m0="#0c0812", m1="#2e2442", m2="#8a7ca8", acc="#b46cff", glow="#f0e0ff", deep="#12061e",
+                   f0="#2a0a4e", f1="#6420b0", f2="#a660ff", f3="#f2e4ff"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -404,7 +406,57 @@ def deco_water(img: Image.Image, pal: dict) -> None:
                 put(px, img, ex + k, ey + dy, col)
 
 
-DECOS = {"fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_shadow(img: Image.Image, pal: dict) -> None:
+    """Dornige Nachtkristalle oben (zum Medaillon hin höher), Seelenfunken darunter, eine Krone aus Kristallen am
+    Medaillon und ein wachendes Auge als Spitze."""
+    px = img.load()
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    m0 = c(pal, "m0")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def shard(cx: int, base: int, h: int, w: int, lean: float, up: bool = True):
+        for k in range(h):
+            t = k / max(1, h - 1)
+            half = max(0, round((w / 2) * (1 - t)))
+            off = round(lean * k)
+            for dx in range(-half, half + 1):
+                if abs(dx) == half:
+                    col = mix(f0, m0, 0.35)
+                else:
+                    col = f3 if (dx < 0 and t > 0.4) else (f2 if dx <= 0 else f1)
+                put(px, img, cx + dx + off, base - k if up else base + k, col)
+    for x in range(BAR_X - 1, BAR_X + BAR_W + 1, 6):
+        rel = (x - BAR_X) / BAR_W
+        h = 3 + round(5 * (1 - rel) ** 2 + 3 * hash01(x, 11))
+        shard(x, top - 1, h, 3 if h < 6 else 4, (hash01(x, 13) - 0.5) * 0.5)
+    # Seelenfunken unter der Leiste, wie aufsteigende Irrlichter
+    for x in range(BAR_X + 3, BAR_X + BAR_W, 8):
+        if hash01(x, 17) > 0.45:
+            y = bottom + 2 + round(hash01(x, 19) * 5)
+            put(px, img, x, y, f3)
+            put(px, img, x, y + 1, f2)
+            put(px, img, x + (1 if hash01(x, 23) > 0.5 else -1), y + 2, f1)
+    # Kristallkrone am Medaillon
+    for k, ang in enumerate(range(-160, -10, 22)):
+        a = math.radians(ang)
+        x = round(EMB_X + math.cos(a) * (EMB_R - 1))
+        y = round(EMB_Y + math.sin(a) * (EMB_R - 1))
+        shard(x, y, 5 + (k % 2) * 3, 3, math.cos(a) * 0.5)
+    # Spitze: ein wachendes Auge (Mandelform, leuchtende Pupille)
+    ex, ey = BAR_X + BAR_W + 3, BAR_Y + BAR_H // 2
+    for k in range(11):
+        half = round(4.2 * math.sin(math.pi * k / 10))
+        for dy in range(-half, half + 1):
+            if abs(dy) == half:
+                col = OUTLINE
+            elif abs(k - 5) <= 1 and abs(dy) <= 1:
+                col = f3 if (k, dy) == (5, 0) else f2
+            else:
+                col = mix(m0, f0, 0.6)
+            put(px, img, ex + k, ey + dy, col)
+
+
+DECOS = {"shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -441,6 +493,10 @@ def fill_value(element: str, x: int, y: int) -> float:
         return 0.35 + 0.4 * hash01(x // 2, y // 2, 7) * (0.5 + 0.5 * math.sin(tau * x / 64))
     if element == "water":
         return 0.5 + 0.5 * math.sin(tau * (x / 32 - y / 9))
+    if element == "shadow":
+        # wabernder Rauch, durch den einzelne Seelen ziehen
+        smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
+        return 1.0 if hash01(x // 2, y // 3, 29) > 0.93 else smoke
     return 0.5
 
 
@@ -536,11 +592,11 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_water
+    from entitygen.models import boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
-           "water": boss_water}[element]
+           "water": boss_water, "shadow": boss_shadow}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -550,7 +606,7 @@ def portrait(element: str) -> Image.Image:
     big = render(m, tex, glow, yaw, 6, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["head"])
     img = big.resize((64, 64), Image.LANCZOS)
-    img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6}.get(element, 1.4))
+    img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()
@@ -593,7 +649,7 @@ def bossbar(element: str) -> Image.Image:
 
 def preview(target: str) -> None:
     """Vorschau: alle Leisten zusammengesetzt (wie im Spiel, bei 70 % und 25 % Leben), dreifach vergrößert."""
-    out = Image.new("RGBA", (FRAME_W * 3 * 2 + 30, 6 * 3 * (FRAME_H + 10) + 20), (46, 52, 60, 255))
+    out = Image.new("RGBA", (FRAME_W * 3 * 2 + 30, len(ELEMENTS) * 3 * (FRAME_H + 10) + 20), (46, 52, 60, 255))
     for i, element in enumerate(ELEMENTS):
         tex = bossbar(element)
         for j, hp in enumerate((0.7, 0.25)):

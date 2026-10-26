@@ -23,7 +23,8 @@ public final class SealState {
             Codec.BOOL.optionalFieldOf("broken", false).forGetter(s -> s.broken),
             BlockPos.CODEC.optionalFieldOf("center").forGetter(s -> Optional.ofNullable(s.center)),
             Codec.INT.optionalFieldOf("break_ticks", -1).forGetter(s -> s.breakTicks),
-            BlockPos.CODEC.optionalFieldOf("shadow_gate").forGetter(s -> Optional.ofNullable(s.shadowGate))
+            BlockPos.CODEC.optionalFieldOf("shadow_gate").forGetter(s -> Optional.ofNullable(s.shadowGate)),
+            Codec.INT.optionalFieldOf("nyxar_defeats", 0).forGetter(s -> s.nyxarDefeats)
     ).apply(instance, SealState::new));
 
     private final EnumSet<DragonType> inserted = EnumSet.noneOf(DragonType.class);
@@ -33,12 +34,16 @@ public final class SealState {
     private int breakTicks;
     /** Mitte des Gegentors in der Schattenwelt (sobald es jemand durchschritten hat). */
     private @Nullable BlockPos shadowGate;
+    /** Wie oft Nyxar schon besiegt wurde (beim ersten Mal endet die Geschichte). */
+    private int nyxarDefeats;
 
     public SealState() {
-        this(List.of(), false, Optional.empty(), -1, Optional.empty());
+        this(List.of(), false, Optional.empty(), -1, Optional.empty(), 0);
     }
 
-    private SealState(List<DragonType> inserted, boolean broken, Optional<BlockPos> center, int breakTicks, Optional<BlockPos> shadowGate) {
+    private SealState(List<DragonType> inserted, boolean broken, Optional<BlockPos> center, int breakTicks, Optional<BlockPos> shadowGate,
+            int nyxarDefeats) {
+        this.nyxarDefeats = nyxarDefeats;
         this.inserted.addAll(inserted);
         this.broken = broken;
         this.center = center.orElse(null);
@@ -105,6 +110,14 @@ public final class SealState {
 
     public void setShadowGate(@Nullable BlockPos pos) {
         this.shadowGate = pos == null ? null : pos.immutable();
+    }
+
+    public int nyxarDefeats() {
+        return this.nyxarDefeats;
+    }
+
+    public void addNyxarDefeat() {
+        this.nyxarDefeats++;
     }
 
     /** Alles zurück auf Anfang (nur für Befehle und Tests). */

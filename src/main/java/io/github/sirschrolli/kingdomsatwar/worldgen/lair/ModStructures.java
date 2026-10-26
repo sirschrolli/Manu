@@ -51,6 +51,17 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> UMBRER_VILLAGE_PIECE =
             PIECES.register("umbrer_village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece::new);
 
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement>>
+            CITADEL_PLACEMENT = PLACEMENTS.register("shadow_citadel", () -> io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelStructure>>
+            SHADOW_CITADEL = TYPES.register("shadow_citadel", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SHADOW_CITADEL_PIECE =
+            PIECES.register("shadow_citadel", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPiece::new);
+
+    /** Nyxars Schattenzitadelle (einmal in der Schattenwelt). */
+    public static final ResourceKey<Structure> SHADOW_CITADEL_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("shadow_citadel"));
+    public static final ResourceKey<StructureSet> SHADOW_CITADEL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("shadow_citadel"));
+
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
     public static final ResourceKey<StructureSet> UMBRER_VILLAGES = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("umbrer_villages"));
@@ -90,6 +101,12 @@ public final class ModStructures {
                         .generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
+        context.register(SHADOW_CITADEL_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL))
+                        // ganz zum Schluss: so räumt die Zitadelle auch Bäume und Pflanzen auf ihrem Grund ab
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
         context.register(SEAL_CIRCLE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(BiomeTags.IS_OVERWORLD))
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
@@ -114,6 +131,9 @@ public final class ModStructures {
         context.register(UMBRER_VILLAGES, new StructureSet(structures.getOrThrow(UMBRER_VILLAGE_STRUCTURE),
                 new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 9,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 73_419_211)));
+        context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
+                        biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
         context.register(SEAL_CIRCLE_SET, new StructureSet(structures.getOrThrow(SEAL_CIRCLE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement(220, 640,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SEAL_CIRCLE), 51_731)));

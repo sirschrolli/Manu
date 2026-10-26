@@ -46,7 +46,9 @@ public class BossProjectile extends AbstractHurtingProjectile {
         /** Wasserblase (Thalassa): verlangsamt und stößt weg. */
         BUBBLE(1.5f, 3.2, 4, false),
         /** Dornensaat (Verdantis, vom Himmel): vergiftet, wo sie einschlägt, wächst kurz Dornengestrüpp. */
-        SEED(1.0f, 2.8, 4, true);
+        SEED(1.0f, 2.8, 4, true),
+        /** Seelenpfeil (Nyxar): zehrt (Verdorren) und lässt die Sicht verdunkeln. */
+        SOUL_BOLT(1.1f, 3.0, 3, false);
 
         public final float size;
         public final double radius;
@@ -162,6 +164,11 @@ public class BossProjectile extends AbstractHurtingProjectile {
                 smoke = ParticleTypes.SPLASH;
                 count = 2;
             }
+            case SOUL_BOLT -> {
+                main = ParticleTypes.SCULK_SOUL;
+                smoke = io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SHADOW.get();
+                count = 1;
+            }
             default -> {
                 main = ParticleTypes.SMOKE;
                 smoke = ParticleTypes.SMOKE;
@@ -273,6 +280,14 @@ public class BossProjectile extends AbstractHurtingProjectile {
                         kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
                 this.sound(level, c, SoundEvents.GENERIC_SPLASH, volume, 0.6f);
                 this.sound(level, c, SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, 1.5f, 0.6f);
+            }
+            case SOUL_BOLT -> {
+                level.sendParticles(ParticleTypes.SCULK_SOUL, c.x, c.y, c.z, 30, kind.radius * 0.35, 0.4, kind.radius * 0.35, 0.06);
+                level.sendParticles(ParticleTypes.SOUL, c.x, c.y, c.z, 14, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.04);
+                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SHADOW.get(), c.x, c.y, c.z, 16,
+                        kind.radius * 0.35, 0.3, kind.radius * 0.35, 0.02);
+                this.sound(level, c, SoundEvents.SCULK_SHRIEKER_SHRIEK, 1.2f, 1.4f);
+                this.sound(level, c, SoundEvents.SOUL_ESCAPE.value(), volume, 0.6f);
             }
         }
     }

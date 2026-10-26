@@ -69,6 +69,13 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.NACRE_BLOCK.get(), 3, 6))
                 .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 6, 12)));
+        // Nyxar: Abyssit, Seelenkristalle und Schattenessenz (das Herz der Schatten erscheint gesondert)
+        this.add(ModEntities.NYXAR.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHARD.get(), 6, 10))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 14))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 10, 16))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get(), 1, 2))
+                .withPool(drop(ModItems.GEMSTONE.get(), 4, 8)));
         this.add(ModEntities.VINELING.get(), LootTable.lootTable()
                 .withPool(drop(Items.VINE, 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));

@@ -1725,5 +1725,65 @@
       "kingdomsatwar:voice/soldier/victory_en_3b"
     ],
     "subtitle": "subtitles.kingdomsatwar.voice.soldier.victory"
+  },
+  "entity.nyxar.breath": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_charge1",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge2",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge3",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge4",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/ghast/moan1",
+        "pitch": 0.45,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/moan2",
+        "pitch": 0.45,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/moan3",
+        "pitch": 0.45,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.breath"
+  },
+  "entity.nyxar.shriek": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/ghast/scream1",
+        "pitch": 0.4,
+        "volume": 1.0
+      },
+      {
+        "name": "minecraft:mob/ghast/scream2",
+        "pitch": 0.4,
+        "volume": 1.0
+      },
+      {
+        "name": "minecraft:mob/ghast/scream3",
+        "pitch": 0.4,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
   }
 }

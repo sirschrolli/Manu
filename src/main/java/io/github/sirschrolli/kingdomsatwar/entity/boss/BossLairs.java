@@ -65,6 +65,9 @@ public final class BossLairs {
     public static void onBossSlumber(ServerLevel level, DragonBossEntity boss) {
         if (boss.getLairCore() != null && level.getBlockEntity(boss.getLairCore()) instanceof DragonLairCoreBlockEntity core) {
             core.onBossSlumber(level);
+        } else if (boss.getLairCore() != null
+                && level.getBlockEntity(boss.getLairCore()) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity throne) {
+            throne.onBossSlumber(level);
         }
     }
 

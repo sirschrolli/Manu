@@ -25,6 +25,7 @@ public class BossParticle extends SingleQuadParticle {
     public static final Style SPORE = new Style(30, 50, 0.35f, 1.6f, 0.92f, -0.004f, false, true, 0.03f);
     public static final Style DUST = new Style(20, 32, 0.5f, 2.2f, 0.88f, 0.012f, false, true, 0.05f);
     public static final Style WATER = new Style(12, 20, 0.45f, 1.6f, 0.9f, 0.035f, false, true, 0.08f);
+    public static final Style SHADOW = new Style(22, 36, 0.55f, 2.6f, 0.9f, -0.006f, false, true, 0.06f);
 
     private final SpriteSet sprites;
     private final Style style;

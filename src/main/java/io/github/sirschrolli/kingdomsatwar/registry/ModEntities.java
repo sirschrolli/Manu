@@ -138,6 +138,10 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity>> THALASSA =
             ENTITIES.registerEntityType("water_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(4.5f, 3.5f).eyeHeight(3.0f).clientTrackingRange(16).updateInterval(2));
+    /** Nyxar, der Schattendrache – Endgegner der Schattenwelt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.shadow.NyxarEntity>> NYXAR =
+            ENTITIES.registerEntityType("shadow_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.shadow.NyxarEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(6.0f, 6.5f).eyeHeight(8.0f).fireImmune().clientTrackingRange(16).updateInterval(2));
     /** Rankling: Diener von Verdantis (wird nicht gespeichert). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity>> VINELING =
             ENTITIES.registerEntityType("vineling", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity::new,
@@ -191,6 +195,7 @@ public final class ModEntities {
         event.put(TERRAGON.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.earth.TerragonEntity.createAttributes().build());
         event.put(VOLTARION.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity.createAttributes().build());
         event.put(THALASSA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity.createAttributes().build());
+        event.put(NYXAR.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.shadow.NyxarEntity.createAttributes().build());
         event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
         event.put(SHADE_STALKER.get(), ShadeStalkerEntity.createAttributes().build());
         event.put(CRYSTAL_CRAWLER.get(), CrystalCrawlerEntity.createAttributes().build());

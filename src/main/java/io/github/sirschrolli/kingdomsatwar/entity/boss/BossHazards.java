@@ -68,6 +68,9 @@ final class BossHazards {
 
     /** Ticks vor dem Einschlag, zu denen ein fallendes Geschoss losfliegt (0 = keins). */
     private static int fallTime(DragonBossEntity boss) {
+        if (boss.element() == null) {
+            return -1;
+        }
         return switch (boss.element()) {
             case FIRE, ICE, EARTH, NATURE -> 16;
             default -> -1;
@@ -75,7 +78,7 @@ final class BossHazards {
     }
 
     private static ParticleOptions particle(DragonBossEntity boss) {
-        return boss.element().particle();
+        return boss.bossParticle();
     }
 
     /** Leuchtender, schrumpfender Kreis am Boden, dazu Funken in der Mitte. */
@@ -94,7 +97,7 @@ final class BossHazards {
 
     /** Fallende Gefahren: Meteor, Eiszapfen, Felsbrocken oder Dornensaat stürzen vom Himmel auf die Markierung. */
     private void launch(ServerLevel level, DragonBossEntity boss, Vec3 pos) {
-        BossProjectile.Kind kind = switch (boss.element()) {
+        BossProjectile.Kind kind = boss.element() == null ? BossProjectile.Kind.SEED : switch (boss.element()) {
             case FIRE -> BossProjectile.Kind.METEOR;
             case ICE -> BossProjectile.Kind.ICICLE;
             case EARTH -> BossProjectile.Kind.BOULDER;
@@ -106,6 +109,16 @@ final class BossHazards {
 
     /** Was im Moment des Einschlags geschieht (bei fallenden Gefahren erledigt das Geschoss den Rest). */
     private void strike(ServerLevel level, DragonBossEntity boss, Vec3 pos) {
+        if (boss.element() == null) {
+            // Schatten: ein Riss im Boden, der Seelen hinaufzieht
+            BossFx.sound(level, pos, SoundEvents.SCULK_SHRIEKER_SHRIEK, 2.0f, 0.5f);
+            level.sendParticles(ParticleTypes.SCULK_SOUL, pos.x, pos.y + 0.5, pos.z, 40, 1.2, 1.5, 1.2, 0.05);
+            for (LivingEntity e : boss.enemiesAround(pos, 3.0, 4)) {
+                boss.hurtTarget(level, e, 7.0f);
+                e.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DARKNESS, 60, 0), boss);
+            }
+            return;
+        }
         switch (boss.element()) {
             case LIGHTNING -> {
                 LightningAttacks.visualBolt(level, pos);

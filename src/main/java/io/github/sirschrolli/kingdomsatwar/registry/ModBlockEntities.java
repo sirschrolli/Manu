@@ -14,5 +14,10 @@ public final class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DragonLairCoreBlockEntity>> DRAGON_LAIR_CORE =
             BLOCK_ENTITIES.register("dragon_lair_core", () -> new BlockEntityType<>(DragonLairCoreBlockEntity::new, ModBlocks.DRAGON_LAIR_CORE.get()));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity>>
+            SHADOW_THRONE_CORE = BLOCK_ENTITIES.register("shadow_throne_core",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity::new,
+                            ModBlocks.SHADOW_THRONE_CORE.get()));
+
     private ModBlockEntities() {}
 }
