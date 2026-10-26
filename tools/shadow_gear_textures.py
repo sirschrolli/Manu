@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Texturen der Schätze der Schattenwelt (Erze, Rohstoffe, Werkzeuge, Waffen, Rüstungen):
+Texturen der Schätze der Schattenwelt (Rohstoffe, Werkzeuge, Waffen, Rüstungen; Erze und Blöcke: tools/shadow_blocks.py):
 
   * Mondsilber   – fahles, bläuliches Silber (Erz in Schatten- und Tiefschattenstein, Rohmondsilber, Barren, Klümpchen,
                    Block, Mondlaterne, die Mondsilberklinge)
@@ -16,7 +16,6 @@ getragenen Rüstungen.
 from __future__ import annotations
 
 import math
-import random
 from typing import Callable
 
 from PIL import Image
@@ -24,7 +23,7 @@ from PIL import Image
 import building_textures as bld
 import equipment_textures as et
 import pixelart as pa
-from pixelart import CLEAR, Color, hexc
+from pixelart import Color, hexc
 
 N = 16
 
@@ -168,9 +167,6 @@ TEMPLATE = [
 ]
 
 
-def ingot_like(art, colors: dict[str, Color]) -> Image.Image:
-    return pa.sprite(art, colors)
-
 
 def abyss_template() -> Image.Image:
     colors = {"o": hexc("#050307"), "s": hexc("#2a2230"), "t": hexc("#1a141e"), "b": hexc("#120e16"),
@@ -182,194 +178,15 @@ def abyss_template() -> Image.Image:
 # Erz-Einschlüsse (durchsichtig; der Stein kommt im Modell darunter)
 # =============================================================================
 
-MOONSILVER_ORE = """
-................
-...dl...........
-..dlhd......dl..
-...dl......dlhd.
-............dd..
-.......dl.......
-......dlhl......
-.......dld......
-.dl.............
-dlhd.......dl...
-.dd.......dlhd..
-...........dd...
-.....dl.........
-....dlhd....dl..
-.....dd....dlhd.
-............d...
-"""
-MOONSILVER_COLORS = {"d": "#4c5a74", "l": "#9eaecc", "h": "#eef4ff"}
-
-NIGHTSTEEL_ORE = """
-................
-..dlh...........
-.dmlhl......dl..
-.dmmld.....dmlh.
-..ddd......dmmd.
-............dd..
-......dlh.......
-.....dmlhl......
-.....dmmld......
-......ddd.......
-..dl.......dlh..
-.dmlh.....dmlhl.
-.dmmd.....dmmld.
-..dd.......ddd..
-................
-................
-"""
-NIGHTSTEEL_COLORS = {"d": "#05040b", "m": "#332c66", "l": "#7466c8", "h": "#d6ccff"}
-
-SOUL_CRYSTAL_ORE = """
-................
-....c...........
-...cl.......c...
-...cld.....clh..
-..dcld.....cld..
-..ddd......dd...
-................
-........c.......
-.......clh......
-.c.....cld......
-clh...dcldd.....
-cld....ddd...c..
-dd..........clh.
-............cld.
-...........ddd..
-................
-"""
-SOUL_CRYSTAL_COLORS = {"d": "#0a3a3e", "c": "#28aaa6", "l": "#7af0e4", "h": "#ffffff"}
-
-ABYSSITE_ORE = """
-................
-.v..............
-.vV.......vv....
-..vVv....vVVv...
-...vVv..vVhVv...
-....vVvvVVvv....
-.....vVhVv......
-......vVv.......
-.....vVv........
-....vVv.....v...
-...vVhv....vVv..
-..vVvv....vVhVv.
-..vv.....vVvvv..
-........vVv.....
-........vv......
-................
-"""
-ABYSSITE_COLORS = {"v": "#3a0a36", "V": "#c02ab0", "h": "#ffb4f4"}
 
 
-def _ore(art: str, colors: dict[str, str]) -> Image.Image:
-    rows = [r for r in art.strip("\n").split("\n")]
-    img = pa.new()
-    px = img.load()
-    for y, row in enumerate(rows):
-        for x, ch in enumerate(row):
-            if ch in colors:
-                px[x, y] = hexc(colors[ch])
-    return img
 
 
-def _glow_of(img: Image.Image, keep: set[Color]) -> Image.Image:
-    out = pa.new()
-    src = img.load()
-    dst = out.load()
-    for y in range(N):
-        for x in range(N):
-            if src[x, y] in keep:
-                dst[x, y] = src[x, y]
-    return out
 
 
 # =============================================================================
 # Speicherblöcke
 # =============================================================================
-
-def _plate_block(t: dict[str, Color], seed: int, rivets: bool) -> Image.Image:
-    """Metallblock: vier Platten mit Fasen, feiner Bürstung und (optional) Nieten."""
-    noise = pa.fractal_noise(seed, ((8, 0.5), (4, 0.5)))
-    ramp = [t[k] for k in "abcdef"]
-    img = pa.new()
-    px = img.load()
-    for y in range(N):
-        for x in range(N):
-            lx, ly = x % 8, y % 8
-            if lx == 7 or ly == 7:
-                c = t["o"] if (lx == 7 and ly == 7) else ramp[0]
-            elif lx == 0 or ly == 0:
-                c = ramp[4]
-            elif lx == 6 or ly == 6:
-                c = ramp[1]
-            else:
-                v = 0.45 + 0.2 * noise[y][x] + (0.08 if (x + 2 * y) % 7 == 0 else 0)
-                c = ramp[max(0, min(5, int(v * 6)))]
-            px[x, y] = c
-    if rivets:
-        for (x, y) in ((1, 1), (5, 1), (1, 5), (5, 5)):
-            for ox in (0, 8):
-                for oy in (0, 8):
-                    px[x + ox, y + oy] = ramp[5]
-                    px[x + ox + 1, y + oy + 1] = ramp[0]
-    return img
-
-
-def moonsilver_block() -> Image.Image:
-    """Mondsilberblock: helle, glatte Platten mit einer eingelegten Mondsichel in der Mitte."""
-    img = _plate_block(MOON_T, 41101, False)
-    px = img.load()
-    for (x, y) in [(6, 5), (5, 6), (5, 7), (5, 8), (5, 9), (6, 10), (7, 10), (7, 5)]:
-        px[x, y] = MOON_T["o"]
-    for (x, y) in [(7, 6), (6, 7), (6, 8), (6, 9), (8, 10)]:
-        px[x, y] = MOON_T["f"]
-    return img
-
-
-def nightsteel_block() -> Image.Image:
-    return _plate_block(NIGHT_T, 41201, True)
-
-
-def soul_crystal_block() -> tuple[Image.Image, Image.Image]:
-    """Seelenkristallblock: große, türkise Facetten mit hellen Kanten; die Kanten leuchten."""
-    cells, border, pts = pa.voronoi(41301, 6)
-    rng = random.Random(41302)
-    pal = [SOUL["o"], SOUL["a"], SOUL["b"], SOUL["c"], SOUL["d"], SOUL["w"]]
-    tone = {i: 1 + rng.randrange(3) for i in range(len(pts))}
-    img = pa.new()
-    glow = pa.new()
-    px = img.load()
-    gp = glow.load()
-    for y in range(N):
-        for x in range(N):
-            if border[y][x] < 0.8:
-                px[x, y] = pal[4]
-                gp[x, y] = pal[4]
-            else:
-                cx, cy = pts[cells[y][x]]
-                v = tone[cells[y][x]] + (1 if (x - cx) + (y - cy) < -2 else 0)
-                px[x, y] = pal[v]
-    for (x, y) in [(4, 3), (11, 9), (6, 12)]:
-        px[x, y] = pal[5]
-        gp[x, y] = pal[5]
-    return img, glow
-
-
-def abyssite_block() -> tuple[Image.Image, Image.Image]:
-    """Abyssitblock: schwarze, schwere Blöcke; durch die Fugen glüht es magenta."""
-    img = _plate_block(ABYSS_T, 41401, False)
-    glow = pa.new()
-    px = img.load()
-    gp = glow.load()
-    vein = [(1, 3), (2, 3), (3, 4), (4, 4), (5, 5), (5, 6), (6, 7), (7, 7), (8, 8), (9, 8), (10, 9), (11, 10), (12, 10),
-            (13, 11), (14, 12), (9, 2), (10, 3), (10, 4), (3, 11), (4, 12), (5, 13), (5, 14)]
-    for i, (x, y) in enumerate(vein):
-        c = MAGENTA["y"] if i % 4 else MAGENTA["Y"]
-        px[x, y] = c
-        gp[x, y] = c
-    return img, glow
 
 
 # =============================================================================
@@ -447,25 +264,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("item/night_crystal_shard", pa.sprite(CRYSTAL_SHARD, NCRYSTAL))
     put("item/abyssite_upgrade_smithing_template", abyss_template())
 
-    # Erze
-    put("block/moonsilver_ore_overlay", _ore(MOONSILVER_ORE, MOONSILVER_COLORS))
-    put("block/nightsteel_ore_overlay", _ore(NIGHTSTEEL_ORE, NIGHTSTEEL_COLORS))
-    soul = _ore(SOUL_CRYSTAL_ORE, SOUL_CRYSTAL_COLORS)
-    put("block/soul_crystal_ore_overlay", soul)
-    put("block/soul_crystal_ore_glow", _glow_of(soul, {hexc(SOUL_CRYSTAL_COLORS["l"]), hexc(SOUL_CRYSTAL_COLORS["h"])}))
-    abyss = _ore(ABYSSITE_ORE, ABYSSITE_COLORS)
-    put("block/abyssite_ore_overlay", abyss)
-    put("block/abyssite_ore_glow", _glow_of(abyss, {hexc(ABYSSITE_COLORS["V"]), hexc(ABYSSITE_COLORS["h"])}))
-
-    # Speicherblöcke
-    put("block/moonsilver_block", moonsilver_block())
-    put("block/nightsteel_block", nightsteel_block())
-    soul_block, soul_glow = soul_crystal_block()
-    put("block/soul_crystal_block", soul_block)
-    put("block/soul_crystal_block_glow", soul_glow)
-    abyss_block, abyss_glow = abyssite_block()
-    put("block/abyssite_block", abyss_block)
-    put("block/abyssite_block_glow", abyss_glow)
+    # Erze und Speicherblöcke kommen aus tools/shadow_blocks.py
 
     # Mondlaterne: Mondsilber-Rahmen, kaltes, weißblaues Licht
     frame = [MOON_T[k] for k in "oace"]

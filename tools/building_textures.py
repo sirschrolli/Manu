@@ -8,13 +8,11 @@ Wird von tools/generate_textures.py aufgerufen (build(put)).
 """
 from __future__ import annotations
 
-import random
 from typing import Callable
 
 from PIL import Image
 
 import pixelart as pa
-from block_textures import PLASTER, soft_noise
 from pixelart import CLEAR, Color, hexc
 
 N = 16
@@ -35,44 +33,7 @@ def sprite(rows: list[str], colors: dict[str, Color]) -> Image.Image:
 # Putz
 # =============================================================================
 
-def white_plaster() -> Image.Image:
-    """Kalkputz: ruhige, leicht wolkige Fläche mit Kellenspuren und feinen Haarrissen."""
-    noise = soft_noise(201, 0.75)
-    img = Image.new("RGBA", (N, N))
-    px = img.load()
-    rng = random.Random(202)
-    cracks = {(x, y) for x, y in ((3, 4), (4, 5), (4, 6), (5, 7), (11, 11), (12, 11), (13, 12))}
-    for y in range(N):
-        for x in range(N):
-            n = noise[y][x]
-            v = 3 if n < 0.3 else 4 if n < 0.82 else 5
-            if (x + 2 * y) % 11 == 0 and rng.random() < 0.5:
-                v -= 1                                   # Kellenspur
-            if (x, y) in cracks:
-                v = 1
-            px[x, y] = PLASTER[v]
-    return img
-
-
 CLAY = pal("#6e4c2c", "#80593a", "#936848", "#a27654", "#b08562", "#bf9672")
-
-
-def clay_plaster() -> Image.Image:
-    """Lehmputz: warmes Ocker mit eingearbeiteten Strohfasern."""
-    noise = soft_noise(211, 0.7)
-    img = Image.new("RGBA", (N, N))
-    px = img.load()
-    for y in range(N):
-        for x in range(N):
-            n = noise[y][x]
-            v = 2 if n < 0.18 else 3 if n < 0.55 else 4 if n < 0.9 else 5
-            px[x, y] = CLAY[v]
-    straw = hexc("#d8bc7c")
-    straw_dark = hexc("#a88a4e")
-    for x0, y0, dx, length in ((2, 3, 1, 4), (9, 1, 1, 3), (11, 7, -1, 4), (4, 11, 1, 3), (12, 13, 1, 3), (6, 7, 1, 2)):
-        for k in range(length):
-            px[(x0 + k * dx) % N, (y0 + (k // 2)) % N] = straw if k % 3 else straw_dark
-    return img
 
 
 # =============================================================================
@@ -349,8 +310,6 @@ CHANDELIER_ITEM = [
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
-    put("block/white_plaster", white_plaster())
-    put("block/clay_plaster", clay_plaster())
     put("block/leaded_glass", leaded_glass())
     put("block/leaded_glass_pane_top", leaded_glass_pane_top())
     put("block/castle_door_top", sprite(CASTLE_DOOR_TOP, DOOR_COLORS))

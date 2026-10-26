@@ -41,61 +41,7 @@ LEAF = {
 # Hopfen: rankt an einer Stange empor, reif mit hellgrünen Dolden
 # =============================================================================
 
-HOPS_COLORS = {**LEAF, "c": hexc("#7fae3e"), "C": hexc("#b4d86a"), "w": hexc("#e6f4b0")}
 
-HOPS = [
-    pad_top([
-        "......L..L......",
-        ".......lG.......",
-        ".......Gg.......",
-        ".......g........"]),
-    pad_top([
-        ".......S........",
-        ".......s........",
-        ".....lLs........",
-        "......Gsl.......",
-        ".......sGl......",
-        "....lG.s........",
-        ".....GgsL.......",
-        ".......sGl..L...",
-        "...L..ls....G...",
-        "...G..Gs....g...",
-        "...g...s........"]),
-    pad_top([
-        ".......S........",
-        ".....lLsL.......",
-        "......Gsgl......",
-        "....lGgs........",
-        ".....G.sGl......",
-        "......gsgLl.....",
-        "...lL.Gs.G......",
-        "....GgGsg.......",
-        ".......sGl......",
-        ".....lGsgGl.....",
-        "......G.s.G.....",
-        "...l..gsg...l...",
-        "...G...s....G...",
-        "..lG..gs....G...",
-        "..G....s....g...",
-        "..g....s........"]),
-    pad_top([
-        ".......S.L......",
-        ".....lLsGl......",
-        "....cCgsgCw.....",
-        "....wCGs.c......",
-        "......gsGl.cC...",
-        "...lG.Gs.GlwC...",
-        "..cCw.gsg.......",
-        "..wC.lGsGlcC....",
-        "......gs.GwC....",
-        "...cCgGsg.......",
-        "...wCG.sGl.cC...",
-        ".....lgsgGlwC...",
-        "...l.G.s.G......",
-        "..lG..gs....G...",
-        "..G....s....g...",
-        "..g....s........"]),
-]
 
 # =============================================================================
 # Weintrauben: Rebe am Pfahl, erst grüne, dann blaue Trauben
@@ -104,105 +50,12 @@ HOPS = [
 GRAPE_COLORS = {**LEAF, "u": hexc("#6aa632"), "U": hexc("#a8d65e"),
                 "m": hexc("#2a0e36"), "M": hexc("#5a2470"), "N": hexc("#8a44a6"), "x": hexc("#c890dc")}
 
-GRAPES = [
-    pad_top([
-        ".......L........",
-        "......lGl.......",
-        ".......s........",
-        ".......s........"]),
-    pad_top([
-        "......lL........",
-        ".....lGGl.......",
-        "......Gs........",
-        ".......sLl......",
-        ".......SGGl.....",
-        "....lL.s........",
-        "...lGG.s........",
-        ".....GSs........",
-        ".......s........",
-        ".......s........"]),
-    pad_top([
-        "...lL......lL...",
-        "..lGGlS..SlGGl..",
-        "...GgSs..sSgG...",
-        "......sSSs......",
-        "..lL...ss...lL..",
-        ".lGGl..sS..lGGl.",
-        "..GuUu.s..uUuG..",
-        "..uUuU.sS.UuUu..",
-        "...uUu.s..uUu...",
-        "....u..s...u....",
-        ".......s........",
-        ".......sS.......",
-        ".......s........",
-        ".......s........"]),
-    pad_top([
-        "...lL......lL...",
-        "..lGGlS..SlGGl..",
-        "..lGgSs..sSgGl..",
-        "...G..sSSs..G...",
-        "..lL...ss...lL..",
-        ".lGGl..sS..lGGl.",
-        "..GmMm.s..mMmG..",
-        "..mNxMmsSmNxMm..",
-        "..mMNxMs.MNxMm..",
-        "...mMMm.s.mMMm..",
-        "....mNm.sSmNm...",
-        ".....m..s..m....",
-        ".......sS.......",
-        ".......s........",
-        ".......s........"]),
-]
 
 # =============================================================================
 # Knoblauch: flache, graugrüne Blätter, reif mit weißen Knollen
 # =============================================================================
 
-GARLIC_COLORS = {**LEAF, "v": hexc("#5e8e46"), "V": hexc("#8ab866"), "e": hexc("#b2b04a"),
-                 "q": hexc("#f2ecdc"), "Q": hexc("#d4c8b0"), "o": hexc("#8c7c66"), "x": hexc("#b08ab8")}
 
-GARLIC = [
-    pad_top([
-        "...V.....V...V..",
-        "...v.....v...v..",
-        "...v.....v...v.."]),
-    pad_top([
-        "..V.......V.....",
-        "..v..V....v...V.",
-        "..v..v...Vv...v.",
-        ".Vv..v...v....v.",
-        ".v...v...v...vv.",
-        ".v...v...v...v..",
-        ".v...v...v...v.."]),
-    pad_top([
-        "..V.........V...",
-        "..v...V.....v...",
-        "..v...v...V.v...",
-        ".Vv...v...v.v..V",
-        ".v....v...v.v..v",
-        ".v...Vv...v.v..v",
-        ".v...v....vVv..v",
-        ".v...v...Vv.v..v",
-        ".v...v...v..v.Vv",
-        ".v...v...v..v.v.",
-        ".Qq..v...Qq.v.v.",
-        "QqqQ.....qqQ.Qq.",
-        ".oo.......o..oo."]),
-    pad_top([
-        "..e.........e...",
-        "..e...V.....v...",
-        "..v...v...e.v...",
-        ".Vv...v...e.v..V",
-        ".v....v...v.v..v",
-        ".v...Vv...v.v..v",
-        ".v...v....vVv..v",
-        ".v...v...Vv.v..v",
-        ".v..qv...v.qv.Vv",
-        "qQxqQq..qQxqQqv.",
-        "QqxqqQ..QqxqqQq.",
-        ".QqqQo..oQqqQoQq",
-        "..oo......oo..o."]),
-]
 
 # =============================================================================
 # Mondblume: blasse, bläulich-weiße Blüte, die nachts schwach leuchtet
@@ -226,10 +79,6 @@ MOON_COLORS = {**LEAF, "w": hexc("#ffffff"), "b": hexc("#b4d0ff"), "B": hexc("#8
 
 
 def crops(put: Callable[[str, Image.Image], None]) -> None:
-    for name, stages, colors in (("hops", HOPS, HOPS_COLORS), ("grapes", GRAPES, GRAPE_COLORS),
-                                 ("garlic_crop", GARLIC, GARLIC_COLORS)):
-        for i, rows in enumerate(stages):
-            put(f"block/{name}_stage{i}", sprite(rows, colors))
     put("block/moonflower", sprite(MOONFLOWER, MOON_COLORS))
 
 

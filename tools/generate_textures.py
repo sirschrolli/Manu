@@ -30,6 +30,7 @@ import block_textures  # noqa: E402
 import boss_textures  # noqa: E402
 import building_textures  # noqa: E402
 import creature_textures  # noqa: E402
+import crops  # noqa: E402
 import equipment_textures  # noqa: E402
 import farm_textures  # noqa: E402
 import frost_textures  # noqa: E402
@@ -41,11 +42,13 @@ import kingdom_textures  # noqa: E402
 import lair_textures  # noqa: E402
 import magic_textures  # noqa: E402
 import pixelart as pa  # noqa: E402
+import region_blocks  # noqa: E402
 import seal_textures  # noqa: E402
 import shadow_textures  # noqa: E402
 import shadow_gear_textures  # noqa: E402
 import shadow_creature_textures  # noqa: E402
 import shadow_village_textures  # noqa: E402
+import world_blocks  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -142,185 +145,6 @@ PLANT = {
     "a": hexc("#94722a"), "A": hexc("#c4a044"), "b": hexc("#dcbc60"), "B": hexc("#f2da88"), "n": hexc("#cfb468"),  # Gerste
 }
 
-CROPS: dict[str, list[list[str]]] = {
-    "tomatoes": [
-        ["", "", "", "", "", "", "", "", "", "", "",
-         "....L.L.........",
-         ".....G.....L.L..",
-         ".....g......G...",
-         "..L.Lg......g...",
-         "...Gg.......g..."],
-        ["", "", "", "", "", "",
-         ".......L........",
-         "......LGL....L..",
-         "...L...g....LGl.",
-         "..lGl..gL....g..",
-         "...g..lGl.L..g..",
-         "...gL..g.lG..gL.",
-         "..lG...g..g.lG..",
-         "...g...g..g..g..",
-         "...g...g..g..g..",
-         "...g...g..g..g.."],
-        ["",
-         ".......S........",
-         ".....L.SL.......",
-         "....LGlsGL......",
-         "...lGgysGgL.....",
-         "..lGgYyslGgl....",
-         "..Gg..Ls.LGgL...",
-         ".lGuUlGsgGuUg...",
-         ".gGuugGslGuugl..",
-         "..gg.lGsGg.gG...",
-         "..lGl.gsg.lGgl..",
-         ".lGgGLgsglGgGl..",
-         "..g.uU.s.uU.g...",
-         "..g.uu.s.uu.g...",
-         "..g....s....g...",
-         "..g....s....g..."],
-        ["",
-         ".......S........",
-         ".....L.SL.......",
-         "....LGlsGL......",
-         "...lGgRhGgL.....",
-         "..lGgrRslGgl....",
-         "..Gg..Ls.LGgL...",
-         ".lGRhlGsgGRhg...",
-         ".gGrRgGslGrRgl..",
-         "..gg.lGsGg.gG...",
-         "..lGl.gsg.lGgl..",
-         ".lGgGLgsglGgGl..",
-         "..g.Rh.s.Rh.g...",
-         "..g.rR.s.rR.g...",
-         "..g....s....g...",
-         "..g....s....g..."],
-    ],
-    "cabbages": [
-        ["", "", "", "", "", "", "", "", "", "", "", "",
-         "...L.L....L.L...",
-         "....G......G....",
-         "...lGl....lGl...",
-         "....g......g...."],
-        ["", "", "", "", "", "", "", "", "", "",
-         "................",
-         "..L.L.....L..L..",
-         ".lGlGl...lGllGl.",
-         "lGgGGGl.lGgGGgGl",
-         ".GgCgG...GgCgGg.",
-         "..ggg.....ggg..."],
-        ["", "", "", "", "", "", "",
-         "................",
-         "..L..L.....L..L.",
-         ".lGl.Gl...lGl.Gl",
-         "lGgGlGGl.lGgGlGG",
-         "GgGCCCgGlGgCCCgG",
-         "gGCwCCcGgGCwCCcG",
-         ".gGCCcgg.gGCCcgg",
-         "..gGGgg...gGGgg.",
-         "...ggg.....ggg.."],
-        ["", "", "", "", "",
-         "....L....L......",
-         "...lGl..lGl.....",
-         "..lGgGllGgGl....",
-         ".lGgCCCCCgGgl...",
-         ".GgCwwCCCcgGl...",
-         "lGCwCCvCCCcgGl..",
-         "GgCCvCCCvCcgGg..",
-         "gGcCCCvCCCcgGg..",
-         ".gGcCCCCCcggg...",
-         "..gGgcccgGgg....",
-         "...gggGggg......"],
-    ],
-    "onions": [
-        ["", "", "", "", "", "", "", "", "", "", "", "",
-         "...L.....L....L.",
-         "...l.....l....l.",
-         "...G.....G....G.",
-         "...g.....g....g."],
-        ["", "", "", "", "", "", "", "",
-         "..L.......L.....",
-         "..l..L....l...L.",
-         "..G..l...LG...l.",
-         "..G..G...lG...G.",
-         ".lG..G...G....G.",
-         ".G...g...G...gG.",
-         ".g...g...g...g..",
-         ".g...g...g...g.."],
-        ["", "", "",
-         "..L.........L...",
-         "..l...L.....l...",
-         "..G...l...L.G...",
-         ".lG...G...l.G..L",
-         ".G....G...G.G..l",
-         ".G...lG...G.G..G",
-         ".G...G....GlG..G",
-         ".g...G...lG.g..G",
-         ".g...g...G..g.lg",
-         ".g...g...g..g.g.",
-         ".pO..g...pO.g.g.",
-         "pOOo.....OOo.pOo",
-         ".oo.......o..oo."],
-        ["", "", "",
-         "..e.........e...",
-         "..e...L.....l...",
-         "..l...l...e.G...",
-         ".lG...G...e.G..L",
-         ".G....G...G.G..l",
-         ".G...lG...G.G..G",
-         ".G...G....GlG..G",
-         ".g...G...lG.g..G",
-         ".g..qg...G.qg.lg",
-         "qpOOpO..qpOOpOpO",
-         "pOOOOo..pOOOOopO",
-         ".OOoOo..OOOoOoOo",
-         "..oo......oo..o."],
-    ],
-    "barley": [
-        ["", "", "", "", "", "", "", "", "", "", "", "", "",
-         "..L....L...L..L.",
-         ".lG..L.G..lG..G.",
-         ".G..lG.g..G..lg."],
-        ["", "", "", "", "", "", "", "", "",
-         "..L......L......",
-         "..l...L..l...L..",
-         ".lG...l..G..lG..",
-         ".G...lG..G..G..L",
-         ".G...G..lG..G..l",
-         ".g...G..G..lg..G",
-         ".g...g..g..g...g"],
-        ["", "",
-         "..n.....n.......",
-         "..ln...nl....n..",
-         "..lL...Ll...nl..",
-         "..LG...lL...Ll..",
-         "..lL...GL...lL..",
-         "..G...lG....LG..",
-         ".lG...G....lG...",
-         ".G...lG....G....",
-         ".G...G....lG...l",
-         ".G...G....G....G",
-         ".g...G....G...lG",
-         ".g...g...lg...G.",
-         ".g...g...g....g.",
-         ".g...g...g....g."],
-        ["n.......n.......",
-         ".n.n.....n.n....",
-         "..nBn...nBn.....",
-         "..BbB...BbBn....",
-         "..bAb..nbAb.n.n.",
-         "..Bb....Bb...nBn",
-         "..bA....bA...BbB",
-         "..A.....A....bAb",
-         ".aA....aA....Bb.",
-         ".A.....A.....bA.",
-         ".A.....A....aA..",
-         ".A....aA....A...",
-         ".a....A.....A...",
-         ".a....A....aA...",
-         ".a....a....a....",
-         ".a....a....a...."],
-    ],
-}
-
 FLOWERS: dict[str, tuple[list[str], dict[str, Color]]] = {
     "lavender": ([
         "", "",
@@ -395,9 +219,6 @@ FLOWERS: dict[str, tuple[list[str], dict[str, Color]]] = {
 
 
 def plants() -> None:
-    for crop, stages in CROPS.items():
-        for i, rows in enumerate(stages):
-            put(f"block/{crop}_stage{i}", pa.sprite(rows, PLANT))
     for name, (rows, colors) in FLOWERS.items():
         put(f"block/{name}", pa.sprite(rows, {**PLANT, **colors}))
 
@@ -801,6 +622,9 @@ def build_all() -> dict[str, Image.Image]:
     earth_textures.build(put)
     storm_textures.build(put)
     deep_textures.build(put)
+    world_blocks.build(put)
+    region_blocks.build(put)
+    crops.build(put)
     shadow_textures.build(put)
     shadow_gear_textures.build(put)
     shadow_creature_textures.build(put)

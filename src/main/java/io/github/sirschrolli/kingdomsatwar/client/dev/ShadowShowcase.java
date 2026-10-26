@@ -739,7 +739,7 @@ final class ShadowShowcase {
         steps.add(Step.waitForChunks(1200));
         steps.add(Step.screenshot("umbrer_village_top"));
         // der Platz mit dem Mondbrunnen
-        steps.add(view(c, 9, 3.5, -11, 2));
+        steps.add(view(c, 7, 9, -8, 0));
         steps.add(Step.waitTicks(40));
         steps.add(Step.waitForChunks(1200));
         steps.add(Step.screenshot("umbrer_village_plaza"));

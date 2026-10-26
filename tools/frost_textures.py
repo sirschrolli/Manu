@@ -20,15 +20,12 @@ from typing import Callable
 from PIL import Image
 
 import pixelart as pa
-from pixelart import CLEAR, Color, hexc
+from pixelart import hexc
 
 N = 16
 
 ICE = pa.palette("#3c6c9c", "#4f84b6", "#6a9fcc", "#8ab8dd", "#a8cfe9", "#c6e2f4", "#e2f2fb", "#ffffff")
 STONE = pa.palette("#4a4d55", "#575b63", "#656972", "#737882", "#838892", "#959aa3")
-RIME = pa.palette("#b8c8d8", "#cddae6", "#e0eaf2", "#f2f8fc", "#ffffff")
-SOIL = pa.palette("#2f2722", "#3a302a", "#463a32", "#53453b", "#615145")
-
 
 def frost_crystal() -> Image.Image:
     """Facettierter Kristall: schräge Flächen in Blautönen, helle Kanten, halbtransparent."""
@@ -79,61 +76,6 @@ def glacier_ice() -> Image.Image:
         y += 1
     return img
 
-
-def rime_stone() -> Image.Image:
-    """Stein mit Reifkruste: oben und an den Kanten weißer Frost, darunter grauer Stein mit Körnung."""
-    img = pa.new()
-    px = img.load()
-    noise = pa.fractal_noise(8301, ((8, 0.5), (4, 0.3), (2, 0.2)))
-    frost = pa.fractal_noise(8302, ((4, 0.6), (2, 0.4)))
-    for y in range(N):
-        for x in range(N):
-            c = pa.pick_dither(STONE[1:6], 0.15 + noise[y][x] * 0.7, x, y, 0.7)
-            if frost[y][x] > 0.58:
-                c = pa.pick(RIME, (frost[y][x] - 0.58) * 2.2)
-            px[x, y] = c
-    return img
-
-
-def _soil(seed: int) -> Image.Image:
-    img = pa.new()
-    px = img.load()
-    noise = pa.fractal_noise(seed, ((8, 0.4), (4, 0.4), (2, 0.2)))
-    rng = random.Random(seed + 1)
-    for y in range(N):
-        for x in range(N):
-            px[x, y] = pa.pick_dither(SOIL, 0.1 + noise[y][x] * 0.8, x, y, 0.7)
-    for _ in range(10):
-        x, y = rng.randrange(N), rng.randrange(N)
-        px[x, y] = RIME[1] if rng.random() < 0.6 else SOIL[0]
-    return img
-
-
-def frozen_soil_bottom() -> Image.Image:
-    return _soil(8401)
-
-
-def frozen_soil_top() -> Image.Image:
-    img = pa.new()
-    px = img.load()
-    noise = pa.fractal_noise(8402, ((4, 0.6), (2, 0.4)))
-    soil = _soil(8403).load()
-    for y in range(N):
-        for x in range(N):
-            n = noise[y][x]
-            px[x, y] = soil[x, y] if n < 0.28 else pa.pick(RIME, (n - 0.28) * 1.3)
-    return img
-
-
-def frozen_soil_side() -> Image.Image:
-    img = _soil(8404)
-    px = img.load()
-    rng = random.Random(8405)
-    for x in range(N):
-        depth = 3 + (1 if rng.random() < 0.45 else 0) + (1 if rng.random() < 0.2 else 0)
-        for y in range(depth):
-            px[x, y] = RIME[min(4, 4 - y)] if y < depth - 1 else RIME[0]
-    return img
 
 
 ICICLE = """
@@ -283,10 +225,6 @@ def bubble() -> Image.Image:
 def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/frost_crystal", frost_crystal())
     put("block/glacier_ice", glacier_ice())
-    put("block/rime_stone", rime_stone())
-    put("block/frozen_soil_bottom", frozen_soil_bottom())
-    put("block/frozen_soil_top", frozen_soil_top())
-    put("block/frozen_soil_side", frozen_soil_side())
     put("block/icicle", icicle())
     put("entity/boss/projectile_ice_spear", ice_spear())
     put("entity/boss/projectile_icicle", icicle_projectile())
