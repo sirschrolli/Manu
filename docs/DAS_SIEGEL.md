@@ -142,9 +142,48 @@ Blöcken, Farben, Partikeln und Geräuschen:
 
 ## 6. Die Schattenwelt
 
-Eigene Dimension, erreichbar erst nach dem Siegelbruch durch den Siegelkreis: dunkler Himmel, Schattenwälder,
-Aschefelder, Kristallabgründe; eigene Mobs, Erze (Nachtstahl), Bauwerke (Schattenzitadelle) und ein letzter
-Boss für danach.
+Eine ganz eigene Welt, erreichbar erst nach dem Siegelbruch durch das Tor im Siegelkreis – groß ausgebaut mit
+eigenen Biomen, eigenem Volk, eigenen Erzen, Kreaturen, Bauwerken und einem Endgegner.
+
+**Atmosphäre:** violett-grauer Himmel ohne Sonne, ein fahler Schattenmond, fremde Sternbilder, eigener Nebel und
+eigene Umgebungsgeräusche. Es wird nie ganz hell, aber auch nie ganz dunkel. Eigener Geländegenerator mit steilen
+Felsnadeln, tiefen Abgründen und schwebenden Inseln.
+
+**Biome:**
+
+| Biom | Landschaft |
+|---|---|
+| Schattenwald | hohe Bäume aus Schattenholz mit violettem Laub, leuchtende Pilze, dichter Nebel |
+| Bleiche Öde | fahler Schattensand, ausgebleichte Knochenbögen, Staubwirbel |
+| Kristallabgründe | tiefe Schluchten voller leuchtender Nachtkristalle, natürliche Felsbrücken |
+| Seelensumpf | dunkles Wasser, Schilf, Irrlichter, Nebelschwaden |
+| Schattengipfel | schwarze Felsnadeln, Aschschnee, eisige Winde |
+| Glimmerweiten | weite Wiesen mit leuchtenden Mondblumen und Ruinen der alten Welt |
+| Abgrundmeer | tiefschwarzes Meer mit Inseln |
+
+**Blöcke:** Schattenstein (mit Ziegeln, poliert, Treppe/Stufe/Mauer), Schattenerde und -gras, Schattenholz
+(Stamm, Bretter, Treppe, Stufe, Zaun, Tür), Schattensand, Nachtkristall (leuchtet), Glimmmoos, Mondblumen.
+
+**Erze und Ausrüstung:**
+- **Nachtstahl** – die stärkste Ausrüstung (Werkzeuge, Waffen, Rüstung)
+- **Mondsilber** – für Zauber und Verbesserungen an Zauberstab und Rüstung
+- **Seelenkristall** – Energie für mächtige Zaubertafeln
+- **Abyssit** – sehr selten, für das Endspiel
+
+**Das Schattenvolk:** Die Umbrer lebten seit Jahrhunderten hinter dem Siegel. Eigene **Dörfer** im eigenen Stil
+(Türme aus Schattenstein, Laternenbrücken, Kristallgärten), eigene Berufe und eigener Handel; manche Umbrer
+schließen sich dem Spieler an. Nicht alle sind freundlich: Schattenritter überfallen Reisende.
+
+**Kreaturen (mit Varianten):** Schattenwölfe, Irrgeister, Kristallkäfer, Nachtfalter, Schattenpirscher,
+Steinwächter und Abgrundfische.
+
+**Bauwerke:** Schattenzitadelle (Festung des Endgegners), verlassene Tempel, Kristallminen, Leuchttürme,
+Felsbrücken und Ruinen der alten Welt.
+
+**Endgegner:** **Nyxar, der Schattendrache** – das Wesen, vor dem das Siegel die Welt schützte. Sein Kampf in
+der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
+
+**Rückweg:** Das Tor im Siegelkreis bleibt offen; in der Schattenwelt steht ein Gegentor.
 
 ---
 
@@ -154,13 +193,13 @@ Boss für danach.
 |---|---|---|
 | A | Intro mit Stimme C, README, Version 0.2.0 | ✅ |
 | B1 | Boss-Grundgerüst (Zustände, Trefferzonen, Bossleiste, Bewegung, Angriffe, Tod → Ei) + **Pyrrhon** | ✅ |
-| B1b | Weiche, realistische Bewegungen für alle Drachen (Feder-Ketten, Atmen, Schrittfolge, Flügelwelle, Ausholen/Nachschwingen) | ⏳ |
+| B1b | Weiche, realistische Bewegungen für alle Drachen (Feder-Ketten, Atmen, Schrittfolge, Flügelwelle, Ausholen/Nachschwingen) | ✅ |
 | B2 | Riesige Nester als echte Bauwerke, eins je Welt im passenden Biom, Nestkern, Drachenkompass | ✅ |
-| B2b | Eigenes Biom um jedes Nest mit neuen Blöcken (zuerst die **Aschelande** um Pyrrhons Krater) | ⏳ |
+| B2b | Eigenes Biom um jedes Nest mit neuen Blöcken: **Aschelande** ✅, die übrigen mit B4–B8 | ✅ |
 | B3 | Story-Grundlage: Chronik, Kapitel, Siegelkreis, Fortschritt je Spieler | ⏳ |
 | B4–B8 | Glaciara, Voltarion, Verdantis, Terragon, Thalassa mit Nestern | ⏳ |
 | B9 | Alte Drachen-Mechanik umbauen (keine wilden Drachen, keine Ei-Rezepte), Tests, Bilder | ⏳ |
-| F | Schattenwelt | ⏳ |
+| F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, Bauwerke, Nyxar | ⏳ |
 | C | Wirtschaft, Münzen, wachsende Stadt, Ansehen, Handel, Krönung | ⏳ |
 | D | Magier-Bosse, Magietisch, Radialmenü | ⏳ |
 | E | Biome, Dörfer, eigene Mobs statt Vanilla, keine Vanilla-Bauwerke, Nether/End | ⏳ |
