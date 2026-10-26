@@ -93,10 +93,14 @@ final class Showcase {
                 case "structures" -> structures(steps);
                 case "boss" -> boss(steps);
                 case "lair" -> lair(steps);
+                case "bossmotion" -> bossMotion(steps);
                 case "lairinfo" -> {
                     double[] nest = new double[4];
                     locateFireNest(steps, nest);
                     steps.add(Step.until(() -> nest[3] != 0, 1200));
+                    steps.add(Step.waitTicks(100));
+                    steps.add(Step.server(level -> debugAshlands(level, nest)));
+                    steps.add(Step.waitTicks(40));
                 }
                 default -> { }
             }
@@ -1277,22 +1281,21 @@ final class Showcase {
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
         steps.add(lookFrom(nest, 0, 70, 105, 0));
         steps.add(Step.waitTicks(40));
-        steps.add(chunksAround(nest, 3, 4000));
-        steps.add(Step.waitTicks(100));
+        steps.add(Step.waitTicks(400));
         steps.add(Step.waitForChunks(3000));
         steps.add(Step.waitTicks(60));
         steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}",
                 io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(DragonType.FIRE))));
         steps.add(Step.screenshot("lair_fire_overview"));
         // Aschelande: aus großer Höhe und vom Boden aus
-        steps.add(lookFrom(nest, 0, 150, 250, 0));
+        steps.add(lookFrom(nest, 40, 95, 150, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("lair_ashlands_aerial"));
-        groundView(steps, nest, 64, 70, 2.2, 14, "lair_ashlands_ground");
-        groundView(steps, nest, -95, 20, 1.8, 10, "lair_ashlands_ground_2");
-        groundView(steps, nest, 30, -100, 3.0, 12, "lair_ashlands_ground_3");
+        groundView(steps, nest, 50, 52, 6.0, 14, "lair_ashlands_ground");
+        groundView(steps, nest, -78, 18, 7.0, 10, "lair_ashlands_ground_2");
+        groundView(steps, nest, 25, -82, 6.0, 12, "lair_ashlands_ground_3");
         steps.add(lookFrom(nest, -70, 55, -80, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
@@ -1378,6 +1381,90 @@ final class Showcase {
         }));
     }
 
+    /**
+     * Bewegungen des Drachen-Bosses als Bildfolgen (werden zu Videos zusammengesetzt): Erwachen, Kampf gegen ein paar
+     * Soldaten (Gehen, Drehen, Angriffe, Launen) und Flug. Die Kamera folgt dem Boss von der Seite.
+     */
+    private static void bossMotion(Deque<Step> steps) {
+        int ox = 600;
+        int oz = 0;
+        DragonBossEntity[] boss = new DragonBossEntity[1];
+        steps.add(tp(ox, 30, oz - 40, 0, 30));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.command("time set 9000"));
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(ox - 60, ground - 3, oz - 60), new BlockPos(ox + 60, ground - 1, oz + 60), Blocks.BASALT.defaultBlockState());
+            fill(level, new BlockPos(ox - 60, ground, oz - 60), new BlockPos(ox + 60, ground + 40, oz + 60), Blocks.AIR.defaultBlockState());
+            for (BlockPos pos : BlockPos.betweenClosed(ox - 6, ground - 3, oz - 6, ox + 6, ground - 1, oz + 6)) {
+                if (pos.distSqr(new BlockPos(ox, pos.getY(), oz)) <= 30) {
+                    level.setBlock(pos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(Step.server(level -> {
+            var b = ModEntities.PYRRHON.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            b.snapTo(ox + 0.5, ground - 11, oz + 0.5, 200, 0);
+            b.yBodyRot = 200;
+            b.yHeadRot = 200;
+            level.addFreshEntity(b);
+            b.beginAwakening(level, new BlockPos(ox, ground, oz));
+            boss[0] = b;
+        }));
+        steps.add(Step.waitTicks(2));
+        steps.add(Step.record("motion_awakening", 175, follow(boss, 24.0, 8.0, 7.0)));
+        // Kampf: ein paar Soldaten, damit der Boss geht, sich dreht und angreift
+        steps.add(Step.server(level -> {
+            for (int i = 0; i < 5; i++) {
+                double a = -0.6 + i * 0.3;
+                SoldierType type = i % 2 == 0 ? SoldierType.KNIGHT : SoldierType.ARCHER;
+                var soldier = ModEntities.SOLDIERS.get(type).get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (soldier != null) {
+                    soldier.snapTo(ox + Math.sin(a) * 14, ground, oz - Math.cos(a) * 14, 0, 0);
+                    soldier.setPermanentlyInvulnerable(true);
+                    level.addFreshEntity(soldier);
+                }
+            }
+        }));
+        steps.add(Step.record("motion_fight", 300, follow(boss, 22.0, 6.0, 5.0)));
+        steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
+        steps.add(Step.record("motion_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
+        steps.add(Step.hud(true));
+    }
+
+    /** Kamera folgt dem Boss: seitlich in {@code distance} Blöcken, {@code up} über ihm, Blick auf {@code lookUp}. */
+    private static java.util.function.Consumer<net.minecraft.client.Minecraft> follow(DragonBossEntity[] boss, double distance, double up,
+            double lookUp) {
+        double[] cam = new double[4];   // geglättete Kameraposition, gesetzt (1)
+        return minecraft -> {
+            DragonBossEntity b = boss[0];
+            if (b == null) {
+                return;
+            }
+            net.minecraft.world.phys.Vec3 center = b.position().add(0, 3.0, 0);
+            // Blick schräg von vorn-seitlich auf den Körper
+            net.minecraft.world.phys.Vec3 side = net.minecraft.world.phys.Vec3.directionFromRotation(0, b.yBodyRot + 115.0f);
+            net.minecraft.world.phys.Vec3 want = center.add(side.scale(distance)).add(0, up, 0);
+            if (cam[3] == 0) {
+                cam[0] = want.x;
+                cam[1] = want.y;
+                cam[2] = want.z;
+                cam[3] = 1;
+            } else {
+                cam[0] += (want.x - cam[0]) * 0.06;
+                cam[1] += (want.y - cam[1]) * 0.06;
+                cam[2] += (want.z - cam[2]) * 0.06;
+            }
+            net.minecraft.world.phys.Vec3 look = b.position().add(0, lookUp, 0).subtract(cam[0], cam[1], cam[2]);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, look.horizontalDistance()) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cam[0], cam[1], cam[2], yaw, pitch));
+        };
+    }
+
     /** Bild vom Boden aus: Kamera auf Augenhöhe über dem Gelände bei (dx, dz), Blick zur Nestmitte. */
     private static void groundView(Deque<Step> steps, double[] nest, double dx, double dz, double eye, double lookUp, String name) {
         double[] y = new double[1];
@@ -1400,6 +1487,70 @@ final class Showcase {
         steps.add(Step.waitForChunks(600));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot(name));
+    }
+
+    /** Fehlersuche: freiliegender Sand/Sandstein im inneren Biom und Bauwerke in der Nähe. */
+    private static void debugAshlands(ServerLevel level, double[] nest) {
+        int cx = (int) Math.floor(nest[0]);
+        int cz = (int) Math.floor(nest[1]);
+        int found = 0;
+        java.util.Map<String, Integer> kinds = new java.util.TreeMap<>();
+        for (int x = cx - 90; x <= cx + 90; x++) {
+            for (int z = cz - 90; z <= cz + 90; z++) {
+                double d = Math.hypot(x - cx, z - cz);
+                if (d < 50 || d > 85) {
+                    continue;
+                }
+                int top = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+                for (int y = top; y > top - 50; y--) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    BlockState state = level.getBlockState(pos);
+                    if (!(state.is(net.minecraft.tags.BlockTags.SAND) || state.getBlock().getDescriptionId().contains("sandstone"))) {
+                        continue;
+                    }
+                    boolean exposed = false;
+                    for (Direction dir : Direction.values()) {
+                        if (level.getBlockState(pos.relative(dir)).isAir()) {
+                            exposed = true;
+                        }
+                    }
+                    if (exposed) {
+                        kinds.merge(state.getBlock().getDescriptionId(), 1, Integer::sum);
+                        if (found++ < 12) {
+                            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Sand frei: {} {} d={} top={}",
+                                    pos.toShortString(), state, (int) d, top);
+                        }
+                    }
+                }
+            }
+        }
+        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Freiliegend im inneren Biom: {} Blöcke {}", found, kinds);
+        java.util.Map<String, Integer> plants = new java.util.TreeMap<>();
+        for (int x = cx - 110; x <= cx + 110; x++) {
+            for (int z = cz - 110; z <= cz + 110; z++) {
+                double d = Math.hypot(x - cx, z - cz);
+                if (d < 50 || d > 95) {
+                    continue;
+                }
+                int top = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+                for (int y = top; y > top - 4; y--) {
+                    BlockState state = level.getBlockState(new BlockPos(x, y, z));
+                    if (state.is(Blocks.CACTUS) || state.is(net.minecraft.tags.BlockTags.REPLACEABLE_BY_TREES) || state.is(net.minecraft.tags.BlockTags.LEAVES)) {
+                        plants.merge(state.getBlock().getDescriptionId(), 1, Integer::sum);
+                    }
+                }
+            }
+        }
+        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Pflanzen im inneren Biom: {}", plants);
+        java.util.Set<String> structures = new java.util.TreeSet<>();
+        for (int x = cx - 128; x <= cx + 128; x += 16) {
+            for (int z = cz - 128; z <= cz + 128; z += 16) {
+                level.structureManager().getAllStructuresAt(new BlockPos(x, 64, z)).keySet().forEach(structure ->
+                        structures.add(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                                .getKey(structure).toString()));
+            }
+        }
+        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Bauwerke um das Nest: {}", structures);
     }
 
     /** Wartet, bis der Spieler alle Chunks im Umkreis {@code radius} um die Nestmitte erhalten hat. */

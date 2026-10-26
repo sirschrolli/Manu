@@ -42,9 +42,10 @@ def build() -> Model:
     spike_row(m, "body", [-19, -11, -3, 5, 13], -17, [7, 9, 10, 8.5, 6.5], width=3.4)
 
     # ---------------------------------------------------------------- Hals und Kopf
+    # sechs kurze Halsglieder: der Hals biegt sich weich statt in wenigen Knicken
     neck = chain(m, "neck", "body", (0, -7, -20),
-                 [(15, 15, 11), (13, 13, 10), (11.5, 11.5, 10), (10, 10, 9)],
-                 [-40, -10, 12, 18], direction=-1, spikes=[5.5, 5, 4.5, 4], belly="plates")
+                 [(15, 15, 7.5), (14, 14, 7), (13, 13, 7), (12, 12, 6.5), (11, 11, 6), (10, 10, 6)],
+                 [-28, -12, -2, 6, 9, 7], direction=-1, spikes=[5.5, 5.2, 4.9, 4.6, 4.3, 4], belly="plates")
     m.bone("head", neck[-1], pivot=(0, 0, -8.5), rotation=(30, 0, 0))
     m.cube("head", (-7, -6, -15), (14, 12, 15), "scales")                       # Schädel
     m.cube("head", (-7.5, -7.5, -14), (15, 2.5, 7), "scales")                   # Stirnwülste

@@ -24,7 +24,7 @@ from pixelart import CLEAR, Color, hexc
 
 N = 16
 
-ASH = pa.palette("#35322f", "#3f3c39", "#4a4643", "#55514d", "#605b57", "#6c6762", "#7a746e", "#8a847d")
+ASH = pa.palette("#2c2927", "#363230", "#403c39", "#4a4643", "#55504c", "#605a55", "#6c6660", "#7a736c")
 SOIL = pa.palette("#1d1714", "#261e1a", "#2f2520", "#392d26", "#44362d", "#504035")
 ROCK = pa.palette("#1b1717", "#231e1e", "#2c2626", "#352e2d", "#3f3735", "#4a403d", "#574a46")
 BARK = pa.palette("#121010", "#1a1616", "#231d1c", "#2d2524", "#382e2b", "#463934")
@@ -87,9 +87,9 @@ def cinder_soil_top() -> Image.Image:
     apx = ash.load()
     for y in range(N):
         for x in range(N):
-            if noise[y][x] > 0.42:
-                px[x, y] = pa.mix(apx[x, y], SOIL[3], 0.25)
-            elif noise[y][x] > 0.34:
+            if noise[y][x] > 0.55:
+                px[x, y] = pa.mix(apx[x, y], SOIL[3], 0.3)
+            elif noise[y][x] > 0.46:
                 px[x, y] = ASH[2]
     return img
 

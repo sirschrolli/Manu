@@ -169,6 +169,46 @@ public final class ShowcaseRunner {
             };
         }
 
+        /**
+         * Nimmt eine Bildfolge auf (für Videos): Das Spiel steht still ({@code /tick freeze}); für jedes Bild läuft genau
+         * ein Spieltick ({@code /tick step 1}), dann wird – nach zwei gezeichneten Bildern – ein Screenshot gemacht.
+         * So entsteht bei 20 Bildern je Sekunde ein Video in Echtzeit, egal wie langsam der Rechner zeichnet.
+         * {@code beforeFrame} läuft vor jedem Tick (z. B. um die Kamera nachzuführen).
+         */
+        static Step record(String name, int frames, Consumer<Minecraft> beforeFrame) {
+            int[] state = new int[3];   // Bild, Phase, Wartezeit
+            return (minecraft, ticks) -> {
+                switch (state[1]) {
+                    case 0 -> {
+                        if (state[0] == 0) {
+                            minecraft.player.connection.sendCommand("tick freeze");
+                        }
+                        beforeFrame.accept(minecraft);
+                        minecraft.player.connection.sendCommand("tick step 1");
+                        state[1] = 1;
+                        state[2] = 0;
+                    }
+                    case 1 -> {
+                        if (++state[2] >= 3) {
+                            state[1] = 2;
+                        }
+                    }
+                    default -> {
+                        Screenshot.grab(minecraft.gameDirectory, String.format(java.util.Locale.ROOT, "%s_%04d.png", name, state[0]),
+                                minecraft.gameRenderer.mainRenderTarget(), 1, message -> { });
+                        state[0]++;
+                        state[1] = 0;
+                    }
+                }
+                if (state[0] >= frames) {
+                    minecraft.player.connection.sendCommand("tick unfreeze");
+                    LOGGER.info("[Showcase] Bildfolge {} fertig ({} Bilder)", name, frames);
+                    return true;
+                }
+                return false;
+            };
+        }
+
         static Step quit() {
             return once(minecraft -> {
                 LOGGER.info("[Showcase] Fertig, beende das Spiel");

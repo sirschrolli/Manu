@@ -42,6 +42,11 @@ public final class ModBiomes {
         return type == DragonType.FIRE ? ASHLANDS : null;
     }
 
+    /** Ist das eines der Nest-Biome? */
+    public static boolean isNestBiome(net.minecraft.core.Holder<Biome> biome) {
+        return biome.is(ASHLANDS);
+    }
+
     public static void bootstrap(BootstrapContext<Biome> context) {
         context.register(ASHLANDS, ashlands());
     }

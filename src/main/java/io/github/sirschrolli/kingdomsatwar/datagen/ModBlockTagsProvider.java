@@ -50,7 +50,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.CHARRED_LOG);
         add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.CINDER_SOIL);
-        add(BlockTags.SUPPORTS_DRY_VEGETATION, ModBlocks.CINDER_SOIL, ModBlocks.ASH_BLOCK);
+        add(BlockTags.SUPPORTS_DRY_VEGETATION, ModBlocks.CINDER_SOIL);
         add(BlockTags.INFINIBURN_OVERWORLD, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
         add(BlockTags.DRAGON_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);

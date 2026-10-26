@@ -36,5 +36,22 @@ public final class BossAnims {
     public static final int SPECIAL_1 = 15;
     public static final int SPECIAL_2 = 16;
 
+    // Launen in ruhigen Momenten (nur Client, für lebendigere Bewegungen)
+    public static final int MOOD_NONE = 0;
+    /** Schnauben: Kopf ruckt hoch, Rauch aus den Nüstern. */
+    public static final int MOOD_SNORT = 1;
+    /** Kopfschütteln. */
+    public static final int MOOD_SHAKE = 2;
+    /** Peitschen mit der Schwanzspitze. */
+    public static final int MOOD_TAIL_FLICK = 3;
+    /** Flügel lockern (halb öffnen, wieder anlegen). */
+    public static final int MOOD_SHRUG = 4;
+    /** Umsehen zur Seite. */
+    public static final int MOOD_GLANCE = 5;
+    /** Gähnen mit gestrecktem Hals. */
+    public static final int MOOD_YAWN = 6;
+    /** Dauer der Launen in Ticks. */
+    public static final int[] MOOD_TICKS = {0, 20, 25, 20, 32, 50, 44};
+
     private BossAnims() {}
 }

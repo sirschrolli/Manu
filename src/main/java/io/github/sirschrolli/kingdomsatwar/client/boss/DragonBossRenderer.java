@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -22,9 +21,13 @@ import net.minecraft.world.phys.AABB;
  * Zeichnet einen Drachen-Boss: vergrößertes Modell, Schräglage und Neigung im Flug, leuchtende Teile mit
  * veränderlicher Helligkeit (pulsieren, glühen vor dem Odem auf, erlöschen im Tod).
  */
-public class DragonBossRenderer<T extends DragonBossEntity, M extends EntityModel<BossRenderState>>
+public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBossModel>
         extends MobRenderer<T, BossRenderState, M> {
     private final Identifier texture;
+    private final DragonMotion motion;
+    private final DragonPose pose;
+    /** Federn je Boss (schwach gehalten: verschwindet der Boss, verschwinden auch seine Federn). */
+    private final java.util.Map<T, DragonRig> rigs = new java.util.WeakHashMap<>();
     private final float modelScale;
     /** Höhe des Körpermittelpunkts über dem Boden in Blöcken (Drehpunkt für Neigung und Schräglage). */
     private final float pivotHeight;
@@ -35,6 +38,8 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends EntityMode
         this.texture = texture;
         this.modelScale = modelScale;
         this.pivotHeight = pivotHeight;
+        this.motion = model.createMotion();
+        this.pose = new DragonPose(model.tailCount());
         this.addLayer(new GlowLayer(this, RenderTypes.eyes(glowTexture)));
     }
 
@@ -64,10 +69,13 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends EntityMode
         double vy = entity.getDeltaMovement().y;
         double vh = entity.getDeltaMovement().horizontalDistance();
         state.flightPitch = entity.isFlying() ? (float) Mth.clamp(Math.atan2(vy, Math.max(vh, 0.05)) * Mth.RAD_TO_DEG, -35.0, 35.0) : 0.0f;
-        float now = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
-        for (int i = 0; i < state.yawLag.length; i++) {
-            state.yawLag[i] = Mth.wrapDegrees(entity.yawHistory[i] - now);
-        }
+        state.idleEvent = entity.idleEvent;
+        state.idleTime = entity.idleEvent == 0 ? 0.0f : (entity.tickCount - entity.idleEventStart + partialTicks) / 20.0f;
+        state.idleSide = entity.idleSide;
+        // Zielhaltung bestimmen und mit den Federn dieses Bosses glätten
+        this.motion.pose(state, this.pose);
+        DragonRig rig = this.rigs.computeIfAbsent(entity, e -> this.getModel().createRig());
+        rig.update(state, this.pose, state.ageInTicks / 20.0f, state.bodyRot, entity.hurtTime);
         state.glow = this.glowLevel(state);
         // Kein rotes Aufblinken bei jedem Treffer (ein ganzes Heer trifft ständig) und kein Rot im Tod
         state.hasRedOverlay = false;

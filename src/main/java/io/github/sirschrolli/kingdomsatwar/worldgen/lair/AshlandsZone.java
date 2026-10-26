@@ -69,8 +69,8 @@ final class AshlandsZone {
         if (d >= edge) {
             return 0;
         }
-        double t = Mth.clamp((edge - d) / 38.0, 0, 1);
-        return t + (ctx.noise(x, z, 0.045, 72) - 0.5) * 0.7;
+        double t = Mth.clamp((edge - d) / 30.0, 0, 1);
+        return t + (ctx.noise(x, z, 0.045, 72) - 0.5) * 0.6;
     }
 
     private void column(LairContext ctx, int x, int z, double local) {
@@ -110,15 +110,20 @@ final class AshlandsZone {
         BlockState ground = ctx.get(x, y, z);
         // 2) Wasser: flache Tümpel trocknen aus und füllen sich mit Asche
         if (!ground.getFluidState().isEmpty()) {
+            // Die Hitze lässt Seen verdampfen: flache Tümpel schon am Rand, tiefe Seen nahe am Krater
             if (ground.getFluidState().is(Fluids.WATER) && local > 0.55) {
+                int maxDepth = local > 0.85 ? 24 : 6;
                 int depth = 0;
-                while (depth < 5 && !ctx.get(x, y - depth, z).getFluidState().isEmpty()) {
+                while (depth <= maxDepth && !ctx.get(x, y - depth, z).getFluidState().isEmpty()) {
                     depth++;
                 }
-                if (depth <= 3) {
+                if (depth <= maxDepth) {
                     for (int k = 0; k < depth; k++) {
-                        ctx.set(x, y - k, z, k == 0 ? ModBlocks.ASH_BLOCK.get().defaultBlockState()
-                                : ModBlocks.CINDER_SOIL.get().defaultBlockState());
+                        BlockState fill = k == 0 ? (ctx.rand(x, z, 84) < 0.7 ? ModBlocks.ASH_BLOCK.get().defaultBlockState()
+                                : ModBlocks.CINDER_SOIL.get().defaultBlockState())
+                                : k < 3 ? ModBlocks.CINDER_SOIL.get().defaultBlockState()
+                                : ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState();
+                        ctx.set(x, y - k, z, fill);
                     }
                 }
             }
@@ -126,10 +131,16 @@ final class AshlandsZone {
         }
         double n1 = ctx.noise(x, z, 0.035, 73);
         double n2 = ctx.noise(x, z, 0.11, 74);
+        // Wie tief umgestaltet wird: mindestens 5 Blöcke, an Steilhängen bis hinunter zum tiefsten Nachbarn,
+        // damit an Klippen und Schluchtwänden kein Sand oder Sandstein mehr hervorschaut
+        int floor = Math.min(Math.min(ctx.groundY(x + 1, z), ctx.groundY(x - 1, z)), Math.min(ctx.groundY(x, z + 1), ctx.groundY(x, z - 1)));
+        int depth = Mth.clamp(y - floor + 1, 5, 40);
         if (local < 0.5) {
-            // Übergang: der Boden ist nur angesengt
-            if (isSoftGround(ground) && ctx.rand(x, z, 77) < (local - 0.3) * 4.0) {
-                ctx.set(x, y, z, ModBlocks.CINDER_SOIL.get().defaultBlockState());
+            // Übergang: der Boden ist nur angesengt – Asche- und Aschenerde-Flecken im Sand bzw. in der Erde
+            if (ctx.rand(x, z, 77) < (local - 0.3) * 5.0 && isReplaceableGround(ground)) {
+                ctx.set(x, y, z, ground.is(BlockTags.SAND) && ctx.rand(x, z, 82) < 0.6
+                        ? ModBlocks.ASH_BLOCK.get().defaultBlockState() : ModBlocks.CINDER_SOIL.get().defaultBlockState());
+                this.fillBelow(ctx, x, y, z, depth, false);
             }
             return;
         }
@@ -138,11 +149,11 @@ final class AshlandsZone {
         boolean crack = Math.abs(n2 - 0.5) < 0.022 && n1 > 0.38 && local > 0.75;
         if (crack) {
             surface = ctx.rand(x, z, 78) < 0.7 ? ModBlocks.GLOWING_VOLCANIC_ROCK.get().defaultBlockState() : Blocks.MAGMA_BLOCK.defaultBlockState();
-        } else if (n1 > 0.7) {
+        } else if (n1 > 0.62) {
             double r = ctx.rand(x, z, 79);
-            surface = r < 0.75 ? ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState()
-                    : r < 0.9 ? Blocks.BASALT.defaultBlockState() : Blocks.BLACKSTONE.defaultBlockState();
-        } else if (n1 < 0.3) {
+            surface = r < 0.7 ? ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState()
+                    : r < 0.88 ? Blocks.BASALT.defaultBlockState() : Blocks.BLACKSTONE.defaultBlockState();
+        } else if (n1 < 0.34) {
             surface = ModBlocks.CINDER_SOIL.get().defaultBlockState();
         } else {
             surface = ModBlocks.ASH_BLOCK.get().defaultBlockState();
@@ -151,21 +162,9 @@ final class AshlandsZone {
             surface = Blocks.MAGMA_BLOCK.defaultBlockState();   // heiße Stellen
         }
         ctx.set(x, y, z, surface);
-        // darunter: Asche bzw. Aschenerde, dann Vulkangestein (Erze bleiben erhalten)
-        for (int k = 1; k <= 5; k++) {
-            BlockState below = ctx.get(x, y - k, z);
-            if (!isReplaceableGround(below)) {
-                break;
-            }
-            BlockState fill;
-            if (k <= 2 && !surface.is(ModBlocks.VOLCANIC_ROCK.base().get()) && !crack) {
-                fill = surface.is(ModBlocks.ASH_BLOCK.get()) && k == 1 ? ModBlocks.ASH_BLOCK.get().defaultBlockState()
-                        : ModBlocks.CINDER_SOIL.get().defaultBlockState();
-            } else {
-                fill = ctx.rand(x * 7 + k, z, 80) < 0.8 ? ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState() : Blocks.TUFF.defaultBlockState();
-            }
-            ctx.set(x, y - k, z, fill);
-        }
+        // darunter: Asche bzw. Aschenerde, dann Vulkangestein (Erze und Bauwerke bleiben erhalten)
+        this.fillBelow(ctx, x, y, z, depth, !surface.is(ModBlocks.VOLCANIC_ROCK.base().get()) && !crack
+                && (surface.is(ModBlocks.ASH_BLOCK.get()) || surface.is(ModBlocks.CINDER_SOIL.get())));
         // 4) Aschedünen: Schichten auf der Asche
         if (surface.is(ModBlocks.ASH_BLOCK.get()) || surface.is(ModBlocks.CINDER_SOIL.get())) {
             double dune = ctx.noise(x, z, 0.06, 76) + (ctx.rand(x, z, 81) - 0.5) * 0.08;
@@ -176,6 +175,57 @@ final class AshlandsZone {
                 }
             }
         }
+    }
+
+    /**
+     * Füllt unter der neuen Oberfläche: oben (falls {@code soil}) zwei Lagen Aschenerde, darunter Vulkangestein in
+     * Schichten mit Tuff und Basalt – so sehen auch Klippen und Schluchtwände vulkanisch aus.
+     */
+    private void fillBelow(LairContext ctx, int x, int y, int z, int depth, boolean soil) {
+        int gaps = 0;
+        boolean inGap = false;
+        for (int k = 1; k <= depth; k++) {
+            BlockState below = ctx.get(x, y - k, z);
+            if (!isReplaceableGround(below)) {
+                if (!below.getFluidState().isEmpty()) {
+                    break;   // Wasser oder Lava darunter
+                }
+                if (below.isAir()) {
+                    // Überhang oder Höhle: darunter weitermachen, damit auch Höhlenwände und Unterseiten passen
+                    if (!inGap && ++gaps > 2) {
+                        break;
+                    }
+                    inGap = true;
+                }
+                continue;    // Erz, Bauwerk oder Luft: stehen lassen, darunter weitermachen
+            }
+            inGap = false;
+            BlockState fill;
+            if (soil && k <= 2) {
+                fill = ModBlocks.CINDER_SOIL.get().defaultBlockState();
+            } else {
+                double strata = ctx.noise(x * 0.3 + z * 0.3, y - k, 0.35, 83);   // schräge Gesteinsschichten
+                fill = strata < 0.62 ? ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState()
+                        : strata < 0.8 ? Blocks.TUFF.defaultBlockState() : Blocks.BASALT.defaultBlockState();
+            }
+            ctx.set(x, y - k, z, fill);
+        }
+        // Darunter (bis 40 Blöcke tief): alles, was an Luft grenzt – Schluchtwände, Überhänge, Höhlen
+        for (int k = depth + 1; k <= 40; k++) {
+            int yy = y - k;
+            BlockState below = ctx.get(x, yy, z);
+            if (!isReplaceableGround(below) || !exposed(ctx, x, yy, z)) {
+                continue;
+            }
+            double strata = ctx.noise(x * 0.3 + z * 0.3, yy, 0.35, 83);
+            ctx.set(x, yy, z, strata < 0.62 ? ModBlocks.VOLCANIC_ROCK.base().get().defaultBlockState()
+                    : strata < 0.8 ? Blocks.TUFF.defaultBlockState() : Blocks.BASALT.defaultBlockState());
+        }
+    }
+
+    private static boolean exposed(LairContext ctx, int x, int y, int z) {
+        return ctx.get(x + 1, y, z).isAir() || ctx.get(x - 1, y, z).isAir() || ctx.get(x, y, z + 1).isAir()
+                || ctx.get(x, y, z - 1).isAir() || ctx.get(x, y - 1, z).isAir() || ctx.get(x, y + 1, z).isAir();
     }
 
     /** Einzelheiten: verkohlte Baumgerippe, Glutspalten, Basaltsäulen, Feuerlilien, tote Büsche, Knochen. */
@@ -209,7 +259,7 @@ final class AshlandsZone {
                 ctx.set(x, y + 1, z, ModBlocks.FIRE_LILY.get().defaultBlockState());
             }
         } else if (r < 0.0145) {
-            if ((ground.is(ModBlocks.CINDER_SOIL.get()) || ground.is(ModBlocks.ASH_BLOCK.get())) && ctx.get(x, y + 1, z).canBeReplaced()) {
+            if (ground.is(ModBlocks.CINDER_SOIL.get()) && ctx.get(x, y + 1, z).canBeReplaced()) {
                 ctx.set(x, y + 1, z, Blocks.DEAD_BUSH.defaultBlockState());
             }
         } else if (r < 0.0152) {
@@ -250,7 +300,9 @@ final class AshlandsZone {
     /** Darf beim Umgestalten ersetzt werden (Erde, Sand, Stein, Terrakotta …) – Erze und Bauwerke nicht. */
     private static boolean isReplaceableGround(BlockState state) {
         return isSoftGround(state) || state.is(BlockTags.BASE_STONE_OVERWORLD) || state.is(BlockTags.TERRACOTTA)
-                || state.is(Blocks.SANDSTONE) || state.is(Blocks.RED_SANDSTONE) || state.is(Blocks.CLAY)
-                || state.is(Blocks.SNOW_BLOCK) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.ICE);
+                || state.is(Blocks.SANDSTONE) || state.is(Blocks.RED_SANDSTONE) || state.is(Blocks.SMOOTH_SANDSTONE)
+                || state.is(Blocks.SMOOTH_RED_SANDSTONE) || state.is(Blocks.CLAY) || state.is(Blocks.MUD)
+                || state.is(Blocks.SNOW_BLOCK) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.ICE)
+                || state.is(Blocks.CALCITE) || state.is(Blocks.MOSS_BLOCK);
     }
 }

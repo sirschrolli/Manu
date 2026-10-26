@@ -68,7 +68,7 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
         event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,
-                new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 4, 8, true, 4, 32.0f),
+                new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 6, 8, true, 4, 32.0f),
                 KingdomsAtWar.id("textures/entity/boss/pyrrhon.png"), KingdomsAtWar.id("textures/entity/boss/pyrrhon_glow.png"),
                 2.1f, 4.4f, 4.5f));
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);

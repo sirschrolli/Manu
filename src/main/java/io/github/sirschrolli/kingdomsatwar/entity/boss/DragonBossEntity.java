@@ -121,6 +121,11 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     /** 0 = am Boden (Flügel angelegt), 1 = in der Luft (Flügel ausgebreitet) – weich überblendet. */
     public float airBlend;
     public float airBlendO;
+    /** Laune in ruhigen Momenten (nur Client): Art, Beginn (Tick), Richtung, nächster frühester Zeitpunkt. */
+    public int idleEvent;
+    public int idleEventStart;
+    public float idleSide = 1.0f;
+    private int nextIdleEvent = 60;
 
     protected DragonBossEntity(EntityType<? extends DragonBossEntity> type, Level level, DragonType element) {
         super(type, level);
@@ -495,6 +500,51 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         float turn = Mth.wrapDegrees(this.yawHistory[0] - this.yawHistory[1]);
         float wanted = this.isFlying() ? Mth.clamp(-turn * 6.0f, -40.0f, 40.0f) : 0.0f;
         this.bank += (wanted - this.bank) * 0.1f;
+        this.tickMood();
+    }
+
+    /** Launen in ruhigen Momenten: Schnauben, Kopfschütteln, Schwanzschlagen, Flügel lockern, Umsehen, Gähnen. */
+    private void tickMood() {
+        if (this.idleEvent != BossAnims.MOOD_NONE && this.tickCount - this.idleEventStart > BossAnims.MOOD_TICKS[this.idleEvent]) {
+            this.idleEvent = BossAnims.MOOD_NONE;
+        }
+        State state = this.getBossState();
+        boolean calm = this.getAttackAnim() == BossAnims.NONE && (state == State.FIGHT || state == State.RETURNING)
+                && !this.isDeadOrDying();
+        if (!calm) {
+            if (this.getAttackAnim() != BossAnims.NONE) {
+                this.idleEvent = BossAnims.MOOD_NONE;
+            }
+            return;
+        }
+        if (this.idleEvent == BossAnims.MOOD_NONE && this.tickCount >= this.nextIdleEvent) {
+            int[] choices = this.isFlying()
+                    ? new int[] {BossAnims.MOOD_GLANCE, BossAnims.MOOD_SHAKE, BossAnims.MOOD_SNORT}
+                    : new int[] {BossAnims.MOOD_SNORT, BossAnims.MOOD_SNORT, BossAnims.MOOD_SHAKE, BossAnims.MOOD_TAIL_FLICK,
+                            BossAnims.MOOD_TAIL_FLICK, BossAnims.MOOD_SHRUG, BossAnims.MOOD_GLANCE, BossAnims.MOOD_GLANCE,
+                            BossAnims.MOOD_YAWN};
+            this.idleEvent = choices[this.random.nextInt(choices.length)];
+            this.idleEventStart = this.tickCount;
+            this.idleSide = this.random.nextBoolean() ? 1.0f : -1.0f;
+            this.nextIdleEvent = this.tickCount + 50 + this.random.nextInt(90);
+        }
+        if (this.idleEvent == BossAnims.MOOD_SNORT && this.tickCount - this.idleEventStart == 4) {
+            this.snortParticles();
+        }
+    }
+
+    /** Rauch (und je nach Element mehr) aus den Nüstern beim Schnauben. */
+    protected void snortParticles() {
+        Vec3 mouth = this.mouthPosition();
+        Vec3 dir = Vec3.directionFromRotation(10.0f, this.yHeadRot);
+        for (int i = 0; i < 6; i++) {
+            double spread = 0.12;
+            this.level().addParticle(i % 2 == 0 ? net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE
+                            : net.minecraft.core.particles.ParticleTypes.SMOKE,
+                    mouth.x, mouth.y + 0.4, mouth.z,
+                    dir.x * 0.25 + (this.random.nextDouble() - 0.5) * spread, dir.y * 0.25 + 0.03,
+                    dir.z * 0.25 + (this.random.nextDouble() - 0.5) * spread);
+        }
     }
 
     @Override
@@ -505,7 +555,10 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     @Override
     protected void tickHeadTurn(float yBodyRotT) {
-        // Körperdrehung steuert der Boss selbst
+        // Körperdrehung steuert der Boss selbst; auf dem Client folgt der Körper der (geglätteten) Drehung vom Server
+        if (this.level().isClientSide()) {
+            this.yBodyRot = this.getYRot();
+        }
     }
 
     @Override

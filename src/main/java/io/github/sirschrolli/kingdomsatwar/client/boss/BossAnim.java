@@ -42,6 +42,32 @@ public final class BossAnim {
         return 1.0f - smooth((t - t0) / (t1 - t0));
     }
 
+    /** Anteil des Abschlags am ganzen Flügelschlag. */
+    public static final float DOWNSTROKE = 0.42f;
+
+    private static float strokeU(float phase) {
+        float u = phase / Mth.TWO_PI;
+        return u - Mth.floor(u);
+    }
+
+    /** Stellung des Flügels im Schlag: 1 = ganz oben, -1 = ganz unten. Der Abschlag ist schneller als der Aufschlag. */
+    public static float stroke(float phase) {
+        float u = strokeU(phase);
+        return u < DOWNSTROKE ? Mth.cos(Mth.PI * u / DOWNSTROKE) : -Mth.cos(Mth.PI * (u - DOWNSTROKE) / (1.0f - DOWNSTROKE));
+    }
+
+    /** Kraft des Abschlags (0..1..0, nur im Abschlag). */
+    public static float downstroke(float phase) {
+        float u = strokeU(phase);
+        return u < DOWNSTROKE ? Mth.sin(Mth.PI * u / DOWNSTROKE) : 0.0f;
+    }
+
+    /** Aufschlag (0..1..0): dann knickt der Flügel im Handgelenk ein, die Finger legen sich zusammen. */
+    public static float upstroke(float phase) {
+        float u = strokeU(phase);
+        return u < DOWNSTROKE ? 0.0f : Mth.sin(Mth.PI * (u - DOWNSTROKE) / (1.0f - DOWNSTROKE));
+    }
+
     /** Gedämpfte Schwingung nach einem Ereignis (z. B. Nachwippen nach dem Aufprall). */
     public static float wobble(float t, float t0, float freq, float decay) {
         if (t < t0) {
