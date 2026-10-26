@@ -9,7 +9,7 @@ from __future__ import annotations
 import math
 
 from ..geometry import Model
-from ..paint import Ctx, eye_painter, flat_painter, fur_painter, hash01, mix, pick, ramp, rel_y
+from ..paint import Ctx, eye_painter, flat_painter, hash01, mix, pick, ramp, rel_y, soft_fur_painter
 
 PALETTES = {
     "wild_boar": {
@@ -73,7 +73,7 @@ def _stripes(base):
 def _leg(ctx: Ctx):
     if rel_y(ctx) > 0.82 or ctx.face == "bottom":
         return pick(ctx.pal["hoof"], 0.4 + hash01(ctx.u, ctx.v) * 0.2)
-    return fur_painter("fur", None, top_dark=0.0, seed=21)(ctx)
+    return soft_fur_painter("fur", None, top_dark=0.0, seed=21)(ctx)
 
 
 def _snout(ctx: Ctx):
@@ -98,7 +98,7 @@ def _bristle(ctx: Ctx):
 
 def materials(variant: str) -> dict:
     return {
-        "fur": _stripes(fur_painter("fur", "belly", belly_from=0.7, contrast=0.55, streaks=0.22, seed=7)),
+        "fur": _stripes(soft_fur_painter("fur", "belly", belly_from=0.7, contrast=0.26, strokes=0.08, seed=7)),
         "leg": _leg,
         "snout": _snout,
         "tusk": flat_painter("tusk", 0.8, 0.1) if variant != "wild_boar_baby" else (lambda ctx: None),

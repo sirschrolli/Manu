@@ -7,7 +7,9 @@ Knochen-Namen werden in LindwormModel (Java) für die Animationen verwendet.
 from __future__ import annotations
 
 from ..geometry import Model
-from ..paint import Ctx, eye_painter, flat_painter, gradient_painter, ramp, scales_painter
+import math
+
+from ..paint import Ctx, belly_plates, eye_painter, flat_painter, gradient_painter, mix, noise3, pick, ramp, rel_y
 
 PALETTES = {
     "lindworm": {
@@ -80,9 +82,39 @@ def _tail_tip(ctx: Ctx):
     return ctx.pal["horn"][3 if abs(u) < 0.3 else 2]
 
 
+def _scales(ctx: Ctx):
+    """
+    Ruhige Schuppenhaut: feine, versetzte Schuppenreihen mit nur einer Helligkeitsstufe Unterschied, weiche große
+    Flecken, dunkles Rückenband mit hellen Rauten, helle Flecken an den Flanken und Bauchplatten unten.
+    """
+    x, y, z = ctx.world
+    if ctx.face == "bottom":
+        return belly_plates(ctx, "belly")
+    ry = rel_y(ctx) if ctx.face != "top" else 0.0
+    v = 0.52 + (noise3(x * 0.18, y * 0.18, z * 0.18, 72) - 0.5) * 0.16 + (0.5 - ry) * 0.1
+    row = int(math.floor((z if ctx.face == "top" else y) / 1.5))
+    k = int(math.floor((x if ctx.face in ("top", "front", "back") else z) / 2.0 + (row % 2) * 0.5))
+    v += 0.05 if (k + row) % 2 == 0 else -0.03
+    if ctx.face != "top" and (ctx.s == 0 or ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1):
+        v -= 0.06
+    if ctx.face == "top":
+        if abs(x) < 1.6:
+            v -= 0.14                                   # dunkles Rückenband
+            dz = (z % 6.0) - 3.0
+            if abs(x) + abs(dz) * 0.7 < 1.1:
+                return pick(ctx.pal["accent"], 0.62)    # helle Raute
+    elif ry < 0.55 and noise3(x * 0.35, y * 0.35, z * 0.35, 73) > 0.7:
+        return pick(ctx.pal["accent"], 0.5)             # Flankenflecken
+    col = pick(ctx.pal["back"], v)
+    if ry > 0.68 and ctx.face in ("west", "east", "front", "back"):
+        t = (ry - 0.68) / 0.32
+        col = mix(col, pick(ctx.pal["belly"], 0.55), t * 0.85)
+    return col
+
+
 def materials(variant: str) -> dict:
     return {
-        "scales": scales_painter(cell=2.0, seed=71, belly_from=0.68),
+        "scales": _scales,
         "spike": gradient_painter("horn", 0.3, 0.85),
         "horn": gradient_painter("horn", 0.25, 0.9, rings=4),
         "claw": flat_painter("claw", 0.75),

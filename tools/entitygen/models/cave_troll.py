@@ -9,7 +9,7 @@ from __future__ import annotations
 import math
 
 from ..geometry import Model
-from ..paint import Ctx, flat_painter, hash01, noise3, pick, ramp, rel_y, skin_painter
+from ..paint import Ctx, Voronoi3D, flat_painter, hash01, noise3, pick, ramp, rel_y
 
 PALETTES = {
     "cave_troll": {
@@ -64,17 +64,60 @@ def build() -> Model:
     return m
 
 
-def _skin(ctx: Ctx):
-    return skin_painter("skin", "moss", seed=61)(ctx)
+_CRACKS = Voronoi3D(6.5, 69)
 
 
-def _head(ctx: Ctx):
-    col = skin_painter("skin", None, seed=62, scale=0.45)(ctx)
+def _hide(ctx: Ctx, moss: bool, seed: int) -> tuple:
+    """
+    Steinige Trollhaut wie bei Vanilla-Wesen: ruhige Grundfläche mit großen, weichen Helligkeitsflächen,
+    dunkleren Kanten der Quader (wirkt gerundet), wenigen Rissen und kleinen Warzen. Moos nur oben auf
+    Schultern, Rücken und Kopf als zusammenhängende Flecken mit dunklerem Rand.
+    """
+    x, y, z = ctx.world
+    ry = rel_y(ctx) if ctx.face not in ("top", "bottom") else (0.0 if ctx.face == "top" else 1.0)
+    v = 0.54 + (0.5 - ry) * 0.16
+    v += (noise3(x * 0.16, y * 0.16, z * 0.16, seed) - 0.5) * 0.18
+    # Kanten der Fläche dunkler (Umgebungsverdeckung)
+    if ctx.face not in ("top",):
+        if ctx.s == 0 or ctx.s == ctx.w - 1:
+            v -= 0.07
+        if ctx.t == ctx.h - 1:
+            v -= 0.08
+    val, edge = _CRACKS(x, y, z)
+    if edge < 0.09:
+        v -= 0.13
+    # vereinzelte Warzen: heller Punkt mit Schatten darunter
+    if hash01(ctx.u, ctx.v, seed) > 0.975:
+        v += 0.14
+    elif hash01(ctx.u, ctx.v - 1, seed) > 0.975:
+        v -= 0.1
+    col = pick(ctx.pal["skin"], v)
+    if moss and ctx.face in ("top", "back", "west", "east") and ry < 0.45:
+        m = noise3(x * 0.22, y * 0.22, z * 0.22, seed + 7) + (0.45 - ry) * 0.35
+        if m > 0.7:
+            return pick(ctx.pal["moss"], 0.5 + (noise3(x * 0.6, y * 0.6, z * 0.6, seed + 8) - 0.5) * 0.3)
+        if m > 0.66:
+            return pick(ctx.pal["moss"], 0.2)
     return col
 
 
+def _skin(ctx: Ctx):
+    return _hide(ctx, True, 61)
+
+
+def _head(ctx: Ctx):
+    # Gesicht: dunkle Mundlinie über dem Unterkiefer, Nase etwas heller
+    if ctx.cube.size == (3, 4, 3):
+        return pick(ctx.pal["skin"], 0.62 - (0.1 if ctx.t == ctx.h - 1 else 0.0))
+    if ctx.cube.size == (7, 2, 4) and ctx.face == "front" and ctx.t == 0:
+        return pick(ctx.pal["skin"], 0.18)
+    if ctx.cube.size == (9, 2, 2) and ctx.face in ("bottom",):
+        return pick(ctx.pal["skin"], 0.22)
+    return _hide(ctx, ctx.face == "top", 62)
+
+
 def _arm(ctx: Ctx):
-    return skin_painter("skin", "moss", seed=63)(ctx)
+    return _hide(ctx, True, 63)
 
 
 def _hand(ctx: Ctx):
@@ -84,7 +127,7 @@ def _hand(ctx: Ctx):
             return pick(ctx.pal["skin"], 0.25)
         if ctx.face == "front" and ctx.t == ctx.h - 1:
             return pick(ctx.pal["nail"], 0.6)
-    return skin_painter("skin", None, seed=64)(ctx)
+    return _hide(ctx, False, 64)
 
 
 def _leg(ctx: Ctx):
@@ -93,7 +136,7 @@ def _leg(ctx: Ctx):
         if ctx.face == "front" and ctx.s % 2 == 0:
             return pick(ctx.pal["skin"], 0.28)
         return pick(ctx.pal["skin"], 0.4)
-    return skin_painter("skin", "moss", seed=65)(ctx)
+    return _hide(ctx, False, 65)
 
 
 def _cloth(ctx: Ctx):

@@ -87,6 +87,7 @@ final class Showcase {
                 case "eggs" -> eggs(steps);
                 case "equipment" -> equipment(steps);
                 case "armor" -> armor(steps);
+                case "mobclose" -> mobClose(steps);
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
@@ -635,7 +636,52 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
-    /** Rüstungen auf Rüstungsständern (vorne und hinten), Drachen mit Panzer und Waffen in der Hand. */
+    /** Nahaufnahmen einzelner Wesen (schräg von vorn, bei Tag) – zum Beurteilen von Modell und Textur. */
+    private static void mobClose(Deque<Step> steps) {
+        int oz = 260;
+        record Shot(String name, net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob> type,
+                    double dist, double dy, java.util.function.Consumer<net.minecraft.world.entity.Mob> setup) { }
+        List<Shot> shots = List.of(
+                new Shot("troll", ModEntities.CAVE_TROLL.get(), 5.5, 1.2, m -> { }),
+                new Shot("lindworm", ModEntities.LINDWORM.get(), 6.5, 1.0, m -> { }),
+                new Shot("boar", ModEntities.WILD_BOAR.get(), 3.2, 0.2, m -> { }),
+                new Shot("deer", ModEntities.DEER.get(), 4.2, 0.6, m -> ((io.github.sirschrolli.kingdomsatwar.entity.creature.DeerEntity) m).setStag(true)),
+                new Shot("goose", ModEntities.GOOSE.get(), 2.4, -0.2, m -> { }),
+                new Shot("wisp", ModEntities.WILL_O_WISP.get(), 2.6, 0.4, m -> m.setNoGravity(true)),
+                new Shot("vineling", ModEntities.VINELING.get(), 3.2, 0.3, m -> { }),
+                new Shot("stalker", ModEntities.SHADE_STALKER.get(), 3.8, 0.9, m -> { }),
+                new Shot("crawler", ModEntities.CRYSTAL_CRAWLER.get(), 3.0, 0.2, m -> { }),
+                new Shot("moonstag", ModEntities.MOON_STAG.get(), 4.2, 0.6, m -> { }),
+                new Shot("moth", ModEntities.GLIMMER_MOTH.get(), 2.0, 0.0, m -> m.setNoGravity(true)),
+                new Shot("umbrer", ModEntities.UMBRER.get(), 3.0, 0.4, m -> { }),
+                new Shot("umbrer_guard", ModEntities.UMBRER_GUARD.get(), 3.0, 0.4, m -> { }),
+                new Shot("bandit", ModEntities.BANDIT.get(), 3.0, 0.4, m -> { }),
+                new Shot("bandit_archer", ModEntities.BANDIT_ARCHER.get(), 3.0, 0.4, m -> { }));
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-6, ground - 1, oz - 10), new BlockPos(shots.size() * 12 + 6, ground - 1, oz + 10),
+                    Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 10), new BlockPos(shots.size() * 12 + 6, ground + 8, oz + 10),
+                    Blocks.AIR.defaultBlockState());
+            for (int i = 0; i < shots.size(); i++) {
+                Shot s = shots.get(i);
+                spawnCreature(level, s.type(), i * 12, oz, 0, m -> s.setup().accept(m));
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        for (int i = 0; i < shots.size(); i++) {
+            Shot s = shots.get(i);
+            double x = i * 12 + 0.5;
+            steps.add(tp(x + s.dist() * 0.45, s.dy(), oz + 0.5 + s.dist(), 155, 8));
+            steps.add(Step.waitForChunks(200));
+            steps.add(Step.waitTicks(i == 0 ? 80 : 25));
+            steps.add(Step.screenshot("mob_" + s.name()));
+        }
+        steps.add(Step.hud(true));
+    }
+
     /**
      * Alle Rüstungs-Sätze auf Rüstungsständern (mit passender Waffe) und als Baby-Zombies (eigene Baby-Textur):
      * Gesamtansicht, drei Nahaufnahmen von vorn, Rückseite und die Babys.
@@ -727,6 +773,7 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
+    /** Rüstungen auf Rüstungsständern (vorne und hinten), Drachen mit Panzer und Waffen in der Hand. */
     private static void equipment(Deque<Step> steps) {
         int oz = 140;
         steps.add(Step.server(level -> {

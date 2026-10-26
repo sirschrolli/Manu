@@ -338,6 +338,31 @@ def fur_painter(back: str = "fur", belly: str | None = "belly", belly_from: floa
     return paint
 
 
+def soft_fur_painter(back: str = "fur", belly: str | None = "belly", belly_from: float = 0.62, scale: float = 0.28,
+                     contrast: float = 0.24, top_dark: float = 0.12, seed: int = 5, strokes: float = 0.07) -> Painter:
+    """
+    Ruhiges Fell wie bei Vanilla-Tieren: große, weiche Helligkeitsflächen, kurze senkrechte Haarstriche mit nur
+    einer Stufe Unterschied, dunklere Flächenkanten (wirkt gerundet), Rücken dunkler und Bauch heller.
+    """
+
+    def paint(ctx: Ctx) -> RGBA:
+        x, y, z = ctx.world
+        n = noise3(x * scale, y * scale, z * scale, seed)
+        col_key = (int(math.floor(x)), int(math.floor(z)))
+        strand = hash01(col_key[0], int(math.floor(y * 0.5 + hash01(col_key[0], col_key[1], seed) * 2.0)), col_key[1], seed)
+        ry = rel_y(ctx) if ctx.face not in ("top", "bottom") else (0.0 if ctx.face == "top" else 1.0)
+        v = 0.54 + (n - 0.5) * contrast + (strand - 0.5) * strokes - (1.0 - ry) * top_dark
+        if ctx.face != "top" and (ctx.s == 0 or ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1):
+            v -= 0.06
+        col = pick(ctx.pal[back], v)
+        if belly is not None and (ctx.face == "bottom" or (ry > belly_from and ctx.face in ("west", "east", "front", "back"))):
+            t = 1.0 if ctx.face == "bottom" else min(1.0, (ry - belly_from) / max(1e-3, 1.0 - belly_from) * 1.4)
+            col = mix(col, pick(ctx.pal[belly], 0.55 + (n - 0.5) * 0.15), t)
+        return col
+
+    return paint
+
+
 def feather_painter(key: str = "feather", rows: float = 1.6, seed: int = 9, tip: str | None = None) -> Painter:
     """Federkleid: versetzte Reihen kleiner Bögen mit hellen Federkanten."""
 

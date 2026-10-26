@@ -7,7 +7,7 @@ Knochen-Namen werden in DeerModel (Java) für die Animationen verwendet.
 from __future__ import annotations
 
 from ..geometry import Model
-from ..paint import Ctx, eye_painter, fur_painter, hash01, mix, noise3, pick, ramp, rel_y
+from ..paint import Ctx, eye_painter, hash01, mix, noise3, pick, ramp, rel_y, soft_fur_painter
 
 PALETTES = {
     "deer": {
@@ -89,7 +89,7 @@ def _spots(base):
 
 
 def _body(ctx: Ctx):
-    base = _spots(fur_painter("fur", "belly", belly_from=0.72, contrast=0.35, streaks=0.12, top_dark=0.16, seed=31))
+    base = _spots(soft_fur_painter("fur", "belly", belly_from=0.72, contrast=0.24, strokes=0.07, top_dark=0.16, seed=31))
     col = base(ctx)
     # weißer Spiegel am Hinterteil
     if ctx.face == "back" and ctx.cube.size[2] >= 14 and rel_y(ctx) < 0.7:
@@ -98,7 +98,7 @@ def _body(ctx: Ctx):
 
 
 def _neck(ctx: Ctx):
-    col = fur_painter("fur", "belly", belly_from=0.55, contrast=0.3, streaks=0.1, top_dark=0.1, seed=32)(ctx)
+    col = soft_fur_painter("fur", "belly", belly_from=0.55, contrast=0.22, strokes=0.06, top_dark=0.1, seed=32)(ctx)
     # helle Kehle
     if ctx.face == "bottom":
         return pick(ctx.pal["white"], 0.6)
@@ -110,7 +110,7 @@ def _muzzle(ctx: Ctx):
         return pick(ctx.pal["nose"], 0.25 if ctx.t == 0 else 0.4)
     if ctx.face == "bottom":
         return pick(ctx.pal["white"], 0.6)
-    return fur_painter("fur", None, contrast=0.2, top_dark=0.0, seed=33)(ctx)
+    return soft_fur_painter("fur", None, contrast=0.18, top_dark=0.0, seed=33)(ctx)
 
 
 def _ear(ctx: Ctx):
@@ -125,7 +125,7 @@ def _leg(ctx: Ctx):
         return pick(ctx.pal["hoof"], 0.35)
     if ry > 0.55:
         return pick(ctx.pal["fur"], 0.42 + hash01(ctx.u, ctx.v) * 0.08)
-    return fur_painter("fur", None, contrast=0.25, top_dark=0.0, seed=34)(ctx)
+    return soft_fur_painter("fur", None, contrast=0.2, top_dark=0.0, seed=34)(ctx)
 
 
 def _antler(ctx: Ctx):
