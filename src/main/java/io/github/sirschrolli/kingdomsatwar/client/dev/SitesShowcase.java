@@ -3,11 +3,15 @@ package io.github.sirschrolli.kingdomsatwar.client.dev;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
+import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSitePiece;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure;
 import java.util.Deque;
 import java.util.Locale;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -18,6 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 /** Vorführung der kleineren Bauwerke der Schattenwelt: jedes wird auf echtem Gelände gebaut und von zwei Seiten gezeigt. */
 final class SitesShowcase {
@@ -48,20 +54,67 @@ final class SitesShowcase {
                 place(shadow, kind, spot[0], spot[1], c);
             }));
             steps.add(Step.until(() -> c[3] != 0, 3000));
-            double[][] views = switch (kind) {
-                case TEMPLE -> new double[][] {{-24, 14, -30, 0, 8, 0}, {20, 10, 34, 0, 8, 6}, {0, 4, -6, 0, 5, 14}, {6, -2, 6, -3, -3, 9}};
-                case MINE -> new double[][] {{-14, 10, -16, 0, 4, 0}, {4, -24, -3, -6, -24, 3}, {12, -26, 0, 22, -25.5, 0},
-                        {-24, -26, 1, -30, -25, -1}};
-                case LIGHTHOUSE -> new double[][] {{20, 8, 34, 0, 16, 0}, {14, 30, -12, 0, 30, 0}, {-8, 3, -17, -8, 2, -5}, {10, 4, 26, 0, 10, 4}};
-                case RUIN -> new double[][] {{-12, 6, -13, -1, 1, 1}, {11, 5, 11, -2, 1, 0}, {0, 13, -4, 0, 0, 1}};
-            };
-            int n = 0;
-            for (double[] v : views) {
-                steps.add(at(c, v));
-                steps.add(Step.waitTicks(n == 0 ? 160 : 40));
-                steps.add(Step.waitForChunks(1500));
-                steps.add(Step.screenshot("site_" + kind.id() + "_" + n++));
+            addViews(steps, kind, c, "site_");
+        }
+    }
+
+    /**
+     * Echte Weltgenerierung: von einem festen Punkt aus das nächste Bauwerk jeder Art suchen (wie /locate), seine Chunks
+     * vom Weltgenerator vollständig erzeugen lassen und es aus denselben Blickwinkeln zeigen – gedreht wie das Bauwerk.
+     */
+    static void siteWorld(Deque<Step> steps) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        for (ShadowSiteStructure.Kind kind : ShadowSiteStructure.Kind.values()) {
+            double[] c = new double[5];
+            steps.add(Step.server(level -> locateAndGenerate(ShadowShowcase.shadow(level), kind, c)));
+            steps.add(Step.until(() -> c[3] != 0, 6000));
+            addViews(steps, kind, c, "world_");
+        }
+    }
+
+    private static void locateAndGenerate(ServerLevel shadow, ShadowSiteStructure.Kind kind, double[] c) {
+        long started = System.currentTimeMillis();
+        Holder<Structure> holder = shadow.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ModStructures.shadowSite(kind));
+        var found = shadow.getChunkSource().getGenerator().findNearestMapStructure(shadow, HolderSet.direct(holder),
+                new BlockPos(600, 80, 600), 100, false);
+        StructureStart start = found == null ? null : shadow.getChunk(ChunkPos.containing(found.getFirst()).x(),
+                ChunkPos.containing(found.getFirst()).z(), ChunkStatus.STRUCTURE_STARTS, true).getStartForStructure(holder.value());
+        if (start == null || !start.isValid() || !(start.getPieces().getFirst() instanceof ShadowSitePiece piece)) {
+            KingdomsAtWar.LOGGER.info("[Showcase] {} nicht gefunden", kind.id());
+            c[3] = -1;
+            return;
+        }
+        BoundingBox box = piece.getBoundingBox();
+        for (int cx = (box.minX() >> 4) - 1; cx <= (box.maxX() >> 4) + 1; cx++) {
+            for (int cz = (box.minZ() >> 4) - 1; cz <= (box.maxZ() >> 4) + 1; cz++) {
+                shadow.getChunk(cx, cz, ChunkStatus.FULL, true);
             }
+        }
+        BlockPos origin = piece.origin();
+        c[0] = origin.getX() + 0.5;
+        c[1] = origin.getZ() + 0.5;
+        c[2] = origin.getY();
+        c[4] = piece.rotation().ordinal();
+        c[3] = 1;
+        KingdomsAtWar.LOGGER.info("[Showcase] {} von der Welt erzeugt bei {} ({}), {} ms", kind.id(), origin, piece.rotation(),
+                System.currentTimeMillis() - started);
+    }
+
+    private static void addViews(Deque<Step> steps, ShadowSiteStructure.Kind kind, double[] c, String prefix) {
+        double[][] views = switch (kind) {
+            case TEMPLE -> new double[][] {{-24, 14, -30, 0, 8, 0}, {20, 10, 34, 0, 8, 6}, {0, 4, -6, 0, 5, 14}, {6, -2, 6, -3, -3, 9}};
+            case MINE -> new double[][] {{-14, 10, -16, 0, 4, 0}, {4, -24, -3, -6, -24, 3}, {12, -26, 0, 22, -25.5, 0},
+                    {-24, -26, 1, -30, -25, -1}};
+            case LIGHTHOUSE -> new double[][] {{20, 8, 34, 0, 16, 0}, {14, 30, -12, 0, 30, 0}, {-8, 3, -17, -8, 2, -5}, {10, 4, 26, 0, 10, 4}};
+            case RUIN -> new double[][] {{-12, 6, -13, -1, 1, 1}, {11, 5, 11, -2, 1, 0}, {0, 13, -4, 0, 0, 1}};
+        };
+        int n = 0;
+        for (double[] v : views) {
+            steps.add(at(c, v));
+            steps.add(Step.waitTicks(n == 0 ? 160 : 40));
+            steps.add(Step.waitForChunks(1500));
+            steps.add(Step.screenshot(prefix + kind.id() + "_" + n++));
         }
     }
 
@@ -131,6 +184,16 @@ final class SitesShowcase {
         KingdomsAtWar.LOGGER.info("[Showcase] {} gebaut bei {}", kind.id(), origin);
     }
 
+    /** Wie {@code BlockPos.rotate}: lokale Lage (x, z) in die Drehung des Bauwerks bringen. */
+    private static double[] turn(double x, double z, Rotation rotation) {
+        return switch (rotation) {
+            case NONE -> new double[] {x, z};
+            case CLOCKWISE_90 -> new double[] {-z, x};
+            case CLOCKWISE_180 -> new double[] {-x, -z};
+            case COUNTERCLOCKWISE_90 -> new double[] {z, -x};
+        };
+    }
+
     /** Nur für die Vorführung: Bäume rund um den Bauplatz entfernen, damit die Kamera freie Sicht auf das Bauwerk hat. */
     private static void clearTrees(ServerLevel shadow, int sx, int sz, int radius) {
         for (int cx = (sx - radius) >> 4; cx <= (sx + radius) >> 4; cx++) {
@@ -156,12 +219,18 @@ final class SitesShowcase {
 
     private static Step at(double[] c, double[] v) {
         return Step.once(minecraft -> {
-            double dx = v[0];
+            if (c[3] < 0) {
+                return;
+            }
+            Rotation rotation = c.length > 4 ? Rotation.values()[(int) c[4]] : Rotation.NONE;
+            double[] eye = turn(v[0], v[2], rotation);
+            double[] look = turn(v[3], v[5], rotation);
+            double dx = eye[0];
             double dy = v[1];
-            double dz = v[2];
-            double lx = v[3] - dx;
+            double dz = eye[1];
+            double lx = look[0] - dx;
             double ly = v[4] - (dy + 1.62);
-            double lz = v[5] - dz;
+            double lz = look[1] - dz;
             float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
             float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
             minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f",

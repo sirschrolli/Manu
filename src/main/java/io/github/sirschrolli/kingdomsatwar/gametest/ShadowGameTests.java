@@ -278,8 +278,11 @@ final class ShadowGameTests {
         for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.values()) {
             helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE)
                     .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.shadowSite(kind)).isPresent(), "Bauwerk fehlt: " + kind.id());
-            helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE_SET)
-                    .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.shadowSiteSet(kind)).isPresent(), "Gruppe fehlt: " + kind.id());
+            var sites = registries.lookupOrThrow(Registries.STRUCTURE_SET)
+                    .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_SITES_SET);
+            helper.assertTrue(sites.isPresent() && sites.get().value().structures().stream()
+                    .anyMatch(entry -> entry.structure().is(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.shadowSite(kind))),
+                    "Nicht in der Gruppe der Bauwerke: " + kind.id());
             offset += 160;
             BlockPos origin = base.offset(2000 + offset, kind == io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.MINE ? 40 : 0, 0);
             var piece = new io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSitePiece(kind, origin,

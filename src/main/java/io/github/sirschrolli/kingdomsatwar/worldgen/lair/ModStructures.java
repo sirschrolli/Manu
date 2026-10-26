@@ -69,9 +69,11 @@ public final class ModStructures {
         return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id(kind.id()));
     }
 
-    public static ResourceKey<StructureSet> shadowSiteSet(io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind kind) {
-        return ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id(kind.id() + "s"));
-    }
+    /**
+     * Alle kleineren Bauwerke der Schattenwelt teilen sich eine Gruppe: je Feld der Verteilung entsteht höchstens eines
+     * (passt die gewürfelte Art nicht ins Gelände, wird die nächste versucht) – so überschneiden sie sich nie.
+     */
+    public static final ResourceKey<StructureSet> SHADOW_SITES_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("shadow_sites"));
 
     /** Biome, Abstand (Chunks), Mindestabstand und Startwert je Art. */
     private static TagKey<Biome> siteBiomes(io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind kind) {
@@ -83,12 +85,11 @@ public final class ModStructures {
         };
     }
 
-    private static int[] siteSpacing(io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind kind) {
+    /** Gewicht der Art beim Würfeln (Leuchttürme etwas öfter, weil sie nur an der Küste passen). */
+    private static int siteWeight(io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind kind) {
         return switch (kind) {
-            case TEMPLE -> new int[] {30, 12, 61_442_917};
-            case MINE -> new int[] {26, 10, 88_204_331};
-            case LIGHTHOUSE -> new int[] {14, 5, 37_710_559};
-            case RUIN -> new int[] {18, 7, 19_335_871};
+            case TEMPLE, MINE, RUIN -> 3;
+            case LIGHTHOUSE -> 4;
         };
     }
 
@@ -172,12 +173,14 @@ public final class ModStructures {
         context.register(UMBRER_VILLAGES, new StructureSet(structures.getOrThrow(UMBRER_VILLAGE_STRUCTURE),
                 new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 9,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 73_419_211)));
+        // Felder von 14 Chunks, mindestens 9 Chunks zwischen zwei Bauwerken (weiter, als zwei Bauplätze reichen)
+        java.util.List<StructureSet.StructureSelectionEntry> sites = new java.util.ArrayList<>();
         for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.values()) {
-            int[] spread = siteSpacing(kind);
-            context.register(shadowSiteSet(kind), new StructureSet(structures.getOrThrow(shadowSite(kind)),
-                    new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(spread[0], spread[1],
-                            net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, spread[2])));
+            sites.add(StructureSet.entry(structures.getOrThrow(shadowSite(kind)), siteWeight(kind)));
         }
+        context.register(SHADOW_SITES_SET, new StructureSet(sites,
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(14, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_442_917)));
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));

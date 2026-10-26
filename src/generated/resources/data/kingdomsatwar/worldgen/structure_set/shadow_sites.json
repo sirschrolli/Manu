@@ -1,0 +1,26 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 61442917,
+    "separation": 8,
+    "spacing": 14
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:moon_temple",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:crystal_mine",
+      "weight": 3
+    },
+    {
+      "structure": "kingdomsatwar:lighthouse",
+      "weight": 4
+    },
+    {
+      "structure": "kingdomsatwar:old_world_ruin",
+      "weight": 3
+    }
+  ]
+}
