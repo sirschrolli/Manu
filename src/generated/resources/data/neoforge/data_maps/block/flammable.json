@@ -40,6 +40,18 @@
       "burn_odds": 20,
       "ignite_odds": 5
     },
+    "kingdomsatwar:shadow_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:shadow_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
     "kingdomsatwar:throne": {
       "burn_odds": 20,
       "ignite_odds": 5

@@ -1,5 +1,8 @@
 {
   "values": [
-    "#c:ingots/steel"
+    "#c:ingots/steel",
+    "#c:ingots/moonsilver",
+    "#c:ingots/nightsteel",
+    "#c:ingots/abyssite"
   ]
 }

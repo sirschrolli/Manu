@@ -72,6 +72,7 @@ public final class ModBiomes {
         context.register(RUGGED_WILDS, ruggedWilds());
         context.register(STORM_CLIFFS, stormCliffs());
         context.register(ABYSSAL_GROTTO, abyssalGrotto());
+        io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.bootstrap(context);
     }
 
     /**

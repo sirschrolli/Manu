@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -33,8 +34,25 @@ public final class ShadowGate {
         return false;
     }
 
-    /** Ziel einer Reise durch das Tor (null: das Tor führt nirgendwohin). */
+    /**
+     * Ziel einer Reise durch das Tor (null: das Tor führt nirgendwohin): vom Siegelkreis auf die Plattform des Gegentors
+     * in der Schattenwelt (beim ersten Mal wird sie gebaut), vom Gegentor zurück an den Siegelkreis.
+     */
     public static @Nullable TeleportTransition destination(ServerLevel level, Entity entity, BlockPos entry) {
-        return null;
+        TeleportTransition.PostTeleportTransition after = TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET);
+        if (level.dimension() == SHADOW_WORLD) {
+            ServerLevel overworld = level.getServer().overworld();
+            BlockPos center = SealState.of(level).center();
+            BlockPos target = center != null ? center.offset(0, 1, 4)
+                    : overworld.getRespawnData().pos();
+            return new TeleportTransition(overworld, Vec3.atBottomCenterOf(target), Vec3.ZERO, 180.0f, 0.0f, after);
+        }
+        ServerLevel shadow = level.getServer().getLevel(SHADOW_WORLD);
+        if (shadow == null) {
+            return null;
+        }
+        BlockPos gate = io.github.sirschrolli.kingdomsatwar.shadow.CounterGate.ensure(shadow, entry);
+        BlockPos arrival = io.github.sirschrolli.kingdomsatwar.shadow.CounterGate.arrival(gate);
+        return new TeleportTransition(shadow, Vec3.atBottomCenterOf(arrival), Vec3.ZERO, 180.0f, 0.0f, after);
     }
 }

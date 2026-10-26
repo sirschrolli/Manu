@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "group": "soul_crystal",
+  "ingredient": "kingdomsatwar:soul_crystal_ore",
+  "result": {
+    "id": "kingdomsatwar:soul_crystal"
+  }
+}

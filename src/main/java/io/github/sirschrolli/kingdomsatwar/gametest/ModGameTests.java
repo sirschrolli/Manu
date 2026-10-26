@@ -157,6 +157,10 @@ public final class ModGameTests {
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SEAL_CIRCLE =
             TEST_FUNCTIONS.register("seal_circle", () -> ModGameTests::sealCircle);
 
+    static {
+        ShadowGameTests.init();   // meldet die Tests der Schattenwelt an
+    }
+
     private ModGameTests() {}
 
     /** Wird nur auf dem Test-Server bzw. in der Entwicklungsumgebung ausgelöst. */
@@ -177,6 +181,7 @@ public final class ModGameTests {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
+        ShadowGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

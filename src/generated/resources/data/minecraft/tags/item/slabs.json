@@ -23,6 +23,10 @@
     "kingdomsatwar:stormstone_slab",
     "kingdomsatwar:abyssal_stone_slab",
     "kingdomsatwar:sealstone_slab",
-    "kingdomsatwar:sealstone_brick_slab"
+    "kingdomsatwar:sealstone_brick_slab",
+    "kingdomsatwar:shadow_stone_slab",
+    "kingdomsatwar:shadow_stone_brick_slab",
+    "kingdomsatwar:polished_shadow_stone_slab",
+    "kingdomsatwar:shadow_plank_slab"
   ]
 }

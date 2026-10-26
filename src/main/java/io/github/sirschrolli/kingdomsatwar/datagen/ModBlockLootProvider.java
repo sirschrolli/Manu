@@ -3,6 +3,10 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import java.util.Set;
 import java.util.stream.Collectors;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
@@ -12,6 +16,13 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -49,11 +60,43 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
 
-        // Aschelande
-        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ASH_BLOCK, ModBlocks.ASH_LAYER, ModBlocks.CINDER_SOIL,
+        // Aschelande (eine Ascheschicht gibt so viele Schichten zurück, wie sie hoch ist)
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ASH_BLOCK, ModBlocks.CINDER_SOIL,
                 ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.CHARRED_LOG, ModBlocks.EMBER_VENT)) {
             dropSelf(block.get());
         }
+        layers(ModBlocks.ASH_LAYER.get());
+
+        // Schattenwelt
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.CRACKED_SHADOW_STONE_BRICKS,
+                ShadowBlocks.CHISELED_SHADOW_STONE, ShadowBlocks.DEEP_SHADOW_STONE, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_SAND,
+                ShadowBlocks.ASH_SNOW_BLOCK, ShadowBlocks.SHADOW_LOG, ShadowBlocks.SHADOW_WOOD, ShadowBlocks.STRIPPED_SHADOW_LOG,
+                ShadowBlocks.STRIPPED_SHADOW_WOOD, ShadowBlocks.NIGHT_CRYSTAL, ShadowBlocks.GLIMMER_MOSS, ShadowBlocks.GHOSTCAP)) {
+            dropSelf(block.get());
+        }
+        layers(ShadowBlocks.ASH_SNOW.get());
+        add(ShadowBlocks.SHADOW_GRASS.get(), block -> createSingleItemTableWithSilkTouch(block, ShadowBlocks.SHADOW_SOIL.get()));
+        add(ShadowBlocks.SHADOW_LEAVES.get(), block -> createLeavesDrops(block, ShadowBlocks.SHADOW_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+        // Schätze der Schattenwelt
+        ore(ShadowBlocks.MOONSILVER_ORE, ShadowItems.RAW_MOONSILVER.get());
+        ore(ShadowBlocks.DEEP_MOONSILVER_ORE, ShadowItems.RAW_MOONSILVER.get());
+        ore(ShadowBlocks.NIGHTSTEEL_ORE, ShadowItems.RAW_NIGHTSTEEL.get());
+        ore(ShadowBlocks.DEEP_NIGHTSTEEL_ORE, ShadowItems.RAW_NIGHTSTEEL.get());
+        ore(ShadowBlocks.SOUL_CRYSTAL_ORE, ShadowItems.SOUL_CRYSTAL.get());
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.MOONSILVER_BLOCK,
+                ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.SOUL_CRYSTAL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK, ShadowBlocks.MOON_LANTERN,
+                ShadowBlocks.SHADOW_SAPLING)) {
+            dropSelf(block.get());
+        }
+        dropPottedContents(ShadowBlocks.POTTED_SHADOW_SAPLING.get());
+        // Drusen: mit Behutsamkeit die Druse, sonst zwei bis vier Splitter (Glück hilft)
+        add(ShadowBlocks.NIGHT_CRYSTAL_CLUSTER.get(), block -> createSilkTouchDispatchTable(block,
+                (net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>) applyExplosionDecay(block,
+                        LootItem.lootTableItem(ShadowItems.NIGHT_CRYSTAL_SHARD.get())
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4)))
+                                .apply(ApplyBonusCount.addOreBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE))))));
+        add(ShadowBlocks.SHADOW_SPROUTS.get(), block -> this.createShearsOnlyDrop(block));
+        add(ShadowBlocks.PALE_GRASS.get(), block -> this.createShearsOnlyDrop(block));
 
         // Frostkessel (Gletschereis nur mit Behutsamkeit, wie Blaueis)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.FROST_CRYSTAL, ModBlocks.FROZEN_SOIL, ModBlocks.ICICLE)) {
@@ -134,6 +177,17 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(flower.get());
             dropPottedContents(pot.get());
         });
+    }
+
+    /** Schichtblock (wie Schnee): so viele Schichten als Gegenstand, wie der Block hoch war. */
+    private void layers(Block block) {
+        add(block, LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool()
+                .setRolls(ContextIntProviders.exactly(1))
+                .add(AlternativesEntry.alternatives(SnowLayerBlock.LAYERS.getPossibleValues(),
+                        layers -> LootItem.lootTableItem(block)
+                                .when(MatchBlock.blockMatches(this.blocks, block,
+                                        StatePropertiesPredicate.Builder.properties().hasProperty(SnowLayerBlock.LAYERS, layers.intValue())))
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(layers))))))));
     }
 
     private void ore(DeferredBlock<? extends Block> ore, Item drop) {

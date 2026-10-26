@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "kingdomsatwar:block/moon_lantern"
+    },
+    "hanging=true": {
+      "model": "kingdomsatwar:block/moon_lantern_hanging"
+    }
+  }
+}

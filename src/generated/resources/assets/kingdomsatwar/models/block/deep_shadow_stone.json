@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/deep_shadow_stone_top",
+    "side": "kingdomsatwar:block/deep_shadow_stone_side"
+  }
+}

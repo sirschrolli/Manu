@@ -68,6 +68,13 @@ public final class ModBlocks {
     static final List<Supplier<? extends ItemLike>> KINGDOM_TAB = new ArrayList<>();
     /** Blöcke der Nest-Biome (Aschelande und später die übrigen fünf). */
     static final List<Supplier<? extends ItemLike>> NATURE_TAB = new ArrayList<>();
+    /** Blöcke der Schattenwelt (siehe {@link ShadowBlocks}). */
+    static final List<Supplier<? extends ItemLike>> SHADOW_TAB = new ArrayList<>();
+
+    /** Inhalt des Schattenwelt-Tabs (Blöcke und Gegenstände, in Reihenfolge). */
+    public static List<Supplier<? extends ItemLike>> shadowTab() {
+        return java.util.Collections.unmodifiableList(SHADOW_TAB);
+    }
 
     private static final List<BuildingSet> BUILDING_SETS_MUTABLE = new ArrayList<>();
     /** Alle Baustoff-Sets (Vollblock, Treppe, Stufe, Mauer). */
@@ -576,7 +583,7 @@ public final class ModBlocks {
     // Hilfsmethoden
     // =====================================================================================
 
-    private static <B extends Block> DeferredBlock<B> blockWithItem(String name,
+    static <B extends Block> DeferredBlock<B> blockWithItem(String name,
             Function<BlockBehaviour.Properties, ? extends B> factory,
             Supplier<BlockBehaviour.Properties> properties,
             UnaryOperator<Item.Properties> itemProperties,
@@ -587,7 +594,7 @@ public final class ModBlocks {
         return block;
     }
 
-    private static <B extends Block> DeferredBlock<B> blockWithItem(String name,
+    static <B extends Block> DeferredBlock<B> blockWithItem(String name,
             Function<BlockBehaviour.Properties, ? extends B> factory,
             UnaryOperator<BlockBehaviour.Properties> properties,
             UnaryOperator<Item.Properties> itemProperties,
@@ -603,10 +610,15 @@ public final class ModBlocks {
     }
 
     private static BuildingSet stoneSet(String name, String variantPrefix, MapColor color, SoundType sound, float hardness) {
+        return stoneSet(name, variantPrefix, color, sound, hardness, BUILDING_TAB);
+    }
+
+    static BuildingSet stoneSet(String name, String variantPrefix, MapColor color, SoundType sound, float hardness,
+            List<Supplier<? extends ItemLike>> tab) {
         return buildingSet(name, variantPrefix,
                 p -> p.mapColor(color).instrument(NoteBlockInstrument.BASEDRUM)
                         .requiresCorrectToolForDrops().strength(hardness, 6.0f).sound(sound),
-                true, BuildingSet.Tool.PICKAXE);
+                true, BuildingSet.Tool.PICKAXE, tab);
     }
 
     private static BuildingSet roofSet(String name, String variantPrefix,
@@ -616,6 +628,12 @@ public final class ModBlocks {
 
     private static BuildingSet buildingSet(String name, String variantPrefix,
             UnaryOperator<BlockBehaviour.Properties> properties, boolean withWall, BuildingSet.Tool tool) {
+        return buildingSet(name, variantPrefix, properties, withWall, tool, BUILDING_TAB);
+    }
+
+    static BuildingSet buildingSet(String name, String variantPrefix,
+            UnaryOperator<BlockBehaviour.Properties> properties, boolean withWall, BuildingSet.Tool tool,
+            List<Supplier<? extends ItemLike>> tab) {
         // Holz-Sets (mit der Axt abzubauen) taugen wie Holzbretter als Brennstoff im Ofen.
         boolean wooden = tool == BuildingSet.Tool.AXE;
         UnaryOperator<Item.Properties> blockFuel = wooden
@@ -624,18 +642,18 @@ public final class ModBlocks {
         UnaryOperator<Item.Properties> slabFuel = wooden
                 ? ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
                 : UnaryOperator.identity();
-        DeferredBlock<Block> base = blockWithItem(name, Block::new, properties, blockFuel, BUILDING_TAB);
+        DeferredBlock<Block> base = blockWithItem(name, Block::new, properties, blockFuel, tab);
         DeferredBlock<StairBlock> stairs = blockWithItem(variantPrefix + "_stairs",
                 p -> new StairBlock(base.get().defaultBlockState(), p),
                 () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
-                blockFuel, BUILDING_TAB);
+                blockFuel, tab);
         DeferredBlock<SlabBlock> slab = blockWithItem(variantPrefix + "_slab", SlabBlock::new,
                 () -> BlockBehaviour.Properties.ofFullCopy(base.get()),
-                slabFuel, BUILDING_TAB);
+                slabFuel, tab);
         DeferredBlock<WallBlock> wall = withWall
                 ? blockWithItem(variantPrefix + "_wall", WallBlock::new,
                         () -> BlockBehaviour.Properties.ofFullCopy(base.get()).forceSolidOn(),
-                        UnaryOperator.identity(), BUILDING_TAB)
+                        UnaryOperator.identity(), tab)
                 : null;
         BuildingSet set = new BuildingSet(name, base, stairs, slab, wall, tool);
         BUILDING_SETS_MUTABLE.add(set);

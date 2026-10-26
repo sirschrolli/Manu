@@ -38,6 +38,8 @@ public final class KingdomsAtWar {
     public KingdomsAtWar(IEventBus modBus, ModContainer container) {
         ModSounds.SOUNDS.register(modBus);
         ModAttachments.ATTACHMENTS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.init();
+        io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.init();
         ModBlocks.BLOCKS.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPONENTS.register(modBus);
         ModItems.ITEMS.register(modBus);

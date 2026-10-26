@@ -6,6 +6,8 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
 import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.data.PackOutput;
@@ -28,6 +30,7 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         bosses();
+        shadowWorld();
         // --- Kreativ-Tabs ---
         // (kurz halten: längere Titel ragen im Kreativ-Inventar über den Rand)
         text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Building", "Kingdoms at War: Bauen");
@@ -331,6 +334,120 @@ public class ModLanguageProvider extends LanguageProvider {
         lore("mead", "The drink of heroes: extra hearts for two minutes", "Der Trank der Helden: Extraherzen für zwei Minuten");
         block(ModBlocks.FEAST, "Feast", "Festmahl");
         lore("feast", "Place it on the table – four hearty servings", "Auf die Tafel stellen – vier üppige Portionen");
+    }
+
+    /** Die Schattenwelt: Biome, Blöcke, Meldungen. */
+    private void shadowWorld() {
+        text("itemGroup.kingdomsatwar.shadow_world", "Kingdoms at War: Shadows", "Kingdoms at War: Schatten");
+        text("block.kingdomsatwar.bed.shadow_world", "No one finds sleep in the Shadow World – but your bed remembers where you wake.",
+                "In der Schattenwelt findet niemand Schlaf – doch dein Bett merkt sich, wo du erwachst.");
+
+        // Biome
+        text("biome.kingdomsatwar.shadow_forest", "Shadow Forest", "Schattenwald");
+        text("biome.kingdomsatwar.pale_wastes", "Pale Wastes", "Bleiche Öde");
+        text("biome.kingdomsatwar.crystal_chasms", "Crystal Chasms", "Kristallschluchten");
+        text("biome.kingdomsatwar.soul_marsh", "Soul Marsh", "Seelensumpf");
+        text("biome.kingdomsatwar.shadow_peaks", "Shadow Peaks", "Schattengipfel");
+        text("biome.kingdomsatwar.glimmer_meadows", "Glimmer Meadows", "Glimmerweiten");
+        text("biome.kingdomsatwar.abyssal_sea", "Abyssal Sea", "Abgrundmeer");
+        text("biome.kingdomsatwar.floating_isles", "Floating Isles", "Schwebende Inseln");
+        text("biome.kingdomsatwar.shadow_depths", "Shadow Depths", "Schattentiefen");
+
+        // Gestein
+        set("shadow_stone", "shadow_stone", "Shadow Stone", "Schattenstein", "Shadow Stone", "Schattenstein");
+        set("shadow_stone_bricks", "shadow_stone_brick", "Shadow Stone Bricks", "Schattensteinziegel", "Shadow Stone Brick",
+                "Schattensteinziegel");
+        set("polished_shadow_stone", "polished_shadow_stone", "Polished Shadow Stone", "Polierter Schattenstein",
+                "Polished Shadow Stone", "Polierte Schattenstein");
+        block(ShadowBlocks.CRACKED_SHADOW_STONE_BRICKS, "Cracked Shadow Stone Bricks", "Rissige Schattensteinziegel");
+        block(ShadowBlocks.CHISELED_SHADOW_STONE, "Chiseled Shadow Stone", "Gemeißelter Schattenstein");
+        block(ShadowBlocks.DEEP_SHADOW_STONE, "Deep Shadow Stone", "Tiefschattenstein");
+
+        // Böden
+        block(ShadowBlocks.SHADOW_SOIL, "Shadow Soil", "Schattenerde");
+        block(ShadowBlocks.SHADOW_GRASS, "Shadow Grass Block", "Schattengrasblock");
+        block(ShadowBlocks.SHADOW_SAND, "Shadow Sand", "Schattensand");
+        block(ShadowBlocks.ASH_SNOW_BLOCK, "Ash Snow Block", "Aschschneeblock");
+        block(ShadowBlocks.ASH_SNOW, "Ash Snow", "Aschschnee");
+
+        // Holz
+        block(ShadowBlocks.SHADOW_LOG, "Shadow Log", "Schattenholzstamm");
+        block(ShadowBlocks.SHADOW_WOOD, "Shadow Wood", "Schattenholz");
+        block(ShadowBlocks.STRIPPED_SHADOW_LOG, "Stripped Shadow Log", "Entrindeter Schattenholzstamm");
+        block(ShadowBlocks.STRIPPED_SHADOW_WOOD, "Stripped Shadow Wood", "Entrindetes Schattenholz");
+        roof("shadow_planks", "shadow_plank", "Shadow Planks", "Schattenholzbretter", "Shadow Wood", "Schattenholz");
+        block(ShadowBlocks.SHADOW_LEAVES, "Shadow Leaves", "Schattenlaub");
+
+        // Licht und Pflanzen
+        block(ShadowBlocks.NIGHT_CRYSTAL, "Night Crystal", "Nachtkristall");
+        block(ShadowBlocks.NIGHT_CRYSTAL_CLUSTER, "Night Crystal Cluster", "Nachtkristalldruse");
+        block(ShadowBlocks.GLIMMER_MOSS, "Glimmer Moss", "Glimmmoos");
+        block(ShadowBlocks.GHOSTCAP, "Ghostcap", "Geisterpilz");
+        block(ShadowBlocks.SHADOW_SPROUTS, "Shadow Sprouts", "Schattenhalme");
+        block(ShadowBlocks.PALE_GRASS, "Pale Grass", "Bleichgras");
+        block(ShadowBlocks.SHADOW_SAPLING, "Shadow Sapling", "Schattensetzling");
+        block(ShadowBlocks.POTTED_SHADOW_SAPLING, "Potted Shadow Sapling", "Schattensetzling im Topf");
+        block(ShadowBlocks.MOON_LANTERN, "Moon Lantern", "Mondlaterne");
+
+        // Erze und Speicherblöcke
+        block(ShadowBlocks.MOONSILVER_ORE, "Moonsilver Ore", "Mondsilbererz");
+        block(ShadowBlocks.DEEP_MOONSILVER_ORE, "Deep Moonsilver Ore", "Tiefes Mondsilbererz");
+        block(ShadowBlocks.NIGHTSTEEL_ORE, "Nightsteel Ore", "Nachtstahlerz");
+        block(ShadowBlocks.DEEP_NIGHTSTEEL_ORE, "Deep Nightsteel Ore", "Tiefes Nachtstahlerz");
+        block(ShadowBlocks.SOUL_CRYSTAL_ORE, "Soul Crystal Ore", "Seelenkristallerz");
+        block(ShadowBlocks.ABYSSITE_ORE, "Abyssite Ore", "Abyssiterz");
+        block(ShadowBlocks.MOONSILVER_BLOCK, "Block of Moonsilver", "Mondsilberblock");
+        block(ShadowBlocks.NIGHTSTEEL_BLOCK, "Block of Nightsteel", "Nachtstahlblock");
+        block(ShadowBlocks.SOUL_CRYSTAL_BLOCK, "Block of Soul Crystal", "Seelenkristallblock");
+        block(ShadowBlocks.ABYSSITE_BLOCK, "Block of Abyssite", "Abyssitblock");
+
+        // Rohstoffe
+        item(ShadowItems.RAW_MOONSILVER, "Raw Moonsilver", "Rohmondsilber");
+        item(ShadowItems.MOONSILVER_INGOT, "Moonsilver Ingot", "Mondsilberbarren");
+        item(ShadowItems.MOONSILVER_NUGGET, "Moonsilver Nugget", "Mondsilberklümpchen");
+        item(ShadowItems.RAW_NIGHTSTEEL, "Raw Nightsteel", "Rohnachtstahl");
+        item(ShadowItems.NIGHTSTEEL_INGOT, "Nightsteel Ingot", "Nachtstahlbarren");
+        item(ShadowItems.SOUL_CRYSTAL, "Soul Crystal", "Seelenkristall");
+        lore("soul_crystal", "Something whispers inside it", "Darin flüstert etwas");
+        item(ShadowItems.ABYSSITE_SHARD, "Abyssite Shard", "Abyssitsplitter");
+        item(ShadowItems.ABYSSITE_INGOT, "Abyssite Ingot", "Abyssitbarren");
+        item(ShadowItems.NIGHT_CRYSTAL_SHARD, "Night Crystal Shard", "Nachtkristallsplitter");
+        item(ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE, "Smithing Template", "Schmiedevorlage");
+        text("item.kingdomsatwar.smithing_template.abyssite_upgrade.applies_to", "Nightsteel Equipment", "Nachtstahl-Ausrüstung");
+        text("item.kingdomsatwar.smithing_template.abyssite_upgrade.ingredients", "Abyssite Ingot", "Abyssitbarren");
+        text("item.kingdomsatwar.smithing_template.abyssite_upgrade.base_slot_description",
+                "Add nightsteel armor, weapon, or tool", "Nachtstahl-Rüstung, -Waffe oder -Werkzeug hinzufügen");
+        text("item.kingdomsatwar.smithing_template.abyssite_upgrade.additions_slot_description",
+                "Add Abyssite Ingot", "Abyssitbarren hinzufügen");
+
+        // Nachtstahl
+        item(ShadowItems.NIGHTSTEEL_SWORD, "Nightsteel Sword", "Nachtstahlschwert");
+        item(ShadowItems.NIGHTSTEEL_PICKAXE, "Nightsteel Pickaxe", "Nachtstahlspitzhacke");
+        item(ShadowItems.NIGHTSTEEL_AXE, "Nightsteel Axe", "Nachtstahlaxt");
+        item(ShadowItems.NIGHTSTEEL_SHOVEL, "Nightsteel Shovel", "Nachtstahlschaufel");
+        item(ShadowItems.NIGHTSTEEL_HOE, "Nightsteel Hoe", "Nachtstahlhacke");
+        item(ShadowItems.NIGHTSTEEL_HELMET, "Nightsteel Helmet", "Nachtstahlhelm");
+        item(ShadowItems.NIGHTSTEEL_CHESTPLATE, "Nightsteel Chestplate", "Nachtstahlharnisch");
+        item(ShadowItems.NIGHTSTEEL_LEGGINGS, "Nightsteel Leggings", "Nachtstahlbeinschutz");
+        item(ShadowItems.NIGHTSTEEL_BOOTS, "Nightsteel Boots", "Nachtstahlstiefel");
+        lore("nightsteel_helmet", "Lets you see clearly in the Shadow World", "Lässt dich in der Schattenwelt klar sehen");
+
+        // Abyssit
+        item(ShadowItems.ABYSSITE_SWORD, "Abyssite Sword", "Abyssitschwert");
+        item(ShadowItems.ABYSSITE_PICKAXE, "Abyssite Pickaxe", "Abyssitspitzhacke");
+        item(ShadowItems.ABYSSITE_AXE, "Abyssite Axe", "Abyssitaxt");
+        item(ShadowItems.ABYSSITE_SHOVEL, "Abyssite Shovel", "Abyssitschaufel");
+        item(ShadowItems.ABYSSITE_HOE, "Abyssite Hoe", "Abyssithacke");
+        item(ShadowItems.ABYSSITE_HELMET, "Abyssite Helmet", "Abyssithelm");
+        item(ShadowItems.ABYSSITE_CHESTPLATE, "Abyssite Chestplate", "Abyssitharnisch");
+        item(ShadowItems.ABYSSITE_LEGGINGS, "Abyssite Leggings", "Abyssitbeinschutz");
+        item(ShadowItems.ABYSSITE_BOOTS, "Abyssite Boots", "Abyssitstiefel");
+        lore("abyssite_boots", "You never take fall damage", "Du nimmst nie Fallschaden");
+
+        // Mondsilber
+        item(ShadowItems.MOONSILVER_BLADE, "Moonsilver Blade", "Mondsilberklinge");
+        lore("moonsilver_blade", "Strikes shadow creatures and the undead hard", "Trifft Schattenwesen und Untote hart");
+        text(ModItems.loreKey("moonsilver_blade", 2), "Struck foes glow brightly", "Getroffene leuchten hell auf");
     }
 
     private void bosses() {

@@ -22,7 +22,8 @@ public final class SealState {
             DragonType.CODEC.listOf().optionalFieldOf("inserted", List.of()).forGetter(s -> List.copyOf(s.inserted)),
             Codec.BOOL.optionalFieldOf("broken", false).forGetter(s -> s.broken),
             BlockPos.CODEC.optionalFieldOf("center").forGetter(s -> Optional.ofNullable(s.center)),
-            Codec.INT.optionalFieldOf("break_ticks", -1).forGetter(s -> s.breakTicks)
+            Codec.INT.optionalFieldOf("break_ticks", -1).forGetter(s -> s.breakTicks),
+            BlockPos.CODEC.optionalFieldOf("shadow_gate").forGetter(s -> Optional.ofNullable(s.shadowGate))
     ).apply(instance, SealState::new));
 
     private final EnumSet<DragonType> inserted = EnumSet.noneOf(DragonType.class);
@@ -30,16 +31,19 @@ public final class SealState {
     private @Nullable BlockPos center;
     /** Fortschritt des Siegelbruchs in Ticks (-1: läuft nicht). */
     private int breakTicks;
+    /** Mitte des Gegentors in der Schattenwelt (sobald es jemand durchschritten hat). */
+    private @Nullable BlockPos shadowGate;
 
     public SealState() {
-        this(List.of(), false, Optional.empty(), -1);
+        this(List.of(), false, Optional.empty(), -1, Optional.empty());
     }
 
-    private SealState(List<DragonType> inserted, boolean broken, Optional<BlockPos> center, int breakTicks) {
+    private SealState(List<DragonType> inserted, boolean broken, Optional<BlockPos> center, int breakTicks, Optional<BlockPos> shadowGate) {
         this.inserted.addAll(inserted);
         this.broken = broken;
         this.center = center.orElse(null);
         this.breakTicks = breakTicks;
+        this.shadowGate = shadowGate.orElse(null);
     }
 
     public static SealState of(ServerLevel level) {
@@ -93,6 +97,14 @@ public final class SealState {
 
     public void setBreakTicks(int ticks) {
         this.breakTicks = ticks;
+    }
+
+    public @Nullable BlockPos shadowGate() {
+        return this.shadowGate;
+    }
+
+    public void setShadowGate(@Nullable BlockPos pos) {
+        this.shadowGate = pos == null ? null : pos.immutable();
     }
 
     /** Alles zurück auf Anfang (nur für Befehle und Tests). */

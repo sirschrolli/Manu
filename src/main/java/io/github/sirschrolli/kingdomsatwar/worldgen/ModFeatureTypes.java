@@ -16,6 +16,16 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<CastleRuinFeature>> CASTLE_RUIN =
             FEATURE_TYPES.register("castle_ruin", () -> CastleRuinFeature.CODEC);
 
+    // --- Schattenwelt ---
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.ShadowTreeFeature>> SHADOW_TREE =
+            FEATURE_TYPES.register("shadow_tree", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.ShadowTreeFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.CrystalGrowthFeature>> CRYSTAL_GROWTH =
+            FEATURE_TYPES.register("crystal_growth", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.CrystalGrowthFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.RockSpireFeature>> ROCK_SPIRE =
+            FEATURE_TYPES.register("rock_spire", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.RockSpireFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.BoneArchFeature>> BONE_ARCH =
+            FEATURE_TYPES.register("bone_arch", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.BoneArchFeature.CODEC);
+
     public static final DeferredRegister<MapCodec<? extends PlacementModifier>> PLACEMENT_TYPES =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, KingdomsAtWar.MODID);
 

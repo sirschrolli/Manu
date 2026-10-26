@@ -172,6 +172,7 @@ public final class ModWorldgen {
         for (Ruin ruin : STRUCTURES) {
             context.register(ruin.featureKey(), ruin.feature());
         }
+        io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapFeatures(context);
     }
 
     public static void bootstrapPlacedFeatures(BootstrapContext<PlacedFeature> context) {
@@ -210,6 +211,7 @@ public final class ModWorldgen {
                     BiomeFilter.biome());
             context.register(ruin.placedKey(), new PlacedFeature(features.getOrThrow(ruin.featureKey()), placement));
         }
+        io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapPlacedFeatures(context);
     }
 
     /** Biom-Modifikator für das Erscheinen der Banditen. */

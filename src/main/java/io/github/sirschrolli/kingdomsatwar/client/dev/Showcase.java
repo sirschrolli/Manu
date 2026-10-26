@@ -119,6 +119,21 @@ final class Showcase {
                         bossModels(steps, false, DragonType.byId(scene.substring(10)));
                     } else if (scene.startsWith("bossmodelsky_")) {
                         bossModels(steps, true, DragonType.byId(scene.substring(13)));
+                    } else if (scene.startsWith("shadowmap")) {
+                        // shadowmap oder shadowmap_<Kantenlänge>_<Schritt>
+                        String[] parts = scene.split("_");
+                        ShadowShowcase.map(steps, parts.length > 1 ? Integer.parseInt(parts[1]) : 3072,
+                                parts.length > 2 ? Integer.parseInt(parts[2]) : 8);
+                    } else if (scene.equals("shadowtab")) {
+                        ShadowShowcase.tab(steps);
+                    } else if (scene.equals("shadowdisplay")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        ShadowShowcase.display(steps, g);
+                    } else if (scene.equals("shadow")) {
+                        ShadowShowcase.tour(steps, "");
+                    } else if (scene.startsWith("shadow_")) {
+                        ShadowShowcase.tour(steps, scene.substring(7));
                     }
                 }
             }

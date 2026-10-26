@@ -4,6 +4,8 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -30,6 +32,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider registries) {
+        motionBlocking();
         // --- Baublöcke ---
         for (BuildingSet set : ModBlocks.BUILDING_SETS) {
             TagKey<Block> tool = set.tool() == BuildingSet.Tool.AXE ? BlockTags.MINEABLE_WITH_AXE : BlockTags.MINEABLE_WITH_PICKAXE;
@@ -85,6 +88,71 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.SEAL_PLATE, ModBlocks.SHADOW_PORTAL);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.SEAL_MONOLITH, ModBlocks.SEAL_RUNE, ModBlocks.SEAL_INLAY, ModBlocks.SEAL_SOCKET,
                 ModBlocks.SEAL_PLATE, ModBlocks.SHADOW_PORTAL);
+
+        // --- Schattenwelt ---
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ShadowBlocks.CRACKED_SHADOW_STONE_BRICKS, ShadowBlocks.CHISELED_SHADOW_STONE,
+                ShadowBlocks.DEEP_SHADOW_STONE, ShadowBlocks.NIGHT_CRYSTAL, ShadowBlocks.NIGHT_CRYSTAL_CLUSTER);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.SHADOW_SAND,
+                ShadowBlocks.ASH_SNOW_BLOCK, ShadowBlocks.ASH_SNOW);
+        add(BlockTags.MINEABLE_WITH_AXE, ShadowBlocks.SHADOW_LOG, ShadowBlocks.SHADOW_WOOD, ShadowBlocks.STRIPPED_SHADOW_LOG,
+                ShadowBlocks.STRIPPED_SHADOW_WOOD);
+        add(BlockTags.MINEABLE_WITH_HOE, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.GLIMMER_MOSS);
+        add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS,
+                ShadowBlocks.GHOSTCAP);
+        add(ModTags.Blocks.SHADOW_LOGS, ShadowBlocks.SHADOW_LOG, ShadowBlocks.SHADOW_WOOD, ShadowBlocks.STRIPPED_SHADOW_LOG,
+                ShadowBlocks.STRIPPED_SHADOW_WOOD);
+        tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.SHADOW_LOGS);
+        tag(BlockTags.LOGS).addTag(ModTags.Blocks.SHADOW_LOGS);
+        add(BlockItemTags.PLANKS.block(), ShadowBlocks.SHADOW_PLANKS.base());
+        add(BlockItemTags.WOODEN_STAIRS.block(), ShadowBlocks.SHADOW_PLANKS.stairs());
+        add(BlockItemTags.WOODEN_SLABS.block(), ShadowBlocks.SHADOW_PLANKS.slab());
+        add(BlockTags.LEAVES, ShadowBlocks.SHADOW_LEAVES);
+        add(BlockItemTags.DIRT.block(), ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS);
+        add(BlockItemTags.SAND.block(), ShadowBlocks.SHADOW_SAND);
+        add(BlockItemTags.SMELTS_TO_GLASS.block(), ShadowBlocks.SHADOW_SAND);
+        add(BlockItemTags.MOSS_BLOCKS.block(), ShadowBlocks.GLIMMER_MOSS);
+        add(BlockTags.SUPPORTS_VEGETATION, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
+        add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
+        add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
+        add(BlockTags.REPLACEABLE_BY_MUSHROOMS, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
+        add(BlockTags.ENDERMAN_HOLDABLE, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.SHADOW_SAND,
+                ShadowBlocks.GHOSTCAP);
+        add(BlockTags.CRYSTAL_SOUND_BLOCKS, ShadowBlocks.NIGHT_CRYSTAL);
+        add(BlockTags.VIBRATION_RESONATORS, ShadowBlocks.NIGHT_CRYSTAL);
+        tag(ModTags.Blocks.SHADOW_STONE_ORE_REPLACEABLES).add(ShadowBlocks.SHADOW_STONE.base().key());
+        tag(ModTags.Blocks.DEEP_SHADOW_STONE_ORE_REPLACEABLES).add(ShadowBlocks.DEEP_SHADOW_STONE.key());
+        add(BlockTags.BASE_STONE_OVERWORLD, ShadowBlocks.DEEP_SHADOW_STONE);
+        // Schätze der Schattenwelt
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ShadowBlocks.MOONSILVER_ORE, ShadowBlocks.DEEP_MOONSILVER_ORE, ShadowBlocks.NIGHTSTEEL_ORE,
+                ShadowBlocks.DEEP_NIGHTSTEEL_ORE, ShadowBlocks.SOUL_CRYSTAL_ORE, ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.MOONSILVER_BLOCK,
+                ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.SOUL_CRYSTAL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK, ShadowBlocks.MOON_LANTERN);
+        add(BlockTags.NEEDS_STONE_TOOL, ShadowBlocks.MOONSILVER_ORE, ShadowBlocks.DEEP_MOONSILVER_ORE, ShadowBlocks.MOONSILVER_BLOCK);
+        add(BlockTags.NEEDS_IRON_TOOL, ShadowBlocks.NIGHTSTEEL_ORE, ShadowBlocks.DEEP_NIGHTSTEEL_ORE, ShadowBlocks.SOUL_CRYSTAL_ORE,
+                ShadowBlocks.SOUL_CRYSTAL_BLOCK);
+        add(BlockTags.NEEDS_DIAMOND_TOOL, ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK);
+        add(ModTags.Blocks.ORES_MOONSILVER, ShadowBlocks.MOONSILVER_ORE, ShadowBlocks.DEEP_MOONSILVER_ORE);
+        add(ModTags.Blocks.ORES_NIGHTSTEEL, ShadowBlocks.NIGHTSTEEL_ORE, ShadowBlocks.DEEP_NIGHTSTEEL_ORE);
+        add(ModTags.Blocks.ORES_SOUL_CRYSTAL, ShadowBlocks.SOUL_CRYSTAL_ORE);
+        add(ModTags.Blocks.ORES_ABYSSITE, ShadowBlocks.ABYSSITE_ORE);
+        for (TagKey<Block> oreTag : List.of(ModTags.Blocks.ORES_MOONSILVER, ModTags.Blocks.ORES_NIGHTSTEEL, ModTags.Blocks.ORES_SOUL_CRYSTAL,
+                ModTags.Blocks.ORES_ABYSSITE)) {
+            tag(Tags.BlockItems.ORES.block()).addTag(oreTag);
+            tag(BlockItemTags.ORES.block()).addTag(oreTag);
+        }
+        add(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER, ShadowBlocks.MOONSILVER_BLOCK);
+        add(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ShadowBlocks.NIGHTSTEEL_BLOCK);
+        add(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ShadowBlocks.SOUL_CRYSTAL_BLOCK);
+        add(ModTags.Blocks.STORAGE_BLOCKS_ABYSSITE, ShadowBlocks.ABYSSITE_BLOCK);
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL).addTag(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL)
+                .addTag(ModTags.Blocks.STORAGE_BLOCKS_ABYSSITE);
+        add(BlockTags.BEACON_BASE_BLOCKS, ShadowBlocks.MOONSILVER_BLOCK, ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK);
+        add(BlockTags.DRAGON_IMMUNE, ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.ABYSSITE_BLOCK);
+        add(BlockTags.WITHER_IMMUNE, ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.ABYSSITE_BLOCK);
+        add(BlockItemTags.SAPLINGS.block(), ShadowBlocks.SHADOW_SAPLING);
+        add(BlockTags.FLOWER_POTS, ShadowBlocks.POTTED_SHADOW_SAPLING);
+        add(BlockItemTags.LANTERNS.block(), ShadowBlocks.MOON_LANTERN);
+        tag(BlockTags.BASE_STONE_OVERWORLD).add(ShadowBlocks.SHADOW_STONE.base().key());
 
         // --- Einrichtung ---
         add(Tags.BlockItems.GLASS_BLOCKS.block(), ModBlocks.LEADED_GLASS);
@@ -166,6 +234,30 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             add(BlockItemTags.SMALL_FLOWERS.block(), flower);
             add(BlockTags.FLOWER_POTS, pot);
         });
+    }
+
+    /**
+     * Seit 26.3 entscheiden Tags, welche Blöcke Bewegung aufhalten: Höhenkarten (worauf Bäume und Pflanzen gesetzt
+     * werden), Ersticken, Wasserlauf, Teleport-Ziele. Alle festen Blöcke der Mod (außer Laub, das über
+     * {@code #leaves} dazugehört) kommen deshalb in {@code #blocks_motion_no_leaves} – genau die, die nach der alten
+     * Regel als fest galten.
+     */
+    private void motionBlocking() {
+        TagAppender<Block> appender = tag(BlockTags.BLOCKS_MOTION_NO_LEAVES);
+        int count = 0;
+        for (var entry : ModBlocks.BLOCKS.getEntries()) {
+            Block block = entry.get();
+            if (block instanceof net.minecraft.world.level.block.LeavesBlock) {
+                continue;
+            }
+            net.minecraft.world.level.block.state.BlockState state = block.defaultBlockState();
+            state.initCache();
+            if (state.isSolid()) {
+                appender.add(entry.getKey());
+                count++;
+            }
+        }
+        KingdomsAtWar.LOGGER.info("[Datagen] {} feste Blöcke in #blocks_motion_no_leaves", count);
     }
 
     @SafeVarargs

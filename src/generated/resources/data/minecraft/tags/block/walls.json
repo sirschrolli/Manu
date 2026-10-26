@@ -14,6 +14,9 @@
     "kingdomsatwar:stormstone_wall",
     "kingdomsatwar:abyssal_stone_wall",
     "kingdomsatwar:sealstone_wall",
-    "kingdomsatwar:sealstone_brick_wall"
+    "kingdomsatwar:sealstone_brick_wall",
+    "kingdomsatwar:shadow_stone_wall",
+    "kingdomsatwar:shadow_stone_brick_wall",
+    "kingdomsatwar:polished_shadow_stone_wall"
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "kingdomsatwar:nightsteel_ingot"
+  },
+  "pattern": [
+    "M M",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:nightsteel_boots"
+  }
+}

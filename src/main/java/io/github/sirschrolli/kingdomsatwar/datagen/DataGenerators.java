@@ -23,7 +23,13 @@ public final class DataGenerators {
     /** Datapack-Registereinträge: Weltgenerierung, Loot-Tables und Rezepte. */
     @SubscribeEvent
     public static void gatherRegistries(GatherDataRegistryEntriesEvent event) {
-        event.add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
+        event.add(Registries.NOISE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapNoises)
+                .add(Registries.DENSITY_FUNCTION, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapDensityFunctions)
+                .add(Registries.MATERIAL_RULE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowSurface::bootstrap)
+                .add(Registries.NOISE_SETTINGS, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapSettings)
+                .add(Registries.DIMENSION_TYPE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapType)
+                .add(Registries.LEVEL_STEM, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapStem)
+                .add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
                 .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)
                 .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
                 .add(Registries.BIOME, io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes::bootstrap)

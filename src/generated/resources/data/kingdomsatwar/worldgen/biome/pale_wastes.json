@@ -1,0 +1,76 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.basalt_deltas.loop",
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.soul_sand_valley"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.012
+      }
+    ],
+    "minecraft:visual/fog_color": "#6a6278",
+    "minecraft:visual/fog_end_distance": 200.0,
+    "minecraft:visual/fog_start_distance": 28.0,
+    "minecraft:visual/sky_color": "#3a3448",
+    "minecraft:visual/water_fog_color": "#1a1a2a"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#8c8298",
+    "foliage_color": "#8c8298",
+    "grass_color": "#8e879a",
+    "water_color": "#4a4a62"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:shadow/rock_spires_wastes",
+      "kingdomsatwar:shadow/bone_arch"
+    ],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:shadow/ore_moonsilver",
+      "kingdomsatwar:shadow/ore_nightsteel",
+      "kingdomsatwar:shadow/ore_soul_crystal",
+      "kingdomsatwar:shadow/ore_abyssite"
+    ],
+    [
+      "kingdomsatwar:shadow/night_crystals_depths"
+    ],
+    [],
+    [
+      "kingdomsatwar:shadow/trees_bleached",
+      "kingdomsatwar:shadow/pale_grass",
+      "kingdomsatwar:shadow/dead_bush"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 1.2
+}

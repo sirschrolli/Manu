@@ -23,6 +23,8 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
     protected void registerModels(BiConsumer<ResourceKey<EquipmentAsset>, EquipmentClientInfo> output) {
         humanoid(output, ModEquipment.STEEL_ASSET);
         humanoid(output, ModEquipment.KONTERIT_ASSET);
+        humanoid(output, ModEquipment.NIGHTSTEEL_ASSET);
+        humanoid(output, ModEquipment.ABYSSITE_ASSET);
         ModEquipment.SCALE_ASSETS.values().forEach(asset -> humanoid(output, asset));
         // Die Krone sitzt nur auf dem Kopf
         output.accept(ModEquipment.CROWN_ASSET, EquipmentClientInfo.builder()

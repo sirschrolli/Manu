@@ -15,6 +15,19 @@ import net.minecraft.world.level.block.Block;
 public final class ModTags {
     public static final class Blocks {
         public static final TagKey<Block> DRAGON_EGGS = mod("dragon_eggs");
+        /** Stämme und Holz der Schattenbäume (für die Bretter). */
+        public static final TagKey<Block> SHADOW_LOGS = mod("shadow_logs");
+        /** Gestein der Schattenwelt, in dem Erze entstehen können. */
+        public static final TagKey<Block> SHADOW_STONE_ORE_REPLACEABLES = mod("shadow_stone_ore_replaceables");
+        public static final TagKey<Block> DEEP_SHADOW_STONE_ORE_REPLACEABLES = mod("deep_shadow_stone_ore_replaceables");
+        public static final TagKey<Block> ORES_MOONSILVER = common("ores/moonsilver");
+        public static final TagKey<Block> ORES_NIGHTSTEEL = common("ores/nightsteel");
+        public static final TagKey<Block> ORES_SOUL_CRYSTAL = common("ores/soul_crystal");
+        public static final TagKey<Block> ORES_ABYSSITE = common("ores/abyssite");
+        public static final TagKey<Block> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
+        public static final TagKey<Block> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
+        public static final TagKey<Block> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
+        public static final TagKey<Block> STORAGE_BLOCKS_ABYSSITE = common("storage_blocks/abyssite");
         public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
         public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
@@ -38,6 +51,14 @@ public final class ModTags {
         }
 
         private Blocks() {}
+    }
+
+    public static final class EntityTypes {
+        /** Wesen der Schattenwelt (die Mondsilberklinge trifft sie besonders hart). */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> SHADOW_CREATURES = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("shadow_creatures"));
+
+        private EntityTypes() {}
     }
 
     public static final class Biomes {
@@ -83,6 +104,27 @@ public final class ModTags {
         }
 
         public static final TagKey<Item> DRAGON_EGGS = mod("dragon_eggs");
+        public static final TagKey<Item> SHADOW_LOGS = mod("shadow_logs");
+        public static final TagKey<Item> NIGHTSTEEL_TOOL_MATERIALS = mod("nightsteel_tool_materials");
+        public static final TagKey<Item> ABYSSITE_TOOL_MATERIALS = mod("abyssite_tool_materials");
+        public static final TagKey<Item> MOONSILVER_TOOL_MATERIALS = mod("moonsilver_tool_materials");
+        public static final TagKey<Item> REPAIRS_NIGHTSTEEL_ARMOR = mod("repairs_nightsteel_armor");
+        public static final TagKey<Item> REPAIRS_ABYSSITE_ARMOR = mod("repairs_abyssite_armor");
+        public static final TagKey<Item> ORES_MOONSILVER = common("ores/moonsilver");
+        public static final TagKey<Item> ORES_NIGHTSTEEL = common("ores/nightsteel");
+        public static final TagKey<Item> ORES_SOUL_CRYSTAL = common("ores/soul_crystal");
+        public static final TagKey<Item> ORES_ABYSSITE = common("ores/abyssite");
+        public static final TagKey<Item> INGOTS_MOONSILVER = common("ingots/moonsilver");
+        public static final TagKey<Item> INGOTS_NIGHTSTEEL = common("ingots/nightsteel");
+        public static final TagKey<Item> INGOTS_ABYSSITE = common("ingots/abyssite");
+        public static final TagKey<Item> NUGGETS_MOONSILVER = common("nuggets/moonsilver");
+        public static final TagKey<Item> RAW_MATERIALS_MOONSILVER = common("raw_materials/moonsilver");
+        public static final TagKey<Item> RAW_MATERIALS_NIGHTSTEEL = common("raw_materials/nightsteel");
+        public static final TagKey<Item> GEMS_SOUL_CRYSTAL = common("gems/soul_crystal");
+        public static final TagKey<Item> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
+        public static final TagKey<Item> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
+        public static final TagKey<Item> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
+        public static final TagKey<Item> STORAGE_BLOCKS_ABYSSITE = common("storage_blocks/abyssite");
         public static final TagKey<Item> DRAGON_SCALES = mod("dragon_scales");
         public static final TagKey<Item> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Item> ORES_GEMSTONE = common("ores/gemstone");

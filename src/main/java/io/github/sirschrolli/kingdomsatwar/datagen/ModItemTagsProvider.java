@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -40,6 +41,24 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(BlockItemTags.LOGS);
         copy(BlockItemTags.LOGS_THAT_BURN);
         copy(BlockItemTags.LEAVES);
+        copy(BlockItemTags.PLANKS);
+        copy(BlockItemTags.WOODEN_STAIRS);
+        copy(BlockItemTags.WOODEN_SLABS);
+        copy(BlockItemTags.DIRT);
+        copy(BlockItemTags.SAND);
+        copy(BlockItemTags.SMELTS_TO_GLASS);
+        copy(BlockItemTags.MOSS_BLOCKS);
+        copy(ModTags.Blocks.SHADOW_LOGS, ModTags.Items.SHADOW_LOGS);
+        copy(BlockItemTags.SAPLINGS);
+        copy(BlockItemTags.LANTERNS);
+        copy(ModTags.Blocks.ORES_MOONSILVER, ModTags.Items.ORES_MOONSILVER);
+        copy(ModTags.Blocks.ORES_NIGHTSTEEL, ModTags.Items.ORES_NIGHTSTEEL);
+        copy(ModTags.Blocks.ORES_SOUL_CRYSTAL, ModTags.Items.ORES_SOUL_CRYSTAL);
+        copy(ModTags.Blocks.ORES_ABYSSITE, ModTags.Items.ORES_ABYSSITE);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER, ModTags.Items.STORAGE_BLOCKS_MOONSILVER);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ModTags.Items.STORAGE_BLOCKS_NIGHTSTEEL);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ModTags.Items.STORAGE_BLOCKS_SOUL_CRYSTAL);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_ABYSSITE, ModTags.Items.STORAGE_BLOCKS_ABYSSITE);
         copy(BlockItemTags.WOODEN_DOORS);
         copy(BlockItemTags.WOODEN_TRAPDOORS);
         copy(Tags.BlockItems.GLASS_BLOCKS);
@@ -78,6 +97,38 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ModTags.Items.INGOTS_STEEL, ModItems.STEEL_INGOT);
         tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_STEEL);
         add(ItemTags.BEACON_PAYMENT_ITEMS, ModItems.STEEL_INGOT);
+
+        // --- Schätze der Schattenwelt ---
+        add(ModTags.Items.INGOTS_MOONSILVER, ShadowItems.MOONSILVER_INGOT);
+        add(ModTags.Items.INGOTS_NIGHTSTEEL, ShadowItems.NIGHTSTEEL_INGOT);
+        add(ModTags.Items.INGOTS_ABYSSITE, ShadowItems.ABYSSITE_INGOT);
+        tag(Tags.Items.INGOTS).addTag(ModTags.Items.INGOTS_MOONSILVER).addTag(ModTags.Items.INGOTS_NIGHTSTEEL)
+                .addTag(ModTags.Items.INGOTS_ABYSSITE);
+        add(ModTags.Items.NUGGETS_MOONSILVER, ShadowItems.MOONSILVER_NUGGET);
+        tag(Tags.Items.NUGGETS).addTag(ModTags.Items.NUGGETS_MOONSILVER);
+        add(ModTags.Items.RAW_MATERIALS_MOONSILVER, ShadowItems.RAW_MOONSILVER);
+        add(ModTags.Items.RAW_MATERIALS_NIGHTSTEEL, ShadowItems.RAW_NIGHTSTEEL);
+        tag(Tags.Items.RAW_MATERIALS).addTag(ModTags.Items.RAW_MATERIALS_MOONSILVER).addTag(ModTags.Items.RAW_MATERIALS_NIGHTSTEEL);
+        add(ModTags.Items.GEMS_SOUL_CRYSTAL, ShadowItems.SOUL_CRYSTAL);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_SOUL_CRYSTAL);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, ShadowItems.MOONSILVER_INGOT, ShadowItems.NIGHTSTEEL_INGOT, ShadowItems.ABYSSITE_INGOT);
+        add(ModTags.Items.NIGHTSTEEL_TOOL_MATERIALS, ShadowItems.NIGHTSTEEL_INGOT);
+        add(ModTags.Items.REPAIRS_NIGHTSTEEL_ARMOR, ShadowItems.NIGHTSTEEL_INGOT);
+        add(ModTags.Items.ABYSSITE_TOOL_MATERIALS, ShadowItems.ABYSSITE_INGOT);
+        add(ModTags.Items.REPAIRS_ABYSSITE_ARMOR, ShadowItems.ABYSSITE_INGOT);
+        add(ModTags.Items.MOONSILVER_TOOL_MATERIALS, ShadowItems.MOONSILVER_INGOT);
+        add(ItemTags.SWORDS, ShadowItems.NIGHTSTEEL_SWORD, ShadowItems.ABYSSITE_SWORD, ShadowItems.MOONSILVER_BLADE);
+        add(ItemTags.PICKAXES, ShadowItems.NIGHTSTEEL_PICKAXE, ShadowItems.ABYSSITE_PICKAXE);
+        add(ItemTags.AXES, ShadowItems.NIGHTSTEEL_AXE, ShadowItems.ABYSSITE_AXE);
+        add(ItemTags.SHOVELS, ShadowItems.NIGHTSTEEL_SHOVEL, ShadowItems.ABYSSITE_SHOVEL);
+        add(ItemTags.HOES, ShadowItems.NIGHTSTEEL_HOE, ShadowItems.ABYSSITE_HOE);
+        add(ItemTags.HEAD_ARMOR, ShadowItems.NIGHTSTEEL_HELMET, ShadowItems.ABYSSITE_HELMET);
+        add(ItemTags.CHEST_ARMOR, ShadowItems.NIGHTSTEEL_CHESTPLATE, ShadowItems.ABYSSITE_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, ShadowItems.NIGHTSTEEL_LEGGINGS, ShadowItems.ABYSSITE_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, ShadowItems.NIGHTSTEEL_BOOTS, ShadowItems.ABYSSITE_BOOTS);
+        add(ItemTags.TRIMMABLE_ARMOR, ShadowItems.NIGHTSTEEL_HELMET, ShadowItems.NIGHTSTEEL_CHESTPLATE, ShadowItems.NIGHTSTEEL_LEGGINGS,
+                ShadowItems.NIGHTSTEEL_BOOTS, ShadowItems.ABYSSITE_HELMET, ShadowItems.ABYSSITE_CHESTPLATE, ShadowItems.ABYSSITE_LEGGINGS,
+                ShadowItems.ABYSSITE_BOOTS);
 
         // --- Drachen ---
         ModItems.DRAGON_SCALES.values().forEach(scale -> add(ModTags.Items.DRAGON_SCALES, scale));

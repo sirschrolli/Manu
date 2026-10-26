@@ -1,5 +1,9 @@
 {
   "values": [
+    "#c:storage_blocks/moonsilver",
+    "#c:storage_blocks/nightsteel",
+    "#c:storage_blocks/soul_crystal",
+    "#c:storage_blocks/abyssite",
     "#c:storage_blocks/carbon",
     "#c:storage_blocks/gemstone",
     "#c:storage_blocks/konterit",

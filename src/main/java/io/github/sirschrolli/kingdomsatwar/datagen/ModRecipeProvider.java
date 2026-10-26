@@ -5,6 +5,9 @@ import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
 import java.util.List;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.Registries;
@@ -13,6 +16,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
@@ -46,6 +50,8 @@ public class ModRecipeProvider extends RecipeProvider {
         equipmentRecipes();
         magicRecipes();
         cookVenison();
+        shadowRecipes();
+        shadowTreasureRecipes();
     }
 
     // =====================================================================================
@@ -219,6 +225,169 @@ public class ModRecipeProvider extends RecipeProvider {
         stonecut(polished, 1, sealstone);
         stonecut(bricks, 1, sealstone, polished);
         stonecut(ModBlocks.CHISELED_SEALSTONE.get(), 1, sealstone, polished);
+    }
+
+    // =====================================================================================
+    // Schattenwelt
+    // =====================================================================================
+
+    private void shadowRecipes() {
+        ItemLike stone = ShadowBlocks.SHADOW_STONE.base().get();
+        ItemLike polished = ShadowBlocks.POLISHED_SHADOW_STONE.base().get();
+        ItemLike bricks = ShadowBlocks.SHADOW_STONE_BRICKS.base().get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, polished, 4)
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', stone)
+                .unlockedBy(getHasName(stone), has(stone))
+                .save(output, key("polished_shadow_stone"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, bricks, 4)
+                .pattern("PP")
+                .pattern("PP")
+                .define('P', polished)
+                .unlockedBy(getHasName(polished), has(polished))
+                .save(output, key("shadow_stone_bricks"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, ShadowBlocks.CHISELED_SHADOW_STONE.get())
+                .pattern("S")
+                .pattern("S")
+                .define('S', ShadowBlocks.SHADOW_STONE_BRICKS.slab().get())
+                .unlockedBy(getHasName(bricks), has(bricks))
+                .save(output, key("chiseled_shadow_stone"));
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(bricks), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS,
+                ShadowBlocks.CRACKED_SHADOW_STONE_BRICKS.get(), 0.1f, 200).unlockedBy(getHasName(bricks), has(bricks)),
+                "cracked_shadow_stone_bricks");
+        stonecut(polished, 1, stone);
+        stonecut(bricks, 1, stone, polished);
+        stonecut(ShadowBlocks.CHISELED_SHADOW_STONE.get(), 1, stone, polished, bricks);
+        for (BuildingSet set : List.of(ShadowBlocks.POLISHED_SHADOW_STONE, ShadowBlocks.SHADOW_STONE_BRICKS)) {
+            stonecut(set.stairs().get(), 1, stone);
+            stonecut(set.slab().get(), 2, stone);
+            if (set.wall() != null) {
+                stonecut(set.wall().get(), 1, stone);
+            }
+        }
+        // Tiefschattenstein lässt sich zu Schattenstein zerschlagen (für alle, die Ziegel brauchen)
+        stonecut(stone, 1, ShadowBlocks.DEEP_SHADOW_STONE.get());
+
+        // Schattenholz
+        ItemLike planks = ShadowBlocks.SHADOW_PLANKS.base().get();
+        shapeless(RecipeCategory.BUILDING_BLOCKS, planks, 4)
+                .requires(ModTags.Items.SHADOW_LOGS)
+                .unlockedBy("has_shadow_log", has(ModTags.Items.SHADOW_LOGS))
+                .save(output, key("shadow_planks"));
+        wood(ShadowBlocks.SHADOW_WOOD.get(), ShadowBlocks.SHADOW_LOG.get(), "shadow_wood");
+        wood(ShadowBlocks.STRIPPED_SHADOW_WOOD.get(), ShadowBlocks.STRIPPED_SHADOW_LOG.get(), "stripped_shadow_wood");
+
+        // Aschschnee: drei Blöcke ergeben sechs Schichten, vier Schichten wieder einen Block
+        shaped(RecipeCategory.BUILDING_BLOCKS, ShadowBlocks.ASH_SNOW.get(), 6)
+                .pattern("###")
+                .define('#', ShadowBlocks.ASH_SNOW_BLOCK.get())
+                .unlockedBy(getHasName(ShadowBlocks.ASH_SNOW_BLOCK.get()), has(ShadowBlocks.ASH_SNOW_BLOCK.get()))
+                .save(output, key("ash_snow"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, ShadowBlocks.ASH_SNOW_BLOCK.get())
+                .pattern("##")
+                .pattern("##")
+                .define('#', ShadowBlocks.ASH_SNOW.get())
+                .unlockedBy(getHasName(ShadowBlocks.ASH_SNOW.get()), has(ShadowBlocks.ASH_SNOW.get()))
+                .save(output, key("ash_snow_block_from_layers"));
+    }
+
+    /** Erze, Barren, Werkzeuge, Rüstungen und die Abyssit-Aufwertung der Schattenwelt. */
+    private void shadowTreasureRecipes() {
+        Item moonsilver = ShadowItems.MOONSILVER_INGOT.get();
+        Item nightsteel = ShadowItems.NIGHTSTEEL_INGOT.get();
+        Item soul = ShadowItems.SOUL_CRYSTAL.get();
+        Item abyssite = ShadowItems.ABYSSITE_INGOT.get();
+        smeltOre(moonsilver, 0.7f, ShadowItems.RAW_MOONSILVER.get(), ShadowBlocks.MOONSILVER_ORE.get(), ShadowBlocks.DEEP_MOONSILVER_ORE.get());
+        smeltOre(nightsteel, 1.0f, ShadowItems.RAW_NIGHTSTEEL.get(), ShadowBlocks.NIGHTSTEEL_ORE.get(), ShadowBlocks.DEEP_NIGHTSTEEL_ORE.get());
+        smeltOre(soul, 1.0f, ShadowBlocks.SOUL_CRYSTAL_ORE.get());
+        smeltOre(ShadowItems.ABYSSITE_SHARD.get(), 2.0f, ShadowBlocks.ABYSSITE_ORE.get());
+        storage(ShadowItems.MOONSILVER_NUGGET.get(), moonsilver);
+        storage(moonsilver, ShadowBlocks.MOONSILVER_BLOCK.get());
+        storage(nightsteel, ShadowBlocks.NIGHTSTEEL_BLOCK.get());
+        storage(soul, ShadowBlocks.SOUL_CRYSTAL_BLOCK.get());
+        storage(abyssite, ShadowBlocks.ABYSSITE_BLOCK.get());
+        // Abyssit: vier Splitter, vier Nachtstahlbarren (wie Netherit)
+        shapeless(RecipeCategory.MISC, abyssite)
+                .requires(ShadowItems.ABYSSITE_SHARD.get(), 4)
+                .requires(nightsteel, 4)
+                .unlockedBy(getHasName(ShadowItems.ABYSSITE_SHARD.get()), has(ShadowItems.ABYSSITE_SHARD.get()))
+                .save(output, key("abyssite_ingot"));
+        // Nachtkristall aus Splittern
+        shaped(RecipeCategory.BUILDING_BLOCKS, ShadowBlocks.NIGHT_CRYSTAL.get())
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ShadowItems.NIGHT_CRYSTAL_SHARD.get())
+                .unlockedBy(getHasName(ShadowItems.NIGHT_CRYSTAL_SHARD.get()), has(ShadowItems.NIGHT_CRYSTAL_SHARD.get()))
+                .save(output, key("night_crystal"));
+        // Mondlaterne: Mondsilber-Klümpchen um einen Nachtkristallsplitter
+        shaped(RecipeCategory.DECORATIONS, ShadowBlocks.MOON_LANTERN.get())
+                .pattern("NNN")
+                .pattern("NSN")
+                .pattern("NNN")
+                .define('N', ShadowItems.MOONSILVER_NUGGET.get())
+                .define('S', ShadowItems.NIGHT_CRYSTAL_SHARD.get())
+                .unlockedBy(getHasName(ShadowItems.MOONSILVER_NUGGET.get()), has(ShadowItems.MOONSILVER_NUGGET.get()))
+                .save(output, key("moon_lantern"));
+        // Mondsilberklinge: Mondsilber-Klinge mit einer Parierstange aus Seelenkristallen
+        shaped(RecipeCategory.COMBAT, ShadowItems.MOONSILVER_BLADE.get())
+                .pattern(" M ")
+                .pattern(" M ")
+                .pattern("CSC")
+                .define('M', moonsilver)
+                .define('C', soul)
+                .define('S', Items.STICK)
+                .unlockedBy(getHasName(moonsilver), has(moonsilver))
+                .save(output, key("moonsilver_blade"));
+        // Nachtstahl
+        tools(nightsteel, ShadowItems.NIGHTSTEEL_SWORD.get(), ShadowItems.NIGHTSTEEL_PICKAXE.get(), ShadowItems.NIGHTSTEEL_AXE.get(),
+                ShadowItems.NIGHTSTEEL_SHOVEL.get(), ShadowItems.NIGHTSTEEL_HOE.get());
+        armorSet(nightsteel, ShadowItems.NIGHTSTEEL_HELMET.get(), ShadowItems.NIGHTSTEEL_CHESTPLATE.get(),
+                ShadowItems.NIGHTSTEEL_LEGGINGS.get(), ShadowItems.NIGHTSTEEL_BOOTS.get());
+        // Abyssit: Nachtstahl im Schmiedetisch aufwerten
+        Item template = ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get();
+        List<List<Item>> upgrades = List.of(
+                List.of(ShadowItems.NIGHTSTEEL_SWORD.get(), ShadowItems.ABYSSITE_SWORD.get()),
+                List.of(ShadowItems.NIGHTSTEEL_PICKAXE.get(), ShadowItems.ABYSSITE_PICKAXE.get()),
+                List.of(ShadowItems.NIGHTSTEEL_AXE.get(), ShadowItems.ABYSSITE_AXE.get()),
+                List.of(ShadowItems.NIGHTSTEEL_SHOVEL.get(), ShadowItems.ABYSSITE_SHOVEL.get()),
+                List.of(ShadowItems.NIGHTSTEEL_HOE.get(), ShadowItems.ABYSSITE_HOE.get()),
+                List.of(ShadowItems.NIGHTSTEEL_HELMET.get(), ShadowItems.ABYSSITE_HELMET.get()),
+                List.of(ShadowItems.NIGHTSTEEL_CHESTPLATE.get(), ShadowItems.ABYSSITE_CHESTPLATE.get()),
+                List.of(ShadowItems.NIGHTSTEEL_LEGGINGS.get(), ShadowItems.ABYSSITE_LEGGINGS.get()),
+                List.of(ShadowItems.NIGHTSTEEL_BOOTS.get(), ShadowItems.ABYSSITE_BOOTS.get()));
+        for (List<Item> pair : upgrades) {
+            Item result = pair.get(1);
+            RecipeCategory category = result == ShadowItems.ABYSSITE_SWORD.get() || isArmor(result) ? RecipeCategory.COMBAT : RecipeCategory.TOOLS;
+            SmithingTransformRecipeBuilder.smithing(Ingredient.of(template), Ingredient.of(pair.get(0)), Ingredient.of(abyssite), category, result)
+                    .unlocks(getHasName(abyssite), has(abyssite))
+                    .save(output, key(getItemName(result) + "_smithing"));
+        }
+        // Vorlage vervielfältigen: Vorlage, Tiefschattenstein und sieben Seelenkristalle ergeben zwei Vorlagen
+        shaped(RecipeCategory.MISC, template, 2)
+                .pattern("#S#")
+                .pattern("#C#")
+                .pattern("###")
+                .define('#', soul)
+                .define('C', ShadowBlocks.DEEP_SHADOW_STONE.get())
+                .define('S', template)
+                .unlockedBy(getHasName(template), has(template))
+                .save(output, key("abyssite_upgrade_smithing_template"));
+    }
+
+    private static boolean isArmor(Item item) {
+        return item == ShadowItems.ABYSSITE_HELMET.get() || item == ShadowItems.ABYSSITE_CHESTPLATE.get()
+                || item == ShadowItems.ABYSSITE_LEGGINGS.get() || item == ShadowItems.ABYSSITE_BOOTS.get();
+    }
+
+    /** Holzblock (vier Seiten Rinde): vier Stämme im Quadrat ergeben drei Holzblöcke. */
+    private void wood(ItemLike wood, ItemLike log, String name) {
+        shaped(RecipeCategory.BUILDING_BLOCKS, wood, 3)
+                .pattern("##")
+                .pattern("##")
+                .define('#', log)
+                .unlockedBy(getHasName(log), has(log))
+                .save(output, key(name));
     }
 
     private void cookVenison() {

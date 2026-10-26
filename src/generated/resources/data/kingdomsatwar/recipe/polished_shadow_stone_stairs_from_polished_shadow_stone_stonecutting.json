@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:polished_shadow_stone",
+  "result": {
+    "id": "kingdomsatwar:polished_shadow_stone_stairs"
+  }
+}

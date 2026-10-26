@@ -23,6 +23,10 @@
     "kingdomsatwar:stormstone_stairs",
     "kingdomsatwar:abyssal_stone_stairs",
     "kingdomsatwar:sealstone_stairs",
-    "kingdomsatwar:sealstone_brick_stairs"
+    "kingdomsatwar:sealstone_brick_stairs",
+    "kingdomsatwar:shadow_stone_stairs",
+    "kingdomsatwar:shadow_stone_brick_stairs",
+    "kingdomsatwar:polished_shadow_stone_stairs",
+    "kingdomsatwar:shadow_plank_stairs"
   ]
 }

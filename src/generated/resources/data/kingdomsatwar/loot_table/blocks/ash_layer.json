@@ -7,8 +7,129 @@
       },
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:ash_layer"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "1"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 1
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "2"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 2
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "3"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 3
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "4"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 4
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "5"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 5
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "6"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 6
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "7"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 7
+              },
+              "name": "kingdomsatwar:ash_layer"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:ash_layer",
+                "state": {
+                  "layers": "8"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 8
+              },
+              "name": "kingdomsatwar:ash_layer"
+            }
+          ]
         }
       ],
       "rolls": 1

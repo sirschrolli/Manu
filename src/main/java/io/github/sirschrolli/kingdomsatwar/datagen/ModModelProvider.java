@@ -38,7 +38,7 @@ public class ModModelProvider extends ModelProvider {
     private static final TextureSlot OVERLAY = TextureSlot.create("overlay");
     private static final TextureSlot GLOW = TextureSlot.create("glow");
     /** Erze mit selbstleuchtendem Kern (eigene Glow-Textur, im Dunkeln voll hell). */
-    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium");
+    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite");
 
     /**
      * Erz-Modell aus zwei Schichten: unten die echte Vanilla-Textur (Stein oder Tiefenschiefer),
@@ -312,6 +312,9 @@ public class ModModelProvider extends ModelProvider {
         // --- Siegelkreis, Siegelsplitter und Chronik ---
         SealModels.register(blocks, items);
 
+        // --- Schattenwelt ---
+        ShadowModels.register(blocks, items);
+
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();
         Identifier crystalModel = ModelTemplates.CUBE_ALL.create(frostCrystal,
@@ -350,7 +353,7 @@ public class ModModelProvider extends ModelProvider {
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */
-    private static void ashLayer(BlockModelGenerators blocks, Block layer, Block full) {
+    static void ashLayer(BlockModelGenerators blocks, Block layer, Block full) {
         Material texture = TextureMapping.getBlockTexture(full);
         TextureMapping textures = new TextureMapping().put(TextureSlot.TEXTURE, texture).put(TextureSlot.PARTICLE, texture);
         Identifier[] models = new Identifier[8];
@@ -484,26 +487,30 @@ public class ModModelProvider extends ModelProvider {
     }
 
     /** Rüstungsteile mit Rüstungsbesatz (Trims) aus dem Schmiedetisch. */
-    private static void armor(ItemModelGenerators items, Item helmet, Item chestplate, Item leggings, Item boots) {
+    static void armor(ItemModelGenerators items, Item helmet, Item chestplate, Item leggings, Item boots) {
         for (Item piece : java.util.List.of(helmet, chestplate, leggings, boots)) {
             ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(piece), TextureMapping.layer0(piece), items.modelOutput);
         }
         items.generateDynamicTrimmableArmorSet(helmet, chestplate, leggings, boots, null);
     }
 
-    private static void glowingCube(BlockModelGenerators blocks, Block block) {
+    static void glowingCube(BlockModelGenerators blocks, Block block) {
         TextureMapping mapping = TextureMapping.cube(block).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE)
                 .put(GLOW, TextureMapping.getBlockTexture(block, "_glow"));
         Identifier model = CUBE_GLOW.create(block, mapping, blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
     }
 
-    private static void flat(ItemModelGenerators items, Item item) {
+    static void flat(ItemModelGenerators items, Item item) {
         items.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
     }
 
-    private static void ore(BlockModelGenerators blocks, DeferredBlock<? extends Block> ore, Block baseRock, String material) {
-        Material base = TextureMapping.getBlockTexture(baseRock);
+    static void ore(BlockModelGenerators blocks, DeferredBlock<? extends Block> ore, Block baseRock, String material) {
+        ore(blocks, ore, TextureMapping.getBlockTexture(baseRock), material);
+    }
+
+    /** Erz aus Gestein mit eigener Textur ({@code base}) und durchsichtigem Einschluss {@code <material>_ore_overlay}. */
+    static void ore(BlockModelGenerators blocks, DeferredBlock<? extends Block> ore, Material base, String material) {
         TextureMapping mapping = new TextureMapping()
                 .put(BASE, base)
                 .put(OVERLAY, new Material(KingdomsAtWar.id("block/" + material + "_ore_overlay")))

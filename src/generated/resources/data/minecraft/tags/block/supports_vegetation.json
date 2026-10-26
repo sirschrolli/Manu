@@ -2,6 +2,9 @@
   "values": [
     "kingdomsatwar:cinder_soil",
     "kingdomsatwar:frozen_soil",
-    "kingdomsatwar:glowing_moss"
+    "kingdomsatwar:glowing_moss",
+    "kingdomsatwar:shadow_soil",
+    "kingdomsatwar:shadow_grass",
+    "kingdomsatwar:glimmer_moss"
   ]
 }
