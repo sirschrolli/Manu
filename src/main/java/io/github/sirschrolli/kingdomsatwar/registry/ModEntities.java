@@ -1,5 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.registry;
 
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.CrystalCrawlerEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.GlimmerMothEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.MoonStagEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.NightWingEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
@@ -76,6 +81,27 @@ public final class ModEntities {
             CaveTrollEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.9f).eyeHeight(2.45f).clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
             LindwormEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.6f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
+
+    // ---------------------------------------------------------------- Kreaturen der Schattenwelt
+    /** Schattenpirscher: unsichtbar, solange man ihn nicht ansieht. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ShadeStalkerEntity>> SHADE_STALKER = ENTITIES.registerEntityType("shade_stalker",
+            ShadeStalkerEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(0.7f, 2.5f).eyeHeight(2.2f).notInPeaceful().clientTrackingRange(10));
+    /** Kristallkriecher: klettert an Wänden, Kristallsplitter auf dem Rücken. */
+    public static final DeferredHolder<EntityType<?>, EntityType<CrystalCrawlerEntity>> CRYSTAL_CRAWLER = ENTITIES.registerEntityType(
+            "crystal_crawler", CrystalCrawlerEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.2f, 0.65f).eyeHeight(0.45f).notInPeaceful().clientTrackingRange(8));
+    /** Nachtschwinge: Flugjäger über den Gipfeln und Inseln. */
+    public static final DeferredHolder<EntityType<?>, EntityType<NightWingEntity>> NIGHT_WING = ENTITIES.registerEntityType("night_wing",
+            NightWingEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.0f, 0.55f).eyeHeight(0.2f).passengerAttachments(0.35f).ridingOffset(-0.125f).notInPeaceful()
+                    .clientTrackingRange(10));
+    /** Mondhirsch: friedlich, mit leuchtendem Kristallgeweih. */
+    public static final DeferredHolder<EntityType<?>, EntityType<MoonStagEntity>> MOON_STAG = ENTITIES.registerEntityType("moon_stag",
+            MoonStagEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.4f).eyeHeight(1.3f).clientTrackingRange(10));
+    /** Glimmerfalter: leuchtende Nachtfalter über den Wiesen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<GlimmerMothEntity>> GLIMMER_MOTH = ENTITIES.registerEntityType("glimmer_moth",
+            GlimmerMothEntity::new, MobCategory.AMBIENT, builder -> builder.sized(0.5f, 0.4f).eyeHeight(0.2f).clientTrackingRange(8));
 
     // ---------------------------------------------------------------- Drachen-Bosse
     /** Pyrrhon, der Aschenfürst (Feuer). */
@@ -156,6 +182,11 @@ public final class ModEntities {
         event.put(VOLTARION.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity.createAttributes().build());
         event.put(THALASSA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity.createAttributes().build());
         event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
+        event.put(SHADE_STALKER.get(), ShadeStalkerEntity.createAttributes().build());
+        event.put(CRYSTAL_CRAWLER.get(), CrystalCrawlerEntity.createAttributes().build());
+        event.put(NIGHT_WING.get(), NightWingEntity.createAttributes().build());
+        event.put(MOON_STAG.get(), DeerEntity.createAttributes().build());
+        event.put(GLIMMER_MOTH.get(), GlimmerMothEntity.createAttributes().build());
     }
 
     /**
@@ -175,5 +206,11 @@ public final class ModEntities {
         event.register(WILL_O_WISP.get(), ground, surface, WillOWispEntity::checkWispSpawnRules, replace);
         event.register(CAVE_TROLL.get(), ground, surface, CaveTrollEntity::checkTrollSpawnRules, replace);
         event.register(LINDWORM.get(), ground, surface, LindwormEntity::checkLindwormSpawnRules, replace);
+        // Schattenwelt: Pirscher überall im Dunkeln, Kriecher in Höhlen und Schluchten, Schwingen und Falter in der Luft
+        event.register(SHADE_STALKER.get(), ground, surface, ShadeStalkerEntity::checkStalkerSpawnRules, replace);
+        event.register(CRYSTAL_CRAWLER.get(), ground, surface, CrystalCrawlerEntity::checkCrawlerSpawnRules, replace);
+        event.register(NIGHT_WING.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, NightWingEntity::checkNightWingSpawnRules, replace);
+        event.register(MOON_STAG.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
+        event.register(GLIMMER_MOTH.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, GlimmerMothEntity::checkMothSpawnRules, replace);
     }
 }

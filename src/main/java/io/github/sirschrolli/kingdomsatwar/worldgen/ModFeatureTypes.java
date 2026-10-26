@@ -25,6 +25,8 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("rock_spire", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.RockSpireFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.BoneArchFeature>> BONE_ARCH =
             FEATURE_TYPES.register("bone_arch", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.BoneArchFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature>> HANGING_VINES =
+            FEATURE_TYPES.register("hanging_vines", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature.CODEC);
 
     public static final DeferredRegister<MapCodec<? extends PlacementModifier>> PLACEMENT_TYPES =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, KingdomsAtWar.MODID);

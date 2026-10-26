@@ -89,6 +89,18 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(block.get());
         }
         dropPottedContents(ShadowBlocks.POTTED_SHADOW_SAPLING.get());
+        // Seelenbeerenstrauch: reif zwei bis drei Beeren, halbreif eine bis zwei, sonst eine (zum Umpflanzen)
+        add(ShadowBlocks.SOUL_BERRY_BUSH.get(), block -> LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool()
+                .setRolls(ContextIntProviders.exactly(1))
+                .add(AlternativesEntry.alternatives(io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock.AGE.getPossibleValues(),
+                        age -> LootItem.lootTableItem(ShadowItems.SOUL_BERRIES.get())
+                                .when(MatchBlock.blockMatches(this.blocks, block, StatePropertiesPredicate.Builder.properties()
+                                        .hasProperty(io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock.AGE, age.intValue())))
+                                .apply(SetItemCountFunction.setCount(age == 3 ? ContextIntProviders.between(2, 3)
+                                        : age == 2 ? ContextIntProviders.between(1, 2) : ContextIntProviders.exactly(1))))))));
+        // Glimmerranken: nur mit Schere oder Behutsamkeit (wie Trauerranken)
+        add(ShadowBlocks.GLIMMER_VINES.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
+        add(ShadowBlocks.GLIMMER_VINES_PLANT.get(), block -> createShearsOrSilkTouchOnlyDrop(ShadowBlocks.GLIMMER_VINES.get()));
         // Drusen: mit Behutsamkeit die Druse, sonst zwei bis vier Splitter (Glück hilft)
         add(ShadowBlocks.NIGHT_CRYSTAL_CLUSTER.get(), block -> createSilkTouchDispatchTable(block,
                 (net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>) applyExplosionDecay(block,

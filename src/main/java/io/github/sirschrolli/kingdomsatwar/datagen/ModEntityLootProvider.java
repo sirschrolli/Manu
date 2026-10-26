@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
+import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -96,6 +97,23 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.EARTH).get(), 1, 3))
                 .withPool(drop(Items.BONE, 1, 3))
                 .withPool(rare(ModItems.DRACONIUM.get(), 0.1f, 0.03f)));
+
+        // Kreaturen der Schattenwelt
+        this.add(ModEntities.SHADE_STALKER.get(), LootTable.lootTable()
+                .withPool(drop(ShadowItems.SHADOW_ESSENCE.get(), 0, 2))
+                .withPool(rare(ShadowItems.SOUL_CRYSTAL.get(), 0.05f, 0.02f)));
+        this.add(ModEntities.CRYSTAL_CRAWLER.get(), LootTable.lootTable()
+                .withPool(drop(ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 1, 3))
+                .withPool(rare(ShadowItems.SOUL_CRYSTAL.get(), 0.04f, 0.02f)));
+        this.add(ModEntities.NIGHT_WING.get(), LootTable.lootTable()
+                .withPool(drop(Items.PHANTOM_MEMBRANE, 0, 2))
+                .withPool(drop(ShadowItems.SHADOW_ESSENCE.get(), 0, 1)));
+        this.add(ModEntities.MOON_STAG.get(), LootTable.lootTable()
+                .withPool(meat(ModItems.VENISON.get(), 1, 3))
+                .withPool(drop(Items.LEATHER, 0, 2))
+                .withPool(drop(ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 0, 1)));
+        this.add(ModEntities.GLIMMER_MOTH.get(), LootTable.lootTable()
+                .withPool(drop(Items.GLOWSTONE_DUST, 0, 1)));
     }
 
     /** Fleisch: wird gebraten, wenn das Tier brennend stirbt; Plünderung bringt mehr. */

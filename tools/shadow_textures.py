@@ -732,6 +732,149 @@ def pale_grass() -> Image.Image:
 
 
 # =============================================================================
+# Seelenbeeren und Glimmerranken
+# =============================================================================
+
+BUSH_LEAF = {"d": hexc("#0e2e2c"), "m": hexc("#174a46"), "l": hexc("#22665e"), "h": hexc("#348a7e"), "s": hexc("#1c1a24")}
+BERRY_UNRIPE = {"b": hexc("#1e6e72"), "B": hexc("#3aa4a4")}
+BERRY_RIPE = {"b": hexc("#2ad2cc"), "B": hexc("#c8fffa")}
+
+SOUL_BUSH = [
+    [
+        "", "", "", "", "", "", "", "", "",
+        "................",
+        ".......l........",
+        "......lhl..l....",
+        "....l..m..lhl...",
+        "...lhl.m...m....",
+        "....m..ms.m.....",
+        ".......ss.......",
+    ],
+    [
+        "", "", "", "", "",
+        "................",
+        "......l..l......",
+        ".....lhllhl.l...",
+        "...l.mhmmhm.hl..",
+        "..lhlmmlmmlmm...",
+        "...mmdmmlmdmml..",
+        "..lmdmldmmdmlh..",
+        "...mdmmdmdmmm...",
+        "....dmddsdmd....",
+        ".....d.ss.d.....",
+        ".......ss.......",
+    ],
+    [
+        "", "", "",
+        "................",
+        ".......l..l.....",
+        "....l.lhllhl....",
+        "...lhlmhmmhm.l..",
+        "..lmhmmbmlmmlhl.",
+        "..mmlmmmmlbmmm..",
+        ".lhmbmdmlmmmdml.",
+        "..mmmmdmmdbmmh..",
+        "..lmdmbdmmdmlm..",
+        "...mdmmdmdmmm...",
+        "....dmddsdmbd...",
+        ".....d.ss.d.....",
+        ".......ss.......",
+    ],
+    [
+        "", "",
+        "................",
+        "......l...l.....",
+        "...l.lhlBlhl.l..",
+        "..lhlmhmbmhmlhl.",
+        "..mBmmbmmlmmBm..",
+        ".lbmlmmmBmmbmml.",
+        ".mmmhbmlbmmmBmh.",
+        ".lBmmmdmlmmbdml.",
+        "..mmbmdmmdBmmh..",
+        "..lmdmBdmmdmbm..",
+        "...mbmmdmBmmm...",
+        "....dmddsdmbd...",
+        ".....d.ss.d.....",
+        ".......ss.......",
+    ],
+]
+
+
+def soul_berry_bush(stage: int) -> Image.Image:
+    colors = dict(BUSH_LEAF)
+    colors.update(BERRY_RIPE if stage == 3 else BERRY_UNRIPE)
+    return pa.sprite(SOUL_BUSH[stage], colors)
+
+
+SOUL_BERRIES_ITEM = [
+    "", "", "", "",
+    ".........ll.....",
+    "........lhl.....",
+    "......m.l.......",
+    ".....m..m.......",
+    "....bBb.bBb.....",
+    "...bBwbbBwbb....",
+    "...bbbbbbbbb....",
+    "....bbb.bbb.....",
+    "......bBb.......",
+    ".....bBwbb......",
+    ".....bbbbb......",
+    "......bbb.......",
+]
+
+
+def soul_berries_item() -> Image.Image:
+    return pa.sprite(SOUL_BERRIES_ITEM, {"l": BUSH_LEAF["l"], "h": BUSH_LEAF["h"], "m": BUSH_LEAF["m"],
+                                         "b": hexc("#1aa8a4"), "B": hexc("#4ae8e0"), "w": hexc("#e8fffd")})
+
+
+VINE_COLORS = {"d": hexc("#2a3450"), "m": hexc("#44587e"), "l": hexc("#6a86b0"), "h": hexc("#9cb6dc"),
+               "g": hexc("#c8e0ff"), "G": hexc("#f2f8ff")}
+
+GLIMMER_VINES_PLANT = [
+    ".....m....m.....",
+    ".....ml...m.....",
+    "......m..lm.....",
+    "......m..m......",
+    ".....lm..m......",
+    "......m..ml.....",
+    "......dm.m......",
+    ".......m.m......",
+    ".......m.mh.....",
+    "......hm.m......",
+    ".......m.m......",
+    ".......mdm......",
+    "........m.......",
+    "........ml......",
+    ".......lm.......",
+    "........m.......",
+]
+
+GLIMMER_VINES = [
+    ".....m....m.....",
+    ".....ml...m.....",
+    "......m..lm.....",
+    "......m..m......",
+    ".....lm..m......",
+    "......m..ml.....",
+    "......dm.m......",
+    ".......m.m......",
+    ".......mhm......",
+    "......lmmh......",
+    "......hggh......",
+    ".....hgGGgh.....",
+    ".....gGGGGg.....",
+    ".....hgGGgh.....",
+    "......hggh......",
+    ".......hh.......",
+]
+
+
+def glimmer_vines() -> tuple[Image.Image, Image.Image]:
+    return pa.sprite(GLIMMER_VINES, VINE_COLORS), pa.sprite(GLIMMER_VINES_PLANT, VINE_COLORS)
+
+
+# =============================================================================
 # Ausgabe
 # =============================================================================
 
@@ -767,6 +910,12 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/ghostcap_emissive", cap_glow)
     put("block/shadow_sprouts", shadow_sprouts())
     put("block/pale_grass", pale_grass())
+    for stage in range(4):
+        put(f"block/soul_berry_bush_stage{stage}", soul_berry_bush(stage))
+    put("item/soul_berries", soul_berries_item())
+    head, plant = glimmer_vines()
+    put("block/glimmer_vines", head)
+    put("block/glimmer_vines_plant", plant)
 
 
 if __name__ == "__main__":

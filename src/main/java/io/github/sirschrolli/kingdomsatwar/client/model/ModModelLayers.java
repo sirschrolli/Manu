@@ -27,6 +27,11 @@ public final class ModModelLayers {
     public static final ModelLayerLocation THALASSA = new ModelLayerLocation(KingdomsAtWar.id("water_dragon_boss"), "main");
     /** Rankling (Diener von Verdantis). */
     public static final ModelLayerLocation VINELING = new ModelLayerLocation(KingdomsAtWar.id("vineling"), "main");
+    // Kreaturen der Schattenwelt
+    public static final ModelLayerLocation SHADE_STALKER = new ModelLayerLocation(KingdomsAtWar.id("shade_stalker"), "main");
+    public static final ModelLayerLocation CRYSTAL_CRAWLER = new ModelLayerLocation(KingdomsAtWar.id("crystal_crawler"), "main");
+    public static final ModelLayerLocation NIGHT_WING = new ModelLayerLocation(KingdomsAtWar.id("night_wing"), "main");
+    public static final ModelLayerLocation GLIMMER_MOTH = new ModelLayerLocation(KingdomsAtWar.id("glimmer_moth"), "main");
 
     private ModModelLayers() {}
 }

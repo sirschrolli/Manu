@@ -15,10 +15,54 @@
         "sound": "minecraft:music.end"
       }
     },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.1,
     "minecraft:gameplay/natural_mob_spawns": {
       "argument": {
         "spawn_costs": {},
-        "spawns_by_category": {}
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:glimmer_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 2
+              },
+              "weight": 20
+            }
+          ],
+          "creature": [
+            {
+              "type": "kingdomsatwar:moon_stag",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 6
+            }
+          ],
+          "monster": [
+            {
+              "type": "kingdomsatwar:night_wing",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 70
+            },
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 25
+            }
+          ]
+        }
       },
       "modifier": "overlay"
     },
@@ -57,13 +101,16 @@
       "kingdomsatwar:shadow/ore_soul_crystal",
       "kingdomsatwar:shadow/ore_abyssite"
     ],
-    [],
+    [
+      "kingdomsatwar:shadow/glimmer_vines_caves"
+    ],
     [],
     [
       "kingdomsatwar:shadow/trees_isle",
       "kingdomsatwar:shadow/sprouts_dense",
       "kingdomsatwar:shadow/moonflowers",
-      "kingdomsatwar:shadow/ghostcaps"
+      "kingdomsatwar:shadow/ghostcaps",
+      "kingdomsatwar:shadow/glimmer_vines_trees"
     ]
   ],
   "has_precipitation": false,

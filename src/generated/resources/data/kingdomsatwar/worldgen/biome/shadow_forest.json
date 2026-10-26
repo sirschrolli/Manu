@@ -20,10 +20,63 @@
         "sound": "minecraft:music.overworld.deep_dark"
       }
     },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.08,
     "minecraft:gameplay/natural_mob_spawns": {
       "argument": {
         "spawn_costs": {},
-        "spawns_by_category": {}
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:glimmer_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 2
+              },
+              "weight": 25
+            }
+          ],
+          "creature": [
+            {
+              "type": "kingdomsatwar:moon_stag",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 10
+            }
+          ],
+          "monster": [
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 100
+            },
+            {
+              "type": "kingdomsatwar:crystal_crawler",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 25
+            },
+            {
+              "type": "kingdomsatwar:night_wing",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 8
+            }
+          ]
+        }
       },
       "modifier": "overlay"
     },
@@ -63,7 +116,8 @@
       "kingdomsatwar:shadow/ore_abyssite"
     ],
     [
-      "kingdomsatwar:shadow/night_crystals_depths"
+      "kingdomsatwar:shadow/night_crystals_depths",
+      "kingdomsatwar:shadow/glimmer_vines_caves"
     ],
     [],
     [
@@ -71,7 +125,9 @@
       "kingdomsatwar:shadow/trees_forest",
       "kingdomsatwar:shadow/sprouts_dense",
       "kingdomsatwar:shadow/moonflowers",
-      "kingdomsatwar:shadow/ghostcaps"
+      "kingdomsatwar:shadow/ghostcaps",
+      "kingdomsatwar:shadow/soul_berry_bushes",
+      "kingdomsatwar:shadow/glimmer_vines_trees"
     ]
   ],
   "has_precipitation": false,

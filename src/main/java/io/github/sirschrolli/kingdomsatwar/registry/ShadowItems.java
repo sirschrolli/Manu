@@ -15,6 +15,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SmithingTemplateItem;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
@@ -52,6 +55,17 @@ public final class ShadowItems {
     public static final DeferredItem<Item> ABYSSITE_SHARD = item("abyssite_shard", p -> p.rarity(Rarity.RARE).fireResistant());
     public static final DeferredItem<Item> ABYSSITE_INGOT = item("abyssite_ingot", p -> p.rarity(Rarity.RARE).fireResistant());
     public static final DeferredItem<Item> NIGHT_CRYSTAL_SHARD = item("night_crystal_shard", UnaryOperator.identity());
+    /** Seelenbeeren: leuchtende Beeren, essbar (kurz Nachtsicht) und zum Pflanzen des Strauchs. */
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> SOUL_BERRIES = register("soul_berries",
+            p -> new net.minecraft.world.item.BlockItem(ShadowBlocks.SOUL_BERRY_BUSH.get(), p),
+            p -> p.useItemDescriptionPrefix()
+                    .food(new net.minecraft.world.food.FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).build(),
+                            net.minecraft.world.item.component.Consumables.defaultFood()
+                                    .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(
+                                            new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 400, 0)))
+                                    .build())
+                    .compostable(net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.COMPOSTABLE_LOW)
+                    .component(DataComponents.LORE, ModItems.lore("soul_berries", 1)));
     public static final DeferredItem<SmithingTemplateItem> ABYSSITE_UPGRADE_SMITHING_TEMPLATE = register("abyssite_upgrade_smithing_template",
             p -> new SmithingTemplateItem(
                     description("abyssite_upgrade.applies_to"),
@@ -115,8 +129,30 @@ public final class ShadowItems {
                     .component(DataComponents.LORE, ModItems.lore("moonsilver_blade", 2)));
 
     // =====================================================================================
+    // Kreaturen
+    // =====================================================================================
+
+    /** Schattenessenz: was von einem Schattenpirscher bleibt – Zutat für Schattenzauber, begehrt bei den Umbrern. */
+    public static final DeferredItem<Item> SHADOW_ESSENCE = item("shadow_essence", p -> p.rarity(Rarity.UNCOMMON)
+            .component(DataComponents.LORE, ModItems.lore("shadow_essence", 1)));
+    public static final DeferredItem<SpawnEggItem> SHADE_STALKER_SPAWN_EGG = egg("shade_stalker", () -> ModEntities.SHADE_STALKER.get());
+    public static final DeferredItem<SpawnEggItem> CRYSTAL_CRAWLER_SPAWN_EGG = egg("crystal_crawler", () -> ModEntities.CRYSTAL_CRAWLER.get());
+    public static final DeferredItem<SpawnEggItem> NIGHT_WING_SPAWN_EGG = egg("night_wing", () -> ModEntities.NIGHT_WING.get());
+    public static final DeferredItem<SpawnEggItem> MOON_STAG_SPAWN_EGG = egg("moon_stag", () -> ModEntities.MOON_STAG.get());
+    public static final DeferredItem<SpawnEggItem> GLIMMER_MOTH_SPAWN_EGG = egg("glimmer_moth", () -> ModEntities.GLIMMER_MOTH.get());
+
+    /** Alle Spawn-Eier der Schattenwelt (für Modelle und Übersetzungen). */
+    public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
+        return List.of(SHADE_STALKER_SPAWN_EGG, CRYSTAL_CRAWLER_SPAWN_EGG, NIGHT_WING_SPAWN_EGG, MOON_STAG_SPAWN_EGG, GLIMMER_MOTH_SPAWN_EGG);
+    }
+
+    // =====================================================================================
     // Hilfsmethoden
     // =====================================================================================
+
+    private static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {
+        return register(name + "_spawn_egg", SpawnEggItem::new, p -> p.spawnEgg(type.get()));
+    }
 
     private static DeferredItem<Item> item(String name, UnaryOperator<Item.Properties> properties) {
         DeferredItem<Item> item = ModItems.ITEMS.registerSimpleItem(name, properties);

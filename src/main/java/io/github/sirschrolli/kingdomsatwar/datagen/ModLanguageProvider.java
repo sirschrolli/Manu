@@ -388,6 +388,20 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ShadowBlocks.SHADOW_SAPLING, "Shadow Sapling", "Schattensetzling");
         block(ShadowBlocks.POTTED_SHADOW_SAPLING, "Potted Shadow Sapling", "Schattensetzling im Topf");
         block(ShadowBlocks.MOON_LANTERN, "Moon Lantern", "Mondlaterne");
+        block(ShadowBlocks.SOUL_BERRY_BUSH, "Soul Berry Bush", "Seelenbeerenstrauch");
+        block(ShadowBlocks.GLIMMER_VINES, "Glimmer Vines", "Glimmerranken");
+        block(ShadowBlocks.GLIMMER_VINES_PLANT, "Glimmer Vines Plant", "Glimmerranken");
+        item(ShadowItems.SOUL_BERRIES, "Soul Berries", "Seelenbeeren");
+        lore("soul_berries", "Lets you see in the dark for a while", "Lässt dich eine Weile im Dunkeln sehen");
+
+        // Kreaturen
+        creature(ModEntities.SHADE_STALKER, ShadowItems.SHADE_STALKER_SPAWN_EGG, "Shade Stalker", "Schattenpirscher", "Schattenpirscher");
+        creature(ModEntities.CRYSTAL_CRAWLER, ShadowItems.CRYSTAL_CRAWLER_SPAWN_EGG, "Crystal Crawler", "Kristallkriecher", "Kristallkriecher");
+        creature(ModEntities.NIGHT_WING, ShadowItems.NIGHT_WING_SPAWN_EGG, "Night Wing", "Nachtschwinge", "Nachtschwingen");
+        creature(ModEntities.MOON_STAG, ShadowItems.MOON_STAG_SPAWN_EGG, "Moon Stag", "Mondhirsch", "Mondhirsch");
+        creature(ModEntities.GLIMMER_MOTH, ShadowItems.GLIMMER_MOTH_SPAWN_EGG, "Glimmer Moth", "Glimmerfalter", "Glimmerfalter");
+        item(ShadowItems.SHADOW_ESSENCE, "Shadow Essence", "Schattenessenz");
+        lore("shadow_essence", "What remains of a shade – sought after by the Umbrer", "Was von einem Schatten bleibt – begehrt bei den Umbrern");
 
         // Erze und Speicherblöcke
         block(ShadowBlocks.MOONSILVER_ORE, "Moonsilver Ore", "Mondsilbererz");

@@ -130,6 +130,10 @@ final class Showcase {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         ShadowShowcase.display(steps, g);
+                    } else if (scene.equals("shadowcreatures")) {
+                        ShadowShowcase.creatures(steps, false);
+                    } else if (scene.equals("shadowcreatures_live")) {
+                        ShadowShowcase.creatures(steps, true);
                     } else if (scene.equals("shadow")) {
                         ShadowShowcase.tour(steps, "");
                     } else if (scene.startsWith("shadow_")) {

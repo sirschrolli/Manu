@@ -15,10 +15,52 @@
         "sound": "minecraft:music.overworld.dripstone_caves"
       }
     },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.1,
     "minecraft:gameplay/natural_mob_spawns": {
       "argument": {
         "spawn_costs": {},
-        "spawns_by_category": {}
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:glimmer_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 2
+              },
+              "weight": 10
+            }
+          ],
+          "monster": [
+            {
+              "type": "kingdomsatwar:crystal_crawler",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 100
+            },
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 40
+            },
+            {
+              "type": "kingdomsatwar:night_wing",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            }
+          ]
+        }
       },
       "modifier": "overlay"
     },
@@ -59,7 +101,8 @@
     ],
     [
       "kingdomsatwar:shadow/night_crystals_chasm",
-      "kingdomsatwar:shadow/night_crystals_depths"
+      "kingdomsatwar:shadow/night_crystals_depths",
+      "kingdomsatwar:shadow/glimmer_vines_caves"
     ],
     [],
     [

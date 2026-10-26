@@ -14,8 +14,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_water, cave_troll, deer,  # noqa: E402
-                              dragon, dragon_armor, goose, lindworm, vineling, wild_boar, will_o_wisp)
+from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_water, cave_troll,  # noqa: E402
+                              crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
+                              shade_stalker, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -71,6 +72,13 @@ def main():
                 "Geometrie von Thalassa, dem Wasserdrachen-Boss (Grundgröße, im Spiel ×2,0).", "boss", boss_water.PALETTES, preview)
     write_model(vineling, "VinelingGeometry", "Geometrie des Ranklings (Diener von Verdantis).", "vineling", vineling.PALETTES,
                 preview)
+    # Kreaturen der Schattenwelt
+    write_model(shade_stalker, "ShadeStalkerGeometry", "Geometrie des Schattenpirschers.", "shade_stalker", shade_stalker.PALETTES,
+                preview)
+    write_model(crystal_crawler, "CrystalCrawlerGeometry", "Geometrie des Kristallkriechers.", "crystal_crawler",
+                crystal_crawler.PALETTES, preview)
+    write_model(night_wing, "NightWingGeometry", "Geometrie der Nachtschwinge.", "night_wing", night_wing.PALETTES, preview)
+    write_model(glimmer_moth, "GlimmerMothGeometry", "Geometrie des Glimmerfalters.", "glimmer_moth", glimmer_moth.PALETTES, preview)
 
 
 if __name__ == "__main__":

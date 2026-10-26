@@ -15,6 +15,17 @@ PALETTES = {
         "nose": ramp("#0e0a0a", "#4a3a34"), "hoof": ramp("#141010", "#4a403a"), "eye": ramp("#100806", "#5a3a20"),
         "antler": ramp("#5a4630", "#efe2c4"), "back": ramp("#4a2a16", "#c0864e"),
     },
+    # Mondhirsch (Schattenwelt): silbrig-lavendelfarbenes Fell, Geweih aus Nachtkristall, helle Augen
+    "moon_stag": {
+        "fur": ramp("#605c88", "#e8e4fa"), "belly": ramp("#aaa6cc", "#f8f6ff"), "white": ramp("#d0d0ea", "#ffffff"),
+        "nose": ramp("#16142a", "#4a4668"), "hoof": ramp("#16142a", "#56507a"), "eye": ramp("#3a8ad8", "#e8f8ff"),
+        "antler": ramp("#3a38a8", "#eae6ff"), "back": ramp("#605c88", "#e8e4fa"),
+    },
+    "moon_stag_fawn": {
+        "fur": ramp("#545072", "#d4d0ec"), "belly": ramp("#a4a0c2", "#f8f6ff"), "white": ramp("#d8d8ee", "#ffffff"),
+        "nose": ramp("#16142a", "#4a4668"), "hoof": ramp("#201e36", "#625c86"), "eye": ramp("#3a8ad8", "#e8f8ff"),
+        "antler": ramp("#3a38a8", "#eae6ff"), "back": ramp("#545072", "#d4d0ec"),
+    },
     "deer_fawn": {
         "fur": ramp("#5a321a", "#d29a5e"), "belly": ramp("#b09070", "#f6e8d0"), "white": ramp("#d8d0c0", "#ffffff"),
         "nose": ramp("#0e0a0a", "#4a3a34"), "hoof": ramp("#201814", "#5a4a40"), "eye": ramp("#100806", "#5a3a20"),
@@ -65,7 +76,7 @@ def _spots(base):
 
     def paint(ctx: Ctx):
         col = base(ctx)
-        if ctx.params.get("variant") != "deer_fawn" or ctx.face in ("bottom", "front", "back"):
+        if ctx.params.get("variant") not in ("deer_fawn", "moon_stag_fawn") or ctx.face in ("bottom", "front", "back"):
             return col
         x, y, z = ctx.world
         if ctx.cube.size[2] >= 14 and rel_y(ctx) < 0.6:
@@ -120,7 +131,10 @@ def _leg(ctx: Ctx):
 def _antler(ctx: Ctx):
     x, y, z = ctx.world
     n = noise3(x * 1.2, y * 1.2, z * 1.2, 41)
-    return pick(ctx.pal["antler"], 0.45 + n * 0.35 + (0.15 if ctx.face in ("top", "west") else 0.0))
+    col = pick(ctx.pal["antler"], 0.45 + n * 0.35 + (0.15 if ctx.face in ("top", "west") else 0.0))
+    if str(ctx.params.get("variant", "")).startswith("moon"):
+        ctx.glow = col                       # Kristallgeweih leuchtet
+    return col
 
 
 def _tail(ctx: Ctx):
@@ -135,7 +149,7 @@ def materials(variant: str) -> dict:
         "neck": _neck,
         "muzzle": _muzzle,
         "ear": _ear,
-        "eye": eye_painter("eye", glow=False),
+        "eye": eye_painter("eye", glow=variant.startswith("moon")),
         "leg": _leg,
         "antler": _antler,
         "tail": _tail,

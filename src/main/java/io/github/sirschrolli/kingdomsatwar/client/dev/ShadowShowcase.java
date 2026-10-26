@@ -442,6 +442,229 @@ final class ShadowShowcase {
         steps.add(Step.screenshot("shadow_" + name + "_ground_b"));
     }
 
+    // =====================================================================================
+    // Kreaturen
+    // =====================================================================================
+
+    /**
+     * Die Kreaturen der Schattenwelt auf einer Lichtung in den Glimmerweiten: Mondhirsche (Hirsch, Hirschkuh, Kitz),
+     * Kristallkriecher, Schattenpirscher, Nachtschwinge und Glimmerfalter – erst in Reihe (ohne eigenen Willen), mit
+     * {@code live} danach als Videos: die Tiere frei laufend und der Pirscher auf der Jagd.
+     */
+    static void creatures(Deque<Step> steps, boolean live) {
+        double[] c = new double[4];          // x0, y, lz, bereit
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(10)));
+        // Monster brauchen eine Schwierigkeit (im Frieden verschwinden sie); von selbst erscheint aber niemand
+        steps.add(Step.command("gamerule spawn_monsters false"));
+        steps.add(Step.command("difficulty normal"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.command("effect give @s resistance infinite 5 true"));
+        steps.add(Step.command("effect give @s saturation infinite 5 true"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> {
+            ServerLevel shadow = shadow(level);
+            Pair<BlockPos, Holder<Biome>> found = shadow.findClosestBiome3d(biome -> biome.is(ShadowBiomes.GLIMMER_MEADOWS),
+                    new BlockPos(0, 80, 0), 6000, 32, 24);
+            BlockPos pos = found != null ? found.getFirst() : BlockPos.ZERO;
+            // die Bühne bleibt geladen, damit die Kreaturen dieselben bleiben
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    shadow.setChunkForced((pos.getX() >> 4) + dx, (pos.getZ() >> 4) + dz, true);
+                }
+            }
+            int y = Math.max(firstSolidBelow(shadow, pos.getX(), 165, pos.getZ()), ShadowTerrain.SEA_LEVEL + 2);
+            int x0 = pos.getX() - 13;
+            int z0 = pos.getZ() - 22;
+            var grass = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_GRASS.get().defaultBlockState();
+            var soil = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SOIL.get().defaultBlockState();
+            var air = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+            for (int dx = -2; dx < 29; dx++) {
+                for (int dz = 0; dz < 50; dz++) {
+                    for (int dy = -4; dy < 14; dy++) {
+                        var state = dy < -1 ? soil : dy == -1 ? grass : air;
+                        shadow.setBlock(new BlockPos(x0 + dx, y + dy, z0 + dz), state, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            // Pflanzen hinter der Reihe und am Rand
+            var plants = List.of(io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SPROUTS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.GHOSTCAP.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SPROUTS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.PALE_GRASS.get());
+            var random = net.minecraft.util.RandomSource.create(42);
+            for (int i = 0; i < 70; i++) {
+                int dx = random.nextInt(29) - 2;
+                int dz = random.nextInt(50);
+                if (dz > 17 && dz < 46) {
+                    continue;                // vor der Reihe frei lassen
+                }
+                shadow.setBlock(new BlockPos(x0 + dx, y, z0 + dz), plants.get(random.nextInt(plants.size())).defaultBlockState(),
+                        net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+            double lz = z0 + 20.5;
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MOON_STAG.get(), x0 + 3.5, y, lz, -20,
+                    m -> m.setStag(true));
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MOON_STAG.get(), x0 + 6.0, y, lz + 0.5, 10,
+                    m -> m.setStag(false));
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MOON_STAG.get(), x0 + 7.8, y, lz + 1.2, 30,
+                    m -> m.setBaby(true));
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.CRYSTAL_CRAWLER.get(), x0 + 10.5, y, lz, 15, m -> { });
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SHADE_STALKER.get(), x0 + 13.5, y, lz, 0, m -> { });
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.NIGHT_WING.get(), x0 + 17.0, y + 2.6, lz, -25, m -> {
+                m.setNoGravity(true);
+                m.setPhantomSize(1);
+            });
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.GLIMMER_MOTH.get(), x0 + 20.5, y + 1.3, lz - 0.5, 30,
+                    m -> m.setNoGravity(true));
+            creature(shadow, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.GLIMMER_MOTH.get(), x0 + 21.8, y + 2.0, lz + 0.8, -40,
+                    m -> m.setNoGravity(true));
+            c[0] = x0;
+            c[1] = y;
+            c[2] = lz;
+            c[3] = 1;
+            KingdomsAtWar.LOGGER.info("[Showcase] Kreaturen bei {} {} {}", x0, y, lz);
+        }));
+        steps.add(Step.until(() -> c[3] != 0, 20 * 300));
+        // Standbilder aus der Luft (Zuschauermodus: die Kamera schwebt genau dort)
+        steps.add(at(c, 12.6, 2.8, 8.5, 12.6, 1.0, 0.0));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.waitTicks(40));
+        shot(steps, "shadow_creatures_overview");
+        steps.add(at(c, 5.8, 1.6, 4.4, 5.8, 1.0, 0.0));
+        shot(steps, "shadow_creatures_stags");
+        steps.add(at(c, 11.6, 1.2, 3.6, 11.6, 0.8, 0.0));
+        shot(steps, "shadow_creatures_crawler_stalker");
+        steps.add(at(c, 18.8, 1.0, 4.6, 19.2, 2.2, 0.0));
+        shot(steps, "shadow_creatures_flyers");
+        steps.add(at(c, 12.5, 2.4, -6.5, 12.5, 1.0, 0.0));
+        shot(steps, "shadow_creatures_back");
+        // Der Pirscher: Spieler am Boden und im Überlebensmodus, damit er ihn jagt
+        steps.add(Step.command("gamemode survival"));
+        steps.add(at(c, 13.5, 0.0, 3.4, 13.5, 1.9, 0.0));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> tagged(level).forEach(m -> {
+            if (m instanceof io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity stalker) {
+                stalker.setTarget(level.getServer().getPlayerList().getPlayers().get(0));
+                stalker.setAggressive(true);
+            }
+        })));
+        steps.add(Step.waitTicks(40));
+        shot(steps, "shadow_creatures_stalker");
+        // zur Seite geblickt: unbeobachtet verblasst der Pirscher (rechts im Bild)
+        steps.add(at(c, 11.0, 0.0, 4.5, 10.0, 1.4, 0.0));
+        steps.add(Step.waitTicks(50));
+        shot(steps, "shadow_creatures_stalker_lurking");
+        if (!live) {
+            steps.add(Step.command("gamemode creative"));
+            return;
+        }
+        // Video 1: die Tiere leben (Zuschauermodus, damit niemand angreift)
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(at(c, 12.6, 2.6, 9.0, 12.6, 1.0, 0.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> tagged(level).forEach(m -> {
+            if (!(m instanceof io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity)) {
+                m.setNoAi(false);
+                m.setNoGravity(false);
+            }
+        })));
+        steps.add(Step.record("shadow_life", 240, minecraft -> { }));
+        // Video 2: der Pirscher jagt – angesehen langsam und deutlich, unbeobachtet schnell und kaum zu sehen
+        steps.add(Step.server(level -> tagged(level).forEach(m -> {
+            if (!(m instanceof io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity)) {
+                m.discard();
+            }
+        })));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(at(c, 13.5, 0.0, 14.0, 13.5, 1.9, 0.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> tagged(level).forEach(m -> {
+            m.setNoAi(false);
+            m.setTarget(level.getServer().getPlayerList().getPlayers().get(0));
+        })));
+        int[] frame = new int[1];
+        steps.add(Step.record("shadow_stalker", 115, minecraft -> {
+            int f = frame[0]++;
+            var player = minecraft.player;
+            var stalker = minecraft.level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity.class,
+                    player.getBoundingBox().inflate(40)).stream().findFirst().orElse(null);
+            if (stalker == null) {
+                return;
+            }
+            double dx = stalker.getX() - player.getX();
+            double dz = stalker.getZ() - player.getZ();
+            double dy = stalker.getY(0.6) - player.getEyeY();
+            float toStalker = (float) (-Math.atan2(dx, dz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * 180.0 / Math.PI);
+            // 0–30: ansehen · 30–60: 42° daneben blicken · ab 60: wieder ansehen
+            float yaw = f >= 30 && f < 60 ? toStalker - 42.0f : toStalker;
+            player.connection.sendCommand(String.format(Locale.ROOT, "tp @s ~ ~ ~ %.1f %.1f", yaw, pitch));
+            if (f % 10 == 0) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Pirscher: Abstand {} sichtbar {} beobachtet {} jagt {}",
+                        String.format(Locale.ROOT, "%.1f", Math.sqrt(dx * dx + dz * dz)),
+                        String.format(Locale.ROOT, "%.2f", stalker.visibility), stalker.isWatched(), stalker.isAggressive());
+            }
+        }));
+        steps.add(Step.command("gamemode creative"));
+    }
+
+    /** Die Kreaturen der Bühne (am Merkmal erkennbar, auch wenn sie neu geladen wurden). */
+    private static List<net.minecraft.world.entity.Mob> tagged(ServerLevel any) {
+        List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();
+        shadow(any).getAllEntities().forEach(entity -> {
+            if (entity instanceof net.minecraft.world.entity.Mob mob && mob.entityTags().contains(STAGE_TAG)) {
+                mobs.add(mob);
+            }
+        });
+        return mobs;
+    }
+
+    private static final String STAGE_TAG = "kaw_showcase";
+
+    private static void shot(Deque<Step> steps, String name) {
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot(name));
+        steps.add(Step.once(minecraft -> minecraft.level.getEntitiesOfClass(
+                        io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity.class, minecraft.player.getBoundingBox().inflate(40))
+                .forEach(stalker -> KingdomsAtWar.LOGGER.info("[Showcase] {}: Pirscher sichtbar {} beobachtet {} jagt {}", name,
+                        stalker.visibility, stalker.isWatched(), stalker.isAggressive()))));
+    }
+
+    /** Kamera an (x0+dx, y+dy, lz+dz), Blick auf (x0+tx, y+ty, lz+tz) – in der Schattenwelt. */
+    private static Step at(double[] c, double dx, double dy, double dz, double tx, double ty, double tz) {
+        return Step.once(minecraft -> {
+            double cx = c[0] + dx;
+            double cy = c[1] + dy;
+            double cz = c[2] + dz;
+            double lx = tx - dx;
+            double ly = ty - (dy + 1.62);
+            double lz = tz - dz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f",
+                    DIM, cx, cy, cz, yaw, pitch));
+        });
+    }
+
+    private static <T extends net.minecraft.world.entity.Mob> T creature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
+            double x, double y, double z, float yaw, java.util.function.Consumer<T> setup) {
+        T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        if (mob == null) {
+            throw new IllegalStateException("Kreatur lässt sich nicht erzeugen: " + type);
+        }
+        mob.setNoAi(true);
+        mob.setPersistenceRequired();
+        mob.addTag(STAGE_TAG);
+        mob.snapTo(x, y, z, yaw, 0);
+        mob.setYBodyRot(yaw);
+        mob.setYHeadRot(yaw);
+        setup.accept(mob);
+        level.addFreshEntity(mob);
+        return mob;
+    }
+
     /** Oberste feste Stelle (kein Laub, kein Wasser) in der Säule ab {@code fromY} abwärts, +1. */
     private static int firstSolidBelow(ServerLevel shadow, int x, int fromY, int z) {
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(x, fromY, z);

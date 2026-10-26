@@ -14,6 +14,15 @@ import io.github.sirschrolli.kingdomsatwar.client.model.geom.GooseGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.LindwormGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.WildBoarGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.WillOWispGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.CrystalCrawlerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.GlimmerMothGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.NightWingGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.ShadeStalkerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.CrystalCrawlerRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.GlimmerMothRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.MoonStagRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.NightWingRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.ShadeStalkerRenderer;
 import io.github.sirschrolli.kingdomsatwar.client.model.SoldierModel;
 import io.github.sirschrolli.kingdomsatwar.client.renderer.BanditRenderer;
 import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.CaveTrollRenderer;
@@ -57,6 +66,10 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.VOLTARION, io.github.sirschrolli.kingdomsatwar.client.model.geom.VoltarionGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.THALASSA, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThalassaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.VINELING, io.github.sirschrolli.kingdomsatwar.client.model.geom.VinelingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHADE_STALKER, ShadeStalkerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CRYSTAL_CRAWLER, CrystalCrawlerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.NIGHT_WING, NightWingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
     }
 
     @SubscribeEvent
@@ -101,6 +114,12 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
+        // Kreaturen der Schattenwelt
+        event.registerEntityRenderer(ModEntities.SHADE_STALKER.get(), ShadeStalkerRenderer::new);
+        event.registerEntityRenderer(ModEntities.CRYSTAL_CRAWLER.get(), CrystalCrawlerRenderer::new);
+        event.registerEntityRenderer(ModEntities.NIGHT_WING.get(), NightWingRenderer::new);
+        event.registerEntityRenderer(ModEntities.MOON_STAG.get(), MoonStagRenderer::new);
+        event.registerEntityRenderer(ModEntities.GLIMMER_MOTH.get(), GlimmerMothRenderer::new);
     }
 
     @SubscribeEvent

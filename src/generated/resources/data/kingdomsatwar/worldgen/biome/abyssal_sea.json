@@ -15,10 +15,23 @@
         "sound": "minecraft:music.under_water"
       }
     },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.1,
     "minecraft:gameplay/natural_mob_spawns": {
       "argument": {
         "spawn_costs": {},
-        "spawns_by_category": {}
+        "spawns_by_category": {
+          "monster": [
+            {
+              "type": "kingdomsatwar:night_wing",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 15
+            }
+          ]
+        }
       },
       "modifier": "overlay"
     },
@@ -50,7 +63,8 @@
       "kingdomsatwar:shadow/ore_abyssite"
     ],
     [
-      "kingdomsatwar:shadow/night_crystals_depths"
+      "kingdomsatwar:shadow/night_crystals_depths",
+      "kingdomsatwar:shadow/glimmer_vines_caves"
     ]
   ],
   "has_precipitation": false,

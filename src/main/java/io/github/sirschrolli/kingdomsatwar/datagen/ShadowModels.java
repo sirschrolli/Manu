@@ -91,11 +91,22 @@ final class ShadowModels {
         blocks.createPlantWithDefaultItem(ShadowBlocks.SHADOW_SAPLING.get(), ShadowBlocks.POTTED_SHADOW_SAPLING.get(),
                 BlockModelGenerators.PlantType.NOT_TINTED);
 
+        // Seelenbeeren und Glimmerranken
+        blocks.createCrossBlock(ShadowBlocks.SOUL_BERRY_BUSH.get(), BlockModelGenerators.PlantType.NOT_TINTED,
+                io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock.AGE, 0, 1, 2, 3);
+        blocks.createGrowingPlant(ShadowBlocks.GLIMMER_VINES.get(), ShadowBlocks.GLIMMER_VINES_PLANT.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
+        blocks.registerSimpleFlatItemModel(ShadowBlocks.GLIMMER_VINES.get(), "_plant");
+
         // Gegenstände
         for (var item : java.util.List.of(ShadowItems.RAW_MOONSILVER, ShadowItems.MOONSILVER_INGOT, ShadowItems.MOONSILVER_NUGGET,
                 ShadowItems.RAW_NIGHTSTEEL, ShadowItems.NIGHTSTEEL_INGOT, ShadowItems.SOUL_CRYSTAL, ShadowItems.ABYSSITE_SHARD,
-                ShadowItems.ABYSSITE_INGOT, ShadowItems.NIGHT_CRYSTAL_SHARD, ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE)) {
+                ShadowItems.ABYSSITE_INGOT, ShadowItems.NIGHT_CRYSTAL_SHARD, ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE,
+                ShadowItems.SHADOW_ESSENCE)) {
             ModModelProvider.flat(items, item.get());
+        }
+        for (var egg : ShadowItems.spawnEggs()) {
+            ModModelProvider.flat(items, egg.get());
         }
         for (var tool : java.util.List.of(ShadowItems.NIGHTSTEEL_SWORD, ShadowItems.NIGHTSTEEL_PICKAXE, ShadowItems.NIGHTSTEEL_AXE,
                 ShadowItems.NIGHTSTEEL_SHOVEL, ShadowItems.NIGHTSTEEL_HOE, ShadowItems.ABYSSITE_SWORD, ShadowItems.ABYSSITE_PICKAXE,

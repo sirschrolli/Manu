@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.shadow;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -123,39 +124,48 @@ public final class ShadowBiomes {
                         .fog(20.0f, 150.0f).particles(new AmbientParticle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.0012f))
                         .music(SoundEvents.MUSIC_BIOME_DEEP_DARK).loop(SoundEvents.AMBIENT_WARPED_FOREST_LOOP)
                         .additions(SoundEvents.AMBIENT_WARPED_FOREST_ADDITIONS, 0.0111),
-                ShadowFeatures.forest(placed, carvers), false, 0.6f, 0.8f));
+                ShadowFeatures.forest(placed, carvers),
+                new Spawns().stalkers(100).crawlers(25).nightWings(8).moonStags(10).moths(25).worldGen(0.08f), false, 0.6f, 0.8f));
         context.register(PALE_WASTES, biome(new Look(0x3A3448, 0x6A6278, 0x4A4A62, 0x1A1A2A, 0x8E879A, 0x8C8298)
                         .fog(28.0f, 200.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.012f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_BASALT_DELTAS_LOOP),
-                ShadowFeatures.wastes(placed, carvers), false, 1.2f, 0.0f));
+                ShadowFeatures.wastes(placed, carvers),
+                new Spawns().stalkers(90).crawlers(20).nightWings(30), false, 1.2f, 0.0f));
         context.register(CRYSTAL_CHASMS, biome(new Look(0x20244A, 0x2A3264, 0x2A4A8A, 0x0C1838, 0x4A5C9C, 0x4C6CAC)
                         .fog(24.0f, 180.0f).particles(new AmbientParticle(ParticleTypes.END_ROD, 0.0009f))
                         .music(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES),
-                ShadowFeatures.chasms(placed, carvers), false, 0.8f, 0.4f));
+                ShadowFeatures.chasms(placed, carvers),
+                new Spawns().crawlers(100).stalkers(40).nightWings(10).moths(10), false, 0.8f, 0.4f));
         context.register(SOUL_MARSH, biome(new Look(0x1C2830, 0x2A3A3A, 0x1A3A34, 0x081A16, 0x3E5E4E, 0x305E4A)
                         .fog(10.0f, 110.0f).particles(new AmbientParticle(ParticleTypes.SOUL, 0.0006f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_LOOP)
                         .additions(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_ADDITIONS, 0.0111),
-                ShadowFeatures.marsh(placed, carvers), true, 0.7f, 0.9f));
+                ShadowFeatures.marsh(placed, carvers),
+                new Spawns().stalkers(80).crawlers(15).nightWings(10).moonStags(5).moths(35), true, 0.7f, 0.9f));
         context.register(SHADOW_PEAKS, biome(new Look(0x2A283E, 0x48445E, 0x3A4062, 0x101830, 0x5E5874, 0x544C74)
                         .fog(32.0f, 240.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.004f))
                         .music(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS),
-                ShadowFeatures.peaks(placed, carvers), true, -0.6f, 0.4f));
+                ShadowFeatures.peaks(placed, carvers),
+                new Spawns().nightWings(50).stalkers(60).crawlers(25), true, -0.6f, 0.4f));
         context.register(GLIMMER_MEADOWS, biome(new Look(0x2C2650, 0x3C3668, 0x3A3A7C, 0x12123A, 0x7C72BA, 0x8C7ACA)
                         .fog(32.0f, 230.0f).particles(new AmbientParticle(ParticleTypes.FIREFLY, 0.0035f))
                         .music(SoundEvents.MUSIC_END),
-                ShadowFeatures.meadows(placed, carvers), false, 0.7f, 0.5f));
+                ShadowFeatures.meadows(placed, carvers),
+                new Spawns().stalkers(60).crawlers(10).nightWings(12).moonStags(14).moths(45).worldGen(0.1f), false, 0.7f, 0.5f));
         context.register(ABYSSAL_SEA, biome(new Look(0x181630, 0x1C1A36, 0x0E0E24, 0x04040E, 0x3A3460, 0x3A3466)
                         .fog(24.0f, 200.0f).music(SoundEvents.MUSIC_UNDER_WATER),
-                ShadowFeatures.sea(placed, carvers), false, 0.5f, 0.5f));
+                ShadowFeatures.sea(placed, carvers),
+                new Spawns().nightWings(15), false, 0.5f, 0.5f));
         context.register(FLOATING_ISLES, biome(new Look(0x382C64, 0x463A78, 0x4A4A9A, 0x16163E, 0x9C7CCC, 0xB28AE2)
                         .fog(40.0f, 260.0f).particles(new AmbientParticle(ParticleTypes.END_ROD, 0.0007f))
                         .music(SoundEvents.MUSIC_END),
-                ShadowFeatures.isles(placed, carvers), false, 0.7f, 0.5f));
+                ShadowFeatures.isles(placed, carvers),
+                new Spawns().nightWings(70).stalkers(25).moonStags(6).moths(20), false, 0.7f, 0.5f));
         context.register(SHADOW_DEPTHS, biome(new Look(0x120E1C, 0x16101E, 0x14183A, 0x06081A, 0x4A3E6A, 0x4A3E6A)
                         .fog(12.0f, 90.0f).particles(new AmbientParticle(ParticleTypes.ASH, 0.002f))
                         .music(SoundEvents.MUSIC_BIOME_DEEP_DARK),
-                ShadowFeatures.depths(placed, carvers), false, 0.8f, 0.4f));
+                ShadowFeatures.depths(placed, carvers),
+                new Spawns().crawlers(100).stalkers(60), false, 0.8f, 0.4f));
     }
 
     /** Farben, Nebel, Partikel und Klänge eines Bioms. */
@@ -209,7 +219,48 @@ public final class ShadowBiomes {
         }
     }
 
-    private static Biome biome(Look look, BiomeGenerationSettings generation, boolean precipitation, float temperature, float downfall) {
+    /**
+     * Wer in einem Biom von selbst erscheint: Schattenpirscher (Gruppen von 1–2), Kristallkriecher (1–3),
+     * Nachtschwingen (1–2), Mondhirsche (Herden von 2–4) und Glimmerfalter (Schwärme von 2–5).
+     */
+    private static final class Spawns {
+        final MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
+        float worldGen = MobSpawnSettings.DEFAULT_CREATURE_WORLD_GEN_SPAWN_PROBABILITY;
+
+        Spawns stalkers(int weight) {
+            this.builder.addSpawn(ModEntities.SHADE_STALKER.get(), weight, 1, 2);
+            return this;
+        }
+
+        Spawns crawlers(int weight) {
+            this.builder.addSpawn(ModEntities.CRYSTAL_CRAWLER.get(), weight, 1, 3);
+            return this;
+        }
+
+        Spawns nightWings(int weight) {
+            this.builder.addSpawn(ModEntities.NIGHT_WING.get(), weight, 1, 2);
+            return this;
+        }
+
+        Spawns moonStags(int weight) {
+            this.builder.addSpawn(ModEntities.MOON_STAG.get(), weight, 2, 4);
+            return this;
+        }
+
+        Spawns moths(int weight) {
+            this.builder.addSpawn(ModEntities.GLIMMER_MOTH.get(), weight, 2, 5);
+            return this;
+        }
+
+        /** Wie oft beim Erzeugen eines Chunks Tiere erscheinen. */
+        Spawns worldGen(float probability) {
+            this.worldGen = probability;
+            return this;
+        }
+    }
+
+    private static Biome biome(Look look, BiomeGenerationSettings generation, Spawns spawns, boolean precipitation, float temperature,
+            float downfall) {
         Biome.BiomeBuilder builder = new Biome.BiomeBuilder()
                 .hasPrecipitation(precipitation)
                 .temperature(temperature)
@@ -229,7 +280,8 @@ public final class ShadowBiomes {
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(look.loop,
                         Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
                         List.copyOf(look.additions)))
-                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .mobSpawnSettings(spawns.builder.build())
+                .setAttribute(EnvironmentAttributes.CREATURE_WORLD_GEN_SPAWN_PROBABILITY, spawns.worldGen)
                 .generationSettings(generation);
         if (!look.particles.isEmpty()) {
             builder.setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.copyOf(look.particles));

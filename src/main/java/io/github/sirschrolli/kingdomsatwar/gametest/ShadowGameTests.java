@@ -2,6 +2,19 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.item.MoonsilverBladeItem;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.CrystalCrawlerEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.MoonStagEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.shadow.ShadeStalkerEntity;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.storage.loot.LootTable;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
@@ -70,6 +83,12 @@ final class ShadowGameTests {
             ModGameTests.TEST_FUNCTIONS.register("shadow_gear", () -> ShadowGameTests::shadowGear);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_RECIPES =
             ModGameTests.TEST_FUNCTIONS.register("shadow_recipes", () -> ShadowGameTests::shadowRecipes);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_CREATURES =
+            ModGameTests.TEST_FUNCTIONS.register("shadow_creatures", () -> ShadowGameTests::shadowCreatures);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADE_STALKER_HUNTS =
+            ModGameTests.TEST_FUNCTIONS.register("shade_stalker_hunts", () -> ShadowGameTests::shadeStalkerHunts);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CRYSTAL_CRAWLER_SHARDS =
+            ModGameTests.TEST_FUNCTIONS.register("crystal_crawler_shards", () -> ShadowGameTests::crystalCrawlerShards);
 
     private ShadowGameTests() {}
 
@@ -80,7 +99,7 @@ final class ShadowGameTests {
         for (var test : List.of(SHADOW_ORES, SHADOW_RECIPES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(), new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
-        for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR)) {
+        for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -150,6 +169,125 @@ final class ShadowGameTests {
             helper.assertTrue(ShadowGate.destination(overworld, player, BlockPos.ZERO) == null,
                     "Ohne Schattenwelt darf das Tor nirgendwohin führen");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Die Kreaturen der Schattenwelt: alle erscheinen, leben und haben Beute; Mondhirsche fressen Seelenbeeren, bekommen
+     * Mondhirsch-Kitze und dürfen auf Schattengras erscheinen; die Biome kennen ihre Bewohner; die feindlichen
+     * Schattenwesen sind als solche markiert (für die Mondsilberklinge).
+     */
+    private static void shadowCreatures(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, ShadowBlocks.SHADOW_GRASS.get());
+            }
+        }
+        var loot = level.getServer().reloadableRegistries();
+        List<EntityType<? extends Mob>> types = List.of(ModEntities.SHADE_STALKER.get(), ModEntities.CRYSTAL_CRAWLER.get(),
+                ModEntities.NIGHT_WING.get(), ModEntities.MOON_STAG.get(), ModEntities.GLIMMER_MOTH.get());
+        List<Mob> mobs = new java.util.ArrayList<>();
+        for (int i = 0; i < types.size(); i++) {
+            var type = types.get(i);
+            mobs.add(helper.spawnWithNoFreeWill(type, new BlockPos(1 + (i % 3) * 3, 1, 2 + (i / 3) * 4)));
+            ResourceKey<LootTable> key = type.getDefaultLootTable().orElseThrow();
+            helper.assertTrue(loot.getLootTable(key) != LootTable.EMPTY, "Beute fehlt: " + key.identifier());
+        }
+        // Tags
+        helper.assertTrue(mobs.get(0).is(ModTags.EntityTypes.SHADOW_CREATURES), "Der Schattenpirscher ist kein Schattenwesen");
+        helper.assertTrue(mobs.get(1).is(net.minecraft.tags.EntityTypeTags.ARTHROPOD), "Der Kristallkriecher ist kein Gliederfüßer");
+        helper.assertFalse(mobs.get(3).is(ModTags.EntityTypes.SHADOW_CREATURES), "Der Mondhirsch gilt als feindliches Schattenwesen");
+        // Mondhirsch
+        MoonStagEntity stag = (MoonStagEntity) mobs.get(3);
+        helper.assertTrue(stag.isFood(new ItemStack(ShadowItems.SOUL_BERRIES.get())), "Mondhirsche fressen keine Seelenbeeren");
+        helper.assertFalse(stag.isFood(new ItemStack(Items.WHEAT)), "Mondhirsche fressen Weizen");
+        var fawn = stag.getBreedOffspring(level, stag);
+        helper.assertTrue(fawn instanceof MoonStagEntity, "Mondhirsche bekommen keine Mondhirsch-Kitze");
+        helper.assertTrue(net.minecraft.world.entity.animal.Animal.checkAnimalSpawnRules(ModEntities.MOON_STAG.get(), level,
+                EntitySpawnReason.NATURAL, helper.absolutePos(new BlockPos(7, 1, 7)), level.getRandom()), "Tiere erscheinen nicht auf Schattengras");
+        // Bewohner der Biome
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
+        assertSpawns(helper, biomes.getOrThrow(ShadowBiomes.GLIMMER_MEADOWS).value(), MobCategory.CREATURE, ModEntities.MOON_STAG.get());
+        assertSpawns(helper, biomes.getOrThrow(ShadowBiomes.GLIMMER_MEADOWS).value(), MobCategory.AMBIENT, ModEntities.GLIMMER_MOTH.get());
+        assertSpawns(helper, biomes.getOrThrow(ShadowBiomes.SHADOW_FOREST).value(), MobCategory.MONSTER, ModEntities.SHADE_STALKER.get());
+        assertSpawns(helper, biomes.getOrThrow(ShadowBiomes.SHADOW_DEPTHS).value(), MobCategory.MONSTER, ModEntities.CRYSTAL_CRAWLER.get());
+        assertSpawns(helper, biomes.getOrThrow(ShadowBiomes.FLOATING_ISLES).value(), MobCategory.MONSTER, ModEntities.NIGHT_WING.get());
+        helper.runAfterDelay(10, () -> {
+            for (Mob mob : mobs) {
+                helper.assertTrue(mob.isAlive(), mob.getType().getDescriptionId() + " lebt nicht mehr");
+            }
+            helper.succeed();
+        });
+    }
+
+    private static void assertSpawns(GameTestHelper helper, Biome biome, MobCategory category, EntityType<?> type) {
+        MobSpawnSettings spawns = biome.getAttributes().applyModifier(EnvironmentAttributes.NATURAL_MOB_SPAWNS, MobSpawnSettings.EMPTY);
+        helper.assertTrue(spawns.getMobsToSpawn(category).unwrap().stream().anyMatch(entry -> entry.value().type() == type),
+                "Biom ohne " + type.getDescriptionId());
+    }
+
+    /**
+     * Schattenpirscher: merkt, ob sein Opfer ihn ansieht – angesehen wird er langsam, unbeobachtet schnell; sein Hieb hüllt
+     * das Opfer in Finsternis.
+     */
+    private static void shadeStalkerHunts(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, ShadowBlocks.SHADOW_STONE.base().get());
+            }
+        }
+        ShadeStalkerEntity stalker = helper.spawnWithNoFreeWill(ModEntities.SHADE_STALKER.get(), new BlockPos(4, 1, 6));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        // Blick nach Süden (+Z) auf den Pirscher
+        player.snapTo(stalker.getX(), stalker.getY(), stalker.getZ() - 4.0, 0.0f, 0.0f);
+        helper.assertTrue(stalker.isLookedAtBy(player), "Der Pirscher merkt nicht, dass er angesehen wird");
+        player.snapTo(stalker.getX(), stalker.getY(), stalker.getZ() - 4.0, 180.0f, 0.0f);
+        helper.assertFalse(stalker.isLookedAtBy(player), "Der Pirscher glaubt sich angesehen, obwohl man wegschaut");
+        stalker.setTarget(player);
+        double base = stalker.getAttributeBaseValue(Attributes.MOVEMENT_SPEED);
+        helper.runAfterDelay(6, () -> {
+            helper.assertFalse(stalker.isWatched(), "Unbeobachtet hält er sich für beobachtet");
+            helper.assertTrue(stalker.getAttributeValue(Attributes.MOVEMENT_SPEED) > base * 1.2,
+                    "Unbeobachtet ist er nicht schneller: " + stalker.getAttributeValue(Attributes.MOVEMENT_SPEED));
+            player.snapTo(stalker.getX(), stalker.getY(), stalker.getZ() - 4.0, 0.0f, 0.0f);
+        });
+        helper.runAfterDelay(14, () -> {
+            helper.assertTrue(stalker.isWatched(), "Angesehen merkt er es nicht");
+            helper.assertTrue(stalker.getAttributeValue(Attributes.MOVEMENT_SPEED) < base * 0.5,
+                    "Angesehen ist er nicht langsamer: " + stalker.getAttributeValue(Attributes.MOVEMENT_SPEED));
+            stalker.doHurtTarget(level, player);
+            helper.assertTrue(player.hasEffect(MobEffects.DARKNESS), "Der Hieb hüllt nicht in Finsternis");
+            helper.succeed();
+        });
+    }
+
+    /** Kristallkriecher: wer ihn aus der Nähe trifft, bekommt manchmal einen Splitterhagel ab. */
+    private static void crystalCrawlerShards(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, ShadowBlocks.SHADOW_STONE.base().get());
+            }
+        }
+        CrystalCrawlerEntity crawler = helper.spawnWithNoFreeWill(ModEntities.CRYSTAL_CRAWLER.get(), new BlockPos(4, 1, 4));
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.snapTo(crawler.getX() + 1.5, crawler.getY(), crawler.getZ(), 90.0f, 0.0f);
+        helper.assertTrue(crawler.getNavigation() instanceof net.minecraft.world.entity.ai.navigation.WallClimberNavigation,
+                "Der Kristallkriecher kann nicht klettern");
+        float before = player.getHealth();
+        int hits = 0;
+        for (int i = 0; i < 40 && player.getHealth() >= before; i++) {
+            crawler.damageCooldownTime = 0;
+            player.damageCooldownTime = 0;
+            crawler.setHealth(crawler.getMaxHealth());
+            if (crawler.hurtServer(level, level.damageSources().playerAttack(player), 0.5f)) {
+                hits++;
+            }
+        }
+        helper.assertTrue(player.getHealth() < before, "Kein Splitterhagel nach 40 Treffern (" + hits + " trafen, Leben "
+                + player.getHealth() + ", Abstand " + player.distanceTo(crawler) + ")");
         helper.succeed();
     }
 

@@ -167,6 +167,17 @@ public final class ShadowFeatures {
     static final Entry GHOSTCAPS = entry(VEGETATION, "ghostcaps", block(ShadowBlocks.GHOSTCAP), patch(RarityFilter.onAverageOnceEvery(2), 16));
     static final Entry CRYSTAL_CLUSTERS = entry(VEGETATION, "night_crystal_clusters", block(ShadowBlocks.NIGHT_CRYSTAL_CLUSTER),
             patch(RarityFilter.onAverageOnceEvery(3), 10));
+    static final Entry SOUL_BERRIES = entry(VEGETATION, "soul_berry_bushes", () -> new SimpleBlockFeature(BlockStateProvider.of(
+            ShadowBlocks.SOUL_BERRY_BUSH.get().defaultBlockState().setValue(io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock.AGE, 3))),
+            patch(RarityFilter.onAverageOnceEvery(4), 12));
+    /** Glimmerranken unter den Baumkronen (nach den Bäumen, damit es Laub gibt). */
+    static final Entry VINES_TREES = entry(VEGETATION, "glimmer_vines_trees",
+            () -> new io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature(10, 6),
+            List.of(CountPlacement.of(6), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING),
+                    BiomeFilter.biome()));
+    /** Glimmerranken an Höhlendecken und Schluchtwänden (in allen Biomen). */
+    static final Entry VINES_CAVES = entry(UNDERGROUND, "glimmer_vines_caves",
+            () -> new io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature(8, 10), volume(28, -56, 150));
 
     /** Setzlinge: ein Schattenbaum – vier Setzlinge im Quadrat werden zu einem Schattenriesen. */
     public static final TreeGrower SHADOW_TREE = new TreeGrower("kingdomsatwar_shadow", WeightedList.of(TREES_SPARSE.featureKey()),
@@ -196,7 +207,7 @@ public final class ShadowFeatures {
     private static BiomeGenerationSettings settings(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers, Entry... chosen) {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(placed, carvers);
         List<Entry> wanted = new ArrayList<>(List.of(chosen));
-        wanted.addAll(List.of(ORE_MOONSILVER, ORE_NIGHTSTEEL, ORE_SOUL_CRYSTAL, ORE_ABYSSITE));
+        wanted.addAll(List.of(ORE_MOONSILVER, ORE_NIGHTSTEEL, ORE_SOUL_CRYSTAL, ORE_ABYSSITE, VINES_CAVES));
         Map<GenerationStep.Decoration, List<Entry>> byStep = new EnumMap<>(GenerationStep.Decoration.class);
         for (Entry entry : ENTRIES) {   // feste Reihenfolge
             if (wanted.contains(entry)) {
@@ -208,7 +219,8 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings forest(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, CRYSTALS_DEPTHS, TREE_GIANT, TREES_FOREST, SPROUTS_DENSE, GHOSTCAPS, MOONFLOWERS);
+        return settings(placed, carvers, CRYSTALS_DEPTHS, TREE_GIANT, TREES_FOREST, SPROUTS_DENSE, GHOSTCAPS, MOONFLOWERS, SOUL_BERRIES,
+                VINES_TREES);
     }
 
     static BiomeGenerationSettings wastes(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
@@ -220,7 +232,7 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings marsh(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, CRYSTALS_DEPTHS, TREES_MARSH, SPROUTS_DENSE, GHOSTCAPS);
+        return settings(placed, carvers, CRYSTALS_DEPTHS, TREES_MARSH, SPROUTS_DENSE, GHOSTCAPS, SOUL_BERRIES, VINES_TREES);
     }
 
     static BiomeGenerationSettings peaks(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
@@ -236,7 +248,7 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings isles(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, TREES_ISLE, SPROUTS_DENSE, MOONFLOWERS, GHOSTCAPS);
+        return settings(placed, carvers, TREES_ISLE, SPROUTS_DENSE, MOONFLOWERS, GHOSTCAPS, VINES_TREES);
     }
 
     static BiomeGenerationSettings depths(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {

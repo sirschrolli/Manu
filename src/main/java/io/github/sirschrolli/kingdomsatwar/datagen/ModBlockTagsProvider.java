@@ -112,6 +112,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockItemTags.SMELTS_TO_GLASS.block(), ShadowBlocks.SHADOW_SAND);
         add(BlockItemTags.MOSS_BLOCKS.block(), ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_VEGETATION, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
+        add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
         add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
         add(BlockTags.REPLACEABLE_BY_MUSHROOMS, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
@@ -152,6 +153,9 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockItemTags.SAPLINGS.block(), ShadowBlocks.SHADOW_SAPLING);
         add(BlockTags.FLOWER_POTS, ShadowBlocks.POTTED_SHADOW_SAPLING);
         add(BlockItemTags.LANTERNS.block(), ShadowBlocks.MOON_LANTERN);
+        add(BlockTags.CLIMBABLE, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
+        add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SOUL_BERRY_BUSH, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
+        add(BlockTags.BEE_GROWABLES, ShadowBlocks.SOUL_BERRY_BUSH);
         tag(BlockTags.BASE_STONE_OVERWORLD).add(ShadowBlocks.SHADOW_STONE.base().key());
 
         // --- Einrichtung ---

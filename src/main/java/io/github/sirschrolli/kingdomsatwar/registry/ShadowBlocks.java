@@ -150,6 +150,22 @@ public final class ShadowBlocks {
                     .offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.POPPED),
             UnaryOperator.identity(), TAB);
 
+    /** Seelenbeerenstrauch (ohne eigenen Gegenstand – man pflanzt ihn mit den Beeren). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock> SOUL_BERRY_BUSH =
+            ModBlocks.BLOCKS.registerBlock("soul_berry_bush", io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock::new,
+                    p -> p.mapColor(MapColor.COLOR_CYAN).randomTicks().noCollision().strength(0.2f).sound(SoundType.SWEET_BERRY_BUSH)
+                            .lightLevel(io.github.sirschrolli.kingdomsatwar.block.SoulBerryBushBlock::light).pushReaction(PushReaction.POPPED));
+    /** Glimmerranken: hängen von Laub und Höhlendecken, die Spitzen glimmen. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.GlimmerVinesBlock> GLIMMER_VINES = ModBlocks.blockWithItem(
+            "glimmer_vines", io.github.sirschrolli.kingdomsatwar.block.GlimmerVinesBlock::new,
+            p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).randomTicks().noCollision().instabreak().sound(SoundType.WEEPING_VINES)
+                    .lightLevel(state -> 9).pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), TAB);
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.GlimmerVinesPlantBlock> GLIMMER_VINES_PLANT =
+            ModBlocks.BLOCKS.registerBlock("glimmer_vines_plant", io.github.sirschrolli.kingdomsatwar.block.GlimmerVinesPlantBlock::new,
+                    p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).noCollision().instabreak().sound(SoundType.WEEPING_VINES)
+                            .lightLevel(state -> 4).pushReaction(PushReaction.POPPED));
+
     // =====================================================================================
     // Erze
     // =====================================================================================

@@ -15,10 +15,32 @@
         "sound": "minecraft:music.overworld.deep_dark"
       }
     },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.1,
     "minecraft:gameplay/natural_mob_spawns": {
       "argument": {
         "spawn_costs": {},
-        "spawns_by_category": {}
+        "spawns_by_category": {
+          "monster": [
+            {
+              "type": "kingdomsatwar:crystal_crawler",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 100
+            },
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 60
+            }
+          ]
+        }
       },
       "modifier": "overlay"
     },
@@ -58,7 +80,8 @@
       "kingdomsatwar:shadow/ore_abyssite"
     ],
     [
-      "kingdomsatwar:shadow/night_crystals_depths"
+      "kingdomsatwar:shadow/night_crystals_depths",
+      "kingdomsatwar:shadow/glimmer_vines_caves"
     ],
     [],
     [
