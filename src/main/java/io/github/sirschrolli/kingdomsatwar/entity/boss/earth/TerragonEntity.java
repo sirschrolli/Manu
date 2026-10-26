@@ -179,6 +179,11 @@ public class TerragonEntity extends DragonBossEntity {
     // =====================================================================================
 
     @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "stalagmite_row" : "quake";
+    }
+
+    @Override
     protected void registerAttacks(List<BossAttack> list) {
         ElementFx dust = new ElementFx(ModParticles.BOSS_DUST.get(),
                 new BlockParticleOption(ParticleTypes.BLOCK, Blocks.SAND.defaultBlockState()),

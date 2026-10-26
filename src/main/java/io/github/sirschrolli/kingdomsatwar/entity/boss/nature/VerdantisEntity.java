@@ -147,6 +147,11 @@ public class VerdantisEntity extends DragonBossEntity {
     // =====================================================================================
 
     @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "seed_rain" : "vine_pillars";
+    }
+
+    @Override
     protected void registerAttacks(List<BossAttack> list) {
         ElementFx spores = new ElementFx(ModParticles.BOSS_SPORE.get(), ParticleTypes.SPORE_BLOSSOM_AIR,
                 ModSounds.DRAGON_BREATH.get(DragonType.NATURE).get(), NatureAttacks::spores);

@@ -16,6 +16,10 @@ public class BossRenderState extends LivingEntityRenderState {
     /** Sekunden seit dem Todesstoß. */
     public float deathSeconds;
     public int phase = 1;
+    /** Noch verborgen (z. B. Glaciara im Eiskristall, bis er zerspringt): wird nicht gezeichnet. */
+    public boolean hidden;
+    /** Wut (0 = volles Leben … 1 = fast besiegt): die leuchtenden Teile glühen heller und pulsieren schneller. */
+    public float rage;
     /** Gestärkt (Kristallpanzer, Aufladung …): die leuchtenden Teile glühen hell. */
     public boolean empowered;
     public float flapPhase;

@@ -303,6 +303,11 @@ public class ThalassaEntity extends DragonBossEntity {
     // =====================================================================================
 
     @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "tidal_wave" : "whirlpool";
+    }
+
+    @Override
     protected void registerAttacks(List<BossAttack> list) {
         ElementFx water = new ElementFx(ModParticles.BOSS_WATER.get(), ParticleTypes.BUBBLE,
                 ModSounds.DRAGON_BREATH.get(DragonType.WATER).get(), WaterAttacks::drench);

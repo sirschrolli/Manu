@@ -118,6 +118,11 @@ public class PyrrhonEntity extends DragonBossEntity {
     // =====================================================================================
 
     @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "meteor_rain" : "eruption";
+    }
+
+    @Override
     protected void registerAttacks(List<BossAttack> list) {
         ElementFx fire = new ElementFx(ModParticles.BOSS_FLAME.get(), ParticleTypes.LARGE_SMOKE,
                 ModSounds.DRAGON_BREATH.get(DragonType.FIRE).get(), (boss, e) -> e.igniteForSeconds(5));

@@ -74,7 +74,7 @@ public class BossProjectile extends AbstractHurtingProjectile {
     public static BossProjectile shoot(ServerLevel level, DragonBossEntity boss, Kind kind, Vec3 from, Vec3 dir, double speed, float damage) {
         BossProjectile p = new BossProjectile(ModEntities.BOSS_PROJECTILE.get(), level);
         p.setKind(kind);
-        p.damage = damage;
+        p.damage = damage * boss.damageMultiplier();
         p.setOwner(boss);
         p.setPos(from.x, from.y, from.z);
         p.setDeltaMovement(dir.normalize().scale(speed));

@@ -47,6 +47,17 @@ public class GlaciaraEntity extends DragonBossEntity {
         return createBossAttributes(820.0, 11.0, 0.34);
     }
 
+    /** Bis der Kristall zerspringt, ist von ihr nichts zu sehen (kein Kopf, der aus dem Eis ragt). */
+    @Override
+    public boolean hiddenDuringAwakening(int ticks) {
+        return ticks < SHATTER_TICK;
+    }
+
+    @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "icicle_rain" : "blizzard";
+    }
+
     /** Die Frostkönigin erstarrt nicht. */
     @Override
     public boolean canFreeze() {

@@ -335,6 +335,9 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private void bosses() {
         add(ModEntities.PYRRHON.get(), pick("Pyrrhon", "Pyrrhon"));
+        text("boss.kingdomsatwar.angered", "%s grows furious!", "%s wird wütend!");
+        text("boss.kingdomsatwar.enraged", "%s flies into a rage!", "%s gerät in Raserei!");
+        text("boss.kingdomsatwar.last_stand", "%s rears up for a final stand!", "%s bäumt sich ein letztes Mal auf!");
         text("boss.kingdomsatwar.fire", "Pyrrhon, the Ash Lord", "Pyrrhon, der Aschenfürst");
         text("boss.kingdomsatwar.fire.title", "The Ash Lord", "Der Aschenfürst");
         add(ModEntities.GLACIARA.get(), pick("Glaciara", "Glaciara"));

@@ -154,6 +154,11 @@ public class VoltarionEntity extends DragonBossEntity {
     // =====================================================================================
 
     @Override
+    protected String signatureAttack(int phase) {
+        return phase >= 3 ? "thunderstorm" : "chain_lightning";
+    }
+
+    @Override
     protected void registerAttacks(List<BossAttack> list) {
         ElementFx lightning = new ElementFx(ModParticles.BOSS_SPARK.get(), ParticleTypes.ELECTRIC_SPARK,
                 ModSounds.DRAGON_BREATH.get(DragonType.LIGHTNING).get(), LightningAttacks::shock);

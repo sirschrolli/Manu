@@ -53,16 +53,28 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
         return new BossRenderState();
     }
 
+    /** Noch verborgen (z. B. im Eiskristall): auch keinen Schatten werfen. */
+    @Override
+    protected float getShadowRadius(BossRenderState state) {
+        return state.hidden ? 0.0f : super.getShadowRadius(state);
+    }
+
     @Override
     public void extractRenderState(T entity, BossRenderState state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         state.bossState = entity.getBossState();
         state.moveMode = entity.getMoveMode();
         state.attack = entity.getAttackAnim();
-        state.attackTime = state.attack == BossAnims.NONE ? 0 : (entity.tickCount - entity.clientAttackStart + partialTicks) / 20.0f;
+        // Wütende Drachen greifen schneller an: die Animation läuft im Tempo des Angriffs
+        state.attackTime = state.attack == BossAnims.NONE ? 0
+                : (entity.tickCount - entity.clientAttackStart + partialTicks) / 20.0f * entity.attackTempo();
         state.stateTime = (entity.tickCount - entity.clientStateStart + partialTicks) / 20.0f;
         state.deathSeconds = entity.isDeadOrDying() ? (entity.deathTime + partialTicks) / 20.0f : 0.0f;
         state.phase = entity.getPhase();
+        state.hidden = entity.getBossState() == DragonBossEntity.State.AWAKENING
+                && entity.hiddenDuringAwakening(entity.tickCount - entity.clientStateStart);
+        state.rage = entity.getMaxHealth() > 0 && entity.getBossState() == DragonBossEntity.State.FIGHT
+                ? Mth.clamp(1.0f - entity.getHealth() / entity.getMaxHealth(), 0.0f, 1.0f) : 0.0f;
         state.empowered = entity.isEmpowered();
         state.flapPhase = Mth.lerp(partialTicks, entity.flapPhaseO, entity.flapPhase);
         state.airBlend = Mth.lerp(partialTicks, entity.airBlendO, entity.airBlend);
@@ -83,9 +95,11 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
     }
 
     private float glowLevel(BossRenderState state) {
-        float g = 0.82f + 0.18f * Mth.sin(state.ageInTicks * 0.12f);
+        // je wütender, desto heller und schneller pulsiert das Glühen
+        float pulse = 0.12f + 0.3f * state.rage;
+        float g = 0.82f + 0.18f * Mth.sin(state.ageInTicks * pulse) + 0.25f * state.rage;
         if (state.phase == 3) {
-            g += 0.15f + 0.1f * Mth.sin(state.ageInTicks * 0.4f);
+            g += 0.12f + 0.12f * Mth.sin(state.ageInTicks * 0.45f);
         }
         if ((state.attack == BossAnims.BREATH || state.attack == BossAnims.RING || state.attack == BossAnims.VOLLEY)
                 && state.attackTime < 1.0f) {
@@ -101,6 +115,14 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
             g *= Mth.clamp(1.0f - (state.deathSeconds - 2.0f) / 4.0f, 0.0f, 1.0f) + Mth.clamp((state.deathSeconds - 7.0f) * 2.0f, 0.0f, 1.2f);
         }
         return Math.max(0.0f, g);
+    }
+
+    @Override
+    public void submit(BossRenderState state, PoseStack poseStack, SubmitNodeCollector collector,
+            net.minecraft.client.renderer.state.level.CameraRenderState camera) {
+        if (!state.hidden) {
+            super.submit(state, poseStack, collector, camera);
+        }
     }
 
     @Override

@@ -80,6 +80,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private static final EntityDataAccessor<Byte> DATA_PHASE = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.BYTE);
     /** Gestärkt (Kristallpanzer, Aufladung …): die leuchtenden Teile glühen hell. */
     private static final EntityDataAccessor<Boolean> DATA_EMPOWERED = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.BOOLEAN);
+    /** Tempo des laufenden Angriffs (wird beim Start festgelegt; je wütender, desto schneller). */
+    private static final EntityDataAccessor<Float> DATA_TEMPO = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.FLOAT);
     private static final Identifier HEALTH_SCALE = KingdomsAtWar.id("boss_health_scale");
 
     /** Gegner werden bis zu dieser Entfernung vom Nest gesucht. */
@@ -110,6 +112,14 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private @Nullable DamageSource deathSource;
     private float circleAngle;
     private boolean awakeningAnnounced;
+    /** Bruchteil eines Angriffs-Ticks, der durch das erhöhte Tempo noch aussteht. */
+    private float tempoCarry;
+    /** Phasenwechsel läuft (Ticks übrig): der Drache brüllt, eine Druckwelle fegt über die Arena, kurz unverwundbar. */
+    private int transitionTicks;
+    private int transitionPhase;
+    /** Das letzte Aufbäumen (unter 12 % Leben) ist schon geschehen. */
+    private boolean lastStandDone;
+    private final BossHazards hazards = new BossHazards();
 
     // ------------------------------------------------------------------ Client (Animation)
     public int clientStateStart;
@@ -226,6 +236,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         builder.define(DATA_MOVE, (byte) MoveMode.GROUND.ordinal());
         builder.define(DATA_PHASE, (byte) 1);
         builder.define(DATA_EMPOWERED, false);
+        builder.define(DATA_TEMPO, 1.0f);
     }
 
     @Override
@@ -303,6 +314,53 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         this.entityData.set(DATA_EMPOWERED, empowered);
     }
 
+    // =====================================================================================
+    // Wut: Je mehr Schaden der Drache nimmt, desto schneller, härter und angriffslustiger wird er
+    // =====================================================================================
+
+    /** 0 bei vollem Leben … 1 kurz vor dem Tod (nur im Kampf). */
+    public float rage() {
+        if (this.getBossState() != State.FIGHT || this.getMaxHealth() <= 0) {
+            return 0.0f;
+        }
+        return Mth.clamp(1.0f - this.getHealth() / this.getMaxHealth(), 0.0f, 1.0f);
+    }
+
+    /** Schaden aller Angriffe (Nahkampf, Odem, Geschosse): bis zu 70 % mehr. */
+    public float damageMultiplier() {
+        return 1.0f + 0.55f * this.rage() + (this.getPhase() >= 3 ? 0.15f : 0.0f);
+    }
+
+    /** Tempo neuer Angriffe: bis zu 40 % schneller. */
+    public float tempo() {
+        return 1.0f + 0.32f * this.rage() + (this.getPhase() >= 3 ? 0.08f : 0.0f);
+    }
+
+    /** Laufen, Schwimmen und Fliegen: bis zu 30 % schneller. */
+    public float speedMultiplier() {
+        return 1.0f + 0.3f * this.rage();
+    }
+
+    /** Tempo des laufenden Angriffs (Server und Client: für Ablauf und Animation). */
+    public float attackTempo() {
+        return this.entityData.get(DATA_TEMPO);
+    }
+
+    /** Läuft gerade ein Phasenwechsel? */
+    public boolean isInTransition() {
+        return this.transitionTicks > 0;
+    }
+
+    /** Ist der Drache während der Erweckung noch verborgen (z. B. im Eiskristall)? Für die Darstellung. */
+    public boolean hiddenDuringAwakening(int ticks) {
+        return false;
+    }
+
+    /** Der große Angriff, den der Drache nach einem Phasenwechsel entfesselt (Name, null = keiner). */
+    protected @Nullable String signatureAttack(int phase) {
+        return null;
+    }
+
     public @Nullable BlockPos getHome() {
         return this.home;
     }
@@ -367,6 +425,19 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
             player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
         }
         this.shake(level, 90.0, 0.7f, this.awakeningTicks());
+    }
+
+    /** Nur für Vorführungen: Bossleiste sofort auf den Stand bringen (auch ohne KI). */
+    public void devBossBar(ServerLevel level) {
+        this.updateBossBar(level);
+    }
+
+    /** Nur für Vorführungen: sofort im Kampfzustand (ohne Erwachen), am Boden oder in der Luft. */
+    public void devPose(MoveMode mode) {
+        this.noPhysics = false;
+        this.awakeningAnnounced = true;
+        this.setBossState(State.FIGHT);
+        this.setMoveMode(mode);
     }
 
     private void finishAwakening(ServerLevel level) {
@@ -434,7 +505,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     /** Fügt Schaden zu (Nahkampf zählt als Angriff des Bosses). */
     public boolean hurtTarget(ServerLevel level, LivingEntity target, float damage) {
-        return target.hurtServer(level, this.damageSources().mobAttack(this), damage);
+        return target.hurtServer(level, this.damageSources().mobAttack(this), damage * this.damageMultiplier());
     }
 
     /** Stößt ein Ziel vom Punkt {@code from} weg (und etwas nach oben). */
@@ -513,6 +584,28 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         float wanted = this.isFlying() ? Mth.clamp(-turn * 6.0f, -40.0f, 40.0f) : 0.0f;
         this.bank += (wanted - this.bank) * 0.1f;
         this.tickMood();
+        this.rageAura();
+    }
+
+    /** Wut-Aura: Ab Phase 2 steigen Teilchen des Elements vom Körper auf, in Phase 3 dicht und mit Glut in den Nüstern. */
+    private void rageAura() {
+        int phase = this.getPhase();
+        if (phase < 2 || this.getBossState() != State.FIGHT || this.parts.length == 0) {
+            return;
+        }
+        int every = phase >= 3 ? 2 : 6;
+        if (this.tickCount % every != 0) {
+            return;
+        }
+        BossPart part = this.parts[this.random.nextInt(this.parts.length)];
+        double w = part.getBbWidth();
+        this.level().addParticle(this.element.particle(),
+                part.getX() + (this.random.nextDouble() - 0.5) * w, part.getY() + this.random.nextDouble() * part.getBbHeight(),
+                part.getZ() + (this.random.nextDouble() - 0.5) * w, 0.0, 0.04 + this.random.nextDouble() * 0.04, 0.0);
+        if (phase >= 3 && this.tickCount % 16 == 0) {
+            Vec3 mouth = this.mouthPosition();
+            this.level().addParticle(net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE, mouth.x, mouth.y + 0.3, mouth.z, 0.0, 0.06, 0.0);
+        }
     }
 
     /** Launen in ruhigen Momenten: Schnauben, Kopfschütteln, Schwanzschlagen, Flügel lockern, Umsehen, Gähnen. */
@@ -608,6 +701,11 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private void tickFight(ServerLevel level) {
         this.updatePhase(level);
         this.modeTicks++;
+        if (this.transitionTicks > 0) {
+            this.tickTransition(level);
+            return;
+        }
+        this.hazards.tick(level, this);
         LivingEntity target = this.getTarget();
         if (--this.retargetTicks <= 0 || !this.isValidTarget(target)) {
             target = this.pickTarget(level);
@@ -638,14 +736,19 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
             if (this.attackTick < attack.turnUntil()) {
                 this.turnTowards(target.position(), 6.0f);
             }
-            attack.tick(level, this, target, this.attackTick);
-            this.attackTick++;
-            if (attack.stopsMovement()) {
+            // Je wütender, desto schneller läuft der Angriff ab (manchmal zwei Angriffs-Ticks in einem Spiel-Tick)
+            this.tempoCarry += this.attackTempo();
+            while (this.tempoCarry >= 1.0f && this.currentAttack == attack) {
+                this.tempoCarry -= 1.0f;
+                attack.tick(level, this, target, this.attackTick);
+                this.attackTick++;
+                if (this.currentAttack == attack && this.attackTick >= attack.duration()) {
+                    this.endAttack(level);
+                }
+            }
+            if (attack.stopsMovement() && this.currentAttack == attack) {
                 this.stopMoving();
             }   // sonst bewegt der Angriff den Boss selbst
-            if (this.currentAttack == attack && this.attackTick >= attack.duration()) {
-                this.endAttack(level);
-            }
             return;
         }
         this.moveInFight(level, target);
@@ -660,16 +763,81 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         if (phase > this.getPhase()) {
             this.entityData.set(DATA_PHASE, (byte) phase);
             this.onPhaseChange(level, phase);
+        } else if (!this.lastStandDone && hp < 0.12f && this.transitionTicks <= 0) {
+            this.lastStandDone = true;
+            this.beginTransition(level, 4);
         }
     }
 
-    /** Phasenwechsel: Brüllen (Unterklassen können mehr tun). */
+    /** Phasenwechsel: Der Drache bäumt sich brüllend auf, eine Druckwelle fegt über die Arena, dann entfesselt er seinen großen Angriff. */
     protected void onPhaseChange(ServerLevel level, int phase) {
-        BossAttack roar = this.findAttack(BossAnims.ROAR);
-        if (roar != null && this.currentAttack == null && this.getTarget() != null) {
-            this.startAttack(level, roar, this.getTarget());
+        this.beginTransition(level, phase);
+    }
+
+    /** Dauer eines Phasenwechsels in Ticks. */
+    public static final int TRANSITION_TICKS = 44;
+
+    private void beginTransition(ServerLevel level, int phase) {
+        if (this.currentAttack != null) {
+            this.endAttack(level);
         }
-        this.shake(level, 60.0, 0.5f, 30);
+        this.transitionTicks = TRANSITION_TICKS;
+        this.transitionPhase = phase;
+        this.entityData.set(DATA_TEMPO, 1.0f);
+        this.entityData.set(DATA_ATTACK, BossAnims.ROAR);
+        Component name = Component.translatable("entity.kingdomsatwar." + this.element.id() + "_dragon_boss").withColor(this.element.color());
+        String key = phase >= 4 ? "boss.kingdomsatwar.last_stand" : phase == 3 ? "boss.kingdomsatwar.enraged" : "boss.kingdomsatwar.angered";
+        for (ServerPlayer player : this.nearbyPlayers(level, ARENA_RADIUS * 1.5)) {
+            player.sendOverlayMessage(Component.translatable(key, name).withStyle(phase >= 3 ? ChatFormatting.RED : ChatFormatting.GOLD));
+        }
+    }
+
+    private void tickTransition(ServerLevel level) {
+        int t = TRANSITION_TICKS - this.transitionTicks;
+        this.transitionTicks--;
+        this.stopMoving();
+        LivingEntity target = this.getTarget();
+        if (target != null) {
+            this.lookAtTarget(target);
+            if (t < 10) {
+                this.turnTowards(target.position(), 6.0f);
+            }
+        }
+        if (t == 12) {
+            Vec3 feet = this.position();
+            BossFx.sound(level, feet, io.github.sirschrolli.kingdomsatwar.registry.ModSounds.DRAGON_ROAR.get(), 8.0f, 0.42f);
+            BossFx.sound(level, feet, net.minecraft.sounds.SoundEvents.ENDER_DRAGON_GROWL, 6.0f, 0.5f);
+            BossFx.sound(level, feet, net.minecraft.sounds.SoundEvents.GENERIC_EXPLODE.value(), 3.0f, 0.5f);
+            this.shake(level, 70.0, this.transitionPhase >= 3 ? 1.0f : 0.7f, 30);
+            double radius = this.transitionPhase >= 3 ? 14.0 : 11.0;
+            for (int r = 3; r <= (int) radius; r += 3) {
+                BossFx.ring(level, this.element.particle(), feet.add(0, 0.4, 0), r, r * 7, 0.25);
+            }
+            BossFx.burst(level, this.element.particle(), feet.add(0, 4, 0), 80, 4.0, 0.25);
+            for (LivingEntity e : this.enemiesAround(feet, radius, 8)) {
+                double d = e.position().subtract(feet).horizontalDistance();
+                float f = (float) Math.max(0.35, 1.0 - d / radius);
+                this.hurtTarget(level, e, 6.0f * f);
+                pushAway(e, feet, 2.2 * f, 0.7 * f);
+                switch (this.element) {
+                    case FIRE -> BossEffects.burn(e, 4);
+                    case ICE -> BossEffects.freeze(e, 3);
+                    case LIGHTNING -> BossEffects.stun(e, 2);
+                    case NATURE -> BossEffects.poison(e, 4);
+                    case WATER -> BossEffects.soak(e, 4);
+                    case EARTH -> e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOWNESS, 60, 2), this);
+                }
+            }
+        }
+        if (this.transitionTicks <= 0) {
+            this.entityData.set(DATA_ATTACK, BossAnims.NONE);
+            this.idleTicks = 2;
+            String signature = this.signatureAttack(Math.min(3, this.transitionPhase));
+            BossAttack attack = signature != null ? this.findAttack(signature) : null;
+            if (attack != null && target != null && this.isWhere(attack.where())) {
+                this.startAttack(level, attack, target);
+            }
+        }
     }
 
     private boolean isValidTarget(@Nullable LivingEntity target) {
@@ -719,6 +887,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
                 continue;
             }
             float w = attack.weight(this, target, distance, angle);
+            if (w > 0 && attack.minPhase() > 1) {
+                w *= 1.0f + this.rage();   // die großen Angriffe kommen in Wut häufiger
+            }
             if (w > 0) {
                 options.add(attack);
                 weights.add(w);
@@ -776,6 +947,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         }
         this.currentAttack = attack;
         this.attackTick = 0;
+        this.tempoCarry = 0.0f;
+        this.entityData.set(DATA_TEMPO, attack.id() == BossAnims.TAKE_OFF || attack.id() == BossAnims.LAND ? 1.0f : this.tempo());
         this.entityData.set(DATA_ATTACK, attack.id());
         attack.start(level, this, target);
     }
@@ -789,12 +962,18 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         BossAttack attack = this.currentAttack;
         this.currentAttack = null;
         this.entityData.set(DATA_ATTACK, BossAnims.NONE);
+        float rage = this.rage();
         if (attack != null) {
             attack.stop(level, this);
-            attack.resetCooldown(this.getPhase() == 3 ? 0.65f : this.getPhase() == 2 ? 0.85f : 1.0f);
+            attack.resetCooldown(1.0f - 0.5f * rage);
         }
         int phase = this.getPhase();
-        this.idleTicks = (phase == 3 ? 6 : phase == 2 ? 10 : 16) + this.random.nextInt(14);
+        this.idleTicks = Math.round(Mth.lerp(rage, 16.0f, 3.0f)) + this.random.nextInt(Math.round(Mth.lerp(rage, 14.0f, 5.0f)) + 1);
+        // Angriffsketten: ab Phase 2 folgt manchmal sofort der nächste Angriff
+        float chain = phase >= 3 ? 0.45f : phase == 2 ? 0.2f : 0.0f;
+        if (attack != null && attack.id() != BossAnims.TAKE_OFF && attack.id() != BossAnims.LAND && this.random.nextFloat() < chain) {
+            this.idleTicks = this.random.nextInt(3);
+        }
     }
 
     public @Nullable BossAttack currentAttack() {
@@ -844,7 +1023,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         }
         double distance = target.position().subtract(this.position()).horizontalDistance();
         float angle = this.angleTo(target.position());
-        this.turnTowards(target.position(), 4.5f);
+        this.turnTowards(target.position(), 4.5f * (1.0f + 0.5f * this.rage()));
         double reach = 5.5 + this.getBbWidth() * 0.5;
         if (distance > reach && angle < 60.0f) {
             this.walkForward(distance > 18 ? 1.25 : 0.8);
@@ -854,13 +1033,14 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     }
 
     public void walkForward(double speedFactor) {
-        this.setSpeed((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * speedFactor));
+        this.setSpeed((float) (this.getAttributeValue(Attributes.MOVEMENT_SPEED) * speedFactor * this.speedMultiplier()));
         this.zza = 1.0f;
     }
 
     /** Kreist in der Luft um einen Punkt (Ziel oder Nest). */
     public void circleAround(ServerLevel level, Vec3 center, double radius, double height, double speed) {
-        this.circleAngle += (float) (speed / radius) * (this.getPhase() == 3 ? 1.25f : 1.0f);
+        speed *= this.speedMultiplier();
+        this.circleAngle += (float) (speed / radius);
         double x = center.x + Math.cos(this.circleAngle) * radius;
         double z = center.z + Math.sin(this.circleAngle) * radius;
         double y = Math.max(center.y, this.groundY(x, z)) + height;
@@ -995,6 +1175,13 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         State state = this.getBossState();
         if (state == State.AWAKENING || state == State.SLUMBER || state == State.DYING) {
             return false;
+        }
+        if (this.transitionTicks > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            if (source.getEntity() instanceof Player) {
+                level.sendParticles(net.minecraft.core.particles.ParticleTypes.ENCHANTED_HIT, this.getX(), this.getY() + 4, this.getZ(),
+                        12, 2.0, 2.0, 2.0, 0.3);
+            }
+            return false;   // im Aufbäumen prallt alles ab
         }
         if (source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.CRAMMING) || source.is(DamageTypeTags.IS_FALL)
                 || source.is(DamageTypes.DROWN) || source.is(DamageTypes.FLY_INTO_WALL)) {

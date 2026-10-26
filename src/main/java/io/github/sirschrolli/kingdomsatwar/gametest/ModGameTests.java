@@ -150,6 +150,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("structures_generate", () -> ModGameTests::structuresGenerate);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_BOSS_LIFECYCLE =
             TEST_FUNCTIONS.register("dragon_boss_lifecycle", () -> ModGameTests::dragonBossLifecycle);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_BOSS_RAGE =
+            TEST_FUNCTIONS.register("dragon_boss_rage", () -> ModGameTests::dragonBossRage);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_COMPASS =
             TEST_FUNCTIONS.register("dragon_compass", () -> ModGameTests::dragonCompass);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SEAL_CIRCLE =
@@ -171,7 +173,7 @@ public final class ModGameTests {
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
                         LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST,
-                        STAFF_SPELLS, STRUCTURES_GENERATE, SEAL_CIRCLE)) {
+                        STAFF_SPELLS, STRUCTURES_GENERATE, SEAL_CIRCLE, DRAGON_BOSS_RAGE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -740,6 +742,54 @@ public final class ModGameTests {
             helper.assertFalse(io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).isDefeated(DragonType.FIRE),
                     "Nest lässt sich nicht zurücksetzen");
             level.setBlock(corePos, Blocks.STONE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Drachen-Boss als echter Boss: Nester wecken ihn erst aus nächster Nähe (höchstens fünf Blöcke vom schlafenden
+     * Drachen); je mehr Schaden er nimmt, desto härter und schneller schlägt er zu; beim Phasenwechsel bäumt er sich auf
+     * und ist dabei kurz unverwundbar.
+     */
+    private static void dragonBossRage(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        // Weckabstand: Rand des schlafenden Drachen + 5 Blöcke
+        BlockPos center = helper.absolutePos(new BlockPos(4, 1, 4));
+        for (DragonType element : DragonType.values()) {
+            double r = io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity.sleepRadius(element)
+                    + io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity.WAKE_DISTANCE;
+            double cx = center.getX() + 0.5;
+            double cz = center.getZ() + 0.5;
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity.wakes(element, center,
+                    cx + r - 0.5, center.getY() + 1, cz), "Weckt nicht in Reichweite: " + element);
+            helper.assertFalse(io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity.wakes(element, center,
+                    cx + r + 1.0, center.getY() + 1, cz), "Weckt schon im Vorbeigehen: " + element);
+        }
+        var boss = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.bossType(DragonType.FIRE)
+                .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        helper.assertTrue(boss != null, "Boss lässt sich nicht erzeugen");
+        boss.snapTo(center.getX() + 0.5, center.getY(), center.getZ() + 0.5, 0.0f, 0.0f);
+        level.addFreshEntity(boss);
+        boss.devPose(io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.MoveMode.GROUND);
+        helper.assertTrue(Math.abs(boss.damageMultiplier() - 1.0f) < 1e-3, "Ungereizt schon verstärkt: " + boss.damageMultiplier());
+        float max = boss.getMaxHealth();
+        boss.setHealth(max * 0.5f);
+        helper.assertTrue(boss.rage() > 0.45f && boss.damageMultiplier() > 1.25f && boss.tempo() > 1.15f,
+                "Wut wirkt nicht: " + boss.rage() + " / " + boss.damageMultiplier() + " / " + boss.tempo());
+        helper.runAfterDelay(3, () -> {
+            helper.assertTrue(boss.getPhase() == 2, "Phase 2 beginnt nicht: " + boss.getPhase());
+            helper.assertTrue(boss.isInTransition(), "Kein Aufbäumen beim Phasenwechsel");
+            float before = boss.getHealth();
+            helper.assertFalse(boss.hurtServer(level, level.damageSources().magic(), 20.0f), "Im Aufbäumen verwundbar");
+            helper.assertTrue(boss.getHealth() == before, "Im Aufbäumen Schaden genommen");
+        });
+        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.TRANSITION_TICKS + 10, () -> {
+            helper.assertFalse(boss.isInTransition(), "Aufbäumen endet nicht");
+            float before = boss.getHealth();
+            boss.hurtServer(level, level.damageSources().magic(), 20.0f);
+            helper.assertTrue(boss.getHealth() < before, "Nach dem Aufbäumen unverwundbar");
+            boss.discard();
             helper.succeed();
         });
     }

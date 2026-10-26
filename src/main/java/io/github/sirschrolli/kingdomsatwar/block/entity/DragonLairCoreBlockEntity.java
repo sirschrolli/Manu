@@ -24,14 +24,41 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Wacht über ein Drachennest: warnt näherkommende Spieler, lässt den Boss erwachen, wenn jemand das Nest betritt,
+ * Wacht über ein Drachennest: warnt näherkommende Spieler, lässt den Boss erwachen, wenn jemand bis auf
+ * {@link #WAKE_DISTANCE} Blöcke an den schlafenden Drachen herankommt,
  * und merkt sich, ob der Drache besiegt ist (dann bleibt das Nest still). Schläft der Boss wieder ein, wartet das
  * Nest eine halbe Minute, bevor es erneut erwacht.
  */
 public class DragonLairCoreBlockEntity extends BlockEntity {
-    /** Betritt ein Spieler diesen Umkreis (waagerecht) um die Nestmitte, erwacht der Boss. */
-    public static final double AWAKEN_RADIUS = 26.0;
+    /**
+     * So nah muss ein Spieler dem schlafenden Drachen kommen, damit er erwacht (Blöcke vom Rand des Schlafplatzes:
+     * Lavasee, Eiskristall, Hügel, Podest oder See). Wer am Nest nur vorbeiläuft, weckt ihn nicht.
+     */
+    public static final double WAKE_DISTANCE = 5.0;
     private static final double WARN_RADIUS = 64.0;
+
+    /** Wie weit der schlafende Drache (bzw. sein Schlafplatz) von der Nestmitte reicht (waagerecht). */
+    public static double sleepRadius(DragonType element) {
+        return switch (element) {
+            case FIRE -> 8.0;        // im Lavasee
+            case ICE -> 4.5;         // im Eiskristall
+            case LIGHTNING -> 4.0;   // auf dem Podest mit dem Blitzstern
+            case NATURE -> 8.5;      // im überwucherten Hügel
+            case EARTH -> 6.5;       // unter dem Erdhügel
+            case WATER -> 15.0;      // am Grund des Grottensees
+        };
+    }
+
+    /** Ist der Spieler dem Schlafplatz nah genug, um den Drachen zu wecken? */
+    public static boolean wakes(DragonType element, BlockPos center, double x, double y, double z) {
+        double dx = x - (center.getX() + 0.5);
+        double dz = z - (center.getZ() + 0.5);
+        double dy = y - center.getY();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        // Thalassa erwacht erst, wenn jemand aus dem See ans Ufer der Grotte steigt
+        double minDy = element == DragonType.WATER ? -2.5 : -5.0;
+        return dist <= sleepRadius(element) + WAKE_DISTANCE && dy > minDy && dy < 10.0;
+    }
 
     private DragonType element = DragonType.FIRE;
     private @Nullable BlockPos center;
@@ -90,16 +117,14 @@ public class DragonLairCoreBlockEntity extends BlockEntity {
             if (player.isSpectator() || player.isCreative() || !player.isAlive()) {
                 continue;
             }
+            if (wakes(this.element, c, player.getX(), player.getY(), player.getZ())) {
+                this.awaken(level);
+                return;
+            }
             double dx = player.getX() - (c.getX() + 0.5);
             double dz = player.getZ() - (c.getZ() + 0.5);
             double dy = player.getY() - c.getY();
             double dist = Math.sqrt(dx * dx + dz * dz);
-            // Thalassa erwacht erst, wenn jemand aus dem See ans Ufer der Grotte steigt
-            double minDy = this.element == DragonType.WATER ? -2.5 : -16;
-            if (dist < AWAKEN_RADIUS && dy > minDy && dy < 40) {
-                this.awaken(level);
-                return;
-            }
             if (dist < WARN_RADIUS && dy > -32 && dy < 64) {
                 long now = level.getGameTime();
                 Long last = this.warned.get(player.getUUID());
