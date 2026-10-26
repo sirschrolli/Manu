@@ -295,6 +295,11 @@ public final class ModItems {
                     .repairable(ModTags.Items.GEMS_AETHERIT)
                     .component(DataComponents.LORE, lore("aetherit_staff", 2))));
 
+    /** Zeigt zum Nest eines Drachen-Bosses (jedes Nest gibt es nur einmal); Rechtsklick wechselt das Nest. */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem> DRAGON_COMPASS = addTo(EQUIPMENT_TAB,
+            ITEMS.registerItem("dragon_compass", io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem::new,
+                    p -> p.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_compass", 1))));
+
     private static final Map<DragonType, DeferredItem<RuneItem>> RUNES_MUTABLE = new EnumMap<>(DragonType.class);
     /** Eine Rune je Drachen-Element. */
     public static final Map<DragonType, DeferredItem<RuneItem>> RUNES = Collections.unmodifiableMap(RUNES_MUTABLE);

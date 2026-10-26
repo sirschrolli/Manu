@@ -2,8 +2,11 @@
   "feature": "kingdomsatwar:castle_ruin",
   "placement": [
     {
-      "type": "minecraft:rarity_filter",
-      "chance": 70
+      "type": "kingdomsatwar:spaced",
+      "nest_distance": 320,
+      "salt": 704311219,
+      "separation": 6,
+      "spacing": 14
     },
     {
       "type": "minecraft:in_square"

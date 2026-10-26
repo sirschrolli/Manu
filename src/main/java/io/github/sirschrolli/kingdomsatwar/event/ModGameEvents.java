@@ -70,7 +70,99 @@ public final class ModGameEvents {
                 }))
                 .then(army)
                 .then(Commands.literal("boss").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .then(Commands.literal("fire").executes(context -> summonBoss(context.getSource().getPlayerOrException())))));
+                        .then(Commands.literal("fire").executes(context -> summonBoss(context.getSource().getPlayerOrException()))))
+                .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> listLairs(context.getSource()))
+                        .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
+                        .then(Commands.literal("reset").executes(context -> resetLair(context.getSource().getPlayerOrException())))));
+    }
+
+    /** {@code /kaw lair}: alle Nester der Welt mit Lage und Zustand; die Koordinaten lassen sich anklicken (Teleport). */
+    private static int listLairs(net.minecraft.commands.CommandSourceStack source) {
+        ServerLevel overworld = source.getServer().overworld();
+        java.util.Map<DragonType, net.minecraft.world.level.ChunkPos> nests =
+                io.github.sirschrolli.kingdomsatwar.worldgen.lair.NestLocator.all(overworld);
+        if (nests.isEmpty()) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.lair.none"));
+            return 0;
+        }
+        io.github.sirschrolli.kingdomsatwar.world.LairRecords records = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(overworld);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.lair.header").withStyle(net.minecraft.ChatFormatting.GOLD), false);
+        for (DragonType type : io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem.ORDER) {
+            net.minecraft.world.level.ChunkPos chunk = nests.get(type);
+            if (chunk == null) {
+                continue;
+            }
+            BlockPos center = io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem.nestCenter(overworld, type, chunk);
+            var entry = records.get(type);
+            Component state = entry == null
+                    ? Component.translatable("command.kingdomsatwar.lair.unexplored").withStyle(net.minecraft.ChatFormatting.GRAY)
+                    : Component.translatable("command.kingdomsatwar.lair.phase." + entry.phase().name().toLowerCase(java.util.Locale.ROOT));
+            String tp = "/tp @s " + center.getX() + " " + (center.getY() + 30) + " " + center.getZ();
+            Component x = Component.literal(String.valueOf(center.getX())).withStyle(style -> style.withUnderlined(true)
+                    .withClickEvent(new net.minecraft.network.chat.ClickEvent.SuggestCommand(tp)));
+            Component z = Component.literal(String.valueOf(center.getZ())).withStyle(style -> style.withUnderlined(true)
+                    .withClickEvent(new net.minecraft.network.chat.ClickEvent.SuggestCommand(tp)));
+            Component line = Component.translatable("command.kingdomsatwar.lair.entry",
+                    Component.translatable("lair.kingdomsatwar." + type.id() + ".name").withColor(type.color()), x, z, state);
+            source.sendSuccess(() -> line, false);
+        }
+        return nests.size();
+    }
+
+    /** Nestkern des nächstgelegenen (bereits erzeugten) Nests im Umkreis von 160 Blöcken. */
+    private static io.github.sirschrolli.kingdomsatwar.block.entity.@org.jspecify.annotations.Nullable DragonLairCoreBlockEntity nearestCore(
+            ServerPlayer player) {
+        ServerLevel level = player.level();
+        if (level.dimension() != net.minecraft.world.level.Level.OVERWORLD) {
+            return null;
+        }
+        io.github.sirschrolli.kingdomsatwar.world.LairRecords records = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level);
+        io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity best = null;
+        double bestDist = 160.0 * 160.0;
+        for (DragonType type : DragonType.values()) {
+            var entry = records.get(type);
+            if (entry == null) {
+                continue;
+            }
+            BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(type).corePos(entry.center());
+            double d = player.distanceToSqr(core.getX() + 0.5, player.getY(), core.getZ() + 0.5);
+            if (d < bestDist && level.getBlockEntity(core) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity be) {
+                best = be;
+                bestDist = d;
+            }
+        }
+        return best;
+    }
+
+    private static int awakenLair(ServerPlayer player) {
+        var core = nearestCore(player);
+        if (core == null) {
+            player.sendSystemMessage(Component.translatable("command.kingdomsatwar.lair.no_core").withStyle(net.minecraft.ChatFormatting.RED));
+            return 0;
+        }
+        if (core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DEFEATED) {
+            core.reset(player.level());
+        }
+        if (core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.AWAKE || core.awaken(player.level()) == null) {
+            player.sendSystemMessage(Component.translatable("command.kingdomsatwar.lair.cannot_awaken").withStyle(net.minecraft.ChatFormatting.RED));
+            return 0;
+        }
+        player.sendSystemMessage(Component.translatable("command.kingdomsatwar.lair.awakened",
+                Component.translatable("lair.kingdomsatwar." + core.element().id() + ".name").withColor(core.element().color())));
+        return 1;
+    }
+
+    private static int resetLair(ServerPlayer player) {
+        var core = nearestCore(player);
+        if (core == null) {
+            player.sendSystemMessage(Component.translatable("command.kingdomsatwar.lair.no_core").withStyle(net.minecraft.ChatFormatting.RED));
+            return 0;
+        }
+        core.reset(player.level());
+        player.sendSystemMessage(Component.translatable("command.kingdomsatwar.lair.reset",
+                Component.translatable("lair.kingdomsatwar." + core.element().id() + ".name").withColor(core.element().color())));
+        return 1;
     }
 
     /** Lässt einen Drachen-Boss vor dem Spieler erwachen (zum Testen; das Nest ist dort, wo er erwacht). */

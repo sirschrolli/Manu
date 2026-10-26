@@ -39,10 +39,16 @@ public final class KingdomsAtWar {
         ModSounds.SOUNDS.register(modBus);
         ModAttachments.ATTACHMENTS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPONENTS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         ModParticles.PARTICLE_TYPES.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.ModBlockEntities.BLOCK_ENTITIES.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.PLACEMENTS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.TYPES.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.PIECES.register(modBus);
         ModFeatureTypes.FEATURE_TYPES.register(modBus);
+        ModFeatureTypes.PLACEMENT_TYPES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);
 

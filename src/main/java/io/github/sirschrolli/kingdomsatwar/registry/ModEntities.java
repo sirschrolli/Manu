@@ -87,6 +87,15 @@ public final class ModEntities {
             BossProjectile::new, MobCategory.MISC,
             builder -> builder.sized(1.0f, 1.0f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
 
+    /** Der Boss einer Drachenart (null, solange er noch nicht gebaut ist). */
+    public static @org.jspecify.annotations.Nullable EntityType<? extends io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity> bossType(
+            DragonType element) {
+        return switch (element) {
+            case FIRE -> PYRRHON.get();
+            default -> null;
+        };
+    }
+
     // ---------------------------------------------------------------- Möbel
     /** Unsichtbarer Sitz auf Stühlen, Bänken und dem Thron. */
     public static final DeferredHolder<EntityType<?>, EntityType<SeatEntity>> SEAT = ENTITIES.registerEntityType("seat",

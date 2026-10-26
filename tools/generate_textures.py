@@ -32,6 +32,7 @@ import creature_textures  # noqa: E402
 import equipment_textures  # noqa: E402
 import farm_textures  # noqa: E402
 import kingdom_textures  # noqa: E402
+import lair_textures  # noqa: E402
 import magic_textures  # noqa: E402
 import pixelart as pa  # noqa: E402
 from pixelart import CLEAR, Color, hexc, palette, pick  # noqa: E402
@@ -797,6 +798,7 @@ def build_all() -> dict[str, Image.Image]:
     farm_textures.build(put)
     magic_textures.build(put)
     boss_textures.build(put)
+    lair_textures.build(put)
     equipment_textures.build_entity(put)
     dragon_spawn_eggs()
     plants()

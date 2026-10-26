@@ -1,8 +1,6 @@
 {
   "values": [
     "minecraft:stony_peaks",
-    "minecraft:jagged_peaks",
-    "minecraft:meadow",
-    "minecraft:windswept_hills"
+    "minecraft:jagged_peaks"
   ]
 }

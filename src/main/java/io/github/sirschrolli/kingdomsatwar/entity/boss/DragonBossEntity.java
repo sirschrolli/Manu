@@ -104,6 +104,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private int modeTicks;
     private int retargetTicks;
     private @Nullable BlockPos home;
+    private @Nullable BlockPos lairCore;
     private @Nullable DamageSource deathSource;
     private float circleAngle;
     private boolean awakeningAnnounced;
@@ -235,6 +236,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         if (this.home != null) {
             output.store("BossHome", BlockPos.CODEC, this.home);
         }
+        if (this.lairCore != null) {
+            output.store("BossLairCore", BlockPos.CODEC, this.lairCore);
+        }
         output.putInt("BossState", this.getBossState().ordinal());
         output.putInt("BossMove", this.getMoveMode().ordinal());
     }
@@ -243,6 +247,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         input.read("BossHome", BlockPos.CODEC).ifPresent(pos -> this.home = pos);
+        input.read("BossLairCore", BlockPos.CODEC).ifPresent(pos -> this.lairCore = pos);
         State state = State.values()[Mth.clamp(input.getIntOr("BossState", State.FIGHT.ordinal()), 0, State.values().length - 1)];
         // Nach dem Laden: ein unterbrochenes Erwachen oder Einschlafen geht als Kampf weiter (ohne Gegner kehrt er heim)
         this.setBossState(state == State.DYING || state == State.SLUMBER || state == State.AWAKENING ? State.FIGHT : state);
@@ -287,6 +292,14 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     public void setHome(BlockPos home) {
         this.home = home;
+    }
+
+    public @Nullable BlockPos getLairCore() {
+        return this.lairCore;
+    }
+
+    public void setLairCore(BlockPos core) {
+        this.lairCore = core;
     }
 
     public int getStateTicks() {
@@ -868,9 +881,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     /** Der Boss ist wieder eingeschlafen – das Nest wartet auf den nächsten Besucher. */
     protected void onSlumber(ServerLevel level) {
-        if (this.home != null) {
-            BossLairs.onBossSlumber(level, this.home, this.element);
-        }
+        BossLairs.onBossSlumber(level, this);
     }
 
     // =====================================================================================

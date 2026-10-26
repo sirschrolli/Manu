@@ -118,8 +118,12 @@ public final class ModWorldgen {
             new FlowerPatch("frost_flower", ModBlocks.FROST_FLOWER, 6, Tags.Biomes.IS_SNOWY),
             new FlowerPatch("moonflower", ModBlocks.MOONFLOWER, 5, ModTags.Biomes.HAS_WILL_O_WISPS));
 
-    /** Bauwerke: je Drachenart ein Nest, dazu Burgruinen. */
-    public record Ruin(String name, Feature feature, int rarity, TagKey<Biome> biomes) {
+    /**
+     * Kleine Bauwerke (Burgruinen); die Drachennester sind eigene, riesige Bauwerke (siehe worldgen/lair).
+     * Je Feld von {@code spacing}×{@code spacing} Chunks höchstens eins, mindestens {@code separation} Chunks
+     * auseinander und weit weg von den Drachennestern.
+     */
+    public record Ruin(String name, Feature feature, int spacing, int separation, int salt, TagKey<Biome> biomes) {
         public ResourceKey<Feature> featureKey() {
             return ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id(name));
         }
@@ -133,17 +137,18 @@ public final class ModWorldgen {
         }
     }
 
-    /** Alle Bauwerke (feste Reihenfolge). Seltenheit = im Mittel einmal je so vielen Chunks des passenden Bioms. */
+    /** Alle Bauwerke (feste Reihenfolge). */
     public static final List<Ruin> STRUCTURES = structures();
 
     private static List<Ruin> structures() {
         List<Ruin> list = new ArrayList<>();
-        for (io.github.sirschrolli.kingdomsatwar.dragon.DragonType type : io.github.sirschrolli.kingdomsatwar.dragon.DragonType.values()) {
-            list.add(new Ruin(type.id() + "_dragon_nest", new DragonNestFeature(type), 90, ModTags.Biomes.HAS_DRAGON_NESTS.get(type)));
-        }
-        list.add(new Ruin("castle_ruin", new CastleRuinFeature(), 70, ModTags.Biomes.HAS_CASTLE_RUINS));
+        // Drachennester sind jetzt riesige, einzigartige Bauwerke (worldgen/lair)
+        list.add(new Ruin("castle_ruin", new CastleRuinFeature(), 14, 6, 704_311_219, ModTags.Biomes.HAS_CASTLE_RUINS));
         return List.copyOf(list);
     }
+
+    /** So weit bleiben kleine Bauwerke (und später Dörfer) von den Drachennestern weg. */
+    public static final int NEST_CLEARANCE = 320;
 
     private ModWorldgen() {}
 
@@ -199,7 +204,7 @@ public final class ModWorldgen {
 
         for (Ruin ruin : STRUCTURES) {
             List<PlacementModifier> placement = List.of(
-                    RarityFilter.onAverageOnceEvery(ruin.rarity()),
+                    new SpacedPlacement(ruin.spacing(), ruin.separation(), ruin.salt(), NEST_CLEARANCE),
                     InSquarePlacement.spread(),
                     HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
                     BiomeFilter.biome());

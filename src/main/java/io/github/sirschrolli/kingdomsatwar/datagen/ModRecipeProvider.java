@@ -140,6 +140,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STICK)
                 .unlockedBy(getHasName(aetherit), has(aetherit))
                 .save(output, key("aetherit_staff"));
+        // Drachenkompass: Kompass, gefasst in Edelsteine, mit Draconium (Essenz der Drachen) und Aetherit (Magie)
+        shaped(RecipeCategory.TOOLS, ModItems.DRAGON_COMPASS.get())
+                .pattern(" D ")
+                .pattern("GCG")
+                .pattern(" A ")
+                .define('D', ModItems.DRACONIUM.get())
+                .define('G', ModItems.GEMSTONE.get())
+                .define('C', Items.COMPASS)
+                .define('A', aetherit)
+                .unlockedBy(getHasName(ModItems.DRACONIUM.get()), has(ModItems.DRACONIUM.get()))
+                .save(output, key("dragon_compass"));
         // Runen: Schieferplatte, Aetherit, Irrlichtstaub und eine Zutat des Elements
         java.util.Map<DragonType, ItemLike> essence = new java.util.EnumMap<>(DragonType.class);
         essence.put(DragonType.FIRE, Items.BLAZE_POWDER);

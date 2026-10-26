@@ -294,6 +294,11 @@ public final class ModBlocks {
     // =====================================================================================
 
     /** Hier wirbt man Soldaten an. */
+    /** Nestkern unter jedem Drachennest (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock> DRAGON_LAIR_CORE = BLOCKS.registerBlock(
+            "dragon_lair_core", io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
+
     public static final DeferredBlock<RecruitmentTableBlock> RECRUITMENT_TABLE = blockWithItem("recruitment_table",
             RecruitmentTableBlock::new,
             p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5f).sound(SoundType.WOOD)

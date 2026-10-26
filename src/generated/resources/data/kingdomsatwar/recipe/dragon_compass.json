@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:aetherit",
+    "C": "minecraft:compass",
+    "D": "kingdomsatwar:draconium",
+    "G": "kingdomsatwar:gemstone"
+  },
+  "pattern": [
+    " D ",
+    "GCG",
+    " A "
+  ],
+  "result": {
+    "id": "kingdomsatwar:dragon_compass"
+  }
+}

@@ -150,6 +150,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("structures_generate", () -> ModGameTests::structuresGenerate);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_BOSS_LIFECYCLE =
             TEST_FUNCTIONS.register("dragon_boss_lifecycle", () -> ModGameTests::dragonBossLifecycle);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_COMPASS =
+            TEST_FUNCTIONS.register("dragon_compass", () -> ModGameTests::dragonCompass);
 
     private ModGameTests() {}
 
@@ -158,7 +160,7 @@ public final class ModGameTests {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(KingdomsAtWar.id("default"));
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
                 List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
-                        FLOWER_POTS, WOOD_BURNS)) {
+                        FLOWER_POTS, WOOD_BURNS, DRAGON_COMPASS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
@@ -196,11 +198,14 @@ public final class ModGameTests {
         helper.succeed();
     }
 
-    /** Jeder Block hat eine Loot-Table, die vom Server geladen wurde. */
+    /** Jeder Block hat eine Loot-Table, die vom Server geladen wurde (außer dem unzerstörbaren Nestkern). */
     private static void lootTables(GameTestHelper helper) {
         var registries = helper.getLevel().getServer().reloadableRegistries();
         for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
             Block block = holder.value();
+            if (block == ModBlocks.DRAGON_LAIR_CORE.get()) {
+                continue;
+            }
             ResourceKey<LootTable> key = block.getLootTable().orElseThrow(
                     () -> helper.assertionException("Block ohne Loot-Table: %s", holder.getId()));
             helper.assertTrue(registries.getLootTable(key) != LootTable.EMPTY,
@@ -684,11 +689,16 @@ public final class ModGameTests {
         ServerLevel level = helper.getLevel();
         BlockPos homeRel = new BlockPos(4, 1, 4);
         BlockPos home = helper.absolutePos(homeRel);
-        var boss = ModEntities.PYRRHON.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        // Der Boss erwacht über den Nestkern unter seinem Nest
+        BlockPos corePos = home.below(7);
+        level.setBlock(corePos, ModBlocks.DRAGON_LAIR_CORE.get().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        var core = (io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity) level.getBlockEntity(corePos);
+        helper.assertTrue(core != null, "Nestkern ohne Blockobjekt");
+        core.setup(DragonType.FIRE, home);
+        var boss = core.awaken(level);
         helper.assertTrue(boss != null, "Boss lässt sich nicht erzeugen");
-        boss.snapTo(home.getX() + 0.5, home.getY() - 11, home.getZ() + 0.5, 0, 0);
-        level.addFreshEntity(boss);
-        boss.beginAwakening(level, home);
+        helper.assertTrue(corePos.equals(boss.getLairCore()), "Boss kennt seinen Nestkern nicht");
+        helper.assertTrue(core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.AWAKE, "Nest ist nicht erwacht");
         helper.assertTrue(boss.getBossState() == io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.State.AWAKENING,
                 "Boss erwacht nicht");
         helper.assertFalse(boss.hurtServer(level, level.damageSources().magic(), 10.0f), "Boss ist beim Erwachen verwundbar");
@@ -713,8 +723,51 @@ public final class ModGameTests {
         helper.runAfterDelay(awake + io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.DEATH_TICKS + 10, () -> {
             helper.assertTrue(boss.isRemoved(), "Boss wurde nach der Todesanimation nicht entfernt");
             helper.assertBlockPresent(ModBlocks.DRAGON_EGGS.get(DragonType.FIRE).get(), homeRel);
+            helper.assertTrue(core.phase() == io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DEFEATED,
+                    "Nest ist nach dem Sieg nicht besiegt: " + core.phase());
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).isDefeated(DragonType.FIRE),
+                    "Die Welt weiß nichts vom Sieg");
+            core.reset(level);
+            helper.assertFalse(io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).isDefeated(DragonType.FIRE),
+                    "Nest lässt sich nicht zurücksetzen");
+            level.setBlock(corePos, Blocks.STONE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
             helper.succeed();
         });
+    }
+
+    /**
+     * Drachenkompass: richtet sich auf ein Nest aus (Nadel über lodestone_tracker, Farbe des Elements, Ziel), und die
+     * Abstandsregel der kleinen Bauwerke lässt je Feld genau einen Chunk zu.
+     */
+    private static void dragonCompass(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ItemStack stack = new ItemStack(ModItems.DRAGON_COMPASS.get());
+        io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem.aim(stack, level, DragonType.ICE, new net.minecraft.world.level.ChunkPos(20, -5));
+        var target = stack.get(io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPASS_TARGET.get());
+        helper.assertTrue(target != null && target.element() == DragonType.ICE && !target.defeated(), "Falsches Ziel: " + target);
+        var tracker = stack.get(net.minecraft.core.component.DataComponents.LODESTONE_TRACKER);
+        helper.assertTrue(tracker != null && !tracker.tracked() && tracker.target().isPresent(), "Nadel ohne Ziel");
+        var pos = tracker.target().get();
+        helper.assertTrue(pos.dimension() == Level.OVERWORLD && pos.pos().getX() == 20 * 16 + 8 && pos.pos().getZ() == -5 * 16 + 8,
+                "Nadel zeigt woandershin: " + pos);
+        var color = stack.get(net.minecraft.core.component.DataComponents.CUSTOM_MODEL_DATA);
+        helper.assertTrue(color != null && Integer.valueOf(DragonType.ICE.color()).equals(color.getColor(0)), "Edelstein nicht in Eisfarbe");
+        // Abstandsregel: in einem Feld von 14×14 Chunks genau ein möglicher Chunk, nie in den letzten 6 Reihen
+        for (int region = 0; region < 4; region++) {
+            int found = 0;
+            for (int x = 0; x < 14; x++) {
+                for (int z = 0; z < 14; z++) {
+                    int cx = region * 14 + x;
+                    int cz = -region * 14 + z;
+                    if (io.github.sirschrolli.kingdomsatwar.worldgen.SpacedPlacement.isGridChunk(1234L, 99, cx, cz, 14, 6)) {
+                        found++;
+                        helper.assertTrue(x < 8 && z < 8, "Bauwerks-Chunk zu nah am nächsten Feld: " + x + "/" + z);
+                    }
+                }
+            }
+            helper.assertTrue(found == 1, "Feld " + region + " hat " + found + " mögliche Chunks");
+        }
+        helper.succeed();
     }
 
     /**
@@ -885,19 +938,29 @@ public final class ModGameTests {
     }
 
     /**
-     * Bauwerke: Ein Eisdrachen-Nest entsteht aus Packeis und Schnee, mit Fundstücken im Kies; eine Burgruine hat
-     * Mauern aus Mod-Steinen und eine Truhe mit Beute. Wächter und Banditen werden für den Test gleich entfernt.
+     * Bauwerke: In der Mitte von Pyrrhons Vulkankrater liegt der Lavasee mit dem Nestkern darunter; eine Burgruine hat
+     * Mauern aus Mod-Steinen und eine Truhe mit Beute. Banditen werden für den Test gleich entfernt.
      */
     private static void structuresGenerate(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var generator = level.getChunkSource().getGenerator();
         BlockPos center = helper.absolutePos(new BlockPos(4, 1, 4));
         flatGround(helper);
-        helper.assertTrue(new io.github.sirschrolli.kingdomsatwar.worldgen.DragonNestFeature(DragonType.ICE)
-                .place(level, generator, RandomSource.create(7), center), "Das Nest wurde nicht gebaut");
-        removeSpawned(helper);
-        helper.assertTrue(countInArea(helper, Blocks.PACKED_ICE) + countInArea(helper, Blocks.SNOW_BLOCK) > 20, "Nest ohne Eis und Schnee");
-        helper.assertTrue(countInArea(helper, Blocks.SUSPICIOUS_GRAVEL) > 0, "Nest ohne Fundstücke im Kies");
+        // Mitte des Vulkankraters (nur der Teil über der Arena wird gebaut): Lavasee, Basalt, Nestkern darunter
+        var lairCenter = center.below(1);
+        var area = new net.minecraft.world.level.levelgen.structure.BoundingBox(center.getX() - 4, center.getY() - 10, center.getZ() - 4,
+                center.getX() + 4, center.getY() + 12, center.getZ() + 4);
+        new io.github.sirschrolli.kingdomsatwar.worldgen.lair.DragonLairPiece(DragonType.FIRE, lairCenter, 7L)
+                .postProcess(level, level.structureManager(), generator, RandomSource.create(7), area,
+                        net.minecraft.world.level.ChunkPos.containing(center), lairCenter);
+        helper.assertTrue(level.getBlockState(lairCenter.below(2)).is(Blocks.LAVA), "Kein Lavasee in der Kratermitte");
+        helper.assertTrue(level.getBlockState(lairCenter.below(7)).is(ModBlocks.DRAGON_LAIR_CORE.get()), "Kein Nestkern unter dem Lavasee");
+        helper.assertTrue(level.getBlockEntity(lairCenter.below(7))
+                instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity core && core.element() == DragonType.FIRE,
+                "Nestkern ohne Feuer-Element");
+        for (var pos : BlockPos.betweenClosed(area.minX(), lairCenter.getY() - 9, area.minZ(), area.maxX(), area.maxY(), area.maxZ())) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
 
         flatGround(helper);
         helper.assertTrue(new io.github.sirschrolli.kingdomsatwar.worldgen.CastleRuinFeature()

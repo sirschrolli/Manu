@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.boss;
 
+import io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
@@ -30,10 +31,19 @@ public final class BossLairs {
         level.sendParticles(boss.element().particle(), egg.getX() + 0.5, egg.getY() + 1.0, egg.getZ() + 0.5, 60, 1.2, 1.0, 1.2, 0.05);
         level.playSound(null, egg, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 2.0f, 0.7f);
         level.playSound(null, egg, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 2.0f, 0.6f);
+        if (boss.getLairCore() != null && level.getBlockEntity(boss.getLairCore()) instanceof DragonLairCoreBlockEntity core) {
+            core.onBossDefeated(level);
+        } else {
+            io.github.sirschrolli.kingdomsatwar.world.LairRecords.update(level, boss.element(), home,
+                    io.github.sirschrolli.kingdomsatwar.world.LairRecords.Phase.DEFEATED);
+        }
     }
 
     /** Der Boss schläft wieder (keine Gegner mehr im Nest). */
-    public static void onBossSlumber(ServerLevel level, BlockPos home, DragonType element) {
+    public static void onBossSlumber(ServerLevel level, DragonBossEntity boss) {
+        if (boss.getLairCore() != null && level.getBlockEntity(boss.getLairCore()) instanceof DragonLairCoreBlockEntity core) {
+            core.onBossSlumber(level);
+        }
     }
 
     private static BlockPos findEggSpot(ServerLevel level, BlockPos home, DragonType element) {

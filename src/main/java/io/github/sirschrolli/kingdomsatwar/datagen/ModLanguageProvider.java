@@ -286,6 +286,69 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.fire.title", "The Ash Lord", "Der Aschenfürst");
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
+        lairs();
+    }
+
+    /** Die sechs Drachennester: Namen, Warnungen beim Näherkommen, Nestkern, Drachenkompass und Befehle. */
+    private void lairs() {
+        lair(DragonType.FIRE, "Pyrrhon's Volcanic Crater", "Pyrrhons Vulkankrater",
+                "The air shimmers with heat… something vast slumbers here.",
+                "Die Luft flimmert vor Hitze … etwas Gewaltiges schläft hier.");
+        lair(DragonType.ICE, "Glaciara's Glacier Basin", "Glaciaras Gletscherkessel",
+                "Your breath freezes… beneath the ice, something stirs.",
+                "Dein Atem gefriert … unter dem Eis regt sich etwas.");
+        lair(DragonType.LIGHTNING, "Voltarion's Storm Peaks", "Voltarions Sturmgipfel",
+                "The air crackles… a storm lies in wait here.",
+                "Die Luft knistert … hier lauert ein Sturm.");
+        lair(DragonType.NATURE, "Verdantis' Ancient Grove", "Verdantis' Uralter Hain",
+                "The trees whisper… the grove is watching you.",
+                "Die Bäume flüstern … der Hain beobachtet dich.");
+        lair(DragonType.EARTH, "Terragon's Rift", "Terragons Felsschlucht",
+                "The ground trembles beneath your feet…",
+                "Der Boden bebt unter deinen Füßen …");
+        lair(DragonType.WATER, "Thalassa's Sunken Grotto", "Thalassas Versunkene Grotte",
+                "The water turns cold and dark… something vast circles below you.",
+                "Das Wasser wird kalt und dunkel … etwas Gewaltiges zieht unter dir seine Kreise.");
+        block(ModBlocks.DRAGON_LAIR_CORE, "Lair Core", "Nestkern");
+
+        item(ModItems.DRAGON_COMPASS, "Dragon Compass", "Drachenkompass");
+        lore("dragon_compass", "Shows the way to the lairs of the great dragons", "Weist den Weg zu den Nestern der großen Drachen");
+        text("item.kingdomsatwar.dragon_compass.unaimed", "Right-click to align the needle", "Rechtsklick richtet die Nadel aus");
+        text("item.kingdomsatwar.dragon_compass.seeking", "Seeking: %s", "Sucht: %s");
+        text("item.kingdomsatwar.dragon_compass.defeated", "Its dragon has been defeated.", "Sein Drache ist besiegt.");
+        text("item.kingdomsatwar.dragon_compass.hint", "Right-click: direction · Sneak + right-click: next lair",
+                "Rechtsklick: Richtung · Schleichen + Rechtsklick: nächstes Nest");
+        text("item.kingdomsatwar.dragon_compass.aimed", "%s – %s", "%s – %s");
+        text("item.kingdomsatwar.dragon_compass.distance", "about %s blocks to the %s", "etwa %s Blöcke im %s");
+        text("item.kingdomsatwar.dragon_compass.here", "right here!", "genau hier!");
+        text("item.kingdomsatwar.dragon_compass.other_dimension", "in the Overworld", "in der Oberwelt");
+        text("item.kingdomsatwar.dragon_compass.defeated_suffix", " (defeated)", " (besiegt)");
+        text("item.kingdomsatwar.dragon_compass.no_nests", "The needle trembles – this world has no dragon lairs.",
+                "Die Nadel zittert – in dieser Welt gibt es keine Drachennester.");
+        String[][] directions = {{"n", "north", "Norden"}, {"ne", "northeast", "Nordosten"}, {"e", "east", "Osten"},
+                {"se", "southeast", "Südosten"}, {"s", "south", "Süden"}, {"sw", "southwest", "Südwesten"},
+                {"w", "west", "Westen"}, {"nw", "northwest", "Nordwesten"}};
+        for (String[] d : directions) {
+            text("direction.kingdomsatwar." + d[0], d[1], d[2]);
+        }
+
+        text("command.kingdomsatwar.lair.header", "Dragon lairs of this world:", "Drachennester dieser Welt:");
+        text("command.kingdomsatwar.lair.entry", "%s at %s, %s – %s", "%s bei %s, %s – %s");
+        text("command.kingdomsatwar.lair.unexplored", "not yet discovered", "noch nicht erkundet");
+        text("command.kingdomsatwar.lair.phase.dormant", "asleep", "schlafend");
+        text("command.kingdomsatwar.lair.phase.awake", "awake", "erwacht");
+        text("command.kingdomsatwar.lair.phase.defeated", "defeated", "besiegt");
+        text("command.kingdomsatwar.lair.none", "This world has no dragon lairs.", "In dieser Welt gibt es keine Drachennester.");
+        text("command.kingdomsatwar.lair.no_core", "There is no lair core near you.", "In deiner Nähe gibt es keinen Nestkern.");
+        text("command.kingdomsatwar.lair.awakened", "The dragon of %s awakens!", "Der Drache von %s erwacht!");
+        text("command.kingdomsatwar.lair.cannot_awaken", "This dragon cannot awaken (yet).", "Dieser Drache kann (noch) nicht erwachen.");
+        text("command.kingdomsatwar.lair.reset", "%s sleeps again – its dragon can be challenged anew.",
+                "%s schläft wieder – sein Drache kann erneut herausgefordert werden.");
+    }
+
+    private void lair(DragonType type, String nameEn, String nameDe, String warningEn, String warningDe) {
+        text("lair.kingdomsatwar." + type.id() + ".name", nameEn, nameDe);
+        text("lair.kingdomsatwar." + type.id() + ".warning", warningEn, warningDe);
     }
 
     private void creatures() {

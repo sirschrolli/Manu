@@ -92,6 +92,12 @@ final class Showcase {
                 case "magic" -> magic(steps);
                 case "structures" -> structures(steps);
                 case "boss" -> boss(steps);
+                case "lair" -> lair(steps);
+                case "lairinfo" -> {
+                    double[] nest = new double[4];
+                    locateFireNest(steps, nest);
+                    steps.add(Step.until(() -> nest[3] != 0, 1200));
+                }
                 default -> { }
             }
         }
@@ -974,19 +980,14 @@ final class Showcase {
         steps.add(Step.command("gamemode spectator"));
     }
 
-    /** Die sechs Drachennester und eine Burgruine, wie sie die Weltgenerierung baut. */
+    /** Eine Burgruine, wie sie die Weltgenerierung baut (die Drachennester zeigt die Szene "lair"). */
     private static void structures(Deque<Step> steps) {
         int oz = 440;
         steps.add(Step.server(level -> {
             fill(level, new BlockPos(-10, ground - 3, oz - 14), new BlockPos(90, ground - 1, oz + 14), Blocks.GRASS_BLOCK.defaultBlockState());
             fill(level, new BlockPos(-10, ground, oz - 14), new BlockPos(90, ground + 10, oz + 14), Blocks.AIR.defaultBlockState());
             var generator = level.getChunkSource().getGenerator();
-            int x = 0;
-            for (DragonType type : DragonType.values()) {
-                new io.github.sirschrolli.kingdomsatwar.worldgen.DragonNestFeature(type)
-                        .place(level, generator, net.minecraft.util.RandomSource.create(5 + x), new BlockPos(x, ground, oz));
-                x += 14;
-            }
+            int x = 84;
             new io.github.sirschrolli.kingdomsatwar.worldgen.CastleRuinFeature()
                     .place(level, generator, net.minecraft.util.RandomSource.create(3), new BlockPos(x + 2, ground, oz));
             level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new net.minecraft.world.phys.AABB(-20, ground - 5, oz - 20, 120, ground + 20, oz + 20))
@@ -1000,12 +1001,6 @@ final class Showcase {
         steps.add(tp(0.5, 9.0, oz + 13.0, 180, 35));
         steps.add(Step.waitForChunks(300));
         steps.add(Step.waitTicks(100));
-        String[] names = {"fire", "ice", "lightning", "nature", "earth", "water"};
-        for (int i = 0; i < names.length; i++) {
-            steps.add(tp(i * 14 + 0.5, 7.0, oz + 10.0, 180, 35));
-            steps.add(Step.waitTicks(30));
-            steps.add(Step.screenshot("structure_nest_" + names[i]));
-        }
         steps.add(tp(14.5, 2.2, oz + 3.0, 180, 30));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("structure_nest_ice_close"));
@@ -1268,6 +1263,150 @@ final class Showcase {
             steps.add(Step.waitTicks(5));
         }
         steps.add(Step.command("gamemode spectator"));
+    }
+
+    /**
+     * Pyrrhons Vulkankrater in einer echten (nicht flachen) Welt: Lage aus dem {@code NestLocator}, Bilder aus der Luft,
+     * vom Kraterrand, in der Dämmerung und beim Erwachen des Bosses – zum Schluss der Drachenkompass in der Hand.
+     */
+    private static void lair(Deque<Step> steps) {
+        double[] nest = new double[4];   // x, z, Bodenhöhe der Mitte, gefunden (1) / keins (-1)
+        locateFireNest(steps, nest);
+        steps.add(Step.until(() -> nest[3] != 0, 1200));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(lookFrom(nest, 0, 70, 105, 0));
+        steps.add(Step.waitTicks(40));
+        steps.add(chunksAround(nest, 3, 4000));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.waitForChunks(3000));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}",
+                io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(DragonType.FIRE))));
+        steps.add(Step.screenshot("lair_fire_overview"));
+        steps.add(lookFrom(nest, -70, 55, -80, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1500));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_fire_overview_2"));
+        steps.add(lookFrom(nest, -8, 27, 29, 0));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.screenshot("lair_fire_rim"));
+        steps.add(lookFrom(nest, 5, 5, 13, 2));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.screenshot("lair_fire_inside"));
+        // Dämmerung: die Lava leuchtet
+        steps.add(Step.command("time set 13200"));
+        steps.add(lookFrom(nest, 0, 45, 80, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.screenshot("lair_fire_dusk"));
+        // Erwachen über den Nestkern
+        steps.add(lookFrom(nest, 2, 8, 23, 6));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> {
+            BlockPos center = BlockPos.containing(nest[0], nest[2], nest[1]);
+            BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(DragonType.FIRE).corePos(center);
+            if (level.getBlockEntity(core) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity be) {
+                var boss = be.awaken(level);
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nestkern bei {} weckt {}", core, boss);
+            } else {
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Kein Nestkern bei {}: {}", core, level.getBlockState(core));
+            }
+        }));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.screenshot("lair_fire_awakening_1"));
+        steps.add(Step.waitTicks(55));
+        steps.add(Step.screenshot("lair_fire_awakening_2"));
+        steps.add(Step.waitTicks(55));
+        steps.add(Step.screenshot("lair_fire_awakening_3"));
+        // Drachenkompass in der Hand, ein Stück außerhalb des Kraters (die Nadel zeigt zum Nest)
+        steps.add(Step.command("kill @e[type=kingdomsatwar:pyrrhon]"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("give @s kingdomsatwar:dragon_compass"));
+        steps.add(Step.server(level -> level.players().forEach(player -> {
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+            player.getInventory().setSelectedSlot(0);
+        })));
+        steps.add(lookFrom(nest, 40, 40, 160, 10));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.server(level -> level.players().forEach(player ->
+                player.getMainHandItem().use(level, player, net.minecraft.world.InteractionHand.MAIN_HAND))));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("lair_compass"));
+        steps.add(Step.command("gamemode spectator"));
+    }
+
+    /** Sucht das Feuernest dieser Welt (x, z, Bodenhöhe der Mitte, gefunden = 1 / keins = -1) und erzeugt seine Chunks. */
+    private static void locateFireNest(Deque<Step> steps, double[] nest) {
+        steps.add(Step.server(level -> {
+            var nests = io.github.sirschrolli.kingdomsatwar.worldgen.lair.NestLocator.all(level);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nester dieser Welt: {}", nests);
+            var fire = nests.get(DragonType.FIRE);
+            if (fire == null) {
+                nest[3] = -1;
+                return;
+            }
+            nest[0] = fire.getMiddleBlockX() + 0.5;
+            nest[1] = fire.getMiddleBlockZ() + 0.5;
+            // das ganze Nest erzeugen lassen (dauert einen Moment) und den Lavasee messen
+            for (int x = fire.x() - 4; x <= fire.x() + 4; x++) {
+                for (int z = fire.z() - 4; z <= fire.z() + 4; z++) {
+                    level.getChunk(x, z);
+                }
+            }
+            nest[2] = level.getHeight(Heightmap.Types.MOTION_BLOCKING, fire.getMiddleBlockX(), fire.getMiddleBlockZ());
+            nest[3] = 1;
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Feuernest bei {} {} {}", nest[0], nest[2], nest[1]);
+        }));
+    }
+
+    /** Wartet, bis der Spieler alle Chunks im Umkreis {@code radius} um die Nestmitte erhalten hat. */
+    private static Step chunksAround(double[] nest, int radius, int maxTicks) {
+        return (minecraft, ticks) -> {
+            if (ticks > maxTicks) {
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Chunks um das Nest nach {} Ticks noch nicht da", ticks);
+                return true;
+            }
+            if (minecraft.level == null || ticks < 20) {
+                return false;
+            }
+            int cx = net.minecraft.core.SectionPos.blockToSectionCoord((int) Math.floor(nest[0]));
+            int cz = net.minecraft.core.SectionPos.blockToSectionCoord((int) Math.floor(nest[1]));
+            for (int x = cx - radius; x <= cx + radius; x++) {
+                for (int z = cz - radius; z <= cz + radius; z++) {
+                    if (!minecraft.level.getChunkSource().hasChunk(x, z)) {
+                        return false;
+                    }
+                }
+            }
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Chunks um das Nest nach {} Ticks da", ticks);
+            return true;
+        };
+    }
+
+    /** Kamera relativ zur Nestmitte setzen und auf die Mitte (plus {@code lookUp}) blicken lassen. */
+    private static Step lookFrom(double[] nest, double dx, double dy, double dz, double lookUp) {
+        return Step.once(minecraft -> {
+            double cx = nest[0] + dx;
+            double cy = nest[2] + dy;
+            double cz = nest[1] + dz;
+            double lx = nest[0] - cx;
+            double ly = nest[2] + lookUp - cy;
+            double lz = nest[1] - cz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cx, cy, cz, yaw, pitch));
+        });
     }
 
     // =====================================================================================

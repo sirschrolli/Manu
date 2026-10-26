@@ -1,6 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "#kingdomsatwar:has_ice_dragon_nests",
-  "features": "kingdomsatwar:ice_dragon_nest",
-  "step": "surface_structures"
-}

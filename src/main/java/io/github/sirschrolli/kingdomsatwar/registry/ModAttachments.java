@@ -16,5 +16,10 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<Boolean>> INTRO_SEEN = ATTACHMENTS.register("intro_seen",
             () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("seen")).copyOnDeath().build());
 
+    /** Lage und Zustand der sechs Drachennester (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.world.LairRecords>> LAIRS = ATTACHMENTS.register("lairs",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.LairRecords::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.world.LairRecords.CODEC.fieldOf("lairs")).build());
+
     private ModAttachments() {}
 }

@@ -87,6 +87,22 @@ Umsehen, jeder Angriff mit Ausholen und Nachschwingen, Seeschlange schlängelt s
 - **Drachenkompass** (Kompass + Aetherit + Edelstein + Draconium): zeigt zum nächsten unbesiegten Nest,
   Schleichen + Rechtsklick wechselt das Element.
 - **Karten** beim Kartografen (für Münzen), **Hinweise** in der Chronik („weit im eisigen Norden …“).
+- Schon von Weitem sichtbar: Rauchsäulen über dem Krater, Warnungen in der Statuszeile beim Näherkommen.
+- **Abstand:** Nester liegen mindestens 640 Blöcke auseinander, Dörfer halten 256 Blöcke Abstand zu den Nestern,
+  kleine Bauwerke (Burgruinen) 320 Blöcke; Burgruinen untereinander mindestens ~100 Blöcke.
+
+### Nest-Biome
+Um jedes Nest liegt ein eigenes Biom (ca. 250 Blöcke Durchmesser), das die Landschaft umgestaltet – mit eigenen
+Blöcken, Farben, Partikeln und Geräuschen:
+
+| Nest | Biom | Landschaft |
+|---|---|---|
+| Feuer | **Aschelande** | Aschedünen, Aschenerde, verkohlte Bäume, Vulkangestein mit Glutrissen, rauchende Glutspalten, fallende Asche, rötlich-dunkler Himmel; Wasser verdampft, Lava fließt schneller |
+| Eis | Frostkessel | ewiges Eis, Frostkristalle, Schneetreiben, blaue Eisnadeln |
+| Blitz | Sturmklippen | zerrissene Felsen, Blitzglas, Kupferadern, düsterer Gewitterhimmel |
+| Natur | Uralter Hain | Riesenbäume, Moos, Ranken, leuchtende Pilze, Glühwürmchen |
+| Erde | Zerklüftete Weiten | Felsnadeln, Kristalldrusen, Staub |
+| Wasser | Abgrundgrotte | Tangwälder, leuchtende Tiefseepflanzen, Perlmuttfelsen |
 
 ---
 
@@ -137,8 +153,10 @@ Boss für danach.
 | Schritt | Inhalt | Stand |
 |---|---|---|
 | A | Intro mit Stimme C, README, Version 0.2.0 | ✅ |
-| B1 | Boss-Grundgerüst (Zustände, Trefferzonen, Bossleiste, Bewegung, Angriffe, Tod → Ei) + **Pyrrhon** | ⏳ |
-| B2 | Riesige Nester als echte Bauwerke, eins je Welt im passenden Biom, Nestkern, Drachenkompass | ⏳ |
+| B1 | Boss-Grundgerüst (Zustände, Trefferzonen, Bossleiste, Bewegung, Angriffe, Tod → Ei) + **Pyrrhon** | ✅ |
+| B1b | Weiche, realistische Bewegungen für alle Drachen (Feder-Ketten, Atmen, Schrittfolge, Flügelwelle, Ausholen/Nachschwingen) | ⏳ |
+| B2 | Riesige Nester als echte Bauwerke, eins je Welt im passenden Biom, Nestkern, Drachenkompass | ✅ |
+| B2b | Eigenes Biom um jedes Nest mit neuen Blöcken (zuerst die **Aschelande** um Pyrrhons Krater) | ⏳ |
 | B3 | Story-Grundlage: Chronik, Kapitel, Siegelkreis, Fortschritt je Spieler | ⏳ |
 | B4–B8 | Glaciara, Voltarion, Verdantis, Terragon, Thalassa mit Nestern | ⏳ |
 | B9 | Alte Drachen-Mechanik umbauen (keine wilden Drachen, keine Ei-Rezepte), Tests, Bilder | ⏳ |

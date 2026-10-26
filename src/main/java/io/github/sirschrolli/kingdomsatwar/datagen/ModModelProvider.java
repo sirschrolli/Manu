@@ -296,6 +296,40 @@ public class ModModelProvider extends ModelProvider {
         // --- Magie ---
         items.generateFlatItem(ModItems.AETHERIT_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         ModItems.RUNES.values().forEach(rune -> flat(items, rune.get()));
+
+        // --- Drachennester: Nestkern (verborgen, mit glimmendem Siegel) und Drachenkompass ---
+        glowingCube(blocks, ModBlocks.DRAGON_LAIR_CORE.get());
+        dragonCompass(items, ModItems.DRAGON_COMPASS.get());
+    }
+
+    /**
+     * Drachenkompass: 32 Nadelstellungen wie beim Vanilla-Kompass (die Nadel dreht das Spiel über den
+     * {@code lodestone_tracker}); darüber der Edelstein, getönt in der Farbe des gesuchten Drachen.
+     */
+    private static void dragonCompass(ItemModelGenerators items, Item compass) {
+        java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
+        net.minecraft.client.renderer.item.ItemModel.Unbaked up = compassFrame(items, compass, 16);
+        entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(up, 0.0F));
+        for (int i = 1; i < 32; i++) {
+            entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(
+                    compassFrame(items, compass, net.minecraft.util.Mth.positiveModulo(i - 16, 32)), i - 0.5F));
+        }
+        entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(up, 31.5F));
+        items.itemModelOutput.accept(compass, net.minecraft.client.data.models.model.ItemModelUtils.rangeSelect(
+                new net.minecraft.client.renderer.item.properties.numeric.CompassAngle(true,
+                        net.minecraft.client.renderer.item.properties.numeric.CompassAngleState.CompassTarget.LODESTONE),
+                32.0F, entries));
+    }
+
+    private static net.minecraft.client.renderer.item.ItemModel.Unbaked compassFrame(ItemModelGenerators items, Item compass, int index) {
+        String suffix = String.format(java.util.Locale.ROOT, "_%02d", index);
+        Identifier model = ModelTemplates.TWO_LAYERED_ITEM.create(ModelLocationUtils.getModelLocation(compass, suffix),
+                TextureMapping.layered(new Material(KingdomsAtWar.id("item/dragon_compass" + suffix)),
+                        new Material(KingdomsAtWar.id("item/dragon_compass_gem"))),
+                items.modelOutput);
+        return net.minecraft.client.data.models.model.ItemModelUtils.tintedModel(model,
+                net.minecraft.client.data.models.model.ItemModelUtils.constantTint(-1),
+                new net.minecraft.client.color.item.CustomModelDataSource(0, 0xF2CC5A));
     }
 
     /** Stuhl, Bank, Tisch und Thron. */

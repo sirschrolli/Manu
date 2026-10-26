@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.dragon;
 
+import com.mojang.serialization.Codec;
 import java.util.function.Supplier;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.Items;
@@ -17,7 +19,7 @@ import net.minecraft.world.level.material.MapColor;
  * <p>Der {@code nestMaterial} ist der Rohstoff, aus dem laut Konzept die Nester der Art bestehen.
  * Er wird im Rezept für das jeweilige Drachenei verwendet.
  */
-public enum DragonType {
+public enum DragonType implements StringRepresentable {
     FIRE("fire", MapColor.COLOR_RED, () -> Items.MAGMA_BLOCK, () -> ParticleTypes.FLAME, 0xFF6A1A),
     ICE("ice", MapColor.ICE, () -> Items.BLUE_ICE, () -> ParticleTypes.SNOWFLAKE, 0x9FE8FF),
     LIGHTNING("lightning", MapColor.COLOR_YELLOW, () -> Blocks.LIGHTNING_ROD.weathering().unaffected(),
@@ -25,6 +27,9 @@ public enum DragonType {
     NATURE("nature", MapColor.PLANT, () -> Items.MOSS_BLOCK, () -> ParticleTypes.SPORE_BLOSSOM_AIR, 0x7FE05A),
     EARTH("earth", MapColor.DIRT, () -> Items.RAW_IRON_BLOCK, () -> ParticleTypes.DUST_PLUME, 0xC8A070),
     WATER("water", MapColor.WATER, () -> Items.PRISMARINE, () -> ParticleTypes.SPLASH, 0x4FD0F0);
+
+    /** Speichern und Laden über den Kurznamen ({@code fire}, {@code ice} …). */
+    public static final Codec<DragonType> CODEC = StringRepresentable.fromEnum(DragonType::values);
 
     private final String id;
     private final MapColor mapColor;
@@ -57,6 +62,20 @@ public enum DragonType {
     /** Partikel für Odem-Angriff und brütende Eier. */
     public ParticleOptions particle() {
         return particle.get();
+    }
+
+    @Override
+    public String getSerializedName() {
+        return id;
+    }
+
+    public static DragonType byId(String id) {
+        for (DragonType type : values()) {
+            if (type.id.equals(id)) {
+                return type;
+            }
+        }
+        return FIRE;
     }
 
     /** Leitfarbe der Art (RGB), z. B. für Partikel und Text. */

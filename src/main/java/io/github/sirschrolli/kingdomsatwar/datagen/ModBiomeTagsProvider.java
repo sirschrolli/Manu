@@ -64,17 +64,17 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .addTag(BiomeTags.IS_BADLANDS)
                 .addTag(BiomeTags.IS_HILL);
 
-        // Drachennester: jede Art dort, wo sie zu Hause ist
+        // Drachennester (je eins pro Welt): jede Art in ihrem eigenen Gebiet – Eis im Eis-Biom, Wasser im tiefen Ozean
         var nests = ModTags.Biomes.HAS_DRAGON_NESTS;
-        this.tag(nests.get(DragonType.FIRE)).addTag(BiomeTags.IS_BADLANDS).add(Biomes.SAVANNA_PLATEAU).add(Biomes.WINDSWEPT_SAVANNA);
-        this.tag(nests.get(DragonType.ICE)).add(Biomes.SNOWY_SLOPES).add(Biomes.FROZEN_PEAKS).add(Biomes.ICE_SPIKES).add(Biomes.SNOWY_PLAINS);
-        this.tag(nests.get(DragonType.LIGHTNING)).add(Biomes.STONY_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.MEADOW)
-                .add(Biomes.WINDSWEPT_HILLS);
-        this.tag(nests.get(DragonType.NATURE)).addTag(BiomeTags.IS_JUNGLE).add(Biomes.FLOWER_FOREST).add(Biomes.LUSH_CAVES);
-        this.tag(nests.get(DragonType.EARTH)).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_FOREST).add(Biomes.WOODED_BADLANDS)
-                .add(Biomes.STONY_SHORE);
-        this.tag(nests.get(DragonType.WATER)).addTag(BiomeTags.IS_BEACH);
-        // Burgruinen: offenes, bewohnbares Land
+        this.tag(nests.get(DragonType.FIRE)).addTag(BiomeTags.IS_BADLANDS).add(Biomes.DESERT);
+        this.tag(nests.get(DragonType.ICE)).add(Biomes.ICE_SPIKES).add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_SLOPES).add(Biomes.FROZEN_PEAKS);
+        this.tag(nests.get(DragonType.LIGHTNING)).add(Biomes.STONY_PEAKS).add(Biomes.JAGGED_PEAKS);
+        this.tag(nests.get(DragonType.NATURE)).addTag(BiomeTags.IS_JUNGLE).add(Biomes.DARK_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST)
+                .add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
+        this.tag(nests.get(DragonType.EARTH)).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_HILLS).add(Biomes.SAVANNA_PLATEAU)
+                .add(Biomes.WINDSWEPT_SAVANNA);
+        this.tag(nests.get(DragonType.WATER)).add(Biomes.DEEP_OCEAN).add(Biomes.DEEP_COLD_OCEAN).add(Biomes.DEEP_LUKEWARM_OCEAN);
+
         this.tag(ModTags.Biomes.HAS_CASTLE_RUINS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)
