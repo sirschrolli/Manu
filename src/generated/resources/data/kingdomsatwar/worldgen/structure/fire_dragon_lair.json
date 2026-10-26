@@ -3,5 +3,5 @@
   "biomes": "#minecraft:is_overworld",
   "element": "fire",
   "spawn_overrides": {},
-  "step": "surface_structures"
+  "step": "top_layer_modification"
 }

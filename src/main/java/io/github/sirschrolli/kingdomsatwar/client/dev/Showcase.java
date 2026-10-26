@@ -1284,6 +1284,15 @@ final class Showcase {
         steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}",
                 io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(DragonType.FIRE))));
         steps.add(Step.screenshot("lair_fire_overview"));
+        // Aschelande: aus großer Höhe und vom Boden aus
+        steps.add(lookFrom(nest, 0, 150, 250, 0));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1500));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("lair_ashlands_aerial"));
+        groundView(steps, nest, 64, 70, 2.2, 14, "lair_ashlands_ground");
+        groundView(steps, nest, -95, 20, 1.8, 10, "lair_ashlands_ground_2");
+        groundView(steps, nest, 30, -100, 3.0, 12, "lair_ashlands_ground_3");
         steps.add(lookFrom(nest, -70, 55, -80, 0));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
@@ -1358,8 +1367,8 @@ final class Showcase {
             nest[0] = fire.getMiddleBlockX() + 0.5;
             nest[1] = fire.getMiddleBlockZ() + 0.5;
             // das ganze Nest erzeugen lassen (dauert einen Moment) und den Lavasee messen
-            for (int x = fire.x() - 4; x <= fire.x() + 4; x++) {
-                for (int z = fire.z() - 4; z <= fire.z() + 4; z++) {
+            for (int x = fire.x() - 8; x <= fire.x() + 8; x++) {
+                for (int z = fire.z() - 8; z <= fire.z() + 8; z++) {
                     level.getChunk(x, z);
                 }
             }
@@ -1367,6 +1376,30 @@ final class Showcase {
             nest[3] = 1;
             io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Feuernest bei {} {} {}", nest[0], nest[2], nest[1]);
         }));
+    }
+
+    /** Bild vom Boden aus: Kamera auf Augenhöhe über dem Gelände bei (dx, dz), Blick zur Nestmitte. */
+    private static void groundView(Deque<Step> steps, double[] nest, double dx, double dz, double eye, double lookUp, String name) {
+        double[] y = new double[1];
+        steps.add(Step.server(level -> y[0] = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (int) Math.floor(nest[0] + dx), (int) Math.floor(nest[1] + dz))));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.once(minecraft -> {
+            double cx = nest[0] + dx;
+            double cy = y[0] + eye;
+            double cz = nest[1] + dz;
+            double lx = nest[0] - cx;
+            double ly = nest[2] + lookUp - cy;
+            double lz = nest[1] - cz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                    cx, cy, cz, yaw, pitch));
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot(name));
     }
 
     /** Wartet, bis der Spieler alle Chunks im Umkreis {@code radius} um die Nestmitte erhalten hat. */

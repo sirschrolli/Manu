@@ -65,6 +65,38 @@ public final class LairContext {
         return this.level.getHeight(type, x, z);
     }
 
+    /**
+     * Oberster Boden-Block einer Säule: Pflanzen, Laub, Stämme, Schnee- und Ascheschichten zählen nicht, Wasser und
+     * Lava schon (der Aufrufer prüft, ob es Flüssigkeit ist).
+     */
+    public int groundY(int x, int z) {
+        int y = this.originalHeight(x, z, false) - 1;
+        int min = this.level.getMinY();
+        while (y > min) {
+            BlockState state = this.get(x, y, z);
+            if (!state.getFluidState().isEmpty() || isGround(state)) {
+                return y;
+            }
+            y--;
+        }
+        return y;
+    }
+
+    /** Fester, voller Block, der zum Gelände gehört (keine Pflanze, kein Baum). */
+    public static boolean isGround(BlockState state) {
+        if (state.isAir() || state.is(net.minecraft.tags.BlockTags.LOGS) || state.is(net.minecraft.tags.BlockTags.LEAVES)) {
+            return false;
+        }
+        if (state.is(net.minecraft.world.level.block.Blocks.CACTUS) || state.is(net.minecraft.world.level.block.Blocks.PUMPKIN)
+                || state.is(net.minecraft.world.level.block.Blocks.MELON) || state.is(net.minecraft.world.level.block.Blocks.BEE_NEST)
+                || state.is(net.minecraft.world.level.block.Blocks.BROWN_MUSHROOM_BLOCK)
+                || state.is(net.minecraft.world.level.block.Blocks.RED_MUSHROOM_BLOCK)
+                || state.is(net.minecraft.world.level.block.Blocks.MUSHROOM_STEM)) {
+            return false;
+        }
+        return state.isSolidRender();
+    }
+
     /** Fester Zufall 0..1 für ganze Zahlen (gleich in jedem Chunk). */
     public double rand(int a, int b, int salt) {
         long h = this.seed * 0x9E3779B97F4A7C15L + a * 0x632BE59BD9B4E019L + b * 0x85157AF5L + salt * 0xC2B2AE3D27D4EB4FL;

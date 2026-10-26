@@ -297,9 +297,79 @@ public class ModModelProvider extends ModelProvider {
         items.generateFlatItem(ModItems.AETHERIT_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         ModItems.RUNES.values().forEach(rune -> flat(items, rune.get()));
 
+        // --- Aschelande ---
+        blocks.createTrivialCube(ModBlocks.ASH_BLOCK.get());
+        ashLayer(blocks, ModBlocks.ASH_LAYER.get(), ModBlocks.ASH_BLOCK.get());
+        blocks.createTrivialBlock(ModBlocks.CINDER_SOIL.get(), TexturedModel.CUBE_BOTTOM_TOP);
+        glowingCube(blocks, ModBlocks.GLOWING_VOLCANIC_ROCK.get());
+        blocks.createAxisAlignedPillarBlock(ModBlocks.CHARRED_LOG.get(), TexturedModel.COLUMN);
+        emberVent(blocks, ModBlocks.EMBER_VENT.get());
+
         // --- Drachennester: Nestkern (verborgen, mit glimmendem Siegel) und Drachenkompass ---
         glowingCube(blocks, ModBlocks.DRAGON_LAIR_CORE.get());
         dragonCompass(items, ModItems.DRAGON_COMPASS.get());
+    }
+
+    /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */
+    private static void ashLayer(BlockModelGenerators blocks, Block layer, Block full) {
+        Material texture = TextureMapping.getBlockTexture(full);
+        TextureMapping textures = new TextureMapping().put(TextureSlot.TEXTURE, texture).put(TextureSlot.PARTICLE, texture);
+        Identifier[] models = new Identifier[8];
+        for (int layers = 1; layers < 8; layers++) {
+            models[layers] = layerTemplate(layers * 2).createWithSuffix(layer, "_height" + layers * 2, textures, blocks.modelOutput);
+        }
+        Identifier fullModel = ModelLocationUtils.getModelLocation(full);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(layer).with(
+                PropertyDispatch.initial(net.minecraft.world.level.block.state.properties.BlockStateProperties.LAYERS)
+                        .generate(layers -> BlockModelGenerators.plainVariant(layers < 8 ? models[layers] : fullModel))));
+        blocks.registerSimpleItemModel(layer, models[1]);
+    }
+
+    private static ModelTemplate layerTemplate(int height) {
+        return ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace(height == 2 ? "block/thin_block" : "block/block"))
+                .requiredTextureSlot(TextureSlot.TEXTURE)
+                .requiredTextureSlot(TextureSlot.PARTICLE)
+                .element(element -> element.from(0, 0, 0).to(16, height, 16)
+                        .allFaces((direction, face) -> {
+                            switch (direction) {
+                                case UP -> face.uvs(0, 0, 16, 16);
+                                case DOWN -> face.uvs(0, 0, 16, 16).cullface(net.minecraft.core.Direction.DOWN);
+                                default -> face.uvs(0, 16 - height, 16, 16).cullface(direction);
+                            }
+                            face.texture(TextureSlot.TEXTURE);
+                        }))
+                .build();
+    }
+
+    /** Glutspalte: Vulkangestein mit Schlot oben; der Schlot leuchtet von selbst. */
+    private static void emberVent(BlockModelGenerators blocks, Block vent) {
+        ModelTemplate template = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace("block/block"))
+                .requiredTextureSlot(TextureSlot.SIDE)
+                .requiredTextureSlot(TextureSlot.TOP)
+                .requiredTextureSlot(TextureSlot.BOTTOM)
+                .requiredTextureSlot(GLOW)
+                .requiredTextureSlot(TextureSlot.PARTICLE)
+                .element(element -> element.from(0, 0, 0).to(16, 16, 16)
+                        .allFaces((direction, face) -> face.uvs(0, 0, 16, 16).cullface(direction)
+                                .texture(switch (direction) {
+                                    case UP -> TextureSlot.TOP;
+                                    case DOWN -> TextureSlot.BOTTOM;
+                                    default -> TextureSlot.SIDE;
+                                })))
+                .element(element -> element.from(0, 0, 0).to(16, 16, 16).lightEmission(15).ambientOcclusion(false)
+                        .face(net.minecraft.core.Direction.UP, face -> face.uvs(0, 0, 16, 16).texture(GLOW)
+                                .cullface(net.minecraft.core.Direction.UP)))
+                .build();
+        TextureMapping textures = new TextureMapping()
+                .put(TextureSlot.SIDE, TextureMapping.getBlockTexture(vent))
+                .put(TextureSlot.TOP, TextureMapping.getBlockTexture(vent, "_top"))
+                .put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(ModBlocks.VOLCANIC_ROCK.base().get()))
+                .put(GLOW, TextureMapping.getBlockTexture(vent, "_top_glow"))
+                .put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(vent));
+        Identifier model = template.create(vent, textures, blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(vent, BlockModelGenerators.plainVariant(model)));
     }
 
     /**

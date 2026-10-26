@@ -1,0 +1,61 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "additions": {
+        "sound": "minecraft:ambient.basalt_deltas.additions",
+        "tick_chance": 0.0111
+      },
+      "loop": "minecraft:ambient.basalt_deltas.loop",
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.basalt_deltas.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.basalt_deltas"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {}
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:gameplay/snow_golem_melts": true,
+    "minecraft:gameplay/water_evaporates": true,
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.045
+      },
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.02
+      }
+    ],
+    "minecraft:visual/fog_color": "#7a5c4e",
+    "minecraft:visual/sky_color": "#8a7268",
+    "minecraft:visual/water_fog_color": "#34302b"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#5a4a34",
+    "foliage_color": "#665640",
+    "grass_color": "#857650",
+    "water_color": "#5c584f"
+  },
+  "features": [],
+  "has_precipitation": false,
+  "temperature": 2.0
+}

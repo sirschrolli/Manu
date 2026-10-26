@@ -36,6 +36,17 @@ public class ModLanguageProvider extends LanguageProvider {
         text("itemGroup.kingdomsatwar.farming", "Kingdoms at War: Food", "Kingdoms at War: Nahrung");
         text("itemGroup.kingdomsatwar.kingdom", "Kingdoms at War: Army", "Kingdoms at War: Armee");
         text("itemGroup.kingdomsatwar.equipment", "Kingdoms at War: Equipment", "Kingdoms at War: Ausrüstung");
+        text("itemGroup.kingdomsatwar.nature", "Kingdoms at War: Wilds", "Kingdoms at War: Wildnis");
+
+        // --- Aschelande ---
+        text("biome.kingdomsatwar.ashlands", "Ashlands", "Aschelande");
+        block(ModBlocks.ASH_BLOCK, "Ash", "Asche");
+        block(ModBlocks.ASH_LAYER, "Ash Layer", "Ascheschicht");
+        block(ModBlocks.CINDER_SOIL, "Cinder Soil", "Aschenerde");
+        set("volcanic_rock", "volcanic_rock", "Volcanic Rock", "Vulkangestein", "Volcanic Rock", "Vulkangestein");
+        block(ModBlocks.GLOWING_VOLCANIC_ROCK, "Glowing Volcanic Rock", "Glühendes Vulkangestein");
+        block(ModBlocks.CHARRED_LOG, "Charred Log", "Verkohlter Stamm");
+        block(ModBlocks.EMBER_VENT, "Ember Vent", "Glutspalte");
 
         // --- Steinblöcke ---
         set("medieval_stone", "medieval_stone", "Medieval Stone", "Mittelalterlicher Stein",

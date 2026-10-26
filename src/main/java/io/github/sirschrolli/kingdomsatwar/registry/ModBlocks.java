@@ -66,6 +66,8 @@ public final class ModBlocks {
     static final List<Supplier<? extends ItemLike>> DRAGON_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> FARMING_TAB = new ArrayList<>();
     static final List<Supplier<? extends ItemLike>> KINGDOM_TAB = new ArrayList<>();
+    /** Blöcke der Nest-Biome (Aschelande und später die übrigen fünf). */
+    static final List<Supplier<? extends ItemLike>> NATURE_TAB = new ArrayList<>();
 
     private static final List<BuildingSet> BUILDING_SETS_MUTABLE = new ArrayList<>();
     /** Alle Baustoff-Sets (Vollblock, Treppe, Stufe, Mauer). */
@@ -295,6 +297,45 @@ public final class ModBlocks {
 
     /** Hier wirbt man Soldaten an. */
     /** Nestkern unter jedem Drachennest (unzerstörbar, ohne Gegenstand). */
+    // =====================================================================================
+    // Aschelande: das Biom um Pyrrhons Vulkankrater
+    // =====================================================================================
+
+    /** Feine Asche – rieselt wie Sand. */
+    public static final DeferredBlock<net.minecraft.world.level.block.ColoredFallingBlock> ASH_BLOCK = blockWithItem("ash_block",
+            p -> new net.minecraft.world.level.block.ColoredFallingBlock(new net.minecraft.util.ColorRGBA(0xFF5A5652), p),
+            p -> p.mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.SNARE).strength(0.5f).sound(SoundType.SAND),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Ascheschicht in bis zu acht Lagen (wie Schnee, schmilzt aber nicht). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.AshLayerBlock> ASH_LAYER = blockWithItem("ash_layer",
+            io.github.sirschrolli.kingdomsatwar.block.AshLayerBlock::new,
+            p -> p.mapColor(MapColor.COLOR_GRAY).replaceable().forceSolidOff().strength(0.1f).sound(SoundType.SAND)
+                    .isViewBlocking((state, level, pos, box) -> state.getValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS) >= 8)
+                    .pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Verbrannte Erde unter der Asche. */
+    public static final DeferredBlock<Block> CINDER_SOIL = blockWithItem("cinder_soil", Block::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_BLACK).strength(0.6f).sound(SoundType.ROOTED_DIRT),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Poröses Vulkangestein (auch als Treppe, Stufe und Mauer zum Bauen). */
+    public static final BuildingSet VOLCANIC_ROCK = stoneSet("volcanic_rock", "volcanic_rock", MapColor.COLOR_BLACK, SoundType.TUFF, 1.5f);
+    /** Vulkangestein mit glühenden Rissen – heiß wie Magma. */
+    public static final DeferredBlock<net.minecraft.world.level.block.MagmaBlock> GLOWING_VOLCANIC_ROCK = blockWithItem("glowing_volcanic_rock",
+            net.minecraft.world.level.block.MagmaBlock::new,
+            p -> p.mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5f, 6.0f)
+                    .sound(SoundType.TUFF).lightLevel(state -> 6).isValidSpawn((state, level, pos, type) -> type.fireImmune()),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Verkohlter Baumstamm – was vom Wald übrig blieb. */
+    public static final DeferredBlock<RotatedPillarBlock> CHARRED_LOG = blockWithItem("charred_log", RotatedPillarBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASS).strength(1.5f).sound(SoundType.WOOD),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Glutspalte: Schlot mit Rauchsäule und spritzender Glut. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.EmberVentBlock> EMBER_VENT = blockWithItem("ember_vent",
+            io.github.sirschrolli.kingdomsatwar.block.EmberVentBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0f, 6.0f)
+                    .sound(SoundType.TUFF).lightLevel(state -> 10).isValidSpawn((state, level, pos, type) -> type.fireImmune()),
+            UnaryOperator.identity(), NATURE_TAB);
+
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock> DRAGON_LAIR_CORE = BLOCKS.registerBlock(
             "dragon_lair_core", io.github.sirschrolli.kingdomsatwar.block.DragonLairCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLACK).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));

@@ -37,7 +37,7 @@ public class DragonLairPiece extends StructurePiece {
 
     private static BoundingBox makeBox(DragonType element, BlockPos center) {
         LairDesign design = LairDesigns.of(element);
-        int r = design.radius();
+        int r = Math.max(design.radius(), design.zoneRadius());
         return new BoundingBox(center.getX() - r, center.getY() - design.depthBelow(), center.getZ() - r,
                 center.getX() + r, center.getY() + design.heightAbove(), center.getZ() + r);
     }
@@ -51,10 +51,43 @@ public class DragonLairPiece extends StructurePiece {
         tag.putLong("Seed", this.seed);
     }
 
+    /**
+     * Baut den Teil im aktuellen Chunk: erst wird das Nest-Biom in den Chunk gemalt (Farben, Partikel, Geräusche),
+     * dann die Landschaft rundherum umgestaltet, zuletzt das eigentliche Nest gebaut.
+     */
     @Override
     public void postProcess(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, RandomSource random,
             BoundingBox chunkBB, ChunkPos chunkPos, BlockPos referencePos) {
-        LairDesigns.of(this.element).build(new LairContext(level, chunkBB, this.center, this.seed));
+        LairDesign design = LairDesigns.of(this.element);
+        LairContext ctx = new LairContext(level, chunkBB, this.center, this.seed);
+        this.paintBiome(level, chunkPos, design, ctx);
+        design.buildZone(ctx);
+        design.build(ctx);
+    }
+
+    private void paintBiome(WorldGenLevel level, ChunkPos chunkPos, LairDesign design, LairContext ctx) {
+        var key = io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes.forNest(this.element);
+        if (key == null) {
+            return;
+        }
+        var biome = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME).get(key);
+        if (biome.isEmpty()) {
+            return;
+        }
+        net.minecraft.world.level.chunk.ChunkAccess chunk = level.getChunk(chunkPos.x(), chunkPos.z());
+        boolean any = false;
+        for (int qx = 0; qx < 4 && !any; qx++) {
+            for (int qz = 0; qz < 4 && !any; qz++) {
+                any = design.inZone(ctx, chunkPos.getMinBlockX() + qx * 4 + 2, chunkPos.getMinBlockZ() + qz * 4 + 2);
+            }
+        }
+        if (!any) {
+            return;
+        }
+        net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> nestBiome = biome.get();
+        chunk.fillBiomesFromNoise((qx, qy, qz) -> design.inZone(ctx, net.minecraft.core.QuartPos.toBlock(qx) + 2,
+                net.minecraft.core.QuartPos.toBlock(qz) + 2) ? nestBiome : chunk.getNoiseBiome(qx, qy, qz));
+        chunk.markUnsaved();
     }
 
     public DragonType element() {

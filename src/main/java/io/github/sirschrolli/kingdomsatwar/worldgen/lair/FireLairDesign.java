@@ -19,15 +19,27 @@ import net.minecraft.world.level.material.Fluids;
  * Pyrrhons Vulkankrater: ein Ring aus Basalt und Tuff (bis 22 Blöcke hoch) um einen Kraterboden aus Basalt und
  * Schwarzstein mit glühenden Rissen, in der Mitte der Lavasee, aus dem der Drache erwacht. Dazu Basaltnadeln mit
  * ewigen Flammen, die Gerippe früherer Opfer, rauchende Schlote, Lavafälle am inneren Kraterrand,
- * Draconium-Adern in der Wand und eine Bresche als Zugang.
+ * Draconium-Adern in der Wand und eine Bresche als Zugang. Ringsum liegen die Aschelande ({@link AshlandsZone}).
  */
 public final class FireLairDesign implements LairDesign {
     private static final int R = 48;
     private static final int TOP = 46;
+    private final AshlandsZone zone = new AshlandsZone(this, R);
 
     @Override
     public int radius() {
         return R;
+    }
+
+    /** Die Aschelande reichen gut 120 Blöcke weit. */
+    @Override
+    public int zoneRadius() {
+        return 124;
+    }
+
+    @Override
+    public void buildZone(LairContext ctx) {
+        this.zone.build(ctx);
     }
 
     @Override
@@ -83,7 +95,8 @@ public final class FireLairDesign implements LairDesign {
     }
 
     private void column(LairContext ctx, int x, int z, double d, double angle, double breach, int cy) {
-        int h0 = ctx.originalHeight(x, z, false) - 1;          // oberster Block des Geländes
+        int top0 = ctx.originalHeight(x, z, false) - 1;        // oberster Block (auch Bäume)
+        int h0 = ctx.groundY(x, z);                            // oberster Block des Geländes
         double rim = rimRadius(ctx, angle);
         double lake = lakeRadius(ctx, angle);
         double breachDiff = Math.abs(Mth.wrapDegrees((angle - breach) * Mth.RAD_TO_DEG)) * Mth.DEG_TO_RAD;
@@ -124,8 +137,8 @@ public final class FireLairDesign implements LairDesign {
         for (int y = bottom; y <= hs; y++) {
             ctx.set(x, y, z, this.rimBlock(ctx, x, y, z, hs, cy, outer));
         }
-        // Innen alles frei räumen, außen nur über dem neuen Hang
-        int clearTo = d < rim ? top : Math.max(h0, hs) + 2;
+        // Innen alles frei räumen, außen über dem neuen Hang (samt Bäumen)
+        int clearTo = d < rim ? top : Math.max(Math.max(h0, hs) + 2, top0 + 1);
         ctx.fill(x, hs + 1, clearTo, z, Blocks.AIR.defaultBlockState());
     }
 

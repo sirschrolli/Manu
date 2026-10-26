@@ -45,6 +45,16 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.TIMBER_BEAM, ModBlocks.TIMBER_FRAME,
                 ModBlocks.TIMBER_FRAME_DIAGONAL, ModBlocks.TIMBER_FRAME_CROSS);
 
+        // --- Aschelande ---
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.ASH_BLOCK, ModBlocks.ASH_LAYER, ModBlocks.CINDER_SOIL);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
+        add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.CHARRED_LOG);
+        add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.CINDER_SOIL);
+        add(BlockTags.SUPPORTS_DRY_VEGETATION, ModBlocks.CINDER_SOIL, ModBlocks.ASH_BLOCK);
+        add(BlockTags.INFINIBURN_OVERWORLD, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
+        add(BlockTags.DRAGON_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
+        add(BlockTags.WITHER_IMMUNE, ModBlocks.DRAGON_LAIR_CORE);
+
         // --- Einrichtung ---
         add(Tags.BlockItems.GLASS_BLOCKS.block(), ModBlocks.LEADED_GLASS);
         add(BlockTags.IMPERMEABLE, ModBlocks.LEADED_GLASS);

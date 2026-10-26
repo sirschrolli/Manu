@@ -49,6 +49,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
 
+        // Aschelande
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ASH_BLOCK, ModBlocks.ASH_LAYER, ModBlocks.CINDER_SOIL,
+                ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.CHARRED_LOG, ModBlocks.EMBER_VENT)) {
+            dropSelf(block.get());
+        }
+
         // Einrichtung: Glas nur mit Behutsamkeit (wie Vanilla-Glas), Türen nur aus der unteren Hälfte
         dropWhenSilkTouch(ModBlocks.LEADED_GLASS.get());
         dropWhenSilkTouch(ModBlocks.LEADED_GLASS_PANE.get());

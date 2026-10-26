@@ -26,6 +26,7 @@ public final class DataGenerators {
         event.add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
                 .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)
                 .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
+                .add(Registries.BIOME, io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes::bootstrap)
                 .add(Registries.STRUCTURE, io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures::bootstrapStructures)
                 .add(Registries.STRUCTURE_SET, io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures::bootstrapStructureSets)
                 .lootTable(

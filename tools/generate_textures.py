@@ -25,6 +25,7 @@ from pathlib import Path
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ashlands_textures  # noqa: E402
 import block_textures  # noqa: E402
 import boss_textures  # noqa: E402
 import building_textures  # noqa: E402
@@ -799,6 +800,7 @@ def build_all() -> dict[str, Image.Image]:
     magic_textures.build(put)
     boss_textures.build(put)
     lair_textures.build(put)
+    ashlands_textures.build(put)
     equipment_textures.build_entity(put)
     dragon_spawn_eggs()
     plants()

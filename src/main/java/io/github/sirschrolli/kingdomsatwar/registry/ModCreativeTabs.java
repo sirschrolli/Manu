@@ -78,6 +78,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, ModItems.EQUIPMENT_TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> NATURE = TABS.register("nature",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.nature"))
+                    .icon(() -> ModBlocks.GLOWING_VOLCANIC_ROCK.toStack())
+                    .withTabsBefore(EQUIPMENT.key())
+                    .displayItems((parameters, output) -> accept(output, ModBlocks.NATURE_TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

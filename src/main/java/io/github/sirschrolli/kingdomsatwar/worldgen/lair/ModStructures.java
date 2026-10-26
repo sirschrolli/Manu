@@ -71,7 +71,8 @@ public final class ModStructures {
                 continue;
             }
             context.register(lair(type), new DragonLairStructure(new Structure.StructureSettings.Builder(biomes.getOrThrow(BiomeTags.IS_OVERWORLD))
-                    .generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+                    // ganz zum Schluss: so gestaltet das Nest auch Bäume und Pflanzen seiner Umgebung um
+                    .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
                     .terrainAdapation(TerrainAdjustment.NONE)
                     .build(), type));
         }
