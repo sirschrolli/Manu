@@ -49,6 +49,14 @@ public class BossPart extends PartEntity<DragonBossEntity> {
         return true;
     }
 
+    /**
+     * Trefferzonen gehören fest zu ihrem Boss und werden nie einzeln entfernt – auch nicht von Befehlen wie /kill oder
+     * beim Aufräumen eines Bereichs, in den der riesige Körper hineinragt (sonst wäre z. B. der Kopf danach unverwundbar).
+     */
+    @Override
+    public void remove(Entity.RemovalReason reason) {
+    }
+
     @Override
     public @Nullable ItemStack getPickResult() {
         return this.getParent().getPickResult();

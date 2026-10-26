@@ -727,6 +727,8 @@ public final class ModGameTests {
             boss.bossParts()[0].hurtServer(level, level.damageSources().magic(), 50.0f);
             float head = before - boss.getHealth();
             helper.assertTrue(head > body * 1.3f, "Kopftreffer zählen nicht mehr: " + head + " / " + body);
+            boss.bossParts()[0].discard();
+            helper.assertFalse(boss.bossParts()[0].isRemoved(), "Trefferzone lässt sich einzeln entfernen");
             boss.setHealth(1.0f);
             boss.hurtServer(level, level.damageSources().magic(), 50.0f);
             helper.assertTrue(boss.isDeadOrDying(), "Boss stirbt nicht");
