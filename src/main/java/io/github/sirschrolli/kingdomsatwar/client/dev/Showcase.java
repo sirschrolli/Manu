@@ -86,6 +86,7 @@ final class Showcase {
                 case "soldiers" -> soldiers(steps);
                 case "eggs" -> eggs(steps);
                 case "equipment" -> equipment(steps);
+                case "armor" -> armor(steps);
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
@@ -635,6 +636,94 @@ final class Showcase {
     }
 
     /** Rüstungen auf Rüstungsständern (vorne und hinten), Drachen mit Panzer und Waffen in der Hand. */
+    /**
+     * Alle Rüstungs-Sätze auf Rüstungsständern (mit passender Waffe) und als Baby-Zombies (eigene Baby-Textur):
+     * Gesamtansicht, drei Nahaufnahmen von vorn, Rückseite und die Babys.
+     */
+    private static void armor(Deque<Step> steps) {
+        int oz = 180;
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-6, ground - 1, oz - 12), new BlockPos(44, ground - 1, oz + 14), Blocks.STONE_BRICKS.defaultBlockState());
+            fill(level, new BlockPos(-6, ground, oz - 12), new BlockPos(44, ground + 8, oz + 14), Blocks.AIR.defaultBlockState());
+            List<List<Item>> sets = new ArrayList<>();
+            sets.add(List.of(ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
+                    ModItems.STEEL_BOOTS.get(), ModItems.STEEL_SWORD.get()));
+            sets.add(List.of(ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(), ModItems.KONTERIT_LEGGINGS.get(),
+                    ModItems.KONTERIT_BOOTS.get(), ModItems.STEEL_AXE.get()));
+            sets.add(List.of(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_HELMET.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_CHESTPLATE.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_LEGGINGS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_BOOTS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_SWORD.get()));
+            sets.add(List.of(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_HELMET.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_CHESTPLATE.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_LEGGINGS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_BOOTS.get(),
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SWORD.get()));
+            for (DragonType type : DragonType.values()) {
+                var set = ModItems.DRAGON_SCALE_ARMOR.get(type);
+                sets.add(List.of(set.get(0).get(), set.get(1).get(), set.get(2).get(), set.get(3).get(),
+                        type == DragonType.FIRE ? ModItems.DRACONIUM_SWORD.get() : type == DragonType.EARTH
+                                ? ModItems.DRACONIUM_AXE.get() : Items.AIR));
+            }
+            EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.MAINHAND};
+            for (int i = 0; i < sets.size(); i++) {
+                ArmorStand stand = EntityTypes.ARMOR_STAND.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (stand == null) {
+                    continue;
+                }
+                stand.setShowArms(true);
+                stand.setNoBasePlate(true);
+                stand.setRightArmPose(new Rotations(-20, 0, 10));
+                for (int j = 0; j < slots.length; j++) {
+                    stand.setItemSlot(slots[j], new ItemStack(sets.get(i).get(j)));
+                }
+                stand.snapTo(i * 2 + 0.5, ground, oz + 0.5, 0, 0);
+                stand.setYBodyRot(0);
+                level.addFreshEntity(stand);
+                // dieselbe Rüstung an einem Baby-Zombie (eigene Baby-Textur)
+                final List<Item> set = sets.get(i);
+                spawnCreature(level, net.minecraft.world.entity.EntityTypes.ZOMBIE, i * 2, oz + 6, 0, z -> {
+                    z.setBaby(true);
+                    z.setSilent(true);
+                    for (int j = 0; j < 4; j++) {
+                        z.setItemSlot(slots[j], new ItemStack(set.get(j)));
+                    }
+                });
+            }
+        }));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(9.5, 2.0, oz + 13.0, 180, 9));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.screenshot("armor_all"));
+        double[] groups = {2.5, 8.5, 14.5};
+        for (int k = 0; k < groups.length; k++) {
+            steps.add(tp(groups[k] + 0.5, 0, oz + 4.6, 180, 4));
+            steps.add(Step.waitTicks(25));
+            steps.add(Step.screenshot("armor_front_" + k));
+        }
+        steps.add(tp(17.5, 0, oz + 4.2, 180, 4));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("armor_front_3"));
+        steps.add(tp(5.5, 0, oz - 3.6, 0, 4));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("armor_back"));
+        steps.add(tp(14.5, 0, oz - 3.6, 0, 4));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("armor_back_2"));
+        steps.add(tp(5.0, 0, oz + 10.0, 180, 22));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("armor_babies"));
+        steps.add(tp(15.0, 0, oz + 10.0, 180, 22));
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("armor_babies_2"));
+        steps.add(Step.hud(true));
+    }
+
     private static void equipment(Deque<Step> steps) {
         int oz = 140;
         steps.add(Step.server(level -> {

@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """
-Restliche Texturen der Schattenwelt-Ausrüstung: Mondlaterne, Schattensetzling und die getragenen Rüstungen aus
-Nachtstahl und Abyssit.
+Restliche Texturen der Schattenwelt-Ausrüstung: Mondlaterne und Schattensetzling.
 
 Rohstoffe, Waffen, Werkzeuge und Rüstungs-Symbole kommen aus tools/items_materials.py, items_gear.py und
-items_armor.py, Erze und Speicherblöcke aus tools/shadow_blocks.py.
+items_armor.py, die getragenen Rüstungen aus tools/armor_worn.py, Erze und Speicherblöcke aus tools/shadow_blocks.py.
 
-Wird von tools/generate_textures.py aufgerufen: build(put) für Laterne und Setzling, build_entity(save) für die
-getragenen Rüstungen.
+Wird von tools/generate_textures.py aufgerufen: build(put).
 """
 from __future__ import annotations
 
@@ -24,17 +22,8 @@ from pixelart import hexc
 N = 16
 
 
-# Werkstoff-Töne für Werkzeuge und Rüstungen (o, a..f)
+# Mondsilber-Töne für den Laternenrahmen (o, a..f)
 MOON_T = et.tones("#262c3a", "#4a566c", "#6e7c96", "#95a4bc", "#b9c6da", "#d9e3f0", "#f7fbff")
-NIGHT_T = et.tones("#04030a", "#0f0d22", "#1b1838", "#2a2552", "#3d3570", "#594e98", "#8f80d6")
-ABYSS_T = et.tones("#030105", "#0d0612", "#1a0c22", "#2a1234", "#3e1a4a", "#5a2666", "#86408e")
-
-MOON_TRIM = {"g": hexc("#4a566c"), "G": hexc("#8796b0"), "y": hexc("#c4d2e6"), "Y": hexc("#f4f8ff")}
-MAGENTA = {"g": hexc("#5a0a52"), "G": hexc("#b01ea2"), "y": hexc("#ff5ae6"), "Y": hexc("#ffc4f6")}
-VIOLET_ACCENT = {"x": hexc("#2a2470"), "X": hexc("#7a6af0"), "z": hexc("#d4ccff")}
-MAGENTA_ACCENT = {"x": hexc("#5a0a52"), "X": hexc("#e03ad0"), "z": hexc("#ffc4f6")}
-
-
 # =============================================================================
 # Setzling
 # =============================================================================
@@ -76,17 +65,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
 
     # Setzling
     put("block/shadow_sapling", shadow_sapling())
-
-
-NIGHTSTEEL_STYLE = et.Style(NIGHT_T, MOON_TRIM, VIOLET_ACCENT, "plate")
-ABYSSITE_STYLE = et.Style(ABYSS_T, MAGENTA, MAGENTA_ACCENT, "plate")
-
-
-def build_entity(save: Callable[[str, Image.Image], None]) -> None:
-    for name, style in (("nightsteel", NIGHTSTEEL_STYLE), ("abyssite", ABYSSITE_STYLE)):
-        outer, inner = et.armor_layers(style)
-        save(f"entity/equipment/humanoid/{name}", outer)
-        save(f"entity/equipment/humanoid_leggings/{name}", inner)
 
 
 if __name__ == "__main__":
