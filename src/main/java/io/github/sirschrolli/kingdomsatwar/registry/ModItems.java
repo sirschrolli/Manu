@@ -177,6 +177,24 @@ public final class ModItems {
             new MobEffectInstance(MobEffects.ABSORPTION, 2400, 0));
 
     // =====================================================================================
+    // Kingdoms at War – Münzen
+    // =====================================================================================
+
+    /** Bronzemünze, Silbermünze, Goldmünze (je 10 sind eine der nächstgrößeren). */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.CoinItem> BRONZE_COIN = coin("bronze_coin",
+            io.github.sirschrolli.kingdomsatwar.economy.Coin.BRONZE, Rarity.COMMON);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.CoinItem> SILVER_COIN = coin("silver_coin",
+            io.github.sirschrolli.kingdomsatwar.economy.Coin.SILVER, Rarity.COMMON);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.CoinItem> GOLD_COIN = coin("gold_coin",
+            io.github.sirschrolli.kingdomsatwar.economy.Coin.GOLD, Rarity.UNCOMMON);
+
+    private static DeferredItem<io.github.sirschrolli.kingdomsatwar.item.CoinItem> coin(String name,
+            io.github.sirschrolli.kingdomsatwar.economy.Coin coin, Rarity rarity) {
+        return addTo(KINGDOM_TAB, ITEMS.registerItem(name, p -> new io.github.sirschrolli.kingdomsatwar.item.CoinItem(coin, p),
+                () -> new Item.Properties().rarity(rarity)));
+    }
+
+    // =====================================================================================
     // Kingdoms at War – Armee
     // =====================================================================================
 

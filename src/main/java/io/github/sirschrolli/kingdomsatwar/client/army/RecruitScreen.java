@@ -302,30 +302,43 @@ public class RecruitScreen extends Screen {
         g.text(this.font, Component.translatable(type.ranged() ? "gui.kingdomsatwar.recruitment.ranged" : "gui.kingdomsatwar.recruitment.melee"),
                 x + 12, sy + 25, LABEL, false);
 
-        // Preis
+        // Preis: der Sold in Münzen, dazu die nötige Ausrüstung
         int py = y + 68;
         g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.cost"), x, py, LABEL, false);
-        List<SoldierType.Cost> costs = type.cost();
-        List<Component> missing = new ArrayList<>();
-        for (int i = 0; i < costs.size(); i++) {
-            SoldierType.Cost cost = costs.get(i);
+        List<ItemStack> shown = new ArrayList<>(io.github.sirschrolli.kingdomsatwar.economy.Coins.stacks(type.coins()));
+        int coinStacks = shown.size();
+        for (SoldierType.Cost cost : type.cost()) {
+            shown.add(cost.stack());
+        }
+        var player = this.minecraft.player;
+        boolean creative = player != null && player.hasInfiniteMaterials();
+        int purse = player == null ? 0 : io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player);
+        for (int i = 0; i < shown.size(); i++) {
+            ItemStack stack = shown.get(i);
             int sx = x + i * 20;
             int slotY = py + 10;
             g.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT, sx, slotY, 18, 18);
-            ItemStack stack = cost.stack();
             g.item(stack, sx + 1, slotY + 1);
             g.itemDecorations(this.font, stack, sx + 1, slotY + 1);
-            int have = this.minecraft.player == null ? 0 : this.minecraft.player.getInventory().countItem(cost.item().get());
-            boolean enough = have >= cost.count() || (this.minecraft.player != null && this.minecraft.player.hasInfiniteMaterials());
+            boolean coin = i < coinStacks;
+            int have = coin ? purse : player == null ? 0 : player.getInventory().countItem(stack.getItem());
+            int need = coin ? type.coins() : type.cost().get(i - coinStacks).count();
+            boolean enough = creative || have >= need;
             if (!enough) {
                 g.fill(sx + 1, slotY + 1, sx + 17, slotY + 17, 0x55FF3030);
-                missing.add(Component.translatable("gui.kingdomsatwar.recruitment.missing", cost.count() - have, stack.getHoverName()));
             }
             if (mouseX >= sx && mouseX < sx + 18 && mouseY >= slotY && mouseY < slotY + 18) {
                 List<Component> tooltip = new ArrayList<>();
-                tooltip.add(Component.literal(cost.count() + "× ").append(stack.getHoverName()));
-                tooltip.add(Component.translatable("gui.kingdomsatwar.recruitment.have", have)
-                        .withStyle(enough ? ChatFormatting.GREEN : ChatFormatting.RED));
+                if (coin) {
+                    tooltip.add(Component.translatable("gui.kingdomsatwar.recruitment.pay",
+                            io.github.sirschrolli.kingdomsatwar.economy.Coins.format(need)));
+                    tooltip.add(Component.translatable("gui.kingdomsatwar.recruitment.purse",
+                            io.github.sirschrolli.kingdomsatwar.economy.Coins.format(have)).withStyle(enough ? ChatFormatting.GREEN : ChatFormatting.RED));
+                } else {
+                    tooltip.add(Component.literal(need + "× ").append(stack.getHoverName()));
+                    tooltip.add(Component.translatable("gui.kingdomsatwar.recruitment.have", have)
+                            .withStyle(enough ? ChatFormatting.GREEN : ChatFormatting.RED));
+                }
                 g.setTooltipForNextFrame(this.font, tooltip, java.util.Optional.empty(), stack, mouseX, mouseY);
             }
         }

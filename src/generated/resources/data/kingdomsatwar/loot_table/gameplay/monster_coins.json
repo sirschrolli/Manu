@@ -1,0 +1,52 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:random_chance_with_enchanted_bonus",
+        "enchanted_chance": {
+          "type": "minecraft:linear",
+          "base": 0.55,
+          "per_level_above_first": 0.1
+        },
+        "enchantment": "minecraft:looting",
+        "unenchanted_chance": 0.45
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 3,
+              "min": 1
+            }
+          },
+          "name": "kingdomsatwar:bronze_coin"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:random_chance_with_enchanted_bonus",
+        "enchanted_chance": {
+          "type": "minecraft:linear",
+          "base": 0.06,
+          "per_level_above_first": 0.02
+        },
+        "enchantment": "minecraft:looting",
+        "unenchanted_chance": 0.04
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:silver_coin"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:gameplay/monster_coins"
+}

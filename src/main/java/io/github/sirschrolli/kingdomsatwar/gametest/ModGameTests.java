@@ -160,6 +160,7 @@ public final class ModGameTests {
     static {
         ShadowGameTests.init();   // meldet die Tests der Schattenwelt an
         UmbrerGameTests.init();   // und die der Umbrer
+        EconomyGameTests.init();  // und die der Wirtschaft
     }
 
     private ModGameTests() {}
@@ -184,6 +185,7 @@ public final class ModGameTests {
         }
         ShadowGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
+        EconomyGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -469,7 +471,7 @@ public final class ModGameTests {
         });
     }
 
-    /** Am Rekrutierungstisch wirbt man Soldaten gegen ihren Preis an; ohne genug Smaragde geht es nicht. */
+    /** Am Rekrutierungstisch wirbt man Soldaten gegen ihren Sold in Münzen an; ohne genug Geld geht es nicht. */
     private static void soldierRecruit(GameTestHelper helper) {
         arenaFloor(helper);
         BlockPos table = new BlockPos(4, 1, 4);
@@ -477,25 +479,26 @@ public final class ModGameTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Vec3 stand = helper.absoluteVec(new Vec3(4.5, 1, 1.5));
         player.snapTo(stand.x, stand.y, stand.z, 0.0f, 0.0f);
-        player.getInventory().add(new ItemStack(Items.EMERALD, 5));
+        player.getInventory().add(new ItemStack(ModItems.SILVER_COIN.get(), 5));
         BlockPos tablePos = helper.absolutePos(table);
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.RECRUITED,
                 "Schwertkämpfer lässt sich nicht anwerben");
-        helper.assertValueEqual(player.getInventory().countItem(Items.EMERALD), 0, "Smaragde nach dem Anwerben");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 0, "Münzen nach dem Anwerben");
         SoldierEntity soldier = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get());
         helper.assertTrue(soldier.isOwnedBy(player), "Soldat gehört nicht dem Spieler");
         helper.assertTrue(soldier.getMainHandItem().is(Items.IRON_SWORD), "Soldat hat kein Schwert");
         helper.assertTrue(soldier.hasCustomName(), "Soldat hat keinen Namen");
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.NOT_ENOUGH,
-                "Anwerben ohne Smaragde muss scheitern");
-        // Ritter brauchen zusätzlich zwei Stahlbarren
-        player.getInventory().add(new ItemStack(Items.EMERALD, 12));
+                "Anwerben ohne Münzen muss scheitern");
+        // Ritter kosten 1 Gold 5 Silber und zwei Stahlbarren – bezahlt mit 2 Gold, das Wechselgeld kommt zurück
+        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 2));
         player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.NOT_ENOUGH,
                 "Ritter ohne genug Stahl darf nicht erscheinen");
         player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.RECRUITED,
                 "Ritter lässt sich nicht anwerben");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 50, "Wechselgeld nach dem Ritter");
         SoldierEntity knight = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get());
         helper.assertTrue(knight.getOffhandItem().is(Items.SHIELD), "Ritter hat keinen Schild");
         // zu weit weg

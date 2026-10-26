@@ -33,6 +33,26 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.enchantments = output.lookup(Registries.ENCHANTMENT);
     }
 
+    /**
+     * Münzen in einer Truhe: Bronze und Silber (je ein eigener Pool), mit etwas Glück eine Goldmünze. Je nach Truhe
+     * klein (Hütten), mittel (Ruinen, Tempel) oder groß (Gruft, Zitadelle, Grotte).
+     */
+    private static LootTable.Builder coins(LootTable.Builder table, int bronzeMin, int bronzeMax, int silverMin, int silverMax,
+            float goldChance) {
+        table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(item(ModItems.BRONZE_COIN.get(), 1, bronzeMin, bronzeMax)));
+        if (silverMax > 0) {
+            table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(item(ModItems.SILVER_COIN.get(), 1, silverMin, silverMax)));
+        }
+        if (goldChance > 0.0f) {
+            table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(LootItem.lootTableItem(ModItems.GOLD_COIN.get()))
+                    .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(goldChance)));
+        }
+        return table;
+    }
+
     private static UniformContainerBase.Builder<?> item(ItemLike item, int weight, int min, int max) {
         return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
@@ -52,7 +72,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.4f, 0.9f))))
                 .add(EmptyLootItem.emptyItem().setWeight(8));
         ModItems.RUNES.values().forEach(rune -> treasure.add(LootItem.lootTableItem(rune.get()).setWeight(1)));
-        this.output.accept(ModLootTables.CASTLE_RUIN_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.CASTLE_RUIN_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(ModItems.BREAD_ROLL.get(), 10, 1, 4))
@@ -72,7 +92,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(ModItems.HOPS.get(), 3, 1, 3)))
                 .withPool(treasure));
         // Sturmwarte: was die Sturmwächter zurückließen – Fernrohr, Kupfer, Aufzeichnungen, mit Glück Blitzrunen
-        this.output.accept(ModLootTables.STORM_WATCHTOWER_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.STORM_WATCHTOWER_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
                         .add(item(Items.COPPER_INGOT, 10, 2, 7))
@@ -96,7 +116,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
         // Thron der Tiefe: Schätze des versunkenen Tempels – Perlmutt, Prismarin, Gold, mit Glück ein Dreizack
-        this.output.accept(ModLootTables.SUNKEN_GROTTO_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.SUNKEN_GROTTO_CHEST, coins(LootTable.lootTable(), 4, 9, 2, 5, 0.4f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(Items.PRISMARINE_SHARD, 10, 2, 8))
@@ -120,7 +140,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(EmptyLootItem.emptyItem().setWeight(4))));
 
         // Dörfer der Umbrer
-        this.output.accept(ModLootTables.UMBRER_HOUSE, LootTable.lootTable()
+        this.output.accept(ModLootTables.UMBRER_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 1, 0.0f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.DUSK_BREAD.get(), 10, 1, 4))
@@ -131,7 +151,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.DYED_CANDLE.purple(), 4, 1, 3))
                         .add(item(Items.STRING, 4, 1, 3))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SAPLING.get(), 3, 1, 2))));
-        this.output.accept(ModLootTables.UMBRER_SMITHY, LootTable.lootTable()
+        this.output.accept(ModLootTables.UMBRER_SMITHY, coins(LootTable.lootTable(), 2, 7, 0, 2, 0.0f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.RAW_MOONSILVER.get(), 10, 1, 4))
@@ -146,7 +166,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                                 .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(6))));
-        this.output.accept(ModLootTables.UMBRER_HERBALIST, LootTable.lootTable()
+        this.output.accept(ModLootTables.UMBRER_HERBALIST, coins(LootTable.lootTable(), 1, 6, 0, 1, 0.0f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_BERRIES.get(), 10, 2, 8))
@@ -156,7 +176,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.GLASS_BOTTLE, 6, 1, 4))
                         .add(item(Items.GLOWSTONE_DUST, 4, 1, 3))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 2, 1, 2))));
-        this.output.accept(ModLootTables.UMBRER_SEER, LootTable.lootTable()
+        this.output.accept(ModLootTables.UMBRER_SEER, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.05f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(2, 5))
                         .add(item(Items.BOOK, 8, 1, 3))
@@ -172,7 +192,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get())
                                 .setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(4))));
-        this.output.accept(ModLootTables.UMBRER_WORKSHOP, LootTable.lootTable()
+        this.output.accept(ModLootTables.UMBRER_WORKSHOP, coins(LootTable.lootTable(), 2, 7, 0, 2, 0.0f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 10, 2, 6))
@@ -186,7 +206,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.SPYGLASS).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
-        this.output.accept(ModLootTables.SHADOW_CITADEL_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.SHADOW_CITADEL_CHEST, coins(LootTable.lootTable(), 5, 9, 3, 7, 0.5f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get(), 10, 1, 4))
@@ -206,7 +226,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_SWORD.get()).setWeight(2))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
         // Bauwerke der Schattenwelt
-        this.output.accept(ModLootTables.MOON_TEMPLE_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.MOON_TEMPLE_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 4, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_INGOT.get(), 8, 1, 3))
@@ -224,7 +244,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_BLADE.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
-        this.output.accept(ModLootTables.MOON_TEMPLE_CRYPT, LootTable.lootTable()
+        this.output.accept(ModLootTables.MOON_TEMPLE_CRYPT, coins(LootTable.lootTable(), 4, 9, 2, 6, 0.45f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 1, 3))
@@ -240,7 +260,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))));
-        this.output.accept(ModLootTables.CRYSTAL_MINE_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.CRYSTAL_MINE_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.1f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 8))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.RAW_MOONSILVER.get(), 10, 2, 6))
@@ -256,7 +276,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_PICKAXE.get()).setWeight(2))
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHARD.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(4))));
-        this.output.accept(ModLootTables.LIGHTHOUSE_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.LIGHTHOUSE_CHEST, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.05f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(Items.COD, 8, 2, 5))
@@ -268,7 +288,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.LEAD, 3, 1, 2))
                         .add(item(Items.SPYGLASS, 2, 1, 1))
                         .add(item(Items.COMPASS, 2, 1, 1))));
-        this.output.accept(ModLootTables.OLD_WORLD_RUIN_CHEST, LootTable.lootTable()
+        this.output.accept(ModLootTables.OLD_WORLD_RUIN_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(Items.WHEAT_SEEDS, 8, 2, 6))

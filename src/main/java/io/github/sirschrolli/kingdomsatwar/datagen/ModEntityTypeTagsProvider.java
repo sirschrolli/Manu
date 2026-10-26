@@ -26,6 +26,18 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key())
                 .add(ModEntities.NIGHT_WING.key());
+        // Münzen: alle Monster der Oberwelt, des Nethers und des Ends, dazu die feindseligen Wesen der Mod
+        var coins = this.tag(ModTags.EntityTypes.DROPS_COINS);
+        for (String name : java.util.List.of("zombie", "husk", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "creeper",
+                "spider", "cave_spider", "witch", "slime", "phantom", "pillager", "vindicator", "evoker", "ravager", "vex", "illusioner",
+                "silverfish", "endermite", "enderman", "guardian", "elder_guardian", "shulker", "breeze", "blaze", "ghast",
+                "magma_cube", "wither_skeleton", "piglin_brute", "zombified_piglin", "hoglin", "zoglin", "creaking", "parched",
+                "camel_husk")) {
+            coins.addOptional(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE,
+                    net.minecraft.resources.Identifier.withDefaultNamespace(name)));
+        }
+        coins.add(ModEntities.CAVE_TROLL.key()).add(ModEntities.LINDWORM.key()).add(ModEntities.SHADE_STALKER.key())
+                .add(ModEntities.CRYSTAL_CRAWLER.key()).add(ModEntities.NIGHT_WING.key());
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.CRYSTAL_CRAWLER.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.NIGHT_WING.key()).add(ModEntities.GLIMMER_MOTH.key());
     }

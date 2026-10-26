@@ -587,18 +587,23 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
                 Component.translatable("message.kingdomsatwar.soldier_mode." + this.getMode()));
     }
 
-    /** Herrenlose Soldaten (z. B. Söldner) treten für ihren Smaragd-Preis in den Dienst. */
+    /**
+     * Herrenlose Soldaten (z. B. Söldner) treten für ihren Sold in Münzen in den Dienst: Rechtsklick mit einer Münze in
+     * der Hand bezahlt (mit Wechselgeld aus dem ganzen Inventar), sonst nennen sie ihren Preis.
+     */
     private InteractionResult offerService(Player player, ItemStack stack) {
-        int price = this.soldierType.emeraldPrice();
-        if (stack.is(Items.EMERALD) && (stack.getCount() >= price || player.hasInfiniteMaterials())) {
+        int price = this.soldierType.coins();
+        if (io.github.sirschrolli.kingdomsatwar.economy.Coin.of(stack.getItem()) != null
+                && io.github.sirschrolli.kingdomsatwar.economy.Coins.canAfford(player, price)) {
             if (!this.level().isClientSide()) {
-                stack.consume(price, player);
+                io.github.sirschrolli.kingdomsatwar.economy.Coins.pay(player, price);
                 this.recruitBy(player);
             }
             return InteractionResult.SUCCESS;
         }
         if (!this.level().isClientSide()) {
-            player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.soldier_price", this.getDisplayName(), price));
+            player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.soldier_price", this.getDisplayName(),
+                    io.github.sirschrolli.kingdomsatwar.economy.Coins.format(price)));
         }
         return InteractionResult.SUCCESS;
     }

@@ -57,6 +57,9 @@ public final class ModTags {
         /** Wesen der Schattenwelt (die Mondsilberklinge trifft sie besonders hart). */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> SHADOW_CREATURES = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("shadow_creatures"));
+        /** Monster, die Münzen fallen lassen, wenn ein Spieler sie besiegt. */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> DROPS_COINS = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("drops_coins"));
 
         private EntityTypes() {}
     }

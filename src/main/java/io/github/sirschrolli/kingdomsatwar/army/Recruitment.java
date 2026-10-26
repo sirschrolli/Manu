@@ -58,6 +58,9 @@ public final class Recruitment {
         if (player.hasInfiniteMaterials()) {
             return true;
         }
+        if (!io.github.sirschrolli.kingdomsatwar.economy.Coins.canAfford(player, type.coins())) {
+            return false;
+        }
         for (SoldierType.Cost cost : type.cost()) {
             if (player.getInventory().countItem(cost.item().get()) < cost.count()) {
                 return false;
@@ -91,6 +94,7 @@ public final class Recruitment {
             return Result.NO_SPACE;
         }
         if (!player.hasInfiniteMaterials()) {
+            io.github.sirschrolli.kingdomsatwar.economy.Coins.pay(player, type.coins());
             for (SoldierType.Cost cost : type.cost()) {
                 player.getInventory().clearOrCountMatchingItems(stack -> stack.is(cost.item().get()), false, cost.count(),
                         player.inventoryMenu.getCraftSlots());

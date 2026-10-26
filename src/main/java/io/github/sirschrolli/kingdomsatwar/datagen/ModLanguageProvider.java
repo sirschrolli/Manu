@@ -29,6 +29,7 @@ public class ModLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
+        EconomyLang.register(this::text);
         bosses();
         shadowWorld();
         // --- Kreativ-Tabs ---
@@ -986,7 +987,7 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");
 
         block(ModBlocks.RECRUITMENT_TABLE, "Recruitment Table", "Rekrutierungstisch");
-        text(ModItems.loreKey("recruitment_table", 1), "Recruit soldiers for emeralds", "Hier wirbst du Soldaten gegen Smaragde an");
+        text(ModItems.loreKey("recruitment_table", 1), "Recruit soldiers for coins", "Hier wirbst du Soldaten gegen Münzen an");
         text(ModItems.loreKey("recruitment_table", 2), "Knights also need steel, captains a gemstone",
                 "Ritter brauchen zusätzlich Stahl, Hauptleute einen Edelstein");
         item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
@@ -1027,7 +1028,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.soldier_mode.1", "holding position", "hält Stellung");
         text("message.kingdomsatwar.soldier_mode.2", "on patrol", "auf Patrouille");
         text("message.kingdomsatwar.soldier_status", "%s – %s/%s health – %s", "%s – %s/%s Leben – %s");
-        text("message.kingdomsatwar.soldier_price", "%s serves for %s emeralds", "%s dient für %s Smaragde");
+        text("message.kingdomsatwar.soldier_price", "%s serves for %s – hold a coin and use him", "%s dient für %s – nimm eine Münze in die Hand und sprich ihn an");
         text("message.kingdomsatwar.soldier_equipped", "%s now fights with: %s", "%s kämpft jetzt mit: %s");
         text("message.kingdomsatwar.command.none", "No soldiers of yours nearby", "Keine eigenen Soldaten in der Nähe");
         text("message.kingdomsatwar.command.attack", "%s soldiers attack %s!", "%s Soldaten greifen %s an!");

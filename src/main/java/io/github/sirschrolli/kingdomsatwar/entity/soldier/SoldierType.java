@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Supplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 /**
  * Die vier Soldatenarten, die man am Rekrutierungstisch anwerben kann.
@@ -17,13 +16,14 @@ import net.minecraft.world.item.Items;
  * @param speed     Laufgeschwindigkeit
  * @param knockback Rückstoßfestigkeit
  * @param variants  Anzahl der Gesichter (Texturvarianten)
- * @param cost      Preis am Rekrutierungstisch
+ * @param coins     Sold beim Anwerben (in Bronze, siehe {@link io.github.sirschrolli.kingdomsatwar.economy.Coins})
+ * @param cost      dazu nötige Ausrüstung (Stahl für Ritter, ein Edelstein für Hauptleute)
  */
 public enum SoldierType {
-    SWORDSMAN("swordsman", 30.0, 8.0, 0.0, 2.0, 0.30, 0.1, 4, List.of(cost(() -> Items.EMERALD, 5))),
-    ARCHER("archer", 24.0, 4.0, 0.0, 2.0, 0.32, 0.0, 4, List.of(cost(() -> Items.EMERALD, 7))),
-    KNIGHT("knight", 44.0, 14.0, 4.0, 3.0, 0.28, 0.5, 2, List.of(cost(() -> Items.EMERALD, 12), cost(() -> ModItems.STEEL_INGOT.get(), 2))),
-    CAPTAIN("captain", 50.0, 12.0, 2.0, 4.0, 0.30, 0.3, 3, List.of(cost(() -> Items.EMERALD, 20), cost(() -> ModItems.GEMSTONE.get(), 1)));
+    SWORDSMAN("swordsman", 30.0, 8.0, 0.0, 2.0, 0.30, 0.1, 4, 50, List.of()),
+    ARCHER("archer", 24.0, 4.0, 0.0, 2.0, 0.32, 0.0, 4, 70, List.of()),
+    KNIGHT("knight", 44.0, 14.0, 4.0, 3.0, 0.28, 0.5, 2, 150, List.of(cost(() -> ModItems.STEEL_INGOT.get(), 2))),
+    CAPTAIN("captain", 50.0, 12.0, 2.0, 4.0, 0.30, 0.3, 3, 250, List.of(cost(() -> ModItems.GEMSTONE.get(), 1)));
 
     private final String id;
     private final double health;
@@ -33,10 +33,11 @@ public enum SoldierType {
     private final double speed;
     private final double knockback;
     private final int variants;
+    private final int coins;
     private final List<Cost> cost;
 
     SoldierType(String id, double health, double armor, double toughness, double attack, double speed, double knockback, int variants,
-            List<Cost> cost) {
+            int coins, List<Cost> cost) {
         this.id = id;
         this.health = health;
         this.armor = armor;
@@ -45,6 +46,7 @@ public enum SoldierType {
         this.speed = speed;
         this.knockback = knockback;
         this.variants = variants;
+        this.coins = coins;
         this.cost = cost;
     }
 
@@ -96,13 +98,13 @@ public enum SoldierType {
         return (this == SWORDSMAN || this == ARCHER) && variant == this.variants - 1;
     }
 
-    public List<Cost> cost() {
-        return this.cost;
+    /** Sold in Bronze. */
+    public int coins() {
+        return this.coins;
     }
 
-    /** Die Smaragde im Preis (auch der Lohn herrenloser Söldner). */
-    public int emeraldPrice() {
-        return this.cost.stream().filter(c -> c.item().get() == Items.EMERALD).mapToInt(Cost::count).sum();
+    public List<Cost> cost() {
+        return this.cost;
     }
 
     public boolean ranged() {

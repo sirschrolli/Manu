@@ -39,6 +39,7 @@ public final class DataGenerators {
                         new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModExtraLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModEntityLootProvider::new, LootContextParamSets.ENTITY),
+                        new LootTableProvider.SubProviderEntry(ModGameplayEntityLootProvider::new, LootContextParamSets.ENTITY),
                         new LootTableProvider.SubProviderEntry(ModChestLootProvider::new, LootContextParamSets.CHEST),
                         new LootTableProvider.SubProviderEntry(ModArchaeologyLootProvider::new, LootContextParamSets.ARCHAEOLOGY))
                 .recipe(ModRecipeProvider::new);

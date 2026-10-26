@@ -14,6 +14,9 @@ public final class ModLootTables {
     /** Samen, die beim Abbauen von Gras zusätzlich fallen können. */
     public static final ResourceKey<LootTable> GRASS_SEEDS =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/grass_seeds"));
+    /** Münzen von besiegten Monstern (über einen globalen Loot-Modifier). */
+    public static final ResourceKey<LootTable> MONSTER_COINS =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/monster_coins"));
     /** Truhe in den Burgruinen. */
     public static final ResourceKey<LootTable> CASTLE_RUIN_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/castle_ruin"));

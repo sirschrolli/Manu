@@ -270,6 +270,9 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.BANDIT_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        for (io.github.sirschrolli.kingdomsatwar.economy.Coin coin : io.github.sirschrolli.kingdomsatwar.economy.Coin.values()) {
+            coinModel(items, coin.item(), coin.id() + "_coin");
+        }
 
         // --- Werkzeuge, Waffen und Rüstungen ---
         for (DeferredItem<?> tool : java.util.List.of(ModItems.STEEL_SWORD, ModItems.STEEL_PICKAXE, ModItems.STEEL_AXE,
@@ -443,6 +446,21 @@ public class ModModelProvider extends ModelProvider {
         return net.minecraft.client.data.models.model.ItemModelUtils.tintedModel(model,
                 net.minecraft.client.data.models.model.ItemModelUtils.constantTint(-1),
                 new net.minecraft.client.color.item.CustomModelDataSource(0, 0xF2CC5A));
+    }
+
+    /** Münze: eine einzelne, ein kleiner Stapel (ab 2) oder ein Haufen (ab 10) – je nachdem, wie viele im Stapel liegen. */
+    private static void coinModel(ItemModelGenerators items, Item coin, String name) {
+        java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
+        String[] suffixes = {"", "_stack", "_pile"};
+        float[] from = {0.0F, 2.0F, 10.0F};
+        for (int i = 0; i < suffixes.length; i++) {
+            Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(coin, suffixes[i]),
+                    TextureMapping.layer0(new Material(KingdomsAtWar.id("item/" + name + suffixes[i]))), items.modelOutput);
+            entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(
+                    net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model), from[i]));
+        }
+        items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.rangeSelect(
+                new net.minecraft.client.renderer.item.properties.numeric.Count(false), 1.0F, entries));
     }
 
     /** Stuhl, Bank, Tisch und Thron. */

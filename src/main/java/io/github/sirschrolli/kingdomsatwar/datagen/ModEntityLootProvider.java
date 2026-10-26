@@ -41,29 +41,35 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         ModEntities.SOLDIERS.values().forEach(type -> this.add(type.get(), LootTable.lootTable()));
         // Drachen-Bosse: viele Schuppen, Draconium und Edelsteine (das Ei erscheint gesondert auf dem Nest)
         this.add(ModEntities.PYRRHON.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         this.add(ModEntities.GLACIARA.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.ICE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         this.add(ModEntities.VERDANTIS.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.NATURE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.LIFE_BLOSSOM.get(), 2, 4)));
         this.add(ModEntities.TERRAGON.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.EARTH).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 3, 6))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.AMBER_CRYSTAL.get(), 4, 8)));
         this.add(ModEntities.VOLTARION.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.LIGHTNING).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.STORM_CRYSTAL.get(), 3, 6)));
         this.add(ModEntities.THALASSA.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.WATER).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
@@ -71,6 +77,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 6, 12)));
         // Nyxar: Abyssit, Seelenkristalle und Schattenessenz (das Herz der Schatten erscheint gesondert)
         this.add(ModEntities.NYXAR.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.GOLD_COIN.get(), 20, 32))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHARD.get(), 6, 10))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 14))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 10, 16))
@@ -155,8 +162,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         LootTable.Builder table = LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
-                        .add(LootItem.lootTableItem(Items.EMERALD)
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 2)))
+                        .add(LootItem.lootTableItem(ModItems.BRONZE_COIN.get())
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 7)))
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f)))))
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
@@ -174,6 +181,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                             .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 3)))
                             .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f)))));
         }
+        table.withPool(this.rare(ModItems.SILVER_COIN.get(), 0.25f, 0.05f));
         return table;
     }
 
