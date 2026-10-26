@@ -89,7 +89,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "kingdomsatwar:shadow/rock_bridge"
+    ],
     [],
     [],
     [],

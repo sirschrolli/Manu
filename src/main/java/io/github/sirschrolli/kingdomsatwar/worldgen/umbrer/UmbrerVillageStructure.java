@@ -59,6 +59,11 @@ public class UmbrerVillageStructure extends Structure {
 
     /** Kein Dorf im Schatten der Zitadelle: mindestens 160 Blöcke Abstand zu Nyxars Festung. */
     private static boolean nearCitadel(Structure.GenerationContext context, ChunkPos chunk) {
+        return nearCitadelArea(context, chunk, 160);
+    }
+
+    /** Liegt der Chunk näher als {@code distance} Blöcke an Nyxars Zitadelle? */
+    static boolean nearCitadelArea(Structure.GenerationContext context, ChunkPos chunk, int distance) {
         var set = context.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
                 .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.SHADOW_CITADEL_SET);
         if (set.isEmpty() || !(set.get().value().placement()
@@ -72,7 +77,7 @@ public class UmbrerVillageStructure extends Structure {
         }
         double dx = citadel.getMiddleBlockX() - chunk.getMiddleBlockX();
         double dz = citadel.getMiddleBlockZ() - chunk.getMiddleBlockZ();
-        return dx * dx + dz * dz < 160.0 * 160.0;
+        return dx * dx + dz * dz < (double) distance * distance;
     }
 
     // =====================================================================================
@@ -87,7 +92,15 @@ public class UmbrerVillageStructure extends Structure {
      */
     public static boolean isNearVillage(net.minecraft.world.level.WorldGenLevel level, BlockPos pos, int margin) {
         // auch rund um Nyxars Zitadelle bleibt das Land frei (Bäume ragten sonst über die Mauern in den Thronhof)
-        return isNear(level, pos, margin, ModStructures.UMBRER_VILLAGE_STRUCTURE) || isNear(level, pos, margin, ModStructures.SHADOW_CITADEL_STRUCTURE);
+        if (isNear(level, pos, margin, ModStructures.UMBRER_VILLAGE_STRUCTURE) || isNear(level, pos, margin, ModStructures.SHADOW_CITADEL_STRUCTURE)) {
+            return true;
+        }
+        for (ShadowSiteStructure.Kind kind : ShadowSiteStructure.Kind.values()) {
+            if (isNear(level, pos, margin, ModStructures.shadowSite(kind))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isNear(net.minecraft.world.level.WorldGenLevel level, BlockPos pos, int margin,
@@ -115,7 +128,7 @@ public class UmbrerVillageStructure extends Structure {
                 continue;
             }
             for (var piece : start.getPieces()) {
-                BoundingBox box = piece.getBoundingBox();
+                BoundingBox box = piece instanceof ShadowSitePiece site ? site.clearing() : piece.getBoundingBox();
                 if (pos.getX() >= box.minX() - margin && pos.getX() <= box.maxX() + margin
                         && pos.getZ() >= box.minZ() - margin && pos.getZ() <= box.maxZ() + margin) {
                     return true;

@@ -78,6 +78,11 @@ public final class ModTags {
         /** Wo in der Schattenwelt Dörfer der Umbrer liegen können. */
         public static final TagKey<Biome> HAS_UMBRER_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_umbrer_village"));
         /** Wo Nyxars Schattenzitadelle stehen kann (weites, festes Land der Schattenwelt). */
+        /** Bauwerke der Schattenwelt: verlassene Mondtempel, Kristallminen, Leuchttürme an der Küste, Ruinen der alten Welt. */
+        public static final TagKey<Biome> HAS_MOON_TEMPLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_moon_temple"));
+        public static final TagKey<Biome> HAS_CRYSTAL_MINE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_crystal_mine"));
+        public static final TagKey<Biome> HAS_LIGHTHOUSE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_lighthouse"));
+        public static final TagKey<Biome> HAS_OLD_WORLD_RUIN = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_old_world_ruin"));
         public static final TagKey<Biome> HAS_SHADOW_CITADEL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_shadow_citadel"));
 
         private static java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> nestTags() {

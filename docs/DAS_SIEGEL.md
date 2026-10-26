@@ -230,7 +230,7 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | B3 | Story-Grundlage: Chronik (Buch-Oberfläche), Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelsplitter, Siegelbruch mit Lichteffekten, Schattentor, Fortschritt je Spieler | ✅ |
 | B4–B8 | Glaciara (Gletscherkessel, Frostkessel), Verdantis (Uralter Hain), Terragon (Felsschlucht, Zerklüftete Weiten), Voltarion (Sturmgipfel, Sturmklippen), Thalassa (Versunkene Grotte unter dem Meer, Abgrundgrotte) | ✅ |
 | B9 | Alte Drachen-Mechanik umgebaut: keine wilden Drachen, keine Ei-Rezepte und Fragmente mehr, ein Ei schlüpft nur mit einem Spieler in der Nähe; Tests, README und Bilder (Version 0.3.0) | ✅ |
-| F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, **Nyxar mit der Schattenzitadelle** ✅; weitere Bauwerke (Tempel, Kristallminen, Leuchttürme, Ruinen) | 🔶 |
+| F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, **Nyxar mit der Schattenzitadelle**, Bauwerke (Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken) | ✅ |
 | C | Wirtschaft, Münzen, wachsende Stadt, Ansehen, Handel, Krönung | ⏳ |
 | D | Magier-Bosse, Magietisch, Radialmenü | ⏳ |
 | E | Biome, Dörfer, eigene Mobs statt Vanilla, keine Vanilla-Bauwerke, Nether/End | ⏳ |

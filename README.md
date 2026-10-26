@@ -8,12 +8,14 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.4.0 – Der Schattendrache.**
+> **Testversion 0.4.1 – Der Schattendrache.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom – dazu alles aus Phase 2: Drachen zum Reiten,
 > Soldaten, Kreaturen, Ausrüstung, Magie, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.4.0: **Nyxar, der Schattendrache** – der Endgegner in seiner **Schattenzitadelle** hinter dem Siegel.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (52 GameTests).
+> Neu in 0.4: **Nyxar, der Schattendrache** – der Endgegner in seiner **Schattenzitadelle** hinter dem Siegel – und
+> in 0.4.1 die übrigen **Bauwerke der Schattenwelt**: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme an der
+> Küste, Ruinen der alten Welt und Felsbrücken über den Schluchten.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (54 GameTests).
 > **Als Nächstes:** Wirtschaft und Stadt, dann Magie und eigene Biome.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
@@ -42,7 +44,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen; Nyxar und seine Schattenzitadelle | ✅ fertig |
-| Weitere Bauwerke der Schattenwelt (Tempel, Kristallminen, Leuchttürme, Ruinen) | ⏳ in Arbeit |
+| Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft mit Münzen, wachsende Stadt, Ansehen, Krönung | ⏳ geplant |
 | Magier-Bosse, Magietisch, Zauber-Radialmenü | ⏳ geplant |
 | Eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End) | ⏳ geplant |
@@ -62,7 +64,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.4.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.4.1.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -70,7 +72,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.4.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.4.1.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Erze, Kreaturen, Blumen, der
    Siegelkreis, die Drachennester und Burgruinen entstehen nur in neu erzeugten Gebieten.
@@ -169,6 +171,30 @@ aus sechs Hörnern und zerfetzten Schwingen mit leuchtenden Adern. Zwischen sein
 - Magie und Gift von Nicht-Spielern prallen an ihm ab, Feuer trifft ihn härter.
 - **Sieg:** Licht bricht über dem Thronhof durch, das **Herz der Schatten** schwebt dort, wo er fiel, dazu Abyssit,
   Seelenkristalle und Schattenessenz – und beim ersten Sieg endet die Geschichte vom Siegel.
+
+### Bauwerke der Schattenwelt
+
+Neben den Dörfern der Umbrer und der Zitadelle liegen überall in der Schattenwelt kleinere Bauwerke. Jedes sucht sich
+passendes Gelände (eben genug, nie unter Wasser, Leuchttürme nur an der Küste) und steht auf einer Lichtung.
+
+- **Verlassener Mondtempel** (Schattenwald, Bleiche Öde, Glimmerweiten): auf einem dreistufigen Sockel ein Säulenportikus
+  mit Rosenfenster aus Nachtkristall, ein Schiff mit zwei Säulenreihen, Bänken und hängenden Mondlaternen, ein steiles
+  Steindach, an drei Stellen eingestürzt (darunter Trümmer, Moos und Glimmerranken), und hinten die Apsis mit
+  Halbkuppel, Mondaltar, Seelenkristall und einer Mondsichel aus Mondsilber. Eine Treppe führt hinab in die **Gruft**
+  mit Sarkophagen – zwei Truhen mit Mondsilber, Seelenkristallen, Schattenessenz, verzauberten Büchern, selten einer
+  Mondsilberklinge oder der Abyssit-Schmiedevorlage.
+- **Kristallmine** (Kristallschluchten, Schattengipfel, Bleiche Öde): ein Förderturm aus Schattenholz über dem Schacht, eine
+  Leiter 26 Blöcke hinab in eine Halle mit Stützbalken, Seelenlaternen und Truhe. Zwei Stollen mit Gleisen: nach
+  Osten zu einer **Lore mit Beute**, nach Westen in eine **Kristallkammer** voller Nachtkristall – mit einem Spawner,
+  aus dem Kristallkriecher kommen. In den Wänden glitzern Seelenkristall- und Mondsilberadern.
+- **Mondleuchtturm** (an den Küsten): Felssockel, ein runder, nach oben schmaler werdender Turm mit Streifen aus
+  Mondsilber, drei Geschosse mit Leiter, eine Galerie und der gläserne Laternenraum mit leuchtender Lampe unter einem
+  Zeltdach. Daneben das Haus des Wärters (Bett, Ofen, Schornstein, Truhe) und ein Steg aufs Meer hinaus.
+- **Ruine der alten Welt** (Glimmerweiten, Bleiche Öde, Schattenwald, Seelensumpf): ein Hof aus der Zeit vor dem Siegel – bemooste
+  Mauerreste aus Bruchstein, Eichenpfosten, ein eingestürzter Balken, Kamin, Amboss, Truhe mit Vorräten der alten Welt
+  (Stahl, Eisen, Saatgut, manchmal eine Karte) und ein Brunnen.
+- **Felsbrücken**: natürliche Bögen aus Schattenstein über Schluchten und Senken, oben bewachsen, unten hängen
+  Glimmerranken.
 
 ### Die Nester
 
@@ -361,7 +387,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.4.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.4.1.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -394,7 +420,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.4.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.4.1` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 

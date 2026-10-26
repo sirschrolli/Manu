@@ -95,6 +95,11 @@ final class ShadowGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_CITADEL =
             ModGameTests.TEST_FUNCTIONS.register("shadow_citadel", () -> ShadowGameTests::shadowCitadel);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_SITES =
+            ModGameTests.TEST_FUNCTIONS.register("shadow_sites", () -> ShadowGameTests::shadowSites);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ROCK_BRIDGE =
+            ModGameTests.TEST_FUNCTIONS.register("rock_bridge", () -> ShadowGameTests::rockBridge);
+
     private ShadowGameTests() {}
 
     /** Lädt die Klasse (meldet die Testfunktionen an). */
@@ -108,7 +113,7 @@ final class ShadowGameTests {
         event.registerTest(NYXAR_LIFECYCLE.getId(), new FunctionGameTestInstance(NYXAR_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 56)));
         for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS,
-                SHADOW_CITADEL)) {
+                SHADOW_CITADEL, SHADOW_SITES, ROCK_BRIDGE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -255,6 +260,132 @@ final class ShadowGameTests {
             level.setBlock(corePos, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
             helper.succeed();
         });
+    }
+
+    /**
+     * Die Bauwerke der Schattenwelt: Mondtempel (mit Altar, Truhe und Gruft), Kristallmine (Truhe in der Halle, Spawner
+     * der Kristallkriecher in der Kristallkammer, Lore mit Beute im Stollen), Mondleuchtturm (Licht, Tür, Truhe im
+     * Wärterhaus) und Ruine der alten Welt (Truhe, Brunnen). Gebaut wird jedes Bauwerk vollständig weit abseits der
+     * anderen Tests; alle Bauwerke und ihre Gruppen sind registriert.
+     */
+    private static void shadowSites(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var registries = level.registryAccess();
+        BlockPos base = helper.absolutePos(new BlockPos(4, 1, 4));
+        var generator = level.getChunkSource().getGenerator();
+        int offset = 0;
+        BlockPos mine = null;
+        for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.values()) {
+            helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE)
+                    .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.shadowSite(kind)).isPresent(), "Bauwerk fehlt: " + kind.id());
+            helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE_SET)
+                    .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.shadowSiteSet(kind)).isPresent(), "Gruppe fehlt: " + kind.id());
+            offset += 160;
+            BlockPos origin = base.offset(2000 + offset, kind == io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.MINE ? 40 : 0, 0);
+            var piece = new io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSitePiece(kind, origin,
+                    net.minecraft.world.level.block.Rotation.NONE, 4242L + offset);
+            var box = piece.getBoundingBox();
+            // Chunk für Chunk bauen wie in der echten Weltgenerierung
+            for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
+                for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++) {
+                    var chunkBox = new net.minecraft.world.level.levelgen.structure.BoundingBox(cx << 4, level.getMinY(), cz << 4,
+                            (cx << 4) + 15, level.getMaxY(), (cz << 4) + 15);
+                    piece.postProcess(level, level.structureManager(), generator, net.minecraft.util.RandomSource.create(1), chunkBox,
+                            new net.minecraft.world.level.ChunkPos(cx, cz), origin);
+                }
+            }
+            switch (kind) {
+                case TEMPLE -> {
+                    assertChest(helper, origin.offset(3, 4, 14), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.MOON_TEMPLE_CHEST, "Tempel");
+                    assertChest(helper, origin.offset(-5, -4, 10), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.MOON_TEMPLE_CRYPT, "Gruft");
+                    helper.assertTrue(level.getBlockState(origin.offset(0, 5, 15)).is(ShadowBlocks.SOUL_CRYSTAL_BLOCK.get()), "Tempel ohne Mondreliquie");
+                    helper.assertTrue(level.getBlockState(origin.offset(0, 20, 0)).is(ShadowBlocks.POLISHED_SHADOW_STONE.slab().get())
+                            || level.getBlockState(origin.offset(0, 20, 0)).isAir(), "Tempeldach ohne First");
+                }
+                case MINE -> {
+                    assertChest(helper, origin.offset(7, -26, -4), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.CRYSTAL_MINE_CHEST, "Mine");
+                    helper.assertTrue(level.getBlockEntity(origin.offset(-29, -26, 0))
+                            instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity, "Kristallkammer ohne Spawner");
+                    helper.assertTrue(level.getBlockState(origin.offset(0, -10, -1)).is(net.minecraft.world.level.block.Blocks.LADDER),
+                            "Schacht ohne Leiter");
+                    mine = origin;
+                }
+                case LIGHTHOUSE -> {
+                    helper.assertTrue(level.getBlockState(origin.offset(0, 29, 0)).is(net.minecraft.world.level.block.Blocks.SEA_LANTERN)
+                            && level.getBlockState(origin.offset(0, 30, 0)).is(net.minecraft.world.level.block.Blocks.SEA_LANTERN),
+                            "Leuchtturm ohne Licht");
+                    // die Leiter führt bis unter die Galerie, darüber ist der Durchgang zum Laternenraum frei
+                    helper.assertTrue(level.getBlockState(origin.offset(0, 27, 2)).is(net.minecraft.world.level.block.Blocks.LADDER)
+                            && level.getBlockState(origin.offset(0, 28, 2)).isAir() && level.getBlockState(origin.offset(0, 29, 2)).isAir(),
+                            "Leuchtturm: Leiter oder Durchgang zur Galerie versperrt");
+                    helper.assertTrue(level.getBlockState(origin.offset(1, 30, 2)).is(net.minecraft.world.level.block.Blocks.GLASS),
+                            "Laternenraum ohne Glas");
+                    helper.assertTrue(level.getBlockState(origin.offset(0, 1, -4)).is(ShadowBlocks.SHADOW_DOOR.get()), "Leuchtturm ohne Tür");
+                    assertChest(helper, origin.offset(-7, 1, -4), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.LIGHTHOUSE_CHEST, "Wärterhaus");
+                }
+                case RUIN -> {
+                    assertChest(helper, origin.offset(-5, 1, 2), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.OLD_WORLD_RUIN_CHEST, "Ruine");
+                    helper.assertTrue(level.getBlockState(origin.offset(-9, -1, 0)).is(net.minecraft.world.level.block.Blocks.WATER),
+                            "Brunnen ohne Wasser");
+                }
+            }
+        }
+        // Die Lore ist ein Wesen: sichtbar wird sie erst, wenn ihr Chunk wirklich geladen ist – dafür den Chunk kurz
+        // festhalten und warten, bis sie auftaucht.
+        helper.assertTrue(mine != null, "Mine nicht gebaut");
+        BlockPos cart = mine.offset(23, -26, 0);
+        var cartChunk = net.minecraft.world.level.ChunkPos.containing(cart);
+        level.setChunkForced(cartChunk.x(), cartChunk.z(), true);
+        helper.succeedWhen(() -> {
+            var carts = level.getEntitiesOfClass(net.minecraft.world.entity.vehicle.minecart.MinecartChest.class,
+                    net.minecraft.world.phys.AABB.encapsulatingFullBlocks(cart.offset(-3, -2, -3), cart.offset(3, 2, 3)));
+            helper.assertTrue(!carts.isEmpty() && carts.getFirst().getContainerLootTable() != null, "Keine Lore mit Beute im Stollen");
+            carts.forEach(net.minecraft.world.entity.Entity::discard);
+            level.setChunkForced(cartChunk.x(), cartChunk.z(), false);
+        });
+    }
+
+    /**
+     * Felsbrücke: über einer runden Senke, deren Rand zwölf Blöcke höher liegt als ihr Grund, spannt sich ein Bogen aus
+     * Schattenstein von Kante zu Kante – über der Mitte der Senke liegt Fels, darunter bleibt sie frei.
+     */
+    private static void rockBridge(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos anchor = helper.absolutePos(new BlockPos(4, 1, 4));
+        int cx = ((anchor.getX() + 3400) & ~15) + 8;
+        int cz = (anchor.getZ() & ~15) + 8;
+        int floor = anchor.getY() + 8;
+        var stone = ShadowBlocks.SHADOW_STONE.base().get().defaultBlockState();
+        var air = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+        for (int x = cx - 28; x <= cx + 28; x++) {
+            for (int z = cz - 28; z <= cz + 28; z++) {
+                int top = Math.sqrt((x - cx) * (x - cx) + (z - cz) * (z - cz)) < 8.0 ? floor : floor + 12;
+                for (int y = floor - 2; y <= floor + 20; y++) {
+                    level.setBlock(new BlockPos(x, y, z), y <= top ? stone : air, 2);
+                }
+            }
+        }
+        boolean placed = new io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature().place(level,
+                level.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(7L), new BlockPos(cx, floor, cz));
+        helper.assertTrue(placed, "Die Felsbrücke wurde nicht gebaut");
+        int rock = 0;
+        for (int y = floor + 1; y <= floor + 20; y++) {
+            var state = level.getBlockState(new BlockPos(cx, y, cz));
+            if (state.is(ShadowBlocks.SHADOW_STONE.base().get()) || state.is(ShadowBlocks.DEEP_SHADOW_STONE.get())
+                    || state.is(ShadowBlocks.SHADOW_GRASS.get())) {
+                rock++;
+            }
+        }
+        helper.assertTrue(rock >= 2, "Kein Felsbogen über der Mitte der Senke");
+        helper.assertTrue(level.getBlockState(new BlockPos(cx, floor + 1, cz)).isAir()
+                && level.getBlockState(new BlockPos(cx, floor + 3, cz)).isAir(), "Der Bogen füllt die Senke aus");
+        helper.succeed();
+    }
+
+    private static void assertChest(GameTestHelper helper, BlockPos pos, net.minecraft.resources.ResourceKey<net.minecraft.world.level.storage.loot.LootTable> loot,
+            String where) {
+        helper.assertTrue(helper.getLevel().getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity chest
+                && loot.equals(chest.getLootTable()), where + ": keine Truhe mit Beute bei " + pos);
     }
 
     /**

@@ -28,6 +28,9 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature>> HANGING_VINES =
             FEATURE_TYPES.register("hanging_vines", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.HangingVinesFeature.CODEC);
 
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature>> ROCK_BRIDGE =
+            FEATURE_TYPES.register("rock_bridge", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature.CODEC);
+
     public static final DeferredRegister<MapCodec<? extends PlacementModifier>> PLACEMENT_TYPES =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, KingdomsAtWar.MODID);
 

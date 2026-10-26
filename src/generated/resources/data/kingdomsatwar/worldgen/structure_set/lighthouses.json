@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 37710559,
+    "separation": 5,
+    "spacing": 14
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:lighthouse",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 88204331,
+    "separation": 10,
+    "spacing": 26
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:crystal_mine",
+      "weight": 1
+    }
+  ]
+}

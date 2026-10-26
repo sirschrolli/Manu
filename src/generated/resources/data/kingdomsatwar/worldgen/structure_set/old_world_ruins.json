@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 19335871,
+    "separation": 7,
+    "spacing": 18
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:old_world_ruin",
+      "weight": 1
+    }
+  ]
+}

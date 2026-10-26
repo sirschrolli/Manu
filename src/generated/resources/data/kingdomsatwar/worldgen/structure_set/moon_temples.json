@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 61442917,
+    "separation": 12,
+    "spacing": 30
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:moon_temple",
+      "weight": 1
+    }
+  ]
+}

@@ -101,6 +101,7 @@ final class Showcase {
                 case "citadel" -> CitadelShowcase.citadel(steps, false);
                 case "nyxar" -> CitadelShowcase.citadel(steps, true);
                 case "citadelmap" -> CitadelShowcase.citadel(steps, false, true);
+                case "sites" -> SitesShowcase.sites(steps);
                 case "nyxarfight" -> CitadelShowcase.citadel(steps, true, false, true);
                 case "bossmodels" -> bossModels(steps, false, null);
                 case "bossmodels_air" -> bossModels(steps, true, null);

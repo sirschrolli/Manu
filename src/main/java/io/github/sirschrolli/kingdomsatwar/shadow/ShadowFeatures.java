@@ -142,6 +142,9 @@ public final class ShadowFeatures {
     static final Entry SPIRES_SMALL = entry(LOCAL, "rock_spires_small", () -> new RockSpireFeature(4, 9, 1.3f),
             surface(RarityFilter.onAverageOnceEvery(5), 0));
     static final Entry BONE_ARCH = entry(LOCAL, "bone_arch", BoneArchFeature::new, surface(RarityFilter.onAverageOnceEvery(7), 0));
+    /** Felsbrücken über Schluchten und Senken (sucht selbst nach zwei Kanten; meist findet sich keine). */
+    static final Entry ROCK_BRIDGE = entry(LOCAL, "rock_bridge", io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature::new,
+            surface(CountPlacement.of(1), 0));
 
     static final Entry CRYSTALS_CHASM = entry(UNDERGROUND, "night_crystals_chasm", () -> new CrystalGrowthFeature(64, 7), volume(30, -30, 110));
     static final Entry CRYSTALS_DEPTHS = entry(UNDERGROUND, "night_crystals_depths", () -> new CrystalGrowthFeature(40, 6), volume(6, -60, 40));
@@ -228,7 +231,7 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings chasms(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, CRYSTALS_CHASM, CRYSTALS_DEPTHS, TREES_SPARSE, SPROUTS, CRYSTAL_CLUSTERS);
+        return settings(placed, carvers, ROCK_BRIDGE, CRYSTALS_CHASM, CRYSTALS_DEPTHS, TREES_SPARSE, SPROUTS, CRYSTAL_CLUSTERS);
     }
 
     static BiomeGenerationSettings marsh(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
@@ -236,7 +239,7 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings peaks(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, SPIRES_PEAKS, CRYSTALS_DEPTHS, PALE_GRASS);
+        return settings(placed, carvers, SPIRES_PEAKS, ROCK_BRIDGE, CRYSTALS_DEPTHS, PALE_GRASS);
     }
 
     static BiomeGenerationSettings meadows(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
