@@ -52,6 +52,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.LIFE_BLOSSOM.get(), 2, 4)));
+        this.add(ModEntities.TERRAGON.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.EARTH).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 3, 6))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.AMBER_CRYSTAL.get(), 4, 8)));
+        this.add(ModEntities.VOLTARION.get(), LootTable.lootTable()
+                .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.LIGHTNING).get(), 18, 26))
+                .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.STORM_CRYSTAL.get(), 3, 6)));
         this.add(ModEntities.VINELING.get(), LootTable.lootTable()
                 .withPool(drop(Items.VINE, 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));

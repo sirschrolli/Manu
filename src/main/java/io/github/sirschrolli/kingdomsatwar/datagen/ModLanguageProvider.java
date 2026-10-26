@@ -56,6 +56,21 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.BRAMBLE, "Bramble", "Dornengestrüpp");
         block(ModBlocks.GNARLED_ROOTS, "Gnarled Roots", "Knorrige Wurzeln");
 
+        // --- Zerklüftete Weiten ---
+        text("biome.kingdomsatwar.rugged_wilds", "Rugged Wilds", "Zerklüftete Weiten");
+        block(ModBlocks.AMBER_CRYSTAL, "Amber Crystal", "Bernsteinkristall");
+        block(ModBlocks.AMBER_CLUSTER, "Amber Cluster", "Bernsteindruse");
+        set("shale", "shale", "Shale", "Schiefer", "Shale", "Schiefer");
+        block(ModBlocks.RUBBLE, "Rubble", "Geröll");
+        block(ModBlocks.RIFT_STONE, "Rift Stone", "Spaltgestein");
+
+        // --- Sturmklippen ---
+        text("biome.kingdomsatwar.storm_cliffs", "Storm Cliffs", "Sturmklippen");
+        set("stormstone", "stormstone", "Stormstone", "Sturmstein", "Stormstone", "Sturmstein");
+        block(ModBlocks.CHARGED_STORMSTONE, "Charged Stormstone", "Geladener Sturmstein");
+        block(ModBlocks.FULGURITE, "Fulgurite", "Fulgurit");
+        block(ModBlocks.STORM_CRYSTAL, "Storm Crystal", "Sturmkristall");
+
         // --- Aschelande ---
         text("biome.kingdomsatwar.ashlands", "Ashlands", "Aschelande");
         block(ModBlocks.ASH_BLOCK, "Ash", "Asche");
@@ -322,6 +337,10 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.VERDANTIS.get(), pick("Verdantis", "Verdantis"));
         text("boss.kingdomsatwar.nature.title", "Guardian of the Grove", "Die Hüterin des Hains");
         add(ModEntities.VINELING.get(), pick("Vineling", "Rankling"));
+        add(ModEntities.TERRAGON.get(), pick("Terragon", "Terragon"));
+        text("boss.kingdomsatwar.earth.title", "The Mountainbreaker", "Der Bergbrecher");
+        add(ModEntities.VOLTARION.get(), pick("Voltarion", "Voltarion"));
+        text("boss.kingdomsatwar.lightning.title", "The Stormbringer", "Der Sturmbringer");
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");

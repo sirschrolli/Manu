@@ -90,6 +90,14 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity>> VERDANTIS =
             ENTITIES.registerEntityType("nature_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(6.0f, 5.5f).eyeHeight(6.5f).clientTrackingRange(16).updateInterval(2));
+    /** Terragon, der Bergbrecher (Erde). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.earth.TerragonEntity>> TERRAGON =
+            ENTITIES.registerEntityType("earth_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.earth.TerragonEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(6.5f, 5.0f).eyeHeight(5.5f).clientTrackingRange(16).updateInterval(2));
+    /** Voltarion, der Sturmbringer (Blitz). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity>> VOLTARION =
+            ENTITIES.registerEntityType("lightning_dragon_boss", io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(5.0f, 6.0f).eyeHeight(7.5f).fireImmune().clientTrackingRange(16).updateInterval(2));
     /** Rankling: Diener von Verdantis (wird nicht gespeichert). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity>> VINELING =
             ENTITIES.registerEntityType("vineling", io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity::new,
@@ -111,6 +119,8 @@ public final class ModEntities {
             case FIRE -> PYRRHON.get();
             case ICE -> GLACIARA.get();
             case NATURE -> VERDANTIS.get();
+            case EARTH -> TERRAGON.get();
+            case LIGHTNING -> VOLTARION.get();
             default -> null;
         };
     }
@@ -137,6 +147,8 @@ public final class ModEntities {
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
         event.put(GLACIARA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity.createAttributes().build());
         event.put(VERDANTIS.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity.createAttributes().build());
+        event.put(TERRAGON.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.earth.TerragonEntity.createAttributes().build());
+        event.put(VOLTARION.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.VoltarionEntity.createAttributes().build());
         event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
     }
 

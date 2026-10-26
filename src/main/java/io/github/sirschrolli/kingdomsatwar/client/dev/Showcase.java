@@ -423,6 +423,20 @@ final class Showcase {
         });
     }
 
+    private static Step forceAttack(DragonBossEntity[] boss, String name) {
+        return Step.server(level -> {
+            DragonBossEntity b = boss[0];
+            BossAttack attack = b.findAttack(name);
+            net.minecraft.world.entity.LivingEntity target = b.getTarget();
+            if (target == null) {
+                target = level.getEntitiesOfClass(SoldierEntity.class, b.getBoundingBox().inflate(60)).stream().findFirst().orElse(null);
+            }
+            if (attack != null && target != null) {
+                b.startAttack(level, attack, target);
+            }
+        });
+    }
+
     private static Step forceAttack(DragonBossEntity[] boss, int anim) {
         return Step.server(level -> {
             DragonBossEntity b = boss[0];
@@ -1292,8 +1306,13 @@ final class Showcase {
         steps.add(Step.waitTicks(400));
         steps.add(Step.waitForChunks(3000));
         steps.add(Step.waitTicks(60));
-        steps.add(Step.server(level -> io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}",
-                io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type))));
+        steps.add(Step.server(level -> {
+            var entry = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Nesteintrag: {}", entry);
+            if (entry != null) {
+                nest[2] = entry.center().getY();
+            }
+        }));
         steps.add(Step.screenshot("lair_" + id + "_overview"));
         // Aschelande: aus großer Höhe und vom Boden aus
         steps.add(lookFrom(nest, 40, 95, 150, 0));
@@ -1328,7 +1347,8 @@ final class Showcase {
         steps.add(Step.waitTicks(30));
         steps.add(Step.waitTicks(20));
         steps.add(Step.server(level -> {
-            BlockPos center = BlockPos.containing(nest[0], nest[2], nest[1]);
+            var entry = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(level).get(type);
+            BlockPos center = entry != null ? entry.center() : BlockPos.containing(nest[0], nest[2], nest[1]);
             BlockPos core = io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairDesigns.of(type).corePos(center);
             if (level.getBlockEntity(core) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.DragonLairCoreBlockEntity be) {
                 var boss = be.awaken(level);
@@ -1559,11 +1579,15 @@ final class Showcase {
         BlockState floorBlock = switch (type) {
             case ICE -> Blocks.SNOW_BLOCK.defaultBlockState();
             case NATURE -> Blocks.GRASS_BLOCK.defaultBlockState();
+            case EARTH -> Blocks.COARSE_DIRT.defaultBlockState();
+            case LIGHTNING -> ModBlocks.STORMSTONE.base().get().defaultBlockState();
             default -> Blocks.BASALT.defaultBlockState();
         };
         BlockState poolBlock = switch (type) {
             case ICE -> Blocks.PACKED_ICE.defaultBlockState();
             case NATURE -> Blocks.MOSS_BLOCK.defaultBlockState();
+            case EARTH -> Blocks.GRAVEL.defaultBlockState();
+            case LIGHTNING -> ModBlocks.STORMSTONE.base().get().defaultBlockState();
             default -> Blocks.LAVA.defaultBlockState();
         };
         int ox = 600;
@@ -1585,6 +1609,19 @@ final class Showcase {
                 // der Eiskristall, den Glaciara beim Erwachen sprengt
                 fill(level, new BlockPos(ox - 3, ground, oz - 3), new BlockPos(ox + 3, ground + 10, oz + 3),
                         ModBlocks.FROST_CRYSTAL.get().defaultBlockState());
+            }
+            if (type == DragonType.EARTH) {
+                var ctx = new io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairContext(level,
+                        new net.minecraft.world.level.levelgen.structure.BoundingBox(ox - 40, ground - 8, oz - 40, ox + 40, ground + 20, oz + 40),
+                        new BlockPos(ox, ground, oz), 1234L);
+                io.github.sirschrolli.kingdomsatwar.worldgen.lair.EarthLairDesign.mound(ctx, ox, ground, oz);
+            }
+            if (type == DragonType.LIGHTNING) {
+                // das Podest mit dem Blitzstern, auf das Voltarion herabfährt
+                var ctx = new io.github.sirschrolli.kingdomsatwar.worldgen.lair.LairContext(level,
+                        new net.minecraft.world.level.levelgen.structure.BoundingBox(ox - 40, ground - 8, oz - 40, ox + 40, ground + 20, oz + 40),
+                        new BlockPos(ox, ground, oz), 1234L);
+                io.github.sirschrolli.kingdomsatwar.worldgen.lair.LightningLairDesign.dais(ctx, ox, ground, oz);
             }
             if (type == DragonType.NATURE) {
                 // der überwucherte Hügel und die Lebensblüten
@@ -1609,7 +1646,13 @@ final class Showcase {
             boss[0] = b;
         }));
         steps.add(Step.waitTicks(2));
-        steps.add(Step.record("motion_" + id + "_awakening", type == DragonType.NATURE ? 200 : 175, follow(boss, 24.0, 8.0, 7.0)));
+        if (type == DragonType.LIGHTNING) {
+            // er fährt aus dem Himmel herab: Die Kamera bleibt beim Podest
+            steps.add(Step.record("motion_" + id + "_awakening", 195, fixedCam(ox, oz, 15.0, 6.5, -14.0, 5.0)));
+        } else {
+            steps.add(Step.record("motion_" + id + "_awakening", type == DragonType.NATURE ? 200 : type == DragonType.EARTH ? 190 : 175,
+                    follow(boss, 24.0, 8.0, 7.0)));
+        }
         // Kampf: ein paar Soldaten, damit der Boss geht, sich dreht und angreift
         steps.add(Step.server(level -> {
             for (int i = 0; i < 5; i++) {
@@ -1624,20 +1667,61 @@ final class Showcase {
             }
         }));
         steps.add(Step.record("motion_" + id + "_fight", 300, follow(boss, 22.0, 6.0, 5.0)));
-        if (type == DragonType.NATURE) {
-            // die besonderen Angriffe nacheinander (Wurzelfessel, Rankensäulen, Giftsporen, Rankendiener, Heilung)
-            int[][] special = {{BossAnims.SPECIAL_1, 70}, {BossAnims.ERUPT, 60}, {BossAnims.RING, 60}, {BossAnims.STOMP, 70},
+        int[][] special = switch (type) {
+            // Wurzelfessel, Rankensäulen, Giftsporen, Rankendiener, Heilung
+            case NATURE -> new int[][] {{BossAnims.SPECIAL_1, 70}, {BossAnims.ERUPT, 60}, {BossAnims.RING, 60}, {BossAnims.STOMP, 70},
                     {BossAnims.SPECIAL_2, 125}};
-            for (int i = 0; i < special.length; i++) {
-                int anim = special[i][0];
-                steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
-                steps.add(forceAttack(boss, anim));
-                steps.add(Step.record("motion_" + id + "_special_" + i, special[i][1], follow(boss, 24.0, 7.0, 5.0)));
-            }
+            // Eingraben, Stalagmiten, Erdbeben, Felsbrocken, Kristallpanzer
+            case EARTH -> new int[][] {{BossAnims.SPECIAL_1, 175}, {BossAnims.ERUPT, 60}, {BossAnims.STOMP, 65}, {BossAnims.VOLLEY, 60},
+                    {BossAnims.SPECIAL_2, 90}};
+            default -> new int[0][];
+        };
+        for (int i = 0; i < special.length; i++) {
+            int anim = special[i][0];
+            steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
+            steps.add(forceAttack(boss, anim));
+            steps.add(Step.record("motion_" + id + "_special_" + i, special[i][1], follow(boss, 24.0, 7.0, 5.0)));
         }
-        steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
-        steps.add(Step.record("motion_" + id + "_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
+        if (type == DragonType.LIGHTNING) {
+            // Kettenblitz, Blitzfeld, Donnerschrei, Blitzodem – dann in der Luft: Gewitter und Sturzflug
+            Object[][] groundAttacks = {{"chain_lightning", 60}, {"lightning_field", 160}, {"thunder_roar", 50}, {"breath", 80}};
+            int i = 0;
+            // zuerst landen (er fliegt viel): auf den Boden setzen und kurz zur Ruhe kommen lassen
+            steps.add(Step.server(level -> {
+                DragonBossEntity b = boss[0];
+                b.setMoveMode(DragonBossEntity.MoveMode.GROUND);
+                b.setPos(b.getX(), b.groundY(b.getX(), b.getZ()), b.getZ());
+                b.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            }));
+            steps.add(Step.record("motion_" + id + "_walk", 70, follow(boss, 24.0, 6.0, 5.0)));
+            for (Object[] attack : groundAttacks) {
+                steps.add(Step.server(level -> boss[0].setHealth(boss[0].getMaxHealth() * 0.5f)));
+                steps.add(forceAttack(boss, (String) attack[0]));
+                steps.add(Step.record("motion_" + id + "_special_" + i++, (Integer) attack[1], follow(boss, 26.0, 7.0, 5.0)));
+            }
+            steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
+            steps.add(Step.record("motion_" + id + "_flight", 140, follow(boss, 32.0, 5.0, 4.0)));
+            steps.add(forceAttack(boss, "thunderstorm"));
+            steps.add(Step.record("motion_" + id + "_special_" + i++, 125, follow(boss, 34.0, 4.0, 2.0)));
+            steps.add(forceAttack(boss, "dive_charge"));
+            steps.add(Step.record("motion_" + id + "_special_" + i, 95, follow(boss, 30.0, 6.0, 3.0)));
+            steps.add(Step.hud(true));
+            return;
+        }
+        if (type != DragonType.EARTH) {
+            steps.add(forceAttack(boss, BossAnims.TAKE_OFF));
+            steps.add(Step.record("motion_" + id + "_flight", 240, follow(boss, 30.0, 5.0, 4.0)));
+        }
         steps.add(Step.hud(true));
+    }
+
+    /** Feste Kamera (dx, dy, dz) neben dem Punkt (ox, Boden, oz), Blick auf (ox, Boden + lookUp, oz). */
+    private static java.util.function.Consumer<net.minecraft.client.Minecraft> fixedCam(double ox, double oz, double dx, double dy, double dz,
+            double lookUp) {
+        float yaw = (float) (-Math.atan2(-dx, -dz) * 180.0 / Math.PI);
+        float pitch = (float) (-Math.atan2(lookUp - dy, Math.sqrt(dx * dx + dz * dz)) * 180.0 / Math.PI);
+        return minecraft -> minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f",
+                ox + dx, ground + dy, oz + dz, yaw, pitch));
     }
 
     /** Kamera folgt dem Boss: seitlich in {@code distance} Blöcken, {@code up} über ihm, Blick auf {@code lookUp}. */

@@ -12,6 +12,8 @@ public final class LairDesigns {
         DESIGNS.put(DragonType.FIRE, new FireLairDesign());
         DESIGNS.put(DragonType.ICE, new IceLairDesign());
         DESIGNS.put(DragonType.NATURE, new NatureLairDesign());
+        DESIGNS.put(DragonType.EARTH, new EarthLairDesign());
+        DESIGNS.put(DragonType.LIGHTNING, new LightningLairDesign());
     }
 
     private LairDesigns() {}

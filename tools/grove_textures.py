@@ -325,7 +325,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/glowing_moss", glowing_moss())
     put("block/glowcap", glowcap())
     put("block/bramble", bramble())
-    put("block/gnarled_roots", gnarled_roots())
+    put("block/gnarled_roots_side", gnarled_roots())
     put("block/gnarled_roots_top", gnarled_roots_top())
     put("block/grove_bell", grove_bell())
     put("block/life_blossom", life_blossom())

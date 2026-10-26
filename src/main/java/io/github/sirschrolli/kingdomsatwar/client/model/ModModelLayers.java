@@ -22,6 +22,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation PYRRHON = new ModelLayerLocation(KingdomsAtWar.id("fire_dragon_boss"), "main");
     public static final ModelLayerLocation GLACIARA = new ModelLayerLocation(KingdomsAtWar.id("ice_dragon_boss"), "main");
     public static final ModelLayerLocation VERDANTIS = new ModelLayerLocation(KingdomsAtWar.id("nature_dragon_boss"), "main");
+    public static final ModelLayerLocation TERRAGON = new ModelLayerLocation(KingdomsAtWar.id("earth_dragon_boss"), "main");
+    public static final ModelLayerLocation VOLTARION = new ModelLayerLocation(KingdomsAtWar.id("lightning_dragon_boss"), "main");
     /** Rankling (Diener von Verdantis). */
     public static final ModelLayerLocation VINELING = new ModelLayerLocation(KingdomsAtWar.id("vineling"), "main");
 

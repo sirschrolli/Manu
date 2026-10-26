@@ -72,6 +72,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.GLOWING_MOSS);
         add(BlockTags.MOSS_BLOCKS, ModBlocks.GLOWING_MOSS);
 
+        // --- Zerklüftete Weiten ---
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.AMBER_CRYSTAL, ModBlocks.AMBER_CLUSTER, ModBlocks.RIFT_STONE,
+                ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.RUBBLE);
+
         // --- Siegelkreis ---
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE);

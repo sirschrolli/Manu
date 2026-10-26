@@ -421,6 +421,59 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
 
     // =====================================================================================
+    // Zerklüftete Weiten: das Biom um Terragons Felsschlucht
+    // =====================================================================================
+
+    /** Bernsteinkristall: durchscheinend, leuchtet goldgelb. */
+    public static final DeferredBlock<net.minecraft.world.level.block.HalfTransparentBlock> AMBER_CRYSTAL = blockWithItem("amber_crystal",
+            net.minecraft.world.level.block.HalfTransparentBlock::new,
+            p -> p.mapColor(MapColor.COLOR_ORANGE).strength(1.5f).sound(SoundType.AMETHYST).noOcclusion().lightLevel(s -> 9)
+                    .isValidSpawn((state, level, pos, type) -> false).isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Bernsteindruse: ein Grüppchen spitzer Kristalle. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.CrystalClusterBlock> AMBER_CLUSTER = blockWithItem("amber_cluster",
+            p -> new io.github.sirschrolli.kingdomsatwar.block.CrystalClusterBlock(0xFFC65A, p),
+            p -> p.mapColor(MapColor.COLOR_ORANGE).noCollision().noOcclusion().strength(0.5f).sound(SoundType.AMETHYST_CLUSTER)
+                    .lightLevel(s -> 5).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Schiefer: dünn geschichteter, graubrauner Fels (auch als Treppe, Stufe und Mauer). */
+    public static final BuildingSet SHALE = stoneSet("shale", "shale", MapColor.COLOR_GRAY, SoundType.DEEPSLATE, 1.6f);
+    /** Geröll: grobe, lose Steinbrocken – rutscht wie Kies. */
+    public static final DeferredBlock<net.minecraft.world.level.block.ColoredFallingBlock> RUBBLE = blockWithItem("rubble",
+            p -> new net.minecraft.world.level.block.ColoredFallingBlock(new net.minecraft.util.ColorRGBA(0xFF6A6058), p),
+            p -> p.mapColor(MapColor.STONE).instrument(NoteBlockInstrument.SNARE).strength(0.8f).sound(SoundType.GRAVEL),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Spaltgestein: dunkler Fels mit glimmenden Bernsteinrissen. */
+    public static final DeferredBlock<Block> RIFT_STONE = blockWithItem("rift_stone", Block::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0f, 6.0f)
+                    .sound(SoundType.DEEPSLATE).lightLevel(s -> 5),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
+    // Sturmklippen: das Biom um Voltarions Sturmgipfel
+    // =====================================================================================
+
+    /** Sturmstein: dunkler, bläulich schimmernder Fels (auch als Treppe, Stufe und Mauer). */
+    public static final BuildingSet STORMSTONE = stoneSet("stormstone", "stormstone", MapColor.COLOR_BLUE, SoundType.DEEPSLATE, 2.0f);
+    /** Geladener Sturmstein: mit gleißenden Blitzadern – knistert und teilt Schläge aus. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ChargedStoneBlock> CHARGED_STORMSTONE = blockWithItem(
+            "charged_stormstone", io.github.sirschrolli.kingdomsatwar.block.ChargedStoneBlock::new,
+            p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.0f, 6.0f)
+                    .sound(SoundType.DEEPSLATE).lightLevel(s -> 5),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Fulgurit: vom Blitz geschmolzener Sand, eine glasige Röhre. */
+    public static final DeferredBlock<RotatedPillarBlock> FULGURITE = blockWithItem("fulgurite", RotatedPillarBlock::new,
+            p -> p.mapColor(MapColor.SAND).instrument(NoteBlockInstrument.HAT).strength(1.0f).sound(SoundType.GLASS),
+            UnaryOperator.identity(), NATURE_TAB);
+    /** Sturmkristall: eisblau leuchtende Kristalle, die nach jedem Einschlag wachsen. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.CrystalClusterBlock> STORM_CRYSTAL = blockWithItem("storm_crystal",
+            p -> new io.github.sirschrolli.kingdomsatwar.block.CrystalClusterBlock(0x5AC8F0, p),
+            p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).noCollision().noOcclusion().strength(0.5f).sound(SoundType.AMETHYST_CLUSTER)
+                    .lightLevel(s -> 7).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
     // Siegelkreis: uralter Siegelstein, Monolithen, Runen, das Siegel und das Schattentor
     // =====================================================================================
 

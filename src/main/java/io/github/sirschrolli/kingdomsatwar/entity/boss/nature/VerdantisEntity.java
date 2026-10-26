@@ -282,6 +282,9 @@ public class VerdantisEntity extends DragonBossEntity {
                     if (state.isCollisionShapeFullBlock(level, pos) && thrown < 34 && this.random.nextInt(5) == 0) {
                         FallingBlockEntity chunk = FallingBlockEntity.fall(level, pos, state);
                         chunk.dropItem = false;
+                        if (this.random.nextInt(3) != 0) {
+                            chunk.disableDrop();   // die meisten Brocken zerfallen beim Aufprall
+                        }
                         Vec3 out = new Vec3(dx, 0, dz);
                         out = out.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : out.normalize();
                         double speed = 0.45 + this.random.nextDouble() * 0.5;

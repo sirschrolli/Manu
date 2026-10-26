@@ -16,6 +16,8 @@ public class BossRenderState extends LivingEntityRenderState {
     /** Sekunden seit dem Todesstoß. */
     public float deathSeconds;
     public int phase = 1;
+    /** Gestärkt (Kristallpanzer, Aufladung …): die leuchtenden Teile glühen hell. */
+    public boolean empowered;
     public float flapPhase;
     /** 0 = am Boden (Flügel angelegt), 1 = in der Luft. */
     public float airBlend;

@@ -14,8 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from entitygen.models import (boss_fire, boss_ice, boss_nature, cave_troll, deer, dragon, dragon_armor, goose,  # noqa: E402
-                              lindworm, vineling, wild_boar, will_o_wisp)
+from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, cave_troll, deer, dragon,  # noqa: E402
+                              dragon_armor, goose, lindworm, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -62,6 +62,11 @@ def main():
                 "boss", boss_ice.PALETTES, preview)
     write_model(boss_nature, "VerdantisGeometry",
                 "Geometrie von Verdantis, dem Naturdrachen-Boss (Grundgröße, im Spiel ×2,0).", "boss", boss_nature.PALETTES, preview)
+    write_model(boss_earth, "TerragonGeometry",
+                "Geometrie von Terragon, dem Erddrachen-Boss (Grundgröße, im Spiel ×2,2).", "boss", boss_earth.PALETTES, preview)
+    write_model(boss_lightning, "VoltarionGeometry",
+                "Geometrie von Voltarion, dem Blitzdrachen-Boss (Grundgröße, im Spiel ×2,1).", "boss", boss_lightning.PALETTES,
+                preview)
     write_model(vineling, "VinelingGeometry", "Geometrie des Ranklings (Diener von Verdantis).", "vineling", vineling.PALETTES,
                 preview)
 

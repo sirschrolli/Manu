@@ -78,6 +78,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
     private static final EntityDataAccessor<Integer> DATA_ATTACK = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> DATA_MOVE = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_PHASE = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.BYTE);
+    /** Gestärkt (Kristallpanzer, Aufladung …): die leuchtenden Teile glühen hell. */
+    private static final EntityDataAccessor<Boolean> DATA_EMPOWERED = SynchedEntityData.defineId(DragonBossEntity.class, EntityDataSerializers.BOOLEAN);
     private static final Identifier HEALTH_SCALE = KingdomsAtWar.id("boss_health_scale");
 
     /** Gegner werden bis zu dieser Entfernung vom Nest gesucht. */
@@ -223,6 +225,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         builder.define(DATA_ATTACK, BossAnims.NONE);
         builder.define(DATA_MOVE, (byte) MoveMode.GROUND.ordinal());
         builder.define(DATA_PHASE, (byte) 1);
+        builder.define(DATA_EMPOWERED, false);
     }
 
     @Override
@@ -289,6 +292,15 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
 
     public int getPhase() {
         return this.entityData.get(DATA_PHASE);
+    }
+
+    /** Gestärkt (z. B. Kristallpanzer): die leuchtenden Teile glühen hell. */
+    public boolean isEmpowered() {
+        return this.entityData.get(DATA_EMPOWERED);
+    }
+
+    public void setEmpowered(boolean empowered) {
+        this.entityData.set(DATA_EMPOWERED, empowered);
     }
 
     public @Nullable BlockPos getHome() {
@@ -746,6 +758,16 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         return null;
     }
 
+    /** Angriff nach seinem Namen (für Vorführungen und Tests). */
+    public @Nullable BossAttack findAttack(String name) {
+        for (BossAttack attack : this.attacks) {
+            if (attack.name().equals(name)) {
+                return attack;
+            }
+        }
+        return null;
+    }
+
     public void startAttack(ServerLevel level, BossAttack attack, LivingEntity target) {
         if (this.currentAttack != null) {
             this.endAttack(level);
@@ -966,6 +988,10 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         if (!(attacker instanceof Player) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             damage *= NPC_DAMAGE_FACTOR;
         }
+        damage = this.modifyIncomingDamage(source, damage);
+        if (damage <= 0.0f) {
+            return false;
+        }
         if (attacker instanceof LivingEntity living) {
             this.threat.merge(living.getUUID(), damage, Float::sum);
             if (living instanceof Player player) {
@@ -981,6 +1007,11 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
         // Jeder Treffer zählt (kein Abfangen gleichzeitiger Treffer eines ganzen Heeres)
         this.damageCooldownTime = Math.min(this.damageCooldownTime, 10);
         return hurt;
+    }
+
+    /** Für Unterklassen: Schaden abschwächen (Panzer) oder ganz abwehren (0 = kein Schaden, z. B. unter der Erde). */
+    protected float modifyIncomingDamage(DamageSource source, float damage) {
+        return damage;
     }
 
     @Override

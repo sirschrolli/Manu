@@ -67,25 +67,37 @@ def leg(m: Model, side: str, sx: int, kind: str, parent: str, hip, segs: list[tu
 
 def wing(m: Model, side: str, sx: int, parent: str, shoulder, arm: float, fore: float,
          fingers: list[tuple[float, float]], arm_th: float = 4.0, inner_chord: float = 30.0,
-         fore_chord: float = 30.0, mats: dict | None = None, thumb: bool = True, sag: float = 0.16) -> None:
+         fore_chord: float = 30.0, mats: dict | None = None, thumb: bool = True, sag: float = 0.16,
+         web_bones: bool = False) -> None:
     """Flügel: wing_<s> (Oberarm) -> wing_<s>_fore (Unterarm) -> wing_<s>_hand (Handgelenk) -> wing_<s>_f<n> (Finger).
 
     fingers = [(länge, winkel_y_grad), …] von vorn nach hinten (Winkel 0 = gerade nach außen, 90 = nach hinten).
     Jeder Finger trägt die Flughaut bis zum nächsten Finger: ein Keil vom Handgelenk zur Hinterkante zwischen den
     beiden Fingerspitzen (leicht eingebuchtet). Der letzte Finger trägt die Haut zurück bis zum Unterarm.
-    Die Form steht im Tag des Quaders und wird von finger_membrane() gemalt."""
+    Die Form steht im Tag des Quaders und wird von finger_membrane() gemalt.
+
+    web_bones: die Flughäute an Ober- und Unterarm hängen an eigenen Knochen (wing_<s>_web, wing_<s>_fore_web) – so
+    lassen sie sich beim Anlegen stauchen, ohne das Skelett darunter zu verzerren."""
     mats = mats or {}
     bone_mat = mats.get("bone", "scales")
     x0 = lambda length: 0 if sx > 0 else -length  # noqa: E731
     w = f"wing_{side}"
     m.bone(w, parent, pivot=(shoulder[0] * sx, shoulder[1], shoulder[2]))
     m.cube(w, (x0(arm), -arm_th / 2, -arm_th / 2), (arm, arm_th, arm_th), bone_mat)
-    m.cube(w, (x0(arm), 0, arm_th / 2 - 0.5), (arm, 0, inner_chord), mats.get("inner", "membrane_inner"))
+    web = w
+    if web_bones:
+        web = f"{w}_web"
+        m.bone(web, w, pivot=(0, 0, 0))
+    m.cube(web, (x0(arm), 0, arm_th / 2 - 0.5), (arm, 0, inner_chord), mats.get("inner", "membrane_inner"))
     f = f"{w}_fore"
     m.bone(f, w, pivot=(arm * sx, 0, 0))
     th = arm_th * 0.75
     m.cube(f, (x0(fore), -th / 2, -th / 2), (fore, th, th), bone_mat)
-    m.cube(f, (x0(fore), 0, th / 2 - 0.5), (fore, 0, fore_chord), mats.get("fore", "membrane_fore"))
+    fweb = f
+    if web_bones:
+        fweb = f"{f}_web"
+        m.bone(fweb, f, pivot=(0, 0, 0))
+    m.cube(fweb, (x0(fore), 0, th / 2 - 0.5), (fore, 0, fore_chord), mats.get("fore", "membrane_fore"))
     h = f"{w}_hand"
     m.bone(h, f, pivot=(fore * sx, 0, 0))
     m.cube(h, (-2.5, -2.5, -2.5), (5, 5, 5), bone_mat)

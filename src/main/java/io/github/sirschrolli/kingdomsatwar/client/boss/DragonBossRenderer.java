@@ -63,6 +63,7 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
         state.stateTime = (entity.tickCount - entity.clientStateStart + partialTicks) / 20.0f;
         state.deathSeconds = entity.isDeadOrDying() ? (entity.deathTime + partialTicks) / 20.0f : 0.0f;
         state.phase = entity.getPhase();
+        state.empowered = entity.isEmpowered();
         state.flapPhase = Mth.lerp(partialTicks, entity.flapPhaseO, entity.flapPhase);
         state.airBlend = Mth.lerp(partialTicks, entity.airBlendO, entity.airBlend);
         state.bank = Mth.lerp(partialTicks, entity.bankO, entity.bank);
@@ -89,6 +90,9 @@ public class DragonBossRenderer<T extends DragonBossEntity, M extends DragonBoss
         if ((state.attack == BossAnims.BREATH || state.attack == BossAnims.RING || state.attack == BossAnims.VOLLEY)
                 && state.attackTime < 1.0f) {
             g += state.attackTime * 0.9f;
+        }
+        if (state.empowered) {
+            g += 0.55f + 0.15f * Mth.sin(state.ageInTicks * 0.5f);
         }
         if (state.bossState == DragonBossEntity.State.AWAKENING) {
             g *= Mth.clamp(state.stateTime / 6.0f, 0.15f, 1.0f);

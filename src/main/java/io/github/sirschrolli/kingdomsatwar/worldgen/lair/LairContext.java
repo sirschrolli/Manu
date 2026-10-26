@@ -54,9 +54,23 @@ public final class LairContext {
         return this.level.getBlockState(new BlockPos(x, y, z));
     }
 
-    /** Beim Erzeugen sind nur der aktuelle Chunk und seine direkten Nachbarn lesbar. */
+    /**
+     * Beim Erzeugen sind nur der aktuelle Chunk und seine direkten Nachbarn sicher lesbar (die Schreibzone) – weiter
+     * entfernte Chunks sind womöglich noch nicht so weit erzeugt (und das Spiel warnt vor solchen Zugriffen).
+     */
     public boolean reachable(int x, int z) {
-        return !(this.level instanceof net.minecraft.server.level.WorldGenRegion region) || region.hasChunk(x >> 4, z >> 4);
+        if (!(this.level instanceof net.minecraft.server.level.WorldGenRegion region)) {
+            return true;
+        }
+        this.probe.set(x, 0, z);
+        return region.hasChunk(x >> 4, z >> 4) && region.isWithinWriteZone(this.probe);
+    }
+
+    private final BlockPos.MutableBlockPos probe = new BlockPos.MutableBlockPos();
+
+    /** Liegt die Säule höchstens {@code margin} Blöcke neben dem aktuellen Bauabschnitt? (Spart Arbeit an fernen Stellen.) */
+    public boolean near(int x, int z, int margin) {
+        return x >= this.box.minX() - margin && x <= this.box.maxX() + margin && z >= this.box.minZ() - margin && z <= this.box.maxZ() + margin;
     }
 
     public void fill(int x, int y0, int y1, int z, BlockState state) {

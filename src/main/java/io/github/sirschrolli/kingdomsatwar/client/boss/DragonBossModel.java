@@ -170,48 +170,62 @@ public class DragonBossModel extends EntityModel<BossRenderState> {
         if (this.wingL == null || this.wingR == null) {
             return;
         }
+        Wing[] wings = {this.wingL, this.wingR};
+        for (int side = 0; side < 2; side++) {
+            this.foldWing(s, wings[side], side);
+            this.flapWing(s, wings[side], side);
+        }
+    }
+
+    /** Anlegen: Standard ist der eng an den Rumpf gelegte Flügel (Flughaut senkrecht am Körper). */
+    protected void foldWing(BossRenderState s, Wing w, int side) {
+        float sx = w.sx();
+        float fa = s.foldArm[side];
+        float ff = s.foldFore[side];
+        float fh = s.foldHand[side];
+        // Anlegen (Flughäute werden dabei quer zu den Knochen zusammengeschoben)
+        w.arm().xRot += -1.3f * fa;
+        w.arm().yRot += -1.3f * sx * fa;
+        w.arm().zRot += -0.35f * sx * fa;
+        w.arm().zScale *= 1.0f - 0.4f * fa;
+        w.fore().zRot += 2.85f * sx * ff;
+        w.fore().zScale *= 1.0f - 0.4f * ff;
+        w.hand().xRot += 1.57f * fh;
+        w.hand().zRot += -2.97f * sx * fh;
+        this.foldFingers(s, w, fh);
+    }
+
+    /** Finger zusammenlegen (die Flughaut dazwischen wird schmal) bzw. beim Gleiten spreizen. */
+    protected void foldFingers(BossRenderState s, Wing w, float fh) {
+        float openHand = 1.0f - fh;
+        for (ModelPart finger : w.fingers()) {
+            finger.yRot *= 1.0f - 0.92f * fh + 0.18f * s.spread * openHand;
+            finger.zScale *= 1.0f - 0.8f * fh;
+        }
+    }
+
+    /** Flügelschlag (nur soweit der Flügel ausgebreitet ist). */
+    protected void flapWing(BossRenderState s, Wing w, int side) {
         float t = s.ageInTicks / 20.0f;
         float stroke = BossAnim.stroke(s.flap);
         float strokeLag = BossAnim.stroke(s.flap - 0.55f);
         float strokeLag2 = BossAnim.stroke(s.flap - 1.0f);
         float up = BossAnim.upstroke(s.flap);
-        Wing[] wings = {this.wingL, this.wingR};
-        for (int side = 0; side < 2; side++) {
-            Wing w = wings[side];
-            float sx = w.sx();
-            float fa = s.foldArm[side];
-            float ff = s.foldFore[side];
-            float fh = s.foldHand[side];
-            // Anlegen (Flughäute werden dabei quer zu den Knochen zusammengeschoben)
-            w.arm().xRot += -1.3f * fa;
-            w.arm().yRot += -1.3f * sx * fa;
-            w.arm().zRot += -0.35f * sx * fa;
-            w.arm().zScale *= 1.0f - 0.4f * fa;
-            w.fore().zRot += 2.85f * sx * ff;
-            w.fore().zScale *= 1.0f - 0.4f * ff;
-            w.hand().xRot += 1.57f * fh;
-            w.hand().zRot += -2.97f * sx * fh;
-            float openHand = 1.0f - fh;
-            for (ModelPart finger : w.fingers()) {
-                finger.yRot *= 1.0f - 0.92f * fh + 0.18f * s.spread * openHand;
-                finger.zScale *= 1.0f - 0.8f * fh;
-            }
-            // Schlag (nur soweit ausgebreitet)
-            float open = 1.0f - fa;
-            float amp = s.flapAmp * open;
-            // Ausschlag: oben etwa 50°, unten etwa 35° unter die Waagerechte (Abschlag endet nicht senkrecht)
-            float armSwing = stroke > 0 ? stroke * 0.85f : stroke * 0.6f;
-            w.arm().zRot += (-armSwing - s.raise * 0.6f) * sx * amp + (-s.raise * 0.6f) * sx * (1.0f - amp) * open;
-            w.arm().xRot += stroke * 0.08f * amp;
-            w.fore().zRot += (-strokeLag * 0.3f + up * 0.6f) * sx * amp;
-            w.hand().zRot += (up * 0.5f - strokeLag2 * 0.18f) * sx * amp;
-            w.arm().yRot += (s.sweep * 0.6f + up * 0.16f * amp) * -sx;
-            for (int i = 0; i < w.fingers().length; i++) {
-                ModelPart finger = w.fingers()[i];
-                finger.yRot *= 1.0f - 0.28f * up * amp;
-                // Gleiten: die Spitzen zittern leicht im Fahrtwind
-                finger.zRot += Mth.sin(t * 11.0f + i * 1.7f + side) * 0.025f * open * (1.0f - Math.min(1.0f, s.flapAmp * 3.0f));
-            }
+        float sx = w.sx();
+        float open = 1.0f - s.foldArm[side];
+        float amp = s.flapAmp * open;
+        // Ausschlag: oben etwa 50°, unten etwa 35° unter die Waagerechte (Abschlag endet nicht senkrecht)
+        float armSwing = stroke > 0 ? stroke * 0.85f : stroke * 0.6f;
+        w.arm().zRot += (-armSwing - s.raise * 0.6f) * sx * amp + (-s.raise * 0.6f) * sx * (1.0f - amp) * open;
+        w.arm().xRot += stroke * 0.08f * amp;
+        w.fore().zRot += (-strokeLag * 0.3f + up * 0.6f) * sx * amp;
+        w.hand().zRot += (up * 0.5f - strokeLag2 * 0.18f) * sx * amp;
+        w.arm().yRot += (s.sweep * 0.6f + up * 0.16f * amp) * -sx;
+        for (int i = 0; i < w.fingers().length; i++) {
+            ModelPart finger = w.fingers()[i];
+            finger.yRot *= 1.0f - 0.28f * up * amp;
+            // Gleiten: die Spitzen zittern leicht im Fahrtwind
+            finger.zRot += Mth.sin(t * 11.0f + i * 1.7f + side) * 0.025f * open * (1.0f - Math.min(1.0f, s.flapAmp * 3.0f));
         }
     }
 

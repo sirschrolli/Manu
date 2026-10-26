@@ -69,6 +69,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(ModBlocks.ANCIENT_LEAVES.get(), this::createMangroveLeavesDrops);
         add(ModBlocks.BRAMBLE.get(), block -> this.createShearsOnlyDrop(block));
 
+        // Zerklüftete Weiten
+        for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.AMBER_CRYSTAL, ModBlocks.AMBER_CLUSTER, ModBlocks.RUBBLE,
+                ModBlocks.RIFT_STONE, ModBlocks.CHARGED_STORMSTONE, ModBlocks.FULGURITE, ModBlocks.STORM_CRYSTAL)) {
+            dropSelf(block.get());
+        }
+
         // Siegelstein (die heiligen Teile des Siegelkreises sind unzerstörbar und haben keine Beute)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE)) {

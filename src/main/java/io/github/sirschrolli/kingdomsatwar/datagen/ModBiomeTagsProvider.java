@@ -68,7 +68,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         var nests = ModTags.Biomes.HAS_DRAGON_NESTS;
         this.tag(nests.get(DragonType.FIRE)).addTag(BiomeTags.IS_BADLANDS).add(Biomes.DESERT);
         this.tag(nests.get(DragonType.ICE)).add(Biomes.ICE_SPIKES).add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_SLOPES).add(Biomes.FROZEN_PEAKS);
-        this.tag(nests.get(DragonType.LIGHTNING)).add(Biomes.STONY_PEAKS).add(Biomes.JAGGED_PEAKS);
+        this.tag(nests.get(DragonType.LIGHTNING)).add(Biomes.STONY_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.FROZEN_PEAKS);
         this.tag(nests.get(DragonType.NATURE)).addTag(BiomeTags.IS_JUNGLE).add(Biomes.DARK_FOREST).add(Biomes.OLD_GROWTH_BIRCH_FOREST)
                 .add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
         this.tag(nests.get(DragonType.EARTH)).add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.WINDSWEPT_HILLS).add(Biomes.SAVANNA_PLATEAU)

@@ -90,17 +90,24 @@ public final class LairCleanup {
                     continue;   // im Uralten Hain dürfen Pflanzen und Bäume von nebenan bleiben
                 }
                 boolean frost = biome.is(ModBiomes.FROSTBASIN);
+                boolean rugged = biome.is(ModBiomes.RUGGED_WILDS);
+                boolean storm = biome.is(ModBiomes.STORM_CLIFFS);
                 for (int y = top; y > top - 28 && y > level.getMinY(); y--) {
                     pos.set(x, y, z);
                     BlockState state = chunk.getBlockState(pos);
-                    if (state.isAir() || (frost ? keepFrost(state) : keep(state))) {
+                    if (state.isAir() || (frost ? keepFrost(state) : rugged ? keepRugged(state) : storm ? keepStorm(state) : keep(state))) {
                         continue;
                     }
                     if (!state.getFluidState().isEmpty() || LairContext.isGround(state)) {
                         break;
                     }
+                    if (!isVegetation(state)) {
+                        continue;   // Laternen, Ketten, Stufen, Truhen … gehören zum Nest selbst
+                    }
                     if (state.is(BlockTags.LOGS)) {
-                        if (!frost) {
+                        if (rugged || storm) {
+                            level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                        } else if (!frost) {
                             BlockState charred = ModBlocks.CHARRED_LOG.get().defaultBlockState();
                             if (state.hasProperty(RotatedPillarBlock.AXIS)) {
                                 charred = charred.setValue(RotatedPillarBlock.AXIS, state.getValue(RotatedPillarBlock.AXIS));
@@ -119,6 +126,28 @@ public final class LairCleanup {
     private static boolean keepFrost(BlockState state) {
         return state.is(Blocks.SNOW) || state.is(ModBlocks.ICICLE.get()) || state.is(ModBlocks.FROST_FLOWER.get())
                 || state.is(ModBlocks.FROST_CRYSTAL.get()) || state.is(Blocks.STRIPPED_SPRUCE_LOG) || state.is(BlockTags.ICE);
+    }
+
+    /** Pflanzen und Bäume (nur die räumt der Schritt weg – alles andere hat das Nest selbst gebaut). */
+    private static boolean isVegetation(BlockState state) {
+        return state.is(BlockTags.LOGS) || state.is(BlockTags.LEAVES) || state.is(BlockTags.SAPLINGS) || state.is(BlockTags.FLOWERS)
+                || state.is(Blocks.CACTUS) || state.is(Blocks.CACTUS_FLOWER) || state.is(Blocks.SUGAR_CANE) || state.is(Blocks.VINE)
+                || state.is(Blocks.SWEET_BERRY_BUSH) || state.is(Blocks.PUMPKIN) || state.is(Blocks.MELON) || state.is(Blocks.BEE_NEST)
+                || state.is(Blocks.MOSS_CARPET) || state.is(Blocks.BROWN_MUSHROOM_BLOCK) || state.is(Blocks.RED_MUSHROOM_BLOCK)
+                || state.is(Blocks.MUSHROOM_STEM) || state.is(Blocks.BAMBOO) || state.is(Blocks.COCOA)
+                || state.canBeReplaced() && state.getFluidState().isEmpty() && !state.is(Blocks.SNOW);
+    }
+
+    /** Was in die Sturmklippen gehört: Schnee, zähes Gras, Sturmkristalle. */
+    private static boolean keepStorm(BlockState state) {
+        return state.is(Blocks.SNOW) || state.is(Blocks.SHORT_GRASS) || state.is(ModBlocks.STORM_CRYSTAL.get())
+                || state.is(ModBlocks.CHARRED_LOG.get());
+    }
+
+    /** Was in die Zerklüfteten Weiten gehört: trockenes Gras, tote Büsche, Bernstein. */
+    private static boolean keepRugged(BlockState state) {
+        return state.is(Blocks.DEAD_BUSH) || state.is(Blocks.SHORT_DRY_GRASS) || state.is(Blocks.TALL_DRY_GRASS)
+                || state.is(ModBlocks.AMBER_CLUSTER.get()) || state.is(ModBlocks.AMBER_CRYSTAL.get());
     }
 
     /** Was in den Aschelanden hingehört (vom Nest selbst gesetzt). */

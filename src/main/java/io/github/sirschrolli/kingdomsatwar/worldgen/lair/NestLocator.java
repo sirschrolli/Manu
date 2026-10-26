@@ -141,12 +141,17 @@ public final class NestLocator {
                 if (!farFromOthers(x, z, taken)) {
                     continue;
                 }
-                if (fitsArea(resolver, sampler, p.biomes(), p.inland(), x, z, AREA)) {
+                if (fitsArea(resolver, sampler, p.biomes(), p.inland(), x, z, area(p.element()))) {
                     return new int[] {x, z};
                 }
             }
         }
         return null;
+    }
+
+    /** So weit muss das passende Biom reichen: Gipfel sind schmal, dort genügt der Kern (das Nest formt den Rest). */
+    private static int area(DragonType type) {
+        return type == DragonType.LIGHTNING ? 24 : AREA;
     }
 
     private static boolean farFromOthers(int x, int z, Map<DragonType, ChunkPos> taken) {

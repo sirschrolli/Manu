@@ -328,6 +328,20 @@ public class ModModelProvider extends ModelProvider {
         blocks.createCrossBlockWithDefaultItem(ModBlocks.GLOWCAP.get(), BlockModelGenerators.PlantType.NOT_TINTED);
         blocks.createCrossBlockWithDefaultItem(ModBlocks.BRAMBLE.get(), BlockModelGenerators.PlantType.NOT_TINTED);
         blocks.createTrivialBlock(ModBlocks.GNARLED_ROOTS.get(), TexturedModel.COLUMN);
+
+        // --- Zerklüftete Weiten ---
+        Block amber = ModBlocks.AMBER_CRYSTAL.get();
+        Identifier amberModel = ModelTemplates.CUBE_ALL.create(amber,
+                TextureMapping.cube(TextureMapping.getBlockTexture(amber).withForceTranslucent(true)), blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(amber, BlockModelGenerators.plainVariant(amberModel)));
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.AMBER_CLUSTER.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        blocks.createTrivialCube(ModBlocks.RUBBLE.get());
+        blocks.createTrivialCube(ModBlocks.RIFT_STONE.get());
+
+        // --- Sturmklippen ---
+        blocks.createTrivialCube(ModBlocks.CHARGED_STORMSTONE.get());
+        blocks.woodProvider(ModBlocks.FULGURITE.get()).logWithHorizontal(ModBlocks.FULGURITE.get());
+        blocks.createCrossBlockWithDefaultItem(ModBlocks.STORM_CRYSTAL.get(), BlockModelGenerators.PlantType.NOT_TINTED);
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */

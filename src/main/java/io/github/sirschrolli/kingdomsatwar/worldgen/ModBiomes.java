@@ -32,8 +32,12 @@ public final class ModBiomes {
     public static final ResourceKey<Biome> ASHLANDS = key("ashlands");
     /** Frostkessel um Glaciaras Gletscherkessel. */
     public static final ResourceKey<Biome> FROSTBASIN = key("frostbasin");
+    /** Zerklüftete Weiten um Terragons Felsschlucht. */
+    public static final ResourceKey<Biome> RUGGED_WILDS = key("rugged_wilds");
     /** Uralter Hain um Verdantis' Nest. */
     public static final ResourceKey<Biome> ANCIENT_GROVE = key("ancient_grove");
+    /** Sturmklippen um Voltarions Sturmgipfel. */
+    public static final ResourceKey<Biome> STORM_CLIFFS = key("storm_cliffs");
 
     private ModBiomes() {}
 
@@ -47,19 +51,81 @@ public final class ModBiomes {
             case FIRE -> ASHLANDS;
             case ICE -> FROSTBASIN;
             case NATURE -> ANCIENT_GROVE;
+            case EARTH -> RUGGED_WILDS;
+            case LIGHTNING -> STORM_CLIFFS;
             default -> null;
         };
     }
 
     /** Ist das eines der Nest-Biome? */
     public static boolean isNestBiome(net.minecraft.core.Holder<Biome> biome) {
-        return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE);
+        return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE) || biome.is(RUGGED_WILDS) || biome.is(STORM_CLIFFS);
     }
 
     public static void bootstrap(BootstrapContext<Biome> context) {
         context.register(ASHLANDS, ashlands());
         context.register(FROSTBASIN, frostbasin());
         context.register(ANCIENT_GROVE, ancientGrove());
+        context.register(RUGGED_WILDS, ruggedWilds());
+        context.register(STORM_CLIFFS, stormCliffs());
+    }
+
+    /**
+     * Sturmklippen: ein dunkler, schiefergrauer Gewitterhimmel, fahler Dunst, Funken knistern in der Luft, fernes
+     * Donnergrollen, graue, zähe Pflanzenfarben und die Musik der zerklüfteten Gipfel.
+     */
+    private static Biome stormCliffs() {
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .temperature(0.5f)
+                .downfall(0.9f)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x3A5A7A)
+                        .grassColorOverride(0x6A8478)
+                        .foliageColorOverride(0x5A7468)
+                        .dryFoliageColorOverride(0x6A7470)
+                        .build())
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x5C6478))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x7C8698))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x223448))
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(
+                        new AmbientParticle(ParticleTypes.ELECTRIC_SPARK, 0.003f)))
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS))
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(
+                        Optional.empty(),
+                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
+                        List.of(new AmbientAdditionsSettings(
+                                net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.LIGHTNING_BOLT_THUNDER),
+                                0.0012))))
+                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .generationSettings(BiomeGenerationSettings.EMPTY)
+                .build();
+    }
+
+    /**
+     * Zerklüftete Weiten: trocken und staubig, ein dunstig-ockerfarbener Himmel, Staub in der Luft, verblichene Farben
+     * und die Musik der steinigen Gipfel.
+     */
+    private static Biome ruggedWilds() {
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(false)
+                .temperature(1.2f)
+                .downfall(0.0f)
+                .specialEffects(new BiomeSpecialEffects.Builder()
+                        .waterColor(0x5A6A5E)
+                        .grassColorOverride(0x9A9050)
+                        .foliageColorOverride(0x8A8448)
+                        .dryFoliageColorOverride(0x9A8A5A)
+                        .build())
+                .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0xB8A88A))
+                .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xC8B48E))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x3A4038))
+                .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(
+                        new AmbientParticle(ParticleTypes.WHITE_ASH, 0.006f)))
+                .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_STONY_PEAKS))
+                .mobSpawnSettings(MobSpawnSettings.EMPTY)
+                .generationSettings(BiomeGenerationSettings.EMPTY)
+                .build();
     }
 
     /**
@@ -73,8 +139,8 @@ public final class ModBiomes {
                 .downfall(0.9f)
                 .specialEffects(new BiomeSpecialEffects.Builder()
                         .waterColor(0x2E7A5A)
-                        .grassColorOverride(0x4E9A32)
-                        .foliageColorOverride(0x3A8A2A)
+                        .grassColorOverride(0x3E8A2C)
+                        .foliageColorOverride(0x2E7A26)
                         .dryFoliageColorOverride(0x6A8A3A)
                         .build())
                 .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x8CC4A0))
