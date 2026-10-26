@@ -243,7 +243,7 @@ public final class ModGameTests {
     /** Einige wichtige Rezepte wurden geladen. */
     private static void recipes(GameTestHelper helper) {
         var recipes = helper.getLevel().getServer().getRecipeManager().recipeMap();
-        for (String name : List.of("steel_blend", "steel_ingot_from_blasting", "dragon_egg_fragment", "fire_dragon_egg",
+        for (String name : List.of("steel_blend", "steel_ingot_from_blasting",
                 "medieval_stone_stairs", "red_roof_tile_stairs", "konterit_block", "vegetable_stew",
                 "medieval_stone_from_stone_stonecutting", "draconium_from_smelting_draconium_ore", "recruitment_table",
                 "command_baton", "steel_sword", "steel_pickaxe", "steel_chestplate", "konterit_boots", "draconium_sword",
@@ -255,6 +255,11 @@ public final class ModGameTests {
                 "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
+        }
+        // Dracheneier gibt es nur nach dem Sieg über einen Drachen-Boss – kein Rezept
+        for (DragonType type : DragonType.values()) {
+            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(type.id() + "_dragon_egg"));
+            helper.assertTrue(recipes.byKey(key) == null, "Drachenei darf kein Rezept haben: " + key.identifier());
         }
         helper.succeed();
     }
@@ -370,10 +375,12 @@ public final class ModGameTests {
                 .setValue(ElementalDragonEggBlock.WATERLOGGED, true));
         // Licht breitet sich erst nach ein paar Ticks aus
         helper.succeedWhen(() -> spots.forEach((type, pos) -> {
-
             ElementalDragonEggBlock egg = ModBlocks.DRAGON_EGGS.get(type).get();
             helper.assertTrue(egg.canIncubate(level, helper.absolutePos(pos), helper.getBlockState(pos)),
                     type.id() + "-Ei brütet nicht am passenden Ort");
+            // … aber ohne einen Spieler in der Nähe schlüpft nichts (keine wilden Schlüpflinge)
+            helper.assertFalse(egg.canHatchNow(level, helper.absolutePos(pos), helper.getBlockState(pos)),
+                    type.id() + "-Ei brütet ohne Zeugen");
         }));
     }
 

@@ -46,7 +46,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .add(LootItem.lootTableItem(ModItems.STEEL_HELMET.get()).setWeight(4)
                         .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.9f))))
                 .add(LootItem.lootTableItem(Items.BOOK).setWeight(5).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
-                .add(LootItem.lootTableItem(ModItems.DRAGON_EGG_FRAGMENT.get()).setWeight(2))
+                .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(2))
                 .add(LootItem.lootTableItem(ModItems.GEMSTONE_CROWN.get()).setWeight(1))
                 .add(LootItem.lootTableItem(ModItems.AETHERIT_STAFF.get()).setWeight(1)
                         .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.4f, 0.9f))))

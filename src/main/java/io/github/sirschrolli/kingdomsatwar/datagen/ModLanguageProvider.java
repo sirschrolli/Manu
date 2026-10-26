@@ -215,8 +215,6 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.DRAGON_SCALES.get(DragonType.EARTH), "Earth Dragon Scale", "Erddrachen-Schuppe");
         item(ModItems.DRAGON_SCALES.get(DragonType.WATER), "Water Dragon Scale", "Wasserdrachen-Schuppe");
         lore("dragon_scale", "Dragons shed scales as they grow", "Drachen verlieren beim Wachsen Schuppen");
-        item(ModItems.DRAGON_EGG_FRAGMENT, "Dragon Egg Fragment", "Drachenei-Fragment");
-        lore("dragon_egg_fragment", "Very rare – used for dragon eggs", "Sehr selten – für Dracheneier");
         item(ModItems.DRAGON_FOOD, "Dragon Food", "Drachenfutter");
         lore("dragon_food", "Heals dragons and makes them grow faster", "Heilt Drachen und lässt sie schneller wachsen");
 

@@ -26,7 +26,7 @@ public class ModArchaeologyLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.DRAGON_SCALES.get(type).get()).setWeight(5))
-                        .add(LootItem.lootTableItem(ModItems.DRAGON_EGG_FRAGMENT.get()).setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.DRACONIUM.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.GOLD_NUGGET).setWeight(4))
                         .add(LootItem.lootTableItem(ModItems.GEMSTONE.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.BONE).setWeight(4))

@@ -229,7 +229,7 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | B2b | Eigenes Biom um jedes Nest mit neuen Blöcken: **Aschelande** ✅, die übrigen mit B4–B8 | ✅ |
 | B3 | Story-Grundlage: Chronik (Buch-Oberfläche), Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelsplitter, Siegelbruch mit Lichteffekten, Schattentor, Fortschritt je Spieler | ✅ |
 | B4–B8 | Glaciara (Gletscherkessel, Frostkessel), Verdantis (Uralter Hain), Terragon (Felsschlucht, Zerklüftete Weiten), Voltarion (Sturmgipfel, Sturmklippen), Thalassa (Versunkene Grotte unter dem Meer, Abgrundgrotte) | ✅ |
-| B9 | Alte Drachen-Mechanik umbauen (keine wilden Drachen, keine Ei-Rezepte), Tests, Bilder | ⏳ |
+| B9 | Alte Drachen-Mechanik umgebaut: keine wilden Drachen, keine Ei-Rezepte und Fragmente mehr, ein Ei schlüpft nur mit einem Spieler in der Nähe; Tests, README und Bilder (Version 0.3.0) | ✅ |
 | F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, Bauwerke, Nyxar | ⏳ |
 | C | Wirtschaft, Münzen, wachsende Stadt, Ansehen, Handel, Krönung | ⏳ |
 | D | Magier-Bosse, Magietisch, Radialmenü | ⏳ |

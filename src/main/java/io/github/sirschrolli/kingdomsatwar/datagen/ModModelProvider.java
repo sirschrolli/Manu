@@ -253,7 +253,7 @@ public class ModModelProvider extends ModelProvider {
         // Samen und Zwiebel bekommen ihr Modell schon über createCropBlock (Gegenstand der Feldfrucht).
         for (DeferredItem<?> item : java.util.List.of(
                 ModItems.CARBON, ModItems.GEMSTONE, ModItems.KONTERIT, ModItems.AETHERIT, ModItems.DRACONIUM,
-                ModItems.WYVERNIT, ModItems.STEEL_BLEND, ModItems.STEEL_INGOT, ModItems.DRAGON_EGG_FRAGMENT,
+                ModItems.WYVERNIT, ModItems.STEEL_BLEND, ModItems.STEEL_INGOT,
                 ModItems.DRAGON_FOOD, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY, ModItems.BREAD_ROLL,
                 ModItems.VEGETABLE_STEW, ModItems.MEAT_PIE, ModItems.APPLE_PIE)) {
             flat(items, item.get());

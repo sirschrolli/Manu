@@ -118,10 +118,22 @@ public class ElementalDragonEggBlock extends Block implements SimpleWaterloggedB
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (!canIncubate(level, pos, state) || random.nextInt(2) != 0) {
+        if (!this.canHatchNow(level, pos, state) || random.nextInt(2) != 0) {
             return;
         }
         advance(level, pos, state, 1);
+    }
+
+    /** So weit darf der Spieler höchstens entfernt sein, damit das Ei brütet (der Schlüpfling gehört ihm). */
+    public static final double WITNESS_RANGE = 24.0;
+
+    /**
+     * Brütet das Ei gerade? Es braucht den richtigen Ort – und jemanden, der dabei ist: Ein Drache schlüpft nie
+     * allein, darum gibt es keine wilden Schlüpflinge.
+     */
+    public boolean canHatchNow(Level level, BlockPos pos, BlockState state) {
+        return this.canIncubate(level, pos, state)
+                && level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, WITNESS_RANGE, false) != null;
     }
 
     /** Bringt das Brüten um {@code steps} Stufen voran; bei voller Stufe schlüpft der Drache. */
@@ -151,7 +163,7 @@ public class ElementalDragonEggBlock extends Block implements SimpleWaterloggedB
         }
         dragon.applyStage(DragonStage.HATCHLING, true);
         dragon.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
-        Player player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 16.0, false);
+        Player player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, WITNESS_RANGE, false);
         if (player != null && !player.isSpectator()) {
             dragon.tame(player);
             dragon.setMode(DragonEntity.MODE_FOLLOW);

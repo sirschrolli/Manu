@@ -91,9 +91,6 @@ public final class ModItems {
     // Dragon Warfare – Drachen
     // =====================================================================================
 
-    public static final DeferredItem<Item> DRAGON_EGG_FRAGMENT = item("dragon_egg_fragment",
-            p -> p.rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_egg_fragment", 1)), DRAGON_TAB);
-
     private static final Map<DragonType, DeferredItem<Item>> DRAGON_SCALES_MUTABLE = new EnumMap<>(DragonType.class);
     /** Eine Schuppensorte je Drachenart – Material für spätere Drachenrüstungen. */
     public static final Map<DragonType, DeferredItem<Item>> DRAGON_SCALES = Collections.unmodifiableMap(DRAGON_SCALES_MUTABLE);

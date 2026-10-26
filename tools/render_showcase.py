@@ -165,7 +165,6 @@ def main() -> None:
             ("Natur-Schuppe", flat(tex("item", "nature_dragon_scale"))),
             ("Erd-Schuppe", flat(tex("item", "earth_dragon_scale"))),
             ("Wasser-Schuppe", flat(tex("item", "water_dragon_scale"))),
-            ("Drachenei-Fragment", flat(tex("item", "dragon_egg_fragment"))),
             ("Drachenfutter", flat(tex("item", "dragon_food"))),
         ]),
         ("Kingdoms at War – Landwirtschaft & Nahrung", [

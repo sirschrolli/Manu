@@ -558,27 +558,7 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
 
     private void dragonRecipes() {
-        // Drachenei-Fragment aus vier seltenen Drachenmaterialien
-        shapeless(RecipeCategory.MISC, ModItems.DRAGON_EGG_FRAGMENT.get())
-                .requires(ModItems.DRACONIUM.get())
-                .requires(ModItems.AETHERIT.get())
-                .requires(ModItems.KONTERIT.get())
-                .requires(ModItems.GEMSTONE.get())
-                .unlockedBy("has_draconium", has(ModItems.DRACONIUM.get()))
-                .save(output, key("dragon_egg_fragment"));
-
-        // Drachenei: vier Fragmente um das Nest-Material der jeweiligen Art
-        for (DragonType type : DragonType.values()) {
-            ItemLike egg = ModBlocks.DRAGON_EGGS.get(type).get();
-            shaped(RecipeCategory.MISC, egg)
-                    .pattern(" F ")
-                    .pattern("FNF")
-                    .pattern(" F ")
-                    .define('F', ModItems.DRAGON_EGG_FRAGMENT.get())
-                    .define('N', type.nestMaterial())
-                    .unlockedBy("has_dragon_egg_fragment", has(ModItems.DRAGON_EGG_FRAGMENT.get()))
-                    .save(output, key(type.id() + "_dragon_egg"));
-        }
+        // Dracheneier lassen sich nicht herstellen: Es gibt sie nur auf dem Nest eines besiegten Drachen-Bosses.
 
         // Drachenfutter aus Fleisch und Beeren
         shapeless(RecipeCategory.FOOD, ModItems.DRAGON_FOOD.get(), 2)

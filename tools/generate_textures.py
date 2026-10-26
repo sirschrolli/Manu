@@ -534,20 +534,6 @@ SHARD = [
     "....ooo.........",
 ]
 
-EGG_FRAGMENT = [
-    "", "", "",
-    "..........oo....",
-    "........oodwo...",
-    ".....oo.odwdco..",
-    "...oodwoodcccbo.",
-    "..odwdcdcccbbbo.",
-    ".odwccccccbbbao.",
-    ".odcccbbbbbbao..",
-    ".ocbbbiiiiiiio..",
-    "..oiiiiiiiioo...",
-    "...oooooooo.....",
-]
-
 MEAT_BONE = [
     "", "",
     "............ww..",
@@ -758,8 +744,6 @@ def items() -> None:
     put("item/aetherit", pa.sprite(TALL_CRYSTAL, tones("#0a3346", "#125a73", "#1c88a6", "#37bcd8", "#86e6f4", "#efffff")))
     put("item/draconium", pa.sprite(FLAME_CRYSTAL, tones("#1a0306", "#4a080e", "#7a1016", "#b4241c", "#e24a22", "#ffb04e")))
     put("item/wyvernit", pa.sprite(SHARD, tones("#34536f", "#5f88ad", "#8fb6d8", "#bcdaf2", "#e6f4ff", "#ffffff")))
-    put("item/dragon_egg_fragment", pa.sprite(EGG_FRAGMENT, {
-        **tones("#2a1238", "#4a2266", "#6e3896", "#8e5cbc", "#b48ee0", "#e4d0fa"), "i": hexc("#efe6d6")}))
     put("item/dragon_food", pa.sprite(MEAT_BONE, {
         "o": hexc("#4a0e0c"), "r": hexc("#9a2a22"), "R": hexc("#c8443a"), "h": hexc("#f08a7a"),
         "w": hexc("#f2ead8"), "k": hexc("#c8bca0"), "b": hexc("#3a0a1e"), "B": hexc("#c2304a"), "p": hexc("#8a1a34")}))
