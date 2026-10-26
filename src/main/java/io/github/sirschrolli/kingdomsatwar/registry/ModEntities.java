@@ -67,6 +67,12 @@ public final class ModEntities {
             (entityType, level) -> new BanditEntity(entityType, level, true), MobCategory.MONSTER,
             builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(8));
 
+    // ---------------------------------------------------------------- Bürger der eigenen Siedlung
+    /** Bürger: am Stadtbanner angeheuert, mit Beruf, Bett und Werkstatt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity>> CITIZEN =
+            ENTITIES.registerEntityType("citizen", io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -182,6 +188,7 @@ public final class ModEntities {
         DRAGONS.values().forEach(type -> event.put(type.get(), DragonEntity.createAttributes().build()));
         SOLDIERS.values().forEach(type -> event.put(type.get(), SoldierEntity.createAttributes().build()));
         event.put(BANDIT.get(), BanditEntity.createAttributes().build());
+        event.put(CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity.createAttributes().build());
         event.put(BANDIT_ARCHER.get(), BanditEntity.createAttributes().build());
         event.put(WILD_BOAR.get(), WildBoarEntity.createAttributes().build());
         event.put(DEER.get(), DeerEntity.createAttributes().build());

@@ -36,5 +36,14 @@ public final class ModAttachments {
             ATTACHMENTS.register("temporary_blocks", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store.CODEC.fieldOf("blocks")).build());
 
+    /** Alle Siedlungen der Welt (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.economy.town.Towns>> TOWNS = ATTACHMENTS.register("towns",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.economy.town.Towns::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.economy.town.Towns.CODEC.fieldOf("towns")).build());
+
+    /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
+    public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
+            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());
+
     private ModAttachments() {}
 }

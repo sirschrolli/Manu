@@ -59,6 +59,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.TIMBER_FRAME_DIAGONAL.get());
         dropSelf(ModBlocks.TIMBER_FRAME_CROSS.get());
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
+        add(ModBlocks.TOWN_BANNER.get(), this::createDoorTable);
 
         // Aschelande (eine Ascheschicht gibt so viele Schichten zurück, wie sie hoch ist)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ASH_BLOCK, ModBlocks.CINDER_SOIL,

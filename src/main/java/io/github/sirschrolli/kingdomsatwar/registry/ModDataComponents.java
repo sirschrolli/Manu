@@ -18,5 +18,16 @@ public final class ModDataComponents {
                     .persistent(DragonCompassItem.Target.CODEC)
                     .networkSynchronized(DragonCompassItem.Target.STREAM_CODEC));
 
+    /** Bauplan: welches Gebäude und in welcher Drehung (0–3, im Uhrzeigersinn) es aufgestellt wird. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType>>
+            BUILDING = COMPONENTS.registerComponentType("building", builder -> builder
+                    .persistent(io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.CODEC)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.idMapper(
+                            i -> io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.values()[i], Enum::ordinal)));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BUILD_TURN =
+            COMPONENTS.registerComponentType("build_turn", builder -> builder
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
     private ModDataComponents() {}
 }

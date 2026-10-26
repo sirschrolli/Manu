@@ -1,0 +1,185 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#stone"
+        },
+        "east": {
+          "texture": "#stone"
+        },
+        "north": {
+          "texture": "#stone"
+        },
+        "south": {
+          "texture": "#stone"
+        },
+        "up": {
+          "texture": "#stone"
+        },
+        "west": {
+          "texture": "#stone"
+        }
+      },
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        2,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#slab"
+        },
+        "east": {
+          "texture": "#slab"
+        },
+        "north": {
+          "texture": "#slab"
+        },
+        "south": {
+          "texture": "#slab"
+        },
+        "up": {
+          "texture": "#slab"
+        },
+        "west": {
+          "texture": "#slab"
+        }
+      },
+      "from": [
+        4,
+        2,
+        4
+      ],
+      "to": [
+        12,
+        4,
+        12
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#gold"
+        },
+        "east": {
+          "texture": "#gold"
+        },
+        "north": {
+          "texture": "#gold"
+        },
+        "south": {
+          "texture": "#gold"
+        },
+        "up": {
+          "texture": "#gold"
+        },
+        "west": {
+          "texture": "#gold"
+        }
+      },
+      "from": [
+        6.5,
+        4,
+        6.5
+      ],
+      "to": [
+        9.5,
+        5,
+        9.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#pole"
+        },
+        "east": {
+          "texture": "#pole"
+        },
+        "north": {
+          "texture": "#pole"
+        },
+        "south": {
+          "texture": "#pole"
+        },
+        "up": {
+          "texture": "#pole"
+        },
+        "west": {
+          "texture": "#pole"
+        }
+      },
+      "from": [
+        7,
+        5,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ]
+    },
+    {
+      "faces": {
+        "east": {
+          "texture": "#cloth",
+          "uv": [
+            13.75,
+            0.0,
+            14.0,
+            10.0
+          ]
+        },
+        "north": {
+          "texture": "#cloth"
+        },
+        "south": {
+          "texture": "#cloth",
+          "uv": [
+            14.0,
+            0.0,
+            2.0,
+            10.0
+          ]
+        },
+        "west": {
+          "texture": "#cloth",
+          "uv": [
+            2.0,
+            0.0,
+            2.25,
+            10.0
+          ]
+        }
+      },
+      "from": [
+        2,
+        6,
+        6.25
+      ],
+      "to": [
+        14,
+        16,
+        6.5
+      ]
+    }
+  ],
+  "textures": {
+    "cloth": "kingdomsatwar:block/town_banner_cloth_lower",
+    "gold": "minecraft:block/gold_block",
+    "particle": "kingdomsatwar:block/town_banner_cloth_upper",
+    "pole": "minecraft:block/stripped_dark_oak_log",
+    "slab": "minecraft:block/smooth_stone",
+    "stone": "minecraft:block/stone_bricks"
+  }
+}

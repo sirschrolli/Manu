@@ -566,6 +566,15 @@ public final class ModBlocks {
             ip -> ip.component(DataComponents.LORE, ModItems.lore("recruitment_table", 2)),
             KINGDOM_TAB);
 
+    /** Stadtbanner: gründet die eigene Siedlung; Rechtsklick öffnet das Stadtfenster. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock> TOWN_BANNER = blockWithItem("town_banner",
+            io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 1200.0f).sound(SoundType.WOOD)
+                    .noOcclusion().pushReaction(net.minecraft.world.level.material.PushReaction.IMMOVEABLE),
+            ip -> ip.stacksTo(16).rarity(net.minecraft.world.item.Rarity.UNCOMMON)
+                    .component(DataComponents.LORE, ModItems.lore("town_banner", 3)),
+            KINGDOM_TAB);
+
     private ModBlocks() {}
 
     /**

@@ -137,21 +137,25 @@ Blöcken, Farben, Partikeln und Geräuschen:
 
 ---
 
-## 3. Wirtschaft und Stadt
+## 3. Wirtschaft und Stadt (umgesetzt in C)
 
-- **Münzen:** Bronze, Silber, Gold (10 Bronze = 1 Silber, 10 Silber = 1 Gold). Von Monstern, Bossen und aus dem Handel.
-- **Anheuern** aller Bewohner mit Münzen (statt Smaragden).
-- **Berufe:** Bauer (bestellt Felder), Holzfäller, Bergmann, Schmied, Händler, Koch/Wirt, Baumeister,
-  Wachen/Soldaten, Kartograf.
-- **Wachsende Stadt:** Das Rathaus (Stadtbanner) gründet die Siedlung. Mit der Zahl der Bewohner steigt die Stufe –
-  Lager, Weiler, Dorf, Marktflecken, Stadt – und Baumeister errichten Block für Block neue Gebäude
-  (Häuser, Felder, Schmiede, Markt, Kaserne, Taverne, Mauern, Burg).
-- **Ansehen:** steigt durch Siege, Aufträge, Handel und Schutz der Stadt; je höher, desto günstiger der Handel mit
-  den eigenen Bewohnern.
-- **Handelsgrenze:** Hat ein Händler eine gewisse Menge gekauft/verkauft, handelt er erst nach einigen Stunden
-  **Echtzeit** wieder (Standard 3 Stunden, einstellbar).
-- **Krönung:** nach dem Siegelbruch, mit großer Stadt und höchstem Ansehen auf dem eigenen Thron mit der
-  Königskrone → König/Königin, **alles bei den eigenen Bewohnern gratis**.
+- **Münzen:** Bronze, Silber, Gold (10 Bronze = 1 Silber, 10 Silber = 1 Gold). Von Monstern, Banditen, Bossen, aus
+  Truhen und aus dem Handel. Rechtsklick wechselt zehn in eine größere, Schleichen + Rechtsklick eine in zehn kleinere.
+- **Anheuern** aller Bewohner und Soldaten mit Münzen (statt Smaragden).
+- **Berufe:** Baumeister, Bauer (erntet, sät nach, pflegt), Holzfäller (fällt wilde Bäume, pflanzt nach), Bergmann
+  (Leiterschacht, Erzwand), Schmied, Händler, Wirt, Kartograf (Karten zum Siegelkreis und zu Drachennestern). Jeder
+  braucht ein Bett und seine Werkstatt; was die Arbeiter erarbeiten, kommt in die Truhe der Werkstatt.
+- **Wachsende Stadt:** Das **Stadtbanner** gründet die Siedlung (Stadtfenster mit fünf Reitern). Mit der Zahl der
+  Bewohner steigt die Stufe – Lager (0), Weiler (4), Dorf (8), Marktflecken (14), Stadt (22) – und mit ihr das Gebiet
+  und die erlaubten Gebäude: Wohnhaus, Feld, Holzfällerhütte, Brunnen, Schmiede, Mine, Markt, Taverne, Bürgerhaus,
+  Kaserne (+8 Soldaten), Kartenhaus, Thronsaal. Der **Baumeister** baut sie Block für Block nach dem Bauplan.
+- **Ansehen:** steigt durch Anheuern, fertige Gebäude, Handel, besiegte Monster in der eigenen Siedlung und besiegte
+  Drachen; je höher (Fremder … Legendär), desto günstiger der Handel mit den eigenen Bewohnern (bis 30 %).
+- **Handelsgrenze:** Nach 16 Handeln macht ein Laden Pause und handelt erst nach 3 Stunden **Echtzeit** wieder
+  (beides einstellbar, die Pause läuft auch bei ausgeschaltetem Spiel ab).
+- **Krönung:** nach dem Siegelbruch, mit einer Stadt, legendärem Ansehen und einem Thronsaal setzt man sich mit der
+  Königskrone auf den eigenen Thron → Zeremonie mit Glocken, Licht und Feuerwerk → König/Königin, **alles bei den
+  eigenen Bewohnern gratis**.
 
 ## 4. Magie
 
@@ -231,7 +235,7 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | B4–B8 | Glaciara (Gletscherkessel, Frostkessel), Verdantis (Uralter Hain), Terragon (Felsschlucht, Zerklüftete Weiten), Voltarion (Sturmgipfel, Sturmklippen), Thalassa (Versunkene Grotte unter dem Meer, Abgrundgrotte) | ✅ |
 | B9 | Alte Drachen-Mechanik umgebaut: keine wilden Drachen, keine Ei-Rezepte und Fragmente mehr, ein Ei schlüpft nur mit einem Spieler in der Nähe; Tests, README und Bilder (Version 0.3.0) | ✅ |
 | F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, **Nyxar mit der Schattenzitadelle**, Bauwerke (Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken) | ✅ |
-| C | Wirtschaft, Münzen, wachsende Stadt, Ansehen, Handel, Krönung | ⏳ |
+| C | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Ansehen, Handel mit Echtzeit-Pause, Krönung (Version 0.5.0) | ✅ |
 | D | Magier-Bosse, Magietisch, Radialmenü | ⏳ |
 | E | Biome, Dörfer, eigene Mobs statt Vanilla, keine Vanilla-Bauwerke, Nether/End | ⏳ |
 | G | Erzähler-Kapitel und neues Intro mit Stimme C, Feinschliff, Veröffentlichung | ⏳ |

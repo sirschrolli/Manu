@@ -8,15 +8,16 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.4.1 – Der Schattendrache.**
+> **Testversion 0.5.0 – Die eigene Stadt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
-> eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom – dazu alles aus Phase 2: Drachen zum Reiten,
-> Soldaten, Kreaturen, Ausrüstung, Magie, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.4: **Nyxar, der Schattendrache** – der Endgegner in seiner **Schattenzitadelle** hinter dem Siegel – und
-> in 0.4.1 die übrigen **Bauwerke der Schattenwelt**: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme an der
-> Küste, Ruinen der alten Welt und Felsbrücken über den Schluchten.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (54 GameTests).
-> **Als Nächstes:** Wirtschaft und Stadt, dann Magie und eigene Biome.
+> eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
+> Schattenzitadelle und die Bauwerke der Schattenwelt – dazu Drachen zum Reiten, Soldaten, Kreaturen, Ausrüstung,
+> Magie, Bau-Blöcke, Essen und das erzählte Intro.
+> Neu in 0.5: die **Wirtschaft** – Münzen aus Bronze, Silber und Gold, das **Stadtbanner** gründet deine Siedlung,
+> **Bürger mit acht Berufen** wohnen in ihren Häusern und gehen ihrer Arbeit nach, ein **Baumeister** baut zwölf
+> Gebäude Block für Block, **Handel** mit Ansehen und Echtzeit-Pause, und am Ende die **Krönung** auf dem eigenen Thron.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (62 GameTests).
+> **Als Nächstes:** Magie (Magier-Bosse, Magietisch, Zauber-Radialmenü), dann eigene Biome.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -45,7 +46,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen; Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
-| Wirtschaft mit Münzen, wachsende Stadt, Ansehen, Krönung | ⏳ geplant |
+| Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Magier-Bosse, Magietisch, Zauber-Radialmenü | ⏳ geplant |
 | Eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End) | ⏳ geplant |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
@@ -64,7 +65,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.4.1.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.5.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -72,7 +73,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.4.1.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.5.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Erze, Kreaturen, Blumen, der
    Siegelkreis, die Drachennester und Burgruinen entstehen nur in neu erzeugten Gebieten.
@@ -95,7 +96,7 @@ eine Titelkarte.
 | Kapitel | Was zu tun ist |
 |---|---|
 | Prolog | das Intro – die Welt, die Drachen, das Siegel |
-| I Ein neues Königreich | den ersten Soldaten anwerben |
+| I Ein neues Königreich | mit dem Stadtbanner die Siedlung gründen und den ersten Bürger oder Soldaten anheuern |
 | II Die Chronik des Siegels | den **Siegelkreis** finden (die Chronik verrät die Richtung) |
 | III–VIII Die sechs Drachen | die Drachen in beliebiger Reihenfolge bezwingen und ihre Splitter einsetzen |
 | IX Das Siegel bricht | der sechste Splitter öffnet das Tor in die Schattenwelt |
@@ -253,19 +254,69 @@ und der Schlüpfling gehört dem, der dabei war.
 
 ![Hauptmann, Schwertkämpfer, Ritter und Bogenschütze](docs/bilder/soldaten.jpg)
 
-Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Soldaten an:
+Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Soldaten an – bezahlt wird der Sold in
+Münzen:
 
-| Soldat | Preis | Rolle |
+| Soldat | Sold | Rolle |
 |---|---|---|
-| Schwertkämpfer | 5 Smaragde | Nahkämpfer – das Rückgrat jeder Armee |
-| Bogenschütze | 7 Smaragde | Fernkämpfer, schießt nie auf Freunde |
-| Ritter | 12 Smaragde + 2 Stahlbarren | Plattenrüstung und Schild, hält die vorderste Reihe |
-| Hauptmann | 20 Smaragde + 1 Edelstein | macht Soldaten in seiner Nähe stärker |
+| Schwertkämpfer | 5 Silber | Nahkämpfer – das Rückgrat jeder Armee |
+| Bogenschütze | 7 Silber | Fernkämpfer, schießt nie auf Freunde |
+| Ritter | 1 Gold 5 Silber + 2 Stahlbarren | Plattenrüstung und Schild, hält die vorderste Reihe |
+| Hauptmann | 2 Gold 5 Silber + 1 Edelstein | macht Soldaten in seiner Nähe stärker |
+
+Jede **Kaserne** deiner Siedlung erlaubt acht Soldaten mehr.
 
 Mit dem **Kommandostab** gibst du Befehle: auf einen Feind zeigen = Angriff, auf den Boden zeigen = Stellung halten
 (Schleichen: Patrouille), in den Himmel zeigen = alle folgen, Schleichen + eigenen Soldaten anklicken = entlassen.
 Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder dich noch deine Tiere und Drachen.
 **Banditen** streifen nachts durch die Lande und hausen manchmal in Burgruinen.
+
+### Münzen, Siedlung und Krönung
+
+Bezahlt wird mit **Bronze-, Silber- und Goldmünzen** (je zehn sind eine der nächstgrößeren; Rechtsklick wechselt zehn
+in eine größere, Schleichen + Rechtsklick eine in zehn kleinere). Münzen lassen besiegte Monster und Banditen fallen,
+sie liegen in den Truhen der Bauwerke, die Drachen-Bosse hüten Gold – und deine Bürger kaufen dir Waren ab.
+
+**Das Stadtbanner** (Banner, Goldbarren, Stock, 3 Steinziegel) gründet deine **Siedlung** – jeder Spieler hat eine,
+mit einem Namen, den du ändern kannst. Rechtsklick auf das Banner öffnet das **Stadtfenster**: Übersicht (Stufe,
+Betten, Gebiet, Ansehen, Baustellen), Anheuern, Bewohner, Bauen und Krone. Nur du kannst dein Banner abbauen; fällt es,
+bleibt die Siedlung bestehen, bis es wieder steht.
+
+**Bürger** heuerst du mit Münzen an. Jeder braucht ein Bett (die ersten zwei schlafen im Lager am Banner) und – außer
+dem Baumeister – seine Werkstatt. Tagsüber arbeiten sie, nachts gehen sie ins Bett; Zombies, Plünderer und Banditen
+haben es auf sie abgesehen.
+
+| Beruf | Lohn | Werkstatt | Arbeit |
+|---|---|---|---|
+| Baumeister | 4 Silber | – | baut die Baustellen Block für Block nach Plan |
+| Bauer | 3 Silber | Feld | erntet, sät nach, pflegt die Pflanzen, bringt die Ernte in die Truhe |
+| Holzfäller | 3 Silber | Holzfällerhütte | fällt wilde Bäume rund um die Hütte und pflanzt nach |
+| Bergmann | 5 Silber | Mine | steigt in den Schacht und hackt an der Erzwand (Kohle, Eisen, Kupfer, selten Gold und Edelsteine) |
+| Schmied | 8 Silber | Schmiede | handelt mit Stahlwaffen und -rüstungen |
+| Händler | 8 Silber | Markt | kauft Ernte, Holz und Stein, verkauft Baustoffe und Nützliches |
+| Wirt | 6 Silber | Taverne | verkauft Essen, Bier, Wein, Met und das Festmahl |
+| Kartograf | 1 Gold | Kartenhaus | zeichnet Karten zum Siegelkreis und zu Drachennestern |
+
+**Bauen:** Im Stadtfenster nimmst du einen **Bauplan**; mit ihm in der Hand zeigen Lichtpunkte den Umriss, Rechtsklick
+auf den Boden richtet die Baustelle ein (Schleichen + Rechtsklick dreht den Plan). Der **Baumeister** räumt den Platz,
+legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Staub.
+
+| Stufe (ab Bewohnern) | Gebäude |
+|---|---|
+| Lager (0) | Wohnhaus (2 Betten), Feld, Holzfällerhütte |
+| Weiler (4) | Brunnen, Schmiede |
+| Dorf (8) | Mine, Markt, Taverne |
+| Marktflecken (14) | Bürgerhaus (4 Betten), Kaserne, Kartenhaus |
+| Stadt (22) | Thronsaal |
+
+**Ansehen** gewinnst du durch Anheuern, fertige Gebäude, Handel, besiegte Monster in deiner Siedlung und vor allem durch
+besiegte Drachen. Es senkt die Preise deiner Bürger (bis 30 %). Jeder Laden macht nach 16 Handeln eine Pause von
+drei Stunden – in **Echtzeit**, auch wenn das Spiel aus ist (beides einstellbar).
+
+**Die Krönung:** Wer das Siegel gebrochen hat, eine Stadt regiert, legendäres Ansehen genießt und die **Königskrone**
+trägt, setzt sich im eigenen **Thronsaal** auf den Thron: Glocken läuten, goldenes Licht steigt auf, die Bürger eilen
+herbei, Feuerwerk erhellt den Himmel – und du wirst **König** oder **Königin**. Von da an geben dir deine Bürger alles
+umsonst.
 
 ### Wilde Kreaturen
 
@@ -379,7 +430,9 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
-| `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32) |
+| `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
+| `tradesBeforePause` (Server) | so oft kann man mit einem Bürger handeln, bevor sein Laden Pause macht (Standard: 16) |
+| `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |
 
 ---
 
@@ -389,12 +442,13 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.4.1.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.5.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
 | `python3 tools/generate_textures.py` | Alle Texturen neu zeichnen (`--preview datei.png` für eine Übersicht) |
 | `python3 tools/generate_entities.py` | Modelle und Texturen der Lebewesen neu erzeugen |
+| `python3 tools/generate_citizens.py` | Texturen der Bürger neu zeichnen (`--preview` für eine Übersicht) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
@@ -408,6 +462,7 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
 ├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Sitz
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
+├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
 ├── item/                     besondere Ausrüstung
 ├── worldgen/                 Erzadern, Blumen, Burgruinen, Nest-Biome, Nester (worldgen/lair), Siegelkreis (worldgen/seal)
@@ -422,7 +477,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.4.1` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.5.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -430,13 +485,9 @@ Ein Tag wie `v0.4.1` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Die Schattenwelt** hinter dem Siegel: eigene Dimension mit sieben Biomen, schwebenden Inseln und tiefen
-   Abgründen, das Schattenvolk der Umbrer mit eigenen Dörfern, neue Erze und Ausrüstung, Kreaturen, Bauwerke und
-   **Nyxar, der Schattendrache**.
-2. **Wirtschaft und Stadt:** Münzen, Berufe, eine wachsende Stadt, Ansehen, Handel und die Krönung.
-3. **Magie:** Magier-Bosse, Magietisch und ein Zauber-Radialmenü.
-4. **Eigene Welt:** eigene Biome, Dörfer und Tiere statt der Vanilla-Inhalte, auch im Nether und End.
-5. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
+1. **Magie:** Magier-Bosse, Magietisch und ein Zauber-Radialmenü.
+2. **Eigene Welt:** eigene Biome, Dörfer und Tiere statt der Vanilla-Inhalte, auch im Nether und End.
+3. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 

@@ -41,8 +41,24 @@ public final class Recruitment {
 
     private Recruitment() {}
 
+    /** Soldaten mehr je Kaserne in der eigenen Siedlung. */
+    public static final int SOLDIERS_PER_BARRACKS = 8;
+
     public static int armyLimit() {
         return ModServerConfig.SPEC.isLoaded() ? ModServerConfig.ARMY_LIMIT.get() : ModServerConfig.ARMY_LIMIT.getDefault();
+    }
+
+    /** Grenze der Armee eines Spielers: die Einstellung des Servers und je Kaserne seiner Siedlung acht Soldaten mehr. */
+    public static int armyLimit(Player player) {
+        int limit = armyLimit();
+        if (player.level() instanceof ServerLevel level) {
+            io.github.sirschrolli.kingdomsatwar.economy.town.Town town =
+                    io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(level.getServer()).byOwner(player.getUUID());
+            if (town != null) {
+                limit += SOLDIERS_PER_BARRACKS * town.count(io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.BARRACKS);
+            }
+        }
+        return limit;
     }
 
     /** Wie viele Soldaten der Spieler hat (in allen geladenen Dimensionen). */
@@ -78,7 +94,7 @@ public final class Recruitment {
         if (!(table.getBlock() instanceof RecruitmentTableBlock) || player.distanceToSqr(Vec3.atCenterOf(tablePos)) > TABLE_RANGE * TABLE_RANGE) {
             return Result.TOO_FAR;
         }
-        if (armySize(level, player.getUUID()) >= armyLimit()) {
+        if (armySize(level, player.getUUID()) >= armyLimit(player)) {
             return Result.ARMY_FULL;
         }
         if (!canAfford(player, type)) {

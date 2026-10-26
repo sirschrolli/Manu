@@ -59,6 +59,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CITIZEN, io.github.sirschrolli.kingdomsatwar.client.model.CitizenModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.NYXAR, io.github.sirschrolli.kingdomsatwar.client.model.geom.NyxarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLACIARA, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlaciaraGeometry::createLayer);
@@ -79,6 +80,7 @@ public final class ClientSetup {
         ModEntities.DRAGONS.values().forEach(type -> event.registerEntityRenderer(type.get(), DragonRenderer::new));
         ModEntities.SOLDIERS.values().forEach(type -> event.registerEntityRenderer(type.get(), SoldierRenderer::new));
         event.registerEntityRenderer(ModEntities.BANDIT.get(), BanditRenderer::new);
+        event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);

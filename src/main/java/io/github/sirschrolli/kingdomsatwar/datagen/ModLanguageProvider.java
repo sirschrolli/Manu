@@ -715,11 +715,11 @@ public class ModLanguageProvider extends LanguageProvider {
                         + "Jahrhunderte wurden die Hüter selbst wild, und heute dulden sie niemanden mehr in der Nähe ihrer Nester.");
         text("chronicle.kingdomsatwar.kingdom.text",
                 "You have arrived in a foreign land with little more than the clothes on your back. Yet this land is waiting for "
-                        + "someone to unite it.\n\nBuild a home, gather supplies and find people who will follow you. Every army begins "
-                        + "at a recruitment table.",
+                        + "someone to unite it.\n\nPlant a town banner to found your settlement. Coins buy you a builder, farmers and "
+                        + "craftsmen – and every army begins at a recruitment table.",
                 "Du bist in einem fremden Land angekommen, mit kaum mehr als dem, was du am Leib trägst. Doch dieses Land wartet auf "
-                        + "jemanden, der es eint.\n\nBaue dir ein Zuhause, sammle Vorräte und finde Menschen, die dir folgen. Jedes "
-                        + "Heer beginnt an einem Rekrutierungstisch.");
+                        + "jemanden, der es eint.\n\nSetze ein Stadtbanner und gründe deine Siedlung. Mit Münzen heuerst du einen "
+                        + "Baumeister, Bauern und Handwerker an – und jedes Heer beginnt an einem Rekrutierungstisch.");
         text("chronicle.kingdomsatwar.chronicle.text",
                 "This chronicle was written by the keepers of the seal, generation after generation. It tells of a circle of six "
                         + "monoliths not far from the heart of the world: the Seal Circle. It was there that the seal was once forged."
@@ -748,8 +748,8 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Das Land hat einen Helden gesehen, der Drachen bezwang und das Tor der Schatten durchschritt. Nun fehlt nur noch "
                         + "eines: die Krone.\n\nKehre heim in dein Königreich. Dein Volk wartet auf dich.");
         text("chronicle.kingdomsatwar.goals", "Goals", "Ziele");
-        text("chronicle.kingdomsatwar.goal.table", "Set up a recruitment table", "Stelle einen Rekrutierungstisch auf");
-        text("chronicle.kingdomsatwar.goal.recruit", "Recruit your first soldier", "Wirb deinen ersten Soldaten an");
+        text("chronicle.kingdomsatwar.goal.town", "Found your settlement with a town banner", "Gründe deine Siedlung mit einem Stadtbanner");
+        text("chronicle.kingdomsatwar.goal.recruit", "Hire your first citizen or soldier", "Heuere deinen ersten Bürger oder Soldaten an");
         text("chronicle.kingdomsatwar.goal.read", "Read the chronicle", "Lies die Chronik");
         text("chronicle.kingdomsatwar.goal.find_circle", "Find the Seal Circle", "Finde den Siegelkreis");
         text("chronicle.kingdomsatwar.goal.defeat", "Defeat the six dragons (%s/6)", "Besiege die sechs Drachen (%s/6)");

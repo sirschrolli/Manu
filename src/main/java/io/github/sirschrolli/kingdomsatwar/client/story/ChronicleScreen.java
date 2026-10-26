@@ -138,7 +138,7 @@ public class ChronicleScreen extends Screen {
             case PROLOG -> this.paragraph(story, INK, 0);
             case KINGDOM -> {
                 this.heading(false);
-                this.goal(Component.translatable("chronicle.kingdomsatwar.goal.table"), this.data.has(Flag.TABLE_PLACED) || this.done(part));
+                this.goal(Component.translatable("chronicle.kingdomsatwar.goal.town"), this.data.has(Flag.TOWN_FOUNDED) || this.done(part));
                 this.goal(Component.translatable("chronicle.kingdomsatwar.goal.recruit"), this.data.has(Flag.RECRUITED) || this.done(part));
                 this.story(story);
             }

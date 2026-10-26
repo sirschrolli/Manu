@@ -9,7 +9,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 /** Spiel an Server: Der Spieler möchte am Tisch bei {@code pos} einen Soldaten der Art {@code soldierType} anwerben. */
@@ -35,6 +34,6 @@ public record RecruitPayload(BlockPos pos, int soldierType) implements CustomPac
             return;
         }
         Recruitment.Result result = Recruitment.recruit(player, payload.pos(), types[payload.soldierType()]);
-        PacketDistributor.sendToPlayer(player, new RecruitResultPayload(result.ordinal()));
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new RecruitResultPayload(result.ordinal()));
     }
 }

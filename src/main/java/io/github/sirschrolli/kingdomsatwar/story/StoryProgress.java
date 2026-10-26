@@ -28,7 +28,9 @@ public final class StoryProgress {
         /** Die Schattenwelt wurde betreten. */
         ENTERED_SHADOW,
         /** Der Spieler wurde gekrönt. */
-        CROWNED;
+        CROWNED,
+        /** Der Spieler hat mit dem Stadtbanner seine Siedlung gegründet. */
+        TOWN_FOUNDED;
 
         static final Codec<Flag> CODEC = Codec.STRING.xmap(s -> Flag.valueOf(s.toUpperCase(Locale.ROOT)), f -> f.name().toLowerCase(Locale.ROOT));
     }

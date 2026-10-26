@@ -19,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Der Rekrutierungstisch: Ein Klick öffnet die Anwerbe-Liste, in der man Soldaten gegen Smaragde
@@ -60,7 +59,7 @@ public class RecruitmentTableBlock extends HorizontalDirectionalBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (player instanceof ServerPlayer serverPlayer) {
-            PacketDistributor.sendToPlayer(serverPlayer, new OpenRecruitScreenPayload(pos, Recruitment.armyLimit()));
+            io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(serverPlayer, new OpenRecruitScreenPayload(pos, Recruitment.armyLimit(serverPlayer)));
         }
         return InteractionResult.SUCCESS;
     }

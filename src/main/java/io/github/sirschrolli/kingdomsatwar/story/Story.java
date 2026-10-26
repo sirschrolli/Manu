@@ -34,7 +34,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
  * Die Geschichte „Das Siegel“ auf dem Server: verfolgt für jeden Spieler, wie weit er ist ({@link StoryProgress}),
@@ -118,6 +117,24 @@ public final class Story {
             if (p.set(Flag.TABLE_PLACED)) {
                 save(player, p);
             }
+        }
+    }
+
+    /** Der Spieler hat mit dem Stadtbanner seine Siedlung gegründet. */
+    public static void onTownFounded(ServerPlayer player) {
+        StoryProgress p = progress(player);
+        if (p.set(Flag.TOWN_FOUNDED)) {
+            save(player, p);
+            update(player);
+        }
+    }
+
+    /** Der Spieler wurde gekrönt: der Epilog ist erfüllt. */
+    public static void onCrowned(ServerPlayer player) {
+        StoryProgress p = progress(player);
+        if (p.set(Flag.CROWNED)) {
+            save(player, p);
+            update(player);
         }
     }
 
@@ -237,7 +254,7 @@ public final class Story {
     }
 
     public static void sendCard(ServerPlayer player, Chapter chapter, int fallen) {
-        PacketDistributor.sendToPlayer(player, new ChapterCardPayload(chapter.ordinal(), fallen));
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new ChapterCardPayload(chapter.ordinal(), fallen));
     }
 
     // =====================================================================================
@@ -251,7 +268,7 @@ public final class Story {
         if (p.set(Flag.CHRONICLE_READ)) {
             save(player, p);
         }
-        PacketDistributor.sendToPlayer(player, new OpenChroniclePayload(build(player)));
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new OpenChroniclePayload(build(player)));
     }
 
     public static ChronicleData build(ServerPlayer player) {

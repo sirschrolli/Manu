@@ -29,7 +29,6 @@ import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 
 /** Spielereignisse auf dem Server. */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
@@ -44,7 +43,7 @@ public final class ModGameEvents {
     static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player && !player.getData(ModAttachments.INTRO_SEEN)) {
             player.setData(ModAttachments.INTRO_SEEN, true);
-            PacketDistributor.sendToPlayer(player, new StartIntroPayload(false));
+            io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new StartIntroPayload(false));
         }
     }
 
@@ -65,7 +64,7 @@ public final class ModGameEvents {
         event.getDispatcher().register(Commands.literal("kaw")
                 .then(Commands.literal("intro").executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
-                    PacketDistributor.sendToPlayer(player, new StartIntroPayload(true));
+                    io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new StartIntroPayload(true));
                     return 1;
                 }))
                 .then(army)

@@ -194,6 +194,10 @@ public final class ModItems {
                 () -> new Item.Properties().rarity(rarity)));
     }
 
+    /** Bauplan aus dem Stadtfenster (welcher Bau, steht im Gegenstand). */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.BlueprintItem> BLUEPRINT = ITEMS.registerItem("blueprint",
+            io.github.sirschrolli.kingdomsatwar.item.BlueprintItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+
     // =====================================================================================
     // Kingdoms at War – Armee
     // =====================================================================================

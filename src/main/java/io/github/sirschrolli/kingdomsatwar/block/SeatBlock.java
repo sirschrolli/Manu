@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.block;
 
 import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
+import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -76,8 +77,12 @@ public class SeatBlock extends HorizontalDirectionalBlock {
         if (level.getBlockState(pos.above()).isSuffocating(level, pos.above())) {
             return refuse(level, player, "obstructed");
         }
-        return SeatEntity.sit(level, pos, this.seatHeight, state.getValue(FACING), player)
-                ? InteractionResult.SUCCESS : InteractionResult.PASS;
+        boolean sat = SeatEntity.sit(level, pos, this.seatHeight, state.getValue(FACING), player);
+        if (sat && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && state.is(ModBlocks.THRONE.get())) {
+            // auf dem Thron des eigenen Thronsaals beginnt (wenn alles erfüllt ist) die Krönung
+            io.github.sirschrolli.kingdomsatwar.economy.town.Coronation.onSit(serverPlayer, pos);
+        }
+        return sat ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
 
     private static InteractionResult refuse(Level level, Player player, String reason) {

@@ -33,7 +33,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -393,7 +392,7 @@ public final class SealCircle {
 
     private static void shake(ServerLevel level, BlockPos center, float strength, int ticks) {
         for (ServerPlayer player : level.getPlayers(p -> p.distanceToSqr(Vec3.atCenterOf(center)) < 96 * 96)) {
-            PacketDistributor.sendToPlayer(player, new ScreenShakePayload(strength, ticks));
+            io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new ScreenShakePayload(strength, ticks));
         }
     }
 

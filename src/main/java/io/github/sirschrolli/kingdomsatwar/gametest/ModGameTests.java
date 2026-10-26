@@ -161,6 +161,7 @@ public final class ModGameTests {
         ShadowGameTests.init();   // meldet die Tests der Schattenwelt an
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
+        TownGameTests.init();     // und die der eigenen Siedlung
     }
 
     private ModGameTests() {}
@@ -186,6 +187,7 @@ public final class ModGameTests {
         ShadowGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
+        TownGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

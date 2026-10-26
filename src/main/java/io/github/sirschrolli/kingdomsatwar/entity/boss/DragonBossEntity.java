@@ -55,7 +55,6 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -506,7 +505,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy {
             double dist = player.distanceTo(this);
             if (dist < radius) {
                 float s = strength * (float) (1.0 - dist / radius * 0.7);
-                PacketDistributor.sendToPlayer(player, new ScreenShakePayload(s, ticks));
+                io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new ScreenShakePayload(s, ticks));
             }
         }
     }

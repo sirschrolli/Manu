@@ -103,6 +103,8 @@ final class Showcase {
                 case "citadelmap" -> CitadelShowcase.citadel(steps, false, true);
                 case "sites" -> SitesShowcase.sites(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
+                case "townplans" -> TownShowcase.plans(steps, "");
+                case "town" -> TownShowcase.town(steps);
                 case "nyxarfight" -> CitadelShowcase.citadel(steps, true, false, true);
                 case "bossmodels" -> bossModels(steps, false, null);
                 case "bossmodels_air" -> bossModels(steps, true, null);
@@ -119,6 +121,8 @@ final class Showcase {
                         lairWater(steps);
                     } else if (scene.startsWith("lair_")) {
                         lair(steps, DragonType.byId(scene.substring(5)));
+                    } else if (scene.startsWith("townplan_")) {
+                        TownShowcase.plans(steps, scene.substring(9));
                     } else if (scene.startsWith("bossmotion_")) {
                         bossMotion(steps, DragonType.byId(scene.substring(11)), false);
                     } else if (scene.startsWith("bossrage_")) {

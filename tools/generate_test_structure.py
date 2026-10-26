@@ -4,6 +4,7 @@ Erzeugt die Teststrukturen für die automatischen GameTests (Steinboden unten, L
   - test_platform: 5x3x5 für Block-Tests
   - test_arena:    9x6x9 für Tests mit Drachen und anderen großen Lebewesen
   - test_village:  14x32x14 für Tests, die ein ganzes Gebäude eines Umbrer-Dorfs bauen
+  - test_town:     48x30x48 für Tests der eigenen Siedlung (Banner, Bürger, Baustellen, Thronsaal)
 
 Aufruf: python3 tools/generate_test_structure.py   (benötigt: pip install nbtlib)
 """
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STRUCTURES = ROOT / "src" / "main" / "resources" / "data" / "kingdomsatwar" / "structure"
 
 DATA_VERSION = 5023  # Minecraft 26.3
-PLATFORMS = {"test_platform": (5, 3, 5), "test_arena": (9, 6, 9), "test_village": (14, 32, 14)}
+PLATFORMS = {"test_platform": (5, 3, 5), "test_arena": (9, 6, 9), "test_village": (14, 32, 14), "test_town": (48, 30, 48)}
 
 
 def write_platform(name: str, size_x: int, size_y: int, size_z: int) -> None:

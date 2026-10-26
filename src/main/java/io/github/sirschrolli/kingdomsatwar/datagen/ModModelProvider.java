@@ -227,6 +227,29 @@ public class ModModelProvider extends ModelProvider {
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(table, BlockModelGenerators.plainVariant(tableModel))
                 .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
+        // --- Stadtbanner: zwei Hälften, dreht sich zum Spieler ---
+        Block banner = ModBlocks.TOWN_BANNER.get();
+        TextureMapping bannerLower = new TextureMapping()
+                .put(TownBannerModel.STONE, vanilla("stone_bricks"))
+                .put(TownBannerModel.SLAB, vanilla("smooth_stone"))
+                .put(TownBannerModel.POLE, vanilla("stripped_dark_oak_log"))
+                .put(TownBannerModel.GOLD, vanilla("gold_block"))
+                .put(TownBannerModel.CLOTH, new Material(KingdomsAtWar.id("block/town_banner_cloth_lower")))
+                .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/town_banner_cloth_upper")));
+        TextureMapping bannerUpper = new TextureMapping()
+                .put(TownBannerModel.POLE, vanilla("stripped_dark_oak_log"))
+                .put(TownBannerModel.GOLD, vanilla("gold_block"))
+                .put(TownBannerModel.CLOTH, new Material(KingdomsAtWar.id("block/town_banner_cloth_upper")))
+                .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/town_banner_cloth_upper")));
+        Identifier bannerLowerModel = TownBannerModel.lower().createWithSuffix(banner, "_lower", bannerLower, blocks.modelOutput);
+        Identifier bannerUpperModel = TownBannerModel.upper().createWithSuffix(banner, "_upper", bannerUpper, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(banner)
+                .with(PropertyDispatch.initial(io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock.HALF)
+                        .select(net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER, BlockModelGenerators.plainVariant(bannerLowerModel))
+                        .select(net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER, BlockModelGenerators.plainVariant(bannerUpperModel)))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+        blocks.registerSimpleFlatItemModel(banner.asItem());
+
         // --- Feldfrüchte: 8 Altersstufen, 4 Texturen ---
         for (DeferredBlock<? extends CropBlock> crop : ModBlocks.CROPS) {
             blocks.createCropBlock(crop.get(), CropBlock.AGE, 0, 0, 1, 1, 2, 2, 2, 3);
@@ -270,6 +293,7 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.BANDIT_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        flat(items, ModItems.BLUEPRINT.get());
         for (io.github.sirschrolli.kingdomsatwar.economy.Coin coin : io.github.sirschrolli.kingdomsatwar.economy.Coin.values()) {
             coinModel(items, coin.item(), coin.id() + "_coin");
         }

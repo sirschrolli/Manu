@@ -475,6 +475,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STICK)
                 .unlockedBy("has_recruitment_table", has(ModBlocks.RECRUITMENT_TABLE.get()))
                 .save(output, key("command_baton"));
+        // Stadtbanner: ein Banner (beliebige Farbe) mit Goldknauf an einem Mast auf einem Steinsockel
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.TOWN_BANNER.get())
+                .pattern(" G ")
+                .pattern("BSB")
+                .pattern("CCC")
+                .define('G', Items.GOLD_INGOT)
+                .define('B', ItemTags.BANNERS)
+                .define('S', Items.STICK)
+                .define('C', Items.STONE_BRICKS)
+                .unlockedBy("has_banner", has(ItemTags.BANNERS))
+                .save(output, key("town_banner"));
     }
 
     // =====================================================================================
