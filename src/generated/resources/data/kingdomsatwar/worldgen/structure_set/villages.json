@@ -1,0 +1,28 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:village",
+    "nest_distance": 28,
+    "salt": 10387312,
+    "seal_distance": 10,
+    "separation": 8,
+    "spacing": 34
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:village_timber",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:village_nordic",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:village_clay",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:village_stilt",
+      "weight": 1
+    }
+  ]
+}

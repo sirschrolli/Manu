@@ -22,6 +22,19 @@ public class CitizenRenderer extends HumanoidMobRenderer<CitizenEntity, CitizenR
         return KingdomsAtWar.id("textures/entity/citizen/" + profession.id() + "_" + (variant + 1) + ".png");
     }
 
+    /** Was ein Bürger dieses Berufs trägt. */
+    public static int parts(Profession profession) {
+        return switch (profession) {
+            case BUILDER -> CitizenModel.CAP | CitizenModel.POUCH;
+            case FARMER -> CitizenModel.BRIM | CitizenModel.CROWN;
+            case LUMBERJACK -> CitizenModel.CAP;
+            case MINER -> CitizenModel.CROWN | CitizenModel.LAMP;
+            case SMITH, INNKEEPER -> CitizenModel.APRON;
+            case MERCHANT -> CitizenModel.CAP | CitizenModel.FEATHER | CitizenModel.POUCH;
+            case CARTOGRAPHER -> CitizenModel.CAP | CitizenModel.QUIVER;
+        };
+    }
+
     @Override
     public CitizenRenderState createRenderState() {
         return new CitizenRenderState();
@@ -33,9 +46,10 @@ public class CitizenRenderer extends HumanoidMobRenderer<CitizenEntity, CitizenR
         Profession profession = citizen.getProfession();
         int variant = Math.min(citizen.getVariant(), profession.variants() - 1);
         state.texture = texture(profession, variant);
-        state.profession = profession;
+        state.parts = parts(profession);
         state.feminine = citizen.isFeminine();
         state.working = citizen.isWorking();
+        state.hammer = profession == Profession.SMITH;
     }
 
     @Override

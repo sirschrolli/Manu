@@ -4,21 +4,26 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
 import java.util.List;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 /**
- * Server an Spiel: das Handelsfenster eines Bürgers öffnen (oder auffrischen) – mit seinen Angeboten, wie oft noch gehandelt
- * werden kann, wie lange der Laden noch geschlossen ist (ms), dem Rabatt durch Ansehen, ob alles umsonst ist, und den
+ * Server an Spiel: das Handelsfenster eines Bürgers oder Dorfbewohners öffnen (oder auffrischen) – mit seinem Gesicht
+ * ({@code skin}: Hauttextur), Beruf (Übersetzungsschlüssel) und Namen, seinen Angeboten, wie oft noch gehandelt werden
+ * kann, wie lange der Laden noch geschlossen ist (ms), dem Rabatt durch Ansehen, ob alles umsonst ist, und den
  * Einstellungen des Servers (Handel bis zur Pause, Länge der Pause in Minuten).
  */
-public record OpenTradePayload(int entity, int profession, List<Trading.Offer> offers, int tradesLeft, long closedMillis, int discount,
-        boolean free, int limit, int pauseMinutes) implements CustomPacketPayload {
+public record OpenTradePayload(int entity, String skin, String profession, Component name, List<Trading.Offer> offers, int tradesLeft,
+        long closedMillis, int discount, boolean free, int limit, int pauseMinutes) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenTradePayload> TYPE = new CustomPacketPayload.Type<>(KingdomsAtWar.id("open_trade"));
     public static final StreamCodec<RegistryFriendlyByteBuf, OpenTradePayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, OpenTradePayload::entity,
-            ByteBufCodecs.VAR_INT, OpenTradePayload::profession,
+            ByteBufCodecs.STRING_UTF8, OpenTradePayload::skin,
+            ByteBufCodecs.STRING_UTF8, OpenTradePayload::profession,
+            ComponentSerialization.STREAM_CODEC, OpenTradePayload::name,
             Trading.Offer.STREAM_CODEC.apply(ByteBufCodecs.list()), OpenTradePayload::offers,
             ByteBufCodecs.VAR_INT, OpenTradePayload::tradesLeft,
             ByteBufCodecs.VAR_LONG, OpenTradePayload::closedMillis,

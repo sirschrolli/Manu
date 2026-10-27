@@ -41,6 +41,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         ModEntities.SOLDIERS.values().forEach(type -> this.add(type.get(), LootTable.lootTable()));
         // Bürger lassen nichts fallen (was sie tragen, liegt in der Truhe ihrer Werkstatt)
         this.add(ModEntities.CITIZEN.get(), LootTable.lootTable());
+        // Dorfbewohner lassen nichts fallen (wer sie umbringt, gewinnt nichts außer schlechtem Ruf)
+        this.add(ModEntities.VILLAGER.get(), LootTable.lootTable());
         // Drachen-Bosse: viele Schuppen, Draconium und Edelsteine (das Ei erscheint gesondert auf dem Nest)
         this.add(ModEntities.PYRRHON.get(), LootTable.lootTable()
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))

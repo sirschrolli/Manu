@@ -231,6 +231,8 @@ public final class ModItems {
         }
     }
 
+    public static final DeferredItem<SpawnEggItem> VILLAGER_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("villager_spawn_egg",
+            SpawnEggItem::new, p -> p.spawnEgg(ModEntities.VILLAGER.get())));
     public static final DeferredItem<SpawnEggItem> BANDIT_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("bandit_spawn_egg",
             SpawnEggItem::new, p -> p.spawnEgg(ModEntities.BANDIT.get())));
     public static final DeferredItem<SpawnEggItem> BANDIT_ARCHER_SPAWN_EGG = addTo(KINGDOM_TAB, ITEMS.registerItem("bandit_archer_spawn_egg",

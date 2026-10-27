@@ -72,6 +72,10 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity>> CITIZEN =
             ENTITIES.registerEntityType("citizen", io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(10));
+    /** Dorfbewohner: leben in den Dörfern der Welt, mit Beruf, Bett, Arbeitsplatz und Tagesablauf. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity>> VILLAGER =
+            ENTITIES.registerEntityType("villager", io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(10));
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -215,6 +219,7 @@ public final class ModEntities {
         SOLDIERS.values().forEach(type -> event.put(type.get(), SoldierEntity.createAttributes().build()));
         event.put(BANDIT.get(), BanditEntity.createAttributes().build());
         event.put(CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity.createAttributes().build());
+        event.put(VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity.createAttributes().build());
         event.put(BANDIT_ARCHER.get(), BanditEntity.createAttributes().build());
         event.put(WILD_BOAR.get(), WildBoarEntity.createAttributes().build());
         event.put(DEER.get(), DeerEntity.createAttributes().build());

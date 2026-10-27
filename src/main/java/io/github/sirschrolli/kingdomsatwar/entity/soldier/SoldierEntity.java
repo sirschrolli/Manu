@@ -111,6 +111,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
     private final SoldierType soldierType;
     private @Nullable BlockPos post;
+    /** Wache eines Dorfs: bewacht es, lässt sich nicht anwerben und schützt die Dorfbewohner. */
+    private String village = "";
     private int lastHurtTick = -1000;
     private int voiceCooldown;
     private int idleChatter = 1200;
@@ -191,6 +193,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             output.putInt("PostY", this.post.getY());
             output.putInt("PostZ", this.post.getZ());
         }
+        if (!this.village.isEmpty()) {
+            output.putString("Village", this.village);
+        }
     }
 
     @Override
@@ -205,6 +210,22 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         } else {
             this.post = null;
         }
+        this.village = input.getStringOr("Village", "");
+    }
+
+    /** Macht den Soldaten zur Wache des Dorfs {@code name} (ohne Herrn, auf Patrouille um {@code post}). */
+    public void guardVillage(String name, BlockPos post) {
+        this.village = name;
+        this.setMode(MODE_PATROL, post);
+    }
+
+    /** Wache eines Dorfs (lässt sich nicht anwerben)? */
+    public boolean isVillageGuard() {
+        return !this.village.isEmpty() && !this.hasOwner();
+    }
+
+    public String getVillage() {
+        return this.village;
     }
 
     @Override
@@ -538,6 +559,15 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (this.isVillageGuard()) {
+            // Dorfwachen stehen nicht zum Verkauf: sie sagen, wen sie bewachen
+            if (!this.level().isClientSide() && !(stack.getItem() instanceof net.minecraft.world.item.SpawnEggItem)) {
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.soldier.village_guard", this.getDisplayName(), this.village)
+                        .withStyle(ChatFormatting.GOLD));
+                this.salute();
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (!this.hasOwner()) {
             return this.offerService(player, stack);
         }

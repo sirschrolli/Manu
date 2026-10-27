@@ -57,6 +57,28 @@ public final class ModLootTables {
     /** Was man mit dem Pinsel aus dem Kies eines Drachennests ausgräbt (je Art). */
     public static final Map<DragonType, ResourceKey<LootTable>> DRAGON_NEST_ARCHAEOLOGY;
 
+    /** Truhen und Fässer in den Dörfern der Oberwelt – je Gebäude eine eigene Beute. */
+    public static final ResourceKey<LootTable> VILLAGE_HOUSE = village("house");
+    public static final ResourceKey<LootTable> VILLAGE_SMITHY = village("smithy");
+    public static final ResourceKey<LootTable> VILLAGE_BAKERY = village("bakery");
+    public static final ResourceKey<LootTable> VILLAGE_TAVERN = village("tavern");
+    public static final ResourceKey<LootTable> VILLAGE_SCRIPTORIUM = village("scriptorium");
+    public static final ResourceKey<LootTable> VILLAGE_MAP_HOUSE = village("map_house");
+    public static final ResourceKey<LootTable> VILLAGE_HERB_HOUSE = village("herb_house");
+    public static final ResourceKey<LootTable> VILLAGE_BUTCHERY = village("butchery");
+    public static final ResourceKey<LootTable> VILLAGE_TANNERY = village("tannery");
+    public static final ResourceKey<LootTable> VILLAGE_MASONRY = village("masonry");
+    public static final ResourceKey<LootTable> VILLAGE_BOWYER = village("bowyer");
+    public static final ResourceKey<LootTable> VILLAGE_CHAPEL = village("chapel");
+    public static final ResourceKey<LootTable> VILLAGE_FARM = village("farm");
+    public static final ResourceKey<LootTable> VILLAGE_SHEPHERD = village("shepherd");
+    public static final ResourceKey<LootTable> VILLAGE_FISHER = village("fisher");
+    public static final ResourceKey<LootTable> VILLAGE_WATCHTOWER = village("watchtower");
+
+    private static ResourceKey<LootTable> village(String name) {
+        return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/village/" + name));
+    }
+
     static {
         Map<DragonType, ResourceKey<LootTable>> nests = new EnumMap<>(DragonType.class);
         for (DragonType type : DragonType.values()) {

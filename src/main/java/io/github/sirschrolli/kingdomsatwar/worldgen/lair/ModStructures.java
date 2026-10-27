@@ -71,6 +71,21 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> MAGE_TOWER_PIECE =
             PIECES.register("mage_tower", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPiece::new);
 
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement>>
+            VILLAGE_PLACEMENT = PLACEMENTS.register("village", () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillageStructure>>
+            VILLAGE = TYPES.register("village", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillageStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> VILLAGE_PIECE =
+            PIECES.register("village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillagePiece::new);
+
+    /** Ein Dorf der jeweiligen Bauweise. */
+    public static ResourceKey<Structure> village(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle style) {
+        return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("village_" + style.id()));
+    }
+
+    /** Alle Dörfer teilen sich eine Verteilung (wie die Dörfer früher): je Feld höchstens eins, nie nahe der Nester. */
+    public static final ResourceKey<StructureSet> VILLAGES = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("villages"));
+
     /** Turm des Erzmagiers eines Elements. */
     public static ResourceKey<Structure> mageTower(DragonType type) {
         return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id(type.id() + "_mage_tower"));
@@ -169,6 +184,13 @@ public final class ModStructures {
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
+        for (var style : io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.values()) {
+            context.register(village(style), new io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillageStructure(
+                    new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_VILLAGE.get(style)))
+                            .generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+                            .terrainAdapation(TerrainAdjustment.NONE)
+                            .build(), style));
+        }
         for (DragonType type : DragonType.values()) {
             context.register(mageTower(type), new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerStructure(
                     new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_MAGE_TOWERS.get(type)))
@@ -211,7 +233,14 @@ public final class ModStructures {
         for (DragonType type : DragonType.values()) {
             towers.add(StructureSet.entry(structures.getOrThrow(mageTower(type))));
         }
-        var villages = context.lookup(Registries.STRUCTURE_SET).getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.VILLAGES);
+        // Dörfer: Felder von 34 Chunks, mindestens 8 Chunks Abstand (wie früher), 28 Chunks fern der Nester, 10 vom Siegelkreis
+        java.util.List<StructureSet.StructureSelectionEntry> villageEntries = new java.util.ArrayList<>();
+        for (var style : io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.values()) {
+            villageEntries.add(StructureSet.entry(structures.getOrThrow(village(style))));
+        }
+        context.register(VILLAGES, new StructureSet(villageEntries, new io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement(34, 8,
+                10_387_312, java.util.Optional.empty(), 28, 10)));
+        var villages = context.lookup(Registries.STRUCTURE_SET).getOrThrow(VILLAGES);
         context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(36, 12,
                 47_719_163, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                         .ExclusionZone(villages, 7)), 14)));

@@ -50,7 +50,7 @@ import org.jspecify.annotations.Nullable;
  * seinem Beruf nach (bauen, ernten, Holz fällen, Erz hauen, handeln) und schläft nachts. Händler, Schmied, Wirt und
  * Kartograf handeln mit Spielern; die Handelsgrenze läuft in Echtzeit ab.
  */
-public class CitizenEntity extends PathfinderMob {
+public class CitizenEntity extends PathfinderMob implements CoinTrader {
     private static final EntityDataAccessor<Byte> DATA_PROFESSION = SynchedEntityData.defineId(CitizenEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(CitizenEntity.class, EntityDataSerializers.BYTE);
     /** Gerade bei der Arbeit (für die Haltung im Bild). */
@@ -221,15 +221,50 @@ public class CitizenEntity extends PathfinderMob {
     // Handel
     // =====================================================================================
 
+    @Override
+    public boolean canTrade() {
+        return this.getProfession().trader();
+    }
+
+    @Override
+    public java.util.List<Trading.Offer> baseOffers() {
+        return Trading.baseOffers(this.getProfession());
+    }
+
+    @Override
+    public boolean givesFreely(Player player) {
+        return Trading.free(player, this);
+    }
+
+    @Override
+    public String skinTexture() {
+        int variant = Math.min(this.getVariant(), this.getProfession().variants() - 1);
+        return io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("textures/entity/citizen/" + this.getProfession().id() + "_" + (variant + 1) + ".png")
+                .toString();
+    }
+
+    @Override
+    public String professionKey() {
+        return this.getProfession().translationKey();
+    }
+
+    @Override
+    public Component traderName() {
+        return this.getName();
+    }
+
+    @Override
     public int tradesUsed() {
         return this.tradesUsed;
     }
 
+    @Override
     public long closedUntil() {
         return this.closedUntil;
     }
 
     /** Ist der Laden gerade geschlossen (Handelsgrenze erreicht, Pause läuft in Echtzeit)? */
+    @Override
     public boolean isClosed() {
         if (this.closedUntil > 0 && System.currentTimeMillis() >= this.closedUntil) {
             this.closedUntil = 0;
@@ -238,6 +273,7 @@ public class CitizenEntity extends PathfinderMob {
         return this.closedUntil > 0;
     }
 
+    @Override
     public void recordTrade(int limit, long pauseMillis) {
         this.tradesUsed++;
         if (this.tradesUsed >= limit) {
@@ -245,10 +281,12 @@ public class CitizenEntity extends PathfinderMob {
         }
     }
 
+    @Override
     public @Nullable Player getCustomer() {
         return this.customer;
     }
 
+    @Override
     public void setCustomer(@Nullable Player customer) {
         this.customer = customer;
         this.customerTicks = customer == null ? 0 : 400;

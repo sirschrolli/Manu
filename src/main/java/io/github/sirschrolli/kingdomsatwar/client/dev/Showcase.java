@@ -125,7 +125,21 @@ final class Showcase {
                     steps.add(Step.waitTicks(40));
                 }
                 default -> {
-                    if (scene.equals("features") || scene.startsWith("features_")) {
+                    if (scene.equals("village_gallery") || scene.startsWith("village_gallery_")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        VillageShowcase.gallery(steps, g, scene.equals("village_gallery") ? "" : scene.substring(16));
+                    } else if (scene.equals("villagers")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        VillageShowcase.villagers(steps, g);
+                    } else if (scene.equals("villages_stats")) {
+                        VillageShowcase.stats(steps, 6);
+                    } else if (scene.equals("villages_life")) {
+                        VillageShowcase.life(steps);
+                    } else if (scene.equals("villages") || scene.startsWith("villages_")) {
+                        VillageShowcase.villages(steps, scene.equals("villages") ? "" : scene.substring(9));
+                    } else if (scene.equals("features") || scene.startsWith("features_")) {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         OverworldShowcase.gallery(steps, g, scene.equals("features") ? "" : scene.substring(9));

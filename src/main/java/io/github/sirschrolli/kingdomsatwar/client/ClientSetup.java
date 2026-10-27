@@ -86,6 +86,7 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_MISSILE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MagicMissileRenderer::new);
         event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
+        event.registerEntityRenderer(ModEntities.VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.VillagerRenderer::new);
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);

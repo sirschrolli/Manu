@@ -1,13 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.client.town;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer;
 import io.github.sirschrolli.kingdomsatwar.economy.Coin;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
-import io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity;
+import io.github.sirschrolli.kingdomsatwar.economy.citizen.CoinTrader;
 import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
-import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.network.OpenTradePayload;
 import io.github.sirschrolli.kingdomsatwar.network.TradePayload;
 import java.util.List;
@@ -27,7 +25,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Handel mit einem Bürger: links die Angebote (was man gibt → was man bekommt; ein Klick handelt einmal), rechts der
+ * Handel mit einem Bürger oder Dorfbewohner: links die Angebote (was man gibt → was man bekommt; ein Klick handelt einmal), rechts der
  * eigene Geldbeutel, wie oft noch gehandelt werden kann, bevor der Laden Pause macht (in Echtzeit), und der Rabatt durch
  * das Ansehen.
  */
@@ -71,8 +69,10 @@ public class TradeScreen extends Screen {
         this.top = (this.height - HEIGHT) / 2;
     }
 
-    private Profession profession() {
-        return Profession.values()[Mth.clamp(this.data.profession(), 0, Profession.values().length - 1)];
+    /** Die Haut des Händlers (für sein Gesicht in der Kopfzeile). */
+    private Identifier skin() {
+        Identifier skin = Identifier.tryParse(this.data.skin());
+        return skin != null ? skin : KingdomsAtWar.id("textures/entity/citizen/merchant_1.png");
     }
 
     private long closedRemaining() {
@@ -89,8 +89,7 @@ public class TradeScreen extends Screen {
     @Override
     public void tick() {
         Entity e = this.minecraft.level == null ? null : this.minecraft.level.getEntity(this.data.entity());
-        if (!(e instanceof CitizenEntity citizen) || !citizen.isAlive() || this.minecraft.player == null
-                || this.minecraft.player.distanceToSqr(citizen) > 8.0 * 8.0) {
+        if (!(e instanceof CoinTrader) || !e.isAlive() || this.minecraft.player == null || this.minecraft.player.distanceToSqr(e) > 8.0 * 8.0) {
             this.onClose();
         }
     }
@@ -175,17 +174,14 @@ public class TradeScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         int x0 = this.left;
         int y0 = this.top;
-        Profession profession = this.profession();
-        Entity e = this.minecraft.level == null ? null : this.minecraft.level.getEntity(this.data.entity());
-        int variant = e instanceof CitizenEntity c ? c.getVariant() : 0;
-        Component name = e != null ? e.getName() : Component.translatable(profession.translationKey());
+        Component name = this.data.name();
         // Kopfzeile: Gesicht, Name, Beruf
-        Identifier skin = CitizenRenderer.texture(profession, Math.min(variant, profession.variants() - 1));
+        Identifier skin = this.skin();
         g.fill(x0 + 10, y0 + 9, x0 + 28, y0 + 27, 0xFF0D1533);
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x0 + 11, y0 + 10, 8.0f, 8.0f, 16, 16, 8, 8, 128, 64);
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x0 + 11, y0 + 10, 40.0f, 8.0f, 16, 16, 8, 8, 128, 64);
         g.text(this.font, name.copy().withStyle(ChatFormatting.BOLD), x0 + 33, y0 + 14, TownScreen.GOLD_TEXT, true);
-        Component job = Component.translatable(profession.translationKey());
+        Component job = Component.translatable(this.data.profession());
         g.text(this.font, job, x0 + WIDTH - 12 - this.font.width(job), y0 + 14, TownScreen.RIBBON_TEXT, true);
 
         this.drawOffers(g, x0 + LIST_X, y0 + LIST_Y, mouseX, mouseY);

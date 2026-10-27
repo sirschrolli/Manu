@@ -76,6 +76,10 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<SpacedPlacement>> SPACED =
             PLACEMENT_TYPES.register("spaced", () -> SpacedPlacement.CODEC);
 
+    /** Nur außerhalb der Dörfer (Bäume, Felsen, Teiche und Ruinen halten Abstand zu Häusern und Wegen). */
+    public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter>>
+            NOT_IN_VILLAGE = PLACEMENT_TYPES.register("not_in_village", () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.CODEC);
+
     public static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES =
             DeferredRegister.create(Registries.BIOME_SOURCE, KingdomsAtWar.MODID);
 

@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.storage.loot.LootTable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Baut ein Gebäude in eigenen Koordinaten: x nach rechts (Osten), y nach oben (0 = Fußboden), z nach hinten (Süden);
@@ -48,6 +49,11 @@ public final class VillageBuilder {
     private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
     /** Zäune, Scheiben, Mauern …: ihre Verbindungen werden am Ende aus den Nachbarn berechnet. */
     private final List<BlockPos> shaped = new ArrayList<>();
+    /**
+     * Wo man vor dem Gebäude steht, um hineinzugehen (Gebäude-Koordinaten): vor der ersten Haustür bzw. am ersten Zugang
+     * von der Straße. Die Bewohner nehmen diesen Platz als Zwischenziel, wenn sie von weit her heimkommen.
+     */
+    public @Nullable BlockPos entrance;
 
     public VillageBuilder(WorldGenLevel level, BoundingBox chunkBox, BlockPos origin, Rotation rotation, long seed) {
         this.level = level;

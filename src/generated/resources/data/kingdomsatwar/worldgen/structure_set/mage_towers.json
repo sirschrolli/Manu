@@ -3,7 +3,7 @@
     "type": "kingdomsatwar:mage_tower",
     "exclusion_zone": {
       "chunk_count": 7,
-      "other_set": "minecraft:villages"
+      "other_set": "kingdomsatwar:villages"
     },
     "nest_distance": 14,
     "salt": 47719163,

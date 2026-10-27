@@ -209,11 +209,13 @@ public final class ModWorldgen {
                     new SpacedPlacement(ruin.spacing(), ruin.separation(), ruin.salt(), NEST_CLEARANCE),
                     InSquarePlacement.spread(),
                     HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
-                    BiomeFilter.biome());
+                    BiomeFilter.biome(),
+                    io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.INSTANCE);
             context.register(ruin.placedKey(), new PlacedFeature(features.getOrThrow(ruin.featureKey()), placement));
         }
         io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapPlacedFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapPlacedFeatures(context);
     }
 
     /** Biom-Modifikator für das Erscheinen der Banditen. */
@@ -275,5 +277,7 @@ public final class ModWorldgen {
         context.register(WILL_O_WISP_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILL_O_WISPS, ModEntities.WILL_O_WISP.get(), 12, 1, 3));
         context.register(CAVE_TROLL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CAVE_TROLLS, ModEntities.CAVE_TROLL.get(), 6, 1, 1));
         context.register(LINDWORM_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_LINDWORMS, ModEntities.LINDWORM.get(), 3, 1, 1));
+        // Bäume, Kakteen und Felsbrocken der Dorf-Biome wachsen nicht mehr in die Dörfer hinein
+        io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapBiomeModifiers(context);
     }
 }

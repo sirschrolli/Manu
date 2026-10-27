@@ -325,7 +325,14 @@ public final class OverworldFeatures {
     public static void bootstrapPlacedFeatures(BootstrapContext<PlacedFeature> context) {
         HolderGetter<Feature> features = context.lookup(Registries.FEATURE);
         for (Entry entry : ENTRIES) {
-            context.register(entry.placedKey(), new PlacedFeature(features.getOrThrow(entry.featureKey()), entry.placement()));
+            List<PlacementModifier> placement = entry.placement();
+            // Bäume, Felsen und Teiche halten Abstand zu den Dörfern
+            if (entry.step() == GenerationStep.Decoration.LAKES || entry.step() == GenerationStep.Decoration.LOCAL_MODIFICATIONS
+                    || entry.step() == GenerationStep.Decoration.VEGETAL_DECORATION) {
+                placement = new java.util.ArrayList<>(placement);
+                placement.add(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.INSTANCE);
+            }
+            context.register(entry.placedKey(), new PlacedFeature(features.getOrThrow(entry.featureKey()), placement));
         }
     }
 

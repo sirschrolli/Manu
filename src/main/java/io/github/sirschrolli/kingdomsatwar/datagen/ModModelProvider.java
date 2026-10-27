@@ -312,6 +312,7 @@ public class ModModelProvider extends ModelProvider {
             flat(items, spawnEgg.get());
         }
         flat(items, ModItems.BANDIT_SPAWN_EGG.get());
+        flat(items, ModItems.VILLAGER_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         flat(items, ModItems.BLUEPRINT.get());

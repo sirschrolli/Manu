@@ -179,7 +179,13 @@ Blöcken, Farben, Partikeln und Geräuschen:
   Zerklüftet) über eine eigene Biomquelle; jedes mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben, Partikeln
   und Klängen. Die Nest-Biome (Aschelande, Frostkessel, Sturmklippen, Uralter Hain, Zerklüftete Weiten, Abgrundgrotte)
   bleiben den Nestern vorbehalten.
-- **Eigene Dörfer** mit eigenen Bewohnern (nie in der Nähe der Drachennester).
+- **Eigene Dörfer** mit eigenen Bewohnern (umgesetzt in E2a): vier Bauweisen je nach Land – Fachwerk in Ebenen,
+  Wiesen und Laubwäldern, nordische Blockhäuser in Taiga und Schneeland, Lehmbauten in Wüste und Savanne, Pfahlbauten
+  in Sumpf und Moor. Ein Planer legt Dorfplatz, Wege mit Seitengassen, Stufen und Brücken und im Schnitt 17 Gebäude an
+  (Wohnhäuser, Gasthaus, Schmiede, Bäckerei, Kapelle, Werkstätten, am Rand Mühle, Scheune, Felder, Schafweide,
+  Fischerhütte und Wachtürme). Dorfbewohner in 17 Berufen mit eigenem Bett und Arbeitsplatz arbeiten, treffen sich
+  nachmittags auf dem Platz und schlafen nachts; sie handeln gegen Münzen, erzählen Gerüchte (Drachen, Siegelkreis,
+  Nachbardörfer) und werden von Dorfwachen beschützt. Mindestens rund 450 Blöcke Abstand zu jedem Nest.
 - **Keine Vanilla-Mobs** mehr: eigene Nutztiere, Wildtiere, Monster und Wasserwesen, jeweils in mehreren
   Varianten; alles, was Vanilla-Mobs fallen ließen (Leder, Wolle, Federn, Fäden, Knochen, Schwarzpulver …),
   bekommt man von den eigenen.
@@ -249,7 +255,8 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | C | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Ansehen, Handel mit Echtzeit-Pause, Krönung (Version 0.5.0) | ✅ |
 | D | Magie: Zauberstufen, Zaubertafeln, Magietisch, Zauberkreis, sechs Erzmagier in sechs Magiertürmen (Version 0.6.0) | ✅ |
 | E1 | Acht eigene Oberwelt-Biome mit eigener Biomquelle, eigenen Böden, Bäumen, Pflanzen, Felsen, Torf und Schilf (Version 0.7.0) | ✅ |
-| E2 | Eigene Dörfer mit eigenen Bewohnern (fern der Nester), keine Vanilla-Bauwerke mehr | ⏳ |
+| E2a | Eigene Dörfer in vier Bauweisen (Fachwerk, Nordisch, Lehm, Pfahlbau) fern der Nester, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen; keine Vanilla-Dörfer und Außenposten mehr (Version 0.8.0) | ✅ |
+| E2b | Keine Vanilla-Bauwerke mehr: eigene Bauwerke an ihrer Stelle (Endportal, verlassene Stollen …), alle Funde bleiben erhältlich | ⏳ |
 | E3 | Eigene Nutz- und Wildtiere statt Vanilla – alle Vanilla-Beute bleibt erhältlich | ⏳ |
 | E4 | Eigene Monster und Wassertiere | ⏳ |
 | E5 | Nether und End: eigene Mobs und Bauwerke | ⏳ |

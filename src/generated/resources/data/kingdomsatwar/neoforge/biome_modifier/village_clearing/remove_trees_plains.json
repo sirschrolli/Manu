@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:remove_features",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains"
+  ],
+  "features": "minecraft:trees_plains",
+  "steps": "vegetal_decoration"
+}

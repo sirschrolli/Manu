@@ -46,6 +46,9 @@
         "type": "minecraft:matching_block_tag",
         "tag": "minecraft:air"
       }
+    },
+    {
+      "type": "kingdomsatwar:not_in_village"
     }
   ]
 }

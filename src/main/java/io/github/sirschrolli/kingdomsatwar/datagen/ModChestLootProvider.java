@@ -57,9 +57,127 @@ public class ModChestLootProvider implements LootTableSubProvider {
         return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
 
+    /** Ein Pool mit {@code min}–{@code max} Ziehungen aus den Einträgen. */
+    @SafeVarargs
+    private static LootPool.Builder pool(int min, int max, UniformContainerBase.Builder<?>... entries) {
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.between(min, max));
+        for (UniformContainerBase.Builder<?> entry : entries) {
+            pool.add(entry);
+        }
+        return pool;
+    }
+
+    /**
+     * Die Truhen der Dörfer: in jedem Haus das, was dort gebraucht wird – Brot und Saatgut bei den Bauern, Eisen und
+     * Werkzeug in der Schmiede, Bier und Wein im Gasthaus, Papier und manchmal ein verzaubertes Buch in der
+     * Schreibstube –, dazu ein paar Münzen (die Dörfler bezahlen nicht mehr mit Smaragden).
+     */
+    private void villages() {
+        this.output.accept(ModLootTables.VILLAGE_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 1, 0.0f)
+                .withPool(pool(3, 6,
+                        item(ModItems.BREAD_ROLL.get(), 10, 1, 4), item(Items.BREAD, 8, 1, 3), item(Items.APPLE, 8, 1, 4),
+                        item(Items.POTATO, 8, 1, 5), item(Items.CARROT, 6, 1, 5), item(Items.WHEAT_SEEDS, 6, 2, 6),
+                        item(ModItems.TOMATO_SEEDS.get(), 4, 1, 3), item(ModItems.CABBAGE_SEEDS.get(), 4, 1, 3),
+                        item(Items.TORCH, 6, 2, 6), item(Items.STRING, 4, 1, 3), item(Items.FEATHER, 4, 1, 3),
+                        item(Items.WOOL.white(), 4, 1, 2), item(Items.BOOK, 2, 1, 1), item(Items.OAK_SAPLING, 3, 1, 2),
+                        item(Items.DANDELION, 3, 1, 2), item(Items.POPPY, 3, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_SMITHY, coins(LootTable.lootTable(), 2, 8, 1, 3, 0.05f)
+                .withPool(pool(3, 6,
+                        item(Items.IRON_INGOT, 10, 1, 5), item(Items.IRON_NUGGET, 8, 3, 9), item(ModItems.STEEL_INGOT.get(), 6, 1, 3),
+                        item(Items.COAL, 8, 2, 8), item(ModItems.CARBON.get(), 6, 2, 6), item(Items.GOLD_INGOT, 3, 1, 3),
+                        item(Items.IRON_SWORD, 3, 1, 1), item(Items.IRON_PICKAXE, 3, 1, 1), item(Items.IRON_SHOVEL, 3, 1, 1),
+                        item(Items.IRON_HELMET, 2, 1, 1), item(Items.IRON_CHESTPLATE, 2, 1, 1), item(Items.CHAINMAIL_BOOTS, 2, 1, 1),
+                        item(Items.SHIELD, 2, 1, 1), item(Items.OBSIDIAN, 3, 1, 4), item(Items.BREAD, 4, 1, 3),
+                        item(Items.DIAMOND, 1, 1, 2), item(Items.SADDLE, 1, 1, 1), item(Items.IRON_HORSE_ARMOR, 1, 1, 1))));
+        this.output.accept(ModLootTables.VILLAGE_BAKERY, coins(LootTable.lootTable(), 1, 6, 0, 1, 0.0f)
+                .withPool(pool(3, 6,
+                        item(Items.BREAD, 10, 1, 4), item(ModItems.BREAD_ROLL.get(), 10, 2, 6), item(Items.WHEAT, 8, 2, 8),
+                        item(Items.SUGAR, 6, 1, 4), item(Items.EGG, 5, 1, 3), item(Items.COOKIE, 6, 2, 8), item(Items.PUMPKIN_PIE, 4, 1, 2),
+                        item(ModItems.APPLE_PIE.get(), 4, 1, 2), item(ModItems.GARLIC_BREAD.get(), 4, 1, 3), item(Items.CAKE, 1, 1, 1),
+                        item(Items.HONEY_BOTTLE, 2, 1, 1), item(ModItems.BARLEY.get(), 4, 1, 4))));
+        this.output.accept(ModLootTables.VILLAGE_TAVERN, coins(LootTable.lootTable(), 3, 9, 1, 4, 0.08f)
+                .withPool(pool(3, 6,
+                        item(ModItems.ALE.get(), 10, 1, 3), item(ModItems.WINE.get(), 6, 1, 2), item(ModItems.MEAD.get(), 4, 1, 2),
+                        item(ModItems.MEAT_PIE.get(), 6, 1, 3), item(ModItems.COOKED_VENISON.get(), 6, 1, 3),
+                        item(ModItems.VEGETABLE_STEW.get(), 4, 1, 1), item(ModItems.BREAD_ROLL.get(), 8, 2, 5),
+                        item(Items.CANDLE, 4, 1, 3), item(ModItems.HOPS.get(), 4, 2, 5), item(ModItems.GRAPES.get(), 3, 2, 5),
+                        item(Items.MUSIC_DISC_CAT, 1, 1, 1), item(Items.GLASS_BOTTLE, 4, 1, 4))));
+        this.output.accept(ModLootTables.VILLAGE_SCRIPTORIUM, coins(LootTable.lootTable(), 2, 6, 0, 2, 0.0f)
+                .withPool(pool(3, 5,
+                        item(Items.PAPER, 10, 2, 8), item(Items.BOOK, 8, 1, 3), item(Items.WRITABLE_BOOK, 3, 1, 1), item(Items.INK_SAC, 6, 1, 4),
+                        item(Items.FEATHER, 6, 1, 4), item(Items.CANDLE, 4, 1, 3), item(Items.COMPASS, 2, 1, 1), item(Items.CLOCK, 1, 1, 1),
+                        item(Items.GLOW_INK_SAC, 2, 1, 2)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(EmptyLootItem.emptyItem().setWeight(3))));
+        this.output.accept(ModLootTables.VILLAGE_MAP_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.MAP, 8, 1, 3), item(Items.PAPER, 10, 2, 8), item(Items.COMPASS, 4, 1, 1), item(Items.GLASS_PANE, 5, 1, 4),
+                        item(Items.SPYGLASS, 1, 1, 1), item(Items.FEATHER, 4, 1, 3), item(Items.INK_SAC, 4, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_HERB_HOUSE, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
+                .withPool(pool(3, 6,
+                        item(Items.GLASS_BOTTLE, 8, 1, 4), item(Items.REDSTONE, 6, 1, 4), item(Items.GLOWSTONE_DUST, 4, 1, 3),
+                        item(Items.LAPIS_LAZULI, 4, 1, 4), item(Items.SWEET_BERRIES, 6, 2, 6), item(Items.NETHER_WART, 2, 1, 2),
+                        item(ModBlocks.LAVENDER.get(), 5, 1, 3), item(ModBlocks.GARDEN_ROSE.get(), 4, 1, 2), item(ModItems.WISP_DUST.get(), 3, 1, 2),
+                        item(Items.SPIDER_EYE, 3, 1, 2), item(Items.BLAZE_POWDER, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(2).apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction
+                                .setPotion(net.minecraft.world.item.alchemy.Potions.HEALING)))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(2).apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction
+                                .setPotion(net.minecraft.world.item.alchemy.Potions.REGENERATION)))
+                        .add(EmptyLootItem.emptyItem().setWeight(3))));
+        this.output.accept(ModLootTables.VILLAGE_BUTCHERY, coins(LootTable.lootTable(), 1, 6, 0, 1, 0.0f)
+                .withPool(pool(3, 6,
+                        item(Items.BEEF, 8, 1, 3), item(Items.PORKCHOP, 8, 1, 3), item(Items.MUTTON, 6, 1, 3), item(Items.CHICKEN, 6, 1, 3),
+                        item(Items.COOKED_BEEF, 4, 1, 2), item(Items.COOKED_PORKCHOP, 4, 1, 2), item(ModItems.VENISON.get(), 4, 1, 3),
+                        item(Items.LEATHER, 5, 1, 3), item(Items.COAL, 5, 1, 4), item(Items.WHEAT, 4, 1, 4), item(Items.RABBIT, 3, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_TANNERY, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.LEATHER, 10, 1, 4), item(Items.RABBIT_HIDE, 6, 1, 3), item(Items.LEATHER_CHESTPLATE, 2, 1, 1),
+                        item(Items.LEATHER_BOOTS, 2, 1, 1), item(Items.LEATHER_HELMET, 2, 1, 1), item(Items.LEATHER_LEGGINGS, 2, 1, 1),
+                        item(Items.SADDLE, 1, 1, 1), item(Items.STRING, 5, 1, 4), item(Items.BREAD, 4, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_MASONRY, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.CLAY_BALL, 8, 2, 6), item(Items.STONE_BRICKS, 6, 2, 6), item(Items.TERRACOTTA, 5, 1, 4),
+                        item(Items.SMOOTH_STONE, 5, 1, 4), item(Items.CHISELED_STONE_BRICKS, 3, 1, 2), item(Items.QUARTZ, 2, 1, 3),
+                        item(Items.FLOWER_POT, 3, 1, 1), item(Items.BRICK, 6, 2, 6), item(Items.IRON_PICKAXE, 1, 1, 1))));
+        this.output.accept(ModLootTables.VILLAGE_BOWYER, coins(LootTable.lootTable(), 1, 6, 0, 2, 0.0f)
+                .withPool(pool(3, 5,
+                        item(Items.ARROW, 10, 4, 14), item(Items.STICK, 8, 2, 8), item(Items.FEATHER, 8, 2, 6), item(Items.FLINT, 6, 1, 4),
+                        item(Items.STRING, 6, 1, 4), item(Items.BOW, 2, 1, 1), item(Items.CROSSBOW, 1, 1, 1), item(Items.TARGET, 1, 1, 1))));
+        this.output.accept(ModLootTables.VILLAGE_CHAPEL, coins(LootTable.lootTable(), 3, 9, 1, 4, 0.1f)
+                .withPool(pool(2, 5,
+                        item(Items.CANDLE, 10, 1, 4), item(Items.REDSTONE, 6, 1, 4), item(Items.LAPIS_LAZULI, 6, 1, 4),
+                        item(Items.GOLD_NUGGET, 6, 2, 6), item(Items.BREAD, 4, 1, 3), item(Items.BOOK, 4, 1, 2),
+                        item(Items.EXPERIENCE_BOTTLE, 2, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_FARM, coins(LootTable.lootTable(), 1, 5, 0, 1, 0.0f)
+                .withPool(pool(3, 6,
+                        item(Items.WHEAT_SEEDS, 10, 2, 8), item(Items.WHEAT, 8, 2, 8), item(Items.POTATO, 8, 1, 6), item(Items.CARROT, 8, 1, 6),
+                        item(Items.BEETROOT_SEEDS, 6, 2, 6), item(Items.BONE_MEAL, 6, 1, 6), item(ModItems.TOMATO_SEEDS.get(), 4, 1, 3),
+                        item(ModItems.CABBAGE_SEEDS.get(), 4, 1, 3), item(ModItems.BARLEY_SEEDS.get(), 4, 1, 3), item(ModItems.ONION.get(), 3, 1, 3),
+                        item(ModItems.GARLIC.get(), 3, 1, 3), item(Items.PUMPKIN_SEEDS, 3, 1, 3), item(Items.MELON_SEEDS, 3, 1, 3),
+                        item(Items.IRON_HOE, 1, 1, 1), item(Items.SHEARS, 1, 1, 1))));
+        this.output.accept(ModLootTables.VILLAGE_SHEPHERD, coins(LootTable.lootTable(), 1, 5, 0, 1, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.WOOL.white(), 10, 1, 6), item(Items.WOOL.gray(), 4, 1, 3), item(Items.WOOL.brown(), 4, 1, 3),
+                        item(Items.WOOL.black(), 3, 1, 3), item(Items.SHEARS, 2, 1, 1), item(Items.WHEAT, 6, 1, 4),
+                        item(Items.DYE.white(), 3, 1, 2), item(Items.DYE.red(), 2, 1, 2), item(Items.DYE.blue(), 2, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_FISHER, coins(LootTable.lootTable(), 1, 5, 0, 1, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.COD, 10, 1, 5), item(Items.SALMON, 8, 1, 4), item(Items.COOKED_COD, 6, 1, 3), item(Items.STRING, 6, 1, 4),
+                        item(Items.FISHING_ROD, 3, 1, 1), item(Items.KELP, 4, 1, 4), item(Items.LILY_PAD, 3, 1, 2),
+                        item(Items.INK_SAC, 3, 1, 3), item(Items.NAUTILUS_SHELL, 1, 1, 1), item(Items.TROPICAL_FISH, 2, 1, 2))));
+        this.output.accept(ModLootTables.VILLAGE_WATCHTOWER, coins(LootTable.lootTable(), 2, 7, 0, 2, 0.0f)
+                .withPool(pool(2, 5,
+                        item(Items.ARROW, 10, 4, 12), item(Items.BREAD, 8, 1, 3), item(Items.TORCH, 6, 2, 6), item(Items.IRON_INGOT, 4, 1, 3),
+                        item(Items.SHIELD, 2, 1, 1), item(ModItems.STEEL_SWORD.get(), 1, 1, 1), item(ModItems.ALE.get(), 4, 1, 2),
+                        item(Items.SPYGLASS, 1, 1, 1))));
+    }
+
     @Override
     public void run() {
         this.mageTowers();
+        this.villages();
         LootPool.Builder treasure = LootPool.lootPool()
                 .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.STEEL_SWORD.get()).setWeight(5)

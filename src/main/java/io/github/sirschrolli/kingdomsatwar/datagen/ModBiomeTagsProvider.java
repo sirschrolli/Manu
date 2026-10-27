@@ -10,6 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.common.Tags;
@@ -23,6 +24,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         this.overworldBiomes();
+        this.villages();
         this.tag(ModTags.Biomes.HAS_BANDITS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)
@@ -144,6 +146,34 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
      * Die eigenen Oberwelt-Biome in den allgemeinen Tags (Vanilla und {@code c:}), damit Spiel und andere Mods sie richtig
      * einordnen – und damit die Biom-Modifikatoren der Mod (Erze, Blumen, Kreaturen) sie erreichen.
      */
+    /**
+     * Die Dörfer: Fachwerk in Ebenen, Wiesen und Laubwäldern, nordische Blockhäuser in Taiga und Schneeland, Lehmbauten in
+     * Wüste und Savanne, Pfahlbauten in Sumpf und Moor. Die alten Dörfer (und die Außenposten der Plünderer) gibt es nicht
+     * mehr.
+     */
+    private void villages() {
+        var v = ModTags.Biomes.HAS_VILLAGE;
+        this.tag(v.get(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.TIMBER))
+                .add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.MEADOW).add(Biomes.FOREST).add(Biomes.FLOWER_FOREST)
+                .add(Biomes.BIRCH_FOREST).add(OverworldBiomes.ROYAL_MEADOWS);
+        this.tag(v.get(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.NORDIC))
+                .add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.SNOWY_PLAINS).add(Biomes.OLD_GROWTH_PINE_TAIGA)
+                .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
+        this.tag(v.get(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.CLAY))
+                .add(Biomes.DESERT).add(Biomes.SAVANNA);
+        this.tag(v.get(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.STILT))
+                .add(Biomes.SWAMP).add(Biomes.MANGROVE_SWAMP).add(OverworldBiomes.MIST_MOOR);
+        var ground = this.tag(ModTags.Biomes.VILLAGE_GROUND);
+        for (var style : io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.values()) {
+            ground.addTag(v.get(style));
+        }
+        // keine Dörfer und Außenposten aus Vanilla mehr
+        for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_VILLAGE_PLAINS, BiomeTags.HAS_VILLAGE_DESERT, BiomeTags.HAS_VILLAGE_SAVANNA,
+                BiomeTags.HAS_VILLAGE_SNOWY, BiomeTags.HAS_VILLAGE_TAIGA, BiomeTags.HAS_PILLAGER_OUTPOST)) {
+            this.tag(old).replace();
+        }
+    }
+
     private void overworldBiomes() {
         var all = OverworldBiomes.ALL;
         all.forEach(biome -> {

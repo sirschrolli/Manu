@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Prediction;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -48,16 +49,22 @@ public final class Trading {
                 Offer::new);
 
         /** Der Spieler kauft etwas für Münzen. */
-        static Offer buy(ItemLike item, int count, int price) {
+        public static Offer buy(ItemLike item, int count, int price) {
             return new Offer(ItemStack.EMPTY, price, new ItemStack(item, count), 0, "");
         }
 
+        /** Der Spieler kauft eine besondere Ware (verzaubert, gefärbt, ein Trank …) für Münzen. */
+        public static Offer buy(ItemStack goods, int price) {
+            return new Offer(ItemStack.EMPTY, price, goods, 0, "");
+        }
+
         /** Der Spieler verkauft etwas und bekommt Münzen. */
-        static Offer sell(ItemLike item, int count, int price) {
+        public static Offer sell(ItemLike item, int count, int price) {
             return new Offer(new ItemStack(item, count), 0, ItemStack.EMPTY, price, "");
         }
 
-        static Offer special(String id, ItemStack shown, int price) {
+        /** Ware, die erst beim Handel entsteht (z. B. eine Karte); {@code shown} ist nur das Bild im Fenster. */
+        public static Offer special(String id, ItemStack shown, int price) {
             return new Offer(ItemStack.EMPTY, price, shown, 0, id);
         }
 
@@ -155,28 +162,29 @@ public final class Trading {
         return list;
     }
 
-    private static ItemStack named(Item item, String key) {
+    public static ItemStack named(Item item, String key) {
         ItemStack stack = new ItemStack(item);
         stack.set(net.minecraft.core.component.DataComponents.ITEM_NAME, Component.translatable(key));
         return stack;
     }
 
-    /** Wie viel günstiger bzw. besser es für diesen Spieler ist (in Prozent), und ob er als Herrscher nichts zahlt. */
-    public static int discount(Player player, CitizenEntity citizen) {
+    /** Wie viel günstiger bzw. besser es für diesen Spieler ist (in Prozent). */
+    public static int discount(Player player, CoinTrader trader) {
         return Reputation.rank(player).discount();
     }
 
+    /** Der gekrönte Herrscher bekommt bei den eigenen Bürgern alles umsonst. */
     public static boolean free(Player player, CitizenEntity citizen) {
         Town town = citizen.town();
         return town != null && town.crowned() && town.owner().equals(player.getUUID());
     }
 
     /** Die Angebote mit den Preisen für diesen Spieler. */
-    public static List<Offer> offers(Player player, CitizenEntity citizen) {
-        int discount = discount(player, citizen);
-        boolean free = free(player, citizen);
+    public static List<Offer> offers(Player player, CoinTrader trader) {
+        int discount = discount(player, trader);
+        boolean free = trader.givesFreely(player);
         List<Offer> priced = new ArrayList<>();
-        for (Offer o : baseOffers(citizen.getProfession())) {
+        for (Offer o : trader.baseOffers()) {
             int pay = free ? 0 : o.giveCoins() <= 0 ? 0 : Math.max(1, Math.round(o.giveCoins() * (100 - discount) / 100.0f));
             int earn = o.getCoins() <= 0 ? 0 : Math.round(o.getCoins() * (100 + discount / 2) / 100.0f);
             priced.add(new Offer(o.give(), pay, o.get(), earn, o.special()));
@@ -189,27 +197,31 @@ public final class Trading {
     // =====================================================================================
 
     /** Öffnet das Handelsfenster (auf dem Server). */
-    public static void open(ServerPlayer player, CitizenEntity citizen) {
-        citizen.setCustomer(player);
-        citizen.level().playSound(null, citizen.getX(), citizen.getY(), citizen.getZ(), SoundEvents.VILLAGER_TRADE, SoundSource.NEUTRAL, 0.6f, 1.0f);
-        send(player, citizen);
+    public static <T extends LivingEntity & CoinTrader> void open(ServerPlayer player, T trader) {
+        trader.setCustomer(player);
+        trader.level().playSound(null, trader.getX(), trader.getY(), trader.getZ(), SoundEvents.VILLAGER_TRADE, SoundSource.NEUTRAL, 0.6f, 1.0f);
+        send(player, trader);
     }
 
-    static void send(ServerPlayer player, CitizenEntity citizen) {
-        boolean closed = citizen.isClosed();
-        long remaining = closed ? Math.max(0, citizen.closedUntil() - System.currentTimeMillis()) : 0;
-        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new OpenTradePayload(citizen.getId(), citizen.getProfession().ordinal(), offers(player, citizen),
-                Math.max(0, limit() - citizen.tradesUsed()), remaining, discount(player, citizen), free(player, citizen), limit(),
-                (int) (pauseMillis() / 60_000L)));
+    static <T extends LivingEntity & CoinTrader> void send(ServerPlayer player, T trader) {
+        boolean closed = trader.isClosed();
+        long remaining = closed ? Math.max(0, trader.closedUntil() - System.currentTimeMillis()) : 0;
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new OpenTradePayload(trader.getId(), trader.skinTexture(),
+                trader.professionKey(), trader.traderName(), offers(player, trader), Math.max(0, limit() - trader.tradesUsed()), remaining,
+                discount(player, trader), trader.givesFreely(player), limit(), (int) (pauseMillis() / 60_000L)));
     }
 
     public enum Result { DONE, TOO_FAR, CLOSED, MISSING_ITEMS, MISSING_COINS, NO_SPACE, NOTHING }
 
     /** Führt einen Handel aus (auf dem Server; alles wird dort noch einmal geprüft). */
     public static Result trade(ServerPlayer player, int entityId, int index) {
-        if (!(player.level().getEntity(entityId) instanceof CitizenEntity citizen) || !citizen.getProfession().trader()) {
+        if (!(player.level().getEntity(entityId) instanceof LivingEntity entity) || !(entity instanceof CoinTrader trader) || !trader.canTrade()) {
             return Result.TOO_FAR;
         }
+        return trade(player, (LivingEntity & CoinTrader) entity, index);
+    }
+
+    private static <T extends LivingEntity & CoinTrader> Result trade(ServerPlayer player, T citizen, int index) {
         if (citizen.distanceToSqr(player) > 8.0 * 8.0 || !citizen.isAlive()) {
             return Result.TOO_FAR;
         }
@@ -231,7 +243,7 @@ public final class Trading {
         }
         ItemStack goods = offer.get().copy();
         if (!offer.special().isEmpty()) {
-            goods = special(player, offer.special());
+            goods = special(player, citizen, offer.special());
             if (goods.isEmpty()) {
                 return Result.NOTHING;
             }
@@ -262,25 +274,34 @@ public final class Trading {
         return Result.DONE;
     }
 
-    /** Waren, die erst beim Handel entstehen: Karten zum Siegelkreis und zu einem noch unbesiegten Drachennest. */
-    private static ItemStack special(ServerPlayer player, String id) {
+    /**
+     * Waren, die erst beim Handel entstehen: Karten zum Siegelkreis, zu einem noch unbesiegten Drachennest, zum
+     * nächsten anderen Dorf und zum nächsten Magierturm.
+     */
+    private static ItemStack special(ServerPlayer player, LivingEntity trader, String id) {
         ServerLevel level = player.level();
+        ServerLevel overworld = level.getServer().overworld();
         BlockPos target = switch (id) {
-            case "seal_map" -> io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.approximateCenter(level.getServer().overworld());
-            case "nest_map" -> nearestNest(player);
+            case "seal_map" -> io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.approximateCenter(overworld);
+            case "nest_map" -> nearestNest(overworld, player.blockPosition());
+            case "village_map" -> level == overworld ? Maps.nearestOtherVillage(overworld, trader) : null;
+            case "tower_map" -> level == overworld ? Maps.nearestMageTower(overworld, trader.blockPosition()) : null;
             default -> null;
         };
         if (target == null) {
             player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.trade.no_target").withStyle(ChatFormatting.GRAY));
             return ItemStack.EMPTY;
         }
-        return Maps.explorerMap(level.getServer().overworld(), target, id.equals("seal_map")
-                ? "item.kingdomsatwar.map.seal_circle" : "item.kingdomsatwar.map.nest");
+        return Maps.explorerMap(overworld, target, "item.kingdomsatwar.map." + switch (id) {
+            case "seal_map" -> "seal_circle";
+            case "nest_map" -> "nest";
+            case "village_map" -> "village";
+            default -> "mage_tower";
+        });
     }
 
-    /** Das nächste Nest eines noch unbesiegten Drachen (vom Spieler aus). */
-    private static @Nullable BlockPos nearestNest(ServerPlayer player) {
-        ServerLevel overworld = player.level().getServer().overworld();
+    /** Das nächste Nest eines noch unbesiegten Drachen (von {@code from} aus). */
+    public static @Nullable BlockPos nearestNest(ServerLevel overworld, BlockPos from) {
         var records = io.github.sirschrolli.kingdomsatwar.world.LairRecords.of(overworld);
         BlockPos best = null;
         double bestDist = Double.MAX_VALUE;
@@ -289,7 +310,7 @@ public final class Trading {
                 continue;
             }
             BlockPos pos = new BlockPos(entry.getValue().getMiddleBlockX(), overworld.getSeaLevel(), entry.getValue().getMiddleBlockZ());
-            double d = pos.distSqr(player.blockPosition());
+            double d = pos.distSqr(from);
             if (d < bestDist) {
                 best = pos;
                 bestDist = d;

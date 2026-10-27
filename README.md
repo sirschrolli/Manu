@@ -8,17 +8,18 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.7.0 – Die neue Oberwelt.**
+> **Testversion 0.8.0 – Die Dörfer.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
-> Krönung, die **Magie** mit sechs Erzmagiern in ihren Magiertürmen – dazu Drachen zum Reiten, Soldaten, Kreaturen,
-> Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.7: **acht eigene Biome** in jeder neuen Welt – Aschefelder, Frostgipfel, Sturmküste, Urhain,
-> Felsschluchten, Korallenküste, Königsauen und Nebelmoor –, jedes mit eigenem Boden, eigenen Bäumen und Pflanzen,
-> eigenen Farben, Partikeln und Klängen; dazu **Torf** und **Schilf** aus dem Moor.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (70 GameTests).
-> **Als Nächstes:** eigene Dörfer mit eigenen Bewohnern, eigene Tiere und Monster statt Vanilla, danach Nether und End.
+> Krönung, die **Magie** mit sechs Erzmagiern in ihren Magiertürmen, **acht eigene Biome** – dazu Drachen zum Reiten,
+> Soldaten, Kreaturen, Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
+> Neu in 0.8: **eigene Dörfer** statt der Vanilla-Dörfer – in vier Bauweisen (Fachwerk, Nordisch, Lehm, Pfahlbau),
+> mit Dorfplatz, Wegen, im Schnitt 17 Gebäuden, Feldern, Mühle, Schafweide, Fischerhütte und Wachtürmen – und
+> **eigene Dorfbewohner** in 17 Berufen, mit eigenem Tagesablauf (Arbeit, Dorfplatz, eigenes Bett), Handel gegen
+> Münzen, Gerüchten über Drachen, Siegelkreis und Nachbardörfer, und Dorfwachen, die sie beschützen.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (77 GameTests).
+> **Als Nächstes:** keine Vanilla-Bauwerke mehr, eigene Tiere und Monster statt Vanilla, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -50,7 +51,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
-| Eigene Dörfer und Bewohner, eigene Tiere und Monster statt Vanilla, keine Vanilla-Bauwerke; Nether und End | 🔨 in Arbeit |
+| Eigene Dörfer in vier Bauweisen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
+| Keine Vanilla-Bauwerke mehr, eigene Tiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -67,7 +69,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.7.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.8.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -75,11 +77,11 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.7.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.8.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
-   angelegten Welten; Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und Burgruinen entstehen nur in neu
-   erzeugten Gebieten.
+   angelegten Welten; Dörfer, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und Burgruinen entstehen nur
+   in neu erzeugten Gebieten.
 
 Beim ersten Betreten einer Welt läuft das **Intro**: ein Kameraflug über die Welt, die sechs Drachen und dein
 Königreich, mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder ansehen mit `/kaw intro`.
@@ -228,6 +230,77 @@ Luft, eigene Musik und Klänge.
   unten).
 - Finden mit `/locate biome kingdomsatwar:ash_fields` (bzw. `frost_peaks`, `storm_coast`, `primeval_forest`,
   `rock_gorges`, `coral_coast`, `royal_meadows`, `mist_moor`).
+
+### Dörfer und Dorfbewohner
+
+![Dörfer in den vier Bauweisen: Fachwerk, Nordisch, Lehm und Pfahlbau](docs/bilder/doerfer.jpg)
+
+Die Vanilla-Dörfer sind fort – an ihrer Stelle stehen **eigene Dörfer in vier Bauweisen**, jede passend zu ihrem Land:
+
+| Bauweise | Wo | Wie sie aussieht |
+|---|---|---|
+| **Fachwerk** | Ebenen, Sonnenblumenebenen, Wiesen, Laub-, Birken- und Blumenwälder, Königsauen | weißer Kalkputz zwischen dunklen Balken auf einem Sockel aus Mauerstein, rote oder braune Ziegeldächer, Bleiglasfenster mit grünen oder roten Läden |
+| **Nordisch** | Taiga, verschneite Taiga, Schneeebenen, Urwald-Taiga | Blockhäuser aus Fichtenstämmen auf einem Feldsteinsockel, steile Dächer aus Schiefer oder Holzschindeln |
+| **Lehm** | Wüste und Savanne | Lehm- und Kalkputz auf behauenem Sandstein, Flachdächer mit Brüstung, vorstehende Balken, bunte Sonnensegel |
+| **Pfahlbau** | Sumpf, Mangrovensumpf, Nebelmoor | Holzhäuser auf Pfählen über Wasser und Schlamm, Stege statt Wegen, Schindeldächer |
+
+- **Der Dorfplatz** in der Mitte ist gepflastert (im Moor eine Plattform auf Pfählen). Darauf steht ein Brunnen mit
+  Dach und Dorfglocke, eine Dorflinde, ein Maibaum, ein Springbrunnen oder eine Feuerstelle; ringsum Bänke, Laternen
+  und Marktstände.
+- Vom Platz führen **Wege** in alle Richtungen, mit Seitengassen, Stufen am Hang und Brücken über Wasser. Daran stehen
+  im Schnitt **17 Gebäude**: Wohnhäuser in drei Größen, Gasthaus, Schmiede, Bäckerei, meist eine Kapelle und vier bis
+  sechs Werkstätten (Schreibstube, Kartenhaus, Kräuterhaus, Metzgerei, Gerberei, Steinmetz, Bogner). Am Dorfrand
+  liegen Windmühle, Scheune, Felder (auch hinter den Häusern), eine Schafweide und am Wasser eine Fischerhütte mit Steg
+  und Boot; an den Wegenden stehen Wachtürme.
+- In den Truhen liegt, was in das Haus gehört (Vorräte, Werkzeug, Fisch, Wolle, Kräuter …), dazu ein paar Münzen.
+- Dörfer liegen nie in der Nähe eines Drachennests (mindestens rund 450 Blöcke entfernt) und nicht am Siegelkreis.
+  Vanilla-Dörfer und die Außenposten der Plünderer gibt es nicht mehr.
+- Finden mit `/locate structure kingdomsatwar:village_timber` (bzw. `village_nordic`, `village_clay`, `village_stilt`).
+
+![Die Dorfbewohner in ihren 17 Berufen](docs/bilder/dorfbewohner.jpg)
+
+**Die Bewohner** sind Männer und Frauen in 17 Berufen, jeder mit eigenem Namen und eigener Kleidung (Strohhut, Kapuze,
+Kappe mit Feder, Schürze, Bäckermütze, Gewand, Umhängetasche, Köcher …). **Rechtsklick** öffnet den **Handel** – mit
+Münzen, wie bei den Bürgern deiner Siedlung; dein Ansehen senkt die Preise, nach einer Pause gibt es neue Ware.
+**Schleichen + Rechtsklick** fängt ein **Gespräch** an.
+
+| Beruf | Wohnt und arbeitet in | Handelt mit |
+|---|---|---|
+| Tagelöhner | Wohnhaus, Gasthaus | – (erzählt dafür gern) |
+| Bauer | großem Haus, Windmühle, Scheune, Feld | Feldfrüchten, Saatgut und Brot |
+| Fischer | Fischerhütte | Fisch, Eimern, Angel (auch verzaubert) und Booten |
+| Schäfer | Schafweide | Wolle, Farben, Betten, Bannern, Gemälden und dem Webstuhl |
+| Bogner | Bogner | Pfeilen, Bögen und Armbrüsten (auch verzaubert) und Trankpfeilen |
+| Schreiber | Schreibstube | verzauberten Büchern, Uhr, Kompass und Namensschild |
+| Kartograf | Kartenhaus | Karten zum nächsten Dorf, zum Siegelkreis, zu einem Magierturm oder einem Drachennest; Fernrohr, Drachenkompass |
+| Kräuterkundiger | Kräuterhaus | Redstone, Lapis, Glowstone, Enderperlen, Erfahrungsfläschchen, Tränken und dem Braustand |
+| Rüstungsschmied | Schmiede | Eisen-, Ketten- und Stahlrüstung, Schild, verzauberter Diamantrüstung |
+| Waffenschmied | Schmiede | Eisen- und Stahlwaffen, Speer, verzauberten Waffen |
+| Werkzeugschmied | Schmiede | Stein-, Eisen- und Stahlwerkzeug, auch verzaubert |
+| Metzger | Metzgerei | Fleisch, Wildbret und Fleischpastete |
+| Gerber | Gerberei | gefärbter Lederrüstung, Pferderüstung, Sattel, Bündel und Leine |
+| Steinmetz | Steinmetz | Steinen, Terrakotta, Quarz und den Bau-Blöcken der Mod |
+| Bäcker | Bäckerei | Brot, Gebäck, Kuchen und Gerichten |
+| Wirt | Gasthaus | Essen, Bier, Wein und Met |
+| Händler | Marktstand am Platz | Alltäglichem und wechselnden Raritäten aus der Ferne |
+
+![Ein Tag im Dorf: Arbeit, Dorfplatz, Handel, Gerüchte und die Nacht im eigenen Bett](docs/bilder/dorfleben.jpg)
+
+**Ein Tag im Dorf:**
+- **Morgens** gehen alle an die Arbeit: mit dem Werkzeug ihres Berufs in der Hand, mit Hammerschlägen und Funken am
+  Amboss, Staub beim Steinmetz, Rauch beim Bäcker und Metzger; der Bauer geht übers Feld, erntet und sät gleich nach.
+  Zwischen den Schichten machen sie Pause.
+- **Nachmittags** trifft sich das Dorf auf dem Platz.
+- **Abends** geht jeder heim, **nachts** schläft jeder in seinem eigenen Bett.
+- Bei **Regen** stellen sie sich unter, vor Monstern laufen sie davon.
+
+**Gerüchte:** Im Gespräch erzählen die Bewohner, was man sich so erzählt – wo ein Drache haust (mit Himmelsrichtung und
+ungefährer Entfernung), wo der Siegelkreis liegt, wo das nächste Dorf ist, ob Regen kommt, und was man in ihrem Beruf
+wissen sollte.
+
+**Dorfwachen:** Schwertkämpfer am Dorfplatz und Bogenschützen auf den Wachtürmen beschützen die Bewohner vor Monstern –
+und vor dir: Wer einen Bewohner angreift, hat die Wachen am Hals, und wer einen tötet, verliert 40 Ansehen.
+Dorfwachen lassen sich nicht anheuern.
 
 ### Die Nester
 
@@ -487,6 +560,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
   liegen Fundstücke, die man mit dem Pinsel freilegt.
 - **Die sechs Magiertürme** – im Land ihres Elements (siehe „Die Erzmagier und ihre Türme“), mit
   `/locate structure kingdomsatwar:fire_mage_tower` (bzw. `ice_`, `lightning_`, `nature_`, `earth_`, `water_`) zu finden.
+- **Die Dörfer** in vier Bauweisen, je nach Land (siehe „Dörfer und Dorfbewohner“), mit
+  `/locate structure kingdomsatwar:village_timber` (bzw. `village_nordic`, `village_clay`, `village_stilt`) zu finden.
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -507,7 +582,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
-| `tradesBeforePause` (Server) | so oft kann man mit einem Bürger handeln, bevor sein Laden Pause macht (Standard: 16) |
+| `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |
 
 ---
@@ -518,13 +593,14 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.7.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.8.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
 | `python3 tools/generate_textures.py` | Alle Texturen neu zeichnen (`--preview datei.png` für eine Übersicht) |
 | `python3 tools/generate_entities.py` | Modelle und Texturen der Lebewesen neu erzeugen |
 | `python3 tools/generate_citizens.py` | Texturen der Bürger neu zeichnen (`--preview` für eine Übersicht) |
+| `python3 tools/generate_villagers.py` | Texturen der Dorfbewohner neu zeichnen (`--preview` für eine Übersicht) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
@@ -536,13 +612,14 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── KingdomsAtWar.java        Hauptklasse der Mod
 ├── registry/                 Blöcke, Gegenstände, Lebewesen, Geräusche, Kreativ-Tabs, Tags
 ├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
-├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Sitz
+├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
 ├── item/                     besondere Ausrüstung
 ├── worldgen/                 Erzadern, Blumen, Burgruinen, Nest-Biome, Nester (worldgen/lair), Siegelkreis (worldgen/seal),
-│                             die acht Oberwelt-Biome mit Biomquelle, Böden und Features (worldgen/overworld)
+│                             die acht Oberwelt-Biome mit Biomquelle, Böden und Features (worldgen/overworld),
+│                             die Dörfer mit Planer, Wegen, Plätzen und Gebäuden (worldgen/village)
 ├── client/                   Modelle, Renderer, Intro, Oberflächen
 ├── datagen/                  Datengenerierung (erzeugt src/generated/resources)
 └── gametest/                 automatische Tests
@@ -554,7 +631,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.7.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.8.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -562,8 +639,9 @@ Ein Tag wie `v0.7.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt** – die acht Oberwelt-Biome sind fertig, als Nächstes:
-   - eigene **Dörfer** mit eigenen Bewohnern (nie in der Nähe der Drachennester), keine Vanilla-Bauwerke mehr;
+1. **Eigene Welt** – die acht Oberwelt-Biome und die Dörfer sind fertig, als Nächstes:
+   - **keine Vanilla-Bauwerke** mehr: eigene Bauwerke an ihrer Stelle (etwa ein eigenes Bauwerk mit dem Endportal statt
+     der Festung, verlassene Stollen statt der Minen) – alles, was es dort zu finden gab, bleibt erhältlich;
    - eigene **Nutz- und Wildtiere** statt der Vanilla-Tiere – alles, was die Vanilla-Tiere fallen lassen, bleibt
      erhältlich;
    - eigene **Monster und Wassertiere**;
