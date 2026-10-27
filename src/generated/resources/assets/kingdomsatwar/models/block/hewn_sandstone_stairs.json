@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/hewn_sandstone",
+    "side": "kingdomsatwar:block/hewn_sandstone",
+    "top": "kingdomsatwar:block/hewn_sandstone"
+  }
+}

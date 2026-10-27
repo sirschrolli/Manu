@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "kingdomsatwar:aetherit",
+    "B": "minecraft:book",
+    "D": "minecraft:polished_deepslate",
+    "G": "minecraft:gold_ingot",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "ABA",
+    "GOG",
+    "DDD"
+  ],
+  "result": {
+    "id": "kingdomsatwar:magic_table"
+  }
+}

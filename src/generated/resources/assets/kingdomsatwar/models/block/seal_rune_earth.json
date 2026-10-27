@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "kingdomsatwar:block/seal_monolith_top",
+    "side": "kingdomsatwar:block/seal_rune_earth"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_table",
+  "condition": {
+    "type": "neoforge:loot_table_id",
+    "loot_table_id": "minecraft:blocks/tall_grass"
+  },
+  "priority": 0,
+  "table": "kingdomsatwar:gameplay/grass_seeds"
+}

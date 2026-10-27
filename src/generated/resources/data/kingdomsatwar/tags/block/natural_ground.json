@@ -1,0 +1,22 @@
+{
+  "values": [
+    "kingdomsatwar:volcanic_rock",
+    "kingdomsatwar:rime_stone",
+    "kingdomsatwar:shale",
+    "kingdomsatwar:stormstone",
+    "kingdomsatwar:abyssal_stone",
+    "kingdomsatwar:glowing_volcanic_rock",
+    "kingdomsatwar:cinder_soil",
+    "kingdomsatwar:ash_block",
+    "kingdomsatwar:frozen_soil",
+    "kingdomsatwar:glacier_ice",
+    "kingdomsatwar:rubble",
+    "kingdomsatwar:charged_stormstone",
+    "kingdomsatwar:abyssal_sand",
+    "kingdomsatwar:nacre_block",
+    "kingdomsatwar:peat",
+    "minecraft:dripstone_block",
+    "minecraft:basalt",
+    "minecraft:blackstone"
+  ]
+}

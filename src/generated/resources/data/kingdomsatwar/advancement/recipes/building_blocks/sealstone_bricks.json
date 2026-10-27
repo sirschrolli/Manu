@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_sealstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:polished_sealstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:sealstone_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_polished_sealstone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:sealstone_bricks"
+    ]
+  }
+}

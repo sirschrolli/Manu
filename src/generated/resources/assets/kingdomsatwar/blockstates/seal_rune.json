@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "element=earth,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_earth"
+    },
+    "element=earth,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_earth_lit"
+    },
+    "element=fire,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_fire"
+    },
+    "element=fire,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_fire_lit"
+    },
+    "element=ice,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_ice"
+    },
+    "element=ice,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_ice_lit"
+    },
+    "element=lightning,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_lightning"
+    },
+    "element=lightning,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_lightning_lit"
+    },
+    "element=nature,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_nature"
+    },
+    "element=nature,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_nature_lit"
+    },
+    "element=water,lit=false": {
+      "model": "kingdomsatwar:block/seal_rune_water"
+    },
+    "element=water,lit=true": {
+      "model": "kingdomsatwar:block/seal_rune_water_lit"
+    }
+  }
+}

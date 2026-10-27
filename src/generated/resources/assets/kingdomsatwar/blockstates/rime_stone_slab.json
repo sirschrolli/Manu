@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/rime_stone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/rime_stone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/rime_stone_slab_top"
+    }
+  }
+}

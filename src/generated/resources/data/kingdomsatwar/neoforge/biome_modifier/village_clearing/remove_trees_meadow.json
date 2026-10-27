@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:remove_features",
+  "biomes": "minecraft:meadow",
+  "features": "minecraft:trees_meadow",
+  "steps": "vegetal_decoration"
+}

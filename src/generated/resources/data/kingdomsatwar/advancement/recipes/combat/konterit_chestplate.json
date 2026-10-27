@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_konterit": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:konterit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:konterit_chestplate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_konterit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:konterit_chestplate"
+    ]
+  }
+}

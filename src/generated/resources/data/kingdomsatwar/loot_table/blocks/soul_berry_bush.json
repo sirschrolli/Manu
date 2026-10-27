@@ -1,0 +1,87 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:soul_berry_bush",
+                "state": {
+                  "age": "0"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 1
+              },
+              "name": "kingdomsatwar:soul_berries"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:soul_berry_bush",
+                "state": {
+                  "age": "1"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": 1
+              },
+              "name": "kingdomsatwar:soul_berries"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:soul_berry_bush",
+                "state": {
+                  "age": "2"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "max": 2,
+                  "min": 1
+                }
+              },
+              "name": "kingdomsatwar:soul_berries"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "kingdomsatwar:soul_berry_bush",
+                "state": {
+                  "age": "3"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "count": {
+                  "type": "minecraft:uniform",
+                  "max": 3,
+                  "min": 2
+                }
+              },
+              "name": "kingdomsatwar:soul_berries"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "kingdomsatwar:blocks/soul_berry_bush"
+}

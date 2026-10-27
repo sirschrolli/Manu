@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:copper_roof",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:copper_roof_slab"
+  }
+}

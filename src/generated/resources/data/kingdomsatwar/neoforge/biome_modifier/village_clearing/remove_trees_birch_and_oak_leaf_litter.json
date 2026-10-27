@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:remove_features",
+  "biomes": "minecraft:forest",
+  "features": "minecraft:trees_birch_and_oak_leaf_litter",
+  "steps": "vegetal_decoration"
+}

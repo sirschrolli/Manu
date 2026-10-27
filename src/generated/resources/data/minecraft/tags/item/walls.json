@@ -1,0 +1,22 @@
+{
+  "values": [
+    "kingdomsatwar:medieval_stone_wall",
+    "kingdomsatwar:rough_fieldstone_wall",
+    "kingdomsatwar:hewn_sandstone_wall",
+    "kingdomsatwar:dark_stone_brick_wall",
+    "kingdomsatwar:limestone_brick_wall",
+    "kingdomsatwar:weathered_stone_brick_wall",
+    "kingdomsatwar:mossy_wall_stone_wall",
+    "kingdomsatwar:cracked_stone_block_wall",
+    "kingdomsatwar:volcanic_rock_wall",
+    "kingdomsatwar:rime_stone_wall",
+    "kingdomsatwar:shale_wall",
+    "kingdomsatwar:stormstone_wall",
+    "kingdomsatwar:abyssal_stone_wall",
+    "kingdomsatwar:sealstone_wall",
+    "kingdomsatwar:sealstone_brick_wall",
+    "kingdomsatwar:shadow_stone_wall",
+    "kingdomsatwar:shadow_stone_brick_wall",
+    "kingdomsatwar:polished_shadow_stone_wall"
+  ]
+}

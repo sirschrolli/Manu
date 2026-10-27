@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:beef",
+    "minecraft:porkchop",
+    "minecraft:mutton",
+    "minecraft:sweet_berries"
+  ],
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:dragon_food"
+  }
+}

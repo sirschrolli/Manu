@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "kingdomsatwar:block/shadow_planks",
+    "side": "kingdomsatwar:block/shadow_planks",
+    "top": "kingdomsatwar:block/shadow_planks"
+  }
+}

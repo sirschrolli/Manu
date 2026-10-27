@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "#minecraft:banners",
+    "C": "minecraft:stone_bricks",
+    "G": "minecraft:gold_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " G ",
+    "BSB",
+    "CCC"
+  ],
+  "result": {
+    "id": "kingdomsatwar:town_banner"
+  }
+}

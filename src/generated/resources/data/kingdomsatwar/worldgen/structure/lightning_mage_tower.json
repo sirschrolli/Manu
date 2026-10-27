@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:mage_tower",
+  "biomes": "#kingdomsatwar:has_lightning_mage_tower",
+  "element": "lightning",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

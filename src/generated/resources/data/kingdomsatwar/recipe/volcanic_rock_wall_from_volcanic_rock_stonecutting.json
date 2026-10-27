@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:volcanic_rock",
+  "result": {
+    "id": "kingdomsatwar:volcanic_rock_wall"
+  }
+}

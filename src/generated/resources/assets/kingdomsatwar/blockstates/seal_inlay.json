@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "element=earth,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_earth"
+    },
+    "element=earth,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_earth_lit"
+    },
+    "element=fire,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_fire"
+    },
+    "element=fire,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_fire_lit"
+    },
+    "element=ice,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_ice"
+    },
+    "element=ice,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_ice_lit"
+    },
+    "element=lightning,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_lightning"
+    },
+    "element=lightning,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_lightning_lit"
+    },
+    "element=nature,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_nature"
+    },
+    "element=nature,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_nature_lit"
+    },
+    "element=water,lit=false": {
+      "model": "kingdomsatwar:block/seal_inlay_water"
+    },
+    "element=water,lit=true": {
+      "model": "kingdomsatwar:block/seal_inlay_water_lit"
+    }
+  }
+}

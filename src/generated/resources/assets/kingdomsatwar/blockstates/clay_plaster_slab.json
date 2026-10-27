@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/clay_plaster_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/clay_plaster"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/clay_plaster_slab_top"
+    }
+  }
+}

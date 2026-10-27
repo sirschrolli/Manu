@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "kingdomsatwar:water_dragon_scale"
+  },
+  "pattern": [
+    "M M",
+    "MMM",
+    "MMM"
+  ],
+  "result": {
+    "id": "kingdomsatwar:water_dragon_scale_chestplate"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "kingdomsatwar:amber_crystal",
+  "accent_chance": 0.03,
+  "in_water": false,
+  "max_radius": 3.2,
+  "min_radius": 1.6,
+  "secondary": "minecraft:tuff",
+  "secondary_chance": 0.3,
+  "stone": "kingdomsatwar:shale",
+  "top": "minecraft:air"
+}

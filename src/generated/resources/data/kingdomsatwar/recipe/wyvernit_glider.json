@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "M": "minecraft:phantom_membrane",
+    "S": "kingdomsatwar:steel_ingot",
+    "W": "kingdomsatwar:wyvernit"
+  },
+  "pattern": [
+    "WSW",
+    "M M",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:wyvernit_glider"
+  }
+}

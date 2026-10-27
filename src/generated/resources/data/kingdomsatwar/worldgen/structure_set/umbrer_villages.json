@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 73419211,
+    "separation": 9,
+    "spacing": 24
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:umbrer_village",
+      "weight": 1
+    }
+  ]
+}

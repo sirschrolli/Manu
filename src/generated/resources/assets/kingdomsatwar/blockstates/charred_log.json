@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "kingdomsatwar:block/charred_log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "kingdomsatwar:block/charred_log"
+    },
+    "axis=z": {
+      "model": "kingdomsatwar:block/charred_log",
+      "x": 90
+    }
+  }
+}

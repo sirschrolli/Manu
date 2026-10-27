@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "kingdomsatwar:block/garden_rose"
+  }
+}

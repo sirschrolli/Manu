@@ -1,0 +1,32 @@
+# Metadaten der Mod. Die Platzhalter (Dollarzeichen + geschweifte Klammern) werden beim Bauen aus gradle.properties ersetzt.
+license="${mod_license}"
+issueTrackerURL="https://github.com/sirschrolli/Manu/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://github.com/sirschrolli/Manu"
+bannerFile="kingdomsatwar_banner.png"
+iconFile="kingdomsatwar_icon.png"
+authors="${mod_authors}"
+credits="Inspiriert von Ancient Warfare und Ice and Fire"
+description='''
+Kingdoms at War – Dragon Warfare: Gründe dein mittelalterliches Königreich, bezwinge die sechs Elementardrachen und brich das Siegel der Schattenwelt.
+
+Die Geschichte „Das Siegel“ mit Chronik und Siegelkreis, sechs riesige Drachen-Bosse in eigenen Nestern, Nyxar und die Schattenwelt, eigene Drachen zum Reiten, Ritter und Soldaten, Münzen, eine wachsende Stadt mit Bürgern in acht Berufen, Handel und die Krönung auf dem eigenen Thron, die Magie mit sieben Zaubern in drei Stufen, Zaubertafeln, dem Magietisch, einem Zauberkreis und sechs Erzmagiern in ihren Magiertürmen – und eine neue Oberwelt mit acht eigenen Biomen (Aschefelder, Frostgipfel, Sturmküste, Urhain, Felsschluchten, Korallenküste, Königsauen und Nebelmoor) und eigenen Dörfern in vier Bauweisen, deren Bewohner in 17 Berufen arbeiten, handeln, sich auf dem Dorfplatz treffen und Gerüchte über die Drachen erzählen.
+'''
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"

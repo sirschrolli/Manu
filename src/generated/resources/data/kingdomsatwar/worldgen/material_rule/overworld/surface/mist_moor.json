@@ -1,0 +1,151 @@
+{
+  "type": "minecraft:sequence",
+  "sequence": [
+    {
+      "type": "minecraft:condition",
+      "if_true": "minecraft:on_floor",
+      "then_run": {
+        "type": "minecraft:sequence",
+        "sequence": [
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:y_above",
+              "add_stone_depth": false,
+              "anchor": {
+                "absolute": 62
+              },
+              "surface_depth_multiplier": 0
+            },
+            "then_run": {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:not",
+                "invert": {
+                  "type": "minecraft:y_above",
+                  "add_stone_depth": false,
+                  "anchor": {
+                    "absolute": 63
+                  },
+                  "surface_depth_multiplier": 0
+                }
+              },
+              "then_run": {
+                "type": "minecraft:condition",
+                "if_true": {
+                  "type": "minecraft:noise_threshold",
+                  "max_threshold": 1.7976931348623157E308,
+                  "min_threshold": 0.0,
+                  "noise": "minecraft:surface_swamp"
+                },
+                "then_run": {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:water"
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": "minecraft:not_underwater",
+            "then_run": {
+              "type": "minecraft:sequence",
+              "sequence": [
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.2,
+                    "noise": "minecraft:patch"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "kingdomsatwar:peat"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 0.3,
+                    "noise": "minecraft:surface"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:mud"
+                  }
+                },
+                {
+                  "type": "minecraft:condition",
+                  "if_true": {
+                    "type": "minecraft:noise_threshold",
+                    "max_threshold": 1.7976931348623157E308,
+                    "min_threshold": 1.8,
+                    "noise": "minecraft:small_patch"
+                  },
+                  "then_run": {
+                    "type": "minecraft:block",
+                    "result_state": "minecraft:moss_block"
+                  }
+                },
+                {
+                  "type": "minecraft:block",
+                  "result_state": "minecraft:grass_block"
+                }
+              ]
+            }
+          },
+          {
+            "type": "minecraft:condition",
+            "if_true": {
+              "type": "minecraft:noise_threshold",
+              "max_threshold": 1.7976931348623157E308,
+              "min_threshold": -0.1,
+              "noise": "minecraft:patch"
+            },
+            "then_run": {
+              "type": "minecraft:block",
+              "result_state": "kingdomsatwar:peat"
+            }
+          },
+          {
+            "type": "minecraft:block",
+            "result_state": "minecraft:mud"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": "minecraft:not_under_deep_water",
+      "then_run": {
+        "type": "minecraft:condition",
+        "if_true": "minecraft:under_floor",
+        "then_run": {
+          "type": "minecraft:sequence",
+          "sequence": [
+            {
+              "type": "minecraft:condition",
+              "if_true": {
+                "type": "minecraft:noise_threshold",
+                "max_threshold": 1.7976931348623157E308,
+                "min_threshold": 0.0,
+                "noise": "minecraft:patch"
+              },
+              "then_run": {
+                "type": "minecraft:block",
+                "result_state": "kingdomsatwar:peat"
+              }
+            },
+            {
+              "type": "minecraft:block",
+              "result_state": "minecraft:dirt"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

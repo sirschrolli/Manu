@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:timber_frame"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_timber_beam": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:timber_beam"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_timber_beam"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:timber_frame"
+    ]
+  }
+}

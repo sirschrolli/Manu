@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_deer",
+  "spawners": {
+    "type": "kingdomsatwar:deer",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "weight": 8
+  }
+}

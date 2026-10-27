@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:sealstone",
+  "result": {
+    "id": "kingdomsatwar:sealstone_bricks"
+  }
+}

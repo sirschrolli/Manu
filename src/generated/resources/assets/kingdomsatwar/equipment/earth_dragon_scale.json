@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "kingdomsatwar:earth_dragon_scale"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "kingdomsatwar:earth_dragon_scale"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "kingdomsatwar:earth_dragon_scale"
+      }
+    ]
+  }
+}

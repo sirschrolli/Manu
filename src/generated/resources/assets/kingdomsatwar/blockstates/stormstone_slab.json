@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/stormstone_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/stormstone"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/stormstone_slab_top"
+    }
+  }
+}

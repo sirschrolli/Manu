@@ -1,0 +1,154 @@
+package io.github.sirschrolli.kingdomsatwar.client;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.client.boss.BossProjectileRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.boss.DragonBossModel;
+import io.github.sirschrolli.kingdomsatwar.client.boss.DragonBossRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.PyrrhonGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.CaveTrollGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.DeerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.DragonArmorGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.DragonGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.GooseGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.LindwormGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.WildBoarGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.WillOWispGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.CrystalCrawlerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.GlimmerMothGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.NightWingGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.ShadeStalkerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.CrystalCrawlerRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.GlimmerMothRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.MoonStagRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.NightWingRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.shadow.ShadeStalkerRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.model.SoldierModel;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.BanditRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.CaveTrollRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.DeerRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.GooseRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.LindwormRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.WildBoarRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.creature.WillOWispRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.DragonRenderer;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.SoldierRenderer;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import io.github.sirschrolli.kingdomsatwar.client.boss.BossParticle;
+import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
+
+/** Anmeldung aller Client-Dinge: Modelle und Renderer der Lebewesen. */
+@EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
+public final class ClientSetup {
+    private ClientSetup() {}
+
+    @SubscribeEvent
+    static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(ModModelLayers.DRAGON, DragonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.DRAGON_ARMOR, DragonArmorGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WILL_O_WISP, WillOWispGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CITIZEN, io.github.sirschrolli.kingdomsatwar.client.model.CitizenModel::createLayer);
+        event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.NYXAR, io.github.sirschrolli.kingdomsatwar.client.model.geom.NyxarGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GLACIARA, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlaciaraGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VERDANTIS, io.github.sirschrolli.kingdomsatwar.client.model.geom.VerdantisGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.TERRAGON, io.github.sirschrolli.kingdomsatwar.client.model.geom.TerragonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VOLTARION, io.github.sirschrolli.kingdomsatwar.client.model.geom.VoltarionGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.THALASSA, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThalassaGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VINELING, io.github.sirschrolli.kingdomsatwar.client.model.geom.VinelingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHADE_STALKER, ShadeStalkerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CRYSTAL_CRAWLER, CrystalCrawlerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.NIGHT_WING, NightWingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
+    }
+
+    @SubscribeEvent
+    static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        ModEntities.DRAGONS.values().forEach(type -> event.registerEntityRenderer(type.get(), DragonRenderer::new));
+        ModEntities.SOLDIERS.values().forEach(type -> event.registerEntityRenderer(type.get(), SoldierRenderer::new));
+        event.registerEntityRenderer(ModEntities.BANDIT.get(), BanditRenderer::new);
+        ModEntities.MAGES.values().forEach(type -> event.registerEntityRenderer(type.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new));
+        event.registerEntityRenderer(ModEntities.MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_MISSILE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MagicMissileRenderer::new);
+        event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
+        event.registerEntityRenderer(ModEntities.VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.VillagerRenderer::new);
+        event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
+        event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
+        event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
+        event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEAT.get(), NoopRenderer::new);
+        event.registerEntityRenderer(ModEntities.WILL_O_WISP.get(), WillOWispRenderer::new);
+        event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
+        event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
+        // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
+        event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,
+                new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 6, 8, true, 4, 32.0f),
+                KingdomsAtWar.id("textures/entity/boss/pyrrhon.png"), KingdomsAtWar.id("textures/entity/boss/pyrrhon_glow.png"),
+                2.1f, 4.4f, 4.5f));
+        event.registerEntityRenderer(ModEntities.GLACIARA.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.GlaciaraModel(context.bakeLayer(ModModelLayers.GLACIARA)),
+                KingdomsAtWar.id("textures/entity/boss/glaciara.png"), KingdomsAtWar.id("textures/entity/boss/glaciara_glow.png"),
+                2.1f, 4.8f, 4.0f));
+        event.registerEntityRenderer(ModEntities.VERDANTIS.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.VerdantisModel(context.bakeLayer(ModModelLayers.VERDANTIS)),
+                KingdomsAtWar.id("textures/entity/boss/verdantis.png"), KingdomsAtWar.id("textures/entity/boss/verdantis_glow.png"),
+                2.0f, 4.2f, 4.8f));
+        event.registerEntityRenderer(ModEntities.TERRAGON.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.TerragonModel(context.bakeLayer(ModModelLayers.TERRAGON)),
+                KingdomsAtWar.id("textures/entity/boss/terragon.png"), KingdomsAtWar.id("textures/entity/boss/terragon_glow.png"),
+                2.2f, 4.3f, 5.0f));
+        event.registerEntityRenderer(ModEntities.VOLTARION.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.VoltarionModel(context.bakeLayer(ModModelLayers.VOLTARION)),
+                KingdomsAtWar.id("textures/entity/boss/voltarion.png"), KingdomsAtWar.id("textures/entity/boss/voltarion_glow.png"),
+                2.1f, 4.2f, 4.2f));
+        event.registerEntityRenderer(ModEntities.THALASSA.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.ThalassaModel(context.bakeLayer(ModModelLayers.THALASSA)),
+                KingdomsAtWar.id("textures/entity/boss/thalassa.png"), KingdomsAtWar.id("textures/entity/boss/thalassa_glow.png"),
+                2.0f, 1.5f, 4.0f));
+        event.registerEntityRenderer(ModEntities.NYXAR.get(), context -> new DragonBossRenderer<>(context,
+                new io.github.sirschrolli.kingdomsatwar.client.boss.NyxarModel(context.bakeLayer(ModModelLayers.NYXAR)),
+                KingdomsAtWar.id("textures/entity/boss/nyxar.png"), KingdomsAtWar.id("textures/entity/boss/nyxar_glow.png"),
+                2.3f, 4.8f, 5.0f));
+        event.registerEntityRenderer(ModEntities.VINELING.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
+        event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
+        // Kreaturen der Schattenwelt
+        event.registerEntityRenderer(ModEntities.SHADE_STALKER.get(), ShadeStalkerRenderer::new);
+        event.registerEntityRenderer(ModEntities.CRYSTAL_CRAWLER.get(), CrystalCrawlerRenderer::new);
+        event.registerEntityRenderer(ModEntities.NIGHT_WING.get(), NightWingRenderer::new);
+        event.registerEntityRenderer(ModEntities.MOON_STAG.get(), MoonStagRenderer::new);
+        event.registerEntityRenderer(ModEntities.GLIMMER_MOTH.get(), GlimmerMothRenderer::new);
+        // die Umbrer
+        event.registerEntityRenderer(ModEntities.UMBRER.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);
+        event.registerEntityRenderer(ModEntities.UMBRER_GUARD.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity>::new);
+    }
+
+    @SubscribeEvent
+    static void registerParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(ModParticles.BOSS_FLAME.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FLAME));
+        event.registerSpriteSet(ModParticles.BOSS_FROST.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FROST));
+        event.registerSpriteSet(ModParticles.BOSS_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SPARK));
+        event.registerSpriteSet(ModParticles.BOSS_SPORE.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SPORE));
+        event.registerSpriteSet(ModParticles.BOSS_DUST.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.DUST));
+        event.registerSpriteSet(ModParticles.BOSS_WATER.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.WATER));
+        event.registerSpriteSet(ModParticles.BOSS_SHADOW.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SHADOW));
+    }
+}

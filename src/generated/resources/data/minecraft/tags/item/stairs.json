@@ -1,0 +1,32 @@
+{
+  "values": [
+    "kingdomsatwar:medieval_stone_stairs",
+    "kingdomsatwar:rough_fieldstone_stairs",
+    "kingdomsatwar:hewn_sandstone_stairs",
+    "kingdomsatwar:dark_stone_brick_stairs",
+    "kingdomsatwar:limestone_brick_stairs",
+    "kingdomsatwar:weathered_stone_brick_stairs",
+    "kingdomsatwar:mossy_wall_stone_stairs",
+    "kingdomsatwar:cracked_stone_block_stairs",
+    "kingdomsatwar:red_roof_tile_stairs",
+    "kingdomsatwar:brown_roof_tile_stairs",
+    "kingdomsatwar:dark_slate_shingle_stairs",
+    "kingdomsatwar:wooden_shingle_stairs",
+    "kingdomsatwar:light_roof_tile_stairs",
+    "kingdomsatwar:copper_roof_stairs",
+    "kingdomsatwar:white_plaster_stairs",
+    "kingdomsatwar:clay_plaster_stairs",
+    "kingdomsatwar:volcanic_rock_stairs",
+    "kingdomsatwar:rime_stone_stairs",
+    "kingdomsatwar:ancient_plank_stairs",
+    "kingdomsatwar:shale_stairs",
+    "kingdomsatwar:stormstone_stairs",
+    "kingdomsatwar:abyssal_stone_stairs",
+    "kingdomsatwar:sealstone_stairs",
+    "kingdomsatwar:sealstone_brick_stairs",
+    "kingdomsatwar:shadow_stone_stairs",
+    "kingdomsatwar:shadow_stone_brick_stairs",
+    "kingdomsatwar:polished_shadow_stone_stairs",
+    "kingdomsatwar:shadow_plank_stairs"
+  ]
+}

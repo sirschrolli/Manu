@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:mossy_wall_stones",
+  "result": {
+    "id": "kingdomsatwar:mossy_wall_stone_stairs"
+  }
+}

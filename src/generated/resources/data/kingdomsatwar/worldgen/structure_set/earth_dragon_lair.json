@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:unique_nest",
+    "biomes": "#kingdomsatwar:has_earth_dragon_nests",
+    "element": "earth",
+    "inland": true,
+    "max_distance": 2500,
+    "min_distance": 900,
+    "salt": 421
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:earth_dragon_lair",
+      "weight": 1
+    }
+  ]
+}
