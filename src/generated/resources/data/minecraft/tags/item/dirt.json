@@ -1,5 +1,8 @@
 {
   "values": [
+    "kingdomsatwar:cinder_soil",
+    "kingdomsatwar:frozen_soil",
+    "kingdomsatwar:peat",
     "kingdomsatwar:shadow_soil",
     "kingdomsatwar:shadow_grass"
   ]

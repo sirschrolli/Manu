@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.Block;
 public final class ModTags {
     public static final class Blocks {
         public static final TagKey<Block> DRAGON_EGGS = mod("dragon_eggs");
+        /** Natürlicher Boden der eigenen Biome (Vulkangestein, Asche, Reifstein, Torf …): darauf dürfen Bäume und Felsen stehen. */
+        public static final TagKey<Block> NATURAL_GROUND = mod("natural_ground");
         /** Stämme und Holz der Schattenbäume (für die Bretter). */
         public static final TagKey<Block> SHADOW_LOGS = mod("shadow_logs");
         /** Gestein der Schattenwelt, in dem Erze entstehen können. */

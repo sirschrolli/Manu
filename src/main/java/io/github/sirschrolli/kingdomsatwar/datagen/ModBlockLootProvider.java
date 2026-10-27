@@ -151,6 +151,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(block.get());
         }
 
+        // Eigene Oberwelt-Biome: Torf; Schilf nur aus der unteren Hälfte (wie hohe Blumen)
+        dropSelf(ModBlocks.PEAT.get());
+        add(ModBlocks.REEDS.get(), block -> this.createSinglePropConditionTable(block, net.minecraft.world.level.block.DoublePlantBlock.HALF,
+                net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
+
         // Siegelstein (die heiligen Teile des Siegelkreises sind unzerstörbar und haben keine Beute)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE)) {

@@ -52,6 +52,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.PIECES.register(modBus);
         ModFeatureTypes.FEATURE_TYPES.register(modBus);
         ModFeatureTypes.PLACEMENT_TYPES.register(modBus);
+        ModFeatureTypes.BIOME_SOURCES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);
 

@@ -2,6 +2,7 @@
   "values": [
     "#minecraft:is_forest",
     "#minecraft:is_taiga",
+    "kingdomsatwar:royal_meadows",
     "minecraft:meadow",
     "minecraft:cherry_grove"
   ]

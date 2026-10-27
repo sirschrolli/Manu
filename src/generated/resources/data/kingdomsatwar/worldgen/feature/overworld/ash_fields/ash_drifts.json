@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:dune",
+  "layer": "kingdomsatwar:ash_layer",
+  "max_layers": 3,
+  "radius": 4.0
+}

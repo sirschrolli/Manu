@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:fallen_trunk",
+  "log": "kingdomsatwar:ancient_log",
+  "max_length": 10,
+  "min_length": 5
+}

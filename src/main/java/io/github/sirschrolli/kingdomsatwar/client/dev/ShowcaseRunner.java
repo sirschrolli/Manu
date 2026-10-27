@@ -74,7 +74,7 @@ public final class ShowcaseRunner {
         worldRequested = true;
         Minecraft minecraft = Minecraft.getInstance();
         boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal") || SCENES.contains("tower")
-                || SCENES.contains("magefight"));
+                || SCENES.contains("magefight") || SCENES.contains("biome"));
         try {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,

@@ -82,6 +82,18 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.GLOW_CORAL, "Glow Coral", "Leuchtkoralle");
         block(ModBlocks.NACRE_BLOCK, "Nacre Block", "Perlmuttblock");
 
+        // --- Eigene Oberwelt-Biome ---
+        text("biome.kingdomsatwar.ash_fields", "Ash Fields", "Aschefelder");
+        text("biome.kingdomsatwar.frost_peaks", "Frost Peaks", "Frostgipfel");
+        text("biome.kingdomsatwar.storm_coast", "Storm Coast", "Sturmküste");
+        text("biome.kingdomsatwar.primeval_forest", "Primeval Forest", "Urhain");
+        text("biome.kingdomsatwar.rock_gorges", "Rock Gorges", "Felsschluchten");
+        text("biome.kingdomsatwar.coral_coast", "Coral Coast", "Korallenküste");
+        text("biome.kingdomsatwar.royal_meadows", "Royal Meadows", "Königsauen");
+        text("biome.kingdomsatwar.mist_moor", "Mist Moor", "Nebelmoor");
+        block(ModBlocks.PEAT, "Peat", "Torf");
+        block(ModBlocks.REEDS, "Reeds", "Schilf");
+
         // --- Aschelande ---
         text("biome.kingdomsatwar.ashlands", "Ashlands", "Aschelande");
         block(ModBlocks.ASH_BLOCK, "Ash", "Asche");

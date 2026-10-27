@@ -504,6 +504,21 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
 
     // =====================================================================================
+    // Oberwelt: Nebelmoor
+    // =====================================================================================
+
+    /** Torf: dunkler, faseriger Moorboden – brennt im Ofen so lange wie ein Boot (sechs Gegenstände). */
+    public static final DeferredBlock<Block> PEAT = blockWithItem("peat", Block::new,
+            p -> p.mapColor(MapColor.TERRACOTTA_BROWN).strength(0.6f).sound(SoundType.ROOTED_DIRT),
+            ip -> ip.cookingFuel(ContextIntProviders.COOKING_TIME_BOATS), NATURE_TAB);
+    /** Schilf: zwei Blöcke hohe Halme mit Kolben, am Ufer und im flachen Wasser. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ReedsBlock> REEDS = blockWithItem("reeds",
+            io.github.sirschrolli.kingdomsatwar.block.ReedsBlock::new,
+            p -> p.mapColor(MapColor.PLANT).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)
+                    .ignitedByLava().pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), NATURE_TAB);
+
+    // =====================================================================================
     // Siegelkreis: uralter Siegelstein, Monolithen, Runen, das Siegel und das Schattentor
     // =====================================================================================
 

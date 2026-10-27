@@ -8,16 +8,17 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.6.0 – Die Magie.**
+> **Testversion 0.7.0 – Die neue Oberwelt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
-> Krönung – dazu Drachen zum Reiten, Soldaten, Kreaturen, Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.6: die **Magie** – sieben Zauber in drei Stufen, **Zaubertafeln**, der **Magietisch** mit kreisenden
-> Runen, ein **Zauberkreis** zum Wählen (Taste V) und **sechs Erzmagier** als Bosse, jeder in seinem eigenen
-> **Magierturm** – mit Bibliothek, Laboratorium, Kammer und dem Sanktum unter einem spitzen Dach.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (66 GameTests).
-> **Als Nächstes:** eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End).
+> Krönung, die **Magie** mit sechs Erzmagiern in ihren Magiertürmen – dazu Drachen zum Reiten, Soldaten, Kreaturen,
+> Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
+> Neu in 0.7: **acht eigene Biome** in jeder neuen Welt – Aschefelder, Frostgipfel, Sturmküste, Urhain,
+> Felsschluchten, Korallenküste, Königsauen und Nebelmoor –, jedes mit eigenem Boden, eigenen Bäumen und Pflanzen,
+> eigenen Farben, Partikeln und Klängen; dazu **Torf** und **Schilf** aus dem Moor.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (70 GameTests).
+> **Als Nächstes:** eigene Dörfer mit eigenen Bewohnern, eigene Tiere und Monster statt Vanilla, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -48,7 +49,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen; Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
-| Eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End) | ⏳ geplant |
+| Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
+| Eigene Dörfer und Bewohner, eigene Tiere und Monster statt Vanilla, keine Vanilla-Bauwerke; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -65,7 +67,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.5.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.7.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -73,10 +75,11 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.5.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.7.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
-3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Erze, Kreaturen, Blumen, der
-   Siegelkreis, die Drachennester und Burgruinen entstehen nur in neu erzeugten Gebieten.
+3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
+   angelegten Welten; Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und Burgruinen entstehen nur in neu
+   erzeugten Gebieten.
 
 Beim ersten Betreten einer Welt läuft das **Intro**: ein Kameraflug über die Welt, die sechs Drachen und dein
 Königreich, mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder ansehen mit `/kaw intro`.
@@ -199,6 +202,33 @@ hält Abstand zu Dörfern und anderen Bauwerken und steht auf einer Lichtung. Mi
 - **Felsbrücken**: natürliche Bögen aus Schattenstein über Schluchten und Senken, oben bewachsen, unten hängen
   Glimmerranken.
 
+### Die neue Oberwelt
+
+![Die acht neuen Biome](docs/bilder/biome.jpg)
+
+In jeder neuen Welt wachsen **acht eigene Biome** zwischen den bekannten Landschaften. Jedes hat seinen eigenen Boden,
+eigene Bäume, Pflanzen und Felsen, eigene Farben für Himmel, Nebel, Wasser, Gras und Laub, eigene Partikel in der
+Luft, eigene Musik und Klänge.
+
+| Biom | Wo | Was es ausmacht |
+|---|---|---|
+| **Aschefelder** | in einem Teil der Wüsten | Asche, Aschenerde und Vulkangestein; verkohlte Haine, Aschedünen, Glutspalten mit glühendem Grund, rauchende Schlote, Felsnadeln aus Vulkangestein, Feuerlilien; Asche weht durch die Luft |
+| **Frostgipfel** | auf allen vereisten Gipfeln und einem Teil der Schneehänge | Schnee, Gletschereis, Packeis, Raureifstein, tückische Pulverschnee-Mulden; Eisnadeln mit Adern aus Blaueis und Frostkristallen auf den Spitzen, Eiszapfen unter Überhängen, Schneewehen, Frostblumen |
+| **Sturmküste** | an allen steinigen Küsten | Sturmstein mit Kiesbändern; Brandungstürme aus Sturmstein und Schiefer, Findlinge in der Brandung, Fulgurite mit Sturmkristallen, vom Wind gebeugte Fichten, fernes Donnergrollen und Funken in der Luft |
+| **Urhain** | in einem Teil der kühlen Wälder | uralte Riesenbäume aus Urholz auf Wurzelfüßen, mit Ranken voller Leuchtbeeren; umgestürzte, bemooste Stämme, Podsol, Moos und Leuchtmoos, Farne, Leuchtkappen, Hainglocken, Dornengestrüpp, Laubstreu und Glühwürmchen |
+| **Felsschluchten** | auf den Savannen-Hochebenen und den windgepeitschten Savannen | Felswände in Bändern aus Tuff, Schiefer, Kalzit, Andesit, Terrakotta und Tropfstein; hohe Felsnadeln, Geröll, Bernsteindrusen, Akazien und trockenes Gras |
+| **Korallenküste** | an den warmen Stränden und im flachen Wasser davor | weißer Sand, türkise Lagunen mit Korallengärten, Riffen, Seegras und Meeresgurken; Palmen, Perlmuttfelsen, Schildkröten und Tropenfische |
+| **Königsauen** | in einem Teil der gemäßigten Ebenen | wogende Blumenwiesen aus Lavendel, Kornblumen, Gartenrosen, Margeriten und Mohn; mächtige Königseichen, kleine Eichenhaine, einzelne Birken; Rothirsche |
+| **Nebelmoor** | in den kühlen Sümpfen | Torf, Schlamm und Moos; Mooraugen mit Schilf und Seerosen, tote Bäume und Moorbirken mit fahlem Moos, Blasseichen, Mondblumen; trübes Wasser und dichter Nebel |
+
+- **Torf** brennt im Ofen so lange wie ein Boot, **Schilf** wächst im flachen Wasser und am Ufer.
+- Die Biome entstehen in den Weltarten **Standard**, **Große Biome** und **Zerklüftet** – auch auf Servern. Bestehende
+  Welten behalten ihre Landschaft; die neuen Biome gibt es nur in neu angelegten Welten.
+- Drachennester, Magiertürme, der Siegelkreis, Erze, Blumen und Kreaturen kennen die neuen Biome (siehe die Tabellen
+  unten).
+- Finden mit `/locate biome kingdomsatwar:ash_fields` (bzw. `frost_peaks`, `storm_coast`, `primeval_forest`,
+  `rock_gorges`, `coral_coast`, `royal_meadows`, `mist_moor`).
+
 ### Die Nester
 
 ![Die sechs Nester](docs/bilder/nester.jpg)
@@ -209,11 +239,11 @@ Farben, Partikel und Geräusche hat.
 
 | Nest | Wo | Biom ringsum |
 |---|---|---|
-| Pyrrhons **Vulkankrater** | Badlands, Wüste | **Aschelande:** Aschedünen, Aschenerde, verkohlte Bäume, Vulkangestein mit Glutrissen, rauchende Glutspalten, fallende Asche |
-| Glaciaras **Gletscherkessel** | Eiszapfen-Ebene, vereiste Gipfel | **Frostkessel:** Gletschereis, Raureifstein, Frosterde, Frostkristalle, Eiszapfen, Schneetreiben |
+| Pyrrhons **Vulkankrater** | Badlands, Wüste, Aschefelder | **Aschelande:** Aschedünen, Aschenerde, verkohlte Bäume, Vulkangestein mit Glutrissen, rauchende Glutspalten, fallende Asche |
+| Glaciaras **Gletscherkessel** | Eiszapfen-Ebene, Schneeebene, Schneehänge, Frostgipfel | **Frostkessel:** Gletschereis, Raureifstein, Frosterde, Frostkristalle, Eiszapfen, Schneetreiben |
 | Voltarions **Sturmgipfel** | zerklüftete und steinige Gipfel | **Sturmklippen:** Sturmstein, geladener Sturmstein, Fulgurit, Sturmkristalle, Kupferadern, verfallene Wachtürme |
-| Verdantis' Nest im **Uralten Hain** | Dschungel, dunkler Wald | **Uralter Hain:** Riesenbäume aus Urholz, Leuchtmoos, Leuchtkappen, Dornengestrüpp, knorrige Wurzeln |
-| Terragons **Felsschlucht** | windgepeitschte Hügel, Savannen-Hochebene | **Zerklüftete Weiten:** Felsnadeln, Schiefer, Geröll, Spaltgestein, Bernsteindrusen |
+| Verdantis' Nest im **Uralten Hain** | Dschungel, dunkler Wald, Urhain | **Uralter Hain:** Riesenbäume aus Urholz, Leuchtmoos, Leuchtkappen, Dornengestrüpp, knorrige Wurzeln |
+| Terragons **Felsschlucht** | windgepeitschte Hügel, Felsschluchten | **Zerklüftete Weiten:** Felsnadeln, Schiefer, Geröll, Spaltgestein, Bernsteindrusen |
 | Thalassas **Versunkene Grotte** | am Grund des tiefen Ozeans | **Abgrundgrotte:** Abgrundstein und -sand, Leuchtkorallen, Perlmutt, Schlote, Walknochen, versunkene Säulen |
 
 **Nester finden**
@@ -392,12 +422,12 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
 
 | Erzmagier | Turm | Land |
 |---|---|---|
-| **Ignatius**, Erzmagier der Flammen | schwarzer Basalt, ziegelrotes Dach, eine Flamme auf der Spitze | Wüste, Tafelberge |
+| **Ignatius**, Erzmagier der Flammen | schwarzer Basalt, ziegelrotes Dach, eine Flamme auf der Spitze | Wüste, Tafelberge, Aschefelder |
 | **Isolde**, Erzmagierin des Frosts | Reifstein und Packeis, Schieferdach, Frostkristall | Schneeebene, Eisdornen, Schneetaiga, Hain |
-| **Fulgor**, Erzmagier der Stürme | Tiefenschiefer und Kupfer, grünes Kupferdach, Blitzableiter | Bergwiese, windige Hügel, steinige Küste |
-| **Sylvana**, Erzmagierin der Wildnis | bemoostes Mauerwerk, Holzschindeln, eine blühende Krone | Wälder, Dschungel, Kirschhain |
-| **Gorvan**, Erzmagier des Gesteins | Tuff und Lehmziegel, braune Ziegel, Bernstein | Savanne, Ebene, Taiga |
-| **Marena**, Erzmagierin der Gezeiten | Prismarin und Perlmutt, dunkles Prismarindach | Strand, Sumpf, Mangrovensumpf |
+| **Fulgor**, Erzmagier der Stürme | Tiefenschiefer und Kupfer, grünes Kupferdach, Blitzableiter | Bergwiese, windige Hügel, Sturmküste |
+| **Sylvana**, Erzmagierin der Wildnis | bemoostes Mauerwerk, Holzschindeln, eine blühende Krone | Wälder, Dschungel, Kirschhain, Urhain |
+| **Gorvan**, Erzmagier des Gesteins | Tuff und Lehmziegel, braune Ziegel, Bernstein | Savanne, Ebene, Taiga, Felsschluchten |
+| **Marena**, Erzmagierin der Gezeiten | Prismarin und Perlmutt, dunkles Prismarindach | Strand, Sumpf, Mangrovensumpf, Korallenküste, Nebelmoor |
 
 - Über eine Wendeltreppe an der Wand geht es durch **Eingangshalle**, **Bibliothek** (mit den Aufzeichnungen des
   Magiers auf dem Lesepult – darin Hinweise für den Kampf), **Laboratorium** (mit Magietisch und Braustand) und
@@ -488,7 +518,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.5.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.7.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -511,7 +541,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
 ├── item/                     besondere Ausrüstung
-├── worldgen/                 Erzadern, Blumen, Burgruinen, Nest-Biome, Nester (worldgen/lair), Siegelkreis (worldgen/seal)
+├── worldgen/                 Erzadern, Blumen, Burgruinen, Nest-Biome, Nester (worldgen/lair), Siegelkreis (worldgen/seal),
+│                             die acht Oberwelt-Biome mit Biomquelle, Böden und Features (worldgen/overworld)
 ├── client/                   Modelle, Renderer, Intro, Oberflächen
 ├── datagen/                  Datengenerierung (erzeugt src/generated/resources)
 └── gametest/                 automatische Tests
@@ -523,7 +554,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.6.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.7.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -531,7 +562,12 @@ Ein Tag wie `v0.6.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt:** eigene Biome, Dörfer und Tiere statt der Vanilla-Inhalte, auch im Nether und End.
+1. **Eigene Welt** – die acht Oberwelt-Biome sind fertig, als Nächstes:
+   - eigene **Dörfer** mit eigenen Bewohnern (nie in der Nähe der Drachennester), keine Vanilla-Bauwerke mehr;
+   - eigene **Nutz- und Wildtiere** statt der Vanilla-Tiere – alles, was die Vanilla-Tiere fallen lassen, bleibt
+     erhältlich;
+   - eigene **Monster und Wassertiere**;
+   - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

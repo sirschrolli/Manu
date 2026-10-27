@@ -2,6 +2,7 @@
   "values": [
     "#minecraft:is_beach",
     "minecraft:swamp",
-    "minecraft:mangrove_swamp"
+    "minecraft:mangrove_swamp",
+    "kingdomsatwar:mist_moor"
   ]
 }

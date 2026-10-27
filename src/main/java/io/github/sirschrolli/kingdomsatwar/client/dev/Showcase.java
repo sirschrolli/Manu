@@ -125,7 +125,15 @@ final class Showcase {
                     steps.add(Step.waitTicks(40));
                 }
                 default -> {
-                    if (scene.equals("lair_water")) {
+                    if (scene.equals("features") || scene.startsWith("features_")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        OverworldShowcase.gallery(steps, g, scene.equals("features") ? "" : scene.substring(9));
+                    } else if (scene.equals("biomes")) {
+                        OverworldShowcase.tour(steps, "");
+                    } else if (scene.startsWith("biome_")) {
+                        OverworldShowcase.tour(steps, scene.substring(6));
+                    } else if (scene.equals("lair_water")) {
                         lairWater(steps);
                     } else if (scene.startsWith("lair_")) {
                         lair(steps, DragonType.byId(scene.substring(5)));

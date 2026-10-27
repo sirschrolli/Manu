@@ -87,6 +87,26 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.ABYSSAL_SAND);
         add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.RUBBLE);
 
+        // --- Eigene Oberwelt-Biome ---
+        add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.PEAT);
+        add(BlockTags.SWORD_EFFICIENT, ModBlocks.REEDS);
+        // Schlacke, Frosterde und Torf sind Erde: Pflanzen wachsen darauf, Bäume ersetzen sie nicht durch Erde
+        add(BlockTags.DIRT, ModBlocks.CINDER_SOIL, ModBlocks.FROZEN_SOIL, ModBlocks.PEAT);
+        add(BlockTags.SUPPORTS_DRY_VEGETATION, ModBlocks.ASH_BLOCK);
+        // Vulkangestein, Reifstein, Schiefer und Sturmstein sind gewachsener Fels wie Stein
+        tag(BlockTags.BASE_STONE_OVERWORLD).add(ModBlocks.VOLCANIC_ROCK.base().key(), ModBlocks.RIME_STONE.base().key(),
+                ModBlocks.SHALE.base().key(), ModBlocks.STORMSTONE.base().key());
+        // natürlicher Boden: darauf dürfen Bäume, Felsen und Kristalle der eigenen Biome stehen
+        tag(ModTags.Blocks.NATURAL_GROUND)
+                .add(ModBlocks.VOLCANIC_ROCK.base().key(), ModBlocks.RIME_STONE.base().key(), ModBlocks.SHALE.base().key(),
+                        ModBlocks.STORMSTONE.base().key(), ModBlocks.ABYSSAL_STONE.base().key())
+                .add(ModBlocks.GLOWING_VOLCANIC_ROCK.key(), ModBlocks.CINDER_SOIL.key(), ModBlocks.ASH_BLOCK.key(), ModBlocks.FROZEN_SOIL.key(),
+                        ModBlocks.GLACIER_ICE.key(), ModBlocks.RUBBLE.key(), ModBlocks.CHARGED_STORMSTONE.key(), ModBlocks.ABYSSAL_SAND.key(),
+                        ModBlocks.NACRE_BLOCK.key(), ModBlocks.PEAT.key())
+                .add(net.minecraft.world.level.block.Blocks.DRIPSTONE_BLOCK.builtInRegistryHolder().key(),
+                        net.minecraft.world.level.block.Blocks.BASALT.builtInRegistryHolder().key(),
+                        net.minecraft.world.level.block.Blocks.BLACKSTONE.builtInRegistryHolder().key());
+
         // --- Siegelkreis ---
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.CRACKED_SEALSTONE_BRICKS, ModBlocks.MOSSY_SEALSTONE_BRICKS,
                 ModBlocks.POLISHED_SEALSTONE, ModBlocks.CHISELED_SEALSTONE);

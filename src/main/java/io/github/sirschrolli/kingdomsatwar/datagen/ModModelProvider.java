@@ -400,6 +400,10 @@ public class ModModelProvider extends ModelProvider {
         blocks.createTrivialCube(ModBlocks.ABYSSAL_SAND.get());
         blocks.createCrossBlockWithDefaultItem(ModBlocks.GLOW_CORAL.get(), BlockModelGenerators.PlantType.NOT_TINTED);
         blocks.createTrivialCube(ModBlocks.NACRE_BLOCK.get());
+
+        // --- Eigene Oberwelt-Biome ---
+        blocks.createTrivialCube(ModBlocks.PEAT.get());
+        blocks.createDoublePlantWithDefaultItem(ModBlocks.REEDS.get(), BlockModelGenerators.PlantType.NOT_TINTED);
     }
 
     /** Ascheschicht: sieben flache Modelle (2 bis 14 Pixel hoch), acht Lagen sind ein voller Aschenblock. */

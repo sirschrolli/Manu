@@ -12,6 +12,9 @@
     "#c:is_swamp",
     "minecraft:dripstone_caves",
     "minecraft:lush_caves",
-    "minecraft:meadow"
+    "minecraft:meadow",
+    "kingdomsatwar:ash_fields",
+    "kingdomsatwar:storm_coast",
+    "kingdomsatwar:coral_coast"
   ]
 }

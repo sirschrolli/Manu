@@ -2,6 +2,7 @@
   "values": [
     "#minecraft:is_mountain",
     "#minecraft:is_badlands",
-    "#minecraft:is_hill"
+    "#minecraft:is_hill",
+    "kingdomsatwar:rock_gorges"
   ]
 }

@@ -174,8 +174,11 @@ Blöcken, Farben, Partikeln und Geräuschen:
 
 ## 5. Welt
 
-- **Eigene Biome** in der Oberwelt (u. a. Aschelande, Frostgipfel, Sturmklippen, Urhain, Felsschluchten,
-  Korallenküste, Königsauen, Nebelmoor).
+- **Eigene Biome** in der Oberwelt (umgesetzt in E1): Aschefelder, Frostgipfel, Sturmküste, Urhain, Felsschluchten,
+  Korallenküste, Königsauen und Nebelmoor – eingewoben in die normale Weltgenerierung (Standard, Große Biome,
+  Zerklüftet) über eine eigene Biomquelle; jedes mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben, Partikeln
+  und Klängen. Die Nest-Biome (Aschelande, Frostkessel, Sturmklippen, Uralter Hain, Zerklüftete Weiten, Abgrundgrotte)
+  bleiben den Nestern vorbehalten.
 - **Eigene Dörfer** mit eigenen Bewohnern (nie in der Nähe der Drachennester).
 - **Keine Vanilla-Mobs** mehr: eigene Nutztiere, Wildtiere, Monster und Wasserwesen, jeweils in mehreren
   Varianten; alles, was Vanilla-Mobs fallen ließen (Leder, Wolle, Federn, Fäden, Knochen, Schwarzpulver …),
@@ -245,5 +248,9 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, **Nyxar mit der Schattenzitadelle**, Bauwerke (Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken) | ✅ |
 | C | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Ansehen, Handel mit Echtzeit-Pause, Krönung (Version 0.5.0) | ✅ |
 | D | Magie: Zauberstufen, Zaubertafeln, Magietisch, Zauberkreis, sechs Erzmagier in sechs Magiertürmen (Version 0.6.0) | ✅ |
-| E | Biome, Dörfer, eigene Mobs statt Vanilla, keine Vanilla-Bauwerke, Nether/End | ⏳ |
+| E1 | Acht eigene Oberwelt-Biome mit eigener Biomquelle, eigenen Böden, Bäumen, Pflanzen, Felsen, Torf und Schilf (Version 0.7.0) | ✅ |
+| E2 | Eigene Dörfer mit eigenen Bewohnern (fern der Nester), keine Vanilla-Bauwerke mehr | ⏳ |
+| E3 | Eigene Nutz- und Wildtiere statt Vanilla – alle Vanilla-Beute bleibt erhältlich | ⏳ |
+| E4 | Eigene Monster und Wassertiere | ⏳ |
+| E5 | Nether und End: eigene Mobs und Bauwerke | ⏳ |
 | G | Erzähler-Kapitel und neues Intro mit Stimme C, Feinschliff, Veröffentlichung | ⏳ |

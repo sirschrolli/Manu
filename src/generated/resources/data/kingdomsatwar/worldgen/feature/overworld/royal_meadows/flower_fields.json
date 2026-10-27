@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:noise",
+    "noise": {
+      "base_amplitude": 0.955388882960065,
+      "base_octave": 0
+    },
+    "scale": 0.035,
+    "seed": 7731,
+    "states": [
+      "kingdomsatwar:lavender",
+      "kingdomsatwar:lavender",
+      "minecraft:cornflower",
+      "kingdomsatwar:garden_rose",
+      "kingdomsatwar:lavender",
+      "minecraft:oxeye_daisy",
+      "minecraft:poppy",
+      "kingdomsatwar:lavender",
+      "minecraft:allium",
+      "kingdomsatwar:garden_rose",
+      "minecraft:white_tulip",
+      "kingdomsatwar:lavender",
+      "minecraft:azure_bluet",
+      "kingdomsatwar:lavender"
+    ]
+  }
+}

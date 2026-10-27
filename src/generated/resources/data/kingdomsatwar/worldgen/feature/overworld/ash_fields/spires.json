@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:spire",
+  "band": "minecraft:smooth_basalt",
+  "band_every": 4,
+  "base_radius": 1.5,
+  "body": "kingdomsatwar:volcanic_rock",
+  "in_water": false,
+  "lean": 0.15,
+  "max_height": 10,
+  "min_height": 4,
+  "tip": "minecraft:air"
+}

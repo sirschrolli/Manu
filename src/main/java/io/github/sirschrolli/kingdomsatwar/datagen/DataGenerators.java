@@ -25,7 +25,10 @@ public final class DataGenerators {
     public static void gatherRegistries(GatherDataRegistryEntriesEvent event) {
         event.add(Registries.NOISE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapNoises)
                 .add(Registries.DENSITY_FUNCTION, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapDensityFunctions)
-                .add(Registries.MATERIAL_RULE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowSurface::bootstrap)
+                .add(Registries.MATERIAL_RULE, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowSurface.bootstrap(context);
+                    io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface.bootstrap(context);
+                })
                 .add(Registries.NOISE_SETTINGS, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapSettings)
                 .add(Registries.DIMENSION_TYPE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapType)
                 .add(Registries.LEVEL_STEM, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapStem)
@@ -43,6 +46,10 @@ public final class DataGenerators {
                         new LootTableProvider.SubProviderEntry(ModChestLootProvider::new, LootContextParamSets.CHEST),
                         new LootTableProvider.SubProviderEntry(ModArchaeologyLootProvider::new, LootContextParamSets.ARCHAEOLOGY))
                 .recipe(ModRecipeProvider::new);
+        // Vanilla-Einträge, die die Mod ersetzt: die Oberwelt-Oberflächen und die Weltvoreinstellungen mit den eigenen Biomen
+        event.gatherFor("minecraft")
+                .add(Registries.MATERIAL_RULE, io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface::bootstrapVanillaOverride)
+                .add(Registries.WORLD_PRESET, io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldPresets::bootstrap);
     }
 
     /** Alle übrigen Daten: Modelle, Tags, Übersetzungen, Loot-Modifier und Data Maps. */

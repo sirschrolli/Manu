@@ -173,6 +173,7 @@ public final class ModWorldgen {
             context.register(ruin.featureKey(), ruin.feature());
         }
         io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapFeatures(context);
     }
 
     public static void bootstrapPlacedFeatures(BootstrapContext<PlacedFeature> context) {
@@ -212,6 +213,7 @@ public final class ModWorldgen {
             context.register(ruin.placedKey(), new PlacedFeature(features.getOrThrow(ruin.featureKey()), placement));
         }
         io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapPlacedFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapPlacedFeatures(context);
     }
 
     /** Biom-Modifikator für das Erscheinen der Banditen. */

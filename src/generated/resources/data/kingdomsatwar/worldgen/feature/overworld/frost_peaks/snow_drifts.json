@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:dune",
+  "layer": "minecraft:snow",
+  "max_layers": 4,
+  "radius": 4.5
+}
