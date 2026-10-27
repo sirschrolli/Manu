@@ -92,6 +92,7 @@ final class Showcase {
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
                 case "magic" -> magic(steps);
+                case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);
                 case "boss" -> boss(steps);
                 case "lair" -> lair(steps, DragonType.FIRE);
@@ -1147,46 +1148,136 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
-    /** Der Aetherit-Stab in Aktion: jeder Zauber einmal, kurz nach dem Wirken fotografiert. */
+    /**
+     * Der Aetherit-Stab in Aktion: der Zauberkreis (einmal mit einem Zauber unter der Maus), dann jeder Zauber einmal
+     * auf seiner höchsten Stufe, kurz nach dem Wirken fotografiert.
+     */
     private static void magic(Deque<Step> steps) {
         int oz = 380;
         steps.add(Step.server(level -> {
             fill(level, new BlockPos(-8, ground - 1, oz - 16), new BlockPos(16, ground - 1, oz + 6), Blocks.GRASS_BLOCK.defaultBlockState());
             fill(level, new BlockPos(-8, ground, oz - 16), new BlockPos(16, ground + 8, oz + 6), Blocks.AIR.defaultBlockState());
             fill(level, new BlockPos(2, ground - 1, oz - 6), new BlockPos(7, ground - 1, oz - 3), Blocks.WATER.defaultBlockState());
-            for (int x : new int[] {1, 8}) {
+            for (int x : new int[] {1, 4, 8}) {
                 var golem = net.minecraft.world.entity.EntityTypes.IRON_GOLEM.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
                 golem.setNoAi(true);
-                golem.snapTo(x + 0.5, ground, oz - 9 + 0.5, 0, 0);
+                golem.snapTo(x + 0.5, ground, oz - 9 + 0.5 - (x == 4 ? 3 : 0), 0, 0);
                 level.addFreshEntity(golem);
             }
         }));
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.command("clear @s"));
         steps.add(Step.command("item replace entity @s weapon.mainhand with kingdomsatwar:aetherit_staff"));
-        steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:fire_rune"));
-        steps.add(Step.command("item replace entity @s hotbar.2 with kingdomsatwar:ice_rune"));
-        steps.add(Step.command("item replace entity @s hotbar.3 with kingdomsatwar:lightning_rune"));
-        steps.add(Step.command("item replace entity @s hotbar.4 with kingdomsatwar:nature_rune"));
-        steps.add(Step.command("item replace entity @s hotbar.5 with kingdomsatwar:earth_rune"));
-        steps.add(Step.command("item replace entity @s hotbar.6 with kingdomsatwar:water_rune"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:fire_spell_tablet"));
+        steps.add(Step.command("item replace entity @s hotbar.2 with kingdomsatwar:ice_spell_tablet"));
+        steps.add(Step.server(level -> {
+            var player = level.getServer().getPlayerList().getPlayers().get(0);
+            // gelernt: Aether-Blitz II, Feuer III, Eis I, Blitz II, Natur I – Erde und Wasser bleiben für das Bild gesperrt
+            var levels = new java.util.EnumMap<io.github.sirschrolli.kingdomsatwar.magic.Spell, Integer>(io.github.sirschrolli.kingdomsatwar.magic.Spell.class);
+            levels.put(io.github.sirschrolli.kingdomsatwar.magic.Spell.AETHER_BOLT, 2);
+            levels.put(io.github.sirschrolli.kingdomsatwar.magic.Spell.FIRE, 3);
+            levels.put(io.github.sirschrolli.kingdomsatwar.magic.Spell.ICE, 1);
+            levels.put(io.github.sirschrolli.kingdomsatwar.magic.Spell.LIGHTNING, 2);
+            levels.put(io.github.sirschrolli.kingdomsatwar.magic.Spell.NATURE, 1);
+            var staff = player.getMainHandItem();
+            io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem.setSpells(staff,
+                    new io.github.sirschrolli.kingdomsatwar.magic.KnownSpells(levels, io.github.sirschrolli.kingdomsatwar.magic.Spell.FIRE));
+        }));
         steps.add(tp(4.5, 0, oz + 1.5, 180, 14));
         steps.add(Step.waitForChunks(200));
         steps.add(Step.waitTicks(120));
-        String[][] casts = {{"", "AETHER_BOLT"}, {"fire_rune", "FIRE"}, {"ice_rune", "ICE"}, {"lightning_rune", "LIGHTNING"},
-                {"nature_rune", "NATURE"}, {"earth_rune", "EARTH"}, {"water_rune", "WATER"}};
-        for (String[] cast : casts) {
-            steps.add(Step.command(cast[0].isEmpty() ? "item replace entity @s weapon.offhand with air"
-                    : "item replace entity @s weapon.offhand with kingdomsatwar:" + cast[0]));
-            steps.add(Step.waitTicks(4));
+        // Zauberkreis: einmal ohne, einmal mit Zauber unter der Maus
+        steps.add(Step.screen(mc -> new io.github.sirschrolli.kingdomsatwar.client.magic.SpellWheelScreen()));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("magic_wheel"));
+        steps.add(Step.once(mc -> {
+            if (mc.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.magic.SpellWheelScreen wheel) {
+                wheel.devHover(3);
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("magic_wheel_hover"));
+        steps.add(Step.once(mc -> mc.gui.setScreen(null)));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("magic_hud"));
+        for (var spell : io.github.sirschrolli.kingdomsatwar.magic.Spell.values()) {
             steps.add(Step.server(level -> {
                 var player = level.getServer().getPlayerList().getPlayers().get(0);
-                io.github.sirschrolli.kingdomsatwar.magic.Spell.valueOf(cast[1]).cast(level, player);
+                var staff = player.getMainHandItem();
+                var known = io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.of(staff).withLevel(spell, 3).select(spell);
+                io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem.setSpells(staff, known.select(spell));
+                spell.cast(level, player, 3);
             }));
-            steps.add(Step.waitTicks(cast[1].equals("LIGHTNING") ? 2 : 5));
-            steps.add(Step.screenshot("magic_" + cast[1].toLowerCase(java.util.Locale.ROOT)));
+            steps.add(Step.waitTicks(spell == io.github.sirschrolli.kingdomsatwar.magic.Spell.LIGHTNING ? 2 : 5));
+            steps.add(Step.screenshot("magic_" + spell.id()));
             steps.add(Step.waitTicks(30));
         }
+        steps.add(Step.command("gamemode spectator"));
+    }
+
+    /**
+     * Der Magietisch: bei Tag und bei Nacht (Runen, schwebender Stab, Tafel), das Fenster und das Ritual beim Einschreiben.
+     */
+    private static void magicTable(Deque<Step> steps) {
+        int oz = 520;
+        // Lage des Tischs erst beim Ablauf bestimmen (die Bodenhöhe steht vorher noch nicht fest)
+        java.util.function.Supplier<BlockPos> tablePos = () -> new BlockPos(2, ground, oz);
+        steps.add(Step.server(level -> {
+            BlockPos table = tablePos.get();
+            fill(level, new BlockPos(-8, ground - 1, oz - 8), new BlockPos(12, ground - 1, oz + 8), Blocks.POLISHED_DEEPSLATE.defaultBlockState());
+            fill(level, new BlockPos(-8, ground, oz - 8), new BlockPos(12, ground + 8, oz + 8), Blocks.AIR.defaultBlockState());
+            fill(level, new BlockPos(-2, ground, oz - 3), new BlockPos(6, ground + 3, oz - 3), Blocks.BOOKSHELF.defaultBlockState());
+            for (int x : new int[] {-1, 5}) {
+                level.setBlockAndUpdate(new BlockPos(x, ground, oz - 1), Blocks.CANDLE.defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.CandleBlock.CANDLES, 3).setValue(net.minecraft.world.level.block.CandleBlock.LIT, true));
+            }
+            level.setBlockAndUpdate(table, io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.MAGIC_TABLE.get().defaultBlockState());
+            if (level.getBlockEntity(table) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity be) {
+                var staff = new net.minecraft.world.item.ItemStack(io.github.sirschrolli.kingdomsatwar.registry.ModItems.AETHERIT_STAFF.get());
+                io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem.setSpells(staff, io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.DEFAULT
+                        .withLevel(io.github.sirschrolli.kingdomsatwar.magic.Spell.FIRE, 1)
+                        .withLevel(io.github.sirschrolli.kingdomsatwar.magic.Spell.ICE, 2)
+                        .withLevel(io.github.sirschrolli.kingdomsatwar.magic.Spell.NATURE, 1));
+                be.setItem(io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity.STAFF, staff);
+                be.setItem(io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity.TABLET, new net.minecraft.world.item.ItemStack(
+                        io.github.sirschrolli.kingdomsatwar.registry.ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.FIRE).get()));
+                be.setItem(io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity.CATALYST, new net.minecraft.world.item.ItemStack(
+                        io.github.sirschrolli.kingdomsatwar.registry.ModItems.AETHERIT.get(), 6));
+            }
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("xp set @s 30 levels"));
+        steps.add(Step.command("time set day"));
+        steps.add(tp(2.5, 0.0, oz + 2.7, 180, 22));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.hud(false));
+        steps.add(Step.screenshot("magic_table"));
+        steps.add(Step.command("time set midnight"));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("magic_table_night"));
+        steps.add(Step.hud(true));
+        steps.add(Step.server(level -> {
+            BlockPos table = tablePos.get();
+            var player = level.getServer().getPlayerList().getPlayers().get(0);
+            level.getBlockState(table).useWithoutItem(level, player, new net.minecraft.world.phys.BlockHitResult(
+                    net.minecraft.world.phys.Vec3.atCenterOf(table), net.minecraft.core.Direction.UP, table, false));
+        }));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("magic_table_gui"));
+        steps.add(Step.once(mc -> {
+            if (mc.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.magic.MagicTableScreen screen) {
+                screen.inscribe();
+            }
+        }));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.screenshot("magic_table_gui_after"));
+        steps.add(Step.once(mc -> mc.gui.setScreen(null)));
+        steps.add(Step.hud(false));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.screenshot("magic_table_ritual"));
+        steps.add(Step.hud(true));
         steps.add(Step.command("gamemode spectator"));
     }
 

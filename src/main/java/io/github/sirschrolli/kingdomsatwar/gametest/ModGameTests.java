@@ -15,6 +15,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem;
+import io.github.sirschrolli.kingdomsatwar.magic.KnownSpells;
 import io.github.sirschrolli.kingdomsatwar.magic.Spell;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
@@ -162,6 +163,7 @@ public final class ModGameTests {
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
+        MagicGameTests.init();    // und die der Magie
     }
 
     private ModGameTests() {}
@@ -188,6 +190,7 @@ public final class ModGameTests {
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);
+        MagicGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -264,15 +267,17 @@ public final class ModGameTests {
                 "steel_dragon_armor", "draconium_dragon_armor", "cooked_venison", "cooked_venison_from_campfire_cooking",
                 "white_plaster", "clay_plaster_stairs", "leaded_glass", "leaded_glass_pane", "castle_door", "green_shutters",
                 "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement", "ale", "wine", "mead",
-                "garlic_bread", "feast", "aetherit_staff", "fire_rune", "water_rune",
+                "garlic_bread", "feast", "aetherit_staff",
                 "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
-        // Dracheneier gibt es nur nach dem Sieg über einen Drachen-Boss – kein Rezept
+        // Dracheneier gibt es nur nach dem Sieg über einen Drachen-Boss, Zauber nur aus den Tafeln der Erzmagier – kein Rezept
         for (DragonType type : DragonType.values()) {
-            ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(type.id() + "_dragon_egg"));
-            helper.assertTrue(recipes.byKey(key) == null, "Drachenei darf kein Rezept haben: " + key.identifier());
+            for (String name : List.of(type.id() + "_dragon_egg", type.id() + "_rune", type.id() + "_spell_tablet")) {
+                ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
+                helper.assertTrue(recipes.byKey(key) == null, "Darf kein Rezept haben: " + key.identifier());
+            }
         }
         helper.succeed();
     }
@@ -1058,8 +1063,9 @@ public final class ModGameTests {
 
     /**
      * Aetherit-Stab: Der Aether-Blitz trifft das anvisierte Ziel, Frost verlangsamt, der Erdstoß verletzt Feinde,
-     * aber nicht den eigenen Wolf, Natur heilt, die Woge schenkt Wasseratmung, Feuer und Blitz erscheinen.
-     * Mit Rune in der zweiten Hand wirkt der Stab deren Zauber und kostet Haltbarkeit.
+     * aber nicht den eigenen Wolf, Natur heilt, die Woge schenkt Wasseratmung, Feuer und Blitz erscheinen. Höhere
+     * Stufen sind stärker. Ein neuer Stab kennt nur den Aether-Blitz; gewählt werden kann nur, was er gelernt hat. Der
+     * gewählte Zauber kostet Haltbarkeit und hat seine eigene Abklingzeit – ein anderer Zauber ist sofort bereit.
      */
     private static void staffSpells(GameTestHelper helper) {
         arenaFloor(helper);
@@ -1077,6 +1083,16 @@ public final class ModGameTests {
         float health = golem.getHealth();
         helper.assertTrue(Spell.AETHER_BOLT.cast(level, mage) && golem.getHealth() < health, "Der Aether-Blitz trifft nicht");
         helper.assertTrue(flank.getHealth() == flank.getMaxHealth(), "Der Aether-Blitz trifft auch daneben");
+        // Stufe III trifft härter als Stufe I (Schaden je Stufe: 100 %, 135 %, 170 %)
+        golem.setHealth(golem.getMaxHealth());
+        golem.setInvulnerableTime(0);
+        Spell.AETHER_BOLT.cast(level, mage, 1);
+        float lost1 = golem.getMaxHealth() - golem.getHealth();
+        golem.setHealth(golem.getMaxHealth());
+        golem.setInvulnerableTime(0);
+        Spell.AETHER_BOLT.cast(level, mage, 3);
+        float lost3 = golem.getMaxHealth() - golem.getHealth();
+        helper.assertTrue(lost3 > lost1 * 1.4f, "Stufe III ist nicht stärker: " + lost1 + " / " + lost3);
         Spell.ICE.cast(level, mage);
         helper.assertTrue(golem.hasEffect(MobEffects.SLOWNESS) && !flank.hasEffect(MobEffects.SLOWNESS),
                 "Frosthauch trifft nicht (nur) den Kegel vor dem Zaubernden");
@@ -1084,25 +1100,38 @@ public final class ModGameTests {
         Spell.EARTH.cast(level, mage);
         helper.assertTrue(flank.getHealth() < flank.getMaxHealth(), "Erdstoß trifft den Golem nicht");
         helper.assertTrue(wolf.getHealth() == wolfHealth, "Erdstoß verletzt den eigenen Wolf");
-        Spell.NATURE.cast(level, mage);
+        Spell.NATURE.cast(level, mage, 2);
         helper.assertTrue(mage.hasEffect(MobEffects.REGENERATION) && wolf.hasEffect(MobEffects.REGENERATION), "Natur heilt nicht");
+        helper.assertTrue(mage.hasEffect(MobEffects.ABSORPTION), "Natur Stufe II gibt keinen Schild");
         Spell.WATER.cast(level, mage);
         helper.assertTrue(mage.hasEffect(MobEffects.WATER_BREATHING), "Woge schenkt keine Wasseratmung");
-        Spell.FIRE.cast(level, mage);
-        helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball.class,
-                mage.getBoundingBox().inflate(4)).isEmpty(), "Kein Feuerball");
+        Spell.FIRE.cast(level, mage, 2);
+        helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball.class,
+                mage.getBoundingBox().inflate(4)).size() == 3, "Feuer Stufe II schießt nicht drei Feuerbälle");
 
-        // Mit dem Stab: Rune in der zweiten Hand bestimmt den Zauber, der Stab nutzt sich ab und braucht eine Pause
+        // Der Stab: zuerst nur der Aether-Blitz; gelernte Zauber lassen sich wählen, ungelernte nicht
         ItemStack staff = new ItemStack(ModItems.AETHERIT_STAFF.get());
+        helper.assertTrue(KnownSpells.of(staff).equals(KnownSpells.DEFAULT), "Neuer Stab kennt mehr als den Aether-Blitz");
+        AetheritStaffItem.setSpells(staff, KnownSpells.DEFAULT.withLevel(Spell.LIGHTNING, 2));
+        helper.assertTrue(!AetheritStaffItem.select(staff, Spell.FIRE), "Ungelernter Zauber lässt sich wählen");
+        helper.assertTrue(AetheritStaffItem.select(staff, Spell.LIGHTNING) && KnownSpells.of(staff).selected() == Spell.LIGHTNING,
+                "Gelernter Zauber lässt sich nicht wählen");
+        var cooldown = staff.get(net.minecraft.core.component.DataComponents.USE_COOLDOWN);
+        helper.assertTrue(cooldown != null && cooldown.cooldownGroup().equals(java.util.Optional.of(Spell.LIGHTNING.cooldownGroup()))
+                && cooldown.ticks() == Spell.LIGHTNING.cooldown(2), "Abklingzeit des Stabs passt nicht zum gewählten Zauber");
         mage.setItemInHand(InteractionHand.MAIN_HAND, staff);
-        mage.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.RUNES.get(DragonType.LIGHTNING).get()));
-        helper.assertTrue(AetheritStaffItem.runeInOtherHand(mage, InteractionHand.MAIN_HAND) == DragonType.LIGHTNING,
-                "Rune in der zweiten Hand wird nicht erkannt");
-        ModItems.AETHERIT_STAFF.get().use(level, mage, InteractionHand.MAIN_HAND);
+        staff.use(level, mage, InteractionHand.MAIN_HAND);
         helper.assertTrue(staff.getDamageValue() == 3, "Blitz kostet nicht 3 Haltbarkeit: " + staff.getDamageValue());
-        helper.assertTrue(mage.getCooldowns().isOnCooldown(staff), "Stab hat keine Abklingzeit");
+        helper.assertTrue(mage.getCooldowns().isOnCooldown(staff), "Blitzschlag hat keine Abklingzeit");
         helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.LightningBolt.class, golem.getBoundingBox().inflate(3)).isEmpty(),
                 "Kein Blitz am Ziel");
+        AetheritStaffItem.select(staff, Spell.AETHER_BOLT);
+        helper.assertTrue(!mage.getCooldowns().isOnCooldown(staff), "Der Aether-Blitz teilt sich die Abklingzeit mit dem Blitzschlag");
+        // Speichern und Laden der gelernten Zauber
+        KnownSpells spells = KnownSpells.of(staff);
+        var tag = KnownSpells.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, spells).getOrThrow();
+        helper.assertTrue(KnownSpells.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, tag).getOrThrow().equals(spells),
+                "Gelernte Zauber gehen beim Speichern verloren");
         helper.succeed();
     }
 

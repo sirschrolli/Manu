@@ -21,6 +21,10 @@ public final class ModKeyMappings {
     /** Drachenodem beim Reiten (Standard: R). */
     public static final KeyMapping DRAGON_BREATH = new KeyMapping("key.kingdomsatwar.dragon_breath", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_R, CATEGORY);
+    public static final KeyMapping.Category MAGIC = new KeyMapping.Category(KingdomsAtWar.id("magic"));
+    /** Zauberkreis: gedrückt halten, Zauber mit der Maus wählen, loslassen (Standard: V). */
+    public static final KeyMapping SPELL_WHEEL = new KeyMapping("key.kingdomsatwar.spell_wheel", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_V, MAGIC);
 
     private ModKeyMappings() {}
 
@@ -28,6 +32,8 @@ public final class ModKeyMappings {
     static void register(RegisterKeyMappingsEvent event) {
         event.registerCategory(CATEGORY);
         event.register(DRAGON_BREATH);
+        event.registerCategory(MAGIC);
+        event.register(SPELL_WHEEL);
     }
 
     @SubscribeEvent

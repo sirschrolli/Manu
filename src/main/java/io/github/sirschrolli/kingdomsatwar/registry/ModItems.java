@@ -8,6 +8,8 @@ import io.github.sirschrolli.kingdomsatwar.item.DraconiumWeaponItem;
 import io.github.sirschrolli.kingdomsatwar.item.DragonScaleArmorItem;
 import io.github.sirschrolli.kingdomsatwar.magic.AetheritStaffItem;
 import io.github.sirschrolli.kingdomsatwar.magic.RuneItem;
+import io.github.sirschrolli.kingdomsatwar.magic.Spell;
+import io.github.sirschrolli.kingdomsatwar.magic.SpellTabletItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -305,14 +307,28 @@ public final class ModItems {
     public static final DeferredItem<Item> DRACONIUM_DRAGON_ARMOR = dragonArmor("draconium_dragon_armor", ModEquipment.DRACONIUM_DRAGON_ARMOR, true);
 
     // =====================================================================================
-    // Magie: Aetherit-Stab und die sechs Runen der Drachen-Elemente
+    // Magie: Aetherit-Stab, Zaubertafeln der Erzmagier (und die alten Runen)
     // =====================================================================================
 
-    /** Wirkt Zauber – ohne Rune einen Aether-Blitz, mit einer Rune in der anderen Hand deren Element. */
+    /** Wirkt den gewählten Zauber; neue Zauber lernt er am Magietisch aus Zaubertafeln. */
     public static final DeferredItem<AetheritStaffItem> AETHERIT_STAFF = addTo(EQUIPMENT_TAB, ITEMS.registerItem("aetherit_staff",
             AetheritStaffItem::new, p -> p.durability(320).rarity(Rarity.EPIC).enchantable(12)
                     .repairable(ModTags.Items.GEMS_AETHERIT)
+                    .component(DataComponents.USE_COOLDOWN, AetheritStaffItem.defaultCooldown())
                     .component(DataComponents.LORE, lore("aetherit_staff", 2))));
+
+    private static final Map<Spell, DeferredItem<SpellTabletItem>> SPELL_TABLETS_MUTABLE = new EnumMap<>(Spell.class);
+    /** Eine Zaubertafel je Element – Beute der Erzmagier in ihren Türmen. */
+    public static final Map<Spell, DeferredItem<SpellTabletItem>> SPELL_TABLETS = Collections.unmodifiableMap(SPELL_TABLETS_MUTABLE);
+
+    static {
+        for (Spell spell : Spell.values()) {
+            if (spell.element() != null) {
+                SPELL_TABLETS_MUTABLE.put(spell, addTo(EQUIPMENT_TAB, ITEMS.registerItem(spell.element().id() + "_spell_tablet",
+                        p -> new SpellTabletItem(spell, p), p -> p.stacksTo(16).rarity(Rarity.EPIC))));
+            }
+        }
+    }
 
     /** Zeigt zum Nest eines Drachen-Bosses (jedes Nest gibt es nur einmal); Rechtsklick wechselt das Nest. */
     public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem> DRAGON_COMPASS = addTo(EQUIPMENT_TAB,
@@ -341,15 +357,18 @@ public final class ModItems {
     }
 
     private static final Map<DragonType, DeferredItem<RuneItem>> RUNES_MUTABLE = new EnumMap<>(DragonType.class);
-    /** Eine Rune je Drachen-Element. */
+    /**
+     * Die alten Runen je Drachen-Element: werden nicht mehr hergestellt und nicht mehr gefunden (nicht im Kreativ-Menü);
+     * vorhandene lassen sich am Magietisch wie eine Zaubertafel einschreiben.
+     */
     public static final Map<DragonType, DeferredItem<RuneItem>> RUNES = Collections.unmodifiableMap(RUNES_MUTABLE);
 
     static {
         for (DragonType type : DragonType.values()) {
             String name = type.id() + "_rune";
-            RUNES_MUTABLE.put(type, addTo(EQUIPMENT_TAB, ITEMS.registerItem(name, p -> new RuneItem(type, p),
+            RUNES_MUTABLE.put(type, ITEMS.registerItem(name, p -> new RuneItem(type, p),
                     p -> p.stacksTo(16).rarity(Rarity.RARE).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
-                            .component(DataComponents.LORE, lore(name, 1)))));
+                            .component(DataComponents.LORE, lore("old_rune", 1))));
         }
     }
 

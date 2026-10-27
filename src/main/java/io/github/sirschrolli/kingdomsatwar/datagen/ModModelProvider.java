@@ -227,6 +227,24 @@ public class ModModelProvider extends ModelProvider {
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(table, BlockModelGenerators.plainVariant(tableModel))
                 .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
+        // --- Magietisch: Sockel, Säule, Platte mit Siegelkreis; Runen und Kristalle leuchten ---
+        Block magicTable = ModBlocks.MAGIC_TABLE.get();
+        TextureMapping magicTextures = new TextureMapping()
+                .put(MagicTableModel.BASE, new Material(KingdomsAtWar.id("block/magic_table_base")))
+                .put(MagicTableModel.BASE_TOP, new Material(KingdomsAtWar.id("block/magic_table_base_top")))
+                .put(MagicTableModel.BOTTOM, new Material(KingdomsAtWar.id("block/magic_table_bottom")))
+                .put(MagicTableModel.GOLD, new Material(KingdomsAtWar.id("block/magic_table_gold")))
+                .put(MagicTableModel.COLUMN, new Material(KingdomsAtWar.id("block/magic_table_column")))
+                .put(MagicTableModel.COLUMN_GLOW, new Material(KingdomsAtWar.id("block/magic_table_column_glow")))
+                .put(MagicTableModel.TOP, new Material(KingdomsAtWar.id("block/magic_table_top")))
+                .put(MagicTableModel.TOP_GLOW, new Material(KingdomsAtWar.id("block/magic_table_top_glow")))
+                .put(MagicTableModel.TOP_SIDE, new Material(KingdomsAtWar.id("block/magic_table_top_side")))
+                .put(MagicTableModel.TOP_SIDE_GLOW, new Material(KingdomsAtWar.id("block/magic_table_top_side_glow")))
+                .put(MagicTableModel.CRYSTAL, new Material(KingdomsAtWar.id("block/magic_table_crystal")))
+                .put(TextureSlot.PARTICLE, new Material(KingdomsAtWar.id("block/magic_table_base")));
+        Identifier magicModel = MagicTableModel.template().create(magicTable, magicTextures, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(magicTable, BlockModelGenerators.plainVariant(magicModel)));
+
         // --- Stadtbanner: zwei Hälften, dreht sich zum Spieler ---
         Block banner = ModBlocks.TOWN_BANNER.get();
         TextureMapping bannerLower = new TextureMapping()
@@ -323,6 +341,7 @@ public class ModModelProvider extends ModelProvider {
         // --- Magie ---
         items.generateFlatItem(ModItems.AETHERIT_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         ModItems.RUNES.values().forEach(rune -> flat(items, rune.get()));
+        ModItems.SPELL_TABLETS.values().forEach(tablet -> flat(items, tablet.get()));
 
         // --- Aschelande ---
         blocks.createTrivialCube(ModBlocks.ASH_BLOCK.get());

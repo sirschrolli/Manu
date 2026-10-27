@@ -922,23 +922,9 @@ public class ModLanguageProvider extends LanguageProvider {
         lore("dragon_scale_armor_" + type.id(), bonusEn, bonusDe);
     }
 
-    /** Magie: Aetherit-Stab und Runen. */
+    /** Magie: Aetherit-Stab, Zauber, Zaubertafeln, Zauberkreis (siehe {@link MagicLang}). */
     private void magic() {
-        item(ModItems.AETHERIT_STAFF, "Aetherit Staff", "Aetherit-Stab");
-        text(ModItems.loreKey("aetherit_staff", 1), "Right-click: Aether bolt", "Rechtsklick: Aether-Blitz");
-        text(ModItems.loreKey("aetherit_staff", 2), "Hold a rune in your other hand to cast its spell",
-                "Eine Rune in der anderen Hand wirkt ihren Zauber");
-        rune(DragonType.FIRE, "Fire Rune", "Feuerrune", "Hurls a fireball", "Schleudert einen Feuerball");
-        rune(DragonType.ICE, "Ice Rune", "Eisrune", "Breath of frost: slows and freezes water", "Frosthauch: verlangsamt und friert Wasser");
-        rune(DragonType.LIGHTNING, "Lightning Rune", "Blitzrune", "Calls down lightning", "Ruft einen Blitz herab");
-        rune(DragonType.NATURE, "Nature Rune", "Naturrune", "Heals you and your allies, plants sprout", "Heilt dich und Verbündete, Pflanzen sprießen");
-        rune(DragonType.EARTH, "Earth Rune", "Erdrune", "Earthquake: hurls enemies away", "Erdstoß: schleudert Feinde fort");
-        rune(DragonType.WATER, "Water Rune", "Wasserrune", "Tidal wave: pushes back, puts out fires", "Woge: drängt zurück, löscht Feuer");
-    }
-
-    private void rune(DragonType type, String english, String deutsch, String loreEn, String loreDe) {
-        item(ModItems.RUNES.get(type), english, deutsch);
-        text(ModItems.loreKey(type.id() + "_rune", 1), loreEn, loreDe);
+        MagicLang.register(this::text);
     }
 
     /** Einrichtung und Burgbau: Putz, Fenster, Türen, Läden, Licht, Zinnen, Möbel. */

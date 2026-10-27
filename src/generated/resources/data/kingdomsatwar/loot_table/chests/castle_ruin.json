@@ -313,30 +313,6 @@
         {
           "type": "minecraft:empty",
           "weight": 8
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:fire_rune"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:ice_rune"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:lightning_rune"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:nature_rune"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:earth_rune"
-        },
-        {
-          "type": "minecraft:item",
-          "name": "kingdomsatwar:water_rune"
         }
       ],
       "rolls": 1

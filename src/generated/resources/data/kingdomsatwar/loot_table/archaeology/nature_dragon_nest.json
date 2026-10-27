@@ -30,7 +30,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "kingdomsatwar:nature_rune"
+          "name": "kingdomsatwar:gold_coin"
         }
       ],
       "rolls": 1

@@ -1,7 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -146,6 +145,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STICK)
                 .unlockedBy(getHasName(aetherit), has(aetherit))
                 .save(output, key("aetherit_staff"));
+        // Magietisch: Buch und Aetherit auf Gold und Obsidian, darunter polierter Tiefenschiefer (wie ein Zaubertisch der Erzmagier)
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.MAGIC_TABLE.get())
+                .pattern("ABA")
+                .pattern("GOG")
+                .pattern("DDD")
+                .define('A', aetherit)
+                .define('B', Items.BOOK)
+                .define('G', Items.GOLD_INGOT)
+                .define('O', Items.OBSIDIAN)
+                .define('D', Items.POLISHED_DEEPSLATE)
+                .unlockedBy(getHasName(aetherit), has(aetherit))
+                .save(output, key("magic_table"));
         // Drachenkompass: Kompass, gefasst in Edelsteine, mit Draconium (Essenz der Drachen) und Aetherit (Magie)
         shaped(RecipeCategory.TOOLS, ModItems.DRAGON_COMPASS.get())
                 .pattern(" D ")
@@ -164,21 +175,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_book", has(Items.BOOK))
                 .save(output, key("chronicle"));
         sealstoneRecipes();
-        // Runen: Schieferplatte, Aetherit, Irrlichtstaub und eine Zutat des Elements
-        java.util.Map<DragonType, ItemLike> essence = new java.util.EnumMap<>(DragonType.class);
-        essence.put(DragonType.FIRE, Items.BLAZE_POWDER);
-        essence.put(DragonType.ICE, Items.PACKED_ICE);
-        essence.put(DragonType.LIGHTNING, Items.COPPER_INGOT);
-        essence.put(DragonType.NATURE, Items.MOSS_BLOCK);
-        essence.put(DragonType.EARTH, Items.RAW_IRON);
-        essence.put(DragonType.WATER, Items.PRISMARINE_SHARD);
-        ModItems.RUNES.forEach((type, rune) -> shapeless(RecipeCategory.COMBAT, rune.get())
-                .requires(Items.POLISHED_DEEPSLATE)
-                .requires(aetherit)
-                .requires(dust)
-                .requires(essence.get(type))
-                .unlockedBy(getHasName(dust), has(dust))
-                .save(output, key(type.id() + "_rune")));
+        // Runen werden nicht mehr hergestellt: Zauber lehren jetzt die Zaubertafeln der Erzmagier (am Magietisch)
     }
 
     /**

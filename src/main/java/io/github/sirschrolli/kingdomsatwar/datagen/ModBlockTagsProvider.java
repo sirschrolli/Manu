@@ -45,6 +45,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         }
         ModBlocks.COPPER_ROOF.all().forEach(block -> add(BlockTags.NEEDS_STONE_TOOL, block));
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STONE_PILLAR);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.MAGIC_TABLE);
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.TIMBER_BEAM, ModBlocks.TIMBER_FRAME,
                 ModBlocks.TIMBER_FRAME_DIAGONAL, ModBlocks.TIMBER_FRAME_CROSS, ModBlocks.TOWN_BANNER);
         // das Stadtbanner überlebt Drachen und Wither (die Siedlung hängt an ihm)

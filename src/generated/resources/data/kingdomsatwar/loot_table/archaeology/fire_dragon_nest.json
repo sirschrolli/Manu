@@ -30,7 +30,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "kingdomsatwar:fire_rune"
+          "name": "kingdomsatwar:gold_coin"
         }
       ],
       "rolls": 1

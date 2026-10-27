@@ -567,6 +567,14 @@ public final class ModBlocks {
             KINGDOM_TAB);
 
     /** Stadtbanner: gründet die eigene Siedlung; Rechtsklick öffnet das Stadtfenster. */
+    /** Magietisch: schreibt Zaubertafeln in den Aetherit-Stab ein; über ihm kreisen Runen, der Stab schwebt darüber. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.MagicTableBlock> MAGIC_TABLE = blockWithItem("magic_table",
+            io.github.sirschrolli.kingdomsatwar.block.MagicTableBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops()
+                    .strength(5.0f, 1200.0f).sound(SoundType.DEEPSLATE_BRICKS).lightLevel(state -> 7).noOcclusion(),
+            ip -> ip.rarity(net.minecraft.world.item.Rarity.EPIC).component(DataComponents.LORE, ModItems.lore("magic_table", 2)),
+            KINGDOM_TAB);
+
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock> TOWN_BANNER = blockWithItem("town_banner",
             io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLUE).instrument(NoteBlockInstrument.BASS).strength(2.0f, 1200.0f).sound(SoundType.WOOD)

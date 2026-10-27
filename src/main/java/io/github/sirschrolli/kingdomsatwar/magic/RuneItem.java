@@ -4,8 +4,9 @@ import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import net.minecraft.world.item.Item;
 
 /**
- * Rune eines der sechs Drachen-Elemente. Hält man sie in der zweiten Hand, wirkt der Aetherit-Stab ihren Zauber;
- * die Rune selbst verbraucht sich dabei nicht.
+ * Rune eines der sechs Drachen-Elemente – aus der Zeit, bevor die Erzmagier ihre Zaubertafeln schrieben. Runen werden
+ * nicht mehr hergestellt; wer noch welche besitzt, kann sie am Magietisch wie eine Zaubertafel ihres Elements
+ * einschreiben.
  */
 public class RuneItem extends Item {
     private final DragonType element;
@@ -17,5 +18,10 @@ public class RuneItem extends Item {
 
     public DragonType element() {
         return this.element;
+    }
+
+    /** Der Zauber, den die Rune am Magietisch lehrt. */
+    public Spell spell() {
+        return Spell.of(this.element);
     }
 }

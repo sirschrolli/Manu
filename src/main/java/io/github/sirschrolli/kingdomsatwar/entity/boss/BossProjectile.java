@@ -73,11 +73,11 @@ public class BossProjectile extends AbstractHurtingProjectile {
     }
 
     /** Schießt ein Geschoss aus {@code from} in Richtung {@code dir}. */
-    public static BossProjectile shoot(ServerLevel level, DragonBossEntity boss, Kind kind, Vec3 from, Vec3 dir, double speed, float damage) {
+    public static BossProjectile shoot(ServerLevel level, ElementalBoss boss, Kind kind, Vec3 from, Vec3 dir, double speed, float damage) {
         BossProjectile p = new BossProjectile(ModEntities.BOSS_PROJECTILE.get(), level);
         p.setKind(kind);
         p.damage = damage * boss.damageMultiplier();
-        p.setOwner(boss);
+        p.setOwner((Entity) boss);
         p.setPos(from.x, from.y, from.z);
         p.setDeltaMovement(dir.normalize().scale(speed));
         p.accelerationPower = 0.02;
@@ -185,7 +185,8 @@ public class BossProjectile extends AbstractHurtingProjectile {
 
     @Override
     protected boolean canHitEntity(Entity entity) {
-        if (entity instanceof DragonBossEntity || entity instanceof BossPart || entity instanceof BossProjectile) {
+        if (entity instanceof ElementalBoss || entity instanceof BossPart || entity instanceof BossProjectile
+                || entity instanceof io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageMinion) {
             return false;
         }
         return super.canHitEntity(entity);
@@ -204,9 +205,9 @@ public class BossProjectile extends AbstractHurtingProjectile {
         Kind kind = this.getKind();
         Vec3 c = this.position();
         this.impactEffects(level, kind, c);
-        DragonBossEntity boss = this.getOwner() instanceof DragonBossEntity b ? b : null;
+        ElementalBoss boss = this.getOwner() instanceof ElementalBoss b ? b : null;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(kind.radius))) {
-            if (boss != null ? !boss.isBossEnemy(e) : e instanceof DragonBossEntity) {
+            if (boss != null ? !boss.isBossEnemy(e) : e instanceof ElementalBoss) {
                 continue;
             }
             double d = e.position().add(0, e.getBbHeight() * 0.5, 0).distanceTo(c);
@@ -214,7 +215,8 @@ public class BossProjectile extends AbstractHurtingProjectile {
                 continue;
             }
             float f = (float) Math.max(0.35, 1.0 - d / (kind.radius + 0.5));
-            DamageSource source = boss != null ? this.damageSources().mobProjectile(this, boss) : this.damageSources().explosion(this, null);
+            DamageSource source = boss instanceof LivingEntity owner ? this.damageSources().mobProjectile(this, owner)
+                    : this.damageSources().explosion(this, null);
             e.hurtServer(level, source, this.damage * f);
             BossEffects.apply(e, kind, kind.effectSeconds);
             double push = kind == Kind.BOULDER ? 1.4 : kind == Kind.BUBBLE ? 1.0 : 0.7;

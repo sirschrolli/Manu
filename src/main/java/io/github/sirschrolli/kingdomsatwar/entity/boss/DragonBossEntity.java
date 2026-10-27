@@ -68,7 +68,7 @@ import org.jspecify.annotations.Nullable;
  * dazu Angriffe, Erweckung und Todeseffekte. Bewegt wird ohne Wegfindung: am Boden lenkend, in der Luft mit
  * weichen Kurven um das Nest.
  */
-public abstract class DragonBossEntity extends Mob implements Enemy {
+public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBoss {
     public enum State { AWAKENING, FIGHT, RETURNING, SLUMBER, DYING }
 
     public enum MoveMode { GROUND, AIR, WATER, BURROW }

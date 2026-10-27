@@ -217,8 +217,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "kingdomsatwar:lightning_rune",
-          "weight": 3
+          "name": "kingdomsatwar:lightning_spell_tablet"
         },
         {
           "type": "minecraft:item",

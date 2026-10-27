@@ -19,5 +19,11 @@ public final class ModBlockEntities {
                     () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.ShadowThroneCoreBlockEntity::new,
                             ModBlocks.SHADOW_THRONE_CORE.get()));
 
+    /** Magietisch: hält Stab, Zaubertafel und Aetherit. */
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity>>
+            MAGIC_TABLE = BLOCK_ENTITIES.register("magic_table",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity::new,
+                            ModBlocks.MAGIC_TABLE.get()));
+
     private ModBlockEntities() {}
 }

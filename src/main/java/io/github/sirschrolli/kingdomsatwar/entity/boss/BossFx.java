@@ -62,7 +62,7 @@ public final class BossFx {
     }
 
     /** Alle Gegner in einem Kegel vom Punkt {@code origin} in Richtung {@code dir}. */
-    public static void cone(DragonBossEntity boss, Vec3 origin, Vec3 dir, double range, double halfAngleDeg, Consumer<LivingEntity> hit) {
+    public static void cone(ElementalBoss boss, Vec3 origin, Vec3 dir, double range, double halfAngleDeg, Consumer<LivingEntity> hit) {
         Vec3 n = dir.normalize();
         double cos = Math.cos(Math.toRadians(halfAngleDeg));
         AABB box = new AABB(origin, origin.add(n.scale(range))).inflate(range * Math.sin(Math.toRadians(halfAngleDeg)) + 2.0);
@@ -76,7 +76,7 @@ public final class BossFx {
     }
 
     /** Stoßwelle am Boden: Schaden und Hochschleudern, nach außen schwächer. */
-    public static void shockwave(ServerLevel level, DragonBossEntity boss, Vec3 center, double radius, float damage, double launch) {
+    public static void shockwave(ServerLevel level, ElementalBoss boss, Vec3 center, double radius, float damage, double launch) {
         List<LivingEntity> hits = boss.enemiesAround(center, radius, 4.0);
         for (LivingEntity e : hits) {
             double d = e.position().subtract(center).horizontalDistance();

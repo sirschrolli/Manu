@@ -71,7 +71,6 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .add(LootItem.lootTableItem(ModItems.AETHERIT_STAFF.get()).setWeight(1)
                         .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.4f, 0.9f))))
                 .add(EmptyLootItem.emptyItem().setWeight(8));
-        ModItems.RUNES.values().forEach(rune -> treasure.add(LootItem.lootTableItem(rune.get()).setWeight(1)));
         this.output.accept(ModLootTables.CASTLE_RUIN_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
@@ -91,7 +90,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(ModBlocks.STEEL_LANTERN.get(), 3, 1, 1))
                         .add(item(ModItems.HOPS.get(), 3, 1, 3)))
                 .withPool(treasure));
-        // Sturmwarte: was die Sturmwächter zurückließen – Fernrohr, Kupfer, Aufzeichnungen, mit Glück Blitzrunen
+        // Sturmwarte: was die Sturmwächter zurückließen – Fernrohr, Kupfer, Aufzeichnungen, mit viel Glück eine Blitz-Zaubertafel
         this.output.accept(ModLootTables.STORM_WATCHTOWER_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
@@ -109,8 +108,8 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(ModItems.GEMSTONE.get(), 2, 1, 2)))
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
-                        .add(LootItem.lootTableItem(ModItems.RUNES.get(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.LIGHTNING).get())
-                                .setWeight(3))
+                        .add(LootItem.lootTableItem(ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.LIGHTNING).get())
+                                .setWeight(1))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(1))
@@ -131,8 +130,8 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(ModItems.GEMSTONE.get(), 3, 1, 2)))
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
-                        .add(LootItem.lootTableItem(ModItems.RUNES.get(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.WATER).get())
-                                .setWeight(3))
+                        .add(LootItem.lootTableItem(ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.WATER).get())
+                                .setWeight(1))
                         .add(LootItem.lootTableItem(Items.TRIDENT).setWeight(1)
                                 .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)

@@ -30,6 +30,6 @@ public class ModArchaeologyLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(Items.GOLD_NUGGET).setWeight(4))
                         .add(LootItem.lootTableItem(ModItems.GEMSTONE.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.BONE).setWeight(4))
-                        .add(LootItem.lootTableItem(ModItems.RUNES.get(type).get()).setWeight(1)))));
+                        .add(LootItem.lootTableItem(ModItems.GOLD_COIN.get()).setWeight(1)))));
     }
 }
