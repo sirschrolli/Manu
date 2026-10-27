@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -27,6 +28,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -279,12 +281,12 @@ public enum Spell implements StringRepresentable {
         }
         for (LivingEntity target : inCone(level, caster, range, 0.8)) {
             target.hurtServer(level, level.damageSources().freeze(), 4.0f * power(lv));
-            target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100 + 40 * (lv - 1), lv >= 3 ? 3 : 2), caster);
+            target.addEffect(effect(MobEffects.SLOWNESS, 100 + 40 * (lv - 1), lv >= 3 ? 3 : 2), caster);
             target.setTicksFrozen(Math.max(target.getTicksFrozen(), target.getTicksRequiredToFreeze() + 120 + 60 * (lv - 1)));
             if (lv >= 3) {
                 // festgefroren: anderthalb Sekunden kaum Bewegung, eine Hülle aus Eissplittern
-                target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 6), caster);
-                target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 30, 2), caster);
+                target.addEffect(effect(MobEffects.SLOWNESS, 30, 6), caster);
+                target.addEffect(effect(MobEffects.MINING_FATIGUE, 30, 2), caster);
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PACKED_ICE.defaultBlockState()),
                         target.getX(), target.getY(0.5), target.getZ(), 24, target.getBbWidth() * 0.4, target.getBbHeight() * 0.4,
                         target.getBbWidth() * 0.4, 0.05);
@@ -343,7 +345,7 @@ public enum Spell implements StringRepresentable {
                 LightningAttacks.arc(level, from, to);
                 LightningAttacks.visualBolt(level, target.position());
                 target.hurtServer(level, source, 5.0f * power(lv));
-                target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 20, 5), caster);
+                target.addEffect(effect(MobEffects.SLOWNESS, 20, 5), caster);
                 from = to;
             }
             if (!chain.isEmpty()) {
@@ -359,9 +361,9 @@ public enum Spell implements StringRepresentable {
         allies.addAll(level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(radius),
                 entity -> entity != caster && entity.isAlive() && isAlly(caster, entity)));
         for (LivingEntity ally : allies) {
-            ally.addEffect(new MobEffectInstance(MobEffects.REGENERATION, lv >= 2 ? 160 : 120, lv >= 3 ? 2 : 1), caster);
+            ally.addEffect(effect(MobEffects.REGENERATION, lv >= 2 ? 160 : 120, lv >= 3 ? 2 : 1), caster);
             if (lv >= 2) {
-                ally.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, lv - 2), caster);
+                ally.addEffect(effect(MobEffects.ABSORPTION, 600, lv - 2), caster);
             }
             if (ally != caster) {     // beim Zaubernden selbst nicht – direkt vor der Kamera wären die Funken riesig
                 level.sendParticles(ParticleTypes.HAPPY_VILLAGER, ally.getX(), ally.getY(0.6), ally.getZ(), 10, 0.4, 0.5, 0.4, 0.0);
@@ -371,7 +373,7 @@ public enum Spell implements StringRepresentable {
             // Wurzeln brechen aus dem Boden und halten Gegner fest
             BlockState roots = Blocks.ROOTED_DIRT.defaultBlockState();
             for (LivingEntity enemy : enemiesNear(level, caster, caster.position(), 6.0 * range(lv), e -> true)) {
-                enemy.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 4), caster);
+                enemy.addEffect(effect(MobEffects.SLOWNESS, 60, 4), caster);
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, roots), enemy.getX(), enemy.getY() + 0.2, enemy.getZ(),
                         20, 0.4, 0.1, 0.4, 0.05);
                 level.sendParticles(ParticleTypes.COMPOSTER, enemy.getX(), enemy.getY() + 0.5, enemy.getZ(), 8, 0.3, 0.4, 0.3, 0.0);
@@ -417,8 +419,8 @@ public enum Spell implements StringRepresentable {
                 target.push(0.0, 0.5 + 0.1 * (lv - 1), 0.0);
                 if (lv >= 3) {
                     // Felsdornen schießen unter dem Gegner hervor und lassen ihn taumeln
-                    target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 1), caster);
-                    target.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 60, 0), caster);
+                    target.addEffect(effect(MobEffects.SLOWNESS, 60, 1), caster);
+                    target.addEffect(effect(MobEffects.NAUSEA, 60, 0), caster);
                     for (int k = 0; k < 4; k++) {
                         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, spike), target.getX(), target.getY() + k * 0.4,
                                 target.getZ(), 8, 0.15, 0.1, 0.15, 0.1);
@@ -432,6 +434,14 @@ public enum Spell implements StringRepresentable {
             sound(level, caster, SoundEvents.POINTED_DRIPSTONE_LAND, 1.4f, 0.6f);
         }
         return true;
+    }
+
+    /**
+     * Wirkung eines Zaubers (auf den Zaubernden, Verbündete oder Gegner): mit Zeichen in der Anzeige, aber ohne
+     * Wirbel-Teilchen – die stiegen dem Zaubernden sonst ständig vor die Augen.
+     */
+    private static MobEffectInstance effect(Holder<MobEffect> effect, int duration, int amplifier) {
+        return new MobEffectInstance(effect, duration, amplifier, false, false, true);
     }
 
     private static boolean wave(ServerLevel level, LivingEntity caster, int lv) {
@@ -462,14 +472,14 @@ public enum Spell implements StringRepresentable {
             }
         }
         caster.clearFire();
-        caster.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 600, 0), caster);
-        caster.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 200, 0), caster);
+        caster.addEffect(effect(MobEffects.WATER_BREATHING, 600, 0), caster);
+        caster.addEffect(effect(MobEffects.DOLPHINS_GRACE, 200, 0), caster);
         if (lv >= 2) {
             caster.heal(lv >= 3 ? 5.0f : 3.0f);
         }
         if (lv >= 3) {
             // Wasserschild: eine Hülle aus Wasser fängt Schläge ab
-            caster.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 120, 0), caster);
+            caster.addEffect(effect(MobEffects.RESISTANCE, 120, 0), caster);
             for (int a = 0; a < 24; a++) {
                 double angle = Mth.TWO_PI * a / 24;
                 level.sendParticles(ParticleTypes.DRIPPING_WATER, caster.getX() + Math.cos(angle) * 1.1, caster.getY(0.5) + Math.sin(a) * 0.6,

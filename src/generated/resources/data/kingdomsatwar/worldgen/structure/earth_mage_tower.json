@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:mage_tower",
+  "biomes": "#kingdomsatwar:has_earth_mage_tower",
+  "element": "earth",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

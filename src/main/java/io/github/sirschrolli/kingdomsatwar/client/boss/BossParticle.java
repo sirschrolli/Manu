@@ -5,10 +5,12 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import org.joml.Quaternionf;
 
 /**
  * Große, animierte Odem-Partikel der Drachen-Bosse. Sie wachsen beim Fliegen, werden langsamer, wechseln ihr Bild
@@ -66,9 +68,37 @@ public class BossParticle extends SingleQuadParticle {
 
     @Override
     public float getQuadSize(float partial) {
+        return this.grownSize(partial) * this.nearScale;
+    }
+
+    private float grownSize(float partial) {
         float t = Mth.clamp((this.age + partial) / this.lifetime, 0.0f, 1.0f);
         float grow = 1.0f + (this.style.endSize() / this.style.startSize() - 1.0f) * (1.0f - (1.0f - t) * (1.0f - t));
         return this.quadSize * grow;
+    }
+
+    /** Verkleinerung dicht vor der Kamera (1 = keine), nur während des Zeichnens gesetzt. */
+    private float nearScale = 1.0f;
+
+    /**
+     * Dicht vor der Kamera wird das Teilchen kleiner und (wenn es durchscheinend ist) blasser: Diese Teilchen sind groß –
+     * ein einziges direkt vor den Augen verdeckte sonst das halbe Bild.
+     */
+    @Override
+    protected void extractRotatedQuad(QuadParticleRenderState state, Quaternionf rotation, float x, float y, float z, float partial) {
+        float distance = Mth.sqrt(x * x + y * y + z * z);
+        float size = this.grownSize(partial);
+        float alpha = this.alpha;
+        // nah dran höchstens 0,15 × Abstand groß (gut ein Fünftel der Bildhöhe), ab fünf Blöcken schwindet die Grenze
+        // rasch – die großen Odem-Wolken der Drachen bleiben aus der Ferne, wie sie sind
+        float beyond = Math.max(0.0f, distance - 5.0f);
+        this.nearScale = Math.min(1.0f, (distance * 0.15f + beyond * beyond * 0.5f) / Math.max(size, 1.0e-3f));
+        if (this.style.translucent()) {
+            this.alpha = alpha * Mth.clamp((distance - 1.0f) / 2.5f, 0.0f, 1.0f);
+        }
+        super.extractRotatedQuad(state, rotation, x, y, z, partial);
+        this.alpha = alpha;
+        this.nearScale = 1.0f;
     }
 
     @Override

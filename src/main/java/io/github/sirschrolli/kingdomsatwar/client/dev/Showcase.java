@@ -74,6 +74,13 @@ final class Showcase {
         steps.add(Step.command("gamerule advance_weather false"));
         steps.add(Step.command("gamerule spawn_mobs false"));
         steps.add(Step.command("gamerule send_command_feedback false"));
+        // die Titelkarte des ersten Kapitels käme sonst mitten in die Bilder (die Szene "seal" zeigt Karten eigens)
+        steps.add(Step.server(level -> level.players().forEach(player -> {
+            var progress = io.github.sirschrolli.kingdomsatwar.story.Story.progress(player);
+            progress.setLastCard(Math.max(progress.lastCard(), io.github.sirschrolli.kingdomsatwar.story.Story.current(player).ordinal()));
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.STORY, progress);
+        })));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
         steps.add(Step.waitTicks(20));
         for (String scene : scenes.split(",")) {
             switch (scene.trim()) {
@@ -122,6 +129,18 @@ final class Showcase {
                         lairWater(steps);
                     } else if (scene.startsWith("lair_")) {
                         lair(steps, DragonType.byId(scene.substring(5)));
+                    } else if (scene.equals("towers")) {
+                        TowerShowcase.towers(steps, java.util.List.of(DragonType.values()));
+                    } else if (scene.startsWith("tower_")) {
+                        TowerShowcase.towers(steps, java.util.List.of(DragonType.byId(scene.substring(6))));
+                    } else if (scene.equals("magefights")) {
+                        TowerShowcase.mageFights(steps, java.util.List.of(DragonType.values()));
+                    } else if (scene.startsWith("magefight_")) {
+                        TowerShowcase.mageFights(steps, java.util.List.of(DragonType.byId(scene.substring(10))));
+                    } else if (scene.equals("towerworld")) {
+                        TowerShowcase.towerWorld(steps, java.util.List.of(DragonType.values()));
+                    } else if (scene.startsWith("towerworld_")) {
+                        TowerShowcase.towerWorld(steps, java.util.List.of(DragonType.byId(scene.substring(11))));
                     } else if (scene.startsWith("townplan_")) {
                         TownShowcase.plans(steps, scene.substring(9));
                     } else if (scene.startsWith("bossmotion_")) {

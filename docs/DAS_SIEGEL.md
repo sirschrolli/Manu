@@ -159,10 +159,18 @@ Blöcken, Farben, Partikeln und Geräuschen:
 
 ## 4. Magie
 
-- **Magier-Bosse** (je Element ein Magier in seinem Magierturm) lassen die **Zaubertafeln** fallen
-  (die bisherigen Runen werden nicht mehr hergestellt).
-- **Magietisch** mit eigener Oberfläche und schwebenden, kreisenden Runen: Tafel + Stab → der Stab lernt den Zauber.
-- **Radialmenü:** Taste halten → kreisförmiges Zaubermenü im eigenen Magie-Design, Zauber auswählen.
+- **Sechs Erzmagier** – Ignatius (Feuer), Isolde (Eis), Fulgor (Blitz), Sylvana (Natur), Gorvan (Erde) und Marena
+  (Wasser) – meditieren im Sanktum ihres **Magierturms** im Land ihres Elements. Wer den Saal betritt, weckt sie:
+  verfolgende Geschosse (zurückschlagbar), der Zauber des Elements, Blinzeln, Spiegelbilder, Runenschild, drei Phasen
+  und ein großer Zauber je Element. Besiegt lassen sie die **Zaubertafel** ihres Elements fallen (die bisherigen Runen
+  werden nicht mehr hergestellt, lehren aber noch wie Tafeln).
+- **Magierturm:** Terrasse, runder Schaft mit Eingangshalle, Bibliothek (Aufzeichnungen des Magiers mit Hinweisen),
+  Laboratorium (Magietisch) und Kammer, darüber das auskragende Sanktum mit Ritualkreis und ein spitzes Kegeldach –
+  sechs Bauweisen, eine je Element.
+- **Magietisch** mit eigener Oberfläche und schwebenden, kreisenden Runen: Stab + Tafel + Aetherit → der Stab lernt
+  den Zauber; weitere Tafeln heben ihn auf Stufe II und III.
+- **Zauberkreis (Radialmenü):** Taste V halten → kreisförmiges Zaubermenü im eigenen Magie-Design, Zauber auswählen;
+  Anzeige des gewählten Zaubers mit Abklingzeit über der Schnellleiste.
 
 ## 5. Welt
 
@@ -236,6 +244,6 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | B9 | Alte Drachen-Mechanik umgebaut: keine wilden Drachen, keine Ei-Rezepte und Fragmente mehr, ein Ei schlüpft nur mit einem Spieler in der Nähe; Tests, README und Bilder (Version 0.3.0) | ✅ |
 | F | Schattenwelt: Dimension, 7 Biome, Schattenvolk mit Dörfern, Erze, Kreaturen, **Nyxar mit der Schattenzitadelle**, Bauwerke (Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken) | ✅ |
 | C | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Ansehen, Handel mit Echtzeit-Pause, Krönung (Version 0.5.0) | ✅ |
-| D | Magier-Bosse, Magietisch, Radialmenü | ⏳ |
+| D | Magie: Zauberstufen, Zaubertafeln, Magietisch, Zauberkreis, sechs Erzmagier in sechs Magiertürmen (Version 0.6.0) | ✅ |
 | E | Biome, Dörfer, eigene Mobs statt Vanilla, keine Vanilla-Bauwerke, Nether/End | ⏳ |
 | G | Erzähler-Kapitel und neues Intro mit Stimme C, Feinschliff, Veröffentlichung | ⏳ |

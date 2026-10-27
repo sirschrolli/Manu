@@ -34,6 +34,16 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> LIGHTHOUSE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/lighthouse"));
     public static final ResourceKey<LootTable> OLD_WORLD_RUIN_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/old_world_ruin"));
+    /** Truhen in den Türmen der Erzmagier: Eingangshalle, Bibliothek, Laboratorium, Kammer und Sanktum. */
+    public static final ResourceKey<LootTable> MAGE_TOWER_HALL = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/mage_tower_hall"));
+    public static final ResourceKey<LootTable> MAGE_TOWER_LIBRARY =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/mage_tower_library"));
+    public static final ResourceKey<LootTable> MAGE_TOWER_LABORATORY =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/mage_tower_laboratory"));
+    public static final ResourceKey<LootTable> MAGE_TOWER_QUARTERS =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/mage_tower_quarters"));
+    public static final ResourceKey<LootTable> MAGE_TOWER_SANCTUM =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/mage_tower_sanctum"));
     /** Truhen in den Türmen der Schattenzitadelle. */
     public static final ResourceKey<LootTable> SHADOW_CITADEL_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/shadow_citadel"));

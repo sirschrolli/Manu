@@ -632,6 +632,68 @@ def portrait(element: str) -> Image.Image:
     return out
 
 
+def mage_portrait(element: str) -> Image.Image:
+    """Bildnis eines Erzmagiers: Kopf mit Kopfschmuck schräg von vorn (Zubehör anderer Elemente entfernt)."""
+    from entitygen.models import mage
+    from entitygen.paint import paint_model
+    from entitygen.preview import render
+    m = mage.build()
+    m.pack()
+    hidden = (mage.ALL_GEAR - mage.GEAR[element]) | {"left_arm", "right_arm"}
+
+    def strip(bone):
+        if bone.name in hidden:
+            bone.cubes.clear()
+            for child in bone.children:
+                strip_all(child)
+            return
+        for child in bone.children:
+            strip(child)
+
+    def strip_all(bone):
+        bone.cubes.clear()
+        for child in bone.children:
+            strip_all(child)
+
+    tex, glow = paint_model(m, mage.materials(element), mage.PALETTES[element], seed=100 + mage.ELEMENTS.index(element),
+                            params={"variant": element})
+    strip(m.root)
+    big = render(m, tex, glow, -28, 4, 448, background=(0, 0, 0, 0), zoom=1.08, focus=["head"])
+    img = big.resize((64, 64), Image.LANCZOS)
+    img = ImageEnhance.Brightness(img).enhance({"fire": 1.2, "earth": 1.25, "lightning": 1.5}.get(element, 1.4))
+    img = ImageEnhance.Color(img).enhance(1.15)
+    img = ImageEnhance.Contrast(img).enhance(1.12)
+    px = img.load()
+    solid = [[False] * 64 for _ in range(64)]
+    for y in range(64):
+        for x in range(64):
+            r, g, b, a = px[x, y]
+            d = math.hypot(x - 31.5, y - 31.5)
+            on = a > 140 and d <= 29.5
+            solid[x][y] = on
+            px[x, y] = (r, g, b, 255) if on else (0, 0, 0, 0)
+    out = Image.new("RGBA", (64, 64), CLEAR)
+    op = out.load()
+    for y in range(64):
+        for x in range(64):
+            if solid[x][y]:
+                op[x, y] = px[x, y]
+                continue
+            near = any(0 <= x + dx < 64 and 0 <= y + dy < 64 and solid[x + dx][y + dy]
+                       for dx in (-2, -1, 0, 1, 2) for dy in (-2, -1, 0, 1, 2) if abs(dx) + abs(dy) <= 3)
+            if near and math.hypot(x - 31.5, y - 31.5) <= 31.5:
+                op[x, y] = (10, 8, 12, 255)
+    return out
+
+
+def mage_bossbar(element: str) -> Image.Image:
+    """Bossleiste eines Erzmagiers: Rahmen und Füllung seines Elements, im Medaillon sein Bildnis."""
+    img = bossbar(element)
+    img.paste((0, 0, 0, 0), (0, 128, 64, 192))
+    img.alpha_composite(mage_portrait(element), (0, 128))
+    return img
+
+
 def bossbar(element: str) -> Image.Image:
     img = Image.new("RGBA", (256, 256), CLEAR)
     fr = frame(element)

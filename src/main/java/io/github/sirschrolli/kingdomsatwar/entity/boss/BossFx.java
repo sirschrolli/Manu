@@ -11,6 +11,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -23,8 +25,80 @@ public final class BossFx {
         level.playSound(null, pos.x, pos.y, pos.z, sound, SoundSource.HOSTILE, volume, pitch);
     }
 
+    /** Teilchenwolke, nach allen Seiten gleich weit gestreut (mit freier Sicht für den, der mittendrin steht – siehe {@link #impact}). */
     public static void burst(ServerLevel level, ParticleOptions particle, Vec3 pos, int count, double spread, double speed) {
-        level.sendParticles(particle, pos.x, pos.y, pos.z, count, spread, spread, spread, speed);
+        impact(level, particle, pos, count, spread, spread, spread, speed);
+    }
+
+    /** So weit vor den Augen eines Spielers entstehen keine Teilchen einer Wolke, in der er selbst steht. */
+    public static final double CLEAR_SIGHT = 1.7;
+
+    /**
+     * Teilchenwolke an einer Stelle, an der auch ein Spieler stehen kann (Einschlag, Explosion, Zauber am Gegner).
+     * Zuschauer sehen sie wie gewohnt. Wer aber mittendrin steht – meist der Getroffene selbst –, bekäme die Teilchen
+     * direkt vor die Augen: bildschirmfüllende bunte Klötze, hinter denen man nichts mehr sieht. Für ihn werden die
+     * Teilchen einzeln verteilt: die, die näher als {@link #CLEAR_SIGHT} vor seinen Augen entstünden, entfallen, und
+     * keines fliegt auf ihn zu.
+     */
+    public static void impact(ServerLevel level, ParticleOptions particle, Vec3 c, int count, double dx, double dy, double dz, double speed) {
+        if (count <= 0) {
+            level.sendParticles(particle, c.x, c.y, c.z, count, dx, dy, dz, speed);
+            return;
+        }
+        double spread = Math.max(dx, Math.max(dy, dz));
+        double clear = clearance(particle);
+        // eine weite Wolke ist dünn – da landet kaum ein Teilchen vor den Augen
+        double near = spread > 2.5 ? 0.0 : clear + 2.5 * spread + 8.0 * speed;
+        var random = level.getRandom();
+        for (var player : level.players()) {
+            Vec3 eye = player.getEyePosition();
+            if (eye.distanceToSqr(c) >= near * near) {
+                level.sendParticles(player, particle, false, false, c.x, c.y, c.z, count, dx, dy, dz, speed);
+                continue;
+            }
+            for (int i = 0; i < Math.min(count, 160); i++) {
+                double x = c.x + random.nextGaussian() * dx;
+                double y = c.y + random.nextGaussian() * dy;
+                double z = c.z + random.nextGaussian() * dz;
+                double ex = x - eye.x;
+                double ey = y - eye.y;
+                double ez = z - eye.z;
+                if (ex * ex + ey * ey + ez * ez < clear * clear) {
+                    continue;
+                }
+                // Flugrichtung zufällig wie sonst – aber nie auf die Augen zu (Anzahl 0: dx/dy/dz sind die Geschwindigkeit)
+                double vx = random.nextGaussian() * speed;
+                double vy = random.nextGaussian() * speed;
+                double vz = random.nextGaussian() * speed;
+                if (vx * ex + vy * ey + vz * ez < 0.0) {
+                    vx = -vx;
+                    vy = -vy;
+                    vz = -vz;
+                }
+                level.sendParticles(player, particle, false, false, x, y, z, 0, vx, vy, vz, 1.0);
+            }
+        }
+    }
+
+    /**
+     * Wie weit eine Teilchenart vor den Augen bleiben muss: Explosionswolken sind einige Blöcke groß (der Auslöser
+     * verteilt sie zudem ringsum) – die übrigen reichen mit {@link #CLEAR_SIGHT}.
+     */
+    static double clearance(ParticleOptions particle) {
+        if (particle.getType() == ParticleTypes.EXPLOSION_EMITTER) {
+            return 6.5;
+        }
+        return particle.getType() == ParticleTypes.EXPLOSION ? 4.5 : CLEAR_SIGHT;
+    }
+
+    /** Ist die Stelle so nah vor den Augen eines Spielers, dass Teilchen dort sein Bild verdecken würden? */
+    public static boolean nearEyes(Level level, Vec3 pos) {
+        for (Player player : level.players()) {
+            if (player.getEyePosition().distanceToSqr(pos) < CLEAR_SIGHT * CLEAR_SIGHT) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Partikelring auf dem Boden (Vorwarnung oder Welle). */
@@ -37,13 +111,26 @@ public final class BossFx {
         }
     }
 
-    /** Gefüllter Warnkreis (z. B. wo gleich etwas einschlägt). */
+    /**
+     * Gefüllter Warnkreis (z. B. wo gleich etwas einschlägt). Wer im Kreis steht, sieht ihn um sich herum – nur direkt
+     * unter seinen Füßen nicht: was dort aufsteigt (Rauch, Funken), stiege ihm sonst ins Gesicht.
+     */
     public static void warnDisc(ServerLevel level, ParticleOptions particle, Vec3 center, double radius, int count) {
         RandomPoints rnd = new RandomPoints(level);
         for (int i = 0; i < count; i++) {
             double r = Math.sqrt(rnd.next()) * radius;
             double a = rnd.next() * Mth.TWO_PI;
-            level.sendParticles(particle, center.x + Math.cos(a) * r, center.y + 0.15, center.z + Math.sin(a) * r, 1, 0, 0.02, 0, 0.0);
+            double x = center.x + Math.cos(a) * r;
+            double y = center.y + 0.15;
+            double z = center.z + Math.sin(a) * r;
+            for (var player : level.players()) {
+                double dx = player.getX() - x;
+                double dz = player.getZ() - z;
+                if (dx * dx + dz * dz < 1.0 && Math.abs(player.getY() - y) < 2.5) {
+                    continue;
+                }
+                level.sendParticles(player, particle, false, false, x, y, z, 1, 0.0, 0.02, 0.0, 0.0);
+            }
         }
     }
 

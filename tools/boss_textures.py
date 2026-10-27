@@ -292,6 +292,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     import bossbar_textures
     for element in bossbar_textures.ELEMENTS:
         put(f"gui/boss_bar/{element}", bossbar_textures.bossbar(element))
+    for element in ("fire", "ice", "lightning", "nature", "earth", "water"):
+        put(f"gui/boss_bar/mage_{element}", bossbar_textures.mage_bossbar(element))
     put("entity/boss/projectile_fireball", orb("#fff6c0", "#ffa42a", "#c42a08", flames=True, rough=False, seed=11))
     for kind in PARTICLE_RAMPS:
         for frame in range(8):

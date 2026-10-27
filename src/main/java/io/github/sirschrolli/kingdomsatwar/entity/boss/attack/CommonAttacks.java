@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.entity.boss.attack;
 
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossEffects;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossPart;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
@@ -14,7 +15,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -259,8 +259,8 @@ public final class CommonAttacks {
                 BossFx.sound(level, boss.position(), SoundEvents.ENDER_DRAGON_GROWL, 4.0f, 0.6f);
                 boss.shake(level, 50, 0.45f, 25);
                 for (LivingEntity e : boss.enemiesAround(boss.position(), this.radius, 10)) {
-                    e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 1), boss);
-                    e.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 80, 0), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 50, 1), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.WEAKNESS, 80, 0), boss);
                 }
                 net.minecraft.world.phys.Vec3 feet = boss.position();
                 for (int r = 4; r <= 12; r += 4) {

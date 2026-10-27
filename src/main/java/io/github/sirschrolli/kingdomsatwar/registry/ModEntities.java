@@ -157,6 +157,32 @@ public final class ModEntities {
             BossProjectile::new, MobCategory.MISC,
             builder -> builder.sized(1.0f, 1.0f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
 
+    // ---------------------------------------------------------------- Erzmagier
+    /** Ein Erzmagier je Element (wacht in der Spitze seines Turms). */
+    public static final Map<DragonType, DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity>>>
+            MAGES = new EnumMap<>(DragonType.class);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            MAGES.put(type, ENTITIES.registerEntityType(type.id() + "_mage",
+                    (entityType, level) -> new io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity(entityType, level, type),
+                    MobCategory.MONSTER, builder -> {
+                        builder.sized(0.9f, 2.6f).eyeHeight(2.3f).clientTrackingRange(12).updateInterval(2);
+                        return type == DragonType.FIRE ? builder.fireImmune() : builder;
+                    }));
+        }
+    }
+
+    /** Spiegelbild eines Erzmagiers (wird nicht gespeichert). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageImageEntity>> MAGE_IMAGE =
+            ENTITIES.registerEntityType("mage_image", io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageImageEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.9f, 2.6f).eyeHeight(2.3f).noSave().noLootTable().clientTrackingRange(10));
+
+    /** Magisches Geschoss der Erzmagier. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MagicMissile>> MAGIC_MISSILE =
+            ENTITIES.registerEntityType("magic_missile", io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MagicMissile::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
+
     /** Unsichtbarer Träger der Lichteffekte beim Siegelbruch. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity>> SEAL_BREAK =
             ENTITIES.registerEntityType("seal_break", io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity::new, MobCategory.MISC,
@@ -204,6 +230,8 @@ public final class ModEntities {
         event.put(THALASSA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.water.ThalassaEntity.createAttributes().build());
         event.put(NYXAR.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.shadow.NyxarEntity.createAttributes().build());
         event.put(VINELING.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity.createAttributes().build());
+        MAGES.values().forEach(type -> event.put(type.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity.createAttributes().build()));
+        event.put(MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageImageEntity.createAttributes().build());
         event.put(SHADE_STALKER.get(), ShadeStalkerEntity.createAttributes().build());
         event.put(CRYSTAL_CRAWLER.get(), CrystalCrawlerEntity.createAttributes().build());
         event.put(NIGHT_WING.get(), NightWingEntity.createAttributes().build());

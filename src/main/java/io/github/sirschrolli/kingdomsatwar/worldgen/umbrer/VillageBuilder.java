@@ -37,19 +37,19 @@ import net.minecraft.world.level.storage.loot.LootTable;
  * für Chunk gebaut werden und alle Teile passen zusammen. Zufall, der über mehrere Blöcke entscheidet, wird vorab aus
  * {@link #random} gezogen; Zufall je Block kommt aus {@link #chance}, damit jeder Chunk dasselbe Ergebnis erhält.
  */
-final class VillageBuilder {
-    final WorldGenLevel level;
-    final BoundingBox chunkBox;
+public final class VillageBuilder {
+    public final WorldGenLevel level;
+    public final BoundingBox chunkBox;
     /** Ursprung (links vorne, Höhe des Fußbodens) in Weltkoordinaten. */
-    final BlockPos origin;
-    final Rotation rotation;
-    final RandomSource random;
+    public final BlockPos origin;
+    public final Rotation rotation;
+    public final RandomSource random;
     private final long seed;
     private final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
     /** Zäune, Scheiben, Mauern …: ihre Verbindungen werden am Ende aus den Nachbarn berechnet. */
     private final List<BlockPos> shaped = new ArrayList<>();
 
-    VillageBuilder(WorldGenLevel level, BoundingBox chunkBox, BlockPos origin, Rotation rotation, long seed) {
+    public VillageBuilder(WorldGenLevel level, BoundingBox chunkBox, BlockPos origin, Rotation rotation, long seed) {
         this.level = level;
         this.chunkBox = chunkBox;
         this.origin = origin;
@@ -59,22 +59,22 @@ final class VillageBuilder {
     }
 
     /** Weltposition eines Punktes in Gebäude-Koordinaten. */
-    BlockPos world(int x, int y, int z) {
+    public BlockPos world(int x, int y, int z) {
         BlockPos local = new BlockPos(x, y, z).rotate(this.rotation);
         return this.origin.offset(local);
     }
 
     /** Eine Richtung im Gebäude-Rahmen als Weltrichtung. */
-    Direction worldDirection(Direction local) {
+    public Direction worldDirection(Direction local) {
         return this.rotation.rotate(local);
     }
 
-    boolean inside(BlockPos pos) {
+    public boolean inside(BlockPos pos) {
         return this.chunkBox.isInside(pos) && pos.getY() > this.level.getMinY() && pos.getY() < this.level.getMaxY();
     }
 
     /** Liegt der Punkt (in Gebäude-Koordinaten) im aktuellen Chunk? */
-    boolean here(int x, int y, int z) {
+    public boolean here(int x, int y, int z) {
         return this.inside(this.world(x, y, z));
     }
 
@@ -83,16 +83,16 @@ final class VillageBuilder {
     // =====================================================================================
 
     /** Setzt einen Block (die Blickrichtung wird mitgedreht). */
-    void set(int x, int y, int z, BlockState state) {
+    public void set(int x, int y, int z, BlockState state) {
         this.setWorld(this.world(x, y, z), state.rotate(this.rotation));
     }
 
-    void set(int x, int y, int z, Block block) {
+    public void set(int x, int y, int z, Block block) {
         this.set(x, y, z, block.defaultBlockState());
     }
 
     /** Setzt einen Block in Weltkoordinaten (ohne Drehung), wenn er im aktuellen Chunk liegt. */
-    void setWorld(BlockPos pos, BlockState state) {
+    public void setWorld(BlockPos pos, BlockState state) {
         if (this.inside(pos)) {
             this.level.setBlock(pos, state, Block.UPDATE_CLIENTS);
             if (needsShape(state)) {
@@ -101,12 +101,12 @@ final class VillageBuilder {
         }
     }
 
-    BlockState get(int x, int y, int z) {
+    public BlockState get(int x, int y, int z) {
         BlockPos pos = this.world(x, y, z);
         return this.inside(pos) ? this.level.getBlockState(pos) : Blocks.AIR.defaultBlockState();
     }
 
-    void fill(int x0, int y0, int z0, int x1, int y1, int z1, BlockState state) {
+    public void fill(int x0, int y0, int z0, int x1, int y1, int z1, BlockState state) {
         for (int x = Math.min(x0, x1); x <= Math.max(x0, x1); x++) {
             for (int y = Math.min(y0, y1); y <= Math.max(y0, y1); y++) {
                 for (int z = Math.min(z0, z1); z <= Math.max(z0, z1); z++) {
@@ -116,16 +116,16 @@ final class VillageBuilder {
         }
     }
 
-    void fill(int x0, int y0, int z0, int x1, int y1, int z1, Block block) {
+    public void fill(int x0, int y0, int z0, int x1, int y1, int z1, Block block) {
         this.fill(x0, y0, z0, x1, y1, z1, block.defaultBlockState());
     }
 
-    void air(int x0, int y0, int z0, int x1, int y1, int z1) {
+    public void air(int x0, int y0, int z0, int x1, int y1, int z1) {
         this.fill(x0, y0, z0, x1, y1, z1, Blocks.AIR.defaultBlockState());
     }
 
     /** Rahmen eines Rechtecks (nur der Rand) in einer Höhe. */
-    void ring(int x0, int z0, int x1, int z1, int y, BlockState state) {
+    public void ring(int x0, int z0, int x1, int z1, int y, BlockState state) {
         for (int x = x0; x <= x1; x++) {
             this.set(x, y, z0, state);
             this.set(x, y, z1, state);
@@ -137,12 +137,12 @@ final class VillageBuilder {
     }
 
     /** Fester Zufall je Block (unabhängig davon, in welchem Chunk gerade gebaut wird). */
-    boolean chance(int x, int y, int z, float probability) {
+    public boolean chance(int x, int y, int z, float probability) {
         return this.noise(x, y, z) < probability;
     }
 
     /** Ein fester Zufallswert 0..1 je Block. */
-    float noise(int x, int y, int z) {
+    public float noise(int x, int y, int z) {
         long h = this.seed ^ (x * 0x9E3779B97F4A7C15L) ^ (y * 0xC2B2AE3D27D4EB4FL) ^ (z * 0x165667B19E3779F9L);
         h = (h ^ (h >>> 30)) * 0xBF58476D1CE4E5B9L;
         h = (h ^ (h >>> 27)) * 0x94D049BB133111EBL;
@@ -154,41 +154,41 @@ final class VillageBuilder {
     // Bauteile
     // =====================================================================================
 
-    static BlockState stairs(Block block, Direction facing, Half half) {
+    public static BlockState stairs(Block block, Direction facing, Half half) {
         return block.defaultBlockState().setValue(StairBlock.FACING, facing).setValue(StairBlock.HALF, half);
     }
 
-    static BlockState stairs(Block block, Direction facing, Half half, StairsShape shape) {
+    public static BlockState stairs(Block block, Direction facing, Half half, StairsShape shape) {
         return stairs(block, facing, half).setValue(StairBlock.SHAPE, shape);
     }
 
-    static BlockState slab(Block block, SlabType type) {
+    public static BlockState slab(Block block, SlabType type) {
         return block.defaultBlockState().setValue(SlabBlock.TYPE, type);
     }
 
     /** Tür (unten bei y, oben bei y + 1); {@code facing} ist die Richtung, in die man beim Hineingehen blickt. */
-    void door(int x, int y, int z, Block door, Direction facing) {
+    public void door(int x, int y, int z, Block door, Direction facing) {
         BlockState state = door.defaultBlockState().setValue(DoorBlock.FACING, facing);
         this.set(x, y, z, state.setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
         this.set(x, y + 1, z, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
     }
 
     /** Bett: Fußende bei (x, y, z), Kopfende ein Block weiter in Richtung {@code facing}. */
-    void bed(int x, int y, int z, Block bed, Direction facing) {
+    public void bed(int x, int y, int z, Block bed, Direction facing) {
         BlockState state = bed.defaultBlockState().setValue(BedBlock.FACING, facing);
         this.set(x, y, z, state.setValue(BedBlock.PART, BedPart.FOOT));
         this.set(x + facing.getStepX(), y, z + facing.getStepZ(), state.setValue(BedBlock.PART, BedPart.HEAD));
     }
 
     /** Leiter von y0 bis y1; {@code facing} zeigt von der Wand weg in den Raum. */
-    void ladder(int x, int y0, int y1, int z, Direction facing) {
+    public void ladder(int x, int y0, int y1, int z, Direction facing) {
         BlockState state = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, facing);
         for (int y = y0; y <= y1; y++) {
             this.set(x, y, z, state);
         }
     }
 
-    void hangingLantern(int x, int y, int z, Block lantern) {
+    public void hangingLantern(int x, int y, int z, Block lantern) {
         this.set(x, y, z, lantern.defaultBlockState().setValue(LanternBlock.HANGING, true));
     }
 
@@ -197,7 +197,7 @@ final class VillageBuilder {
      * Das Dach steht vorne und hinten einen Block über; die Giebeldreiecke werden mit {@code gable} gefüllt, der First
      * aus {@code ridge} mit einer Stufe {@code cap} darauf.
      */
-    void gableAlongZ(int x0, int x1, int z0, int z1, int y, Block stairs, BlockState ridge, BlockState cap, BlockState gable) {
+    public void gableAlongZ(int x0, int x1, int z0, int z1, int y, Block stairs, BlockState ridge, BlockState cap, BlockState gable) {
         for (int i = 0; ; i++) {
             int left = x0 - 1 + i;
             int right = x1 + 1 - i;
@@ -226,7 +226,7 @@ final class VillageBuilder {
     }
 
     /** Satteldach mit First entlang x (Traufen vorne und hinten, Giebel links bei x0 und rechts bei x1). */
-    void gableAlongX(int x0, int x1, int z0, int z1, int y, Block stairs, BlockState ridge, BlockState cap, BlockState gable) {
+    public void gableAlongX(int x0, int x1, int z0, int z1, int y, Block stairs, BlockState ridge, BlockState cap, BlockState gable) {
         for (int i = 0; ; i++) {
             int front = z0 - 1 + i;
             int back = z1 + 1 - i;
@@ -258,7 +258,7 @@ final class VillageBuilder {
      * Walm- bzw. Zeltdach über dem Rechteck (x0..x1, z0..z1) ab Höhe y: Ring für Ring nach innen, die Ecken als
      * Außenecken. Bleibt eine Linie oder ein Punkt übrig, kommt dort {@code top} hin. Gibt die Höhe der Spitze zurück.
      */
-    int hipRoof(int x0, int z0, int x1, int z1, int y, Block stairs, BlockState top) {
+    public int hipRoof(int x0, int z0, int x1, int z1, int y, Block stairs, BlockState top) {
         for (int k = 0; ; k++) {
             int xa = x0 + k;
             int xb = x1 - k;
@@ -295,7 +295,7 @@ final class VillageBuilder {
      * Fundament: unter der Grundfläche bis zum Gelände auffüllen (Rand aus {@code edge}, innen {@code inner}); darüber bis
      * {@code clear} Blöcke hoch alles freiräumen (auch Bäume und Pflanzen).
      */
-    void foundation(int x0, int z0, int x1, int z1, BlockState edge, BlockState inner, int clear) {
+    public void foundation(int x0, int z0, int x1, int z1, BlockState edge, BlockState inner, int clear) {
         for (int x = x0; x <= x1; x++) {
             for (int z = z0; z <= z1; z++) {
                 boolean rim = x == x0 || x == x1 || z == z0 || z == z1;
@@ -305,7 +305,7 @@ final class VillageBuilder {
     }
 
     /** Eine Säule des Fundaments: darunter auffüllen, darüber freiräumen. */
-    void column(int x, int z, BlockState fill, int clear) {
+    public void column(int x, int z, BlockState fill, int clear) {
         BlockPos top = this.world(x, 0, z);
         if (!this.chunkBox.isInside(top.getX(), this.chunkBox.minY(), top.getZ())) {
             return;
@@ -326,12 +326,12 @@ final class VillageBuilder {
         }
     }
 
-    static boolean isSolidGround(BlockState state) {
+    public static boolean isSolidGround(BlockState state) {
         return state.isSolidRender() && !state.is(BlockTags.LOGS) && !state.is(BlockTags.LEAVES);
     }
 
     /** Truhe (oder Fass) mit Beute aus der Tabelle (eigener Zufall je Truhe, damit alle Chunks gleich bauen). */
-    void chest(int x, int y, int z, BlockState state, ResourceKey<LootTable> loot) {
+    public void chest(int x, int y, int z, BlockState state, ResourceKey<LootTable> loot) {
         BlockPos pos = this.world(x, y, z);
         if (this.inside(pos)) {
             this.level.setBlock(pos, state.rotate(this.rotation), Block.UPDATE_CLIENTS);
@@ -352,7 +352,7 @@ final class VillageBuilder {
      * Verbindet Zäune, Scheiben und Mauern mit ihren Nachbarn – auch mit denen jenseits der Chunkgrenze, die schon
      * stehen (die Nachbarn dort werden mit angepasst; später gebaute Chunks passen sich selbst an).
      */
-    void finish() {
+    public void finish() {
         BlockPos.MutableBlockPos neighbour = new BlockPos.MutableBlockPos();
         for (BlockPos pos : this.shaped) {
             this.reshape(pos);

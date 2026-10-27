@@ -305,6 +305,9 @@ public class ModModelProvider extends ModelProvider {
         for (DeferredItem<?> spawnEgg : ModItems.DRAGON_SPAWN_EGGS.values()) {
             flat(items, spawnEgg.get());
         }
+        for (DeferredItem<?> spawnEgg : ModItems.MAGE_SPAWN_EGGS.values()) {
+            flat(items, spawnEgg.get());
+        }
         for (DeferredItem<?> spawnEgg : ModItems.SOLDIER_SPAWN_EGGS.values()) {
             flat(items, spawnEgg.get());
         }

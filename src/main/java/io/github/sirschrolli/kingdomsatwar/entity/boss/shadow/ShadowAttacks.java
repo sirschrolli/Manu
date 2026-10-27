@@ -15,7 +15,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -110,9 +109,9 @@ public final class ShadowAttacks {
                         continue;
                     }
                     DragonBossEntity.pushAway(e, boss.position(), 1.2, 0.45);
-                    e.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 140, 0), boss);
-                    e.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 120, 0), boss);
-                    e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.DARKNESS, 140, 0), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.WEAKNESS, 120, 0), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 40, 1), boss);
                 }
             }
             // der Ring wandert nach außen
@@ -446,7 +445,7 @@ public final class ShadowAttacks {
                     if (immune(e)) {
                         continue;
                     }
-                    e.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 260, 0), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.DARKNESS, 260, 0), boss);
                 }
                 // je Gegner zwei Irrlichter (höchstens zwölf), nacheinander losgelassen
                 int n = 0;
@@ -581,7 +580,7 @@ public final class ShadowAttacks {
                 if (tick % 12 == 4) {
                     float dealt = this.damage * 0.25f;
                     if (e.hurtServer(level, boss.damageSources().indirectMagic(boss, boss), dealt * boss.damageMultiplier())) {
-                        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 1), boss);
+                        e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 30, 1), boss);
                         boss.heal(Math.min(dealt * 2.0f, boss.getMaxHealth() * 0.01f));
                         level.sendParticles(ParticleTypes.SOUL, chest.x, chest.y, chest.z, 6, 0.3, 0.3, 0.3, 0.04);
                         BossFx.sound(level, chest, SoundEvents.SOUL_ESCAPE.value(), 1.2f, 0.8f);

@@ -64,6 +64,21 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SHADOW_SITE_PIECE =
             PIECES.register("shadow_site", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSitePiece::new);
 
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement>>
+            MAGE_TOWER_PLACEMENT = PLACEMENTS.register("mage_tower", () -> io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerStructure>>
+            MAGE_TOWER = TYPES.register("mage_tower", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> MAGE_TOWER_PIECE =
+            PIECES.register("mage_tower", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPiece::new);
+
+    /** Turm des Erzmagiers eines Elements. */
+    public static ResourceKey<Structure> mageTower(DragonType type) {
+        return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id(type.id() + "_mage_tower"));
+    }
+
+    /** Alle sechs Magiertürme teilen sich eine Verteilung: je Feld entsteht höchstens einer – der, dessen Land dort liegt. */
+    public static final ResourceKey<StructureSet> MAGE_TOWERS = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("mage_towers"));
+
     /** Bauwerk einer Art der Schattenwelt (Mondtempel, Kristallmine, Leuchtturm, Ruine der alten Welt). */
     public static ResourceKey<Structure> shadowSite(io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind kind) {
         return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id(kind.id()));
@@ -155,6 +170,13 @@ public final class ModStructures {
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
         for (DragonType type : DragonType.values()) {
+            context.register(mageTower(type), new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerStructure(
+                    new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_MAGE_TOWERS.get(type)))
+                            .generationStep(GenerationStep.Decoration.SURFACE_STRUCTURES)
+                            .terrainAdapation(TerrainAdjustment.NONE)
+                            .build(), type));
+        }
+        for (DragonType type : DragonType.values()) {
             if (!LairDesigns.available(type)) {
                 continue;
             }
@@ -184,6 +206,15 @@ public final class ModStructures {
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
+        // Magiertürme: Felder von 36 Chunks, mindestens 12 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
+        java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
+        for (DragonType type : DragonType.values()) {
+            towers.add(StructureSet.entry(structures.getOrThrow(mageTower(type))));
+        }
+        var villages = context.lookup(Registries.STRUCTURE_SET).getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.VILLAGES);
+        context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(36, 12,
+                47_719_163, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                        .ExclusionZone(villages, 7)), 14)));
         context.register(SEAL_CIRCLE_SET, new StructureSet(structures.getOrThrow(SEAL_CIRCLE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement(220, 640,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SEAL_CIRCLE), 51_731)));

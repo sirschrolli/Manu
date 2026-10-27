@@ -16,7 +16,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
@@ -224,7 +223,7 @@ public final class WaterAttacks {
                 e.needsSync = true;
                 if (inWater && tick % 20 == 0) {
                     boss.hurtTarget(level, e, this.damage);
-                    e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 40, 1), boss);
                 }
             }
         }
@@ -298,8 +297,8 @@ public final class WaterAttacks {
                     this.victims.add(second);
                 }
                 for (LivingEntity e : this.victims) {
-                    e.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 1), boss);
-                    e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 70, 3), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.LEVITATION, 60, 1), boss);
+                    e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 70, 3), boss);
                     BossFx.sound(level, e.position(), SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, 3.0f, 0.8f);
                 }
             }

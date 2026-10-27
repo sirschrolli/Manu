@@ -119,6 +119,17 @@ public final class ModItems {
         }
     }
 
+    private static final Map<DragonType, DeferredItem<SpawnEggItem>> MAGE_SPAWN_EGGS_MUTABLE = new EnumMap<>(DragonType.class);
+    /** Spawn-Eier (Kreativmodus) für die Erzmagier – sie meditieren, wo sie erscheinen, bis jemand näher kommt. */
+    public static final Map<DragonType, DeferredItem<SpawnEggItem>> MAGE_SPAWN_EGGS = Collections.unmodifiableMap(MAGE_SPAWN_EGGS_MUTABLE);
+
+    static {
+        for (DragonType type : DragonType.values()) {
+            MAGE_SPAWN_EGGS_MUTABLE.put(type, addTo(DRAGON_TAB, ITEMS.registerItem(type.id() + "_mage_spawn_egg", SpawnEggItem::new,
+                    p -> p.spawnEgg(ModEntities.MAGES.get(type).get()))));
+        }
+    }
+
     // Wilde Kreaturen: Spawn-Eier
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());

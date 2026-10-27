@@ -15,7 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,  # noqa: E402
-                              cave_troll,
+                              cave_troll, mage,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -74,6 +74,8 @@ def main():
     write_model(boss_shadow, "NyxarGeometry",
                 "Geometrie von Nyxar, dem Schattendrachen (Endgegner, Grundgröße, im Spiel ×2,3).", "boss", boss_shadow.PALETTES,
                 preview)
+    write_model(mage, "MageGeometry", "Geometrie der sechs Erzmagier (Zubehör je Element, siehe MageModel).", "mage",
+                mage.PALETTES, preview)
     write_model(vineling, "VinelingGeometry", "Geometrie des Ranklings (Diener von Verdantis).", "vineling", vineling.PALETTES,
                 preview)
     # Kreaturen der Schattenwelt

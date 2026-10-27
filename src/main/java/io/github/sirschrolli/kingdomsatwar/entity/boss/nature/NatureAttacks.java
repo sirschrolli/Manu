@@ -23,7 +23,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -129,7 +128,7 @@ public final class NatureAttacks {
                     continue;
                 }
                 boss.hurtTarget(level, e, this.damage);
-                e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 4));
+                e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 60, 4));
                 e.setDeltaMovement(Vec3.ZERO);
                 e.needsSync = true;
             }
@@ -221,7 +220,7 @@ public final class NatureAttacks {
                     if (this.hit.add(e.getUUID())) {
                         boss.hurtTarget(level, e, this.damage);
                         e.push(d.x * 0.3, 1.0, d.z * 0.3);
-                        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 1));
+                        e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 60, 1));
                         e.needsSync = true;
                     }
                 }
@@ -276,8 +275,8 @@ public final class NatureAttacks {
                 cloud.setDuration(170);
                 cloud.setRadiusPerTick(-0.02f);
                 cloud.setCustomParticle(ModParticles.BOSS_SPORE.get());
-                cloud.addEffect(new MobEffectInstance(MobEffects.POISON, 80, 1));
-                cloud.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 80, 0));
+                cloud.addEffect(BossEffects.debuff(MobEffects.POISON, 80, 1));
+                cloud.addEffect(BossEffects.debuff(MobEffects.NAUSEA, 80, 0));
                 level.addFreshEntity(cloud);
             }
             if (tick < 40) {

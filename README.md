@@ -8,16 +8,16 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.5.0 – Die eigene Stadt.**
+> **Testversion 0.6.0 – Die Magie.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
-> Schattenzitadelle und die Bauwerke der Schattenwelt – dazu Drachen zum Reiten, Soldaten, Kreaturen, Ausrüstung,
-> Magie, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.5: die **Wirtschaft** – Münzen aus Bronze, Silber und Gold, das **Stadtbanner** gründet deine Siedlung,
-> **Bürger mit acht Berufen** wohnen in ihren Häusern und gehen ihrer Arbeit nach, ein **Baumeister** baut zwölf
-> Gebäude Block für Block, **Handel** mit Ansehen und Echtzeit-Pause, und am Ende die **Krönung** auf dem eigenen Thron.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (62 GameTests).
-> **Als Nächstes:** Magie (Magier-Bosse, Magietisch, Zauber-Radialmenü), dann eigene Biome.
+> Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
+> Krönung – dazu Drachen zum Reiten, Soldaten, Kreaturen, Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
+> Neu in 0.6: die **Magie** – sieben Zauber in drei Stufen, **Zaubertafeln**, der **Magietisch** mit kreisenden
+> Runen, ein **Zauberkreis** zum Wählen (Taste V) und **sechs Erzmagier** als Bosse, jeder in seinem eigenen
+> **Magierturm** – mit Bibliothek, Laboratorium, Kammer und dem Sanktum unter einem spitzen Dach.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (66 GameTests).
+> **Als Nächstes:** eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End).
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -40,14 +40,14 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
-| Magie: Aetherit-Stab mit sechs Runen | ✅ fertig |
+| Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
+| Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen; Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
-| Magier-Bosse, Magietisch, Zauber-Radialmenü | ⏳ geplant |
 | Eigene Biome, Dörfer und Tiere statt Vanilla (auch Nether und End) | ⏳ geplant |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
@@ -358,22 +358,65 @@ Aus 9 Rohstoffen wird jeweils ein Speicherblock.
 
 ### Magie
 
-![Der Aetherit-Stab mit der Blitzrune](docs/bilder/magie.jpg)
+![Zauberkreis, Magietisch und Zauber](docs/bilder/magie.jpg)
 
-Der **Aetherit-Stab** (Aetherit, Irrlichtstaub, Stöcke) wirkt per Rechtsklick einen **Aether-Blitz**.
-Hältst du eine **Rune** in der anderen Hand, wirkt er stattdessen deren Zauber:
+Der **Aetherit-Stab** (Aetherit, Irrlichtstaub, Stöcke) beherrscht von Anfang an den **Aether-Blitz**. Weitere Zauber
+lernt er am **Magietisch** aus **Zaubertafeln**: Stab, Tafel und Aetherit einlegen, „Einschreiben“ – unter kreisenden
+Runen schreibt sich der Zauber in den Stab. Jede weitere Tafel desselben Zaubers hebt ihn eine Stufe höher (bis III);
+der Aether-Blitz wird mit Aetherit allein stärker.
 
-| Rune | Zutat (+ Tiefenschiefer, Aetherit, Irrlichtstaub) | Zauber |
+| Zauber | Tafel | Stufe I | Stufe II | Stufe III |
+|---|---|---|---|---|
+| Aether-Blitz | – | Strahl reiner Magie | mehr Schaden, größere Reichweite | springt auf einen zweiten Feind über |
+| Feuerball | Ignatius | setzt Feinde in Brand (nie Blöcke) | drei Feuerbälle im Fächer | zerbersten in einer Feuerwolke |
+| Frosthauch | Isolde | verlangsamt, unterkühlt, friert Wasser | kälter und weiter | friert Feinde fest |
+| Blitzschlag | Fulgor | Blitz an die anvisierte Stelle | springt auf zwei weitere Feinde | Kettenblitz: bis zu vier Feinde |
+| Heilende Blüte | Sylvana | heilt dich und Verbündete | dazu ein Schild | Wurzeln packen Feinde |
+| Erdstoß | Gorvan | schleudert Feinde fort | stärker und weiter | Felsdornen lassen taumeln |
+| Woge | Marena | drängt zurück, löscht Feuer, Wasseratmung | heilt dich dabei | Wasserschild: weniger Schaden |
+
+- **Einschreiben** kostet Erfahrung und Aetherit: Stufe I 3 Stufen + 1 Aetherit, II 6 + 2, III 9 + 3
+  (Aether-Blitz: II 4 + 3, III 8 + 6). Der **Magietisch** entsteht aus Aetherit, Buch, Gold, Obsidian und poliertem
+  Tiefenschiefer.
+- **Zauberkreis:** Taste **V** halten, mit der Maus einen Zauber wählen (oder mit 1–7). Über der Schnellleiste zeigt
+  ein Zeichen den gewählten Zauber und seine Abklingzeit; jeder Zauber kühlt für sich ab.
+- **Zaubertafeln** lassen die Erzmagier fallen (je die Tafel ihres Elements); selten liegt eine in den Truhen ihrer
+  Türme, in der Sturmwarte oder am Thron der Tiefe. Alte **Runen** aus früheren Versionen lehren wie eine Tafel.
+- Zauber kosten Haltbarkeit; Reparatur mit Aetherit.
+
+### Die Erzmagier und ihre Türme
+
+![Die sechs Magiertürme](docs/bilder/magiertuerme.jpg)
+
+Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen **Magierturm**, im Land seines Elements:
+
+| Erzmagier | Turm | Land |
 |---|---|---|
-| Feuerrune | Lohenstaub | Feuerball (verbrennt Wesen, aber keine Blöcke) |
-| Eisrune | Packeis | Frosthauch: verlangsamt, lässt erstarren, friert Wasser |
-| Blitzrune | Kupferbarren | ruft einen Blitz herab |
-| Naturrune | Moosblock | heilt dich und deine Verbündeten, Pflanzen sprießen |
-| Erdrune | Roheisen | Erdstoß: schleudert Feinde fort |
-| Wasserrune | Prismarinscherbe | Woge: drängt zurück, löscht Feuer, Wasseratmung |
+| **Ignatius**, Erzmagier der Flammen | schwarzer Basalt, ziegelrotes Dach, eine Flamme auf der Spitze | Wüste, Tafelberge |
+| **Isolde**, Erzmagierin des Frosts | Reifstein und Packeis, Schieferdach, Frostkristall | Schneeebene, Eisdornen, Schneetaiga, Hain |
+| **Fulgor**, Erzmagier der Stürme | Tiefenschiefer und Kupfer, grünes Kupferdach, Blitzableiter | Bergwiese, windige Hügel, steinige Küste |
+| **Sylvana**, Erzmagierin der Wildnis | bemoostes Mauerwerk, Holzschindeln, eine blühende Krone | Wälder, Dschungel, Kirschhain |
+| **Gorvan**, Erzmagier des Gesteins | Tuff und Lehmziegel, braune Ziegel, Bernstein | Savanne, Ebene, Taiga |
+| **Marena**, Erzmagierin der Gezeiten | Prismarin und Perlmutt, dunkles Prismarindach | Strand, Sumpf, Mangrovensumpf |
 
-Zauber kosten Haltbarkeit und brauchen eine kurze Pause. Reparatur mit Aetherit; Haltbarkeit und Reparatur lassen sich
-anverzaubern.
+- Über eine Wendeltreppe an der Wand geht es durch **Eingangshalle**, **Bibliothek** (mit den Aufzeichnungen des
+  Magiers auf dem Lesepult – darin Hinweise für den Kampf), **Laboratorium** (mit Magietisch und Braustand) und
+  **Kammer** (mit Zaubertisch) hinauf ins **Sanktum**. In jedem Geschoss steht eine Truhe.
+- Im Sanktum meditiert der Erzmagier über seinem Ritualkreis. Betrittst du den Saal, **erwacht** er: Er wirft
+  Geschosse, die dir folgen (ein beherzter Schlag wirft sie zurück), wirkt den Zauber seines Elements, blinzelt
+  durch den Saal, ruft **Spiegelbilder** (zerplatzen beim ersten Treffer) und hüllt sich in einen **Runenschild**
+  (bricht nach vier Schlägen). Bei zwei und einem Drittel seiner Kraft folgt eine neue **Phase**, und mit ihr sein
+  **großer Zauber**: Meteorregen, Blizzard, Gewittersturm, Wildwuchs, Felsbeben oder Mahlstrom – jeder Einschlag
+  kündigt sich am Boden an.
+- Gegen sein eigenes Element ist er gefeit. Wer ins Geschoss darunter flieht, entkommt ihm – dann kehrt er geheilt an
+  seinen Platz zurück.
+- Auch mitten im Getümmel bleibt die Sicht frei: Einschläge werfen ihre Funken, Splitter und Wolken nicht direkt vor
+  die Augen dessen, den sie treffen, und Schwächungen durch Bosse (wie auch die Wirkungen eigener Zauber) zeigen sich
+  als Zeichen in der Anzeige statt als Wirbel vor den Augen – das gilt ebenso im Kampf gegen die Drachen.
+- Besiegt lässt er seine **Zaubertafel**, Goldmünzen, Aetherit und ein verzaubertes Buch fallen; die Truhe im Sanktum
+  hält weiteren Schatz bereit.
+
+![Kampf gegen die Erzmagier](docs/bilder/erzmagier.jpg)
 
 ### Bauen und Einrichten
 
@@ -412,6 +455,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 - **Der Siegelkreis** – einmal pro Welt, auf ebenem Land unweit des Weltursprungs (siehe „Die Geschichte“).
 - **Die sechs Drachennester** – je eins pro Welt, mit eigenem Biom (siehe „Die Nester“). In ihren Schuttfeldern
   liegen Fundstücke, die man mit dem Pinsel freilegt.
+- **Die sechs Magiertürme** – im Land ihres Elements (siehe „Die Erzmagier und ihre Türme“), mit
+  `/locate structure kingdomsatwar:fire_mage_tower` (bzw. `ice_`, `lightning_`, `nature_`, `earth_`, `water_`) zu finden.
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -429,6 +474,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
+| **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger handeln, bevor sein Laden Pause macht (Standard: 16) |
@@ -477,7 +523,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.5.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.6.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -485,9 +531,8 @@ Ein Tag wie `v0.5.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Magie:** Magier-Bosse, Magietisch und ein Zauber-Radialmenü.
-2. **Eigene Welt:** eigene Biome, Dörfer und Tiere statt der Vanilla-Inhalte, auch im Nether und End.
-3. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
+1. **Eigene Welt:** eigene Biome, Dörfer und Tiere statt der Vanilla-Inhalte, auch im Nether und End.
+2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 

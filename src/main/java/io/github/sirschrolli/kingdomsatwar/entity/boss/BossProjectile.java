@@ -129,6 +129,9 @@ public class BossProjectile extends AbstractHurtingProjectile {
 
     /** Spur hinter dem Geschoss (nur auf dem Bildschirm). */
     private void trail(Kind kind) {
+        if (BossFx.nearEyes(this.level(), this.position())) {
+            return;                         // kurz vor dem Gesicht keine Spur
+        }
         ParticleOptions main;
         ParticleOptions smoke;
         int count;
@@ -229,64 +232,64 @@ public class BossProjectile extends AbstractHurtingProjectile {
         float pitch = 0.7f + this.random.nextFloat() * 0.2f;
         switch (kind) {
             case FIREBALL, METEOR -> {
-                level.sendParticles(ParticleTypes.EXPLOSION, c.x, c.y, c.z, kind == Kind.METEOR ? 4 : 1, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0);
-                level.sendParticles(ParticleTypes.FLAME, c.x, c.y, c.z, 40, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.08);
-                level.sendParticles(ParticleTypes.LAVA, c.x, c.y, c.z, 12, kind.radius * 0.3, 0.2, kind.radius * 0.3, 0.1);
+                BossFx.impact(level, ParticleTypes.EXPLOSION, c, kind == Kind.METEOR ? 4 : 1, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0);
+                BossFx.impact(level, ParticleTypes.FLAME, c, 40, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.08);
+                BossFx.impact(level, ParticleTypes.LAVA, c, 12, kind.radius * 0.3, 0.2, kind.radius * 0.3, 0.1);
                 this.sound(level, c, SoundEvents.GENERIC_EXPLODE.value(), volume, pitch);
             }
             case ICE_SPEAR, ICICLE -> {
-                level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
-                        net.minecraft.world.level.block.Blocks.PACKED_ICE.defaultBlockState()), c.x, c.y, c.z, 40, kind.radius * 0.3, 0.3,
+                BossFx.impact(level, new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.PACKED_ICE.defaultBlockState()), c, 40, kind.radius * 0.3, 0.3,
                         kind.radius * 0.3, 0.15);
-                level.sendParticles(ParticleTypes.SNOWFLAKE, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.05);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_FROST.get(), c.x, c.y, c.z, 12,
+                BossFx.impact(level, ParticleTypes.SNOWFLAKE, c, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.05);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_FROST.get(), c, 12,
                         kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.02);
                 this.sound(level, c, SoundEvents.GLASS_BREAK, volume, 0.6f + this.random.nextFloat() * 0.2f);
                 this.sound(level, c, SoundEvents.PLAYER_HURT_FREEZE, 1.0f, 0.8f);
             }
             case SEED -> {
-                level.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c.x, c.y, c.z, 10,
+                BossFx.impact(level, ParticleTypes.SPORE_BLOSSOM_AIR, c, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c, 10,
                         kind.radius * 0.4, 0.3, kind.radius * 0.4, 0.02);
                 this.sound(level, c, SoundEvents.SWEET_BERRY_BUSH_PLACE, volume, 0.6f);
                 this.sound(level, c, SoundEvents.ROOTED_DIRT_BREAK, 1.2f, 0.7f);
                 this.growBrambles(level, c);
             }
             case THORN -> {
-                level.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
-                level.sendParticles(ParticleTypes.COMPOSTER, c.x, c.y, c.z, 20, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c.x, c.y, c.z, 14,
+                BossFx.impact(level, ParticleTypes.SPORE_BLOSSOM_AIR, c, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
+                BossFx.impact(level, ParticleTypes.COMPOSTER, c, 20, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPORE.get(), c, 14,
                         kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
                 this.sound(level, c, SoundEvents.SWEET_BERRY_BUSH_BREAK, volume, pitch);
             }
             case BOULDER -> {
-                level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
-                        net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState()), c.x, c.y, c.z, 60, kind.radius * 0.35, 0.4,
+                BossFx.impact(level, new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                        net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState()), c, 60, kind.radius * 0.35, 0.4,
                         kind.radius * 0.35, 0.2);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get(), c.x, c.y, c.z, 24,
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get(), c, 24,
                         kind.radius * 0.5, 0.4, kind.radius * 0.5, 0.03);
                 this.sound(level, c, SoundEvents.GENERIC_EXPLODE.value(), volume, 0.5f);
                 this.sound(level, c, SoundEvents.STONE_BREAK, 2.0f, 0.5f);
             }
             case SPARK -> {
-                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, c.x, c.y, c.z, 50, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.4);
-                level.sendParticles(net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFE8F4FF), c.x, c.y, c.z, 1, 0, 0, 0, 0);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPARK.get(), c.x, c.y, c.z, 16,
+                BossFx.impact(level, ParticleTypes.ELECTRIC_SPARK, c, 50, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.4);
+                BossFx.impact(level, net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFE8F4FF), c, 1, 0, 0, 0, 0);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SPARK.get(), c, 16,
                         kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
                 this.sound(level, c, SoundEvents.LIGHTNING_BOLT_IMPACT, volume, 1.2f);
             }
             case BUBBLE -> {
-                level.sendParticles(ParticleTypes.SPLASH, c.x, c.y, c.z, 60, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.2);
-                level.sendParticles(ParticleTypes.BUBBLE_POP, c.x, c.y, c.z, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.1);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_WATER.get(), c.x, c.y, c.z, 16,
+                BossFx.impact(level, ParticleTypes.SPLASH, c, 60, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.2);
+                BossFx.impact(level, ParticleTypes.BUBBLE_POP, c, 30, kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.1);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_WATER.get(), c, 16,
                         kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.05);
                 this.sound(level, c, SoundEvents.GENERIC_SPLASH, volume, 0.6f);
                 this.sound(level, c, SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, 1.5f, 0.6f);
             }
             case SOUL_BOLT -> {
-                level.sendParticles(ParticleTypes.SCULK_SOUL, c.x, c.y, c.z, 30, kind.radius * 0.35, 0.4, kind.radius * 0.35, 0.06);
-                level.sendParticles(ParticleTypes.SOUL, c.x, c.y, c.z, 14, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.04);
-                level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SHADOW.get(), c.x, c.y, c.z, 16,
+                BossFx.impact(level, ParticleTypes.SCULK_SOUL, c, 30, kind.radius * 0.35, 0.4, kind.radius * 0.35, 0.06);
+                BossFx.impact(level, ParticleTypes.SOUL, c, 14, kind.radius * 0.3, 0.3, kind.radius * 0.3, 0.04);
+                BossFx.impact(level, io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_SHADOW.get(), c, 16,
                         kind.radius * 0.35, 0.3, kind.radius * 0.35, 0.02);
                 this.sound(level, c, SoundEvents.SCULK_SHRIEKER_SHRIEK, 1.2f, 1.4f);
                 this.sound(level, c, SoundEvents.SOUL_ESCAPE.value(), volume, 0.6f);

@@ -85,6 +85,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SHADOW_ESSENCE.get(), 10, 16))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get(), 1, 2))
                 .withPool(drop(ModItems.GEMSTONE.get(), 4, 8)));
+        // Erzmagier: immer ihre Zaubertafel, dazu Gold, Aetherit und ein verzaubertes Buch
+        for (DragonType type : DragonType.values()) {
+            this.add(ModEntities.MAGES.get(type).get(), LootTable.lootTable()
+                    .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                            .add(LootItem.lootTableItem(ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.of(type)).get())))
+                    .withPool(drop(ModItems.GOLD_COIN.get(), 3, 6))
+                    .withPool(drop(ModItems.AETHERIT.get(), 2, 5))
+                    .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                            .add(LootItem.lootTableItem(net.minecraft.world.item.Items.BOOK)
+                                    .apply(net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction
+                                            .randomApplicableEnchantment(this.enchantments)))));
+        }
         this.add(ModEntities.VINELING.get(), LootTable.lootTable()
                 .withPool(drop(Items.VINE, 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));

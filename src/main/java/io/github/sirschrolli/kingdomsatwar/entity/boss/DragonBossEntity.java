@@ -242,8 +242,8 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     /** Wirkung des Elements auf Gegner beim Phasenwechsel. */
     protected void transitionEffect(LivingEntity e) {
         if (this.element == null) {
-            e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.DARKNESS, 100, 0), this);
-            e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 60, 1), this);
+            e.addEffect(BossEffects.debuff(net.minecraft.world.effect.MobEffects.DARKNESS, 100, 0), this);
+            e.addEffect(BossEffects.debuff(net.minecraft.world.effect.MobEffects.WITHER, 60, 1), this);
             return;
         }
         switch (this.element) {
@@ -252,7 +252,7 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
             case LIGHTNING -> BossEffects.stun(e, 2);
             case NATURE -> BossEffects.poison(e, 4);
             case WATER -> BossEffects.soak(e, 4);
-            case EARTH -> e.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOWNESS, 60, 2), this);
+            case EARTH -> e.addEffect(BossEffects.debuff(net.minecraft.world.effect.MobEffects.SLOWNESS, 60, 2), this);
         }
     }
 
@@ -1370,6 +1370,14 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     @Override
     public void remove(Entity.RemovalReason reason) {
         super.remove(reason);
+        this.bossEvent.removeAllPlayers();
+        this.barPlayers.clear();
+    }
+
+    /** Auch wenn der Chunk entladen wird (Spieler weit weg), verschwindet die Bossleiste von den Bildschirmen. */
+    @Override
+    public void onRemovedFromLevel() {
+        super.onRemovedFromLevel();
         this.bossEvent.removeAllPlayers();
         this.barPlayers.clear();
     }

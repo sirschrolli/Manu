@@ -24,6 +24,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ExtractBlockScreenEffectEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import org.slf4j.Logger;
 
@@ -72,7 +73,8 @@ public final class ShowcaseRunner {
         }
         worldRequested = true;
         Minecraft minecraft = Minecraft.getInstance();
-        boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal"));
+        boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal") || SCENES.contains("tower")
+                || SCENES.contains("magefight"));
         try {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,
@@ -87,6 +89,14 @@ public final class ShowcaseRunner {
                     flat ? WorldPresets::createTestWorldDimensions : WorldPresets::createNormalWorldDimensions, title);
         } catch (IOException e) {
             LOGGER.error("[Showcase] Welt konnte nicht erzeugt werden", e);
+        }
+    }
+
+    /** In der Vorführung kein Flammenbild vor den Augen: Die Bilder sollen den Kampf zeigen, nicht den brennenden Spieler. */
+    @SubscribeEvent
+    static void onScreenEffect(ExtractBlockScreenEffectEvent event) {
+        if (enabled() && event.getOverlayType() == ExtractBlockScreenEffectEvent.OverlayType.FIRE) {
+            event.setCanceled(true);
         }
     }
 

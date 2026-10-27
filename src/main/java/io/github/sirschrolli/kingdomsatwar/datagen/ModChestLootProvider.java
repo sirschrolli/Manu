@@ -59,6 +59,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
 
     @Override
     public void run() {
+        this.mageTowers();
         LootPool.Builder treasure = LootPool.lootPool()
                 .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.STEEL_SWORD.get()).setWeight(5)
@@ -305,5 +306,116 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(Items.COMPASS).setWeight(2))
                         .add(LootItem.lootTableItem(Items.CLOCK).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
+    }
+
+    /**
+     * Die Türme der Erzmagier: in der Halle Vorräte für Besucher, in der Bibliothek Bücher und Papier (selten eine
+     * Zaubertafel), im Laboratorium Tränke und Zutaten, in der Kammer Münzen und Edelsteine, im Sanktum der Schatz.
+     */
+    private void mageTowers() {
+        LootPool.Builder anyTablet = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1));
+        for (io.github.sirschrolli.kingdomsatwar.magic.Spell spell : io.github.sirschrolli.kingdomsatwar.magic.Spell.values()) {
+            var tablet = ModItems.SPELL_TABLETS.get(spell);
+            if (tablet != null) {
+                anyTablet.add(LootItem.lootTableItem(tablet.get()).setWeight(1));
+            }
+        }
+        this.output.accept(ModLootTables.MAGE_TOWER_HALL, coins(LootTable.lootTable(), 2, 6, 0, 2, 0.0f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(3, 5))
+                        .add(item(ModItems.BREAD_ROLL.get(), 8, 1, 4))
+                        .add(item(ModItems.MEAD.get(), 4, 1, 2))
+                        .add(item(Items.CANDLE, 6, 1, 4))
+                        .add(item(Items.TORCH, 6, 2, 8))
+                        .add(item(Items.ARROW, 5, 4, 10))
+                        .add(item(Items.PAPER, 5, 1, 4))
+                        .add(item(Items.STRING, 4, 1, 3))
+                        .add(item(ModItems.WISP_DUST.get(), 3, 1, 2))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(3)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.HEALING)))));
+        this.output.accept(ModLootTables.MAGE_TOWER_LIBRARY, coins(LootTable.lootTable(), 1, 4, 1, 2, 0.05f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(Items.BOOK, 10, 1, 4))
+                        .add(item(Items.PAPER, 10, 2, 8))
+                        .add(item(Items.INK_SAC, 6, 1, 3))
+                        .add(item(Items.GLOW_INK_SAC, 3, 1, 2))
+                        .add(item(Items.FEATHER, 6, 1, 4))
+                        .add(item(Items.WRITABLE_BOOK, 3, 1, 1))
+                        .add(item(Items.LAPIS_LAZULI, 5, 2, 6))
+                        .add(item(Items.MAP, 2, 1, 1))
+                        .add(item(Items.CANDLE, 4, 1, 3))
+                        .add(item(ModItems.CHRONICLE.get(), 1, 1, 1)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(1, 2))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
+                                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments))))
+                .withPool(anyTablet.add(EmptyLootItem.emptyItem().setWeight(70))));
+        this.output.accept(ModLootTables.MAGE_TOWER_LABORATORY, coins(LootTable.lootTable(), 1, 4, 1, 2, 0.05f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(Items.GLASS_BOTTLE, 8, 2, 5))
+                        .add(item(Items.NETHER_WART, 6, 1, 4))
+                        .add(item(Items.BLAZE_POWDER, 4, 1, 3))
+                        .add(item(Items.GLOWSTONE_DUST, 6, 2, 6))
+                        .add(item(Items.REDSTONE, 6, 2, 6))
+                        .add(item(Items.SPIDER_EYE, 4, 1, 3))
+                        .add(item(Items.SUGAR, 4, 1, 4))
+                        .add(item(Items.GHAST_TEAR, 1, 1, 1))
+                        .add(item(ModItems.WISP_DUST.get(), 5, 1, 3))
+                        .add(item(ModItems.AETHERIT.get(), 4, 1, 2))
+                        .add(item(Items.AMETHYST_SHARD, 4, 1, 4)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(1, 3))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(4)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.HEALING)))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(3)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.REGENERATION)))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(3)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.FIRE_RESISTANCE)))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(2)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.NIGHT_VISION)))
+                        .add(LootItem.lootTableItem(Items.POTION).setWeight(2)
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
+                                        net.minecraft.world.item.alchemy.Potions.SWIFTNESS)))));
+        this.output.accept(ModLootTables.MAGE_TOWER_QUARTERS, coins(LootTable.lootTable(), 3, 8, 2, 5, 0.35f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(3, 6))
+                        .add(item(ModItems.GEMSTONE.get(), 6, 1, 3))
+                        .add(item(ModItems.AETHERIT.get(), 6, 1, 3))
+                        .add(item(Items.GOLD_INGOT, 6, 1, 4))
+                        .add(item(Items.EMERALD, 5, 1, 4))
+                        .add(item(Items.DIAMOND, 2, 1, 2))
+                        .add(item(Items.CLOCK, 2, 1, 1))
+                        .add(item(Items.COMPASS, 2, 1, 1))
+                        .add(item(Items.GOLDEN_APPLE, 2, 1, 1))
+                        .add(item(ModItems.WINE.get(), 4, 1, 2))
+                        .add(item(Items.EXPERIENCE_BOTTLE, 4, 2, 6))));
+        this.output.accept(ModLootTables.MAGE_TOWER_SANCTUM, coins(LootTable.lootTable(), 4, 10, 3, 7, 0.9f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 6))
+                        .add(item(ModItems.AETHERIT.get(), 8, 2, 5))
+                        .add(item(ModItems.GEMSTONE.get(), 6, 2, 4))
+                        .add(item(Items.DIAMOND, 4, 1, 3))
+                        .add(item(Items.GOLD_BLOCK, 2, 1, 1))
+                        .add(item(Items.EXPERIENCE_BOTTLE, 6, 3, 8))
+                        .add(item(Items.ENDER_PEARL, 4, 1, 3))
+                        .add(item(Items.ENCHANTED_GOLDEN_APPLE, 1, 1, 1)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
+                                .apply(net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction.enchantWithLevels(
+                                        this.enchantments, ContextIntProviders.between(20, 30)))))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.AETHERIT_STAFF.get()).setWeight(2))
+                        .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(2))
+                        .add(LootItem.lootTableItem(Items.TOTEM_OF_UNDYING).setWeight(1))
+                        .add(EmptyLootItem.emptyItem().setWeight(5))));
     }
 }

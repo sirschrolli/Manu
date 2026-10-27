@@ -1174,6 +1174,75 @@ def _empty_icon(art: str) -> Image.Image:
     return img
 
 
+# =============================================================================================
+# Erzmagier: Siegel unter ihren Füßen und magische Geschosse
+# =============================================================================================
+
+def mage_sigil() -> Image.Image:
+    """Leuchtendes Siegel (128x128, weiß – wird im Spiel in der Farbe des Elements getönt): zwei Ringe mit Runen,
+    ein Siebenstern und ein innerer Kreis."""
+    size = 128
+    k = 4
+    big = Image.new("L", (size * k, size * k), 0)
+    d = ImageDraw.Draw(big)
+    c = size * k / 2
+
+    def ring(r: float, w: float, v: int = 255) -> None:
+        d.ellipse([c - r * k, c - r * k, c + r * k, c + r * k], outline=v, width=max(1, round(w * k)))
+
+    ring(62, 1.6)
+    ring(57, 0.8, 200)
+    ring(44, 1.2)
+    ring(20, 1.0, 220)
+    pts = [(c + math.sin(i * math.tau / 7) * 44 * k, c - math.cos(i * math.tau / 7) * 44 * k) for i in range(7)]
+    for i in range(7):
+        a, b = pts[i], pts[(i + 3) % 7]
+        d.line([a, b], fill=170, width=round(0.9 * k))
+    for (x, y) in pts:
+        d.ellipse([x - 2.4 * k, y - 2.4 * k, x + 2.4 * k, y + 2.4 * k], fill=255)
+    # Runen zwischen den Ringen (aus dem Zauberkreis)
+    for i in range(14):
+        rows = WHEEL_RUNES[i % len(WHEEL_RUNES)]
+        a = i * math.tau / 14
+        cx, cy = c + math.sin(a) * 50.5 * k, c - math.cos(a) * 50.5 * k
+        glyph = Image.new("L", (7 * k, 9 * k), 0)
+        gd = ImageDraw.Draw(glyph)
+        for y, row in enumerate(rows):
+            for x, ch in enumerate(row):
+                if ch == "#":
+                    gd.rectangle([x * k, y * k, x * k + k - 1, y * k + k - 1], fill=255)
+        glyph = glyph.rotate(-math.degrees(a), expand=True, resample=Image.BICUBIC)
+        big.paste(255, (int(cx - glyph.width / 2), int(cy - glyph.height / 2)), glyph)
+    halo = big.filter(ImageFilter.GaussianBlur(3 * k))
+    core = big.resize((size, size), Image.LANCZOS)
+    glow = halo.resize((size, size), Image.LANCZOS)
+    out = Image.new("RGBA", (size, size), CLEAR)
+    op = out.load()
+    cp = core.load()
+    gp = glow.load()
+    for y in range(size):
+        for x in range(size):
+            a = max(cp[x, y], min(255, gp[x, y] * 2) // 2)
+            op[x, y] = (255, 255, 255, a)
+    return out
+
+
+def mage_missile() -> Image.Image:
+    """Leuchtkugel (32x32): heller Kern, weicher Rand."""
+    size = 32
+    img = Image.new("RGBA", (size, size), CLEAR)
+    px = img.load()
+    for y in range(size):
+        for x in range(size):
+            d = math.hypot(x + 0.5 - size / 2, y + 0.5 - size / 2) / (size / 2)
+            if d < 1.0:
+                a = (1 - d) ** 1.6
+                core = max(0.0, 1 - d * 2.2)
+                v = int(255 * min(1.0, 0.7 + core * 0.3))
+                px[x, y] = (v, v, v, int(255 * min(1.0, a * 1.4)))
+    return img
+
+
 ICONS: dict[str, Callable[[], Image.Image]] = {
     "aether_bolt": icon_aether_bolt,
     "fire": icon_fire,
@@ -1206,6 +1275,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/magic_table_glyphs", table_glyphs())
     put("block/magic_table_beam", table_beam())
     put("gui/magic_table", magic_table_gui())
+    put("entity/mage/sigil", mage_sigil())
+    put("entity/mage/missile", mage_missile())
     put("gui/sprites/magic_table/button", _button("normal"))
     put("gui/sprites/magic_table/button_highlighted", _button("hover"))
     put("gui/sprites/magic_table/button_disabled", _button("disabled"))

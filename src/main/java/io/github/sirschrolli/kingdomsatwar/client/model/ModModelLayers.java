@@ -36,6 +36,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation NIGHT_WING = new ModelLayerLocation(KingdomsAtWar.id("night_wing"), "main");
     public static final ModelLayerLocation GLIMMER_MOTH = new ModelLayerLocation(KingdomsAtWar.id("glimmer_moth"), "main");
     public static final ModelLayerLocation UMBRER = new ModelLayerLocation(KingdomsAtWar.id("umbrer"), "main");
+    /** Erzmagier (alle Elemente, Zubehör je Element). */
+    public static final ModelLayerLocation MAGE = new ModelLayerLocation(KingdomsAtWar.id("mage"), "main");
 
     private ModModelLayers() {}
 }

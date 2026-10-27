@@ -111,6 +111,18 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.PALE_WASTES)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
 
+        // Türme der Erzmagier: jedes Element in seinem Land
+        var towers = ModTags.Biomes.HAS_MAGE_TOWERS;
+        this.tag(towers.get(DragonType.FIRE)).addTag(BiomeTags.IS_BADLANDS).add(Biomes.DESERT);
+        this.tag(towers.get(DragonType.ICE)).add(Biomes.SNOWY_PLAINS).add(Biomes.ICE_SPIKES).add(Biomes.SNOWY_TAIGA).add(Biomes.GROVE);
+        this.tag(towers.get(DragonType.LIGHTNING)).add(Biomes.MEADOW).add(Biomes.WINDSWEPT_HILLS).add(Biomes.WINDSWEPT_FOREST)
+                .add(Biomes.WINDSWEPT_GRAVELLY_HILLS).add(Biomes.STONY_SHORE);
+        this.tag(towers.get(DragonType.NATURE)).add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST)
+                .add(Biomes.OLD_GROWTH_BIRCH_FOREST).add(Biomes.DARK_FOREST).add(Biomes.CHERRY_GROVE).addTag(BiomeTags.IS_JUNGLE);
+        this.tag(towers.get(DragonType.EARTH)).addTag(BiomeTags.IS_SAVANNA).add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS)
+                .add(Biomes.TAIGA).add(Biomes.OLD_GROWTH_PINE_TAIGA).add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
+        this.tag(towers.get(DragonType.WATER)).addTag(BiomeTags.IS_BEACH).add(Biomes.SWAMP).add(Biomes.MANGROVE_SWAMP);
+
         this.tag(ModTags.Biomes.HAS_CASTLE_RUINS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)

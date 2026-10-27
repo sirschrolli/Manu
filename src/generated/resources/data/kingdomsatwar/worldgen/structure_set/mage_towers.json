@@ -1,0 +1,39 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:mage_tower",
+    "exclusion_zone": {
+      "chunk_count": 7,
+      "other_set": "minecraft:villages"
+    },
+    "nest_distance": 14,
+    "salt": 47719163,
+    "separation": 12,
+    "spacing": 36
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:fire_mage_tower",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:ice_mage_tower",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:lightning_mage_tower",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:nature_mage_tower",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:earth_mage_tower",
+      "weight": 1
+    },
+    {
+      "structure": "kingdomsatwar:water_mage_tower",
+      "weight": 1
+    }
+  ]
+}

@@ -76,6 +76,8 @@ public final class ModTags {
         /** Wo Drachennester der jeweiligen Art entstehen. */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_DRAGON_NESTS = nestTags();
         public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));
+        /** Wo der Turm des Erzmagiers eines Elements stehen kann. */
+        public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_MAGE_TOWERS = towerTags();
         /** Wo der Siegelkreis liegen kann (ebenes, offenes Land). */
         public static final TagKey<Biome> HAS_SEAL_CIRCLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_seal_circle"));
         /** Wo in der Schattenwelt Dörfer der Umbrer liegen können. */
@@ -93,6 +95,15 @@ public final class ModTags {
                     new java.util.EnumMap<>(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.class);
             for (io.github.sirschrolli.kingdomsatwar.dragon.DragonType type : io.github.sirschrolli.kingdomsatwar.dragon.DragonType.values()) {
                 tags.put(type, TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_" + type.id() + "_dragon_nests")));
+            }
+            return java.util.Collections.unmodifiableMap(tags);
+        }
+
+        private static java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> towerTags() {
+            java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> tags =
+                    new java.util.EnumMap<>(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.class);
+            for (io.github.sirschrolli.kingdomsatwar.dragon.DragonType type : io.github.sirschrolli.kingdomsatwar.dragon.DragonType.values()) {
+                tags.put(type, TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_" + type.id() + "_mage_tower")));
             }
             return java.util.Collections.unmodifiableMap(tags);
         }

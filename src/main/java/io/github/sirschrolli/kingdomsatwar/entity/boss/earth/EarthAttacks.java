@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.entity.boss.earth;
 
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAttack;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossEffects;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossFx;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.BossProjectile;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
@@ -21,7 +22,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
@@ -493,7 +493,7 @@ public final class EarthAttacks {
 
     /** Wirkung des Staubodems: blendet kurz und verlangsamt. */
     public static void dust(DragonBossEntity boss, LivingEntity e) {
-        e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 50, 0));
-        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 1));
+        e.addEffect(BossEffects.debuff(MobEffects.BLINDNESS, 50, 0));
+        e.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 50, 1));
     }
 }

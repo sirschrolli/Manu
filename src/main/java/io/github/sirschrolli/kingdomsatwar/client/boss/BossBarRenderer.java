@@ -57,6 +57,10 @@ public final class BossBarRenderer {
             STYLES.put(type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/" + type.id() + ".png"), type.color()));
         }
         STYLES.put("shadow", new Style(KingdomsAtWar.id("textures/gui/boss_bar/shadow.png"), 0xB46CFF));
+        // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
+        for (DragonType type : DragonType.values()) {
+            STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));
+        }
     }
 
     /** Spur des erlittenen Schadens: bleibt nach einem Treffer kurz stehen und schmilzt dann zur echten Füllung. */

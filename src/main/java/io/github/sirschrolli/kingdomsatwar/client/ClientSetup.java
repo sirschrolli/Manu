@@ -73,6 +73,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.NIGHT_WING, NightWingGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
     }
 
     @SubscribeEvent
@@ -80,6 +81,10 @@ public final class ClientSetup {
         ModEntities.DRAGONS.values().forEach(type -> event.registerEntityRenderer(type.get(), DragonRenderer::new));
         ModEntities.SOLDIERS.values().forEach(type -> event.registerEntityRenderer(type.get(), SoldierRenderer::new));
         event.registerEntityRenderer(ModEntities.BANDIT.get(), BanditRenderer::new);
+        ModEntities.MAGES.values().forEach(type -> event.registerEntityRenderer(type.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new));
+        event.registerEntityRenderer(ModEntities.MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_MISSILE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MagicMissileRenderer::new);
         event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.boss.nature;
 
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossEffects;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import net.minecraft.core.BlockPos;
@@ -9,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
@@ -65,7 +65,7 @@ public class VinelingEntity extends Monster {
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12.0f));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, VinelingEntity.class, DragonBossEntity.class));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this, VinelingEntity.class, DragonBossEntity.class, io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SoldierEntity.class, true));
     }
@@ -113,7 +113,7 @@ public class VinelingEntity extends Monster {
         level.broadcastEntityEvent(this, EVENT_SNAP);
         boolean hit = super.doHurtTarget(level, target);
         if (hit && target instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1));
+            living.addEffect(BossEffects.debuff(MobEffects.SLOWNESS, 40, 1));
         }
         this.playSound(SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, 1.0f, 0.6f);
         return hit;
