@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.13.0 – Die Gesetzlosen.**
+> **Testversion 0.14.0 – Die Wassertiere.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -35,7 +35,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > spitzem Hut, Nachtmahre, untote Pferde und Dörrkamele. Untote Dorfbewohner lassen sich heilen und werden wieder genau
 > der Dorfbewohner, der sie waren. Spinnenreiter, Hühnerreiter, Skelettfallen, Überfälle, Prüfkammern und alle Beute
 > funktionieren wie gewohnt.
-> Neu in 0.13: **die übrigen Monster der Oberwelt** – statt der Illager ziehen **Gesetzlose** durchs Land: Wegelagerer
+> In 0.13 kamen **die übrigen Monster der Oberwelt** – statt der Illager ziehen **Gesetzlose** durchs Land: Wegelagerer
 > mit Armbrust (in grüner Gugel, mit Indigo-Turban und Schleier oder in Pelz), Schlächter als Henker oder Berserker,
 > Beschwörer in tiefer Kapuze oder als Runenpriester, die Plagegeister in ihrer Farbe rufen, und der Gaukler mit
 > Narrenkappe und Halbmaske. Dazu der **Verwüster** als Kriegsauerochse oder zotteliges Steppenungetüm, der
@@ -43,8 +43,16 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > mit Astgeweih und glühenden Augen und der **Tiefenhüter** mit leuchtendem Herzen im Rippenkäfig. Überfälle mit
 > Hauptmann und Reitern, Patrouillen, Räuberlager, Raubritterburg, Korallenpalast, Knarzherzen und Kreischer bringen die
 > eigenen Wesen; Totem, unheilvolle Flasche, Schwämme, Windruten und alle Beute bleiben.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (140 GameTests).
-> **Als Nächstes:** Wassertiere und Golems, danach Nether und End.
+> Neu in 0.14: **eigene Wassertiere statt der Vanilla-Wassertiere** – 13 Arten in 23 Gestalten mit eigenen Modellen:
+> Dorsch und Seelachs mit Bartel, Lachs und Rotlachs mit Hakenkiefer in drei Größen, der Kugelfisch, der sich zur
+> Stachelkugel aufbläht, Rifffische mit zwölf eigenen Mustern in allen Farben, Tintenfisch und leuchtende Tiefseekrake,
+> Großer Tümmler und Schwertwal, Suppen- und Karettschildkröte, fünf Molche vom Grottenolm bis zum Blaumolch mit
+> leuchtenden Kiemen, Teichfrosch, Feuerkröte und Grasfrosch, die Kaulquappe, der Nautilus und der Geisternautilus.
+> Eimer, Spielarten, Zucht, Eiablage, Froschlichter, Delfingnade, Sattel und Nautilus-Rüstung und alle Beute bleiben.
+> Außerdem sitzen jetzt alle Texturen der eigenen Wesen exakt auf ihren Modellen (keine Ritzen mehr an krummen Maßen).
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (147 GameTests).
+> **Als Nächstes:** Überarbeitung von Siedlung und Dörfern (Bauarbeiter, Häuser, Lager, Söldner, Münzen), danach
+> Golems und die übrigen Dorfwesen, zuletzt Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -82,7 +90,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Wildtiere statt Vanilla: Wolf, Fuchs, Bär, Panda, Katzen, Papagei, Biene, Fledermaus, Gürteltier, Kamel, Lama in 50 Arten | ✅ fertig |
 | Eigene Monster statt Vanilla: Untote und Nachtwesen in 19 Arten und 39 Gestalten, 51 untote Dorfbewohner (heilbar) | ✅ fertig |
 | Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
-| Wassertiere und Golems statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
+| Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute | 🔨 in Arbeit |
+| Golems, Hilfsgeist, Schnüffler, Dorfbewohner und Händler statt Vanilla; Nether und End | ⏳ danach |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -99,7 +109,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.13.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.14.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -107,7 +117,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.13.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.14.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -537,6 +547,32 @@ Nestern, Dorfkatzen und die Lamas des fahrenden Händlers werden zu den neuen Ti
 | **Kamel** | Kamel | Dromedar, Trampeltier | Trampeltier mit zwei Höckern neu in Tafelbergen und auf den Savannen-Hochebenen; Sattel, zwei Reiter, Sprint |
 | **Lama** | Lama, Händlerlama | creme, weiß, braun, grau | dichtes Vlies, Bananenohren; spuckt, zieht in Karawanen, trägt Teppiche und Packtaschen |
 
+### Wassertiere
+
+![Dorsche, Lachse, Kugelfische, Rifffische, Tintenfische, Delfine, Nautilusse, Molche, Frösche und Schildkröten](docs/bilder/wassertiere.jpg)
+
+In Meeren, Flüssen, Sümpfen und Höhlen leben keine Vanilla-Wassertiere mehr. Jede Art hat ein eigenes Modell mit den
+Knochen ihres Vanilla-Gegenstücks – Schwimmen, Zappeln an Land, Aufblähen, Fangarme, Quaken und Totstellen sehen aus
+wie gewohnt. Was Vanilla als Spielart speichert, bleibt erhalten: Axolotl-Farbe, Muster und Farben der Tropenfische,
+Lachsgröße und Froschart. Eimer, Zucht, Eiablage und alle Beute funktionieren wie bei Vanilla; in kalten Meeren
+schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschildkröten durch warme.
+
+| Tier | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Dorsch** | Kabeljau | Dorsch, Seelachs | olivbraun gesprenkelt mit Bartel am Kinn, oder dunkelgrüner Rücken mit silbernen Flanken; Schwärme, Eimer |
+| **Lachs** | Lachs | Lachs, Rotlachs | stahlblauer Rücken mit schwarzen Tupfen, oder leuchtend rot mit grünem Kopf, Buckel und Hakenkiefer; drei Größen |
+| **Kugelfisch** | Kugelfisch | – | ockergelb mit braunen Sätteln; bläht sich in zwei Stufen zur Stachelkugel auf und vergiftet, wer ihn berührt |
+| **Rifffisch** | Tropenfisch | zwei Körperformen, zwölf Muster | Querbinden, Augenbinde, Halbmond, Glitzerpunkte, Schrägstreifen … in allen Farben der Vanilla-Tropenfische |
+| **Tintenfisch** | Tintenfisch | – | rotbraun gesprenkelter Mantel mit Pfeilflossen, goldene Augen, Saugnapf-Arme; Tintenbeutel |
+| **Tiefseekrake** | Leuchttintenfisch | – | tiefblau mit leuchtenden Lichtflecken, Flossensaum, Augen und Armringen; nach einem Treffer kurz dunkel |
+| **Delfin** | Delfin | Großer Tümmler, Schwertwal | eigene Finne je Art; spielt mit Gegenständen, führt zu Schätzen, schenkt die Gnade des Delfins |
+| **Meeresschildkröte** | Schildkröte | Suppenschildkröte, Karettschildkröte | Panzer mit hellen Nähten oder in Schildpatt; Eiablage am Heimatstrand, Schildkrötenschuppen |
+| **Molch** | Axolotl | Grottenolm, Wildmolch, Goldmolch, Eismolch, Blaumolch | gefiederte Kiemenäste; der seltene Blaumolch mit leuchtenden Kiemenspitzen; jagt mit dir, stellt sich tot |
+| **Frosch** | Frosch | Teichfrosch, Feuerkröte, Grasfrosch | für gemäßigte, warme und kalte Gegenden; Schallblasen, Zungenschlag, Froschlichter |
+| **Kaulquappe** | Kaulquappe | – | golden gesprenkelt mit durchscheinendem Flossensaum; wird zum Frosch ihrer Gegend |
+| **Nautilus** | Nautilus | – | gestreiftes Perlboot mit Fangarmen; zähmbar, mit Sattel und Nautilus-Rüstung reitbar |
+| **Geisternautilus** | Zombienautilus | – | bleiches, rissiges Gehäuse mit Seepocken und Tang, seegrün glimmende Augen; trägt Wasserleichen |
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -767,7 +803,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.13.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.14.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -810,7 +846,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.13.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.14.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -819,9 +855,12 @@ Ein Tag wie `v0.13.0` erzeugt automatisch ein Release mit der JAR (`.github/work
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
 1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt, die Hof- und Weidetiere, die
-   Wildtiere und alle Monster der Oberwelt sind fertig, als Nächstes:
-   - **Wassertiere und Golems** – Fische, Tintenfische, Delfine, Schildkröten, Axolotl, Frösche, Eisen- und
-     Schneegolem, Hilfsgeist und Schnüffler; alles, was sie fallen lassen, bleibt erhältlich;
+   Wildtiere, alle Monster und die Wassertiere der Oberwelt sind fertig, als Nächstes:
+   - **Siedlung und Dörfer überarbeiten** – Bauarbeiter, die nah am Bau arbeiten und auch hohe Häuser fertig bauen,
+     Häuser mit Baukosten in mehreren Entwürfen, Bewohner, die Rohstoffe sammeln und abends ins Lager bringen,
+     Söldner aus den Dörfern, verschiedene Dorfanlagen, härtere Rezepte und Beute, Münzen;
+   - **Golems und die übrigen Dorfwesen** – Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler, glücklicher
+     Ghast, Dorfbewohner und fahrender Händler; alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 

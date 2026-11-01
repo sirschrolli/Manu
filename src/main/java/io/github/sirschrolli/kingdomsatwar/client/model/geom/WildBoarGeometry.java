@@ -30,10 +30,10 @@ public final class WildBoarGeometry {
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(80, 0).addBox(-3.5F, -3.5F, -6.5F, 7F, 7F, 7F)
                 .texOffs(70, 27).addBox(-2F, 0F, -9.5F, 4F, 3F, 3F)
-                .texOffs(104, 27).addBox(-2.6F, 0.2F, -9F, 1F, 2.5F, 1F)
-                .texOffs(109, 27).addBox(1.6F, 0.2F, -9F, 1F, 2.5F, 1F)
-                .texOffs(114, 27).addBox(3.4F, -1.5F, -5.5F, 0.5F, 1F, 1F)
-                .texOffs(119, 27).addBox(-3.9F, -1.5F, -5.5F, 0.5F, 1F, 1F),
+                .texOffs(104, 27).addBox(-2.6F, -0.05F, -9F, 1F, 3F, 1F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(109, 27).addBox(1.6F, -0.05F, -9F, 1F, 3F, 1F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(114, 27).addBox(3.15F, -1.5F, -5.5F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, 0F))
+                .texOffs(119, 27).addBox(-4.15F, -1.5F, -5.5F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, 0F)),
                 PartPose.offsetAndRotation(0F, -1F, -9F, 0.2094F, 0F, 0F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()
                 .texOffs(90, 27).addBox(-1F, -3F, -0.5F, 2F, 3F, 1F),

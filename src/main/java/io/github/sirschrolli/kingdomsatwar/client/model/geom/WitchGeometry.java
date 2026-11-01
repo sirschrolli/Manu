@@ -32,7 +32,7 @@ public final class WitchGeometry {
                 .texOffs(29, 60).addBox(-1F, -1F, -2F, 2F, 4F, 2F),
                 PartPose.offsetAndRotation(0F, -3F, -4F, -0.1396F, 0F, 0F));
         PartDefinition p_wart = p_nose.addOrReplaceChild("wart", CubeListBuilder.create()
-                .texOffs(88, 60).addBox(-0.4F, -0.4F, -0.6F, 0.8F, 0.8F, 0.8F),
+                .texOffs(88, 60).addBox(-0.5F, -0.5F, -0.7F, 1F, 1F, 1F, new CubeDeformation(-0.1F, -0.1F, -0.1F)),
                 PartPose.offset(0.6F, 2.2F, -2F));
         PartDefinition p_long_hair = p_head.addOrReplaceChild("long_hair", CubeListBuilder.create()
                 .texOffs(78, 35).addBox(-4.5F, 0F, 0F, 9F, 11F, 1F),
@@ -42,44 +42,44 @@ public final class WitchGeometry {
                 PartPose.offset(0F, -7.6F, 0F));
         PartDefinition p_hat_crown = p_hat_brim.addOrReplaceChild("hat_crown", CubeListBuilder.create()
                 .texOffs(0, 35).addBox(-4.5F, -4F, -4.5F, 9F, 4F, 9F)
-                .texOffs(37, 35).addBox(-4.7F, -1.4F, -4.7F, 9.4F, 1.4F, 9.4F),
+                .texOffs(37, 35).addBox(-5F, -1.7F, -5F, 10F, 2F, 10F, new CubeDeformation(-0.3F, -0.3F, -0.3F)),
                 PartPose.offset(0F, -0.5F, 0F));
         PartDefinition p_hat_tier1 = p_hat_crown.addOrReplaceChild("hat_tier1", CubeListBuilder.create()
                 .texOffs(99, 35).addBox(-3F, -4F, -3F, 6F, 4F, 6F),
                 PartPose.offsetAndRotation(0F, -4F, 0.6F, -0.2094F, 0F, 0.0698F));
         PartDefinition p_hat_tier2 = p_hat_tier1.addOrReplaceChild("hat_tier2", CubeListBuilder.create()
-                .texOffs(92, 49).addBox(-2F, -3.5F, -2F, 4F, 3.5F, 4F),
+                .texOffs(92, 49).addBox(-2F, -3.75F, -2F, 4F, 4F, 4F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offsetAndRotation(0F, -4F, 0.4F, -0.3142F, 0F, 0.0698F));
         PartDefinition p_hat_tip = p_hat_tier2.addOrReplaceChild("hat_tip", CubeListBuilder.create()
                 .texOffs(49, 60).addBox(-1F, -3F, -1F, 2F, 3F, 2F),
                 PartPose.offsetAndRotation(0F, -3.5F, 0.3F, -0.4887F, 0F, 0.1047F));
         PartDefinition p_hat_deco = p_hat_crown.addOrReplaceChild("hat_deco", CubeListBuilder.create()
                 .texOffs(67, 60).addBox(2.6F, -3.2F, -5.2F, 2F, 2F, 1F)
-                .texOffs(74, 60).addBox(3.6F, -2.2F, -5F, 1.4F, 1.4F, 1F),
+                .texOffs(74, 60).addBox(3.3F, -2.5F, -5F, 2F, 2F, 1F, new CubeDeformation(-0.3F, -0.3F, 0F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(95, 0).addBox(-4F, 0F, -2F, 8F, 12F, 4F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_shawl = p_body.addOrReplaceChild("shawl", CubeListBuilder.create()
                 .texOffs(21, 49).addBox(-4.5F, -0.3F, -2.5F, 9F, 4F, 5F)
-                .texOffs(0, 49).addBox(-4.5F, 3.7F, 2F, 9F, 9F, 0.6F),
+                .texOffs(0, 49).addBox(-4.5F, 3.7F, 1.8F, 9F, 9F, 1F, new CubeDeformation(0F, 0F, -0.2F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_dress = p_body.addOrReplaceChild("dress", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-4.4F, 9.5F, -2.4F, 8.8F, 11.6F, 4.8F),
+                .texOffs(0, 0).addBox(-4.5F, 9.3F, -2.5F, 9F, 12F, 5F, new CubeDeformation(-0.1F, -0.2F, -0.1F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_belt = p_body.addOrReplaceChild("belt", CubeListBuilder.create()
-                .texOffs(0, 60).addBox(-4.3F, 8.6F, -2.3F, 8.6F, 1.4F, 4.6F)
-                .texOffs(58, 60).addBox(-3.6F, 9.6F, -3.2F, 1.6F, 2.4F, 1.2F)
-                .texOffs(81, 60).addBox(-1.4F, 9.8F, -3F, 1.2F, 2F, 1F)
-                .texOffs(38, 60).addBox(2F, 9.4F, -3F, 2.4F, 2.6F, 1.4F),
+                .texOffs(0, 60).addBox(-4.5F, 8.3F, -2.5F, 9F, 2F, 5F, new CubeDeformation(-0.2F, -0.3F, -0.2F))
+                .texOffs(58, 60).addBox(-3.8F, 9.3F, -3.6F, 2F, 3F, 2F, new CubeDeformation(-0.2F, -0.3F, -0.4F))
+                .texOffs(81, 60).addBox(-1.8F, 9.8F, -3F, 2F, 2F, 1F, new CubeDeformation(-0.4F, 0F, 0F))
+                .texOffs(38, 60).addBox(1.7F, 9.2F, -3.3F, 3F, 3F, 2F, new CubeDeformation(-0.3F, -0.2F, -0.3F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(0, 18).addBox(-3F, -2F, -2F, 4F, 12F, 4F)
-                .texOffs(50, 49).addBox(-3.4F, 6.4F, -2.4F, 4.8F, 3F, 4.8F),
+                .texOffs(50, 49).addBox(-3.5F, 6.4F, -2.5F, 5F, 3F, 5F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offset(-5F, 2F, 0F));
         PartDefinition p_left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(17, 18).addBox(-1F, -2F, -2F, 4F, 12F, 4F)
-                .texOffs(71, 49).addBox(-1.4F, 6.4F, -2.4F, 4.8F, 3F, 4.8F),
+                .texOffs(71, 49).addBox(-1.5F, 6.4F, -2.5F, 5F, 3F, 5F, new CubeDeformation(-0.1F, 0F, -0.1F)),
                 PartPose.offset(5F, 2F, 0F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(34, 18).addBox(-2F, 0F, -2F, 4F, 12F, 4F),

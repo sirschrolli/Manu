@@ -26,7 +26,7 @@ public final class FarmDonkeyGeometry {
                 .texOffs(0, 0).addBox(-5F, -8F, -17F, 10F, 10F, 22F, new CubeDeformation(0.05F)),
                 PartPose.offset(0F, 11F, 5F));
         PartDefinition p_tail = p_body.addOrReplaceChild("tail", CubeListBuilder.create()
-                .texOffs(95, 33).addBox(-0.8F, 0F, 1.2F, 1.6F, 10F, 1.6F),
+                .texOffs(95, 33).addBox(-1F, 0F, 1F, 2F, 10F, 2F, new CubeDeformation(-0.2F, 0F, -0.2F)),
                 PartPose.offsetAndRotation(0F, -5F, 2F, 0.5236F, 0F, 0F));
         PartDefinition p_tail_tuft = p_tail.addOrReplaceChild("tail_tuft", CubeListBuilder.create()
                 .texOffs(42, 49).addBox(-1.5F, 8.5F, 0.5F, 3F, 5F, 3F),
@@ -62,7 +62,7 @@ public final class FarmDonkeyGeometry {
                 .texOffs(23, 49).addBox(-2F, -11F, -7F, 4F, 5F, 5F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_mane = p_head_parts.addOrReplaceChild("mane", CubeListBuilder.create()
-                .texOffs(88, 0).addBox(-1F, -11.2F, 4.6F, 2F, 15.5F, 2.2F),
+                .texOffs(88, 0).addBox(-1F, -11.45F, 4.2F, 2F, 16F, 3F, new CubeDeformation(0F, -0.25F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_left_hind_leg = root.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(0, 33).addBox(-3F, -1.01F, -1F, 4F, 11F, 4F),

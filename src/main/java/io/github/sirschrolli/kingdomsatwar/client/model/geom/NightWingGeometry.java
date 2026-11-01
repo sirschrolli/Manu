@@ -29,10 +29,10 @@ public final class NightWingGeometry {
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(25, 16).addBox(-2.5F, -2F, -4.5F, 5F, 4F, 5F)
                 .texOffs(91, 26).addBox(-1.5F, -0.5F, -7.5F, 3F, 2F, 3F)
-                .texOffs(104, 26).addBox(-2F, -1F, -4.8F, 1F, 1F, 0.5F)
-                .texOffs(109, 26).addBox(1F, -1F, -4.8F, 1F, 1F, 0.5F)
-                .texOffs(114, 26).addBox(-1.2F, 1.5F, -7.2F, 0.5F, 1F, 0.5F)
-                .texOffs(119, 26).addBox(0.7F, 1.5F, -7.2F, 0.5F, 1F, 0.5F),
+                .texOffs(104, 26).addBox(-2F, -1F, -5.05F, 1F, 1F, 1F, new CubeDeformation(0F, 0F, -0.25F))
+                .texOffs(109, 26).addBox(1F, -1F, -5.05F, 1F, 1F, 1F, new CubeDeformation(0F, 0F, -0.25F))
+                .texOffs(114, 26).addBox(-1.45F, 1.5F, -7.45F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, -0.25F))
+                .texOffs(119, 26).addBox(0.45F, 1.5F, -7.45F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, -0.25F)),
                 PartPose.offsetAndRotation(0F, -0.5F, -6F, 0.1396F, 0F, 0F));
         PartDefinition p_ear_l = p_head.addOrReplaceChild("ear_l", CubeListBuilder.create()
                 .texOffs(56, 26).addBox(-0.5F, -4F, -0.5F, 1F, 4F, 2F),
@@ -57,7 +57,7 @@ public final class NightWingGeometry {
                 PartPose.offset(0F, -0.5F, 5F));
         PartDefinition p_tail_tip = p_tail_base.addOrReplaceChild("tail_tip", CubeListBuilder.create()
                 .texOffs(37, 26).addBox(-1F, -0.5F, 0F, 2F, 1F, 7F)
-                .texOffs(70, 26).addBox(-3F, 0F, 4F, 6F, 0.5F, 4F),
+                .texOffs(70, 26).addBox(-3F, -0.25F, 4F, 6F, 1F, 4F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(0F, 0F, 7F));
         return mesh;
     }

@@ -25,8 +25,8 @@ public final class BearGeometry {
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 45).addBox(-3.5F, -3F, -3F, 7F, 7F, 7F)
                 .texOffs(82, 45).addBox(-2.5F, 1F, -6F, 5F, 3F, 3F)
-                .texOffs(56, 45).addBox(-4.3F, -0.5F, -2.5F, 0.8F, 4.5F, 4.5F)
-                .texOffs(69, 45).addBox(3.5F, -0.5F, -2.5F, 0.8F, 4.5F, 4.5F),
+                .texOffs(56, 45).addBox(-4.4F, -0.75F, -2.75F, 1F, 5F, 5F, new CubeDeformation(-0.1F, -0.25F, -0.25F))
+                .texOffs(69, 45).addBox(3.4F, -0.75F, -2.75F, 1F, 5F, 5F, new CubeDeformation(-0.1F, -0.25F, -0.25F)),
                 PartPose.offset(0F, 10F, -16F));
         PartDefinition p_right_ear = p_head.addOrReplaceChild("right_ear", CubeListBuilder.create()
                 .texOffs(99, 45).addBox(-1F, -1.5F, -0.5F, 2F, 2F, 1F),
@@ -37,10 +37,10 @@ public final class BearGeometry {
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-5F, -13F, -7F, 14F, 14F, 11F)
                 .texOffs(51, 0).addBox(-4F, -25F, -7F, 12F, 12F, 10F)
-                .texOffs(25, 26).addBox(-5.5F, -14F, 3.5F, 15F, 15F, 1.5F),
+                .texOffs(25, 26).addBox(-5.5F, -14F, 3.25F, 15F, 15F, 2F, new CubeDeformation(0F, 0F, -0.25F)),
                 PartPose.offsetAndRotation(-2F, 9F, 12F, 1.5708F, 0F, 0F));
         PartDefinition p_hump = p_body.addOrReplaceChild("hump", CubeListBuilder.create()
-                .texOffs(29, 45).addBox(-3F, -22F, -8.5F, 10F, 8F, 2.5F),
+                .texOffs(29, 45).addBox(-3F, -22F, -8.75F, 10F, 8F, 3F, new CubeDeformation(0F, 0F, -0.25F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_hind_leg = root.addOrReplaceChild("right_hind_leg", CubeListBuilder.create()
                 .texOffs(96, 0).addBox(-2F, 0F, -2F, 4F, 10F, 8F),

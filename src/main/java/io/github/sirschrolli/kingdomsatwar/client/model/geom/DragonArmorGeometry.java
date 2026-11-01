@@ -38,8 +38,8 @@ public final class DragonArmorGeometry {
         PartDefinition p_head = p_neck3.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(111, 38).addBox(-5F, -6F, -12F, 10F, 3F, 10F, new CubeDeformation(0.5F))
                 .texOffs(25, 56).addBox(-3.5F, -3F, -21F, 7F, 1F, 9F, new CubeDeformation(0.45F))
-                .texOffs(150, 56).addBox(-0.5F, -5.5F, -16.5F, 1F, 2.5F, 3F)
-                .texOffs(159, 56).addBox(-0.5F, -7.5F, -15.5F, 1F, 2F, 1.5F),
+                .texOffs(150, 56).addBox(-0.5F, -5.75F, -16.5F, 1F, 3F, 3F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(159, 56).addBox(-0.5F, -7.5F, -15.75F, 1F, 2F, 2F, new CubeDeformation(0F, 0F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0F, -8F, 0.4887F, 0F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create(),
                 PartPose.offsetAndRotation(0F, 3F, -10F, 0.0698F, 0F, 0F));

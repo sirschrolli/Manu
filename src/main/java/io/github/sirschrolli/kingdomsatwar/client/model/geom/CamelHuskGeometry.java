@@ -29,8 +29,8 @@ public final class CamelHuskGeometry {
                 .texOffs(50, 68).addBox(-4.5F, -5F, -5.5F, 9F, 5F, 11F),
                 PartPose.offset(0F, -12F, -10F));
         PartDefinition p_hump2 = p_body.addOrReplaceChild("hump2", CubeListBuilder.create()
-                .texOffs(0, 95).addBox(-4F, -5.5F, -11.5F, 8F, 5.5F, 6F)
-                .texOffs(29, 95).addBox(-4F, -5.5F, 2.5F, 8F, 5.5F, 6F),
+                .texOffs(0, 95).addBox(-4F, -5.75F, -11.5F, 8F, 6F, 6F, new CubeDeformation(0F, -0.25F, 0F))
+                .texOffs(29, 95).addBox(-4F, -5.75F, 2.5F, 8F, 6F, 6F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(0F, -12F, -10F));
         PartDefinition p_tail = p_body.addOrReplaceChild("tail", CubeListBuilder.create()
                 .texOffs(91, 68).addBox(-1.5F, 0F, 0F, 3F, 14F, 0F),
@@ -39,7 +39,7 @@ public final class CamelHuskGeometry {
                 .texOffs(0, 40).addBox(-3.5F, -7F, -15F, 7F, 8F, 19F)
                 .texOffs(21, 68).addBox(-3.5F, -21F, -15F, 7F, 14F, 7F)
                 .texOffs(58, 95).addBox(-2.5F, -21F, -21F, 5F, 5F, 6F)
-                .texOffs(98, 68).addBox(-3.9F, -12F, -15.3F, 7.8F, 6F, 6.6F),
+                .texOffs(98, 68).addBox(-4F, -12F, -15.5F, 8F, 6F, 7F, new CubeDeformation(-0.1F, 0F, -0.2F)),
                 PartPose.offset(0F, -3F, -19.5F));
         PartDefinition p_left_ear = p_head.addOrReplaceChild("left_ear", CubeListBuilder.create()
                 .texOffs(81, 95).addBox(-0.5F, 0.5F, -1F, 3F, 1F, 2F),

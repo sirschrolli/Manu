@@ -34,6 +34,10 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                 net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
                                         io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS)))).build();
         add("coins_from_monsters", new AddTableLootModifier(Optional.of(Holder.direct(monster)), 0, ModLootTables.MONSTER_COINS));
+        // Froschlichter, wenn ein eigener Frosch einen kleinen Magmawürfel frisst
+        add("froglights_from_magma_cubes", new AddTableLootModifier(
+                Optional.of(Holder.direct(LootTableIdCondition.builder(Identifier.withDefaultNamespace("entities/magma_cube")).build())),
+                0, ModLootTables.FROGLIGHTS));
     }
 
     private void seedsFromGrass(String name, String vanillaTable) {

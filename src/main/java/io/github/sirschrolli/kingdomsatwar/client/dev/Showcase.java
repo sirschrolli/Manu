@@ -102,6 +102,7 @@ final class Showcase {
                 case "wildanimals" -> WildShowcase.wildAnimals(steps);
                 case "monsters" -> MonsterShowcase.monsters(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
+                case "water" -> WaterShowcase.water(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);

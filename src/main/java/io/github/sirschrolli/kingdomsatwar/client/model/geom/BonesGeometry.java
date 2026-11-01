@@ -47,11 +47,11 @@ public final class BonesGeometry {
                 PartPose.offsetAndRotation(-2.5F, -8F, -1.5F, 0F, 2.3562F, 0F));
         PartDefinition p_shelf_fungus = p_mushrooms.addOrReplaceChild("shelf_fungus", CubeListBuilder.create()
                 .texOffs(43, 37).addBox(0F, -1F, -1.5F, 2F, 1F, 3F)
-                .texOffs(81, 37).addBox(0F, 0.6F, -0.5F, 1.4F, 1F, 2F),
+                .texOffs(81, 37).addBox(-0.3F, 0.6F, -0.5F, 2F, 1F, 2F, new CubeDeformation(-0.3F, 0F, 0F)),
                 PartPose.offset(4F, -3F, 1F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(18, 22).addBox(-4F, 0F, -2F, 8F, 8F, 4F)
-                .texOffs(9, 22).addBox(-1F, 0F, 0.3F, 2F, 10.5F, 1.5F)
+                .texOffs(9, 22).addBox(-1F, -0.25F, 0.05F, 2F, 11F, 2F, new CubeDeformation(0F, -0.25F, -0.25F))
                 .texOffs(87, 22).addBox(-3.5F, 10F, -1.5F, 7F, 2F, 3F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_garb = p_body.addOrReplaceChild("garb", CubeListBuilder.create()

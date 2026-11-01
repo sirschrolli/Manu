@@ -1,6 +1,17 @@
 {
   "values": [
     "kingdomsatwar:guardian",
-    "kingdomsatwar:elder_guardian"
+    "kingdomsatwar:elder_guardian",
+    "kingdomsatwar:cod",
+    "kingdomsatwar:salmon",
+    "kingdomsatwar:pufferfish",
+    "kingdomsatwar:tropical_fish",
+    "kingdomsatwar:squid",
+    "kingdomsatwar:glow_squid",
+    "kingdomsatwar:turtle",
+    "kingdomsatwar:axolotl",
+    "kingdomsatwar:frog",
+    "kingdomsatwar:tadpole",
+    "kingdomsatwar:nautilus"
   ]
 }

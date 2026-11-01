@@ -30,9 +30,9 @@ public final class GooseGeometry {
                 PartPose.offsetAndRotation(0F, -2F, -4F, 0.2094F, 0F, 0F));
         PartDefinition p_head = p_neck.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(28, 17).addBox(-1.5F, -2.5F, -2.5F, 3F, 3F, 4F)
-                .texOffs(0, 30).addBox(-1F, -1.5F, -5F, 2F, 1.5F, 2.5F)
-                .texOffs(43, 30).addBox(1.3F, -2F, -1.8F, 0.5F, 1F, 1F)
-                .texOffs(48, 30).addBox(-1.8F, -2F, -1.8F, 0.5F, 1F, 1F),
+                .texOffs(0, 30).addBox(-1F, -1.75F, -5.25F, 2F, 2F, 3F, new CubeDeformation(0F, -0.25F, -0.25F))
+                .texOffs(43, 30).addBox(1.05F, -2F, -1.8F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, 0F))
+                .texOffs(48, 30).addBox(-2.05F, -2F, -1.8F, 1F, 1F, 1F, new CubeDeformation(-0.25F, 0F, 0F)),
                 PartPose.offsetAndRotation(0F, -7.5F, -0.5F, -0.2094F, 0F, 0F));
         PartDefinition p_left_wing = p_body.addOrReplaceChild("left_wing", CubeListBuilder.create()
                 .texOffs(33, 0).addBox(0F, 0F, 0F, 1F, 4F, 8F),
@@ -45,11 +45,11 @@ public final class GooseGeometry {
                 PartPose.offsetAndRotation(0F, -2.5F, 5F, -0.4363F, 0F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(11, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F)
-                .texOffs(21, 30).addBox(-1F, 3.5F, -2.5F, 2F, 0.5F, 3F),
+                .texOffs(21, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(1.5F, 20F, 0.5F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(16, 30).addBox(-0.5F, 0F, -0.5F, 1F, 4F, 1F)
-                .texOffs(32, 30).addBox(-1F, 3.5F, -2.5F, 2F, 0.5F, 3F),
+                .texOffs(32, 30).addBox(-1F, 3.25F, -2.5F, 2F, 1F, 3F, new CubeDeformation(0F, -0.25F, 0F)),
                 PartPose.offset(-1.5F, 20F, 0.5F));
         return mesh;
     }

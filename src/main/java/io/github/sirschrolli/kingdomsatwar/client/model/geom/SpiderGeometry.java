@@ -53,7 +53,7 @@ public final class SpiderGeometry {
                 .texOffs(31, 32).addBox(-9F, -1F, -1F, 9F, 2F, 2F),
                 PartPose.offsetAndRotation(-2.5F, 0F, 0F, 0F, 0F, 1.0821F));
         PartDefinition p_right_hind_tibia = p_right_hind_femur.addOrReplaceChild("right_hind_tibia", CubeListBuilder.create()
-                .texOffs(18, 21).addBox(-13F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(18, 21).addBox(-13F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(-9F, 0F, 0F, 0F, 0F, -1.7453F));
         PartDefinition p_left_hind_leg = root.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(95, 37).addBox(0F, -1F, -1F, 3F, 2F, 2F),
@@ -62,7 +62,7 @@ public final class SpiderGeometry {
                 .texOffs(54, 32).addBox(0F, -1F, -1F, 9F, 2F, 2F),
                 PartPose.offsetAndRotation(2.5F, 0F, 0F, 0F, 0F, -1.0821F));
         PartDefinition p_left_hind_tibia = p_left_hind_femur.addOrReplaceChild("left_hind_tibia", CubeListBuilder.create()
-                .texOffs(49, 21).addBox(0F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(49, 21).addBox(0F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(9F, 0F, 0F, 0F, 0F, 1.7453F));
         PartDefinition p_right_middle_hind_leg = root.addOrReplaceChild("right_middle_hind_leg", CubeListBuilder.create()
                 .texOffs(106, 37).addBox(-3F, -1F, -1F, 3F, 2F, 2F),
@@ -71,7 +71,7 @@ public final class SpiderGeometry {
                 .texOffs(77, 32).addBox(-9F, -1F, -1F, 9F, 2F, 2F),
                 PartPose.offsetAndRotation(-2.5F, 0F, 0F, 0F, 0F, 1.117F));
         PartDefinition p_right_middle_hind_tibia = p_right_middle_hind_femur.addOrReplaceChild("right_middle_hind_tibia", CubeListBuilder.create()
-                .texOffs(80, 21).addBox(-13F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(80, 21).addBox(-13F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(-9F, 0F, 0F, 0F, 0F, -1.885F));
         PartDefinition p_left_middle_hind_leg = root.addOrReplaceChild("left_middle_hind_leg", CubeListBuilder.create()
                 .texOffs(117, 37).addBox(0F, -1F, -1F, 3F, 2F, 2F),
@@ -80,7 +80,7 @@ public final class SpiderGeometry {
                 .texOffs(100, 32).addBox(0F, -1F, -1F, 9F, 2F, 2F),
                 PartPose.offsetAndRotation(2.5F, 0F, 0F, 0F, 0F, -1.117F));
         PartDefinition p_left_middle_hind_tibia = p_left_middle_hind_femur.addOrReplaceChild("left_middle_hind_tibia", CubeListBuilder.create()
-                .texOffs(0, 27).addBox(0F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(0, 27).addBox(0F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(9F, 0F, 0F, 0F, 0F, 1.885F));
         PartDefinition p_right_middle_front_leg = root.addOrReplaceChild("right_middle_front_leg", CubeListBuilder.create()
                 .texOffs(0, 42).addBox(-3F, -1F, -1F, 3F, 2F, 2F),
@@ -89,7 +89,7 @@ public final class SpiderGeometry {
                 .texOffs(0, 37).addBox(-8F, -1F, -1F, 8F, 2F, 2F),
                 PartPose.offsetAndRotation(-2.5F, 0F, 0F, 0F, 0F, 1.2566F));
         PartDefinition p_right_middle_front_tibia = p_right_middle_front_femur.addOrReplaceChild("right_middle_front_tibia", CubeListBuilder.create()
-                .texOffs(31, 27).addBox(-13F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(31, 27).addBox(-13F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(-8F, 0F, 0F, 0F, 0F, -2.0595F));
         PartDefinition p_left_middle_front_leg = root.addOrReplaceChild("left_middle_front_leg", CubeListBuilder.create()
                 .texOffs(11, 42).addBox(0F, -1F, -1F, 3F, 2F, 2F),
@@ -98,7 +98,7 @@ public final class SpiderGeometry {
                 .texOffs(21, 37).addBox(0F, -1F, -1F, 8F, 2F, 2F),
                 PartPose.offsetAndRotation(2.5F, 0F, 0F, 0F, 0F, -1.2566F));
         PartDefinition p_left_middle_front_tibia = p_left_middle_front_femur.addOrReplaceChild("left_middle_front_tibia", CubeListBuilder.create()
-                .texOffs(62, 27).addBox(0F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(62, 27).addBox(0F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(8F, 0F, 0F, 0F, 0F, 2.0595F));
         PartDefinition p_right_front_leg = root.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(22, 42).addBox(-3F, -1F, -1F, 3F, 2F, 2F),
@@ -107,7 +107,7 @@ public final class SpiderGeometry {
                 .texOffs(42, 37).addBox(-8F, -1F, -1F, 8F, 2F, 2F),
                 PartPose.offsetAndRotation(-2.5F, 0F, 0F, 0F, 0F, 1.2217F));
         PartDefinition p_right_front_tibia = p_right_front_femur.addOrReplaceChild("right_front_tibia", CubeListBuilder.create()
-                .texOffs(93, 27).addBox(-13F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(93, 27).addBox(-13F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(-8F, 0F, 0F, 0F, 0F, -2.1991F));
         PartDefinition p_left_front_leg = root.addOrReplaceChild("left_front_leg", CubeListBuilder.create()
                 .texOffs(33, 42).addBox(0F, -1F, -1F, 3F, 2F, 2F),
@@ -116,7 +116,7 @@ public final class SpiderGeometry {
                 .texOffs(63, 37).addBox(0F, -1F, -1F, 8F, 2F, 2F),
                 PartPose.offsetAndRotation(2.5F, 0F, 0F, 0F, 0F, -1.2217F));
         PartDefinition p_left_front_tibia = p_left_front_femur.addOrReplaceChild("left_front_tibia", CubeListBuilder.create()
-                .texOffs(0, 32).addBox(0F, -0.75F, -0.75F, 13F, 1.5F, 1.5F),
+                .texOffs(0, 32).addBox(0F, -1F, -1F, 13F, 2F, 2F, new CubeDeformation(0F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(8F, 0F, 0F, 0F, 0F, 2.1991F));
         return mesh;
     }

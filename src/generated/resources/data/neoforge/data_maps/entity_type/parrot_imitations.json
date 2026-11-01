@@ -81,6 +81,9 @@
     "kingdomsatwar:zombie_horse": {
       "sound": "minecraft:entity.parrot.imitate.zombie_horse"
     },
+    "kingdomsatwar:zombie_nautilus": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_nautilus"
+    },
     "kingdomsatwar:zombie_villager": {
       "sound": "minecraft:entity.parrot.imitate.zombie_villager"
     }

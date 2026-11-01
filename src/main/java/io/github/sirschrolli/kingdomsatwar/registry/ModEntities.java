@@ -262,6 +262,39 @@ public final class ModEntities {
                     .attach(net.minecraft.world.entity.EntityAttachment.WARDEN_CHEST, 0.0f, 1.6f, 0.0f).clientTrackingRange(16).fireImmune()
                     .notInPeaceful());
 
+    // ---------------------------------------------------------------- Wassertiere (E4c)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Codfish>> COD = ENTITIES.registerEntityType("cod",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Codfish::new, MobCategory.WATER_AMBIENT, builder -> builder.sized(0.5f, 0.3f).eyeHeight(0.195f).clientTrackingRange(4));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Salmonid>> SALMON = ENTITIES.registerEntityType("salmon",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Salmonid::new, MobCategory.WATER_AMBIENT, builder -> builder.sized(0.7f, 0.4f).eyeHeight(0.26f).clientTrackingRange(4));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Puffer>> PUFFERFISH = ENTITIES.registerEntityType("pufferfish",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Puffer::new, MobCategory.WATER_AMBIENT, builder -> builder.sized(0.7f, 0.7f).eyeHeight(0.455f).clientTrackingRange(4));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.ReefFish>> TROPICAL_FISH = ENTITIES.registerEntityType("tropical_fish",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.ReefFish::new, MobCategory.WATER_AMBIENT, builder -> builder.sized(0.5f, 0.4f).eyeHeight(0.26f).clientTrackingRange(4));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Inkfish>> SQUID = ENTITIES.registerEntityType("squid",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Inkfish::new, MobCategory.WATER_CREATURE, builder -> builder.sized(0.8f, 0.8f).eyeHeight(0.4f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.DeepKraken>> GLOW_SQUID = ENTITIES.registerEntityType("glow_squid",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.DeepKraken::new, MobCategory.UNDERGROUND_WATER_CREATURE, builder -> builder.sized(0.8f, 0.8f).eyeHeight(0.4f)
+                    .clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaDolphin>> DOLPHIN = ENTITIES.registerEntityType("dolphin",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaDolphin::new, MobCategory.WATER_CREATURE, builder -> builder.sized(0.9f, 0.6f).eyeHeight(0.3f));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaTurtle>> TURTLE = ENTITIES.registerEntityType("turtle",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaTurtle::new, MobCategory.CREATURE, builder -> builder.sized(1.2f, 0.4f)
+                    .passengerAttachments(new net.minecraft.world.phys.Vec3(0.0, 0.55625, -0.25)).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Newt>> AXOLOTL = ENTITIES.registerEntityType("axolotl",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Newt::new, MobCategory.AXOLOTLS, builder -> builder.sized(0.75f, 0.42f).eyeHeight(0.2751f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Toad>> FROG = ENTITIES.registerEntityType("frog",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Toad::new, MobCategory.CREATURE, builder -> builder.sized(0.5f, 0.5f)
+                    .passengerAttachments(new net.minecraft.world.phys.Vec3(0.0, 0.375, -0.25)).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.Polliwog>> TADPOLE = ENTITIES.registerEntityType("tadpole",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.Polliwog::new, MobCategory.CREATURE, builder -> builder.sized(0.4f, 0.3f).eyeHeight(0.19500001f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaNautilus>> NAUTILUS = ENTITIES.registerEntityType("nautilus",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.water.SeaNautilus::new, MobCategory.WATER_CREATURE, builder -> builder.sized(0.875f, 0.95f).passengerAttachments(1.1375f)
+                    .eyeHeight(0.2751f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.water.GhostNautilus>> ZOMBIE_NAUTILUS = ENTITIES.registerEntityType(
+            "zombie_nautilus", io.github.sirschrolli.kingdomsatwar.entity.creature.water.GhostNautilus::new, MobCategory.MONSTER, builder -> builder.sized(0.875f, 0.95f).passengerAttachments(1.1375f)
+                    .eyeHeight(0.2751f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -446,6 +479,19 @@ public final class ModEntities {
         event.put(BREEZE.get(), net.minecraft.world.entity.monster.breeze.Breeze.createAttributes().build());
         event.put(CREAKING.get(), net.minecraft.world.entity.monster.creaking.Creaking.createAttributes().build());
         event.put(WARDEN.get(), net.minecraft.world.entity.monster.warden.Warden.createAttributes().build());
+        event.put(COD.get(), net.minecraft.world.entity.animal.fish.AbstractFish.createAttributes().build());
+        event.put(SALMON.get(), net.minecraft.world.entity.animal.fish.AbstractFish.createAttributes().build());
+        event.put(PUFFERFISH.get(), net.minecraft.world.entity.animal.fish.AbstractFish.createAttributes().build());
+        event.put(TROPICAL_FISH.get(), net.minecraft.world.entity.animal.fish.AbstractFish.createAttributes().build());
+        event.put(SQUID.get(), net.minecraft.world.entity.animal.squid.Squid.createAttributes().build());
+        event.put(GLOW_SQUID.get(), net.minecraft.world.entity.animal.squid.Squid.createAttributes().build());
+        event.put(DOLPHIN.get(), net.minecraft.world.entity.animal.dolphin.Dolphin.createAttributes().build());
+        event.put(TURTLE.get(), net.minecraft.world.entity.animal.turtle.Turtle.createAttributes().build());
+        event.put(AXOLOTL.get(), net.minecraft.world.entity.animal.axolotl.Axolotl.createAttributes().build());
+        event.put(FROG.get(), net.minecraft.world.entity.animal.frog.Frog.createAttributes().build());
+        event.put(TADPOLE.get(), net.minecraft.world.entity.animal.frog.Tadpole.createAttributes().build());
+        event.put(NAUTILUS.get(), net.minecraft.world.entity.animal.nautilus.AbstractNautilus.createAttributes().build());
+        event.put(ZOMBIE_NAUTILUS.get(), net.minecraft.world.entity.animal.nautilus.ZombieNautilus.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -539,6 +585,24 @@ public final class ModEntities {
         event.register(BREEZE.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkAnyLightMonsterSpawnRules, replace);
         event.register(CREAKING.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
         event.register(WARDEN.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        // Wassertiere (E4c): Regeln wie bei Vanilla
+        var water = SpawnPlacementTypes.IN_WATER;
+        event.register(COD.get(), water, noLeaves, net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules, replace);
+        event.register(SALMON.get(), water, noLeaves, net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules, replace);
+        event.register(PUFFERFISH.get(), water, noLeaves, net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+                replace);
+        event.register(TROPICAL_FISH.get(), water, noLeaves, net.minecraft.world.entity.animal.fish.TropicalFish::checkTropicalFishSpawnRules,
+                replace);
+        event.register(SQUID.get(), water, noLeaves, net.minecraft.world.entity.animal.AgeableWaterCreature::checkSurfaceAgeableWaterCreatureSpawnRules,
+                replace);
+        event.register(GLOW_SQUID.get(), water, noLeaves, net.minecraft.world.entity.animal.squid.GlowSquid::checkGlowSquidSpawnRules, replace);
+        event.register(DOLPHIN.get(), water, noLeaves,
+                net.minecraft.world.entity.animal.AgeableWaterCreature::checkSurfaceAgeableWaterCreatureSpawnRules, replace);
+        event.register(TURTLE.get(), ground, noLeaves, net.minecraft.world.entity.animal.turtle.Turtle::checkTurtleSpawnRules, replace);
+        event.register(AXOLOTL.get(), water, noLeaves, net.minecraft.world.entity.animal.axolotl.Axolotl::checkAxolotlSpawnRules, replace);
+        event.register(FROG.get(), ground, noLeaves, net.minecraft.world.entity.animal.frog.Frog::checkFrogSpawnRules, replace);
+        event.register(NAUTILUS.get(), water, noLeaves, net.minecraft.world.entity.animal.nautilus.AbstractNautilus::checkNautilusSpawnRules,
+                replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);

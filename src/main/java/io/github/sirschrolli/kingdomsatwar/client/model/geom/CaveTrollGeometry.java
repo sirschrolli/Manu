@@ -36,8 +36,8 @@ public final class CaveTrollGeometry {
                 .texOffs(121, 80).addBox(-3F, -1.5F, -7.3F, 1F, 2F, 1F)
                 .texOffs(0, 88).addBox(2F, -1.5F, -7.3F, 1F, 2F, 1F)
                 .texOffs(0, 80).addBox(-2.5F, -9.5F, -3F, 5F, 2F, 5F)
-                .texOffs(5, 88).addBox(-3.6F, -5.5F, -6.6F, 2F, 1F, 0.5F)
-                .texOffs(12, 88).addBox(1.6F, -5.5F, -6.6F, 2F, 1F, 0.5F),
+                .texOffs(5, 88).addBox(-3.6F, -5.5F, -6.85F, 2F, 1F, 1F, new CubeDeformation(0F, 0F, -0.25F))
+                .texOffs(12, 88).addBox(1.6F, -5.5F, -6.85F, 2F, 1F, 1F, new CubeDeformation(0F, 0F, -0.25F)),
                 PartPose.offsetAndRotation(0F, -17F, -3F, -0.1745F, 0F, 0F));
         PartDefinition p_left_ear = p_head.addOrReplaceChild("left_ear", CubeListBuilder.create()
                 .texOffs(99, 80).addBox(0F, -1.5F, -0.5F, 4F, 3F, 1F),

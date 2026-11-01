@@ -29,20 +29,20 @@ public final class UndeadGeometry {
                 .texOffs(62, 0).addBox(-4F, -8F, -4F, 8F, 8F, 8F, new CubeDeformation(0.5F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
-                .texOffs(78, 35).addBox(-3F, 0F, -2.4F, 6F, 1.8F, 2.4F),
+                .texOffs(78, 35).addBox(-3F, -0.1F, -2.7F, 6F, 2F, 3F, new CubeDeformation(0F, -0.1F, -0.3F)),
                 PartPose.offsetAndRotation(0F, -0.6F, -2F, 0.2094F, 0F, 0F));
         PartDefinition p_helm = p_head.addOrReplaceChild("helm", CubeListBuilder.create()
-                .texOffs(68, 18).addBox(-4.6F, -9.4F, -4.6F, 9.2F, 3.4F, 9.2F)
-                .texOffs(0, 35).addBox(-6F, -6.4F, -6F, 12F, 0.8F, 12F),
+                .texOffs(68, 18).addBox(-5F, -9.7F, -5F, 10F, 4F, 10F, new CubeDeformation(-0.4F, -0.3F, -0.4F))
+                .texOffs(0, 35).addBox(-6F, -6.5F, -6F, 12F, 1F, 12F, new CubeDeformation(0F, -0.1F, 0F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(95, 0).addBox(-4F, 0F, -2F, 8F, 12F, 4F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_skirt = p_body.addOrReplaceChild("skirt", CubeListBuilder.create()
-                .texOffs(49, 35).addBox(-4.3F, 9.5F, -2.3F, 8.6F, 5F, 4.6F),
+                .texOffs(49, 35).addBox(-4.5F, 9.5F, -2.5F, 9F, 5F, 5F, new CubeDeformation(-0.2F, 0F, -0.2F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_robe = p_body.addOrReplaceChild("robe", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-4.4F, 9.5F, -2.4F, 8.8F, 11.5F, 4.8F),
+                .texOffs(0, 0).addBox(-4.5F, 9.25F, -2.5F, 9F, 12F, 5F, new CubeDeformation(-0.1F, -0.25F, -0.1F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(0, 18).addBox(-3F, -2F, -2F, 4F, 12F, 4F),

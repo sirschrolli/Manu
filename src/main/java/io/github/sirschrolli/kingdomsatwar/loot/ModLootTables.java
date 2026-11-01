@@ -17,6 +17,9 @@ public final class ModLootTables {
     /** Münzen von besiegten Monstern (über einen globalen Loot-Modifier). */
     public static final ResourceKey<LootTable> MONSTER_COINS =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/monster_coins"));
+    /** Froschlichter: frisst ein eigener Frosch einen kleinen Magmawürfel (über einen globalen Loot-Modifier). */
+    public static final ResourceKey<LootTable> FROGLIGHTS =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/froglights"));
     /** Truhe in den Burgruinen. */
     public static final ResourceKey<LootTable> CASTLE_RUIN_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/castle_ruin"));

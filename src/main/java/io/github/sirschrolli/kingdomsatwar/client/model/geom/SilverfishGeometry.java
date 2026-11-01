@@ -26,10 +26,10 @@ public final class SilverfishGeometry {
                 .texOffs(0, 14).addBox(-1.5F, 0F, -1F, 3F, 2F, 2F),
                 PartPose.offset(0F, 22F, -3.5F));
         PartDefinition p_antenna_right = p_segment0.addOrReplaceChild("antenna_right", CubeListBuilder.create()
-                .texOffs(19, 0).addBox(-0.3F, -0.3F, -5F, 0.6F, 0.6F, 5F),
+                .texOffs(19, 0).addBox(-0.5F, -0.5F, -5F, 1F, 1F, 5F, new CubeDeformation(-0.2F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(-0.8F, 0.3F, -1F, -0.3142F, 0.4887F, 0F));
         PartDefinition p_antenna_left = p_segment0.addOrReplaceChild("antenna_left", CubeListBuilder.create()
-                .texOffs(32, 0).addBox(-0.3F, -0.3F, -5F, 0.6F, 0.6F, 5F),
+                .texOffs(32, 0).addBox(-0.5F, -0.5F, -5F, 1F, 1F, 5F, new CubeDeformation(-0.2F, -0.2F, 0F)),
                 PartPose.offsetAndRotation(0.8F, 0.3F, -1F, -0.3142F, -0.4887F, 0F));
         PartDefinition p_segment1 = root.addOrReplaceChild("segment1", CubeListBuilder.create()
                 .texOffs(0, 8).addBox(-2F, 0F, -1F, 4F, 3F, 2F),
@@ -50,23 +50,23 @@ public final class SilverfishGeometry {
                 .texOffs(20, 14).addBox(-0.5F, 0F, -1F, 1F, 1F, 2F),
                 PartPose.offset(0F, 23F, 11.5F));
         PartDefinition p_cercus_right = p_segment6.addOrReplaceChild("cercus_right", CubeListBuilder.create()
-                .texOffs(24, 8).addBox(-0.25F, -0.25F, 0F, 0.5F, 0.5F, 3.5F),
+                .texOffs(24, 8).addBox(-0.5F, -0.5F, -0.25F, 1F, 1F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0.4F, 1F, 0.1396F, -0.5236F, 0F));
         PartDefinition p_cercus_middle = p_segment6.addOrReplaceChild("cercus_middle", CubeListBuilder.create()
-                .texOffs(35, 8).addBox(-0.25F, -0.25F, 0F, 0.5F, 0.5F, 4F),
+                .texOffs(35, 8).addBox(-0.5F, -0.5F, 0F, 1F, 1F, 4F, new CubeDeformation(-0.25F, -0.25F, 0F)),
                 PartPose.offsetAndRotation(0F, 0.4F, 1F, 0.1396F, 0F, 0F));
         PartDefinition p_cercus_left = p_segment6.addOrReplaceChild("cercus_left", CubeListBuilder.create()
-                .texOffs(46, 8).addBox(-0.25F, -0.25F, 0F, 0.5F, 0.5F, 3.5F),
+                .texOffs(46, 8).addBox(-0.5F, -0.5F, -0.25F, 1F, 1F, 4F, new CubeDeformation(-0.25F, -0.25F, -0.25F)),
                 PartPose.offsetAndRotation(0F, 0.4F, 1F, 0.1396F, 0.5236F, 0F));
         PartDefinition p_layer0 = root.addOrReplaceChild("layer0", CubeListBuilder.create()
-                .texOffs(27, 14).addBox(-4.6F, 7.1F, -1.1F, 9.2F, 0.8F, 0.6F)
-                .texOffs(0, 19).addBox(-4.2F, 7.1F, 0.6F, 8.4F, 0.8F, 0.6F),
+                .texOffs(27, 14).addBox(-5F, 7F, -1.3F, 10F, 1F, 1F, new CubeDeformation(-0.4F, -0.1F, -0.2F))
+                .texOffs(0, 19).addBox(-4.5F, 7F, 0.4F, 9F, 1F, 1F, new CubeDeformation(-0.3F, -0.1F, -0.2F)),
                 PartPose.offset(0F, 16F, 1F));
         PartDefinition p_layer1 = root.addOrReplaceChild("layer1", CubeListBuilder.create()
-                .texOffs(40, 19).addBox(-2.8F, 3.1F, -0.3F, 5.6F, 0.8F, 0.6F),
+                .texOffs(40, 19).addBox(-3F, 3F, -0.5F, 6F, 1F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F)),
                 PartPose.offset(0F, 20F, 7F));
         PartDefinition p_layer2 = root.addOrReplaceChild("layer2", CubeListBuilder.create()
-                .texOffs(21, 19).addBox(-3.8F, 4.1F, -0.3F, 7.6F, 0.8F, 0.6F),
+                .texOffs(21, 19).addBox(-4F, 4F, -0.5F, 8F, 1F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.2F)),
                 PartPose.offset(0F, 19F, -1.5F));
         return mesh;
     }

@@ -1004,6 +1004,25 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.BREEZE, ModItems.BREEZE_SPAWN_EGG, "Wind Spirit", "Windgeist", "Windgeist");
         creature(ModEntities.CREAKING, ModItems.CREAKING_SPAWN_EGG, "Gnarl", "Knorz", "Knorz");
         creature(ModEntities.WARDEN, ModItems.WARDEN_SPAWN_EGG, "Deepwarden", "Tiefenhüter", "Tiefenhüter");
+        // Wassertiere (E4c)
+        creature(ModEntities.COD, ModItems.COD_SPAWN_EGG, "Codfish", "Dorsch", "Dorsch");
+        breeds(ModEntities.COD, new String[][]{{"dorsch", "Codfish", "Dorsch"}, {"seelachs", "Pollock", "Seelachs"}});
+        creature(ModEntities.SALMON, ModItems.SALMON_SPAWN_EGG, "Salmon", "Lachs", "Lachs");
+        breeds(ModEntities.SALMON, new String[][]{{"lachs", "Salmon", "Lachs"}, {"rotlachs", "Sockeye Salmon", "Rotlachs"}});
+        creature(ModEntities.PUFFERFISH, ModItems.PUFFERFISH_SPAWN_EGG, "Pufferfish", "Kugelfisch", "Kugelfisch");
+        creature(ModEntities.TROPICAL_FISH, ModItems.TROPICAL_FISH_SPAWN_EGG, "Reef Fish", "Rifffisch", "Rifffisch");
+        creature(ModEntities.SQUID, ModItems.SQUID_SPAWN_EGG, "Inkfish", "Tintenfisch", "Tintenfisch");
+        creature(ModEntities.GLOW_SQUID, ModItems.GLOW_SQUID_SPAWN_EGG, "Deep Kraken", "Tiefseekrake", "Tiefseekraken");
+        creature(ModEntities.DOLPHIN, ModItems.DOLPHIN_SPAWN_EGG, "Dolphin", "Delfin", "Delfin");
+        breeds(ModEntities.DOLPHIN, new String[][]{{"tuemmler", "Bottlenose Dolphin", "Großer Tümmler"}, {"schwertwal", "Orca", "Schwertwal"}});
+        creature(ModEntities.TURTLE, ModItems.TURTLE_SPAWN_EGG, "Sea Turtle", "Meeresschildkröte", "Meeresschildkröten");
+        breeds(ModEntities.TURTLE, new String[][]{{"suppen", "Green Sea Turtle", "Suppenschildkröte"},
+                {"karett", "Hawksbill Turtle", "Karettschildkröte"}});
+        creature(ModEntities.AXOLOTL, ModItems.AXOLOTL_SPAWN_EGG, "Newt", "Molch", "Molch");
+        creature(ModEntities.FROG, ModItems.FROG_SPAWN_EGG, "Frog", "Frosch", "Frosch");
+        creature(ModEntities.TADPOLE, ModItems.TADPOLE_SPAWN_EGG, "Polliwog", "Kaulquappe", "Kaulquappen");
+        creature(ModEntities.NAUTILUS, ModItems.NAUTILUS_SPAWN_EGG, "Nautilus", "Nautilus", "Nautilus");
+        creature(ModEntities.ZOMBIE_NAUTILUS, ModItems.ZOMBIE_NAUTILUS_SPAWN_EGG, "Ghost Nautilus", "Geisternautilus", "Geisternautilus");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

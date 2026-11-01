@@ -115,6 +115,29 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.DEFLECTS_PROJECTILES).add(ModEntities.BREEZE.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.BREEZE.key());
         this.tag(EntityTypeTags.NO_ANGER_FROM_WIND_CHARGE).add(ModEntities.BREEZE.key());
+        // Wassertiere (E4c): Wasserwesen (Fluch des Meeres, Harpune), Beute der Molche, Atmen unter Wasser
+        this.tag(EntityTypeTags.AQUATIC).add(ModEntities.COD.key()).add(ModEntities.SALMON.key()).add(ModEntities.PUFFERFISH.key())
+                .add(ModEntities.TROPICAL_FISH.key()).add(ModEntities.SQUID.key()).add(ModEntities.GLOW_SQUID.key()).add(ModEntities.DOLPHIN.key())
+                .add(ModEntities.TURTLE.key()).add(ModEntities.AXOLOTL.key()).add(ModEntities.TADPOLE.key()).add(ModEntities.NAUTILUS.key())
+                .add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.AXOLOTL_HUNT_TARGETS).add(ModEntities.COD.key()).add(ModEntities.SALMON.key()).add(ModEntities.PUFFERFISH.key())
+                .add(ModEntities.TROPICAL_FISH.key()).add(ModEntities.SQUID.key()).add(ModEntities.GLOW_SQUID.key()).add(ModEntities.TADPOLE.key());
+        this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(ModEntities.COD.key()).add(ModEntities.SALMON.key())
+                .add(ModEntities.PUFFERFISH.key()).add(ModEntities.TROPICAL_FISH.key()).add(ModEntities.SQUID.key()).add(ModEntities.GLOW_SQUID.key())
+                .add(ModEntities.TURTLE.key()).add(ModEntities.AXOLOTL.key()).add(ModEntities.FROG.key()).add(ModEntities.TADPOLE.key())
+                .add(ModEntities.NAUTILUS.key());
+        this.tag(EntityTypeTags.CANNOT_BE_PUSHED_ONTO_BOATS).add(ModEntities.COD.key()).add(ModEntities.SALMON.key())
+                .add(ModEntities.PUFFERFISH.key()).add(ModEntities.TROPICAL_FISH.key()).add(ModEntities.SQUID.key()).add(ModEntities.GLOW_SQUID.key())
+                .add(ModEntities.DOLPHIN.key()).add(ModEntities.TADPOLE.key()).add(ModEntities.NAUTILUS.key()).add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.NOT_SCARY_FOR_PUFFERFISH).add(ModEntities.COD.key()).add(ModEntities.SALMON.key())
+                .add(ModEntities.PUFFERFISH.key()).add(ModEntities.TROPICAL_FISH.key()).add(ModEntities.SQUID.key()).add(ModEntities.GLOW_SQUID.key())
+                .add(ModEntities.DOLPHIN.key()).add(ModEntities.TURTLE.key()).add(ModEntities.TADPOLE.key()).add(ModEntities.NAUTILUS.key())
+                .add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.NAUTILUS_HOSTILES).add(ModEntities.PUFFERFISH.key());
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.NAUTILUS.key()).add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.CAN_WEAR_NAUTILUS_ARMOR).add(ModEntities.NAUTILUS.key()).add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.BURN_IN_DAYLIGHT).add(ModEntities.ZOMBIE_NAUTILUS.key());
+        this.tag(EntityTypeTags.ZOMBIES).add(ModEntities.ZOMBIE_NAUTILUS.key());
         var monsterCoins = this.tag(ModTags.EntityTypes.DROPS_COINS);
         for (var monster : java.util.List.of(ModEntities.ZOMBIE, ModEntities.HUSK, ModEntities.DROWNED, ModEntities.ZOMBIE_VILLAGER,
                 ModEntities.SKELETON, ModEntities.STRAY, ModEntities.BOGGED, ModEntities.PARCHED, ModEntities.CREEPER, ModEntities.SPIDER,

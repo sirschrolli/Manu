@@ -27,7 +27,7 @@ public final class UndeadHorseGeometry {
                 PartPose.offset(0F, 11F, 5F));
         PartDefinition p_tail = p_body.addOrReplaceChild("tail", CubeListBuilder.create()
                 .texOffs(114, 0).addBox(-1.5F, 0F, 0F, 3F, 14F, 4F)
-                .texOffs(95, 33).addBox(-2F, 9F, -0.2F, 4F, 6.5F, 4.2F),
+                .texOffs(95, 33).addBox(-2F, 8.75F, -0.6F, 4F, 7F, 5F, new CubeDeformation(0F, -0.25F, -0.4F)),
                 PartPose.offsetAndRotation(0F, -5F, 2F, 0.5236F, 0F, 0F));
         PartDefinition p_head_parts = root.addOrReplaceChild("head_parts", CubeListBuilder.create()
                 .texOffs(91, 0).addBox(-2.05F, -6F, -2F, 4F, 12F, 7F),
@@ -36,11 +36,11 @@ public final class UndeadHorseGeometry {
                 .texOffs(68, 33).addBox(-3F, -11F, -2F, 6F, 5F, 7F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_forelock = p_head.addOrReplaceChild("forelock", CubeListBuilder.create()
-                .texOffs(0, 60).addBox(-1.5F, -11.5F, 1.2F, 3F, 0.6F, 3.6F),
+                .texOffs(0, 60).addBox(-1.5F, -11.7F, 1F, 3F, 1F, 4F, new CubeDeformation(0F, -0.2F, -0.2F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_forelock_big = p_head.addOrReplaceChild("forelock_big", CubeListBuilder.create()
-                .texOffs(103, 49).addBox(-2F, -11.8F, -0.6F, 4F, 0.9F, 5.4F)
-                .texOffs(29, 60).addBox(-1.5F, -11F, -1.4F, 3F, 1.6F, 0.9F),
+                .texOffs(103, 49).addBox(-2F, -11.85F, -0.9F, 4F, 1F, 6F, new CubeDeformation(0F, -0.05F, -0.3F))
+                .texOffs(29, 60).addBox(-1.5F, -11.2F, -1.45F, 3F, 2F, 1F, new CubeDeformation(0F, -0.2F, -0.05F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_left_ear = p_head.addOrReplaceChild("left_ear", CubeListBuilder.create()
                 .texOffs(15, 60).addBox(-1F, -2F, -0.5F, 2F, 3F, 1F),
@@ -52,34 +52,34 @@ public final class UndeadHorseGeometry {
                 .texOffs(0, 49).addBox(-2F, -11F, -7F, 4F, 5F, 5F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_mane = p_head_parts.addOrReplaceChild("mane", CubeListBuilder.create()
-                .texOffs(78, 0).addBox(-1.15F, -11.6F, 4.5F, 2.3F, 16.8F, 2.7F),
+                .texOffs(78, 0).addBox(-1.5F, -11.7F, 4.35F, 3F, 17F, 3F, new CubeDeformation(-0.35F, -0.1F, -0.15F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_mane_drape = p_head_parts.addOrReplaceChild("mane_drape", CubeListBuilder.create()
-                .texOffs(65, 0).addBox(1.9F, -10.6F, 2.4F, 1F, 15.2F, 4.6F),
+                .texOffs(65, 0).addBox(1.9F, -11F, 2.2F, 1F, 16F, 5F, new CubeDeformation(0F, -0.4F, -0.2F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_left_hind_leg = root.addOrReplaceChild("left_hind_leg", CubeListBuilder.create()
                 .texOffs(0, 33).addBox(-3F, -1.01F, -1F, 4F, 11F, 4F),
                 PartPose.offset(4F, 14F, 7F));
         PartDefinition p_feather_left_hind_leg = p_left_hind_leg.addOrReplaceChild("feather_left_hind_leg", CubeListBuilder.create()
-                .texOffs(19, 49).addBox(-3.45F, 5.6F, -1.45F, 4.9F, 3.7F, 4.9F),
+                .texOffs(19, 49).addBox(-3.5F, 5.45F, -1.5F, 5F, 4F, 5F, new CubeDeformation(-0.05F, -0.15F, -0.05F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_hind_leg = root.addOrReplaceChild("right_hind_leg", CubeListBuilder.create()
                 .texOffs(17, 33).addBox(-1F, -1.01F, -1F, 4F, 11F, 4F),
                 PartPose.offset(-4F, 14F, 7F));
         PartDefinition p_feather_right_hind_leg = p_right_hind_leg.addOrReplaceChild("feather_right_hind_leg", CubeListBuilder.create()
-                .texOffs(40, 49).addBox(-1.45F, 5.6F, -1.45F, 4.9F, 3.7F, 4.9F),
+                .texOffs(40, 49).addBox(-1.5F, 5.45F, -1.5F, 5F, 4F, 5F, new CubeDeformation(-0.05F, -0.15F, -0.05F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_left_front_leg = root.addOrReplaceChild("left_front_leg", CubeListBuilder.create()
                 .texOffs(34, 33).addBox(-3F, -1.01F, -1.9F, 4F, 11F, 4F),
                 PartPose.offset(4F, 14F, -10F));
         PartDefinition p_feather_left_front_leg = p_left_front_leg.addOrReplaceChild("feather_left_front_leg", CubeListBuilder.create()
-                .texOffs(61, 49).addBox(-3.45F, 5.6F, -2.35F, 4.9F, 3.7F, 4.9F),
+                .texOffs(61, 49).addBox(-3.5F, 5.45F, -2.4F, 5F, 4F, 5F, new CubeDeformation(-0.05F, -0.15F, -0.05F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_front_leg = root.addOrReplaceChild("right_front_leg", CubeListBuilder.create()
                 .texOffs(51, 33).addBox(-1F, -1.01F, -1.9F, 4F, 11F, 4F),
                 PartPose.offset(-4F, 14F, -10F));
         PartDefinition p_feather_right_front_leg = p_right_front_leg.addOrReplaceChild("feather_right_front_leg", CubeListBuilder.create()
-                .texOffs(82, 49).addBox(-1.45F, 5.6F, -2.35F, 4.9F, 3.7F, 4.9F),
+                .texOffs(82, 49).addBox(-1.5F, 5.45F, -2.4F, 5F, 4F, 5F, new CubeDeformation(-0.05F, -0.15F, -0.05F)),
                 PartPose.offset(0F, 0F, 0F));
         return mesh;
     }

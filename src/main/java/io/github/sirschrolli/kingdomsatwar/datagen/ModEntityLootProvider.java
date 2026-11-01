@@ -161,6 +161,20 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.BREEZE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.BREEZE));
         this.add(ModEntities.CREAKING.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CREAKING));
         this.add(ModEntities.WARDEN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WARDEN));
+        // Wassertiere (E4c): Beute wie bei Vanilla (Fische, Knochenmehl, Tinte, Schuppen …)
+        this.add(ModEntities.COD.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.COD));
+        this.add(ModEntities.SALMON.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SALMON));
+        this.add(ModEntities.PUFFERFISH.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PUFFERFISH));
+        this.add(ModEntities.TROPICAL_FISH.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TROPICAL_FISH));
+        this.add(ModEntities.SQUID.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SQUID));
+        this.add(ModEntities.GLOW_SQUID.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GLOW_SQUID));
+        this.add(ModEntities.DOLPHIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.DOLPHIN));
+        this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
+        this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
+        this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));
+        this.add(ModEntities.TADPOLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TADPOLE));
+        this.add(ModEntities.NAUTILUS.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.NAUTILUS));
+        this.add(ModEntities.ZOMBIE_NAUTILUS.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE_NAUTILUS));
 
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()

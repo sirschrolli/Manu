@@ -128,7 +128,17 @@ class Model:
                 u, v = c.uv
                 ox, oy, oz = c.origin
                 w, h, d = c.size
-                if c.inflate:
+                # Minecraft legt die Seiten auf der Textur mit den (Kommazahl-)Maßen des Quaders an, der Packer und das
+                # Bemalen mit aufgerundeten ganzen Maßen. Bei krummen Maßen stünden die UVs bis zu einem Texel daneben
+                # (durchsichtige Ritzen, Farbe der Nachbarseite). Deshalb bekommt Minecraft die ganzen Maße und die
+                # Abweichung als Verformung je Achse – derselbe Quader im Raum, die UVs genau wie gemalt.
+                n = c.int_size()
+                g = tuple((s - k) / 2 for s, k in zip((w, h, d), n))
+                if any(abs(x) > 1e-9 for x in g):
+                    cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox + g[0])}, {fmt(oy + g[1])}, {fmt(oz + g[2])}, "
+                                      f"{fmt(n[0])}, {fmt(n[1])}, {fmt(n[2])}, new CubeDeformation("
+                                      f"{fmt(c.inflate + g[0])}, {fmt(c.inflate + g[1])}, {fmt(c.inflate + g[2])}))")
+                elif c.inflate:
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox)}, {fmt(oy)}, {fmt(oz)}, {fmt(w)}, {fmt(h)}, {fmt(d)}, "
                                       f"new CubeDeformation({fmt(c.inflate)}))")
                 else:

@@ -26,7 +26,7 @@ public final class WildBeeGeometry {
                 PartPose.offset(0F, 19F, 0F));
         PartDefinition p_body = p_bone.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-3.5F, -4F, -5F, 7F, 7F, 10F)
-                .texOffs(35, 0).addBox(-3.8F, -4.3F, -5.2F, 7.6F, 4F, 3.2F),
+                .texOffs(35, 0).addBox(-4F, -4.3F, -5.6F, 8F, 4F, 4F, new CubeDeformation(-0.2F, 0F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_stinger = p_body.addOrReplaceChild("stinger", CubeListBuilder.create()
                 .texOffs(18, 25).addBox(0F, -1F, 5F, 0F, 1F, 2F),

@@ -1,0 +1,17 @@
+{
+  "type": "kingdomsatwar:replace_spawns",
+  "biomes": "#kingdomsatwar:replaces_vanilla_animals",
+  "replacements": {
+    "minecraft:axolotl": "kingdomsatwar:axolotl",
+    "minecraft:cod": "kingdomsatwar:cod",
+    "minecraft:dolphin": "kingdomsatwar:dolphin",
+    "minecraft:frog": "kingdomsatwar:frog",
+    "minecraft:glow_squid": "kingdomsatwar:glow_squid",
+    "minecraft:nautilus": "kingdomsatwar:nautilus",
+    "minecraft:pufferfish": "kingdomsatwar:pufferfish",
+    "minecraft:salmon": "kingdomsatwar:salmon",
+    "minecraft:squid": "kingdomsatwar:squid",
+    "minecraft:tropical_fish": "kingdomsatwar:tropical_fish",
+    "minecraft:turtle": "kingdomsatwar:turtle"
+  }
+}

@@ -109,7 +109,21 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.ELDER_GUARDIAN, ModEntities.ELDER_GUARDIAN),
                 Map.entry(EntityTypes.BREEZE, ModEntities.BREEZE),
                 Map.entry(EntityTypes.CREAKING, ModEntities.CREAKING),
-                Map.entry(EntityTypes.WARDEN, ModEntities.WARDEN));
+                Map.entry(EntityTypes.WARDEN, ModEntities.WARDEN),
+                // Wassertiere (E4c)
+                Map.entry(EntityTypes.COD, ModEntities.COD),
+                Map.entry(EntityTypes.SALMON, ModEntities.SALMON),
+                Map.entry(EntityTypes.PUFFERFISH, ModEntities.PUFFERFISH),
+                Map.entry(EntityTypes.TROPICAL_FISH, ModEntities.TROPICAL_FISH),
+                Map.entry(EntityTypes.SQUID, ModEntities.SQUID),
+                Map.entry(EntityTypes.GLOW_SQUID, ModEntities.GLOW_SQUID),
+                Map.entry(EntityTypes.DOLPHIN, ModEntities.DOLPHIN),
+                Map.entry(EntityTypes.TURTLE, ModEntities.TURTLE),
+                Map.entry(EntityTypes.AXOLOTL, ModEntities.AXOLOTL),
+                Map.entry(EntityTypes.FROG, ModEntities.FROG),
+                Map.entry(EntityTypes.TADPOLE, ModEntities.TADPOLE),
+                Map.entry(EntityTypes.NAUTILUS, ModEntities.NAUTILUS),
+                Map.entry(EntityTypes.ZOMBIE_NAUTILUS, ModEntities.ZOMBIE_NAUTILUS));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */

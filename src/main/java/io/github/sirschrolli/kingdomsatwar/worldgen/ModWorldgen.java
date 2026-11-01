@@ -246,6 +246,7 @@ public final class ModWorldgen {
     // eigene Wildtiere (E3b): Tausch gegen die Vanilla-Wildtiere, dazu neue Arten in neuen Gegenden
     public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
     public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
+    public static final ResourceKey<BiomeModifier> SWAP_WATER_CREATURES = spawnModifier("swap_vanilla_water_creatures");
     public static final ResourceKey<BiomeModifier> FOREST_BEAR_SPAWNS = spawnModifier("add_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FEW_FOREST_BEAR_SPAWNS = spawnModifier("add_few_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FENNEC_SPAWNS = spawnModifier("add_fennec_spawns");
@@ -382,6 +383,20 @@ public final class ModWorldgen {
                         java.util.Map.entry(EntityTypes.ZOMBIE_HORSE, ModEntities.ZOMBIE_HORSE.get()),
                         java.util.Map.entry(EntityTypes.SKELETON_HORSE, ModEntities.SKELETON_HORSE.get()),
                         java.util.Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK.get()))));
+        // Wassertiere (E4c): Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche und Nautilusse mit gleichem Gewicht
+        context.register(SWAP_WATER_CREATURES, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),
+                java.util.Map.ofEntries(
+                        java.util.Map.entry(EntityTypes.COD, ModEntities.COD.get()),
+                        java.util.Map.entry(EntityTypes.SALMON, ModEntities.SALMON.get()),
+                        java.util.Map.entry(EntityTypes.PUFFERFISH, ModEntities.PUFFERFISH.get()),
+                        java.util.Map.entry(EntityTypes.TROPICAL_FISH, ModEntities.TROPICAL_FISH.get()),
+                        java.util.Map.entry(EntityTypes.SQUID, ModEntities.SQUID.get()),
+                        java.util.Map.entry(EntityTypes.GLOW_SQUID, ModEntities.GLOW_SQUID.get()),
+                        java.util.Map.entry(EntityTypes.DOLPHIN, ModEntities.DOLPHIN.get()),
+                        java.util.Map.entry(EntityTypes.TURTLE, ModEntities.TURTLE.get()),
+                        java.util.Map.entry(EntityTypes.AXOLOTL, ModEntities.AXOLOTL.get()),
+                        java.util.Map.entry(EntityTypes.FROG, ModEntities.FROG.get()),
+                        java.util.Map.entry(EntityTypes.NAUTILUS, ModEntities.NAUTILUS.get()))));
         // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
         context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
                 net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,

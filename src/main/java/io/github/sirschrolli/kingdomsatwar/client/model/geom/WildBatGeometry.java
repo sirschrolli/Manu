@@ -24,7 +24,7 @@ public final class WildBatGeometry {
         PartDefinition root = mesh.getRoot();
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(26, 0).addBox(-1.5F, 0F, -1F, 3F, 5F, 2F)
-                .texOffs(47, 0).addBox(-1.8F, 0.2F, -1.3F, 3.6F, 2.4F, 2.6F),
+                .texOffs(47, 0).addBox(-2F, -0.1F, -1.5F, 4F, 3F, 3F, new CubeDeformation(-0.2F, -0.3F, -0.2F)),
                 PartPose.offset(0F, 17F, 0F));
         PartDefinition p_right_wing = p_body.addOrReplaceChild("right_wing", CubeListBuilder.create()
                 .texOffs(37, 0).addBox(-2F, -2F, 0F, 2F, 7F, 0F),
@@ -43,7 +43,7 @@ public final class WildBatGeometry {
                 PartPose.offset(0F, 5F, 0F));
         PartDefinition p_head = root.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(0, 9).addBox(-2F, -3F, -1F, 4F, 3F, 2F)
-                .texOffs(27, 9).addBox(-0.75F, -1.5F, -1.6F, 1.5F, 1.2F, 0.6F),
+                .texOffs(27, 9).addBox(-1F, -1.9F, -1.8F, 2F, 2F, 1F, new CubeDeformation(-0.25F, -0.4F, -0.2F)),
                 PartPose.offset(0F, 17F, 0F));
         PartDefinition p_right_ear = p_head.addOrReplaceChild("right_ear", CubeListBuilder.create()
                 .texOffs(13, 9).addBox(-2.5F, -4F, 0F, 3F, 5F, 0F),

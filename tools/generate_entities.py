@@ -20,6 +20,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               cave_troll, mage,
                               bones, camel_husk, creeper, phantom, silverfish, slime, spider, sulfur_cube, undead, undead_horse, witch,
                               breeze, breeze_wind, creaking, guardian, illager, ravager, vex, warden,
+                              axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
+                              turtle,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -147,6 +149,34 @@ def main():
                 creaking.PALETTES, preview)
     write_model(warden, "WardenGeometry", "Geometrie des Tiefenhüters (Knochen wie beim Vanilla-Wärter, Hörner statt Fühler).",
                 "warden", warden.PALETTES, preview)
+    # Wassertiere (E4c): Knochen wie bei Vanilla, eigene Quader und Texturen
+    write_model(fish_cod, "CodfishGeometry", "Geometrie des Dorschs (Knochen wie beim Vanilla-Kabeljau, dazu Bartel und Afterflosse).",
+                "cod", fish_cod.PALETTES, preview)
+    write_model(fish_salmon, "SalmonidGeometry", "Geometrie des Lachses (Knochen wie beim Vanilla-Lachs, dazu Buckel, Hakenkiefer und Flossen).",
+                "salmon", fish_salmon.PALETTES, preview)
+    for stage, size in (("klein", "Small"), ("mittel", "Mid"), ("gross", "Big")):
+        module = fish_puffer.stage_module(stage)
+        write_model(module, f"Puffer{size}Geometry", f"Geometrie des Kugelfischs ({stage}, Knochen wie beim Vanilla-Kugelfisch).",
+                    "pufferfish", module.PALETTES, preview)
+    for shape, size in (("a", "Small"), ("b", "Large")):
+        module = fish_tropical.shape_module(shape)
+        write_model(module, f"ReefFish{size}Geometry", f"Geometrie des Rifffischs (Form {shape.upper()}, Grundfarbe getönt).",
+                    "tropical_fish", module.PALETTES, preview)
+        pattern = fish_tropical.shape_module(shape, pattern=True)
+        write_model(pattern, f"ReefFish{size}PatternGeometry", f"Geometrie der Muster-Ebene des Rifffischs (Form {shape.upper()}).",
+                    "tropical_fish", pattern.PALETTES, preview)
+    write_model(axolotl, "NewtGeometry", "Geometrie des Molchs (Knochen wie beim Vanilla-Axolotl).", "axolotl", axolotl.PALETTES, preview)
+    write_model(frog, "ToadGeometry", "Geometrie des Froschs (Knochen wie beim Vanilla-Frosch).", "frog", frog.PALETTES, preview)
+    write_model(tadpole, "PolliwogGeometry", "Geometrie der Kaulquappe (Knochen wie bei Vanilla, Flossensaum durchscheinend).",
+                "tadpole", tadpole.PALETTES, preview)
+    write_model(squid, "InkfishGeometry", "Geometrie der Tintenfische und Tiefseekraken (Knochen wie beim Vanilla-Tintenfisch).",
+                "squid", squid.PALETTES, preview)
+    write_model(dolphin, "SeaDolphinGeometry", "Geometrie der Delfine (Knochen wie beim Vanilla-Delfin, Finne je Art).",
+                "dolphin", dolphin.PALETTES, preview)
+    write_model(turtle, "SeaTurtleGeometry", "Geometrie der Meeresschildkröten (Knochen wie bei der Vanilla-Schildkröte).",
+                "turtle", turtle.PALETTES, preview)
+    write_model(nautilus, "SeaNautilusGeometry", "Geometrie der Nautilusse (Knochen wie beim Vanilla-Nautilus, Fangarme an den Mundteilen).",
+                "nautilus", nautilus.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)
