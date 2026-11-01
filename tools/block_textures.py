@@ -496,6 +496,98 @@ def timber_beam_top() -> Image.Image:
 # Dächer
 # =============================================================================
 
+# =============================================================================
+# Baugerüst des Baumeisters: Rundholzstangen mit Seilbünden, Bohlenbelag, Riegel
+# =============================================================================
+
+POLE = pal("#33241a", "#422f20", "#523b28", "#614730", "#71543a", "#806146", "#907053")
+ROPE = pal("#4f4130", "#6b5b41", "#887655", "#a6936c", "#c0ad84")
+DECK = pal("#3d2a1a", "#4d3522", "#5e432b", "#6e5034", "#7d5d3d", "#8c6b48", "#9d7b55")
+
+
+def builder_scaffold_pole() -> Image.Image:
+    """Vier Stangen nebeneinander (je 4 Pixel: zwei Seiten zu 2 Pixeln): oben Hirnholz, darunter Rundholz mit Rinde-
+    resten und zwei Seilbünden (unter dem Belag und bei der Strebe)."""
+    rng = random.Random(7101)
+    rows = [[0] * N for _ in range(N)]
+    for pole in range(4):
+        for side in range(2):
+            x0 = pole * 4 + side * 2
+            for y in range(N):
+                for dx in range(2):
+                    x = x0 + dx
+                    if y < 2:
+                        # Hirnholz: Ring und Kern
+                        rows[y][x] = 4 if (dx + y) % 2 == 0 else 3
+                        continue
+                    v = (5 if dx == 0 else 3) + (1 if side == 0 and dx == 0 else 0)
+                    if rng.random() < 0.18:
+                        v -= 1
+                    if rng.random() < 0.06:
+                        v = 1  # Astloch / Rindenrest
+                    rows[y][x] = v
+    img = from_indices(rows, POLE)
+    px = img.load()
+    for pole in range(4):
+        for x in range(pole * 4, pole * 4 + 4):
+            for y in (3, 4, 5, 10, 11):
+                tone = 3 if (x + y) % 2 == 0 else 2
+                if y in (5, 11):
+                    tone -= 1
+                if x % 2 == 1:
+                    tone -= 1
+                px[x, y] = ROPE[max(0, tone)]
+    return img
+
+
+def builder_scaffold_deck() -> Image.Image:
+    """Bohlenbelag von oben: vier Bohlen mit dunklen Fugen, Stößen an verschiedenen Stellen und Nagelköpfen."""
+    grain = wood_grain(7201, along_x=True)
+    rows = [[0] * N for _ in range(N)]
+    tones = [4, 3, 4, 3]
+    joints = {0: None, 1: 9, 2: 4, 3: 12}
+    for y in range(N):
+        board = y // 4
+        for x in range(N):
+            if y % 4 == 3:
+                v = 1
+            elif joints[board] is not None and x == joints[board]:
+                v = 1
+            else:
+                v = tones[board] + grain[y][x] + (1 if y % 4 == 0 else 0)
+            rows[y][x] = max(1, min(6, v))
+    img = from_indices(rows, DECK)
+    px = img.load()
+    nail = hexc("#26201c")
+    shine = hexc("#7a7068")
+    for board in range(4):
+        y = board * 4 + 1
+        ends = [1, 14] if joints[board] is None else [1, 14, joints[board] - 1, joints[board] + 1]
+        for x in ends:
+            if 0 <= x < N:
+                px[x, y] = nail
+                px[x, y + 1] = shine if x % 2 else nail
+    return img
+
+
+def builder_scaffold_slat() -> Image.Image:
+    """Riegel und Streben: acht Bretter zu je zwei Zeilen (helle Oberkante, dunklere Unterkante), Nägel an den Enden."""
+    grain = wood_grain(7301, along_x=True)
+    rows = [[0] * N for _ in range(N)]
+    for y in range(N):
+        base = 5 if y % 2 == 0 else 3
+        shade = (y // 2) % 3 - 1
+        for x in range(N):
+            rows[y][x] = max(1, min(6, base + grain[y][x] + (shade if y % 2 else 0)))
+    img = from_indices(rows, DECK)
+    px = img.load()
+    nail = hexc("#26201c")
+    for y in range(0, N, 2):
+        for x in (1, 14):
+            px[x, y + 1] = nail
+    return img
+
+
 def roof_tiles(colors: list[Color], seed: int) -> Image.Image:
     """
     Rundziegel in Reihen (4 Pixel hoch, 8 breit, jede Reihe um einen halben Ziegel versetzt):
@@ -973,6 +1065,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/timber_frame_cross", timber_frame("x", 63))
     put("block/timber_beam_side", timber_beam_side())
     put("block/timber_beam_top", timber_beam_top())
+    put("block/builder_scaffold_pole", builder_scaffold_pole())
+    put("block/builder_scaffold_deck", builder_scaffold_deck())
+    put("block/builder_scaffold_slat", builder_scaffold_slat())
     put("block/red_roof_tiles", roof_tiles(RED_TILES, 21))
     put("block/brown_roof_tiles", roof_tiles(BROWN_TILES, 22))
     put("block/light_roof_tiles", roof_tiles(LIGHT_TILES, 23))

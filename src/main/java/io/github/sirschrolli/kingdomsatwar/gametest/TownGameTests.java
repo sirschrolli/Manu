@@ -76,6 +76,8 @@ final class TownGameTests {
             ModGameTests.TEST_FUNCTIONS.register("town_blueprints", () -> TownGameTests::townBlueprints);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_BUILDER =
             ModGameTests.TEST_FUNCTIONS.register("town_builder", () -> TownGameTests::townBuilder);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_BUILDER_TALL =
+            ModGameTests.TEST_FUNCTIONS.register("town_builder_tall", () -> TownGameTests::townBuilderTall);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_TRADE =
             ModGameTests.TEST_FUNCTIONS.register("town_trade", () -> TownGameTests::townTrade);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_CROWN =
@@ -91,6 +93,7 @@ final class TownGameTests {
         // jede Siedlung in einem eigenen Durchgang
         own(event, TOWN_FOUND, "town_found", 200);
         own(event, TOWN_BUILDER, "town_builder", 4000);
+        own(event, TOWN_BUILDER_TALL, "town_builder_tall", 12000);
         own(event, TOWN_TRADE, "town_trade", 4000);
         own(event, TOWN_CROWN, "town_crown", 600);
     }
@@ -273,6 +276,7 @@ final class TownGameTests {
             helper.assertTrue(!plan.steps(origin, Rotation.NONE).isEmpty(), type.id() + ": kein Bauablauf");
             plan.placeAll(level, origin, Rotation.NONE);
             helper.assertTrue(plan.complete(level, origin, Rotation.NONE), type.id() + ": nach dem Bauen unvollständig");
+            assertConnected(helper, plan, origin, Rotation.NONE, type.id());
             for (BlockPos bed : plan.beds()) {
                 helper.assertTrue(level.getBlockState(Blueprint.world(origin, Rotation.NONE, bed)).getBlock()
                         instanceof net.minecraft.world.level.block.BedBlock, type.id() + ": Bett fehlt bei " + bed);
@@ -287,8 +291,37 @@ final class TownGameTests {
             BlockPos origin = originFor(helper, BuildingType.HOUSE, 24, 24);
             BuildingType.HOUSE.blueprint().placeAll(level, origin, rotation);
             helper.assertTrue(BuildingType.HOUSE.blueprint().complete(level, origin, rotation), "Haus gedreht " + rotation + " unvollständig");
+            assertConnected(helper, BuildingType.HOUSE.blueprint(), origin, rotation, "Haus gedreht " + rotation);
         }
         helper.succeed();
+    }
+
+    /**
+     * Scheiben, Gitter, Zäune, Mauern und Treppen sind mit ihren Nachbarn verbunden, wie sie es beim Setzen von Hand wären
+     * (keine einzelnen Scheiben-Pfosten im Fenster, Dachecken als Ecken), und keine Fensterscheibe steht frei.
+     */
+    static void assertConnected(GameTestHelper helper, Blueprint plan, BlockPos origin, Rotation rotation, String what) {
+        ServerLevel level = helper.getLevel();
+        for (Blueprint.Entry e : plan.blocks()) {
+            BlockPos pos = Blueprint.world(origin, rotation, e.pos());
+            BlockState state = level.getBlockState(pos);
+            Block block = state.getBlock();
+            if (block instanceof net.minecraft.world.level.block.CrossCollisionBlock || block instanceof net.minecraft.world.level.block.StairBlock
+                    || block instanceof net.minecraft.world.level.block.WallBlock) {
+                BlockState settled = Block.updateFromNeighbourShapes(state, level, pos);
+                helper.assertTrue(settled.equals(state), what + ": " + block.getName().getString() + " bei " + helper.relativePos(pos)
+                        + " nicht mit den Nachbarn verbunden (" + state + " statt " + settled + ")");
+            }
+            if (block instanceof net.minecraft.world.level.block.IronBarsBlock) {
+                boolean any = false;
+                for (var property : java.util.List.of(net.minecraft.world.level.block.CrossCollisionBlock.NORTH,
+                        net.minecraft.world.level.block.CrossCollisionBlock.EAST, net.minecraft.world.level.block.CrossCollisionBlock.SOUTH,
+                        net.minecraft.world.level.block.CrossCollisionBlock.WEST)) {
+                    any |= state.getValue(property);
+                }
+                helper.assertTrue(any, what + ": Fensterscheibe ohne Halt bei " + helper.relativePos(pos));
+            }
+        }
     }
 
     // =====================================================================================
@@ -344,6 +377,84 @@ final class TownGameTests {
             helper.assertTrue(BuildingType.FIELD.blueprint().complete(level, origin, Rotation.NONE), "Feld unvollständig gebaut");
             helper.assertTrue(Reputation.points(owner) >= Reputation.HIRE + Reputation.BUILDING, "Ansehen fürs fertige Gebäude");
             KingdomsAtWar.LOGGER.info("[Test] Der Baumeister hat das Feld nach {} Ticks fertig gebaut ({} Bauschritte)", helper.getTick(), total);
+            clearTowns(server);
+            leave(helper, owner);
+        });
+    }
+
+    /**
+     * Ein zweistöckiges Bürgerhaus: Der Baumeister baut es ganz fertig, und zwar aus der Nähe (fast jeder Block in
+     * Reichweite vom Stehplatz, auch oben am Dach – dafür stellt er sich Gerüste auf). Danach steht kein Gerüst mehr.
+     */
+    private static void townBuilderTall(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        helper.setTime(1000);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 40));
+        Town town = found(helper, owner, new BlockPos(24, 1, 42));
+        Coins.give(owner, 500);
+        helper.assertValueEqual(TownManager.hire(owner, town, Profession.BUILDER), TownManager.HireResult.HIRED, "Baumeister anheuern");
+        BlockPos origin = originFor(helper, BuildingType.TOWNHOUSE, 24, 18);
+        Town.Project project = TownManager.startProject(level, town, BuildingType.TOWNHOUSE, origin, Rotation.NONE);
+        List<Blueprint.Step> steps = project.steps();
+        int[] last = {0};
+        int[] near = {0};
+        int[] placed = {0};
+        double[] worst = {0};
+        String[] worstAt = {""};
+        boolean[] scaffold = {false};
+        helper.onEachTick(() -> {
+            if (town.projects().isEmpty()) {
+                return;
+            }
+            Town.Project open = town.projects().getFirst();
+            CitizenEntity builder = TownManager.citizen(level, town.residents().getFirst().entity());
+            if (builder != null && open.progress == last[0] + 1 && open.progress > 0) {
+                Blueprint.Step step = steps.get(open.progress - 1);
+                if (!step.state().isAir() && !step.foundation()) {
+                    double dx = builder.getX() - (step.pos().getX() + 0.5);
+                    double dz = builder.getZ() - (step.pos().getZ() + 0.5);
+                    double h = Math.sqrt(dx * dx + dz * dz);
+                    double dy = step.pos().getY() + 0.5 - builder.getY();
+                    placed[0]++;
+                    if (h <= 5.0 && dy <= 5.5 && dy >= -4.0) {
+                        near[0]++;
+                    }
+                    double far = Math.max(h, Math.abs(dy));
+                    if (far > worst[0]) {
+                        worst[0] = far;
+                        worstAt[0] = step.state().getBlock() + " bei " + helper.relativePos(step.pos()) + ", Baumeister bei "
+                                + helper.relativePos(builder.blockPosition());
+                    }
+                }
+            }
+            last[0] = open.progress;
+            if (!scaffold[0] && builder != null && level.getBlockState(builder.blockPosition().below()).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                scaffold[0] = true;
+            }
+        });
+        helper.succeedWhen(() -> {
+            if (!town.projects().isEmpty()) {
+                Town.Project open = town.projects().getFirst();
+                CitizenEntity builder = TownManager.citizen(level, town.residents().getFirst().entity());
+                String detail = open.progress < steps.size() ? " – Schritt " + steps.get(open.progress).state() + " bei "
+                        + helper.relativePos(steps.get(open.progress).pos()) : " – Gerüste abbauen";
+                detail += builder == null ? " – kein Baumeister" : " – Baumeister bei " + helper.relativePos(builder.blockPosition());
+                helper.assertTrue(false, "Bürgerhaus noch offen: " + open.progress + " von " + steps.size() + detail);
+            }
+            helper.assertValueEqual(town.count(BuildingType.TOWNHOUSE), 1, "Fertige Bürgerhäuser");
+            helper.assertTrue(BuildingType.TOWNHOUSE.blueprint().complete(level, origin, Rotation.NONE), "Bürgerhaus unvollständig gebaut");
+            assertConnected(helper, BuildingType.TOWNHOUSE.blueprint(), origin, Rotation.NONE, "Bürgerhaus vom Baumeister");
+            var box = project.bounds().inflatedBy(6, 0, 6);
+            for (BlockPos p : BlockPos.betweenClosed(box.minX(), box.minY() - 1, box.minZ(), box.maxX(), box.maxY() + 4, box.maxZ())) {
+                helper.assertTrue(!level.getBlockState(p).is(ModBlocks.BUILDER_SCAFFOLD.get()), "Gerüst stehen geblieben bei " + helper.relativePos(p));
+            }
+            helper.assertTrue(scaffold[0], "Baumeister stand nie auf einem Gerüst");
+            helper.assertTrue(placed[0] > 100 && near[0] >= placed[0] * 0.95, "Baumeister zu weit weg: nur " + near[0] + " von "
+                    + placed[0] + " Blöcken aus der Nähe gesetzt (am weitesten " + String.format("%.1f", worst[0]) + ": " + worstAt[0] + ")");
+            KingdomsAtWar.LOGGER.info("[Test] Bürgerhaus nach {} Ticks fertig ({} Bauschritte, {} von {} Blöcken aus der Nähe, am weitesten {}: {})",
+                    helper.getTick(), steps.size(), near[0], placed[0], String.format("%.1f", worst[0]), worstAt[0]);
             clearTowns(server);
             leave(helper, owner);
         });

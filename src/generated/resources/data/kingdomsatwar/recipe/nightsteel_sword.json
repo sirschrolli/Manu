@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "M": "kingdomsatwar:nightsteel_ingot",
-    "S": "minecraft:stick"
+    "H": "kingdomsatwar:reinforced_handle",
+    "M": "kingdomsatwar:nightsteel_ingot"
   },
   "pattern": [
     "M",
     "M",
-    "S"
+    "H"
   ],
   "result": {
     "id": "kingdomsatwar:nightsteel_sword"

@@ -34,21 +34,18 @@ public class ModChestLootProvider implements LootTableSubProvider {
     }
 
     /**
-     * Münzen in einer Truhe: Bronze und Silber (je ein eigener Pool), mit etwas Glück eine Goldmünze. Je nach Truhe
-     * klein (Hütten), mittel (Ruinen, Tempel) oder groß (Gruft, Zitadelle, Grotte).
+     * Münzen in einer Truhe: nur Bronze – Silber und Gold gibt es allein durch Zusammenlegen (9 Bronze = 1 Silber, 9 Silber
+     * = 1 Gold) und im Handel. Die alten Mengen bleiben als Maß für die Truhe: wo früher Silber lag, liegt etwas mehr
+     * Bronze, insgesamt aber weit weniger Wert als zuvor.
      */
     private static LootTable.Builder coins(LootTable.Builder table, int bronzeMin, int bronzeMax, int silverMin, int silverMax,
             float goldChance) {
-        table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
-                .add(item(ModItems.BRONZE_COIN.get(), 1, bronzeMin, bronzeMax)));
-        if (silverMax > 0) {
+        // nur Bronze, und karg: die alten Silber- und Goldmünzen zählen nur noch als ein paar Bronzestücke mehr
+        int min = Math.max(0, bronzeMin);
+        int max = bronzeMax + silverMax + (goldChance >= 0.1f ? 1 : 0);
+        if (max > 0) {
             table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
-                    .add(item(ModItems.SILVER_COIN.get(), 1, silverMin, silverMax)));
-        }
-        if (goldChance > 0.0f) {
-            table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
-                    .add(LootItem.lootTableItem(ModItems.GOLD_COIN.get()))
-                    .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(goldChance)));
+                    .add(item(ModItems.BRONZE_COIN.get(), 1, Math.min(min, max), max)));
         }
         return table;
     }
@@ -57,10 +54,14 @@ public class ModChestLootProvider implements LootTableSubProvider {
         return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
 
-    /** Ein Pool mit {@code min}–{@code max} Ziehungen aus den Einträgen. */
+    /**
+     * Ein Pool mit {@code min}–{@code max} Ziehungen aus den Einträgen – karger als angegeben: eine Ziehung weniger und
+     * höchstens zwei unter dem alten Höchstwert (die Truhen sollen sich verdient anfühlen).
+     */
     @SafeVarargs
     private static LootPool.Builder pool(int min, int max, UniformContainerBase.Builder<?>... entries) {
-        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.between(min, max));
+        int lean = Math.max(1, min - 1);
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.between(lean, Math.max(lean, max - 2)));
         for (UniformContainerBase.Builder<?> entry : entries) {
             pool.add(entry);
         }

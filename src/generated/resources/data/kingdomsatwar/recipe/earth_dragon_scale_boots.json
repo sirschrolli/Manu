@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "M": "kingdomsatwar:earth_dragon_scale"
+    "A": "kingdomsatwar:steel_boots",
+    "S": "kingdomsatwar:earth_dragon_scale"
   },
   "pattern": [
-    "M M",
-    "M M"
+    "SAS",
+    "S S"
   ],
   "result": {
     "id": "kingdomsatwar:earth_dragon_scale_boots"

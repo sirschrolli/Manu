@@ -3,12 +3,13 @@
   "category": "equipment",
   "key": {
     "B": "minecraft:blaze_rod",
-    "D": "kingdomsatwar:draconium"
+    "D": "kingdomsatwar:draconium",
+    "S": "kingdomsatwar:steel_ingot"
   },
   "pattern": [
-    "D",
-    "D",
-    "B"
+    " D ",
+    " D ",
+    "SBS"
   ],
   "result": {
     "id": "kingdomsatwar:draconium_sword"

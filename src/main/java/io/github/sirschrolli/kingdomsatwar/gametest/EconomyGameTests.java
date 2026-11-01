@@ -54,23 +54,23 @@ final class EconomyGameTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 1));
         player.getInventory().add(new ItemStack(ModItems.BRONZE_COIN.get(), 3));
-        helper.assertValueEqual(Coins.total(player), 103, "Geld zu Beginn");
+        helper.assertValueEqual(Coins.total(player), 84, "Geld zu Beginn (1 Gold = 81 Bronze)");
         helper.assertTrue(Coins.pay(player, 15), "15 Bronze lassen sich nicht bezahlen");
-        helper.assertValueEqual(Coins.total(player), 88, "Geld nach dem Bezahlen");
+        helper.assertValueEqual(Coins.total(player), 69, "Geld nach dem Bezahlen");
         helper.assertValueEqual(player.getInventory().countItem(ModItems.GOLD_COIN.get()), 0, "Goldmünze nicht gewechselt");
-        helper.assertValueEqual(player.getInventory().countItem(ModItems.SILVER_COIN.get()), 8, "Wechselgeld in Silber");
-        helper.assertValueEqual(player.getInventory().countItem(ModItems.BRONZE_COIN.get()), 8, "Wechselgeld in Bronze");
-        helper.assertTrue(!Coins.pay(player, 89), "Mehr bezahlen als man hat darf nicht gehen");
-        helper.assertValueEqual(Coins.total(player), 88, "Fehlgeschlagene Zahlung hat Geld gekostet");
-        helper.assertTrue(Coins.pay(player, 88), "Alles bezahlen geht nicht");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.SILVER_COIN.get()), 7, "Wechselgeld in Silber");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.BRONZE_COIN.get()), 6, "Wechselgeld in Bronze");
+        helper.assertTrue(!Coins.pay(player, 70), "Mehr bezahlen als man hat darf nicht gehen");
+        helper.assertValueEqual(Coins.total(player), 69, "Fehlgeschlagene Zahlung hat Geld gekostet");
+        helper.assertTrue(Coins.pay(player, 69), "Alles bezahlen geht nicht");
         helper.assertValueEqual(Coins.total(player), 0, "Nach dem Bezahlen von allem bleibt Geld übrig");
         // Beträge als Münzen: größte zuerst, mehr als 64 einer Art in mehreren Stapeln
         List<ItemStack> stacks = Coins.stacks(7_345);
         helper.assertValueEqual(stacks.size(), 4, "Stapel für 7345 Bronze");
         helper.assertTrue(stacks.get(0).is(ModItems.GOLD_COIN.get()) && stacks.get(0).getCount() == 64, "Erster Stapel: 64 Gold");
-        helper.assertTrue(stacks.get(1).is(ModItems.GOLD_COIN.get()) && stacks.get(1).getCount() == 9, "Zweiter Stapel: 9 Gold");
-        helper.assertTrue(stacks.get(2).is(ModItems.SILVER_COIN.get()) && stacks.get(2).getCount() == 4, "4 Silber");
-        helper.assertTrue(stacks.get(3).is(ModItems.BRONZE_COIN.get()) && stacks.get(3).getCount() == 5, "5 Bronze");
+        helper.assertTrue(stacks.get(1).is(ModItems.GOLD_COIN.get()) && stacks.get(1).getCount() == 26, "Zweiter Stapel: 26 Gold");
+        helper.assertTrue(stacks.get(2).is(ModItems.SILVER_COIN.get()) && stacks.get(2).getCount() == 6, "6 Silber");
+        helper.assertTrue(stacks.get(3).is(ModItems.BRONZE_COIN.get()) && stacks.get(3).getCount() == 1, "1 Bronze");
         Coins.give(player, 7_345);
         helper.assertValueEqual(Coins.total(player), 7_345, "Geschenktes Geld");
         helper.succeed();
@@ -111,24 +111,24 @@ final class EconomyGameTests {
         });
     }
 
-    /** Umtauschen: zehn Münzen per Rechtsklick in eine größere, mit Schleichen eine in zehn kleinere. */
+    /** Umtauschen: neun Münzen per Rechtsklick in eine größere, mit Schleichen eine in neun kleinere. */
     private static void coinsExchange(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.BRONZE_COIN.get(), 12));
         player.getMainHandItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
-        helper.assertValueEqual(player.getInventory().countItem(ModItems.BRONZE_COIN.get()), 2, "Bronze nach dem Wechseln");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.BRONZE_COIN.get()), 3, "Bronze nach dem Wechseln");
         helper.assertValueEqual(player.getInventory().countItem(ModItems.SILVER_COIN.get()), 1, "Silber nach dem Wechseln");
-        // mit nur zwei Münzen geht es nicht
+        // mit nur drei Münzen geht es nicht
         player.getMainHandItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
-        helper.assertValueEqual(Coins.total(player), 12, "Wechseln von zwei Münzen hat etwas verändert");
-        // eine Goldmünze in zehn Silbermünzen
+        helper.assertValueEqual(Coins.total(player), 12, "Wechseln von drei Münzen hat etwas verändert");
+        // eine Goldmünze in neun Silbermünzen
         player.getInventory().clearContent();
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.GOLD_COIN.get(), 1));
         player.setShiftKeyDown(true);
         player.getMainHandItem().use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
         player.setShiftKeyDown(false);
         helper.assertValueEqual(player.getInventory().countItem(ModItems.GOLD_COIN.get()), 0, "Gold nach dem Wechseln");
-        helper.assertValueEqual(player.getInventory().countItem(ModItems.SILVER_COIN.get()), 10, "Silber aus Gold");
+        helper.assertValueEqual(player.getInventory().countItem(ModItems.SILVER_COIN.get()), 9, "Silber aus Gold");
         helper.succeed();
     }
 }

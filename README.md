@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.14.0 – Die Wassertiere.**
+> **Testversion 0.15.0 – Baumeister mit Gerüst, härtere Wirtschaft.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -43,16 +43,26 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > mit Astgeweih und glühenden Augen und der **Tiefenhüter** mit leuchtendem Herzen im Rippenkäfig. Überfälle mit
 > Hauptmann und Reitern, Patrouillen, Räuberlager, Raubritterburg, Korallenpalast, Knarzherzen und Kreischer bringen die
 > eigenen Wesen; Totem, unheilvolle Flasche, Schwämme, Windruten und alle Beute bleiben.
-> Neu in 0.14: **eigene Wassertiere statt der Vanilla-Wassertiere** – 13 Arten in 23 Gestalten mit eigenen Modellen:
+> In 0.14 kamen **eigene Wassertiere statt der Vanilla-Wassertiere** – 13 Arten in 23 Gestalten mit eigenen Modellen:
 > Dorsch und Seelachs mit Bartel, Lachs und Rotlachs mit Hakenkiefer in drei Größen, der Kugelfisch, der sich zur
 > Stachelkugel aufbläht, Rifffische mit zwölf eigenen Mustern in allen Farben, Tintenfisch und leuchtende Tiefseekrake,
 > Großer Tümmler und Schwertwal, Suppen- und Karettschildkröte, fünf Molche vom Grottenolm bis zum Blaumolch mit
 > leuchtenden Kiemen, Teichfrosch, Feuerkröte und Grasfrosch, die Kaulquappe, der Nautilus und der Geisternautilus.
 > Eimer, Spielarten, Zucht, Eiablage, Froschlichter, Delfingnade, Sattel und Nautilus-Rüstung und alle Beute bleiben.
 > Außerdem sitzen jetzt alle Texturen der eigenen Wesen exakt auf ihren Modellen (keine Ritzen mehr an krummen Maßen).
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (147 GameTests).
-> **Als Nächstes:** Überarbeitung von Siedlung und Dörfern (Bauarbeiter, Häuser, Lager, Söldner, Münzen), danach
-> Golems und die übrigen Dorfwesen, zuletzt Nether und End.
+> Neu in 0.15: Der **Baumeister** arbeitet jetzt aus der Nähe – höchstens vier Blöcke neben dem Block, auf dem Boden,
+> auf den schon gebauten Böden oder auf dem Dach – und baut auch hohe Häuser sicher fertig: an hohen Mauern stellt er
+> sich ein **Baugerüst** auf, stapelt es Lage für Lage unter sich hoch, klettert darin hinauf und hinunter und baut es
+> zum Schluss wieder ab. Er zieht die Mauern im Kreis hoch, statt hin und her zu laufen. Die **Fensterläden** sitzen
+> jetzt außen neben den Fenstern. **Uralt- und Kohlestämme** lassen sich zu Brettern verarbeiten (mit Treppen und
+> Platten). **Münzen:** 9 Bronze = 1 Silber, 9 Silber = 1 Gold – am Werktisch zusammenlegen und wechseln, gestapelt
+> sehen sie aus wie eine einzelne. Die **Beute ist härter**: in Truhen nur noch wenige Bronzemünzen, Banditen geben
+> weniger. **Schwerere Rezepte** für die eigene Ausrüstung: Stahlwerkzeug braucht den beschlagenen Griff, Rüstungen
+> ein Lederpolster, Schuppenrüstungen das passende Stück Stahlrüstung darunter, Stahl zwei Eisenbarren.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (149 GameTests).
+> **Als Nächstes:** Lager und Baukosten (Bewohner sammeln und bringen es abends ins Lager), Häuser in mehreren
+> Entwürfen, Söldner aus den Dörfern, verschiedene Dorfanlagen – danach Golems und die übrigen Dorfwesen, zuletzt
+> Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -109,7 +119,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.14.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.15.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -117,7 +127,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.14.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.15.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -453,9 +463,11 @@ Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder 
 
 ### Münzen, Siedlung und Krönung
 
-Bezahlt wird mit **Bronze-, Silber- und Goldmünzen** (je zehn sind eine der nächstgrößeren; Rechtsklick wechselt zehn
-in eine größere, Schleichen + Rechtsklick eine in zehn kleinere). Münzen lassen besiegte Monster und Banditen fallen,
-sie liegen in den Truhen der Bauwerke, die Drachen-Bosse hüten Gold – und deine Bürger kaufen dir Waren ab.
+Bezahlt wird mit **Bronze-, Silber- und Goldmünzen** (je **neun** sind eine der nächstgrößeren: 9 Bronze = 1 Silber,
+9 Silber = 1 Gold). Am Werktisch legst du neun Münzen zu einer größeren zusammen oder wechselst eine in neun kleinere;
+dasselbe geht mit Rechtsklick (Schleichen + Rechtsklick wechselt klein). Gestapelt sehen Münzen aus wie eine einzelne.
+In den Truhen der Bauwerke liegen nur **Bronzemünzen** (und nicht viele), Monster und Banditen lassen ab und zu ein paar
+fallen, die Drachen-Bosse hüten Gold – und deine Bürger kaufen dir Waren ab.
 
 **Das Stadtbanner** (Banner, Goldbarren, Stock, 3 Steinziegel) gründet deine **Siedlung** – jeder Spieler hat eine,
 mit einem Namen, den du ändern kannst. Rechtsklick auf das Banner öffnet das **Stadtfenster**: Übersicht (Stufe,
@@ -479,7 +491,9 @@ haben es auf sie abgesehen.
 
 **Bauen:** Im Stadtfenster nimmst du einen **Bauplan**; mit ihm in der Hand zeigen Lichtpunkte den Umriss, Rechtsklick
 auf den Boden richtet die Baustelle ein (Schleichen + Rechtsklick dreht den Plan). Der **Baumeister** räumt den Platz,
-legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Staub.
+legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Staub. Er arbeitet immer aus der Nähe (nie
+dort, wo später noch etwas hinkommt, damit er sich nicht einmauert) und stellt sich an hohen Mauern ein **Baugerüst** auf,
+das er nach dem Bau wieder abbaut.
 
 | Stufe (ab Bewohnern) | Gebäude |
 |---|---|
@@ -803,7 +817,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.14.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.15.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -846,7 +860,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.14.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.15.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 

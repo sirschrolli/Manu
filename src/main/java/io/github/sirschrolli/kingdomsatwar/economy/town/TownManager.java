@@ -371,6 +371,7 @@ public final class TownManager {
             return;
         }
         town.removeProject(project);
+        clearScaffolds(level, project.bounds());
         town.addBuilding(new Town.Building(project.type, project.origin, project.rotation));
         assignHomes(level, town);
         Towns.of(level.getServer()).save(level.getServer());
@@ -381,6 +382,30 @@ public final class TownManager {
             owner.sendSystemMessage(Component.translatable("message.kingdomsatwar.town.project_done",
                     Component.translatable(project.type.translationKey()), Component.literal(town.name())).withStyle(ChatFormatting.GREEN));
             Reputation.add(owner, Reputation.BUILDING);
+        }
+    }
+
+    /** Richtet eine Baustelle ohne Preis und ohne Prüfung der Stufe ein (Befehle, Tests). */
+    public static Town.Project startProject(ServerLevel level, Town town, BuildingType type, BlockPos origin, Rotation rotation) {
+        Town.Project project = new Town.Project(type, origin, rotation, 0);
+        town.addProject(project);
+        Towns.of(level.getServer()).save(level.getServer());
+        return project;
+    }
+
+    /** Räumt die Baugerüste rund um eine Baustelle weg (fertig gebaut oder abgebrochen). */
+    public static void clearScaffolds(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox bounds) {
+        var box = bounds.inflatedBy(5, 0, 5);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int y = box.maxY() + 4; y >= box.minY() - 2; y--) {
+            for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                for (int x = box.minX(); x <= box.maxX(); x++) {
+                    pos.set(x, y, z);
+                    if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.BUILDER_SCAFFOLD.get())) {
+                        level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+                    }
+                }
+            }
         }
     }
 
@@ -398,6 +423,7 @@ public final class TownManager {
         }
         Town.Project project = town.projects().get(index);
         town.removeProject(project);
+        clearScaffolds(player.level(), project.bounds());
         // halbe Rückzahlung, wenn noch nichts gebaut ist sogar ganz (vom Preis, den der Spieler heute zahlen würde)
         int price = buildPrice(town, project.type, player);
         int refund = project.progress == 0 ? price : price / 2;

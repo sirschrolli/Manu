@@ -17,14 +17,14 @@ import org.jspecify.annotations.Nullable;
  * @param variants Anzahl der Gesichter
  */
 public enum Profession implements StringRepresentable {
-    BUILDER(40, false, 3),
-    FARMER(30, false, 3),
-    LUMBERJACK(30, false, 3),
-    MINER(50, false, 3),
-    SMITH(80, true, 3),
-    MERCHANT(80, true, 3),
-    INNKEEPER(60, true, 3),
-    CARTOGRAPHER(100, true, 3);
+    BUILDER(36, false, 3),
+    FARMER(27, false, 3),
+    LUMBERJACK(27, false, 3),
+    MINER(45, false, 3),
+    SMITH(72, true, 3),
+    MERCHANT(72, true, 3),
+    INNKEEPER(54, true, 3),
+    CARTOGRAPHER(81, true, 3);
 
     public static final Codec<Profession> CODEC = StringRepresentable.fromEnum(Profession::values);
 

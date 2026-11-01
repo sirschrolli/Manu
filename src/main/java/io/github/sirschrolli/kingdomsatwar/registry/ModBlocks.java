@@ -348,6 +348,11 @@ public final class ModBlocks {
     public static final DeferredBlock<RotatedPillarBlock> CHARRED_LOG = blockWithItem("charred_log", RotatedPillarBlock::new,
             p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASS).strength(1.5f).sound(SoundType.WOOD),
             UnaryOperator.identity(), NATURE_TAB);
+    /** Verkohlte Bretter aus verkohlten Stämmen: fast schwarzes, rissiges Holz (auch als Treppe und Stufe). */
+    public static final BuildingSet CHARRED_PLANKS = roofSet("charred_planks", "charred_plank",
+            p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASS).strength(2.0f, 3.0f).sound(SoundType.WOOD)
+                    .ignitedByLava(),
+            BuildingSet.Tool.AXE);
     /** Glutspalte: Schlot mit Rauchsäule und spritzender Glut. */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.EmberVentBlock> EMBER_VENT = blockWithItem("ember_vent",
             io.github.sirschrolli.kingdomsatwar.block.EmberVentBlock::new,
@@ -573,6 +578,13 @@ public final class ModBlocks {
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ShadowThroneCoreBlock> SHADOW_THRONE_CORE = BLOCKS.registerBlock(
             "shadow_throne_core", io.github.sirschrolli.kingdomsatwar.block.ShadowThroneCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
+
+    /** Baugerüst, das sich der Baumeister an hohen Mauern aufstellt (ohne Gegenstand, lässt nichts fallen). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.BuilderScaffoldBlock> BUILDER_SCAFFOLD = BLOCKS.registerBlock(
+            "builder_scaffold", io.github.sirschrolli.kingdomsatwar.block.BuilderScaffoldBlock::new,
+            p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(0.4f).sound(SoundType.SCAFFOLDING)
+                    .noOcclusion().noLootTable().ignitedByLava().pushReaction(PushReaction.POPPED)
+                    .isSuffocating((state, level, pos) -> false));
 
     public static final DeferredBlock<RecruitmentTableBlock> RECRUITMENT_TABLE = blockWithItem("recruitment_table",
             RecruitmentTableBlock::new,

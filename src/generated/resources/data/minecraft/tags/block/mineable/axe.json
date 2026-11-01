@@ -3,6 +3,9 @@
     "kingdomsatwar:wooden_shingles",
     "kingdomsatwar:wooden_shingle_stairs",
     "kingdomsatwar:wooden_shingle_slab",
+    "kingdomsatwar:charred_planks",
+    "kingdomsatwar:charred_plank_stairs",
+    "kingdomsatwar:charred_plank_slab",
     "kingdomsatwar:ancient_planks",
     "kingdomsatwar:ancient_plank_stairs",
     "kingdomsatwar:ancient_plank_slab",
@@ -31,6 +34,7 @@
     "kingdomsatwar:oak_chair",
     "kingdomsatwar:oak_bench",
     "kingdomsatwar:oak_table",
-    "kingdomsatwar:throne"
+    "kingdomsatwar:throne",
+    "kingdomsatwar:builder_scaffold"
   ]
 }

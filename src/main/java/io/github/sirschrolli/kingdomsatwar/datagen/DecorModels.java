@@ -221,6 +221,79 @@ final class DecorModels {
                 .build();
     }
 
+    // ------------------------------------------------------------------ Baugerüst
+
+    /** Rundholz der Gerüststangen (senkrechte Maserung, Seilbünde). */
+    static final TextureSlot POLE = TextureSlot.create("pole");
+    /** Bohlenbelag obenauf. */
+    static final TextureSlot DECK = TextureSlot.create("deck");
+    /** Riegel und Streben (Bretter mit waagerechter Maserung, eins je zwei Texturzeilen). */
+    static final TextureSlot SLAT = TextureSlot.create("slat");
+
+    /**
+     * Baugerüst: vier Stangen an den Ecken, oben ringsum Riegel unter einem Bohlenbelag, auf jeder Seite eine Schrägstrebe
+     * (abwechselnd steigend und fallend, damit sich die Streben benachbarter Lagen zu einem Zickzack fügen).
+     */
+    static ModelTemplate scaffold() {
+        ExtendedModelTemplateBuilder b = builder(POLE, DECK, SLAT);
+        b.element(e -> box(e, 0, 14, 0, 16, 16, 16, DECK));
+        float[][] poles = {{0.5f, 0.5f}, {13.5f, 0.5f}, {0.5f, 13.5f}, {13.5f, 13.5f}};
+        for (int i = 0; i < poles.length; i++) {
+            float x = poles[i][0], z = poles[i][1], u = i * 4;
+            b.element(e -> e.from(x, 0, z).to(x + 2, 14, z + 2).allFaces((d, f) -> {
+                if (d.getAxis() == Direction.Axis.Y) {
+                    f.uvs(u, 0, u + 2, 2);
+                } else {
+                    f.uvs(u + (d == Direction.NORTH || d == Direction.EAST ? 2 : 0), 2,
+                            u + (d == Direction.NORTH || d == Direction.EAST ? 4 : 2), 16);
+                }
+                f.texture(POLE);
+                if (d == Direction.DOWN) {
+                    f.cullface(Direction.DOWN);
+                }
+            }));
+        }
+        // Riegel unter dem Belag
+        b.element(e -> slat(e, 2.5f, 12.5f, 1, 13.5f, 14, 2, Direction.Axis.X, 0));
+        b.element(e -> slat(e, 2.5f, 12.5f, 14, 13.5f, 14, 15, Direction.Axis.X, 2));
+        b.element(e -> slat(e, 1, 12.5f, 2.5f, 2, 14, 13.5f, Direction.Axis.Z, 4));
+        b.element(e -> slat(e, 14, 12.5f, 2.5f, 15, 14, 13.5f, Direction.Axis.Z, 6));
+        // Schrägstreben über die ganze Seite, durch die Mitte der Stangen
+        b.element(e -> slat(e, -1.5f, 7.25f, 1, 17.5f, 8.75f, 2, Direction.Axis.X, 8)
+                .rotation(r -> r.origin(8, 8, 1.5f).singleAxis(Direction.Axis.Z, 45)));
+        b.element(e -> slat(e, -1.5f, 7.25f, 14, 17.5f, 8.75f, 15, Direction.Axis.X, 10)
+                .rotation(r -> r.origin(8, 8, 14.5f).singleAxis(Direction.Axis.Z, -45)));
+        b.element(e -> slat(e, 1, 7.25f, -1.5f, 2, 8.75f, 17.5f, Direction.Axis.Z, 12)
+                .rotation(r -> r.origin(1.5f, 8, 8).singleAxis(Direction.Axis.X, -45)));
+        b.element(e -> slat(e, 14, 7.25f, -1.5f, 15, 8.75f, 17.5f, Direction.Axis.Z, 14)
+                .rotation(r -> r.origin(14.5f, 8, 8).singleAxis(Direction.Axis.X, 45)));
+        return b.build();
+    }
+
+    /**
+     * Brett entlang {@code axis}: die Längsseiten zeigen Zeile {@code row} der Brett-Textur (so lang wie das Brett, höchstens
+     * 16), die Stirnseiten ein Stück davon.
+     */
+    private static ElementBuilder slat(ElementBuilder e, float x1, float y1, float z1, float x2, float y2, float z2,
+            Direction.Axis axis, float row) {
+        float length = axis == Direction.Axis.X ? x2 - x1 : z2 - z1;
+        float u2 = Math.min(16, length);
+        return e.from(x1, y1, z1).to(x2, y2, z2).allFaces((d, f) -> {
+            boolean along = d.getAxis() != axis;
+            if (d.getAxis() == Direction.Axis.Y) {
+                f.uvs(0, row, u2, row + 1);
+                if (axis == Direction.Axis.Z) {
+                    f.rotation(com.mojang.math.Quadrant.R90);
+                }
+            } else if (along) {
+                f.uvs(0, row, u2, row + (y2 - y1));
+            } else {
+                f.uvs(0, row, 1, row + (y2 - y1));
+            }
+            f.texture(SLAT);
+        });
+    }
+
     // ------------------------------------------------------------------ Hilfen
 
     /**

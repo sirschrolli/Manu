@@ -2,11 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "L": "minecraft:leather",
     "M": "kingdomsatwar:nightsteel_ingot"
   },
   "pattern": [
     "MMM",
-    "M M",
+    "MLM",
     "M M"
   ],
   "result": {

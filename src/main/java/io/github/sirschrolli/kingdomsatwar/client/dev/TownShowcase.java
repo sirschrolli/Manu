@@ -92,6 +92,109 @@ final class TownShowcase {
     }
 
     /**
+     * Der Baumeister baut ein Bürgerhaus (im Zeitraffer): Aufnahmen vom Bauplatz bei 15, 35, 55, 75 und 95 % und am Ende,
+     * dazu jeweils eine Nahaufnahme vom Baumeister (auf dem Gerüst, im Haus, auf dem Dach).
+     */
+    static void builder(Deque<Step> steps, BuildingType type) {
+        int ox = 400;
+        int oz = -300;
+        int[] g = {Integer.MIN_VALUE};
+        Town[] town = {null};
+        int[] builder = {-1};
+        steps.add(Step.hud(false));
+        steps.add(Step.command("time set 1500"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.command("gamerule doDaylightCycle false"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        steps.add(Step.command("tp @s " + ox + " 140 " + (oz - 20) + " 0 30"));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.server(level -> {
+            for (int cx = (ox - 40) >> 4; cx <= (ox + 40) >> 4; cx++) {
+                for (int cz = (oz - 40) >> 4; cz <= (oz + 40) >> 4; cz++) {
+                    level.getChunk(cx, cz);
+                }
+            }
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ox, oz);
+            BlockState grass = Blocks.GRASS_BLOCK.defaultBlockState();
+            BlockState dirt = Blocks.DIRT.defaultBlockState();
+            BlockState air = Blocks.AIR.defaultBlockState();
+            for (int x = ox - 30; x <= ox + 30; x++) {
+                for (int z = oz - 30; z <= oz + 30; z++) {
+                    for (int dy = -4; dy <= 30; dy++) {
+                        level.setBlock(new BlockPos(x, y + dy, z), dy < -1 ? dirt : dy == -1 ? grass : air, Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            BlockPos banner = new BlockPos(ox - 12, y, oz - 14);
+            BlockState lower = ModBlocks.TOWN_BANNER.get().defaultBlockState().setValue(TownBannerBlock.FACING, Direction.SOUTH);
+            level.setBlock(banner, lower, Block.UPDATE_ALL);
+            level.setBlock(banner.above(), lower.setValue(TownBannerBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+            TownManager.placeBanner(player, level, banner);
+            Town t = Towns.of(level.getServer()).byOwner(player.getUUID());
+            CitizenEntity c = TownManager.spawnCitizen(level, t, Profession.BUILDER);
+            builder[0] = c == null ? -1 : c.getId();
+            TownManager.startProject(level, t, type, new BlockPos(ox, y, oz), Rotation.NONE);
+            town[0] = t;
+            g[0] = y;
+        }));
+        steps.add(Step.until(() -> g[0] != Integer.MIN_VALUE, 600));
+        steps.add(Step.command("tick rate 80"));
+        BoundingBox b = type.blueprint().bounds();
+        double[] c = {ox + 0.5, oz + 0.5, 0, 0};
+        double cx = (b.minX() + b.maxX()) / 2.0;
+        double cz = (b.minZ() + b.maxZ()) / 2.0;
+        double h = b.maxY();
+        double d = Math.max(Math.max(b.getXSpan(), b.getZSpan()), h) * 0.75 + 5;
+        double[] front = {cx - d * 0.55, h * 0.45 + d * 0.2, b.minZ() - d * 0.75, cx, h * 0.35, cz};
+        int shot = 0;
+        for (double target : new double[] {0.15, 0.35, 0.55, 0.75, 0.95, 2.0}) {
+            steps.add(Step.until(() -> {
+                Town t = town[0];
+                if (t == null || g[0] == Integer.MIN_VALUE) {
+                    return false;
+                }
+                c[2] = g[0];
+                if (t.projects().isEmpty()) {
+                    return true;
+                }
+                return target <= 1.0 && t.projects().getFirst().fraction() >= target;
+            }, 60000));
+            steps.add(Step.command("tick freeze"));
+            steps.add(at(c, front));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.waitForChunks(400));
+            steps.add(Step.screenshot("builder_" + type.id() + "_" + shot + "_site"));
+            // nah am Baumeister (schräg von außen und etwas über ihm)
+            steps.add(Step.server(level -> {
+                net.minecraft.world.entity.Entity e = level.getEntity(builder[0]);
+                ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+                if (e == null) {
+                    return;
+                }
+                double bx = e.getX() - (ox + cx + 0.5);
+                double bz = e.getZ() - (oz + cz + 0.5);
+                double len = Math.max(0.1, Math.sqrt(bx * bx + bz * bz));
+                double px = e.getX() + bx / len * 4.5 + 1.5;
+                double pz = e.getZ() + bz / len * 4.5 - 1.0;
+                double py = e.getY() + 2.6;
+                double lx = e.getX() - px;
+                double ly = e.getY() + 1.0 - (py + 1.62);
+                double lz = e.getZ() - pz;
+                float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                player.teleportTo(level, px, py, pz, java.util.Set.of(), yaw, pitch, false);
+            }));
+            steps.add(Step.waitTicks(25));
+            steps.add(Step.screenshot("builder_" + type.id() + "_" + shot + "_close"));
+            steps.add(Step.command("tick unfreeze"));
+            shot++;
+        }
+        steps.add(Step.command("tick rate 20"));
+    }
+
+    /**
      * Die Siedlung im Spiel: Stadtbanner, Gebäude, Bürger aller Berufe (vorn und hinten, bei der Arbeit), dazu das
      * Stadtfenster mit allen Reitern und das Handelsfenster des Händlers.
      */

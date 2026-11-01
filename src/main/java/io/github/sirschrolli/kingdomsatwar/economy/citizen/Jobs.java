@@ -5,12 +5,15 @@ import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownManager;
+import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -256,14 +259,65 @@ final class Jobs {
     /**
      * Der Baumeister arbeitet die Baustellen der Siedlung ab: erst räumt er den Platz, dann legt er das Fundament, dann
      * setzt er Block für Block den Bauplan – mit Hammerschlag, Geräusch und Staub.
+     *
+     * <p>Er arbeitet immer aus der Nähe: von einem Stehplatz höchstens {@link #REACH} Blöcke neben dem Block – auf dem
+     * Boden, auf schon gebauten Böden oder Dachstufen –, aber nie dort, wo der Plan später noch etwas hinsetzt (er mauert
+     * sich also nicht ein). Reicht kein Stehplatz bis an eine hohe Mauer heran, stellt er sich ein Baugerüst auf: er stapelt
+     * es unter sich hoch, steigt darin hinauf und hinunter und stockt es Lage für Lage mit der Mauer auf. Die Gerüste
+     * bleiben stehen, bis der Bau fertig ist; dann baut er sie von oben nach unten ab.
      */
     static final class BuilderJob extends Job {
+        /** So weit reicht der Baumeister waagrecht von der Mitte seines Stehplatzes bis zur Mitte des Blocks. */
+        static final double REACH = 4.0;
+        /** So hoch über seinen Füßen bzw. so tief darunter setzt er Blöcke. */
+        static final int UP = 4;
+        static final int DOWN = 3;
+        /** Höchstens so viele Lagen hat ein Gerüst. */
+        static final int MAX_SCAFFOLD = 28;
+        /** Findet er so lange (Ticks) keinen Platz für einen Block, setzt er ihn von dort, wo er steht. */
+        static final int STALL = 400;
+        /** Steiggeschwindigkeit im Gerüst (Blöcke je Tick). */
+        private static final double CLIMB_SPEED = 0.3;
+
         private int cooldown;
-        private int index;
-        /** Wie lange der Baumeister schon auf der Baustelle steht, statt davor. */
-        private int onSiteTicks;
-        /** So weit reicht der Baumeister von seinem Platz neben der Baustelle (Blöcke). */
-        private static final double REACH = 16.0;
+        private int stalled;
+        private int lastProgress = -1;
+        /** Wohin er gerade geht: zu einem Stehplatz, zum Einstieg eines Gerüsts oder an den Fuß eines neuen Gerüsts. */
+        private @Nullable Place place;
+        private @Nullable BlockPos goingTo;
+        private int travel;
+        private int travelLimit;
+        /** Klettern im Gerüst: von wo nach wo (y), in welcher Säule, und wo er unten aussteigt. */
+        private boolean climbing;
+        private double climbY;
+        private double climbTo;
+        private BlockPos climbColumn = BlockPos.ZERO;
+        private @Nullable BlockPos climbExit;
+        /** Gerüste, die nach dem Bau abgebaut werden (von oben nach unten). */
+        private @Nullable ArrayDeque<BlockPos> dismantle;
+        /** Zähler für die Fehlersuche (nur mit -Dkingdomsatwar.debugBuilder=true ausgegeben). */
+        private int statTeleports;
+        private int statClimbs;
+        private int statRaises;
+        private int statForced;
+        private static final boolean DEBUG = Boolean.getBoolean("kingdomsatwar.debugBuilder");
+        /** Für welche Baustelle die Karten gelten. */
+        private Town.@Nullable Project mapped;
+        /** Letzter Bauschritt, der an einer Stelle einen Block setzt bzw. dort etwas wegräumt. */
+        private final Map<BlockPos, Integer> lastSolid = new HashMap<>();
+        private final Map<BlockPos, Integer> lastClear = new HashMap<>();
+
+        /** Ein Ziel: Stehplatz (Füße), dazu ggf. die Gerüstsäule, auf der er steht bzw. die er aufstellt. */
+        private record Place(BlockPos feet, Kind kind, @Nullable BlockPos column) {}
+
+        private enum Kind {
+            /** Hingehen und dort stehen. */
+            GROUND,
+            /** Auf ein schon stehendes Gerüst steigen ({@code column} = unterste Lage). */
+            SCAFFOLD,
+            /** An den Fuß eines neuen Gerüsts gehen und es unter sich hochstapeln. */
+            NEW_SCAFFOLD
+        }
 
         BuilderJob(CitizenEntity citizen) {
             super(citizen);
@@ -287,7 +341,6 @@ final class Jobs {
                     me = i;
                 }
             }
-            this.index = me;
             return town.projects().get(me % town.projects().size());
         }
 
@@ -301,6 +354,8 @@ final class Jobs {
             return this.project() != null;
         }
 
+        // ------------------------------------------------------------------ Ablauf
+
         @Override
         void tick() {
             Town town = this.town();
@@ -308,51 +363,128 @@ final class Jobs {
             if (town == null || project == null) {
                 return;
             }
+            if (this.climbing) {
+                this.climb();
+                return;
+            }
+            this.map(project);
             List<Blueprint.Step> steps = project.steps();
             int skipped = 0;
-            while (project.progress < steps.size() && skipped < 48 && !Blueprint.needsWork(this.level(), steps.get(project.progress))) {
+            while (project.progress < steps.size() && skipped < 64 && !this.needsWork(steps.get(project.progress))) {
                 project.progress++;
                 skipped++;
             }
             if (project.progress >= steps.size()) {
-                TownManager.completeProject(this.level(), town, project);
-                this.citizen.setWorking(false);
+                this.finish(town, project);
                 return;
+            }
+            if (project.progress != this.lastProgress) {
+                this.lastProgress = project.progress;
+                this.stalled = 0;
             }
             Blueprint.Step step = steps.get(project.progress);
             BlockPos at = step.pos();
-            // nah genug heran (der Baumeister reicht weit) – gebaut wird aber nur von außerhalb der Baustelle,
-            // sonst mauerte er sich selbst ein
-            var box = project.bounds();
-            BlockPos feet = this.citizen.blockPosition();
-            boolean onSite = feet.getX() >= box.minX() - 1 && feet.getX() <= box.maxX() + 1
-                    && feet.getZ() >= box.minZ() - 1 && feet.getZ() <= box.maxZ() + 1;
-            if (onSite) {
-                // von der Baustelle herunter (auf kürzestem Weg); findet er keinen Weg hinaus, tritt er hinaus
-                this.citizen.setWorking(false);
-                BlockPos exit = this.exit(box);
-                if (++this.onSiteTicks > 80) {
-                    this.citizen.teleportTo(exit.getX() + 0.5, exit.getY(), exit.getZ() + 0.5);
-                    this.onSiteTicks = 0;
+            if (this.cooldown > 0) {
+                this.cooldown--;
+                this.lookAt(at);
+                return;
+            }
+            if (++this.stalled > STALL) {
+                // nirgends ein Platz: dann eben von hier aus (der Bau bleibt nie stecken)
+                this.statForced++;
+                if (DEBUG) {
+                    io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Baumeister] kein Platz für {} bei {} (steht bei {})",
+                            step.state(), at, this.feet());
                 }
-                this.walkTo(exit, 1.0, 0.85);
+                this.build(project, step);
                 return;
             }
-            BlockPos approach = this.approach(project, at);
-            boolean arrived = this.citizen.position().distanceToSqr(Vec3.atBottomCenterOf(approach)) <= 2.5 * 2.5;
-            boolean near = this.citizen.position().distanceToSqr(Vec3.atCenterOf(at)) <= REACH * REACH;
-            if (!near && !arrived) {
-                this.citizen.setWorking(false);
-                this.walkTo(approach, 2.0, 0.85);
+            BlockPos feet = this.feet();
+            boolean onScaffold = this.onScaffold(feet);
+            // auf dem Gerüst neben dem Block: aufstocken, bis der Block etwa in Brusthöhe liegt
+            if (onScaffold && horizontal(feet, at) <= REACH && at.getY() - feet.getY() > 2 && this.canRaise(feet, project.progress)) {
+                this.raise(feet);
                 return;
             }
-            this.onSiteTicks = 0;
+            if (this.canWork(feet, at) && this.safe(feet, project.progress)) {
+                this.place = null;
+                this.goingTo = null;
+                this.build(project, step);
+                return;
+            }
+            this.citizen.setWorking(false);
+            if (this.place == null || !this.canWork(this.place.feet(), at) || !this.stillValid(this.place, project.progress)) {
+                this.place = this.choose(project, at, feet);
+                this.goingTo = null;
+            }
+            Place place = this.place;
+            if (place == null) {
+                return; // nichts gefunden: gleich noch einmal versuchen (und nach einer Weile von hier aus bauen)
+            }
+            // erst vom eigenen Gerüst herunter, wenn es woanders weitergeht
+            if (onScaffold && (place.kind() != Kind.SCAFFOLD || !sameColumn(place.feet(), feet))) {
+                this.startClimbDown(feet, project.progress);
+                return;
+            }
+            switch (place.kind()) {
+                case GROUND -> {
+                    if (!this.arrived(place.feet())) {
+                        this.go(place.feet());
+                    }
+                }
+                case SCAFFOLD -> {
+                    BlockPos column = place.column();
+                    BlockPos entry = column == null ? null : this.exitOf(column, project.progress);
+                    if (entry == null) {
+                        this.teleport(place.feet());
+                    } else if (!this.arrived(entry)) {
+                        this.go(entry);
+                    } else {
+                        this.startClimbUp(column, place.feet());
+                    }
+                }
+                case NEW_SCAFFOLD -> {
+                    if (!this.arrived(place.feet())) {
+                        this.go(place.feet());
+                    } else if (this.canRaise(place.feet(), project.progress)) {
+                        this.raise(place.feet());
+                        this.place = null;
+                    }
+                }
+            }
+        }
+
+        @Override
+        void stop() {
+            super.stop();
+            this.citizen.setWorking(false);
+            Town.Project project = this.project();
+            int progress = project == null ? Integer.MAX_VALUE : project.progress;
+            if (this.climbing) {
+                this.endClimb();
+            }
+            BlockPos feet = this.feet();
+            if (this.onScaffold(feet)) {
+                // Feierabend: aus dem Gerüst herunter
+                BlockPos exit = this.exitOf(this.columnBase(feet), progress);
+                if (exit != null) {
+                    this.teleport(exit);
+                }
+            } else if (project != null && project.bounds().isInside(feet) && feet.getY() > project.origin.getY() + 1) {
+                // oben im Rohbau (ohne Treppe): hinunter vor die Tür
+                this.teleport(this.entrance(project));
+            }
+            this.place = null;
+            this.goingTo = null;
+        }
+
+        // ------------------------------------------------------------------ Bauen
+
+        private void build(Town.Project project, Blueprint.Step step) {
+            BlockPos at = step.pos();
             this.citizen.getNavigation().stop();
             this.citizen.setWorking(true);
             this.lookAt(at);
-            if (--this.cooldown > 0) {
-                return;
-            }
             BlockState before = this.level().getBlockState(at);
             Blueprint.apply(this.level(), step);
             BlockState shown = step.state().isAir() ? before : step.state();
@@ -365,57 +497,488 @@ final class Jobs {
                         at.getZ() + 0.5, 5, 0.3, 0.3, 0.3, 0.05);
             }
             project.progress++;
+            this.stalled = 0;
             // Wegräumen geht schneller als Bauen
-            this.cooldown = step.state().isAir() ? 1 : 3;
+            this.cooldown = step.state().isAir() ? 0 : 2;
         }
 
-        /** Der nächste Platz neben der Baustelle (zwei Blöcke außerhalb ihres Umrisses), vom Baumeister aus. */
-        private BlockPos exit(net.minecraft.world.level.levelgen.structure.BoundingBox box) {
-            BlockPos feet = this.citizen.blockPosition();
-            int x = feet.getX();
-            int z = feet.getZ();
-            int toMinX = x - (box.minX() - 2);
-            int toMaxX = box.maxX() + 2 - x;
-            int toMinZ = z - (box.minZ() - 2);
-            int toMaxZ = box.maxZ() + 2 - z;
-            int m = Math.min(Math.min(toMinX, toMaxX), Math.min(toMinZ, toMaxZ));
-            if (m == toMinX) {
-                x = box.minX() - 2;
-            } else if (m == toMaxX) {
-                x = box.maxX() + 2;
-            } else if (m == toMinZ) {
-                z = box.minZ() - 2;
-            } else {
-                z = box.maxZ() + 2;
+        /** Alles gesetzt: erst vom Gerüst herunter, dann die Gerüste abbauen, dann ist das Gebäude fertig. */
+        private void finish(Town town, Town.Project project) {
+            BlockPos feet = this.feet();
+            if (this.onScaffold(feet)) {
+                this.startClimbDown(feet, Integer.MAX_VALUE);
+                return;
             }
-            int y = this.level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            return new BlockPos(x, y, z);
-        }
-
-        /** Wo der Baumeister steht: vor der Baustelle, auf der Seite des Bauschritts. */
-        private BlockPos approach(Town.Project project, BlockPos at) {
-            var box = project.bounds();
-            int x = Math.max(box.minX() - 2, Math.min(box.maxX() + 2, at.getX()));
-            int z = Math.max(box.minZ() - 2, Math.min(box.maxZ() + 2, at.getZ()));
-            // außerhalb der Grundfläche bleiben
-            if (x > box.minX() - 2 && x < box.maxX() + 2 && z > box.minZ() - 2 && z < box.maxZ() + 2) {
-                int toMinX = x - (box.minX() - 2);
-                int toMaxX = box.maxX() + 2 - x;
-                int toMinZ = z - (box.minZ() - 2);
-                int toMaxZ = box.maxZ() + 2 - z;
-                int m = Math.min(Math.min(toMinX, toMaxX), Math.min(toMinZ, toMaxZ));
-                if (m == toMinX) {
-                    x = box.minX() - 2;
-                } else if (m == toMaxX) {
-                    x = box.maxX() + 2;
-                } else if (m == toMinZ) {
-                    z = box.minZ() - 2;
+            if (this.dismantle == null) {
+                this.dismantle = scaffolds(this.level(), project.bounds());
+            }
+            if (!this.dismantle.isEmpty()) {
+                this.citizen.setWorking(true);
+                for (int i = 0; i < 2 && !this.dismantle.isEmpty(); i++) {
+                    BlockPos pos = this.dismantle.poll();
+                    if (this.level().getBlockState(pos).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                        this.lookAt(pos);
+                        this.level().destroyBlock(pos, false);
+                    }
+                }
+                this.citizen.swingArm();
+                return;
+            }
+            this.dismantle = null;
+            this.citizen.setWorking(false);
+            BlockPos door = this.entrance(project);
+            boolean inside = project.bounds().isInside(this.feet());
+            if (DEBUG) {
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info(
+                        "[Baumeister] {} fertig: {} Sprünge, {} Kletterpartien, {} Gerüstlagen, {} Blöcke ohne Platz",
+                        project.type.id(), this.statTeleports, this.statClimbs, this.statRaises, this.statForced);
+            }
+            this.statTeleports = this.statClimbs = this.statRaises = this.statForced = 0;
+            TownManager.completeProject(this.level(), town, project);
+            if (inside) {
+                // aus dem fertigen Haus hinaus (oder vom Dach herunter)
+                net.minecraft.world.level.pathfinder.Path path = this.citizen.getNavigation().createPath(door, 0);
+                if (path != null && path.canReach()) {
+                    this.citizen.getNavigation().moveTo(path, 0.8);
                 } else {
-                    z = box.maxZ() + 2;
+                    this.teleport(door);
                 }
             }
-            int y = this.level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            return new BlockPos(x, y, z);
+            this.mapped = null;
+            this.place = null;
+        }
+
+        private BlockPos entrance(Town.Project project) {
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.type.blueprint().entrance());
+            BlockPos spot = standingSpot(this.level(), door);
+            return spot != null ? spot : door;
+        }
+
+        // ------------------------------------------------------------------ Karten der Baustelle
+
+        /** Merkt sich, wo der Plan noch Blöcke setzt bzw. wegräumt; nach dem Laden wird der Fortschritt nachgeprüft. */
+        private void map(Town.Project project) {
+            if (this.mapped == project) {
+                return;
+            }
+            this.mapped = project;
+            this.lastSolid.clear();
+            this.lastClear.clear();
+            this.dismantle = null;
+            List<Blueprint.Step> steps = project.steps();
+            for (int i = 0; i < steps.size(); i++) {
+                Blueprint.Step s = steps.get(i);
+                if (s.foundation()) {
+                    for (int k = 0; k < 12; k++) {
+                        this.lastSolid.put(s.pos().below(k), i);
+                    }
+                } else if (s.state().isAir()) {
+                    this.lastClear.put(s.pos(), i);
+                } else if (traps(s.state())) {
+                    this.lastSolid.put(s.pos(), i);
+                }
+            }
+            // ab dem ersten Schritt, der noch Arbeit braucht (z. B. nach einem Neustart oder einem geänderten Ablauf)
+            int first = 0;
+            while (first < project.progress && !this.needsWork(steps.get(first))) {
+                first++;
+            }
+            project.progress = first;
+        }
+
+        /**
+         * Würde dieser Block ihn einschließen, wenn er ihn an seinen Füßen oder seinem Kopf setzt? Pflanzen, Teppiche,
+         * Fackeln, Wasser und Ähnliches nicht – dort darf er stehen, auch wenn der Plan da später noch etwas hinsetzt.
+         */
+        private static boolean traps(BlockState state) {
+            var shape = state.getCollisionShape(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+            return !shape.isEmpty() && shape.max(net.minecraft.core.Direction.Axis.Y) > 0.25;
+        }
+
+        /** Wie {@link Blueprint#needsWork}, nur gilt das eigene Gerüst nicht als „im Weg“. */
+        private boolean needsWork(Blueprint.Step step) {
+            if (!step.foundation() && step.state().isAir() && this.level().getBlockState(step.pos()).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                return false;
+            }
+            return Blueprint.needsWork(this.level(), step);
+        }
+
+        /** Setzt der Plan (ab Schritt {@code progress}) an dieser Stelle noch etwas hin? */
+        private boolean filledLater(BlockPos pos, int progress) {
+            return this.lastSolid.getOrDefault(pos, -1) >= progress;
+        }
+
+        /** Hier darf er stehen: Füße und Kopf bleiben frei, und der Boden unter ihm wird nicht mehr weggeräumt. */
+        private boolean safe(BlockPos feet, int progress) {
+            return !this.filledLater(feet, progress) && !this.filledLater(feet.above(), progress)
+                    && this.lastClear.getOrDefault(feet.below(), -1) < progress;
+        }
+
+        // ------------------------------------------------------------------ Stehplätze
+
+        private static double horizontal(BlockPos feet, BlockPos at) {
+            double dx = at.getX() - feet.getX();
+            double dz = at.getZ() - feet.getZ();
+            return Math.sqrt(dx * dx + dz * dz);
+        }
+
+        /** Von diesem Stehplatz (Füße) aus erreicht er den Block. */
+        private boolean canWork(BlockPos feet, BlockPos at) {
+            int dy = at.getY() - feet.getY();
+            return horizontal(feet, at) <= REACH && dy <= UP && dy >= -DOWN;
+        }
+
+        /** Füße des Baumeisters: am Ziel der Stehplatz selbst (er steht dort evtl. auf einer Stufe oder Platte). */
+        private BlockPos feet() {
+            Place place = this.place;
+            if (place != null && place.kind() == Kind.GROUND && this.arrived(place.feet())) {
+                return place.feet();
+            }
+            return BlockPos.containing(this.citizen.getX(), this.citizen.getY() + 0.2, this.citizen.getZ());
+        }
+
+        private boolean arrived(BlockPos feet) {
+            double dx = this.citizen.getX() - (feet.getX() + 0.5);
+            double dz = this.citizen.getZ() - (feet.getZ() + 0.5);
+            double dy = this.citizen.getY() - feet.getY();
+            return dx * dx + dz * dz <= 0.8 * 0.8 && dy > -1.0 && dy < 1.0;
+        }
+
+        /** Luft (oder Gras, Blumen …) ohne Flüssigkeit, durch die man hindurch kann. */
+        private boolean open(BlockPos pos) {
+            BlockState state = this.level().getBlockState(pos);
+            return state.getCollisionShape(this.level(), pos).isEmpty() && state.getFluidState().isEmpty()
+                    && !state.is(BlockTags.FIRE) && !state.is(Blocks.SWEET_BERRY_BUSH) && !state.is(Blocks.POWDER_SNOW);
+        }
+
+        /** Darauf kann er stehen: fester Untergrund (mindestens eine halbe Stufe hoch, kein Zaun), darüber zwei Blöcke frei. */
+        private boolean standable(BlockPos feet) {
+            BlockPos down = feet.below();
+            BlockState ground = this.level().getBlockState(down);
+            var shape = ground.getCollisionShape(this.level(), down);
+            if (shape.isEmpty() || shape.max(net.minecraft.core.Direction.Axis.Y) < 0.5 || shape.max(net.minecraft.core.Direction.Axis.Y) > 1.0
+                    || ground.is(Blocks.MAGMA_BLOCK) || ground.is(Blocks.CACTUS) || ground.getBlock() instanceof net.minecraft.world.level.block.CampfireBlock) {
+                return false;
+            }
+            return this.open(feet) && this.open(feet.above());
+        }
+
+        private boolean onScaffold(BlockPos feet) {
+            return this.level().getBlockState(feet.below()).is(ModBlocks.BUILDER_SCAFFOLD.get());
+        }
+
+        private static boolean sameColumn(BlockPos a, BlockPos b) {
+            return a.getX() == b.getX() && a.getZ() == b.getZ();
+        }
+
+        /** Unterste Lage des Gerüsts unter diesen Füßen. */
+        private BlockPos columnBase(BlockPos feet) {
+            BlockPos.MutableBlockPos pos = feet.below().mutable();
+            while (this.level().getBlockState(pos.below()).is(ModBlocks.BUILDER_SCAFFOLD.get()) && pos.getY() > this.level().getMinY()) {
+                pos.move(net.minecraft.core.Direction.DOWN);
+            }
+            return pos.immutable();
+        }
+
+        /** Ein freier Platz neben dem Fuß eines Gerüsts (zum Ein- und Aussteigen). */
+        private @Nullable BlockPos exitOf(BlockPos base, int progress) {
+            BlockPos best = null;
+            double bestDist = Double.MAX_VALUE;
+            for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                for (int dy = 0; dy >= -1; dy--) {
+                    BlockPos p = base.relative(dir).above(dy);
+                    if (this.standable(p) && this.safe(p, progress)) {
+                        double d = this.citizen.distanceToSqr(Vec3.atBottomCenterOf(p));
+                        if (d < bestDist) {
+                            bestDist = d;
+                            best = p;
+                        }
+                        break;
+                    }
+                }
+            }
+            return best;
+        }
+
+        /** Gilt das Ziel noch? (Inzwischen kann dort etwas gebaut oder ein Gerüst schon aufgestellt sein.) */
+        private boolean stillValid(Place place, int progress) {
+            return switch (place.kind()) {
+                case GROUND, SCAFFOLD -> this.standable(place.feet()) && this.safe(place.feet(), progress);
+                case NEW_SCAFFOLD -> this.standable(place.feet()) && this.safe(place.feet(), progress)
+                        || this.onScaffold(this.feet());
+            };
+        }
+
+        /**
+         * Sucht den besten Platz für den nächsten Block: einen Stehplatz in Reichweite (gern in Schulterhöhe des Blocks und
+         * nicht weit vom jetzigen Platz) oder – wenn keiner hinkommt – den Fuß eines neuen Gerüsts neben dem Block.
+         */
+        private @Nullable Place choose(Town.Project project, BlockPos at, BlockPos feet) {
+            int progress = project.progress;
+            var box = project.bounds();
+            List<BlockPos> upcoming = this.upcoming(project);
+            Place best = null;
+            double bestScore = Double.MAX_VALUE;
+            int r = (int) Math.ceil(REACH);
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    double h = Math.sqrt(dx * dx + dz * dz);
+                    if (h > REACH) {
+                        continue;
+                    }
+                    for (int y = at.getY() - UP; y <= at.getY() + DOWN; y++) {
+                        BlockPos p = new BlockPos(at.getX() + dx, y, at.getZ() + dz);
+                        if (!this.standable(p) || !this.safe(p, progress)) {
+                            continue;
+                        }
+                        boolean scaffold = this.onScaffold(p);
+                        int rel = at.getY() - y;
+                        int raise = 0;
+                        if (scaffold && rel > 2) {
+                            // ein Gerüst lässt sich oben aufstocken
+                            while (rel - raise > 2 && raise < 6 && this.canRaise(p.above(raise), progress)) {
+                                raise++;
+                            }
+                        }
+                        int eff = rel - raise;
+                        double score = (h < 1.0 ? 2.5 : 0.0) + Math.max(0.0, h - 2.5) * 0.8
+                                + (eff > 2 ? (eff - 2) * 0.9 : eff < 0 ? -eff * 0.9 : 0.0) + raise * 0.12
+                                + Math.sqrt(p.distSqr(feet)) * 0.08 - this.coverage(p.above(raise), upcoming) * 0.25;
+                        if (scaffold && !(this.onScaffold(feet) && sameColumn(p, feet))) {
+                            score += 0.5; // hinaufsteigen kostet Zeit
+                        }
+                        if (score < bestScore) {
+                            bestScore = score;
+                            best = new Place(p, scaffold ? Kind.SCAFFOLD : Kind.GROUND, scaffold ? this.columnBase(p) : null);
+                        }
+                    }
+                }
+            }
+            // ein Stehplatz weit oben ohne Weg dorthin (Obergeschoss ohne Treppe, Dach): lieber ein Gerüst, wenn es eins gibt
+            if (best != null && best.kind() == Kind.GROUND && best.feet().getY() > feet.getY() + 2) {
+                net.minecraft.world.level.pathfinder.Path path = this.citizen.getNavigation().createPath(best.feet(), 0);
+                if (path == null || !path.canReach()) {
+                    bestScore += 2.0;
+                }
+            }
+            Place column = this.newScaffold(project, at, feet, box, upcoming);
+            if (column != null && (best == null || this.columnScore < bestScore)) {
+                return column;
+            }
+            return best;
+        }
+
+        private double columnScore;
+
+        /** Die nächsten Blöcke, die noch gesetzt werden (für die Wahl eines Platzes, von dem aus er möglichst viele erreicht). */
+        private List<BlockPos> upcoming(Town.Project project) {
+            List<Blueprint.Step> steps = project.steps();
+            List<BlockPos> list = new ArrayList<>();
+            for (int i = project.progress; i < steps.size() && list.size() < 12 && i < project.progress + 40; i++) {
+                Blueprint.Step s = steps.get(i);
+                if (!s.foundation() && !s.state().isAir()) {
+                    list.add(s.pos());
+                }
+            }
+            return list;
+        }
+
+        /** Wie viele der nächsten Blöcke er von diesem Platz aus erreicht. */
+        private int coverage(BlockPos feet, List<BlockPos> upcoming) {
+            int n = 0;
+            for (BlockPos p : upcoming) {
+                if (this.canWork(feet, p)) {
+                    n++;
+                }
+            }
+            return n;
+        }
+
+        /**
+         * Fuß eines neuen Gerüsts neben dem Block: eine Säule, die vom Boden bis zwei Blöcke unter den Block frei ist und frei
+         * bleibt (dort setzt der Plan nichts hin), möglichst außerhalb des Hauses und nicht vor der Tür.
+         */
+        private @Nullable Place newScaffold(Town.Project project, BlockPos at, BlockPos feet, net.minecraft.world.level.levelgen.structure.BoundingBox box,
+                List<BlockPos> upcoming) {
+            int progress = project.progress;
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.type.blueprint().entrance());
+            int top = at.getY() - 2;   // Füße oben auf dem Gerüst
+            Place best = null;
+            double bestScore = Double.MAX_VALUE;
+            int r = (int) Math.floor(REACH - 0.5);
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    double h = Math.sqrt(dx * dx + dz * dz);
+                    if (h < 1.0 || h > REACH - 0.5) {
+                        continue;
+                    }
+                    int x = at.getX() + dx;
+                    int z = at.getZ() + dz;
+                    if (Math.abs(x - door.getX()) <= 1 && Math.abs(z - door.getZ()) <= 1) {
+                        continue;
+                    }
+                    BlockPos head = new BlockPos(x, top + 1, z);
+                    if (!this.open(head) || this.filledLater(head, progress) || !this.open(head.above()) || this.filledLater(head.above(), progress)) {
+                        continue;
+                    }
+                    // nach unten bis zum Boden: alles frei?
+                    int y = top;
+                    while (y > top - MAX_SCAFFOLD && this.open(new BlockPos(x, y, z)) && !this.filledLater(new BlockPos(x, y, z), progress)) {
+                        y--;
+                    }
+                    BlockPos ground = new BlockPos(x, y, z);
+                    BlockPos base = ground.above();
+                    if (base.getY() >= top || this.open(ground) || !this.standable(base) || !this.safe(base, progress)
+                            || this.level().getBlockState(ground).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                        continue;
+                    }
+                    double score = 1.2 + Math.max(0.0, h - 2.0) * 0.8 + (top - base.getY()) * 0.15
+                            + (box.isInside(x, box.minY(), z) ? 1.5 : 0.0) + Math.sqrt(base.distSqr(feet)) * 0.05
+                            - this.coverage(new BlockPos(x, top, z), upcoming) * 0.25;
+                    if (score < bestScore) {
+                        bestScore = score;
+                        best = new Place(base, Kind.NEW_SCAFFOLD, base);
+                    }
+                }
+            }
+            this.columnScore = bestScore;
+            return best;
+        }
+
+        // ------------------------------------------------------------------ Gehen, Gerüst, Klettern
+
+        /** Geht zu einem Platz; findet sich kein Weg (oder dauert es zu lange), steigt er hinüber bzw. hinauf. */
+        private void go(BlockPos target) {
+            if (!target.equals(this.goingTo)) {
+                this.goingTo = target;
+                this.travel = 0;
+                net.minecraft.world.level.pathfinder.Path path = this.citizen.getNavigation().createPath(target, 0);
+                boolean reach = path != null && path.canReach();
+                this.travelLimit = reach ? 40 + path.getNodeCount() * 8 : target.getY() > this.citizen.getY() + 1.5 ? 15 : 60;
+                if (path != null) {
+                    this.citizen.getNavigation().moveTo(path, 0.85);
+                }
+            }
+            if (++this.travel > this.travelLimit) {
+                this.teleport(target);
+                return;
+            }
+            if (this.travel % 20 == 0 && this.citizen.getNavigation().isDone()) {
+                this.citizen.getNavigation().moveTo(target.getX() + 0.5, target.getY(), target.getZ() + 0.5, 0.85);
+            }
+            if (this.citizen.distanceToSqr(Vec3.atBottomCenterOf(target)) < 2.5 * 2.5) {
+                // das letzte Stück genau auf den Platz
+                this.citizen.getMoveControl().setWantedPosition(target.getX() + 0.5, target.getY(), target.getZ() + 0.5, 0.7);
+            }
+        }
+
+        private void teleport(BlockPos feet) {
+            this.statTeleports++;
+            boolean up = feet.getY() > this.citizen.getY() + 1.5;
+            this.citizen.getNavigation().stop();
+            this.citizen.teleportTo(feet.getX() + 0.5, feet.getY(), feet.getZ() + 0.5);
+            if (up) {
+                this.level().playSound(null, feet, SoundEvents.LADDER_STEP, SoundSource.NEUTRAL, 0.6f, 1.0f);
+            }
+            this.goingTo = null;
+        }
+
+        /** Kann das Gerüst unter ihm um eine Lage wachsen? (Die Stelle selbst und zwei Blöcke darüber bleiben frei.) */
+        private boolean canRaise(BlockPos feet, int progress) {
+            if (feet.getY() - this.columnBase(feet).getY() >= MAX_SCAFFOLD) {
+                return false;
+            }
+            for (int i = 0; i <= 2; i++) {
+                BlockPos p = feet.above(i);
+                if (!this.open(p) || this.filledLater(p, progress)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /** Springt hoch und setzt unter sich eine Gerüstlage. */
+        private void raise(BlockPos feet) {
+            this.statRaises++;
+            this.citizen.getNavigation().stop();
+            this.citizen.teleportTo(feet.getX() + 0.5, feet.getY() + 1, feet.getZ() + 0.5);
+            this.level().setBlock(feet, ModBlocks.BUILDER_SCAFFOLD.get().defaultBlockState(), Block.UPDATE_ALL);
+            this.citizen.swingArm();
+            this.level().playSound(null, feet, SoundEvents.SCAFFOLDING_PLACE, SoundSource.BLOCKS, 0.8f, 0.9f);
+            this.cooldown = 4;
+        }
+
+        private void startClimbUp(BlockPos base, BlockPos top) {
+            this.statClimbs++;
+            this.climbing = true;
+            this.climbColumn = base;
+            this.climbY = base.getY();
+            this.climbTo = top.getY();
+            this.climbExit = null;
+            this.citizen.getNavigation().stop();
+            this.citizen.noPhysics = true;
+        }
+
+        private void startClimbDown(BlockPos feet, int progress) {
+            BlockPos base = this.columnBase(feet);
+            this.climbing = true;
+            this.climbColumn = base;
+            this.climbY = this.citizen.getY();
+            this.climbTo = base.getY();
+            this.climbExit = this.exitOf(base, progress);
+            this.citizen.getNavigation().stop();
+            this.citizen.noPhysics = true;
+            this.place = null;
+        }
+
+        /** Klettert im Inneren des Gerüsts (zwischen den Stangen) hinauf oder hinunter. */
+        private void climb() {
+            this.climbY = this.climbTo > this.climbY ? Math.min(this.climbTo, this.climbY + CLIMB_SPEED)
+                    : Math.max(this.climbTo, this.climbY - CLIMB_SPEED);
+            this.citizen.setDeltaMovement(Vec3.ZERO);
+            this.citizen.setPos(this.climbColumn.getX() + 0.5, this.climbY, this.climbColumn.getZ() + 0.5);
+            if (this.citizen.tickCount % 4 == 0) {
+                this.level().playSound(null, this.citizen.blockPosition(), SoundEvents.SCAFFOLDING_STEP, SoundSource.NEUTRAL, 0.4f, 1.0f);
+            }
+            if (this.climbY == this.climbTo) {
+                this.endClimb();
+            }
+        }
+
+        private void endClimb() {
+            this.climbing = false;
+            this.citizen.noPhysics = false;
+            this.citizen.setDeltaMovement(Vec3.ZERO);
+            if (this.climbTo <= this.climbColumn.getY() + 0.01) {
+                // unten angekommen: aus dem Gerüst heraustreten
+                BlockPos exit = this.climbExit;
+                if (exit == null) {
+                    exit = standingSpot(this.level(), this.climbColumn);
+                }
+                if (exit != null) {
+                    this.citizen.teleportTo(exit.getX() + 0.5, exit.getY(), exit.getZ() + 0.5);
+                }
+            } else {
+                this.citizen.teleportTo(this.climbColumn.getX() + 0.5, this.climbTo, this.climbColumn.getZ() + 0.5);
+            }
+            this.goingTo = null;
+        }
+
+        /** Alle Baugerüste rund um eine Baustelle, von oben nach unten. */
+        static ArrayDeque<BlockPos> scaffolds(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox bounds) {
+            List<BlockPos> found = new ArrayList<>();
+            var box = bounds.inflatedBy(5, 0, 5);
+            for (int y = box.maxY() + 4; y >= box.minY() - 2; y--) {
+                for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                    for (int x = box.minX(); x <= box.maxX(); x++) {
+                        BlockPos p = new BlockPos(x, y, z);
+                        if (level.getBlockState(p).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                            found.add(p);
+                        }
+                    }
+                }
+            }
+            return new ArrayDeque<>(found);
         }
     }
 

@@ -89,6 +89,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("crop_harvest", () -> ModGameTests::cropHarvest);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> RECIPES =
             TEST_FUNCTIONS.register("recipes", () -> ModGameTests::recipes);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CRAFTING =
+            TEST_FUNCTIONS.register("crafting", () -> ModGameTests::crafting);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WORLDGEN =
             TEST_FUNCTIONS.register("worldgen", () -> ModGameTests::worldgen);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ORE_VEINS =
@@ -181,7 +183,7 @@ public final class ModGameTests {
     public static void registerTests(RegisterGameTestsEvent event) {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(KingdomsAtWar.id("default"));
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
+                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, CRAFTING, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
                         FLOWER_POTS, WOOD_BURNS, DRAGON_COMPASS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
@@ -239,8 +241,8 @@ public final class ModGameTests {
         var registries = helper.getLevel().getServer().reloadableRegistries();
         for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
             Block block = holder.value();
-            if (block.defaultDestroyTime() < 0.0f) {
-                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises): ohne Beute
+            if (block.defaultDestroyTime() < 0.0f || block == ModBlocks.BUILDER_SCAFFOLD.get()) {
+                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises) oder Baugerüst: ohne Beute
             }
             ResourceKey<LootTable> key = block.getLootTable().orElseThrow(
                     () -> helper.assertionException("Block ohne Loot-Table: %s", holder.getId()));
@@ -286,7 +288,9 @@ public final class ModGameTests {
                 "white_plaster", "clay_plaster_stairs", "leaded_glass", "leaded_glass_pane", "castle_door", "green_shutters",
                 "steel_lantern", "aetherit_lantern", "chandelier", "medieval_stone_battlement", "ale", "wine", "mead",
                 "garlic_bread", "feast", "aetherit_staff",
-                "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne")) {
+                "medieval_stone_battlement_from_medieval_stone_stonecutting", "oak_chair", "oak_bench", "oak_table", "throne",
+                "reinforced_handle", "ancient_planks", "charred_planks", "charred_plank_stairs", "silver_coin_from_bronze_coins",
+                "bronze_coins_from_silver_coin", "gold_coin_from_silver_coins", "silver_coins_from_gold_coin")) {
             ResourceKey<Recipe<?>> key = ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id(name));
             helper.assertTrue(recipes.byKey(key) != null, "Rezept fehlt: " + key.identifier());
         }
@@ -298,6 +302,41 @@ public final class ModGameTests {
             }
         }
         helper.succeed();
+    }
+
+    /**
+     * Ein paar Rezepte werden wirklich am Werktisch gelegt: Münzen tauschen 9 zu 1, eigene Stämme werden zu Brettern,
+     * und Stahlwerkzeug braucht den beschlagenen Griff (zwei Barren auf einem bloßen Stock ergeben nichts mehr).
+     */
+    private static void crafting(GameTestHelper helper) {
+        ItemStack bronze = new ItemStack(ModItems.BRONZE_COIN.get());
+        ItemStack silver = new ItemStack(ModItems.SILVER_COIN.get());
+        ItemStack gold = new ItemStack(ModItems.GOLD_COIN.get());
+        assertCrafts(helper, 3, 3, List.of(bronze, bronze, bronze, bronze, bronze, bronze, bronze, bronze, bronze),
+                ModItems.SILVER_COIN.get(), 1);
+        assertCrafts(helper, 3, 3, List.of(silver, silver, silver, silver, silver, silver, silver, silver, silver),
+                ModItems.GOLD_COIN.get(), 1);
+        assertCrafts(helper, 1, 1, List.of(silver), ModItems.BRONZE_COIN.get(), 9);
+        assertCrafts(helper, 1, 1, List.of(gold), ModItems.SILVER_COIN.get(), 9);
+        assertCrafts(helper, 1, 1, List.of(new ItemStack(ModBlocks.ANCIENT_LOG.get())), ModBlocks.ANCIENT_PLANKS.base().get().asItem(), 4);
+        assertCrafts(helper, 1, 1, List.of(new ItemStack(ModBlocks.CHARRED_LOG.get())), ModBlocks.CHARRED_PLANKS.base().get().asItem(), 4);
+        ItemStack steel = new ItemStack(ModItems.STEEL_INGOT.get());
+        ItemStack handle = new ItemStack(ModItems.REINFORCED_HANDLE.get());
+        assertCrafts(helper, 1, 3, List.of(steel, steel, handle), ModItems.STEEL_SWORD.get(), 1);
+        assertCrafts(helper, 1, 3, List.of(steel, steel, new ItemStack(Items.STICK)), Items.AIR, 0);
+        assertCrafts(helper, 2, 2, List.of(new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.LEATHER),
+                new ItemStack(Items.IRON_NUGGET)), ModItems.REINFORCED_HANDLE.get(), 1);
+        helper.succeed();
+    }
+
+    private static void assertCrafts(GameTestHelper helper, int width, int height, List<ItemStack> grid, Item expected, int count) {
+        var input = net.minecraft.world.item.crafting.CraftingInput.of(width, height, grid);
+        ItemStack result = helper.getLevel().getServer().getRecipeManager()
+                .getRecipeFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING, input, helper.getLevel())
+                .map(holder -> holder.value().assemble(input)).orElse(ItemStack.EMPTY);
+        String what = grid.stream().map(stack -> stack.getItem().toString()).toList().toString();
+        helper.assertTrue(expected == Items.AIR ? result.isEmpty() : result.is(expected) && result.getCount() == count,
+                "Werktisch " + what + " ergab " + result + " statt " + count + "x " + expected);
     }
 
     /** Die Erzadern und Blumenfelder sind registriert. */
@@ -523,7 +562,7 @@ public final class ModGameTests {
         player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.RECRUITED,
                 "Ritter lässt sich nicht anwerben");
-        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 50, "Wechselgeld nach dem Ritter");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 36, "Wechselgeld nach dem Ritter");
         SoldierEntity knight = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get());
         helper.assertTrue(knight.getOffhandItem().is(Items.SHIELD), "Ritter hat keinen Schild");
         // zu weit weg

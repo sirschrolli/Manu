@@ -58,16 +58,18 @@ public final class Coins {
         int bronze = count(player, Coin.BRONZE);
         int silver = count(player, Coin.SILVER);
         int gold = count(player, Coin.GOLD);
-        if (bronze + silver * 10 + gold * 100 < price) {
+        int silverValue = Coin.SILVER.value();
+        int goldValue = Coin.GOLD.value();
+        if (bronze + silver * silverValue + gold * goldValue < price) {
             return false;
         }
         int rest = price;
         int useBronze = Math.min(bronze, rest);
         rest -= useBronze;
-        int useSilver = Math.min(silver, ceilDiv(Math.max(rest, 0), 10));
-        rest -= useSilver * 10;
-        int useGold = Math.min(gold, ceilDiv(Math.max(rest, 0), 100));
-        rest -= useGold * 100;
+        int useSilver = Math.min(silver, ceilDiv(Math.max(rest, 0), silverValue));
+        rest -= useSilver * silverValue;
+        int useGold = Math.min(gold, ceilDiv(Math.max(rest, 0), goldValue));
+        rest -= useGold * goldValue;
         if (rest > 0) {
             return false;   // kann bei genug Geld nicht vorkommen, aber sicher ist sicher
         }

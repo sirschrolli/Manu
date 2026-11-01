@@ -21,18 +21,14 @@ public class ModGameplayEntityLootProvider implements LootTableSubProvider {
 
     @Override
     public void run() {
-        // Münzen von Monstern: oft ein paar Bronzemünzen, selten eine Silbermünze (Plünderung erhöht beides)
+        // Münzen von Monstern: manchmal ein, zwei Bronzemünzen (Plünderung hilft) – Silber gibt es nur durch Zusammenlegen
         var enchantments = this.output.lookup(net.minecraft.core.registries.Registries.ENCHANTMENT);
         output.accept(ModLootTables.MONSTER_COINS, LootTable.lootTable()
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.BRONZE_COIN.get())
-                                .apply(net.minecraft.world.level.storage.loot.functions.SetItemCountFunction.setCount(ContextIntProviders.between(1, 3))))
+                                .apply(net.minecraft.world.level.storage.loot.functions.SetItemCountFunction.setCount(ContextIntProviders.between(1, 2))))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
-                                .randomChanceAndLootingBoost(enchantments, 0.45f, 0.1f)))
-                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
-                        .add(LootItem.lootTableItem(ModItems.SILVER_COIN.get()))
-                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition
-                                .randomChanceAndLootingBoost(enchantments, 0.04f, 0.02f))));
+                                .randomChanceAndLootingBoost(enchantments, 0.35f, 0.08f))));
         // Froschlichter wie bei Vanilla – Vanilla fragt nur nach dem Vanilla-Frosch, die eigenen Frösche sind eine eigene Art
         var types = this.output.lookup(net.minecraft.core.registries.Registries.ENTITY_TYPE);
         var variants = this.output.lookup(net.minecraft.core.registries.Registries.FROG_VARIANT);

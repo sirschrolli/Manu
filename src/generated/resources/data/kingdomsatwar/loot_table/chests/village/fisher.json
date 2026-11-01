@@ -9,28 +9,11 @@
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "max": 5,
+              "max": 6,
               "min": 1
             }
           },
           "name": "kingdomsatwar:bronze_coin"
-        }
-      ],
-      "rolls": 1
-    },
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": {
-              "type": "minecraft:uniform",
-              "max": 1,
-              "min": 0
-            }
-          },
-          "name": "kingdomsatwar:silver_coin"
         }
       ],
       "rolls": 1
@@ -169,8 +152,8 @@
       ],
       "rolls": {
         "type": "minecraft:uniform",
-        "max": 5,
-        "min": 2
+        "max": 3,
+        "min": 1
       }
     }
   ],

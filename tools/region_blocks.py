@@ -32,6 +32,7 @@ BASALT = vs.tones("#3f3a3d", 4, spread=0.26, cool=250, warm=20, hue=6, sat=0.03)
 LAVA = [hexc("#7a1e08"), hexc("#d24a10"), hexc("#ff9a2a"), hexc("#ffe08a")]
 CHAR_BARK = vs.tones("#2e2728", 6, spread=0.40, cool=250, warm=20, hue=6, sat=0.03)
 CHAR_WOOD = vs.tones("#3a2e2a", 6, spread=0.30)
+CHAR_PLANKS = vs.tones("#3b302c", 7, spread=0.34, cool=250, warm=20, hue=6, sat=0.03)
 RIME = vs.tones("#b9c4cf", 4, spread=0.12, cool=215, warm=200, hue=4, sat=0.02)
 FROST = [hexc("#e7f2fb"), hexc("#ffffff")]
 FROZEN_SOIL = vs.tones("#5c524c", 5, spread=0.26, cool=220, warm=30, hue=6, sat=0.03)
@@ -174,6 +175,17 @@ def charred_log_side() -> Image.Image:
 def charred_log_top() -> Image.Image:
     g = vs.log_top(51411)
     return _img(g, [CHAR_BARK[0], CHAR_BARK[1], CHAR_WOOD[1], CHAR_WOOD[2], CHAR_WOOD[3], CHAR_WOOD[4]])
+
+
+def charred_planks() -> Image.Image:
+    """Verkohlte Bretter: fast schwarzes Holz mit rissiger, matt glänzender Kohlehaut, hier und da ein Rest warmer Maserung."""
+    img = _img(vs.planks(51421, joints=(4, None, 10, 1)), CHAR_PLANKS)
+    rnd = random.Random(51422)
+    for _ in range(4):
+        x, y = rnd.randrange(N), rnd.randrange(N)
+        if y % 4 not in (0, 3):
+            img.putpixel((x, y), CHAR_WOOD[3])
+    return img
 
 
 # =============================================================================
@@ -334,6 +346,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/glowing_volcanic_rock_glow", rock_glow)
     put("block/charred_log_side", charred_log_side())
     put("block/charred_log_top", charred_log_top())
+    put("block/charred_planks", charred_planks())
     put("block/rime_stone", rime_stone())
     put("block/frozen_soil_top", frozen_soil_top())
     put("block/frozen_soil_side", frozen_soil_side())

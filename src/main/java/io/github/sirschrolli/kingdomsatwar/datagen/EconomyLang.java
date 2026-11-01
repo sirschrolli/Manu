@@ -31,10 +31,10 @@ final class EconomyLang {
         t.add("coin.kingdomsatwar.gold", "%s Gold", "%s Gold");
         t.add("item.kingdomsatwar.coin.value", "Worth %s", "Wert: %s");
         t.add("item.kingdomsatwar.coin.stack_value", "Stack worth %s", "Stapel: %s");
-        t.add("item.kingdomsatwar.coin.combine", "Use: change 10 into one %s", "Rechtsklick: 10 in eine %s wechseln");
-        t.add("item.kingdomsatwar.coin.split", "Sneak + use: change one into ten smaller coins",
-                "Schleichen + Rechtsklick: eine in zehn kleinere wechseln");
-        t.add("message.kingdomsatwar.coin.need_ten", "You need ten of them to exchange", "Zum Wechseln brauchst du zehn Stück");
+        t.add("item.kingdomsatwar.coin.combine", "Use: change 9 into one %s", "Rechtsklick: 9 in eine %s wechseln");
+        t.add("item.kingdomsatwar.coin.split", "Sneak + use: change one into nine smaller coins",
+                "Schleichen + Rechtsklick: eine in neun kleinere wechseln");
+        t.add("message.kingdomsatwar.coin.need_nine", "You need nine of them to exchange", "Zum Wechseln brauchst du neun Stück");
         t.add("gui.kingdomsatwar.recruitment.pay", "Pay: %s", "Sold: %s");
         t.add("gui.kingdomsatwar.recruitment.purse", "Your purse: %s", "Deine Börse: %s");
     }

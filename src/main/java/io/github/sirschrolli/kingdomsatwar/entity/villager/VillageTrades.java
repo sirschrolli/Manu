@@ -28,7 +28,7 @@ import net.minecraft.world.level.ItemLike;
 
 /**
  * Was die Dorfbewohner kaufen und verkaufen – alles, was es früher bei den Dorfbewohnern gab, jetzt gegen Münzen (1
- * Silber = 10 Bronze, 1 Gold = 100 Bronze). Feste Waren hat jeder Händler seines Berufs; dazu kommen einige wechselnde
+ * Silber = 9 Bronze, 1 Gold = 81 Bronze). Feste Waren hat jeder Händler seines Berufs; dazu kommen einige wechselnde
  * (verzauberte Bücher, verzauberte Ausrüstung, Tränke, Farben, Waren aus fernen Ländern), die jeder Bewohner nach
  * seinem eigenen Zufall wählt – und nach jeder Ladenpause neu.
  */

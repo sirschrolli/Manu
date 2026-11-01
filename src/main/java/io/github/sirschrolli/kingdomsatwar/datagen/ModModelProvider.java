@@ -163,6 +163,15 @@ public class ModModelProvider extends ModelProvider {
                 TextureMapping.cube(chandelier).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE), blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(chandelier, BlockModelGenerators.plainVariant(chandelierModel)));
         blocks.registerSimpleFlatItemModel(chandelier.asItem());
+        // Baugerüst des Baumeisters (ohne Gegenstand)
+        Block scaffold = ModBlocks.BUILDER_SCAFFOLD.get();
+        Material scaffoldDeck = new Material(KingdomsAtWar.id("block/builder_scaffold_deck"));
+        Identifier scaffoldModel = DecorModels.scaffold().create(scaffold, new TextureMapping()
+                .put(DecorModels.POLE, new Material(KingdomsAtWar.id("block/builder_scaffold_pole")))
+                .put(DecorModels.DECK, scaffoldDeck)
+                .put(DecorModels.SLAT, new Material(KingdomsAtWar.id("block/builder_scaffold_slat")))
+                .put(TextureSlot.PARTICLE, scaffoldDeck), blocks.modelOutput);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(scaffold, BlockModelGenerators.plainVariant(scaffoldModel)));
 
         // --- Zinnen (Textur des Baustoffs) ---
         ModelTemplate battlementTemplate = DecorModels.battlement();
@@ -294,7 +303,7 @@ public class ModModelProvider extends ModelProvider {
         // Samen und Zwiebel bekommen ihr Modell schon über createCropBlock (Gegenstand der Feldfrucht).
         for (DeferredItem<?> item : java.util.List.of(
                 ModItems.CARBON, ModItems.GEMSTONE, ModItems.KONTERIT, ModItems.AETHERIT, ModItems.DRACONIUM,
-                ModItems.WYVERNIT, ModItems.STEEL_BLEND, ModItems.STEEL_INGOT,
+                ModItems.WYVERNIT, ModItems.STEEL_BLEND, ModItems.REINFORCED_HANDLE, ModItems.STEEL_INGOT,
                 ModItems.DRAGON_FOOD, ModItems.TOMATO, ModItems.CABBAGE, ModItems.BARLEY, ModItems.BREAD_ROLL,
                 ModItems.VEGETABLE_STEW, ModItems.MEAT_PIE, ModItems.APPLE_PIE)) {
             flat(items, item.get());
@@ -518,19 +527,11 @@ public class ModModelProvider extends ModelProvider {
                 new net.minecraft.client.color.item.CustomModelDataSource(0, 0xF2CC5A));
     }
 
-    /** Münze: eine einzelne, ein kleiner Stapel (ab 2) oder ein Haufen (ab 10) – je nachdem, wie viele im Stapel liegen. */
+    /** Münze: immer dieselbe einzelne Münze, egal wie viele im Stapel liegen (die Zahl steht ja daneben). */
     private static void coinModel(ItemModelGenerators items, Item coin, String name) {
-        java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
-        String[] suffixes = {"", "_stack", "_pile"};
-        float[] from = {0.0F, 2.0F, 10.0F};
-        for (int i = 0; i < suffixes.length; i++) {
-            Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(coin, suffixes[i]),
-                    TextureMapping.layer0(new Material(KingdomsAtWar.id("item/" + name + suffixes[i]))), items.modelOutput);
-            entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(
-                    net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model), from[i]));
-        }
-        items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.rangeSelect(
-                new net.minecraft.client.renderer.item.properties.numeric.Count(false), 1.0F, entries));
+        Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(coin),
+                TextureMapping.layer0(new Material(KingdomsAtWar.id("item/" + name))), items.modelOutput);
+        items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model));
     }
 
     /** Stuhl, Bank, Tisch und Thron. */

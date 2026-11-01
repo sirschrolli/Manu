@@ -58,55 +58,67 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
 
     private void equipmentRecipes() {
-        // Stahl: Werkzeuge und Rüstung wie aus Eisen, nur aus Stahlbarren
+        // Beschlagener Griff: zwei Stöcke, mit Leder umwickelt und mit einer eisernen Zwinge beschlagen
+        Item handle = ModItems.REINFORCED_HANDLE.get();
+        shapeless(RecipeCategory.MISC, handle)
+                .requires(Items.STICK, 2)
+                .requires(Items.LEATHER)
+                .requires(Items.IRON_NUGGET)
+                .unlockedBy("has_leather", has(Items.LEATHER))
+                .save(output, key("reinforced_handle"));
+        // Stahl: Klingen und Köpfe aus Stahlbarren am beschlagenen Griff; Rüstung mit Lederpolster
         Item steel = ModItems.STEEL_INGOT.get();
         tools(steel, ModItems.STEEL_SWORD.get(), ModItems.STEEL_PICKAXE.get(), ModItems.STEEL_AXE.get(),
                 ModItems.STEEL_SHOVEL.get(), ModItems.STEEL_HOE.get());
         armorSet(steel, ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
                 ModItems.STEEL_BOOTS.get());
-        // Konterit: leichte Rüstung
+        // Konterit: leichte Rüstung, ebenfalls gepolstert
         armorSet(ModItems.KONTERIT.get(), ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(),
                 ModItems.KONTERIT_LEGGINGS.get(), ModItems.KONTERIT_BOOTS.get());
-        // Drachenschuppen: je Art ein Satz
-        ModItems.DRAGON_SCALE_ARMOR.forEach((type, set) -> armorSet(ModItems.DRAGON_SCALES.get(type).get(),
+        // Drachenschuppen: auf die Stahlrüstung genietet – je Art ein Satz
+        ModItems.DRAGON_SCALE_ARMOR.forEach((type, set) -> scaleArmor(ModItems.DRAGON_SCALES.get(type).get(),
                 set.get(0).get(), set.get(1).get(), set.get(2).get(), set.get(3).get()));
 
-        // Draconium-Waffen mit Lohenruten als Griff
+        // Draconium-Waffen: Lohenrute als Griff, Parierstange bzw. Beschlag aus Stahl
         Item draconium = ModItems.DRACONIUM.get();
         shaped(RecipeCategory.COMBAT, ModItems.DRACONIUM_SWORD.get())
-                .pattern("D")
-                .pattern("D")
-                .pattern("B")
+                .pattern(" D ")
+                .pattern(" D ")
+                .pattern("SBS")
                 .define('D', draconium)
+                .define('S', steel)
                 .define('B', Items.BLAZE_ROD)
                 .unlockedBy(getHasName(draconium), has(draconium))
                 .save(output, key("draconium_sword"));
         shaped(RecipeCategory.COMBAT, ModItems.DRACONIUM_AXE.get())
-                .pattern("DD")
-                .pattern("DB")
-                .pattern(" B")
+                .pattern("DDS")
+                .pattern("DB ")
+                .pattern(" B ")
                 .define('D', draconium)
+                .define('S', steel)
                 .define('B', Items.BLAZE_ROD)
                 .unlockedBy(getHasName(draconium), has(draconium))
                 .save(output, key("draconium_axe"));
 
-        // Wyvernit-Gleiter: Stahlrahmen, Wyvernit-Streben, Phantomhaut als Bespannung
+        // Wyvernit-Gleiter: Stahlrahmen, Wyvernit-Streben, Phantomhaut als Bespannung, Ledergurt
         shaped(RecipeCategory.TRANSPORTATION, ModItems.WYVERNIT_GLIDER.get())
                 .pattern("WSW")
-                .pattern("M M")
+                .pattern("MLM")
                 .pattern("M M")
                 .define('W', ModItems.WYVERNIT.get())
                 .define('S', steel)
+                .define('L', Items.LEATHER)
                 .define('M', Items.PHANTOM_MEMBRANE)
                 .unlockedBy(getHasName(ModItems.WYVERNIT.get()), has(ModItems.WYVERNIT.get()))
                 .save(output, key("wyvernit_glider"));
 
-        // Königskrone: Gold mit Edelsteinen
+        // Königskrone: Edelsteine auf einem Reif aus Gold
         shaped(RecipeCategory.COMBAT, ModItems.GEMSTONE_CROWN.get())
                 .pattern("EGE")
-                .pattern("GGG")
+                .pattern("GBG")
                 .define('E', ModItems.GEMSTONE.get())
                 .define('G', Items.GOLD_INGOT)
+                .define('B', Items.GOLD_BLOCK)
                 .unlockedBy(getHasName(ModItems.GEMSTONE.get()), has(ModItems.GEMSTONE.get()))
                 .save(output, key("gemstone_crown"));
 
@@ -138,10 +150,11 @@ public class ModRecipeProvider extends RecipeProvider {
         Item dust = ModItems.WISP_DUST.get();
         shaped(RecipeCategory.COMBAT, ModItems.AETHERIT_STAFF.get())
                 .pattern(" WA")
-                .pattern(" SW")
+                .pattern(" HW")
                 .pattern("S  ")
                 .define('A', aetherit)
                 .define('W', dust)
+                .define('H', ModItems.REINFORCED_HANDLE.get())
                 .define('S', Items.STICK)
                 .unlockedBy(getHasName(aetherit), has(aetherit))
                 .save(output, key("aetherit_staff"));
@@ -404,6 +417,28 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, key(name));
     }
 
+    private void planksFromLogs(ItemLike planks, ItemLike log, String name) {
+        shapeless(RecipeCategory.BUILDING_BLOCKS, planks, 4)
+                .requires(log)
+                .unlockedBy(getHasName(log), has(log))
+                .save(output, key(name));
+    }
+
+    /** Neun kleine Münzen ergeben eine große, eine große wieder neun kleine. */
+    private void coins(Item small, Item large, String largeName, String smallName) {
+        shaped(RecipeCategory.MISC, large)
+                .pattern("###")
+                .pattern("###")
+                .pattern("###")
+                .define('#', small)
+                .unlockedBy(getHasName(small), has(small))
+                .save(output, key(largeName + "_from_" + smallName));
+        shapeless(RecipeCategory.MISC, small, 9)
+                .requires(large)
+                .unlockedBy(getHasName(large), has(large))
+                .save(output, key(smallName + "_from_" + largeName));
+    }
+
     private void cookVenison() {
         Item raw = ModItems.VENISON.get();
         Item cooked = ModItems.COOKED_VENISON.get();
@@ -415,35 +450,55 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_campfire_cooking");
     }
 
+    /** Werkzeug und Schwert: Kopf bzw. Klinge aus dem Stoff am beschlagenen Griff (unten ein einfacher Stock). */
     private void tools(Item material, Item sword, Item pickaxe, Item axe, Item shovel, Item hoe) {
         String has = getHasName(material);
-        shaped(RecipeCategory.COMBAT, sword).pattern("M").pattern("M").pattern("S")
-                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+        Item handle = ModItems.REINFORCED_HANDLE.get();
+        shaped(RecipeCategory.COMBAT, sword).pattern("M").pattern("M").pattern("H")
+                .define('M', material).define('H', handle).unlockedBy(has, has(material))
                 .save(output, key(getItemName(sword)));
-        shaped(RecipeCategory.TOOLS, pickaxe).pattern("MMM").pattern(" S ").pattern(" S ")
-                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+        shaped(RecipeCategory.TOOLS, pickaxe).pattern("MMM").pattern(" H ").pattern(" S ")
+                .define('M', material).define('H', handle).define('S', Items.STICK).unlockedBy(has, has(material))
                 .save(output, key(getItemName(pickaxe)));
-        shaped(RecipeCategory.TOOLS, axe).pattern("MM").pattern("MS").pattern(" S")
-                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+        shaped(RecipeCategory.TOOLS, axe).pattern("MM").pattern("MH").pattern(" S")
+                .define('M', material).define('H', handle).define('S', Items.STICK).unlockedBy(has, has(material))
                 .save(output, key(getItemName(axe)));
-        shaped(RecipeCategory.TOOLS, shovel).pattern("M").pattern("S").pattern("S")
-                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+        shaped(RecipeCategory.TOOLS, shovel).pattern("M").pattern("H").pattern("S")
+                .define('M', material).define('H', handle).define('S', Items.STICK).unlockedBy(has, has(material))
                 .save(output, key(getItemName(shovel)));
-        shaped(RecipeCategory.TOOLS, hoe).pattern("MM").pattern(" S").pattern(" S")
-                .define('M', material).define('S', Items.STICK).unlockedBy(has, has(material))
+        shaped(RecipeCategory.TOOLS, hoe).pattern("MM").pattern(" H").pattern(" S")
+                .define('M', material).define('H', handle).define('S', Items.STICK).unlockedBy(has, has(material))
                 .save(output, key(getItemName(hoe)));
     }
 
+    /** Rüstung aus Platten des Stoffs, innen mit Leder gepolstert. */
     private void armorSet(Item material, Item helmet, Item chestplate, Item leggings, Item boots) {
         String has = getHasName(material);
-        shaped(RecipeCategory.COMBAT, helmet).pattern("MMM").pattern("M M")
-                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(helmet)));
-        shaped(RecipeCategory.COMBAT, chestplate).pattern("M M").pattern("MMM").pattern("MMM")
-                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(chestplate)));
-        shaped(RecipeCategory.COMBAT, leggings).pattern("MMM").pattern("M M").pattern("M M")
-                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(leggings)));
-        shaped(RecipeCategory.COMBAT, boots).pattern("M M").pattern("M M")
-                .define('M', material).unlockedBy(has, has(material)).save(output, key(getItemName(boots)));
+        shaped(RecipeCategory.COMBAT, helmet).pattern("MMM").pattern("MLM")
+                .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(helmet)));
+        shaped(RecipeCategory.COMBAT, chestplate).pattern("MLM").pattern("MMM").pattern("MMM")
+                .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(chestplate)));
+        shaped(RecipeCategory.COMBAT, leggings).pattern("MMM").pattern("MLM").pattern("M M")
+                .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(leggings)));
+        shaped(RecipeCategory.COMBAT, boots).pattern("MLM").pattern("M M")
+                .define('M', material).define('L', Items.LEATHER).unlockedBy(has, has(material)).save(output, key(getItemName(boots)));
+    }
+
+    /** Drachenschuppen-Rüstung: Schuppen rund um das passende Stück Stahlrüstung genietet. */
+    private void scaleArmor(Item scales, Item helmet, Item chestplate, Item leggings, Item boots) {
+        String has = getHasName(scales);
+        shaped(RecipeCategory.COMBAT, helmet).pattern("SSS").pattern("SAS")
+                .define('S', scales).define('A', ModItems.STEEL_HELMET.get()).unlockedBy(has, has(scales))
+                .save(output, key(getItemName(helmet)));
+        shaped(RecipeCategory.COMBAT, chestplate).pattern("SAS").pattern("SSS").pattern("SSS")
+                .define('S', scales).define('A', ModItems.STEEL_CHESTPLATE.get()).unlockedBy(has, has(scales))
+                .save(output, key(getItemName(chestplate)));
+        shaped(RecipeCategory.COMBAT, leggings).pattern("SSS").pattern("SAS").pattern("S S")
+                .define('S', scales).define('A', ModItems.STEEL_LEGGINGS.get()).unlockedBy(has, has(scales))
+                .save(output, key(getItemName(leggings)));
+        shaped(RecipeCategory.COMBAT, boots).pattern("SAS").pattern("S S")
+                .define('S', scales).define('A', ModItems.STEEL_BOOTS.get()).unlockedBy(has, has(scales))
+                .save(output, key(getItemName(boots)));
     }
 
     // =====================================================================================
@@ -627,7 +682,7 @@ public class ModRecipeProvider extends RecipeProvider {
 
         // Licht
         Item steel = ModItems.STEEL_INGOT.get();
-        shaped(RecipeCategory.DECORATIONS, ModBlocks.STEEL_LANTERN.get(), 2)
+        shaped(RecipeCategory.DECORATIONS, ModBlocks.STEEL_LANTERN.get())
                 .pattern(" S ")
                 .pattern("STS")
                 .pattern(" S ")
@@ -732,15 +787,21 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(ModItems.WYVERNIT.get(), ModBlocks.WYVERNIT_BLOCK.get());
         storage(ModItems.STEEL_INGOT.get(), ModBlocks.STEEL_BLOCK.get());
 
-        // Stahl: Eisen + Kohlenstoff mischen, dann im Hochofen härten
+        // Stahl: zwei Eisenbarren mit Kohlenstoff mischen, dann im Hochofen härten
         shapeless(RecipeCategory.MISC, ModItems.STEEL_BLEND.get())
-                .requires(Items.IRON_INGOT)
+                .requires(Items.IRON_INGOT, 2)
                 .requires(ModItems.CARBON.get(), 2)
                 .unlockedBy("has_carbon", has(ModItems.CARBON.get()))
                 .save(output, key("steel_blend"));
         save(SimpleCookingRecipeBuilder.blasting(Ingredient.of(ModItems.STEEL_BLEND.get()), RecipeCategory.MISC,
                         CookingBookCategory.MISC, ModItems.STEEL_INGOT.get(), 0.7f, 200)
                 .unlockedBy("has_steel_blend", has(ModItems.STEEL_BLEND.get())), "steel_ingot_from_blasting");
+        // Bretter aus den eigenen Stämmen (wie bei Vanilla vier je Stamm)
+        planksFromLogs(ModBlocks.ANCIENT_PLANKS.base().get(), ModBlocks.ANCIENT_LOG.get(), "ancient_planks");
+        planksFromLogs(ModBlocks.CHARRED_PLANKS.base().get(), ModBlocks.CHARRED_LOG.get(), "charred_planks");
+        // Münzen zusammenlegen und wechseln: 9 Bronze = 1 Silber, 9 Silber = 1 Gold
+        coins(ModItems.BRONZE_COIN.get(), ModItems.SILVER_COIN.get(), "silver_coin", "bronze_coins");
+        coins(ModItems.SILVER_COIN.get(), ModItems.GOLD_COIN.get(), "gold_coin", "silver_coins");
         // Kohlenstoff auch aus Holzkohle (Köhlerei)
         save(SimpleCookingRecipeBuilder.blasting(Ingredient.of(Items.CHARCOAL), RecipeCategory.MISC,
                         CookingBookCategory.MISC, ModItems.CARBON.get(), 0.1f, 200)

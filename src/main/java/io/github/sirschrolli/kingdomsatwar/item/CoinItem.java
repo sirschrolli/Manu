@@ -17,8 +17,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
 /**
- * Eine Münze. Rechtsklick wechselt zehn Münzen in die nächstgrößere (10 Bronze → 1 Silber, 10 Silber → 1 Gold),
- * Schleichen + Rechtsklick eine Münze in zehn kleinere.
+ * Eine Münze. Rechtsklick wechselt neun Münzen in die nächstgrößere (9 Bronze → 1 Silber, 9 Silber → 1 Gold),
+ * Schleichen + Rechtsklick eine Münze in neun kleinere – genau wie an der Werkbank.
  */
 public class CoinItem extends Item {
     private final Coin coin;
@@ -42,8 +42,8 @@ public class CoinItem extends Item {
             }
             if (!level.isClientSide()) {
                 stack.shrink(1);
-                // ausdrücklich zehn kleinere Münzen (Coins.give würde sie wieder zur großen zusammenfassen)
-                player.getInventory().placeItemBackInInventory(new ItemStack(smaller.item(), 10), net.minecraft.util.Prediction.SERVER_ONLY);
+                // ausdrücklich neun kleinere Münzen (Coins.give würde sie wieder zur großen zusammenfassen)
+                player.getInventory().placeItemBackInInventory(new ItemStack(smaller.item(), Coin.RATIO), net.minecraft.util.Prediction.SERVER_ONLY);
                 clink(level, player, 1.25f);
             }
             return InteractionResult.SUCCESS;
@@ -52,14 +52,14 @@ public class CoinItem extends Item {
         if (larger == null) {
             return InteractionResult.PASS;
         }
-        if (stack.getCount() < 10) {
+        if (stack.getCount() < Coin.RATIO) {
             if (!level.isClientSide()) {
-                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.coin.need_ten").withStyle(ChatFormatting.GRAY));
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.coin.need_nine").withStyle(ChatFormatting.GRAY));
             }
             return InteractionResult.FAIL;
         }
         if (!level.isClientSide()) {
-            stack.shrink(10);
+            stack.shrink(Coin.RATIO);
             player.getInventory().placeItemBackInInventory(new ItemStack(larger.item()), net.minecraft.util.Prediction.SERVER_ONLY);
             clink(level, player, 0.9f);
         }

@@ -165,8 +165,9 @@ final class Blueprints {
             int sx = ox + along.getStepX() * side;
             int sz = oz + along.getStepZ() * side;
             for (int i = 0; i < h; i++) {
-                // ein offener Laden liegt an der Seite seines Blocks, die seiner Blickrichtung gegenüberliegt
-                b.shutter(sx, y + i, sz, shutter, out.getOpposite(), i == 0 ? Half.BOTTOM : Half.TOP);
+                // ein offener Laden liegt an der Seite seines Blocks, die seiner Blickrichtung gegenüberliegt – er schaut also
+                // aus der Wand hinaus und liegt flach an ihr an
+                b.shutter(sx, y + i, sz, shutter, out, i == 0 ? Half.BOTTOM : Half.TOP);
             }
         }
     }

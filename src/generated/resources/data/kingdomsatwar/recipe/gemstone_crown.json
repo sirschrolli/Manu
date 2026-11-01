@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "B": "minecraft:gold_block",
     "E": "kingdomsatwar:gemstone",
     "G": "minecraft:gold_ingot"
   },
   "pattern": [
     "EGE",
-    "GGG"
+    "GBG"
   ],
   "result": {
     "id": "kingdomsatwar:gemstone_crown"

@@ -2,10 +2,11 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
+    "L": "minecraft:leather",
     "M": "kingdomsatwar:konterit"
   },
   "pattern": [
-    "M M",
+    "MLM",
     "M M"
   ],
   "result": {

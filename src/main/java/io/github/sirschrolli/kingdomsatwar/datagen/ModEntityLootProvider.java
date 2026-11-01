@@ -250,7 +250,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(ModItems.BRONZE_COIN.get())
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 7)))
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 4)))
                                 .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f)))))
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.exactly(1))
@@ -268,7 +268,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                             .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 3)))
                             .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments, ContextFloatProviders.between(0.0f, 1.0f)))));
         }
-        table.withPool(this.rare(ModItems.SILVER_COIN.get(), 0.25f, 0.05f));
+        table.withPool(this.rare(ModItems.SILVER_COIN.get(), 0.1f, 0.03f));
         return table;
     }
 

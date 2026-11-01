@@ -118,6 +118,8 @@ final class Showcase {
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");
                 case "town" -> TownShowcase.town(steps);
+                case "builder" -> TownShowcase.builder(steps, io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.TOWNHOUSE);
+                case "builder_hall" -> TownShowcase.builder(steps, io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.THRONE_HALL);
                 case "nyxarfight" -> CitadelShowcase.citadel(steps, true, false, true);
                 case "bossmodels" -> bossModels(steps, false, null);
                 case "bossmodels_air" -> bossModels(steps, true, null);

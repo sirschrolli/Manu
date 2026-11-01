@@ -2,12 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "M": "kingdomsatwar:lightning_dragon_scale"
+    "A": "kingdomsatwar:steel_chestplate",
+    "S": "kingdomsatwar:lightning_dragon_scale"
   },
   "pattern": [
-    "M M",
-    "MMM",
-    "MMM"
+    "SAS",
+    "SSS",
+    "SSS"
   ],
   "result": {
     "id": "kingdomsatwar:lightning_dragon_scale_chestplate"

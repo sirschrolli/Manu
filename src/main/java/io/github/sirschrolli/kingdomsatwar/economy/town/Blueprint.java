@@ -66,21 +66,58 @@ public final class Blueprint {
             maxZ = Math.max(maxZ, p.getZ());
             (attached(e.getValue()) ? attached : solid).add(new Entry(p, e.getValue()));
         }
-        Comparator<Entry> order = Comparator.<Entry>comparingInt(e -> e.pos().getY()).thenComparingInt(e -> e.pos().getZ())
-                .thenComparingInt(e -> e.pos().getX());
-        solid.sort(order);
-        attached.sort(order);
-        List<Entry> all = new ArrayList<>(solid);
-        all.addAll(attached);
+        // Lage für Lage von unten nach oben, innerhalb der Lage immer zum nächstgelegenen Block: so zieht der Baumeister
+        // die Mauern im Kreis hoch, statt zwischen den Seiten hin und her zu laufen
+        BlockPos corner = new BlockPos(minX, 0, minZ);
+        List<Entry> all = new ArrayList<>(sweep(solid, Entry::pos, corner));
+        all.addAll(sweep(attached, Entry::pos, all.isEmpty() ? corner : all.getLast().pos()));
         this.blocks = Collections.unmodifiableList(all);
         this.bounds = new BoundingBox(minX, Math.min(minY, 0), minZ, maxX, maxY, maxZ);
-        this.footprint = List.copyOf(footprint);
+        this.footprint = List.copyOf(sweep(new ArrayList<>(footprint), p -> p, corner));
         this.foundation = foundation;
         this.beds = List.copyOf(beds);
         this.chest = chest;
         this.workSpot = workSpot;
         this.entrance = entrance;
         this.marks = List.copyOf(marks);
+    }
+
+    /**
+     * Ordnet Stellen Lage für Lage (y aufsteigend); innerhalb einer Lage folgt auf jede Stelle die nächstgelegene noch
+     * offene (bei Gleichstand die vordere, dann die linke). Jede Lage beginnt dort, wo die vorige aufgehört hat.
+     */
+    static <T> List<T> sweep(List<T> items, java.util.function.Function<T, BlockPos> pos, BlockPos start) {
+        java.util.TreeMap<Integer, List<T>> layers = new java.util.TreeMap<>();
+        for (T item : items) {
+            layers.computeIfAbsent(pos.apply(item).getY(), y -> new ArrayList<>()).add(item);
+        }
+        List<T> out = new ArrayList<>(items.size());
+        int cx = start.getX();
+        int cz = start.getZ();
+        for (List<T> layer : layers.values()) {
+            layer.sort(Comparator.<T>comparingInt(i -> pos.apply(i).getZ()).thenComparingInt(i -> pos.apply(i).getX()));
+            boolean[] used = new boolean[layer.size()];
+            for (int n = 0; n < layer.size(); n++) {
+                int best = -1;
+                int bestDist = Integer.MAX_VALUE;
+                for (int i = 0; i < layer.size(); i++) {
+                    if (!used[i]) {
+                        BlockPos p = pos.apply(layer.get(i));
+                        int d = Math.abs(p.getX() - cx) + Math.abs(p.getZ() - cz);
+                        if (d < bestDist) {
+                            bestDist = d;
+                            best = i;
+                        }
+                    }
+                }
+                used[best] = true;
+                T item = layer.get(best);
+                out.add(item);
+                cx = pos.apply(item).getX();
+                cz = pos.apply(item).getZ();
+            }
+        }
+        return out;
     }
 
     /** Türen, Betten, Laternen, Fackeln, Leitern, Pflanzen, Teppiche … – alles, was an anderen Blöcken hängt. */
@@ -160,9 +197,11 @@ public final class Blueprint {
         for (Entry e : this.blocks) {
             planned.add(e.pos());
         }
+        // Räumen von oben nach unten, Reihe für Reihe in Schlangenlinien
         for (int y = this.bounds.maxY() + 1; y >= 0; y--) {
             for (int z = this.bounds.minZ(); z <= this.bounds.maxZ(); z++) {
-                for (int x = this.bounds.minX(); x <= this.bounds.maxX(); x++) {
+                for (int i = 0; i <= this.bounds.maxX() - this.bounds.minX(); i++) {
+                    int x = (z - this.bounds.minZ()) % 2 == 0 ? this.bounds.minX() + i : this.bounds.maxX() - i;
                     BlockPos local = new BlockPos(x, y, z);
                     if (!planned.contains(local)) {
                         steps.add(new Step(world(origin, rotation, local), Blocks.AIR.defaultBlockState(), false));
@@ -259,7 +298,10 @@ public final class Blueprint {
             level.updateNeighborsAt(other, otherState.getBlock());
             return true;
         }
-        level.setBlock(step.pos(), state, Block.UPDATE_ALL);
+        // an die schon stehenden Nachbarn anschließen: Scheiben und Zäune verbinden sich mit der Wand daneben, Treppen
+        // bilden Ecken (die Nachbarn, die erst später kommen, passen sich dann selbst an)
+        BlockState shaped = Block.updateFromNeighbourShapes(state, level, step.pos());
+        level.setBlock(step.pos(), shaped.isAir() ? state : shaped, Block.UPDATE_ALL);
         return true;
     }
 

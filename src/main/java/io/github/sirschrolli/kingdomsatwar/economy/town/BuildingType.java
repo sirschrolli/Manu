@@ -15,18 +15,18 @@ import net.minecraft.world.item.Items;
  * Preis (in Bronze), Betten für Bewohner und Arbeitsplätze für einen Beruf; den Bauplan liefert {@link Blueprints}.
  */
 public enum BuildingType implements StringRepresentable {
-    HOUSE(TownTier.CAMP, 60, 2, 0),
-    FIELD(TownTier.CAMP, 30, 0, 1),
-    LUMBER_HUT(TownTier.CAMP, 50, 1, 1),
-    WELL(TownTier.HAMLET, 40, 0, 0),
-    SMITHY(TownTier.HAMLET, 120, 1, 1),
-    MINE(TownTier.VILLAGE, 120, 0, 2),
-    MARKET(TownTier.VILLAGE, 150, 0, 2),
-    TAVERN(TownTier.VILLAGE, 150, 2, 1),
-    TOWNHOUSE(TownTier.MARKET_TOWN, 150, 4, 0),
-    BARRACKS(TownTier.MARKET_TOWN, 250, 0, 0),
-    MAP_HOUSE(TownTier.MARKET_TOWN, 200, 1, 1),
-    THRONE_HALL(TownTier.CITY, 600, 0, 0);
+    HOUSE(TownTier.CAMP, 54, 2, 0),
+    FIELD(TownTier.CAMP, 27, 0, 1),
+    LUMBER_HUT(TownTier.CAMP, 45, 1, 1),
+    WELL(TownTier.HAMLET, 36, 0, 0),
+    SMITHY(TownTier.HAMLET, 108, 1, 1),
+    MINE(TownTier.VILLAGE, 108, 0, 2),
+    MARKET(TownTier.VILLAGE, 135, 0, 2),
+    TAVERN(TownTier.VILLAGE, 135, 2, 1),
+    TOWNHOUSE(TownTier.MARKET_TOWN, 135, 4, 0),
+    BARRACKS(TownTier.MARKET_TOWN, 243, 0, 0),
+    MAP_HOUSE(TownTier.MARKET_TOWN, 189, 1, 1),
+    THRONE_HALL(TownTier.CITY, 567, 0, 0);
 
     public static final Codec<BuildingType> CODEC = StringRepresentable.fromEnum(BuildingType::values);
     private static final Map<BuildingType, Blueprint> PLANS = new EnumMap<>(BuildingType.class);

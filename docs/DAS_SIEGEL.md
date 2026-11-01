@@ -139,8 +139,9 @@ Blöcken, Farben, Partikeln und Geräuschen:
 
 ## 3. Wirtschaft und Stadt (umgesetzt in C)
 
-- **Münzen:** Bronze, Silber, Gold (10 Bronze = 1 Silber, 10 Silber = 1 Gold). Von Monstern, Banditen, Bossen, aus
-  Truhen und aus dem Handel. Rechtsklick wechselt zehn in eine größere, Schleichen + Rechtsklick eine in zehn kleinere.
+- **Münzen:** Bronze, Silber, Gold (9 Bronze = 1 Silber, 9 Silber = 1 Gold). Von Monstern, Banditen, Bossen, aus
+  Truhen (dort nur Bronze) und aus dem Handel. Am Werktisch oder per Rechtsklick wechseln neun in eine größere,
+  Schleichen + Rechtsklick (oder der Werktisch) eine in neun kleinere.
 - **Anheuern** aller Bewohner und Soldaten mit Münzen (statt Smaragden).
 - **Berufe:** Baumeister, Bauer (erntet, sät nach, pflegt), Holzfäller (fällt wilde Bäume, pflanzt nach), Bergmann
   (Leiterschacht, Erzwand), Schmied, Händler, Wirt, Kartograf (Karten zum Siegelkreis und zu Drachennestern). Jeder

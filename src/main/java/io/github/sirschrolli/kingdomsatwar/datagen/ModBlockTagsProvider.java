@@ -56,6 +56,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.ASH_BLOCK, ModBlocks.ASH_LAYER, ModBlocks.CINDER_SOIL);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.CHARRED_LOG);
+        add(BlockTags.LOGS, ModBlocks.CHARRED_LOG);
+        add(net.minecraft.tags.BlockItemTags.LOGS_THAT_BURN.block(), ModBlocks.CHARRED_LOG);
+        // Bretter der eigenen Hölzer: wie Vanilla-Bretter für Stöcke, Werkbank, Truhe & Co.
+        add(BlockItemTags.PLANKS.block(), ModBlocks.ANCIENT_PLANKS.base(), ModBlocks.CHARRED_PLANKS.base());
+        add(BlockItemTags.WOODEN_STAIRS.block(), ModBlocks.ANCIENT_PLANKS.stairs(), ModBlocks.CHARRED_PLANKS.stairs());
+        add(BlockItemTags.WOODEN_SLABS.block(), ModBlocks.ANCIENT_PLANKS.slab(), ModBlocks.CHARRED_PLANKS.slab());
         add(BlockTags.SUPPORTS_VEGETATION, ModBlocks.CINDER_SOIL);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ModBlocks.CINDER_SOIL);
         add(BlockTags.INFINIBURN_OVERWORLD, ModBlocks.GLOWING_VOLCANIC_ROCK, ModBlocks.EMBER_VENT);
@@ -202,6 +208,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.CASTLE_DOOR, ModBlocks.GREEN_SHUTTERS, ModBlocks.RED_SHUTTERS,
                 ModBlocks.OAK_CHAIR, ModBlocks.OAK_BENCH, ModBlocks.OAK_TABLE, ModBlocks.THRONE);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STEEL_LANTERN, ModBlocks.AETHERIT_LANTERN, ModBlocks.CHANDELIER);
+        add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.BUILDER_SCAFFOLD);
         ModBlocks.BATTLEMENTS.keySet().forEach(battlement -> add(BlockTags.MINEABLE_WITH_PICKAXE, battlement));
 
         // --- Erze ---

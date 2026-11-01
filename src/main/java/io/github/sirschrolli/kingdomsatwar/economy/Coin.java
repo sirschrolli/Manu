@@ -5,13 +5,17 @@ import net.minecraft.world.item.Item;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die drei Münzen des Königreichs: 10 Bronzemünzen sind eine Silbermünze, 10 Silbermünzen eine Goldmünze. Alle Preise
+ * Die drei Münzen des Königreichs: 9 Bronzemünzen sind eine Silbermünze, 9 Silbermünzen eine Goldmünze (so lassen sie sich
+ * an der Werkbank zusammenlegen wie Klumpen zu einem Barren). Alle Preise
  * werden in Bronze gerechnet ({@link #value()}).
  */
 public enum Coin {
     BRONZE("bronze", 1, 0xC2793D),
-    SILVER("silver", 10, 0xC9D0DC),
-    GOLD("gold", 100, 0xF2C23A);
+    SILVER("silver", 9, 0xC9D0DC),
+    GOLD("gold", 81, 0xF2C23A);
+
+    /** So viele Münzen ergeben die nächstgrößere. */
+    public static final int RATIO = 9;
 
     private final String id;
     private final int value;

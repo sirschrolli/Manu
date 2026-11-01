@@ -20,10 +20,10 @@ import net.minecraft.world.item.ItemStack;
  * @param cost      dazu nötige Ausrüstung (Stahl für Ritter, ein Edelstein für Hauptleute)
  */
 public enum SoldierType {
-    SWORDSMAN("swordsman", 30.0, 8.0, 0.0, 2.0, 0.30, 0.1, 4, 50, List.of()),
-    ARCHER("archer", 24.0, 4.0, 0.0, 2.0, 0.32, 0.0, 4, 70, List.of()),
-    KNIGHT("knight", 44.0, 14.0, 4.0, 3.0, 0.28, 0.5, 2, 150, List.of(cost(() -> ModItems.STEEL_INGOT.get(), 2))),
-    CAPTAIN("captain", 50.0, 12.0, 2.0, 4.0, 0.30, 0.3, 3, 250, List.of(cost(() -> ModItems.GEMSTONE.get(), 1)));
+    SWORDSMAN("swordsman", 30.0, 8.0, 0.0, 2.0, 0.30, 0.1, 4, 45, List.of()),
+    ARCHER("archer", 24.0, 4.0, 0.0, 2.0, 0.32, 0.0, 4, 63, List.of()),
+    KNIGHT("knight", 44.0, 14.0, 4.0, 3.0, 0.28, 0.5, 2, 126, List.of(cost(() -> ModItems.STEEL_INGOT.get(), 2))),
+    CAPTAIN("captain", 50.0, 12.0, 2.0, 4.0, 0.30, 0.3, 3, 207, List.of(cost(() -> ModItems.GEMSTONE.get(), 1)));
 
     private final String id;
     private final double health;

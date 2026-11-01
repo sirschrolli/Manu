@@ -44,6 +44,38 @@ def baton() -> Image.Image:
 
 
 # =============================================================================
+# Beschlagener Griff: Holzstiel mit Lederwicklung, eiserner Zwinge oben und Eisenknauf unten
+# =============================================================================
+
+HANDLE = [
+    "............ooo.",
+    "...........oiijo",
+    "..........oijjko",
+    ".........ojjjko.",
+    "........oabkoo..",
+    ".......oabcdo...",
+    "......oLMcdo....",
+    ".....oLMNdo.....",
+    "....oLMNdo......",
+    "...oabcdo.......",
+    "..oLMNdo........",
+    ".ojjkjo.........",
+    ".oijko..........",
+    "..oko...........",
+    "................",
+    "................",
+]
+
+
+def handle() -> Image.Image:
+    colors = {"o": hexc("#1a120c"),
+              "a": hexc("#c49a5c"), "b": hexc("#9a7240"), "c": hexc("#74532c"), "d": hexc("#523a1e"),
+              "L": hexc("#9a6236"), "M": hexc("#6e4020"), "N": hexc("#4a2812"),
+              "i": hexc("#eef0f4"), "j": hexc("#a9aeb8"), "k": hexc("#666b76")}
+    return pa.sprite(HANDLE, colors)
+
+
+# =============================================================================
 # Rekrutierungstisch: Tischläufer, Wappenbehang und Kleinkram auf dem Tisch
 # =============================================================================
 
@@ -205,6 +237,7 @@ def recruit_gui() -> Image.Image:
 
 def build(put) -> None:
     put("item/command_baton", baton())
+    put("item/reinforced_handle", handle())
     put("block/recruitment_table_cloth", table_cloth())
     put("block/recruitment_table_banner", table_banner())
     put("block/recruitment_table_items", table_items())

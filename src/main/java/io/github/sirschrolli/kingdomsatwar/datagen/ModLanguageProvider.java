@@ -55,6 +55,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("biome.kingdomsatwar.ancient_grove", "Ancient Grove", "Uralter Hain");
         block(ModBlocks.ANCIENT_LOG, "Ancient Log", "Urholzstamm");
         roof("ancient_planks", "ancient_plank", "Ancient Planks", "Urholzbretter", "Ancient Plank", "Urholz");
+        roof("charred_planks", "charred_plank", "Charred Planks", "Verkohlte Bretter", "Charred Plank", "Verkohlte Holz");
         block(ModBlocks.ANCIENT_LEAVES, "Ancient Leaves", "Uraltes Laub");
         block(ModBlocks.GLOWING_MOSS, "Glowing Moss", "Leuchtmoos");
         block(ModBlocks.GLOWCAP, "Glowcap", "Leuchtkappe");
@@ -175,6 +176,7 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.WYVERNIT, "Wyvernit", "Wyvernit");
         lore("wyvernit", "Found high up – for flight technology", "Kommt in großer Höhe vor – für Flugtechnik");
         item(ModItems.STEEL_BLEND, "Steel Blend", "Stahlmischung");
+        item(ModItems.REINFORCED_HANDLE, "Reinforced Handle", "Beschlagener Griff");
         item(ModItems.STEEL_INGOT, "Steel Ingot", "Stahlbarren");
         lore("steel_ingot", "For steel tools, weapons and armour", "Für Werkzeuge, Waffen und Rüstungen aus Stahl");
 
@@ -1114,6 +1116,7 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.STEEL_LANTERN, "Steel Lantern", "Stahllaterne");
         block(ModBlocks.AETHERIT_LANTERN, "Aetherit Lantern", "Aetheritlaterne");
         block(ModBlocks.CHANDELIER, "Chandelier", "Kronleuchter");
+        block(ModBlocks.BUILDER_SCAFFOLD, "Builder's Scaffold", "Baugerüst");
         block(ModBlocks.MEDIEVAL_STONE_BATTLEMENT, "Medieval Stone Battlement", "Mittelalterliche Steinzinne");
         block(ModBlocks.DARK_STONE_BRICK_BATTLEMENT, "Dark Stone Brick Battlement", "Dunkle Steinziegelzinne");
         block(ModBlocks.LIMESTONE_BRICK_BATTLEMENT, "Light Limestone Brick Battlement", "Helle Kalksteinziegelzinne");

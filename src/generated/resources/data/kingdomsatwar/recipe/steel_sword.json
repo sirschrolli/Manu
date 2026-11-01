@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "M": "kingdomsatwar:steel_ingot",
-    "S": "minecraft:stick"
+    "H": "kingdomsatwar:reinforced_handle",
+    "M": "kingdomsatwar:steel_ingot"
   },
   "pattern": [
     "M",
     "M",
-    "S"
+    "H"
   ],
   "result": {
     "id": "kingdomsatwar:steel_sword"

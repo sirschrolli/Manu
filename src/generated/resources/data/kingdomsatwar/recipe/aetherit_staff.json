@@ -3,12 +3,13 @@
   "category": "equipment",
   "key": {
     "A": "kingdomsatwar:aetherit",
+    "H": "kingdomsatwar:reinforced_handle",
     "S": "minecraft:stick",
     "W": "kingdomsatwar:wisp_dust"
   },
   "pattern": [
     " WA",
-    " SW",
+    " HW",
     "S  "
   ],
   "result": {

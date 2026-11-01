@@ -86,6 +86,8 @@ public final class ModItems {
     public static final DeferredItem<Item> WYVERNIT = item("wyvernit",
             p -> p.rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore("wyvernit", 1)), RESOURCE_TAB);
     public static final DeferredItem<Item> STEEL_BLEND = item("steel_blend", UnaryOperator.identity(), RESOURCE_TAB);
+    /** Beschlagener Griff: Holzstiel mit Lederwicklung und eisernen Beschlägen – für Stahlwerkzeug, Draconiumwaffen und Stäbe. */
+    public static final DeferredItem<Item> REINFORCED_HANDLE = item("reinforced_handle", UnaryOperator.identity(), RESOURCE_TAB);
     public static final DeferredItem<Item> STEEL_INGOT = item("steel_ingot",
             p -> p.component(DataComponents.LORE, lore("steel_ingot", 1)), RESOURCE_TAB);
 
