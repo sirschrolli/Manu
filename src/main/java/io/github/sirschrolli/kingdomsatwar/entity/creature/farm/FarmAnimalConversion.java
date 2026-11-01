@@ -48,7 +48,12 @@ public final class FarmAnimalConversion {
     private FarmAnimalConversion() {}
 
     private static Map<EntityType<?>, Supplier<? extends EntityType<? extends Mob>>> replacements() {
-        return Map.ofEntries(
+        return Replacements.MAP;
+    }
+
+    /** Vanilla-Typ -> eigener Typ (einmal gebaut; die Lieferanten lösen erst beim Umwandeln auf). */
+    private static final class Replacements {
+        static final Map<EntityType<?>, Supplier<? extends EntityType<? extends Mob>>> MAP = Map.ofEntries(
                 Map.entry(EntityTypes.COW, ModEntities.CATTLE),
                 Map.entry(EntityTypes.MOOSHROOM, ModEntities.CATTLE),
                 Map.entry(EntityTypes.PIG, ModEntities.FARM_PIG),
@@ -92,7 +97,25 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.SILVERFISH, ModEntities.SILVERFISH),
                 Map.entry(EntityTypes.ZOMBIE_HORSE, ModEntities.ZOMBIE_HORSE),
                 Map.entry(EntityTypes.SKELETON_HORSE, ModEntities.SKELETON_HORSE),
-                Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK));
+                Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK),
+                // übrige Monster (E4b)
+                Map.entry(EntityTypes.PILLAGER, ModEntities.PILLAGER),
+                Map.entry(EntityTypes.VINDICATOR, ModEntities.VINDICATOR),
+                Map.entry(EntityTypes.EVOKER, ModEntities.EVOKER),
+                Map.entry(EntityTypes.ILLUSIONER, ModEntities.ILLUSIONER),
+                Map.entry(EntityTypes.VEX, ModEntities.VEX),
+                Map.entry(EntityTypes.RAVAGER, ModEntities.RAVAGER),
+                Map.entry(EntityTypes.GUARDIAN, ModEntities.GUARDIAN),
+                Map.entry(EntityTypes.ELDER_GUARDIAN, ModEntities.ELDER_GUARDIAN),
+                Map.entry(EntityTypes.BREEZE, ModEntities.BREEZE),
+                Map.entry(EntityTypes.CREAKING, ModEntities.CREAKING),
+                Map.entry(EntityTypes.WARDEN, ModEntities.WARDEN));
+    }
+
+    /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */
+    public static @Nullable EntityType<? extends Mob> replacementType(EntityType<?> vanilla) {
+        Supplier<? extends EntityType<? extends Mob>> target = replacements().get(vanilla);
+        return target == null ? null : target.get();
     }
 
     /** Merkmal für Vanilla-Wesen, die schon anders ersetzt wurden (geheilte Dorfbewohner) und nicht erscheinen sollen. */
@@ -132,6 +155,57 @@ public final class FarmAnimalConversion {
         if (replacement != null) {
             event.setCanceled(true);
             level.addFreshEntity(replacement);
+            RECENT.add(new Converted(mob, replacement));
+        }
+    }
+
+    /**
+     * Gerade umgewandelte Wesen: Manches geschieht mit dem Original erst NACH seinem Erscheinen im selben Tick – ein
+     * Überfall setzt den Reiter erst danach auf den Verwüster, ein Knarzherz bindet seinen Knarz erst danach an sich.
+     * Am Ende des Ticks wird das auf die Gegenstücke übertragen.
+     */
+    private record Converted(Mob original, Mob replacement) {}
+
+    private static final java.util.List<Converted> RECENT = new java.util.ArrayList<>();
+
+    private static void applyLateChanges(ServerLevel level) {
+        for (Converted converted : java.util.List.copyOf(RECENT)) {
+            Mob original = converted.original();
+            Mob replacement = converted.replacement();
+            if (replacement.level() != level) {
+                continue;
+            }
+            RECENT.remove(converted);
+            if (replacement.isRemoved()) {
+                continue;
+            }
+            // nachträglich aufgesessen: das Gegenstück reitet auf dem, was jetzt unter dieser UUID in der Welt ist
+            Entity vehicle = original.getVehicle();
+            if (vehicle != null && !replacement.isPassenger()) {
+                Entity target = level.getEntity(vehicle.getUUID());
+                if (target != null && target != replacement) {
+                    replacement.startRiding(target, true, false);
+                }
+            }
+            for (Entity passenger : java.util.List.copyOf(original.getPassengers())) {
+                Entity rider = level.getEntity(passenger.getUUID());
+                if (rider != null && rider != replacement && rider.getVehicle() != replacement) {
+                    rider.stopRiding();
+                    rider.startRiding(replacement, true, false);
+                }
+            }
+            // Knarz: Heimat und Herz gehören jetzt dem Gegenstück
+            if (original instanceof net.minecraft.world.entity.monster.creaking.Creaking creaking
+                    && replacement instanceof net.minecraft.world.entity.monster.creaking.Creaking ours && creaking.getHomePos() != null) {
+                net.minecraft.core.BlockPos home = creaking.getHomePos();
+                if (ours.getHomePos() == null) {
+                    ours.setTransient(home);
+                }
+                if (level.getBlockEntity(home) instanceof net.minecraft.world.level.block.entity.CreakingHeartBlockEntity heart) {
+                    heart.setCreakingInfo(ours);
+                    level.broadcastEntityEvent(ours, (byte) 60);
+                }
+            }
         }
     }
 
@@ -140,7 +214,13 @@ public final class FarmAnimalConversion {
 
     @SubscribeEvent
     static void onLevelTick(net.neoforged.neoforge.event.tick.LevelTickEvent.Post event) {
-        if (PENDING.isEmpty() || !(event.getLevel() instanceof ServerLevel level)) {
+        if (!(event.getLevel() instanceof ServerLevel level)) {
+            return;
+        }
+        if (!RECENT.isEmpty()) {
+            applyLateChanges(level);
+        }
+        if (PENDING.isEmpty()) {
             return;
         }
         java.util.Set<Entity> roots = new java.util.LinkedHashSet<>();
@@ -227,6 +307,9 @@ public final class FarmAnimalConversion {
             tag.remove("UUID");
         }
         replacement.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
+        if (original.getPose() != net.minecraft.world.entity.Pose.STANDING) {
+            replacement.setPose(original.getPose());          // z. B. ein Wärter, der gerade aus dem Boden auftaucht
+        }
 
         Holder<Biome> biome = level.getBiome(original.blockPosition());
         RandomSource random = level.getRandom();

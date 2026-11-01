@@ -171,6 +171,7 @@ public final class ModGameTests {
         FarmGameTests.init();      // die eigenen Hof- und Weidetiere
         WildGameTests.init();      // die eigenen Wildtiere
         MonsterGameTests.init();   // die eigenen Monster
+        OutlawGameTests.init();    // die übrigen eigenen Monster
     }
 
     private ModGameTests() {}
@@ -205,6 +206,7 @@ public final class ModGameTests {
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);
+        OutlawGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

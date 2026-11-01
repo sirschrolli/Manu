@@ -100,11 +100,28 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.CAN_WEAR_HORSE_ARMOR).add(ModEntities.ZOMBIE_HORSE.key());
         this.tag(EntityTypeTags.CANNOT_BE_AGE_LOCKED).add(ModEntities.ZOMBIE_HORSE.key()).add(ModEntities.SKELETON_HORSE.key());
         this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.SKELETON_HORSE.key());
+        // übrige Monster (E4b): Illager (Überfälle, Bann der Illager-Freunde), Wasserwesen, Windgeist
+        this.tag(EntityTypeTags.ILLAGER).add(ModEntities.PILLAGER.key()).add(ModEntities.VINDICATOR.key()).add(ModEntities.EVOKER.key())
+                .add(ModEntities.ILLUSIONER.key());
+        this.tag(EntityTypeTags.RAIDERS).add(ModEntities.PILLAGER.key()).add(ModEntities.VINDICATOR.key()).add(ModEntities.EVOKER.key())
+                .add(ModEntities.ILLUSIONER.key()).add(ModEntities.RAVAGER.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.RAVAGER.key());
+        this.tag(EntityTypeTags.AQUATIC).add(ModEntities.GUARDIAN.key()).add(ModEntities.ELDER_GUARDIAN.key());
+        this.tag(EntityTypeTags.AXOLOTL_ALWAYS_HOSTILES).add(ModEntities.GUARDIAN.key()).add(ModEntities.ELDER_GUARDIAN.key());
+        this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(ModEntities.GUARDIAN.key()).add(ModEntities.ELDER_GUARDIAN.key());
+        this.tag(EntityTypeTags.NOT_SCARY_FOR_PUFFERFISH).add(ModEntities.GUARDIAN.key()).add(ModEntities.ELDER_GUARDIAN.key());
+        this.tag(EntityTypeTags.CANNOT_BE_PUSHED_ONTO_BOATS).add(ModEntities.ELDER_GUARDIAN.key()).add(ModEntities.CREAKING.key());
+        this.tag(EntityTypeTags.CAN_TURN_IN_BOATS).add(ModEntities.BREEZE.key());
+        this.tag(EntityTypeTags.DEFLECTS_PROJECTILES).add(ModEntities.BREEZE.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.BREEZE.key());
+        this.tag(EntityTypeTags.NO_ANGER_FROM_WIND_CHARGE).add(ModEntities.BREEZE.key());
         var monsterCoins = this.tag(ModTags.EntityTypes.DROPS_COINS);
         for (var monster : java.util.List.of(ModEntities.ZOMBIE, ModEntities.HUSK, ModEntities.DROWNED, ModEntities.ZOMBIE_VILLAGER,
                 ModEntities.SKELETON, ModEntities.STRAY, ModEntities.BOGGED, ModEntities.PARCHED, ModEntities.CREEPER, ModEntities.SPIDER,
                 ModEntities.CAVE_SPIDER, ModEntities.SLIME, ModEntities.WITCH, ModEntities.PHANTOM, ModEntities.SILVERFISH,
-                ModEntities.CAMEL_HUSK)) {
+                ModEntities.CAMEL_HUSK, ModEntities.PILLAGER, ModEntities.VINDICATOR, ModEntities.EVOKER, ModEntities.ILLUSIONER,
+                ModEntities.VEX, ModEntities.RAVAGER, ModEntities.GUARDIAN, ModEntities.ELDER_GUARDIAN, ModEntities.BREEZE,
+                ModEntities.CREAKING)) {
             monsterCoins.add(monster.key());
         }
     }

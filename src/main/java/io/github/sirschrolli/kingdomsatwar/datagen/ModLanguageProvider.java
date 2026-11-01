@@ -983,6 +983,27 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"alt", "Ancient Bone Horse", "Uraltes Skelettpferd"}});
         creature(ModEntities.CAMEL_HUSK, ModItems.CAMEL_HUSK_SPAWN_EGG, "Dried Camel", "Dörrkamel", "Dörrkamel");
         breeds(ModEntities.CAMEL_HUSK, new String[][]{{"doerr", "Dried Camel", "Dörrkamel"}, {"mumie", "Mummified Camel", "Mumienkamel"}});
+        // übrige Monster (E4b)
+        creature(ModEntities.PILLAGER, ModItems.PILLAGER_SPAWN_EGG, "Highwayman", "Wegelagerer", "Wegelagerer");
+        breeds(ModEntities.PILLAGER, new String[][]{{"wald", "Forest Highwayman", "Wegelagerer"},
+                {"steppe", "Steppe Raider", "Steppenräuber"}, {"nord", "Northern Brigand", "Nordräuber"}});
+        creature(ModEntities.VINDICATOR, ModItems.VINDICATOR_SPAWN_EGG, "Butcher", "Schlächter", "Schlächter");
+        breeds(ModEntities.VINDICATOR, new String[][]{{"henker", "Headsman", "Henker"}, {"berserker", "Berserker", "Berserker"}});
+        creature(ModEntities.EVOKER, ModItems.EVOKER_SPAWN_EGG, "Conjurer", "Beschwörer", "Beschwörer");
+        breeds(ModEntities.EVOKER, new String[][]{{"schatten", "Shadow Conjurer", "Schattenbeschwörer"},
+                {"runen", "Rune Priest", "Runenpriester"}});
+        creature(ModEntities.ILLUSIONER, ModItems.ILLUSIONER_SPAWN_EGG, "Trickster", "Gaukler", "Gaukler");
+        creature(ModEntities.VEX, ModItems.VEX_SPAWN_EGG, "Tormentor", "Plagegeist", "Plagegeist");
+        breeds(ModEntities.VEX, new String[][]{{"violett", "Tormentor", "Plagegeist"}, {"tuerkis", "Rune Tormentor", "Runengeist"}});
+        creature(ModEntities.RAVAGER, ModItems.RAVAGER_SPAWN_EGG, "Devastator", "Verwüster", "Verwüster");
+        breeds(ModEntities.RAVAGER, new String[][]{{"auerochse", "War Aurochs", "Kriegsauerochse"},
+                {"steppe", "Steppe Devastator", "Steppenungetüm"}});
+        creature(ModEntities.GUARDIAN, ModItems.GUARDIAN_SPAWN_EGG, "Reef Guardian", "Riffwächter", "Riffwächter");
+        creature(ModEntities.ELDER_GUARDIAN, ModItems.ELDER_GUARDIAN_SPAWN_EGG, "Ancient Reef Guardian", "Uralter Riffwächter",
+                "Uralter-Riffwächter");
+        creature(ModEntities.BREEZE, ModItems.BREEZE_SPAWN_EGG, "Wind Spirit", "Windgeist", "Windgeist");
+        creature(ModEntities.CREAKING, ModItems.CREAKING_SPAWN_EGG, "Gnarl", "Knorz", "Knorz");
+        creature(ModEntities.WARDEN, ModItems.WARDEN_SPAWN_EGG, "Deepwarden", "Tiefenhüter", "Tiefenhüter");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

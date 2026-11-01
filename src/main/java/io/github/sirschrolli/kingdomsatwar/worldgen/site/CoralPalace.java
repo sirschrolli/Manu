@@ -5,7 +5,6 @@ import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
@@ -298,7 +297,8 @@ final class CoralPalace {
             }
             BlockPos pos = this.b.world(0, 3, 0);
             if (this.b.inside(pos)) {
-                ElderGuardian keeper = EntityTypes.ELDER_GUARDIAN.create(this.b.level.getLevel(), EntitySpawnReason.STRUCTURE);
+                ElderGuardian keeper = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ELDER_GUARDIAN.get()
+                        .create(this.b.level.getLevel(), EntitySpawnReason.STRUCTURE);
                 if (keeper != null) {
                     keeper.setPersistenceRequired();
                     keeper.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 180.0f, 0.0f);

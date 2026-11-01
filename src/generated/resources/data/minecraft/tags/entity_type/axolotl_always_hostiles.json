@@ -1,5 +1,7 @@
 {
   "values": [
-    "kingdomsatwar:drowned"
+    "kingdomsatwar:drowned",
+    "kingdomsatwar:guardian",
+    "kingdomsatwar:elder_guardian"
   ]
 }

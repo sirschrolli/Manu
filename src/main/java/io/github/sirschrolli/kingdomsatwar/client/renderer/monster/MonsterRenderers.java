@@ -13,6 +13,14 @@ import io.github.sirschrolli.kingdomsatwar.client.model.geom.SulfurCubeGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.UndeadGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.UndeadHorseGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.WitchGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.BreezeGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.BreezeWindGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.CreakingGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.GuardianGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.IllagerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.RavagerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.VexGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.WardenGeometry;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BoneHorse;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Boneman;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DrownedCorpse;
@@ -38,8 +46,9 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Modell-Ebenen und Renderer der eigenen Monster (E4a). Die Zombie-Familie teilt sich ein Modell, ebenso die
- * Skelett-Familie; Jungtiere sind das erwachsene Modell mit großem Kopf (wie früher bei Vanilla), samt passender Rüstung.
+ * Modell-Ebenen und Renderer der eigenen Monster (E4a und E4b). Die Zombie-Familie teilt sich ein Modell, ebenso die
+ * Skelett-Familie und die Gesetzlosen; Jungtiere sind das erwachsene Modell mit großem Kopf (wie früher bei Vanilla),
+ * samt passender Rüstung.
  */
 public final class MonsterRenderers {
     public static final ModelLayerLocation UNDEAD = layer("undead");
@@ -65,6 +74,19 @@ public final class MonsterRenderers {
     public static final ModelLayerLocation SILVERFISH = layer("silverfish");
     public static final ModelLayerLocation UNDEAD_HORSE = layer("undead_horse");
     public static final ModelLayerLocation CAMEL_HUSK = layer("camel_husk");
+    // übrige Monster (E4b)
+    public static final ModelLayerLocation ILLAGER = layer("illager");
+    public static final ModelLayerLocation VEX = layer("vex");
+    public static final ModelLayerLocation RAVAGER = layer("ravager");
+    public static final ModelLayerLocation GUARDIAN = layer("guardian");
+    public static final ModelLayerLocation ELDER_GUARDIAN = layer("elder_guardian");
+    public static final ModelLayerLocation BREEZE = layer("breeze");
+    public static final ModelLayerLocation BREEZE_WIND = new ModelLayerLocation(KingdomsAtWar.id("breeze"), "wind");
+    public static final ModelLayerLocation CREAKING = layer("creaking");
+    public static final ModelLayerLocation WARDEN = layer("warden");
+
+    /** Der uralte Riffwächter ist der Riffwächter in groß (wie bei Vanilla). */
+    private static final float ELDER_GUARDIAN_SCALE = 2.35f;
 
     /** Pferde der Mod sind wie die lebenden Vanilla-Pferde etwas größer gezeichnet als ihr Kasten. */
     private static final float HORSE_SCALE = 1.1f;
@@ -137,6 +159,15 @@ public final class MonsterRenderers {
         event.registerLayerDefinition(SILVERFISH, SilverfishGeometry::createLayer);
         event.registerLayerDefinition(UNDEAD_HORSE, () -> UndeadHorseGeometry.createLayer().apply(MeshTransformer.scaling(HORSE_SCALE)));
         event.registerLayerDefinition(CAMEL_HUSK, CamelHuskGeometry::createLayer);
+        event.registerLayerDefinition(ILLAGER, IllagerGeometry::createLayer);
+        event.registerLayerDefinition(VEX, VexGeometry::createLayer);
+        event.registerLayerDefinition(RAVAGER, RavagerGeometry::createLayer);
+        event.registerLayerDefinition(GUARDIAN, GuardianGeometry::createLayer);
+        event.registerLayerDefinition(ELDER_GUARDIAN, () -> GuardianGeometry.createLayer().apply(MeshTransformer.scaling(ELDER_GUARDIAN_SCALE)));
+        event.registerLayerDefinition(BREEZE, BreezeGeometry::createLayer);
+        event.registerLayerDefinition(BREEZE_WIND, BreezeWindGeometry::createLayer);
+        event.registerLayerDefinition(CREAKING, CreakingGeometry::createLayer);
+        event.registerLayerDefinition(WARDEN, WardenGeometry::createLayer);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -167,5 +198,18 @@ public final class MonsterRenderers {
         event.registerEntityRenderer(ModEntities.SKELETON_HORSE.get(), context -> new UndeadEquineRenderer<BoneHorse>(context, "skelettpferd_",
                 BoneHorse.Look.values(), horse -> horse.getLook().ordinal(), EquipmentClientInfo.LayerType.SKELETON_HORSE_SADDLE, false));
         event.registerEntityRenderer(ModEntities.CAMEL_HUSK.get(), DryCamelRenderer::new);
+        // übrige Monster (E4b)
+        event.registerEntityRenderer(ModEntities.PILLAGER.get(), HighwaymanRenderer::new);
+        event.registerEntityRenderer(ModEntities.VINDICATOR.get(), ButcherRenderer::new);
+        event.registerEntityRenderer(ModEntities.EVOKER.get(), ConjurerRenderer::new);
+        event.registerEntityRenderer(ModEntities.ILLUSIONER.get(), TricksterRenderer::new);
+        event.registerEntityRenderer(ModEntities.VEX.get(), TormentorRenderer::new);
+        event.registerEntityRenderer(ModEntities.RAVAGER.get(), DevastatorRenderer::new);
+        event.registerEntityRenderer(ModEntities.GUARDIAN.get(), context -> new ReefGuardianRenderer(context, 0.5f, GUARDIAN, "riffwaechter"));
+        event.registerEntityRenderer(ModEntities.ELDER_GUARDIAN.get(),
+                context -> new ReefGuardianRenderer(context, 1.2f, ELDER_GUARDIAN, "riffwaechter_alt"));
+        event.registerEntityRenderer(ModEntities.BREEZE.get(), WindSpiritRenderer::new);
+        event.registerEntityRenderer(ModEntities.CREAKING.get(), GnarlRenderer::new);
+        event.registerEntityRenderer(ModEntities.WARDEN.get(), DeepWardenRenderer::new);
     }
 }

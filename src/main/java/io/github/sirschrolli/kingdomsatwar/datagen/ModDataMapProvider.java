@@ -14,8 +14,9 @@ import net.neoforged.neoforge.registries.datamaps.builtin.Flammable;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 
 /**
- * Data Maps von NeoForge. Bisher nur: welche Blöcke Feuer fangen und wie schnell sie abbrennen
- * (Datei {@code data/neoforge/data_maps/block/flammable.json}).
+ * Data Maps von NeoForge: welche Blöcke Feuer fangen und wie schnell sie abbrennen, was Werkzeuge mit den Blöcken der
+ * Schattenwelt machen, und dass Papageien die eigenen Monster nachahmen und Dorfbewohner vor ihnen Abstand halten wie
+ * vor den Vanilla-Monstern.
  */
 public class ModDataMapProvider extends DataMapProvider {
     /** Wie Holzbretter: fängt schwer Feuer, brennt dann aber recht schnell ab. */
@@ -48,6 +49,29 @@ public class ModDataMapProvider extends DataMapProvider {
             flammable.add(wood.key(), LIKE_PLANKS, false);
         }
         flammable.add(ShadowBlocks.SHADOW_LEAVES.key(), new Flammable(FireBlock.IGNITE_EASY, FireBlock.BURN_EASY), false);
+
+        // Eigene Monster wie ihre Vanilla-Gegenstücke: Papageien ahmen sie nach, Dorfbewohner halten Abstand
+        var imitations = builder(NeoForgeDataMaps.PARROT_IMITATIONS);
+        net.neoforged.fml.util.ObfuscationReflectionHelper.<java.util.Map<net.minecraft.world.entity.EntityType<?>, net.minecraft.sounds.SoundEvent>,
+                net.minecraft.world.entity.animal.parrot.Parrot>getPrivateValue(net.minecraft.world.entity.animal.parrot.Parrot.class, null,
+                "MOB_SOUND_MAP").forEach((vanilla, sound) -> {
+                    var ours = io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimalConversion.replacementType(vanilla);
+                    if (ours != null) {
+                        imitations.add(ours.builtInRegistryHolder(), new net.neoforged.neoforge.registries.datamaps.builtin.ParrotImitation(sound),
+                                false);
+                    }
+                });
+        var distances = builder(NeoForgeDataMaps.ACCEPTABLE_VILLAGER_DISTANCES);
+        net.neoforged.fml.util.ObfuscationReflectionHelper.<com.google.common.collect.ImmutableMap<net.minecraft.world.entity.EntityType<?>, Float>,
+                net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor>getPrivateValue(
+                net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor.class, null, "ACCEPTABLE_DISTANCE_FROM_HOSTILES")
+                .forEach((vanilla, distance) -> {
+                    var ours = io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimalConversion.replacementType(vanilla);
+                    if (ours != null) {
+                        distances.add(ours.builtInRegistryHolder(),
+                                new net.neoforged.neoforge.registries.datamaps.builtin.AcceptableVillagerDistance(distance), false);
+                    }
+                });
 
         // Werkzeuge: Axt entrindet Schattenholz, Hacke macht Ackerland, Schaufel einen Pfad
         var transform = builder(NeoForgeDataMaps.TRANSFORMABLES);

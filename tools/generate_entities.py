@@ -19,6 +19,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               armadillo, bat, bear, bee, camel, feline, fox, llama, panda, parrot, wolf,
                               cave_troll, mage,
                               bones, camel_husk, creeper, phantom, silverfish, slime, spider, sulfur_cube, undead, undead_horse, witch,
+                              breeze, breeze_wind, creaking, guardian, illager, ravager, vex, warden,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -125,6 +126,27 @@ def main():
                 "undead_horse", undead_horse.PALETTES, preview)
     write_model(camel_husk, "CamelHuskGeometry", "Geometrie der Dörrkamele (Kamel-Skelett der Mod).", "camel_husk",
                 camel_husk.PALETTES, preview)
+    # übrige Monster (E4b)
+    write_model(illager, "IllagerGeometry",
+                "Geometrie der Gesetzlosen (Skelett des Vanilla-Illagers mit Menschenkopf; Kapuzen, Mützen, Bärte, Roben als eigene Knochen).",
+                "illager", illager.PALETTES, preview)
+    write_model(vex, "VexGeometry", "Geometrie der Plagegeister (Knochen wie beim Vanilla-Plagegeist, Kapuze und Fetzen).", "vex",
+                vex.PALETTES, preview)
+    write_model(ravager, "RavagerGeometry", "Geometrie der Verwüster (Knochen wie beim Vanilla-Verwüster, Hörner, Fell und Geschirr).",
+                "ravager", ravager.PALETTES, preview)
+    write_model(guardian, "GuardianGeometry",
+                "Geometrie der Riffwächter (Knochen und Stacheln wie beim Vanilla-Wächter; der uralte wird im Spiel ×2,35 gezeichnet).",
+                "guardian", guardian.PALETTES, preview)
+    write_model(breeze, "BreezeGeometry", "Geometrie des Windgeists (Körper: Kopf mit Kapuze, Runensteine, Augen).", "breeze",
+                breeze.PALETTES, preview)
+    write_model(breeze_wind, "BreezeWindGeometry", "Geometrie des Windgeists (Wind-Ebene mit nahtlos rollender Textur).",
+                "breeze/wind", breeze_wind.PALETTES, preview)
+    wind_img, _ = breeze_wind.full_texture()               # die Wind-Textur rollt: das ganze Bild, nicht nur die Flächen
+    wind_img.save(TEX / "breeze/wind" / "windgeist.png")
+    write_model(creaking, "CreakingGeometry", "Geometrie des Knorz (Knochen wie beim Vanilla-Knarz, Geweih aus Ästen).", "creaking",
+                creaking.PALETTES, preview)
+    write_model(warden, "WardenGeometry", "Geometrie des Tiefenhüters (Knochen wie beim Vanilla-Wärter, Hörner statt Fühler).",
+                "warden", warden.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

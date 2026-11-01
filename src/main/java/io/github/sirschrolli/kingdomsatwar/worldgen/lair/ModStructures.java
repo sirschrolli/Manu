@@ -308,12 +308,14 @@ public final class ModStructures {
                     net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                                    net.minecraft.world.entity.EntityTypes.GUARDIAN, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+                                    io.github.sirschrolli.kingdomsatwar.registry.ModEntities.GUARDIAN.get(),
+                                    new net.minecraft.util.valueproviders.ConstantInt(1)))));
             case BANDIT_CAMP -> java.util.Map.of(
                     net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                                    net.minecraft.world.entity.EntityTypes.PILLAGER, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+                                    io.github.sirschrolli.kingdomsatwar.registry.ModEntities.PILLAGER.get(),
+                                    new net.minecraft.util.valueproviders.ConstantInt(1)))));
             // in der Kathedrale herrscht Stille: dort entsteht nichts von selbst (wie in der antiken Stadt)
             case SILENT_CATHEDRAL -> {
                 var none = new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(

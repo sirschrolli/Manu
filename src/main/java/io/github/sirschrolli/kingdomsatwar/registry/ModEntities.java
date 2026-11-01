@@ -227,6 +227,41 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryCamel>> CAMEL_HUSK = ENTITIES.registerEntityType("camel_husk",
             io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryCamel::new, MobCategory.MONSTER, builder -> builder.sized(1.7f, 2.375f).eyeHeight(2.275f).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Übrige Monster (E4b): Gesetzlose, Verwüster, Wächter, Windgeist, Knorz, Tiefenhüter
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Highwayman>> PILLAGER = ENTITIES.registerEntityType("pillager",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Highwayman::new, MobCategory.MONSTER, builder -> builder.canSpawnFarFromPlayer().sized(0.6f, 1.95f)
+                    .passengerAttachments(2.0f).ridingOffset(-0.6f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Butcher>> VINDICATOR = ENTITIES.registerEntityType("vindicator",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Butcher::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).passengerAttachments(2.0f).ridingOffset(-0.6f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Conjurer>> EVOKER = ENTITIES.registerEntityType("evoker",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Conjurer::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).passengerAttachments(2.0f).ridingOffset(-0.6f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Trickster>> ILLUSIONER = ENTITIES.registerEntityType("illusioner",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Trickster::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).passengerAttachments(2.0f).ridingOffset(-0.6f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Tormentor>> VEX = ENTITIES.registerEntityType("vex",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Tormentor::new, MobCategory.MONSTER, builder -> builder.fireImmune().sized(0.4f, 0.8f).eyeHeight(0.51875f)
+                    .passengerAttachments(0.7375f).ridingOffset(0.04f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Devastator>> RAVAGER = ENTITIES.registerEntityType("ravager",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Devastator::new, MobCategory.MONSTER, builder -> builder.sized(1.95f, 2.2f)
+                    .passengerAttachments(new net.minecraft.world.phys.Vec3(0.0, 2.2625, -0.0625)).clientTrackingRange(10).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.ReefGuardian>> GUARDIAN = ENTITIES.registerEntityType("guardian",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.ReefGuardian::new, MobCategory.MONSTER, builder -> builder.sized(0.85f, 0.85f).eyeHeight(0.425f).passengerAttachments(0.975f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.ElderReefGuardian>> ELDER_GUARDIAN = ENTITIES.registerEntityType(
+            "elder_guardian", io.github.sirschrolli.kingdomsatwar.entity.creature.monster.ElderReefGuardian::new, MobCategory.MONSTER, builder -> builder.sized(1.9975f, 1.9975f)
+                    .eyeHeight(0.99875f).passengerAttachments(2.350625f).clientTrackingRange(10).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WindSpirit>> BREEZE = ENTITIES.registerEntityType("breeze",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WindSpirit::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.77f).eyeHeight(1.3452f).clientTrackingRange(10)
+                    .notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Gnarl>> CREAKING = ENTITIES.registerEntityType("creaking",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Gnarl::new, MobCategory.MONSTER, builder -> builder.sized(0.9f, 2.7f).eyeHeight(2.3f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DeepWarden>> WARDEN = ENTITIES.registerEntityType("warden",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DeepWarden::new, MobCategory.MONSTER, builder -> builder.sized(0.9f, 2.9f).passengerAttachments(3.15f)
+                    .attach(net.minecraft.world.entity.EntityAttachment.WARDEN_CHEST, 0.0f, 1.6f, 0.0f).clientTrackingRange(16).fireImmune()
+                    .notInPeaceful());
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -400,6 +435,17 @@ public final class ModEntities {
         event.put(ZOMBIE_HORSE.get(), net.minecraft.world.entity.animal.equine.ZombieHorse.createAttributes().build());
         event.put(SKELETON_HORSE.get(), net.minecraft.world.entity.animal.equine.SkeletonHorse.createAttributes().build());
         event.put(CAMEL_HUSK.get(), net.minecraft.world.entity.animal.camel.Camel.createAttributes().build());
+        event.put(PILLAGER.get(), net.minecraft.world.entity.monster.illager.Pillager.createAttributes().build());
+        event.put(VINDICATOR.get(), net.minecraft.world.entity.monster.illager.Vindicator.createAttributes().build());
+        event.put(EVOKER.get(), net.minecraft.world.entity.monster.illager.Evoker.createAttributes().build());
+        event.put(ILLUSIONER.get(), net.minecraft.world.entity.monster.illager.Illusioner.createAttributes().build());
+        event.put(VEX.get(), net.minecraft.world.entity.monster.Vex.createAttributes().build());
+        event.put(RAVAGER.get(), net.minecraft.world.entity.monster.Ravager.createAttributes().build());
+        event.put(GUARDIAN.get(), net.minecraft.world.entity.monster.Guardian.createAttributes().build());
+        event.put(ELDER_GUARDIAN.get(), net.minecraft.world.entity.monster.ElderGuardian.createAttributes().build());
+        event.put(BREEZE.get(), net.minecraft.world.entity.monster.breeze.Breeze.createAttributes().build());
+        event.put(CREAKING.get(), net.minecraft.world.entity.monster.creaking.Creaking.createAttributes().build());
+        event.put(WARDEN.get(), net.minecraft.world.entity.monster.warden.Warden.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -480,6 +526,19 @@ public final class ModEntities {
         event.register(ZOMBIE_HORSE.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
         event.register(SKELETON_HORSE.get(), ground, surface, net.minecraft.world.entity.animal.equine.SkeletonHorse::checkSkeletonHorseSpawnRules, replace);
         event.register(CAMEL_HUSK.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkSurfaceMonstersSpawnRules, replace);
+        // übrige Monster (E4b): Regeln wie bei Vanilla
+        event.register(PILLAGER.get(), ground, noLeaves, net.minecraft.world.entity.monster.PatrollingMonster::checkPatrollingMonsterSpawnRules, replace);
+        event.register(VINDICATOR.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(EVOKER.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(ILLUSIONER.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(VEX.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(RAVAGER.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(GUARDIAN.get(), SpawnPlacementTypes.IN_WATER, noLeaves, net.minecraft.world.entity.monster.Guardian::checkGuardianSpawnRules, replace);
+        event.register(ELDER_GUARDIAN.get(), SpawnPlacementTypes.IN_WATER, noLeaves, net.minecraft.world.entity.monster.Guardian::checkGuardianSpawnRules,
+                replace);
+        event.register(BREEZE.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkAnyLightMonsterSpawnRules, replace);
+        event.register(CREAKING.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(WARDEN.get(), free, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);

@@ -1,5 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.worldgen.site;
 
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.VillageBuilder;
 import java.util.Optional;
@@ -674,14 +676,14 @@ final class RobberCastle {
 
         /** Die Leute des Raubritters: Diener mit Äxten, zwei Hexer, Armbrustschützen auf den Südtürmen. */
         void garrison() {
-            this.spawn(EntityTypes.VINDICATOR, 5, 1, -3);
-            this.spawn(EntityTypes.VINDICATOR, 10, 1, -2);
-            this.spawn(EntityTypes.VINDICATOR, 0, 8, -10);
-            this.spawn(EntityTypes.VINDICATOR, 0, 1, 10);
-            this.spawn(EntityTypes.EVOKER, 7, 1, 3);
-            this.spawn(EntityTypes.EVOKER, 0, 14, -10);
-            this.spawn(EntityTypes.PILLAGER, 10, 13, 10);
-            this.spawn(EntityTypes.PILLAGER, -10, 13, 10);
+            this.spawn(ModEntities.VINDICATOR.get(), 5, 1, -3);
+            this.spawn(ModEntities.VINDICATOR.get(), 10, 1, -2);
+            this.spawn(ModEntities.VINDICATOR.get(), 0, 8, -10);
+            this.spawn(ModEntities.VINDICATOR.get(), 0, 1, 10);
+            this.spawn(ModEntities.EVOKER.get(), 7, 1, 3);
+            this.spawn(ModEntities.EVOKER.get(), 0, 14, -10);
+            this.spawn(ModEntities.PILLAGER.get(), 10, 13, 10);
+            this.spawn(ModEntities.PILLAGER.get(), -10, 13, 10);
         }
 
         void spawn(EntityType<? extends Mob> type, int x, int y, int z) {

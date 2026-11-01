@@ -7,7 +7,7 @@
       "bounding_box": "full",
       "spawns": [
         {
-          "type": "minecraft:pillager",
+          "type": "kingdomsatwar:pillager",
           "count": 1,
           "weight": 1
         }

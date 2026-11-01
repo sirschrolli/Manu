@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.12.0 – Die Monster.**
+> **Testversion 0.13.0 – Die Gesetzlosen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -28,16 +28,23 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Braunbär mit Schulterbuckel, Luchs mit Ohrpinseln, Hummel, Vampirfledermaus, Trampeltier mit zwei Höckern …
 > Zähmen, Halsband, Wolfspanzer, Teppiche, Sattel, Bienenstöcke, der Papagei auf der Schulter und alle Beute bleiben,
 > wie man sie kennt.
-> Neu in 0.12: **eigene Monster statt der Vanilla-Monster** – alle Untoten und Nachtwesen der Oberwelt in 19 Arten und
+> In 0.12 kamen **eigene Monster statt der Vanilla-Monster** – alle Untoten und Nachtwesen der Oberwelt in 19 Arten und
 > 39 Gestalten, dazu 51 untote Dorfbewohner: Wiedergänger als Bauer, Söldner oder Mönch, Mumien in Leinenbinden,
 > Wasserleichen im Streifenhemd, Gerippe mit Ritterhelm oder Köcher, Frost-, Moor- und Dörrgebein, Kriecher mit Moos,
 > Kakteen, Eiszapfen oder Leuchtpilzen, Spinnen nach Land, glimmende Höhlenspinnen, Schleime mit Gesicht, Hexen mit
 > spitzem Hut, Nachtmahre, untote Pferde und Dörrkamele. Untote Dorfbewohner lassen sich heilen und werden wieder genau
 > der Dorfbewohner, der sie waren. Spinnenreiter, Hühnerreiter, Skelettfallen, Überfälle, Prüfkammern und alle Beute
 > funktionieren wie gewohnt.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (133 GameTests).
-> **Als Nächstes:** die übrigen Monster (Illager, Wächter, Brise, Knarz, Wärter), Wassertiere und Golems, danach
-> Nether und End.
+> Neu in 0.13: **die übrigen Monster der Oberwelt** – statt der Illager ziehen **Gesetzlose** durchs Land: Wegelagerer
+> mit Armbrust (in grüner Gugel, mit Indigo-Turban und Schleier oder in Pelz), Schlächter als Henker oder Berserker,
+> Beschwörer in tiefer Kapuze oder als Runenpriester, die Plagegeister in ihrer Farbe rufen, und der Gaukler mit
+> Narrenkappe und Halbmaske. Dazu der **Verwüster** als Kriegsauerochse oder zotteliges Steppenungetüm, der
+> **Riffwächter** und der riesige **Uralte Riffwächter**, der **Windgeist** mit Steinmaske und Runensteinen, der **Knorz**
+> mit Astgeweih und glühenden Augen und der **Tiefenhüter** mit leuchtendem Herzen im Rippenkäfig. Überfälle mit
+> Hauptmann und Reitern, Patrouillen, Räuberlager, Raubritterburg, Korallenpalast, Knarzherzen und Kreischer bringen die
+> eigenen Wesen; Totem, unheilvolle Flasche, Schwämme, Windruten und alle Beute bleiben.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (140 GameTests).
+> **Als Nächstes:** Wassertiere und Golems, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -74,7 +81,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
 | Eigene Wildtiere statt Vanilla: Wolf, Fuchs, Bär, Panda, Katzen, Papagei, Biene, Fledermaus, Gürteltier, Kamel, Lama in 50 Arten | ✅ fertig |
 | Eigene Monster statt Vanilla: Untote und Nachtwesen in 19 Arten und 39 Gestalten, 51 untote Dorfbewohner (heilbar) | ✅ fertig |
-| Übrige Monster (Illager, Wächter, Brise, Knarz, Wärter), Wassertiere und Golems statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
+| Wassertiere und Golems statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -91,7 +99,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.12.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.13.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -99,7 +107,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.12.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.13.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -563,6 +571,28 @@ Vanilla-Spawn-Eier und Befehle bringen die neuen Monster hervor.
 | **Skelettpferd** | Skelettpferd | bleich, uralt | Skelettfalle im Gewitter mit vier Reitern |
 | **Dörrkamel** | Camel Husk | Dörrkamel, Mumienkamel | vertrocknet oder bandagiert, mit Satteldecke; trägt Mumie und Dörrgebein |
 
+#### Gesetzlose und andere Ungeheuer
+
+![Gesetzlose, Verwüster, Riffwächter, Windgeist, Knorz und Tiefenhüter](docs/bilder/gesetzlose.jpg)
+
+Statt der Illager ziehen Menschen durchs Land, die das Gesetz hinter sich gelassen haben – mit eigenem Gesicht, eigener
+Tracht und denselben Waffen, Zaubern und Überfällen wie die Illager. Ihr Hauptmann trägt das unheilvolle Banner und
+lässt wie bei Vanilla die unheilvolle Flasche fallen. Auch die übrigen Ungeheuer der Oberwelt haben ihre eigene Gestalt.
+
+| Monster | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Wegelagerer** | Plünderer | Wald, Steppe, Nord | grüne Gugel mit Zipfel und Lederwams, Indigo-Turban mit Schleier und Gambeson oder Fellmütze mit geflochtenem Bart; Armbrust; Patrouillen, Räuberlager, Hauptmann mit Banner |
+| **Schlächter** | Diener | Henker, Berserker | schwarze Spitzhaube und blutige Lederschürze, oder wilde rote Mähne mit Waidbemalung und Bärenfell; verschränkte Arme, im Kampf die Axt |
+| **Beschwörer** | Magier | Schattenbeschwörer, Runenpriester | tiefe Kapuze mit leuchtenden Augen oder kahler Kopf mit leuchtenden Runen; Fangzähne, Plagegeister, Totem der Unsterblichkeit |
+| **Gaukler** | Illusionist | – | Narrenkappe mit Schellen, weiße Halbmaske, Harlekin-Rauten; Bogen, Trugbilder, Blindheit |
+| **Plagegeist** | Plagegeist | violett, türkis | Kapuzengeist mit Schädelgesicht und Fetzenflügeln, in der Farbe seines Beschwörers |
+| **Verwüster** | Verwüster | Kriegsauerochse, Steppenungetüm | lange Hörner, Stirnplatte, Nasenring und beschlagenes Kampfgeschirr; trägt die Reiter der Überfälle |
+| **Riffwächter** | Wächter | – | gepanzerter Rifffisch mit gebänderten Stacheln und Bernsteinauge; bewacht den Korallenpalast |
+| **Uralter Riffwächter** | Großer Wächter | – | riesig, elfenbeinbleich, mit Seepocken und Tang und türkisem Auge; Abbaulähmung, nasse Schwämme |
+| **Windgeist** | Brise | – | Steinmaske in einer Kapuze aus Wind, drei Runensteine, darunter ein Wirbel; Windkugeln, Windruten |
+| **Knorz** | Knarz | – | knorrige Rinde mit Moos, Astgeweih und glühende Augen; an sein Knarzherz gebunden |
+| **Tiefenhüter** | Wärter | – | schiefergraue Steinhaut, gebogene Hörner, leuchtendes Herz im Rippenkäfig; taucht aus dem Boden auf, Schallschlag |
+
 ### Wilde Kreaturen
 
 ![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
@@ -737,7 +767,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.12.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.13.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -780,7 +810,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.12.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.13.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -789,8 +819,7 @@ Ein Tag wie `v0.12.0` erzeugt automatisch ein Release mit der JAR (`.github/work
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
 1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt, die Hof- und Weidetiere, die
-   Wildtiere und die Untoten und Nachtwesen sind fertig, als Nächstes:
-   - die übrigen **Monster** – Illager samt Überfällen, Plagegeister, Verwüster, Wächter, Brise, Knarz und Wärter;
+   Wildtiere und alle Monster der Oberwelt sind fertig, als Nächstes:
    - **Wassertiere und Golems** – Fische, Tintenfische, Delfine, Schildkröten, Axolotl, Frösche, Eisen- und
      Schneegolem, Hilfsgeist und Schnüffler; alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.

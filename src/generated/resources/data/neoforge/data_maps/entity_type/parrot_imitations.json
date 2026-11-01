@@ -1,0 +1,88 @@
+{
+  "values": {
+    "kingdomsatwar:bogged": {
+      "sound": "minecraft:entity.parrot.imitate.bogged"
+    },
+    "kingdomsatwar:breeze": {
+      "sound": "minecraft:entity.parrot.imitate.breeze"
+    },
+    "kingdomsatwar:camel_husk": {
+      "sound": "minecraft:entity.parrot.imitate.camel_husk"
+    },
+    "kingdomsatwar:cave_spider": {
+      "sound": "minecraft:entity.parrot.imitate.spider"
+    },
+    "kingdomsatwar:creaking": {
+      "sound": "minecraft:entity.parrot.imitate.creaking"
+    },
+    "kingdomsatwar:creeper": {
+      "sound": "minecraft:entity.parrot.imitate.creeper"
+    },
+    "kingdomsatwar:drowned": {
+      "sound": "minecraft:entity.parrot.imitate.drowned"
+    },
+    "kingdomsatwar:elder_guardian": {
+      "sound": "minecraft:entity.parrot.imitate.elder_guardian"
+    },
+    "kingdomsatwar:evoker": {
+      "sound": "minecraft:entity.parrot.imitate.evoker"
+    },
+    "kingdomsatwar:guardian": {
+      "sound": "minecraft:entity.parrot.imitate.guardian"
+    },
+    "kingdomsatwar:husk": {
+      "sound": "minecraft:entity.parrot.imitate.husk"
+    },
+    "kingdomsatwar:illusioner": {
+      "sound": "minecraft:entity.parrot.imitate.illusioner"
+    },
+    "kingdomsatwar:parched": {
+      "sound": "minecraft:entity.parrot.imitate.parched"
+    },
+    "kingdomsatwar:phantom": {
+      "sound": "minecraft:entity.parrot.imitate.phantom"
+    },
+    "kingdomsatwar:pillager": {
+      "sound": "minecraft:entity.parrot.imitate.pillager"
+    },
+    "kingdomsatwar:ravager": {
+      "sound": "minecraft:entity.parrot.imitate.ravager"
+    },
+    "kingdomsatwar:silverfish": {
+      "sound": "minecraft:entity.parrot.imitate.silverfish"
+    },
+    "kingdomsatwar:skeleton": {
+      "sound": "minecraft:entity.parrot.imitate.skeleton"
+    },
+    "kingdomsatwar:slime": {
+      "sound": "minecraft:entity.parrot.imitate.slime"
+    },
+    "kingdomsatwar:spider": {
+      "sound": "minecraft:entity.parrot.imitate.spider"
+    },
+    "kingdomsatwar:stray": {
+      "sound": "minecraft:entity.parrot.imitate.stray"
+    },
+    "kingdomsatwar:vex": {
+      "sound": "minecraft:entity.parrot.imitate.vex"
+    },
+    "kingdomsatwar:vindicator": {
+      "sound": "minecraft:entity.parrot.imitate.vindicator"
+    },
+    "kingdomsatwar:warden": {
+      "sound": "minecraft:entity.parrot.imitate.warden"
+    },
+    "kingdomsatwar:witch": {
+      "sound": "minecraft:entity.parrot.imitate.witch"
+    },
+    "kingdomsatwar:zombie": {
+      "sound": "minecraft:entity.parrot.imitate.zombie"
+    },
+    "kingdomsatwar:zombie_horse": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_horse"
+    },
+    "kingdomsatwar:zombie_villager": {
+      "sound": "minecraft:entity.parrot.imitate.zombie_villager"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "values": {
+    "kingdomsatwar:drowned": {
+      "acceptable_villager_distance": 8.0
+    },
+    "kingdomsatwar:evoker": {
+      "acceptable_villager_distance": 12.0
+    },
+    "kingdomsatwar:husk": {
+      "acceptable_villager_distance": 8.0
+    },
+    "kingdomsatwar:illusioner": {
+      "acceptable_villager_distance": 12.0
+    },
+    "kingdomsatwar:pillager": {
+      "acceptable_villager_distance": 15.0
+    },
+    "kingdomsatwar:ravager": {
+      "acceptable_villager_distance": 12.0
+    },
+    "kingdomsatwar:vex": {
+      "acceptable_villager_distance": 8.0
+    },
+    "kingdomsatwar:vindicator": {
+      "acceptable_villager_distance": 10.0
+    },
+    "kingdomsatwar:zombie": {
+      "acceptable_villager_distance": 8.0
+    },
+    "kingdomsatwar:zombie_villager": {
+      "acceptable_villager_distance": 8.0
+    }
+  }
+}

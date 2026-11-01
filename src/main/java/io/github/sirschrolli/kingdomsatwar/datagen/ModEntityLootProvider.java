@@ -149,6 +149,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.ZOMBIE_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE_HORSE));
         this.add(ModEntities.SKELETON_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SKELETON_HORSE));
         this.add(ModEntities.CAMEL_HUSK.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAMEL_HUSK));
+        // übrige Monster (E4b): Beute wie bei Vanilla (Totem, Banner des Hauptmanns, Schwämme, Windruten, Katalysator …)
+        this.add(ModEntities.PILLAGER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PILLAGER));
+        this.add(ModEntities.VINDICATOR.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.VINDICATOR));
+        this.add(ModEntities.EVOKER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.EVOKER));
+        this.add(ModEntities.ILLUSIONER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ILLUSIONER));
+        this.add(ModEntities.VEX.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.VEX));
+        this.add(ModEntities.RAVAGER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.RAVAGER));
+        this.add(ModEntities.GUARDIAN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GUARDIAN));
+        this.add(ModEntities.ELDER_GUARDIAN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ELDER_GUARDIAN));
+        this.add(ModEntities.BREEZE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.BREEZE));
+        this.add(ModEntities.CREAKING.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CREAKING));
+        this.add(ModEntities.WARDEN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WARDEN));
 
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()

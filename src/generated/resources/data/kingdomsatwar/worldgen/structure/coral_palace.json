@@ -7,7 +7,7 @@
       "bounding_box": "full",
       "spawns": [
         {
-          "type": "minecraft:guardian",
+          "type": "kingdomsatwar:guardian",
           "count": 1,
           "weight": 1
         }
