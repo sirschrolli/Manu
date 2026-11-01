@@ -8,18 +8,20 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.8.0 – Die Dörfer.**
+> **Testversion 0.9.0 – Die Bauwerke.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
 > Krönung, die **Magie** mit sechs Erzmagiern in ihren Magiertürmen, **acht eigene Biome** – dazu Drachen zum Reiten,
 > Soldaten, Kreaturen, Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
-> Neu in 0.8: **eigene Dörfer** statt der Vanilla-Dörfer – in vier Bauweisen (Fachwerk, Nordisch, Lehm, Pfahlbau),
-> mit Dorfplatz, Wegen, im Schnitt 17 Gebäuden, Feldern, Mühle, Schafweide, Fischerhütte und Wachtürmen – und
-> **eigene Dorfbewohner** in 17 Berufen, mit eigenem Tagesablauf (Arbeit, Dorfplatz, eigenes Bett), Handel gegen
-> Münzen, Gerüchten über Drachen, Siegelkreis und Nachbardörfer, und Dorfwachen, die sie beschützen.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (77 GameTests).
-> **Als Nächstes:** keine Vanilla-Bauwerke mehr, eigene Tiere und Monster statt Vanilla, danach Nether und End.
+> Dazu **eigene Dörfer** in vier Bauweisen mit **eigenen Dorfbewohnern** in 17 Berufen.
+> Neu in 0.9: **kein einziges Vanilla-Bauwerk mehr in der Oberwelt** – an ihrer Stelle stehen **17 ganz eigene
+> Bauwerke**: der Sternensturz mit dem Portal ins Ende, die Wasserstollen der Alten, Gezeitenschrein, Seedrachen-Gebeine,
+> Karawanserei, Schlangentempel, Hexenbaum, Frostgrotte, Räuberlager, Köhlerei, Glutpforte, Muschelfeld, Korallenpalast,
+> das verschüttete Kloster, die Stille Kathedrale im Reich des Sculk, die Arena der Prüfungen und die Raubritterburg.
+> Alles, was man dort finden musste, bleibt erhältlich.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (95 GameTests).
+> **Als Nächstes:** eigene Tiere und Monster statt Vanilla, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -52,7 +54,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
-| Keine Vanilla-Bauwerke mehr, eigene Tiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
+| Eigene Tiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -69,7 +72,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.8.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.9.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -77,11 +80,11 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.8.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.9.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
-   angelegten Welten; Dörfer, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und Burgruinen entstehen nur
-   in neu erzeugten Gebieten.
+   angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
+   Burgruinen entstehen nur in neu erzeugten Gebieten.
 
 Beim ersten Betreten einer Welt läuft das **Intro**: ein Kameraflug über die Welt, die sechs Drachen und dein
 Königreich, mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder ansehen mit `/kaw intro`.
@@ -301,6 +304,43 @@ wissen sollte.
 **Dorfwachen:** Schwertkämpfer am Dorfplatz und Bogenschützen auf den Wachtürmen beschützen die Bewohner vor Monstern –
 und vor dir: Wer einen Bewohner angreift, hat die Wachen am Hals, und wer einen tötet, verliert 40 Ansehen.
 Dorfwachen lassen sich nicht anheuern.
+
+### Bauwerke der Oberwelt
+
+![Die eigenen Bauwerke der Oberwelt](docs/bilder/bauwerke.jpg)
+
+Kein einziges Vanilla-Bauwerk entsteht mehr in der Oberwelt. An die Stelle jedes Bauwerks tritt ein **ganz eigenes
+Gegenstück** – andere Gestalt, anderes Thema, aber dieselbe Rolle in der Welt: Es steht im selben Land, ist ungefähr
+gleich häufig, und was man dort unbedingt braucht (das Portal ins Ende, das Herz des Meeres, die Prüfungsschlüssel und
+Tresore, die Totems der Hexer …), findet man weiterhin. In den Truhen liegt die Beute des alten Bauwerks, dazu eigene
+Funde und Münzen.
+
+| Bauwerk | statt | Wo | Was man dort findet |
+|---|---|---|---|
+| **Sternensturz** | Festung | wie die Festungen in Ringen um den Ursprung | ein Meteoritenkrater (oder ein Sternfels auf dem Wasser bzw. am Hang), im glühenden Kern das **Portal ins Ende**; eine Wendeltreppe hinab, ein Lager der Sternforscher mit Fernrohr |
+| **Wasserstollen der Alten** | Mine | tief unter der Erde | gewölbte Kanäle mit Wasserrinnen, Säulenzisternen, Treppen, ein Brunnenhaus an der Oberfläche |
+| **Gezeitenschrein** | vergrabener Schatz | Strände und Korallenküste | ein Schrein mit Säulen und einem Dreizack aus Prismarin, unter dem Altar das **Herz des Meeres** |
+| **Gebeine eines Seedrachen** | Schiffswrack | im Meer und an Stränden | ein riesiges Drachenskelett, im Brustkorb die verschluckte Fracht (Karten, Ladung, Schatz) |
+| **Karawanserei** | Wüstentempel | Wüste | eine verfallene Herberge mit Arkadenhof und Brunnen; darunter der Schatzkeller – mit Falle |
+| **Schlangentempel** | Dschungeltempel | Dschungel | ein steinerner Schlangenkopf auf einer Lichtung, eine Pfeilfalle im Schlund, eine Halle mit Wassergraben darunter |
+| **Hexenbaum** | Sumpfhütte | Sumpf und Nebelmoor | ein hohler, abgestorbener Riesenbaum, unten die Höhle der Hexe, oben eine Plattform in der Krone |
+| **Frostgrotte** | Iglu | verschneite Ebenen, Taiga und Hänge | die Felsgrotte eines Einsiedlers mit Holzvorbau, unter dem Teppich eine Luke zum Keller |
+| **Räuberlager** | Plünderer-Außenposten | Ebenen, Savanne, Taiga, Wüste … | eine Palisade mit Wachturm und Zelten, ein Gefangener im Käfig, Wegelagerer mit Armbrüsten |
+| **Köhlerei** | verlassenes Lager | Wälder und Taiga | ein rauchender Meiler auf einer Lichtung, Holzstapel, Unterstand, ein vergrabenes Versteck |
+| **Glutpforte** | Portalruine | überall in der Oberwelt | ein zerbrochenes Tor aus Obsidian zwischen Basaltsäulen, ringsum glühender Boden; wer die Steine ergänzt, kann es entzünden |
+| **Muschelfeld** | Ozeanruinen | Ozeane | Riesenmuscheln mit leuchtenden Perlen und Truhen, alte Scherben im Sand (warm mit Korallen, kalt mit Seetang) |
+| **Korallenpalast** | Ozeanmonument | tiefe Ozeane | eine Halle unter einer Glaskuppel, vier Türme aus lebenden Korallen, ein Thron auf **acht Goldblöcken**, ein alter Wächter, die **Schwammgrotte** |
+| **Verschüttetes Kloster** | Pfadruinen | Taiga, Urwald, Dschungel | nur der Glockenturm schaut aus dem Waldboden; unten Kreuzgang, Skriptorium, Kapelle – und Funde im Kies für den Pinsel |
+| **Stille Kathedrale** | antike Stadt | tief im Reich des Sculk | eine Kathedrale aus Tiefenschiefer in einer riesigen Höhle: Türme, Fensterrose, Strebebögen, eine Kupferorgel – und Kreischer, die den Wärter rufen |
+| **Arena der Prüfungen** | Prüfungskammern | tief unter der Erde | ein Kolosseum aus Sandstein in einer Höhle; sechs Käfige mit **Prüfungsspawnern**, der Spawner der Böen in der Mitte, **Tresore** (einer unheilvoll) auf der Ehrentribüne |
+| **Raubritterburg** | Waldanwesen | dunkler Wald, Blasser Garten | eine Burg auf einem Hügel mit Graben und Brücke, Ringmauer, Rundtürme, Bergfried mit Verlies (gefangene Hellegeister), Palas – und die Leute des Raubritters (Diener, **Hexer**, Armbrustschützen) |
+
+- Enderaugen finden den Sternensturz; Schatzkarten, Ozean-Entdeckerkarten, Waldkarten, Prüfungskarten und die
+  übrigen Karten der Kartografen zeigen auf die neuen Bauwerke.
+- Finden mit `/locate structure kingdomsatwar:fallen_star` (bzw. `aqueduct`, `tide_shrine`, `sea_dragon`,
+  `caravanserai`, `serpent_temple`, `witch_tree`, `frost_grotto`, `bandit_camp`, `charcoal_camp`, `ember_gate`,
+  `clam_field`, `coral_palace`, `buried_abbey`, `silent_cathedral`, `trial_arena`, `robber_castle`).
+- Die neuen Bauwerke entstehen nur in neu erzeugten Chunks.
 
 ### Die Nester
 
@@ -562,6 +602,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
   `/locate structure kingdomsatwar:fire_mage_tower` (bzw. `ice_`, `lightning_`, `nature_`, `earth_`, `water_`) zu finden.
 - **Die Dörfer** in vier Bauweisen, je nach Land (siehe „Dörfer und Dorfbewohner“), mit
   `/locate structure kingdomsatwar:village_timber` (bzw. `village_nordic`, `village_clay`, `village_stilt`) zu finden.
+- **Die 17 Bauwerke der Oberwelt** an Stelle der Vanilla-Bauwerke (siehe „Bauwerke der Oberwelt“) – vom
+  Sternensturz mit dem Portal ins Ende bis zur Raubritterburg im dunklen Wald.
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -593,7 +635,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.8.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.9.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -619,7 +661,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── item/                     besondere Ausrüstung
 ├── worldgen/                 Erzadern, Blumen, Burgruinen, Nest-Biome, Nester (worldgen/lair), Siegelkreis (worldgen/seal),
 │                             die acht Oberwelt-Biome mit Biomquelle, Böden und Features (worldgen/overworld),
-│                             die Dörfer mit Planer, Wegen, Plätzen und Gebäuden (worldgen/village)
+│                             die Dörfer mit Planer, Wegen, Plätzen und Gebäuden (worldgen/village),
+│                             die 17 Bauwerke der Oberwelt an Stelle der Vanilla-Bauwerke (worldgen/site)
 ├── client/                   Modelle, Renderer, Intro, Oberflächen
 ├── datagen/                  Datengenerierung (erzeugt src/generated/resources)
 └── gametest/                 automatische Tests
@@ -631,7 +674,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.8.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.9.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -639,9 +682,7 @@ Ein Tag wie `v0.8.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt** – die acht Oberwelt-Biome und die Dörfer sind fertig, als Nächstes:
-   - **keine Vanilla-Bauwerke** mehr: eigene Bauwerke an ihrer Stelle (etwa ein eigenes Bauwerk mit dem Endportal statt
-     der Festung, verlassene Stollen statt der Minen) – alles, was es dort zu finden gab, bleibt erhältlich;
+1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer und die 17 Bauwerke der Oberwelt sind fertig, als Nächstes:
    - eigene **Nutz- und Wildtiere** statt der Vanilla-Tiere – alles, was die Vanilla-Tiere fallen lassen, bleibt
      erhältlich;
    - eigene **Monster und Wassertiere**;

@@ -38,6 +38,12 @@ public class ModStructureTagsProvider extends TagsProvider<Structure> {
         this.tag(StructureTags.RUINED_PORTAL).replace().add(ModStructures.site(SiteKind.EMBER_GATE))
                 .add(net.minecraft.world.level.levelgen.structure.BuiltinStructures.RUINED_PORTAL_NETHER);
         this.tag(StructureTags.ABANDONED_CAMP).replace().add(ModStructures.site(SiteKind.CHARCOAL_CAMP));
+        this.tag(StructureTags.OCEAN_RUIN).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));
+        this.tag(StructureTags.ON_OCEAN_RUIN_WARM_MAPS).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));
+        this.tag(StructureTags.ON_OCEAN_MONUMENT_MAPS).replace().add(ModStructures.site(SiteKind.CORAL_PALACE));
+        this.tag(StructureTags.ON_ANCIENT_CITY_MAPS).replace().add(ModStructures.site(SiteKind.SILENT_CATHEDRAL));
+        this.tag(StructureTags.ON_BURIED_TRIAL_CHAMBERS_MAPS).replace().add(ModStructures.site(SiteKind.TRIAL_ARENA));
+        this.tag(StructureTags.ON_WOODLAND_MANSION_MAPS).replace().add(ModStructures.site(SiteKind.ROBBER_CASTLE));
         for (var map : java.util.List.of(StructureTags.ON_ABANDONED_CAMP_BAMBOO_JUNGLE_MAPS, StructureTags.ON_ABANDONED_CAMP_CHERRY_GROVE_MAPS,
                 StructureTags.ON_ABANDONED_CAMP_BIRCH_FOREST_MAPS, StructureTags.ON_ABANDONED_CAMP_DAPPLED_FOREST_MAPS,
                 StructureTags.ON_ABANDONED_CAMP_FLOWER_FOREST_MAPS, StructureTags.ON_ABANDONED_CAMP_PALE_GARDEN_MAPS,

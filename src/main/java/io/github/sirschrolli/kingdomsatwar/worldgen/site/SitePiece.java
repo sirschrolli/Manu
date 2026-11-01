@@ -115,6 +115,12 @@ public class SitePiece extends StructurePiece {
             case BANDIT_CAMP -> BanditCamp.build(b, this);
             case CHARCOAL_CAMP -> CharcoalCamp.build(b, this);
             case EMBER_GATE -> EmberGate.build(b, this);
+            case CLAM_FIELD -> ClamField.build(b, this);
+            case CORAL_PALACE -> CoralPalace.build(b, this);
+            case BURIED_ABBEY -> BuriedAbbey.build(b, this);
+            case SILENT_CATHEDRAL -> SilentCathedral.build(b, this);
+            case TRIAL_ARENA -> TrialArena.build(b, this);
+            case ROBBER_CASTLE -> RobberCastle.build(b, this);
         }
         b.finish();
     }

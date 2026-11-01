@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/trial_arena",
+  "kind": "trial_arena",
+  "spawn_overrides": {},
+  "step": "underground_structures"
+}

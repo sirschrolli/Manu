@@ -32,7 +32,19 @@ public enum SiteKind implements StringRepresentable {
     /** Köhlerei: ein rauchender Meiler auf einer Lichtung, Unterstand und Versteck (an Stelle des verlassenen Lagers). */
     CHARCOAL_CAMP(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
     /** Glutpforte: ein zerbrochenes Tor aus Obsidian zwischen Basaltsäulen, ringsum Glut (an Stelle der Portalruine). */
-    EMBER_GATE(GenerationStep.Decoration.SURFACE_STRUCTURES);
+    EMBER_GATE(GenerationStep.Decoration.SURFACE_STRUCTURES),
+    /** Muschelfeld: Riesenmuscheln mit Perlen, Truhen und Scherben im Sand (an Stelle der Ozeanruinen). */
+    CLAM_FIELD(GenerationStep.Decoration.SURFACE_STRUCTURES),
+    /** Korallenpalast: Halle unter einer Glaskuppel, Korallentürme, Thron aus Gold, Schwammgrotte (an Stelle des Ozeanmonuments). */
+    CORAL_PALACE(GenerationStep.Decoration.SURFACE_STRUCTURES),
+    /** Verschüttetes Kloster: unter der Erde, nur der Glockenturm schaut heraus; Funde im Kies (an Stelle der Pfadruinen). */
+    BURIED_ABBEY(GenerationStep.Decoration.UNDERGROUND_STRUCTURES),
+    /** Stille Kathedrale: tief im Reich des Sculk, mit Orgel, Fensterrose und Kreischern (an Stelle der antiken Stadt). */
+    SILENT_CATHEDRAL(GenerationStep.Decoration.UNDERGROUND_STRUCTURES),
+    /** Arena der Prüfungen: ein Kolosseum in einer Höhle, Prüfungsspawner in Käfigen, Tresore auf der Tribüne (an Stelle der Prüfungskammern). */
+    TRIAL_ARENA(GenerationStep.Decoration.UNDERGROUND_STRUCTURES),
+    /** Raubritterburg: Burg auf einem Hügel im dunklen Wald, mit Bergfried, Verlies und Palas (an Stelle des Waldanwesens). */
+    ROBBER_CASTLE(GenerationStep.Decoration.SURFACE_STRUCTURES);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

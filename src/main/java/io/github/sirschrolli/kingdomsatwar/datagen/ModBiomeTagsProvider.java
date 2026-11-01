@@ -205,6 +205,17 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(net.minecraft.world.level.biome.Biomes.SWAMP).add(net.minecraft.world.level.biome.Biomes.WOODED_BADLANDS)
                 .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN).add(OverworldBiomes.PRIMEVAL_FOREST);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.EMBER_GATE)).addTag(BiomeTags.IS_OVERWORLD);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CLAM_FIELD)).addTag(BiomeTags.IS_OCEAN);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CORAL_PALACE)).addTag(BiomeTags.IS_DEEP_OCEAN);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BURIED_ABBEY)).add(net.minecraft.world.level.biome.Biomes.TAIGA)
+                .add(net.minecraft.world.level.biome.Biomes.SNOWY_TAIGA).add(net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA)
+                .add(net.minecraft.world.level.biome.Biomes.OLD_GROWTH_SPRUCE_TAIGA).add(net.minecraft.world.level.biome.Biomes.OLD_GROWTH_BIRCH_FOREST)
+                .add(net.minecraft.world.level.biome.Biomes.JUNGLE).add(OverworldBiomes.PRIMEVAL_FOREST);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SILENT_CATHEDRAL)).add(net.minecraft.world.level.biome.Biomes.DEEP_DARK);
+        // die Arena liegt tief unter der Erde, fast überall (das Reich des Sculk prüft sie selbst aus)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.TRIAL_ARENA)).addTag(BiomeTags.IS_OVERWORLD);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ROBBER_CASTLE)).add(net.minecraft.world.level.biome.Biomes.DARK_FOREST)
+                .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN);
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
                 BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,
@@ -215,7 +226,9 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST, BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA,
                 BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_PALE_GARDEN, BiomeTags.HAS_ABANDONED_CAMP_SAVANNA,
                 BiomeTags.HAS_ABANDONED_CAMP_SNOWY_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_SPARSE_JUNGLE, BiomeTags.HAS_ABANDONED_CAMP_SWAMP,
-                BiomeTags.HAS_ABANDONED_CAMP_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_WINDSWEPT_FOREST, BiomeTags.HAS_ABANDONED_CAMP_WOODED_BADLANDS)) {
+                BiomeTags.HAS_ABANDONED_CAMP_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_WINDSWEPT_FOREST, BiomeTags.HAS_ABANDONED_CAMP_WOODED_BADLANDS,
+                BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
+                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION)) {
             this.tag(old).replace();
         }
     }

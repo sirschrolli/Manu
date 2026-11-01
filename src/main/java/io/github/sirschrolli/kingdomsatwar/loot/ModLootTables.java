@@ -94,6 +94,14 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP = site("charcoal_camp");
     public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP_SECRET = site("charcoal_camp_secret");
     public static final ResourceKey<LootTable> SITE_EMBER_GATE = site("ember_gate");
+    public static final ResourceKey<LootTable> SITE_CLAM_BIG = site("clam_big");
+    public static final ResourceKey<LootTable> SITE_CLAM_SMALL = site("clam_small");
+    public static final ResourceKey<LootTable> SITE_BURIED_ABBEY = site("buried_abbey");
+    public static final ResourceKey<LootTable> SITE_CATHEDRAL = site("cathedral");
+    public static final ResourceKey<LootTable> SITE_CATHEDRAL_RELIQUARY = site("cathedral_reliquary");
+    public static final ResourceKey<LootTable> SITE_TRIAL_ARENA = site("trial_arena");
+    public static final ResourceKey<LootTable> SITE_ROBBER_CASTLE = site("robber_castle");
+    public static final ResourceKey<LootTable> SITE_ROBBER_CASTLE_HOARD = site("robber_castle_hoard");
 
     private static ResourceKey<LootTable> site(String name) {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/site/" + name));

@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 94251331,
+    "separation": 12,
+    "spacing": 34
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:trial_arena",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/clam_field",
+  "kind": "clam_field",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

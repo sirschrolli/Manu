@@ -44,6 +44,12 @@ public class SiteStructure extends Structure {
             case BANDIT_CAMP -> BanditCamp.plan(context, terrain, seed);
             case CHARCOAL_CAMP -> CharcoalCamp.plan(context, terrain, seed);
             case EMBER_GATE -> EmberGate.plan(context, terrain, seed);
+            case CLAM_FIELD -> ClamField.plan(context, terrain, seed);
+            case CORAL_PALACE -> CoralPalace.plan(context, terrain, seed);
+            case BURIED_ABBEY -> BuriedAbbey.plan(context, terrain, seed);
+            case SILENT_CATHEDRAL -> SilentCathedral.plan(context, terrain, seed);
+            case TRIAL_ARENA -> TrialArena.plan(context, terrain, seed);
+            case ROBBER_CASTLE -> RobberCastle.plan(context, terrain, seed);
         };
     }
 

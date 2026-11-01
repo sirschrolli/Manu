@@ -23,8 +23,9 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 /**
- * Die Frostgrotte: Ein Einsiedler hat sich in einen Schneehügel eine Höhle gegraben – außen nur ein weißer Buckel mit
- * einem Eingang aus Eisblöcken und einer Rauchfahne, innen eine warme Stube unter einer Kuppel aus Packeis: Felle auf dem
+ * Die Frostgrotte: Ein Einsiedler hat sich in einen verschneiten Felsbuckel eine Höhle gegraben – außen grauer Fels mit
+ * Felsnasen und Eisadern, nur obenauf Schnee, davor ein hölzerner Vorbau und eine Rauchfahne; innen eine warme Stube
+ * unter einer Kuppel aus Packeis: Felle auf dem
  * Boden, ein Feuer in der Mitte, Bett, Werkbank, Ofen, Vorräte. Unter einem Fell liegt eine Falltür – darunter der
  * versteckte Keller des Einsiedlers mit seinem Braustand und seinem Schatz.
  *
@@ -60,34 +61,46 @@ final class FrostGrotto {
             this.b = b;
         }
 
-        /** Abstand zum Hügel (≤ 1 innerhalb): unregelmäßig, mit Buckeln und Felsnasen. */
+        /** Felsnasen hinter und neben der Grotte: (Mitte x, Mitte z, Halbachsen x, Höhe, z). */
+        private static final double[][] SPURS = {{-5, -5, 3.6, 9.4, 3.4}, {4, -6, 3.2, 8.2, 3.0}, {-1, -8, 4.2, 7.2, 2.6},
+                {7, 2, 2.4, 4.6, 2.6}, {-8, 1, 2.6, 5.4, 3.0}};
+
+        /** Abstand zum Fels (≤ 1 innerhalb): ein flacher Buckel mit Felsnasen, unregelmäßig. */
         double mound(int x, int y, int z) {
             double ax = x / 8.5;
             double az = z / 7.5;
-            double ay = y / 6.5;
+            double ay = y / 6.0;
             double bump = Math.sin(x * 0.7 + 1.3) * Math.cos(z * 0.6 + 0.4) * 0.12 + (this.b.noise(x / 2, 0, z / 2) - 0.5) * 0.18;
-            return ax * ax + az * az + ay * ay - bump;
+            double m = ax * ax + az * az + ay * ay - bump;
+            for (double[] s : SPURS) {
+                double sx = (x - s[0]) / s[2];
+                double sy = y / s[3];
+                double sz = (z - s[1]) / s[4];
+                double jag = (this.b.noise(x, y / 2, z) - 0.5) * 0.3;
+                m = Math.min(m, sx * sx + sy * sy + sz * sz - jag);
+            }
+            return m;
         }
 
-        /** Außen am Hügel: Fels, Packeis und Schnee in Flecken, oben Schnee. */
-        BlockState crust(int x, int y, int z, double m) {
-            float n = this.b.noise(x / 2, y / 2, z / 2);
-            if (y >= 4 && m > 0.7) {
+        /** Außen am Fels: grauer Stein mit Adern aus Packeis, oben (wo nichts mehr darüber liegt) Schnee. */
+        BlockState crust(int x, int y, int z, double m, boolean top) {
+            float n = this.b.noise(x / 2, y / 3, z / 2);
+            if (top && this.b.chance(x, y, z, 0.35f)) {
                 return Blocks.SNOW_BLOCK.defaultBlockState();
             }
-            if (n < 0.3f) {
+            if (n < 0.4f) {
                 return Blocks.STONE.defaultBlockState();
             }
-            if (n < 0.45f) {
+            if (n < 0.6f) {
                 return Blocks.ANDESITE.defaultBlockState();
             }
-            if (n < 0.62f) {
+            if (n < 0.72f) {
                 return Blocks.PACKED_ICE.defaultBlockState();
             }
-            if (n < 0.7f) {
+            if (n < 0.86f) {
                 return Blocks.COBBLESTONE.defaultBlockState();
             }
-            return Blocks.SNOW_BLOCK.defaultBlockState();
+            return Blocks.TUFF.defaultBlockState();
         }
 
         double room(int x, int y, int z) {
@@ -111,7 +124,14 @@ final class FrostGrotto {
                         }
                         this.b.set(x, y, z, Blocks.PACKED_ICE.defaultBlockState());
                     }
-                    for (int y = 0; y <= 8; y++) {
+                    int top = -1;
+                    for (int y = 9; y >= 0; y--) {
+                        if (this.mound(x, y, z) <= 1.0) {
+                            top = y;
+                            break;
+                        }
+                    }
+                    for (int y = 0; y <= 9; y++) {
                         double m = this.mound(x, y, z);
                         if (m > 1.0) {
                             continue;
@@ -123,18 +143,11 @@ final class FrostGrotto {
                         } else if (r <= 1.35 && y >= 1) {
                             state = this.b.chance(x, y, z, 0.15f) ? Blocks.BLUE_ICE.defaultBlockState() : Blocks.PACKED_ICE.defaultBlockState();
                         } else {
-                            state = this.crust(x, y, z, m);
+                            state = this.crust(x, y, z, m, y == top);
                         }
                         this.b.set(x, y, z, state);
                     }
                     // Schneedecke obenauf
-                    int top = -1;
-                    for (int y = 8; y >= 0; y--) {
-                        if (this.mound(x, y, z) <= 1.0) {
-                            top = y;
-                            break;
-                        }
-                    }
                     if (top >= 0 && this.b.get(x, top + 1, z).isAir() && this.b.chance(x, top, z, 0.7f)) {
                         this.b.set(x, top + 1, z, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 1 + (int) (this.b.noise(x, 9, z) * 3)));
                     }

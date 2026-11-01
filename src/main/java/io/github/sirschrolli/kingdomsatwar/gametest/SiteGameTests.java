@@ -78,6 +78,18 @@ final class SiteGameTests {
             ModGameTests.TEST_FUNCTIONS.register("site_charcoal_camp", () -> SiteGameTests::charcoalCamp);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> EMBER_GATE =
             ModGameTests.TEST_FUNCTIONS.register("site_ember_gate", () -> SiteGameTests::emberGate);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CLAM_FIELD =
+            ModGameTests.TEST_FUNCTIONS.register("site_clam_field", () -> SiteGameTests::clamField);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CORAL_PALACE =
+            ModGameTests.TEST_FUNCTIONS.register("site_coral_palace", () -> SiteGameTests::coralPalace);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BURIED_ABBEY =
+            ModGameTests.TEST_FUNCTIONS.register("site_buried_abbey", () -> SiteGameTests::buriedAbbey);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SILENT_CATHEDRAL =
+            ModGameTests.TEST_FUNCTIONS.register("site_silent_cathedral", () -> SiteGameTests::silentCathedral);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TRIAL_ARENA =
+            ModGameTests.TEST_FUNCTIONS.register("site_trial_arena", () -> SiteGameTests::trialArena);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ROBBER_CASTLE =
+            ModGameTests.TEST_FUNCTIONS.register("site_robber_castle", () -> SiteGameTests::robberCastle);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> VANILLA_SITES_OFF =
             ModGameTests.TEST_FUNCTIONS.register("site_vanilla_off", () -> SiteGameTests::vanillaOff);
 
@@ -97,6 +109,12 @@ final class SiteGameTests {
         add(event, environment, BANDIT_CAMP, 100);
         add(event, environment, CHARCOAL_CAMP, 100);
         add(event, environment, EMBER_GATE, 100);
+        add(event, environment, CLAM_FIELD, 100);
+        add(event, environment, CORAL_PALACE, 100);
+        add(event, environment, BURIED_ABBEY, 100);
+        add(event, environment, SILENT_CATHEDRAL, 100);
+        add(event, environment, TRIAL_ARENA, 100);
+        add(event, environment, ROBBER_CASTLE, 100);
         add(event, environment, VANILLA_SITES_OFF, 100);
     }
 
@@ -628,6 +646,301 @@ final class SiteGameTests {
     }
 
     // =====================================================================================
+    // Muschelfeld, Korallenpalast, verschüttetes Kloster
+    // =====================================================================================
+
+    /** Das Muschelfeld am Meeresgrund: Muscheln mit leuchtenden Perlen, Truhen unter Wasser, verdächtiger Sand. */
+    private static void clamField(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 3, 47), Blocks.SAND.defaultBlockState());
+        fill(helper, new BlockPos(0, 4, 0), new BlockPos(47, 20, 47), Blocks.WATER.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 3, 24));
+        build(helper, SiteSamples.clamField(o, true));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = o.offset(-17, -4, -17);
+        BlockPos hi = o.offset(17, 10, 17);
+        int pearls = count(helper, lo, hi, s -> s.is(Blocks.SEA_LANTERN));
+        if (pearls < 3) {
+            problems.add("Perlen: " + pearls);
+        }
+        int shells = count(helper, lo, hi, s -> s.is(Blocks.CALCITE));
+        if (shells < 40) {
+            problems.add("Schalen: " + shells);
+        }
+        int chests = lootChests(helper, lo, hi, s -> s.getValue(BlockStateProperties.WATERLOGGED));
+        if (chests < 1) {
+            problems.add("Truhen unter Wasser: " + chests);
+        }
+        int brush = count(helper, lo, hi, s -> s.is(Blocks.SUSPICIOUS_SAND));
+        if (brush < 2) {
+            problems.add("verdächtiger Sand: " + brush);
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /** Der Korallenpalast: acht Goldblöcke am Thron, nasse Schwämme in der Grotte, Korallentürme, Glaskuppel, ein alter Wächter. */
+    private static void coralPalace(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.SAND.defaultBlockState());
+        fill(helper, new BlockPos(0, 2, 0), new BlockPos(47, 29, 47), Blocks.WATER.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 6, 24));
+        build(helper, SiteSamples.coralPalace(o));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = o.offset(-17, -6, -17);
+        BlockPos hi = o.offset(17, 23, 17);
+        int gold = count(helper, lo, hi, s -> s.is(Blocks.GOLD_BLOCK));
+        if (gold != 8) {
+            problems.add("Gold: " + gold);
+        }
+        int sponges = count(helper, lo, hi, s -> s.is(Blocks.WET_SPONGE));
+        if (sponges < 8) {
+            problems.add("Schwämme: " + sponges);
+        }
+        int coral = count(helper, lo, hi, s -> s.is(net.minecraft.tags.BlockTags.CORAL_BLOCKS));
+        if (coral < 100) {
+            problems.add("Korallen: " + coral);
+        }
+        int glass = count(helper, lo, hi, s -> s.is(Blocks.STAINED_GLASS.pick(net.minecraft.world.item.DyeColor.LIGHT_BLUE)));
+        if (glass < 150) {
+            problems.add("Kuppel: " + glass);
+        }
+        var keepers = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.monster.ElderGuardian.class,
+                AABB.encapsulatingFullBlocks(lo, hi));
+        if (keepers.size() != 1) {
+            problems.add("alte Wächter: " + keepers.size());
+        }
+        keepers.forEach(Entity::discard);
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /** Das verschüttete Kloster: der Glockenturm schaut aus der Erde, die Leiter führt hinab, Funde im Kies, eine Truhe. */
+    private static void buriedAbbey(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 18, 47), Blocks.DIRT.defaultBlockState());
+        fill(helper, new BlockPos(0, 19, 0), new BlockPos(47, 19, 47), Blocks.GRASS_BLOCK.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 6, 24));
+        build(helper, SiteSamples.buriedAbbey(o, 13));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = o.offset(-13, -2, -13);
+        BlockPos hi = o.offset(13, 19, 13);
+        if (count(helper, lo, hi, s -> s.is(Blocks.BELL)) != 1) {
+            problems.add("keine Glocke");
+        }
+        // die Erde endet bei y = 13: darüber stehen die Glockenstube (y 17–18) und das Dach
+        if (!helper.getLevel().getBlockState(o.offset(9, 18, -9)).is(Blocks.BELL)) {
+            problems.add("die Glocke hängt nicht über der Erde");
+        }
+        if (count(helper, o.offset(7, 17, -11), o.offset(11, 18, -7), BlockState::isAir) < 8) {
+            problems.add("die Glockenstube ist zu");
+        }
+        int ladder = count(helper, o.offset(9, 1, -10), o.offset(9, 16, -10), s -> s.is(Blocks.LADDER));
+        if (ladder != 16) {
+            problems.add("Leiter im Turm: " + ladder);
+        }
+        if (!helper.getLevel().getBlockState(o.offset(9, 23, -9)).is(Blocks.LIGHTNING_ROD.waxed().oxidized())) {
+            problems.add("keine Turmspitze");
+        }
+        // rings um den Turm Geröll statt Gras (eine Lichtung), an den Ecken Mauerstümpfe
+        int rubble = count(helper, o.offset(3, 13, -15), o.offset(15, 13, -3), s -> !s.is(Blocks.GRASS_BLOCK) && !s.isAir() && !s.is(Blocks.DIRT));
+        if (rubble < 40) {
+            problems.add("keine Lichtung am Turm: " + rubble);
+        }
+        if (count(helper, o.offset(-12, 14, 12), o.offset(-12, 15, 12), s -> !s.isAir()) == 0) {
+            problems.add("keine Mauerstümpfe");
+        }
+        int chests = lootChests(helper, lo, hi, s -> true);
+        if (chests != 1) {
+            problems.add("Truhen: " + chests);
+        }
+        int brush = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(lo, hi)) {
+            if (helper.getLevel().getBlockState(pos).is(Blocks.SUSPICIOUS_GRAVEL)
+                    && helper.getLevel().getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.BrushableBlockEntity be
+                    && be.saveWithoutMetadata(helper.getLevel().registryAccess()).contains("LootTable")) {
+                brush++;
+            }
+        }
+        if (brush < 4) {
+            problems.add("Funde im Kies: " + brush);
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    // =====================================================================================
+    // Stille Kathedrale, Arena der Prüfungen, Raubritterburg
+    // =====================================================================================
+
+    /**
+     * Die Kathedrale im Fels: Katalysator auf dem Altar aus verstärktem Tiefenschiefer, Kreischer, die den Wärter rufen
+     * können, die Orgel aus Kupfer mit dem Spieltisch aus Notenblöcken, Fensterrose, zwei Glocken, Truhen.
+     */
+    private static void silentCathedral(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 29, 47), Blocks.DEEPSLATE.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 1, 24));
+        build(helper, SiteSamples.silentCathedral(o));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = helper.absolutePos(new BlockPos(0, 1, 0));
+        BlockPos hi = helper.absolutePos(new BlockPos(47, 29, 47));
+        if (!helper.getLevel().getBlockState(o.offset(0, 3, -14)).is(Blocks.SCULK_CATALYST)) {
+            problems.add("kein Katalysator auf dem Altar");
+        }
+        int reinforced = count(helper, lo, hi, st -> st.is(Blocks.REINFORCED_DEEPSLATE));
+        if (reinforced != 3) {
+            problems.add("Altar: " + reinforced);
+        }
+        int shriekers = count(helper, lo, hi, st -> st.is(Blocks.SCULK_SHRIEKER) && st.getValue(BlockStateProperties.CAN_SUMMON));
+        if (shriekers < 4) {
+            problems.add("Kreischer: " + shriekers);
+        }
+        int pipes = count(helper, lo, hi, st -> st.is(Blocks.COPPER_BLOCK.waxed().weathered()));
+        if (pipes < 40) {
+            problems.add("Orgelpfeifen: " + pipes);
+        }
+        int keys = count(helper, lo, hi, st -> st.is(Blocks.NOTE_BLOCK));
+        if (keys != 5) {
+            problems.add("Spieltisch: " + keys);
+        }
+        int rose = count(helper, o.offset(-5, 8, 18), o.offset(5, 18, 18), st -> st.getBlock().getDescriptionId().contains("stained_glass"));
+        if (rose < 30) {
+            problems.add("Fensterrose: " + rose);
+        }
+        int bells = count(helper, lo, hi, st -> st.is(Blocks.BELL));
+        if (bells != 2) {
+            problems.add("Glocken: " + bells);
+        }
+        int chests = lootChests(helper, lo, hi, st -> true);
+        if (chests != 6) {
+            problems.add("Truhen: " + chests);
+        }
+        if (!helper.getLevel().getBlockState(o.offset(0, 10, 0)).isAir() || helper.getLevel().getBlockState(o.offset(0, 18, 0)).isAir()) {
+            problems.add("Gewölbe des Mittelschiffs falsch");
+        }
+        if (!helper.getLevel().getBlockState(o.offset(-1, 1, 18)).is(Blocks.DARK_OAK_DOOR)) {
+            problems.add("keine Tür im Portal");
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Die Arena: sieben Prüfungsspawner mit echten Konfigurationen (sechs Käfige, die Böen in der Mitte), drei Tresore
+     * (einer unheilvoll, mit unheilvollem Schlüssel), Kupferlampen, Vorratskammern, das offene Haupttor.
+     */
+    private static void trialArena(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 29, 47), Blocks.STONE.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 1, 24));
+        long seed = 0x7A1L;
+        build(helper, SiteSamples.trialArena(o, seed));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = helper.absolutePos(new BlockPos(0, 1, 0));
+        BlockPos hi = helper.absolutePos(new BlockPos(47, 29, 47));
+        int spawners = 0;
+        int configured = 0;
+        int vaults = 0;
+        int ominous = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(lo, hi)) {
+            var be = helper.getLevel().getBlockEntity(pos);
+            if (be instanceof net.minecraft.world.level.block.entity.TrialSpawnerBlockEntity spawner) {
+                spawners++;
+                if (!spawner.getTrialSpawner().normalConfig().equals(net.minecraft.world.level.block.entity.trialspawner.TrialSpawnerConfig.DEFAULT)) {
+                    configured++;
+                }
+            } else if (be instanceof net.minecraft.world.level.block.entity.vault.VaultBlockEntity vault) {
+                vaults++;
+                if (helper.getLevel().getBlockState(pos).getValue(net.minecraft.world.level.block.VaultBlock.OMINOUS)
+                        && vault.getConfig().lootTable().equals(net.minecraft.world.level.storage.loot.BuiltInLootTables.TRIAL_CHAMBERS_REWARD_OMINOUS)
+                        && vault.getConfig().keyItem().is(net.minecraft.world.item.Items.OMINOUS_TRIAL_KEY)) {
+                    ominous++;
+                }
+            }
+        }
+        if (spawners != 7 || configured != 7) {
+            problems.add("Spawner: " + spawners + " (eingerichtet " + configured + ")");
+        }
+        if (vaults != 3 || ominous != 1) {
+            problems.add("Tresore: " + vaults + " (unheilvoll " + ominous + ")");
+        }
+        int bulbs = count(helper, lo, hi, st -> st.getBlock() instanceof net.minecraft.world.level.block.CopperBulbBlock && st.getValue(BlockStateProperties.LIT));
+        if (bulbs < 10) {
+            problems.add("Kupferlampen: " + bulbs);
+        }
+        int chests = lootChests(helper, lo, hi, st -> st.is(Blocks.CHEST));
+        if (chests != 2) {
+            problems.add("Vorratstruhen: " + chests);
+        }
+        if (count(helper, o.offset(-1, 1, 13), o.offset(1, 3, 23), st -> !st.isAir()) > 0) {
+            problems.add("das Haupttor ist zu");
+        }
+        int sand = count(helper, o.offset(-12, 0, -12), o.offset(12, 0, 12), st -> st.is(Blocks.SAND) || st.is(Blocks.RED_SAND));
+        if (sand < 300) {
+            problems.add("Sand der Arena: " + sand);
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Die Burg: die Besatzung (vier Diener, zwei Hexer, zwei Armbrustschützen), zwei gefangene Hellegeister im Verlies,
+     * Truhen mit Raubgut und der Hort in der Kammer des Raubritters, das Fallgitter, Fahnen.
+     */
+    private static void robberCastle(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 4, 47), Blocks.DIRT.defaultBlockState());
+        fill(helper, new BlockPos(0, 5, 0), new BlockPos(47, 5, 47), Blocks.GRASS_BLOCK.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 7, 24));
+        build(helper, SiteSamples.robberCastle(o));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = helper.absolutePos(new BlockPos(0, 1, 0));
+        BlockPos hi = helper.absolutePos(new BlockPos(47, 29, 47));
+        AABB box = AABB.encapsulatingFullBlocks(lo, hi);
+        var level = helper.getLevel();
+        int vindicators = level.getEntitiesOfClass(net.minecraft.world.entity.monster.illager.Vindicator.class, box).size();
+        int evokers = level.getEntitiesOfClass(net.minecraft.world.entity.monster.illager.Evoker.class, box).size();
+        int pillagers = level.getEntitiesOfClass(net.minecraft.world.entity.monster.illager.Pillager.class, box).size();
+        int allays = level.getEntitiesOfClass(net.minecraft.world.entity.animal.allay.Allay.class, box).size();
+        if (vindicators != 4 || evokers != 2 || pillagers != 2 || allays != 2) {
+            problems.add("Besatzung: " + vindicators + " Diener, " + evokers + " Hexer, " + pillagers + " Schützen, " + allays + " Hellegeister");
+        }
+        boolean armed = level.getEntitiesOfClass(net.minecraft.world.entity.monster.illager.Vindicator.class, box).stream()
+                .allMatch(v -> v.getMainHandItem().is(net.minecraft.world.item.Items.IRON_AXE));
+        if (!armed) {
+            problems.add("Diener ohne Axt");
+        }
+        int chests = lootChests(helper, lo, hi, st -> st.is(Blocks.CHEST));
+        if (chests != 6) {
+            problems.add("Truhen: " + chests);
+        }
+        if (!level.getBlockState(o.offset(-2, 14, -13)).is(Blocks.BED.pick(net.minecraft.world.item.DyeColor.RED))) {
+            problems.add("kein Bett in der Kammer des Raubritters");
+        }
+        int bars = count(helper, o.offset(-3, -5, -11), o.offset(3, -2, -11), st -> st.is(Blocks.IRON_BARS));
+        if (bars < 20) {
+            problems.add("Gitter im Verlies: " + bars);
+        }
+        if (count(helper, o.offset(-1, 4, 15), o.offset(1, 4, 15), st -> st.is(Blocks.IRON_BARS)) != 3) {
+            problems.add("kein Fallgitter");
+        }
+        if (count(helper, o.offset(-1, 1, 11), o.offset(1, 3, 16), st -> !st.isAir()) > 0) {
+            problems.add("die Durchfahrt ist zu");
+        }
+        // im Testbereich wehen die Fahnen über dem Torhaus (die auf Bergfried und Nordtürmen sind höher)
+        int flags = count(helper, lo, hi, st -> st.is(Blocks.WOOL.pick(net.minecraft.world.item.DyeColor.RED)));
+        if (flags < 4) {
+            problems.add("Fahnen: " + flags);
+        }
+        for (Entity e : level.getEntitiesOfClass(Entity.class, box, e -> !(e instanceof net.minecraft.server.level.ServerPlayer))) {
+            e.discard();
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    // =====================================================================================
     // Tags
     // =====================================================================================
 
@@ -638,7 +951,9 @@ final class SiteGameTests {
         for (var tag : List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA, BiomeTags.HAS_BURIED_TREASURE,
                 BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID, BiomeTags.HAS_JUNGLE_TEMPLE,
                 BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_PILLAGER_OUTPOST, BiomeTags.HAS_RUINED_PORTAL_STANDARD,
-                BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA)) {
+                BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA,
+                BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
+                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION)) {
             helper.assertTrue(biomes.get(tag).map(set -> set.size() == 0).orElse(true), "altes Bauwerk noch erlaubt: " + tag.location());
         }
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
@@ -653,7 +968,11 @@ final class SiteGameTests {
         record Expect(TagKey<Structure> tag, SiteKind kind) {}
         for (Expect e : List.of(new Expect(StructureTags.EYE_OF_ENDER_LOCATED, SiteKind.FALLEN_STAR),
                 new Expect(StructureTags.ON_TREASURE_MAPS, SiteKind.TIDE_SHRINE), new Expect(StructureTags.MINESHAFT, SiteKind.AQUEDUCT),
-                new Expect(StructureTags.ON_MINESHAFT_MAPS, SiteKind.AQUEDUCT), new Expect(StructureTags.SHIPWRECK, SiteKind.SEA_DRAGON))) {
+                new Expect(StructureTags.ON_MINESHAFT_MAPS, SiteKind.AQUEDUCT), new Expect(StructureTags.SHIPWRECK, SiteKind.SEA_DRAGON),
+                new Expect(StructureTags.ON_ANCIENT_CITY_MAPS, SiteKind.SILENT_CATHEDRAL),
+                new Expect(StructureTags.ON_BURIED_TRIAL_CHAMBERS_MAPS, SiteKind.TRIAL_ARENA),
+                new Expect(StructureTags.ON_WOODLAND_MANSION_MAPS, SiteKind.ROBBER_CASTLE),
+                new Expect(StructureTags.ON_OCEAN_MONUMENT_MAPS, SiteKind.CORAL_PALACE))) {
             var set = structures.get(e.tag()).orElseThrow();
             helper.assertTrue(set.size() == 1 && set.get(0).is(ModStructures.site(e.kind())), e.tag().location() + " zeigt nicht auf "
                     + e.kind().id());

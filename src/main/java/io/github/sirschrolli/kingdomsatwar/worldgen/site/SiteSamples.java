@@ -102,6 +102,47 @@ public final class SiteSamples {
                 new BoundingBox(origin.getX() - 9, origin.getY() - 4, origin.getZ() - 9, origin.getX() + 9, origin.getY() + 10, origin.getZ() + 9));
     }
 
+    /** Ein Muschelfeld mit der Mitte bei {@code origin} (y = oberster Block des Meeresgrunds); warm: Sand und Korallen. */
+    public static SitePiece clamField(BlockPos origin, boolean warm) {
+        return new SitePiece(SiteKind.CLAM_FIELD, 0, origin, Rotation.NONE, 0xC1A3L, new int[] {warm ? 1 : 0},
+                new BoundingBox(origin.getX() - 17, origin.getY() - 4, origin.getZ() - 17, origin.getX() + 17, origin.getY() + 10, origin.getZ() + 17));
+    }
+
+    /** Ein Korallenpalast mit der Mitte bei {@code origin} (y = direkt über dem Meeresgrund). */
+    public static SitePiece coralPalace(BlockPos origin) {
+        int h = CoralPalace.HALF;
+        return new SitePiece(SiteKind.CORAL_PALACE, 0, origin, Rotation.NONE, 0xC02AL, new int[0],
+                new BoundingBox(origin.getX() - h - 1, origin.getY() - 10, origin.getZ() - h - 1, origin.getX() + h + 1, origin.getY() + 22,
+                        origin.getZ() + h + 1));
+    }
+
+    /** Ein verschüttetes Kloster mit der Mitte des Kreuzgangs bei {@code origin} (Boden); die Erde liegt {@code surface} höher. */
+    public static SitePiece buriedAbbey(BlockPos origin, int surface) {
+        return new SitePiece(SiteKind.BURIED_ABBEY, 0, origin, Rotation.NONE, 0xAB3L, new int[] {surface},
+                new BoundingBox(origin.getX() - 13, origin.getY() - 2, origin.getZ() - 13, origin.getX() + 13, origin.getY() + Math.max(surface, 9) + 9,
+                        origin.getZ() + 13));
+    }
+
+    /** Eine Stille Kathedrale mit der Mitte des Mittelschiffs bei {@code origin} (y = Schicht des Fußbodens). */
+    public static SitePiece silentCathedral(BlockPos origin) {
+        return new SitePiece(SiteKind.SILENT_CATHEDRAL, 0, origin, Rotation.NONE, 0xCA7L, new int[0], SilentCathedral.box(origin, Rotation.NONE));
+    }
+
+    /** Eine Arena der Prüfungen mit der Mitte der Arena bei {@code origin} (y = Schicht des Sandes). */
+    public static SitePiece trialArena(BlockPos origin, long seed) {
+        return new SitePiece(SiteKind.TRIAL_ARENA, 0, origin, Rotation.NONE, seed, new int[0], TrialArena.box(origin));
+    }
+
+    /** Eine Raubritterburg mit der Mitte des Hofs bei {@code origin} (y = oberste Schicht des Hofs). */
+    public static SitePiece robberCastle(BlockPos origin) {
+        return new SitePiece(SiteKind.ROBBER_CASTLE, 0, origin, Rotation.NONE, 0xB06L, new int[0], RobberCastle.box(origin));
+    }
+
+    /** Die Konfiguration des Prüfungsspawners in einem Käfig der Arena. */
+    public static String arenaCage(int cage, long seed) {
+        return TrialArena.cageConfig(cage, seed);
+    }
+
     /** Ein Gezeitenschrein mit der Mitte des Altars bei {@code center} (y = Oberfläche des Strands). */
     public static SitePiece tideShrine(BlockPos center) {
         return new SitePiece(SiteKind.TIDE_SHRINE, 0, center, Rotation.NONE, 77L, new int[0],

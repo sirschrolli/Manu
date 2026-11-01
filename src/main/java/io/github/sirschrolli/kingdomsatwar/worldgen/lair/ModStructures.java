@@ -272,6 +272,18 @@ public final class ModStructures {
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 91_231_129);
                 case EMBER_GATE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 15,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 34_222_647);
+                case CLAM_FIELD -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(20, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_639);
+                case CORAL_PALACE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 5,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_315);
+                case BURIED_ABBEY -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(34, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 83_469_869);
+                case SILENT_CATHEDRAL -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 20_083_239);
+                case TRIAL_ARENA -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(34, 12,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 94_251_331);
+                case ROBBER_CASTLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(80, 20,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_321);
             };
             context.register(siteSet(kind), new StructureSet(structure, placement));
         }
@@ -290,11 +302,28 @@ public final class ModStructures {
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.PIECE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                                     net.minecraft.world.entity.EntityTypes.CAT, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+            case CORAL_PALACE -> java.util.Map.of(
+                    net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                            net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                    net.minecraft.world.entity.EntityTypes.GUARDIAN, new net.minecraft.util.valueproviders.ConstantInt(1)))));
             case BANDIT_CAMP -> java.util.Map.of(
                     net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                                     net.minecraft.world.entity.EntityTypes.PILLAGER, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+            // in der Kathedrale herrscht Stille: dort entsteht nichts von selbst (wie in der antiken Stadt)
+            case SILENT_CATHEDRAL -> {
+                var none = new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                        net.minecraft.util.random.WeightedList.of());
+                var map = new java.util.EnumMap<net.minecraft.world.entity.MobCategory, net.minecraft.world.level.levelgen.structure.StructureSpawnOverride>(
+                        net.minecraft.world.entity.MobCategory.class);
+                for (var category : net.minecraft.world.entity.MobCategory.values()) {
+                    map.put(category, none);
+                }
+                yield map;
+            }
             default -> java.util.Map.of();
         };
     }

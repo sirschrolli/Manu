@@ -263,6 +263,44 @@ public class ModChestLootProvider implements LootTableSubProvider {
         // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
         this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
                 0, 3, 1, 3, 0.1f));
+        // Muschelfeld: was das Meer in die Muscheln spülte (wie in den Ozeanruinen, mit Schatzkarten), dazu Perlen (Prismarin)
+        this.output.accept(ModLootTables.SITE_CLAM_BIG, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.UNDERWATER_RUIN_BIG),
+                0, 4, 1, 3, 0.15f)
+                .withPool(pool(1, 2, item(Items.PRISMARINE_CRYSTALS, 4, 1, 4), item(Items.NAUTILUS_SHELL, 1, 1, 1), item(ModItems.GEMSTONE.get(), 2, 1, 2))));
+        this.output.accept(ModLootTables.SITE_CLAM_SMALL, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables
+                .UNDERWATER_RUIN_SMALL), 1, 4, 0, 1, 0.0f)
+                .withPool(pool(0, 2, item(Items.PRISMARINE_CRYSTALS, 4, 1, 3), item(Items.KELP, 3, 2, 6))));
+        // Kloster: Bücher, Schreibzeug, Kerzen, Brot, ein verzaubertes Buch der Mönche
+        this.output.accept(ModLootTables.SITE_BURIED_ABBEY, coins(LootTable.lootTable(), 0, 4, 1, 4, 0.2f)
+                .withPool(pool(3, 6, item(Items.BOOK, 6, 1, 3), item(Items.PAPER, 6, 2, 8), item(Items.INK_SAC, 4, 1, 3), item(Items.FEATHER, 4, 1, 3),
+                        item(Items.CANDLE, 4, 1, 3), item(Items.BREAD, 3, 1, 2), item(Items.BRUSH, 2, 1, 1), item(Items.GOLD_NUGGET, 3, 2, 6)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
+        this.greatSites();
+    }
+
+    /** Kathedrale, Arena und Burg: die Beute der Bauwerke, an deren Stelle sie stehen, dazu eigene Funde. */
+    private void greatSites() {
+        // Stille Kathedrale: wie in der antiken Stadt (Echosplitter, Schallplattenbruchstück, Bücher mit Huschen …)
+        this.output.accept(ModLootTables.SITE_CATHEDRAL, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ANCIENT_CITY),
+                2, 8, 1, 3, 0.15f)
+                .withPool(pool(0, 2, item(Items.CANDLE, 4, 1, 3), item(Items.BONE, 4, 1, 4), item(Items.ECHO_SHARD, 1, 1, 1))));
+        this.output.accept(ModLootTables.SITE_CATHEDRAL_RELIQUARY, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ANCIENT_CITY),
+                4, 12, 2, 6, 0.4f)
+                .withPool(pool(1, 2, item(Items.ECHO_SHARD, 3, 1, 3), item(ModItems.GEMSTONE.get(), 2, 1, 2), item(Items.SKELETON_SKULL, 1, 1, 1))));
+        // Arena der Prüfungen: die Vorräte der Kämpfer (wie in den Prüfungskammern)
+        this.output.accept(ModLootTables.SITE_TRIAL_ARENA, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.TRIAL_CHAMBERS_SUPPLY),
+                1, 6, 0, 2, 0.05f)
+                .withPool(pool(0, 2, item(Items.BREAD, 3, 1, 3), item(Items.ARROW, 3, 4, 12), item(Items.LEATHER, 2, 1, 3))));
+        // Raubritterburg: Raubgut (wie im Waldanwesen), in der Kammer des Raubritters sein Hort
+        this.output.accept(ModLootTables.SITE_ROBBER_CASTLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.WOODLAND_MANSION),
+                3, 10, 1, 4, 0.15f)
+                .withPool(pool(0, 2, item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.LEATHER, 3, 1, 4), item(Items.WHEAT, 3, 2, 6))));
+        this.output.accept(ModLootTables.SITE_ROBBER_CASTLE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.WOODLAND_MANSION),
+                10, 30, 4, 10, 0.5f)
+                .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 1, 4), item(Items.EMERALD, 4, 1, 5), item(ModItems.GEMSTONE.get(), 3, 1, 3),
+                        item(Items.DIAMOND, 1, 1, 2), item(Items.SADDLE, 2, 1, 1))));
     }
 
     /** Eine Tabelle, die einmal die Vanilla-Tabelle zieht. */

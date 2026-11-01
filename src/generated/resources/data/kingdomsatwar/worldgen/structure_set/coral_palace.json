@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 10387315,
+    "separation": 5,
+    "spacing": 32,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:coral_palace",
+      "weight": 1
+    }
+  ]
+}

@@ -230,6 +230,54 @@ final class WorldSitesShowcase {
                 add(views, first, 0.5, 2, 8, 0.5, 2.5, -2);
                 add(views, first, -9, 5, 6, 0, 2, -2);
             }
+            case CLAM_FIELD -> {
+                add(views, first, -11, 6, 11, 0, 2, 0);
+                add(views, first, 7, 3, -6, 0, 2, 0);
+                add(views, first, 3, 2.5, 3, 0, 1.5, 0);
+            }
+            case CORAL_PALACE -> {
+                add(views, first, -24, 16, -26, 0, 9, 0);
+                add(views, first, 22, 6, 18, 0, 8, 0);
+                add(views, first, 0.5, 4, -7, 0.5, 4, 6);
+                add(views, first, 6, 12, 6, -2, 14, -2);
+                add(views, first, 3, -2.5, 3, -3, -3, -3);
+            }
+            case BURIED_ABBEY -> {
+                int surface = first.data(0);
+                int top = Math.max(surface + 6, 12);
+                add(views, first, -6, surface + 9, 6, 9, surface + 4, -9);
+                add(views, first, 9, top - 2, -8.5, 9, top - 1.5, -12);
+                add(views, first, -5.5, 1, -5.5, 5, 2, -5.5);
+                add(views, first, 0.5, 1, -7, 0.5, 1.5, -11);
+                add(views, first, 0.5, 1, 7, 0.5, 1.5, 11);
+                add(views, first, 9, 1, -6, 9, top - 3, -9.5);
+            }
+            case SILENT_CATHEDRAL -> {
+                add(views, first, -8, 8, 30, 2, 12, 10);
+                add(views, first, 0.5, 1, 15, 0.5, 6, -14);
+                add(views, first, 0.5, 2, -11, 0.5, 6, -22);
+                add(views, first, 18, 4, 2, 6, 12, 2);
+                add(views, first, 9, 1, 14, 9, 2, -4);
+                add(views, first, -8, 1, -12, -10, 2, -16);
+                add(views, first, 0.5, 2, 35, 0.5, 12, 19);
+            }
+            case TRIAL_ARENA -> {
+                add(views, first, 0, 16, 20, 0, 2, -4);
+                add(views, first, 0.5, 9, -9, 0.5, 8.5, -17);
+                add(views, first, -14, 11, 0, 8, 2, 4);
+                add(views, first, 0.5, 1, 26, 0.5, 3, 12);
+                add(views, first, 30, 6, 10, 20, 6, 4);
+                add(views, first, 9, 1, 3, 13, 1.5, 8);
+            }
+            case ROBBER_CASTLE -> {
+                add(views, first, -26, 18, 30, 0, 6, 0);
+                add(views, first, 0.5, 6, 36, 0.5, 4, 14);
+                add(views, first, -6, 2, 6, 6, 4, -6);
+                add(views, first, 6, 2, -3, 8, 2, 4);
+                add(views, first, 0.5, 14, -9, -1, 14, -13);
+                add(views, first, 26, 14, -22, 0, 10, -8);
+                add(views, first, 0.5, -5, -9.5, 0.5, -4, -13);
+            }
             case TIDE_SHRINE -> {
                 add(views, first, 8, 5, 8, 0, 2, 0);
                 add(views, first, -10, 3, 3, 0, 3, 0);

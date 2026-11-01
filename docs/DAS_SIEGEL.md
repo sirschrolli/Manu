@@ -189,7 +189,10 @@ Blöcken, Farben, Partikeln und Geräuschen:
 - **Keine Vanilla-Mobs** mehr: eigene Nutztiere, Wildtiere, Monster und Wasserwesen, jeweils in mehreren
   Varianten; alles, was Vanilla-Mobs fallen ließen (Leder, Wolle, Federn, Fäden, Knochen, Schwarzpulver …),
   bekommt man von den eigenen.
-- **Keine Vanilla-Bauwerke** mehr (Dörfer, Tempel, Minen, Festungen …) – nur eigene.
+- **Keine Vanilla-Bauwerke** mehr (Dörfer, Tempel, Minen, Festungen …) – nur eigene (umgesetzt in E2b): jedes
+  Vanilla-Bauwerk der Oberwelt hat ein ganz eigenes Gegenstück mit anderer Gestalt und anderem Thema, das dieselbe
+  Rolle spielt – der Sternensturz trägt das Portal ins Ende, der Gezeitenschrein das Herz des Meeres, die Arena der
+  Prüfungen die Prüfungsspawner und Tresore, in der Raubritterburg hausen die Hexer mit ihren Totems.
 - Nether und End bekommen zuletzt eigene Mobs und Bauwerke.
 
 ## 6. Die Schattenwelt
@@ -256,7 +259,7 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | D | Magie: Zauberstufen, Zaubertafeln, Magietisch, Zauberkreis, sechs Erzmagier in sechs Magiertürmen (Version 0.6.0) | ✅ |
 | E1 | Acht eigene Oberwelt-Biome mit eigener Biomquelle, eigenen Böden, Bäumen, Pflanzen, Felsen, Torf und Schilf (Version 0.7.0) | ✅ |
 | E2a | Eigene Dörfer in vier Bauweisen (Fachwerk, Nordisch, Lehm, Pfahlbau) fern der Nester, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen; keine Vanilla-Dörfer und Außenposten mehr (Version 0.8.0) | ✅ |
-| E2b | Keine Vanilla-Bauwerke mehr: eigene Bauwerke an ihrer Stelle (Endportal, verlassene Stollen …), alle Funde bleiben erhältlich | ⏳ |
+| E2b | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 ganz eigene Gegenstücke (Sternensturz mit dem Endportal, Wasserstollen, Gezeitenschrein mit dem Herz des Meeres, Seedrachen-Gebeine, Karawanserei, Schlangentempel, Hexenbaum, Frostgrotte, Räuberlager, Köhlerei, Glutpforte, Muschelfeld, Korallenpalast, verschüttetes Kloster, Stille Kathedrale, Arena der Prüfungen, Raubritterburg); Enderaugen und Karten zeigen auf sie, alle Funde bleiben erhältlich (Version 0.9.0) | ✅ |
 | E3 | Eigene Nutz- und Wildtiere statt Vanilla – alle Vanilla-Beute bleibt erhältlich | ⏳ |
 | E4 | Eigene Monster und Wassertiere | ⏳ |
 | E5 | Nether und End: eigene Mobs und Bauwerke | ⏳ |
