@@ -902,6 +902,43 @@ public class ModLanguageProvider extends LanguageProvider {
         breeds(ModEntities.HARE, new String[][]{{"feldhase", "Brown Hare", "Feldhase"}, {"schneehase", "Snow Hare", "Schneehase"},
                 {"wuestenhase", "Desert Hare", "Wüstenhase"}, {"kaninchen", "Wild Rabbit", "Wildkaninchen"},
                 {"schecke", "Spotted Rabbit", "Scheckenkaninchen"}, {"mordshase", "Killer Hare", "Mordshase"}});
+        // Eigene Wildtiere
+        creature(ModEntities.WOLF, ModItems.WOLF_SPAWN_EGG, "Wolf", "Wolf", "Wolfs");
+        breeds(ModEntities.WOLF, new String[][]{{"grau", "Grey Wolf", "Grauwolf"}, {"polar", "Arctic Wolf", "Polarwolf"},
+                {"schwarz", "Black Wolf", "Schwarzwolf"}, {"timber", "Timber Wolf", "Timberwolf"}, {"steppe", "Steppe Wolf", "Steppenwolf"},
+                {"rot", "Red Wolf", "Rotwolf"}});
+        creature(ModEntities.FOX, ModItems.FOX_SPAWN_EGG, "Fox", "Fuchs", "Fuchs");
+        breeds(ModEntities.FOX, new String[][]{{"rot", "Red Fox", "Rotfuchs"}, {"polar", "Arctic Fox", "Polarfuchs"},
+                {"wueste", "Fennec Fox", "Wüstenfuchs"}, {"silber", "Silver Fox", "Silberfuchs"}});
+        creature(ModEntities.BEAR, ModItems.BEAR_SPAWN_EGG, "Bear", "Bär", "Bären");
+        breeds(ModEntities.BEAR, new String[][]{{"eis", "Polar Bear", "Eisbär"}, {"braun", "Brown Bear", "Braunbär"},
+                {"schwarz", "Black Bear", "Schwarzbär"}});
+        creature(ModEntities.PANDA, ModItems.PANDA_SPAWN_EGG, "Panda", "Panda", "Panda");
+        creature(ModEntities.CAT, ModItems.CAT_SPAWN_EGG, "Cat", "Hauskatze", "Katzen");
+        breeds(ModEntities.CAT, new String[][]{{"getigert", "Tabby Cat", "Getigerte Katze"}, {"rot", "Ginger Tomcat", "Roter Kater"},
+                {"siam", "Siamese Cat", "Siamkatze"}, {"kartaeuser", "Chartreux", "Kartäuser"}, {"glueck", "Calico Cat", "Glückskatze"},
+                {"perser", "Persian Cat", "Perserkatze"}, {"smoking", "Tuxedo Cat", "Smokingkatze"}, {"hexe", "Witch's Cat", "Hexenkatze"}});
+        creature(ModEntities.WILDCAT, ModItems.WILDCAT_SPAWN_EGG, "Wildcat", "Wildkatze", "Wildkatzen");
+        breeds(ModEntities.WILDCAT, new String[][]{{"ozelot", "Ocelot", "Ozelot"}, {"luchs", "Lynx", "Luchs"},
+                {"waldkatze", "European Wildcat", "Waldkatze"}});
+        creature(ModEntities.PARROT, ModItems.PARROT_SPAWN_EGG, "Parrot", "Papagei", "Papageien");
+        breeds(ModEntities.PARROT, new String[][]{{"ara", "Scarlet Macaw", "Hellroter Ara"}, {"hyazinth", "Hyacinth Macaw", "Hyazinthara"},
+                {"amazone", "Amazon Parrot", "Amazonenpapagei"}, {"gelbbrust", "Blue-and-yellow Macaw", "Gelbbrustara"},
+                {"grau", "Grey Parrot", "Graupapagei"}});
+        creature(ModEntities.BEE, ModItems.BEE_SPAWN_EGG, "Bee", "Biene", "Bienen");
+        breeds(ModEntities.BEE, new String[][]{{"honig", "Honey Bee", "Honigbiene"}, {"hummel", "Bumblebee", "Hummel"}});
+        creature(ModEntities.BAT, ModItems.BAT_SPAWN_EGG, "Bat", "Fledermaus", "Fledermaus");
+        breeds(ModEntities.BAT, new String[][]{{"abendsegler", "Noctule", "Abendsegler"}, {"mausohr", "Mouse-eared Bat", "Mausohr"},
+                {"vampir", "Vampire Bat", "Vampirfledermaus"}});
+        creature(ModEntities.ARMADILLO, ModItems.ARMADILLO_SPAWN_EGG, "Armadillo", "Gürteltier", "Gürteltier");
+        breeds(ModEntities.ARMADILLO, new String[][]{{"neunbinden", "Nine-banded Armadillo", "Neunbinden-Gürteltier"},
+                {"kugel", "Three-banded Armadillo", "Kugelgürteltier"}});
+        creature(ModEntities.CAMEL, ModItems.CAMEL_SPAWN_EGG, "Camel", "Kamel", "Kamel");
+        breeds(ModEntities.CAMEL, new String[][]{{"dromedar", "Dromedary", "Dromedar"}, {"trampeltier", "Bactrian Camel", "Trampeltier"}});
+        creature(ModEntities.LLAMA, ModItems.LLAMA_SPAWN_EGG, "Llama", "Lama", "Lama");
+        breeds(ModEntities.LLAMA, new String[][]{{"creme", "Cream Llama", "Cremefarbenes Lama"}, {"weiss", "White Llama", "Weißes Lama"},
+                {"braun", "Brown Llama", "Braunes Lama"}, {"grau", "Grey Llama", "Graues Lama"}});
+        creature(ModEntities.TRADER_LLAMA, ModItems.TRADER_LLAMA_SPAWN_EGG, "Trader Llama", "Händlerlama", "Händlerlama");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

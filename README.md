@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.10.0 – Die Hoftiere.**
+> **Testversion 0.11.0 – Die Wildtiere.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -20,12 +20,16 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Karawanserei, Schlangentempel, Hexenbaum, Frostgrotte, Räuberlager, Köhlerei, Glutpforte, Muschelfeld, Korallenpalast,
 > das verschüttete Kloster, die Stille Kathedrale im Reich des Sculk, die Arena der Prüfungen und die Raubritterburg.
 > Alles, was man dort finden musste, bleibt erhältlich.
-> Neu in 0.10: **eigene Hof- und Weidetiere statt der Vanilla-Tiere** – Hausrind, Hausschwein, Schaf, Huhn, Pferd, Esel,
-> Maultier, Ziege und Hase in **40 Rassen** mit eigenen Modellen und Fellbildern, vom zotteligen Hochlandrind über den
-> Hahn mit Sichelfedern bis zum Kaltblut mit Fesselbehang. Milch, Wolle, Eier, Sattel, Rossharnisch und alle Beute
-> bleiben, wie man sie kennt.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (107 GameTests).
-> **Als Nächstes:** eigene Wildtiere, dann Monster und Wassertiere, danach Nether und End.
+> In 0.10 kamen **eigene Hof- und Weidetiere statt der Vanilla-Tiere** – Hausrind, Hausschwein, Schaf, Huhn, Pferd,
+> Esel, Maultier, Ziege und Hase in **40 Rassen**.
+> Neu in 0.11: **eigene Wildtiere statt der Vanilla-Wildtiere** – Wolf, Fuchs, Bär, Panda, Hauskatze, Wildkatze,
+> Papagei, Biene, Fledermaus, Gürteltier, Kamel und Lama (samt Händlerlama) in **50 Arten und Rassen** mit eigenen
+> Modellen und Fellbildern: Grau-, Polar-, Schwarz-, Timber-, Steppen- und Rotwolf, der Fennek mit Riesenohren,
+> Braunbär mit Schulterbuckel, Luchs mit Ohrpinseln, Hummel, Vampirfledermaus, Trampeltier mit zwei Höckern …
+> Zähmen, Halsband, Wolfspanzer, Teppiche, Sattel, Bienenstöcke, der Papagei auf der Schulter und alle Beute bleiben,
+> wie man sie kennt.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (121 GameTests).
+> **Als Nächstes:** eigene Monster und Wassertiere, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -60,7 +64,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Dörfer in vier Bauweisen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
-| Eigene Wildtiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Eigene Wildtiere statt Vanilla: Wolf, Fuchs, Bär, Panda, Katzen, Papagei, Biene, Fledermaus, Gürteltier, Kamel, Lama in 50 Arten | ✅ fertig |
+| Eigene Monster und Wassertiere statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -77,7 +82,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.10.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.11.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -85,7 +90,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.10.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.11.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -489,6 +494,32 @@ bringen ebenfalls die neuen Tiere hervor; schon vorhandene Tiere einer alten Wel
 | **Ziege** | Ziege | Steinbock, Gämse, Schneeziege, Hausziege | Hörner je Art (einzeln abbrechbar), Zottelfell der Schneeziege; rammt und springt wie bisher |
 | **Hase** | Kaninchen | Feldhase, Schneehase, Wüstenhase, Wildkaninchen, Scheckenkaninchen, Mordshase | hoppelt mit gestreckten Läufen; der Mordshase mit glühenden Augen greift an (nur per Befehl) |
 
+### Wildtiere
+
+![Die eigenen Wildtiere](docs/bilder/wildtiere.jpg)
+
+Auch die Wildtiere der Vanilla-Welt sind ersetzt: Überall, wo Vanilla ein Wildtier vorsieht, lebt mit dem gleichen
+Gewicht ein **eigenes Gegenstück** – mit eigenem Modell und Fellbild, aber den vertrauten Bewegungen (Sitzen, Schlafen,
+Lauern, Rollen, Einrollen, Aufrichten). Die Art richtet sich nach dem Land: Polarwolf und Polarfuchs im Schnee, Fennek
+und Dromedar in der Wüste, Luchs in der Taiga. Zähmen, Halsbänder, Wolfspanzer, Teppiche, Packtaschen, Sattel,
+Bienenstöcke, Honig, Gürteltier-Hornplatten und alle Beute bleiben, wie man sie kennt; Vanilla-Spawn-Eier, Bienen aus
+Nestern, Dorfkatzen und die Lamas des fahrenden Händlers werden zu den neuen Tieren.
+
+| Tier | statt | Arten und Rassen | Besonderheiten |
+|---|---|---|---|
+| **Wolf** | Wolf | Grauwolf, Polarwolf, Schwarzwolf, Timberwolf, Steppenwolf, Rotwolf | Rudel einer Art; wütend mit roten Augen; eigenes Halsband, Wolfspanzer; jagt auch die eigenen Schafe, Hasen und Füchse |
+| **Fuchs** | Fuchs | Rotfuchs, Polarfuchs, Wüstenfuchs (Fennek), Silberfuchs | Riesenohren beim Fennek, schläft mit geschlossenen Augen, trägt Dinge im Maul, pflückt Beeren |
+| **Bär** | Eisbär | Eisbär, Braunbär, Schwarzbär | neu in Taiga und Wäldern; Schulterbuckel beim Braunbären; richtet sich zum Angriff auf |
+| **Panda** | Panda | ein Gesicht je Wesenszug | faul, besorgt, verspielt, schwach, aggressiv oder braun – man sieht es an den Augenflecken |
+| **Hauskatze** | Katze | getigert, roter Kater, Siam, Kartäuser, Glückskatze, Perser, Smoking, Hexenkatze | eigenes Halsband; die schwarze Hexenkatze wohnt am Hexenbaum |
+| **Wildkatze** | Ozelot | Ozelot, Luchs, Waldkatze | Luchs mit Ohrpinseln, Stummelschwanz und dichtem Fell in Taiga und Schnee, Waldkatze in den Wäldern |
+| **Papagei** | Papagei | Hellroter Ara, Hyazinthara, Amazone, Gelbbrustara, Graupapagei | Krummschnabel, Federhaube; tanzt, ahmt Monster nach und sitzt auf der Schulter |
+| **Biene** | Biene | Honigbiene, Hummel | pelzige Hummeln in kühlen Gegenden; Pollen an den Beinen, Zorn, Stich, Nester und Bienenstöcke |
+| **Fledermaus** | Fledermaus | Abendsegler, Mausohr, Vampirfledermaus | Flughäute mit Fingerknochen; Vampire in Dschungel und Sumpf |
+| **Gürteltier** | Gürteltier | Neunbinden-Gürteltier, Kugelgürteltier | Panzer mit Gürteln und Schilden, rollt sich zur Kugel ein, wirft Hornplatten ab |
+| **Kamel** | Kamel | Dromedar, Trampeltier | Trampeltier mit zwei Höckern neu in Tafelbergen und auf den Savannen-Hochebenen; Sattel, zwei Reiter, Sprint |
+| **Lama** | Lama, Händlerlama | creme, weiß, braun, grau | dichtes Vlies, Bananenohren; spuckt, zieht in Karawanen, trägt Teppiche und Packtaschen |
+
 ### Wilde Kreaturen
 
 ![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
@@ -663,7 +694,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.10.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.11.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -683,7 +714,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── registry/                 Blöcke, Gegenstände, Lebewesen, Geräusche, Kreativ-Tabs, Tags
 ├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
 ├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz,
-│                             die Hof- und Weidetiere an Stelle der Vanilla-Tiere (entity/creature/farm)
+│                             die Hof- und Weidetiere an Stelle der Vanilla-Tiere (entity/creature/farm),
+│                             die Wildtiere an Stelle der Vanilla-Wildtiere (entity/creature/wild)
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
@@ -703,7 +735,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.10.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.11.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -711,11 +743,9 @@ Ein Tag wie `v0.10.0` erzeugt automatisch ein Release mit der JAR (`.github/work
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt und die Hof- und Weidetiere
-   sind fertig, als Nächstes:
-   - eigene **Wildtiere** statt der übrigen Vanilla-Tiere (Wolf, Fuchs, Bär, Katze, Biene, Fledermaus, Papagei …) –
-     alles, was sie fallen lassen, bleibt erhältlich;
-   - eigene **Monster und Wassertiere**;
+1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt, die Hof- und Weidetiere und
+   die Wildtiere sind fertig, als Nächstes:
+   - eigene **Monster und Wassertiere** – alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 

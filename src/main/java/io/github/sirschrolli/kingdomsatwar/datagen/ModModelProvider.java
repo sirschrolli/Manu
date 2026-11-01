@@ -337,7 +337,10 @@ public class ModModelProvider extends ModelProvider {
         items.generateFlatItem(ModItems.TROLL_CLUB.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         for (DeferredItem<?> item : java.util.List.of(ModItems.CATTLE_SPAWN_EGG, ModItems.PIG_SPAWN_EGG, ModItems.SHEEP_SPAWN_EGG,
                 ModItems.CHICKEN_SPAWN_EGG, ModItems.HORSE_SPAWN_EGG, ModItems.DONKEY_SPAWN_EGG, ModItems.MULE_SPAWN_EGG,
-                ModItems.GOAT_SPAWN_EGG, ModItems.HARE_SPAWN_EGG)) {
+                ModItems.GOAT_SPAWN_EGG, ModItems.HARE_SPAWN_EGG, ModItems.WOLF_SPAWN_EGG, ModItems.FOX_SPAWN_EGG, ModItems.BEAR_SPAWN_EGG,
+                ModItems.PANDA_SPAWN_EGG, ModItems.CAT_SPAWN_EGG, ModItems.WILDCAT_SPAWN_EGG, ModItems.PARROT_SPAWN_EGG,
+                ModItems.BEE_SPAWN_EGG, ModItems.BAT_SPAWN_EGG, ModItems.ARMADILLO_SPAWN_EGG, ModItems.CAMEL_SPAWN_EGG,
+                ModItems.LLAMA_SPAWN_EGG, ModItems.TRADER_LLAMA_SPAWN_EGG)) {
             flat(items, item.get());
         }
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,

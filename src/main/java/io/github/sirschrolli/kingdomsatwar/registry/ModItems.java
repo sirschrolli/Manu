@@ -141,6 +141,20 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> MULE_SPAWN_EGG = creatureEgg("mule", () -> ModEntities.FARM_MULE.get());
     public static final DeferredItem<SpawnEggItem> GOAT_SPAWN_EGG = creatureEgg("goat", () -> ModEntities.FARM_GOAT.get());
     public static final DeferredItem<SpawnEggItem> HARE_SPAWN_EGG = creatureEgg("hare", () -> ModEntities.HARE.get());
+    // Eigene Wildtiere (auch die Vanilla-Spawn-Eier erzeugen diese Tiere)
+    public static final DeferredItem<SpawnEggItem> WOLF_SPAWN_EGG = creatureEgg("wolf", () -> ModEntities.WOLF.get());
+    public static final DeferredItem<SpawnEggItem> FOX_SPAWN_EGG = creatureEgg("fox", () -> ModEntities.FOX.get());
+    public static final DeferredItem<SpawnEggItem> BEAR_SPAWN_EGG = creatureEgg("bear", () -> ModEntities.BEAR.get());
+    public static final DeferredItem<SpawnEggItem> PANDA_SPAWN_EGG = creatureEgg("panda", () -> ModEntities.PANDA.get());
+    public static final DeferredItem<SpawnEggItem> CAT_SPAWN_EGG = creatureEgg("cat", () -> ModEntities.CAT.get());
+    public static final DeferredItem<SpawnEggItem> WILDCAT_SPAWN_EGG = creatureEgg("wildcat", () -> ModEntities.WILDCAT.get());
+    public static final DeferredItem<SpawnEggItem> PARROT_SPAWN_EGG = creatureEgg("parrot", () -> ModEntities.PARROT.get());
+    public static final DeferredItem<SpawnEggItem> BEE_SPAWN_EGG = creatureEgg("bee", () -> ModEntities.BEE.get());
+    public static final DeferredItem<SpawnEggItem> BAT_SPAWN_EGG = creatureEgg("bat", () -> ModEntities.BAT.get());
+    public static final DeferredItem<SpawnEggItem> ARMADILLO_SPAWN_EGG = creatureEgg("armadillo", () -> ModEntities.ARMADILLO.get());
+    public static final DeferredItem<SpawnEggItem> CAMEL_SPAWN_EGG = creatureEgg("camel", () -> ModEntities.CAMEL.get());
+    public static final DeferredItem<SpawnEggItem> LLAMA_SPAWN_EGG = creatureEgg("llama", () -> ModEntities.LLAMA.get());
+    public static final DeferredItem<SpawnEggItem> TRADER_LLAMA_SPAWN_EGG = creatureEgg("trader_llama", () -> ModEntities.TRADER_LLAMA.get());
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
     public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());

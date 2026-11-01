@@ -115,10 +115,60 @@ Painter = Callable[["Ctx"], RGBA | None]
 
 class Ctx:
     """Alles, was ein Material-Maler über ein Texel wissen muss."""
-    __slots__ = ("cube", "face", "s", "t", "w", "h", "local", "world", "pal", "rng", "u", "v", "glow", "params")
+    __slots__ = ("cube", "face", "s", "t", "w", "h", "local", "world", "pal", "rng", "u", "v", "glow", "params", "wrel",
+                 "lface")
 
     def __init__(self):
         self.glow: RGBA | None = None
+        self.wrel: float | None = None
+        self.lface: str | None = None
+
+
+_NORMALS = {"west": (-1.0, 0.0, 0.0), "east": (1.0, 0.0, 0.0), "top": (0.0, -1.0, 0.0), "bottom": (0.0, 1.0, 0.0),
+            "front": (0.0, 0.0, -1.0), "back": (0.0, 0.0, 1.0)}
+
+
+def _rot_matrix(deg: tuple[float, float, float]):
+    """Drehung wie bei Minecraft-Modellteilen (erst X, dann Y, dann Z)."""
+    ax, ay, az = (math.radians(v) for v in deg)
+    cx, sx, cy, sy, cz, sz = math.cos(ax), math.sin(ax), math.cos(ay), math.sin(ay), math.cos(az), math.sin(az)
+    rx = ((1, 0, 0), (0, cx, -sx), (0, sx, cx))
+    ry = ((cy, 0, sy), (0, 1, 0), (-sy, 0, cy))
+    rz = ((cz, -sz, 0), (sz, cz, 0), (0, 0, 1))
+    return _mat_mul(rz, _mat_mul(ry, rx))
+
+
+def _mat_mul(a, b):
+    return tuple(tuple(sum(a[i][k] * b[k][j] for k in range(3)) for j in range(3)) for i in range(3))
+
+
+def _apply(m, v):
+    return tuple(sum(m[i][k] * v[k] for k in range(3)) for i in range(3))
+
+
+def _bone_matrix(bone):
+    m = ((1, 0, 0), (0, 1, 0), (0, 0, 1))
+    chain = []
+    b = bone
+    while b is not None:
+        chain.append(b)
+        b = b.parent
+    for b in reversed(chain):
+        m = _mat_mul(m, _rot_matrix(b.rotation))
+    return m
+
+
+def _world_face(m, face: str) -> str:
+    """Welche Seite eine Fläche nach den Drehungen der Knochen in der Welt zeigt (oben, vorn …)."""
+    n = _apply(m, _NORMALS[face])
+    axis = max(range(3), key=lambda i: abs(n[i]))
+    if abs(n[axis]) < 0.7:
+        return face
+    if axis == 0:
+        return "west" if n[0] < 0 else "east"
+    if axis == 1:
+        return "top" if n[1] < 0 else "bottom"
+    return "front" if n[2] < 0 else "back"
 
 
 def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: int = 1,
@@ -130,8 +180,16 @@ def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: in
     px = img.load()
     gx = glow.load()
     rng = random.Random(seed)
+    world_faces = getattr(model, "world_faces", False)
     for cube in model.all_cubes():
         wp = cube.bone.world_pivot()
+        rot = _bone_matrix(cube.bone) if world_faces else None
+        y_lo = y_hi = 0.0
+        if rot is not None:
+            ox, oy, oz = cube.origin
+            sx, sy, sz = cube.size
+            ys = [_apply(rot, (ox + dx * sx, oy + dy * sy, oz + dz * sz))[1] for dx in (0, 1) for dy in (0, 1) for dz in (0, 1)]
+            y_lo, y_hi = min(ys), max(ys)
         for face, (u0, v0, fw, fh) in face_rects(cube).items():
             if cube.faces and face not in cube.faces:
                 continue
@@ -149,6 +207,13 @@ def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: in
                     lx, ly, lz = texel_to_local(cube, face, s, t, res)
                     ctx.local = (lx, ly, lz)
                     ctx.world = (wp[0] + lx, wp[1] + ly, wp[2] + lz)
+                    ctx.lface = face
+                    if rot is not None:
+                        # gedrehte Knochen: Seiten und Höhe so, wie sie in der Welt liegen (Rücken oben, Bauch unten)
+                        ctx.face = _world_face(rot, face)
+                        rp = _apply(rot, (lx, ly, lz))
+                        ctx.world = (wp[0] + rp[0], wp[1] + rp[1], wp[2] + rp[2])
+                        ctx.wrel = 0.0 if y_hi - y_lo < 1e-6 else (rp[1] - y_lo) / (y_hi - y_lo)
                     ctx.pal, ctx.rng, ctx.u, ctx.v = pal, rng, u0 + s, v0 + t
                     ctx.params = params or {}
                     color = painter(ctx)
@@ -170,7 +235,9 @@ def paint_model(model: Model, materials: dict[str, Painter], pal: dict, seed: in
 # =============================================================================================
 
 def rel_y(ctx: Ctx) -> float:
-    """0 = Oberkante des Quaders, 1 = Unterkante."""
+    """0 = Oberkante des Quaders, 1 = Unterkante (bei Modellen mit world_faces in Weltrichtung)."""
+    if ctx.wrel is not None:
+        return ctx.wrel
     oy = ctx.cube.origin[1]
     h = ctx.cube.size[1]
     return 0.0 if h <= 0 else (ctx.local[1] - oy) / h

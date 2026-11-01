@@ -169,6 +169,7 @@ public final class ModGameTests {
         VillageGameTests.init();   // die Dörfer und ihre Bewohner
         SiteGameTests.init();      // die eigenen Bauwerke statt der alten
         FarmGameTests.init();      // die eigenen Hof- und Weidetiere
+        WildGameTests.init();      // die eigenen Wildtiere
     }
 
     private ModGameTests() {}
@@ -201,6 +202,7 @@ public final class ModGameTests {
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
+        WildGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -1086,7 +1088,7 @@ public final class ModGameTests {
         golem.setNoAi(true);
         var flank = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(8, 1, 1));         // seitlich: Erdstoß
         flank.setNoAi(true);
-        var wolf = helper.spawn(EntityTypes.WOLF, new BlockPos(6, 1, 2));
+        var wolf = helper.spawn(ModEntities.WOLF.get(), new BlockPos(6, 1, 2));
         wolf.setNoAi(true);
         wolf.tame(mage);
 

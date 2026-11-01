@@ -115,6 +115,20 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.FARM_MULE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.MULE));
         this.add(ModEntities.FARM_GOAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GOAT));
         this.add(ModEntities.HARE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.RABBIT));
+        // Eigene Wildtiere: Beute wie die Vanilla-Tiere, die sie ersetzen
+        this.add(ModEntities.WOLF.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WOLF));
+        this.add(ModEntities.FOX.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FOX));
+        this.add(ModEntities.BEAR.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.POLAR_BEAR));
+        this.add(ModEntities.PANDA.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PANDA));
+        this.add(ModEntities.CAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAT));
+        this.add(ModEntities.WILDCAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.OCELOT));
+        this.add(ModEntities.PARROT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PARROT));
+        this.add(ModEntities.BEE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.BEE));
+        this.add(ModEntities.BAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.BAT));
+        this.add(ModEntities.ARMADILLO.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ARMADILLO));
+        this.add(ModEntities.CAMEL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAMEL));
+        this.add(ModEntities.LLAMA.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.LLAMA));
+        this.add(ModEntities.TRADER_LLAMA.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TRADER_LLAMA));
 
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()

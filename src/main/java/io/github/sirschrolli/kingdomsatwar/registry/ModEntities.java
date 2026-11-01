@@ -25,6 +25,20 @@ import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmMule;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmPig;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Hare;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.Bear;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.HouseCat;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildAnimals;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildArmadillo;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildBat;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildBee;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildCamel;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildFox;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildLlama;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildPanda;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildParrot;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildTraderLlama;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildWolf;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.Wildcat;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
@@ -35,7 +49,14 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
+import net.minecraft.world.entity.animal.feline.Ocelot;
 import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.parrot.Parrot;
+import net.minecraft.world.entity.animal.polarbear.PolarBear;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -114,6 +135,40 @@ public final class ModEntities {
             FarmGoat::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.3f).passengerAttachments(1.1125f).clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<Hare>> HARE = ENTITIES.registerEntityType("hare",
             Hare::new, MobCategory.CREATURE, builder -> builder.sized(0.5f, 0.6f).eyeHeight(0.59f).clientTrackingRange(8));
+
+    // ---------------------------------------------------------------- Eigene Wildtiere (ersetzen die Vanilla-Wildtiere)
+    public static final DeferredHolder<EntityType<?>, EntityType<WildWolf>> WOLF = ENTITIES.registerEntityType("wolf",
+            WildWolf::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.6f, 0.85f).eyeHeight(0.68f).passengerAttachments(new Vec3(0.0, 0.81875, -0.0625)).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildFox>> FOX = ENTITIES.registerEntityType("fox",
+            WildFox::new, MobCategory.CREATURE, builder -> builder.sized(0.6f, 0.7f).eyeHeight(0.4f)
+                    .passengerAttachments(new Vec3(0.0, 0.6375, -0.25)).clientTrackingRange(8).immuneTo(BlockTags.FOX_IMMUNE_TO));
+    public static final DeferredHolder<EntityType<?>, EntityType<Bear>> BEAR = ENTITIES.registerEntityType("bear",
+            Bear::new, MobCategory.CREATURE, builder -> builder.immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO).sized(1.4f, 1.4f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildPanda>> PANDA = ENTITIES.registerEntityType("panda",
+            WildPanda::new, MobCategory.CREATURE, builder -> builder.sized(1.3f, 1.25f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<HouseCat>> CAT = ENTITIES.registerEntityType("cat",
+            HouseCat::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.6f, 0.7f).eyeHeight(0.35f).passengerAttachments(0.5125f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<Wildcat>> WILDCAT = ENTITIES.registerEntityType("wildcat",
+            Wildcat::new, MobCategory.CREATURE, builder -> builder.sized(0.6f, 0.7f).passengerAttachments(0.6375f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildParrot>> PARROT = ENTITIES.registerEntityType("parrot",
+            WildParrot::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.5f, 0.9f).eyeHeight(0.54f).passengerAttachments(0.4625f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildBee>> BEE = ENTITIES.registerEntityType("bee",
+            WildBee::new, MobCategory.CREATURE, builder -> builder.sized(0.55f, 0.5f).eyeHeight(0.3f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildBat>> BAT = ENTITIES.registerEntityType("bat",
+            WildBat::new, MobCategory.AMBIENT, builder -> builder.sized(0.5f, 0.9f).eyeHeight(0.45f).clientTrackingRange(5).dontTrackDeltas());
+    public static final DeferredHolder<EntityType<?>, EntityType<WildArmadillo>> ARMADILLO = ENTITIES.registerEntityType("armadillo",
+            WildArmadillo::new, MobCategory.CREATURE, builder -> builder.sized(0.7f, 0.65f).eyeHeight(0.26f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildCamel>> CAMEL = ENTITIES.registerEntityType("camel",
+            WildCamel::new, MobCategory.CREATURE, builder -> builder.sized(1.7f, 2.375f).eyeHeight(2.275f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildLlama>> LLAMA = ENTITIES.registerEntityType("llama",
+            WildLlama::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.87f).eyeHeight(1.7765f)
+                    .passengerAttachments(new Vec3(0.0, 1.37, -0.3)).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<WildTraderLlama>> TRADER_LLAMA = ENTITIES.registerEntityType("trader_llama",
+            WildTraderLlama::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.87f).eyeHeight(1.7765f)
+                    .passengerAttachments(new Vec3(0.0, 1.37, -0.3)).clientTrackingRange(10));
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -268,6 +323,19 @@ public final class ModEntities {
         event.put(FARM_MULE.get(), FarmMule.createAttributes().build());
         event.put(FARM_GOAT.get(), FarmGoat.createAttributes().build());
         event.put(HARE.get(), Hare.createAttributes().build());
+        event.put(WOLF.get(), WildWolf.createAttributes().build());
+        event.put(FOX.get(), WildFox.createAttributes().build());
+        event.put(BEAR.get(), Bear.createAttributes().build());
+        event.put(PANDA.get(), WildPanda.createAttributes().build());
+        event.put(CAT.get(), HouseCat.createAttributes().build());
+        event.put(WILDCAT.get(), Wildcat.createAttributes().build());
+        event.put(PARROT.get(), WildParrot.createAttributes().build());
+        event.put(BEE.get(), WildBee.createAttributes().build());
+        event.put(BAT.get(), WildBat.createAttributes().build());
+        event.put(ARMADILLO.get(), WildArmadillo.createAttributes().build());
+        event.put(CAMEL.get(), WildCamel.createAttributes().build());
+        event.put(LLAMA.get(), WildLlama.createAttributes().build());
+        event.put(TRADER_LLAMA.get(), WildLlama.createAttributes().build());
         event.put(WILD_BOAR.get(), WildBoarEntity.createAttributes().build());
         event.put(DEER.get(), DeerEntity.createAttributes().build());
         event.put(GOOSE.get(), GooseEntity.createAttributes().build());
@@ -312,6 +380,22 @@ public final class ModEntities {
         }
         event.register(FARM_GOAT.get(), ground, surface, Goat::checkGoatSpawnRules, replace);
         event.register(HARE.get(), ground, surface, Rabbit::checkRabbitSpawnRules, replace);
+        // eigene Wildtiere: wie die Vanilla-Tiere, die sie ersetzen (Fennek und Trampeltier auch auf Sand bzw. Gras)
+        var noLeaves = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+        var free = SpawnPlacementTypes.NO_RESTRICTIONS;
+        event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
+        event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
+        event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);
+        event.register(PANDA.get(), free, noLeaves, Animal::checkAnimalSpawnRules, replace);
+        event.register(CAT.get(), ground, noLeaves, Animal::checkAnimalSpawnRules, replace);
+        event.register(WILDCAT.get(), ground, Heightmap.Types.MOTION_BLOCKING, Ocelot::checkOcelotSpawnRules, replace);
+        event.register(PARROT.get(), ground, Heightmap.Types.MOTION_BLOCKING, Parrot::checkParrotSpawnRules, replace);
+        event.register(BEE.get(), ground, noLeaves, Animal::checkAnimalSpawnRules, replace);
+        event.register(BAT.get(), ground, noLeaves, Bat::checkBatSpawnRules, replace);
+        event.register(ARMADILLO.get(), ground, noLeaves, Armadillo::checkArmadilloSpawnRules, replace);
+        event.register(CAMEL.get(), ground, noLeaves, WildCamel::checkWildCamelSpawnRules, replace);
+        event.register(LLAMA.get(), ground, noLeaves, Animal::checkAnimalSpawnRules, replace);
+        event.register(TRADER_LLAMA.get(), free, noLeaves, Animal::checkAnimalSpawnRules, replace);
         event.register(WILD_BOAR.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(DEER.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(GOOSE.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);

@@ -301,7 +301,8 @@ public final class ModStructures {
                     net.minecraft.world.entity.MobCategory.CREATURE, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.PIECE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
-                                    net.minecraft.world.entity.EntityTypes.CAT, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+                                    io.github.sirschrolli.kingdomsatwar.registry.ModEntities.CAT.get(),
+                                    new net.minecraft.util.valueproviders.ConstantInt(1)))));
             case CORAL_PALACE -> java.util.Map.of(
                     net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,

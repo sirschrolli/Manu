@@ -414,10 +414,10 @@ final class FarmGameTests {
                 "noch kein Zicklein"));
     }
 
-    /** Vanilla-Wölfe jagen auch die eigenen Schafe. */
+    /** Wölfe jagen auch die eigenen Schafe. */
     private static void wolfHunts(GameTestHelper helper) {
         floor(helper);
-        var wolf = helper.spawn(EntityTypes.WOLF, new BlockPos(2, 1, 4));
+        var wolf = helper.spawn(ModEntities.WOLF.get(), new BlockPos(2, 1, 4));
         helper.spawnWithNoFreeWill(ModEntities.FARM_SHEEP.get(), new BlockPos(6, 1, 4));
         helper.succeedWhen(() -> helper.assertTrue(wolf.getTarget() instanceof FarmSheep, "der Wolf jagt das Schaf nicht"));
     }

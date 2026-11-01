@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,  # noqa: E402
                               cattle, chicken, donkey, goat, hare, horse, pig, sheep,
+                              armadillo, bat, bear, bee, camel, feline, fox, llama, panda, parrot, wolf,
                               cave_troll, mage,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
@@ -75,6 +76,28 @@ def main():
     write_model(donkey, "FarmDonkeyGeometry",
                 "Geometrie von Esel und Maultier (Skelett wie bei Vanilla, damit Sattel und Packtaschen passen).", "donkey",
                 donkey.PALETTES, preview)
+    # Eigene Wildtiere (ersetzen die Vanilla-Wildtiere; Knochen wie bei Vanilla, damit dessen Animationen passen)
+    write_model(wolf, "WildWolfGeometry", "Geometrie der Wölfe (Skelett wie beim Vanilla-Wolf, Halsband als eigener Knochen).",
+                "wolf", wolf.PALETTES, preview)
+    write_model(fox, "WildFoxGeometry", "Geometrie der Füchse (Fennek mit großen Ohren als eigene Knochen).", "fox",
+                fox.PALETTES, preview)
+    write_model(bear, "BearGeometry", "Geometrie der Bären (Skelett wie beim Eisbären, Buckel beim Braunbären).", "bear",
+                bear.PALETTES, preview)
+    write_model(panda, "WildPandaGeometry", "Geometrie des Pandas (je Wesenszug eine Fellzeichnung).", "panda",
+                panda.PALETTES, preview)
+    write_model(feline, "FelineGeometry",
+                "Geometrie von Hauskatzen und Wildkatzen (Pinsel, Stummelschwanz, Halskrause und Halsband als eigene Knochen).",
+                "feline", feline.PALETTES, preview)
+    write_model(parrot, "WildParrotGeometry", "Geometrie der Papageien (Skelett wie beim Vanilla-Papagei).", "parrot",
+                parrot.PALETTES, preview)
+    write_model(bee, "WildBeeGeometry", "Geometrie von Honigbiene und Hummel.", "bee", bee.PALETTES, preview)
+    write_model(bat, "WildBatGeometry", "Geometrie der Fledermäuse.", "bat", bat.PALETTES, preview)
+    write_model(armadillo, "WildArmadilloGeometry", "Geometrie der Gürteltiere (mit eingerollter Kugel).", "armadillo",
+                armadillo.PALETTES, preview)
+    write_model(camel, "WildCamelGeometry", "Geometrie von Dromedar und Trampeltier (zweiter Höcker als eigener Knochen).",
+                "camel", camel.PALETTES, preview)
+    write_model(llama, "WildLlamaGeometry", "Geometrie der Lamas (Skelett wie bei Vanilla, damit Teppich und Kisten passen).",
+                "llama", llama.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

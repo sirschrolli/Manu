@@ -7,7 +7,7 @@
       "bounding_box": "piece",
       "spawns": [
         {
-          "type": "minecraft:cat",
+          "type": "kingdomsatwar:cat",
           "count": 1,
           "weight": 1
         }

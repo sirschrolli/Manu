@@ -1,0 +1,19 @@
+{
+  "type": "kingdomsatwar:replace_spawns",
+  "biomes": "#kingdomsatwar:replaces_vanilla_animals",
+  "replacements": {
+    "minecraft:armadillo": "kingdomsatwar:armadillo",
+    "minecraft:bat": "kingdomsatwar:bat",
+    "minecraft:bee": "kingdomsatwar:bee",
+    "minecraft:camel": "kingdomsatwar:camel",
+    "minecraft:cat": "kingdomsatwar:cat",
+    "minecraft:fox": "kingdomsatwar:fox",
+    "minecraft:llama": "kingdomsatwar:llama",
+    "minecraft:ocelot": "kingdomsatwar:wildcat",
+    "minecraft:panda": "kingdomsatwar:panda",
+    "minecraft:parrot": "kingdomsatwar:parrot",
+    "minecraft:polar_bear": "kingdomsatwar:bear",
+    "minecraft:trader_llama": "kingdomsatwar:trader_llama",
+    "minecraft:wolf": "kingdomsatwar:wolf"
+  }
+}

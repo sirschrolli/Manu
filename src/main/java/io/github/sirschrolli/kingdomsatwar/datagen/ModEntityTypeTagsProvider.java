@@ -54,5 +54,19 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.HARE.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.FARM_CHICKEN.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.NIGHT_WING.key()).add(ModEntities.GLIMMER_MOTH.key());
+        // Eigene Wildtiere verhalten sich wie die Vanilla-Wildtiere, die sie ersetzen
+        this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.WOLF.key()).add(ModEntities.FOX.key()).add(ModEntities.BEAR.key())
+                .add(ModEntities.PANDA.key()).add(ModEntities.CAT.key()).add(ModEntities.WILDCAT.key()).add(ModEntities.PARROT.key())
+                .add(ModEntities.BEE.key()).add(ModEntities.ARMADILLO.key()).add(ModEntities.CAMEL.key()).add(ModEntities.LLAMA.key());
+        this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.FOX.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.BEAR.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.CAT.key()).add(ModEntities.WILDCAT.key()).add(ModEntities.PARROT.key())
+                .add(ModEntities.BEE.key()).add(ModEntities.BAT.key());
+        this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.BEE.key());
+        this.tag(EntityTypeTags.BEEHIVE_INHABITORS).add(ModEntities.BEE.key());
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.CAMEL.key());
+        this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.CAMEL.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.CAMEL.key()).add(ModEntities.LLAMA.key())
+                .add(ModEntities.TRADER_LLAMA.key());
     }
 }

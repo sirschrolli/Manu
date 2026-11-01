@@ -80,6 +80,14 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter>>
             NOT_IN_VILLAGE = PLACEMENT_TYPES.register("not_in_village", () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.CODEC);
 
+    /** Eigene Biom-Änderungen (Tausch der Vanilla-Wildtiere gegen die eigenen, siehe {@link ReplaceSpawnsBiomeModifier}). */
+    public static final DeferredRegister<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>> BIOME_MODIFIERS =
+            DeferredRegister.create(net.neoforged.neoforge.registries.NeoForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, KingdomsAtWar.MODID);
+    public static final DeferredHolder<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>, MapCodec<ReplaceSpawnsBiomeModifier>>
+            REPLACE_SPAWNS = BIOME_MODIFIERS.register("replace_spawns", () -> ReplaceSpawnsBiomeModifier.CODEC);
+    public static final DeferredHolder<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>, MapCodec<AddCategorySpawnsBiomeModifier>>
+            ADD_CATEGORY_SPAWNS = BIOME_MODIFIERS.register("add_spawns_in_category", () -> AddCategorySpawnsBiomeModifier.CODEC);
+
     public static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES =
             DeferredRegister.create(Registries.BIOME_SOURCE, KingdomsAtWar.MODID);
 

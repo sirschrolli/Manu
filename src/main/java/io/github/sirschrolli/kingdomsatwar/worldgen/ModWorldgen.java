@@ -243,6 +243,14 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> WILL_O_WISP_SPAWNS = spawnModifier("add_will_o_wisp_spawns");
     public static final ResourceKey<BiomeModifier> CAVE_TROLL_SPAWNS = spawnModifier("add_cave_troll_spawns");
     public static final ResourceKey<BiomeModifier> LINDWORM_SPAWNS = spawnModifier("add_lindworm_spawns");
+    // eigene Wildtiere (E3b): Tausch gegen die Vanilla-Wildtiere, dazu neue Arten in neuen Gegenden
+    public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
+    public static final ResourceKey<BiomeModifier> FOREST_BEAR_SPAWNS = spawnModifier("add_forest_bear_spawns");
+    public static final ResourceKey<BiomeModifier> FEW_FOREST_BEAR_SPAWNS = spawnModifier("add_few_forest_bear_spawns");
+    public static final ResourceKey<BiomeModifier> FENNEC_SPAWNS = spawnModifier("add_fennec_spawns");
+    public static final ResourceKey<BiomeModifier> LYNX_SPAWNS = spawnModifier("add_lynx_spawns");
+    public static final ResourceKey<BiomeModifier> FOREST_WILDCAT_SPAWNS = spawnModifier("add_forest_wildcat_spawns");
+    public static final ResourceKey<BiomeModifier> BACTRIAN_CAMEL_SPAWNS = spawnModifier("add_bactrian_camel_spawns");
 
     private static ResourceKey<BiomeModifier> spawnModifier(String name) {
         return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id(name));
@@ -251,6 +259,15 @@ public final class ModWorldgen {
     private static BiomeModifier spawns(HolderGetter<Biome> biomes, TagKey<Biome> where, EntityType<?> type, int weight, int min, int max) {
         return new BiomeModifiers.AddSpawnsBiomeModifier(biomes.getOrThrow(where),
                 WeightedList.<MobSpawnSettings.SpawnerData>builder()
+                        .add(new MobSpawnSettings.SpawnerData(type, UniformInt.of(min, max)), weight)
+                        .build());
+    }
+
+    @SafeVarargs
+    private static BiomeModifier spawnsIn(HolderGetter<Biome> biomes, EntityType<?> type, int weight, int min, int max,
+            net.minecraft.world.entity.MobCategory category, ResourceKey<Biome>... where) {
+        return new AddCategorySpawnsBiomeModifier(HolderSet.direct(java.util.Arrays.stream(where).map(biomes::getOrThrow).toList()),
+                category, WeightedList.<MobSpawnSettings.SpawnerData>builder()
                         .add(new MobSpawnSettings.SpawnerData(type, UniformInt.of(min, max)), weight)
                         .build());
     }
@@ -325,6 +342,50 @@ public final class ModWorldgen {
         context.register(WILL_O_WISP_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILL_O_WISPS, ModEntities.WILL_O_WISP.get(), 12, 1, 3));
         context.register(CAVE_TROLL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CAVE_TROLLS, ModEntities.CAVE_TROLL.get(), 6, 1, 1));
         context.register(LINDWORM_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_LINDWORMS, ModEntities.LINDWORM.get(), 3, 1, 1));
+
+        // Eigene Wildtiere: überall, wo Vanilla seine Wildtiere vorsieht, erscheinen mit gleichem Gewicht die eigenen
+        context.register(SWAP_WILD_ANIMALS, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),
+                java.util.Map.ofEntries(
+                        java.util.Map.entry(EntityTypes.WOLF, ModEntities.WOLF.get()),
+                        java.util.Map.entry(EntityTypes.FOX, ModEntities.FOX.get()),
+                        java.util.Map.entry(EntityTypes.POLAR_BEAR, ModEntities.BEAR.get()),
+                        java.util.Map.entry(EntityTypes.PANDA, ModEntities.PANDA.get()),
+                        java.util.Map.entry(EntityTypes.CAT, ModEntities.CAT.get()),
+                        java.util.Map.entry(EntityTypes.OCELOT, ModEntities.WILDCAT.get()),
+                        java.util.Map.entry(EntityTypes.PARROT, ModEntities.PARROT.get()),
+                        java.util.Map.entry(EntityTypes.BEE, ModEntities.BEE.get()),
+                        java.util.Map.entry(EntityTypes.BAT, ModEntities.BAT.get()),
+                        java.util.Map.entry(EntityTypes.ARMADILLO, ModEntities.ARMADILLO.get()),
+                        java.util.Map.entry(EntityTypes.CAMEL, ModEntities.CAMEL.get()),
+                        java.util.Map.entry(EntityTypes.LLAMA, ModEntities.LLAMA.get()),
+                        java.util.Map.entry(EntityTypes.TRADER_LLAMA, ModEntities.TRADER_LLAMA.get()))));
+        // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
+        context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
+                net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,
+                net.minecraft.world.level.biome.Biomes.OLD_GROWTH_SPRUCE_TAIGA, net.minecraft.world.level.biome.Biomes.WINDSWEPT_FOREST,
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.PRIMEVAL_FOREST));
+        context.register(FEW_FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 1, 1, 1, net.minecraft.world.entity.MobCategory.CREATURE,
+                net.minecraft.world.level.biome.Biomes.FOREST, net.minecraft.world.level.biome.Biomes.DARK_FOREST,
+                net.minecraft.world.level.biome.Biomes.OLD_GROWTH_BIRCH_FOREST, net.minecraft.world.level.biome.Biomes.SNOWY_TAIGA));
+        // Wüstenfüchse in Wüste und Tafelbergen
+        context.register(FENNEC_SPAWNS, spawnsIn(biomes, ModEntities.FOX.get(), 4, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
+                net.minecraft.world.level.biome.Biomes.DESERT, net.minecraft.world.level.biome.Biomes.BADLANDS,
+                net.minecraft.world.level.biome.Biomes.WOODED_BADLANDS));
+        // Luchs und Waldkatze wie der Ozelot im Durchgang der Monster
+        context.register(LYNX_SPAWNS, spawnsIn(biomes, ModEntities.WILDCAT.get(), 2, 1, 1, net.minecraft.world.entity.MobCategory.MONSTER,
+                net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.SNOWY_TAIGA,
+                net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_SPRUCE_TAIGA,
+                net.minecraft.world.level.biome.Biomes.GROVE));
+        context.register(FOREST_WILDCAT_SPAWNS, spawnsIn(biomes, ModEntities.WILDCAT.get(), 2, 1, 1, net.minecraft.world.entity.MobCategory.MONSTER,
+                net.minecraft.world.level.biome.Biomes.FOREST, net.minecraft.world.level.biome.Biomes.BIRCH_FOREST,
+                net.minecraft.world.level.biome.Biomes.DARK_FOREST, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_BIRCH_FOREST,
+                net.minecraft.world.level.biome.Biomes.DAPPLED_FOREST,
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.PRIMEVAL_FOREST));
+        // Trampeltiere in Tafelbergen, Felsschluchten und auf den Savannen-Hochebenen
+        context.register(BACTRIAN_CAMEL_SPAWNS, spawnsIn(biomes, ModEntities.CAMEL.get(), 1, 1, 1, net.minecraft.world.entity.MobCategory.CREATURE,
+                net.minecraft.world.level.biome.Biomes.BADLANDS, net.minecraft.world.level.biome.Biomes.ERODED_BADLANDS,
+                net.minecraft.world.level.biome.Biomes.SAVANNA_PLATEAU,
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.ROCK_GORGES));
         // Bäume, Kakteen und Felsbrocken der Dorf-Biome wachsen nicht mehr in die Dörfer hinein
         io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapBiomeModifiers(context);
     }

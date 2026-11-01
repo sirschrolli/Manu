@@ -4,6 +4,9 @@
     "kingdomsatwar:donkey",
     "kingdomsatwar:mule",
     "kingdomsatwar:pig",
-    "kingdomsatwar:chicken"
+    "kingdomsatwar:chicken",
+    "kingdomsatwar:camel",
+    "kingdomsatwar:llama",
+    "kingdomsatwar:trader_llama"
   ]
 }

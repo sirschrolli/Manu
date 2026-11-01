@@ -53,6 +53,7 @@ public final class KingdomsAtWar {
         ModFeatureTypes.FEATURE_TYPES.register(modBus);
         ModFeatureTypes.PLACEMENT_TYPES.register(modBus);
         ModFeatureTypes.BIOME_SOURCES.register(modBus);
+        ModFeatureTypes.BIOME_MODIFIERS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);
 

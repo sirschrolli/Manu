@@ -57,7 +57,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
  */
 final class Showcase {
     /** Erste freie Höhe über dem Boden. */
-    private static volatile int ground = Integer.MIN_VALUE;
+    static volatile int ground = Integer.MIN_VALUE;
 
     private Showcase() {}
 
@@ -99,6 +99,7 @@ final class Showcase {
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
                 case "farmanimals" -> farmAnimals(steps);
+                case "wildanimals" -> WildShowcase.wildAnimals(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);
@@ -1531,7 +1532,7 @@ final class Showcase {
         }
     }
 
-    private static <T extends net.minecraft.world.entity.Mob> void spawnCreature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
+    static <T extends net.minecraft.world.entity.Mob> void spawnCreature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
             int x, int z, float yaw, java.util.function.Consumer<T> setup) {
         T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
         if (mob == null) {
@@ -2651,7 +2652,7 @@ final class Showcase {
                 "tp @s %d %d %d %s %s".formatted(x, ground + dy, z, yaw, pitch)));
     }
 
-    private static Step tp(double x, double dy, double z, float yaw, float pitch) {
+    static Step tp(double x, double dy, double z, float yaw, float pitch) {
         return Step.once(minecraft -> minecraft.player.connection.sendCommand(
                 String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %s %s", x, ground + dy, z, yaw, pitch)));
     }
@@ -2682,7 +2683,7 @@ final class Showcase {
         }
     }
 
-    private static void fill(ServerLevel level, BlockPos from, BlockPos to, BlockState state) {
+    static void fill(ServerLevel level, BlockPos from, BlockPos to, BlockState state) {
         for (BlockPos pos : BlockPos.betweenClosed(from, to)) {
             level.setBlock(pos, state, Block.UPDATE_CLIENTS);
         }
