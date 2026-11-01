@@ -8,20 +8,24 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.9.0 – Die Bauwerke.**
+> **Testversion 0.10.0 – Die Hoftiere.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
 > Krönung, die **Magie** mit sechs Erzmagiern in ihren Magiertürmen, **acht eigene Biome** – dazu Drachen zum Reiten,
 > Soldaten, Kreaturen, Ausrüstung, Bau-Blöcke, Essen und das erzählte Intro.
 > Dazu **eigene Dörfer** in vier Bauweisen mit **eigenen Dorfbewohnern** in 17 Berufen.
-> Neu in 0.9: **kein einziges Vanilla-Bauwerk mehr in der Oberwelt** – an ihrer Stelle stehen **17 ganz eigene
+> In 0.9 kam **kein einziges Vanilla-Bauwerk mehr in der Oberwelt** – an ihrer Stelle stehen **17 ganz eigene
 > Bauwerke**: der Sternensturz mit dem Portal ins Ende, die Wasserstollen der Alten, Gezeitenschrein, Seedrachen-Gebeine,
 > Karawanserei, Schlangentempel, Hexenbaum, Frostgrotte, Räuberlager, Köhlerei, Glutpforte, Muschelfeld, Korallenpalast,
 > das verschüttete Kloster, die Stille Kathedrale im Reich des Sculk, die Arena der Prüfungen und die Raubritterburg.
 > Alles, was man dort finden musste, bleibt erhältlich.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (95 GameTests).
-> **Als Nächstes:** eigene Tiere und Monster statt Vanilla, danach Nether und End.
+> Neu in 0.10: **eigene Hof- und Weidetiere statt der Vanilla-Tiere** – Hausrind, Hausschwein, Schaf, Huhn, Pferd, Esel,
+> Maultier, Ziege und Hase in **40 Rassen** mit eigenen Modellen und Fellbildern, vom zotteligen Hochlandrind über den
+> Hahn mit Sichelfedern bis zum Kaltblut mit Fesselbehang. Milch, Wolle, Eier, Sattel, Rossharnisch und alle Beute
+> bleiben, wie man sie kennt.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (107 GameTests).
+> **Als Nächstes:** eigene Wildtiere, dann Monster und Wassertiere, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -55,7 +59,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
-| Eigene Tiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
+| Eigene Wildtiere und Monster statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -72,7 +77,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.9.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.10.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -80,7 +85,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.9.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.10.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -461,6 +466,29 @@ trägt, setzt sich im eigenen **Thronsaal** auf den Thron: Glocken läuten, gold
 herbei, Feuerwerk erhellt den Himmel – und du wirst **König** oder **Königin**. Von da an geben dir deine Bürger alles
 umsonst.
 
+### Hof- und Weidetiere
+
+![Die eigenen Hof- und Weidetiere](docs/bilder/hoftiere.jpg)
+
+Die Tiere der Vanilla-Welt gibt es nicht mehr – an ihrer Stelle leben **eigene Hof- und Weidetiere** mit eigenen
+Modellen, Fellbildern und Bewegungen, jedes in mehreren **Rassen**, die zum Land passen: zottelige Hochlandrinder und
+Wollschweine im Norden, Steppenrinder mit Leierhörnern und Wüstenhasen im Süden, Schneeziegen an den Schneehängen.
+Alles Gewohnte funktioniert wie bisher: Milch, Wolle (scheren, färben, nachwachsen), Eier, Reiten, Zähmen, Sattel,
+Rossharnisch, Packtaschen, Ziegenhörner und die Beute beim Schlachten. Vanilla-Spawn-Eier, Befehle und geworfene Eier
+bringen ebenfalls die neuen Tiere hervor; schon vorhandene Tiere einer alten Welt bleiben, wie sie sind.
+
+| Tier | statt | Rassen | Besonderheiten |
+|---|---|---|---|
+| **Hausrind** | Kuh, Pilzkuh | Fleckvieh, Braunvieh, Hochlandrind, Steppenrind, Pilzrind | Hörner je Rasse, Stirnschopf beim Hochlandrind; das Pilzrind trägt Pilze auf dem Rücken und füllt Schüsseln mit Pilzsuppe |
+| **Hausschwein** | Schwein | Landschwein, Sattelschwein, buntes Schwein, Wollschwein | Schlappohren, Ringelschwanz; mit Sattel und Karottenrute reitbar |
+| **Schaf** | Schaf | Merinoschaf, Heidschnucke, Schwarzkopfschaf | Wolle in jeder Farbe, Heidschnucken mit Schneckenhörnern und natürlich grauer Wolle |
+| **Huhn** | Huhn | weiße, braune, schwarze Henne, Sperberhenne, Hahn | Hennen legen weiße, braune oder (Sperberhenne) blaue Eier; der Hahn mit großem Kamm und Sichelfedern legt keine |
+| **Pferd** | Pferd | Fuchs, Brauner, Friese, Apfelschimmel, Schecke, Haflinger, Kaltblut, Falbe, Pony | Abzeichen, lange Mähnen, Fesselbehang; das Kaltblut ist größer und kräftiger, das Pony klein; Herden meist einer Rasse |
+| **Esel** | Esel | Grauesel, brauner Esel | lange Ohren, Schweifquaste, Packtaschen; mit einem Pferd gibt es Maultiere |
+| **Maultier** | Maultier | Maultier, Rappmaultier | Eselsohren, Pferdeschweif, trägt Packtaschen |
+| **Ziege** | Ziege | Steinbock, Gämse, Schneeziege, Hausziege | Hörner je Art (einzeln abbrechbar), Zottelfell der Schneeziege; rammt und springt wie bisher |
+| **Hase** | Kaninchen | Feldhase, Schneehase, Wüstenhase, Wildkaninchen, Scheckenkaninchen, Mordshase | hoppelt mit gestreckten Läufen; der Mordshase mit glühenden Augen greift an (nur per Befehl) |
+
 ### Wilde Kreaturen
 
 ![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
@@ -635,7 +663,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.9.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.10.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -654,7 +682,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── KingdomsAtWar.java        Hauptklasse der Mod
 ├── registry/                 Blöcke, Gegenstände, Lebewesen, Geräusche, Kreativ-Tabs, Tags
 ├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
-├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz
+├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz,
+│                             die Hof- und Weidetiere an Stelle der Vanilla-Tiere (entity/creature/farm)
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
@@ -674,7 +703,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.9.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.10.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -682,9 +711,10 @@ Ein Tag wie `v0.9.0` erzeugt automatisch ein Release mit der JAR (`.github/workf
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer und die 17 Bauwerke der Oberwelt sind fertig, als Nächstes:
-   - eigene **Nutz- und Wildtiere** statt der Vanilla-Tiere – alles, was die Vanilla-Tiere fallen lassen, bleibt
-     erhältlich;
+1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt und die Hof- und Weidetiere
+   sind fertig, als Nächstes:
+   - eigene **Wildtiere** statt der übrigen Vanilla-Tiere (Wolf, Fuchs, Bär, Katze, Biene, Fledermaus, Papagei …) –
+     alles, was sie fallen lassen, bleibt erhältlich;
    - eigene **Monster und Wassertiere**;
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.

@@ -586,7 +586,7 @@ final class ShadowGameTests {
         }
         // Mondsilberklinge: hart gegen Untote, normal gegen Tiere
         var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(2, 1, 2));
-        var pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(6, 1, 6));
+        var pig = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_PIG.get(), new BlockPos(6, 1, 6));
         MoonsilverBladeItem blade = ShadowItems.MOONSILVER_BLADE.get();
         DamageSource source = helper.getLevel().damageSources().generic();
         helper.assertTrue(blade.getAttackDamageBonus(zombie, 5.0f, source) >= MoonsilverBladeItem.BONUS_DAMAGE,

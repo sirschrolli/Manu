@@ -24,6 +24,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         this.overworldBiomes();
+        this.farmAnimals();
         this.villages();
         this.sites();
         this.tag(ModTags.Biomes.HAS_BANDITS)
@@ -283,5 +284,42 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(Tags.Biomes.PRIMARY_WOOD_TYPE_JUNGLE).add(OverworldBiomes.CORAL_COAST);
         this.tag(Tags.Biomes.PRIMARY_WOOD_TYPE_ACACIA).add(OverworldBiomes.ROCK_GORGES);
         this.tag(Tags.Biomes.PRIMARY_WOOD_TYPE_BIRCH).add(OverworldBiomes.MIST_MOOR);
+    }
+
+    /** Eigene Hof- und Weidetiere: dieselben Biome wie bei Vanilla, dazu die eigenen Biome der Oberwelt. */
+    private void farmAnimals() {
+        java.util.List<net.minecraft.resources.ResourceKey<Biome>> farm = java.util.List.of(Biomes.BADLANDS, Biomes.BAMBOO_JUNGLE,
+                Biomes.BIRCH_FOREST, Biomes.DAPPLED_FOREST,
+                Biomes.DARK_FOREST, Biomes.ERODED_BADLANDS, Biomes.FLOWER_FOREST, Biomes.FOREST, Biomes.JUNGLE,
+                Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.PLAINS,
+                Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.SNOWY_TAIGA, Biomes.SPARSE_JUNGLE, Biomes.SUNFLOWER_PLAINS,
+                Biomes.SWAMP, Biomes.TAIGA, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_HILLS,
+                Biomes.WINDSWEPT_SAVANNA, Biomes.WOODED_BADLANDS, OverworldBiomes.ROYAL_MEADOWS, OverworldBiomes.PRIMEVAL_FOREST,
+                OverworldBiomes.ROCK_GORGES);
+        for (var tag : java.util.List.of(ModTags.Biomes.HAS_CATTLE, ModTags.Biomes.HAS_PIGS, ModTags.Biomes.HAS_SHEEP,
+                ModTags.Biomes.HAS_CHICKENS)) {
+            var builder = this.tag(tag);
+            farm.forEach(builder::add);
+        }
+        this.tag(ModTags.Biomes.HAS_MUSHROOM_CATTLE).add(Biomes.MUSHROOM_FIELDS);
+        this.tag(ModTags.Biomes.HAS_FEW_SHEEP).add(Biomes.CHERRY_GROVE).add(Biomes.MEADOW);
+        this.tag(ModTags.Biomes.HAS_HORSES).add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(OverworldBiomes.ROYAL_MEADOWS);
+        this.tag(ModTags.Biomes.HAS_FEW_HORSES).add(Biomes.SAVANNA).add(Biomes.SAVANNA_PLATEAU).add(Biomes.WINDSWEPT_SAVANNA)
+                .add(Biomes.MEADOW).add(OverworldBiomes.ROCK_GORGES);
+        this.tag(ModTags.Biomes.HAS_DONKEYS).add(Biomes.MEADOW).add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.SAVANNA)
+                .add(Biomes.SAVANNA_PLATEAU).add(Biomes.WINDSWEPT_SAVANNA);
+        this.tag(ModTags.Biomes.HAS_GOATS).add(Biomes.FROZEN_PEAKS).add(Biomes.JAGGED_PEAKS).add(Biomes.SNOWY_SLOPES)
+                .add(Biomes.STONY_PEAKS).add(OverworldBiomes.FROST_PEAKS);
+        this.tag(ModTags.Biomes.HAS_FEW_GOATS).add(Biomes.MEADOW).add(OverworldBiomes.ROYAL_MEADOWS).add(OverworldBiomes.ROCK_GORGES);
+        this.tag(ModTags.Biomes.HAS_MANY_HARES).add(Biomes.DESERT).add(Biomes.SNOWY_PLAINS).add(Biomes.ICE_SPIKES).add(Biomes.GROVE);
+        this.tag(ModTags.Biomes.HAS_HARES).add(Biomes.TAIGA).add(Biomes.SNOWY_TAIGA).add(Biomes.OLD_GROWTH_PINE_TAIGA)
+                .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA).add(Biomes.SNOWY_SLOPES).add(Biomes.FLOWER_FOREST).add(Biomes.PLAINS)
+                .add(Biomes.SUNFLOWER_PLAINS).add(OverworldBiomes.ROYAL_MEADOWS).add(OverworldBiomes.PRIMEVAL_FOREST)
+                .add(Biomes.DAPPLED_FOREST);
+        this.tag(ModTags.Biomes.HAS_FEW_HARES).add(Biomes.CHERRY_GROVE).add(Biomes.MEADOW).add(Biomes.SAVANNA);
+        this.tag(ModTags.Biomes.REPLACES_VANILLA_ANIMALS).addTag(BiomeTags.IS_OVERWORLD)
+                .add(OverworldBiomes.ROYAL_MEADOWS).add(OverworldBiomes.PRIMEVAL_FOREST).add(OverworldBiomes.ROCK_GORGES)
+                .add(OverworldBiomes.FROST_PEAKS).add(OverworldBiomes.ASH_FIELDS).add(OverworldBiomes.STORM_COAST)
+                .add(OverworldBiomes.CORAL_COAST).add(OverworldBiomes.MIST_MOOR);
     }
 }

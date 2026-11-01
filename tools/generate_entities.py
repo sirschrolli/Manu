@@ -15,6 +15,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,  # noqa: E402
+                              cattle, chicken, donkey, goat, hare, horse, pig, sheep,
                               cave_troll, mage,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
@@ -57,6 +58,23 @@ def main():
     write_model(will_o_wisp, "WillOWispGeometry", "Geometrie des Irrlichts.", "will_o_wisp", will_o_wisp.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
+    # Eigene Tiere (ersetzen die Vanilla-Tiere)
+    write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",
+                cattle.PALETTES, preview)
+    write_model(pig, "FarmPigGeometry", "Geometrie des Hausschweins (mit Sattel).", "pig", pig.PALETTES, preview)
+    write_model(sheep, "FarmSheepGeometry", "Geometrie des Schafs (Wolle als eigene Knochen, eingefärbt im Renderer).",
+                "sheep", sheep.PALETTES, preview)
+    write_model(chicken, "FarmChickenGeometry", "Geometrie des Huhns (Hahn mit großem Kamm und Sichelfedern).", "chicken",
+                chicken.PALETTES, preview)
+    write_model(goat, "FarmGoatGeometry", "Geometrie der Ziegen (Hörner je Art, einzeln abbrechbar).", "goat",
+                goat.PALETTES, preview)
+    write_model(hare, "HareGeometry", "Geometrie von Hase und Kaninchen.", "hare", hare.PALETTES, preview)
+    write_model(horse, "FarmHorseGeometry",
+                "Geometrie der Pferde (Skelett wie beim Vanilla-Pferd, damit Sattel und Rossharnisch passen).", "horse",
+                horse.PALETTES, preview)
+    write_model(donkey, "FarmDonkeyGeometry",
+                "Geometrie von Esel und Maultier (Skelett wie bei Vanilla, damit Sattel und Packtaschen passen).", "donkey",
+                donkey.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

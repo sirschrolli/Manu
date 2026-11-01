@@ -16,6 +16,15 @@ import io.github.sirschrolli.kingdomsatwar.entity.creature.GooseEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.LindwormEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.WildBoarEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.WillOWispEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Cattle;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmChicken;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmDonkey;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmGoat;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmHorse;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmMule;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmPig;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Hare;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
@@ -26,6 +35,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.goat.Goat;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -76,6 +88,32 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity>> VILLAGER =
             ENTITIES.registerEntityType("villager", io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(10));
+
+    // ---------------------------------------------------------------- Eigene Hof- und Weidetiere (ersetzen Vanilla)
+    public static final DeferredHolder<EntityType<?>, EntityType<Cattle>> CATTLE = ENTITIES.registerEntityType("cattle",
+            Cattle::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.9f, 1.4f).eyeHeight(1.3f).passengerAttachments(1.36875f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmPig>> FARM_PIG = ENTITIES.registerEntityType("pig",
+            FarmPig::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).passengerAttachments(0.86875f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmSheep>> FARM_SHEEP = ENTITIES.registerEntityType("sheep",
+            FarmSheep::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.9f, 1.3f).eyeHeight(1.235f).passengerAttachments(1.2375f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmChicken>> FARM_CHICKEN = ENTITIES.registerEntityType("chicken",
+            FarmChicken::new, MobCategory.CREATURE,
+            builder -> builder.sized(0.4f, 0.7f).eyeHeight(0.644f).passengerAttachments(new Vec3(0.0, 0.7, -0.1)).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmHorse>> FARM_HORSE = ENTITIES.registerEntityType("horse",
+            FarmHorse::new, MobCategory.CREATURE,
+            builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f).passengerAttachments(1.44375f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmDonkey>> FARM_DONKEY = ENTITIES.registerEntityType("donkey",
+            FarmDonkey::new, MobCategory.CREATURE,
+            builder -> builder.sized(1.3964844f, 1.5f).eyeHeight(1.425f).passengerAttachments(1.1125f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmMule>> FARM_MULE = ENTITIES.registerEntityType("mule",
+            FarmMule::new, MobCategory.CREATURE,
+            builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f).passengerAttachments(1.2125f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<FarmGoat>> FARM_GOAT = ENTITIES.registerEntityType("goat",
+            FarmGoat::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.3f).passengerAttachments(1.1125f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<Hare>> HARE = ENTITIES.registerEntityType("hare",
+            Hare::new, MobCategory.CREATURE, builder -> builder.sized(0.5f, 0.6f).eyeHeight(0.59f).clientTrackingRange(8));
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -221,6 +259,15 @@ public final class ModEntities {
         event.put(CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity.createAttributes().build());
         event.put(VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity.createAttributes().build());
         event.put(BANDIT_ARCHER.get(), BanditEntity.createAttributes().build());
+        event.put(CATTLE.get(), Cattle.createAttributes().build());
+        event.put(FARM_PIG.get(), FarmPig.createAttributes().build());
+        event.put(FARM_SHEEP.get(), FarmSheep.createAttributes().build());
+        event.put(FARM_CHICKEN.get(), FarmChicken.createAttributes().build());
+        event.put(FARM_HORSE.get(), FarmHorse.createAttributes().build());
+        event.put(FARM_DONKEY.get(), FarmDonkey.createAttributes().build());
+        event.put(FARM_MULE.get(), FarmMule.createAttributes().build());
+        event.put(FARM_GOAT.get(), FarmGoat.createAttributes().build());
+        event.put(HARE.get(), Hare.createAttributes().build());
         event.put(WILD_BOAR.get(), WildBoarEntity.createAttributes().build());
         event.put(DEER.get(), DeerEntity.createAttributes().build());
         event.put(GOOSE.get(), GooseEntity.createAttributes().build());
@@ -257,6 +304,14 @@ public final class ModEntities {
         for (var bandit : java.util.List.of(BANDIT, BANDIT_ARCHER)) {
             event.register(bandit.get(), ground, surface, BanditEntity::checkBanditSpawnRules, replace);
         }
+        // eigene Hof- und Weidetiere: wie die Vanilla-Tiere, die sie ersetzen
+        event.register(CATTLE.get(), ground, surface, Cattle::checkCattleSpawnRules, replace);
+        for (var animal : java.util.List.<java.util.function.Supplier<? extends EntityType<? extends Animal>>>of(FARM_PIG, FARM_SHEEP,
+                FARM_CHICKEN, FARM_HORSE, FARM_DONKEY, FARM_MULE)) {
+            registerAnimal(event, animal.get());
+        }
+        event.register(FARM_GOAT.get(), ground, surface, Goat::checkGoatSpawnRules, replace);
+        event.register(HARE.get(), ground, surface, Rabbit::checkRabbitSpawnRules, replace);
         event.register(WILD_BOAR.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(DEER.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(GOOSE.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
@@ -269,5 +324,10 @@ public final class ModEntities {
         event.register(NIGHT_WING.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, NightWingEntity::checkNightWingSpawnRules, replace);
         event.register(MOON_STAG.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(GLIMMER_MOTH.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, GlimmerMothEntity::checkMothSpawnRules, replace);
+    }
+
+    private static <T extends Animal> void registerAnimal(RegisterSpawnPlacementsEvent event, EntityType<T> type) {
+        event.register(type, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 }

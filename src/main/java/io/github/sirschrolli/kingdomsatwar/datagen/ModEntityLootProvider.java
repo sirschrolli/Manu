@@ -105,6 +105,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.BANDIT.get(), banditLoot(false));
         this.add(ModEntities.BANDIT_ARCHER.get(), banditLoot(true));
 
+        // Eigene Hof- und Weidetiere: dieselbe Beute wie die Vanilla-Tiere (Wolle nach Farbe, Braten im Feuer …)
+        this.add(ModEntities.CATTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.COW));
+        this.add(ModEntities.FARM_PIG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PIG));
+        this.add(ModEntities.FARM_SHEEP.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SHEEP));
+        this.add(ModEntities.FARM_CHICKEN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CHICKEN));
+        this.add(ModEntities.FARM_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HORSE));
+        this.add(ModEntities.FARM_DONKEY.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.DONKEY));
+        this.add(ModEntities.FARM_MULE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.MULE));
+        this.add(ModEntities.FARM_GOAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GOAT));
+        this.add(ModEntities.HARE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.RABBIT));
+
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()
                 .withPool(meat(Items.PORKCHOP, 1, 3))
@@ -204,5 +215,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
     @Override
     protected Stream<EntityType<?>> getKnownEntityTypes() {
         return ModEntities.ENTITIES.getEntries().stream().map(DeferredHolder::value);
+    }
+
+    /** Verweist auf die Beute-Tabelle eines Vanilla-Tiers (die Bedingungen darin greifen auch bei den eigenen Tieren). */
+    private LootTable.Builder vanillaLoot(net.minecraft.world.entity.EntityType<?> vanilla) {
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(net.minecraft.world.level.storage.loot.entries.NestedLootTable.lootTableReference(
+                        this.lootTables.getOrThrow(vanilla.getDefaultLootTable().orElseThrow()))));
     }
 }

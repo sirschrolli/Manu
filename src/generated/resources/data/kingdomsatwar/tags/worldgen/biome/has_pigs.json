@@ -1,0 +1,32 @@
+{
+  "values": [
+    "minecraft:badlands",
+    "minecraft:bamboo_jungle",
+    "minecraft:birch_forest",
+    "minecraft:dappled_forest",
+    "minecraft:dark_forest",
+    "minecraft:eroded_badlands",
+    "minecraft:flower_forest",
+    "minecraft:forest",
+    "minecraft:jungle",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:old_growth_pine_taiga",
+    "minecraft:old_growth_spruce_taiga",
+    "minecraft:plains",
+    "minecraft:savanna",
+    "minecraft:savanna_plateau",
+    "minecraft:snowy_taiga",
+    "minecraft:sparse_jungle",
+    "minecraft:sunflower_plains",
+    "minecraft:swamp",
+    "minecraft:taiga",
+    "minecraft:windswept_forest",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_savanna",
+    "minecraft:wooded_badlands",
+    "kingdomsatwar:royal_meadows",
+    "kingdomsatwar:primeval_forest",
+    "kingdomsatwar:rock_gorges"
+  ]
+}

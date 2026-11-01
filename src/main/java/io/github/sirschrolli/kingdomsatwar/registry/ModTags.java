@@ -69,6 +69,24 @@ public final class ModTags {
     public static final class Biomes {
         /** Hier ziehen nachts Banditen umher. */
         public static final TagKey<Biome> HAS_BANDITS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_bandits"));
+        /** Eigene Hof- und Weidetiere (wo Vanilla die entsprechenden Tiere hatte, mit gleichen Gewichten). */
+        public static final TagKey<Biome> HAS_CATTLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_cattle"));
+        public static final TagKey<Biome> HAS_MUSHROOM_CATTLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_mushroom_cattle"));
+        public static final TagKey<Biome> HAS_PIGS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_pigs"));
+        public static final TagKey<Biome> HAS_SHEEP = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sheep"));
+        public static final TagKey<Biome> HAS_FEW_SHEEP = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_few_sheep"));
+        public static final TagKey<Biome> HAS_CHICKENS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_chickens"));
+        public static final TagKey<Biome> HAS_HORSES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_horses"));
+        public static final TagKey<Biome> HAS_FEW_HORSES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_few_horses"));
+        public static final TagKey<Biome> HAS_DONKEYS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_donkeys"));
+        public static final TagKey<Biome> HAS_GOATS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_goats"));
+        public static final TagKey<Biome> HAS_FEW_GOATS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_few_goats"));
+        public static final TagKey<Biome> HAS_MANY_HARES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_many_hares"));
+        public static final TagKey<Biome> HAS_HARES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_hares"));
+        public static final TagKey<Biome> HAS_FEW_HARES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_few_hares"));
+        /** Hier werden die Vanilla-Hoftiere aus den Spawn-Listen genommen (die eigenen treten an ihre Stelle). */
+        public static final TagKey<Biome> REPLACES_VANILLA_ANIMALS = TagKey.create(Registries.BIOME,
+                KingdomsAtWar.id("replaces_vanilla_animals"));
         public static final TagKey<Biome> HAS_WILD_BOARS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_wild_boars"));
         public static final TagKey<Biome> HAS_DEER = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_deer"));
         public static final TagKey<Biome> HAS_GEESE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_geese"));

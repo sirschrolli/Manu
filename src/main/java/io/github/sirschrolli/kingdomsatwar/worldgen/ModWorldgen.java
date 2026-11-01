@@ -7,8 +7,10 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -19,6 +21,7 @@ import net.minecraft.util.valueproviders.TrapezoidInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
@@ -221,6 +224,19 @@ public final class ModWorldgen {
     /** Biom-Modifikator für das Erscheinen der Banditen. */
     public static final ResourceKey<BiomeModifier> BANDIT_SPAWNS =
             ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("add_bandit_spawns"));
+    /** Eigene Hof- und Weidetiere statt der Vanilla-Tiere. */
+    public static final ResourceKey<BiomeModifier> REMOVE_VANILLA_ANIMALS = spawnModifier("remove_vanilla_farm_animals");
+    public static final ResourceKey<BiomeModifier> FARM_ANIMAL_SPAWNS = spawnModifier("add_farm_animal_spawns");
+    public static final ResourceKey<BiomeModifier> FEW_FARM_ANIMAL_SPAWNS = spawnModifier("add_few_farm_animal_spawns");
+    public static final ResourceKey<BiomeModifier> MUSHROOM_CATTLE_SPAWNS = spawnModifier("add_mushroom_cattle_spawns");
+    public static final ResourceKey<BiomeModifier> HORSE_SPAWNS = spawnModifier("add_horse_spawns");
+    public static final ResourceKey<BiomeModifier> FEW_HORSE_SPAWNS = spawnModifier("add_few_horse_spawns");
+    public static final ResourceKey<BiomeModifier> DONKEY_SPAWNS = spawnModifier("add_donkey_spawns");
+    public static final ResourceKey<BiomeModifier> GOAT_SPAWNS = spawnModifier("add_goat_spawns");
+    public static final ResourceKey<BiomeModifier> FEW_GOAT_SPAWNS = spawnModifier("add_few_goat_spawns");
+    public static final ResourceKey<BiomeModifier> MANY_HARE_SPAWNS = spawnModifier("add_many_hare_spawns");
+    public static final ResourceKey<BiomeModifier> HARE_SPAWNS = spawnModifier("add_hare_spawns");
+    public static final ResourceKey<BiomeModifier> FEW_HARE_SPAWNS = spawnModifier("add_few_hare_spawns");
     public static final ResourceKey<BiomeModifier> WILD_BOAR_SPAWNS = spawnModifier("add_wild_boar_spawns");
     public static final ResourceKey<BiomeModifier> DEER_SPAWNS = spawnModifier("add_deer_spawns");
     public static final ResourceKey<BiomeModifier> GOOSE_SPAWNS = spawnModifier("add_goose_spawns");
@@ -270,6 +286,38 @@ public final class ModWorldgen {
                         .add(new MobSpawnSettings.SpawnerData(ModEntities.BANDIT.get(), UniformInt.of(2, 3)), 8)
                         .add(new MobSpawnSettings.SpawnerData(ModEntities.BANDIT_ARCHER.get(), UniformInt.of(1, 2)), 5)
                         .build()));
+        // Eigene Hof- und Weidetiere: die Vanilla-Tiere verschwinden aus den Spawn-Listen, die eigenen kommen mit den
+        // gleichen Gewichten hinzu (Kühe 8, Schweine 10, Schafe 12, Hühner 10 …)
+        HolderGetter<EntityType<?>> types = context.lookup(Registries.ENTITY_TYPE);
+        context.register(REMOVE_VANILLA_ANIMALS, new BiomeModifiers.RemoveSpawnsBiomeModifier(
+                biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),
+                HolderSet.direct(java.util.stream.Stream.of(EntityTypes.COW, EntityTypes.MOOSHROOM, EntityTypes.PIG, EntityTypes.SHEEP,
+                                EntityTypes.CHICKEN, EntityTypes.HORSE, EntityTypes.DONKEY, EntityTypes.MULE, EntityTypes.GOAT,
+                                EntityTypes.RABBIT)
+                        .map(type -> (Holder<EntityType<?>>) types.getOrThrow(BuiltInRegistries.ENTITY_TYPE.getResourceKey(type).orElseThrow()))
+                        .toList())));
+        context.register(FARM_ANIMAL_SPAWNS, new BiomeModifiers.AddSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_CATTLE),
+                WeightedList.<MobSpawnSettings.SpawnerData>builder()
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.CATTLE.get(), UniformInt.of(4, 4)), 8)
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.FARM_PIG.get(), UniformInt.of(4, 4)), 10)
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.FARM_SHEEP.get(), UniformInt.of(4, 4)), 12)
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.FARM_CHICKEN.get(), UniformInt.of(4, 4)), 10)
+                        .build()));
+        context.register(FEW_FARM_ANIMAL_SPAWNS, new BiomeModifiers.AddSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.HAS_FEW_SHEEP),
+                WeightedList.<MobSpawnSettings.SpawnerData>builder()
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.FARM_SHEEP.get(), UniformInt.of(2, 4)), 2)
+                        .add(new MobSpawnSettings.SpawnerData(ModEntities.FARM_PIG.get(), UniformInt.of(1, 2)), 1)
+                        .build()));
+        context.register(MUSHROOM_CATTLE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_MUSHROOM_CATTLE, ModEntities.CATTLE.get(), 8, 4, 8));
+        context.register(HORSE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_HORSES, ModEntities.FARM_HORSE.get(), 5, 2, 6));
+        context.register(FEW_HORSE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_FEW_HORSES, ModEntities.FARM_HORSE.get(), 1, 2, 6));
+        context.register(DONKEY_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_DONKEYS, ModEntities.FARM_DONKEY.get(), 1, 1, 3));
+        context.register(GOAT_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_GOATS, ModEntities.FARM_GOAT.get(), 5, 1, 3));
+        context.register(FEW_GOAT_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_FEW_GOATS, ModEntities.FARM_GOAT.get(), 2, 1, 3));
+        context.register(MANY_HARE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_MANY_HARES, ModEntities.HARE.get(), 10, 2, 3));
+        context.register(HARE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_HARES, ModEntities.HARE.get(), 4, 2, 3));
+        context.register(FEW_HARE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_FEW_HARES, ModEntities.HARE.get(), 2, 2, 4));
+
         // Wilde Kreaturen
         context.register(WILD_BOAR_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILD_BOARS, ModEntities.WILD_BOAR.get(), 8, 2, 4));
         context.register(DEER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_DEER, ModEntities.DEER.get(), 8, 2, 4));

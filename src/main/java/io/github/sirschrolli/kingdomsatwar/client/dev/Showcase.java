@@ -98,6 +98,7 @@ final class Showcase {
                 case "creatures" -> creatures(steps);
                 case "decor" -> decor(steps);
                 case "farm" -> farm(steps);
+                case "farmanimals" -> farmAnimals(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);
@@ -954,6 +955,168 @@ final class Showcase {
         steps.add(Step.screenshot("creatures_wisp_night"));
         steps.add(Step.command("time set 6000"));
         steps.add(Step.waitTicks(10));
+        steps.add(Step.hud(true));
+    }
+
+    /**
+     * Die eigenen Hof- und Weidetiere auf einer Wiese: Rinder, Schweine, Schafe, Hühner, Hasen, Pferde, Esel, Maultiere
+     * und Ziegen – jede Rasse einmal, dazu Jungtiere, Sattel, Rossharnisch, Packtaschen und ein geschorenes Schaf.
+     */
+    private static void farmAnimals(Deque<Step> steps) {
+        int oz = 330;
+        steps.add(Step.server(level -> {
+            fill(level, new BlockPos(-8, ground - 1, oz - 8), new BlockPos(48, ground - 1, oz + 52), Blocks.GRASS_BLOCK.defaultBlockState());
+            fill(level, new BlockPos(-8, ground, oz - 8), new BlockPos(48, ground + 10, oz + 52), Blocks.AIR.defaultBlockState());
+            int x = 0;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Cattle.Breed.values()) {
+                spawnCreature(level, ModEntities.CATTLE.get(), x, oz, 30, m -> m.setBreed(breed));
+                x += 3;
+            }
+            spawnCreature(level, ModEntities.CATTLE.get(), x, oz, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Cattle.Breed.HOCHLAND);
+                m.setBaby(true);
+            });
+            // Schweine und Schafe
+            x = 0;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmPig.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_PIG.get(), x, oz + 8, 30, m -> {
+                    m.setBreed(breed);
+                    if (breed == io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmPig.Breed.LANDSCHWEIN) {
+                        m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
+                    }
+                });
+                x += 2;
+            }
+            spawnCreature(level, ModEntities.FARM_PIG.get(), x, oz + 8, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmPig.Breed.BUNT);
+                m.setBaby(true);
+            });
+            x += 3;
+            var sheepColors = new net.minecraft.world.item.DyeColor[]{net.minecraft.world.item.DyeColor.WHITE,
+                    net.minecraft.world.item.DyeColor.LIGHT_GRAY, net.minecraft.world.item.DyeColor.WHITE};
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep.Breed.values()) {
+                var color = sheepColors[breed.ordinal()];
+                spawnCreature(level, ModEntities.FARM_SHEEP.get(), x, oz + 8, 30, m -> {
+                    m.setBreed(breed);
+                    m.setColor(color);
+                });
+                x += 2;
+            }
+            spawnCreature(level, ModEntities.FARM_SHEEP.get(), x, oz + 8, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep.Breed.MERINO);
+                m.setColor(net.minecraft.world.item.DyeColor.LIGHT_BLUE);
+            });
+            spawnCreature(level, ModEntities.FARM_SHEEP.get(), x + 2, oz + 8, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep.Breed.SCHWARZKOPF);
+                m.setSheared(true);
+            });
+            spawnCreature(level, ModEntities.FARM_SHEEP.get(), x + 4, oz + 8, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep.Breed.MERINO);
+                m.setBaby(true);
+            });
+            // Hühner und Hasen
+            x = 0;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmChicken.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_CHICKEN.get(), x, oz + 15, 30, m -> {
+                    m.setBreed(breed);
+                    m.setOnGround(true);
+                });
+                x += 1;
+            }
+            spawnCreature(level, ModEntities.FARM_CHICKEN.get(), x, oz + 15, 30, m -> {
+                m.setBaby(true);
+                m.setOnGround(true);
+            });
+            x += 3;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Hare.Breed.values()) {
+                spawnCreature(level, ModEntities.HARE.get(), x, oz + 15, 30, m -> m.setBreed(breed));
+                x += 1;
+            }
+            // Pferde
+            x = 0;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmHorse.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_HORSE.get(), x, oz + 22, 30, m -> {
+                    m.setBreed(breed);
+                    if (breed == io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmHorse.Breed.BRAUNER) {
+                        m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
+                    }
+                    if (breed == io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmHorse.Breed.SCHIMMEL) {
+                        m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.BODY, new ItemStack(Items.GOLDEN_HORSE_ARMOR));
+                    }
+                });
+                x += 3;
+            }
+            spawnCreature(level, ModEntities.FARM_HORSE.get(), x, oz + 22, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmHorse.Breed.HAFLINGER);
+                m.setBaby(true);
+            });
+            // Esel, Maultiere, Ziegen
+            x = 0;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmDonkey.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_DONKEY.get(), x, oz + 30, 30, m -> {
+                    m.setBreed(breed);
+                    m.setChest(breed == io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmDonkey.Breed.GRAU);
+                });
+                x += 3;
+            }
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmMule.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_MULE.get(), x, oz + 30, 30, m -> {
+                    m.setBreed(breed);
+                    if (breed == io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmMule.Breed.BRAUN) {
+                        m.setItemSlot(net.minecraft.world.entity.EquipmentSlot.SADDLE, new ItemStack(Items.SADDLE));
+                    }
+                });
+                x += 3;
+            }
+            x += 1;
+            for (var breed : io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmGoat.Breed.values()) {
+                spawnCreature(level, ModEntities.FARM_GOAT.get(), x, oz + 30, 30, m -> m.setBreed(breed));
+                x += 2;
+            }
+            spawnCreature(level, ModEntities.FARM_GOAT.get(), x, oz + 30, 30, m -> {
+                m.setBreed(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmGoat.Breed.SCHNEE);
+                m.setBaby(true);
+            });
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.hud(false));
+        steps.add(tp(3.5, 2.4, oz + 6.0, 180, 20));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.screenshot("farm_cattle_a"));
+        steps.add(tp(12.5, 2.4, oz + 6.0, 180, 20));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_cattle_b"));
+        steps.add(tp(4.5, 1.8, oz + 12.5, 180, 20));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_pigs"));
+        steps.add(tp(16.5, 1.9, oz + 13.0, 180, 20));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_sheep"));
+        steps.add(tp(3.0, 1.1, oz + 18.0, 180, 22));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_chickens"));
+        steps.add(tp(11.0, 1.1, oz + 18.0, 180, 22));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_hares"));
+        steps.add(tp(3.5, 2.8, oz + 28.5, 180, 16));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_horses_a"));
+        steps.add(tp(12.5, 2.8, oz + 28.5, 180, 16));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_horses_b"));
+        steps.add(tp(22.5, 2.8, oz + 28.5, 180, 16));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_horses_c"));
+        steps.add(tp(5.0, 2.6, oz + 36.0, 180, 18));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_donkeys"));
+        steps.add(tp(17.5, 1.9, oz + 35.0, 180, 20));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("farm_goats"));
+        steps.add(tp(12.0, 5.0, oz + 41.0, 180, 13));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("farm_overview"));
         steps.add(Step.hud(true));
     }
 

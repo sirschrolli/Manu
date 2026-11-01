@@ -131,6 +131,16 @@ public final class ModItems {
     }
 
     // Wilde Kreaturen: Spawn-Eier
+    // Eigene Hof- und Weidetiere (die Vanilla-Spawn-Eier erzeugen ebenfalls diese Tiere)
+    public static final DeferredItem<SpawnEggItem> CATTLE_SPAWN_EGG = creatureEgg("cattle", () -> ModEntities.CATTLE.get());
+    public static final DeferredItem<SpawnEggItem> PIG_SPAWN_EGG = creatureEgg("pig", () -> ModEntities.FARM_PIG.get());
+    public static final DeferredItem<SpawnEggItem> SHEEP_SPAWN_EGG = creatureEgg("sheep", () -> ModEntities.FARM_SHEEP.get());
+    public static final DeferredItem<SpawnEggItem> CHICKEN_SPAWN_EGG = creatureEgg("chicken", () -> ModEntities.FARM_CHICKEN.get());
+    public static final DeferredItem<SpawnEggItem> HORSE_SPAWN_EGG = creatureEgg("horse", () -> ModEntities.FARM_HORSE.get());
+    public static final DeferredItem<SpawnEggItem> DONKEY_SPAWN_EGG = creatureEgg("donkey", () -> ModEntities.FARM_DONKEY.get());
+    public static final DeferredItem<SpawnEggItem> MULE_SPAWN_EGG = creatureEgg("mule", () -> ModEntities.FARM_MULE.get());
+    public static final DeferredItem<SpawnEggItem> GOAT_SPAWN_EGG = creatureEgg("goat", () -> ModEntities.FARM_GOAT.get());
+    public static final DeferredItem<SpawnEggItem> HARE_SPAWN_EGG = creatureEgg("hare", () -> ModEntities.HARE.get());
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
     public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());

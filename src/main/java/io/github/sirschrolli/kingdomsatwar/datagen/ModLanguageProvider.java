@@ -824,6 +824,7 @@ public class ModLanguageProvider extends LanguageProvider {
     }
 
     private void creatures() {
+        farmAnimals();
         creature(ModEntities.WILD_BOAR, ModItems.WILD_BOAR_SPAWN_EGG, "Wild Boar", "Wildschwein", "Wildschwein");
         creature(ModEntities.DEER, ModItems.DEER_SPAWN_EGG, "Red Deer", "Rothirsch", "Rothirsch");
         creature(ModEntities.GOOSE, ModItems.GOOSE_SPAWN_EGG, "Goose", "Gans", "Gänse");
@@ -869,6 +870,46 @@ public class ModLanguageProvider extends LanguageProvider {
     }
 
     /** Kreatur mit Spawn-Ei ({@code eggStemDe}: Wortstamm für "...-Spawn-Ei"). */
+    /** Eigene Hof- und Weidetiere: Art, Spawn-Ei und je Rasse ein eigener Name. */
+    private void farmAnimals() {
+        creature(ModEntities.CATTLE, ModItems.CATTLE_SPAWN_EGG, "Cattle", "Hausrind", "Rinder");
+        breeds(ModEntities.CATTLE, new String[][]{{"fleckvieh", "Simmental Cattle", "Fleckvieh"}, {"braunvieh", "Brown Swiss", "Braunvieh"},
+                {"hochland", "Highland Cattle", "Hochlandrind"}, {"steppe", "Steppe Cattle", "Steppenrind"},
+                {"pilz", "Mushroom Cattle", "Pilzrind"}});
+        creature(ModEntities.FARM_PIG, ModItems.PIG_SPAWN_EGG, "Pig", "Hausschwein", "Schweine");
+        breeds(ModEntities.FARM_PIG, new String[][]{{"landschwein", "Landrace Pig", "Landschwein"},
+                {"sattelschwein", "Saddleback Pig", "Sattelschwein"}, {"bunt", "Spotted Pig", "Buntes Schwein"},
+                {"wollschwein", "Woolly Pig", "Wollschwein"}});
+        creature(ModEntities.FARM_SHEEP, ModItems.SHEEP_SPAWN_EGG, "Sheep", "Schaf", "Schaf");
+        breeds(ModEntities.FARM_SHEEP, new String[][]{{"merino", "Merino Sheep", "Merinoschaf"}, {"heidschnucke", "Heath Sheep", "Heidschnucke"},
+                {"schwarzkopf", "Blackface Sheep", "Schwarzkopfschaf"}});
+        creature(ModEntities.FARM_CHICKEN, ModItems.CHICKEN_SPAWN_EGG, "Chicken", "Huhn", "Hühner");
+        breeds(ModEntities.FARM_CHICKEN, new String[][]{{"white", "White Hen", "Weiße Henne"}, {"brown", "Brown Hen", "Braune Henne"},
+                {"black", "Black Hen", "Schwarze Henne"}, {"barred", "Barred Hen", "Sperberhenne"}, {"rooster", "Rooster", "Hahn"}});
+        creature(ModEntities.FARM_HORSE, ModItems.HORSE_SPAWN_EGG, "Horse", "Pferd", "Pferde");
+        breeds(ModEntities.FARM_HORSE, new String[][]{{"fuchs", "Chestnut Horse", "Fuchs"}, {"brauner", "Bay Horse", "Brauner"},
+                {"friese", "Friesian", "Friese"}, {"schimmel", "Dapple Grey", "Apfelschimmel"}, {"schecke", "Pinto", "Schecke"},
+                {"haflinger", "Haflinger", "Haflinger"}, {"kaltblut", "Draft Horse", "Kaltblut"}, {"falbe", "Dun Horse", "Falbe"},
+                {"pony", "Pony", "Pony"}});
+        creature(ModEntities.FARM_DONKEY, ModItems.DONKEY_SPAWN_EGG, "Donkey", "Esel", "Esel");
+        breeds(ModEntities.FARM_DONKEY, new String[][]{{"grau", "Grey Donkey", "Grauesel"}, {"braun", "Brown Donkey", "Brauner Esel"}});
+        creature(ModEntities.FARM_MULE, ModItems.MULE_SPAWN_EGG, "Mule", "Maultier", "Maultier");
+        breeds(ModEntities.FARM_MULE, new String[][]{{"braun", "Mule", "Maultier"}, {"rappe", "Black Mule", "Rappmaultier"}});
+        creature(ModEntities.FARM_GOAT, ModItems.GOAT_SPAWN_EGG, "Goat", "Ziege", "Ziegen");
+        breeds(ModEntities.FARM_GOAT, new String[][]{{"steinbock", "Ibex", "Steinbock"}, {"gaemse", "Chamois", "Gämse"},
+                {"schnee", "Snow Goat", "Schneeziege"}, {"haus", "Domestic Goat", "Hausziege"}});
+        creature(ModEntities.HARE, ModItems.HARE_SPAWN_EGG, "Hare", "Hase", "Hasen");
+        breeds(ModEntities.HARE, new String[][]{{"feldhase", "Brown Hare", "Feldhase"}, {"schneehase", "Snow Hare", "Schneehase"},
+                {"wuestenhase", "Desert Hare", "Wüstenhase"}, {"kaninchen", "Wild Rabbit", "Wildkaninchen"},
+                {"schecke", "Spotted Rabbit", "Scheckenkaninchen"}, {"mordshase", "Killer Hare", "Mordshase"}});
+    }
+
+    private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {
+        for (String[] name : names) {
+            add(type.get().getDescriptionId() + "." + name[0], pick(name[1], name[2]));
+        }
+    }
+
     private void creature(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, Supplier<? extends Item> egg,
             String english, String deutsch, String eggStemDe) {
         add(type.get(), pick(english, deutsch));

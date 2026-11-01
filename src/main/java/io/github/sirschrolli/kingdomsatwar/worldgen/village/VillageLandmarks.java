@@ -415,7 +415,7 @@ final class VillageLandmarks {
         b.set(2, 2, 9, Blocks.HAY_BLOCK.defaultBlockState());
         b.set(5, 1, 9, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
         for (int i = 0; i < 4; i++) {
-            VillageResidents.animal(b, piece, 3 + i * 2, 1, 4 + (i & 1) * 2, net.minecraft.world.entity.EntityTypes.SHEEP);
+            VillageResidents.animal(b, piece, 3 + i * 2, 1, 4 + (i & 1) * 2, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_SHEEP.get());
         }
         // der Schäfer webt in seiner Hütte (durch die Tür zur Weide hat er die Herde im Blick)
         piece.resident(b, 10, 1, 8, VillageProfession.SHEPHERD, at(9, 1, 9), at(10, 1, 8));

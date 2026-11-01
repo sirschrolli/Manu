@@ -260,7 +260,8 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | E1 | Acht eigene Oberwelt-Biome mit eigener Biomquelle, eigenen Böden, Bäumen, Pflanzen, Felsen, Torf und Schilf (Version 0.7.0) | ✅ |
 | E2a | Eigene Dörfer in vier Bauweisen (Fachwerk, Nordisch, Lehm, Pfahlbau) fern der Nester, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen; keine Vanilla-Dörfer und Außenposten mehr (Version 0.8.0) | ✅ |
 | E2b | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 ganz eigene Gegenstücke (Sternensturz mit dem Endportal, Wasserstollen, Gezeitenschrein mit dem Herz des Meeres, Seedrachen-Gebeine, Karawanserei, Schlangentempel, Hexenbaum, Frostgrotte, Räuberlager, Köhlerei, Glutpforte, Muschelfeld, Korallenpalast, verschüttetes Kloster, Stille Kathedrale, Arena der Prüfungen, Raubritterburg); Enderaugen und Karten zeigen auf sie, alle Funde bleiben erhältlich (Version 0.9.0) | ✅ |
-| E3 | Eigene Nutz- und Wildtiere statt Vanilla – alle Vanilla-Beute bleibt erhältlich | ⏳ |
+| E3a | Eigene Hof- und Weidetiere statt Vanilla: Hausrind, Hausschwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen nach Land; Milch, Wolle, Eier, Sattel, Rossharnisch, Packtaschen und alle Beute wie gewohnt; neue Vanilla-Tiere werden umgewandelt (Version 0.10.0) | ✅ |
+| E3b | Eigene Wildtiere statt Vanilla (Wolf, Fuchs, Bär, Katze, Biene, Fledermaus, Papagei, Gürteltier, Kamel …) – alle Vanilla-Beute bleibt erhältlich | ⏳ |
 | E4 | Eigene Monster und Wassertiere | ⏳ |
 | E5 | Nether und End: eigene Mobs und Bauwerke | ⏳ |
 | G | Erzähler-Kapitel und neues Intro mit Stimme C, Feinschliff, Veröffentlichung | ⏳ |

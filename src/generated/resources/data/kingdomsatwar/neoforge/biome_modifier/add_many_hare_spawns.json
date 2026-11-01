@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_many_hares",
+  "spawners": {
+    "type": "kingdomsatwar:hare",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 3,
+      "min_inclusive": 2
+    },
+    "weight": 10
+  }
+}

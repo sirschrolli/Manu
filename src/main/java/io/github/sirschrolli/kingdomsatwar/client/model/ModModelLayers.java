@@ -13,6 +13,17 @@ public final class ModModelLayers {
     /** Bürger der eigenen Siedlung. */
     public static final ModelLayerLocation CITIZEN = new ModelLayerLocation(KingdomsAtWar.id("citizen"), "main");
 
+    /** Eigene Hof- und Weidetiere. */
+    public static final ModelLayerLocation CATTLE = new ModelLayerLocation(KingdomsAtWar.id("cattle"), "main");
+    public static final ModelLayerLocation FARM_PIG = new ModelLayerLocation(KingdomsAtWar.id("pig"), "main");
+    public static final ModelLayerLocation FARM_SHEEP = new ModelLayerLocation(KingdomsAtWar.id("sheep"), "main");
+    public static final ModelLayerLocation FARM_CHICKEN = new ModelLayerLocation(KingdomsAtWar.id("chicken"), "main");
+    public static final ModelLayerLocation FARM_GOAT = new ModelLayerLocation(KingdomsAtWar.id("goat"), "main");
+    public static final ModelLayerLocation HARE = new ModelLayerLocation(KingdomsAtWar.id("hare"), "main");
+    public static final ModelLayerLocation FARM_HORSE = new ModelLayerLocation(KingdomsAtWar.id("horse"), "main");
+    public static final ModelLayerLocation FARM_DONKEY = new ModelLayerLocation(KingdomsAtWar.id("donkey"), "main");
+    public static final ModelLayerLocation FARM_MULE = new ModelLayerLocation(KingdomsAtWar.id("mule"), "main");
+
     public static final ModelLayerLocation WILD_BOAR = new ModelLayerLocation(KingdomsAtWar.id("wild_boar"), "main");
     public static final ModelLayerLocation DEER = new ModelLayerLocation(KingdomsAtWar.id("deer"), "main");
     public static final ModelLayerLocation GOOSE = new ModelLayerLocation(KingdomsAtWar.id("goose"), "main");

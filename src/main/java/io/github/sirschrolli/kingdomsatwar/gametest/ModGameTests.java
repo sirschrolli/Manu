@@ -168,6 +168,7 @@ public final class ModGameTests {
         OverworldGameTests.init(); // die eigenen Oberwelt-Biome
         VillageGameTests.init();   // die Dörfer und ihre Bewohner
         SiteGameTests.init();      // die eigenen Bauwerke statt der alten
+        FarmGameTests.init();      // die eigenen Hof- und Weidetiere
     }
 
     private ModGameTests() {}
@@ -199,6 +200,7 @@ public final class ModGameTests {
         OverworldGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
+        FarmGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -477,7 +479,7 @@ public final class ModGameTests {
         dragon.snapTo(dragon.getX(), dragon.getY(), dragon.getZ(), -90.0f, 0.0f); // Blick nach +X
         dragon.setYBodyRot(-90.0f);
         dragon.setYHeadRot(-90.0f);
-        var target = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(5, 1, 4));
+        var target = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_PIG.get(), new BlockPos(5, 1, 4));
         Vec3 direction = target.getBoundingBox().getCenter().subtract(dragon.headPosition()).normalize();
         helper.assertTrue(dragon.startBreath(direction), "Odem startet nicht");
         helper.succeedWhen(() -> {
@@ -618,7 +620,7 @@ public final class ModGameTests {
     private static void draconiumIgnites(GameTestHelper helper) {
         arenaFloor(helper);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        var pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(4, 1, 4));
+        var pig = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_PIG.get(), new BlockPos(4, 1, 4));
         player.snapTo(pig.getX() - 1.5, pig.getY(), pig.getZ(), -90.0f, 0.0f);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.DRACONIUM_SWORD.get()));
         player.attack(pig);
@@ -701,7 +703,7 @@ public final class ModGameTests {
     private static void lindwormHunts(GameTestHelper helper) {
         arenaFloor(helper);
         var lindworm = helper.spawn(ModEntities.LINDWORM.get(), new BlockPos(2, 1, 4));
-        var pig = helper.spawnWithNoFreeWill(EntityTypes.PIG, new BlockPos(5, 1, 4));
+        var pig = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_PIG.get(), new BlockPos(5, 1, 4));
         helper.succeedWhen(() -> helper.assertTrue(pig.getHealth() < pig.getMaxHealth() || !pig.isAlive(),
                 "Der Lindwurm greift das Schwein nicht an"));
     }
