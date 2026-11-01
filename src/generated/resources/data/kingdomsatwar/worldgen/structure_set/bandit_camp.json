@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "frequency": 0.25,
+    "salt": 165745297,
+    "separation": 8,
+    "spacing": 32
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:bandit_camp",
+      "weight": 1
+    }
+  ]
+}

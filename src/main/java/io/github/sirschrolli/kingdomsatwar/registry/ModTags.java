@@ -93,8 +93,19 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_SHADOW_CITADEL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_shadow_citadel"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
+        /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */
+        public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind, TagKey<Biome>> HAS_SITE = siteTags();
         /** Alle Biome, in denen Dörfer stehen können – dort halten Bäume und Felsen Abstand zu den Häusern und Wegen. */
         public static final TagKey<Biome> VILLAGE_GROUND = TagKey.create(Registries.BIOME, KingdomsAtWar.id("village_ground"));
+
+        private static java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind, TagKey<Biome>> siteTags() {
+            java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind, TagKey<Biome>> tags =
+                    new java.util.EnumMap<>(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.class);
+            for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.values()) {
+                tags.put(kind, TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_site/" + kind.id())));
+            }
+            return java.util.Collections.unmodifiableMap(tags);
+        }
 
         private static java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> villageTags() {
             java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> tags =

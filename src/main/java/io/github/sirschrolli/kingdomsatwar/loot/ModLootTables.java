@@ -75,6 +75,30 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> VILLAGE_FISHER = village("fisher");
     public static final ResourceKey<LootTable> VILLAGE_WATCHTOWER = village("watchtower");
 
+    /** Truhen in den eigenen Bauwerken der Oberwelt (an Stelle der Vanilla-Bauwerke). */
+    public static final ResourceKey<LootTable> SITE_FALLEN_STAR_CAMP = site("fallen_star_camp");
+    public static final ResourceKey<LootTable> SITE_FALLEN_STAR_CORE = site("fallen_star_core");
+    public static final ResourceKey<LootTable> SITE_AQUEDUCT_ALCOVE = site("aqueduct_alcove");
+    public static final ResourceKey<LootTable> SITE_AQUEDUCT_CISTERN = site("aqueduct_cistern");
+    public static final ResourceKey<LootTable> SITE_TIDE_SHRINE = site("tide_shrine");
+    public static final ResourceKey<LootTable> SITE_SEA_DRAGON_MAP = site("sea_dragon_map");
+    public static final ResourceKey<LootTable> SITE_SEA_DRAGON_CARGO = site("sea_dragon_cargo");
+    public static final ResourceKey<LootTable> SITE_SEA_DRAGON_HOARD = site("sea_dragon_hoard");
+    public static final ResourceKey<LootTable> SITE_CARAVANSERAI_TREASURE = site("caravanserai_treasure");
+    public static final ResourceKey<LootTable> SITE_CARAVANSERAI_TRAVELER = site("caravanserai_traveler");
+    public static final ResourceKey<LootTable> SITE_SERPENT_TEMPLE = site("serpent_temple");
+    public static final ResourceKey<LootTable> SITE_WITCH_TREE = site("witch_tree");
+    public static final ResourceKey<LootTable> SITE_FROST_GROTTO = site("frost_grotto");
+    public static final ResourceKey<LootTable> SITE_FROST_GROTTO_CELLAR = site("frost_grotto_cellar");
+    public static final ResourceKey<LootTable> SITE_BANDIT_CAMP = site("bandit_camp");
+    public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP = site("charcoal_camp");
+    public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP_SECRET = site("charcoal_camp_secret");
+    public static final ResourceKey<LootTable> SITE_EMBER_GATE = site("ember_gate");
+
+    private static ResourceKey<LootTable> site(String name) {
+        return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/site/" + name));
+    }
+
     private static ResourceKey<LootTable> village(String name) {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/village/" + name));
     }

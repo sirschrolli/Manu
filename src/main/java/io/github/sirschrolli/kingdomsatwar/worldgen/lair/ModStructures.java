@@ -78,6 +78,20 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> VILLAGE_PIECE =
             PIECES.register("village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillagePiece::new);
 
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteStructure>>
+            SITE = TYPES.register("site", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SITE_PIECE =
+            PIECES.register("site", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.site.SitePiece::new);
+
+    /** Ein eigenes Bauwerk der Oberwelt (an Stelle eines Vanilla-Bauwerks). */
+    public static ResourceKey<Structure> site(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind kind) {
+        return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id(kind.id()));
+    }
+
+    public static ResourceKey<StructureSet> siteSet(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind kind) {
+        return ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id(kind.id()));
+    }
+
     /** Ein Dorf der jeweiligen Bauweise. */
     public static ResourceKey<Structure> village(io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle style) {
         return ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("village_" + style.id()));
@@ -191,6 +205,14 @@ public final class ModStructures {
                             .terrainAdapation(TerrainAdjustment.NONE)
                             .build(), style));
         }
+        for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.values()) {
+            context.register(site(kind), new io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteStructure(
+                    new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SITE.get(kind)))
+                            .spawnOverrides(siteSpawns(kind))
+                            .generationStep(kind.step())
+                            .terrainAdapation(TerrainAdjustment.NONE)
+                            .build(), kind));
+        }
         for (DragonType type : DragonType.values()) {
             context.register(mageTower(type), new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerStructure(
                     new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_MAGE_TOWERS.get(type)))
@@ -208,6 +230,73 @@ public final class ModStructures {
                     .terrainAdapation(TerrainAdjustment.NONE)
                     .build(), type));
         }
+    }
+
+    /**
+     * Die Verteilung der eigenen Bauwerke der Oberwelt – etwa so dicht wie die der Bauwerke, deren Rolle sie übernehmen:
+     * der Sternensturz in Ringen um den Weltursprung (wie die Festungen, Enderaugen finden ihn so), Wasserstollen und
+     * Gezeitenschreine selten in vielen Chunks, die Gebeine der Seedrachen in Feldern von 24 Chunks.
+     */
+    private static void siteSets(BootstrapContext<StructureSet> context, HolderGetter<Structure> structures, HolderGetter<Biome> biomes) {
+        for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.values()) {
+            var structure = structures.getOrThrow(site(kind));
+            StructurePlacement placement = switch (kind) {
+                case FALLEN_STAR -> new net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement(32, 3, 128,
+                        biomes.getOrThrow(BiomeTags.STRONGHOLD_BIASED_TO));
+                case AQUEDUCT -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
+                        net.minecraft.core.Vec3i.ZERO,
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_3,
+                        0.003f, 71_404_413, java.util.Optional.empty(), 1, 0,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
+                case TIDE_SHRINE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
+                        new net.minecraft.core.Vec3i(9, 0, 9),
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_2,
+                        0.01f, 50_918_377, java.util.Optional.empty(), 1, 0,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
+                case SEA_DRAGON -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 4,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 165_745_311);
+                case CARAVANSERAI -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_631);
+                case SERPENT_TEMPLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_633);
+                case WITCH_TREE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_635);
+                case FROST_GROTTO -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_637);
+                case BANDIT_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
+                        net.minecraft.core.Vec3i.ZERO,
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
+                        0.25f, 165_745_297, java.util.Optional.empty(), 32, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
+                case CHARCOAL_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(37, 8,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 91_231_129);
+                case EMBER_GATE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 15,
+                        net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 34_222_647);
+            };
+            context.register(siteSet(kind), new StructureSet(structure, placement));
+        }
+    }
+
+    /** Wer an den eigenen Bauwerken auftaucht: Hexen (und eine Katze) am Hexenbaum, Wegelagerer im Räuberlager. */
+    private static java.util.Map<net.minecraft.world.entity.MobCategory, net.minecraft.world.level.levelgen.structure.StructureSpawnOverride> siteSpawns(
+            io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind kind) {
+        return switch (kind) {
+            case WITCH_TREE -> java.util.Map.of(
+                    net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.PIECE,
+                            net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                    net.minecraft.world.entity.EntityTypes.WITCH, new net.minecraft.util.valueproviders.ConstantInt(1)))),
+                    net.minecraft.world.entity.MobCategory.CREATURE, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.PIECE,
+                            net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                    net.minecraft.world.entity.EntityTypes.CAT, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+            case BANDIT_CAMP -> java.util.Map.of(
+                    net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                            net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                    net.minecraft.world.entity.EntityTypes.PILLAGER, new net.minecraft.util.valueproviders.ConstantInt(1)))));
+            default -> java.util.Map.of();
+        };
     }
 
     public static void bootstrapStructureSets(BootstrapContext<StructureSet> context) {
@@ -244,6 +333,7 @@ public final class ModStructures {
         context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(36, 12,
                 47_719_163, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                         .ExclusionZone(villages, 7)), 14)));
+        siteSets(context, structures, biomes);
         context.register(SEAL_CIRCLE_SET, new StructureSet(structures.getOrThrow(SEAL_CIRCLE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePlacement(220, 640,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SEAL_CIRCLE), 51_731)));

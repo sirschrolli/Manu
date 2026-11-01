@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:plains",
+    "minecraft:savanna",
+    "minecraft:taiga",
+    "minecraft:snowy_plains",
+    "minecraft:meadow",
+    "minecraft:grove",
+    "minecraft:desert",
+    "kingdomsatwar:royal_meadows",
+    "kingdomsatwar:rock_gorges"
+  ]
+}

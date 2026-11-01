@@ -25,6 +25,7 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
     protected void addTags(HolderLookup.Provider registries) {
         this.overworldBiomes();
         this.villages();
+        this.sites();
         this.tag(ModTags.Biomes.HAS_BANDITS)
                 .addTag(Tags.Biomes.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST)
@@ -170,6 +171,51 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         // keine Dörfer und Außenposten aus Vanilla mehr
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_VILLAGE_PLAINS, BiomeTags.HAS_VILLAGE_DESERT, BiomeTags.HAS_VILLAGE_SAVANNA,
                 BiomeTags.HAS_VILLAGE_SNOWY, BiomeTags.HAS_VILLAGE_TAIGA, BiomeTags.HAS_PILLAGER_OUTPOST)) {
+            this.tag(old).replace();
+        }
+    }
+
+    /**
+     * Die eigenen Bauwerke an Stelle der Vanilla-Bauwerke: das Weltentor und die Stollen überall in der Oberwelt, Schätze
+     * an den Stränden, Wracks im Meer und an der Küste. Die Vanilla-Bauwerke, die sie ersetzen, entstehen nicht mehr.
+     */
+    private void sites() {
+        var has = ModTags.Biomes.HAS_SITE;
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.FALLEN_STAR)).addTag(BiomeTags.IS_OVERWORLD);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.AQUEDUCT)).addTag(BiomeTags.IS_OVERWORLD);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.TIDE_SHRINE)).addTag(BiomeTags.IS_BEACH)
+                .add(OverworldBiomes.CORAL_COAST);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SEA_DRAGON)).addTag(BiomeTags.IS_OCEAN)
+                .addTag(BiomeTags.IS_BEACH).add(OverworldBiomes.CORAL_COAST).add(OverworldBiomes.STORM_COAST);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CARAVANSERAI)).add(net.minecraft.world.level.biome.Biomes.DESERT);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SERPENT_TEMPLE)).addTag(BiomeTags.IS_JUNGLE);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.WITCH_TREE)).add(net.minecraft.world.level.biome.Biomes.SWAMP)
+                .add(OverworldBiomes.MIST_MOOR);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.FROST_GROTTO)).add(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS)
+                .add(net.minecraft.world.level.biome.Biomes.SNOWY_TAIGA).add(net.minecraft.world.level.biome.Biomes.SNOWY_SLOPES)
+                .add(OverworldBiomes.FROST_PEAKS);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.BANDIT_CAMP)).add(net.minecraft.world.level.biome.Biomes.PLAINS)
+                .add(net.minecraft.world.level.biome.Biomes.SAVANNA).add(net.minecraft.world.level.biome.Biomes.TAIGA)
+                .add(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS).add(net.minecraft.world.level.biome.Biomes.MEADOW)
+                .add(net.minecraft.world.level.biome.Biomes.GROVE).add(net.minecraft.world.level.biome.Biomes.DESERT)
+                .add(OverworldBiomes.ROYAL_MEADOWS).add(OverworldBiomes.ROCK_GORGES);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CHARCOAL_CAMP)).addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_TAIGA)
+                .add(net.minecraft.world.level.biome.Biomes.MEADOW).add(net.minecraft.world.level.biome.Biomes.SAVANNA)
+                .add(net.minecraft.world.level.biome.Biomes.SPARSE_JUNGLE).add(net.minecraft.world.level.biome.Biomes.BAMBOO_JUNGLE)
+                .add(net.minecraft.world.level.biome.Biomes.SWAMP).add(net.minecraft.world.level.biome.Biomes.WOODED_BADLANDS)
+                .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN).add(OverworldBiomes.PRIMEVAL_FOREST);
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.EMBER_GATE)).addTag(BiomeTags.IS_OVERWORLD);
+        for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
+                BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
+                BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,
+                BiomeTags.HAS_RUINED_PORTAL_JUNGLE, BiomeTags.HAS_RUINED_PORTAL_OCEAN, BiomeTags.HAS_RUINED_PORTAL_SWAMP,
+                BiomeTags.HAS_RUINED_PORTAL_MOUNTAIN, BiomeTags.HAS_RUINED_PORTAL_STANDARD, BiomeTags.HAS_ABANDONED_CAMP_BAMBOO_JUNGLE,
+                BiomeTags.HAS_ABANDONED_CAMP_BIRCH_FOREST, BiomeTags.HAS_ABANDONED_CAMP_CHERRY_GROVE, BiomeTags.HAS_ABANDONED_CAMP_DAPPLED_FOREST,
+                BiomeTags.HAS_ABANDONED_CAMP_FLOWER_FOREST, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_MEADOW,
+                BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_BIRCH_FOREST, BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_PINE_TAIGA,
+                BiomeTags.HAS_ABANDONED_CAMP_OLD_GROWTH_SPRUCE_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_PALE_GARDEN, BiomeTags.HAS_ABANDONED_CAMP_SAVANNA,
+                BiomeTags.HAS_ABANDONED_CAMP_SNOWY_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_SPARSE_JUNGLE, BiomeTags.HAS_ABANDONED_CAMP_SWAMP,
+                BiomeTags.HAS_ABANDONED_CAMP_TAIGA, BiomeTags.HAS_ABANDONED_CAMP_WINDSWEPT_FOREST, BiomeTags.HAS_ABANDONED_CAMP_WOODED_BADLANDS)) {
             this.tag(old).replace();
         }
     }

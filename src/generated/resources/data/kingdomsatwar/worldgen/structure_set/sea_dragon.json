@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 165745311,
+    "separation": 4,
+    "spacing": 24
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:sea_dragon",
+      "weight": 1
+    }
+  ]
+}

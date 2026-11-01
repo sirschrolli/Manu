@@ -167,6 +167,7 @@ public final class ModGameTests {
         MageGameTests.init();     // Erzmagier und ihre Türme
         OverworldGameTests.init(); // die eigenen Oberwelt-Biome
         VillageGameTests.init();   // die Dörfer und ihre Bewohner
+        SiteGameTests.init();      // die eigenen Bauwerke statt der alten
     }
 
     private ModGameTests() {}
@@ -197,6 +198,7 @@ public final class ModGameTests {
         MageGameTests.register(event, environment);
         OverworldGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
+        SiteGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

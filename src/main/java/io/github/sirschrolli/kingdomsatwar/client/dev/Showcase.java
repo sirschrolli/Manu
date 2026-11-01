@@ -133,6 +133,10 @@ final class Showcase {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         VillageShowcase.villagers(steps, g);
+                    } else if (scene.equals("worldsites")) {
+                        WorldSitesShowcase.sites(steps, "");
+                    } else if (scene.startsWith("worldsite_")) {
+                        WorldSitesShowcase.sites(steps, scene.substring(10));
                     } else if (scene.equals("villages_stats")) {
                         VillageShowcase.stats(steps, 6);
                     } else if (scene.equals("villages_life")) {

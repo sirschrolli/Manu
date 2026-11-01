@@ -1,0 +1,16 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "frequency": 0.003,
+    "frequency_reduction_method": "legacy_type_3",
+    "salt": 71404413,
+    "separation": 0,
+    "spacing": 1
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:aqueduct",
+      "weight": 1
+    }
+  ]
+}

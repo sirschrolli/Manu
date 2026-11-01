@@ -174,10 +174,109 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.SPYGLASS, 1, 1, 1))));
     }
 
+    /**
+     * Die eigenen Bauwerke an Stelle der Vanilla-Bauwerke: In jeder Truhe liegt alles, was die alte Truhe enthielt (die
+     * Vanilla-Tabelle wird einmal gezogen – so bleiben Schmiedevorlagen, Schallplatten, das Herz des Meeres und die
+     * Schatzkarten erhältlich), dazu Münzen und manchmal etwas aus diesem Königreich.
+     */
+    /**
+     * Die Truhen der eigenen Bauwerke der Oberwelt. Der Sternensturz und die Wasserstollen haben ganz eigene Beute;
+     * im Gezeitenschrein liegt (wie im vergrabenen Schatz) immer das Herz des Meeres, und in der Truhe des Kapitäns in den
+     * Gebeinen eines Seedrachen immer die Seekarte, die zu einem Gezeitenschrein führt.
+     */
+    private void sites() {
+        // Sterndeuter: Vorräte, Schreibzeug, Kerzen, ein Fernrohr, selten eine Enderperle
+        this.output.accept(ModLootTables.SITE_FALLEN_STAR_CAMP, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.BREAD, 8, 1, 4), item(Items.APPLE, 6, 1, 3), item(Items.TORCH, 8, 3, 10), item(Items.PAPER, 6, 2, 6),
+                        item(Items.BOOK, 4, 1, 2), item(Items.CANDLE, 5, 1, 3), item(Items.COMPASS, 2, 1, 1), item(Items.SPYGLASS, 1, 1, 1),
+                        item(Items.ENDER_PEARL, 2, 1, 1), item(Items.AMETHYST_SHARD, 4, 1, 4))));
+        // Kern des Sterns: Enderperlen und -augen, Obsidian, Amethyst, Gold, ein verzaubertes Buch der Sterndeuter
+        this.output.accept(ModLootTables.SITE_FALLEN_STAR_CORE, coins(LootTable.lootTable(), 0, 0, 2, 6, 0.4f)
+                .withPool(pool(1, 1, item(Items.ENDER_PEARL, 1, 2, 5)))
+                .withPool(pool(2, 4, item(Items.ENDER_EYE, 2, 1, 2), item(Items.OBSIDIAN, 6, 2, 6), item(Items.CRYING_OBSIDIAN, 4, 1, 3),
+                        item(Items.AMETHYST_SHARD, 6, 3, 8), item(Items.GOLD_INGOT, 4, 1, 4), item(ModItems.GEMSTONE.get(), 3, 1, 2),
+                        item(Items.EXPERIENCE_BOTTLE, 3, 1, 4)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.6f))));
+        // Wasserwärter: Werkzeug, Eimer, Seil, Laternen, Brot, etwas Stahl
+        this.output.accept(ModLootTables.SITE_AQUEDUCT_ALCOVE, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.BUCKET, 4, 1, 1), item(Items.WATER_BUCKET, 2, 1, 1), item(Items.LEAD, 3, 1, 2),
+                        item(Items.LANTERN, 4, 1, 2), item(Items.TORCH, 6, 2, 8), item(Items.BREAD, 6, 1, 3), item(Items.IRON_INGOT, 4, 1, 3),
+                        item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.IRON_PICKAXE, 1, 1, 1), item(Items.IRON_SHOVEL, 2, 1, 1),
+                        item(Items.STONE_BRICKS, 4, 4, 12), item(Items.CLAY_BALL, 3, 2, 6))));
+        // Opfergaben auf dem Grund der Zisterne: Münzen, Gold, Edelsteine, Perlmutt (Prismarin), ein Nautilus
+        this.output.accept(ModLootTables.SITE_AQUEDUCT_CISTERN, coins(LootTable.lootTable(), 4, 12, 2, 6, 0.5f)
+                .withPool(pool(2, 4, item(Items.GOLD_NUGGET, 8, 3, 12), item(Items.GOLD_INGOT, 4, 1, 3), item(ModItems.GEMSTONE.get(), 4, 1, 3),
+                        item(Items.PRISMARINE_SHARD, 4, 2, 6), item(Items.NAUTILUS_SHELL, 2, 1, 1), item(Items.EMERALD, 3, 1, 3),
+                        item(Items.GLOW_INK_SAC, 3, 1, 3))));
+        // Gezeitenschrein: was im vergrabenen Schatz lag (immer das Herz des Meeres), dazu Münzen und Edelsteine
+        this.output.accept(ModLootTables.SITE_TIDE_SHRINE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.BURIED_TREASURE),
+                0, 0, 3, 8, 0.8f)
+                .withPool(pool(0, 1, item(ModItems.GEMSTONE.get(), 1, 1, 3))));
+        // Seedrache: die verschluckte Fracht eines Schiffs (Seekarte, Vorräte, Schatz)
+        this.output.accept(ModLootTables.SITE_SEA_DRAGON_MAP, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_MAP),
+                1, 5, 0, 1, 0.0f));
+        this.output.accept(ModLootTables.SITE_SEA_DRAGON_CARGO, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_SUPPLY),
+                1, 4, 0, 0, 0.0f)
+                .withPool(pool(0, 2, item(Items.BONE, 6, 1, 4), item(Items.BONE_MEAL, 4, 2, 6))));
+        this.output.accept(ModLootTables.SITE_SEA_DRAGON_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_TREASURE),
+                2, 8, 2, 5, 0.3f));
+        // Karawanserei: der Schatz der Karawanenmeister (wie im Wüstentempel), Habe eines Reisenden
+        this.output.accept(ModLootTables.SITE_CARAVANSERAI_TREASURE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.DESERT_PYRAMID),
+                0, 4, 2, 6, 0.4f)
+                .withPool(pool(0, 2, item(Items.GOLD_INGOT, 4, 1, 3), item(ModItems.GEMSTONE.get(), 2, 1, 2), item(Items.CARPET.pick(net.minecraft.world.item.DyeColor.ORANGE), 2, 1, 3))));
+        this.output.accept(ModLootTables.SITE_CARAVANSERAI_TRAVELER, coins(LootTable.lootTable(), 2, 8, 0, 3, 0.05f)
+                .withPool(pool(3, 6, item(Items.BREAD, 6, 1, 3), item(Items.APPLE, 5, 1, 3), item(Items.STRING, 5, 2, 6), item(Items.LEATHER, 4, 1, 3),
+                        item(Items.CARPET.pick(net.minecraft.world.item.DyeColor.RED), 3, 1, 3), item(Items.DYE.pick(net.minecraft.world.item.DyeColor.ORANGE), 3, 1, 4), item(Items.CACTUS, 3, 1, 4), item(Items.SADDLE, 1, 1, 1),
+                        item(Items.LEAD, 2, 1, 1), item(Items.COMPASS, 1, 1, 1), item(Items.GLASS_BOTTLE, 4, 1, 3))));
+        // Schlangentempel: die Opfergaben (wie im Dschungeltempel), dazu Gold und Smaragde
+        this.output.accept(ModLootTables.SITE_SERPENT_TEMPLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.JUNGLE_TEMPLE),
+                0, 4, 2, 6, 0.4f)
+                .withPool(pool(1, 2, item(Items.GOLD_NUGGET, 6, 3, 9), item(Items.EMERALD, 4, 1, 3), item(ModItems.GEMSTONE.get(), 3, 1, 2),
+                        item(Items.COCOA_BEANS, 3, 2, 5))));
+        // Hexenbaum: Zutaten der Hexe
+        this.output.accept(ModLootTables.SITE_WITCH_TREE, coins(LootTable.lootTable(), 1, 5, 0, 2, 0.05f)
+                .withPool(pool(3, 6, item(Items.GLASS_BOTTLE, 6, 1, 4), item(Items.REDSTONE, 5, 1, 4), item(Items.GLOWSTONE_DUST, 4, 1, 3),
+                        item(Items.SUGAR, 5, 1, 4), item(Items.SPIDER_EYE, 4, 1, 3), item(Items.FERMENTED_SPIDER_EYE, 2, 1, 1),
+                        item(Items.NETHER_WART, 3, 1, 3), item(Items.BROWN_MUSHROOM, 4, 1, 3), item(Items.RED_MUSHROOM, 4, 1, 3),
+                        item(Items.GUNPOWDER, 3, 1, 2), item(Items.STICK, 3, 1, 3), item(Items.CANDLE, 3, 1, 2))));
+        // Frostgrotte: die Stube (wie im Iglu) und der Keller des Einsiedlers
+        this.output.accept(ModLootTables.SITE_FROST_GROTTO, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.IGLOO_CHEST),
+                1, 4, 0, 1, 0.0f)
+                .withPool(pool(1, 3, item(Items.COD, 5, 1, 4), item(Items.SALMON, 4, 1, 3), item(Items.TORCH, 5, 2, 6), item(Items.LEATHER, 3, 1, 3))));
+        this.output.accept(ModLootTables.SITE_FROST_GROTTO_CELLAR, coins(LootTable.lootTable(), 0, 3, 2, 5, 0.3f)
+                .withPool(pool(1, 1, item(Items.GOLDEN_APPLE, 1, 1, 1)))
+                .withPool(pool(2, 4, item(Items.GLASS_BOTTLE, 4, 1, 3), item(Items.BLAZE_POWDER, 2, 1, 2), item(Items.FERMENTED_SPIDER_EYE, 3, 1, 2),
+                        item(Items.GOLD_NUGGET, 4, 2, 8), item(Items.EMERALD, 3, 1, 2), item(ModItems.GEMSTONE.get(), 2, 1, 1),
+                        item(Items.BOOK, 3, 1, 2))));
+        // Räuberlager: die Beute der Wegelagerer (wie im Außenposten, mit Armbrust und Wachposten-Besatz)
+        this.output.accept(ModLootTables.SITE_BANDIT_CAMP, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.PILLAGER_OUTPOST),
+                4, 12, 1, 4, 0.2f)
+                .withPool(pool(0, 2, item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.LEATHER, 4, 1, 3), item(Items.GOLD_NUGGET, 4, 2, 6))));
+        // Köhlerei: Vorräte und Karten der Köhler (wie im verlassenen Lager), im Versteck die geheimen Karten
+        this.output.accept(ModLootTables.SITE_CHARCOAL_CAMP, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables
+                .ABANDONED_CAMP_COMMON_CHEST), 1, 5, 0, 1, 0.0f)
+                .withPool(pool(1, 2, item(Items.CHARCOAL, 6, 4, 12), item(Items.STONE_AXE, 2, 1, 1), item(Items.BREAD, 3, 1, 3))));
+        this.output.accept(ModLootTables.SITE_CHARCOAL_CAMP_SECRET, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables
+                .ABANDONED_CAMP_SECRET_CHEST), 0, 0, 2, 6, 0.4f));
+        // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
+        this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
+                0, 3, 1, 3, 0.1f));
+    }
+
+    /** Eine Tabelle, die einmal die Vanilla-Tabelle zieht. */
+    private LootTable.Builder vanilla(net.minecraft.resources.ResourceKey<LootTable> table) {
+        return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(net.minecraft.world.level.storage.loot.entries.NestedLootTable.lootTableReference(
+                        this.output.lookup(Registries.LOOT_TABLE).getOrThrow(table))));
+    }
+
     @Override
     public void run() {
         this.mageTowers();
         this.villages();
+        this.sites();
         LootPool.Builder treasure = LootPool.lootPool()
                 .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.STEEL_SWORD.get()).setWeight(5)

@@ -63,6 +63,7 @@ public final class DataGenerators {
         event.createProvider(ModLootModifierProvider::new);
         event.createProvider(ModDataMapProvider::new);
         event.createProvider(ModBiomeTagsProvider::new);
+        event.createProvider(ModStructureTagsProvider::new);
         event.createProvider(ModEntityTypeTagsProvider::new);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/sea_dragon",
+  "kind": "sea_dragon",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

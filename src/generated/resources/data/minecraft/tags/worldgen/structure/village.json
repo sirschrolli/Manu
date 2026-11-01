@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "kingdomsatwar:village_timber",
+    "kingdomsatwar:village_nordic",
+    "kingdomsatwar:village_clay",
+    "kingdomsatwar:village_stilt"
+  ]
+}

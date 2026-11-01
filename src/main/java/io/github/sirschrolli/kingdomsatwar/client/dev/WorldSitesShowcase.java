@@ -1,0 +1,260 @@
+package io.github.sirschrolli.kingdomsatwar.client.dev;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
+import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
+import io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind;
+import io.github.sirschrolli.kingdomsatwar.worldgen.site.SitePiece;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.Locale;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+
+/**
+ * Vorführung der eigenen Bauwerke der Oberwelt, so wie die Welt sie erzeugt: von einem festen Punkt aus das nächste
+ * Bauwerk jeder Art suchen (wie /locate), seine Chunks vollständig erzeugen lassen und es von innen und außen zeigen
+ * (mit Nachtsicht, damit man unter der Erde etwas erkennt).
+ */
+final class WorldSitesShowcase {
+    private static final int SLOTS = 16;
+
+    private WorldSitesShowcase() {}
+
+    static void sites(Deque<Step> steps, String only) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
+        steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
+        for (SiteKind kind : SiteKind.values()) {
+            if (!only.isEmpty() && !kind.id().equals(only)) {
+                continue;
+            }
+            List<double[]> views = new ArrayList<>();
+            int[] state = {0};
+            steps.add(Step.server(level -> locate(level, kind, views, state)));
+            steps.add(Step.until(() -> state[0] != 0, 9000));
+            for (int n = 0; n < SLOTS; n++) {
+                int slot = n;
+                steps.add(Step.once(minecraft -> {
+                    if (slot < views.size()) {
+                        double[] v = views.get(slot);
+                        double lx = v[3] - v[0];
+                        double ly = v[4] - (v[1] + 1.62);
+                        double lz = v[5] - v[2];
+                        float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                        float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                        minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                                "execute in minecraft:overworld run tp @s %.2f %.2f %.2f %.1f %.1f", v[0], v[1], v[2], yaw, pitch));
+                    }
+                }));
+                steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
+                steps.add((minecraft, ticks) -> slot >= views.size() || Step.waitForChunks(1500).run(minecraft, ticks));
+                Step shot = Step.screenshot("site_" + kind.id() + "_" + n);
+                steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
+            }
+        }
+    }
+
+    private static void locate(ServerLevel level, SiteKind kind, List<double[]> views, int[] state) {
+        long started = System.currentTimeMillis();
+        Holder<Structure> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(ModStructures.site(kind));
+        // beim Sternensturz von drei Seiten suchen: so finden sich ein Krater und ein Sternfels
+        BlockPos[] from = kind == SiteKind.FALLEN_STAR
+                ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(-1000, 80, 1700), new BlockPos(-1000, 80, -1700), new BlockPos(2000, 80, 0)}
+                : new BlockPos[] {new BlockPos(0, 80, 0)};
+        List<StructureStart> starts = new ArrayList<>();
+        for (BlockPos origin : from) {
+            var found = level.getChunkSource().getGenerator().findNearestMapStructure(level, HolderSet.direct(holder), origin, 300, false);
+            if (found == null) {
+                continue;
+            }
+            ChunkPos chunk = ChunkPos.containing(found.getFirst());
+            StructureStart start = level.getChunk(chunk.x(), chunk.z(), ChunkStatus.STRUCTURE_STARTS, true).getStartForStructure(holder.value());
+            if (start != null && start.isValid() && starts.stream().noneMatch(s -> s.getChunkPos().equals(start.getChunkPos()))) {
+                starts.add(start);
+            }
+        }
+        if (starts.isEmpty()) {
+            KingdomsAtWar.LOGGER.info("[Showcase] {} nicht gefunden", kind.id());
+            state[0] = -1;
+            return;
+        }
+        if (kind == SiteKind.FALLEN_STAR) {
+            StructureStart crater = null;
+            StructureStart rock = null;
+            for (StructureStart s : starts) {
+                int variant = ((SitePiece) s.getPieces().getFirst()).data(0);
+                if (variant == 0 && crater == null) {
+                    crater = s;
+                } else if (variant == 1 && rock == null) {
+                    rock = s;
+                }
+            }
+            starts.clear();
+            if (crater != null) {
+                starts.add(crater);
+            }
+            if (rock != null) {
+                starts.add(rock);
+            }
+        }
+        for (StructureStart start : starts) {
+            show(level, kind, start, views, started);
+        }
+        state[0] = 1;
+    }
+
+    private static void show(ServerLevel level, SiteKind kind, StructureStart start, List<double[]> views, long started) {
+        BoundingBox box = start.getBoundingBox();
+        int around = kind == SiteKind.FALLEN_STAR ? 4 : 2;
+        for (int cx = (box.minX() >> 4) - around; cx <= (box.maxX() >> 4) + around; cx++) {
+            for (int cz = (box.minZ() >> 4) - around; cz <= (box.maxZ() >> 4) + around; cz++) {
+                level.getChunk(cx, cz, ChunkStatus.FULL, true);
+            }
+        }
+        List<SitePiece> pieces = new ArrayList<>();
+        for (StructurePiece p : start.getPieces()) {
+            if (p instanceof SitePiece site) {
+                pieces.add(site);
+            }
+        }
+        SitePiece first = pieces.getFirst();
+        KingdomsAtWar.LOGGER.info("[Showcase] {} bei {} ({}), {} Teile, Daten {}, Fläche {}×{}×{}, {} ms", kind.id(), first.origin(),
+                first.rotation(), pieces.size(), java.util.Arrays.toString(new int[] {first.data(0), first.data(1), first.data(2), first.data(3),
+                        first.data(4)}), box.getXSpan(), box.getYSpan(), box.getZSpan(), System.currentTimeMillis() - started);
+        switch (kind) {
+            case FALLEN_STAR -> {
+                int floor = first.data(1);
+                int camp = first.data(4);
+                boolean rock = first.data(0) == 1;
+                int[] a = switch (camp & 3) {
+                    case 1 -> new int[] {1, 0};
+                    case 2 -> new int[] {0, 1};
+                    case 3 -> new int[] {-1, 0};
+                    default -> new int[] {0, -1};
+                };
+                if (rock) {
+                    add(views, first, -24, 12, -20, 0, 0, 0);
+                    add(views, first, -26, 2, 18, 0, -2, 0);
+                    add(views, first, 4, 6, -3, 0, floor + 6, 0);
+                } else {
+                    add(views, first, -26, 34, -20, 0, -8, 0);
+                    add(views, first, 9, 1, 7, 0, floor + 4, 0);
+                    add(views, first, a[0] * 19 + a[1] * 7, -1, a[1] * 19 - a[0] * 7, a[0] * 12, -5, a[1] * 12);
+                }
+                add(views, first, 9, floor + 3, -6, 0, floor + 2.5, 0);
+                add(views, first, -4, floor + 9, 6, 0, floor + 2, 0);
+                add(views, first, -a[0] * 3, floor + 2, -a[1] * 3, -a[0] * 9, floor + 1.5, -a[1] * 9);
+                add(views, first, 1.5, floor + 1, 1.5, 3, 30, 3);
+            }
+            case AQUEDUCT -> {
+                int shaft = first.data(1);
+                add(views, first, 3, 1.5, 3, -3, 1, -3);
+                if (shaft > 0) {
+                    add(views, first, 8, shaft + 4, 8, 0, shaft + 2, 0);
+                }
+                boolean tunnel = false;
+                boolean cistern = false;
+                boolean stairs = false;
+                for (SitePiece p : pieces) {
+                    if (p.part() == 1 && !tunnel) {
+                        add(views, p, 0.5, 1, 0.5, 0, 2, 12);
+                        tunnel = true;
+                    } else if (p.part() == 2 && !cistern) {
+                        add(views, p, -6, 4, -2, 2, -1, 2);
+                        add(views, p, 6, 5, 2, -2, 0, -2);
+                        cistern = true;
+                    } else if (p.part() == 3 && !stairs) {
+                        add(views, p, 0, 1, 0.5, 0, p.data(1) * 4 + 2, 8);
+                        stairs = true;
+                    }
+                }
+                for (SitePiece p : pieces) {
+                    KingdomsAtWar.LOGGER.info("[Showcase]   Teil {} bei {} ({}), Daten {} {}", p.part(), p.origin(), p.rotation(), p.data(0), p.data(1));
+                }
+            }
+            case SEA_DRAGON -> {
+                add(views, first, -16, 12, -6, 0, 3, 14);
+                add(views, first, -22, 9, 12, 0, 3, 14);
+                add(views, first, 4, 5, -24, 0, 3, -2);
+                add(views, first, 6, 24, 16, 0, 0, 17);
+                add(views, first, 2, 2, 9, 0, 1, 18);
+                add(views, first, 6, 4, -9, 0, 3, -5);
+            }
+            case CARAVANSERAI -> {
+                add(views, first, -26, 26, 30, 0, 0, 0);
+                add(views, first, 0, 2, 17, 0, 3, 0);
+                add(views, first, 3, 2, -3, -4, 1, 4);
+                add(views, first, 0.5, -6, 3, 0, -6, 7);
+                add(views, first, -22, 10, 20, 0, 4, 0);
+            }
+            case SERPENT_TEMPLE -> {
+                add(views, first, -14, 16, -16, 4, 3, 8);
+                add(views, first, 14, 9, 6, 0, 4, 9);
+                add(views, first, 0, 1.5, 1, 0, 1.5, 8);
+                add(views, first, 4, -5, 18, -1, -6, 26);
+                add(views, first, -3, -5, 21, 4, -6, 20);
+            }
+            case WITCH_TREE -> {
+                add(views, first, -14, 6, 14, 0, 8, 0);
+                add(views, first, 1, 1, 1.5, -1, 1.5, -1.5);
+                add(views, first, 9, 21, 9, 0, 14, 0);
+            }
+            case FROST_GROTTO -> {
+                add(views, first, -12, 6, 16, 0, 2, 0);
+                add(views, first, 2.5, 1, 2, -3, 1.5, -2);
+                add(views, first, -2, -5, 1.5, -5, -5, 0);
+            }
+            case BANDIT_CAMP -> {
+                add(views, first, -20, 14, 22, 0, 0, 0);
+                add(views, first, 3, 1.5, 6, -4, 1, -6);
+                add(views, first, -2, 1, -5, -2, 0.5, -8);
+            }
+            case CHARCOAL_CAMP -> {
+                add(views, first, -9, 16, 9, 0, 1, 0);
+                add(views, first, 7, 2, -1, -3, 2, -2);
+            }
+            case EMBER_GATE -> {
+                add(views, first, 0.5, 2, 8, 0.5, 2.5, -2);
+                add(views, first, -9, 5, 6, 0, 2, -2);
+            }
+            case TIDE_SHRINE -> {
+                add(views, first, 8, 5, 8, 0, 2, 0);
+                add(views, first, -10, 3, 3, 0, 3, 0);
+                add(views, first, 1, -3, -1, 0, -3, 0.5);
+            }
+        }
+    }
+
+    /** Ein Blick in eigenen Koordinaten des Bauteils (Füße bei x, y, z; Blick auf lx, ly, lz). */
+    private static void add(List<double[]> views, SitePiece piece, double x, double y, double z, double lx, double ly, double lz) {
+        BlockPos o = piece.origin();
+        Rotation r = piece.rotation();
+        double[] eye = turn(x, z, r);
+        double[] look = turn(lx, lz, r);
+        views.add(new double[] {o.getX() + eye[0] + 0.5, o.getY() + y, o.getZ() + eye[1] + 0.5, o.getX() + look[0] + 0.5, o.getY() + ly,
+                o.getZ() + look[1] + 0.5});
+    }
+
+    /** Wie {@code BlockPos.rotate}. */
+    private static double[] turn(double x, double z, Rotation rotation) {
+        return switch (rotation) {
+            case NONE -> new double[] {x, z};
+            case CLOCKWISE_90 -> new double[] {-z, x};
+            case CLOCKWISE_180 -> new double[] {-x, -z};
+            case COUNTERCLOCKWISE_90 -> new double[] {z, -x};
+        };
+    }
+}
