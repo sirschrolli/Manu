@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.11.0 – Die Wildtiere.**
+> **Testversion 0.12.0 – Die Monster.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -22,14 +22,22 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Alles, was man dort finden musste, bleibt erhältlich.
 > In 0.10 kamen **eigene Hof- und Weidetiere statt der Vanilla-Tiere** – Hausrind, Hausschwein, Schaf, Huhn, Pferd,
 > Esel, Maultier, Ziege und Hase in **40 Rassen**.
-> Neu in 0.11: **eigene Wildtiere statt der Vanilla-Wildtiere** – Wolf, Fuchs, Bär, Panda, Hauskatze, Wildkatze,
+> In 0.11 kamen **eigene Wildtiere statt der Vanilla-Wildtiere** – Wolf, Fuchs, Bär, Panda, Hauskatze, Wildkatze,
 > Papagei, Biene, Fledermaus, Gürteltier, Kamel und Lama (samt Händlerlama) in **50 Arten und Rassen** mit eigenen
 > Modellen und Fellbildern: Grau-, Polar-, Schwarz-, Timber-, Steppen- und Rotwolf, der Fennek mit Riesenohren,
 > Braunbär mit Schulterbuckel, Luchs mit Ohrpinseln, Hummel, Vampirfledermaus, Trampeltier mit zwei Höckern …
 > Zähmen, Halsband, Wolfspanzer, Teppiche, Sattel, Bienenstöcke, der Papagei auf der Schulter und alle Beute bleiben,
 > wie man sie kennt.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (121 GameTests).
-> **Als Nächstes:** eigene Monster und Wassertiere, danach Nether und End.
+> Neu in 0.12: **eigene Monster statt der Vanilla-Monster** – alle Untoten und Nachtwesen der Oberwelt in 19 Arten und
+> 39 Gestalten, dazu 51 untote Dorfbewohner: Wiedergänger als Bauer, Söldner oder Mönch, Mumien in Leinenbinden,
+> Wasserleichen im Streifenhemd, Gerippe mit Ritterhelm oder Köcher, Frost-, Moor- und Dörrgebein, Kriecher mit Moos,
+> Kakteen, Eiszapfen oder Leuchtpilzen, Spinnen nach Land, glimmende Höhlenspinnen, Schleime mit Gesicht, Hexen mit
+> spitzem Hut, Nachtmahre, untote Pferde und Dörrkamele. Untote Dorfbewohner lassen sich heilen und werden wieder genau
+> der Dorfbewohner, der sie waren. Spinnenreiter, Hühnerreiter, Skelettfallen, Überfälle, Prüfkammern und alle Beute
+> funktionieren wie gewohnt.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (133 GameTests).
+> **Als Nächstes:** die übrigen Monster (Illager, Wächter, Brise, Knarz, Wärter), Wassertiere und Golems, danach
+> Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -65,7 +73,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
 | Eigene Wildtiere statt Vanilla: Wolf, Fuchs, Bär, Panda, Katzen, Papagei, Biene, Fledermaus, Gürteltier, Kamel, Lama in 50 Arten | ✅ fertig |
-| Eigene Monster und Wassertiere statt Vanilla; Nether und End | 🔨 in Arbeit |
+| Eigene Monster statt Vanilla: Untote und Nachtwesen in 19 Arten und 39 Gestalten, 51 untote Dorfbewohner (heilbar) | ✅ fertig |
+| Übrige Monster (Illager, Wächter, Brise, Knarz, Wärter), Wassertiere und Golems statt Vanilla; Nether und End | 🔨 in Arbeit |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -82,7 +91,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.11.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.12.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -90,7 +99,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.11.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.12.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -520,6 +529,40 @@ Nestern, Dorfkatzen und die Lamas des fahrenden Händlers werden zu den neuen Ti
 | **Kamel** | Kamel | Dromedar, Trampeltier | Trampeltier mit zwei Höckern neu in Tafelbergen und auf den Savannen-Hochebenen; Sattel, zwei Reiter, Sprint |
 | **Lama** | Lama, Händlerlama | creme, weiß, braun, grau | dichtes Vlies, Bananenohren; spuckt, zieht in Karawanen, trägt Teppiche und Packtaschen |
 
+### Monster
+
+![Die eigenen Monster](docs/bilder/monster.jpg)
+
+Auch die Untoten und Nachtwesen der Vanilla-Welt sind ersetzt: Wo Vanilla nachts oder in Höhlen ein Monster erscheinen
+lässt, kommt mit dem gleichen Gewicht ein **eigenes Gegenstück** – mit eigenem Modell und Bild, aber denselben Angriffen,
+Schwächen und derselben Beute. Die Gestalt richtet sich nach dem Land: Mönche und Söldner unter den Wiedergängern,
+Fischer in den Flüssen, Wüstenkriecher mit Kakteenstacheln, Schneespinnen mit weißem Pelz, Höhlenkriecher mit
+Leuchtpilzen. Die Augen der Untoten glimmen in der Nacht. Spinnenreiter, Hühnerreiter, Mumien auf Dörrkamelen,
+Skelettfallen im Gewitter, Hexen bei Überfällen und die Monster der Prüfkammern kommen ebenfalls als eigene Wesen;
+Vanilla-Spawn-Eier und Befehle bringen die neuen Monster hervor.
+
+| Monster | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Wiedergänger** | Zombie | Bauer, Söldner, Mönch | zerrissener Kittel, rostiges Kettenhemd mit Eisenhut oder Kutte mit Kapuze; Kinder und Hühnerreiter; steckt Dorfbewohner an |
+| **Mumie** | Wüstenzombie | Mumie, Wüstenleiche | Leinenbinden oder Turban; Schlag mit Hunger; reitet manchmal ein Dörrkamel |
+| **Wasserleiche** | Ertrunkener | Matrose, Fischer | Seetang im Haar oder Strickmütze und Ölzeug; schwimmt, wirft Dreizacke; Fischer meist in Flüssen |
+| **Untoter Dorfbewohner** | Zombie-Dorfbewohner | 17 Berufe mit je drei Gesichtern | verweste Tracht des Berufs; mit Trank der Schwäche und goldenem Apfel heilbar – er wird wieder genau der Dorfbewohner, der er war, mit Namen, Beruf, Dorf und Bett |
+| **Gerippe** | Skelett | Knochen, Knochenritter, Knochenjäger | Rippen mit Lücken, Unterkiefer, Knöchel; Ritter mit rostigem Nasalhelm und zerfetztem Wappenrock, Jäger mit Kapuze und Köcher |
+| **Frostgebein** | Eiswanderer | – | Pelzumhang und Raureif; Pfeile der Langsamkeit |
+| **Moorgebein** | Sumpfskelett | – | Moos und Pilze (abscherbar); Giftpfeile |
+| **Dörrgebein** | Parched | – | Wüstenbinden; Pfeile der Schwäche; reitet mit der Mumie auf dem Dörrkamel |
+| **Kriecher** | Creeper | Wald, Wüste, Schnee, Höhle, Dschungel | Moos, Kakteenstacheln, Eiszapfen, Leuchtpilze oder Blüten; bei Blitz aufgeladen |
+| **Spinne** | Spinne | Wald, Wüste, Dschungel, Schnee | gegliederte Beine, leuchtende Augen; trägt manchmal ein Gerippe |
+| **Höhlenspinne** | Höhlenspinne | – | giftgrün gezeichnet und glimmend; giftig |
+| **Schleim** | Schleim | Sumpfschleim, Höhlenschleim | durchscheinende Hülle mit Gesicht; teilt sich in kleinere Schleime gleicher Art |
+| **Schwefelwürfel** | Sulfur Cube | – | durchscheinend mit Kern; verschluckt Blöcke und trägt sie sichtbar in sich |
+| **Hexe** | Hexe | Moor-, Nacht-, Kräuterhexe | Spitzhut mit Krempe, Warze, Kräuterbeutel und leuchtende Fläschchen; wirft Tränke; wohnt am Hexenbaum |
+| **Nachtmahr** | Phantom | dunkel, bleich | zerfranste Flughäute und glühende Augen; kommt zu dem, der lange nicht schläft |
+| **Silberfischchen** | Silberfischchen | silbern, aus der Tiefe | wohnt in befallenen Steinen und ruft Artgenossen |
+| **Zombiepferd** | Zombiepferd | grau, verwester Rappe | nachts auf den Ebenen, oft mit einem Wiedergänger samt Speer im Sattel; zähmbar und reitbar |
+| **Skelettpferd** | Skelettpferd | bleich, uralt | Skelettfalle im Gewitter mit vier Reitern |
+| **Dörrkamel** | Camel Husk | Dörrkamel, Mumienkamel | vertrocknet oder bandagiert, mit Satteldecke; trägt Mumie und Dörrgebein |
+
 ### Wilde Kreaturen
 
 ![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
@@ -694,7 +737,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.11.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.12.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -702,6 +745,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/generate_entities.py` | Modelle und Texturen der Lebewesen neu erzeugen |
 | `python3 tools/generate_citizens.py` | Texturen der Bürger neu zeichnen (`--preview` für eine Übersicht) |
 | `python3 tools/generate_villagers.py` | Texturen der Dorfbewohner neu zeichnen (`--preview` für eine Übersicht) |
+| `python3 tools/generate_undead_villagers.py` | Texturen der untoten Dorfbewohner aus denen der Dorfbewohner ableiten (`--preview`) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
@@ -715,7 +759,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── block/                    eigene Blöcke (Drachenei, Möbel, Zinne, Kronleuchter, Festmahl …)
 ├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz,
 │                             die Hof- und Weidetiere an Stelle der Vanilla-Tiere (entity/creature/farm),
-│                             die Wildtiere an Stelle der Vanilla-Wildtiere (entity/creature/wild)
+│                             die Wildtiere an Stelle der Vanilla-Wildtiere (entity/creature/wild),
+│                             die Monster an Stelle der Vanilla-Monster (entity/creature/monster)
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
@@ -735,7 +780,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.11.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.12.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 
@@ -743,9 +788,11 @@ Ein Tag wie `v0.11.0` erzeugt automatisch ein Release mit der JAR (`.github/work
 
 Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 
-1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt, die Hof- und Weidetiere und
-   die Wildtiere sind fertig, als Nächstes:
-   - eigene **Monster und Wassertiere** – alles, was sie fallen lassen, bleibt erhältlich;
+1. **Eigene Welt** – die acht Oberwelt-Biome, die Dörfer, die 17 Bauwerke der Oberwelt, die Hof- und Weidetiere, die
+   Wildtiere und die Untoten und Nachtwesen sind fertig, als Nächstes:
+   - die übrigen **Monster** – Illager samt Überfällen, Plagegeister, Verwüster, Wächter, Brise, Knarz und Wärter;
+   - **Wassertiere und Golems** – Fische, Tintenfische, Delfine, Schildkröten, Axolotl, Frösche, Eisen- und
+     Schneegolem, Hilfsgeist und Schnüffler; alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 

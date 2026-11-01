@@ -939,6 +939,50 @@ public class ModLanguageProvider extends LanguageProvider {
         breeds(ModEntities.LLAMA, new String[][]{{"creme", "Cream Llama", "Cremefarbenes Lama"}, {"weiss", "White Llama", "Weißes Lama"},
                 {"braun", "Brown Llama", "Braunes Lama"}, {"grau", "Grey Llama", "Graues Lama"}});
         creature(ModEntities.TRADER_LLAMA, ModItems.TRADER_LLAMA_SPAWN_EGG, "Trader Llama", "Händlerlama", "Händlerlama");
+        // Eigene Monster (E4a)
+        creature(ModEntities.ZOMBIE, ModItems.ZOMBIE_SPAWN_EGG, "Revenant", "Wiedergänger", "Wiedergänger");
+        breeds(ModEntities.ZOMBIE, new String[][]{{"bauer", "Revenant", "Wiedergänger"}, {"soeldner", "Undead Mercenary", "Untoter Söldner"},
+                {"moench", "Undead Monk", "Untoter Mönch"}});
+        creature(ModEntities.HUSK, ModItems.HUSK_SPAWN_EGG, "Mummy", "Mumie", "Mumien");
+        breeds(ModEntities.HUSK, new String[][]{{"mumie", "Mummy", "Mumie"}, {"wuestling", "Desert Corpse", "Wüstenleiche"}});
+        creature(ModEntities.DROWNED, ModItems.DROWNED_SPAWN_EGG, "Drowned Corpse", "Wasserleiche", "Wasserleichen");
+        breeds(ModEntities.DROWNED, new String[][]{{"matrose", "Drowned Sailor", "Wasserleiche"},
+                {"fischer", "Drowned Fisherman", "Ertrunkener Fischer"}});
+        creature(ModEntities.ZOMBIE_VILLAGER, ModItems.ZOMBIE_VILLAGER_SPAWN_EGG, "Undead Villager", "Untoter Dorfbewohner",
+                "Untoter-Dorfbewohner");
+        add(ModEntities.ZOMBIE_VILLAGER.get().getDescriptionId() + ".female", pick("Undead Villager", "Untote Dorfbewohnerin"));
+        creature(ModEntities.SKELETON, ModItems.SKELETON_SPAWN_EGG, "Boneman", "Gerippe", "Gerippe");
+        breeds(ModEntities.SKELETON, new String[][]{{"knochen", "Boneman", "Gerippe"}, {"ritter", "Bone Knight", "Knochenritter"},
+                {"jaeger", "Bone Hunter", "Knochenjäger"}});
+        creature(ModEntities.STRAY, ModItems.STRAY_SPAWN_EGG, "Frostbones", "Frostgebein", "Frostgebein");
+        creature(ModEntities.BOGGED, ModItems.BOGGED_SPAWN_EGG, "Bogbones", "Moorgebein", "Moorgebein");
+        creature(ModEntities.PARCHED, ModItems.PARCHED_SPAWN_EGG, "Drybones", "Dörrgebein", "Dörrgebein");
+        creature(ModEntities.CREEPER, ModItems.CREEPER_SPAWN_EGG, "Creepling", "Kriecher", "Kriecher");
+        breeds(ModEntities.CREEPER, new String[][]{{"wald", "Forest Creepling", "Waldkriecher"}, {"wueste", "Desert Creepling", "Wüstenkriecher"},
+                {"schnee", "Snow Creepling", "Schneekriecher"}, {"hoehle", "Cave Creepling", "Höhlenkriecher"},
+                {"dschungel", "Jungle Creepling", "Dschungelkriecher"}});
+        creature(ModEntities.SPIDER, ModItems.SPIDER_SPAWN_EGG, "Spider", "Spinne", "Spinnen");
+        breeds(ModEntities.SPIDER, new String[][]{{"wald", "Wolf Spider", "Waldspinne"}, {"wueste", "Desert Tarantula", "Wüstenspinne"},
+                {"dschungel", "Jungle Spider", "Dschungelspinne"}, {"schnee", "Snow Spider", "Schneespinne"}});
+        creature(ModEntities.CAVE_SPIDER, ModItems.CAVE_SPIDER_SPAWN_EGG, "Cave Spider", "Höhlenspinne", "Höhlenspinnen");
+        creature(ModEntities.SLIME, ModItems.SLIME_SPAWN_EGG, "Ooze", "Schleim", "Schleim");
+        breeds(ModEntities.SLIME, new String[][]{{"sumpf", "Bog Ooze", "Sumpfschleim"}, {"hoehle", "Cave Ooze", "Höhlenschleim"}});
+        creature(ModEntities.SULFUR_CUBE, ModItems.SULFUR_CUBE_SPAWN_EGG, "Brimstone Cube", "Schwefelwürfel", "Schwefelwürfel");
+        creature(ModEntities.WITCH, ModItems.WITCH_SPAWN_EGG, "Hag", "Hexe", "Hexen");
+        breeds(ModEntities.WITCH, new String[][]{{"sumpf", "Bog Hag", "Moorhexe"}, {"nacht", "Night Hag", "Nachthexe"},
+                {"kraut", "Herb Hag", "Kräuterhexe"}});
+        creature(ModEntities.PHANTOM, ModItems.PHANTOM_SPAWN_EGG, "Nightmare", "Nachtmahr", "Nachtmahr");
+        breeds(ModEntities.PHANTOM, new String[][]{{"nachtmahr", "Nightmare", "Nachtmahr"}, {"bleich", "Pale Nightmare", "Bleicher Nachtmahr"}});
+        creature(ModEntities.SILVERFISH, ModItems.SILVERFISH_SPAWN_EGG, "Silverling", "Silberfischchen", "Silberfischchen");
+        breeds(ModEntities.SILVERFISH, new String[][]{{"silber", "Silverling", "Silberfischchen"}, {"tiefe", "Deep Silverling", "Tiefenfischchen"}});
+        creature(ModEntities.ZOMBIE_HORSE, ModItems.ZOMBIE_HORSE_SPAWN_EGG, "Rotting Horse", "Zombiepferd", "Zombiepferd");
+        breeds(ModEntities.ZOMBIE_HORSE, new String[][]{{"grau", "Rotting Horse", "Zombiepferd"},
+                {"rappe", "Rotting Black Horse", "Verwester Rappe"}});
+        creature(ModEntities.SKELETON_HORSE, ModItems.SKELETON_HORSE_SPAWN_EGG, "Bone Horse", "Skelettpferd", "Skelettpferd");
+        breeds(ModEntities.SKELETON_HORSE, new String[][]{{"bleich", "Bone Horse", "Skelettpferd"},
+                {"alt", "Ancient Bone Horse", "Uraltes Skelettpferd"}});
+        creature(ModEntities.CAMEL_HUSK, ModItems.CAMEL_HUSK_SPAWN_EGG, "Dried Camel", "Dörrkamel", "Dörrkamel");
+        breeds(ModEntities.CAMEL_HUSK, new String[][]{{"doerr", "Dried Camel", "Dörrkamel"}, {"mumie", "Mummified Camel", "Mumienkamel"}});
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

@@ -98,7 +98,7 @@ final class EconomyGameTests {
         helper.assertTrue(chestCoins >= 3, "Truhe der Burgruine ohne Münzen");
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         for (int i = 0; i < 24; i++) {
-            var zombie = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityTypes.ZOMBIE,
+            var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(),
                     new net.minecraft.core.BlockPos(2 + i % 6, 1, 2 + i / 6));
             zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f);
         }

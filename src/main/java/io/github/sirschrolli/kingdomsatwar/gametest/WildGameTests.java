@@ -455,11 +455,11 @@ final class WildGameTests {
         hive.addOccupant(bee);
         helper.assertTrue(hive.getOccupantCount() == 1 && bee.isRemoved(), "Biene nicht im Stock");
         hive.emptyAllLivingFromHive(null, level.getBlockState(helper.absolutePos(hivePos)), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
-        helper.runAfterDelay(2, () -> {
-            var bees = level.getEntitiesOfClass(WildBee.class, arena(helper));
-            helper.assertTrue(bees.size() == 1 && bees.getFirst().getBreed() == WildBee.Breed.HUMMEL, "Hummel kommt nicht heraus: " + bees);
-            helper.succeed();
-        });
+        // gleich im selben Tick prüfen (und nur dicht am Stock): Nachbartests dürfen in der Zwischenzeit nichts verändern
+        helper.assertTrue(hive.getOccupantCount() == 0, "Biene bleibt im Stock");
+        var bees = level.getEntitiesOfClass(WildBee.class, new AABB(helper.absolutePos(hivePos)).inflate(2.0));
+        helper.assertTrue(bees.size() == 1 && bees.getFirst().getBreed() == WildBee.Breed.HUMMEL, "Hummel kommt nicht heraus: " + bees);
+        helper.succeed();
     }
 
     /**

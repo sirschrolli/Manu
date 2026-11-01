@@ -170,6 +170,7 @@ public final class ModGameTests {
         SiteGameTests.init();      // die eigenen Bauwerke statt der alten
         FarmGameTests.init();      // die eigenen Hof- und Weidetiere
         WildGameTests.init();      // die eigenen Wildtiere
+        MonsterGameTests.init();   // die eigenen Monster
     }
 
     private ModGameTests() {}
@@ -203,6 +204,7 @@ public final class ModGameTests {
         SiteGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
+        MonsterGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -532,7 +534,7 @@ public final class ModGameTests {
         arenaFloor(helper);
         SoldierEntity knight = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(2, 1, 4));
         knight.equip();
-        var husk = helper.spawn(EntityTypes.HUSK, new BlockPos(6, 1, 4));
+        var husk = helper.spawn(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.HUSK.get(), new BlockPos(6, 1, 4));
         helper.succeedWhen(() -> helper.assertTrue(!husk.isAlive(), "Der Zombie lebt noch"));
     }
 
@@ -553,7 +555,7 @@ public final class ModGameTests {
         float ownerHealth = owner.getHealth();
         owner.hurtServer(level, level.damageSources().mobAttack(archer), 4.0f);
         helper.assertValueEqual(owner.getHealth(), ownerHealth, "Leben des Besitzers nach einem Treffer des eigenen Soldaten");
-        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 6));
+        var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(4, 1, 6));
         helper.assertTrue(swordsman.canAttack(zombie) && !swordsman.canAttack(archer), "Freund und Feind verwechselt");
         helper.succeed();
     }
@@ -581,7 +583,7 @@ public final class ModGameTests {
     /** Konterit-Rüstung macht schneller und federt Stürze ab (je Teil). */
     private static void konteritArmor(GameTestHelper helper) {
         arenaFloor(helper);
-        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 4));
+        var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(4, 1, 4));
         double speed = zombie.getAttributeValue(Attributes.MOVEMENT_SPEED);
         double safeFall = zombie.getAttributeValue(Attributes.SAFE_FALL_DISTANCE);
         zombie.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.KONTERIT_HELMET.get()));
@@ -612,7 +614,7 @@ public final class ModGameTests {
         DragonScaleArmorItem.applySetBonus(player, DragonType.FIRE);
         helper.assertTrue(player.hasEffect(MobEffects.FIRE_RESISTANCE), "Kein Feuerschutz durch den Feuer-Satz");
         // Eis-Schuppen schützen schon einzeln vor Pulverschnee-Frost
-        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 4));
+        var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(4, 1, 4));
         zombie.setItemSlot(EquipmentSlot.FEET, new ItemStack(ModItems.DRAGON_SCALE_ARMOR.get(DragonType.ICE).get(3).get()));
         helper.assertFalse(zombie.canFreeze(), "Eis-Schuppen schützen nicht vor Frost");
         helper.succeed();

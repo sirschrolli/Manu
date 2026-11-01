@@ -343,6 +343,14 @@ public class ModModelProvider extends ModelProvider {
                 ModItems.LLAMA_SPAWN_EGG, ModItems.TRADER_LLAMA_SPAWN_EGG)) {
             flat(items, item.get());
         }
+        for (DeferredItem<?> item : java.util.List.of(ModItems.ZOMBIE_SPAWN_EGG, ModItems.HUSK_SPAWN_EGG, ModItems.DROWNED_SPAWN_EGG,
+                ModItems.ZOMBIE_VILLAGER_SPAWN_EGG, ModItems.SKELETON_SPAWN_EGG, ModItems.STRAY_SPAWN_EGG, ModItems.BOGGED_SPAWN_EGG,
+                ModItems.PARCHED_SPAWN_EGG, ModItems.CREEPER_SPAWN_EGG, ModItems.SPIDER_SPAWN_EGG, ModItems.CAVE_SPIDER_SPAWN_EGG,
+                ModItems.SLIME_SPAWN_EGG, ModItems.SULFUR_CUBE_SPAWN_EGG, ModItems.WITCH_SPAWN_EGG, ModItems.PHANTOM_SPAWN_EGG,
+                ModItems.SILVERFISH_SPAWN_EGG, ModItems.ZOMBIE_HORSE_SPAWN_EGG, ModItems.SKELETON_HORSE_SPAWN_EGG,
+                ModItems.CAMEL_HUSK_SPAWN_EGG)) {
+            flat(items, item.get());
+        }
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,
                 ModItems.WILL_O_WISP_SPAWN_EGG, ModItems.CAVE_TROLL_SPAWN_EGG, ModItems.LINDWORM_SPAWN_EGG, ModItems.VENISON,
                 ModItems.COOKED_VENISON, ModItems.WISP_DUST, ModItems.GARLIC_BREAD, ModItems.ALE, ModItems.WINE, ModItems.MEAD)) {

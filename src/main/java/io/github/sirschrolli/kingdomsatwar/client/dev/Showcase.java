@@ -100,6 +100,7 @@ final class Showcase {
                 case "farm" -> farm(steps);
                 case "farmanimals" -> farmAnimals(steps);
                 case "wildanimals" -> WildShowcase.wildAnimals(steps);
+                case "monsters" -> MonsterShowcase.monsters(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);

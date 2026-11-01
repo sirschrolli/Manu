@@ -4,6 +4,9 @@
     "kingdomsatwar:donkey",
     "kingdomsatwar:mule",
     "kingdomsatwar:pig",
-    "kingdomsatwar:camel"
+    "kingdomsatwar:camel",
+    "kingdomsatwar:zombie_horse",
+    "kingdomsatwar:skeleton_horse",
+    "kingdomsatwar:camel_husk"
   ]
 }

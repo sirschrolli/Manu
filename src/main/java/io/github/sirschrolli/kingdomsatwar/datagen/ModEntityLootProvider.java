@@ -129,6 +129,26 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.CAMEL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAMEL));
         this.add(ModEntities.LLAMA.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.LLAMA));
         this.add(ModEntities.TRADER_LLAMA.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TRADER_LLAMA));
+        // Eigene Monster (E4a): Beute wie bei Vanilla (Bedingungen wie aufgeladener Kriecher, Plattenspieler-Disc greifen mit)
+        this.add(ModEntities.ZOMBIE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE));
+        this.add(ModEntities.HUSK.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HUSK));
+        this.add(ModEntities.DROWNED.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.DROWNED));
+        this.add(ModEntities.ZOMBIE_VILLAGER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE_VILLAGER));
+        this.add(ModEntities.SKELETON.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SKELETON));
+        this.add(ModEntities.STRAY.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.STRAY));
+        this.add(ModEntities.BOGGED.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.BOGGED));
+        this.add(ModEntities.PARCHED.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PARCHED));
+        this.add(ModEntities.CREEPER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CREEPER));
+        this.add(ModEntities.SPIDER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SPIDER));
+        this.add(ModEntities.CAVE_SPIDER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAVE_SPIDER));
+        this.add(ModEntities.SLIME.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SLIME));
+        this.add(ModEntities.SULFUR_CUBE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SULFUR_CUBE));
+        this.add(ModEntities.WITCH.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WITCH));
+        this.add(ModEntities.PHANTOM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PHANTOM));
+        this.add(ModEntities.SILVERFISH.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SILVERFISH));
+        this.add(ModEntities.ZOMBIE_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE_HORSE));
+        this.add(ModEntities.SKELETON_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SKELETON_HORSE));
+        this.add(ModEntities.CAMEL_HUSK.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CAMEL_HUSK));
 
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()

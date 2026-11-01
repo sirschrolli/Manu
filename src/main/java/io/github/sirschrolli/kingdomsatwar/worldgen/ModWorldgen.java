@@ -245,6 +245,7 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> LINDWORM_SPAWNS = spawnModifier("add_lindworm_spawns");
     // eigene Wildtiere (E3b): Tausch gegen die Vanilla-Wildtiere, dazu neue Arten in neuen Gegenden
     public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
+    public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
     public static final ResourceKey<BiomeModifier> FOREST_BEAR_SPAWNS = spawnModifier("add_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FEW_FOREST_BEAR_SPAWNS = spawnModifier("add_few_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FENNEC_SPAWNS = spawnModifier("add_fennec_spawns");
@@ -359,6 +360,28 @@ public final class ModWorldgen {
                         java.util.Map.entry(EntityTypes.CAMEL, ModEntities.CAMEL.get()),
                         java.util.Map.entry(EntityTypes.LLAMA, ModEntities.LLAMA.get()),
                         java.util.Map.entry(EntityTypes.TRADER_LLAMA, ModEntities.TRADER_LLAMA.get()))));
+        // Eigene Monster (E4a): überall, wo Vanilla seine Monster vorsieht, erscheinen mit gleichem Gewicht die eigenen
+        context.register(SWAP_MONSTERS, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),
+                java.util.Map.ofEntries(
+                        java.util.Map.entry(EntityTypes.ZOMBIE, ModEntities.ZOMBIE.get()),
+                        java.util.Map.entry(EntityTypes.HUSK, ModEntities.HUSK.get()),
+                        java.util.Map.entry(EntityTypes.DROWNED, ModEntities.DROWNED.get()),
+                        java.util.Map.entry(EntityTypes.ZOMBIE_VILLAGER, ModEntities.ZOMBIE_VILLAGER.get()),
+                        java.util.Map.entry(EntityTypes.SKELETON, ModEntities.SKELETON.get()),
+                        java.util.Map.entry(EntityTypes.STRAY, ModEntities.STRAY.get()),
+                        java.util.Map.entry(EntityTypes.BOGGED, ModEntities.BOGGED.get()),
+                        java.util.Map.entry(EntityTypes.PARCHED, ModEntities.PARCHED.get()),
+                        java.util.Map.entry(EntityTypes.CREEPER, ModEntities.CREEPER.get()),
+                        java.util.Map.entry(EntityTypes.SPIDER, ModEntities.SPIDER.get()),
+                        java.util.Map.entry(EntityTypes.CAVE_SPIDER, ModEntities.CAVE_SPIDER.get()),
+                        java.util.Map.entry(EntityTypes.SLIME, ModEntities.SLIME.get()),
+                        java.util.Map.entry(EntityTypes.SULFUR_CUBE, ModEntities.SULFUR_CUBE.get()),
+                        java.util.Map.entry(EntityTypes.WITCH, ModEntities.WITCH.get()),
+                        java.util.Map.entry(EntityTypes.PHANTOM, ModEntities.PHANTOM.get()),
+                        java.util.Map.entry(EntityTypes.SILVERFISH, ModEntities.SILVERFISH.get()),
+                        java.util.Map.entry(EntityTypes.ZOMBIE_HORSE, ModEntities.ZOMBIE_HORSE.get()),
+                        java.util.Map.entry(EntityTypes.SKELETON_HORSE, ModEntities.SKELETON_HORSE.get()),
+                        java.util.Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK.get()))));
         // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
         context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
                 net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,

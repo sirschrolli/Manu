@@ -18,6 +18,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               cattle, chicken, donkey, goat, hare, horse, pig, sheep,
                               armadillo, bat, bear, bee, camel, feline, fox, llama, panda, parrot, wolf,
                               cave_troll, mage,
+                              bones, camel_husk, creeper, phantom, silverfish, slime, spider, sulfur_cube, undead, undead_horse, witch,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -98,6 +99,32 @@ def main():
                 "camel", camel.PALETTES, preview)
     write_model(llama, "WildLlamaGeometry", "Geometrie der Lamas (Skelett wie bei Vanilla, damit Teppich und Kisten passen).",
                 "llama", llama.PALETTES, preview)
+    # Eigene Monster (ersetzen die Vanilla-Monster; Knochen wie bei Vanilla, damit Rüstung, Gegenstände und Animationen passen)
+    write_model(undead, "UndeadGeometry",
+                "Geometrie von Wiedergänger, Mumie und Wasserleiche (Menschen-Skelett der Zombies, Zubehör als eigene Knochen).",
+                "undead", undead.PALETTES, preview)
+    write_model(bones, "BonesGeometry",
+                "Geometrie von Gerippe, Frostgebein, Moorgebein und Dörrgebein (Skelett-Knochen wie bei Vanilla, Pilze am Kopf).",
+                "skeleton", bones.PALETTES, preview)
+    write_model(creeper, "CreeperGeometry", "Geometrie der Kriecher (Hauptquader wie beim Vanilla-Creeper, Blätter und Blüten als Hülle).",
+                "creeper", creeper.PALETTES, preview)
+    write_model(spider, "SpiderGeometry", "Geometrie der Spinnen (Vanilla-Knochen, geknickte Beine als Kind-Knochen).", "spider",
+                spider.PALETTES, preview)
+    write_model(silverfish, "SilverfishGeometry", "Geometrie der Silberfischchen (Vanilla-Segmente mit Beinen und Fühlern).",
+                "silverfish", silverfish.PALETTES, preview)
+    write_model(slime, "SlimeGeometry", "Geometrie der Schleime (Kern mit Gesicht und durchscheinende Hülle als eigener Knochen).",
+                "slime", slime.PALETTES, preview)
+    write_model(sulfur_cube, "SulfurCubeGeometry",
+                "Geometrie der Schwefelwürfel (Hülle und Kern, groß und klein, je als eigener Knochen).", "sulfur_cube",
+                sulfur_cube.PALETTES, preview)
+    write_model(witch, "WitchGeometry", "Geometrie der Hexen (Menschen-Skelett mit Spitzhut, Nase, Haaren, Umhang und Kleid).", "witch",
+                witch.PALETTES, preview)
+    write_model(phantom, "PhantomGeometry", "Geometrie der Nachtmahre (Knochen wie beim Vanilla-Phantom).", "phantom",
+                phantom.PALETTES, preview)
+    write_model(undead_horse, "UndeadHorseGeometry", "Geometrie der Zombie- und Skelettpferde (Pferde-Skelett der Mod).",
+                "undead_horse", undead_horse.PALETTES, preview)
+    write_model(camel_husk, "CamelHuskGeometry", "Geometrie der Dörrkamele (Kamel-Skelett der Mod).", "camel_husk",
+                camel_husk.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

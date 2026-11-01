@@ -72,8 +72,31 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.ARMADILLO, ModEntities.ARMADILLO),
                 Map.entry(EntityTypes.CAMEL, ModEntities.CAMEL),
                 Map.entry(EntityTypes.LLAMA, ModEntities.LLAMA),
-                Map.entry(EntityTypes.TRADER_LLAMA, ModEntities.TRADER_LLAMA));
+                Map.entry(EntityTypes.TRADER_LLAMA, ModEntities.TRADER_LLAMA),
+                // Monster (E4a)
+                Map.entry(EntityTypes.ZOMBIE, ModEntities.ZOMBIE),
+                Map.entry(EntityTypes.HUSK, ModEntities.HUSK),
+                Map.entry(EntityTypes.DROWNED, ModEntities.DROWNED),
+                Map.entry(EntityTypes.ZOMBIE_VILLAGER, ModEntities.ZOMBIE_VILLAGER),
+                Map.entry(EntityTypes.SKELETON, ModEntities.SKELETON),
+                Map.entry(EntityTypes.STRAY, ModEntities.STRAY),
+                Map.entry(EntityTypes.BOGGED, ModEntities.BOGGED),
+                Map.entry(EntityTypes.PARCHED, ModEntities.PARCHED),
+                Map.entry(EntityTypes.CREEPER, ModEntities.CREEPER),
+                Map.entry(EntityTypes.SPIDER, ModEntities.SPIDER),
+                Map.entry(EntityTypes.CAVE_SPIDER, ModEntities.CAVE_SPIDER),
+                Map.entry(EntityTypes.SLIME, ModEntities.SLIME),
+                Map.entry(EntityTypes.SULFUR_CUBE, ModEntities.SULFUR_CUBE),
+                Map.entry(EntityTypes.WITCH, ModEntities.WITCH),
+                Map.entry(EntityTypes.PHANTOM, ModEntities.PHANTOM),
+                Map.entry(EntityTypes.SILVERFISH, ModEntities.SILVERFISH),
+                Map.entry(EntityTypes.ZOMBIE_HORSE, ModEntities.ZOMBIE_HORSE),
+                Map.entry(EntityTypes.SKELETON_HORSE, ModEntities.SKELETON_HORSE),
+                Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK));
     }
+
+    /** Merkmal für Vanilla-Wesen, die schon anders ersetzt wurden (geheilte Dorfbewohner) und nicht erscheinen sollen. */
+    public static final String REPLACED_TAG = "kingdomsatwar_replaced";
 
     @SubscribeEvent
     static void onJoin(EntityJoinLevelEvent event) {
@@ -90,24 +113,29 @@ public final class FarmAnimalConversion {
         if (event.loadedFromDisk()) {
             return;
         }
-        if (!replacements().containsKey(mob.getType()) || mob.isPassenger() || mob.isVehicle()
-                || mob instanceof Chicken chicken && chicken.isChickenJockey()) {
+        if (mob.entityTags().contains(REPLACED_TAG)) {
+            event.setCanceled(true);
             return;
         }
-        if (mob.getType() == EntityTypes.TRADER_LLAMA) {
-            // Der fahrende Händler legt sein Lama erst NACH dem Erscheinen an die Leine – also bis zum Ende des Ticks
-            // warten, damit die Leine mit umzieht
+        if (!replacements().containsKey(mob.getType())) {
+            return;
+        }
+        if (mob.isPassenger() || mob.isVehicle() || mob.getType() == EntityTypes.TRADER_LLAMA) {
+            // Reiter und Reittiere (Spinnenreiter, Hühnerreiter, Zombiepferde und Dörrkamele mit Reitern) werden am Ende
+            // des Ticks als Ganzes ersetzt und wieder aufgesattelt; der fahrende Händler legt sein Lama erst NACH dem
+            // Erscheinen an die Leine – auch das wartet bis zum Ende des Ticks, damit die Leine mit umzieht
             PENDING.add(mob);
             return;
         }
-        Mob replacement = convert(level, mob);
+        // die UUID bleibt: Prüfkammer-Spawner und Überfälle erkennen ihre Wesen daran (das Original erscheint ja nie)
+        Mob replacement = convert(level, mob, true);
         if (replacement != null) {
             event.setCanceled(true);
             level.addFreshEntity(replacement);
         }
     }
 
-    /** Tiere, die erst am Ende des Ticks ersetzt werden (Händlerlamas). */
+    /** Wesen, die erst am Ende des Ticks ersetzt werden (Reiter, Reittiere, Händlerlamas). */
     private static final java.util.List<Mob> PENDING = new java.util.ArrayList<>();
 
     @SubscribeEvent
@@ -115,28 +143,75 @@ public final class FarmAnimalConversion {
         if (PENDING.isEmpty() || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
+        java.util.Set<Entity> roots = new java.util.LinkedHashSet<>();
         for (Mob mob : java.util.List.copyOf(PENDING)) {
             if (mob.level() == level) {
                 PENDING.remove(mob);
-                replaceLater(level, mob);
+                if (!mob.isRemoved()) {
+                    roots.add(mob.getRootVehicle());
+                }
             }
+        }
+        for (Entity root : roots) {
+            replaceStack(level, root);
         }
     }
 
-    private static void replaceLater(ServerLevel level, Mob original) {
-        if (original.isRemoved() || !original.isAlive()) {
+    /**
+     * Ersetzt alle Vanilla-Wesen eines Reiterstapels (Reittier und Reiter) durch die eigenen und sattelt sie in derselben
+     * Reihenfolge wieder auf; Leinen ziehen mit um.
+     */
+    private static void replaceStack(ServerLevel level, Entity root) {
+        java.util.List<Entity> all = new java.util.ArrayList<>();
+        all.add(root);
+        for (Entity passenger : root.getIndirectPassengers()) {
+            all.add(passenger);
+        }
+        java.util.Map<Entity, Mob> swap = new java.util.LinkedHashMap<>();
+        for (Entity entity : all) {
+            if (entity instanceof Mob mob && !mob.isRemoved() && mob.isAlive() && replacements().containsKey(mob.getType())) {
+                Mob replacement = convert(level, mob, true);
+                if (replacement != null) {
+                    swap.put(mob, replacement);
+                }
+            }
+        }
+        if (swap.isEmpty()) {
             return;
         }
-        Mob replacement = convert(level, original);
-        if (replacement != null) {
-            original.removeLeash();
-            original.discard();
-            level.addFreshEntity(replacement);
+        java.util.Map<Entity, Entity> vehicleOf = new java.util.LinkedHashMap<>();
+        for (Entity entity : all) {
+            if (entity.getVehicle() != null) {
+                vehicleOf.put(entity, entity.getVehicle());
+            }
+        }
+        for (Entity entity : all) {
+            entity.stopRiding();
+        }
+        for (var entry : swap.entrySet()) {
+            if (entry.getKey() instanceof Mob original) {
+                original.removeLeash();
+                original.discard();
+            }
+            level.addFreshEntity(entry.getValue());
+        }
+        for (var entry : vehicleOf.entrySet()) {
+            Entity rider = swap.containsKey(entry.getKey()) ? swap.get(entry.getKey()) : entry.getKey();
+            Entity vehicle = swap.containsKey(entry.getValue()) ? swap.get(entry.getValue()) : entry.getValue();
+            rider.startRiding(vehicle, true, false);
         }
     }
 
     /** Baut das eigene Gegenstück eines Vanilla-Tiers (ohne es der Welt hinzuzufügen); {@code null}, wenn keins. */
     public static @Nullable Mob convert(ServerLevel level, Mob original) {
+        return convert(level, original, original instanceof net.minecraft.world.entity.raid.Raider);
+    }
+
+    /**
+     * Wie {@link #convert(ServerLevel, Mob)}; mit {@code keepUuid} übernimmt das Gegenstück die UUID (nur, wenn das
+     * Original nicht in der Welt bleibt).
+     */
+    private static @Nullable Mob convert(ServerLevel level, Mob original, boolean keepUuid) {
         Supplier<? extends EntityType<? extends Mob>> target = replacements().get(original.getType());
         if (target == null) {
             return null;
@@ -148,7 +223,9 @@ public final class FarmAnimalConversion {
         TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
         original.saveWithoutId(out);
         CompoundTag tag = out.buildResult();
-        tag.remove("UUID");
+        if (!keepUuid) {
+            tag.remove("UUID");
+        }
         replacement.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
 
         Holder<Biome> biome = level.getBiome(original.blockPosition());
@@ -191,6 +268,8 @@ public final class FarmAnimalConversion {
             case WildBat bat -> bat.setBreed(WildBat.breedFor(biome, random));
             case WildArmadillo armadillo -> armadillo.setBreed(WildArmadillo.breedFor(biome, random));
             case WildCamel camel -> camel.setBreed(WildCamel.breedFor(biome));
+            case io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters.Varied varied ->
+                    varied.chooseLook(level, original.blockPosition());
             default -> { }
         }
         return replacement;

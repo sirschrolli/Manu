@@ -155,6 +155,26 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> CAMEL_SPAWN_EGG = creatureEgg("camel", () -> ModEntities.CAMEL.get());
     public static final DeferredItem<SpawnEggItem> LLAMA_SPAWN_EGG = creatureEgg("llama", () -> ModEntities.LLAMA.get());
     public static final DeferredItem<SpawnEggItem> TRADER_LLAMA_SPAWN_EGG = creatureEgg("trader_llama", () -> ModEntities.TRADER_LLAMA.get());
+    // Eigene Monster (E4a)
+    public static final DeferredItem<SpawnEggItem> ZOMBIE_SPAWN_EGG = creatureEgg("zombie", () -> ModEntities.ZOMBIE.get());
+    public static final DeferredItem<SpawnEggItem> HUSK_SPAWN_EGG = creatureEgg("husk", () -> ModEntities.HUSK.get());
+    public static final DeferredItem<SpawnEggItem> DROWNED_SPAWN_EGG = creatureEgg("drowned", () -> ModEntities.DROWNED.get());
+    public static final DeferredItem<SpawnEggItem> ZOMBIE_VILLAGER_SPAWN_EGG = creatureEgg("zombie_villager", () -> ModEntities.ZOMBIE_VILLAGER.get());
+    public static final DeferredItem<SpawnEggItem> SKELETON_SPAWN_EGG = creatureEgg("skeleton", () -> ModEntities.SKELETON.get());
+    public static final DeferredItem<SpawnEggItem> STRAY_SPAWN_EGG = creatureEgg("stray", () -> ModEntities.STRAY.get());
+    public static final DeferredItem<SpawnEggItem> BOGGED_SPAWN_EGG = creatureEgg("bogged", () -> ModEntities.BOGGED.get());
+    public static final DeferredItem<SpawnEggItem> PARCHED_SPAWN_EGG = creatureEgg("parched", () -> ModEntities.PARCHED.get());
+    public static final DeferredItem<SpawnEggItem> CREEPER_SPAWN_EGG = creatureEgg("creeper", () -> ModEntities.CREEPER.get());
+    public static final DeferredItem<SpawnEggItem> SPIDER_SPAWN_EGG = creatureEgg("spider", () -> ModEntities.SPIDER.get());
+    public static final DeferredItem<SpawnEggItem> CAVE_SPIDER_SPAWN_EGG = creatureEgg("cave_spider", () -> ModEntities.CAVE_SPIDER.get());
+    public static final DeferredItem<SpawnEggItem> SLIME_SPAWN_EGG = creatureEgg("slime", () -> ModEntities.SLIME.get());
+    public static final DeferredItem<SpawnEggItem> SULFUR_CUBE_SPAWN_EGG = creatureEgg("sulfur_cube", () -> ModEntities.SULFUR_CUBE.get());
+    public static final DeferredItem<SpawnEggItem> WITCH_SPAWN_EGG = creatureEgg("witch", () -> ModEntities.WITCH.get());
+    public static final DeferredItem<SpawnEggItem> PHANTOM_SPAWN_EGG = creatureEgg("phantom", () -> ModEntities.PHANTOM.get());
+    public static final DeferredItem<SpawnEggItem> SILVERFISH_SPAWN_EGG = creatureEgg("silverfish", () -> ModEntities.SILVERFISH.get());
+    public static final DeferredItem<SpawnEggItem> ZOMBIE_HORSE_SPAWN_EGG = creatureEgg("zombie_horse", () -> ModEntities.ZOMBIE_HORSE.get());
+    public static final DeferredItem<SpawnEggItem> SKELETON_HORSE_SPAWN_EGG = creatureEgg("skeleton_horse", () -> ModEntities.SKELETON_HORSE.get());
+    public static final DeferredItem<SpawnEggItem> CAMEL_HUSK_SPAWN_EGG = creatureEgg("camel_husk", () -> ModEntities.CAMEL_HUSK.get());
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
     public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());

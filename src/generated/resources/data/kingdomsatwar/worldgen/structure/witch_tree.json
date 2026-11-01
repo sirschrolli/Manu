@@ -17,7 +17,7 @@
       "bounding_box": "piece",
       "spawns": [
         {
-          "type": "minecraft:witch",
+          "type": "kingdomsatwar:witch",
           "count": 1,
           "weight": 1
         }

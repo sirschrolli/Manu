@@ -452,7 +452,7 @@ final class VillageGameTests {
         villager.setup(VillageProfession.BAKER, 0, "Agnes", post, "Testdorf", null, null, 1L);
         villager.snapTo(post.getX() + 3.5, post.getY(), post.getZ() + 0.5, 0.0f, 0.0f);
         level.addFreshEntity(villager);
-        Zombie zombie = EntityTypes.ZOMBIE.create(level, EntitySpawnReason.COMMAND);
+        Zombie zombie = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get().create(level, EntitySpawnReason.COMMAND);
         zombie.snapTo(post.getX() + 6.5, post.getY(), post.getZ() + 0.5, 0.0f, 0.0f);
         level.addFreshEntity(zombie);
         float health = villager.getHealth();

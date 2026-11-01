@@ -585,7 +585,7 @@ final class ShadowGameTests {
             }
         }
         // Mondsilberklinge: hart gegen Untote, normal gegen Tiere
-        var zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(2, 1, 2));
+        var zombie = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(2, 1, 2));
         var pig = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FARM_PIG.get(), new BlockPos(6, 1, 6));
         MoonsilverBladeItem blade = ShadowItems.MOONSILVER_BLADE.get();
         DamageSource source = helper.getLevel().damageSources().generic();
@@ -598,10 +598,10 @@ final class ShadowGameTests {
         player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ShadowItems.NIGHTSTEEL_HELMET.get()));
         helper.assertTrue(ShadowEquipment.hasShadowSight(player), "Der Nachtstahlhelm schenkt keine Sicht");
         // Abyssit-Stiefel: kein Fallschaden; Rüstungswerte
-        var wearer = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(4, 1, 6));
+        var wearer = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(4, 1, 6));
         equip(wearer, ShadowItems.ABYSSITE_HELMET.get(), ShadowItems.ABYSSITE_CHESTPLATE.get(), ShadowItems.ABYSSITE_LEGGINGS.get(),
                 ShadowItems.ABYSSITE_BOOTS.get());
-        var night = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, new BlockPos(6, 1, 2));
+        var night = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get(), new BlockPos(6, 1, 2));
         equip(night, ShadowItems.NIGHTSTEEL_HELMET.get(), ShadowItems.NIGHTSTEEL_CHESTPLATE.get(), ShadowItems.NIGHTSTEEL_LEGGINGS.get(),
                 ShadowItems.NIGHTSTEEL_BOOTS.get());
         helper.succeedWhen(() -> {

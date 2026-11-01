@@ -68,5 +68,44 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.CAMEL.key());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.CAMEL.key()).add(ModEntities.LLAMA.key())
                 .add(ModEntities.TRADER_LLAMA.key());
+        // Eigene Monster (E4a): in denselben Vanilla-Tags wie die Monster, die sie ersetzen (Untote: Bann wirkt, Heilen schadet,
+        // Wither verschont sie; Gliederfüßer: Nemesis der Gliederfüßer; Plünderer: Hexe im Überfall)
+        this.tag(EntityTypeTags.ZOMBIES).add(ModEntities.ZOMBIE.key()).add(ModEntities.HUSK.key()).add(ModEntities.DROWNED.key())
+                .add(ModEntities.ZOMBIE_VILLAGER.key()).add(ModEntities.ZOMBIE_HORSE.key()).add(ModEntities.CAMEL_HUSK.key());
+        this.tag(EntityTypeTags.SKELETONS).add(ModEntities.SKELETON.key()).add(ModEntities.STRAY.key()).add(ModEntities.BOGGED.key())
+                .add(ModEntities.PARCHED.key()).add(ModEntities.SKELETON_HORSE.key());
+        this.tag(EntityTypeTags.UNDEAD).add(ModEntities.PHANTOM.key());
+        this.tag(EntityTypeTags.BURN_IN_DAYLIGHT).add(ModEntities.ZOMBIE.key()).add(ModEntities.DROWNED.key())
+                .add(ModEntities.ZOMBIE_VILLAGER.key()).add(ModEntities.SKELETON.key()).add(ModEntities.STRAY.key())
+                .add(ModEntities.BOGGED.key()).add(ModEntities.PHANTOM.key()).add(ModEntities.ZOMBIE_HORSE.key());
+        this.tag(EntityTypeTags.NO_ANGER_FROM_WIND_CHARGE).add(ModEntities.ZOMBIE.key()).add(ModEntities.HUSK.key())
+                .add(ModEntities.SKELETON.key()).add(ModEntities.STRAY.key()).add(ModEntities.BOGGED.key()).add(ModEntities.SPIDER.key())
+                .add(ModEntities.CAVE_SPIDER.key()).add(ModEntities.SLIME.key());
+        this.tag(EntityTypeTags.AXOLOTL_ALWAYS_HOSTILES).add(ModEntities.DROWNED.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.STRAY.key());
+        this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.SPIDER.key()).add(ModEntities.CAVE_SPIDER.key()).add(ModEntities.SILVERFISH.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.SPIDER.key()).add(ModEntities.ZOMBIE_HORSE.key());
+        this.tag(EntityTypeTags.FROG_FOOD).add(ModEntities.SLIME.key());
+        this.tag(EntityTypeTags.IMMUNE_TO_OOZING).add(ModEntities.SLIME.key());
+        this.tag(EntityTypeTags.NON_CONTROLLING_RIDER).add(ModEntities.SLIME.key()).add(ModEntities.SULFUR_CUBE.key());
+        this.tag(EntityTypeTags.CANNOT_BE_PUSHED_ONTO_BOATS).add(ModEntities.SULFUR_CUBE.key());
+        this.tag(EntityTypeTags.NOT_SCARY_FOR_PUFFERFISH).add(ModEntities.SULFUR_CUBE.key());
+        this.tag(EntityTypeTags.RAIDERS).add(ModEntities.WITCH.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.PHANTOM.key());
+        this.tag(EntityTypeTags.IMMUNE_TO_INFESTED).add(ModEntities.SILVERFISH.key());
+        this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.SILVERFISH.key());
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.ZOMBIE_HORSE.key()).add(ModEntities.SKELETON_HORSE.key())
+                .add(ModEntities.CAMEL_HUSK.key());
+        this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.ZOMBIE_HORSE.key()).add(ModEntities.CAMEL_HUSK.key());
+        this.tag(EntityTypeTags.CAN_WEAR_HORSE_ARMOR).add(ModEntities.ZOMBIE_HORSE.key());
+        this.tag(EntityTypeTags.CANNOT_BE_AGE_LOCKED).add(ModEntities.ZOMBIE_HORSE.key()).add(ModEntities.SKELETON_HORSE.key());
+        this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.SKELETON_HORSE.key());
+        var monsterCoins = this.tag(ModTags.EntityTypes.DROPS_COINS);
+        for (var monster : java.util.List.of(ModEntities.ZOMBIE, ModEntities.HUSK, ModEntities.DROWNED, ModEntities.ZOMBIE_VILLAGER,
+                ModEntities.SKELETON, ModEntities.STRAY, ModEntities.BOGGED, ModEntities.PARCHED, ModEntities.CREEPER, ModEntities.SPIDER,
+                ModEntities.CAVE_SPIDER, ModEntities.SLIME, ModEntities.WITCH, ModEntities.PHANTOM, ModEntities.SILVERFISH,
+                ModEntities.CAMEL_HUSK)) {
+            monsterCoins.add(monster.key());
+        }
     }
 }

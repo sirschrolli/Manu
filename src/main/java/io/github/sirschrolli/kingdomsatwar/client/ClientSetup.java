@@ -54,6 +54,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.DRAGON_ARMOR, DragonArmorGeometry::createLayer);
         io.github.sirschrolli.kingdomsatwar.client.renderer.farm.FarmRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.registerLayers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterRenderers.registerLayers(event);
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);
@@ -98,6 +99,7 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
         io.github.sirschrolli.kingdomsatwar.client.renderer.farm.FarmRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.registerRenderers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterRenderers.registerRenderers(event);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
         event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);

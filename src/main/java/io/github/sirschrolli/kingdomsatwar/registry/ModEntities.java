@@ -170,6 +170,63 @@ public final class ModEntities {
             WildTraderLlama::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 1.87f).eyeHeight(1.7765f)
                     .passengerAttachments(new Vec3(0.0, 1.37, -0.3)).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Eigene Monster (ersetzen die Vanilla-Monster, E4a)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Revenant>> ZOMBIE = ENTITIES.registerEntityType("zombie",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Revenant::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.74f).passengerAttachments(2.0125f)
+                    .ridingOffset(-0.7f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Mummy>> HUSK = ENTITIES.registerEntityType("husk",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Mummy::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.74f).passengerAttachments(2.075f)
+                    .ridingOffset(-0.7f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DrownedCorpse>> DROWNED = ENTITIES.registerEntityType("drowned",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DrownedCorpse::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.74f).passengerAttachments(2.0125f)
+                    .ridingOffset(-0.7f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.UndeadVillager>> ZOMBIE_VILLAGER = ENTITIES.registerEntityType(
+            "zombie_villager", io.github.sirschrolli.kingdomsatwar.entity.creature.monster.UndeadVillager::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).passengerAttachments(2.125f)
+                    .ridingOffset(-0.7f).eyeHeight(1.74f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Boneman>> SKELETON = ENTITIES.registerEntityType("skeleton",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Boneman::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.99f).eyeHeight(1.74f).ridingOffset(-0.7f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.FrostBones>> STRAY = ENTITIES.registerEntityType("stray",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.FrostBones::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.99f).eyeHeight(1.74f).ridingOffset(-0.7f)
+                    .immuneTo(BlockTags.STRAY_IMMUNE_TO).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BogBones>> BOGGED = ENTITIES.registerEntityType("bogged",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BogBones::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.99f).eyeHeight(1.74f).ridingOffset(-0.7f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryBones>> PARCHED = ENTITIES.registerEntityType("parched",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryBones::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.99f).eyeHeight(1.74f).ridingOffset(-0.7f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.PlantCreeper>> CREEPER = ENTITIES.registerEntityType("creeper",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.PlantCreeper::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.7f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WildSpider>> SPIDER = ENTITIES.registerEntityType("spider",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WildSpider::new, MobCategory.MONSTER, builder -> builder.sized(1.4f, 0.9f).eyeHeight(0.65f).passengerAttachments(0.765f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WildCaveSpider>> CAVE_SPIDER = ENTITIES.registerEntityType(
+            "cave_spider", io.github.sirschrolli.kingdomsatwar.entity.creature.monster.WildCaveSpider::new, MobCategory.MONSTER, builder -> builder.sized(0.7f, 0.5f).eyeHeight(0.45f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Ooze>> SLIME = ENTITIES.registerEntityType("slime",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Ooze::new, MobCategory.MONSTER, builder -> builder.sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4.0f)
+                    .clientTrackingRange(10).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BrimstoneCube>> SULFUR_CUBE = ENTITIES.registerEntityType(
+            "sulfur_cube", io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BrimstoneCube::new, MobCategory.MONSTER, builder -> builder.sized(0.49f, 0.49f).eyeHeight(0.175f)
+                    .spawnDimensionsScale(2.0f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Hag>> WITCH = ENTITIES.registerEntityType("witch",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Hag::new, MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).passengerAttachments(2.2625f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Nightmare>> PHANTOM = ENTITIES.registerEntityType("phantom",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Nightmare::new, MobCategory.MONSTER, builder -> builder.sized(0.9f, 0.5f).eyeHeight(0.175f).passengerAttachments(0.3375f)
+                    .ridingOffset(-0.125f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Silverling>> SILVERFISH = ENTITIES.registerEntityType("silverfish",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Silverling::new, MobCategory.MONSTER, builder -> builder.sized(0.4f, 0.3f).eyeHeight(0.13f).passengerAttachments(0.2375f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.UndeadHorse>> ZOMBIE_HORSE = ENTITIES.registerEntityType("zombie_horse",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.UndeadHorse::new, MobCategory.MONSTER, builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f).passengerAttachments(1.31875f)
+                    .clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BoneHorse>> SKELETON_HORSE = ENTITIES.registerEntityType(
+            "skeleton_horse", io.github.sirschrolli.kingdomsatwar.entity.creature.monster.BoneHorse::new, MobCategory.CREATURE, builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f)
+                    .passengerAttachments(1.31875f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryCamel>> CAMEL_HUSK = ENTITIES.registerEntityType("camel_husk",
+            io.github.sirschrolli.kingdomsatwar.entity.creature.monster.DryCamel::new, MobCategory.MONSTER, builder -> builder.sized(1.7f, 2.375f).eyeHeight(2.275f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -323,6 +380,26 @@ public final class ModEntities {
         event.put(FARM_MULE.get(), FarmMule.createAttributes().build());
         event.put(FARM_GOAT.get(), FarmGoat.createAttributes().build());
         event.put(HARE.get(), Hare.createAttributes().build());
+        // Eigene Monster (E4a): Werte wie bei Vanilla
+        event.put(ZOMBIE.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
+        event.put(HUSK.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
+        event.put(DROWNED.get(), net.minecraft.world.entity.monster.zombie.Drowned.createAttributes().build());
+        event.put(ZOMBIE_VILLAGER.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
+        event.put(SKELETON.get(), net.minecraft.world.entity.monster.skeleton.AbstractSkeleton.createAttributes().build());
+        event.put(STRAY.get(), net.minecraft.world.entity.monster.skeleton.AbstractSkeleton.createAttributes().build());
+        event.put(BOGGED.get(), net.minecraft.world.entity.monster.skeleton.Bogged.createAttributes().build());
+        event.put(PARCHED.get(), net.minecraft.world.entity.monster.skeleton.Parched.createAttributes().build());
+        event.put(CREEPER.get(), net.minecraft.world.entity.monster.Creeper.createAttributes().build());
+        event.put(SPIDER.get(), net.minecraft.world.entity.monster.spider.Spider.createAttributes().build());
+        event.put(CAVE_SPIDER.get(), net.minecraft.world.entity.monster.spider.CaveSpider.createCaveSpider().build());
+        event.put(SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
+        event.put(SULFUR_CUBE.get(), net.minecraft.world.entity.monster.cubemob.SulfurCube.createSulfurCubeAttributes().build());
+        event.put(WITCH.get(), net.minecraft.world.entity.monster.Witch.createAttributes().build());
+        event.put(PHANTOM.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
+        event.put(SILVERFISH.get(), net.minecraft.world.entity.monster.Silverfish.createAttributes().build());
+        event.put(ZOMBIE_HORSE.get(), net.minecraft.world.entity.animal.equine.ZombieHorse.createAttributes().build());
+        event.put(SKELETON_HORSE.get(), net.minecraft.world.entity.animal.equine.SkeletonHorse.createAttributes().build());
+        event.put(CAMEL_HUSK.get(), net.minecraft.world.entity.animal.camel.Camel.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -383,6 +460,26 @@ public final class ModEntities {
         // eigene Wildtiere: wie die Vanilla-Tiere, die sie ersetzen (Fennek und Trampeltier auch auf Sand bzw. Gras)
         var noLeaves = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
         var free = SpawnPlacementTypes.NO_RESTRICTIONS;
+        // Eigene Monster (E4a): Regeln wie bei Vanilla
+        event.register(ZOMBIE.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(HUSK.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkSurfaceMonstersSpawnRules, replace);
+        event.register(DROWNED.get(), SpawnPlacementTypes.IN_WATER, surface, net.minecraft.world.entity.monster.zombie.Drowned::checkDrownedSpawnRules, replace);
+        event.register(ZOMBIE_VILLAGER.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(SKELETON.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(STRAY.get(), ground, surface, net.minecraft.world.entity.monster.skeleton.Stray::checkStraySpawnRules, replace);
+        event.register(BOGGED.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(PARCHED.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkSurfaceMonstersSpawnRules, replace);
+        event.register(CREEPER.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(SPIDER.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(CAVE_SPIDER.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(SLIME.get(), ground, surface, net.minecraft.world.entity.monster.cubemob.Slime::checkSlimeSpawnRules, replace);
+        event.register(SULFUR_CUBE.get(), ground, surface, net.minecraft.world.entity.monster.cubemob.SulfurCube::checkSulfurCubeSpawnRules, replace);
+        event.register(WITCH.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(PHANTOM.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, net.minecraft.world.entity.Mob::checkMobSpawnRules, replace);
+        event.register(SILVERFISH.get(), ground, surface, net.minecraft.world.entity.monster.Silverfish::checkSilverfishSpawnRules, replace);
+        event.register(ZOMBIE_HORSE.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
+        event.register(SKELETON_HORSE.get(), ground, surface, net.minecraft.world.entity.animal.equine.SkeletonHorse::checkSkeletonHorseSpawnRules, replace);
+        event.register(CAMEL_HUSK.get(), ground, surface, net.minecraft.world.entity.monster.Monster::checkSurfaceMonstersSpawnRules, replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);
