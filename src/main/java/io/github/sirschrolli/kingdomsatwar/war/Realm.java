@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.entity.BannerPatterns;
  * einer Stammburg in eigener Bauweise ({@link CastleStyle}). Wo ihre Burgen liegen, berechnet {@link RealmLocator}.
  */
 public enum Realm implements StringRepresentable {
-    /** Königreich Eisenmark: silberner Turm auf Blau, grauer Stein und Schieferdächer. */
-    EISENMARK("eisenmark", DyeColor.BLUE, DyeColor.WHITE, DyeColor.LIGHT_GRAY, 0x3C5AA6, "tower"),
+    /** Königreich Eisenmark: silberner Turm auf Purpur, grauer Stein und Schieferdächer (Blau trägt das eigene Heer). */
+    EISENMARK("eisenmark", DyeColor.PURPLE, DyeColor.WHITE, DyeColor.LIGHT_GRAY, 0x8A4FC0, "tower"),
     /** Herzogtum Rabenstein: schwarzer Rabe auf Rot, dunkler Stein und rote Dächer. */
     RABENSTEIN("rabenstein", DyeColor.RED, DyeColor.BLACK, DyeColor.BLACK, 0xA62A2A, "raven"),
     /** Fürstentum Dornfels: goldene Sonne auf Ocker, Sandstein und Ziegeldächer. */

@@ -46,6 +46,11 @@ public final class ModAttachments {
             "army_roster", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.army.ArmyRoster::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.CODEC.fieldOf("roster")).build());
 
+    /** Zustand der vier fremden Reiche: Burgen, Herrscher, Eroberung, Krieg (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.war.RealmState>> REALMS = ATTACHMENTS.register("realms",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.war.RealmState::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.war.RealmState.CODEC.fieldOf("realms")).build());
+
     /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());

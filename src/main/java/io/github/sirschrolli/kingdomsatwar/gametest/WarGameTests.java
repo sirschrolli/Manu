@@ -1,0 +1,200 @@
+package io.github.sirschrolli.kingdomsatwar.gametest;
+
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.war.Realm;
+import io.github.sirschrolli.kingdomsatwar.war.RealmState;
+import io.github.sirschrolli.kingdomsatwar.war.WarriorRole;
+import io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastle;
+import io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastlePiece;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.gametest.framework.FunctionGameTestInstance;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.TestData;
+import net.minecraft.gametest.framework.TestEnvironmentDefinition;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.event.RegisterGameTestsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+
+/**
+ * Tests zum Krieg der Königreiche: Die Stammburg steht vollständig (jeder Posten frei und begehbar, Truhen und Banner
+ * des Reichs), ihre Besatzung steht auf den Posten, Krieger greifen nur Eindringlinge an, und der Fall des Herrschers
+ * wird vermerkt (wer ihn erschlägt, liegt mit dem Reich im Krieg).
+ */
+final class WarGameTests {
+    private static final Identifier ARENA = KingdomsAtWar.id("test_arena");
+
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CASTLE =
+            ModGameTests.TEST_FUNCTIONS.register("realm_castle", () -> WarGameTests::castle);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> INTRUDERS =
+            ModGameTests.TEST_FUNCTIONS.register("realm_intruders", () -> WarGameTests::intruders);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LORD_FALLS =
+            ModGameTests.TEST_FUNCTIONS.register("realm_lord_falls", () -> WarGameTests::lordFalls);
+
+    private WarGameTests() {}
+
+    static void init() {}
+
+    static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
+        for (var test : List.of(CASTLE, INTRUDERS, LORD_FALLS)) {
+            event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
+                    new TestData<>(environment, Level.OVERWORLD, ARENA, test == CASTLE ? 1200 : 200, 0, true, Rotation.NONE, false, 1, 1, true,
+                            0)));
+        }
+    }
+
+    /**
+     * Eine Burg (gedreht) weit draußen bauen: jeder Posten hat festen Boden und zwei Blöcke Luft, alle Posten sind besetzt,
+     * es gibt Schatztruhe, Waffenkammer und Vorräte und die Banner tragen das Wappen des Reichs.
+     */
+    private static void castle(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos base = helper.absolutePos(BlockPos.ZERO);
+        BlockPos center = new BlockPos(base.getX() + 3000, level.getSeaLevel() + 20, base.getZ() + 3000);
+        RealmCastlePiece piece = new RealmCastlePiece(Realm.DORNFELS, center, Rotation.CLOCKWISE_90, 4242L);
+        BoundingBox box = piece.getBoundingBox();
+        for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
+            for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++) {
+                level.getChunk(cx, cz, ChunkStatus.FULL, true);
+            }
+        }
+        for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
+            for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++) {
+                BoundingBox chunkBox = new BoundingBox(cx << 4, level.getMinY(), cz << 4, (cx << 4) + 15, level.getMaxY(), (cz << 4) + 15);
+                piece.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), RandomSource.create(1), chunkBox,
+                        new ChunkPos(cx, cz), center);
+            }
+        }
+        List<String> problems = new ArrayList<>();
+        for (RealmCastle.Post post : RealmCastle.posts()) {
+            BlockPos feet = piece.world(new BlockPos(post.x(), post.y(), post.z()));
+            BlockState below = level.getBlockState(feet.below());
+            if (level.getBlockState(feet).getCollisionShape(level, feet).max(Direction.Axis.Y) > 0.2
+                    || !level.getBlockState(feet.above()).getCollisionShape(level, feet.above()).isEmpty()) {
+                problems.add(post.role() + " bei " + post.x() + "/" + post.y() + "/" + post.z() + " steckt in " + level.getBlockState(feet));
+            } else if (below.getCollisionShape(level, feet.below()).isEmpty() && !below.is(net.minecraft.world.level.block.Blocks.LADDER)) {
+                problems.add(post.role() + " bei " + post.x() + "/" + post.y() + "/" + post.z() + " schwebt über " + below);
+            }
+        }
+        AABB area = AABB.of(box);
+        List<RealmWarriorEntity> warriors = level.getEntitiesOfClass(RealmWarriorEntity.class, area);
+        if (warriors.size() != RealmCastle.posts().size()) {
+            problems.add(warriors.size() + " Krieger statt " + RealmCastle.posts().size());
+        }
+        if (warriors.stream().noneMatch(w -> w.role() == WarriorRole.LORD)) {
+            problems.add("kein Herrscher");
+        }
+        if (warriors.stream().anyMatch(w -> w.realm() != Realm.DORNFELS)) {
+            problems.add("Krieger eines fremden Reichs");
+        }
+        int chests = 0;
+        int banners = 0;
+        int painted = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ())) {
+            var entity = level.getBlockEntity(pos);
+            if (entity instanceof ChestBlockEntity) {
+                chests++;
+            } else if (entity instanceof BannerBlockEntity banner) {
+                banners++;
+                if (!banner.getPatterns().layers().isEmpty()) {
+                    painted++;
+                }
+            }
+        }
+        // Schatztruhe, Waffenkammer, Küche und Vorratshaus
+        if (chests != 4) {
+            problems.add(chests + " Truhen");
+        }
+        if (banners < 20 || painted != banners) {
+            problems.add(banners + " Banner, davon " + painted + " mit Wappen");
+        }
+        // Thron und Reichsbanner hinter ihm (eine Wand dahinter)
+        BlockPos standard = piece.world(RealmCastle.STANDARD.above());
+        if (!(level.getBlockEntity(standard) instanceof BannerBlockEntity)) {
+            problems.add("kein Reichsbanner bei " + standard);
+        }
+        for (RealmWarriorEntity warrior : warriors) {
+            warrior.discard();
+        }
+        helper.assertTrue(problems.isEmpty(), "Stammburg: " + problems);
+        helper.succeed();
+    }
+
+    /** Krieger greifen an, wer in die Burg eindringt – wer draußen bleibt, wird in Ruhe gelassen. */
+    private static void intruders(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos home = helper.absolutePos(new BlockPos(4, 1, 4));
+        RealmWarriorEntity guard = ModEntities.REALM_WARRIORS.get(WarriorRole.FOOTMAN).get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        helper.assertTrue(guard != null, "kein Fußknecht");
+        guard.setRealm(Realm.SILBERAU);
+        guard.snapTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5, 0.0f, 0.0f);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.snapTo(home.getX() + 3.5, home.getY(), home.getZ() + 0.5, 0.0f, 0.0f);
+        // Burg hier: der Spieler ist drinnen
+        guard.setPost(home, home);
+        boolean inside = guard.isIntruder(player);
+        // Burg weit weg: der Spieler ist draußen
+        guard.setPost(home, home.relative(Direction.EAST, 200));
+        boolean outside = guard.isIntruder(player);
+        RealmWarriorEntity other = ModEntities.REALM_WARRIORS.get(WarriorRole.ARCHER).get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        other.setRealm(Realm.SILBERAU);
+        boolean allied = guard.isAlliedTo(other);
+        other.setRealm(Realm.RABENSTEIN);
+        boolean foreign = guard.isAlliedTo(other);
+        player.discard();
+        guard.discard();
+        other.discard();
+        helper.assertTrue(inside, "Eindringling in der Burg wird nicht angegriffen");
+        helper.assertFalse(outside, "Spieler außerhalb der Burg wird angegriffen");
+        helper.assertTrue(allied && !foreign, "Verbündete: gleiches Reich " + allied + ", fremdes Reich " + foreign);
+        helper.succeed();
+    }
+
+    /** Fällt der Herrscher, merkt sich die Welt das – und wer ihn erschlug, liegt mit dem Reich im Krieg. */
+    private static void lordFalls(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        RealmState state = RealmState.of(level);
+        state.reset(Realm.RABENSTEIN);
+        state.save(level);
+        BlockPos home = helper.absolutePos(new BlockPos(4, 1, 4));
+        RealmWarriorEntity lord = ModEntities.REALM_WARRIORS.get(WarriorRole.LORD).get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        helper.assertTrue(lord != null, "kein Herrscher");
+        lord.setRealm(Realm.RABENSTEIN);
+        lord.snapTo(home.getX() + 0.5, home.getY(), home.getZ() + 0.5, 0.0f, 0.0f);
+        level.addFreshEntity(lord);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        lord.hurtServer(level, level.damageSources().playerAttack(player), 10000.0f);
+        boolean dead = lord.isDeadOrDying();
+        boolean fallen = RealmState.of(level).isLordFallen(Realm.RABENSTEIN);
+        boolean war = RealmState.of(level).atWar(Realm.RABENSTEIN, player.getUUID());
+        player.discard();
+        lord.discard();
+        state = RealmState.of(level);
+        state.reset(Realm.RABENSTEIN);
+        state.save(level);
+        helper.assertTrue(dead, "Herrscher lebt noch");
+        helper.assertTrue(fallen, "Fall des Herrschers nicht vermerkt");
+        helper.assertTrue(war, "kein Krieg mit dem Spieler, der den Herrscher erschlug");
+        helper.succeed();
+    }
+}

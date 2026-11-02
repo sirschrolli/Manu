@@ -1295,6 +1295,17 @@ public class ModLanguageProvider extends LanguageProvider {
         text("soldier.kingdomsatwar.rank.2", "Elite", "Elite");
         text("message.kingdomsatwar.soldier_trained", "%s has completed the training!", "%s hat die Ausbildung abgeschlossen!");
         add(ModEntities.BANDIT.get(), pick("Bandit", "Bandit"));
+        // Krieger der fremden Reiche ("Fußknecht von Eisenmark", "Eisenmark Footman")
+        var warriors = ModEntities.REALM_WARRIORS;
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.FOOTMAN).get(), pick("Footman", "Fußknecht"));
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.ARCHER).get(), pick("Wall Archer", "Wallschütze"));
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.CROSSBOWMAN).get(), pick("Crossbowman", "Armbrustschütze"));
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.KNIGHT).get(), pick("Castle Knight", "Burgritter"));
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.CAPTAIN).get(), pick("Castle Captain", "Burghauptmann"));
+        add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.LORD).get(), pick("Ruler", "Herrscher"));
+        text("entity.kingdomsatwar.realm_warrior.of", "%2$s %1$s", "%1$s von %2$s");
+        text("realm.kingdomsatwar.alarm", "Alarm! The guards of the %s have spotted you!", "Alarm! Die Wachen von %s haben dich entdeckt!");
+        text("realm.kingdomsatwar.lord_fallen", "%s has fallen – the %s is without a ruler!", "%s ist gefallen – %s ist ohne Herrscher!");
         add(ModEntities.BANDIT_ARCHER.get(), pick("Bandit Archer", "Banditen-Bogenschütze"));
         item(ModItems.BANDIT_SPAWN_EGG, "Bandit Spawn Egg", "Banditen-Spawn-Ei");
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");

@@ -187,6 +187,7 @@ public final class ModGameTests {
         EndGameTests.init();       // Wesen des Ends
         TreeGameTests.init();      // neue Baumformen, karge Truhen
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
+        WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
     }
 
     private ModGameTests() {}
@@ -218,6 +219,7 @@ public final class ModGameTests {
         OverworldGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
+        WarGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);

@@ -1,7 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.worldgen.realm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity;
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.war.Realm;
+import io.github.sirschrolli.kingdomsatwar.war.WarriorRole;
 import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.VillageBuilder;
 import net.minecraft.core.BlockPos;
@@ -11,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -89,6 +93,29 @@ public class RealmCastlePiece extends StructurePiece {
         VillageBuilder builder = new VillageBuilder(level, chunkBB, this.center, this.rotation, this.seed);
         RealmCastle.build(builder, this.realm, ModLootTables.REALM_TREASURY, ModLootTables.REALM_ARMORY, ModLootTables.REALM_STORES);
         builder.finish();
+        this.spawnGarrison(level, chunkBB);
+    }
+
+    /** Die Besatzung: auf jeden Posten in diesem Chunk ein Krieger des Reichs. */
+    private void spawnGarrison(WorldGenLevel level, BoundingBox chunkBB) {
+        RandomSource random = RandomSource.create(this.seed ^ chunkBB.minX() * 341873128712L ^ chunkBB.minZ() * 132897987541L);
+        for (RealmCastle.Post post : RealmCastle.posts()) {
+            BlockPos pos = this.world(new BlockPos(post.x(), post.y(), post.z()));
+            if (!chunkBB.isInside(pos)) {
+                continue;
+            }
+            WarriorRole role = WarriorRole.byId(post.role());
+            RealmWarriorEntity warrior = ModEntities.REALM_WARRIORS.get(role).get().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            if (warrior == null) {
+                continue;
+            }
+            warrior.setRealm(this.realm);
+            warrior.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360.0f, 0.0f);
+            warrior.setPost(pos, this.center);
+            warrior.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.STRUCTURE, null);
+            warrior.setPersistenceRequired();
+            level.addFreshEntityWithPassengers(warrior);
+        }
     }
 
     // =====================================================================================

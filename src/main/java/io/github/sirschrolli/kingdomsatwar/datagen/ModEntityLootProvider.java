@@ -103,6 +103,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(Items.VINE, 0, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GLOWCAP.get(), 0.25f, 0.05f)));
         this.add(ModEntities.BANDIT.get(), banditLoot(false));
+        ModEntities.REALM_WARRIORS.forEach((role, type) -> this.add(type.get(), this.warriorLoot(role)));
         this.add(ModEntities.BANDIT_ARCHER.get(), banditLoot(true));
 
         // Eigene Hof- und Weidetiere: dieselbe Beute wie die Vanilla-Tiere (Wolle nach Farbe, Braten im Feuer …)
@@ -267,6 +268,43 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .add(LootItem.lootTableItem(item))
                 .when(LootItemKilledByPlayerCondition.killedByPlayer())
                 .when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.enchantments, chance, lootingBonus));
+    }
+
+    /**
+     * Beute der Krieger der fremden Reiche: ein paar Bronzemünzen (Ritter und Hauptmann mehr), Pfeile bei den Schützen,
+     * Eisen und Stahl bei den Gerüsteten; der Herrscher hat Gold, Edelsteine und manchmal einen Diamanten bei sich.
+     */
+    private LootTable.Builder warriorLoot(io.github.sirschrolli.kingdomsatwar.war.WarriorRole role) {
+        int coins = switch (role) {
+            case KNIGHT -> 5;
+            case CAPTAIN -> 8;
+            case LORD -> 24;
+            default -> 3;
+        };
+        LootTable.Builder table = LootTable.lootTable()
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(ModItems.BRONZE_COIN.get())
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(Math.max(1, coins / 2), coins)))
+                                .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments,
+                                        ContextFloatProviders.between(0.0f, 1.0f)))));
+        switch (role) {
+            case ARCHER, CROSSBOWMAN -> table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(LootItem.lootTableItem(Items.ARROW).apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 5)))));
+            case KNIGHT, CAPTAIN -> table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(LootItem.lootTableItem(ModItems.STEEL_INGOT.get()).setWeight(2))
+                    .add(LootItem.lootTableItem(Items.IRON_INGOT).setWeight(4))
+                    .add(net.minecraft.world.level.storage.loot.entries.EmptyLootItem.emptyItem().setWeight(6)));
+            case LORD -> table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.between(2, 4))
+                    .add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(5).apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 3))))
+                    .add(LootItem.lootTableItem(ModItems.GEMSTONE.get()).setWeight(3))
+                    .add(LootItem.lootTableItem(Items.EMERALD).setWeight(3).apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 3))))
+                    .add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1)));
+            default -> table.withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(LootItem.lootTableItem(Items.BREAD).setWeight(2))
+                    .add(LootItem.lootTableItem(Items.IRON_NUGGET).setWeight(3).apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 4))))
+                    .add(net.minecraft.world.level.storage.loot.entries.EmptyLootItem.emptyItem().setWeight(5)));
+        }
+        return table;
     }
 
     private LootTable.Builder banditLoot(boolean archer) {

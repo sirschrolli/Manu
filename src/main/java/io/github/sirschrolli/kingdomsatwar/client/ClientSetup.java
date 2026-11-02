@@ -104,6 +104,8 @@ public final class ClientSetup {
         ModEntities.DRAGONS.values().forEach(type -> event.registerEntityRenderer(type.get(), DragonRenderer::new));
         ModEntities.SOLDIERS.values().forEach(type -> event.registerEntityRenderer(type.get(), SoldierRenderer::new));
         event.registerEntityRenderer(ModEntities.BANDIT.get(), BanditRenderer::new);
+        ModEntities.REALM_WARRIORS.values().forEach(type -> event.registerEntityRenderer(type.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.RealmWarriorRenderer::new));
         ModEntities.MAGES.values().forEach(type -> event.registerEntityRenderer(type.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new));
         event.registerEntityRenderer(ModEntities.MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new);

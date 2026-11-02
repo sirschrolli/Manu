@@ -93,6 +93,19 @@ public final class ModEntities {
         }
     }
 
+    /** Die Krieger der vier fremden Reiche: ein Typ je Rang (gleiche Klasse; das Reich steht im Lebewesen). */
+    public static final Map<io.github.sirschrolli.kingdomsatwar.war.WarriorRole,
+            DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity>>> REALM_WARRIORS =
+            new EnumMap<>(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.class);
+
+    static {
+        for (var role : io.github.sirschrolli.kingdomsatwar.war.WarriorRole.values()) {
+            REALM_WARRIORS.put(role, ENTITIES.registerEntityType(role.entityId(),
+                    (entityType, level) -> new io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity(entityType, level, role),
+                    MobCategory.MONSTER, builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(10)));
+        }
+    }
+
     public static final DeferredHolder<EntityType<?>, EntityType<BanditEntity>> BANDIT = ENTITIES.registerEntityType("bandit",
             (entityType, level) -> new BanditEntity(entityType, level, false), MobCategory.MONSTER,
             builder -> builder.sized(0.6f, 1.95f).eyeHeight(1.62f).ridingOffset(-0.7f).clientTrackingRange(8));
@@ -520,6 +533,8 @@ public final class ModEntities {
         DRAGONS.values().forEach(type -> event.put(type.get(), DragonEntity.createAttributes().build()));
         SOLDIERS.values().forEach(type -> event.put(type.get(), SoldierEntity.createAttributes().build()));
         event.put(BANDIT.get(), BanditEntity.createAttributes().build());
+        REALM_WARRIORS.values().forEach(type -> event.put(type.get(),
+                io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity.createAttributes().build()));
         event.put(CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity.createAttributes().build());
         event.put(VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity.createAttributes().build());
         event.put(BANDIT_ARCHER.get(), BanditEntity.createAttributes().build());
