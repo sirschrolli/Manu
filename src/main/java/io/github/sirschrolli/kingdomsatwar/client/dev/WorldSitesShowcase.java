@@ -44,7 +44,7 @@ final class WorldSitesShowcase {
         steps.add(Step.hud(false));
         // in der Unterwelt weiter sehen: dort reicht der Nebel nur bis zur halben Sichtweite
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") || only.equals("hortfeste") ? 16
-                : only.equals("giant_bones") || only.equals("lost_gate") ? 12 : 8)));
+                : only.equals("giant_bones") || only.equals("lost_gate") || only.equals("starwatch") ? 12 : 8)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
         steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
         for (SiteKind kind : SiteKind.values()) {
@@ -54,8 +54,8 @@ final class WorldSitesShowcase {
             List<double[]> views = new ArrayList<>();
             int[] state = {0};
             // die Aschenesse steht in der Unterwelt; dort schwebt die Kamera als Zuschauer (über Lava, durch Felsen)
-            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = nether(kind)
-                    ? net.minecraft.world.level.Level.NETHER : net.minecraft.world.level.Level.OVERWORLD;
+            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = kind == SiteKind.STARWATCH ? net.minecraft.world.level.Level.END
+                    : nether(kind) ? net.minecraft.world.level.Level.NETHER : net.minecraft.world.level.Level.OVERWORLD;
             if (dim != net.minecraft.world.level.Level.OVERWORLD) {
                 steps.add(Step.command("gamemode spectator"));
             }
@@ -159,6 +159,7 @@ final class WorldSitesShowcase {
         BlockPos[] from = kind == SiteKind.FALLEN_STAR
                 ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(-1000, 80, 1700), new BlockPos(-1000, 80, -1700), new BlockPos(2000, 80, 0)}
                 : kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(900, 80, -700)}
+                : kind == SiteKind.STARWATCH ? new BlockPos[] {new BlockPos(1200, 80, 0), new BlockPos(-900, 80, 900)}
                 : kind == SiteKind.LOST_GATE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(700, 80, -500), new BlockPos(-600, 80, 700),
                         new BlockPos(-900, 80, -800)}
                 : new BlockPos[] {new BlockPos(0, 80, 0)};
@@ -448,6 +449,13 @@ final class WorldSitesShowcase {
                     }
                 }
             }
+            case STARWATCH -> {
+                add(views, first, -30, 22, 34, 0, 14, -6);
+                add(views, first, 0.5, 3, 22, 0.5, 6, -6);
+                add(views, first, 34, 30, -6, 0, 18, -10);
+                add(views, first, -14, 40, -24, 0, 33, -11);
+                add(views, first, 9, 44, 6, 0, 38, -9);
+            }
             case LOST_GATE -> {
                 add(views, first, -12, 7, 16, 0, 4, 0);
                 add(views, first, 0.5, 3, 13, 0.5, 6, 0);
@@ -496,6 +504,10 @@ final class WorldSitesShowcase {
      * darin die Muster nebeneinander – so sieht man die Formen ohne Gelände davor.
      */
     static void lab(Deque<Step> steps, String what) {
+        if (what.equals("starwatch")) {
+            labEnd(steps);
+            return;
+        }
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
@@ -607,6 +619,62 @@ final class WorldSitesShowcase {
             steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
             steps.add((minecraft, ticks) -> slot >= views.size() || Step.waitForChunks(1500).run(minecraft, ticks));
             Step shot = Step.screenshot("lab_" + what + "_" + n);
+            steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
+        }
+    }
+
+    /** Werkstatt im End ({@code worldsite_lab_starwatch}): die Sternwarte frei im Leeren zwischen den Inseln. */
+    static void labEnd(Deque<Step> steps) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
+        steps.add(Step.command("gamemode spectator"));
+        List<double[]> views = new ArrayList<>();
+        int[] state = {0};
+        steps.add(Step.server(level -> {
+            ServerLevel end = level.getServer().getLevel(net.minecraft.world.level.Level.END);
+            BlockPos origin = new BlockPos(0, 70, 420);
+            for (int cx = -3; cx <= 3; cx++) {
+                for (int cz = (origin.getZ() >> 4) - 3; cz <= (origin.getZ() >> 4) + 3; cz++) {
+                    end.getChunk(cx, cz, ChunkStatus.FULL, true);
+                }
+            }
+            SitePiece piece = io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteSamples.starwatch(origin, 0x57A2L);
+            BoundingBox all = piece.getBoundingBox();
+            piece.postProcess(end, end.structureManager(), end.getChunkSource().getGenerator(), end.getRandom(), all,
+                    ChunkPos.containing(piece.origin()), piece.origin());
+            add(views, piece, -30, 22, 34, 0, 14, -6);
+            add(views, piece, 0.5, 3, 22, 0.5, 6, -6);
+            add(views, piece, 34, 30, -6, 0, 18, -10);
+            add(views, piece, -14, 40, -24, 0, 33, -11);
+            add(views, piece, 3, 1, -13, -2, 3, -8);
+            add(views, piece, 3, 9, -7, -2, 10, -13);
+            add(views, piece, -2, 17, -14, 1, 20, -12);
+            add(views, piece, 2, 25, -9, 0, 27, -16);
+            add(views, piece, 9, 44, 6, 0, 38, -9);
+            add(views, piece, -9, 18, -7, -16, 19, -11);
+            add(views, piece, 0.5, 1.5, 12, 0.5, 2, 2);
+            state[0] = 1;
+        }));
+        steps.add(Step.until(() -> state[0] != 0, 3000));
+        net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = net.minecraft.world.level.Level.END;
+        for (int n = 0; n < 12; n++) {
+            int slot = n;
+            steps.add(Step.once(minecraft -> {
+                if (slot < views.size()) {
+                    double[] v = views.get(slot);
+                    double lx = v[3] - v[0];
+                    double ly = v[4] - (v[1] + 1.62);
+                    double lz = v[5] - v[2];
+                    float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                    float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                    minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                            "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f", dim.identifier(), v[0], v[1], v[2], yaw, pitch));
+                }
+            }));
+            steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
+            steps.add((minecraft, ticks) -> slot >= views.size() || Step.waitForChunks(1500).run(minecraft, ticks));
+            Step shot = Step.screenshot("lab_starwatch_" + n);
             steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
         }
     }

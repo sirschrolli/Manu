@@ -261,6 +261,9 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(pool(1, 2, item(Items.CHARCOAL, 6, 4, 12), item(Items.STONE_AXE, 2, 1, 1), item(Items.BREAD, 3, 1, 3))));
         this.output.accept(ModLootTables.SITE_CHARCOAL_CAMP_SECRET, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables
                 .ABANDONED_CAMP_SECRET_CHEST), 0, 0, 2, 6, 0.4f));
+        // Sternwarte: der Schatz des Ordens (wie in der Endstadt)
+        this.output.accept(ModLootTables.SITE_STARWATCH, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.END_CITY_TREASURE),
+                0, 4, 2, 5, 0.3f));
         // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
         this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
                 0, 3, 1, 3, 0.1f));

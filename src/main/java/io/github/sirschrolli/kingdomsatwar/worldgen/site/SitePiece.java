@@ -125,6 +125,7 @@ public class SitePiece extends StructurePiece {
             case HORTFESTE -> Hortfeste.build(b, this);
             case GIANT_BONES -> GiantBones.build(b, this);
             case LOST_GATE -> LostGate.build(b, this);
+            case STARWATCH -> Starwatch.build(b, this);
         }
         b.finish();
     }

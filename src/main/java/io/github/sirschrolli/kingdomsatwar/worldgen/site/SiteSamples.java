@@ -166,6 +166,16 @@ public final class SiteSamples {
         return LostGate.piece(origin, Rotation.NONE, seed, lava ? LostGate.LAVA : LostGate.GROUND);
     }
 
+    /** Die Sternwarte mit der Mitte ihres Sternenhofs bei {@code origin} (Lage des Pflasters), der Turm hinten (−z). */
+    public static SitePiece starwatch(BlockPos origin, long seed) {
+        return Starwatch.piece(origin, Rotation.NONE, seed);
+    }
+
+    /** Hängen in der Sternwarte mit diesem Samen die Elytren? */
+    public static boolean starwatchWings(long seed) {
+        return Starwatch.hasWings(seed);
+    }
+
     public static SitePiece robberCastle(BlockPos origin) {
         return new SitePiece(SiteKind.ROBBER_CASTLE, 0, origin, Rotation.NONE, 0xB06L, new int[0], RobberCastle.box(origin));
     }

@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.34.0 – Riesengebeine im Seelensandtal und die Verlorene Pforte statt der letzten Vanilla-Bauwerke des Nethers; dazu die Hortfeste, die Aschenesse, Unterholz, Bäume in neuer Gestalt und karge Truhen.**
+> **Testversion 0.35.0 – die Sternwarte statt der Endstadt: Damit sind alle Vanilla-Bauwerke ersetzt; dazu Riesengebeine, die Verlorene Pforte, die Hortfeste, die Aschenesse, Unterholz und Bäume in neuer Gestalt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,16 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.34: **Riesengebeine und die Verlorene Pforte.** Im Seelensandtal liegen statt der Netherfossilien die
+> Neu in 0.35: **Die Sternwarte.** Statt der Endstädte und Endschiffe steht auf den äußeren Inseln des Ends die
+> **Sternwarte** eines vergessenen Ordens: eine schwebende Plattform mit dem **Sternenhof** (ein achtzackiger Stern im
+> Pflaster, in der Mitte der Sternstein aus Amethyst), dahinter ein achteckiger Turm aus Endsteinziegeln mit
+> Quarzpfeilern und violetten Fenstern – unten die Halle der Schreine, darüber die Bibliothek der Sternkarten, die
+> Instrumentenhalle mit einer **Armillarsphäre** aus Kupferstäben und die **Reliquienkammer**, in der meist die
+> **Schwingen** eines gefallenen Sternenreiters hängen: die **Elytren**. Eine **Wendeltreppe** führt durch alle
+> Geschosse bis unter die **Kuppel aus grünspanigem Kupfer**, aus deren Spalt ein großes Fernrohr in den Himmel zeigt.
+> Zwei Seitentürme mit Kristallspitzen hängen über Brücken am Turm; Schreinlinge halten Wache. Damit gibt es kein
+> Vanilla-Bauwerk mehr.
+> Seit 0.34: **Riesengebeine und die Verlorene Pforte.** Im Seelensandtal liegen statt der Netherfossilien die
 > **Gebeine gewaltiger Wesen** halb im Sand: ein Brustkorb, unter dessen Rippen man hindurchgeht, ein gehörnter
 > **Schädel** mit Seelenfeuer in den Augenhöhlen, das Rückgrat einer **Riesenschlange**, das sich in Bögen durch den
 > Sand windet, oder eine **Knochenhand**, die aus dem Boden greift – manchmal mit einem vertrockneten Ghast. Statt der
@@ -228,7 +237,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die Bauwerke des Ends, ganz neu – statt der Endstädte und Endschiffe (Elytren bleiben zu finden).
+> **Als Nächstes:** Köpfe und Schädel der eigenen Wesen; danach Dragon Architect, Belagerungswaffen und Kriegssystem.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -283,7 +292,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Aschenesse statt Netherfestung | ✅ fertig |
 | Hortfeste der Borstlinge statt Bastion | ✅ fertig |
 | Riesengebeine statt Netherfossilien, Verlorene Pforte statt Portalruine im Nether | ✅ fertig |
-| Die Bauwerke des Ends (Endstadt und Endschiff – ganz neu) | 🔨 als Nächstes |
+| Sternwarte statt Endstadt und Endschiff (mit den Elytren) | ✅ fertig |
+| Köpfe und Schädel der eigenen Wesen | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -741,6 +751,36 @@ Unterwelt suchten – das Gegenstück zur Glutpforte der Oberwelt. Zurück kamen
   Pforte auf dem Grund einer Höhle, die sie zu einer flachen Kuppel aushöhlt (Lava daneben erstarrt zu Schwarzstein) –
   in allen Biomen des Nethers.
 - Finden mit `/locate structure kingdomsatwar:lost_gate`; sie hat die Plätze der Portalruinen im Nether übernommen.
+
+### Bauwerke des Ends
+
+![Die Sternwarte](docs/bilder/sternwarte.jpg)
+
+**Die Sternwarte** (statt der Endstadt und des Endschiffs): Auf den äußeren Inseln des Ends hat ein vergessener Orden
+die Sterne beobachtet, die der Sternenfresser verschlingt. Seine Sternwarte steht auf einer Plattform, deren Unterbau
+wie ein Zapfen unter der Insel hängt, wo sie nicht trägt.
+
+- **Der Sternenhof:** ein achtzackiger Stern aus Quarz mit schwarzem Umriss im Pflaster, in der Mitte der **Sternstein**
+  (ein Amethyst auf einem Quarzpfeiler zwischen Leuchtstäben), ringsum eine Brüstung mit Laternenpfosten, vorn eine
+  Treppe hinab; zu beiden Seiten ein kleiner **Schrein** unter einem Plattendach – im einen eine Truhe, im anderen ein
+  Schreinling.
+- **Der Turm:** achteckig, aus Endsteinziegeln mit Quarzpfeilern an den Ecken, Gesimsen an jedem Geschoss und schmalen
+  violetten Fenstern; das Tor unter einem Bogen aus Quarz. Eine **Wendeltreppe** um eine Quarzsäule führt durch alle
+  Geschosse bis in die Kuppel:
+  - unten die **Halle der Schreine** mit dem Sternstein, Bänken und Schreinlingen,
+  - die **Bibliothek der Sternkarten** mit Regalen, Lesepulten, Kartentisch und einer Truhe,
+  - die **Instrumentenhalle** mit einer **Armillarsphäre**: drei Ringe aus dünnen Kupferstäben um eine leuchtende
+    Kupferlampe, dazu Braustände,
+  - die **Reliquienkammer**: hinten ein Schrein aus Obsidian zwischen Quarzpfeilern, darin – in drei von fünf
+    Sternwarten – in einem Rahmen die **Schwingen eines gefallenen Sternenreiters: die Elytren**; davor die Truhe mit dem
+    Schatz der Warte.
+- **Kuppel und Fernrohr:** auf dem Dach eine Brüstung mit Leuchtstäben, darauf eine **Kuppel aus grünspanigem Kupfer**
+  über einer Trommel mit Gitterfenstern; aus ihrem Spalt ragt das große **Fernrohr** in den Himmel.
+- **Zwei Seitentürme** mit Leitern und Spitzen aus **Amethyst**, über Brücken mit Bögen darunter am Turm.
+- **Schreinlinge** halten Wache – in der Halle, in der Reliquienkammer, auf dem Dach, auf den Seitentürmen und im Schrein.
+- **Beute:** die der Endstadt (dazu ein paar Münzen) in drei Truhen; die Elytren im Rahmen. Der Erfolg „Die Stadt am
+  Ende des Spiels“ heißt jetzt „Die Sternwarte“ und verlangt, eine zu betreten.
+- Finden mit `/locate structure kingdomsatwar:starwatch`; sie hat die Plätze der Endstädte übernommen.
 
 ### Die Nester
 
@@ -1284,6 +1324,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 - **Die Hortfeste** im Nether an Stelle der Bastion (siehe „Bauwerke des Nethers“).
 - **Die Riesengebeine** im Seelensandtal an Stelle der Netherfossilien und **die Verlorene Pforte** im Nether an Stelle
   der Portalruine (siehe „Bauwerke des Nethers“).
+- **Die Sternwarte** auf den äußeren Inseln des Ends an Stelle der Endstadt und des Endschiffs (siehe „Bauwerke des Ends“).
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -1374,7 +1415,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
    - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
    - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
-     Riesengebeine, Verlorene Pforte); es folgen Endstadt und Endschiff.
+     Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso; es folgen die Köpfe der eigenen Wesen.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

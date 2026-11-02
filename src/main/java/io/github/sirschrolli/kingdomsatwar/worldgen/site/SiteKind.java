@@ -66,7 +66,13 @@ public enum SiteKind implements StringRepresentable {
      * Verlorene Pforte: das zerbrochene Ankunftstor der Feuerdiener in der Unterwelt auf einem Stufenpodest, mit
      * Pylonen, Ketten und ihrem letzten Lager (an Stelle der Portalruine des Nethers). Ganz zuletzt gebaut.
      */
-    LOST_GATE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    LOST_GATE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Sternwarte: der achteckige Turm eines vergessenen Ordens auf einer schwebenden Plattform im End, mit Sternenhof,
+     * Bibliothek, Armillarsphäre, Reliquienkammer (meist mit Elytren), Kupferkuppel mit Fernrohr und zwei Seitentürmen;
+     * Schreinlinge halten Wache (an Stelle der Endstadt und des Endschiffs). Ganz zuletzt gebaut.
+     */
+    STARWATCH(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

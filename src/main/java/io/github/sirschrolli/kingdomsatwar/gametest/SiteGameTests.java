@@ -106,6 +106,9 @@ final class SiteGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LOST_GATE =
             ModGameTests.TEST_FUNCTIONS.register("site_lost_gate", () -> SiteGameTests::lostGate);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STARWATCH =
+            ModGameTests.TEST_FUNCTIONS.register("site_starwatch", () -> SiteGameTests::starwatch);
+
     private SiteGameTests() {}
 
     static void init() {}
@@ -135,6 +138,7 @@ final class SiteGameTests {
         add(event, environment, GIANT_BONES_A, 100);
         add(event, environment, GIANT_BONES_B, 100);
         add(event, environment, LOST_GATE, 100);
+        add(event, environment, STARWATCH, 100);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
@@ -1169,7 +1173,7 @@ final class SiteGameTests {
                 BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA,
                 BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
                 BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION, BiomeTags.HAS_NETHER_FORTRESS,
-                BiomeTags.HAS_BASTION_REMNANT, BiomeTags.HAS_NETHER_FOSSIL, BiomeTags.HAS_RUINED_PORTAL_NETHER)) {
+                BiomeTags.HAS_BASTION_REMNANT, BiomeTags.HAS_NETHER_FOSSIL, BiomeTags.HAS_RUINED_PORTAL_NETHER, BiomeTags.HAS_END_CITY)) {
             helper.assertTrue(biomes.get(tag).map(set -> set.size() == 0).orElse(true), "altes Bauwerk noch erlaubt: " + tag.location());
         }
         // in der Unterwelt nimmt die Aschenesse die Plätze der Festung ein (neben den Bastionen)
@@ -1194,6 +1198,10 @@ final class SiteGameTests {
                 "die Verlorene Pforte fehlt bei den Portalruinen");
         helper.assertTrue(portals.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.RUINED_PORTAL_NETHER)),
                 "die alte Portalruine des Nethers hat noch Plätze");
+        var cities = access.lookupOrThrow(Registries.STRUCTURE_SET)
+                .getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.END_CITIES).value();
+        helper.assertTrue(cities.structures().size() == 1 && cities.structures().getFirst().structure().is(ModStructures.site(SiteKind.STARWATCH)),
+                "die Plätze der Endstädte gehören nicht der Sternwarte");
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         for (var key : List.of(BuiltinStructures.STRONGHOLD, BuiltinStructures.MINESHAFT, BuiltinStructures.MINESHAFT_MESA,
                 BuiltinStructures.BURIED_TREASURE, BuiltinStructures.SHIPWRECK, BuiltinStructures.SHIPWRECK_BEACHED)) {
@@ -1387,5 +1395,109 @@ final class SiteGameTests {
         }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();
+    }
+
+    /**
+     * Die Sternwarte (über den Testbereich hinaus bis zur Kuppel gebaut): drei Truhen, die Elytren in einem Rahmen der
+     * Reliquienkammer, Schreinlinge, eine Kuppel aus Kupfer mit Fernrohr – und vom Tor kommt man zu Fuß über alle Treppen
+     * bis in die Reliquienkammer und auf das Deck.
+     */
+    private static void starwatch(GameTestHelper helper) {
+        clear(helper);
+        ServerLevel level = helper.getLevel();
+        long seed = 1;
+        while (!SiteSamples.starwatchWings(seed)) {
+            seed++;
+        }
+        BlockPos o = helper.absolutePos(new BlockPos(24, 2, 25));
+        SitePiece piece = SiteSamples.starwatch(o, seed);
+        BoundingBox all = piece.getBoundingBox();
+        piece.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), RandomSource.create(5), all,
+                ChunkPos.containing(piece.origin()), piece.origin());
+        List<String> problems = new ArrayList<>();
+        BlockPos a = new BlockPos(all.minX(), all.minY(), all.minZ());
+        BlockPos b = new BlockPos(all.maxX(), all.maxY(), all.maxZ());
+        int chests = lootChests(helper, a, b, st -> true);
+        if (chests != 3) {
+            problems.add(chests + " Truhen");
+        }
+        AABB box = AABB.encapsulatingFullBlocks(a, b);
+        var frames = level.getEntitiesOfClass(net.minecraft.world.entity.decoration.ItemFrame.class, box,
+                f -> f.getItem().is(net.minecraft.world.item.Items.ELYTRA));
+        if (frames.size() != 1) {
+            problems.add(frames.size() + " Rahmen mit Elytren");
+        }
+        int guards = level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, box, m -> m.getType() == ModEntities.SHULKER.get()).size();
+        if (guards < 6) {
+            problems.add("nur " + guards + " Schreinlinge");
+        }
+        int copper = count(helper, a, b, st -> st.is(Blocks.CUT_COPPER.waxed().oxidized()) || st.is(Blocks.COPPER_BLOCK.waxed().oxidized()));
+        if (copper < 80) {
+            problems.add("Kuppel: nur " + copper + " Kupferblöcke");
+        }
+        if (count(helper, a, b, st -> st.is(Blocks.AMETHYST_BLOCK)) < 20) {
+            problems.add("zu wenig Amethyst (Kristallspitzen, Sternstein)");
+        }
+        // zu Fuß vom Tor in die Reliquienkammer und auf das Deck
+        BlockPos relic = o.offset(0, 25, -11 + 2);
+        BlockPos deck = o.offset(-4, 33, -11 - 3);
+        java.util.Set<BlockPos> reach = walk(level, o.offset(0, 1, 9), all, 200000);
+        KingdomsAtWar.LOGGER.info("[Test] Sternwarte: {} Truhen, {} Elytren, {} Schreinlinge, {} Kupfer, {} begehbare Stellen", chests,
+                frames.size(), guards, copper, reach.size());
+        if (!reach.contains(relic)) {
+            int top = reach.stream().mapToInt(BlockPos::getY).max().orElse(0) - o.getY();
+            KingdomsAtWar.LOGGER.info("[Test] Sternwarte: höchste begehbare Stelle {} über dem Hof; oben: {}", top,
+                    reach.stream().filter(p -> p.getY() - o.getY() >= top - 1).limit(12).map(p -> p.subtract(o).toShortString()).toList());
+            problems.add("die Reliquienkammer ist zu Fuß nicht erreichbar");
+        }
+        if (!reach.contains(deck)) {
+            problems.add("das Deck ist zu Fuß nicht erreichbar");
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /** Wohin man zu Fuß kommt: Schritte zu den Nachbarn, eine Stufe hinauf oder hinab, wo Kopf und Füße Platz haben. */
+    private static java.util.Set<BlockPos> walk(ServerLevel level, BlockPos start, BoundingBox box, int limit) {
+        java.util.Set<BlockPos> seen = new java.util.HashSet<>();
+        java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
+        seen.add(start);
+        queue.add(start);
+        while (!queue.isEmpty() && seen.size() < limit) {
+            BlockPos p = queue.poll();
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    BlockPos n = p.relative(d).above(dy);
+                    // eine volle Stufe hinauf braucht einen Sprung (Platz über dem Kopf); Treppen und Platten nicht
+                    boolean step = level.getBlockState(n.below()).getBlock() instanceof net.minecraft.world.level.block.StairBlock
+                            || level.getBlockState(n.below()).getBlock() instanceof net.minecraft.world.level.block.SlabBlock;
+                    if (!box.isInside(n) || seen.contains(n) || !stand(level, n) || dy > 0 && !step && !free(level, p.above(2))) {
+                        continue;
+                    }
+                    seen.add(n);
+                    queue.add(n);
+                }
+            }
+            // Leitern hinauf
+            if (level.getBlockState(p).is(Blocks.LADDER) || level.getBlockState(p.above()).is(Blocks.LADDER)) {
+                BlockPos up = p.above();
+                if (box.isInside(up) && !seen.contains(up) && free(level, up.above())) {
+                    seen.add(up);
+                    queue.add(up);
+                }
+            }
+        }
+        return seen;
+    }
+
+    private static boolean free(ServerLevel level, BlockPos pos) {
+        BlockState st = level.getBlockState(pos);
+        return st.getCollisionShape(level, pos).isEmpty() || st.is(Blocks.LADDER);
+    }
+
+    private static boolean stand(ServerLevel level, BlockPos feet) {
+        BlockState below = level.getBlockState(feet.below());
+        return free(level, feet) && free(level, feet.above())
+                && (!below.getCollisionShape(level, feet.below()).isEmpty() || level.getBlockState(feet).is(Blocks.LADDER));
     }
 }

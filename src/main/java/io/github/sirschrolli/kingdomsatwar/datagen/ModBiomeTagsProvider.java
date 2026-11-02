@@ -231,6 +231,10 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(BiomeTags.HAS_NETHER_FOSSIL).replace();
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.LOST_GATE)).addTag(BiomeTags.IS_NETHER);
         this.tag(BiomeTags.HAS_RUINED_PORTAL_NETHER).replace();
+        // die Sternwarte auf den äußeren Inseln des Ends (statt der Endstadt)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.STARWATCH))
+                .add(net.minecraft.world.level.biome.Biomes.END_HIGHLANDS).add(net.minecraft.world.level.biome.Biomes.END_MIDLANDS);
+        this.tag(BiomeTags.HAS_END_CITY).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
                 BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,

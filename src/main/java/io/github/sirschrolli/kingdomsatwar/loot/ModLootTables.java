@@ -97,6 +97,7 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP = site("charcoal_camp");
     public static final ResourceKey<LootTable> SITE_CHARCOAL_CAMP_SECRET = site("charcoal_camp_secret");
     public static final ResourceKey<LootTable> SITE_EMBER_GATE = site("ember_gate");
+    public static final ResourceKey<LootTable> SITE_STARWATCH = site("starwatch");
     public static final ResourceKey<LootTable> SITE_CLAM_BIG = site("clam_big");
     public static final ResourceKey<LootTable> SITE_CLAM_SMALL = site("clam_small");
     public static final ResourceKey<LootTable> SITE_BURIED_ABBEY = site("buried_abbey");

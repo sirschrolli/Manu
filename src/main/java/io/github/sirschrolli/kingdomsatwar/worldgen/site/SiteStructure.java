@@ -54,6 +54,7 @@ public class SiteStructure extends Structure {
             case HORTFESTE -> Hortfeste.plan(context, terrain, seed);
             case GIANT_BONES -> GiantBones.plan(context, terrain, seed);
             case LOST_GATE -> LostGate.plan(context, terrain, seed);
+            case STARWATCH -> Starwatch.plan(context, terrain, seed);
         };
     }
 
