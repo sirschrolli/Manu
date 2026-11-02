@@ -332,9 +332,11 @@ final class VillagePlanner {
 
     private void planBuildings() {
         List<VillageBuilding> wanted = new ArrayList<>();
-        // was ein Dorf ausmacht – Gasthaus, Schmiede, Bäckerei, ein erstes Wohnhaus und meist eine Kapelle
+        // was ein Dorf ausmacht – Gasthaus, Schmiede, Söldnerhaus, Bäckerei, ein erstes Wohnhaus und meist eine Kapelle
         wanted.add(VillageBuilding.TAVERN);
         wanted.add(VillageBuilding.SMITHY);
+        // im Söldnerhaus warten Ritter und andere Kämpfer darauf, angeheuert zu werden
+        wanted.add(VillageBuilding.MERCENARY_HALL);
         wanted.add(VillageBuilding.BAKERY);
         wanted.add(VillageBuilding.HOUSE);
         if (this.random.nextFloat() < 0.8f) {

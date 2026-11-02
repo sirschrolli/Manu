@@ -10,6 +10,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation DRAGON_ARMOR = new ModelLayerLocation(KingdomsAtWar.id("dragon"), "armor");
     /** Soldaten und Banditen. */
     public static final ModelLayerLocation SOLDIER = new ModelLayerLocation(KingdomsAtWar.id("soldier"), "main");
+    /** Rangabzeichen der Soldaten (Schärpe, Ärmelstreifen, Schulterstücke) knapp über der Rüstung. */
+    public static final ModelLayerLocation SOLDIER_RANK = new ModelLayerLocation(KingdomsAtWar.id("soldier"), "rank");
     /** Bürger der eigenen Siedlung. */
     public static final ModelLayerLocation CITIZEN = new ModelLayerLocation(KingdomsAtWar.id("citizen"), "main");
 

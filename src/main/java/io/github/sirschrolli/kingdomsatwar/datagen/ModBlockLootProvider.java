@@ -61,6 +61,14 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.RECRUITMENT_TABLE.get());
         dropSelf(ModBlocks.MAGIC_TABLE.get());
         add(ModBlocks.TOWN_BANNER.get(), this::createDoorTable);
+        // die Söldnertafel hat keinen Gegenstand: abgebaut bleiben Stöcke und ein paar Anschläge
+        add(ModBlocks.MERCENARY_BOARD.get(), block -> LootTable.lootTable()
+                .withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(net.minecraft.world.item.Items.STICK)
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(3))))))
+                .withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(net.minecraft.world.item.Items.PAPER)
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 3)))))));
 
         // Aschelande (eine Ascheschicht gibt so viele Schichten zurück, wie sie hoch ist)
         for (DeferredBlock<? extends Block> block : java.util.List.of(ModBlocks.ASH_BLOCK, ModBlocks.CINDER_SOIL,

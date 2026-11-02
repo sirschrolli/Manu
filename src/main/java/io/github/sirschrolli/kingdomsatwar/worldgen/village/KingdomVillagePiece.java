@@ -300,6 +300,22 @@ public class KingdomVillagePiece extends StructurePiece {
                 work == null ? null : b.world(work.getX(), work.getY(), work.getZ()), door, house, this.center, this.villageName, b.random);
     }
 
+    /**
+     * Die Söldnertafel bei (x, y, z) mit Blick nach {@code facing} (Gebäude-Koordinaten); die Söldner warten an
+     * {@code spots}. Die Tafel selbst ruft sie herbei, sobald jemand in die Nähe kommt.
+     */
+    public void mercenaryBoard(VillageBuilder b, int x, int y, int z, net.minecraft.core.Direction facing, java.util.List<BlockPos> spots) {
+        BlockPos pos = b.world(x, y, z);
+        if (!b.inside(pos)) {
+            return;
+        }
+        b.set(x, y, z, io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.MERCENARY_BOARD.get().defaultBlockState()
+                .setValue(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING, facing));
+        if (b.level.getBlockEntity(pos) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity board) {
+            board.setup(spots.stream().map(s -> b.world(s.getX(), s.getY(), s.getZ())).toList(), this.villageName);
+        }
+    }
+
     /** Ein Wächter, der um {@code post} (Gebäude-Koordinaten) seine Runde geht; {@code archer}: Bogenschütze. */
     public void guard(VillageBuilder b, int x, int y, int z, boolean archer) {
         BlockPos pos = b.world(x, y, z);

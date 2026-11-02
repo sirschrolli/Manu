@@ -91,6 +91,7 @@ final class Showcase {
                 case "items" -> items(steps);
                 case "dragons" -> dragons(steps);
                 case "soldiers" -> soldiers(steps);
+                case "ranks" -> ArmyShowcase.ranks(steps);
                 case "eggs" -> eggs(steps);
                 case "equipment" -> equipment(steps);
                 case "armor" -> armor(steps);

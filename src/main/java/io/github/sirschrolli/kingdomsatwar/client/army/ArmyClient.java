@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.client.army;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
+import io.github.sirschrolli.kingdomsatwar.network.OpenMercenaryBoardPayload;
 import io.github.sirschrolli.kingdomsatwar.network.OpenRecruitScreenPayload;
 import io.github.sirschrolli.kingdomsatwar.network.RecruitResultPayload;
 import net.minecraft.client.Minecraft;
@@ -11,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Nachrichten vom Server rund um die Armee: Anwerbe-Fenster öffnen und Ergebnis anzeigen. */
+/** Nachrichten vom Server rund um die Armee: Anwerbe-Fenster und Söldnertafel öffnen und Ergebnisse anzeigen. */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class ArmyClient {
     private ArmyClient() {}
@@ -19,6 +20,7 @@ public final class ArmyClient {
     @SubscribeEvent
     static void registerHandlers(RegisterClientPayloadHandlersEvent event) {
         event.register(OpenRecruitScreenPayload.TYPE, ArmyClient::onOpen);
+        event.register(OpenMercenaryBoardPayload.TYPE, ArmyClient::onOpenBoard);
         event.register(RecruitResultPayload.TYPE, ArmyClient::onResult);
     }
 
@@ -26,9 +28,18 @@ public final class ArmyClient {
         Minecraft.getInstance().gui.setScreen(new RecruitScreen(payload.pos(), payload.armyLimit()));
     }
 
+    private static void onOpenBoard(OpenMercenaryBoardPayload payload, IPayloadContext context) {
+        Minecraft.getInstance().gui.setScreen(new MercenaryScreen(payload.pos(), payload.armyLimit(), payload.village()));
+    }
+
     private static void onResult(RecruitResultPayload payload, IPayloadContext context) {
         Recruitment.Result[] results = Recruitment.Result.values();
-        if (Minecraft.getInstance().gui.screen() instanceof RecruitScreen screen && payload.result() >= 0 && payload.result() < results.length) {
+        if (payload.result() < 0 || payload.result() >= results.length) {
+            return;
+        }
+        if (Minecraft.getInstance().gui.screen() instanceof RecruitScreen screen) {
+            screen.onResult(results[payload.result()]);
+        } else if (Minecraft.getInstance().gui.screen() instanceof MercenaryScreen screen) {
             screen.onResult(results[payload.result()]);
         }
     }

@@ -244,6 +244,20 @@ public class ModModelProvider extends ModelProvider {
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(table, BlockModelGenerators.plainVariant(tableModel))
                 .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
 
+        // --- Söldnertafel: Pfosten, Brett mit Anschlägen, Abdeckbrett; dreht sich wie der Tisch ---
+        Block mercenaryBoard = ModBlocks.MERCENARY_BOARD.get();
+        Material boardBack = new Material(Identifier.withDefaultNamespace("block/spruce_planks"));
+        TextureMapping boardTextures = new TextureMapping()
+                .put(MercenaryBoardModel.POST, new Material(Identifier.withDefaultNamespace("block/dark_oak_log")))
+                .put(MercenaryBoardModel.POST_END, new Material(Identifier.withDefaultNamespace("block/dark_oak_log_top")))
+                .put(MercenaryBoardModel.BOARD, new Material(KingdomsAtWar.id("block/mercenary_board")))
+                .put(MercenaryBoardModel.BACK, boardBack)
+                .put(MercenaryBoardModel.ROOF, new Material(Identifier.withDefaultNamespace("block/dark_oak_planks")))
+                .put(TextureSlot.PARTICLE, boardBack);
+        Identifier boardModel = MercenaryBoardModel.template().create(mercenaryBoard, boardTextures, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(mercenaryBoard, BlockModelGenerators.plainVariant(boardModel))
+                .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING));
+
         // --- Magietisch: Sockel, Säule, Platte mit Siegelkreis; Runen und Kristalle leuchten ---
         Block magicTable = ModBlocks.MAGIC_TABLE.get();
         TextureMapping magicTextures = new TextureMapping()

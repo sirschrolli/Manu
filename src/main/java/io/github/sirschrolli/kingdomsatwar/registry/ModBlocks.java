@@ -601,6 +601,15 @@ public final class ModBlocks {
             ip -> ip.component(DataComponents.LORE, ModItems.lore("recruitment_table", 2)),
             KINGDOM_TAB);
 
+    /**
+     * Söldnertafel im Söldnerhaus der Dörfer: zeigt die wartenden Söldner und ihren Sold (ohne Gegenstand; abgebaut gibt
+     * sie Stöcke und Papier).
+     */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.MercenaryBoardBlock> MERCENARY_BOARD = BLOCKS.registerBlock(
+            "mercenary_board", io.github.sirschrolli.kingdomsatwar.block.MercenaryBoardBlock::new,
+            p -> p.mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.5f).sound(SoundType.WOOD)
+                    .noOcclusion().ignitedByLava().pushReaction(PushReaction.IMMOVEABLE));
+
     /** Stadtbanner: gründet die eigene Siedlung; Rechtsklick öffnet das Stadtfenster. */
     /** Magietisch: schreibt Zaubertafeln in den Aetherit-Stab ein; über ihm kreisen Runen, der Stab schwebt darüber. */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.MagicTableBlock> MAGIC_TABLE = blockWithItem("magic_table",

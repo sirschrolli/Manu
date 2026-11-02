@@ -63,6 +63,8 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SOLDIER_RANK,
+                () -> SoldierModel.createLayer(new net.minecraft.client.model.geom.builders.CubeDeformation(0.3f)));
         event.registerLayerDefinition(ModModelLayers.CITIZEN, io.github.sirschrolli.kingdomsatwar.client.model.CitizenModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.PYRRHON, PyrrhonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.NYXAR, io.github.sirschrolli.kingdomsatwar.client.model.geom.NyxarGeometry::createLayer);

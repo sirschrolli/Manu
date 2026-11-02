@@ -175,6 +175,7 @@ public final class ModGameTests {
         MonsterGameTests.init();   // die eigenen Monster
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
+        ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
     }
 
     private ModGameTests() {}
@@ -211,6 +212,7 @@ public final class ModGameTests {
         MonsterGameTests.register(event, environment);
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
+        ArmyGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -554,17 +556,19 @@ public final class ModGameTests {
         helper.assertTrue(soldier.hasCustomName(), "Soldat hat keinen Namen");
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.NOT_ENOUGH,
                 "Anwerben ohne Münzen muss scheitern");
-        // Ritter kosten 1 Gold 5 Silber und zwei Stahlbarren – bezahlt mit 2 Gold, das Wechselgeld kommt zurück
-        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 2));
-        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.NOT_ENOUGH,
-                "Ritter ohne genug Stahl darf nicht erscheinen");
-        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 1));
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.RECRUITED,
-                "Ritter lässt sich nicht anwerben");
-        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 36, "Wechselgeld nach dem Ritter");
-        SoldierEntity knight = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get());
-        helper.assertTrue(knight.getOffhandItem().is(Items.SHIELD), "Ritter hat keinen Schild");
+        // Bogenschützen kosten 7 Silber – bezahlt mit 1 Gold, das Wechselgeld kommt zurück
+        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 1));
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.ARCHER) == Recruitment.Result.RECRUITED,
+                "Bogenschütze lässt sich nicht anwerben");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 18, "Wechselgeld nach dem Bogenschützen");
+        SoldierEntity archer = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get());
+        helper.assertTrue(archer.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem, "Bogenschütze hat keinen Bogen");
+        // Ritter und Hauptleute heuert man in den Dörfern an (oder bildet sie am Tisch aus)
+        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 4));
+        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 2));
+        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.VILLAGES_ONLY,
+                "Ritter am Tisch muss auf die Dörfer verweisen");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 18 + 4 * 81, "Münzen nach dem Versuch");
         // zu weit weg
         player.snapTo(stand.x + 30, stand.y, stand.z, 0.0f, 0.0f);
         helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.TOO_FAR,

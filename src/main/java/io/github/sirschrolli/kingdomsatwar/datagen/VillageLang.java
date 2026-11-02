@@ -160,6 +160,10 @@ final class VillageLang {
                 {"I've heard there are towers somewhere where mages live. Creepy.", "Ich habe gehört, irgendwo stehen Türme, in denen Magier hausen. Unheimlich."},
                 {"You can only sleep soundly here when the guards are at their posts.",
                         "Ruhig schlafen kann man hier nur, wenn die Wachen auf ihren Posten sind."},
+                {"New sell-swords turn up at the mercenary hall every morning. Cheap they are not.",
+                        "Im Söldnerhaus stehen jeden Morgen neue Söldner. Billig sind sie nicht."},
+                {"Look at the notice board by the mercenary hall – there's usually a knight waiting for work.",
+                        "Schau mal an die Tafel beim Söldnerhaus – meist wartet dort ein Ritter auf Arbeit."},
         };
         for (int i = 0; i < generic.length; i++) {
             rumor(t, "generic." + (i + 1), generic[i][0], generic[i][1]);

@@ -33,7 +33,15 @@ public class SoldierModel extends HumanoidModel<KingdomHumanoidRenderState> {
     }
 
     public static LayerDefinition createLayer() {
-        MeshDefinition mesh = PlayerModel.createMesh(CubeDeformation.NONE, false);
+        return createLayer(CubeDeformation.NONE);
+    }
+
+    /**
+     * Wie {@link #createLayer()}, nur um {@code deformation} aufgeblasen: so liegt eine zweite Textur (die Rangabzeichen)
+     * über Haut und Rüstung und bewegt sich mit allen Gesten mit.
+     */
+    public static LayerDefinition createLayer(CubeDeformation deformation) {
+        MeshDefinition mesh = PlayerModel.createMesh(deformation, false);
         PartDefinition root = mesh.getRoot();
         PartDefinition body = root.getChild("body");
         PartDefinition head = root.getChild("head");

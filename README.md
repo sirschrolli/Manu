@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.17.0 – 28 Gebäude-Entwürfe, zufällig gewählt.**
+> **Testversion 0.18.0 – Söldner in den Dörfern, Ränge und Ausbildung am Rekrutierungstisch.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -68,7 +68,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > sind behoben. Und die **Erzmagier sperren dich ein**: Sobald der Kampf beginnt, versiegelt ein Bannsiegel in der Farbe
 > seines Elements das Treppenloch, im Sanktum lässt sich nichts abbauen oder sprengen, keine Enderperle trägt hinaus –
 > erst sein Sieg löst das Siegel.
-> Neu in 0.17: **Jedes Gebäude der Siedlung gibt es in mehreren Entwürfen** – zusammen 28 –, und welcher gebaut wird,
+> In 0.17: **Jedes Gebäude der Siedlung gibt es in mehreren Entwürfen** – zusammen 28 –, und welcher gebaut wird,
 > entscheidet der Zufall, wenn du den Bauplan nimmst (der Plan zeigt den Entwurf und seine Baustoffe). Neu sind unter
 > anderem die **Steinkate** mit Krüppelwalmdach, offenem Kamin und Holzstapel, das **Haus mit Giebelvorbau** in
 > Lehmputz, das **zweigeschossige Haus** mit Walmdach und vorkragendem Fachwerk, das **Treppengiebelhaus** aus Kalkstein,
@@ -80,9 +80,17 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Blumenkästen, Fensterbänke, Laternen an Auslegern und Inneneinrichtungen, die zusammenpassen (Küche am Schornstein,
 > Schlafkammer, Stube). Jeder Entwurf wird automatisch gebaut, begangen und geprüft – dabei fielen auch in den alten
 > Gebäuden Laternen und Kronleuchter auf, die frei in der Luft hingen; sie hängen jetzt an Balken.
+> Neu in 0.18: **Jedes Dorf hat ein Söldnerhaus** – vorn ein Übungshof mit Strohzielen, Übungspuppe und der
+> **Söldnertafel**, hinten Schankraum mit Kamin und langer Tafel und oben der Schlafsaal, in allen vier Bauweisen. An der
+> Tafel warten jeden Morgen bis zu drei Söldner: Ritter, Schwertkämpfer, Bogenschützen und Hauptleute, manche schon
+> **Veteran** oder **Elite**. Die Tafel zeigt Gesicht, Rang, Werte und Sold, angeheuert wird mit Münzen. Ritter und
+> Hauptleute gibt es am Tisch nicht mehr zu kaufen – dafür **bildet der Rekrutierungstisch jetzt aus**: Im neuen Reiter
+> „Ausbilden“ beförderst du deine Leute zum Veteranen und zur Elite (je Rang +25 % Leben, +2 Rüstung, +1 Schaden) und
+> bildest Schwertkämpfer zu Rittern und Ritter zu Hauptleuten aus – Name, Rang und Herr bleiben. Den Rang erkennt man
+> an Schärpe, Ärmelstreifen, Schulterstücken und Ehrenmedaille und an den Sternen im Namen.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Söldner aus den Dörfern (am Tisch aufwertbar), verschiedene Dorfanlagen – danach Golems und die
-> übrigen Dorfwesen, zuletzt Nether und End.
+> **Als Nächstes:** verschiedene Dorfanlagen (auch bei den Umbrern im Schattenreich) – danach Golems und die übrigen
+> Dorfwesen, zuletzt Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -139,7 +147,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.17.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.18.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -147,7 +155,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.17.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.18.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -318,8 +326,8 @@ Die Vanilla-Dörfer sind fort – an ihrer Stelle stehen **eigene Dörfer in vie
   Dach und Dorfglocke, eine Dorflinde, ein Maibaum, ein Springbrunnen oder eine Feuerstelle; ringsum Bänke, Laternen
   und Marktstände.
 - Vom Platz führen **Wege** in alle Richtungen, mit Seitengassen, Stufen am Hang und Brücken über Wasser. Daran stehen
-  im Schnitt **17 Gebäude**: Wohnhäuser in drei Größen, Gasthaus, Schmiede, Bäckerei, meist eine Kapelle und vier bis
-  sechs Werkstätten (Schreibstube, Kartenhaus, Kräuterhaus, Metzgerei, Gerberei, Steinmetz, Bogner). Am Dorfrand
+  im Schnitt **17 Gebäude**: Wohnhäuser in drei Größen, Gasthaus, Schmiede, das **Söldnerhaus** mit Übungshof und
+  Söldnertafel, Bäckerei, meist eine Kapelle und vier bis sechs Werkstätten (Schreibstube, Kartenhaus, Kräuterhaus, Metzgerei, Gerberei, Steinmetz, Bogner). Am Dorfrand
   liegen Windmühle, Scheune, Felder (auch hinter den Häusern), eine Schafweide und am Wasser eine Fischerhütte mit Steg
   und Boot; an den Wegenden stehen Wachtürme.
 - In den Truhen liegt, was in das Haus gehört (Vorräte, Werkzeug, Fisch, Wolle, Kräuter …), dazu ein paar Münzen.
@@ -464,15 +472,33 @@ und der Schlüpfling gehört dem, der dabei war.
 
 ![Hauptmann, Schwertkämpfer, Ritter und Bogenschütze](docs/bilder/soldaten.jpg)
 
-Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Soldaten an – bezahlt wird der Sold in
-Münzen:
+Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Schwertkämpfer und Bogenschützen an –
+bezahlt wird der Sold in Münzen. **Ritter und Hauptleute** heuerst du im **Söldnerhaus** der Dörfer an, oder du bildest
+sie am Tisch aus deinen eigenen Leuten aus:
 
-| Soldat | Sold | Rolle |
+| Soldat | Woher | Rolle |
 |---|---|---|
-| Schwertkämpfer | 5 Silber | Nahkämpfer – das Rückgrat jeder Armee |
-| Bogenschütze | 7 Silber | Fernkämpfer, schießt nie auf Freunde |
-| Ritter | 1 Gold 5 Silber + 2 Stahlbarren | Plattenrüstung und Schild, hält die vorderste Reihe |
-| Hauptmann | 2 Gold 5 Silber + 1 Edelstein | macht Soldaten in seiner Nähe stärker |
+| Schwertkämpfer | Tisch: 5 Silber | Nahkämpfer – das Rückgrat jeder Armee |
+| Bogenschütze | Tisch: 7 Silber | Fernkämpfer, schießt nie auf Freunde |
+| Ritter | Söldnerhaus (ab 2 Gold 2 Silber) oder Ausbildung | Plattenrüstung und Schild, hält die vorderste Reihe |
+| Hauptmann | Söldnerhaus (ab 3 Gold 5 Silber) oder Ausbildung | macht Soldaten in seiner Nähe stärker |
+
+![Rekrut, Veteran und Elite](docs/bilder/soldaten_raenge.jpg)
+
+**Söldnerhaus:** In jedem Dorf steht eines – vorn der Übungshof mit der **Söldnertafel**, an der jeden Morgen bis zu
+drei Söldner warten (fast immer ein Ritter). Die Tafel zeigt Art, Rang, Werte und Sold; Söldner mit Rang kosten mehr
+(je Rang die Hälfte), Ritter und Hauptleute bringen ihre Rüstung selbst mit.
+
+![Das Söldnerhaus und seine Tafel](docs/bilder/soeldnerhaus.jpg)
+
+**Ausbilden** (Reiter am Rekrutierungstisch, die eigenen Soldaten im Umkreis von 8 Blöcken):
+
+| Ausbildung | Preis | Wirkung |
+|---|---|---|
+| Rekrut → Veteran ★ | halber Sold + 3 Eisenbarren | +25 % Leben, +2 Rüstung, +1 Schaden, Schärpe mit Silbersaum |
+| Veteran → Elite ★★ | ganzer Sold + 2 Stahlbarren | noch einmal so viel, Goldsaum, Schulterstücke, Ehrenmedaille |
+| Schwertkämpfer → Ritter | 1 Gold + 2 Stahlbarren | wird Ritter mit Schild – Name und Rang bleiben |
+| Ritter → Hauptmann | 2 Gold + 1 Edelstein | wird Hauptmann – Name und Rang bleiben |
 
 Jede **Kaserne** deiner Siedlung erlaubt acht Soldaten mehr.
 
@@ -848,7 +874,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.17.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.18.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -903,7 +929,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    Wildtiere, alle Monster und die Wassertiere der Oberwelt sind fertig, als Nächstes:
    - **Siedlung und Dörfer überarbeiten** – Bauarbeiter, die nah am Bau arbeiten und auch hohe Häuser fertig bauen,
      Häuser mit Baukosten in mehreren Entwürfen, Bewohner, die Rohstoffe sammeln und abends ins Lager bringen,
-     Söldner aus den Dörfern, verschiedene Dorfanlagen, härtere Rezepte und Beute, Münzen;
+     Söldner aus den Dörfern und Ausbildung am Tisch (fertig), als Nächstes verschiedene Dorfanlagen;
    - **Golems und die übrigen Dorfwesen** – Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler, glücklicher
      Ghast, Dorfbewohner und fahrender Händler; alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.

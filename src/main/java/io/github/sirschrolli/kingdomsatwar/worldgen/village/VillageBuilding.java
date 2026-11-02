@@ -21,6 +21,8 @@ public enum VillageBuilding {
     TANNERY(9, 9, 12, false),
     MASONRY(11, 9, 12, false),
     BOWYER(9, 9, 13, false),
+    /** Söldnerhaus: vorn der Übungshof mit der Söldnertafel, hinten Schankraum und Schlafsaal. */
+    MERCENARY_HALL(13, 11, 17, false),
     SHEEPFOLD(13, 11, 11, true),
     FIELD(11, 13, 5, true),
     BARN(11, 9, 14, true),

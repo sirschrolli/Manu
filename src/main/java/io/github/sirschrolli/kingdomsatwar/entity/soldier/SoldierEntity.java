@@ -97,6 +97,14 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
     private static final EntityDataAccessor<Byte> DATA_MODE = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_RANK = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BYTE);
+    /** Söldner ohne Herrn: die Söldnertafel des Söldnerhauses, zu dem er gehört (auch der Client braucht sie für die Tafel). */
+    private static final EntityDataAccessor<Optional<BlockPos>> DATA_HALL =
+            SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+
+    /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Rekrutierungstisch ausgebildet oder als Söldner schon erfahren). */
+    public static final int MAX_RANK = 2;
+    private static final net.minecraft.resources.Identifier RANK_MODIFIER = KingdomsAtWar.id("rank");
 
     public static final int MODE_FOLLOW = 0;
     public static final int MODE_HOLD = 1;
@@ -113,6 +121,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     private @Nullable BlockPos post;
     /** Wache eines Dorfs: bewacht es, lässt sich nicht anwerben und schützt die Dorfbewohner. */
     private String village = "";
+    /** Der eigene Name (ohne Art und Rang), z. B. "Konrad". */
+    private String personalName = "";
     private int lastHurtTick = -1000;
     private int voiceCooldown;
     private int idleChatter = 1200;
@@ -180,6 +190,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         builder.define(DATA_OWNER, Optional.empty());
         builder.define(DATA_MODE, (byte) MODE_FOLLOW);
         builder.define(DATA_VARIANT, (byte) 0);
+        builder.define(DATA_RANK, (byte) 0);
+        builder.define(DATA_HALL, Optional.empty());
     }
 
     @Override
@@ -196,6 +208,16 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         if (!this.village.isEmpty()) {
             output.putString("Village", this.village);
         }
+        output.putInt("Rank", this.getRank());
+        if (!this.personalName.isEmpty()) {
+            output.putString("PersonalName", this.personalName);
+        }
+        BlockPos hall = this.getHall();
+        if (hall != null) {
+            output.putInt("HallX", hall.getX());
+            output.putInt("HallY", hall.getY());
+            output.putInt("HallZ", hall.getZ());
+        }
     }
 
     @Override
@@ -211,6 +233,127 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             this.post = null;
         }
         this.village = input.getStringOr("Village", "");
+        this.entityData.set(DATA_RANK, (byte) Mth.clamp(input.getIntOr("Rank", 0), 0, MAX_RANK));
+        this.applyRank();
+        this.personalName = input.getStringOr("PersonalName", "");
+        this.entityData.set(DATA_HALL, input.getIntOr("HallY", Integer.MIN_VALUE) != Integer.MIN_VALUE
+                ? Optional.of(new BlockPos(input.getIntOr("HallX", 0), input.getIntOr("HallY", 0), input.getIntOr("HallZ", 0)))
+                : Optional.empty());
+    }
+
+    // =====================================================================================
+    // Rang
+    // =====================================================================================
+
+    public int getRank() {
+        return this.entityData.get(DATA_RANK);
+    }
+
+    /** Setzt den Rang: mehr Leben (+25 % je Rang), Rüstung (+2), Schaden (+1) und Standfestigkeit; der Name zeigt die Sterne. */
+    public void setRank(int rank) {
+        this.entityData.set(DATA_RANK, (byte) Mth.clamp(rank, 0, MAX_RANK));
+        float fraction = this.getHealth() / Math.max(1.0f, this.getMaxHealth());
+        this.applyRank();
+        this.setHealth(Math.max(1.0f, fraction * this.getMaxHealth()));
+        this.refreshName();
+    }
+
+    private void applyRank() {
+        int rank = this.getRank();
+        this.rankModifier(Attributes.MAX_HEALTH, 0.25 * rank, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.rankModifier(Attributes.ARMOR, 2.0 * rank, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
+        this.rankModifier(Attributes.ATTACK_DAMAGE, 1.0 * rank, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
+        this.rankModifier(Attributes.KNOCKBACK_RESISTANCE, 0.05 * rank,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
+    }
+
+    private void rankModifier(Holder<Attribute> attribute, double amount, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation op) {
+        var instance = this.getAttribute(attribute);
+        if (instance == null) {
+            return;
+        }
+        instance.removeModifier(RANK_MODIFIER);
+        if (amount != 0.0) {
+            instance.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(RANK_MODIFIER, amount, op));
+        }
+    }
+
+    /** Der eigene Name ohne Art und Rang (bei alten Soldaten aus dem gespeicherten Namen gelesen). */
+    public String getPersonalName() {
+        if (this.personalName.isEmpty() && this.getCustomName() != null
+                && this.getCustomName().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                && t.getKey().startsWith("soldier.kingdomsatwar.name") && t.getArgs().length >= 2) {
+            Object arg = t.getArgs()[1];
+            this.personalName = arg instanceof Component c ? c.getString() : String.valueOf(arg);
+        }
+        return this.personalName;
+    }
+
+    /** Baut den angezeigten Namen neu: Art, Name und – ab Veteran – Sterne für den Rang ("Ritter Konrad ★★"). */
+    public void refreshName() {
+        String name = this.getPersonalName();
+        if (name.isEmpty()) {
+            return;
+        }
+        int rank = this.getRank();
+        this.setCustomName(rank == 0
+                ? Component.translatable("soldier.kingdomsatwar.name", Component.translatable(this.soldierType.translationKey()), name)
+                : Component.translatable("soldier.kingdomsatwar.name.ranked", Component.translatable(this.soldierType.translationKey()), name,
+                        "★".repeat(rank)));
+    }
+
+    /** Übernimmt alles Persönliche von einem anderen Soldaten (bei der Beförderung zu einer anderen Art). */
+    public void copyPersonFrom(SoldierEntity other) {
+        this.entityData.set(DATA_OWNER, other.entityData.get(DATA_OWNER));
+        this.entityData.set(DATA_MODE, (byte) other.getMode());
+        this.post = other.post;
+        this.village = other.village;
+        this.setVariant(other.getVariant());
+        this.personalName = other.getPersonalName();
+        this.entityData.set(DATA_RANK, (byte) other.getRank());
+        this.applyRank();
+        this.setHealth(Math.max(1.0f, other.getHealth() / Math.max(1.0f, other.getMaxHealth()) * this.getMaxHealth()));
+        this.refreshName();
+    }
+
+    // =====================================================================================
+    // Söldner
+    // =====================================================================================
+
+    /** Macht den Soldaten zum Söldner des Söldnerhauses mit der Söldnertafel bei {@code board}; er wartet an {@code spot}. */
+    public void waitForHire(BlockPos board, BlockPos spot) {
+        this.entityData.set(DATA_HALL, Optional.of(board.immutable()));
+        this.setMode(MODE_HOLD, spot);
+    }
+
+    /** Die Söldnertafel, an der dieser Söldner auf Arbeit wartet ({@code null}: kein Söldner). */
+    public @Nullable BlockPos getHall() {
+        return this.entityData.get(DATA_HALL).orElse(null);
+    }
+
+    /** Ein Söldner, der im Söldnerhaus auf einen Herrn wartet? */
+    public boolean isMercenary() {
+        return !this.hasOwner() && this.getHall() != null;
+    }
+
+    /** In den Dienst nehmen (mit Bezahlung schon erledigt): verlässt das Söldnerhaus und folgt dem Spieler. */
+    public void hireBy(Player player) {
+        this.entityData.set(DATA_HALL, Optional.empty());
+        this.recruitBy(player);
+    }
+
+    /**
+     * Sold eines Söldners in Bronze: der Sold der Art, für Ritter und Hauptleute dazu der Wert ihrer Ausrüstung (im Dorf
+     * zahlt man nur mit Münzen), je Rang die Hälfte mehr – auf ganze Silber aufgerundet.
+     */
+    public int hirePrice() {
+        int base = this.soldierType.coins() + switch (this.soldierType) {
+            case KNIGHT -> 54;
+            case CAPTAIN -> 81;
+            default -> 0;
+        };
+        int price = (int) Math.ceil(base * (1.0 + 0.5 * this.getRank()));
+        return (price + 8) / 9 * 9;
     }
 
     /** Macht den Soldaten zur Wache des Dorfs {@code name} (ohne Herrn, auf Patrouille um {@code post}). */
@@ -294,9 +437,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public void giveRandomName() {
         // Ritter tragen geschlossene Helme – hinter dem Visier kann jeder stecken
         boolean feminine = this.soldierType == SoldierType.KNIGHT ? this.random.nextInt(4) == 0 : this.soldierType.isFeminine(this.getVariant());
-        String name = SoldierNames.random(this.random, feminine);
-        this.setCustomName(Component.translatable("soldier.kingdomsatwar.name",
-                Component.translatable(this.soldierType.translationKey()), name));
+        this.personalName = SoldierNames.random(this.random, feminine);
+        this.refreshName();
     }
 
     // =====================================================================================
@@ -612,7 +754,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     }
 
     public Component statusMessage() {
-        return Component.translatable("message.kingdomsatwar.soldier_status", this.getDisplayName(),
+        return Component.translatable("message.kingdomsatwar.soldier_status", Component.translatable("soldier.kingdomsatwar.rank." + this.getRank())
+                        .append(" ").append(this.getDisplayName()),
                 Mth.ceil(this.getHealth()), Mth.ceil(this.getMaxHealth()),
                 Component.translatable("message.kingdomsatwar.soldier_mode." + this.getMode()));
     }
@@ -622,14 +765,23 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
      * der Hand bezahlt (mit Wechselgeld aus dem ganzen Inventar), sonst nennen sie ihren Preis.
      */
     private InteractionResult offerService(Player player, ItemStack stack) {
-        int price = this.soldierType.coins();
-        if (io.github.sirschrolli.kingdomsatwar.economy.Coin.of(stack.getItem()) != null
-                && io.github.sirschrolli.kingdomsatwar.economy.Coins.canAfford(player, price)) {
-            if (!this.level().isClientSide()) {
-                io.github.sirschrolli.kingdomsatwar.economy.Coins.pay(player, price);
-                this.recruitBy(player);
+        int price = this.hirePrice();
+        if (this.level() instanceof ServerLevel level && io.github.sirschrolli.kingdomsatwar.economy.Coin.of(stack.getItem()) != null) {
+            if (io.github.sirschrolli.kingdomsatwar.army.Recruitment.armySize(level, player.getUUID())
+                    >= io.github.sirschrolli.kingdomsatwar.army.Recruitment.armyLimit(player)) {
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.recruit.army_full").withStyle(ChatFormatting.RED));
+                return InteractionResult.SUCCESS;
             }
-            return InteractionResult.SUCCESS;
+            if (io.github.sirschrolli.kingdomsatwar.economy.Coins.canAfford(player, price) || player.hasInfiniteMaterials()) {
+                if (!player.hasInfiniteMaterials()) {
+                    io.github.sirschrolli.kingdomsatwar.economy.Coins.pay(player, price);
+                }
+                this.hireBy(player);
+                if (player instanceof ServerPlayer serverPlayer) {
+                    io.github.sirschrolli.kingdomsatwar.story.Story.onRecruited(serverPlayer);
+                }
+                return InteractionResult.SUCCESS;
+            }
         }
         if (!this.level().isClientSide()) {
             player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.soldier_price", this.getDisplayName(),

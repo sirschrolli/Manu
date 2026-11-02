@@ -25,5 +25,10 @@ public final class ModBlockEntities {
                     () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.MagicTableBlockEntity::new,
                             ModBlocks.MAGIC_TABLE.get()));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity>>
+            MERCENARY_BOARD = BLOCK_ENTITIES.register("mercenary_board",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity::new,
+                            ModBlocks.MERCENARY_BOARD.get()));
+
     private ModBlockEntities() {}
 }

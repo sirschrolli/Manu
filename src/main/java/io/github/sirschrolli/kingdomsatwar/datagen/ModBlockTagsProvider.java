@@ -209,6 +209,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 ModBlocks.OAK_CHAIR, ModBlocks.OAK_BENCH, ModBlocks.OAK_TABLE, ModBlocks.THRONE);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STEEL_LANTERN, ModBlocks.AETHERIT_LANTERN, ModBlocks.CHANDELIER);
         add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.BUILDER_SCAFFOLD);
+        add(BlockTags.MINEABLE_WITH_AXE, ModBlocks.MERCENARY_BOARD);
         ModBlocks.BATTLEMENTS.keySet().forEach(battlement -> add(BlockTags.MINEABLE_WITH_PICKAXE, battlement));
 
         // --- Erze ---

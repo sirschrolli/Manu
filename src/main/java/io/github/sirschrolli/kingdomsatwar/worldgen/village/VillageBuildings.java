@@ -45,6 +45,7 @@ final class VillageBuildings {
             case TANNERY -> VillageWorkshops.tannery(a, piece);
             case MASONRY -> VillageWorkshops.masonry(a, piece);
             case BOWYER -> VillageWorkshops.bowyer(a, piece);
+            case MERCENARY_HALL -> VillageBarracks.mercenaryHall(a, piece);
             case CHAPEL -> VillageLandmarks.chapel(a, piece);
             case WINDMILL -> VillageLandmarks.windmill(a, piece);
             case WATCHTOWER -> VillageLandmarks.watchtower(a, piece);

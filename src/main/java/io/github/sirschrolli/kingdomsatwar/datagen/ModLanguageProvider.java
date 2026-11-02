@@ -1136,27 +1136,33 @@ public class ModLanguageProvider extends LanguageProvider {
 
     private void army() {
         soldier(SoldierType.SWORDSMAN, "Swordsman", "Schwertkämpfer", "Schwertkämpfer", "Melee fighter", "Nahkämpfer",
-                "Chain mail, sword and the kingdom's tabard. Reliable and cheap – the backbone of any army.",
-                "Kettenhemd, Schwert und Wappenrock. Zuverlässig und günstig – das Rückgrat jeder Armee.");
+                "Chain mail and sword: reliable and cheap – the backbone of any army.",
+                "Kettenhemd und Schwert: zuverlässig und günstig – das Rückgrat jeder Armee.");
         soldier(SoldierType.ARCHER, "Archer", "Bogenschütze", "Bogenschützen", "Ranged fighter", "Fernkämpfer",
-                "Shoots from afar and never at friends. Lightly armoured – best kept behind the swordsmen.",
-                "Schießt aus der Ferne und nie auf Freunde. Leicht gerüstet – am besten hinter den Schwertkämpfern.");
+                "Shoots from afar, never at friends. Lightly armoured – keep him behind the front.",
+                "Schießt aus der Ferne, nie auf Freunde. Leicht gerüstet: gehört hinter die Front.");
         soldier(SoldierType.KNIGHT, "Knight", "Ritter", "Ritter", "Armoured", "Gepanzert",
-                "Full plate armour and the kingdom's shield. Blocks arrows and holds the front line.",
-                "Plattenrüstung und Schild des Königreichs. Wehrt Pfeile ab und hält die vorderste Reihe.");
+                "Plate armour and shield: blocks arrows and holds the front line.",
+                "Plattenrüstung und Schild: wehrt Pfeile ab und hält die vorderste Reihe.");
         soldier(SoldierType.CAPTAIN, "Captain", "Hauptmann", "Hauptmann", "Leader", "Anführer",
                 "Makes all soldiers nearby stronger and tougher and leads them into battle.",
-                "Macht alle Soldaten in seiner Nähe stärker und zäher und führt sie in die Schlacht.");
+                "Macht alle Soldaten in seiner Nähe stärker und zäher und führt sie an.");
         text("soldier.kingdomsatwar.name", "%s %s", "%s %s");
+        text("soldier.kingdomsatwar.name.ranked", "%s %s %s", "%s %s %s");
+        text("soldier.kingdomsatwar.rank.0", "Recruit", "Rekrut");
+        text("soldier.kingdomsatwar.rank.1", "Veteran", "Veteran");
+        text("soldier.kingdomsatwar.rank.2", "Elite", "Elite");
+        text("message.kingdomsatwar.soldier_trained", "%s has completed the training!", "%s hat die Ausbildung abgeschlossen!");
         add(ModEntities.BANDIT.get(), pick("Bandit", "Bandit"));
         add(ModEntities.BANDIT_ARCHER.get(), pick("Bandit Archer", "Banditen-Bogenschütze"));
         item(ModItems.BANDIT_SPAWN_EGG, "Bandit Spawn Egg", "Banditen-Spawn-Ei");
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");
 
         block(ModBlocks.RECRUITMENT_TABLE, "Recruitment Table", "Rekrutierungstisch");
-        text(ModItems.loreKey("recruitment_table", 1), "Recruit soldiers for coins", "Hier wirbst du Soldaten gegen Münzen an");
-        text(ModItems.loreKey("recruitment_table", 2), "Knights also need steel, captains a gemstone",
-                "Ritter brauchen zusätzlich Stahl, Hauptleute einen Edelstein");
+        text(ModItems.loreKey("recruitment_table", 1), "Recruit swordsmen and archers for coins",
+                "Hier wirbst du Schwertkämpfer und Bogenschützen gegen Münzen an");
+        text(ModItems.loreKey("recruitment_table", 2), "Train your soldiers: higher ranks, knights and captains",
+                "Und hier bildest du deine Leute aus: höhere Ränge, Ritter und Hauptleute");
         item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
         text(ModItems.loreKey("command_baton", 1), "Point at an enemy: attack", "Auf einen Feind zeigen: Angriff");
         text(ModItems.loreKey("command_baton", 2), "Point at the ground: hold position (sneak: patrol)",
@@ -1186,6 +1192,58 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.recruit.army_full", "Your army is complete – you can't lead more soldiers.",
                 "Deine Armee ist vollzählig – mehr Soldaten kannst du nicht führen.");
         text("message.kingdomsatwar.recruit.no_space", "There is no room next to the table.", "Neben dem Tisch ist kein Platz.");
+        text("message.kingdomsatwar.recruit.villages_only", "Knights and captains are hired in the villages – or trained here.",
+                "Ritter und Hauptleute heuerst du in den Dörfern an – oder bildest sie hier aus.");
+        text("message.kingdomsatwar.recruit.trained", "Promoted!", "Befördert!");
+        text("message.kingdomsatwar.recruit.promoted", "Training complete!", "Ausbildung abgeschlossen!");
+        text("message.kingdomsatwar.recruit.max_rank", "This soldier can't be trained any further.",
+                "Dieser Soldat lässt sich nicht weiter ausbilden.");
+        text("message.kingdomsatwar.recruit.not_here", "That soldier isn't here (any more).", "Dieser Soldat ist nicht (mehr) hier.");
+        text("message.kingdomsatwar.recruit.hired", "Hired! Your mercenary follows you.", "Angeheuert! Dein Söldner folgt dir.");
+        text("gui.kingdomsatwar.recruitment.result.villages_only", "Hire in villages", "In Dörfern anheuern");
+        text("gui.kingdomsatwar.recruitment.result.trained", "Promoted!", "Befördert!");
+        text("gui.kingdomsatwar.recruitment.result.promoted", "Trained!", "Ausgebildet!");
+        text("gui.kingdomsatwar.recruitment.result.max_rank", "Highest rank", "Höchster Rang");
+        text("gui.kingdomsatwar.recruitment.result.not_here", "Not here any more", "Nicht mehr da");
+        text("gui.kingdomsatwar.recruitment.result.hired", "Hired!", "Angeheuert!");
+
+        // Ausbilden am Rekrutierungstisch
+        text("gui.kingdomsatwar.recruitment.tab.recruit", "Recruit", "Anwerben");
+        text("gui.kingdomsatwar.recruitment.tab.train", "Train", "Ausbilden");
+        text("gui.kingdomsatwar.recruitment.title.train", "Training", "Ausbildung");
+        text("gui.kingdomsatwar.recruitment.villages_hint",
+                "Knights and captains are hired in the mercenary halls of the villages – or trained here from your own soldiers.",
+                "Ritter und Hauptleute heuerst du im Söldnerhaus der Dörfer an – oder bildest hier deine eigenen Leute dazu aus.");
+        text("gui.kingdomsatwar.recruitment.no_soldiers", "Bring your soldiers to the table (up to 8 blocks away) to train them.",
+                "Bring deine Soldaten an den Tisch (bis 8 Blöcke weit), um sie auszubilden.");
+        text("gui.kingdomsatwar.recruitment.no_soldier", "No soldier at the table", "Kein Soldat am Tisch");
+        text("gui.kingdomsatwar.recruitment.rank_up", "Promote", "Befördern");
+        text("gui.kingdomsatwar.recruitment.rank_up.hint", "Promote to %s: +25%% health, +2 armour, +1 damage",
+                "Befördern zum Rang %s: +25 %% Leben, +2 Rüstung, +1 Schaden");
+        text("gui.kingdomsatwar.recruitment.max_rank", "Already elite – the highest rank", "Schon Elite – der höchste Rang");
+        text("gui.kingdomsatwar.recruitment.max_rank.short", "Highest rank reached", "Höchster Rang erreicht");
+        text("gui.kingdomsatwar.recruitment.promote", "Train", "Ausbilden");
+        text("gui.kingdomsatwar.recruitment.promote_to", "To %s", "Zum %s");
+        text("gui.kingdomsatwar.recruitment.promote.hint", "Train him as a %s – he keeps his name and rank",
+                "Zum %s ausbilden – Name und Rang bleiben");
+        text("gui.kingdomsatwar.recruitment.promote.none", "Archers and captains can't be trained as another kind of soldier",
+                "Bogenschützen und Hauptleute lassen sich zu keiner anderen Art ausbilden");
+        text("gui.kingdomsatwar.recruitment.promote.none.short", "No further training", "Keine weitere Ausbildung");
+        text("gui.kingdomsatwar.recruitment.rank_cost", "Promotion:", "Befördern:");
+        text("gui.kingdomsatwar.recruitment.promote_cost", "Training:", "Ausbildung:");
+
+        // Söldner in den Dörfern
+        block(ModBlocks.MERCENARY_BOARD, "Mercenary Board", "Söldnertafel");
+        text("sign.kingdomsatwar.mercenaries", "Mercenaries", "Söldner");
+        text("gui.kingdomsatwar.mercenaries.title", "Mercenary Board", "Söldnertafel");
+        text("gui.kingdomsatwar.mercenaries.title.village", "Mercenaries of %s", "Söldner von %s");
+        text("gui.kingdomsatwar.mercenaries.hire", "Hire", "Anheuern");
+        text("gui.kingdomsatwar.mercenaries.hire.hint", "Hire %s for %s", "%s für %s anheuern");
+        text("gui.kingdomsatwar.mercenaries.none", "Nobody is waiting here today. New mercenaries arrive every morning.",
+                "Heute wartet hier niemand mehr. Jeden Morgen kommen neue Söldner.");
+        text("gui.kingdomsatwar.mercenaries.hint", "You can train and promote them later at your recruitment table.",
+                "Ausbilden und befördern kannst du sie später an deinem Rekrutierungstisch.");
+        text("gui.kingdomsatwar.mercenaries.wage", "Wage:", "Sold:");
 
         // Befehle und Zustand
         text("message.kingdomsatwar.soldier_order.0", "%s follows you", "%s folgt dir");

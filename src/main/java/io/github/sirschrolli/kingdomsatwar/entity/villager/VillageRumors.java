@@ -20,7 +20,7 @@ import org.jspecify.annotations.Nullable;
  */
 public final class VillageRumors {
     /** Anzahl der allgemeinen Sätze ({@code villager.kingdomsatwar.rumor.generic.N}). */
-    public static final int GENERIC = 14;
+    public static final int GENERIC = 16;
     /** Sätze je Beruf ({@code villager.kingdomsatwar.rumor.<beruf>.N}). */
     public static final int PER_PROFESSION = 2;
 

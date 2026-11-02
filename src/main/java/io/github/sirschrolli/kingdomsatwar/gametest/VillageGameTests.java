@@ -166,7 +166,9 @@ final class VillageGameTests {
                 String name = style.id() + "/" + kind.id();
                 int before = problems.size();
                 List<VillagerEntity> here = villagers(helper);
-                boolean expectsResidents = kind != VillageBuilding.CHAPEL && kind != VillageBuilding.WATCHTOWER;
+                // Kapelle und Wachturm haben keine Bewohner, im Söldnerhaus warten Söldner (siehe ArmyGameTests)
+                boolean expectsResidents = kind != VillageBuilding.CHAPEL && kind != VillageBuilding.WATCHTOWER
+                        && kind != VillageBuilding.MERCENARY_HALL;
                 if (expectsResidents && here.isEmpty()) {
                     problems.add(name + ": keine Bewohner");
                 }

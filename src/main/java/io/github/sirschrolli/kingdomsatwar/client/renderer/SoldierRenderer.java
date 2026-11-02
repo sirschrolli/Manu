@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, KingdomHumanoidRenderState, SoldierModel> {
     public SoldierRenderer(EntityRendererProvider.Context context) {
         super(context, new SoldierModel(context.bakeLayer(ModModelLayers.SOLDIER)), 0.5f);
+        this.addLayer(new SoldierRankLayer(this, context.getModelSet()));
     }
 
     public static Identifier texture(SoldierType type, int variant) {
@@ -41,6 +42,7 @@ public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, KingdomH
         state.cape = type == SoldierType.CAPTAIN || type == SoldierType.KNIGHT;
         state.plume = type == SoldierType.CAPTAIN || type == SoldierType.KNIGHT && soldier.getVariant() == 1;
         state.quiver = type == SoldierType.ARCHER;
+        state.rank = soldier.getRank();
         extractCape(soldier, state, partialTicks);
     }
 

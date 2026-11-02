@@ -32,7 +32,17 @@ public final class Recruitment {
 
     /** Ergebnis eines Anwerbe-Versuchs (Reihenfolge = Nummer im Netzwerk). */
     public enum Result {
-        RECRUITED, TOO_FAR, NOT_ENOUGH, ARMY_FULL, NO_SPACE;
+        RECRUITED, TOO_FAR, NOT_ENOUGH, ARMY_FULL, NO_SPACE,
+        /** Ritter und Hauptleute wirbt man in den Dörfern an (oder bildet sie am Tisch aus). */
+        VILLAGES_ONLY,
+        /** Ausbildung am Tisch: befördert (ein Rang höher) bzw. zu einer neuen Art ausgebildet. */
+        TRAINED, PROMOTED,
+        /** Der Soldat hat den höchsten Rang schon / lässt sich nicht weiter ausbilden. */
+        MAX_RANK,
+        /** Der Soldat gehört nicht dem Spieler oder steht nicht am Tisch (bzw. der Söldner ist schon fort). */
+        NOT_HERE,
+        /** Ein Söldner im Dorf wurde angeheuert. */
+        HIRED;
 
         public String translationKey() {
             return "message.kingdomsatwar.recruit." + this.name().toLowerCase(java.util.Locale.ROOT);
@@ -85,8 +95,16 @@ public final class Recruitment {
         return true;
     }
 
+    /** Am Tisch lassen sich nur Schwertkämpfer und Bogenschützen anwerben; Ritter und Hauptleute gibt es in den Dörfern. */
+    public static boolean recruitableAtTable(SoldierType type) {
+        return type == SoldierType.SWORDSMAN || type == SoldierType.ARCHER;
+    }
+
     /** Wirbt einen Soldaten an: prüft Entfernung, Armeegröße und Preis, zieht den Preis ab und lässt ihn am Tisch erscheinen. */
     public static Result recruit(Player player, BlockPos tablePos, SoldierType type) {
+        if (!recruitableAtTable(type)) {
+            return Result.VILLAGES_ONLY;
+        }
         if (!(player.level() instanceof ServerLevel level)) {
             return Result.TOO_FAR;
         }

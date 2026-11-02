@@ -58,7 +58,7 @@ final class VillageShowcase {
                     continue;
                 }
                 String name = style.id() + "_" + kind.id();
-                if (!only.isEmpty() && !name.startsWith(only) && !style.id().equals(only)) {
+                if (!only.isEmpty() && !name.startsWith(only) && !name.endsWith(only) && !style.id().equals(only)) {
                     continue;
                 }
                 int x = 5000 + index * 48;
@@ -76,6 +76,16 @@ final class VillageShowcase {
                     }
                     KingdomVillagePiece piece = KingdomVillagePiece.single(style, index(style), kind, origin, Rotation.NONE, 31L * kind.ordinal() + 7);
                     build(level, piece);
+                    if (kind == VillageBuilding.MERCENARY_HALL) {
+                        // die Söldner gleich herbeirufen (sonst kämen sie erst beim nächsten Blick der Tafel auf die Uhr)
+                        var box = piece.getBoundingBox();
+                        for (BlockPos pos : BlockPos.betweenClosed(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ())) {
+                            if (level.getBlockEntity(pos) instanceof io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity board) {
+                                board.refill(level, false);
+                                break;
+                            }
+                        }
+                    }
                 }));
                 steps.add(Step.waitTicks(30));
                 // schräg von vorn links, leicht von oben

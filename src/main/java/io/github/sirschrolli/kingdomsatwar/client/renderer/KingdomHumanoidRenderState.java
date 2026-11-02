@@ -14,6 +14,8 @@ public class KingdomHumanoidRenderState extends HumanoidRenderState {
     public boolean cape;
     public boolean plume;
     public boolean quiver;
+    /** Rang des Soldaten (0 Rekrut, 1 Veteran, 2 Elite): Schärpe und Abzeichen. */
+    public int rank;
     /** Wie weit der Umhang nach hinten weht (Grad) und wie er flattert. */
     public float capeLean;
     public float capeFlap;
