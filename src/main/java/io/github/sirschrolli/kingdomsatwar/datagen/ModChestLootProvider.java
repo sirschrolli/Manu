@@ -314,7 +314,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.DIAMOND, 2, 1, 2), item(Items.NETHERITE_SCRAP, 1, 1, 1)))
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.WITHER_SKELETON_SKULL))
-                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.15f))));
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.06f))));
     }
 
     /** Eine Tabelle, die einmal die Vanilla-Tabelle zieht. */

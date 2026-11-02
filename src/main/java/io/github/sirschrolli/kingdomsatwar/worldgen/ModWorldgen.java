@@ -146,7 +146,7 @@ public final class ModWorldgen {
     private static List<Ruin> structures() {
         List<Ruin> list = new ArrayList<>();
         // Drachennester sind jetzt riesige, einzigartige Bauwerke (worldgen/lair)
-        list.add(new Ruin("castle_ruin", new CastleRuinFeature(), 14, 6, 704_311_219, ModTags.Biomes.HAS_CASTLE_RUINS));
+        list.add(new Ruin("castle_ruin", new CastleRuinFeature(), 36, 12, 704_311_219, ModTags.Biomes.HAS_CASTLE_RUINS));
         return List.copyOf(list);
     }
 

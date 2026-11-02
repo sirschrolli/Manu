@@ -497,14 +497,26 @@ final class Blueprints {
             }
         }
         b.set(-2, 2, -4, PlanBuilder.log(Blocks.OAK_LOG, Direction.Axis.Z));
-        // Setzlingsschule hinten
-        for (int x = -2; x <= 2; x += 2) {
-            b.set(x, -1, 5, s(Blocks.PODZOL));
-            b.set(x, 0, 5, s(x == 0 ? Blocks.SPRUCE_SAPLING : Blocks.OAK_SAPLING));
-        }
+        // der Baumgarten hinter der Hütte: drei Setzlinge mit reichlich Abstand zum Haus und zueinander – der Holzfäller fällt
+        // die Bäume, wenn sie gewachsen sind, und pflanzt nach
+        grove(b, Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.OAK_SAPLING);
         step(b, 0, -3, Direction.SOUTH, Blocks.SPRUCE_STAIRS);
         b.workAt(1, 0, -4);
         b.entranceAt(0, 0, -4);
+    }
+
+    /**
+     * Der Baumgarten einer Holzfällerhütte: drei Setzlinge acht Blöcke hinter der Mitte des Hauses (fünf Blöcke hinter der
+     * Rückwand), fünf Blöcke voneinander, jeder auf Podsol – so haben die Kronen der ausgewachsenen Bäume Platz.
+     */
+    static void grove(PlanBuilder b, net.minecraft.world.level.block.Block left, net.minecraft.world.level.block.Block middle,
+            net.minecraft.world.level.block.Block right) {
+        net.minecraft.world.level.block.Block[] saplings = {left, middle, right};
+        for (int i = 0; i < 3; i++) {
+            int x = -5 + i * 5;
+            b.set(x, -1, 8, s(Blocks.PODZOL));
+            b.set(x, 0, 8, s(saplings[i]));
+        }
     }
 
     // =====================================================================================

@@ -33,6 +33,10 @@ final class WorldSitesShowcase {
     private WorldSitesShowcase() {}
 
     static void sites(Deque<Step> steps, String only) {
+        if (only.equals("survey")) {
+            survey(steps, 48);
+            return;
+        }
         steps.add(Step.hud(false));
         // in der Unterwelt weiter sehen: dort reicht der Nebel nur bis zur halben Sichtweite
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") ? 16 : 8)));
@@ -72,6 +76,75 @@ final class WorldSitesShowcase {
                 steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
             }
         }
+    }
+
+    /**
+     * Zählung ({@code worldsite_survey}): alle Bauwerke, die in einem Quadrat von 2 × {@code radius} Chunks um den Ursprung
+     * beginnen, dazu die Burgruinen (ein Feature in festen Feldern) – je Art die Zahl, die Dichte je Quadratkilometer und
+     * ein paar Fundorte.
+     */
+    static void survey(Deque<Step> steps, int radius) {
+        steps.add(Step.server(level -> {
+            long started = System.currentTimeMillis();
+            java.util.Map<String, Integer> counts = new java.util.TreeMap<>();
+            java.util.Map<String, List<String>> where = new java.util.TreeMap<>();
+            var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+            for (int cx = -radius; cx < radius; cx++) {
+                for (int cz = -radius; cz < radius; cz++) {
+                    var chunk = level.getChunk(cx, cz, ChunkStatus.STRUCTURE_STARTS, true);
+                    for (var e : chunk.getAllStarts().entrySet()) {
+                        if (!e.getValue().isValid()) {
+                            continue;
+                        }
+                        String name = String.valueOf(registry.getKey(e.getKey()));
+                        counts.merge(name, 1, Integer::sum);
+                        // Bauwerke unter der Erde: reichen sie bis an die Oberfläche?
+                        if (name.endsWith(":aqueduct") || name.endsWith(":buried_abbey") || name.endsWith(":trial_arena")
+                                || name.endsWith(":silent_cathedral")) {
+                            var box = e.getValue().getBoundingBox();
+                            int surface = level.getChunkSource().getGenerator().getBaseHeight(box.getCenter().getX(), box.getCenter().getZ(),
+                                    net.minecraft.world.level.levelgen.Heightmap.Types.OCEAN_FLOOR_WG, level, level.getChunkSource().randomState());
+                            counts.merge(name + " (bis an die Oberfläche)", box.maxY() >= surface - 1 ? 1 : 0, Integer::sum);
+                        }
+                        List<String> list = where.computeIfAbsent(name, k -> new ArrayList<>());
+                        if (list.size() < 3) {
+                            BlockPos c = e.getValue().getBoundingBox().getCenter();
+                            list.add(c.getX() + " " + e.getValue().getBoundingBox().minY() + ".." + e.getValue().getBoundingBox().maxY() + " " + c.getZ());
+                        }
+                    }
+                }
+            }
+            // Burgruinen: in jedem Feld ein fester Chunk; zählen, wo das Biom passt
+            var gen = level.getChunkSource().getGenerator();
+            var resolver = gen.getBiomeSource().createResolver(level.getChunkSource().randomState()
+                    .createClimateSampler(net.minecraft.world.level.levelgen.densityfunction.SamplerContext.EMPTY_UNCACHED));
+            var ruinBiomes = level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Biomes.HAS_CASTLE_RUINS);
+            for (var ruin : io.github.sirschrolli.kingdomsatwar.worldgen.ModWorldgen.STRUCTURES) {
+                int n = 0;
+                for (int cx = -radius; cx < radius; cx++) {
+                    for (int cz = -radius; cz < radius; cz++) {
+                        if (io.github.sirschrolli.kingdomsatwar.worldgen.SpacedPlacement.isGridChunk(level.getSeed(), ruin.salt(), cx, cz, ruin.spacing(),
+                                ruin.separation())) {
+                            var biome = resolver.getNoiseBiome(cx * 4 + 2, 16, cz * 4 + 2);
+                            if (ruinBiomes.contains(biome)) {
+                                n++;
+                            }
+                        }
+                    }
+                }
+                counts.put("feature:" + ruin.name(), n);
+            }
+            double km2 = Math.pow(radius * 2 * 16 / 1000.0, 2);
+            KingdomsAtWar.LOGGER.info("[Showcase] Zählung: {} × {} Blöcke ({} km²), {} ms", radius * 32, radius * 32, String.format(Locale.ROOT, "%.2f", km2),
+                    System.currentTimeMillis() - started);
+            int total = 0;
+            for (var e : counts.entrySet()) {
+                total += e.getValue();
+                KingdomsAtWar.LOGGER.info("[Showcase]   {}: {} ({} je km²) {}", e.getKey(), e.getValue(), String.format(Locale.ROOT, "%.1f", e.getValue() / km2),
+                        where.getOrDefault(e.getKey(), List.of()));
+            }
+            KingdomsAtWar.LOGGER.info("[Showcase]   zusammen: {} ({} je km²)", total, String.format(Locale.ROOT, "%.1f", total / km2));
+        }));
     }
 
     private static void locate(ServerLevel level, SiteKind kind, List<double[]> views, int[] state) {

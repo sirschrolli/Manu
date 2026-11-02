@@ -34,6 +34,8 @@ public class ModLootModifierProvider extends GlobalLootModifierProvider {
                                 net.minecraft.advancements.predicates.entity.EntityTypePredicate.of(entities,
                                         io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DROPS_COINS)))).build();
         add("coins_from_monsters", new AddTableLootModifier(Optional.of(Holder.direct(monster)), 0, ModLootTables.MONSTER_COINS));
+        // karge Truhen: in allen eigenen Truhen bleibt nur ein Teil liegen (Wertvolles noch seltener), Stapel schrumpfen
+        add("lean_chests", new io.github.sirschrolli.kingdomsatwar.loot.LeanLootModifier(Optional.empty(), 0, 0.3f, 0.55f, 0.6f, "chests/"));
         // Froschlichter, wenn ein eigener Frosch einen kleinen Magmawürfel frisst
         add("froglights_from_magma_cubes", new AddTableLootModifier(
                 Optional.of(Holder.direct(LootTableIdCondition.builder(Identifier.withDefaultNamespace("entities/magma_cube")).build())),

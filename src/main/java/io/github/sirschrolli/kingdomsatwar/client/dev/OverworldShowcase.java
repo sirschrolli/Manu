@@ -111,6 +111,87 @@ final class OverworldShowcase {
         }
     }
 
+    /** Die neuen Baumformen (unter den Vanilla-Namen), je drei nebeneinander, dazu ein gemischter Hain. */
+    private static final List<ResourceKey<net.minecraft.world.level.levelgen.feature.Feature>> TREES = List.of(
+            net.minecraft.data.worldgen.features.TreeFeatures.OAK, net.minecraft.data.worldgen.features.TreeFeatures.FANCY_OAK,
+            net.minecraft.data.worldgen.features.TreeFeatures.BIRCH, net.minecraft.data.worldgen.features.TreeFeatures.SUPER_BIRCH_BEES_0002,
+            net.minecraft.data.worldgen.features.TreeFeatures.SPRUCE, net.minecraft.data.worldgen.features.TreeFeatures.PINE,
+            net.minecraft.data.worldgen.features.TreeFeatures.MEGA_SPRUCE, net.minecraft.data.worldgen.features.TreeFeatures.MEGA_PINE,
+            net.minecraft.data.worldgen.features.TreeFeatures.JUNGLE_TREE, net.minecraft.data.worldgen.features.TreeFeatures.MEGA_JUNGLE_TREE,
+            net.minecraft.data.worldgen.features.TreeFeatures.ACACIA, net.minecraft.data.worldgen.features.TreeFeatures.DARK_OAK,
+            net.minecraft.data.worldgen.features.TreeFeatures.CHERRY, net.minecraft.data.worldgen.features.TreeFeatures.SWAMP_OAK);
+
+    static void trees(Deque<Step> steps, int[] ground, String only) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        steps.add(Step.command("time set 6000"));
+        int index = 0;
+        for (ResourceKey<net.minecraft.world.level.levelgen.feature.Feature> key : TREES) {
+            String name = key.identifier().getPath();
+            if (!only.isEmpty() && !name.equals(only)) {
+                continue;
+            }
+            int x = 6000 + index * 64;
+            int z = 3000;
+            index++;
+            boolean big = name.startsWith("mega_");
+            steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d 135 35", x - 14, ground[0] + 14, z - 14)));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(400));
+            steps.add(Step.server(level -> {
+                var feature = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.FEATURE).getOrThrow(key).value();
+                BlockPos center = new BlockPos(x, ground[0], z);
+                prepareGround(level, center, "trees", 24);
+                int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}} : new int[][] {{0, 0}, {-10, 8}, {9, -8}};
+                int seed = 0;
+                for (int[] spot : spots) {
+                    BlockPos at = center.offset(spot[0], 0, spot[1]);
+                    for (int attempt = 0; attempt < 4; attempt++) {
+                        if (feature.place(level, level.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(777L + seed++), at)) {
+                            break;
+                        }
+                    }
+                }
+            }));
+            steps.add(Step.waitTicks(30));
+            double dist = big ? 30.0 : 21.0;
+            double up = big ? 16.0 : 9.0;
+            steps.add(Step.command(String.format(Locale.ROOT, "tp @s %.1f %.1f %.1f -45 %.1f", x - dist, ground[0] + up, z - dist,
+                    Math.toDegrees(Math.atan2(up - (big ? 12.0 : 6.0), Math.sqrt(2) * dist)))));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(400));
+            steps.add(Step.screenshot("tree_" + name));
+        }
+        if (!only.isEmpty() && !only.equals("grove")) {
+            return;
+        }
+        // ein gemischter Hain: Eichen, große Eichen, Birken, eine Kirsche
+        int x = 6000 + index * 64;
+        int z = 3000;
+        steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d 135 35", x - 14, ground[0] + 14, z - 14)));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.server(level -> {
+            BlockPos center = new BlockPos(x, ground[0], z);
+            prepareGround(level, center, "trees", 30);
+            var features = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.FEATURE);
+            List<ResourceKey<net.minecraft.world.level.levelgen.feature.Feature>> mix = List.of(
+                    net.minecraft.data.worldgen.features.TreeFeatures.OAK, net.minecraft.data.worldgen.features.TreeFeatures.FANCY_OAK,
+                    net.minecraft.data.worldgen.features.TreeFeatures.BIRCH, net.minecraft.data.worldgen.features.TreeFeatures.OAK,
+                    net.minecraft.data.worldgen.features.TreeFeatures.BIRCH, net.minecraft.data.worldgen.features.TreeFeatures.OAK);
+            net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(99L);
+            for (int k = 0; k < 16; k++) {
+                BlockPos at = center.offset(random.nextInt(48) - 24, 0, random.nextInt(48) - 24);
+                features.getOrThrow(mix.get(k % mix.size())).value().place(level, level.getChunkSource().getGenerator(), random, at);
+            }
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d -45 18", x - 34, ground[0] + 12, z - 34)));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.screenshot("tree_grove"));
+    }
+
     /** Boden für ein Feature (wie im GameTest): je nach Biom Asche, Schnee, Sturmstein, Sand oder Gras; Teich, Becken, Felsdach. */
     private static void prepareGround(ServerLevel level, BlockPos origin, String name, int radius) {
         BlockState ground = Blocks.GRASS_BLOCK.defaultBlockState();

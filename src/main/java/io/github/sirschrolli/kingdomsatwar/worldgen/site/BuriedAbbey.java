@@ -31,7 +31,7 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
  * Oberfläche liegt bei y = {@code data[0]}.
  */
 final class BuriedAbbey {
-    static final int DEPTH = 9;
+    static final int DEPTH = 12;
     static final int TOWER_X = 9;
     static final int TOWER_Z = -9;
 
@@ -41,8 +41,9 @@ final class BuriedAbbey {
         ChunkPos chunk = context.chunkPos();
         int x = chunk.getMiddleBlockX();
         int z = chunk.getMiddleBlockZ();
-        int[] span = terrain.span(x, z, 9, 3);
-        if (terrain.water(x, z) || span[1] - span[0] > 6) {
+        // über dem ganzen Kloster (26 × 26) soll die Erde liegen: der tiefste Punkt der Oberfläche zählt
+        int[] span = terrain.span(x, z, 14, 2);
+        if (terrain.water(x, z) || span[1] - span[0] > 8) {
             return Optional.empty();
         }
         Rotation rotation = Rotation.values()[Math.floorMod((int) (seed >>> 7), 4)];

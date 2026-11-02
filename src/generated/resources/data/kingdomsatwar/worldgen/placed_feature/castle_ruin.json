@@ -5,8 +5,8 @@
       "type": "kingdomsatwar:spaced",
       "nest_distance": 320,
       "salt": 704311219,
-      "separation": 6,
-      "spacing": 14
+      "separation": 12,
+      "spacing": 36
     },
     {
       "type": "minecraft:in_square"

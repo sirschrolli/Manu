@@ -71,12 +71,12 @@ final class Aqueduct {
         int cx = chunk.getMiddleBlockX();
         int cz = chunk.getMiddleBlockZ();
         int ground = terrain.ground(cx, cz);
-        int y = Math.max(terrain.minY() + 16, ground - 16 - random.nextInt(14));
-        if (y > ground - 14) {
+        int y = Math.max(terrain.minY() + 16, ground - 22 - random.nextInt(16));
+        if (y > ground - 20) {
             return Optional.empty();
         }
-        // der Brunnenschacht reicht bis an die Oberfläche (nicht im Wasser)
-        int shaft = terrain.water(cx, cz) ? 0 : ground - y;
+        // nur zu manchen Stollen führt ein Brunnenschacht bis an die Oberfläche (nie im Wasser); die übrigen liegen verborgen
+        int shaft = terrain.water(cx, cz) || random.nextFloat() < 0.6f ? 0 : ground - y;
         List<SitePiece> pieces = new ArrayList<>();
         List<BoundingBox> taken = new ArrayList<>();
         BlockPos start = new BlockPos(cx, y, cz);
@@ -106,7 +106,7 @@ final class Aqueduct {
                     dy = 1;
                 }
                 BoundingBox box = SitePiece.box(node.pos, rotation, -4, Math.min(0, dy * 4) - 2, 0, 4, Math.max(0, dy * 4) + 6, 7);
-                if (overlaps(taken, box)) {
+                if (overlaps(taken, box) || shallow(terrain, box)) {
                     continue;
                 }
                 int[] data = {8, dy};
@@ -118,11 +118,11 @@ final class Aqueduct {
             }
             int len = 12 + 6 * random.nextInt(4);
             BoundingBox box = SitePiece.box(node.pos, rotation, -5, -2, 0, 5, 6, len - 1);
-            while (overlaps(taken, box) && len > 12) {
+            while ((overlaps(taken, box) || shallow(terrain, box)) && len > 12) {
                 len -= 6;
                 box = SitePiece.box(node.pos, rotation, -5, -2, 0, 5, 6, len - 1);
             }
-            if (overlaps(taken, box)) {
+            if (overlaps(taken, box) || shallow(terrain, box)) {
                 continue;
             }
             float roll = random.nextFloat();
@@ -145,7 +145,7 @@ final class Aqueduct {
                         center.getZ() + 8);
                 BoundingBox hallTaken = new BoundingBox(center.getX() - 7, center.getY() - 4, center.getZ() - 7, center.getX() + 7,
                         center.getY() + 9, center.getZ() + 7);
-                if (overlaps(taken, hallTaken)) {
+                if (overlaps(taken, hallTaken) || shallow(terrain, hall)) {
                     continue;
                 }
                 int[] hallData = {bit(node.dir.getOpposite())};
@@ -189,6 +189,21 @@ final class Aqueduct {
             case EAST -> Rotation.COUNTERCLOCKWISE_90;
             default -> Rotation.NONE;
         };
+    }
+
+    /**
+     * Käme ein Bauteil der Oberfläche zu nahe? Über seiner Decke sollen überall mindestens sechs Blöcke Gestein liegen
+     * (geprüft an den Ecken und in der Mitte) – sonst bräche der Stollen an Hängen, in Tälern und unter Flüssen auf.
+     */
+    private static boolean shallow(SiteTerrain terrain, BoundingBox box) {
+        int[][] probes = {{box.minX(), box.minZ()}, {box.maxX(), box.minZ()}, {box.minX(), box.maxZ()}, {box.maxX(), box.maxZ()},
+                {(box.minX() + box.maxX()) / 2, (box.minZ() + box.maxZ()) / 2}};
+        for (int[] p : probes) {
+            if (terrain.ground(p[0], p[1]) < box.maxY() + 6) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean overlaps(List<BoundingBox> taken, BoundingBox box) {

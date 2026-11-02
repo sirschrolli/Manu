@@ -233,9 +233,10 @@ public final class ModStructures {
     }
 
     /**
-     * Die Verteilung der eigenen Bauwerke der Oberwelt – etwa so dicht wie die der Bauwerke, deren Rolle sie übernehmen:
-     * der Sternensturz in Ringen um den Weltursprung (wie die Festungen, Enderaugen finden ihn so), Wasserstollen und
-     * Gezeitenschreine selten in vielen Chunks, die Gebeine der Seedrachen in Feldern von 24 Chunks.
+     * Die Verteilung der eigenen Bauwerke der Oberwelt – eher seltener als die der Bauwerke, deren Rolle sie übernehmen,
+     * damit jedes ein Fund bleibt: der Sternensturz in Ringen um den Weltursprung (wie die Festungen, Enderaugen finden ihn
+     * so), Wasserstollen und Gezeitenschreine selten in vielen Chunks, sonst Felder von 28 bis 56 Chunks mit weitem
+     * Mindestabstand.
      */
     private static void siteSets(BootstrapContext<StructureSet> context, HolderGetter<Structure> structures, HolderGetter<Biome> biomes) {
         for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.values()) {
@@ -246,41 +247,41 @@ public final class ModStructures {
                 case AQUEDUCT -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         net.minecraft.core.Vec3i.ZERO,
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_3,
-                        0.003f, 71_404_413, java.util.Optional.empty(), 1, 0,
+                        0.0015f, 71_404_413, java.util.Optional.empty(), 1, 0,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
                 case TIDE_SHRINE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         new net.minecraft.core.Vec3i(9, 0, 9),
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_2,
-                        0.01f, 50_918_377, java.util.Optional.empty(), 1, 0,
+                        0.007f, 50_918_377, java.util.Optional.empty(), 1, 0,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
-                case SEA_DRAGON -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 4,
+                case SEA_DRAGON -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 165_745_311);
-                case CARAVANSERAI -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                case CARAVANSERAI -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_631);
-                case SERPENT_TEMPLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                case SERPENT_TEMPLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_633);
-                case WITCH_TREE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                case WITCH_TREE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_635);
-                case FROST_GROTTO -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 8,
+                case FROST_GROTTO -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_637);
                 case BANDIT_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         net.minecraft.core.Vec3i.ZERO,
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
-                        0.25f, 165_745_297, java.util.Optional.empty(), 32, 8,
+                        0.25f, 165_745_297, java.util.Optional.empty(), 40, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
-                case CHARCOAL_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(37, 8,
+                case CHARCOAL_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(50, 14,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 91_231_129);
-                case EMBER_GATE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 15,
+                case EMBER_GATE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(56, 20,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 34_222_647);
-                case CLAM_FIELD -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(20, 8,
+                case CLAM_FIELD -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(28, 10,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_639);
-                case CORAL_PALACE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(32, 5,
+                case CORAL_PALACE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 10,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_315);
-                case BURIED_ABBEY -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(34, 8,
+                case BURIED_ABBEY -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(44, 12,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 83_469_869);
-                case SILENT_CATHEDRAL -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 8,
+                case SILENT_CATHEDRAL -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(30, 10,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 20_083_239);
-                case TRIAL_ARENA -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(34, 12,
+                case TRIAL_ARENA -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(40, 14,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 94_251_331);
                 case ROBBER_CASTLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(80, 20,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_321);
@@ -362,33 +363,33 @@ public final class ModStructures {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         context.register(ALL_LAIRS, new StructureSet(java.util.List.of(), new AnyNestPlacement()));
         context.register(UMBRER_VILLAGES, new StructureSet(structures.getOrThrow(UMBRER_VILLAGE_STRUCTURE),
-                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(24, 9,
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(28, 10,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 73_419_211)));
-        // Felder von 14 Chunks, mindestens 9 Chunks zwischen zwei Bauwerken (weiter, als zwei Bauplätze reichen)
+        // Felder von 18 Chunks, mindestens 9 Chunks zwischen zwei Bauwerken (weiter, als zwei Bauplätze reichen)
         java.util.List<StructureSet.StructureSelectionEntry> sites = new java.util.ArrayList<>();
         for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.Kind.values()) {
             sites.add(StructureSet.entry(structures.getOrThrow(shadowSite(kind)), siteWeight(kind)));
         }
         context.register(SHADOW_SITES_SET, new StructureSet(sites,
-                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(14, 8,
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(18, 9,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_442_917)));
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
-        // Magiertürme: Felder von 36 Chunks, mindestens 12 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
+        // Magiertürme: Felder von 46 Chunks, mindestens 16 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
         for (DragonType type : DragonType.values()) {
             towers.add(StructureSet.entry(structures.getOrThrow(mageTower(type))));
         }
-        // Dörfer: Felder von 34 Chunks, mindestens 8 Chunks Abstand (wie früher), 28 Chunks fern der Nester, 10 vom Siegelkreis
+        // Dörfer: Felder von 40 Chunks, mindestens 12 Chunks Abstand, 28 Chunks fern der Nester, 10 vom Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> villageEntries = new java.util.ArrayList<>();
         for (var style : io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.values()) {
             villageEntries.add(StructureSet.entry(structures.getOrThrow(village(style))));
         }
-        context.register(VILLAGES, new StructureSet(villageEntries, new io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement(34, 8,
+        context.register(VILLAGES, new StructureSet(villageEntries, new io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement(40, 12,
                 10_387_312, java.util.Optional.empty(), 28, 10)));
         var villages = context.lookup(Registries.STRUCTURE_SET).getOrThrow(VILLAGES);
-        context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(36, 12,
+        context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(46, 16,
                 47_719_163, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                         .ExclusionZone(villages, 7)), 14)));
         siteSets(context, structures, biomes);

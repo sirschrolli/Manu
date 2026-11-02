@@ -167,6 +167,10 @@ final class Showcase {
                         VillageShowcase.life(steps);
                     } else if (scene.equals("villages") || scene.startsWith("villages_")) {
                         VillageShowcase.villages(steps, scene.equals("villages") ? "" : scene.substring(9));
+                    } else if (scene.equals("trees") || scene.startsWith("trees_")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        OverworldShowcase.trees(steps, g, scene.equals("trees") ? "" : scene.substring(6));
                     } else if (scene.equals("features") || scene.startsWith("features_")) {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));

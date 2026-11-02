@@ -220,13 +220,7 @@ final class WorkDesigns {
         }
         b.set(6, 1, 0, PlanBuilder.log(Blocks.OAK_LOG, Direction.Axis.Z));
         b.set(6, 1, 1, PlanBuilder.log(Blocks.OAK_LOG, Direction.Axis.Z));
-        for (int x = -3; x <= 3; x++) {
-            b.set(x, -1, 4, s(Blocks.GRASS_BLOCK));
-            b.set(x, -1, 5, s((x & 1) == 0 ? Blocks.PODZOL : Blocks.GRASS_BLOCK));
-        }
-        for (int x = -2; x <= 2; x += 2) {
-            b.set(x, 0, 5, s(x == 0 ? Blocks.BIRCH_SAPLING : x < 0 ? Blocks.SPRUCE_SAPLING : Blocks.OAK_SAPLING));
-        }
+        Blueprints.grove(b, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.OAK_SAPLING);
         step(b, -1, -3, Direction.SOUTH, Blocks.SPRUCE_STAIRS);
         b.workAt(3, 1, -1);
         b.entranceAt(-1, 0, -4);

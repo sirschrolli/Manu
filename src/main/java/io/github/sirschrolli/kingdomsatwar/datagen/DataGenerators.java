@@ -46,8 +46,10 @@ public final class DataGenerators {
                         new LootTableProvider.SubProviderEntry(ModChestLootProvider::new, LootContextParamSets.CHEST),
                         new LootTableProvider.SubProviderEntry(ModArchaeologyLootProvider::new, LootContextParamSets.ARCHAEOLOGY))
                 .recipe(ModRecipeProvider::new);
-        // Vanilla-Einträge, die die Mod ersetzt: die Oberwelt-Oberflächen und die Weltvoreinstellungen mit den eigenen Biomen
+        // Vanilla-Einträge, die die Mod ersetzt: die Oberwelt-Oberflächen, die Weltvoreinstellungen mit den eigenen Biomen
+        // und die Bäume (neue Gestalten unter den alten Namen)
         event.gatherFor("minecraft")
+                .add(Registries.FEATURE, io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees::bootstrapVanillaOverride)
                 .add(Registries.MATERIAL_RULE, io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface::bootstrapVanillaOverride)
                 .add(Registries.WORLD_PRESET, io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldPresets::bootstrap);
     }

@@ -54,6 +54,9 @@ public final class KingdomsAtWar {
         ModFeatureTypes.PLACEMENT_TYPES.register(modBus);
         ModFeatureTypes.BIOME_SOURCES.register(modBus);
         ModFeatureTypes.BIOME_MODIFIERS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.TRUNK_PLACERS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.loot.ModLootModifiers.SERIALIZERS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.FOLIAGE_PLACERS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModGameTests.TEST_FUNCTIONS.register(modBus);
 

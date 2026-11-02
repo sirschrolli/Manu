@@ -1422,7 +1422,10 @@ final class Jobs {
             }
         }
 
-        /** Sucht den nächsten natürlichen Baum (Stamm auf Erde, oben Laub) im Umkreis von 24 Blöcken um die Hütte. */
+        /**
+         * Sucht den nächsten natürlichen Baum (Stamm auf Erde, oben Laub) im Umkreis von 24 Blöcken um die Hütte – auch im
+         * Baumgarten hinter der eigenen Hütte, nie aber Balken oder Bäume auf dem Grund anderer Häuser.
+         */
         private void findTree() {
             Town.Building hut = this.workplace();
             Town town = this.town();
@@ -1439,17 +1442,25 @@ final class Jobs {
                     int x = center.getX() + dx;
                     int z = center.getZ() + dz;
                     int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-                    for (int y = top - 1; y >= top - 3; y--) {
+                    p.set(x, top - 1, z);
+                    if (!level.getBlockState(p).is(BlockTags.LOGS)) {
+                        continue;   // in dieser Säule steht kein Stamm
+                    }
+                    // den Stamm hinab bis zu seinem Fuß auf der Erde (auch über Lücken zwischen Ast und Stamm hinweg)
+                    for (int y = top - 1; y >= top - 40 && y > level.getMinY(); y--) {
                         p.set(x, y, z);
-                        BlockState state = level.getBlockState(p);
-                        if (state.is(BlockTags.LOGS) && level.getBlockState(p.below()).is(BlockTags.DIRT) && !insideBuilding(town, p)) {
-                            double d = p.distSqr(center);
-                            if (d < bestDist && hasLeaves(level, p)) {
-                                best = p.immutable();
-                                bestDist = d;
-                            }
+                        if (!level.getBlockState(p).is(BlockTags.LOGS) || !level.getBlockState(p.below()).is(BlockTags.DIRT)) {
+                            continue;
+                        }
+                        if (insideBuilding(town, p) && !hut.bounds().inflatedBy(1).isInside(p)) {
                             break;
                         }
+                        double d = p.distSqr(center);
+                        if (d < bestDist && hasLeaves(level, p)) {
+                            best = p.immutable();
+                            bestDist = d;
+                        }
+                        break;
                     }
                 }
             }
@@ -1469,7 +1480,12 @@ final class Jobs {
                     for (int dy = 0; dy <= 1; dy++) {
                         for (int dz = -1; dz <= 1; dz++) {
                             BlockPos next = cur.offset(dx, dy, dz);
-                            if (seen.add(next) && level.getBlockState(next).is(BlockTags.LOGS) && !insideBuilding(town, next)) {
+                            // nur der Baum selbst: höchstens sieben Blöcke vom Fuß, nie das Holz eines Hauses
+                            if (Math.abs(next.getX() - best.getX()) > 7 || Math.abs(next.getZ() - best.getZ()) > 7) {
+                                continue;
+                            }
+                            if (seen.add(next) && level.getBlockState(next).is(BlockTags.LOGS)
+                                    && (!insideBuilding(town, next) || hut.bounds().inflatedBy(1).isInside(next))) {
                                 open.add(next);
                             }
                         }
@@ -1494,15 +1510,33 @@ final class Jobs {
             }
         }
 
+        /**
+         * Ein natürlicher Baum trägt Laub: an seinem Holz (dem Stamm hinauf, auch wenn er sich neigt oder in Äste teilt)
+         * sitzt wenigstens zwei Blöcke über dem Fuß ein Blatt.
+         */
         private static boolean hasLeaves(ServerLevel level, BlockPos log) {
-            for (int dy = 2; dy <= 12; dy++) {
-                for (Direction d : Direction.Plane.HORIZONTAL) {
-                    if (level.getBlockState(log.above(dy).relative(d)).is(BlockTags.LEAVES)) {
-                        return true;
+            Set<BlockPos> seen = new HashSet<>();
+            ArrayDeque<BlockPos> open = new ArrayDeque<>();
+            open.add(log);
+            seen.add(log);
+            while (!open.isEmpty() && seen.size() < 80) {
+                BlockPos cur = open.poll();
+                if (cur.getY() >= log.getY() + 2) {
+                    for (Direction d : Direction.values()) {
+                        if (level.getBlockState(cur.relative(d)).is(BlockTags.LEAVES)) {
+                            return true;
+                        }
                     }
                 }
-                if (!level.getBlockState(log.above(dy)).is(BlockTags.LOGS)) {
-                    return level.getBlockState(log.above(dy)).is(BlockTags.LEAVES);
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dy = 0; dy <= 1; dy++) {
+                        for (int dz = -1; dz <= 1; dz++) {
+                            BlockPos next = cur.offset(dx, dy, dz);
+                            if (seen.add(next) && level.getBlockState(next).is(BlockTags.LOGS)) {
+                                open.add(next);
+                            }
+                        }
+                    }
                 }
             }
             return false;

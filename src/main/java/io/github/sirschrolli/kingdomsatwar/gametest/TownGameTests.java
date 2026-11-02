@@ -100,6 +100,8 @@ final class TownGameTests {
             ModGameTests.TEST_FUNCTIONS.register("town_food", () -> TownGameTests::townFood);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_GARRISON =
             ModGameTests.TEST_FUNCTIONS.register("town_garrison", () -> TownGameTests::townGarrison);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_LUMBERJACK =
+            ModGameTests.TEST_FUNCTIONS.register("town_lumberjack", () -> TownGameTests::townLumberjack);
 
     private TownGameTests() {}
 
@@ -118,6 +120,7 @@ final class TownGameTests {
         own(event, TOWN_CROWN, "town_crown", 600);
         own(event, TOWN_FOOD, "town_food", 200);
         own(event, TOWN_GARRISON, "town_garrison", 300);
+        own(event, TOWN_LUMBERJACK, "town_lumberjack", 2400);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,
@@ -763,6 +766,71 @@ final class TownGameTests {
             helper.assertValueEqual(stored, 15, "Stämme im Lager");
             helper.assertTrue(((net.minecraft.world.Container) level.getBlockEntity(hutChest)).isEmpty(), "Truhe der Hütte nicht geleert");
             helper.assertTrue(lumberjack.carried().isEmpty(), "Holzfäller trägt noch etwas");
+            clearTowns(server);
+            leave(helper, owner);
+        });
+    }
+
+    /**
+     * Der Holzfäller bei der Arbeit: Er findet einen ausgewachsenen Baum im Baumgarten hinter seiner Hütte und einen
+     * draußen auf der Wiese, fällt beide ganz (Stamm und Äste), pflanzt an ihrem Fuß wieder einen Setzling und trägt das
+     * Holz bei sich oder hat es schon in die Truhe gebracht.
+     */
+    private static void townLumberjack(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        helper.setTime(1000);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 40));
+        Town town = found(helper, owner, new BlockPos(24, 1, 42));
+        Coins.give(owner, 500);
+        BlockPos hut = originFor(helper, BuildingType.LUMBER_HUT, 24, 14);
+        TownManager.buildInstantly(level, town, BuildingType.LUMBER_HUT, hut, Rotation.NONE);
+        var oak = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.FEATURE)
+                .getOrThrow(net.minecraft.data.worldgen.features.TreeFeatures.OAK).value();
+        // ein Baum im Baumgarten (an Stelle des mittleren Setzlings), einer draußen rechts neben der Hütte
+        BlockPos grove = hut.offset(0, 0, 8);
+        BlockPos meadow = hut.offset(13, 0, 2);
+        List<BlockPos> trees = new java.util.ArrayList<>();
+        for (BlockPos at : List.of(grove, meadow)) {
+            level.setBlock(at, Blocks.AIR.defaultBlockState(), 2);
+            level.setBlock(at.below(), Blocks.GRASS_BLOCK.defaultBlockState(), 2);
+            boolean placed = false;
+            for (int attempt = 0; attempt < 6 && !placed; attempt++) {
+                placed = oak.place(level, level.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(11L + attempt), at);
+            }
+            helper.assertTrue(placed && level.getBlockState(at).is(net.minecraft.tags.BlockTags.LOGS), "kein Baum bei " + helper.relativePos(at));
+            trees.add(at);
+        }
+        helper.assertValueEqual(TownManager.hire(owner, town, Profession.LUMBERJACK), TownManager.HireResult.HIRED, "Holzfäller anheuern");
+        CitizenEntity lumberjack = citizen(helper, town.residents().getFirst());
+        BlockPos hutChest = Blueprint.world(hut, Rotation.NONE, BuildingType.LUMBER_HUT.blueprint().chest());
+        helper.succeedWhen(() -> {
+            for (BlockPos at : trees) {
+                // beim Baumgarten nicht bis an die Rückwand der Hütte zählen (deren Balken sind auch Holz)
+                int back = at.equals(grove) ? -3 : -5;
+                int left = 0;
+                for (BlockPos p : BlockPos.betweenClosed(at.offset(-5, 0, back), at.offset(5, 12, 5))) {
+                    if (level.getBlockState(p).is(net.minecraft.tags.BlockTags.LOGS)) {
+                        left++;
+                    }
+                }
+                helper.assertValueEqual(left, 0, "Holz übrig am Baum bei " + helper.relativePos(at));
+                helper.assertTrue(level.getBlockState(at).is(net.minecraft.tags.BlockTags.SAPLINGS), "kein neuer Setzling bei " + helper.relativePos(at));
+            }
+            int logs = 0;
+            for (int i = 0; i < lumberjack.carried().getContainerSize(); i++) {
+                if (lumberjack.carried().getItem(i).is(net.minecraft.tags.ItemTags.LOGS)) {
+                    logs += lumberjack.carried().getItem(i).getCount();
+                }
+            }
+            var chest = (net.minecraft.world.Container) level.getBlockEntity(hutChest);
+            for (int i = 0; i < chest.getContainerSize(); i++) {
+                if (chest.getItem(i).is(net.minecraft.tags.ItemTags.LOGS)) {
+                    logs += chest.getItem(i).getCount();
+                }
+            }
+            helper.assertTrue(logs >= 8, "zu wenig Holz geschlagen: " + logs);
             clearTowns(server);
             leave(helper, owner);
         });
