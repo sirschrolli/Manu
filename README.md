@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.30.0 – der Sternenfresser, Schreinlinge, Leerwandler und Leermilben; Brandgebeine und der Aschenkönig.**
+> **Testversion 0.31.0 – die Aschenesse im Nether, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,21 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.30: **Der Sternenfresser.** Über dem End kreist statt des Enderdrachen der **Sternenfresser** – Schuppen wie
+> Neu in 0.31: **Die Aschenesse.** Statt der Netherfestungen ragen **Aschenessen** aus den Lavaseen des Nethers –
+> achteckige Schmiedetürme aus Netherziegeln auf einem Sockel aus Schwarzstein, frei in einer weiten Höhlenkuppel. In
+> ihrem Kern steigt hinter Gittern eine Säule aus Lava auf, um die sich die Treppe windet; auf fünf Böden liegen die
+> Schlackenhalle mit dem Anleger, die Schmiede mit zwei gebundenen Glutgeistern, der Warzengarten, die Gebeinkammer und
+> der Thronsaal des Aschenkönigs mit seinem Hort, oben trägt der Schlot die Glutkrone. Vier Brücken führen über die
+> Lava – in den Fels zu Glutkammern, Vorräten, Wachstuben und Kerkern oder zu Wachtürmen über dem See. Brandgebeine
+> halten Wache; Netherwarzen, Lohenruten und Schädel gibt es weiterhin.
+> Dazu **Bäume in neuer Gestalt**: Eichen mit gewölbten Kronen auf knorrigen Ästen, lichte Birken, Fichten in Etagen,
+> Kiefern und Akazien mit Schirmkronen, Schwarzeichen mit Wurzelanläufen, Kirschen und Sumpfeichen mit hängenden
+> Zweigen, Urwaldriesen mit Brettwurzeln – in der Welt wie aus dem Setzling. **Truhen sind karg** geworden (was man für
+> den Fortgang braucht, bleibt darin), **die Bauwerke der Oberwelt sind deutlich seltener** und bleiben unter der Erde,
+> wo sie hingehören, und **der Holzfäller** arbeitet wieder – mit einem eigenen Hain hinter der Hütte. Behoben:
+> **Bienennester** ließen ohne Ende Bienen heraus – jetzt kommen nur ihre eigenen, höchstens drei je Nest (alte Schwärme
+> lösen sich beim Laden auf), und die **Spawner der Verliese** halten ihre Obergrenze wieder ein.
+> Seit 0.30: **Der Sternenfresser.** Über dem End kreist statt des Enderdrachen der **Sternenfresser** – Schuppen wie
 > Nachthimmel mit schwach leuchtenden Sternen, ein Riss in die Leere über Kehle und Brust, zwei geschwungene Hörner und
 > ein Kamm aus Purpurkristall über Kopf, Hals, Rücken und Schwanz, violett gleißende Augen, Flughäute wie ein Nebel im
 > All mit leuchtenden Adern und ausgebuchtetem Hinterrand, eine Kristallklinge am Schwanzende. Er stirbt in violetten
@@ -193,7 +207,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die Bauwerke von Nether und End, ganz neu.
+> **Als Nächstes:** die übrigen Bauwerke von Nether und End, ganz neu – statt der Bastionen, der Netherfossilien und
+> der Endstädte.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -242,7 +257,10 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Schreinling (statt Shulker, siebzehn Farben) mit Schreinfunken | ✅ fertig |
 | Sternenfresser (das Aussehen des Enderdrachen) | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
-| Die Bauwerke von Nether und End (ganz neu) | 🔨 als Nächstes |
+| Eigene Baumformen für alle Standardbäume, in der Welt und aus Setzlingen | ✅ fertig |
+| Karge Truhen, seltenere Bauwerke, Holzfäller mit eigenem Hain | ✅ fertig |
+| Aschenesse statt Netherfestung | ✅ fertig |
+| Die übrigen Bauwerke von Nether und End (Bastion, Netherfossilien, Endstadt – ganz neu) | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -454,6 +472,27 @@ macht – passend zu jeder Gegend und nur dort:
 
 Auch das gilt nur für neu erzeugtes Land – in bestehenden Welten kommt es dort dazu, wo du zum ersten Mal hinkommst.
 
+**Die Bäume in neuer Gestalt:** Die Standardbäume wachsen nicht mehr als Vanilla-Klötze. Jeder Stamm teilt sich in
+Äste, kann sich neigen und spreizt am Fuß Wurzelanläufe; an den Ästen sitzt das Laub in einer Form, die zur Art passt.
+So wachsen sie überall in der Welt – und genauso aus jedem Setzling.
+
+![Die Bäume in neuer Gestalt](docs/bilder/baeume.jpg)
+
+| Baum | Gestalt |
+|---|---|
+| Eiche | knorriger Stamm mit zwei, drei Ästen, eine gewölbte, zerfranste Laubwolke darüber; die große Eiche mit vier, fünf weit ausladenden Ästen und Wurzelanläufen |
+| Birke | schlank und licht, ein, zwei steile Äste, kleine Wolken aus Laub, die hier und da herabhängen |
+| Fichte | gerader Stamm, Laub in Etagen, die nach unten breiter werden und am Rand herabhängen; die Riesenfichte mit dickem Stamm, Wurzelfüßen und Podsol |
+| Kiefer | hoher, kahler Stamm mit kurzen Ästen und flachen Schirmen; die Riesenkiefer mit dickem Stamm und Wurzelfüßen |
+| Akazie | kurzer Stamm, drei, vier weit gespreizte Äste mit flachen Laubschirmen – wie in der Steppe |
+| Schwarzeiche | dicker Stamm mit Wurzelanläufen, breite Äste, eine dichte, dunkle Krone |
+| Kirsche | Äste in alle Richtungen, eine Kuppel aus Blüten, von deren Rand Zweige wie Vorhänge herabhängen |
+| Sumpfeiche | geneigter Stamm, hängende Zweige voller Ranken |
+| Dschungelbaum, Urwaldriese | Schirmkronen auf langen Ästen, Brettwurzeln, Ranken und Kakaobohnen; der Urwaldriese mit dickem Stamm |
+
+Die Blätter liegen überall nah genug am Holz – nichts verdorrt von selbst. Mangrove, Blasseiche und Azalee bleiben,
+wie sie sind.
+
 ### Dörfer und Dorfbewohner
 
 ![Dörfer in den vier Bauweisen: Fachwerk, Nordisch, Lehm und Pfahlbau](docs/bilder/doerfer.jpg)
@@ -539,12 +578,12 @@ Kein einziges Vanilla-Bauwerk entsteht mehr in der Oberwelt. An die Stelle jedes
 Gegenstück** – andere Gestalt, anderes Thema, aber dieselbe Rolle in der Welt: Es steht im selben Land, ist ungefähr
 gleich häufig, und was man dort unbedingt braucht (das Portal ins Ende, das Herz des Meeres, die Prüfungsschlüssel und
 Tresore, die Totems der Hexer …), findet man weiterhin. In den Truhen liegt die Beute des alten Bauwerks, dazu eigene
-Funde und Münzen.
+Funde und Münzen – aber karg (siehe unten).
 
 | Bauwerk | statt | Wo | Was man dort findet |
 |---|---|---|---|
 | **Sternensturz** | Festung | wie die Festungen in Ringen um den Ursprung | ein Meteoritenkrater (oder ein Sternfels auf dem Wasser bzw. am Hang), im glühenden Kern das **Portal ins Ende**; eine Wendeltreppe hinab, ein Lager der Sternforscher mit Fernrohr |
-| **Wasserstollen der Alten** | Mine | tief unter der Erde | gewölbte Kanäle mit Wasserrinnen, Säulenzisternen, Treppen, ein Brunnenhaus an der Oberfläche |
+| **Wasserstollen der Alten** | Mine | tief unter der Erde | gewölbte Kanäle mit Wasserrinnen, Säulenzisternen, Treppen; manchmal führt ein Brunnenhaus an der Oberfläche hinab |
 | **Gezeitenschrein** | vergrabener Schatz | Strände und Korallenküste | ein Schrein mit Säulen und einem Dreizack aus Prismarin, unter dem Altar das **Herz des Meeres** |
 | **Gebeine eines Seedrachen** | Schiffswrack | im Meer und an Stränden | ein riesiges Drachenskelett, im Brustkorb die verschluckte Fracht (Karten, Ladung, Schatz) |
 | **Karawanserei** | Wüstentempel | Wüste | eine verfallene Herberge mit Arkadenhof und Brunnen; darunter der Schatzkeller – mit Falle |
@@ -567,6 +606,42 @@ Funde und Münzen.
   `caravanserai`, `serpent_temple`, `witch_tree`, `frost_grotto`, `bandit_camp`, `charcoal_camp`, `ember_gate`,
   `clam_field`, `coral_palace`, `buried_abbey`, `silent_cathedral`, `trial_arena`, `robber_castle`).
 - Die neuen Bauwerke entstehen nur in neu erzeugten Chunks.
+- **Seltener als früher:** Seit 0.31 liegen die Bauwerke deutlich weiter auseinander, damit jedes ein Fund bleibt –
+  von den meisten gibt es nur noch halb bis zwei Drittel so viele, von den Burgruinen ein Siebtel und von den
+  Brunnenhäusern der Wasserstollen ein Fünftel. Was unter die Erde gehört, bleibt dort: Die Gänge der Wasserstollen
+  haben überall mindestens sechs Blöcke Gestein über sich, nur zu manchen führt ein Brunnenhaus hinab, und das
+  verschüttete Kloster liegt so tief, dass nur der Glockenturm herausschaut.
+- **Karge Truhen:** In allen Truhen – in den eigenen Bauwerken, Dörfern und Türmen wie in den übrigen Vanilla-Bauwerken
+  – bleibt nur ein Teil dessen liegen, was gezogen wurde: Knapp ein Drittel der Stapel fehlt, von Wertvollem
+  (Diamanten, Smaragde, Gold, Netherit, Edelsteine, Verzaubertes, Ausrüstung) mehr als die Hälfte, und die übrigen
+  Stapel schrumpfen auf drei Fünftel.
+  Ganz leer ist keine Truhe, und was man für den Fortgang braucht, liegt immer darin: das Herz des Meeres, die Netherit-
+  und die Abyssit-Vorlage, der Drachenkompass, die Zaubertafeln und die Prüfungsschlüssel.
+
+### Bauwerke des Nethers
+
+![Die Aschenesse](docs/bilder/aschenesse.jpg)
+
+**Die Aschenesse** (statt der Netherfestung): Mitten im Lavameer haben die Brandgebeine ihrem König eine Esse errichtet.
+Sie steht frei in einer weiten Höhlenkuppel über einem Lavasee – ein achteckiger Turm aus Netherziegeln auf einem Sockel
+aus Schwarzstein, gestützt von Strebepfeilern, mit roten Bändern an jedem Boden, Schießscharten, Fenstern und Toren.
+
+- **Im Kern** steigt hinter Eisengittern eine Säule aus Lava auf; um sie windet sich die Treppe von Boden zu Boden.
+- **Fünf Böden:** die Schlackenhalle am Lavasee mit einem Anleger für Lavastelzer, die Schmiede mit Lavarinne,
+  Hochöfen, Ambossen und zwei **Glutgeistern in Käfigen**, der Warzengarten mit **Netherwarzen** auf Seelensand, die
+  Gebeinkammer mit Sarkophagen, Seelenlaternen und Nischen und ganz oben der **Thronsaal** des Aschenkönigs – mit dem
+  Thron, einem Schädel darauf und dem **Hort** (Gold, vergoldeter Schwarzstein, Edelsteine, Diamanten,
+  Netheritschrott, selten ein Witherskelettschädel).
+- **Auf dem Dach** Zinnen, Dornen, Seelenfeuer auf den Spitzen und ein schlanker Schlot mit der **Glutkrone**, einer
+  Feuerschale, die man weithin glühen sieht.
+- **Vier Brücken** gehen von der Schmiede nach allen Seiten, auf Bögen und Pfeilern, mit Geländern und Laternen. Wo sie
+  auf Fels treffen, enden sie hinter einem Tor mit Feuerschalen in **Stuben im Gestein** – eine Glutkammer mit einem
+  weiteren Glutgeist, ein Vorrat, eine Wachstube, ein Kerker mit Ketten –, oft mit einem Stollen in die nächste Höhle;
+  sonst enden sie auf einem **Wachturm** über der Lava.
+- **Brandgebeine** halten Wache; Glutgeister, Brandgebeine, Gerippe, Glutschleime und Moderborstlinge erscheinen in
+  der Esse wie einst in der Festung. Die Beute der Festung bleibt (dazu Münzen, Netherwarzen, Magmacreme, Quarz).
+- Finden mit `/locate structure kingdomsatwar:ash_forge`; die Aschenessen teilen sich ihre Plätze mit den Bastionen.
+  Der Erfolg „Eine schreckliche Festung“ heißt jetzt „Die Aschenesse“ und verlangt, eine zu betreten.
 
 ### Die Nester
 
@@ -680,8 +755,8 @@ Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder 
 Bezahlt wird mit **Bronze-, Silber- und Goldmünzen** (je **neun** sind eine der nächstgrößeren: 9 Bronze = 1 Silber,
 9 Silber = 1 Gold). Am Werktisch legst du neun Münzen zu einer größeren zusammen oder wechselst eine in neun kleinere;
 dasselbe geht mit Rechtsklick (Schleichen + Rechtsklick wechselt klein). Gestapelt sehen Münzen aus wie eine einzelne.
-In den Truhen der Bauwerke liegen nur **Bronzemünzen** (und nicht viele), Monster und Banditen lassen ab und zu ein paar
-fallen, die Drachen-Bosse hüten Gold – und deine Bürger kaufen dir Waren ab.
+In den Truhen der Bauwerke liegen nur **Bronzemünzen** (und nicht viele), Monster lassen selten eine fallen, Banditen ab
+und zu ein paar, die Drachen-Bosse hüten Gold – und deine Bürger kaufen dir Waren ab.
 
 **Das Stadtbanner** (Banner, Goldbarren, Stock, 3 Steinziegel) gründet deine **Siedlung** – jeder Spieler hat eine,
 mit einem Namen, den du ändern kannst. Rechtsklick auf das Banner öffnet das **Stadtfenster**: Übersicht (Stufe,
@@ -703,7 +778,7 @@ reicht.
 |---|---|---|---|
 | Baumeister | 4 Silber | – | baut die Baustellen Block für Block nach Plan |
 | Bauer | 3 Silber | Feld | erntet, sät nach, pflegt die Pflanzen, bringt die Ernte in die Truhe |
-| Holzfäller | 3 Silber | Holzfällerhütte | fällt wilde Bäume rund um die Hütte und pflanzt nach |
+| Holzfäller | 3 Silber | Holzfällerhütte | fällt die Bäume im Hain hinter der Hütte und wilde Bäume ringsum, pflanzt nach |
 | Bergmann | 5 Silber | Mine | steigt in den Schacht und hackt an der Erzwand (Kohle, Eisen, Kupfer, selten Gold und Edelsteine) |
 | Schmied | 8 Silber | Schmiede | handelt mit Stahlwaffen und -rüstungen |
 | Händler | 8 Silber | Markt | kauft Ernte, Holz und Stein, verkauft Baustoffe und Nützliches |
@@ -1105,6 +1180,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
   `/locate structure kingdomsatwar:village_timber` (bzw. `village_nordic`, `village_clay`, `village_stilt`) zu finden.
 - **Die 17 Bauwerke der Oberwelt** an Stelle der Vanilla-Bauwerke (siehe „Bauwerke der Oberwelt“) – vom
   Sternensturz mit dem Portal ins Ende bis zur Raubritterburg im dunklen Wald.
+- **Die Aschenesse** im Nether an Stelle der Netherfestung (siehe „Bauwerke des Nethers“).
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -1194,7 +1270,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
    - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
-   - zuletzt **Nether und End**.
+   - zuletzt **Nether und End** – die Wesen sind fertig, von den Bauwerken die Aschenesse; es folgen Bastion,
+     Netherfossilien und Endstadt.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

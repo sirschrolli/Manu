@@ -125,6 +125,7 @@ final class OverworldShowcase {
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
         steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("gamerule max_block_modifications 10000000"));
         int index = 0;
         for (ResourceKey<net.minecraft.world.level.levelgen.feature.Feature> key : TREES) {
             String name = key.identifier().getPath();
@@ -142,6 +143,7 @@ final class OverworldShowcase {
                 var feature = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.FEATURE).getOrThrow(key).value();
                 BlockPos center = new BlockPos(x, ground[0], z);
                 prepareGround(level, center, "trees", 24);
+                meadow(level, center, 24, 60, treeBiome(name));
                 int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}} : new int[][] {{0, 0}, {-10, 8}, {9, -8}};
                 int seed = 0;
                 for (int[] spot : spots) {
@@ -154,11 +156,12 @@ final class OverworldShowcase {
                 }
             }));
             steps.add(Step.waitTicks(30));
-            double dist = big ? 30.0 : 21.0;
-            double up = big ? 16.0 : 9.0;
+            double dist = big ? 19.0 : 12.0;
+            double up = big ? 9.0 : 4.5;
             steps.add(Step.command(String.format(Locale.ROOT, "tp @s %.1f %.1f %.1f -45 %.1f", x - dist, ground[0] + up, z - dist,
-                    Math.toDegrees(Math.atan2(up - (big ? 12.0 : 6.0), Math.sqrt(2) * dist)))));
-            steps.add(Step.waitTicks(20));
+                    Math.toDegrees(Math.atan2(up - (big ? 13.0 : 5.5), Math.sqrt(2) * dist)))));
+            // beim ersten Platz baut der Client noch die ganze Umgebung: länger warten, sonst fehlen Stämme im Bild
+            steps.add(Step.waitTicks(index == 1 ? 160 : 20));
             steps.add(Step.waitForChunks(400));
             steps.add(Step.screenshot("tree_" + name));
         }
@@ -174,6 +177,7 @@ final class OverworldShowcase {
         steps.add(Step.server(level -> {
             BlockPos center = new BlockPos(x, ground[0], z);
             prepareGround(level, center, "trees", 30);
+            meadow(level, center, 30, 70, "forest");
             var features = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.FEATURE);
             List<ResourceKey<net.minecraft.world.level.levelgen.feature.Feature>> mix = List.of(
                     net.minecraft.data.worldgen.features.TreeFeatures.OAK, net.minecraft.data.worldgen.features.TreeFeatures.FANCY_OAK,
@@ -181,15 +185,55 @@ final class OverworldShowcase {
                     net.minecraft.data.worldgen.features.TreeFeatures.BIRCH, net.minecraft.data.worldgen.features.TreeFeatures.OAK);
             net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(99L);
             for (int k = 0; k < 16; k++) {
-                BlockPos at = center.offset(random.nextInt(48) - 24, 0, random.nextInt(48) - 24);
+                // ein Waldrand: die Bäume hinten dichter, vorn eine Wiese
+                BlockPos at = center.offset(random.nextInt(44) - 18, 0, random.nextInt(44) - 18);
+                if (at.getX() - center.getX() + at.getZ() - center.getZ() < -14) {
+                    continue;
+                }
                 features.getOrThrow(mix.get(k % mix.size())).value().place(level, level.getChunkSource().getGenerator(), random, at);
             }
         }));
         steps.add(Step.waitTicks(30));
-        steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d -45 18", x - 34, ground[0] + 12, z - 34)));
-        steps.add(Step.waitTicks(20));
+        steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d -45 2", x - 17, ground[0] + 4, z - 17)));
+        steps.add(Step.waitTicks(index == 0 ? 160 : 20));
         steps.add(Step.waitForChunks(400));
         steps.add(Step.screenshot("tree_grove"));
+    }
+
+    /** Das Biom, in dem ein Baum der Galerie steht (für die Farben von Laub und Gras). */
+    private static String treeBiome(String tree) {
+        return switch (tree) {
+            case "birch", "super_birch_bees_0002" -> "birch_forest";
+            case "spruce", "pine" -> "taiga";
+            case "mega_spruce", "mega_pine" -> "old_growth_spruce_taiga";
+            case "jungle_tree", "mega_jungle_tree" -> "jungle";
+            case "acacia" -> "savanna";
+            case "dark_oak" -> "dark_forest";
+            case "cherry" -> "cherry_grove";
+            case "swamp_oak" -> "swamp";
+            default -> "forest";
+        };
+    }
+
+    /**
+     * Eine Wiese um einen Galerieplatz: Gras bis {@code outer} Blöcke weit (statt des Sands der flachen Welt) und das
+     * passende Biom darüber, damit Laub und Gras ihre Farben haben.
+     */
+    private static void meadow(ServerLevel level, BlockPos center, int inner, int outer, String biome) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int dx = -outer; dx <= outer; dx++) {
+            for (int dz = -outer; dz <= outer; dz++) {
+                if (Math.abs(dx) <= inner && Math.abs(dz) <= inner) {
+                    continue;
+                }
+                pos.set(center.getX() + dx, center.getY() - 1, center.getZ() + dz);
+                level.setBlock(pos, Blocks.GRASS_BLOCK.defaultBlockState(), 2);
+            }
+        }
+        var holder = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME)
+                .getOrThrow(ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.Identifier.withDefaultNamespace(biome)));
+        var result = net.minecraft.server.commands.FillBiomeCommand.fill(level, center.offset(-outer, -8, -outer), center.offset(outer, 44, outer), holder);
+        result.ifRight(error -> KingdomsAtWar.LOGGER.warn("[Showcase] Biom {} nicht gesetzt: {}", biome, error.getMessage()));
     }
 
     /** Boden für ein Feature (wie im GameTest): je nach Biom Asche, Schnee, Sturmstein, Sand oder Gras; Teich, Becken, Felsdach. */

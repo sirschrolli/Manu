@@ -98,6 +98,12 @@ final class WildGameTests {
             ModGameTests.TEST_FUNCTIONS.register("wild_berry_bush", () -> WildGameTests::berryBush);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BEEHIVE =
             ModGameTests.TEST_FUNCTIONS.register("wild_beehive", () -> WildGameTests::beehive);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> NEST_ONCE =
+            ModGameTests.TEST_FUNCTIONS.register("wild_nest_releases_once", () -> WildGameTests::nestReleasesOnce);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SWARM =
+            ModGameTests.TEST_FUNCTIONS.register("wild_swarm_trimmed", () -> WildGameTests::swarmTrimmed);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SPAWNER =
+            ModGameTests.TEST_FUNCTIONS.register("wild_spawner_adopts", () -> WildGameTests::spawnerAdopts);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHOULDER =
             ModGameTests.TEST_FUNCTIONS.register("wild_parrot_shoulder", () -> WildGameTests::parrotShoulder);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TRADER_LLAMA =
@@ -111,7 +117,7 @@ final class WildGameTests {
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         for (var test : List.of(SPAWN, SPAWN_LISTS, BREEDS, CONVERSION, OFFSPRING, CAMEL_COURTSHIP, ARMADILLO_COURTSHIP, SAVE_LOAD,
-                EQUIPMENT, BERRY_BUSH, BEEHIVE, SHOULDER, TRADER_LLAMA, WOLF_PREY)) {
+                EQUIPMENT, BERRY_BUSH, BEEHIVE, NEST_ONCE, SWARM, SPAWNER, SHOULDER, TRADER_LLAMA, WOLF_PREY)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -460,6 +466,85 @@ final class WildGameTests {
         helper.assertTrue(hive.getOccupantCount() == 0, "Biene bleibt im Stock");
         var bees = level.getEntitiesOfClass(WildBee.class, new AABB(helper.absolutePos(hivePos)).inflate(2.0));
         helper.assertTrue(bees.size() == 1 && bees.getFirst().getBreed() == WildBee.Breed.HUMMEL, "Hummel kommt nicht heraus: " + bees);
+        helper.succeed();
+    }
+
+    /**
+     * Ein Nest voller Vanilla-Bienen (wie aus der Welterzeugung) gibt jede Biene genau einmal frei, als eigene Biene. Früher
+     * behielt es sie, weil die Vanilla-Biene nie erschien, und ließ jeden Tick eine neue heraus.
+     */
+    private static void nestReleasesOnce(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos nestPos = new BlockPos(4, 1, 4);
+        helper.setBlock(nestPos, Blocks.BEE_NEST);
+        BlockPos nestAt = helper.absolutePos(nestPos);
+        BeehiveBlockEntity nest = (BeehiveBlockEntity) level.getBlockEntity(nestAt);
+        helper.assertTrue(nest != null, "kein Nest");
+        for (int i = 0; i < 3; i++) {
+            nest.storeBee(BeehiveBlockEntity.Occupant.create(0));
+        }
+        helper.assertTrue(nest.getOccupantCount() == 3, "nicht drei Bienen im Nest: " + nest.getOccupantCount());
+        nest.emptyAllLivingFromHive(null, level.getBlockState(nestAt), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+        helper.assertTrue(nest.getOccupantCount() == 0, "Bienen bleiben im Nest: " + nest.getOccupantCount());
+        AABB box = new AABB(nestAt).inflate(6.0);
+        helper.runAfterDelay(3, () -> {
+            // ein zweites Mal: nichts mehr drin, nichts kommt heraus
+            nest.emptyAllLivingFromHive(null, level.getBlockState(nestAt), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+            int ours = level.getEntitiesOfClass(WildBee.class, box).size();
+            int vanilla = level.getEntitiesOfClass(net.minecraft.world.entity.animal.bee.Bee.class, box, bee -> bee.getType() == EntityTypes.BEE).size();
+            helper.assertTrue(ours == 3 && vanilla == 0, "aus dem Nest kamen " + ours + " eigene und " + vanilla + " Vanilla-Bienen");
+            helper.assertTrue(level.getEntitiesOfClass(WildBee.class, box, bee -> nestAt.equals(bee.getHivePos())).size() == 3,
+                    "die Bienen kennen ihr Nest nicht");
+            helper.succeed();
+        });
+    }
+
+    /** Ein Schwarm an einem Nest (das Erbe alter Versionen) schrumpft auf drei Bienen; die im Nest zählen mit, benannte bleiben. */
+    private static void swarmTrimmed(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos nestPos = new BlockPos(4, 1, 4);
+        helper.setBlock(nestPos, Blocks.BEE_NEST);
+        BlockPos hive = helper.absolutePos(nestPos);
+        BeehiveBlockEntity nest = (BeehiveBlockEntity) level.getBlockEntity(hive);
+        helper.assertTrue(nest != null, "kein Nest");
+        nest.storeBee(BeehiveBlockEntity.Occupant.create(0));
+        for (int i = 0; i < 8; i++) {
+            WildBee bee = helper.spawnWithNoFreeWill(ModEntities.BEE.get(), new BlockPos(1 + i % 7, 3, 7));
+            bee.setHivePos(hive);
+            if (i == 6) {
+                bee.setCustomName(net.minecraft.network.chat.Component.literal("Summse"));
+            }
+        }
+        int removed = io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimalConversion.trimSwarm(level, hive);
+        var left = level.getEntitiesOfClass(WildBee.class, new AABB(hive).inflate(10.0), bee -> bee.isAlive() && hive.equals(bee.getHivePos()));
+        helper.assertTrue(removed == 6 && left.size() == 2, removed + " Bienen entfernt, " + left.size() + " übrig");
+        helper.assertTrue(left.stream().anyMatch(Entity::hasCustomName), "die benannte Biene ist fort");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimalConversion.trimSwarm(level, hive) == 0,
+                "beim zweiten Mal wieder entfernt");
+        helper.succeed();
+    }
+
+    /**
+     * Ein Spawner, der noch Vanilla-Zombies ruft (Verlies), bekommt beim ersten Spawn den eigenen Wiedergänger eingetragen –
+     * sonst zählte seine Obergrenze die ersetzten Wesen nicht mit.
+     */
+    private static void spawnerAdopts(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = new BlockPos(4, 2, 4);
+        helper.setBlock(pos, Blocks.SPAWNER);
+        BlockPos at = helper.absolutePos(pos);
+        var spawner = (net.minecraft.world.level.block.entity.SpawnerBlockEntity) level.getBlockEntity(at);
+        helper.assertTrue(spawner != null, "kein Spawner");
+        spawner.setEntityId(EntityTypes.ZOMBIE, level.getRandom());
+        Mob zombie = (Mob) EntityTypes.ZOMBIE.create(level, EntitySpawnReason.SPAWNER);
+        helper.assertTrue(zombie != null, "kein Zombie");
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck(
+                zombie, level, EntitySpawnReason.SPAWNER, spawner.getSpawner()));
+        Entity shown = spawner.getSpawner().getOrCreateDisplayEntity(level, at);
+        helper.assertTrue(shown != null && shown.getType() == ModEntities.ZOMBIE.get(),
+                "der Spawner ruft noch " + (shown == null ? "nichts" : shown.getType().getDescriptionId()));
         helper.succeed();
     }
 

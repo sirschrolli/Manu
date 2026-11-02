@@ -193,6 +193,11 @@ public final class FarmAnimalConversion {
             return;
         }
         if (event.loadedFromDisk()) {
+            // geladene Bienen: hängen zu viele an einem Nest (das Erbe der Nester, die ohne Ende Bienen freiließen),
+            // bleiben am Ende des Ticks nur so viele, wie hineinpassen
+            if (mob instanceof net.minecraft.world.entity.animal.bee.Bee bee && bee.getHivePos() != null) {
+                LOADED_BEES.add(bee);
+            }
             return;
         }
         if (mob.entityTags().contains(REPLACED_TAG)) {
@@ -200,6 +205,13 @@ public final class FarmAnimalConversion {
             return;
         }
         if (!replacements().containsKey(mob.getType())) {
+            return;
+        }
+        if (mob.getType() == EntityTypes.BEE) {
+            // Bienen aus Nest und Stock: Der Stock gibt eine Biene nur dann frei, wenn sie wirklich in der Welt erscheint –
+            // sonst behält er sie und lässt sie im nächsten Tick wieder heraus, und so fort (jeden Tick eine neue Biene).
+            // Darum erscheint die Vanilla-Biene erst und wird am Ende des Ticks durch die eigene ersetzt.
+            PENDING.add(mob);
             return;
         }
         if (mob.isPassenger() || mob.isVehicle() || mob.getType() == EntityTypes.TRADER_LLAMA || mob.getType() == EntityTypes.WANDERING_TRADER) {
@@ -274,7 +286,87 @@ public final class FarmAnimalConversion {
         }
     }
 
-    /** Wesen, die erst am Ende des Ticks ersetzt werden (Reiter, Reittiere, Händlerlamas). */
+    /** So viele Bienen gehören höchstens zu einem Nest oder Bienenstock – so viele, wie hineinpassen. */
+    public static final int BEES_PER_HIVE = 3;
+
+    /** Gerade geladene Bienen mit einem Nest (siehe {@link #trimLoadedBees}). */
+    private static final java.util.List<net.minecraft.world.entity.animal.bee.Bee> LOADED_BEES = new java.util.ArrayList<>();
+
+    private static void trimLoadedBees(ServerLevel level) {
+        java.util.Set<net.minecraft.core.BlockPos> hives = new java.util.LinkedHashSet<>();
+        for (var bee : java.util.List.copyOf(LOADED_BEES)) {
+            if (bee.level() == level) {
+                LOADED_BEES.remove(bee);
+                if (!bee.isRemoved() && bee.getHivePos() != null) {
+                    hives.add(bee.getHivePos());
+                }
+            }
+        }
+        for (var hive : hives) {
+            trimSwarm(level, hive);
+        }
+    }
+
+    /**
+     * Lässt an einem Nest höchstens {@link #BEES_PER_HIVE} Bienen übrig – die im Nest zählen mit, benannte bleiben
+     * zuerst; die übrigen verschwinden. So lösen sich die Schwärme auf, die frühere Versionen an den Nestern erzeugt
+     * haben. Gibt zurück, wie viele Bienen verschwunden sind.
+     */
+    public static int trimSwarm(ServerLevel level, net.minecraft.core.BlockPos hive) {
+        int inside = level.isLoaded(hive) && level.getBlockEntity(hive) instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity nest
+                ? nest.getOccupantCount() : 0;
+        java.util.List<net.minecraft.world.entity.animal.bee.Bee> outside = new java.util.ArrayList<>(level.getEntitiesOfClass(
+                net.minecraft.world.entity.animal.bee.Bee.class, new net.minecraft.world.phys.AABB(hive).inflate(48.0),
+                bee -> bee.isAlive() && hive.equals(bee.getHivePos())));
+        int keep = Math.max(0, BEES_PER_HIVE - inside);
+        if (outside.size() <= keep) {
+            return 0;
+        }
+        outside.sort(java.util.Comparator.<net.minecraft.world.entity.animal.bee.Bee, Boolean>comparing(bee -> !bee.hasCustomName())
+                .thenComparing(bee -> !bee.isLeashed()).thenComparing(Entity::getUUID));
+        int removed = 0;
+        for (int i = keep; i < outside.size(); i++) {
+            outside.get(i).discard();
+            removed++;
+        }
+        if (removed > 0) {
+            KingdomsAtWar.LOGGER.info("Nest bei {}: {} überzählige Bienen entfernt", hive.toShortString(), removed);
+        }
+        return removed;
+    }
+
+    /**
+     * Spawner, die noch ein Vanilla-Wesen rufen (die Spawner der Verliese, alte Welten): Beim ersten Mal wird das eigene
+     * Gegenstück eingetragen (und im Käfig gezeigt). Sonst zählte ihre Obergrenze (höchstens sechs in der Nähe) die
+     * ersetzten Wesen nicht mit, und sie riefen immer neue herbei.
+     */
+    @SubscribeEvent
+    static void onSpawnerCheck(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck event) {
+        net.minecraft.world.level.BaseSpawner spawner = event.getSpawner();
+        Supplier<? extends EntityType<? extends Mob>> target = replacements().get(event.getEntity().getType());
+        if (spawner == null || target == null) {
+            return;
+        }
+        adoptSpawner(event.getLevel().getLevel(), spawner, target.get());
+    }
+
+    /** Trägt das eigene Gegenstück in einen Spawner ein (Block oder Lore). */
+    public static void adoptSpawner(ServerLevel level, net.minecraft.world.level.BaseSpawner spawner, EntityType<?> type) {
+        var owner = spawner.getOwner();
+        if (owner == null) {
+            return;
+        }
+        owner.ifLeft(blockEntity -> {
+            if (blockEntity instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity spawnerEntity) {
+                spawnerEntity.setEntityId(type, level.getRandom());
+                var state = level.getBlockState(blockEntity.getBlockPos());
+                level.sendBlockUpdated(blockEntity.getBlockPos(), state, state, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+        });
+        owner.ifRight(entity -> spawner.setEntityId(type, level, level.getRandom(), entity.blockPosition()));
+    }
+
+    /** Wesen, die erst am Ende des Ticks ersetzt werden (Reiter, Reittiere, Händlerlamas, Bienen). */
     private static final java.util.List<Mob> PENDING = new java.util.ArrayList<>();
 
     @SubscribeEvent
@@ -284,6 +376,9 @@ public final class FarmAnimalConversion {
         }
         if (!RECENT.isEmpty()) {
             applyLateChanges(level);
+        }
+        if (!LOADED_BEES.isEmpty()) {
+            trimLoadedBees(level);
         }
         if (PENDING.isEmpty()) {
             return;
@@ -317,6 +412,10 @@ public final class FarmAnimalConversion {
             if (entity instanceof Mob mob && !mob.isRemoved() && mob.isAlive() && replacements().containsKey(mob.getType())) {
                 Mob replacement = convert(level, mob, true);
                 if (replacement != null) {
+                    // wen das Original gerade angreift (die Bienen eines aufgebrochenen Nests den Spieler), greift auch das Gegenstück an
+                    if (mob.getTarget() != null) {
+                        replacement.setTarget(mob.getTarget());
+                    }
                     swap.put(mob, replacement);
                 }
             }

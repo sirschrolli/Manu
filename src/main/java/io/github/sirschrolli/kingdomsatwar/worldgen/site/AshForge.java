@@ -50,7 +50,8 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  * Wachstube, ein Kerker – oft mit einem Stollen in die nächste Höhle), sonst auf Wachtürmen über der Lava.
  *
  * <p>Eigene Koordinaten: Mitte des Turms bei (0, 0, 0); y = 0 ist der Boden der Schlackenhalle, eine Schicht über dem
- * Lavasee (man steht auf y = 1). Vorn (+z) liegt der Anleger, hinten (−z) steht der Thron.
+ * Lavasee (man steht auf y = 1). Vorn (+z) liegt unten der Anleger, auf derselben Seite steht oben der Thron (mit dem
+ * Blick in den Saal).
  */
 final class AshForge {
     /** Teile: der Turm und die Brücken (Brücken bauen in ihrem eigenen Rahmen nach +z). */
