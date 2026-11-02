@@ -305,5 +305,6 @@ public class NyxarEntity extends DragonBossEntity {
     @Override
     protected void onDefeated(ServerLevel level, BlockPos home) {
         ShadowThrone.onNyxarDefeated(level, this, home);
+        io.github.sirschrolli.kingdomsatwar.story.Story.onNyxarDefeated(level);
     }
 }

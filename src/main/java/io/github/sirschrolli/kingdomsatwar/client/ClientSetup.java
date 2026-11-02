@@ -159,6 +159,7 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
+        event.registerEntityRenderer(ModEntities.INTRO_VISION.get(), io.github.sirschrolli.kingdomsatwar.client.intro.IntroVisionRenderer::new);
         // Kreaturen der Schattenwelt
         event.registerEntityRenderer(ModEntities.SHADE_STALKER.get(), ShadeStalkerRenderer::new);
         event.registerEntityRenderer(ModEntities.CRYSTAL_CRAWLER.get(), CrystalCrawlerRenderer::new);

@@ -34,7 +34,7 @@ public final class StoryClient {
     }
 
     private static void onChapterCard(ChapterCardPayload payload, IPayloadContext context) {
-        ChapterCardOverlay.queue(payload.chapter(), payload.fallen());
+        ChapterCardOverlay.queue(payload.chapter(), payload.fallen(), payload.narration());
     }
 
     @SubscribeEvent

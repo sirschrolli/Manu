@@ -20,7 +20,7 @@ Stimme, der wie ein alter König eine Heldensage am Feuer erzählt. Sie entsteht
 
 1. `design_voice.py` – die Stimme wird nur **in Worten beschrieben** (VoiceDesign-Modell) und spricht eine kurze
    Hörprobe. Das Ergebnis liegt bei: `narrator/narrator_reference.mp3` (Zufallswert 11).
-2. `narrate.py` – das Base-Modell übernimmt die Stimme aus dieser Hörprobe und spricht alle neun Zeilen auf
+2. `narrate.py` – das Base-Modell übernimmt die Stimme aus dieser Hörprobe und spricht alle Zeilen (Intro und Kapitel) auf
    Deutsch und Englisch, je drei Takes (ohne Grafikkarte etwa 1,5 Stunden).
 3. `pick_takes.py` – Whisper hört alle Takes ab und wählt je Zeile den, der am deutlichsten zu verstehen ist.
 

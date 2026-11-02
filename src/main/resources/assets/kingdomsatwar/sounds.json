@@ -1165,6 +1165,66 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.lindworm.slither"
   },
+  "entity.nyxar.breath": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/sonic_charge1",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge2",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge3",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/warden/sonic_charge4",
+        "pitch": 0.6,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/ghast/moan1",
+        "pitch": 0.45,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/moan2",
+        "pitch": 0.45,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/ghast/moan3",
+        "pitch": 0.45,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.breath"
+  },
+  "entity.nyxar.shriek": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/ghast/scream1",
+        "pitch": 0.4,
+        "volume": 1.0
+      },
+      {
+        "name": "minecraft:mob/ghast/scream2",
+        "pitch": 0.4,
+        "volume": 1.0
+      },
+      {
+        "name": "minecraft:mob/ghast/scream3",
+        "pitch": 0.4,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
+  },
   "entity.soldier.armor": {
     "sounds": [
       {
@@ -1482,6 +1542,18 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.intro.narration"
   },
+  "intro.narration.de.10": {
+    "sounds": [
+      "kingdomsatwar:intro/narration_de_10"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.intro.narration"
+  },
+  "intro.narration.de.11": {
+    "sounds": [
+      "kingdomsatwar:intro/narration_de_11"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.intro.narration"
+  },
   "intro.narration.de.2": {
     "sounds": [
       "kingdomsatwar:intro/narration_de_02"
@@ -1533,6 +1605,18 @@
   "intro.narration.en.1": {
     "sounds": [
       "kingdomsatwar:intro/narration_en_01"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.intro.narration"
+  },
+  "intro.narration.en.10": {
+    "sounds": [
+      "kingdomsatwar:intro/narration_en_10"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.intro.narration"
+  },
+  "intro.narration.en.11": {
+    "sounds": [
+      "kingdomsatwar:intro/narration_en_11"
     ],
     "subtitle": "subtitles.kingdomsatwar.intro.narration"
   },
@@ -1593,6 +1677,234 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.command_baton.command"
+  },
+  "story.all_fallen.de": {
+    "sounds": [
+      "kingdomsatwar:story/all_fallen_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.all_fallen.en": {
+    "sounds": [
+      "kingdomsatwar:story/all_fallen_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.chronicle.de": {
+    "sounds": [
+      "kingdomsatwar:story/chronicle_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.chronicle.en": {
+    "sounds": [
+      "kingdomsatwar:story/chronicle_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.crown.de": {
+    "sounds": [
+      "kingdomsatwar:story/crown_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.crown.en": {
+    "sounds": [
+      "kingdomsatwar:story/crown_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.crowned.de": {
+    "sounds": [
+      "kingdomsatwar:story/crowned_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.crowned.en": {
+    "sounds": [
+      "kingdomsatwar:story/crowned_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.dragon_1.de": {
+    "sounds": [
+      "kingdomsatwar:story/dragon_1_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.dragon_1.en": {
+    "sounds": [
+      "kingdomsatwar:story/dragon_1_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_earth.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_earth_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_earth.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_earth_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_fire.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_fire_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_fire.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_fire_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_ice.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_ice_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_ice.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_ice_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_lightning.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_lightning_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_lightning.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_lightning_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_nature.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_nature_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_nature.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_nature_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_water.de": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_water_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.fallen_water.en": {
+    "sounds": [
+      "kingdomsatwar:story/fallen_water_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.kingdom.de": {
+    "sounds": [
+      "kingdomsatwar:story/kingdom_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.kingdom.en": {
+    "sounds": [
+      "kingdomsatwar:story/kingdom_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.nyxar.de": {
+    "sounds": [
+      "kingdomsatwar:story/nyxar_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.nyxar.en": {
+    "sounds": [
+      "kingdomsatwar:story/nyxar_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_1.de": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_1_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_1.en": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_1_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_2.de": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_2_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_2.en": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_2_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_3.de": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_3_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_3.en": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_3_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_4.de": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_4_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_4.en": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_4_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_5.de": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_5_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.remaining_5.en": {
+    "sounds": [
+      "kingdomsatwar:story/remaining_5_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.seal.de": {
+    "sounds": [
+      "kingdomsatwar:story/seal_de"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
+  },
+  "story.seal.en": {
+    "sounds": [
+      "kingdomsatwar:story/seal_en"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.story.narration"
   },
   "voice.soldier.attack.de": {
     "sounds": [
@@ -1725,65 +2037,5 @@
       "kingdomsatwar:voice/soldier/victory_en_3b"
     ],
     "subtitle": "subtitles.kingdomsatwar.voice.soldier.victory"
-  },
-  "entity.nyxar.breath": {
-    "sounds": [
-      {
-        "name": "minecraft:mob/warden/sonic_charge1",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/warden/sonic_charge2",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/warden/sonic_charge3",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/warden/sonic_charge4",
-        "pitch": 0.6,
-        "volume": 0.9
-      },
-      {
-        "name": "minecraft:mob/ghast/moan1",
-        "pitch": 0.45,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/ghast/moan2",
-        "pitch": 0.45,
-        "volume": 0.6
-      },
-      {
-        "name": "minecraft:mob/ghast/moan3",
-        "pitch": 0.45,
-        "volume": 0.6
-      }
-    ],
-    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.breath"
-  },
-  "entity.nyxar.shriek": {
-    "sounds": [
-      {
-        "name": "minecraft:mob/ghast/scream1",
-        "pitch": 0.4,
-        "volume": 1.0
-      },
-      {
-        "name": "minecraft:mob/ghast/scream2",
-        "pitch": 0.4,
-        "volume": 1.0
-      },
-      {
-        "name": "minecraft:mob/ghast/scream3",
-        "pitch": 0.4,
-        "volume": 1.0
-      }
-    ],
-    "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
   }
 }

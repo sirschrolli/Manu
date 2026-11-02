@@ -31,7 +31,7 @@ Monolith auf. **Der sechste Sieg bricht das Siegel**: Der Kreis wird zum Tor in 
 
 | Kapitel | Inhalt | Ziel |
 |---|---|---|
-| Prolog | Erzähltes Intro (Kameraflug, Stimme C) | – |
+| Prolog | Erzähltes Intro „Das Siegel“ (die sechs Drachen schmieden das Siegel, Stimme C) | – |
 | 1 Ein neues Königreich | Siedlung gründen, erste Bewohner mit Münzen anheuern | Rathaus/Stadtbanner setzen |
 | 2 Die Chronik des Siegels | Die Chronik erklärt Siegel und Drachen, der Drachenkompass zeigt den Weg | Siegelkreis finden |
 | 3–8 Die sechs Drachen | in beliebiger Reihenfolge | Boss besiegen → Ei + Siegelsplitter |
@@ -288,4 +288,5 @@ der Schattenzitadelle ist der Höhepunkt nach dem Story-Ende.
 | E5d-3 | Riesengebeine (statt Netherfossilien): Brustkorb, gehörnter Schädel mit Seelenfeuer in den Augen, Riesenschlange und Knochenhand im Seelensandtal, halb im Sand, manchmal mit vertrocknetem Ghast; Verlorene Pforte (statt Portalruine im Nether): Ankunftstor der Feuerdiener unter einem Spitzbogen auf einem Stufenpodest, Obelisken mit Seelenfeuer, herausgebrochene Steine zum Wiedereinsetzen, ihr letztes Lager mit Truhe, im Lavameer auf einer Basaltinsel (Version 0.34.0) | ✅ |
 | E5e | Sternwarte (statt Endstadt und Endschiff): schwebende Plattform mit Sternenhof und Sternstein, achteckiger Turm mit Wendeltreppe, Halle der Schreine, Bibliothek, Armillarsphäre, Reliquienkammer mit den Elytren (drei von fünf), Kupferkuppel mit Fernrohr, zwei Seitentürme mit Amethystspitzen und Brücken, Schreinlinge als Wache; damit ist kein Vanilla-Bauwerk mehr übrig (Version 0.35.0) | ✅ |
 | E5x | Köpfe der eigenen Wesen: Gerippeschädel, Brandgebeinschädel (mit Flammen), Wiedergänger-, Kriecher-, Borstlings- (wackelnde Ohren) und Sternenfresserkopf (klappender Kiefer) aus den Köpfen der Wesen selbst – als Block, Gegenstand und getragen; die Blöcke bleiben die von Vanilla (Beschwörung, Tarnung, Notenblöcke); der Sternenfresserkopf als Trophäe in jeder Sternwarte (Version 0.36.0) | ✅ |
-| G | Erzähler-Kapitel und neues Intro mit Stimme C, Feinschliff, Veröffentlichung | ⏳ |
+| G1 | Neues Intro „Das Siegel“ (die Dunkelheit steigt auf, die sechs Drachen schmieden das Siegel, die Splitter fliegen in ihre Herzen, die Last macht sie wild, Lichtsäulen über den Nestern, das Pochen unter der Erde; elf Zeilen, Musik mit düsterem Anfang) und der Erzähler zu jedem Kapitel (19 Zeilen DE/EN mit Stimme C: Königreich, Chronik, Siegelkreis, jeder gefallene Drache, wie viele noch übrig sind, Siegelbruch, Schattenwelt, Nyxar, Krönung) (Version 0.37.0) | ✅ |
+| G2 | Feinschliff (Schattenwelt-Pflanzen, Bewegungen aller Wesen), Veröffentlichung | ⏳ |

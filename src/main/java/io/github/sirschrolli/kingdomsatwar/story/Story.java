@@ -129,12 +129,20 @@ public final class Story {
         }
     }
 
-    /** Der Spieler wurde gekrönt: der Epilog ist erfüllt. */
+    /** Der Spieler wurde gekrönt: der Epilog ist erfüllt – der Erzähler beschließt die Chronik. */
     public static void onCrowned(ServerPlayer player) {
         StoryProgress p = progress(player);
         if (p.set(Flag.CROWNED)) {
             save(player, p);
             update(player);
+            narrate(player, "crowned");
+        }
+    }
+
+    /** Nyxar ist gefallen: Alle hören es vom Erzähler. */
+    public static void onNyxarDefeated(ServerLevel level) {
+        for (ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
+            narrate(player, "nyxar");
         }
     }
 
@@ -156,11 +164,15 @@ public final class Story {
             player.sendSystemMessage(Component.translatable("message.kingdomsatwar.story.dragon_fallen", dragon).withStyle(ChatFormatting.GOLD));
             StoryProgress p = progress(player);
             Chapter chapter = current(player);
+            int defeated = LairRecords.of(level).defeatedCount();
             if (chapter.ordinal() > p.lastCard()) {
                 sendCard(player, chapter, element.ordinal());
                 p.setLastCard(chapter.ordinal());
+            } else if (chapter.isDragon() && defeated >= 6) {
+                // der sechste Drache: kein neues Kapitel, aber der Erzähler meldet sich
+                narrate(player, "fallen_" + element.id() + ",all_fallen");
             }
-            p.setDefeatsTold(LairRecords.of(level).defeatedCount());
+            p.setDefeatsTold(defeated);
             save(player, p);
         }
     }
@@ -254,7 +266,44 @@ public final class Story {
     }
 
     public static void sendCard(ServerPlayer player, Chapter chapter, int fallen) {
-        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new ChapterCardPayload(chapter.ordinal(), fallen));
+        int defeated = LairRecords.of(player.level().getServer().overworld()).defeatedCount();
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player,
+                new ChapterCardPayload(chapter.ordinal(), fallen, narration(chapter, fallen, defeated)));
+    }
+
+    /** Nur der Erzähler (ohne Titelkarte), z. B. nach dem letzten Drachen oder bei der Krönung. */
+    public static void narrate(ServerPlayer player, String lines) {
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player, new ChapterCardPayload(-1, -1, lines));
+    }
+
+    /**
+     * Was der Erzähler zu einer Titelkarte sagt (Kennungen aus {@code tools/audio/lines.py}, durch Kommas getrennt): zu
+     * den Drachen-Kapiteln den Namen des gefallenen Drachen und wie viele noch übrig sind.
+     */
+    public static String narration(Chapter chapter, int fallen, int defeated) {
+        if (chapter.isDragon()) {
+            List<String> parts = new ArrayList<>();
+            if (fallen >= 0 && fallen < DragonType.values().length) {
+                parts.add("fallen_" + DragonType.values()[fallen].id());
+            }
+            int done = Math.max(Mth.clamp(defeated, 0, 6), chapter.dragonIndex());
+            int remaining = 6 - done;
+            if (remaining <= 0) {
+                parts.add("all_fallen");
+            } else if (done == 0) {
+                parts.add("dragon_1");
+            } else {
+                parts.add("remaining_" + remaining);
+            }
+            return String.join(",", parts);
+        }
+        return switch (chapter) {
+            case KINGDOM -> "kingdom";
+            case CHRONICLE -> "chronicle";
+            case SEAL -> "seal";
+            case CROWN -> "crown";
+            default -> "";
+        };
     }
 
     // =====================================================================================

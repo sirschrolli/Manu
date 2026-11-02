@@ -489,6 +489,11 @@ public final class ModEntities {
             ENTITIES.registerEntityType("seal_break", io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity::new, MobCategory.MISC,
                     builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().noSave().clientTrackingRange(16).updateInterval(1));
 
+    /** Träger der Lichteffekte im Erzähl-Intro (nur auf dem eigenen Bildschirm, nie auf dem Server). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.IntroVisionEntity>> INTRO_VISION =
+            ENTITIES.registerEntityType("intro_vision", io.github.sirschrolli.kingdomsatwar.entity.IntroVisionEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().noSave().noSummon().clientTrackingRange(16));
+
     /** Der Boss einer Drachenart (null, solange er noch nicht gebaut ist). */
     public static @org.jspecify.annotations.Nullable EntityType<? extends io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity> bossType(
             DragonType element) {

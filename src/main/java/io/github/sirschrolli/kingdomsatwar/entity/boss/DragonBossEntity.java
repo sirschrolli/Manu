@@ -477,6 +477,23 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
         this.setMoveMode(mode);
     }
 
+    /**
+     * Für das Erzähl-Intro (ein Boss, den es nur auf dem eigenen Bildschirm gibt): Kampfhaltung in der gewünschten
+     * Bewegungsart und Phase (ab Phase 2 steigen Teilchen des Elements auf, in Phase 3 glühen die Nüstern).
+     */
+    public void cinematic(MoveMode mode, int phase) {
+        this.devPose(mode);
+        this.entityData.set(DATA_PHASE, (byte) Mth.clamp(phase, 1, 3));
+    }
+
+    /** Für das Erzähl-Intro: eine Animation abspielen (z. B. {@link BossAnims#ROAR}), {@link BossAnims#NONE} beendet sie. */
+    public void cinematicAnim(int anim) {
+        if (this.getAttackAnim() == anim && anim != BossAnims.NONE) {
+            this.entityData.set(DATA_ATTACK, BossAnims.NONE);
+        }
+        this.entityData.set(DATA_ATTACK, anim);
+    }
+
     private void finishAwakening(ServerLevel level) {
         this.noPhysics = false;
         this.setBossState(State.FIGHT);

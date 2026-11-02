@@ -259,6 +259,7 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("block.dragon_egg.hatch", "Dragon hatches", "Drache schlüpft");
         subtitle("intro.narration", "Narrator speaks", "Erzähler spricht");
         subtitle("intro.music", "Intro music plays", "Intro-Musik spielt");
+        subtitle("story.narration", "Narrator speaks", "Erzähler spricht");
         subtitle("voice.soldier.recruit", "Soldier reports for duty", "Soldat meldet sich zum Dienst");
         subtitle("voice.soldier.follow", "Soldier follows", "Soldat folgt");
         subtitle("voice.soldier.hold", "Soldier holds position", "Soldat hält die Stellung");
@@ -266,25 +267,71 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("voice.soldier.victory", "Soldier cheers", "Soldat jubelt");
         subtitle("voice.soldier.idle", "Soldier mutters", "Soldat murmelt");
 
-        // --- Erzähl-Intro ---
-        text("intro.kingdomsatwar.line1", "Once, this world lay silent and untouched.", "Einst lag diese Welt still und unberührt.");
-        text("intro.kingdomsatwar.line2", "Then the kingdoms rose – with walls of stone and towers that reached up to the clouds.",
-                "Dann erhoben sich die Königreiche – mit Mauern aus Stein und Türmen, die bis an die Wolken reichten.");
-        text("intro.kingdomsatwar.line3", "But deep within the mountains, in volcanoes, ice and sea, the dragons awoke.",
-                "Doch tief in den Bergen, in Vulkanen, Eis und Meer, erwachten die Drachen.");
-        text("intro.kingdomsatwar.line4", "Six kinds – born of fire, ice, lightning, nature, earth and water.",
-                "Sechs Arten – geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.");
-        text("intro.kingdomsatwar.line5", "Whoever finds their eggs and raises them with patience gains an ally mightier than any army.",
-                "Wer ihre Eier findet und sie mit Geduld aufzieht, gewinnt einen Verbündeten, mächtiger als jede Armee.");
-        text("intro.kingdomsatwar.line6", "Deep below, rare ores lie waiting: Draconium, Aetherit, Konterit – the stuff that legends are forged from.",
-                "In der Tiefe warten seltene Erze: Draconium, Aetherit, Konterit – der Stoff, aus dem Legenden geschmiedet werden.");
-        text("intro.kingdomsatwar.line7", "Gather knights and soldiers around you, raise your castle and defend your land.",
-                "Sammle Ritter und Soldaten um dich, errichte deine Burg und verteidige dein Land.");
-        text("intro.kingdomsatwar.line8", "The world is ready. The dragons are waiting.", "Die Welt ist bereit. Die Drachen warten.");
-        text("intro.kingdomsatwar.line9", "This is your kingdom.", "Dies ist dein Königreich.");
+        // --- Erzähl-Intro „Das Siegel“ (Texte wie in tools/audio/lines.py) ---
+        text("intro.kingdomsatwar.line1", "There was a time when a darkness rose from the depths of this world and swallowed every light.",
+                "Es gab eine Zeit, da stieg aus der Tiefe dieser Welt eine Dunkelheit empor, die alles Licht verschlang.");
+        text("intro.kingdomsatwar.line2", "Forests withered, rivers turned black, and the people fled before the shadows.",
+                "Wälder verdorrten, Flüsse wurden schwarz, und die Menschen flohen vor den Schatten.");
+        text("intro.kingdomsatwar.line3", "Then six dragons rose up – born of fire, ice, lightning, nature, earth and water.",
+                "Da erhoben sich sechs Drachen – geboren aus Feuer, Eis, Blitz, Natur, Erde und Wasser.");
+        text("intro.kingdomsatwar.line4", "Together they forged a Seal and banished the darkness deep beneath the earth.",
+                "Gemeinsam schmiedeten sie ein Siegel und verbannten die Dunkelheit tief unter die Erde.");
+        text("intro.kingdomsatwar.line5", "Ever since, each of them has carried a shard of that Seal in its heart.",
+                "Jeder von ihnen trägt seitdem einen Splitter dieses Siegels in seinem Herzen.");
+        text("intro.kingdomsatwar.line6", "But the centuries passed, and the burden of the Seal drove them wild.",
+                "Doch die Jahrhunderte vergingen, und die Last des Siegels machte sie wild.");
+        text("intro.kingdomsatwar.line7", "They guard their nests – in ash and ice, on stormy peaks, in ancient groves, deep within the rock and at the bottom of the sea – and suffer no one to come near.",
+                "Sie hüten ihre Nester – in Asche und Eis, auf Sturmgipfeln, in uralten Hainen, tief im Fels und am Grund des Meeres – und dulden niemanden in ihrer Nähe.");
+        text("intro.kingdomsatwar.line8", "Now your time has come. Found a kingdom, gather knights around you and raise an army.",
+                "Nun ist deine Zeit gekommen. Gründe ein Königreich, sammle Ritter um dich und stelle ein Heer auf.");
+        text("intro.kingdomsatwar.line9", "Defeat the six dragons and bring their shards back to the ring of stones.",
+                "Bezwinge die sechs Drachen und bring ihre Splitter zurück in den Kreis der Steine.");
+        text("intro.kingdomsatwar.line10", "But beware: what the Seal holds back is only waiting for it to break.",
+                "Doch hüte dich: Was das Siegel verschließt, wartet nur darauf, dass es bricht.");
+        text("intro.kingdomsatwar.line11", "This is your kingdom.",
+                "Dies ist dein Königreich.");
+        // --- Der Erzähler zu den Kapiteln (Texte wie in tools/audio/lines.py) ---
+        text("story.kingdomsatwar.narration.kingdom", "Every kingdom begins with a single step. Find a piece of land, plant your banner there – and win the first who will entrust you with his sword.",
+                "Jedes Königreich beginnt mit einem einzigen Schritt. Such dir ein Stück Land, pflanze dort dein Banner – und gewinne den Ersten, der dir sein Schwert anvertraut.");
+        text("story.kingdomsatwar.narration.chronicle", "Now the first of the faithful follow you. Open the Chronicle: it tells of a ring of six stones where the Seal rests. That is where your true path begins.",
+                "Nun folgen dir die ersten Getreuen. Schlag die Chronik auf: Sie erzählt von einem Kreis aus sechs Steinen, in dem das Siegel ruht. Dort beginnt dein eigentlicher Weg.");
+        text("story.kingdomsatwar.narration.dragon_1", "Six stones, six empty niches. Each dragon carries its shard in its heart – and not one of them will give it up willingly. The dragon compass will show you the way.",
+                "Sechs Steine, sechs leere Nischen. Jeder Drache trägt seinen Splitter im Herzen – und keiner von ihnen wird ihn freiwillig hergeben. Der Drachenkompass weist dir den Weg.");
+        text("story.kingdomsatwar.narration.fallen_fire", "Pyrrhon, the Ash Lord, has fallen. His embers have died, but his shard still burns.",
+                "Pyrrhon, der Aschenfürst, ist gefallen. Seine Glut ist erloschen, doch sein Splitter brennt noch.");
+        text("story.kingdomsatwar.narration.fallen_ice", "Glaciara, the Frost Queen, has fallen. The eternal ice has fallen silent.",
+                "Glaciara, die Frostkönigin, ist gefallen. Das ewige Eis ist verstummt.");
+        text("story.kingdomsatwar.narration.fallen_lightning", "Voltarion, the Stormbringer, has fallen. Above the peaks, the storm is passing.",
+                "Voltarion, der Sturmbringer, ist gefallen. Über den Gipfeln verzieht sich das Gewitter.");
+        text("story.kingdomsatwar.narration.fallen_nature", "Verdantis, Guardian of the Grove, has fallen. The ancient forest has grown still.",
+                "Verdantis, die Hüterin des Hains, ist gefallen. Im uralten Wald ist es still geworden.");
+        text("story.kingdomsatwar.narration.fallen_earth", "Terragon, the Mountainbreaker, has fallen. The earth has stopped trembling.",
+                "Terragon, der Bergbrecher, ist gefallen. Die Erde hat aufgehört zu beben.");
+        text("story.kingdomsatwar.narration.fallen_water", "Thalassa, Mistress of the Deep, has fallen. The sea lies calm.",
+                "Thalassa, die Herrin der Tiefe, ist gefallen. Das Meer liegt ruhig.");
+        text("story.kingdomsatwar.narration.remaining_5", "Five dragons still guard the Seal. Bring the shard to its stone in the circle.",
+                "Noch fünf Drachen bewachen das Siegel. Bring den Splitter zu seinem Stein im Kreis.");
+        text("story.kingdomsatwar.narration.remaining_4", "Four dragons remain. With every shard the Seal grows weaker – and the darkness beneath grows restless.",
+                "Noch vier Drachen. Mit jedem Splitter wird das Siegel schwächer – und das Dunkel darunter unruhiger.");
+        text("story.kingdomsatwar.narration.remaining_3", "Half the task is done. Three dragons remain – and a whisper rises from the deep.",
+                "Die Hälfte ist vollbracht. Noch drei Drachen – und aus der Tiefe dringt ein Flüstern.");
+        text("story.kingdomsatwar.narration.remaining_2", "Two dragons remain. Whoever listens at the seal circle by night hears something knocking beneath the stones.",
+                "Noch zwei Drachen. Wer nachts am Siegelkreis lauscht, hört es unter den Steinen pochen.");
+        text("story.kingdomsatwar.narration.remaining_1", "Only one dragon still guards the Seal. Once its shard, too, rests in the circle, the Seal will break. Be ready for what waits beneath.",
+                "Nur noch ein Drache bewacht das Siegel. Ruht auch sein Splitter im Kreis, wird es brechen. Sei bereit für das, was darunter wartet.");
+        text("story.kingdomsatwar.narration.all_fallen", "The last dragon has fallen. Six shards, six stones – the Seal is waiting for you.",
+                "Der letzte Drache ist gefallen. Sechs Splitter, sechs Steine – das Siegel wartet auf dich.");
+        text("story.kingdomsatwar.narration.seal", "The Seal is broken. What the dragons kept locked away for so long has awoken. The gate stands open – and beyond it lies the Shadow World.",
+                "Das Siegel ist gebrochen. Was die Drachen so lange verschlossen hielten, ist erwacht. Das Tor steht offen – und dahinter wartet die Schattenwelt.");
+        text("story.kingdomsatwar.narration.crown", "The Shadow World. For centuries the Umbran folk have lived here, and somewhere in the darkness, Nyxar waits. But do not forget: back home, a realm awaits its crown.",
+                "Die Schattenwelt. Seit Jahrhunderten lebt hier das Volk der Umbrer, und irgendwo in der Dunkelheit wartet Nyxar. Doch vergiss nicht: Daheim wartet ein Reich auf seine Krone.");
+        text("story.kingdomsatwar.narration.nyxar", "Nyxar, the Shadow Dragon, has fallen. The shadows recede – but they do not forget.",
+                "Nyxar, der Schattendrache, ist gefallen. Die Schatten weichen zurück – doch sie vergessen nicht.");
+        text("story.kingdomsatwar.narration.crowned", "And so ends the Chronicle of the Seal. A kingdom, born of a single step, has found its crown. Long live the crown!",
+                "Und so endet die Chronik des Siegels. Ein Königreich, geboren aus einem einzigen Schritt, hat seine Krone gefunden. Lang lebe die Krone!");
         text("intro.kingdomsatwar.title", "Kingdoms at War – Intro", "Kingdoms at War – Intro");
         text("intro.kingdomsatwar.skip", "Space: skip", "Leertaste: überspringen");
-        text("kingdomsatwar.intro.intro_music", "Kingdoms at War – The Dragons Awaken", "Kingdoms at War – Das Erwachen der Drachen");
+        text("kingdomsatwar.intro.intro_music", "Kingdoms at War – The Seal", "Kingdoms at War – Das Siegel");
 
         // --- Einstellungen ---
         text("kingdomsatwar.configuration.title", "Kingdoms at War – Settings", "Kingdoms at War – Einstellungen");
@@ -295,6 +342,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("kingdomsatwar.configuration.showIntro.tooltip",
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
+        text("kingdomsatwar.configuration.narratorVoice", "Narrator voice for chapters", "Erzählerstimme zu den Kapiteln");
+        text("kingdomsatwar.configuration.narratorVoice.tooltip",
+                "The narrator speaks at the start of every chapter of the story (otherwise only his words appear).",
+                "Der Erzähler spricht zu Beginn jedes Kapitels der Geschichte (sonst erscheinen nur seine Worte).");
 
         // --- Armee: Soldaten, Banditen, Feldherrentisch, Kommandostab ---
         army();
@@ -570,6 +621,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("item.kingdomsatwar.dragon_compass.citadel", "Nyxar's Shadow Citadel", "Nyxars Schattenzitadelle");
         add(ModEntities.BOSS_PROJECTILE.get(), pick("Dragon Projectile", "Drachengeschoss"));
         add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
+        add(ModEntities.INTRO_VISION.get(), pick("Vision of the Seal", "Vision des Siegels"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
         text("command.kingdomsatwar.citadel.none", "There is no Shadow Citadel in this world.", "In dieser Welt gibt es keine Schattenzitadelle.");
         text("command.kingdomsatwar.citadel.at", "The Shadow Citadel lies at x %s, z %s (Shadow World).",

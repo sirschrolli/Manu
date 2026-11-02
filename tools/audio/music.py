@@ -4,10 +4,11 @@ und dem Soundfont FluidR3_GM. Danach Mischung mit Hall, Lautheit und Blenden (si
 
 Tonart d-Moll, 72 BPM, 4/4-Takt. Die Abschnitte richten sich nach dem Zeitplan der Erzählung:
   intro    – leiser Beginn: tiefe Streicher (Orgelpunkt), Harfe
-  world    – Welt und Königreiche: Streicherflächen, Harfen-Arpeggien, Flöte mit dem Thema
-  dragons  – die Drachen erwachen: Tremolo-Streicher, Posaunen/Tuba, Chor, Pauken-Wirbel (Steigerung)
-  wonder   – Eier und Erze: Harfe, Celesta, Holzbläser, weiche Streicher (geheimnisvoll)
-  knights  – Ritter und Burg: Hörner mit dem Hauptthema, Pauken, kleine Trommel, Streicher-Ostinato
+  world    – die Dunkelheit steigt auf: tiefe Tremolo-Streicher, dunkler Chor, Orgelpunkt, Paukengrollen,
+             phrygische Wendung (Es-Dur über d), eine einsame Oboe
+  dragons  – die sechs Drachen und das Siegel: Tremolo-Streicher, Posaunen/Tuba, Chor, Pauken-Wirbel (Steigerung)
+  wonder   – die Last des Siegels: Harfe, Celesta, Holzbläser, weiche Streicher (geheimnisvoll)
+  knights  – der Auftrag: Hörner mit dem Hauptthema, Pauken, kleine Trommel, Streicher-Ostinato
   finale   – Auflösung nach D-Dur auf der letzten Zeile, voller Klang, dann Ausklang
 """
 from __future__ import annotations
@@ -40,6 +41,7 @@ CHORDS = {
     "F": ("F", ["F", "A", "C"]), "C": ("C", ["C", "E", "G"]), "A": ("A", ["A", "C#", "E"]),
     "Asus": ("A", ["A", "D", "E"]), "A7": ("A", ["A", "C#", "E", "G"]), "D": ("D", ["D", "F#", "A"]),
     "Bbmaj7": ("Bb", ["Bb", "D", "F", "A"]), "Dm/C": ("C", ["C", "D", "F", "A"]), "Gm6": ("G", ["G", "Bb", "D", "E"]),
+    "Eb": ("Eb", ["Eb", "G", "Bb"]),
 }
 
 
@@ -185,7 +187,7 @@ THEME_CHORDS = ["Dm", "Bb", "Gm", "A", "Dm", "F", "Gm", "Dm"]   # ein Akkord pro
 def progression(section: str, bars: int) -> list[str]:
     base = {
         "intro": ["Dm"],
-        "world": ["Dm", "Bb", "Gm", "A", "Dm", "F", "C", "A"],
+        "world": ["Dm", "Eb", "Dm", "Bb", "Gm", "Eb", "Dm", "A"],
         "dragons": ["Dm", "Dm", "Bb", "Gm", "Dm/C", "Bb", "Gm", "A"],
         "wonder": ["Bbmaj7", "F", "Gm", "Dm", "Bbmaj7", "C", "Gm6", "Asus"],
         "knights": THEME_CHORDS,
@@ -238,8 +240,10 @@ def compose(sections: list[tuple[str, int]], bpm: float = 72.0, outro_bars: int 
         if sec == "intro":
             sc.ramp("cello", s0, s1, 70, 95); sc.ramp("bass", s0, s1, 70, 95); sc.ramp("harp", s0, s1, 90, 100)
         elif sec == "world":
-            sc.ramp("str_pad", s0, s1, 82, 98); sc.ramp("harp", s0, s1, 100, 104); sc.ramp("flute", s0, s1, 92, 100)
-            sc.ramp("cello", s0, s0 + 4, 95, 90); sc.ramp("bass", s0, s0 + 4, 95, 92)
+            # die Dunkelheit wächst: alles schwillt vom Flüstern zum Grollen an
+            sc.ramp("str_trem", s0, s1, 58, 104, curve=1.4); sc.ramp("choir", s0, s1, 62, 96, curve=1.2)
+            sc.ramp("cello", s0, s1, 92, 104); sc.ramp("bass", s0, s1, 92, 108); sc.ramp("timpani", s0, s1, 70, 104)
+            sc.ramp("oboe", s0, s1, 88, 92)
         elif sec == "dragons":
             sc.ramp("str_trem", s0, s1, 62, 122, curve=1.3); sc.ramp("trombones", s0, s1, 70, 118, curve=1.2)
             sc.ramp("tuba", s0, s1, 70, 115, curve=1.2); sc.ramp("choir", s0, s1, 70, 112)
@@ -270,11 +274,18 @@ def compose(sections: list[tuple[str, int]], bpm: float = 72.0, outro_bars: int 
                 sc.note("bass", b, 4, n("D2"), 62)
                 _harp_arp(sc, b, ch, vel=52, pattern="rise")
             elif sec == "world":
-                for p in pad:
-                    sc.note("str_pad", b, 4, p, 62, human=False)
-                sc.note("bass", b, 4, root2, 64)
-                sc.note("cello", b, 4, root2 + 12, 56)
-                _harp_arp(sc, b, ch, vel=58, pattern="wave")
+                # tiefe Tremolo-Streicher und ein dunkler Chor über dem Orgelpunkt D
+                for p in voice_chord(ch, None, 45, 62, 4):
+                    sc.note("str_trem", b, 4, p, 66, human=False)
+                for p in voice_chord(ch, None, 50, 62, 3):
+                    sc.note("choir", b, 4, p, 58, human=False)
+                sc.note("bass", b, 4, n("D2") if ch != "A" else root2, 66)
+                sc.note("cello", b, 4, root2 + 12, 58)
+                # Paukengrollen: leise Wirbel, die anschwellen und abebben
+                if bi % 2 == 1 or last_bar:
+                    _roll(sc, "timpani", b + 1, 3, n("D2") if ch != "A" else n("A1") + 12, 34, 72)
+                if bi % 4 == 0:
+                    sc.note("perc", b, 2, 35, 46)        # dumpfe Basstrommel
             elif sec == "dragons":
                 # Tremolo-Streicher, tiefe Blechbläser-Schwellen, Chor, Pauken
                 for p in voice_chord(ch, None, 50, 69, 4):
@@ -350,8 +361,9 @@ def compose(sections: list[tuple[str, int]], bpm: float = 72.0, outro_bars: int 
                     _roll(sc, "timpani", b + 1, 3, n("A1") + 12, 70, 112)
         # ---------------- Melodien ----------------
         if sec == "world" and bars >= 2:
-            # Flöte spielt den Vordersatz des Themas, weich und weit oben
-            _melody(sc, "flute", s0, THEME, max_beats=bars * 4, vel=56, upto=16)
+            # eine einsame Oboe: ein seufzendes Motiv über d-Moll und Es-Dur, das auf dem A liegen bleibt
+            lament = [(0, 2, "D4"), (2, 1, "F4"), (3, 1, "A4"), (4, 3, "Bb4"), (7, 1, "G4"), (8, 4, "A4")]
+            _melody(sc, "oboe", s0, lament, max_beats=bars * 4, vel=50, upto=12)
         if sec == "knights":
             if bars >= 4:
                 _melody(sc, "horns", s0, THEME, max_beats=bars * 4, transpose=-12, vel=92, upto=32 if bars >= 8 else 16)

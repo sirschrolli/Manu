@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.36.1 – geschlüpfte Drachen sind immer friedlich; dazu Köpfe und Schädel im Gesicht der eigenen Wesen; dazu die Sternwarte statt der Endstadt (damit sind alle Vanilla-Bauwerke ersetzt), Riesengebeine, die Verlorene Pforte, die Hortfeste und die Aschenesse.**
+> **Testversion 0.37.0 – das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ (die sechs Drachen schmieden das Siegel) und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,18 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.36.1: **Drachen sind friedlich.** Ein Drache, der aus dem Ei schlüpft, gehört dem Spieler, der dabei ist, und
+> Neu in 0.37: **Das neue Intro „Das Siegel“ und der Erzähler.** Beim ersten Betreten einer Welt erzählt das Intro jetzt
+> die Geschichte des Siegels – in der eigenen Welt, vor den eigenen Augen: Eine Säule aus Schatten steigt aus der Erde,
+> in ihr erhebt sich der Schattendrache, die Welt wird dunkel. Pyrrhon, Glaciara, Voltarion, Verdantis und Thalassa
+> stürzen aus dem Himmel herab, Terragon bricht aus dem Boden; im Sechseck schicken sie Strahlen aus ihren Herzen, eine
+> Lichtkugel drückt die Dunkelheit unter die Erde, Blitz und Druckwelle – und am Boden leuchtet das Siegel. Sechs
+> Splitter fliegen in die Herzen der Drachen, die Last macht sie wild, in schnellen Schnitten zieht jeder zu seinem
+> Nest. Ein Heer salutiert, am Horizont stehen sechs Lichtsäulen, unter der Erde pocht es … Elf neue Zeilen mit
+> derselben Erzählerstimme, eigene Musik mit düsterem Anfang. Dazu **spricht der Erzähler zu jedem Kapitel** der
+> Geschichte: zum neuen Königreich, zur Chronik, zum Siegelkreis, zu jedem gefallenen Drachen (mit seinem Namen) und wie
+> viele noch übrig sind, zum Siegelbruch, zur Schattenwelt, zu Nyxars Fall und zur Krönung – auf Deutsch und Englisch,
+> mit seinen Worten auf der Titelkarte (abschaltbar unter `narratorVoice`).
+> Seit 0.36.1: **Drachen sind friedlich.** Ein Drache, der aus dem Ei schlüpft, gehört dem Spieler, der dabei ist, und
 > folgt ihm – ebenso ein Drache aus dem Spawn-Ei (er gehört dem, der das Ei benutzt). Kein Drache greift mehr von sich aus
 > Spieler an; Drachen verschonen ihren Herrn, seine Soldaten und seine Tiere auch nach einem versehentlichen Treffer. Ein
 > Drache ohne Herrn (aus älteren Welten) schließt sich dem an, der ihn füttert. Ohne einen Spieler in der Nähe schlüpft
@@ -250,8 +261,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Feinschliff der Schattenwelt-Pflanzen und der Bewegungen aller Wesen, dann das Finale der
-> Geschichte (Erzähler-Kapitel, neues Intro) – danach Dragon Architect, Belagerungswaffen und Kriegssystem.
+> **Als Nächstes:** Feinschliff der Schattenwelt-Pflanzen und der Bewegungen aller Wesen – danach Dragon Architect,
+> Belagerungswaffen und Kriegssystem.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -265,7 +276,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bereich | Stand |
 |---|---|
 | NeoForge-Projekt für Minecraft 26.3, Java 25, Gradle; Build und Tests auf GitHub | ✅ fertig |
-| Erzähltes Intro beim ersten Betreten einer Welt (Kameraflug mit Drachen, Musik, Erzähler DE/EN) | ✅ fertig |
+| Erzähltes Intro „Das Siegel“ beim ersten Betreten einer Welt (die sechs Drachen schmieden das Siegel, Musik, Erzähler DE/EN) | ✅ fertig |
+| Der Erzähler spricht zu jedem Kapitel der Geschichte (Stimme und Text, DE/EN) | ✅ fertig |
 | Geschichte „Das Siegel“: Chronik als Buch, Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelbruch, Schattentor | ✅ fertig |
 | Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
@@ -308,7 +320,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Riesengebeine statt Netherfossilien, Verlorene Pforte statt Portalruine im Nether | ✅ fertig |
 | Sternwarte statt Endstadt und Endschiff (mit den Elytren) | ✅ fertig |
 | Köpfe und Schädel der eigenen Wesen (als Block, Gegenstand und getragen) | ✅ fertig |
-| Feinschliff: Schattenwelt-Pflanzen, Bewegungen aller Wesen; Erzähler-Kapitel und neues Intro | 🔨 als Nächstes |
+| Feinschliff: Schattenwelt-Pflanzen, Bewegungen aller Wesen | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -339,8 +351,12 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
    Burgruinen entstehen nur in neu erzeugten Gebieten.
 
-Beim ersten Betreten einer Welt läuft das **Intro**: ein Kameraflug über die Welt, die sechs Drachen und dein
-Königreich, mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder ansehen mit `/kaw intro`.
+Beim ersten Betreten einer Welt läuft das **Intro „Das Siegel“**: Vor deinen Augen schmieden die sechs Drachen das
+Siegel gegen die Dunkelheit – mit eigener Musik und Erzähler. Überspringen mit Leertaste, Enter oder Esc, wieder
+ansehen mit `/kaw intro`.
+
+![Das neue Intro: „Das Siegel“](docs/bilder/intro_siegel.jpg)
+
 Danach bekommst du die **Chronik des Siegels** – sie erzählt die Geschichte und zeigt dir den nächsten Schritt.
 Im Kreativmodus gibt es sieben neue Tabs.
 
@@ -352,7 +368,10 @@ Im Kreativmodus gibt es sieben neue Tabs.
 
 Die **Chronik des Siegels** ist ein aufgeschlagenes Buch: links die Kapitel (erreicht, aktuell, noch verborgen) und
 der Zustand des Siegels, rechts die Ziele des Kapitels, Hinweise und die Erzählung. Zu Beginn jedes Kapitels erscheint
-eine Titelkarte.
+eine Titelkarte, und **der Erzähler spricht** (dieselbe Stimme wie im Intro, Deutsch oder Englisch je nach Spielsprache,
+seine Worte stehen auf der Karte): zum neuen Königreich, zur Chronik, zum Siegelkreis, zu jedem gefallenen Drachen mit
+seinem Namen und wie viele noch das Siegel bewachen, zum Siegelbruch, zur Schattenwelt, zu Nyxars Fall und zum
+Abschluss bei der Krönung.
 
 | Kapitel | Was zu tun ist |
 |---|---|
@@ -1382,6 +1401,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
+| `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |

@@ -2,7 +2,6 @@ package io.github.sirschrolli.kingdomsatwar.client.intro;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
-import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -27,12 +26,14 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Erzähl-Intro beim ersten Betreten einer Welt: eine Kamerafahrt hinter einem uralten Feuerdrachen
- * über die Landschaft ({@link IntroFlight}), schwarze Kinobalken, der Erzähler spricht neun Zeilen (Text
- * erscheint dazu), Musik läuft, am Ende die Titelkarte. Der Spieler selbst ist währenddessen nicht zu
- * sehen. Leertaste, Enter oder Esc überspringen.
+ * Das Erzähl-Intro „Das Siegel“ beim ersten Betreten einer Welt: eine Bilderfolge in der eigenen Welt
+ * ({@link IntroFlight}) – die Dunkelheit steigt auf, sechs Drachen schmieden das Siegel, werden wild und ziehen davon,
+ * ein Heer salutiert, unter der Erde pocht es –, schwarze Kinobalken, der Erzähler spricht elf Zeilen (Text erscheint
+ * dazu), Musik läuft, am Ende die Titelkarte. Der Spieler selbst ist währenddessen nicht zu sehen. Leertaste, Enter
+ * oder Esc überspringen.
  *
- * <p>Die Drachen, die Soldaten und die Kamera gibt es nur auf dem eigenen Bildschirm (nicht auf dem Server).
+ * <p>Die Drachen, die Soldaten, die Lichteffekte und die Kamera gibt es nur auf dem eigenen Bildschirm (nicht auf dem
+ * Server).
  */
 public class IntroScreen extends Screen {
     private static final Identifier TITLE = KingdomsAtWar.id("textures/gui/intro_title.png");
@@ -55,8 +56,6 @@ public class IntroScreen extends Screen {
     private float lastYaw;
     private float lastPitch;
     private boolean hudWasHidden;
-    private boolean roared;
-    private boolean finalRoar;
     private boolean cleanedUp;
 
     public IntroScreen(IntroScript script, String language) {
@@ -79,7 +78,8 @@ public class IntroScreen extends Screen {
             return;
         }
         LocalPlayer player = this.minecraft.player;
-        this.flight = new IntroFlight(this.minecraft.level, player.position(), player.getYRot(), this.script);
+        this.flight = new IntroFlight(this.minecraft.level, player.position(), player.getYRot(), this.script, this.lines, this::elapsed,
+                (sound, volume, pitch) -> this.play(sound.location(), SoundSource.AMBIENT, volume, pitch));
         this.flight.tick(0.0);
         this.lastYaw = player.getYRot();
         this.camera = new Marker(EntityTypes.MARKER, this.minecraft.level);
@@ -111,7 +111,6 @@ public class IntroScreen extends Screen {
             this.flight.tick(t);
         }
         this.updateCamera(t, false);
-        this.roars(t);
         if (t > this.script.length() + 0.3) {
             this.onClose();
         }
@@ -132,9 +131,10 @@ public class IntroScreen extends Screen {
         if (this.camera == null || this.flight == null) {
             return;
         }
-        Vec3[] view = this.flight.camera(t, snap);
-        Vec3 wanted = view[0];
-        Vec3 target = view[1];
+        IntroFlight.Shot shot = this.flight.camera(t);
+        snap |= shot.cut();
+        Vec3 wanted = shot.position();
+        Vec3 target = shot.target();
         double dx = target.x - wanted.x;
         double dy = target.y - wanted.y;
         double dz = target.z - wanted.z;
@@ -158,18 +158,6 @@ public class IntroScreen extends Screen {
         }
     }
 
-    /** Brüllen, wenn die anderen Drachen dazustoßen und wenn der Drache am Ende in den Himmel steigt. */
-    private void roars(double t) {
-        if (!this.roared && t >= this.script.section("dragons", 20.0) + 1.2) {
-            this.roared = true;
-            this.play(ModSounds.DRAGON_ROAR.get().location(), SoundSource.NEUTRAL, 0.9f, 0.85f);
-        }
-        if (!this.finalRoar && t >= this.script.section("finale", 60.0) + 2.5) {
-            this.finalRoar = true;
-            this.play(ModSounds.DRAGON_ROAR.get().location(), SoundSource.NEUTRAL, 0.7f, 0.75f);
-        }
-    }
-
     // =====================================================================================
     // Zeichnen
     // =====================================================================================
@@ -184,6 +172,9 @@ public class IntroScreen extends Screen {
         double t = this.elapsed();
         int w = this.width;
         int h = this.height;
+        if (this.flight != null) {
+            this.drawMood(graphics, t, w, h);
+        }
         double title = smooth((t - this.script.titleCardStart()) / 1.6);
         if (title > 0.0) {
             graphics.fill(0, 0, w, h, ARGB.black((float) (0.55 * title)));
@@ -202,6 +193,52 @@ public class IntroScreen extends Screen {
         }
         Component skip = Component.translatable("intro.kingdomsatwar.skip");
         graphics.text(this.font, skip, w - this.font.width(skip) - 8, h - Math.max(12, bar / 2 + 4), 0xFF8C8577, false);
+    }
+
+    /**
+     * Stimmung über dem Bild: die Dunkelheit (violett-schwarz, von unten nach oben dichter), der Blitz beim Schmieden
+     * des Siegels, das Abblenden bei harten Schnitten und das violette Pochen am Rand zum Schluss.
+     */
+    private void drawMood(GuiGraphicsExtractor graphics, double t, int w, int h) {
+        IntroFlight flight = this.flight;
+        double dark = flight.darkness(t);
+        if (dark > 0.005) {
+            graphics.fillGradient(0, 0, w, h, ARGB.color((int) (dark * 120), 0x0A, 0x04, 0x12), ARGB.color((int) (dark * 205), 0x16, 0x06, 0x22));
+            int edge = Math.max(8, w / 6);
+            int shade = ARGB.color((int) (dark * 170), 0x05, 0x02, 0x0A);
+            graphics.fillGradient(0, 0, w, h / 5, shade, ARGB.color(0, 0x05, 0x02, 0x0A));
+            this.sideShade(graphics, w, h, edge, shade);
+        }
+        double pulse = flight.pulse(t);
+        if (pulse > 0.01) {
+            int edge = Math.max(10, w / 5);
+            int shade = ARGB.color((int) (pulse * 150), 0x3A, 0x0C, 0x55);
+            graphics.fillGradient(0, h - h / 3, w, h, ARGB.color(0, 0x3A, 0x0C, 0x55), shade);
+            this.sideShade(graphics, w, h, edge, shade);
+        }
+        double flash = flight.screenFlash(t);
+        if (flash > 0.005) {
+            graphics.fill(0, 0, w, h, ARGB.color((int) (flash * 235), 0xFF, 0xF8, 0xFF));
+        }
+        double dip = flight.dip(t);
+        if (dip > 0.005) {
+            graphics.fill(0, 0, w, h, ARGB.black((float) dip));
+        }
+    }
+
+    /** Seitliche Abdunkelung (links und rechts je ein Verlauf zur Mitte). */
+    private void sideShade(GuiGraphicsExtractor graphics, int w, int h, int edge, int shade) {
+        int clear = ARGB.color(0, ARGB.red(shade), ARGB.green(shade), ARGB.blue(shade));
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(edge, 0.0f);
+        graphics.pose().rotate((float) (Math.PI / 2.0));
+        graphics.fillGradient(0, 0, h, edge, clear, shade);
+        graphics.pose().popMatrix();
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(w - edge, h);
+        graphics.pose().rotate((float) (-Math.PI / 2.0));
+        graphics.fillGradient(0, 0, h, edge, clear, shade);
+        graphics.pose().popMatrix();
     }
 
     /** Aktuelle Erzählzeile mittig über dem unteren Balken, weich ein- und ausgeblendet. */

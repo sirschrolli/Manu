@@ -88,6 +88,7 @@ final class Showcase {
                 case "house" -> house(steps);
                 case "samples" -> samples(steps);
                 case "intro" -> intro(steps);
+                case "cards" -> cards(steps);
                 case "items" -> items(steps);
                 case "dragons" -> dragons(steps);
                 case "soldiers" -> soldiers(steps);
@@ -381,29 +382,69 @@ final class Showcase {
         steps.add(Step.hud(true));
     }
 
-    /** Das Erzähl-Intro mit Screenshots zu festen Zeitpunkten (am besten zusammen mit "terrain"). */
+    /**
+     * Das Erzähl-Intro mit Screenshots an den wichtigen Stellen (am besten zusammen mit "terrain"): Zeitpunkte relativ zu
+     * den Zeilen des Erzählers in der Sprache des Spiels (Zeile, Versatz in Sekunden).
+     */
     private static void intro(Deque<Step> steps) {
         steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("time set 6000"));
         steps.add(Step.waitTicks(20));
         steps.add(Step.once(minecraft -> IntroController.request()));
         steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof IntroScreen, 200));
-        // Zeitpunkte für ein Intro von 72,9 s – werden auf die tatsächliche Länge aus intro.json gestreckt
-        double[] times = {3.5, 10.0, 17.0, 23.0, 29.0, 35.0, 42.0, 48.0, 54.5, 58.0, 63.0, 70.5};
-        double[] length = {0.0};
-        for (int i = 0; i < times.length; i++) {
-            double at = times[i] / 72.913;
+        double[][] marks = {
+                {0, -1.2}, {0, 2.5}, {0, 5.0}, {1, 2.5}, {2, 1.5}, {3, -0.6}, {3, 2.0}, {3, 4.2}, {3, 6.4}, {4, 0.8}, {4, 2.2},
+                {4, 5.6}, {5, 1.5}, {6, 0.6}, {6, 2.6}, {6, 4.6}, {6, 6.6}, {6, 8.6}, {6, 10.6}, {7, 1.5}, {8, 2.0}, {9, 1.5},
+                {10, 4.0}};
+        double[] at = new double[marks.length];
+        for (int i = 0; i < marks.length; i++) {
+            int index = i;
             steps.add(Step.until(() -> {
-                if (length[0] <= 0.0) {
+                if (at[0] <= 0.0) {
                     IntroScript script = IntroScript.load(Minecraft.getInstance().getResourceManager());
-                    length[0] = script != null ? script.length() : 72.913;
+                    java.util.List<IntroScript.Line> lines = script == null ? java.util.List.of()
+                            : script.linesFor(Minecraft.getInstance().getLanguageManager().getSelected());
+                    for (int k = 0; k < marks.length; k++) {
+                        int line = (int) marks[k][0];
+                        double base = line < lines.size() ? lines.get(line).start() : 6.0 + line * 7.0;
+                        at[k] = Math.max(0.5, base + marks[k][1]);
+                    }
                 }
-                return Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at * length[0];
-            }, 2400));
+                return Minecraft.getInstance().gui.screen() instanceof IntroScreen intro && intro.elapsed() >= at[index];
+            }, 3000));
             steps.add(Step.screenshot("intro_%02d".formatted(i + 1)));
         }
-        steps.add(Step.until(() -> !(Minecraft.getInstance().gui.screen() instanceof IntroScreen), 400));
+        steps.add(Step.until(() -> !(Minecraft.getInstance().gui.screen() instanceof IntroScreen), 600));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("intro_after"));
+    }
+
+    /** Kapitelkarten mit dem Erzähler: Kapitel I, ein gefallener Drache (zwei Zeilen) und nur der Erzähler (Krönung). */
+    private static void cards(Deque<Step> steps) {
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
+        steps.add(Step.server(level -> level.players().forEach(player -> io.github.sirschrolli.kingdomsatwar.story.Story.sendCard(player,
+                io.github.sirschrolli.kingdomsatwar.story.Chapter.KINGDOM, -1))));
+        steps.add(Step.waitTicks(90));
+        steps.add(Step.screenshot("card_kingdom"));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.server(level -> level.players().forEach(player -> io.github.sirschrolli.kingdomsatwar.story.Story.sendCard(player,
+                io.github.sirschrolli.kingdomsatwar.story.Chapter.DRAGON_4, DragonType.WATER.ordinal()))));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.screenshot("card_fallen_1"));
+        steps.add(Step.waitTicks(150));
+        steps.add(Step.screenshot("card_fallen_2"));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.story.ChapterCardOverlay.clear()));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.server(level -> level.players().forEach(player -> io.github.sirschrolli.kingdomsatwar.story.Story.narrate(player,
+                "crowned"))));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.screenshot("card_crowned"));
     }
 
     /** Drachen-Boss Pyrrhon: Erwachen aus dem Lavasee, Kampf gegen Soldaten (Odem, Flug, Meteorregen), Tod und Ei. */
