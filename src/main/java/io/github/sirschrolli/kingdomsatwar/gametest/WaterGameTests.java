@@ -74,13 +74,15 @@ final class WaterGameTests {
             ModGameTests.TEST_FUNCTIONS.register("water_save_load", () -> WaterGameTests::saveLoad);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FROGLIGHTS =
             ModGameTests.TEST_FUNCTIONS.register("water_froglights", () -> WaterGameTests::froglights);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COURTSHIP =
+            ModGameTests.TEST_FUNCTIONS.register("water_courtship", () -> WaterGameTests::courtship);
 
     private WaterGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(SPAWN, SPAWN_LISTS, CONVERSION, VARIANTS, TADPOLE, SAVE_LOAD, FROGLIGHTS)) {
+        for (var test : List.of(SPAWN, SPAWN_LISTS, CONVERSION, VARIANTS, TADPOLE, SAVE_LOAD, FROGLIGHTS, COURTSHIP)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -103,6 +105,28 @@ final class WaterGameTests {
         map.put(EntityTypes.NAUTILUS, ModEntities.NAUTILUS.get());
         map.put(EntityTypes.ZOMBIE_NAUTILUS, ModEntities.ZOMBIE_NAUTILUS.get());
         return map;
+    }
+
+    /**
+     * Das Vanilla-Gehirn sucht Partner nur unter dem Vanilla-Typ – die eigene Werbung bringt trotzdem Nachwuchs: zwei
+     * verliebte Molche bekommen ein Junges, zwei Nautilusse auch, und von zwei Fröschen trägt einer danach Laich.
+     */
+    private static void courtship(GameTestHelper helper) {
+        pool(helper);
+        Newt[] newts = {helper.spawn(ModEntities.AXOLOTL.get(), new BlockPos(1, 1, 1)), helper.spawn(ModEntities.AXOLOTL.get(), new BlockPos(3, 1, 1))};
+        var nautili = new net.minecraft.world.entity.animal.Animal[] {helper.spawn(ModEntities.NAUTILUS.get(), new BlockPos(5, 2, 5)),
+                helper.spawn(ModEntities.NAUTILUS.get(), new BlockPos(7, 2, 5))};
+        Toad[] toads = {helper.spawn(ModEntities.FROG.get(), new BlockPos(1, 1, 6)), helper.spawn(ModEntities.FROG.get(), new BlockPos(3, 1, 6))};
+        for (var animal : List.of(newts[0], newts[1], nautili[0], nautili[1], toads[0], toads[1])) {
+            animal.setInLove(null);
+        }
+        helper.succeedWhen(() -> {
+            helper.assertTrue(!helper.getLevel().getEntitiesOfClass(Newt.class, arena(helper), Newt::isBaby).isEmpty(), "noch kein junger Molch");
+            helper.assertTrue(!helper.getLevel().getEntitiesOfClass(nautili[0].getClass(), arena(helper),
+                    net.minecraft.world.entity.AgeableMob::isBaby).isEmpty(), "noch kein junger Nautilus");
+            helper.assertTrue(java.util.Arrays.stream(toads).anyMatch(t -> t.getBrain().hasMemoryValue(
+                    net.minecraft.world.entity.ai.memory.MemoryModuleType.IS_PREGNANT)), "kein Frosch trägt Laich");
+        });
     }
 
     /** Ein Becken: Steinboden, Glasrand und Wasser bis zur dritten Schicht. */

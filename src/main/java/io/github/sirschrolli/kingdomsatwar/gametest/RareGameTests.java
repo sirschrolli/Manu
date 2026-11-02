@@ -62,13 +62,15 @@ final class RareGameTests {
             ModGameTests.TEST_FUNCTIONS.register("rare_merchant_trades", () -> RareGameTests::merchantTrades);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> HARNESS =
             ModGameTests.TEST_FUNCTIONS.register("rare_cloud_harness", () -> RareGameTests::cloudHarness);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DIGGER_EGG =
+            ModGameTests.TEST_FUNCTIONS.register("rare_digger_courtship", () -> RareGameTests::diggerCourtship);
 
     private RareGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(SPAWN, CONVERSION, VILLAGERS, TRADER, MERCHANT, HARNESS)) {
+        for (var test : List.of(SPAWN, CONVERSION, VILLAGERS, TRADER, MERCHANT, HARNESS, DIGGER_EGG)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -290,6 +292,17 @@ final class RareGameTests {
         jelly.setItemSlot(EquipmentSlot.BODY, harness);
         helper.assertTrue(jelly.isWearingBodyArmor() || !jelly.getItemBySlot(EquipmentSlot.BODY).isEmpty(), "Geschirr nicht angelegt");
         helper.succeed();
+    }
+
+    /** Zwei verliebte Urwühler finden zueinander (das Vanilla-Gehirn sucht nur Schnüffler) – danach liegt ein Ei im Gras. */
+    private static void diggerCourtship(GameTestHelper helper) {
+        floor(helper);
+        PrimevalDigger a = helper.spawn(ModEntities.SNIFFER.get(), new BlockPos(1, 1, 4));
+        PrimevalDigger b = helper.spawn(ModEntities.SNIFFER.get(), new BlockPos(7, 1, 4));
+        a.setInLove(null);
+        b.setInLove(null);
+        helper.succeedWhen(() -> helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                arena(helper), item -> item.getItem().is(Items.SNIFFER_EGG)).isEmpty(), "noch kein Ei"));
     }
 
     private static void place(GameTestHelper helper, Mob mob, BlockPos relative) {
