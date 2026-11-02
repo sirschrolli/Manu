@@ -972,8 +972,9 @@ final class SiteGameTests {
         List<String> problems = new ArrayList<>();
         ServerLevel level = helper.getLevel();
         BlockPos o = c.below();
-        // die Mitte der Halle: Gold, das Feuerbecken davor
-        if (!level.getBlockState(o).is(Blocks.GOLD_BLOCK) || !level.getBlockState(o.offset(0, 2, 4)).is(Blocks.FIRE)) {
+        // die Mitte der Halle: Blattgold, das Feuerbecken davor
+        if (!level.getBlockState(o).is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GOLD_LEAF_BLOCK.get())
+                || !level.getBlockState(o.offset(0, 2, 4)).is(Blocks.FIRE)) {
             problems.add("keine goldene Mitte mit Feuerbecken");
         }
         // die Seitentore stehen offen
@@ -999,9 +1000,12 @@ final class SiteGameTests {
                 problems.add("Spawner ohne Glutschleim bei " + helper.relativePos(p));
             }
         }
+        // die Haufen glänzen golden, echtes Gold ist aber nur ein Teil davon (die Feste ist kein Goldbergwerk)
+        int shine = count(helper, o.offset(-7, 20, -7), o.offset(7, 23, 7), st -> st.is(Blocks.GOLD_BLOCK) || st.is(Blocks.RAW_GOLD_BLOCK)
+                || st.is(Blocks.GILDED_BLACKSTONE) || st.is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GOLD_LEAF_BLOCK.get()));
         int gold = count(helper, o.offset(-7, 20, -7), o.offset(7, 23, 7), st -> st.is(Blocks.GOLD_BLOCK) || st.is(Blocks.RAW_GOLD_BLOCK));
-        if (gold < 20) {
-            problems.add("zu wenig Gold in der Hortkammer: " + gold);
+        if (shine < 60 || gold < 4 || gold > 30) {
+            problems.add("Hortkammer: " + shine + " goldene Blöcke, davon " + gold + " echtes Gold");
         }
         if (count(helper, o.offset(-8, 20, -8), o.offset(8, 23, 8), st -> st.is(Blocks.ANCIENT_DEBRIS)) < 3) {
             problems.add("kein Netheritschutt in den Wänden");

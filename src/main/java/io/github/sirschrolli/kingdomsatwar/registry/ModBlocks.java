@@ -502,6 +502,15 @@ public final class ModBlocks {
             p -> p.mapColor(MapColor.COLOR_CYAN).noCollision().noOcclusion().instabreak().sound(SoundType.WET_GRASS).lightLevel(s -> 10)
                     .pushReaction(PushReaction.POPPED),
             UnaryOperator.identity(), NATURE_TAB);
+    /**
+     * Blattgold: Stein unter einer Haut aus gehämmerten Goldblättchen – glänzt wie Gold, ist aber nur Zierde (gibt kein
+     * Gold her). Damit verkleiden die Borstlinge ihr Götzenbild; man stellt ihn aus Stein und einem Goldbarren her.
+     */
+    public static final DeferredBlock<Block> GOLD_LEAF_BLOCK = blockWithItem("gold_leaf_block", Block::new,
+            p -> p.mapColor(MapColor.GOLD).instrument(NoteBlockInstrument.BELL).requiresCorrectToolForDrops().strength(1.5f, 6.0f)
+                    .sound(SoundType.METAL),
+            UnaryOperator.identity(), BUILDING_TAB);
+
     /** Perlmutt: schimmernde Schichten in Weiß, Rosa und Hellblau. */
     public static final DeferredBlock<Block> NACRE_BLOCK = blockWithItem("nacre_block", Block::new,
             p -> p.mapColor(MapColor.QUARTZ).instrument(NoteBlockInstrument.CHIME).requiresCorrectToolForDrops().strength(1.5f, 6.0f)

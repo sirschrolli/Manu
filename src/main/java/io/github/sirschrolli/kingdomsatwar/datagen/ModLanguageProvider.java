@@ -94,6 +94,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("biome.kingdomsatwar.royal_meadows", "Royal Meadows", "Königsauen");
         text("biome.kingdomsatwar.mist_moor", "Mist Moor", "Nebelmoor");
         block(ModBlocks.PEAT, "Peat", "Torf");
+        block(ModBlocks.GOLD_LEAF_BLOCK, "Gold Leaf Block", "Blattgold");
         block(ModBlocks.REEDS, "Reeds", "Schilf");
 
         // --- Aschelande ---

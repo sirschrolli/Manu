@@ -161,6 +161,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
 
         // Eigene Oberwelt-Biome: Torf; Schilf nur aus der unteren Hälfte (wie hohe Blumen)
         dropSelf(ModBlocks.PEAT.get());
+        dropSelf(ModBlocks.GOLD_LEAF_BLOCK.get());
         add(ModBlocks.REEDS.get(), block -> this.createSinglePropConditionTable(block, net.minecraft.world.level.block.DoublePlantBlock.HALF,
                 net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
 

@@ -457,6 +457,7 @@ public class ModModelProvider extends ModelProvider {
         blocks.createTrivialCube(ModBlocks.ABYSSAL_SAND.get());
         blocks.createCrossBlockWithDefaultItem(ModBlocks.GLOW_CORAL.get(), BlockModelGenerators.PlantType.NOT_TINTED);
         blocks.createTrivialCube(ModBlocks.NACRE_BLOCK.get());
+        blocks.createTrivialCube(ModBlocks.GOLD_LEAF_BLOCK.get());
 
         // --- Eigene Oberwelt-Biome ---
         blocks.createTrivialCube(ModBlocks.PEAT.get());

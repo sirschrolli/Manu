@@ -188,6 +188,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_book", has(Items.BOOK))
                 .save(output, key("chronicle"));
         sealstoneRecipes();
+        goldLeafRecipe();
         // Runen werden nicht mehr hergestellt: Zauber lehren jetzt die Zaubertafeln der Erzmagier (am Magietisch)
     }
 
@@ -195,6 +196,18 @@ public class ModRecipeProvider extends RecipeProvider {
      * Siegelstein: aus Tiefenschiefer-Bruchstein und einer Amethystscherbe (die Hüter mischten Kristallstaub in ihren
      * Stein); poliert, als Ziegel, gemeißelt, rissig (im Ofen) und bemoost.
      */
+    /** Blattgold: acht Stein um einen Goldbarren (ein Barren reicht für acht Blöcke – nur zur Zierde, kein Gold zurück). */
+    private void goldLeafRecipe() {
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GOLD_LEAF_BLOCK.get(), 8)
+                .pattern("SSS")
+                .pattern("SGS")
+                .pattern("SSS")
+                .define('S', Items.STONE)
+                .define('G', Items.GOLD_INGOT)
+                .unlockedBy("has_gold_ingot", has(Items.GOLD_INGOT))
+                .save(output, key("gold_leaf_block"));
+    }
+
     private void sealstoneRecipes() {
         ItemLike sealstone = ModBlocks.SEALSTONE.base().get();
         ItemLike bricks = ModBlocks.SEALSTONE_BRICKS.base().get();

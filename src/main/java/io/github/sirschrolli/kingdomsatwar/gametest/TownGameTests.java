@@ -766,6 +766,8 @@ final class TownGameTests {
             helper.assertValueEqual(stored, 15, "Stämme im Lager");
             helper.assertTrue(((net.minecraft.world.Container) level.getBlockEntity(hutChest)).isEmpty(), "Truhe der Hütte nicht geleert");
             helper.assertTrue(lumberjack.carried().isEmpty(), "Holzfäller trägt noch etwas");
+            // wieder Tag: die Tests danach rechnen nicht mit dem Abend
+            helper.setTime(1000);
             clearTowns(server);
             leave(helper, owner);
         });

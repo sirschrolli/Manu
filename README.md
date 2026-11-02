@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.32.0 – Unterholz und sattere Farben in den Standard-Biomen; dazu die Aschenesse im Nether, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
+> **Testversion 0.33.0 – die Hortfeste der Borstlinge statt der Bastion; dazu Unterholz und sattere Farben, die Aschenesse, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,16 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.32: **Unterholz und Farben.** In Wäldern, Taiga, Savanne, Kirschhain und auf den Ebenen wachsen jetzt
+> Neu in 0.33: **Die Hortfeste.** Statt der Bastionen horten die Borstlinge ihr Gold in einer **Stufenburg** aus
+> Schwarzstein: drei Absätze mit goldenem Fries und Zinnen, vier Ecktürme mit Feuerschalen und eine Freitreppe, die vom
+> Vorhof mit seinem Tor bis auf die oberste Plattform führt. Dort steht der **goldene Keiler**, das Götzenbild der
+> Borstlinge aus Blattgold, mit glühenden Augen, schlanken weißen Hauern und einem Kamm aus dunklen Borsten. Innen liegen
+> die Tauschhalle mit dem Feuerbecken, die Ställe der Glutkeiler, Schlafsaal und Waffenkammer und ganz oben die
+> **Hortkammer** mit glänzenden Haufen (echtes Gold ist darin nur wenig), Netheritschutt in den Wänden, zwei
+> Glutschleim-Spawnern und dem Hort – mit der Netherit-Vorlage. Dazu: Bienen aus einem Nest, das nachts geleert wird,
+> fliegen als eigene Bienen zurück.
+> Borstlinge, Borstenhünen und Glutkeiler wohnen darin, und die Truhen haben die Beute der Bastion.
+> Seit 0.32: **Unterholz und Farben.** In Wäldern, Taiga, Savanne, Kirschhain und auf den Ebenen wachsen jetzt
 > **Büsche** – Hügel aus Laub, die bis auf den Boden reichen und den kurzen Stamm ganz verdecken (Eiche, Birke, Fichte,
 > Schwarzeiche, Akazie, Kirsche) – und **junge Bäume** zwischen den großen (Eichen, Birken, Fichten). Gras und Laub der
 > Standard-Biome haben ein satteres, frischeres Grün wie in den eigenen Biomen; die Taiga ist kühler, der dunkle Wald
@@ -212,8 +221,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die übrigen Bauwerke von Nether und End, ganz neu – statt der Bastionen, der Netherfossilien und
-> der Endstädte.
+> **Als Nächstes:** die übrigen Bauwerke von Nether und End, ganz neu – statt der Netherfossilien und der Endstädte.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -266,7 +274,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Unterholz (Büsche, junge Bäume) und sattere Farben in den Standard-Biomen | ✅ fertig |
 | Karge Truhen, seltenere Bauwerke, Holzfäller mit eigenem Hain | ✅ fertig |
 | Aschenesse statt Netherfestung | ✅ fertig |
-| Die übrigen Bauwerke von Nether und End (Bastion, Netherfossilien, Endstadt – ganz neu) | 🔨 als Nächstes |
+| Hortfeste der Borstlinge statt Bastion | ✅ fertig |
+| Die übrigen Bauwerke von Nether und End (Netherfossilien, Endstadt – ganz neu) | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -651,8 +660,39 @@ aus Schwarzstein, gestützt von Strebepfeilern, mit roten Bändern an jedem Bode
   sonst enden sie auf einem **Wachturm** über der Lava.
 - **Brandgebeine** halten Wache; Glutgeister, Brandgebeine, Gerippe, Glutschleime und Moderborstlinge erscheinen in
   der Esse wie einst in der Festung. Die Beute der Festung bleibt (dazu Münzen, Netherwarzen, Magmacreme, Quarz).
-- Finden mit `/locate structure kingdomsatwar:ash_forge`; die Aschenessen teilen sich ihre Plätze mit den Bastionen.
+- Finden mit `/locate structure kingdomsatwar:ash_forge`; die Aschenessen teilen sich ihre Plätze mit den Hortfesten.
   Der Erfolg „Eine schreckliche Festung“ heißt jetzt „Die Aschenesse“ und verlangt, eine zu betreten.
+
+![Die Hortfeste](docs/bilder/hortfeste.jpg)
+
+**Die Hortfeste** (statt der Bastion): Die Borstlinge horten ihr Gold in einer Stufenburg. Sie steht frei in einer
+weiten Höhlenkuppel auf einem Sockel, der bis auf den Grund oder in den Lavasee reicht – in den Karmesin- und
+Wirrwäldern, den Netherwüsten und im Seelensandtal, wo früher die Bastionen standen.
+
+- **Drei Absätze** aus Schwarzstein übereinander, jeder mit einem Fries aus gemeißelten Platten und Gold, Zinnen am
+  Rand der Terrassen und hohen Fenstern; an den Ecken des untersten vier **Türme** mit Feuerschalen (eine Leiter führt
+  von der Terrasse hinauf).
+- **Der Vorhof** mit einem Tor zwischen zwei Pylonen, Feuerschalen und der Wachstube; von dort steigt die
+  **Freitreppe** mit Brüstung, Pfosten und Laternen über alle Absätze bis auf die oberste Plattform.
+- **Der goldene Keiler** auf der Spitze: das Götzenbild der Borstlinge auf einem Sockel zwischen vier Feuerschalen – ein
+  Rumpf aus **Blattgold** mit rundem Bauch und hohem Widerrist, darauf ein Kamm aus dunklen Borsten; der schwere Kopf
+  hängt tiefer als der Rücken, mit Rüsselscheibe und Nüstern, schlanken weißen Hauern, glühenden Augen und abstehenden
+  Ohren; dazu ein Ringelschwanz.
+- **Unten** die Tauschhalle mit einem Feuerbecken auf goldenem Grund, Arkaden unter dem nächsten Absatz, Vorräte an den
+  Seiten (Fässer, Truhen) und hinten die **Ställe der Glutkeiler** mit Koppeln aus Karmesinzaun, Heu und Futter;
+  große Tore an beiden Seiten und hinten.
+- **In der Mitte** der Schlafsaal mit Strohlagern und die Waffenkammer (Schmiedetisch, Amboss, Schleifstein); Türen
+  führen auf die Terrassen.
+- **Oben** die **Hortkammer**: glänzende Haufen aus Blattgold und vergoldetem Schwarzstein mit echtem Gold und Rohgold
+  dazwischen, Netheritschutt in den Wänden, zwei Glutschleim-Spawner in Käfigen und der Hort auf einem Podest. Treppen im
+  Inneren verbinden die Absätze. Zierde wie Zinnenkappen, Schlusssteine und der Keiler ist aus Blattgold – die Feste
+  glänzt, ist aber kein Goldbergwerk: Echtes Gold und Rohgold sind nur ein paar Blöcke in den Haufen der Hortkammer.
+- **Bewohner:** Borstlinge in der Halle, im Schlafsaal und auf den Terrassen, Borstenhünen als Wache (auch beim Keiler),
+  Glutkeiler in den Ställen. Licht geben nur gelbe Flammen – Seelenfeuer fürchten die Borstlinge.
+- **Beute:** die der Bastion – im Hort die **Netherit-Vorlage**, in den übrigen Truhen Gold, Ausrüstung, Leitsteine
+  und mit etwas Glück ebenfalls eine Vorlage. Der Erfolg für das Betreten einer Bastion heißt jetzt „Die Hortfeste“ und
+  verlangt, eine zu betreten; der für das Plündern einer Bastion-Truhe gilt für die Truhen der Hortfeste.
+- Finden mit `/locate structure kingdomsatwar:hortfeste`; sie hat die Plätze der Bastionen übernommen.
 
 ### Die Nester
 
@@ -1163,6 +1203,7 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
 | Stahllaterne, Aetheritlaterne, Kronleuchter mit acht Kerzen | Werkbank | – |
 | Zinnen aus mittelalterlichem Stein, dunklen Steinziegeln oder hellen Kalksteinziegeln | Werkbank / Steinmetz | – |
 | Eichenstuhl, Eichenbank, Eichentisch (verbindet sich zur Tafel), Thron | Werkbank | – |
+| Blattgold (Stein unter gehämmerten Goldblättchen; glänzt wie Gold, ist aber nur Zierde) | Werkbank: 8 Stein um einen Goldbarren (ergibt 8) | – |
 
 Auf **Stühle, Bänke und den Thron** setzt man sich per Rechtsklick. **Zinnen** in einer Reihe ergeben von selbst
 Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
@@ -1192,6 +1233,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 - **Die 17 Bauwerke der Oberwelt** an Stelle der Vanilla-Bauwerke (siehe „Bauwerke der Oberwelt“) – vom
   Sternensturz mit dem Portal ins Ende bis zur Raubritterburg im dunklen Wald.
 - **Die Aschenesse** im Nether an Stelle der Netherfestung (siehe „Bauwerke des Nethers“).
+- **Die Hortfeste** im Nether an Stelle der Bastion (siehe „Bauwerke des Nethers“).
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -1281,8 +1323,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
    - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
-   - zuletzt **Nether und End** – die Wesen sind fertig, von den Bauwerken die Aschenesse; es folgen Bastion,
-     Netherfossilien und Endstadt.
+   - zuletzt **Nether und End** – die Wesen sind fertig, von den Bauwerken die Aschenesse und die Hortfeste; es
+     folgen Netherfossilien und Endstadt.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

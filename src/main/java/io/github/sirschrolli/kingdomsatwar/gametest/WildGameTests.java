@@ -100,6 +100,8 @@ final class WildGameTests {
             ModGameTests.TEST_FUNCTIONS.register("wild_beehive", () -> WildGameTests::beehive);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> NEST_ONCE =
             ModGameTests.TEST_FUNCTIONS.register("wild_nest_releases_once", () -> WildGameTests::nestReleasesOnce);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> NEST_NIGHT =
+            ModGameTests.TEST_FUNCTIONS.register("wild_nest_night", () -> WildGameTests::nestAtNight);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SWARM =
             ModGameTests.TEST_FUNCTIONS.register("wild_swarm_trimmed", () -> WildGameTests::swarmTrimmed);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SPAWNER =
@@ -121,6 +123,10 @@ final class WildGameTests {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
+        // stellt die Zeit auf Nacht: darum für sich allein
+        Holder<TestEnvironmentDefinition<?>> night = event.registerEnvironment(KingdomsAtWar.id("wild_night"));
+        event.registerTest(NEST_NIGHT.getId(), new FunctionGameTestInstance(NEST_NIGHT.key(),
+                new TestData<>(night, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     private static List<EntityType<? extends Mob>> types() {
@@ -496,6 +502,42 @@ final class WildGameTests {
             helper.assertTrue(ours == 3 && vanilla == 0, "aus dem Nest kamen " + ours + " eigene und " + vanilla + " Vanilla-Bienen");
             helper.assertTrue(level.getEntitiesOfClass(WildBee.class, box, bee -> nestAt.equals(bee.getHivePos())).size() == 3,
                     "die Bienen kennen ihr Nest nicht");
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Nachts fliegen Bienen, die aus dem Nest getrieben wurden, gleich wieder hinein – und zwar als eigene Bienen: Sie
+     * werden ersetzt, bevor sie sich auch nur einen Tick lang als Vanilla-Bienen bewegen. Wieder heraus kommen also eigene.
+     */
+    private static void nestAtNight(GameTestHelper helper) {
+        floor(helper);
+        helper.setTime(18000);
+        ServerLevel level = helper.getLevel();
+        BlockPos nestPos = new BlockPos(4, 1, 4);
+        helper.setBlock(nestPos, Blocks.BEE_NEST);
+        BlockPos nestAt = helper.absolutePos(nestPos);
+        BeehiveBlockEntity nest = (BeehiveBlockEntity) level.getBlockEntity(nestAt);
+        boolean night = level.environmentAttributes().getValue(EnvironmentAttributes.BEES_STAY_IN_HIVE,
+                net.minecraft.world.phys.Vec3.atCenterOf(nestAt));
+        if (nest == null || !night) {
+            helper.setTime(1000);
+            helper.fail(nest == null ? "kein Nest" : "für die Bienen ist es nicht Nacht");
+            return;
+        }
+        for (int i = 0; i < 3; i++) {
+            nest.storeBee(BeehiveBlockEntity.Occupant.create(0));
+        }
+        nest.emptyAllLivingFromHive(null, level.getBlockState(nestAt), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+        AABB box = new AABB(nestAt).inflate(6.0);
+        helper.runAfterDelay(40, () -> {
+            int home = nest.getOccupantCount();
+            nest.emptyAllLivingFromHive(null, level.getBlockState(nestAt), BeehiveBlockEntity.BeeReleaseStatus.EMERGENCY);
+            int ours = level.getEntitiesOfClass(WildBee.class, box).size();
+            int vanilla = level.getEntitiesOfClass(net.minecraft.world.entity.animal.bee.Bee.class, box, bee -> bee.getType() == EntityTypes.BEE).size();
+            helper.setTime(1000);
+            helper.assertTrue(home == 3, "nur " + home + " Bienen sind nachts ins Nest zurückgeflogen");
+            helper.assertTrue(ours == 3 && vanilla == 0, "aus dem Nest kamen nachts " + ours + " eigene und " + vanilla + " Vanilla-Bienen");
             helper.succeed();
         });
     }

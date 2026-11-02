@@ -395,17 +395,18 @@ final class WorldSitesShowcase {
             case HORTFESTE -> {
                 if (!views.isEmpty()) {
                     // die zweite Feste nur von außen
-                    add(views, first, -34, 24, 58, 0, 16, 4);
-                    add(views, first, 36, 18, -30, 0, 16, 0);
+                    add(views, first, -20, 18, 38, 0, 14, 4);
+                    add(views, first, 28, 16, -24, 0, 14, 0);
                     return;
                 }
-                add(views, first, -34, 24, 58, 0, 16, 4);
+                add(views, first, -20, 18, 38, 0, 14, 4);
                 add(views, first, 0, 5, 50, 0, 18, 18);
-                add(views, first, 11, 33, 15, 0, 32, 1);
-                add(views, first, -7, 31, -11, 0, 32, 2);
-                add(views, first, 36, 18, -30, 0, 16, 0);
+                add(views, first, 9, 34, 16, 0, 33, 2);
+                add(views, first, -8, 33, -10, 0, 33, 1);
+                add(views, first, 13, 32, 3, 0, 33, 1);
+                add(views, first, 28, 16, -24, 0, 14, 0);
                 add(views, first, 0, 3, 13, 0, 3, -2);
-                add(views, first, 14, 3, 0, 3, 2, -2);
+                add(views, first, 10, 3, -10, -6, 2, 6);
                 add(views, first, -11, 3, -11, -7, 1, -17);
                 add(views, first, 10, 13, 10, -4, 12, -6);
                 add(views, first, -2, 22, 4, 0, 21, -6);

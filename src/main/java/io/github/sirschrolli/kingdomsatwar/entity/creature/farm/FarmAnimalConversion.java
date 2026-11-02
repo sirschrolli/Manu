@@ -369,6 +369,18 @@ public final class FarmAnimalConversion {
     /** Wesen, die erst am Ende des Ticks ersetzt werden (Reiter, Reittiere, Händlerlamas, Bienen). */
     private static final java.util.List<Mob> PENDING = new java.util.ArrayList<>();
 
+    /**
+     * Was zwischen zwei Ticks erschienen ist (durch Spieler, Befehle, Spawn-Eier), wird schon vor dem nächsten Tick
+     * ersetzt: Sonst bewegte es sich einen Tick lang als Vanilla-Wesen – nachts flöge eine Biene, die ein Spieler aus
+     * dem Nest getrieben hat, als Vanilla-Biene gleich wieder hinein und bliebe es.
+     */
+    @SubscribeEvent
+    static void onLevelTickStart(net.neoforged.neoforge.event.tick.LevelTickEvent.Pre event) {
+        if (event.getLevel() instanceof ServerLevel level && !PENDING.isEmpty()) {
+            replacePending(level);
+        }
+    }
+
     @SubscribeEvent
     static void onLevelTick(net.neoforged.neoforge.event.tick.LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level)) {
@@ -380,9 +392,12 @@ public final class FarmAnimalConversion {
         if (!LOADED_BEES.isEmpty()) {
             trimLoadedBees(level);
         }
-        if (PENDING.isEmpty()) {
-            return;
+        if (!PENDING.isEmpty()) {
+            replacePending(level);
         }
+    }
+
+    private static void replacePending(ServerLevel level) {
         java.util.Set<Entity> roots = new java.util.LinkedHashSet<>();
         for (Mob mob : java.util.List.copyOf(PENDING)) {
             if (mob.level() == level) {

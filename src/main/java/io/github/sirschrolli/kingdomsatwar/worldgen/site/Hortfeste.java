@@ -202,6 +202,11 @@ final class Hortfeste {
                     : s(Blocks.MAGMA_BLOCK);
         }
 
+        /** Blattgold: glänzt wie Gold, ist aber nur Zierde (die Feste soll kein Goldbergwerk sein). */
+        static BlockState leaf() {
+            return io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.GOLD_LEAF_BLOCK.get().defaultBlockState();
+        }
+
         BlockState pillar(Block block) {
             return block.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
         }
@@ -276,6 +281,9 @@ final class Hortfeste {
                     double edge = domeRadius(this.seed, Math.atan2(dz, x));
                     double rough = (this.b.noise(x, 0, z) - 0.5) * 1.8;
                     if (r > edge + rough) {
+                        if (r <= edge + 9) {
+                            this.rim(x, z, r - edge);
+                        }
                         continue;
                     }
                     double k = Math.min(1.0, r / edge);
@@ -285,6 +293,37 @@ final class Hortfeste {
                             this.b.set(x, y, z, AIR);
                         }
                     }
+                    // die Decke der Kuppel abdichten: Lava darüber wird zu Gestein, sonst tropfte sie als Lavafall herab
+                    for (int y = top + 1; y <= top + 4; y++) {
+                        BlockState above = this.b.get(x, y, z);
+                        if (!above.getFluidState().isEmpty()) {
+                            this.b.set(x, y, z, this.b.chance(x, y, z, 0.5f) ? s(Blocks.BLACKSTONE) : s(Blocks.BASALT));
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Rings um die Kuppel: Was von angeschnittenen Riesenpilzen und Ranken übrig bliebe, verschwindet (sonst schwebten
+         * Brocken davon in der Luft), und Lava in der Kuppelwand wird zu Schwarzstein – so ergießt sich kein Lavafall auf
+         * die Feste.
+         */
+        private void rim(int x, int z, double out) {
+            for (int y = 1; y <= DOME_HEIGHT + 6; y++) {
+                BlockState old = this.b.get(x, y, z);
+                if (old.isAir()) {
+                    continue;
+                }
+                if (old.is(net.minecraft.tags.BlockTags.WART_BLOCKS) || old.is(Blocks.SHROOMLIGHT) || old.is(Blocks.CRIMSON_STEM)
+                        || old.is(Blocks.WARPED_STEM) || old.is(Blocks.WEEPING_VINES) || old.is(Blocks.WEEPING_VINES_PLANT)
+                        || old.is(Blocks.TWISTING_VINES) || old.is(Blocks.TWISTING_VINES_PLANT)) {
+                    this.b.set(x, y, z, AIR);
+                } else if (!old.getFluidState().isEmpty() && !old.getFluidState().isSource()) {
+                    // fließende Lava (ein Lavafall) verschwindet; ihre Quelle in der Wand wird zu Gestein
+                    this.b.set(x, y, z, AIR);
+                } else if (out <= 4 && !old.getFluidState().isEmpty()) {
+                    this.b.set(x, y, z, this.b.chance(x, y, z, 0.5f) ? s(Blocks.BLACKSTONE) : s(Blocks.BASALT));
                 }
             }
         }
@@ -382,11 +421,11 @@ final class Hortfeste {
                         }
                     }
                 }
-                this.b.set(cx, 13, z - 1, s(Blocks.GOLD_BLOCK));
+                this.b.set(cx, 13, z - 1, leaf());
                 this.brazier(cx, 14, z - 1);
                 // der Torbogen zwischen den Pylonen
                 for (int x = -4; x <= 4; x++) {
-                    this.b.set(x, 7, z - 1, x == 0 ? s(Blocks.GOLD_BLOCK) : s(Blocks.CHISELED_POLISHED_BLACKSTONE));
+                    this.b.set(x, 7, z - 1, x == 0 ? leaf() : s(Blocks.CHISELED_POLISHED_BLACKSTONE));
                     this.b.set(x, 8, z - 1, s(Blocks.POLISHED_BLACKSTONE_BRICKS));
                 }
                 for (int x = -4; x <= 4; x += 2) {
@@ -455,7 +494,7 @@ final class Hortfeste {
                         boolean merlon = Math.floorMod(x + z, 2) == 0;
                         this.b.set(x, rf + 1, z, merlon ? s(Blocks.POLISHED_BLACKSTONE_BRICKS) : s(Blocks.POLISHED_BLACKSTONE_BRICK_WALL));
                         if (corner) {
-                            this.b.set(x, rf + 2, z, s(Blocks.GOLD_BLOCK));
+                            this.b.set(x, rf + 2, z, leaf());
                         } else if (merlon && Math.floorMod(x + z, 8) == 0) {
                             this.b.set(x, rf + 2, z, s(Blocks.GILDED_BLACKSTONE));
                         }
@@ -503,7 +542,7 @@ final class Hortfeste {
                         for (int y = fl + 1; y <= fl + 4; y++) {
                             this.b.set(x, y, z, AIR);
                         }
-                        this.b.set(x, fl + 5, z, s == 0 ? s(Blocks.GOLD_BLOCK) : s(Blocks.CHISELED_POLISHED_BLACKSTONE));
+                        this.b.set(x, fl + 5, z, s == 0 ? leaf() : s(Blocks.CHISELED_POLISHED_BLACKSTONE));
                     }
                     // Torpfeiler
                     for (int s : new int[] {-2, 2}) {
@@ -553,7 +592,7 @@ final class Hortfeste {
                                 boolean merlon = Math.floorMod(dx + dz, 2) == 1 || corner;
                                 this.b.set(cx + dx, top + 1, cz + dz, merlon ? s(Blocks.POLISHED_BLACKSTONE_BRICKS) : AIR);
                                 if (corner) {
-                                    this.b.set(cx + dx, top + 2, cz + dz, s(Blocks.GOLD_BLOCK));
+                                    this.b.set(cx + dx, top + 2, cz + dz, leaf());
                                 }
                             } else {
                                 this.b.set(cx + dx, top + 1, cz + dz, AIR);
@@ -586,7 +625,7 @@ final class Hortfeste {
             for (int x = -a; x <= a; x++) {
                 for (int z = -a; z <= a; z++) {
                     int d = cheb(x, z);
-                    BlockState floor = d <= 1 ? s(Blocks.GOLD_BLOCK) : d % 4 == 0 ? s(Blocks.POLISHED_BLACKSTONE_BRICKS)
+                    BlockState floor = d <= 1 ? leaf() : d % 4 == 0 ? s(Blocks.POLISHED_BLACKSTONE_BRICKS)
                             : d > A[1] ? s(Blocks.POLISHED_BLACKSTONE) : Math.floorMod(x + z, 2) == 0 ? s(Blocks.POLISHED_BLACKSTONE)
                             : s(Blocks.BLACKSTONE);
                     this.b.set(x, 0, z, floor);
@@ -605,7 +644,7 @@ final class Hortfeste {
                 }
             }
             for (int[] c : new int[][] {{2, 2}, {-2, 2}, {2, 6}, {-2, 6}}) {
-                this.b.set(c[0], 1, c[1], s(Blocks.GOLD_BLOCK));
+                this.b.set(c[0], 1, c[1], leaf());
                 this.lantern(c[0], 2, c[1], false);
             }
             // Laternen an Ketten in der Halle und in den Gängen
@@ -630,7 +669,7 @@ final class Hortfeste {
                     if (z == -9) {
                         this.chest(x, 1, z, in, BuiltInLootTables.BASTION_OTHER);
                     } else if (this.b.chance(x, 1, z, 0.35f)) {
-                        this.b.set(x, 1, z, this.b.chance(x, 3, z, 0.4f) ? s(Blocks.GOLD_BLOCK) : s(Blocks.GILDED_BLACKSTONE));
+                        this.b.set(x, 1, z, this.b.chance(x, 3, z, 0.4f) ? leaf() : s(Blocks.GILDED_BLACKSTONE));
                     } else {
                         this.b.set(x, 1, z, s(Blocks.HAY_BLOCK));
                     }
@@ -771,7 +810,7 @@ final class Hortfeste {
                 this.barrel(-w, fl + 2, z, Direction.UP);
             }
             this.chest(-w + 1, fl + 1, w, Direction.NORTH, BuiltInLootTables.BASTION_OTHER);
-            this.b.set(-w, fl + 1, w, s(Blocks.GOLD_BLOCK));
+            this.b.set(-w, fl + 1, w, leaf());
             this.lantern(-w, fl + 2, w, false);
         }
 
@@ -800,15 +839,16 @@ final class Hortfeste {
                     int h = (int) Math.round(2.6 - edge * 0.9 + (this.b.noise(x, 50, z) - 0.5) * 1.4);
                     for (int y = 1; y <= Math.min(h, 3); y++) {
                         float n = this.b.noise(x, fl + y, z);
-                        this.b.set(x, fl + y, z, n < 0.38f ? s(Blocks.GOLD_BLOCK) : n < 0.6f ? s(Blocks.RAW_GOLD_BLOCK)
-                                : s(Blocks.GILDED_BLACKSTONE));
+                        // echtes Gold nur hier und da; das meiste glänzt nur (Blattgold und vergoldeter Schwarzstein)
+                        this.b.set(x, fl + y, z, n < 0.05f ? s(Blocks.GOLD_BLOCK) : n < 0.1f ? s(Blocks.RAW_GOLD_BLOCK)
+                                : n < 0.53f ? s(Blocks.GILDED_BLACKSTONE) : leaf());
                     }
                 }
             }
             // der Hort auf einem Podest hinten in der Mitte
             for (int x = -2; x <= 2; x++) {
                 for (int z = -a; z <= -a + 2; z++) {
-                    this.b.set(x, fl + 1, z, Math.abs(x) == 2 ? s(Blocks.GOLD_BLOCK) : s(Blocks.POLISHED_BLACKSTONE_BRICKS));
+                    this.b.set(x, fl + 1, z, Math.abs(x) == 2 ? leaf() : s(Blocks.POLISHED_BLACKSTONE_BRICKS));
                     this.b.set(x, fl + 2, z, AIR);
                 }
                 this.b.set(x, fl + 1, -a + 3, VillageBuilder.stairs(Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS, Direction.NORTH, Half.BOTTOM));
@@ -822,7 +862,7 @@ final class Hortfeste {
             for (int sx : new int[] {-1, 1}) {
                 int x = sx * (a - 1);
                 int z = -a + 1;
-                this.b.set(x, fl + 1, z, s(Blocks.GOLD_BLOCK));
+                this.b.set(x, fl + 1, z, leaf());
                 this.spawner(x, fl + 2, z);
                 for (int dx = -1; dx <= 1; dx++) {
                     for (int dz = -1; dz <= 1; dz++) {
@@ -953,73 +993,101 @@ final class Hortfeste {
             for (int[] c : new int[][] {{6, 6}, {-6, 6}, {6, -6}, {-6, -6}}) {
                 this.brazier(c[0], top + 1, c[1]);
             }
-            // der Sockel des Götzenbilds
-            for (int x = -3; x <= 3; x++) {
-                for (int z = -5; z <= 4; z++) {
-                    boolean rim = Math.abs(x) == 3 || z == -5 || z == 4;
-                    for (int y = top + 1; y <= top + 2; y++) {
-                        this.b.set(x, y, z, rim && y == top + 2 ? s(Blocks.CHISELED_POLISHED_BLACKSTONE) : s(Blocks.POLISHED_BLACKSTONE_BRICKS));
+            // der Sockel des Götzenbilds: zwei Stufen, oben ein Rand aus gemeißelten Platten, an den Ecken Gold
+            for (int x = -4; x <= 4; x++) {
+                for (int z = -7; z <= 6; z++) {
+                    boolean outer = Math.abs(x) == 4 || z == -7 || z == 6;
+                    this.b.set(x, top + 1, z, outer ? s(Blocks.POLISHED_BLACKSTONE_BRICKS) : s(Blocks.POLISHED_BLACKSTONE));
+                    if (!outer) {
+                        boolean rim = Math.abs(x) == 3 || z == -6 || z == 5;
+                        this.b.set(x, top + 2, z, rim ? s(Blocks.CHISELED_POLISHED_BLACKSTONE) : s(Blocks.POLISHED_BLACKSTONE_BRICKS));
+                    } else {
+                        this.b.set(x, top + 2, z, AIR);
                     }
                 }
             }
-            for (int[] c : new int[][] {{3, -5}, {-3, -5}, {3, 4}, {-3, 4}}) {
-                this.b.set(c[0], top + 3, c[1], s(Blocks.GOLD_BLOCK));
+            for (int[] c : new int[][] {{3, -6}, {-3, -6}, {3, 5}, {-3, 5}}) {
+                this.b.set(c[0], top + 3, c[1], leaf());
             }
             this.boar(top + 3);
         }
 
         /**
-         * Der goldene Keiler (Blick nach vorn, +z): ein Rumpf aus Gold mit Sprenkeln aus Rohgold, vier Beine, ein schwerer
-         * Kopf mit Rüssel, weißen Hauern und glühenden Augen, Ohren und ein Kamm aus dunklen Borsten auf dem Rücken.
+         * Der goldene Keiler (Blick nach vorn, +z), vierzehn Blöcke lang: kurze Beine mit dunklen Hufen, ein Rumpf mit
+         * rundem Bauch und hohem Widerrist, darauf ein Kamm aus dunklen Borsten; der schwere Kopf hängt tiefer als der
+         * Rücken, vorn die Rüsselscheibe mit Nüstern, daneben die schlanken weißen Hauer; glühende Augen, abstehende Ohren
+         * und ein Ringelschwanz.
          */
         private void boar(int y0) {
-            // Rumpf: ein Ellipsoid
-            double cy = y0 + 2.6;
-            double cz = -0.5;
-            for (int x = -3; x <= 3; x++) {
-                for (int y = y0 + 1; y <= y0 + 5; y++) {
-                    for (int z = -5; z <= 4; z++) {
-                        double ex = x / 2.4;
-                        double ey = (y - cy) / 2.0;
-                        double ez = (z - cz) / 4.0;
-                        if (ex * ex + ey * ey + ez * ez <= 1.0) {
-                            this.b.set(x, y, z, this.b.chance(x, y, z, 0.16f) ? s(Blocks.RAW_GOLD_BLOCK) : s(Blocks.GOLD_BLOCK));
+            BlockState gold = leaf();
+            BlockState dark = s(Blocks.POLISHED_BLACKSTONE);
+            // Beine mit Hufen: vorn unter dem Widerrist, hinten unter der Keule
+            for (int[] l : new int[][] {{1, 1}, {-1, 1}, {1, -4}, {-1, -4}}) {
+                this.b.set(l[0], y0, l[1], dark);
+                this.b.set(l[0], y0 + 1, l[1], gold);
+            }
+            // Rumpf: unten schmal (der Bauch), in der Mitte fünf breit, oben wieder schmal; vorn der Widerrist
+            for (int z = -5; z <= 2; z++) {
+                for (int x = -2; x <= 2; x++) {
+                    int ax = Math.abs(x);
+                    if (ax <= 1 && z >= -4) {
+                        this.b.set(x, y0 + 2, z, gold);
+                    }
+                    if (!(ax == 2 && z == -5)) {
+                        this.b.set(x, y0 + 3, z, gold);
+                        this.b.set(x, y0 + 4, z, gold);
+                    }
+                    if (ax <= 1 && z >= -4) {
+                        this.b.set(x, y0 + 5, z, gold);
+                    }
+                    if (ax <= 1 && z >= 0) {
+                        this.b.set(x, y0 + 6, z, gold);
+                    }
+                }
+            }
+            // Hals und Kopf: der Kopf fünf breit, hängt eine Schicht tiefer als der Rücken
+            for (int x = -2; x <= 2; x++) {
+                for (int y = y0 + 2; y <= y0 + 5; y++) {
+                    this.b.set(x, y, 3, gold);
+                }
+                for (int z = 4; z <= 5; z++) {
+                    for (int y = y0 + 1; y <= y0 + 4; y++) {
+                        if (Math.abs(x) == 2 && y == y0 + 1) {
+                            continue;
                         }
+                        this.b.set(x, y, z, gold);
                     }
                 }
             }
-            // Beine
-            for (int[] l : new int[][] {{1, 2}, {-1, 2}, {1, -3}, {-1, -3}}) {
-                this.b.set(l[0], y0, l[1], s(Blocks.GOLD_BLOCK));
-            }
-            // Kopf, Rüssel, Hauer, Augen, Ohren
+            // die Rüsselscheibe vorn unten, mit zwei dunklen Nüstern
             for (int x = -1; x <= 1; x++) {
-                for (int y = y0 + 1; y <= y0 + 3; y++) {
-                    for (int z = 4; z <= 5; z++) {
-                        this.b.set(x, y, z, s(Blocks.GOLD_BLOCK));
-                    }
-                }
-                this.b.set(x, y0 + 1, 6, s(Blocks.RAW_GOLD_BLOCK));
-                this.b.set(x, y0 + 2, 6, s(Blocks.GOLD_BLOCK));
+                this.b.set(x, y0 + 1, 6, gold);
+                this.b.set(x, y0 + 2, 6, gold);
             }
             for (int sx : new int[] {-1, 1}) {
-                this.b.set(sx * 2, y0 + 1, 6, Blocks.BONE_BLOCK.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-                this.b.set(sx * 2, y0 + 2, 6, Blocks.BONE_BLOCK.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
-                this.b.set(sx * 2, y0 + 3, 7, Blocks.BONE_BLOCK.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Z));
-                this.b.set(sx, y0 + 3, 6, s(Blocks.SHROOMLIGHT));
-                this.b.set(sx, y0 + 4, 4, s(Blocks.GOLD_BLOCK));
-                this.b.set(sx * 2, y0 + 4, 3, s(Blocks.GOLD_BLOCK));
+                this.b.set(sx, y0 + 2, 7, Blocks.POLISHED_BLACKSTONE_BUTTON.defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.ButtonBlock.FACE, AttachFace.WALL)
+                        .setValue(net.minecraft.world.level.block.ButtonBlock.FACING, Direction.SOUTH));
+                // die Hauer: schlank und weiß, seitlich der Rüsselscheibe nach oben gebogen
+                BlockState tusk = Blocks.END_ROD.defaultBlockState().setValue(net.minecraft.world.level.block.EndRodBlock.FACING, Direction.UP);
+                this.b.set(sx * 2, y0 + 1, 6, tusk);
+                this.b.set(sx * 2, y0 + 2, 6, tusk);
+                // glühende Augen in den Ecken der Stirn
+                this.b.set(sx * 2, y0 + 4, 5, s(Blocks.SHROOMLIGHT));
+                // abstehende Ohren
+                this.b.set(sx * 3, y0 + 4, 4, gold);
+                this.b.set(sx * 3, y0 + 5, 3, gold);
             }
-            // der Kamm aus Borsten
-            for (int z = -3; z <= 3; z++) {
-                this.b.set(0, y0 + 5, z, s(Blocks.BLACKSTONE_WALL));
-                if (z % 2 == 0) {
-                    this.b.set(0, y0 + 6, z, s(Blocks.BLACKSTONE_WALL));
-                }
+            // der Kamm aus Borsten: über dem Widerrist am höchsten, über Hals und Kreuz niedriger
+            for (int z = -4; z <= 3; z++) {
+                int top = z >= 0 && z <= 2 ? y0 + 7 : y0 + 6;
+                this.b.set(0, top, z, s(Blocks.BLACKSTONE_WALL));
             }
-            // der Schwanz
-            this.b.set(0, y0 + 3, -5, s(Blocks.GOLD_BLOCK));
-            this.b.set(0, y0 + 2, -6, s(Blocks.IRON_CHAIN));
+            this.b.set(0, y0 + 8, 1, s(Blocks.BLACKSTONE_WALL));
+            // Ringelschwanz mit dunkler Quaste
+            this.b.set(0, y0 + 4, -6, gold);
+            this.b.set(0, y0 + 5, -7, gold);
+            this.b.set(0, y0 + 6, -7, s(Blocks.BLACKSTONE_WALL));
         }
 
         // =====================================================================================
