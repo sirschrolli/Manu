@@ -185,9 +185,11 @@ public final class MonsterRenderers {
         event.registerEntityRenderer(ModEntities.PARCHED.get(), context -> new BonesRenderer<>(context, new String[] {"doerrgebein"}, s -> 0));
         event.registerEntityRenderer(ModEntities.CREEPER.get(), PlantCreeperRenderer::new);
         event.registerEntityRenderer(ModEntities.SPIDER.get(),
-                context -> new WildSpiderRenderer<WildSpider>(context, SPIDER, 0.8f, SPIDER_NAMES, s -> s.getLook().ordinal()));
+                context -> new WildSpiderRenderer<WildSpider>(context, SPIDER, 0.8f, SPIDER_NAMES, s -> s.getLook().ordinal(),
+                        new net.minecraft.client.renderer.entity.SpiderRenderer<WildSpider>(context)));
         event.registerEntityRenderer(ModEntities.CAVE_SPIDER.get(), context -> new WildSpiderRenderer<WildCaveSpider>(context, CAVE_SPIDER,
-                0.8f * CAVE_SPIDER_SCALE, new String[] {"hoehlenspinne"}, s -> 0));
+                0.8f * CAVE_SPIDER_SCALE, new String[] {"hoehlenspinne"}, s -> 0,
+                new net.minecraft.client.renderer.entity.CaveSpiderRenderer(context)));
         event.registerEntityRenderer(ModEntities.SLIME.get(), OozeRenderer::new);
         event.registerEntityRenderer(ModEntities.SULFUR_CUBE.get(), BrimstoneCubeRenderer::new);
         event.registerEntityRenderer(ModEntities.WITCH.get(), HagRenderer::new);

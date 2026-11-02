@@ -64,8 +64,26 @@ public final class ModTags {
         /** Monster, die Münzen fallen lassen, wenn ein Spieler sie besiegt. */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> DROPS_COINS = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("drops_coins"));
+        /** Drachen aller Art: Drachen, Drachen-Bosse, Lindwürmer (Drachentöter trifft sie hart, Drachenschuppe schützt vor ihnen). */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> DRAGONS = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("dragons"));
 
         private EntityTypes() {}
+    }
+
+    /** Verzauberungs-Tags: wo die Verzauberungen der Mod als Beute liegen. */
+    public static final class Enchantments {
+        /** Schatzkammern und Herrscher der Reiche: Lebensraub, Rüstungsbrecher, Pfeilhagel, Windschritt. */
+        public static final TagKey<net.minecraft.world.item.enchantment.Enchantment> LOOT_REALM = TagKey.create(Registries.ENCHANTMENT,
+                KingdomsAtWar.id("loot/realm"));
+        /** Drachen: Drachentöter und Drachenschuppe. */
+        public static final TagKey<net.minecraft.world.item.enchantment.Enchantment> LOOT_DRAGON = TagKey.create(Registries.ENCHANTMENT,
+                KingdomsAtWar.id("loot/dragon"));
+        /** Erzmagier und ihre Türme: Frostklinge, Lebensraub, Windschritt. */
+        public static final TagKey<net.minecraft.world.item.enchantment.Enchantment> LOOT_ARCANE = TagKey.create(Registries.ENCHANTMENT,
+                KingdomsAtWar.id("loot/arcane"));
+
+        private Enchantments() {}
     }
 
     public static final class Biomes {

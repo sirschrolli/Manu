@@ -33,7 +33,8 @@ public final class RealmState {
                 UUIDUtil.CODEC.listOf().optionalFieldOf("enemies", List.of()).forGetter(e -> List.copyOf(e.enemies)),
                 Codec.INT.optionalFieldOf("fallen", 0).forGetter(e -> e.fallen),
                 Codec.LONG.optionalFieldOf("last_tribute", 0L).forGetter(e -> e.lastTribute),
-                Codec.INT.optionalFieldOf("garrison", 0).forGetter(e -> e.garrison)
+                Codec.INT.optionalFieldOf("garrison", 0).forGetter(e -> e.garrison),
+                Codec.LONG.optionalFieldOf("last_reinforcement", 0L).forGetter(e -> e.lastReinforcement)
         ).apply(instance, Entry::new));
 
         private @Nullable BlockPos castle;
@@ -45,13 +46,14 @@ public final class RealmState {
         private int fallen;
         private long lastTribute;
         private int garrison;
+        private long lastReinforcement;
         /** Spielzeit des letzten Alarms (nicht gespeichert). */
         private long lastAlarm = -100000L;
 
         Entry() {}
 
         private Entry(Optional<BlockPos> castle, int rotation, boolean lordFallen, Optional<UUID> conqueror, long conqueredAt,
-                List<UUID> enemies, int fallen, long lastTribute, int garrison) {
+                List<UUID> enemies, int fallen, long lastTribute, int garrison, long lastReinforcement) {
             this.castle = castle.orElse(null);
             this.rotation = rotation;
             this.lordFallen = lordFallen;
@@ -61,6 +63,7 @@ public final class RealmState {
             this.fallen = fallen;
             this.lastTribute = lastTribute;
             this.garrison = garrison;
+            this.lastReinforcement = lastReinforcement;
         }
     }
 
@@ -182,6 +185,15 @@ public final class RealmState {
     public void replaced(Realm realm) {
         Entry entry = this.entry(realm);
         entry.fallen = Math.max(0, entry.fallen - 1);
+    }
+
+    /** Bis wann der Nachschub schon nachgerückt ist (Spielzeit). */
+    public long lastReinforcement(Realm realm) {
+        return this.entry(realm).lastReinforcement;
+    }
+
+    public void setLastReinforcement(Realm realm, long gameTime) {
+        this.entry(realm).lastReinforcement = gameTime;
     }
 
     public long lastTribute(Realm realm) {

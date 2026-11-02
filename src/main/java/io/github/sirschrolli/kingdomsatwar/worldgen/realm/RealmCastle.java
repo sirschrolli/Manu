@@ -82,6 +82,8 @@ public final class RealmCastle {
     public static final BlockPos STANDARD = new BlockPos(0, 10, -23);
     /** Wo der Thron steht (eigene Koordinaten). */
     public static final BlockPos THRONE = new BlockPos(0, HALL + 2, -23);
+    /** Die Schatztruhe in der Kammer des Herrschers (eigene Koordinaten): hierhin fließt nach der Eroberung der Tribut. */
+    public static final BlockPos TREASURY = new BlockPos(-4, UPPER + 1, -23);
 
     private RealmCastle() {}
 
@@ -811,7 +813,8 @@ public final class RealmCastle {
             this.b.set(-8, floor + 1, -23, Blocks.BOOKSHELF);
             this.b.set(-8, floor + 2, -23, Blocks.BOOKSHELF);
             this.b.set(-9, floor + 1, -23, Blocks.BARREL);
-            this.b.chest(-4, floor + 1, -23, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH), this.treasury);
+            this.b.chest(TREASURY.getX(), TREASURY.getY(), TREASURY.getZ(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING,
+                    Direction.SOUTH), this.treasury);
             this.b.set(-3, floor + 1, -23, Blocks.BARREL);
             for (int x = -8; x <= -4; x++) {
                 for (int z = -19; z <= -15; z++) {

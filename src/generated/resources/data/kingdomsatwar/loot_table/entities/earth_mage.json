@@ -72,6 +72,24 @@
           "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/arcane"
+          },
+          "name": "minecraft:book",
+          "weight": 50
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 50
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
             "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:book"

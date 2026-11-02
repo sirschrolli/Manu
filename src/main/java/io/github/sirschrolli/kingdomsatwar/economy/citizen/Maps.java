@@ -32,6 +32,63 @@ final class Maps {
         return map;
     }
 
+    /**
+     * Karte zur nächsten Stammburg, die noch nicht erobert ist: das Banner des Reichs markiert die Burg, der Name sagt,
+     * wessen Burg es ist.
+     */
+    static @Nullable ItemStack realmMap(ServerLevel overworld, BlockPos from) {
+        io.github.sirschrolli.kingdomsatwar.war.RealmState state = io.github.sirschrolli.kingdomsatwar.war.RealmState.of(overworld);
+        io.github.sirschrolli.kingdomsatwar.war.Realm best = null;
+        BlockPos bestPos = null;
+        double bestDist = Double.MAX_VALUE;
+        for (io.github.sirschrolli.kingdomsatwar.war.Realm realm : io.github.sirschrolli.kingdomsatwar.war.Realm.values()) {
+            if (state.isConquered(realm)) {
+                continue;
+            }
+            BlockPos pos = state.castle(realm) != null ? state.castle(realm)
+                    : io.github.sirschrolli.kingdomsatwar.war.RealmLocator.approximateCenter(overworld, realm);
+            if (pos == null) {
+                continue;
+            }
+            double d = pos.distSqr(from);
+            if (d < bestDist) {
+                best = realm;
+                bestPos = pos;
+                bestDist = d;
+            }
+        }
+        if (best == null) {
+            return null;
+        }
+        ItemStack map = MapItem.create(overworld, bestPos.getX(), bestPos.getZ(), (byte) 2, true, true);
+        MapItem.renderBiomePreviewMap(overworld, map);
+        MapItemSavedData.addTargetDecoration(map, bestPos, "realm_" + best.id(), banner(best.field()));
+        map.set(DataComponents.ITEM_NAME, Component.translatable("item.kingdomsatwar.map.realm_castle", best.shortName()));
+        return map;
+    }
+
+    /** Kartenzeichen: ein Banner in dieser Farbe. */
+    private static Holder<net.minecraft.world.level.saveddata.maps.MapDecorationType> banner(net.minecraft.world.item.DyeColor color) {
+        return switch (color) {
+            case WHITE -> MapDecorationTypes.WHITE_BANNER;
+            case ORANGE -> MapDecorationTypes.ORANGE_BANNER;
+            case MAGENTA -> MapDecorationTypes.MAGENTA_BANNER;
+            case LIGHT_BLUE -> MapDecorationTypes.LIGHT_BLUE_BANNER;
+            case YELLOW -> MapDecorationTypes.YELLOW_BANNER;
+            case LIME -> MapDecorationTypes.LIME_BANNER;
+            case PINK -> MapDecorationTypes.PINK_BANNER;
+            case GRAY -> MapDecorationTypes.GRAY_BANNER;
+            case LIGHT_GRAY -> MapDecorationTypes.LIGHT_GRAY_BANNER;
+            case CYAN -> MapDecorationTypes.CYAN_BANNER;
+            case PURPLE -> MapDecorationTypes.PURPLE_BANNER;
+            case BLUE -> MapDecorationTypes.BLUE_BANNER;
+            case BROWN -> MapDecorationTypes.BROWN_BANNER;
+            case GREEN -> MapDecorationTypes.GREEN_BANNER;
+            case RED -> MapDecorationTypes.RED_BANNER;
+            case BLACK -> MapDecorationTypes.BLACK_BANNER;
+        };
+    }
+
     /** Das nächste Dorf – für einen Dorfbewohner das nächste andere als sein eigenes. */
     static @Nullable BlockPos nearestOtherVillage(ServerLevel overworld, LivingEntity trader) {
         BlockPos center = trader instanceof VillagerEntity villager ? villager.getVillageCenter() : null;

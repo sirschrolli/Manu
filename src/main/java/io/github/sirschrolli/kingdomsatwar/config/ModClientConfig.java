@@ -12,6 +12,8 @@ public final class ModClientConfig {
     public static final ModConfigSpec.BooleanValue SHOW_INTRO;
     /** Die Stimme des Erzählers zu den Kapiteln der Geschichte abspielen. */
     public static final ModConfigSpec.BooleanValue NARRATOR_VOICE;
+    /** Arachnophobie-Modus: Spinnen erscheinen im schlichten Standard-Aussehen statt im eigenen, lebensechten Modell. */
+    public static final ModConfigSpec.BooleanValue ARACHNOPHOBIA;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -23,6 +25,10 @@ public final class ModClientConfig {
                 .comment("Der Erzähler spricht zu jedem Kapitel der Geschichte (sonst erscheint nur der Text).")
                 .translation("kingdomsatwar.configuration.narratorVoice")
                 .define("narratorVoice", true);
+        ARACHNOPHOBIA = builder
+                .comment("Arachnophobie-Modus: Spinnen und Höhlenspinnen erscheinen im schlichten Standard-Aussehen von Minecraft.")
+                .translation("kingdomsatwar.configuration.arachnophobia")
+                .define("arachnophobia", false);
         SPEC = builder.build();
     }
 

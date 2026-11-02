@@ -150,6 +150,7 @@ public final class VillageTrades {
                 list.add(Offer.special("seal_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.seal_circle"), 50));
                 list.add(Offer.special("tower_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.mage_tower"), 80));
                 list.add(Offer.special("nest_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.nest"), 120));
+                list.add(Offer.special("realm_map", Trading.named(Items.FILLED_MAP, "item.kingdomsatwar.map.realm"), 150));
                 list.add(Offer.buy(Items.ITEM_FRAME, 1, 7));
                 list.add(Offer.buy(Items.GLOBE_BANNER_PATTERN, 1, 60));
                 list.add(Offer.buy(Items.BANNER.pick(color(random)), 1, 15));

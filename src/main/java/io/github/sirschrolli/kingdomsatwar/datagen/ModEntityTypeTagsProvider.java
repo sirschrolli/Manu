@@ -186,6 +186,14 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.WITHER.key());
         this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.WITHER.key());
         this.tag(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES).add(ModEntities.WITHER.key());
+        // Drachen aller Art (Drachentöter, Drachenschuppe); der Herrscher eines Reichs zählt als Boss
+        var dragons = this.tag(io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.DRAGONS);
+        ModEntities.DRAGONS.values().forEach(type -> dragons.add(type.key()));
+        dragons.add(ModEntities.PYRRHON.key()).add(ModEntities.GLACIARA.key()).add(ModEntities.VERDANTIS.key()).add(ModEntities.TERRAGON.key())
+                .add(ModEntities.VOLTARION.key()).add(ModEntities.THALASSA.key()).add(ModEntities.NYXAR.key()).add(ModEntities.LINDWORM.key())
+                .add(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE, net.minecraft.resources.Identifier.withDefaultNamespace("ender_dragon")));
+        this.tag(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES).add(
+                ModEntities.REALM_WARRIORS.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.LORD).key());
         // Wesen des Ends (E5c): die Leermilbe ist ein Gliederfüßer (Nemesis der Gliederfüßer wirkt) und läuft über Pulverschnee
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.ENDERMITE.key());
         this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.ENDERMITE.key());

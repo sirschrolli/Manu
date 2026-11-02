@@ -79,7 +79,8 @@ public final class ModGameEvents {
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
                         .then(Commands.literal("reset").executes(context -> resetLair(context.getSource().getPlayerOrException()))))
                 .then(storyCommand())
-                .then(sealCommand()));
+                .then(sealCommand())
+                .then(io.github.sirschrolli.kingdomsatwar.war.RealmWar.command()));
     }
 
     /** {@code /kaw story reset|card <Kapitel>|chronicle}: Geschichte zurücksetzen, Titelkarte zeigen, Chronik geben. */

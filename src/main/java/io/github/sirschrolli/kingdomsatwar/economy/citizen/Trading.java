@@ -150,6 +150,7 @@ public final class Trading {
                 list.add(Offer.buy(Items.COMPASS, 1, 15));
                 list.add(Offer.special("seal_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.seal_circle"), 50));
                 list.add(Offer.special("nest_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.nest"), 120));
+                list.add(Offer.special("realm_map", named(Items.FILLED_MAP, "item.kingdomsatwar.map.realm"), 150));
                 list.add(Offer.buy(ModItems.DRAGON_COMPASS.get(), 1, 300));
                 list.add(Offer.buy(Items.SPYGLASS, 1, 25));
                 list.add(Offer.buy(Items.WRITABLE_BOOK, 1, 10));
@@ -276,11 +277,19 @@ public final class Trading {
 
     /**
      * Waren, die erst beim Handel entstehen: Karten zum Siegelkreis, zu einem noch unbesiegten Drachennest, zum
-     * nächsten anderen Dorf und zum nächsten Magierturm.
+     * nächsten anderen Dorf, zum nächsten Magierturm und zur nächsten noch freien Stammburg eines fremden Reichs.
      */
     private static ItemStack special(ServerPlayer player, LivingEntity trader, String id) {
         ServerLevel level = player.level();
         ServerLevel overworld = level.getServer().overworld();
+        if (id.equals("realm_map")) {
+            ItemStack map = level == overworld ? Maps.realmMap(overworld, player.blockPosition()) : null;
+            if (map == null) {
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.trade.no_target").withStyle(ChatFormatting.GRAY));
+                return ItemStack.EMPTY;
+            }
+            return map;
+        }
         BlockPos target = switch (id) {
             case "seal_map" -> io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.approximateCenter(overworld);
             case "nest_map" -> nearestNest(overworld, player.blockPosition());

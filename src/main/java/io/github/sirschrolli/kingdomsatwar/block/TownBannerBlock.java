@@ -101,8 +101,12 @@ public class TownBannerBlock extends HorizontalDirectionalBlock {
                     }
                     Town own = Towns.of(server.getServer()).byOwner(player.getUUID());
                     if (result == TownManager.FoundResult.HAS_BANNER && own != null) {
+                        // keine Koordinaten: Entfernung und Himmelsrichtung
+                        double dx = own.banner().getX() + 0.5 - player.getX();
+                        double dz = own.banner().getZ() + 0.5 - player.getZ();
                         player.sendSystemMessage(Component.translatable(result.key(), Component.literal(own.name()),
-                                own.banner().getX(), own.banner().getY(), own.banner().getZ()).withStyle(ChatFormatting.RED));
+                                io.github.sirschrolli.kingdomsatwar.rules.Compass.roughDistance(dx, dz),
+                                io.github.sirschrolli.kingdomsatwar.rules.Compass.describe(dx, dz)).withStyle(ChatFormatting.RED));
                     } else {
                         player.sendSystemMessage(Component.translatable(result.key()).withStyle(ChatFormatting.RED));
                     }

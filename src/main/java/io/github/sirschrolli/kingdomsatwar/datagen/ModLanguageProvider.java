@@ -32,6 +32,7 @@ public class ModLanguageProvider extends LanguageProvider {
         EconomyLang.register(this::text);
         VillageLang.register(this::text);
         WarLang.register(this::text);
+        RulesLang.register(this::text);
         bosses();
         shadowWorld();
         // --- Kreativ-Tabs ---
@@ -350,6 +351,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("kingdomsatwar.configuration.showIntro.tooltip",
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
+        text("kingdomsatwar.configuration.arachnophobia", "Arachnophobia mode", "Arachnophobie-Modus");
+        text("kingdomsatwar.configuration.arachnophobia.tooltip",
+                "Spiders and cave spiders keep the plain standard Minecraft look instead of the detailed model.",
+                "Spinnen und Höhlenspinnen behalten das schlichte Standard-Aussehen von Minecraft statt des detaillierten Modells.");
         text("kingdomsatwar.configuration.narratorVoice", "Narrator voice for chapters", "Erzählerstimme zu den Kapiteln");
         text("kingdomsatwar.configuration.narratorVoice.tooltip",
                 "The narrator speaks at the start of every chapter of the story (otherwise only his words appear).",
@@ -1304,8 +1309,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.CAPTAIN).get(), pick("Castle Captain", "Burghauptmann"));
         add(warriors.get(io.github.sirschrolli.kingdomsatwar.war.WarriorRole.LORD).get(), pick("Ruler", "Herrscher"));
         text("entity.kingdomsatwar.realm_warrior.of", "%2$s %1$s", "%1$s von %2$s");
-        text("realm.kingdomsatwar.alarm", "Alarm! The guards of the %s have spotted you!", "Alarm! Die Wachen von %s haben dich entdeckt!");
-        text("realm.kingdomsatwar.lord_fallen", "%s has fallen – the %s is without a ruler!", "%s ist gefallen – %s ist ohne Herrscher!");
         add(ModEntities.BANDIT_ARCHER.get(), pick("Bandit Archer", "Banditen-Bogenschütze"));
         item(ModItems.BANDIT_SPAWN_EGG, "Bandit Spawn Egg", "Banditen-Spawn-Ei");
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");

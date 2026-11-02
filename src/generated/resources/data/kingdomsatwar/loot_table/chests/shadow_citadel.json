@@ -158,6 +158,24 @@
         }
       ],
       "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/dragon"
+          },
+          "name": "minecraft:book",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 80
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "kingdomsatwar:chests/shadow_citadel"

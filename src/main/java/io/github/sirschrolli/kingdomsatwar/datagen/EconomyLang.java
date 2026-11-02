@@ -318,8 +318,8 @@ final class EconomyLang {
                 "Du hast %s gegründet! Rechtsklick auf das Banner: Bürger anheuern.");
         t.add("message.kingdomsatwar.town.found.founded", "Settlement founded", "Siedlung gegründet");
         t.add("message.kingdomsatwar.town.found.moved", "The banner of %s stands again", "Das Banner von %s steht wieder");
-        t.add("message.kingdomsatwar.town.found.has_banner", "%s already has its banner at %s, %s, %s",
-                "%s hat sein Banner schon bei %s, %s, %s");
+        t.add("message.kingdomsatwar.town.found.has_banner", "%s already has its banner – about %s blocks to the %s.",
+                "%s hat sein Banner schon – etwa %s Blöcke von hier Richtung %s.");
         t.add("message.kingdomsatwar.town.found.too_close", "Too close to another settlement", "Zu nah an einer anderen Siedlung");
         t.add("message.kingdomsatwar.town.banner_removed", "The banner of %s has fallen – put it up again to keep ruling",
                 "Das Banner von %s ist gefallen – stelle es wieder auf, um weiter zu herrschen");

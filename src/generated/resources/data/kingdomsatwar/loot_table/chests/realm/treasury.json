@@ -130,6 +130,24 @@
         }
       ],
       "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/realm"
+          },
+          "name": "minecraft:book",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 60
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "kingdomsatwar:chests/realm/treasury"

@@ -182,6 +182,24 @@
         "max": 2,
         "min": 1
       }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/realm"
+          },
+          "name": "minecraft:book",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 85
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "kingdomsatwar:chests/realm/armory"

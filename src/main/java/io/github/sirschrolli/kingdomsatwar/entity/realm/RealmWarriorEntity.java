@@ -342,7 +342,7 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         if (this.castle != null && target instanceof ServerPlayer player
                 && RealmState.of(level).alarm(this.realm(), level.getGameTime())) {
             level.playSound(null, this.castle.above(8), SoundEvents.BELL_BLOCK, this.getSoundSource(), 3.0f, 0.8f);
-            player.sendSystemMessage(Component.translatable("realm.kingdomsatwar.alarm", this.realm().displayName()), true);
+            player.sendSystemMessage(Component.translatable("realm.kingdomsatwar.alarm", this.realm().shortName()), true);
         }
     }
 
@@ -460,10 +460,13 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
             if (this.role == WarriorRole.LORD) {
                 state.lordFallen(this.realm());
                 state.save(level);
-                Component message = Component.translatable("realm.kingdomsatwar.lord_fallen", this.realm().ruler(), this.realm().displayName());
+                Component message = Component.translatable("realm.kingdomsatwar.lord_fallen", this.realm().ruler(), this.realm().shortName())
+                        .withStyle(net.minecraft.ChatFormatting.GOLD);
+                Component hint = Component.translatable("realm.kingdomsatwar.lord_fallen.hint").withStyle(net.minecraft.ChatFormatting.YELLOW);
                 for (ServerPlayer player : level.players()) {
                     if (player.distanceToSqr(this) < 96.0 * 96.0) {
                         player.sendSystemMessage(message);
+                        player.sendSystemMessage(hint);
                     }
                 }
             } else {

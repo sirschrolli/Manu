@@ -20,6 +20,7 @@ import net.minecraft.gametest.framework.TestData;
 import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
@@ -50,16 +51,18 @@ final class WarGameTests {
             ModGameTests.TEST_FUNCTIONS.register("realm_intruders", () -> WarGameTests::intruders);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LORD_FALLS =
             ModGameTests.TEST_FUNCTIONS.register("realm_lord_falls", () -> WarGameTests::lordFalls);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CONQUEST =
+            ModGameTests.TEST_FUNCTIONS.register("realm_conquest", () -> WarGameTests::conquest);
 
     private WarGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CASTLE, INTRUDERS, LORD_FALLS)) {
+        for (var test : List.of(CASTLE, INTRUDERS, LORD_FALLS, CONQUEST)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
-                    new TestData<>(environment, Level.OVERWORLD, ARENA, test == CASTLE ? 1200 : 200, 0, true, Rotation.NONE, false, 1, 1, true,
-                            0)));
+                    new TestData<>(environment, Level.OVERWORLD, ARENA, test == CASTLE || test == CONQUEST ? 1200 : 200, 0, true, Rotation.NONE,
+                            false, 1, 1, true, 0)));
         }
     }
 
@@ -67,11 +70,12 @@ final class WarGameTests {
      * Eine Burg (gedreht) weit draußen bauen: jeder Posten hat festen Boden und zwei Blöcke Luft, alle Posten sind besetzt,
      * es gibt Schatztruhe, Waffenkammer und Vorräte und die Banner tragen das Wappen des Reichs.
      */
-    private static void castle(GameTestHelper helper) {
+    /** Eine Stammburg weit draußen bauen (Chunks laden, dann Chunk für Chunk errichten wie bei der Weltgenerierung). */
+    private static RealmCastlePiece buildCastle(GameTestHelper helper, Realm realm, Rotation rotation, int dx, int dz) {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(BlockPos.ZERO);
-        BlockPos center = new BlockPos(base.getX() + 3000, level.getSeaLevel() + 20, base.getZ() + 3000);
-        RealmCastlePiece piece = new RealmCastlePiece(Realm.DORNFELS, center, Rotation.CLOCKWISE_90, 4242L);
+        BlockPos center = new BlockPos(base.getX() + dx, level.getSeaLevel() + 20, base.getZ() + dz);
+        RealmCastlePiece piece = new RealmCastlePiece(realm, center, rotation, 4242L);
         BoundingBox box = piece.getBoundingBox();
         for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
             for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++) {
@@ -85,6 +89,13 @@ final class WarGameTests {
                         new ChunkPos(cx, cz), center);
             }
         }
+        return piece;
+    }
+
+    private static void castle(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        RealmCastlePiece piece = buildCastle(helper, Realm.DORNFELS, Rotation.CLOCKWISE_90, 3000, 3000);
+        BoundingBox box = piece.getBoundingBox();
         List<String> problems = new ArrayList<>();
         for (RealmCastle.Post post : RealmCastle.posts()) {
             BlockPos feet = piece.world(new BlockPos(post.x(), post.y(), post.z()));
@@ -195,6 +206,100 @@ final class WarGameTests {
         helper.assertTrue(dead, "Herrscher lebt noch");
         helper.assertTrue(fallen, "Fall des Herrschers nicht vermerkt");
         helper.assertTrue(war, "kein Krieg mit dem Spieler, der den Herrscher erschlug");
+        helper.succeed();
+    }
+
+    /**
+     * Nachschub, Eroberung und Tribut: Gefallene Krieger rücken nach (aber nur so viele, wie gefallen sind); solange der
+     * Herrscher lebt oder Wachen am Reichsbanner stehen, lässt sich die Burg nicht erobern; danach tragen alle Banner das
+     * Wappen des Spielers, die Krieger sind abgezogen, und nach drei Tagen liegt dreifacher Tribut in der Schatztruhe.
+     */
+    private static void conquest(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Realm realm = Realm.EISENMARK;
+        RealmState state = RealmState.of(level);
+        state.reset(realm);
+        state.save(level);
+        RealmCastlePiece piece = buildCastle(helper, realm, Rotation.COUNTERCLOCKWISE_90, -3200, 3200);
+        AABB area = AABB.of(piece.getBoundingBox());
+        List<String> problems = new ArrayList<>();
+        // drei Krieger fallen (ohne den Herrscher), eine Weile später rücken genau drei nach
+        List<RealmWarriorEntity> garrison = level.getEntitiesOfClass(RealmWarriorEntity.class, area, w -> w.role() != WarriorRole.LORD);
+        for (int i = 0; i < 3 && i < garrison.size(); i++) {
+            garrison.get(i).discard();
+            state.warriorFallen(realm);
+        }
+        state.setLastReinforcement(realm, level.getGameTime() - 10 * io.github.sirschrolli.kingdomsatwar.war.RealmWar.REINFORCEMENT);
+        int added = io.github.sirschrolli.kingdomsatwar.war.RealmWar.reinforce(level, piece, pos -> true);
+        int now = level.getEntitiesOfClass(RealmWarriorEntity.class, area, RealmWarriorEntity::isAlive).size();
+        if (added != 3 || state.fallen(realm) != 0 || now != RealmCastle.posts().size()) {
+            problems.add("Nachschub: " + added + " nachgerückt, " + state.fallen(realm) + " fehlen noch, " + now + " Krieger");
+        }
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            BlockPos standard = piece.world(RealmCastle.STANDARD);
+            player.snapTo(standard.getX() + 0.5, standard.getY() - 3, standard.getZ() + 3.5, 0.0f, 0.0f);
+            if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.obstacle(level, player.getUUID(), piece) == null) {
+                problems.add("Eroberung möglich, obwohl der Herrscher lebt");
+            }
+            state.lordFallen(realm);
+            if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.obstacle(level, player.getUUID(), piece) == null) {
+                problems.add("Eroberung möglich, obwohl Wachen am Reichsbanner stehen");
+            }
+            for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, area)) {
+                warrior.discard();
+            }
+            boolean standardFound = io.github.sirschrolli.kingdomsatwar.war.RealmWar.isStandard(piece, piece.world(RealmCastle.STANDARD.above()));
+            boolean conquered = io.github.sirschrolli.kingdomsatwar.war.RealmWar.tryConquer(level, player, piece);
+            if (!standardFound || !conquered || !player.getUUID().equals(RealmState.of(level).conqueror(realm))) {
+                problems.add("Eroberung: Reichsbanner erkannt " + standardFound + ", erobert " + conquered);
+            }
+            // alle Banner im Wappen des Spielers
+            int banners = 0;
+            int ours = 0;
+            BoundingBox box = piece.getBoundingBox();
+            for (BlockPos pos : BlockPos.betweenClosed(box.minX(), box.minY(), box.minZ(), box.maxX(), box.maxY(), box.maxZ())) {
+                if (level.getBlockEntity(pos) instanceof BannerBlockEntity banner) {
+                    banners++;
+                    if (banner.getBaseColor() == net.minecraft.world.item.DyeColor.BLUE && banner.getPatterns().layers().size() == 2) {
+                        ours++;
+                    }
+                }
+            }
+            if (banners < 20 || ours != banners) {
+                problems.add(banners + " Banner, davon " + ours + " im Wappen des Spielers");
+            }
+            // Tribut: drei Tage
+            state = RealmState.of(level);
+            state.setLastTribute(realm, level.getGameTime() - 3 * 24000L - 10);
+            int days = io.github.sirschrolli.kingdomsatwar.war.RealmWar.payTribute(level, piece);
+            int coins = 0;
+            if (level.getBlockEntity(piece.world(RealmCastle.TREASURY)) instanceof ChestBlockEntity chest) {
+                for (int i = 0; i < chest.getContainerSize(); i++) {
+                    if (chest.getItem(i).is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.BRONZE_COIN.get())) {
+                        coins += chest.getItem(i).getCount();
+                    }
+                }
+            } else {
+                problems.add("keine Schatztruhe bei " + piece.world(RealmCastle.TREASURY));
+            }
+            if (days != 3 || coins < 24) {
+                problems.add("Tribut: " + days + " Tage, " + coins + " Bronzemünzen");
+            }
+            if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.payTribute(level, piece) != 0) {
+                problems.add("Tribut doppelt gezahlt");
+            }
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+            for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, area)) {
+                warrior.discard();
+            }
+            state = RealmState.of(level);
+            state.reset(realm);
+            state.save(level);
+        }
+        helper.assertTrue(problems.isEmpty(), "Eroberung: " + problems);
         helper.succeed();
     }
 }

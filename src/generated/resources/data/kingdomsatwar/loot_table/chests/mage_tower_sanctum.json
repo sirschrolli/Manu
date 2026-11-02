@@ -157,6 +157,24 @@
         }
       ],
       "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/arcane"
+          },
+          "name": "minecraft:book",
+          "weight": 35
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 65
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "kingdomsatwar:chests/mage_tower_sanctum"

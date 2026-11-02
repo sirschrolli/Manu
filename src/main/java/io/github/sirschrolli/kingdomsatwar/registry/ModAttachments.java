@@ -51,6 +51,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.war.RealmState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.war.RealmState.CODEC.fieldOf("realms")).build());
 
+    /** Welche fremden Reiche der Spieler schon betreten hat (Kennungen; bleibt nach dem Tod). */
+    public static final Supplier<AttachmentType<java.util.List<String>>> REALMS_SEEN = ATTACHMENTS.register("realms_seen",
+            () -> AttachmentType.<java.util.List<String>>builder(() -> java.util.List.of())
+                    .serialize(Codec.STRING.listOf().fieldOf("realms")).copyOnDeath().build());
+
     /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());

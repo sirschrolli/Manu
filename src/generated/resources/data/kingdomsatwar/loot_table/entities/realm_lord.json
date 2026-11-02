@@ -72,6 +72,20 @@
         "max": 4,
         "min": 2
       }
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:enchant_randomly",
+            "options": "#kingdomsatwar:loot/realm"
+          },
+          "name": "minecraft:book",
+          "weight": 100
+        }
+      ],
+      "rolls": 1
     }
   ],
   "random_sequence": "kingdomsatwar:entities/realm_lord"

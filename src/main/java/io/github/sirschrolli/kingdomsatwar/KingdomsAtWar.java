@@ -36,6 +36,8 @@ public final class KingdomsAtWar {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public KingdomsAtWar(IEventBus modBus, ModContainer container) {
+        // Kingdoms at War wird allein gespielt: fremde Mods brechen den Start ab
+        io.github.sirschrolli.kingdomsatwar.rules.ModGuard.check(container);
         ModSounds.SOUNDS.register(modBus);
         ModAttachments.ATTACHMENTS.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.init();
@@ -44,6 +46,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPONENTS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.EFFECTS.register(modBus);
         ModParticles.PARTICLE_TYPES.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ModMenus.MENUS.register(modBus);
