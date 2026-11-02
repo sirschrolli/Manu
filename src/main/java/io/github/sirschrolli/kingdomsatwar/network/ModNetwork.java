@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "6";
+    private static final String PROTOCOL = "7";
 
     private ModNetwork() {}
 
@@ -28,6 +28,8 @@ public final class ModNetwork {
         event.registrar(PROTOCOL)
                 .playToServer(DragonBreathPayload.TYPE, DragonBreathPayload.STREAM_CODEC, DragonBreathPayload::handle)
                 .playToServer(HealPayload.TYPE, HealPayload.STREAM_CODEC, HealPayload::handle)
+                .playToServer(ProvisionPayload.TYPE, ProvisionPayload.STREAM_CODEC, ProvisionPayload::handle)
+                .playToServer(CampaignPayload.TYPE, CampaignPayload.STREAM_CODEC, CampaignPayload::handle)
                 .playToServer(TrainPayload.TYPE, TrainPayload.STREAM_CODEC, TrainPayload::handle)
                 .playToServer(HirePayload.TYPE, HirePayload.STREAM_CODEC, HirePayload::handle)
                 .playToServer(TradePayload.TYPE, TradePayload.STREAM_CODEC, TradePayload::handle)

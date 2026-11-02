@@ -1,11 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.army;
 
 import io.github.sirschrolli.kingdomsatwar.config.ModServerConfig;
-import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import java.util.UUID;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.entity.EntityTypeTest;
 
 /**
  * Die Armee eines Spielers: wie groß sie sein darf, wie groß sie ist, und die Antworten auf das Anheuern in den Dörfern
@@ -28,7 +26,13 @@ public final class Recruitment {
         /** Der Soldat gehört nicht dem Spieler oder steht nicht am Tisch (bzw. der Söldner ist schon fort). */
         NOT_HERE,
         /** Ein Söldner im Dorf wurde angeheuert. */
-        HIRED;
+        HIRED,
+        /** Proviant: allen im Feldlager zugeteilt – bzw. nicht genug Essen da, bzw. alle haben schon genug. */
+        SUPPLIED, NO_FOOD, NOTHING_NEEDED,
+        /** Schlachtzug: die Soldaten des Feldlagers ziehen mit – bzw. kehren in die Garnison zurück. */
+        MARCHED, RETURNED,
+        /** Ohne eigene Siedlung gibt es keine Garnison; im Feldlager steht niemand, der mitziehen könnte. */
+        NO_TOWN, NO_SOLDIERS;
 
         public String translationKey() {
             return "message.kingdomsatwar.recruit." + this.name().toLowerCase(java.util.Locale.ROOT);
@@ -57,12 +61,11 @@ public final class Recruitment {
         return limit;
     }
 
-    /** Wie viele Soldaten der Spieler hat (in allen geladenen Dimensionen). */
+    /**
+     * Wie viele Soldaten der Spieler hat – nach der Stammrolle, also auch die in der Garnison, deren Siedlung gerade nicht
+     * geladen ist.
+     */
     public static int armySize(ServerLevel level, UUID owner) {
-        int count = 0;
-        for (ServerLevel world : level.getServer().getAllLevels()) {
-            count += world.getEntities(EntityTypeTest.forClass(SoldierEntity.class), soldier -> owner.equals(soldier.getOwnerId())).size();
-        }
-        return count;
+        return ArmyRoster.of(level.getServer()).count(owner);
     }
 }

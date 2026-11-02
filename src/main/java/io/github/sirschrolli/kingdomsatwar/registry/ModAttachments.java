@@ -41,6 +41,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.economy.town.Towns::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.economy.town.Towns.CODEC.fieldOf("towns")).build());
 
+    /** Die Stammrolle: welche Soldaten welchem Spieler gehören (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.army.ArmyRoster>> ARMY_ROSTER = ATTACHMENTS.register(
+            "army_roster", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.army.ArmyRoster::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.CODEC.fieldOf("roster")).build());
+
     /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());

@@ -312,7 +312,7 @@ public final class ModGameEvents {
             soldier.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, player.getYRot(), 0.0f);
             EventHooks.finalizeMobSpawn(soldier, level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.COMMAND, null);
             level.addFreshEntity(soldier);
-            soldier.recruitBy(player);
+            soldier.recruitIntoField(player);
             spawned++;
         }
         int result = spawned;
@@ -321,12 +321,16 @@ public final class ModGameEvents {
         return result;
     }
 
-    /** Soldaten verletzen weder ihren Besitzer noch dessen Drachen, Tiere oder andere Soldaten (auch nicht mit Pfeilen). */
+    /** Soldaten verletzen weder ihren Besitzer noch dessen Drachen, Tiere oder andere Soldaten (auch nicht mit Pfeilen); hungrige treffen schwächer. */
     @SubscribeEvent
     static void onIncomingDamage(LivingIncomingDamageEvent event) {
-        if (event.getSource().getEntity() instanceof SoldierEntity soldier && soldier != event.getEntity()
-                && soldier.isAlliedTo(event.getEntity())) {
-            event.setCanceled(true);
+        if (event.getSource().getEntity() instanceof SoldierEntity soldier && soldier != event.getEntity()) {
+            if (soldier.isAlliedTo(event.getEntity())) {
+                event.setCanceled(true);
+            } else if (soldier.isHungry()) {
+                // wer hungert, schlägt (und schießt) schwächer zu
+                event.setAmount(event.getAmount() * io.github.sirschrolli.kingdomsatwar.army.Provisions.HUNGRY_DAMAGE);
+            }
         }
     }
 

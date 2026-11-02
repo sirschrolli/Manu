@@ -395,6 +395,14 @@ public final class TownManager {
         Towns.of(level.getServer()).save(level.getServer());
         BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
         celebrate(level, door);
+        if (project.type == BuildingType.BARRACKS) {
+            // die Garnison zieht vor die neue Kaserne
+            for (io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity soldier : level.getEntitiesOfClass(
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class, new net.minecraft.world.phys.AABB(town.banner())
+                            .inflate(town.radius() + 32.0), s -> town.owner().equals(s.getOwnerId()) && !s.isOnCampaign())) {
+                io.github.sirschrolli.kingdomsatwar.army.Garrison.station(soldier);
+            }
+        }
         ServerPlayer owner = level.getServer().getPlayerList().getPlayer(town.owner());
         if (owner != null) {
             owner.sendSystemMessage(Component.translatable("message.kingdomsatwar.town.project_done",

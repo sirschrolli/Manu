@@ -171,6 +171,8 @@ public final class ModTags {
         }
 
         public static final TagKey<Item> DRAGON_EGGS = mod("dragon_eggs");
+        /** Essen, das Bürger und Soldaten nicht nehmen: Verdorbenes, Giftiges, rohes Huhn und Kostbares. */
+        public static final TagKey<Item> UNFIT_FOOD = mod("unfit_food");
         public static final TagKey<Item> SHADOW_LOGS = mod("shadow_logs");
         public static final TagKey<Item> NIGHTSTEEL_TOOL_MATERIALS = mod("nightsteel_tool_materials");
         public static final TagKey<Item> ABYSSITE_TOOL_MATERIALS = mod("abyssite_tool_materials");

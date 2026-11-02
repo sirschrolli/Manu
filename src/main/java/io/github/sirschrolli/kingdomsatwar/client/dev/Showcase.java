@@ -1711,7 +1711,7 @@ final class Showcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));
-        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, ground, oz), 32)));
+        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, ground, oz), 32, 4, false)));
         steps.add(Step.waitTicks(15));
         steps.add(Step.once(Showcase::parkMouse));
         steps.add(Step.waitTicks(5));

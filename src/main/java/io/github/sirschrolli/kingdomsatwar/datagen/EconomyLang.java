@@ -75,6 +75,9 @@ final class EconomyLang {
         t.add("citizen.kingdomsatwar.activity.sleeping", "asleep", "schläft");
         t.add("citizen.kingdomsatwar.activity.working", "at work", "bei der Arbeit");
         t.add("citizen.kingdomsatwar.activity.idle", "taking a break", "macht Pause");
+        t.add("citizen.kingdomsatwar.activity.hungry", "hungry – the storage is empty", "hungrig – das Lager ist leer");
+        t.add("message.kingdomsatwar.citizen.hungry", "%s is hungry and won't work – bring food to the storage!",
+                "%s hat Hunger und arbeitet nicht – bring Essen ins Lager!");
 
         t.add("kingdomsatwar.configuration.tradesBeforePause", "Trades before a shop pauses", "Handel bis zur Pause eines Ladens");
         t.add("kingdomsatwar.configuration.tradesBeforePause.tooltip",
@@ -281,6 +284,18 @@ final class EconomyLang {
         t.add("gui.kingdomsatwar.town.state.1", "working", "arbeitet");
         t.add("gui.kingdomsatwar.town.state.2", "asleep", "schläft");
         t.add("gui.kingdomsatwar.town.state.3", "far away", "weit weg");
+        t.add("gui.kingdomsatwar.town.state.4", "hungry", "hungrig");
+        t.add("gui.kingdomsatwar.town.food.none_needed", "Food: nobody to feed yet", "Essen: noch niemand zu versorgen");
+        t.add("gui.kingdomsatwar.town.food.day", "Food for %s day", "Essen für %s Tag");
+        t.add("gui.kingdomsatwar.town.food.days", "Food for %s days", "Essen für %s Tage");
+        t.add("gui.kingdomsatwar.town.food.hint",
+                "%s meals in storage. Every citizen takes one meal from the storage each morning – bread, meat, fish, vegetables: "
+                        + "anything edible counts by its nutrition. Wheat, potatoes and raw meat or fish count as baked or roasted – "
+                        + "the citizens prepare them themselves. Hungry citizens neither work nor trade until food arrives.",
+                "%s Mahlzeiten im Lager. Jeder Bürger nimmt sich jeden Morgen eine Mahlzeit aus dem Lager – Brot, Fleisch, Fisch, "
+                        + "Gemüse: alles Essbare zählt nach seinem Nährwert. Weizen, Kartoffeln und rohes Fleisch oder roher Fisch "
+                        + "zählen wie gebacken und gebraten – das bereiten die Bürger selbst zu. Hungrige Bürger arbeiten und handeln "
+                        + "nicht, bis wieder Essen da ist.");
         t.add("gui.kingdomsatwar.town.dismiss", "Dismiss %s", "%s entlassen");
         t.add("gui.kingdomsatwar.town.dismiss_confirm", "Click again to dismiss %s", "Nochmal klicken, um %s zu entlassen");
         t.add("gui.kingdomsatwar.town.build.hint", "Click a building to take its blueprint.", "Klicke einen Bau an, um seinen Bauplan zu nehmen.");

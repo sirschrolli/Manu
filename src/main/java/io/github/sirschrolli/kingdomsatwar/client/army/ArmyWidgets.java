@@ -60,6 +60,12 @@ final class ArmyWidgets {
      */
     static void entry(GuiGraphicsExtractor g, Font font, int x, int y, int width, int height, boolean hovered, boolean selected, SoldierType type,
             int variant, String name, Component sub, int rank) {
+        entry(g, font, x, y, width, height, hovered, selected, type, variant, name, sub, rank, width - 34);
+    }
+
+    /** Wie oben; die zweite Zeile ist höchstens {@code subWidth} breit (sonst mit "…" gekürzt), rechts daneben ist Platz. */
+    static void entry(GuiGraphicsExtractor g, Font font, int x, int y, int width, int height, boolean hovered, boolean selected, SoldierType type,
+            int variant, String name, Component sub, int rank, int subWidth) {
         g.blitSprite(RenderPipelines.GUI_TEXTURED, hovered || selected ? BUTTON_HIGHLIGHTED : BUTTON, x, y, width, height);
         face(g, type, variant, x + 5, y + 5);
         String stars = "★".repeat(rank);
@@ -69,7 +75,15 @@ final class ArmyWidgets {
         if (rank > 0) {
             g.text(font, stars, x + width - 4 - font.width(stars), y + 7, 0xFFF2C14E, true);
         }
-        g.text(font, font.plainSubstrByWidth(sub.getString(), width - 34), x + 33, y + 19, 0xFFC8C8C8, true);
+        g.text(font, shorten(font, sub.getString(), subWidth), x + 33, y + 19, 0xFFC8C8C8, true);
+    }
+
+    /** Kürzt einen Text auf {@code width} Pixel – mit "…", wenn etwas fehlt. */
+    static String shorten(Font font, String text, int width) {
+        if (font.width(text) <= width) {
+            return text;
+        }
+        return font.plainSubstrByWidth(text, Math.max(0, width - font.width("…"))) + "…";
     }
 
     /**

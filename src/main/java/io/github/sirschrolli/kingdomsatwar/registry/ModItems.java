@@ -304,7 +304,7 @@ public final class ModItems {
     /** Kommandostab: Befehle an alle eigenen Soldaten in der Nähe. */
     public static final DeferredItem<CommandBatonItem> COMMAND_BATON = addTo(KINGDOM_TAB, ITEMS.registerItem("command_baton",
             CommandBatonItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)
-                    .component(DataComponents.LORE, lore("command_baton", 4))));
+                    .component(DataComponents.LORE, lore("command_baton", 5))));
 
     private static final Map<SoldierType, DeferredItem<SpawnEggItem>> SOLDIER_SPAWN_EGGS_MUTABLE = new EnumMap<>(SoldierType.class);
     /** Spawn-Eier (Kreativmodus) für jede Soldatenart – der Soldat gehört dem, der das Ei benutzt. */

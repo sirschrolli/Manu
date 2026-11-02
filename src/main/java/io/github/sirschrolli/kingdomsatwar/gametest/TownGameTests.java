@@ -1,6 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.army.Garrison;
+import io.github.sirschrolli.kingdomsatwar.army.Provisions;
+import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.block.TownBannerBlock;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
@@ -10,6 +13,7 @@ import io.github.sirschrolli.kingdomsatwar.economy.town.Blueprint;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Coronation;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
+import io.github.sirschrolli.kingdomsatwar.economy.town.TownFood;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
@@ -18,6 +22,8 @@ import io.github.sirschrolli.kingdomsatwar.economy.town.TownTier;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownView;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Towns;
 import io.github.sirschrolli.kingdomsatwar.entity.SeatEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.network.OpenTownPayload;
 import io.github.sirschrolli.kingdomsatwar.network.OpenTradePayload;
 import io.github.sirschrolli.kingdomsatwar.registry.ModAttachments;
@@ -90,6 +96,10 @@ final class TownGameTests {
             ModGameTests.TEST_FUNCTIONS.register("town_trade", () -> TownGameTests::townTrade);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_CROWN =
             ModGameTests.TEST_FUNCTIONS.register("town_crown", () -> TownGameTests::townCrown);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_FOOD =
+            ModGameTests.TEST_FUNCTIONS.register("town_food", () -> TownGameTests::townFood);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_GARRISON =
+            ModGameTests.TEST_FUNCTIONS.register("town_garrison", () -> TownGameTests::townGarrison);
 
     private TownGameTests() {}
 
@@ -106,6 +116,8 @@ final class TownGameTests {
         own(event, TOWN_EVENING, "town_evening", 1200);
         own(event, TOWN_TRADE, "town_trade", 4000);
         own(event, TOWN_CROWN, "town_crown", 600);
+        own(event, TOWN_FOOD, "town_food", 200);
+        own(event, TOWN_GARRISON, "town_garrison", 300);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,
@@ -903,5 +915,147 @@ final class TownGameTests {
             clearTowns(server);
             leave(helper, owner);
         });
+    }
+
+    // =====================================================================================
+    // Essen, Garnison und Schlachtzug
+    // =====================================================================================
+
+    /**
+     * Essen im Stadtlager: Es zählt der Nährwert (Verdorbenes und Goldenes nicht). Ein neuer Bürger kommt satt an; an
+     * einem neuen Tag isst er eine Mahlzeit – das Einfache zuerst. Ist nicht genug da, hungert er (die Übersicht zeigt es);
+     * bringt man Essen, isst er beim nächsten Nachschauen.
+     */
+    private static void townFood(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 30));
+        Town town = found(helper, owner, CENTER);
+        BlockPos chestPos = helper.absolutePos(CENTER.offset(3, 0, 1));
+        level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
+        net.minecraft.world.Container chest = (net.minecraft.world.Container) level.getBlockEntity(chestPos);
+        chest.setItem(0, new ItemStack(Items.BREAD, 1));             // 5
+        chest.setItem(1, new ItemStack(Items.CARROT, 2));            // 2 × 3
+        chest.setItem(2, new ItemStack(Items.ROTTEN_FLESH, 8));      // verdorben: zählt nicht
+        chest.setItem(3, new ItemStack(Items.GOLDEN_CARROT, 4));     // zu kostbar
+        chest.setItem(5, new ItemStack(Items.WHEAT, 3));             // 3 × 2: das backen die Bürger selbst
+        helper.assertValueEqual(TownFood.pantry(level, town), 17, "Nährwert im Lager");
+        CitizenEntity citizen = TownManager.spawnCitizen(level, town, Profession.FARMER);
+        helper.assertTrue(citizen != null, "Bürger nicht erschienen");
+        long day = Provisions.day(level);
+        citizen.mealTick(level);
+        helper.assertTrue(!citizen.isHungry() && citizen.fedDay() == day, "neuer Bürger kommt nicht satt an");
+        helper.assertValueEqual(TownFood.pantry(level, town), 17, "neuer Bürger hat schon gegessen");
+        // ein neuer Tag: er isst – das Einfache zuerst (den Weizen), Möhren und Brot bleiben
+        citizen.setFedDay(day - 1);
+        citizen.mealTick(level);
+        helper.assertTrue(!citizen.isHungry() && citizen.fedDay() == day, "Bürger hat nicht gegessen");
+        helper.assertTrue(chest.getItem(5).isEmpty() && chest.getItem(1).getCount() == 2, "nicht den Weizen zuerst gegessen: "
+                + chest.getItem(5) + ", " + chest.getItem(1));
+        helper.assertValueEqual(TownFood.pantry(level, town), 11, "Nährwert nach der ersten Mahlzeit");
+        // noch ein Tag: die Möhren, das Brot bleibt
+        citizen.setFedDay(day - 1);
+        citizen.mealTick(level);
+        helper.assertTrue(chest.getItem(1).isEmpty() && chest.getItem(0).getCount() == 1, "nicht das Einfache zuerst gegessen: "
+                + chest.getItem(0) + ", " + chest.getItem(1) + ", Lager " + TownFood.pantry(level, town));
+        helper.assertValueEqual(TownFood.pantry(level, town), 5, "Nährwert nach der Mahlzeit");
+        // noch ein Tag: zu wenig im Lager – er hungert, und die Übersicht zeigt es
+        citizen.setFedDay(day - 1);
+        citizen.mealTick(level);
+        helper.assertTrue(citizen.isHungry(), "Bürger hungert nicht ohne Essen");
+        helper.assertValueEqual(TownFood.pantry(level, town), 5, "hungriger Bürger hat trotzdem genommen");
+        TownView view = TownView.of(owner, town);
+        helper.assertValueEqual(view.residents().getFirst().state(), 4, "Übersicht zeigt den Hunger nicht");
+        helper.assertValueEqual(view.foodDays(), 0, "Essen für Tage ohne Mahlzeit");
+        // Essen gebracht: beim nächsten Nachschauen isst er
+        chest.setItem(4, new ItemStack(Items.COOKED_BEEF, 3));       // 3 × 8
+        helper.assertValueEqual(TownView.of(owner, town).foodDays(), 4, "Tage mit Brot und Braten");
+        citizen.mealTick(level);
+        helper.assertTrue(!citizen.isHungry() && citizen.fedDay() == day, "Bürger isst nicht, obwohl wieder Essen da ist");
+        leave(helper, owner);
+        helper.succeed();
+    }
+
+    /**
+     * Garnison und Schlachtzug: Ein angeworbener Soldat zieht in die Siedlung und geht vor dem Tor der Kaserne Streife; er
+     * zählt zur Armee und isst in der Garnison aus dem Stadtlager. Am Feldherrentisch bekommt er Proviant – erst aus dem
+     * Lager, dann aus dem Gepäck –, zieht mit auf den Schlachtzug (lebt dort von seinem Proviant) und kehrt am Tisch oder
+     * mit dem Kommandostab heim.
+     */
+    private static void townGarrison(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 30));
+        Town town = found(helper, owner, CENTER);
+        BlockPos barracks = originFor(helper, BuildingType.BARRACKS, 24, 10);
+        TownManager.buildInstantly(level, town, BuildingType.BARRACKS, barracks, Rotation.NONE);
+        BlockPos table = helper.absolutePos(CENTER.offset(-3, 0, 3));
+        level.setBlock(table, ModBlocks.RECRUITMENT_TABLE.get().defaultBlockState(), Block.UPDATE_ALL);
+        BlockPos chestPos = helper.absolutePos(CENTER.offset(3, 0, 1));
+        level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
+        net.minecraft.world.Container chest = (net.minecraft.world.Container) level.getBlockEntity(chestPos);
+        chest.setItem(0, new ItemStack(Items.BREAD, 4));             // 4 × 5
+        int pantry = TownFood.pantry(level, town);
+        helper.assertValueEqual(pantry, 20, "Nährwert im Lager");
+        // angeworben: er zieht in die Garnison und geht vor der Kaserne Streife
+        SoldierEntity soldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(30, 1, 30));
+        soldier.recruitBy(owner);
+        helper.assertTrue(soldier.isOwnedBy(owner) && !soldier.isOnCampaign(), "Soldat zieht nicht in die Garnison");
+        helper.assertValueEqual(soldier.getMode(), SoldierEntity.MODE_PATROL, "Modus in der Garnison");
+        BlockPos gate = Blueprint.world(barracks, Rotation.NONE, BuildingType.BARRACKS.blueprint().entrance());
+        BlockPos post = soldier.getPost();
+        helper.assertTrue(post != null && Math.abs(post.getX() - gate.getX()) <= 2 && Math.abs(post.getZ() - gate.getZ()) <= 2
+                && Math.abs(post.getY() - gate.getY()) <= 2, "Posten nicht vor der Kaserne: " + post + ", Tor " + gate);
+        helper.assertTrue(level.getBlockState(post).getCollisionShape(level, post).isEmpty()
+                && level.getBlockState(post.below()).isFaceSturdy(level, post.below(), Direction.UP), "Posten nicht auf festem Boden: " + post);
+        helper.assertValueEqual(Recruitment.armySize(level, owner.getUUID()), 1, "Armee nach dem Anwerben");
+        helper.assertValueEqual(soldier.getRations(), Provisions.START_RATIONS, "Proviant beim Anwerben");
+        // in der Garnison isst er aus dem Stadtlager – sein Proviant bleibt
+        long day = Provisions.day(level);
+        soldier.setFedDay(day - 1);
+        soldier.rationTick(level);
+        helper.assertTrue(!soldier.isHungry(), "Soldat in der Garnison hat nicht gegessen");
+        helper.assertValueEqual(soldier.getRations(), Provisions.START_RATIONS, "in der Garnison vom Proviant gegessen");
+        helper.assertValueEqual(TownFood.pantry(level, town), 10, "Mahlzeit nicht aus dem Stadtlager");
+        // Proviant am Feldherrentisch: erst aus dem Lager, dann aus dem Gepäck (Verdorbenes nimmt keiner)
+        owner.getInventory().clearContent();
+        owner.getInventory().add(new ItemStack(Items.APPLE, 5));      // 5 × 4
+        owner.getInventory().add(new ItemStack(Items.ROTTEN_FLESH, 9));
+        helper.assertTrue(Provisions.supply(owner, table) == Recruitment.Result.SUPPLIED, "Proviant zuteilen klappt nicht");
+        helper.assertValueEqual(soldier.getRations(), Provisions.MAX_RATIONS, "Proviant nach dem Zuteilen");
+        helper.assertValueEqual(TownFood.pantry(level, town), 0, "das Lager zuerst");
+        helper.assertValueEqual(owner.getInventory().countItem(Items.APPLE), 1, "Äpfel aus dem Gepäck");
+        helper.assertValueEqual(owner.getInventory().countItem(Items.ROTTEN_FLESH), 9, "Verdorbenes zugeteilt");
+        helper.assertTrue(Provisions.supply(owner, table) == Recruitment.Result.NOTHING_NEEDED, "voller Proviant");
+        // Lager leer: in der Garnison isst er nun von seinem Proviant
+        soldier.setFedDay(day - 1);
+        soldier.rationTick(level);
+        helper.assertTrue(!soldier.isHungry() && soldier.getRations() == Provisions.MAX_RATIONS - 1, "leeres Lager: nicht vom Proviant gegessen");
+        // auf zum Schlachtzug: er folgt dem Spieler und lebt von seinem Proviant, auch wenn das Lager wieder voll ist
+        helper.assertTrue(Garrison.march(owner, table) == Recruitment.Result.MARCHED, "Schlachtzug klappt nicht");
+        helper.assertTrue(soldier.isOnCampaign() && soldier.getMode() == SoldierEntity.MODE_FOLLOW, "Soldat zieht nicht mit");
+        helper.assertTrue(Garrison.march(owner, table) == Recruitment.Result.NO_SOLDIERS, "alle sind schon unterwegs");
+        chest.setItem(0, new ItemStack(Items.BREAD, 10));
+        soldier.setFedDay(day - 1);
+        soldier.rationTick(level);
+        helper.assertValueEqual(soldier.getRations(), Provisions.MAX_RATIONS - 2, "auf dem Schlachtzug nicht vom Proviant gegessen");
+        helper.assertValueEqual(TownFood.pantry(level, town), 50, "auf dem Schlachtzug aus dem Stadtlager gegessen");
+        // Heimkehr am Tisch: wieder Streife vor der Kaserne
+        helper.assertTrue(Garrison.returnHome(owner, table) == Recruitment.Result.RETURNED, "Heimkehr klappt nicht");
+        helper.assertTrue(!soldier.isOnCampaign() && soldier.getMode() == SoldierEntity.MODE_PATROL && post.equals(soldier.getPost()),
+                "Soldat kehrt nicht auf seinen Posten heim: " + soldier.getPost());
+        helper.assertTrue(Garrison.returnHome(owner, table) == Recruitment.Result.NO_SOLDIERS, "niemand ist mehr unterwegs");
+        // mit dem Kommandostab (Schleichen und in den Himmel zeigen) heim
+        soldier.setCampaign(true);
+        soldier.setMode(SoldierEntity.MODE_FOLLOW, null);
+        helper.assertValueEqual(Garrison.sendHome(owner), 1, "Kommandostab schickt niemanden heim");
+        helper.assertTrue(!soldier.isOnCampaign() && soldier.getMode() == SoldierEntity.MODE_PATROL, "Kommandostab: nicht heimgekehrt");
+        // gefallen: aus der Stammrolle
+        soldier.discard();
+        helper.assertValueEqual(Recruitment.armySize(level, owner.getUUID()), 0, "Armee nach dem Ende des Soldaten");
+        leave(helper, owner);
+        helper.succeed();
     }
 }

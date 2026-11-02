@@ -32,7 +32,8 @@ import org.jspecify.annotations.Nullable;
  * <ul>
  *     <li>auf einen Gegner zeigen und klicken: <b>Angriff</b></li>
  *     <li>auf einen Block zeigen und klicken: dort <b>Stellung halten</b> (mit Schleichen: <b>Patrouille</b>)</li>
- *     <li>in den Himmel zeigen und klicken: alle <b>folgen</b></li>
+ *     <li>in den Himmel zeigen und klicken: alle <b>folgen</b> (sie ziehen mit auf den Schlachtzug); mit Schleichen:
+ *     alle kehren <b>heim</b> in die Garnison der Siedlung</li>
  *     <li>schleichend einen eigenen Soldaten anklicken: aus dem Dienst <b>entlassen</b></li>
  * </ul>
  */
@@ -88,10 +89,17 @@ public class CommandBatonItem extends Item {
             speaker.speak("hold");
             this.feedback(level, player, Component.translatable(patrol ? "message.kingdomsatwar.command.patrol" : "message.kingdomsatwar.command.hold",
                     soldiers.size()), 0.8f);
+        } else if (player.isSecondaryUseActive() && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            // Heimkehr in die Garnison
+            if (Garrison.sendHome(serverPlayer) > 0) {
+                speaker.speak("hold");
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.COMMAND_BATON.get(), SoundSource.PLAYERS, 0.6f, 0.7f);
+            }
         } else {
-            // Alle folgen
+            // Alle folgen – sie ziehen mit auf den Schlachtzug
             for (SoldierEntity soldier : soldiers) {
                 soldier.setTarget(null);
+                soldier.setCampaign(true);
                 soldier.setMode(SoldierEntity.MODE_FOLLOW, null);
                 soldier.salute();
             }

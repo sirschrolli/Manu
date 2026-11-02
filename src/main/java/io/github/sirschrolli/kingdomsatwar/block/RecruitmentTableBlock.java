@@ -59,7 +59,10 @@ public class RecruitmentTableBlock extends HorizontalDirectionalBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (player instanceof ServerPlayer serverPlayer) {
-            io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(serverPlayer, new OpenRecruitScreenPayload(pos, Recruitment.armyLimit(serverPlayer)));
+            io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(serverPlayer, new OpenRecruitScreenPayload(pos,
+                    Recruitment.armyLimit(serverPlayer), Recruitment.armySize(serverPlayer.level(), serverPlayer.getUUID()),
+                    io.github.sirschrolli.kingdomsatwar.economy.town.Towns.of(serverPlayer.level().getServer())
+                            .byOwner(serverPlayer.getUUID()) != null));
         }
         return InteractionResult.SUCCESS;
     }

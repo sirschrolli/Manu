@@ -1194,8 +1194,8 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");
 
         block(ModBlocks.RECRUITMENT_TABLE, "Commander's Table", "Feldherrentisch");
-        text(ModItems.loreKey("recruitment_table", 1), "Heal all your soldiers in the camp around it",
-                "Hier heilst du alle deine Soldaten im Feldlager");
+        text(ModItems.loreKey("recruitment_table", 1), "Heal your soldiers in the camp and give out provisions",
+                "Hier heilst du deine Soldaten im Feldlager und teilst Proviant zu");
         text(ModItems.loreKey("recruitment_table", 2), "Level them up: higher ranks, knights and captains",
                 "Und hier bildest du sie aus: höhere Ränge, Ritter und Hauptleute");
         item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
@@ -1204,6 +1204,8 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Auf den Boden zeigen: Stellung halten (Schleichen: Patrouille)");
         text(ModItems.loreKey("command_baton", 3), "Point at the sky: everyone follows", "In den Himmel zeigen: alle folgen");
         text(ModItems.loreKey("command_baton", 4), "Sneak + click your soldier: dismiss", "Schleichen + eigenen Soldaten anklicken: entlassen");
+        text(ModItems.loreKey("command_baton", 5), "Sneak + point at the sky: everyone returns to the garrison",
+                "Schleichen + in den Himmel zeigen: alle kehren in die Garnison heim");
 
         // Fenster des Feldherrentischs
         text("gui.kingdomsatwar.recruitment.title", "Commander's Table", "Feldherrentisch");
@@ -1226,6 +1228,53 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.recruitment.have", "You have %s", "Du hast %s");
         text("gui.kingdomsatwar.recruitment.missing", "Missing: %s× %s", "Es fehlen: %s× %s");
         text("gui.kingdomsatwar.recruitment.result.healed", "Everyone healed!", "Alle geheilt!");
+        text("gui.kingdomsatwar.recruitment.result.supplied", "Provisions given out!", "Proviant verteilt!");
+        text("gui.kingdomsatwar.recruitment.result.no_food", "No food here", "Kein Essen da");
+        text("gui.kingdomsatwar.recruitment.result.nothing_needed", "Provisions are full", "Proviant ist voll");
+        text("gui.kingdomsatwar.recruitment.result.marched", "On campaign!", "Auf zum Schlachtzug!");
+        text("gui.kingdomsatwar.recruitment.result.returned", "Back to the garrison", "Zurück in die Garnison");
+        text("gui.kingdomsatwar.recruitment.result.no_town", "No settlement", "Keine Siedlung");
+        text("gui.kingdomsatwar.recruitment.result.no_soldiers", "Nobody here", "Niemand hier");
+        text("message.kingdomsatwar.recruit.supplied", "Your soldiers in the camp have their provisions.", "Deine Soldaten im Feldlager haben ihren Proviant.");
+        text("message.kingdomsatwar.recruit.no_food", "There is no food – neither in the storage of your settlement nor in your pack.",
+                "Es ist kein Essen da – weder im Lager deiner Siedlung noch in deinem Gepäck.");
+        text("message.kingdomsatwar.recruit.nothing_needed", "Everyone in the camp already has full provisions.",
+                "Alle im Feldlager haben schon vollen Proviant.");
+        text("message.kingdomsatwar.recruit.marched", "Your soldiers march with you.", "Deine Soldaten ziehen mit dir.");
+        text("message.kingdomsatwar.recruit.returned", "Your soldiers return to the garrison.", "Deine Soldaten kehren in die Garnison zurück.");
+        text("message.kingdomsatwar.recruit.no_town", "Without a settlement there is no garrison.", "Ohne Siedlung gibt es keine Garnison.");
+        text("message.kingdomsatwar.recruit.no_soldiers", "None of your soldiers is here.", "Keiner deiner Soldaten ist hier.");
+        text("gui.kingdomsatwar.recruitment.provisions", "Give out provisions", "Proviant zuteilen");
+        text("gui.kingdomsatwar.recruitment.provisions.cost", "Give out %s rations", "%s Rationen zuteilen");
+        text("gui.kingdomsatwar.recruitment.provisions.full", "Everyone has full provisions", "Alle haben vollen Proviant");
+        text("gui.kingdomsatwar.recruitment.provisions.hint",
+                "Every soldier in the camp gets rations for up to %s days – from the storage of your settlement (if the table "
+                        + "stands in it) and from your pack. In the garrison they eat from the storage of your settlement, on "
+                        + "campaign they live on their rations. Whoever has nothing goes hungry: no more healing on his own and "
+                        + "weaker blows.",
+                "Jeder Soldat im Feldlager bekommt Rationen für bis zu %s Tage – aus dem Lager deiner Siedlung (wenn der Tisch "
+                        + "darin steht) und aus deinem Gepäck. In der Garnison essen sie aus dem Stadtlager, auf dem Schlachtzug "
+                        + "von ihrem Proviant. Wer nichts hat, hungert: Er heilt nicht mehr von selbst und schlägt schwächer zu.");
+        text("gui.kingdomsatwar.recruitment.march", "Go on campaign", "Auf Schlachtzug");
+        text("gui.kingdomsatwar.recruitment.march.count", "Go on campaign (%s)", "Auf Schlachtzug (%s)");
+        text("gui.kingdomsatwar.recruitment.march.hint", "All soldiers of the garrison here in the camp follow you until you send them home.",
+                "Alle Soldaten der Garnison hier im Feldlager folgen dir, bis du sie heimschickst.");
+        text("gui.kingdomsatwar.recruitment.return.count", "Send home (%s)", "Heimkehr (%s)");
+        text("gui.kingdomsatwar.recruitment.return.hint", "They return to the garrison of your settlement and patrol there.",
+                "Sie kehren in die Garnison deiner Siedlung zurück und gehen dort Streife.");
+        text("gui.kingdomsatwar.recruitment.return.no_town", "Without a settlement there is no garrison – found one with a town banner.",
+                "Ohne Siedlung gibt es keine Garnison – gründe eine mit einem Stadtbanner.");
+        text("gui.kingdomsatwar.recruitment.rations", "Provisions for %s days", "Proviant für %s Tage");
+        text("gui.kingdomsatwar.recruitment.rations.hungry", "Hungry – no provisions left", "Hungrig – kein Proviant mehr");
+        text("gui.kingdomsatwar.recruitment.on_campaign", " – on campaign", " – auf dem Schlachtzug");
+        text("gui.kingdomsatwar.recruitment.in_garrison", " – in the garrison", " – in der Garnison");
+        text("gui.kingdomsatwar.recruitment.no_garrison", " – follows you (no settlement)", " – folgt dir (keine Siedlung)");
+        text("message.kingdomsatwar.soldier_hungry", "%s is hungry – fill the storage of your settlement or give out provisions at "
+                + "your commander's table!", "%s hat Hunger – fülle das Lager deiner Siedlung oder teile am Feldherrentisch Proviant zu!");
+        text("message.kingdomsatwar.garrison.joined", "%s moves into the garrison of %s.", "%s zieht in die Garnison von %s.");
+        text("message.kingdomsatwar.garrison.no_town", "You have no settlement – there is no garrison to return to.",
+                "Du hast keine Siedlung – es gibt keine Garnison, in die sie heimkehren könnten.");
+        text("message.kingdomsatwar.garrison.sent_home", "%s soldiers return to the garrison of %s.", "%s Soldaten kehren in die Garnison von %s heim.");
         text("gui.kingdomsatwar.recruitment.result.nothing_to_heal", "Nobody is wounded", "Niemand ist verwundet");
         text("gui.kingdomsatwar.recruitment.result.too_far", "Too far away", "Zu weit weg");
         text("gui.kingdomsatwar.recruitment.result.not_enough", "Too expensive", "Zu teuer");
@@ -1245,7 +1294,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.recruit.max_rank", "This soldier can't be trained any further.",
                 "Dieser Soldat lässt sich nicht weiter ausbilden.");
         text("message.kingdomsatwar.recruit.not_here", "That soldier isn't here (any more).", "Dieser Soldat ist nicht (mehr) hier.");
-        text("message.kingdomsatwar.recruit.hired", "Hired! Your mercenary follows you.", "Angeheuert! Dein Söldner folgt dir.");
+        text("message.kingdomsatwar.recruit.hired", "Hired! Your mercenary joins your army.", "Angeheuert! Dein Söldner tritt in dein Heer ein.");
         text("gui.kingdomsatwar.recruitment.result.trained", "Promoted!", "Befördert!");
         text("gui.kingdomsatwar.recruitment.result.promoted", "Trained!", "Ausgebildet!");
         text("gui.kingdomsatwar.recruitment.result.max_rank", "Highest rank", "Höchster Rang");
@@ -1296,7 +1345,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.soldier_mode.0", "following", "folgt");
         text("message.kingdomsatwar.soldier_mode.1", "holding position", "hält Stellung");
         text("message.kingdomsatwar.soldier_mode.2", "on patrol", "auf Patrouille");
-        text("message.kingdomsatwar.soldier_status", "%s – %s/%s health – %s", "%s – %s/%s Leben – %s");
+        text("message.kingdomsatwar.soldier_status", "%s – %s/%s health – %s – %s", "%s – %s/%s Leben – %s – %s");
         text("message.kingdomsatwar.soldier_price", "%s serves for %s – hold a coin and use him", "%s dient für %s – nimm eine Münze in die Hand und sprich ihn an");
         text("message.kingdomsatwar.soldier_equipped", "%s now fights with: %s", "%s kämpft jetzt mit: %s");
         text("message.kingdomsatwar.command.none", "No soldiers of yours nearby", "Keine eigenen Soldaten in der Nähe");

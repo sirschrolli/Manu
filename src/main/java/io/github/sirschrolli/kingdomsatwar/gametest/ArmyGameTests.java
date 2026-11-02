@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Mercenaries;
+import io.github.sirschrolli.kingdomsatwar.army.Provisions;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.army.Training;
 import io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity;
@@ -29,6 +30,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -61,6 +63,8 @@ final class ArmyGameTests {
             ModGameTests.TEST_FUNCTIONS.register("mercenary_board", () -> ArmyGameTests::board);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> VILLAGE_MERCENARY_HALL =
             ModGameTests.TEST_FUNCTIONS.register("village_mercenary_hall", () -> ArmyGameTests::hall);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOLDIER_HUNGER =
+            ModGameTests.TEST_FUNCTIONS.register("soldier_hunger", () -> ArmyGameTests::hunger);
 
     private ArmyGameTests() {}
 
@@ -70,6 +74,7 @@ final class ArmyGameTests {
         add(event, environment, SOLDIER_TRAINING, ARENA, 200);
         add(event, environment, MERCENARY_BOARD, ARENA, 200);
         add(event, environment, VILLAGE_MERCENARY_HALL, TOWN, 300);
+        add(event, environment, SOLDIER_HUNGER, ARENA, 200);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
@@ -94,6 +99,84 @@ final class ArmyGameTests {
         Vec3 at = helper.absoluteVec(local);
         player.snapTo(at.x, at.y, at.z, 0.0f, 0.0f);
         return player;
+    }
+
+    // =====================================================================================
+    // Proviant
+    // =====================================================================================
+
+    /**
+     * Proviant ohne Siedlung: Angeworbene Soldaten folgen dem Spieler und tragen Rationen für drei Tage; an jedem neuen Tag
+     * isst jeder eine. Wem sie ausgehen, der hungert und trifft schwächer. Am Feldherrentisch gibt es Proviant aus dem
+     * Gepäck (die Hungrigen zuerst, dann reihum, Verdorbenes nimmt keiner); aus der Hand gefüttert ist ein Hungriger satt.
+     */
+    private static void hunger(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        BlockPos tableLocal = new BlockPos(4, 1, 4);
+        helper.setBlock(tableLocal, ModBlocks.RECRUITMENT_TABLE.get());
+        BlockPos table = helper.absolutePos(tableLocal);
+        ServerPlayer player = player(helper, new Vec3(4.5, 1, 1.5));
+        try {
+            SoldierEntity a = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(2, 1, 6));
+            SoldierEntity b = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(6, 1, 6));
+            a.recruitBy(player);
+            b.recruitBy(player);
+            helper.assertTrue(a.isOnCampaign() && a.getMode() == SoldierEntity.MODE_FOLLOW, "ohne Siedlung folgt er nicht");
+            helper.assertValueEqual(Recruitment.armySize(level, player.getUUID()), 2, "Armee nach dem Anwerben");
+            helper.assertValueEqual(a.getRations(), Provisions.START_RATIONS, "Proviant beim Anwerben");
+            // ein neuer Tag: er isst eine Ration aus dem Gepäck
+            long day = Provisions.day(level);
+            a.setFedDay(day - 1);
+            a.rationTick(level);
+            helper.assertTrue(!a.isHungry() && a.getRations() == Provisions.START_RATIONS - 1, "Tagesration nicht gegessen");
+            a.rationTick(level);
+            helper.assertValueEqual(a.getRations(), Provisions.START_RATIONS - 1, "zweimal am selben Tag gegessen");
+            // ohne Proviant hungert er – und trifft schwächer
+            b.setRations(0);
+            b.setFedDay(day - 1);
+            b.rationTick(level);
+            helper.assertTrue(b.isHungry(), "ohne Proviant kein Hunger");
+            var fed = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.HUSK.get(), new BlockPos(1, 1, 8));
+            var starved = helper.spawnWithNoFreeWill(io.github.sirschrolli.kingdomsatwar.registry.ModEntities.HUSK.get(), new BlockPos(7, 1, 8));
+            float fedBefore = fed.getHealth();
+            float starvedBefore = starved.getHealth();
+            fed.hurtServer(level, level.damageSources().mobAttack(a), 6.0f);
+            starved.hurtServer(level, level.damageSources().mobAttack(b), 6.0f);
+            float full = fedBefore - fed.getHealth();
+            float weak = starvedBefore - starved.getHealth();
+            helper.assertTrue(full > 1.0f && Math.abs(weak - full * Provisions.HUNGRY_DAMAGE) < 0.05f,
+                    "Schaden satt " + full + ", hungrig " + weak);
+            // Proviant am Tisch aus dem Gepäck: der Hungrige zuerst, dann reihum
+            helper.assertTrue(Provisions.supply(player, table) == Recruitment.Result.NO_FOOD, "ohne Essen Proviant bekommen");
+            player.getInventory().add(new ItemStack(Items.BREAD, 6));            // 30 Nährwert: fünf Rationen
+            player.getInventory().add(new ItemStack(Items.ROTTEN_FLESH, 16));    // nimmt keiner
+            helper.assertTrue(Provisions.supply(player, table) == Recruitment.Result.SUPPLIED, "Proviant zuteilen klappt nicht");
+            helper.assertTrue(!b.isHungry(), "der Hungrige hat nicht zuerst bekommen");
+            helper.assertValueEqual(a.getRations(), 4, "Rationen des Satten");
+            helper.assertValueEqual(b.getRations(), 2, "Rationen des Hungrigen");
+            helper.assertValueEqual(player.getInventory().countItem(Items.BREAD), 0, "Brot aus dem Gepäck");
+            helper.assertValueEqual(player.getInventory().countItem(Items.ROTTEN_FLESH), 16, "Verdorbenes zugeteilt");
+            // aus der Hand gefüttert: satt für heute
+            b.setRations(0);
+            b.setFedDay(day - 1);
+            b.rationTick(level);
+            helper.assertTrue(b.isHungry(), "wieder hungrig");
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.COOKED_BEEF, 2));
+            player.interactOn(b, InteractionHand.MAIN_HAND, b.position());
+            helper.assertTrue(!b.isHungry(), "aus der Hand gefüttert und noch hungrig");
+            helper.assertValueEqual(player.getMainHandItem().getCount(), 1, "Braten nicht gegessen");
+            // Speichern: Proviant, Hunger und Schlachtzug bleiben
+            TagValueOutput out = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+            a.saveWithoutId(out);
+            CompoundTag tag = out.buildResult();
+            SoldierEntity loaded = ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get().create(level, EntitySpawnReason.LOAD);
+            loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
+            helper.assertTrue(loaded.getRations() == 4 && loaded.isOnCampaign() && !loaded.isHungry(), "Proviant nicht gespeichert");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
     }
 
     // =====================================================================================

@@ -220,6 +220,17 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(Tags.Items.FOODS_RAW_MEAT, ModItems.VENISON);
         add(Tags.Items.FOODS_COOKED_MEAT, ModItems.COOKED_VENISON);
         add(ItemTags.WOLF_FOOD, ModItems.VENISON, ModItems.COOKED_VENISON);
+
+        // Essen, das Bürger und Soldaten nicht nehmen (Lager und Proviant)
+        tag(ModTags.Items.UNFIT_FOOD).add(net.minecraft.world.item.Items.ROTTEN_FLESH.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.SPIDER_EYE.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.POISONOUS_POTATO.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.PUFFERFISH.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.SUSPICIOUS_STEW.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.CHORUS_FRUIT.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.GOLDEN_APPLE.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE.builtInRegistryHolder().key(),
+                net.minecraft.world.item.Items.GOLDEN_CARROT.builtInRegistryHolder().key());
     }
 
     @SafeVarargs

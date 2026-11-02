@@ -101,6 +101,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     /** Söldner ohne Herrn: die Söldnertafel des Söldnerhauses, zu dem er gehört (auch der Client braucht sie für die Tafel). */
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HALL =
             SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    /** Proviant: Tagesrationen im Gepäck, ob er gerade hungert, ob er auf einem Schlachtzug ist (für den Feldherrentisch). */
+    private static final EntityDataAccessor<Byte> DATA_RATIONS = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_HUNGRY = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CAMPAIGN = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BOOLEAN);
 
     /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Feldherrentisch ausgebildet oder als Söldner schon erfahren). */
     public static final int MAX_RANK = 2;
@@ -126,6 +130,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     /** Der eigene Name (ohne Art und Rang), z. B. "Konrad". */
     private String personalName = "";
     private int lastHurtTick = -1000;
+    /** Der Tag (seit Weltbeginn), an dem er zuletzt eine Ration gegessen hat ({@code -1}: noch nie). */
+    /** Tag der letzten Mahlzeit ({@link Long#MIN_VALUE}: noch nie – dann kommt er satt an). */
+    private long fedDay = Long.MIN_VALUE;
     private int voiceCooldown;
     private int idleChatter = 1200;
     private int shieldTicks;
@@ -194,6 +201,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_RANK, (byte) 0);
         builder.define(DATA_HALL, Optional.empty());
+        builder.define(DATA_RATIONS, (byte) 0);
+        builder.define(DATA_HUNGRY, false);
+        builder.define(DATA_CAMPAIGN, false);
     }
 
     @Override
@@ -223,6 +233,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             output.putInt("HallY", hall.getY());
             output.putInt("HallZ", hall.getZ());
         }
+        output.putInt("Rations", this.getRations());
+        output.putLong("FedDay", this.fedDay);
+        output.putBoolean("Hungry", this.isHungry());
+        output.putBoolean("Campaign", this.isOnCampaign());
     }
 
     @Override
@@ -245,6 +259,105 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.entityData.set(DATA_HALL, input.getIntOr("HallY", Integer.MIN_VALUE) != Integer.MIN_VALUE
                 ? Optional.of(new BlockPos(input.getIntOr("HallX", 0), input.getIntOr("HallY", 0), input.getIntOr("HallZ", 0)))
                 : Optional.empty());
+        // Soldaten aus älteren Spielständen haben noch keinen Proviant-Eintrag: Sie bekommen den Anfangsproviant
+        this.entityData.set(DATA_RATIONS, (byte) Mth.clamp(input.getIntOr("Rations",
+                io.github.sirschrolli.kingdomsatwar.army.Provisions.START_RATIONS), 0, io.github.sirschrolli.kingdomsatwar.army.Provisions.MAX_RATIONS));
+        this.fedDay = input.getLongOr("FedDay", Long.MIN_VALUE);
+        this.entityData.set(DATA_HUNGRY, input.getBooleanOr("Hungry", false));
+        // ältere Soldaten mit Herrn folgten ihm: sie gelten als auf dem Schlachtzug, bis man sie heimschickt
+        this.entityData.set(DATA_CAMPAIGN, input.getBooleanOr("Campaign", this.getOwnerReference() != null));
+    }
+
+    // =====================================================================================
+    // Proviant und Schlachtzug
+    // =====================================================================================
+
+    /** Wie viele Tagesrationen er noch im Gepäck hat. */
+    public int getRations() {
+        return this.entityData.get(DATA_RATIONS);
+    }
+
+    public void setRations(int rations) {
+        this.entityData.set(DATA_RATIONS, (byte) Mth.clamp(rations, 0, io.github.sirschrolli.kingdomsatwar.army.Provisions.MAX_RATIONS));
+    }
+
+    /** Hungert er (keine Ration mehr für heute)? Dann heilt er nicht von selbst und schlägt schwächer zu. */
+    public boolean isHungry() {
+        return this.entityData.get(DATA_HUNGRY);
+    }
+
+    /** Isst seine Ration für den Tag {@code day} – aus dem Gepäck ({@code fromStock}) oder frisch zugeteilt. */
+    public void eatRation(long day, boolean fromStock) {
+        if (fromStock) {
+            this.setRations(this.getRations() - 1);
+        }
+        this.fedDay = day;
+        this.entityData.set(DATA_HUNGRY, false);
+    }
+
+    /** Für die Vorschau: hungrig (oder satt) machen, ohne den Herrn zu rufen. */
+    public void setHungry(boolean hungry) {
+        this.entityData.set(DATA_HUNGRY, hungry);
+    }
+
+    /** Für Tests: so tun, als hätte er am Tag {@code day} zuletzt gegessen. */
+    public void setFedDay(long day) {
+        this.fedDay = day;
+    }
+
+    /** Ist er mit seinem Herrn auf einem Schlachtzug (statt in der Garnison der Siedlung)? */
+    public boolean isOnCampaign() {
+        return this.entityData.get(DATA_CAMPAIGN);
+    }
+
+    public void setCampaign(boolean campaign) {
+        this.entityData.set(DATA_CAMPAIGN, campaign);
+    }
+
+    /**
+     * Jeden Morgen isst ein Soldat mit Herrn seine Mahlzeit: in der Garnison aus dem Lager der Siedlung (wie die Bürger),
+     * auf dem Schlachtzug – oder wenn das Lager leer ist – eine Ration aus seinem Gepäck. Ist nichts da, hungert er, bis
+     * das Lager wieder gefüllt ist oder man ihm am Feldherrentisch Proviant zuteilt. Nebenbei trägt er sich in die
+     * Stammrolle seines Herrn ein (ältere Spielstände). Läuft alle fünf Sekunden (öffentlich für die Tests).
+     */
+    public void rationTick(ServerLevel level) {
+        UUID owner = this.getOwnerId();
+        if (owner == null) {
+            return;
+        }
+        if (!io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.of(level.getServer()).contains(owner, this.getUUID())) {
+            io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.enlist(level.getServer(), owner, this.getUUID());
+        }
+        long day = io.github.sirschrolli.kingdomsatwar.army.Provisions.day(level);
+        if (this.fedDay == Long.MIN_VALUE || this.fedDay > day) {
+            this.fedDay = day;   // neu – oder die Zeit wurde zurückgestellt
+            return;
+        }
+        if (this.fedDay >= day) {
+            return;
+        }
+        if (!this.isOnCampaign() && this.eatFromTown(level)) {
+            this.eatRation(day, false);
+        } else if (this.getRations() > 0) {
+            this.eatRation(day, true);
+        } else if (!this.isHungry()) {
+            this.entityData.set(DATA_HUNGRY, true);
+            if (this.getOwner() instanceof ServerPlayer player && player.distanceToSqr(this) < 64.0 * 64.0) {
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.soldier_hungry", this.getDisplayName())
+                        .withStyle(ChatFormatting.RED));
+            }
+        }
+    }
+
+    /** In der Garnison: eine Mahlzeit aus dem Lager der eigenen Siedlung (wenn genug Essen darin ist). */
+    private boolean eatFromTown(ServerLevel level) {
+        io.github.sirschrolli.kingdomsatwar.economy.town.Town town = io.github.sirschrolli.kingdomsatwar.army.Garrison.townOf(this);
+        if (town == null || town.dimension() != level.dimension()) {
+            return false;
+        }
+        int meal = io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.MEAL;
+        return io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.pantry(level, town) >= meal
+                && io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.take(level, town, meal) >= meal;
     }
 
     // =====================================================================================
@@ -320,6 +433,13 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.applyRank();
         this.setHealth(Math.max(1.0f, other.getHealth() / Math.max(1.0f, other.getMaxHealth()) * this.getMaxHealth()));
         this.refreshName();
+        this.entityData.set(DATA_RATIONS, (byte) other.getRations());
+        this.entityData.set(DATA_HUNGRY, other.isHungry());
+        this.entityData.set(DATA_CAMPAIGN, other.isOnCampaign());
+        this.fedDay = other.fedDay;
+        if (this.level() instanceof ServerLevel level && this.getOwnerId() != null) {
+            io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.enlist(level.getServer(), this.getOwnerId(), this.getUUID());
+        }
     }
 
     // =====================================================================================
@@ -342,7 +462,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         return !this.hasOwner() && this.getHall() != null;
     }
 
-    /** In den Dienst nehmen (mit Bezahlung schon erledigt): verlässt das Söldnerhaus und folgt dem Spieler. */
+    /** In den Dienst nehmen (mit Bezahlung schon erledigt): verlässt das Söldnerhaus und zieht in die Garnison des Spielers. */
     public void hireBy(Player player) {
         this.entityData.set(DATA_HALL, Optional.empty());
         this.recruitBy(player);
@@ -389,6 +509,13 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
     public void setOwner(@Nullable LivingEntity owner) {
         this.entityData.set(DATA_OWNER, Optional.ofNullable(EntityReference.of(owner)));
+        if (this.level() instanceof ServerLevel level) {
+            if (owner != null) {
+                io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.enlist(level.getServer(), owner.getUUID(), this.getUUID());
+            } else {
+                io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.discharge(level.getServer(), this.getUUID());
+            }
+        }
     }
 
     public @Nullable UUID getOwnerId() {
@@ -432,11 +559,37 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     // Anwerben
     // =====================================================================================
 
-    /** Der Soldat tritt in den Dienst des Spielers: Er salutiert, meldet sich und folgt ihm. */
+    /**
+     * Der Soldat tritt in den Dienst des Spielers: Er salutiert, meldet sich, bekommt Proviant für ein paar Tage und
+     * zieht in die Garnison der Siedlung des Spielers. Hat der Spieler (noch) keine Siedlung, folgt er ihm.
+     */
     public void recruitBy(Player player) {
-        this.setOwner(player);
+        this.enlist(player);
+        if (io.github.sirschrolli.kingdomsatwar.army.Garrison.station(this)) {
+            io.github.sirschrolli.kingdomsatwar.economy.town.Town town = io.github.sirschrolli.kingdomsatwar.army.Garrison.townOf(this);
+            player.sendSystemMessage(Component.translatable("message.kingdomsatwar.garrison.joined", this.getDisplayName(),
+                    town == null ? "" : town.name()).withStyle(ChatFormatting.GOLD));
+        } else {
+            this.setCampaign(true);
+            this.setMode(MODE_FOLLOW, null);
+        }
+    }
+
+    /** Wie {@link #recruitBy}, aber er bleibt beim Spieler und folgt ihm (z. B. herbeigerufene Truppen). */
+    public void recruitIntoField(Player player) {
+        this.enlist(player);
+        this.setCampaign(true);
         this.setMode(MODE_FOLLOW, null);
+    }
+
+    private void enlist(Player player) {
+        this.setOwner(player);
         this.setTarget(null);
+        this.setRations(io.github.sirschrolli.kingdomsatwar.army.Provisions.START_RATIONS);
+        this.entityData.set(DATA_HUNGRY, false);
+        if (this.level() instanceof ServerLevel level) {
+            this.fedDay = io.github.sirschrolli.kingdomsatwar.army.Provisions.day(level);
+        }
         this.salute();
         this.speak("recruit");
         if (this.level() instanceof ServerLevel level) {
@@ -683,8 +836,11 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             io.github.sirschrolli.kingdomsatwar.entity.creature.golem.VillageSentinels.summon(level, this.post);
         }
         this.updateShield();
-        // langsame Heilung außerhalb des Kampfes
-        if (this.tickCount - this.lastHurtTick > 200 && this.tickCount % 80 == 0 && this.getHealth() < this.getMaxHealth()) {
+        if ((this.tickCount + this.getId()) % 100 == 0) {
+            this.rationTick(level);
+        }
+        // langsame Heilung außerhalb des Kampfes – nur wer satt ist
+        if (this.tickCount - this.lastHurtTick > 200 && this.tickCount % 80 == 0 && this.getHealth() < this.getMaxHealth() && !this.isHungry()) {
             this.heal(1.0f);
         }
         // der Hauptmann stärkt seine Leute
@@ -732,8 +888,13 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             return super.mobInteract(player, hand);
         }
         var food = stack.get(DataComponents.FOOD);
-        if (food != null && this.getHealth() < this.getMaxHealth()) {
-            if (!this.level().isClientSide()) {
+        boolean feedsHunger = this.isHungry() && io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.nutrition(stack) > 0;
+        if (food != null && (feedsHunger || this.getHealth() < this.getMaxHealth())) {
+            if (this.level() instanceof ServerLevel level) {
+                if (feedsHunger) {
+                    // aus der Hand gegessen: satt für heute
+                    this.eatRation(io.github.sirschrolli.kingdomsatwar.army.Provisions.day(level), false);
+                }
                 this.heal(Math.max(2.0f, food.nutrition() * 1.5f));
                 stack.consume(1, player);
                 ((ServerLevel) this.level()).sendParticles(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.2,
@@ -772,7 +933,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         return Component.translatable("message.kingdomsatwar.soldier_status", Component.translatable("soldier.kingdomsatwar.rank." + this.getRank())
                         .append(" ").append(this.getDisplayName()),
                 Mth.ceil(this.getHealth()), Mth.ceil(this.getMaxHealth()),
-                Component.translatable("message.kingdomsatwar.soldier_mode." + this.getMode()));
+                Component.translatable("message.kingdomsatwar.soldier_mode." + this.getMode()),
+                this.isHungry() ? Component.translatable("gui.kingdomsatwar.recruitment.rations.hungry")
+                        : Component.translatable("gui.kingdomsatwar.recruitment.rations", this.getRations()));
     }
 
     /**
@@ -927,6 +1090,22 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     @Override
     public float getVoicePitch() {
         return this.voicePitch();
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (this.level() instanceof ServerLevel level) {
+            io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.discharge(level.getServer(), this.getUUID());
+        }
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if (reason.shouldDestroy() && this.level() instanceof ServerLevel level) {
+            io.github.sirschrolli.kingdomsatwar.army.ArmyRoster.discharge(level.getServer(), this.getUUID());
+        }
+        super.remove(reason);
     }
 
     @Override

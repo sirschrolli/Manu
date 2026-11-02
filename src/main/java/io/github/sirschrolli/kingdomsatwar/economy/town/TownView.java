@@ -16,9 +16,9 @@ import net.minecraft.server.level.ServerPlayer;
  */
 public record TownView(String name, String owner, boolean isOwner, int tier, int capacity, int radius, int reputation, boolean crowned,
         boolean queen, List<ResidentView> residents, List<HireView> hires, List<BuildView> builds, List<ProjectView> projects, int crown,
-        boolean storage, List<Integer> stock) {
+        boolean storage, List<Integer> stock, int food) {
 
-    /** Ein Bürger: Name, Beruf, Zustand (0 = unterwegs, 1 = bei der Arbeit, 2 = schläft, 3 = fern), mit Bett und Werkstatt. */
+    /** Ein Bürger: Name, Beruf, Zustand (0 = unterwegs, 1 = bei der Arbeit, 2 = schläft, 3 = fern, 4 = hungrig), mit Bett und Werkstatt. */
     public record ResidentView(String name, int profession, int variant, int state, boolean bed, boolean work) {
         static final StreamCodec<RegistryFriendlyByteBuf, ResidentView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.STRING_UTF8, ResidentView::name,
@@ -72,6 +72,11 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 ProjectView::new);
     }
 
+    /** Für wie viele Tage das Essen im Lager alle Bürger satt macht. */
+    public int foodDays() {
+        return TownFood.days(this.food, this.residents.size());
+    }
+
     /** Wie viele Einheiten eines Baustoffs im Lager liegen. */
     public int stock(Material material) {
         return material.ordinal() < this.stock.size() ? this.stock.get(material.ordinal()) : 0;
@@ -104,6 +109,7 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         buf.writeVarInt(v.crown);
         buf.writeBoolean(v.storage);
         ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).encode(buf, v.stock);
+        buf.writeVarInt(v.food);
     }
 
     private static TownView read(RegistryFriendlyByteBuf buf) {
@@ -113,7 +119,7 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 HireView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 BuildView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 ProjectView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
-                buf.readVarInt(), buf.readBoolean(), ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).decode(buf));
+                buf.readVarInt(), buf.readBoolean(), ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).decode(buf), buf.readVarInt());
     }
 
     public TownTier tierValue() {
@@ -131,7 +137,7 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         for (Town.Resident r : town.residents()) {
             int state = 3;
             if (level != null && level.getEntity(r.entity()) instanceof CitizenEntity citizen) {
-                state = citizen.isSleeping() ? 2 : citizen.isWorking() ? 1 : 0;
+                state = citizen.isSleeping() ? 2 : citizen.isHungry() ? 4 : citizen.isWorking() ? 1 : 0;
             }
             residents.add(new ResidentView(r.name(), r.profession().ordinal(), r.variant(), state, r.bed().isPresent(),
                     r.work().isPresent() || r.profession().workplace() == null));
@@ -152,9 +158,10 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         }
         boolean storage = level != null && TownStorage.exists(level, town);
         int[] stock = level == null ? new int[Material.values().length] : TownStorage.counts(level, town);
+        int food = level == null ? 0 : TownFood.pantry(level, town);
         return new TownView(town.name(), town.ownerName(), town.owner().equals(player.getUUID()), town.tier().ordinal(), town.capacity(),
                 town.radius(), Reputation.points(player), town.crowned(), town.queen(), residents, hires, builds, projects,
-                Coronation.requirements(player, town), storage, ints(stock));
+                Coronation.requirements(player, town), storage, ints(stock), food);
     }
 
     private static int[] concat(int[] a, int[] b) {

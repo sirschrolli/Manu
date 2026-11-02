@@ -420,6 +420,19 @@ public class TownScreen extends Screen {
         y += 13;
         this.itemScaled(g, new ItemStack(ModBlocks.THRONE.get()), x, y - 3, 0.75f);
         g.text(this.font, Component.translatable("gui.kingdomsatwar.town.owner", v.owner()), x + 15, y, TEXT, false);
+        y += 13;
+        // Essen im Lager: für wie viele Tage es die Bürger satt macht
+        this.itemScaled(g, new ItemStack(Items.BREAD), x, y - 3, 0.75f);
+        int days = v.foodDays();
+        boolean hungry = v.residents().stream().anyMatch(r -> r.state() == 4);
+        Component food = v.residents().isEmpty() ? Component.translatable("gui.kingdomsatwar.town.food.none_needed")
+                : Component.translatable(days == 1 ? "gui.kingdomsatwar.town.food.day" : "gui.kingdomsatwar.town.food.days", days);
+        g.text(this.font, food, x + 15, y, hungry || days < 1 && !v.residents().isEmpty() ? BAD : days < 3 ? 0xFF8A6A10 : TEXT, false);
+        if (mouseX >= x && mouseX < x + 140 && mouseY >= y - 3 && mouseY < y + 10) {
+            List<FormattedCharSequence> tip = new ArrayList<>(this.font.split(Component.translatable("gui.kingdomsatwar.town.food.hint",
+                    v.food() / io.github.sirschrolli.kingdomsatwar.economy.town.TownFood.MEAL), 220));
+            g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
+        }
         y += 15;
         // Ansehen
         Reputation.Rank rank = v.rank();
@@ -643,6 +656,7 @@ public class TownScreen extends Screen {
                 case 1 -> GOOD;
                 case 2 -> 0xFF3F5A8A;
                 case 3 -> MUTED;
+                case 4 -> BAD;
                 default -> TEXT;
             };
             g.text(this.font, this.ellipsize(Component.translatable("gui.kingdomsatwar.town.state." + r.state()).getString(), 52), x + 172,

@@ -25,7 +25,7 @@ public final class ArmyClient {
     }
 
     private static void onOpen(OpenRecruitScreenPayload payload, IPayloadContext context) {
-        Minecraft.getInstance().gui.setScreen(new WarTableScreen(payload.pos(), payload.armyLimit()));
+        Minecraft.getInstance().gui.setScreen(new WarTableScreen(payload.pos(), payload.armyLimit(), payload.armySize(), payload.hasTown()));
     }
 
     private static void onOpenBoard(OpenMercenaryBoardPayload payload, IPayloadContext context) {

@@ -162,12 +162,14 @@ final class CitizenGoals {
 
         @Override
         public boolean canUse() {
-            return workHours(this.citizen) && !this.citizen.isSleeping() && this.citizen.town() != null && this.job().canStart();
+            // wer hungrig ist, arbeitet nicht (siehe CitizenEntity.mealTick)
+            return workHours(this.citizen) && !this.citizen.isSleeping() && !this.citizen.isHungry() && this.citizen.town() != null
+                    && this.job().canStart();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return workHours(this.citizen) && !this.citizen.isSleeping() && this.job().running();
+            return workHours(this.citizen) && !this.citizen.isSleeping() && !this.citizen.isHungry() && this.job().running();
         }
 
         @Override

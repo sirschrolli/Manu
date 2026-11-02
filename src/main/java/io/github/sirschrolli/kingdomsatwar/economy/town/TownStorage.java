@@ -58,7 +58,7 @@ public final class TownStorage {
         }
     }
 
-    private static @Nullable Container container(ServerLevel level, BlockPos pos) {
+    static @Nullable Container container(ServerLevel level, BlockPos pos) {
         return level.isLoaded(pos) && level.getBlockEntity(pos) instanceof Container c ? c : null;
     }
 

@@ -287,6 +287,18 @@ final class TownShowcase {
             }
             Coins.give(player, 2345);
             io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage.supply(level, banner.offset(2, 0, -1), BuildingType.HOUSE.costs());
+            // Essen im Lager: Brot, Möhren und Braten für gut eine Woche
+            if (level.getBlockEntity(banner.offset(2, 0, -1)) instanceof net.minecraft.world.Container pantry) {
+                net.minecraft.world.item.ItemStack[] food = {new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BREAD, 24),
+                        new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CARROT, 16),
+                        new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COOKED_BEEF, 8)};
+                int next = 0;
+                for (int i = 0; i < pantry.getContainerSize() && next < food.length; i++) {
+                    if (pantry.getItem(i).isEmpty()) {
+                        pantry.setItem(i, food[next++]);
+                    }
+                }
+            }
             TownManager.placeProject(player, BuildingType.HOUSE, new BlockPos(ox + 1, g[0], oz + 12), Rotation.NONE);
             // Reihen mit allen Bürgern (je Gesicht eine Reihe, Blick nach Süden)
             for (int v = 0; v < 3; v++) {

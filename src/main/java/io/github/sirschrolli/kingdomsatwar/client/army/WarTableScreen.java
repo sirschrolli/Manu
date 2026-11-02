@@ -1,12 +1,15 @@
 package io.github.sirschrolli.kingdomsatwar.client.army;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.army.Provisions;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.army.Training;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
+import io.github.sirschrolli.kingdomsatwar.network.CampaignPayload;
 import io.github.sirschrolli.kingdomsatwar.network.HealPayload;
+import io.github.sirschrolli.kingdomsatwar.network.ProvisionPayload;
 import io.github.sirschrolli.kingdomsatwar.network.TrainPayload;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,9 +38,10 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Das Fenster des Feldherrentischs. Oben „Alle heilen“: der Feldscher versorgt alle Verwundeten im Feldlager (24 Blöcke
- * um den Tisch) – der Knopf nennt seinen Lohn. Links die eigenen Soldaten im Feldlager mit ihrer Gesundheit, in der
- * Mitte der ausgewählte, rechts Rang, Werte und die Preise fürs Befördern und für die Ausbildung zur nächsten Art.
- * Neue Soldaten gibt es hier nicht – die heuert man bei den Rittern und Söldnern der Dörfer an.
+ * um den Tisch) – der Knopf nennt seinen Lohn. Links die eigenen Soldaten im Feldlager mit Gesundheit und Proviant, in
+ * der Mitte der ausgewählte, rechts Rang, Werte und die Preise fürs Befördern und für die Ausbildung zur nächsten Art.
+ * Unten: Proviant zuteilen (aus dem Stadtlager und dem Gepäck) und mit allen auf den Schlachtzug ziehen bzw. sie heim in
+ * die Garnison schicken. Neue Soldaten gibt es hier nicht – die heuert man bei den Rittern und Söldnern der Dörfer an.
  */
 public class WarTableScreen extends Screen {
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/recruitment_table.png");
@@ -56,6 +60,8 @@ public class WarTableScreen extends Screen {
 
     private final BlockPos tablePos;
     private final int armyLimit;
+    private final int armySize;
+    private final boolean hasTown;
     private int selectedSoldier = -1;
     private int scroll;
     private int left;
@@ -63,14 +69,18 @@ public class WarTableScreen extends Screen {
     private @Nullable Button healButton;
     private @Nullable Button rankButton;
     private @Nullable Button promoteButton;
+    private @Nullable Button provisionButton;
+    private @Nullable Button campaignButton;
     private @Nullable Component feedback;
     private int feedbackColor;
     private int feedbackTicks;
 
-    public WarTableScreen(BlockPos tablePos, int armyLimit) {
+    public WarTableScreen(BlockPos tablePos, int armyLimit, int armySize, boolean hasTown) {
         super(Component.translatable("gui.kingdomsatwar.recruitment.title"));
         this.tablePos = tablePos;
         this.armyLimit = armyLimit;
+        this.armySize = armySize;
+        this.hasTown = hasTown;
     }
 
     @Override
@@ -83,6 +93,11 @@ public class WarTableScreen extends Screen {
                 button -> this.train(Training.Action.RANK)).bounds(this.left + PREVIEW_X, this.top + 149, 84, 20).build());
         this.promoteButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.promote"),
                 button -> this.train(Training.Action.PROMOTE)).bounds(this.left + PREVIEW_X + 88, this.top + 149, 84, 20).build());
+        this.provisionButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.provisions"),
+                button -> ClientPacketDistributor.sendToServer(new ProvisionPayload(this.tablePos)))
+                .bounds(this.left, this.top + HEIGHT + 2, WIDTH / 2 - 1, 20).build());
+        this.campaignButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.march"),
+                button -> this.campaign()).bounds(this.left + WIDTH / 2 + 1, this.top + HEIGHT + 2, WIDTH / 2 - 1, 20).build());
         this.updateButtons();
     }
 
@@ -105,9 +120,27 @@ public class WarTableScreen extends Screen {
     }
 
     private void updateButtons() {
-        if (this.healButton == null || this.rankButton == null || this.promoteButton == null || this.minecraft.player == null) {
+        if (this.healButton == null || this.rankButton == null || this.promoteButton == null || this.provisionButton == null
+                || this.campaignButton == null || this.minecraft.player == null) {
             return;
         }
+        // Proviant: wie viele Rationen den Soldaten im Feldlager bis zum Vollen fehlen
+        List<SoldierEntity> camp = this.soldiers();
+        int missing = Provisions.missing(camp);
+        this.provisionButton.active = missing > 0;
+        this.provisionButton.setMessage(missing > 0 ? Component.translatable("gui.kingdomsatwar.recruitment.provisions.cost", missing)
+                : Component.translatable("gui.kingdomsatwar.recruitment.provisions.full"));
+        this.provisionButton.setTooltip(Tooltip.create(Component.translatable("gui.kingdomsatwar.recruitment.provisions.hint",
+                Provisions.MAX_RATIONS)));
+        // Schlachtzug: wer in der Garnison steht, zieht mit; wer mitgezogen ist, kehrt heim
+        long home = camp.stream().filter(s -> !s.isOnCampaign()).count();
+        long away = camp.size() - home;
+        boolean march = home > 0;
+        this.campaignButton.active = march || away > 0 && this.hasTown;
+        this.campaignButton.setMessage(march ? Component.translatable("gui.kingdomsatwar.recruitment.march.count", home)
+                : Component.translatable("gui.kingdomsatwar.recruitment.return.count", away));
+        this.campaignButton.setTooltip(Tooltip.create(Component.translatable(march ? "gui.kingdomsatwar.recruitment.march.hint"
+                : this.hasTown ? "gui.kingdomsatwar.recruitment.return.hint" : "gui.kingdomsatwar.recruitment.return.no_town")));
         // Heilen: der Lohn des Feldschers für alle Verwundeten im Feldlager
         List<SoldierEntity> wounded = this.soldiers().stream().filter(s -> Training.healCost(s) > 0).toList();
         int coins = Training.healCost(wounded);
@@ -137,6 +170,11 @@ public class WarTableScreen extends Screen {
                 : Component.translatable("gui.kingdomsatwar.recruitment.promote.hint", Component.translatable(next.translationKey()))));
     }
 
+    private void campaign() {
+        boolean march = this.soldiers().stream().anyMatch(s -> !s.isOnCampaign());
+        ClientPacketDistributor.sendToServer(new CampaignPayload(this.tablePos, march));
+    }
+
     private void heal() {
         ClientPacketDistributor.sendToServer(new HealPayload(this.tablePos));
     }
@@ -151,7 +189,8 @@ public class WarTableScreen extends Screen {
     /** Antwort des Servers auf Heilen oder Ausbilden. */
     public void onResult(Recruitment.Result result) {
         this.feedback = Component.translatable("gui.kingdomsatwar.recruitment.result." + result.name().toLowerCase(java.util.Locale.ROOT));
-        boolean good = result == Recruitment.Result.HEALED || result == Recruitment.Result.TRAINED || result == Recruitment.Result.PROMOTED;
+        boolean good = result == Recruitment.Result.HEALED || result == Recruitment.Result.TRAINED || result == Recruitment.Result.PROMOTED
+                || result == Recruitment.Result.SUPPLIED || result == Recruitment.Result.MARCHED || result == Recruitment.Result.RETURNED;
         this.feedbackColor = good ? ArmyWidgets.GOOD : ArmyWidgets.BAD;
         this.feedbackTicks = 60;
         if (result == Recruitment.Result.PROMOTED) {
@@ -160,18 +199,9 @@ public class WarTableScreen extends Screen {
         }
     }
 
-    /** Wie viele Soldaten der Spieler hat (soweit das Spiel sie gerade kennt). */
+    /** Wie viele Soldaten der Spieler hat (laut Stammrolle beim Öffnen; auch die gerade nicht geladenen). */
     private int armySize() {
-        if (this.minecraft.level == null || this.minecraft.player == null) {
-            return 0;
-        }
-        int count = 0;
-        for (var entity : this.minecraft.level.entitiesForRendering()) {
-            if (entity instanceof SoldierEntity soldier && soldier.isOwnedBy(this.minecraft.player) && soldier.isAlive()) {
-                count++;
-            }
-        }
-        return count;
+        return this.armySize;
     }
 
     /** Die eigenen Soldaten im Feldlager, die nächsten zuerst. */
@@ -380,8 +410,12 @@ public class WarTableScreen extends Screen {
         boolean hovered = mouseX >= x && mouseX < x + ENTRY_W && mouseY >= y && mouseY < y + ENTRY_H - 2;
         boolean isSelected = chosen != null && soldier.getId() == chosen.getId();
         String name = soldier.getPersonalName().isEmpty() ? soldier.getDisplayName().getString() : soldier.getPersonalName();
+        // rechts in der zweiten Zeile stehen Proviant und Schlachtzug – die Art des Soldaten muss davor enden
+        String days = soldier.isHungry() ? "!" : String.valueOf(soldier.getRations());
+        int dx = x + ENTRY_W - 6 - this.font.width(days);
+        int iconsLeft = dx - (soldier.isOnCampaign() ? 22 : 11);
         ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
-                Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank());
+                Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank(), iconsLeft - (x + 33) - 2);
         float part = Mth.clamp(soldier.getHealth() / Math.max(1.0f, soldier.getMaxHealth()), 0.0f, 1.0f);
         int bx = x + 33;
         int by = y + 29;
@@ -390,5 +424,25 @@ public class WarTableScreen extends Screen {
         g.fill(bx, by, bx + bw, by + 2, 0xFF5A1414);
         int color = part > 0.66f ? 0xFF4CAF50 : part > 0.33f ? 0xFFE0B030 : 0xFFE04030;
         g.fill(bx, by, bx + Math.round(bw * part), by + 2, color);
+        // rechts in der zweiten Zeile: Proviant (Brot und Tage, rot bei Hunger) und ob er auf dem Schlachtzug ist
+        g.text(this.font, days, dx, y + 19, soldier.isHungry() ? 0xFFFF6B5E : soldier.getRations() <= 1 ? 0xFFF2C14E : 0xFFE8E0D0, true);
+        g.pose().pushMatrix();
+        g.pose().translate(dx - 10, y + 18);
+        g.pose().scale(0.5f, 0.5f);
+        g.item(new ItemStack(net.minecraft.world.item.Items.BREAD), 0, 0);
+        g.pose().popMatrix();
+        if (soldier.isOnCampaign()) {
+            g.pose().pushMatrix();
+            g.pose().translate(dx - 21, y + 18);
+            g.pose().scale(0.5f, 0.5f);
+            g.item(new ItemStack(net.minecraft.world.item.Items.IRON_SWORD), 0, 0);
+            g.pose().popMatrix();
+        }
+        if (mouseX >= dx - 22 && mouseX < x + ENTRY_W - 4 && mouseY >= y + 17 && mouseY < y + 27) {
+            g.setTooltipForNextFrame(this.font, Component.translatable(soldier.isHungry() ? "gui.kingdomsatwar.recruitment.rations.hungry"
+                    : "gui.kingdomsatwar.recruitment.rations", soldier.getRations()).append(soldier.isOnCampaign()
+                    ? Component.translatable("gui.kingdomsatwar.recruitment.on_campaign") : Component.translatable(this.hasTown
+                    ? "gui.kingdomsatwar.recruitment.in_garrison" : "gui.kingdomsatwar.recruitment.no_garrison")), mouseX, mouseY);
+        }
     }
 }

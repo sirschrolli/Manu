@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.23.0 – Glutkeiler, Moderkeiler und Lavastelzer; der Feldherrentisch heilt und bildet aus.**
+> **Testversion 0.24.0 – Nahrung für Bürger und Soldaten, Proviant, Garnison und Schlachtzug.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -146,9 +146,17 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > wie bei Vanilla. Und aus dem Rekrutierungstisch wurde der **Feldherrentisch**: Angeworben wird nur noch bei den
 > Rittern und Söldnern der Dörfer; am Tisch heilt der Feldscher alle Verwundeten im Feldlager (24 Blöcke) für ein paar
 > Münzen, und du bildest deine Leute aus – höhere Ränge, Ritter und Hauptleute.
+> Neu in 0.24: **Nahrung, Proviant und Garnison.** Deine **Bürger essen jetzt**: Jeden Morgen nimmt sich jeder eine
+> Mahlzeit aus dem Stadtlager – Brot, Fleisch, Fisch, Gemüse; Weizen, Kartoffeln und rohes Fleisch bereiten sie selbst
+> zu, so ernährt die Ernte der Bauern die Siedlung. Ist nichts mehr da, hungern sie und arbeiten nicht, bis wieder Essen
+> kommt – das Stadtfenster zeigt, für wie viele Tage es reicht. **Angeworbene Ritter und Soldaten ziehen in die
+> Garnison** deiner Siedlung und gehen vor der Kaserne (oder am Stadtbanner) Streife, auch wenn du sie in einem fernen
+> Dorf angeworben hast; dort essen sie aus dem Stadtlager. Am **Feldherrentisch** teilst du ihnen **Proviant** zu (bis zu
+> sieben Tagesrationen, erst aus dem Lager, dann aus deinem Gepäck) und nimmst sie **auf einen Schlachtzug** mit: Dann
+> folgen sie dir und leben von ihrem Proviant – wer nichts mehr hat, hungert, heilt nicht mehr und schlägt schwächer zu.
+> Am Tisch oder mit dem Kommandostab schickst du sie wieder heim.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Nahrung für Bürger und Soldaten (Stadtlager und Proviant), Garnison und Schlachtzug, dann schönere
-> Standard-Biome und die übrigen Nether- und End-Wesen.
+> **Als Nächstes:** schönere Standard-Biome im Stil der eigenen Biome, dann die übrigen Nether- und End-Wesen.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -167,7 +175,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
 | Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer | ✅ fertig |
-| Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung und Rängen, Kommandostab, Banditen | ✅ fertig |
+| Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung, Rängen und Proviant, Garnison und Schlachtzug, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
@@ -208,7 +216,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.23.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.24.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -216,7 +224,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.23.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.24.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -581,8 +589,24 @@ und kein Feuer mehr – und nimmt dafür 1 Bronze je 4 fehlende Leben. **Ausbild
 
 Jede **Kaserne** deiner Siedlung erlaubt acht Soldaten mehr.
 
+**Garnison und Schlachtzug:** Hast du eine Siedlung, ziehen deine angeworbenen Soldaten in ihre **Garnison** (aus der
+Ferne reisen sie sofort hin) und gehen vor dem Tor der Kaserne Streife – solange es keine gibt, am Stadtbanner. Am
+Feldherrentisch nimmst du alle Soldaten der Garnison im Feldlager **auf einen Schlachtzug** mit: Sie folgen dir, bis du
+sie am Tisch oder mit dem Kommandostab heimschickst. Ohne Siedlung folgen sie dir gleich.
+
+**Proviant:** Jeder Soldat isst am Morgen eine Mahlzeit – in der Garnison aus dem Stadtlager, auf dem Schlachtzug (oder
+wenn das Lager leer ist) eine Ration aus seinem Gepäck. Angeworben wird er mit Rationen für drei Tage, tragen kann er
+sieben. **„Rationen zuteilen“** am Tisch füllt allen im Feldlager den Proviant auf: erst aus dem Lager der Siedlung (wenn
+der Tisch darin steht), dann aus deinem Gepäck – die Hungrigen zuerst, dann reihum. Wer nichts mehr hat, **hungert**: Er
+heilt nicht mehr von selbst und schlägt nur noch mit 70 % zu, bis er wieder etwas bekommt; aus der Hand gefüttert ist er
+für heute satt. In der Liste am Tisch steht bei jedem, für wie viele Tage er Proviant hat (ein rotes „!“ heißt hungrig)
+und ob er auf dem Schlachtzug ist (Schwert).
+
+![Der Feldherrentisch mit Proviant und Schlachtzug](docs/bilder/feldherrentisch.jpg)
+
 Mit dem **Kommandostab** gibst du Befehle: auf einen Feind zeigen = Angriff, auf den Boden zeigen = Stellung halten
-(Schleichen: Patrouille), in den Himmel zeigen = alle folgen, Schleichen + eigenen Soldaten anklicken = entlassen.
+(Schleichen: Patrouille), in den Himmel zeigen = alle folgen (Schleichen: alle heim in die Garnison), Schleichen +
+eigenen Soldaten anklicken = entlassen.
 Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder dich noch deine Tiere und Drachen.
 **Banditen** streifen nachts durch die Lande und hausen manchmal in Burgruinen.
 
@@ -602,6 +626,13 @@ bleibt die Siedlung bestehen, bis es wieder steht.
 **Bürger** heuerst du mit Münzen an. Jeder braucht ein Bett (die ersten zwei schlafen im Lager am Banner) und – außer
 dem Baumeister – seine Werkstatt. Tagsüber arbeiten sie, nachts gehen sie ins Bett; Zombies, Plünderer und Banditen
 haben es auf sie abgesehen.
+
+**Essen:** Jeden Morgen nimmt sich jeder Bürger eine Mahlzeit aus dem **Lager** (6 Nährwert, etwas mehr als ein Brot) –
+das Einfache zuerst. Alles Essbare zählt nach seinem Nährwert; **Weizen** (drei sind eine Mahlzeit), Kartoffeln und rohes
+Fleisch oder roher Fisch zählen wie gebacken und gebraten, denn das bereiten die Bürger selbst zu – so ernährt die Ernte
+der Bauern die Siedlung. Verdorbenes, Giftiges und Goldenes nimmt niemand. Ist nicht genug da, **hungern** sie: Sie
+arbeiten und handeln nicht, bis wieder Essen kommt. Die Übersicht im Stadtfenster zeigt, für wie viele Tage das Essen
+reicht.
 
 | Beruf | Lohn | Werkstatt | Arbeit |
 |---|---|---|---|
@@ -1006,7 +1037,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.23.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.24.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

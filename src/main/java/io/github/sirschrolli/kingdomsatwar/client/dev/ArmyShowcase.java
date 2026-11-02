@@ -74,15 +74,31 @@ final class ArmyShowcase {
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));
         steps.add(Step.server(level -> {
-            // zwei Verwundete im Feldlager: der Feldscher nennt seinen Lohn
+            // zwei Verwundete im Feldlager: der Feldscher nennt seinen Lohn; dazu verschieden viel Proviant (der
+            // Bogenschütze hungert), zwei sind auf dem Schlachtzug, zwei in der Garnison
+            long day = io.github.sirschrolli.kingdomsatwar.army.Provisions.day(level);
             for (SoldierEntity soldier : level.getEntitiesOfClass(SoldierEntity.class, new net.minecraft.world.phys.AABB(new BlockPos(30, Showcase.ground, tz)).inflate(8.0))) {
                 if (soldier.getSoldierType() == SoldierType.KNIGHT || soldier.getSoldierType() == SoldierType.ARCHER) {
                     soldier.setHealth(soldier.getMaxHealth() * 0.4f);
                 }
+                switch (soldier.getSoldierType()) {
+                    case KNIGHT -> soldier.setRations(5);
+                    case SWORDSMAN -> {
+                        soldier.setRations(1);
+                        soldier.setCampaign(true);
+                    }
+                    case ARCHER -> {
+                        soldier.setRations(0);
+                        soldier.setCampaign(true);
+                        soldier.setFedDay(day);
+                        soldier.setHungry(true);
+                    }
+                    default -> soldier.setRations(7);
+                }
             }
         }));
         steps.add(Step.waitTicks(5));
-        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, Showcase.ground, tz), 32)));
+        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, Showcase.ground, tz), 32, 4, true)));
         steps.add(Step.waitTicks(10));
         steps.add(Step.once(Showcase::parkMouse));
         steps.add(Step.waitTicks(15));

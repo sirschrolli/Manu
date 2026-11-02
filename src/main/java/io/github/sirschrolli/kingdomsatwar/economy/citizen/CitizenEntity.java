@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.economy.citizen;
 
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
+import io.github.sirschrolli.kingdomsatwar.economy.town.TownFood;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownManager;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Towns;
 import java.util.UUID;
@@ -56,6 +57,8 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(CitizenEntity.class, EntityDataSerializers.BYTE);
     /** Gerade bei der Arbeit (für die Haltung im Bild). */
     private static final EntityDataAccessor<Boolean> DATA_WORKING = SynchedEntityData.defineId(CitizenEntity.class, EntityDataSerializers.BOOLEAN);
+    /** Hungrig: heute keine Mahlzeit aus dem Lager bekommen – arbeitet und handelt nicht. */
+    private static final EntityDataAccessor<Boolean> DATA_HUNGRY = SynchedEntityData.defineId(CitizenEntity.class, EntityDataSerializers.BOOLEAN);
 
     /** Waren, die der Bürger bei sich trägt, bis er sie in die Truhe seiner Werkstatt bringt. */
     private final SimpleContainer carried = new SimpleContainer(12);
@@ -63,6 +66,9 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
     private final int[] stock = new int[Material.values().length];
     /** Der Tag (seit Weltbeginn), an dem der Bürger zuletzt abends ins Lager gebracht hat. */
     private long deliveredDay = -1;
+    /** Der Tag (seit Weltbeginn), an dem der Bürger zuletzt gegessen hat ({@code -1}: neu, kommt satt an). */
+    /** Tag der letzten Mahlzeit ({@link Long#MIN_VALUE}: noch nie – dann kommt er satt an). */
+    private long fedDay = Long.MIN_VALUE;
     private @Nullable UUID townId;
     private @Nullable BlockPos bed;
     private @Nullable BlockPos work;
@@ -116,6 +122,7 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
         builder.define(DATA_PROFESSION, (byte) 0);
         builder.define(DATA_VARIANT, (byte) 0);
         builder.define(DATA_WORKING, false);
+        builder.define(DATA_HUNGRY, false);
     }
 
     @Override
@@ -137,6 +144,8 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
         this.carried.storeAsItemList(output.list("Carried", ItemStack.OPTIONAL_CODEC));
         output.putIntArray("Stock", this.stock.clone());
         output.putLong("DeliveredDay", this.deliveredDay);
+        output.putLong("FedDay", this.fedDay);
+        output.putBoolean("Hungry", this.isHungry());
     }
 
     @Override
@@ -162,6 +171,8 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
             this.stock[i] = i < stock.length ? Math.max(0, stock[i]) : 0;
         }
         this.deliveredDay = input.getLongOr("DeliveredDay", -1L);
+        this.fedDay = input.getLongOr("FedDay", Long.MIN_VALUE);
+        this.entityData.set(DATA_HUNGRY, input.getBooleanOr("Hungry", false));
     }
 
     /** Wie viele Einheiten eines Baustoffs der Bürger bei sich hat. */
@@ -204,6 +215,54 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
 
     public boolean isWorking() {
         return this.entityData.get(DATA_WORKING);
+    }
+
+    /** Heute noch nichts gegessen, weil das Lager leer war? Dann arbeitet und handelt der Bürger nicht. */
+    public boolean isHungry() {
+        return this.entityData.get(DATA_HUNGRY);
+    }
+
+    public long fedDay() {
+        return this.fedDay;
+    }
+
+    /**
+     * Die Mahlzeit des Tages: Am Morgen eines neuen Tages (sobald er wach ist) nimmt der Bürger eine Mahlzeit aus dem
+     * Lager der Siedlung. Ist dort nicht genug, bleibt er hungrig und schaut immer wieder nach, ob jemand Essen gebracht
+     * hat. Neue Bürger kommen satt an.
+     */
+    public void mealTick(ServerLevel level) {
+        Town town = this.town();
+        if (town == null) {
+            return;
+        }
+        long day = Math.floorDiv(level.getOverworldClockTime(), 24000L);
+        if (this.fedDay == Long.MIN_VALUE || this.fedDay > day) {
+            this.fedDay = day;   // neu – oder die Zeit wurde zurückgestellt
+        }
+        if (this.fedDay >= day) {
+            if (this.isHungry()) {
+                this.entityData.set(DATA_HUNGRY, false);
+            }
+            return;
+        }
+        if (this.isSleeping()) {
+            return;
+        }
+        if (TownFood.pantry(level, town) >= TownFood.MEAL && TownFood.take(level, town, TownFood.MEAL) >= TownFood.MEAL) {
+            this.fedDay = day;
+            this.entityData.set(DATA_HUNGRY, false);
+            this.playSound(net.minecraft.sounds.SoundEvents.GENERIC_EAT.value(), 0.6f, 1.0f);
+            level.sendParticles(new net.minecraft.core.particles.ItemParticleOption(net.minecraft.core.particles.ParticleTypes.ITEM,
+                    Items.BREAD), this.getX(), this.getEyeY() - 0.2, this.getZ(), 6, 0.15, 0.1, 0.15, 0.03);
+        } else if (!this.isHungry()) {
+            this.entityData.set(DATA_HUNGRY, true);
+        }
+    }
+
+    /** Für Tests: so tun, als hätte der Bürger am Tag {@code day} zuletzt gegessen. */
+    public void setFedDay(long day) {
+        this.fedDay = day;
     }
 
     public void setWorking(boolean working) {
@@ -328,6 +387,9 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
     @Override
     public void aiStep() {
         super.aiStep();
+        if (this.level() instanceof ServerLevel mealLevel && (this.tickCount + this.getId()) % 100 == 0) {
+            this.mealTick(mealLevel);
+        }
         if (!this.level().isClientSide()) {
             if (this.customer != null && (--this.customerTicks <= 0 || !this.customer.isAlive() || this.customer.distanceToSqr(this) > 64.0)) {
                 this.customer = null;
@@ -368,7 +430,10 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
             return InteractionResult.SUCCESS;
         }
         if (player instanceof ServerPlayer serverPlayer) {
-            if (this.getProfession().trader()) {
+            if (this.isHungry()) {
+                serverPlayer.sendOverlayMessage(Component.translatable("message.kingdomsatwar.citizen.hungry", this.getName())
+                        .withStyle(ChatFormatting.RED));
+            } else if (this.getProfession().trader()) {
                 Trading.open(serverPlayer, this);
             } else {
                 serverPlayer.sendOverlayMessage(this.statusMessage());
@@ -381,7 +446,7 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
     public Component statusMessage() {
         Town town = this.town();
         Component activity = Component.translatable("citizen.kingdomsatwar.activity." + (this.isSleeping() ? "sleeping"
-                : this.isWorking() ? "working" : "idle"));
+                : this.isHungry() ? "hungry" : this.isWorking() ? "working" : "idle"));
         return Component.translatable("message.kingdomsatwar.citizen.status", this.getName(),
                 Component.translatable(this.getProfession().translationKey()),
                 town == null ? Component.literal("–") : Component.literal(town.name()), activity).withStyle(ChatFormatting.GOLD);
