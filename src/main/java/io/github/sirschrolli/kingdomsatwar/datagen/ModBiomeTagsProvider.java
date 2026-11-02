@@ -93,6 +93,12 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.CHERRY_GROVE)
                 .add(Biomes.TAIGA).add(Biomes.SNOWY_PLAINS).add(Biomes.SNOWY_TAIGA).add(OverworldBiomes.ROYAL_MEADOWS);
 
+        // Stammburgen der fremden Reiche: ebenes, offenes Land (auch Wüste und Steppe – Dornfels baut in Sandstein)
+        this.tag(ModTags.Biomes.HAS_REALM_CASTLE)
+                .add(Biomes.PLAINS).add(Biomes.SUNFLOWER_PLAINS).add(Biomes.MEADOW).add(Biomes.SAVANNA).add(Biomes.SAVANNA_PLATEAU)
+                .add(Biomes.FOREST).add(Biomes.FLOWER_FOREST).add(Biomes.BIRCH_FOREST).add(Biomes.TAIGA).add(Biomes.SNOWY_PLAINS)
+                .add(Biomes.DESERT).add(OverworldBiomes.ROYAL_MEADOWS);
+
         // Dörfer der Umbrer: offene Wiesen, lichte Wälder, die fahle Ödnis und die Ränder der Seelenmarsch
         this.tag(ModTags.Biomes.HAS_MOON_TEMPLE)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)

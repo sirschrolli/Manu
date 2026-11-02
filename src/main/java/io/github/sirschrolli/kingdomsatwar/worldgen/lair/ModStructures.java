@@ -47,6 +47,14 @@ public final class ModStructures {
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SEAL_CIRCLE_PIECE =
             PIECES.register("seal_circle", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCirclePiece::new);
 
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastlePlacement>>
+            REALM_CASTLE_PLACEMENT = PLACEMENTS.register("realm_castle",
+                    () -> io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastlePlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastleStructure>>
+            REALM_CASTLE = TYPES.register("realm_castle", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastleStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> REALM_CASTLE_PIECE =
+            PIECES.register("realm_castle", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastlePiece::new);
+
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure>>
             UMBRER_VILLAGE = TYPES.register("umbrer_village", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> UMBRER_VILLAGE_PIECE =

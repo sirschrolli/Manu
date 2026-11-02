@@ -109,6 +109,15 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_ASH_FORGE = site("ash_forge");
     public static final ResourceKey<LootTable> SITE_ASH_FORGE_HOARD = site("ash_forge_hoard");
 
+    /** Truhen in den Stammburgen der Reiche: Schatzkammer des Herrschers, Waffenkammer und Vorräte. */
+    public static final ResourceKey<LootTable> REALM_TREASURY = realm("treasury");
+    public static final ResourceKey<LootTable> REALM_ARMORY = realm("armory");
+    public static final ResourceKey<LootTable> REALM_STORES = realm("stores");
+
+    private static ResourceKey<LootTable> realm(String name) {
+        return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/realm/" + name));
+    }
+
     private static ResourceKey<LootTable> site(String name) {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/site/" + name));
     }

@@ -100,6 +100,8 @@ public final class ModTags {
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_MAGE_TOWERS = towerTags();
         /** Wo der Siegelkreis liegen kann (ebenes, offenes Land). */
         public static final TagKey<Biome> HAS_SEAL_CIRCLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_seal_circle"));
+        /** Wo die Stammburgen der fremden Reiche stehen dürfen (ebenes, offenes Land). */
+        public static final TagKey<Biome> HAS_REALM_CASTLE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_realm_castle"));
         /** Wo in der Schattenwelt Dörfer der Umbrer liegen können. */
         public static final TagKey<Biome> HAS_UMBRER_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_umbrer_village"));
         /** Wo Nyxars Schattenzitadelle stehen kann (weites, festes Land der Schattenwelt). */
