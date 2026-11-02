@@ -43,12 +43,22 @@ final class TownShowcase {
         steps.add(Step.command("gamerule doDaylightCycle false"));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
         int i = 0;
+        // "house" zeigt alle Entwürfe des Wohnhauses, "house:2" nur den dritten
+        String onlyType = only.contains(":") ? only.substring(0, only.indexOf(':')) : only;
+        int onlyDesign = only.contains(":") ? Integer.parseInt(only.substring(only.indexOf(':') + 1)) : -1;
         for (BuildingType type : BuildingType.values()) {
-            if (!only.isEmpty() && !type.id().equals(only)) {
+          if (!onlyType.isEmpty() && !type.id().equals(onlyType)) {
+              continue;
+          }
+          for (int design = 0; design < type.designs(); design++) {
+            if (onlyDesign >= 0 && design != onlyDesign) {
                 continue;
             }
+            final int dsg = design;
+            final Blueprint plan = type.blueprint(design);
+            final String name = type.id() + (type.designs() > 1 ? "_d" + design : "");
             double[] c = new double[4];
-            int ox = 40 + i * 40;
+            int ox = 40 + i * 48;
             int oz = 40;
             i++;
             steps.add(Step.server(level -> {
@@ -59,15 +69,15 @@ final class TownShowcase {
                 }
                 int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ox, oz);
                 BlockPos origin = new BlockPos(ox, y, oz);
-                type.blueprint().placeAll(level, origin, Rotation.NONE);
+                plan.placeAll(level, origin, Rotation.NONE);
                 c[0] = ox + 0.5;
                 c[1] = oz + 0.5;
                 c[2] = y;
                 c[3] = 1;
-                KingdomsAtWar.LOGGER.info("[Showcase] {} gebaut bei {}", type.id(), origin);
+                KingdomsAtWar.LOGGER.info("[Showcase] {} (Entwurf {}) gebaut bei {}", type.id(), dsg, origin);
             }));
             steps.add(Step.until(() -> c[3] != 0, 600));
-            BoundingBox b = type.blueprint().bounds();
+            BoundingBox b = plan.bounds();
             double cx = (b.minX() + b.maxX()) / 2.0;
             double cz = (b.minZ() + b.maxZ()) / 2.0;
             double h = b.maxY();
@@ -76,7 +86,8 @@ final class TownShowcase {
                     {cx - d * 0.5, h * 0.5 + d * 0.22, b.minZ() - d * 0.7, cx, h * 0.38, cz},
                     {cx + d * 0.55, h * 0.5 + d * 0.25, b.maxZ() + d * 0.65, cx, h * 0.38, cz},
                     {cx, h + d * 0.9, cz - d * 0.3, cx, 0, cz},
-                    interior(type, b)
+                    interior(type, plan, design),
+                    interior2(plan)
             };
             int n = 0;
             for (double[] v : views) {
@@ -86,9 +97,32 @@ final class TownShowcase {
                 steps.add(at(c, v));
                 steps.add(Step.waitTicks(n == 0 ? 80 : 30));
                 steps.add(Step.waitForChunks(800));
-                steps.add(Step.screenshot("plan_" + type.id() + "_" + n++));
+                steps.add(Step.screenshot("plan_" + name + "_" + n++));
             }
+          }
         }
+    }
+
+    /** Blick nach innen, den der Entwurf selbst festlegt ("camera" → "look"), sonst der alte je Gebäude. */
+    private static double[] interior(BuildingType type, Blueprint plan, int design) {
+        BlockPos none = new BlockPos(Integer.MIN_VALUE, 0, 0);
+        BlockPos cam = plan.anchor("camera", none);
+        BlockPos look = plan.anchor("look", none);
+        if (cam != none && look != none) {
+            return new double[] {cam.getX() + 0.5, cam.getY(), cam.getZ() + 0.5, look.getX() + 0.5, look.getY() + 0.5, look.getZ() + 0.5};
+        }
+        return design == 0 ? interior(type, plan.bounds()) : null;
+    }
+
+    /** Ein zweiter Blick nach innen (z. B. ins Obergeschoss), wenn der Entwurf einen festlegt. */
+    private static double[] interior2(Blueprint plan) {
+        BlockPos none = new BlockPos(Integer.MIN_VALUE, 0, 0);
+        BlockPos cam = plan.anchor("camera2", none);
+        BlockPos look = plan.anchor("look2", none);
+        if (cam == none || look == none) {
+            return null;
+        }
+        return new double[] {cam.getX() + 0.5, cam.getY(), cam.getZ() + 0.5, look.getX() + 0.5, look.getY() + 0.5, look.getZ() + 0.5};
     }
 
     /**

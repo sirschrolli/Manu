@@ -70,7 +70,9 @@ public final class ModCreativeTabs {
                         // Baupläne aller Gebäude (sonst gibt es sie im Stadtfenster)
                         for (io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType type
                                 : io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType.values()) {
-                            output.accept(io.github.sirschrolli.kingdomsatwar.item.BlueprintItem.of(type));
+                            for (int design = 0; design < type.designs(); design++) {
+                                output.accept(io.github.sirschrolli.kingdomsatwar.item.BlueprintItem.of(type, design));
+                            }
                         }
                     })
                     .build());

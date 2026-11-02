@@ -78,7 +78,7 @@ public final class TownClient {
         }
         BlockPos origin = BlueprintItem.origin(hit.getBlockPos(), hit.getDirection());
         Rotation rotation = BlueprintItem.rotation(player.getDirection(), BlueprintItem.turn(stack));
-        Blueprint plan = type.blueprint();
+        Blueprint plan = type.blueprint(BlueprintItem.design(stack));
         BoundingBox box = plan.worldBounds(origin, rotation);
         double y = origin.getY() + 0.05;
         double x0 = box.minX();

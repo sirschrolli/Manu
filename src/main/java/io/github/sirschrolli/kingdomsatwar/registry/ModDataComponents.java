@@ -28,6 +28,11 @@ public final class ModDataComponents {
             COMPONENTS.registerComponentType("build_turn", builder -> builder
                     .persistent(com.mojang.serialization.Codec.INT)
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+    /** Bauplan: welcher der Entwürfe des Gebäudes gebaut wird (beim Nehmen zufällig gewählt). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> BUILD_DESIGN =
+            COMPONENTS.registerComponentType("build_design", builder -> builder
+                    .persistent(com.mojang.serialization.Codec.INT)
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
 
     /** Aetherit-Stab: welche Zauber er auf welcher Stufe kennt und welcher gewählt ist. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.magic.KnownSpells>> SPELLS =

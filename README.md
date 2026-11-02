@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.16.0 – Lager, Baukosten und eingesperrt beim Erzmagier.**
+> **Testversion 0.17.0 – 28 Gebäude-Entwürfe, zufällig gewählt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -59,7 +59,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > sehen sie aus wie eine einzelne. Die **Beute ist härter**: in Truhen nur noch wenige Bronzemünzen, Banditen geben
 > weniger. **Schwerere Rezepte** für die eigene Ausrüstung: Stahlwerkzeug braucht den beschlagenen Griff, Rüstungen
 > ein Lederpolster, Schuppenrüstungen das passende Stück Stahlrüstung darunter, Stahl zwei Eisenbarren.
-> Neu in 0.16: **Bauen kostet Baustoffe** – jedes Gebäude braucht Holz, Stein und Metall (eine Einheit je Block). Der
+> In 0.16: **Bauen kostet Baustoffe** – jedes Gebäude braucht Holz, Stein und Metall (eine Einheit je Block). Der
 > Baumeister holt sie aus dem **Lager** (Truhen und Fässer am Stadtbanner und im neuen **Lagerhaus**) und wartet, wenn
 > etwas fehlt; das Stadtfenster zeigt Vorrat, Kosten und was fehlt. **Abends bringen Bauern, Holzfäller und Bergleute
 > alles ins Lager**, was sie gesammelt haben – so lassen sich alle Baustoffe von den eigenen Bürgern erwirtschaften.
@@ -68,9 +68,21 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > sind behoben. Und die **Erzmagier sperren dich ein**: Sobald der Kampf beginnt, versiegelt ein Bannsiegel in der Farbe
 > seines Elements das Treppenloch, im Sanktum lässt sich nichts abbauen oder sprengen, keine Enderperle trägt hinaus –
 > erst sein Sieg löst das Siegel.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (151 GameTests).
-> **Als Nächstes:** Häuser in mehreren zufälligen, schöneren Entwürfen, Söldner aus den Dörfern (am Tisch
-> aufwertbar), verschiedene Dorfanlagen – danach Golems und die übrigen Dorfwesen, zuletzt Nether und End.
+> Neu in 0.17: **Jedes Gebäude der Siedlung gibt es in mehreren Entwürfen** – zusammen 28 –, und welcher gebaut wird,
+> entscheidet der Zufall, wenn du den Bauplan nimmst (der Plan zeigt den Entwurf und seine Baustoffe). Neu sind unter
+> anderem die **Steinkate** mit Krüppelwalmdach, offenem Kamin und Holzstapel, das **Haus mit Giebelvorbau** in
+> Lehmputz, das **zweigeschossige Haus** mit Walmdach und vorkragendem Fachwerk, das **Treppengiebelhaus** aus Kalkstein,
+> das **Kaufmannshaus** mit Doppelgiebel, Ladenfenster und Markise, der **Gasthof mit Biergarten**, die **Sägehütte**,
+> die **Feldsteinscheune** mit Heuboden, der **Ziehbrunnen**, die **Steinschmiede** mit hohem Essenschornstein, das
+> **Förderhaus** mit Fördergerüst und Stollen, die **Markthalle** auf Steinsäulen mit Marktglocke, das **Wachhaus mit
+> Turm**, das **Gelehrtenhaus mit Aussichtsturm** und Fernrohr und der **Gemüsegarten** mit Geräteschuppen. Dächer
+> setzen sich jetzt aus mehreren Dachkörpern zusammen (mit Kehlen, Graten, Zwerchgiebeln und Krüppelwalmen), dazu
+> Blumenkästen, Fensterbänke, Laternen an Auslegern und Inneneinrichtungen, die zusammenpassen (Küche am Schornstein,
+> Schlafkammer, Stube). Jeder Entwurf wird automatisch gebaut, begangen und geprüft – dabei fielen auch in den alten
+> Gebäuden Laternen und Kronleuchter auf, die frei in der Luft hingen; sie hängen jetzt an Balken.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
+> **Als Nächstes:** Söldner aus den Dörfern (am Tisch aufwertbar), verschiedene Dorfanlagen – danach Golems und die
+> übrigen Dorfwesen, zuletzt Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -127,7 +139,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.16.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.17.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -135,7 +147,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.16.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.17.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -497,7 +509,8 @@ haben es auf sie abgesehen.
 | Wirt | 6 Silber | Taverne | verkauft Essen, Bier, Wein, Met und das Festmahl |
 | Kartograf | 1 Gold | Kartenhaus | zeichnet Karten zum Siegelkreis und zu Drachennestern |
 
-**Bauen:** Im Stadtfenster nimmst du einen **Bauplan**; mit ihm in der Hand zeigen Lichtpunkte den Umriss, Rechtsklick
+**Bauen:** Im Stadtfenster nimmst du einen **Bauplan** – er trägt einen der Entwürfe des Gebäudes, zufällig gewählt
+(Tooltip: Name des Entwurfs und seine Baustoffe); mit ihm in der Hand zeigen Lichtpunkte den Umriss, Rechtsklick
 auf den Boden richtet die Baustelle ein (Schleichen + Rechtsklick dreht den Plan). Der **Baumeister** räumt den Platz,
 legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Staub. Er arbeitet immer aus der Nähe (nie
 dort, wo später noch etwas hinkommt, damit er sich nicht einmauert) und stellt sich an hohen Mauern ein **Baugerüst** auf,
@@ -513,10 +526,10 @@ neben Erz vor allem Stein, der Holzfäller liefert Stämme.
 
 | Stufe (ab Bewohnern) | Gebäude |
 |---|---|
-| Lager (0) | Wohnhaus (2 Betten), Feld, Holzfällerhütte, Lagerhaus |
-| Weiler (4) | Brunnen, Schmiede |
-| Dorf (8) | Mine, Markt, Taverne |
-| Marktflecken (14) | Bürgerhaus (4 Betten), Kaserne, Kartenhaus |
+| Lager (0) | Wohnhaus (2 Betten; 4 Entwürfe), Feld (2), Holzfällerhütte (2), Lagerhaus (2) |
+| Weiler (4) | Brunnen (2), Schmiede (2) |
+| Dorf (8) | Mine (2), Markt (2), Taverne (2) |
+| Marktflecken (14) | Bürgerhaus (4 Betten; 3 Entwürfe), Kaserne (2), Kartenhaus (2) |
 | Stadt (22) | Thronsaal |
 
 **Ansehen** gewinnst du durch Anheuern, fertige Gebäude, Handel, besiegte Monster in deiner Siedlung und vor allem durch
@@ -835,7 +848,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.16.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.17.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

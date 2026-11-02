@@ -118,7 +118,7 @@ public final class Coronation {
         }
         for (Town.Building b : town.buildings()) {
             if (b.type() == BuildingType.THRONE_HALL) {
-                for (BlockPos mark : b.type().blueprint().marks()) {
+                for (BlockPos mark : b.plan().marks()) {
                     if (b.world(mark).equals(throne)) {
                         return true;
                     }

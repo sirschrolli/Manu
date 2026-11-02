@@ -294,14 +294,14 @@ public final class TownManager {
     }
 
     /** Prüft einen Bauplatz (ohne zu bezahlen); {@code PLACED} heißt: hier darf gebaut werden. */
-    public static PlaceResult check(ServerLevel level, Town town, BuildingType type, BlockPos origin, Rotation rotation) {
+    public static PlaceResult check(ServerLevel level, Town town, BuildingType type, int design, BlockPos origin, Rotation rotation) {
         if (town.tier().ordinal() < type.tier().ordinal()) {
             return PlaceResult.TIER;
         }
         if (town.projects().size() >= 3) {
             return PlaceResult.LIMIT;
         }
-        Blueprint plan = type.blueprint();
+        Blueprint plan = type.blueprint(design);
         BoundingBox box = plan.worldBounds(origin, rotation);
         for (BlockPos corner : new BlockPos[] {new BlockPos(box.minX(), origin.getY(), box.minZ()),
                 new BlockPos(box.maxX(), origin.getY(), box.maxZ()), new BlockPos(box.minX(), origin.getY(), box.maxZ()),
@@ -336,8 +336,13 @@ public final class TownManager {
         return PlaceResult.PLACED;
     }
 
-    /** Richtet eine Baustelle ein (bezahlt den Bau); der Baumeister beginnt dann zu bauen. */
+    /** Richtet eine Baustelle ein (bezahlt den Bau; erster Entwurf); der Baumeister beginnt dann zu bauen. */
     public static PlaceResult placeProject(ServerPlayer player, BuildingType type, BlockPos origin, Rotation rotation) {
+        return placeProject(player, type, 0, origin, rotation);
+    }
+
+    /** Richtet eine Baustelle für einen Entwurf ein (bezahlt den Bau); der Baumeister beginnt dann zu bauen. */
+    public static PlaceResult placeProject(ServerPlayer player, BuildingType type, int design, BlockPos origin, Rotation rotation) {
         ServerLevel level = player.level();
         Towns towns = Towns.of(level.getServer());
         Town town = towns.byOwner(player.getUUID());
@@ -347,7 +352,7 @@ public final class TownManager {
         if (!town.dimension().equals(level.dimension())) {
             return PlaceResult.OUTSIDE;
         }
-        PlaceResult result = check(level, town, type, origin, rotation);
+        PlaceResult result = check(level, town, type, design, origin, rotation);
         if (result != PlaceResult.PLACED) {
             return result;
         }
@@ -355,7 +360,7 @@ public final class TownManager {
         if (!Coins.pay(player, price)) {
             return PlaceResult.NOT_ENOUGH;
         }
-        town.addProject(new Town.Project(type, origin, rotation, 0));
+        town.addProject(new Town.Project(type, origin, rotation, 0, design));
         towns.save(level.getServer());
         level.playSound(null, origin, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f);
         boolean builder = town.count(Profession.BUILDER) > 0;
@@ -364,7 +369,7 @@ public final class TownManager {
                 builder ? ChatFormatting.GREEN : ChatFormatting.GOLD));
         if (type.costsMaterials()) {
             // was der Bau an Baustoffen braucht und was davon im Lager liegt
-            int[] costs = type.costs();
+            int[] costs = type.costs(design);
             int[] stock = TownStorage.counts(level, town);
             Component[] parts = new Component[Material.values().length];
             for (Material m : Material.values()) {
@@ -385,10 +390,10 @@ public final class TownManager {
         }
         town.removeProject(project);
         clearScaffolds(level, project.bounds());
-        town.addBuilding(new Town.Building(project.type, project.origin, project.rotation));
+        town.addBuilding(new Town.Building(project.type, project.origin, project.rotation, project.design));
         assignHomes(level, town);
         Towns.of(level.getServer()).save(level.getServer());
-        BlockPos door = Blueprint.world(project.origin, project.rotation, project.type.blueprint().entrance());
+        BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
         celebrate(level, door);
         ServerPlayer owner = level.getServer().getPlayerList().getPlayer(town.owner());
         if (owner != null) {
@@ -400,7 +405,12 @@ public final class TownManager {
 
     /** Richtet eine Baustelle ohne Preis und ohne Prüfung der Stufe ein (Befehle, Tests). */
     public static Town.Project startProject(ServerLevel level, Town town, BuildingType type, BlockPos origin, Rotation rotation) {
-        Town.Project project = new Town.Project(type, origin, rotation, 0);
+        return startProject(level, town, type, 0, origin, rotation);
+    }
+
+    /** Wie {@link #startProject(ServerLevel, Town, BuildingType, BlockPos, Rotation)}, für einen bestimmten Entwurf. */
+    public static Town.Project startProject(ServerLevel level, Town town, BuildingType type, int design, BlockPos origin, Rotation rotation) {
+        Town.Project project = new Town.Project(type, origin, rotation, 0, design);
         town.addProject(project);
         Towns.of(level.getServer()).save(level.getServer());
         return project;
@@ -424,8 +434,13 @@ public final class TownManager {
 
     /** Baut einen Plan sofort (Kreativmodus, Befehle, Tests). */
     public static void buildInstantly(ServerLevel level, Town town, BuildingType type, BlockPos origin, Rotation rotation) {
-        type.blueprint().placeAll(level, origin, rotation);
-        town.addBuilding(new Town.Building(type, origin, rotation));
+        buildInstantly(level, town, type, 0, origin, rotation);
+    }
+
+    /** Baut einen Entwurf sofort. */
+    public static void buildInstantly(ServerLevel level, Town town, BuildingType type, int design, BlockPos origin, Rotation rotation) {
+        type.blueprint(design).placeAll(level, origin, rotation);
+        town.addBuilding(new Town.Building(type, origin, rotation, design));
         assignHomes(level, town);
         Towns.of(level.getServer()).save(level.getServer());
     }

@@ -173,7 +173,7 @@ final class Jobs {
         /** Bringt alles in die Truhe der Werkstatt; {@code true}, wenn abgeliefert (oder keine Truhe da ist). */
         boolean deliver() {
             Town.Building work = this.workplace();
-            BlockPos chestLocal = work == null ? null : work.type().blueprint().chest();
+            BlockPos chestLocal = work == null ? null : work.plan().chest();
             if (work == null || chestLocal == null) {
                 return true;
             }
@@ -241,7 +241,7 @@ final class Jobs {
             this.citizen.setWorking(false);
             if (!this.collected) {
                 Town.Building work = this.workplace();
-                BlockPos chestLocal = work == null ? null : work.type().blueprint().chest();
+                BlockPos chestLocal = work == null ? null : work.plan().chest();
                 if (work == null || chestLocal == null) {
                     this.collected = true;
                     return true;
@@ -744,7 +744,7 @@ final class Jobs {
         }
 
         private BlockPos entrance(Town.Project project) {
-            BlockPos door = Blueprint.world(project.origin, project.rotation, project.type.blueprint().entrance());
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
             BlockPos spot = standingSpot(this.level(), door);
             return spot != null ? spot : door;
         }
@@ -996,7 +996,7 @@ final class Jobs {
         private @Nullable Place newScaffold(Town.Project project, BlockPos at, BlockPos feet, net.minecraft.world.level.levelgen.structure.BoundingBox box,
                 List<BlockPos> upcoming) {
             int progress = project.progress;
-            BlockPos door = Blueprint.world(project.origin, project.rotation, project.type.blueprint().entrance());
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
             int top = at.getY() - 2;   // Füße oben auf dem Gerüst
             Place best = null;
             double bestScore = Double.MAX_VALUE;
@@ -1200,7 +1200,7 @@ final class Jobs {
             if (field == null) {
                 return crops;
             }
-            for (Blueprint.Entry e : field.type().blueprint().blocks()) {
+            for (Blueprint.Entry e : field.plan().blocks()) {
                 if (e.state().getBlock() instanceof CropBlock) {
                     crops.add(field.world(e.pos()));
                 }
@@ -1295,7 +1295,7 @@ final class Jobs {
             if (field == null) {
                 return null;
             }
-            for (Blueprint.Entry e : field.type().blueprint().blocks()) {
+            for (Blueprint.Entry e : field.plan().blocks()) {
                 if (field.world(e.pos()).equals(world) && e.state().getBlock() instanceof CropBlock) {
                     return e.state().getBlock();
                 }
@@ -1583,9 +1583,10 @@ final class Jobs {
             if (mine == null) {
                 return;
             }
-            Blueprint plan = mine.type().blueprint();
-            BlockPos top = mine.world(new BlockPos(0, 1, 1));
-            BlockPos bottom = mine.world(new BlockPos(0, -11, 1));
+            Blueprint plan = mine.plan();
+            BlockPos top = mine.world(plan.anchor("shaft_top", new BlockPos(0, 1, 1)));
+            BlockPos bottom = mine.world(plan.anchor("shaft_bottom", new BlockPos(0, -11, 1)));
+            BlockPos entry = mine.world(plan.anchor("shaft_entry", new BlockPos(0, 1, 2)));
             BlockPos spot = plan.workSpot() != null ? mine.world(plan.workSpot()) : bottom;
             boolean endOfDay = CitizenGoals.time(this.citizen) > 10500;
             // oben angekommen: abends alles ins Lager
@@ -1595,7 +1596,7 @@ final class Jobs {
             switch (this.phase) {
                 case TO_SHAFT -> {
                     this.citizen.setWorking(false);
-                    if (this.walkTo(mine.world(new BlockPos(0, 1, 2)), 1.2, 0.8)) {
+                    if (this.walkTo(entry, 1.2, 0.8)) {
                         this.phase = Phase.DOWN;
                     }
                 }
@@ -1633,8 +1634,7 @@ final class Jobs {
                         return;
                     }
                     if (this.climb(bottom, top, 0.18)) {
-                        this.citizen.teleportTo(mine.world(new BlockPos(0, 1, 2)).getX() + 0.5, top.getY(),
-                                mine.world(new BlockPos(0, 1, 2)).getZ() + 0.5);
+                        this.citizen.teleportTo(entry.getX() + 0.5, top.getY(), entry.getZ() + 0.5);
                         this.phase = Phase.DELIVER;
                     }
                 }
@@ -1716,7 +1716,7 @@ final class Jobs {
             if (shop == null || town == null) {
                 return null;
             }
-            Blueprint plan = shop.type().blueprint();
+            Blueprint plan = shop.plan();
             // der wievielte Bürger in dieser Werkstatt bin ich?
             int me = 0;
             int i = 0;
@@ -1755,7 +1755,7 @@ final class Jobs {
             this.work++;
             if (this.profession() == Profession.SMITH && shop != null) {
                 // am Amboss hämmern
-                BlockPos anvil = shop.world(new BlockPos(0, 1, -2));
+                BlockPos anvil = shop.world(shop.plan().anchor("anvil", new BlockPos(0, 1, -2)));
                 this.citizen.setWorking(true);
                 this.lookAt(anvil);
                 if (this.work % 20 == 0) {

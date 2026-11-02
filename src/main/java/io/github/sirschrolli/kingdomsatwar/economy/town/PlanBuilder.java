@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.economy.town;
 
+import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,9 @@ final class PlanBuilder {
     private final List<BlockPos> footprint = new ArrayList<>();
     private final List<BlockPos> beds = new ArrayList<>();
     private final List<BlockPos> marks = new ArrayList<>();
+    private final Map<String, BlockPos> anchors = new LinkedHashMap<>();
+    private final List<RoofPart> roofParts = new ArrayList<>();
+    private final Map<Long, Integer> roofTops = new HashMap<>();
     private BlockState foundation = Blocks.COBBLESTONE.defaultBlockState();
     private @Nullable BlockPos chest;
     private @Nullable BlockPos work;
@@ -128,6 +133,12 @@ final class PlanBuilder {
 
     PlanBuilder mark(int x, int y, int z) {
         this.marks.add(new BlockPos(x, y, z));
+        return this;
+    }
+
+    /** Eine benannte Stelle, die ein Beruf braucht (z. B. der Schacht der Mine oder der Amboss der Schmiede). */
+    PlanBuilder anchor(String name, int x, int y, int z) {
+        this.anchors.put(name, new BlockPos(x, y, z));
         return this;
     }
 
@@ -279,7 +290,143 @@ final class PlanBuilder {
         }
     }
 
+    // ---------------------------------------------------------------- Dächer aus mehreren Dachkörpern
+
+    /** Form eines Dachkörpers. Z: First entlang z (Giebel vorn und hinten), X: First entlang x (Giebel links und rechts). */
+    enum RoofShape { GABLE_Z, GABLE_X, HIP, HALF_HIP_Z, HALF_HIP_X }
+
+    /**
+     * Ein Dachkörper über den Wänden (x0..x1, z0..z1): Traufe auf Höhe {@code y}, ein Block Überstand ringsum, je Block
+     * Abstand zur Traufe {@code pitch} Blöcke höher. {@code gable} füllt Giebeldreiecke und den Kranz über den Wänden
+     * ({@code null}: offenes Dach auf Pfosten). Beim Krüppelwalm steigt der Giebel {@code hipAt} Blöcke, dann ist er
+     * abgewalmt.
+     */
+    record RoofPart(RoofShape shape, int x0, int z0, int x1, int z1, int y, int pitch, int hipAt, Block stairs, BlockState ridge,
+            @Nullable BlockState gable) {
+        boolean covers(int x, int z) {
+            return x >= this.x0 - 1 && x <= this.x1 + 1 && z >= this.z0 - 1 && z <= this.z1 + 1;
+        }
+
+        boolean onWall(int x, int z) {
+            return x >= this.x0 && x <= this.x1 && z >= this.z0 && z <= this.z1
+                    && (x == this.x0 || x == this.x1 || z == this.z0 || z == this.z1);
+        }
+
+        /** Abstand zur Traufe (in Blöcken) und die Richtung, in die die Dachtreppe dort ansteigt ({@code null}: First). */
+        Slope slope(int x, int z) {
+            int w = x - (this.x0 - 1);
+            int e = this.x1 + 1 - x;
+            int n = z - (this.z0 - 1);
+            int s = this.z1 + 1 - z;
+            int k = this.hipAt;
+            int[] d = switch (this.shape) {
+                case GABLE_Z -> new int[] {w, e, Integer.MAX_VALUE, Integer.MAX_VALUE};
+                case GABLE_X -> new int[] {Integer.MAX_VALUE, Integer.MAX_VALUE, n, s};
+                case HIP -> new int[] {w, e, n, s};
+                case HALF_HIP_Z -> new int[] {w, e, n + k, s + k};
+                case HALF_HIP_X -> new int[] {w + k, e + k, n, s};
+            };
+            int min = Math.min(Math.min(d[0], d[1]), Math.min(d[2], d[3]));
+            boolean west = d[0] == min;
+            boolean east = d[1] == min;
+            boolean north = d[2] == min;
+            boolean south = d[3] == min;
+            Direction up;
+            if (west && east || north && south) {
+                up = null;
+            } else if (west) {
+                up = Direction.EAST;
+            } else if (east) {
+                up = Direction.WEST;
+            } else if (north) {
+                up = Direction.SOUTH;
+            } else {
+                up = Direction.NORTH;
+            }
+            return new Slope(min, up);
+        }
+
+        int height(int x, int z) {
+            return this.y + this.pitch * this.slope(x, z).distance();
+        }
+    }
+
+    record Slope(int distance, @Nullable Direction up) {}
+
+    /** Ein Dachkörper (Material aus einem Dachziegel-Satz), noch nicht gesetzt – siehe {@link #roofs()}. */
+    PlanBuilder roof(RoofShape shape, int x0, int z0, int x1, int z1, int y, BuildingSet set, @Nullable BlockState gable) {
+        return this.roof(shape, x0, z0, x1, z1, y, 1, 2, set, gable);
+    }
+
+    PlanBuilder roof(RoofShape shape, int x0, int z0, int x1, int z1, int y, int pitch, int hipAt, BuildingSet set, @Nullable BlockState gable) {
+        this.roofParts.add(new RoofPart(shape, Math.min(x0, x1), Math.min(z0, z1), Math.max(x0, x1), Math.max(z0, z1), y, pitch, hipAt,
+                set.stairs().get(), set.base().get().defaultBlockState(), gable));
+        return this;
+    }
+
+    /**
+     * Setzt alle angemeldeten Dachkörper zusammen: an jeder Stelle gilt das höchste Dach (so entstehen Kehlen, wo zwei
+     * Dächer zusammenstoßen, und die Treppen bilden beim Bauen ihre Ecken). Unter dem Dach werden Giebel und der Kranz
+     * über den Wänden gefüllt. Gibt die Höhe des höchsten Firsts zurück.
+     */
+    int roofs() {
+        Map<Long, RoofPart> owner = new HashMap<>();
+        Map<Long, Integer> top = new HashMap<>();
+        for (RoofPart part : this.roofParts) {
+            for (int x = part.x0 - 1; x <= part.x1 + 1; x++) {
+                for (int z = part.z0 - 1; z <= part.z1 + 1; z++) {
+                    long key = BlockPos.asLong(x, 0, z);
+                    int h = part.height(x, z);
+                    Integer old = top.get(key);
+                    if (old == null || h > old) {
+                        top.put(key, h);
+                        owner.put(key, part);
+                    }
+                }
+            }
+        }
+        int max = Integer.MIN_VALUE;
+        for (Map.Entry<Long, RoofPart> e : owner.entrySet()) {
+            long key = e.getKey();
+            RoofPart part = e.getValue();
+            int x = BlockPos.getX(key);
+            int z = BlockPos.getZ(key);
+            int h = top.get(key);
+            Slope slope = part.slope(x, z);
+            int fillTo = h - 1;
+            if (slope.up() == null) {
+                this.set(x, h, z, part.ridge);
+            } else {
+                this.set(x, h, z, stairs(part.stairs, slope.up(), Half.BOTTOM));
+            }
+            if (part.pitch > 1 && slope.distance() > 0) {
+                for (int y = h - part.pitch + 1; y < h; y++) {
+                    this.set(x, y, z, part.ridge);
+                }
+                fillTo = h - part.pitch;
+            }
+            if (part.gable != null && part.onWall(x, z)) {
+                for (int y = part.y; y <= fillTo; y++) {
+                    this.set(x, y, z, part.gable);
+                }
+            }
+            this.roofTops.put(key, h);
+            max = Math.max(max, h);
+        }
+        this.roofParts.clear();
+        return max;
+    }
+
+    /** Höhe des Dachs über einer Spalte (nach {@link #roofs()}), sonst {@link Integer#MIN_VALUE}. */
+    int roofTop(int x, int z) {
+        return this.roofTops.getOrDefault(BlockPos.asLong(x, 0, z), Integer.MIN_VALUE);
+    }
+
     Blueprint build() {
-        return new Blueprint(this.plan, this.footprint, this.foundation, this.beds, this.chest, this.work, this.entrance, this.marks);
+        if (!this.roofParts.isEmpty()) {
+            this.roofs();
+        }
+        return new Blueprint(this.plan, this.footprint, this.foundation, this.beds, this.chest, this.work, this.entrance, this.marks,
+                this.anchors);
     }
 }

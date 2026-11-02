@@ -39,7 +39,10 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 HireView::new);
     }
 
-    /** Bauen: Preis, wie viele stehen, ob die Stufe reicht, und die Baustoffe (Einheiten je {@link Material}). */
+    /**
+     * Bauen: Preis, wie viele stehen, ob die Stufe reicht, und die Baustoffe (Einheiten je {@link Material}: erst das
+     * Höchste, dann das Wenigste, was einer der Entwürfe braucht).
+     */
     public record BuildView(int price, int count, boolean allowed, List<Integer> costs) {
         static final StreamCodec<RegistryFriendlyByteBuf, BuildView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, BuildView::price,
@@ -48,8 +51,15 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()), BuildView::costs,
                 BuildView::new);
 
+        /** Höchstens so viel braucht ein Entwurf. */
         public int cost(Material material) {
             return material.ordinal() < this.costs.size() ? this.costs.get(material.ordinal()) : 0;
+        }
+
+        /** Mindestens so viel braucht ein Entwurf. */
+        public int minCost(Material material) {
+            int i = Material.values().length + material.ordinal();
+            return i < this.costs.size() ? this.costs.get(i) : this.cost(material);
         }
     }
 
@@ -134,7 +144,7 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         List<BuildView> builds = new ArrayList<>();
         for (BuildingType type : BuildingType.values()) {
             builds.add(new BuildView(TownManager.buildPrice(town, type, player), town.count(type),
-                    town.tier().ordinal() >= type.tier().ordinal(), ints(type.costs())));
+                    town.tier().ordinal() >= type.tier().ordinal(), ints(concat(type.maxCosts(), type.minCosts()))));
         }
         List<ProjectView> projects = new ArrayList<>();
         for (Town.Project p : town.projects()) {
@@ -145,6 +155,12 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         return new TownView(town.name(), town.ownerName(), town.owner().equals(player.getUUID()), town.tier().ordinal(), town.capacity(),
                 town.radius(), Reputation.points(player), town.crowned(), town.queen(), residents, hires, builds, projects,
                 Coronation.requirements(player, town), storage, ints(stock));
+    }
+
+    private static int[] concat(int[] a, int[] b) {
+        int[] out = java.util.Arrays.copyOf(a, a.length + b.length);
+        System.arraycopy(b, 0, out, a.length, b.length);
+        return out;
     }
 
     private static List<Integer> ints(int[] values) {

@@ -161,8 +161,36 @@ final class TownGameTests {
 
     /** Ursprung eines Plans, sodass sein Grundriss mit der Mitte bei (x, z) liegt. */
     private static BlockPos originFor(GameTestHelper helper, BuildingType type, int x, int z) {
-        BoundingBox b = type.blueprint().bounds();
+        return originFor(helper, type.blueprint(), x, z);
+    }
+
+    private static BlockPos originFor(GameTestHelper helper, Blueprint plan, int x, int z) {
+        BoundingBox b = plan.bounds();
         return helper.absolutePos(new BlockPos(x - (b.minX() + b.maxX()) / 2, ground(helper), z - (b.minZ() + b.maxZ()) / 2));
+    }
+
+    /**
+     * Räumt die Testfläche: über dem Boden alles weg, darunter (Fundamente, Schächte, Brunnen) wieder der Boden aus der
+     * Testfläche – damit jeder Entwurf auf frischem Boden steht.
+     */
+    private static void clearArea(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        int ground = ground(helper);
+        BlockState floor = helper.getBlockState(new BlockPos(1, ground - 1, 1));
+        BlockState air = Blocks.AIR.defaultBlockState();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = 0; x < 48; x++) {
+            for (int z = 0; z < 48; z++) {
+                for (int y = ground - 14; y <= ground + 30; y++) {
+                    BlockPos abs = helper.absolutePos(new BlockPos(x, y, z));
+                    pos.set(abs);
+                    BlockState want = y < ground ? floor : air;
+                    if (!level.getBlockState(pos).equals(want)) {
+                        level.setBlock(pos, want, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_SUPPRESS_DROPS);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -281,43 +309,91 @@ final class TownGameTests {
     // Baupläne
     // =====================================================================================
 
-    /** Jedes Gebäude lässt sich vollständig setzen; Betten, Truhen, Eingang und Bauablauf stimmen; die Drehungen auch. */
+    /**
+     * Jeder Entwurf jedes Gebäudes lässt sich vollständig setzen; Betten, Truhen, Eingang und Bauablauf stimmen, alles ist
+     * begehbar und verbunden; Wohn- und Bürgerhäuser auch in allen vier Drehungen.
+     */
     private static void townBlueprints(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
+        // alle Entwürfe prüfen und die Fehler sammeln, statt beim ersten aufzuhören
+        List<String> problems = new java.util.ArrayList<>();
         for (BuildingType type : BuildingType.values()) {
-            Blueprint plan = type.blueprint();
+          for (int design = 0; design < type.designs(); design++) {
+            Blueprint plan = type.blueprint(design);
+            String what = type.id() + (type.designs() > 1 ? " (Entwurf " + design + ")" : "");
             BoundingBox b = plan.bounds();
-            helper.assertTrue(!plan.blocks().isEmpty(), type.id() + ": leerer Bauplan");
-            helper.assertTrue(b.getXSpan() <= 46 && b.getZSpan() <= 46 && b.maxY() < 28, type.id() + ": zu groß für die Testfläche " + b);
-            helper.assertValueEqual(plan.beds().size(), type.beds(), type.id() + ": Betten");
-            if (type == BuildingType.FIELD || type == BuildingType.LUMBER_HUT || type == BuildingType.MINE) {
-                helper.assertTrue(plan.chest() != null, type.id() + ": Truhe für die Arbeit fehlt");
+            clearArea(helper);
+            try {
+            helper.assertTrue(!plan.blocks().isEmpty(), what + ": leerer Bauplan");
+            helper.assertTrue(b.getXSpan() <= 46 && b.getZSpan() <= 46 && b.maxY() < 28, what + ": zu groß für die Testfläche " + b);
+            helper.assertValueEqual(plan.beds().size(), type.beds(), what + ": Betten");
+            if (type == BuildingType.FIELD || type == BuildingType.LUMBER_HUT || type == BuildingType.MINE || type == BuildingType.STOREHOUSE
+                    || type == BuildingType.MARKET || type == BuildingType.SMITHY) {
+                helper.assertTrue(plan.chest() != null, what + ": Truhe für die Arbeit fehlt");
             }
-            helper.assertTrue(b.inflatedBy(1).isInside(plan.entrance()), type.id() + ": Eingang außerhalb");
-            BlockPos origin = originFor(helper, type, 24, 24);
-            helper.assertTrue(!plan.steps(origin, Rotation.NONE).isEmpty(), type.id() + ": kein Bauablauf");
+            if (type.jobs() > 0) {
+                helper.assertTrue(plan.workSpot() != null, what + ": kein Arbeitsplatz");
+            }
+            helper.assertTrue(b.inflatedBy(1).isInside(plan.entrance()), what + ": Eingang außerhalb");
+            BlockPos origin = originFor(helper, plan, 24, 24);
+            helper.assertTrue(!plan.steps(origin, Rotation.NONE).isEmpty(), what + ": kein Bauablauf");
             plan.placeAll(level, origin, Rotation.NONE);
-            helper.assertTrue(plan.complete(level, origin, Rotation.NONE), type.id() + ": nach dem Bauen unvollständig");
-            assertConnected(helper, plan, origin, Rotation.NONE, type.id());
-            assertWalkable(helper, plan, origin, Rotation.NONE, type.id());
+            helper.assertTrue(plan.complete(level, origin, Rotation.NONE), what + ": nach dem Bauen unvollständig");
+            assertConnected(helper, plan, origin, Rotation.NONE, what);
+            assertWalkable(helper, plan, origin, Rotation.NONE, what);
+            assertStanding(helper, plan, origin, Rotation.NONE, what);
             for (BlockPos bed : plan.beds()) {
                 helper.assertTrue(level.getBlockState(Blueprint.world(origin, Rotation.NONE, bed)).getBlock()
-                        instanceof net.minecraft.world.level.block.BedBlock, type.id() + ": Bett fehlt bei " + bed);
+                        instanceof net.minecraft.world.level.block.BedBlock, what + ": Bett fehlt bei " + bed);
             }
             if (plan.chest() != null) {
                 helper.assertTrue(level.getBlockEntity(Blueprint.world(origin, Rotation.NONE, plan.chest()))
-                        instanceof net.minecraft.world.Container, type.id() + ": Truhe ist kein Behälter");
+                        instanceof net.minecraft.world.Container, what + ": Truhe ist kein Behälter");
+            }
+            } catch (RuntimeException e) {
+                problems.add(e.getMessage());
+                KingdomsAtWar.LOGGER.error("[Baupläne] {}", e.getMessage());
+            }
+          }
+        }
+        // Drehungen: alle Wohn- und Bürgerhäuser in allen vier Richtungen
+        for (BuildingType type : new BuildingType[] {BuildingType.HOUSE, BuildingType.TOWNHOUSE}) {
+            for (int design = 0; design < type.designs(); design++) {
+                Blueprint plan = type.blueprint(design);
+                for (Rotation rotation : Rotation.values()) {
+                    clearArea(helper);
+                    BlockPos origin = originFor(helper, plan, 24, 24);
+                    String what = type.id() + " (Entwurf " + design + ") gedreht " + rotation;
+                    try {
+                        plan.placeAll(level, origin, rotation);
+                        helper.assertTrue(plan.complete(level, origin, rotation), what + " unvollständig");
+                        assertConnected(helper, plan, origin, rotation, what);
+                        assertWalkable(helper, plan, origin, rotation, what);
+                    } catch (RuntimeException e) {
+                        problems.add(e.getMessage());
+                        KingdomsAtWar.LOGGER.error("[Baupläne] {}", e.getMessage());
+                    }
+                }
             }
         }
-        // Drehungen: das Haus in allen vier Richtungen
-        for (Rotation rotation : Rotation.values()) {
-            BlockPos origin = originFor(helper, BuildingType.HOUSE, 24, 24);
-            BuildingType.HOUSE.blueprint().placeAll(level, origin, rotation);
-            helper.assertTrue(BuildingType.HOUSE.blueprint().complete(level, origin, rotation), "Haus gedreht " + rotation + " unvollständig");
-            assertConnected(helper, BuildingType.HOUSE.blueprint(), origin, rotation, "Haus gedreht " + rotation);
-            assertWalkable(helper, BuildingType.HOUSE.blueprint(), origin, rotation, "Haus gedreht " + rotation);
-        }
+        clearArea(helper);
+        helper.assertTrue(problems.isEmpty(), problems.size() + " Fehler in den Bauplänen: " + String.join(" ¦ ", problems));
         helper.succeed();
+    }
+
+    /**
+     * Was im Plan steht, bleibt auch stehen: Pflanzen, Laternen, Leitern, Ketten, Kronleuchter, Banner und Glocken haben
+     * nach dem Bauen ihren Halt (sonst wären sie gleich wieder abgefallen).
+     */
+    static void assertStanding(GameTestHelper helper, Blueprint plan, BlockPos origin, Rotation rotation, String what) {
+        ServerLevel level = helper.getLevel();
+        for (Blueprint.Entry e : plan.blocks()) {
+            BlockPos pos = Blueprint.world(origin, rotation, e.pos());
+            BlockState state = level.getBlockState(pos);
+            if (!state.isAir() && !state.canSurvive(level, pos)) {
+                helper.fail(what + ": " + state.getBlock().getName().getString() + " bei " + helper.relativePos(pos) + " hat keinen Halt");
+            }
+        }
     }
 
     /**
@@ -343,6 +419,16 @@ final class TownGameTests {
             BlockState state = level.getBlockState(head);
             BlockPos foot = state.getBlock() instanceof net.minecraft.world.level.block.BedBlock
                     ? head.relative(state.getValue(net.minecraft.world.level.block.BedBlock.FACING).getOpposite()) : head;
+            if (!(walk.reachesBlock(head) || walk.reachesBlock(foot)) && Boolean.getBoolean("kingdomsatwar.debugWalk")) {
+                BoundingBox box = plan.worldBounds(origin, rotation);
+                for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                    StringBuilder line = new StringBuilder("[Walk] z=" + (z - origin.getZ()) + ":");
+                    for (int x = box.minX(); x <= box.maxX(); x++) {
+                        line.append(" | ").append(x - origin.getX()).append(":").append(walk.column(x, z).replaceAll("^[^:]*:", ""));
+                    }
+                    KingdomsAtWar.LOGGER.info(line.toString());
+                }
+            }
             helper.assertTrue(walk.reachesBlock(head) || walk.reachesBlock(foot), what + ": Bett bei " + helper.relativePos(head)
                     + " nicht zu Fuß erreichbar (" + walk.explain() + ")");
         }
@@ -619,7 +705,20 @@ final class TownGameTests {
         // das Fenster zeigt das Lager
         TownView view = TownView.of(owner, town);
         helper.assertTrue(view.storage() && view.stock(Material.STONE) == 76, "Fenster: Lager falsch");
-        helper.assertValueEqual(view.builds().get(BuildingType.HOUSE.ordinal()).cost(Material.WOOD), BuildingType.HOUSE.costs()[0], "Fenster: Baukosten");
+        // die Baukosten im Fenster: das Meiste und das Wenigste, was einer der Entwürfe braucht
+        TownView.BuildView house = view.builds().get(BuildingType.HOUSE.ordinal());
+        helper.assertValueEqual(house.cost(Material.WOOD), BuildingType.HOUSE.maxCosts()[0], "Fenster: höchste Baukosten");
+        helper.assertValueEqual(house.minCost(Material.WOOD), BuildingType.HOUSE.minCosts()[0], "Fenster: niedrigste Baukosten");
+        helper.assertTrue(house.minCost(Material.STONE) < house.cost(Material.STONE), "Fenster: die Entwürfe kosten alle gleich viel Stein");
+        // jeder Entwurf kostet etwas anderes (sie unterscheiden sich wirklich)
+        for (BuildingType type : BuildingType.values()) {
+            for (int a = 0; a < type.designs(); a++) {
+                for (int b2 = a + 1; b2 < type.designs(); b2++) {
+                    helper.assertTrue(!java.util.Arrays.equals(type.blueprint(a).costs(), type.blueprint(b2).costs()),
+                            type.id() + ": Entwurf " + a + " und " + b2 + " sind gleich");
+                }
+            }
+        }
         clearTowns(server);
         leave(helper, owner);
         helper.succeed();

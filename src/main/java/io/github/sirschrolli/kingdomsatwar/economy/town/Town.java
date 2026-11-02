@@ -42,20 +42,30 @@ public final class Town {
         }
     }
 
-    /** Ein fertiges Gebäude (Ursprung und Drehung des Bauplans in der Welt). */
-    public record Building(BuildingType type, BlockPos origin, Rotation rotation) {
+    /** Ein fertiges Gebäude (Entwurf, Ursprung und Drehung des Bauplans in der Welt). */
+    public record Building(BuildingType type, BlockPos origin, Rotation rotation, int design) {
         public static final Codec<Building> CODEC = RecordCodecBuilder.create(i -> i.group(
                 BuildingType.CODEC.fieldOf("type").forGetter(Building::type),
                 BlockPos.CODEC.fieldOf("origin").forGetter(Building::origin),
-                Rotation.CODEC.fieldOf("rotation").forGetter(Building::rotation)
+                Rotation.CODEC.fieldOf("rotation").forGetter(Building::rotation),
+                Codec.INT.optionalFieldOf("design", 0).forGetter(Building::design)
         ).apply(i, Building::new));
+
+        public Building(BuildingType type, BlockPos origin, Rotation rotation) {
+            this(type, origin, rotation, 0);
+        }
+
+        /** Der Bauplan dieses Gebäudes (sein Entwurf). */
+        public Blueprint plan() {
+            return this.type.blueprint(this.design);
+        }
 
         public BlockPos world(BlockPos local) {
             return Blueprint.world(this.origin, this.rotation, local);
         }
 
         public BoundingBox bounds() {
-            return this.type.blueprint().worldBounds(this.origin, this.rotation);
+            return this.plan().worldBounds(this.origin, this.rotation);
         }
     }
 
@@ -65,28 +75,41 @@ public final class Town {
                 BuildingType.CODEC.fieldOf("type").forGetter(p -> p.type),
                 BlockPos.CODEC.fieldOf("origin").forGetter(p -> p.origin),
                 Rotation.CODEC.fieldOf("rotation").forGetter(p -> p.rotation),
-                Codec.INT.optionalFieldOf("progress", 0).forGetter(p -> p.progress)
+                Codec.INT.optionalFieldOf("progress", 0).forGetter(p -> p.progress),
+                Codec.INT.optionalFieldOf("design", 0).forGetter(p -> p.design)
         ).apply(i, Project::new));
 
         public final BuildingType type;
         public final BlockPos origin;
         public final Rotation rotation;
+        /** Welcher Entwurf gebaut wird (siehe {@link BuildingType#designs()}). */
+        public final int design;
         public int progress;
         /** Baustoff, auf den die Baustelle gerade wartet (nicht gespeichert; der Baumeister prüft es neu). */
         public @Nullable Material waiting;
                 /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
         private @Nullable List<Blueprint.Step> steps;
 
-        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress) {
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design) {
             this.type = type;
             this.origin = origin;
             this.rotation = rotation;
             this.progress = progress;
+            this.design = Math.floorMod(design, Math.max(1, type.designs()));
+        }
+
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress) {
+            this(type, origin, rotation, progress, 0);
+        }
+
+        /** Der Bauplan dieser Baustelle (ihr Entwurf). */
+        public Blueprint plan() {
+            return this.type.blueprint(this.design);
         }
 
         public List<Blueprint.Step> steps() {
             if (this.steps == null) {
-                this.steps = this.type.blueprint().steps(this.origin, this.rotation);
+                this.steps = this.plan().steps(this.origin, this.rotation);
             }
             return this.steps;
         }
@@ -108,7 +131,7 @@ public final class Town {
         }
 
         public BoundingBox bounds() {
-            return this.type.blueprint().worldBounds(this.origin, this.rotation);
+            return this.plan().worldBounds(this.origin, this.rotation);
         }
     }
 
@@ -298,7 +321,7 @@ public final class Town {
     public List<BlockPos> beds() {
         List<BlockPos> beds = new ArrayList<>();
         for (Building building : this.buildings) {
-            for (BlockPos bed : building.type().blueprint().beds()) {
+            for (BlockPos bed : building.plan().beds()) {
                 beds.add(building.world(bed));
             }
         }

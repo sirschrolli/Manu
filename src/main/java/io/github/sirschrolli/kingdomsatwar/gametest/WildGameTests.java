@@ -304,7 +304,8 @@ final class WildGameTests {
             level.addFreshEntity(mob);
             i++;
         }
-        helper.runAfterDelay(2, () -> {
+        // jeden Tick neu prüfen, bis alles ersetzt ist (bei voller Testlast kann es einen Tick länger dauern)
+        helper.succeedWhen(() -> {
             AABB box = arena(helper);
             Set<EntityType<?>> vanilla = vanillaTypes();
             helper.assertTrue(level.getEntitiesOfClass(Mob.class, box, m -> vanilla.contains(m.getType())).isEmpty(), "Vanilla-Wildtiere sind noch da");
@@ -329,9 +330,9 @@ final class WildGameTests {
             var llamas = level.getEntitiesOfClass(WildLlama.class, box);
             helper.assertTrue(llamas.size() == 1 && llamas.getFirst().getVariant() == Llama.Variant.BROWN, "Farbe des Lamas verloren");
             for (Class<? extends Mob> type : List.of(WildBee.class, WildBat.class, WildArmadillo.class, WildCamel.class)) {
-                helper.assertTrue(level.getEntitiesOfClass(type, box).size() == 1, "kein " + type.getSimpleName());
+                // Fledermaus und Biene fliegen gleich los: etwas weiter suchen
+                helper.assertTrue(level.getEntitiesOfClass(type, box.inflate(8.0)).size() == 1, "kein " + type.getSimpleName());
             }
-            helper.succeed();
         });
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +30,8 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Bauplan aus dem Stadtfenster: Rechtsklick auf den Boden richtet dort die Baustelle ein (der Eingang zeigt zum
- * Spieler), Schleichen + Rechtsklick dreht den Plan. Solange man ihn hält, zeigen Lichtpunkte den Umriss.
+ * Spieler), Schleichen + Rechtsklick dreht den Plan. Solange man ihn hält, zeigen Lichtpunkte den Umriss. Jeder Bauplan
+ * trägt einen der Entwürfe seines Gebäudes, der beim Nehmen zufällig gewählt wird.
  */
 public class BlueprintItem extends Item {
     public BlueprintItem(Item.Properties properties) {
@@ -37,9 +39,26 @@ public class BlueprintItem extends Item {
     }
 
     public static ItemStack of(BuildingType type) {
+        return of(type, 0);
+    }
+
+    public static ItemStack of(BuildingType type, int design) {
         ItemStack stack = new ItemStack(ModItems.BLUEPRINT.get());
         stack.set(ModDataComponents.BUILDING.get(), type);
+        stack.set(ModDataComponents.BUILD_DESIGN.get(), Math.floorMod(design, type.designs()));
         return stack;
+    }
+
+    /** Ein Bauplan mit zufällig gewähltem Entwurf. */
+    public static ItemStack random(BuildingType type, RandomSource random) {
+        return of(type, random.nextInt(type.designs()));
+    }
+
+    /** Welcher Entwurf (0, wenn der Plan keinen trägt). */
+    public static int design(ItemStack stack) {
+        BuildingType type = type(stack);
+        int design = stack.getOrDefault(ModDataComponents.BUILD_DESIGN.get(), 0);
+        return type == null ? 0 : Math.floorMod(design, type.designs());
     }
 
     public static @Nullable BuildingType type(ItemStack stack) {
@@ -97,9 +116,13 @@ public class BlueprintItem extends Item {
         if (player instanceof ServerPlayer serverPlayer) {
             BlockPos origin = origin(context.getClickedPos(), context.getClickedFace());
             Rotation rotation = rotation(player.getDirection(), turn(stack));
-            TownManager.PlaceResult result = TownManager.placeProject(serverPlayer, type, origin, rotation);
+            TownManager.PlaceResult result = TownManager.placeProject(serverPlayer, type, design(stack), origin, rotation);
             if (result == TownManager.PlaceResult.PLACED) {
                 stack.consume(1, player);
+                if (!stack.isEmpty() && type.designs() > 1) {
+                    // der nächste Plan vom Stapel zeigt wieder einen zufälligen Entwurf
+                    stack.set(ModDataComponents.BUILD_DESIGN.get(), serverPlayer.getRandom().nextInt(type.designs()));
+                }
             } else {
                 serverPlayer.sendOverlayMessage(Component.translatable(result.key()).withStyle(ChatFormatting.RED));
             }
@@ -108,8 +131,8 @@ public class BlueprintItem extends Item {
     }
 
     /** Umriss der Baustelle in der Welt (für die Vorschau). */
-    public static BoundingBox outline(BuildingType type, BlockPos origin, Rotation rotation) {
-        return type.blueprint().worldBounds(origin, rotation);
+    public static BoundingBox outline(ItemStack stack, BuildingType type, BlockPos origin, Rotation rotation) {
+        return type.blueprint(design(stack)).worldBounds(origin, rotation);
     }
 
     @Override
@@ -126,13 +149,25 @@ public class BlueprintItem extends Item {
         if (type == null) {
             return;
         }
-        Blueprint plan = type.blueprint();
+        int design = design(stack);
+        Blueprint plan = type.blueprint(design);
+        if (type.designs() > 1) {
+            builder.accept(Component.translatable("item.kingdomsatwar.blueprint.design", Component.translatable(type.designKey(design)),
+                    design + 1, type.designs()).withStyle(ChatFormatting.GOLD));
+        }
         builder.accept(Component.translatable(type.descriptionKey()).withStyle(ChatFormatting.GRAY));
         builder.accept(Component.translatable("item.kingdomsatwar.blueprint.price", Coins.format(type.price())).withStyle(ChatFormatting.GRAY));
         builder.accept(Component.translatable("item.kingdomsatwar.blueprint.size", plan.bounds().getXSpan(), plan.bounds().getZSpan())
                 .withStyle(ChatFormatting.GRAY));
         if (type.beds() > 0) {
             builder.accept(Component.translatable("item.kingdomsatwar.blueprint.beds", type.beds()).withStyle(ChatFormatting.GRAY));
+        }
+        if (type.costsMaterials()) {
+            int[] costs = type.costs(design);
+            builder.accept(Component.translatable("item.kingdomsatwar.blueprint.materials",
+                    costs[io.github.sirschrolli.kingdomsatwar.economy.town.Material.WOOD.ordinal()],
+                    costs[io.github.sirschrolli.kingdomsatwar.economy.town.Material.STONE.ordinal()],
+                    costs[io.github.sirschrolli.kingdomsatwar.economy.town.Material.METAL.ordinal()]).withStyle(ChatFormatting.GRAY));
         }
         builder.accept(Component.translatable("item.kingdomsatwar.blueprint.use").withStyle(ChatFormatting.DARK_GRAY));
         builder.accept(Component.translatable("item.kingdomsatwar.blueprint.turn").withStyle(ChatFormatting.DARK_GRAY));

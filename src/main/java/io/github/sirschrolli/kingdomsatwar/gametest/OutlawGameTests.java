@@ -264,14 +264,14 @@ final class OutlawGameTests {
         vex.setNoAi(true);
         UUID id = vex.getUUID();
         level.addFreshEntity(vex);
-        helper.runAfterDelay(2, () -> {
-            Entity found = level.getEntity(id);
-            helper.assertTrue(found instanceof Tormentor, "kein eigener Plagegeist: " + found);
-            Tormentor tormentor = (Tormentor) found;
+        // jeden Tick neu prüfen, bis der Plagegeist ersetzt ist (bei voller Testlast kann es einen Tick länger dauern)
+        helper.succeedWhen(() -> {
+            Tormentor tormentor = level.getEntitiesOfClass(Tormentor.class, new net.minecraft.world.phys.AABB(origin).inflate(6.0)).stream()
+                    .findFirst().orElse(null);
+            helper.assertTrue(tormentor != null, "kein eigener Plagegeist: " + level.getEntity(id));
             helper.assertTrue(tormentor.getOwner() == conjurer, "Besitzer verloren: " + tormentor.getOwner());
             helper.assertTrue(origin.equals(tormentor.getBoundOrigin()), "Heimat verloren: " + tormentor.getBoundOrigin());
             helper.assertTrue(tormentor.getLook() == Tormentor.Look.TUERKIS, "Farbe nicht die des Runenpriesters: " + tormentor.getLook());
-            helper.succeed();
         });
     }
 

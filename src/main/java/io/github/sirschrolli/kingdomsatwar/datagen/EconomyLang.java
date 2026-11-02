@@ -120,44 +120,71 @@ final class EconomyLang {
 
     private static void buildings(Text t) {
         bld(t, "house", "House", "Wohnhaus",
-                "Half-timbered house on a stone base with a red gable roof and a chimney. Two beds.",
-                "Fachwerkhaus auf Steinsockel mit rotem Satteldach und Kamin. Zwei Betten.");
+                "A home for two citizens: half-timbered house, stone cottage with a fireplace, house with a gabled porch or two-storey house with a slate hip roof.",
+                "Ein Zuhause für zwei Bürger: Fachwerkhaus, Steinkate mit offenem Kamin, Haus mit Giebelvorbau oder zweigeschossiges Haus mit Schieferwalmdach.");
         bld(t, "field", "Field", "Feld",
-                "9 × 9 farmland with wheat, carrots, potatoes and beetroot, a fence, a scarecrow and a chest. Workplace of a farmer.",
-                "9 × 9 Ackerland mit Weizen, Karotten, Kartoffeln und Roter Bete, Zaun, Vogelscheuche und Truhe. Arbeitsplatz eines Bauern.");
+                "Farmland with a fence, a scarecrow and a chest – a cornfield or a kitchen garden with four beds and a tool shed. Workplace of a farmer.",
+                "Ackerland mit Zaun, Vogelscheuche und Truhe – ein Acker oder ein Gemüsegarten mit vier Beeten und Geräteschuppen. Arbeitsplatz eines Bauern.");
         bld(t, "lumber_hut", "Lumber Hut", "Holzfällerhütte",
-                "Log cabin with a chopping block, a woodpile and a sapling nursery. One bed; workplace of a lumberjack.",
-                "Blockhaus mit Hackklotz, Holzstapel und Setzlingsschule. Ein Bett; Arbeitsplatz eines Holzfällers.");
+                "Log cabin or saw hut with a chopping block, logs and saplings. One bed; workplace of a lumberjack.",
+                "Blockhütte oder Sägehütte mit Hackklotz, Stämmen und Setzlingen. Ein Bett; Arbeitsplatz eines Holzfällers.");
         bld(t, "storehouse", "Storehouse", "Lagerhaus",
-                "Timber storehouse with double chests and rows of barrels. Here your citizens bring what they gather in the evening and the builder fetches his building materials. Costs no building materials.",
-                "Fachwerkspeicher mit Doppeltruhen und Reihen von Fässern. Hierher bringen die Bürger abends, was sie gesammelt haben, und hier holt der Baumeister seine Baustoffe. Kostet keine Baustoffe.");
+                "Timber storehouse or fieldstone barn with chests and barrels. Here your citizens bring what they gather in the evening and the builder fetches his building materials. Costs no building materials.",
+                "Fachwerkspeicher oder Feldsteinscheune mit Truhen und Fässern. Hierher bringen die Bürger abends, was sie gesammelt haben, und hier holt der Baumeister seine Baustoffe. Kostet keine Baustoffe.");
         bld(t, "well", "Well", "Brunnen",
-                "Stone well with a tiled roof – the heart of every hamlet.",
-                "Steinbrunnen mit Ziegeldach – das Herz jedes Weilers.");
+                "Stone well with a tiled roof or a draw well with a winch on a paved square – the heart of every hamlet.",
+                "Steinbrunnen mit Ziegeldach oder Ziehbrunnen mit Haspel auf einem gepflasterten Platz – das Herz jedes Weilers.");
         bld(t, "smithy", "Smithy", "Schmiede",
-                "Stone workshop with forge, anvil and grindstone, the smith's chamber at the back. One bed; workplace of a smith.",
-                "Steinerne Werkstatt mit Esse, Amboss und Schleifstein, hinten die Kammer des Schmieds. Ein Bett; Arbeitsplatz eines Schmieds.");
+                "Workshop with forge, anvil and grindstone and the smith's chamber. One bed; workplace of a smith.",
+                "Werkstatt mit Esse, Amboss und Schleifstein und der Kammer des Schmieds. Ein Bett; Arbeitsplatz eines Schmieds.");
         bld(t, "mine", "Mine", "Mine",
-                "Pithead over a ladder shaft ten blocks deep, at the bottom a chamber at the ore wall. Workplace of two miners.",
-                "Stollenhaus über einem zehn Blöcke tiefen Leiterschacht, unten eine Kammer an der Erzwand. Arbeitsplatz zweier Bergleute.");
+                "Pithead or winding house over a ladder shaft ten blocks deep, at the bottom the ore face. Workplace of two miners.",
+                "Stollenhaus oder Förderhaus über einem zehn Blöcke tiefen Leiterschacht, unten die Erzwand. Arbeitsplatz zweier Bergleute.");
         bld(t, "market", "Market", "Markt",
-                "Two market stalls with striped awnings around a paved square. Workplace of two merchants.",
-                "Zwei Marktstände mit gestreiften Markisen um einen gepflasterten Platz. Arbeitsplatz zweier Händler.");
+                "Two market stalls with striped awnings or a market hall on stone columns. Workplace of two merchants.",
+                "Zwei Marktstände mit gestreiften Markisen oder eine Markthalle auf Steinsäulen. Arbeitsplatz zweier Händler.");
         bld(t, "tavern", "Tavern", "Taverne",
-                "Two-storey inn with a taproom, a barrel bar, tables and two guest rooms. Two beds; workplace of an innkeeper.",
-                "Zweistöckiges Gasthaus mit Schankstube, Theke aus Fässern, Tischen und zwei Kammern. Zwei Betten; Arbeitsplatz eines Wirts.");
+                "Half-timbered tavern or coaching inn with a beer garden: taproom with a bar, fireplace and guest rooms. Two beds; workplace of an innkeeper.",
+                "Fachwerkschenke oder Gasthof mit Biergarten: Schankstube mit Theke, Kamin und Gästekammern. Zwei Betten; Arbeitsplatz eines Wirts.");
         bld(t, "townhouse", "Townhouse", "Bürgerhaus",
-                "Tall, narrow half-timbered house with an overhanging upper floor. Four beds.",
-                "Schmales, hohes Fachwerkhaus mit vorkragendem Obergeschoss. Vier Betten.");
+                "Tall house of a wealthy family: jettied half-timbered house, stone house with a stepped gable or merchant's house with a shop. Four beds.",
+                "Hohes Haus einer wohlhabenden Familie: Fachwerkhaus mit vorkragendem Obergeschoss, Steinhaus mit Treppengiebel oder Kaufmannshaus mit Laden. Vier Betten.");
         bld(t, "barracks", "Barracks", "Kaserne",
-                "Fortified stone house with weapon racks and a training yard. Every barracks lets you recruit eight more soldiers.",
-                "Wehrhaftes Steinhaus mit Waffenständern und Übungsplatz. Jede Kaserne erlaubt dir acht Soldaten mehr.");
+                "Fortified stone barracks or guardhouse with a watchtower, with a training yard. Every barracks lets you recruit eight more soldiers.",
+                "Wehrhafte Kaserne oder Wachhaus mit Wachturm, dazu ein Übungsplatz. Jede Kaserne erlaubt dir acht Soldaten mehr.");
         bld(t, "map_house", "Map House", "Kartenhaus",
-                "Slender tower with a map table, a lectern and a copper roof. One bed; workplace of a cartographer.",
-                "Schlanker Turm mit Kartentisch, Lesepult und Kupferdach. Ein Bett; Arbeitsplatz eines Kartografen.");
+                "Slender map tower or scholar's house with a lookout and telescope. One bed; workplace of a cartographer.",
+                "Schlanker Kartenturm oder Gelehrtenhaus mit Aussichtsturm und Fernrohr. Ein Bett; Arbeitsplatz eines Kartografen.");
         bld(t, "throne_hall", "Throne Hall", "Thronsaal",
                 "Great limestone hall with stained glass, columns and a red carpet up to the throne. Here you are crowned.",
                 "Große Halle aus Kalkstein mit Bleiglasfenstern, Säulen und rotem Teppich bis zum Thron. Hier wirst du gekrönt.");
+        designs(t, "house", "Half-timbered house", "Fachwerkhaus", "Stone cottage", "Steinkate", "House with gabled porch", "Haus mit Giebelvorbau",
+                "Two-storey house", "Zweigeschossiges Haus");
+        designs(t, "field", "Cornfield", "Ackerfeld", "Kitchen garden", "Gemüsegarten");
+        designs(t, "lumber_hut", "Log cabin", "Blockhütte", "Saw hut", "Sägehütte");
+        designs(t, "storehouse", "Timber storehouse", "Fachwerkspeicher", "Fieldstone barn", "Feldsteinscheune");
+        designs(t, "well", "Roofed well", "Brunnen mit Dach", "Draw well", "Ziehbrunnen");
+        designs(t, "smithy", "Open smithy", "Offene Schmiede", "Stone forge", "Steinschmiede");
+        designs(t, "mine", "Pithead", "Stollenhaus", "Winding house", "Förderhaus");
+        designs(t, "market", "Market stalls", "Marktstände", "Market hall", "Markthalle");
+        designs(t, "tavern", "Half-timbered tavern", "Fachwerkschenke", "Coaching inn", "Gasthof mit Biergarten");
+        designs(t, "townhouse", "Jettied townhouse", "Fachwerk-Bürgerhaus", "Stepped-gable house", "Treppengiebelhaus", "Merchant's house",
+                "Kaufmannshaus");
+        designs(t, "barracks", "Fortified barracks", "Wehrhafte Kaserne", "Guardhouse with tower", "Wachhaus mit Turm");
+        designs(t, "map_house", "Map tower", "Kartenturm", "Scholar's house", "Gelehrtenhaus");
+        designs(t, "throne_hall", "Throne hall", "Thronsaal");
+        t.add("item.kingdomsatwar.blueprint.design", "Design: %s (%s of %s)", "Entwurf: %s (%s von %s)");
+        t.add("item.kingdomsatwar.blueprint.materials", "Building materials: %s wood, %s stone, %s metal",
+                "Baustoffe: %s Holz, %s Stein, %s Metall");
+        t.add("gui.kingdomsatwar.town.build.designs", "%s designs – one is chosen at random", "%s Entwürfe – einer wird zufällig gewählt");
+        t.add("gui.kingdomsatwar.town.build.size_max", "Size: up to %s × %s blocks", "Größe: bis %s × %s Blöcke");
+    }
+
+    /** Namen der Entwürfe: abwechselnd englisch und deutsch, in der Reihenfolge der Entwürfe. */
+    private static void designs(Text t, String id, String... names) {
+        for (int i = 0; i + 1 < names.length; i += 2) {
+            t.add("building.kingdomsatwar." + id + ".design." + (i / 2), names[i], names[i + 1]);
+        }
     }
 
     private static void bld(Text t, String id, String en, String de, String descEn, String descDe) {

@@ -30,7 +30,7 @@ public enum BuildingType implements StringRepresentable {
     THRONE_HALL(TownTier.CITY, 567, 0, 0);
 
     public static final Codec<BuildingType> CODEC = StringRepresentable.fromEnum(BuildingType::values);
-    private static final Map<BuildingType, Blueprint> PLANS = new EnumMap<>(BuildingType.class);
+    private static final Map<BuildingType, Blueprint[]> PLANS = new EnumMap<>(BuildingType.class);
 
     private final TownTier tier;
     private final int price;
@@ -105,15 +105,75 @@ public enum BuildingType implements StringRepresentable {
         return this != STOREHOUSE;
     }
 
-    /** Was der Bau an Baustoffen kostet (Einheiten je {@link Material}). */
+    /** Was der Bau an Baustoffen kostet (Einheiten je {@link Material}; im ersten Entwurf). */
     public int[] costs() {
-        return this.costsMaterials() ? this.blueprint().costs() : new int[Material.values().length];
+        return this.costs(0);
     }
 
-    /** Der Bauplan (einmal erzeugt, dann zwischengespeichert). */
+    /** Was ein Entwurf an Baustoffen kostet. */
+    public int[] costs(int design) {
+        return this.costsMaterials() ? this.blueprint(design).costs() : new int[Material.values().length];
+    }
+
+    /** Die meisten Baustoffe, die einer der Entwürfe braucht (je Baustoff), für die Anzeige. */
+    public int[] maxCosts() {
+        int[] max = new int[Material.values().length];
+        for (int d = 0; d < this.designs(); d++) {
+            int[] c = this.costs(d);
+            for (int i = 0; i < max.length; i++) {
+                max[i] = Math.max(max[i], c[i]);
+            }
+        }
+        return max;
+    }
+
+    /** Die wenigsten Baustoffe, die einer der Entwürfe braucht (je Baustoff). */
+    public int[] minCosts() {
+        int[] min = this.costs(0);
+        for (int d = 1; d < this.designs(); d++) {
+            int[] c = this.costs(d);
+            for (int i = 0; i < min.length; i++) {
+                min[i] = Math.min(min[i], c[i]);
+            }
+        }
+        return min;
+    }
+
+    /** Größte Grundfläche (x, z) über alle Entwürfe. */
+    public int[] maxSize() {
+        int[] size = new int[2];
+        for (int d = 0; d < this.designs(); d++) {
+            var b = this.blueprint(d).bounds();
+            size[0] = Math.max(size[0], b.getXSpan());
+            size[1] = Math.max(size[1], b.getZSpan());
+        }
+        return size;
+    }
+
+    /** Wie viele Entwürfe es gibt; beim Nehmen eines Bauplans wird einer davon zufällig gewählt. */
+    public int designs() {
+        return this.plans().length;
+    }
+
+    /** Übersetzungsschlüssel für den Namen eines Entwurfs. */
+    public String designKey(int design) {
+        return "building.kingdomsatwar." + this.id() + ".design." + Math.floorMod(design, this.designs());
+    }
+
+    /** Der Bauplan des ersten Entwurfs. */
     public Blueprint blueprint() {
+        return this.blueprint(0);
+    }
+
+    /** Der Bauplan eines Entwurfs (einmal erzeugt, dann zwischengespeichert). */
+    public Blueprint blueprint(int design) {
+        Blueprint[] plans = this.plans();
+        return plans[Math.floorMod(design, plans.length)];
+    }
+
+    private Blueprint[] plans() {
         synchronized (PLANS) {
-            return PLANS.computeIfAbsent(this, type -> Blueprints.create(type));
+            return PLANS.computeIfAbsent(this, Blueprints::createAll);
         }
     }
 

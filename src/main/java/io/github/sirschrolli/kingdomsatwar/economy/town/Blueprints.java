@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Die Baupläne der Siedlung im Stil eines mittelalterlichen Städtchens: Fachwerk über einem Steinsockel, Bleiglasfenster
@@ -25,83 +27,92 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 final class Blueprints {
     private Blueprints() {}
 
-    static Blueprint create(BuildingType type) {
-        PlanBuilder b = new PlanBuilder();
-        switch (type) {
-            case HOUSE -> house(b);
-            case FIELD -> field(b);
-            case LUMBER_HUT -> lumberHut(b);
-            case STOREHOUSE -> storehouse(b);
-            case WELL -> well(b);
-            case SMITHY -> smithy(b);
-            case MINE -> mine(b);
-            case MARKET -> market(b);
-            case TAVERN -> tavern(b);
-            case TOWNHOUSE -> townhouse(b);
-            case BARRACKS -> barracks(b);
-            case MAP_HOUSE -> mapHouse(b);
-            case THRONE_HALL -> throneHall(b);
+    /**
+     * Alle Entwürfe einer Gebäudeart (der erste ist der ursprüngliche). Welcher gebaut wird, entscheidet der Zufall beim
+     * Nehmen des Bauplans.
+     */
+    static Blueprint[] createAll(BuildingType type) {
+        List<Consumer<PlanBuilder>> designs = switch (type) {
+            case HOUSE -> List.of(Blueprints::house, HouseDesigns::cottage, HouseDesigns::gabledHouse, HouseDesigns::twoStoreyHouse);
+            case FIELD -> List.of(Blueprints::field, WorkDesigns::kitchenGarden);
+            case LUMBER_HUT -> List.of(Blueprints::lumberHut, WorkDesigns::sawHut);
+            case STOREHOUSE -> List.of(Blueprints::storehouse, WorkDesigns::barn);
+            case WELL -> List.of(Blueprints::well, WorkDesigns::drawWell);
+            case SMITHY -> List.of(Blueprints::smithy, WorkDesigns::stoneForge);
+            case MINE -> List.of(Blueprints::mine, WorkDesigns::headframeMine);
+            case MARKET -> List.of(Blueprints::market, WorkDesigns::marketHall);
+            case TAVERN -> List.of(Blueprints::tavern, HouseDesigns::coachingInn);
+            case TOWNHOUSE -> List.of(Blueprints::townhouse, HouseDesigns::stoneTownhouse, HouseDesigns::merchantHouse);
+            case BARRACKS -> List.of(Blueprints::barracks, WorkDesigns::guardTower);
+            case MAP_HOUSE -> List.of(Blueprints::mapHouse, WorkDesigns::observatory);
+            case THRONE_HALL -> List.of(Blueprints::throneHall);
+        };
+        Blueprint[] plans = new Blueprint[designs.size()];
+        for (int i = 0; i < plans.length; i++) {
+            PlanBuilder b = new PlanBuilder();
+            designs.get(i).accept(b);
+            plans[i] = b.build();
         }
-        return b.build();
+        return plans;
     }
 
     // =====================================================================================
     // Baustoffe
     // =====================================================================================
 
-    private static BlockState s(Block block) {
+    static BlockState s(Block block) {
         return block.defaultBlockState();
     }
 
-    private static BlockState stone() {
+    static BlockState stone() {
         return s(ModBlocks.MEDIEVAL_STONE.base().get());
     }
 
-    private static BlockState fieldstone() {
+    static BlockState fieldstone() {
         return s(ModBlocks.ROUGH_FIELDSTONE.base().get());
     }
 
-    private static BlockState frame() {
+    static BlockState frame() {
         return s(ModBlocks.TIMBER_FRAME.get());
     }
 
-    private static BlockState diagonal() {
+    static BlockState diagonal() {
         return s(ModBlocks.TIMBER_FRAME_DIAGONAL.get());
     }
 
-    private static BlockState cross() {
+    static BlockState cross() {
         return s(ModBlocks.TIMBER_FRAME_CROSS.get());
     }
 
-    private static BlockState beam(Direction.Axis axis) {
+    static BlockState beam(Direction.Axis axis) {
         return PlanBuilder.log(ModBlocks.TIMBER_BEAM.get(), axis);
     }
 
-    private static BlockState plaster() {
+    static BlockState plaster() {
         return s(ModBlocks.WHITE_PLASTER.base().get());
     }
 
-    private static BlockState pane() {
+    static BlockState pane() {
         return s(ModBlocks.LEADED_GLASS_PANE.get());
     }
 
-    private static BlockState planks() {
+    static BlockState planks() {
         return s(Blocks.SPRUCE_PLANKS);
     }
 
-    private static BlockState facing(Block block, Direction facing) {
+    static BlockState facing(Block block, Direction facing) {
         return block.defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, facing);
     }
 
-    private static BlockState barrel(Direction facing) {
+    static BlockState barrel(Direction facing) {
         return Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, facing);
     }
 
-    private static BlockState seat(Block seat, Direction facing) {
+    static BlockState seat(Block seat, Direction facing) {
         return facing(seat, facing);
     }
 
-    private static BlockState roofBlock(BuildingSet roof) {
+    static BlockState roofBlock(BuildingSet roof) {
         return s(roof.base().get());
     }
 
@@ -113,7 +124,7 @@ final class Blueprints {
      * Fachwerkwand entlang x (bei z) von x0 bis x1, Höhe y1..y4: unten Steinsockel, darüber Gefache mit Streben an den
      * Enden, oben das Rähm (waagerechter Balken). Ecken bekommen Pfosten.
      */
-    private static void timberWallX(PlanBuilder b, int x0, int x1, int z, int y0, int y1) {
+    static void timberWallX(PlanBuilder b, int x0, int x1, int z, int y0, int y1) {
         for (int x = x0; x <= x1; x++) {
             boolean corner = x == x0 || x == x1;
             for (int y = y0; y <= y1; y++) {
@@ -133,7 +144,7 @@ final class Blueprints {
     }
 
     /** Fachwerkwand entlang z (bei x). */
-    private static void timberWallZ(PlanBuilder b, int z0, int z1, int x, int y0, int y1) {
+    static void timberWallZ(PlanBuilder b, int z0, int z1, int x, int y0, int y1) {
         for (int z = z0; z <= z1; z++) {
             boolean corner = z == z0 || z == z1;
             for (int y = y0; y <= y1; y++) {
@@ -156,7 +167,7 @@ final class Blueprints {
      * Fenster in einer Wand bei (x, y..y+h-1, z) mit Läden auf beiden Seiten. {@code out} zeigt aus der Wand hinaus,
      * {@code along} entlang der Wand.
      */
-    private static void window(PlanBuilder b, int x, int y, int z, int h, Direction out, Direction along, Block shutter) {
+    static void window(PlanBuilder b, int x, int y, int z, int h, Direction out, Direction along, Block shutter) {
         for (int i = 0; i < h; i++) {
             b.set(x, y + i, z, pane());
         }
@@ -174,15 +185,154 @@ final class Blueprints {
     }
 
     /** Kamin aus Ziegeln von y0 bis y1 (oben eine Ziegelstufe). */
-    private static void chimney(PlanBuilder b, int x, int z, int y0, int y1) {
+    static void chimney(PlanBuilder b, int x, int z, int y0, int y1) {
         for (int y = y0; y <= y1; y++) {
             b.set(x, y, z, Blocks.BRICKS);
         }
         b.set(x, y1 + 1, z, PlanBuilder.slab(Blocks.BRICK_SLAB, SlabType.BOTTOM));
     }
 
+    // =====================================================================================
+    // Wände und Schmuck für die weiteren Entwürfe
+    // =====================================================================================
+
+    /**
+     * Wand entlang x bei z von x0 bis x1, Höhe y0..y1: Ecken {@code post} (wenn nicht {@code null}), unten {@code base},
+     * oben {@code top}, dazwischen {@code infill}.
+     */
+    static void wallX(PlanBuilder b, int x0, int x1, int z, int y0, int y1, BlockState post, BlockState base, BlockState infill,
+            BlockState top) {
+        for (int x = x0; x <= x1; x++) {
+            for (int y = y0; y <= y1; y++) {
+                boolean corner = x == x0 || x == x1;
+                b.set(x, y, z, corner && post != null ? post : y == y0 ? base : y == y1 ? top : infill);
+            }
+        }
+    }
+
+    /** Wand entlang z bei x (wie {@link #wallX}). */
+    static void wallZ(PlanBuilder b, int z0, int z1, int x, int y0, int y1, BlockState post, BlockState base, BlockState infill,
+            BlockState top) {
+        for (int z = z0; z <= z1; z++) {
+            for (int y = y0; y <= y1; y++) {
+                boolean corner = z == z0 || z == z1;
+                b.set(x, y, z, corner && post != null ? post : y == y0 ? base : y == y1 ? top : infill);
+            }
+        }
+    }
+
+    /** Putzwand zwischen Balken: Eckpfosten, unten Stein, oben das Rähm, dazwischen {@code plaster}. */
+    static void plasterWallX(PlanBuilder b, int x0, int x1, int z, int y0, int y1, BlockState plaster) {
+        wallX(b, x0, x1, z, y0, y1, beam(Direction.Axis.Y), stone(), plaster, beam(Direction.Axis.X));
+    }
+
+    static void plasterWallZ(PlanBuilder b, int z0, int z1, int x, int y0, int y1, BlockState plaster) {
+        wallZ(b, z0, z1, x, y0, y1, beam(Direction.Axis.Y), stone(), plaster, beam(Direction.Axis.Z));
+    }
+
+    /** Fachwerkwand eines Obergeschosses: unten die Schwelle, oben das Rähm (Balken), Gefache mit Streben an den Enden. */
+    static void frameWallX(PlanBuilder b, int x0, int x1, int z, int y0, int y1) {
+        wallX(b, x0, x1, z, y0, y1, beam(Direction.Axis.Y), beam(Direction.Axis.X), frame(), beam(Direction.Axis.X));
+        for (int x : new int[] {x0 + 1, x1 - 1}) {
+            if (x > x0 && x < x1 && y1 - 1 > y0) {
+                b.set(x, y1 - 1, z, diagonal());
+            }
+        }
+    }
+
+    static void frameWallZ(PlanBuilder b, int z0, int z1, int x, int y0, int y1) {
+        wallZ(b, z0, z1, x, y0, y1, beam(Direction.Axis.Y), beam(Direction.Axis.Z), frame(), beam(Direction.Axis.Z));
+        for (int z : new int[] {z0 + 1, z1 - 1}) {
+            if (z > z0 && z < z1 && y1 - 1 > y0) {
+                b.set(x, y1 - 1, z, diagonal());
+            }
+        }
+    }
+
+    /** Offene Falltür: liegt an der Seite ihres Blocks, die ihrer Blickrichtung gegenüberliegt. */
+    static BlockState openTrapdoor(Block trapdoor, Direction facing) {
+        return trapdoor.defaultBlockState().setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING, facing)
+                .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN, true);
+    }
+
+    /**
+     * Blumenkasten außen an der Wand: ab der Wandstelle (x, y, z) {@code length} Blöcke in Richtung {@code along}, einen Block
+     * vor der Wand (Richtung {@code out}). Moos mit Blumen, davor ein Brett, an den Enden auch eins (wo dort noch nichts steht).
+     */
+    static void flowerBox(PlanBuilder b, int x, int y, int z, int length, Direction along, Direction out, Block... flowers) {
+        int ox = out.getStepX();
+        int oz = out.getStepZ();
+        int ax = along.getStepX();
+        int az = along.getStepZ();
+        for (int i = 0; i < length; i++) {
+            int bx = x + ax * i + ox;
+            int bz = z + az * i + oz;
+            b.set(bx, y, bz, Blocks.MOSS_BLOCK);
+            b.set(bx, y + 1, bz, flowers[i % flowers.length]);
+            b.set(bx + ox, y, bz + oz, openTrapdoor(Blocks.SPRUCE_TRAPDOOR, out));
+        }
+        int sx = x - ax + ox;
+        int sz = z - az + oz;
+        if (b.get(sx, y, sz) == null) {
+            b.set(sx, y, sz, openTrapdoor(Blocks.SPRUCE_TRAPDOOR, along.getOpposite()));
+        }
+        int ex = x + ax * length + ox;
+        int ez = z + az * length + oz;
+        if (b.get(ex, y, ez) == null) {
+            b.set(ex, y, ez, openTrapdoor(Blocks.SPRUCE_TRAPDOOR, along));
+        }
+    }
+
+    /** Fensterbank: umgedrehte Treppe außen vor der Wandstelle (x, y, z). */
+    static void sill(PlanBuilder b, int x, int y, int z, Direction out, Block stairs) {
+        b.set(x + out.getStepX(), y, z + out.getStepZ(), PlanBuilder.stairs(stairs, out.getOpposite(), Half.TOP));
+    }
+
+    /** Laterne an einem Ausleger: ein Zaun ragt vor der Wandstelle (x, y + 1, z) heraus, darunter hängt die Laterne. */
+    static void bracketLantern(PlanBuilder b, int x, int y, int z, Direction out, Block lantern) {
+        int fx = x + out.getStepX();
+        int fz = z + out.getStepZ();
+        b.set(fx, y + 1, fz, s(Blocks.SPRUCE_FENCE));
+        b.hangingLantern(fx, y, fz, lantern);
+    }
+
+    /** Laternenpfahl: Zaunpfosten mit stehender Laterne obendrauf. */
+    static void lanternPost(PlanBuilder b, int x, int y, int z, int height, Block lantern) {
+        for (int i = 0; i < height; i++) {
+            b.set(x, y + i, z, s(Blocks.SPRUCE_FENCE));
+        }
+        b.standingLantern(x, y + height, z, lantern);
+    }
+
+    static BlockState waterCauldron() {
+        return s(Blocks.WATER_CAULDRON).setValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL, 3);
+    }
+
+    static BlockState litCampfire() {
+        return Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true).setValue(CampfireBlock.SIGNAL_FIRE, false);
+    }
+
+    static BlockState wallBanner(Block banner, Direction facing) {
+        return banner.defaultBlockState().setValue(net.minecraft.world.level.block.WallBannerBlock.FACING, facing);
+    }
+
+    /** Ein Strauch aus Laub, der nicht verwelkt. */
+    static BlockState bush(Block leaves) {
+        return leaves.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true);
+    }
+
+    /** Tür mit Angel links oder rechts (für Doppeltüren). */
+    static void door(PlanBuilder b, int x, int y, int z, Block door, Direction facing, boolean rightHinge) {
+        b.door(x, y, z, door, facing);
+        net.minecraft.world.level.block.state.properties.DoorHingeSide hinge = rightHinge
+                ? net.minecraft.world.level.block.state.properties.DoorHingeSide.RIGHT
+                : net.minecraft.world.level.block.state.properties.DoorHingeSide.LEFT;
+        b.set(x, y, z, b.get(x, y, z).setValue(net.minecraft.world.level.block.DoorBlock.HINGE, hinge));
+        b.set(x, y + 1, z, b.get(x, y + 1, z).setValue(net.minecraft.world.level.block.DoorBlock.HINGE, hinge));
+    }
+
     /** Stufe vor einer Tür: Treppe, die zum Haus hin ansteigt. */
-    private static void step(PlanBuilder b, int x, int z, Direction toHouse, Block stairs) {
+    static void step(PlanBuilder b, int x, int z, Direction toHouse, Block stairs) {
         b.set(x, 0, z, PlanBuilder.stairs(stairs, toHouse, Half.BOTTOM));
     }
 
@@ -194,7 +344,7 @@ final class Blueprints {
      * Wohnhaus (2 Betten): Fachwerkhaus 7 × 8 über Steinsockel, hohe Bleiglasfenster mit grünen Läden, rotes Satteldach mit
      * Fachwerkgiebeln, Kamin. Innen zwei Betten, Ofen, Tisch mit Stühlen, Fass und eine Laterne unter dem Zugbalken.
      */
-    private static void house(PlanBuilder b) {
+    static void house(PlanBuilder b) {
         BuildingSet roof = ModBlocks.RED_ROOF_TILES;
         Block shutter = ModBlocks.GREEN_SHUTTERS.get();
         b.foundation(-3, -3, 3, 4, fieldstone());
@@ -210,6 +360,8 @@ final class Blueprints {
         b.set(0, 3, -3, cross());
         window(b, -2, 2, -3, 2, Direction.NORTH, Direction.EAST, shutter);
         window(b, 2, 2, -3, 2, Direction.NORTH, Direction.EAST, shutter);
+        flowerBox(b, -2, 1, -3, 1, Direction.EAST, Direction.NORTH, Blocks.POPPY);
+        flowerBox(b, 2, 1, -3, 1, Direction.EAST, Direction.NORTH, Blocks.AZURE_BLUET);
         // hinten und an den Seiten
         window(b, -1, 2, 4, 2, Direction.SOUTH, Direction.EAST, shutter);
         window(b, -3, 2, 0, 2, Direction.WEST, Direction.SOUTH, shutter);
@@ -250,7 +402,7 @@ final class Blueprints {
      * Feld (für einen Bauern): 9 × 9 Ackerland, in der Mitte die Wasserquelle, Reihen mit Weizen, Karotten, Kartoffeln
      * und Roter Bete, rundum ein Zaun mit Tor, eine Vogelscheuche, davor Truhe, Fass und Komposter.
      */
-    private static void field(PlanBuilder b) {
+    static void field(PlanBuilder b) {
         b.foundation(-5, -6, 5, 5, s(Blocks.DIRT));
         for (int x = -5; x <= 5; x++) {
             for (int z = -5; z <= 5; z++) {
@@ -301,7 +453,7 @@ final class Blueprints {
      * Holzfällerhütte (1 Bett): Blockhaus aus Fichtenstämmen mit Schindeldach, davor ein Hackklotz und ein Holzstapel,
      * hinten eine Setzlingsschule. Innen Bett, Truhe, Werkbank und Laterne.
      */
-    private static void lumberHut(PlanBuilder b) {
+    static void lumberHut(PlanBuilder b) {
         BuildingSet roof = ModBlocks.WOODEN_SHINGLES;
         b.foundation(-3, -2, 3, 3, fieldstone());
         b.fill(-3, 0, -2, 3, 0, 3, fieldstone());
@@ -324,16 +476,17 @@ final class Blueprints {
         }
         b.air(-2, 1, -1, 2, 3, 2);
         b.door(0, 1, -2, Blocks.SPRUCE_DOOR, Direction.SOUTH);
-        b.set(-2, 2, -2, pane());
-        b.set(2, 2, -2, pane());
-        b.set(-3, 2, 1, pane());
-        b.set(3, 2, 0, pane());
+        window(b, -2, 2, -2, 1, Direction.NORTH, Direction.EAST, ModBlocks.GREEN_SHUTTERS.get());
+        window(b, 2, 2, -2, 1, Direction.NORTH, Direction.EAST, ModBlocks.GREEN_SHUTTERS.get());
+        window(b, -3, 2, 1, 1, Direction.WEST, Direction.SOUTH, ModBlocks.GREEN_SHUTTERS.get());
+        window(b, 3, 2, 0, 1, Direction.EAST, Direction.SOUTH, ModBlocks.GREEN_SHUTTERS.get());
         int ridge = b.gableAlongX(-3, 3, -2, 3, 4, roof.stairs().get(), roofBlock(roof),
                 PlanBuilder.log(Blocks.SPRUCE_LOG, Direction.Axis.X));
         b.set(0, ridge + 1, 0, s(Blocks.AIR));
         b.bed(-2, 1, 1, Blocks.BED.green(), Direction.SOUTH);
         b.chestAt(2, 1, 2, Direction.WEST);
         b.set(2, 1, -1, s(Blocks.CRAFTING_TABLE));
+        b.fill(-2, 4, 0, 2, 4, 0, beam(Direction.Axis.X));
         b.hangingLantern(0, 3, 0, Blocks.LANTERN);
         // Hackklotz und Holzstapel vor der Hütte
         b.set(2, 0, -4, PlanBuilder.log(Blocks.STRIPPED_OAK_LOG, Direction.Axis.Y));
@@ -363,7 +516,7 @@ final class Blueprints {
      * zwei Reihen Fässer übereinander, hinten Heuballen und Säcke, in der Mitte ein freier Gang unter der Laterne. Über dem
      * Tor die Ladeluke im Giebel mit dem Kranbalken, an dem eine Kette mit Laterne hängt; vor dem Haus Fässer und eine Waage.
      */
-    private static void storehouse(PlanBuilder b) {
+    static void storehouse(PlanBuilder b) {
         BuildingSet roof = ModBlocks.BROWN_ROOF_TILES;
         Block shutter = ModBlocks.RED_SHUTTERS.get();
         b.foundation(-3, -4, 3, 4, fieldstone());
@@ -423,7 +576,7 @@ final class Blueprints {
     }
 
     /** Doppeltruhe: die linke Hälfte bei (x, y, z), die rechte daneben (vom Gang aus gesehen rechts). */
-    private static void doubleChest(PlanBuilder b, int x, int y, int z, Direction facing) {
+    static void doubleChest(PlanBuilder b, int x, int y, int z, Direction facing) {
         BlockState chest = Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, facing);
         Direction toRight = facing.getClockWise();
         b.set(x, y, z, chest.setValue(net.minecraft.world.level.block.ChestBlock.TYPE, net.minecraft.world.level.block.state.properties.ChestType.LEFT));
@@ -436,7 +589,7 @@ final class Blueprints {
     // =====================================================================================
 
     /** Brunnen: Steinkranz um tiefes Wasser, vier Pfosten mit einem Ziegeldach, eine Kette hängt in den Schacht. */
-    private static void well(PlanBuilder b) {
+    static void well(PlanBuilder b) {
         BuildingSet roof = ModBlocks.RED_ROOF_TILES;
         b.foundation(-2, -2, 2, 2, stone());
         b.fill(-2, -1, -2, 2, -1, 2, s(ModBlocks.MEDIEVAL_STONE.base().get()));
@@ -475,7 +628,7 @@ final class Blueprints {
      * Schmiede (1 Bett): Steinhaus mit offener Werkstatt unter einem Vordach, Esse mit Glut und Schornstein, Amboss,
      * Schleifstein, Schmiedetisch und Löschwasser; hinten die Kammer des Schmieds.
      */
-    private static void smithy(PlanBuilder b) {
+    static void smithy(PlanBuilder b) {
         BuildingSet roof = ModBlocks.DARK_SLATE_SHINGLES;
         b.foundation(-4, -4, 4, 4, fieldstone());
         b.fill(-4, 0, -4, 4, 0, 4, stone());
@@ -501,6 +654,8 @@ final class Blueprints {
         b.fill(-3, 4, -4, 3, 4, -4, beam(Direction.Axis.X));
         b.fill(-4, 4, -3, -4, 4, 0, beam(Direction.Axis.Z));
         b.fill(4, 4, -3, 4, 4, 0, beam(Direction.Axis.Z));
+        bracketLantern(b, -4, 2, -4, Direction.NORTH, Blocks.LANTERN);
+        bracketLantern(b, 4, 2, -4, Direction.NORTH, Blocks.LANTERN);
         // Esse links in der Werkstatt mit Schornstein
         b.fill(-4, 1, -2, -3, 1, 0, s(Blocks.BRICKS));
         b.set(-3, 1, -1, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true).setValue(CampfireBlock.SIGNAL_FIRE, false));
@@ -517,11 +672,13 @@ final class Blueprints {
         b.set(3, 1, 0, s(Blocks.SMITHING_TABLE));
         b.set(3, 1, -1, s(Blocks.WATER_CAULDRON).setValue(net.minecraft.world.level.block.LayeredCauldronBlock.LEVEL, 3));
         b.chestAt(2, 1, 0, Direction.NORTH);
+        b.fill(-3, 4, -2, 3, 4, -2, beam(Direction.Axis.X));
         b.hangingLantern(0, 3, -2, Blocks.LANTERN);
         // Kammer: Bett, Tisch
         b.bed(2, 1, 2, Blocks.BED.brown(), Direction.SOUTH);
         b.set(-2, 1, 3, ModBlocks.OAK_TABLE.get());
         b.set(-3, 1, 3, seat(ModBlocks.OAK_CHAIR.get(), Direction.EAST));
+        b.fill(-3, 4, 3, 3, 4, 3, beam(Direction.Axis.X));
         b.hangingLantern(0, 3, 3, Blocks.LANTERN);
         // breite Stufe vor der offenen Werkstatt
         for (int x = -1; x <= 1; x++) {
@@ -539,7 +696,7 @@ final class Blueprints {
      * Mine (2 Bergleute): ein Stollenhaus aus Feldstein über dem Schacht, eine Leiter zehn Blöcke hinab in eine Kammer
      * mit Stützbalken, Laternen und der Erzwand, vor der die Bergleute arbeiten; oben Lore, Gleis und Truhe.
      */
-    private static void mine(PlanBuilder b) {
+    static void mine(PlanBuilder b) {
         BuildingSet roof = ModBlocks.WOODEN_SHINGLES;
         b.foundation(-3, -3, 3, 3, fieldstone());
         b.fill(-3, 0, -3, 3, 0, 3, fieldstone());
@@ -601,11 +758,24 @@ final class Blueprints {
         b.chestAt(-2, 1, 2, Direction.EAST);
         b.set(-2, 1, -2, barrel(Direction.UP));
         b.set(2, 1, -2, s(Blocks.CRAFTING_TABLE));
+        b.fill(-3, 4, -1, 3, 4, -1, beam(Direction.Axis.X));
         b.hangingLantern(0, 3, -1, Blocks.LANTERN);
-        // Stufen vor der offenen Front
+        // Stufen vor der offenen Front, eine Laterne am Eckpfosten
         for (int x = -1; x <= 1; x++) {
             step(b, x, -4, Direction.SOUTH, Blocks.SPRUCE_STAIRS);
         }
+        bracketLantern(b, -3, 1, -3, Direction.NORTH, Blocks.LANTERN);
+        // Halde aus Gestein neben dem Haus, ein Haufen Erz
+        b.foundation(4, -1, 6, 2, fieldstone());
+        for (int x = 4; x <= 6; x++) {
+            for (int z = -1; z <= 2; z++) {
+                b.set(x, 0, z, s(((x + z) & 1) == 0 ? Blocks.COBBLESTONE : Blocks.ANDESITE));
+            }
+        }
+        b.fill(5, 1, 0, 5, 1, 1, s(Blocks.COBBLESTONE));
+        b.set(4, 1, 1, s(Blocks.COARSE_DIRT));
+        b.set(-4, 0, 2, s(Blocks.COAL_ORE));
+        b.set(-4, 0, 1, s(Blocks.IRON_ORE));
         b.entranceAt(0, 0, -5);
     }
 
@@ -617,7 +787,7 @@ final class Blueprints {
      * Markt (2 Händler): zwei Marktstände mit gestreiften Markisen aus Wolle, Theken aus Fässern und Tischen, Waren
      * (Melonen, Kürbisse, Heu, Blumen), in der Mitte ein gepflasterter Platz mit einer Laterne.
      */
-    private static void market(PlanBuilder b) {
+    static void market(PlanBuilder b) {
         b.foundation(-6, -3, 6, 4, stone());
         for (int x = -6; x <= 6; x++) {
             for (int z = -3; z <= 4; z++) {
@@ -646,7 +816,7 @@ final class Blueprints {
     }
 
     /** Ein Marktstand bei x: Theke, vier Pfosten, Markise mit Streifen. */
-    private static void stall(PlanBuilder b, int cx, Block woolA, Block woolB, Block stairsA, Block stairsB) {
+    static void stall(PlanBuilder b, int cx, Block woolA, Block woolB, Block stairsA, Block stairsB) {
         for (int x = cx - 1; x <= cx + 1; x++) {
             b.set(x, 0, 2, x == cx ? s(ModBlocks.OAK_TABLE.get()) : barrel(Direction.NORTH));
         }
@@ -675,7 +845,7 @@ final class Blueprints {
      * Taverne (Wirt, 2 Betten): zweistöckiges Fachwerkhaus 9 × 11 mit Steinsockel, unten die Schankstube mit Theke aus
      * Fässern, Tischen und Bänken, Kamin und Kronleuchter; eine Treppe führt in die Kammern mit zwei Betten; braunes Dach.
      */
-    private static void tavern(PlanBuilder b) {
+    static void tavern(PlanBuilder b) {
         BuildingSet roof = ModBlocks.BROWN_ROOF_TILES;
         Block shutter = ModBlocks.RED_SHUTTERS.get();
         b.foundation(-4, -5, 4, 5, fieldstone());
@@ -713,6 +883,9 @@ final class Blueprints {
         b.set(4, 2, -3, pane());
         window(b, -2, 5, -5, 2, Direction.NORTH, Direction.EAST, shutter);
         window(b, 2, 5, -5, 2, Direction.NORTH, Direction.EAST, shutter);
+        flowerBox(b, -2, 4, -5, 1, Direction.EAST, Direction.NORTH, ModBlocks.GARDEN_ROSE.get());
+        flowerBox(b, 2, 4, -5, 1, Direction.EAST, Direction.NORTH, Blocks.POPPY);
+        b.set(-1, 3, -6, wallBanner(Blocks.WALL_BANNER.brown(), Direction.NORTH));
         window(b, -2, 5, 5, 2, Direction.SOUTH, Direction.EAST, shutter);
         window(b, -4, 5, 0, 2, Direction.WEST, Direction.SOUTH, shutter);
         // Dach
@@ -747,6 +920,7 @@ final class Blueprints {
         b.bed(-2, 5, 2, Blocks.BED.red(), Direction.SOUTH);
         b.bed(-2, 5, -3, Blocks.BED.red(), Direction.NORTH);
         b.set(-3, 5, 0, barrel(Direction.UP));
+        b.fill(-3, 8, 0, 3, 8, 0, beam(Direction.Axis.X));
         b.hangingLantern(0, 7, 0, Blocks.LANTERN);
         // Laterne am Eingang
         b.set(1, 3, -6, Blocks.LANTERN.defaultBlockState().setValue(net.minecraft.world.level.block.LanternBlock.HANGING, true));
@@ -764,7 +938,7 @@ final class Blueprints {
      * Bürgerhaus (4 Betten): schmales, hohes Fachwerkhaus 7 × 9, das Obergeschoss kragt vorn einen Block über, steiles
      * rotes Dach mit Gaube; unten Stube und Küche, oben vier Betten.
      */
-    private static void townhouse(PlanBuilder b) {
+    static void townhouse(PlanBuilder b) {
         BuildingSet roof = ModBlocks.RED_ROOF_TILES;
         Block shutter = ModBlocks.GREEN_SHUTTERS.get();
         b.foundation(-3, -4, 3, 4, fieldstone());
@@ -828,6 +1002,7 @@ final class Blueprints {
         b.bed(1, 6, -3, Blocks.BED.lightBlue(), Direction.NORTH);
         b.bed(2, 6, -3, Blocks.BED.lightBlue(), Direction.NORTH);
         b.set(2, 6, 1, barrel(Direction.UP));
+        b.fill(-2, 10, 0, 2, 10, 0, beam(Direction.Axis.X));
         b.hangingLantern(0, 9, 0, Blocks.LANTERN);
         step(b, 0, -5, Direction.SOUTH, ModBlocks.MEDIEVAL_STONE.stairs().get());
         b.workAt(0, 1, 0);
@@ -842,7 +1017,7 @@ final class Blueprints {
      * Kaserne (acht Soldaten mehr): wehrhaftes Steinhaus 11 × 9 mit Zinnenkranz auf dem Flachdach, schmale Fenster,
      * innen Waffenständer, Tische, Kisten; davor ein Übungsplatz mit Strohpuppen und einer Zielscheibe.
      */
-    private static void barracks(PlanBuilder b) {
+    static void barracks(PlanBuilder b) {
         BlockState wall = s(ModBlocks.DARK_STONE_BRICKS.base().get());
         BlockState trim = s(ModBlocks.MEDIEVAL_STONE.base().get());
         Block battlement = ModBlocks.DARK_STONE_BRICK_BATTLEMENT.get();
@@ -964,7 +1139,7 @@ final class Blueprints {
      * Kartenhaus (Kartograf, 1 Bett): schlanker Turm mit Fachwerk-Obergeschoss und kupfernem Zeltdach; unten Kartentisch,
      * Lesepult und Bücher, oben die Kammer des Kartografen und ein Fernrohr-Erker.
      */
-    private static void mapHouse(PlanBuilder b) {
+    static void mapHouse(PlanBuilder b) {
         BuildingSet roof = ModBlocks.COPPER_ROOF;
         b.foundation(-3, -3, 3, 3, fieldstone());
         b.fill(-3, 0, -3, 3, 0, 3, stone());
@@ -1004,6 +1179,7 @@ final class Blueprints {
         b.bed(1, 6, 1, Blocks.BED.cyan(), Direction.SOUTH);
         b.set(-1, 6, -2, ModBlocks.OAK_TABLE.get());
         b.set(-1, 7, -2, s(Blocks.POTTED_FERN));
+        b.fill(-3, 9, 0, 3, 9, 0, beam(Direction.Axis.X));
         b.hangingLantern(0, 8, 0, Blocks.LANTERN);
         step(b, 0, -4, Direction.SOUTH, ModBlocks.LIMESTONE_BRICKS.stairs().get());
         b.workAt(0, 1, 0);
@@ -1019,7 +1195,7 @@ final class Blueprints {
      * Säulen und Kronleuchtern, ein roter Teppich führt vom Burgtor zum Thron auf einem dreistufigen Podest; Banner an den
      * Wänden, ein steiles Schieferdach mit Zinnen am Giebel.
      */
-    private static void throneHall(PlanBuilder b) {
+    static void throneHall(PlanBuilder b) {
         BuildingSet roof = ModBlocks.DARK_SLATE_SHINGLES;
         BlockState wall = s(ModBlocks.LIMESTONE_BRICKS.base().get());
         b.foundation(-6, -10, 6, 10, stone());
@@ -1103,6 +1279,7 @@ final class Blueprints {
         }
         // Kronleuchter
         for (int z = -6; z <= 6; z += 6) {
+            b.fill(-5, 9, z, 5, 9, z, beam(Direction.Axis.X));
             b.set(0, 8, z, s(ModBlocks.CHANDELIER.get()));
         }
         // Treppe vor dem Tor

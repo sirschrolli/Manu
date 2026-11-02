@@ -60,7 +60,7 @@ public final class TownActions {
                         good = false;
                         notice = Component.translatable(TownManager.PlaceResult.TIER.key());
                     } else {
-                        player.getInventory().placeItemBackInInventory(BlueprintItem.of(type), Prediction.SERVER_ONLY);
+                        player.getInventory().placeItemBackInInventory(BlueprintItem.random(type, player.getRandom()), Prediction.SERVER_ONLY);
                         notice = Component.translatable("message.kingdomsatwar.town.blueprint_taken", Component.translatable(type.translationKey()));
                     }
                 }

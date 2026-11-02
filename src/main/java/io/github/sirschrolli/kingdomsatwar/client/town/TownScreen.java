@@ -731,8 +731,16 @@ public class TownScreen extends Screen {
                 List<FormattedCharSequence> tip = new ArrayList<>();
                 tip.add(name.copy().withStyle(ChatFormatting.GOLD).getVisualOrderText());
                 tip.addAll(this.font.split(Component.translatable(type.descriptionKey()).withStyle(ChatFormatting.GRAY), 210));
-                tip.add(Component.translatable("gui.kingdomsatwar.town.build.size", type.blueprint().bounds().getXSpan(),
-                        type.blueprint().bounds().getZSpan()).withStyle(ChatFormatting.DARK_GRAY).getVisualOrderText());
+                int[] size = type.maxSize();
+                if (type.designs() > 1) {
+                    tip.add(Component.translatable("gui.kingdomsatwar.town.build.designs", type.designs()).withStyle(ChatFormatting.GOLD)
+                            .getVisualOrderText());
+                    tip.add(Component.translatable("gui.kingdomsatwar.town.build.size_max", size[0], size[1]).withStyle(ChatFormatting.DARK_GRAY)
+                            .getVisualOrderText());
+                } else {
+                    tip.add(Component.translatable("gui.kingdomsatwar.town.build.size", size[0], size[1]).withStyle(ChatFormatting.DARK_GRAY)
+                            .getVisualOrderText());
+                }
                 if (type.beds() > 0) {
                     tip.add(Component.translatable("gui.kingdomsatwar.town.build.beds", type.beds()).withStyle(ChatFormatting.DARK_GRAY).getVisualOrderText());
                 }
@@ -743,10 +751,13 @@ public class TownScreen extends Screen {
                     tip.add(Component.translatable("gui.kingdomsatwar.town.build.materials").withStyle(ChatFormatting.GRAY).getVisualOrderText());
                     for (Material m : Material.values()) {
                         int need = b.cost(m);
+                        int least = b.minCost(m);
                         if (need > 0) {
-                            boolean enough = v.stock(m) >= need;
-                            tip.add(Component.translatable("gui.kingdomsatwar.town.build.material", need, Component.translatable(m.translationKey()),
-                                    v.stock(m)).withStyle(enough ? ChatFormatting.DARK_GREEN : ChatFormatting.RED).getVisualOrderText());
+                            int have = v.stock(m);
+                            ChatFormatting color = have >= need ? ChatFormatting.DARK_GREEN : have >= least ? ChatFormatting.GOLD : ChatFormatting.RED;
+                            Component amount = least == need ? Component.literal(String.valueOf(need)) : Component.literal(least + "–" + need);
+                            tip.add(Component.translatable("gui.kingdomsatwar.town.build.material", amount, Component.translatable(m.translationKey()),
+                                    have).withStyle(color).getVisualOrderText());
                         }
                     }
                 }

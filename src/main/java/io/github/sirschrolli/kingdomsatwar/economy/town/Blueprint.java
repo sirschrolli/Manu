@@ -45,9 +45,10 @@ public final class Blueprint {
     private final @Nullable BlockPos workSpot;
     private final BlockPos entrance;
     private final List<BlockPos> marks;
+    private final Map<String, BlockPos> anchors;
 
     Blueprint(Map<BlockPos, BlockState> plan, List<BlockPos> footprint, BlockState foundation, List<BlockPos> beds, @Nullable BlockPos chest,
-            @Nullable BlockPos workSpot, BlockPos entrance, List<BlockPos> marks) {
+            @Nullable BlockPos workSpot, BlockPos entrance, List<BlockPos> marks, Map<String, BlockPos> anchors) {
         List<Entry> solid = new ArrayList<>();
         List<Entry> attached = new ArrayList<>();
         int minX = Integer.MAX_VALUE;
@@ -80,6 +81,7 @@ public final class Blueprint {
         this.workSpot = workSpot;
         this.entrance = entrance;
         this.marks = List.copyOf(marks);
+        this.anchors = Map.copyOf(anchors);
     }
 
     /**
@@ -195,6 +197,11 @@ public final class Blueprint {
     /** Weitere markierte Stellen (z. B. Arbeitsplätze am Markt). */
     public List<BlockPos> marks() {
         return this.marks;
+    }
+
+    /** Eine benannte Stelle (z. B. "shaft_top" der Mine, "anvil" der Schmiede) oder {@code fallback}. */
+    public BlockPos anchor(String name, BlockPos fallback) {
+        return this.anchors.getOrDefault(name, fallback);
     }
 
     // =====================================================================================
