@@ -178,6 +178,7 @@ public final class ModGameTests {
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
         VillageLayoutGameTests.init(); // Grundrisse der Dörfer
         GolemGameTests.init();     // Golems und Wichtel
+        RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
     }
 
     private ModGameTests() {}
@@ -217,6 +218,7 @@ public final class ModGameTests {
         ArmyGameTests.register(event, environment);
         VillageLayoutGameTests.register(event, environment);
         GolemGameTests.register(event, environment);
+        RareGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

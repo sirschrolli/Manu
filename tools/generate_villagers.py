@@ -42,6 +42,11 @@ gs.PARTS.update({
     "tall_hat": (64, 0, 7, 6, 7),
     "hood": (92, 0, 9, 3, 5),
     "satchel": (106, 41, 4, 4, 2),
+    # Kiepe des fahrenden Händlers: Weidenkorb, Deckenrolle obenauf, Kessel und Laterne an den Seiten
+    "pack": (84, 36, 7, 12, 4),
+    "bedroll": (84, 52, 8, 2, 2),
+    "kettle": (106, 48, 2, 2, 2),
+    "lantern": (114, 48, 2, 3, 2),
 })
 
 SIDES = ("right", "front", "left", "back")
@@ -633,6 +638,113 @@ def merchant(look, feminine):
     return gc.merchant(look[:4], feminine)
 
 
+# =============================================================================
+# Fahrender Händler (kein Beruf im Dorf: er zieht mit seinen Lamas von Ort zu Ort)
+# =============================================================================
+
+WICKER = pal("#4a3014", "#6a4620", "#8c6230", "#ae8044", "#cca262")
+COPPER = pal("#4a1e10", "#7a3418", "#a8502a", "#cc7444", "#ec9a68")
+TRAVEL_COAT = pal("#18282a", "#22383a", "#2e4a4a", "#3c5e5a", "#4e746c")
+DUST = hexc("#9a8a6a")
+
+
+def kiepe(s, blanket):
+    """Rückentrage aus Weidenruten mit Ledergurten, darauf eine Deckenrolle; Kupferkessel und Laterne hängen außen."""
+    def woven(x, y, w, h):
+        if y == 0:
+            return WICKER[4]                                              # Rand oben
+        if y == h - 1:
+            return WICKER[1]                                              # Boden
+        if y in (3, 8):
+            return WICKER[3] if x % 2 else WICKER[4]                      # zwei geflochtene Ringe
+        # Flechtwerk: waagrechte Ruten, versetzt über und unter den senkrechten Staken
+        over = (x + y // 2) % 2 == 0
+        return WICKER[3] if over else WICKER[2] if y % 2 else WICKER[1]
+    for f in SIDES:
+        s.fill("pack", f, woven)
+    # oben schaut, was er mit sich trägt, aus dem Korb: Tuch, Rollen, Flaschenhälse
+    def load(x, y, w, h):
+        if min(x, y, w - 1 - x, h - 1 - y) == 0:
+            return WICKER[4]
+        return [blanket[2], hexc("#3a6a3a"), blanket[1], hexc("#d8c890"), hexc("#3a5a8a")][(x * 3 + y * 5) % 5]
+    s.fill("pack", "top", load)
+    s.fill("pack", "bottom", WICKER[1])
+    # zwei Ledergurte senkrecht über den Korb (hinten sichtbar), mit Messingschnallen
+    x0, y0, w, h = gs.face_rect("pack", "back")
+    for y in range(h):
+        s.set(x0 + 1, y0 + y, LEATHER[2] if y % 3 else LEATHER[3])
+        s.set(x0 + 5, y0 + y, LEATHER[2] if y % 3 else LEATHER[3])
+    s.set(x0 + 1, y0 + 5, BRASS[3])
+    s.set(x0 + 5, y0 + 5, BRASS[3])
+    # Deckenrolle: Wolle mit Streifen, die Enden zeigen die Wicklung
+    def roll(x, y, w, h):
+        return blanket[3] if (x // 2) % 3 else blanket[4] if y == 0 else blanket[2]
+    for f in ("front", "back", "top", "bottom"):
+        s.fill("bedroll", f, roll)
+    for f in ("right", "left"):
+        s.fill("bedroll", f, lambda x, y, w, h: blanket[1] if (x, y) in ((0, 0), (1, 1)) else blanket[3])
+    x0, y0, w, h = gs.face_rect("bedroll", "back")
+    for y in range(h):
+        s.set(x0 + 2, y0 + y, LEATHER[2])
+        s.set(x0 + 5, y0 + y, LEATHER[2])
+    # Kupferkessel
+    s.fill_all("kettle", lambda x, y, w, h: COPPER[4] if (x, y) == (0, 0) else COPPER[3] if y == 0 else COPPER[2])
+    s.fill("kettle", "top", COPPER[1])
+    # Laterne: Eisenrahmen, warmes Licht
+    def lamp(x, y, w, h):
+        if y in (0, h - 1):
+            return IRON[1]
+        return hexc("#ffd36a") if x == 0 else hexc("#e09a30")
+    for f in SIDES:
+        s.fill("lantern", f, lamp)
+    s.fill("lantern", "top", IRON[2])
+    s.fill("lantern", "bottom", IRON[1])
+
+
+def traveler(look, feminine: bool) -> gs.Skin:
+    """
+    Fahrender Händler: breitkrempiger, verstaubter Filzhut mit Feder, langer Reisemantel mit Flicken und
+    Halstuch, Schultergurte der Kiepe, Gürtel mit Geldbeutel, hohe Stiefel.
+    """
+    s, skin, hair = base(look, feminine)
+    hat = pal("#2a1c10", "#3e2a18", "#564026", "#6e5434", "#866a46")
+    felt_hat(s, hat, band=hexc("#7a2a1c"))
+    scarf = [hexc("#6a1a14"), hexc("#8a2a1c"), hexc("#b0402a"), hexc("#cc5a3a")]
+    blanket = pal("#3a1810", "#5a2818", "#7a3a22", "#a05030", "#c87040")
+    coat = cloth(TRAVEL_COAT, 3, "tcoat", folds=(1, 6))
+    def front(x, y, w, h):
+        if y <= 1 and 1 <= x <= 6:
+            return scarf[3] if y == 0 and x in (3, 4) else scarf[2] if y == 0 else scarf[1]   # Halstuch
+        if y == 2 and x in (3, 4):
+            return scarf[0]                                               # Zipfel
+        if x in (1, 6) and y < 9:
+            return LEATHER[2] if y % 3 else LEATHER[3]                    # Schultergurte der Kiepe
+        if (x, y) in ((2, 6), (2, 7)):
+            return hexc("#5a4a30")                                        # Flicken
+        c = coat(x, y, w, h)
+        return mix(c, DUST, 0.18) if y >= 9 else c                        # Staub der Straße am Saum
+    def back(x, y, w, h):
+        if y <= 1 and 1 <= x <= 6:
+            return scarf[1]
+        return coat(x, y, w, h)
+    torso(s, front, back, cloth(TRAVEL_COAT, 3, "tcoats"), top=scarf[2])
+    belt(s, 8, ramp=BROWN, buckle=BRASS)
+    def sleeve(x, y, w, h):
+        c = cloth(TRAVEL_COAT, 3, "tsleeve", folds=(1,))(x, y, w, h)
+        if (x, y) in ((1, 3), (2, 3), (1, 4)):
+            return hexc("#5a4a30")                                        # Flicken am Ellbogen
+        return c
+    arms(s, sleeve, 10, skin, cuff=TRAVEL_COAT[1])
+    skirt_flaps(s, TRAVEL_COAT, "tskirt" + look[0], hem=TRAVEL_COAT[1])
+    if feminine:
+        dress_legs(s, TRAVEL_COAT, BROWN, "tdress")
+    else:
+        legs(s, cloth(BROWN, 3, "ttrousers", folds=(2,), shade_bottom=False), pal("#1a120c", "#2a1d13", "#3a2a1c", "#4c3826", "#5e4632"), 6)
+    pouch(s, pal("#3a2a08", "#5a4210", "#8a6a20", "#b48e30", "#d8b450"))
+    kiepe(s, blanket)
+    return s
+
+
 # Gesichter: (Hautton, Haare, Augen, Gesicht[, Farbvariante der Gugel])
 PROFESSIONS = {
     "peasant": (peasant, [("medium", "brown", "brown", "stubble", 0), ("light", "blond", "blue", "plain", 1),
@@ -654,6 +766,8 @@ PROFESSIONS = {
     "baker": (baker, [("light", "blond", "blue", "mustache"), ("medium", "brown", "brown", "plain"), ("light", "red", "green", "freckles")]),
     "innkeeper": (innkeeper, [("medium", "brown", "brown", "beard"), ("light", "red", "blue", "fullbeard"), ("light", "blond", "green", "woman")]),
     "merchant": (merchant, [("tan", "black", "brown", "beard"), ("light", "gray", "blue", "mustache"), ("medium", "chestnut", "hazel", "woman")]),
+    "traveler": (traveler, [("tan", "gray", "brown", "fullbeard"), ("medium", "brown", "green", "mustache"),
+                            ("light", "red", "hazel", "woman")]),
 }
 
 

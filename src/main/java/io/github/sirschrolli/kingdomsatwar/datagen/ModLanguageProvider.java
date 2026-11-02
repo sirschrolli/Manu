@@ -1034,6 +1034,15 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.ALLAY, ModItems.ALLAY_SPAWN_EGG, "Sprite", "Wichtel", "Wichtel");
         breeds(ModEntities.ALLAY, new String[][]{{"mooswichtel", "Moss Sprite", "Mooswichtel"}, {"pilzwichtel", "Toadstool Sprite", "Pilzwichtel"},
                 {"laubwichtel", "Leaf Sprite", "Laubwichtel"}, {"sternwichtel", "Star Sprite", "Sternwichtel"}});
+        // seltene Wesen und der fahrende Händler (E4d-2)
+        creature(ModEntities.SNIFFER, ModItems.SNIFFER_SPAWN_EGG, "Primeval Digger", "Urwühler", "Urwühler");
+        breeds(ModEntities.SNIFFER, new String[][]{{"zottelwuehler", "Shaggy Digger", "Zottelwühler"}, {"steppenwuehler", "Steppe Digger", "Steppenwühler"},
+                {"frostwuehler", "Frost Digger", "Frostwühler"}});
+        creature(ModEntities.HAPPY_GHAST, ModItems.HAPPY_GHAST_SPAWN_EGG, "Cloud Jelly", "Wolkenqualle", "Wolkenqualle");
+        breeds(ModEntities.HAPPY_GHAST, new String[][]{{"schoenwetter", "Fair-Weather Cloud", "Schönwetterwolke"},
+                {"abendrot", "Sunset Cloud", "Abendwolke"}, {"regenwolke", "Rain Cloudlet", "Regenwölkchen"}});
+        creature(ModEntities.WANDERING_TRADER, ModItems.WANDERING_TRADER_SPAWN_EGG, "Travelling Merchant", "Fahrender Händler",
+                "Fahrender-Händler");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

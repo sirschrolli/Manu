@@ -30,6 +30,9 @@
     "kingdomsatwar:guardian": {
       "sound": "minecraft:entity.parrot.imitate.guardian"
     },
+    "kingdomsatwar:happy_ghast": {
+      "sound": "minecraft:intentionally_empty"
+    },
     "kingdomsatwar:husk": {
       "sound": "minecraft:entity.parrot.imitate.husk"
     },

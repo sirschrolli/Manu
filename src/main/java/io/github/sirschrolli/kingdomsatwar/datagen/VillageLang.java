@@ -39,6 +39,7 @@ final class VillageLang {
         profession(t, "baker", "Baker", "Bäcker", "Baker", "Bäckerin");
         profession(t, "innkeeper", "Innkeeper", "Wirt", "Innkeeper", "Wirtin");
         profession(t, "merchant", "Merchant", "Händler", "Merchant", "Händlerin");
+        profession(t, "traveler", "Travelling Merchant", "Fahrender Händler", "Travelling Merchant", "Fahrende Händlerin");
     }
 
     private static void messages(EconomyLang.Text t) {

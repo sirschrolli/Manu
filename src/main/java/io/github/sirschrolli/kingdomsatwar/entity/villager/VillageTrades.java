@@ -322,6 +322,66 @@ public final class VillageTrades {
         return list;
     }
 
+    /**
+     * Was der fahrende Händler anbietet (vor Rabatt): Pflanzen, Setzlinge und Hölzer aus fernen Ländern, Blumen, Farben,
+     * Korallen, Eis und Höhlenfunde, dazu ein, zwei Kostbarkeiten – jeder Händler nach seinem eigenen Zufall. Er kauft
+     * Proviant für die Reise (Ofenkartoffeln, Heu für die Lamas, Milch, Wasser).
+     */
+    public static List<Offer> traveler(RegistryAccess registries, long seed) {
+        RandomSource random = RandomSource.create(seed);
+        List<Offer> list = new ArrayList<>();
+        // Setzlinge und Hölzer
+        List<Item> saplings = new ArrayList<>(List.of(Items.OAK_SAPLING, Items.SPRUCE_SAPLING, Items.BIRCH_SAPLING, Items.JUNGLE_SAPLING,
+                Items.ACACIA_SAPLING, Items.DARK_OAK_SAPLING, Items.CHERRY_SAPLING, Items.PALE_OAK_SAPLING, Items.POPLAR_SAPLING,
+                Items.MANGROVE_PROPAGULE));
+        for (int i = 0; i < 3; i++) {
+            list.add(Offer.buy(saplings.remove(random.nextInt(saplings.size())), 1, 6));
+        }
+        list.add(Offer.buy(pickItem(random, Items.ACACIA_LOG, Items.CHERRY_LOG, Items.JUNGLE_LOG, Items.MANGROVE_LOG, Items.PALE_OAK_LOG,
+                Items.POPLAR_LOG, Items.DARK_OAK_LOG), 8, 8));
+        // Blumen und Farben
+        List<Item> flowers = new ArrayList<>(List.of(Items.ALLIUM, Items.AZURE_BLUET, Items.BLUE_ORCHID, Items.CORNFLOWER, Items.DANDELION,
+                Items.GOLDEN_DANDELION, Items.LILY_OF_THE_VALLEY, Items.OPEN_EYEBLOSSOM, Items.ORANGE_TULIP, Items.PINK_TULIP,
+                Items.RED_TULIP, Items.WHITE_TULIP, Items.OXEYE_DAISY, Items.POPPY, Items.WILDFLOWERS));
+        for (int i = 0; i < 3; i++) {
+            list.add(Offer.buy(flowers.remove(random.nextInt(flowers.size())), 1, 2));
+        }
+        list.add(Offer.buy(Items.DYE.pick(color(random)), 3, 3));
+        list.add(Offer.buy(Items.DYE.pick(color(random)), 3, 3));
+        // Waren aus fernen Ländern: Meer, Eis, Höhlen, Moore
+        List<ItemStack> far = new ArrayList<>(List.of(stack(Items.KELP, 4), stack(Items.SEA_PICKLE, 2), stack(Items.LILY_PAD, 2),
+                stack(Items.BRAIN_CORAL_BLOCK, 1), stack(Items.BUBBLE_CORAL_BLOCK, 1), stack(Items.FIRE_CORAL_BLOCK, 1),
+                stack(Items.HORN_CORAL_BLOCK, 1), stack(Items.TUBE_CORAL_BLOCK, 1), stack(Items.PACKED_ICE, 2), stack(Items.BLUE_ICE, 1),
+                stack(Items.POINTED_DRIPSTONE, 2), stack(Items.SMALL_DRIPLEAF, 2), stack(Items.MOSS_BLOCK, 2), stack(Items.PALE_MOSS_BLOCK, 2),
+                stack(Items.PALE_HANGING_MOSS, 3), stack(Items.PODZOL, 3), stack(Items.ROOTED_DIRT, 3), stack(Items.RED_SAND, 4),
+                stack(Items.CACTUS, 2), stack(Items.SUGAR_CANE, 3), stack(Items.VINE, 3), stack(Items.FIREFLY_BUSH, 1),
+                stack(Items.SHELF_MUSHROOM, 2), stack(Items.SULFUR_SPIKE, 2), stack(Items.BROWN_MUSHROOM, 2), stack(Items.RED_MUSHROOM, 2),
+                stack(Items.FERN, 2), stack(Items.DRY_TALL_GRASS, 2), stack(Items.PUMPKIN, 1), stack(Items.GLOWSTONE, 1),
+                stack(Items.SLIME_BALL, 2), stack(Items.GUNPOWDER, 2), stack(Items.NAUTILUS_SHELL, 1)));
+        for (int i = 0; i < 5; i++) {
+            ItemStack goods = far.remove(random.nextInt(far.size()));
+            list.add(Offer.buy(goods, 4 + random.nextInt(5) + goods.getCount()));
+        }
+        // Saatgut aus fernen Gärten
+        list.add(Offer.buy(pickItem(random, Items.BEETROOT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, ModItems.TOMATO_SEEDS.get(),
+                ModItems.CABBAGE_SEEDS.get(), ModItems.BARLEY_SEEDS.get()), 4, 4));
+        // ein, zwei Kostbarkeiten
+        int rare = random.nextInt(6);
+        switch (rare) {
+            case 0 -> list.add(Offer.buy(enchanted(registries, random, Items.IRON_PICKAXE, 10), 60));
+            case 1 -> list.add(Offer.buy(PotionContents.createItemStack(Items.POTION, Potions.LONG_INVISIBILITY), 45));
+            case 2 -> list.add(Offer.buy(Items.NAME_TAG, 1, 40));
+            case 3 -> list.add(Offer.buy(Items.PUFFERFISH_BUCKET, 1, 30));
+            case 4 -> list.add(Offer.buy(Items.TROPICAL_FISH_BUCKET, 1, 30));
+            default -> list.add(Offer.buy(Items.BLUE_ICE, 4, 30));
+        }
+        // Proviant für die Reise
+        list.add(Offer.sell(Items.BAKED_POTATO, 4, 6));
+        list.add(Offer.sell(Items.HAY_BLOCK, 1, 10));
+        list.add(Offer.sell(pickItem(random, Items.MILK_BUCKET, Items.WATER_BUCKET, Items.FERMENTED_SPIDER_EYE), 1, 12));
+        return list;
+    }
+
     // =====================================================================================
     // Wechselnde Waren
     // =====================================================================================

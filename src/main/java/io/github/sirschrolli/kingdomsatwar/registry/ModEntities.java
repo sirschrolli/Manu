@@ -309,6 +309,20 @@ public final class ModEntities {
             "allay", io.github.sirschrolli.kingdomsatwar.entity.creature.golem.HouseSprite::new, MobCategory.CREATURE, builder -> builder.sized(0.35f, 0.6f)
                     .eyeHeight(0.36f).ridingOffset(0.04f).clientTrackingRange(8).updateInterval(2));
 
+    // ---------------------------------------------------------------- Seltene Wesen und der fahrende Händler (E4d-2)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.rare.PrimevalDigger>> SNIFFER = ENTITIES.registerEntityType(
+            "sniffer", io.github.sirschrolli.kingdomsatwar.entity.creature.rare.PrimevalDigger::new, MobCategory.CREATURE, builder -> builder
+                    .sized(1.9f, 1.75f).eyeHeight(1.05f).passengerAttachments(2.09375f).nameTagOffset(2.05f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.rare.CloudJelly>> HAPPY_GHAST = ENTITIES.registerEntityType(
+            "happy_ghast", io.github.sirschrolli.kingdomsatwar.entity.creature.rare.CloudJelly::new, MobCategory.CREATURE, builder -> builder
+                    .sized(4.0f, 4.0f).eyeHeight(2.6f)
+                    .passengerAttachments(new net.minecraft.world.phys.Vec3(0.0, 4.0, 1.7), new net.minecraft.world.phys.Vec3(-1.7, 4.0, 0.0),
+                            new net.minecraft.world.phys.Vec3(0.0, 4.0, -1.7), new net.minecraft.world.phys.Vec3(1.7, 4.0, 0.0))
+                    .ridingOffset(0.5f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.villager.TravelingMerchant>> WANDERING_TRADER = ENTITIES.registerEntityType(
+            "wandering_trader", io.github.sirschrolli.kingdomsatwar.entity.villager.TravelingMerchant::new, MobCategory.CREATURE, builder -> builder
+                    .sized(0.6f, 1.95f).eyeHeight(1.62f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -510,6 +524,9 @@ public final class ModEntities {
         event.put(SNOW_GOLEM.get(), net.minecraft.world.entity.animal.golem.SnowGolem.createAttributes().build());
         event.put(COPPER_GOLEM.get(), net.minecraft.world.entity.animal.golem.CopperGolem.createAttributes().build());
         event.put(ALLAY.get(), net.minecraft.world.entity.animal.allay.Allay.createAttributes().build());
+        event.put(SNIFFER.get(), net.minecraft.world.entity.animal.sniffer.Sniffer.createAttributes().build());
+        event.put(HAPPY_GHAST.get(), net.minecraft.world.entity.animal.happyghast.HappyGhast.createAttributes().build());
+        event.put(WANDERING_TRADER.get(), net.minecraft.world.entity.Mob.createMobAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());

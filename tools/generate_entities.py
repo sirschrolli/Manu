@@ -22,7 +22,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               breeze, breeze_wind, creaking, guardian, illager, ravager, vex, warden,
                               axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
                               turtle,
-                              allay, copper_golem, iron_golem, snow_golem,
+                              allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -203,6 +203,16 @@ def main():
     write_model(allay, "HouseSpriteGeometry",
                 "Geometrie der Wichtel (Knochen wie beim Vanilla-Hilfsgeist; Zipfelmütze oder Fliegenpilz je Gestalt).",
                 "allay", allay.PALETTES, preview)
+    # Seltene Wesen (E4d-2): Knochen wie bei Vanilla, eigene Quader und Texturen
+    write_model(sniffer, "PrimevalDiggerGeometry",
+                "Geometrie des Urwühlers (Knochen wie beim Vanilla-Schnüffler; Fellbehang, Buckel, Moosmatte, Backenbart).",
+                "sniffer", sniffer.PALETTES, preview)
+    write_model(sniffer_baby, "PrimevalDiggerBabyGeometry",
+                "Geometrie des jungen Urwühlers (Knochen wie beim Vanilla-Schnüfflerjungen; Flaum, Stirnbüschel, Farnsprössling).",
+                "sniffer/baby", sniffer_baby.PALETTES, preview)
+    write_model(happy_ghast, "CloudJellyGeometry",
+                "Geometrie der Wolkenqualle (Körper und Fangarme wie beim glücklichen Ghast, dazu der Ballenkranz; im Spiel ×4).",
+                "happy_ghast", happy_ghast.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

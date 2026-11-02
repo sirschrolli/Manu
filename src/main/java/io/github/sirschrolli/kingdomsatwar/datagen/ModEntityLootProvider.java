@@ -174,6 +174,9 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.SNOW_GOLEM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SNOW_GOLEM));
         this.add(ModEntities.COPPER_GOLEM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.COPPER_GOLEM));
         this.add(ModEntities.ALLAY.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ALLAY));
+        this.add(ModEntities.SNIFFER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SNIFFER));
+        this.add(ModEntities.HAPPY_GHAST.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HAPPY_GHAST));
+        this.add(ModEntities.WANDERING_TRADER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WANDERING_TRADER));
         this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
         this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
         this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));

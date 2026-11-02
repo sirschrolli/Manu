@@ -49,6 +49,8 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
     public static final int SATCHEL = 1 << 10;
     /** Hohe Mütze (Bäcker). */
     public static final int TALL_HAT = 1 << 11;
+    /** Kiepe des fahrenden Händlers: Weidenkorb mit Deckenrolle, Kupferkessel und Laterne. */
+    public static final int PACK = 1 << 12;
 
     private final ModelPart crown;
     private final ModelPart brim;
@@ -63,6 +65,9 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
     private final ModelPart flapBack;
     private final ModelPart hood;
     private final ModelPart satchel;
+    private final ModelPart pack;
+    private final ModelPart kettle;
+    private final ModelPart lantern;
 
     public CitizenModel(ModelPart root) {
         super(root);
@@ -79,6 +84,9 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
         this.flapBack = this.body.getChild("flap_back");
         this.hood = this.body.getChild("hood");
         this.satchel = this.body.getChild("satchel");
+        this.pack = this.body.getChild("pack");
+        this.kettle = this.pack.getChild("kettle");
+        this.lantern = this.pack.getChild("lantern");
     }
 
     public static LayerDefinition createLayer() {
@@ -125,6 +133,16 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
         // Umhängetasche hinten an der Hüfte (der Riemen läuft quer über die Brust)
         body.addOrReplaceChild("satchel", CubeListBuilder.create().texOffs(106, 41).addBox(-2.0f, 0.0f, 0.0f, 4.0f, 4.0f, 2.0f),
                 PartPose.offsetAndRotation(-1.6f, 7.4f, 2.05f, 0.08f, 0.0f, 0.0f));
+        // Kiepe auf dem Rücken: ein hoher Weidenkorb, der unten an der Hüfte aufliegt und nach hinten geneigt über die
+        // Schultern ragt (so bleibt er frei vom Kopf); obenauf die Deckenrolle, hinten hängen Kupferkessel und Laterne
+        PartDefinition pack = body.addOrReplaceChild("pack", CubeListBuilder.create().texOffs(84, 36).addBox(-3.5f, -12.0f, 0.0f, 7.0f, 12.0f, 4.0f),
+                PartPose.offsetAndRotation(0.0f, 9.0f, 2.2f, -0.25f, 0.0f, 0.0f));
+        pack.addOrReplaceChild("bedroll", CubeListBuilder.create().texOffs(84, 52).addBox(-4.0f, -2.0f, -1.0f, 8.0f, 2.0f, 2.0f),
+                PartPose.offset(0.0f, -12.0f, 2.0f));
+        pack.addOrReplaceChild("kettle", CubeListBuilder.create().texOffs(106, 48).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 2.0f, 2.0f),
+                PartPose.offset(1.8f, -4.0f, 5.0f));
+        pack.addOrReplaceChild("lantern", CubeListBuilder.create().texOffs(114, 48).addBox(-1.0f, 0.0f, -1.0f, 2.0f, 3.0f, 2.0f),
+                PartPose.offset(-1.8f, -7.5f, 5.0f));
         return LayerDefinition.create(mesh, 128, 64);
     }
 
@@ -142,7 +160,8 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
         this.scroll.visible = (p & QUIVER) != 0;
         this.hood.visible = (p & HOOD) != 0;
         this.satchel.visible = (p & SATCHEL) != 0;
-        this.hair.visible = state.feminine;
+        this.pack.visible = (p & PACK) != 0;
+        this.hair.visible = state.feminine && (p & PACK) == 0;          // unter der Kiepe trägt sie das Haar hochgesteckt
         this.flapFront.visible = (p & (APRON | ROBE)) != 0 || state.feminine;
         this.flapBack.visible = (p & ROBE) != 0 || state.feminine;
 
@@ -153,6 +172,11 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
         this.flapBack.xRot = backward * 0.95f;
         // die Tasche schwingt beim Gehen ein wenig
         this.satchel.xRot = 0.08f + Math.abs(Mth.sin(state.walkAnimationPos * 0.6662f)) * state.walkAnimationSpeed * 0.3f;
+        // Kessel und Laterne an der Kiepe schaukeln beim Gehen
+        float sway = Mth.sin(state.walkAnimationPos * 0.6662f) * state.walkAnimationSpeed;
+        this.kettle.zRot = sway * 0.3f;
+        this.lantern.zRot = -sway * 0.3f;
+        this.kettle.xRot = this.lantern.xRot = -Math.abs(sway) * 0.25f;
         // die Feder wippt beim Gehen leicht nach
         this.feather.xRot = -0.55f + Mth.sin(state.walkAnimationPos * 0.6662f * 2.0f) * state.walkAnimationSpeed * 0.12f;
         // die Haare schwingen mit dem Kopf nach (bleiben hinten am Rücken, wenn der Kopf nach unten schaut)

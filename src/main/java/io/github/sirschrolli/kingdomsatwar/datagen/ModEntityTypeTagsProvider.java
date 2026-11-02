@@ -155,5 +155,10 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(ModEntities.COPPER_GOLEM.key());
         this.tag(EntityTypeTags.ACCEPTS_IRON_GOLEM_GIFT).add(ModEntities.COPPER_GOLEM.key());
         this.tag(EntityTypeTags.CANDIDATE_FOR_IRON_GOLEM_GIFT).add(ModEntities.VILLAGER.key());
+        // seltene Wesen (E4d-2): Geschirr nur für die Wolkenqualle, sie fällt nicht und wirft unter Wasser ihre Reiter ab
+        this.tag(EntityTypeTags.CAN_EQUIP_HARNESS).add(ModEntities.HAPPY_GHAST.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.HAPPY_GHAST.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.HAPPY_GHAST.key());
+        this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.HAPPY_GHAST.key()).add(ModEntities.SNIFFER.key());
     }
 }

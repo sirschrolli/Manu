@@ -492,7 +492,7 @@ final class WildGameTests {
         });
     }
 
-    /** Das Lama des fahrenden Händlers wird zum eigenen Lama – und bleibt an seiner Leine. */
+    /** Das Lama des fahrenden Händlers wird zum eigenen Lama, der Händler zum eigenen Händler – und das Lama bleibt an seiner Leine. */
     private static void traderLlamaLeash(GameTestHelper helper) {
         floor(helper);
         ServerLevel level = helper.getLevel();
@@ -501,10 +501,13 @@ final class WildGameTests {
         var llama = EntityTypes.TRADER_LLAMA.spawn(level, helper.absolutePos(new BlockPos(5, 1, 4)), EntitySpawnReason.EVENT);
         helper.assertTrue(llama != null, "kein Händlerlama");
         llama.setLeashedTo(trader, true);
+        java.util.UUID traderId = trader.getUUID();
         helper.succeedWhen(() -> {
             var llamas = level.getEntitiesOfClass(WildTraderLlama.class, arena(helper));
             helper.assertTrue(llamas.size() == 1, "kein eigenes Händlerlama");
-            helper.assertTrue(llamas.getFirst().getLeashHolder() == trader, "Händlerlama nicht mehr an der Leine");
+            // auch der Händler selbst ist jetzt der eigene (mit derselben UUID) – das Lama hängt an seiner Leine
+            helper.assertTrue(llamas.getFirst().getLeashHolder() instanceof io.github.sirschrolli.kingdomsatwar.entity.villager.TravelingMerchant merchant
+                    && merchant.getUUID().equals(traderId), "Händlerlama nicht mehr an der Leine des Händlers: " + llamas.getFirst().getLeashHolder());
             helper.assertTrue(level.getEntitiesOfClass(Llama.class, arena(helper), l -> l.getType() == EntityTypes.TRADER_LLAMA).isEmpty(),
                     "Vanilla-Händlerlama bleibt");
             helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, arena(helper),

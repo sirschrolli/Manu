@@ -128,7 +128,12 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.IRON_GOLEM, ModEntities.IRON_GOLEM),
                 Map.entry(EntityTypes.SNOW_GOLEM, ModEntities.SNOW_GOLEM),
                 Map.entry(EntityTypes.COPPER_GOLEM, ModEntities.COPPER_GOLEM),
-                Map.entry(EntityTypes.ALLAY, ModEntities.ALLAY));
+                Map.entry(EntityTypes.ALLAY, ModEntities.ALLAY),
+                // seltene Wesen, Dorfbewohner und der fahrende Händler (E4d-2)
+                Map.entry(EntityTypes.SNIFFER, ModEntities.SNIFFER),
+                Map.entry(EntityTypes.HAPPY_GHAST, ModEntities.HAPPY_GHAST),
+                Map.entry(EntityTypes.VILLAGER, ModEntities.VILLAGER),
+                Map.entry(EntityTypes.WANDERING_TRADER, ModEntities.WANDERING_TRADER));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */
@@ -162,10 +167,11 @@ public final class FarmAnimalConversion {
         if (!replacements().containsKey(mob.getType())) {
             return;
         }
-        if (mob.isPassenger() || mob.isVehicle() || mob.getType() == EntityTypes.TRADER_LLAMA) {
+        if (mob.isPassenger() || mob.isVehicle() || mob.getType() == EntityTypes.TRADER_LLAMA || mob.getType() == EntityTypes.WANDERING_TRADER) {
             // Reiter und Reittiere (Spinnenreiter, Hühnerreiter, Zombiepferde und Dörrkamele mit Reitern) werden am Ende
             // des Ticks als Ganzes ersetzt und wieder aufgesattelt; der fahrende Händler legt sein Lama erst NACH dem
-            // Erscheinen an die Leine – auch das wartet bis zum Ende des Ticks, damit die Leine mit umzieht
+            // Erscheinen an die Leine und bekommt erst dann Aufenthaltsdauer, Ziel und Heimat – auch das wartet bis zum
+            // Ende des Ticks, damit Leine und Reiseplan mit umziehen
             PENDING.add(mob);
             return;
         }
@@ -385,11 +391,54 @@ public final class FarmAnimalConversion {
                     sprite.setLook(parent.getFirst().getLook());
                 }
             }
+            case io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity villager -> setupVillager(level, original, villager);
+            case io.github.sirschrolli.kingdomsatwar.entity.villager.TravelingMerchant merchant -> {
+                if (!merchant.isInitialized()) {
+                    merchant.setupRandom();
+                }
+            }
             case io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters.Varied varied ->
                     varied.chooseLook(level, original.blockPosition());
             default -> { }
         }
         return replacement;
+    }
+
+    /**
+     * Ein Vanilla-Dorfbewohner wird ein Bewohner mit dem passenden Beruf (Geistlicher → Kräuterkundige, Bibliothekar →
+     * Schreiber, Lederer → Gerber, Fischer → Fischer, ohne Beruf und Nichtsnutz → Tagelöhner …), einem Gesicht und einem
+     * Namen (ein Namensschild bleibt); er ist dort zu Hause, wo er erscheint.
+     */
+    private static void setupVillager(ServerLevel level, Mob original, io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity villager) {
+        io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession profession =
+                original instanceof net.minecraft.world.entity.npc.villager.Villager vanilla
+                        ? professionFor(vanilla.getVillagerData().profession().unwrapKey().map(k -> k.identifier().getPath()).orElse("none"))
+                        : io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.PEASANT;
+        RandomSource random = level.getRandom();
+        int variant = random.nextInt(profession.variants());
+        String name = original.getCustomName() != null ? original.getCustomName().getString()
+                : io.github.sirschrolli.kingdomsatwar.economy.town.TownNames.citizen(random, variant == profession.variants() - 1);
+        villager.setup(profession, variant, name, original.blockPosition(), "", null, null, random.nextLong());
+    }
+
+    /** Der eigene Beruf zu einem Vanilla-Beruf (Pfad der Kennung, z. B. {@code librarian}). */
+    public static io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession professionFor(String vanilla) {
+        return switch (vanilla) {
+            case "armorer" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.ARMORER;
+            case "butcher" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.BUTCHER;
+            case "cartographer" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.CARTOGRAPHER;
+            case "cleric" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.HERBALIST;
+            case "farmer" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.FARMER;
+            case "fisherman" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.FISHER;
+            case "fletcher" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.FLETCHER;
+            case "leatherworker" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.TANNER;
+            case "librarian" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.SCRIBE;
+            case "mason" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.MASON;
+            case "shepherd" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.SHEPHERD;
+            case "toolsmith" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.TOOLSMITH;
+            case "weaponsmith" -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.WEAPONSMITH;
+            default -> io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.PEASANT;
+        };
     }
 
     /** Für Tests und Zubehör: ob ein Typ durch ein eigenes Tier ersetzt wird. */

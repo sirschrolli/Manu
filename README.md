@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.20.0 – eigene Golems und Wichtel: Eisenwächter, Schneemann, Kupferknecht und Wichtel.**
+> **Testversion 0.21.0 – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler: keine Vanilla-Dorfwesen mehr.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -111,8 +111,19 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Die **Wichtel** sind kleine Hausgeister mit Libellenflügeln: Moos-, Pilz-, Laub- und Sternwichtel. Gebaut werden die
 > Golems wie gewohnt, alles Gelernte (Eisen flicken, Wachsen, Abschleifen, Sammeln, Tanzen, Verdoppeln) und alle Beute
 > bleiben, wie man sie kennt.
+> Neu in 0.21: **Die letzten Vanilla-Dorfwesen sind ersetzt.** Der **Urwühler** (statt Schnüffler) ist ein uraltes,
+> zotteliges Grabtier wie ein Moschusochse: das lange Fell fällt in drei Lagen bis über die Knie, auf dem Rücken wächst
+> eine Moosmatte mit Farnen und Blumen aus alter Zeit, vorn sitzt eine breite, ledrige Rüsselplatte mit Hauern. Er
+> schnuppert, gräbt alte Samen aus und legt Eier wie gewohnt – je nach Land als **Zottelwühler**, **Steppenwühler** oder
+> **Frostwühler**. Die **Wolkenqualle** (statt glücklicher Ghast) ist eine freundliche Haufenwolke mit großen Augen und
+> Dunstfäden, deren Ballen über alle Seiten hinweg gewölbt sind und unten als Kranz hervorquellen; Geschirr,
+> Schutzbrille und Seile passen wie beim Ghast, und es gibt sie als **Schönwetterwolke**, **Abendwolke** und
+> **Regenwölkchen**. Wo noch ein Vanilla-Dorfbewohner auftaucht (Spawn-Ei, Befehl, andere Mods), wird er ein eigener
+> Bewohner mit dem passenden Beruf. Und der **fahrende Händler** kommt mit breitkrempigem Hut, langem Reisemantel und
+> einer hohen Weidenkiepe samt Deckenrolle, Kupferkessel und Laterne – er handelt jetzt gegen Münzen: Setzlinge,
+> Blumen, Farben, Korallen, Eis und Höhlenfunde aus fernen Ländern.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Schnüffler, glücklicher Ghast, Dorfbewohner und fahrender Händler, danach Nether und End.
+> **Als Nächstes:** Nether und End – eigene Wesen und Bauwerke.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -153,7 +164,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
-| Schnüffler, glücklicher Ghast, Dorfbewohner und Händler statt Vanilla; Nether und End | 🔨 als Nächstes |
+| Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler statt Vanilla (Händler mit Münzhandel) | ✅ fertig |
+| Nether und End: eigene Mobs und Bauwerke | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -170,7 +182,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.20.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.21.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -178,7 +190,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.20.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.21.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -697,6 +709,22 @@ seines Vanilla-Gegenstücks – Schlag, Blumen-Reichen, Werfen, Truhen-Öffnen, 
 | **Kupferknecht** | Kupfergolem | blank, angelaufen, verwittert, oxidiert | Kesselkopf mit Glasaugen, Zeigerwerk, Aufziehschlüssel; sortiert Kupfertruhen, Wachs und Axt wie gewohnt; erstarrt irgendwann zur Statue in vier Haltungen |
 | **Wichtel** | Hilfsgeist | Mooswichtel, Pilzwichtel, Laubwichtel, Sternwichtel | Hausgeist mit Libellenflügeln und Zipfelmütze oder Fliegenpilz-Hut; sammelt, bringt zum Notenblock, tanzt, verdoppelt sich (mit derselben Mütze) |
 
+### Seltene Wesen und der fahrende Händler
+
+![Urwühler, Wolkenquallen und fahrende Händler](docs/bilder/seltene_wesen.jpg)
+
+Auch die letzten Vanilla-Dorfwesen sind ersetzt. Urwühler und Wolkenqualle haben die Knochen ihrer Vorbilder, damit
+Schnuppern, Graben, Aufstehen, Freudentanz und das Wehen der Fangarme wie gewohnt aussehen und Geschirr, Schutzbrille
+und Seile der Wolkenqualle genau sitzen. Aus Schnüffler-Eiern schlüpfen junge Urwühler, aus eingeweichten
+Ghastling-Blöcken Wölkchen.
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Urwühler** | Schnüffler | Zottelwühler, Steppenwühler (warm und trocken), Frostwühler (kalt) | Fell in drei Lagen bis über die Knie, Moosmatte mit Farnen und Blumen, Rüsselplatte (bläht sich beim Schnuppern), Hauer; gräbt Fackellilien- und Kannenpflanzen-Samen aus, legt Eier; Junge als flauschige Knäuel mit großen Augen |
+| **Wolkenqualle** | Glücklicher Ghast | Schönwetterwolke, Abendwolke, Regenwölkchen | Haufenwolke mit doppelter Texturauflösung, Ballenkranz, Dunstfäden (bei Regen mit Tropfen), großen Augen und Lächeln; trägt mit Geschirr bis zu vier Reiter; Wölkchen aus dem Ghastling-Block |
+| **Dorfbewohner** | Dorfbewohner | 17 Berufe | Vanilla-Dorfbewohner werden eigene Bewohner: Bibliothekar → Schreiber, Geistlicher → Kräuterkundige, Lederer → Gerber, ohne Beruf → Tagelöhner …; ein Namensschild bleibt |
+| **Fahrender Händler** | Fahrender Händler | drei Gesichter | Filzhut mit Feder, Reisemantel mit Flicken, Kiepe mit Deckenrolle, Kupferkessel und Laterne; kommt mit seinen Lamas, handelt gegen Münzen (mit Ansehen-Rabatt und Ladenpause), trinkt nachts seinen Unsichtbarkeitstrank |
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -929,7 +957,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.20.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.21.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -986,8 +1014,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Häuser mit Baukosten in mehreren Entwürfen, Bewohner, die Rohstoffe sammeln und abends ins Lager bringen,
      Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
-   - **die übrigen Dorfwesen** – Schnüffler, glücklicher Ghast, Dorfbewohner und fahrender Händler; alles, was sie
-     fallen lassen, bleibt erhältlich;
+   - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
