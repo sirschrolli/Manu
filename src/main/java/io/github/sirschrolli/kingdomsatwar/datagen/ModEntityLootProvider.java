@@ -192,6 +192,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         // Wesen des Ends (E5c): Enderperlen wie gewohnt
         this.add(ModEntities.ENDERMAN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ENDERMAN));
         this.add(ModEntities.ENDERMITE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ENDERMITE));
+        this.add(ModEntities.SHULKER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SHULKER));
         this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
         this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
         this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));

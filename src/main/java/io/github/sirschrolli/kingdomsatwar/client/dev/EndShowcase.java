@@ -119,6 +119,75 @@ final class EndShowcase {
         steps.add(Step.hud(true));
     }
 
+    /**
+     * Schreinlinge in einer Ecke aus Purpur (wie in einer Endstadt): am Boden, an der Wand und an der Decke, in mehreren
+     * Farben, einer späht mit offenem Deckel; davor Schreinfunken.
+     */
+    static void shulkers(Deque<Step> steps) {
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.server(level -> {
+            stage(level);
+            int g = Showcase.ground;
+            int x0 = X0 + 22;
+            BlockState purpur = Blocks.PURPUR_BLOCK.defaultBlockState();
+            Showcase.fill(level, new BlockPos(x0, g - 1, OZ - 7), new BlockPos(x0 + 10, g - 1, OZ - 1), purpur);
+            Showcase.fill(level, new BlockPos(x0, g, OZ - 7), new BlockPos(x0 + 10, g + 6, OZ - 7), purpur);     // Rückwand
+            Showcase.fill(level, new BlockPos(x0, g, OZ - 6), new BlockPos(x0, g + 6, OZ - 1), purpur);         // Seitenwand
+            Showcase.fill(level, new BlockPos(x0, g + 6, OZ - 6), new BlockPos(x0 + 10, g + 6, OZ - 4), purpur); // Decke
+            for (int x = x0 + 2; x <= x0 + 10; x += 4) {
+                level.setBlock(new BlockPos(x, g + 5, OZ - 6), Blocks.END_ROD.defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.EndRodBlock.FACING, net.minecraft.core.Direction.DOWN), 2);
+            }
+            shulker(level, x0 + 3.5, g, OZ - 2.5, null, false);                // am Boden, geschlossen
+            shulker(level, x0 + 6.5, g, OZ - 3.5, null, true);                 // späht
+            shulker(level, x0 + 5.5, g + 2, OZ - 5.5, net.minecraft.world.item.DyeColor.RED, false);         // an der Rückwand
+            shulker(level, x0 + 8.5, g + 5, OZ - 5.5, net.minecraft.world.item.DyeColor.LIGHT_BLUE, false);  // an der Decke
+            shulker(level, x0 + 1.5, g + 2, OZ - 2.5, net.minecraft.world.item.DyeColor.YELLOW, false);      // an der Seitenwand
+            shulker(level, x0 + 9.5, g, OZ - 2.0, net.minecraft.world.item.DyeColor.BLACK, false);
+            for (int i = 0; i < 3; i++) {
+                var bullet = net.minecraft.world.entity.EntityTypes.SHULKER_BULLET.create(level, EntitySpawnReason.COMMAND);
+                bullet.setNoGravity(true);
+                bullet.snapTo(x0 + 4.0 + i * 1.6, g + 1.4 + (i % 2) * 0.5, OZ + 0.5, 0, 0);
+                bullet.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                level.addFreshEntity(bullet);
+            }
+        }));
+        steps.add(Step.waitTicks(120));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(60)));
+        shot(steps, "end_shulkers", X0 + 27.5, 3.2, 2.2, 8.0, true);
+        // erst jetzt späht er (das Spähen wird beim Neuladen der Chunks zurückgesetzt)
+        steps.add(Step.command("data merge entity @e[type=kingdomsatwar:shulker,tag=spaeht,limit=1] {Peek:100b}"));
+        steps.add(Step.waitTicks(20));
+        shot(steps, "end_shulker_open", X0 + 28.5, 1.6, 0.6, 3.6, false);
+        shot(steps, "end_shulkers_wide", X0 + 27.5, 3.2, 2.2, 8.0, false);
+        steps.add(Step.command("time set 6000"));
+        shot(steps, "end_shulkers_day", X0 + 27.5, 3.2, 2.2, 8.0, false);
+        steps.add(Step.command("difficulty peaceful"));
+        steps.add(Step.command("gamerule spawn_mobs true"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
+        steps.add(Step.hud(true));
+    }
+
+    private static void shulker(ServerLevel level, double x, double y, double z, net.minecraft.world.item.DyeColor color, boolean open) {
+        var shulker = ModEntities.SHULKER.get().create(level, EntitySpawnReason.COMMAND);
+        shulker.setNoAi(true);
+        shulker.setPersistenceRequired();
+        shulker.snapTo(Math.floor(x) + 0.5, y, Math.floor(z) + 0.5, 0, 0);
+        if (color != null) {
+            shulker.setComponent(net.minecraft.core.component.DataComponents.SHULKER_COLOR, color);
+        }
+        if (open) {
+            shulker.addTag("spaeht");
+        }
+        level.addFreshEntity(shulker);
+    }
+
     /** Die Kamera steht {@code distance} Blöcke südlich, in Augenhöhe {@code eye}, und blickt nach Norden auf die Höhe {@code target}. */
     private static void shot(Deque<Step> steps, String name, double x, double eye, double target, double distance, boolean first) {
         float pitch = (float) Math.toDegrees(Math.atan2(eye - target, distance));

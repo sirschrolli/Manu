@@ -149,7 +149,8 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.WITHER, ModEntities.WITHER),
                 // Wesen des Ends (E5c)
                 Map.entry(EntityTypes.ENDERMAN, ModEntities.ENDERMAN),
-                Map.entry(EntityTypes.ENDERMITE, ModEntities.ENDERMITE));
+                Map.entry(EntityTypes.ENDERMITE, ModEntities.ENDERMITE),
+                Map.entry(EntityTypes.SHULKER, ModEntities.SHULKER));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */

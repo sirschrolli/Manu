@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.28.0 – Leerwandler und Leermilben; Brandgebeine und der Aschenkönig; die Standard-Biome im Stil der eigenen.**
+> **Testversion 0.29.0 – Schreinlinge, Leerwandler und Leermilben; Brandgebeine und der Aschenkönig; die Standard-Biome im Stil der eigenen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,12 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.28: **Die Wesen des Ends.** Statt Endermen wandern **Leerwandler** durch Oberwelt und End – Leiber wie aus
+> Neu in 0.29: **Schreinlinge.** Statt Shulkern hausen in den Endstädten **Schreinlinge** – bleiche Wesen mit einem
+> einzigen großen Auge und zwei Fühlern in geschnitzten Reliquienschreinen aus Stein: Bogennischen mit glimmenden Runen,
+> ein Rautenfries, oben ein achtzackiger Stern mit Medaillon und Seelenstein, Eckbeschläge aus angelaufener Bronze und
+> Zähne unter dem Deckelrand, die beim Öffnen blecken. Sie feuern **Schreinfunken** – Sterne aus Kristallnadeln –, lassen
+> sich in allen sechzehn Farben färben und lassen ihre Schalen fallen.
+> Seit 0.28: **Die Wesen des Ends.** Statt Endermen wandern **Leerwandler** durch Oberwelt und End – Leiber wie aus
 > dem Nachthimmel geschnitten, voller schwach leuchtender Sterne, über der Brust ein Riss in die leuchtende Leere, ein
 > langer Kopf mit zwei schmalen, schrägen, gleißenden Augen, über dem drei Splitter aus Purpurkristall kreisen. Sieht man
 > ihnen in die Augen, hebt sich der Kopf vom Kiefer, und darunter klafft ein Schlund voller dünner Zähne und violettem
@@ -182,7 +187,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** der Shulker, dann der Enderdrache.
+> **Als Nächstes:** der Enderdrache.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -228,8 +233,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Tiere und Geister des Nethers: Glutkeiler, Moderkeiler, Lavastelzer, Rauchqualle, Glutgeist, Glutschleim | ✅ fertig |
 | Brandgebein (statt Witherskelett) und Aschenkönig (statt Wither) mit Seelenschädeln | ✅ fertig |
 | Leerwandler (statt Enderman, zwei Gestalten) und Leermilbe (statt Endermite) | ✅ fertig |
+| Schreinling (statt Shulker, siebzehn Farben) mit Schreinfunken | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
-| Das End: Shulker und Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
+| Das End: Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -878,6 +884,12 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 |---|---|---|---|
 | **Leerwandler** | Enderman | Leerwandler (Oberwelt und End), Wirrwandler (Nether) | Leib wie Nachthimmel mit leuchtenden Sternen und einem Hauch Nebel, Riss über der Brust, langer Kopf mit schmalen schrägen Augen, drei kreisende Splitter aus Purpurkristall (im Zorn rasen sie), Schattenschleier, glimmende Gelenkringe, lange Finger; im Zorn ein Schlund voller Zähne; trägt Blöcke, springt fort, scheut Wasser; Enderperlen |
 | **Leermilbe** | Endermite | – | Panzerplatten aus Purpurkristall mit glimmenden Fugen, vier Punktaugen, Fühler, Beißzangen, drei Beinpaare, Kristalldornen und leuchtender Stachel; kriecht aus Enderperlen, wird von Leerwandlern gejagt |
+
+![Schreinlinge](docs/bilder/schreinling.jpg)
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Schreinling** | Shulker | Purpur und die sechzehn Färbungen | Reliquienschrein aus Stein mit Bogennischen und glimmenden Runen, Rautenfries, Pilastern, achtzackigem Stern mit Medaillon und Seelenstein, Bronzebeschlägen mit Grünspan, Zähnen unter dem Deckelrand und Fuß mit Runenpunkten; darin ein bleiches, von innen leuchtendes Wesen mit einem großen Auge und zwei Fühlern; klammert sich an jede Seite, späht, feuert Schreinfunken (Sterne aus Kristallnadeln, sie lassen schweben), springt fort; Shulkerschalen |
 
 ### Monster
 

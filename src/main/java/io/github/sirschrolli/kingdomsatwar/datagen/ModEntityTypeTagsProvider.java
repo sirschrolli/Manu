@@ -190,5 +190,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.ENDERMITE.key());
         this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.ENDERMITE.key());
         this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.ENDERMAN.key()).add(ModEntities.ENDERMITE.key());
+        // der Schreinling fällt nicht (er klammert sich fest und schwebt)
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.SHULKER.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.SHULKER.key());
     }
 }

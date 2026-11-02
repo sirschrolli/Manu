@@ -3,6 +3,8 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.end;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.LeermilbeGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.LeerwandlerGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.SchreinfunkeGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.SchreinlingGeometry;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
@@ -15,6 +17,8 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 public final class EndRenderers {
     public static final ModelLayerLocation LEERWANDLER = layer("leerwandler");
     public static final ModelLayerLocation LEERMILBE = layer("leermilbe");
+    public static final ModelLayerLocation SCHREINLING = layer("schreinling");
+    public static final ModelLayerLocation SCHREINFUNKE = layer("schreinfunke");
 
     private EndRenderers() {}
 
@@ -29,10 +33,15 @@ public final class EndRenderers {
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(LEERWANDLER, LeerwandlerGeometry::createLayer);
         event.registerLayerDefinition(LEERMILBE, LeermilbeGeometry::createLayer);
+        event.registerLayerDefinition(SCHREINLING, SchreinlingGeometry::createLayer);
+        event.registerLayerDefinition(SCHREINFUNKE, SchreinfunkeGeometry::createLayer);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.ENDERMAN.get(), LeerwandlerRenderer::new);
         event.registerEntityRenderer(ModEntities.ENDERMITE.get(), LeermilbeRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHULKER.get(), SchreinlingRenderer::new);
+        // die Geschosse der Schreinlinge sind Vanilla-Geschosse – sie bekommen das eigene Aussehen
+        event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.SHULKER_BULLET, SchreinfunkeRenderer::new);
     }
 }

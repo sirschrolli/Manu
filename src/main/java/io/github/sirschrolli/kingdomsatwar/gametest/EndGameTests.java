@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.end.Leermilbe;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.end.Leerwandler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.end.Schreinling;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,13 +44,17 @@ final class EndGameTests {
             ModGameTests.TEST_FUNCTIONS.register("end_pearl_mite", () -> EndGameTests::pearlMite);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> HUNT =
             ModGameTests.TEST_FUNCTIONS.register("end_walker_hunts_mites", () -> EndGameTests::walkerHuntsMites);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHULKER_REPLACED =
+            ModGameTests.TEST_FUNCTIONS.register("end_shulker_replaced", () -> EndGameTests::shulkerReplaced);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHULKER_BULLET =
+            ModGameTests.TEST_FUNCTIONS.register("end_shulker_bullet", () -> EndGameTests::shulkerBullet);
 
     private EndGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(SPAWN, REPLACED, PEARL, HUNT)) {
+        for (var test : List.of(SPAWN, REPLACED, PEARL, HUNT, SHULKER_REPLACED, SHULKER_BULLET)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -59,6 +64,7 @@ final class EndGameTests {
         Map<EntityType<?>, EntityType<? extends Mob>> map = new LinkedHashMap<>();
         map.put(EntityTypes.ENDERMAN, ModEntities.ENDERMAN.get());
         map.put(EntityTypes.ENDERMITE, ModEntities.ENDERMITE.get());
+        map.put(EntityTypes.SHULKER, ModEntities.SHULKER.get());
         return map;
     }
 
@@ -149,5 +155,37 @@ final class EndGameTests {
         Leermilbe milbe = helper.spawnWithNoFreeWill(ModEntities.ENDERMITE.get(), new BlockPos(6, 1, 4));
         milbe.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 400, 9));
         helper.succeedWhen(() -> helper.assertTrue(wandler.getTarget() == milbe, "der Leerwandler jagt die Milbe nicht"));
+    }
+
+    /** Ein roter Vanilla-Shulker (Spawn-Ei, Endstadt) wird ein roter Schreinling mit gleicher UUID. */
+    private static void shulkerReplaced(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        net.minecraft.world.entity.monster.Shulker shulker = EntityTypes.SHULKER.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+        shulker.setComponent(net.minecraft.core.component.DataComponents.SHULKER_COLOR, net.minecraft.world.item.DyeColor.RED);
+        shulker.setNoAi(true);
+        place(helper, shulker, new BlockPos(4, 1, 4));
+        UUID u = shulker.getUUID();
+        helper.runAfterDelay(2, () -> {
+            helper.assertTrue(level.getEntity(u) instanceof Schreinling ours && ours.getColor() == net.minecraft.world.item.DyeColor.RED,
+                    "kein roter Schreinling: " + level.getEntity(u));
+            helper.assertTrue(level.getEntity(u).getName().getString().equals(Component.translatable("entity.kingdomsatwar.shulker").getString()),
+                    "Name des Schreinlings: " + level.getEntity(u).getName().getString());
+            helper.succeed();
+        });
+    }
+
+    /** Der Schreinling feuert auf sein Ziel (Vanilla-Geschosse, die ihm gehören). */
+    private static void shulkerBullet(GameTestHelper helper) {
+        floor(helper);
+        Schreinling shulker = helper.spawn(ModEntities.SHULKER.get(), new BlockPos(4, 1, 7));
+        var target = helper.spawnWithNoFreeWill(ModEntities.CATTLE.get(), new BlockPos(4, 1, 1));
+        helper.onEachTick(() -> shulker.setTarget(target));
+        helper.succeedWhen(() -> {
+            var bullets = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.projectile.ShulkerBullet.class,
+                    new AABB(helper.absolutePos(new BlockPos(4, 1, 4))).inflate(16.0), bullet -> bullet.getOwner() == shulker);
+            helper.assertTrue(!bullets.isEmpty(), "noch kein Schreinfunke");
+            bullets.forEach(net.minecraft.world.entity.Entity::discard);
+        });
     }
 }

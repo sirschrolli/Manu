@@ -24,7 +24,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               turtle,
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
                               hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube, wither, wither_skull,
-                              enderman, endermite,
+                              enderman, endermite, shulker, shulker_bullet,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -258,6 +258,11 @@ def main():
                 "enderman", enderman.PALETTES, preview)
     write_model(endermite, "LeermilbeGeometry", "Geometrie der Leermilbe (vier Segmente wie bei der Vanilla-Endermite, Beine, Fühler, Dornen).",
                 "endermite", endermite.PALETTES, preview)
+    write_model(shulker, "SchreinlingGeometry",
+                "Geometrie des Schreinlings (Deckel, Sockel und Kopf wie beim Vanilla-Shulker, dazu Medaillon, Beschläge, Zähne, Fuß und Fühler).",
+                "shulker", shulker.PALETTES, preview)
+    write_model(shulker_bullet, "SchreinfunkeGeometry", "Geometrie des Schreinfunkens (Knochen \"main\" wie beim Vanilla-Shulker-Geschoss).",
+                "shulker", shulker_bullet.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

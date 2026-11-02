@@ -72,6 +72,9 @@
     "kingdomsatwar:ravager": {
       "sound": "minecraft:entity.parrot.imitate.ravager"
     },
+    "kingdomsatwar:shulker": {
+      "sound": "minecraft:entity.parrot.imitate.shulker"
+    },
     "kingdomsatwar:silverfish": {
       "sound": "minecraft:entity.parrot.imitate.silverfish"
     },

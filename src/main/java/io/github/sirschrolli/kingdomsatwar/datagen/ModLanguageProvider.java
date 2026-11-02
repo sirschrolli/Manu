@@ -1073,6 +1073,7 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.ENDERMAN, ModItems.ENDERMAN_SPAWN_EGG, "Void Walker", "Leerwandler", "Leerwandler");
         breeds(ModEntities.ENDERMAN, new String[][]{{"leere", "Void Walker", "Leerwandler"}, {"wirr", "Warped Walker", "Wirrwandler"}});
         creature(ModEntities.ENDERMITE, ModItems.ENDERMITE_SPAWN_EGG, "Void Mite", "Leermilbe", "Leermilben");
+        creature(ModEntities.SHULKER, ModItems.SHULKER_SPAWN_EGG, "Shrineling", "Schreinling", "Schreinling");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

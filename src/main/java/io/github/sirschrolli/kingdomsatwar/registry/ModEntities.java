@@ -370,6 +370,9 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.end.Leermilbe>> ENDERMITE = ENTITIES.registerEntityType(
             "endermite", io.github.sirschrolli.kingdomsatwar.entity.creature.end.Leermilbe::new, MobCategory.MONSTER, builder -> builder
                     .sized(0.4f, 0.3f).eyeHeight(0.13f).passengerAttachments(0.2375f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.end.Schreinling>> SHULKER = ENTITIES.registerEntityType(
+            "shulker", io.github.sirschrolli.kingdomsatwar.entity.creature.end.Schreinling::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().canSpawnFarFromPlayer().sized(1.0f, 1.0f).eyeHeight(0.5f).clientTrackingRange(10));
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -588,6 +591,7 @@ public final class ModEntities {
         event.put(WITHER.get(), net.minecraft.world.entity.boss.wither.WitherBoss.createAttributes().build());
         event.put(ENDERMAN.get(), net.minecraft.world.entity.monster.Enderman.createAttributes().build());
         event.put(ENDERMITE.get(), net.minecraft.world.entity.monster.Endermite.createAttributes().build());
+        event.put(SHULKER.get(), net.minecraft.world.entity.monster.Shulker.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -715,6 +719,7 @@ public final class ModEntities {
         event.register(WITHER.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
         event.register(ENDERMAN.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkMonsterSpawnRules, replace);
         event.register(ENDERMITE.get(), ground, noLeaves, net.minecraft.world.entity.monster.Endermite::checkEndermiteSpawnRules, replace);
+        event.register(SHULKER.get(), SpawnPlacementTypes.NO_RESTRICTIONS, noLeaves, net.minecraft.world.entity.Mob::checkMobSpawnRules, replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);
