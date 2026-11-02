@@ -120,7 +120,7 @@ final class TownGameTests {
         own(event, TOWN_CROWN, "town_crown", 600);
         own(event, TOWN_FOOD, "town_food", 200);
         own(event, TOWN_GARRISON, "town_garrison", 300);
-        own(event, TOWN_LUMBERJACK, "town_lumberjack", 2400);
+        own(event, TOWN_LUMBERJACK, "town_lumberjack", 4000);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,

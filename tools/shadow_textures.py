@@ -112,127 +112,102 @@ def ghostcap() -> tuple[Image.Image, Image.Image]:
     return img, glow
 
 
-SPROUTS = [
-    "................",
-    "................",
-    "................",
-    "...........a....",
-    "..a.......ab....",
-    "..ba...a..b.a...",
-    "...b..ab.ab.b...",
-    ".a.b.a.b.b.b..a.",
-    ".ba.b..bb..b.ab.",
-    "..b.b.a.b.ab.b..",
-    "..bb.ab.b.b.bb..",
-    "...bb.b.bb.bb...",
-    "...cbbbcbbcbc...",
-    "....cbcbcbbc....",
-    "....ccccccccc...",
-    "................",
-]
+def _blades(seed: int, count: int, heights: tuple[int, int], tones: list[Color], bend: float, base: int = 2) -> Image.Image:
+    """Ein Büschel aus einzelnen, ein Pixel breiten Halmen wie bei Vanilla-Gras: verschieden hoch, unten dunkel, zur
+    Spitze hin heller; manche Spitzen biegen sich zur Seite. tones: dunkel → hell."""
+    import random
+    rnd = random.Random(seed)
+    img = pa.new()
+    px = img.load()
+    columns = list(range(1, N - 1))
+    rnd.shuffle(columns)
+    columns = sorted(columns[:count])
+    for x in columns:
+        h = rnd.randint(*heights)
+        side = rnd.choice((-1, 1))
+        bends = rnd.random() < bend
+        for k in range(h):
+            y = N - 1 - k
+            xx = x + (side if bends and k >= h - max(2, h // 3) else 0)
+            if not 0 <= xx < N:
+                continue
+            t = k / max(1, h - 1)
+            level = min(len(tones) - 1, max(0, int(t * (len(tones) - 1) + rnd.uniform(-0.35, 0.45))))
+            if k == h - 1:
+                level = len(tones) - 1 if rnd.random() < 0.6 else len(tones) - 2
+            if px[xx, y][3] == 0 or level > tones.index(px[xx, y]):
+                px[xx, y] = tones[level]
+    for x in range(1, N - 1):
+        for k in range(base):
+            y = N - 1 - k
+            if px[x, y][3] == 0 and rnd.random() < 0.75 - 0.25 * k:
+                px[x, y] = tones[rnd.randrange(0, 2)]
+    return img
 
 
 def shadow_sprouts() -> Image.Image:
-    return pa.sprite(SPROUTS, {"a": _gray(196), "b": _gray(160), "c": _gray(120)})
-
-
-PALE_GRASS = [
-    "................",
-    "..........a.....",
-    "...a......a.....",
-    "...a.....ab.....",
-    "...b..a..b......",
-    "...b..a..b...a..",
-    "...bb.b..b..ab..",
-    "....b.b.bb..b...",
-    "..a.b.bb.b..b...",
-    "..ab.b.b.b.bb...",
-    "...b.b.bb.bb....",
-    "...bbcb.bcb.....",
-    "....bcbcbcb.....",
-    "....ccbccbc.....",
-    "...cddcdcdcd....",
-    "................",
-]
+    """Fedrige Schattenhalme (grau – die Farbe kommt aus dem Biom)."""
+    tones = [_gray(92), _gray(122), _gray(150), _gray(178), _gray(206)]
+    return _blades(31, 12, (5, 12), tones, 0.45, base=2)
 
 
 def pale_grass() -> Image.Image:
-    return pa.sprite(PALE_GRASS, {"a": PALE[4], "b": PALE[3], "c": PALE[2], "d": PALE[1]})
+    """Dürre, fahle Halme der Bleichen Öde: höher, dünner, mit hellen Spitzen."""
+    tones = [PALE[0], PALE[1], PALE[2], PALE[3], PALE[4]]
+    return _blades(57, 10, (7, 15), tones, 0.7, base=1)
 
 
 # =============================================================================
 # Seelenbeeren und Glimmerranken
 # =============================================================================
 
-BUSH_LEAF = {"d": hexc("#0e2e2c"), "m": hexc("#174a46"), "l": hexc("#22665e"), "h": hexc("#348a7e"), "s": hexc("#1c1a24")}
-BERRY_UNRIPE = {"b": hexc("#1e6e72"), "B": hexc("#3aa4a4")}
-BERRY_RIPE = {"b": hexc("#2ad2cc"), "B": hexc("#c8fffa")}
-
-SOUL_BUSH = [
-    [
-        "", "", "", "", "", "", "", "", "",
-        "................",
-        ".......l........",
-        "......lhl..l....",
-        "....l..m..lhl...",
-        "...lhl.m...m....",
-        "....m..ms.m.....",
-        ".......ss.......",
-    ],
-    [
-        "", "", "", "", "",
-        "................",
-        "......l..l......",
-        ".....lhllhl.l...",
-        "...l.mhmmhm.hl..",
-        "..lhlmmlmmlmm...",
-        "...mmdmmlmdmml..",
-        "..lmdmldmmdmlh..",
-        "...mdmmdmdmmm...",
-        "....dmddsdmd....",
-        ".....d.ss.d.....",
-        ".......ss.......",
-    ],
-    [
-        "", "", "",
-        "................",
-        ".......l..l.....",
-        "....l.lhllhl....",
-        "...lhlmhmmhm.l..",
-        "..lmhmmbmlmmlhl.",
-        "..mmlmmmmlbmmm..",
-        ".lhmbmdmlmmmdml.",
-        "..mmmmdmmdbmmh..",
-        "..lmdmbdmmdmlm..",
-        "...mdmmdmdmmm...",
-        "....dmddsdmbd...",
-        ".....d.ss.d.....",
-        ".......ss.......",
-    ],
-    [
-        "", "",
-        "................",
-        "......l...l.....",
-        "...l.lhlBlhl.l..",
-        "..lhlmhmbmhmlhl.",
-        "..mBmmbmmlmmBm..",
-        ".lbmlmmmBmmbmml.",
-        ".mmmhbmlbmmmBmh.",
-        ".lBmmmdmlmmbdml.",
-        "..mmbmdmmdBmmh..",
-        "..lmdmBdmmdmbm..",
-        "...mbmmdmBmmm...",
-        "....dmddsdmbd...",
-        ".....d.ss.d.....",
-        ".......ss.......",
-    ],
-]
+BUSH_TONES = [hexc("#0b2624"), hexc("#123a37"), hexc("#1a4f4a"), hexc("#23665e"), hexc("#2f8072"), hexc("#46a08e")]
+BERRY_UNRIPE = (hexc("#155a5e"), hexc("#2a8486"), hexc("#5cb4b0"))
+BERRY_RIPE = (hexc("#1b9c9c"), hexc("#3fe0d6"), hexc("#d8fffb"))
 
 
 def soul_berry_bush(stage: int) -> Image.Image:
-    colors = dict(BUSH_LEAF)
-    colors.update(BERRY_RIPE if stage == 3 else BERRY_UNRIPE)
-    return pa.sprite(SOUL_BUSH[stage], colors)
+    """Seelenbeerenstrauch wie ein Vanilla-Beerenstrauch: dichtes Laub bis zum Boden (Stufe 0 ein kleiner Schössling),
+    ab Stufe 2 Beeren als 2×2-Trauben mit Glanzpunkt, reif leuchtend türkis."""
+    import random
+    rnd = random.Random(400 + stage)
+    img = pa.new()
+    px = img.load()
+    top = (11, 6, 3, 2)[stage]          # wie hoch das Laub reicht
+    half = (3.2, 5.6, 6.8, 7.4)[stage]  # halbe Breite
+    for y in range(top, N):
+        for x in range(N):
+            # Umriss: nach oben runder und schmaler, unten breit; ausgefranster Rand
+            v = (y - top) / max(1, N - 1 - top)
+            width = half * (0.55 + 0.45 * min(1.0, v * 1.8))
+            edge = width + rnd.uniform(-1.2, 0.8)
+            if abs(x - 7.5) > edge:
+                continue
+            if rnd.random() < 0.1 and abs(x - 7.5) > width - 2:
+                continue                  # Lücken am Rand
+            shade = 0.25 + 0.55 * (1.0 - v) + rnd.uniform(-0.28, 0.28)
+            if abs(x - 7.5) > width - 1.5:
+                shade -= 0.18             # Rand dunkler (Tiefe)
+            level = max(0, min(len(BUSH_TONES) - 1, int(shade * len(BUSH_TONES))))
+            px[x, y] = BUSH_TONES[level]
+    # einzelne Blätter über den Rand hinaus
+    for _ in range(4 + stage * 2):
+        x = rnd.randrange(1, N - 1)
+        y = rnd.randrange(max(0, top - 2), N - 3)
+        if px[x, y][3] == 0 and any(0 <= x + dx < N and px[x + dx, y + 1][3] for dx in (-1, 0, 1)):
+            px[x, y] = BUSH_TONES[rnd.randrange(2, 5)]
+    if stage >= 2:
+        berry = BERRY_RIPE if stage == 3 else BERRY_UNRIPE
+        spots = [(4, 7), (10, 6), (7, 10), (2, 11), (12, 11), (8, 4), (5, 13)][: 4 if stage == 2 else 7]
+        for bx, by in spots:
+            by = max(by, top + 1)
+            if by + 1 >= N:
+                continue
+            px[bx, by] = berry[1]
+            px[bx + 1, by] = berry[2]
+            px[bx, by + 1] = berry[0]
+            px[bx + 1, by + 1] = berry[1]
+    return img
 
 
 VINE_COLORS = {"d": hexc("#2a3450"), "m": hexc("#44587e"), "l": hexc("#6a86b0"), "h": hexc("#9cb6dc"),
