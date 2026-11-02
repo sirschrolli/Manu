@@ -48,6 +48,7 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.FROST_CRYSTAL, "Frost Crystal", "Frostkristall");
         block(ModBlocks.GLACIER_ICE, "Glacier Ice", "Gletschereis");
         set("rime_stone", "rime_stone", "Rime Stone", "Raureifstein", "Rime Stone", "Raureifstein");
+        set("cobbled_rime_stone", "cobbled_rime_stone", "Cobbled Rime Stone", "Raureifbruchstein", "Cobbled Rime Stone", "Raureifbruchstein");
         block(ModBlocks.FROZEN_SOIL, "Frozen Soil", "Frosterde");
         block(ModBlocks.ICICLE, "Icicle", "Eiszapfen");
 
@@ -67,12 +68,14 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.AMBER_CRYSTAL, "Amber Crystal", "Bernsteinkristall");
         block(ModBlocks.AMBER_CLUSTER, "Amber Cluster", "Bernsteindruse");
         set("shale", "shale", "Shale", "Schiefer", "Shale", "Schiefer");
+        set("cobbled_shale", "cobbled_shale", "Cobbled Shale", "Schieferbruchstein", "Cobbled Shale", "Schieferbruchstein");
         block(ModBlocks.RUBBLE, "Rubble", "Geröll");
         block(ModBlocks.RIFT_STONE, "Rift Stone", "Spaltgestein");
 
         // --- Sturmklippen ---
         text("biome.kingdomsatwar.storm_cliffs", "Storm Cliffs", "Sturmklippen");
         set("stormstone", "stormstone", "Stormstone", "Sturmstein", "Stormstone", "Sturmstein");
+        set("cobbled_stormstone", "cobbled_stormstone", "Cobbled Stormstone", "Sturmbruchstein", "Cobbled Stormstone", "Sturmbruchstein");
         block(ModBlocks.CHARGED_STORMSTONE, "Charged Stormstone", "Geladener Sturmstein");
         block(ModBlocks.FULGURITE, "Fulgurite", "Fulgurit");
         block(ModBlocks.STORM_CRYSTAL, "Storm Crystal", "Sturmkristall");
@@ -80,6 +83,8 @@ public class ModLanguageProvider extends LanguageProvider {
         // --- Abgrundgrotte ---
         text("biome.kingdomsatwar.abyssal_grotto", "Abyssal Grotto", "Abgrundgrotte");
         set("abyssal_stone", "abyssal_stone", "Abyssal Stone", "Abgrundstein", "Abyssal Stone", "Abgrundstein");
+        set("cobbled_abyssal_stone", "cobbled_abyssal_stone", "Cobbled Abyssal Stone", "Abgrundbruchstein", "Cobbled Abyssal Stone",
+                "Abgrundbruchstein");
         block(ModBlocks.ABYSSAL_SAND, "Abyssal Sand", "Abgrundsand");
         block(ModBlocks.GLOW_CORAL, "Glow Coral", "Leuchtkoralle");
         block(ModBlocks.NACRE_BLOCK, "Nacre Block", "Perlmuttblock");
@@ -103,6 +108,8 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.ASH_LAYER, "Ash Layer", "Ascheschicht");
         block(ModBlocks.CINDER_SOIL, "Cinder Soil", "Aschenerde");
         set("volcanic_rock", "volcanic_rock", "Volcanic Rock", "Vulkangestein", "Volcanic Rock", "Vulkangestein");
+        set("cobbled_volcanic_rock", "cobbled_volcanic_rock", "Cobbled Volcanic Rock", "Vulkanbruchstein", "Cobbled Volcanic Rock",
+                "Vulkanbruchstein");
         block(ModBlocks.GLOWING_VOLCANIC_ROCK, "Glowing Volcanic Rock", "Glühendes Vulkangestein");
         block(ModBlocks.CHARRED_LOG, "Charred Log", "Verkohlter Stamm");
         block(ModBlocks.EMBER_VENT, "Ember Vent", "Glutspalte");
@@ -423,6 +430,10 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Gestein
         set("shadow_stone", "shadow_stone", "Shadow Stone", "Schattenstein", "Shadow Stone", "Schattenstein");
+        set("cobbled_shadow_stone", "cobbled_shadow_stone", "Cobbled Shadow Stone", "Schattenbruchstein", "Cobbled Shadow Stone",
+                "Schattenbruchstein");
+        set("cobbled_deep_shadow_stone", "cobbled_deep_shadow_stone", "Cobbled Deep Shadow Stone", "Tiefschattenbruchstein",
+                "Cobbled Deep Shadow Stone", "Tiefschattenbruchstein");
         set("shadow_stone_bricks", "shadow_stone_brick", "Shadow Stone Bricks", "Schattensteinziegel", "Shadow Stone Brick",
                 "Schattensteinziegel");
         set("polished_shadow_stone", "polished_shadow_stone", "Polished Shadow Stone", "Polierter Schattenstein",

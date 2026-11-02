@@ -47,6 +47,11 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(BlockItemTags.DIRT);
         copy(BlockItemTags.SAND);
         copy(BlockItemTags.SMELTS_TO_GLASS);
+        copy(Tags.BlockItems.COBBLESTONES);
+        // Bruchstein aus eigenem Gestein taugt wie Bruchstein für Steinwerkzeuge, Öfen und Braustände
+        copy(ModTags.Blocks.COBBLED_STONES, ModTags.Items.COBBLED_STONES);
+        tag(ItemTags.STONE_TOOL_MATERIALS).addTag(ModTags.Items.COBBLED_STONES);
+        tag(ItemTags.STONE_CRAFTING_MATERIALS).addTag(ModTags.Items.COBBLED_STONES);
         copy(BlockItemTags.MOSS_BLOCKS);
         copy(ModTags.Blocks.SHADOW_LOGS, ModTags.Items.SHADOW_LOGS);
         copy(BlockItemTags.SAPLINGS);

@@ -5,6 +5,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
+import io.github.sirschrolli.kingdomsatwar.registry.StoneChains;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import java.util.Set;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -223,6 +225,17 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             dropSelf(flower.get());
             dropPottedContents(pot.get());
         });
+
+        // Gestein gibt Bruchstein (mit Behutsamkeit sich selbst) – wie Stein und Bruchstein
+        for (StoneChains.Chain chain : StoneChains.all()) {
+            add(chain.stone().get(), block -> createSingleItemTableWithSilkTouch(block, chain.cobble().base().get()));
+        }
+        // Geröll gibt wie Kies manchmal Feuerstein
+        add(ModBlocks.RUBBLE.get(), block -> createSilkTouchDispatchTable(block, applyExplosionCondition(block,
+                LootItem.lootTableItem(net.minecraft.world.item.Items.FLINT)
+                        .when(BonusLevelTableCondition.bonusLevelFlatChance(this.enchantments.getOrThrow(Enchantments.FORTUNE),
+                                0.1f, 0.14285715f, 0.25f, 1.0f))
+                        .otherwise(LootItem.lootTableItem(block)))));
     }
 
     /** Schichtblock (wie Schnee): so viele Schichten als Gegenstand, wie der Block hoch war. */

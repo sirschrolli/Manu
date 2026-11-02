@@ -338,6 +338,9 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
     /** Poröses Vulkangestein (auch als Treppe, Stufe und Mauer zum Bauen). */
     public static final BuildingSet VOLCANIC_ROCK = stoneSet("volcanic_rock", "volcanic_rock", MapColor.COLOR_BLACK, SoundType.TUFF, 1.5f);
+    /** Vulkanbruchstein: was beim Abbau von Vulkangestein bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_VOLCANIC_ROCK = stoneSet("cobbled_volcanic_rock", "cobbled_volcanic_rock", MapColor.COLOR_BLACK,
+            SoundType.TUFF, 2.0f);
     /** Vulkangestein mit glühenden Rissen – heiß wie Magma. */
     public static final DeferredBlock<net.minecraft.world.level.block.MagmaBlock> GLOWING_VOLCANIC_ROCK = blockWithItem("glowing_volcanic_rock",
             net.minecraft.world.level.block.MagmaBlock::new,
@@ -377,6 +380,9 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
     /** Raureifstein: Stein unter einer Kruste aus Reif (auch als Treppe, Stufe und Mauer). */
     public static final BuildingSet RIME_STONE = stoneSet("rime_stone", "rime_stone", MapColor.SNOW, SoundType.STONE, 1.5f);
+    /** Raureifbruchstein: was beim Abbau von Raureifstein bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_RIME_STONE = stoneSet("cobbled_rime_stone", "cobbled_rime_stone", MapColor.SNOW, SoundType.STONE,
+            2.0f);
     /** Frosterde: gefrorener Boden, auf dem Frostblumen wachsen. */
     public static final DeferredBlock<Block> FROZEN_SOIL = blockWithItem("frozen_soil", Block::new,
             p -> p.mapColor(MapColor.SNOW).strength(0.7f).sound(SoundType.ROOTED_DIRT),
@@ -451,6 +457,8 @@ public final class ModBlocks {
             UnaryOperator.identity(), NATURE_TAB);
     /** Schiefer: dünn geschichteter, graubrauner Fels (auch als Treppe, Stufe und Mauer). */
     public static final BuildingSet SHALE = stoneSet("shale", "shale", MapColor.COLOR_GRAY, SoundType.DEEPSLATE, 1.6f);
+    /** Schieferbruchstein: was beim Abbau von Schiefer bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_SHALE = stoneSet("cobbled_shale", "cobbled_shale", MapColor.COLOR_GRAY, SoundType.DEEPSLATE, 2.1f);
     /** Geröll: grobe, lose Steinbrocken – rutscht wie Kies. */
     public static final DeferredBlock<net.minecraft.world.level.block.ColoredFallingBlock> RUBBLE = blockWithItem("rubble",
             p -> new net.minecraft.world.level.block.ColoredFallingBlock(new net.minecraft.util.ColorRGBA(0xFF6A6058), p),
@@ -468,6 +476,9 @@ public final class ModBlocks {
 
     /** Sturmstein: dunkler, bläulich schimmernder Fels (auch als Treppe, Stufe und Mauer). */
     public static final BuildingSet STORMSTONE = stoneSet("stormstone", "stormstone", MapColor.COLOR_BLUE, SoundType.DEEPSLATE, 2.0f);
+    /** Sturmbruchstein: was beim Abbau von Sturmstein bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_STORMSTONE = stoneSet("cobbled_stormstone", "cobbled_stormstone", MapColor.COLOR_BLUE,
+            SoundType.DEEPSLATE, 2.5f);
     /** Geladener Sturmstein: mit gleißenden Blitzadern – knistert und teilt Schläge aus. */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ChargedStoneBlock> CHARGED_STORMSTONE = blockWithItem(
             "charged_stormstone", io.github.sirschrolli.kingdomsatwar.block.ChargedStoneBlock::new,
@@ -491,6 +502,9 @@ public final class ModBlocks {
 
     /** Abgrundstein: dunkler, blaugrüner Fels der Tiefsee mit Muschelsplittern (auch als Treppe, Stufe und Mauer). */
     public static final BuildingSet ABYSSAL_STONE = stoneSet("abyssal_stone", "abyssal_stone", MapColor.COLOR_CYAN, SoundType.DEEPSLATE, 1.8f);
+    /** Abgrundbruchstein: was beim Abbau von Abgrundstein bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_ABYSSAL_STONE = stoneSet("cobbled_abyssal_stone", "cobbled_abyssal_stone", MapColor.COLOR_CYAN,
+            SoundType.DEEPSLATE, 2.3f);
     /** Abgrundsand: feiner, dunkler Tiefseesand. */
     public static final DeferredBlock<net.minecraft.world.level.block.ColoredFallingBlock> ABYSSAL_SAND = blockWithItem("abyssal_sand",
             p -> new net.minecraft.world.level.block.ColoredFallingBlock(new net.minecraft.util.ColorRGBA(0xFF3A4242), p),

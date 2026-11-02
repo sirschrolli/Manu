@@ -29,6 +29,7 @@ import ashlands_textures  # noqa: E402
 import block_textures  # noqa: E402
 import boss_textures  # noqa: E402
 import building_textures  # noqa: E402
+import cobble_textures  # noqa: E402
 import creature_textures  # noqa: E402
 import crops  # noqa: E402
 import equipment_textures  # noqa: E402
@@ -347,6 +348,7 @@ def build_all() -> dict[str, Image.Image]:
     deep_textures.build(put)
     world_blocks.build(put)
     region_blocks.build(put)
+    cobble_textures.build(put)
     ores_art.build(put)
     crops.build(put)
     shadow_textures.build(put)

@@ -91,6 +91,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("recipes", () -> ModGameTests::recipes);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CRAFTING =
             TEST_FUNCTIONS.register("crafting", () -> ModGameTests::crafting);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> NATURAL_CHAINS =
+            TEST_FUNCTIONS.register("natural_chains", () -> ModGameTests::naturalChains);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WORLDGEN =
             TEST_FUNCTIONS.register("worldgen", () -> ModGameTests::worldgen);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ORE_VEINS =
@@ -193,7 +195,7 @@ public final class ModGameTests {
     public static void registerTests(RegisterGameTestsEvent event) {
         Holder<TestEnvironmentDefinition<?>> environment = event.registerEnvironment(KingdomsAtWar.id("default"));
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, CRAFTING, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
+                List.of(PLACE_BLOCKS, LOOT_TABLES, ORE_DROPS, CROP_HARVEST, RECIPES, CRAFTING, NATURAL_CHAINS, WORLDGEN, ORE_VEINS, FLOWER_PATCHES,
                         FLOWER_POTS, WOOD_BURNS, DRAGON_COMPASS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
@@ -345,6 +347,51 @@ public final class ModGameTests {
         assertCrafts(helper, 2, 2, List.of(new ItemStack(Items.STICK), new ItemStack(Items.STICK), new ItemStack(Items.LEATHER),
                 new ItemStack(Items.IRON_NUGGET)), ModItems.REINFORCED_HANDLE.get(), 1);
         helper.succeed();
+    }
+
+    /**
+     * Die logischen Ketten der eigenen Naturstoffe: Gestein gibt Bruchstein (mit Behutsamkeit sich selbst), daraus werden
+     * Steinwerkzeuge und Öfen, im Ofen wird er wieder Fels; Abgrundsand schmilzt zu Glas, Blumen geben Farbstoff.
+     */
+    private static void naturalChains(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(TEST_POS);
+        ItemStack pickaxe = new ItemStack(Items.STONE_PICKAXE);
+        ItemStack silk = new ItemStack(Items.STONE_PICKAXE);
+        silk.enchant(level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SILK_TOUCH), 1);
+        for (io.github.sirschrolli.kingdomsatwar.registry.StoneChains.Chain chain : io.github.sirschrolli.kingdomsatwar.registry.StoneChains.all()) {
+            Block stone = chain.stone().get();
+            Item cobble = chain.cobble().base().get().asItem();
+            List<ItemStack> drops = Block.getDrops(stone.defaultBlockState(), level, pos, null, null, pickaxe);
+            helper.assertTrue(drops.size() == 1 && drops.getFirst().is(cobble), stone + " gibt " + drops + " statt " + cobble);
+            List<ItemStack> silkDrops = Block.getDrops(stone.defaultBlockState(), level, pos, null, null, silk);
+            helper.assertTrue(silkDrops.size() == 1 && silkDrops.getFirst().is(stone.asItem()), stone + " mit Behutsamkeit gibt " + silkDrops);
+            ItemStack c = new ItemStack(cobble);
+            ItemStack stick = new ItemStack(Items.STICK);
+            assertCrafts(helper, 3, 3, List.of(c, c, c, ItemStack.EMPTY, stick, ItemStack.EMPTY, ItemStack.EMPTY, stick, ItemStack.EMPTY),
+                    Items.STONE_PICKAXE, 1);
+            assertCrafts(helper, 3, 3, List.of(c, c, c, c, ItemStack.EMPTY, c, c, c, c), Items.FURNACE, 1);
+            assertSmelts(helper, new ItemStack(cobble), stone.asItem());
+        }
+        assertSmelts(helper, new ItemStack(ModBlocks.ABYSSAL_SAND.get()), Items.GLASS);
+        assertSmelts(helper, new ItemStack(ModBlocks.FULGURITE.get()), Items.GLASS);
+        assertCrafts(helper, 1, 1, List.of(new ItemStack(ModBlocks.LAVENDER.get())), Items.DYE.pick(net.minecraft.world.item.DyeColor.PURPLE), 1);
+        assertCrafts(helper, 2, 1, List.of(new ItemStack(ModBlocks.STORMSTONE.base().get()), new ItemStack(ModBlocks.STORM_CRYSTAL.get())),
+                ModBlocks.CHARGED_STORMSTONE.get().asItem(), 1);
+        ItemStack reeds = new ItemStack(ModBlocks.REEDS.get());
+        assertCrafts(helper, 3, 1, List.of(reeds, reeds, reeds), Items.PAPER, 3);
+        List<ItemStack> rubble = Block.getDrops(ModBlocks.RUBBLE.get().defaultBlockState(), level, pos, null, null, silk);
+        helper.assertTrue(rubble.size() == 1 && rubble.getFirst().is(ModBlocks.RUBBLE.get().asItem()), "Geröll mit Behutsamkeit gibt " + rubble);
+        helper.succeed();
+    }
+
+    private static void assertSmelts(GameTestHelper helper, ItemStack input, Item expected) {
+        var single = new net.minecraft.world.item.crafting.SingleRecipeInput(input);
+        ItemStack result = helper.getLevel().getServer().getRecipeManager()
+                .getRecipeFor(net.minecraft.world.item.crafting.RecipeType.SMELTING, single, helper.getLevel())
+                .map(holder -> holder.value().assemble(single)).orElse(ItemStack.EMPTY);
+        helper.assertTrue(result.is(expected), "Ofen: " + input.getItem() + " ergab " + result + " statt " + expected);
     }
 
     private static void assertCrafts(GameTestHelper helper, int width, int height, List<ItemStack> grid, Item expected, int count) {

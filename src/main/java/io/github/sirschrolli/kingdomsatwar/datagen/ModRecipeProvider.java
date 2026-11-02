@@ -7,6 +7,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowItems;
+import io.github.sirschrolli.kingdomsatwar.registry.StoneChains;
 import java.util.List;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.Registries;
@@ -51,6 +52,82 @@ public class ModRecipeProvider extends RecipeProvider {
         cookVenison();
         shadowRecipes();
         shadowTreasureRecipes();
+        naturalChains();
+    }
+
+    // =====================================================================================
+    // Natürliche Stoffe: dieselben Ketten wie in Vanilla
+    // =====================================================================================
+
+    /**
+     * Bruchstein wird im Ofen wieder zu glattem Fels (die Werkzeuge, Öfen und Braustände kommen über die Vanilla-Tags
+     * dazu), Blumen geben Farbstoff, Leuchtpilze kommen in die Pilzsuppe, Bernsteindrusen ergeben Bernsteinblöcke,
+     * Sturmkristalle laden Sturmstein auf, Magmacreme bringt Vulkangestein zum Glühen, Schilf gibt Papier und Fulgurit
+     * schmilzt zu Glas.
+     */
+    private void naturalChains() {
+        for (StoneChains.Chain chain : StoneChains.all()) {
+            ItemLike cobble = chain.cobble().base().get();
+            ItemLike stone = chain.stone().get();
+            save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(cobble), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS, stone,
+                    0.1f, 200).unlockedBy(getHasName(cobble), has(cobble)), getItemName(stone) + "_from_smelting");
+        }
+        dye(ModBlocks.LAVENDER.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.PURPLE), 1);
+        dye(ModBlocks.GARDEN_ROSE.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.RED), 1);
+        dye(ModBlocks.FIRE_LILY.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.ORANGE), 1);
+        dye(ModBlocks.FROST_FLOWER.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.LIGHT_BLUE), 1);
+        dye(ModBlocks.MOONFLOWER.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.WHITE), 1);
+        dye(ModBlocks.GROVE_BELL.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.BLUE), 1);
+        dye(ModBlocks.LIFE_BLOSSOM.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.PINK), 1);
+        dye(ModBlocks.GLOW_CORAL.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.CYAN), 2);
+        // Pilzsuppe auch mit Leuchtpilzen (einer davon muss ein Leuchtpilz sein)
+        ItemLike glowcap = ModBlocks.GLOWCAP.get();
+        ItemLike ghostcap = ShadowBlocks.GHOSTCAP.get();
+        shapeless(RecipeCategory.FOOD, Items.MUSHROOM_STEW)
+                .requires(Ingredient.of(glowcap, ghostcap))
+                .requires(Ingredient.of(glowcap, ghostcap, Items.BROWN_MUSHROOM, Items.RED_MUSHROOM))
+                .requires(Items.BOWL)
+                .unlockedBy(getHasName(glowcap), has(glowcap))
+                .save(output, key("mushroom_stew_from_glowcaps"));
+        // vier Bernsteindrusen zu einem Bernsteinblock (wie Amethystsplitter)
+        shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.AMBER_CRYSTAL.get())
+                .pattern("AA")
+                .pattern("AA")
+                .define('A', ModBlocks.AMBER_CLUSTER.get())
+                .unlockedBy(getHasName(ModBlocks.AMBER_CLUSTER.get()), has(ModBlocks.AMBER_CLUSTER.get()))
+                .save(output, key("amber_crystal"));
+        // geladener Sturmstein: Sturmstein und ein Sturmkristall
+        shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.CHARGED_STORMSTONE.get())
+                .requires(ModBlocks.STORMSTONE.base().get())
+                .requires(ModBlocks.STORM_CRYSTAL.get())
+                .unlockedBy(getHasName(ModBlocks.STORM_CRYSTAL.get()), has(ModBlocks.STORM_CRYSTAL.get()))
+                .save(output, key("charged_stormstone"));
+        // glühendes Vulkangestein: Vulkangestein und Magmacreme (wie der Magmablock)
+        shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.GLOWING_VOLCANIC_ROCK.get())
+                .requires(ModBlocks.VOLCANIC_ROCK.base().get())
+                .requires(Items.MAGMA_CREAM)
+                .unlockedBy(getHasName(Items.MAGMA_CREAM), has(Items.MAGMA_CREAM))
+                .save(output, key("glowing_volcanic_rock"));
+        // Schilf gibt Papier (wie Zuckerrohr)
+        shaped(RecipeCategory.MISC, Items.PAPER, 3)
+                .pattern("RRR")
+                .define('R', ModBlocks.REEDS.get())
+                .group("paper")
+                .unlockedBy(getHasName(ModBlocks.REEDS.get()), has(ModBlocks.REEDS.get()))
+                .save(output, key("paper_from_reeds"));
+        // Fulgurit ist vom Blitz geschmolzener Sand: im Ofen wird er zu Glas
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModBlocks.FULGURITE.get()), RecipeCategory.BUILDING_BLOCKS,
+                CookingBookCategory.BLOCKS, Blocks.GLASS, 0.1f, 200).unlockedBy(getHasName(ModBlocks.FULGURITE.get()),
+                has(ModBlocks.FULGURITE.get())), "glass_from_fulgurite");
+    }
+
+    /** Farbstoff aus einer Blume (oder Koralle). */
+    private void dye(ItemLike source, Item dye, int count) {
+        shapeless(RecipeCategory.MISC, dye, count)
+                .requires(source)
+                .group(getItemName(dye))
+                .unlockedBy(getHasName(source), has(source))
+                .save(output, key(getItemName(dye) + "_from_" + getItemName(source)));
     }
 
     // =====================================================================================

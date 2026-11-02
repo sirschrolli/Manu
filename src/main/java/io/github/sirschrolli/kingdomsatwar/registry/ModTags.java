@@ -19,6 +19,8 @@ public final class ModTags {
         public static final TagKey<Block> NATURAL_GROUND = mod("natural_ground");
         /** Stämme und Holz der Schattenbäume (für die Bretter). */
         public static final TagKey<Block> SHADOW_LOGS = mod("shadow_logs");
+        /** Bruchstein aus eigenem Gestein (für Steinwerkzeuge, Öfen und Braustände). */
+        public static final TagKey<Block> COBBLED_STONES = mod("cobbled_stones");
         /** Gestein der Schattenwelt, in dem Erze entstehen können. */
         public static final TagKey<Block> SHADOW_STONE_ORE_REPLACEABLES = mod("shadow_stone_ore_replaceables");
         public static final TagKey<Block> DEEP_SHADOW_STONE_ORE_REPLACEABLES = mod("deep_shadow_stone_ore_replaceables");
@@ -176,6 +178,8 @@ public final class ModTags {
         /** Essen, das Bürger und Soldaten nicht nehmen: Verdorbenes, Giftiges, rohes Huhn und Kostbares. */
         public static final TagKey<Item> UNFIT_FOOD = mod("unfit_food");
         public static final TagKey<Item> SHADOW_LOGS = mod("shadow_logs");
+        /** Bruchstein aus eigenem Gestein (für Steinwerkzeuge, Öfen und Braustände). */
+        public static final TagKey<Item> COBBLED_STONES = mod("cobbled_stones");
         public static final TagKey<Item> NIGHTSTEEL_TOOL_MATERIALS = mod("nightsteel_tool_materials");
         public static final TagKey<Item> ABYSSITE_TOOL_MATERIALS = mod("abyssite_tool_materials");
         public static final TagKey<Item> MOONSILVER_TOOL_MATERIALS = mod("moonsilver_tool_materials");

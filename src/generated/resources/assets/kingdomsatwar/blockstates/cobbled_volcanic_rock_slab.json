@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/cobbled_volcanic_rock_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/cobbled_volcanic_rock"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/cobbled_volcanic_rock_slab_top"
+    }
+  }
+}

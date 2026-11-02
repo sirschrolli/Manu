@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      "kingdomsatwar:glowcap",
+      "kingdomsatwar:ghostcap"
+    ],
+    [
+      "kingdomsatwar:glowcap",
+      "kingdomsatwar:ghostcap",
+      "minecraft:brown_mushroom",
+      "minecraft:red_mushroom"
+    ],
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "minecraft:mushroom_stew"
+  }
+}

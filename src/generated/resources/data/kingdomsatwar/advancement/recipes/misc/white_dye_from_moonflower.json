@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_moonflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:moonflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:white_dye_from_moonflower"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_moonflower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:white_dye_from_moonflower"
+    ]
+  }
+}

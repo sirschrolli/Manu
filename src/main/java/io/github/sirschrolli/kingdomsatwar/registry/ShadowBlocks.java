@@ -55,6 +55,9 @@ public final class ShadowBlocks {
     /** Schattenstein: dunkler, violettgrauer Fels mit fahlen Schlieren – das Grundgestein der Schattenwelt. */
     public static final BuildingSet SHADOW_STONE = ModBlocks.stoneSet("shadow_stone", "shadow_stone", MapColor.TERRACOTTA_GRAY,
             SoundType.DEEPSLATE, 1.6f, TAB);
+    /** Schattenbruchstein: was beim Abbau von Schattenstein bleibt – für Steinwerkzeuge, Öfen und zum Bauen. */
+    public static final BuildingSet COBBLED_SHADOW_STONE = ModBlocks.stoneSet("cobbled_shadow_stone", "cobbled_shadow_stone",
+            MapColor.TERRACOTTA_GRAY, SoundType.DEEPSLATE, 2.1f, TAB);
     /** Ziegel aus Schattenstein. */
     public static final BuildingSet SHADOW_STONE_BRICKS = ModBlocks.stoneSet("shadow_stone_bricks", "shadow_stone_brick",
             MapColor.TERRACOTTA_GRAY, SoundType.DEEPSLATE_BRICKS, 2.0f, TAB);
@@ -70,6 +73,9 @@ public final class ShadowBlocks {
             p -> p.mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops()
                     .strength(3.0f, 6.0f).sound(SoundType.DEEPSLATE),
             UnaryOperator.identity(), TAB);
+    /** Tiefschattenbruchstein: was beim Abbau von Tiefschattenstein bleibt (wie Bruchtiefenschiefer). */
+    public static final BuildingSet COBBLED_DEEP_SHADOW_STONE = ModBlocks.stoneSet("cobbled_deep_shadow_stone", "cobbled_deep_shadow_stone",
+            MapColor.DEEPSLATE, SoundType.DEEPSLATE, 3.5f, TAB);
 
     // =====================================================================================
     // Böden

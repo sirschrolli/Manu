@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.37.0 – das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ (die sechs Drachen schmieden das Siegel) und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.**
+> **Testversion 0.37.1 – das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ (die sechs Drachen schmieden das Siegel) und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, logische Ketten (eigenes Gestein gibt Bruchstein für Steinwerkzeuge und Öfen, Blumen geben Farbstoff …), Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -173,6 +173,13 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Geschichte: zum neuen Königreich, zur Chronik, zum Siegelkreis, zu jedem gefallenen Drachen (mit seinem Namen) und wie
 > viele noch übrig sind, zum Siegelbruch, zur Schattenwelt, zu Nyxars Fall und zur Krönung – auf Deutsch und Englisch,
 > mit seinen Worten auf der Titelkarte (abschaltbar unter `narratorVoice`).
+> Seit 0.37.1: **Logische Ketten wie in Vanilla.** Sturmstein gibt beim Abbau **Sturmbruchstein** (mit Behutsamkeit
+> Sturmstein), und aus Sturmbruchstein werden **Steinwerkzeuge, Öfen und Braustände**; im Ofen wird er wieder Sturmstein.
+> Dasselbe gilt für Vulkangestein, Raureifstein, Schiefer, Abgrundstein, Schattenstein und Tiefschattenstein – jeder mit
+> eigenem Bruchstein samt Treppe, Stufe und Mauer. Dazu: Zierblumen geben Farbstoff, Leuchtpilze kommen in die
+> Pilzsuppe, Abgrundsand und Fulgurit schmelzen zu Glas, Geröll gibt wie Kies manchmal Feuerstein, Schilf wird zu
+> Papier, vier Bernsteindrusen ergeben einen Bernsteinblock, ein Sturmkristall lädt Sturmstein auf und Magmacreme bringt
+> Vulkangestein zum Glühen.
 > Seit 0.36.1: **Drachen sind friedlich.** Ein Drache, der aus dem Ei schlüpft, gehört dem Spieler, der dabei ist, und
 > folgt ihm – ebenso ein Drache aus dem Spawn-Ei (er gehört dem, der das Ei benutzt). Kein Drache greift mehr von sich aus
 > Spieler an; Drachen verschonen ihren Herrn, seine Soldaten und seine Tiere auch nach einem versehentlichen Treffer. Ein
@@ -1257,6 +1264,20 @@ lässt wie bei Vanilla die unheilvolle Flasche fallen. Auch die übrigen Ungeheu
 
 **Stahl:** 1 Eisenbarren + 2 Kohlenstoff → Stahlmischung → im Hochofen → Stahlbarren (auch Kohlenstoff aus Holzkohle).
 Aus 9 Rohstoffen wird jeweils ein Speicherblock.
+
+**Gestein und Bruchstein:** Jedes eigene Gestein gibt beim Abbau seinen Bruchstein (mit Behutsamkeit sich selbst) –
+wie Stein und Bruchstein. Bruchstein taugt für Steinwerkzeuge, Ofen und Braustand, lässt sich zu Treppe, Stufe und
+Mauer verarbeiten und wird im Ofen wieder zum Gestein.
+
+| Gestein | Bruchstein | Fundort |
+|---|---|---|
+| Sturmstein | Sturmbruchstein | Sturmklippen um Voltarions Sturmgipfel |
+| Vulkangestein | Vulkanbruchstein | Aschelande um Pyrrhons Vulkankrater |
+| Raureifstein | Raureifbruchstein | Frostkessel um Glaciaras Gletscherkessel |
+| Schiefer | Schieferbruchstein | Zerklüftete Weiten um Terragons Felsschlucht |
+| Abgrundstein | Abgrundbruchstein | Abgrundgrotte um Thalassas Versunkene Grotte |
+| Schattenstein | Schattenbruchstein | Schattenwelt |
+| Tiefschattenstein | Tiefschattenbruchstein | tief in der Schattenwelt |
 
 ### Ausrüstung
 

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cobbled_shale": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:cobbled_shale"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:cobbled_shale_stairs_from_cobbled_shale_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_cobbled_shale"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:cobbled_shale_stairs_from_cobbled_shale_stonecutting"
+    ]
+  }
+}

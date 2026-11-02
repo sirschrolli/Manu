@@ -150,8 +150,12 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockItemTags.WOODEN_SLABS.block(), ShadowBlocks.SHADOW_PLANKS.slab());
         add(BlockTags.LEAVES, ShadowBlocks.SHADOW_LEAVES);
         add(BlockItemTags.DIRT.block(), ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS);
-        add(BlockItemTags.SAND.block(), ShadowBlocks.SHADOW_SAND);
-        add(BlockItemTags.SMELTS_TO_GLASS.block(), ShadowBlocks.SHADOW_SAND);
+        add(BlockItemTags.SAND.block(), ShadowBlocks.SHADOW_SAND, ModBlocks.ABYSSAL_SAND);
+        add(BlockItemTags.SMELTS_TO_GLASS.block(), ShadowBlocks.SHADOW_SAND, ModBlocks.ABYSSAL_SAND);
+        for (io.github.sirschrolli.kingdomsatwar.registry.StoneChains.Chain chain : io.github.sirschrolli.kingdomsatwar.registry.StoneChains.all()) {
+            add(Tags.BlockItems.COBBLESTONES.block(), chain.cobble().base());
+            add(ModTags.Blocks.COBBLED_STONES, chain.cobble().base());
+        }
         add(BlockItemTags.MOSS_BLOCKS.block(), ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_VEGETATION, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
