@@ -42,12 +42,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dsp  # noqa: E402
 import music  # noqa: E402
 import tts  # noqa: E402
-from lines import NARRATION, SOLDIER, SUBTITLES  # noqa: E402
+from lines import NARRATION, SOLDIER, STORY, SUBTITLES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 ASSETS = ROOT / "src" / "main" / "resources" / "assets" / "kingdomsatwar"
 SOUNDS = ASSETS / "sounds"
 INTRO_DIR = ASSETS / "intro"
+STORY_DIR = ASSETS / "story"
 SR = tts.OUT_SR
 NS = "kingdomsatwar"
 
@@ -152,6 +153,26 @@ def load_narration(source: Path, work: Path, style: str = "epic") -> dict:
             info[(lang, i)] = dict(file=path, speech=speech_length(y, SR), length=len(y) / SR)
             print(f"  Erzähler {lang} {i}: {info[(lang, i)]['speech']:.2f} s", flush=True)
     return info
+
+
+def load_story(source: Path, work: Path, style: str = "natural") -> dict:
+    """Die Zeilen des Erzählers zu den Kapiteln übernehmen und nachbearbeiten (wie die Intro-Zeilen); schreibt
+    sounds/story/<id>_<de|en>.ogg und story/narration.json (Sprechdauer je Zeile, für die Titelkarten)."""
+    durations = {}
+    for line in STORY:
+        for lang in ("de", "en"):
+            raw, sr = dsp.read_wav(source / f"story_raw_{line['id']}_{lang}.wav")
+            y = tts.epic_narrator_chain(raw, sr, target_lufs=-16.0, style=style)
+            path = SOUNDS / "story" / f"{line['id']}_{lang}.ogg"
+            dsp.write_ogg(y, SR, path, quality=5)
+            dsp.write_wav(y, SR, work / "story" / f"{line['id']}_{lang}.wav")
+            durations.setdefault(line["id"], {})[lang] = round(speech_length(y, SR), 3)
+            print(f"  Kapitel {line['id']} {lang}: {durations[line['id']][lang]:.2f} s", flush=True)
+    STORY_DIR.mkdir(parents=True, exist_ok=True)
+    with open(STORY_DIR / "narration.json", "w", encoding="utf-8") as f:
+        json.dump({"lines": durations}, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    return durations
 
 
 def plan_timeline(narr: dict) -> dict:
@@ -371,6 +392,11 @@ def write_sounds_json(voice_files: dict | None) -> None:
         for i in range(1, len(NARRATION) + 1):
             data[f"intro.narration.{lang}.{i}"] = {"sounds": [f"{NS}:intro/narration_{lang}_{i:02d}"],
                                                    "subtitle": "subtitles.kingdomsatwar.intro.narration"}
+    for line in STORY:
+        for lang in ("de", "en"):
+            if (SOUNDS / "story" / f"{line['id']}_{lang}.ogg").exists():
+                data[f"story.{line['id']}.{lang}"] = {"sounds": [f"{NS}:story/{line['id']}_{lang}"],
+                                                       "subtitle": "subtitles.kingdomsatwar.story.narration"}
     if voice_files:
         for key, files in voice_files.items():
             cat = key.split(".")[2]

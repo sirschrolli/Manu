@@ -5,7 +5,8 @@ und keine echten Sprecher. Ergebnis:
 
 | Was | Datei(en) |
 |---|---|
-| Erzählerstimme Deutsch / Englisch (9 Zeilen) | `src/main/resources/assets/kingdomsatwar/sounds/intro/narration_de_01.ogg` … `narration_en_09.ogg` |
+| Erzählerstimme des Intros, Deutsch / Englisch (11 Zeilen) | `src/main/resources/assets/kingdomsatwar/sounds/intro/narration_de_01.ogg` … `narration_en_11.ogg` |
+| Erzähler zu den Kapiteln der Geschichte (19 Zeilen, DE/EN) | `…/sounds/story/<id>_<de\|en>.ogg`, Sprechdauern in `…/story/narration.json` |
 | Intro-Musik (gestreamt) | `…/sounds/intro/intro_music.ogg` |
 | Soldaten-Sprachzeilen (6 Arten, je 3 Sätze × 2 Stimmen, DE und EN) | `…/sounds/voice/soldier/<art>_<sprache>_<nr><variante>.ogg` |
 | Zeitplan des Intros | `…/assets/kingdomsatwar/intro/intro.json` |
@@ -22,6 +23,12 @@ Stimme, der wie ein alter König eine Heldensage am Feuer erzählt. Sie entsteht
 2. `narrate.py` – das Base-Modell übernimmt die Stimme aus dieser Hörprobe und spricht alle neun Zeilen auf
    Deutsch und Englisch, je drei Takes (ohne Grafikkarte etwa 1,5 Stunden).
 3. `pick_takes.py` – Whisper hört alle Takes ab und wählt je Zeile den, der am deutlichsten zu verstehen ist.
+
+Auf GitHub erledigt das der Workflow **Erzählerstimme** (`.github/workflows/narrator.yml`): Er startet, wenn
+`narrator/request.txt` geändert wird, verteilt das Sprechen auf acht Rechner, wählt die Takes, bearbeitet sie mit
+`narrator/finish.py` nach (fertige `.ogg`-Dateien, `narrator/narration_timing.json`, `story/narration.json`) und legt das
+Ergebnis als Commit auf den Branch. Musik und Zeitplan entstehen danach lokal:
+`build_audio.py --only music --work <ordner>` mit einer Kopie von `narration_timing.json` in `<ordner>`.
 
 Danach baut `build_audio.py` daraus die fertigen Dateien – mit **leichter** Nachbearbeitung (`--narration-style
 natural`: sanfter EQ, behutsame Kompression, ein Hauch Raum), denn die Stimme klingt schon von sich aus
