@@ -23,7 +23,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
                               turtle,
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
-                              hoglin, hoglin_baby, strider, strider_baby,
+                              hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -232,6 +232,16 @@ def main():
                 "strider", strider.PALETTES, preview)
     write_model(strider_baby, "LavastelzerBabyGeometry", "Geometrie der jungen Lavastelzer (Knochen wie beim Vanilla-Schreiter-Jungtier).",
                 "strider/baby", strider_baby.PALETTES, preview)
+    # übrige Nether-Wesen (E5b)
+    write_model(ghast, "RauchqualleGeometry",
+                "Geometrie der Rauchqualle (Körper und Fangarme wie beim Vanilla-Ghast, dazu Haube und Kranz; im Spiel ×4,5).",
+                "ghast", ghast.PALETTES, preview)
+    write_model(blaze, "GlutgeistGeometry",
+                "Geometrie des Glutgeists (Kopf und zwölf Stäbe wie bei der Vanilla-Lohe, dazu Krone, Bart und Kern).",
+                "blaze", blaze.PALETTES, preview)
+    write_model(magma_cube, "GlutschleimGeometry",
+                "Geometrie des Glutschleims (acht Scheiben und Kern wie beim Vanilla-Magmawürfel, dazu Schollen und Tropfen).",
+                "magma_cube", magma_cube.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

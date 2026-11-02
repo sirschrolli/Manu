@@ -170,5 +170,12 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.STRIDER.key());
         this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.STRIDER.key());
         this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(ModEntities.STRIDER.key());
+        // übrige Nether-Wesen (E5b): kein Fallschaden, Kälte schadet Glutgeist und Glutschleim mehr, Frösche fressen kleine
+        // Glutschleime (und lassen Froschlicht fallen), Glutschleime reiten nicht als Lenker
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.GHAST.key()).add(ModEntities.BLAZE.key()).add(ModEntities.MAGMA_CUBE.key());
+        this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(ModEntities.BLAZE.key()).add(ModEntities.MAGMA_CUBE.key());
+        this.tag(EntityTypeTags.FROG_FOOD).add(ModEntities.MAGMA_CUBE.key());
+        this.tag(EntityTypeTags.NON_CONTROLLING_RIDER).add(ModEntities.MAGMA_CUBE.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.GHAST.key()).add(ModEntities.BLAZE.key()).add(ModEntities.MAGMA_CUBE.key());
     }
 }

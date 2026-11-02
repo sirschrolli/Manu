@@ -3,9 +3,12 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.BristleGiant;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Moderkeiler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Rauchqualle;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.LinkedHashMap;
@@ -73,13 +76,22 @@ final class NetherGameTests {
             ModGameTests.TEST_FUNCTIONS.register("nether_strider_jockey", () -> NetherGameTests::striderJockey);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STRIDER_COLD =
             ModGameTests.TEST_FUNCTIONS.register("nether_strider_cold", () -> NetherGameTests::striderCold);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SPIRITS_REPLACED =
+            ModGameTests.TEST_FUNCTIONS.register("nether_spirits_replaced", () -> NetherGameTests::spiritsReplaced);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GHAST_FIREBALL =
+            ModGameTests.TEST_FUNCTIONS.register("nether_ghast_fireball", () -> NetherGameTests::ghastFireball);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BLAZE_FIREBALL =
+            ModGameTests.TEST_FUNCTIONS.register("nether_blaze_fireball", () -> NetherGameTests::blazeFireball);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MAGMA_SPLIT =
+            ModGameTests.TEST_FUNCTIONS.register("nether_magma_split", () -> NetherGameTests::magmaSplit);
 
     private NetherGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(SPAWN, CONVERSION, AVOID, HOGLIN_BREEDING, HOGLIN_RETREAT, STRIDER_RIDE, STRIDER_JOCKEY, STRIDER_COLD)) {
+        for (var test : List.of(SPAWN, CONVERSION, AVOID, HOGLIN_BREEDING, HOGLIN_RETREAT, STRIDER_RIDE, STRIDER_JOCKEY, STRIDER_COLD,
+                SPIRITS_REPLACED, GHAST_FIREBALL, BLAZE_FIREBALL, MAGMA_SPLIT)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -97,6 +109,9 @@ final class NetherGameTests {
         map.put(EntityTypes.HOGLIN, ModEntities.HOGLIN.get());
         map.put(EntityTypes.ZOGLIN, ModEntities.ZOGLIN.get());
         map.put(EntityTypes.STRIDER, ModEntities.STRIDER.get());
+        map.put(EntityTypes.GHAST, ModEntities.GHAST.get());
+        map.put(EntityTypes.BLAZE, ModEntities.BLAZE.get());
+        map.put(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE.get());
         return map;
     }
 
@@ -357,6 +372,98 @@ final class NetherGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(cold.isSuffocating(), "der Lavastelzer an Land friert nicht");
             helper.assertFalse(warm.isSuffocating(), "der Lavastelzer in der Lava friert");
+        });
+    }
+
+    // =====================================================================================
+    // Rauchqualle, Glutgeist und Glutschleim (E5b)
+    // =====================================================================================
+
+    /**
+     * Vanilla-Ghast, -Lohe und -Magmawürfel (Spawn-Ei, Befehl, Spawner der Festung) werden die eigenen – mit UUID, Größe
+     * und Leben; Namen je Gestalt.
+     */
+    private static void spiritsReplaced(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        net.minecraft.world.entity.monster.Ghast ghast = EntityTypes.GHAST.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+        ghast.setNoAi(true);
+        place(helper, ghast, new BlockPos(4, 3, 4));
+        net.minecraft.world.entity.monster.Blaze blaze = EntityTypes.BLAZE.create(level, EntitySpawnReason.SPAWNER);
+        blaze.setNoAi(true);
+        place(helper, blaze, new BlockPos(1, 1, 1));
+        net.minecraft.world.entity.monster.cubemob.MagmaCube cube = EntityTypes.MAGMA_CUBE.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+        cube.setSize(3, true);
+        cube.setNoAi(true);
+        place(helper, cube, new BlockPos(7, 1, 7));
+        UUID g = ghast.getUUID(), b = blaze.getUUID(), m = cube.getUUID();
+        helper.runAfterDelay(2, () -> {
+            helper.assertTrue(level.getEntity(g) instanceof Rauchqualle, "keine Rauchqualle: " + level.getEntity(g));
+            helper.assertTrue(level.getEntity(b) instanceof Glutgeist, "kein Glutgeist: " + level.getEntity(b));
+            helper.assertTrue(level.getEntity(m) instanceof Glutschleim ours && ours.getSize() == 3,
+                    "Glutschleim nicht so groß wie der Magmawürfel: " + level.getEntity(m));
+            Rauchqualle qualle = (Rauchqualle) level.getEntity(g);
+            qualle.setLook(Rauchqualle.Look.SEELE);
+            helper.assertTrue(qualle.getName().getString().equals(Component.translatable("entity.kingdomsatwar.ghast.seele").getString()),
+                    "Name der Seelenqualle: " + qualle.getName().getString());
+            Glutschleim slime = (Glutschleim) level.getEntity(m);
+            slime.setLook(Glutschleim.Look.BASALT);
+            helper.assertTrue(slime.getName().getString().equals(Component.translatable("entity.kingdomsatwar.magma_cube.basalt").getString()),
+                    "Name des Basaltschleims: " + slime.getName().getString());
+            helper.succeed();
+        });
+    }
+
+    /** Die Rauchqualle reißt die Augen auf und speit einen Feuerball auf ihr Ziel (der Feuerball gehört ihr). */
+    private static void ghastFireball(GameTestHelper helper) {
+        floor(helper);
+        Rauchqualle qualle = helper.spawn(ModEntities.GHAST.get(), new BlockPos(4, 4, 7));
+        var target = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 1));
+        boolean[] charged = new boolean[1];
+        helper.onEachTick(() -> {
+            qualle.setTarget(target);
+            charged[0] |= qualle.isCharging();
+        });
+        helper.succeedWhen(() -> {
+            var balls = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball.class,
+                    new AABB(helper.absolutePos(new BlockPos(4, 3, 4))).inflate(24.0), ball -> ball.getOwner() == qualle);
+            helper.assertTrue(!balls.isEmpty(), "noch kein Feuerball");
+            helper.assertTrue(charged[0], "die Rauchqualle hat die Augen nicht aufgerissen");
+            balls.forEach(Entity::discard);
+        });
+    }
+
+    /** Der Glutgeist schießt Feuerkugeln auf sein Ziel; Wasser und Schnee verletzen ihn wie die Lohe. */
+    private static void blazeFireball(GameTestHelper helper) {
+        floor(helper);
+        Glutgeist geist = helper.spawn(ModEntities.BLAZE.get(), new BlockPos(4, 1, 7));
+        var target = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 1));
+        helper.assertTrue(geist.isSensitiveToWater(), "Wasser schadet dem Glutgeist nicht");
+        helper.onEachTick(() -> geist.setTarget(target));
+        helper.succeedWhen(() -> {
+            var balls = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball.class,
+                    new AABB(helper.absolutePos(new BlockPos(4, 1, 4))).inflate(24.0), ball -> ball.getOwner() == geist);
+            helper.assertTrue(!balls.isEmpty(), "noch keine Feuerkugel");
+            balls.forEach(Entity::discard);
+        });
+    }
+
+    /** Ein großer Basaltschleim zerfällt beim Sterben in kleinere Basaltschleime (eigene Art, halbe Größe). */
+    private static void magmaSplit(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        Glutschleim big = helper.spawnWithNoFreeWill(ModEntities.MAGMA_CUBE.get(), new BlockPos(4, 1, 4));
+        big.setSize(4, true);
+        big.setLook(Glutschleim.Look.BASALT);
+        big.hurtServer(level, level.damageSources().genericKill(), Float.MAX_VALUE);
+        helper.succeedWhen(() -> {
+            var parts = level.getEntitiesOfClass(net.minecraft.world.entity.monster.cubemob.MagmaCube.class,
+                    new AABB(helper.absolutePos(new BlockPos(4, 1, 4))).inflate(8.0), part -> part != big && part.isAlive());
+            helper.assertTrue(parts.size() >= 2, "nicht zerfallen: " + parts.size());
+            for (var part : parts) {
+                helper.assertTrue(part instanceof Glutschleim ours && ours.getLook() == Glutschleim.Look.BASALT && ours.getSize() == 2,
+                        "falsches Teil: " + part);
+            }
         });
     }
 }

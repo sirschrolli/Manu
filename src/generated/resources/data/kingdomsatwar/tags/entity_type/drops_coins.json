@@ -182,6 +182,9 @@
     "kingdomsatwar:piglin_brute",
     "kingdomsatwar:zombified_piglin",
     "kingdomsatwar:hoglin",
-    "kingdomsatwar:zoglin"
+    "kingdomsatwar:zoglin",
+    "kingdomsatwar:ghast",
+    "kingdomsatwar:blaze",
+    "kingdomsatwar:magma_cube"
   ]
 }

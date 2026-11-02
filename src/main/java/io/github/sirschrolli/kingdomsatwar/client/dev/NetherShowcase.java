@@ -2,9 +2,12 @@ package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Moderkeiler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Rauchqualle;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.Deque;
@@ -230,6 +233,111 @@ final class NetherShowcase {
         shot(steps, "nether_striders", group(3) + 8.5, 2.6, 0.3, 9.0, true);
         shot(steps, "nether_strider_close", group(3) + 6.0, 1.8, 0.2, 7.0, false);
         shot(steps, "nether_strider_cold", group(3) + 19.0, 1.8, 1.0, 10.0, false);
+        steps.add(Step.command("difficulty peaceful"));
+        steps.add(Step.command("gamerule spawn_mobs true"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
+        steps.add(Step.hud(true));
+    }
+
+    /** Basaltdelta mit Festungsmauer: Basalt, Schwarzstein, Magmablöcke, hinten Netherziegel; rechts ein Stück Seelensand. */
+    private static void delta(ServerLevel level, int x0) {
+        int g = Showcase.ground;
+        Showcase.fill(level, new BlockPos(x0 - 14, g - 3, OZ - 30), new BlockPos(x0 + 34, g - 1, OZ + 22), Blocks.BLACKSTONE.defaultBlockState());
+        Showcase.fill(level, new BlockPos(x0 - 14, g, OZ - 30), new BlockPos(x0 + 34, g + 24, OZ + 22), Blocks.AIR.defaultBlockState());
+        for (int x = x0 - 12; x <= x0 + 32; x++) {
+            for (int z = OZ - 28; z <= OZ + 20; z++) {
+                int r = Math.floorMod(x * 31 + z * 17 + x * z, 23);
+                BlockState top = r < 6 ? Blocks.BASALT.defaultBlockState() : r < 8 ? Blocks.MAGMA_BLOCK.defaultBlockState()
+                        : Blocks.BLACKSTONE.defaultBlockState();
+                if (x > x0 + 18) {
+                    top = r < 5 ? Blocks.SOUL_SOIL.defaultBlockState() : Blocks.SOUL_SAND.defaultBlockState();
+                }
+                level.setBlock(new BlockPos(x, g - 1, z), top, 2);
+            }
+        }
+        BlockState bricks = Blocks.NETHER_BRICKS.defaultBlockState();
+        Showcase.fill(level, new BlockPos(x0 - 8, g, OZ - 7), new BlockPos(x0 + 26, g + 5, OZ - 7), bricks);
+        for (int x = x0 - 8; x <= x0 + 26; x += 2) {
+            level.setBlock(new BlockPos(x, g + 6, OZ - 7), bricks, 2);
+            level.setBlock(new BlockPos(x + 1, g + 6, OZ - 7), Blocks.NETHER_BRICK_FENCE.defaultBlockState(), 2);
+        }
+        for (int x = x0 - 6; x <= x0 + 24; x += 10) {
+            level.setBlock(new BlockPos(x, g + 3, OZ - 6), Blocks.SOUL_LANTERN.defaultBlockState(), 2);
+        }
+        for (int[] spike : new int[][] {{-10, -20, 7}, {-4, -24, 11}, {30, -18, 8}, {24, -26, 13}, {6, -27, 9}}) {
+            Showcase.fill(level, new BlockPos(x0 + spike[0], g, OZ + spike[1]), new BlockPos(x0 + spike[0], g + spike[2], OZ + spike[1]),
+                    Blocks.BASALT.defaultBlockState());
+        }
+    }
+
+    /** Rauchquallen über dem Basaltdelta, Glutgeister vor der Festungsmauer, Glutschleime in drei Größen. */
+    static void spirits(Deque<Step> steps) {
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.server(level -> {
+            int b = group(5);
+            delta(level, b);
+            // Glutschleime: drei Größen je Gestalt
+            int[] sizes = {4, 2, 1};
+            for (int i = 0; i < 3; i++) {
+                int size = sizes[i];
+                spawn(level, ModEntities.MAGMA_CUBE.get(), b + 1.5 + i * 3.4, OZ + 1.5, i == 1 ? 345 : 15, m -> {
+                    m.setSize(size, true);
+                    m.setLook(Glutschleim.Look.GLUT);
+                });
+                spawn(level, ModEntities.MAGMA_CUBE.get(), b + 12.0 + i * 3.4, OZ + 1.5, i == 1 ? 15 : 345, m -> {
+                    m.setSize(size, true);
+                    m.setLook(Glutschleim.Look.BASALT);
+                });
+            }
+            // Glutgeister schweben vor der Festungsmauer
+            spawn(level, ModEntities.BLAZE.get(), b + 4.5, OZ - 3.0, 10, m -> {
+                m.setLook(Glutgeist.Look.GLUT);
+                m.setNoGravity(true);
+            }).snapTo(b + 4.5, Showcase.ground + 1.2, OZ - 3.0, 10, 0);
+            spawn(level, ModEntities.BLAZE.get(), b + 9.0, OZ - 3.5, 350, m -> {
+                m.setLook(Glutgeist.Look.GLUT);
+                m.setNoGravity(true);
+            }).snapTo(b + 9.0, Showcase.ground + 1.8, OZ - 3.5, 350, 0);
+            spawn(level, ModEntities.BLAZE.get(), b + 21.5, OZ - 3.0, 345, m -> {
+                m.setLook(Glutgeist.Look.SEELE);
+                m.setNoGravity(true);
+            }).snapTo(b + 21.5, Showcase.ground + 1.4, OZ - 3.0, 345, 0);
+            // Rauchquallen hoch über dem Delta
+            Rauchqualle.Look[] looks = Rauchqualle.Look.values();
+            for (int i = 0; i < looks.length; i++) {
+                Rauchqualle.Look look = looks[i];
+                double x = b + 2.0 + i * 9.0;
+                double y = Showcase.ground + 9.0 + (i == 1 ? 2.0 : 0.0);
+                spawn(level, ModEntities.GHAST.get(), x, OZ - 16.0, i == 1 ? 0 : (i == 0 ? 20 : 340), m -> {
+                    m.setLook(look);
+                    m.setNoGravity(true);
+                    m.setCharging(look == Rauchqualle.Look.GLUT);
+                }).snapTo(x, y, OZ - 16.0, i == 1 ? 0 : (i == 0 ? 20 : 340), 0);
+            }
+        }));
+        steps.add(Step.waitTicks(120));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(55)));
+        shot(steps, "nether_ghasts", group(5) + 11.0, 9.0, 10.5, 18.0, true);
+        // erst jetzt (die Chunks sind geladen): die Glutqualle reißt die Augen auf – das Laden wird nicht gespeichert
+        steps.add(Step.server(level -> {
+            for (Rauchqualle qualle : level.getEntitiesOfClass(Rauchqualle.class, new net.minecraft.world.phys.AABB(
+                    new BlockPos(group(5), Showcase.ground, OZ)).inflate(48.0))) {
+                qualle.setCharging(qualle.getLook() == Rauchqualle.Look.GLUT);
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        shot(steps, "nether_ghast_fire", group(5) + 11.0, 12.5, 13.0, 9.0, false);
+        shot(steps, "nether_spirits", group(5) + 10.0, 3.2, 1.2, 10.5, false);
+        shot(steps, "nether_blaze_close", group(5) + 4.5, 2.3, 2.1, 1.8, false);
+        shot(steps, "nether_magma_close", group(5) + 8.0, 1.8, 0.6, 6.0, false);
+        steps.add(Step.command("time set 6000"));
+        shot(steps, "nether_ghasts_day", group(5) + 11.0, 9.0, 10.5, 18.0, false);
         steps.add(Step.command("difficulty peaceful"));
         steps.add(Step.command("gamerule spawn_mobs true"));
         steps.add(Step.command("gamemode creative"));

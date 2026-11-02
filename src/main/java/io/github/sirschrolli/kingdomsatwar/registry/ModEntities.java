@@ -343,6 +343,17 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer>> STRIDER = ENTITIES.registerEntityType(
             "strider", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer::new, MobCategory.CREATURE, builder -> builder
                     .fireImmune().sized(0.9f, 1.7f).clientTrackingRange(10));
+    // übrige Nether-Wesen (E5b): Maße wie bei Vanilla
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Rauchqualle>> GHAST = ENTITIES.registerEntityType(
+            "ghast", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Rauchqualle::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().sized(4.0f, 4.0f).eyeHeight(2.6f).passengerAttachments(4.0625f).ridingOffset(0.5f).clientTrackingRange(10)
+                    .notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist>> BLAZE = ENTITIES.registerEntityType(
+            "blaze", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().sized(0.6f, 1.8f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim>> MAGMA_CUBE = ENTITIES.registerEntityType(
+            "magma_cube", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4.0f).clientTrackingRange(8).notInPeaceful());
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -554,6 +565,9 @@ public final class ModEntities {
         event.put(HOGLIN.get(), net.minecraft.world.entity.monster.hoglin.Hoglin.createAttributes().build());
         event.put(ZOGLIN.get(), net.minecraft.world.entity.monster.Zoglin.createAttributes().build());
         event.put(STRIDER.get(), net.minecraft.world.entity.monster.Strider.createAttributes().build());
+        event.put(GHAST.get(), net.minecraft.world.entity.monster.Ghast.createAttributes().build());
+        event.put(BLAZE.get(), net.minecraft.world.entity.monster.Blaze.createAttributes().build());
+        event.put(MAGMA_CUBE.get(), net.minecraft.world.entity.monster.cubemob.MagmaCube.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -672,6 +686,10 @@ public final class ModEntities {
         event.register(HOGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.hoglin.Hoglin::checkHoglinSpawnRules, replace);
         event.register(ZOGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkAnyLightMonsterSpawnRules, replace);
         event.register(STRIDER.get(), SpawnPlacementTypes.IN_LAVA, noLeaves, net.minecraft.world.entity.monster.Strider::checkStriderSpawnRules,
+                replace);
+        event.register(GHAST.get(), ground, noLeaves, net.minecraft.world.entity.monster.Ghast::checkGhastSpawnRules, replace);
+        event.register(BLAZE.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkAnyLightMonsterSpawnRules, replace);
+        event.register(MAGMA_CUBE.get(), ground, noLeaves, net.minecraft.world.entity.monster.cubemob.MagmaCube::checkMagmaCubeSpawnRules,
                 replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);

@@ -1,5 +1,8 @@
 {
   "values": {
+    "kingdomsatwar:blaze": {
+      "sound": "minecraft:entity.parrot.imitate.blaze"
+    },
     "kingdomsatwar:bogged": {
       "sound": "minecraft:entity.parrot.imitate.bogged"
     },
@@ -27,6 +30,9 @@
     "kingdomsatwar:evoker": {
       "sound": "minecraft:entity.parrot.imitate.evoker"
     },
+    "kingdomsatwar:ghast": {
+      "sound": "minecraft:entity.parrot.imitate.ghast"
+    },
     "kingdomsatwar:guardian": {
       "sound": "minecraft:entity.parrot.imitate.guardian"
     },
@@ -41,6 +47,9 @@
     },
     "kingdomsatwar:illusioner": {
       "sound": "minecraft:entity.parrot.imitate.illusioner"
+    },
+    "kingdomsatwar:magma_cube": {
+      "sound": "minecraft:entity.parrot.imitate.magma_cube"
     },
     "kingdomsatwar:parched": {
       "sound": "minecraft:entity.parrot.imitate.parched"

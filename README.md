@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.25.0 – die Standard-Biome im Stil der eigenen; Nahrung, Proviant, Garnison und Schlachtzug.**
+> **Testversion 0.26.0 – Rauchquallen, Glutgeister und Glutschleime; die Standard-Biome im Stil der eigenen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,8 +162,17 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
+> Neu in 0.26: **Die Geister des Nethers.** Statt Ghasts schweben **Rauchquallen** über dem Nether – düstere Ballen
+> aus Qualm mit Rauchfäden, schweren Lidern und glühenden Tränen; wenn sie Feuer speien, reißen sie die glühenden Augen
+> auf und ihr Maul steht voller Feuer (**Aschenqualle**, **Glutqualle** mit Glutnestern in den Basaltdeltas,
+> **Seelenqualle** im Seelensandtal). Statt Lohen bewachen **Glutgeister** die Festungen: eine Maske aus geschwärztem
+> Erz mit gleißenden Augenschlitzen und Mundgitter, eine Krone aus Flammen, ein glühender Kern und zwölf kreisende
+> Glutklingen mit leuchtenden Runen (im Seelensandtal als türkiser **Seelengeist**). Und statt Magmawürfeln hüpfen
+> **Glutschleime** – Lava unter einer Kruste aus Schollen mit glühenden Fugen, mit Glutgesicht und weißglühendem Herzen;
+> springen sie, leuchten die Schichten dazwischen auf (in den Basaltdeltas als grauer **Basaltschleim**). Feuerbälle
+> zurückschlagen, Schneebälle gegen Glutgeister, Zerfallen in kleinere Schleime gleicher Art und alle Beute wie gewohnt.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die übrigen Nether-Wesen (Ghast, Lohe, Magmawürfel, Witherskelett, Wither), dann das End.
+> **Als Nächstes:** das Witherskelett und der Wither, dann das End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -206,7 +215,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
 | Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler statt Vanilla (Händler mit Münzhandel) | ✅ fertig |
 | Nether-Volk statt Piglins: Borstlinge (drei Gestalten), Borstenhüne, Moderborstlinge | ✅ fertig |
-| Nether und End: übrige Mobs und Bauwerke | 🔨 als Nächstes |
+| Tiere und Geister des Nethers: Glutkeiler, Moderkeiler, Lavastelzer, Rauchqualle, Glutgeist, Glutschleim | ✅ fertig |
+| Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
+| Nether und End: Witherskelett, Wither, die Wesen des Ends und die Bauwerke | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -223,7 +234,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.25.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.26.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -231,7 +242,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.25.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.26.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -834,6 +845,14 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 | **Moderkeiler** | Zoglin | Moderkeiler, Dörrkeiler | verwest mit offenen Stellen, freiliegenden Rippen und Stirnknochen, räudiger Mähne, abgebrochenem Hauer und einem glimmenden Auge; greift alles an außer Moderkeilern und Kriechern |
 | **Lavastelzer** | Schreiter | Glutstelzer, Seelenstelzer (Seelensandtal) | warzige Lavahaut mit glimmenden Poren, große glühende Augen, breites Maul, sechs Lappen aus feurigem Haar, Stelzbeine mit glühenden Füßen; friert an Land (fahl, zitternd, langsam); Sattel, Wirrpilzrute, Paarung und Jockeys wie gewohnt |
 
+![Rauchquallen, Glutgeister und Glutschleime](docs/bilder/nether_geister.jpg)
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Rauchqualle** | Ghast | Aschenqualle, Glutqualle (Basaltdeltas, selten im Ödland), Seelenqualle (Seelensandtal) | Ballen aus Qualm mit Haube und Kranz, angeglüht von unten, Funken und Glutnester; Rauchfäden mit glimmenden Spitzen; schwere Lider mit glühenden Tränen – beim Feuerspeien aufgerissene Augen und ein Maul voller Feuer; Feuerbälle lassen sich zurückschlagen; Tränen und Schwarzpulver |
+| **Glutgeist** | Lohe | Glutgeist, Seelengeist (Festungen im Seelensandtal) | Maske aus geschwärztem Erz mit Augenschlitzen, Mundgitter, Stirnreif mit Runen, Flammenkrone und Glutbart; glühender Kern mit Flammenzunge; zwölf kreisende Glutklingen mit Runen und Flammen; Feuerkugeln, Schneebälle und Wasser schaden ihm; Lohenruten |
+| **Glutschleim** | Magmawürfel | Glutschleim, Basaltschleim (Basaltdeltas) | Kruste aus Schollen mit glühenden Fugen, Glutgesicht, weißglühendes Herz, Lavatropfen; beim Springen leuchten die Schichten dazwischen auf; zerfällt in kleinere Schleime gleicher Art; Magmacreme |
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -1066,7 +1085,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.25.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.26.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
