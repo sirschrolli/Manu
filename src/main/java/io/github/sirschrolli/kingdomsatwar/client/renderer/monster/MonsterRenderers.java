@@ -63,6 +63,9 @@ public final class MonsterRenderers {
     public static final ModelLayerLocation CREEPER = layer("creeper");
     public static final ModelLayerLocation SPIDER = layer("spider");
     public static final ModelLayerLocation CAVE_SPIDER = layer("cave_spider");
+    /** Arachnophobie-Modus: der Moosling (Spinnenknochen ohne Beine); die Höhlenvariante kleiner gezeichnet. */
+    public static final ModelLayerLocation MOOSLING = layer("moosling");
+    public static final ModelLayerLocation CAVE_MOOSLING = layer("cave_moosling");
     public static final ModelLayerLocation SLIME = layer("slime");
     public static final ModelLayerLocation SLIME_OUTER = new ModelLayerLocation(KingdomsAtWar.id("slime"), "outer");
     public static final ModelLayerLocation SULFUR_CUBE = layer("sulfur_cube");
@@ -144,6 +147,9 @@ public final class MonsterRenderers {
         event.registerLayerDefinition(CREEPER, CreeperGeometry::createLayer);
         event.registerLayerDefinition(SPIDER, SpiderGeometry::createLayer);
         event.registerLayerDefinition(CAVE_SPIDER, () -> SpiderGeometry.createLayer().apply(MeshTransformer.scaling(CAVE_SPIDER_SCALE)));
+        event.registerLayerDefinition(MOOSLING, io.github.sirschrolli.kingdomsatwar.client.model.geom.MooslingGeometry::createLayer);
+        event.registerLayerDefinition(CAVE_MOOSLING, () -> io.github.sirschrolli.kingdomsatwar.client.model.geom.MooslingGeometry.createLayer()
+                .apply(MeshTransformer.scaling(CAVE_SPIDER_SCALE)));
         event.registerLayerDefinition(SLIME, () -> parts(SlimeGeometry.createMesh(), SlimeGeometry.TEXTURE_WIDTH, SlimeGeometry.TEXTURE_HEIGHT,
                 "cube", "right_eye", "left_eye", "mouth"));
         event.registerLayerDefinition(SLIME_OUTER, () -> parts(SlimeGeometry.createMesh(), SlimeGeometry.TEXTURE_WIDTH,
@@ -186,10 +192,10 @@ public final class MonsterRenderers {
         event.registerEntityRenderer(ModEntities.CREEPER.get(), PlantCreeperRenderer::new);
         event.registerEntityRenderer(ModEntities.SPIDER.get(),
                 context -> new WildSpiderRenderer<WildSpider>(context, SPIDER, 0.8f, SPIDER_NAMES, s -> s.getLook().ordinal(),
-                        new net.minecraft.client.renderer.entity.SpiderRenderer<WildSpider>(context)));
+                        new net.minecraft.client.renderer.entity.SpiderRenderer<WildSpider>(context), false));
         event.registerEntityRenderer(ModEntities.CAVE_SPIDER.get(), context -> new WildSpiderRenderer<WildCaveSpider>(context, CAVE_SPIDER,
                 0.8f * CAVE_SPIDER_SCALE, new String[] {"hoehlenspinne"}, s -> 0,
-                new net.minecraft.client.renderer.entity.CaveSpiderRenderer(context)));
+                new net.minecraft.client.renderer.entity.CaveSpiderRenderer(context), true));
         event.registerEntityRenderer(ModEntities.SLIME.get(), OozeRenderer::new);
         event.registerEntityRenderer(ModEntities.SULFUR_CUBE.get(), BrimstoneCubeRenderer::new);
         event.registerEntityRenderer(ModEntities.WITCH.get(), HagRenderer::new);

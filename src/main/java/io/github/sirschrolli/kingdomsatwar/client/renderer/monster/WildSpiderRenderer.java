@@ -18,20 +18,24 @@ import net.minecraft.world.entity.monster.spider.Spider;
 
 /**
  * Spinnen und Höhlenspinne: eigenes Modell mit geknickten Beinen, Kieferklauen und Spinnwarzen, eigene Bilder je Art
- * und leuchtende Augen; Gehen und Klettern wie bei Vanilla, auf dem Rücken liegend im Tod. Im Arachnophobie-Modus
- * (Einstellungen der Mod) zeichnet stattdessen Minecrafts eigener Renderer das schlichte Standard-Aussehen.
+ * und leuchtende Augen; Gehen und Klettern wie bei Vanilla, auf dem Rücken liegend im Tod. In den Einstellungen der Mod
+ * lässt sich stattdessen Minecrafts schlichte Spinne wählen – oder der Arachnophobie-Modus, in dem runde Mooslinge an
+ * die Stelle der Spinnen treten.
  */
 public class WildSpiderRenderer<T extends Spider> extends WildRenderer<T, LookRenderState, SpiderModel> {
-    /** Das Standard-Aussehen für den Arachnophobie-Modus (Modell und Bild von Minecraft selbst, nichts davon in der Mod). */
+    /** Das Standard-Aussehen (Modell und Bild von Minecraft selbst, nichts davon in der Mod). */
     private final EntityRenderer<?, LivingEntityRenderState> classic;
+    /** Arachnophobie-Modus: der Moosling an Stelle der Spinne. */
+    private final EntityRenderer<?, LivingEntityRenderState> moosling;
     private final Identifier[] textures;
     private final RenderType[] glows;
     private final ToIntFunction<T> look;
 
     public WildSpiderRenderer(EntityRendererProvider.Context context, ModelLayerLocation layer, float shadow, String[] names,
-            ToIntFunction<T> look, EntityRenderer<?, LivingEntityRenderState> classic) {
+            ToIntFunction<T> look, EntityRenderer<?, LivingEntityRenderState> classic, boolean cave) {
         super(context, new SpiderModel(context.bakeLayer(layer)), shadow, new SpiderRenderer<T>(context));
         this.classic = classic;
+        this.moosling = new MooslingRenderer<T>(context, cave);
         this.textures = MonsterRenderers.textures("spider", names);
         this.glows = MonsterRenderers.glows("spider", names);
         this.look = look;
@@ -43,13 +47,13 @@ public class WildSpiderRenderer<T extends Spider> extends WildRenderer<T, LookRe
         state.look = this.look.applyAsInt(spider);
     }
 
-    /** Im Arachnophobie-Modus zeichnet Minecrafts eigener Spinnen-Renderer (schlichtes Standard-Aussehen). */
+    /** Je nach Einstellung: das eigene Modell, Minecrafts schlichte Spinne oder (Arachnophobie-Modus) ein Moosling. */
     @Override
     public void submit(LookRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
-        if (io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.ARACHNOPHOBIA.get()) {
-            this.classic.submit(state, poseStack, collector, camera);
-        } else {
-            super.submit(state, poseStack, collector, camera);
+        switch (io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.SPIDER_LOOK.get()) {
+            case CLASSIC -> this.classic.submit(state, poseStack, collector, camera);
+            case MOOSLING -> this.moosling.submit(state, poseStack, collector, camera);
+            default -> super.submit(state, poseStack, collector, camera);
         }
     }
 

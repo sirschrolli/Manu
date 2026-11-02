@@ -21,9 +21,9 @@ einer Himmelsrichtung, auf ebenem Land, mit Abstand zu den Drachennestern, zum S
 
 | Reich | Herrscher | Wappen | Bauweise der Burg |
 |---|---|---|---|
-| **Königreich Eisenmark** | König Harald der Graue | silberner Turm auf Blau | grauer Stein, Schieferdächer |
+| **Königreich Eisenmark** | König Harald der Graue | weißer Turm auf Purpur | grauer Stein, Schieferdächer |
 | **Herzogtum Rabenstein** | Herzogin Morwen | schwarzer Rabe auf Rot | dunkler Stein, rote Banner |
-| **Fürstentum Dornfels** | Fürst Kasimir | goldene Sonne auf Ocker | Sandstein und Terrakotta |
+| **Fürstentum Dornfels** | Fürst Kasimir | goldene Sonne auf Orange | Sandstein und Terrakotta |
 | **Grafschaft Silberau** | Graf Ansgar | weißer Schwan auf Grün | heller Kalkstein, grüne Dächer |
 
 **Die Stammburg** (etwa 70 × 70 Blöcke): Ringmauer mit Wehrgang und Zinnen, vier Ecktürme, ein Torhaus mit
@@ -70,11 +70,31 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 
 | Schritt | Inhalt | Stand |
 |---|---|---|
-| K1a | Die vier Reiche: Namen, Herrscher, Wappen, Lage in der Welt, Zustand (Besatzung, erobert, im Krieg) | 🔨 |
-| K1b | Die Stammburgen in vier Bauweisen mit Thronsaal und Reichsbanner | ⏳ |
-| K1c | Feindliche Krieger in den Farben ihres Reichs, Posten, Alarm, Nachschub | ⏳ |
-| K1d | Der Herrscher, die Eroberung, Garnison und Tribut | ⏳ |
-| K1e | Die Reiche finden: Chronik, Kriegskarte am Feldherrentisch, Karten beim Kartografen | ⏳ |
-| K1f | Tests, Bilder, Doku, Version 0.38.0 | ⏳ |
-| K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok (Version 0.39.0) | ⏳ |
-| K3 | Gegenangriffe der Reiche, neue Truppen (Version 0.40.0) | ⏳ |
+| K1a | Die vier Reiche: Namen, Herrscher, Wappen, Lage in der Welt, Zustand (Besatzung, erobert, im Krieg) | ✅ |
+| K1b | Die Stammburgen in vier Bauweisen mit Thronsaal und Reichsbanner | ✅ |
+| K1c | Feindliche Krieger in den Farben ihres Reichs, Posten, Alarm, Nachschub | ✅ |
+| K1d | Der Herrscher, die Eroberung und der Tribut | ✅ |
+| K1e | Die Reiche finden: Grenzmeldung, Karten beim Kartografen, `/kaw realms` | ✅ |
+| K1f | Tests, Bilder, Doku, Version 0.38.0 | ✅ |
+| M | Die Arkane Sphäre: Erzmagier ziehen Spieler und Truppen in ihre Arena-Dimension (Version 0.39.0) | 🔨 |
+| K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | ⏳ |
+| K3 | Gegenangriffe der Reiche, neue Truppen | ⏳ |
+
+## Was in 0.38.0 fertig ist
+
+- **Stammburgen in der Welt:** genau vier je Welt, je Reich eine, 900 bis 2400 Blöcke vom Ursprung, nie in der Nähe
+  von Nestern, Siegelkreis, Magiertürmen oder Dörfern. Bauplatz eingeebnet, ringsum ein sanfter Übergang ins Gelände.
+- **Besatzung:** 28 Krieger je Burg auf festen Posten – Fußknechte, Wallschützen auf den Mauern, Armbrustschützen auf
+  den Türmen, Burgritter im Thronsaal, der Burghauptmann am Tor und der Herrscher (mit Bossleiste; schwer angeschlagen
+  trinkt er einmal einen Heiltrank). Wer die Mauern betritt, löst Alarm aus; wer einen Krieger erschlägt, liegt mit dem
+  Reich im Krieg.
+- **Nachschub:** Für jede Minute, die niemand in der Nähe der Burg ist, rückt ein gefallener Krieger nach – nie mehr,
+  als gefallen sind. Der Herrscher kehrt nie zurück.
+- **Eroberung:** Ist der Herrscher gefallen und steht kein Verteidiger mehr im Umkreis von 16 Blöcken um das
+  Reichsbanner hinter dem Thron, genügt ein Rechtsklick auf das Banner: alle Banner der Burg tragen dann das Wappen des
+  Spielers (blau mit goldenem Kreuz), die übrigen Krieger ziehen ab.
+- **Tribut:** Jeden Tag Bronzemünzen und Waren des Landes in der Schatztruhe in der Kammer des Herrschers (höchstens
+  eine Woche sammelt sich an).
+- **Finden:** Beim ersten Betreten des Landes erscheint der Name des Reichs und seines Herrschers; der Kartograf
+  verkauft eine Karte zur nächsten noch freien Stammburg (Banner des Reichs als Zeichen). `/kaw realms` (Operatoren)
+  zeigt Lage und Zustand, `/kaw realms check` prüft, ob die Burgen in der Welt stehen.

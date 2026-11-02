@@ -154,7 +154,7 @@ public class RealmCastlePiece extends StructurePiece {
         int floor = this.center.getY();
         for (int y = floor + 1; y <= floor + CLEAR; y++) {
             if (!level.getBlockState(pos.set(x, y, z)).isAir()) {
-                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             }
         }
         int bottom = Math.max(level.getMinY() + 1, Math.min(ground, floor) - 2);
@@ -163,9 +163,9 @@ public class RealmCastlePiece extends StructurePiece {
             if (y < ground && VillageBuilder.isSolidGround(old)) {
                 break;
             }
-            level.setBlock(pos, floor - y <= 3 ? belowFor(surface) : Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+            level.setBlock(pos, floor - y <= 3 ? belowFor(surface) : Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         }
-        level.setBlock(pos.set(x, floor, z), surface, Block.UPDATE_CLIENTS);
+        level.setBlock(pos.set(x, floor, z), surface, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
     }
 
     /** Übergang: vom Bauplatz sanft zur ursprünglichen Geländehöhe. */
@@ -173,22 +173,22 @@ public class RealmCastlePiece extends StructurePiece {
         if (target < ground) {
             for (int y = target + 1; y <= ground + 24; y++) {
                 if (!level.getBlockState(pos.set(x, y, z)).isAir()) {
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                 }
             }
-            level.setBlock(pos.set(x, target, z), surface, Block.UPDATE_CLIENTS);
+            level.setBlock(pos.set(x, target, z), surface, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         } else if (target > ground) {
             for (int y = ground + 1; y < target; y++) {
-                level.setBlock(pos.set(x, y, z), belowFor(surface), Block.UPDATE_CLIENTS);
+                level.setBlock(pos.set(x, y, z), belowFor(surface), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             }
             // Pflanzen über dem alten Boden fort, damit nichts im neuen Hang steckt
             for (int y = target + 1; y <= target + 3; y++) {
                 BlockState old = level.getBlockState(pos.set(x, y, z));
                 if (!old.isAir() && !old.is(BlockTags.LOGS) && !old.is(BlockTags.LEAVES)) {
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
                 }
             }
-            level.setBlock(pos.set(x, target, z), surface, Block.UPDATE_CLIENTS);
+            level.setBlock(pos.set(x, target, z), surface, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         }
     }
 

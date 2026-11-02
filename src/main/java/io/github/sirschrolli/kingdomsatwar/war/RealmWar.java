@@ -482,7 +482,36 @@ public final class RealmWar {
                     state.save(overworld);
                     context.getSource().sendSuccess(() -> Component.translatable("command.kingdomsatwar.realms.reset"), true);
                     return 1;
-                }));
+                }))
+                .then(Commands.literal("check").executes(context -> check(context.getSource())));
+    }
+
+    /**
+     * {@code /kaw realms check}: lädt den Mittel-Chunk jeder Stammburg (erzeugt ihn, falls nötig) und meldet, ob dort
+     * wirklich eine Burg steht – mit Lage, Höhe und Drehung. Zum Prüfen der Weltgenerierung.
+     */
+    private static int check(CommandSourceStack source) {
+        ServerLevel overworld = source.getServer().overworld();
+        Structure structure = overworld.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(ModStructures.REALM_CASTLE_STRUCTURE);
+        int found = 0;
+        for (Realm realm : Realm.values()) {
+            ChunkPos chunk = RealmLocator.find(overworld, realm);
+            if (chunk == null || structure == null) {
+                source.sendFailure(Component.translatable("command.kingdomsatwar.realms.check.none", realm.shortName()));
+                continue;
+            }
+            StructureStart start = overworld.getChunk(chunk.x(), chunk.z()).getStartForStructure(structure);
+            if (start != null && start.isValid() && start.getPieces().getFirst() instanceof RealmCastlePiece piece) {
+                found++;
+                BlockPos center = piece.center();
+                source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.realms.check.found", realm.shortName(), center.getX(),
+                        center.getY(), center.getZ(), piece.rotation().name().toLowerCase(java.util.Locale.ROOT)), false);
+            } else {
+                source.sendFailure(Component.translatable("command.kingdomsatwar.realms.check.missing", realm.shortName(), chunk.getMiddleBlockX(),
+                        chunk.getMiddleBlockZ()));
+            }
+        }
+        return found;
     }
 
     private static int list(CommandSourceStack source) {

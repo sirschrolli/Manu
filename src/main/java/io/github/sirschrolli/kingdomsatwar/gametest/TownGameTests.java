@@ -405,7 +405,12 @@ final class TownGameTests {
         for (Blueprint.Entry e : plan.blocks()) {
             BlockPos pos = Blueprint.world(origin, rotation, e.pos());
             BlockState state = level.getBlockState(pos);
-            if (!state.isAir() && !state.canSurvive(level, pos)) {
+            // Feldfrüchte: nur der Ackerboden zählt (ihr Lichtbedarf hängt davon ab, wie weit die Beleuchtung nachgerechnet
+            // ist – unter Last hinkt sie im Testserver hinterher)
+            boolean standing = state.getBlock() instanceof net.minecraft.world.level.block.CropBlock
+                    ? level.getBlockState(pos.below()).getBlock() instanceof net.minecraft.world.level.block.FarmlandBlock
+                    : state.canSurvive(level, pos);
+            if (!state.isAir() && !standing) {
                 helper.fail(what + ": " + state.getBlock().getName().getString() + " bei " + helper.relativePos(pos) + " hat keinen Halt");
             }
         }

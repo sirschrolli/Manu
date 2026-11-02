@@ -351,10 +351,13 @@ public class ModLanguageProvider extends LanguageProvider {
         text("kingdomsatwar.configuration.showIntro.tooltip",
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
-        text("kingdomsatwar.configuration.arachnophobia", "Arachnophobia mode", "Arachnophobie-Modus");
-        text("kingdomsatwar.configuration.arachnophobia.tooltip",
-                "Spiders and cave spiders keep the plain standard Minecraft look instead of the detailed model.",
-                "Spinnen und Höhlenspinnen behalten das schlichte Standard-Aussehen von Minecraft statt des detaillierten Modells.");
+        text("kingdomsatwar.configuration.spiderLook", "Spider look (arachnophobia mode)", "Aussehen der Spinnen (Arachnophobie-Modus)");
+        text("kingdomsatwar.configuration.spiderLook.tooltip",
+                "Detailed: the mod's lifelike spiders. Classic: Minecraft's plain spiders. Mooslings: arachnophobia mode – round, friendly moss balls without legs instead of spiders.",
+                "Detailliert: die lebensechten Spinnen der Mod. Klassisch: die schlichten Spinnen von Minecraft. Mooslinge: Arachnophobie-Modus – runde, freundliche Moosbälle ohne Beine statt Spinnen.");
+        text("kingdomsatwar.configuration.spiderLook.detailed", "Detailed", "Detailliert");
+        text("kingdomsatwar.configuration.spiderLook.classic", "Classic (Minecraft)", "Klassisch (Minecraft)");
+        text("kingdomsatwar.configuration.spiderLook.moosling", "Mooslings (arachnophobia)", "Mooslinge (Arachnophobie)");
         text("kingdomsatwar.configuration.narratorVoice", "Narrator voice for chapters", "Erzählerstimme zu den Kapiteln");
         text("kingdomsatwar.configuration.narratorVoice.tooltip",
                 "The narrator speaks at the start of every chapter of the story (otherwise only his words appear).",

@@ -25,7 +25,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
                               hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube, wither, wither_skull,
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
-                              crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
+                              crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
 
@@ -123,6 +123,8 @@ def main():
                 "creeper", creeper.PALETTES, preview)
     write_model(spider, "SpiderGeometry", "Geometrie der Spinnen (Vanilla-Knochen, geknickte Beine als Kind-Knochen).", "spider",
                 spider.PALETTES, preview)
+    write_model(moosling, "MooslingGeometry", "Geometrie der Mooslinge (Arachnophobie-Modus: Spinnenknochen ohne Beine).", "moosling",
+                moosling.PALETTES, preview)
     write_model(silverfish, "SilverfishGeometry", "Geometrie der Silberfischchen (Vanilla-Segmente mit Beinen und Fühlern).",
                 "silverfish", silverfish.PALETTES, preview)
     write_model(slime, "SlimeGeometry", "Geometrie der Schleime (Kern mit Gesicht und durchscheinende Hülle als eigener Knochen).",

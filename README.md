@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.37.1 – das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ (die sechs Drachen schmieden das Siegel) und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, logische Ketten (eigenes Gestein gibt Bruchstein für Steinwerkzeuge und Öfen, Blumen geben Farbstoff …), Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.**
+> **Testversion 0.38.0 – Krieg der Königreiche, Teil 1: vier feindliche Reiche mit je einer großen Stammburg, Besatzung, Herrscher, Eroberung und Tribut. Dazu: Kingdoms at War läuft nur noch ohne andere Mods, keine Koordinaten mehr (F3), viel härter (Schwer fest, stärkere Gegner, halbe Heilung, Schwäche nach dem Tod), acht eigene Verzauberungen und ein Arachnophobie-Modus.**
+> In 0.37 kam das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, logische Ketten (eigenes Gestein gibt Bruchstein für Steinwerkzeuge und Öfen, Blumen geben Farbstoff …), Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -327,8 +328,11 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Riesengebeine statt Netherfossilien, Verlorene Pforte statt Portalruine im Nether | ✅ fertig |
 | Sternwarte statt Endstadt und Endschiff (mit den Elytren) | ✅ fertig |
 | Köpfe und Schädel der eigenen Wesen (als Block, Gegenstand und getragen) | ✅ fertig |
-| Feinschliff: Schattenwelt-Pflanzen, Bewegungen aller Wesen | 🔨 als Nächstes |
-| Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
+| Krieg der Königreiche, Teil 1: vier Reiche, Stammburgen, Besatzung, Herrscher, Eroberung, Tribut | ✅ fertig |
+| Regeln: nur ohne andere Mods, keine Koordinaten, Schwierigkeit fest auf Schwer, stärkere Gegner, halbe Heilung | ✅ fertig |
+| Acht eigene Verzauberungen (nur als Beute), Arachnophobie-Modus | ✅ fertig |
+| Die Arkane Sphäre: Kampf gegen die Erzmagier in einer eigenen Dimension | 🔨 als Nächstes |
+| Belagerungswaffen, Gegenangriffe, neue Truppen, Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
 
@@ -932,6 +936,56 @@ eigenen Soldaten anklicken = entlassen.
 Soldaten nehmen Waffen und Rüstung an, die du ihnen gibst, und verletzen weder dich noch deine Tiere und Drachen.
 **Banditen** streifen nachts durch die Lande und hausen manchmal in Burgruinen.
 
+### Krieg der Königreiche
+
+In jeder Welt herrschen **vier fremde Reiche**, jedes mit Herrscher, Wappen und einer großen **Stammburg** in eigener
+Bauweise (Plan und Stand: [docs/KRIEG.md](docs/KRIEG.md)):
+
+| Reich | Herrscher | Wappen | Burg |
+|---|---|---|---|
+| Königreich Eisenmark | König Harald der Graue | weißer Turm auf Purpur | grauer Stein, Schieferdächer |
+| Herzogtum Rabenstein | Herzogin Morwen | schwarzer Rabe auf Rot | dunkler Stein, rote Dächer |
+| Fürstentum Dornfels | Fürst Kasimir | goldene Sonne auf Orange | Sandstein, Terrakotta |
+| Grafschaft Silberau | Graf Ansgar | weißer Schwan auf Grün | heller Kalkstein, grüne Dächer |
+
+- **Die Stammburg** (etwa 70 × 70 Blöcke): Ringmauer mit Wehrgang, vier Ecktürme, Torhaus mit Fallgitter, Kaserne,
+  Stall, Schmiede, Kapelle, Vorratshaus und der Bergfried mit dem **Thronsaal** und dem **Reichsbanner**.
+- **Die Besatzung:** 28 Krieger in den Farben ihres Reichs – Fußknechte, Wallschützen, Armbrustschützen, Burgritter, der
+  Burghauptmann und der **Herrscher** mit Bossleiste. Wer die Mauern betritt, löst Alarm aus; gefallene Krieger rücken
+  nach, solange niemand in der Nähe ist – der Herrscher nie.
+- **Die Eroberung:** Ist der Herrscher gefallen und verteidigt niemand mehr das Reichsbanner, genügt ein Griff an das
+  Banner: Alle Banner tragen dein Wappen, die übrigen Krieger ziehen ab, und jeden Tag liegt **Tribut** in der
+  Schatztruhe des Herrschers.
+- **Finden:** Wer sich einer Stammburg nähert, erfährt, wessen Land er betritt; der Kartograf verkauft eine Karte zur
+  nächsten noch freien Stammburg.
+
+### Regeln: allein, ohne Koordinaten, hart
+
+- **Nur ohne andere Mods:** Ist neben Kingdoms at War noch eine andere Mod installiert, bricht das Spiel den Start mit
+  einer Liste der fremden Mods ab (gelöscht wird nichts – die Mods einfach aus dem Mod-Ordner nehmen).
+- **Keine Koordinaten:** Die Debug-Anzeige (F3) ist immer verkürzt – keine Koordinaten, kein Kopieren der Position;
+  Meldungen nennen Entfernung und Himmelsrichtung statt Koordinaten.
+- **Viel härter:** Schwierigkeit fest auf *Schwer*, Gegner mit 50 % mehr Leben und 30 % härteren Treffern (Bosse 25 und
+  15 %), die natürliche Heilung halbiert, nach dem Tod zwei Minuten Schwäche.
+- **Der Boden unter dem Erzmagier** lässt sich nicht abbauen oder wegsprengen.
+
+### Verzauberungen
+
+Acht eigene Verzauberungen – nur als Beute (kein Zaubertisch, kein Händler): in Schatzkammern und Waffenkammern der
+Reiche, beim Herrscher, bei Erzmagiern und in ihren Türmen, bei den Drachen-Bossen und in der Schattenzitadelle. Ihr
+Buch erklärt im Tooltip, was sie tun.
+
+| Verzauberung | für | Wirkung |
+|---|---|---|
+| Drachentöter I–III | Waffen | +3 Schaden je Stufe gegen Drachen, Drachen-Bosse und Lindwürmer |
+| Frostklinge I–II | Schwerter, Äxte | Treffer verlangsamen den Gegner (nicht mit Verbrennung) |
+| Lebensraub I–III | Schwerter, Äxte | jeder Treffer heilt den Träger um ein Viertel Herz je Stufe |
+| Rüstungsbrecher I–III | Äxte | Treffer durchschlagen 12 % der Rüstung je Stufe |
+| Pfeilhagel | Bögen | drei Pfeile auf einmal |
+| Drachenschuppe I–IV | Rüstung | Schutz vor allem, was Drachen anrichten |
+| Windschritt I–II | Stiefel | 6 % schneller je Stufe |
+| Fluch der Schwere | Rüstung | 5 % langsamer je Teil – ein Fluch auf erbeuteter Rüstung |
+
 ### Münzen, Siedlung und Krönung
 
 Bezahlt wird mit **Bronze-, Silber- und Goldmünzen** (je **neun** sind eine der nächstgrößeren: 9 Bronze = 1 Silber,
@@ -1419,10 +1473,12 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
+| `/kaw realms` · `/kaw realms check` · `/kaw realms reset` | (nur Operatoren) Lage und Zustand der vier Reiche, prüfen, ob die Stammburgen in der Welt stehen, alle Reiche zurücksetzen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
+| `spiderLook` (Client) | Aussehen der Spinnen: `DETAILED` (eigenes Modell, Standard), `CLASSIC` (Minecrafts Spinne) oder `MOOSLING` (Arachnophobie-Modus: runde Moosbälle ohne Beine statt Spinnen) – im Spiel unter Mods → Kingdoms at War → Konfiguration |
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |

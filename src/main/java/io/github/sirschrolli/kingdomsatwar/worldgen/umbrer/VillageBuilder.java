@@ -100,7 +100,9 @@ public final class VillageBuilder {
     /** Setzt einen Block in Weltkoordinaten (ohne Drehung), wenn er im aktuellen Chunk liegt. */
     public void setWorld(BlockPos pos, BlockState state) {
         if (this.inside(pos)) {
-            this.level.setBlock(pos, state, Block.UPDATE_CLIENTS);
+            // wie bei der Weltgenerierung: keine Formänderungen der Nachbarn (sonst fielen in Tests und Vorführungen,
+            // die direkt in die Welt bauen, Wandbanner und Fackeln ab, deren Halt erst ein später gebauter Chunk setzt)
+            this.level.setBlock(pos, state, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             if (needsShape(state)) {
                 this.shaped.add(pos.immutable());
             }

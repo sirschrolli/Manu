@@ -56,6 +56,9 @@ final class WarLang {
         text.add("command.kingdomsatwar.realms.leaderless", "ruler fallen", "Herrscher gefallen");
         text.add("command.kingdomsatwar.realms.conquered", "conquered", "erobert");
         text.add("command.kingdomsatwar.realms.reset", "All realms have been reset.", "Alle Reiche wurden zurückgesetzt.");
+        text.add("command.kingdomsatwar.realms.check.found", "%s: castle at %s %s %s (facing %s)", "%s: Burg bei %s %s %s (Drehung %s)");
+        text.add("command.kingdomsatwar.realms.check.missing", "%s: no castle in the chunk at %s %s", "%s: keine Burg im Chunk bei %s %s");
+        text.add("command.kingdomsatwar.realms.check.none", "%s: no place for a castle found", "%s: kein Platz für eine Burg gefunden");
     }
 
     private static void realm(Text text, Realm realm, String nameEn, String nameDe, String shortName, String rulerEn, String rulerDe) {

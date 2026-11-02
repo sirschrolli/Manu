@@ -293,6 +293,41 @@ final class MonsterShowcase {
     }
 
     /**
+     * Die Spinnen in allen drei Aussehen: detailliert (eigenes Modell), klassisch (Minecraft) und als Mooslinge
+     * (Arachnophobie-Modus), jeweils die Gruppe und eine Nahaufnahme.
+     */
+    static void spiderLooks(Deque<Step> steps) {
+        int oz = 560;
+        steps.add(Step.command("difficulty hard"));
+        steps.add(Step.server(level -> {
+            int ground = Showcase.ground;
+            int base = group(4);
+            Showcase.fill(level, new BlockPos(base - 10, ground - 1, oz - 16), new BlockPos(base + 40, ground - 1, oz + 16),
+                    Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(base - 10, ground, oz - 16), new BlockPos(base + 40, ground + 18, oz + 16),
+                    Blocks.AIR.defaultBlockState());
+            int x = base;
+            for (var look : WildSpider.Look.values()) {
+                spawn(level, ModEntities.SPIDER.get(), x, oz, 20, m -> m.setLook(look));
+                x += 3;
+            }
+            spawn(level, ModEntities.CAVE_SPIDER.get(), base + 12, oz, 20, m -> { });
+        }));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.hud(false));
+        for (var look : io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.SpiderLook.values()) {
+            steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.SPIDER_LOOK.set(look)));
+            String name = look.name().toLowerCase(java.util.Locale.ROOT);
+            shot(steps, "spiderlook_" + name + "_group", group(4) + 6.0, oz, 1.4, 0.4, 8.0, look.ordinal() == 0);
+            shot(steps, "spiderlook_" + name + "_close", group(4) + 3.5, oz, 1.1, 0.4, 3.2, false);
+            shot(steps, "spiderlook_" + name + "_cave", group(4) + 12.5, oz, 0.9, 0.3, 2.6, false);
+        }
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.SPIDER_LOOK.set(
+                io.github.sirschrolli.kingdomsatwar.config.ModClientConfig.SpiderLook.DETAILED)));
+        steps.add(Step.hud(true));
+    }
+
+    /**
      * Bild einer Gruppe: die Kamera steht {@code distance} Blöcke südlich der Reihe {@code row} in Augenhöhe {@code eye}
      * und blickt nach Norden auf die Höhe {@code target} (beides über dem Boden).
      */

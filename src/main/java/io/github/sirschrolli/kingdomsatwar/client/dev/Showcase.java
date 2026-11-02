@@ -103,6 +103,7 @@ final class Showcase {
                 case "farmanimals" -> farmAnimals(steps);
                 case "wildanimals" -> WildShowcase.wildAnimals(steps);
                 case "monsters" -> MonsterShowcase.monsters(steps);
+                case "spiderlook" -> MonsterShowcase.spiderLooks(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
                 case "golems" -> GolemShowcase.golems(steps);
