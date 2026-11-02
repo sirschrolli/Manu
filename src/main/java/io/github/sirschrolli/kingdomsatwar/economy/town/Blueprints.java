@@ -31,6 +31,7 @@ final class Blueprints {
             case HOUSE -> house(b);
             case FIELD -> field(b);
             case LUMBER_HUT -> lumberHut(b);
+            case STOREHOUSE -> storehouse(b);
             case WELL -> well(b);
             case SMITHY -> smithy(b);
             case MINE -> mine(b);
@@ -354,6 +355,83 @@ final class Blueprints {
     }
 
     // =====================================================================================
+    // Lagerhaus
+    // =====================================================================================
+
+    /**
+     * Lagerhaus: Fachwerkspeicher 7 × 9 über Steinsockel mit braunem Ziegeldach. Innen links zwei Doppeltruhen, rechts
+     * zwei Reihen Fässer übereinander, hinten Heuballen und Säcke, in der Mitte ein freier Gang unter der Laterne. Über dem
+     * Tor die Ladeluke im Giebel mit dem Kranbalken, an dem eine Kette mit Laterne hängt; vor dem Haus Fässer und eine Waage.
+     */
+    private static void storehouse(PlanBuilder b) {
+        BuildingSet roof = ModBlocks.BROWN_ROOF_TILES;
+        Block shutter = ModBlocks.RED_SHUTTERS.get();
+        b.foundation(-3, -4, 3, 4, fieldstone());
+        b.fill(-3, 0, -4, 3, 0, 4, stone());
+        b.fill(-2, 0, -3, 2, 0, 3, planks());
+        timberWallX(b, -3, 3, -4, 1, 4);
+        timberWallX(b, -3, 3, 4, 1, 4);
+        timberWallZ(b, -4, 4, -3, 1, 4);
+        timberWallZ(b, -4, 4, 3, 1, 4);
+        b.air(-2, 1, -3, 2, 4, 3);
+        // Tor mit Querriegel darüber, schmale Fenster an den Seiten
+        b.door(0, 1, -4, Blocks.SPRUCE_DOOR, Direction.SOUTH);
+        b.set(0, 3, -4, beam(Direction.Axis.X));
+        window(b, -3, 2, -2, 2, Direction.WEST, Direction.SOUTH, shutter);
+        window(b, -3, 2, 2, 2, Direction.WEST, Direction.SOUTH, shutter);
+        window(b, 3, 2, 0, 2, Direction.EAST, Direction.SOUTH, shutter);
+        // Dach mit Fachwerkgiebeln; vorn die Ladeluke und der Kranbalken mit Kette und Laterne
+        int ridge = b.gableAlongZ(-3, 3, -4, 4, 5, roof.stairs().get(), roofBlock(roof), frame());
+        b.set(0, 6, -4, ModBlocks.RED_SHUTTERS.get().defaultBlockState()
+                .setValue(net.minecraft.world.level.block.TrapDoorBlock.FACING, Direction.NORTH)
+                .setValue(net.minecraft.world.level.block.TrapDoorBlock.HALF, Half.BOTTOM)
+                .setValue(net.minecraft.world.level.block.TrapDoorBlock.OPEN, true));
+        b.set(0, 7, -4, beam(Direction.Axis.X));
+        for (int z = -7; z <= -5; z++) {
+            b.set(0, ridge - 1, z, beam(Direction.Axis.Z));
+        }
+        b.set(0, ridge - 2, -7, s(Blocks.IRON_CHAIN));
+        b.hangingLantern(0, ridge - 3, -7, Blocks.LANTERN);
+        // Zugbalken mit Laterne über dem Gang
+        b.fill(-2, 4, 0, 2, 4, 0, beam(Direction.Axis.X));
+        b.hangingLantern(0, 3, 0, Blocks.LANTERN);
+        // links zwei Doppeltruhen (Blick zum Gang), dazwischen ein Fass
+        doubleChest(b, -2, 1, -2, Direction.EAST);
+        b.set(-2, 1, 0, barrel(Direction.EAST));
+        doubleChest(b, -2, 1, 1, Direction.EAST);
+        // rechts zwei Reihen Fässer übereinander
+        for (int z = -2; z <= 2; z++) {
+            b.set(2, 1, z, barrel(Direction.WEST));
+            b.set(2, 2, z, barrel(Direction.WEST));
+        }
+        // hinten Heuballen und Säcke (Wollblöcke), eine Doppeltruhe
+        doubleChest(b, -1, 1, 3, Direction.NORTH);
+        b.set(1, 1, 3, s(Blocks.HAY_BLOCK));
+        b.set(1, 2, 3, s(Blocks.HAY_BLOCK));
+        b.set(-2, 1, 3, s(Blocks.WOOL.white()));
+        b.set(-2, 2, 3, PlanBuilder.slab(Blocks.SPRUCE_SLAB, SlabType.BOTTOM));
+        // vor dem Haus: Stufe, Fässer, eine Waage aus Zaun und Druckplatte
+        step(b, 0, -5, Direction.SOUTH, ModBlocks.MEDIEVAL_STONE.stairs().get());
+        b.set(-2, 0, -5, barrel(Direction.UP));
+        b.set(-2, 1, -5, barrel(Direction.UP));
+        b.set(-1, 0, -5, barrel(Direction.NORTH));
+        b.set(2, 0, -5, s(Blocks.SPRUCE_FENCE));
+        b.set(2, 1, -5, s(Blocks.SPRUCE_PRESSURE_PLATE));
+        b.chest(-2, 1, -2);
+        b.entranceAt(0, 0, -6);
+        b.workAt(0, 1, -1);
+    }
+
+    /** Doppeltruhe: die linke Hälfte bei (x, y, z), die rechte daneben (vom Gang aus gesehen rechts). */
+    private static void doubleChest(PlanBuilder b, int x, int y, int z, Direction facing) {
+        BlockState chest = Blocks.CHEST.defaultBlockState().setValue(net.minecraft.world.level.block.ChestBlock.FACING, facing);
+        Direction toRight = facing.getClockWise();
+        b.set(x, y, z, chest.setValue(net.minecraft.world.level.block.ChestBlock.TYPE, net.minecraft.world.level.block.state.properties.ChestType.LEFT));
+        b.set(x + toRight.getStepX(), y, z + toRight.getStepZ(),
+                chest.setValue(net.minecraft.world.level.block.ChestBlock.TYPE, net.minecraft.world.level.block.state.properties.ChestType.RIGHT));
+    }
+
+    // =====================================================================================
     // Brunnen
     // =====================================================================================
 
@@ -445,8 +523,12 @@ final class Blueprints {
         b.set(-2, 1, 3, ModBlocks.OAK_TABLE.get());
         b.set(-3, 1, 3, seat(ModBlocks.OAK_CHAIR.get(), Direction.EAST));
         b.hangingLantern(0, 3, 3, Blocks.LANTERN);
+        // breite Stufe vor der offenen Werkstatt
+        for (int x = -1; x <= 1; x++) {
+            step(b, x, -5, Direction.SOUTH, ModBlocks.MEDIEVAL_STONE.stairs().get());
+        }
         b.workAt(0, 1, -3);
-        b.entranceAt(0, 0, -5);
+        b.entranceAt(0, 0, -6);
     }
 
     // =====================================================================================
@@ -517,10 +599,14 @@ final class Blueprints {
         }
         // oben: Truhe, Fass und Werkbank
         b.chestAt(-2, 1, 2, Direction.EAST);
-        b.set(-2, 1, 1, barrel(Direction.UP));
+        b.set(-2, 1, -2, barrel(Direction.UP));
         b.set(2, 1, -2, s(Blocks.CRAFTING_TABLE));
         b.hangingLantern(0, 3, -1, Blocks.LANTERN);
-        b.entranceAt(0, 0, -4);
+        // Stufen vor der offenen Front
+        for (int x = -1; x <= 1; x++) {
+            step(b, x, -4, Direction.SOUTH, Blocks.SPRUCE_STAIRS);
+        }
+        b.entranceAt(0, 0, -5);
     }
 
     // =====================================================================================
@@ -716,11 +802,14 @@ final class Blueprints {
         window(b, -3, 7, 1, 2, Direction.WEST, Direction.SOUTH, shutter);
         window(b, 3, 7, -1, 2, Direction.EAST, Direction.SOUTH, shutter);
         window(b, 0, 7, 4, 2, Direction.SOUTH, Direction.EAST, shutter);
-        // Treppe hinten links nach oben
-        for (int i = 0; i < 4; i++) {
-            b.set(-2, 1 + i, 3 - i, PlanBuilder.stairs(Blocks.SPRUCE_STAIRS, Direction.NORTH, Half.BOTTOM));
+        // Treppe an der linken Wand nach oben: fünf Stufen bis auf den Boden des Obergeschosses (die oberste liegt in
+        // ihm), darüber ein Treppenloch mit Geländer – drei Blöcke Kopffreiheit über jeder Stufe
+        for (int i = 1; i <= 5; i++) {
+            b.set(-2, i, 4 - i, PlanBuilder.stairs(Blocks.SPRUCE_STAIRS, Direction.NORTH, Half.BOTTOM));
         }
-        b.air(-2, 5, -1, -2, 5, 3);
+        b.air(-2, 5, 0, -2, 5, 2);
+        b.set(-1, 6, 0, s(Blocks.SPRUCE_FENCE));
+        b.set(-1, 6, 1, s(Blocks.SPRUCE_FENCE));
         // Dach
         int ridge = b.gableAlongZ(-3, 3, -5, 4, 10, roof.stairs().get(), roofBlock(roof), frame());
         b.set(0, 11, -5, pane());

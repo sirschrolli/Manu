@@ -188,6 +188,31 @@ final class MageGameTests {
         helper.assertTrue(near(reachable(level, piece, floors[2], MageTowerBuilder.R_IN, 3, -3), 0, 0), name + ": Magietisch nicht erreichbar");
         helper.assertTrue(level.getBlockState(piece.world(0, floors[3] + 1, 2)).is(Blocks.ENCHANTING_TABLE), name + ": kein Zaubertisch");
         helper.assertTrue(near(reachable(level, piece, floors[3], MageTowerBuilder.R_IN, -3, -3), 0, 2), name + ": Zaubertisch nicht erreichbar");
+        // zu Fuß, ohne zu springen: von draußen vor der Tür bis ins Sanktum, zu allen Truhen und Tischen, in jeden Raum
+        WalkCheck walk = new WalkCheck(level, piece.getBoundingBox());
+        BlockPos outside = piece.world(0, 1, -9);
+        walk.walkFrom(outside.getX(), outside.getZ(), outside.getY());
+        if (!(walk.reachesSpot(piece.home()) || walk.reachesBlock(piece.home()))) {
+            for (MageTowerBuilder.Flight f : MageTowerBuilder.FLIGHTS) {
+                StringBuilder line = new StringBuilder("[Walk] Lauf ab " + f.floor() + ":");
+                for (int i = -1; i <= 8; i++) {
+                    BlockPos p = piece.world(f.x(i), 0, f.z(i));
+                    line.append(" | ").append(i).append(": ").append(walk.column(p.getX(), p.getZ()));
+                }
+                KingdomsAtWar.LOGGER.info(line.toString());
+            }
+        }
+        helper.assertTrue(walk.reachesSpot(piece.home()) || walk.reachesBlock(piece.home()), name + ": Sanktum nicht zu Fuß erreichbar ("
+                + walk.explain() + ", Turm bei " + piece.origin() + " " + piece.rotation() + ")");
+        for (int[] c : chests) {
+            helper.assertTrue(walk.reachesBlock(piece.world(c[0], c[1], c[2])), name + ": Truhe bei " + c[0] + "," + c[1] + "," + c[2]
+                    + " nicht zu Fuß erreichbar");
+        }
+        helper.assertTrue(walk.reachesBlock(lectern), name + ": Lesepult nicht zu Fuß erreichbar");
+        helper.assertTrue(walk.reachesBlock(piece.world(0, floors[2] + 1, 0)), name + ": Magietisch nicht zu Fuß erreichbar");
+        helper.assertTrue(walk.reachesBlock(piece.world(0, floors[3] + 1, 2)), name + ": Zaubertisch nicht zu Fuß erreichbar");
+        BlockPos room = walk.unreachedRoom(6, piece.world(0, 1, 0).getY());
+        helper.assertTrue(room == null, name + ": Raum bei " + (room == null ? "" : local(piece, room)) + " nicht zu Fuß erreichbar");
         // Dach mit Spitze
         helper.assertTrue(!level.getBlockState(piece.world(0, MageTowerBuilder.PEAK, 0)).isAir()
                 && !level.getBlockState(piece.world(0, MageTowerBuilder.PEAK + 1, 0)).isAir(), name + ": Dachspitze fehlt");
@@ -250,6 +275,15 @@ final class MageGameTests {
                         + ", Chunk " + chunkStatus(level, mage) + ")"))
                 .thenWaitUntil(() -> helper.assertTrue(mage.state() == MageBossEntity.State.FIGHT, "Kampf beginnt nicht"))
                 .thenExecute(() -> {
+                    // eingesperrt: das Treppenloch ist versiegelt, zu Fuß kommt man nicht mehr hinunter, abbauen geht nicht
+                    helper.assertTrue(mage.sealed() && barriers(level, piece) >= 3, "Sanktum nicht versiegelt (" + barriers(level, piece) + " Siegel)");
+                    WalkCheck walk = new WalkCheck(level, piece.getBoundingBox());
+                    walk.walkFrom(arena.getX(), arena.getZ(), arena.getY());
+                    helper.assertTrue(!walk.reachesSpot(piece.world(2, MageTowerBuilder.FLOOR[3] + 1, 2)), "Aus dem versiegelten Sanktum geht es hinunter");
+                    helper.assertTrue(io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageArenaEvents.sealed(level,
+                            piece.world(0, MageTowerBuilder.SANCTUM + 3, 7)), "Mauern des Sanktums lassen sich im Kampf abbauen");
+                    helper.assertTrue(!io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageArenaEvents.sealed(level,
+                            piece.world(0, MageTowerBuilder.FLOOR[2] + 1, 3)), "Auch das Geschoss darunter ist versiegelt");
                     health[0] = mage.getHealth();
                     mage.hurtServer(level, level.damageSources().inFire(), 20.0f);
                     mage.hurtServer(level, level.damageSources().lava(), 20.0f);
@@ -293,6 +327,7 @@ final class MageGameTests {
                 .thenWaitUntil(() -> helper.assertTrue(mage.state() == MageBossEntity.State.DORMANT && mage.getHealth() == mage.getMaxHealth(),
                         "Magier kehrt nicht geheilt an seinen Platz zurück"))
                 .thenExecute(() -> {
+                    helper.assertTrue(!mage.sealed() && barriers(level, piece) == 0, "Siegel bleibt nach dem Rückzug");
                     helper.assertTrue(mage.position().distanceTo(Vec3.atBottomCenterOf(piece.home())) < 2.0, "Magier nicht an seinem Platz");
                     teleport(player, arena);
                     mage.beginAwakening(level);
@@ -307,6 +342,7 @@ final class MageGameTests {
                 })
                 .thenWaitUntil(() -> helper.assertTrue(mage.isRemoved(), "Todesanimation endet nicht"))
                 .thenExecute(() -> {
+                    helper.assertValueEqual(barriers(level, piece), 0, "Bannsiegel nach dem Sieg");
                     List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(piece.home()).inflate(6.0));
                     helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(ModItems.SPELL_TABLETS.get(Spell.FIRE).get())),
                             "keine Feuer-Zaubertafel als Beute");
@@ -397,6 +433,29 @@ final class MageGameTests {
     static int groundY(ServerLevel level, int x, int z) {
         return level.getChunkSource().getGenerator().getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, level,
                 level.getChunkSource().randomState());
+    }
+
+    /** Bannsiegel im Boden des Sanktums. */
+    private static int barriers(ServerLevel level, MageTowerPiece piece) {
+        int n = 0;
+        BlockPos home = piece.home();
+        for (BlockPos pos : BlockPos.betweenClosed(home.offset(-7, -1, -7), home.offset(7, -1, 7))) {
+            if (level.getBlockState(pos).is(ModBlocks.ARCANE_BARRIER.get())) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Eine Weltposition in Turmkoordinaten (für Fehlermeldungen). */
+    private static String local(MageTowerPiece piece, BlockPos pos) {
+        BlockPos d = pos.subtract(piece.origin());
+        BlockPos back = d.rotate(switch (piece.rotation()) {
+            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
+            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
+            default -> piece.rotation();
+        });
+        return back.getX() + "," + back.getY() + "," + back.getZ();
     }
 
     private static void forceChunks(ServerLevel level, MageTowerPiece piece, boolean force) {

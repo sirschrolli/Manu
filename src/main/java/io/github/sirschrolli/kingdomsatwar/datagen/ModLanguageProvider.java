@@ -1117,6 +1117,9 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ModBlocks.AETHERIT_LANTERN, "Aetherit Lantern", "Aetheritlaterne");
         block(ModBlocks.CHANDELIER, "Chandelier", "Kronleuchter");
         block(ModBlocks.BUILDER_SCAFFOLD, "Builder's Scaffold", "Baugerüst");
+        block(ModBlocks.ARCANE_BARRIER, "Arcane Seal", "Bannsiegel");
+        text("message.kingdomsatwar.mage.sealed", "The archmage's magic holds the sanctum together – defeat him to get out.",
+                "Die Magie des Erzmagiers hält das Sanktum zusammen – besiege ihn, um hinauszukommen.");
         block(ModBlocks.MEDIEVAL_STONE_BATTLEMENT, "Medieval Stone Battlement", "Mittelalterliche Steinzinne");
         block(ModBlocks.DARK_STONE_BRICK_BATTLEMENT, "Dark Stone Brick Battlement", "Dunkle Steinziegelzinne");
         block(ModBlocks.LIMESTONE_BRICK_BATTLEMENT, "Light Limestone Brick Battlement", "Helle Kalksteinziegelzinne");

@@ -143,6 +143,9 @@ Blöcken, Farben, Partikeln und Geräuschen:
   Truhen (dort nur Bronze) und aus dem Handel. Am Werktisch oder per Rechtsklick wechseln neun in eine größere,
   Schleichen + Rechtsklick (oder der Werktisch) eine in neun kleinere.
 - **Anheuern** aller Bewohner und Soldaten mit Münzen (statt Smaragden).
+- **Lager und Baustoffe:** Jeder Bau kostet Holz, Stein und Metall (eine Einheit je Block); der Baumeister holt sie aus
+  dem Lager (Truhen am Banner, Lagerhaus) und wartet, wenn etwas fehlt. Abends bringen Bauer, Holzfäller und Bergmann
+  ihre Ausbeute ins Lager.
 - **Berufe:** Baumeister, Bauer (erntet, sät nach, pflegt), Holzfäller (fällt wilde Bäume, pflanzt nach), Bergmann
   (Leiterschacht, Erzwand), Schmied, Händler, Wirt, Kartograf (Karten zum Siegelkreis und zu Drachennestern). Jeder
   braucht ein Bett und seine Werkstatt; was die Arbeiter erarbeiten, kommt in die Truhe der Werkstatt.

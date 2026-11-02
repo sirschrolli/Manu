@@ -137,6 +137,35 @@ public final class Blueprint {
         return this.blocks;
     }
 
+    private int @Nullable [] costs;
+
+    /**
+     * Was der Plan an Baustoffen kostet: eine Einheit je Block (siehe {@link Material#of(BlockState)}) und eine Einheit
+     * Stein je Säule des Fundaments.
+     */
+    public int[] costs() {
+        if (this.costs == null) {
+            int[] c = new int[Material.values().length];
+            for (Entry e : this.blocks) {
+                Material m = Material.of(e.state());
+                if (m != null) {
+                    c[m.ordinal()]++;
+                }
+            }
+            Material base = Material.of(this.foundation);
+            if (base != null) {
+                c[base.ordinal()] += this.footprint.size();
+            }
+            this.costs = c;
+        }
+        return this.costs.clone();
+    }
+
+    /** Was ein Bauschritt kostet ({@code null}: nichts, z. B. Wegräumen oder Pflanzen). */
+    public static @Nullable Material cost(Step step) {
+        return Material.of(step.state());
+    }
+
     /** Ausdehnung des Plans (lokal, mit dem Boden ab y = 0). */
     public BoundingBox bounds() {
         return this.bounds;

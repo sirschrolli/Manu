@@ -15,7 +15,8 @@ import net.minecraft.server.level.ServerPlayer;
  * Voraussetzungen der Krönung). Wird vom Server geschickt.
  */
 public record TownView(String name, String owner, boolean isOwner, int tier, int capacity, int radius, int reputation, boolean crowned,
-        boolean queen, List<ResidentView> residents, List<HireView> hires, List<BuildView> builds, List<ProjectView> projects, int crown) {
+        boolean queen, List<ResidentView> residents, List<HireView> hires, List<BuildView> builds, List<ProjectView> projects, int crown,
+        boolean storage, List<Integer> stock) {
 
     /** Ein Bürger: Name, Beruf, Zustand (0 = unterwegs, 1 = bei der Arbeit, 2 = schläft, 3 = fern), mit Bett und Werkstatt. */
     public record ResidentView(String name, int profession, int variant, int state, boolean bed, boolean work) {
@@ -38,21 +39,32 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 HireView::new);
     }
 
-    /** Bauen: Preis, wie viele stehen, und ob die Stufe reicht. */
-    public record BuildView(int price, int count, boolean allowed) {
+    /** Bauen: Preis, wie viele stehen, ob die Stufe reicht, und die Baustoffe (Einheiten je {@link Material}). */
+    public record BuildView(int price, int count, boolean allowed, List<Integer> costs) {
         static final StreamCodec<RegistryFriendlyByteBuf, BuildView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, BuildView::price,
                 ByteBufCodecs.VAR_INT, BuildView::count,
                 ByteBufCodecs.BOOL, BuildView::allowed,
+                ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()), BuildView::costs,
                 BuildView::new);
+
+        public int cost(Material material) {
+            return material.ordinal() < this.costs.size() ? this.costs.get(material.ordinal()) : 0;
+        }
     }
 
-    /** Eine Baustelle: was gebaut wird und wie weit (Promille). */
-    public record ProjectView(int type, int permille) {
+    /** Eine Baustelle: was gebaut wird, wie weit (Promille) und auf welchen Baustoff sie wartet (−1: auf keinen). */
+    public record ProjectView(int type, int permille, int waiting) {
         static final StreamCodec<RegistryFriendlyByteBuf, ProjectView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, ProjectView::type,
                 ByteBufCodecs.VAR_INT, ProjectView::permille,
+                ByteBufCodecs.VAR_INT, ProjectView::waiting,
                 ProjectView::new);
+    }
+
+    /** Wie viele Einheiten eines Baustoffs im Lager liegen. */
+    public int stock(Material material) {
+        return material.ordinal() < this.stock.size() ? this.stock.get(material.ordinal()) : 0;
     }
 
     /** Bits der Krönungs-Voraussetzungen. */
@@ -80,6 +92,8 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         BuildView.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, v.builds);
         ProjectView.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, v.projects);
         buf.writeVarInt(v.crown);
+        buf.writeBoolean(v.storage);
+        ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).encode(buf, v.stock);
     }
 
     private static TownView read(RegistryFriendlyByteBuf buf) {
@@ -89,7 +103,7 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 HireView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 BuildView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                 ProjectView.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
-                buf.readVarInt());
+                buf.readVarInt(), buf.readBoolean(), ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).decode(buf));
     }
 
     public TownTier tierValue() {
@@ -120,14 +134,24 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         List<BuildView> builds = new ArrayList<>();
         for (BuildingType type : BuildingType.values()) {
             builds.add(new BuildView(TownManager.buildPrice(town, type, player), town.count(type),
-                    town.tier().ordinal() >= type.tier().ordinal()));
+                    town.tier().ordinal() >= type.tier().ordinal(), ints(type.costs())));
         }
         List<ProjectView> projects = new ArrayList<>();
         for (Town.Project p : town.projects()) {
-            projects.add(new ProjectView(p.type.ordinal(), Math.round(p.fraction() * 1000)));
+            projects.add(new ProjectView(p.type.ordinal(), Math.round(p.fraction() * 1000), p.waiting == null ? -1 : p.waiting.ordinal()));
         }
+        boolean storage = level != null && TownStorage.exists(level, town);
+        int[] stock = level == null ? new int[Material.values().length] : TownStorage.counts(level, town);
         return new TownView(town.name(), town.ownerName(), town.owner().equals(player.getUUID()), town.tier().ordinal(), town.capacity(),
                 town.radius(), Reputation.points(player), town.crowned(), town.queen(), residents, hires, builds, projects,
-                Coronation.requirements(player, town));
+                Coronation.requirements(player, town), storage, ints(stock));
+    }
+
+    private static List<Integer> ints(int[] values) {
+        List<Integer> list = new ArrayList<>(values.length);
+        for (int v : values) {
+            list.add(v);
+        }
+        return list;
     }
 }

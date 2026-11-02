@@ -6,6 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.economy.Coin;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownActions;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownTier;
@@ -463,15 +464,35 @@ public class TownScreen extends Screen {
                 ry += 10;
             }
         }
+        int storageY = y0 + CONTENT_H - (v.storage() ? 16 : 26);
         for (int i = 0; i < v.projects().size(); i++) {
             TownView.ProjectView p = v.projects().get(i);
+            if (ry + 30 > storageY - 4) {
+                Component more = Component.translatable("gui.kingdomsatwar.town.more_projects", v.projects().size() - i);
+                g.text(this.font, more, rx, ry, MUTED, false);
+                break;
+            }
             BuildingType type = BuildingType.values()[Mth.clamp(p.type(), 0, BuildingType.values().length - 1)];
             this.card(g, rx, ry, 140, 30, false);
             this.itemScaled(g, new ItemStack(type.icon()), rx + 4, ry + 4, 1.0f);
             g.text(this.font, Component.translatable(type.translationKey()), rx + 24, ry + 4, TEXT, false);
             String pct = (p.permille() / 10) + " %";
             g.text(this.font, pct, rx + 136 - this.font.width(pct), ry + 4, MUTED, false);
-            this.bar(g, rx + 24, ry + 16, 90, 6, p.permille() / 1000.0f, 0xFF5E8C3A);
+            if (p.waiting() >= 0 && p.waiting() < Material.values().length) {
+                // wartet auf einen Baustoff: statt des Balkens rot, was fehlt
+                Material m = Material.values()[p.waiting()];
+                this.itemScaled(g, m.icon(), rx + 24, ry + 14, 0.625f);
+                Component waiting = Component.translatable("gui.kingdomsatwar.town.waiting", Component.translatable(m.translationKey()));
+                g.text(this.font, this.ellipsize(waiting.getString(), 80), rx + 36, ry + 16, BAD, false);
+                if (mouseX >= rx && mouseX < rx + 116 && mouseY >= ry && mouseY < ry + 30) {
+                    List<FormattedCharSequence> tip = new ArrayList<>(this.font.split(Component.translatable(
+                            v.storage() ? "gui.kingdomsatwar.town.waiting.hint" : "gui.kingdomsatwar.town.storage.none",
+                            Component.translatable(m.translationKey())).withStyle(ChatFormatting.GRAY), 200));
+                    g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
+                }
+            } else {
+                this.bar(g, rx + 24, ry + 16, 90, 6, p.permille() / 1000.0f, 0xFF5E8C3A);
+            }
             if (v.isOwner()) {
                 final int index = i;
                 this.smallButton(g, rx + 120, ry + 13, 16, 14, Component.literal("✘"), true, mouseX, mouseY,
@@ -480,6 +501,36 @@ public class TownScreen extends Screen {
                                 Component.translatable("gui.kingdomsatwar.town.cancel.refund").withStyle(ChatFormatting.GRAY)));
             }
             ry += 33;
+        }
+        this.drawStorage(g, rx, storageY, mouseX, mouseY);
+    }
+
+    /** Unten in der rechten Spalte: was im Lager liegt (oder der Hinweis, wie man eins anlegt). */
+    private void drawStorage(GuiGraphicsExtractor g, int x, int y, int mouseX, int mouseY) {
+        TownView v = this.view;
+        g.fill(x - 2, y - 3, x + 142, y - 2, 0x40765A34);
+        if (!v.storage()) {
+            this.wrapped(g, Component.translatable("gui.kingdomsatwar.town.storage.none"), x, y, 140, BAD);
+            return;
+        }
+        Component label = Component.translatable("gui.kingdomsatwar.town.storage");
+        g.text(this.font, label, x, y + 3, MUTED, false);
+        int ix = x + this.font.width(label) + 5;
+        for (Material m : Material.values()) {
+            this.itemScaled(g, m.icon(), ix, y, 0.75f);
+            String n = String.valueOf(v.stock(m));
+            g.text(this.font, n, ix + 13, y + 3, TEXT, false);
+            ix += 13 + this.font.width(n) + 6;
+        }
+        if (mouseX >= x && mouseX < x + 140 && mouseY >= y - 2 && mouseY < y + 12) {
+            List<FormattedCharSequence> tip = new ArrayList<>();
+            tip.add(Component.translatable("gui.kingdomsatwar.town.storage.title").withStyle(ChatFormatting.GOLD).getVisualOrderText());
+            for (Material m : Material.values()) {
+                tip.add(Component.translatable("gui.kingdomsatwar.town.storage.line", v.stock(m), Component.translatable(m.translationKey()))
+                        .withStyle(ChatFormatting.GRAY).getVisualOrderText());
+            }
+            tip.addAll(this.font.split(Component.translatable("gui.kingdomsatwar.town.storage.hint").withStyle(ChatFormatting.DARK_GRAY), 200));
+            g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
         }
     }
 
@@ -643,11 +694,11 @@ public class TownScreen extends Screen {
         boolean creative = player != null && player.hasInfiniteMaterials();
         Component hint = Component.translatable(v.isOwner() ? "gui.kingdomsatwar.town.build.hint" : "gui.kingdomsatwar.town.build.foreign");
         g.text(this.font, hint, x0 + 5, y0 + 3, MUTED, false);
-        int cw = 73;
+        int cw = 58;
         int ch = 42;
         for (BuildingType type : BuildingType.values()) {
-            int col = type.ordinal() % 4;
-            int row = type.ordinal() / 4;
+            int col = type.ordinal() % 5;
+            int row = type.ordinal() / 5;
             int x = x0 + 2 + col * (cw + 2);
             int y = y0 + 15 + row * (ch + 2);
             TownView.BuildView b = v.builds().get(type.ordinal());
@@ -684,6 +735,20 @@ public class TownScreen extends Screen {
                         type.blueprint().bounds().getZSpan()).withStyle(ChatFormatting.DARK_GRAY).getVisualOrderText());
                 if (type.beds() > 0) {
                     tip.add(Component.translatable("gui.kingdomsatwar.town.build.beds", type.beds()).withStyle(ChatFormatting.DARK_GRAY).getVisualOrderText());
+                }
+                // Baustoffe (grün: liegt im Lager, rot: fehlt noch)
+                if (!type.costsMaterials()) {
+                    tip.add(Component.translatable("gui.kingdomsatwar.town.build.no_materials").withStyle(ChatFormatting.GREEN).getVisualOrderText());
+                } else {
+                    tip.add(Component.translatable("gui.kingdomsatwar.town.build.materials").withStyle(ChatFormatting.GRAY).getVisualOrderText());
+                    for (Material m : Material.values()) {
+                        int need = b.cost(m);
+                        if (need > 0) {
+                            boolean enough = v.stock(m) >= need;
+                            tip.add(Component.translatable("gui.kingdomsatwar.town.build.material", need, Component.translatable(m.translationKey()),
+                                    v.stock(m)).withStyle(enough ? ChatFormatting.DARK_GREEN : ChatFormatting.RED).getVisualOrderText());
+                        }
+                    }
                 }
                 for (Profession p : Profession.values()) {
                     if (p.workplace() == type) {

@@ -17,6 +17,7 @@ final class EconomyLang {
         professions(t);
         buildings(t);
         townScreen(t);
+        storage(t);
         messages(t);
         trade(t);
         crown(t);
@@ -127,6 +128,9 @@ final class EconomyLang {
         bld(t, "lumber_hut", "Lumber Hut", "Holzfällerhütte",
                 "Log cabin with a chopping block, a woodpile and a sapling nursery. One bed; workplace of a lumberjack.",
                 "Blockhaus mit Hackklotz, Holzstapel und Setzlingsschule. Ein Bett; Arbeitsplatz eines Holzfällers.");
+        bld(t, "storehouse", "Storehouse", "Lagerhaus",
+                "Timber storehouse with double chests and rows of barrels. Here your citizens bring what they gather in the evening and the builder fetches his building materials. Costs no building materials.",
+                "Fachwerkspeicher mit Doppeltruhen und Reihen von Fässern. Hierher bringen die Bürger abends, was sie gesammelt haben, und hier holt der Baumeister seine Baustoffe. Kostet keine Baustoffe.");
         bld(t, "well", "Well", "Brunnen",
                 "Stone well with a tiled roof – the heart of every hamlet.",
                 "Steinbrunnen mit Ziegeldach – das Herz jedes Weilers.");
@@ -159,6 +163,42 @@ final class EconomyLang {
     private static void bld(Text t, String id, String en, String de, String descEn, String descDe) {
         t.add("building.kingdomsatwar." + id, en, de);
         t.add("building.kingdomsatwar." + id + ".description", descEn, descDe);
+    }
+
+    private static void storage(Text t) {
+        t.add("material.kingdomsatwar.wood", "Wood", "Holz");
+        t.add("material.kingdomsatwar.stone", "Stone", "Stein");
+        t.add("material.kingdomsatwar.metal", "Metal", "Metall");
+        t.add("gui.kingdomsatwar.town.more_projects", "+%s more", "+%s weitere");
+        t.add("gui.kingdomsatwar.town.waiting", "waiting for %s", "wartet auf %s");
+        t.add("gui.kingdomsatwar.town.waiting.hint",
+                "The builder is waiting for %s. Put some into the storage (chests next to the banner or in a storehouse) – or let your citizens gather it.",
+                "Der Baumeister wartet auf %s. Leg welches ins Lager (Truhen am Banner oder im Lagerhaus) – oder lass es deine Bürger sammeln.");
+        t.add("gui.kingdomsatwar.town.storage", "Storage:", "Lager:");
+        t.add("gui.kingdomsatwar.town.storage.none", "No storage yet: place a chest next to the banner or build a storehouse.",
+                "Noch kein Lager: Stell eine Truhe neben das Banner oder bau ein Lagerhaus.");
+        t.add("gui.kingdomsatwar.town.storage.title", "Storage of the settlement", "Lager der Siedlung");
+        t.add("gui.kingdomsatwar.town.storage.line", "%2$s: %1$s", "%2$s: %1$s");
+        t.add("gui.kingdomsatwar.town.storage.hint",
+                "Chests and barrels up to four blocks from the banner and in every storehouse. One plank is one unit of wood, a log four; "
+                        + "cobblestone, stone, sand, gravel or clay is stone; iron or copper (also raw) is metal, steel counts twice. "
+                        + "In the evening your farmers, lumberjacks and miners bring what they gathered.",
+                "Truhen und Fässer bis vier Blöcke um das Banner und in jedem Lagerhaus. Ein Brett ist eine Einheit Holz, ein Stamm vier; "
+                        + "Bruchstein, Stein, Sand, Kies oder Ton ist Stein; Eisen oder Kupfer (auch roh) ist Metall, Stahl zählt doppelt. "
+                        + "Abends bringen deine Bauern, Holzfäller und Bergleute, was sie gesammelt haben.");
+        t.add("gui.kingdomsatwar.town.build.no_materials", "Costs no building materials", "Kostet keine Baustoffe");
+        t.add("message.kingdomsatwar.town.material", "%s %s (%s in storage)", "%s %s (%s im Lager)");
+        t.add("message.kingdomsatwar.town.materials", "Building materials: %s, %s, %s", "Baustoffe: %s, %s, %s");
+        t.add("message.kingdomsatwar.town.materials_no_storage",
+                "Building materials: %s, %s, %s – your settlement has no storage yet: place a chest next to the banner or build a storehouse.",
+                "Baustoffe: %s, %s, %s – deine Siedlung hat noch kein Lager: Stell eine Truhe neben das Banner oder bau ein Lagerhaus.");
+        t.add("gui.kingdomsatwar.town.build.materials", "Building materials (in storage):", "Baustoffe (im Lager):");
+        t.add("gui.kingdomsatwar.town.build.material", "%s %s (%s)", "%s %s (%s)");
+        t.add("message.kingdomsatwar.town.waiting", "The construction site %s needs %s – bring it to the storage (chests next to the banner or in a storehouse).",
+                "Die Baustelle %s braucht %s – bring es ins Lager (Truhen am Banner oder im Lagerhaus).");
+        t.add("message.kingdomsatwar.town.no_storage",
+                "The construction site %s needs %s, but your settlement has no storage yet: place a chest next to the banner or build a storehouse.",
+                "Die Baustelle %s braucht %s, aber deine Siedlung hat noch kein Lager: Stell eine Truhe neben das Banner oder bau ein Lagerhaus.");
     }
 
     private static void townScreen(Text t) {

@@ -162,6 +162,34 @@ final class TowerShowcase {
             steps.add(Step.waitTicks(70));
             steps.add(Step.command("title @s clear"));
             shot(steps, c, id + "_2_fight");
+            // das versiegelte Treppenloch: Bannsiegel in der Farbe des Elements
+            steps.add(Step.server(level -> {
+                BlockPos home = BlockPos.containing(c[0], c[2] + MageTowerBuilder.SANCTUM + 1, c[1]);
+                double sx = 0, sy = 0, sz = 0;
+                int n = 0;
+                for (BlockPos p : BlockPos.betweenClosed(home.offset(-7, -1, -7), home.offset(7, -1, 7))) {
+                    if (level.getBlockState(p).is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.ARCANE_BARRIER.get())) {
+                        sx += p.getX() + 0.5;
+                        sy += p.getY() + 1.0;
+                        sz += p.getZ() + 0.5;
+                        n++;
+                    }
+                }
+                if (n == 0) {
+                    return;
+                }
+                double tx = sx / n, ty = sy / n, tz = sz / n;
+                // von der Mitte des Sanktums her auf das Siegel schauen, schräg von oben
+                double dx = home.getX() + 0.5 - tx, dz = home.getZ() + 0.5 - tz;
+                double len = Math.max(0.1, Math.sqrt(dx * dx + dz * dz));
+                double px = tx + dx / len * 2.4, pz = tz + dz / len * 2.4, py = ty + 2.6;
+                double lx = tx - px, ly = ty - (py + 1.62), lz = tz - pz;
+                float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                level.players().forEach(player -> player.teleportTo(level, px, py, pz, java.util.Set.of(), yaw, pitch, true));
+            }));
+            steps.add(Step.waitTicks(1));
+            steps.add(Step.screenshot(id + "_2_sealed"));
             steps.add(Step.server(level -> withMage(level, c, mage -> mage.devAttack(4))));
             steps.add(Step.waitTicks(16));
             steps.add(Step.command("title @s clear"));

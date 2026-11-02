@@ -579,6 +579,14 @@ public final class ModBlocks {
             "shadow_throne_core", io.github.sirschrolli.kingdomsatwar.block.ShadowThroneCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 6));
 
+    /** Bannsiegel, mit dem ein Erzmagier sein Sanktum versiegelt, solange der Kampf dauert (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ArcaneBarrierBlock> ARCANE_BARRIER = BLOCKS.registerBlock(
+            "arcane_barrier", io.github.sirschrolli.kingdomsatwar.block.ArcaneBarrierBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.AMETHYST)
+                    .lightLevel(state -> 10).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+                    .isSuffocating((state, level, pos) -> false).isRedstoneConductor((state, level, pos) -> false)
+                    .isValidSpawn((state, level, pos, type) -> false));
+
     /** Baugerüst, das sich der Baumeister an hohen Mauern aufstellt (ohne Gegenstand, lässt nichts fallen). */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.BuilderScaffoldBlock> BUILDER_SCAFFOLD = BLOCKS.registerBlock(
             "builder_scaffold", io.github.sirschrolli.kingdomsatwar.block.BuilderScaffoldBlock::new,

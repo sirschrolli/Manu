@@ -9,6 +9,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.magic.Spell;
 import io.github.sirschrolli.kingdomsatwar.network.ScreenShakePayload;
+import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -54,6 +55,9 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -197,6 +201,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         input.read("MageHome", BlockPos.CODEC).ifPresent(pos -> this.home = pos);
+        // ein Bannsiegel aus einem unterbrochenen Kampf wird beim nächsten Schritt gelöst
+        this.liftSealSoon = true;
         // nach dem Laden meditiert er wieder an seinem Platz (ein unterbrochener Kampf beginnt von vorn)
         this.setState(State.DORMANT);
         this.setHealth(this.getMaxHealth());
@@ -490,6 +496,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     @Override
     protected void customServerAiStep(ServerLevel level) {
         this.stateTicks++;
+        if (this.liftSealSoon) {
+            this.unseal(level);
+        }
         int blink = this.entityData.get(DATA_BLINK);
         if (blink > 0 && this.attack != Attack.BLINK) {
             this.entityData.set(DATA_BLINK, Math.max(0, blink - 1));
@@ -564,6 +573,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         }
         this.setState(State.AWAKENING);
         this.setGesture(ANIM_AWAKEN);
+        this.seal(level);
         int players = Math.max(1, this.nearbyPlayers(level, LEASH_RADIUS).size());
         double difficulty = switch (level.getDifficulty()) {
             case PEACEFUL, EASY -> 0.75;
@@ -1025,10 +1035,103 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         return this.position().add(sx + forward.x, 2.75, sz + forward.z);
     }
 
+    // ------------------------------------------------------------------ Bannsiegel
+
+    /** So weit um die Mitte des Sanktums sucht der Magier nach Öffnungen im Boden (dem Treppenloch). */
+    private static final double SEAL_RADIUS = 5.5;
+    private boolean sealed;
+    private boolean liftSealSoon;
+
+    /** Ist das Sanktum gerade versiegelt? */
+    public boolean sealed() {
+        return this.sealed;
+    }
+
+    /**
+     * Versiegelt das Sanktum, sobald der Kampf beginnt: jede Öffnung im Boden um ihn herum (das Treppenloch) wird zu einem
+     * Bannsiegel in der Farbe seines Elements – wer heraufgekommen ist, kommt erst wieder hinunter, wenn der Magier fällt.
+     */
+    private void seal(ServerLevel level) {
+        if (this.home == null) {
+            return;
+        }
+        BlockState barrier = ModBlocks.ARCANE_BARRIER.get().defaultBlockState()
+                .setValue(io.github.sirschrolli.kingdomsatwar.block.ArcaneBarrierBlock.ELEMENT, this.element);
+        for (BlockPos pos : this.floorOpenings(level, true)) {
+            level.setBlock(pos, barrier, Block.UPDATE_ALL);
+            BossFx.impact(level, new DustParticleOptions(this.element.color(), 1.5f), Vec3.atCenterOf(pos), 12, 0.4, 0.4, 0.4, 0.02);
+            this.sealed = true;
+        }
+        if (this.sealed) {
+            level.playSound(null, this.home, SoundEvents.BEACON_ACTIVATE, SoundSource.HOSTILE, 2.0f, 1.4f);
+            level.playSound(null, this.home, SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1.5f, 0.8f);
+        }
+    }
+
+    /** Löst das Bannsiegel wieder (nach dem Sieg, beim Rückzug oder nach dem Laden der Welt). */
+    private void unseal(ServerLevel level) {
+        this.liftSealSoon = false;
+        if (this.home == null) {
+            this.sealed = false;
+            return;
+        }
+        boolean any = false;
+        for (BlockPos pos : this.floorOpenings(level, false)) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            BossFx.impact(level, ParticleTypes.ENCHANT, Vec3.atCenterOf(pos), 10, 0.4, 0.4, 0.4, 0.4);
+            any = true;
+        }
+        if (any) {
+            level.playSound(null, this.home, SoundEvents.BEACON_DEACTIVATE, SoundSource.HOSTILE, 2.0f, 1.2f);
+        }
+        this.sealed = false;
+    }
+
+    /** Die Öffnungen im Boden des Sanktums ({@code open}: noch offen, sonst: schon versiegelt). */
+    private List<BlockPos> floorOpenings(ServerLevel level, boolean open) {
+        List<BlockPos> list = new ArrayList<>();
+        int r = (int) Math.ceil(SEAL_RADIUS);
+        for (int dx = -r; dx <= r; dx++) {
+            for (int dz = -r; dz <= r; dz++) {
+                if (dx * dx + dz * dz > SEAL_RADIUS * SEAL_RADIUS) {
+                    continue;
+                }
+                BlockPos pos = this.home.offset(dx, -1, dz);
+                BlockState state = level.getBlockState(pos);
+                if (open ? state.isAir() && !level.getBlockState(pos.below()).isAir() || state.isAir() && hasStairsBelow(level, pos)
+                        : state.is(ModBlocks.ARCANE_BARRIER.get())) {
+                    list.add(pos);
+                }
+            }
+        }
+        return list;
+    }
+
+    private static boolean hasStairsBelow(ServerLevel level, BlockPos pos) {
+        for (int i = 1; i <= 4; i++) {
+            if (level.getBlockState(pos.below(i)).getBlock() instanceof net.minecraft.world.level.block.StairBlock) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Liegt eine Stelle im versiegelten Sanktum (Boden bis Dach)? Dort lässt sich während des Kampfs nichts abbauen. */
+    public boolean seals(BlockPos pos) {
+        if (!this.sealed || this.home == null) {
+            return false;
+        }
+        double dx = pos.getX() + 0.5 - (this.home.getX() + 0.5);
+        double dz = pos.getZ() + 0.5 - (this.home.getZ() + 0.5);
+        int dy = pos.getY() - this.home.getY();
+        return dx * dx + dz * dz <= 10.5 * 10.5 && dy >= -1 && dy <= 12;
+    }
+
     // ------------------------------------------------------------------ Rückkehr
 
     /** Kein Gegner mehr im Saal: zurück an den Platz, heilen, wieder meditieren. */
     private void resetToHome(ServerLevel level) {
+        this.unseal(level);
         this.burst(level);
         if (this.home != null) {
             this.snapTo(Vec3.atBottomCenterOf(this.home));
@@ -1098,6 +1201,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     }
 
     private void finishDeath(ServerLevel level) {
+        this.unseal(level);
         DamageSource source = this.deathSource != null ? this.deathSource : this.damageSources().generic();
         super.dropAllDeathLoot(level, source);
         for (int i = 0; i < 8; i++) {

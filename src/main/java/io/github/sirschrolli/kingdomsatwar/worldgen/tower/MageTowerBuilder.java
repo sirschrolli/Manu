@@ -439,11 +439,18 @@ public final class MageTowerBuilder {
             new Flight(3, -4, Direction.WEST, FLOOR[2]),
             new Flight(-4, -3, Direction.SOUTH, FLOOR[3])};
 
-    /** Treppenlöcher im Boden darüber (je Lauf zwei) – dort bleibt der Boden offen. */
+    /**
+     * Treppenlöcher im Boden darüber (je Lauf drei, über der dritten bis fünften Stufe) – dort bleibt der Boden offen. Drei
+     * müssen es sein: wer von der dritten Stufe auf die vierte steigt, ist mit dem Kopf schon über dem Boden darüber.
+     */
     public static boolean isHole(int x, int y, int z) {
         for (Flight f : FLIGHTS) {
-            if (y == f.floor() + 6 && ((x == f.x(4) && z == f.z(4)) || (x == f.x(5) && z == f.z(5)))) {
-                return true;
+            if (y == f.floor() + 6) {
+                for (int i = 3; i <= 5; i++) {
+                    if (x == f.x(i) && z == f.z(i)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -495,15 +502,19 @@ public final class MageTowerBuilder {
                     this.set(x, y, z, k == 1 && this.b.chance(x, y, z, 0.3f) ? s(Blocks.CHISELED_BOOKSHELF) : s(under[k]));
                 }
                 this.set(x, f.floor() + i, z, stairs(step, f.dir(), Half.BOTTOM));
-                // Kopffreiheit über den oberen Stufen
+                // Kopffreiheit über den Stufen; über der dritten bis fünften bleibt auch der Boden darüber offen (auch im
+                // Sanktum, dessen Boden die Krone legt)
                 this.air(x, f.floor() + i + 1, z);
                 this.air(x, f.floor() + i + 2, z);
+                if (i >= 3 && i <= 5) {
+                    this.air(x, f.floor() + 6, z);
+                }
             }
             // Geländer um das Treppenloch im Geschoss darüber
             int top = f.floor() + 6;
             boolean sanctum = top == SANCTUM;
             Set<Long> rails = new HashSet<>();
-            for (int i = 4; i <= 5; i++) {
+            for (int i = 3; i <= 5; i++) {
                 for (int dx = -1; dx <= 1; dx++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         int x = f.x(i) + dx;

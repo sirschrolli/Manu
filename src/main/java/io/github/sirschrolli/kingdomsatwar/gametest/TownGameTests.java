@@ -9,6 +9,8 @@ import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Blueprint;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Coronation;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
+import io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownManager;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -47,6 +50,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -78,6 +82,10 @@ final class TownGameTests {
             ModGameTests.TEST_FUNCTIONS.register("town_builder", () -> TownGameTests::townBuilder);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_BUILDER_TALL =
             ModGameTests.TEST_FUNCTIONS.register("town_builder_tall", () -> TownGameTests::townBuilderTall);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_STORAGE =
+            ModGameTests.TEST_FUNCTIONS.register("town_storage", () -> TownGameTests::townStorage);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_EVENING =
+            ModGameTests.TEST_FUNCTIONS.register("town_evening", () -> TownGameTests::townEvening);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_TRADE =
             ModGameTests.TEST_FUNCTIONS.register("town_trade", () -> TownGameTests::townTrade);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWN_CROWN =
@@ -94,6 +102,8 @@ final class TownGameTests {
         own(event, TOWN_FOUND, "town_found", 200);
         own(event, TOWN_BUILDER, "town_builder", 4000);
         own(event, TOWN_BUILDER_TALL, "town_builder_tall", 12000);
+        own(event, TOWN_STORAGE, "town_storage", 200);
+        own(event, TOWN_EVENING, "town_evening", 1200);
         own(event, TOWN_TRADE, "town_trade", 4000);
         own(event, TOWN_CROWN, "town_crown", 600);
     }
@@ -152,7 +162,19 @@ final class TownGameTests {
     /** Ursprung eines Plans, sodass sein Grundriss mit der Mitte bei (x, z) liegt. */
     private static BlockPos originFor(GameTestHelper helper, BuildingType type, int x, int z) {
         BoundingBox b = type.blueprint().bounds();
-        return helper.absolutePos(new BlockPos(x - (b.minX() + b.maxX()) / 2, 1, z - (b.minZ() + b.maxZ()) / 2));
+        return helper.absolutePos(new BlockPos(x - (b.minX() + b.maxX()) / 2, ground(helper), z - (b.minZ() + b.maxZ()) / 2));
+    }
+
+    /**
+     * Die erste Lage über dem Boden der Testfläche – dorthin setzt auch der Bauplan im Spiel den Ursprung (Rechtsklick auf
+     * den Boden). Gemessen in einer Ecke, wo nie gebaut wird.
+     */
+    private static int ground(GameTestHelper helper) {
+        int y = 2;
+        while (y > -4 && helper.getBlockState(new BlockPos(1, y - 1, 1)).isAir()) {
+            y--;
+        }
+        return y;
     }
 
     private static CitizenEntity citizen(GameTestHelper helper, Town.Resident r) {
@@ -277,6 +299,7 @@ final class TownGameTests {
             plan.placeAll(level, origin, Rotation.NONE);
             helper.assertTrue(plan.complete(level, origin, Rotation.NONE), type.id() + ": nach dem Bauen unvollständig");
             assertConnected(helper, plan, origin, Rotation.NONE, type.id());
+            assertWalkable(helper, plan, origin, Rotation.NONE, type.id());
             for (BlockPos bed : plan.beds()) {
                 helper.assertTrue(level.getBlockState(Blueprint.world(origin, Rotation.NONE, bed)).getBlock()
                         instanceof net.minecraft.world.level.block.BedBlock, type.id() + ": Bett fehlt bei " + bed);
@@ -292,8 +315,49 @@ final class TownGameTests {
             BuildingType.HOUSE.blueprint().placeAll(level, origin, rotation);
             helper.assertTrue(BuildingType.HOUSE.blueprint().complete(level, origin, rotation), "Haus gedreht " + rotation + " unvollständig");
             assertConnected(helper, BuildingType.HOUSE.blueprint(), origin, rotation, "Haus gedreht " + rotation);
+            assertWalkable(helper, BuildingType.HOUSE.blueprint(), origin, rotation, "Haus gedreht " + rotation);
         }
         helper.succeed();
+    }
+
+    /**
+     * Begehbar wie für einen Spieler, der nicht springt: vom Eingang aus erreicht man jeden Raum, jedes Bett, die Truhe und den
+     * Arbeitsplatz (Treppen enden auf Höhe des Bodens darüber, mit Kopffreiheit).
+     */
+    static void assertWalkable(GameTestHelper helper, Blueprint plan, BlockPos origin, Rotation rotation, String what) {
+        ServerLevel level = helper.getLevel();
+        WalkCheck walk = new WalkCheck(level, plan.worldBounds(origin, rotation));
+        BlockPos door = Blueprint.world(origin, rotation, plan.entrance());
+        walk.walkFrom(door.getX(), door.getZ(), door.getY());
+        if (Boolean.getBoolean("kingdomsatwar.debugWalk")) {
+            StringBuilder line = new StringBuilder("[Walk] " + what + " Eingang:");
+            for (int d = 0; d <= 6; d++) {
+                BlockPos p = door.relative(rotation.rotate(Direction.SOUTH), d);
+                line.append(" | ").append(d).append(": ").append(walk.column(p.getX(), p.getZ()));
+            }
+            KingdomsAtWar.LOGGER.info(line.toString());
+        }
+        for (BlockPos bed : plan.beds()) {
+            // ein Bett erreicht man am Kopf- oder am Fußende
+            BlockPos head = Blueprint.world(origin, rotation, bed);
+            BlockState state = level.getBlockState(head);
+            BlockPos foot = state.getBlock() instanceof net.minecraft.world.level.block.BedBlock
+                    ? head.relative(state.getValue(net.minecraft.world.level.block.BedBlock.FACING).getOpposite()) : head;
+            helper.assertTrue(walk.reachesBlock(head) || walk.reachesBlock(foot), what + ": Bett bei " + helper.relativePos(head)
+                    + " nicht zu Fuß erreichbar (" + walk.explain() + ")");
+        }
+        if (plan.chest() != null) {
+            BlockPos pos = Blueprint.world(origin, rotation, plan.chest());
+            helper.assertTrue(walk.reachesBlock(pos), what + ": Truhe bei " + helper.relativePos(pos) + " nicht zu Fuß erreichbar");
+        }
+        if (plan.workSpot() != null && plan.workSpot().getY() >= 0) {
+            BlockPos pos = Blueprint.world(origin, rotation, plan.workSpot());
+            helper.assertTrue(walk.reachesSpot(pos) || walk.reachesBlock(pos), what + ": Arbeitsplatz bei " + helper.relativePos(pos)
+                    + " nicht zu Fuß erreichbar");
+        }
+        BlockPos room = walk.unreachedRoom(4, origin.getY());
+        helper.assertTrue(room == null, what + ": Raum bei " + (room == null ? "" : helper.relativePos(room))
+                + " nicht zu Fuß erreichbar (Treppe zu kurz, keine Kopffreiheit oder kein Zugang; " + walk.explain() + ")");
     }
 
     /**
@@ -354,9 +418,24 @@ final class TownGameTests {
         Town.Project project = town.projects().getFirst();
         int total = project.steps().size();
         int[] maxProgress = {0};
+        // erst gibt es kein Lager: der Baumeister wartet auf Holz (für den Zaun); dann kommt eine Truhe mit Baustoffen ans Banner
+        boolean[] waited = {false};
+        int[] stuckAt = {-1};
         helper.onEachTick(() -> {
             if (!town.projects().isEmpty()) {
-                maxProgress[0] = Math.max(maxProgress[0], town.projects().getFirst().progress);
+                Town.Project open = town.projects().getFirst();
+                maxProgress[0] = Math.max(maxProgress[0], open.progress);
+                if (!waited[0] && open.waiting != null) {
+                    if (stuckAt[0] < 0) {
+                        stuckAt[0] = open.progress;
+                    } else if (helper.getTick() % 100 == 0) {
+                        helper.assertValueEqual(open.progress, stuckAt[0], "Baustelle ohne Baustoffe weitergebaut");
+                        if (helper.getTick() > 600) {
+                            waited[0] = true;
+                            TownStorage.supply(level, helper.absolutePos(new BlockPos(27, 1, 34)), BuildingType.FIELD.costs());
+                        }
+                    }
+                }
             }
         });
         helper.succeedWhen(() -> {
@@ -373,6 +452,7 @@ final class TownGameTests {
                         + (builder.isWorking() ? " (arbeitet)" : "");
                 helper.assertTrue(false, "Baustelle noch offen: " + open.progress + " von " + total + " Schritten" + detail);
             }
+            helper.assertTrue(waited[0], "Die Baustelle hat nie auf Baustoffe gewartet");
             helper.assertValueEqual(town.count(BuildingType.FIELD), 1, "Fertige Felder");
             helper.assertTrue(BuildingType.FIELD.blueprint().complete(level, origin, Rotation.NONE), "Feld unvollständig gebaut");
             helper.assertTrue(Reputation.points(owner) >= Reputation.HIRE + Reputation.BUILDING, "Ansehen fürs fertige Gebäude");
@@ -396,6 +476,12 @@ final class TownGameTests {
         Coins.give(owner, 500);
         helper.assertValueEqual(TownManager.hire(owner, town, Profession.BUILDER), TownManager.HireResult.HIRED, "Baumeister anheuern");
         BlockPos origin = originFor(helper, BuildingType.TOWNHOUSE, 24, 18);
+        int[] costs = BuildingType.TOWNHOUSE.costs();
+        TownStorage.supply(level, helper.absolutePos(new BlockPos(20, 1, 42)), costs);
+        int[] before = TownStorage.counts(level, town);
+        for (Material m : Material.values()) {
+            helper.assertTrue(before[m.ordinal()] >= costs[m.ordinal()], "Lager zu klein für " + m.id());
+        }
         Town.Project project = TownManager.startProject(level, town, BuildingType.TOWNHOUSE, origin, Rotation.NONE);
         List<Blueprint.Step> steps = project.steps();
         int[] last = {0};
@@ -451,10 +537,121 @@ final class TownGameTests {
                 helper.assertTrue(!level.getBlockState(p).is(ModBlocks.BUILDER_SCAFFOLD.get()), "Gerüst stehen geblieben bei " + helper.relativePos(p));
             }
             helper.assertTrue(scaffold[0], "Baumeister stand nie auf einem Gerüst");
+            // die Baustoffe kamen aus dem Lager (höchstens ein paar Stämme mehr, als gebraucht wurden)
+            int[] after = TownStorage.counts(level, town);
+            for (Material m : Material.values()) {
+                int used = before[m.ordinal()] - after[m.ordinal()];
+                helper.assertTrue(used >= costs[m.ordinal()] * 0.6 && used <= costs[m.ordinal()] + 72, "Verbrauch an " + m.id() + ": "
+                        + used + " statt etwa " + costs[m.ordinal()]);
+            }
             helper.assertTrue(placed[0] > 100 && near[0] >= placed[0] * 0.95, "Baumeister zu weit weg: nur " + near[0] + " von "
                     + placed[0] + " Blöcken aus der Nähe gesetzt (am weitesten " + String.format("%.1f", worst[0]) + ": " + worstAt[0] + ")");
             KingdomsAtWar.LOGGER.info("[Test] Bürgerhaus nach {} Ticks fertig ({} Bauschritte, {} von {} Blöcken aus der Nähe, am weitesten {}: {})",
                     helper.getTick(), steps.size(), near[0], placed[0], String.format("%.1f", worst[0]), worstAt[0]);
+            clearTowns(server);
+            leave(helper, owner);
+        });
+    }
+
+    // =====================================================================================
+    // Lager und Baustoffe
+    // =====================================================================================
+
+    /**
+     * Das Lager: Truhen bis vier Blöcke um das Banner und in Lagerhäusern zählen, weiter weg nicht; Einheiten je Baustoff
+     * (Stamm vier, Brett eins, Stahl zwei), Nehmen (erst Bretter, dann Stämme) und Einlagern; jeder Bau außer dem Lagerhaus
+     * kostet Holz und Stein.
+     */
+    private static void townStorage(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 30));
+        Town town = found(helper, owner, CENTER);
+        helper.assertTrue(!TownStorage.exists(level, town), "Lager ohne Truhe");
+        // eine Truhe zu weit weg zählt nicht, eine nah am Banner schon
+        BlockPos far = helper.absolutePos(CENTER.offset(6, 0, 0));
+        BlockPos near = helper.absolutePos(CENTER.offset(3, 0, 1));
+        level.setBlock(far, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
+        helper.assertTrue(!TownStorage.exists(level, town), "Truhe sechs Blöcke weg zählt zum Lager");
+        level.setBlock(near, Blocks.BARREL.defaultBlockState(), Block.UPDATE_ALL);
+        helper.assertTrue(TownStorage.exists(level, town), "Fass am Banner zählt nicht zum Lager");
+        net.minecraft.world.Container barrel = (net.minecraft.world.Container) level.getBlockEntity(near);
+        barrel.setItem(0, new ItemStack(Items.OAK_LOG, 3));
+        barrel.setItem(1, new ItemStack(Items.SPRUCE_PLANKS, 5));
+        barrel.setItem(2, new ItemStack(Items.COBBLESTONE, 10));
+        barrel.setItem(3, new ItemStack(Items.SAND, 2));
+        barrel.setItem(4, new ItemStack(Items.IRON_INGOT, 1));
+        barrel.setItem(5, new ItemStack(ModItems.STEEL_INGOT.get(), 1));
+        barrel.setItem(6, new ItemStack(Items.WHEAT, 20));
+        ((net.minecraft.world.Container) level.getBlockEntity(far)).setItem(0, new ItemStack(Items.OAK_LOG, 64));
+        int[] counts = TownStorage.counts(level, town);
+        helper.assertValueEqual(counts[Material.WOOD.ordinal()], 17, "Holz im Lager");
+        helper.assertValueEqual(counts[Material.STONE.ordinal()], 12, "Stein im Lager");
+        helper.assertValueEqual(counts[Material.METAL.ordinal()], 3, "Metall im Lager");
+        // sechs Einheiten Holz: fünf Bretter, dann ein Stamm (vier) – zusammen neun
+        helper.assertValueEqual(TownStorage.take(level, town, Material.WOOD, 6), 9, "Genommenes Holz");
+        helper.assertValueEqual(TownStorage.counts(level, town)[Material.WOOD.ordinal()], 8, "Holz danach");
+        helper.assertValueEqual(TownStorage.take(level, town, Material.METAL, 10), 3, "Nur so viel Metall, wie da ist");
+        // ein Lagerhaus: seine Truhen und Fässer gehören dazu, Eingelagertes kommt in den nächsten Behälter
+        BlockPos storehouse = originFor(helper, BuildingType.STOREHOUSE, 24, 10);
+        TownManager.buildInstantly(level, town, BuildingType.STOREHOUSE, storehouse, Rotation.NONE);
+        int containers = TownStorage.containers(level, town).size();
+        helper.assertTrue(containers >= 10, "Behälter im Lagerhaus: " + containers);
+        ItemStack rest = TownStorage.store(level, town, new ItemStack(Items.COBBLESTONE, 64), storehouse);
+        helper.assertTrue(rest.isEmpty(), "Einlagern ging nicht");
+        helper.assertValueEqual(TownStorage.counts(level, town)[Material.STONE.ordinal()], 12 + 64, "Stein nach dem Einlagern");
+        BlockPos nearest = TownStorage.nearest(level, town, storehouse);
+        helper.assertTrue(nearest != null && BuildingType.STOREHOUSE.blueprint().worldBounds(storehouse, Rotation.NONE).isInside(nearest),
+                "Nächster Behälter liegt nicht im Lagerhaus");
+        // Baukosten
+        for (BuildingType type : BuildingType.values()) {
+            int[] c = type.costs();
+            if (type == BuildingType.STOREHOUSE) {
+                helper.assertTrue(c[0] == 0 && c[1] == 0 && c[2] == 0, "Das Lagerhaus kostet Baustoffe");
+            } else {
+                helper.assertTrue(c[Material.WOOD.ordinal()] > 0 && c[Material.STONE.ordinal()] > 0 || type == BuildingType.FIELD,
+                        type.id() + " kostet keine Baustoffe");
+            }
+            KingdomsAtWar.LOGGER.info("[Test] Baukosten {}: {} Holz, {} Stein, {} Metall", type.id(), c[0], c[1], c[2]);
+        }
+        helper.assertTrue(BuildingType.FIELD.costs()[Material.WOOD.ordinal()] > 0, "Der Zaun ums Feld kostet nichts");
+        // das Fenster zeigt das Lager
+        TownView view = TownView.of(owner, town);
+        helper.assertTrue(view.storage() && view.stock(Material.STONE) == 76, "Fenster: Lager falsch");
+        helper.assertValueEqual(view.builds().get(BuildingType.HOUSE.ordinal()).cost(Material.WOOD), BuildingType.HOUSE.costs()[0], "Fenster: Baukosten");
+        clearTowns(server);
+        leave(helper, owner);
+        helper.succeed();
+    }
+
+    /**
+     * Abends bringt der Holzfäller alles ins Lager: was in der Truhe seiner Hütte liegt und was er bei sich trägt. Ohne Lager
+     * bleibt es in der Hütte.
+     */
+    private static void townEvening(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        clearTowns(server);
+        helper.setTime(1000);
+        ServerPlayer owner = player(helper, new BlockPos(24, 1, 30));
+        Town town = found(helper, owner, CENTER);
+        Coins.give(owner, 500);
+        BlockPos hut = originFor(helper, BuildingType.LUMBER_HUT, 24, 12);
+        TownManager.buildInstantly(level, town, BuildingType.LUMBER_HUT, hut, Rotation.NONE);
+        helper.assertValueEqual(TownManager.hire(owner, town, Profession.LUMBERJACK), TownManager.HireResult.HIRED, "Holzfäller anheuern");
+        CitizenEntity lumberjack = citizen(helper, town.residents().getFirst());
+        BlockPos hutChest = Blueprint.world(hut, Rotation.NONE, BuildingType.LUMBER_HUT.blueprint().chest());
+        ((net.minecraft.world.Container) level.getBlockEntity(hutChest)).setItem(0, new ItemStack(Items.SPRUCE_LOG, 10));
+        lumberjack.carried().addItem(new ItemStack(Items.SPRUCE_LOG, 5));
+        BlockPos store = helper.absolutePos(CENTER.offset(2, 0, 2));
+        level.setBlock(store, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
+        helper.setTime(10650);
+        helper.succeedWhen(() -> {
+            int stored = TownStorage.counts(level, town)[Material.WOOD.ordinal()] / 4;
+            helper.assertValueEqual(stored, 15, "Stämme im Lager");
+            helper.assertTrue(((net.minecraft.world.Container) level.getBlockEntity(hutChest)).isEmpty(), "Truhe der Hütte nicht geleert");
+            helper.assertTrue(lumberjack.carried().isEmpty(), "Holzfäller trägt noch etwas");
             clearTowns(server);
             leave(helper, owner);
         });

@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.15.0 – Baumeister mit Gerüst, härtere Wirtschaft.**
+> **Testversion 0.16.0 – Lager, Baukosten und eingesperrt beim Erzmagier.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -50,7 +50,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > leuchtenden Kiemen, Teichfrosch, Feuerkröte und Grasfrosch, die Kaulquappe, der Nautilus und der Geisternautilus.
 > Eimer, Spielarten, Zucht, Eiablage, Froschlichter, Delfingnade, Sattel und Nautilus-Rüstung und alle Beute bleiben.
 > Außerdem sitzen jetzt alle Texturen der eigenen Wesen exakt auf ihren Modellen (keine Ritzen mehr an krummen Maßen).
-> Neu in 0.15: Der **Baumeister** arbeitet jetzt aus der Nähe – höchstens vier Blöcke neben dem Block, auf dem Boden,
+> In 0.15 lernte der **Baumeister**, aus der Nähe zu arbeiten – höchstens vier Blöcke neben dem Block, auf dem Boden,
 > auf den schon gebauten Böden oder auf dem Dach – und baut auch hohe Häuser sicher fertig: an hohen Mauern stellt er
 > sich ein **Baugerüst** auf, stapelt es Lage für Lage unter sich hoch, klettert darin hinauf und hinunter und baut es
 > zum Schluss wieder ab. Er zieht die Mauern im Kreis hoch, statt hin und her zu laufen. Die **Fensterläden** sitzen
@@ -59,10 +59,18 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > sehen sie aus wie eine einzelne. Die **Beute ist härter**: in Truhen nur noch wenige Bronzemünzen, Banditen geben
 > weniger. **Schwerere Rezepte** für die eigene Ausrüstung: Stahlwerkzeug braucht den beschlagenen Griff, Rüstungen
 > ein Lederpolster, Schuppenrüstungen das passende Stück Stahlrüstung darunter, Stahl zwei Eisenbarren.
-> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (149 GameTests).
-> **Als Nächstes:** Lager und Baukosten (Bewohner sammeln und bringen es abends ins Lager), Häuser in mehreren
-> Entwürfen, Söldner aus den Dörfern, verschiedene Dorfanlagen – danach Golems und die übrigen Dorfwesen, zuletzt
-> Nether und End.
+> Neu in 0.16: **Bauen kostet Baustoffe** – jedes Gebäude braucht Holz, Stein und Metall (eine Einheit je Block). Der
+> Baumeister holt sie aus dem **Lager** (Truhen und Fässer am Stadtbanner und im neuen **Lagerhaus**) und wartet, wenn
+> etwas fehlt; das Stadtfenster zeigt Vorrat, Kosten und was fehlt. **Abends bringen Bauern, Holzfäller und Bergleute
+> alles ins Lager**, was sie gesammelt haben – so lassen sich alle Baustoffe von den eigenen Bürgern erwirtschaften.
+> Jedes Haus und jeder Magierturm wird jetzt automatisch **zu Fuß begangen** (ohne Springen und ohne etwas abzubauen):
+> die zu kurze Treppe im Bürgerhaus, fehlende Stufen vor Schmiede und Mine und zu kleine Treppenlöcher im Magierturm
+> sind behoben. Und die **Erzmagier sperren dich ein**: Sobald der Kampf beginnt, versiegelt ein Bannsiegel in der Farbe
+> seines Elements das Treppenloch, im Sanktum lässt sich nichts abbauen oder sprengen, keine Enderperle trägt hinaus –
+> erst sein Sieg löst das Siegel.
+> Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests (151 GameTests).
+> **Als Nächstes:** Häuser in mehreren zufälligen, schöneren Entwürfen, Söldner aus den Dörfern (am Tisch
+> aufwertbar), verschiedene Dorfanlagen – danach Golems und die übrigen Dorfwesen, zuletzt Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -119,7 +127,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.15.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.16.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -127,7 +135,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.15.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.16.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -495,9 +503,17 @@ legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Stau
 dort, wo später noch etwas hinkommt, damit er sich nicht einmauert) und stellt sich an hohen Mauern ein **Baugerüst** auf,
 das er nach dem Bau wieder abbaut.
 
+**Lager und Baustoffe:** Jeder Bau kostet neben Münzen auch **Baustoffe** – eine Einheit je Block: **Holz** (ein Brett ist
+eine Einheit, ein Stamm vier), **Stein** (Bruchstein, Stein, Sand, Kies oder Ton) und **Metall** (Eisen oder Kupfer, auch
+roh; Stahl zählt doppelt). Erde, Pflanzen, Wasser und Speisen kosten nichts. Das **Lager** sind alle Truhen und Fässer bis
+vier Blöcke um das Stadtbanner und in jedem **Lagerhaus** (das selbst keine Baustoffe kostet). Der Baumeister holt dort,
+was die nächsten Blöcke brauchen; fehlt etwas, wartet er und sagt dir Bescheid. **Abends** (vor Feierabend) bringen
+Bauern, Holzfäller und Bergleute alles, was sie gesammelt haben, aus ihrer Werkstatt ins Lager – der Bergmann bricht
+neben Erz vor allem Stein, der Holzfäller liefert Stämme.
+
 | Stufe (ab Bewohnern) | Gebäude |
 |---|---|
-| Lager (0) | Wohnhaus (2 Betten), Feld, Holzfällerhütte |
+| Lager (0) | Wohnhaus (2 Betten), Feld, Holzfällerhütte, Lagerhaus |
 | Weiler (4) | Brunnen, Schmiede |
 | Dorf (8) | Mine, Markt, Taverne |
 | Marktflecken (14) | Bürgerhaus (4 Betten), Kaserne, Kartenhaus |
@@ -733,8 +749,10 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
   (bricht nach vier Schlägen). Bei zwei und einem Drittel seiner Kraft folgt eine neue **Phase**, und mit ihr sein
   **großer Zauber**: Meteorregen, Blizzard, Gewittersturm, Wildwuchs, Felsbeben oder Mahlstrom – jeder Einschlag
   kündigt sich am Boden an.
-- Gegen sein eigenes Element ist er gefeit. Wer ins Geschoss darunter flieht, entkommt ihm – dann kehrt er geheilt an
-  seinen Platz zurück.
+- Gegen sein eigenes Element ist er gefeit. **Fliehen gilt nicht:** Sobald er erwacht, versiegelt er das Treppenloch mit
+  einem schimmernden **Bannsiegel** in der Farbe seines Elements; solange der Kampf dauert, hält seine Magie Boden,
+  Mauern und Fenster zusammen (nichts lässt sich abbauen, setzen oder sprengen), und keine Enderperle trägt hinaus.
+  Erst sein Sieg löst das Siegel – fällst du, kehrt er geheilt an seinen Platz zurück und das Siegel erlischt.
 - Auch mitten im Getümmel bleibt die Sicht frei: Einschläge werfen ihre Funken, Splitter und Wolken nicht direkt vor
   die Augen dessen, den sie treffen, und Schwächungen durch Bosse (wie auch die Wirkungen eigener Zauber) zeigen sich
   als Zeichen in der Anzeige statt als Wirbel vor den Augen – das gilt ebenso im Kampf gegen die Drachen.
@@ -817,7 +835,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.15.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.16.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -860,7 +878,7 @@ docs/                         Konzept und Bilder
 
 Bei jedem Push baut GitHub Actions die Mod, führt die Datengenerierung und die GameTests aus
 und stellt die JAR als Artefakt bereit (`.github/workflows/build.yml`).
-Ein Tag wie `v0.15.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
+Ein Tag wie `v0.16.0` erzeugt automatisch ein Release mit der JAR (`.github/workflows/release.yml`).
 
 ---
 

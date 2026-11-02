@@ -625,6 +625,51 @@ def shadow_portal(frames: int = 32) -> Image.Image:
 
 
 # =============================================================================
+# Bannsiegel der Erzmagier (je Element, 16 Bilder Animation)
+# =============================================================================
+
+BARRIER_COLORS = {"fire": "#ff6a1a", "ice": "#9fe8ff", "lightning": "#ffe94a", "nature": "#7fe05a", "earth": "#c8a070",
+                  "water": "#4fd0f0"}
+
+
+def arcane_barrier(element: str, frames: int = 16) -> Image.Image:
+    """Eine durchscheinende Wand aus Licht: feines Rautengitter aus Runenlinien, ein heller Rahmen und ein Lichtband, das
+    schräg darüber wandert (nahtlos in Raum und Zeit)."""
+    base = hexc(BARRIER_COLORS[element])
+    r, g, b = base[0], base[1], base[2]
+
+    def tone(k: float, alpha: int):
+        # k < 1 dunkler, k > 1 heller (zum Weiß hin)
+        if k >= 1.0:
+            m = min(1.0, k - 1.0)
+            return (int(r + (255 - r) * m), int(g + (255 - g) * m), int(b + (255 - b) * m), alpha)
+        return (int(r * k), int(g * k), int(b * k), alpha)
+
+    sheet = Image.new("RGBA", (N, N * frames), CLEAR)
+    px = sheet.load()
+    for f in range(frames):
+        t = f / frames
+        for y in range(N):
+            for x in range(N):
+                lattice = (x + y) % 8 == 0 or (x - y) % 8 == 0
+                rune = (x % 8 == 4 and y % 8 in (3, 4, 5)) or (y % 8 == 4 and x % 8 in (3, 5))
+                edge = x in (0, 15) or y in (0, 15)
+                # Lichtband: wandert in einem Durchlauf genau eine Kachel weit (x + y läuft über 32)
+                d = ((x + y) - t * 32) % 32
+                band = max(0.0, 1.0 - min(d, 32 - d) / 5.0)
+                if edge:
+                    c = tone(1.15 + band * 0.4, 175 + int(band * 60))
+                elif lattice:
+                    c = tone(1.05 + band * 0.5, 120 + int(band * 90))
+                elif rune:
+                    c = tone(1.35 + band * 0.4, 150 + int(band * 80))
+                else:
+                    c = tone(0.85 + band * 0.35, 58 + int(band * 70))
+                px[x, f * N + y] = c
+    return sheet
+
+
+# =============================================================================
 # Gegenstände
 # =============================================================================
 
@@ -964,4 +1009,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
         put(f"block/seal_plate_{i:02d}", tile)
         put(f"block/seal_plate_{i:02d}_glow", glow)
     put("block/shadow_portal", shadow_portal())
+    for element in BARRIER_COLORS:
+        put(f"block/arcane_barrier_{element}", arcane_barrier(element))
     put("gui/chronicle", chronicle_gui())

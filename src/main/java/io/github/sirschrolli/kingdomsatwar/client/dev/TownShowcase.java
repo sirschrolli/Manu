@@ -135,6 +135,7 @@ final class TownShowcase {
             Town t = Towns.of(level.getServer()).byOwner(player.getUUID());
             CitizenEntity c = TownManager.spawnCitizen(level, t, Profession.BUILDER);
             builder[0] = c == null ? -1 : c.getId();
+            io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage.supply(level, banner.offset(2, 0, 1), type.costs());
             TownManager.startProject(level, t, type, new BlockPos(ox, y, oz), Rotation.NONE);
             town[0] = t;
             g[0] = y;
@@ -251,6 +252,7 @@ final class TownShowcase {
                 }
             }
             Coins.give(player, 2345);
+            io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage.supply(level, banner.offset(2, 0, -1), BuildingType.HOUSE.costs());
             TownManager.placeProject(player, BuildingType.HOUSE, new BlockPos(ox + 1, g[0], oz + 12), Rotation.NONE);
             // Reihen mit allen Bürgern (je Gesicht eine Reihe, Blick nach Süden)
             for (int v = 0; v < 3; v++) {

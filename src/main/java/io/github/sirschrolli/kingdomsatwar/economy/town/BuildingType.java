@@ -18,6 +18,7 @@ public enum BuildingType implements StringRepresentable {
     HOUSE(TownTier.CAMP, 54, 2, 0),
     FIELD(TownTier.CAMP, 27, 0, 1),
     LUMBER_HUT(TownTier.CAMP, 45, 1, 1),
+    STOREHOUSE(TownTier.CAMP, 27, 0, 0),
     WELL(TownTier.HAMLET, 36, 0, 0),
     SMITHY(TownTier.HAMLET, 108, 1, 1),
     MINE(TownTier.VILLAGE, 108, 0, 2),
@@ -86,6 +87,7 @@ public enum BuildingType implements StringRepresentable {
             case HOUSE -> Items.OAK_DOOR;
             case FIELD -> Items.WHEAT;
             case LUMBER_HUT -> Items.OAK_LOG;
+            case STOREHOUSE -> Items.CHEST;
             case WELL -> Items.WATER_BUCKET;
             case SMITHY -> Items.ANVIL;
             case MINE -> Items.IRON_PICKAXE;
@@ -96,6 +98,16 @@ public enum BuildingType implements StringRepresentable {
             case MAP_HOUSE -> Items.CARTOGRAPHY_TABLE;
             case THRONE_HALL -> ModBlocks.THRONE.get().asItem();
         };
+    }
+
+    /** Kostet der Bau Baustoffe? Das Lagerhaus nicht – es ist das erste, was eine Siedlung braucht. */
+    public boolean costsMaterials() {
+        return this != STOREHOUSE;
+    }
+
+    /** Was der Bau an Baustoffen kostet (Einheiten je {@link Material}). */
+    public int[] costs() {
+        return this.costsMaterials() ? this.blueprint().costs() : new int[Material.values().length];
     }
 
     /** Der Bauplan (einmal erzeugt, dann zwischengespeichert). */

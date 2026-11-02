@@ -110,7 +110,13 @@ final class PlanBuilder {
         return this;
     }
 
-    PlanBuilder workAt(int x, int y, int z) {
+    /** Merkt eine schon gesetzte Truhe als die Truhe des Gebäudes. */
+    PlanBuilder chest(int x, int y, int z) {
+        this.chest = new BlockPos(x, y, z);
+        return this;
+    }
+
+        PlanBuilder workAt(int x, int y, int z) {
         this.work = new BlockPos(x, y, z);
         return this;
     }

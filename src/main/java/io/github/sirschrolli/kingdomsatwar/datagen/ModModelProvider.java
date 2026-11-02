@@ -163,6 +163,14 @@ public class ModModelProvider extends ModelProvider {
                 TextureMapping.cube(chandelier).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE), blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(chandelier, BlockModelGenerators.plainVariant(chandelierModel)));
         blocks.registerSimpleFlatItemModel(chandelier.asItem());
+        // Bannsiegel der Erzmagier: eine Wand je Element (durchscheinend, schimmernd)
+        Block barrier = ModBlocks.ARCANE_BARRIER.get();
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(barrier).with(
+                PropertyDispatch.initial(io.github.sirschrolli.kingdomsatwar.block.ArcaneBarrierBlock.ELEMENT).generate(element -> {
+                    Material tex = new Material(KingdomsAtWar.id("block/arcane_barrier_" + element.id()));
+                    return BlockModelGenerators.plainVariant(ModelTemplates.CUBE_ALL.createWithSuffix(barrier, "_" + element.id(),
+                            new TextureMapping().put(TextureSlot.ALL, tex).put(TextureSlot.PARTICLE, tex), blocks.modelOutput));
+                })));
         // Baugerüst des Baumeisters (ohne Gegenstand)
         Block scaffold = ModBlocks.BUILDER_SCAFFOLD.get();
         Material scaffoldDeck = new Material(KingdomsAtWar.id("block/builder_scaffold_deck"));

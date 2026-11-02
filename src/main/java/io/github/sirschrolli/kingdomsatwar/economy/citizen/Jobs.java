@@ -2,6 +2,8 @@ package io.github.sirschrolli.kingdomsatwar.economy.citizen;
 
 import io.github.sirschrolli.kingdomsatwar.economy.town.Blueprint;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
+import io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownManager;
@@ -208,6 +210,100 @@ final class Jobs {
                 this.citizen.spawnAtLocation(this.level(), rest);
             }
         }
+
+        /** Ab dieser Tageszeit bringen die Sammler ihre Ausbeute ins Lager (Feierabend ist um 11500). */
+        static final long EVENING = 10600;
+        private boolean collected;
+        private @Nullable BlockPos store;
+
+        /**
+         * Abends bringt der Bürger alles Gesammelte ins Lager der Siedlung: erst holt er, was in der Truhe seiner Werkstatt
+         * liegt, dann trägt er es mit dem, was er ohnehin bei sich hat, zum nächsten Behälter des Lagers. Einmal am Tag;
+         * {@code true}, solange er damit beschäftigt ist. Ohne Lager bleibt alles in der Werkstatt.
+         */
+        boolean evening() {
+            long day = Math.floorDiv(this.level().getOverworldClockTime(), 24000L);
+            if (CitizenGoals.time(this.citizen) < EVENING || this.citizen.deliveredDay() == day) {
+                return false;
+            }
+            Town town = this.town();
+            if (town == null) {
+                return false;
+            }
+            // einmal am Abend nachsehen, ob es ein Lager gibt (und wo es am nächsten ist)
+            if (this.store == null) {
+                this.store = TownStorage.nearest(this.level(), town, this.citizen.blockPosition());
+                if (this.store == null) {
+                    this.citizen.setDeliveredDay(day);
+                    return false;
+                }
+            }
+            this.citizen.setWorking(false);
+            if (!this.collected) {
+                Town.Building work = this.workplace();
+                BlockPos chestLocal = work == null ? null : work.type().blueprint().chest();
+                if (work == null || chestLocal == null) {
+                    this.collected = true;
+                    return true;
+                }
+                BlockPos chest = work.world(chestLocal);
+                if (!this.walkTo(chest, 2.4, 0.75)) {
+                    return true;
+                }
+                this.lookAt(chest);
+                if (this.level().getBlockEntity(chest) instanceof Container container) {
+                    SimpleContainer carried = this.citizen.carried();
+                    for (int i = 0; i < container.getContainerSize(); i++) {
+                        ItemStack stack = container.getItem(i);
+                        if (!stack.isEmpty() && carried.canAddItem(stack)) {
+                            ItemStack rest = carried.addItem(stack.copy());
+                            container.setItem(i, rest);
+                        }
+                    }
+                    container.setChanged();
+                    openLid(this.level(), chest);
+                    this.citizen.swingArm();
+                }
+                this.collected = true;
+                return true;
+            }
+            BlockPos store = this.store;
+            if (!this.carriesAnything()) {
+                this.collected = false;
+                this.store = null;
+                this.citizen.setDeliveredDay(day);
+                return false;
+            }
+            if (!this.walkTo(store, 2.4, 0.75)) {
+                return true;
+            }
+            this.lookAt(store);
+            SimpleContainer carried = this.citizen.carried();
+            for (int i = 0; i < carried.getContainerSize(); i++) {
+                ItemStack stack = carried.getItem(i);
+                if (!stack.isEmpty()) {
+                    carried.setItem(i, TownStorage.store(this.level(), town, stack, store));
+                }
+            }
+            openLid(this.level(), store);
+            this.citizen.swingArm();
+            this.collected = false;
+            this.store = null;
+            this.citizen.setDeliveredDay(day);
+            return false;
+        }
+    }
+
+    /** Öffnet den Deckel einer Truhe kurz (mit Geräusch); bei Fässern nur das Geräusch. */
+    static void openLid(ServerLevel level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof ChestBlock) {
+            level.blockEvent(pos, state.getBlock(), 1, 1);
+            level.scheduleTick(pos, state.getBlock(), 12);
+            level.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 0.5f, 1.0f);
+        } else {
+            level.playSound(null, pos, SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 0.5f, 1.0f);
+        }
     }
 
     /** Legt einen Stapel in einen Behälter; gibt zurück, was nicht hineinpasst. */
@@ -389,6 +485,13 @@ final class Jobs {
                 this.lookAt(at);
                 return;
             }
+            // Baustoff dabei? Sonst erst ins Lager.
+            Material need = project.type.costsMaterials() ? Blueprint.cost(step) : null;
+            if (need != null && this.citizen.stock(need) <= 0) {
+                this.stalled = 0;
+                this.fetch(town, project, need);
+                return;
+            }
             if (++this.stalled > STALL) {
                 // nirgends ein Platz: dann eben von hier aus (der Bau bleibt nie stecken)
                 this.statForced++;
@@ -482,6 +585,10 @@ final class Jobs {
 
         private void build(Town.Project project, Blueprint.Step step) {
             BlockPos at = step.pos();
+            Material need = project.type.costsMaterials() ? Blueprint.cost(step) : null;
+            if (need != null) {
+                this.citizen.addStock(need, -1);
+            }
             this.citizen.getNavigation().stop();
             this.citizen.setWorking(true);
             this.lookAt(at);
@@ -500,6 +607,94 @@ final class Jobs {
             this.stalled = 0;
             // Wegräumen geht schneller als Bauen
             this.cooldown = step.state().isAir() ? 0 : 2;
+        }
+
+        // ------------------------------------------------------------------ Baustoffe
+
+        /**
+         * Holt Baustoffe aus dem Lager – so viel, wie die nächsten Blöcke brauchen (je Baustoff höchstens einen Stapel). Fehlt
+         * der Baustoff im Lager (oder gibt es gar keins), wartet er dort und sagt dem Herrn der Siedlung Bescheid.
+         */
+        private void fetch(Town town, Town.Project project, Material need) {
+            this.citizen.setWorking(false);
+            BlockPos feet = this.feet();
+            if (this.onScaffold(feet)) {
+                this.startClimbDown(feet, project.progress);
+                return;
+            }
+            BlockPos store = TownStorage.nearest(this.level(), town, feet);
+            if (store == null) {
+                this.waitFor(town, project, need, false);
+                return;
+            }
+            if (this.citizen.distanceToSqr(Vec3.atCenterOf(store)) > 2.6 * 2.6) {
+                BlockPos spot = standingSpot(this.level(), store);
+                this.go(spot != null ? spot : store);
+                return;
+            }
+            this.citizen.getNavigation().stop();
+            this.lookAt(store);
+            if (this.fetchCooldown > 0) {
+                this.fetchCooldown--;
+                return;
+            }
+            int[] want = this.demand(project);
+            boolean got = false;
+            for (Material m : Material.values()) {
+                int missing = Math.max(m == need ? 1 : 0, want[m.ordinal()]) - this.citizen.stock(m);
+                if (missing > 0) {
+                    int n = TownStorage.take(this.level(), town, m, missing);
+                    if (n > 0) {
+                        this.citizen.addStock(m, n);
+                        got = true;
+                    }
+                }
+            }
+            if (got) {
+                openLid(this.level(), store);
+                this.citizen.swingArm();
+            }
+            if (this.citizen.stock(need) <= 0) {
+                this.waitFor(town, project, need, true);
+                this.fetchCooldown = 100;
+            } else {
+                project.waiting = null;
+                this.goingTo = null;
+            }
+        }
+
+        private int fetchCooldown;
+
+        /** Was die nächsten Blöcke brauchen (Einheiten je Baustoff, höchstens 64). */
+        private int[] demand(Town.Project project) {
+            int[] want = new int[Material.values().length];
+            List<Blueprint.Step> steps = project.steps();
+            int counted = 0;
+            for (int i = project.progress; i < steps.size() && counted < 160; i++) {
+                Blueprint.Step s = steps.get(i);
+                Material m = Blueprint.cost(s);
+                if (m != null && want[m.ordinal()] < 64 && this.needsWork(s)) {
+                    want[m.ordinal()]++;
+                    counted++;
+                }
+            }
+            return want;
+        }
+
+        /** Der Baustoff fehlt: warten und (einmal) Bescheid sagen. */
+        private void waitFor(Town town, Town.Project project, Material need, boolean storage) {
+            this.citizen.getNavigation().stop();
+            if (project.waiting != need) {
+                project.waiting = need;
+                net.minecraft.server.level.ServerPlayer owner = this.level().getServer().getPlayerList().getPlayer(town.owner());
+                if (owner != null) {
+                    owner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                            storage ? "message.kingdomsatwar.town.waiting" : "message.kingdomsatwar.town.no_storage",
+                            net.minecraft.network.chat.Component.translatable(project.type.translationKey()),
+                            net.minecraft.network.chat.Component.translatable(need.translationKey()))
+                            .withStyle(net.minecraft.ChatFormatting.GOLD));
+                }
+            }
         }
 
         /** Alles gesetzt: erst vom Gerüst herunter, dann die Gerüste abbauen, dann ist das Gebäude fertig. */
@@ -1025,6 +1220,9 @@ final class Jobs {
 
         @Override
         void tick() {
+            if (this.evening()) {
+                return;
+            }
             if (this.loaded(24) || (this.carriesAnything() && CitizenGoals.time(this.citizen) > 11000)) {
                 this.citizen.setWorking(false);
                 this.deliver();
@@ -1173,6 +1371,9 @@ final class Jobs {
 
         @Override
         void tick() {
+            if (this.logs.isEmpty() && this.evening()) {
+                return;
+            }
             if (this.loaded(32) || (this.logs.isEmpty() && this.carriesAnything() && CitizenGoals.time(this.citizen) > 11000)) {
                 this.citizen.setWorking(false);
                 if (this.deliver() && this.logs.isEmpty()) {
@@ -1387,6 +1588,10 @@ final class Jobs {
             BlockPos bottom = mine.world(new BlockPos(0, -11, 1));
             BlockPos spot = plan.workSpot() != null ? mine.world(plan.workSpot()) : bottom;
             boolean endOfDay = CitizenGoals.time(this.citizen) > 10500;
+            // oben angekommen: abends alles ins Lager
+            if ((this.phase == Phase.TO_SHAFT || this.phase == Phase.DELIVER && !this.carriesAnything()) && endOfDay && this.evening()) {
+                return;
+            }
             switch (this.phase) {
                 case TO_SHAFT -> {
                     this.citizen.setWorking(false);

@@ -72,7 +72,9 @@ public final class Town {
         public final BlockPos origin;
         public final Rotation rotation;
         public int progress;
-        /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
+        /** Baustoff, auf den die Baustelle gerade wartet (nicht gespeichert; der Baumeister prüft es neu). */
+        public @Nullable Material waiting;
+                /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
         private @Nullable List<Blueprint.Step> steps;
 
         public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress) {

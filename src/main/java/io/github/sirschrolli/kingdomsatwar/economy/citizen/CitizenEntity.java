@@ -41,6 +41,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
@@ -58,6 +59,10 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
 
     /** Waren, die der Bürger bei sich trägt, bis er sie in die Truhe seiner Werkstatt bringt. */
     private final SimpleContainer carried = new SimpleContainer(12);
+    /** Baustoffe, die der Baumeister aus dem Lager geholt hat (Einheiten je {@link Material}). */
+    private final int[] stock = new int[Material.values().length];
+    /** Der Tag (seit Weltbeginn), an dem der Bürger zuletzt abends ins Lager gebracht hat. */
+    private long deliveredDay = -1;
     private @Nullable UUID townId;
     private @Nullable BlockPos bed;
     private @Nullable BlockPos work;
@@ -130,6 +135,8 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
         output.putInt("TradesUsed", this.tradesUsed);
         output.putLong("ClosedUntil", this.closedUntil);
         this.carried.storeAsItemList(output.list("Carried", ItemStack.OPTIONAL_CODEC));
+        output.putIntArray("Stock", this.stock.clone());
+        output.putLong("DeliveredDay", this.deliveredDay);
     }
 
     @Override
@@ -150,6 +157,28 @@ public class CitizenEntity extends PathfinderMob implements CoinTrader {
         this.tradesUsed = input.getIntOr("TradesUsed", 0);
         this.closedUntil = input.getLongOr("ClosedUntil", 0L);
         this.carried.fromItemList(input.listOrEmpty("Carried", ItemStack.OPTIONAL_CODEC));
+        int[] stock = input.getIntArray("Stock").orElse(new int[0]);
+        for (int i = 0; i < this.stock.length; i++) {
+            this.stock[i] = i < stock.length ? Math.max(0, stock[i]) : 0;
+        }
+        this.deliveredDay = input.getLongOr("DeliveredDay", -1L);
+    }
+
+    /** Wie viele Einheiten eines Baustoffs der Bürger bei sich hat. */
+    public int stock(Material material) {
+        return this.stock[material.ordinal()];
+    }
+
+    public void addStock(Material material, int units) {
+        this.stock[material.ordinal()] = Math.max(0, this.stock[material.ordinal()] + units);
+    }
+
+    long deliveredDay() {
+        return this.deliveredDay;
+    }
+
+    void setDeliveredDay(long day) {
+        this.deliveredDay = day;
     }
 
     public Profession getProfession() {

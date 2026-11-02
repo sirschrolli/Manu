@@ -362,6 +362,19 @@ public final class TownManager {
         player.sendSystemMessage(Component.translatable(builder ? "message.kingdomsatwar.town.project_started"
                 : "message.kingdomsatwar.town.project_no_builder", Component.translatable(type.translationKey())).withStyle(
                 builder ? ChatFormatting.GREEN : ChatFormatting.GOLD));
+        if (type.costsMaterials()) {
+            // was der Bau an Baustoffen braucht und was davon im Lager liegt
+            int[] costs = type.costs();
+            int[] stock = TownStorage.counts(level, town);
+            Component[] parts = new Component[Material.values().length];
+            for (Material m : Material.values()) {
+                parts[m.ordinal()] = Component.translatable("message.kingdomsatwar.town.material", costs[m.ordinal()],
+                        Component.translatable(m.translationKey()), stock[m.ordinal()])
+                        .withStyle(stock[m.ordinal()] >= costs[m.ordinal()] ? ChatFormatting.GRAY : ChatFormatting.RED);
+            }
+            player.sendSystemMessage(Component.translatable(TownStorage.exists(level, town) ? "message.kingdomsatwar.town.materials"
+                    : "message.kingdomsatwar.town.materials_no_storage", parts[0], parts[1], parts[2]).withStyle(ChatFormatting.GRAY));
+        }
         return PlaceResult.PLACED;
     }
 
