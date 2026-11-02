@@ -100,7 +100,8 @@ public final class DragonBreath {
         return to.normalize().dot(dir) > CONE_COS || dist < 1.5;
     }
 
-    private static boolean isAlly(DragonEntity dragon, LivingEntity target) {
+    /** Gehört das Ziel zur Seite des Drachen (sein Herr, dessen Tiere und Verbündete, bei wilden Drachen andere Drachen)? */
+    static boolean isAlly(DragonEntity dragon, LivingEntity target) {
         LivingEntity owner = dragon.getOwner();
         if (owner == null) {
             return target instanceof DragonEntity;

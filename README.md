@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.36.0 – Köpfe und Schädel im Gesicht der eigenen Wesen; dazu die Sternwarte statt der Endstadt (damit sind alle Vanilla-Bauwerke ersetzt), Riesengebeine, die Verlorene Pforte, die Hortfeste und die Aschenesse.**
+> **Testversion 0.36.1 – geschlüpfte Drachen sind immer friedlich; dazu Köpfe und Schädel im Gesicht der eigenen Wesen; dazu die Sternwarte statt der Endstadt (damit sind alle Vanilla-Bauwerke ersetzt), Riesengebeine, die Verlorene Pforte, die Hortfeste und die Aschenesse.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,12 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.36: **Köpfe und Schädel.** Die Köpfe von Vanilla tragen jetzt das Gesicht der eigenen Wesen: der
+> Neu in 0.36.1: **Drachen sind friedlich.** Ein Drache, der aus dem Ei schlüpft, gehört dem Spieler, der dabei ist, und
+> folgt ihm – ebenso ein Drache aus dem Spawn-Ei (er gehört dem, der das Ei benutzt). Kein Drache greift mehr von sich aus
+> Spieler an; Drachen verschonen ihren Herrn, seine Soldaten und seine Tiere auch nach einem versehentlichen Treffer. Ein
+> Drache ohne Herrn (aus älteren Welten) schließt sich dem an, der ihn füttert. Ohne einen Spieler in der Nähe schlüpft
+> kein Ei – auch nicht nach einem Blitzschlag.
+> Seit 0.36: **Köpfe und Schädel.** Die Köpfe von Vanilla tragen jetzt das Gesicht der eigenen Wesen: der
 > **Gerippeschädel** (statt Skelettschädel), der **Brandgebeinschädel** mit Flammen (statt Witherskelettschädel), der
 > **Wiedergängerkopf** (statt Zombiekopf), der **Kriecherkopf** aus Laub mit Blüte (statt Creeperkopf), der
 > **Borstlingskopf** mit Rüssel, Hauern und wackelnden Ohren (statt Piglinkopf) und der **Sternenfresserkopf** mit
@@ -824,7 +829,9 @@ Farben, Partikel und Geräusche hat.
 
 Wilde Drachen gibt es nicht mehr: **Dracheneier bekommt man nur von besiegten Drachen-Bossen.** Ein Ei schlüpft,
 wenn es am richtigen Ort liegt **und ein Spieler in der Nähe ist** (bis 24 Blöcke) – ein Drache schlüpft nie allein,
-und der Schlüpfling gehört dem, der dabei war.
+und der Schlüpfling gehört dem, der dabei war, und folgt ihm. **Drachen sind friedlich:** Sie greifen nie von sich aus
+Spieler an, verteidigen ihren Herrn und verschonen ihn, seine Soldaten und seine Tiere selbst nach einem
+versehentlichen Treffer. Ein Drache aus dem Spawn-Ei gehört dem, der das Ei benutzt.
 
 | Drachenart | Zum Ausbrüten … | Odem |
 |---|---|---|

@@ -136,10 +136,19 @@ public class ElementalDragonEggBlock extends Block implements SimpleWaterloggedB
                 && level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, WITNESS_RANGE, false) != null;
     }
 
-    /** Bringt das Brüten um {@code steps} Stufen voran; bei voller Stufe schlüpft der Drache. */
+    /**
+     * Bringt das Brüten um {@code steps} Stufen voran; bei voller Stufe schlüpft der Drache – aber nur, wenn ein Spieler
+     * dabei ist (sonst wartet das Ei kurz vor dem Schlüpfen, z. B. nach einem Blitzschlag in der Nähe).
+     */
     public void advance(ServerLevel level, BlockPos pos, BlockState state, int steps) {
         int hatch = state.getValue(HATCH) + steps;
         if (hatch > 3) {
+            if (witness(level, pos) == null) {
+                if (state.getValue(HATCH) < 3) {
+                    level.setBlock(pos, state.setValue(HATCH, 3), Block.UPDATE_ALL);
+                }
+                return;
+            }
             this.hatch(level, pos, state);
             return;
         }
@@ -163,16 +172,22 @@ public class ElementalDragonEggBlock extends Block implements SimpleWaterloggedB
         }
         dragon.applyStage(DragonStage.HATCHLING, true);
         dragon.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360.0f, 0.0f);
-        Player player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, WITNESS_RANGE, false);
-        if (player != null && !player.isSpectator()) {
-            dragon.tame(player);
-            dragon.setMode(DragonEntity.MODE_FOLLOW);
+        Player player = witness(level, pos);
+        if (player != null) {
+            dragon.bondWith(player);
             dragon.getLookControl().setLookAt(player);
             player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.dragon_hatched", dragon.getType().getDescription())
                     .withStyle(ChatFormatting.GOLD));
         }
         dragon.setPersistenceRequired();
         level.addFreshEntity(dragon);
+    }
+
+    /** Der Spieler, dem der Schlüpfling gehören wird (der nächste, nicht zuschauende Spieler in der Nähe). */
+    private static @org.jspecify.annotations.Nullable Player witness(Level level, BlockPos pos) {
+        Player player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, WITNESS_RANGE,
+                net.minecraft.world.entity.EntitySelector.NO_SPECTATORS);
+        return player;
     }
 
     /** Liegt das Ei an einem Ort, an dem es brüten kann? */

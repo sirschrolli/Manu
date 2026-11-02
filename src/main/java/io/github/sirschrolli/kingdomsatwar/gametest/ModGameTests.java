@@ -105,6 +105,8 @@ public final class ModGameTests {
             TEST_FUNCTIONS.register("dragon_egg_incubation", () -> ModGameTests::dragonEggIncubation);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_EGG_HATCHES =
             TEST_FUNCTIONS.register("dragon_egg_hatches", () -> ModGameTests::dragonEggHatches);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_HATCHLING_FRIENDLY =
+            TEST_FUNCTIONS.register("dragon_hatchling_friendly", () -> ModGameTests::dragonHatchlingFriendly);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_GROWTH =
             TEST_FUNCTIONS.register("dragon_growth", () -> ModGameTests::dragonGrowth);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DRAGON_FEEDING =
@@ -197,7 +199,7 @@ public final class ModGameTests {
                     new TestData<>(environment, PLATFORM, 100, 0, true)));
         }
         for (DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test :
-                List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
+                List.of(DRAGON_EGG_INCUBATION, DRAGON_EGG_HATCHES, DRAGON_HATCHLING_FRIENDLY, DRAGON_GROWTH, DRAGON_FEEDING, DRAGON_BREATH,
                         SOLDIER_RECRUIT, SOLDIER_FIGHTS, SOLDIER_ALLIES, SOLDIER_HOLDS_POST, BANDIT_LOOT, KONTERIT_ARMOR,
                         SCALE_ARMOR_SET, DRACONIUM_IGNITES, DRAGON_ARMOR, GLIDER_AND_CROWN, CREATURES_SPAWN, BOAR_RETALIATES,
                         LINDWORM_HUNTS, TROLL_FIGHTS_SOLDIERS, FURNITURE_SEATS, DECOR_BLOCKS, DRINKS_AND_FEAST,
@@ -475,9 +477,13 @@ public final class ModGameTests {
         }));
     }
 
-    /** Ein brütendes Ei bekommt Risse, dann schlüpft ein Schlüpfling. */
+    /** Ein brütendes Ei bekommt Risse, dann schlüpft ein Schlüpfling (ein Spieler ist dabei – allein schlüpft kein Drache). */
     private static void dragonEggHatches(GameTestHelper helper) {
         arenaFloor(helper);
+        net.minecraft.server.level.ServerPlayer witness = helper.makeMockServerPlayerInLevel();
+        witness.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        Vec3 near = helper.absoluteVec(new Vec3(7.5, 1.0, 7.5));
+        witness.snapTo(near.x, near.y, near.z, 0.0f, 0.0f);
         BlockPos pos = new BlockPos(4, 1, 4);
         ElementalDragonEggBlock egg = ModBlocks.DRAGON_EGGS.get(DragonType.FIRE).get();
         helper.setBlock(pos.below(), Blocks.MAGMA_BLOCK);
@@ -489,10 +495,73 @@ public final class ModGameTests {
             helper.assertBlockProperty(pos, ElementalDragonEggBlock.HATCH, stage);
         }
         egg.advance(level, absolute, level.getBlockState(absolute), 1);
+        witness.discard();
         helper.assertBlockNotPresent(egg, pos);
         DragonEntity dragon = helper.findOneEntity(ModEntities.DRAGONS.get(DragonType.FIRE).get());
         helper.assertTrue(dragon.getStage() == DragonStage.HATCHLING, "Geschlüpfter Drache ist kein Schlüpfling");
         helper.assertTrue(dragon.position().distanceTo(Vec3.atBottomCenterOf(absolute)) < 1.0, "Drache schlüpft nicht am Ei");
+        helper.succeed();
+    }
+
+    /**
+     * Geschlüpfte Drachen sind friedlich: Der Schlüpfling aus dem Ei gehört dem Spieler daneben und folgt ihm, ein Drache aus
+     * dem Spawn-Ei ebenso; auch ausgewachsen greift er Spieler nie von sich aus an (auch keinen fremden), den eigenen Herrn
+     * nicht einmal nach einem Versehen. Ohne Zeugen schlüpft auch nach einem Blitzschlag nichts.
+     */
+    private static void dragonHatchlingFriendly(GameTestHelper helper) {
+        arenaFloor(helper);
+        ServerLevel level = helper.getLevel();
+        // Der Spieler lebt nur in diesem einen Augenblick (die Tests laufen nebeneinander – andere Eier sollen ihn nicht sehen)
+        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        Vec3 at = helper.absoluteVec(new Vec3(6.5, 1.0, 6.5));
+        player.snapTo(at.x, at.y, at.z, 0.0f, 0.0f);
+        // 1) Ei mit einem Spieler daneben
+        BlockPos pos = new BlockPos(4, 1, 4);
+        ElementalDragonEggBlock egg = ModBlocks.DRAGON_EGGS.get(DragonType.ICE).get();
+        helper.setBlock(pos.below(), Blocks.PACKED_ICE);
+        helper.setBlock(pos, egg);
+        BlockPos absolute = helper.absolutePos(pos);
+        for (int i = 0; i < 4; i++) {
+            egg.advance(level, absolute, level.getBlockState(absolute), 1);
+        }
+        // 2) Drache aus dem Spawn-Ei
+        DragonEntity fromEgg = ModEntities.DRAGONS.get(DragonType.FIRE).get().spawn(level, helper.absolutePos(new BlockPos(7, 1, 3)),
+                net.minecraft.world.entity.EntitySpawnReason.SPAWN_ITEM_USE);
+        boolean eggTame = fromEgg != null && fromEgg.isTame() && fromEgg.isOwnedBy(player);
+        java.util.List<DragonEntity> hatched = helper.getLevel().getEntitiesOfClass(DragonEntity.class,
+                new net.minecraft.world.phys.AABB(absolute).inflate(2.0), d -> d.getType() == ModEntities.DRAGONS.get(DragonType.ICE).get());
+        DragonEntity hatchling = hatched.isEmpty() ? null : hatched.get(0);
+        boolean owned = hatchling != null && hatchling.isTame() && hatchling.isOwnedBy(player);
+        boolean follows = hatchling != null && hatchling.getMode() == DragonEntity.MODE_FOLLOW;
+        boolean spares = hatchling != null && !hatchling.canAttack(player);
+        player.discard();
+        helper.assertBlockNotPresent(egg, pos);
+        helper.assertTrue(hatchling != null, "Kein Schlüpfling am Ei");
+        helper.assertTrue(owned, "Schlüpfling gehört nicht dem Spieler daneben");
+        helper.assertTrue(follows, "Schlüpfling folgt seinem Herrn nicht");
+        helper.assertTrue(spares, "Schlüpfling dürfte seinen Herrn angreifen");
+        helper.assertTrue(eggTame, "Drache aus dem Spawn-Ei gehört niemandem");
+        // 3) Kein Drache sucht sich von sich aus Spieler als Ziel (es gibt keine wilden Drachen mehr)
+        DragonEntity adult = helper.spawnWithNoFreeWill(ModEntities.DRAGONS.get(DragonType.EARTH).get(), new BlockPos(2, 1, 7));
+        adult.applyStage(DragonStage.ADULT, true);
+        boolean hunts = adult.targetSelector.getAvailableGoals().stream()
+                .anyMatch(goal -> goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<?>);
+        helper.assertFalse(hunts, "Ein Drache ohne Herrn jagt Spieler");
+        // 4) Blitzschlag ohne Zeugen: das Ei wartet kurz vor dem Schlüpfen (sofern wirklich niemand in der Nähe ist)
+        BlockPos far = new BlockPos(1, 1, 1);
+        ElementalDragonEggBlock storm = ModBlocks.DRAGON_EGGS.get(DragonType.LIGHTNING).get();
+        helper.setBlock(far, storm);
+        BlockPos stormAt = helper.absolutePos(far);
+        boolean anyone = level.getNearestPlayer(stormAt.getX() + 0.5, stormAt.getY() + 0.5, stormAt.getZ() + 0.5,
+                ElementalDragonEggBlock.WITNESS_RANGE, net.minecraft.world.entity.EntitySelector.NO_SPECTATORS) != null;
+        for (int i = 0; i < 5; i++) {
+            storm.advance(level, stormAt, level.getBlockState(stormAt), 1);
+        }
+        if (!anyone) {
+            helper.assertBlockPresent(storm, far);
+            helper.assertBlockProperty(far, ElementalDragonEggBlock.HATCH, 3);
+        }
         helper.succeed();
     }
 

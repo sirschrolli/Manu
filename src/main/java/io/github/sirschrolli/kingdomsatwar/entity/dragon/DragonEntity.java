@@ -47,7 +47,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -528,6 +527,10 @@ public class DragonEntity extends TamableAnimal {
 
         if (this.isFood(stack)) {
             if (!this.level().isClientSide()) {
+                // ein Drache ohne Herrn (aus alten Welten) schließt sich dem an, der ihn füttert
+                if (!this.isTame()) {
+                    this.bondWith(player);
+                }
                 boolean dragonFood = stack.is(ModItems.DRAGON_FOOD.get());
                 this.heal(this.getMaxHealth() * (dragonFood ? 0.25f : 0.08f));
                 this.addGrowth(dragonFood ? 3000 : 600);
@@ -661,11 +664,29 @@ public class DragonEntity extends TamableAnimal {
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 10.0f));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        // Drachen sind friedlich: Sie verteidigen ihren Herrn und sich selbst, greifen aber nie von sich aus Spieler an
+        // (wilde Drachen gibt es nicht mehr – jeder Drache schlüpft bei einem Spieler und gehört ihm)
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
-                (target, level) -> !this.isTame() && this.getStage().number() >= 4 && target.distanceToSqr(this) < 144));
+    }
+
+    /** Nie den eigenen Herrn, seine Tiere, seine Soldaten oder andere Verbündete angreifen (auch nicht nach einem Versehen). */
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        if (this.isTame() && DragonBreath.isAlly(this, target)) {
+            return false;
+        }
+        return super.canAttack(target);
+    }
+
+    /** Einem Spieler gehören (Schlüpfen, Spawn-Ei, Füttern): folgt ihm ab sofort. */
+    public void bondWith(Player player) {
+        this.tame(player);
+        this.setMode(MODE_FOLLOW);
+        this.setTarget(null);
+        this.navigation.stop();
+        this.level().broadcastEntityEvent(this, (byte) 7);
     }
 
     @Override
@@ -673,6 +694,13 @@ public class DragonEntity extends TamableAnimal {
             @Nullable SpawnGroupData groupData) {
         if (reason == EntitySpawnReason.SPAWN_ITEM_USE || reason == EntitySpawnReason.COMMAND) {
             this.applyStage(DragonStage.HATCHLING, true);
+        }
+        // Aus dem Spawn-Ei: Der Schlüpfling gehört dem, der das Ei benutzt hat (dem nächsten Spieler daneben)
+        if (reason == EntitySpawnReason.SPAWN_ITEM_USE || reason == EntitySpawnReason.DISPENSER) {
+            Player player = level.getNearestPlayer(this.getX(), this.getY(), this.getZ(), 12.0, false);
+            if (player != null && !player.isSpectator()) {
+                this.bondWith(player);
+            }
         }
         return super.finalizeSpawn(level, difficulty, reason, groupData);
     }
