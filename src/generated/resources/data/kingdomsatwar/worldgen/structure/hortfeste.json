@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/hortfeste",
+  "kind": "hortfeste",
+  "spawn_overrides": {},
+  "step": "top_layer_modification"
+}

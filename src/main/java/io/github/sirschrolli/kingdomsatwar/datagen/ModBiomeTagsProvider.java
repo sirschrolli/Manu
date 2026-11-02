@@ -220,6 +220,11 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         // in der Unterwelt: die Aschenesse überall (wie die Festung, die sie ersetzt)
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ASH_FORGE)).addTag(BiomeTags.IS_NETHER);
         this.tag(BiomeTags.HAS_NETHER_FORTRESS).replace();
+        // die Hortfeste, wo früher Bastionen standen (nicht in den Basaltdeltas)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.HORTFESTE)).add(net.minecraft.world.level.biome.Biomes.CRIMSON_FOREST)
+                .add(net.minecraft.world.level.biome.Biomes.NETHER_WASTES).add(net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY)
+                .add(net.minecraft.world.level.biome.Biomes.WARPED_FOREST);
+        this.tag(BiomeTags.HAS_BASTION_REMNANT).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
                 BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,

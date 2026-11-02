@@ -1078,6 +1078,9 @@ public class ModLanguageProvider extends LanguageProvider {
         add("entity.minecraft.ender_dragon", pick("Star Devourer", "Sternenfresser"));
         // Fortschritte, die jetzt zu den eigenen Bauwerken führen
         add("advancements.nether.find_fortress.title", pick("The Ash Forge", "Die Aschenesse"));
+        add("advancements.nether.find_bastion.title", pick("The Hoard Fortress", "Die Hortfeste"));
+        add("advancements.nether.find_bastion.description", pick("Enter the Bristlings' golden hoard fortress",
+                "Betritt die goldene Stufenburg der Borstlinge"));
         add("advancements.nether.find_fortress.description", pick("Enter the Ash King's forge in the Nether",
                 "Betritt die Esse des Aschenkönigs in der Unterwelt"));
         add("advancements.story.follow_ender_eye.description", pick("Follow an Eye of Ender to a Fallen Star",

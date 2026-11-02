@@ -94,6 +94,8 @@ final class SiteGameTests {
             ModGameTests.TEST_FUNCTIONS.register("site_vanilla_off", () -> SiteGameTests::vanillaOff);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ASH_FORGE =
             ModGameTests.TEST_FUNCTIONS.register("site_ash_forge", () -> SiteGameTests::ashForge);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> HORTFESTE =
+            ModGameTests.TEST_FUNCTIONS.register("site_hortfeste", () -> SiteGameTests::hortfeste);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ASH_FORGE_BRIDGES =
             ModGameTests.TEST_FUNCTIONS.register("site_ash_forge_bridges", () -> SiteGameTests::ashForgeBridges);
 
@@ -122,6 +124,7 @@ final class SiteGameTests {
         add(event, environment, VANILLA_SITES_OFF, 100);
         add(event, environment, ASH_FORGE, 100);
         add(event, environment, ASH_FORGE_BRIDGES, 100);
+        add(event, environment, HORTFESTE, 100);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
@@ -956,6 +959,73 @@ final class SiteGameTests {
      * Brandgebeine als Wache in der Schmiede; ein Bewohner kommt über die Wendeltreppe von der Schlackenhalle bis in den
      * Warzengarten.
      */
+    /**
+     * Die Hortfeste (unten bis in die Hortkammer, so weit der Testbereich reicht): Gold im Boden der Halle, ein Feuerbecken,
+     * Arkaden, Ställe mit Glutkeilern, Treppen nach oben, die Hortkammer mit Netheritschutt, zwei Glutschleim-Spawnern und
+     * dem Hort; Borstlinge und Borstenhünen; Truhen mit der Beute der Bastion.
+     */
+    private static void hortfeste(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.NETHERRACK.defaultBlockState());
+        BlockPos c = helper.absolutePos(new BlockPos(24, 2, 24));
+        build(helper, SiteSamples.hortfeste(c));
+        List<String> problems = new ArrayList<>();
+        ServerLevel level = helper.getLevel();
+        BlockPos o = c.below();
+        // die Mitte der Halle: Gold, das Feuerbecken davor
+        if (!level.getBlockState(o).is(Blocks.GOLD_BLOCK) || !level.getBlockState(o.offset(0, 2, 4)).is(Blocks.FIRE)) {
+            problems.add("keine goldene Mitte mit Feuerbecken");
+        }
+        // die Seitentore stehen offen
+        for (int s : new int[] {-1, 1}) {
+            if (count(helper, o.offset(s * 19, 1, -1), o.offset(s * 19, 4, 1), st -> !st.isAir()) > 0) {
+                problems.add("das Tor bei x = " + s * 19 + " ist zu");
+            }
+        }
+        // die Treppen im Inneren
+        if (!level.getBlockState(o.offset(0, 1, -2)).is(Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS)
+                || !level.getBlockState(o.offset(4, 11, -5)).is(Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS)) {
+            problems.add("die Treppen nach oben fehlen");
+        }
+        // die Hortkammer
+        for (int sx : new int[] {-1, 1}) {
+            BlockPos p = o.offset(sx * 6, 21, -6);
+            if (!(level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity spawner)) {
+                problems.add("kein Spawner bei " + helper.relativePos(p));
+                continue;
+            }
+            Entity shown = spawner.getSpawner().getOrCreateDisplayEntity(level, p);
+            if (shown == null || shown.getType() != ModEntities.MAGMA_CUBE.get()) {
+                problems.add("Spawner ohne Glutschleim bei " + helper.relativePos(p));
+            }
+        }
+        int gold = count(helper, o.offset(-7, 20, -7), o.offset(7, 23, 7), st -> st.is(Blocks.GOLD_BLOCK) || st.is(Blocks.RAW_GOLD_BLOCK));
+        if (gold < 20) {
+            problems.add("zu wenig Gold in der Hortkammer: " + gold);
+        }
+        if (count(helper, o.offset(-8, 20, -8), o.offset(8, 23, 8), st -> st.is(Blocks.ANCIENT_DEBRIS)) < 3) {
+            problems.add("kein Netheritschutt in den Wänden");
+        }
+        if (!(level.getBlockEntity(o.offset(0, 21, -6)) instanceof net.minecraft.world.level.block.entity.ChestBlockEntity hoard)
+                || !net.minecraft.world.level.storage.loot.BuiltInLootTables.BASTION_TREASURE.equals(hoard.getLootTable())) {
+            problems.add("der Hort fehlt");
+        }
+        int chests = lootChests(helper, o.offset(-19, 1, -19), o.offset(19, 27, 19), st -> st.is(Blocks.CHEST));
+        if (chests < 6) {
+            problems.add("Truhen: " + chests);
+        }
+        // die Bewohner
+        AABB box = AABB.encapsulatingFullBlocks(o.offset(-20, 0, -20), o.offset(20, 28, 20));
+        int piglins = level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, box, m -> m.getType() == ModEntities.PIGLIN.get()).size();
+        int brutes = level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, box, m -> m.getType() == ModEntities.PIGLIN_BRUTE.get()).size();
+        int hoglins = level.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, box, m -> m.getType() == ModEntities.HOGLIN.get()).size();
+        if (piglins < 6 || brutes < 3 || hoglins < 3) {
+            problems.add("Bewohner: " + piglins + " Borstlinge, " + brutes + " Borstenhünen, " + hoglins + " Glutkeiler");
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
     private static void ashForge(GameTestHelper helper) {
         clear(helper);
         fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.NETHERRACK.defaultBlockState());
@@ -1084,7 +1154,8 @@ final class SiteGameTests {
                 BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_PILLAGER_OUTPOST, BiomeTags.HAS_RUINED_PORTAL_STANDARD,
                 BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA,
                 BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
-                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION, BiomeTags.HAS_NETHER_FORTRESS)) {
+                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION, BiomeTags.HAS_NETHER_FORTRESS,
+                BiomeTags.HAS_BASTION_REMNANT)) {
             helper.assertTrue(biomes.get(tag).map(set -> set.size() == 0).orElse(true), "altes Bauwerk noch erlaubt: " + tag.location());
         }
         // in der Unterwelt nimmt die Aschenesse die Plätze der Festung ein (neben den Bastionen)
@@ -1094,6 +1165,10 @@ final class SiteGameTests {
                 "die Aschenesse fehlt bei den Plätzen der Unterwelt");
         helper.assertTrue(complexes.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.FORTRESS)),
                 "die alte Festung hat noch Plätze");
+        helper.assertTrue(complexes.structures().stream().anyMatch(e -> e.structure().is(ModStructures.site(SiteKind.HORTFESTE))),
+                "die Hortfeste fehlt bei den Plätzen der Unterwelt");
+        helper.assertTrue(complexes.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.BASTION_REMNANT)),
+                "die alte Bastion hat noch Plätze");
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         for (var key : List.of(BuiltinStructures.STRONGHOLD, BuiltinStructures.MINESHAFT, BuiltinStructures.MINESHAFT_MESA,
                 BuiltinStructures.BURIED_TREASURE, BuiltinStructures.SHIPWRECK, BuiltinStructures.SHIPWRECK_BEACHED)) {

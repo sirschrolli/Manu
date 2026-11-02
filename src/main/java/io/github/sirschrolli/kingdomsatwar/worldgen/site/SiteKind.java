@@ -50,7 +50,13 @@ public enum SiteKind implements StringRepresentable {
      * Thronsaal, Brücken nach allen Seiten (an Stelle der Netherfestung). Ganz zuletzt gebaut, damit kein Bewuchs der
      * Unterwelt in ihr wächst.
      */
-    ASH_FORGE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    ASH_FORGE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Hortfeste: die Stufenburg der Borstlinge aus Schwarzstein und Gold in einer Höhlenkuppel der Unterwelt, mit
+     * Tauschhalle, Ställen, Schlafsaal, Hortkammer und dem goldenen Keiler auf der Spitze (an Stelle der Bastion).
+     * Ebenfalls ganz zuletzt gebaut.
+     */
+    HORTFESTE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

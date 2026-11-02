@@ -287,6 +287,8 @@ public final class ModStructures {
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_321);
                 // die Aschenesse teilt sich die Plätze mit den Bastionen (data/minecraft/worldgen/structure_set/nether_complexes.json)
                 case ASH_FORGE -> null;
+                // die Hortfeste nimmt die Plätze der Bastionen ein (ebenda)
+                case HORTFESTE -> null;
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

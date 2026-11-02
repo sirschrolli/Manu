@@ -51,6 +51,7 @@ public class SiteStructure extends Structure {
             case TRIAL_ARENA -> TrialArena.plan(context, terrain, seed);
             case ROBBER_CASTLE -> RobberCastle.plan(context, terrain, seed);
             case ASH_FORGE -> AshForge.plan(context, terrain, seed);
+            case HORTFESTE -> Hortfeste.plan(context, terrain, seed);
         };
     }
 

@@ -122,6 +122,7 @@ public class SitePiece extends StructurePiece {
             case TRIAL_ARENA -> TrialArena.build(b, this);
             case ROBBER_CASTLE -> RobberCastle.build(b, this);
             case ASH_FORGE -> AshForge.build(b, this);
+            case HORTFESTE -> Hortfeste.build(b, this);
         }
         b.finish();
     }

@@ -148,6 +148,11 @@ public final class SiteSamples {
         return AshForge.bridge(center, Rotation.NONE, 0xA5E6L + variant, len, rock ? AshForge.END_ROCK : AshForge.END_TOWER, exit, variant);
     }
 
+    /** Die Hortfeste mit der Mitte ihres Sockels bei {@code center} (Oberfläche des Sockels eine Schicht darunter). */
+    public static SitePiece hortfeste(BlockPos center) {
+        return Hortfeste.piece(center.below(), Rotation.NONE, 0x4F27L);
+    }
+
     public static SitePiece robberCastle(BlockPos origin) {
         return new SitePiece(SiteKind.ROBBER_CASTLE, 0, origin, Rotation.NONE, 0xB06L, new int[0], RobberCastle.box(origin));
     }

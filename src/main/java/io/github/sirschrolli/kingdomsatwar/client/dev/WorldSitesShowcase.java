@@ -39,7 +39,7 @@ final class WorldSitesShowcase {
         }
         steps.add(Step.hud(false));
         // in der Unterwelt weiter sehen: dort reicht der Nebel nur bis zur halben Sichtweite
-        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") ? 16 : 8)));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") || only.equals("hortfeste") ? 16 : 8)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
         steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
         for (SiteKind kind : SiteKind.values()) {
@@ -49,7 +49,7 @@ final class WorldSitesShowcase {
             List<double[]> views = new ArrayList<>();
             int[] state = {0};
             // die Aschenesse steht in der Unterwelt; dort schwebt die Kamera als Zuschauer (über Lava, durch Felsen)
-            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = kind == SiteKind.ASH_FORGE
+            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE
                     ? net.minecraft.world.level.Level.NETHER : net.minecraft.world.level.Level.OVERWORLD;
             if (dim != net.minecraft.world.level.Level.OVERWORLD) {
                 steps.add(Step.command("gamemode spectator"));
@@ -153,7 +153,7 @@ final class WorldSitesShowcase {
         // beim Sternensturz von drei Seiten suchen: so finden sich ein Krater und ein Sternfels
         BlockPos[] from = kind == SiteKind.FALLEN_STAR
                 ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(-1000, 80, 1700), new BlockPos(-1000, 80, -1700), new BlockPos(2000, 80, 0)}
-                : kind == SiteKind.ASH_FORGE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(900, 80, -700)}
+                : kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(900, 80, -700)}
                 : new BlockPos[] {new BlockPos(0, 80, 0)};
         List<StructureStart> starts = new ArrayList<>();
         for (BlockPos origin : from) {
@@ -391,6 +391,25 @@ final class WorldSitesShowcase {
                     }
                     add(views, p, 9, 3, len - 7, 0, 5, len - 7);
                 }
+            }
+            case HORTFESTE -> {
+                if (!views.isEmpty()) {
+                    // die zweite Feste nur von außen
+                    add(views, first, -34, 24, 58, 0, 16, 4);
+                    add(views, first, 36, 18, -30, 0, 16, 0);
+                    return;
+                }
+                add(views, first, -34, 24, 58, 0, 16, 4);
+                add(views, first, 0, 5, 50, 0, 18, 18);
+                add(views, first, 11, 33, 15, 0, 32, 1);
+                add(views, first, -7, 31, -11, 0, 32, 2);
+                add(views, first, 36, 18, -30, 0, 16, 0);
+                add(views, first, 0, 3, 13, 0, 3, -2);
+                add(views, first, 14, 3, 0, 3, 2, -2);
+                add(views, first, -11, 3, -11, -7, 1, -17);
+                add(views, first, 10, 13, 10, -4, 12, -6);
+                add(views, first, -2, 22, 4, 0, 21, -6);
+                add(views, first, 16, 13, 16, 0, 15, 0);
             }
             case ROBBER_CASTLE -> {
                 add(views, first, -26, 18, 30, 0, 6, 0);
