@@ -150,7 +150,9 @@ final class OverworldShowcase {
                 BlockPos center = new BlockPos(x, ground[0], z);
                 prepareGround(level, center, "trees", 24);
                 meadow(level, center, 24, 60, treeBiome(name));
-                int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}} : small ? new int[][] {{0, 0}, {-5, 4}, {5, -4}, {4, 6}, {-6, -5}}
+                // die kleinen in einer Reihe quer zum Blick, mit etwas Versatz nach hinten
+                int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}}
+                        : small ? new int[][] {{0, 0}, {-5, 5}, {5, -5}, {-8, 11}, {11, -8}}
                         : new int[][] {{0, 0}, {-10, 8}, {9, -8}};
                 int seed = 0;
                 for (int[] spot : spots) {
@@ -163,9 +165,10 @@ final class OverworldShowcase {
                 }
             }));
             steps.add(Step.waitTicks(30));
-            double dist = big ? 19.0 : small ? 7.5 : 12.0;
-            double up = big ? 9.0 : small ? 3.5 : 4.5;
-            double look = big ? 13.0 : small ? 1.2 : 5.5;
+            boolean young = name.startsWith("young_");
+            double dist = big ? 19.0 : young ? 11.0 : small ? 8.5 : 12.0;
+            double up = big ? 9.0 : young ? 3.5 : small ? 3.0 : 4.5;
+            double look = big ? 13.0 : young ? 3.0 : small ? 0.8 : 5.5;
             steps.add(Step.command(String.format(Locale.ROOT, "tp @s %.1f %.1f %.1f -45 %.1f", x - dist, ground[0] + up, z - dist,
                     Math.toDegrees(Math.atan2(up - look, Math.sqrt(2) * dist)))));
             // beim ersten Platz baut der Client noch die ganze Umgebung: länger warten, sonst fehlen Stämme im Bild

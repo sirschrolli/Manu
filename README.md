@@ -498,6 +498,8 @@ So wachsen sie überall in der Welt – und genauso aus jedem Setzling.
 | Büsche | ein Stummel, ganz verdeckt von einem Hügel aus Laub, der bis auf den Boden reicht – aus Eiche (Wälder, Ebenen, Bergwiese), Birke, Fichte (Taiga, verschneite Taiga, windgepeitschter Wald), Schwarzeiche, Akazie (Savanne) und Kirsche |
 | Junge Bäume | zwischen den großen: kleine Eichen mit runder Krone, dünne Birken, kleine Fichten als Kegel bis fast auf den Boden |
 
+![Unterholz und Farben](docs/bilder/unterholz.jpg)
+
 Die Blätter liegen überall nah genug am Holz – nichts verdorrt von selbst. Mangrove, Blasseiche und Azalee bleiben,
 wie sie sind. Gras und Laub der Ebenen, Wälder, Birkenwälder, der Taiga, der Bergwiese und der windgepeitschten Hügel
 haben seit 0.32 ein satteres Grün wie in den eigenen Biomen (die Taiga kühler, das Laub des dunklen Walds tiefer).

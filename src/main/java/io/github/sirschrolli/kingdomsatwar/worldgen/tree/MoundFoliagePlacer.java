@@ -48,22 +48,38 @@ public class MoundFoliagePlacer extends ShapedFoliagePlacer {
         double c = dbl ? 0.5 : 0.0;
         double r = Math.max(1, leafRadius + attachment.radiusOffsetXZ()) + 0.45;
         int h = Math.max(1, foliageHeight);
-        // etwas schief: der Hügel lehnt sich ein wenig zu einer Seite
-        double sx = (random.nextDouble() - 0.5) * 0.6;
-        double sz = (random.nextDouble() - 0.5) * 0.6;
-        int reach = (int) Math.ceil(r) + 1;
+        // der Hügel und ein, zwei kleinere Buckel daneben: so wird der Umriss unregelmäßig wie bei einem echten Busch
+        int lobes = 1 + random.nextInt(2);
+        double[][] mounds = new double[lobes + 1][];
+        mounds[0] = new double[] {c, c, r, h};
+        double a0 = random.nextDouble() * Math.PI * 2.0;
+        for (int k = 1; k <= lobes; k++) {
+            double a = a0 + k * Math.PI * (0.8 + random.nextDouble() * 0.4);
+            double d = r * (0.55 + random.nextDouble() * 0.25);
+            mounds[k] = new double[] {c + Math.cos(a) * d, c + Math.sin(a) * d, r * (0.55 + random.nextDouble() * 0.2), Math.max(1, h - 1)};
+        }
+        int reach = (int) Math.ceil(r * 1.6) + 1;
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int dy = 0; dy < h; dy++) {
-            double t = dy / (h + 0.35);
-            double rr = r * Math.sqrt(Math.max(0.0, 1.0 - t * t));
             for (int dx = -reach; dx <= reach + (dbl ? 1 : 0); dx++) {
                 for (int dz = -reach; dz <= reach + (dbl ? 1 : 0); dz++) {
-                    double ex = dx - c - sx * dy;
-                    double ez = dz - c - sz * dy;
-                    if (Math.sqrt(ex * ex + ez * ez) > rr + 0.25 - random.nextFloat() * 0.5) {
-                        continue;
+                    boolean inside = false;
+                    for (double[] m : mounds) {
+                        if (dy >= m[3]) {
+                            continue;
+                        }
+                        double t = dy / (m[3] + 0.35);
+                        double rr = m[2] * Math.sqrt(Math.max(0.0, 1.0 - t * t));
+                        double ex = dx - m[0];
+                        double ez = dz - m[1];
+                        if (Math.sqrt(ex * ex + ez * ez) <= rr + 0.3 - random.nextFloat() * 0.65) {
+                            inside = true;
+                            break;
+                        }
                     }
-                    leaves.add(pos.setWithOffset(base, dx, dy, dz));
+                    if (inside) {
+                        leaves.add(pos.setWithOffset(base, dx, dy, dz));
+                    }
                 }
             }
         }
