@@ -323,6 +323,17 @@ public final class ModEntities {
             "wandering_trader", io.github.sirschrolli.kingdomsatwar.entity.villager.TravelingMerchant::new, MobCategory.CREATURE, builder -> builder
                     .sized(0.6f, 1.95f).eyeHeight(1.62f).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Nether-Volk (E5a)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling>> PIGLIN = ENTITIES.registerEntityType(
+            "piglin", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling::new, MobCategory.MONSTER, builder -> builder
+                    .sized(0.6f, 1.95f).eyeHeight(1.79f).passengerAttachments(2.0125f).ridingOffset(-0.7f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.BristleGiant>> PIGLIN_BRUTE = ENTITIES.registerEntityType(
+            "piglin_brute", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.BristleGiant::new, MobCategory.MONSTER, builder -> builder
+                    .sized(0.6f, 1.95f).eyeHeight(1.79f).passengerAttachments(2.0125f).ridingOffset(-0.7f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling>> ZOMBIFIED_PIGLIN = ENTITIES.registerEntityType(
+            "zombified_piglin", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().sized(0.6f, 1.95f).eyeHeight(1.79f).passengerAttachments(2.0f).ridingOffset(-0.7f).clientTrackingRange(8));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -527,6 +538,9 @@ public final class ModEntities {
         event.put(SNIFFER.get(), net.minecraft.world.entity.animal.sniffer.Sniffer.createAttributes().build());
         event.put(HAPPY_GHAST.get(), net.minecraft.world.entity.animal.happyghast.HappyGhast.createAttributes().build());
         event.put(WANDERING_TRADER.get(), net.minecraft.world.entity.Mob.createMobAttributes().build());
+        event.put(PIGLIN.get(), net.minecraft.world.entity.monster.piglin.Piglin.createAttributes().build());
+        event.put(PIGLIN_BRUTE.get(), net.minecraft.world.entity.monster.piglin.PiglinBrute.createAttributes().build());
+        event.put(ZOMBIFIED_PIGLIN.get(), net.minecraft.world.entity.monster.zombie.ZombifiedPiglin.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -638,6 +652,10 @@ public final class ModEntities {
         event.register(FROG.get(), ground, noLeaves, net.minecraft.world.entity.animal.frog.Frog::checkFrogSpawnRules, replace);
         event.register(NAUTILUS.get(), water, noLeaves, net.minecraft.world.entity.animal.nautilus.AbstractNautilus::checkNautilusSpawnRules,
                 replace);
+        // Nether-Volk (E5a): Regeln wie bei Vanilla
+        event.register(PIGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.piglin.Piglin::checkPiglinSpawnRules, replace);
+        event.register(ZOMBIFIED_PIGLIN.get(), ground, noLeaves,
+                net.minecraft.world.entity.monster.zombie.ZombifiedPiglin::checkZombifiedPiglinSpawnRules, replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);

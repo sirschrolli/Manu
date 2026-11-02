@@ -133,7 +133,11 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.SNIFFER, ModEntities.SNIFFER),
                 Map.entry(EntityTypes.HAPPY_GHAST, ModEntities.HAPPY_GHAST),
                 Map.entry(EntityTypes.VILLAGER, ModEntities.VILLAGER),
-                Map.entry(EntityTypes.WANDERING_TRADER, ModEntities.WANDERING_TRADER));
+                Map.entry(EntityTypes.WANDERING_TRADER, ModEntities.WANDERING_TRADER),
+                // Nether-Volk (E5a)
+                Map.entry(EntityTypes.PIGLIN, ModEntities.PIGLIN),
+                Map.entry(EntityTypes.PIGLIN_BRUTE, ModEntities.PIGLIN_BRUTE),
+                Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */

@@ -22,7 +22,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               breeze, breeze_wind, creaking, guardian, illager, ravager, vex, warden,
                               axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
                               turtle,
-                              allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby,
+                              allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -213,6 +213,13 @@ def main():
     write_model(happy_ghast, "CloudJellyGeometry",
                 "Geometrie der Wolkenqualle (Körper und Fangarme wie beim glücklichen Ghast, dazu der Ballenkranz; im Spiel ×4).",
                 "happy_ghast", happy_ghast.PALETTES, preview)
+    # Nether-Volk (E5a): Knochen wie bei den Vanilla-Piglins
+    write_model(piglin, "BorstlingGeometry",
+                "Geometrie der Borstlinge, Borstenhünen und Moderborstlinge (Knochen wie beim Vanilla-Piglin; Helm und Panzer nur beim Hünen bemalt).",
+                "piglin", piglin.PALETTES, preview)
+    write_model(piglin_baby, "BorstlingBabyGeometry",
+                "Geometrie der jungen Borstlinge und Moderborstlinge (Knochen wie beim Vanilla-Piglin-Kind).",
+                "piglin/baby", {k: v for k, v in piglin_baby.PALETTES.items() if k != "borstenhuene"}, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

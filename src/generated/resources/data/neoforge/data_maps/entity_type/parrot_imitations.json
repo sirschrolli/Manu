@@ -45,6 +45,12 @@
     "kingdomsatwar:phantom": {
       "sound": "minecraft:entity.parrot.imitate.phantom"
     },
+    "kingdomsatwar:piglin": {
+      "sound": "minecraft:entity.parrot.imitate.piglin"
+    },
+    "kingdomsatwar:piglin_brute": {
+      "sound": "minecraft:entity.parrot.imitate.piglin_brute"
+    },
     "kingdomsatwar:pillager": {
       "sound": "minecraft:entity.parrot.imitate.pillager"
     },

@@ -1043,6 +1043,14 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"abendrot", "Sunset Cloud", "Abendwolke"}, {"regenwolke", "Rain Cloudlet", "Regenwölkchen"}});
         creature(ModEntities.WANDERING_TRADER, ModItems.WANDERING_TRADER_SPAWN_EGG, "Travelling Merchant", "Fahrender Händler",
                 "Fahrender-Händler");
+        // Nether-Volk (E5a)
+        creature(ModEntities.PIGLIN, ModItems.PIGLIN_SPAWN_EGG, "Bristling", "Borstling", "Borstling");
+        breeds(ModEntities.PIGLIN, new String[][]{{"karmesin", "Crimson Bristling", "Karmesinborstling"}, {"aschen", "Ashen Bristling", "Aschenborstling"},
+                {"gold", "Gilded Bristling", "Goldborstling"}});
+        creature(ModEntities.PIGLIN_BRUTE, ModItems.PIGLIN_BRUTE_SPAWN_EGG, "Bristle Giant", "Borstenhüne", "Borstenhünen");
+        creature(ModEntities.ZOMBIFIED_PIGLIN, ModItems.ZOMBIFIED_PIGLIN_SPAWN_EGG, "Rotten Bristling", "Moderborstling", "Moderborstling");
+        breeds(ModEntities.ZOMBIFIED_PIGLIN, new String[][]{{"moder_karmesin", "Rotten Bristling", "Moderborstling"},
+                {"moder_aschen", "Withered Bristling", "Dörrborstling"}});
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

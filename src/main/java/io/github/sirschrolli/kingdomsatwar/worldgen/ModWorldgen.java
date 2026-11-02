@@ -247,6 +247,7 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
     public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
     public static final ResourceKey<BiomeModifier> SWAP_WATER_CREATURES = spawnModifier("swap_vanilla_water_creatures");
+    public static final ResourceKey<BiomeModifier> SWAP_NETHER_CREATURES = spawnModifier("swap_vanilla_nether_creatures");
     public static final ResourceKey<BiomeModifier> FOREST_BEAR_SPAWNS = spawnModifier("add_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FEW_FOREST_BEAR_SPAWNS = spawnModifier("add_few_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FENNEC_SPAWNS = spawnModifier("add_fennec_spawns");
@@ -397,6 +398,11 @@ public final class ModWorldgen {
                         java.util.Map.entry(EntityTypes.AXOLOTL, ModEntities.AXOLOTL.get()),
                         java.util.Map.entry(EntityTypes.FROG, ModEntities.FROG.get()),
                         java.util.Map.entry(EntityTypes.NAUTILUS, ModEntities.NAUTILUS.get()))));
+        // Nether-Wesen (E5): im ganzen Nether mit gleichem Gewicht die eigenen
+        context.register(SWAP_NETHER_CREATURES, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(net.minecraft.tags.BiomeTags.IS_NETHER),
+                java.util.Map.ofEntries(
+                        java.util.Map.entry(EntityTypes.PIGLIN, ModEntities.PIGLIN.get()),
+                        java.util.Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN.get()))));
         // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
         context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
                 net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,

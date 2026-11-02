@@ -58,6 +58,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.water.WaterRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerLayers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerLayers(event);
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);
@@ -113,6 +114,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.water.WaterRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerRenderers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerRenderers(event);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
         event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);

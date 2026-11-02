@@ -160,5 +160,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.HAPPY_GHAST.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.HAPPY_GHAST.key());
         this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.HAPPY_GHAST.key()).add(ModEntities.SNIFFER.key());
+        // Nether-Volk (E5a): der Moderborstling zählt zu den Zombies (Bann wirkt)
+        this.tag(EntityTypeTags.ZOMBIES).add(ModEntities.ZOMBIFIED_PIGLIN.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.PIGLIN_BRUTE.key()).add(ModEntities.ZOMBIFIED_PIGLIN.key());
     }
 }

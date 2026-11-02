@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.21.0 – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler: keine Vanilla-Dorfwesen mehr.**
+> **Testversion 0.22.0 – das Nether-Volk: Borstlinge, Borstenhünen und Moderborstlinge statt Piglins.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -122,8 +122,17 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Bewohner mit dem passenden Beruf. Und der **fahrende Händler** kommt mit breitkrempigem Hut, langem Reisemantel und
 > einer hohen Weidenkiepe samt Deckenrolle, Kupferkessel und Laterne – er handelt jetzt gegen Münzen: Setzlinge,
 > Blumen, Farben, Korallen, Eis und Höhlenfunde aus fernen Ländern.
+> Neu in 0.22: **Das Nether-Volk.** Statt Piglins leben im Nether die **Borstlinge** – ein stolzes Keilervolk mit
+> schwerer Stirn, Knopfaugen, Rüssel mit Nasenring, Hauern, Borstenkamm und Zopf, im Waffenrock mit Fellumhang, Gürtel
+> mit Goldschnalle und Armreifen. Im Karmesinwald tragen sie Rot und schwarze Kriegsbemalung (**Karmesinborstling**),
+> im Ödland Aschgrau (**Aschenborstling**), und selten trifft man einen reich geschmückten **Goldborstling**. Der
+> **Borstenhüne** (statt Piglin-Barbar) trägt einen gehörnten Eisenhelm und einen Brustpanzer mit Keilerwappen, der
+> **Moderborstling** (statt Zombie-Piglin) ist faulig, mit offenem Schädel, Rippen und einem glimmenden Auge. Sie lieben
+> Gold, tauschen, jagen, tanzen und verwandeln sich in der Oberwelt wie gewohnt; ein Borstling weicht auch vor den
+> eigenen Untoten zurück. Außerdem finden Frösche, Molche, Nautilusse und Urwühler jetzt wieder zueinander und bekommen
+> Nachwuchs.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Nether und End – eigene Wesen und Bauwerke.
+> **Als Nächstes:** Glutkeiler und Lavastelzer (statt Hoglin und Schreiter), danach die übrigen Nether- und End-Wesen.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -165,7 +174,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
 | Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler statt Vanilla (Händler mit Münzhandel) | ✅ fertig |
-| Nether und End: eigene Mobs und Bauwerke | 🔨 als Nächstes |
+| Nether-Volk statt Piglins: Borstlinge (drei Gestalten), Borstenhüne, Moderborstlinge | ✅ fertig |
+| Nether und End: übrige Mobs und Bauwerke | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -182,7 +192,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.21.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.22.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -190,7 +200,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.21.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.22.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -725,6 +735,20 @@ Ghastling-Blöcken Wölkchen.
 | **Dorfbewohner** | Dorfbewohner | 17 Berufe | Vanilla-Dorfbewohner werden eigene Bewohner: Bibliothekar → Schreiber, Geistlicher → Kräuterkundige, Lederer → Gerber, ohne Beruf → Tagelöhner …; ein Namensschild bleibt |
 | **Fahrender Händler** | Fahrender Händler | drei Gesichter | Filzhut mit Feder, Reisemantel mit Flicken, Kiepe mit Deckenrolle, Kupferkessel und Laterne; kommt mit seinen Lamas, handelt gegen Münzen (mit Ansehen-Rabatt und Ladenpause), trinkt nachts seinen Unsichtbarkeitstrank |
 
+### Das Nether-Volk
+
+![Borstlinge, Borstenhüne und Moderborstlinge](docs/bilder/nether_volk.jpg)
+
+Keine Piglins mehr: Im Nether lebt ein stolzes Keilervolk. Die Modelle haben die Knochen der Vanilla-Piglins, damit
+Ohrenwackeln, Gold-Bewundern, Tanzen, Armbrust und Rüstungen wie gewohnt aussehen. Tauschhandel mit Gold, Jagd auf
+Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben, wie man sie kennt.
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Borstling** | Piglin | Karmesinborstling (Karmesinwald), Aschenborstling (Ödland, Seelensandtal, Basaltdeltas), Goldborstling (selten) | Keilerkopf mit Knopfaugen, Rüssel und Nasenring, Hauern, Borstenkamm und Zopf; Waffenrock, Fellumhang, Goldschnalle, Armreifen, bemalte Arme; Kinder mit Kulleraugen; weicht auch den eigenen Untoten aus |
+| **Borstenhüne** | Piglin-Barbar | – | gehörnter Eisenhelm mit Goldnieten, Brustpanzer mit Keilerwappen, Schulterstücke und Kettenärmel; bewacht die Bastionen |
+| **Moderborstling** | Zombie-Piglin | Moderborstling, Dörrborstling | fauliges, fleckiges Fleisch, offener Schädel, Rippen unter dem zerrissenen Waffenrock, angelaufenes Gold, ein glimmendes Auge |
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -957,7 +981,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.21.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.22.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
