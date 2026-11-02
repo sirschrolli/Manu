@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
+import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -15,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 public final class SiteTerrain {
     private final Structure.GenerationContext context;
     private final Long2ObjectOpenHashMap<int[]> cache = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectOpenHashMap<NoiseColumn> columns = new Long2ObjectOpenHashMap<>();
 
     public SiteTerrain(Structure.GenerationContext context) {
         this.context = context;
@@ -71,6 +74,32 @@ public final class SiteTerrain {
     /** Liegt die Stelle in einem Biom, in dem das Bauwerk stehen darf? */
     public boolean valid(int x, int y, int z) {
         return this.context.validBiome().test(this.biome(x, y, z));
+    }
+
+    /**
+     * Die ganze Säule des Geländes an einer Stelle, wie der Generator sie formt (Gestein, Flüssigkeit, Luft – noch ohne
+     * Oberfläche, Höhlen und Bewuchs). In der Unterwelt gibt es keine Oberfläche, die man mit Höhenkarten fassen könnte:
+     * Dort fragt man so ab, wo Fels ist und wo Hohlraum.
+     */
+    public NoiseColumn column3d(int x, int z) {
+        long key = BlockPos.asLong(x, 0, z);
+        NoiseColumn c = this.columns.get(key);
+        if (c == null) {
+            c = this.context.chunkGenerator().getBaseColumn(x, z, this.context.heightAccessor(), this.context.randomState());
+            this.columns.put(key, c);
+        }
+        return c;
+    }
+
+    /** Fester Fels an der Stelle (weder Luft noch Flüssigkeit)? */
+    public boolean rock(int x, int y, int z) {
+        BlockState state = this.column3d(x, z).getBlock(y);
+        return !state.isAir() && state.getFluidState().isEmpty();
+    }
+
+    /** Lava (oder eine andere Flüssigkeit) an der Stelle? */
+    public boolean fluid(int x, int y, int z) {
+        return !this.column3d(x, z).getBlock(y).getFluidState().isEmpty();
     }
 
     /** Kleinste und größte Bodenhöhe auf einem Quadrat (Kantenlänge 2r + 1, alle {@code step} Blöcke). */

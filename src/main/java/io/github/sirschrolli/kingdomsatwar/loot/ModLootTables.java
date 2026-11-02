@@ -105,6 +105,8 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_TRIAL_ARENA = site("trial_arena");
     public static final ResourceKey<LootTable> SITE_ROBBER_CASTLE = site("robber_castle");
     public static final ResourceKey<LootTable> SITE_ROBBER_CASTLE_HOARD = site("robber_castle_hoard");
+    public static final ResourceKey<LootTable> SITE_ASH_FORGE = site("ash_forge");
+    public static final ResourceKey<LootTable> SITE_ASH_FORGE_HOARD = site("ash_forge_hoard");
 
     private static ResourceKey<LootTable> site(String name) {
         return ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/site/" + name));

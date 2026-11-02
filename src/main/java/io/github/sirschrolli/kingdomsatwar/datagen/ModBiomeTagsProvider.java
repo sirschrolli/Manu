@@ -217,6 +217,9 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.TRIAL_ARENA)).addTag(BiomeTags.IS_OVERWORLD);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ROBBER_CASTLE)).add(net.minecraft.world.level.biome.Biomes.DARK_FOREST)
                 .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN);
+        // in der Unterwelt: die Aschenesse überall (wie die Festung, die sie ersetzt)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ASH_FORGE)).addTag(BiomeTags.IS_NETHER);
+        this.tag(BiomeTags.HAS_NETHER_FORTRESS).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
                 BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,

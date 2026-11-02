@@ -6,7 +6,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.levelgen.GenerationStep;
 
 /**
- * Die eigenen Bauwerke der Oberwelt, die an die Stelle der Vanilla-Bauwerke treten: jedes ein ganz eigenes Gegenstück
+ * Die eigenen Bauwerke der Oberwelt (und der Unterwelt), die an die Stelle der Vanilla-Bauwerke treten: jedes ein ganz eigenes Gegenstück
  * (andere Gestalt, anderes Thema), das dieselbe Rolle in der Welt spielt. Was man unbedingt braucht – das Portal ins
  * Ende, das Herz des Meeres –, findet man dort weiterhin.
  */
@@ -44,7 +44,13 @@ public enum SiteKind implements StringRepresentable {
     /** Arena der Prüfungen: ein Kolosseum in einer Höhle, Prüfungsspawner in Käfigen, Tresore auf der Tribüne (an Stelle der Prüfungskammern). */
     TRIAL_ARENA(GenerationStep.Decoration.UNDERGROUND_STRUCTURES),
     /** Raubritterburg: Burg auf einem Hügel im dunklen Wald, mit Bergfried, Verlies und Palas (an Stelle des Waldanwesens). */
-    ROBBER_CASTLE(GenerationStep.Decoration.SURFACE_STRUCTURES);
+    ROBBER_CASTLE(GenerationStep.Decoration.SURFACE_STRUCTURES),
+    /**
+     * Aschenesse: ein achteckiger Turm im Lavameer der Unterwelt mit Lavakern, Glutkäfigen, Warzengarten, Gebeinkammer und
+     * Thronsaal, Brücken nach allen Seiten (an Stelle der Netherfestung). Ganz zuletzt gebaut, damit kein Bewuchs der
+     * Unterwelt in ihr wächst.
+     */
+    ASH_FORGE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

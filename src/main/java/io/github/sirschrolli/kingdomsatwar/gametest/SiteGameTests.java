@@ -92,6 +92,10 @@ final class SiteGameTests {
             ModGameTests.TEST_FUNCTIONS.register("site_robber_castle", () -> SiteGameTests::robberCastle);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> VANILLA_SITES_OFF =
             ModGameTests.TEST_FUNCTIONS.register("site_vanilla_off", () -> SiteGameTests::vanillaOff);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ASH_FORGE =
+            ModGameTests.TEST_FUNCTIONS.register("site_ash_forge", () -> SiteGameTests::ashForge);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ASH_FORGE_BRIDGES =
+            ModGameTests.TEST_FUNCTIONS.register("site_ash_forge_bridges", () -> SiteGameTests::ashForgeBridges);
 
     private SiteGameTests() {}
 
@@ -116,6 +120,8 @@ final class SiteGameTests {
         add(event, environment, TRIAL_ARENA, 100);
         add(event, environment, ROBBER_CASTLE, 100);
         add(event, environment, VANILLA_SITES_OFF, 100);
+        add(event, environment, ASH_FORGE, 100);
+        add(event, environment, ASH_FORGE_BRIDGES, 100);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
@@ -941,6 +947,131 @@ final class SiteGameTests {
     }
 
     // =====================================================================================
+    // Aschenesse
+    // =====================================================================================
+
+    /**
+     * Der Turm der Aschenesse (die unteren drei Böden passen in den Testbereich): Lavakern hinter Gittern, zwei
+     * Glutkäfige mit Glutgeist-Spawnern, Netherwarzen im Garten, Truhen mit Beute, das untere Tor mit dem Anleger,
+     * Brandgebeine als Wache in der Schmiede; ein Bewohner kommt über die Wendeltreppe von der Schlackenhalle bis in den
+     * Warzengarten.
+     */
+    private static void ashForge(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.NETHERRACK.defaultBlockState());
+        BlockPos c = helper.absolutePos(new BlockPos(24, 2, 22));
+        build(helper, SiteSamples.ashForge(c));
+        List<String> problems = new ArrayList<>();
+        ServerLevel level = helper.getLevel();
+        if (!level.getBlockState(c.offset(0, 5, 0)).is(Blocks.LAVA) || !level.getBlockState(c.offset(2, 5, 0)).is(Blocks.IRON_BARS)
+                || !level.getBlockState(c.offset(0, 14, -2)).is(Blocks.IRON_BARS)) {
+            problems.add("kein Lavakern hinter Gittern");
+        }
+        for (BlockPos p : List.of(c.offset(6, 11, -6), c.offset(-6, 11, 6))) {
+            if (!(level.getBlockEntity(p) instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity spawner)) {
+                problems.add("kein Spawner bei " + helper.relativePos(p));
+                continue;
+            }
+            Entity shown = spawner.getSpawner().getOrCreateDisplayEntity(level, p);
+            if (shown == null || shown.getType() != ModEntities.BLAZE.get()) {
+                problems.add("Spawner ohne Glutgeist bei " + helper.relativePos(p) + (shown == null ? "" : ": " + shown.getType()));
+            }
+            if (count(helper, p.offset(-1, 0, -1), p.offset(1, 2, 1), st -> st.is(Blocks.IRON_BARS)) < 16) {
+                problems.add("Käfig unvollständig bei " + helper.relativePos(p));
+            }
+        }
+        int wart = count(helper, c.offset(-10, 20, -10), c.offset(10, 20, 10), st -> st.is(Blocks.NETHER_WART));
+        if (wart < 40) {
+            problems.add("Netherwarzen: " + wart);
+        }
+        int chests = lootChests(helper, c.offset(-12, 1, -12), c.offset(12, 27, 12), st -> st.is(Blocks.CHEST));
+        if (chests != 2) {
+            problems.add("Truhen: " + chests);
+        }
+        if (count(helper, c.offset(-1, 1, 11), c.offset(1, 3, 12), st -> !st.isAir()) > 0) {
+            problems.add("das untere Tor ist zu");
+        }
+        if (count(helper, c.offset(-1, 10, 11), c.offset(1, 12, 12), st -> !st.isAir()) > 0) {
+            problems.add("ein Tor der Schmiede ist zu");
+        }
+        if (count(helper, c.offset(-3, 0, 13), c.offset(3, 0, 17), BlockState::isAir) > 0) {
+            problems.add("kein Anleger");
+        }
+        AABB box = AABB.encapsulatingFullBlocks(helper.absolutePos(new BlockPos(0, 1, 0)), helper.absolutePos(new BlockPos(47, 29, 47)));
+        int guards = level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein.class, box).size();
+        if (guards != 2) {
+            problems.add("Wachen in der Schmiede: " + guards);
+        }
+        VillagerEntity v = walker(helper, c.offset(0, 1, 8));
+        var path = v.getNavigation().createPath(c.offset(-7, 19, 0), 1);
+        if (path == null || !path.canReach()) {
+            problems.add("kein Weg die Wendeltreppe hinauf" + (path == null ? "" : " (endet bei " + helper.relativePos(path.getEndNode().asBlockPos()) + ")"));
+        }
+        v.discard();
+        for (Entity e : level.getEntitiesOfClass(Entity.class, box, e -> !(e instanceof ServerPlayer))) {
+            e.discard();
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Zwei Brücken der Aschenesse: Die eine stößt in den Fels – Tor mit Feuerschalen, Stollen, Glutkammer mit Spawner und
+     * ein Gang, der nur im Fels ausgemauert ist, bis in die Höhle dahinter (begehbar von der Brücke bis hinaus); die
+     * andere endet auf einem Wachturm über der Lava, dessen Pfeiler bis auf den Grund reicht.
+     */
+    private static void ashForgeBridges(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.NETHERRACK.defaultBlockState());
+        fill(helper, new BlockPos(0, 2, 12), new BlockPos(20, 20, 33), Blocks.NETHERRACK.defaultBlockState());
+        BlockPos rock = helper.absolutePos(new BlockPos(12, 2, -6));
+        build(helper, SiteSamples.ashForgeBridge(rock, 18, true, 6, 0));
+        BlockPos tower = helper.absolutePos(new BlockPos(36, 2, -6));
+        build(helper, SiteSamples.ashForgeBridge(tower, 16, false, 0, 1));
+        List<String> problems = new ArrayList<>();
+        ServerLevel level = helper.getLevel();
+        if (!level.getBlockState(rock.offset(0, 9, 15)).isSolidRender() || !level.getBlockState(rock.offset(3, 10, 15)).is(Blocks.POLISHED_BLACKSTONE_BRICK_WALL)) {
+            problems.add("Deck oder Brüstung fehlt");
+        }
+        BlockPos spawner = rock.offset(0, 10, 29);
+        if (!(level.getBlockEntity(spawner) instanceof net.minecraft.world.level.block.entity.SpawnerBlockEntity s)
+                || s.getSpawner().getOrCreateDisplayEntity(level, spawner) == null
+                || s.getSpawner().getOrCreateDisplayEntity(level, spawner).getType() != ModEntities.BLAZE.get()) {
+            problems.add("keine Glutkammer mit Spawner");
+        }
+        if (count(helper, rock.offset(0, 10, 36), rock.offset(0, 11, 41), st -> !st.isAir()) > 0) {
+            problems.add("der Gang hinaus ist zu");
+        }
+        if (!level.getBlockState(rock.offset(2, 11, 37)).is(Blocks.NETHER_BRICKS) && !level.getBlockState(rock.offset(2, 11, 37)).is(Blocks.CRACKED_NETHER_BRICKS)) {
+            problems.add("der Gang ist im Fels nicht ausgemauert");
+        }
+        if (!level.getBlockState(rock.offset(2, 11, 41)).isAir()) {
+            problems.add("der Gang ist auch in der Höhle gemauert");
+        }
+        VillagerEntity v = walker(helper, rock.offset(0, 10, 14));
+        var path = v.getNavigation().createPath(rock.offset(0, 10, 41), 1);
+        if (path == null || !path.canReach()) {
+            problems.add("kein Weg durch die Felsstube" + (path == null ? "" : " (endet bei " + helper.relativePos(path.getEndNode().asBlockPos()) + ")"));
+        }
+        v.discard();
+        if (lootChests(helper, tower.offset(-6, 9, 16), tower.offset(6, 12, 28), st -> st.is(Blocks.CHEST)) != 1) {
+            problems.add("keine Truhe auf dem Wachturm");
+        }
+        if (!level.getBlockState(tower.offset(5, 10, 22)).is(Blocks.NETHER_BRICKS) || !level.getBlockState(tower.offset(0, 11, 22)).is(Blocks.SOUL_CAMPFIRE)) {
+            problems.add("Wachturm ohne Brüstung oder Feuer");
+        }
+        if (!level.getBlockState(tower.offset(0, 0, 22)).isSolidRender()) {
+            problems.add("der Pfeiler des Wachturms reicht nicht bis auf den Grund");
+        }
+        AABB box = AABB.encapsulatingFullBlocks(helper.absolutePos(new BlockPos(0, 1, 0)), helper.absolutePos(new BlockPos(47, 29, 47)));
+        for (Entity e : level.getEntitiesOfClass(Entity.class, box, e -> !(e instanceof ServerPlayer))) {
+            e.discard();
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    // =====================================================================================
     // Tags
     // =====================================================================================
 
@@ -953,9 +1084,16 @@ final class SiteGameTests {
                 BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_PILLAGER_OUTPOST, BiomeTags.HAS_RUINED_PORTAL_STANDARD,
                 BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA,
                 BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
-                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION)) {
+                BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION, BiomeTags.HAS_NETHER_FORTRESS)) {
             helper.assertTrue(biomes.get(tag).map(set -> set.size() == 0).orElse(true), "altes Bauwerk noch erlaubt: " + tag.location());
         }
+        // in der Unterwelt nimmt die Aschenesse die Plätze der Festung ein (neben den Bastionen)
+        var complexes = access.lookupOrThrow(Registries.STRUCTURE_SET)
+                .getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.NETHER_COMPLEXES).value();
+        helper.assertTrue(complexes.structures().stream().anyMatch(e -> e.structure().is(ModStructures.site(SiteKind.ASH_FORGE))),
+                "die Aschenesse fehlt bei den Plätzen der Unterwelt");
+        helper.assertTrue(complexes.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.FORTRESS)),
+                "die alte Festung hat noch Plätze");
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         for (var key : List.of(BuiltinStructures.STRONGHOLD, BuiltinStructures.MINESHAFT, BuiltinStructures.MINESHAFT_MESA,
                 BuiltinStructures.BURIED_TREASURE, BuiltinStructures.SHIPWRECK, BuiltinStructures.SHIPWRECK_BEACHED)) {

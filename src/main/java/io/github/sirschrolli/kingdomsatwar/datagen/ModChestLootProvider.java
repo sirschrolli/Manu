@@ -302,6 +302,19 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 10, 30, 4, 10, 0.5f)
                 .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 1, 4), item(Items.EMERALD, 4, 1, 5), item(ModItems.GEMSTONE.get(), 3, 1, 3),
                         item(Items.DIAMOND, 1, 1, 2), item(Items.SADDLE, 2, 1, 1))));
+        // Aschenesse: was in der Netherfestung lag (Netherwarzen, Gold, Eisen, Diamanten, Sattel, Rossharnische …),
+        // dazu Schmiedegut; im Hort des Aschenkönigs mehr Gold, Edelsteine, etwas Netheritschrott und selten ein Schädel
+        this.output.accept(ModLootTables.SITE_ASH_FORGE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.NETHER_BRIDGE),
+                1, 6, 0, 2, 0.08f)
+                .withPool(pool(1, 3, item(Items.NETHER_WART, 5, 2, 6), item(Items.MAGMA_CREAM, 3, 1, 2), item(Items.GOLD_NUGGET, 4, 3, 9),
+                        item(Items.QUARTZ, 3, 2, 6), item(Items.IRON_INGOT, 2, 1, 3))));
+        this.output.accept(ModLootTables.SITE_ASH_FORGE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.NETHER_BRIDGE),
+                6, 18, 2, 6, 0.4f)
+                .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 2, 6), item(Items.GILDED_BLACKSTONE, 3, 1, 3), item(ModItems.GEMSTONE.get(), 2, 1, 2),
+                        item(Items.DIAMOND, 2, 1, 2), item(Items.NETHERITE_SCRAP, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.WITHER_SKELETON_SKULL))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.15f))));
     }
 
     /** Eine Tabelle, die einmal die Vanilla-Tabelle zieht. */

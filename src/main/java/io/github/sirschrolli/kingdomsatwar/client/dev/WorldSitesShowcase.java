@@ -28,13 +28,14 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
  * (mit Nachtsicht, damit man unter der Erde etwas erkennt).
  */
 final class WorldSitesShowcase {
-    private static final int SLOTS = 16;
+    private static final int SLOTS = 32;
 
     private WorldSitesShowcase() {}
 
     static void sites(Deque<Step> steps, String only) {
         steps.add(Step.hud(false));
-        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        // in der Unterwelt weiter sehen: dort reicht der Nebel nur bis zur halben Sichtweite
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") ? 16 : 8)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
         steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
         for (SiteKind kind : SiteKind.values()) {
@@ -43,7 +44,13 @@ final class WorldSitesShowcase {
             }
             List<double[]> views = new ArrayList<>();
             int[] state = {0};
-            steps.add(Step.server(level -> locate(level, kind, views, state)));
+            // die Aschenesse steht in der Unterwelt; dort schwebt die Kamera als Zuschauer (über Lava, durch Felsen)
+            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = kind == SiteKind.ASH_FORGE
+                    ? net.minecraft.world.level.Level.NETHER : net.minecraft.world.level.Level.OVERWORLD;
+            if (dim != net.minecraft.world.level.Level.OVERWORLD) {
+                steps.add(Step.command("gamemode spectator"));
+            }
+            steps.add(Step.server(level -> locate(level.getServer().getLevel(dim), kind, views, state)));
             steps.add(Step.until(() -> state[0] != 0, 9000));
             for (int n = 0; n < SLOTS; n++) {
                 int slot = n;
@@ -56,7 +63,7 @@ final class WorldSitesShowcase {
                         float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
                         float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
                         minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
-                                "execute in minecraft:overworld run tp @s %.2f %.2f %.2f %.1f %.1f", v[0], v[1], v[2], yaw, pitch));
+                                "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f", dim.identifier(), v[0], v[1], v[2], yaw, pitch));
                     }
                 }));
                 steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
@@ -73,6 +80,7 @@ final class WorldSitesShowcase {
         // beim Sternensturz von drei Seiten suchen: so finden sich ein Krater und ein Sternfels
         BlockPos[] from = kind == SiteKind.FALLEN_STAR
                 ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(-1000, 80, 1700), new BlockPos(-1000, 80, -1700), new BlockPos(2000, 80, 0)}
+                : kind == SiteKind.ASH_FORGE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(900, 80, -700)}
                 : new BlockPos[] {new BlockPos(0, 80, 0)};
         List<StructureStart> starts = new ArrayList<>();
         for (BlockPos origin : from) {
@@ -268,6 +276,48 @@ final class WorldSitesShowcase {
                 add(views, first, 0.5, 1, 26, 0.5, 3, 12);
                 add(views, first, 30, 6, 10, 20, 6, 4);
                 add(views, first, 9, 1, 3, 13, 1.5, 8);
+            }
+            case ASH_FORGE -> {
+                if (!views.isEmpty()) {
+                    // die zweite Esse nur von außen und von ihren Brücken
+                    add(views, first, -14, 20, 14, 0, 30, 0);
+                    add(views, first, -19, 3, 10, 0, 28, 0);
+                    for (SitePiece p : pieces) {
+                        if (p.part() == 1) {
+                            KingdomsAtWar.LOGGER.info("[Showcase]   Brücke {} ({}): Länge {}, Ende {}, Ausgang {}", p.data(3), p.rotation(), p.data(0),
+                                    p.data(1), p.data(2));
+                            add(views, p, 2.5, 10, 14, 0, 11, p.data(0) + 4);
+                        }
+                    }
+                    return;
+                }
+                add(views, first, -14, 20, 14, 0, 30, 0);
+                add(views, first, 15, 44, -15, 0, 48, 0);
+                add(views, first, -19, 3, 10, 0, 28, 0);
+                add(views, first, 0.5, 3, 24, 0.5, 5, 8);
+                add(views, first, 7.5, 10, 7.5, -5, 11, -5);
+                add(views, first, -8, 13, -3, 6, 11, -6);
+                add(views, first, -6.5, 22, 4, -6, 19, -7);
+                add(views, first, 2, 28, 7, -7, 29, 5);
+                add(views, first, 6.5, 38.2, -0.5, 0, 39.5, 9);
+                add(views, first, -6, 50, 8, 0, 55, 0);
+                for (SitePiece p : pieces) {
+                    if (p.part() != 1) {
+                        continue;
+                    }
+                    int len = p.data(0);
+                    KingdomsAtWar.LOGGER.info("[Showcase]   Brücke {} ({}): Länge {}, Ende {}, Ausgang {}", p.data(3), p.rotation(), len, p.data(1), p.data(2));
+                    add(views, p, 2.5, 10, 14, 0, 11, len + 4);
+                    if (p.data(3) == 0) {
+                        add(views, p, 0.5, 10.5, len - 1, 0.5, 16, 0);
+                    }
+                    if (p.data(1) == 1) {
+                        add(views, p, 3.5, 10, len + 7, -1, 10.5, len + 13);
+                    } else {
+                        add(views, p, 5, 15, len - 2, 0, 10, len + 6);
+                    }
+                    add(views, p, 9, 3, len - 7, 0, 5, len - 7);
+                }
             }
             case ROBBER_CASTLE -> {
                 add(views, first, -26, 18, 30, 0, 6, 0);

@@ -1076,6 +1076,14 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.SHULKER, ModItems.SHULKER_SPAWN_EGG, "Shrineling", "Schreinling", "Schreinling");
         // der Enderdrache bleibt der Vanilla-Drache (der Kampf hängt an ihm), sieht aber aus wie der Sternenfresser und heißt so
         add("entity.minecraft.ender_dragon", pick("Star Devourer", "Sternenfresser"));
+        // Fortschritte, die jetzt zu den eigenen Bauwerken führen
+        add("advancements.nether.find_fortress.title", pick("The Ash Forge", "Die Aschenesse"));
+        add("advancements.nether.find_fortress.description", pick("Enter the Ash King's forge in the Nether",
+                "Betritt die Esse des Aschenkönigs in der Unterwelt"));
+        add("advancements.story.follow_ender_eye.description", pick("Follow an Eye of Ender to a Fallen Star",
+                "Folge einem Enderauge zu einem Sternensturz"));
+        add("advancements.adventure.minecraft_trials_edition.description", pick("Step foot in an Arena of Trials",
+                "Betritt eine Arena der Prüfungen"));
         add("item.minecraft.ender_dragon_spawn_egg", pick("Star Devourer Spawn Egg", "Sternenfresser-Spawn-Ei"));
     }
 

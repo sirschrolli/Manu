@@ -134,6 +134,20 @@ public final class SiteSamples {
     }
 
     /** Eine Raubritterburg mit der Mitte des Hofs bei {@code origin} (y = oberste Schicht des Hofs). */
+    /** Der Turm der Aschenesse mit der Mitte bei {@code center} (y = Boden der Schlackenhalle, eine Schicht über der Lava). */
+    public static SitePiece ashForge(BlockPos center) {
+        return AshForge.tower(center, Rotation.NONE, 0xA5E5L);
+    }
+
+    /**
+     * Eine Brücke der Aschenesse nach Süden (+z) vom Turm bei {@code center}: {@code len} lang, am Ende ein Wachturm
+     * ({@code rock} falsch) oder eine Felsstube ({@code variant}: 0 Glutkammer, 1 Vorrat, 2 Wachstube, 3 Kerker) mit einem
+     * Stollen von {@code exit} Blöcken dahinter.
+     */
+    public static SitePiece ashForgeBridge(BlockPos center, int len, boolean rock, int exit, int variant) {
+        return AshForge.bridge(center, Rotation.NONE, 0xA5E6L + variant, len, rock ? AshForge.END_ROCK : AshForge.END_TOWER, exit, variant);
+    }
+
     public static SitePiece robberCastle(BlockPos origin) {
         return new SitePiece(SiteKind.ROBBER_CASTLE, 0, origin, Rotation.NONE, 0xB06L, new int[0], RobberCastle.box(origin));
     }

@@ -284,8 +284,12 @@ public final class ModStructures {
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 94_251_331);
                 case ROBBER_CASTLE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(80, 20,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.TRIANGULAR, 10_387_321);
+                // die Aschenesse teilt sich die Plätze mit den Bastionen (data/minecraft/worldgen/structure_set/nether_complexes.json)
+                case ASH_FORGE -> null;
             };
-            context.register(siteSet(kind), new StructureSet(structure, placement));
+            if (placement != null) {
+                context.register(siteSet(kind), new StructureSet(structure, placement));
+            }
         }
     }
 
@@ -316,6 +320,27 @@ public final class ModStructures {
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                                     io.github.sirschrolli.kingdomsatwar.registry.ModEntities.PILLAGER.get(),
                                     new net.minecraft.util.valueproviders.ConstantInt(1)))));
+            // in der Aschenesse wie in der Festung: Glutgeister, Brandgebeine, Moderborstlinge, Gerippe und Glutschleime
+            case ASH_FORGE -> java.util.Map.of(
+                    net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                            net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.PIECE,
+                            net.minecraft.util.random.WeightedList.<net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData>builder()
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.BLAZE.get(),
+                                            net.minecraft.util.valueproviders.UniformInt.of(2, 3)), 10)
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIFIED_PIGLIN.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(4)), 5)
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.WITHER_SKELETON.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(5)), 8)
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SKELETON.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(5)), 2)
+                                    .add(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
+                                            io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MAGMA_CUBE.get(),
+                                            net.minecraft.util.valueproviders.ConstantInt.of(4)), 3)
+                                    .build()));
             // in der Kathedrale herrscht Stille: dort entsteht nichts von selbst (wie in der antiken Stadt)
             case SILENT_CATHEDRAL -> {
                 var none = new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
