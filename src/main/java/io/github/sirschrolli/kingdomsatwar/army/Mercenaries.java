@@ -23,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * Söldner in den Dörfern: Im Söldnerhaus jedes Dorfs warten jeden Morgen bis zu drei Kämpfer – Schwertkämpfer,
  * Bogenschützen, Ritter und Hauptleute, manche schon erfahren (Veteran, Elite). An der Söldnertafel sieht man, wer da
  * ist und was er kostet; angeheuert wird mit Münzen (Ritter und Hauptleute bringen ihre Ausrüstung selbst mit, dafür
- * ist ihr Sold höher). Ausgebildet und befördert wird später am eigenen Rekrutierungstisch.
+ * ist ihr Sold höher). Geheilt, ausgebildet und befördert wird später am eigenen Feldherrentisch.
  */
 public final class Mercenaries {
     /** So viele Söldner warten höchstens an einer Tafel. */

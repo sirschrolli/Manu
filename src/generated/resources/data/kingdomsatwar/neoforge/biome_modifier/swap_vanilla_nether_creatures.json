@@ -2,7 +2,9 @@
   "type": "kingdomsatwar:replace_spawns",
   "biomes": "#minecraft:is_nether",
   "replacements": {
+    "minecraft:hoglin": "kingdomsatwar:hoglin",
     "minecraft:piglin": "kingdomsatwar:piglin",
+    "minecraft:strider": "kingdomsatwar:strider",
     "minecraft:zombified_piglin": "kingdomsatwar:zombified_piglin"
   }
 }

@@ -2,6 +2,8 @@ package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
+import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import net.minecraft.core.Holder;
@@ -14,12 +16,9 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.animal.fox.Fox;
-import net.minecraft.world.entity.animal.wolf.Wolf;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.Bear;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.HouseCat;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildArmadillo;
@@ -137,7 +136,11 @@ public final class FarmAnimalConversion {
                 // Nether-Volk (E5a)
                 Map.entry(EntityTypes.PIGLIN, ModEntities.PIGLIN),
                 Map.entry(EntityTypes.PIGLIN_BRUTE, ModEntities.PIGLIN_BRUTE),
-                Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN));
+                Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN),
+                // Tiere des Nethers (E5a-2)
+                Map.entry(EntityTypes.HOGLIN, ModEntities.HOGLIN),
+                Map.entry(EntityTypes.ZOGLIN, ModEntities.ZOGLIN),
+                Map.entry(EntityTypes.STRIDER, ModEntities.STRIDER));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */
@@ -146,19 +149,37 @@ public final class FarmAnimalConversion {
         return target == null ? null : target.get();
     }
 
+    /** Alle Vanilla-Typen, die durch eigene ersetzt werden. */
+    public static java.util.Set<EntityType<?>> replacedTypes() {
+        return replacements().keySet();
+    }
+
+    /** Der Vanilla-Typ, den ein eigener Typ ersetzt ({@code null}, wenn keiner) – für {@link ReplacesVanilla}. */
+    public static @Nullable EntityType<?> vanillaOf(EntityType<?> own) {
+        return Originals.MAP.get(own);
+    }
+
+    /** Eigener Typ -> ersetzter Vanilla-Typ (das Hausrind gilt als Kuh). */
+    private static final class Originals {
+        static final Map<EntityType<?>, EntityType<?>> MAP = build();
+
+        private static Map<EntityType<?>, EntityType<?>> build() {
+            Map<EntityType<?>, EntityType<?>> map = new IdentityHashMap<>();
+            Replacements.MAP.forEach((vanilla, own) -> {
+                if (vanilla != EntityTypes.MOOSHROOM) {
+                    map.put(own.get(), vanilla);
+                }
+            });
+            return map;
+        }
+    }
+
     /** Merkmal für Vanilla-Wesen, die schon anders ersetzt wurden (geheilte Dorfbewohner) und nicht erscheinen sollen. */
     public static final String REPLACED_TAG = "kingdomsatwar_replaced";
 
     @SubscribeEvent
     static void onJoin(EntityJoinLevelEvent event) {
         if (!(event.getLevel() instanceof ServerLevel level) || !(event.getEntity() instanceof Mob mob)) {
-            return;
-        }
-        if (mob instanceof Wolf wolf && !(mob instanceof WildWolf) && event.loadedFromDisk()) {
-            // alte, schon gespeicherte Vanilla-Wölfe jagen nur Vanilla-Schafe und -Kaninchen – auch die eigenen sollen
-            // vor ihnen auf der Hut sein (die eigenen Wölfe tun das von selbst)
-            wolf.targetSelector.addGoal(5, new NonTameRandomTargetGoal<>(wolf, Animal.class, false,
-                    (target, targetLevel) -> target instanceof FarmSheep || target instanceof Hare || target instanceof WildFox));
             return;
         }
         if (event.loadedFromDisk()) {

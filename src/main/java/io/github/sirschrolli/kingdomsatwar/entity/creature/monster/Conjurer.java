@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * ein kahler Runenpriester mit leuchtenden Zeichen und langem weißem Bart. Ruft Fangzähne aus dem Boden und Plagegeister
  * in seiner Farbe herbei, färbt blaue Schafe rot und lässt das Totem der Unsterblichkeit fallen.
  */
-public class Conjurer extends Evoker implements Monsters.Varied {
+public class Conjurer extends Evoker implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Conjurer.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

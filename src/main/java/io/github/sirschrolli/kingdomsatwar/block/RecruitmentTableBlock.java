@@ -21,8 +21,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * Der Rekrutierungstisch: Ein Klick öffnet die Anwerbe-Liste, in der man Soldaten gegen Smaragde
- * (und für Ritter und Hauptleute etwas Stahl bzw. einen Edelstein) in seinen Dienst nimmt.
+ * Der Feldherrentisch (Block-Kennung wie früher {@code recruitment_table}, damit gebaute Tische bleiben): Ein Klick öffnet
+ * sein Fenster – dort heilt der Feldscher die Verwundeten im Feldlager, und man bildet seine Soldaten aus.
  */
 public class RecruitmentTableBlock extends HorizontalDirectionalBlock {
     /** Tischplatte und vier Beine. */

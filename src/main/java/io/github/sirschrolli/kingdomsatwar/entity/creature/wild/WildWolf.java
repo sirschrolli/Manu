@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmSheep;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Hare;
@@ -38,7 +39,7 @@ import org.jspecify.annotations.Nullable;
  * in den alten Taigas, Steppenwolf in Savanne und Tafelbergen, Rotwolf im Dschungel. Zähmen, Sitzen, Halsband,
  * Wolfspanzer, Rudel und Jagd wie bei Vanilla – gejagt werden auch die eigenen Schafe, Hasen und Füchse.
  */
-public class WildWolf extends Wolf {
+public class WildWolf extends Wolf implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { GRAU, POLAR, SCHWARZ, TIMBER, STEPPE, ROT }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

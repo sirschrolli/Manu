@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.level.Level;
@@ -9,7 +10,7 @@ import net.minecraft.world.level.Level;
  * türkis leuchtendem Auge. Hütet die Halle des Korallenpalasts, belegt Eindringlinge mit Abbaulähmung und lässt
  * nasse Schwämme fallen.
  */
-public class ElderReefGuardian extends ElderGuardian {
+public class ElderReefGuardian extends ElderGuardian implements ReplacesVanilla {
     public ElderReefGuardian(EntityType<? extends ElderReefGuardian> type, Level level) {
         super(type, level);
     }

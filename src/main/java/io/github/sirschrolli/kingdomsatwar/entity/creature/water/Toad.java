@@ -1,7 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.water;
 
-import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.Courtship;
-import net.minecraft.server.level.ServerLevel;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.Level;
@@ -11,17 +10,8 @@ import net.minecraft.world.level.Level;
  * rostbrauner Grasfrosch. Springt, quakt, fängt mit der Zunge Schleime und Magmawürfel und lässt Froschlichter
  * entstehen wie der Vanilla-Frosch.
  */
-public class Toad extends Frog {
+public class Toad extends Frog implements ReplacesVanilla {
     public Toad(EntityType<? extends net.minecraft.world.entity.animal.Animal> type, Level level) {
         super(type, level);
-    }
-
-    /** Das Vanilla-Gehirn sucht Partner nur unter Vanilla-Fröschen – die Werbung übernimmt {@link Courtship} (danach laicht das Weibchen wie gewohnt). */
-    private final Courtship<Toad> courtship = new Courtship<>(Toad.class, 70);
-
-    @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
-        this.courtship.tick(level, this, frog -> !frog.isPanicking());
     }
 }

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -27,13 +28,11 @@ import org.jspecify.annotations.Nullable;
  * Gürteltier – ersetzt das Vanilla-Gürteltier. Neunbinden-Gürteltier und gelbbraunes Kugelgürteltier in Savanne und
  * Tafelbergen. Rollt sich bei Gefahr ein, wirft Hornplatten ab (Bürste!) und mag Spinnenaugen – wie bei Vanilla.
  */
-public class WildArmadillo extends Armadillo {
+public class WildArmadillo extends Armadillo implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { NEUNBINDEN, KUGEL }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =
             SynchedEntityData.defineId(WildArmadillo.class, EntityDataSerializers.INT);
-
-    private final Courtship<WildArmadillo> courtship = new Courtship<>(WildArmadillo.class, 70);
 
     public WildArmadillo(EntityType<? extends WildArmadillo> type, Level level) {
         super(type, level);
@@ -91,13 +90,6 @@ public class WildArmadillo extends Armadillo {
             pup.setBreed(this.random.nextBoolean() ? this.getBreed() : other);
         }
         return pup;
-    }
-
-    /** Das Vanilla-Gehirn sucht Partner nur unter Vanilla-Gürteltieren – die Werbung übernimmt {@link Courtship}. */
-    @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
-        this.courtship.tick(level, this, armadillo -> !armadillo.shouldHideInShell() && !armadillo.isPanicking());
     }
 
     @Override

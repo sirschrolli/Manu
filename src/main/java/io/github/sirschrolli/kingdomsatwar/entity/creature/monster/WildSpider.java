@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Spinne (statt Vanilla-Spinne): dunkelbraune, behaarte Waldspinne, sandfarbene Wüstenspinne, schwarz-rote
  * Dschungelspinne oder weißgraue Schneespinne – klettert, springt an und trägt manchmal ein Gerippe als Reiter.
  */
-public class WildSpider extends Spider implements Monsters.Varied {
+public class WildSpider extends Spider implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(WildSpider.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

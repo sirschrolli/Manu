@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -30,7 +31,7 @@ import org.jspecify.annotations.Nullable;
  * Smoking und die schwarze Hexenkatze (beim Hexenbaum). Zähmen mit Fisch, Halsband, Sitzen, Schlafen beim Spieler und
  * Geschenke am Morgen wie bei Vanilla; Creeper und Phantome fürchten sie genauso.
  */
-public class HouseCat extends Cat {
+public class HouseCat extends Cat implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { GETIGERT, ROT, SIAM, KARTAEUSER, GLUECK, PERSER, SMOKING, HEXE }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

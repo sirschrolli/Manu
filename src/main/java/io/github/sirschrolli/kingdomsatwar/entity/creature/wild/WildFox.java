@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * Wüstenfuchs (Fennek) mit riesigen Ohren in Wüste und Tafelbergen. Schläft tagsüber, lauert, springt auf Beute,
  * trägt Dinge im Maul, pflückt Beeren und vertraut seinen Züchtern – alles wie bei Vanilla.
  */
-public class WildFox extends Fox {
+public class WildFox extends Fox implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { ROT, POLAR, WUESTE, SILBER }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

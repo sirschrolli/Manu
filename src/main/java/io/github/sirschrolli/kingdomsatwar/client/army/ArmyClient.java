@@ -12,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Nachrichten vom Server rund um die Armee: Anwerbe-Fenster und Söldnertafel öffnen und Ergebnisse anzeigen. */
+/** Nachrichten vom Server rund um die Armee: Feldherrentisch und Söldnertafel öffnen und Ergebnisse anzeigen. */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class ArmyClient {
     private ArmyClient() {}
@@ -25,7 +25,7 @@ public final class ArmyClient {
     }
 
     private static void onOpen(OpenRecruitScreenPayload payload, IPayloadContext context) {
-        Minecraft.getInstance().gui.setScreen(new RecruitScreen(payload.pos(), payload.armyLimit()));
+        Minecraft.getInstance().gui.setScreen(new WarTableScreen(payload.pos(), payload.armyLimit()));
     }
 
     private static void onOpenBoard(OpenMercenaryBoardPayload payload, IPayloadContext context) {
@@ -37,7 +37,7 @@ public final class ArmyClient {
         if (payload.result() < 0 || payload.result() >= results.length) {
             return;
         }
-        if (Minecraft.getInstance().gui.screen() instanceof RecruitScreen screen) {
+        if (Minecraft.getInstance().gui.screen() instanceof WarTableScreen screen) {
             screen.onResult(results[payload.result()]);
         } else if (Minecraft.getInstance().gui.screen() instanceof MercenaryScreen screen) {
             screen.onResult(results[payload.result()]);

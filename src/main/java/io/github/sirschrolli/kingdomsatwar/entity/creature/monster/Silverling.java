@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Silberfischchen (statt Vanilla-Silberfischchen): silbergrau mit Segmentschuppen oder – tief unten im Tiefenschiefer –
  * dunkel mit bläulichem Schimmer. Versteckt sich in Steinen und ruft Artgenossen herbei.
  */
-public class Silverling extends Silverfish implements Monsters.Varied {
+public class Silverling extends Silverfish implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Silverling.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

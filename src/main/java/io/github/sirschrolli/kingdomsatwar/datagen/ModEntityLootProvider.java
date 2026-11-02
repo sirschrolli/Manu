@@ -180,6 +180,9 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.PIGLIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PIGLIN));
         this.add(ModEntities.PIGLIN_BRUTE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.PIGLIN_BRUTE));
         this.add(ModEntities.ZOMBIFIED_PIGLIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIFIED_PIGLIN));
+        this.add(ModEntities.HOGLIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HOGLIN));
+        this.add(ModEntities.ZOGLIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOGLIN));
+        this.add(ModEntities.STRIDER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.STRIDER));
         this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
         this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
         this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));

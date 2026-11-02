@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * oder ein Knochenjäger mit zerschlissener Kapuze und Köchergurt. Schießt mit dem Bogen, flieht vor Wölfen, wird im
  * Pulverschnee zum Frostgebein – wie das Vanilla-Skelett.
  */
-public class Boneman extends Skeleton implements Monsters.Varied {
+public class Boneman extends Skeleton implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Boneman.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

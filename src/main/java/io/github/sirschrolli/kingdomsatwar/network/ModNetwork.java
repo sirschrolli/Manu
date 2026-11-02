@@ -27,7 +27,7 @@ public final class ModNetwork {
     static void register(RegisterPayloadHandlersEvent event) {
         event.registrar(PROTOCOL)
                 .playToServer(DragonBreathPayload.TYPE, DragonBreathPayload.STREAM_CODEC, DragonBreathPayload::handle)
-                .playToServer(RecruitPayload.TYPE, RecruitPayload.STREAM_CODEC, RecruitPayload::handle)
+                .playToServer(HealPayload.TYPE, HealPayload.STREAM_CODEC, HealPayload::handle)
                 .playToServer(TrainPayload.TYPE, TrainPayload.STREAM_CODEC, TrainPayload::handle)
                 .playToServer(HirePayload.TYPE, HirePayload.STREAM_CODEC, HirePayload::handle)
                 .playToServer(TradePayload.TYPE, TradePayload.STREAM_CODEC, TradePayload::handle)

@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownNames;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession;
 import io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
@@ -35,7 +36,7 @@ import org.jspecify.annotations.Nullable;
  * wird wieder genau der Dorfbewohner, der er war – mit Namen, Beruf, Gesicht, Dorf, Bett und Arbeitsplatz, wenn er
  * einmal einer war (Wiedergänger machen Dorfbewohner auf "Normal" zur Hälfte, auf "Schwer" immer zu Untoten).
  */
-public class UndeadVillager extends ZombieVillager implements Monsters.Varied {
+public class UndeadVillager extends ZombieVillager implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Byte> DATA_PROFESSION = SynchedEntityData.defineId(UndeadVillager.class,
             EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(UndeadVillager.class, EntityDataSerializers.BYTE);

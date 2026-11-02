@@ -7,7 +7,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-/** Server an Spiel: Anwerbe-Fenster des Rekrutierungstischs bei {@code pos} öffnen. */
+/** Server an Spiel: Fenster des Feldherrentischs bei {@code pos} öffnen. */
 public record OpenRecruitScreenPayload(BlockPos pos, int armyLimit) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<OpenRecruitScreenPayload> TYPE =
             new CustomPacketPayload.Type<>(KingdomsAtWar.id("open_recruit_screen"));

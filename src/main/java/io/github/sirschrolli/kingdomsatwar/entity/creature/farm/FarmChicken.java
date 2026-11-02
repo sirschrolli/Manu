@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * (kalte Länder) blaue Eier; der Hahn mit großem Kamm und Sichelfedern legt keine. Etwa jedes fünfte Küken wird ein
  * Hahn. Hühnerjockeys, Flattern und Futter wie bei Vanilla.
  */
-public class FarmChicken extends Chicken {
+public class FarmChicken extends Chicken implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { WHITE, BROWN, BLACK, BARRED, ROOSTER }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.rare;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * <p>Drei Gestalten: Schönwetterwolke (weiß mit goldenem Sonnensaum), Abendwolke (rosig mit fliederfarbenen Schatten,
  * eher in warmen Ländern) und Regenwölkchen (blaugrau, mit Tropfen an den Fäden; eher in feuchten und kalten Ländern).
  */
-public class CloudJelly extends HappyGhast implements Monsters.Varied {
+public class CloudJelly extends HappyGhast implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(CloudJelly.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

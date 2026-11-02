@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * Wüstenkriecher, ein bereifter Schneekriecher, ein Höhlenkriecher mit Flechten und leuchtenden Pilzflecken oder ein
  * blühender Dschungelkriecher. Zischt, explodiert und lässt sich vom Blitz aufladen wie der Vanilla-Creeper.
  */
-public class PlantCreeper extends Creeper implements Monsters.Varied {
+public class PlantCreeper extends Creeper implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(PlantCreeper.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

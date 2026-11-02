@@ -47,7 +47,7 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests der Armee: Ausbilden am Rekrutierungstisch (Ränge mit ihren Werten, Beförderung zur nächsten Art mit Name, Rang
+ * Tests der Armee: Ausbilden am Feldherrentisch (Ränge mit ihren Werten, Beförderung zur nächsten Art mit Name, Rang
  * und Herrn, Speichern), die Söldnertafel (füllt auf, heuert an, prüft Geld und Armeegröße) und das Söldnerhaus der
  * Dörfer in jeder Bauweise.
  */
@@ -102,8 +102,7 @@ final class ArmyGameTests {
 
     /**
      * Ein Schwertkämpfer wird am Tisch Veteran (27 Bronze und 3 Eisen), dann Elite (45 Bronze und 2 Stahl) und dann
-     * Ritter (81 Bronze und 2 Stahl): Er behält Herrn, Namen und Rang, seine Werte wachsen mit. Ritter und Hauptleute
-     * wirbt man am Tisch nicht mehr an.
+     * Ritter (81 Bronze und 2 Stahl): Er behält Herrn, Namen und Rang, seine Werte wachsen mit.
      */
     private static void training(GameTestHelper helper) {
         floor(helper);
@@ -113,10 +112,6 @@ final class ArmyGameTests {
         BlockPos table = helper.absolutePos(tableLocal);
         ServerPlayer player = player(helper, new Vec3(4.5, 1, 1.5));
         try {
-            helper.assertTrue(Recruitment.recruit(player, table, SoldierType.KNIGHT) == Recruitment.Result.VILLAGES_ONLY,
-                    "Ritter am Tisch muss auf die Dörfer verweisen");
-            helper.assertTrue(Recruitment.recruit(player, table, SoldierType.CAPTAIN) == Recruitment.Result.VILLAGES_ONLY,
-                    "Hauptmann am Tisch muss auf die Dörfer verweisen");
             SoldierEntity soldier = helper.spawn(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(2, 1, 4));
             soldier.finalizeSpawn(level, level.getCurrentDifficultyAt(soldier.blockPosition()), EntitySpawnReason.COMMAND, null);
             soldier.setOwner(player);

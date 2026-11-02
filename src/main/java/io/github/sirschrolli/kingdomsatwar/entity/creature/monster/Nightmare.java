@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Nachtmahr (statt Phantom): ein knochiger Flugschatten mit zerfransten Flughäuten in tiefem Indigo, seltener
  * fahl grau-violett. Sucht wie das Phantom die Schlaflosen heim und lässt Phantomhaut fallen.
  */
-public class Nightmare extends Phantom implements Monsters.Varied {
+public class Nightmare extends Phantom implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Nightmare.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

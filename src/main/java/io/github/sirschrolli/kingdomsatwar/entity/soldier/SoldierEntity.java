@@ -102,7 +102,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     private static final EntityDataAccessor<Optional<BlockPos>> DATA_HALL =
             SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
-    /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Rekrutierungstisch ausgebildet oder als Söldner schon erfahren). */
+    /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Feldherrentisch ausgebildet oder als Söldner schon erfahren). */
     public static final int MAX_RANK = 2;
     private static final net.minecraft.resources.Identifier RANK_MODIFIER = KingdomsAtWar.id("rank");
 

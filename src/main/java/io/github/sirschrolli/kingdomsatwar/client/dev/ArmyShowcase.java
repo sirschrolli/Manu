@@ -2,7 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.block.entity.MercenaryBoardBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.client.army.MercenaryScreen;
-import io.github.sirschrolli.kingdomsatwar.client.army.RecruitScreen;
+import io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 
 /**
- * Vorführung der Armee: Soldaten in allen Rängen (vorn und hinten), das Ausbilden am Rekrutierungstisch und die
+ * Vorführung der Armee: Soldaten in allen Rängen (vorn und hinten), Heilen und Ausbilden am Feldherrentisch und die
  * Söldnertafel mit ihren wartenden Söldnern.
  */
 final class ArmyShowcase {
@@ -73,21 +73,20 @@ final class ArmyShowcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));
-        steps.add(Step.screen(minecraft -> new RecruitScreen(new BlockPos(30, Showcase.ground, tz), 32)));
-        steps.add(Step.waitTicks(10));
-        steps.add(Step.once(minecraft -> {
-            if (minecraft.gui.screen() instanceof RecruitScreen screen) {
-                screen.showTraining();
+        steps.add(Step.server(level -> {
+            // zwei Verwundete im Feldlager: der Feldscher nennt seinen Lohn
+            for (SoldierEntity soldier : level.getEntitiesOfClass(SoldierEntity.class, new net.minecraft.world.phys.AABB(new BlockPos(30, Showcase.ground, tz)).inflate(8.0))) {
+                if (soldier.getSoldierType() == SoldierType.KNIGHT || soldier.getSoldierType() == SoldierType.ARCHER) {
+                    soldier.setHealth(soldier.getMaxHealth() * 0.4f);
+                }
             }
         }));
-        steps.add(Step.once(Showcase::parkMouse));
-        steps.add(Step.waitTicks(15));
-        steps.add(Step.screenshot("train_screen_1"));
-        steps.add(Step.screen(minecraft -> new RecruitScreen(new BlockPos(30, Showcase.ground, tz), 32)));
+        steps.add(Step.waitTicks(5));
+        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, Showcase.ground, tz), 32)));
         steps.add(Step.waitTicks(10));
         steps.add(Step.once(Showcase::parkMouse));
-        steps.add(Step.waitTicks(5));
-        steps.add(Step.screenshot("recruit_screen_tabs"));
+        steps.add(Step.waitTicks(15));
+        steps.add(Step.screenshot("war_table_screen"));
         steps.add(Step.screen(minecraft -> null));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.hud(false));

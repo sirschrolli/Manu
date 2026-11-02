@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.water;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ import org.jspecify.annotations.Nullable;
  * Karettschildkröte mit bernsteinfarbenem Flammenmuster und spitzem Schnabel. Kehrt zu ihrem Heimatstrand zurück,
  * legt dort Eier und lässt als Jungtier Schildkrötenschuppen fallen.
  */
-public class SeaTurtle extends Turtle implements Monsters.Varied {
+public class SeaTurtle extends Turtle implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(SeaTurtle.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

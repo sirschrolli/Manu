@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.economy.citizen.CoinTrader;
 import io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownNames;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -39,7 +40,7 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>Drei Gesichter: ein alter Mann mit grauem Vollbart, ein jüngerer mit Schnurrbart und eine rothaarige Händlerin.
  */
-public class TravelingMerchant extends WanderingTrader implements CoinTrader {
+public class TravelingMerchant extends WanderingTrader implements CoinTrader, ReplacesVanilla {
     private static final EntityDataAccessor<Byte> DATA_VARIANT = SynchedEntityData.defineId(TravelingMerchant.class, EntityDataSerializers.BYTE);
 
     /** Anzahl der Gesichter (das letzte ist eine Frau). */

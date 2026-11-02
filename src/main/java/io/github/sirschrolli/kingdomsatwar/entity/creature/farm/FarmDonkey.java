@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,7 +23,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 /** Esel – ersetzt den Vanilla-Esel: Grauesel mit Schulterkreuz oder brauner Esel; trägt Packtaschen (Truhe). */
-public class FarmDonkey extends Donkey {
+public class FarmDonkey extends Donkey implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { GRAU, BRAUN }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

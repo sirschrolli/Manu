@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.golem;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.WildAnimals;
@@ -30,7 +31,7 @@ import org.jspecify.annotations.Nullable;
  * <p>Vier Gestalten: Mooswichtel (Moosmütze mit Blüten), Pilzwichtel (Fliegenpilz-Hut), Laubwichtel (Herbstlaub) und
  * Sternwichtel (nachtblau mit goldenen Sternen).
  */
-public class HouseSprite extends Allay implements Monsters.Varied {
+public class HouseSprite extends Allay implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(HouseSprite.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

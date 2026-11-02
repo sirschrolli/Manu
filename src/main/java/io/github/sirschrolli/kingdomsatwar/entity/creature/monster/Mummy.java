@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Mumie (statt Wüstenzombie): in Leinenbinden gewickelt mit Goldkragen, oder als vertrockneter Wüstenwanderer in Tuch
  * und Turban. Brennt nicht in der Sonne und macht hungrig – wie der Vanilla-Wüstenzombie.
  */
-public class Mummy extends Husk implements Monsters.Varied {
+public class Mummy extends Husk implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Mummy.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

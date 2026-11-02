@@ -1,6 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.rare;
 
-import io.github.sirschrolli.kingdomsatwar.entity.creature.wild.Courtship;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import net.minecraft.server.level.ServerLevel;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
@@ -34,7 +34,7 @@ import org.jspecify.annotations.Nullable;
  * <p>Drei Gestalten nach dem Land, in dem er schlüpft: Zottelwühler (dunkles Kastanienfell), Steppenwühler (in warmen,
  * trockenen Ländern; ockerfarben mit dunklen Rückenstreifen) und Frostwühler (in kalten Ländern; langes graues Fell).
  */
-public class PrimevalDigger extends Sniffer implements Monsters.Varied {
+public class PrimevalDigger extends Sniffer implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(PrimevalDigger.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {
@@ -104,14 +104,5 @@ public class PrimevalDigger extends Sniffer implements Monsters.Varied {
     @Override
     protected Component getTypeName() {
         return Monsters.typeName(this.getType(), this.getLook());
-    }
-
-    /** Das Vanilla-Gehirn sucht Partner nur unter Vanilla-Schnüfflern – die Werbung übernimmt {@link Courtship} (danach legt der Urwühler ein Ei). */
-    private final Courtship<PrimevalDigger> courtship = new Courtship<>(PrimevalDigger.class, 70);
-
-    @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
-        this.courtship.tick(level, this, digger -> !digger.isPanicking());
     }
 }

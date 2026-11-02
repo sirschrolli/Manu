@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Skelettpferd: gebleichte Knochen mit leuchtenden Augenhöhlen oder uralte, braun verfärbte Knochen mit Moos.
  * Erscheint wie das Vanilla-Skelettpferd als Falle im Gewitter (mit Gerippe-Reitern) und lässt sich zähmen.
  */
-public class BoneHorse extends SkeletonHorse implements Monsters.Varied {
+public class BoneHorse extends SkeletonHorse implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(BoneHorse.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

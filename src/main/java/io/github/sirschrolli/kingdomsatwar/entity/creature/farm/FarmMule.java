@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 /** Maultier – Kreuzung aus Pferd und Esel (unfruchtbar), braun oder schwarzbraun mit hellem Maul. */
-public class FarmMule extends Mule {
+public class FarmMule extends Mule implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { BRAUN, RAPPE }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

@@ -23,6 +23,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
                               turtle,
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
+                              hoglin, hoglin_baby, strider, strider_baby,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -220,6 +221,17 @@ def main():
     write_model(piglin_baby, "BorstlingBabyGeometry",
                 "Geometrie der jungen Borstlinge und Moderborstlinge (Knochen wie beim Vanilla-Piglin-Kind).",
                 "piglin/baby", {k: v for k, v in piglin_baby.PALETTES.items() if k != "borstenhuene"}, preview)
+    write_model(hoglin, "GlutkeilerGeometry",
+                "Geometrie der Glutkeiler und Moderkeiler (Knochen wie beim Vanilla-Hoglin; Pilze nur beim Karmesinkeiler, Kruste nur beim Schlackenkeiler bemalt).",
+                "hoglin", hoglin.PALETTES, preview)
+    write_model(hoglin_baby, "GlutkeilerBabyGeometry",
+                "Geometrie der Glut-Frischlinge und jungen Moderkeiler (Knochen wie beim Vanilla-Hoglin-Jungtier).",
+                "hoglin/baby", hoglin_baby.PALETTES, preview)
+    write_model(strider, "LavastelzerGeometry",
+                "Geometrie der Lavastelzer (Knochen und Rumpf wie beim Vanilla-Schreiter, damit der Sattel passt).",
+                "strider", strider.PALETTES, preview)
+    write_model(strider_baby, "LavastelzerBabyGeometry", "Geometrie der jungen Lavastelzer (Knochen wie beim Vanilla-Schreiter-Jungtier).",
+                "strider/baby", strider_baby.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

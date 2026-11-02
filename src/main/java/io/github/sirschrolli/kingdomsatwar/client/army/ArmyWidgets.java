@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
-/** Gemeinsame Bausteine der Armee-Fenster (Rekrutierungstisch und Söldnertafel). */
+/** Gemeinsame Bausteine der Armee-Fenster (Feldherrentisch und Söldnertafel). */
 final class ArmyWidgets {
     static final Identifier SLOT = Identifier.withDefaultNamespace("container/slot");
     static final Identifier HEART = Identifier.withDefaultNamespace("hud/heart/full");

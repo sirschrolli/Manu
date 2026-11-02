@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes;
 import net.minecraft.core.Holder;
@@ -11,13 +12,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.DifficultyInstance;
-import java.util.Comparator;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -34,18 +32,13 @@ import org.jspecify.annotations.Nullable;
  * die Hausziege auf Bergwiesen. Rammen, weite Sprünge, Hörner (die abbrechen können), Ziegenhörner und Milch wie bei
  * Vanilla.
  */
-public class FarmGoat extends Goat {
+public class FarmGoat extends Goat implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { STEINBOCK, GAEMSE, SCHNEE, HAUS }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =
             SynchedEntityData.defineId(FarmGoat.class, EntityDataSerializers.INT);
     private static final UniformInt TIME_BETWEEN_LONG_JUMPS = UniformInt.of(600, 1200);
     private static final UniformInt TIME_BETWEEN_RAMS = UniformInt.of(600, 6000);
-    /** So lange stehen zwei verliebte Ziegen beieinander, bis ein Zicklein kommt (wie bei Vanilla 60–110 Ticks). */
-    private static final int COURTSHIP_TICKS = 70;
-
-    private @Nullable FarmGoat courtPartner;
-    private int courtship;
 
     public FarmGoat(EntityType<? extends FarmGoat> type, Level level) {
         super(type, level);
@@ -117,47 +110,6 @@ public class FarmGoat extends Goat {
                     breedFor(level.getBiome(this.blockPosition()), this.random)));
         }
         return kid;
-    }
-
-    /** Ziegen rammen keine anderen Ziegen (Vanilla schließt nur den eigenen Typ aus). */
-    @Override
-    public boolean canAttack(LivingEntity target) {
-        return !(target instanceof Goat) && super.canAttack(target);
-    }
-
-    @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
-        this.court(level);
-    }
-
-    /**
-     * Werbung: Das Gehirn der Vanilla-Ziege sucht Partner nur unter Vanilla-Ziegen; die eigenen Ziegen suchen sich hier
-     * eine verliebte Ziege in der Nähe, gehen aufeinander zu und bekommen nach einer Weile ein Zicklein.
-     */
-    private void court(ServerLevel level) {
-        if (!this.isInLove() || this.isPanicking() || this.isBaby()) {
-            this.courtPartner = null;
-            this.courtship = 0;
-            return;
-        }
-        FarmGoat partner = this.courtPartner;
-        if (partner == null || !partner.isAlive() || !this.canMate(partner) || this.distanceToSqr(partner) > 16.0 * 16.0) {
-            partner = level.getEntitiesOfClass(FarmGoat.class, this.getBoundingBox().inflate(8.0),
-                            goat -> goat != this && this.canMate(goat) && !goat.isPanicking())
-                    .stream().min(Comparator.comparingDouble(this::distanceToSqr)).orElse(null);
-            this.courtPartner = partner;
-            this.courtship = 0;
-            if (partner == null) {
-                return;
-            }
-        }
-        BehaviorUtils.lockGazeAndWalkToEachOther(this, partner, 1.0f, 2);
-        if (this.closerThan(partner, 3.0) && ++this.courtship >= COURTSHIP_TICKS && this.getId() < partner.getId()) {
-            this.spawnChildFromBreeding(level, partner);
-            this.courtPartner = null;
-            this.courtship = 0;
-        }
     }
 
     @Override

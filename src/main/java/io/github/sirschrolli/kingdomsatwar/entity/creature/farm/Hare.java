@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -29,7 +30,7 @@ import org.jspecify.annotations.Nullable;
  * Wüstenhase mit Riesenlöffeln in Wüste und Savanne, Wildkaninchen in Wäldern, Scheckenkaninchen auf Weiden – und der
  * berüchtigte Mordshase (nur per Befehl, wie der Killerhase). Hoppeln, Karottenklau und Zucht wie bei Vanilla.
  */
-public class Hare extends Rabbit {
+public class Hare extends Rabbit implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed {
         FELDHASE(Rabbit.Variant.BROWN), SCHNEEHASE(Rabbit.Variant.WHITE), WUESTENHASE(Rabbit.Variant.GOLD),
         KANINCHEN(Rabbit.Variant.SALT), SCHECKE(Rabbit.Variant.WHITE_SPLOTCHED), MORDSHASE(Rabbit.Variant.EVIL);

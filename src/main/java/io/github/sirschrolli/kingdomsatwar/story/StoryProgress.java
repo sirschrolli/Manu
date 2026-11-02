@@ -19,7 +19,7 @@ public final class StoryProgress {
         CHRONICLE_GIVEN,
         /** Die Chronik wurde gelesen. */
         CHRONICLE_READ,
-        /** Ein Rekrutierungstisch wurde aufgestellt. */
+        /** Ein Feldherrentisch (früher Rekrutierungstisch) wurde aufgestellt. */
         TABLE_PLACED,
         /** Der erste Soldat wurde angeworben. */
         RECRUITED,

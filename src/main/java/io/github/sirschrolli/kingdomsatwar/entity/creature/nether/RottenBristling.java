@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.nether;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import net.minecraft.core.BlockPos;
@@ -26,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>Zwei Gestalten nach dem Land: karmesinrot verfault oder aschgrau verwittert.
  */
-public class RottenBristling extends ZombifiedPiglin implements Monsters.Varied {
+public class RottenBristling extends ZombifiedPiglin implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(RottenBristling.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {
@@ -59,7 +60,9 @@ public class RottenBristling extends ZombifiedPiglin implements Monsters.Varied 
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason reason,
             @Nullable SpawnGroupData groupData) {
-        this.chooseLook(level, this.blockPosition());
+        if (reason != EntitySpawnReason.CONVERSION) {
+            this.chooseLook(level, this.blockPosition());                  // verweste Borstlinge behalten ihre Gestalt
+        }
         return super.finalizeSpawn(level, difficulty, reason, groupData);
     }
 

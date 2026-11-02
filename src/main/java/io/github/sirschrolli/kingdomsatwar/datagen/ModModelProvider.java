@@ -230,7 +230,7 @@ public class ModModelProvider extends ModelProvider {
             blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).with(stages));
         }
 
-        // --- Rekrutierungstisch (dreht sich zum Spieler) ---
+        // --- Feldherrentisch (dreht sich zum Spieler) ---
         Block table = ModBlocks.RECRUITMENT_TABLE.get();
         Material spruce = new Material(Identifier.withDefaultNamespace("block/spruce_planks"));
         TextureMapping tableTextures = new TextureMapping()
@@ -385,7 +385,8 @@ public class ModModelProvider extends ModelProvider {
                 ModItems.COD_SPAWN_EGG, ModItems.SALMON_SPAWN_EGG, ModItems.PUFFERFISH_SPAWN_EGG, ModItems.TROPICAL_FISH_SPAWN_EGG, ModItems.SQUID_SPAWN_EGG, ModItems.GLOW_SQUID_SPAWN_EGG, ModItems.DOLPHIN_SPAWN_EGG, ModItems.TURTLE_SPAWN_EGG, ModItems.AXOLOTL_SPAWN_EGG, ModItems.FROG_SPAWN_EGG, ModItems.TADPOLE_SPAWN_EGG, ModItems.NAUTILUS_SPAWN_EGG, ModItems.ZOMBIE_NAUTILUS_SPAWN_EGG,
                 ModItems.IRON_GOLEM_SPAWN_EGG, ModItems.SNOW_GOLEM_SPAWN_EGG, ModItems.COPPER_GOLEM_SPAWN_EGG, ModItems.ALLAY_SPAWN_EGG,
                 ModItems.SNIFFER_SPAWN_EGG, ModItems.HAPPY_GHAST_SPAWN_EGG, ModItems.WANDERING_TRADER_SPAWN_EGG, ModItems.PIGLIN_SPAWN_EGG,
-                ModItems.PIGLIN_BRUTE_SPAWN_EGG, ModItems.ZOMBIFIED_PIGLIN_SPAWN_EGG)) {
+                ModItems.PIGLIN_BRUTE_SPAWN_EGG, ModItems.ZOMBIFIED_PIGLIN_SPAWN_EGG, ModItems.HOGLIN_SPAWN_EGG, ModItems.ZOGLIN_SPAWN_EGG,
+                ModItems.STRIDER_SPAWN_EGG)) {
             flat(items, item.get());
         }
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,

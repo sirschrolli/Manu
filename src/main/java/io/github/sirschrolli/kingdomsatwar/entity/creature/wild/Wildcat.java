@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -27,7 +28,7 @@ import org.jspecify.annotations.Nullable;
  * die graue Waldkatze in den Wäldern. Scheu wie der Vanilla-Ozelot: Vertrauen gewinnt man nur mit Geduld und Fisch;
  * Hühner jagen sie gern.
  */
-public class Wildcat extends Ocelot {
+public class Wildcat extends Ocelot implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { OZELOT, LUCHS, WALDKATZE }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

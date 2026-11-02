@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.golem;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import net.minecraft.core.BlockPos;
@@ -24,7 +25,7 @@ import org.jspecify.annotations.Nullable;
  * Gesicht: Kohleaugen, ein Lächeln, eine Möhrennase – und eine Strickmütze in der Farbe des Schals (Rot, Grün, Blau
  * oder Gelb).
  */
-public class Snowman extends SnowGolem implements Monsters.Varied {
+public class Snowman extends SnowGolem implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Snowman.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

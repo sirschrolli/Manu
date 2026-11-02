@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Wasserleiche (statt Ertrunkener): ein Matrose im Streifenhemd mit Seetang im Haar oder ein Fischer in Ölzeug und
  * Strickmütze; in Flüssen meist Fischer. Schwimmt, wirft Dreizacke und trägt Nautilusschalen wie der Ertrunkene.
  */
-public class DrownedCorpse extends Drowned implements Monsters.Varied {
+public class DrownedCorpse extends Drowned implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(DrownedCorpse.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

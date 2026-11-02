@@ -6,7 +6,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-/** Server an Spiel: Ergebnis des Anwerbens ({@link io.github.sirschrolli.kingdomsatwar.army.Recruitment.Result}). */
+/** Server an Spiel: Ergebnis von Anheuern, Heilen oder Ausbilden ({@link io.github.sirschrolli.kingdomsatwar.army.Recruitment.Result}). */
 public record RecruitResultPayload(int result) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<RecruitResultPayload> TYPE = new CustomPacketPayload.Type<>(KingdomsAtWar.id("recruit_result"));
     public static final StreamCodec<RegistryFriendlyByteBuf, RecruitResultPayload> STREAM_CODEC =

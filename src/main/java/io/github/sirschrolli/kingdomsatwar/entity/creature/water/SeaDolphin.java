@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.water;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ import org.jspecify.annotations.Nullable;
  * Meeren – ein kleiner Schwertwal in Schwarz und Weiß. Spielt mit Gegenständen, führt zu Schätzen und schenkt
  * Delfingnade wie der Vanilla-Delfin.
  */
-public class SeaDolphin extends Dolphin implements Monsters.Varied {
+public class SeaDolphin extends Dolphin implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(SeaDolphin.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

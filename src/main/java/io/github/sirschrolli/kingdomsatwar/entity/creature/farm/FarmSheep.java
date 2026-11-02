@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -28,7 +29,7 @@ import org.jspecify.annotations.Nullable;
  * Schaf – ersetzt das Vanilla-Schaf. Rassen: Merino mit Wollschopf, Heidschnucke mit Schneckenhörnern und grauer Wolle
  * (Heiden, Nadelwälder, Berge), Schwarzkopfschaf. Scheren, Färben, Grasen und Nachwachsen der Wolle wie bei Vanilla.
  */
-public class FarmSheep extends Sheep {
+public class FarmSheep extends Sheep implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { MERINO, HEIDSCHNUCKE, SCHWARZKOPF }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.golem;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.golem.CopperGolem;
 import net.minecraft.world.level.Level;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.Level;
  * Kupfertruhen in die Truhen ringsum, läuft mit der Zeit an und wird grün, lässt sich mit Wachs schützen und mit der
  * Axt abschleifen, ein Blitz macht ihn wieder blank. Ganz oxidiert erstarrt er irgendwann zur Statue.
  */
-public class CopperServant extends CopperGolem {
+public class CopperServant extends CopperGolem implements ReplacesVanilla {
     public CopperServant(EntityType<? extends CopperServant> type, Level level) {
         super(type, level);
     }

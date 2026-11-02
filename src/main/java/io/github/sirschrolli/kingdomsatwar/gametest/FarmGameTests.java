@@ -406,7 +406,8 @@ final class FarmGameTests {
         floor(helper);
         FarmGoat a = helper.spawn(ModEntities.FARM_GOAT.get(), new BlockPos(2, 1, 4));
         FarmGoat b = helper.spawn(ModEntities.FARM_GOAT.get(), new BlockPos(6, 1, 4));
-        helper.assertTrue(!a.canAttack(b), "Ziegen rammen einander");
+        // die Ramm-Auswahl der Vanilla-Ziegen schließt Ziegen aus – die eigenen gelten als solche
+        helper.assertTrue(b.is(EntityTypes.GOAT), "Ziegen rammen einander");
         a.setInLove(null);
         b.setInLove(null);
         helper.succeedWhen(() -> helper.assertTrue(!helper.getLevel().getEntitiesOfClass(FarmGoat.class,

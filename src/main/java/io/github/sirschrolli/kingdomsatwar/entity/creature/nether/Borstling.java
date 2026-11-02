@@ -1,17 +1,21 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.nether;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.ConversionParams;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
@@ -31,7 +35,7 @@ import org.jspecify.annotations.Nullable;
  * Ödland, Seelensandtal und Basaltdeltas, aschfarbene Tracht, weiße Bemalung) und – selten – der reich geschmückte
  * Goldborstling.
  */
-public class Borstling extends Piglin implements Monsters.Varied {
+public class Borstling extends Piglin implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Borstling.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {
@@ -73,10 +77,19 @@ public class Borstling extends Piglin implements Monsters.Varied {
         return super.finalizeSpawn(level, difficulty, reason, groupData);
     }
 
+    /** In der Oberwelt wird aus ihm ein Moderborstling – karmesinrot oder aschgrau verwest, wie er war. */
     @Override
-    protected void customServerAiStep(ServerLevel level) {
-        super.customServerAiStep(level);
-        NetherFolk.noticeUndead(this);
+    @SuppressWarnings("unchecked")
+    public <T extends Mob> @Nullable T convertTo(EntityType<T> type, ConversionParams params, EntitySpawnReason reason,
+            ConversionParams.AfterConversion<T> after) {
+        if (type != EntityTypes.ZOMBIFIED_PIGLIN) {
+            return super.convertTo(type, params, reason, after);
+        }
+        RottenBristling.Look look = this.getLook() == Look.KARMESIN ? RottenBristling.Look.MODER_KARMESIN : RottenBristling.Look.MODER_ASCHEN;
+        return (T) super.convertTo(ModEntities.ZOMBIFIED_PIGLIN.get(), params, reason, rotten -> {
+            rotten.setLook(look);
+            after.finalizeConversion((T) rotten);
+        });
     }
 
     @Override

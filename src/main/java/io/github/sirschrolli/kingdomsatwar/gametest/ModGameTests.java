@@ -180,6 +180,7 @@ public final class ModGameTests {
         GolemGameTests.init();     // Golems und Wichtel
         RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
         NetherGameTests.init();    // Nether-Volk
+        IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
     }
 
     private ModGameTests() {}
@@ -221,6 +222,7 @@ public final class ModGameTests {
         GolemGameTests.register(event, environment);
         RareGameTests.register(event, environment);
         NetherGameTests.register(event, environment);
+        IdentityGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -545,7 +547,11 @@ public final class ModGameTests {
         });
     }
 
-    /** Am Rekrutierungstisch wirbt man Soldaten gegen ihren Sold in Münzen an; ohne genug Geld geht es nicht. */
+    /**
+     * Am Feldherrentisch heilt der Feldscher alle eigenen Verwundeten im Feldlager gegen ein paar Münzen (1 Bronze je 4
+     * fehlende Leben, je Soldat aufgerundet) – fremde Soldaten und solche außerhalb des Lagers nicht; ist niemand
+     * verwundet oder fehlt das Geld, geschieht nichts. Anwerben kann man am Tisch niemanden mehr.
+     */
     private static void soldierRecruit(GameTestHelper helper) {
         arenaFloor(helper);
         BlockPos table = new BlockPos(4, 1, 4);
@@ -553,34 +559,34 @@ public final class ModGameTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         Vec3 stand = helper.absoluteVec(new Vec3(4.5, 1, 1.5));
         player.snapTo(stand.x, stand.y, stand.z, 0.0f, 0.0f);
-        player.getInventory().add(new ItemStack(ModItems.SILVER_COIN.get(), 5));
         BlockPos tablePos = helper.absolutePos(table);
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.RECRUITED,
-                "Schwertkämpfer lässt sich nicht anwerben");
-        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 0, "Münzen nach dem Anwerben");
-        SoldierEntity soldier = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get());
-        helper.assertTrue(soldier.isOwnedBy(player), "Soldat gehört nicht dem Spieler");
-        helper.assertTrue(soldier.getMainHandItem().is(Items.IRON_SWORD), "Soldat hat kein Schwert");
-        helper.assertTrue(soldier.hasCustomName(), "Soldat hat keinen Namen");
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.NOT_ENOUGH,
-                "Anwerben ohne Münzen muss scheitern");
-        // Bogenschützen kosten 7 Silber – bezahlt mit 1 Gold, das Wechselgeld kommt zurück
-        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 1));
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.ARCHER) == Recruitment.Result.RECRUITED,
-                "Bogenschütze lässt sich nicht anwerben");
-        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 18, "Wechselgeld nach dem Bogenschützen");
-        SoldierEntity archer = helper.findOneEntity(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get());
-        helper.assertTrue(archer.getMainHandItem().getItem() instanceof net.minecraft.world.item.BowItem, "Bogenschütze hat keinen Bogen");
-        // Ritter und Hauptleute heuert man in den Dörfern an (oder bildet sie am Tisch aus)
-        player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 4));
-        player.getInventory().add(new ItemStack(ModItems.STEEL_INGOT.get(), 2));
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.KNIGHT) == Recruitment.Result.VILLAGES_ONLY,
-                "Ritter am Tisch muss auf die Dörfer verweisen");
-        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 18 + 4 * 81, "Münzen nach dem Versuch");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.army.Training.healAll(player, tablePos) == Recruitment.Result.NOTHING_TO_HEAL,
+                "ohne Verwundete gibt es nichts zu heilen");
+        SoldierEntity knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(2, 1, 6));
+        knight.setOwner(player);
+        knight.setHealth(knight.getMaxHealth() - 10.0f);                     // 10 fehlen: 3 Bronze
+        knight.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.POISON, 400));
+        SoldierEntity archer = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.ARCHER).get(), new BlockPos(6, 1, 6));
+        archer.setOwner(player);
+        archer.setHealth(archer.getMaxHealth() - 4.0f);                      // 4 fehlen: 1 Bronze
+        SoldierEntity stranger = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(4, 1, 7));
+        stranger.setHealth(stranger.getMaxHealth() - 8.0f);                  // gehört niemandem: bleibt verwundet
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.army.Training.healCost(
+                io.github.sirschrolli.kingdomsatwar.army.Training.camp(player, tablePos)), 4, "Lohn des Feldschers");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.army.Training.healAll(player, tablePos) == Recruitment.Result.NOT_ENOUGH,
+                "Heilen ohne Münzen muss scheitern");
+        player.getInventory().add(new ItemStack(ModItems.SILVER_COIN.get(), 1));
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.army.Training.healAll(player, tablePos) == Recruitment.Result.HEALED,
+                "Heilen klappt nicht");
+        helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), 9 - 4, "Münzen nach dem Heilen");
+        helper.assertTrue(knight.getHealth() >= knight.getMaxHealth() - 0.01f && !knight.hasEffect(net.minecraft.world.effect.MobEffects.POISON),
+                "der Ritter ist nicht geheilt");
+        helper.assertTrue(archer.getHealth() >= archer.getMaxHealth() - 0.01f, "der Bogenschütze ist nicht geheilt");
+        helper.assertTrue(stranger.getHealth() < stranger.getMaxHealth() - 1.0f, "ein fremder Soldat wurde geheilt");
         // zu weit weg
         player.snapTo(stand.x + 30, stand.y, stand.z, 0.0f, 0.0f);
-        helper.assertTrue(Recruitment.recruit(player, tablePos, SoldierType.SWORDSMAN) == Recruitment.Result.TOO_FAR,
-                "Anwerben aus der Ferne muss scheitern");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.army.Training.healAll(player, tablePos) == Recruitment.Result.TOO_FAR,
+                "Heilen aus der Ferne muss scheitern");
         helper.succeed();
     }
 

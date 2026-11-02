@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Zombiepferd: fahl grau-grün mit freiliegenden Rippen oder ein verwesender schwarzer Rappe; lässt sich wie das
  * Vanilla-Zombiepferd satteln, reiten und mit Rossharnisch ausstatten.
  */
-public class UndeadHorse extends ZombieHorse implements Monsters.Varied {
+public class UndeadHorse extends ZombieHorse implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(UndeadHorse.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

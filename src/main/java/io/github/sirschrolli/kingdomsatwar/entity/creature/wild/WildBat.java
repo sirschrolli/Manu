@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -24,7 +25,7 @@ import org.jspecify.annotations.Nullable;
  * Fledermaus – ersetzt die Vanilla-Fledermaus. Abendsegler und Mausohr in allen Höhlen, die dunkle Vampirfledermaus
  * mit roten Augen in Dschungel und Sümpfen. Hängt kopfüber an der Decke und flattert auf, wenn man ihr zu nahe kommt.
  */
-public class WildBat extends Bat {
+public class WildBat extends Bat implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { ABENDSEGLER, MAUSOHR, VAMPIR }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

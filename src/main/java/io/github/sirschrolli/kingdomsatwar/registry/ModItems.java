@@ -214,6 +214,9 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> PIGLIN_SPAWN_EGG = creatureEgg("piglin", () -> ModEntities.PIGLIN.get());
     public static final DeferredItem<SpawnEggItem> PIGLIN_BRUTE_SPAWN_EGG = creatureEgg("piglin_brute", () -> ModEntities.PIGLIN_BRUTE.get());
     public static final DeferredItem<SpawnEggItem> ZOMBIFIED_PIGLIN_SPAWN_EGG = creatureEgg("zombified_piglin", () -> ModEntities.ZOMBIFIED_PIGLIN.get());
+    public static final DeferredItem<SpawnEggItem> HOGLIN_SPAWN_EGG = creatureEgg("hoglin", () -> ModEntities.HOGLIN.get());
+    public static final DeferredItem<SpawnEggItem> ZOGLIN_SPAWN_EGG = creatureEgg("zoglin", () -> ModEntities.ZOGLIN.get());
+    public static final DeferredItem<SpawnEggItem> STRIDER_SPAWN_EGG = creatureEgg("strider", () -> ModEntities.STRIDER.get());
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
     public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());

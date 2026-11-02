@@ -402,7 +402,9 @@ public final class ModWorldgen {
         context.register(SWAP_NETHER_CREATURES, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(net.minecraft.tags.BiomeTags.IS_NETHER),
                 java.util.Map.ofEntries(
                         java.util.Map.entry(EntityTypes.PIGLIN, ModEntities.PIGLIN.get()),
-                        java.util.Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN.get()))));
+                        java.util.Map.entry(EntityTypes.ZOMBIFIED_PIGLIN, ModEntities.ZOMBIFIED_PIGLIN.get()),
+                        java.util.Map.entry(EntityTypes.HOGLIN, ModEntities.HOGLIN.get()),
+                        java.util.Map.entry(EntityTypes.STRIDER, ModEntities.STRIDER.get()))));
         // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
         context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
                 net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,

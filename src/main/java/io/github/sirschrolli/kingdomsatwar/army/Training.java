@@ -14,6 +14,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,16 +24,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Ausbildung am Rekrutierungstisch: Eigene Soldaten, die beim Tisch stehen, steigen gegen Sold und Ausrüstung im Rang
- * (Rekrut → Veteran → Elite) oder werden zu einer stärkeren Art ausgebildet (Schwertkämpfer → Ritter → Hauptmann).
+ * Der Feldherrentisch: Eigene Soldaten im Feldlager um den Tisch werden hier geheilt (der Feldscher nimmt ein paar
+ * Münzen) und ausgebildet – sie steigen gegen Sold und Ausrüstung im Rang (Rekrut → Veteran → Elite) oder werden zu einer
+ * stärkeren Art (Schwertkämpfer → Ritter → Hauptmann).
  */
 public final class Training {
-    /** So nah muss der Soldat am Tisch stehen. */
-    public static final double SOLDIER_RANGE = 8.0;
+    /** So weit reicht das Feldlager um den Tisch: Soldaten darin lassen sich heilen und ausbilden. */
+    public static final double CAMP_RANGE = 24.0;
+    /** Der Feldscher nimmt eine Bronzemünze je vier fehlende Lebenspunkte (je Soldat aufgerundet). */
+    public static final int HEALTH_PER_COIN = 4;
 
     /** Was am Tisch geschieht (Reihenfolge = Nummer im Netzwerk). */
     public enum Action {
@@ -109,9 +116,74 @@ public final class Training {
         }
     }
 
-    /** Darf der Spieler diesen Soldaten an diesem Tisch ausbilden? */
+    /** Steht dieser Soldat des Spielers im Feldlager um den Tisch (darf er hier geheilt und ausgebildet werden)? */
     public static boolean atTable(Player player, BlockPos table, SoldierEntity soldier) {
-        return soldier.isAlive() && soldier.isOwnedBy(player) && soldier.distanceToSqr(Vec3.atCenterOf(table)) <= SOLDIER_RANGE * SOLDIER_RANGE;
+        return soldier.isAlive() && soldier.isOwnedBy(player) && soldier.distanceToSqr(Vec3.atCenterOf(table)) <= CAMP_RANGE * CAMP_RANGE;
+    }
+
+    /** Die eigenen Soldaten im Feldlager um den Tisch. */
+    public static List<SoldierEntity> camp(Player player, BlockPos table) {
+        return player.level().getEntitiesOfClass(SoldierEntity.class, new AABB(table).inflate(CAMP_RANGE),
+                soldier -> atTable(player, table, soldier));
+    }
+
+    /** Was der Feldscher für diesen Soldaten nimmt (in Bronze; 0, wenn er unverletzt ist). */
+    public static int healCost(SoldierEntity soldier) {
+        float missing = soldier.getMaxHealth() - soldier.getHealth();
+        if (missing > 0.01f) {
+            return Math.max(1, Mth.ceil(missing / HEALTH_PER_COIN));
+        }
+        return hurting(soldier) ? 1 : 0;                                      // nur Gift, Schwäche … loswerden
+    }
+
+    /** Was das Heilen aller dieser Soldaten kostet. */
+    public static int healCost(List<SoldierEntity> soldiers) {
+        int coins = 0;
+        for (SoldierEntity soldier : soldiers) {
+            coins += healCost(soldier);
+        }
+        return coins;
+    }
+
+    private static boolean hurting(SoldierEntity soldier) {
+        return soldier.getActiveEffects().stream().anyMatch(effect -> effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL)
+                || soldier.isOnFire();
+    }
+
+    /**
+     * Heilt alle verwundeten eigenen Soldaten im Feldlager: volle Gesundheit, Gift, Schwäche und Feuer sind fort. Der
+     * Feldscher will dafür seinen Lohn (siehe {@link #healCost(SoldierEntity)}).
+     */
+    public static Recruitment.Result healAll(Player player, BlockPos table) {
+        if (!(player.level() instanceof ServerLevel level) || !(level.getBlockState(table).getBlock() instanceof RecruitmentTableBlock)
+                || player.distanceToSqr(Vec3.atCenterOf(table)) > Recruitment.TABLE_RANGE * Recruitment.TABLE_RANGE) {
+            return Recruitment.Result.TOO_FAR;
+        }
+        List<SoldierEntity> wounded = camp(player, table).stream().filter(soldier -> healCost(soldier) > 0).toList();
+        if (wounded.isEmpty()) {
+            return Recruitment.Result.NOTHING_TO_HEAL;
+        }
+        int coins = healCost(wounded);
+        if (!player.hasInfiniteMaterials()) {
+            if (!Coins.canAfford(player, coins)) {
+                return Recruitment.Result.NOT_ENOUGH;
+            }
+            Coins.pay(player, coins);
+        }
+        for (SoldierEntity soldier : wounded) {
+            soldier.setHealth(soldier.getMaxHealth());
+            for (MobEffectInstance effect : List.copyOf(soldier.getActiveEffects())) {
+                if (effect.getEffect().value().getCategory() == MobEffectCategory.HARMFUL) {
+                    soldier.removeEffect(effect.getEffect());
+                }
+            }
+            soldier.clearFire();
+            level.sendParticles(ParticleTypes.HEART, soldier.getX(), soldier.getY() + 1.4, soldier.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
+            level.playSound(null, soldier.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.NEUTRAL, 0.8f, 1.1f);
+            soldier.salute();
+        }
+        level.playSound(null, table, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.4f, 1.6f);
+        return Recruitment.Result.HEALED;
     }
 
     /** Bildet einen Soldaten aus: prüft Tisch, Besitzer, Entfernung und Preis, zieht den Preis ab und befördert ihn. */

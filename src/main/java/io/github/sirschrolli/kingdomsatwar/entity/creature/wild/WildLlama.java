@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.network.chat.Component;
@@ -14,7 +15,7 @@ import org.jspecify.annotations.Nullable;
  * Lama – ersetzt das Vanilla-Lama. Die vier Vanilla-Farben (creme, weiß, braun, grau) bleiben, das Modell ist neu:
  * dichtes Vlies, Bananenohren, gespaltene Oberlippe. Spucken, Karawanen, Teppiche und Packtaschen wie bei Vanilla.
  */
-public class WildLlama extends Llama {
+public class WildLlama extends Llama implements ReplacesVanilla {
     /** Die Farben in der Reihenfolge der Vanilla-Varianten. */
     public enum Breed implements FarmAnimals.Breed { CREME, WEISS, BRAUN, GRAU }
 

@@ -8,7 +8,7 @@ import net.neoforged.neoforge.client.model.generators.template.ElementBuilder;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 
 /**
- * Modell des Rekrutierungstischs (Blickrichtung Norden): Holztisch mit Beinen, Zargen und Streben,
+ * Modell des Feldherrentischs (Blickrichtung Norden): Holztisch mit Beinen, Zargen und Streben,
  * blauer Tischläufer mit Wappenbehang, ein aufgeschlagenes Buch, ein Häufchen Smaragde und ein Tintenfass
  * mit Schreibfeder.
  */

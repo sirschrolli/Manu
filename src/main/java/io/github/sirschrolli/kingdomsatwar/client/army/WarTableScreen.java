@@ -3,17 +3,14 @@ package io.github.sirschrolli.kingdomsatwar.client.army;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.army.Training;
-import io.github.sirschrolli.kingdomsatwar.client.renderer.SoldierRenderer;
+import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
-import io.github.sirschrolli.kingdomsatwar.network.RecruitPayload;
+import io.github.sirschrolli.kingdomsatwar.network.HealPayload;
 import io.github.sirschrolli.kingdomsatwar.network.TrainPayload;
-import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -30,21 +27,19 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Das Fenster des Rekrutierungstischs mit zwei Reitern. <b>Anwerben:</b> links Schwertkämpfer und Bogenschütze, in der
- * Mitte der ausgewählte Soldat zum Anschauen (er salutiert), rechts Werte, Preis und "Anwerben" – Ritter und Hauptleute
- * gibt es in den Dörfern. <b>Ausbilden:</b> links die eigenen Soldaten am Tisch, in der Mitte der ausgewählte, rechts
- * Rang, Werte und die Preise fürs Befördern und für die Ausbildung zur nächsten Art.
+ * Das Fenster des Feldherrentischs. Oben „Alle heilen“: der Feldscher versorgt alle Verwundeten im Feldlager (24 Blöcke
+ * um den Tisch) – der Knopf nennt seinen Lohn. Links die eigenen Soldaten im Feldlager mit ihrer Gesundheit, in der
+ * Mitte der ausgewählte, rechts Rang, Werte und die Preise fürs Befördern und für die Ausbildung zur nächsten Art.
+ * Neue Soldaten gibt es hier nicht – die heuert man bei den Rittern und Söldnern der Dörfer an.
  */
-public class RecruitScreen extends Screen {
+public class WarTableScreen extends Screen {
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/recruitment_table.png");
     private static final int WIDTH = 306;
     private static final int HEIGHT = 176;
@@ -58,35 +53,21 @@ public class RecruitScreen extends Screen {
     private static final int PREVIEW_W = 68;
     private static final int PREVIEW_H = 96;
     private static final int INFO_X = 203;
-    /** Kennungen der Vorschau-Soldaten (weit weg von echten Lebewesen). */
-    private static final int PREVIEW_ID = -1_800_000_000;
-    /** Am Tisch wirbt man nur die einfachen Leute an. */
-    private static final SoldierType[] RECRUITABLE = {SoldierType.SWORDSMAN, SoldierType.ARCHER};
-
-    private enum Tab {
-        RECRUIT, TRAIN
-    }
 
     private final BlockPos tablePos;
     private final int armyLimit;
-    private final Map<SoldierType, SoldierEntity> previews = new EnumMap<>(SoldierType.class);
-    private Tab tab = Tab.RECRUIT;
-    private SoldierType selected = SoldierType.SWORDSMAN;
     private int selectedSoldier = -1;
     private int scroll;
     private int left;
     private int top;
-    private @Nullable Button recruitButton;
+    private @Nullable Button healButton;
     private @Nullable Button rankButton;
     private @Nullable Button promoteButton;
-    private @Nullable Button recruitTab;
-    private @Nullable Button trainTab;
     private @Nullable Component feedback;
     private int feedbackColor;
     private int feedbackTicks;
-    private int ticks;
 
-    public RecruitScreen(BlockPos tablePos, int armyLimit) {
+    public WarTableScreen(BlockPos tablePos, int armyLimit) {
         super(Component.translatable("gui.kingdomsatwar.recruitment.title"));
         this.tablePos = tablePos;
         this.armyLimit = armyLimit;
@@ -96,26 +77,13 @@ public class RecruitScreen extends Screen {
     protected void init() {
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
-        this.recruitTab = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.tab.recruit"),
-                button -> this.setTab(Tab.RECRUIT)).bounds(this.left, this.top - 21, 100, 20).build());
-        this.trainTab = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.tab.train"),
-                button -> this.setTab(Tab.TRAIN)).bounds(this.left + 102, this.top - 21, 100, 20).build());
-        this.recruitButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.recruit"),
-                button -> this.recruit()).bounds(this.left + INFO_X, this.top + 149, 96, 20).build());
+        this.healButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.heal"),
+                button -> this.heal()).bounds(this.left, this.top - 22, WIDTH, 20).build());
         this.rankButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.rank_up"),
                 button -> this.train(Training.Action.RANK)).bounds(this.left + PREVIEW_X, this.top + 149, 84, 20).build());
         this.promoteButton = this.addRenderableWidget(Button.builder(Component.translatable("gui.kingdomsatwar.recruitment.promote"),
                 button -> this.train(Training.Action.PROMOTE)).bounds(this.left + PREVIEW_X + 88, this.top + 149, 84, 20).build());
         this.updateButtons();
-    }
-
-    private void setTab(Tab tab) {
-        if (this.tab != tab) {
-            this.tab = tab;
-            this.feedbackTicks = 0;
-            this.scroll = 0;
-            this.updateButtons();
-        }
     }
 
     // =====================================================================================
@@ -124,10 +92,6 @@ public class RecruitScreen extends Screen {
 
     @Override
     public void tick() {
-        this.ticks++;
-        for (SoldierEntity preview : this.previews.values()) {
-            preview.tickCount++;
-        }
         if (this.feedbackTicks > 0) {
             this.feedbackTicks--;
         }
@@ -141,24 +105,21 @@ public class RecruitScreen extends Screen {
     }
 
     private void updateButtons() {
-        if (this.recruitButton == null || this.rankButton == null || this.promoteButton == null || this.recruitTab == null
-                || this.trainTab == null || this.minecraft.player == null) {
+        if (this.healButton == null || this.rankButton == null || this.promoteButton == null || this.minecraft.player == null) {
             return;
         }
-        boolean recruiting = this.tab == Tab.RECRUIT;
-        this.recruitTab.active = !recruiting;
-        this.trainTab.active = recruiting;
-        this.recruitButton.visible = recruiting;
-        this.rankButton.visible = !recruiting;
-        this.promoteButton.visible = !recruiting;
-        if (recruiting) {
-            boolean affordable = Recruitment.canAfford(this.minecraft.player, this.selected);
-            boolean room = this.armySize() < this.armyLimit;
-            this.recruitButton.active = affordable && room;
-            this.recruitButton.setTooltip(!room ? Tooltip.create(Component.translatable("message.kingdomsatwar.recruit.army_full"))
-                    : !affordable ? Tooltip.create(Component.translatable("message.kingdomsatwar.recruit.not_enough")) : null);
-            return;
-        }
+        // Heilen: der Lohn des Feldschers für alle Verwundeten im Feldlager
+        List<SoldierEntity> wounded = this.soldiers().stream().filter(s -> Training.healCost(s) > 0).toList();
+        int coins = Training.healCost(wounded);
+        boolean affordable = this.minecraft.player.hasInfiniteMaterials() || Coins.canAfford(this.minecraft.player, coins);
+        this.healButton.active = !wounded.isEmpty() && affordable;
+        this.healButton.setMessage(wounded.isEmpty() ? Component.translatable("gui.kingdomsatwar.recruitment.heal.none")
+                : Component.translatable("gui.kingdomsatwar.recruitment.heal.cost", wounded.size(), Coins.format(coins)));
+        this.healButton.setTooltip(Tooltip.create(wounded.isEmpty()
+                ? Component.translatable("gui.kingdomsatwar.recruitment.heal.none.hint", (int) Training.CAMP_RANGE)
+                : !affordable ? Component.translatable("message.kingdomsatwar.recruit.not_enough")
+                : Component.translatable("gui.kingdomsatwar.recruitment.heal.hint", (int) Training.CAMP_RANGE, Training.HEALTH_PER_COIN)));
+        // Ausbilden
         SoldierEntity soldier = this.soldier();
         Training.Cost rank = soldier == null ? null : Training.rankCost(soldier.getSoldierType(), soldier.getRank());
         Training.Cost promote = soldier == null ? null : Training.promoteCost(soldier.getSoldierType());
@@ -176,8 +137,8 @@ public class RecruitScreen extends Screen {
                 : Component.translatable("gui.kingdomsatwar.recruitment.promote.hint", Component.translatable(next.translationKey()))));
     }
 
-    private void recruit() {
-        ClientPacketDistributor.sendToServer(new RecruitPayload(this.tablePos, this.selected.ordinal()));
+    private void heal() {
+        ClientPacketDistributor.sendToServer(new HealPayload(this.tablePos));
     }
 
     private void train(Training.Action action) {
@@ -187,18 +148,12 @@ public class RecruitScreen extends Screen {
         }
     }
 
-    /** Antwort des Servers auf das Anwerben oder Ausbilden. */
+    /** Antwort des Servers auf Heilen oder Ausbilden. */
     public void onResult(Recruitment.Result result) {
         this.feedback = Component.translatable("gui.kingdomsatwar.recruitment.result." + result.name().toLowerCase(java.util.Locale.ROOT));
-        boolean good = result == Recruitment.Result.RECRUITED || result == Recruitment.Result.TRAINED || result == Recruitment.Result.PROMOTED;
-        this.feedbackColor = good ? ArmyWidgets.GOOD : 0xFFB3261E;
+        boolean good = result == Recruitment.Result.HEALED || result == Recruitment.Result.TRAINED || result == Recruitment.Result.PROMOTED;
+        this.feedbackColor = good ? ArmyWidgets.GOOD : ArmyWidgets.BAD;
         this.feedbackTicks = 60;
-        if (result == Recruitment.Result.RECRUITED) {
-            SoldierEntity preview = this.preview(this.selected);
-            if (preview != null) {
-                preview.handleEntityEvent(SoldierEntity.EVENT_CHEER);
-            }
-        }
         if (result == Recruitment.Result.PROMOTED) {
             // der beförderte Soldat ist ein neues Wesen: den nächsten am selben Platz auswählen
             this.selectedSoldier = -1;
@@ -219,7 +174,7 @@ public class RecruitScreen extends Screen {
         return count;
     }
 
-    /** Die eigenen Soldaten am Tisch, die nächsten zuerst. */
+    /** Die eigenen Soldaten im Feldlager, die nächsten zuerst. */
     private List<SoldierEntity> soldiers() {
         List<SoldierEntity> list = new ArrayList<>();
         if (this.minecraft.level == null || this.minecraft.player == null) {
@@ -235,7 +190,7 @@ public class RecruitScreen extends Screen {
         return list;
     }
 
-    /** Der ausgewählte eigene Soldat (oder der erste am Tisch). */
+    /** Der ausgewählte eigene Soldat (oder der erste im Feldlager). */
     private @Nullable SoldierEntity soldier() {
         List<SoldierEntity> list = this.soldiers();
         for (SoldierEntity s : list) {
@@ -250,50 +205,22 @@ public class RecruitScreen extends Screen {
         return list.getFirst();
     }
 
-    private @Nullable SoldierEntity preview(SoldierType type) {
-        if (this.minecraft.level == null) {
-            return null;
-        }
-        return this.previews.computeIfAbsent(type, t -> {
-            SoldierEntity soldier = ModEntities.SOLDIERS.get(t).get().create(this.minecraft.level, EntitySpawnReason.LOAD);
-            if (soldier != null) {
-                soldier.setId(PREVIEW_ID - t.ordinal()); // nur zum Zeichnen, lebt nicht in der Welt
-                soldier.equip();
-                soldier.setVariant(0);
-            }
-            return soldier;
-        });
-    }
-
     // =====================================================================================
     // Eingaben
     // =====================================================================================
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (this.tab == Tab.RECRUIT) {
-            for (int i = 0; i < RECRUITABLE.length; i++) {
-                SoldierType type = RECRUITABLE[i];
-                if (this.inEntry(event.x(), event.y(), i)) {
-                    if (this.selected != type) {
-                        this.select(type);
-                        this.click();
-                    }
-                    return true;
+        List<SoldierEntity> list = this.soldiers();
+        for (int i = 0; i < VISIBLE && this.scroll + i < list.size(); i++) {
+            if (this.inEntry(event.x(), event.y(), i)) {
+                SoldierEntity soldier = list.get(this.scroll + i);
+                if (soldier.getId() != this.selectedSoldier) {
+                    this.selectedSoldier = soldier.getId();
+                    this.feedbackTicks = 0;
+                    this.click();
                 }
-            }
-        } else {
-            List<SoldierEntity> list = this.soldiers();
-            for (int i = 0; i < VISIBLE && this.scroll + i < list.size(); i++) {
-                if (this.inEntry(event.x(), event.y(), i)) {
-                    SoldierEntity soldier = list.get(this.scroll + i);
-                    if (soldier.getId() != this.selectedSoldier) {
-                        this.selectedSoldier = soldier.getId();
-                        this.feedbackTicks = 0;
-                        this.click();
-                    }
-                    return true;
-                }
+                return true;
             }
         }
         return super.mouseClicked(event, doubleClick);
@@ -301,12 +228,9 @@ public class RecruitScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
-        if (this.tab == Tab.TRAIN) {
-            int max = Math.max(0, this.soldiers().size() - VISIBLE);
-            this.scroll = Mth.clamp(this.scroll - (int) Math.signum(scrollY), 0, max);
-            return true;
-        }
-        return super.mouseScrolled(x, y, scrollX, scrollY);
+        int max = Math.max(0, this.soldiers().size() - VISIBLE);
+        this.scroll = Mth.clamp(this.scroll - (int) Math.signum(scrollY), 0, max);
+        return true;
     }
 
     private boolean inEntry(double mx, double my, int row) {
@@ -319,20 +243,10 @@ public class RecruitScreen extends Screen {
         this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0f));
     }
 
-    /** Soldatenart auswählen; der Soldat im Bild salutiert. */
-    public void select(SoldierType type) {
-        this.selected = type;
-        this.feedbackTicks = 0;
-        SoldierEntity preview = this.preview(type);
-        if (preview != null) {
-            preview.handleEntityEvent(SoldierEntity.EVENT_SALUTE);
-        }
+    /** Für Vorführungen: diesen Soldaten auswählen. */
+    public void select(SoldierEntity soldier) {
+        this.selectedSoldier = soldier.getId();
         this.updateButtons();
-    }
-
-    /** Für Vorführungen: zum Reiter "Ausbilden" wechseln. */
-    public void showTraining() {
-        this.setTab(Tab.TRAIN);
     }
 
     @Override
@@ -369,86 +283,30 @@ public class RecruitScreen extends Screen {
         super.extractRenderState(g, mouseX, mouseY, a);
         int x0 = this.left;
         int y0 = this.top;
-        Component title = Component.translatable(this.tab == Tab.RECRUIT ? "gui.kingdomsatwar.recruitment.title"
-                : "gui.kingdomsatwar.recruitment.title.train");
-        g.text(this.font, title, x0 + 8, y0 + 6, ArmyWidgets.LABEL, false);
+        g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.title"), x0 + 8, y0 + 6, ArmyWidgets.LABEL, false);
         Component army = Component.translatable("gui.kingdomsatwar.recruitment.army", this.armySize(), this.armyLimit);
         g.text(this.font, army, x0 + WIDTH - 8 - this.font.width(army), y0 + 6, ArmyWidgets.LABEL, false);
-        if (this.tab == Tab.RECRUIT) {
-            this.renderRecruit(g, mouseX, mouseY);
-        } else {
-            this.renderTrain(g, mouseX, mouseY);
-        }
+        this.renderCamp(g, mouseX, mouseY);
         if (this.feedback != null && this.feedbackTicks > 0) {
-            int fy = this.tab == Tab.RECRUIT ? y0 + 155 : y0 + 139;
-            g.text(this.font, this.feedback, x0 + PREVIEW_X, fy, this.feedbackColor, false);
+            g.text(this.font, this.feedback, x0 + PREVIEW_X, y0 + 139, this.feedbackColor, false);
         }
     }
 
-    // ---------------------------------------------------------------- Anwerben
-
-    private void renderRecruit(GuiGraphicsExtractor g, int mouseX, int mouseY) {
-        int x0 = this.left;
-        int y0 = this.top;
-        for (int i = 0; i < RECRUITABLE.length; i++) {
-            this.drawTypeEntry(g, RECRUITABLE[i], x0 + LIST_X, y0 + LIST_Y + i * ENTRY_H, mouseX, mouseY);
-        }
-        // Ritter und Hauptleute: in den Dörfern
-        int hy = y0 + LIST_Y + RECRUITABLE.length * ENTRY_H + 4;
-        List<FormattedCharSequence> hint = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.villages_hint"), ENTRY_W - 4);
-        for (int i = 0; i < Math.min(6, hint.size()); i++) {
-            g.text(this.font, hint.get(i), x0 + LIST_X + 2, hy + i * 10, ArmyWidgets.MUTED, false);
-        }
-        SoldierEntity preview = this.preview(this.selected);
-        if (preview != null) {
-            InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0 + PREVIEW_X + 1, y0 + PREVIEW_Y + 1, x0 + PREVIEW_X + PREVIEW_W - 1,
-                    y0 + PREVIEW_Y + PREVIEW_H - 1, 34, 0.0625f, mouseX, mouseY, preview);
-        }
-        this.drawTypeInfo(g, x0 + INFO_X, y0 + PREVIEW_Y, mouseX, mouseY);
-        ArmyWidgets.description(g, this.font, Component.translatable(this.selected.descriptionKey()), x0 + PREVIEW_X, y0 + 117,
-                WIDTH - PREVIEW_X - 8, INFO_X - PREVIEW_X - 4, ArmyWidgets.LABEL);
-    }
-
-    private void drawTypeEntry(GuiGraphicsExtractor g, SoldierType type, int x, int y, int mouseX, int mouseY) {
-        boolean hovered = mouseX >= x && mouseX < x + ENTRY_W && mouseY >= y && mouseY < y + ENTRY_H - 2;
-        ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, type == this.selected, type, 0,
-                Component.translatable(type.translationKey()).getString(), Component.translatable("soldier.kingdomsatwar." + type.id() + ".role"), 0);
-    }
-
-    private void drawTypeInfo(GuiGraphicsExtractor g, int x, int y, int mouseX, int mouseY) {
-        SoldierType type = this.selected;
-        g.text(this.font, Component.translatable(type.translationKey()).withStyle(ChatFormatting.BOLD), x, y + 2, ArmyWidgets.LABEL, false);
-        g.text(this.font, Component.translatable("soldier.kingdomsatwar." + type.id() + ".role"), x, y + 13, ArmyWidgets.MUTED, false);
-        int sy = y + 28;
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.HEART, x, sy, 9, 9);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.health", (int) type.health()), x + 12, sy + 1, ArmyWidgets.LABEL, false);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 12, 9, 9);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.armor", (int) type.armor()), x + 12, sy + 13, ArmyWidgets.LABEL, false);
-        ArmyWidgets.weaponIcon(g, type, x - 1, sy + 23);
-        g.text(this.font, Component.translatable(type.ranged() ? "gui.kingdomsatwar.recruitment.ranged" : "gui.kingdomsatwar.recruitment.melee"),
-                x + 12, sy + 25, ArmyWidgets.LABEL, false);
-        int py = y + 68;
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.cost"), x, py, ArmyWidgets.LABEL, false);
-        List<ItemStack> items = new ArrayList<>();
-        List<Integer> counts = new ArrayList<>();
-        for (SoldierType.Cost cost : type.cost()) {
-            items.add(cost.stack());
-            counts.add(cost.count());
-        }
-        ArmyWidgets.costRow(g, this.font, this.minecraft.player, x, py + 10, type.coins(), items, counts, mouseX, mouseY);
-    }
-
-    // ---------------------------------------------------------------- Ausbilden
-
-    private void renderTrain(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+    private void renderCamp(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int x0 = this.left;
         int y0 = this.top;
         List<SoldierEntity> list = this.soldiers();
         SoldierEntity chosen = this.soldier();
         if (list.isEmpty()) {
-            List<FormattedCharSequence> hint = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.no_soldiers"), ENTRY_W - 4);
-            for (int i = 0; i < Math.min(12, hint.size()); i++) {
+            List<FormattedCharSequence> hint = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.no_soldiers",
+                    (int) Training.CAMP_RANGE), ENTRY_W - 4);
+            for (int i = 0; i < Math.min(14, hint.size()); i++) {
                 g.text(this.font, hint.get(i), x0 + LIST_X + 2, y0 + LIST_Y + 4 + i * 10, ArmyWidgets.MUTED, false);
+            }
+            List<FormattedCharSequence> villages = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.villages_hint"),
+                    WIDTH - PREVIEW_X - 8);
+            for (int i = 0; i < Math.min(5, villages.size()); i++) {
+                g.text(this.font, villages.get(i), x0 + PREVIEW_X, y0 + PREVIEW_Y + 4 + i * 10, ArmyWidgets.MUTED, false);
             }
         }
         this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, list.size() - VISIBLE));
@@ -516,6 +374,7 @@ public class RecruitScreen extends Screen {
         ArmyWidgets.costRow(g, this.font, this.minecraft.player, x, y, cost.coins(), items, counts, mouseX, mouseY);
     }
 
+    /** Ein Soldat der Liste, darunter seine Gesundheit als Balken (grün, gelb, rot bei schweren Wunden). */
     private void drawSoldierEntry(GuiGraphicsExtractor g, SoldierEntity soldier, @Nullable SoldierEntity chosen, int x, int y, int mouseX,
             int mouseY) {
         boolean hovered = mouseX >= x && mouseX < x + ENTRY_W && mouseY >= y && mouseY < y + ENTRY_H - 2;
@@ -523,11 +382,13 @@ public class RecruitScreen extends Screen {
         String name = soldier.getPersonalName().isEmpty() ? soldier.getDisplayName().getString() : soldier.getPersonalName();
         ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
                 Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank());
-    }
-
-    @Override
-    public void removed() {
-        this.previews.clear();
-        super.removed();
+        float part = Mth.clamp(soldier.getHealth() / Math.max(1.0f, soldier.getMaxHealth()), 0.0f, 1.0f);
+        int bx = x + 33;
+        int by = y + 29;
+        int bw = ENTRY_W - 38;
+        g.fill(bx - 1, by - 1, bx + bw + 1, by + 3, 0xFF1E1E1E);
+        g.fill(bx, by, bx + bw, by + 2, 0xFF5A1414);
+        int color = part > 0.66f ? 0xFF4CAF50 : part > 0.33f ? 0xFFE0B030 : 0xFFE04030;
+        g.fill(bx, by, bx + Math.round(bw * part), by + 2, color);
     }
 }

@@ -33,6 +33,9 @@
     "kingdomsatwar:happy_ghast": {
       "sound": "minecraft:intentionally_empty"
     },
+    "kingdomsatwar:hoglin": {
+      "sound": "minecraft:entity.parrot.imitate.hoglin"
+    },
     "kingdomsatwar:husk": {
       "sound": "minecraft:entity.parrot.imitate.husk"
     },
@@ -83,6 +86,9 @@
     },
     "kingdomsatwar:witch": {
       "sound": "minecraft:entity.parrot.imitate.witch"
+    },
+    "kingdomsatwar:zoglin": {
+      "sound": "minecraft:entity.parrot.imitate.zoglin"
     },
     "kingdomsatwar:zombie": {
       "sound": "minecraft:entity.parrot.imitate.zombie"

@@ -163,5 +163,12 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         // Nether-Volk (E5a): der Moderborstling zählt zu den Zombies (Bann wirkt)
         this.tag(EntityTypeTags.ZOMBIES).add(ModEntities.ZOMBIFIED_PIGLIN.key());
         this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.PIGLIN_BRUTE.key()).add(ModEntities.ZOMBIFIED_PIGLIN.key());
+        // Tiere des Nethers (E5a-2): der Moderkeiler zählt zu den Zombies, den Lavastelzer kann man satteln und ihm folgen
+        this.tag(EntityTypeTags.ZOMBIES).add(ModEntities.ZOGLIN.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.HOGLIN.key()).add(ModEntities.ZOGLIN.key());
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.STRIDER.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.STRIDER.key());
+        this.tag(EntityTypeTags.FOLLOWABLE_FRIENDLY_MOBS).add(ModEntities.STRIDER.key());
+        this.tag(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES).add(ModEntities.STRIDER.key());
     }
 }

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * und Wüste mit Indigo-Turban, Schleier und Gambeson, im Norden mit Fellmütze, geflochtenem Bart und Pelz. Zieht in
  * Patrouillen umher, bewacht die Räuberlager und reitet mit den Überfällen wie der Vanilla-Plünderer.
  */
-public class Highwayman extends Pillager implements Monsters.Varied {
+public class Highwayman extends Pillager implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Highwayman.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

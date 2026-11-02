@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.golem;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes;
@@ -37,7 +38,7 @@ import org.jspecify.annotations.Nullable;
  * <p>Vier Gestalten nach dem Land, in dem er entsteht: Schmiedeeisen, Mooswächter (Wälder, Dschungel, Sümpfe),
  * Frostwächter (Schnee und Eis) und Rostwächter (Küsten, Strände, Flüsse).
  */
-public class IronSentinel extends IronGolem implements Monsters.Varied {
+public class IronSentinel extends IronGolem implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(IronSentinel.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

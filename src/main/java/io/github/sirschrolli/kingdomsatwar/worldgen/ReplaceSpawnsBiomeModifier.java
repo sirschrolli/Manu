@@ -22,7 +22,7 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 
 /**
  * Tauscht in den Spawn-Listen der Biome Lebewesen gegen andere aus – mit genau dem Gewicht, der Gruppengröße und in
- * der Spawn-Kategorie des Originals. So erscheinen die eigenen Wildtiere überall dort, wo Vanilla seine Wildtiere
+ * der Spawn-Kategorie des Originals (und mit seinen Spawn-Kosten). So erscheinen die eigenen Wildtiere überall dort, wo Vanilla seine Wildtiere
  * vorsieht, auch in Biomen anderer Mods, ohne dass jedes Biom einzeln aufgezählt werden muss.
  *
  * <p>JSON: {@code {"type": "kingdomsatwar:replace_spawns", "biomes": "#minecraft:is_overworld",
@@ -58,6 +58,14 @@ public record ReplaceSpawnsBiomeModifier(HolderSet<Biome> biomes, Map<EntityType
             for (Weighted<MobSpawnSettings.SpawnerData> entry : found) {
                 EntityType<?> type = this.replacements.get(entry.value().type());
                 list.add(new MobSpawnSettings.SpawnerData(type, entry.value().count()), entry.weight());
+            }
+        }
+        // auch die Spawn-Kosten (im Seelensandtal etwa für Schreiter, Skelett, Ghast und Enderman) gehen auf den Ersatz über
+        for (Map.Entry<EntityType<?>, EntityType<?>> swap : this.replacements.entrySet()) {
+            MobSpawnSettings.MobSpawnCost cost = spawns.getCost(swap.getKey());
+            if (cost != null) {
+                spawns.removeSpawnCost(swap.getKey());
+                spawns.addMobSpawnCost(swap.getValue(), cost.charge(), cost.energyBudget());
             }
         }
     }

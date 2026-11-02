@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
@@ -14,7 +15,7 @@ import org.jspecify.annotations.Nullable;
  * Panda – ersetzt den Vanilla-Panda. Gene, Wesenszüge (faul, besorgt, verspielt, schwach, aggressiv, braun), Bambus,
  * Niesen, Rollen und Rückenlage wie bei Vanilla; das eigene Fellbild zeigt das Gemüt im Gesicht.
  */
-public class WildPanda extends Panda {
+public class WildPanda extends Panda implements ReplacesVanilla {
     public WildPanda(EntityType<? extends WildPanda> type, Level level) {
         super(type, level);
     }

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * oder Kräuterhexe in Rostrot und Braun – mit Spitzhut, krummer Nase und Tränken am Gürtel. Braut und wirft Tränke
  * und zieht mit den Plünderern in Überfälle wie die Vanilla-Hexe.
  */
-public class Hag extends Witch implements Monsters.Varied {
+public class Hag extends Witch implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Hag.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

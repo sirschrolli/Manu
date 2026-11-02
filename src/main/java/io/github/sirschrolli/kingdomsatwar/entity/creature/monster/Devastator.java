@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * beschlagenem Kampfgeschirr, oder ein zottiges Steppenungetüm mit eingerollten Hörnern. Rammt, brüllt, zertrampelt
  * Blätter und Feldfrüchte und trägt die Reiter der Überfälle.
  */
-public class Devastator extends Ravager implements Monsters.Varied {
+public class Devastator extends Ravager implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Devastator.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

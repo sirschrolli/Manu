@@ -2,6 +2,9 @@ package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Moderkeiler;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import java.util.Deque;
@@ -11,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.item.ItemStack;
@@ -19,9 +23,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Weltvorführung des Nether-Volks (E5a): Borstlinge in drei Gestalten (mit Armbrust, Goldschwert, einer bewundert einen
- * Goldbarren), der Borstenhüne mit Goldaxt, zwei Moderborstlinge, die Kinder und ein tanzender Borstling – vor einer
- * Mauer aus Netherziegeln mit Karmesinstämmen und Pilzlichtern.
+ * Weltvorführung des Nether-Volks und seiner Tiere (E5a): Borstlinge in drei Gestalten (mit Armbrust, Goldschwert, einer
+ * bewundert einen Goldbarren), der Borstenhüne mit Goldaxt, zwei Moderborstlinge, die Kinder und ein tanzender Borstling
+ * vor einer Mauer aus Netherziegeln; die drei Glutkeiler mit Frischlingen und zwei Moderkeilern im Karmesinwald; Glut- und
+ * Seelenstelzer in einem Lavasee (einer gesattelt, ein Junges) und ein frierender am Ufer.
  */
 final class NetherShowcase {
     private static final int OZ = 1400;
@@ -41,6 +46,9 @@ final class NetherShowcase {
         mob.setPersistenceRequired();
         if (mob instanceof AbstractPiglin piglin) {
             piglin.setImmuneToZombification(true);                         // die Vorführwelt ist die Oberwelt
+        }
+        if (mob instanceof Glutkeiler keiler) {
+            keiler.setImmuneToZombification(true);
         }
         mob.snapTo(x, Showcase.ground, z, yaw, 0.0f);
         mob.setYBodyRot(yaw);
@@ -66,6 +74,56 @@ final class NetherShowcase {
                 level.setBlock(new BlockPos(x, g, OZ - 4), (x % 4 == 0 ? Blocks.CRIMSON_ROOTS : Blocks.CRIMSON_FUNGUS).defaultBlockState(), 2);
             }
         }
+    }
+
+    /** Karmesinwald: Nyzel, Karmesinpilze und -wurzeln, hinten Stämme mit Warzenblöcken und Pilzlichtern. */
+    private static void crimsonGrove(ServerLevel level, int x0) {
+        int g = Showcase.ground;
+        Showcase.fill(level, new BlockPos(x0 - 14, g - 1, OZ - 18), new BlockPos(x0 + 32, g - 1, OZ + 20), Blocks.NETHERRACK.defaultBlockState());
+        Showcase.fill(level, new BlockPos(x0 - 10, g - 1, OZ - 10), new BlockPos(x0 + 28, g - 1, OZ + 6), Blocks.CRIMSON_NYLIUM.defaultBlockState());
+        Showcase.fill(level, new BlockPos(x0 - 14, g, OZ - 18), new BlockPos(x0 + 32, g + 12, OZ + 20), Blocks.AIR.defaultBlockState());
+        for (int x = x0 - 8; x <= x0 + 26; x += 7) {
+            int h = 5 + Math.floorMod(x, 3);
+            Showcase.fill(level, new BlockPos(x, g, OZ - 7), new BlockPos(x, g + h, OZ - 7), Blocks.CRIMSON_STEM.defaultBlockState());
+            Showcase.fill(level, new BlockPos(x - 2, g + h - 1, OZ - 9), new BlockPos(x + 2, g + h + 1, OZ - 5), Blocks.NETHER_WART_BLOCK.defaultBlockState());
+            level.setBlock(new BlockPos(x, g + h - 2, OZ - 5), Blocks.SHROOMLIGHT.defaultBlockState(), 2);
+            level.setBlock(new BlockPos(x, g + h + 2, OZ - 7), Blocks.NETHER_WART_BLOCK.defaultBlockState(), 2);
+        }
+        for (int x = x0 - 9; x <= x0 + 27; x++) {
+            for (int z = OZ - 6; z <= OZ - 3; z++) {
+                int r = Math.floorMod(x * 7 + z * 13, 9);
+                if (r == 0) {
+                    level.setBlock(new BlockPos(x, g, z), Blocks.CRIMSON_FUNGUS.defaultBlockState(), 2);
+                } else if (r < 3) {
+                    level.setBlock(new BlockPos(x, g, z), Blocks.CRIMSON_ROOTS.defaultBlockState(), 2);
+                }
+            }
+        }
+    }
+
+    /** Lavasee mit Ufer aus Basalt und Schwarzstein. */
+    private static void lavaLake(ServerLevel level, int x0) {
+        int g = Showcase.ground;
+        Showcase.fill(level, new BlockPos(x0 - 14, g - 3, OZ - 18), new BlockPos(x0 + 32, g - 1, OZ + 20), Blocks.BLACKSTONE.defaultBlockState());
+        Showcase.fill(level, new BlockPos(x0 - 14, g, OZ - 18), new BlockPos(x0 + 32, g + 12, OZ + 20), Blocks.AIR.defaultBlockState());
+        Showcase.fill(level, new BlockPos(x0 - 6, g - 2, OZ - 8), new BlockPos(x0 + 22, g - 1, OZ + 1), Blocks.LAVA.defaultBlockState());
+        for (int x = x0 - 7; x <= x0 + 23; x++) {
+            level.setBlock(new BlockPos(x, g, OZ - 9), (Math.floorMod(x, 4) == 0 ? Blocks.BASALT : Blocks.BLACKSTONE).defaultBlockState(), 2);
+            if (Math.floorMod(x, 5) == 1) {
+                level.setBlock(new BlockPos(x, g + 1, OZ - 9), Blocks.BASALT.defaultBlockState(), 2);
+            }
+        }
+        Showcase.fill(level, new BlockPos(x0 - 6, g - 1, OZ + 2), new BlockPos(x0 + 22, g - 1, OZ + 6), Blocks.SOUL_SOIL.defaultBlockState());
+    }
+
+    private static Lavastelzer strider(ServerLevel level, int x0, double dx, double dz, float yaw, Lavastelzer.Look look, Consumer<Lavastelzer> setup) {
+        Lavastelzer stelzer = spawn(level, ModEntities.STRIDER.get(), x0 + dx, OZ + dz, yaw, m -> {
+            m.setLook(look);
+            setup.accept(m);
+        });
+        stelzer.setNoGravity(true);
+        stelzer.snapTo(x0 + dx, Showcase.ground - 0.6, OZ + dz, yaw, 0.0f);    // watet in der Lava
+        return stelzer;
     }
 
     static void nether(Deque<Step> steps) {
@@ -119,6 +177,46 @@ final class NetherShowcase {
                 m.setDancing(true);
             });
         }));
+        steps.add(Step.server(level -> {
+            // Glutkeiler im Karmesinwald: drei Gestalten, Frischlinge, zwei Moderkeiler
+            int b = group(2);
+            crimsonGrove(level, b);
+            spawn(level, ModEntities.HOGLIN.get(), b + 1.5, OZ - 0.5, 20, m -> m.setLook(Glutkeiler.Look.KARMESIN));
+            spawn(level, ModEntities.HOGLIN.get(), b + 7.5, OZ - 0.5, 345, m -> m.setLook(Glutkeiler.Look.ASCHEN));
+            spawn(level, ModEntities.HOGLIN.get(), b + 13.5, OZ - 0.5, 15, m -> m.setLook(Glutkeiler.Look.SCHLACKE));
+            spawn(level, ModEntities.ZOGLIN.get(), b + 19.5, OZ - 0.5, 340, m -> m.setLook(Moderkeiler.Look.MODER_KARMESIN));
+            spawn(level, ModEntities.ZOGLIN.get(), b + 25.0, OZ - 0.5, 20, m -> m.setLook(Moderkeiler.Look.MODER_ASCHEN));
+            Glutkeiler.Look[] looks = Glutkeiler.Look.values();
+            for (int i = 0; i < looks.length; i++) {
+                Glutkeiler.Look look = looks[i];
+                spawn(level, ModEntities.HOGLIN.get(), b + 4.4 + i * 6.0, OZ + 0.9, i % 2 == 0 ? 25 : 335, m -> {
+                    m.setLook(look);
+                    m.setBaby(true);
+                });
+            }
+            spawn(level, ModEntities.ZOGLIN.get(), b + 22.4, OZ + 0.9, 10, m -> {
+                m.setLook(Moderkeiler.Look.MODER_KARMESIN);
+                m.setBaby(true);
+            });
+
+            // Lavastelzer im Lavasee: Glut- und Seelenstelzer, einer gesattelt, ein Junges; am Ufer friert einer
+            b = group(3);
+            lavaLake(level, b);
+            strider(level, b, 2.5, -3.5, 15, Lavastelzer.Look.GLUT, m -> {});
+            strider(level, b, 7.5, -4.5, 345, Lavastelzer.Look.SEELE, m -> {});
+            strider(level, b, 12.5, -3.5, 20, Lavastelzer.Look.GLUT,
+                    m -> m.setItemSlot(EquipmentSlot.SADDLE, new net.minecraft.world.item.ItemStack(Items.SADDLE)));
+            strider(level, b, 5.2, -1.0, 0, Lavastelzer.Look.GLUT, m -> m.setAge(-24000));
+            strider(level, b, 10.0, -1.0, 340, Lavastelzer.Look.SEELE, m -> m.setAge(-24000));
+            for (int i = 0; i < 2; i++) {
+                Lavastelzer.Look look = i == 0 ? Lavastelzer.Look.GLUT : Lavastelzer.Look.SEELE;
+                spawn(level, ModEntities.STRIDER.get(), b + 17.5 + i * 3.0, OZ + 3.5, i == 0 ? 330 : 20, m -> {
+                    m.setLook(look);
+                    m.setNoAi(false);                                       // nur so merkt er, dass er an Land friert
+                    m.removeFreeWill();
+                });
+            }
+        }));
         steps.add(Step.waitTicks(120));
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(50)));
@@ -126,6 +224,12 @@ final class NetherShowcase {
         shot(steps, "nether_close", group(0) + 4.5, 2.0, 1.4, 4.8, false);
         shot(steps, "nether_brute", group(0) + 12.0, 2.0, 1.3, 4.8, false);
         shot(steps, "nether_babies", group(1) + 5.8, 1.5, 0.9, 5.2, true);
+        shot(steps, "nether_boars", group(2) + 13.0, 3.0, 0.8, 12.0, true);
+        shot(steps, "nether_boar_close", group(2) + 3.6, 2.3, 0.9, 6.0, false);
+        shot(steps, "nether_boar_rot", group(2) + 21.8, 2.3, 0.9, 6.0, false);
+        shot(steps, "nether_striders", group(3) + 8.5, 2.6, 0.3, 9.0, true);
+        shot(steps, "nether_strider_close", group(3) + 6.0, 1.8, 0.2, 7.0, false);
+        shot(steps, "nether_strider_cold", group(3) + 19.0, 1.8, 1.0, 10.0, false);
         steps.add(Step.command("difficulty peaceful"));
         steps.add(Step.command("gamerule spawn_mobs true"));
         steps.add(Step.command("gamemode creative"));

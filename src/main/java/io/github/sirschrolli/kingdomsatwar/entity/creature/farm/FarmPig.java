@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,7 @@ import org.jspecify.annotations.Nullable;
  * schwarzen Platten (Wälder, warme Länder) und das krause Wollschwein (kalte Länder). Mit Sattel und Karottenrute
  * reitbar wie bei Vanilla.
  */
-public class FarmPig extends Pig {
+public class FarmPig extends Pig implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { LANDSCHWEIN, SATTELSCHWEIN, BUNT, WOLLSCHWEIN }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

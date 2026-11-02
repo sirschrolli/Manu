@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * Eisenhut oder ein Mönch in der Kutte. Er verhält sich genau wie der Vanilla-Zombie (Verstärkung rufen, Türen
  * einschlagen, im Wasser zur Wasserleiche werden, im Sonnenlicht brennen) und lässt dasselbe fallen.
  */
-public class Revenant extends Zombie implements Monsters.Varied {
+public class Revenant extends Zombie implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Revenant.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

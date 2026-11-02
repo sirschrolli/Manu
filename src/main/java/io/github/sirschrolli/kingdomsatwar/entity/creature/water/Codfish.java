@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.water;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters;
 import net.minecraft.core.BlockPos;
@@ -23,7 +24,7 @@ import org.jspecify.annotations.Nullable;
  * oder ein Seelachs mit dunkelgrünem Rücken und silbernen Flanken. Zieht in Schwärmen, lässt sich in den Eimer
  * holen und lässt rohen Kabeljau fallen wie der Vanilla-Kabeljau.
  */
-public class Codfish extends Cod implements Monsters.Varied {
+public class Codfish extends Cod implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Codfish.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

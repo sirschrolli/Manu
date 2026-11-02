@@ -34,7 +34,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Die Söldnertafel im Söldnerhaus eines Dorfs: links die Söldner, die heute warten (Gesicht, Name, Art, Rang), in der
  * Mitte der ausgewählte zum Anschauen, rechts seine Werte und sein Sold, darunter "Anheuern". Ausbilden und befördern
- * lassen sie sich später am eigenen Rekrutierungstisch.
+ * lassen sie sich später am eigenen Feldherrentisch.
  */
 public class MercenaryScreen extends Screen {
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/recruitment_table.png");

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * Berserker mit wilder roter Mähne, Waidbemalung und Bärenfell. Schwingt die Axt, schlägt Türen ein und zieht mit den
  * Überfällen wie der Vanilla-Diener (und heißt einer "Johnny", greift er alles an).
  */
-public class Butcher extends Vindicator implements Monsters.Varied {
+public class Butcher extends Vindicator implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Butcher.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

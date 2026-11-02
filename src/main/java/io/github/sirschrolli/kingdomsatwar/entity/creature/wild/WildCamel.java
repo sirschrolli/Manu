@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.BlockPos;
@@ -32,13 +33,11 @@ import org.jspecify.annotations.Nullable;
  * Höckern in Tafelbergen und auf den Savannen-Hochebenen. Sattel, zwei Reiter, Sprint, Sitzen und Kakteen wie bei
  * Vanilla.
  */
-public class WildCamel extends Camel {
+public class WildCamel extends Camel implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { DROMEDAR, TRAMPELTIER }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =
             SynchedEntityData.defineId(WildCamel.class, EntityDataSerializers.INT);
-
-    private final Courtship<WildCamel> courtship = new Courtship<>(WildCamel.class, 70);
 
     public WildCamel(EntityType<? extends WildCamel> type, Level level) {
         super(type, level);
@@ -104,17 +103,13 @@ public class WildCamel extends Camel {
         return calf;
     }
 
-    /**
-     * Das Vanilla-Gehirn sucht Partner nur unter Vanilla-Kamelen – die Werbung übernimmt {@link Courtship}. Ein
-     * verliebtes Kamel, das gerade sitzt, steht dafür auf.
-     */
+    /** Ein verliebtes Kamel, das gerade sitzt, steht auf, damit es zu seinem Partner gehen kann. */
     @Override
     protected void customServerAiStep(ServerLevel level) {
         super.customServerAiStep(level);
         if (this.isInLove() && this.isCamelSitting() && !this.isVehicle()) {
             this.standUp();
         }
-        this.courtship.tick(level, this, camel -> !camel.isCamelSitting() && !camel.isPanicking() && !camel.isVehicle());
     }
 
     @Override

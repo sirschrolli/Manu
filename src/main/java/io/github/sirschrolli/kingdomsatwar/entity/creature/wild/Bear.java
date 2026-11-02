@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -29,7 +30,7 @@ import org.jspecify.annotations.Nullable;
  * der Taiga, Schwarzbär in den übrigen Wäldern. Alle verhalten sich wie der Vanilla-Eisbär: friedlich, bis man ihren
  * Jungen zu nahe kommt – dann richten sie sich auf und schlagen zu.
  */
-public class Bear extends PolarBear {
+public class Bear extends PolarBear implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { EIS, BRAUN, SCHWARZ }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

@@ -295,7 +295,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
 
-        // --- Armee: Soldaten, Banditen, Rekrutierungstisch, Kommandostab ---
+        // --- Armee: Soldaten, Banditen, Feldherrentisch, Kommandostab ---
         army();
         equipment();
         creatures();
@@ -731,10 +731,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("chronicle.kingdomsatwar.kingdom.text",
                 "You have arrived in a foreign land with little more than the clothes on your back. Yet this land is waiting for "
                         + "someone to unite it.\n\nPlant a town banner to found your settlement. Coins buy you a builder, farmers and "
-                        + "craftsmen – and every army begins at a recruitment table.",
+                        + "craftsmen – and every army begins with the knights and mercenaries of the villages.",
                 "Du bist in einem fremden Land angekommen, mit kaum mehr als dem, was du am Leib trägst. Doch dieses Land wartet auf "
                         + "jemanden, der es eint.\n\nSetze ein Stadtbanner und gründe deine Siedlung. Mit Münzen heuerst du einen "
-                        + "Baumeister, Bauern und Handwerker an – und jedes Heer beginnt an einem Rekrutierungstisch.");
+                        + "Baumeister, Bauern und Handwerker an – und jedes Heer beginnt mit den Rittern und Söldnern der Dörfer.");
         text("chronicle.kingdomsatwar.chronicle.text",
                 "This chronicle was written by the keepers of the seal, generation after generation. It tells of a circle of six "
                         + "monoliths not far from the heart of the world: the Seal Circle. It was there that the seal was once forged."
@@ -1051,6 +1051,15 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.ZOMBIFIED_PIGLIN, ModItems.ZOMBIFIED_PIGLIN_SPAWN_EGG, "Rotten Bristling", "Moderborstling", "Moderborstling");
         breeds(ModEntities.ZOMBIFIED_PIGLIN, new String[][]{{"moder_karmesin", "Rotten Bristling", "Moderborstling"},
                 {"moder_aschen", "Withered Bristling", "Dörrborstling"}});
+        // Tiere des Nethers (E5a-2)
+        creature(ModEntities.HOGLIN, ModItems.HOGLIN_SPAWN_EGG, "Ember Boar", "Glutkeiler", "Glutkeiler");
+        breeds(ModEntities.HOGLIN, new String[][]{{"karmesin", "Crimson Boar", "Karmesinkeiler"}, {"aschen", "Ashen Boar", "Aschenkeiler"},
+                {"schlacke", "Slag Boar", "Schlackenkeiler"}});
+        creature(ModEntities.ZOGLIN, ModItems.ZOGLIN_SPAWN_EGG, "Rotten Boar", "Moderkeiler", "Moderkeiler");
+        breeds(ModEntities.ZOGLIN, new String[][]{{"moder_karmesin", "Rotten Boar", "Moderkeiler"},
+                {"moder_aschen", "Withered Boar", "Dörrkeiler"}});
+        creature(ModEntities.STRIDER, ModItems.STRIDER_SPAWN_EGG, "Lava Stilt", "Lavastelzer", "Lavastelzer");
+        breeds(ModEntities.STRIDER, new String[][]{{"glut", "Ember Stilt", "Glutstelzer"}, {"seele", "Soul Stilt", "Seelenstelzer"}});
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {
@@ -1184,11 +1193,11 @@ public class ModLanguageProvider extends LanguageProvider {
         item(ModItems.BANDIT_SPAWN_EGG, "Bandit Spawn Egg", "Banditen-Spawn-Ei");
         item(ModItems.BANDIT_ARCHER_SPAWN_EGG, "Bandit Archer Spawn Egg", "Banditen-Bogenschützen-Spawn-Ei");
 
-        block(ModBlocks.RECRUITMENT_TABLE, "Recruitment Table", "Rekrutierungstisch");
-        text(ModItems.loreKey("recruitment_table", 1), "Recruit swordsmen and archers for coins",
-                "Hier wirbst du Schwertkämpfer und Bogenschützen gegen Münzen an");
-        text(ModItems.loreKey("recruitment_table", 2), "Train your soldiers: higher ranks, knights and captains",
-                "Und hier bildest du deine Leute aus: höhere Ränge, Ritter und Hauptleute");
+        block(ModBlocks.RECRUITMENT_TABLE, "Commander's Table", "Feldherrentisch");
+        text(ModItems.loreKey("recruitment_table", 1), "Heal all your soldiers in the camp around it",
+                "Hier heilst du alle deine Soldaten im Feldlager");
+        text(ModItems.loreKey("recruitment_table", 2), "Level them up: higher ranks, knights and captains",
+                "Und hier bildest du sie aus: höhere Ränge, Ritter und Hauptleute");
         item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
         text(ModItems.loreKey("command_baton", 1), "Point at an enemy: attack", "Auf einen Feind zeigen: Angriff");
         text(ModItems.loreKey("command_baton", 2), "Point at the ground: hold position (sneak: patrol)",
@@ -1196,10 +1205,19 @@ public class ModLanguageProvider extends LanguageProvider {
         text(ModItems.loreKey("command_baton", 3), "Point at the sky: everyone follows", "In den Himmel zeigen: alle folgen");
         text(ModItems.loreKey("command_baton", 4), "Sneak + click your soldier: dismiss", "Schleichen + eigenen Soldaten anklicken: entlassen");
 
-        // Fenster des Rekrutierungstischs
-        text("gui.kingdomsatwar.recruitment.title", "Recruitment Table", "Rekrutierungstisch");
+        // Fenster des Feldherrentischs
+        text("gui.kingdomsatwar.recruitment.title", "Commander's Table", "Feldherrentisch");
         text("gui.kingdomsatwar.recruitment.army", "Army: %s / %s", "Armee: %s / %s");
-        text("gui.kingdomsatwar.recruitment.recruit", "Recruit", "Anwerben");
+        text("gui.kingdomsatwar.recruitment.heal", "Heal everyone", "Alle heilen");
+        text("gui.kingdomsatwar.recruitment.heal.cost", "Heal everyone (%s wounded) – %s", "Alle heilen (%s verwundet) – %s");
+        text("gui.kingdomsatwar.recruitment.heal.none", "Everyone in the camp is unhurt", "Im Feldlager sind alle unverletzt");
+        text("gui.kingdomsatwar.recruitment.heal.none.hint", "Wounded soldiers of yours within %s blocks of the table are healed here.",
+                "Hier werden deine verwundeten Soldaten im Umkreis von %s Blöcken um den Tisch geheilt.");
+        text("gui.kingdomsatwar.recruitment.heal.hint",
+                "The field surgeon tends to all your wounded within %s blocks: full health, no more poison or fire. "
+                        + "He charges 1 bronze per %s missing health.",
+                "Der Feldscher versorgt alle deine Verwundeten im Umkreis von %s Blöcken: volle Gesundheit, kein Gift, kein "
+                        + "Feuer mehr. Er nimmt 1 Bronze je %s fehlende Leben.");
         text("gui.kingdomsatwar.recruitment.health", "%s health", "%s Leben");
         text("gui.kingdomsatwar.recruitment.armor", "%s armour", "%s Rüstung");
         text("gui.kingdomsatwar.recruitment.melee", "Sword", "Schwert");
@@ -1207,42 +1225,42 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.recruitment.cost", "Price:", "Preis:");
         text("gui.kingdomsatwar.recruitment.have", "You have %s", "Du hast %s");
         text("gui.kingdomsatwar.recruitment.missing", "Missing: %s× %s", "Es fehlen: %s× %s");
-        text("gui.kingdomsatwar.recruitment.result.recruited", "Recruited!", "Angeworben!");
+        text("gui.kingdomsatwar.recruitment.result.healed", "Everyone healed!", "Alle geheilt!");
+        text("gui.kingdomsatwar.recruitment.result.nothing_to_heal", "Nobody is wounded", "Niemand ist verwundet");
         text("gui.kingdomsatwar.recruitment.result.too_far", "Too far away", "Zu weit weg");
         text("gui.kingdomsatwar.recruitment.result.not_enough", "Too expensive", "Zu teuer");
         text("gui.kingdomsatwar.recruitment.result.army_full", "Army full", "Armee voll");
         text("gui.kingdomsatwar.recruitment.result.no_space", "No room", "Kein Platz");
-        text("message.kingdomsatwar.recruit.recruited", "Recruited! Your new soldier follows you.", "Angeworben! Dein neuer Soldat folgt dir.");
+        text("message.kingdomsatwar.recruit.healed", "The field surgeon has tended to all your wounded.",
+                "Der Feldscher hat alle deine Verwundeten versorgt.");
+        text("message.kingdomsatwar.recruit.nothing_to_heal", "None of your soldiers in the camp is wounded.",
+                "Keiner deiner Soldaten im Feldlager ist verwundet.");
         text("message.kingdomsatwar.recruit.too_far", "You are too far away from the table.", "Du bist zu weit vom Tisch entfernt.");
         text("message.kingdomsatwar.recruit.not_enough", "You can't afford this soldier yet.", "Diesen Soldaten kannst du dir noch nicht leisten.");
         text("message.kingdomsatwar.recruit.army_full", "Your army is complete – you can't lead more soldiers.",
                 "Deine Armee ist vollzählig – mehr Soldaten kannst du nicht führen.");
         text("message.kingdomsatwar.recruit.no_space", "There is no room next to the table.", "Neben dem Tisch ist kein Platz.");
-        text("message.kingdomsatwar.recruit.villages_only", "Knights and captains are hired in the villages – or trained here.",
-                "Ritter und Hauptleute heuerst du in den Dörfern an – oder bildest sie hier aus.");
         text("message.kingdomsatwar.recruit.trained", "Promoted!", "Befördert!");
         text("message.kingdomsatwar.recruit.promoted", "Training complete!", "Ausbildung abgeschlossen!");
         text("message.kingdomsatwar.recruit.max_rank", "This soldier can't be trained any further.",
                 "Dieser Soldat lässt sich nicht weiter ausbilden.");
         text("message.kingdomsatwar.recruit.not_here", "That soldier isn't here (any more).", "Dieser Soldat ist nicht (mehr) hier.");
         text("message.kingdomsatwar.recruit.hired", "Hired! Your mercenary follows you.", "Angeheuert! Dein Söldner folgt dir.");
-        text("gui.kingdomsatwar.recruitment.result.villages_only", "Hire in villages", "In Dörfern anheuern");
         text("gui.kingdomsatwar.recruitment.result.trained", "Promoted!", "Befördert!");
         text("gui.kingdomsatwar.recruitment.result.promoted", "Trained!", "Ausgebildet!");
         text("gui.kingdomsatwar.recruitment.result.max_rank", "Highest rank", "Höchster Rang");
         text("gui.kingdomsatwar.recruitment.result.not_here", "Not here any more", "Nicht mehr da");
         text("gui.kingdomsatwar.recruitment.result.hired", "Hired!", "Angeheuert!");
 
-        // Ausbilden am Rekrutierungstisch
-        text("gui.kingdomsatwar.recruitment.tab.recruit", "Recruit", "Anwerben");
-        text("gui.kingdomsatwar.recruitment.tab.train", "Train", "Ausbilden");
-        text("gui.kingdomsatwar.recruitment.title.train", "Training", "Ausbildung");
+        // Ausbilden am Feldherrentisch
         text("gui.kingdomsatwar.recruitment.villages_hint",
-                "Knights and captains are hired in the mercenary halls of the villages – or trained here from your own soldiers.",
-                "Ritter und Hauptleute heuerst du im Söldnerhaus der Dörfer an – oder bildest hier deine eigenen Leute dazu aus.");
-        text("gui.kingdomsatwar.recruitment.no_soldiers", "Bring your soldiers to the table (up to 8 blocks away) to train them.",
-                "Bring deine Soldaten an den Tisch (bis 8 Blöcke weit), um sie auszubilden.");
-        text("gui.kingdomsatwar.recruitment.no_soldier", "No soldier at the table", "Kein Soldat am Tisch");
+                "New soldiers are not recruited here: hire the knights and mercenaries waiting in the mercenary halls of the "
+                        + "villages. Then bring them to your camp to heal them and level them up.",
+                "Neue Soldaten wirbst du hier nicht an: Heuere die Ritter und Söldner an, die im Söldnerhaus der Dörfer "
+                        + "warten. Im Feldlager heilst du sie dann und bildest sie aus.");
+        text("gui.kingdomsatwar.recruitment.no_soldiers", "None of your soldiers is in the camp (up to %s blocks around the table).",
+                "Keiner deiner Soldaten ist im Feldlager (bis %s Blöcke um den Tisch).");
+        text("gui.kingdomsatwar.recruitment.no_soldier", "No soldier in the camp", "Kein Soldat im Feldlager");
         text("gui.kingdomsatwar.recruitment.rank_up", "Promote", "Befördern");
         text("gui.kingdomsatwar.recruitment.rank_up.hint", "Promote to %s: +25%% health, +2 armour, +1 damage",
                 "Befördern zum Rang %s: +25 %% Leben, +2 Rüstung, +1 Schaden");
@@ -1267,8 +1285,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.mercenaries.hire.hint", "Hire %s for %s", "%s für %s anheuern");
         text("gui.kingdomsatwar.mercenaries.none", "Nobody is waiting here today. New mercenaries arrive every morning.",
                 "Heute wartet hier niemand mehr. Jeden Morgen kommen neue Söldner.");
-        text("gui.kingdomsatwar.mercenaries.hint", "You can train and promote them later at your recruitment table.",
-                "Ausbilden und befördern kannst du sie später an deinem Rekrutierungstisch.");
+        text("gui.kingdomsatwar.mercenaries.hint", "You can heal, train and promote them later at your commander's table.",
+                "Heilen, ausbilden und befördern kannst du sie später an deinem Feldherrentisch.");
         text("gui.kingdomsatwar.mercenaries.wage", "Wage:", "Sold:");
 
         // Befehle und Zustand

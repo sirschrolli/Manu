@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
@@ -31,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * Biene – ersetzt die Vanilla-Biene. Honigbiene und (in kühlen Gegenden) die pelzige Hummel. Bestäuben, Nester und
  * Bienenstöcke, Honig, Zorn und Stich wie bei Vanilla.
  */
-public class WildBee extends Bee {
+public class WildBee extends Bee implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed { HONIG, HUMMEL }
 
     private static final EntityDataAccessor<Integer> DATA_BREED =

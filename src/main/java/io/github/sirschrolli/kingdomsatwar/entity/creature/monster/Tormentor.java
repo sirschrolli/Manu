@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import org.jspecify.annotations.Nullable;
  * Flügeln aus zerrissenem Tuch – violett beim Schattenbeschwörer, türkis beim Runenpriester. Fliegt durch Wände und
  * vergeht nach einer Weile wie der Vanilla-Plagegeist.
  */
-public class Tormentor extends Vex implements Monsters.Varied {
+public class Tormentor extends Vex implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Tormentor.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

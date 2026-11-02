@@ -333,6 +333,16 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling>> ZOMBIFIED_PIGLIN = ENTITIES.registerEntityType(
             "zombified_piglin", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.RottenBristling::new, MobCategory.MONSTER, builder -> builder
                     .fireImmune().sized(0.6f, 1.95f).eyeHeight(1.79f).passengerAttachments(2.0f).ridingOffset(-0.7f).clientTrackingRange(8));
+    // Tiere des Nethers (E5a-2): Maße wie bei Vanilla
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler>> HOGLIN = ENTITIES.registerEntityType(
+            "hoglin", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler::new, MobCategory.MONSTER, builder -> builder
+                    .sized(1.3964844f, 1.4f).passengerAttachments(1.49375f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Moderkeiler>> ZOGLIN = ENTITIES.registerEntityType(
+            "zoglin", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Moderkeiler::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().sized(1.3964844f, 1.4f).passengerAttachments(1.49375f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer>> STRIDER = ENTITIES.registerEntityType(
+            "strider", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Lavastelzer::new, MobCategory.CREATURE, builder -> builder
+                    .fireImmune().sized(0.9f, 1.7f).clientTrackingRange(10));
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -541,6 +551,9 @@ public final class ModEntities {
         event.put(PIGLIN.get(), net.minecraft.world.entity.monster.piglin.Piglin.createAttributes().build());
         event.put(PIGLIN_BRUTE.get(), net.minecraft.world.entity.monster.piglin.PiglinBrute.createAttributes().build());
         event.put(ZOMBIFIED_PIGLIN.get(), net.minecraft.world.entity.monster.zombie.ZombifiedPiglin.createAttributes().build());
+        event.put(HOGLIN.get(), net.minecraft.world.entity.monster.hoglin.Hoglin.createAttributes().build());
+        event.put(ZOGLIN.get(), net.minecraft.world.entity.monster.Zoglin.createAttributes().build());
+        event.put(STRIDER.get(), net.minecraft.world.entity.monster.Strider.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());
@@ -656,6 +669,10 @@ public final class ModEntities {
         event.register(PIGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.piglin.Piglin::checkPiglinSpawnRules, replace);
         event.register(ZOMBIFIED_PIGLIN.get(), ground, noLeaves,
                 net.minecraft.world.entity.monster.zombie.ZombifiedPiglin::checkZombifiedPiglinSpawnRules, replace);
+        event.register(HOGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.hoglin.Hoglin::checkHoglinSpawnRules, replace);
+        event.register(ZOGLIN.get(), ground, noLeaves, net.minecraft.world.entity.monster.Monster::checkAnyLightMonsterSpawnRules, replace);
+        event.register(STRIDER.get(), SpawnPlacementTypes.IN_LAVA, noLeaves, net.minecraft.world.entity.monster.Strider::checkStriderSpawnRules,
+                replace);
         event.register(WOLF.get(), ground, noLeaves, Wolf::checkWolfSpawnRules, replace);
         event.register(FOX.get(), free, noLeaves, WildAnimals::checkGrassOrSandSpawnRules, replace);
         event.register(BEAR.get(), ground, noLeaves, PolarBear::checkPolarBearSpawnRules, replace);

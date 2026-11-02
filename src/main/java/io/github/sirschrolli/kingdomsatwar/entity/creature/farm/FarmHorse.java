@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.farm;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -34,7 +35,7 @@ import org.jspecify.annotations.Nullable;
  * größer, kräftiger und langsamer, das Pony klein und gemächlich. Zähmen, Sattel, Rossharnisch, Steigen und Springen
  * wie bei Vanilla; mit einem Esel gibt es Maultiere.
  */
-public class FarmHorse extends Horse {
+public class FarmHorse extends Horse implements ReplacesVanilla {
     public enum Breed implements FarmAnimals.Breed {
         FUCHS(1.0f), BRAUNER(1.0f), FRIESE(1.04f), SCHIMMEL(1.0f), SCHECKE(1.0f), HAFLINGER(0.94f), KALTBLUT(1.12f),
         FALBE(0.98f), PONY(0.8f);

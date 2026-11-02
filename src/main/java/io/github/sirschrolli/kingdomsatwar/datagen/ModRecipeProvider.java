@@ -506,7 +506,7 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
 
     private void armyRecipes() {
-        // Rekrutierungstisch: Buch und Smaragde auf einem Holztisch
+        // Feldherrentisch: Buch und Smaragde auf einem Holztisch
         shaped(RecipeCategory.DECORATIONS, ModBlocks.RECRUITMENT_TABLE.get())
                 .pattern("EBE")
                 .pattern("PPP")

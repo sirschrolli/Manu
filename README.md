@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.22.0 – das Nether-Volk: Borstlinge, Borstenhünen und Moderborstlinge statt Piglins.**
+> **Testversion 0.23.0 – Glutkeiler, Moderkeiler und Lavastelzer; der Feldherrentisch heilt und bildet aus.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -84,7 +84,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > **Söldnertafel**, hinten Schankraum mit Kamin und langer Tafel und oben der Schlafsaal, in allen vier Bauweisen. An der
 > Tafel warten jeden Morgen bis zu drei Söldner: Ritter, Schwertkämpfer, Bogenschützen und Hauptleute, manche schon
 > **Veteran** oder **Elite**. Die Tafel zeigt Gesicht, Rang, Werte und Sold, angeheuert wird mit Münzen. Ritter und
-> Hauptleute gibt es am Tisch nicht mehr zu kaufen – dafür **bildet der Rekrutierungstisch jetzt aus**: Im neuen Reiter
+> Hauptleute gibt es am Tisch nicht mehr zu kaufen – dafür **bildet der Tisch (heute Feldherrentisch) jetzt aus**: Im neuen Reiter
 > „Ausbilden“ beförderst du deine Leute zum Veteranen und zur Elite (je Rang +25 % Leben, +2 Rüstung, +1 Schaden) und
 > bildest Schwertkämpfer zu Rittern und Ritter zu Hauptleuten aus – Name, Rang und Herr bleiben. Den Rang erkennt man
 > an Schärpe, Ärmelstreifen, Schulterstücken und Ehrenmedaille und an den Sternen im Namen.
@@ -131,8 +131,24 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Gold, tauschen, jagen, tanzen und verwandeln sich in der Oberwelt wie gewohnt; ein Borstling weicht auch vor den
 > eigenen Untoten zurück. Außerdem finden Frösche, Molche, Nautilusse und Urwühler jetzt wieder zueinander und bekommen
 > Nachwuchs.
+> Neu in 0.23: **Die Tiere des Nethers.** Der **Glutkeiler** (statt Hoglin) ist ein schwerer Keiler mit Schulterbuckel
+> unter einem zotteligen Fellumhang, einer Borstenmähne aus drei Fächern, glühenden Augen und langen, nach oben
+> geschwungenen Hauern – im Karmesinwald rostrot mit Karmesinpilzen auf dem Rücken (**Karmesinkeiler**), sonst aschgrau
+> mit glimmenden Borstenspitzen (**Aschenkeiler**), selten schwarz mit glühender Magmakruste (**Schlackenkeiler**); seine
+> Frischlinge tragen helle Streifen. In der Oberwelt verwest er zum **Moderkeiler** (statt Zoglin) – und behält dabei
+> seine Farbe, ebenso wie verwesende Borstlinge. Der **Lavastelzer** (statt Schreiter) watet auf langen Stelzbeinen mit
+> glühend heißen Füßen durch die Lava, ein warziges Lavawesen mit großen Augen, breitem Maul und sechs Lappen aus
+> feurigem Haar, im Seelensandtal türkis wie Seelenfeuer (**Seelenstelzer**); an Land friert er, wird fahl und zittert.
+> Sattel, Wirrpilzrute, Paarung und Jockeys wie gewohnt.
+> Außerdem gelten **alle eigenen Wesen für das Spiel jetzt als die ersetzten**: Eisenwächter lassen Kriecher in Ruhe,
+> Ziegen rammen keine Ziegen, Wölfe jagen die eigenen Schafe und Hasen, Lamas ziehen in Karawanen, Karotten- und
+> Wirrpilzrute treiben Hausschwein und Lavastelzer an, und die Tiere mit Vanilla-Gehirn finden ihre Partner wieder ganz
+> wie bei Vanilla. Und aus dem Rekrutierungstisch wurde der **Feldherrentisch**: Angeworben wird nur noch bei den
+> Rittern und Söldnern der Dörfer; am Tisch heilt der Feldscher alle Verwundeten im Feldlager (24 Blöcke) für ein paar
+> Münzen, und du bildest deine Leute aus – höhere Ränge, Ritter und Hauptleute.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Glutkeiler und Lavastelzer (statt Hoglin und Schreiter), danach die übrigen Nether- und End-Wesen.
+> **Als Nächstes:** Nahrung für Bürger und Soldaten (Stadtlager und Proviant), Garnison und Schlachtzug, dann schönere
+> Standard-Biome und die übrigen Nether- und End-Wesen.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -151,7 +167,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
 | Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer | ✅ fertig |
-| Ritter und Soldaten: Rekrutierungstisch mit Ausbildung und Rängen, Söldnerhaus in den Dörfern, Kommandostab, Banditen | ✅ fertig |
+| Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung und Rängen, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
@@ -192,7 +208,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.22.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.23.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -200,7 +216,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.22.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.23.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -534,14 +550,13 @@ und der Schlüpfling gehört dem, der dabei war.
 
 ![Hauptmann, Schwertkämpfer, Ritter und Bogenschütze](docs/bilder/soldaten.jpg)
 
-Am **Rekrutierungstisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) wirbst du Schwertkämpfer und Bogenschützen an –
-bezahlt wird der Sold in Münzen. **Ritter und Hauptleute** heuerst du im **Söldnerhaus** der Dörfer an, oder du bildest
-sie am Tisch aus deinen eigenen Leuten aus:
+Soldaten wirbst du bei den **Rittern und Söldnern der Dörfer** an: im **Söldnerhaus**, bezahlt wird der Sold in
+Münzen. Am **Feldherrentisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) heilst du sie und bildest sie aus:
 
 | Soldat | Woher | Rolle |
 |---|---|---|
-| Schwertkämpfer | Tisch: 5 Silber | Nahkämpfer – das Rückgrat jeder Armee |
-| Bogenschütze | Tisch: 7 Silber | Fernkämpfer, schießt nie auf Freunde |
+| Schwertkämpfer | Söldnerhaus (ab 5 Silber) | Nahkämpfer – das Rückgrat jeder Armee |
+| Bogenschütze | Söldnerhaus (ab 7 Silber) | Fernkämpfer, schießt nie auf Freunde |
 | Ritter | Söldnerhaus (ab 2 Gold 2 Silber) oder Ausbildung | Plattenrüstung und Schild, hält die vorderste Reihe |
 | Hauptmann | Söldnerhaus (ab 3 Gold 5 Silber) oder Ausbildung | macht Soldaten in seiner Nähe stärker |
 
@@ -553,7 +568,9 @@ drei Söldner warten (fast immer ein Ritter). Die Tafel zeigt Art, Rang, Werte u
 
 ![Das Söldnerhaus und seine Tafel](docs/bilder/soeldnerhaus.jpg)
 
-**Ausbilden** (Reiter am Rekrutierungstisch, die eigenen Soldaten im Umkreis von 8 Blöcken):
+**Am Feldherrentisch** stehen links alle deine Soldaten im **Feldlager** (bis 24 Blöcke um den Tisch) mit ihrer
+Gesundheit. **„Alle heilen“** ruft den Feldscher: Er versorgt alle Verwundeten auf einmal – volle Gesundheit, kein Gift
+und kein Feuer mehr – und nimmt dafür 1 Bronze je 4 fehlende Leben. **Ausbilden** kannst du jeden einzeln:
 
 | Ausbildung | Preis | Wirkung |
 |---|---|---|
@@ -747,7 +764,15 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 |---|---|---|---|
 | **Borstling** | Piglin | Karmesinborstling (Karmesinwald), Aschenborstling (Ödland, Seelensandtal, Basaltdeltas), Goldborstling (selten) | Keilerkopf mit Knopfaugen, Rüssel und Nasenring, Hauern, Borstenkamm und Zopf; Waffenrock, Fellumhang, Goldschnalle, Armreifen, bemalte Arme; Kinder mit Kulleraugen; weicht auch den eigenen Untoten aus |
 | **Borstenhüne** | Piglin-Barbar | – | gehörnter Eisenhelm mit Goldnieten, Brustpanzer mit Keilerwappen, Schulterstücke und Kettenärmel; bewacht die Bastionen |
-| **Moderborstling** | Zombie-Piglin | Moderborstling, Dörrborstling | fauliges, fleckiges Fleisch, offener Schädel, Rippen unter dem zerrissenen Waffenrock, angelaufenes Gold, ein glimmendes Auge |
+| **Moderborstling** | Zombie-Piglin | Moderborstling, Dörrborstling | fauliges, fleckiges Fleisch, offener Schädel, Rippen unter dem zerrissenen Waffenrock, angelaufenes Gold, ein glimmendes Auge; behält beim Verwesen die Farbe des Borstlings |
+
+![Glutkeiler, Moderkeiler und Lavastelzer](docs/bilder/nether_tiere.jpg)
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Glutkeiler** | Hoglin | Karmesinkeiler (Karmesinwald), Aschenkeiler, Schlackenkeiler (selten) | Schulterbuckel mit Fellumhang, Borstenmähne aus drei Fächern, glühende Augen, lange geschwungene Hauer; Karmesinpilze auf dem Rücken, glimmende Borstenspitzen oder glühende Magmakruste; Frischlinge mit Streifen; Kopfstoß, Paarung mit Karmesinpilzen, Flucht vor Wirrpilzen und Portalen, Jagd durch die Borstlinge wie gewohnt |
+| **Moderkeiler** | Zoglin | Moderkeiler, Dörrkeiler | verwest mit offenen Stellen, freiliegenden Rippen und Stirnknochen, räudiger Mähne, abgebrochenem Hauer und einem glimmenden Auge; greift alles an außer Moderkeilern und Kriechern |
+| **Lavastelzer** | Schreiter | Glutstelzer, Seelenstelzer (Seelensandtal) | warzige Lavahaut mit glimmenden Poren, große glühende Augen, breites Maul, sechs Lappen aus feurigem Haar, Stelzbeine mit glühenden Füßen; friert an Land (fahl, zitternd, langsam); Sattel, Wirrpilzrute, Paarung und Jockeys wie gewohnt |
 
 ### Monster
 
@@ -981,7 +1006,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.22.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.23.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

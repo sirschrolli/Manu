@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ import org.jspecify.annotations.Nullable;
  * Dörrkamel (statt Kamel-Mumie): vertrocknete, über die Rippen gespannte Haut mit glimmenden Augen, oder als
  * Mumienkamel mit Leinenbinden, Satteldecke und Goldschmuck. Trägt seine untoten Reiter durch die Wüste.
  */
-public class DryCamel extends CamelHusk implements Monsters.Varied {
+public class DryCamel extends CamelHusk implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(DryCamel.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

@@ -24,6 +24,9 @@
     "kingdomsatwar:vindicator": {
       "acceptable_villager_distance": 10.0
     },
+    "kingdomsatwar:zoglin": {
+      "acceptable_villager_distance": 10.0
+    },
     "kingdomsatwar:zombie": {
       "acceptable_villager_distance": 8.0
     },

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.monster;
 
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ import net.minecraft.world.entity.monster.cubemob.AbstractCubeMob;
  * Schleim (statt Vanilla-Schleim): trübgrüner Sumpfschleim mit Algenflocken oder türkisgrauer Höhlenschleim mit
  * Kristallsplittern. Hüpft, teilt sich beim Sterben (die Teile behalten ihre Art) und lässt Schleimbälle fallen.
  */
-public class Ooze extends Slime implements Monsters.Varied {
+public class Ooze extends Slime implements Monsters.Varied, ReplacesVanilla {
     private static final EntityDataAccessor<Integer> DATA_LOOK = SynchedEntityData.defineId(Ooze.class, EntityDataSerializers.INT);
 
     public enum Look implements FarmAnimals.Breed {

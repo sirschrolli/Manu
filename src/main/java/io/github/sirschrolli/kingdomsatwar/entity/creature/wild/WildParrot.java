@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.entity.creature.wild;
 
 import com.mojang.logging.LogUtils;
+import io.github.sirschrolli.kingdomsatwar.entity.ReplacesVanilla;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.FarmAnimals;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -19,7 +20,7 @@ import org.slf4j.Logger;
  * Amazone, Gelbbrustara und Graupapagei. Fliegen, Tanzen, Nachahmen von Monstern und das Sitzen auf der Schulter wie
  * bei Vanilla.
  */
-public class WildParrot extends Parrot {
+public class WildParrot extends Parrot implements ReplacesVanilla {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     /** Die Arten in der Reihenfolge der Vanilla-Varianten (rot-blau, blau, grün, gelb-blau, grau). */

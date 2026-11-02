@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Die vier Soldatenarten, die man am Rekrutierungstisch anwerben kann.
+ * Die vier Soldatenarten (angeworben in den Dörfern, ausgebildet am Feldherrentisch).
  *
  * @param health    Lebenspunkte
  * @param armor     Rüstungswert (die Rüstung ist Teil des Aussehens, nicht als Gegenstand angelegt)

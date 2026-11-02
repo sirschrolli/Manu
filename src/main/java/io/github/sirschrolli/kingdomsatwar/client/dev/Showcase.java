@@ -1,6 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.dev;
 
-import io.github.sirschrolli.kingdomsatwar.client.army.RecruitScreen;
+import io.github.sirschrolli.kingdomsatwar.client.army.WarTableScreen;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroController;
 import io.github.sirschrolli.kingdomsatwar.client.intro.IntroScreen;
@@ -1635,7 +1635,7 @@ final class Showcase {
                 s.setAggressive(true);
                 s.startUsingItem(net.minecraft.world.InteractionHand.MAIN_HAND);
             });
-            // Rekrutierungstisch
+            // Feldherrentisch
             level.setBlock(new BlockPos(30, ground, oz), ModBlocks.RECRUITMENT_TABLE.get().defaultBlockState()
                     .setValue(io.github.sirschrolli.kingdomsatwar.block.RecruitmentTableBlock.FACING, Direction.SOUTH), Block.UPDATE_ALL);
         }));
@@ -1704,25 +1704,18 @@ final class Showcase {
         steps.add(Step.screenshot("soldiers_battle_1"));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("soldiers_battle_2"));
-        // Rekrutierungstisch und Anwerbe-Fenster
+        // Feldherrentisch und sein Fenster
         steps.add(tp(30.5, 1.4, oz + 2.6, 180, 32));
         steps.add(Step.waitTicks(25));
         steps.add(Step.screenshot("recruitment_table"));
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.waitTicks(10));
         steps.add(Step.hud(true));
-        steps.add(Step.screen(minecraft -> new RecruitScreen(new BlockPos(30, ground, oz), 32)));
+        steps.add(Step.screen(minecraft -> new WarTableScreen(new BlockPos(30, ground, oz), 32)));
         steps.add(Step.waitTicks(15));
         steps.add(Step.once(Showcase::parkMouse));
         steps.add(Step.waitTicks(5));
-        steps.add(Step.screenshot("recruit_screen_1"));
-        steps.add(Step.once(minecraft -> {
-            if (minecraft.gui.screen() instanceof RecruitScreen screen) {
-                screen.select(SoldierType.KNIGHT);
-            }
-        }));
-        steps.add(Step.waitTicks(10));
-        steps.add(Step.screenshot("recruit_screen_2"));
+        steps.add(Step.screenshot("war_table_1"));
         steps.add(Step.screen(minecraft -> null));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.waitTicks(5));
