@@ -3,6 +3,7 @@
   "biomes": "#minecraft:is_nether",
   "replacements": {
     "minecraft:blaze": "kingdomsatwar:blaze",
+    "minecraft:enderman": "kingdomsatwar:enderman",
     "minecraft:ghast": "kingdomsatwar:ghast",
     "minecraft:hoglin": "kingdomsatwar:hoglin",
     "minecraft:magma_cube": "kingdomsatwar:magma_cube",

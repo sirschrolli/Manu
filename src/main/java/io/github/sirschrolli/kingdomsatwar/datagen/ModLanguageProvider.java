@@ -1070,6 +1070,9 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.WITHER_SKELETON, ModItems.WITHER_SKELETON_SPAWN_EGG, "Charred Bones", "Brandgebein", "Brandgebein");
         breeds(ModEntities.WITHER_SKELETON, new String[][]{{"brand", "Charred Bones", "Brandgebein"}, {"seele", "Soul Bones", "Seelengebein"}});
         creature(ModEntities.WITHER, ModItems.WITHER_SPAWN_EGG, "Ash King", "Aschenkönig", "Aschenkönig");
+        creature(ModEntities.ENDERMAN, ModItems.ENDERMAN_SPAWN_EGG, "Void Walker", "Leerwandler", "Leerwandler");
+        breeds(ModEntities.ENDERMAN, new String[][]{{"leere", "Void Walker", "Leerwandler"}, {"wirr", "Warped Walker", "Wirrwandler"}});
+        creature(ModEntities.ENDERMITE, ModItems.ENDERMITE_SPAWN_EGG, "Void Mite", "Leermilbe", "Leermilben");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

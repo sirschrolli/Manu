@@ -387,7 +387,7 @@ public class ModModelProvider extends ModelProvider {
                 ModItems.SNIFFER_SPAWN_EGG, ModItems.HAPPY_GHAST_SPAWN_EGG, ModItems.WANDERING_TRADER_SPAWN_EGG, ModItems.PIGLIN_SPAWN_EGG,
                 ModItems.PIGLIN_BRUTE_SPAWN_EGG, ModItems.ZOMBIFIED_PIGLIN_SPAWN_EGG, ModItems.HOGLIN_SPAWN_EGG, ModItems.ZOGLIN_SPAWN_EGG,
                 ModItems.STRIDER_SPAWN_EGG, ModItems.GHAST_SPAWN_EGG, ModItems.BLAZE_SPAWN_EGG, ModItems.MAGMA_CUBE_SPAWN_EGG,
-                ModItems.WITHER_SKELETON_SPAWN_EGG, ModItems.WITHER_SPAWN_EGG)) {
+                ModItems.WITHER_SKELETON_SPAWN_EGG, ModItems.WITHER_SPAWN_EGG, ModItems.ENDERMAN_SPAWN_EGG, ModItems.ENDERMITE_SPAWN_EGG)) {
             flat(items, item.get());
         }
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,

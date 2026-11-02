@@ -24,6 +24,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               turtle,
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
                               hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube, wither, wither_skull,
+                              enderman, endermite,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -251,6 +252,12 @@ def main():
     write_model(wither_skull, "SeelenschaedelGeometry",
                 "Geometrie des Seelenschädels, den der Aschenkönig abfeuert (Knochen \"head\" wie beim Vanilla-Schädel, mit Flammenschweif).",
                 "wither", wither_skull.PALETTES, preview)
+    # Wesen des Ends (E5c)
+    write_model(enderman, "LeerwandlerGeometry",
+                "Geometrie des Leerwandlers (Knochen wie beim Vanilla-Enderman, Kiefer als \"hat\", Splitterkranz \"halo\").",
+                "enderman", enderman.PALETTES, preview)
+    write_model(endermite, "LeermilbeGeometry", "Geometrie der Leermilbe (vier Segmente wie bei der Vanilla-Endermite, Beine, Fühler, Dornen).",
+                "endermite", endermite.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

@@ -250,6 +250,7 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
     public static final ResourceKey<BiomeModifier> SWAP_WATER_CREATURES = spawnModifier("swap_vanilla_water_creatures");
     public static final ResourceKey<BiomeModifier> SWAP_NETHER_CREATURES = spawnModifier("swap_vanilla_nether_creatures");
+    public static final ResourceKey<BiomeModifier> SWAP_END_CREATURES = spawnModifier("swap_vanilla_end_creatures");
     public static final ResourceKey<BiomeModifier> FOREST_BEAR_SPAWNS = spawnModifier("add_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FEW_FOREST_BEAR_SPAWNS = spawnModifier("add_few_forest_bear_spawns");
     public static final ResourceKey<BiomeModifier> FENNEC_SPAWNS = spawnModifier("add_fennec_spawns");
@@ -388,7 +389,8 @@ public final class ModWorldgen {
                         java.util.Map.entry(EntityTypes.SILVERFISH, ModEntities.SILVERFISH.get()),
                         java.util.Map.entry(EntityTypes.ZOMBIE_HORSE, ModEntities.ZOMBIE_HORSE.get()),
                         java.util.Map.entry(EntityTypes.SKELETON_HORSE, ModEntities.SKELETON_HORSE.get()),
-                        java.util.Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK.get()))));
+                        java.util.Map.entry(EntityTypes.CAMEL_HUSK, ModEntities.CAMEL_HUSK.get()),
+                        java.util.Map.entry(EntityTypes.ENDERMAN, ModEntities.ENDERMAN.get()))));
         // Wassertiere (E4c): Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche und Nautilusse mit gleichem Gewicht
         context.register(SWAP_WATER_CREATURES, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),
                 java.util.Map.ofEntries(
@@ -412,7 +414,12 @@ public final class ModWorldgen {
                         java.util.Map.entry(EntityTypes.STRIDER, ModEntities.STRIDER.get()),
                         java.util.Map.entry(EntityTypes.GHAST, ModEntities.GHAST.get()),
                         java.util.Map.entry(EntityTypes.BLAZE, ModEntities.BLAZE.get()),
-                        java.util.Map.entry(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE.get()))));
+                        java.util.Map.entry(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE.get()),
+                        java.util.Map.entry(EntityTypes.ENDERMAN, ModEntities.ENDERMAN.get()))));
+        // Wesen des Ends (E5c): im ganzen End mit gleichem Gewicht die eigenen
+        context.register(SWAP_END_CREATURES, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(net.minecraft.tags.BiomeTags.IS_END),
+                java.util.Map.ofEntries(
+                        java.util.Map.entry(EntityTypes.ENDERMAN, ModEntities.ENDERMAN.get()))));
         // Braun- und Schwarzbären in Taiga und alten Wäldern (selten, wie der Eisbär), vereinzelt in den übrigen Wäldern
         context.register(FOREST_BEAR_SPAWNS, spawnsIn(biomes, ModEntities.BEAR.get(), 2, 1, 2, net.minecraft.world.entity.MobCategory.CREATURE,
                 net.minecraft.world.level.biome.Biomes.TAIGA, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_PINE_TAIGA,

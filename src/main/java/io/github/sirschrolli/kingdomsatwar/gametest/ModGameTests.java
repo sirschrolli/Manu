@@ -180,6 +180,7 @@ public final class ModGameTests {
         GolemGameTests.init();     // Golems und Wichtel
         RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
         NetherGameTests.init();    // Nether-Volk
+        EndGameTests.init();       // Wesen des Ends
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
     }
 
@@ -222,6 +223,7 @@ public final class ModGameTests {
         GolemGameTests.register(event, environment);
         RareGameTests.register(event, environment);
         NetherGameTests.register(event, environment);
+        EndGameTests.register(event, environment);
         IdentityGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),

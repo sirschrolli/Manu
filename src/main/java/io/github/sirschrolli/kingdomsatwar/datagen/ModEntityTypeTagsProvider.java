@@ -186,5 +186,9 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.WITHER.key());
         this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.WITHER.key());
         this.tag(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES).add(ModEntities.WITHER.key());
+        // Wesen des Ends (E5c): die Leermilbe ist ein Gliederfüßer (Nemesis der Gliederfüßer wirkt) und läuft über Pulverschnee
+        this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.ENDERMITE.key());
+        this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.ENDERMITE.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.ENDERMAN.key()).add(ModEntities.ENDERMITE.key());
     }
 }

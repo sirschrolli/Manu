@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:replace_spawns",
+  "biomes": "#minecraft:is_end",
+  "replacements": {
+    "minecraft:enderman": "kingdomsatwar:enderman"
+  }
+}

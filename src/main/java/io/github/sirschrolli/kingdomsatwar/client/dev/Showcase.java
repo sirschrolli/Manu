@@ -109,6 +109,7 @@ final class Showcase {
                 case "nether" -> NetherShowcase.nether(steps);
                 case "nether_spirits" -> NetherShowcase.spirits(steps);
                 case "nether_wither" -> NetherShowcase.withers(steps);
+                case "end_creatures" -> EndShowcase.creatures(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);

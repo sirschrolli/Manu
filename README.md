@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.27.0 – Brandgebeine und der Aschenkönig; die Geister des Nethers; die Standard-Biome im Stil der eigenen.**
+> **Testversion 0.28.0 – Leerwandler und Leermilben; Brandgebeine und der Aschenkönig; die Standard-Biome im Stil der eigenen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,14 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.27: **Brandgebeine und der Aschenkönig.** Statt Witherskeletten bewachen **Brandgebeine** die
+> Neu in 0.28: **Die Wesen des Ends.** Statt Endermen wandern **Leerwandler** durch Oberwelt und End – Leiber wie aus
+> dem Nachthimmel geschnitten, voller schwach leuchtender Sterne, über der Brust ein Riss in die leuchtende Leere, ein
+> langer Kopf mit zwei schmalen, schrägen, gleißenden Augen, über dem drei Splitter aus Purpurkristall kreisen. Sieht man
+> ihnen in die Augen, hebt sich der Kopf vom Kiefer, und darunter klafft ein Schlund voller dünner Zähne und violettem
+> Licht (im Nether als türkiser **Wirrwandler**). Aus Enderperlen kriechen statt Endermiten **Leermilben** mit einem
+> Panzer aus Purpurkristall, glimmenden Fugen, Punktaugen und Kristalldornen. Blöcke tragen, Fortspringen, Wasserscheu,
+> Kürbis, Milbenjagd und Enderperlen wie gewohnt.
+> Seit 0.27: **Brandgebeine und der Aschenkönig.** Statt Witherskeletten bewachen **Brandgebeine** die
 > Netherfestungen – verkohlte Knochen, in deren Rissen, Schädelnähten und Gelenken noch Glut glimmt, Flammen auf dem
 > Schädel (sie flackern und verlöschen unter einem Helm) und ein angesengter Wappenrock in den Farben ihres Königs mit
 > seiner Dreizackkrone auf der Brust (in den Festungen des Seelensandtals als türkises **Seelengebein**). Und aus vier
@@ -175,7 +182,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** das End – Enderman, Endermite, Shulker und der Enderdrache.
+> **Als Nächstes:** der Shulker, dann der Enderdrache.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -220,8 +227,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Nether-Volk statt Piglins: Borstlinge (drei Gestalten), Borstenhüne, Moderborstlinge | ✅ fertig |
 | Tiere und Geister des Nethers: Glutkeiler, Moderkeiler, Lavastelzer, Rauchqualle, Glutgeist, Glutschleim | ✅ fertig |
 | Brandgebein (statt Witherskelett) und Aschenkönig (statt Wither) mit Seelenschädeln | ✅ fertig |
+| Leerwandler (statt Enderman, zwei Gestalten) und Leermilbe (statt Endermite) | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
-| Das End: Enderman, Endermite, Shulker, Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
+| Das End: Shulker und Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -863,6 +871,13 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 |---|---|---|---|
 | **Brandgebein** | Witherskelett | Brandgebein, Seelengebein (Festungen im Seelensandtal) | 1,2-mal so groß wie die anderen Gebeine; verkohlte Knochen mit Asche obenauf, Glut in Rissen, Schädelnähten und Gelenken; flackernde Flammen auf dem Schädel; angesengter Wappenrock in Netherrot mit Goldborte und Dreizackkrone, glimmende Brandlöcher; Kragen aus geschwärzten Kettengliedern; Steinschwert, Verdorren, Jagd auf Borstlinge; Kohle, Knochen und selten sein Schädel |
 | **Aschenkönig** | Wither | – | erwacht aus vier Seelensand und drei Brandgebein-Schädeln; drei Häupter (Goldkrone mit Seelenstein und Seelenfeuer, gehörnte Seitenköpfe, glühende Augen und Rachen, mahlende Kiefer), Joch mit Knochendornen, Brustkorb mit schlagendem Seelenherz, Krallenarme, Schwanz mit Knochenklinge, Königsmantel mit Dreizackkrone; beim Erwachen ganz im Seelenfeuer, bei halber Kraft im Seelenschild (Pfeile prallen ab); Seelenschädel und weißblaue Zornschädel mit Flammenschweif; Netherstern |
+
+![Leerwandler, Wirrwandler und Leermilben](docs/bilder/leerwandler.jpg)
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Leerwandler** | Enderman | Leerwandler (Oberwelt und End), Wirrwandler (Nether) | Leib wie Nachthimmel mit leuchtenden Sternen und einem Hauch Nebel, Riss über der Brust, langer Kopf mit schmalen schrägen Augen, drei kreisende Splitter aus Purpurkristall (im Zorn rasen sie), Schattenschleier, glimmende Gelenkringe, lange Finger; im Zorn ein Schlund voller Zähne; trägt Blöcke, springt fort, scheut Wasser; Enderperlen |
+| **Leermilbe** | Endermite | – | Panzerplatten aus Purpurkristall mit glimmenden Fugen, vier Punktaugen, Fühler, Beißzangen, drei Beinpaare, Kristalldornen und leuchtender Stachel; kriecht aus Enderperlen, wird von Leerwandlern gejagt |
 
 ### Monster
 

@@ -189,6 +189,9 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         // Brandgebein: Kohle, Knochen und selten sein Schädel; den Netherstern lässt der Aschenkönig selbst fallen (wie der Wither)
         this.add(ModEntities.WITHER_SKELETON.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WITHER_SKELETON));
         this.add(ModEntities.WITHER.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.WITHER));
+        // Wesen des Ends (E5c): Enderperlen wie gewohnt
+        this.add(ModEntities.ENDERMAN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ENDERMAN));
+        this.add(ModEntities.ENDERMITE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ENDERMITE));
         this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
         this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
         this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));

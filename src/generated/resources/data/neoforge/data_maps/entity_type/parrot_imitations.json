@@ -27,6 +27,9 @@
     "kingdomsatwar:elder_guardian": {
       "sound": "minecraft:entity.parrot.imitate.elder_guardian"
     },
+    "kingdomsatwar:endermite": {
+      "sound": "minecraft:entity.parrot.imitate.endermite"
+    },
     "kingdomsatwar:evoker": {
       "sound": "minecraft:entity.parrot.imitate.evoker"
     },
