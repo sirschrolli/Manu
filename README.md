@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.26.0 – Rauchquallen, Glutgeister und Glutschleime; die Standard-Biome im Stil der eigenen.**
+> **Testversion 0.27.0 – Brandgebeine und der Aschenkönig; die Geister des Nethers; die Standard-Biome im Stil der eigenen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,17 +162,20 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.26: **Die Geister des Nethers.** Statt Ghasts schweben **Rauchquallen** über dem Nether – düstere Ballen
-> aus Qualm mit Rauchfäden, schweren Lidern und glühenden Tränen; wenn sie Feuer speien, reißen sie die glühenden Augen
-> auf und ihr Maul steht voller Feuer (**Aschenqualle**, **Glutqualle** mit Glutnestern in den Basaltdeltas,
-> **Seelenqualle** im Seelensandtal). Statt Lohen bewachen **Glutgeister** die Festungen: eine Maske aus geschwärztem
-> Erz mit gleißenden Augenschlitzen und Mundgitter, eine Krone aus Flammen, ein glühender Kern und zwölf kreisende
-> Glutklingen mit leuchtenden Runen (im Seelensandtal als türkiser **Seelengeist**). Und statt Magmawürfeln hüpfen
-> **Glutschleime** – Lava unter einer Kruste aus Schollen mit glühenden Fugen, mit Glutgesicht und weißglühendem Herzen;
-> springen sie, leuchten die Schichten dazwischen auf (in den Basaltdeltas als grauer **Basaltschleim**). Feuerbälle
-> zurückschlagen, Schneebälle gegen Glutgeister, Zerfallen in kleinere Schleime gleicher Art und alle Beute wie gewohnt.
+> Neu in 0.27: **Brandgebeine und der Aschenkönig.** Statt Witherskeletten bewachen **Brandgebeine** die
+> Netherfestungen – verkohlte Knochen, in deren Rissen, Schädelnähten und Gelenken noch Glut glimmt, Flammen auf dem
+> Schädel (sie flackern und verlöschen unter einem Helm) und ein angesengter Wappenrock in den Farben ihres Königs mit
+> seiner Dreizackkrone auf der Brust (in den Festungen des Seelensandtals als türkises **Seelengebein**). Und aus vier
+> Seelensand und drei ihrer Schädel erwacht statt des Withers der **Aschenkönig**: ein schwebender König aus verkohlten
+> Knochen mit drei Häuptern – der mittlere unter einer Goldkrone, in der Seelenfeuer lodert, die seitlichen mit
+> geschwungenen Hörnern –, einem Brustkorb, in dem ein Herz aus Seelenfeuer schlägt, langen Krallenarmen, einem Schwanz
+> mit Knochenklinge und einem zerschlissenen Königsmantel. Beim Erwachen glüht er ganz im Seelenfeuer, bei halber Kraft
+> hüllt ihn ein Seelenschild ein, und er feuert **Seelenschädel** mit einem Schweif aus Seelenfeuer (die gefährlichen
+> lodern weißblau). Verdorren, Blockzerstören, Boss-Leiste und der Netherstern wie gewohnt.
+> Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
+> und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** das Witherskelett und der Wither, dann das End.
+> **Als Nächstes:** das End – Enderman, Endermite, Shulker und der Enderdrache.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -216,8 +219,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler statt Vanilla (Händler mit Münzhandel) | ✅ fertig |
 | Nether-Volk statt Piglins: Borstlinge (drei Gestalten), Borstenhüne, Moderborstlinge | ✅ fertig |
 | Tiere und Geister des Nethers: Glutkeiler, Moderkeiler, Lavastelzer, Rauchqualle, Glutgeist, Glutschleim | ✅ fertig |
+| Brandgebein (statt Witherskelett) und Aschenkönig (statt Wither) mit Seelenschädeln | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
-| Nether und End: Witherskelett, Wither, die Wesen des Ends und die Bauwerke | 🔨 als Nächstes |
+| Das End: Enderman, Endermite, Shulker, Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -852,6 +856,13 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 | **Rauchqualle** | Ghast | Aschenqualle, Glutqualle (Basaltdeltas, selten im Ödland), Seelenqualle (Seelensandtal) | Ballen aus Qualm mit Haube und Kranz, angeglüht von unten, Funken und Glutnester; Rauchfäden mit glimmenden Spitzen; schwere Lider mit glühenden Tränen – beim Feuerspeien aufgerissene Augen und ein Maul voller Feuer; Feuerbälle lassen sich zurückschlagen; Tränen und Schwarzpulver |
 | **Glutgeist** | Lohe | Glutgeist, Seelengeist (Festungen im Seelensandtal) | Maske aus geschwärztem Erz mit Augenschlitzen, Mundgitter, Stirnreif mit Runen, Flammenkrone und Glutbart; glühender Kern mit Flammenzunge; zwölf kreisende Glutklingen mit Runen und Flammen; Feuerkugeln, Schneebälle und Wasser schaden ihm; Lohenruten |
 | **Glutschleim** | Magmawürfel | Glutschleim, Basaltschleim (Basaltdeltas) | Kruste aus Schollen mit glühenden Fugen, Glutgesicht, weißglühendes Herz, Lavatropfen; beim Springen leuchten die Schichten dazwischen auf; zerfällt in kleinere Schleime gleicher Art; Magmacreme |
+
+![Brandgebeine und der Aschenkönig](docs/bilder/aschenkoenig.jpg)
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Brandgebein** | Witherskelett | Brandgebein, Seelengebein (Festungen im Seelensandtal) | 1,2-mal so groß wie die anderen Gebeine; verkohlte Knochen mit Asche obenauf, Glut in Rissen, Schädelnähten und Gelenken; flackernde Flammen auf dem Schädel; angesengter Wappenrock in Netherrot mit Goldborte und Dreizackkrone, glimmende Brandlöcher; Kragen aus geschwärzten Kettengliedern; Steinschwert, Verdorren, Jagd auf Borstlinge; Kohle, Knochen und selten sein Schädel |
+| **Aschenkönig** | Wither | – | erwacht aus vier Seelensand und drei Brandgebein-Schädeln; drei Häupter (Goldkrone mit Seelenstein und Seelenfeuer, gehörnte Seitenköpfe, glühende Augen und Rachen, mahlende Kiefer), Joch mit Knochendornen, Brustkorb mit schlagendem Seelenherz, Krallenarme, Schwanz mit Knochenklinge, Königsmantel mit Dreizackkrone; beim Erwachen ganz im Seelenfeuer, bei halber Kraft im Seelenschild (Pfeile prallen ab); Seelenschädel und weißblaue Zornschädel mit Flammenschweif; Netherstern |
 
 ### Monster
 

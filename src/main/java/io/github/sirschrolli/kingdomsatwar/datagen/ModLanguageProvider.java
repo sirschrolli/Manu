@@ -1067,6 +1067,9 @@ public class ModLanguageProvider extends LanguageProvider {
         breeds(ModEntities.BLAZE, new String[][]{{"glut", "Ember Spirit", "Glutgeist"}, {"seele", "Soul Spirit", "Seelengeist"}});
         creature(ModEntities.MAGMA_CUBE, ModItems.MAGMA_CUBE_SPAWN_EGG, "Ember Ooze", "Glutschleim", "Glutschleim");
         breeds(ModEntities.MAGMA_CUBE, new String[][]{{"glut", "Ember Ooze", "Glutschleim"}, {"basalt", "Basalt Ooze", "Basaltschleim"}});
+        creature(ModEntities.WITHER_SKELETON, ModItems.WITHER_SKELETON_SPAWN_EGG, "Charred Bones", "Brandgebein", "Brandgebein");
+        breeds(ModEntities.WITHER_SKELETON, new String[][]{{"brand", "Charred Bones", "Brandgebein"}, {"seele", "Soul Bones", "Seelengebein"}});
+        creature(ModEntities.WITHER, ModItems.WITHER_SPAWN_EGG, "Ash King", "Aschenkönig", "Aschenkönig");
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

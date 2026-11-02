@@ -2,7 +2,9 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.monster;
 
 import io.github.sirschrolli.kingdomsatwar.client.model.monster.BonesModel;
 import java.util.function.ToIntFunction;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.ArmorModelSet;
 import net.minecraft.client.renderer.entity.AbstractSkeletonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -21,7 +23,13 @@ public class BonesRenderer<T extends AbstractSkeleton> extends AbstractSkeletonR
     private final ToIntFunction<T> look;
 
     public BonesRenderer(EntityRendererProvider.Context context, String[] names, ToIntFunction<T> look) {
-        super(context, ModelLayers.SKELETON_ARMOR, new BonesModel(context.bakeLayer(MonsterRenderers.BONES)));
+        this(context, MonsterRenderers.BONES, ModelLayers.SKELETON_ARMOR, names, look);
+    }
+
+    /** Mit eigener Modell-Ebene und Rüstung (das Brandgebein ist wie das Witherskelett 1,2-mal so groß). */
+    public BonesRenderer(EntityRendererProvider.Context context, ModelLayerLocation layer, ArmorModelSet<ModelLayerLocation> armor,
+            String[] names, ToIntFunction<T> look) {
+        super(context, armor, new BonesModel(context.bakeLayer(layer)));
         this.textures = MonsterRenderers.textures("skeleton", names);
         this.glows = MonsterRenderers.glows("skeleton", names);
         this.look = look;

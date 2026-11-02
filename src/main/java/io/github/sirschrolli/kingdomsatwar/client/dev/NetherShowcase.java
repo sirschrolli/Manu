@@ -1,7 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Aschenkoenig;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutkeiler;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim;
@@ -343,6 +345,74 @@ final class NetherShowcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
         steps.add(Step.hud(true));
+    }
+
+    /**
+     * Brandgebeine vor der Festungsmauer (zwei mit Glut, eines im Seelenfeuer), dahinter drei Aschenkönige: einer beim
+     * Erwachen, einer in voller Kraft, einer im Seelenschild; ein vierter kehrt den Rücken (Mantel). Davor zwei
+     * Seelenschädel im Flug, ein gewöhnlicher und ein Zornschädel.
+     */
+    static void withers(Deque<Step> steps) {
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.server(level -> {
+            int b = group(6);
+            delta(level, b);
+            spawn(level, ModEntities.WITHER_SKELETON.get(), b + 3.5, OZ + 3.5, 20, m -> {
+                m.setLook(Brandgebein.Look.BRAND);
+                m.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+            });
+            spawn(level, ModEntities.WITHER_SKELETON.get(), b + 6.5, OZ + 4.5, 345, m -> {
+                m.setLook(Brandgebein.Look.BRAND);
+                m.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+            });
+            spawn(level, ModEntities.WITHER_SKELETON.get(), b + 21.5, OZ + 3.5, 340, m -> {
+                m.setLook(Brandgebein.Look.SEELE);
+                m.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+            });
+            // drei Aschenkönige: erwachend (lädt sich auf), in voller Kraft, mit Seelenschild (halbe Kraft)
+            king(level, b + 5.0, OZ - 2.0, 15, m -> m.setInvulnerableTicks(200));
+            king(level, b + 12.5, OZ - 1.0, 0, m -> { });
+            king(level, b + 20.0, OZ - 2.0, 345, m -> m.setHealth(m.getMaxHealth() * 0.4f));
+            king(level, b + 27.0, OZ - 1.0, 180, m -> { });                    // kehrt den Rücken
+            // zwei Seelenschädel im Flug, schräg zur Kamera
+            for (int i = 0; i < 2; i++) {
+                var skull = net.minecraft.world.entity.EntityTypes.WITHER_SKULL.create(level, EntitySpawnReason.COMMAND);
+                skull.setDangerous(i == 1);
+                skull.accelerationPower = 0.0;
+                skull.setNoGravity(true);
+                skull.snapTo(b + 32.0 + i * 2.5, Showcase.ground + 1.6 + i * 0.6, OZ + 1.0 + i * 0.8, i == 0 ? 75.0f : 105.0f, -6.0f);
+                skull.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                level.addFreshEntity(skull);
+            }
+        }));
+        steps.add(Step.waitTicks(120));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(60)));
+        shot(steps, "nether_withers", group(6) + 12.5, 5.0, 3.2, 17.0, true);
+        shot(steps, "nether_wither_close", group(6) + 12.5, 3.6, 2.9, 7.5, false);
+        shot(steps, "nether_wither_shield", group(6) + 20.0, 3.4, 2.7, 7.0, false);
+        shot(steps, "nether_wither_awake", group(6) + 5.0, 3.4, 2.6, 7.0, false);
+        shot(steps, "nether_wither_back", group(6) + 27.0, 3.4, 2.8, 7.5, false);
+        shot(steps, "nether_wither_skeletons", group(6) + 5.0, 2.3, 1.7, 9.0, false);
+        shot(steps, "nether_wither_skulls", group(6) + 33.2, 2.4, 2.0, 4.6, false);
+        steps.add(Step.command("time set 6000"));
+        shot(steps, "nether_withers_day", group(6) + 12.5, 5.0, 3.2, 17.0, false);
+        steps.add(Step.command("difficulty peaceful"));
+        steps.add(Step.command("gamerule spawn_mobs true"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
+        steps.add(Step.hud(true));
+    }
+
+    private static void king(ServerLevel level, double x, double z, float yaw, Consumer<Aschenkoenig> setup) {
+        spawn(level, ModEntities.WITHER.get(), x, z, yaw, m -> {
+            m.setNoGravity(true);
+            setup.accept(m);
+        }).snapTo(x, Showcase.ground + 0.6, z, yaw, 0);
     }
 
     /** Die Kamera steht {@code distance} Blöcke südlich, in Augenhöhe {@code eye}, und blickt nach Norden auf die Höhe {@code target}. */

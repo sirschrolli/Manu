@@ -60,6 +60,9 @@ class Model:
         # Pixel je Modell-Einheit in der gemalten Textur. Die UVs im Java-Code bleiben in Einheiten (TEXTURE_WIDTH =
         # tex_w); Minecraft rechnet mit normierten UVs, daher darf das PNG ein Vielfaches davon groß sein (feinere Details).
         self.tex_res = 1
+        # True: zusätzlich createMesh(float grow) / createLayer(float grow) – alle Quader um grow vergrößert (für Hüllen
+        # wie den Seelenschild des Aschenkönigs, die das Modell knapp umschließen)
+        self.grow_layer = False
         self.root = Bone("root", None, (0.0, 0.0, 0.0))
         self.bones: dict[str, Bone] = {"root": self.root}
 
@@ -112,7 +115,7 @@ class Model:
             shelf_h = max(shelf_h, h)
 
     # ------------------------------------------------------------------ Java
-    def java_body(self) -> str:
+    def java_body(self, grow: bool = False) -> str:
         lines: list[str] = []
 
         def fmt(v: float) -> str:
@@ -120,6 +123,10 @@ class Model:
             if s in ("-0", ""):
                 s = "0"
             return s + "F"
+
+        def dfm(v: float) -> str:
+            """Verformung; mit grow kommt die Hülle dazu."""
+            return f"{fmt(v)} + grow" if grow else fmt(v)
 
         def emit(b: Bone, parent_var: str):
             var = "p_" + b.name
@@ -137,10 +144,10 @@ class Model:
                 if any(abs(x) > 1e-9 for x in g):
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox + g[0])}, {fmt(oy + g[1])}, {fmt(oz + g[2])}, "
                                       f"{fmt(n[0])}, {fmt(n[1])}, {fmt(n[2])}, new CubeDeformation("
-                                      f"{fmt(c.inflate + g[0])}, {fmt(c.inflate + g[1])}, {fmt(c.inflate + g[2])}))")
-                elif c.inflate:
+                                      f"{dfm(c.inflate + g[0])}, {dfm(c.inflate + g[1])}, {dfm(c.inflate + g[2])}))")
+                elif c.inflate or grow:
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox)}, {fmt(oy)}, {fmt(oz)}, {fmt(w)}, {fmt(h)}, {fmt(d)}, "
-                                      f"new CubeDeformation({fmt(c.inflate)}))")
+                                      f"new CubeDeformation({dfm(c.inflate)}))")
                 else:
                     cube_parts.append(f".texOffs({u}, {v}).addBox({fmt(ox)}, {fmt(oy)}, {fmt(oz)}, {fmt(w)}, {fmt(h)}, {fmt(d)})")
             cubes = "CubeListBuilder.create()" + "".join("\n                " + p for p in cube_parts)
@@ -157,6 +164,37 @@ class Model:
         return "\n".join(lines)
 
     def java_class(self, package: str, class_name: str, doc: str) -> str:
+        if self.grow_layer:
+            mesh = f"""    public static MeshDefinition createMesh() {{
+        return createMesh(0F);
+    }}
+
+    /** Wie {{@link #createMesh()}}, alle Quader um {{@code grow}} vergrößert (Hüllen). */
+    public static MeshDefinition createMesh(float grow) {{
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+{self.java_body(True)}
+        return mesh;
+    }}
+
+    public static LayerDefinition createLayer() {{
+        return createLayer(0F);
+    }}
+
+    public static LayerDefinition createLayer(float grow) {{
+        return LayerDefinition.create(createMesh(grow), TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    }}"""
+        else:
+            mesh = f"""    public static MeshDefinition createMesh() {{
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+{self.java_body()}
+        return mesh;
+    }}
+
+    public static LayerDefinition createLayer() {{
+        return LayerDefinition.create(createMesh(), TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    }}"""
         return f"""package {package};
 
 import net.minecraft.client.model.geom.PartPose;
@@ -178,16 +216,7 @@ public final class {class_name} {{
 
     private {class_name}() {{}}
 
-    public static MeshDefinition createMesh() {{
-        MeshDefinition mesh = new MeshDefinition();
-        PartDefinition root = mesh.getRoot();
-{self.java_body()}
-        return mesh;
-    }}
-
-    public static LayerDefinition createLayer() {{
-        return LayerDefinition.create(createMesh(), TEXTURE_WIDTH, TEXTURE_HEIGHT);
-    }}
+{mesh}
 }}
 """
 

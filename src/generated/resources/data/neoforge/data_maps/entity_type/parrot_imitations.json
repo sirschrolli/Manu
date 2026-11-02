@@ -96,6 +96,12 @@
     "kingdomsatwar:witch": {
       "sound": "minecraft:entity.parrot.imitate.witch"
     },
+    "kingdomsatwar:wither": {
+      "sound": "minecraft:entity.parrot.imitate.wither"
+    },
+    "kingdomsatwar:wither_skeleton": {
+      "sound": "minecraft:entity.parrot.imitate.wither_skeleton"
+    },
     "kingdomsatwar:zoglin": {
       "sound": "minecraft:entity.parrot.imitate.zoglin"
     },

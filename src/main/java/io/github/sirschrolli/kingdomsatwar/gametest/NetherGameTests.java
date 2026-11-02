@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Aschenkoenig;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.BristleGiant;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Borstling;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutgeist;
@@ -84,6 +86,14 @@ final class NetherGameTests {
             ModGameTests.TEST_FUNCTIONS.register("nether_blaze_fireball", () -> NetherGameTests::blazeFireball);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MAGMA_SPLIT =
             ModGameTests.TEST_FUNCTIONS.register("nether_magma_split", () -> NetherGameTests::magmaSplit);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WITHER_REPLACED =
+            ModGameTests.TEST_FUNCTIONS.register("nether_wither_replaced", () -> NetherGameTests::witherReplaced);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WITHER_SUMMON =
+            ModGameTests.TEST_FUNCTIONS.register("nether_wither_summon", () -> NetherGameTests::witherSummon);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WITHER_STRIKE =
+            ModGameTests.TEST_FUNCTIONS.register("nether_wither_skeleton_strike", () -> NetherGameTests::witherSkeletonStrike);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WITHER_SKULLS =
+            ModGameTests.TEST_FUNCTIONS.register("nether_wither_skulls", () -> NetherGameTests::witherSkulls);
 
     private NetherGameTests() {}
 
@@ -91,7 +101,7 @@ final class NetherGameTests {
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         for (var test : List.of(SPAWN, CONVERSION, AVOID, HOGLIN_BREEDING, HOGLIN_RETREAT, STRIDER_RIDE, STRIDER_JOCKEY, STRIDER_COLD,
-                SPIRITS_REPLACED, GHAST_FIREBALL, BLAZE_FIREBALL, MAGMA_SPLIT)) {
+                SPIRITS_REPLACED, GHAST_FIREBALL, BLAZE_FIREBALL, MAGMA_SPLIT, WITHER_REPLACED, WITHER_SUMMON, WITHER_STRIKE, WITHER_SKULLS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 300, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -112,6 +122,8 @@ final class NetherGameTests {
         map.put(EntityTypes.GHAST, ModEntities.GHAST.get());
         map.put(EntityTypes.BLAZE, ModEntities.BLAZE.get());
         map.put(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE.get());
+        map.put(EntityTypes.WITHER_SKELETON, ModEntities.WITHER_SKELETON.get());
+        map.put(EntityTypes.WITHER, ModEntities.WITHER.get());
         return map;
     }
 
@@ -464,6 +476,102 @@ final class NetherGameTests {
                 helper.assertTrue(part instanceof Glutschleim ours && ours.getLook() == Glutschleim.Look.BASALT && ours.getSize() == 2,
                         "falsches Teil: " + part);
             }
+        });
+    }
+
+    // =====================================================================================
+
+    /**
+     * Ein Vanilla-Witherskelett (Spawner der Festung) wird ein Brandgebein mit seinem Steinschwert, ein Vanilla-Wither
+     * (Spawn-Ei) ein Aschenkönig mit gleichem Leben; Namen je Gestalt, der Boss heißt Aschenkönig.
+     */
+    private static void witherReplaced(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        net.minecraft.world.entity.monster.skeleton.WitherSkeleton skeleton = EntityTypes.WITHER_SKELETON.create(level, EntitySpawnReason.SPAWNER);
+        skeleton.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
+        skeleton.setNoAi(true);
+        place(helper, skeleton, new BlockPos(1, 1, 1));
+        net.minecraft.world.entity.boss.wither.WitherBoss wither = EntityTypes.WITHER.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
+        wither.setHealth(123.0f);
+        wither.setNoAi(true);
+        place(helper, wither, new BlockPos(5, 1, 5));
+        UUID s = skeleton.getUUID(), w = wither.getUUID();
+        helper.runAfterDelay(2, () -> {
+            helper.assertTrue(level.getEntity(s) instanceof Brandgebein ours && ours.getMainHandItem().is(Items.STONE_SWORD),
+                    "Brandgebein ohne Steinschwert: " + level.getEntity(s));
+            helper.assertTrue(level.getEntity(w) instanceof Aschenkoenig ours && Math.abs(ours.getHealth() - 123.0f) < 0.01f,
+                    "Aschenkönig nicht so verletzt wie der Wither: " + level.getEntity(w));
+            Brandgebein gebein = (Brandgebein) level.getEntity(s);
+            gebein.setLook(Brandgebein.Look.SEELE);
+            helper.assertTrue(gebein.getName().getString().equals(Component.translatable("entity.kingdomsatwar.wither_skeleton.seele").getString()),
+                    "Name des Seelengebeins: " + gebein.getName().getString());
+            Entity king = level.getEntity(w);
+            helper.assertTrue(king.getName().getString().equals(Component.translatable("entity.kingdomsatwar.wither").getString()),
+                    "Name des Aschenkönigs: " + king.getName().getString());
+            for (Mob mob : level.getEntitiesOfClass(Mob.class, arena(helper))) {
+                helper.assertTrue(!pairs().containsKey(mob.getType()), "noch ein Vanilla-Wesen: " + mob.getType().getDescriptionId());
+            }
+            king.discard();
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Vier Seelensand und drei Brandgebein-Schädel: es erwacht der Aschenkönig (kein Vanilla-Wither) – er lädt sich auf
+     * (unverwundbar, ein Drittel Leben), die Blöcke des Musters sind fort.
+     */
+    private static void witherSummon(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        helper.setBlock(4, 1, 4, Blocks.SOUL_SAND);
+        for (int x = 3; x <= 5; x++) {
+            helper.setBlock(x, 2, 4, Blocks.SOUL_SAND);
+            helper.setBlock(x, 3, 4, Blocks.WITHER_SKELETON_SKULL);
+        }
+        net.minecraft.world.level.block.WitherSkullBlock.checkSpawn(level, helper.absolutePos(new BlockPos(5, 3, 4)));
+        helper.runAfterDelay(2, () -> {
+            var kings = level.getEntitiesOfClass(net.minecraft.world.entity.boss.wither.WitherBoss.class, arena(helper));
+            helper.assertTrue(kings.size() == 1, "nicht genau ein Wither-Wesen: " + kings);
+            helper.assertTrue(kings.getFirst() instanceof Aschenkoenig, "kein Aschenkönig erwacht: " + kings.getFirst());
+            Aschenkoenig king = (Aschenkoenig) kings.getFirst();
+            helper.assertTrue(king.getInvulnerableTicks() > 150, "lädt sich nicht auf: " + king.getInvulnerableTicks());
+            helper.assertTrue(king.getHealth() < king.getMaxHealth() * 0.4f, "zu viel Leben beim Erwachen: " + king.getHealth());
+            helper.assertBlockNotPresent(Blocks.SOUL_SAND, new BlockPos(4, 2, 4));
+            helper.assertBlockNotPresent(Blocks.WITHER_SKELETON_SKULL, new BlockPos(4, 3, 4));
+            king.discard();                                                 // bevor er sich freisprengt
+            helper.succeed();
+        });
+    }
+
+    /** Das Brandgebein trägt ein Steinschwert, und wen es trifft, den lässt es verdorren. */
+    private static void witherSkeletonStrike(GameTestHelper helper) {
+        floor(helper);
+        ServerLevel level = helper.getLevel();
+        Brandgebein gebein = helper.spawn(ModEntities.WITHER_SKELETON.get(), new BlockPos(2, 1, 4), EntitySpawnReason.SPAWN_ITEM_USE);
+        gebein.setNoAi(true);
+        helper.assertTrue(gebein.getMainHandItem().is(Items.STONE_SWORD), "kein Steinschwert: " + gebein.getMainHandItem());
+        helper.assertTrue(gebein.getLook() == Brandgebein.Look.BRAND, "in der Oberwelt kein Brandgebein: " + gebein.getLook());
+        var target = helper.spawnWithNoFreeWill(ModEntities.CATTLE.get(), new BlockPos(3, 1, 4));
+        helper.assertTrue(gebein.doHurtTarget(level, target), "der Hieb trifft nicht");
+        helper.assertTrue(target.hasEffect(net.minecraft.world.effect.MobEffects.WITHER), "das Ziel verdorrt nicht");
+        helper.assertTrue(!gebein.canBeAffected(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 100)),
+                "das Brandgebein verdorrt selbst");
+        helper.succeed();
+    }
+
+    /** Der Aschenkönig feuert Seelenschädel (Vanilla-Geschosse, die ihm gehören) auf sein Ziel. */
+    private static void witherSkulls(GameTestHelper helper) {
+        floor(helper);
+        Aschenkoenig king = helper.spawn(ModEntities.WITHER.get(), new BlockPos(4, 2, 7));
+        var target = helper.spawnWithNoFreeWill(ModEntities.CATTLE.get(), new BlockPos(4, 1, 1));
+        helper.onEachTick(() -> king.setTarget(target));
+        helper.succeedWhen(() -> {
+            var skulls = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.WitherSkull.class,
+                    new AABB(helper.absolutePos(new BlockPos(4, 3, 4))).inflate(32.0), skull -> skull.getOwner() == king);
+            helper.assertTrue(!skulls.isEmpty(), "noch kein Schädel");
+            skulls.forEach(Entity::discard);
+            king.discard();
         });
     }
 }

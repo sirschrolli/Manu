@@ -29,26 +29,34 @@ public final class BonesGeometry {
                 .texOffs(62, 0).addBox(-4F, -8F, -4F, 8F, 8F, 8F, new CubeDeformation(0.5F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
-                .texOffs(0, 37).addBox(-3F, 0F, -2F, 6F, 2F, 2F),
+                .texOffs(18, 37).addBox(-3F, 0F, -2F, 6F, 2F, 2F),
                 PartPose.offsetAndRotation(0F, -0.2F, -2.2F, 0.1745F, 0F, 0F));
         PartDefinition p_mushrooms = p_head.addOrReplaceChild("mushrooms", CubeListBuilder.create(),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_red_mushroom_1 = p_mushrooms.addOrReplaceChild("red_mushroom_1", CubeListBuilder.create()
-                .texOffs(17, 37).addBox(-3F, -4F, 0F, 6F, 4F, 0F),
+                .texOffs(35, 37).addBox(-3F, -4F, 0F, 6F, 4F, 0F),
                 PartPose.offsetAndRotation(2F, -8F, 1.5F, 0F, 0.7854F, 0F));
         PartDefinition p_red_mushroom_2 = p_mushrooms.addOrReplaceChild("red_mushroom_2", CubeListBuilder.create()
-                .texOffs(30, 37).addBox(-3F, -4F, 0F, 6F, 4F, 0F),
+                .texOffs(48, 37).addBox(-3F, -4F, 0F, 6F, 4F, 0F),
                 PartPose.offsetAndRotation(2F, -8F, 1.5F, 0F, 2.3562F, 0F));
         PartDefinition p_brown_mushroom_1 = p_mushrooms.addOrReplaceChild("brown_mushroom_1", CubeListBuilder.create()
-                .texOffs(59, 37).addBox(-2.5F, -3F, 0F, 5F, 3F, 0F),
+                .texOffs(77, 37).addBox(-2.5F, -3F, 0F, 5F, 3F, 0F),
                 PartPose.offsetAndRotation(-2.5F, -8F, -1.5F, 0F, 0.7854F, 0F));
         PartDefinition p_brown_mushroom_2 = p_mushrooms.addOrReplaceChild("brown_mushroom_2", CubeListBuilder.create()
-                .texOffs(70, 37).addBox(-2.5F, -3F, 0F, 5F, 3F, 0F),
+                .texOffs(88, 37).addBox(-2.5F, -3F, 0F, 5F, 3F, 0F),
                 PartPose.offsetAndRotation(-2.5F, -8F, -1.5F, 0F, 2.3562F, 0F));
         PartDefinition p_shelf_fungus = p_mushrooms.addOrReplaceChild("shelf_fungus", CubeListBuilder.create()
-                .texOffs(43, 37).addBox(0F, -1F, -1.5F, 2F, 1F, 3F)
-                .texOffs(81, 37).addBox(-0.3F, 0.6F, -0.5F, 2F, 1F, 2F, new CubeDeformation(-0.3F, 0F, 0F)),
+                .texOffs(61, 37).addBox(0F, -1F, -1.5F, 2F, 1F, 3F)
+                .texOffs(99, 37).addBox(-0.3F, 0.6F, -0.5F, 2F, 1F, 2F, new CubeDeformation(-0.3F, 0F, 0F)),
                 PartPose.offset(4F, -3F, 1F));
+        PartDefinition p_flames = p_head.addOrReplaceChild("flames", CubeListBuilder.create(),
+                PartPose.offset(0F, -8F, 0F));
+        PartDefinition p_flame_1 = p_flames.addOrReplaceChild("flame_1", CubeListBuilder.create()
+                .texOffs(108, 22).addBox(-3F, -5F, 0F, 6F, 5F, 0F),
+                PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 0.7854F, 0F));
+        PartDefinition p_flame_2 = p_flames.addOrReplaceChild("flame_2", CubeListBuilder.create()
+                .texOffs(0, 37).addBox(-3F, -5F, 0F, 6F, 5F, 0F),
+                PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 2.3562F, 0F));
         PartDefinition p_body = root.addOrReplaceChild("body", CubeListBuilder.create()
                 .texOffs(18, 22).addBox(-4F, 0F, -2F, 8F, 8F, 4F)
                 .texOffs(9, 22).addBox(-1F, -0.25F, 0.05F, 2F, 11F, 2F, new CubeDeformation(0F, -0.25F, -0.25F))
@@ -64,26 +72,26 @@ public final class BonesGeometry {
                 .texOffs(43, 22).addBox(-1.5F, 0F, 0F, 3F, 10F, 2F),
                 PartPose.offsetAndRotation(-3F, -0.5F, 2.7F, 0F, 0F, -0.4538F));
         PartDefinition p_arrows = p_quiver.addOrReplaceChild("arrows", CubeListBuilder.create()
-                .texOffs(54, 37).addBox(-1.1F, -2.5F, 0.5F, 1F, 3F, 1F)
-                .texOffs(108, 22).addBox(0.1F, -3.2F, 0.6F, 1F, 4F, 1F),
+                .texOffs(72, 37).addBox(-1.1F, -2.5F, 0.5F, 1F, 3F, 1F)
+                .texOffs(13, 37).addBox(0.1F, -3.2F, 0.6F, 1F, 4F, 1F),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_arm = root.addOrReplaceChild("right_arm", CubeListBuilder.create()
                 .texOffs(95, 0).addBox(-1F, -2F, -1F, 2F, 12F, 2F)
-                .texOffs(90, 37).addBox(-1F, 3.5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.25F)),
+                .texOffs(108, 37).addBox(-1F, 3.5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.25F)),
                 PartPose.offset(-5F, 2F, 0F));
         PartDefinition p_left_arm = root.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(104, 0).addBox(-1F, -2F, -1F, 2F, 12F, 2F)
-                .texOffs(99, 37).addBox(-1F, 3.5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.25F)),
+                .texOffs(117, 37).addBox(-1F, 3.5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.25F)),
                 PartPose.offset(5F, 2F, 0F));
         PartDefinition p_right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create()
                 .texOffs(113, 0).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
-                .texOffs(108, 37).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
-                .texOffs(117, 37).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
+                .texOffs(0, 43).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
+                .texOffs(9, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
                 PartPose.offset(-2F, 12F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(0, 22).addBox(-1F, 0F, -1F, 2F, 12F, 2F)
-                .texOffs(0, 42).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
-                .texOffs(9, 42).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
+                .texOffs(18, 43).addBox(-1F, 5F, -1F, 2F, 1F, 2F, new CubeDeformation(0.3F))
+                .texOffs(27, 43).addBox(-1F, 11F, -2.8F, 2F, 1F, 2F),
                 PartPose.offset(2F, 12F, 0F));
         return mesh;
     }

@@ -15,6 +15,11 @@ Bewegungen passen). Ein Modell für die ganze Familie:
   * Frostgebein (statt Eiswanderer): Reif und Eiskrusten, zerfetzter Pelzumhang, eisblaue Augen
   * Moorgebein (statt Sumpfskelett): Moos, Schlamm, Ranken, rote und braune Pilze, Baumpilze
   * Dörrgebein (statt Ausgedörrtem): sonnengebleicht, sandfarbene Wüstenbinden, vertrocknete Sehnen
+  * Brandgebein (statt Witherskelett, ×1,2): verkohlte Knochen mit Asche obenauf, in Rissen, Schädelnähten und Gelenken
+    glimmt Glut; auf dem Schädel lodern Flammen (zwei gekreuzte Flächen, "flames"), ein angesengter Wappenrock in den
+    Farben des Aschenkönigs (dunkles Netherrot, angelaufenes Gold, die Dreizackkrone auf der Brust) mit glimmenden
+    Brandlöchern und ein Kragen aus geschwärzten Kettengliedern; als Seelengebein (Festungen im Seelensandtal) brennt
+    alles in türkisem Seelenfeuer
 """
 from __future__ import annotations
 
@@ -28,6 +33,9 @@ _EMBER = ramp("#2a0904", "#b04a20")          # schwaches Glimmen der Gerippe
 
 _GERIPPE = {"bone": ramp("#6a5a40", "#f6eed6", steps=8), "stain": ramp("#5a4426", "#a88a5a"), "socket": _SOCKET,
             "eye": _EMBER}
+# verkohlte Knochen der Brandgebeine (Glut und Augen je Gestalt)
+_BRAND = {"bone": ramp("#100d0c", "#6e655f", steps=8), "stain": ramp("#160f0c", "#33241c"), "socket": ramp("#010000", "#120a08"),
+          "eye": _EMBER}
 
 
 def _pal(base: dict, **extra) -> dict:
@@ -56,6 +64,14 @@ PALETTES = {
     "doerrgebein": _pal({"bone": ramp("#a29478", "#fffdf6", steps=8), "stain": ramp("#8a7656", "#d8c49a"), "socket": _SOCKET,
                          "eye": ramp("#4a2002", "#ffc860")},
                         sand=("#8a6a3a", "#f6e6c0"), stripe=("#6a2c16", "#c4683a"), sinew=("#3a1a0e", "#8a4a2a")),
+    "brandgebein": _pal(_BRAND, eye=("#6a1804", "#ffe08a"), ash=("#36312e", "#9a928c"), ember=("#5c1404", "#ffc35a"),
+                        flame=("#7a1a02", "#fff4c0"), cloth=("#240707", "#9a2a1c"), trim=("#2e200a", "#b08a3a"),
+                        mail=("#0a0909", "#4a4440"), leather=("#100906", "#3e2618"), brass=("#3a2a0c", "#c09a40"),
+                        rust=("#1a0c08", "#5a2a18")),
+    "seelengebein": _pal(_BRAND, eye=("#04403c", "#e0fffa"), ash=("#30373a", "#929ca0"), ember=("#053a38", "#a6fff2"),
+                         flame=("#06504a", "#eefffd"), cloth=("#0a141c", "#2e5a6e"), trim=("#1e2a2a", "#80aca8"),
+                         mail=("#090a0b", "#454a4c"), leather=("#0a0a0a", "#33302c"), brass=("#1a2a2a", "#80c0b8"),
+                         rust=("#0e1414", "#2e3e3e")),
 }
 
 # Zubehör je Bild (Knochen-Namen); was nicht dabei ist, bleibt durchsichtig
@@ -66,8 +82,10 @@ GEAR = {
     "frostgebein": {"garb", "collar"},
     "moorgebein": {"garb", "collar", "mushrooms"},
     "doerrgebein": {"garb", "collar"},
+    "brandgebein": {"garb", "collar", "flames"},
+    "seelengebein": {"garb", "collar", "flames"},
 }
-ALL_GEAR = {"garb", "collar", "quiver", "mushrooms"}
+ALL_GEAR = {"garb", "collar", "quiver", "mushrooms", "flames"}
 
 
 def build() -> Model:
@@ -91,6 +109,11 @@ def build() -> Model:
     m.bone("shelf_fungus", "mushrooms", pivot=(4, -3, 1))                    # Baumpilze an der Schläfe
     m.cube("shelf_fungus", (0, -1, -1.5), (2, 1, 3), "shelf")
     m.cube("shelf_fungus", (0, 0.6, -0.5), (1.4, 1, 2), "shelf")
+    m.bone("flames", "head", pivot=(0, -8, 0))                               # Flammen auf dem Schädel (Brandgebein; flackern)
+    m.bone("flame_1", "flames", rotation=(0, 45, 0))
+    m.cube("flame_1", (-3, -5, 0), (6, 5, 0), "flame")
+    m.bone("flame_2", "flames", rotation=(0, 135, 0))
+    m.cube("flame_2", (-3, -5, 0), (6, 5, 0), "flame")
 
     # --- Rumpf: Brustkorb, Wirbelsäule, Becken; Gewand, Kragen, Köcher
     m.bone("body")
@@ -135,7 +158,16 @@ def _variant(ctx: Ctx) -> str:
 
 def _kind(ctx: Ctx) -> str:
     v = _variant(ctx)
+    if v == "seelengebein":
+        return "brandgebein"
     return "gerippe" if v.startswith("gerippe") else v
+
+
+def _ember(ctx: Ctx, v: float):
+    """Glut (leuchtet)."""
+    col = pick(ctx.pal["ember"], v)
+    ctx.glow = col
+    return col
 
 
 def _hidden(ctx: Ctx) -> bool:
@@ -173,15 +205,27 @@ def _bone(ctx: Ctx, base: float = 0.66):
             return pick(ctx.pal["moss"], 0.35 + hash01(ctx.u, ctx.v, 507) * 0.4)
         if moss > 0.68:
             return mix(col, pick(ctx.pal["moss"], 0.4), 0.45)
+    elif kind == "brandgebein":
+        # verkohlt: Asche bleibt auf den Oberseiten liegen, hier und da glimmt ein Glutnest
+        if ctx.face == "top" and hash01(ctx.u, ctx.v, 508) > 0.3:
+            return pick(ctx.pal["ash"], 0.25 + hash01(ctx.u, ctx.v, 509) * 0.55)
+        nest = noise3(x * 0.7 + 3, y * 0.7, z * 0.7, 510)
+        if nest > 0.89 and ctx.face != "top" and hash01(ctx.u, ctx.v, 511) > 0.3:
+            return _ember(ctx, 0.3 + (nest - 0.89) * 5.0)
+        if nest > 0.83:
+            return mix(col, pick(ctx.pal["ember"], 0.12), 0.55)                               # angeglüht
     return col
 
 
 def _crack(ctx: Ctx, col, seed: int):
-    """Feine Risse im Knochen (bei allen Arten selten, beim Dörrgebein häufiger)."""
+    """Feine Risse im Knochen (bei allen Arten selten, beim Dörrgebein häufiger; beim Brandgebein glimmt Glut darin)."""
     x, y, z = ctx.world
-    rate = 0.07 if _kind(ctx) == "doerrgebein" else 0.035
+    kind = _kind(ctx)
+    rate = 0.07 if kind == "doerrgebein" else 0.05 if kind == "brandgebein" else 0.035
     line = abs(math.sin(x * 2.1 + y * 1.3 - z * 1.7 + noise3(x * 0.3, y * 0.3, z * 0.3, seed) * 7.0))
     if line < rate and hash01(ctx.u, ctx.v, seed + 1) > 0.25:
+        if kind == "brandgebein":
+            return _ember(ctx, 0.45 + (1.0 - line / rate) * 0.5)
         return mix(col, pick(ctx.pal["bone"], 0.08), 0.65)
     return col
 
@@ -276,6 +320,8 @@ def _skull(ctx: Ctx):
     if face == "top":
         # Schädelnähte: Pfeilnaht längs, Kranznaht quer
         if (s == 3 + (t % 2) and t <= 5) or (t == 5 and 1 <= s <= 6 and (s + t) % 3 != 0):
+            if kind == "brandgebein":
+                return _ember(ctx, 0.55 + hash01(ctx.u, ctx.v, 634) * 0.35)                 # glühende Nähte
             col = mix(col, pick(ctx.pal["bone"], 0.25), 0.55)
         return col
     if face in ("west", "east"):
@@ -408,6 +454,21 @@ def _hat(ctx: Ctx):
         if t <= 4 - int(hash01(s, face, 675) * 2):
             return pick(ctx.pal["stripe"], 0.55) if stripe else _cloth(ctx, "sand", 0.5, seed=676)
         return None
+    if v in ("brandgebein", "seelengebein"):
+        # Glutkranz: mitten auf dem Scheitel (unter den Flammen) Glut, ringsum Asche mit Lücken, am Rand ein paar Funken
+        if face == "bottom":
+            return None
+        if face == "top":
+            r = hash01(ctx.u, ctx.v, 681)
+            dist = max(abs(s - (w - 1) / 2), abs(t - (h - 1) / 2)) / (w / 2)
+            if dist < 0.45:
+                return _ember(ctx, 0.5 + r * 0.45)
+            if r > 0.45:
+                return pick(ctx.pal["ash"], 0.2 + r * 0.4) if r < 0.86 else _ember(ctx, 0.3 + r * 0.3)
+            return None
+        if t == 0 and hash01(s, face, 682) > 0.75:
+            return _ember(ctx, 0.35 + hash01(ctx.u, ctx.v, 683) * 0.4)
+        return None
     return None
 
 
@@ -446,6 +507,25 @@ def _mush_brown(ctx: Ctx):
         return None
     c = _sprite(ctx, _BROWN_MUSHROOM, 5)
     return {"b": pick(ctx.pal["mush_brown"], 0.45), "B": pick(ctx.pal["mush_brown"], 0.75), "s": pick(ctx.pal["stem"], 0.65)}.get(c)
+
+
+_FLAME = ["..o...",
+          ".oOo.o",
+          "oOYOoO",
+          "OYWYOY",
+          "YWWWYW"]
+
+
+def _flame(ctx: Ctx):
+    """Flammen auf dem Schädel des Brandgebeins (leuchten)."""
+    if _hidden(ctx):
+        return None
+    level = {"o": 0.22, "O": 0.48, "Y": 0.74, "W": 0.95}.get(_sprite(ctx, _FLAME, 6))
+    if level is None:
+        return None
+    col = pick(ctx.pal["flame"], level)
+    ctx.glow = col
+    return col
 
 
 def _shelf(ctx: Ctx):
@@ -624,7 +704,47 @@ def _garb(ctx: Ctx):
                 return None
             return _cloth(ctx, "sand", 0.46, seed=745)
         return None
+    if v in ("brandgebein", "seelengebein"):
+        # angesengter Wappenrock in den Farben des Aschenkönigs: Bahn vorn und hinten, Gürtel, die Dreizackkrone auf der
+        # Brust, Brandlöcher mit glimmenden Rändern, unten verkohlt und ausgefranst
+        if face == "top":
+            return _cloth(ctx, "cloth", 0.36, seed=751) if s in (2, 3, 5, 6) else None
+        if face == "bottom":
+            return None
+        if t == 10:
+            if face in ("west", "east") or 1 <= s <= 7:
+                if face == "front" and s == 4:
+                    return pick(ctx.pal["brass"], 0.72)                                       # Schnalle
+                return pick(ctx.pal["leather"], 0.35 + (s % 2) * 0.12)
+        if face in ("west", "east") or not 1 <= s <= 7 or t == 0:
+            return None
+        hem = 12 + int(hash01(s, face, 752) * 4)
+        if t > hem:
+            return None
+        if t == hem:                                                                           # verkohlter Saum, glimmt
+            return _ember(ctx, 0.3 + hash01(ctx.u, ctx.v, 753) * 0.4) if hash01(s, face, 754) > 0.4 else pick(ctx.pal["cloth"], 0.04)
+        x, y, z = ctx.world
+        burn = noise3(x * 0.55 + 31, y * 0.55, z * 0.55, 755)
+        if burn > 0.79:
+            return None                                                                        # Brandloch
+        if burn > 0.75:
+            return _ember(ctx, 0.35 + (burn - 0.75) * 10.0)                                    # glimmender Rand
+        if burn > 0.7:
+            return pick(ctx.pal["cloth"], 0.04)                                                # verkohlt
+        col = _cloth(ctx, "cloth", 0.5, seed=756)
+        if face == "front" and _crown_emblem(s, t):
+            col = mix(pick(ctx.pal["trim"], 0.62), col, 0.15)                                  # Dreizackkrone
+        if s in (1, 7):
+            col = pick(ctx.pal["trim"], 0.32 + (0.1 if t % 3 == 0 else 0.0))                   # Borte
+        return col
     return None
+
+
+def _crown_emblem(s: int, t: int) -> bool:
+    """Die Dreizackkrone des Aschenkönigs auf der Brust (5 × 3 Texel)."""
+    if t == 3:
+        return s in (2, 4, 6)
+    return t in (4, 5) and 2 <= s <= 6
 
 
 def _fur(ctx: Ctx, base: float):
@@ -676,6 +796,13 @@ def _collar(ctx: Ctx):
         if t == 1 and face != "top":
             return pick(ctx.pal["stripe"], 0.5 + (0.12 if s % 2 else 0.0))
         return _cloth(ctx, "sand", 0.52, seed=769)
+    if v in ("brandgebein", "seelengebein"):
+        # geschwärzte Kettenglieder, ein paar glühen noch
+        if last and hash01(ctx.s, face, 771) > 0.6:
+            return None
+        if hash01(ctx.u, ctx.v, 772) > 0.91:
+            return _ember(ctx, 0.4 + hash01(ctx.u, ctx.v, 773) * 0.4)
+        return _mail(ctx)
     return None
 
 
@@ -740,8 +867,11 @@ def _leg(ctx: Ctx):
 
 def _knob(ctx: Ctx):
     col = _bone(ctx, 0.7)
-    if _kind(ctx) == "doerrgebein" and ctx.face == "back":
+    kind = _kind(ctx)
+    if kind == "doerrgebein" and ctx.face == "back":
         return pick(ctx.pal["sinew"], 0.42 + (0.12 if ctx.s % 2 else 0.0))                  # Sehnen hinter Knie und Ellbogen
+    if kind == "brandgebein" and ctx.face not in ("top", "bottom") and hash01(ctx.u, ctx.v, 795) > 0.72:
+        return _ember(ctx, 0.2 + hash01(ctx.u, ctx.v, 796) * 0.25)                          # glimmende Gelenke
     return col
 
 
@@ -766,6 +896,7 @@ def materials(variant: str) -> dict:
         "mush_red": _mush_red,
         "mush_brown": _mush_brown,
         "shelf": _shelf,
+        "flame": _flame,
         "ribs": _ribs,
         "spine": _spine,
         "pelvis": _pelvis,

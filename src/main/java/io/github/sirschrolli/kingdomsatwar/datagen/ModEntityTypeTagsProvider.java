@@ -177,5 +177,14 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.FROG_FOOD).add(ModEntities.MAGMA_CUBE.key());
         this.tag(EntityTypeTags.NON_CONTROLLING_RIDER).add(ModEntities.MAGMA_CUBE.key());
         this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.GHAST.key()).add(ModEntities.BLAZE.key()).add(ModEntities.MAGMA_CUBE.key());
+        // Brandgebein und Aschenkönig (E5b-2): Gebeine und Untote wie Witherskelett und Wither (beide damit auch Freunde des
+        // Aschenkönigs); der Aschenkönig ist ein Boss, fällt nicht und friert nicht
+        this.tag(EntityTypeTags.SKELETONS).add(ModEntities.WITHER_SKELETON.key());
+        this.tag(EntityTypeTags.BURN_IN_DAYLIGHT).add(ModEntities.WITHER_SKELETON.key());
+        this.tag(ModTags.EntityTypes.DROPS_COINS).add(ModEntities.WITHER_SKELETON.key());
+        this.tag(EntityTypeTags.UNDEAD).add(ModEntities.WITHER.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.WITHER.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.WITHER.key());
+        this.tag(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES).add(ModEntities.WITHER.key());
     }
 }

@@ -144,7 +144,9 @@ public final class FarmAnimalConversion {
                 // übrige Nether-Wesen (E5b)
                 Map.entry(EntityTypes.GHAST, ModEntities.GHAST),
                 Map.entry(EntityTypes.BLAZE, ModEntities.BLAZE),
-                Map.entry(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE));
+                Map.entry(EntityTypes.MAGMA_CUBE, ModEntities.MAGMA_CUBE),
+                Map.entry(EntityTypes.WITHER_SKELETON, ModEntities.WITHER_SKELETON),
+                Map.entry(EntityTypes.WITHER, ModEntities.WITHER));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */

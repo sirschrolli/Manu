@@ -354,6 +354,14 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim>> MAGMA_CUBE = ENTITIES.registerEntityType(
             "magma_cube", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Glutschleim::new, MobCategory.MONSTER, builder -> builder
                     .fireImmune().sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4.0f).clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein>> WITHER_SKELETON = ENTITIES.registerEntityType(
+            "wither_skeleton", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().immuneTo(BlockTags.WITHER_SKELETON_IMMUNE_TO).sized(0.7f, 2.4f).eyeHeight(2.1f).ridingOffset(-0.875f)
+                    .clientTrackingRange(8).notInPeaceful());
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Aschenkoenig>> WITHER = ENTITIES.registerEntityType(
+            "wither", io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Aschenkoenig::new, MobCategory.MONSTER, builder -> builder
+                    .fireImmune().immuneTo(BlockTags.WITHER_IMMUNE_TO).sized(0.9f, 3.5f).clientTrackingRange(10).notInPeaceful()
+                    .dontTrackDeltas());
 
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
@@ -568,6 +576,8 @@ public final class ModEntities {
         event.put(GHAST.get(), net.minecraft.world.entity.monster.Ghast.createAttributes().build());
         event.put(BLAZE.get(), net.minecraft.world.entity.monster.Blaze.createAttributes().build());
         event.put(MAGMA_CUBE.get(), net.minecraft.world.entity.monster.cubemob.MagmaCube.createAttributes().build());
+        event.put(WITHER_SKELETON.get(), net.minecraft.world.entity.monster.skeleton.AbstractSkeleton.createAttributes().build());
+        event.put(WITHER.get(), net.minecraft.world.entity.boss.wither.WitherBoss.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());

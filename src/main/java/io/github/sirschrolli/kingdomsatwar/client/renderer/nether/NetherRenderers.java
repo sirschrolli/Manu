@@ -1,6 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.client.renderer.nether;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.AschenkoenigGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.BonesGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.SeelenschaedelGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.renderer.monster.BonesRenderer;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.BorstlingBabyGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.BorstlingGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.GlutkeilerBabyGeometry;
@@ -17,7 +22,8 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 /**
- * Modell-Ebenen und Renderer des Nether-Volks, seiner Tiere (E5a) und der übrigen Nether-Wesen (E5b). Die Modelle haben die Knochen der Vanilla-Wesen,
+ * Modell-Ebenen und Renderer des Nether-Volks, seiner Tiere (E5a) und der übrigen Nether-Wesen (E5b: Rauchqualle,
+ * Glutgeist, Glutschleim, Brandgebein, Aschenkönig und seine Seelenschädel). Die Modelle haben die Knochen der Vanilla-Wesen,
  * die sie ersetzen, damit deren Animationen (Ohrenwackeln, Gold-Bewundern, Tanzen, Armbrust, Kopfstoß, Stelzen und
  * Haarwehen), Rüstungen und Sättel unverändert passen.
  */
@@ -31,6 +37,10 @@ public final class NetherRenderers {
     public static final ModelLayerLocation RAUCHQUALLE = layer("rauchqualle");
     public static final ModelLayerLocation GLUTGEIST = layer("glutgeist");
     public static final ModelLayerLocation GLUTSCHLEIM = layer("glutschleim");
+    public static final ModelLayerLocation BRANDGEBEIN = layer("brandgebein");
+    public static final ModelLayerLocation ASCHENKOENIG = layer("aschenkoenig");
+    public static final ModelLayerLocation ASCHENKOENIG_SHIELD = layer("aschenkoenig_shield");
+    public static final ModelLayerLocation SEELENSCHAEDEL = layer("seelenschaedel");
 
     private NetherRenderers() {}
 
@@ -54,6 +64,12 @@ public final class NetherRenderers {
                 .apply(net.minecraft.client.model.geom.builders.MeshTransformer.scaling(4.5f)));
         event.registerLayerDefinition(GLUTGEIST, GlutgeistGeometry::createLayer);
         event.registerLayerDefinition(GLUTSCHLEIM, GlutschleimGeometry::createLayer);
+        // das Brandgebein ist wie das Witherskelett 1,2-mal so groß wie die übrigen Gebeine
+        event.registerLayerDefinition(BRANDGEBEIN, () -> BonesGeometry.createLayer()
+                .apply(net.minecraft.client.model.geom.builders.MeshTransformer.scaling(1.2f)));
+        event.registerLayerDefinition(ASCHENKOENIG, AschenkoenigGeometry::createLayer);
+        event.registerLayerDefinition(ASCHENKOENIG_SHIELD, () -> AschenkoenigGeometry.createLayer(0.5f));
+        event.registerLayerDefinition(SEELENSCHAEDEL, SeelenschaedelGeometry::createLayer);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -68,5 +84,10 @@ public final class NetherRenderers {
         event.registerEntityRenderer(ModEntities.GHAST.get(), RauchqualleRenderer::new);
         event.registerEntityRenderer(ModEntities.BLAZE.get(), GlutgeistRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGMA_CUBE.get(), GlutschleimRenderer::new);
+        event.registerEntityRenderer(ModEntities.WITHER_SKELETON.get(), context -> new BonesRenderer<Brandgebein>(context, BRANDGEBEIN,
+                ModelLayers.WITHER_SKELETON_ARMOR, new String[] {"brandgebein", "seelengebein"}, gebein -> gebein.getLook().ordinal()));
+        event.registerEntityRenderer(ModEntities.WITHER.get(), AschenkoenigRenderer::new);
+        // die Schädel, die der Aschenkönig abfeuert, sind Vanilla-Geschosse – sie bekommen das eigene Aussehen
+        event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.WITHER_SKULL, SeelenschaedelRenderer::new);
     }
 }
