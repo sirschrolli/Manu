@@ -60,6 +60,8 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerLayers(event);
+        // die Köpfe von Vanilla bekommen die Texturen der eigenen Wesen (die Modelle setzt SkullBlockRendererMixin ein)
+        io.github.sirschrolli.kingdomsatwar.client.renderer.OwnHeads.install();
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);

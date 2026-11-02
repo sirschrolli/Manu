@@ -508,6 +508,10 @@ final class WorldSitesShowcase {
             labEnd(steps);
             return;
         }
+        if (what.equals("heads")) {
+            labHeads(steps);
+            return;
+        }
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
@@ -619,6 +623,88 @@ final class WorldSitesShowcase {
             steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
             steps.add((minecraft, ticks) -> slot >= views.size() || Step.waitForChunks(1500).run(minecraft, ticks));
             Step shot = Step.screenshot("lab_" + what + "_" + n);
+            steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
+        }
+    }
+
+    /**
+     * Werkstatt der Köpfe ({@code worldsite_lab_heads}): die sechs Köpfe auf Sockeln und an einer Wand, dazu ein
+     * Rüstungsständer mit Kopf – hoch über der Oberwelt.
+     */
+    static void labHeads(Deque<Step> steps) {
+        steps.add(Step.hud(false));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("gamerule advance_time false"));
+        steps.add(Step.command("gamemode spectator"));
+        List<double[]> views = new ArrayList<>();
+        int[] state = {0};
+        steps.add(Step.server(level -> {
+            BlockPos o = new BlockPos(0, 200, 0);
+            for (int cx = -2; cx <= 2; cx++) {
+                for (int cz = -2; cz <= 2; cz++) {
+                    level.getChunk(cx, cz, ChunkStatus.FULL, true);
+                }
+            }
+            net.minecraft.world.level.block.Block[] ground = {net.minecraft.world.level.block.Blocks.SKELETON_SKULL,
+                    net.minecraft.world.level.block.Blocks.WITHER_SKELETON_SKULL, net.minecraft.world.level.block.Blocks.ZOMBIE_HEAD,
+                    net.minecraft.world.level.block.Blocks.CREEPER_HEAD, net.minecraft.world.level.block.Blocks.PIGLIN_HEAD,
+                    net.minecraft.world.level.block.Blocks.DRAGON_HEAD};
+            net.minecraft.world.level.block.Block[] wall = {net.minecraft.world.level.block.Blocks.SKELETON_WALL_SKULL,
+                    net.minecraft.world.level.block.Blocks.WITHER_SKELETON_WALL_SKULL, net.minecraft.world.level.block.Blocks.ZOMBIE_WALL_HEAD,
+                    net.minecraft.world.level.block.Blocks.CREEPER_WALL_HEAD, net.minecraft.world.level.block.Blocks.PIGLIN_WALL_HEAD,
+                    net.minecraft.world.level.block.Blocks.DRAGON_WALL_HEAD};
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -6; z <= 4; z++) {
+                    level.setBlock(o.offset(x, -1, z), net.minecraft.world.level.block.Blocks.POLISHED_DEEPSLATE.defaultBlockState(), 2);
+                }
+                for (int y = 0; y <= 5; y++) {
+                    level.setBlock(o.offset(x, y, -4), net.minecraft.world.level.block.Blocks.DARK_OAK_PLANKS.defaultBlockState(), 2);
+                }
+            }
+            for (int i = 0; i < 6; i++) {
+                int x = -8 + i * 3 + (i == 5 ? 1 : 0);
+                level.setBlock(o.offset(x, 0, 0), net.minecraft.world.level.block.Blocks.POLISHED_DEEPSLATE_WALL.defaultBlockState(), 2);
+                level.setBlock(o.offset(x, 1, 0), ground[i].defaultBlockState().setValue(net.minecraft.world.level.block.SkullBlock.ROTATION, 8), 2);
+                level.setBlock(o.offset(x, 3, -3), wall[i].defaultBlockState()
+                        .setValue(net.minecraft.world.level.block.WallSkullBlock.FACING, net.minecraft.core.Direction.SOUTH), 2);
+            }
+            var stand = net.minecraft.world.entity.EntityTypes.ARMOR_STAND.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            if (stand != null) {
+                stand.snapTo(o.getX() - 9.5, o.getY(), o.getZ() + 2.5, 160.0f, 0.0f);
+                stand.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD,
+                        new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CREEPER_HEAD));
+                level.addFreshEntity(stand);
+            }
+            var frame = new net.minecraft.world.entity.decoration.ItemFrame(level, o.offset(6, 1, -3), net.minecraft.core.Direction.SOUTH);
+            frame.setItem(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.PIGLIN_HEAD), false);
+            level.addFreshEntity(frame);
+            views.add(new double[] {o.getX() + 0.5, o.getY() + 1.5, o.getZ() + 9.5, o.getX() + 0.5, o.getY() + 1.8, o.getZ()});
+            for (int i = 0; i < 6; i++) {
+                double x = o.getX() - 8 + i * 3 + (i == 5 ? 1 : 0) + 0.5;
+                double d = i == 5 ? 3.6 : 2.1;
+                views.add(new double[] {x + (i == 5 ? 1.6 : 0.9), o.getY() + (i == 5 ? 0.9 : 0.6), o.getZ() + 0.5 + d, x,
+                        o.getY() + (i == 5 ? 1.5 : 1.35), o.getZ() + 0.5});
+            }
+            views.add(new double[] {o.getX() - 7.0, o.getY() + 1.0, o.getZ() + 5.0, o.getX() - 9.5, o.getY() + 1.6, o.getZ() + 2.5});
+            views.add(new double[] {o.getX() + 6.5, o.getY() + 0.2, o.getZ() - 0.6, o.getX() + 6.5, o.getY() + 1.5, o.getZ() - 3});
+            state[0] = 1;
+        }));
+        steps.add(Step.until(() -> state[0] != 0, 3000));
+        for (int n = 0; n < 9; n++) {
+            int slot = n;
+            steps.add(Step.once(minecraft -> {
+                if (slot < views.size()) {
+                    double[] v = views.get(slot);
+                    double lx = v[3] - v[0];
+                    double ly = v[4] - (v[1] + 1.62);
+                    double lz = v[5] - v[2];
+                    float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                    float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                    minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", v[0], v[1], v[2], yaw, pitch));
+                }
+            }));
+            steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 200 : 40));
+            Step shot = Step.screenshot("lab_heads_" + n);
             steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
         }
     }

@@ -17,6 +17,10 @@ Kingdoms at War – Dragon Warfare: Gründe dein mittelalterliches Königreich, 
 Die Geschichte „Das Siegel“ mit Chronik und Siegelkreis, sechs riesige Drachen-Bosse in eigenen Nestern, Nyxar und die Schattenwelt, eigene Drachen zum Reiten, Ritter und Soldaten, Münzen, eine wachsende Stadt mit Bürgern in acht Berufen, Handel und die Krönung auf dem eigenen Thron, die Magie mit sieben Zaubern in drei Stufen, Zaubertafeln, dem Magietisch, einem Zauberkreis und sechs Erzmagiern in ihren Magiertürmen – und eine neue Oberwelt mit acht eigenen Biomen (Aschefelder, Frostgipfel, Sturmküste, Urhain, Felsschluchten, Korallenküste, Königsauen und Nebelmoor) und eigenen Dörfern in vier Bauweisen, deren Bewohner in 17 Berufen arbeiten, handeln, sich auf dem Dorfplatz treffen und Gerüchte über die Drachen erzählen.
 '''
 
+# ein einziger Eingriff auf dem Client: die Köpfe von Vanilla sehen aus wie die der eigenen Wesen
+[[mixins]]
+config="${mod_id}.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"

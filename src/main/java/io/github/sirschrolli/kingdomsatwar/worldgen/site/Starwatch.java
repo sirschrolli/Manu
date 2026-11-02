@@ -504,10 +504,11 @@ final class Starwatch {
                     this.b.set(x, y, back - 1, s(Blocks.OBSIDIAN));
                 }
             }
+            // der Kopf des Sternenfressers als Trophäe an der Wand, darüber (meist) die Schwingen
+            this.b.set(0, fl + 2, back, Blocks.DRAGON_WALL_HEAD.defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.WallSkullBlock.FACING, Direction.SOUTH));
             if (this.wings) {
-                this.frame(0, fl + 3, back, Direction.SOUTH, new ItemStack(Items.ELYTRA));
-            } else {
-                this.b.set(0, fl + 2, back, s(Blocks.AMETHYST_CLUSTER));
+                this.frame(0, fl + 4, back, Direction.SOUTH, new ItemStack(Items.ELYTRA));
             }
             this.b.chest(0, fl + 1, back + 3, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.SOUTH),
                     ModLootTables.SITE_STARWATCH);

@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.35.0 – die Sternwarte statt der Endstadt: Damit sind alle Vanilla-Bauwerke ersetzt; dazu Riesengebeine, die Verlorene Pforte, die Hortfeste, die Aschenesse, Unterholz und Bäume in neuer Gestalt.**
+> **Testversion 0.36.0 – Köpfe und Schädel im Gesicht der eigenen Wesen; dazu die Sternwarte statt der Endstadt (damit sind alle Vanilla-Bauwerke ersetzt), Riesengebeine, die Verlorene Pforte, die Hortfeste und die Aschenesse.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,15 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.35: **Die Sternwarte.** Statt der Endstädte und Endschiffe steht auf den äußeren Inseln des Ends die
+> Neu in 0.36: **Köpfe und Schädel.** Die Köpfe von Vanilla tragen jetzt das Gesicht der eigenen Wesen: der
+> **Gerippeschädel** (statt Skelettschädel), der **Brandgebeinschädel** mit Flammen (statt Witherskelettschädel), der
+> **Wiedergängerkopf** (statt Zombiekopf), der **Kriecherkopf** aus Laub mit Blüte (statt Creeperkopf), der
+> **Borstlingskopf** mit Rüssel, Hauern und wackelnden Ohren (statt Piglinkopf) und der **Sternenfresserkopf** mit
+> Hörnern aus Purpurkristall und klappendem Kiefer (statt Drachenkopf) – als Block, als Gegenstand und auf dem Kopf
+> getragen. Es bleiben die Blöcke von Vanilla: Sie fallen wie gewohnt, wenn ein geladener Kriecher ein Wesen sprengt,
+> rufen den Wither, tarnen ihren Träger und spielen auf Notenblöcken. Den Sternenfresserkopf gibt es als Trophäe in
+> jeder Sternwarte (in der Reliquienkammer unter den Elytren).
+> Seit 0.35: **Die Sternwarte.** Statt der Endstädte und Endschiffe steht auf den äußeren Inseln des Ends die
 > **Sternwarte** eines vergessenen Ordens: eine schwebende Plattform mit dem **Sternenhof** (ein achtzackiger Stern im
 > Pflaster, in der Mitte der Sternstein aus Amethyst), dahinter ein achteckiger Turm aus Endsteinziegeln mit
 > Quarzpfeilern und violetten Fenstern – unten die Halle der Schreine, darüber die Bibliothek der Sternkarten, die
@@ -237,7 +245,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Köpfe und Schädel der eigenen Wesen; danach Dragon Architect, Belagerungswaffen und Kriegssystem.
+> **Als Nächstes:** Feinschliff der Schattenwelt-Pflanzen und der Bewegungen aller Wesen, dann das Finale der
+> Geschichte (Erzähler-Kapitel, neues Intro) – danach Dragon Architect, Belagerungswaffen und Kriegssystem.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -293,7 +302,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Hortfeste der Borstlinge statt Bastion | ✅ fertig |
 | Riesengebeine statt Netherfossilien, Verlorene Pforte statt Portalruine im Nether | ✅ fertig |
 | Sternwarte statt Endstadt und Endschiff (mit den Elytren) | ✅ fertig |
-| Köpfe und Schädel der eigenen Wesen | 🔨 als Nächstes |
+| Köpfe und Schädel der eigenen Wesen (als Block, Gegenstand und getragen) | ✅ fertig |
+| Feinschliff: Schattenwelt-Pflanzen, Bewegungen aller Wesen; Erzähler-Kapitel und neues Intro | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1118,6 +1128,27 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 |---|---|---|
 | **Sternenfresser** | Enderdrache | Schuppen wie Nachthimmel mit leuchtenden Sternen, helle Bauchplatten, Riss in die Leere über Kehle und Brust; Kopf mit Nüstern, Brauenwülsten, Wangendornen, Zähnen und violett gleißenden Augen, zwei geschwungene Hörner aus Purpurkristall; Kristallkamm über Kopf, Hals, Rücken und Schwanz; Flughäute wie ein Nebel im All mit leuchtenden Adern und ausgebuchtetem Hinterrand, Daumenkrallen; Kristallklinge am Schwanzende; stirbt in violetten Strahlen. Er ist der Vanilla-Drache mit eigenem Aussehen und Namen – Kampf, Kristalle, Portal, Ei und Endtore bleiben, wie sie sind |
 
+### Köpfe und Schädel
+
+![Köpfe und Schädel](docs/bilder/koepfe.jpg)
+
+Die Köpfe von Vanilla tragen das Gesicht der eigenen Wesen – gebaut aus deren eigenem Kopf (dieselbe Form, dieselbe
+Textur), als Block auf dem Boden und an der Wand, als Gegenstand im Inventar und im Rahmen und auf dem Kopf getragen:
+
+| Kopf | statt | Aussehen |
+|---|---|---|
+| **Gerippeschädel** | Skelettschädel | der bleiche Schädel eines Gerippes mit Unterkiefer |
+| **Brandgebeinschädel** | Witherskelettschädel | verkohlt, mit glühenden Augen und Flammen auf dem Scheitel |
+| **Wiedergängerkopf** | Zombiekopf | grünlich, mit wirrem Haar und roten Augen |
+| **Kriecherkopf** | Creeperkopf | aus Laub, mit einer Blüte obenauf |
+| **Borstlingskopf** | Piglinkopf | Keilerkopf mit Rüssel, Hauern und Ohren, die wackeln, wenn der Kopf Strom bekommt |
+| **Sternenfresserkopf** | Drachenkopf | Schuppen wie Nachthimmel, Hörner aus Purpurkristall; der Kiefer klappt bei Strom |
+
+Die Blöcke selbst bleiben die von Vanilla: Sie fallen, wenn ein geladener Kriecher ein Gerippe, einen Wiedergänger,
+einen Kriecher oder einen Borstling sprengt, Brandgebeine lassen ihre Schädel fallen, drei Brandgebeinschädel auf
+Seelensand rufen den Wither, ein getragener Kopf tarnt vor seinesgleichen, und auf Notenblöcken klingen sie wie
+gewohnt. Den **Sternenfresserkopf** gibt es als Trophäe in der Reliquienkammer jeder Sternwarte.
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -1415,7 +1446,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
    - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
    - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
-     Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso; es folgen die Köpfe der eigenen Wesen.
+     Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
+     eigenen Wesen.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

@@ -1080,6 +1080,16 @@ public class ModLanguageProvider extends LanguageProvider {
         // Fortschritte, die jetzt zu den eigenen Bauwerken führen
         add("advancements.nether.find_fortress.title", pick("The Ash Forge", "Die Aschenesse"));
         add("advancements.end.find_end_city.title", pick("The Starwatch", "Die Sternwarte"));
+        // die Köpfe von Vanilla tragen das Gesicht der eigenen Wesen – und deren Namen
+        for (String[] head : new String[][] {{"skeleton_skull", "skeleton_wall_skull", "Boneman Skull", "Gerippeschädel"},
+                {"wither_skeleton_skull", "wither_skeleton_wall_skull", "Charred Bones Skull", "Brandgebeinschädel"},
+                {"zombie_head", "zombie_wall_head", "Revenant Head", "Wiedergängerkopf"},
+                {"creeper_head", "creeper_wall_head", "Creepling Head", "Kriecherkopf"},
+                {"piglin_head", "piglin_wall_head", "Bristling Head", "Borstlingskopf"},
+                {"dragon_head", "dragon_wall_head", "Star Devourer Head", "Sternenfresserkopf"}}) {
+            add("block.minecraft." + head[0], pick(head[2], head[3]));
+            add("block.minecraft." + head[1], pick(head[2], head[3]));
+        }
         add("advancements.end.find_end_city.description", pick("Enter the forgotten order's observatory at the edge of the End",
                 "Betritt die Sternwarte des vergessenen Ordens am Rand des Ends"));
         add("advancements.nether.find_bastion.title", pick("The Hoard Fortress", "Die Hortfeste"));
