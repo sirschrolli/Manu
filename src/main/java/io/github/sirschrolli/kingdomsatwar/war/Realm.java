@@ -120,12 +120,11 @@ public enum Realm implements StringRepresentable {
     // Wappen
     // =====================================================================================
 
-    /** Die Schichten des Wappens: Zeichen, Bordüre und ein Schatten am Fuß. */
+    /** Die Schichten des Wappens: das Zeichen auf dem Feld und eine Bordüre. */
     public BannerPatternLayers heraldry(HolderGetter<BannerPattern> patterns) {
         return new BannerPatternLayers.Builder()
                 .addIfRegistered(patterns, this.emblem(), this.charge)
                 .addIfRegistered(patterns, BannerPatterns.BORDER, this.border)
-                .addIfRegistered(patterns, BannerPatterns.GRADIENT_UP, DyeColor.BLACK)
                 .build();
     }
 

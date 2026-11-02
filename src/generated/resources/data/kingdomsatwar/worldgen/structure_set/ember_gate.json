@@ -1,6 +1,10 @@
 {
   "placement": {
     "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 6,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
     "salt": 34222647,
     "separation": 20,
     "spacing": 56

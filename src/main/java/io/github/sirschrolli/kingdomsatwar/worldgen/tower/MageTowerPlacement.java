@@ -15,8 +15,8 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
 /**
  * Verteilung der Magiertürme: wie ein gewöhnliches Zufallsraster (so finden {@code /locate} und Karten sie), aber nie in
- * der Nähe eines Drachennests oder des Siegelkreises – deren Gelände gestalten Nest und Kreis selbst. Von den Dörfern
- * hält die Sperrzone der Platzierung Abstand.
+ * der Nähe eines Drachennests, des Siegelkreises oder einer Stammburg – deren Gelände gestalten sie selbst. Von den
+ * Dörfern hält die Sperrzone der Platzierung Abstand.
  */
 public class MageTowerPlacement extends RandomSpreadStructurePlacement {
     public static final MapCodec<MageTowerPlacement> CODEC = RecordCodecBuilder.mapCodec(i -> placementCodec(i)
@@ -54,8 +54,14 @@ public class MageTowerPlacement extends RandomSpreadStructurePlacement {
                 return false;
             }
         }
+        if (io.github.sirschrolli.kingdomsatwar.war.RealmLocator.near(state, sourceX * 16 + 8, sourceZ * 16 + 8, CASTLE_DISTANCE)) {
+            return false;
+        }
         return !this.near(SealCircleLocator.find(state), sourceX, sourceZ);
     }
+
+    /** Abstand (Blöcke) zu den Stammburgen der Reiche. */
+    private static final int CASTLE_DISTANCE = 160;
 
     private boolean near(ChunkPos pos, int x, int z) {
         if (pos == null) {

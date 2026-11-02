@@ -125,6 +125,8 @@ final class Showcase {
                 case "nyxar" -> CitadelShowcase.citadel(steps, true);
                 case "citadelmap" -> CitadelShowcase.citadel(steps, false, true);
                 case "sites" -> SitesShowcase.sites(steps);
+                case "castles" -> CastleShowcase.castles(steps);
+                case "castleworld" -> CastleShowcase.castleWorld(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");
                 case "town" -> TownShowcase.town(steps);

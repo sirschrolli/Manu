@@ -320,6 +320,41 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.06f))));
     }
 
+    /**
+     * Die Truhen der Stammburgen: in den Gemächern des Herrschers die Schatztruhe (erst nach dem Kampf durch die ganze Burg
+     * zu erreichen, daher reich, aber nicht verschwenderisch), in der Kaserne die Waffenkammer, in Küche und Vorratshaus
+     * die Vorräte.
+     */
+    private void realmCastles() {
+        this.output.accept(ModLootTables.REALM_TREASURY, coins(LootTable.lootTable(), 12, 30, 4, 10, 0.5f)
+                .withPool(pool(3, 5, item(Items.GOLD_INGOT, 6, 2, 5), item(ModItems.GEMSTONE.get(), 4, 1, 3), item(Items.EMERALD, 4, 2, 5),
+                        item(Items.GOLD_NUGGET, 4, 6, 14), item(Items.DIAMOND, 1, 1, 2), item(ModItems.STEEL_INGOT.get(), 3, 2, 4)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(6).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(LootItem.lootTableItem(ModItems.GEMSTONE_CROWN.get()).setWeight(1))
+                        .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(2))
+                        .add(EmptyLootItem.emptyItem().setWeight(5))));
+        this.output.accept(ModLootTables.REALM_ARMORY, coins(LootTable.lootTable(), 2, 8, 0, 2, 0.0f)
+                .withPool(pool(3, 5, item(Items.ARROW, 6, 8, 20), item(ModItems.STEEL_INGOT.get(), 4, 1, 3), item(Items.IRON_INGOT, 5, 2, 5),
+                        item(Items.LEATHER, 3, 2, 5), item(Items.STRING, 3, 2, 6), item(Items.SHIELD, 2, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.between(1, 2))
+                        .add(LootItem.lootTableItem(ModItems.STEEL_SWORD.get()).setWeight(4)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.2f, 0.7f))))
+                        .add(LootItem.lootTableItem(ModItems.STEEL_AXE.get()).setWeight(3)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.2f, 0.7f))))
+                        .add(LootItem.lootTableItem(ModItems.STEEL_HELMET.get()).setWeight(3)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.2f, 0.7f))))
+                        .add(LootItem.lootTableItem(ModItems.STEEL_CHESTPLATE.get()).setWeight(2)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.3f, 0.8f))))
+                        .add(LootItem.lootTableItem(Items.CROSSBOW).setWeight(3)
+                                .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.2f, 0.7f))))
+                        .add(EmptyLootItem.emptyItem().setWeight(4))));
+        this.output.accept(ModLootTables.REALM_STORES, coins(LootTable.lootTable(), 0, 4, 0, 0, 0.0f)
+                .withPool(pool(4, 7, item(ModItems.BREAD_ROLL.get(), 8, 2, 6), item(ModItems.COOKED_VENISON.get(), 5, 1, 4),
+                        item(ModItems.ALE.get(), 5, 1, 3), item(ModItems.WINE.get(), 3, 1, 2), item(Items.WHEAT, 5, 3, 9),
+                        item(Items.CARROT, 4, 2, 6), item(Items.POTATO, 4, 2, 6), item(Items.APPLE, 4, 1, 4), item(Items.SALMON, 2, 1, 3))));
+    }
+
     /** Eine Tabelle, die einmal die Vanilla-Tabelle zieht. */
     private LootTable.Builder vanilla(net.minecraft.resources.ResourceKey<LootTable> table) {
         return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
@@ -332,6 +367,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.mageTowers();
         this.villages();
         this.sites();
+        this.realmCastles();
         LootPool.Builder treasure = LootPool.lootPool()
                 .setRolls(ContextIntProviders.exactly(1))
                 .add(LootItem.lootTableItem(ModItems.STEEL_SWORD.get()).setWeight(5)

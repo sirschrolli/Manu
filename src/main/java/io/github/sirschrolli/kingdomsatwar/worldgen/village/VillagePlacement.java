@@ -16,7 +16,7 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Verteilung der Dörfer: ein gewöhnliches Zufallsraster (so finden {@code /locate} und Karten sie), aber nie in der Nähe
- * eines Drachennests – wo ein Drache haust, siedelt niemand – und nicht am Siegelkreis.
+ * eines Drachennests – wo ein Drache haust, siedelt niemand –, nicht am Siegelkreis und nicht an einer Stammburg.
  */
 public class VillagePlacement extends RandomSpreadStructurePlacement {
     public static final MapCodec<VillagePlacement> CODEC = RecordCodecBuilder.mapCodec(i -> placementCodec(i)
@@ -63,8 +63,14 @@ public class VillagePlacement extends RandomSpreadStructurePlacement {
                 return false;
             }
         }
+        if (io.github.sirschrolli.kingdomsatwar.war.RealmLocator.near(state, sourceX * 16 + 8, sourceZ * 16 + 8, CASTLE_DISTANCE)) {
+            return false;
+        }
         return !near(SealCircleLocator.find(state), sourceX, sourceZ, this.sealDistance);
     }
+
+    /** Abstand (Blöcke) zu den Stammburgen der Reiche: dort siedeln die Leute des Reichs, keine freien Dörfer. */
+    private static final int CASTLE_DISTANCE = 200;
 
     private static boolean near(@Nullable ChunkPos pos, int x, int z, int distance) {
         if (pos == null) {

@@ -38,6 +38,7 @@ public final class DataGenerators {
                 .add(Registries.BIOME, io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes::bootstrap)
                 .add(Registries.STRUCTURE, io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures::bootstrapStructures)
                 .add(Registries.STRUCTURE_SET, io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures::bootstrapStructureSets)
+                .add(Registries.BANNER_PATTERN, io.github.sirschrolli.kingdomsatwar.war.Realm::bootstrapPatterns)
                 .lootTable(
                         new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModExtraLootProvider::new, LootContextParamSets.BLOCK),

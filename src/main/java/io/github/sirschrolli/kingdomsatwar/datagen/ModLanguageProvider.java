@@ -31,6 +31,7 @@ public class ModLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         EconomyLang.register(this::text);
         VillageLang.register(this::text);
+        WarLang.register(this::text);
         bosses();
         shadowWorld();
         // --- Kreativ-Tabs ---

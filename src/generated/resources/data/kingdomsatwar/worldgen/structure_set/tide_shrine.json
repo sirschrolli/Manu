@@ -1,6 +1,10 @@
 {
   "placement": {
     "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 6,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
     "frequency": 0.007,
     "frequency_reduction_method": "legacy_type_2",
     "locate_offset": [

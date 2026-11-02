@@ -39,6 +39,7 @@ public final class RealmLocator {
     private static final int SEAL_CLEARANCE = 450;
     private static final int CASTLE_CLEARANCE = 800;
     private static final int MAX_RELIEF = 10;
+    private static final int RING_CLEARANCE = 160;
     private static final Map<ChunkGeneratorStructureState, Map<Realm, ChunkPos>> CACHE = Collections.synchronizedMap(new WeakHashMap<>());
     /** Dieselben Orte nach dem Rauschzustand der Welt – so findet das Bauwerk sein Reich (es kennt den Zustand nicht). */
     private static final Map<RandomState, Map<Realm, ChunkPos>> BY_NOISE = Collections.synchronizedMap(new WeakHashMap<>());
@@ -138,6 +139,17 @@ public final class RealmLocator {
         ChunkPos seal = SealCircleLocator.find(state);
         if (seal != null) {
             avoid.add(new int[] {seal.getMiddleBlockX(), seal.getMiddleBlockZ(), SEAL_CLEARANCE});
+        }
+        // Bauwerke in Ringen um den Ursprung (z. B. der Sternensturz) haben keine Sperrzone: ihnen weicht die Burg aus
+        for (Holder<StructureSet> set : state.possibleStructureSets()) {
+            if (set.value().placement() instanceof net.minecraft.world.level.levelgen.structure.placement.ConcentricRingsStructurePlacement rings) {
+                List<ChunkPos> positions = state.getRingPositionsFor(rings);
+                if (positions != null) {
+                    for (ChunkPos pos : positions) {
+                        avoid.add(new int[] {pos.getMiddleBlockX(), pos.getMiddleBlockZ(), RING_CLEARANCE});
+                    }
+                }
+            }
         }
         ChunkPos origin = state.getDimensionOrigin();
         int ox = origin.getMiddleBlockX();

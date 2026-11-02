@@ -109,7 +109,7 @@ public final class RealmCastle {
         posts.add(new Post("footman", 4, 1, 24));
         posts.add(new Post("captain", 0, 1, 21));
         // Fußknechte im Hof und vor dem Bergfried
-        posts.add(new Post("footman", -8, 1, 9));
+        posts.add(new Post("footman", -6, 1, 11));
         posts.add(new Post("footman", 8, 1, 9));
         posts.add(new Post("footman", 13, 1, -8));
         posts.add(new Post("footman", -13, 1, -8));
@@ -163,7 +163,7 @@ public final class RealmCastle {
             this.smithy();
             this.chapel();
             this.storehouse();
-            this.well(0, 4);
+            this.well(-11, 9);
             this.yard();
             this.lamps();
         }
@@ -247,6 +247,11 @@ public final class RealmCastle {
                     this.curtainColumn(WALL - d, i, d, Direction.EAST);
                     this.curtainColumn(-(WALL - d), i, d, Direction.WEST);
                 }
+                // Kragsteine unter der Brüstung außen
+                this.b.set(i, WALK, WALL + 1, this.trimStairs(Direction.NORTH, Half.TOP));
+                this.b.set(i, WALK, -WALL - 1, this.trimStairs(Direction.SOUTH, Half.TOP));
+                this.b.set(WALL + 1, WALK, i, this.trimStairs(Direction.WEST, Half.TOP));
+                this.b.set(-WALL - 1, WALK, i, this.trimStairs(Direction.EAST, Half.TOP));
                 // Böschung außen am Mauerfuß
                 this.b.set(i, 1, WALL + 1, VillageBuilder.stairs(this.s.baseStairs(), Direction.NORTH, Half.BOTTOM));
                 this.b.set(i, 1, -WALL - 1, VillageBuilder.stairs(this.s.baseStairs(), Direction.SOUTH, Half.BOTTOM));
@@ -501,6 +506,13 @@ public final class RealmCastle {
                 for (int y : new int[] {3, 8}) {
                     this.b.air(side * 6, y, GZ1, side * 7, y + 1, GZ1);
                 }
+                // Kragsteine unter der Wehrplatte (vorn und an der Außenseite)
+                for (int x = Math.min(xa, xb); x <= Math.max(xa, xb); x++) {
+                    this.b.set(x, GATE_TOP, GZ1 + 1, this.trimStairs(Direction.NORTH, Half.TOP));
+                }
+                for (int z = WALL + 1; z <= GZ1; z++) {
+                    this.b.set(xb + side, GATE_TOP, z, this.trimStairs(side > 0 ? Direction.WEST : Direction.EAST, Half.TOP));
+                }
                 // Tür vom Hof, Leiter bis auf die Wehrplatte
                 this.b.door(side * 6, 1, GZ0, this.s.door(), Direction.SOUTH);
                 this.b.ladder(side * 8, 1, GATE_TOP, GZ0 + 2, side > 0 ? Direction.WEST : Direction.EAST);
@@ -612,6 +624,15 @@ public final class RealmCastle {
                         this.merlon(x, ROOF + 1, z, Math.floorMod(x + z, 2) == 0);
                     }
                 }
+            }
+            // Kragsteine unter der Brüstung der Wehrplatte
+            for (int x = -KX; x <= KX; x++) {
+                this.b.set(x, ROOF, KS + 1, this.trimStairs(Direction.NORTH, Half.TOP));
+                this.b.set(x, ROOF, KN - 1, this.trimStairs(Direction.SOUTH, Half.TOP));
+            }
+            for (int z = KN; z <= KS; z++) {
+                this.b.set(KX + 1, ROOF, z, this.trimStairs(Direction.WEST, Half.TOP));
+                this.b.set(-KX - 1, ROOF, z, this.trimStairs(Direction.EAST, Half.TOP));
             }
             // Gesims zwischen Thronsaal und Gemächern
             for (int x = -KX - 1; x <= KX + 1; x++) {

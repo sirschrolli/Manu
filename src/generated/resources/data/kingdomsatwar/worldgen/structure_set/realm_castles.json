@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:realm_castle",
+    "biomes": "#kingdomsatwar:has_realm_castle",
+    "max_distance": 2400,
+    "min_distance": 900,
+    "salt": 70717
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:realm_castle",
+      "weight": 1
+    }
+  ]
+}

@@ -52,7 +52,7 @@ public record SpacedPlacement(int spacing, int separation, int salt, int nestDis
         return regionX * spacing + random.nextInt(range) == chunkX && regionZ * spacing + random.nextInt(range) == chunkZ;
     }
 
-    /** Liegt der Punkt mindestens {@code distance} Blöcke von allen Drachennestern entfernt? */
+    /** Liegt der Punkt mindestens {@code distance} Blöcke von allen Drachennestern (und den Stammburgen) entfernt? */
     public static boolean farFromNests(ServerLevel level, int x, int z, int distance) {
         ChunkGeneratorStructureState state = level.getChunkSource().getGeneratorState();
         for (DragonType type : DragonType.values()) {
@@ -64,6 +64,9 @@ public record SpacedPlacement(int spacing, int separation, int salt, int nestDis
                     return false;
                 }
             }
+        }
+        if (io.github.sirschrolli.kingdomsatwar.war.RealmLocator.near(state, x, z, Math.min(distance, 140))) {
+            return false;
         }
         ChunkPos circle = io.github.sirschrolli.kingdomsatwar.worldgen.seal.SealCircleLocator.find(state);
         if (circle != null) {
