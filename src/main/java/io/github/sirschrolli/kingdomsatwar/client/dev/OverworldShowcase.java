@@ -55,8 +55,10 @@ final class OverworldShowcase {
     static void vanillaTour(Deque<Step> steps, String only) {
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        // mehrere mit "+" verbunden: vbiome_forest+taiga+plains
+        List<String> wanted = only.isEmpty() ? List.of() : List.of(only.split("\\+"));
         for (ResourceKey<Biome> key : VANILLA) {
-            if (only.isEmpty() || key.identifier().getPath().equals(only)) {
+            if (wanted.isEmpty() || wanted.contains(key.identifier().getPath())) {
                 biome(steps, key);
             }
         }
@@ -127,9 +129,13 @@ final class OverworldShowcase {
         steps.add(Step.command("time set 6000"));
         steps.add(Step.command("gamerule max_block_modifications 10000000"));
         int index = 0;
-        for (ResourceKey<net.minecraft.world.level.levelgen.feature.Feature> key : TREES) {
-            String name = key.identifier().getPath();
-            if (!only.isEmpty() && !name.equals(only)) {
+        List<ResourceKey<net.minecraft.world.level.levelgen.feature.Feature>> all = new ArrayList<>(TREES);
+        all.addAll(io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.UNDERGROWTH);
+        for (ResourceKey<net.minecraft.world.level.levelgen.feature.Feature> key : all) {
+            // Vanilla-Namen wie sie sind, die eigenen ohne "tree/": bush_oak, young_spruce …
+            String name = key.identifier().getPath().replace("tree/", "").replace('/', '_');
+            boolean small = name.startsWith("bush_") || name.startsWith("young_");
+            if (!only.isEmpty() && !name.equals(only) && !(only.equals("undergrowth") && small)) {
                 continue;
             }
             int x = 6000 + index * 64;
@@ -144,7 +150,8 @@ final class OverworldShowcase {
                 BlockPos center = new BlockPos(x, ground[0], z);
                 prepareGround(level, center, "trees", 24);
                 meadow(level, center, 24, 60, treeBiome(name));
-                int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}} : new int[][] {{0, 0}, {-10, 8}, {9, -8}};
+                int[][] spots = big ? new int[][] {{0, 0}, {-13, 11}, {12, -11}} : small ? new int[][] {{0, 0}, {-5, 4}, {5, -4}, {4, 6}, {-6, -5}}
+                        : new int[][] {{0, 0}, {-10, 8}, {9, -8}};
                 int seed = 0;
                 for (int[] spot : spots) {
                     BlockPos at = center.offset(spot[0], 0, spot[1]);
@@ -156,10 +163,11 @@ final class OverworldShowcase {
                 }
             }));
             steps.add(Step.waitTicks(30));
-            double dist = big ? 19.0 : 12.0;
-            double up = big ? 9.0 : 4.5;
+            double dist = big ? 19.0 : small ? 7.5 : 12.0;
+            double up = big ? 9.0 : small ? 3.5 : 4.5;
+            double look = big ? 13.0 : small ? 1.2 : 5.5;
             steps.add(Step.command(String.format(Locale.ROOT, "tp @s %.1f %.1f %.1f -45 %.1f", x - dist, ground[0] + up, z - dist,
-                    Math.toDegrees(Math.atan2(up - (big ? 13.0 : 5.5), Math.sqrt(2) * dist)))));
+                    Math.toDegrees(Math.atan2(up - look, Math.sqrt(2) * dist)))));
             // beim ersten Platz baut der Client noch die ganze Umgebung: länger warten, sonst fehlen Stämme im Bild
             steps.add(Step.waitTicks(index == 1 ? 160 : 20));
             steps.add(Step.waitForChunks(400));
@@ -168,6 +176,9 @@ final class OverworldShowcase {
         if (!only.isEmpty() && !only.equals("grove")) {
             return;
         }
+        var undergrowth = List.of(io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.OAK_BUSH,
+                io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.OAK_BUSH, io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.YOUNG_OAK,
+                io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.BIRCH_BUSH, io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.YOUNG_BIRCH);
         // ein gemischter Hain: Eichen, große Eichen, Birken, eine Kirsche
         int x = 6000 + index * 64;
         int z = 3000;
@@ -192,6 +203,14 @@ final class OverworldShowcase {
                 }
                 features.getOrThrow(mix.get(k % mix.size())).value().place(level, level.getChunkSource().getGenerator(), random, at);
             }
+            // dazwischen das Unterholz: Büsche und junge Bäume, auch am Waldrand
+            for (int k = 0; k < 14; k++) {
+                BlockPos at = center.offset(random.nextInt(40) - 18, 0, random.nextInt(40) - 18);
+                if (at.getX() - center.getX() + at.getZ() - center.getZ() < -18) {
+                    continue;
+                }
+                features.getOrThrow(undergrowth.get(k % undergrowth.size())).value().place(level, level.getChunkSource().getGenerator(), random, at);
+            }
         }));
         steps.add(Step.waitTicks(30));
         steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d -45 2", x - 17, ground[0] + 4, z - 17)));
@@ -203,8 +222,11 @@ final class OverworldShowcase {
     /** Das Biom, in dem ein Baum der Galerie steht (für die Farben von Laub und Gras). */
     private static String treeBiome(String tree) {
         return switch (tree) {
-            case "birch", "super_birch_bees_0002" -> "birch_forest";
-            case "spruce", "pine" -> "taiga";
+            case "birch", "super_birch_bees_0002", "bush_birch", "young_birch" -> "birch_forest";
+            case "spruce", "pine", "bush_spruce", "young_spruce" -> "taiga";
+            case "bush_dark_oak" -> "dark_forest";
+            case "bush_acacia" -> "savanna";
+            case "bush_cherry" -> "cherry_grove";
             case "mega_spruce", "mega_pine" -> "old_growth_spruce_taiga";
             case "jungle_tree", "mega_jungle_tree" -> "jungle";
             case "acacia" -> "savanna";

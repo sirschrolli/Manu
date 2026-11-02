@@ -51,13 +51,15 @@ final class TreeGameTests {
             ModGameTests.TEST_FUNCTIONS.register("trees_from_saplings", () -> TreeGameTests::saplings);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LEAN_CHESTS =
             ModGameTests.TEST_FUNCTIONS.register("loot_lean_chests", () -> TreeGameTests::leanChests);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> UNDERGROWTH =
+            ModGameTests.TEST_FUNCTIONS.register("trees_undergrowth", () -> TreeGameTests::undergrowth);
 
     private TreeGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(SHAPES, SAPLINGS, LEAN_CHESTS)) {
+        for (var test : List.of(SHAPES, SAPLINGS, LEAN_CHESTS, UNDERGROWTH)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, TOWN, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -162,6 +164,64 @@ final class TreeGameTests {
                 problems.add(BuiltInName.of(g.sapling()) + ": " + (grown ? "" : "wächst nicht, ") + c.logs() + " Holz, " + c.leaves() + " Laub, "
                         + c.far() + " verdorrend");
             }
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Unterholz: Büsche (ein Hügel aus Laub, der bis auf den Boden reicht und nicht höher als vier Blöcke ist) und junge
+     * Bäume wachsen, ihr Laub verdorrt nicht; die Standard-Biome haben ihre neuen Farben.
+     */
+    private static void undergrowth(GameTestHelper helper) {
+        ground(helper);
+        ServerLevel level = helper.getLevel();
+        var features = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        List<String> problems = new ArrayList<>();
+        List<ResourceKey<Feature>> keys = io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.UNDERGROWTH;
+        for (int i = 0; i < keys.size(); i++) {
+            ResourceKey<Feature> key = keys.get(i);
+            String name = key.identifier().getPath();
+            Feature feature = features.getOrThrow(key).value();
+            BlockPos spot = helper.absolutePos(new BlockPos(6 + (i % 4) * 11, 2, 6 + (i / 4) * 11));
+            boolean placed = false;
+            for (int attempt = 0; attempt < 4 && !placed; attempt++) {
+                placed = feature.place(level, level.getChunkSource().getGenerator(), RandomSource.create(41L * i + attempt), spot);
+            }
+            if (!placed) {
+                problems.add(name + " wächst nicht");
+                continue;
+            }
+            Count c = count(helper, spot.offset(-4, -1, -4), spot.offset(4, 9, 4));
+            if (c.logs() < 1 || c.leaves() < 6 || c.far() > 0) {
+                problems.add(name + ": " + c.logs() + " Holz, " + c.leaves() + " Laub, " + c.far() + " verdorrend");
+            }
+            if (name.startsWith("tree/bush/")) {
+                int ground = 0;
+                int top = 0;
+                for (BlockPos pos : BlockPos.betweenClosed(spot.offset(-4, 0, -4), spot.offset(4, 8, 4))) {
+                    if (level.getBlockState(pos).is(BlockTags.LEAVES)) {
+                        top = Math.max(top, pos.getY() - spot.getY());
+                        if (pos.getY() == spot.getY()) {
+                            ground++;
+                        }
+                    }
+                }
+                if (ground < 3 || top > 3) {
+                    problems.add(name + " ist kein Busch: " + ground + " Blätter am Boden, oberstes in Höhe " + top);
+                }
+            }
+        }
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
+        var plains = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.PLAINS).value().getSpecialEffects();
+        var colors = io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes.colors(net.minecraft.world.level.biome.Biomes.PLAINS);
+        if (colors == null || !plains.grassColorOverride().equals(java.util.Optional.of(colors.grass()))
+                || !plains.foliageColorOverride().equals(java.util.Optional.of(colors.foliage()))) {
+            problems.add("die Ebene hat ihre Farben nicht: " + plains.grassColorOverride() + " / " + plains.foliageColorOverride());
+        }
+        var dark = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.DARK_FOREST).value().getSpecialEffects();
+        if (dark.grassColorOverride().isPresent() || dark.foliageColorOverride().isEmpty()) {
+            problems.add("der dunkle Wald: Gras " + dark.grassColorOverride() + ", Laub " + dark.foliageColorOverride());
         }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();

@@ -411,6 +411,29 @@ public final class OverworldFeatures {
     /** Schilf im Sumpf und an den Flussufern. */
     static final Entry STD_REEDS = own(VEGETATION, "standard/swamp/reeds", () -> new ReedBedFeature(20), anywhere(count(2)));
     static final Entry STD_AMBER = own(VEGETATION, "standard/savanna/amber_clusters", block(ModBlocks.AMBER_CLUSTER), patch(rare(10), 5, 3));
+    // Unterholz: Büsche aus Laub (bis auf den Boden) und junge Bäume zwischen den großen
+    static final Entry STD_OAK_BUSHES = existing(VEGETATION, "standard/forest/oak_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.OAK_BUSH, tree(count(2), Blocks.OAK_SAPLING));
+    static final Entry STD_FIELD_BUSHES = existing(VEGETATION, "standard/plains/oak_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.OAK_BUSH, tree(rare(3), Blocks.OAK_SAPLING));
+    static final Entry STD_BIRCH_BUSHES = existing(VEGETATION, "standard/birch_forest/birch_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.BIRCH_BUSH, tree(count(1), Blocks.BIRCH_SAPLING));
+    static final Entry STD_SPRUCE_BUSHES = existing(VEGETATION, "standard/taiga/spruce_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.SPRUCE_BUSH, tree(count(2), Blocks.SPRUCE_SAPLING));
+    static final Entry STD_SPARSE_SPRUCE_BUSHES = existing(VEGETATION, "standard/snowy/spruce_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.SPRUCE_BUSH, tree(rare(2), Blocks.SPRUCE_SAPLING));
+    static final Entry STD_DARK_OAK_BUSHES = existing(VEGETATION, "standard/dark_forest/dark_oak_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.DARK_OAK_BUSH, tree(count(2), Blocks.DARK_OAK_SAPLING));
+    static final Entry STD_ACACIA_BUSHES = existing(VEGETATION, "standard/savanna/acacia_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.ACACIA_BUSH, tree(count(1), Blocks.ACACIA_SAPLING));
+    static final Entry STD_CHERRY_BUSHES = existing(VEGETATION, "standard/cherry_grove/cherry_bushes",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.CHERRY_BUSH, tree(count(1), Blocks.CHERRY_SAPLING));
+    static final Entry STD_YOUNG_OAKS = existing(VEGETATION, "standard/forest/young_oaks",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.YOUNG_OAK, tree(count(1), Blocks.OAK_SAPLING));
+    static final Entry STD_YOUNG_BIRCHES = existing(VEGETATION, "standard/birch_forest/young_birches",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.YOUNG_BIRCH, tree(count(1), Blocks.BIRCH_SAPLING));
+    static final Entry STD_YOUNG_SPRUCES = existing(VEGETATION, "standard/taiga/young_spruces",
+            io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.YOUNG_SPRUCE, tree(count(1), Blocks.SPRUCE_SAPLING));
 
     // --- oberste Schicht ---
     /** Schneewehen wie auf den Frostgipfeln. */

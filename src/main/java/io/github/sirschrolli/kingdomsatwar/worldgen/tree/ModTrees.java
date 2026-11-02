@@ -9,6 +9,7 @@ import net.minecraft.data.worldgen.BlockStateProviders;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -68,6 +69,27 @@ public final class ModTrees {
             FOLIAGE_PLACERS.register("umbrella_foliage_placer", () -> new FoliagePlacerType<>(UmbrellaFoliagePlacer.CODEC));
     public static final DeferredHolder<FoliagePlacerType<?>, FoliagePlacerType<WeepingFoliagePlacer>> WEEPING_FOLIAGE =
             FOLIAGE_PLACERS.register("weeping_foliage_placer", () -> new FoliagePlacerType<>(WeepingFoliagePlacer.CODEC));
+    public static final DeferredHolder<FoliagePlacerType<?>, FoliagePlacerType<MoundFoliagePlacer>> MOUND_FOLIAGE =
+            FOLIAGE_PLACERS.register("mound_foliage_placer", () -> new FoliagePlacerType<>(MoundFoliagePlacer.CODEC));
+
+    // Büsche und junge Bäume für das Unterholz der Standard-Biome (eigene Namen; siehe bootstrapModFeatures)
+    public static final ResourceKey<Feature> OAK_BUSH = key("bush/oak");
+    public static final ResourceKey<Feature> BIRCH_BUSH = key("bush/birch");
+    public static final ResourceKey<Feature> SPRUCE_BUSH = key("bush/spruce");
+    public static final ResourceKey<Feature> DARK_OAK_BUSH = key("bush/dark_oak");
+    public static final ResourceKey<Feature> ACACIA_BUSH = key("bush/acacia");
+    public static final ResourceKey<Feature> CHERRY_BUSH = key("bush/cherry");
+    public static final ResourceKey<Feature> YOUNG_OAK = key("young/oak");
+    public static final ResourceKey<Feature> YOUNG_BIRCH = key("young/birch");
+    public static final ResourceKey<Feature> YOUNG_SPRUCE = key("young/spruce");
+
+    /** Alle Büsche und jungen Bäume (für Tests und die Vorführung). */
+    public static final List<ResourceKey<Feature>> UNDERGROWTH = List.of(OAK_BUSH, BIRCH_BUSH, SPRUCE_BUSH, DARK_OAK_BUSH, ACACIA_BUSH,
+            CHERRY_BUSH, YOUNG_OAK, YOUNG_BIRCH, YOUNG_SPRUCE);
+
+    private static ResourceKey<Feature> key(String name) {
+        return ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id("tree/" + name));
+    }
 
     private ModTrees() {}
 
@@ -174,6 +196,54 @@ public final class ModTrees {
                         UniformInt.of(1, 2), UniformInt.of(1, 3), true, false)),
                 Blocks.OAK_LEAVES, new WeepingFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 0.35f),
                 new TwoLayersFeatureSize(1, 0, 1), soil);
+    }
+
+    /**
+     * Ein Busch: ein Stummel aus einem Block, ganz verdeckt von einem Hügel aus Laub, der bis auf den Boden reicht
+     * (Halbmesser {@code radius}, {@code height} Schichten hoch).
+     */
+    static TreeFeature.Builder bush(Block log, Block leaves, IntProvider radius, IntProvider height, Holder<BlockStateProvider> soil) {
+        return tree(log, new BranchedTrunkPlacer(1, 0, 0, shape(ConstantInt.of(0), ConstantInt.of(1), 0.5f, 1.0f, ConstantInt.of(0),
+                        ConstantInt.of(0), true, false)),
+                leaves, new MoundFoliagePlacer(radius, ConstantInt.of(0), height), new TwoLayersFeatureSize(0, 0, 0), soil).ignoreVines();
+    }
+
+    /** Eine junge Eiche: zwei, drei Blöcke Stamm, manchmal ein kurzer Ast, eine kleine runde Krone. */
+    static TreeFeature.Builder youngOak(Holder<BlockStateProvider> soil) {
+        return tree(Blocks.OAK_LOG, new BranchedTrunkPlacer(2, 1, 0, shape(UniformInt.of(0, 1), ConstantInt.of(1), 0.7f, 1.0f,
+                        ConstantInt.of(0), ConstantInt.of(0), true, false)),
+                Blocks.OAK_LEAVES, new CloudFoliagePlacer(ConstantInt.of(1), ConstantInt.of(0), ConstantInt.of(3), 0.0f),
+                new TwoLayersFeatureSize(1, 0, 1), soil).ignoreVines();
+    }
+
+    /** Eine junge Birke: dünn und gerade, eine schmale Krone mit ein paar hängenden Blättern. */
+    static TreeFeature.Builder youngBirch(Holder<BlockStateProvider> soil) {
+        return tree(Blocks.BIRCH_LOG, new BranchedTrunkPlacer(3, 1, 0, shape(ConstantInt.of(0), ConstantInt.of(1), 0.7f, 1.0f,
+                        ConstantInt.of(0), ConstantInt.of(0), true, false)),
+                Blocks.BIRCH_LEAVES, new CloudFoliagePlacer(ConstantInt.of(1), ConstantInt.of(0), UniformInt.of(3, 4), 0.25f),
+                new TwoLayersFeatureSize(1, 0, 1), soil).ignoreVines();
+    }
+
+    /** Eine junge Fichte: ein kleiner Kegel in zwei Etagen, der bis fast auf den Boden reicht. */
+    static TreeFeature.Builder youngSpruce(Holder<BlockStateProvider> soil) {
+        return tree(Blocks.SPRUCE_LOG, new BranchedTrunkPlacer(3, 1, 0, shape(ConstantInt.of(0), ConstantInt.of(1), 0.7f, 1.0f,
+                        ConstantInt.of(0), ConstantInt.of(0), true, false)),
+                Blocks.SPRUCE_LEAVES, new TieredFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), ConstantInt.of(1), 2, 0.3f),
+                new TwoLayersFeatureSize(1, 0, 1), soil).ignoreVines();
+    }
+
+    /** Büsche und junge Bäume für das Unterholz (unter eigenen Namen; die Standard-Biome setzen sie in ihre Wälder). */
+    public static void bootstrapModFeatures(BootstrapContext<Feature> context) {
+        Holder<BlockStateProvider> soil = context.lookup(Registries.BLOCK_STATE_PROVIDER).getOrThrow(BlockStateProviders.SOIL_BENEATH_TREE);
+        context.register(OAK_BUSH, bush(Blocks.OAK_LOG, Blocks.OAK_LEAVES, UniformInt.of(1, 2), UniformInt.of(2, 3), soil).build());
+        context.register(BIRCH_BUSH, bush(Blocks.BIRCH_LOG, Blocks.BIRCH_LEAVES, ConstantInt.of(1), UniformInt.of(2, 3), soil).build());
+        context.register(SPRUCE_BUSH, bush(Blocks.SPRUCE_LOG, Blocks.SPRUCE_LEAVES, ConstantInt.of(1), UniformInt.of(2, 3), soil).build());
+        context.register(DARK_OAK_BUSH, bush(Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_LEAVES, UniformInt.of(1, 2), ConstantInt.of(2), soil).build());
+        context.register(ACACIA_BUSH, bush(Blocks.ACACIA_LOG, Blocks.ACACIA_LEAVES, UniformInt.of(1, 2), UniformInt.of(1, 2), soil).build());
+        context.register(CHERRY_BUSH, bush(Blocks.CHERRY_LOG, Blocks.CHERRY_LEAVES, ConstantInt.of(1), ConstantInt.of(2), soil).build());
+        context.register(YOUNG_OAK, youngOak(soil).build());
+        context.register(YOUNG_BIRCH, youngBirch(soil).build());
+        context.register(YOUNG_SPRUCE, youngSpruce(soil).build());
     }
 
     // =====================================================================================

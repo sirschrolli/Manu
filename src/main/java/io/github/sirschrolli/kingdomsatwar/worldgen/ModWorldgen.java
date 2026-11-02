@@ -176,6 +176,7 @@ public final class ModWorldgen {
             context.register(ruin.featureKey(), ruin.feature());
         }
         io.github.sirschrolli.kingdomsatwar.shadow.ShadowFeatures.bootstrapFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.bootstrapModFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapFeatures(context);
     }
 

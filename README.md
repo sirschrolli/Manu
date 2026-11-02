@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.31.0 – die Aschenesse im Nether, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
+> **Testversion 0.32.0 – Unterholz und sattere Farben in den Standard-Biomen; dazu die Aschenesse im Nether, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,12 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.31: **Die Aschenesse.** Statt der Netherfestungen ragen **Aschenessen** aus den Lavaseen des Nethers –
+> Neu in 0.32: **Unterholz und Farben.** In Wäldern, Taiga, Savanne, Kirschhain und auf den Ebenen wachsen jetzt
+> **Büsche** – Hügel aus Laub, die bis auf den Boden reichen und den kurzen Stamm ganz verdecken (Eiche, Birke, Fichte,
+> Schwarzeiche, Akazie, Kirsche) – und **junge Bäume** zwischen den großen (Eichen, Birken, Fichten). Gras und Laub der
+> Standard-Biome haben ein satteres, frischeres Grün wie in den eigenen Biomen; die Taiga ist kühler, der dunkle Wald
+> tiefer.
+> Seit 0.31: **Die Aschenesse.** Statt der Netherfestungen ragen **Aschenessen** aus den Lavaseen des Nethers –
 > achteckige Schmiedetürme aus Netherziegeln auf einem Sockel aus Schwarzstein, frei in einer weiten Höhlenkuppel. In
 > ihrem Kern steigt hinter Gittern eine Säule aus Lava auf, um die sich die Treppe windet; auf fünf Böden liegen die
 > Schlackenhalle mit dem Anleger, die Schmiede mit zwei gebundenen Glutgeistern, der Warzengarten, die Gebeinkammer und
@@ -258,6 +263,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sternenfresser (das Aussehen des Enderdrachen) | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
 | Eigene Baumformen für alle Standardbäume, in der Welt und aus Setzlingen | ✅ fertig |
+| Unterholz (Büsche, junge Bäume) und sattere Farben in den Standard-Biomen | ✅ fertig |
 | Karge Truhen, seltenere Bauwerke, Holzfäller mit eigenem Hain | ✅ fertig |
 | Aschenesse statt Netherfestung | ✅ fertig |
 | Die übrigen Bauwerke von Nether und End (Bastion, Netherfossilien, Endstadt – ganz neu) | 🔨 als Nächstes |
@@ -489,9 +495,12 @@ So wachsen sie überall in der Welt – und genauso aus jedem Setzling.
 | Kirsche | Äste in alle Richtungen, eine Kuppel aus Blüten, von deren Rand Zweige wie Vorhänge herabhängen |
 | Sumpfeiche | geneigter Stamm, hängende Zweige voller Ranken |
 | Dschungelbaum, Urwaldriese | Schirmkronen auf langen Ästen, Brettwurzeln, Ranken und Kakaobohnen; der Urwaldriese mit dickem Stamm |
+| Büsche | ein Stummel, ganz verdeckt von einem Hügel aus Laub, der bis auf den Boden reicht – aus Eiche (Wälder, Ebenen, Bergwiese), Birke, Fichte (Taiga, verschneite Taiga, windgepeitschter Wald), Schwarzeiche, Akazie (Savanne) und Kirsche |
+| Junge Bäume | zwischen den großen: kleine Eichen mit runder Krone, dünne Birken, kleine Fichten als Kegel bis fast auf den Boden |
 
 Die Blätter liegen überall nah genug am Holz – nichts verdorrt von selbst. Mangrove, Blasseiche und Azalee bleiben,
-wie sie sind.
+wie sie sind. Gras und Laub der Ebenen, Wälder, Birkenwälder, der Taiga, der Bergwiese und der windgepeitschten Hügel
+haben seit 0.32 ein satteres Grün wie in den eigenen Biomen (die Taiga kühler, das Laub des dunklen Walds tiefer).
 
 ### Dörfer und Dorfbewohner
 

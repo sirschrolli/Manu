@@ -28,7 +28,9 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
  * Königseiche, Felsnadeln in Wüste, Savanne und Tafelland, Oasen mit Palmen, Windkiefern auf den Hügeln, abgestorbene
  * Bäume und Schilf im Sumpf, Schilf an den Flüssen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden –
  * dazu ein wenig Leben in der Luft: Glühwürmchen im dunklen Wald und im Sumpf, Pollen über Blumenwald und Bergwiese,
- * Schneeflocken auf den Gipfeln, Staub über dem Tafelland.
+ * Schneeflocken auf den Gipfeln, Staub über dem Tafelland. Seit 0.32 wächst in Wäldern, Taiga, Savanne, Kirschhain und
+ * auf den Ebenen auch Unterholz – Büsche aus Laub, die bis auf den Boden reichen, und junge Bäume –, und Gras und Laub
+ * haben ein satteres Grün wie in den eigenen Biomen.
  *
  * <p>Die Features hängen hinter denen des Bioms, und zwar in der festen Reihenfolge von {@link OverworldFeatures#entries()};
  * jedes kommt nur in Standard-Biomen vor, nie in den eigenen – so bleibt die Reihenfolge der Features in allen Biomen
@@ -44,6 +46,12 @@ public record StandardBiomes() implements BiomeModifier {
     private static final Map<ResourceKey<Biome>, Set<OverworldFeatures.Entry>> TOUCHES = new HashMap<>();
     /** Was in der Luft treibt. */
     private static final Map<ResourceKey<Biome>, List<AmbientParticle>> PARTICLES = new HashMap<>();
+
+    /** Gras- und Laubfarbe eines Standard-Bioms (0: wie bei Vanilla). */
+    public record Colors(int grass, int foliage) {}
+
+    /** Die neuen Farben (vor dem static-Block, der sie füllt). */
+    private static final Map<ResourceKey<Biome>, Colors> COLORS = new HashMap<>();
 
     static {
         // Ebenen und Bergwiese: Findlinge, Blumeninseln, hin und wieder eine Königseiche
@@ -94,6 +102,28 @@ public record StandardBiomes() implements BiomeModifier {
         // Flüsse (die Steinküsten, vereisten Gipfel, Savannen-Hochebenen und warmen Strände sind schon eigene Biome)
         touch(List.of(Biomes.RIVER), OverworldFeatures.STD_REEDS);
 
+        // Unterholz: Büsche aus Laub und junge Bäume zwischen den großen
+        touch(List.of(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW), OverworldFeatures.STD_FIELD_BUSHES);
+        touch(List.of(Biomes.FOREST, Biomes.FLOWER_FOREST), OverworldFeatures.STD_OAK_BUSHES, OverworldFeatures.STD_BIRCH_BUSHES,
+                OverworldFeatures.STD_YOUNG_OAKS);
+        touch(List.of(Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST), OverworldFeatures.STD_BIRCH_BUSHES,
+                OverworldFeatures.STD_YOUNG_BIRCHES);
+        touch(List.of(Biomes.DARK_FOREST), OverworldFeatures.STD_DARK_OAK_BUSHES);
+        touch(List.of(Biomes.TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA), OverworldFeatures.STD_SPRUCE_BUSHES,
+                OverworldFeatures.STD_YOUNG_SPRUCES);
+        touch(List.of(Biomes.SNOWY_TAIGA, Biomes.WINDSWEPT_FOREST), OverworldFeatures.STD_SPARSE_SPRUCE_BUSHES);
+        touch(List.of(Biomes.SAVANNA), OverworldFeatures.STD_ACACIA_BUSHES);
+        touch(List.of(Biomes.CHERRY_GROVE), OverworldFeatures.STD_CHERRY_BUSHES);
+
+        // Farben: satteres, frischeres Grün wie in den eigenen Biomen (Gras, Laub); die Taiga kühler, der dunkle Wald tiefer
+        paint(List.of(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS), 0x86C35C, 0x66B43C);
+        paint(List.of(Biomes.MEADOW), 0x7EC064, 0x5CAE44);
+        paint(List.of(Biomes.FOREST, Biomes.FLOWER_FOREST), 0x6BBA4E, 0x4CA62E);
+        paint(List.of(Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST), 0x82C063, 0x64AE42);
+        paint(List.of(Biomes.DARK_FOREST), 0, 0x3F8A2A);
+        paint(List.of(Biomes.TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA), 0x6FA56C, 0x508F52);
+        paint(List.of(Biomes.WINDSWEPT_HILLS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_FOREST), 0x7EAE80, 0x5E9A62);
+
         air(List.of(Biomes.DARK_FOREST), new AmbientParticle(ParticleTypes.FIREFLY, 0.0006f));
         air(List.of(Biomes.SWAMP, Biomes.MANGROVE_SWAMP), new AmbientParticle(ParticleTypes.FIREFLY, 0.0008f));
         air(List.of(Biomes.FLOWER_FOREST, Biomes.MEADOW), new AmbientParticle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.0008f));
@@ -106,6 +136,17 @@ public record StandardBiomes() implements BiomeModifier {
         for (ResourceKey<Biome> biome : biomes) {
             TOUCHES.computeIfAbsent(biome, key -> new LinkedHashSet<>()).addAll(List.of(entries));
         }
+    }
+
+    private static void paint(List<ResourceKey<Biome>> biomes, int grass, int foliage) {
+        for (ResourceKey<Biome> biome : biomes) {
+            COLORS.put(biome, new Colors(grass, foliage));
+        }
+    }
+
+    /** Die neuen Farben eines Standard-Bioms (oder {@code null}) – für Tests. */
+    public static @org.jspecify.annotations.Nullable Colors colors(ResourceKey<Biome> biome) {
+        return COLORS.get(biome);
     }
 
     private static void air(List<ResourceKey<Biome>> biomes, AmbientParticle particle) {
@@ -142,6 +183,18 @@ public record StandardBiomes() implements BiomeModifier {
                 }
             }
         } else if (phase == Phase.MODIFY) {
+            Colors colors = COLORS.get(key);
+            if (colors != null) {
+                // nur, wo das Biom keine eigenen Farben hat (und das Gras nicht ohnehin abgewandelt wird, wie im dunklen Wald)
+                var effects = builder.getSpecialEffects();
+                if (colors.grass() != 0 && effects.getGrassColorOverride().isEmpty()
+                        && effects.getGrassColorModifier() == net.minecraft.world.level.biome.BiomeSpecialEffects.GrassColorModifier.NONE) {
+                    effects.grassColorOverride(java.util.Optional.of(colors.grass()));
+                }
+                if (colors.foliage() != 0 && effects.getFoliageColorOverride().isEmpty()) {
+                    effects.foliageColorOverride(java.util.Optional.of(colors.foliage()));
+                }
+            }
             List<AmbientParticle> particles = PARTICLES.get(key);
             if (particles != null && builder.getAttributes().get(EnvironmentAttributes.AMBIENT_PARTICLES) == null) {
                 builder.getAttributes().set(EnvironmentAttributes.AMBIENT_PARTICLES, List.copyOf(particles));
