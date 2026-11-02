@@ -40,6 +40,10 @@ final class EndShowcase {
 
     /** Endstein mit Chorus, Purpursäulen mit Endstäben, dahinter eine Obsidiansäule. */
     private static void stage(ServerLevel level) {
+        stage(level, true);
+    }
+
+    private static void stage(ServerLevel level, boolean pillar) {
         int g = Showcase.ground;
         int x0 = X0;
         Showcase.fill(level, new BlockPos(x0 - 16, g - 3, OZ - 30), new BlockPos(x0 + 34, g - 1, OZ + 22), Blocks.END_STONE.defaultBlockState());
@@ -56,7 +60,9 @@ final class EndShowcase {
             Showcase.fill(level, new BlockPos(x, g, OZ - 8), new BlockPos(x, g + 5, OZ - 8), purpur);
             level.setBlock(new BlockPos(x, g + 6, OZ - 8), Blocks.END_ROD.defaultBlockState(), 2);
         }
-        Showcase.fill(level, new BlockPos(x0 + 5, g, OZ - 22), new BlockPos(x0 + 8, g + 18, OZ - 19), Blocks.OBSIDIAN.defaultBlockState());
+        if (pillar) {
+            Showcase.fill(level, new BlockPos(x0 + 5, g, OZ - 22), new BlockPos(x0 + 8, g + 18, OZ - 19), Blocks.OBSIDIAN.defaultBlockState());
+        }
         // Chorus: Stängel mit Blüten
         for (int[] c : new int[][] {{-5, -4, 3}, {2, -6, 4}, {17, -5, 3}, {24, -3, 2}, {12, -12, 5}}) {
             int x = x0 + c[0];
@@ -172,6 +178,98 @@ final class EndShowcase {
         steps.add(Step.command("gamemode creative"));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
         steps.add(Step.hud(true));
+    }
+
+    /**
+     * Der Sternenfresser (das Aussehen des Enderdrachen) über dem Endstein: von vorn, von der Seite, von unten; ein
+     * zweiter stirbt und zerfällt in violetten Strahlen.
+     */
+    static void dragon(Deque<Step> steps) {
+        steps.add(Step.command("difficulty easy"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.command("time set 18000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.server(level -> {
+            stage(level, false);
+            dragonAt(level, X0 + 9.0, Showcase.ground + 9.0, OZ - 4.0, "schwebt");
+        }));
+        steps.add(Step.waitTicks(120));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
+        // von vorn (die Kamera steht im Norden und blickt nach Süden)
+        steps.add(Showcase.tp(X0 + 9.0, 11.0, OZ - 30.0, 0, 6));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("end_dragon_front"));
+        steps.add(Showcase.tp(X0 + 9.0, 13.0, OZ - 17.0, 0, 16));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_head"));
+        // Nahaufnahmen des Kopfes (er hängt etwa sechs Blöcke vor dem Drachen)
+        steps.add(Showcase.tp(X0 + 14.5, 12.0, OZ - 15.5, 45, 10));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_portrait"));
+        steps.add(Showcase.tp(X0 + 16.0, 11.4, OZ - 10.0, 90, 4));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_profile"));
+        // von der Seite, schräg von oben und von unten
+        steps.add(Showcase.tp(X0 + 33.0, 11.0, OZ + 2.0, 90, 4));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_side"));
+        steps.add(Showcase.tp(X0 - 6.0, 22.0, OZ + 12.0, 223, 32));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_above"));
+        steps.add(Showcase.tp(X0 + 9.0, 1.0, OZ + 14.0, 180, -24));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("end_dragon_below"));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Showcase.tp(X0 + 9.0, 11.0, OZ - 30.0, 0, 6));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("end_dragon_day"));
+        // ein zweiter fliegt (mit Verstand): Flügelschlag, Hals und Schwanz folgen der Flugbahn
+        steps.add(Step.command("time set 18000"));
+        steps.add(Step.server(level -> {
+            var flyer = net.minecraft.world.entity.EntityTypes.ENDER_DRAGON.create(level, EntitySpawnReason.COMMAND);
+            flyer.setPersistenceRequired();
+            flyer.setFightOrigin(new BlockPos(X0 + 9, Showcase.ground, OZ + 60));
+            flyer.snapTo(X0 + 9.0, Showcase.ground + 16.0, OZ + 50.0, 90, 0);
+            flyer.addTag("fliegt");
+            level.addFreshEntity(flyer);
+        }));
+        steps.add(Showcase.tp(X0 + 9.0, 18.0, OZ + 20.0, 0, 2));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("end_dragon_flight"));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("end_dragon_flight2"));
+        steps.add(Step.command("kill @e[type=minecraft:ender_dragon,tag=fliegt]"));
+        steps.add(Showcase.tp(X0 + 9.0, 11.0, OZ - 30.0, 0, 6));
+        steps.add(Step.waitTicks(20));
+        // er stirbt und zerfällt
+        // /kill nähme ihn sofort weg – ohne Lebenskraft aber zerfällt er wie im Kampf
+        steps.add(Step.server(level -> {
+            for (var dragon : level.getEntitiesOfClass(net.minecraft.world.entity.boss.enderdragon.EnderDragon.class,
+                    new net.minecraft.world.phys.AABB(new BlockPos(X0, Showcase.ground, OZ)).inflate(60.0), d -> d.entityTags().contains("schwebt"))) {
+                dragon.setHealth(0.0f);
+            }
+        }));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.screenshot("end_dragon_dying"));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("end_dragon_dying2"));
+        steps.add(Step.command("difficulty peaceful"));
+        steps.add(Step.command("gamerule spawn_mobs true"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.hud(true));
+    }
+
+    private static void dragonAt(ServerLevel level, double x, double y, double z, String tag) {
+        var dragon = net.minecraft.world.entity.EntityTypes.ENDER_DRAGON.create(level, EntitySpawnReason.COMMAND);
+        dragon.setNoAi(true);
+        dragon.setPersistenceRequired();
+        dragon.snapTo(x, y, z, 0, 0);
+        dragon.addTag(tag);
+        level.addFreshEntity(dragon);
     }
 
     private static void shulker(ServerLevel level, double x, double y, double z, net.minecraft.world.item.DyeColor color, boolean open) {

@@ -5,6 +5,7 @@ import io.github.sirschrolli.kingdomsatwar.client.model.geom.LeermilbeGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.LeerwandlerGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.SchreinfunkeGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.SchreinlingGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.SternenfresserGeometry;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
@@ -19,6 +20,7 @@ public final class EndRenderers {
     public static final ModelLayerLocation LEERMILBE = layer("leermilbe");
     public static final ModelLayerLocation SCHREINLING = layer("schreinling");
     public static final ModelLayerLocation SCHREINFUNKE = layer("schreinfunke");
+    public static final ModelLayerLocation STERNENFRESSER = layer("sternenfresser");
 
     private EndRenderers() {}
 
@@ -35,6 +37,7 @@ public final class EndRenderers {
         event.registerLayerDefinition(LEERMILBE, LeermilbeGeometry::createLayer);
         event.registerLayerDefinition(SCHREINLING, SchreinlingGeometry::createLayer);
         event.registerLayerDefinition(SCHREINFUNKE, SchreinfunkeGeometry::createLayer);
+        event.registerLayerDefinition(STERNENFRESSER, SternenfresserGeometry::createLayer);
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -43,5 +46,7 @@ public final class EndRenderers {
         event.registerEntityRenderer(ModEntities.SHULKER.get(), SchreinlingRenderer::new);
         // die Geschosse der Schreinlinge sind Vanilla-Geschosse – sie bekommen das eigene Aussehen
         event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.SHULKER_BULLET, SchreinfunkeRenderer::new);
+        // der Enderdrache bleibt der Vanilla-Drache (Kampf, Kristalle, Portal und Ei hängen an ihm) – mit eigenem Aussehen
+        event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.ENDER_DRAGON, SternenfresserRenderer::new);
     }
 }

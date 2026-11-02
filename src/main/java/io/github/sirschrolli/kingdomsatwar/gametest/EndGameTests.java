@@ -148,13 +148,25 @@ final class EndGameTests {
         });
     }
 
-    /** Leerwandler jagen Leermilben (wie Endermen Endermiten). */
+    /**
+     * Leerwandler jagen Leermilben (wie Endermen Endermiten). Unter einem Glasdach: im Tageslicht unter freiem Himmel
+     * springen Leerwandler sonst fort – womöglich in die Prüfflächen nebenan.
+     */
     private static void walkerHuntsMites(GameTestHelper helper) {
         floor(helper);
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 5, z, Blocks.GLASS);
+            }
+        }
         Leerwandler wandler = helper.spawn(ModEntities.ENDERMAN.get(), new BlockPos(2, 1, 4));
         Leermilbe milbe = helper.spawnWithNoFreeWill(ModEntities.ENDERMITE.get(), new BlockPos(6, 1, 4));
         milbe.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 400, 9));
-        helper.succeedWhen(() -> helper.assertTrue(wandler.getTarget() == milbe, "der Leerwandler jagt die Milbe nicht"));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(wandler.getTarget() == milbe, "der Leerwandler jagt die Milbe nicht");
+            wandler.discard();
+            milbe.discard();
+        });
     }
 
     /** Ein roter Vanilla-Shulker (Spawn-Ei, Endstadt) wird ein roter Schreinling mit gleicher UUID. */

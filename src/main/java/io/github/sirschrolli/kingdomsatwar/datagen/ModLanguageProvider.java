@@ -1074,6 +1074,9 @@ public class ModLanguageProvider extends LanguageProvider {
         breeds(ModEntities.ENDERMAN, new String[][]{{"leere", "Void Walker", "Leerwandler"}, {"wirr", "Warped Walker", "Wirrwandler"}});
         creature(ModEntities.ENDERMITE, ModItems.ENDERMITE_SPAWN_EGG, "Void Mite", "Leermilbe", "Leermilben");
         creature(ModEntities.SHULKER, ModItems.SHULKER_SPAWN_EGG, "Shrineling", "Schreinling", "Schreinling");
+        // der Enderdrache bleibt der Vanilla-Drache (der Kampf hängt an ihm), sieht aber aus wie der Sternenfresser und heißt so
+        add("entity.minecraft.ender_dragon", pick("Star Devourer", "Sternenfresser"));
+        add("item.minecraft.ender_dragon_spawn_egg", pick("Star Devourer Spawn Egg", "Sternenfresser-Spawn-Ei"));
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

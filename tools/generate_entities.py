@@ -24,7 +24,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               turtle,
                               allay, copper_golem, iron_golem, snow_golem, happy_ghast, sniffer, sniffer_baby, piglin, piglin_baby,
                               hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube, wither, wither_skull,
-                              enderman, endermite, shulker, shulker_bullet,
+                              enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -263,6 +263,12 @@ def main():
                 "shulker", shulker.PALETTES, preview)
     write_model(shulker_bullet, "SchreinfunkeGeometry", "Geometrie des Schreinfunkens (Knochen \"main\" wie beim Vanilla-Shulker-Geschoss).",
                 "shulker", shulker_bullet.PALETTES, preview)
+    write_model(ender_dragon, "SternenfresserGeometry",
+                "Geometrie des Sternenfressers (Knochen, Drehpunkte und Abstände wie beim Vanilla-Enderdrachen, dessen Animation Hals, "
+                "Schwanz und Flügel bewegt; dazu Hörner, Kamm, Kristalldornen, Krallen und Schwanzklinge).",
+                "ender_dragon", ender_dragon.PALETTES, preview)
+    if not ONLY or "SternenfresserGeometry" in ONLY:
+        ender_dragon.dissolve_mask(256, 256).save(TEX / "ender_dragon" / "sternenfresser_zerfall.png")
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

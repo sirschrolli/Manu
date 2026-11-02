@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.29.0 – Schreinlinge, Leerwandler und Leermilben; Brandgebeine und der Aschenkönig; die Standard-Biome im Stil der eigenen.**
+> **Testversion 0.30.0 – der Sternenfresser, Schreinlinge, Leerwandler und Leermilben; Brandgebeine und der Aschenkönig.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,13 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.29: **Schreinlinge.** Statt Shulkern hausen in den Endstädten **Schreinlinge** – bleiche Wesen mit einem
+> Neu in 0.30: **Der Sternenfresser.** Über dem End kreist statt des Enderdrachen der **Sternenfresser** – Schuppen wie
+> Nachthimmel mit schwach leuchtenden Sternen, ein Riss in die Leere über Kehle und Brust, zwei geschwungene Hörner und
+> ein Kamm aus Purpurkristall über Kopf, Hals, Rücken und Schwanz, violett gleißende Augen, Flughäute wie ein Nebel im
+> All mit leuchtenden Adern und ausgebuchtetem Hinterrand, eine Kristallklinge am Schwanzende. Er stirbt in violetten
+> Strahlen und zerfällt nach eigenem Muster. Der Kampf selbst bleibt, wie er ist: Endkristalle, Heilstrahlen, Odem,
+> Portal, Ei und Endtore.
+> Seit 0.29: **Schreinlinge.** Statt Shulkern hausen in den Endstädten **Schreinlinge** – bleiche Wesen mit einem
 > einzigen großen Auge und zwei Fühlern in geschnitzten Reliquienschreinen aus Stein: Bogennischen mit glimmenden Runen,
 > ein Rautenfries, oben ein achtzackiger Stern mit Medaillon und Seelenstein, Eckbeschläge aus angelaufener Bronze und
 > Zähne unter dem Deckelrand, die beim Öffnen blecken. Sie feuern **Schreinfunken** – Sterne aus Kristallnadeln –, lassen
@@ -187,7 +193,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** der Enderdrache.
+> **Als Nächstes:** die Bauwerke von Nether und End, ganz neu.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -234,8 +240,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Brandgebein (statt Witherskelett) und Aschenkönig (statt Wither) mit Seelenschädeln | ✅ fertig |
 | Leerwandler (statt Enderman, zwei Gestalten) und Leermilbe (statt Endermite) | ✅ fertig |
 | Schreinling (statt Shulker, siebzehn Farben) mit Schreinfunken | ✅ fertig |
+| Sternenfresser (das Aussehen des Enderdrachen) | ✅ fertig |
 | Die Standard-Biome im Stil der eigenen (Felsnadeln, Oasen, Moosfelsen, Stämme, Schilf, Schneewehen …) | ✅ fertig |
-| Das End: Enderdrache; die Bauwerke von Nether und End | 🔨 als Nächstes |
+| Die Bauwerke von Nether und End (ganz neu) | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -890,6 +897,12 @@ Hoglins, Zorn auf Spieler ohne Gold und die Verwandlung in der Oberwelt bleiben,
 | Wesen | statt | Gestalten | Besonderheiten |
 |---|---|---|---|
 | **Schreinling** | Shulker | Purpur und die sechzehn Färbungen | Reliquienschrein aus Stein mit Bogennischen und glimmenden Runen, Rautenfries, Pilastern, achtzackigem Stern mit Medaillon und Seelenstein, Bronzebeschlägen mit Grünspan, Zähnen unter dem Deckelrand und Fuß mit Runenpunkten; darin ein bleiches, von innen leuchtendes Wesen mit einem großen Auge und zwei Fühlern; klammert sich an jede Seite, späht, feuert Schreinfunken (Sterne aus Kristallnadeln, sie lassen schweben), springt fort; Shulkerschalen |
+
+![Der Sternenfresser](docs/bilder/sternenfresser.jpg)
+
+| Wesen | statt | Besonderheiten |
+|---|---|---|
+| **Sternenfresser** | Enderdrache | Schuppen wie Nachthimmel mit leuchtenden Sternen, helle Bauchplatten, Riss in die Leere über Kehle und Brust; Kopf mit Nüstern, Brauenwülsten, Wangendornen, Zähnen und violett gleißenden Augen, zwei geschwungene Hörner aus Purpurkristall; Kristallkamm über Kopf, Hals, Rücken und Schwanz; Flughäute wie ein Nebel im All mit leuchtenden Adern und ausgebuchtetem Hinterrand, Daumenkrallen; Kristallklinge am Schwanzende; stirbt in violetten Strahlen. Er ist der Vanilla-Drache mit eigenem Aussehen und Namen – Kampf, Kristalle, Portal, Ei und Endtore bleiben, wie sie sind |
 
 ### Monster
 
