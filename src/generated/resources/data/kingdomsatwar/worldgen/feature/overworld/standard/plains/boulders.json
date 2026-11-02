@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "minecraft:mossy_cobblestone",
+  "accent_chance": 0.06,
+  "in_water": false,
+  "max_radius": 1.9,
+  "min_radius": 1.0,
+  "secondary": "minecraft:andesite",
+  "secondary_chance": 0.3,
+  "stone": "minecraft:stone",
+  "top": "minecraft:moss_carpet"
+}

@@ -7,6 +7,7 @@ import io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.KingdomBiomeSource;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures;
+import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,8 @@ final class OverworldGameTests {
             ModGameTests.TEST_FUNCTIONS.register("overworld_features", () -> OverworldGameTests::features);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MOOR_BLOCKS =
             ModGameTests.TEST_FUNCTIONS.register("moor_blocks", () -> OverworldGameTests::moorBlocks);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STANDARD_BIOMES =
+            ModGameTests.TEST_FUNCTIONS.register("standard_biomes", () -> OverworldGameTests::standardBiomes);
 
     private OverworldGameTests() {}
 
@@ -74,7 +77,7 @@ final class OverworldGameTests {
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(OVERWORLD_BIOMES, OVERWORLD_FEATURE_ORDER, OVERWORLD_FEATURES, MOOR_BLOCKS)) {
+        for (var test : List.of(OVERWORLD_BIOMES, OVERWORLD_FEATURE_ORDER, OVERWORLD_FEATURES, MOOR_BLOCKS, STANDARD_BIOMES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -251,8 +254,10 @@ final class OverworldGameTests {
                     : name.endsWith("icicles") ? ModBlocks.RIME_STONE.base().get().defaultBlockState() : Blocks.SNOW_BLOCK.defaultBlockState();
         } else if (name.startsWith("storm_coast/") && !name.endsWith("trees")) {
             ground = ModBlocks.STORMSTONE.base().get().defaultBlockState();
-        } else if (name.startsWith("coral_coast/")) {
+        } else if (name.startsWith("coral_coast/") || name.startsWith("standard/desert/")) {
             ground = Blocks.SAND.defaultBlockState();
+        } else if (name.startsWith("standard/snowy/") || name.equals("standard/peaks/ice_spikes")) {
+            ground = Blocks.SNOW_BLOCK.defaultBlockState();
         }
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int dx = -15; dx <= 15; dx++) {
@@ -274,14 +279,14 @@ final class OverworldGameTests {
                     }
                 }
             }
-        } else if (name.equals("mist_moor/reeds")) {
+        } else if (name.equals("mist_moor/reeds") || name.equals("standard/swamp/reeds")) {
             // ein knietiefer Teich mitten im Gras
             for (int dx = -4; dx <= 4; dx++) {
                 for (int dz = -4; dz <= 4; dz++) {
                     level.setBlock(origin.offset(dx, -1, dz), Blocks.WATER.defaultBlockState(), 2);
                 }
             }
-        } else if (name.equals("frost_peaks/icicles")) {
+        } else if (name.endsWith("/icicles")) {
             // ein Felsdach fünf Blöcke über dem Boden
             for (int dx = -7; dx <= 7; dx++) {
                 for (int dz = -7; dz <= 7; dz++) {
@@ -289,6 +294,44 @@ final class OverworldGameTests {
                 }
             }
         }
+    }
+
+    /**
+     * Die Standard-Biome im Stil der eigenen: Jedes ausgewählte Vanilla-Biom hat seine neuen Features – hinter den eigenen
+     * des Bioms, die Oasen etwa ganz am Ende der Seen der Wüste –, kein eigenes Biom hat eins davon; Glühwürmchen,
+     * Pollen, Schneeflocken und Staub treiben in der Luft.
+     */
+    private static void standardBiomes(GameTestHelper helper) {
+        HolderLookup.Provider registries = helper.getLevel().getServer().registryAccess();
+        var placed = registries.lookupOrThrow(Registries.PLACED_FEATURE);
+        var biomes = registries.lookupOrThrow(Registries.BIOME);
+        helper.assertTrue(StandardBiomes.biomes().size() >= 30, "Zu wenige Standard-Biome: " + StandardBiomes.biomes().size());
+        for (ResourceKey<Biome> key : StandardBiomes.biomes()) {
+            Biome biome = biomes.getOrThrow(key).value();
+            for (OverworldFeatures.Entry entry : StandardBiomes.touches(key)) {
+                helper.assertTrue(entry.name().startsWith("standard/"), "Kein Feature der Standard-Biome: " + entry.name());
+                helper.assertTrue(biome.getGenerationSettings().hasFeature(placed.getOrThrow(entry.placedKey()).value()),
+                        key.identifier() + " ohne " + entry.name());
+            }
+        }
+        for (ResourceKey<Biome> key : OverworldBiomes.ALL) {
+            Biome biome = biomes.getOrThrow(key).value();
+            for (OverworldFeatures.Entry entry : OverworldFeatures.entries()) {
+                helper.assertTrue(!entry.name().startsWith("standard/")
+                                || !biome.getGenerationSettings().hasFeature(placed.getOrThrow(entry.placedKey()).value()),
+                        "Das eigene Biom " + key.identifier() + " hat " + entry.name());
+            }
+        }
+        var lakes = biomes.getOrThrow(Biomes.DESERT).value().getGenerationSettings().features()
+                .get(net.minecraft.world.level.levelgen.GenerationStep.Decoration.LAKES.ordinal());
+        helper.assertTrue(lakes.size() > 1 && lakes.get(lakes.size() - 1).is(OverworldFeatures.entries().stream()
+                .filter(e -> e.name().equals("standard/desert/oases")).findFirst().orElseThrow().placedKey()), "Oasen nicht hinter den Seen");
+        for (ResourceKey<Biome> key : List.of(Biomes.DARK_FOREST, Biomes.SWAMP, Biomes.MEADOW, Biomes.JAGGED_PEAKS, Biomes.BADLANDS)) {
+            var particles = biomes.getOrThrow(key).value().getAttributes()
+                    .applyModifier(net.minecraft.world.attribute.EnvironmentAttributes.AMBIENT_PARTICLES, List.of());
+            helper.assertTrue(!particles.isEmpty(), "Nichts in der Luft über " + key.identifier());
+        }
+        helper.succeed();
     }
 
     /**

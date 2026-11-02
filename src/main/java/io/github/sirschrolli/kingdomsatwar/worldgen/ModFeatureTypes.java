@@ -62,6 +62,8 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("moor_tree", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.MoorTreeFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BogPoolFeature>> BOG_POOL =
             FEATURE_TYPES.register("bog_pool", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BogPoolFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.OasisFeature>> OASIS =
+            FEATURE_TYPES.register("oasis", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.OasisFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature>> REED_BED =
             FEATURE_TYPES.register("reed_bed", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.IceSpikeFeature>> ICE_SPIKE =
@@ -87,6 +89,10 @@ public final class ModFeatureTypes {
             REPLACE_SPAWNS = BIOME_MODIFIERS.register("replace_spawns", () -> ReplaceSpawnsBiomeModifier.CODEC);
     public static final DeferredHolder<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>, MapCodec<AddCategorySpawnsBiomeModifier>>
             ADD_CATEGORY_SPAWNS = BIOME_MODIFIERS.register("add_spawns_in_category", () -> AddCategorySpawnsBiomeModifier.CODEC);
+    /** Die Verschönerung der Standard-Biome (siehe {@link io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes}). */
+    public static final DeferredHolder<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>,
+            MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes>> STANDARD_BIOMES =
+            BIOME_MODIFIERS.register("standard_biomes", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes.CODEC);
 
     public static final DeferredRegister<MapCodec<? extends BiomeSource>> BIOME_SOURCES =
             DeferredRegister.create(Registries.BIOME_SOURCE, KingdomsAtWar.MODID);

@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:fallen_trunk",
+  "log": "minecraft:spruce_log",
+  "max_length": 9,
+  "min_length": 5
+}

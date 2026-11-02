@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.24.0 – Nahrung für Bürger und Soldaten, Proviant, Garnison und Schlachtzug.**
+> **Testversion 0.25.0 – die Standard-Biome im Stil der eigenen; Nahrung, Proviant, Garnison und Schlachtzug.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -155,8 +155,15 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > sieben Tagesrationen, erst aus dem Lager, dann aus deinem Gepäck) und nimmst sie **auf einen Schlachtzug** mit: Dann
 > folgen sie dir und leben von ihrem Proviant – wer nichts mehr hat, hungert, heilt nicht mehr und schlägt schwächer zu.
 > Am Tisch oder mit dem Kommandostab schickst du sie wieder heim.
+> Neu in 0.25: **Die Standard-Biome im Stil der eigenen.** Auch die bekannten Landschaften bekommen, was die eigenen
+> Biome so lebendig macht: Felsnadeln aus gebänderter Terrakotta im Tafelland, Granitnadeln in der Savanne,
+> Sandsteinnadeln und **Oasen mit Palmen** in der Wüste, Moosfelsen, umgestürzte Stämme mit Leuchtkappen, Farne,
+> Hainglocken und Dornengestrüpp in den Wäldern, Blumeninseln und hin und wieder eine Königseiche auf den Ebenen,
+> Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
+> verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
+> Schneeflocken und Staub in der Luft.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** schönere Standard-Biome im Stil der eigenen Biome, dann die übrigen Nether- und End-Wesen.
+> **Als Nächstes:** die übrigen Nether-Wesen (Ghast, Lohe, Magmawürfel, Witherskelett, Wither), dann das End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -216,7 +223,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.24.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.25.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -224,7 +231,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.24.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.25.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -388,6 +395,28 @@ Luft, eigene Musik und Klänge.
   unten).
 - Finden mit `/locate biome kingdomsatwar:ash_fields` (bzw. `frost_peaks`, `storm_coast`, `primeval_forest`,
   `rock_gorges`, `coral_coast`, `royal_meadows`, `mist_moor`).
+
+**Die Standard-Biome im neuen Stil:** Auch die bekannten Landschaften bekommen, was die eigenen Biome so lebendig
+macht – passend zu jeder Gegend und nur dort:
+
+![Die Standard-Biome im neuen Stil](docs/bilder/standard_biome.jpg)
+
+| Standard-Biome | Was dazukommt |
+|---|---|
+| Ebenen, Sonnenblumenebenen | Findlinge mit Moospolstern, Blumeninseln (Lavendel, Gartenrosen, Kornblumen, Margeriten …), hin und wieder eine mächtige Königseiche |
+| Bergwiese, Kirschhain | Findlinge aus Stein und Kalk, Hainglocken; auf der Bergwiese Blumeninseln und Königseichen, im Kirschhain umgestürzte Kirschstämme |
+| Wälder, Birkenwälder, dunkler Wald | bemooste Felsen, umgestürzte Stämme mit Moos und Leuchtkappen, Farne, Moosteppiche, Dornengestrüpp und Hainglocken; im dunklen Wald Leuchtkappen und Glühwürmchen |
+| Taiga, Ur-Taiga | Moosfelsen, umgestürzte Fichten, Farne, Moos, Dornengestrüpp; in der Ur-Taiga Leuchtkappen |
+| Bleicher Garten | Felsen mit fahlem Moos, umgestürzte Blasseichen |
+| Schneelande, Schneehänge, Hain, zerklüftete Gipfel | verschneite Felsen mit Eis und Frostkristallen, Schneewehen, Eiszapfen unter Überhängen, kleine Eisnadeln auf den Gipfeln, Schneeflocken in der Luft |
+| Wüste | **Oasen** – ein klarer Teich mit grünem Saum, Zuckerrohr, Seerosen und Palmen –, Sandsteinnadeln und -brocken |
+| Savanne, Tafelland | Felsnadeln aus Granit mit Terrakottabändern bzw. aus gebänderter Terrakotta, Felsbrocken, Bernsteindrusen; Staub über dem Tafelland |
+| Sumpf, Mangrovensumpf | Schilf, abgestorbene Bäume mit fahlem Moos, Moosfelsen, Farne, Glühwürmchen |
+| Dschungel | umgestürzte Urwaldstämme, Moosfelsen, Farne, Moos, Leuchtkappen |
+| Windgepeitschte Hügel, Steingipfel | Windkiefern, grauer Fels, Felsnadeln mit Kalkbändern |
+| Flüsse | Schilf an den Ufern |
+
+Auch das gilt nur für neu erzeugtes Land – in bestehenden Welten kommt es dort dazu, wo du zum ersten Mal hinkommst.
 
 ### Dörfer und Dorfbewohner
 
@@ -1037,7 +1066,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.24.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.25.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

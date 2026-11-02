@@ -222,6 +222,8 @@ public final class ModWorldgen {
     }
 
     /** Biom-Modifikator für das Erscheinen der Banditen. */
+    public static final ResourceKey<BiomeModifier> STANDARD_BIOMES =
+            ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("standard_biomes"));
     public static final ResourceKey<BiomeModifier> BANDIT_SPAWNS =
             ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("add_bandit_spawns"));
     /** Eigene Hof- und Weidetiere statt der Vanilla-Tiere. */
@@ -278,6 +280,9 @@ public final class ModWorldgen {
     public static void bootstrapBiomeModifiers(BootstrapContext<BiomeModifier> context) {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
+
+        // die Standard-Biome im Stil der eigenen (Felsen, Stämme, Farne, Oasen, Schneewehen …)
+        context.register(STANDARD_BIOMES, io.github.sirschrolli.kingdomsatwar.worldgen.overworld.StandardBiomes.INSTANCE);
 
         for (OreVein vein : ORE_VEINS) {
             context.register(vein.modifierKey(), new BiomeModifiers.AddFeaturesBiomeModifier(

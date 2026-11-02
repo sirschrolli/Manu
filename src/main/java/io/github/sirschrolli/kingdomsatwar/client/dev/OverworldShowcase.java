@@ -40,6 +40,28 @@ final class OverworldShowcase {
         }
     }
 
+    /** Die Standard-Biome, die die Mod verschönert (zum Vergleich vorher und nachher an denselben Stellen). */
+    static final List<ResourceKey<Biome>> VANILLA = List.of(net.minecraft.world.level.biome.Biomes.PLAINS,
+            net.minecraft.world.level.biome.Biomes.FOREST, net.minecraft.world.level.biome.Biomes.BIRCH_FOREST,
+            net.minecraft.world.level.biome.Biomes.DARK_FOREST, net.minecraft.world.level.biome.Biomes.TAIGA,
+            net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS, net.minecraft.world.level.biome.Biomes.DESERT,
+            net.minecraft.world.level.biome.Biomes.SAVANNA, net.minecraft.world.level.biome.Biomes.BADLANDS,
+            net.minecraft.world.level.biome.Biomes.SWAMP, net.minecraft.world.level.biome.Biomes.JUNGLE,
+            net.minecraft.world.level.biome.Biomes.MEADOW, net.minecraft.world.level.biome.Biomes.WINDSWEPT_HILLS,
+            net.minecraft.world.level.biome.Biomes.CHERRY_GROVE,
+            net.minecraft.world.level.biome.Biomes.SNOWY_SLOPES, net.minecraft.world.level.biome.Biomes.RIVER);
+
+    /** Rundgang durch die Standard-Biome ({@code vbiomes} oder {@code vbiome_<name>}). */
+    static void vanillaTour(Deque<Step> steps, String only) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        for (ResourceKey<Biome> key : VANILLA) {
+            if (only.isEmpty() || key.identifier().getPath().equals(only)) {
+                biome(steps, key);
+            }
+        }
+    }
+
     /**
      * Galerie der eigenen Features ({@code features} oder {@code features_<biom>}) in der flachen Welt: jedes auf
      * eigenem, passend gestaltetem Boden, dreimal nebeneinander, schräg von oben fotografiert.
@@ -58,7 +80,7 @@ final class OverworldShowcase {
             index++;
             String name = entry.name().replace('/', '_');
             boolean small = entry.name().matches(".*(lilies|flowers|crystals|glowcaps|bells|brambles|ferns|moss_carpets|clusters|moonflowers"
-                    + "|flower_fields|icicles|reeds|fulgurites|reefs|vents|fissures|drifts|dunes|pools|shards).*");
+                    + "|flower_fields|flower_patches|icicles|reeds|fulgurites|reefs|vents|fissures|drifts|dunes|pools|shards).*");
             steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d 135 35", x - 14, ground[0] + 14, z - 14)));
             steps.add(Step.waitTicks(20));
             steps.add(Step.waitForChunks(400));
@@ -101,8 +123,12 @@ final class OverworldShowcase {
                     : Blocks.SNOW_BLOCK.defaultBlockState();
         } else if (name.startsWith("storm_coast/") && !name.endsWith("trees")) {
             ground = io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.STORMSTONE.base().get().defaultBlockState();
-        } else if (name.startsWith("coral_coast/")) {
+        } else if (name.startsWith("coral_coast/") || name.startsWith("standard/desert/")) {
             ground = Blocks.SAND.defaultBlockState();
+        } else if (name.startsWith("standard/badlands/")) {
+            ground = Blocks.RED_SAND.defaultBlockState();
+        } else if (name.startsWith("standard/snowy/") || name.equals("standard/peaks/ice_spikes")) {
+            ground = Blocks.SNOW_BLOCK.defaultBlockState();
         }
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         for (int dx = -radius; dx <= radius; dx++) {
@@ -123,7 +149,7 @@ final class OverworldShowcase {
                     }
                 }
             }
-        } else if (name.equals("mist_moor/reeds")) {
+        } else if (name.equals("mist_moor/reeds") || name.equals("standard/swamp/reeds")) {
             for (int dx = -5; dx <= 5; dx++) {
                 for (int dz = -5; dz <= 5; dz++) {
                     if (dx * dx + dz * dz <= 22) {
@@ -131,7 +157,7 @@ final class OverworldShowcase {
                     }
                 }
             }
-        } else if (name.equals("frost_peaks/icicles")) {
+        } else if (name.endsWith("/icicles")) {
             for (int dx = -8; dx <= 8; dx++) {
                 for (int dz = -8; dz <= 8; dz++) {
                     level.setBlock(origin.offset(dx, 5, dz), Blocks.PACKED_ICE.defaultBlockState(), 2);
@@ -186,7 +212,7 @@ final class OverworldShowcase {
     /** Sucht das Biom und darin eine Stelle, um die herum möglichst viel davon liegt; lädt das Gelände dort. */
     private static void locate(ServerLevel level, ResourceKey<Biome> key, double[] c) {
         String name = key.identifier().getPath();
-        int sampleY = key == OverworldBiomes.FROST_PEAKS ? 150 : 70;
+        int sampleY = key == OverworldBiomes.FROST_PEAKS || key == net.minecraft.world.level.biome.Biomes.SNOWY_SLOPES ? 150 : 70;
         Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(biome -> biome.is(key), new BlockPos(0, sampleY, 0), 6400, 32, 64);
         if (found == null) {
             KingdomsAtWar.LOGGER.info("[Showcase] Biom {} nicht gefunden", name);
@@ -194,7 +220,8 @@ final class OverworldShowcase {
             return;
         }
         BlockPos start = found.getFirst();
-        boolean coast = key == OverworldBiomes.CORAL_COAST || key == OverworldBiomes.STORM_COAST;
+        boolean coast = key == OverworldBiomes.CORAL_COAST || key == OverworldBiomes.STORM_COAST
+                || key == net.minecraft.world.level.biome.Biomes.STONY_SHORE || key == net.minecraft.world.level.biome.Biomes.RIVER;
         // die Stelle mit der größten Abdeckung im Umkreis
         BlockPos best = start;
         int bestScore = -1;

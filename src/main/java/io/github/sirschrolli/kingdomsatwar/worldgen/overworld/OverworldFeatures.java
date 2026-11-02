@@ -13,6 +13,7 @@ import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GrandOakFe
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.IceSpikeFeature;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.IcicleFeature;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.MoorTreeFeature;
+import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.OasisFeature;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.PalmFeature;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReefFeature;
@@ -309,6 +310,112 @@ public final class OverworldFeatures {
     // --- oberste Schicht ---
     static final Entry FROST_DRIFTS = own(TOP, "frost_peaks/snow_drifts", () -> new DuneFeature(Blocks.SNOW.defaultBlockState(), 4.5f, 4),
             ground(count(2), 0));
+
+    // =====================================================================================
+    // Die Standard-Biome: was sie dazubekommen (siehe StandardBiomes) – nur dort, nie in den eigenen Biomen
+    // =====================================================================================
+
+    // --- Seen ---
+    /** Oasen: ein Teich mit grünem Saum und Palmen mitten in der Wüste. */
+    static final Entry STD_OASES = own(LAKES, "standard/desert/oases", OasisFeature::new, ground(rare(36), 0));
+
+    // --- Felsen und Nadeln ---
+    /** Einzelne Findlinge auf den Ebenen, oben bemoost. */
+    static final Entry STD_FIELD_BOULDERS = own(LOCAL, "standard/plains/boulders", () -> new BoulderFeature(Blocks.STONE.defaultBlockState(),
+            Blocks.ANDESITE.defaultBlockState(), 0.3f, Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 0.06f, Blocks.MOSS_CARPET.defaultBlockState(),
+            1.0f, 1.9f, false), ground(rare(12), 0));
+    /** Moosfelsen in den Wäldern, im Dschungel und im Sumpf. */
+    static final Entry STD_MOSSY_BOULDERS = own(LOCAL, "standard/forest/mossy_boulders", () -> new BoulderFeature(
+            Blocks.COBBLESTONE.defaultBlockState(), Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 0.55f, Blocks.MOSS_BLOCK.defaultBlockState(),
+            0.04f, Blocks.MOSS_CARPET.defaultBlockState(), 1.2f, 2.2f, false), ground(rare(6), 0));
+    /** Im bleichen Garten tragen die Felsen fahles Moos. */
+    static final Entry STD_PALE_BOULDERS = own(LOCAL, "standard/pale_garden/boulders", () -> new BoulderFeature(
+            Blocks.COBBLESTONE.defaultBlockState(), Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 0.35f, Blocks.PALE_MOSS_BLOCK.defaultBlockState(),
+            0.06f, Blocks.PALE_MOSS_CARPET.defaultBlockState(), 1.2f, 2.2f, false), ground(rare(5), 0));
+    /** Schneebedeckte Felsen mit Eis und Raureif in den Schneelanden. */
+    static final Entry STD_SNOW_BOULDERS = own(LOCAL, "standard/snowy/boulders", () -> new BoulderFeature(Blocks.STONE.defaultBlockState(),
+            Blocks.PACKED_ICE.defaultBlockState(), 0.15f, state(ModBlocks.FROST_CRYSTAL), 0.02f, Blocks.SNOW.defaultBlockState(), 1.2f, 2.3f,
+            false), ground(rare(6), 0));
+    /** Kleine Eisnadeln auf den Gipfeln, wie auf den Frostgipfeln. */
+    static final Entry STD_ICE_SPIKES = own(LOCAL, "standard/peaks/ice_spikes", () -> new IceSpikeFeature(4, 9), ground(rare(5), 0));
+    /** Sandsteinnadeln in der Wüste … */
+    static final Entry STD_DESERT_SPIRES = own(LOCAL, "standard/desert/spires", () -> new SpireFeature(Blocks.SANDSTONE.defaultBlockState(),
+            Blocks.SMOOTH_SANDSTONE.defaultBlockState(), 3, Blocks.AIR.defaultBlockState(), 4, 9, 1.3f, 0.12f, false), ground(rare(9), 0));
+    /** … und Sandsteinbrocken, halb im Sand versunken. */
+    static final Entry STD_DESERT_BOULDERS = own(LOCAL, "standard/desert/boulders", () -> new BoulderFeature(
+            Blocks.SANDSTONE.defaultBlockState(), Blocks.SMOOTH_SANDSTONE.defaultBlockState(), 0.35f, Blocks.TERRACOTTA.defaultBlockState(),
+            0.03f, Blocks.AIR.defaultBlockState(), 1.2f, 2.4f, false), ground(rare(5), 0));
+    /** Granitnadeln mit Terrakottabändern in der Savanne – wie in den Felsschluchten. */
+    static final Entry STD_SAVANNA_SPIRES = own(LOCAL, "standard/savanna/spires", () -> new SpireFeature(Blocks.GRANITE.defaultBlockState(),
+            Blocks.TERRACOTTA.defaultBlockState(), 3, Blocks.AIR.defaultBlockState(), 5, 12, 1.6f, 0.1f, false), ground(rare(10), 0));
+    static final Entry STD_SAVANNA_BOULDERS = own(LOCAL, "standard/savanna/boulders", () -> new BoulderFeature(
+            Blocks.GRANITE.defaultBlockState(), Blocks.TERRACOTTA.defaultBlockState(), 0.3f, state(ModBlocks.AMBER_CRYSTAL), 0.02f,
+            Blocks.AIR.defaultBlockState(), 1.3f, 2.6f, false), ground(rare(5), 0));
+    /** Felsnadeln aus gebänderter Terrakotta im Tafelland. */
+    static final Entry STD_BADLANDS_SPIRES = own(LOCAL, "standard/badlands/spires", () -> new SpireFeature(
+            Blocks.DYED_TERRACOTTA.orange().defaultBlockState(), Blocks.DYED_TERRACOTTA.white().defaultBlockState(), 4, Blocks.RED_SANDSTONE.defaultBlockState(),
+            7, 16, 1.8f, 0.08f, false), ground(rare(4), 0));
+    static final Entry STD_BADLANDS_BOULDERS = own(LOCAL, "standard/badlands/boulders", () -> new BoulderFeature(
+            Blocks.RED_SANDSTONE.defaultBlockState(), Blocks.TERRACOTTA.defaultBlockState(), 0.35f, state(ModBlocks.AMBER_CRYSTAL), 0.02f,
+            Blocks.AIR.defaultBlockState(), 1.2f, 2.4f, false), ground(rare(5), 0));
+    /** Grauer Fels auf den windgepeitschten Hügeln und Steingipfeln … */
+    static final Entry STD_HILL_BOULDERS = own(LOCAL, "standard/windswept/boulders", () -> new BoulderFeature(Blocks.STONE.defaultBlockState(),
+            Blocks.ANDESITE.defaultBlockState(), 0.35f, Blocks.COBBLESTONE.defaultBlockState(), 0.05f, Blocks.AIR.defaultBlockState(),
+            1.4f, 2.8f, false), ground(rare(4), 0));
+    /** … und Felsnadeln mit Kalkbändern. */
+    static final Entry STD_PEAK_SPIRES = own(LOCAL, "standard/windswept/spires", () -> new SpireFeature(Blocks.STONE.defaultBlockState(),
+            Blocks.CALCITE.defaultBlockState(), 4, Blocks.AIR.defaultBlockState(), 6, 14, 1.6f, 0.1f, false), ground(rare(7), 0));
+    /** Findlinge aus Stein und Kalk auf der Bergwiese und im Kirschhain. */
+    static final Entry STD_MEADOW_BOULDERS = own(LOCAL, "standard/meadow/boulders", () -> new BoulderFeature(Blocks.STONE.defaultBlockState(),
+            Blocks.CALCITE.defaultBlockState(), 0.3f, Blocks.ANDESITE.defaultBlockState(), 0.08f, Blocks.AIR.defaultBlockState(), 1.0f, 2.0f,
+            false), ground(rare(7), 0));
+
+    // --- unter Überhängen ---
+    static final Entry STD_ICICLES = own(UNDERGROUND, "standard/peaks/icicles", () -> new IcicleFeature(20), anywhere(count(2)));
+
+    // --- Pflanzen und Bäume ---
+    /** Hin und wieder eine mächtige Königseiche auf den Ebenen und Bergwiesen. */
+    static final Entry STD_GRAND_OAKS = own(VEGETATION, "standard/plains/grand_oaks", GrandOakFeature::new, ground(rare(14), 0));
+    /** Blumeninseln: in jedem Fleck blüht vor allem eine Sorte – Lavendel, Rosen, Kornblumen, Margeriten … */
+    static final Entry STD_FLOWER_PATCHES = own(VEGETATION, "standard/plains/flower_patches", () -> new SimpleBlockFeature(new NoiseProvider(
+            9134L, NormalNoise.createParity(0, 1.0), 0.05f, List.of(
+                    state(ModBlocks.LAVENDER), Blocks.CORNFLOWER.defaultBlockState(), state(ModBlocks.GARDEN_ROSE),
+                    Blocks.OXEYE_DAISY.defaultBlockState(), state(ModBlocks.LAVENDER), Blocks.POPPY.defaultBlockState(),
+                    Blocks.AZURE_BLUET.defaultBlockState(), state(ModBlocks.GARDEN_ROSE), Blocks.ALLIUM.defaultBlockState(),
+                    state(ModBlocks.LAVENDER)))),
+            patch(rare(3), 40, 5));
+    static final Entry STD_FALLEN_OAKS = own(VEGETATION, "standard/forest/fallen_oaks", () -> new FallenTrunkFeature(
+            Blocks.OAK_LOG.defaultBlockState(), 4, 8), ground(rare(4), 0));
+    static final Entry STD_FALLEN_BIRCHES = own(VEGETATION, "standard/birch_forest/fallen_birches", () -> new FallenTrunkFeature(
+            Blocks.BIRCH_LOG.defaultBlockState(), 4, 8), ground(rare(4), 0));
+    static final Entry STD_FALLEN_DARK_OAKS = own(VEGETATION, "standard/dark_forest/fallen_dark_oaks", () -> new FallenTrunkFeature(
+            Blocks.DARK_OAK_LOG.defaultBlockState(), 4, 7), ground(rare(3), 0));
+    static final Entry STD_FALLEN_PALE_OAKS = own(VEGETATION, "standard/pale_garden/fallen_pale_oaks", () -> new FallenTrunkFeature(
+            Blocks.PALE_OAK_LOG.defaultBlockState(), 4, 7), ground(rare(4), 0));
+    static final Entry STD_FALLEN_SPRUCES = own(VEGETATION, "standard/taiga/fallen_spruces", () -> new FallenTrunkFeature(
+            Blocks.SPRUCE_LOG.defaultBlockState(), 5, 9), ground(rare(3), 0));
+    static final Entry STD_FALLEN_JUNGLE = own(VEGETATION, "standard/jungle/fallen_trunks", () -> new FallenTrunkFeature(
+            Blocks.JUNGLE_LOG.defaultBlockState(), 5, 10), ground(rare(3), 0));
+    static final Entry STD_FALLEN_CHERRIES = own(VEGETATION, "standard/cherry_grove/fallen_cherries", () -> new FallenTrunkFeature(
+            Blocks.CHERRY_LOG.defaultBlockState(), 4, 7), ground(rare(5), 0));
+    /** Windkiefern auf den windgepeitschten Hügeln – wie an der Sturmküste. */
+    static final Entry STD_WINDSWEPT_TREES = own(VEGETATION, "standard/windswept/windswept_trees", WindsweptTreeFeature::new, ground(rare(2), 0));
+    /** Abgestorbene Bäume mit fahlem Moos im Sumpf – wie im Nebelmoor. */
+    static final Entry STD_SWAMP_DEAD_TREES = own(VEGETATION, "standard/swamp/dead_trees", () -> new MoorTreeFeature(true), ground(rare(4), 0));
+    static final Entry STD_FERNS = own(VEGETATION, "standard/forest/ferns", weighted(b -> b.add(Blocks.FERN.defaultBlockState(), 3)
+            .add(Blocks.LARGE_FERN.defaultBlockState(), 1)), patch(rare(2), 18, 5));
+    static final Entry STD_MOSS = own(VEGETATION, "standard/forest/moss_carpets", block(() -> Blocks.MOSS_CARPET), patch(rare(3), 16, 4));
+    static final Entry STD_GLOWCAPS = own(VEGETATION, "standard/forest/glowcaps", block(ModBlocks.GLOWCAP), patch(rare(4), 8, 3));
+    static final Entry STD_GROVE_BELLS = own(VEGETATION, "standard/forest/grove_bells", block(ModBlocks.GROVE_BELL), patch(rare(3), 10, 4));
+    static final Entry STD_BRAMBLES = own(VEGETATION, "standard/forest/brambles", block(ModBlocks.BRAMBLE), patch(rare(5), 6, 3));
+    /** Schilf im Sumpf und an den Flussufern. */
+    static final Entry STD_REEDS = own(VEGETATION, "standard/swamp/reeds", () -> new ReedBedFeature(20), anywhere(count(2)));
+    static final Entry STD_AMBER = own(VEGETATION, "standard/savanna/amber_clusters", block(ModBlocks.AMBER_CLUSTER), patch(rare(10), 5, 3));
+
+    // --- oberste Schicht ---
+    /** Schneewehen wie auf den Frostgipfeln. */
+    static final Entry STD_SNOW_DRIFTS = own(TOP, "standard/snowy/snow_drifts", () -> new DuneFeature(Blocks.SNOW.defaultBlockState(), 4.0f, 3),
+            ground(count(1), 0));
 
     // =====================================================================================
     // Registrierung (Datengenerierung)

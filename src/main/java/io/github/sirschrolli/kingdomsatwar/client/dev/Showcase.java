@@ -166,6 +166,10 @@ final class Showcase {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         OverworldShowcase.gallery(steps, g, scene.equals("features") ? "" : scene.substring(9));
+                    } else if (scene.equals("vbiomes")) {
+                        OverworldShowcase.vanillaTour(steps, "");
+                    } else if (scene.startsWith("vbiome_")) {
+                        OverworldShowcase.vanillaTour(steps, scene.substring(7));
                     } else if (scene.equals("biomes")) {
                         OverworldShowcase.tour(steps, "");
                     } else if (scene.startsWith("biome_")) {
