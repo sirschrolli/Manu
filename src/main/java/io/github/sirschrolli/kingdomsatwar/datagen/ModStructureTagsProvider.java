@@ -34,9 +34,9 @@ public class ModStructureTagsProvider extends TagsProvider<Structure> {
         this.tag(StructureTags.ON_SWAMP_HUT_MAPS).replace().add(ModStructures.site(SiteKind.WITCH_TREE));
         this.tag(StructureTags.CATS_SPAWN_IN).replace().add(ModStructures.site(SiteKind.WITCH_TREE));
         this.tag(StructureTags.CATS_SPAWN_AS_BLACK).replace().add(ModStructures.site(SiteKind.WITCH_TREE));
-        // Portalruinen: die Glutpforte; die Ruinen im Nether bleiben (bis der Nether eigene Bauwerke bekommt)
+        // Portalruinen: die Glutpforte in der Oberwelt, die Verlorene Pforte im Nether
         this.tag(StructureTags.RUINED_PORTAL).replace().add(ModStructures.site(SiteKind.EMBER_GATE))
-                .add(net.minecraft.world.level.levelgen.structure.BuiltinStructures.RUINED_PORTAL_NETHER);
+                .add(ModStructures.site(SiteKind.LOST_GATE));
         this.tag(StructureTags.ABANDONED_CAMP).replace().add(ModStructures.site(SiteKind.CHARCOAL_CAMP));
         this.tag(StructureTags.OCEAN_RUIN).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));
         this.tag(StructureTags.ON_OCEAN_RUIN_WARM_MAPS).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));

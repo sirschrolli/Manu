@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.33.0 – die Hortfeste der Borstlinge statt der Bastion; dazu Unterholz und sattere Farben, die Aschenesse, Bäume in neuer Gestalt, karge Truhen und seltenere Bauwerke.**
+> **Testversion 0.34.0 – Riesengebeine im Seelensandtal und die Verlorene Pforte statt der letzten Vanilla-Bauwerke des Nethers; dazu die Hortfeste, die Aschenesse, Unterholz, Bäume in neuer Gestalt und karge Truhen.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -162,7 +162,14 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Schilf und tote Bäume im Sumpf und an den Flüssen, Windkiefern und Felsnadeln auf den windgepeitschten Hügeln,
 > verschneite Felsen, Schneewehen, Eisnadeln und Eiszapfen in den Schneelanden – dazu Glühwürmchen, Pollen,
 > Schneeflocken und Staub in der Luft.
-> Neu in 0.33: **Die Hortfeste.** Statt der Bastionen horten die Borstlinge ihr Gold in einer **Stufenburg** aus
+> Neu in 0.34: **Riesengebeine und die Verlorene Pforte.** Im Seelensandtal liegen statt der Netherfossilien die
+> **Gebeine gewaltiger Wesen** halb im Sand: ein Brustkorb, unter dessen Rippen man hindurchgeht, ein gehörnter
+> **Schädel** mit Seelenfeuer in den Augenhöhlen, das Rückgrat einer **Riesenschlange**, das sich in Bögen durch den
+> Sand windet, oder eine **Knochenhand**, die aus dem Boden greift – manchmal mit einem vertrockneten Ghast. Statt der
+> Portalruinen steht im Nether die **Verlorene Pforte**: das Ankunftstor der Feuerdiener unter einem Spitzbogen auf
+> einem Stufenpodest, mit Obelisken und Seelenfeuer, ihrem letzten Lager und einer Truhe; im Lavameer trägt sie eine
+> Insel aus Basalt. Damit ist der Nether ganz neu.
+> Seit 0.33: **Die Hortfeste.** Statt der Bastionen horten die Borstlinge ihr Gold in einer **Stufenburg** aus
 > Schwarzstein: drei Absätze mit goldenem Fries und Zinnen, vier Ecktürme mit Feuerschalen und eine Freitreppe, die vom
 > Vorhof mit seinem Tor bis auf die oberste Plattform führt. Dort steht der **goldene Keiler**, das Götzenbild der
 > Borstlinge aus Blattgold, mit glühenden Augen, schlanken weißen Hauern und einem Kamm aus dunklen Borsten. Innen liegen
@@ -221,7 +228,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die übrigen Bauwerke von Nether und End, ganz neu – statt der Netherfossilien und der Endstädte.
+> **Als Nächstes:** die Bauwerke des Ends, ganz neu – statt der Endstädte und Endschiffe (Elytren bleiben zu finden).
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -275,7 +282,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Karge Truhen, seltenere Bauwerke, Holzfäller mit eigenem Hain | ✅ fertig |
 | Aschenesse statt Netherfestung | ✅ fertig |
 | Hortfeste der Borstlinge statt Bastion | ✅ fertig |
-| Die übrigen Bauwerke von Nether und End (Netherfossilien, Endstadt – ganz neu) | 🔨 als Nächstes |
+| Riesengebeine statt Netherfossilien, Verlorene Pforte statt Portalruine im Nether | ✅ fertig |
+| Die Bauwerke des Ends (Endstadt und Endschiff – ganz neu) | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -693,6 +701,46 @@ Wirrwäldern, den Netherwüsten und im Seelensandtal, wo früher die Bastionen s
   und mit etwas Glück ebenfalls eine Vorlage. Der Erfolg für das Betreten einer Bastion heißt jetzt „Die Hortfeste“ und
   verlangt, eine zu betreten; der für das Plündern einer Bastion-Truhe gilt für die Truhen der Hortfeste.
 - Finden mit `/locate structure kingdomsatwar:hortfeste`; sie hat die Plätze der Bastionen übernommen.
+
+![Die Riesengebeine](docs/bilder/riesengebeine.jpg)
+
+**Die Riesengebeine** (statt der Netherfossilien): Im Seelensandtal liegen die Knochen gewaltiger Wesen aus alter Zeit,
+halb im Sand versunken – auf dem Grund der Täler, auf Hängen und Absätzen. Es gibt vier Arten, jede ein wenig anders
+gewachsen und zerbrochen:
+
+- **Der Brustkorb** eines Riesen, der auf dem Bauch liegt: ein Rückgrat im hohen Bogen, alle drei Blöcke ein
+  Rippenpaar bis in den Sand (groß genug, um darunter hindurchzugehen), hinten das Becken; vorn steckt der Schädel im
+  Sand – nur die Stirn schaut heraus, in den Augenhöhlen brennt Seelenfeuer, manchmal ragen die Hörner hervor.
+- **Der Schädel** eines gehörnten Tiers, der auf seinem Unterkiefer ruht: Schädelkapsel, lange Schnauze mit
+  Nasenrücken und Zahnreihe, Jochbögen, zwei mächtige Hörner (weit ausladend oder steil nach hinten), tiefe
+  Augenhöhlen mit Seelenfeuer. Hinten ist er aufgebrochen; drinnen glüht es.
+- **Die Riesenschlange:** ein Rückgrat, das sich in Bögen durch den Sand windet, mit Dornen und kurzen Rippen, die
+  Schwanzspitze im Sand, vorn der lange Kopf mit offenem Maul, in dem Seelenfeuer brennt.
+- **Die Knochenhand:** Elle und Speiche schräg aus dem Boden, vier gespreizte Finger aus drei Gliedern mit gekrümmten
+  Krallen und ein abgespreizter Daumen; ringsum aufgewühlter Grund.
+- Ringsum liegen einzelne Knochen, der Sand ist hier und da zu Seelenerde geworden, und bei jedem zweiten Gerippe liegt
+  ein **vertrockneter Ghast**. Keine Beute – die Gebeine sind ein Anblick, kein Schatz.
+- Finden mit `/locate structure kingdomsatwar:giant_bones`; sie haben die Plätze der Netherfossilien übernommen
+  (seltener: etwa alle vier Chunks eins).
+
+![Die Verlorene Pforte](docs/bilder/verlorene_pforte.jpg)
+
+**Die Verlorene Pforte** (statt der Portalruine im Nether): Hier kamen die Feuerdiener an, die einst den Weg in die
+Unterwelt suchten – das Gegenstück zur Glutpforte der Oberwelt. Zurück kamen sie nicht.
+
+- **Das Tor:** ein Rahmen aus Obsidian unter einem Spitzbogen aus Schwarzsteinziegeln mit Pfeilern, Sturz und
+  vergoldetem Schlussstein; vorn und hinten hängt je eine Seelenlaterne. Einige Steine sind gesprungen (weinender
+  Obsidian), einige herausgebrochen – sie liegen auf den Stufen. **Wer sie wieder einsetzt (und den weinenden Obsidian
+  ersetzt), kann das Tor entzünden.** Manchmal ist eine Seite des Bogens eingestürzt.
+- **Das Podest:** drei Stufen aus Schwarzsteinziegeln mit Treppenkanten, gesprungen und ausgebrochen, oben ein Ring aus
+  gemeißelten Platten; ein Riss im Podest glüht. Ringsum verbrannter Boden aus Schwarzstein, Basalt und Magma.
+- **Vier Obelisken** aus Basalt mit Seelenfeuer auf der Spitze und Ketten daran; einer ist umgestürzt.
+- **Das letzte Lager** der Feuerdiener: eine kalte Feuerstelle, zwei Schlafrollen, ein Fass, eine Laterne an einem
+  Pfahl und eine **Truhe** mit der Beute der Portalruine und ein paar Münzen.
+- Im **Lavameer** trägt eine Insel aus Basalt das Podest, am Rand ragen Basaltsäulen aus der Lava; sonst steht die
+  Pforte auf dem Grund einer Höhle, die sie zu einer flachen Kuppel aushöhlt (Lava daneben erstarrt zu Schwarzstein) –
+  in allen Biomen des Nethers.
+- Finden mit `/locate structure kingdomsatwar:lost_gate`; sie hat die Plätze der Portalruinen im Nether übernommen.
 
 ### Die Nester
 
@@ -1234,6 +1282,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
   Sternensturz mit dem Portal ins Ende bis zur Raubritterburg im dunklen Wald.
 - **Die Aschenesse** im Nether an Stelle der Netherfestung (siehe „Bauwerke des Nethers“).
 - **Die Hortfeste** im Nether an Stelle der Bastion (siehe „Bauwerke des Nethers“).
+- **Die Riesengebeine** im Seelensandtal an Stelle der Netherfossilien und **die Verlorene Pforte** im Nether an Stelle
+  der Portalruine (siehe „Bauwerke des Nethers“).
 - **Burgruinen** in Ebenen, Wäldern und der Taiga: verfallene Mauern mit Ecktürmen und Zinnen, eine Truhe mit Beute
   (Vorräte, Stahl, Edelsteine, mit Glück Runen, der Aetherit-Stab, die Königskrone oder ein Drachenkompass) – und
   manchmal Banditen.
@@ -1323,8 +1373,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
    - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
    - **die übrigen Dorfwesen** – Urwühler, Wolkenqualle, Dorfbewohner und fahrender Händler (fertig);
-   - zuletzt **Nether und End** – die Wesen sind fertig, von den Bauwerken die Aschenesse und die Hortfeste; es
-     folgen Netherfossilien und Endstadt.
+   - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
+     Riesengebeine, Verlorene Pforte); es folgen Endstadt und Endschiff.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 
 ## Danksagung

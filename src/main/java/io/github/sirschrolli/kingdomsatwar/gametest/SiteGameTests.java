@@ -99,6 +99,13 @@ final class SiteGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ASH_FORGE_BRIDGES =
             ModGameTests.TEST_FUNCTIONS.register("site_ash_forge_bridges", () -> SiteGameTests::ashForgeBridges);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GIANT_BONES_A =
+            ModGameTests.TEST_FUNCTIONS.register("site_giant_bones_ribs_serpent", () -> SiteGameTests::giantBonesA);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GIANT_BONES_B =
+            ModGameTests.TEST_FUNCTIONS.register("site_giant_bones_skull_claw", () -> SiteGameTests::giantBonesB);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LOST_GATE =
+            ModGameTests.TEST_FUNCTIONS.register("site_lost_gate", () -> SiteGameTests::lostGate);
+
     private SiteGameTests() {}
 
     static void init() {}
@@ -125,6 +132,9 @@ final class SiteGameTests {
         add(event, environment, ASH_FORGE, 100);
         add(event, environment, ASH_FORGE_BRIDGES, 100);
         add(event, environment, HORTFESTE, 100);
+        add(event, environment, GIANT_BONES_A, 100);
+        add(event, environment, GIANT_BONES_B, 100);
+        add(event, environment, LOST_GATE, 100);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
@@ -1159,7 +1169,7 @@ final class SiteGameTests {
                 BiomeTags.HAS_RUINED_PORTAL_DESERT, BiomeTags.HAS_ABANDONED_CAMP_FOREST, BiomeTags.HAS_ABANDONED_CAMP_TAIGA,
                 BiomeTags.HAS_OCEAN_RUIN_COLD, BiomeTags.HAS_OCEAN_RUIN_WARM, BiomeTags.HAS_OCEAN_MONUMENT, BiomeTags.HAS_TRAIL_RUINS,
                 BiomeTags.HAS_ANCIENT_CITY, BiomeTags.HAS_TRIAL_CHAMBERS, BiomeTags.HAS_WOODLAND_MANSION, BiomeTags.HAS_NETHER_FORTRESS,
-                BiomeTags.HAS_BASTION_REMNANT)) {
+                BiomeTags.HAS_BASTION_REMNANT, BiomeTags.HAS_NETHER_FOSSIL, BiomeTags.HAS_RUINED_PORTAL_NETHER)) {
             helper.assertTrue(biomes.get(tag).map(set -> set.size() == 0).orElse(true), "altes Bauwerk noch erlaubt: " + tag.location());
         }
         // in der Unterwelt nimmt die Aschenesse die Plätze der Festung ein (neben den Bastionen)
@@ -1173,6 +1183,17 @@ final class SiteGameTests {
                 "die Hortfeste fehlt bei den Plätzen der Unterwelt");
         helper.assertTrue(complexes.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.BASTION_REMNANT)),
                 "die alte Bastion hat noch Plätze");
+        // die Riesengebeine an Stelle der Netherfossilien, die Verlorene Pforte an Stelle der Portalruine im Nether
+        var fossils = access.lookupOrThrow(Registries.STRUCTURE_SET)
+                .getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.NETHER_FOSSILS).value();
+        helper.assertTrue(fossils.structures().size() == 1 && fossils.structures().getFirst().structure().is(ModStructures.site(SiteKind.GIANT_BONES)),
+                "die Plätze der Netherfossilien gehören nicht den Riesengebeinen");
+        var portals = access.lookupOrThrow(Registries.STRUCTURE_SET)
+                .getOrThrow(net.minecraft.world.level.levelgen.structure.BuiltinStructureSets.RUINED_PORTALS).value();
+        helper.assertTrue(portals.structures().stream().anyMatch(e -> e.structure().is(ModStructures.site(SiteKind.LOST_GATE))),
+                "die Verlorene Pforte fehlt bei den Portalruinen");
+        helper.assertTrue(portals.structures().stream().noneMatch(e -> e.structure().is(BuiltinStructures.RUINED_PORTAL_NETHER)),
+                "die alte Portalruine des Nethers hat noch Plätze");
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         for (var key : List.of(BuiltinStructures.STRONGHOLD, BuiltinStructures.MINESHAFT, BuiltinStructures.MINESHAFT_MESA,
                 BuiltinStructures.BURIED_TREASURE, BuiltinStructures.SHIPWRECK, BuiltinStructures.SHIPWRECK_BEACHED)) {
@@ -1194,6 +1215,177 @@ final class SiteGameTests {
             helper.assertTrue(set.size() == 1 && set.get(0).is(ModStructures.site(e.kind())), e.tag().location() + " zeigt nicht auf "
                     + e.kind().id());
         }
+        helper.succeed();
+    }
+
+    // =====================================================================================
+    // Riesengebeine und Verlorene Pforte
+    // =====================================================================================
+
+    /**
+     * Knochenblöcke, die keinen Halt haben: Jeder Knochen muss über andere Knochen mit dem Boden verbunden sein (im Sand
+     * stecken oder auf etwas Festem liegen).
+     */
+    private static int floatingBones(GameTestHelper helper, BlockPos a, BlockPos b, int groundY) {
+        ServerLevel level = helper.getLevel();
+        java.util.Set<BlockPos> bones = new java.util.HashSet<>();
+        for (BlockPos pos : BlockPos.betweenClosed(a, b)) {
+            if (level.getBlockState(pos).is(Blocks.BONE_BLOCK)) {
+                bones.add(pos.immutable());
+            }
+        }
+        java.util.ArrayDeque<BlockPos> queue = new java.util.ArrayDeque<>();
+        java.util.Set<BlockPos> held = new java.util.HashSet<>();
+        for (BlockPos pos : bones) {
+            BlockState below = level.getBlockState(pos.below());
+            if (pos.getY() <= groundY || !below.isAir() && !below.is(Blocks.BONE_BLOCK)) {
+                held.add(pos);
+                queue.add(pos);
+            }
+        }
+        while (!queue.isEmpty()) {
+            BlockPos pos = queue.poll();
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+                BlockPos n = pos.relative(d);
+                if (bones.contains(n) && held.add(n)) {
+                    queue.add(n);
+                }
+            }
+        }
+        if (bones.size() > held.size()) {
+            KingdomsAtWar.LOGGER.info("[Test] ohne Halt: {}", bones.stream().filter(p -> !held.contains(p)).limit(24)
+                    .map(p -> helper.relativePos(p).toShortString()).toList());
+        }
+        return bones.size() - held.size();
+    }
+
+    /** Baut ein Gerippe auf Seelensand (Oberfläche bei y = 3) und prüft Umfang und Halt. */
+    private static int bones(GameTestHelper helper, List<String> problems, int variant, int x, long seed, int minBones) {
+        BlockPos origin = helper.absolutePos(new BlockPos(x, 4, 24));
+        build(helper, SiteSamples.giantBones(origin, variant, seed));
+        BlockPos a = origin.offset(-11, -3, -23);
+        BlockPos b = origin.offset(11, 14, 23);
+        int n = count(helper, a, b, st -> st.is(Blocks.BONE_BLOCK));
+        int floating = floatingBones(helper, a, b, origin.getY() - 1);
+        int ghasts = count(helper, a, b, st -> st.is(Blocks.DRIED_GHAST));
+        KingdomsAtWar.LOGGER.info("[Test] Riesengebeine {}: {} Knochen, {} ohne Halt, {} Ghast(e)", variant, n, floating, ghasts);
+        if (n < minBones) {
+            problems.add("Gebeine " + variant + ": nur " + n + " Knochen");
+        }
+        if (floating > 0) {
+            problems.add("Gebeine " + variant + ": " + floating + " Knochen ohne Halt");
+        }
+        if (count(helper, a, b, st -> st.is(Blocks.SOUL_FIRE)) > 0
+                && count(helper, a, b, st -> st.is(Blocks.SOUL_SOIL) || st.is(Blocks.SOUL_SAND)) == 0) {
+            problems.add("Gebeine " + variant + ": Seelenfeuer ohne Seelenerde");
+        }
+        return ghasts;
+    }
+
+    private static void soulSandFloor(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 3, 47), Blocks.SOUL_SAND.defaultBlockState());
+    }
+
+    /** Brustkorb und Riesenschlange: genug Knochen, jeder mit Halt. */
+    private static void giantBonesA(GameTestHelper helper) {
+        soulSandFloor(helper);
+        List<String> problems = new ArrayList<>();
+        bones(helper, problems, 0, 12, 0x5EED1L, 150);
+        bones(helper, problems, 2, 36, 0x5EED2L, 60);
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /** Schädel und Knochenhand: genug Knochen mit Halt, Seelenfeuer hinter den Augen, hinten offen; ein vertrockneter Ghast. */
+    private static void giantBonesB(GameTestHelper helper) {
+        soulSandFloor(helper);
+        List<String> problems = new ArrayList<>();
+        int ghasts = bones(helper, problems, 1, 12, 0x5EED3L, 150);
+        ghasts += bones(helper, problems, 3, 36, 0x5EED4L, 45);
+        BlockPos skull = helper.absolutePos(new BlockPos(12, 4, 24));
+        if (count(helper, skull.offset(-4, -1, -6), skull.offset(4, 6, 3), st -> st.is(Blocks.SOUL_FIRE)) < 5) {
+            problems.add("im Schädel brennt kein Seelenfeuer");
+        }
+        if (!helper.getLevel().getBlockState(skull.offset(0, 1, -6)).isAir() || !helper.getLevel().getBlockState(skull.offset(0, 2, -6)).isAir()) {
+            problems.add("der Schädel ist hinten nicht offen");
+        }
+        if (ghasts < 1) {
+            problems.add("kein vertrockneter Ghast");
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Die Verlorene Pforte, einmal auf Schwarzstein, einmal auf einem Lavasee: Rahmen aus Obsidian mit fehlenden Steinen
+     * (die herausgebrochenen liegen dabei), die Truhe des Lagers, Seelenfeuer auf den Obelisken; setzt man die Steine
+     * wieder ein, lässt sich das Tor entzünden. Auf der Lava trägt eine Insel das Podest.
+     */
+    private static void lostGate(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(23, 3, 47), Blocks.BLACKSTONE.defaultBlockState());
+        fill(helper, new BlockPos(24, 1, 0), new BlockPos(47, 3, 47), Blocks.LAVA.defaultBlockState());
+        ServerLevel level = helper.getLevel();
+        List<String> problems = new ArrayList<>();
+        for (boolean lava : new boolean[] {false, true}) {
+            String name = lava ? "auf der Lava" : "auf dem Boden";
+            BlockPos o = helper.absolutePos(new BlockPos(lava ? 35 : 12, 4, 24));
+            build(helper, SiteSamples.lostGate(o, lava, lava ? 0x6A7EL : 0x6A7DL));
+            BlockPos a = o.offset(-11, -3, -11);
+            BlockPos b = o.offset(11, 14, 11);
+            int frame = 0;
+            int missing = 0;
+            for (int x = -2; x <= 2; x++) {
+                for (int y = 3; y <= 8; y++) {
+                    if (Math.abs(x) != 2 && y != 3 && y != 8) {
+                        continue;
+                    }
+                    BlockState st = level.getBlockState(o.offset(x, y, 0));
+                    if (st.is(Blocks.OBSIDIAN) || st.is(Blocks.CRYING_OBSIDIAN)) {
+                        frame++;
+                    } else if (st.isAir()) {
+                        missing++;
+                    }
+                }
+            }
+            int loose = count(helper, a, b, st -> st.is(Blocks.OBSIDIAN)) - count(helper, o.offset(-2, 3, 0), o.offset(2, 8, 0),
+                    st -> st.is(Blocks.OBSIDIAN));
+            if (frame + missing != 18 || missing < 1 || missing > 4) {
+                problems.add(name + ": Rahmen " + frame + " Steine, " + missing + " fehlen");
+            }
+            if (loose != missing) {
+                problems.add(name + ": " + loose + " lose Steine für " + missing + " Lücken");
+            }
+            if (lootChests(helper, a, b, st -> true) != 1) {
+                problems.add(name + ": keine Truhe im Lager");
+            }
+            if (count(helper, a, b, st -> st.is(Blocks.SOUL_CAMPFIRE)) < 3) {
+                problems.add(name + ": zu wenig Seelenfeuer auf den Obelisken");
+            }
+            if (lava && !level.getBlockState(o.below()).isSolidRender()) {
+                problems.add(name + ": keine Insel unter dem Podest");
+            }
+            // die Steine wieder einsetzen und das Tor entzünden
+            for (int x = -2; x <= 2; x++) {
+                for (int y = 3; y <= 8; y++) {
+                    if (Math.abs(x) == 2 || y == 3 || y == 8) {
+                        level.setBlock(o.offset(x, y, 0), Blocks.OBSIDIAN.defaultBlockState(), 2);
+                    }
+                }
+            }
+            var shape = net.minecraft.world.level.portal.PortalShape.findEmptyPortalShape(level, o.offset(0, 4, 0),
+                    net.minecraft.core.Direction.Axis.X);
+            if (shape.isEmpty()) {
+                problems.add(name + ": das ausgebesserte Tor lässt sich nicht entzünden");
+            } else {
+                shape.get().createPortalBlocks(level);
+                if (!level.getBlockState(o.offset(0, 5, 0)).is(Blocks.NETHER_PORTAL)) {
+                    problems.add(name + ": kein Portal im Tor");
+                }
+            }
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();
     }
 }

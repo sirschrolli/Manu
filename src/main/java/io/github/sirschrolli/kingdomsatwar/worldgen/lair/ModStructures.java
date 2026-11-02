@@ -289,6 +289,9 @@ public final class ModStructures {
                 case ASH_FORGE -> null;
                 // die Hortfeste nimmt die Plätze der Bastionen ein (ebenda)
                 case HORTFESTE -> null;
+                // die Riesengebeine nehmen die Plätze der Netherfossilien ein (data/minecraft/worldgen/structure_set/nether_fossils.json),
+                // die Verlorene Pforte die der Portalruinen im Nether (ruined_portals.json)
+                case GIANT_BONES, LOST_GATE -> null;
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

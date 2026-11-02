@@ -153,6 +153,19 @@ public final class SiteSamples {
         return Hortfeste.piece(center.below(), Rotation.NONE, 0x4F27L);
     }
 
+    /**
+     * Riesengebeine einer Art ({@code variant}: 0 Brustkorb, 1 Schädel, 2 Riesenschlange, 3 Knochenhand) mit der Mitte bei
+     * {@code origin} (erster freier Block über dem Boden), Blick nach +z.
+     */
+    public static SitePiece giantBones(BlockPos origin, int variant, long seed) {
+        return GiantBones.piece(origin, Rotation.NONE, seed, variant);
+    }
+
+    /** Die Verlorene Pforte mit der Mitte bei {@code origin} (erster freier Block über dem Boden bzw. der Lava). */
+    public static SitePiece lostGate(BlockPos origin, boolean lava, long seed) {
+        return LostGate.piece(origin, Rotation.NONE, seed, lava ? LostGate.LAVA : LostGate.GROUND);
+    }
+
     public static SitePiece robberCastle(BlockPos origin) {
         return new SitePiece(SiteKind.ROBBER_CASTLE, 0, origin, Rotation.NONE, 0xB06L, new int[0], RobberCastle.box(origin));
     }

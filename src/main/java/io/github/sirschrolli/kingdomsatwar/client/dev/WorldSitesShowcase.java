@@ -37,9 +37,14 @@ final class WorldSitesShowcase {
             survey(steps, 48);
             return;
         }
+        if (only.startsWith("lab_")) {
+            lab(steps, only.substring(4));
+            return;
+        }
         steps.add(Step.hud(false));
         // in der Unterwelt weiter sehen: dort reicht der Nebel nur bis zur halben Sichtweite
-        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") || only.equals("hortfeste") ? 16 : 8)));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(only.equals("ash_forge") || only.equals("hortfeste") ? 16
+                : only.equals("giant_bones") || only.equals("lost_gate") ? 12 : 8)));
         steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
         steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
         for (SiteKind kind : SiteKind.values()) {
@@ -49,7 +54,7 @@ final class WorldSitesShowcase {
             List<double[]> views = new ArrayList<>();
             int[] state = {0};
             // die Aschenesse steht in der Unterwelt; dort schwebt die Kamera als Zuschauer (über Lava, durch Felsen)
-            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE
+            net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = nether(kind)
                     ? net.minecraft.world.level.Level.NETHER : net.minecraft.world.level.Level.OVERWORLD;
             if (dim != net.minecraft.world.level.Level.OVERWORLD) {
                 steps.add(Step.command("gamemode spectator"));
@@ -154,6 +159,8 @@ final class WorldSitesShowcase {
         BlockPos[] from = kind == SiteKind.FALLEN_STAR
                 ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(-1000, 80, 1700), new BlockPos(-1000, 80, -1700), new BlockPos(2000, 80, 0)}
                 : kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(900, 80, -700)}
+                : kind == SiteKind.LOST_GATE ? new BlockPos[] {new BlockPos(0, 80, 0), new BlockPos(700, 80, -500), new BlockPos(-600, 80, 700),
+                        new BlockPos(-900, 80, -800)}
                 : new BlockPos[] {new BlockPos(0, 80, 0)};
         List<StructureStart> starts = new ArrayList<>();
         for (BlockPos origin : from) {
@@ -171,6 +178,34 @@ final class WorldSitesShowcase {
             KingdomsAtWar.LOGGER.info("[Showcase] {} nicht gefunden", kind.id());
             state[0] = -1;
             return;
+        }
+        if (kind == SiteKind.GIANT_BONES) {
+            // von jeder Art ein Gerippe aus der Nähe des ersten
+            StructureStart first = starts.getFirst();
+            StructureStart[] byVariant = new StructureStart[4];
+            for (int r = 0; r <= 24 && java.util.Arrays.stream(byVariant).anyMatch(java.util.Objects::isNull); r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                            continue;
+                        }
+                        ChunkPos c = new ChunkPos(first.getChunkPos().x() + dx, first.getChunkPos().z() + dz);
+                        StructureStart s = level.getChunk(c.x(), c.z(), ChunkStatus.STRUCTURE_STARTS, true).getStartForStructure(holder.value());
+                        if (s != null && s.isValid()) {
+                            int variant = ((SitePiece) s.getPieces().getFirst()).data(0);
+                            if (byVariant[variant] == null) {
+                                byVariant[variant] = s;
+                            }
+                        }
+                    }
+                }
+            }
+            starts.clear();
+            for (StructureStart s : byVariant) {
+                if (s != null) {
+                    starts.add(s);
+                }
+            }
         }
         if (kind == SiteKind.FALLEN_STAR) {
             StructureStart crater = null;
@@ -392,6 +427,33 @@ final class WorldSitesShowcase {
                     add(views, p, 9, 3, len - 7, 0, 5, len - 7);
                 }
             }
+            case GIANT_BONES -> {
+                switch (first.data(0)) {
+                    case 0 -> {
+                        add(views, first, -19, 10, 13, 0, 4, 2);
+                        add(views, first, 1.5, 1.5, -15, 0, 5, 3);
+                    }
+                    case 1 -> {
+                        add(views, first, -8, 5, 15, 0, 3.5, 0);
+                        add(views, first, 11, 7, -14, 0, 4, -2);
+                        add(views, first, 0.5, 1, -11, 0, 2, 0);
+                    }
+                    case 2 -> {
+                        add(views, first, -17, 9, -4, 0, 1, 2);
+                        add(views, first, 6, 3, 19, 0, 1.5, 12);
+                    }
+                    default -> {
+                        add(views, first, -11, 5, 13, 0, 6, 2);
+                        add(views, first, 10, 3, -8, 0, 7, 2);
+                    }
+                }
+            }
+            case LOST_GATE -> {
+                add(views, first, -12, 7, 16, 0, 4, 0);
+                add(views, first, 0.5, 3, 13, 0.5, 6, 0);
+                add(views, first, 15, 5, 3, 3, 2, 3);
+                add(views, first, 0.5, 4, -9, 0.5, 5, 6);
+            }
             case HORTFESTE -> {
                 if (!views.isEmpty()) {
                     // die zweite Feste nur von außen
@@ -427,6 +489,130 @@ final class WorldSitesShowcase {
                 add(views, first, 1, -3, -1, 0, -3, 0.5);
             }
         }
+    }
+
+    /**
+     * Werkstatt ({@code worldsite_lab_bones}, {@code worldsite_lab_gate}): eine ausgehöhlte Halle im Nether (Seelensandtal),
+     * darin die Muster nebeneinander – so sieht man die Formen ohne Gelände davor.
+     */
+    static void lab(Deque<Step> steps, String what) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
+        steps.add(Step.command("gamemode spectator"));
+        List<double[]> views = new ArrayList<>();
+        int[] state = {0};
+        steps.add(Step.server(level -> {
+            ServerLevel nether = level.getServer().getLevel(net.minecraft.world.level.Level.NETHER);
+            int x0 = -44;
+            int x1 = 44;
+            int z0 = -30;
+            int z1 = 30;
+            int floor = 70;
+            for (int cx = (x0 >> 4) - 1; cx <= (x1 >> 4) + 1; cx++) {
+                for (int cz = (z0 >> 4) - 1; cz <= (z1 >> 4) + 1; cz++) {
+                    nether.getChunk(cx, cz, ChunkStatus.FULL, true);
+                }
+            }
+            boolean gate = what.equals("gate");
+            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+            for (int x = x0 - 1; x <= x1 + 1; x++) {
+                for (int z = z0 - 1; z <= z1 + 1; z++) {
+                    for (int y = floor - 12; y <= floor + 26; y++) {
+                        pos.set(x, y, z);
+                        boolean wall = x < x0 || x > x1 || z < z0 || z > z1 || y == floor + 26;
+                        net.minecraft.world.level.block.state.BlockState state2;
+                        if (wall) {
+                            state2 = net.minecraft.world.level.block.Blocks.NETHERRACK.defaultBlockState();
+                        } else if (y >= floor) {
+                            state2 = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+                        } else if (gate && x > 0 && y >= floor - 4) {
+                            state2 = net.minecraft.world.level.block.Blocks.LAVA.defaultBlockState();
+                        } else if (y >= floor - 3) {
+                            state2 = gate ? net.minecraft.world.level.block.Blocks.NETHERRACK.defaultBlockState()
+                                    : (x * 7 + z * 13) % 5 == 0 ? net.minecraft.world.level.block.Blocks.SOUL_SOIL.defaultBlockState()
+                                    : net.minecraft.world.level.block.Blocks.SOUL_SAND.defaultBlockState();
+                        } else {
+                            state2 = net.minecraft.world.level.block.Blocks.NETHERRACK.defaultBlockState();
+                        }
+                        nether.setBlock(pos, state2, 2 | 16);
+                    }
+                }
+            }
+            var biome = nether.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(gate
+                    ? net.minecraft.world.level.biome.Biomes.NETHER_WASTES : net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY);
+            // in Stücken: der Befehl ändert höchstens 32768 Blöcke auf einmal
+            for (int bx = x0; bx <= x1; bx += 16) {
+                for (int bz = z0; bz <= z1; bz += 16) {
+                    net.minecraft.server.commands.FillBiomeCommand.fill(nether, new BlockPos(bx, floor - 12, bz),
+                            new BlockPos(Math.min(x1, bx + 15), floor + 26, Math.min(z1, bz + 15)), biome)
+                            .ifRight(error -> KingdomsAtWar.LOGGER.warn("[Showcase] Biom nicht gesetzt: {}", error.getMessage()));
+                }
+            }
+            BoundingBox all = new BoundingBox(x0, floor - 12, z0, x1, floor + 26, z1);
+            List<SitePiece> pieces = new ArrayList<>();
+            if (gate) {
+                pieces.add(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteSamples.lostGate(new BlockPos(-20, floor, 0), false, 0x6A7DL));
+                pieces.add(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteSamples.lostGate(new BlockPos(20, floor, 0), true, 0x6A7EL));
+            } else {
+                int[] xs = {-33, -11, 10, 31};
+                for (int v = 0; v < 4; v++) {
+                    pieces.add(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteSamples.giantBones(new BlockPos(xs[v], floor, 0), v, 0x5EED1L + v));
+                }
+            }
+            for (SitePiece piece : pieces) {
+                piece.postProcess(nether, nether.structureManager(), nether.getChunkSource().getGenerator(), nether.getRandom(), all,
+                        ChunkPos.containing(piece.origin()), piece.origin());
+            }
+            if (gate) {
+                for (SitePiece piece : pieces) {
+                    add(views, piece, -13, 8, 15, 0, 4, 0);
+                    add(views, piece, 0.5, 3, 12, 0.5, 6, 0);
+                    add(views, piece, 14, 5, -9, 0, 3, 2);
+                }
+            } else {
+                SitePiece ribs = pieces.get(0);
+                add(views, ribs, -9, 13, 19, 0, 4, 1);
+                add(views, ribs, 9, 6, 2, 0, 4, 2);
+                add(views, ribs, 0.5, 1.5, -17, 0, 5, 3);
+                SitePiece skull = pieces.get(1);
+                add(views, skull, -6, 5, 14, 0, 3.5, 0);
+                add(views, skull, 10, 9, -9, 0, 4, -2);
+                add(views, skull, 0.5, 1.5, -12, 0, 2.5, 0);
+                SitePiece serpent = pieces.get(2);
+                add(views, serpent, -16, 10, -2, 0, 1, 2);
+                add(views, serpent, 5, 3, 19, 0, 1.5, 12);
+                SitePiece claw = pieces.get(3);
+                add(views, claw, -8, 5, 12, 0, 6, 2);
+                add(views, claw, 9, 3, -8, 0, 7, 2);
+            }
+            state[0] = 1;
+        }));
+        steps.add(Step.until(() -> state[0] != 0, 3000));
+        net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim = net.minecraft.world.level.Level.NETHER;
+        for (int n = 0; n < 12; n++) {
+            int slot = n;
+            steps.add(Step.once(minecraft -> {
+                if (slot < views.size()) {
+                    double[] v = views.get(slot);
+                    double lx = v[3] - v[0];
+                    double ly = v[4] - (v[1] + 1.62);
+                    double lz = v[5] - v[2];
+                    float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                    float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                    minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                            "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f", dim.identifier(), v[0], v[1], v[2], yaw, pitch));
+                }
+            }));
+            steps.add((minecraft, ticks) -> slot >= views.size() || ticks > (slot == 0 ? 300 : 60));
+            steps.add((minecraft, ticks) -> slot >= views.size() || Step.waitForChunks(1500).run(minecraft, ticks));
+            Step shot = Step.screenshot("lab_" + what + "_" + n);
+            steps.add((minecraft, ticks) -> slot >= views.size() || shot.run(minecraft, ticks));
+        }
+    }
+
+    private static boolean nether(SiteKind kind) {
+        return kind == SiteKind.ASH_FORGE || kind == SiteKind.HORTFESTE || kind == SiteKind.GIANT_BONES || kind == SiteKind.LOST_GATE;
     }
 
     /** Ein Blick in eigenen Koordinaten des Bauteils (Füße bei x, y, z; Blick auf lx, ly, lz). */

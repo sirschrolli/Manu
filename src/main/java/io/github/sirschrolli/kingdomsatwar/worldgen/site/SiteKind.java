@@ -56,7 +56,17 @@ public enum SiteKind implements StringRepresentable {
      * Tauschhalle, Ställen, Schlafsaal, Hortkammer und dem goldenen Keiler auf der Spitze (an Stelle der Bastion).
      * Ebenfalls ganz zuletzt gebaut.
      */
-    HORTFESTE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    HORTFESTE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Riesengebeine: die Knochen gewaltiger Wesen im Seelensandtal – Brustkorb, gehörnter Schädel, Riesenschlange oder
+     * Knochenhand, manchmal mit einem vertrockneten Ghast (an Stelle der Netherfossilien).
+     */
+    GIANT_BONES(GenerationStep.Decoration.UNDERGROUND_DECORATION),
+    /**
+     * Verlorene Pforte: das zerbrochene Ankunftstor der Feuerdiener in der Unterwelt auf einem Stufenpodest, mit
+     * Pylonen, Ketten und ihrem letzten Lager (an Stelle der Portalruine des Nethers). Ganz zuletzt gebaut.
+     */
+    LOST_GATE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

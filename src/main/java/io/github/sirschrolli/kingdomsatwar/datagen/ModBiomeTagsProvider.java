@@ -225,6 +225,12 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(net.minecraft.world.level.biome.Biomes.NETHER_WASTES).add(net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY)
                 .add(net.minecraft.world.level.biome.Biomes.WARPED_FOREST);
         this.tag(BiomeTags.HAS_BASTION_REMNANT).replace();
+        // die Riesengebeine im Seelensandtal (statt der Netherfossilien), die Verlorene Pforte überall im Nether (statt der Portalruine)
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.GIANT_BONES))
+                .add(net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY);
+        this.tag(BiomeTags.HAS_NETHER_FOSSIL).replace();
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.LOST_GATE)).addTag(BiomeTags.IS_NETHER);
+        this.tag(BiomeTags.HAS_RUINED_PORTAL_NETHER).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,
                 BiomeTags.HAS_JUNGLE_TEMPLE, BiomeTags.HAS_SWAMP_HUT, BiomeTags.HAS_IGLOO, BiomeTags.HAS_RUINED_PORTAL_DESERT,
