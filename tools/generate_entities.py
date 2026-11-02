@@ -22,6 +22,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               breeze, breeze_wind, creaking, guardian, illager, ravager, vex, warden,
                               axolotl, dolphin, fish_cod, fish_puffer, fish_salmon, fish_tropical, frog, nautilus, squid, tadpole,
                               turtle,
+                              allay, copper_golem, iron_golem, snow_golem,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
 from entitygen.paint import paint_model  # noqa: E402
@@ -32,7 +33,12 @@ TEX = ROOT / "src/main/resources/assets/kingdomsatwar/textures/entity"
 PACKAGE = "io.github.sirschrolli.kingdomsatwar.client.model.geom"
 
 
+ONLY: set[str] = set()
+
+
 def write_model(module, class_name: str, doc: str, folder: str, variants: dict, preview: bool):
+    if ONLY and class_name not in ONLY:
+        return
     model = module.build()
     model.pack()
     JAVA.mkdir(parents=True, exist_ok=True)
@@ -51,6 +57,8 @@ def write_model(module, class_name: str, doc: str, folder: str, variants: dict, 
 
 def main():
     preview = "--preview" in sys.argv
+    if "--only" in sys.argv:                 # nur diese Modelle neu erzeugen, z. B. --only IronSentinelGeometry,SnowmanGeometry
+        ONLY.update(sys.argv[sys.argv.index("--only") + 1].split(","))
     write_model(dragon, "DragonGeometry", "Geometrie des Drachen-Modells (ausgewachsene Größe).", "dragon",
                 dragon.PALETTES, preview)
     write_model(dragon_armor, "DragonArmorGeometry",
@@ -177,6 +185,24 @@ def main():
                 "turtle", turtle.PALETTES, preview)
     write_model(nautilus, "SeaNautilusGeometry", "Geometrie der Nautilusse (Knochen wie beim Vanilla-Nautilus, Fangarme an den Mundteilen).",
                 "nautilus", nautilus.PALETTES, preview)
+    # Golems und Wichtel (E4d): Knochen wie bei Vanilla, eigene Quader und Texturen
+    write_model(iron_golem, "IronSentinelGeometry",
+                "Geometrie des Eisenwächters (Knochen wie beim Vanilla-Eisengolem; Polster und Eiszapfen nur je Gestalt bemalt).",
+                "iron_golem", iron_golem.PALETTES, preview)
+    if not ONLY or "IronSentinelGeometry" in ONLY:
+        crack_model = iron_golem.build()
+        crack_model.pack()
+        for level in ("low", "medium", "high"):
+            iron_golem.crack_overlay(crack_model, level).save(TEX / "iron_golem" / f"risse_{level}.png")
+    write_model(snow_golem, "SnowmanGeometry",
+                "Geometrie des Schneemanns (Knochen wie beim Vanilla-Schneegolem; Nase und Mütze nur ohne Kürbis sichtbar).",
+                "snow_golem", snow_golem.PALETTES, preview)
+    write_model(copper_golem, "CopperServantGeometry",
+                "Geometrie des Kupferknechts (Knochen wie beim Vanilla-Kupfergolem, dazu der Aufziehschlüssel).",
+                "copper_golem", copper_golem.PALETTES, preview)
+    write_model(allay, "HouseSpriteGeometry",
+                "Geometrie der Wichtel (Knochen wie beim Vanilla-Hilfsgeist; Zipfelmütze oder Fliegenpilz je Gestalt).",
+                "allay", allay.PALETTES, preview)
     # Drachen-Bosse (Grundgröße, im Spiel vergrößert)
     write_model(boss_fire, "PyrrhonGeometry", "Geometrie von Pyrrhon, dem Feuerdrachen-Boss (Grundgröße, im Spiel ×2,1).",
                 "boss", boss_fire.PALETTES, preview)

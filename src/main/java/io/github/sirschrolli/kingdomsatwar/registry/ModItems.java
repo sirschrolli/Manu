@@ -203,6 +203,11 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> TADPOLE_SPAWN_EGG = creatureEgg("tadpole", () -> ModEntities.TADPOLE.get());
     public static final DeferredItem<SpawnEggItem> NAUTILUS_SPAWN_EGG = creatureEgg("nautilus", () -> ModEntities.NAUTILUS.get());
     public static final DeferredItem<SpawnEggItem> ZOMBIE_NAUTILUS_SPAWN_EGG = creatureEgg("zombie_nautilus", () -> ModEntities.ZOMBIE_NAUTILUS.get());
+    // Golems und Wichtel (E4d)
+    public static final DeferredItem<SpawnEggItem> IRON_GOLEM_SPAWN_EGG = creatureEgg("iron_golem", () -> ModEntities.IRON_GOLEM.get());
+    public static final DeferredItem<SpawnEggItem> SNOW_GOLEM_SPAWN_EGG = creatureEgg("snow_golem", () -> ModEntities.SNOW_GOLEM.get());
+    public static final DeferredItem<SpawnEggItem> COPPER_GOLEM_SPAWN_EGG = creatureEgg("copper_golem", () -> ModEntities.COPPER_GOLEM.get());
+    public static final DeferredItem<SpawnEggItem> ALLAY_SPAWN_EGG = creatureEgg("allay", () -> ModEntities.ALLAY.get());
     public static final DeferredItem<SpawnEggItem> WILD_BOAR_SPAWN_EGG = creatureEgg("wild_boar", () -> ModEntities.WILD_BOAR.get());
     public static final DeferredItem<SpawnEggItem> DEER_SPAWN_EGG = creatureEgg("deer", () -> ModEntities.DEER.get());
     public static final DeferredItem<SpawnEggItem> GOOSE_SPAWN_EGG = creatureEgg("goose", () -> ModEntities.GOOSE.get());

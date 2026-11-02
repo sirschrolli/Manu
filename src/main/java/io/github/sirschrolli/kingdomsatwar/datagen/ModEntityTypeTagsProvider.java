@@ -147,5 +147,13 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                 ModEntities.CREAKING)) {
             monsterCoins.add(monster.key());
         }
+        // Golems und Wichtel (E4d): in denselben Vanilla-Tags wie ihre Gegenstücke; Eisenwächter schenken den eigenen
+        // Dorfbewohnern Mohn und setzen den Kupferknechten eine Blume auf den Blitzableiter
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.IRON_GOLEM.key()).add(ModEntities.SNOW_GOLEM.key())
+                .add(ModEntities.COPPER_GOLEM.key()).add(ModEntities.ALLAY.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.SNOW_GOLEM.key());
+        this.tag(EntityTypeTags.CAN_BREATHE_UNDER_WATER).add(ModEntities.COPPER_GOLEM.key());
+        this.tag(EntityTypeTags.ACCEPTS_IRON_GOLEM_GIFT).add(ModEntities.COPPER_GOLEM.key());
+        this.tag(EntityTypeTags.CANDIDATE_FOR_IRON_GOLEM_GIFT).add(ModEntities.VILLAGER.key());
     }
 }

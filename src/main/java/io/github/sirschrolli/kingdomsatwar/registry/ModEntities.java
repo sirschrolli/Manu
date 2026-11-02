@@ -295,6 +295,20 @@ public final class ModEntities {
             "zombie_nautilus", io.github.sirschrolli.kingdomsatwar.entity.creature.water.GhostNautilus::new, MobCategory.MONSTER, builder -> builder.sized(0.875f, 0.95f).passengerAttachments(1.1375f)
                     .eyeHeight(0.2751f).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Golems und Wichtel (E4d)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.golem.IronSentinel>> IRON_GOLEM = ENTITIES.registerEntityType(
+            "iron_golem", io.github.sirschrolli.kingdomsatwar.entity.creature.golem.IronSentinel::new, MobCategory.MISC, builder -> builder.sized(1.4f, 2.7f)
+                    .clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.golem.Snowman>> SNOW_GOLEM = ENTITIES.registerEntityType(
+            "snow_golem", io.github.sirschrolli.kingdomsatwar.entity.creature.golem.Snowman::new, MobCategory.MISC, builder -> builder
+                    .immuneTo(net.minecraft.tags.BlockTags.SNOW_GOLEM_IMMUNE_TO).sized(0.7f, 1.9f).eyeHeight(1.7f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.golem.CopperServant>> COPPER_GOLEM = ENTITIES.registerEntityType(
+            "copper_golem", io.github.sirschrolli.kingdomsatwar.entity.creature.golem.CopperServant::new, MobCategory.MISC, builder -> builder.sized(0.49f, 0.98f)
+                    .eyeHeight(0.8125f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creature.golem.HouseSprite>> ALLAY = ENTITIES.registerEntityType(
+            "allay", io.github.sirschrolli.kingdomsatwar.entity.creature.golem.HouseSprite::new, MobCategory.CREATURE, builder -> builder.sized(0.35f, 0.6f)
+                    .eyeHeight(0.36f).ridingOffset(0.04f).clientTrackingRange(8).updateInterval(2));
+
     // ---------------------------------------------------------------- Wilde Kreaturen
     public static final DeferredHolder<EntityType<?>, EntityType<WildBoarEntity>> WILD_BOAR = ENTITIES.registerEntityType("wild_boar",
             WildBoarEntity::new, MobCategory.CREATURE, builder -> builder.sized(0.9f, 0.9f).eyeHeight(0.6f).clientTrackingRange(10));
@@ -492,6 +506,10 @@ public final class ModEntities {
         event.put(TADPOLE.get(), net.minecraft.world.entity.animal.frog.Tadpole.createAttributes().build());
         event.put(NAUTILUS.get(), net.minecraft.world.entity.animal.nautilus.AbstractNautilus.createAttributes().build());
         event.put(ZOMBIE_NAUTILUS.get(), net.minecraft.world.entity.animal.nautilus.ZombieNautilus.createAttributes().build());
+        event.put(IRON_GOLEM.get(), net.minecraft.world.entity.animal.golem.IronGolem.createAttributes().build());
+        event.put(SNOW_GOLEM.get(), net.minecraft.world.entity.animal.golem.SnowGolem.createAttributes().build());
+        event.put(COPPER_GOLEM.get(), net.minecraft.world.entity.animal.golem.CopperGolem.createAttributes().build());
+        event.put(ALLAY.get(), net.minecraft.world.entity.animal.allay.Allay.createAttributes().build());
         event.put(WOLF.get(), WildWolf.createAttributes().build());
         event.put(FOX.get(), WildFox.createAttributes().build());
         event.put(BEAR.get(), Bear.createAttributes().build());

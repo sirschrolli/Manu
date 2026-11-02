@@ -104,6 +104,7 @@ final class Showcase {
                 case "monsters" -> MonsterShowcase.monsters(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
+                case "golems" -> GolemShowcase.golems(steps);
                 case "magic" -> magic(steps);
                 case "magic_table" -> magicTable(steps);
                 case "structures" -> structures(steps);
@@ -1382,7 +1383,7 @@ final class Showcase {
             fill(level, new BlockPos(-8, ground, oz - 16), new BlockPos(16, ground + 8, oz + 6), Blocks.AIR.defaultBlockState());
             fill(level, new BlockPos(2, ground - 1, oz - 6), new BlockPos(7, ground - 1, oz - 3), Blocks.WATER.defaultBlockState());
             for (int x : new int[] {1, 4, 8}) {
-                var golem = net.minecraft.world.entity.EntityTypes.IRON_GOLEM.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                var golem = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.IRON_GOLEM.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
                 golem.setNoAi(true);
                 golem.snapTo(x + 0.5, ground, oz - 9 + 0.5 - (x == 4 ? 3 : 0), 0, 0);
                 level.addFreshEntity(golem);

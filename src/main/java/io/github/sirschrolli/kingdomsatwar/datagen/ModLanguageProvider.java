@@ -1025,6 +1025,15 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.TADPOLE, ModItems.TADPOLE_SPAWN_EGG, "Polliwog", "Kaulquappe", "Kaulquappen");
         creature(ModEntities.NAUTILUS, ModItems.NAUTILUS_SPAWN_EGG, "Nautilus", "Nautilus", "Nautilus");
         creature(ModEntities.ZOMBIE_NAUTILUS, ModItems.ZOMBIE_NAUTILUS_SPAWN_EGG, "Ghost Nautilus", "Geisternautilus", "Geisternautilus");
+        // Golems und Wichtel (E4d)
+        creature(ModEntities.IRON_GOLEM, ModItems.IRON_GOLEM_SPAWN_EGG, "Iron Sentinel", "Eisenwächter", "Eisenwächter");
+        breeds(ModEntities.IRON_GOLEM, new String[][]{{"schmiedeeisen", "Iron Sentinel", "Eisenwächter"}, {"mooswaechter", "Moss Sentinel", "Mooswächter"},
+                {"frostwaechter", "Frost Sentinel", "Frostwächter"}, {"rostwaechter", "Rust Sentinel", "Rostwächter"}});
+        creature(ModEntities.SNOW_GOLEM, ModItems.SNOW_GOLEM_SPAWN_EGG, "Snowman", "Schneemann", "Schneemann");
+        creature(ModEntities.COPPER_GOLEM, ModItems.COPPER_GOLEM_SPAWN_EGG, "Copper Servant", "Kupferknecht", "Kupferknecht");
+        creature(ModEntities.ALLAY, ModItems.ALLAY_SPAWN_EGG, "Sprite", "Wichtel", "Wichtel");
+        breeds(ModEntities.ALLAY, new String[][]{{"mooswichtel", "Moss Sprite", "Mooswichtel"}, {"pilzwichtel", "Toadstool Sprite", "Pilzwichtel"},
+                {"laubwichtel", "Leaf Sprite", "Laubwichtel"}, {"sternwichtel", "Star Sprite", "Sternwichtel"}});
     }
 
     private void breeds(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, String[][] names) {

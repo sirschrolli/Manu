@@ -56,6 +56,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.water.WaterRenderers.registerLayers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerLayers(event);
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);
@@ -89,6 +90,11 @@ public final class ClientSetup {
     }
 
     @SubscribeEvent
+    static void registerSpecialRenderers(net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent event) {
+        io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerSpecialRenderers(event);
+    }
+
+    @SubscribeEvent
     static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ModEntities.DRAGONS.values().forEach(type -> event.registerEntityRenderer(type.get(), DragonRenderer::new));
         ModEntities.SOLDIERS.values().forEach(type -> event.registerEntityRenderer(type.get(), SoldierRenderer::new));
@@ -104,6 +110,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.water.WaterRenderers.registerRenderers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerRenderers(event);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
         event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);

@@ -121,6 +121,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     private @Nullable BlockPos post;
     /** Wache eines Dorfs: bewacht es, lässt sich nicht anwerben und schützt die Dorfbewohner. */
     private String village = "";
+    /** Diese Dorfwache ruft beim ersten Erwachen den Eisenwächter des Dorfs herbei (einmal je Dorf). */
+    private boolean callsSentinel;
     /** Der eigene Name (ohne Art und Rang), z. B. "Konrad". */
     private String personalName = "";
     private int lastHurtTick = -1000;
@@ -208,6 +210,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         if (!this.village.isEmpty()) {
             output.putString("Village", this.village);
         }
+        if (this.callsSentinel) {
+            output.putBoolean("CallsSentinel", true);
+        }
         output.putInt("Rank", this.getRank());
         if (!this.personalName.isEmpty()) {
             output.putString("PersonalName", this.personalName);
@@ -233,6 +238,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             this.post = null;
         }
         this.village = input.getStringOr("Village", "");
+        this.callsSentinel = input.getBooleanOr("CallsSentinel", false);
         this.entityData.set(DATA_RANK, (byte) Mth.clamp(input.getIntOr("Rank", 0), 0, MAX_RANK));
         this.applyRank();
         this.personalName = input.getStringOr("PersonalName", "");
@@ -360,6 +366,11 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public void guardVillage(String name, BlockPos post) {
         this.village = name;
         this.setMode(MODE_PATROL, post);
+    }
+
+    /** Diese Wache holt beim ersten Erwachen den Eisenwächter ihres Dorfs auf den Platz. */
+    public void callSentinel() {
+        this.callsSentinel = true;
     }
 
     /** Wache eines Dorfs (lässt sich nicht anwerben)? */
@@ -666,6 +677,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         }
         if (this.voiceCooldown > 0) {
             this.voiceCooldown--;
+        }
+        if (this.callsSentinel && this.tickCount > 20 && this.post != null) {
+            this.callsSentinel = false;
+            io.github.sirschrolli.kingdomsatwar.entity.creature.golem.VillageSentinels.summon(level, this.post);
         }
         this.updateShield();
         // langsame Heilung außerhalb des Kampfes

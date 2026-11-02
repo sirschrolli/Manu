@@ -106,7 +106,7 @@ final class VillageSquare {
             }
         }
         // zwei Wächter auf dem Platz
-        piece.guard(b, 2, 1, -r + 2, false);
+        piece.guard(b, 2, 1, -r + 2, false, true);
         piece.guard(b, -2, 1, r - 2, b.random.nextBoolean());
     }
 

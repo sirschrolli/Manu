@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
@@ -534,8 +533,8 @@ final class RobberCastle {
             this.b.set(3, -4, -8, state(Blocks.IRON_CHAIN));
             this.b.set(2, -5, -9, Blocks.SOUL_LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, false));
             this.b.chest(3, -5, -10, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.SITE_ROBBER_CASTLE);
-            this.spawn(EntityTypes.ALLAY, -2, -5, -13);
-            this.spawn(EntityTypes.ALLAY, 2, -5, -13);
+            this.spawn(ModEntities.ALLAY.get(), -2, -5, -13);
+            this.spawn(ModEntities.ALLAY.get(), 2, -5, -13);
         }
 
         /** Der Palas an der Ostmauer: steinerne Halle mit Satteldach, Kamin, langer Tafel und dem Thron des Raubritters. */

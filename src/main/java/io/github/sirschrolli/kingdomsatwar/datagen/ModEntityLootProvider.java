@@ -169,6 +169,11 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.SQUID.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SQUID));
         this.add(ModEntities.GLOW_SQUID.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GLOW_SQUID));
         this.add(ModEntities.DOLPHIN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.DOLPHIN));
+        // Golems und Wichtel (E4d): Eisen und Mohn, Schneebälle, Kupfer – wie bei Vanilla
+        this.add(ModEntities.IRON_GOLEM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.IRON_GOLEM));
+        this.add(ModEntities.SNOW_GOLEM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SNOW_GOLEM));
+        this.add(ModEntities.COPPER_GOLEM.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.COPPER_GOLEM));
+        this.add(ModEntities.ALLAY.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ALLAY));
         this.add(ModEntities.TURTLE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.TURTLE));
         this.add(ModEntities.AXOLOTL.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.AXOLOTL));
         this.add(ModEntities.FROG.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.FROG));

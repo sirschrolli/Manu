@@ -141,7 +141,7 @@ public class MercenaryBoardBlockEntity extends BlockEntity {
         }
         BlockPos ahead = this.worldPosition.relative(front, 2);
         list.sort(Comparator.comparingDouble(p -> p.distSqr(ahead)));
-        return list.subList(0, Math.min(6, list.size()));
+        return list.subList(0, Math.min(12, list.size()));                  // genug Plätze, auch wenn drei schon besetzt sind
     }
 
     @Override

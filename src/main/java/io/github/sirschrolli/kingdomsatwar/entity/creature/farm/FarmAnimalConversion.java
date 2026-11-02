@@ -123,7 +123,12 @@ public final class FarmAnimalConversion {
                 Map.entry(EntityTypes.FROG, ModEntities.FROG),
                 Map.entry(EntityTypes.TADPOLE, ModEntities.TADPOLE),
                 Map.entry(EntityTypes.NAUTILUS, ModEntities.NAUTILUS),
-                Map.entry(EntityTypes.ZOMBIE_NAUTILUS, ModEntities.ZOMBIE_NAUTILUS));
+                Map.entry(EntityTypes.ZOMBIE_NAUTILUS, ModEntities.ZOMBIE_NAUTILUS),
+                // Golems und Wichtel (E4d)
+                Map.entry(EntityTypes.IRON_GOLEM, ModEntities.IRON_GOLEM),
+                Map.entry(EntityTypes.SNOW_GOLEM, ModEntities.SNOW_GOLEM),
+                Map.entry(EntityTypes.COPPER_GOLEM, ModEntities.COPPER_GOLEM),
+                Map.entry(EntityTypes.ALLAY, ModEntities.ALLAY));
     }
 
     /** Für die Datengenerierung: das eigene Gegenstück eines Vanilla-Typs ({@code null}, wenn keins). */
@@ -207,6 +212,11 @@ public final class FarmAnimalConversion {
                     rider.stopRiding();
                     rider.startRiding(replacement, true, false);
                 }
+            }
+            // Kupfergolem aus Kupferblock und Kürbis: die Verwitterung des Blocks bekommt er erst nach dem Erscheinen
+            if (original instanceof net.minecraft.world.entity.animal.golem.CopperGolem copper
+                    && replacement instanceof net.minecraft.world.entity.animal.golem.CopperGolem ours) {
+                ours.setWeatherState(copper.getWeatherState());
             }
             // Knarz: Heimat und Herz gehören jetzt dem Gegenstück
             if (original instanceof net.minecraft.world.entity.monster.creaking.Creaking creaking
@@ -365,6 +375,16 @@ public final class FarmAnimalConversion {
             case WildBat bat -> bat.setBreed(WildBat.breedFor(biome, random));
             case WildArmadillo armadillo -> armadillo.setBreed(WildArmadillo.breedFor(biome, random));
             case WildCamel camel -> camel.setBreed(WildCamel.breedFor(biome));
+            case io.github.sirschrolli.kingdomsatwar.entity.creature.golem.HouseSprite sprite -> {
+                // ein verdoppelter Wichtel erscheint genau dort, wo sein Vorbild schwebt – und trägt dieselbe Mütze
+                var parent = level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.creature.golem.HouseSprite.class,
+                        original.getBoundingBox().inflate(0.25), other -> other != sprite && other.position().distanceToSqr(original.position()) < 1.0e-4);
+                if (parent.isEmpty()) {
+                    sprite.chooseLook(level, original.blockPosition());
+                } else {
+                    sprite.setLook(parent.getFirst().getLook());
+                }
+            }
             case io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Monsters.Varied varied ->
                     varied.chooseLook(level, original.blockPosition());
             default -> { }

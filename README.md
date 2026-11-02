@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.19.0 – Dörfer mit verschiedenen Grundrissen, auch bei den Umbrern im Schattenreich.**
+> **Testversion 0.20.0 – eigene Golems und Wichtel: Eisenwächter, Schneemann, Kupferknecht und Wichtel.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -88,7 +88,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > „Ausbilden“ beförderst du deine Leute zum Veteranen und zur Elite (je Rang +25 % Leben, +2 Rüstung, +1 Schaden) und
 > bildest Schwertkämpfer zu Rittern und Ritter zu Hauptleuten aus – Name, Rang und Herr bleiben. Den Rang erkennt man
 > an Schärpe, Ärmelstreifen, Schulterstücken und Ehrenmedaille und an den Sternen im Namen.
-> Neu in 0.19: **Kein Dorf sieht mehr aus wie das andere.** Es gibt vier Grundrisse: das **Haufendorf** mit dem
+> In 0.19 kam: **Kein Dorf sieht mehr aus wie das andere.** Es gibt vier Grundrisse: das **Haufendorf** mit dem
 > gepflasterten Platz und Wegen in alle Richtungen, das **Straßendorf** an einer langen Dorfstraße mit kleinem
 > Marktplatz und kurzen Quergassen, das **Angerdorf** um einen langen Anger – Brunnen bzw. Maibaum, Dorflinde, ein Teich
 > mit Seerosen und Schilf, Bäume und ein Trampelpfad, im Lehmland eine Oase mit Palmen – und den **Rundling**, dessen
@@ -99,9 +99,20 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > jeder Platz hat eines von vier Mittelstücken: den Mondbrunnen, einen Kristallhain, einen alten Schattenbaum mit
 > Glimmerranken oder einen Steinkreis der Seher; Häuser, Langhäuser, Felder und Kristallgärten sind jedes Mal anders
 > gemischt, und nicht jedes Dorf hat einen Seherturm.
+> Neu in 0.20: **Eigene Golems und Wichtel statt der Vanilla-Wesen.** Der **Eisenwächter** ist ein geschmiedeter Wächter
+> in Plattenrüstung mit Topfhelm; in seiner Brust glüht ein Schmiedefeuer hinter einem Gitter, aus dem Abzug auf dem
+> Rücken steigt Rauch, im Sehschlitz glimmen die Augen. Je nach Land, in dem er entsteht, ist er aus blankem
+> Schmiedeeisen, moosbewachsen mit Efeu (**Mooswächter**), bereift mit Eiszapfen (**Frostwächter**) oder rostig
+> (**Rostwächter**). In jedem Dorf wacht einer am Platz und beschützt die Bewohner, er schenkt ihnen Mohn und reicht den
+> Kupferknechten eine Blume für ihren Blitzableiter. Der **Schneemann** besteht aus drei runden Schneekugeln mit
+> Ästen als Armen, Kohleknöpfen und einem Strickschal; schert man ihm den Kürbis ab, sieht man sein Kohlegesicht mit
+> Möhrennase und eine Strickmütze. Der **Kupferknecht** ist ein kleiner Diener aus getriebenem Kupfer mit Kesselkopf,
+> leuchtenden Glasaugen, Zeigerwerk und Aufziehschlüssel; er läuft an und wird grün, und auch seine Statuen zeigen ihn.
+> Die **Wichtel** sind kleine Hausgeister mit Libellenflügeln: Moos-, Pilz-, Laub- und Sternwichtel. Gebaut werden die
+> Golems wie gewohnt, alles Gelernte (Eisen flicken, Wachsen, Abschleifen, Sammeln, Tanzen, Verdoppeln) und alle Beute
+> bleiben, wie man sie kennt.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Golems und die übrigen Dorfwesen (Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler,
-> glücklicher Ghast, fahrender Händler), zuletzt Nether und End.
+> **Als Nächstes:** Schnüffler, glücklicher Ghast, Dorfbewohner und fahrender Händler, danach Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -141,7 +152,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
-| Golems, Hilfsgeist, Schnüffler, Dorfbewohner und Händler statt Vanilla; Nether und End | 🔨 als Nächstes |
+| Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
+| Schnüffler, glücklicher Ghast, Dorfbewohner und Händler statt Vanilla; Nether und End | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -158,7 +170,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.19.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.20.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -166,7 +178,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.19.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.20.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -670,6 +682,21 @@ schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschi
 | **Nautilus** | Nautilus | – | gestreiftes Perlboot mit Fangarmen; zähmbar, mit Sattel und Nautilus-Rüstung reitbar |
 | **Geisternautilus** | Zombienautilus | – | bleiches, rissiges Gehäuse mit Seepocken und Tang, seegrün glimmende Augen; trägt Wasserleichen |
 
+### Golems und Wichtel
+
+![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
+
+Keine Vanilla-Golems und keine Hilfsgeister mehr: Wer einen Golem baut (wie gewohnt aus Eisen-, Schnee- oder
+Kupferblock und einem geschnitzten Kürbis), bekommt das eigene Wesen. Jedes hat ein eigenes Modell mit den Knochen
+seines Vanilla-Gegenstücks – Schlag, Blumen-Reichen, Werfen, Truhen-Öffnen, Schweben und Tanzen sehen aus wie gewohnt.
+
+| Wesen | statt | Gestalten | Besonderheiten |
+|---|---|---|---|
+| **Eisenwächter** | Eisengolem | Schmiedeeisen, Mooswächter, Frostwächter, Rostwächter | Plattenrüstung mit Topfhelm, Schmiedefeuer in der Brust (glüht und flackert, Rauch aus dem Abzug); Gestalt nach dem Land; in jedem Dorf einer am Platz, der die Bewohner beschützt; flicken mit Eisenbarren, Risse bei Schaden; Eisen und Mohn |
+| **Schneemann** | Schneegolem | Schal und Mütze in Rot, Grün, Blau oder Gelb | drei Schneekugeln, Astarme, Kohleknöpfe; geschoren Kohlegesicht, Möhrennase und Strickmütze; Schneespur, Schneebälle |
+| **Kupferknecht** | Kupfergolem | blank, angelaufen, verwittert, oxidiert | Kesselkopf mit Glasaugen, Zeigerwerk, Aufziehschlüssel; sortiert Kupfertruhen, Wachs und Axt wie gewohnt; erstarrt irgendwann zur Statue in vier Haltungen |
+| **Wichtel** | Hilfsgeist | Mooswichtel, Pilzwichtel, Laubwichtel, Sternwichtel | Hausgeist mit Libellenflügeln und Zipfelmütze oder Fliegenpilz-Hut; sammelt, bringt zum Notenblock, tanzt, verdoppelt sich (mit derselben Mütze) |
+
 ### Monster
 
 ![Die eigenen Monster](docs/bilder/monster.jpg)
@@ -902,7 +929,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.19.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.20.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -958,8 +985,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **Siedlung und Dörfer überarbeiten** – Bauarbeiter, die nah am Bau arbeiten und auch hohe Häuser fertig bauen,
      Häuser mit Baukosten in mehreren Entwürfen, Bewohner, die Rohstoffe sammeln und abends ins Lager bringen,
      Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
-   - **Golems und die übrigen Dorfwesen** – Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler, glücklicher
-     Ghast, Dorfbewohner und fahrender Händler; alles, was sie fallen lassen, bleibt erhältlich;
+   - **Golems und Wichtel** – Eisenwächter, Schneemann, Kupferknecht und Wichtel (fertig);
+   - **die übrigen Dorfwesen** – Schnüffler, glücklicher Ghast, Dorfbewohner und fahrender Händler; alles, was sie
+     fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.
 2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
 

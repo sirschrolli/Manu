@@ -9,6 +9,10 @@
     "kingdomsatwar:bee",
     "kingdomsatwar:bat",
     "kingdomsatwar:phantom",
-    "kingdomsatwar:breeze"
+    "kingdomsatwar:breeze",
+    "kingdomsatwar:iron_golem",
+    "kingdomsatwar:snow_golem",
+    "kingdomsatwar:copper_golem",
+    "kingdomsatwar:allay"
   ]
 }

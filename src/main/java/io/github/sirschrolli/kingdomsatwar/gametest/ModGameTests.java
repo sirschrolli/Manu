@@ -177,6 +177,7 @@ public final class ModGameTests {
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
         VillageLayoutGameTests.init(); // Grundrisse der Dörfer
+        GolemGameTests.init();     // Golems und Wichtel
     }
 
     private ModGameTests() {}
@@ -215,6 +216,7 @@ public final class ModGameTests {
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);
         VillageLayoutGameTests.register(event, environment);
+        GolemGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
@@ -1135,9 +1137,9 @@ public final class ModGameTests {
         ServerLevel level = helper.getLevel();
         Player mage = helper.makeMockPlayer(GameType.SURVIVAL);
         mage.snapTo(helper.absoluteVec(new Vec3(4.5, 1, 1.5)), 0.0f, 8.0f);            // Blick nach Süden
-        var golem = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(4, 1, 5));         // vorn: Blitz und Frost
+        var golem = helper.spawn(ModEntities.IRON_GOLEM.get(), new BlockPos(4, 1, 5));   // vorn: Blitz und Frost
         golem.setNoAi(true);
-        var flank = helper.spawn(EntityTypes.IRON_GOLEM, new BlockPos(8, 1, 1));         // seitlich: Erdstoß
+        var flank = helper.spawn(ModEntities.IRON_GOLEM.get(), new BlockPos(8, 1, 1));   // seitlich: Erdstoß
         flank.setNoAi(true);
         var wolf = helper.spawn(ModEntities.WOLF.get(), new BlockPos(6, 1, 2));
         wolf.setNoAi(true);

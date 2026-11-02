@@ -337,10 +337,15 @@ public class KingdomVillagePiece extends StructurePiece {
 
     /** Ein Wächter, der um {@code post} (Gebäude-Koordinaten) seine Runde geht; {@code archer}: Bogenschütze. */
     public void guard(VillageBuilder b, int x, int y, int z, boolean archer) {
+        this.guard(b, x, y, z, archer, false);
+    }
+
+    /** Wie {@link #guard(VillageBuilder, int, int, int, boolean)}; mit {@code sentinel} ruft er den Eisenwächter des Dorfs. */
+    public void guard(VillageBuilder b, int x, int y, int z, boolean archer, boolean sentinel) {
         BlockPos pos = b.world(x, y, z);
         if (!b.inside(pos)) {
             return;
         }
-        VillageResidents.guard(b.level, pos, archer, this.center, this.villageName, b.random);
+        VillageResidents.guard(b.level, pos, archer, sentinel, this.center, this.villageName, b.random);
     }
 }

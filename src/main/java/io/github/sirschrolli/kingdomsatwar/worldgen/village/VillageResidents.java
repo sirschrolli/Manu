@@ -75,8 +75,12 @@ final class VillageResidents {
         }
     }
 
-    /** Ein Wächter des Dorfs: Schwertkämpfer oder Bogenschütze ohne Herrn, der um seinen Posten patrouilliert. */
-    static void guard(WorldGenLevel level, BlockPos pos, boolean archer, BlockPos center, String villageName, RandomSource random) {
+    /**
+     * Ein Wächter des Dorfs: Schwertkämpfer oder Bogenschütze ohne Herrn, der um seinen Posten patrouilliert; mit
+     * {@code sentinel} holt er beim ersten Erwachen den Eisenwächter des Dorfs auf den Platz.
+     */
+    static void guard(WorldGenLevel level, BlockPos pos, boolean archer, boolean sentinel, BlockPos center, String villageName,
+            RandomSource random) {
         SoldierEntity guard = ModEntities.SOLDIERS.get(archer ? io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ARCHER
                 : io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.SWORDSMAN).get().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
         if (guard == null) {
@@ -85,6 +89,9 @@ final class VillageResidents {
         guard.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360.0f, 0.0f);
         guard.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.STRUCTURE, null);
         guard.guardVillage(villageName, pos);
+        if (sentinel) {
+            guard.callSentinel();
+        }
         guard.setPersistenceRequired();
         level.addFreshEntityWithPassengers(guard);
     }

@@ -98,7 +98,7 @@ final class VillageGreens {
         }
         flowers(b, p, g, hw, hl);
         // zwei Wächter auf dem Anger
-        piece.guard(b, g.x(1, wellAt + 4), 1, g.z(1, wellAt + 4), false);
+        piece.guard(b, g.x(1, wellAt + 4), 1, g.z(1, wellAt + 4), false, true);
         piece.guard(b, g.x(-1, pondAt - pondV - 2), 1, g.z(-1, pondAt - pondV - 2), b.random.nextBoolean());
     }
 
@@ -156,7 +156,7 @@ final class VillageGreens {
             }
         }
         flowers(b, p, g, r, r);
-        piece.guard(b, 3, 1, -(r - 3), false);
+        piece.guard(b, 3, 1, -(r - 3), false, true);
         piece.guard(b, -3, 1, r - 3, b.random.nextBoolean());
     }
 
