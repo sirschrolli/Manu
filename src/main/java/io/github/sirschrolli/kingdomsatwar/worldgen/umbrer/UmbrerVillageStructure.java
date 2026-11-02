@@ -144,14 +144,33 @@ public class UmbrerVillageStructure extends Structure {
 
     /** Geländehöhen aus dem Generator (mit Zwischenspeicher). */
     static final class Terrain {
-        private final Structure.GenerationContext context;
+        private final Structure.@org.jspecify.annotations.Nullable GenerationContext context;
         private final Map<Long, int[]> cache = new HashMap<>();
+        /** Ebenes Land (Tests, Vorführungen): oberster Block und Meeresspiegel. */
+        private final int flatY;
+        private final int flatSea;
 
         Terrain(Structure.GenerationContext context) {
             this.context = context;
+            this.flatY = 0;
+            this.flatSea = 0;
+        }
+
+        private Terrain(int flatY, int flatSea) {
+            this.context = null;
+            this.flatY = flatY;
+            this.flatSea = flatSea;
+        }
+
+        /** Ebenes, trockenes Land mit dem obersten Block bei {@code y}. */
+        static Terrain flat(int y, int seaLevel) {
+            return new Terrain(y, seaLevel);
         }
 
         private int[] column(int x, int z) {
+            if (this.context == null) {
+                return new int[] {this.flatY + 1, this.flatY + 1};
+            }
             return this.cache.computeIfAbsent(BlockPos.asLong(x, 0, z), key -> new int[] {
                     this.context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, this.context.heightAccessor(),
                             this.context.randomState()),
@@ -175,8 +194,17 @@ public class UmbrerVillageStructure extends Structure {
         }
 
         int seaLevel() {
-            return this.context.chunkGenerator().getSeaLevel();
+            return this.context == null ? this.flatSea : this.context.chunkGenerator().getSeaLevel();
         }
+    }
+
+    /**
+     * Für Tests und Vorführungen: ein Dorf der Umbrer auf ebenem Land (oberster Block bei {@code y}) planen;
+     * {@code layout} und {@code centerpiece} vorgeben ({@code null} bzw. −1: nach Zufall).
+     */
+    public static List<UmbrerVillagePiece> planFlat(int cx, int cz, int y, long seed, @org.jspecify.annotations.Nullable Layout layout,
+            int centerpiece) {
+        return plan(cx, cz, seed, Terrain.flat(y, y - 8), layout, centerpiece);
     }
 
     // =====================================================================================
@@ -197,6 +225,11 @@ public class UmbrerVillageStructure extends Structure {
 
     /** Plant das Dorf; die erste Liste ist leer, wenn der Ort nicht taugt (Wasser, zu steil). */
     static List<UmbrerVillagePiece> plan(int cx, int cz, long seed, Terrain terrain) {
+        return plan(cx, cz, seed, terrain, null, -1);
+    }
+
+    static List<UmbrerVillagePiece> plan(int cx, int cz, long seed, Terrain terrain, @org.jspecify.annotations.Nullable Layout forcedLayout,
+            int forcedCenterpiece) {
         RandomSource random = RandomSource.create(seed);
         if (terrain.water(cx, cz)) {
             return reject("water");
@@ -219,76 +252,109 @@ public class UmbrerVillageStructure extends Structure {
         List<UmbrerVillagePiece> pieces = new ArrayList<>();
         List<BoundingBox> taken = new ArrayList<>();
         BlockPos center = new BlockPos(cx, floor, cz);
-        pieces.add(UmbrerVillagePiece.plaza(center, PLAZA_RADIUS, random.nextLong()));
+        // der Grundriss (eigener Zufall): Stern mit vier Wegen, eine lange Gasse, drei Wege oder ein Ring um den Platz;
+        // dazu das Mittelstück des Platzes (Mondbrunnen, Kristallhain, Schattenbaum oder Steinkreis)
+        RandomSource shape = RandomSource.create(seed ^ 0x554D4252L);
+        List<Direction> dirs = new ArrayList<>(List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
+        Collections.shuffle(dirs, new java.util.Random(shape.nextLong()));
+        Layout layout = forcedLayout != null ? forcedLayout : Layout.values()[shape.nextInt(Layout.values().length)];
+        int centerpiece = forcedCenterpiece >= 0 ? forcedCenterpiece & 3 : shape.nextInt(4);
+        pieces.add(UmbrerVillagePiece.plaza(center, PLAZA_RADIUS, random.nextLong(), centerpiece));
         taken.add(new BoundingBox(cx - PLAZA_RADIUS - 1, 0, cz - PLAZA_RADIUS - 1, cx + PLAZA_RADIUS + 1, 0, cz + PLAZA_RADIUS + 1));
-
-        // Wege in die vier Himmelsrichtungen (Länge je Weg leicht verschieden)
-        Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-        int[] lengths = new int[4];
-        int[][] roads = new int[4][];
-        for (int i = 0; i < 4; i++) {
-            Direction dir = directions[i];
-            int length = 30 + random.nextInt(6);
-            int[] road = new int[length + 1];
-            int[] bridges = new int[length + 1];
-            int previous = floor;
-            for (int t = 0; t <= length; t++) {
-                int x = cx + dir.getStepX() * t;
-                int z = cz + dir.getStepZ() * t;
-                boolean water = terrain.water(x, z);
-                int target = water ? Math.max(terrain.surface(x, z), terrain.seaLevel() + 1) : terrain.ground(x, z);
-                if (t <= PLAZA_RADIUS) {
-                    target = floor;
+        List<Road> roads = new ArrayList<>();
+        if (layout == Layout.RING) {
+            int d = RING;
+            Direction[] along = {Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.NORTH};
+            BlockPos[] corners = {center.offset(-d, 0, -d), center.offset(d, 0, -d), center.offset(d, 0, d), center.offset(-d, 0, d)};
+            for (int i = 0; i < 4 && layout == Layout.RING; i++) {
+                Road ring = flatRoad(terrain, corners[i], along[i], 2 * d, floor);
+                if (ring == null) {
+                    // der Ring passt nicht ins Gelände: dann ein Stern
+                    layout = Layout.STAR;
+                    roads.clear();
+                } else {
+                    roads.add(ring);
                 }
-                // höchstens eine Stufe je Block
-                int y = Math.max(previous - 1, Math.min(previous + 1, target));
-                road[t] = y;
-                // über Wasser und tiefe Senken führt eine Brücke
-                bridges[t] = t > PLAZA_RADIUS && (water || y > terrain.ground(x, z) + 2) ? 1 : 0;
-                previous = y;
             }
-            lengths[i] = length;
-            roads[i] = road;
-            pieces.add(UmbrerVillagePiece.road(center, dir, road, bridges, random.nextLong()));
-            // Wegfläche: in Wegrichtung bis zum Ende, quer dazu ± ROAD_HALF
-            int padX = dir.getStepX() == 0 ? ROAD_HALF : 0;
-            int padZ = dir.getStepZ() == 0 ? ROAD_HALF : 0;
-            int minX = Math.min(cx, cx + dir.getStepX() * length) - padX;
-            int maxX = Math.max(cx, cx + dir.getStepX() * length) + padX;
-            int minZ = Math.min(cz, cz + dir.getStepZ() * length) - padZ;
-            int maxZ = Math.max(cz, cz + dir.getStepZ() * length) + padZ;
-            taken.add(new BoundingBox(minX, 0, minZ, maxX, 0, maxZ));
+        }
+        switch (layout) {
+            case STAR -> {
+                for (Direction dir : dirs) {
+                    roads.add(trace(terrain, center, dir, 30 + random.nextInt(6), PLAZA_RADIUS, floor, true));
+                }
+            }
+            case LANE -> {
+                Direction main = shape.nextBoolean() ? Direction.NORTH : Direction.EAST;
+                for (Direction dir : List.of(main, main.getOpposite())) {
+                    roads.add(trace(terrain, center, dir, 40 + shape.nextInt(10), PLAZA_RADIUS, floor, true));
+                }
+            }
+            case FORK -> {
+                for (Direction dir : dirs.subList(0, 3)) {
+                    roads.add(trace(terrain, center, dir, 32 + shape.nextInt(8), PLAZA_RADIUS, floor, true));
+                }
+            }
+            case RING -> {
+                for (Direction dir : dirs.subList(0, 2)) {
+                    roads.add(trace(terrain, center, dir, RING + 1 + 24 + shape.nextInt(8), RING + 1, floor, true));
+                }
+            }
+        }
+        for (Road road : roads) {
+            pieces.add(UmbrerVillagePiece.road(road.start, center, road.dir, road.heights, road.bridges, road.skip, random.nextLong()));
+            taken.add(road.area());
         }
 
         // Wachtürme an (bis zu) zwei Wegenden
-        List<Integer> roadOrder = new ArrayList<>(List.of(0, 1, 2, 3));
-        Collections.shuffle(roadOrder, new java.util.Random(seed));
+        List<Road> arms = new ArrayList<>(roads.stream().filter(r -> r.arm).toList());
+        Collections.shuffle(arms, new java.util.Random(seed));
         int towers = 0;
-        for (int k = 0; k < 4 && towers < 2; k++) {
-            int i = roadOrder.get(k);
-            Direction dir = directions[i];
+        for (Road road : arms) {
+            if (towers >= 2) {
+                break;
+            }
             // ein Block Abstand zum Wegende: dort liegt der Zugang (sonst überschneidet sich der Turm mit seinem eigenen Weg)
-            BlockPos front = new BlockPos(cx + dir.getStepX() * (lengths[i] + 2), 0, cz + dir.getStepZ() * (lengths[i] + 2));
-            if (tryPlace(pieces, taken, terrain, UmbrerVillagePiece.Kind.WATCHTOWER, front, dir.getOpposite(), roads[i][lengths[i]], center,
+            int t = road.length();
+            BlockPos front = new BlockPos(road.x(t) + road.dir.getStepX() * 2, 0, road.z(t) + road.dir.getStepZ() * 2);
+            if (tryPlace(pieces, taken, terrain, UmbrerVillagePiece.Kind.WATCHTOWER, front, road.dir.getOpposite(), road.heights[t], center,
                     random)) {
                 towers++;
             }
         }
 
-        // Häuser an den Wegen: erst die Pflicht-Gebäude, dann was noch Platz hat
-        List<UmbrerVillagePiece.Kind> wanted = new ArrayList<>(List.of(UmbrerVillagePiece.Kind.SEER_TOWER, UmbrerVillagePiece.Kind.SMITHY,
-                UmbrerVillagePiece.Kind.HERB_HUT, UmbrerVillagePiece.Kind.CRYSTAL_WORKSHOP, UmbrerVillagePiece.Kind.FARM,
-                UmbrerVillagePiece.Kind.HOUSE, UmbrerVillagePiece.Kind.LONGHOUSE, UmbrerVillagePiece.Kind.FARM,
-                UmbrerVillagePiece.Kind.CRYSTAL_GARDEN, UmbrerVillagePiece.Kind.HOUSE, UmbrerVillagePiece.Kind.HOUSE,
-                UmbrerVillagePiece.Kind.FARM, UmbrerVillagePiece.Kind.LONGHOUSE, UmbrerVillagePiece.Kind.HOUSE));
-        // Bauplätze: an jeder Wegseite reihen sich die Gebäude vom Platz nach außen aneinander (2 Blöcke Abstand);
-        // wo Wasser oder ein Hang stört, rückt der Platz ein Stück weiter
-        int[][] cursor = new int[4][2];
-        for (int[] row : cursor) {
-            java.util.Arrays.fill(row, PLAZA_RADIUS + 3);
+        // Häuser an den Wegen: erst, was ein Dorf braucht (der Seherturm fehlt mancherorts), dann eine bunte Mischung
+        List<UmbrerVillagePiece.Kind> wanted = new ArrayList<>();
+        if (shape.nextFloat() < 0.8f) {
+            wanted.add(UmbrerVillagePiece.Kind.SEER_TOWER);
         }
+        wanted.addAll(List.of(UmbrerVillagePiece.Kind.SMITHY, UmbrerVillagePiece.Kind.HERB_HUT, UmbrerVillagePiece.Kind.CRYSTAL_WORKSHOP,
+                UmbrerVillagePiece.Kind.FARM, UmbrerVillagePiece.Kind.HOUSE));
+        List<UmbrerVillagePiece.Kind> rest = new ArrayList<>();
+        int houses = 3 + shape.nextInt(3);
+        int longhouses = 1 + shape.nextInt(3);
+        int farms = 1 + shape.nextInt(3);
+        int gardens = shape.nextInt(3);
+        for (int i = 0; i < houses; i++) {
+            rest.add(UmbrerVillagePiece.Kind.HOUSE);
+        }
+        for (int i = 0; i < longhouses; i++) {
+            rest.add(UmbrerVillagePiece.Kind.LONGHOUSE);
+        }
+        for (int i = 0; i < farms; i++) {
+            rest.add(UmbrerVillagePiece.Kind.FARM);
+        }
+        for (int i = 0; i < gardens; i++) {
+            rest.add(UmbrerVillagePiece.Kind.CRYSTAL_GARDEN);
+        }
+        Collections.shuffle(rest, new java.util.Random(shape.nextLong()));
+        wanted.addAll(rest);
+        // Bauplätze: an jeder Wegseite reihen sich die Gebäude vom Platz nach außen aneinander (2 Blöcke Abstand);
+        // wo Wasser oder ein Hang stört, rückt der Platz ein Stück weiter. Am Ring stehen die Häuser zum Platz hin.
+        int[][] cursor = new int[roads.size()][2];
         List<int[]> sides = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < roads.size(); i++) {
+            Road road = roads.get(i);
+            cursor[i][0] = cursor[i][1] = road.arm ? road.skip + 3 : 1;
             sides.add(new int[] {i, 0});
             sides.add(new int[] {i, 1});
         }
@@ -296,17 +362,20 @@ public class UmbrerVillageStructure extends Structure {
         int placed = 0;
         for (UmbrerVillagePiece.Kind kind : wanted) {
             Collections.shuffle(sides, order);
+            if (layout == Layout.RING) {
+                // die wichtigen Häuser stehen am Ring
+                sides.sort(java.util.Comparator.comparingInt(lot -> roads.get(lot[0]).arm ? 1 : 0));
+            }
             boolean done = false;
             for (int[] lot : sides) {
-                int i = lot[0];
-                Direction dir = directions[i];
-                Direction side = lot[1] == 0 ? dir.getClockWise() : dir.getCounterClockWise();
-                for (int start = cursor[i][lot[1]]; !done && start + kind.width <= lengths[i]; start += 3) {
+                Road road = roads.get(lot[0]);
+                Direction side = lot[1] == 0 ? road.dir.getClockWise() : road.dir.getCounterClockWise();
+                for (int start = cursor[lot[0]][lot[1]]; !done && start + kind.width <= road.length(); start += 3) {
                     int t = start + kind.width / 2;
-                    BlockPos front = new BlockPos(cx + dir.getStepX() * t + side.getStepX() * (ROAD_HALF + 2), 0,
-                            cz + dir.getStepZ() * t + side.getStepZ() * (ROAD_HALF + 2));
-                    if (tryPlace(pieces, taken, terrain, kind, front, side.getOpposite(), roads[i][t], center, random)) {
-                        cursor[i][lot[1]] = start + kind.width + 2;
+                    BlockPos front = new BlockPos(road.x(t) + side.getStepX() * (ROAD_HALF + 2), 0, road.z(t) + side.getStepZ() * (ROAD_HALF + 2));
+                    if (road.bridges[t] == 0
+                            && tryPlace(pieces, taken, terrain, kind, front, side.getOpposite(), road.heights[t], center, random)) {
+                        cursor[lot[0]][lot[1]] = start + kind.width + 2;
                         placed++;
                         done = true;
                     }
@@ -319,7 +388,86 @@ public class UmbrerVillageStructure extends Structure {
         if (placed < 6) {
             return reject("few:" + placed);
         }
+        if (debug != null) {
+            debug.accept("umbrer village (" + layout.name().toLowerCase(java.util.Locale.ROOT) + ") at " + center + ": " + placed + " buildings");
+        }
         return pieces;
+    }
+
+    /** Die Grundrisse der Umbrer-Dörfer. */
+    public enum Layout {
+        /** vier Wege in die Himmelsrichtungen */
+        STAR,
+        /** eine lange Gasse durch den Platz */
+        LANE,
+        /** drei Wege */
+        FORK,
+        /** ein Ring um den Platz, die Häuser schauen zur Mitte; zwei Wege hinaus */
+        RING
+    }
+
+    /** Abstand der Ringstraße von der Platzmitte. */
+    static final int RING = PLAZA_RADIUS + 3;
+
+    /** Ein geplanter Weg: Anfang, Richtung, Höhen und Brücken je Schritt; gebaut wird ab {@code skip}. */
+    private record Road(BlockPos start, Direction dir, int[] heights, int[] bridges, int skip, boolean arm) {
+        int length() {
+            return this.heights.length - 1;
+        }
+
+        int x(int t) {
+            return this.start.getX() + this.dir.getStepX() * t;
+        }
+
+        int z(int t) {
+            return this.start.getZ() + this.dir.getStepZ() * t;
+        }
+
+        /** Wegfläche: in Wegrichtung ab {@code skip} bis zum Ende, quer dazu ± ROAD_HALF. */
+        BoundingBox area() {
+            int padX = this.dir.getStepX() == 0 ? ROAD_HALF : 0;
+            int padZ = this.dir.getStepZ() == 0 ? ROAD_HALF : 0;
+            int x0 = this.x(this.skip);
+            int z0 = this.z(this.skip);
+            int x1 = this.x(this.length());
+            int z1 = this.z(this.length());
+            return new BoundingBox(Math.min(x0, x1) - padX, 0, Math.min(z0, z1) - padZ, Math.max(x0, x1) + padX, 0, Math.max(z0, z1) + padZ);
+        }
+    }
+
+    /** Ein Weg vom Platz hinaus: höchstens eine Stufe je Block, über Wasser und tiefe Senken als Brücke. */
+    private static Road trace(Terrain terrain, BlockPos center, Direction dir, int length, int skip, int floor, boolean arm) {
+        int[] road = new int[length + 1];
+        int[] bridges = new int[length + 1];
+        int previous = floor;
+        for (int t = 0; t <= length; t++) {
+            int x = center.getX() + dir.getStepX() * t;
+            int z = center.getZ() + dir.getStepZ() * t;
+            boolean water = terrain.water(x, z);
+            int target = water ? Math.max(terrain.surface(x, z), terrain.seaLevel() + 1) : terrain.ground(x, z);
+            if (t <= skip) {
+                target = floor;
+            }
+            int y = Math.max(previous - 1, Math.min(previous + 1, target));
+            road[t] = y;
+            bridges[t] = t > skip && (water || y > terrain.ground(x, z) + 2) ? 1 : 0;
+            previous = y;
+        }
+        return new Road(center, dir, road, bridges, skip, arm);
+    }
+
+    /** Ein ebenes Stück des Rings (ohne Wasser, das Gelände höchstens drei Blöcke höher oder tiefer), sonst {@code null}. */
+    private static @org.jspecify.annotations.Nullable Road flatRoad(Terrain terrain, BlockPos start, Direction dir, int length, int y) {
+        int[] heights = new int[length + 1];
+        for (int t = 0; t <= length; t++) {
+            int x = start.getX() + dir.getStepX() * t;
+            int z = start.getZ() + dir.getStepZ() * t;
+            if (terrain.water(x, z) || Math.abs(terrain.ground(x, z) - y) > 3) {
+                return null;
+            }
+            heights[t] = y;
+        }
+        return new Road(start.atY(y), dir, heights, new int[length + 1], 0, false);
     }
 
     /**

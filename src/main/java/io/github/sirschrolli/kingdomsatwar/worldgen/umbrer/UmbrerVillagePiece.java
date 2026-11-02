@@ -82,9 +82,11 @@ public class UmbrerVillagePiece extends StructurePiece {
     private final Direction roadDirection;
     private final int[] roadHeights;
     private final int[] roadBridges;
+    /** Nur beim Weg: ab welchem Schritt gebaut wird (Wege vom Platz beginnen an seinem Rand, der Ring an der Ecke). */
+    private final int roadSkip;
 
     private UmbrerVillagePiece(Kind kind, BlockPos origin, Rotation rotation, long seed, BlockPos center, int step, Direction roadDirection,
-            int[] roadHeights, int[] roadBridges, BoundingBox box) {
+            int[] roadHeights, int[] roadBridges, int roadSkip, BoundingBox box) {
         super(ModStructures.UMBRER_VILLAGE_PIECE.get(), 0, box);
         this.kind = kind;
         this.origin = origin;
@@ -95,6 +97,7 @@ public class UmbrerVillagePiece extends StructurePiece {
         this.roadDirection = roadDirection;
         this.roadHeights = roadHeights;
         this.roadBridges = roadBridges;
+        this.roadSkip = roadSkip;
     }
 
     public UmbrerVillagePiece(CompoundTag tag) {
@@ -109,6 +112,7 @@ public class UmbrerVillagePiece extends StructurePiece {
         this.roadDirection = Direction.from3DDataValue(tag.getIntOr("Dir", 2));
         this.roadHeights = tag.getIntArray("Road").orElse(new int[0]);
         this.roadBridges = tag.getIntArray("Bridge").orElse(new int[this.roadHeights.length]);
+        this.roadSkip = tag.getIntOr("Skip", UmbrerVillageStructure.PLAZA_RADIUS);
     }
 
     @Override
@@ -126,19 +130,44 @@ public class UmbrerVillagePiece extends StructurePiece {
         tag.putInt("Dir", this.roadDirection.get3DDataValue());
         tag.putIntArray("Road", this.roadHeights);
         tag.putIntArray("Bridge", this.roadBridges);
+        tag.putInt("Skip", this.roadSkip);
     }
 
     // =====================================================================================
     // Erzeugen
     // =====================================================================================
 
-    static UmbrerVillagePiece plaza(BlockPos center, int radius, long seed) {
+    /** Der Dorfplatz; {@code centerpiece}: 0 Mondbrunnen, 1 Kristallhain, 2 Schattenbaum, 3 Steinkreis. */
+    static UmbrerVillagePiece plaza(BlockPos center, int radius, long seed, int centerpiece) {
         BoundingBox box = new BoundingBox(center.getX() - radius - 1, center.getY() - 12, center.getZ() - radius - 1,
-                center.getX() + radius + 1, center.getY() + 10, center.getZ() + radius + 1);
-        return new UmbrerVillagePiece(Kind.PLAZA, center, Rotation.NONE, seed, center, 0, Direction.NORTH, new int[0], new int[0], box);
+                center.getX() + radius + 1, center.getY() + 12, center.getZ() + radius + 1);
+        return new UmbrerVillagePiece(Kind.PLAZA, center, Rotation.NONE, seed, center, centerpiece, Direction.NORTH, new int[0], new int[0], 0, box);
+    }
+
+    /** Beim Platz: das Mittelstück (0 Mondbrunnen, 1 Kristallhain, 2 Schattenbaum, 3 Steinkreis). */
+    public int centerpiece() {
+        return this.kind == Kind.PLAZA ? this.step & 3 : 0;
+    }
+
+    /** Beim Weg: Richtung, Länge und ab welchem Schritt gebaut wird. */
+    public Direction roadDirection() {
+        return this.roadDirection;
+    }
+
+    public int roadLength() {
+        return this.roadHeights.length - 1;
+    }
+
+    public int roadSkip() {
+        return this.roadSkip;
     }
 
     static UmbrerVillagePiece road(BlockPos center, Direction direction, int[] heights, int[] bridges, long seed) {
+        return road(center, center, direction, heights, bridges, UmbrerVillageStructure.PLAZA_RADIUS, seed);
+    }
+
+    /** Ein Weg ab {@code start} in Richtung {@code direction}, gebaut ab Schritt {@code skip} (z. B. ein Stück des Rings). */
+    static UmbrerVillagePiece road(BlockPos start, BlockPos center, Direction direction, int[] heights, int[] bridges, int skip, long seed) {
         int length = heights.length - 1;
         int minY = Integer.MAX_VALUE;
         int maxY = Integer.MIN_VALUE;
@@ -146,17 +175,17 @@ public class UmbrerVillagePiece extends StructurePiece {
             minY = Math.min(minY, h);
             maxY = Math.max(maxY, h);
         }
-        int x1 = center.getX() + direction.getStepX() * length;
-        int z1 = center.getZ() + direction.getStepZ() * length;
-        BoundingBox box = new BoundingBox(Math.min(center.getX(), x1) - 3, minY - 12, Math.min(center.getZ(), z1) - 3,
-                Math.max(center.getX(), x1) + 3, maxY + 8, Math.max(center.getZ(), z1) + 3);
-        return new UmbrerVillagePiece(Kind.ROAD, center, Rotation.NONE, seed, center, 0, direction, heights, bridges, box);
+        int x1 = start.getX() + direction.getStepX() * length;
+        int z1 = start.getZ() + direction.getStepZ() * length;
+        BoundingBox box = new BoundingBox(Math.min(start.getX(), x1) - 3, minY - 12, Math.min(start.getZ(), z1) - 3,
+                Math.max(start.getX(), x1) + 3, maxY + 8, Math.max(start.getZ(), z1) + 3);
+        return new UmbrerVillagePiece(Kind.ROAD, start, Rotation.NONE, seed, center, 0, direction, heights, bridges, skip, box);
     }
 
     static UmbrerVillagePiece building(Kind kind, BlockPos origin, Rotation rotation, long seed, BlockPos center, int step) {
         BoundingBox box = footprint(origin, rotation, kind.width, kind.depth, origin.getY() - 24, origin.getY() + kind.height)
                 .inflatedBy(2, 0, 2);
-        return new UmbrerVillagePiece(kind, origin, rotation, seed, center, step, Direction.NORTH, new int[0], new int[0], box);
+        return new UmbrerVillagePiece(kind, origin, rotation, seed, center, step, Direction.NORTH, new int[0], new int[0], 0, box);
     }
 
     /** Für Tests: ein einzelnes Gebäude ohne Dorf (Fußboden auf Höhe des Ursprungs, Weg vor der Tür auf gleicher Höhe). */
@@ -271,7 +300,34 @@ public class UmbrerVillagePiece extends StructurePiece {
                 b.set(x, 0, z, floor);
             }
         }
-        // Mondbrunnen: ein Becken mit Wasser, in der Mitte eine Säule, auf der ein Nachtkristall leuchtet wie der Mond
+        // das Mittelstück: jedes Dorf hat sein eigenes
+        switch (this.centerpiece()) {
+            case 1 -> crystalGrove(b, polished, bricks, chiseled);
+            case 2 -> shadowTree(b, polished, bricks);
+            case 3 -> stoneCircle(b, polished, chiseled);
+            default -> moonWell(b, polished, bricks, chiseled);
+        }
+        // Laternenpfähle an den Diagonalen, Bänke dazwischen
+        for (int sx = -1; sx <= 1; sx += 2) {
+            for (int sz = -1; sz <= 1; sz += 2) {
+                lanternPost(b, sx * 5, 0, sz * 5);
+            }
+        }
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            Direction side = dir.getClockWise();
+            int bx = dir.getStepX() * 6 + side.getStepX() * 3;
+            int bz = dir.getStepZ() * 6 + side.getStepZ() * 3;
+            BlockState bench = ShadowBlocks.SHADOW_PLANKS.stairs().get().defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.StairBlock.FACING, dir);
+            b.set(bx, 1, bz, bench);
+        }
+        // zwei Wächter auf dem Platz
+        this.spawn(b, 3, 1, -3, UmbrerProfession.GUARD);
+        this.spawn(b, -3, 1, 3, UmbrerProfession.GUARD);
+    }
+
+    /** Mondbrunnen: ein Becken mit Wasser, in der Mitte eine Säule, auf der ein Nachtkristall leuchtet wie der Mond. */
+    private void moonWell(VillageBuilder b, BlockState polished, BlockState bricks, BlockState chiseled) {
         BlockState rimSlab = VillageBuilder.slab(ShadowBlocks.POLISHED_SHADOW_STONE.slab().get(), SlabType.BOTTOM);
         BlockState wall = ShadowBlocks.SHADOW_STONE_BRICKS.wall() != null
                 ? ShadowBlocks.SHADOW_STONE_BRICKS.wall().get().defaultBlockState() : bricks;
@@ -311,23 +367,106 @@ public class UmbrerVillagePiece extends StructurePiece {
             b.set(dir.getStepX(), 3, dir.getStepZ(), VillageBuilder.stairs(ShadowBlocks.POLISHED_SHADOW_STONE.stairs().get(), dir.getOpposite(),
                     net.minecraft.world.level.block.state.properties.Half.TOP));
         }
-        // Laternenpfähle an den Diagonalen, Bänke dazwischen
-        for (int sx = -1; sx <= 1; sx += 2) {
-            for (int sz = -1; sz <= 1; sz += 2) {
-                lanternPost(b, sx * 5, 0, sz * 5);
+    }
+
+    /**
+     * Kristallhain: eine runde, zweistufige Plattform, auf der Nachtkristalle in verschiedenen Höhen aus dem Stein wachsen,
+     * mit Glimmermoos in den Fugen und Mondlaternen am Rand.
+     */
+    private void crystalGrove(VillageBuilder b, BlockState polished, BlockState bricks, BlockState chiseled) {
+        BlockState crystal = ShadowBlocks.NIGHT_CRYSTAL.get().defaultBlockState();
+        BlockState cluster = ShadowBlocks.NIGHT_CRYSTAL_CLUSTER.get().defaultBlockState();
+        BlockState moss = ShadowBlocks.GLIMMER_MOSS.get().defaultBlockState();
+        BlockState slab = bottomSlab(ShadowBlocks.POLISHED_SHADOW_STONE.slab().get().defaultBlockState());
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                double d = Math.sqrt(x * x + z * z);
+                if (d > 3.4) {
+                    continue;
+                }
+                b.set(x, 0, z, d > 2.6 ? bricks : (x + z & 1) == 0 ? moss : chiseled);
+                b.set(x, 1, z, d > 2.6 ? slab : polished);
             }
         }
-        for (Direction dir : Direction.Plane.HORIZONTAL) {
-            Direction side = dir.getClockWise();
-            int bx = dir.getStepX() * 6 + side.getStepX() * 3;
-            int bz = dir.getStepZ() * 6 + side.getStepZ() * 3;
-            BlockState bench = ShadowBlocks.SHADOW_PLANKS.stairs().get().defaultBlockState()
-                    .setValue(net.minecraft.world.level.block.StairBlock.FACING, dir);
-            b.set(bx, 1, bz, bench);
+        // die Kristalle: in der Mitte der höchste, ringsum kleinere
+        int[][] spires = {{0, 0, 4}, {2, 1, 2}, {-1, 2, 3}, {-2, -1, 2}, {1, -2, 2}};
+        for (int[] c : spires) {
+            for (int y = 2; y < 2 + c[2]; y++) {
+                b.set(c[0], y, c[1], crystal);
+            }
+            b.set(c[0], 2 + c[2], c[1], cluster);
         }
-        // zwei Wächter auf dem Platz
-        this.spawn(b, 3, 1, -3, UmbrerProfession.GUARD);
-        this.spawn(b, -3, 1, 3, UmbrerProfession.GUARD);
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            b.set(dir.getStepX() * 3, 2, dir.getStepZ() * 3, ShadowBlocks.MOON_LANTERN.get().defaultBlockState());
+        }
+    }
+
+    /** Schattenbaum: ein alter Baum aus Schattenholz mit weiter Krone, Glimmerranken hängen herab; ringsum Sitzsteine. */
+    private void shadowTree(VillageBuilder b, BlockState polished, BlockState bricks) {
+        BlockState log = ShadowBlocks.SHADOW_LOG.get().defaultBlockState();
+        BlockState leaves = ShadowBlocks.SHADOW_LEAVES.get().defaultBlockState()
+                .setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true);
+        BlockState soil = ShadowBlocks.SHADOW_SOIL.get().defaultBlockState();
+        // Beet und Sitzkranz
+        for (int x = -2; x <= 2; x++) {
+            for (int z = -2; z <= 2; z++) {
+                boolean rim = Math.abs(x) == 2 || Math.abs(z) == 2;
+                b.set(x, 0, z, rim ? bricks : soil);
+                if (rim && !(Math.abs(x) == 2 && Math.abs(z) == 2)) {
+                    b.set(x, 1, z, bottomSlab(ShadowBlocks.POLISHED_SHADOW_STONE.slab().get().defaultBlockState()));
+                }
+            }
+        }
+        // Stamm mit Wurzeln, Ästen und einer weiten, flachen Krone
+        for (int y = 1; y <= 7; y++) {
+            b.set(0, y, 0, log);
+        }
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            b.set(dir.getStepX(), 1, dir.getStepZ(), log.setValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS, dir.getAxis()));
+            b.set(dir.getStepX(), 6, dir.getStepZ(), log.setValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS, dir.getAxis()));
+            b.set(dir.getStepX() * 2, 7, dir.getStepZ() * 2, log.setValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS, dir.getAxis()));
+        }
+        for (int x = -5; x <= 5; x++) {
+            for (int z = -5; z <= 5; z++) {
+                for (int y = 7; y <= 10; y++) {
+                    double ex = x / 5.0;
+                    double ez = z / 5.0;
+                    double ey = (y - 8.2) / 1.8;
+                    if (ex * ex + ey * ey + ez * ez <= 1.0 - 0.2 * b.noise(x, y, z) && b.get(x, y, z).isAir()) {
+                        b.set(x, y, z, leaves);
+                    }
+                }
+            }
+        }
+        // Glimmerranken unter der Krone
+        int[][] vines = {{3, 2}, {-3, 1}, {1, -4}, {-2, -3}, {4, -1}, {-1, 4}};
+        for (int[] v : vines) {
+            if (b.get(v[0], 7, v[1]).getBlock() == ShadowBlocks.SHADOW_LEAVES.get()) {
+                b.set(v[0], 6, v[1], ShadowBlocks.GLIMMER_VINES_PLANT.get().defaultBlockState());
+                b.set(v[0], 5, v[1], ShadowBlocks.GLIMMER_VINES.get().defaultBlockState());
+            }
+        }
+    }
+
+    /** Steinkreis der Seher: acht stehende Steine um einen Nachtkristall auf einem Sockel. */
+    private void stoneCircle(VillageBuilder b, BlockState polished, BlockState chiseled) {
+        BlockState stone = ShadowBlocks.DEEP_SHADOW_STONE.get().defaultBlockState();
+        for (int i = 0; i < 8; i++) {
+            double angle = i * Math.PI / 4.0;
+            int x = (int) Math.round(Math.cos(angle) * 4.0);
+            int z = (int) Math.round(Math.sin(angle) * 4.0);
+            int height = i % 2 == 0 ? 3 : 2;
+            for (int y = 1; y <= height; y++) {
+                b.set(x, y, z, stone);
+            }
+            b.set(x, height + 1, z, i % 2 == 0 ? chiseled : bottomSlab(ShadowBlocks.POLISHED_SHADOW_STONE.slab().get().defaultBlockState()));
+        }
+        b.set(0, 1, 0, chiseled);
+        b.set(0, 2, 0, ShadowBlocks.NIGHT_CRYSTAL.get().defaultBlockState());
+        b.set(0, 3, 0, ShadowBlocks.NIGHT_CRYSTAL_CLUSTER.get().defaultBlockState());
+        for (Direction dir : Direction.Plane.HORIZONTAL) {
+            b.set(dir.getStepX() * 2, 0, dir.getStepZ() * 2, chiseled);
+        }
     }
 
     /** Laternenpfahl: Zaunpfosten auf einem Sockel, oben eine Mondlaterne. */
@@ -355,7 +494,7 @@ public class UmbrerVillagePiece extends StructurePiece {
         BlockState planks = ShadowBlocks.SHADOW_PLANKS.base().get().defaultBlockState();
         BlockState fence = ShadowBlocks.SHADOW_FENCE.get().defaultBlockState();
         boolean[] bridge = new boolean[length + 1];
-        for (int t = UmbrerVillageStructure.PLAZA_RADIUS; t <= length; t++) {
+        for (int t = Math.max(0, this.roadSkip); t <= length; t++) {
             int y = this.roadHeights[t];
             int cx = this.origin.getX() + dir.getStepX() * t;
             int cz = this.origin.getZ() + dir.getStepZ() * t;

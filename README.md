@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.18.0 – Söldner in den Dörfern, Ränge und Ausbildung am Rekrutierungstisch.**
+> **Testversion 0.19.0 – Dörfer mit verschiedenen Grundrissen, auch bei den Umbrern im Schattenreich.**
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
 > Schattenzitadelle und die Bauwerke der Schattenwelt, die **Wirtschaft** mit Münzen, Stadt, Bürgern, Handel und
@@ -80,7 +80,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Blumenkästen, Fensterbänke, Laternen an Auslegern und Inneneinrichtungen, die zusammenpassen (Küche am Schornstein,
 > Schlafkammer, Stube). Jeder Entwurf wird automatisch gebaut, begangen und geprüft – dabei fielen auch in den alten
 > Gebäuden Laternen und Kronleuchter auf, die frei in der Luft hingen; sie hängen jetzt an Balken.
-> Neu in 0.18: **Jedes Dorf hat ein Söldnerhaus** – vorn ein Übungshof mit Strohzielen, Übungspuppe und der
+> In 0.18: **Jedes Dorf hat ein Söldnerhaus** – vorn ein Übungshof mit Strohzielen, Übungspuppe und der
 > **Söldnertafel**, hinten Schankraum mit Kamin und langer Tafel und oben der Schlafsaal, in allen vier Bauweisen. An der
 > Tafel warten jeden Morgen bis zu drei Söldner: Ritter, Schwertkämpfer, Bogenschützen und Hauptleute, manche schon
 > **Veteran** oder **Elite**. Die Tafel zeigt Gesicht, Rang, Werte und Sold, angeheuert wird mit Münzen. Ritter und
@@ -88,9 +88,20 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > „Ausbilden“ beförderst du deine Leute zum Veteranen und zur Elite (je Rang +25 % Leben, +2 Rüstung, +1 Schaden) und
 > bildest Schwertkämpfer zu Rittern und Ritter zu Hauptleuten aus – Name, Rang und Herr bleiben. Den Rang erkennt man
 > an Schärpe, Ärmelstreifen, Schulterstücken und Ehrenmedaille und an den Sternen im Namen.
+> Neu in 0.19: **Kein Dorf sieht mehr aus wie das andere.** Es gibt vier Grundrisse: das **Haufendorf** mit dem
+> gepflasterten Platz und Wegen in alle Richtungen, das **Straßendorf** an einer langen Dorfstraße mit kleinem
+> Marktplatz und kurzen Quergassen, das **Angerdorf** um einen langen Anger – Brunnen bzw. Maibaum, Dorflinde, ein Teich
+> mit Seerosen und Schilf, Bäume und ein Trampelpfad, im Lehmland eine Oase mit Palmen – und den **Rundling**, dessen
+> Häuser rings um eine runde Dorfwiese mit Linde, Maibaum oder Springbrunnen stehen; hinaus führen nur ein, zwei Wege zu
+> den Feldern. Welcher Grundriss es wird, entscheiden Zufall und Bauweise (Pfahldörfer sind Haufen- oder Straßendörfer),
+> und auch Handwerker, Felder und Häuser wechseln: Straßendörfer und Rundlinge sind Bauerndörfer, im Angerdorf steht die
+> Kapelle immer. Die **Dörfer der Umbrer** liegen jetzt als Stern, lange Gasse, Dreiweg oder als Ring um den Platz, und
+> jeder Platz hat eines von vier Mittelstücken: den Mondbrunnen, einen Kristallhain, einen alten Schattenbaum mit
+> Glimmerranken oder einen Steinkreis der Seher; Häuser, Langhäuser, Felder und Kristallgärten sind jedes Mal anders
+> gemischt, und nicht jedes Dorf hat einen Seherturm.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** verschiedene Dorfanlagen (auch bei den Umbrern im Schattenreich) – danach Golems und die übrigen
-> Dorfwesen, zuletzt Nether und End.
+> **Als Nächstes:** Golems und die übrigen Dorfwesen (Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler,
+> glücklicher Ghast, fahrender Händler), zuletzt Nether und End.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -109,7 +120,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
 | Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer | ✅ fertig |
-| Ritter und Soldaten: Rekrutierungstisch, Befehle mit dem Kommandostab, Banditen | ✅ fertig |
+| Ritter und Soldaten: Rekrutierungstisch mit Ausbildung und Rängen, Söldnerhaus in den Dörfern, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
@@ -122,15 +133,15 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
-| Eigene Dörfer in vier Bauweisen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
+| Eigene Dörfer in vier Bauweisen und vier Grundrissen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
 | Eigene Wildtiere statt Vanilla: Wolf, Fuchs, Bär, Panda, Katzen, Papagei, Biene, Fledermaus, Gürteltier, Kamel, Lama in 50 Arten | ✅ fertig |
 | Eigene Monster statt Vanilla: Untote und Nachtwesen in 19 Arten und 39 Gestalten, 51 untote Dorfbewohner (heilbar) | ✅ fertig |
 | Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
-| Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute | 🔨 in Arbeit |
-| Golems, Hilfsgeist, Schnüffler, Dorfbewohner und Händler statt Vanilla; Nether und End | ⏳ danach |
+| Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
+| Golems, Hilfsgeist, Schnüffler, Dorfbewohner und Händler statt Vanilla; Nether und End | 🔨 als Nächstes |
 | Dragon Architect, Belagerungswaffen, Kriegssystem, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -147,7 +158,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.18.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.19.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -155,7 +166,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.18.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.19.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -256,6 +267,17 @@ aus sechs Hörnern und zerfetzten Schwingen mit leuchtenden Adern. Zwischen sein
 - **Sieg:** Licht bricht über dem Thronhof durch, das **Herz der Schatten** schwebt dort, wo er fiel, dazu Abyssit,
   Seelenkristalle und Schattenessenz – und beim ersten Sieg endet die Geschichte vom Siegel.
 
+### Die Dörfer der Umbrer
+
+Das Schattenvolk lebt in Dörfern aus Schattenstein und Schattenholz mit Mondlaternen und Nachtkristallen. Jedes Dorf
+hat seinen eigenen Grundriss – **Stern** (vier Wege), **Gasse** (eine lange Gasse durch den Platz), **Dreiweg** oder
+**Ring** (eine Ringstraße um den Platz, die Häuser schauen zur Mitte, zwei Wege hinaus) – und auf dem Platz eines von
+vier Mittelstücken: den **Mondbrunnen**, einen **Kristallhain**, einen alten **Schattenbaum** mit Glimmerranken oder
+den **Steinkreis der Seher**. Häuser, Langhäuser, Dämmerkornfelder und Kristallgärten sind jedes Mal anders gemischt,
+nicht jedes Dorf hat einen Seherturm; an den Wegenden stehen Wachtürme.
+
+![Dörfer der Umbrer: Mondbrunnen, Schattenbaum, Steinkreis und die lange Gasse](docs/bilder/umbrer_doerfer.jpg)
+
 ### Bauwerke der Schattenwelt
 
 Neben den Dörfern der Umbrer und der Zitadelle liegen überall in der Schattenwelt kleinere Bauwerke – etwa alle
@@ -322,10 +344,16 @@ Die Vanilla-Dörfer sind fort – an ihrer Stelle stehen **eigene Dörfer in vie
 | **Lehm** | Wüste und Savanne | Lehm- und Kalkputz auf behauenem Sandstein, Flachdächer mit Brüstung, vorstehende Balken, bunte Sonnensegel |
 | **Pfahlbau** | Sumpf, Mangrovensumpf, Nebelmoor | Holzhäuser auf Pfählen über Wasser und Schlamm, Stege statt Wegen, Schindeldächer |
 
-- **Der Dorfplatz** in der Mitte ist gepflastert (im Moor eine Plattform auf Pfählen). Darauf steht ein Brunnen mit
+![Die vier Grundrisse: Haufendorf, Straßendorf, Angerdorf und Rundling](docs/bilder/dorfanlagen.jpg)
+
+- **Der Dorfplatz** in der Mitte ist gepflastert (im Moor eine Plattform auf Pfählen) – im Angerdorf ist es der lange
+  Anger mit Teich und Bäumen, im Rundling die runde Dorfwiese. Darauf steht ein Brunnen mit
   Dach und Dorfglocke, eine Dorflinde, ein Maibaum, ein Springbrunnen oder eine Feuerstelle; ringsum Bänke, Laternen
   und Marktstände.
-- Vom Platz führen **Wege** in alle Richtungen, mit Seitengassen, Stufen am Hang und Brücken über Wasser. Daran stehen
+- **Vier Grundrisse:** Haufendorf (Platz mit Wegen in alle Richtungen und Seitengassen), Straßendorf (lange
+  Dorfstraße mit kleinem Marktplatz und Quergassen), Angerdorf (zwei Straßen um einen langen Anger mit Brunnen, Linde,
+  Teich und Bäumen, im Lehmland eine Oase mit Palmen) und Rundling (Häuser rings um eine runde Dorfwiese, nur ein, zwei
+  Wege hinaus). Die Wege haben Stufen am Hang und Brücken über Wasser. Daran stehen
   im Schnitt **17 Gebäude**: Wohnhäuser in drei Größen, Gasthaus, Schmiede, das **Söldnerhaus** mit Übungshof und
   Söldnertafel, Bäckerei, meist eine Kapelle und vier bis sechs Werkstätten (Schreibstube, Kartenhaus, Kräuterhaus, Metzgerei, Gerberei, Steinmetz, Bogner). Am Dorfrand
   liegen Windmühle, Scheune, Felder (auch hinter den Häusern), eine Schafweide und am Wasser eine Fischerhütte mit Steg
@@ -874,7 +902,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.18.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.19.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -929,7 +957,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    Wildtiere, alle Monster und die Wassertiere der Oberwelt sind fertig, als Nächstes:
    - **Siedlung und Dörfer überarbeiten** – Bauarbeiter, die nah am Bau arbeiten und auch hohe Häuser fertig bauen,
      Häuser mit Baukosten in mehreren Entwürfen, Bewohner, die Rohstoffe sammeln und abends ins Lager bringen,
-     Söldner aus den Dörfern und Ausbildung am Tisch (fertig), als Nächstes verschiedene Dorfanlagen;
+     Söldner aus den Dörfern, Ausbildung am Tisch und verschiedene Dorfanlagen (fertig);
    - **Golems und die übrigen Dorfwesen** – Eisen-, Schnee- und Kupfergolem, Hilfsgeist, Schnüffler, glücklicher
      Ghast, Dorfbewohner und fahrender Händler; alles, was sie fallen lassen, bleibt erhältlich;
    - zuletzt **Nether und End**.

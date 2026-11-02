@@ -176,6 +176,7 @@ public final class ModGameTests {
         OutlawGameTests.init();    // die übrigen eigenen Monster
         WaterGameTests.init();     // die eigenen Wassertiere
         ArmyGameTests.init();      // Ausbildung, Söldnertafel und Söldnerhaus
+        VillageLayoutGameTests.init(); // Grundrisse der Dörfer
     }
 
     private ModGameTests() {}
@@ -213,6 +214,7 @@ public final class ModGameTests {
         OutlawGameTests.register(event, environment);
         WaterGameTests.register(event, environment);
         ArmyGameTests.register(event, environment);
+        VillageLayoutGameTests.register(event, environment);
         // Drachen-Bosse brauchen länger (Erwachen + Todesanimation)
         event.registerTest(DRAGON_BOSS_LIFECYCLE.getId(), new FunctionGameTestInstance(DRAGON_BOSS_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));

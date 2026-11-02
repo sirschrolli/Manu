@@ -176,7 +176,7 @@ final class VillageShowcase {
         }
     }
 
-    private static void build(ServerLevel level, KingdomVillagePiece piece) {
+    private static void build(ServerLevel level, net.minecraft.world.level.levelgen.structure.StructurePiece piece) {
         BoundingBox box = piece.getBoundingBox();
         var generator = level.getChunkSource().getGenerator();
         for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
@@ -186,7 +186,159 @@ final class VillageShowcase {
         }
         // in einem Zug (in der fertigen Welt rissen Nachbar-Updates sonst Betten an Chunkgrenzen auseinander)
         BoundingBox all = new BoundingBox(box.minX(), level.getMinY(), box.minZ(), box.maxX(), level.getMaxY(), box.maxZ());
-        piece.postProcess(level, level.structureManager(), generator, RandomSource.create(1), all, ChunkPos.containing(piece.origin()), piece.origin());
+        BlockPos origin = piece instanceof KingdomVillagePiece village ? village.origin()
+                : piece instanceof io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillagePiece umbrer ? umbrer.origin()
+                : new BlockPos(box.minX(), box.minY(), box.minZ());
+        piece.postProcess(level, level.structureManager(), generator, RandomSource.create(1), all, ChunkPos.containing(origin), origin);
+    }
+
+    // =====================================================================================
+    // Grundrisse
+    // =====================================================================================
+
+    /**
+     * Baut auf ebenem Land je einen Grundriss (Haufen-, Straßen-, Angerdorf und Rundling, in mehreren Bauweisen) als ganzes
+     * Dorf und fotografiert es von oben und schräg von der Seite.
+     */
+    static void layouts(Deque<Step> steps, int[] ground, String only) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("gamerule advance_time false"));
+        steps.add(Step.command("weather clear"));
+        record Case(VillageStyle style, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout layout, long seed) {}
+        List<Case> cases = List.of(
+                new Case(VillageStyle.TIMBER, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.HAUFENDORF, 11L),
+                new Case(VillageStyle.TIMBER, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.STRASSENDORF, 12L),
+                new Case(VillageStyle.TIMBER, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.ANGERDORF, 13L),
+                new Case(VillageStyle.TIMBER, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.RUNDLING, 14L),
+                new Case(VillageStyle.NORDIC, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.RUNDLING, 15L),
+                new Case(VillageStyle.NORDIC, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.ANGERDORF, 16L),
+                new Case(VillageStyle.CLAY, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.ANGERDORF, 17L),
+                new Case(VillageStyle.CLAY, io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.STRASSENDORF, 18L));
+        int index = 0;
+        for (Case c : cases) {
+            String name = c.style().id() + "_" + c.layout().id();
+            if (!only.isEmpty() && !name.contains(only)) {
+                continue;
+            }
+            int x = 20000 + index * 320;
+            int z = 20000;
+            index++;
+            // Kamera für die zweite Aufnahme: über das Ende des Angers bzw. schräg auf Platz und Dorfwiese (x, y, z, Ziel x, y, z)
+            double[] cam = new double[6];
+            steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d 0 90", x, ground[0] + 78, z)));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(1200));
+            steps.add(Step.server(level -> {
+                BlockState top = switch (c.style()) {
+                    case NORDIC -> Blocks.PODZOL.defaultBlockState();
+                    case CLAY -> Blocks.SAND.defaultBlockState();
+                    default -> Blocks.GRASS_BLOCK.defaultBlockState();
+                };
+                // Boden der Gegend in der Farbe des Landes
+                BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+                for (int dx = -90; dx <= 90; dx++) {
+                    for (int dz = -90; dz <= 90; dz++) {
+                        pos.set(x + dx, ground[0] - 1, z + dz);
+                        level.setBlock(pos, top, 2);
+                    }
+                }
+                List<KingdomVillagePiece> pieces = io.github.sirschrolli.kingdomsatwar.worldgen.village.KingdomVillageStructure.planFlat(
+                        c.style(), c.layout(), x, z, ground[0] - 1, c.seed());
+                KingdomsAtWar.LOGGER.info("[Showcase] Grundriss {}: {} Teile, geplant als {}", name, pieces.size(),
+                        pieces.isEmpty() ? "-" : pieces.getFirst().layout().id());
+                double gy = ground[0];
+                if (!pieces.isEmpty() && pieces.getFirst().layout() == io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageLayout.ANGERDORF) {
+                    KingdomVillagePiece green = pieces.getFirst();
+                    net.minecraft.core.Direction axis = green.direction();
+                    int hl = green.heights()[0];
+                    double back = hl + 10.0;
+                    cam[0] = x + 0.5 - axis.getStepX() * back + axis.getClockWise().getStepX() * 3.0;
+                    cam[2] = z + 0.5 - axis.getStepZ() * back + axis.getClockWise().getStepZ() * 3.0;
+                    cam[1] = gy + 13.0;
+                    cam[3] = x + 0.5 + axis.getStepX() * hl * 0.3;
+                    cam[5] = z + 0.5 + axis.getStepZ() * hl * 0.3;
+                    cam[4] = gy;
+                } else {
+                    double r = pieces.isEmpty() ? 8.0 : pieces.getFirst().radius();
+                    cam[0] = x + 0.5 - (r + 9.0);
+                    cam[2] = z + 0.5 - (r + 11.0);
+                    cam[1] = gy + 15.0;
+                    cam[3] = x + 0.5;
+                    cam[5] = z + 0.5;
+                    cam[4] = gy;
+                }
+                for (KingdomVillagePiece piece : pieces) {
+                    build(level, piece);
+                }
+            }));
+            steps.add(Step.waitTicks(60));
+            steps.add(Step.waitForChunks(1200));
+            steps.add(Step.waitTicks(40));
+            steps.add(Step.screenshot("layout_" + name + "_top"));
+            // schräg von oben auf den Platz bzw. die Dorfwiese
+            steps.add(Step.once(minecraft -> {
+                double lx = cam[3] - cam[0];
+                double ly = cam[4] - (cam[1] + 1.62);
+                double lz = cam[5] - cam[2];
+                float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+                float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+                minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", cam[0], cam[1], cam[2], yaw, pitch));
+            }));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(600));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot("layout_" + name + "_view"));
+        }
+    }
+
+    /**
+     * Baut auf ebenem Land je ein Dorf der Umbrer in jedem Grundriss (Stern, Gasse, Dreiweg, Ring), jedes mit einem
+     * anderen Mittelstück, und fotografiert es von oben und den Platz von schräg oben.
+     */
+    static void umbrerLayouts(Deque<Step> steps, int[] ground) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.command("gamerule advance_time false"));
+        steps.add(Step.command("weather clear"));
+        var layouts = io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.Layout.values();
+        for (int i = 0; i < layouts.length; i++) {
+            var layout = layouts[i];
+            int centerpiece = i;
+            String name = layout.name().toLowerCase(Locale.ROOT);
+            int x = 30000 + i * 260;
+            int z = 30000;
+            steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d 0 90", x, ground[0] + 72, z)));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(1200));
+            steps.add(Step.server(level -> {
+                BlockState top = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_GRASS.get().defaultBlockState();
+                BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+                for (int dx = -80; dx <= 80; dx++) {
+                    for (int dz = -80; dz <= 80; dz++) {
+                        pos.set(x + dx, ground[0] - 1, z + dz);
+                        level.setBlock(pos, top, 2);
+                    }
+                }
+                var pieces = io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.UmbrerVillageStructure.planFlat(x, z, ground[0] - 1, 4242L + 31L * centerpiece,
+                        layout, centerpiece);
+                KingdomsAtWar.LOGGER.info("[Showcase] Umbrer-Dorf {}: {} Teile", name, pieces.size());
+                for (var piece : pieces) {
+                    build(level, piece);
+                }
+            }));
+            steps.add(Step.waitTicks(60));
+            steps.add(Step.waitForChunks(1200));
+            steps.add(Step.waitTicks(40));
+            steps.add(Step.screenshot("umbrer_" + name + "_top"));
+            steps.add(Step.command(String.format(Locale.ROOT, "tp @s %d %d %d -40 38", x - 17, ground[0] + 21, z - 20)));
+            steps.add(Step.waitTicks(20));
+            steps.add(Step.waitForChunks(600));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot("umbrer_" + name + "_plaza"));
+        }
     }
 
     // =====================================================================================

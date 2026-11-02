@@ -36,6 +36,15 @@ public class KingdomVillageStructure extends Structure {
         return this.style;
     }
 
+    /**
+     * Für Tests und Vorführungen: ein Dorf auf ebenem Land planen, dessen oberster Block bei {@code y} liegt;
+     * {@code layout}: vorgegebener Grundriss ({@code null}: nach Zufall und Bauweise). Leer, wenn es nicht taugt.
+     */
+    public static List<KingdomVillagePiece> planFlat(VillageStyle style, @org.jspecify.annotations.Nullable VillageLayout layout, int cx, int cz,
+            int y, long seed) {
+        return VillagePlanner.plan(style, cx, cz, seed, VillageGround.flat(y, y - 8, false), layout);
+    }
+
     @Override
     public StructureType<?> type() {
         return ModStructures.VILLAGE.get();

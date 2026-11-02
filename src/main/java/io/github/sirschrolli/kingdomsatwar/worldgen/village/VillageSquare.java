@@ -25,6 +25,18 @@ final class VillageSquare {
     private VillageSquare() {}
 
     static void build(VillageBuilder b, VillagePalette p, KingdomVillagePiece piece) {
+        switch (piece.layout()) {
+            case ANGERDORF -> {
+                VillageGreens.anger(b, p, piece);
+                return;
+            }
+            case RUNDLING -> {
+                VillageGreens.round(b, p, piece);
+                return;
+            }
+            default -> {
+            }
+        }
         int r = piece.radius();
         int arms = piece.feature() & 15;
         int centerpiece = (piece.feature() >> 4) & 3;
@@ -121,7 +133,7 @@ final class VillageSquare {
         };
     }
 
-    private static void lampPost(VillageBuilder b, VillagePalette p, int x, int z) {
+    static void lampPost(VillageBuilder b, VillagePalette p, int x, int z) {
         b.set(x, 1, z, p.style == VillageStyle.STILT || p.style == VillageStyle.NORDIC ? p.post(Direction.Axis.Y) : p.stone());
         b.set(x, 2, z, p.fence());
         b.set(x, 3, z, p.fence());
@@ -133,7 +145,7 @@ final class VillageSquare {
     // =====================================================================================
 
     /** Brunnen: Steinkranz um ein tiefes Becken, vier Pfosten mit einem kleinen Dach, darunter die Dorfglocke. */
-    private static void well(VillageBuilder b, Arch a, VillagePalette p) {
+    static void well(VillageBuilder b, Arch a, VillagePalette p) {
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
                 boolean rim = Math.abs(x) == 2 || Math.abs(z) == 2;
@@ -201,7 +213,7 @@ final class VillageSquare {
      * Dorflinde: ein mächtiger Laubbaum, um den Stamm ein Kranz aus Steinstufen zum Sitzen, an einem Pfosten daneben die
      * Glocke.
      */
-    private static void linden(VillageBuilder b, Arch a, VillagePalette p) {
+    static void linden(VillageBuilder b, Arch a, VillagePalette p) {
         BlockState log = Blocks.OAK_LOG.defaultBlockState();
         BlockState leaves = Blocks.OAK_LEAVES.defaultBlockState().setValue(net.minecraft.world.level.block.LeavesBlock.PERSISTENT, true);
         // Sitzkranz
@@ -252,7 +264,7 @@ final class VillageSquare {
     }
 
     /** Maibaum: ein hoher, geschälter Stamm mit einem Kranz aus Laub und bunten Bändern; ringsum ein Steinkreis. */
-    private static void maypole(VillageBuilder b, Arch a, VillagePalette p) {
+    static void maypole(VillageBuilder b, Arch a, VillagePalette p) {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
                 b.set(x, 0, z, p.stone());
@@ -297,7 +309,7 @@ final class VillageSquare {
     }
 
     /** Springbrunnen im Lehmdorf: ein achteckiges Becken, in der Mitte eine Säule mit Schale; oder ein Brunnen mit Kuppel. */
-    private static void fountain(VillageBuilder b, Arch a, VillagePalette p, boolean basin) {
+    static void fountain(VillageBuilder b, Arch a, VillagePalette p, boolean basin) {
         BlockState rim = Blocks.CUT_SANDSTONE.defaultBlockState();
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {

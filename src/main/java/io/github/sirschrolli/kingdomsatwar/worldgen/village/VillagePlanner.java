@@ -27,7 +27,15 @@ final class VillagePlanner {
     static java.util.function.@Nullable Consumer<String> debug;
 
     private final VillageStyle style;
-    private final VillageTerrain terrain;
+    private final VillageGround terrain;
+    /** Vorgegebener Grundriss (Tests, Vorführungen) oder {@code null}: nach Zufall und Bauweise. */
+    private final @Nullable VillageLayout forced;
+    private VillageLayout layout = VillageLayout.HAUFENDORF;
+    /** Platz bzw. Dorfwiese samt Rand (für Abstände, Laternen und die Karte). */
+    private BoundingBox plaza = new BoundingBox(0, 0, 0, 0, 0, 0);
+    /** Angerdorf: Richtung, in der sich der Anger erstreckt, und seine halbe Länge. */
+    private Direction axis = Direction.NORTH;
+    private int halfLength;
     private final RandomSource random;
     private final long seed;
     private final int variant;
@@ -57,6 +65,8 @@ final class VillagePlanner {
         final int[] flags;
         final int skip;
         final boolean arm;
+        /** Ein Weg um die Dorfwiese bzw. längs des Angers: die wichtigen Häuser stehen am liebsten hier. */
+        boolean green;
         /** Belegte Schritte je Seite (für Laternen und weitere Bauplätze). */
         final boolean[][] used;
 
@@ -83,9 +93,10 @@ final class VillagePlanner {
         }
     }
 
-    private VillagePlanner(VillageStyle style, VillageTerrain terrain, long seed) {
+    private VillagePlanner(VillageStyle style, VillageGround terrain, long seed, @Nullable VillageLayout forced) {
         this.style = style;
         this.terrain = terrain;
+        this.forced = forced;
         this.seed = seed;
         this.random = RandomSource.create(seed);
         this.variant = this.random.nextInt(3);
@@ -93,8 +104,13 @@ final class VillagePlanner {
         this.stilt = style == VillageStyle.STILT;
     }
 
-    static List<KingdomVillagePiece> plan(VillageStyle style, int cx, int cz, long seed, VillageTerrain terrain) {
-        VillagePlanner planner = new VillagePlanner(style, terrain, seed);
+    static List<KingdomVillagePiece> plan(VillageStyle style, int cx, int cz, long seed, VillageGround terrain) {
+        return plan(style, cx, cz, seed, terrain, null);
+    }
+
+    /** Plant ein Dorf; {@code layout}: vorgegebener Grundriss (sonst nach Zufall und Bauweise). Leer, wenn der Ort nicht taugt. */
+    static List<KingdomVillagePiece> plan(VillageStyle style, int cx, int cz, long seed, VillageGround terrain, @Nullable VillageLayout layout) {
+        VillagePlanner planner = new VillagePlanner(style, terrain, seed, layout);
         return planner.run(cx, cz) ? planner.pieces : List.of();
     }
 
@@ -143,13 +159,18 @@ final class VillagePlanner {
             // Pfahlbauten stehen zwei Blöcke über Wasser und Schlamm: man sieht die Pfähle
             floor = Math.max(floor, sea) + 2;
         }
-        this.radius = this.stilt ? 6 : 7;
         this.center = new BlockPos(cx, floor, cz);
-        this.taken.add(new BoundingBox(cx - this.radius - 1, 0, cz - this.radius - 1, cx + this.radius + 1, 0, cz + this.radius + 1));
-
-        this.planRoads(floor);
-        if (this.roads.size() < 2) {
-            return this.reject("roads");
+        // der Grundriss (mit eigenem Zufall, so bleiben Name und Spielart des Dorfs dieselben)
+        RandomSource shape = RandomSource.create(this.seed ^ 0x4C41594F55544CL);
+        VillageLayout wish = this.forced != null && this.forced.suits(this.style) ? this.forced : VillageLayout.pick(this.style, shape);
+        if (!this.planLayout(wish, floor, shape)) {
+            // passt der Grundriss nicht ins Gelände, wird es ein Haufendorf
+            this.roads.clear();
+            this.roadAreas.clear();
+            this.taken.clear();
+            if (wish == VillageLayout.HAUFENDORF || !this.planLayout(VillageLayout.HAUFENDORF, floor, shape)) {
+                return this.reject("roads");
+            }
         }
         this.planBuildings();
         if (this.placed < 8) {
@@ -165,9 +186,14 @@ final class VillagePlanner {
             }
         }
         int centerpiece = this.random.nextInt(4);
+        int feature = arms | centerpiece << 4 | this.layout.ordinal() << 6;
         List<KingdomVillagePiece> all = new ArrayList<>();
-        all.add(KingdomVillagePiece.square(this.style, this.variant, this.center, this.name, this.radius, arms | centerpiece << 4,
-                this.random.nextLong()));
+        if (this.layout == VillageLayout.ANGERDORF) {
+            all.add(KingdomVillagePiece.green(this.style, this.variant, this.center, this.name, this.radius, this.halfLength, this.axis, feature,
+                    this.random.nextLong()));
+        } else {
+            all.add(KingdomVillagePiece.square(this.style, this.variant, this.center, this.name, this.radius, feature, this.random.nextLong()));
+        }
         for (Road road : this.roads) {
             all.add(KingdomVillagePiece.road(this.style, this.variant, road.start, this.center, this.name, road.dir, road.heights, road.flags,
                     road.skip, this.random.nextLong()));
@@ -193,7 +219,8 @@ final class VillagePlanner {
                     kinds.append(piece.building().id()).append(',');
                 }
             }
-            debug.accept("village " + this.name + " at " + this.center + ": " + this.placed + " buildings, roads " + roads + "kinds " + kinds
+            debug.accept("village " + this.name + " (" + this.layout.id() + ") at " + this.center + ": " + this.placed + " buildings, roads " + roads
+                    + "kinds " + kinds
                     + " rejected " + this.rejections);
             debug.accept("map " + this.name + "\n" + this.map() + this.probe(VillageBuilding.HOUSE_SMALL));
         }
@@ -209,7 +236,39 @@ final class VillagePlanner {
     // Wege
     // =====================================================================================
 
-    private void planRoads(int floor) {
+    /** Der Grundriss: Platz bzw. Dorfwiese und die Wege; {@code false}, wenn er hier nicht ins Gelände passt. */
+    private boolean planLayout(VillageLayout layout, int floor, RandomSource shape) {
+        this.layout = layout;
+        int cx = this.center.getX();
+        int cz = this.center.getZ();
+        switch (layout) {
+            case HAUFENDORF -> this.radius = this.stilt ? 6 : 7;
+            case STRASSENDORF -> this.radius = 6;
+            case ANGERDORF -> {
+                this.radius = 5 + shape.nextInt(2);
+                this.halfLength = 13 + shape.nextInt(5);
+                this.axis = shape.nextBoolean() ? Direction.NORTH : Direction.EAST;
+            }
+            case RUNDLING -> this.radius = 9 + shape.nextInt(2);
+        }
+        if (layout == VillageLayout.ANGERDORF) {
+            int ax = this.axis.getAxis() == Direction.Axis.X ? this.halfLength + 1 : this.radius + 1;
+            int az = this.axis.getAxis() == Direction.Axis.Z ? this.halfLength + 1 : this.radius + 1;
+            this.plaza = new BoundingBox(cx - ax, 0, cz - az, cx + ax, 0, cz + az);
+        } else {
+            this.plaza = new BoundingBox(cx - this.radius - 1, 0, cz - this.radius - 1, cx + this.radius + 1, 0, cz + this.radius + 1);
+        }
+        this.taken.add(this.plaza);
+        return switch (layout) {
+            case HAUFENDORF -> this.planCluster(floor);
+            case STRASSENDORF -> this.planStreet(floor, shape);
+            case ANGERDORF -> this.planGreen(floor, shape);
+            case RUNDLING -> this.planRing(floor, shape);
+        };
+    }
+
+    /** Haufendorf: drei bis vier Wege vom Platz in die Himmelsrichtungen, dazu Seitengassen. */
+    private boolean planCluster(int floor) {
         List<Direction> dirs = new ArrayList<>(List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
         Collections.shuffle(dirs, new java.util.Random(this.seed));
         int count = 3 + (this.random.nextFloat() < 0.6f ? 1 : 0);
@@ -242,6 +301,143 @@ final class VillagePlanner {
                 }
             }
         }
+        return this.roads.size() >= 2;
+    }
+
+    /**
+     * Straßendorf: eine lange Dorfstraße durch den kleinen Marktplatz, manchmal eine Gasse quer dazu, und kurze
+     * Quergassen in dichter Folge.
+     */
+    private boolean planStreet(int floor, RandomSource shape) {
+        Direction main = shape.nextBoolean() ? Direction.NORTH : Direction.EAST;
+        List<Road> arms = new ArrayList<>();
+        for (Direction dir : List.of(main, main.getOpposite())) {
+            int length = (this.stilt ? 30 : 40) + shape.nextInt(this.stilt ? 12 : 17);
+            Road road = this.trace(this.center, dir, length, this.radius + 1, floor, true);
+            if (road != null) {
+                arms.add(road);
+                this.addRoad(road);
+            }
+        }
+        if (arms.size() < 2) {
+            return false;
+        }
+        if (shape.nextFloat() < 0.4f) {
+            Direction cross = shape.nextBoolean() ? main.getClockWise() : main.getCounterClockWise();
+            Road lane = this.trace(this.center, cross, 20 + shape.nextInt(10), this.radius + 1, floor, true);
+            if (lane != null) {
+                this.addRoad(lane);
+            }
+        }
+        for (Road arm : arms) {
+            boolean clockwise = shape.nextBoolean();
+            int at = 15 + shape.nextInt(3);
+            for (int j = 0; at < arm.length() - 6; j++, at += 12 + shape.nextInt(4)) {
+                if (shape.nextFloat() > 0.6f) {
+                    continue;
+                }
+                Direction side = (clockwise ^ (j % 2 == 1)) ? arm.dir.getClockWise() : arm.dir.getCounterClockWise();
+                BlockPos start = new BlockPos(arm.x(at), arm.heights[at], arm.z(at));
+                Road lane = this.trace(start, side, (this.stilt ? 10 : 11) + shape.nextInt(7), ROAD_HALF + 1, arm.heights[at], false);
+                if (lane != null && !this.crossesOtherRoads(lane)) {
+                    this.addRoad(lane);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Angerdorf: an beiden Längsseiten des Angers eine Straße, quer an seinen Enden je eine, von den Enden geht es
+     * hinaus; in der Mitte der Längsseiten manchmal eine Gasse nach außen. Der Anger und seine Straßen liegen eben.
+     */
+    private boolean planGreen(int floor, RandomSource shape) {
+        Direction side = this.axis.getClockWise();
+        int across = this.radius + 2;
+        int along = this.halfLength + 2;
+        for (int s : new int[] {-1, 1}) {
+            Road rail = this.flatRoad(this.center.relative(side, s * across).relative(this.axis, -along), this.axis, 2 * along, floor);
+            if (rail == null) {
+                return false;
+            }
+            this.addRoad(rail);
+        }
+        for (int e : new int[] {-1, 1}) {
+            Road end = this.flatRoad(this.center.relative(this.axis, e * along).relative(side, -across), side, 2 * across, floor);
+            if (end == null) {
+                return false;
+            }
+            this.addRoad(end);
+        }
+        int arms = 0;
+        for (Direction dir : List.of(this.axis, this.axis.getOpposite())) {
+            Road arm = this.trace(this.center, dir, along + 1 + 24 + shape.nextInt(14), along + 1, floor, true);
+            if (arm != null) {
+                this.addRoad(arm);
+                arms++;
+            }
+        }
+        for (Direction dir : List.of(side, side.getOpposite())) {
+            if (shape.nextFloat() < 0.5f) {
+                Road lane = this.trace(this.center, dir, across + 1 + 16 + shape.nextInt(10), across + 1, floor, true);
+                if (lane != null) {
+                    this.addRoad(lane);
+                }
+            }
+        }
+        return arms > 0;
+    }
+
+    /**
+     * Rundling: um die runde Dorfwiese ein Dorfring aus vier geraden Stücken (eben wie die Wiese), hinaus führen nur ein
+     * oder zwei Wege – zu den Feldern.
+     */
+    private boolean planRing(int floor, RandomSource shape) {
+        int d = this.radius + 2;
+        Direction[] along = {Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.NORTH};
+        BlockPos[] corners = {this.center.offset(-d, 0, -d), this.center.offset(d, 0, -d), this.center.offset(d, 0, d), this.center.offset(-d, 0, d)};
+        for (int i = 0; i < 4; i++) {
+            Road ring = this.flatRoad(corners[i], along[i], 2 * d, floor);
+            if (ring == null) {
+                return false;
+            }
+            this.addRoad(ring);
+        }
+        List<Direction> dirs = new ArrayList<>(List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
+        Collections.shuffle(dirs, new java.util.Random(shape.nextLong()));
+        int wanted = 1 + (shape.nextFloat() < 0.6f ? 1 : 0);
+        int arms = 0;
+        for (Direction dir : dirs) {
+            if (arms >= wanted) {
+                break;
+            }
+            Road arm = this.trace(this.center, dir, d + 1 + 26 + shape.nextInt(14), d + 1, floor, true);
+            if (arm != null) {
+                this.addRoad(arm);
+                arms++;
+            }
+        }
+        return arms > 0;
+    }
+
+    /**
+     * Ein ebener Weg auf Höhe {@code y} (um die Dorfwiese bzw. längs des Angers): nur über Land des Dorfs, ohne Wasser und
+     * wo das Gelände höchstens drei Blöcke höher oder tiefer liegt (sonst {@code null}).
+     */
+    private @Nullable Road flatRoad(BlockPos start, Direction dir, int length, int y) {
+        int[] heights = new int[length + 1];
+        int[] flags = new int[length + 1];
+        for (int t = 0; t <= length; t++) {
+            int x = start.getX() + dir.getStepX() * t;
+            int z = start.getZ() + dir.getStepZ() * t;
+            if (!this.terrain.buildable(x, z) || this.terrain.water(x, z) || Math.abs(this.terrain.ground(x, z) - y) > 3) {
+                return null;
+            }
+            heights[t] = y;
+        }
+        Road road = new Road(start.atY(y), dir, heights, flags, 0, false);
+        road.green = true;
+        return road;
     }
 
     /**
@@ -339,26 +535,37 @@ final class VillagePlanner {
         wanted.add(VillageBuilding.MERCENARY_HALL);
         wanted.add(VillageBuilding.BAKERY);
         wanted.add(VillageBuilding.HOUSE);
-        if (this.random.nextFloat() < 0.8f) {
+        // im Angerdorf gehört die Kapelle an den Anger, im Rundling fehlt sie öfter (die Dorflinde ist der Mittelpunkt)
+        float chapel = switch (this.layout) {
+            case ANGERDORF -> 1.0f;
+            case RUNDLING -> 0.6f;
+            default -> 0.8f;
+        };
+        if (this.random.nextFloat() < chapel) {
             wanted.add(VillageBuilding.CHAPEL);
         }
         // dazu einige Handwerker (vor den übrigen Wohnhäusern: sie sind es, mit denen man handelt)
         List<VillageBuilding> crafts = new ArrayList<>(List.of(VillageBuilding.SCRIPTORIUM, VillageBuilding.MAP_HOUSE, VillageBuilding.HERB_HOUSE,
                 VillageBuilding.BUTCHERY, VillageBuilding.TANNERY, VillageBuilding.MASONRY, VillageBuilding.BOWYER));
         Collections.shuffle(crafts, new java.util.Random(this.seed ^ 0x51AFL));
-        int craftCount = 4 + this.random.nextInt(3);
+        // Straßendörfer und Rundlinge sind Bauerndörfer mit weniger Handwerk
+        int craftCount = switch (this.layout) {
+            case STRASSENDORF -> 3 + this.random.nextInt(3);
+            case RUNDLING -> 3 + this.random.nextInt(2);
+            default -> 4 + this.random.nextInt(3);
+        };
         wanted.addAll(crafts.subList(0, craftCount));
         wanted.addAll(List.of(VillageBuilding.HOUSE_SMALL, VillageBuilding.HOUSE_LARGE, VillageBuilding.HOUSE_SMALL, VillageBuilding.HOUSE,
                 VillageBuilding.HOUSE_SMALL));
         // Dorfrand
         List<VillageBuilding> outskirts = new ArrayList<>();
         // Weide, Mühle und Scheune brauchen einen Platz am Weg, die Felder kommen zuletzt (sie passen auch hinter die Häuser)
-        if (this.random.nextFloat() < 0.7f) {
+        if (this.layout == VillageLayout.RUNDLING || this.random.nextFloat() < 0.7f) {
             outskirts.add(VillageBuilding.SHEEPFOLD);
         }
         outskirts.add(VillageBuilding.WINDMILL);
         outskirts.add(VillageBuilding.BARN);
-        int fields = 2 + this.random.nextInt(3);
+        int fields = this.layout == VillageLayout.RUNDLING ? 3 + this.random.nextInt(3) : 2 + this.random.nextInt(3);
         for (int i = 0; i < fields; i++) {
             outskirts.add(VillageBuilding.FIELD);
         }
@@ -430,6 +637,10 @@ final class VillagePlanner {
             sides.add(new int[] {i, 1});
         }
         Collections.shuffle(sides, new java.util.Random(this.random.nextLong()));
+        if (!outer) {
+            // die Häuser schauen am liebsten auf die Dorfwiese bzw. den Anger
+            sides.sort(java.util.Comparator.comparingInt(lot -> this.roads.get(lot[0]).green ? 0 : 1));
+        }
         for (int[] lot : sides) {
             Road road = this.roads.get(lot[0]);
             Direction side = lot[1] == 0 ? road.dir.getClockWise() : road.dir.getCounterClockWise();
@@ -689,8 +900,7 @@ final class VillagePlanner {
                 }
             }
         }
-        this.paint(grid, r, new BoundingBox(this.center.getX() - this.radius, 0, this.center.getZ() - this.radius, this.center.getX() + this.radius, 0,
-                this.center.getZ() + this.radius), 'O');
+        this.paint(grid, r, this.plaza.inflatedBy(-1, 0, -1), 'O');
         int i = 0;
         for (KingdomVillagePiece piece : this.pieces) {
             if (piece.building() != null) {
@@ -764,8 +974,6 @@ final class VillagePlanner {
                 return false;
             }
         }
-        int dx = x - this.center.getX();
-        int dz = z - this.center.getZ();
-        return Math.max(Math.abs(dx), Math.abs(dz)) > this.radius + 1;
+        return !this.plaza.isInside(x, 0, z);
     }
 }

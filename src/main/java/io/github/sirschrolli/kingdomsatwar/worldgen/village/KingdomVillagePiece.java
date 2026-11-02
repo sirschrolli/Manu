@@ -141,6 +141,25 @@ public class KingdomVillagePiece extends StructurePiece {
                 new int[0], new int[0], 0, radius, feature, box);
     }
 
+    /**
+     * Der Anger eines Angerdorfs: eine lange Wiese, quer {@code halfWidth}, längs {@code halfLength} Blöcke um die Mitte,
+     * entlang {@code axis} (gespeichert wie der Platz: Halbmesser = halbe Breite, die halbe Länge im Höhenfeld).
+     */
+    static KingdomVillagePiece green(VillageStyle style, int variant, BlockPos center, String name, int halfWidth, int halfLength, Direction axis,
+            int feature, long seed) {
+        int ax = axis.getAxis() == Direction.Axis.X ? halfLength + 2 : halfWidth + 2;
+        int az = axis.getAxis() == Direction.Axis.Z ? halfLength + 2 : halfWidth + 2;
+        BoundingBox box = new BoundingBox(center.getX() - ax, center.getY() - 16, center.getZ() - az, center.getX() + ax, center.getY() + 14,
+                center.getZ() + az);
+        return new KingdomVillagePiece(Kind.SQUARE, style, variant, center, Rotation.NONE, seed, center, name, null, 0, axis,
+                new int[] {halfLength}, new int[0], 0, halfWidth, feature, box);
+    }
+
+    /** Grundriss des Dorfs, zu dem dieser Platz gehört. */
+    public VillageLayout layout() {
+        return VillageLayout.values()[Math.min((this.feature >> 6) & 3, VillageLayout.values().length - 1)];
+    }
+
     static KingdomVillagePiece road(VillageStyle style, int variant, BlockPos start, BlockPos center, String name, Direction direction,
             int[] heights, int[] flags, int skip, long seed) {
         int length = heights.length - 1;
@@ -235,11 +254,11 @@ public class KingdomVillagePiece extends StructurePiece {
         return this.step;
     }
 
-    Direction direction() {
+    public Direction direction() {
         return this.direction;
     }
 
-    int[] heights() {
+    public int[] heights() {
         return this.heights;
     }
 
@@ -247,11 +266,11 @@ public class KingdomVillagePiece extends StructurePiece {
         return this.flags;
     }
 
-    int skip() {
+    public int skip() {
         return this.skip;
     }
 
-    int radius() {
+    public int radius() {
         return this.radius;
     }
 

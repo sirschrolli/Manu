@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
  * Das Gelände, wie es der Generator vor allen Bäumen und Bauten formt – Höhen und Biome werden beim Planen des Dorfs
  * abgefragt (mit Zwischenspeicher), damit alle Teile in jedem Chunk gleich gebaut werden.
  */
-final class VillageTerrain {
+final class VillageTerrain implements VillageGround {
     private final Structure.GenerationContext context;
     private final Long2ObjectOpenHashMap<int[]> cache = new Long2ObjectOpenHashMap<>();
     private final it.unimi.dsi.fastutil.longs.Long2BooleanOpenHashMap biomes = new it.unimi.dsi.fastutil.longs.Long2BooleanOpenHashMap();
@@ -36,27 +36,32 @@ final class VillageTerrain {
     }
 
     /** Oberster fester Block (y). */
-    int ground(int x, int z) {
+    @Override
+    public int ground(int x, int z) {
         return this.column(x, z)[0] - 1;
     }
 
     /** Erste freie Höhe (über Wasser die Wasseroberfläche + 1). */
-    int surface(int x, int z) {
+    @Override
+    public int surface(int x, int z) {
         return this.column(x, z)[1];
     }
 
-    boolean water(int x, int z) {
+    @Override
+    public boolean water(int x, int z) {
         int[] c = this.column(x, z);
         return c[1] > c[0];
     }
 
     /** Wassertiefe (0 = trocken). */
-    int waterDepth(int x, int z) {
+    @Override
+    public int waterDepth(int x, int z) {
         int[] c = this.column(x, z);
         return Math.max(0, c[1] - c[0]);
     }
 
-    int seaLevel() {
+    @Override
+    public int seaLevel() {
         return this.context.chunkGenerator().getSeaLevel();
     }
 
@@ -86,12 +91,14 @@ final class VillageTerrain {
     private final it.unimi.dsi.fastutil.longs.LongOpenHashSet rivers = new it.unimi.dsi.fastutil.longs.LongOpenHashSet();
 
     /** Darf hier ein Weg verlaufen (Biom des Dorfs oder ein Fluss, über den eine Brücke führt)? */
-    boolean allowed(int x, int z) {
+    @Override
+    public boolean allowed(int x, int z) {
         return this.biomeClass(x, z) > 0;
     }
 
     /** Darf hier ein Gebäude stehen (nur im Biom des Dorfs)? */
-    boolean buildable(int x, int z) {
+    @Override
+    public boolean buildable(int x, int z) {
         return this.biomeClass(x, z) == 1;
     }
 }

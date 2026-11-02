@@ -133,7 +133,15 @@ final class Showcase {
                     steps.add(Step.waitTicks(40));
                 }
                 default -> {
-                    if (scene.equals("village_gallery") || scene.startsWith("village_gallery_")) {
+                    if (scene.equals("umbrer_layouts")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        VillageShowcase.umbrerLayouts(steps, g);
+                    } else if (scene.equals("village_layouts") || scene.startsWith("village_layouts_")) {
+                        int[] g = new int[1];
+                        steps.add(Step.once(minecraft -> g[0] = ground));
+                        VillageShowcase.layouts(steps, g, scene.equals("village_layouts") ? "" : scene.substring(16));
+                    } else if (scene.equals("village_gallery") || scene.startsWith("village_gallery_")) {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         VillageShowcase.gallery(steps, g, scene.equals("village_gallery") ? "" : scene.substring(16));
