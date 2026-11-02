@@ -189,6 +189,7 @@ public final class ModGameTests {
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
+        ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
     }
 
     private ModGameTests() {}
@@ -222,6 +223,7 @@ public final class ModGameTests {
         SiteGameTests.register(event, environment);
         WarGameTests.register(event, environment);
         RulesGameTests.register(event, environment);
+        ArenaGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);

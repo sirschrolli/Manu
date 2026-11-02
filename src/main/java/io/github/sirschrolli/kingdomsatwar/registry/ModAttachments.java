@@ -51,6 +51,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.war.RealmState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.war.RealmState.CODEC.fieldOf("realms")).build());
 
+    /** Die laufenden Kämpfe in der Arkanen Sphäre (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.arena.ArenaFights>> ARENA_FIGHTS = ATTACHMENTS.register(
+            "arena_fights", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.arena.ArenaFights::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.arena.ArenaFights.CODEC.fieldOf("fights")).build());
+
     /** Welche fremden Reiche der Spieler schon betreten hat (Kennungen; bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<java.util.List<String>>> REALMS_SEEN = ATTACHMENTS.register("realms_seen",
             () -> AttachmentType.<java.util.List<String>>builder(() -> java.util.List.of())

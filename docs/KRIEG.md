@@ -76,8 +76,8 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | K1d | Der Herrscher, die Eroberung und der Tribut | ✅ |
 | K1e | Die Reiche finden: Grenzmeldung, Karten beim Kartografen, `/kaw realms` | ✅ |
 | K1f | Tests, Bilder, Doku, Version 0.38.0 | ✅ |
-| M | Die Arkane Sphäre: Erzmagier ziehen Spieler und Truppen in ihre Arena-Dimension (Version 0.39.0) | 🔨 |
-| K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | ⏳ |
+| M | Die Arkane Sphäre: Erzmagier ziehen Spieler und Truppen in ihre Arena-Dimension (Version 0.39.0) | ✅ |
+| K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 |
 | K3 | Gegenangriffe der Reiche, neue Truppen | ⏳ |
 
 ## Was in 0.38.0 fertig ist

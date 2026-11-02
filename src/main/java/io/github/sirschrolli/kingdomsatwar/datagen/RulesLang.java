@@ -8,6 +8,21 @@ final class RulesLang {
         // Härte
         text.add("message.kingdomsatwar.hardness.weakened", "Death has left its mark: you are weakened for two minutes.",
                 "Der Tod hat Spuren hinterlassen: Du bist zwei Minuten lang geschwächt.");
+        // Die Arkane Sphäre
+        text.add("message.kingdomsatwar.arena.pulled", "%s pulls you into the Arcane Sphere!", "%s zieht dich in die Arkane Sphäre!");
+        text.add("message.kingdomsatwar.arena.rules",
+                "Nothing can be built or broken here – and whoever dies here loses everything they carry.",
+                "Hier lässt sich nichts bauen und nichts abbauen – und wer hier stirbt, verliert alles, was er bei sich trägt.");
+        text.add("message.kingdomsatwar.arena.forbidden", "The Sphere does not allow it.", "Die Sphäre lässt es nicht zu.");
+        text.add("message.kingdomsatwar.arena.rescued", "The Sphere hurls you back into the arena!", "Die Sphäre schleudert dich zurück in die Arena!");
+        text.add("message.kingdomsatwar.arena.lost_everything", "Everything you carried is lost in the Sphere.",
+                "Alles, was du bei dir trugst, ist in der Sphäre verloren.");
+        text.add("message.kingdomsatwar.arena.victory", "The archmage has fallen – the Sphere releases you, together with his treasure.",
+                "Der Erzmagier ist gefallen – die Sphäre entlässt euch samt seinem Schatz.");
+        text.add("message.kingdomsatwar.arena.defeat", "The Sphere closes – the archmage returns to his tower.",
+                "Die Sphäre schließt sich – der Erzmagier kehrt in seinen Turm zurück.");
+        text.add("block.kingdomsatwar.bed.arcane_sphere", "There is no rest in the Arcane Sphere.", "In der Arkanen Sphäre gibt es keine Ruhe.");
+        text.add("dimension.kingdomsatwar.arcane_sphere", "Arcane Sphere", "Arkane Sphäre");
         // Verzauberungen: Name und Erklärung (im Tooltip verzauberter Bücher)
         enchantment(text, "dragonslayer", "Dragonslayer", "Drachentöter",
                 "Deals much more damage to dragons, dragon lords and lindworms.",

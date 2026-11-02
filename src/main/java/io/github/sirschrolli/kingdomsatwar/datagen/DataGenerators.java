@@ -30,8 +30,14 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface.bootstrap(context);
                 })
                 .add(Registries.NOISE_SETTINGS, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapSettings)
-                .add(Registries.DIMENSION_TYPE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapType)
-                .add(Registries.LEVEL_STEM, io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension::bootstrapStem)
+                .add(Registries.DIMENSION_TYPE, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapType(context);
+                    io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapType(context);
+                })
+                .add(Registries.LEVEL_STEM, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapStem(context);
+                    io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapStem(context);
+                })
                 .add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
                 .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)
                 .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)

@@ -117,6 +117,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private final Map<Attack, Integer> cooldowns = new EnumMap<>(Attack.class);
     private final List<UUID> images = new ArrayList<>();
     private @Nullable BlockPos home;
+    private double room = ROOM_RADIUS;
     private int stateTicks;
     private @Nullable Attack attack;
     private int attackTicks;
@@ -195,12 +196,14 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         if (this.home != null) {
             output.store("MageHome", BlockPos.CODEC, this.home);
         }
+        output.store("MageRoom", com.mojang.serialization.Codec.DOUBLE, this.room);
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
         super.readAdditionalSaveData(input);
         input.read("MageHome", BlockPos.CODEC).ifPresent(pos -> this.home = pos);
+        input.read("MageRoom", com.mojang.serialization.Codec.DOUBLE).ifPresent(room -> this.room = room);
         // ein Bannsiegel aus einem unterbrochenen Kampf wird beim nächsten Schritt gelöst
         this.liftSealSoon = true;
         // nach dem Laden meditiert er wieder an seinem Platz (ein unterbrochener Kampf beginnt von vorn)
@@ -280,6 +283,20 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     }
 
     /** Platz im Turm, an dem der Magier meditiert (beim Erzeugen des Turms gesetzt). */
+    /** Halbmesser des Raums, in dem er sich bewegt und wohin er blinzelt (Sanktum: eng, Arena: weit). */
+    public double room() {
+        return this.room;
+    }
+
+    public void setRoom(double room) {
+        this.room = room;
+    }
+
+    /** Zurück an seinen Platz: Spiegelbilder fort, geheilt, wieder in Meditation (nach einem verlorenen Kampf der Gegner). */
+    public void retreat(ServerLevel level) {
+        this.resetToHome(level);
+    }
+
     public void setHome(BlockPos home) {
         this.home = home;
     }
@@ -367,7 +384,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             return false;
         }
         if (state == State.DORMANT && attacker instanceof LivingEntity living && this.isBossEnemy(living)) {
-            this.beginAwakening(level);
+            if (!io.github.sirschrolli.kingdomsatwar.arena.MageArena.requestPull(level, this)) {
+                this.beginAwakening(level);
+            }
             return false;
         }
         if (state != State.FIGHT || (this.transition > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY))) {
@@ -553,11 +572,13 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         if (this.tickCount % 10 != 0) {
             return;
         }
-        // Erwacht, sobald ein Gegner den Saal betritt (nah genug und in Sichtweite)
+        // Erwacht, sobald ein Gegner den Saal betritt (nah genug und in Sichtweite) – und zieht ihn in die Arkane Sphäre
         for (ServerPlayer player : level.players()) {
             if (this.isBossEnemy(player) && player.distanceToSqr(this) < 10.0 * 10.0 && Math.abs(player.getY() - this.getY()) < 5.0
                     && this.hasLineOfSight(player)) {
-                this.beginAwakening(level);
+                if (!io.github.sirschrolli.kingdomsatwar.arena.MageArena.requestPull(level, this)) {
+                    this.beginAwakening(level);
+                }
                 return;
             }
         }
@@ -712,7 +733,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         // im Saal bleiben
         Vec3 center = this.center();
         Vec3 fromCenter = this.position().subtract(center).multiply(1, 0, 1);
-        double radius = this.home != null ? ROOM_RADIUS : 12.0;
+        double radius = this.home != null ? this.room : 12.0;
         if (fromCenter.length() > radius - 1.5) {
             want = want.add(fromCenter.normalize().scale(-1.5));
         }
@@ -968,7 +989,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     /** Ein freier Platz im Saal, nicht zu nah am Ziel. */
     public Vec3 findBlinkSpot(ServerLevel level, @Nullable LivingEntity target) {
         Vec3 center = this.center();
-        double radius = this.home != null ? ROOM_RADIUS - 1.5 : 8.0;
+        double radius = this.home != null ? this.room - 1.5 : 8.0;
         for (int i = 0; i < 24; i++) {
             double a = this.random.nextDouble() * Mth.TWO_PI;
             double r = 1.5 + this.random.nextDouble() * (radius - 1.5);

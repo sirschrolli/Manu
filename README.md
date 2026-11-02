@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.38.0 – Krieg der Königreiche, Teil 1: vier feindliche Reiche mit je einer großen Stammburg, Besatzung, Herrscher, Eroberung und Tribut. Dazu: Kingdoms at War läuft nur noch ohne andere Mods, keine Koordinaten mehr (F3), viel härter (Schwer fest, stärkere Gegner, halbe Heilung, Schwäche nach dem Tod), acht eigene Verzauberungen und ein Arachnophobie-Modus.**
+> **Testversion 0.39.0 – die Arkane Sphäre: Die Erzmagier ziehen dich, deine Mitspieler und deine Soldaten in ihre eigene Dimension – eine schwebende Arena im Element des Magiers. Dort lässt sich nichts bauen, und wer stirbt, verliert alles, was er bei sich trägt.**
+> In 0.38 kam der Krieg der Königreiche, Teil 1: vier feindliche Reiche mit je einer großen Stammburg, Besatzung, Herrscher, Eroberung und Tribut. Dazu: Kingdoms at War läuft nur noch ohne andere Mods, keine Koordinaten mehr (F3), viel härter (Schwer fest, stärkere Gegner, halbe Heilung, Schwäche nach dem Tod), acht eigene Verzauberungen und ein Arachnophobie-Modus.
 > In 0.37 kam das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, logische Ketten (eigenes Gestein gibt Bruchstein für Steinwerkzeuge und Öfen, Blumen geben Farbstoff …), Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.
 > Die Geschichte mit Chronik, Kapiteln und Siegelkreis, **sechs riesige Drachen-Bosse** mit eigenem Körperbau,
 > eigenen Angriffen und je einem gewaltigen Nest in einem eigenen Biom, **Nyxar, der Schattendrache**, in seiner
@@ -331,8 +332,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Krieg der Königreiche, Teil 1: vier Reiche, Stammburgen, Besatzung, Herrscher, Eroberung, Tribut | ✅ fertig |
 | Regeln: nur ohne andere Mods, keine Koordinaten, Schwierigkeit fest auf Schwer, stärkere Gegner, halbe Heilung | ✅ fertig |
 | Acht eigene Verzauberungen (nur als Beute), Arachnophobie-Modus | ✅ fertig |
-| Die Arkane Sphäre: Kampf gegen die Erzmagier in einer eigenen Dimension | 🔨 als Nächstes |
-| Belagerungswaffen, Gegenangriffe, neue Truppen, Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
+| Die Arkane Sphäre: Kampf gegen die Erzmagier in einer eigenen Dimension (Arena je Element, Bauverbot, alles verloren beim Tod) | ✅ fertig |
+| Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 als Nächstes |
+| Gegenangriffe der Reiche, neue Truppen, Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
 
@@ -1407,6 +1409,25 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
   hält weiteren Schatz bereit.
 
 ![Kampf gegen die Erzmagier](docs/bilder/erzmagier.jpg)
+
+
+### Die Arkane Sphäre
+
+Betritt jemand das Sanktum eines Erzmagiers, kämpft der Magier nicht mehr in seinem Turm: Er zieht alle Spieler im
+Sanktum und ihre Soldaten in der Nähe in die **Arkane Sphäre** – eine eigene Dimension, ein violetter Abgrund unter
+kalten Sternen mit einem Wolkenmeer tief unten. In der Mitte schwebt seine **Arena** aus den Steinen seines Turms: das
+Ritualmuster des Sanktums im Boden, eine Brüstung mit acht Säulen und Feuerschalen, darunter ein Felszapfen mit
+leuchtender Spitze, ringsum Felsinseln mit Kristallschreinen und Ruinen und schwebende Runenobelisken.
+
+- **Nichts bauen, nichts abbauen:** In der Sphäre lassen sich keine Blöcke setzen oder abbauen (auch kein Wasser,
+  kein Feuer, keine Wesen aus Eiern), Explosionen reißen nichts heraus.
+- **Alles verloren:** Wer in der Sphäre stirbt, verliert alles, was er bei sich trägt – Inventar, Rüstung, Zweithand
+  (auch mit `keepInventory`). Man erwacht an seinem Wiedereinstiegspunkt.
+- **Kein Ausweg nach unten:** Wer vom Rand stürzt, schleudert die Sphäre verletzt in die Arena zurück.
+- **Sieg:** Fällt der Magier, kehren alle an ihren Platz im Sanktum zurück – die Beute und die Erfahrung kommen mit.
+- **Niederlage:** Steht niemand mehr in der Arena, kehrt der Magier geheilt in seinen Turm zurück und meditiert wieder.
+- Wer den Magier von draußen angreift (etwa mit Pfeilen durch ein Fenster), ohne im Sanktum zu stehen, kämpft wie
+  früher gegen ihn in seinem Turm.
 
 ### Bauen und Einrichten
 
