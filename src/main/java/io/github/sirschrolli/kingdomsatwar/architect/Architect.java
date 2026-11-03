@@ -91,13 +91,90 @@ public final class Architect {
             fail(player, "no_paper");
             return;
         }
+        PlanScan.Scanner scanner = new PlanScan.Scanner(level, first, second, ground, front.getAxis().isHorizontal() ? front : Direction.NORTH,
+                level.registryAccess());
+        long cells = (long) (max.getX() - min.getX() + 1) * (max.getY() - min.getY() + 1) * (max.getZ() - min.getZ() + 1);
+        if (cells > DIRECT_CELLS) {
+            // eine ganze Burg: Lage für Lage über mehrere Ticks, damit das Spiel nicht stockt
+            PENDING.put(player.getUUID(), new Pending(scanner, level, min, max, name));
+            player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.architect.scanning", 0).withStyle(ChatFormatting.AQUA));
+            return;
+        }
         PlanScan scan;
         try {
-            scan = PlanScan.scan(level, first, second, ground, front.getAxis().isHorizontal() ? front : Direction.NORTH, level.registryAccess());
+            scan = scanner.finish();
         } catch (IllegalArgumentException e) {
             fail(player, "empty");
             return;
         }
+        finishSave(player, level, scan, name, min, max);
+    }
+
+    /** Bis zu so vielen Blöcken wird auf einmal vermessen, größere Bereiche in mehreren Ticks. */
+    private static final long DIRECT_CELLS = 600_000L;
+    /** So viele Blöcke vermisst der Server je Tick (einige Millisekunden). */
+    private static final int CELLS_PER_TICK = 120_000;
+
+    /** Ein Bereich, der gerade Lage für Lage vermessen wird. */
+    private record Pending(PlanScan.Scanner scanner, ServerLevel level, BlockPos min, BlockPos max, String name) {}
+
+    private static final Map<java.util.UUID, Pending> PENDING = new java.util.HashMap<>();
+
+    /** Vermisst die großen Bereiche ein Stück weiter (jeden Tick, siehe {@link ArchitectEvents}). */
+    static void tick(MinecraftServer server) {
+        if (PENDING.isEmpty()) {
+            return;
+        }
+        var it = PENDING.entrySet().iterator();
+        while (it.hasNext()) {
+            var e = it.next();
+            Pending pending = e.getValue();
+            ServerPlayer player = server.getPlayerList().getPlayer(e.getKey());
+            if (player == null || player.level() != pending.level()) {
+                it.remove();
+                continue;
+            }
+            if (!pending.level().hasChunksAt(pending.min(), pending.max())) {
+                it.remove();
+                fail(player, "not_loaded");
+                continue;
+            }
+            boolean done = pending.scanner().step(CELLS_PER_TICK);
+            if (!done) {
+                if (server.getTickCount() % 5 == 0) {
+                    player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.architect.scanning",
+                            Math.round(pending.scanner().progress() * 100.0f)).withStyle(ChatFormatting.AQUA));
+                }
+                continue;
+            }
+            it.remove();
+            PlanScan scan;
+            try {
+                scan = pending.scanner().finish();
+            } catch (IllegalArgumentException ex) {
+                fail(player, "empty");
+                continue;
+            }
+            if (!player.hasInfiniteMaterials() && player.getInventory().countItem(Items.PAPER) <= 0) {
+                fail(player, "no_paper");
+                continue;
+            }
+            finishSave(player, pending.level(), scan, pending.name(), pending.min(), pending.max());
+        }
+    }
+
+    /** Wird gerade ein Bereich dieses Spielers vermessen? */
+    public static boolean scanning(ServerPlayer player) {
+        return PENDING.containsKey(player.getUUID());
+    }
+
+    /** Speichert die fertige Vermessung als Plan und gibt dem Spieler den Bauplan. */
+    private static void finishSave(ServerPlayer player, ServerLevel level, PlanScan scan, String name, BlockPos min, BlockPos max) {
+        MinecraftServer server = level.getServer();
+        PlanLibrary library = PlanLibrary.of(server);
+        boolean free = player.hasInfiniteMaterials();
+        double cx = (min.getX() + max.getX() + 1) / 2.0;
+        double cz = (min.getZ() + max.getZ() + 1) / 2.0;
         PlanInfo info;
         try {
             info = library.add(server, scan, name, player.getUUID(), player.getName().getString());

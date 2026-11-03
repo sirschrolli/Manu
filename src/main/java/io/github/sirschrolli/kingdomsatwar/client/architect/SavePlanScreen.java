@@ -61,7 +61,11 @@ public class SavePlanScreen extends Screen {
     private boolean doorFound;
     private int maxGround;
     private @Nullable PlanScan scan;
+    /** Vermisst gerade (große Bereiche Lage für Lage, damit das Bild nicht stockt). */
+    private PlanScan.@Nullable Scanner scanner;
     private PlanScan.@Nullable Costs costs;
+    private @Nullable BlockPos door;
+    private int beds;
     private PlanScan.Picture frontPicture = PlanScan.Picture.EMPTY;
     private PlanScan.Picture topPicture = PlanScan.Picture.EMPTY;
     private int version;
@@ -110,6 +114,9 @@ public class SavePlanScreen extends Screen {
         }
     }
 
+    /** So viele Blöcke vermisst das Fenster je Tick. */
+    private static final int CELLS_PER_TICK = 250_000;
+
     /** Vermisst den Bereich neu (nach einer Änderung von Vorderseite oder Bodenlinie). */
     private void rescan() {
         if (this.minecraft.level == null) {
@@ -118,17 +125,46 @@ public class SavePlanScreen extends Screen {
         PlanTextures.forget("save/front/" + this.version);
         PlanTextures.forget("save/top/" + this.version);
         this.version++;
+        this.scan = null;
+        this.costs = null;
+        this.door = null;
+        this.beds = 0;
+        this.frontPicture = PlanScan.Picture.EMPTY;
+        this.topPicture = PlanScan.Picture.EMPTY;
         try {
-            this.scan = PlanScan.scan(this.minecraft.level, this.first, this.second, this.ground, this.front, null);
-            this.costs = this.scan.costs();
-            this.frontPicture = this.scan.front(PREVIEW);
-            this.topPicture = this.scan.top(PREVIEW);
+            this.scanner = new PlanScan.Scanner(this.minecraft.level, this.first, this.second, this.ground, this.front, null);
+        } catch (IllegalArgumentException e) {
+            this.scanner = null;
+            return;
+        }
+        this.advanceScan();
+    }
+
+    /** Vermisst ein Stück weiter; ist alles vermessen, entstehen Bilder und Kosten. */
+    private void advanceScan() {
+        PlanScan.Scanner scanner = this.scanner;
+        if (scanner == null || !scanner.step(CELLS_PER_TICK)) {
+            return;
+        }
+        this.scanner = null;
+        try {
+            PlanScan scan = scanner.finish();
+            this.costs = scan.costs();
+            this.frontPicture = scan.front(PREVIEW);
+            this.topPicture = scan.top(PREVIEW);
+            this.door = scan.door();
+            this.beds = scan.beds().size();
+            this.scan = scan;
         } catch (IllegalArgumentException e) {
             this.scan = null;
             this.costs = null;
-            this.frontPicture = PlanScan.Picture.EMPTY;
-            this.topPicture = PlanScan.Picture.EMPTY;
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.advanceScan();
     }
 
     @Override
@@ -258,7 +294,7 @@ public class SavePlanScreen extends Screen {
         g.text(this.font, Component.translatable("gui.kingdomsatwar.plan.top"), x + 3, ty + 3, 0xFFBFD5F2, false);
         if (scan != null && t[2] > 0) {
             // Eingang: ein grüner Pfeil unter der Vorderseite
-            BlockPos door = scan.door();
+            BlockPos door = this.door;
             int doorX = door == null ? scan.sizeX / 2 : door.getX();
             int ax = t[0] + Math.round((doorX + 0.5f) * t[2] / scan.sizeX);
             int ay = Math.min(t[1] + t[3] + 1, ty + h - 6);
@@ -289,7 +325,13 @@ public class SavePlanScreen extends Screen {
         row += 4;
         PlanScan scan = this.scan;
         PlanScan.Costs costs = this.costs;
-        if (scan == null || costs == null) {
+        PlanScan.Scanner scanner = this.scanner;
+        if (scanner != null) {
+            // große Bereiche: Fortschritt des Vermessens
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.architect.scanning", Math.round(scanner.progress() * 100.0f)), x, row, TEXT, false);
+            g.fill(x, row + 12, x + w, row + 17, 0xFF8C7650);
+            g.fill(x + 1, row + 13, x + 1 + Math.round((w - 2) * scanner.progress()), row + 16, 0xFF3F7FBF);
+        } else if (scan == null || costs == null) {
             for (FormattedCharSequence line : this.font.split(Component.translatable("gui.kingdomsatwar.architect.empty"), w)) {
                 g.text(this.font, line, x, row, BAD, false);
                 row += 10;
@@ -297,7 +339,7 @@ public class SavePlanScreen extends Screen {
         } else {
             // Blöcke und Betten
             g.text(this.font, Component.translatable("gui.kingdomsatwar.architect.blocks", costs.blocks()), x, row, TEXT, false);
-            int beds = scan.beds().size();
+            int beds = this.beds;
             if (beds > 0) {
                 Component bedText = Component.literal("× " + beds);
                 g.text(this.font, bedText, x + w - this.font.width(bedText), row, TEXT, false);
@@ -368,7 +410,9 @@ public class SavePlanScreen extends Screen {
         boolean creative = this.minecraft.player != null && this.minecraft.player.hasInfiniteMaterials();
         this.button(g, x, by, 54, 18, Component.translatable("gui.kingdomsatwar.architect.cancel"), true, mouseX, mouseY, this::onClose, null);
         List<Component> why = new ArrayList<>();
-        if (this.scan == null) {
+        if (this.scanner != null) {
+            why.add(Component.translatable("gui.kingdomsatwar.architect.scanning", Math.round(this.scanner.progress() * 100.0f)));
+        } else if (this.scan == null) {
             why.add(Component.translatable("gui.kingdomsatwar.architect.empty"));
         } else if (!paper) {
             why.add(Component.translatable("message.kingdomsatwar.architect.no_paper"));

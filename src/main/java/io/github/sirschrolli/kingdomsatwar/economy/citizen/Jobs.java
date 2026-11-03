@@ -3,6 +3,8 @@ package io.github.sirschrolli.kingdomsatwar.economy.citizen;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Blueprint;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
+import io.github.sirschrolli.kingdomsatwar.economy.town.SiteSections;
+import io.github.sirschrolli.kingdomsatwar.economy.town.Towns;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
@@ -372,6 +374,8 @@ final class Jobs {
         static final int MAX_SCAFFOLD = 28;
         /** Findet er so lange (Ticks) keinen Platz für einen Block, setzt er ihn von dort, wo er steht. */
         static final int STALL = 400;
+        /** … auf einer Großbaustelle schon nach dieser Zeit (dort warten andere Abschnitte). */
+        static final int STALL_SITE = 160;
         /** Steiggeschwindigkeit im Gerüst (Blöcke je Tick). */
         private static final double CLIMB_SPEED = 0.3;
 
@@ -391,14 +395,20 @@ final class Jobs {
         private @Nullable BlockPos climbExit;
         /** Gerüste, die nach dem Bau abgebaut werden (von oben nach unten). */
         private @Nullable ArrayDeque<BlockPos> dismantle;
+        /** Ticks je Tätigkeit (bauen/Pause, holen, gehen und Platz suchen, klettern, ohne Arbeit, Abschluss) – Fehlersuche. */
+        private final int[] spent = new int[6];
         /** Zähler für die Fehlersuche (nur mit -Dkingdomsatwar.debugBuilder=true ausgegeben). */
         private int statTeleports;
         private int statClimbs;
         private int statRaises;
         private int statForced;
         private static final boolean DEBUG = Boolean.getBoolean("kingdomsatwar.debugBuilder");
-        /** Für welche Baustelle die Karten gelten. */
-        private Town.@Nullable Project mapped;
+        /** Für welche Arbeit die Karten gelten. */
+        private Town.@Nullable Work mapped;
+        /** Die Arbeit, an der er gerade ist (die ganze Baustelle oder ein Abschnitt einer Großbaustelle). */
+        private Town.@Nullable Work work;
+        /** Gerüstlagen, die er für seinen Abschnitt aufgestellt hat (baut er ab, wenn der Abschnitt fertig ist). */
+        private final List<BlockPos> raised = new ArrayList<>();
         /** Letzter Bauschritt, der an einer Stelle einen Block setzt bzw. dort etwas wegräumt. */
         private final Map<BlockPos, Integer> lastSolid = new HashMap<>();
         private final Map<BlockPos, Integer> lastClear = new HashMap<>();
@@ -452,6 +462,25 @@ final class Jobs {
 
         // ------------------------------------------------------------------ Ablauf
 
+        /**
+         * Seine Arbeit an der Baustelle: bei gewöhnlichen Plänen die ganze Baustelle, auf einer Großbaustelle sein
+         * Abschnitt ({@code null}: gerade keiner frei).
+         */
+        private Town.@Nullable Work work(Town.Project project) {
+            SiteSections site = project.sectioned() ? project.site() : null;
+            Town.Work work = site == null ? project.whole() : site.claim(this.citizen.getUUID(), this.level(), this.feet());
+            if (work != this.work) {
+                if (this.work != null && this.work.project != project && this.work.project.site() != null) {
+                    java.util.Objects.requireNonNull(this.work.project.site()).release(this.citizen.getUUID());
+                }
+                this.work = work;
+                this.place = null;
+                this.goingTo = null;
+                this.lastProgress = -1;
+            }
+            return work;
+        }
+
         @Override
         void tick() {
             Town town = this.town();
@@ -460,27 +489,42 @@ final class Jobs {
                 return;
             }
             if (this.climbing) {
+                this.spent[3]++;
                 this.climb();
                 return;
             }
-            this.map(project);
-            List<Blueprint.Step> steps = project.steps();
-            int skipped = 0;
-            while (project.progress < steps.size() && skipped < 64 && !this.needsWork(steps.get(project.progress))) {
-                project.progress++;
-                skipped++;
-            }
-            if (project.progress >= steps.size()) {
-                this.finish(town, project);
+            Town.Work work = this.work(project);
+            if (work == null) {
+                this.spent[4]++;
+                SiteSections site = project.site();
+                if (site != null && site.allDone()) {
+                    this.finishSite(town, project);
+                } else {
+                    this.citizen.setWorking(false); // alle offenen Abschnitte haben schon einen Baumeister
+                }
                 return;
             }
-            if (project.progress != this.lastProgress) {
-                this.lastProgress = project.progress;
+            this.map(work);
+            List<Blueprint.Step> steps = work.steps();
+            int skipped = 0;
+            int budget = work.whole() ? 64 : 256;
+            while (work.progress() < steps.size() && skipped < budget && !this.needsWork(steps.get(work.progress()))) {
+                work.advance();
+                skipped++;
+            }
+            if (work.progress() >= steps.size()) {
+                this.spent[5]++;
+                this.finish(town, project, work);
+                return;
+            }
+            if (work.progress() != this.lastProgress) {
+                this.lastProgress = work.progress();
                 this.stalled = 0;
             }
-            Blueprint.Step step = steps.get(project.progress);
+            Blueprint.Step step = steps.get(work.progress());
             BlockPos at = step.pos();
             if (this.cooldown > 0) {
+                this.spent[0]++;
                 this.cooldown--;
                 this.lookAt(at);
                 return;
@@ -488,42 +532,48 @@ final class Jobs {
             // Baustoff dabei? Sonst erst ins Lager. (Kostbare Blöcke eigener Pläne nimmt er genau so aus dem Lager.)
             Material need = material(project, step);
             if (need != null && this.citizen.stock(need) <= 0) {
+                this.spent[1]++;
                 this.stalled = 0;
-                this.fetch(town, project, need, null);
+                this.fetch(town, project, work, need, null);
                 return;
             }
             net.minecraft.world.item.Item precious = precious(project, step);
             if (precious != null && carried(this.citizen, precious) <= 0) {
+                this.spent[1]++;
                 this.stalled = 0;
-                this.fetch(town, project, null, precious);
+                this.fetch(town, project, work, null, precious);
                 return;
             }
-            if (++this.stalled > STALL) {
+            this.spent[2]++;
+            // wer auf einem Weg zu seinem Platz ist, gilt nicht so schnell als festgefahren
+            boolean walking = this.place != null && this.goingTo != null && this.travel <= this.travelLimit;
+            int limit = work.whole() ? STALL : STALL_SITE;
+            if (++this.stalled > (walking ? limit * 3 : limit)) {
                 // nirgends ein Platz: dann eben von hier aus (der Bau bleibt nie stecken)
                 this.statForced++;
                 if (DEBUG) {
-                    io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Baumeister] kein Platz für {} bei {} (steht bei {})",
-                            step.state(), at, this.feet());
+                    io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Baumeister] kein Platz für {} bei {} (steht bei {}, Arbeit {}/{}, Platz {}) – {}",
+                            step.state(), at, this.feet(), work.section, work.phase, this.place, this.explain(work, at));
                 }
-                this.build(project, step);
+                this.build(project, work, step);
                 return;
             }
             BlockPos feet = this.feet();
             boolean onScaffold = this.onScaffold(feet);
             // auf dem Gerüst neben dem Block: aufstocken, bis der Block etwa in Brusthöhe liegt
-            if (onScaffold && horizontal(feet, at) <= REACH && at.getY() - feet.getY() > 2 && this.canRaise(feet, project.progress)) {
+            if (onScaffold && horizontal(feet, at) <= REACH && at.getY() - feet.getY() > 2 && this.canRaise(feet, work.progress())) {
                 this.raise(feet);
                 return;
             }
-            if (this.canWork(feet, at) && this.safe(feet, project.progress)) {
+            if (this.canWork(feet, at) && this.safe(feet, work.progress())) {
                 this.place = null;
                 this.goingTo = null;
-                this.build(project, step);
+                this.build(project, work, step);
                 return;
             }
             this.citizen.setWorking(false);
-            if (this.place == null || !this.canWork(this.place.feet(), at) || !this.stillValid(this.place, project.progress)) {
-                this.place = this.choose(project, at, feet);
+            if (this.place == null || !this.canWork(this.place.feet(), at) || !this.stillValid(this.place, work.progress())) {
+                this.place = this.choose(project, work, at, feet);
                 this.goingTo = null;
             }
             Place place = this.place;
@@ -532,7 +582,7 @@ final class Jobs {
             }
             // erst vom eigenen Gerüst herunter, wenn es woanders weitergeht
             if (onScaffold && (place.kind() != Kind.SCAFFOLD || !sameColumn(place.feet(), feet))) {
-                this.startClimbDown(feet, project.progress);
+                this.startClimbDown(feet, work.progress());
                 return;
             }
             switch (place.kind()) {
@@ -543,7 +593,7 @@ final class Jobs {
                 }
                 case SCAFFOLD -> {
                     BlockPos column = place.column();
-                    BlockPos entry = column == null ? null : this.exitOf(column, project.progress);
+                    BlockPos entry = column == null ? null : this.exitOf(column, work.progress());
                     if (entry == null) {
                         this.teleport(place.feet());
                     } else if (!this.arrived(entry)) {
@@ -555,7 +605,7 @@ final class Jobs {
                 case NEW_SCAFFOLD -> {
                     if (!this.arrived(place.feet())) {
                         this.go(place.feet());
-                    } else if (this.canRaise(place.feet(), project.progress)) {
+                    } else if (this.canRaise(place.feet(), work.progress())) {
                         this.raise(place.feet());
                         this.place = null;
                     }
@@ -568,7 +618,7 @@ final class Jobs {
             super.stop();
             this.citizen.setWorking(false);
             Town.Project project = this.project();
-            int progress = project == null ? Integer.MAX_VALUE : project.progress;
+            int progress = this.work == null ? Integer.MAX_VALUE : this.work.progress();
             if (this.climbing) {
                 this.endClimb();
             }
@@ -589,19 +639,19 @@ final class Jobs {
 
         // ------------------------------------------------------------------ Bauen
 
-        private void build(Town.Project project, Blueprint.Step step) {
+        private void build(Town.Project project, Town.Work work, Blueprint.Step step) {
             BlockPos at = step.pos();
             this.citizen.getNavigation().stop();
             this.citizen.setWorking(true);
             this.lookAt(at);
             this.place(project, step, true);
             this.citizen.swingArm();
-            project.progress++;
+            work.advance();
             this.stalled = 0;
             // Wegräumen geht schneller als Bauen
             this.cooldown = step.state().isAir() ? 0 : 2;
             if (project.fast) {
-                this.section(project, step);
+                this.section(project, work, step);
             }
         }
 
@@ -632,6 +682,8 @@ final class Jobs {
 
         /** Abschnittsweise: so viele Blöcke setzt er auf einmal (aus derselben Lage, rund um den ersten). */
         static final int SECTION = 12;
+        /** … auf einer Großbaustelle. */
+        static final int SECTION_SITE = 20;
         /** … und so weit dürfen sie vom ersten entfernt liegen. */
         static final int SECTION_REACH = 4;
 
@@ -640,24 +692,29 @@ final class Jobs {
          * liegen, die Baustoffe reichen und er sich nicht selbst einmauert. Dazu Staub und ein Geräusch für den ganzen
          * Abschnitt; danach eine etwas längere Pause.
          */
-        private void section(Town.Project project, Blueprint.Step first) {
-            List<Blueprint.Step> steps = project.steps();
+        private void section(Town.Project project, Town.Work work, Blueprint.Step first) {
+            List<Blueprint.Step> steps = work.steps();
             BlockPos origin = first.pos();
             boolean clearing = first.state().isAir();
-            int limit = clearing ? SECTION * 2 : SECTION;
+            // auf einer Großbaustelle arbeitet eine ganze Kolonne: mehr Blöcke auf einmal, etwas weiter verteilt
+            int limit = (clearing ? 2 : 1) * (work.whole() ? SECTION : SECTION_SITE);
+            int reach = work.whole() ? SECTION_REACH : SECTION_REACH + 1;
             BlockPos feet = this.feet();
             int placed = 0;
             int looked = 0;
-            while (project.progress < steps.size() && placed < limit - 1 && looked < limit * 3) {
-                Blueprint.Step next = steps.get(project.progress);
+            while (work.progress() < steps.size() && placed < limit - 1 && looked < limit * 3) {
+                Blueprint.Step next = steps.get(work.progress());
                 looked++;
                 if (!this.needsWork(next)) {
-                    project.progress++;
+                    work.advance();
                     continue;
                 }
                 BlockPos at = next.pos();
-                if (next.foundation() != first.foundation() || next.state().isAir() != clearing || at.getY() != origin.getY()
-                        || Math.max(Math.abs(at.getX() - origin.getX()), Math.abs(at.getZ() - origin.getZ())) > SECTION_REACH) {
+                // auf einer Großbaustelle zieht er sein Feld auch über mehrere Lagen hoch, soweit er von hier hinreicht
+                boolean layers = !work.whole() && !clearing && !next.foundation() && at.getY() >= origin.getY() && at.getY() <= origin.getY() + 2
+                        && this.canWork(feet, at);
+                if (next.foundation() != first.foundation() || next.state().isAir() != clearing || at.getY() != origin.getY() && !layers
+                        || Math.max(Math.abs(at.getX() - origin.getX()), Math.abs(at.getZ() - origin.getZ())) > reach) {
                     break;
                 }
                 if (!clearing && (at.equals(feet) || at.equals(feet.above()))) {
@@ -672,7 +729,7 @@ final class Jobs {
                     break;
                 }
                 this.place(project, next, false);
-                project.progress++;
+                work.advance();
                 placed++;
             }
             if (placed > 0) {
@@ -726,11 +783,12 @@ final class Jobs {
          * Holt Baustoffe aus dem Lager – so viel, wie die nächsten Blöcke brauchen (je Baustoff höchstens einen Stapel). Fehlt
          * der Baustoff im Lager (oder gibt es gar keins), wartet er dort und sagt dem Herrn der Siedlung Bescheid.
          */
-        private void fetch(Town town, Town.Project project, @Nullable Material need, net.minecraft.world.item.@Nullable Item precious) {
+        private void fetch(Town town, Town.Project project, Town.Work work, @Nullable Material need,
+                net.minecraft.world.item.@Nullable Item precious) {
             this.citizen.setWorking(false);
             BlockPos feet = this.feet();
             if (this.onScaffold(feet)) {
-                this.startClimbDown(feet, project.progress);
+                this.startClimbDown(feet, work.progress());
                 return;
             }
             BlockPos store = TownStorage.nearest(this.level(), town, feet);
@@ -753,7 +811,7 @@ final class Jobs {
                 this.fetchCooldown--;
                 return;
             }
-            int[] want = this.demand(project);
+            int[] want = this.demand(project, work);
             boolean got = false;
             for (Material m : Material.values()) {
                 int missing = Math.max(m == need ? 1 : 0, want[m.ordinal()]) - this.citizen.stock(m);
@@ -766,7 +824,7 @@ final class Jobs {
                 }
             }
             // kostbare Blöcke: so viele, wie die nächsten Schritte brauchen (soweit er sie tragen kann)
-            for (Map.Entry<net.minecraft.world.item.Item, Integer> e : this.demandPrecious(project, precious).entrySet()) {
+            for (Map.Entry<net.minecraft.world.item.Item, Integer> e : this.demandPrecious(project, work, precious).entrySet()) {
                 int missing = e.getValue() - carried(this.citizen, e.getKey());
                 if (missing > 0) {
                     ItemStack taken = TownStorage.takeItem(this.level(), town, e.getKey(), missing);
@@ -797,7 +855,8 @@ final class Jobs {
         }
 
         /** Welche kostbaren Blöcke die nächsten Schritte brauchen (je höchstens ein Stapel), mindestens der gerade nötige. */
-        private Map<net.minecraft.world.item.Item, Integer> demandPrecious(Town.Project project, net.minecraft.world.item.@Nullable Item need) {
+        private Map<net.minecraft.world.item.Item, Integer> demandPrecious(Town.Project project, Town.Work work,
+                net.minecraft.world.item.@Nullable Item need) {
             Map<net.minecraft.world.item.Item, Integer> want = new java.util.LinkedHashMap<>();
             if (need != null) {
                 want.put(need, 1);
@@ -805,8 +864,9 @@ final class Jobs {
             if (project.custom == null) {
                 return want;
             }
-            List<Blueprint.Step> steps = project.steps();
-            for (int i = project.progress; i < steps.size() && i < project.progress + 400 && want.size() < 6; i++) {
+            List<Blueprint.Step> steps = work.steps();
+            int from = work.progress();
+            for (int i = from; i < steps.size() && i < from + 400 && want.size() < 6; i++) {
                 Blueprint.Step s = steps.get(i);
                 net.minecraft.world.item.Item item = precious(project, s);
                 if (item != null && this.needsWork(s)) {
@@ -832,15 +892,20 @@ final class Jobs {
 
         private int fetchCooldown;
 
-        /** Was die nächsten Blöcke brauchen (Einheiten je Baustoff, höchstens 64). */
-        private int[] demand(Town.Project project) {
+        /**
+         * Was die nächsten Blöcke brauchen (Einheiten je Baustoff, höchstens ein Stapel). Auf einer Großbaustelle holt er mit
+         * dem Karren gleich für ein gutes Stück seines Abschnitts (bis acht Stapel je Baustoff), denn das Lager ist weit.
+         */
+        private int[] demand(Town.Project project, Town.Work work) {
             int[] want = new int[Material.values().length];
-            List<Blueprint.Step> steps = project.steps();
+            List<Blueprint.Step> steps = work.steps();
+            int most = work.whole() ? 64 : 512;
+            int window = work.whole() ? 160 : 1600;
             int counted = 0;
-            for (int i = project.progress; i < steps.size() && counted < 160; i++) {
+            for (int i = work.progress(); i < steps.size() && counted < window; i++) {
                 Blueprint.Step s = steps.get(i);
                 Material m = material(project, s);
-                if (m != null && want[m.ordinal()] < 64 && this.needsWork(s)) {
+                if (m != null && want[m.ordinal()] < most && this.needsWork(s)) {
                     want[m.ordinal()]++;
                     counted++;
                 }
@@ -864,11 +929,56 @@ final class Jobs {
             }
         }
 
-        /** Alles gesetzt: erst vom Gerüst herunter, dann die Gerüste abbauen, dann ist das Gebäude fertig. */
-        private void finish(Town town, Town.Project project) {
+        /**
+         * Alles gesetzt: erst vom Gerüst herunter, dann die Gerüste abbauen, dann ist das Gebäude fertig. Auf einer
+         * Großbaustelle ist erst sein Abschnitt fertig: er baut seine Gerüste ab und nimmt sich den nächsten.
+         */
+        private void finish(Town town, Town.Project project, Town.Work work) {
             BlockPos feet = this.feet();
             if (this.onScaffold(feet)) {
                 this.startClimbDown(feet, Integer.MAX_VALUE);
+                return;
+            }
+            if (!work.whole()) {
+                if (this.dismantle == null) {
+                    List<BlockPos> own = new ArrayList<>(this.raised);
+                    own.sort(java.util.Comparator.comparingInt((BlockPos p) -> p.getY()).reversed());
+                    this.dismantle = new ArrayDeque<>(own);
+                }
+                if (!this.dismantle.isEmpty()) {
+                    this.citizen.setWorking(true);
+                    for (int i = 0; i < 3 && !this.dismantle.isEmpty(); i++) {
+                        BlockPos pos = this.dismantle.poll();
+                        if (this.level().getBlockState(pos).is(ModBlocks.BUILDER_SCAFFOLD.get())) {
+                            this.lookAt(pos);
+                            this.level().destroyBlock(pos, false);
+                        }
+                    }
+                    this.citizen.swingArm();
+                    return;
+                }
+                this.dismantle = null;
+                this.raised.clear();
+                this.citizen.setWorking(false);
+                if (DEBUG) {
+                    io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info(
+                            "[Baumeister] Abschnitt {}/{} fertig: {} Schritte; Ticks bauen {}, holen {}, gehen {}, klettern {}, ohne Arbeit {}, Abschluss {}; "
+                                    + "{} Gerüstlagen, {} ohne Platz", work.section, work.phase, work.steps().size(), this.spent[0], this.spent[1],
+                            this.spent[2], this.spent[3], this.spent[4], this.spent[5], this.statRaises, this.statForced);
+                    java.util.Arrays.fill(this.spent, 0);
+                    this.statRaises = this.statForced = 0;
+                }
+                SiteSections site = project.site();
+                if (site != null) {
+                    site.complete(this.citizen.getUUID(), work);
+                    Towns.of(this.level().getServer()).save(this.level().getServer());
+                }
+                this.work = null;
+                this.mapped = null;
+                this.place = null;
+                if (site != null && site.allDone()) {
+                    this.finishSite(town, project);
+                }
                 return;
             }
             if (this.dismantle == null) {
@@ -910,8 +1020,26 @@ final class Jobs {
             this.place = null;
         }
 
+        /**
+         * Die Großbaustelle ist fertig: die Gerüste, die noch irgendwo stehen (etwa nach einem Neustart), kommen weg,
+         * dann zählt der Bau als Gebäude der Siedlung.
+         */
+        private void finishSite(Town town, Town.Project project) {
+            if (!town.projects().contains(project)) {
+                return;
+            }
+            TownManager.clearScaffolds(this.level(), project.bounds());
+            if (DEBUG) {
+                io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Baumeister] Großbaustelle fertig");
+            }
+            TownManager.completeProject(this.level(), town, project);
+            this.work = null;
+            this.mapped = null;
+            this.place = null;
+        }
+
         private BlockPos entrance(Town.Project project) {
-            BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.entranceLocal());
             BlockPos spot = standingSpot(this.level(), door);
             return spot != null ? spot : door;
         }
@@ -919,15 +1047,15 @@ final class Jobs {
         // ------------------------------------------------------------------ Karten der Baustelle
 
         /** Merkt sich, wo der Plan noch Blöcke setzt bzw. wegräumt; nach dem Laden wird der Fortschritt nachgeprüft. */
-        private void map(Town.Project project) {
-            if (this.mapped == project) {
+        private void map(Town.Work work) {
+            if (this.mapped == work) {
                 return;
             }
-            this.mapped = project;
+            this.mapped = work;
             this.lastSolid.clear();
             this.lastClear.clear();
             this.dismantle = null;
-            List<Blueprint.Step> steps = project.steps();
+            List<Blueprint.Step> steps = work.steps();
             for (int i = 0; i < steps.size(); i++) {
                 Blueprint.Step s = steps.get(i);
                 if (s.foundation()) {
@@ -942,10 +1070,10 @@ final class Jobs {
             }
             // ab dem ersten Schritt, der noch Arbeit braucht (z. B. nach einem Neustart oder einem geänderten Ablauf)
             int first = 0;
-            while (first < project.progress && !this.needsWork(steps.get(first))) {
+            while (first < work.progress() && first < steps.size() && !this.needsWork(steps.get(first))) {
                 first++;
             }
-            project.progress = first;
+            work.setProgress(first);
         }
 
         /**
@@ -1075,10 +1203,10 @@ final class Jobs {
          * Sucht den besten Platz für den nächsten Block: einen Stehplatz in Reichweite (gern in Schulterhöhe des Blocks und
          * nicht weit vom jetzigen Platz) oder – wenn keiner hinkommt – den Fuß eines neuen Gerüsts neben dem Block.
          */
-        private @Nullable Place choose(Town.Project project, BlockPos at, BlockPos feet) {
-            int progress = project.progress;
+        private @Nullable Place choose(Town.Project project, Town.Work work, BlockPos at, BlockPos feet) {
+            int progress = work.progress();
             var box = project.bounds();
-            List<BlockPos> upcoming = this.upcoming(project);
+            List<BlockPos> upcoming = this.upcoming(work);
             Place best = null;
             double bestScore = Double.MAX_VALUE;
             int r = (int) Math.ceil(REACH);
@@ -1123,7 +1251,7 @@ final class Jobs {
                     bestScore += 2.0;
                 }
             }
-            Place column = this.newScaffold(project, at, feet, box, upcoming);
+            Place column = this.newScaffold(project, work, at, feet, box, upcoming);
             if (column != null && (best == null || this.columnScore < bestScore)) {
                 return column;
             }
@@ -1132,11 +1260,42 @@ final class Jobs {
 
         private double columnScore;
 
+        /** Für die Fehlersuche: warum es um einen Block herum keinen Stehplatz gibt (Zählung der Gründe). */
+        private String explain(Town.Work work, BlockPos at) {
+            int progress = work.progress();
+            int total = 0;
+            int notStandable = 0;
+            int unsafe = 0;
+            int ok = 0;
+            int r = (int) Math.ceil(REACH);
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.sqrt(dx * dx + dz * dz) > REACH) {
+                        continue;
+                    }
+                    for (int y = at.getY() - UP; y <= at.getY() + DOWN; y++) {
+                        BlockPos p = new BlockPos(at.getX() + dx, y, at.getZ() + dz);
+                        total++;
+                        if (!this.standable(p)) {
+                            notStandable++;
+                        } else if (!this.safe(p, progress)) {
+                            unsafe++;
+                        } else {
+                            ok++;
+                        }
+                    }
+                }
+            }
+            return "Stellen " + total + ", nicht begehbar " + notStandable + ", unsicher " + unsafe + ", gut " + ok + ", Gerüst "
+                    + (this.columnScore == Double.MAX_VALUE ? "keins" : String.format(java.util.Locale.ROOT, "%.1f", this.columnScore));
+        }
+
         /** Die nächsten Blöcke, die noch gesetzt werden (für die Wahl eines Platzes, von dem aus er möglichst viele erreicht). */
-        private List<BlockPos> upcoming(Town.Project project) {
-            List<Blueprint.Step> steps = project.steps();
+        private List<BlockPos> upcoming(Town.Work work) {
+            List<Blueprint.Step> steps = work.steps();
             List<BlockPos> list = new ArrayList<>();
-            for (int i = project.progress; i < steps.size() && list.size() < 12 && i < project.progress + 40; i++) {
+            int from = work.progress();
+            for (int i = from; i < steps.size() && list.size() < 12 && i < from + 40; i++) {
                 Blueprint.Step s = steps.get(i);
                 if (!s.foundation() && !s.state().isAir()) {
                     list.add(s.pos());
@@ -1160,10 +1319,10 @@ final class Jobs {
          * Fuß eines neuen Gerüsts neben dem Block: eine Säule, die vom Boden bis zwei Blöcke unter den Block frei ist und frei
          * bleibt (dort setzt der Plan nichts hin), möglichst außerhalb des Hauses und nicht vor der Tür.
          */
-        private @Nullable Place newScaffold(Town.Project project, BlockPos at, BlockPos feet, net.minecraft.world.level.levelgen.structure.BoundingBox box,
-                List<BlockPos> upcoming) {
-            int progress = project.progress;
-            BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
+        private @Nullable Place newScaffold(Town.Project project, Town.Work work, BlockPos at, BlockPos feet,
+                net.minecraft.world.level.levelgen.structure.BoundingBox box, List<BlockPos> upcoming) {
+            int progress = work.progress();
+            BlockPos door = Blueprint.world(project.origin, project.rotation, project.entranceLocal());
             int top = at.getY() - 2;   // Füße oben auf dem Gerüst
             Place best = null;
             double bestScore = Double.MAX_VALUE;
@@ -1196,7 +1355,9 @@ final class Jobs {
                     }
                     double score = 1.2 + Math.max(0.0, h - 2.0) * 0.8 + (top - base.getY()) * 0.15
                             + (box.isInside(x, box.minY(), z) ? 1.5 : 0.0) + Math.sqrt(base.distSqr(feet)) * 0.05
-                            - this.coverage(new BlockPos(x, top, z), upcoming) * 0.25;
+                            - this.coverage(new BlockPos(x, top, z), upcoming) * 0.25
+                            // auf einer Großbaustelle lieber im eigenen Abschnitt (dort baut kein anderer)
+                            + (!work.whole() && !work.bounds().isInside(x, work.bounds().minY(), z) ? 1.0 : 0.0);
                     if (score < bestScore) {
                         bestScore = score;
                         best = new Place(base, Kind.NEW_SCAFFOLD, base);
@@ -1217,6 +1378,11 @@ final class Jobs {
                 net.minecraft.world.level.pathfinder.Path path = this.citizen.getNavigation().createPath(target, 0);
                 boolean reach = path != null && path.canReach();
                 this.travelLimit = reach ? 40 + path.getNodeCount() * 8 : target.getY() > this.citizen.getY() + 1.5 ? 15 : 60;
+                if (reach && this.work != null && !this.work.whole()
+                        && path.getNodeCount() > 2.5 * Math.sqrt(this.citizen.distanceToSqr(Vec3.atBottomCenterOf(target))) + 10) {
+                    // auf der Großbaustelle steigt er über die Mauer, statt ganz außen herumzulaufen
+                    this.travelLimit = 12;
+                }
                 if (path != null) {
                     this.citizen.getNavigation().moveTo(path, 0.85);
                 }
@@ -1265,6 +1431,7 @@ final class Jobs {
             this.citizen.getNavigation().stop();
             this.citizen.teleportTo(feet.getX() + 0.5, feet.getY() + 1, feet.getZ() + 0.5);
             this.level().setBlock(feet, ModBlocks.BUILDER_SCAFFOLD.get().defaultBlockState(), Block.UPDATE_ALL);
+            this.raised.add(feet.immutable());
             this.citizen.swingArm();
             this.level().playSound(null, feet, SoundEvents.SCAFFOLDING_PLACE, SoundSource.BLOCKS, 0.8f, 0.9f);
             this.cooldown = 4;

@@ -13,7 +13,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -45,10 +44,10 @@ import org.jspecify.annotations.Nullable;
  * liegt die Mitte der Grundfläche bei x = z = 0 und die Bodenlinie bei y = 0 (wie bei den Häusern der Siedlung).
  */
 public final class PlanScan {
-    /** Größte Breite und Tiefe eines Bauplans. */
-    public static final int MAX_WIDTH = 96;
+    /** Größte Breite und Tiefe eines Bauplans (eine ganze Burg). */
+    public static final int MAX_WIDTH = 320;
     /** Größte Höhe eines Bauplans. */
-    public static final int MAX_HEIGHT = 64;
+    public static final int MAX_HEIGHT = 128;
     /** So viele Lagen sucht die Bodenlinie von unten (darüber beginnt immer das Gebäude). */
     public static final int MAX_GROUND = 12;
 
@@ -59,13 +58,14 @@ public final class PlanScan {
     public final int ground;
     /** Farben der Blöcke; {@code palette[0] == null}: nichts tun (gewachsener Boden unter der Bodenlinie). */
     private final BlockState[] palette;
-    private final int[] data;
+    /** Nummer in der Palette je Stelle (16 Bit: auch eine ganze Burg passt in wenige Megabyte). */
+    private final char[] data;
     /** Daten von Schildern und Bannern (Index im Gitter → gespeicherte Daten). */
     private final Map<Integer, CompoundTag> blockEntities;
     /** Was beim Vermessen weggelassen wurde (nur zur Anzeige). */
     private final Map<Block, Integer> skipped;
 
-    private PlanScan(int sizeX, int sizeY, int sizeZ, int ground, BlockState[] palette, int[] data, Map<Integer, CompoundTag> blockEntities,
+    private PlanScan(int sizeX, int sizeY, int sizeZ, int ground, BlockState[] palette, char[] data, Map<Integer, CompoundTag> blockEntities,
             Map<Block, Integer> skipped) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
@@ -197,7 +197,7 @@ public final class PlanScan {
         Direction toViewer = viewer == null ? null : sideFacing(a, b, viewer);
         Direction best = null;
         int bestDist = Integer.MAX_VALUE;
-        for (BlockPos pos : BlockPos.betweenClosed(min.getX(), min.getY() + ground, min.getZ(), max.getX(), max.getY(), max.getZ())) {
+        for (BlockPos pos : doors(level, new BlockPos(min.getX(), min.getY() + ground, min.getZ()), max)) {
             BlockState state = level.getBlockState(pos);
             if (!(state.getBlock() instanceof DoorBlock) || state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) != DoubleBlockHalf.LOWER) {
                 continue;
@@ -215,48 +215,148 @@ public final class PlanScan {
     }
 
     /**
-     * Vermisst den Quader zwischen zwei Ecken.
+     * Wo im Quader Türen stehen könnten: in einer Welt nur die Stellen der Chunk-Lagen, die überhaupt eine Tür enthalten
+     * (so bleibt das Suchen auch bei einer ganzen Burg schnell), sonst alle Stellen.
+     */
+    private static Iterable<BlockPos> doors(BlockGetter level, BlockPos min, BlockPos max) {
+        if (!(level instanceof net.minecraft.world.level.Level world) || min.getY() > max.getY()) {
+            return BlockPos.betweenClosed(min, max);
+        }
+        List<BlockPos> out = new ArrayList<>();
+        for (int cx = min.getX() >> 4; cx <= max.getX() >> 4; cx++) {
+            for (int cz = min.getZ() >> 4; cz <= max.getZ() >> 4; cz++) {
+                var chunk = world.getChunk(cx, cz);
+                for (int sy = min.getY() >> 4; sy <= max.getY() >> 4; sy++) {
+                    int si = chunk.getSectionIndexFromSectionY(sy);
+                    if (si < 0 || si >= chunk.getSectionsCount()
+                            || !chunk.getSection(si).maybeHas(st -> st.getBlock() instanceof DoorBlock)) {
+                        continue;
+                    }
+                    for (BlockPos p : BlockPos.betweenClosed(Math.max(min.getX(), cx << 4), Math.max(min.getY(), sy << 4), Math.max(min.getZ(), cz << 4),
+                            Math.min(max.getX(), (cx << 4) + 15), Math.min(max.getY(), (sy << 4) + 15), Math.min(max.getZ(), (cz << 4) + 15))) {
+                        if (world.getBlockState(p).getBlock() instanceof DoorBlock) {
+                            out.add(p.immutable());
+                        }
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Vermisst den Quader zwischen zwei Ecken (auf einmal; große Bauten lieber Lage für Lage mit einem {@link Scanner}).
      *
      * @param ground     Zahl der Lagen unter der Bodenlinie (siehe {@link #autoGround})
      * @param front      Seite des Quaders, die im Bauplan vorn liegt (dort ist der Eingang)
      * @param registries für die Daten von Schildern und Bannern ({@code null}: ohne)
      */
     public static PlanScan scan(BlockGetter level, BlockPos a, BlockPos b, int ground, Direction front, HolderLookup.@Nullable Provider registries) {
-        BlockPos min = BlockPos.min(a, b);
-        BlockPos max = BlockPos.max(a, b);
-        int rx = max.getX() - min.getX() + 1;
-        int ry = max.getY() - min.getY() + 1;
-        int rz = max.getZ() - min.getZ() + 1;
-        if (Math.max(rx, rz) > MAX_WIDTH || ry > MAX_HEIGHT) {
-            throw new IllegalArgumentException("too large");
+        return new Scanner(level, a, b, ground, front, registries).finish();
+    }
+
+    /**
+     * Vermisst einen Quader Lage für Lage – auf einmal ({@link #finish}) oder verteilt über mehrere Ticks
+     * ({@link #step}), damit eine ganze Burg das Spiel nicht anhält. Jede Stelle bekommt gleich ihre Nummer in der
+     * Palette (16 Bit), so bleibt auch ein Quader von 320 × 128 × 320 Blöcken klein.
+     */
+    public static final class Scanner {
+        private final BlockGetter level;
+        private final BlockPos min;
+        private final int rx;
+        private final int ry;
+        private final int rz;
+        private final int nx;
+        private final int nz;
+        private final int ground;
+        private final Direction front;
+        private final Rotation rotation;
+        private final HolderLookup.@Nullable Provider registries;
+        private final char[] grid;
+        private final Map<BlockState, Integer> ids = new IdentityHashMap<>();
+        private final List<BlockState> palette = new ArrayList<>();
+        private final Map<Integer, CompoundTag> data = new HashMap<>();
+        private final Map<Block, Integer> skipped = new LinkedHashMap<>();
+        private final BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        private int layer;
+
+        public Scanner(BlockGetter level, BlockPos a, BlockPos b, int ground, Direction front, HolderLookup.@Nullable Provider registries) {
+            this.level = level;
+            this.min = BlockPos.min(a, b);
+            BlockPos max = BlockPos.max(a, b);
+            this.rx = max.getX() - this.min.getX() + 1;
+            this.ry = max.getY() - this.min.getY() + 1;
+            this.rz = max.getZ() - this.min.getZ() + 1;
+            if (Math.max(this.rx, this.rz) > MAX_WIDTH || this.ry > MAX_HEIGHT) {
+                throw new IllegalArgumentException("too large");
+            }
+            this.ground = Math.max(0, Math.min(ground, this.ry - 1));
+            this.front = front;
+            this.rotation = switch (front) {
+                case EAST -> Rotation.COUNTERCLOCKWISE_90;
+                case SOUTH -> Rotation.CLOCKWISE_180;
+                case WEST -> Rotation.CLOCKWISE_90;
+                default -> Rotation.NONE;
+            };
+            boolean swap = front == Direction.EAST || front == Direction.WEST;
+            this.nx = swap ? this.rz : this.rx;
+            this.nz = swap ? this.rx : this.rz;
+            this.registries = registries;
+            this.grid = new char[this.nx * this.ry * this.nz];
+            this.palette.add(null);
         }
-        ground = Math.max(0, Math.min(ground, ry - 1));
-        Rotation rotation = switch (front) {
-            case EAST -> Rotation.COUNTERCLOCKWISE_90;
-            case SOUTH -> Rotation.CLOCKWISE_180;
-            case WEST -> Rotation.CLOCKWISE_90;
-            default -> Rotation.NONE;
-        };
-        boolean swap = front == Direction.EAST || front == Direction.WEST;
-        int nx = swap ? rz : rx;
-        int nz = swap ? rx : rz;
-        BlockState[] grid = new BlockState[nx * ry * nz];
-        Map<Integer, CompoundTag> data = new HashMap<>();
-        Map<Block, Integer> skipped = new LinkedHashMap<>();
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (int y = 0; y < ry; y++) {
-            boolean below = y < ground;
-            for (int z = 0; z < rz; z++) {
-                for (int x = 0; x < rx; x++) {
-                    pos.set(min.getX() + x, min.getY() + y, min.getZ() + z);
-                    BlockState raw = level.getBlockState(pos);
+
+        /** Wie weit das Vermessen ist (0 bis 1). */
+        public float progress() {
+            return this.layer / (float) this.ry;
+        }
+
+        /** Vermisst die nächsten Lagen (zusammen etwa {@code cells} Blöcke, mindestens eine Lage); {@code true}: fertig. */
+        public boolean step(int cells) {
+            int layers = Math.max(1, cells / Math.max(1, this.rx * this.rz));
+            for (int i = 0; i < layers && this.layer < this.ry; i++) {
+                this.scanLayer(this.layer++);
+            }
+            return this.layer >= this.ry;
+        }
+
+        /** Vermisst den Rest und macht daraus den Plan (beschnitten, Palette ohne Unbenutztes). */
+        public PlanScan finish() {
+            while (!this.step(Integer.MAX_VALUE)) {
+                // weiter
+            }
+            return trimmed(this.grid, this.palette, this.nx, this.ry, this.nz, this.ground, this.data, this.skipped);
+        }
+
+        private char id(@Nullable BlockState state) {
+            if (state == null) {
+                return 0;
+            }
+            Integer id = this.ids.get(state);
+            if (id == null) {
+                id = this.palette.size();
+                if (id > Character.MAX_VALUE) {
+                    throw new IllegalArgumentException("too many block states");
+                }
+                this.ids.put(state, id);
+                this.palette.add(state);
+            }
+            return (char) id.intValue();
+        }
+
+        private void scanLayer(int y) {
+            boolean below = y < this.ground;
+            for (int z = 0; z < this.rz; z++) {
+                for (int x = 0; x < this.rx; x++) {
+                    this.pos.set(this.min.getX() + x, this.min.getY() + y, this.min.getZ() + z);
+                    BlockState raw = this.level.getBlockState(this.pos);
                     BlockState state = BuildRules.normalize(raw);
                     BuildRules.Kind kind = BuildRules.kind(state);
                     if (kind == BuildRules.Kind.SKIP) {
                         // fließendes Wasser und fließende Lava nicht aufzählen, nur stehende Lava und echte Blöcke
                         if ((!(raw.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock) || raw.getFluidState().isSource())
                                 && !raw.is(Blocks.STRUCTURE_VOID)) {
-                            skipped.merge(raw.getBlock(), 1, Integer::sum);
+                            this.skipped.merge(raw.getBlock(), 1, Integer::sum);
                         }
                         state = below ? null : Blocks.AIR.defaultBlockState();
                     } else if (below && BuildRules.terrain(state)) {
@@ -264,17 +364,17 @@ public final class PlanScan {
                     }
                     int gx;
                     int gz;
-                    switch (front) {
+                    switch (this.front) {
                         case EAST -> {
                             gx = z;
-                            gz = rx - 1 - x;
+                            gz = this.rx - 1 - x;
                         }
                         case SOUTH -> {
-                            gx = rx - 1 - x;
-                            gz = rz - 1 - z;
+                            gx = this.rx - 1 - x;
+                            gz = this.rz - 1 - z;
                         }
                         case WEST -> {
-                            gx = rz - 1 - z;
+                            gx = this.rz - 1 - z;
                             gz = x;
                         }
                         default -> {
@@ -282,22 +382,26 @@ public final class PlanScan {
                             gz = z;
                         }
                     }
-                    int index = (y * nz + gz) * nx + gx;
-                    grid[index] = state == null ? null : state.rotate(rotation);
-                    if (state != null && registries != null && raw.hasBlockEntity()) {
-                        BlockEntity be = level.getBlockEntity(pos);
+                    int index = (y * this.nz + gz) * this.nx + gx;
+                    this.grid[index] = this.id(state == null ? null : state.rotate(this.rotation));
+                    if (state != null && this.registries != null && raw.hasBlockEntity()) {
+                        BlockEntity be = this.level.getBlockEntity(this.pos);
                         if (be != null && BuildRules.keepsData(be)) {
-                            data.put(index, BuildRules.harmless(be.saveWithoutMetadata(registries)));
+                            this.data.put(index, BuildRules.harmless(be.saveWithoutMetadata(this.registries)));
                         }
                     }
                 }
             }
         }
-        return trimmed(grid, nx, ry, nz, ground, data, skipped);
     }
 
-    /** Schneidet leere Ränder ab (Luft über der Bodenlinie, Unberührtes darunter) und baut die Palette. */
-    private static PlanScan trimmed(BlockState[] grid, int nx, int ny, int nz, int ground, Map<Integer, CompoundTag> data, Map<Block, Integer> skipped) {
+    /** Schneidet leere Ränder ab (Luft über der Bodenlinie, Unberührtes darunter) und baut die Palette neu (nur Benutztes). */
+    private static PlanScan trimmed(char[] grid, List<BlockState> palette, int nx, int ny, int nz, int ground, Map<Integer, CompoundTag> data,
+            Map<Block, Integer> skipped) {
+        boolean[] air = new boolean[palette.size()];
+        for (int i = 1; i < air.length; i++) {
+            air[i] = palette.get(i).isAir();
+        }
         int minX = Integer.MAX_VALUE;
         int minY = Integer.MAX_VALUE;
         int minZ = Integer.MAX_VALUE;
@@ -306,9 +410,10 @@ public final class PlanScan {
         int maxZ = -1;
         for (int y = 0; y < ny; y++) {
             for (int z = 0; z < nz; z++) {
+                int row = (y * nz + z) * nx;
                 for (int x = 0; x < nx; x++) {
-                    BlockState s = grid[(y * nz + z) * nx + x];
-                    if (s != null && (!s.isAir() || y < ground)) {
+                    int id = grid[row + x];
+                    if (id != 0 && (!air[id] || y < ground)) {
                         minX = Math.min(minX, x);
                         minY = Math.min(minY, y);
                         minZ = Math.min(minZ, z);
@@ -327,34 +432,36 @@ public final class PlanScan {
         int sx = maxX - minX + 1;
         int sy = maxY - minY + 1;
         int sz = maxZ - minZ + 1;
-        Map<BlockState, Integer> ids = new IdentityHashMap<>();
-        List<BlockState> palette = new ArrayList<>();
-        palette.add(null);
-        int[] out = new int[sx * sy * sz];
+        // neue Palette: nur, was im beschnittenen Quader vorkommt
+        int[] remap = new int[palette.size()];
+        java.util.Arrays.fill(remap, -1);
+        remap[0] = 0;
+        List<BlockState> used = new ArrayList<>();
+        used.add(null);
+        char[] out = new char[sx * sy * sz];
         Map<Integer, CompoundTag> outData = new HashMap<>();
         for (int y = 0; y < sy; y++) {
             for (int z = 0; z < sz; z++) {
                 for (int x = 0; x < sx; x++) {
                     int from = ((y + minY) * nz + (z + minZ)) * nx + (x + minX);
-                    BlockState s = grid[from];
+                    int id = grid[from];
+                    if (id == 0) {
+                        continue;
+                    }
+                    if (remap[id] < 0) {
+                        remap[id] = used.size();
+                        used.add(palette.get(id));
+                    }
                     int to = (y * sz + z) * sx + x;
-                    if (s != null) {
-                        Integer id = ids.get(s);
-                        if (id == null) {
-                            id = palette.size();
-                            ids.put(s, id);
-                            palette.add(s);
-                        }
-                        out[to] = id;
-                        CompoundTag tag = data.get(from);
-                        if (tag != null) {
-                            outData.put(to, tag);
-                        }
+                    out[to] = (char) remap[id];
+                    CompoundTag tag = data.get(from);
+                    if (tag != null) {
+                        outData.put(to, tag);
                     }
                 }
             }
         }
-        return new PlanScan(sx, sy, sz, ground - minY, palette.toArray(new BlockState[0]), out, outData, skipped);
+        return new PlanScan(sx, sy, sz, ground - minY, used.toArray(new BlockState[0]), out, outData, skipped);
     }
 
     // =====================================================================================
@@ -372,9 +479,34 @@ public final class PlanScan {
     }
 
     /** Wird an dieser Stelle etwas gebaut oder ausgehoben? */
-    private boolean meaningful(int x, int y, int z) {
+    public boolean meaningful(int x, int y, int z) {
         BlockState s = this.get(x, y, z);
         return s != null && (!s.isAir() || y < this.ground);
+    }
+
+    /** Wie viele Stellen der Quader hat (für den Zwischenspeicher). */
+    public long cells() {
+        return (long) this.sizeX * this.sizeY * this.sizeZ;
+    }
+
+    /**
+     * Steht in dieser Säule eine Fundamentsäule? (Der unterste Block auf der Bodenlinie ist fest und darunter wird nichts
+     * gebaut oder ausgehoben – dort füllt der Baumeister bis zum festen Boden auf.)
+     */
+    public boolean footprintColumn(int x, int z) {
+        if (this.ground >= this.sizeY) {
+            return false;
+        }
+        BlockState s = this.get(x, this.ground, z);
+        if (s == null || s.isAir() || !s.isSolidRender()) {
+            return false;
+        }
+        for (int y = 0; y < this.ground; y++) {
+            if (this.meaningful(x, y, z)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Lokale Koordinate im Bauplan (Mitte der Grundfläche bei x = z = 0, Bodenlinie bei y = 0). */
@@ -476,7 +608,15 @@ public final class PlanScan {
         // Fundament: eine Einheit je Säule (wie bei den Bauplänen der Siedlung)
         Material base = Material.of(this.foundation());
         if (base != null) {
-            units[base.ordinal()] += this.footprint().size();
+            int columns = 0;
+            for (int z = 0; z < this.sizeZ; z++) {
+                for (int x = 0; x < this.sizeX; x++) {
+                    if (this.footprintColumn(x, z)) {
+                        columns++;
+                    }
+                }
+            }
+            units[base.ordinal()] += columns;
         }
         return new Costs(blocks, units, precious);
     }
@@ -493,15 +633,7 @@ public final class PlanScan {
         }
         for (int z = 0; z < this.sizeZ; z++) {
             for (int x = 0; x < this.sizeX; x++) {
-                BlockState s = this.get(x, this.ground, z);
-                if (s == null || s.isAir() || !s.isSolidRender()) {
-                    continue;
-                }
-                boolean basement = false;
-                for (int y = 0; y < this.ground && !basement; y++) {
-                    basement = this.meaningful(x, y, z);
-                }
-                if (!basement) {
+                if (this.footprintColumn(x, z)) {
                     footprint.add(this.local(x, this.ground, z));
                 }
             }
@@ -509,8 +641,17 @@ public final class PlanScan {
         return footprint;
     }
 
+    private @Nullable BlockState foundation;
+
     /** Das Fundament: der häufigste feste Steinblock der untersten Lage, sonst Bruchstein. */
-    BlockState foundation() {
+    public BlockState foundation() {
+        if (this.foundation == null) {
+            this.foundation = this.findFoundation();
+        }
+        return this.foundation;
+    }
+
+    private BlockState findFoundation() {
         Map<BlockState, Integer> count = new HashMap<>();
         if (this.ground < this.sizeY) {
             for (int z = 0; z < this.sizeZ; z++) {
@@ -562,8 +703,8 @@ public final class PlanScan {
     // Speichern
     // =====================================================================================
 
-    /** Version des Dateiformats. */
-    private static final int VERSION = 1;
+    /** Version des Dateiformats (2: Blöcke dicht gepackt; 1: eine Zahl je Stelle, wird weiter gelesen). */
+    private static final int VERSION = 2;
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
@@ -576,7 +717,9 @@ public final class PlanScan {
             palette.add(NbtUtils.writeBlockState(i == 0 || this.palette[i] == null ? Blocks.STRUCTURE_VOID.defaultBlockState() : this.palette[i]));
         }
         tag.put("Palette", palette);
-        tag.put("Blocks", new IntArrayTag(this.data.clone()));
+        int bits = bits(this.palette.length);
+        tag.putInt("Bits", bits);
+        tag.putLongArray("Blocks", pack(this.data, bits));
         ListTag entities = new ListTag();
         for (Map.Entry<Integer, CompoundTag> e : this.blockEntities.entrySet()) {
             CompoundTag be = new CompoundTag();
@@ -588,22 +731,59 @@ public final class PlanScan {
         return tag;
     }
 
+    /** So viele Bits braucht eine Nummer der Palette (mindestens eins). */
+    static int bits(int paletteSize) {
+        return Math.max(1, 32 - Integer.numberOfLeadingZeros(Math.max(1, paletteSize - 1)));
+    }
+
+    /** Packt die Nummern dicht in lange Zahlen (keine Nummer reicht über zwei hinweg). */
+    static long[] pack(char[] values, int bits) {
+        int perLong = 64 / bits;
+        long[] out = new long[(values.length + perLong - 1) / perLong];
+        for (int i = 0; i < values.length; i++) {
+            out[i / perLong] |= (long) values[i] << ((i % perLong) * bits);
+        }
+        return out;
+    }
+
+    static char[] unpack(long[] packed, int bits, int count) {
+        int perLong = 64 / bits;
+        long mask = (1L << bits) - 1L;
+        char[] out = new char[count];
+        for (int i = 0; i < count; i++) {
+            int l = i / perLong;
+            out[i] = l < packed.length ? (char) ((packed[l] >>> ((i % perLong) * bits)) & mask) : 0;
+        }
+        return out;
+    }
+
     public static PlanScan load(CompoundTag tag) {
         int[] size = tag.getIntArray("Size").orElse(new int[] {1, 1, 1});
         int sx = Math.max(1, size[0]);
         int sy = Math.max(1, size[1]);
         int sz = Math.max(1, size[2]);
+        if ((long) sx * sy * sz > (long) MAX_WIDTH * MAX_WIDTH * MAX_HEIGHT) {
+            throw new IllegalArgumentException("plan too large");
+        }
         ListTag paletteTag = tag.getListOrEmpty("Palette");
-        BlockState[] palette = new BlockState[Math.max(1, paletteTag.size())];
-        for (int i = 1; i < paletteTag.size(); i++) {
+        BlockState[] palette = new BlockState[Math.max(1, Math.min(paletteTag.size(), Character.MAX_VALUE + 1))];
+        for (int i = 1; i < palette.length; i++) {
             palette[i] = NbtUtils.readBlockState(BuiltInRegistries.BLOCK, paletteTag.getCompoundOrEmpty(i));
         }
-        int[] data = tag.getIntArray("Blocks").orElse(new int[0]);
-        if (data.length != sx * sy * sz) {
-            data = java.util.Arrays.copyOf(data, sx * sy * sz);
+        int count = sx * sy * sz;
+        char[] data;
+        if (tag.getIntOr("Version", 1) >= 2) {
+            int bits = Math.max(1, Math.min(16, tag.getIntOr("Bits", bits(palette.length))));
+            data = unpack(tag.getLongArray("Blocks").orElse(new long[0]), bits, count);
+        } else {
+            int[] old = tag.getIntArray("Blocks").orElse(new int[0]);
+            data = new char[count];
+            for (int i = 0; i < Math.min(count, old.length); i++) {
+                data[i] = (char) Math.max(0, Math.min(Character.MAX_VALUE, old[i]));
+            }
         }
         for (int i = 0; i < data.length; i++) {
-            if (data[i] < 0 || data[i] >= palette.length) {
+            if (data[i] >= palette.length) {
                 data[i] = 0;
             }
         }
@@ -638,7 +818,8 @@ public final class PlanScan {
     /**
      * Grundriss (vorn ist unten im Bild), höchstens {@code max} Bildpunkte breit und hoch: ein waagrechter Schnitt in
      * Augenhöhe über dem Erdgeschoss wie auf einer echten Bauzeichnung – Mauern, Türen und Möbel hell, darunter der
-     * Fußboden dunkel; das Dach bleibt weg.
+     * Fußboden dunkel; das Dach bleibt weg. Bei großen Bauten steht ein Bildpunkt für mehrere Säulen: dann zählt die
+     * höchste Mauer darin (so verschwinden schmale Mauern nicht).
      */
     public Picture top(int max) {
         int step = Math.max(1, Math.max((this.sizeX + max - 1) / max, (this.sizeZ + max - 1) / max));
@@ -648,23 +829,43 @@ public final class PlanScan {
         byte[] pixels = new byte[w * h];
         for (int py = 0; py < h; py++) {
             for (int px = 0; px < w; px++) {
-                int x = Math.min(this.sizeX - 1, px * step);
-                int z = Math.min(this.sizeZ - 1, (h - 1 - py) * step);
-                for (int y = section; y >= 0; y--) {
-                    MapColor c = color(this.get(x, y, z));
-                    if (c != MapColor.NONE) {
-                        MapColor.Brightness b = y == section ? MapColor.Brightness.HIGH
-                                : y == section - 1 ? MapColor.Brightness.LOW : MapColor.Brightness.LOWEST;
-                        pixels[py * w + px] = c.getPackedId(b);
-                        break;
+                int bestY = -1;
+                MapColor best = MapColor.NONE;
+                int z0 = (h - 1 - py) * step;
+                for (int dz = 0; dz < step; dz++) {
+                    int z = z0 + dz;
+                    if (z < 0 || z >= this.sizeZ) {
+                        continue;
                     }
+                    for (int dx = 0; dx < step; dx++) {
+                        int x = px * step + dx;
+                        if (x >= this.sizeX) {
+                            continue;
+                        }
+                        for (int y = section; y > bestY; y--) {
+                            MapColor c = color(this.get(x, y, z));
+                            if (c != MapColor.NONE) {
+                                bestY = y;
+                                best = c;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (bestY >= 0) {
+                    MapColor.Brightness b = bestY == section ? MapColor.Brightness.HIGH
+                            : bestY == section - 1 ? MapColor.Brightness.LOW : MapColor.Brightness.LOWEST;
+                    pixels[py * w + px] = best.getPackedId(b);
                 }
             }
         }
         return new Picture(w, h, pixels);
     }
 
-    /** Ansicht von vorn (unten im Bild die unterste Lage), höchstens {@code max} Bildpunkte breit und hoch. */
+    /**
+     * Ansicht von vorn (unten im Bild die unterste Lage), höchstens {@code max} Bildpunkte breit und hoch; bei großen
+     * Bauten zählt je Bildpunkt der vorderste Block der Säulen darin.
+     */
     public Picture front(int max) {
         int step = Math.max(1, Math.max((this.sizeX + max - 1) / max, (this.sizeY + max - 1) / max));
         int w = (this.sizeX + step - 1) / step;
@@ -672,16 +873,33 @@ public final class PlanScan {
         byte[] pixels = new byte[w * h];
         for (int py = 0; py < h; py++) {
             for (int px = 0; px < w; px++) {
-                int x = Math.min(this.sizeX - 1, px * step);
-                int y = Math.min(this.sizeY - 1, (h - 1 - py) * step);
-                for (int z = 0; z < this.sizeZ; z++) {
-                    MapColor c = color(this.get(x, y, z));
-                    if (c != MapColor.NONE) {
-                        MapColor.Brightness b = z == 0 ? MapColor.Brightness.HIGH : z <= 2 ? MapColor.Brightness.NORMAL
-                                : z <= 5 ? MapColor.Brightness.LOW : MapColor.Brightness.LOWEST;
-                        pixels[py * w + px] = c.getPackedId(b);
-                        break;
+                int bestZ = this.sizeZ;
+                MapColor best = MapColor.NONE;
+                int y0 = (h - 1 - py) * step;
+                for (int dy = 0; dy < step; dy++) {
+                    int y = y0 + dy;
+                    if (y >= this.sizeY) {
+                        continue;
                     }
+                    for (int dx = 0; dx < step; dx++) {
+                        int x = px * step + dx;
+                        if (x >= this.sizeX) {
+                            continue;
+                        }
+                        for (int z = 0; z < bestZ; z++) {
+                            MapColor c = color(this.get(x, y, z));
+                            if (c != MapColor.NONE) {
+                                bestZ = z;
+                                best = c;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (bestZ < this.sizeZ) {
+                    MapColor.Brightness b = bestZ == 0 ? MapColor.Brightness.HIGH : bestZ <= 2 ? MapColor.Brightness.NORMAL
+                            : bestZ <= 5 ? MapColor.Brightness.LOW : MapColor.Brightness.LOWEST;
+                    pixels[py * w + px] = best.getPackedId(b);
                 }
             }
         }

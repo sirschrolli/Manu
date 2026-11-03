@@ -144,6 +144,18 @@ final class ArchitectLang {
         t.add("gui.kingdomsatwar.town.export.done", "Saved as schematic: %s", "Als Schematik abgelegt: %s");
         t.add("gui.kingdomsatwar.town.export.failed", "Could not save %s", "%s ließ sich nicht ablegen");
         t.add("message.kingdomsatwar.architect.exported", "Saved: %s", "Abgelegt: %s");
+        // Teil 3: große Bauten
+        t.add("message.kingdomsatwar.architect.scanning", "Surveying … %s %%", "Vermesse … %s %%");
+        t.add("gui.kingdomsatwar.architect.scanning", "Surveying … %s %%", "Vermesse … %s %%");
+        t.add("message.kingdomsatwar.town.place.foreign", "That would reach into another settlement", "Das reicht ins Gebiet einer anderen Siedlung");
+        t.add("gui.kingdomsatwar.town.site.title", "Great building site", "Großbaustelle");
+        t.add("gui.kingdomsatwar.town.site.done", "%s of %s sections finished", "%s von %s Abschnitten fertig");
+        t.add("gui.kingdomsatwar.town.site.builder", "%s builder at work", "%s Baumeister am Werk");
+        t.add("gui.kingdomsatwar.town.site.builders", "%s builders at work", "%s Baumeister am Werk");
+        t.add("gui.kingdomsatwar.town.site.open", "open", "offen");
+        t.add("gui.kingdomsatwar.town.site.frame", "shell", "Rohbau");
+        t.add("gui.kingdomsatwar.town.site.done_key", "finished", "fertig");
+        t.add("gui.kingdomsatwar.town.site.busy", "being built", "in Arbeit");
         t.add("message.kingdomsatwar.town.place.unknown", "This blueprint is unknown in this world", "Diesen Bauplan kennt diese Welt nicht");
     }
 

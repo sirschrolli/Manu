@@ -99,10 +99,12 @@ public final class Town {
                 Codec.INT.optionalFieldOf("progress", 0).forGetter(p -> p.progress),
                 Codec.INT.optionalFieldOf("design", 0).forGetter(p -> p.design),
                 Codec.STRING.optionalFieldOf("plan").forGetter(p -> Optional.ofNullable(p.custom)),
-                Codec.BOOL.optionalFieldOf("fast", false).forGetter(p -> p.fast)
-        ).apply(i, (type, origin, rotation, progress, design, plan, fast) -> {
+                Codec.BOOL.optionalFieldOf("fast", false).forGetter(p -> p.fast),
+                Codec.INT.listOf().optionalFieldOf("sections", List.of()).forGetter(p -> p.sectionStates())
+        ).apply(i, (type, origin, rotation, progress, design, plan, fast, sections) -> {
             Project p = new Project(type, origin, rotation, progress, design, plan.orElse(null));
             p.fast = fast;
+            p.savedSections = sections.stream().mapToInt(Integer::intValue).toArray();
             return p;
         }));
 
@@ -120,8 +122,14 @@ public final class Town {
         public net.minecraft.world.item.@Nullable Item waitingItem;
         /** Baustoff, auf den die Baustelle gerade wartet (nicht gespeichert; der Baumeister prüft es neu). */
         public @Nullable Material waiting;
-                /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
+        /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
         private @Nullable List<Blueprint.Step> steps;
+        /** Die ganze Baustelle als eine Arbeit (gewöhnliche Pläne). */
+        private @Nullable Work whole;
+        /** Bauabschnitte eines großen eigenen Plans (beim ersten Gebrauch angelegt). */
+        private @Nullable SiteSections site;
+        /** Gespeicherter Zustand der Abschnitte (bis die Abschnitte angelegt sind). */
+        int @Nullable [] savedSections;
 
         public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design, @Nullable String custom) {
             this.type = type;
@@ -158,8 +166,65 @@ public final class Town {
             return this.steps;
         }
 
+        /** Wird diese Baustelle in Abschnitten gebaut? (Große eigene Pläne – siehe {@link SiteSections#FROM}.) */
+        public boolean sectioned() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null && SiteSections.large(info);
+        }
+
+        /** Die Bauabschnitte ({@code null}: gewöhnliche Baustelle oder Plan nicht ladbar). */
+        public @Nullable SiteSections site() {
+            if (this.site == null && this.sectioned()) {
+                io.github.sirschrolli.kingdomsatwar.architect.PlanScan scan =
+                        io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.scan(java.util.Objects.requireNonNull(this.custom));
+                if (scan != null) {
+                    this.site = new SiteSections(this, scan, this.savedSections);
+                    this.savedSections = null;
+                }
+            }
+            return this.site;
+        }
+
+        private List<Integer> sectionStates() {
+            if (this.site != null) {
+                return this.site.states();
+            }
+            if (this.savedSections != null) {
+                List<Integer> list = new ArrayList<>();
+                for (int v : this.savedSections) {
+                    list.add(v);
+                }
+                return list;
+            }
+            return List.of();
+        }
+
+        /** Die ganze Baustelle als eine Arbeit (für gewöhnliche Pläne). */
+        public Work whole() {
+            if (this.whole == null) {
+                this.whole = new Work(this, -1, 0, null, this.bounds());
+            }
+            return this.whole;
+        }
+
+        /** Stelle vor dem Eingang (lokal) – bei eigenen Plänen aus der Kurzfassung, ohne den ganzen Plan zu laden. */
+        public BlockPos entranceLocal() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.shape().entrance() : this.plan().entrance();
+        }
+
+        /** Ist an der Baustelle schon etwas getan worden? (Für die Erstattung beim Abbrechen.) */
+        public boolean started() {
+            SiteSections site = this.sectioned() ? this.site() : null;
+            return site != null ? site.started() : this.progress > 0;
+        }
+
         /** Wie weit der Bau ist: gezählt werden nur die gesetzten Blöcke (das Räumen des Platzes zählt nicht). */
         public float fraction() {
+            if (this.sectioned()) {
+                SiteSections site = this.site();
+                return site == null ? 0.0f : site.fraction();
+            }
             List<Blueprint.Step> steps = this.steps();
             int total = 0;
             int done = 0;
@@ -180,6 +245,59 @@ public final class Town {
         }
     }
 
+    /**
+     * Eine Arbeit an einer Baustelle: der ganze Bauablauf (gewöhnliche Pläne; der Fortschritt steht in der Baustelle und
+     * wird gespeichert) oder ein Bauabschnitt einer Großbaustelle im Rohbau ({@code phase} 0) bzw. mit den Einzelheiten
+     * ({@code phase} 1); dort zählt der Fortschritt nur, solange gebaut wird – nach einem Neustart prüft der Baumeister
+     * den Abschnitt einfach von vorn durch.
+     */
+    public static final class Work {
+        public final Project project;
+        /** Nummer des Abschnitts ({@code -1}: die ganze Baustelle). */
+        public final int section;
+        public final int phase;
+        private final @Nullable List<Blueprint.Step> steps;
+        private final BoundingBox bounds;
+        private int progress;
+
+        Work(Project project, int section, int phase, @Nullable List<Blueprint.Step> steps, BoundingBox bounds) {
+            this.project = project;
+            this.section = section;
+            this.phase = phase;
+            this.steps = steps;
+            this.bounds = bounds;
+        }
+
+        public List<Blueprint.Step> steps() {
+            return this.steps != null ? this.steps : this.project.steps();
+        }
+
+        public int progress() {
+            return this.section < 0 ? this.project.progress : this.progress;
+        }
+
+        public void setProgress(int progress) {
+            if (this.section < 0) {
+                this.project.progress = progress;
+            } else {
+                this.progress = progress;
+            }
+        }
+
+        public void advance() {
+            this.setProgress(this.progress() + 1);
+        }
+
+        /** Wo gearbeitet wird (Welt; ein Abschnitt reicht bis eine Lage über den Plan). */
+        public BoundingBox bounds() {
+            return this.bounds;
+        }
+
+        public boolean whole() {
+            return this.section < 0;
+        }
+    }
+
     public static final Codec<Town> CODEC = RecordCodecBuilder.create(i -> i.group(
             UUIDUtil.CODEC.fieldOf("id").forGetter(t -> t.id),
             UUIDUtil.CODEC.fieldOf("owner").forGetter(t -> t.owner),
@@ -195,6 +313,9 @@ public final class Town {
             Building.CODEC.listOf().optionalFieldOf("buildings", List.of()).forGetter(t -> List.copyOf(t.buildings)),
             Project.CODEC.listOf().optionalFieldOf("projects", List.of()).forGetter(t -> List.copyOf(t.projects))
     ).apply(i, Town::new));
+
+    /** So viele Baumeister mehr darf eine Siedlung anheuern, solange sie eine Großbaustelle hat. */
+    public static final int GREAT_SITE_BUILDERS = 4;
 
     /** Betten im Lager am Stadtbanner (für die ersten Bewohner, bevor es Häuser gibt). */
     public static final int CAMP_BEDS = 2;
@@ -401,6 +522,17 @@ public final class Town {
     /** Arbeitsplätze für einen Beruf (der Baumeister hat immer einen, solange die Siedlung steht). */
     public int jobs(Profession profession) {
         BuildingType workplace = profession.workplace();
+        if (profession == Profession.BUILDER) {
+            // Baumeister: einer im Lager und im Weiler, dann einer mehr je Stufe; eine Großbaustelle braucht vier mehr
+            int jobs = Math.max(1, this.tier().ordinal());
+            for (Project p : this.projects) {
+                if (p.sectioned()) {
+                    jobs += GREAT_SITE_BUILDERS;
+                    break;
+                }
+            }
+            return jobs;
+        }
         if (workplace == null) {
             return this.tier().ordinal() >= TownTier.VILLAGE.ordinal() ? 2 : 1;
         }

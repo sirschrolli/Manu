@@ -67,7 +67,8 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
      * Eine Baustelle: was gebaut wird (bei eigenen Plänen mit Namen), wie weit (Promille), auf welchen Baustoff sie wartet
      * (−1: auf keinen) oder auf welchen kostbaren Block (leer: keinen), und ob abschnittsweise gebaut wird.
      */
-    public record ProjectView(int type, String name, int permille, int waiting, net.minecraft.world.item.ItemStack waitingItem, boolean fast) {
+    public record ProjectView(int type, String name, int permille, int waiting, net.minecraft.world.item.ItemStack waitingItem, boolean fast,
+            java.util.Optional<SiteView> site) {
         static final StreamCodec<RegistryFriendlyByteBuf, ProjectView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, ProjectView::type,
                 ByteBufCodecs.STRING_UTF8, ProjectView::name,
@@ -75,7 +76,41 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
                 ByteBufCodecs.VAR_INT, ProjectView::waiting,
                 net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC, ProjectView::waitingItem,
                 ByteBufCodecs.BOOL, ProjectView::fast,
+                ByteBufCodecs.optional(SiteView.STREAM_CODEC), ProjectView::site,
                 ProjectView::new);
+    }
+
+    /**
+     * Eine Großbaustelle im Stadtfenster: die Karte ihrer Abschnitte ({@link SiteSections#map}, Zeile für Zeile, {@code width}
+     * breit) und wie viele Baumeister gerade daran arbeiten.
+     */
+    public record SiteView(int width, byte[] map, int builders) {
+        static final StreamCodec<RegistryFriendlyByteBuf, SiteView> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT, SiteView::width,
+                ByteBufCodecs.BYTE_ARRAY, SiteView::map,
+                ByteBufCodecs.VAR_INT, SiteView::builders,
+                SiteView::new);
+
+        /** Wie viele Abschnitte ganz fertig sind. */
+        public int done() {
+            int n = 0;
+            for (byte b : this.map) {
+                if (b == SiteSections.DONE) {
+                    n++;
+                }
+            }
+            return n;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof SiteView v && v.width == this.width && v.builders == this.builders && java.util.Arrays.equals(v.map, this.map);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(this.width, this.builders, java.util.Arrays.hashCode(this.map));
+        }
     }
 
     /** Für wie viele Tage das Essen im Lager alle Bürger satt macht. */
@@ -161,9 +196,14 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         List<ProjectView> projects = new ArrayList<>();
         for (Town.Project p : town.projects()) {
             io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = p.info();
+            SiteSections site = p.sectioned() ? p.site() : null;
+            long now = level == null ? 0L : level.getGameTime();
+            java.util.Optional<SiteView> siteView = site == null ? java.util.Optional.empty()
+                    : java.util.Optional.of(new SiteView(site.width(), site.map(now), site.builders(now)));
             projects.add(new ProjectView(p.type.ordinal(), info == null ? "" : info.name(), Math.round(p.fraction() * 1000),
                     p.waiting == null ? -1 : p.waiting.ordinal(),
-                    p.waitingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : new net.minecraft.world.item.ItemStack(p.waitingItem), p.fast));
+                    p.waitingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : new net.minecraft.world.item.ItemStack(p.waitingItem), p.fast,
+                    siteView));
         }
         boolean storage = level != null && TownStorage.exists(level, town);
         int[] stock = level == null ? new int[Material.values().length] : TownStorage.counts(level, town);

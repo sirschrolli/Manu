@@ -278,7 +278,7 @@ public final class TownManager {
     // =====================================================================================
 
     public enum PlaceResult {
-        PLACED, NOT_OWNER, NO_TOWN, OUTSIDE, OVERLAP, UNEVEN, WATER, TIER, NOT_ENOUGH, LIMIT, UNKNOWN;
+        PLACED, NOT_OWNER, NO_TOWN, OUTSIDE, OVERLAP, UNEVEN, WATER, TIER, NOT_ENOUGH, LIMIT, UNKNOWN, FOREIGN;
 
         public String key() {
             return "message.kingdomsatwar.town.place." + this.name().toLowerCase(Locale.ROOT);
@@ -340,6 +340,87 @@ public final class TownManager {
             return PlaceResult.UNEVEN;
         }
         return PlaceResult.PLACED;
+    }
+
+    /**
+     * Prüft einen Bauplatz für einen eigenen Plan, ohne den ganzen Plan aufzubauen. Ein Bau, der nie ganz ins Gebiet der
+     * Siedlung passen würde (eine große Burg), darf darüber hinausreichen: er muss das Gebiet berühren – meist steht er
+     * dann gleich neben der Siedlung –, darf aber wie jeder Bau weder Banner noch Häuser überbauen und kein Gebiet einer
+     * anderen Siedlung berühren. Das Gelände wird an höchstens einigen tausend Säulen der Grundfläche geprüft (nur, wo
+     * die Welt schon geladen ist).
+     */
+    public static PlaceResult check(ServerLevel level, Town town, io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info, BlockPos origin,
+            Rotation rotation) {
+        if (town.projects().size() >= 3) {
+            return PlaceResult.LIMIT;
+        }
+        BoundingBox box = info.worldBounds(origin, rotation);
+        boolean inside = true;
+        for (BlockPos corner : new BlockPos[] {new BlockPos(box.minX(), origin.getY(), box.minZ()),
+                new BlockPos(box.maxX(), origin.getY(), box.maxZ()), new BlockPos(box.minX(), origin.getY(), box.maxZ()),
+                new BlockPos(box.maxX(), origin.getY(), box.minZ())}) {
+            inside &= town.contains(level.dimension(), corner);
+        }
+        if (!inside) {
+            int span = Math.max(box.getXSpan(), box.getZSpan());
+            if (span <= town.radius() * 1.4 || !level.dimension().equals(town.dimension()) || !touches(box, town.banner(), town.radius())) {
+                return PlaceResult.OUTSIDE;
+            }
+            for (Town other : Towns.of(level.getServer()).all()) {
+                if (other != town && other.dimension().equals(level.dimension()) && touches(box, other.banner(), other.radius())) {
+                    return PlaceResult.FOREIGN;
+                }
+            }
+        }
+        if (town.overlaps(box)) {
+            return PlaceResult.OVERLAP;
+        }
+        io.github.sirschrolli.kingdomsatwar.architect.PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.scan(info.id());
+        if (scan == null) {
+            return PlaceResult.UNKNOWN;
+        }
+        // Gelände: nicht zu steil, nicht im Wasser
+        int stride = Math.max(1, (int) Math.sqrt(scan.sizeX * (double) scan.sizeZ / 4096.0));
+        int ox = (scan.sizeX - 1) / 2;
+        int oz = (scan.sizeZ - 1) / 2;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int columns = 0;
+        int water = 0;
+        for (int gz = 0; gz < scan.sizeZ; gz += stride) {
+            for (int gx = 0; gx < scan.sizeX; gx += stride) {
+                if (!scan.footprintColumn(gx, gz)) {
+                    continue;
+                }
+                BlockPos w = Blueprint.world(origin, rotation, new BlockPos(gx - ox, 0, gz - oz));
+                if (!level.hasChunkAt(w)) {
+                    continue;
+                }
+                int ground = level.getHeight(Heightmap.Types.OCEAN_FLOOR, w.getX(), w.getZ());
+                int surface = level.getHeight(Heightmap.Types.WORLD_SURFACE, w.getX(), w.getZ());
+                columns++;
+                if (surface > ground + 1) {
+                    water++;
+                }
+                min = Math.min(min, ground);
+                max = Math.max(max, ground);
+            }
+        }
+        if (columns > 0 && water > columns / 6) {
+            return PlaceResult.WATER;
+        }
+        int slack = 5 + Math.max(box.getXSpan(), box.getZSpan()) / 12;
+        if (columns > 0 && (max - min > slack || origin.getY() - min > slack)) {
+            return PlaceResult.UNEVEN;
+        }
+        return PlaceResult.PLACED;
+    }
+
+    /** Berührt ein Bereich den Kreis um einen Punkt? */
+    private static boolean touches(BoundingBox box, BlockPos center, int radius) {
+        long dx = center.getX() - Math.max(box.minX(), Math.min(center.getX(), box.maxX()));
+        long dz = center.getZ() - Math.max(box.minZ(), Math.min(center.getZ(), box.maxZ()));
+        return dx * dx + dz * dz <= (long) radius * radius;
     }
 
     /** Richtet eine Baustelle ein (bezahlt den Bau; erster Entwurf); der Baumeister beginnt dann zu bauen. */
@@ -418,11 +499,10 @@ public final class TownManager {
         if (!town.dimension().equals(level.dimension())) {
             return PlaceResult.OUTSIDE;
         }
-        Blueprint plan = io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(info.id());
-        if (plan.blocks().isEmpty()) {
+        if (info.costs().blocks() <= 0 || io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.scan(info.id()) == null) {
             return PlaceResult.UNKNOWN;
         }
-        PlaceResult result = check(level, town, plan, origin, rotation);
+        PlaceResult result = check(level, town, info, origin, rotation);
         if (result != PlaceResult.PLACED) {
             return result;
         }
@@ -432,7 +512,7 @@ public final class TownManager {
         }
         Town.Project project = new Town.Project(BuildingType.CUSTOM, origin, rotation, 0, 0, info.id());
         // große Bauten gleich abschnittsweise
-        project.fast = info.costs().blocks() >= FAST_FROM;
+        project.fast = info.costs().blocks() >= FAST_FROM || SiteSections.large(info);
         town.addProject(project);
         towns.save(level.getServer());
         level.playSound(null, origin, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f);
@@ -481,7 +561,7 @@ public final class TownManager {
                 java.util.Optional.ofNullable(project.custom)));
         assignHomes(level, town);
         Towns.of(level.getServer()).save(level.getServer());
-        BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
+        BlockPos door = Blueprint.world(project.origin, project.rotation, project.entranceLocal());
         celebrate(level, door);
         if (project.type == BuildingType.BARRACKS) {
             // die Garnison zieht vor die neue Kaserne
@@ -504,6 +584,16 @@ public final class TownManager {
         return startProject(level, town, type, 0, origin, rotation);
     }
 
+    /** Richtet eine Baustelle nach einem eigenen Plan ein, ohne Preis und ohne Prüfung (Befehle, Tests, Vorführungen). */
+    public static Town.Project startCustom(ServerLevel level, Town town, io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info,
+            BlockPos origin, Rotation rotation) {
+        Town.Project project = new Town.Project(BuildingType.CUSTOM, origin, rotation, 0, 0, info.id());
+        project.fast = info.costs().blocks() >= FAST_FROM || SiteSections.large(info);
+        town.addProject(project);
+        Towns.of(level.getServer()).save(level.getServer());
+        return project;
+    }
+
     /** Wie {@link #startProject(ServerLevel, Town, BuildingType, BlockPos, Rotation)}, für einen bestimmten Entwurf. */
     public static Town.Project startProject(ServerLevel level, Town town, BuildingType type, int design, BlockPos origin, Rotation rotation) {
         Town.Project project = new Town.Project(type, origin, rotation, 0, design);
@@ -512,16 +602,35 @@ public final class TownManager {
         return project;
     }
 
-    /** Räumt die Baugerüste rund um eine Baustelle weg (fertig gebaut oder abgebrochen). */
+    /**
+     * Räumt die Baugerüste rund um eine Baustelle weg (fertig gebaut oder abgebrochen). Auch bei einer ganzen Burg schnell:
+     * Lagen der Chunks, in denen kein Gerüst vorkommt, werden übersprungen.
+     */
     public static void clearScaffolds(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox bounds) {
-        var box = bounds.inflatedBy(5, 0, 5);
+        var box = bounds.inflatedBy(6, 0, 6);
+        net.minecraft.world.level.block.state.BlockState scaffold =
+                io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.BUILDER_SCAFFOLD.get().defaultBlockState();
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (int y = box.maxY() + 4; y >= box.minY() - 2; y--) {
-            for (int z = box.minZ(); z <= box.maxZ(); z++) {
-                for (int x = box.minX(); x <= box.maxX(); x++) {
-                    pos.set(x, y, z);
-                    if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.BUILDER_SCAFFOLD.get())) {
-                        level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {
+            for (int cz = box.minZ() >> 4; cz <= box.maxZ() >> 4; cz++) {
+                if (!level.hasChunk(cx, cz)) {
+                    continue;
+                }
+                net.minecraft.world.level.chunk.LevelChunk chunk = level.getChunk(cx, cz);
+                for (int y = box.maxY() + 6; y >= box.minY() - 2; y--) {
+                    int si = chunk.getSectionIndex(y);
+                    if (si < 0 || si >= chunk.getSectionsCount() || !chunk.getSection(si).maybeHas(st -> st.is(scaffold.getBlock()))) {
+                        y &= ~15; // weiter mit der Lage darunter
+                        continue;
+                    }
+                    for (int z = Math.max(box.minZ(), cz << 4); z <= Math.min(box.maxZ(), (cz << 4) + 15); z++) {
+                        for (int x = Math.max(box.minX(), cx << 4); x <= Math.min(box.maxX(), (cx << 4) + 15); x++) {
+                            pos.set(x, y, z);
+                            if (level.getBlockState(pos).is(scaffold.getBlock())) {
+                                level.setBlock(pos, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(),
+                                        net.minecraft.world.level.block.Block.UPDATE_ALL);
+                            }
+                        }
                     }
                 }
             }
@@ -551,7 +660,7 @@ public final class TownManager {
         // halbe Rückzahlung, wenn noch nichts gebaut ist sogar ganz (vom Preis, den der Spieler heute zahlen würde)
         io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = project.info();
         int price = info != null ? buildPrice(town, info, player) : project.custom != null ? 0 : buildPrice(town, project.type, player);
-        int refund = project.progress == 0 ? price : price / 2;
+        int refund = !project.started() ? price : price / 2;
         Coins.give(player, refund);
         Towns.of(player.level().getServer()).save(player.level().getServer());
     }

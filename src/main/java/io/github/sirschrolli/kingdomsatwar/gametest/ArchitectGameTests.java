@@ -10,6 +10,7 @@ import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Blueprint;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
+import io.github.sirschrolli.kingdomsatwar.economy.town.SiteSections;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownManager;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownStorage;
@@ -65,6 +66,12 @@ final class ArchitectGameTests {
             ModGameTests.TEST_FUNCTIONS.register("architect_formats", () -> ArchitectGameTests::formats);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_SAMPLES =
             ModGameTests.TEST_FUNCTIONS.register("architect_samples", () -> ArchitectGameTests::samples);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_STORE =
+            ModGameTests.TEST_FUNCTIONS.register("architect_store", () -> ArchitectGameTests::store);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_SECTIONS =
+            ModGameTests.TEST_FUNCTIONS.register("architect_sections", () -> ArchitectGameTests::sections);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_GREAT_SITE =
+            ModGameTests.TEST_FUNCTIONS.register("architect_great_site", () -> ArchitectGameTests::greatSite);
 
     private ArchitectGameTests() {}
 
@@ -77,6 +84,9 @@ final class ArchitectGameTests {
         own(event, ARCHITECT_BUILD, "architect_build", 9000);
         own(event, ARCHITECT_FORMATS, "architect_formats", 200);
         own(event, ARCHITECT_SAMPLES, "architect_samples", 200);
+        own(event, ARCHITECT_STORE, "architect_store", 200);
+        own(event, ARCHITECT_SECTIONS, "architect_sections", 200);
+        own(event, ARCHITECT_GREAT_SITE, "architect_great_site", 12000);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,
@@ -540,6 +550,429 @@ final class ArchitectGameTests {
             helper.assertValueEqual(town.beds().size(), 1, "Bett im eigenen Haus zählt");
             KingdomsAtWar.LOGGER.info("[Test] Eigenes Haus abschnittsweise gebaut nach {} Ticks ({} Schritte)", helper.getTick(),
                     building.plan().blocks().size());
+            TownGameTests.clearTowns(server);
+            TownGameTests.leave(helper, owner);
+        });
+    }
+
+    // =====================================================================================
+    // Große Bauten (Teil 3)
+    // =====================================================================================
+
+    /**
+     * Eine kleine Burg als Volumen (44 × 10 × 40 mit einer Lage Gelände darunter): Ringmauer mit Tor und Zinnen auf einem
+     * Fundament, vier Türme mit Bretterboden, Tür und Leiter, ein Bergfried mit Dach, Fenstern, Laternen, Bett und Schild,
+     * Fackeln an der Mauer, ein Becken mit Wasser, ein Kiesweg und ein kleiner Keller unter dem Bergfried.
+     */
+    static io.github.sirschrolli.kingdomsatwar.architect.io.Volume testCastle(ServerLevel level) {
+        int sx = 44;
+        int sy = 10;
+        int sz = 40;
+        var v = new io.github.sirschrolli.kingdomsatwar.architect.io.Volume(sx, sy, sz);
+        BlockState air = Blocks.AIR.defaultBlockState();
+        for (int z = 0; z < sz; z++) {
+            for (int x = 0; x < sx; x++) {
+                boolean edge = x == 0 || x == sx - 1 || z == 0 || z == sz - 1;
+                if (edge) {
+                    v.set(x, 0, z, Blocks.STONE_BRICKS.defaultBlockState()); // Fundament unter der Mauer
+                    for (int y = 1; y <= 5; y++) {
+                        if (!(z == 0 && x >= 20 && x <= 23 && y <= 3)) {
+                            v.set(x, y, z, Blocks.COBBLESTONE.defaultBlockState());
+                        }
+                    }
+                    if ((x + z) % 2 == 0) {
+                        v.set(x, 6, z, Blocks.COBBLESTONE.defaultBlockState());
+                    }
+                }
+            }
+        }
+        // Türme
+        int[][] corners = {{0, 0}, {sx - 5, 0}, {0, sz - 5}, {sx - 5, sz - 5}};
+        for (int[] c : corners) {
+            int tx = c[0];
+            int tz = c[1];
+            boolean west = tx < sx / 2;
+            for (int y = 1; y <= 8; y++) {
+                for (int dz = 0; dz < 5; dz++) {
+                    for (int dx = 0; dx < 5; dx++) {
+                        boolean ring = dx == 0 || dx == 4 || dz == 0 || dz == 4;
+                        v.set(tx + dx, y, tz + dz, ring ? Blocks.STONE_BRICKS.defaultBlockState() : y == 1 ? Blocks.OAK_PLANKS.defaultBlockState() : air);
+                    }
+                }
+            }
+            Direction out = west ? Direction.EAST : Direction.WEST;
+            int doorX = west ? tx + 4 : tx;
+            v.set(doorX, 2, tz + 2, Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, out));
+            v.set(doorX, 3, tz + 2, Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, out).setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+            int ladderX = west ? tx + 1 : tx + 3;
+            for (int y = 2; y <= 7; y++) {
+                v.set(ladderX, y, tz + 2, Blocks.LADDER.defaultBlockState().setValue(net.minecraft.world.level.block.LadderBlock.FACING, out));
+            }
+        }
+        // Fackeln an der Innenseite der Mauer
+        for (int x = 8; x <= sx - 9; x += 6) {
+            if (x < 19 || x > 24) {
+                v.set(x, 4, 1, Blocks.WALL_TORCH.defaultBlockState().setValue(net.minecraft.world.level.block.WallTorchBlock.FACING, Direction.SOUTH));
+            }
+            v.set(x, 4, sz - 2, Blocks.WALL_TORCH.defaultBlockState().setValue(net.minecraft.world.level.block.WallTorchBlock.FACING, Direction.NORTH));
+        }
+        for (int z = 8; z <= sz - 9; z += 6) {
+            v.set(1, 4, z, Blocks.WALL_TORCH.defaultBlockState().setValue(net.minecraft.world.level.block.WallTorchBlock.FACING, Direction.EAST));
+            v.set(sx - 2, 4, z, Blocks.WALL_TORCH.defaultBlockState().setValue(net.minecraft.world.level.block.WallTorchBlock.FACING, Direction.WEST));
+        }
+        // Bergfried mit Keller
+        for (int z = 18; z <= 21; z++) {
+            for (int x = 19; x <= 24; x++) {
+                v.set(x, 0, z, air);
+            }
+        }
+        for (int y = 1; y <= 8; y++) {
+            for (int z = 15; z <= 24; z++) {
+                for (int x = 17; x <= 26; x++) {
+                    boolean ring = x == 17 || x == 26 || z == 15 || z == 24;
+                    BlockState state = y == 8 ? Blocks.OAK_PLANKS.defaultBlockState() : ring ? Blocks.STONE_BRICKS.defaultBlockState()
+                            : y == 1 ? Blocks.OAK_PLANKS.defaultBlockState() : air;
+                    v.set(x, y, z, state);
+                }
+            }
+        }
+        v.set(21, 2, 15, Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.NORTH));
+        v.set(21, 3, 15, Blocks.OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.NORTH).setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
+        for (int k = 0; k < 2; k++) {
+            v.set(23 + k, 4, 15, Blocks.GLASS_PANE.defaultBlockState());
+            v.set(21 + k, 4, 24, Blocks.GLASS_PANE.defaultBlockState());
+            v.set(17, 4, 19 + k, Blocks.GLASS_PANE.defaultBlockState());
+            v.set(26, 4, 19 + k, Blocks.GLASS_PANE.defaultBlockState());
+        }
+        v.set(19, 7, 17, Blocks.LANTERN.defaultBlockState().setValue(net.minecraft.world.level.block.LanternBlock.HANGING, true));
+        v.set(24, 7, 22, Blocks.LANTERN.defaultBlockState().setValue(net.minecraft.world.level.block.LanternBlock.HANGING, true));
+        v.set(19, 2, 22, Blocks.BED.red().defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH));
+        v.set(19, 2, 21, Blocks.BED.red().defaultBlockState().setValue(BedBlock.FACING, Direction.NORTH).setValue(BedBlock.PART, BedPart.HEAD));
+        BlockPos signPos = new BlockPos(24, 4, 14);
+        BlockState sign = Blocks.OAK_WALL_SIGN.defaultBlockState().setValue(WallSignBlock.FACING, Direction.NORTH);
+        v.set(signPos.getX(), signPos.getY(), signPos.getZ(), sign);
+        SignBlockEntity be = new SignBlockEntity(signPos, sign);
+        be.setLevel(level); // nur, damit das Schild seinen Text annimmt (es steht nirgends)
+        be.updateText(text -> text.asMutable().setLine(0, Component.literal("Testburg")).asImmutable(),
+                net.minecraft.world.level.block.entity.SignTextSlot.FRONT);
+        v.setBlockEntity(signPos, be);
+        // Kiesweg vom Tor zum Bergfried, Becken mit Wasser
+        for (int z = 1; z <= 14; z++) {
+            for (int x = 20; x <= 23; x++) {
+                v.set(x, 1, z, Blocks.GRAVEL.defaultBlockState());
+            }
+        }
+        for (int z = 28; z <= 32; z++) {
+            for (int x = 30; x <= 34; x++) {
+                boolean rim = x == 30 || x == 34 || z == 28 || z == 32;
+                v.set(x, 1, z, rim ? Blocks.STONE_BRICKS.defaultBlockState() : Blocks.WATER.defaultBlockState());
+            }
+        }
+        return v;
+    }
+
+    /** Hindernisse auf dem Bauplatz (Steinsäulen, Laub), die der Baumeister wegräumen muss; gibt ihre Stellen zurück. */
+    private static java.util.List<BlockPos> obstacles(GameTestHelper helper, int g) {
+        java.util.List<BlockPos> list = new java.util.ArrayList<>();
+        int[][] at = {{8, 10}, {30, 12}, {12, 34}, {34, 36}};
+        for (int[] a : at) {
+            for (int y = 0; y < 4; y++) {
+                BlockPos p = helper.absolutePos(new BlockPos(a[0], g + y, a[1]));
+                helper.getLevel().setBlock(p, (y == 3 ? Blocks.OAK_LEAVES : Blocks.STONE).defaultBlockState(), Block.UPDATE_CLIENTS);
+                list.add(p);
+            }
+        }
+        return list;
+    }
+
+    private static PlanInfo addPlan(MinecraftServer server, PlanScan scan, String name, java.util.UUID author) {
+        try {
+            return PlanLibrary.of(server).add(server, scan, name, author, "Tester");
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private static boolean sameCells(PlanScan a, PlanScan b) {
+        if (a.sizeX != b.sizeX || a.sizeY != b.sizeY || a.sizeZ != b.sizeZ || a.ground != b.ground) {
+            return false;
+        }
+        for (int y = 0; y < a.sizeY; y++) {
+            for (int z = 0; z < a.sizeZ; z++) {
+                for (int x = 0; x < a.sizeX; x++) {
+                    if (!java.util.Objects.equals(a.get(x, y, z), b.get(x, y, z))) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Ein großer Plan (200 × 6 × 180, eine Ringmauer mit Türmen): Lage für Lage vermessen wie auf einmal, gepackt gespeichert
+     * und wieder geladen (auch in der alten Fassung 1), der Grundriss zeigt die schmale Mauer trotz Verkleinerung. Dazu die
+     * Regeln für den Bauplatz einer großen Burg: sie muss das Gebiet der Siedlung berühren und darf das Banner nicht
+     * überbauen.
+     */
+    private static void store(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        TownGameTests.clearTowns(server);
+        PlanLibrary.clearCache();
+        int sx = 200;
+        int sz = 180;
+        var v = new io.github.sirschrolli.kingdomsatwar.architect.io.Volume(sx, 6, sz);
+        for (int z = 0; z < sz; z++) {
+            for (int x = 0; x < sx; x++) {
+                boolean edge = x == 0 || x == sx - 1 || z == 0 || z == sz - 1;
+                boolean tower = (x < 6 || x >= sx - 6) && (z < 6 || z >= sz - 6);
+                if (edge || tower) {
+                    for (int y = 1; y <= (tower ? 5 : 4); y++) {
+                        v.set(x, y, z, (tower ? Blocks.STONE_BRICKS : Blocks.COBBLESTONE).defaultBlockState());
+                    }
+                }
+            }
+        }
+        PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(v, 1, level.registryAccess());
+        // ohne Fundament bleibt von der Lage Gelände nichts übrig: die Bodenlinie liegt dann ganz unten
+        helper.assertTrue(scan.sizeX == sx && scan.sizeY == 5 && scan.sizeZ == sz && scan.ground == 0,
+                "Großer Plan: " + scan.sizeX + "x" + scan.sizeY + "x" + scan.sizeZ + ", Boden " + scan.ground);
+        // Lage für Lage
+        PlanScan.Scanner scanner = new PlanScan.Scanner(v, BlockPos.ZERO, new BlockPos(sx - 1, 5, sz - 1), 1, Direction.NORTH, level.registryAccess());
+        int steps = 0;
+        while (!scanner.step(5000)) {
+            steps++;
+        }
+        helper.assertTrue(steps >= 3, "Lage für Lage: " + steps + " Schritte");
+        helper.assertTrue(sameCells(scanner.finish(), scan), "Lage für Lage vermessen ergibt einen anderen Plan");
+        // gepackt speichern und laden
+        CompoundTag tag = scan.save();
+        helper.assertValueEqual(tag.getIntOr("Version", 0), 2, "Dateifassung");
+        helper.assertTrue(sameCells(PlanScan.load(tag), scan), "Gepackt gespeichert und geladen: anders");
+        // die alte Fassung 1 (eine Zahl je Stelle)
+        net.minecraft.nbt.ListTag palette = tag.getListOrEmpty("Palette");
+        java.util.Map<BlockState, Integer> index = new java.util.HashMap<>();
+        for (int i = 1; i < palette.size(); i++) {
+            index.put(net.minecraft.nbt.NbtUtils.readBlockState(net.minecraft.core.registries.BuiltInRegistries.BLOCK, palette.getCompoundOrEmpty(i)), i);
+        }
+        int[] ints = new int[scan.sizeX * scan.sizeY * scan.sizeZ];
+        for (int y = 0; y < scan.sizeY; y++) {
+            for (int z = 0; z < scan.sizeZ; z++) {
+                for (int x = 0; x < scan.sizeX; x++) {
+                    BlockState st = scan.get(x, y, z);
+                    ints[(y * scan.sizeZ + z) * scan.sizeX + x] = st == null ? 0 : index.get(st);
+                }
+            }
+        }
+        CompoundTag old = tag.copy();
+        old.putInt("Version", 1);
+        old.remove("Bits");
+        old.putIntArray("Blocks", ints);
+        helper.assertTrue(sameCells(PlanScan.load(old), scan), "Fassung 1 lässt sich nicht mehr lesen");
+        // der Grundriss zeigt die Mauer auch verkleinert (jede Ecke und jeder Rand)
+        PlanScan.Picture top = scan.top(PlanInfo.PICTURE_SIZE);
+        helper.assertTrue(top.width() <= PlanInfo.PICTURE_SIZE && top.height() <= PlanInfo.PICTURE_SIZE, "Grundriss zu groß");
+        for (int px = 0; px < top.width(); px++) {
+            helper.assertTrue(top.argb(px, 0) != 0 && top.argb(px, top.height() - 1) != 0, "Mauer im Grundriss fehlt bei " + px);
+        }
+        // Bauplatz einer großen Burg
+        ServerPlayer owner = TownGameTests.player(helper, new BlockPos(24, 1, 30));
+        Town town = TownGameTests.found(helper, owner, new BlockPos(24, 1, 24));
+        PlanInfo info = addPlan(server, scan, "Große Mauer", owner.getUUID());
+        helper.assertTrue(SiteSections.large(info), "Großer Plan wird in Abschnitten gebaut");
+        BlockPos banner = town.banner();
+        BlockPos far = new BlockPos(banner.getX(), banner.getY(), banner.getZ() - 400);
+        helper.assertValueEqual(TownManager.check(level, town, info, far, Rotation.NONE), TownManager.PlaceResult.OUTSIDE, "Weit weg");
+        BlockPos over = new BlockPos(banner.getX(), banner.getY(), banner.getZ());
+        helper.assertValueEqual(TownManager.check(level, town, info, over, Rotation.NONE), TownManager.PlaceResult.OVERLAP, "Über dem Banner");
+        BlockPos next = new BlockPos(banner.getX(), banner.getY(), banner.getZ() - 90 - town.radius() + 8);
+        TownManager.PlaceResult beside = TownManager.check(level, town, info, next, Rotation.NONE);
+        helper.assertTrue(beside != TownManager.PlaceResult.OUTSIDE && beside != TownManager.PlaceResult.OVERLAP
+                && beside != TownManager.PlaceResult.FOREIGN, "Neben der Siedlung: " + beside);
+        TownGameTests.clearTowns(server);
+        TownGameTests.leave(helper, owner);
+        helper.succeed();
+    }
+
+    /**
+     * Die Bauabschnitte einer Großbaustelle (die Testburg, um 90° gedreht): jeder Schritt liegt in seinem Abschnitt, zusammen
+     * sind es genau die Schritte des ganzen Plans; Rohbau aller Abschnitte, dann alle Einzelheiten ergeben die Burg – mit
+     * Hindernissen, die weggeräumt werden, Fackeln über die Grenzen der Abschnitte hinweg und dem Schild am Bergfried.
+     */
+    private static void sections(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        TownGameTests.clearTowns(server);
+        TownGameTests.clearArea(helper);
+        PlanLibrary.clearCache();
+        int g = TownGameTests.ground(helper);
+        PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(testCastle(level), 1, level.registryAccess());
+        helper.assertValueEqual(scan.ground, 1, "Bodenlinie der Testburg");
+        PlanInfo info = addPlan(server, scan, "Testburg", java.util.UUID.randomUUID());
+        helper.assertTrue(SiteSections.large(info), "Testburg wird in Abschnitten gebaut");
+        java.util.List<BlockPos> obstacles = obstacles(helper, g);
+        BlockPos origin = helper.absolutePos(new BlockPos(22, g, 23));
+        Rotation rotation = Rotation.CLOCKWISE_90;
+        Town.Project project = new Town.Project(BuildingType.CUSTOM, origin, rotation, 0, 0, info.id());
+        helper.assertTrue(project.sectioned(), "Baustelle in Abschnitten");
+        SiteSections site = project.site();
+        helper.assertTrue(site != null && site.count() >= 6, "Abschnitte: " + (site == null ? 0 : site.count()));
+        java.util.Map<BlockPos, BlockState> union = new java.util.HashMap<>();
+        java.util.List<java.util.List<Blueprint.Step>> frames = new java.util.ArrayList<>();
+        java.util.List<java.util.List<Blueprint.Step>> details = new java.util.ArrayList<>();
+        int duplicates = 0;
+        for (int i = 0; i < site.count(); i++) {
+            var bounds = site.bounds(i);
+            java.util.List<Blueprint.Step> frame = site.generate(level, i, 0);
+            java.util.List<Blueprint.Step> detail = site.generate(level, i, 1);
+            boolean built = false;
+            for (Blueprint.Step step : frame) {
+                helper.assertTrue(bounds.isInside(step.pos()), "Schritt " + helper.relativePos(step.pos()) + " außerhalb von Abschnitt " + i);
+                // Rohbau: erst räumen, dann bauen (nie wieder räumen)
+                if (step.state().isAir() && step.pos().getY() >= origin.getY()) {
+                    helper.assertTrue(!built, "Abschnitt " + i + ": Räumen nach dem Bauen");
+                } else {
+                    built = true;
+                }
+            }
+            for (Blueprint.Step step : detail) {
+                helper.assertTrue(bounds.isInside(step.pos()), "Einzelheit außerhalb von Abschnitt " + i);
+            }
+            for (Blueprint.Step step : concat(frame, detail)) {
+                if (!step.state().isAir() || step.pos().getY() < origin.getY()) {
+                    if (union.put(step.pos(), step.state()) != null) {
+                        duplicates++;
+                    }
+                }
+            }
+            frames.add(frame);
+            details.add(detail);
+        }
+        helper.assertValueEqual(duplicates, 0, "Doppelte Schritte");
+        Blueprint whole = scan.toBlueprint();
+        java.util.Map<BlockPos, BlockState> classic = new java.util.HashMap<>();
+        for (Blueprint.Step step : whole.steps(origin, rotation)) {
+            if (!step.state().isAir() || step.pos().getY() < origin.getY()) {
+                classic.put(step.pos(), step.state());
+            }
+        }
+        helper.assertValueEqual(union.size(), classic.size(), "Schritte in Abschnitten und im ganzen Plan");
+        for (java.util.Map.Entry<BlockPos, BlockState> e : classic.entrySet()) {
+            helper.assertTrue(e.getValue().equals(union.get(e.getKey())), "Schritt bei " + helper.relativePos(e.getKey()) + ": soll " + e.getValue()
+                    + " ist " + union.get(e.getKey()));
+        }
+        // bauen: erst überall der Rohbau, dann die Einzelheiten
+        for (java.util.List<Blueprint.Step> frame : frames) {
+            for (Blueprint.Step step : frame) {
+                Blueprint.apply(level, step);
+            }
+        }
+        for (java.util.List<Blueprint.Step> detail : details) {
+            for (Blueprint.Step step : detail) {
+                Blueprint.apply(level, step);
+            }
+        }
+        helper.assertTrue(whole.complete(level, origin, rotation), "Burg unvollständig: " + mismatches(helper, whole, origin, rotation));
+        for (BlockPos p : obstacles) {
+            BlockState have = level.getBlockState(p);
+            helper.assertTrue(have.isAir() || whole.blocks().stream().anyMatch(e -> Blueprint.world(origin, rotation, e.pos()).equals(p)),
+                    "Hindernis nicht weggeräumt bei " + helper.relativePos(p) + ": " + have);
+        }
+        helper.assertTrue(level.getBlockState(Blueprint.world(origin, rotation, scan.local(30 + 2, 1, 28 + 2))).is(Blocks.WATER), "Wasser im Becken");
+        boolean signed = false;
+        for (BlockPos p : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(0, g, 0)), helper.absolutePos(new BlockPos(47, g + 6, 47)))) {
+            if (level.getBlockEntity(p) instanceof SignBlockEntity sign) {
+                signed |= sign.getText(net.minecraft.world.level.block.entity.SignTextSlot.FRONT).getMessages(false).getFirst().getString().equals("Testburg");
+            }
+        }
+        helper.assertTrue(signed, "Schild am Bergfried ohne Text");
+        helper.succeed();
+    }
+
+    private static <T> java.util.List<T> concat(java.util.List<T> a, java.util.List<T> b) {
+        java.util.List<T> out = new java.util.ArrayList<>(a);
+        out.addAll(b);
+        return out;
+    }
+
+    /**
+     * Eine Großbaustelle mit drei Baumeistern: jeder nimmt sich einen eigenen Abschnitt (zeitweise arbeiten mehrere
+     * zugleich), am Ende steht die ganze Testburg, die Gerüste sind weg, alle Abschnitte fertig, und die Burg zählt als
+     * Gebäude der Siedlung (mit ihrem Bett).
+     */
+    private static void greatSite(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        MinecraftServer server = level.getServer();
+        TownGameTests.clearTowns(server);
+        TownGameTests.clearArea(helper);
+        PlanLibrary.clearCache();
+        helper.setTime(1000);
+        int g = TownGameTests.ground(helper);
+        ServerPlayer owner = TownGameTests.player(helper, new BlockPos(45, 1, 12));
+        Town town = TownGameTests.found(helper, owner, new BlockPos(45, 1, 4));
+        PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(testCastle(level), 1, level.registryAccess());
+        PlanInfo info = addPlan(server, scan, "Testburg", owner.getUUID());
+        obstacles(helper, g);
+        BlockPos origin = helper.absolutePos(new BlockPos(22, g, 23));
+        Rotation rotation = Rotation.CLOCKWISE_90;
+        Town.Project project = TownManager.startCustom(level, town, info, origin, rotation);
+        helper.assertTrue(project.fast, "Große Baustellen gleich abschnittsweise");
+        Coins.give(owner, 3000);
+        helper.assertValueEqual(TownManager.hire(owner, town, Profession.BUILDER), TownManager.HireResult.HIRED, "Baumeister");
+        helper.assertValueEqual(TownManager.hire(owner, town, Profession.BUILDER), TownManager.HireResult.HIRED,
+                "Zweiter Baumeister (für die Großbaustelle)");
+        helper.assertTrue(TownManager.spawnCitizen(level, town, Profession.BUILDER) != null, "Dritter Baumeister");
+        BlockPos chest = helper.absolutePos(new BlockPos(46, g, 7));
+        int[] units = info.costs().unitArray();
+        for (int i = 0; i < units.length; i++) {
+            units[i] = units[i] * 2 + 64;
+        }
+        TownStorage.supply(level, chest, units);
+        int[] most = {0};
+        java.util.Set<Integer> seen = new java.util.HashSet<>();
+        helper.onEachTick(() -> {
+            SiteSections site = project.site();
+            if (site != null && !town.projects().isEmpty()) {
+                byte[] map = site.map(level.getGameTime());
+                int busy = 0;
+                for (int i = 0; i < map.length; i++) {
+                    if (map[i] == 3) {
+                        busy++;
+                        seen.add(i);
+                    }
+                }
+                most[0] = Math.max(most[0], busy);
+                if (Boolean.getBoolean("kingdomsatwar.debugBuilder") && helper.getTick() % 200 == 0) {
+                    StringBuilder line = new StringBuilder();
+                    for (byte b : map) {
+                        line.append(b);
+                    }
+                    KingdomsAtWar.LOGGER.info("[Test] Großbaustelle t={} Karte {} ({} Baumeister, {} %, wartet {})", helper.getTick(), line,
+                            busy, Math.round(project.fraction() * 100), project.waiting);
+                }
+            }
+        });
+        helper.succeedWhen(() -> {
+            if (!town.projects().isEmpty()) {
+                SiteSections site = project.site();
+                helper.assertTrue(false, "Noch im Bau: " + (site == null ? "?" : site.done() + " von " + site.count() + " Abschnitten")
+                        + (project.waiting != null ? " (wartet auf " + project.waiting + ")" : ""));
+            }
+            helper.assertTrue(most[0] >= 2, "Nie zwei Baumeister zugleich an verschiedenen Abschnitten (höchstens " + most[0] + ")");
+            helper.assertValueEqual(town.count(BuildingType.CUSTOM), 1, "Fertige Burg");
+            Blueprint whole = scan.toBlueprint();
+            helper.assertTrue(whole.complete(level, origin, rotation), "Burg unvollständig: " + mismatches(helper, whole, origin, rotation));
+            int scaffolds = 0;
+            for (BlockPos p : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(0, g, 0)), helper.absolutePos(new BlockPos(47, g + 16, 47)))) {
+                if (level.getBlockState(p).is(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.BUILDER_SCAFFOLD.get())) {
+                    scaffolds++;
+                }
+            }
+            helper.assertValueEqual(scaffolds, 0, "Gerüste stehen noch");
+            helper.assertValueEqual(town.beds().size(), 1, "Bett in der Burg zählt");
+            KingdomsAtWar.LOGGER.info("[Test] Großbaustelle mit drei Baumeistern fertig nach {} Ticks ({} Abschnitte, höchstens {} zugleich)",
+                    helper.getTick(), seen.size(), most[0]);
             TownGameTests.clearTowns(server);
             TownGameTests.leave(helper, owner);
         });

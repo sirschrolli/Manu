@@ -8,6 +8,7 @@ import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
 import io.github.sirschrolli.kingdomsatwar.economy.town.BuildingType;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Material;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
+import io.github.sirschrolli.kingdomsatwar.economy.town.SiteSections;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownActions;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownTier;
 import io.github.sirschrolli.kingdomsatwar.economy.town.TownView;
@@ -367,6 +368,11 @@ public class TownScreen extends Screen {
             }
             case CROWN -> this.drawCrown(g, x, y, mouseX, mouseY);
         }
+        Runnable overlay = this.overlay;
+        this.overlay = null;
+        if (overlay != null) {
+            overlay.run();
+        }
         if (this.notice != null && this.noticeTicks > 0) {
             int w = this.font.width(this.notice) + 12;
             int nx = this.left + (WIDTH - w) / 2;
@@ -377,6 +383,69 @@ public class TownScreen extends Screen {
             g.text(this.font, this.notice, nx + 6, ny + 3, (alpha << 24) | 0xF3E6C4, false);
         }
         super.extractRenderState(g, mouseX, mouseY, a);
+    }
+
+    /** Wird über allem anderen gezeichnet (die Karte einer Großbaustelle). */
+    private @Nullable Runnable overlay;
+
+    /**
+     * Die Karte einer Großbaustelle: jeder Abschnitt ein Feld (Norden oben) – offen, Rohbau, fertig oder gerade in Arbeit –,
+     * dazu wie viele fertig sind und wie viele Baumeister daran arbeiten. Auf Blaupausen-Papier wie die Baupläne.
+     */
+    private void drawSiteMap(GuiGraphicsExtractor g, TownView.SiteView site, int mouseX, int mouseY) {
+        int w = Math.max(1, site.width());
+        int d = Math.max(1, site.map().length / w);
+        int cell = Mth.clamp(112 / Math.max(w, d), 2, 8);
+        int mapW = w * cell;
+        int mapH = d * cell;
+        Component title = Component.translatable("gui.kingdomsatwar.town.site.title").withStyle(ChatFormatting.BOLD);
+        Component done = Component.translatable("gui.kingdomsatwar.town.site.done", site.done(), site.map().length);
+        Component crew = Component.translatable(site.builders() == 1 ? "gui.kingdomsatwar.town.site.builder" : "gui.kingdomsatwar.town.site.builders",
+                site.builders());
+        int textW = Math.max(this.font.width(title), Math.max(this.font.width(done), this.font.width(crew)));
+        int pw = Math.max(Math.max(mapW, textW), 150) + 14;
+        int ph = 38 + mapH + 18;
+        int px = Math.min(mouseX + 14, this.width - pw - 4);
+        int py = Mth.clamp(mouseY - ph / 2, 4, this.height - ph - 4);
+        // Blaupausen-Papier
+        g.fill(px, py, px + pw, py + ph, 0xF21D3B5C);
+        for (int gx = px + 6; gx < px + pw; gx += 6) {
+            g.fill(gx, py + 1, gx + 1, py + ph - 1, 0x1EA9C8F0);
+        }
+        for (int gy = py + 6; gy < py + ph; gy += 6) {
+            g.fill(px + 1, gy, px + pw - 1, gy + 1, 0x1EA9C8F0);
+        }
+        g.outline(px, py, pw, ph, 0xFF9DBBE4);
+        g.outline(px + 2, py + 2, pw - 4, ph - 4, 0x509DBBE4);
+        g.text(this.font, title, px + 7, py + 6, 0xFFF2C23A, false);
+        g.text(this.font, done, px + 7, py + 17, 0xFFF3F7FF, false);
+        g.text(this.font, crew, px + 7, py + 27, 0xFFBFD5F2, false);
+        int mx = px + (pw - mapW) / 2;
+        int my = py + 38;
+        g.fill(mx - 1, my - 1, mx + mapW + 1, my + mapH + 1, 0xFF0F2238);
+        boolean blink = (System.currentTimeMillis() / 400L) % 2L == 0L;
+        for (int i = 0; i < site.map().length; i++) {
+            int cx = mx + (i % w) * cell;
+            int cy = my + (i / w) * cell;
+            int color = switch (site.map()[i]) {
+                case SiteSections.FRAME -> 0xFFD9A441;
+                case SiteSections.DONE -> 0xFF6FBF5A;
+                case 3 -> blink ? 0xFFF3F7FF : 0xFFBFD5F2;
+                default -> 0xFF3A5A7E;
+            };
+            g.fill(cx, cy, cx + Math.max(1, cell - (cell > 3 ? 1 : 0)), cy + Math.max(1, cell - (cell > 3 ? 1 : 0)), color);
+        }
+        // Zeichenerklärung
+        int ly = my + mapH + 6;
+        int lx = px + 7;
+        int[] colors = {0xFF3A5A7E, 0xFFD9A441, 0xFF6FBF5A, 0xFFF3F7FF};
+        String[] keys = {"open", "frame", "done_key", "busy"};
+        for (int k = 0; k < 4; k++) {
+            g.fill(lx, ly + 1, lx + 6, ly + 7, colors[k]);
+            Component label = Component.translatable("gui.kingdomsatwar.town.site." + keys[k]);
+            g.text(this.font, label, lx + 8, ly, 0xFFBFD5F2, false);
+            lx += 8 + this.font.width(label) + 6;
+        }
     }
 
     private void drawHeader(GuiGraphicsExtractor g, int mouseX, int mouseY) {
@@ -584,6 +653,20 @@ public class TownScreen extends Screen {
                 }
             } else {
                 this.bar(g, rx + 24, ry + 16, 72, 6, p.permille() / 1000.0f, 0xFF5E8C3A);
+                if (p.site().isPresent()) {
+                    // Großbaustelle: die Abschnitte als feine Teilung im Balken, die Karte beim Darüberfahren
+                    TownView.SiteView site = p.site().get();
+                    int n = site.map().length;
+                    if (n > 1 && n <= 36) {
+                        for (int k = 1; k < n; k++) {
+                            int tx = rx + 25 + Math.round(70.0f * k / n);
+                            g.fill(tx, ry + 17, tx + 1, ry + 21, 0x40000000);
+                        }
+                    }
+                    if (mouseX >= rx && mouseX < rx + 98 && mouseY >= ry && mouseY < ry + 30) {
+                        this.overlay = () -> this.drawSiteMap(g, site, mouseX, mouseY);
+                    }
+                }
             }
             if (v.isOwner()) {
                 final int index = i;

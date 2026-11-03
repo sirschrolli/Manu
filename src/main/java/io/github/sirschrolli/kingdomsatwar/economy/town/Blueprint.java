@@ -241,7 +241,7 @@ public final class Blueprint {
         return ((long) cx << 32) | (cz & 0xFFFFFFFFL);
     }
 
-    /** Türen, Betten, Laternen, Fackeln, Leitern, Pflanzen, Teppiche … – alles, was an anderen Blöcken hängt. */
+    /** Türen, Betten, Laternen, Fackeln, Leitern, Pflanzen, Teppiche, Wasser … – alles, was an anderen Blöcken hängt. */
     static boolean attached(BlockState state) {
         Block block = state.getBlock();
         return !state.isAir() && (block instanceof DoorBlock || block instanceof BedBlock
@@ -251,7 +251,9 @@ public final class Blueprint {
                 || block instanceof net.minecraft.world.level.block.CarpetBlock || block instanceof net.minecraft.world.level.block.FlowerPotBlock
                 || block instanceof net.minecraft.world.level.block.ChainBlock || block instanceof net.minecraft.world.level.block.BellBlock
                 || block instanceof io.github.sirschrolli.kingdomsatwar.block.ChandelierBlock
-                || block instanceof net.minecraft.world.level.block.WallBannerBlock || block instanceof net.minecraft.world.level.block.BannerBlock);
+                || block instanceof net.minecraft.world.level.block.WallBannerBlock || block instanceof net.minecraft.world.level.block.BannerBlock
+                // Wasser erst, wenn ringsum die Becken stehen (sonst läuft es aus)
+                || block instanceof net.minecraft.world.level.block.LiquidBlock);
     }
 
     public List<Entry> blocks() {

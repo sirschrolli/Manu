@@ -14,8 +14,9 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Das Lager der Siedlung: alle Truhen und Fässer in den Lagerhäusern und – solange es noch keins gibt, aber auch danach –
- * die Truhen und Fässer, die bis zu {@link #BANNER_RADIUS} Blöcke neben dem Stadtbanner stehen. Hierher bringen die
- * Bürger abends, was sie gesammelt haben, und hier holt der Baumeister seine Baustoffe.
+ * die Truhen und Fässer, die bis zu {@link #BANNER_RADIUS} Blöcke neben dem Stadtbanner stehen; dazu das Baustellenlager
+ * rings um eine Großbaustelle. Hierher bringen die Bürger abends, was sie gesammelt haben, und hier holt der Baumeister
+ * seine Baustoffe.
  */
 public final class TownStorage {
     /** So weit um das Banner zählen Truhen und Fässer zum Lager. */
@@ -43,7 +44,36 @@ public final class TownStorage {
             scan(level, new BoundingBox(b.getX() - BANNER_RADIUS, b.getY() - 2, b.getZ() - BANNER_RADIUS,
                     b.getX() + BANNER_RADIUS, b.getY() + 3, b.getZ() + BANNER_RADIUS), list);
         }
+        // Baustellenlager: Truhen und Fässer rings um eine Großbaustelle (bis SITE_RING Blöcke vom Rand, nicht auf ihr)
+        for (Town.Project project : town.projects()) {
+            if (project.sectioned()) {
+                site(level, project.bounds(), list);
+            }
+        }
         return list;
+    }
+
+    /** So weit um eine Großbaustelle zählen Truhen und Fässer zum Lager (dort holen die Baumeister ihre Baustoffe ab). */
+    public static final int SITE_RING = 10;
+
+    private static void site(ServerLevel level, BoundingBox site, List<BlockPos> into) {
+        BoundingBox ring = new BoundingBox(site.minX() - SITE_RING, site.minY() - 4, site.minZ() - SITE_RING,
+                site.maxX() + SITE_RING, site.maxY(), site.maxZ() + SITE_RING);
+        for (int cx = ring.minX() >> 4; cx <= ring.maxX() >> 4; cx++) {
+            for (int cz = ring.minZ() >> 4; cz <= ring.maxZ() >> 4; cz++) {
+                boolean within = (cx << 4) > site.minX() && (cx << 4) + 15 < site.maxX() && (cz << 4) > site.minZ() && (cz << 4) + 15 < site.maxZ();
+                if (within || !level.hasChunk(cx, cz)) {
+                    continue; // ganz auf der Baustelle (oder nicht geladen)
+                }
+                for (java.util.Map.Entry<BlockPos, BlockEntity> e : level.getChunk(cx, cz).getBlockEntities().entrySet()) {
+                    BlockPos pos = e.getKey();
+                    if (ring.isInside(pos) && !site.isInside(pos) && (e.getValue() instanceof ChestBlockEntity || e.getValue() instanceof BarrelBlockEntity)
+                            && !into.contains(pos)) {
+                        into.add(pos.immutable());
+                    }
+                }
+            }
+        }
     }
 
     private static void scan(ServerLevel level, BoundingBox box, List<BlockPos> into) {

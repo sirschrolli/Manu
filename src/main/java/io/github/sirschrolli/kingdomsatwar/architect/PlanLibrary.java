@@ -109,7 +109,10 @@ public final class PlanLibrary {
         PlanInfo info = PlanInfo.of(id, clean(name), author, authorName, System.currentTimeMillis(), scan);
         this.plans.add(info);
         this.save(server);
-        CACHE.put(key(server, id), scan.toBlueprint());
+        synchronized (CACHE) {
+            SCANS.put(key(server, id), scan);
+            trimScans();
+        }
         return info;
     }
 
@@ -164,7 +167,7 @@ public final class PlanLibrary {
     // Baupläne für den Baumeister (zwischengespeichert)
     // =====================================================================================
 
-    private static final int CACHE_SIZE = 24;
+    private static final int CACHE_SIZE = 16;
     private static final Map<String, Blueprint> CACHE = new LinkedHashMap<>(32, 0.75f, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, Blueprint> eldest) {
@@ -182,8 +185,55 @@ public final class PlanLibrary {
     }
 
     /**
+     * Die Vermessungen, die gerade gebraucht werden (Großbaustellen bauen Abschnitt für Abschnitt aus ihnen), zuletzt
+     * benutzte zuerst. Zusammen höchstens so viele Stellen, dass es nur einige Dutzend Megabyte sind – eine ganze Burg
+     * passt immer hinein.
+     */
+    private static final long SCAN_CELLS = 40_000_000L;
+    private static final Map<String, PlanScan> SCANS = new LinkedHashMap<>(16, 0.75f, true);
+
+    private static void trimScans() {
+        long total = 0;
+        for (PlanScan scan : SCANS.values()) {
+            total += scan.cells();
+        }
+        var it = SCANS.entrySet().iterator();
+        while (total > SCAN_CELLS && SCANS.size() > 1 && it.hasNext()) {
+            total -= it.next().getValue().cells();
+            it.remove();
+        }
+    }
+
+    /** Die Vermessung eines eigenen Plans auf dem laufenden Server ({@code null}: unbekannt oder nicht ladbar). */
+    public static @Nullable PlanScan scan(String id) {
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        if (server == null) {
+            return null;
+        }
+        String key = key(server, id);
+        synchronized (CACHE) {
+            PlanScan cached = SCANS.get(key);
+            if (cached != null) {
+                return cached;
+            }
+            if (MISSING.contains(key)) {
+                return null;
+            }
+            PlanScan scan = load(server, id);
+            if (scan == null) {
+                MISSING.add(key);
+                return null;
+            }
+            SCANS.put(key, scan);
+            trimScans();
+            return scan;
+        }
+    }
+
+    /**
      * Der Bauplan eines eigenen Plans für den laufenden Server; fehlt die Datei, ein leerer Plan (die Baustelle ist dann
-     * sofort fertig, statt hängen zu bleiben).
+     * sofort fertig, statt hängen zu bleiben). Große Pläne baut der Baumeister in Abschnitten direkt aus der Vermessung
+     * ({@link #scan}); für sie wird der ganze Bauplan nur gebaut, wenn ihn jemand ausdrücklich verlangt.
      */
     public static Blueprint blueprint(String id) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -196,18 +246,16 @@ public final class PlanLibrary {
             if (cached != null) {
                 return cached;
             }
-            if (MISSING.contains(key)) {
-                return EMPTY;
-            }
-            PlanScan scan = load(server, id);
-            if (scan == null) {
-                MISSING.add(key);
-                return EMPTY;
-            }
-            Blueprint plan = scan.toBlueprint();
-            CACHE.put(key, plan);
-            return plan;
         }
+        PlanScan scan = scan(id);
+        if (scan == null) {
+            return EMPTY;
+        }
+        Blueprint plan = scan.toBlueprint();
+        synchronized (CACHE) {
+            CACHE.put(key, plan);
+        }
+        return plan;
     }
 
     /** Die Kurzfassung eines Plans auf dem laufenden Server ({@code null}: unbekannt). */
@@ -220,6 +268,7 @@ public final class PlanLibrary {
     public static void clearCache() {
         synchronized (CACHE) {
             CACHE.clear();
+            SCANS.clear();
             MISSING.clear();
         }
     }
