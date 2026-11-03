@@ -36,7 +36,7 @@ public final class Crystals {
     /** Mana je Manakristall. */
     public static final float MANA_PER_CRYSTAL = 20.0f;
     /** Kennung der Steigerung der Lebenspunkte (bleibt mit dem Spieler gespeichert). */
-    static final Identifier HEALTH_ID = KingdomsAtWar.id("heart_crystals");
+    public static final Identifier HEALTH_ID = KingdomsAtWar.id("heart_crystals");
 
     /** Die beiden Sorten. */
     public enum Kind implements StringRepresentable {

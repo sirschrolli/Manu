@@ -212,6 +212,7 @@ public final class ModGameTests {
         TroopGameTests.init();     // die neuen Truppen (Speerträger bis Belagerungsknecht)
         DragonWarGameTests.init(); // Drachen im Krieg (Drachenhorn, Sturzangriff, Luftangriff)
         ArchitectGameTests.init(); // Dragon Architect (Vermessen, eigene Baupläne, Nachbau)
+        HeroGameTests.init();      // der eigene Held: Herz- und Manakristalle
     }
 
     private ModGameTests() {}
@@ -253,6 +254,7 @@ public final class ModGameTests {
         TroopGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("troops")));
         DragonWarGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("dragonwar")));
         ArchitectGameTests.register(event);
+        HeroGameTests.register(event, environment);
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg
         RaidGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("raids")));
         FarmGameTests.register(event, environment);

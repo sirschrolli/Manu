@@ -24,7 +24,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
  * weg, Wertvolles (Diamanten, Smaragde, Gold, Netherit, Edelsteine, verzauberte und seltene Dinge, Ausrüstung) noch öfter
  * ({@code drop_valuable}); die übrigen Stapel schrumpfen auf {@code keep} ihrer Größe. Ganz leer bleibt keine Truhe, und
  * was man für den Fortgang braucht, wird nie genommen: das Herz des Meeres, die Netherit- und die Abyssit-Vorlage, der
- * Drachenkompass, die Zaubertafeln und die Prüfungsschlüssel.
+ * Drachenkompass, die Zaubertafeln, die Prüfungsschlüssel und die Herz- und Manakristalle.
  */
 public class LeanLootModifier extends LootModifier {
     public static final MapCodec<LeanLootModifier> CODEC = RecordCodecBuilder.mapCodec(i -> codecStart(i).and(i.group(
@@ -81,7 +81,8 @@ public class LeanLootModifier extends LootModifier {
     static boolean needed(ItemStack stack) {
         if (stack.is(Items.HEART_OF_THE_SEA) || stack.is(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE) || stack.is(Items.TRIAL_KEY)
                 || stack.is(Items.OMINOUS_TRIAL_KEY) || stack.is(ModItems.DRAGON_COMPASS.get())
-                || stack.is(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get())) {
+                || stack.is(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get())
+                || stack.is(ModItems.HEART_CRYSTAL.get()) || stack.is(ModItems.MANA_CRYSTAL.get())) {
             return true;
         }
         for (var tablet : ModItems.SPELL_TABLETS.values()) {
