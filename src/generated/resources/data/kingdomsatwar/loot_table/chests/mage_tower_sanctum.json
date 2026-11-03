@@ -139,7 +139,15 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "kingdomsatwar:aetherit_staff",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 4,
+              "min": 2
+            }
+          },
+          "name": "kingdomsatwar:wisp_dust",
           "weight": 2
         },
         {

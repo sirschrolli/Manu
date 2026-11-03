@@ -417,12 +417,17 @@ public final class ModItems {
     // Magie: Aetherit-Stab, Zaubertafeln der Erzmagier (und die alten Runen)
     // =====================================================================================
 
-    /** Wirkt den gewählten Zauber; neue Zauber lernt er am Magietisch aus Zaubertafeln. */
+    /** Aetherkern: gebündelte Magie in einer Fassung aus Stahl – das Herz eines Aetherit-Stabs. */
+    public static final DeferredItem<Item> AETHER_CORE = item("aether_core",
+            p -> p.rarity(Rarity.RARE).fireResistant().component(DataComponents.LORE, lore("aether_core", 2)), RESOURCE_TAB);
+    /**
+     * Wirkt den gewählten Zauber (halten lädt ihn auf); neue Zauber lernt er am Magietisch aus Zaubertafeln. Unzerstörbar,
+     * nur herstellbar (aufwendig) und anfangs schwach – er wächst mit seiner Meisterschaft.
+     */
     public static final DeferredItem<AetheritStaffItem> AETHERIT_STAFF = addTo(EQUIPMENT_TAB, ITEMS.registerItem("aetherit_staff",
-            AetheritStaffItem::new, p -> p.durability(320).rarity(Rarity.EPIC).enchantable(12)
-                    .repairable(ModTags.Items.GEMS_AETHERIT)
+            AetheritStaffItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).fireResistant()
                     .component(DataComponents.USE_COOLDOWN, AetheritStaffItem.defaultCooldown())
-                    .component(DataComponents.LORE, lore("aetherit_staff", 2))));
+                    .component(DataComponents.LORE, lore("aetherit_staff", 3))));
 
     private static final Map<Spell, DeferredItem<SpellTabletItem>> SPELL_TABLETS_MUTABLE = new EnumMap<>(Spell.class);
     /** Eine Zaubertafel je Element – Beute der Erzmagier in ihren Türmen. */

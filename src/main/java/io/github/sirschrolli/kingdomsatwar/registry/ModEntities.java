@@ -497,6 +497,17 @@ public final class ModEntities {
             ENTITIES.registerEntityType("magic_missile", io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MagicMissile::new,
                     MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
 
+    /** Sichtbare Zauberwirkungen: Runenkreise, Strahlen, Säulen, Felsspitzen, Ranken, Eiskerker, Wellen (wird nicht gespeichert). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity>> SPELL_FX =
+            ENTITIES.registerEntityType("spell_fx", io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().noSave().noSummon().clientTrackingRange(10)
+                            .updateInterval(2));
+
+    /** Zaubergeschosse mit eigener Gestalt: Feuerblitz, Phönix, Frostlanze. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.magic.fx.SpellProjectile>> SPELL_PROJECTILE =
+            ENTITIES.registerEntityType("spell_projectile", io.github.sirschrolli.kingdomsatwar.magic.fx.SpellProjectile::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 0.6f).fireImmune().noLootTable().noSummon().clientTrackingRange(10).updateInterval(1));
+
     /** Unsichtbarer Träger der Lichteffekte beim Siegelbruch. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity>> SEAL_BREAK =
             ENTITIES.registerEntityType("seal_break", io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity::new, MobCategory.MISC,

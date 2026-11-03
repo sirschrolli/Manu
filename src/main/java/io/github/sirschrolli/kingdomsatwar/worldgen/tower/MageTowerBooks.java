@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity;
  * Zaubertafel und seinen Künsten schreibt – mit Hinweisen, wie man ihm im Kampf begegnet.
  */
 final class MageTowerBooks {
-    static final int PAGES = 4;
+    static final int PAGES = 5;
 
     private MageTowerBooks() {}
 

@@ -271,14 +271,14 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:set_damage",
-            "damage": {
+            "type": "minecraft:set_count",
+            "count": {
               "type": "minecraft:uniform",
-              "max": 0.9,
-              "min": 0.4
+              "max": 4,
+              "min": 2
             }
           },
-          "name": "kingdomsatwar:aetherit_staff"
+          "name": "kingdomsatwar:aetherit"
         },
         {
           "type": "minecraft:empty",

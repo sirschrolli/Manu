@@ -180,7 +180,7 @@ final class MageGameTests {
         // Bibliothek: Lesepult mit den Aufzeichnungen des Magiers
         BlockPos lectern = piece.world(-4, floors[1] + 1, 0);
         helper.assertTrue(level.getBlockEntity(lectern) instanceof LecternBlockEntity be && be.hasBook()
-                && be.getBook().get(DataComponents.WRITTEN_BOOK_CONTENT) instanceof WrittenBookContent book && book.pages().size() == 4
+                && be.getBook().get(DataComponents.WRITTEN_BOOK_CONTENT) instanceof WrittenBookContent book && book.pages().size() == 5
                 && be.getBook().has(DataComponents.CUSTOM_NAME), name + ": Lesepult ohne Buch");
         helper.assertTrue(near(reachable(level, piece, floors[1], MageTowerBuilder.R_IN, 3, 3), -4, 0), name + ": Lesepult nicht erreichbar");
         // Laboratorium mit Magietisch, Kammer mit Zaubertisch

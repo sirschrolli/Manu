@@ -77,6 +77,7 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | K1e | Die Reiche finden: Grenzmeldung, Karten beim Kartografen, `/kaw realms` | ✅ |
 | K1f | Tests, Bilder, Doku, Version 0.38.0 | ✅ |
 | M | Die Arkane Sphäre: Erzmagier ziehen Spieler und Truppen in ihre Arena-Dimension (Version 0.39.0) | ✅ |
+| M2 | Die Macht der Erzmagier: Meisterzauber mit eigenen Modellen, Fähigkeiten, stärker; Aetherit-Stab unzerstörbar, nur herstellbar, mit Meisterschaft (Version 0.40.0) | ✅ |
 | K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 |
 | K3 | Gegenangriffe der Reiche, neue Truppen | ⏳ |
 

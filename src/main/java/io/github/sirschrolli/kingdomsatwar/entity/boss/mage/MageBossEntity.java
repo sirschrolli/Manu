@@ -8,6 +8,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.ElementalBoss;
 import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.magic.Spell;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.network.ScreenShakePayload;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import java.util.ArrayList;
@@ -98,6 +99,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     public static final int TRANSITION_TICKS = 30;
     public static final int SHIELD_TICKS = 120;
     private static final int SHIELD_HITS = 4;
+    /** So viele Eisklingen zeigt Isoldes voller Frostpanzer. */
+    public static final int WARD_SHARDS = MagePassives.WARD_SHARDS;
     private static final Identifier HEALTH_SCALE = KingdomsAtWar.id("mage_health_scale");
 
     private static final EntityDataAccessor<Byte> DATA_STATE = SynchedEntityData.defineId(MageBossEntity.class, EntityDataSerializers.BYTE);
@@ -105,9 +108,35 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private static final EntityDataAccessor<Byte> DATA_PHASE = SynchedEntityData.defineId(MageBossEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> DATA_SHIELD = SynchedEntityData.defineId(MageBossEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_BLINK = SynchedEntityData.defineId(MageBossEntity.class, EntityDataSerializers.INT);
+    /** Isoldes Frostpanzer: so viele Eisklingen kreisen um sie (0–6). */
+    private static final EntityDataAccessor<Byte> DATA_WARD = SynchedEntityData.defineId(MageBossEntity.class, EntityDataSerializers.BYTE);
 
-    /** Angriffe des Magiers. */
-    enum Attack { MISSILES, SPELL, BLINK, IMAGES, SHIELD, ULTIMATE }
+    /**
+     * Angriffe des Magiers. {@code STRIKE} und {@code TRAP} sind seine beiden Meisterzauber (siehe {@link MageSignatures}),
+     * jeder Erzmagier hat eigene.
+     */
+    enum Attack { MISSILES, SPELL, BLINK, IMAGES, SHIELD, ULTIMATE, STRIKE, TRAP }
+
+    /** Was ein Meisterzauber über mehrere Ticks braucht (Richtung, schon Getroffene, laufende Strahlen). */
+    static final class SignatureState {
+        @Nullable Vec3 dir;
+        final Set<Integer> hits = new HashSet<>();
+        @Nullable SpellFxEntity beam;
+        @Nullable SpellFxEntity beam2;
+
+        void clear() {
+            this.dir = null;
+            this.hits.clear();
+            if (this.beam != null) {
+                this.beam.discard();
+                this.beam = null;
+            }
+            if (this.beam2 != null) {
+                this.beam2.discard();
+                this.beam2 = null;
+            }
+        }
+    }
 
     private final DragonType element;
     private final ServerBossEvent bossEvent;
@@ -132,6 +161,14 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private float strafe = 1.0f;
     private int strafeTimer;
     private @Nullable DamageSource deathSource;
+    final SignatureState signature = new SignatureState();
+    /** Nur für Tests: allein dieses Wesen gilt als Gegner (andere Tests nebenan bleiben unberührt). */
+    private @Nullable UUID onlyEnemy;
+    /** Isoldes Frostpanzer (Schaden, den er noch abfängt) und wann er nachwächst. */
+    private float ward;
+    int wardRegrow;
+    /** Fulgors statische Ladung: wann sie zuletzt zurückschlug. */
+    int lastShock = -100;
     /** Einschlagstellen des Gewittersturms (siehe {@link MageUltimates}). */
     final @Nullable Vec3[] strikes = new Vec3[8];
 
@@ -154,9 +191,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 300.0)
-                .add(Attributes.ARMOR, 10.0)
-                .add(Attributes.ARMOR_TOUGHNESS, 4.0)
+                .add(Attributes.MAX_HEALTH, 420.0)
+                .add(Attributes.ARMOR, 12.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 6.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.FLYING_SPEED, 0.4)
@@ -176,6 +213,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         builder.define(DATA_PHASE, (byte) 1);
         builder.define(DATA_SHIELD, 0);
         builder.define(DATA_BLINK, 0);
+        builder.define(DATA_WARD, (byte) 0);
     }
 
     @Override
@@ -323,6 +361,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         if (entity == null || !entity.isAlive() || entity == this || entity instanceof ElementalBoss || entity instanceof MageMinion) {
             return false;
         }
+        if (this.onlyEnemy != null) {
+            return entity.getUUID().equals(this.onlyEnemy);
+        }
         if (entity instanceof Player player) {
             return !player.isCreative() && !player.isSpectator();
         }
@@ -353,23 +394,40 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         return target.hurtServer(level, this.damageSources().indirectMagic(this, this), damage * this.damageMultiplier());
     }
 
-    /** Je Phase stärker: Phase 2 +20 %, Phase 3 +45 %. */
+    /** Je Phase stärker: Phase 1 +10 %, Phase 2 +35 %, Phase 3 +60 %. */
     @Override
     public float damageMultiplier() {
         return switch (this.phase()) {
-            case 2 -> 1.2f;
-            case 3 -> 1.45f;
-            default -> 1.0f;
+            case 2 -> 1.35f;
+            case 3 -> 1.6f;
+            default -> 1.1f;
         };
     }
 
     /** Wie schnell er angreift: in Phase 3 deutlich schneller. */
     private float tempo() {
         return switch (this.phase()) {
-            case 2 -> 0.85f;
-            case 3 -> 0.65f;
+            case 2 -> 0.8f;
+            case 3 -> 0.62f;
             default -> 1.0f;
         };
+    }
+
+    // ------------------------------------------------------------------ Frostpanzer (Isolde)
+
+    /** Schaden, den der Frostpanzer noch abfängt. */
+    float ward() {
+        return this.ward;
+    }
+
+    void setWard(float ward) {
+        this.ward = ward;
+        this.entityData.set(DATA_WARD, (byte) MagePassives.shards(this));
+    }
+
+    /** Wie viele Eisklingen des Frostpanzers um die Magierin kreisen (für die Darstellung). */
+    public int wardShards() {
+        return this.entityData.get(DATA_WARD);
     }
 
     @Override
@@ -402,6 +460,10 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         }
         if (!(attacker instanceof Player) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             damage *= DragonBossEntity.NPC_DAMAGE_FACTOR;
+        }
+        damage = MagePassives.onHurt(level, this, source, damage);
+        if (damage <= 0.0f) {
+            return false;
         }
         if (attacker instanceof LivingEntity living) {
             this.threat.merge(living.getUUID(), damage, Float::sum);
@@ -673,6 +735,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             return;
         }
         this.lostTicks = 0;
+        MagePassives.tick(level, this);
         this.face(target.getEyePosition(), 12.0f);
         if (this.attack != null) {
             this.tickAttack(level, target);
@@ -779,6 +842,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private void beginTransition(ServerLevel level) {
         this.transition = TRANSITION_TICKS;
         this.attack = null;
+        this.signature.clear();
         this.setGesture(ANIM_TRANSITION);
         level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.EVOKER_PREPARE_WOLOLO, SoundSource.HOSTILE, 2.2f, 0.6f);
         level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BEACON_POWER_SELECT, SoundSource.HOSTILE, 2.0f, 0.5f);
@@ -822,6 +886,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case IMAGES -> 30;
             case SHIELD -> 22;
             case ULTIMATE -> MageUltimates.duration(this.element);
+            case STRIKE -> MageSignatures.duration(this.element, false);
+            case TRAP -> MageSignatures.duration(this.element, true);
         };
     }
 
@@ -829,21 +895,25 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         return switch (attack) {
             case MISSILES -> 50;
             case SPELL -> 70;
-            case BLINK -> 120;
+            case BLINK -> this.element == DragonType.LIGHTNING ? 60 : 120;
             case IMAGES -> 420;
             case SHIELD -> 380;
             case ULTIMATE -> this.phase() >= 3 ? 320 : 520;
+            case STRIKE -> 130;
+            case TRAP -> 190;
         };
     }
 
     private void chooseAttack(ServerLevel level, LivingEntity target) {
         double dist = target.distanceTo(this);
         Map<Attack, Float> weights = new EnumMap<>(Attack.class);
-        weights.put(Attack.MISSILES, 4.0f);
+        weights.put(Attack.MISSILES, 3.0f);
         if (this.spellReaches(dist)) {
-            weights.put(Attack.SPELL, 4.0f);
+            weights.put(Attack.SPELL, 3.0f);
         }
         weights.put(Attack.BLINK, dist < 4.0 ? 5.0f : 1.0f);
+        weights.put(Attack.STRIKE, 5.0f);
+        weights.put(Attack.TRAP, this.phase() >= 2 ? 5.0f : 2.0f);
         if (this.phase() >= 2) {
             weights.put(Attack.IMAGES, this.images.isEmpty() ? 3.0f : 0.0f);
             weights.put(Attack.SHIELD, this.shielded() ? 0.0f : 2.5f);
@@ -891,7 +961,10 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case IMAGES -> ANIM_SUMMON;
             case SHIELD -> ANIM_SHIELD;
             case ULTIMATE -> ANIM_ULTIMATE;
+            case STRIKE -> this.element == DragonType.ICE || this.element == DragonType.FIRE ? ANIM_MISSILES : ANIM_CAST;
+            case TRAP -> ANIM_CAST;
         });
+        this.signature.clear();
         if (attack == Attack.BLINK) {
             this.blinkTo = null;
         }
@@ -902,8 +975,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             this.cooldowns.put(this.attack, Math.round(this.cooldownOf(this.attack) * this.tempo()));
         }
         this.attack = null;
+        this.signature.clear();
         this.setGesture(ANIM_NONE);
-        this.idle = Math.round((14 + this.random.nextInt(20)) * this.tempo());
+        this.idle = Math.round((10 + this.random.nextInt(16)) * this.tempo());
     }
 
     private void tickAttack(ServerLevel level, LivingEntity target) {
@@ -922,6 +996,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case IMAGES -> this.tickImages(level, target, t);
             case SHIELD -> this.tickShield(level, t);
             case ULTIMATE -> MageUltimates.tick(level, this, target, t);
+            case STRIKE -> MageSignatures.strike(level, this, target, t);
+            case TRAP -> MageSignatures.trap(level, this, target, t);
         }
         if (this.attack == current && t + 1 >= this.duration(current)) {
             this.finishAttack();
@@ -930,7 +1006,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
 
     /** Geschosse aus reiner Magie, eins nach dem anderen, die ihr Ziel verfolgen. */
     private void tickMissiles(ServerLevel level, LivingEntity target, int t) {
-        int count = 3 + (this.phase() - 1);
+        int count = 4 + (this.phase() - 1);
         if (t >= 8 && (t - 8) % 6 == 0 && (t - 8) / 6 < count) {
             Vec3 from = this.staffTip();
             Vec3 dir = target.getBoundingBox().getCenter().subtract(from).normalize();
@@ -1167,6 +1243,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         this.threat.clear();
         this.participants.clear();
         this.attack = null;
+        this.signature.clear();
+        this.setWard(0.0f);
+        this.wardRegrow = 0;
         this.target = null;
         this.entityData.set(DATA_SHIELD, 0);
         this.entityData.set(DATA_PHASE, (byte) 1);
@@ -1201,6 +1280,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             return;
         }
         if (this.deathTime == 1) {
+            this.signature.clear();
+            this.setWard(0.0f);
             for (ServerPlayer player : this.nearbyPlayers(level, LEASH_RADIUS)) {
                 this.participants.add(player.getUUID());
             }
@@ -1331,6 +1412,32 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
      * Nur für Vorführungen: sofort einen Angriff beginnen (0 Geschosse, 1 Zauber, 2 Blinzeln, 3 Spiegelbilder, 4 Schild,
      * 5 großer Zauber).
      */
+    /** Nur für Tests: allein dieses Wesen gilt als Gegner (null: wieder alle). */
+    public void devOnlyEnemy(@Nullable LivingEntity enemy) {
+        this.onlyEnemy = enemy != null ? enemy.getUUID() : null;
+    }
+
+    /** Nur für Tests und Vorführungen: einen Tick eines Meisterzaubers ({@code trap}: die Falle, sonst der Schlag) wirken. */
+    public void devSignature(ServerLevel level, LivingEntity target, boolean trap, int tick) {
+        if (trap) {
+            MageSignatures.trap(level, this, target, tick);
+        } else {
+            MageSignatures.strike(level, this, target, tick);
+        }
+    }
+
+    /** Dauer eines Meisterzaubers in Ticks. */
+    public static int signatureDuration(DragonType element, boolean trap) {
+        return MageSignatures.duration(element, trap);
+    }
+
+    /** Nur für Tests und Vorführungen: der Meisterzauber als nächster Angriff. */
+    public void devSignatureAttack(boolean trap) {
+        if (this.state() == State.FIGHT && this.transition <= 0 && this.target != null) {
+            this.start(trap ? Attack.TRAP : Attack.STRIKE);
+        }
+    }
+
     public void devAttack(int index) {
         if (this.state() == State.FIGHT && this.transition <= 0 && this.target != null) {
             this.start(Attack.values()[Mth.clamp(index, 0, Attack.values().length - 1)]);

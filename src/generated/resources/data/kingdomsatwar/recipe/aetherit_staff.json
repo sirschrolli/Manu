@@ -2,15 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "A": "kingdomsatwar:aetherit",
     "H": "kingdomsatwar:reinforced_handle",
-    "S": "minecraft:stick",
-    "W": "kingdomsatwar:wisp_dust"
+    "K": "kingdomsatwar:aether_core",
+    "S": "kingdomsatwar:steel_ingot"
   },
   "pattern": [
-    " WA",
-    " HW",
-    "S  "
+    " SK",
+    " HS",
+    "H  "
   ],
   "result": {
     "id": "kingdomsatwar:aetherit_staff"

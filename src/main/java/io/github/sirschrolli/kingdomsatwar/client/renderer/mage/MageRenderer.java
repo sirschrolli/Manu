@@ -50,8 +50,14 @@ public class MageRenderer<T extends Mob & MageLike> extends MobRenderer<T, MageR
         }
     }
 
+    private static final Identifier SHARD = KingdomsAtWar.id("textures/entity/spell/ice_lance/ice_lance.png");
+    private static final Identifier SHARD_GLOW = KingdomsAtWar.id("textures/entity/spell/ice_lance/ice_lance_glow.png");
+    private final io.github.sirschrolli.kingdomsatwar.client.model.spell.SpellProjectileModels.Lance shard;
+
     public MageRenderer(EntityRendererProvider.Context context) {
         super(context, new MageModel(context.bakeLayer(ModModelLayers.MAGE)), 0.6f);
+        this.shard = new io.github.sirschrolli.kingdomsatwar.client.model.spell.SpellProjectileModels.Lance(
+                context.bakeLayer(ModModelLayers.ICE_LANCE));
         this.addLayer(new RenderLayer<MageRenderState, MageModel>(this) {
             @Override
             public void submit(PoseStack poseStack, SubmitNodeCollector collector, int lightCoords, MageRenderState state, float yRot,
@@ -87,6 +93,7 @@ public class MageRenderer<T extends Mob & MageLike> extends MobRenderer<T, MageR
         state.dormant = entity.dormant();
         state.dying = entity.dyingTicks() > 0 ? entity.dyingTicks() + partialTicks : 0.0f;
         state.image = entity.isImage();
+        state.wardShards = entity instanceof io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity boss ? boss.wardShards() : 0;
         // sterbend kein rotes Aufleuchten und kein Umkippen: der Magier löst sich schwebend in Funken auf
         state.hasRedOverlay = entity.hurtTime > 0 && state.dying <= 0.0f;
         double y = Mth.lerp(partialTicks, entity.yo, entity.getY());
@@ -141,6 +148,28 @@ public class MageRenderer<T extends Mob & MageLike> extends MobRenderer<T, MageR
         }
         if (state.shield > 0.01f) {
             this.submitShield(state, poseStack, collector);
+        }
+        if (state.wardShards > 0 && state.dying <= 0.0f) {
+            this.submitWard(state, poseStack, collector);
+        }
+    }
+
+    /** Frostpanzer: Eisklingen kreisen schräg um die Magierin, die Spitzen nach außen. */
+    private void submitWard(MageRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
+        int count = state.wardShards;
+        for (int i = 0; i < count; i++) {
+            float angle = state.ageInTicks * 2.6f + i * 360.0f / io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity.WARD_SHARDS;
+            poseStack.pushPose();
+            poseStack.rotate(Axis.YP.rotationDegrees(angle));
+            poseStack.translate(0.0f, 1.5f + Mth.sin(state.ageInTicks * 0.12f + i * 1.3f) * 0.25f, 1.25f);
+            poseStack.rotate(Axis.YP.rotationDegrees(90.0f));
+            poseStack.rotate(Axis.XP.rotationDegrees(-25.0f));
+            poseStack.scale(-0.7f, -0.7f, 0.7f);
+            collector.submitModel(this.shard, state, poseStack, RenderTypes.entityTranslucent(SHARD), FULL_BRIGHT, OverlayTexture.NO_OVERLAY, -1,
+                    null, state.outlineColor);
+            collector.order(1).submitModel(this.shard, state, poseStack, RenderTypes.eyes(SHARD_GLOW), FULL_BRIGHT, OverlayTexture.NO_OVERLAY, -1,
+                    null, state.outlineColor);
+            poseStack.popPose();
         }
     }
 

@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 
 /** Magisches Geschoss: ein farbiger Schein um einen hellen, pulsierenden Kern, immer zur Kamera gedreht. */
 public class MagicMissileRenderer extends EntityRenderer<MagicMissile, MagicMissileRenderer.State> {
@@ -27,6 +28,8 @@ public class MagicMissileRenderer extends EntityRenderer<MagicMissile, MagicMiss
     public static class State extends EntityRenderState {
         DragonType element = DragonType.FIRE;
         float time;
+        int style;
+        int seed;
     }
 
     public MagicMissileRenderer(EntityRendererProvider.Context context) {
@@ -48,6 +51,8 @@ public class MagicMissileRenderer extends EntityRenderer<MagicMissile, MagicMiss
         super.extractRenderState(entity, state, partialTicks);
         state.element = entity.element();
         state.time = entity.tickCount + partialTicks;
+        state.style = entity.style();
+        state.seed = entity.getId();
     }
 
     @Override
@@ -66,7 +71,57 @@ public class MagicMissileRenderer extends EntityRenderer<MagicMissile, MagicMiss
         poseStack.scale(0.5f * pulse, 0.5f * pulse, 0.5f * pulse);
         collector.submitCustomGeometry(poseStack, TYPE, (pose, buffer) -> quad(pose, buffer, core));
         poseStack.popPose();
+        if (state.style == 1) {
+            this.crackle(state, poseStack, collector);
+        }
         super.submit(state, poseStack, collector, camera);
+    }
+
+    /** Kugelblitz: knisternde Funkenbögen springen aus der Kugel (alle zwei Ticks neu). */
+    private void crackle(State state, PoseStack poseStack, SubmitNodeCollector collector) {
+        net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(state.seed * 131L + (long) (state.time / 2.0f));
+        int glow = ARGB.color(120, state.element.color());
+        int bright = ARGB.color(230, ARGB.srgbLerp(0.7f, state.element.color(), 0xFFFFFF));
+        poseStack.pushPose();
+        poseStack.translate(0.0f, 0.2f, 0.0f);
+        collector.submitCustomGeometry(poseStack, RenderTypes.lightning(), (pose, buffer) -> {
+            for (int k = 0; k < 4; k++) {
+                float x = 0.0f;
+                float y = 0.0f;
+                float z = 0.0f;
+                float dx = random.nextFloat() - 0.5f;
+                float dy = random.nextFloat() - 0.5f;
+                float dz = random.nextFloat() - 0.5f;
+                float len = Mth.sqrt(dx * dx + dy * dy + dz * dz) + 1.0e-3f;
+                dx /= len;
+                dy /= len;
+                dz /= len;
+                for (int i = 0; i < 4; i++) {
+                    float nx = x + dx * 0.22f + (random.nextFloat() - 0.5f) * 0.18f;
+                    float ny = y + dy * 0.22f + (random.nextFloat() - 0.5f) * 0.18f;
+                    float nz = z + dz * 0.22f + (random.nextFloat() - 0.5f) * 0.18f;
+                    bolt(pose, buffer, x, y, z, nx, ny, nz, 0.09f, glow);
+                    bolt(pose, buffer, x, y, z, nx, ny, nz, 0.03f, bright);
+                    x = nx;
+                    y = ny;
+                    z = nz;
+                }
+            }
+        });
+        poseStack.popPose();
+    }
+
+    /** Ein Stück Blitzbogen als zwei gekreuzte Bänder. */
+    private static void bolt(PoseStack.Pose pose, VertexConsumer buffer, float x0, float y0, float z0, float x1, float y1, float z1, float w,
+            int color) {
+        buffer.addVertex(pose, x0 - w, y0, z0).setColor(color);
+        buffer.addVertex(pose, x0 + w, y0, z0).setColor(color);
+        buffer.addVertex(pose, x1 + w, y1, z1).setColor(color);
+        buffer.addVertex(pose, x1 - w, y1, z1).setColor(color);
+        buffer.addVertex(pose, x0, y0 - w, z0).setColor(color);
+        buffer.addVertex(pose, x0, y0 + w, z0).setColor(color);
+        buffer.addVertex(pose, x1, y1 + w, z1).setColor(color);
+        buffer.addVertex(pose, x1, y1 - w, z1).setColor(color);
     }
 
     private static void quad(PoseStack.Pose pose, VertexConsumer buffer, int color) {

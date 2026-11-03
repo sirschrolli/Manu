@@ -21,4 +21,6 @@ public class MageRenderState extends LivingEntityRenderState {
     public boolean image;
     /** Abstand zum Boden unter dem Magier (für das Siegel). */
     public float floorOffset = 0.5f;
+    /** Isoldes Frostpanzer: so viele Eisklingen kreisen um sie. */
+    public int wardShards;
 }

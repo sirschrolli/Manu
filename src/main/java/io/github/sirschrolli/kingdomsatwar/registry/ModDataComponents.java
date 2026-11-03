@@ -35,6 +35,12 @@ public final class ModDataComponents {
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
 
     /** Aetherit-Stab: welche Zauber er auf welcher Stufe kennt und welcher gewählt ist. */
+    /** Meisterschaft eines Aetherit-Stabs (gesammelte Erfahrung beim Zaubern). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STAFF_MASTERY =
+            COMPONENTS.registerComponentType("staff_mastery", builder -> builder
+                    .persistent(com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE))
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
+
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.magic.KnownSpells>> SPELLS =
             COMPONENTS.registerComponentType("spells", builder -> builder
                     .persistent(io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.CODEC)

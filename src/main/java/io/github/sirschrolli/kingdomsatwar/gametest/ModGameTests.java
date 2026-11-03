@@ -190,6 +190,7 @@ public final class ModGameTests {
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
         ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
+        SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
     }
 
     private ModGameTests() {}
@@ -224,6 +225,7 @@ public final class ModGameTests {
         WarGameTests.register(event, environment);
         RulesGameTests.register(event, environment);
         ArenaGameTests.register(event, environment);
+        SpellGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);
@@ -1266,7 +1268,7 @@ public final class ModGameTests {
      * Aetherit-Stab: Der Aether-Blitz trifft das anvisierte Ziel, Frost verlangsamt, der Erdstoß verletzt Feinde,
      * aber nicht den eigenen Wolf, Natur heilt, die Woge schenkt Wasseratmung, Feuer und Blitz erscheinen. Höhere
      * Stufen sind stärker. Ein neuer Stab kennt nur den Aether-Blitz; gewählt werden kann nur, was er gelernt hat. Der
-     * gewählte Zauber kostet Haltbarkeit und hat seine eigene Abklingzeit – ein anderer Zauber ist sofort bereit.
+     * Stab ist unzerstörbar; der gewählte Zauber hat seine eigene Abklingzeit – ein anderer Zauber ist sofort bereit.
      */
     private static void staffSpells(GameTestHelper helper) {
         arenaFloor(helper);
@@ -1307,8 +1309,8 @@ public final class ModGameTests {
         Spell.WATER.cast(level, mage);
         helper.assertTrue(mage.hasEffect(MobEffects.WATER_BREATHING), "Woge schenkt keine Wasseratmung");
         Spell.FIRE.cast(level, mage, 2);
-        helper.assertTrue(level.getEntitiesOfClass(net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball.class,
-                mage.getBoundingBox().inflate(4)).size() == 3, "Feuer Stufe II schießt nicht drei Feuerbälle");
+        helper.assertTrue(level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.magic.fx.SpellProjectile.class,
+                mage.getBoundingBox().inflate(4)).size() == 3, "Feuer Stufe II schießt nicht drei Feuerblitze");
 
         // Der Stab: zuerst nur der Aether-Blitz; gelernte Zauber lassen sich wählen, ungelernte nicht
         ItemStack staff = new ItemStack(ModItems.AETHERIT_STAFF.get());
@@ -1321,8 +1323,8 @@ public final class ModGameTests {
         helper.assertTrue(cooldown != null && cooldown.cooldownGroup().equals(java.util.Optional.of(Spell.LIGHTNING.cooldownGroup()))
                 && cooldown.ticks() == Spell.LIGHTNING.cooldown(2), "Abklingzeit des Stabs passt nicht zum gewählten Zauber");
         mage.setItemInHand(InteractionHand.MAIN_HAND, staff);
-        staff.use(level, mage, InteractionHand.MAIN_HAND);
-        helper.assertTrue(staff.getDamageValue() == 3, "Blitz kostet nicht 3 Haltbarkeit: " + staff.getDamageValue());
+        helper.assertTrue(AetheritStaffItem.cast(level, mage, staff, 0.0f), "Blitzschlag gelingt nicht");
+        helper.assertTrue(!staff.isDamageableItem() && staff.getDamageValue() == 0, "Der unzerstörbare Stab nutzt sich ab");
         helper.assertTrue(mage.getCooldowns().isOnCooldown(staff), "Blitzschlag hat keine Abklingzeit");
         helper.assertTrue(!level.getEntitiesOfClass(net.minecraft.world.entity.LightningBolt.class, golem.getBoundingBox().inflate(3)).isEmpty(),
                 "Kein Blitz am Ziel");

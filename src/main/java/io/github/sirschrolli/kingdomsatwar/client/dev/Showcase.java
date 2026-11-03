@@ -105,6 +105,7 @@ final class Showcase {
                 case "monsters" -> MonsterShowcase.monsters(steps);
                 case "spiderlook" -> MonsterShowcase.spiderLooks(steps);
                 case "arena" -> ArenaShowcase.arenas(steps);
+                case "spells" -> SpellShowcase.spells(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
                 case "golems" -> GolemShowcase.golems(steps);

@@ -33,6 +33,15 @@ public final class ModModelLayers {
     public static final ModelLayerLocation CAVE_TROLL = new ModelLayerLocation(KingdomsAtWar.id("cave_troll"), "main");
     public static final ModelLayerLocation LINDWORM = new ModelLayerLocation(KingdomsAtWar.id("lindworm"), "main");
 
+    /** Zauberwirkungen und Zaubergeschosse. */
+    public static final ModelLayerLocation PHOENIX = new ModelLayerLocation(KingdomsAtWar.id("phoenix"), "main");
+    public static final ModelLayerLocation ICE_LANCE = new ModelLayerLocation(KingdomsAtWar.id("ice_lance"), "main");
+    public static final ModelLayerLocation ICE_PRISON = new ModelLayerLocation(KingdomsAtWar.id("ice_prison"), "main");
+    public static final ModelLayerLocation STONE_SPIKE = new ModelLayerLocation(KingdomsAtWar.id("stone_spike"), "main");
+    public static final ModelLayerLocation STONE_FIST = new ModelLayerLocation(KingdomsAtWar.id("stone_fist"), "main");
+    public static final ModelLayerLocation THORN_VINE = new ModelLayerLocation(KingdomsAtWar.id("thorn_vine"), "main");
+    public static final ModelLayerLocation POISON_FLOWER = new ModelLayerLocation(KingdomsAtWar.id("poison_flower"), "main");
+
     /** Drachen-Bosse. */
     public static final ModelLayerLocation NYXAR = new ModelLayerLocation(KingdomsAtWar.id("shadow_dragon_boss"), "main");
     public static final ModelLayerLocation PYRRHON = new ModelLayerLocation(KingdomsAtWar.id("fire_dragon_boss"), "main");

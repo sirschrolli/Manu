@@ -19,8 +19,25 @@ final class MagicLang {
 
     private static void staff(EconomyLang.Text t) {
         t.add("item.kingdomsatwar.aetherit_staff", "Aetherit Staff", "Aetherit-Stab");
-        t.add("lore.kingdomsatwar.aetherit_staff.1", "Right-click: cast the chosen spell", "Rechtsklick: gewählten Zauber wirken");
+        t.add("lore.kingdomsatwar.aetherit_staff.1", "Right-click: cast · hold: charge", "Rechtsklick: zaubern · halten: aufladen");
         t.add("lore.kingdomsatwar.aetherit_staff.2", "Learns new spells at the Magic Table", "Lernt neue Zauber am Magietisch");
+        t.add("lore.kingdomsatwar.aetherit_staff.3", "Indestructible – grows stronger with its mastery",
+                "Unzerstörbar – wird mit seiner Meisterschaft stärker");
+        t.add("item.kingdomsatwar.aether_core", "Aether Core", "Aetherkern");
+        t.add("lore.kingdomsatwar.aether_core.1", "The heart of an Aetherit Staff", "Das Herz eines Aetherit-Stabs");
+        t.add("lore.kingdomsatwar.aether_core.2", "Aetherit and Wisp Dust around Draconium", "Aetherit und Irrlichtstaub um Draconium");
+        t.add("tooltip.kingdomsatwar.staff.rank", "Mastery: %s (%s%% power)", "Meisterschaft: %s (%s %% Kraft)");
+        t.add("tooltip.kingdomsatwar.staff.progress", "%s / %s experience until %s", "%s / %s Erfahrung bis %s");
+        t.add("tooltip.kingdomsatwar.staff.charge", "Hold to charge: up to +50% power", "Halten zum Aufladen: bis zu +50 % Kraft");
+        t.add("staff.kingdomsatwar.rank.apprentice", "Apprentice", "Lehrling");
+        t.add("staff.kingdomsatwar.rank.adept", "Adept", "Adept");
+        t.add("staff.kingdomsatwar.rank.magister", "Magister", "Magister");
+        t.add("staff.kingdomsatwar.rank.archmage", "Archmage", "Erzmagier");
+        t.add("staff.kingdomsatwar.rank_up", "Your Aetherit Staff has reached the rank of %s – its spells grow stronger!",
+                "Dein Aetherit-Stab hat den Rang %s erreicht – seine Zauber werden stärker!");
+        t.add("staff.kingdomsatwar.rank_up.overlay", "Staff rank: %s", "Rang des Stabs: %s");
+        t.add("entity.kingdomsatwar.spell_fx", "Spell Effect", "Zauberwirkung");
+        t.add("entity.kingdomsatwar.spell_projectile", "Spell Projectile", "Zaubergeschoss");
         t.add("tooltip.kingdomsatwar.staff.spells", "Spells:", "Zauber:");
         t.add("tooltip.kingdomsatwar.staff.wheel", "Hold %s: spell circle", "%s halten: Zauberkreis");
         t.add("lore.kingdomsatwar.old_rune.1", "Ancient – inscribe it at the Magic Table like a spell tablet",
@@ -47,10 +64,10 @@ final class MagicLang {
                 "A beam of pure magic strikes the target you aim at.", "Ein Strahl reiner Magie trifft das anvisierte Ziel.",
                 "More damage, greater reach", "Mehr Schaden, größere Reichweite",
                 "Leaps to a second enemy", "Springt auf einen zweiten Feind über");
-        spell(t, "fire", "Fireball", "Feuerball",
-                "Hurls a fireball that sets enemies ablaze – but never your castle.",
-                "Schleudert einen Feuerball, der Feinde in Brand setzt – aber nie die eigene Burg.",
-                "Three fireballs in a fan", "Drei Feuerbälle im Fächer",
+        spell(t, "fire", "Firebolt", "Feuerblitz",
+                "Hurls a ball of living flame that sets enemies ablaze – but never your castle.",
+                "Schleudert einen Ball aus lebendigen Flammen, der Feinde in Brand setzt – aber nie die eigene Burg.",
+                "Three firebolts in a fan", "Drei Feuerblitze im Fächer",
                 "They burst into a cloud of flame", "Sie zerbersten in einer Feuerwolke");
         spell(t, "ice", "Frost Breath", "Frosthauch",
                 "A breath of frost slows and chills enemies and turns water to ice.",
@@ -161,8 +178,47 @@ final class MagicLang {
         }
     }
 
+    /** Fünfte Seite der Aufzeichnungen: die Meisterzauber und die besondere Fähigkeit des Erzmagiers. */
+    private static void signatures(EconomyLang.Text t) {
+        signature(t, "fire",
+                "My phoenixes hunt you through the hall and burst into fire where they strike. Glowing circles beneath your feet "
+                        + "become pillars of flame – leave them!\n\nWhoever comes too close to me catches fire.",
+                "Meine Phönixe jagen dich durch den Saal und zerbersten in Flammen, wo sie treffen. Glühende Kreise unter deinen "
+                        + "Füßen werden zu Feuersäulen – verlass sie!\n\nWer mir zu nahe kommt, fängt Feuer.");
+        signature(t, "ice",
+                "I hurl fans of frost lances. Whoever lingers in my circle freezes in a prison of ice and is struck when it "
+                        + "shatters.\n\nA wreath of ice blades shields me – break it, it grows back.",
+                "Ich schleudere Fächer aus Frostlanzen. Wer in meinem Kreis verweilt, erstarrt in einem Kerker aus Eis und wird "
+                        + "getroffen, wenn er zerspringt.\n\nEin Kranz aus Eisklingen schützt mich – zerbrich ihn, er wächst nach.");
+        signature(t, "lightning",
+                "Ball lightning circles me before it strikes. My lightning beam holds you as long as I can see you – break my "
+                        + "line of sight.\n\nStrike me up close and you will feel the charge.",
+                "Kugelblitze kreisen um mich, ehe sie zuschlagen. Mein Blitzstrahl hält dich, solange ich dich sehe – brich die "
+                        + "Sichtlinie.\n\nTriffst du mich aus der Nähe, spürst du die Ladung.");
+        signature(t, "nature",
+                "Thorned vines burst from my circles. My poison bloom breathes spores – and feeds me while it blossoms; stay far "
+                        + "from it.\n\nLeave me be for a while and I heal.",
+                "Dornenranken brechen aus meinen Kreisen. Meine Giftblüte atmet Sporen – und nährt mich, solange sie blüht; "
+                        + "bleib ihr fern.\n\nLässt man mich eine Weile in Ruhe, heile ich.");
+        signature(t, "earth",
+                "Stone spikes break from the ground in a line towards you – step aside. From my circle a fist of rock hurls you "
+                        + "into the air.\n\nMy skin is stone: your blows hit me only weakly.",
+                "Felsspitzen brechen in einer Linie zu dir aus dem Boden – tritt zur Seite. Aus meinem Kreis schleudert dich eine "
+                        + "Faust aus Fels in die Luft.\n\nMeine Haut ist Stein: Deine Hiebe treffen mich nur schwach.");
+        signature(t, "water",
+                "My tidal wave rolls through the hall and sweeps you away. Whoever stays in my circle is lifted in a bubble and "
+                        + "gasps for air.\n\nArrows often glide off my shell of water.",
+                "Meine Flutwelle rollt durch den Saal und reißt dich mit. Wer in meinem Kreis bleibt, wird in einer Blase "
+                        + "emporgehoben und ringt nach Luft.\n\nPfeile gleiten oft an meiner Hülle aus Wasser ab.");
+    }
+
+    private static void signature(EconomyLang.Text t, String element, String en, String de) {
+        t.add("book.kingdomsatwar.mage_notes." + element + ".page5", en, de);
+    }
+
     /** Die Aufzeichnungen der Erzmagier auf den Lesepulten ihrer Bibliotheken – mit Hinweisen für den Kampf. */
     private static void books(EconomyLang.Text t) {
+        signatures(t);
         String hintEn = "My missiles follow you, yet a bold strike sends them back. My rune shield breaks after a few blows, my mirror "
                 + "images after a single one.";
         String hintDe = "Meine Geschosse folgen dir, doch ein beherzter Schlag wirft sie zurück. Mein Runenschild bricht nach einigen "
@@ -170,14 +226,14 @@ final class MagicLang {
         book(t, "fire", "Notes of Ignatius", "Aufzeichnungen des Ignatius", new String[] {
                 "Notes of Ignatius, Archmage of Flames.\n\nI raised this tower on black stone, far from forest and grass – fire tolerates "
                         + "no neighbours.",
-                "The fire spell tablet rests in my sanctum. Whoever writes it into an Aetherit staff hurls fireballs that set foes "
+                "The fire spell tablet rests in my sanctum. Whoever writes it into an Aetherit staff hurls firebolts that set foes "
                         + "ablaze – but never one's own roof.",
                 hintEn,
                 "When the sky glows, I call down meteors. Watch for the rings of smoke on the ground and never stand still.\n\nFire "
                         + "does not burn me."}, new String[] {
                 "Aufzeichnungen des Ignatius, Erzmagier der Flammen.\n\nDiesen Turm habe ich auf schwarzem Stein errichtet, fern von Wald "
                         + "und Gras – das Feuer duldet keine Nachbarn.",
-                "Die Zaubertafel des Feuers ruht in meinem Sanktum. Wer sie in einen Aetherit-Stab schreibt, schleudert Feuerbälle, die "
+                "Die Zaubertafel des Feuers ruht in meinem Sanktum. Wer sie in einen Aetherit-Stab schreibt, schleudert Feuerblitze, die "
                         + "Feinde entzünden – doch nie das eigene Dach.",
                 hintDe,
                 "Glüht der Himmel, rufe ich Meteore herab. Achte auf die Kreise aus Rauch am Boden und bleib nie stehen.\n\nFeuer "

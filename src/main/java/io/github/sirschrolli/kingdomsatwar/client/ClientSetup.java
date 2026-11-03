@@ -86,6 +86,14 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.PHOENIX, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhoenixGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ICE_LANCE, io.github.sirschrolli.kingdomsatwar.client.model.geom.IceLanceGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ICE_PRISON, io.github.sirschrolli.kingdomsatwar.client.model.geom.IcePrisonGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.STONE_SPIKE, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneSpikeGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.STONE_FIST, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneFistGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.THORN_VINE, io.github.sirschrolli.kingdomsatwar.client.model.geom.ThornVineGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.POISON_FLOWER,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.PoisonFlowerGeometry::createLayer);
     }
 
     /** Der eigene Papagei auf der Schulter des Spielers. */
@@ -110,6 +118,9 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new));
         event.registerEntityRenderer(ModEntities.MAGE_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MageRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGIC_MISSILE.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.mage.MagicMissileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SPELL_FX.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.spell.SpellFxRenderer::new);
+        event.registerEntityRenderer(ModEntities.SPELL_PROJECTILE.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.spell.SpellProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
         event.registerEntityRenderer(ModEntities.VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.VillagerRenderer::new);
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);

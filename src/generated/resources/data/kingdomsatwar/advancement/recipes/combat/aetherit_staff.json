@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_aetherit": {
+    "has_aether_core": {
       "conditions": {
         "items": [
           {
-            "items": "kingdomsatwar:aetherit"
+            "items": "kingdomsatwar:aether_core"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_aetherit"
+      "has_aether_core"
     ]
   ],
   "rewards": {

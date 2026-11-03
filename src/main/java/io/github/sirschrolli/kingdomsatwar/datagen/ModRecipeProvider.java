@@ -225,15 +225,27 @@ public class ModRecipeProvider extends RecipeProvider {
     private void magicRecipes() {
         Item aetherit = ModItems.AETHERIT.get();
         Item dust = ModItems.WISP_DUST.get();
-        shaped(RecipeCategory.COMBAT, ModItems.AETHERIT_STAFF.get())
-                .pattern(" WA")
-                .pattern(" HW")
-                .pattern("S  ")
+        // Aetherkern: Aetherit und Irrlichtstaub um die Essenz eines Drachen (Draconium) – das Herz des Stabs
+        Item draconium = ModItems.DRACONIUM.get();
+        shaped(RecipeCategory.MISC, ModItems.AETHER_CORE.get())
+                .pattern("WAW")
+                .pattern("ADA")
+                .pattern("WAW")
                 .define('A', aetherit)
                 .define('W', dust)
+                .define('D', draconium)
+                .unlockedBy(getHasName(draconium), has(draconium))
+                .save(output, key("aether_core"));
+        // Aetherit-Stab: der Kern in einer Fassung aus Stahl auf zwei beschlagenen Griffen (nur so zu bekommen)
+        Item core = ModItems.AETHER_CORE.get();
+        shaped(RecipeCategory.COMBAT, ModItems.AETHERIT_STAFF.get())
+                .pattern(" SK")
+                .pattern(" HS")
+                .pattern("H  ")
+                .define('K', core)
+                .define('S', ModItems.STEEL_INGOT.get())
                 .define('H', ModItems.REINFORCED_HANDLE.get())
-                .define('S', Items.STICK)
-                .unlockedBy(getHasName(aetherit), has(aetherit))
+                .unlockedBy(getHasName(core), has(core))
                 .save(output, key("aetherit_staff"));
         // Magietisch: Buch und Aetherit auf Gold und Obsidian, darunter polierter Tiefenschiefer (wie ein Zaubertisch der Erzmagier)
         shaped(RecipeCategory.DECORATIONS, ModBlocks.MAGIC_TABLE.get())

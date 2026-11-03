@@ -38,6 +38,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class MagicMissile extends AbstractHurtingProjectile {
     private static final EntityDataAccessor<Integer> DATA_ELEMENT = SynchedEntityData.defineId(MagicMissile.class, EntityDataSerializers.INT);
+    /** 0: magisches Geschoss, 1: Kugelblitz (Fulgor). */
+    private static final EntityDataAccessor<Integer> DATA_STYLE = SynchedEntityData.defineId(MagicMissile.class, EntityDataSerializers.INT);
     private static final int LIFE = 110;
 
     private float damage = 4.0f;
@@ -46,6 +48,10 @@ public class MagicMissile extends AbstractHurtingProjectile {
     private @Nullable UUID targetId;
     private @Nullable UUID casterId;
     private boolean returned;
+    /** Kugelblitz: so lange kreist er noch um den Magier, bevor er losjagt. */
+    private int orbitTicks;
+    private float orbitAngle;
+    private @Nullable UUID orbitCenter;
 
     public MagicMissile(EntityType<? extends MagicMissile> type, Level level) {
         super(type, level);
@@ -73,6 +79,20 @@ public class MagicMissile extends AbstractHurtingProjectile {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ELEMENT, 0);
+        builder.define(DATA_STYLE, 0);
+    }
+
+    /** Kugelblitz: kreist erst {@code ticks} Ticks um {@code center}, dann jagt er seinem Ziel nach. */
+    public void orbit(Entity center, int ticks, float angle) {
+        this.orbitCenter = center.getUUID();
+        this.orbitTicks = ticks;
+        this.orbitAngle = angle;
+        this.entityData.set(DATA_STYLE, 1);
+    }
+
+    /** 0: magisches Geschoss, 1: Kugelblitz. */
+    public int style() {
+        return this.entityData.get(DATA_STYLE);
     }
 
     public DragonType element() {
@@ -84,6 +104,7 @@ public class MagicMissile extends AbstractHurtingProjectile {
         super.addAdditionalSaveData(output);
         output.putInt("Element", this.entityData.get(DATA_ELEMENT));
         output.putFloat("Damage", this.damage);
+        output.putInt("Style", this.style());
         if (this.targetId != null) {
             output.store("Target", UUIDUtil.CODEC, this.targetId);
         }
@@ -97,6 +118,7 @@ public class MagicMissile extends AbstractHurtingProjectile {
         super.readAdditionalSaveData(input);
         this.entityData.set(DATA_ELEMENT, input.getIntOr("Element", 0));
         this.damage = input.getFloatOr("Damage", 4.0f);
+        this.entityData.set(DATA_STYLE, input.getIntOr("Style", 0));
         this.targetId = input.read("Target", UUIDUtil.CODEC).orElse(null);
         this.casterId = input.read("Caster", UUIDUtil.CODEC).orElse(null);
     }
@@ -104,6 +126,11 @@ public class MagicMissile extends AbstractHurtingProjectile {
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
+            if (this.orbitTicks > 0) {
+                this.circle((ServerLevel) this.level());
+                super.tick();
+                return;
+            }
             if (++this.life > LIFE) {
                 this.fizzle((ServerLevel) this.level());
                 return;
@@ -113,6 +140,28 @@ public class MagicMissile extends AbstractHurtingProjectile {
         super.tick();
         if (this.level().isClientSide()) {
             this.trail();
+        }
+    }
+
+    /** Kugelblitz: kreist knisternd um den Magier; zum Schluss jagt er auf sein Ziel los. */
+    private void circle(ServerLevel level) {
+        Entity center = this.orbitCenter != null ? level.getEntity(this.orbitCenter) : null;
+        if (center == null || !center.isAlive()) {
+            this.orbitTicks = 0;
+            return;
+        }
+        this.orbitAngle += 0.24f;
+        Vec3 want = center.position().add(Math.cos(this.orbitAngle) * 2.1, 1.9 + Math.sin(this.tickCount * 0.35) * 0.25,
+                Math.sin(this.orbitAngle) * 2.1);
+        if (--this.orbitTicks <= 0) {
+            UUID follow = this.targetId;
+            Vec3 aim = follow != null && level.getEntity(follow) instanceof LivingEntity goal ? goal.getBoundingBox().getCenter()
+                    : this.position().add(want.subtract(center.position()).multiply(1, 0, 1));
+            this.setDeltaMovement(aim.subtract(this.position()).normalize().scale(this.speed));
+            level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TRIDENT_THUNDER.value(), SoundSource.HOSTILE, 0.5f,
+                    1.8f + this.random.nextFloat() * 0.2f);
+        } else {
+            this.setDeltaMovement(want.subtract(this.position()));
         }
     }
 

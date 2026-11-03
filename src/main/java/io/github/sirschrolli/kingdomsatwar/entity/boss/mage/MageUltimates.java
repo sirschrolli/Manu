@@ -7,6 +7,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.boss.BossProjectile;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.LightningAttacks;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VinelingEntity;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks;
@@ -116,8 +117,7 @@ final class MageUltimates {
             return;
         }
         Vec3 impact = spotNear(mage, e, 5.0);
-        BossFx.warnDisc(level, ParticleTypes.LARGE_SMOKE, impact, 2.2, 12);
-        BossFx.ring(level, ParticleTypes.FLAME, impact, 2.6, 16, 0.15);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, impact.add(0, 0.02, 0), DragonType.FIRE, 22, 2.4f).spawn();
         Vec3 from = skyFrom(level, mage, impact,
                 impact.add((mage.getRandom().nextDouble() - 0.5) * 6, 20, (mage.getRandom().nextDouble() - 0.5) * 6));
         BossProjectile.shoot(level, mage, BossProjectile.Kind.METEOR, from, impact.subtract(from), 1.0, 9.0f);
@@ -152,7 +152,7 @@ final class MageUltimates {
             LivingEntity e = anyEnemy(mage);
             if (e != null) {
                 Vec3 impact = spotNear(mage, e, 3.0);
-                BossFx.ring(level, mage.element().particle(), impact, 1.8, 14, 0.15);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, impact.add(0, 0.02, 0), DragonType.ICE, 16, 1.8f).spawn();
                 Vec3 from = skyFrom(level, mage, impact, impact.add(0, 16, 0));
                 BossProjectile.shoot(level, mage, BossProjectile.Kind.ICICLE, from, impact.subtract(from), 1.1, 7.0f);
             }
@@ -173,15 +173,16 @@ final class MageUltimates {
             if (t == mark) {
                 LivingEntity e = anyEnemy(mage);
                 mage.strikes[k] = e != null ? spotNear(mage, e, 3.0) : mage.center();
+                SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, mage.strikes[k].add(0, 0.02, 0), DragonType.LIGHTNING, STRIKE_FUSE + 1,
+                        2.6f).spawn();
             }
             if (t >= mark && t <= mark + STRIKE_FUSE && mage.strikes[k] != null) {
                 Vec3 spot = mage.strikes[k];
                 int fuse = mark + STRIKE_FUSE - t;
-                if (fuse > 0 && fuse % 2 == 0) {
-                    BossFx.ring(level, ParticleTypes.ELECTRIC_SPARK, spot.add(0, 0.1, 0), 0.8 + 1.6 * fuse / STRIKE_FUSE, 14, 0.0);
-                }
                 if (fuse == 0) {
                     LightningAttacks.visualBolt(level, spot);
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, mage.staffTip(), DragonType.LIGHTNING, 0xFFF06A, 6, 0.3f)
+                            .end(spot.add(0, 0.5, 0)).spawn();
                     BossFx.sound(level, spot, SoundEvents.LIGHTNING_BOLT_IMPACT, 2.0f, 1.0f);
                     for (LivingEntity victim : mage.enemiesAround(spot, 2.6, 4.0)) {
                         mage.hurtTarget(level, victim, 8.0f);
@@ -261,6 +262,11 @@ final class MageUltimates {
             BossFx.ring(level, ParticleTypes.CLOUD, mage.position().add(0, 0.1, 0), 1.0 + (t - 46) * 0.7, 30, 0.0);
         }
         if (t == 58) {
+            for (int i = 0; i < 12; i++) {
+                double a = i * Mth.TWO_PI / 12 + mage.getRandom().nextDouble() * 0.2;
+                Vec3 at = MageSignatures.ground(level, mage.position().add(Math.cos(a) * 4.5, 0, Math.sin(a) * 4.5));
+                SpellFxEntity.create(level, SpellFxEntity.Kind.SPIKE, at, DragonType.EARTH, 26, 0.7f + mage.getRandom().nextFloat() * 0.3f).spawn();
+            }
             BossFx.shockwave(level, mage, mage.position(), 9.0, 8.0f, 0.9);
             BossFx.sound(level, mage.position(), SoundEvents.GENERIC_EXPLODE.value(), 2.5f, 0.5f);
             mage.shake(level, 30.0, 0.8f, 24);
@@ -307,6 +313,7 @@ final class MageUltimates {
             }
         }
         if (t == 82) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, center, DragonType.WATER, 0x4FB8F0, 24, 1.8f).param(8.0f).spawn();
             for (int k = 0; k < 10; k++) {
                 level.sendParticles(ParticleTypes.SPLASH, center.x, center.y + k * 0.7, center.z, 20, 0.6, 0.2, 0.6, 0.1);
                 level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, center.x, center.y + k * 0.7, center.z, 8, 0.5, 0.2, 0.5, 0.1);

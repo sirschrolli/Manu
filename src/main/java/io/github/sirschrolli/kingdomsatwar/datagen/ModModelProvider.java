@@ -6,6 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.block.TableBlock;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import java.util.Optional;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
@@ -399,7 +400,8 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
 
         // --- Magie ---
-        items.generateFlatItem(ModItems.AETHERIT_STAFF.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        staffModel(items, ModItems.AETHERIT_STAFF.get());
+        flat(items, ModItems.AETHER_CORE.get());
         ModItems.RUNES.values().forEach(rune -> flat(items, rune.get()));
         ModItems.SPELL_TABLETS.values().forEach(tablet -> flat(items, tablet.get()));
 
@@ -554,6 +556,35 @@ public class ModModelProvider extends ModelProvider {
         return net.minecraft.client.data.models.model.ItemModelUtils.tintedModel(model,
                 net.minecraft.client.data.models.model.ItemModelUtils.constantTint(-1),
                 new net.minecraft.client.color.item.CustomModelDataSource(0, 0xF2CC5A));
+    }
+
+    /** In der Hand gehalten (wie ein Werkzeug), zwei Ebenen. */
+    private static final ModelTemplate HANDHELD_TWO_LAYERS = new ModelTemplate(Optional.of(Identifier.withDefaultNamespace("item/handheld")),
+            Optional.empty(), TextureSlot.LAYER0, TextureSlot.LAYER1);
+
+    /**
+     * Aetherit-Stab: ein Modell je Rang der Meisterschaft (custom_model_data, Zahl 0), der Kristall getönt in der Farbe
+     * des gewählten Zaubers (custom_model_data, Farbe 0) – siehe {@code StaffMastery#syncLook}.
+     */
+    private static void staffModel(ItemModelGenerators items, Item staff) {
+        String[] ranks = {"apprentice", "adept", "magister", "archmage"};
+        java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
+        net.minecraft.client.renderer.item.ItemModel.Unbaked first = null;
+        for (int i = 0; i < ranks.length; i++) {
+            Identifier model = HANDHELD_TWO_LAYERS.create(ModelLocationUtils.getModelLocation(staff, "_" + ranks[i]),
+                    TextureMapping.layered(new Material(KingdomsAtWar.id("item/aetherit_staff_" + ranks[i])),
+                            new Material(KingdomsAtWar.id("item/aetherit_staff_" + ranks[i] + "_crystal"))),
+                    items.modelOutput);
+            net.minecraft.client.renderer.item.ItemModel.Unbaked tinted = net.minecraft.client.data.models.model.ItemModelUtils.tintedModel(model,
+                    net.minecraft.client.data.models.model.ItemModelUtils.constantTint(-1),
+                    new net.minecraft.client.color.item.CustomModelDataSource(0, io.github.sirschrolli.kingdomsatwar.magic.Spell.AETHER_COLOR));
+            if (first == null) {
+                first = tinted;
+            }
+            entries.add(net.minecraft.client.data.models.model.ItemModelUtils.override(tinted, i - 0.5f));
+        }
+        items.itemModelOutput.accept(staff, net.minecraft.client.data.models.model.ItemModelUtils.rangeSelect(
+                new net.minecraft.client.renderer.item.properties.numeric.CustomModelDataProperty(0), first, entries));
     }
 
     /** Münze: immer dieselbe einzelne Münze, egal wie viele im Stapel liegen (die Zahl steht ja daneben). */

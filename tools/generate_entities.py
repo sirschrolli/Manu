@@ -26,7 +26,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               hoglin, hoglin_baby, strider, strider_baby, ghast, blaze, magma_cube, wither, wither_skull,
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
-                              shade_stalker, umbrer, vineling, wild_boar, will_o_wisp)
+                              shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
+                              ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -300,6 +301,31 @@ def main():
     write_model(night_wing, "NightWingGeometry", "Geometrie der Nachtschwinge.", "night_wing", night_wing.PALETTES, preview)
     write_model(glimmer_moth, "GlimmerMothGeometry", "Geometrie des Glimmerfalters.", "glimmer_moth", glimmer_moth.PALETTES, preview)
     write_model(umbrer, "UmbrerGeometry", "Geometrie der Umbrer (alle Berufe, Zubehör je Beruf).", "umbrer", umbrer.PALETTES, preview)
+    # Zauber-Effekte
+    write_model(phoenix, "PhoenixGeometry",
+                "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "
+                "zRot von left_wing/right_wing und den Handschwingen, Schweif und Kopf bewegen sich).",
+                "spell/phoenix", phoenix.PALETTES, preview)
+    write_model(ice_lance, "IceLanceGeometry",
+                "Geometrie der Eislanze (Geschoss des Eiszaubers, ein Knochen \"lance\", Spitze bei -Z, Mitte im Ursprung; "
+                "durchscheinend).", "spell/ice_lance", ice_lance.PALETTES, preview)
+    write_model(ice_prison, "IcePrisonGeometry",
+                "Geometrie des Eisgefängnisses (acht Kristalle shard0–shard7 mit Drehpunkt am Fuß auf dem Boden, dazu der "
+                "Kristallknoten \"cap\"; durchscheinend, die Kristalle wachsen einzeln aus dem Boden).",
+                "spell/ice_prison", ice_prison.PALETTES, preview)
+    write_model(stone_spike, "StoneSpikeGeometry",
+                "Geometrie des Steinstachels (Felsdorn \"spike\" und Geröll \"rubble\", beide mit Drehpunkt auf dem Boden).",
+                "spell/stone_spike", stone_spike.PALETTES, preview)
+    write_model(stone_fist, "StoneFistGeometry",
+                "Geometrie der Steinfaust (Unterarm \"arm\" mit Drehpunkt auf dem Boden, darauf die Faust \"fist\", Knöchel oben).",
+                "spell/stone_fist", stone_fist.PALETTES, preview)
+    write_model(thorn_vine, "ThornVineGeometry",
+                "Geometrie der Dornenranke (Kette seg0–seg5, jedes Glied mit Drehpunkt an seinem Fuß; schwingt über xRot/zRot).",
+                "spell/thorn_vine", thorn_vine.PALETTES, preview)
+    write_model(poison_flower, "PoisonFlowerGeometry",
+                "Geometrie der Giftblume (Stiel, Samenkapsel \"bulb\", sechs Blütenblätter petal0–petal5 mit Drehung i·60° um Y, "
+                "zeigen nach lokal -Z; öffnen/schließen über xRot; vier Blätter leaf0–leaf3 am Fuß).",
+                "spell/poison_flower", poison_flower.PALETTES, preview)
 
 
 if __name__ == "__main__":

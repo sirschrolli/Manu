@@ -5,6 +5,8 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.ElementalBoss;
 import io.github.sirschrolli.kingdomsatwar.entity.boss.lightning.LightningAttacks;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellProjectile;
 import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -39,7 +41,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -59,24 +60,25 @@ import org.jspecify.annotations.Nullable;
  * die Drachen geboren sind – lernt er am Magietisch aus den Zaubertafeln der Erzmagier. Jeder Zauber hat drei Stufen:
  * mit jeder Stufe wird er stärker, reicht weiter, ist schneller wieder bereit und bekommt eine neue Wirkung dazu.
  *
- * <p>Jeder Zauber kostet Haltbarkeit des Stabs und hat eine eigene Abklingzeit (eigene Gruppe), man kann also zwischen
- * den Zaubern wechseln, während einer abklingt. Zaubern können auch die Magier-Bosse – dann gelten ihre Gegner als Ziel.
+ * <p>Jeder Zauber hat eine eigene Abklingzeit (eigene Gruppe), man kann also zwischen den Zaubern wechseln, während einer
+ * abklingt. Wie stark ein Zauber aus dem Stab wirkt, hängt zusätzlich von dessen Meisterschaft und der Ladung ab
+ * ({@link StaffMastery}). Zaubern können auch die Magier-Bosse – dann gelten ihre Gegner als Ziel.
  */
 public enum Spell implements StringRepresentable {
     /** Aether-Blitz: trifft das anvisierte Wesen mit reiner Magie (Stufe III springt auf ein zweites Ziel über). */
-    AETHER_BOLT("aether_bolt", null, 1, 15),
-    /** Feuerball, wie ihn die Lohe schleudert (Stufe II drei Feuerbälle, Stufe III zerbersten sie in Flammen). */
-    FIRE("fire", DragonType.FIRE, 1, 20),
+    AETHER_BOLT("aether_bolt", null, 15),
+    /** Feuerblitz: ein Glutball aus Flammen (Stufe II drei auf einmal, Stufe III zerbersten sie in einer Feuerwolke). */
+    FIRE("fire", DragonType.FIRE, 20),
     /** Frosthauch: verlangsamt, lässt erstarren und friert Wasser zu Eis (Stufe III friert Gegner fest). */
-    ICE("ice", DragonType.ICE, 1, 30),
+    ICE("ice", DragonType.ICE, 30),
     /** Ruft einen Blitz an die anvisierte Stelle (Stufe II und III springen Blitze auf weitere Gegner über). */
-    LIGHTNING("lightning", DragonType.LIGHTNING, 3, 80),
+    LIGHTNING("lightning", DragonType.LIGHTNING, 80),
     /** Heilt einen selbst und seine Verbündeten und lässt Pflanzen sprießen (ab Stufe II Schutz, Stufe III Wurzeln). */
-    NATURE("nature", DragonType.NATURE, 2, 160),
+    NATURE("nature", DragonType.NATURE, 160),
     /** Erdstoß: schleudert Feinde in der Nähe von sich (Stufe III mit Felsdornen, die taumeln lassen). */
-    EARTH("earth", DragonType.EARTH, 2, 80),
+    EARTH("earth", DragonType.EARTH, 80),
     /** Woge: drängt alles zurück, löscht Feuer, lässt einen unter Wasser atmen (ab Stufe II heilend, Stufe III Wasserschild). */
-    WATER("water", DragonType.WATER, 1, 60);
+    WATER("water", DragonType.WATER, 60);
 
     public static final Codec<Spell> CODEC = StringRepresentable.fromEnum(Spell::values);
     public static final StreamCodec<ByteBuf, Spell> STREAM_CODEC =
@@ -91,13 +93,11 @@ public enum Spell implements StringRepresentable {
 
     private final String id;
     private final @Nullable DragonType element;
-    private final int cost;
     private final int cooldown;
 
-    Spell(String id, @Nullable DragonType element, int cost, int cooldown) {
+    Spell(String id, @Nullable DragonType element, int cooldown) {
         this.id = id;
         this.element = element;
-        this.cost = cost;
         this.cooldown = cooldown;
     }
 
@@ -152,11 +152,6 @@ public enum Spell implements StringRepresentable {
         return KingdomsAtWar.id("spell/" + this.id);
     }
 
-    /** Haltbarkeit, die der Zauber den Stab kostet. */
-    public int cost() {
-        return this.cost;
-    }
-
     /** Abklingzeit der ersten Stufe in Ticks. */
     public int cooldown() {
         return this.cooldown;
@@ -203,17 +198,26 @@ public enum Spell implements StringRepresentable {
         return this.cast(level, caster, 1);
     }
 
-    /** Wirkt den Zauber. @return ob er etwas bewirkt hat (sonst keine Kosten und keine Abklingzeit) */
+    /** Wirkt den Zauber in voller Stärke der Stufe (Erzmagier). */
     public boolean cast(ServerLevel level, LivingEntity caster, int spellLevel) {
+        return this.cast(level, caster, spellLevel, 1.0f);
+    }
+
+    /**
+     * Wirkt den Zauber. {@code scale} schwächt oder stärkt ihn (Meisterschaft des Stabs und Ladung, siehe
+     * {@link StaffMastery}). @return ob er etwas bewirkt hat (sonst keine Abklingzeit)
+     */
+    public boolean cast(ServerLevel level, LivingEntity caster, int spellLevel, float scale) {
         int lv = Mth.clamp(spellLevel, 1, MAX_LEVEL);
+        float p = power(lv) * scale;
         return switch (this) {
-            case AETHER_BOLT -> aetherBolt(level, caster, lv);
-            case FIRE -> fireball(level, caster, lv);
-            case ICE -> frost(level, caster, lv);
-            case LIGHTNING -> lightning(level, caster, lv);
-            case NATURE -> nature(level, caster, lv);
-            case EARTH -> earthquake(level, caster, lv);
-            case WATER -> wave(level, caster, lv);
+            case AETHER_BOLT -> aetherBolt(level, caster, lv, p);
+            case FIRE -> fireball(level, caster, lv, p);
+            case ICE -> frost(level, caster, lv, p);
+            case LIGHTNING -> lightning(level, caster, lv, p);
+            case NATURE -> nature(level, caster, lv, p);
+            case EARTH -> earthquake(level, caster, lv, p);
+            case WATER -> wave(level, caster, lv, p);
         };
     }
 
@@ -221,17 +225,16 @@ public enum Spell implements StringRepresentable {
     // Die Zauber
     // =====================================================================================
 
-    private static boolean aetherBolt(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean aetherBolt(ServerLevel level, LivingEntity caster, int lv, float p) {
         HitResult hit = ProjectileUtil.getHitResultOnViewVector(caster, target -> canHit(caster, target), 24.0 * range(lv));
         Vec3 from = handPosition(caster);
-        trail(level, from, hit.getLocation(), ParticleTypes.END_ROD, 3);
-        if (lv >= 2) {
-            trail(level, from, hit.getLocation(), ParticleTypes.WITCH, 1);
-        }
+        // ein Strahl reinen Aethers, auf höheren Stufen breiter und heller
+        SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, from, null, AETHER_COLOR, 9 + lv, 0.14f + 0.05f * lv).end(hit.getLocation()).spawn();
+        trail(level, from, hit.getLocation(), ParticleTypes.END_ROD, 1);
         sound(level, caster, SoundEvents.AMETHYST_BLOCK_RESONATE, 1.2f, 1.4f);
         sound(level, caster, SoundEvents.EVOKER_CAST_SPELL, 0.6f, 1.6f);
         if (hit instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof LivingEntity target) {
-            float damage = 6.0f * power(lv);
+            float damage = 6.0f * p;
             DamageSource source = level.damageSources().indirectMagic(caster, caster);
             target.hurtServer(level, source, damage);
             level.sendParticles(ParticleTypes.GLOW, target.getX(), target.getY(0.5), target.getZ(), 15, 0.3, 0.4, 0.3, 0.05);
@@ -239,7 +242,8 @@ public enum Spell implements StringRepresentable {
                 // der Blitz springt auf den nächsten Gegner in der Nähe über
                 LivingEntity next = nearestEnemy(level, caster, target.getBoundingBox().getCenter(), 6.0, e -> e != target);
                 if (next != null) {
-                    trail(level, target.getBoundingBox().getCenter(), next.getBoundingBox().getCenter(), ParticleTypes.END_ROD, 4);
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, target.getBoundingBox().getCenter(), null, AETHER_COLOR, 10, 0.16f)
+                            .end(next.getBoundingBox().getCenter()).spawn();
                     next.hurtServer(level, source, damage * 0.6f);
                     level.sendParticles(ParticleTypes.GLOW, next.getX(), next.getY(0.5), next.getZ(), 12, 0.3, 0.4, 0.3, 0.05);
                     level.playSound(null, next.getX(), next.getY(), next.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0f, 1.8f);
@@ -249,16 +253,14 @@ public enum Spell implements StringRepresentable {
         return true;
     }
 
-    private static boolean fireball(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean fireball(ServerLevel level, LivingEntity caster, int lv, float p) {
         Vec3 look = caster.getLookAngle();
         Vec3 start = handPosition(caster);
         int count = lv >= 2 ? 3 : 1;
         for (int i = 0; i < count; i++) {
             float spread = count == 1 ? 0.0f : (i - 1) * 9.0f;
             Vec3 dir = look.yRot(spread * Mth.DEG_TO_RAD);
-            SpellFireball fireball = new SpellFireball(level, caster, dir.scale(1.6), 5.0f * power(lv), lv >= 3);
-            fireball.setPos(start.x, start.y, start.z);
-            level.addFreshEntity(fireball);
+            SpellProjectile.shoot(level, caster, SpellProjectile.Kind.FIREBOLT, start, dir, 1.35, 5.0f * p, null, lv);
         }
         sound(level, caster, SoundEvents.BLAZE_SHOOT, 1.0f, lv >= 3 ? 0.8f : 1.0f);
         level.sendParticles(ParticleTypes.SMALL_FLAME, start.x, start.y, start.z, 6 * count, 0.08, 0.08, 0.08, 0.02);
@@ -266,7 +268,7 @@ public enum Spell implements StringRepresentable {
     }
 
     /** Frosthauch in einem Kegel vor dem Zaubernden (8 Blöcke, je Stufe weiter). */
-    private static boolean frost(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean frost(ServerLevel level, LivingEntity caster, int lv, float p) {
         Vec3 eye = caster.getEyePosition();
         Vec3 look = caster.getLookAngle();
         double range = 8.0 * range(lv);
@@ -280,13 +282,15 @@ public enum Spell implements StringRepresentable {
             }
         }
         for (LivingEntity target : inCone(level, caster, range, 0.8)) {
-            target.hurtServer(level, level.damageSources().freeze(), 4.0f * power(lv));
+            target.hurtServer(level, level.damageSources().freeze(), 4.0f * p);
             target.addEffect(effect(MobEffects.SLOWNESS, 100 + 40 * (lv - 1), lv >= 3 ? 3 : 2), caster);
             target.setTicksFrozen(Math.max(target.getTicksFrozen(), target.getTicksRequiredToFreeze() + 120 + 60 * (lv - 1)));
             if (lv >= 3) {
                 // festgefroren: anderthalb Sekunden kaum Bewegung, eine Hülle aus Eissplittern
                 target.addEffect(effect(MobEffects.SLOWNESS, 30, 6), caster);
                 target.addEffect(effect(MobEffects.MINING_FATIGUE, 30, 2), caster);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.PRISON, target.position(), DragonType.ICE, 30,
+                        Math.max(0.7f, target.getBbHeight() / 1.9f)).spawn();
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.PACKED_ICE.defaultBlockState()),
                         target.getX(), target.getY(0.5), target.getZ(), 24, target.getBbWidth() * 0.4, target.getBbHeight() * 0.4,
                         target.getBbWidth() * 0.4, 0.05);
@@ -314,7 +318,7 @@ public enum Spell implements StringRepresentable {
         return true;
     }
 
-    private static boolean lightning(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean lightning(ServerLevel level, LivingEntity caster, int lv, float p) {
         HitResult hit = ProjectileUtil.getHitResultOnViewVector(caster, target -> canHit(caster, target), 48.0 * range(lv));
         if (hit.getType() == HitResult.Type.MISS) {
             sound(level, caster, SoundEvents.BEACON_DEACTIVATE, 0.6f, 1.6f);
@@ -342,9 +346,9 @@ public enum Spell implements StringRepresentable {
             for (int i = 0; i < Math.min(chain.size(), lv >= 3 ? 4 : 2); i++) {
                 LivingEntity target = chain.get(i);
                 Vec3 to = target.getBoundingBox().getCenter();
-                LightningAttacks.arc(level, from, to);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, from, DragonType.LIGHTNING, 0xFFF06A, 10, 0.22f).end(to).spawn();
                 LightningAttacks.visualBolt(level, target.position());
-                target.hurtServer(level, source, 5.0f * power(lv));
+                target.hurtServer(level, source, 5.0f * p);
                 target.addEffect(effect(MobEffects.SLOWNESS, 20, 5), caster);
                 from = to;
             }
@@ -355,13 +359,16 @@ public enum Spell implements StringRepresentable {
         return true;
     }
 
-    private static boolean nature(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean nature(ServerLevel level, LivingEntity caster, int lv, float p) {
         double radius = 8.0 * range(lv);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, caster.position().add(0, 0.02, 0), DragonType.NATURE, 24, (float) radius * 0.5f)
+                .spawn();
         List<LivingEntity> allies = new ArrayList<>(List.of(caster));
         allies.addAll(level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(radius),
                 entity -> entity != caster && entity.isAlive() && isAlly(caster, entity)));
         for (LivingEntity ally : allies) {
-            ally.addEffect(effect(MobEffects.REGENERATION, lv >= 2 ? 160 : 120, lv >= 3 ? 2 : 1), caster);
+            ally.addEffect(effect(MobEffects.REGENERATION, Math.round((lv >= 2 ? 160 : 120) * Math.max(0.6f, p / power(lv))),
+                    lv >= 3 ? 2 : 1), caster);
             if (lv >= 2) {
                 ally.addEffect(effect(MobEffects.ABSORPTION, 600, lv - 2), caster);
             }
@@ -377,6 +384,7 @@ public enum Spell implements StringRepresentable {
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, roots), enemy.getX(), enemy.getY() + 0.2, enemy.getZ(),
                         20, 0.4, 0.1, 0.4, 0.05);
                 level.sendParticles(ParticleTypes.COMPOSTER, enemy.getX(), enemy.getY() + 0.5, enemy.getZ(), 8, 0.3, 0.4, 0.3, 0.0);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.VINE, enemy.position(), DragonType.NATURE, 36, 0.55f).param(0.95f).spawn();
             }
             sound(level, caster, SoundEvents.ROOTED_DIRT_BREAK, 1.2f, 0.6f);
         }
@@ -397,7 +405,7 @@ public enum Spell implements StringRepresentable {
         return true;
     }
 
-    private static boolean earthquake(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean earthquake(ServerLevel level, LivingEntity caster, int lv, float p) {
         double radius = 5.0 * range(lv);
         BlockState ground = level.getBlockState(caster.blockPosition().below());
         ParticleOptions dust = ground.isAir() ? ParticleTypes.CLOUD : new BlockParticleOption(ParticleTypes.BLOCK, ground);
@@ -409,11 +417,12 @@ public enum Spell implements StringRepresentable {
             }
         }
         DamageSource source = level.damageSources().indirectMagic(caster, caster);
-        double knock = 1.4 * (1.0 + 0.15 * (lv - 1));
+        double knock = 1.4 * (1.0 + 0.15 * (lv - 1)) * Math.max(0.7f, p / power(lv));
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, caster.position().add(0, 0.02, 0), DragonType.EARTH, 10, (float) radius).spawn();
         BlockState spike = Blocks.POINTED_DRIPSTONE.defaultBlockState();
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(radius, 2.0, radius),
                 entity -> entity.isAlive() && canHit(caster, entity))) {
-            if (target.hurtServer(level, source, 6.0f * power(lv))) {
+            if (target.hurtServer(level, source, 6.0f * p)) {
                 Vec3 away = target.position().subtract(caster.position()).multiply(1.0, 0.0, 1.0).normalize();
                 target.knockback(knock, -away.x, -away.z, source, 6.0f);
                 target.push(0.0, 0.5 + 0.1 * (lv - 1), 0.0);
@@ -421,6 +430,7 @@ public enum Spell implements StringRepresentable {
                     // Felsdornen schießen unter dem Gegner hervor und lassen ihn taumeln
                     target.addEffect(effect(MobEffects.SLOWNESS, 60, 1), caster);
                     target.addEffect(effect(MobEffects.NAUSEA, 60, 0), caster);
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.SPIKE, target.position(), DragonType.EARTH, 22, 0.55f).spawn();
                     for (int k = 0; k < 4; k++) {
                         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, spike), target.getX(), target.getY() + k * 0.4,
                                 target.getZ(), 8, 0.15, 0.1, 0.15, 0.1);
@@ -444,10 +454,16 @@ public enum Spell implements StringRepresentable {
         return new MobEffectInstance(effect, duration, amplifier, false, false, true);
     }
 
-    private static boolean wave(ServerLevel level, LivingEntity caster, int lv) {
+    private static boolean wave(ServerLevel level, LivingEntity caster, int lv, float p) {
         Vec3 eye = caster.getEyePosition();
         Vec3 look = caster.getLookAngle();
         double range = 7.0 * range(lv);
+        Vec3 flat = new Vec3(look.x, 0.0, look.z);
+        if (flat.lengthSqr() > 1.0e-4) {
+            flat = flat.normalize();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.WAVE, caster.position().add(flat.scale(1.2)), DragonType.WATER, 0x4FD0F0,
+                    (int) Math.round(range / 0.55), 3.0f + lv).param(0.55f).facing((float) (Mth.atan2(-flat.x, flat.z) * Mth.RAD_TO_DEG)).spawn();
+        }
         for (int i = 2; i <= range; i++) {
             Vec3 point = eye.add(look.scale(i)).add(0, -0.8, 0);
             double spread = 0.2 * i;
@@ -455,7 +471,7 @@ public enum Spell implements StringRepresentable {
             level.sendParticles(ParticleTypes.BUBBLE_POP, point.x, point.y, point.z, 6, spread, 0.3, spread, 0.05);
         }
         DamageSource source = level.damageSources().indirectMagic(caster, caster);
-        double knock = 1.8 * (1.0 + 0.2 * (lv - 1));
+        double knock = 1.8 * (1.0 + 0.2 * (lv - 1)) * Math.max(0.7f, p / power(lv));
         for (LivingEntity target : inCone(level, caster, range, 0.6)) {
             target.clearFire();
             target.knockback(knock, -look.x, -look.z, source, 0.0f);
@@ -475,7 +491,7 @@ public enum Spell implements StringRepresentable {
         caster.addEffect(effect(MobEffects.WATER_BREATHING, 600, 0), caster);
         caster.addEffect(effect(MobEffects.DOLPHINS_GRACE, 200, 0), caster);
         if (lv >= 2) {
-            caster.heal(lv >= 3 ? 5.0f : 3.0f);
+            caster.heal((lv >= 3 ? 5.0f : 3.0f) * p / power(lv));
         }
         if (lv >= 3) {
             // Wasserschild: eine Hülle aus Wasser fängt Schläge ab
@@ -489,67 +505,6 @@ public enum Spell implements StringRepresentable {
         }
         sound(level, caster, SoundEvents.GENERIC_SPLASH, 1.2f, 0.8f);
         return true;
-    }
-
-    // =====================================================================================
-    // Feuerball des Stabs
-    // =====================================================================================
-
-    /**
-     * Feuerball des Stabs: verbrennt Wesen, setzt aber keine Blöcke in Brand (keine abgebrannten Burgen aus Versehen);
-     * Verbündete fliegt er vorbei. Auf Stufe III zerbirst er beim Aufprall in einer Feuerwolke.
-     */
-    private static final class SpellFireball extends SmallFireball {
-        private final float damage;
-        private final boolean burst;
-
-        SpellFireball(Level level, LivingEntity owner, Vec3 direction, float damage, boolean burst) {
-            super(level, owner, direction);
-            this.damage = damage;
-            this.burst = burst;
-        }
-
-        @Override
-        protected boolean canHitEntity(Entity entity) {
-            return super.canHitEntity(entity) && !(this.getOwner() instanceof LivingEntity owner && isAlly(owner, entity));
-        }
-
-        @Override
-        protected void onHitEntity(EntityHitResult hit) {
-            if (this.level() instanceof ServerLevel server) {
-                Entity target = hit.getEntity();
-                int fire = target.getRemainingFireTicks();
-                target.igniteForSeconds(5.0f);
-                if (!target.hurtServer(server, this.damageSources().fireball(this, this.getOwner()), this.damage)) {
-                    target.setRemainingFireTicks(fire);
-                }
-            }
-        }
-
-        @Override
-        protected void onHitBlock(BlockHitResult hit) {
-            if (this.level() instanceof ServerLevel server) {
-                Vec3 at = hit.getLocation();
-                server.sendParticles(ParticleTypes.SMOKE, at.x, at.y, at.z, 8, 0.15, 0.15, 0.15, 0.02);
-            }
-        }
-
-        @Override
-        protected void onHit(HitResult hit) {
-            super.onHit(hit);
-            if (this.burst && this.level() instanceof ServerLevel server && this.getOwner() instanceof LivingEntity owner) {
-                Vec3 at = hit.getLocation();
-                server.sendParticles(ParticleTypes.EXPLOSION, at.x, at.y, at.z, 1, 0, 0, 0, 0);
-                server.sendParticles(ParticleTypes.FLAME, at.x, at.y, at.z, 30, 1.0, 0.6, 1.0, 0.06);
-                server.sendParticles(ParticleTypes.LAVA, at.x, at.y, at.z, 6, 0.6, 0.3, 0.6, 0.1);
-                server.playSound(null, at.x, at.y, at.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 0.9f, 1.3f);
-                DamageSource source = this.damageSources().fireball(this, owner);
-                for (LivingEntity e : enemiesNear(server, owner, at, 3.0, e -> !(hit instanceof EntityHitResult h && h.getEntity() == e))) {
-                    e.igniteForSeconds(4.0f);
-                    e.hurtServer(server, source, this.damage * 0.6f);
-                }
-            }
-        }
     }
 
     // =====================================================================================
