@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "kingdomsatwar:block/duskgrain_stage0"
+  }
+}

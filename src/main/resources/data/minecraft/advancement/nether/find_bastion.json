@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:nether/root",
+  "criteria": {
+    "bastion": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "kingdomsatwar:hortfeste"
+            }
+          }
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "minecraft:gilded_blackstone"
+    },
+    "title": {
+      "translate": "advancements.nether.find_bastion.title"
+    },
+    "description": {
+      "translate": "advancements.nether.find_bastion.description"
+    }
+  },
+  "requirements": [
+    [
+      "bastion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

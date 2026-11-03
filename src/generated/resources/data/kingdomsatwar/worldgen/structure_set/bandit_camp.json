@@ -1,0 +1,19 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 6,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "frequency": 0.25,
+    "salt": 165745297,
+    "separation": 12,
+    "spacing": 40
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:bandit_camp",
+      "weight": 1
+    }
+  ]
+}

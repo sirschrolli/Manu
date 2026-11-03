@@ -1,0 +1,118 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.end"
+      }
+    },
+    "minecraft:gameplay/creature_world_gen_spawn_probability": 0.1,
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:glimmer_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 2
+              },
+              "weight": 20
+            }
+          ],
+          "creature": [
+            {
+              "type": "kingdomsatwar:moon_stag",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 6
+            }
+          ],
+          "monster": [
+            {
+              "type": "kingdomsatwar:night_wing",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 70
+            },
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 25
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:end_rod"
+        },
+        "probability": 7.0E-4
+      }
+    ],
+    "minecraft:visual/fog_color": "#5e4c8e",
+    "minecraft:visual/fog_end_distance": 260.0,
+    "minecraft:visual/fog_start_distance": 40.0,
+    "minecraft:visual/sky_color": "#3e2e72",
+    "minecraft:visual/water_fog_color": "#1a1846"
+  },
+  "carvers": [],
+  "downfall": 0.5,
+  "effects": {
+    "dry_foliage_color": "#c88ae8",
+    "foliage_color": "#c88ae8",
+    "grass_color": "#b07ad8",
+    "water_color": "#6a5ac8"
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:shadow/ore_moonsilver",
+      "kingdomsatwar:shadow/ore_nightsteel",
+      "kingdomsatwar:shadow/ore_soul_crystal",
+      "kingdomsatwar:shadow/ore_abyssite"
+    ],
+    [
+      "kingdomsatwar:shadow/glimmer_vines_caves"
+    ],
+    [],
+    [
+      "kingdomsatwar:shadow/trees_isle",
+      "kingdomsatwar:shadow/sprouts_dense",
+      "kingdomsatwar:shadow/moonflowers",
+      "kingdomsatwar:shadow/ghostcaps",
+      "kingdomsatwar:shadow/glimmer_vines_trees"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.7
+}

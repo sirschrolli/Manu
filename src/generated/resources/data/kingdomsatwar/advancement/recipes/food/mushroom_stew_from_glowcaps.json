@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_glowcap": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:glowcap"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:mushroom_stew_from_glowcaps"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_glowcap"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:mushroom_stew_from_glowcaps"
+    ]
+  }
+}

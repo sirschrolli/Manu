@@ -1,0 +1,1 @@
+"""Modellbeschreibungen der Mobs."""

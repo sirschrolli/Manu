@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:steel_dragon_armor",
+    "D": "kingdomsatwar:draconium"
+  },
+  "pattern": [
+    "D D",
+    "DAD",
+    "DDD"
+  ],
+  "result": {
+    "id": "kingdomsatwar:draconium_dragon_armor"
+  }
+}

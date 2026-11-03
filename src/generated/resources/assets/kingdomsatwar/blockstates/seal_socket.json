@@ -1,0 +1,184 @@
+{
+  "variants": {
+    "element=earth,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_earth",
+      "y": 90
+    },
+    "element=earth,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_earth_filled",
+      "y": 90
+    },
+    "element=earth,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_earth"
+    },
+    "element=earth,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_earth_filled"
+    },
+    "element=earth,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_earth",
+      "y": 180
+    },
+    "element=earth,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_earth_filled",
+      "y": 180
+    },
+    "element=earth,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_earth",
+      "y": 270
+    },
+    "element=earth,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_earth_filled",
+      "y": 270
+    },
+    "element=fire,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_fire",
+      "y": 90
+    },
+    "element=fire,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_fire_filled",
+      "y": 90
+    },
+    "element=fire,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_fire"
+    },
+    "element=fire,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_fire_filled"
+    },
+    "element=fire,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_fire",
+      "y": 180
+    },
+    "element=fire,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_fire_filled",
+      "y": 180
+    },
+    "element=fire,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_fire",
+      "y": 270
+    },
+    "element=fire,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_fire_filled",
+      "y": 270
+    },
+    "element=ice,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_ice",
+      "y": 90
+    },
+    "element=ice,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_ice_filled",
+      "y": 90
+    },
+    "element=ice,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_ice"
+    },
+    "element=ice,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_ice_filled"
+    },
+    "element=ice,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_ice",
+      "y": 180
+    },
+    "element=ice,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_ice_filled",
+      "y": 180
+    },
+    "element=ice,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_ice",
+      "y": 270
+    },
+    "element=ice,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_ice_filled",
+      "y": 270
+    },
+    "element=lightning,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_lightning",
+      "y": 90
+    },
+    "element=lightning,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_lightning_filled",
+      "y": 90
+    },
+    "element=lightning,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_lightning"
+    },
+    "element=lightning,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_lightning_filled"
+    },
+    "element=lightning,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_lightning",
+      "y": 180
+    },
+    "element=lightning,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_lightning_filled",
+      "y": 180
+    },
+    "element=lightning,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_lightning",
+      "y": 270
+    },
+    "element=lightning,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_lightning_filled",
+      "y": 270
+    },
+    "element=nature,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_nature",
+      "y": 90
+    },
+    "element=nature,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_nature_filled",
+      "y": 90
+    },
+    "element=nature,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_nature"
+    },
+    "element=nature,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_nature_filled"
+    },
+    "element=nature,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_nature",
+      "y": 180
+    },
+    "element=nature,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_nature_filled",
+      "y": 180
+    },
+    "element=nature,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_nature",
+      "y": 270
+    },
+    "element=nature,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_nature_filled",
+      "y": 270
+    },
+    "element=water,facing=east,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_water",
+      "y": 90
+    },
+    "element=water,facing=east,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_water_filled",
+      "y": 90
+    },
+    "element=water,facing=north,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_water"
+    },
+    "element=water,facing=north,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_water_filled"
+    },
+    "element=water,facing=south,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_water",
+      "y": 180
+    },
+    "element=water,facing=south,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_water_filled",
+      "y": 180
+    },
+    "element=water,facing=west,filled=false": {
+      "model": "kingdomsatwar:block/seal_socket_water",
+      "y": 270
+    },
+    "element=water,facing=west,filled=true": {
+      "model": "kingdomsatwar:block/seal_socket_water_filled",
+      "y": 270
+    }
+  }
+}

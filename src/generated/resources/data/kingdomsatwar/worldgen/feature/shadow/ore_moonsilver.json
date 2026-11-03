@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:ore",
+  "discard_chance_on_air_exposure": 0.0,
+  "size": 9,
+  "targets": [
+    {
+      "state": "kingdomsatwar:moonsilver_ore",
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "kingdomsatwar:shadow_stone_ore_replaceables"
+      }
+    },
+    {
+      "state": "kingdomsatwar:deep_moonsilver_ore",
+      "target": {
+        "predicate_type": "minecraft:tag_match",
+        "tag": "kingdomsatwar:deep_shadow_stone_ore_replaceables"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": "minecraft:leather",
+    "M": "minecraft:phantom_membrane",
+    "S": "kingdomsatwar:steel_ingot",
+    "W": "kingdomsatwar:wyvernit"
+  },
+  "pattern": [
+    "WSW",
+    "MLM",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:wyvernit_glider"
+  }
+}

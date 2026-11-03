@@ -1,0 +1,75 @@
+{
+  "type": "minecraft:add",
+  "left": {
+    "type": "minecraft:sub",
+    "left": {
+      "type": "minecraft:sub",
+      "left": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:noise",
+              "noise": "kingdomsatwar:shadow/islands",
+              "xz_scale": 1.0,
+              "y_scale": 1.4
+            },
+            "right": 1.5
+          },
+          "right": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:clamp",
+                "input": {
+                  "type": "minecraft:noise",
+                  "noise": "kingdomsatwar:shadow/island_mask",
+                  "xz_scale": 1.0,
+                  "y_scale": 0.0
+                },
+                "max": 0.42,
+                "min": 0.0
+              },
+              "right": 5.4761906
+            },
+            "right": -2.0
+          }
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:clamp",
+              "input": "kingdomsatwar:shadow/erosion",
+              "max": -0.3,
+              "min": -0.5
+            },
+            "right": 10.000001
+          },
+          "right": 3.0000005
+        }
+      },
+      "right": {
+        "type": "minecraft:gradient",
+        "axis": "y",
+        "from_coordinate": 214,
+        "from_value": 0.0,
+        "to_coordinate": 250,
+        "to_value": 2.4
+      }
+    },
+    "right": {
+      "type": "minecraft:gradient",
+      "axis": "y",
+      "from_coordinate": 170,
+      "from_value": 1.8,
+      "to_coordinate": 214,
+      "to_value": 0.0
+    }
+  },
+  "right": -0.2
+}

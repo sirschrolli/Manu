@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:clay_ball",
+    "minecraft:clay_ball",
+    "minecraft:dirt",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:clay_plaster"
+  }
+}

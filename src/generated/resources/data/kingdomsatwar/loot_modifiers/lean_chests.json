@@ -1,0 +1,8 @@
+{
+  "type": "kingdomsatwar:lean_chests",
+  "drop": 0.3,
+  "drop_valuable": 0.55,
+  "keep": 0.6,
+  "prefix": "chests/",
+  "priority": 0
+}

@@ -1,0 +1,22 @@
+{
+  "feature": "kingdomsatwar:overworld/coral_coast/reefs",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:biome"
+    },
+    {
+      "type": "kingdomsatwar:not_in_village"
+    }
+  ]
+}

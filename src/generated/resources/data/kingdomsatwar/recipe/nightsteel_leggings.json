@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "M": "kingdomsatwar:nightsteel_ingot"
+  },
+  "pattern": [
+    "MMM",
+    "MLM",
+    "M M"
+  ],
+  "result": {
+    "id": "kingdomsatwar:nightsteel_leggings"
+  }
+}

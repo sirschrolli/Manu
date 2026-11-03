@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:timber_frame_cross"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_timber_frame_diagonal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:timber_frame_diagonal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_timber_frame_diagonal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:timber_frame_cross"
+    ]
+  }
+}

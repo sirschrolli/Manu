@@ -1,0 +1,46 @@
+{
+  "anvil_cost": 6,
+  "description": {
+    "translate": "enchantment.kingdomsatwar.volley"
+  },
+  "effects": {
+    "minecraft:projectile_count": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2.0,
+            "per_level_above_first": 2.0
+          }
+        }
+      }
+    ],
+    "minecraft:projectile_spread": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 12.0,
+            "per_level_above_first": 12.0
+          }
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/bow",
+  "weight": 1
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:sand",
+    "minecraft:sand",
+    "minecraft:clay_ball",
+    "minecraft:bone_meal"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:white_plaster"
+  }
+}

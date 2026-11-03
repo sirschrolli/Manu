@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:cooked_beef",
+    "kingdomsatwar:onion",
+    "minecraft:wheat",
+    "#minecraft:eggs"
+  ],
+  "result": {
+    "id": "kingdomsatwar:meat_pie"
+  }
+}

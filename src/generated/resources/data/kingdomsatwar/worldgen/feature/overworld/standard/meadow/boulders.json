@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "minecraft:andesite",
+  "accent_chance": 0.08,
+  "in_water": false,
+  "max_radius": 2.0,
+  "min_radius": 1.0,
+  "secondary": "minecraft:calcite",
+  "secondary_chance": 0.3,
+  "stone": "minecraft:stone",
+  "top": "minecraft:air"
+}

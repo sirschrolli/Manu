@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:cache",
+      "input": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:quarter_negative",
+            "input": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:add",
+                "left": "kingdomsatwar:shadow/depth",
+                "right": {
+                  "type": "minecraft:cache",
+                  "input": {
+                    "type": "minecraft:mul",
+                    "left": "kingdomsatwar:shadow/jaggedness",
+                    "right": {
+                      "type": "minecraft:half_negative",
+                      "input": {
+                        "type": "minecraft:noise",
+                        "noise": "kingdomsatwar:shadow/jagged",
+                        "xz_scale": 1500.0,
+                        "y_scale": 0.0
+                      }
+                    }
+                  }
+                }
+              },
+              "right": "kingdomsatwar:shadow/factor"
+            }
+          },
+          "right": 4.0
+        },
+        "right": "kingdomsatwar:shadow/base_3d_noise"
+      }
+    },
+    "right": {
+      "type": "minecraft:mul",
+      "left": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:sqrt",
+          "input": "kingdomsatwar:shadow/chasm"
+        },
+        "right": {
+          "type": "minecraft:gradient",
+          "axis": "y",
+          "from_coordinate": -36,
+          "from_value": 0.0,
+          "to_coordinate": -4,
+          "to_value": 1.0
+        }
+      },
+      "right": -26.0
+    }
+  }
+}

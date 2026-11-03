@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:clay_plaster",
+  "result": {
+    "id": "kingdomsatwar:clay_plaster_stairs"
+  }
+}

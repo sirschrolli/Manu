@@ -1,0 +1,16 @@
+{
+  "type": "neoforge:remove_spawns",
+  "biomes": "#kingdomsatwar:replaces_vanilla_animals",
+  "entity_types": [
+    "minecraft:cow",
+    "minecraft:mooshroom",
+    "minecraft:pig",
+    "minecraft:sheep",
+    "minecraft:chicken",
+    "minecraft:horse",
+    "minecraft:donkey",
+    "minecraft:mule",
+    "minecraft:goat",
+    "minecraft:rabbit"
+  ]
+}

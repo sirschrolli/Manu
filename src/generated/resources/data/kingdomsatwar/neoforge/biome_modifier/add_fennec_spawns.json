@@ -1,0 +1,20 @@
+{
+  "type": "kingdomsatwar:add_spawns_in_category",
+  "biomes": [
+    "minecraft:desert",
+    "minecraft:badlands",
+    "minecraft:wooded_badlands"
+  ],
+  "category": "creature",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:fox",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 1
+      },
+      "weight": 4
+    }
+  ]
+}

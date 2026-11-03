@@ -1,0 +1,78 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "block_state_property": "copper_golem_pose",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:special",
+          "base": "minecraft:item/template_copper_golem_statue",
+          "model": {
+            "type": "kingdomsatwar:copper_servant_statue",
+            "stage": "weathered",
+            "pose": "sitting"
+          }
+        },
+        "when": "sitting"
+      },
+      {
+        "model": {
+          "type": "minecraft:special",
+          "base": "minecraft:item/template_copper_golem_statue",
+          "model": {
+            "type": "kingdomsatwar:copper_servant_statue",
+            "stage": "weathered",
+            "pose": "running"
+          }
+        },
+        "when": "running"
+      },
+      {
+        "model": {
+          "type": "minecraft:special",
+          "base": "minecraft:item/template_copper_golem_statue",
+          "model": {
+            "type": "kingdomsatwar:copper_servant_statue",
+            "stage": "weathered",
+            "pose": "star"
+          }
+        },
+        "when": "star"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:special",
+      "base": "minecraft:item/template_copper_golem_statue",
+      "model": {
+        "type": "kingdomsatwar:copper_servant_statue",
+        "stage": "weathered",
+        "pose": "standing"
+      }
+    },
+    "property": "minecraft:block_state",
+    "transformation": {
+      "left_rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "right_rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "scale": [
+        1.0,
+        -1.0,
+        -1.0
+      ],
+      "translation": [
+        0.5,
+        1.5,
+        0.5
+      ]
+    }
+  }
+}

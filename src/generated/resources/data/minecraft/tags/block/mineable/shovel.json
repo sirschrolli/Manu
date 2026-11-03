@@ -1,0 +1,18 @@
+{
+  "values": [
+    "kingdomsatwar:ash_block",
+    "kingdomsatwar:ash_layer",
+    "kingdomsatwar:cinder_soil",
+    "kingdomsatwar:frozen_soil",
+    "kingdomsatwar:abyssal_sand",
+    "kingdomsatwar:rubble",
+    "kingdomsatwar:peat",
+    "kingdomsatwar:shadow_soil",
+    "kingdomsatwar:shadow_grass",
+    "kingdomsatwar:shadow_sand",
+    "kingdomsatwar:ash_snow_block",
+    "kingdomsatwar:ash_snow",
+    "kingdomsatwar:shadow_farmland",
+    "kingdomsatwar:shadow_path"
+  ]
+}

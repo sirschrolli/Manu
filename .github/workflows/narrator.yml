@@ -1,0 +1,121 @@
+name: Erzählerstimme
+
+# Spricht alle Zeilen des Erzählers (Intro und Kapitel der Geschichte) mit Qwen3-TTS in der Stimme aus
+# tools/audio/narrator/narrator_reference.mp3, wählt mit Whisper je Zeile den besten Take, bearbeitet die
+# Aufnahmen nach und legt die fertigen Dateien als Commit auf diesen Branch (siehe tools/audio/README.md).
+# Läuft nur, wenn tools/audio/narrator/request.txt geändert wird – die Arbeit dauert ohne Grafikkarte Stunden
+# und wird darum auf acht Rechner verteilt.
+
+on:
+  push:
+    branches: [ 'phase-1-grundprojekt' ]
+    paths: [ 'tools/audio/narrator/request.txt' ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: narrator
+  cancel-in-progress: true
+
+env:
+  HF_HUB_DISABLE_PROGRESS_BARS: '1'
+  PIP_DISABLE_PIP_VERSION_CHECK: '1'
+
+jobs:
+  speak:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Werkzeuge
+        run: sudo apt-get update -q > /dev/null && sudo apt-get install -y -q ffmpeg > /dev/null
+
+      - name: Qwen3-TTS installieren
+        run: |
+          set -o pipefail
+          python -m venv /tmp/vq
+          /tmp/vq/bin/pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu 2>&1 | tail -2
+          /tmp/vq/bin/pip install --no-cache-dir -U qwen-tts soundfile 2>&1 | tail -3
+
+      - name: Sprechen (Teil ${{ matrix.shard }} von 8)
+        run: |
+          set -o pipefail
+          /tmp/vq/bin/python tools/audio/narrator/narrate.py --out out --takes 3 --shard ${{ matrix.shard }}/8 2>&1 \
+            | grep -v "it/s\]\|pad_token_id\|flash-attn\|^\*\+$\|^ $"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: takes-${{ matrix.shard }}
+          path: out/takes
+          retention-days: 3
+          if-no-files-found: error
+
+  finish:
+    needs: speak
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: phase-1-grundprojekt
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Werkzeuge
+        run: |
+          set -o pipefail
+          sudo apt-get update -q > /dev/null && sudo apt-get install -y -q sox libsox-fmt-all ffmpeg > /dev/null
+          pip install --no-cache-dir faster-whisper jiwer numpy scipy soundfile pyloudnorm mido 2>&1 | tail -2
+          pip install --no-cache-dir --no-deps tinysoundfont 2>&1 | tail -1
+
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: takes-*
+          path: out/takes
+          merge-multiple: true
+
+      - name: Beste Takes wählen
+        run: |
+          set -o pipefail
+          ls out/takes | wc -l
+          python tools/audio/narrator/pick_takes.py out 2>&1 | tee out/pick.txt
+
+      - name: Nachbearbeiten
+        run: python tools/audio/narrator/finish.py out
+
+      - name: Ergebnis einchecken
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main/resources/assets/kingdomsatwar/sounds/intro src/main/resources/assets/kingdomsatwar/sounds/story \
+                  src/main/resources/assets/kingdomsatwar/story tools/audio/narrator/narration_timing.json \
+                  tools/audio/narrator/takes_report.json
+          git commit -q -m "Erzählerstimme für Intro und Kapitel (automatisch mit Qwen3-TTS erzeugt)" -m "Lauf ${{ github.run_id }}"
+          for attempt in 1 2 3 4 5; do
+            if git pull -q --rebase origin phase-1-grundprojekt && git push -q origin HEAD:phase-1-grundprojekt; then
+              echo "eingecheckt"; exit 0
+            fi
+            sleep 15
+          done
+          exit 1

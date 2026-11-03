@@ -1,0 +1,89 @@
+{
+  "aquifers": {
+    "barrier": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_barrier",
+      "xz_scale": 1.0,
+      "y_scale": 0.5
+    },
+    "exclusion": {
+      "type": "minecraft:add",
+      "left": "kingdomsatwar:shadow/chasm",
+      "right": -0.02
+    },
+    "fluid_level_floodedness": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_fluid_level_floodedness",
+      "xz_scale": 1.0,
+      "y_scale": 0.67
+    },
+    "fluid_level_spread": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_fluid_level_spread",
+      "xz_scale": 1.0,
+      "y_scale": 0.7142857142857143
+    },
+    "lava": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:aquifer_lava",
+      "xz_scale": 1.0,
+      "y_scale": 1.0
+    },
+    "surface_level": "kingdomsatwar:shadow/preliminary_surface_level"
+  },
+  "debug_functions": [
+    {
+      "function": "kingdomsatwar:shadow/final_density",
+      "label": "N"
+    },
+    {
+      "function": "kingdomsatwar:shadow/temperature",
+      "label": "T"
+    },
+    {
+      "function": "kingdomsatwar:shadow/vegetation",
+      "label": "V"
+    },
+    {
+      "function": "kingdomsatwar:shadow/continents",
+      "label": "C"
+    },
+    {
+      "function": "kingdomsatwar:shadow/erosion",
+      "label": "E"
+    },
+    {
+      "function": "kingdomsatwar:shadow/depth",
+      "label": "D"
+    },
+    {
+      "function": "kingdomsatwar:shadow/ridges",
+      "label": "W"
+    },
+    {
+      "function": "kingdomsatwar:shadow/chasm",
+      "label": "A"
+    }
+  ],
+  "default_block": "kingdomsatwar:shadow_stone",
+  "default_fluid": "minecraft:water",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "kingdomsatwar:shadow_world",
+  "noise": {
+    "height": 384,
+    "min_y": -64
+  },
+  "noise_router": {
+    "chunk_surface_level": "kingdomsatwar:shadow/chunk_surface_level",
+    "continents": "kingdomsatwar:shadow/continents",
+    "depth": "kingdomsatwar:shadow/depth",
+    "erosion": "kingdomsatwar:shadow/erosion",
+    "final_density": "kingdomsatwar:shadow/final_density",
+    "ridges": "kingdomsatwar:shadow/ridges",
+    "temperature": "kingdomsatwar:shadow/temperature",
+    "vegetation": "kingdomsatwar:shadow/vegetation"
+  },
+  "sea_level": 63,
+  "spawn_target": []
+}

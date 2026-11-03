@@ -1,0 +1,16 @@
+{
+  "placement": {
+    "type": "kingdomsatwar:unique_nest",
+    "biomes": "#kingdomsatwar:has_water_dragon_nests",
+    "element": "water",
+    "max_distance": 2400,
+    "min_distance": 800,
+    "salt": 522
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:water_dragon_lair",
+      "weight": 1
+    }
+  ]
+}

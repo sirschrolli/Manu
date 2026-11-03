@@ -1,0 +1,14 @@
+{
+  "values": [
+    "#minecraft:is_forest",
+    "#minecraft:is_taiga",
+    "minecraft:meadow",
+    "minecraft:savanna",
+    "minecraft:sparse_jungle",
+    "minecraft:bamboo_jungle",
+    "minecraft:swamp",
+    "minecraft:wooded_badlands",
+    "minecraft:pale_garden",
+    "kingdomsatwar:primeval_forest"
+  ]
+}

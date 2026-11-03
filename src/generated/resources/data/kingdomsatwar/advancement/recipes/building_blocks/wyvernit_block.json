@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:wyvernit_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wyvernit": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:wyvernit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wyvernit"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:wyvernit_block"
+    ]
+  }
+}

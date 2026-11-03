@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_stormstone",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:cobbled_stormstone_slab"
+  }
+}

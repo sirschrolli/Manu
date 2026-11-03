@@ -1,0 +1,61 @@
+{
+  "type": "minecraft:sequence",
+  "sequence": [
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:ash_fields"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/ash_fields"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:frost_peaks"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/frost_peaks"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:storm_coast"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/storm_coast"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:primeval_forest"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/primeval_forest"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:rock_gorges"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/rock_gorges"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:coral_coast"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/coral_coast"
+    },
+    {
+      "type": "minecraft:condition",
+      "if_true": {
+        "type": "minecraft:biome",
+        "biome_is": "kingdomsatwar:mist_moor"
+      },
+      "then_run": "kingdomsatwar:overworld/surface/mist_moor"
+    }
+  ]
+}

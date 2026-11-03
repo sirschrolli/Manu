@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "D": "minecraft:cobbled_deepslate"
+  },
+  "pattern": [
+    "DDD",
+    "DAD",
+    "DDD"
+  ],
+  "result": {
+    "count": 8,
+    "id": "kingdomsatwar:sealstone"
+  }
+}

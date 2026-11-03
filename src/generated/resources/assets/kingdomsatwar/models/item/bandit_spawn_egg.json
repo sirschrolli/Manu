@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:item/bandit_spawn_egg"
+  }
+}

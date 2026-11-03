@@ -1,0 +1,32 @@
+{
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#texture"
+        },
+        "up": {
+          "texture": "#texture"
+        }
+      },
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "light_emission": 15,
+      "neoforge_data": {
+        "ambient_occlusion": false
+      },
+      "to": [
+        16,
+        12,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "particle": "kingdomsatwar:block/shadow_portal",
+    "texture": "kingdomsatwar:block/shadow_portal"
+  }
+}

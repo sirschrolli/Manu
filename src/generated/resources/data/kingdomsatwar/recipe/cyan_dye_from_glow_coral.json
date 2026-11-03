@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "cyan_dye",
+  "ingredients": [
+    "kingdomsatwar:glow_coral"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:cyan_dye"
+  }
+}

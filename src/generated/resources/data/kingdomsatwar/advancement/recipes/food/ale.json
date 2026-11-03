@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_hops": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:hops"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:ale"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_hops"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:ale"
+    ]
+  }
+}

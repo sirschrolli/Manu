@@ -1,0 +1,68 @@
+{
+  "ambient_light": 0.06,
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.deep_dark"
+      }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "always",
+      "can_sleep": "never",
+      "error_message": {
+        "translate": "block.kingdomsatwar.bed.shadow_world"
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/nether_portal_spawns_piglin": false,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/sky_light_level": 10.0,
+    "minecraft:visual/ambient_light_color": "#3a3256",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.0015
+      }
+    ],
+    "minecraft:visual/cloud_color": "#9a3a2e58",
+    "minecraft:visual/cloud_height": 300.0,
+    "minecraft:visual/fog_color": "#46366e",
+    "minecraft:visual/fog_end_distance": 220.0,
+    "minecraft:visual/fog_start_distance": 32.0,
+    "minecraft:visual/moon_angle": 300.0,
+    "minecraft:visual/moon_phase": "full_moon",
+    "minecraft:visual/sky_color": "#2e2252",
+    "minecraft:visual/sky_light_color": "#d4ccfa",
+    "minecraft:visual/sky_light_factor": 0.86,
+    "minecraft:visual/star_angle": 71.0,
+    "minecraft:visual/star_brightness": 1.0,
+    "minecraft:visual/sun_angle": 180.0
+  },
+  "coordinate_scale": 1.0,
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_fixed_time": true,
+  "has_skylight": true,
+  "height": 384,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 384,
+  "min_y": -64,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 7,
+    "min_inclusive": 0
+  }
+}

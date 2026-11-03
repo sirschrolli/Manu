@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "kingdomsatwar:block/throne",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "kingdomsatwar:block/throne"
+    },
+    "facing=south": {
+      "model": "kingdomsatwar:block/throne",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "kingdomsatwar:block/throne",
+      "y": 270
+    }
+  }
+}

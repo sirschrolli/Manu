@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/tide_shrine",
+  "kind": "tide_shrine",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

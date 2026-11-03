@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "kingdomsatwar:cabbage"
+  ],
+  "result": {
+    "id": "kingdomsatwar:cabbage_seeds"
+  }
+}

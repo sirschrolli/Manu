@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:shadow_site",
+  "biomes": "#kingdomsatwar:has_lighthouse",
+  "kind": "lighthouse",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

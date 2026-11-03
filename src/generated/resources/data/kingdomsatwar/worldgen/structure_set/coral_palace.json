@@ -1,0 +1,19 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "chunk_count": 6,
+      "other_set": "kingdomsatwar:realm_castles"
+    },
+    "salt": 10387315,
+    "separation": 10,
+    "spacing": 40,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "kingdomsatwar:coral_palace",
+      "weight": 1
+    }
+  ]
+}

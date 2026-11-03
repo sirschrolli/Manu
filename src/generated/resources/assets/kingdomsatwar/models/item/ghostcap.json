@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:block/ghostcap",
+    "layer1": "kingdomsatwar:block/ghostcap_emissive"
+  }
+}

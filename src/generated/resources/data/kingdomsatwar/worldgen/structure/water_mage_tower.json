@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:mage_tower",
+  "biomes": "#kingdomsatwar:has_water_mage_tower",
+  "element": "water",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

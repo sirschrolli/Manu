@@ -1,0 +1,6 @@
+{
+  "type": "kingdomsatwar:fallen_trunk",
+  "log": "minecraft:jungle_log",
+  "max_length": 10,
+  "min_length": 5
+}

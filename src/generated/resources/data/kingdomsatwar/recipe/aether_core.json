@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "kingdomsatwar:aetherit",
+    "D": "kingdomsatwar:draconium",
+    "W": "kingdomsatwar:wisp_dust"
+  },
+  "pattern": [
+    "WAW",
+    "ADA",
+    "WAW"
+  ],
+  "result": {
+    "id": "kingdomsatwar:aether_core"
+  }
+}

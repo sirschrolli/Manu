@@ -1,0 +1,72 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "cullface": "down",
+          "texture": "#bottom"
+        },
+        "east": {
+          "cullface": "east",
+          "texture": "#side"
+        },
+        "north": {
+          "cullface": "north",
+          "texture": "#side"
+        },
+        "south": {
+          "cullface": "south",
+          "texture": "#side"
+        },
+        "up": {
+          "cullface": "up",
+          "texture": "#top"
+        },
+        "west": {
+          "cullface": "west",
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "up": {
+          "cullface": "up",
+          "texture": "#glow"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "light_emission": 15,
+      "neoforge_data": {
+        "ambient_occlusion": false
+      },
+      "to": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "bottom": "kingdomsatwar:block/volcanic_rock",
+    "glow": "kingdomsatwar:block/ember_vent_top_glow",
+    "particle": "kingdomsatwar:block/ember_vent",
+    "side": "kingdomsatwar:block/ember_vent",
+    "top": "kingdomsatwar:block/ember_vent_top"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/copper_roof_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/copper_roof"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/copper_roof_slab_top"
+    }
+  }
+}

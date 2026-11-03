@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:cobbled_shale",
+  "result": {
+    "id": "kingdomsatwar:cobbled_shale_wall"
+  }
+}

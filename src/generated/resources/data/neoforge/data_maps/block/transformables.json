@@ -1,0 +1,206 @@
+{
+  "values": {
+    "kingdomsatwar:shadow_grass": {
+      "transformers": {
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "kingdomsatwar:shadow_grass"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "tag": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "kingdomsatwar:shadow_farmland",
+                  "properties": {
+                    "moisture": "0"
+                  }
+                }
+              }
+            ]
+          },
+          "item_damage_per_use": 1,
+          "sound": "minecraft:item.hoe.till"
+        },
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "kingdomsatwar:shadow_grass"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "tag": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "kingdomsatwar:shadow_path"
+                }
+              }
+            ]
+          },
+          "disallowed_faces": [
+            "down"
+          ],
+          "item_damage_per_use": 1,
+          "sound": "minecraft:item.shovel.flatten"
+        }
+      }
+    },
+    "kingdomsatwar:shadow_log": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "kingdomsatwar:shadow_log"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "kingdomsatwar:stripped_shadow_log",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "kingdomsatwar:shadow_soil": {
+      "transformers": {
+        "minecraft:hoe": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "kingdomsatwar:shadow_soil"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "tag": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "kingdomsatwar:shadow_farmland",
+                  "properties": {
+                    "moisture": "0"
+                  }
+                }
+              }
+            ]
+          },
+          "item_damage_per_use": 1,
+          "sound": "minecraft:item.hoe.till"
+        },
+        "minecraft:shovel": {
+          "block_state_provider": {
+            "type": "minecraft:rule_based",
+            "rules": [
+              {
+                "if_true": {
+                  "type": "minecraft:all_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "blocks": "kingdomsatwar:shadow_soil"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        1,
+                        0
+                      ],
+                      "tag": "minecraft:air"
+                    }
+                  ]
+                },
+                "then": {
+                  "id": "kingdomsatwar:shadow_path"
+                }
+              }
+            ]
+          },
+          "disallowed_faces": [
+            "down"
+          ],
+          "item_damage_per_use": 1,
+          "sound": "minecraft:item.shovel.flatten"
+        }
+      }
+    },
+    "kingdomsatwar:shadow_wood": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "kingdomsatwar:shadow_wood"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "kingdomsatwar:stripped_shadow_wood",
+                  "properties": {
+                    "axis": "y"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "sound": "minecraft:item.axe.strip"
+      },
+      "transformer": "minecraft:axe"
+    }
+  }
+}

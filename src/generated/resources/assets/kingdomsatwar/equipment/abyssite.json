@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "kingdomsatwar:abyssite"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "kingdomsatwar:abyssite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "kingdomsatwar:abyssite"
+      }
+    ]
+  }
+}

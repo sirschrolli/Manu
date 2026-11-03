@@ -1,0 +1,12 @@
+{
+  "type": "kingdomsatwar:boulder",
+  "accent": "kingdomsatwar:charged_stormstone",
+  "accent_chance": 0.05,
+  "in_water": true,
+  "max_radius": 3.0,
+  "min_radius": 1.6,
+  "secondary": "minecraft:andesite",
+  "secondary_chance": 0.25,
+  "stone": "kingdomsatwar:stormstone",
+  "top": "minecraft:air"
+}

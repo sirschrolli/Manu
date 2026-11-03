@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": "kingdomsatwar:reinforced_handle",
+    "M": "kingdomsatwar:nightsteel_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "MM",
+    "MH",
+    " S"
+  ],
+  "result": {
+    "id": "kingdomsatwar:nightsteel_axe"
+  }
+}

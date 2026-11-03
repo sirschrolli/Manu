@@ -1,0 +1,28 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/witch_tree",
+  "kind": "witch_tree",
+  "spawn_overrides": {
+    "creature": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "kingdomsatwar:cat",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    },
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "kingdomsatwar:witch",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    }
+  },
+  "step": "surface_structures"
+}

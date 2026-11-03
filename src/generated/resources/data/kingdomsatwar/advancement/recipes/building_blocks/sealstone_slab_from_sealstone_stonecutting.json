@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_sealstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:sealstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:sealstone_slab_from_sealstone_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sealstone"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:sealstone_slab_from_sealstone_stonecutting"
+    ]
+  }
+}

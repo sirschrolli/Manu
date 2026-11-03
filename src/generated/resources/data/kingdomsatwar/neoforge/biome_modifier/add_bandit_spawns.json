@@ -1,0 +1,24 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_bandits",
+  "spawners": [
+    {
+      "type": "kingdomsatwar:bandit",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 3,
+        "min_inclusive": 2
+      },
+      "weight": 8
+    },
+    {
+      "type": "kingdomsatwar:bandit_archer",
+      "count": {
+        "type": "minecraft:uniform",
+        "max_inclusive": 2,
+        "min_inclusive": 1
+      },
+      "weight": 5
+    }
+  ]
+}

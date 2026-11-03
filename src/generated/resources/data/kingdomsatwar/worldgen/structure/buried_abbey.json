@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:site",
+  "biomes": "#kingdomsatwar:has_site/buried_abbey",
+  "kind": "buried_abbey",
+  "spawn_overrides": {},
+  "step": "underground_structures"
+}

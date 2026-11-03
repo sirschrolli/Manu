@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_soul_crystal": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:soul_crystal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:soul_crystal_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_soul_crystal"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:soul_crystal_block"
+    ]
+  }
+}
