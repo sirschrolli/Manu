@@ -109,6 +109,7 @@ final class Showcase {
                 case "gifts" -> GiftShowcase.gifts(steps);
                 case "siege" -> SiegeShowcase.siege(steps);
                 case "raid" -> RaidShowcase.raid(steps);
+                case "troops" -> TroopShowcase.troops(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
                 case "golems" -> GolemShowcase.golems(steps);

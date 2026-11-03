@@ -120,6 +120,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.FARM_SHEEP.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.SHEEP));
         this.add(ModEntities.FARM_CHICKEN.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.CHICKEN));
         this.add(ModEntities.FARM_HORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HORSE));
+        this.add(ModEntities.WARHORSE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.HORSE));
         this.add(ModEntities.FARM_DONKEY.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.DONKEY));
         this.add(ModEntities.FARM_MULE.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.MULE));
         this.add(ModEntities.FARM_GOAT.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.GOAT));

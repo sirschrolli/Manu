@@ -42,7 +42,11 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         // Eigene Hof- und Weidetiere verhalten sich wie die Vanilla-Tiere, die sie ersetzen
         this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.FARM_HORSE.key()).add(ModEntities.FARM_DONKEY.key())
                 .add(ModEntities.FARM_MULE.key()).add(ModEntities.FARM_PIG.key());
-        this.tag(EntityTypeTags.CAN_WEAR_HORSE_ARMOR).add(ModEntities.FARM_HORSE.key());
+        this.tag(EntityTypeTags.CAN_WEAR_HORSE_ARMOR).add(ModEntities.FARM_HORSE.key()).add(ModEntities.WARHORSE.key());
+        // das Schlachtross der Lanzenreiter: Sattel, Rossharnisch, schwimmt mit dem Reiter, der unter Wasser absteigt
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.WARHORSE.key());
+        this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.WARHORSE.key());
+        this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.WARHORSE.key());
         this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.FARM_HORSE.key()).add(ModEntities.FARM_DONKEY.key())
                 .add(ModEntities.FARM_MULE.key());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.FARM_HORSE.key()).add(ModEntities.FARM_DONKEY.key())

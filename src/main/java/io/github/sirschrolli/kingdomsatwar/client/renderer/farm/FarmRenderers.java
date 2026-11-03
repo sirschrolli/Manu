@@ -128,6 +128,11 @@ public final class FarmRenderers {
                 "horse", "horse_", FarmHorse.Breed.values(), horse -> horse.getBreed().ordinal(),
                 EquipmentClientInfo.LayerType.HORSE_SADDLE, ModelLayers.HORSE_SADDLE, true, false));
 
+        event.registerEntityRenderer(ModEntities.WARHORSE.get(), context -> new FarmEquineRenderer<io.github.sirschrolli.kingdomsatwar.entity.soldier.Warhorse>(
+                context, new FarmHorseModel(context.bakeLayer(ModModelLayers.FARM_HORSE)), new FarmHorseModel(context.bakeLayer(ModModelLayers.FARM_HORSE)),
+                "horse", "horse_", FarmHorse.Breed.values(), horse -> horse.getBreed().ordinal(),
+                EquipmentClientInfo.LayerType.HORSE_SADDLE, ModelLayers.HORSE_SADDLE, true, false));
+
         event.registerEntityRenderer(ModEntities.FARM_DONKEY.get(), context -> new FarmEquineRenderer<FarmDonkey>(context,
                 new FarmDonkeyModel(context.bakeLayer(ModModelLayers.FARM_DONKEY)),
                 new FarmDonkeyModel(context.bakeLayer(ModModelLayers.FARM_DONKEY)), "donkey", "donkey_", FarmDonkey.Breed.values(),

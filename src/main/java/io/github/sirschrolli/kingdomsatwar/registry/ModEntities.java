@@ -138,6 +138,10 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<FarmHorse>> FARM_HORSE = ENTITIES.registerEntityType("horse",
             FarmHorse::new, MobCategory.CREATURE,
             builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f).passengerAttachments(1.44375f).clientTrackingRange(10));
+    /** Das Schlachtross der Lanzenreiter (ein schweres Pferd aus den Ställen des Heeres). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.soldier.Warhorse>> WARHORSE =
+            ENTITIES.registerEntityType("warhorse", io.github.sirschrolli.kingdomsatwar.entity.soldier.Warhorse::new, MobCategory.CREATURE,
+                    builder -> builder.sized(1.3964844f, 1.6f).eyeHeight(1.52f).passengerAttachments(1.44375f).clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<FarmDonkey>> FARM_DONKEY = ENTITIES.registerEntityType("donkey",
             FarmDonkey::new, MobCategory.CREATURE,
             builder -> builder.sized(1.3964844f, 1.5f).eyeHeight(1.425f).passengerAttachments(1.1125f).clientTrackingRange(10));
@@ -590,6 +594,7 @@ public final class ModEntities {
         event.put(FARM_SHEEP.get(), FarmSheep.createAttributes().build());
         event.put(FARM_CHICKEN.get(), FarmChicken.createAttributes().build());
         event.put(FARM_HORSE.get(), FarmHorse.createAttributes().build());
+        event.put(WARHORSE.get(), io.github.sirschrolli.kingdomsatwar.entity.soldier.Warhorse.createAttributes().build());
         event.put(FARM_DONKEY.get(), FarmDonkey.createAttributes().build());
         event.put(FARM_MULE.get(), FarmMule.createAttributes().build());
         event.put(FARM_GOAT.get(), FarmGoat.createAttributes().build());

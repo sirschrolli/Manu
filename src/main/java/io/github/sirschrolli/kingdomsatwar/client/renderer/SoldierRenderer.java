@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 
 /** Zeichnet die Soldaten – jede Art mit eigener Rüstung, jeder Soldat mit eigenem Gesicht. */
@@ -39,9 +40,9 @@ public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, KingdomH
         state.texture = texture(type, soldier.getVariant());
         state.salute = soldier.saluteProgress(partialTicks);
         state.cheer = soldier.cheerProgress(partialTicks);
-        state.cape = type == SoldierType.CAPTAIN || type == SoldierType.KNIGHT;
-        state.plume = type == SoldierType.CAPTAIN || type == SoldierType.KNIGHT && soldier.getVariant() == 1;
-        state.quiver = type == SoldierType.ARCHER;
+        state.cape = type == SoldierType.CAPTAIN || type == SoldierType.KNIGHT || type == SoldierType.LANCER;
+        state.plume = type == SoldierType.CAPTAIN || type == SoldierType.LANCER || type == SoldierType.KNIGHT && soldier.getVariant() == 1;
+        state.quiver = type.ranged();
         state.rank = soldier.getRank();
         extractCape(soldier, state, partialTicks);
     }
@@ -59,11 +60,19 @@ public class SoldierRenderer extends HumanoidMobRenderer<SoldierEntity, KingdomH
         return armPose(soldier, arm, super.getArmPose(soldier, arm));
     }
 
-    /** Bogen spannen, Schild heben oder die Waffe bereit halten. */
+    /** Bogen oder Armbrust spannen, anlegen, Schild heben oder die Waffe bereit halten. */
     static HumanoidModel.ArmPose armPose(net.minecraft.world.entity.Mob mob, HumanoidArm arm, HumanoidModel.ArmPose fallback) {
         ItemStack held = mob.getItemHeldByArm(arm);
         if (held.isEmpty()) {
             return fallback;
+        }
+        if (held.getItem() instanceof CrossbowItem && mob.getMainArm() == arm) {
+            if (mob.isUsingItem() && mob.getUseItem().getItem() instanceof CrossbowItem) {
+                return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+            }
+            if (mob.isAggressive() && CrossbowItem.isCharged(held)) {
+                return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+            }
         }
         if (mob.isUsingItem() && mob.getUsedItemHand().asArm(mob.getMainArm()) == arm && held.has(DataComponents.BLOCKS_ATTACKS)) {
             return HumanoidModel.ArmPose.BLOCK;

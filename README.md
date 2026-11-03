@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.43.0 – Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – Hauptmann, Fußknechte, Schützen und später Ritter, jedes Mal ein paar mehr. Sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner. Schlägst du sie, liegt ihre Kriegskasse in deinem Lager; verteidigt niemand das Banner, plündern sie ein Drittel des Lagers und ziehen ab.**
+> **Testversion 0.44.0 – Neue Truppen: Speerträger (lange Reichweite, hart gegen Reiter), Armbrustschützen (spannen langsam, schießen weit und durchschlagend), Schildträger (halten den großen Schild hoch und ziehen die Angreifer ihrer Kameraden auf sich), Waffenknechte (Plattenpanzer, der Streitkolben trifft auch die Nebenleute), Lanzenreiter auf dem eigenen Schlachtross (Lanzenangriff – je schneller, desto härter) und Belagerungsknechte (laden Belagerungswaffen schneller nach und bessern sie aus). Am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen, im Söldnerhaus warten die neuen Arten auch.**
+> In 0.43 kamen die Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner; besiegt liegt ihre Kriegskasse in deinem Lager, sonst plündern sie ein Drittel.
 > In 0.42 kamen die Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock – selbst bedient (zielen mit dem Blick, Leuchtspur mit Einschlagkreis) oder von Soldaten mit dem Kommandostab; Breschen in Mauern, Bolzen durch bis zu drei Gegner, Tore aufbrechen.
 > In 0.41 kamen neue Kräfte der Erzmagier: ein Heilritual (wer genug Schaden macht, bricht es) und je eine neue Fähigkeit – Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht, Gegenwelle; die sichere Heimkehr in den Turm; der Aetherit-Stab mit Mana-Leiste und sechs Stufen bis zum Aetherfürsten (150 % Kraft).
 > In 0.40 kam die Macht der Erzmagier: je zwei Meisterzauber mit eigener Gestalt, eine besondere Fähigkeit, deutlich stärker; der Aetherit-Stab unzerstörbar, nur herstellbar und zum Aufladen.
@@ -343,7 +344,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Aetherit-Stab: Mana-Leiste, sechs Stufen bis 150 % Kraft, Heilende Blüte heilt sofort, prächtigere Zauber | ✅ fertig |
 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Kommandostab) | ✅ fertig |
 | Heerhaufen: Reiche im Krieg greifen die eigene Siedlung an (Sammelplatz, Horn, Leiste, Kriegskasse, Plündern) | ✅ fertig |
-| Neue Truppen: Speerträger, Armbrustschützen, Schildträger, schwere Fußknechte, berittene Ritter, Belagerungsknechte | 🔨 als Nächstes |
+| Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte | ✅ fertig |
 | Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -905,25 +906,54 @@ Münzen. Am **Feldherrentisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) heilst 
 | Bogenschütze | Söldnerhaus (ab 7 Silber) | Fernkämpfer, schießt nie auf Freunde |
 | Ritter | Söldnerhaus (ab 2 Gold 2 Silber) oder Ausbildung | Plattenrüstung und Schild, hält die vorderste Reihe |
 | Hauptmann | Söldnerhaus (ab 3 Gold 5 Silber) oder Ausbildung | macht Soldaten in seiner Nähe stärker |
+| Speerträger | Söldnerhaus (ab 7 Silber) oder Ausbildung | lange Reichweite, trifft Reiter, Pferde und große Ungetüme um drei Viertel härter |
+| Armbrustschütze | Söldnerhaus (ab 1 Gold 2 Silber) oder Ausbildung | spannt langsam, schießt weit, flach und härter als ein Bogen – nie auf Freunde |
+| Schildträger | Söldnerhaus (ab 1 Gold 4 Silber) oder Ausbildung | hält den großen Schild fast immer oben, schlägt darauf und zieht die Angreifer seiner Kameraden auf sich |
+| Waffenknecht | Söldnerhaus (ab 3 Gold) oder Ausbildung | Plattenpanzer (Pfeile gleiten oft ab), der Streitkolben trifft auch die Gegner neben dem Ziel |
+| Lanzenreiter | Söldnerhaus (ab 4 Gold 3 Silber) oder Ausbildung | reitet sein eigenes Schlachtross, Lanzenangriff mit gesenkter Lanze – je schneller, desto härter |
+| Belagerungsknecht | Söldnerhaus (ab 1 Gold 1 Silber) oder Ausbildung | lädt Belagerungswaffen um die Hälfte schneller nach und bessert sie aus |
+
+![Die neuen Truppen: Speerträger, Schildträger, Belagerungsknecht, Lanzenreiter, Waffenknecht, Armbrustschütze](docs/bilder/truppen.jpg)
 
 ![Rekrut, Veteran und Elite](docs/bilder/soldaten_raenge.jpg)
 
 **Söldnerhaus:** In jedem Dorf steht eines – vorn der Übungshof mit der **Söldnertafel**, an der jeden Morgen bis zu
 drei Söldner warten (fast immer ein Ritter). Die Tafel zeigt Art, Rang, Werte und Sold; Söldner mit Rang kosten mehr
-(je Rang die Hälfte), Ritter und Hauptleute bringen ihre Rüstung selbst mit.
+(je Rang die Hälfte), wer seine Ausrüstung selbst mitbringt, will mehr Sold. Ein Lanzenreiter wartet zu Fuß – sein Ross
+steht im Stall und kommt, sobald du ihn anheuerst.
 
 ![Das Söldnerhaus und seine Tafel](docs/bilder/soeldnerhaus.jpg)
 
 **Am Feldherrentisch** stehen links alle deine Soldaten im **Feldlager** (bis 24 Blöcke um den Tisch) mit ihrer
 Gesundheit. **„Alle heilen“** ruft den Feldscher: Er versorgt alle Verwundeten auf einmal – volle Gesundheit, kein Gift
-und kein Feuer mehr – und nimmt dafür 1 Bronze je 4 fehlende Leben. **Ausbilden** kannst du jeden einzeln:
+und kein Feuer mehr – und nimmt dafür 1 Bronze je 4 fehlende Leben; ein Lanzenreiter, der sein Ross verloren hat, bekommt
+für 3 Silber ein neues aus den Ställen. **Ausbilden** kannst du jeden einzeln – gibt es mehrere Wege, wählst du die neue
+Art mit den Pfeilen neben ihrem Namen:
 
 | Ausbildung | Preis | Wirkung |
 |---|---|---|
 | Rekrut → Veteran ★ | halber Sold + 3 Eisenbarren | +25 % Leben, +2 Rüstung, +1 Schaden, Schärpe mit Silbersaum |
 | Veteran → Elite ★★ | ganzer Sold + 2 Stahlbarren | noch einmal so viel, Goldsaum, Schulterstücke, Ehrenmedaille |
 | Schwertkämpfer → Ritter | 1 Gold + 2 Stahlbarren | wird Ritter mit Schild – Name und Rang bleiben |
+| Schwertkämpfer → Speerträger | 3 Silber + 1 Eisenspeer | lange Reichweite, hart gegen Reiter |
+| Schwertkämpfer → Schildträger | 5 Silber + 1 Schild + 2 Eisenbarren | zieht die Angreifer auf sich |
+| Schwertkämpfer → Belagerungsknecht | 4 Silber + 3 Eisenbarren + 1 Werkbank | lädt Belagerungswaffen schneller nach, bessert sie aus |
+| Bogenschütze → Armbrustschütze | 5 Silber + 1 Armbrust | schießt weiter und härter |
 | Ritter → Hauptmann | 2 Gold + 1 Edelstein | wird Hauptmann – Name und Rang bleiben |
+| Ritter → Lanzenreiter | 2 Gold + 1 Sattel + 2 Stahlbarren | bekommt sein Schlachtross (gesattelt, im Rossharnisch) |
+| Ritter → Waffenknecht | 1 Gold 3 Silber + 4 Stahlbarren | Plattenpanzer und Streitkolben |
+
+Name, Rang und Herr bleiben bei jeder Ausbildung; eine Frau bleibt eine Frau, ein Mann ein Mann.
+
+**Die neuen Truppen im Kampf:** Der **Lanzenreiter** reitet auf Abstand, senkt die Lanze, galoppiert durch den Gegner
+hindurch und wendet für den nächsten Anritt; die Lanze trifft keine eigenen Leute. Wird er abgeworfen, geht er zu seinem
+Ross zurück und sitzt wieder auf; fällt das Ross, kämpft er zu Fuß weiter. Fällt der Reiter, bleibt das **Schlachtross**
+dir – du kannst es selbst reiten. Der **Schildträger** schlägt alle paar Sekunden mit dem Schwert auf den Schild: Gegner in
+der Nähe, die einen deiner Leute angreifen, wenden sich ihm zu. Der **Belagerungsknecht** geht zu beschädigten eigenen
+Belagerungswaffen in der Nähe und bessert sie mit Hammer und Holz aus; ruft der Kommandostab eine Mannschaft, kommt er
+zuerst, wenn er nicht viel weiter weg ist als die anderen.
+
+![Lanzenangriff, Schlachtreihe und Belagerungsknecht](docs/bilder/truppen_kampf.jpg)
 
 Jede **Kaserne** deiner Siedlung erlaubt acht Soldaten mehr.
 

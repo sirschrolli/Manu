@@ -1297,6 +1297,27 @@ public class ModLanguageProvider extends LanguageProvider {
         soldier(SoldierType.CAPTAIN, "Captain", "Hauptmann", "Hauptmann", "Leader", "Anführer",
                 "Makes all soldiers nearby stronger and tougher and leads them into battle.",
                 "Macht alle Soldaten in seiner Nähe stärker und zäher und führt sie an.");
+        soldier(SoldierType.SPEARMAN, "Spearman", "Speerträger", "Speerträger", "Long reach", "Lange Reichweite",
+                "Keeps foes at bay with his long spear and hits riders, horses and big beasts especially hard.",
+                "Hält Gegner mit dem langen Spieß auf Abstand und trifft Reiter, Pferde und große Ungetüme besonders hart.");
+        soldier(SoldierType.CROSSBOWMAN, "Crossbowman", "Armbrustschütze", "Armbrustschützen", "Heavy ranged", "Schwerer Fernkampf",
+                "Slow to reload, but his bolts fly far and flat and hit hard – never at friends.",
+                "Spannt langsam, aber seine Bolzen fliegen weit und flach und schlagen hart ein – nie auf Freunde.");
+        soldier(SoldierType.SHIELDBEARER, "Shield Bearer", "Schildträger", "Schildträger", "Protector", "Beschützer",
+                "Keeps his big shield raised, bangs on it and draws the attackers of his comrades onto himself.",
+                "Hält den großen Schild hoch, schlägt darauf und zieht die Angreifer seiner Kameraden auf sich.");
+        soldier(SoldierType.MAN_AT_ARMS, "Man-at-Arms", "Waffenknecht", "Waffenknecht", "Heavy infantry", "Schwer gepanzert",
+                "Plate armour from head to toe; arrows often glance off, and his mace also hits the foes beside his target.",
+                "Plattenpanzer vom Scheitel bis zur Sohle: Pfeile gleiten oft ab, und sein Streitkolben trifft auch die Gegner neben "
+                        + "dem Ziel.");
+        soldier(SoldierType.LANCER, "Lancer", "Lanzenreiter", "Lanzenreiter", "Cavalry", "Reiterei",
+                "Rides his own warhorse and charges through the enemy lines with his lance lowered – the faster, the harder.",
+                "Reitet sein eigenes Schlachtross und galoppiert mit gesenkter Lanze durch die feindlichen Reihen – je schneller, desto "
+                        + "härter.");
+        soldier(SoldierType.ENGINEER, "Siege Engineer", "Belagerungsknecht", "Belagerungsknecht", "Siege expert", "Belagerung",
+                "Reloads siege weapons half again as fast and repairs them – but rather weak in melee.",
+                "Lädt Belagerungswaffen um die Hälfte schneller nach und bessert sie aus – im Nahkampf aber eher schwach.");
+        add(ModEntities.WARHORSE.get(), pick("Warhorse", "Schlachtross"));
         text("soldier.kingdomsatwar.name", "%s %s", "%s %s");
         text("soldier.kingdomsatwar.name.ranked", "%s %s %s", "%s %s %s");
         text("soldier.kingdomsatwar.rank.0", "Recruit", "Rekrut");
@@ -1343,9 +1364,11 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Hier werden deine verwundeten Soldaten im Umkreis von %s Blöcken um den Tisch geheilt.");
         text("gui.kingdomsatwar.recruitment.heal.hint",
                 "The field surgeon tends to all your wounded within %s blocks: full health, no more poison or fire. "
-                        + "He charges 1 bronze per %s missing health.",
+                        + "He charges 1 bronze per %s missing health. Lancers who lost their warhorse get a new one from the "
+                        + "stables (3 silver).",
                 "Der Feldscher versorgt alle deine Verwundeten im Umkreis von %s Blöcken: volle Gesundheit, kein Gift, kein "
-                        + "Feuer mehr. Er nimmt 1 Bronze je %s fehlende Leben.");
+                        + "Feuer mehr. Er nimmt 1 Bronze je %s fehlende Leben. Lanzenreiter, die ihr Ross verloren haben, "
+                        + "bekommen ein neues aus den Ställen (3 Silber).");
         text("gui.kingdomsatwar.recruitment.health", "%s health", "%s Leben");
         text("gui.kingdomsatwar.recruitment.armor", "%s armour", "%s Rüstung");
         text("gui.kingdomsatwar.recruitment.melee", "Sword", "Schwert");
@@ -1443,10 +1466,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.recruitment.max_rank.short", "Highest rank reached", "Höchster Rang erreicht");
         text("gui.kingdomsatwar.recruitment.promote", "Train", "Ausbilden");
         text("gui.kingdomsatwar.recruitment.promote_to", "To %s", "Zum %s");
-        text("gui.kingdomsatwar.recruitment.promote.hint", "Train him as a %s – he keeps his name and rank",
-                "Zum %s ausbilden – Name und Rang bleiben");
-        text("gui.kingdomsatwar.recruitment.promote.none", "Archers and captains can't be trained as another kind of soldier",
-                "Bogenschützen und Hauptleute lassen sich zu keiner anderen Art ausbilden");
+        text("gui.kingdomsatwar.recruitment.promote.hint", "Train as %s – he keeps his name and rank",
+                "Ausbilden als %s – Name und Rang bleiben");
+        text("gui.kingdomsatwar.recruitment.promote.none", "This kind of soldier can't be trained any further",
+                "Diese Art lässt sich nicht weiter ausbilden");
         text("gui.kingdomsatwar.recruitment.promote.none.short", "No further training", "Keine weitere Ausbildung");
         text("gui.kingdomsatwar.recruitment.rank_cost", "Promotion:", "Befördern:");
         text("gui.kingdomsatwar.recruitment.promote_cost", "Training:", "Ausbildung:");

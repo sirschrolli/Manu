@@ -7,8 +7,14 @@ Aufbau einer Textur (siehe client/model/SoldierModel.java):
     (Helm bzw. Kapuze, Rüstung/Wappenrock, Schulterstücke, Beinschienen)
   * rechts die Zusatzteile: Umhang (64,0), Helmfeder (64,20 / 72,20), Köcher (64,32), Pfeilfedern (64,48)
 
+Soldatenarten: Schwertkämpfer, Bogenschütze, Ritter und Hauptmann, dazu Speerträger (Eisenhut, blauer Gambeson),
+Armbrustschütze (Schaller oder Polsterhaube, Brigantine, Bolzenköcher), Schildträger (Spangenhelm, Kettenhemd,
+Wappenrock), Waffenknecht (gebläuter Harnisch, Topfhelm bzw. Hundsgugel), Lanzenreiter (blanker Harnisch mit
+Goldborten, Visierhelm, Umhang und Helmfeder) und Pionier (Lederschürze, Werkzeuggürtel, Filzkappe oder Gugel).
+
 Jede Soldatenart hat mehrere Gesichter (Hautton, Haare, Bart); die Namen der Soldaten passen dazu
-(die letzte Variante von Schwertkämpfer und Bogenschütze ist eine Frau).
+(die letzte Variante von Schwertkämpfer, Bogen- und Armbrustschütze, Speerträger und Pionier ist eine Frau;
+Waffenknechte und Lanzenreiter tragen geschlossene Helme).
 
 Aufruf (aus dem Projektordner):
     python3 tools/generate_soldiers.py            # schreibt alle Texturen
@@ -594,6 +600,466 @@ def paint_captain(skin_name: str, hair_name: str, iris: str, face: str) -> Skin:
 
 
 # =============================================================================
+# Weitere Soldatenarten: Speerträger, Armbrustschütze, Schildträger, Waffenknecht, Lanzenreiter, Pionier
+# =============================================================================
+
+# gebläuter Stahl der Waffenknechte: fast schwarz, mit kühlem blauem Glanz
+BLUED = pal("#11141f", "#1c2133", "#29304a", "#394362", "#4d5a7e", "#6878a0", "#93a1c6")
+# braune Wollhose der Speerträger
+UMBER = pal("#291f18", "#3a2d23", "#4e3e30", "#64503f", "#7b6551")
+# rotbrauner Loden (Kapuze der Pioniere)
+RUSSET = pal("#2a1610", "#422219", "#5a3022", "#74412e", "#8e563c")
+# dunkles Stiefelleder
+DARK_LEATHER = pal("#120e0c", "#1e1814", "#2c241e", "#3c3229", "#5a4a3c")
+# helles Holz (Hammerstiel)
+WOOD = pal("#7e5c34", "#9c7848", "#b48e5a")
+
+
+def quilted(ramp: list[Color], base: int = 3, seed: str = "") -> Callable:
+    """Steppstoff (Gambeson): senkrechte Steppnähte im Abstand von 2 Pixeln, dazwischen gepolsterte Bahnen."""
+    def f(x, y, w, h):
+        i = base if x % 2 == 0 else base - 1
+        if x % 2 == 0 and y == 0:
+            i += 1
+        if x % 2 == 0 and h01("quilt", seed, x, y) < 0.04:
+            i -= 1
+        return ramp[max(0, min(len(ramp) - 1, i))]
+    return f
+
+
+def paint_spearman(skin_name: str, hair_name: str, iris: str, face: str, feminine: bool) -> Skin:
+    """Speerträger: Eisenhut über der Polsterhaube, blauer Gambeson mit Goldborte, Lederarmschienen, braune Hose."""
+    s = Skin()
+    skin, hair = SKINS[skin_name], HAIRS[hair_name]
+    paint_head(s, skin, hair, IRISES[iris], face, long_hair=feminine)
+    t = tabard_codes({
+        "S": quilted(BLUE, 3, "gambeson"), "B": BLUE[3], "W": BLUE[5],
+        "X": quilted(LINEN, 2, "cap"), "i": LINEN[0], "I": LINEN[1], "j": LINEN[3],
+    })
+
+    # --- Eisenhut: Glocke mit breiter, blanker Krempe (von oben ein heller Ring), darunter die gesteppte Polsterhaube ---
+    s.art("hat", "top", ["deeeeeed", "ebbbbbbe", "ebcddcbe", "ebdeedbe", "ebdeedbe", "ebcddcbe", "ebbbbbbe", "efffffff"], t)
+    s.art("hat", "front", ["abcddcba", "bcdeedcb", "eFFFFFFe", "abbbbbba", "I      I", "X      X", "X      X", "Xi    iX"], t)
+    side = ["abcddcba", "bcdeedcb", "efFFFFfe", "abbbbbba", "IIIIIIII", "XXXXXXXX", "XXXXXXXX", " XXXXXiX"]
+    s.art("hat", "right", side, t)
+    s.art("hat", "left", [r[::-1] for r in side], t)
+    s.art("hat", "back", ["abcddcba", "bcdeedcb", "deffffed", "abbbbbba", "IIIIIIII", "XXXXXXXX", "XXXXXXXX", "        "], t)
+    if feminine:  # Zopf unter der Haube
+        braid = face_codes(skin, hair, IRISES[iris])
+        s.art("hat", "back", ["........", "........", "........", "........", "........", "...cd...", "...bc...", "...cd..."], braid)
+    s.clear("hat", ("bottom",))
+
+    # --- Körper: blauer Gambeson mit senkrechten Steppnähten, Goldborte und Ledergürtel ---
+    front = ["oGGyyGGo", "SSSgSSSS", "SSSySSSS", "SSSgSSSS", "SSSySSSS", "SSSgSSSS", "SSSySSSS", "lLLGyLLl",
+             "SSSgSSSS", "SSSgSSSS", "SSSgSSSS", "SSSgSSSS"]
+    back = ["oGGGGGGo"] + ["SSSSSSSS"] * 6 + ["lLLLLLLl"] + ["SSSSSSSS"] * 4
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.fill(part, "right", quilted(BLUE, 3, part + "r"))
+        s.fill(part, "left", quilted(BLUE, 3, part + "l"))
+        s.band(part, 0, GOLD[2], ("right", "left"))
+        s.band(part, 7, t["L"], ("right", "left"))
+        s.art(part, "top", ["SSSSSSSS", "SGGGGGGS", "SGGGGGGS", "SSSSSSSS"], t)
+        s.fill(part, "bottom", BLUE[2])
+
+    # --- Arme: gesteppte Ärmel, gepolsterte Schulter mit Goldnaht, Armschienen aus Leder, bloße Hände ---
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, quilted(BLUE, 3, arm), ("top", "right", "front", "left", "back"))
+        s.rows(arm, 11, 11, skin[2])
+        s.fill(arm, "bottom", skin[1])
+        s.clear(sleeve)
+        s.fill(sleeve, "top", quilted(BLUE, 4, sleeve))
+        s.rows(sleeve, 0, 1, quilted(BLUE, 4, sleeve + "s"))
+        s.band(sleeve, 2, GOLD[2])
+        s.band(sleeve, 7, LEATHER[4])
+        s.rows(sleeve, 8, 9, leather(LEATHER, 3, sleeve))
+        s.band(sleeve, 10, LEATHER[1])
+        s.art(sleeve, "right" if arm == "rarm" else "left", ["....", "....", "....", "....", "....", "....", "....", "....",
+                                                             ".nN.", ".Nn."], t)
+
+    # --- Beine: braune Wollhose, Lederstiefel; der Gambeson reicht bis über die Oberschenkel ---
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, cloth(UMBER, 2, leg, folds=(1,), shade_bottom=False), ("top", "right", "front", "left", "back"))
+        boots(s, leg, 7)
+        s.clear(pants)
+        s.rows(pants, 0, 1, quilted(BLUE, 3, pants))
+        s.band(pants, 2, GOLD[2])
+        s.band(pants, 2, BLUE[1], ("left",) if leg == "rleg" else ("right",))
+        # goldbesetzte Vorderkante des geschlitzten Schoßes
+        s.art(pants, "front", ["...g", "...g"] if leg == "rleg" else ["g...", "g..."], t)
+    return s
+
+
+def paint_crossbowman(skin_name: str, hair_name: str, iris: str, face: str, feminine: bool, helmet: str) -> Skin:
+    """Armbrustschütze: Schaller ("sallet") oder Polsterhaube ("cap"), dunkelblaue Brigantine, Bolzenköcher."""
+    s = Skin()
+    skin, hair = SKINS[skin_name], HAIRS[hair_name]
+    paint_head(s, skin, hair, IRISES[iris], face, long_hair=feminine)
+    t = tabard_codes({"B": BLUE[3], "K": hexc("#120c08")})
+
+    if helmet == "sallet":
+        # --- Schaller: runde Glocke mit Grat, hinten der lange, ausgestellte Nackenschirm; das Gesicht bleibt frei ---
+        s.art("hat", "top", ["abcddcba", "bcdeedcb", "cdeFfedc", "cdeFfedc", "cdeFfedc", "cdeffedc", "bcdeedcb", "abcddcba"], t)
+        s.art("hat", "front", ["bcdeedcb", "cdeffedc", "abbccbba", "c      c", "b      b", "a      a", "        ", "        "], t)
+        side = ["bcdeedcb", "cdeffedc", "cdeeeddb", "bcdddcb ", "bcddcb  ", "bccbb   ", "abb     ", "efd     "]
+        s.art("hat", "right", side, t)
+        s.art("hat", "left", [r[::-1] for r in side], t)
+        s.art("hat", "back", ["bcdeedcb", "cdeffedc", "cdeeeedc", "bcddddcb", "bccddccb", "bbcccbbb", "abbbbbba", "deffffed"], t)
+    else:
+        # --- Polsterhaube: in Wülsten gesteppt, oben ein Messingknopf, Wangenklappen mit Lederriemen ---
+        s.art("hat", "top", ["uvvvvvvu", "vBBBBBBv", "vBwwBBBv", "vBwGgBBv", "vBBggBBv", "vBBBBBBv", "vBBBBBBv", "uvvvvvvu"], t)
+        s.art("hat", "front", ["vBBwwBBv", "uuuuuuuu", "vwwwwwwv", "B      B", "v      v", "u      u", "l      l", "        "], t)
+        side = ["vBBwwBBv", "uuuuuuuu", "vBBBBBBw", "uuuuuuuv", "vBBBBBBv", "uvvvvvvu", " uuuuuul", "      l "]
+        s.art("hat", "right", side, t)
+        s.art("hat", "left", [r[::-1] for r in side], t)
+        s.art("hat", "back", ["vBBwwBBv", "uuuuuuuu", "vBBBBBBv", "uuuuuuuu", "vBBBBBBv", "uvvvvvvu", "        ", "        "], t)
+    s.clear("hat", ("bottom",))
+
+    # --- Körper: dunkelblaue Brigantine mit Messingnieten, vorn verschnürt; Gürtel ---
+    front = ["uvvxxvvu", "vGvuuvGv", "vvvuuvvv", "vGvuuvGv", "vvvuuvvv", "vGvuuvGv", "vvvuuvvv", "lLLGyLLl",
+             "vGvvvvGv", "uuuuuuuu", "vvGvvGvv", "UUUUUUUU"]
+    back = ["uvvvvvvu", "vGvvvvGv", "vvvvvvvv", "vGvvvvGv", "vvvvvvvv", "vGvvvvGv", "vvvvvvvv", "lLLLLLLl",
+            "vGvvvvGv", "uuuuuuuu", "vvGvvGvv", "UUUUUUUU"]
+    side = ["vvvv", "vvGv", "vvvv", "vvGv", "vvvv", "vvGv", "vvvv", "LLLL", "vvGv", "uuuu", "vGvv", "UUUU"]
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.art(part, "right", side, t)
+        s.art(part, "left", [r[::-1] for r in side], t)
+        s.art(part, "top", ["vvvvvvvv", "vvxxxxvv", "vvxxxxvv", "vvvvvvvv"], t)
+        s.fill(part, "bottom", BLUE[0])
+    if feminine:  # Zopf über dem Rücken
+        braid = face_codes(skin, hair, IRISES[iris])
+        s.art("jacket", "back", ["...cd...", "...bc...", "...cd...", "...ab..."], braid)
+
+    # --- Arme: Kettenärmel, Lederhandschuhe mit Stulpen ---
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, chainmail(), ("top", "right", "front", "left", "back"))
+        s.rows(arm, 9, 11, leather(LEATHER, 2, arm))
+        s.fill(arm, "bottom", LEATHER[1])
+        s.clear(sleeve)
+        s.band(sleeve, 8, LEATHER[4])
+        s.band(sleeve, 9, LEATHER[3])
+
+    # --- Beine: olivgrüne Beinlinge wie bei den Bogenschützen, hohe Stiefel; der Brigantinenschurz über den Hüften ---
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, cloth(OLIVE, 2, leg, folds=(2,), shade_bottom=False), ("top", "right", "front", "left", "back"))
+        boots(s, leg, 6)
+        s.clear(pants)
+        s.art(pants, "front", ["GvvG", "uuuu"], t)
+        s.art(pants, "back", ["GvvG", "uuuu"], t)
+        s.art(pants, "right", ["vGvv", "uuuu"], t)
+        s.art(pants, "left", ["vvGv", "uuuu"], t)
+
+    # --- Bolzenköcher: lederbezogener Holzkasten mit Messingbeschlägen, kurze Bolzen mit Holzfiedern ---
+    q = tabard_codes({"Q": leather(LEATHER, 2, "bolts"), "j": LEATHER[1], "J": LEATHER[3]})
+    s.fill_all("quiver", leather(LEATHER, 2, "bolts"))
+    for f_ in ("front", "back"):
+        s.art("quiver", f_, ["GyGG", "oooo", "QJQQ", "QJQQ", "gGGg", "QJQQ", "QJQQ", "QJQQ", "gGGg", "QJQQ", "jjjj"], q)
+    for f_ in ("right", "left"):
+        s.art("quiver", f_, ["GGG", "ooo", "QQQ", "QQQ", "gGg", "QQQ", "QQQ", "QQQ", "gGg", "QQQ", "jjj"], q)
+    s.fill("quiver", "top", t["K"])
+    s.fill("quiver", "bottom", LEATHER[0])
+    bolt = {"W": hexc("#e9e2cf"), "w": hexc("#b9b09a"), "B": BLUE[3], "b": BLUE[1], "s": hexc("#5a3e24"), "S": hexc("#3a2716")}
+    for f_ in ("front", "back"):
+        s.art("fletching", f_, ["W B", "wWb", "sSs"], bolt)
+    for f_ in ("right", "left"):
+        s.art("fletching", f_, ["B ", "bW", "Ss"], bolt)
+    s.art("fletching", "top", ["W B", " W "], bolt)
+    s.fill("fletching", "bottom", bolt["S"])
+    return s
+
+
+def paint_shieldbearer(skin_name: str, hair_name: str, iris: str, face: str) -> Skin:
+    """Schildträger: Spangenhelm mit Nasenschutz über der Kettenhaube, langes Kettenhemd, blauer Wappenrock."""
+    s = Skin()
+    skin, hair = SKINS[skin_name], HAIRS[hair_name]
+    paint_head(s, skin, hair, IRISES[iris], face)
+    t = tabard_codes()
+
+    # --- Spangenhelm: spitze Glocke mit Messingspangen und -reif, Nasenschutz; darunter die Kettenhaube ---
+    s.art("hat", "top", ["bcdgocbb", "cdegodcb", "deegoddc", "gggyGgoo", "oooGGooo", "cddgoccb", "bcdgocbb", "bccgocba"], t)
+    s.art("hat", "front", ["bcdgocbb", "cdegodcb", "oGGyyGGo", "C  fd  C", "C  ec  C", "C  db  C", "C      C", "CC    CC"], t)
+    side = ["bcdgocbb", "cdegodcb", "oGGGGGGo", "CCCCCCCC", "CCCCCCCC", "CCCCCCCC", "CCCCCCCC", "CCCCCCCC"]
+    for f_ in ("right", "left", "back"):
+        s.art("hat", f_, side, t)
+    s.clear("hat", ("bottom",))
+
+    # --- Körper: langes Kettenhemd, Kettenkragen, blauer Wappenrock mit breitem goldenem Kreuz ---
+    front = ["CCCCCCCC", "CVVwwVVC", "CVVGGVVC", "CGGGGGGC", "CggyyggC", "CVVGGVVC", "CVVggVVC", "lLLGyLLl",
+             "CVVVVVVC", "CVVVVVVC", "CVVuuVVC", "CVVUUVVC"]
+    back = ["CCCCCCCC", "ClVVVVVC", "CVlVVVVC", "CVVlVVVC", "CVVVlVVC", "CVVVVlVC", "CVVVVVlC", "lLLLLLLl",
+            "CVVVVVVC", "CVVVVVVC", "CVVVVVVC", "CVVVVVVC"]
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.fill(part, "right", chainmail())
+        s.fill(part, "left", chainmail())
+        s.band(part, 7, t["L"], ("right", "left"))
+        s.art(part, "top", ["CCCCCCCC", "CCCCCCCC", "CCCCCCCC", "CCCCCCCC"], t)
+        s.fill(part, "bottom", chainmail())
+
+    # --- Arme: Kettenärmel, Lederhandschuhe ---
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, chainmail(), ("top", "right", "front", "left", "back"))
+        s.rows(arm, 9, 11, leather(LEATHER, 3, arm))
+        s.fill(arm, "bottom", LEATHER[2])
+        s.clear(sleeve)
+        s.band(sleeve, 8, LEATHER[4])
+        s.band(sleeve, 9, LEATHER[3])
+
+    # --- Beine: das Kettenhemd reicht bis über die Knie, darüber der lange Wappenrock; Stiefel ---
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, chainmail(), ("top", "right", "front", "left", "back"))
+        boots(s, leg, 6)
+        s.clear(pants)
+        s.rows(pants, 0, 2, cloth(BLUE, 3, pants))
+        s.band(pants, 3, GOLD[2])
+        s.band(pants, 3, BLUE[1], ("left",) if leg == "rleg" else ("right",))
+    return s
+
+
+def paint_man_at_arms(variant: int) -> Skin:
+    """Waffenknecht: gebläuter Plattenharnisch, Topfhelm (Variante 1) bzw. Hundsgugel (Variante 2)."""
+    s = Skin()
+    looks = [("light", "brown", "gray", "stubble"), ("tan", "black", "brown", "beard")]
+    skin_name, hair_name, iris, face = looks[variant]
+    paint_head(s, SKINS[skin_name], HAIRS[hair_name], IRISES[iris], face)
+    t = tabard_codes({"Z": hexc("#07080c"), "Y": cloth(GOLD, 3, "mgold"), "7": hexc("#bec8e4")})
+    t.update({str(i): c for i, c in enumerate(BLUED)})
+
+    if variant == 0:
+        # --- Topfhelm mit flachem Scheitel, Sehschlitzen und Atemlöchern, Messingkreuz auf dem Gesicht ---
+        s.art("hat", "top", ["23333332", "34444443", "34555443", "34565443", "34555443", "34444443", "34444443", "23333332"], t)
+        s.art("hat", "front", ["23444432", "34555543", "oggGGggo", "3ZZgGZZ3", "456gG654", "3Z4gG4Z3", "34ZgGZ43", "122gG221"], t)
+        side = ["23444432", "34555543", "oggggggo", "34555543", "34555543", "23444432", "23444432", "12333321"]
+        s.art("hat", "right", side, t)
+        s.art("hat", "left", side, t)
+        s.art("hat", "back", ["23444432", "34555543", "oggggggo", "34544543", "34544543", "23433432", "23433432", "12333321"], t)
+        s.fill("hat", "bottom", BLUED[0])
+    else:
+        # --- Beckenhaube mit spitzem Klappvisier ("Hundsgugel"), darunter der Kettenkragen ---
+        s.art("hat", "top", ["12333321", "23455432", "34566543", "34577543", "34566543", "23455432", "23444432", "12333321"], t)
+        s.art("hat", "front", ["23455432", "12333321", "2ZZ67ZZ2", "23467432", "12357321", "1Z2562Z1", "C1Z55Z1C", "CC0230CC"], t)
+        side = ["23455432", "34566543", "3455542Z", "345g5543", "23455542", "CCC34442", "CCCC2331", "CCCCC110"]
+        s.art("hat", "right", side, t)
+        s.art("hat", "left", [r[::-1] for r in side], t)
+        s.art("hat", "back", ["23455432", "34566543", "34555543", "23444432", "12333321", "CCCCCCCC", "CCCCCCCC", "CCCCCCCC"], t)
+        s.clear("hat", ("bottom",))
+
+    # --- Körper: Plattenharnisch aus gebläutem Stahl, darüber ein geviertelter Wappenrock (blau und gold) ---
+    front = ["4wwwyyy4", "3VVVYYY3", "4VVVYYY4", "3VVVYYY3", "3VVVYYY3", "2VVVYYY2", "2VVVYYY2", "lLLGyLLl",
+             "3YYYVVV3", "2YYYVVV2", "2YYYVVV2", "1ggguuu1"]
+    back = ["4yyywww4", "3YYYVVV3", "4YYYVVV4", "3YYYVVV3", "3YYYVVV3", "2YYYVVV2", "2YYYVVV2", "lLLLLLLl",
+            "3VVVYYY3", "2VVVYYY2", "2VVVYYY2", "1uuuggg1"]
+    side = ["4554", "3443", "3443", "3453", "3443", "2342", "2332", "LLLL", "3443", "1221", "3443", "1221"]
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.art(part, "right", side, t)
+        s.art(part, "left", [r[::-1] for r in side], t)
+        s.art(part, "top", ["45555554", "45wwyy54", "45wwyy54", "45555554"], t)
+        s.fill(part, "bottom", BLUED[1])
+
+    # --- Arme: Schulterstücke, Ellbogenkacheln, Armröhren und Plattenhandschuhe ---
+    arm_front = ["4664", "3553", "2442", "1oo1", "2542", "2442", "3673", "1221", "2542", "2442", "3553", "1331"]
+    arm_side = ["4554", "3443", "2332", "1oo1", "2332", "2332", "3443", "1221", "2332", "2332", "3443", "1221"]
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, chainmail())
+        s.clear(sleeve)
+        s.art(sleeve, "front", arm_front, t)
+        for f_ in ("right", "left", "back"):
+            s.art(sleeve, f_, arm_side, t)
+        s.fill(sleeve, "top", plate(BLUED, 4, seed="mtop" + sleeve))
+        s.fill(sleeve, "bottom", BLUED[1])
+
+    # --- Beine: Beinzeug mit Kniebuckeln, Beinröhren und Eisenschuhen ---
+    leg_front = ["2552", "2442", "2442", "1331", "3673", "1gg1", "2552", "2542", "2442", "1331", "0110", "3553"]
+    leg_side = ["2332", "2332", "2332", "1221", "3443", "1221", "2442", "2332", "2332", "1221", "0110", "2442"]
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, chainmail())
+        s.clear(pants)
+        s.art(pants, "front", leg_front, t)
+        for f_ in ("right", "left", "back"):
+            s.art(pants, f_, leg_side, t)
+        s.fill(pants, "bottom", BLUED[1])
+    return s
+
+
+def paint_lancer(variant: int) -> Skin:
+    """Lanzenreiter: blanker Harnisch mit Goldborten, Visierhelm, Waffenrock mit Sparren, Umhang und Helmfeder."""
+    s = Skin()
+    looks = [("light", "blond", "blue", "plain"), ("medium", "brown", "hazel", "mustache")]
+    skin_name, hair_name, iris, face = looks[variant]
+    paint_head(s, SKINS[skin_name], HAIRS[hair_name], IRISES[iris], face)
+    t = tabard_codes({"Z": hexc("#08080b")})
+
+    # --- Visierhelm mit goldenem Kamm und Goldborten ---
+    s.art("hat", "top", ["bcdeedcb", "cdeGyedc", "deeGyeed", "deeGyeed", "deeGyeed", "deeGyeed", "cdeGyedc", "bcdeedcb"], t)
+    s.art("hat", "front", ["cdeGyedc", "deeffeed", "oGGyyGGo", "aZZZZZZa", "cdeffedc", "cdefeZdZ", "bcdfedZb", "oGGyyGGo"], t)
+    side = ["bcdeeddc", "cdeffeed", "ooGGGGGG", "cdddddZZ", "cdeeefff", "cdeGeeed", "bcddddcc", "oGGGGGGo"]
+    s.art("hat", "right", side, t)
+    s.art("hat", "left", [r[::-1] for r in side], t)
+    s.art("hat", "back", ["bcdGydcb", "cdefeedc", "cdeeeedc", "cdeeeedc", "bcddddcb", "bcddddcb", "abccccba", "oGGGGGGo"], t)
+    s.fill("hat", "bottom", STEEL[1])
+
+    # --- Körper: blanker Harnisch mit Goldborten, darüber der blaue Waffenrock mit goldenem Sparren ---
+    front = ["doGwwGod", "dVVVVVVd", "dVVyyVVd", "dVyggyVd", "dygVVgyd", "dgVVVVgd", "dVVVVVVd", "lLLGyLLl",
+             "dVVVVVVd", "dVVVVVVd", "dVVuuVVd", "dGgGGgGd"]
+    back = ["doGGGGod", "dVVVVVVd", "dVVyyVVd", "dVyggyVd", "dygVVgyd", "dgVVVVgd", "dVVVVVVd", "lLLLLLLl",
+            "dVVVVVVd", "dVVVVVVd", "dVVVVVVd", "dGgGGgGd"]
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.fill(part, "right", plate(STEEL, 4, seed=part + "r"))
+        s.fill(part, "left", plate(STEEL, 4, seed=part + "l"))
+        s.band(part, 0, GOLD[3], ("right", "left"))
+        s.band(part, 7, t["L"], ("right", "left"))
+        s.band(part, 11, GOLD[2], ("right", "left"))
+        s.art(part, "top", ["oGGGGGGo", "deeffeed", "deeffeed", "oGGGGGGo"], t)
+        s.fill(part, "bottom", BLUE[1])
+
+    # --- Arme: blanke Platten mit Goldborten ---
+    arm_plate = ["deed", "cefc", "bccb", "GyGG", "cddc", "bccb", "deed", "abba", "cedc", "oGGo", "deed", "bccb"]
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, chainmail())
+        s.clear(sleeve)
+        for f_ in ("right", "front", "left", "back"):
+            s.art(sleeve, f_, arm_plate, t)
+        s.fill(sleeve, "top", plate(STEEL, 5, seed="ltop" + sleeve))
+        s.fill(sleeve, "bottom", STEEL[1])
+
+    # --- Beine: der Waffenrock reicht bis an die Knie (für den Sattel geschlitzt), darunter blankes Beinzeug ---
+    leg_front = ["....", "....", "....", "....", "GyGG", "deed", "cGdc", "cddc", "bddc", "bccb", "abba", "cddc"]
+    leg_side = ["....", "....", "....", "....", "GGGG", "cddc", "cddc", "cddc", "bccb", "bccb", "abba", "cddc"]
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, chainmail())
+        s.clear(pants)
+        s.rows(pants, 0, 3, cloth(BLUE, 3, pants))
+        s.art(pants, "front", leg_front, t)
+        for f_ in ("right", "left", "back"):
+            s.art(pants, f_, leg_side, t)
+        s.fill(pants, "bottom", STEEL[1])
+
+    # --- Umhang: blau mit Goldsaum und goldener Krone ---
+    cape_out = []
+    for y in range(16):
+        row = ""
+        for x in range(10):
+            if y == 0:
+                row += "o"
+            elif x in (0, 9) or y == 15:
+                row += "g" if (x + y) % 2 else "G"
+            elif y == 14:
+                row += "u"
+            else:
+                row += "V"
+        cape_out.append(row)
+    cape_out[1] = "G" + "wwwwwwww" + "G"
+    cape_out[3] = "GVyVyyVyVG"
+    cape_out[4] = "GVyyyyyyVG"
+    cape_out[5] = "GVggggggVG"
+    s.art("cape", "back", cape_out, t)
+    s.art("cape", "front", ["o" * 10] + ["u" + "v" * 8 + "u" for _ in range(14)] + ["g" * 10], t)
+    s.fill("cape", "right", GOLD[2])
+    s.fill("cape", "left", GOLD[2])
+    s.fill("cape", "top", GOLD[1])
+    s.fill("cape", "bottom", GOLD[2])
+
+    # --- Helmfeder: gold-blau bzw. rot-weiß ---
+    if variant == 0:
+        paint_plume(s, GOLD[3], GOLD[4], BLUE[2])
+    else:
+        paint_plume(s, hexc("#ece6da"), hexc("#ffffff"), RED[3])
+    return s
+
+
+def paint_engineer(skin_name: str, hair_name: str, iris: str, face: str, feminine: bool, headgear: str) -> Skin:
+    """Pionier (Belagerungsknecht): Filzkappe ("cap") oder Gugel ("hood"), Lederschürze, Werkzeuggürtel mit Hammer."""
+    s = Skin()
+    skin, hair = SKINS[skin_name], HAIRS[hair_name]
+    paint_head(s, skin, hair, IRISES[iris], face, long_hair=feminine)
+    soot = {"s": mix(skin[1], hexc("#2a2624"), 0.3), "S": mix(skin[2], hexc("#2a2624"), 0.22)}
+    s.art("head", "front", ["........", "........", "........", "........", "........", "......s.", "........", "........"], soot)
+
+    def shirt(x, y, w, h):
+        """Leinenhemd: ruhiger Grundton, ein paar Falten, wenig Flecken."""
+        i = 3
+        if (x + 2 * (y // 4)) % 5 == 1 or h01("shirt", x, y) < 0.05:
+            i -= 1
+        if y == h - 1:
+            i -= 1
+        return LINEN[i]
+
+    def apron(x, y, w, h):
+        """Lederschürze: glattes Leder, kaum Schrammen (die Rußflecken sind von Hand gesetzt)."""
+        return LEATHER[2] if h01("apron", x, y) < 0.04 else LEATHER[3]
+    t = tabard_codes({
+        "x": shirt, "X": LINEN[2], "A": apron, "a": LEATHER[2],
+        "P": DARK_LEATHER[3], "p": DARK_LEATHER[2], "Q": LEATHER[5],
+        "B": DARK_LEATHER[2], "b": DARK_LEATHER[1],
+        "h": WOOD[1], "H": WOOD[2], "s": mix(LEATHER[2], hexc("#1c1a1a"), 0.45), "S": soot["S"],
+        "D": mix(DARK_LEATHER[3], LINEN[2], 0.45),
+    })
+
+    if headgear == "cap":
+        # --- Filzkappe in Blau mit umgeschlagener Krempe ---
+        felt = {"F": cloth(BLUE, 2, "felt"), "f": BLUE[1], "h": BLUE[3], "H": BLUE[4], "u": BLUE[0]}
+        s.art("hat", "top", ["fFFFFFFf", "FFFFFFFF", "FFhHFFFF", "FFHhFFFF", "FFFFFFFF", "FFFFFFFF", "FFFFFFFF", "fFFFFFFf"], felt)
+        s.art("hat", "front", ["fFFhhFFf", "FFFFFFFF", "hHHHHHHh"], felt)
+        for f_ in ("right", "left", "back"):
+            s.art("hat", f_, ["fFFFFFFf", "FFFFFFFF", "hHHHHHHh"], felt)
+        if feminine:  # Zopf
+            braid = face_codes(skin, hair, IRISES[iris])
+            s.art("hat", "back", ["........", "........", "........", "........", "...cd...", "...bc...", "...cd...", "...bc..."], braid)
+    else:
+        # --- Gugel aus rotbraunem Loden ---
+        hood = {"H": cloth(RUSSET, 3, "ehood"), "h": RUSSET[2], "j": RUSSET[1], "J": RUSSET[4], "i": RUSSET[0]}
+        s.art("hat", "top", ["hHHHHHHh", "HHHJJHHH", "HHJJJJHH", "HHHJJHHH", "HHHHHHHH", "hHHHHHHh", "hhHHHHhh", "hhhhhhhh"], hood)
+        s.art("hat", "front", ["HJJJJJJH", "hiiiiiih", "H      H", "H      H", "H      H", "Hh    hH", "HH    HH", "HHh  hHH"], hood)
+        hood_side = ["HHHHHHHH", "HHHHHJHH", "HHHHHHHH", "HHHHHHhH", "HHHHHhHH", "hHHHHHHH", "hhHHHHHh", "hhhhhhhh"]
+        s.art("hat", "right", hood_side, hood)
+        s.art("hat", "left", [r[::-1] for r in hood_side], hood)
+        s.art("hat", "back", ["HHHHHHHH", "HHHhhHHH", "HHHhhHHH", "HHHJhHHH", "HHHhhHHH", "HHHHHHHH", "hHHHHHHh", "hhhhhhhh"], hood)
+    s.clear("hat", ("bottom",))
+
+    # --- Körper: Leinenhemd, Lederschürze mit Latz und Brusttasche, Werkzeuggürtel mit Beutel und Hammer ---
+    front = ["xxlxxlxx", "xxlxxlxx", "xxAAAAxx", "xxAnnAxx", "xxAaaAxx", "xxAAsAxx", "xAAAAAAx", "bBBGBBBb",
+             "QPAAAdef", "pPAAAAHA", "xAAsAAhA", "xAAAAAAx"]
+    back = ["xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "bBBBBBBb",
+            "xxxQQxxx", "xxxQlxxx", "xxxxxxxx", "xxxxxxxx"]
+    for part in ("body", "jacket"):
+        s.art(part, "front", front, t)
+        s.art(part, "back", back, t)
+        s.fill(part, "right", shirt)
+        s.fill(part, "left", shirt)
+        s.band(part, 7, DARK_LEATHER[2], ("right", "left"))
+        s.art(part, "top", ["xxxxxxxx", "xxxxxxxx", "xxxxxxxx", "xxxxxxxx"], t)
+        s.fill(part, "bottom", LINEN[2])
+    s.art("jacket", "right", ["....", "....", "....", "....", "....", "....", "....", "....", ".QP.", ".pP."], t)  # Beutel
+
+    # --- Arme: hochgekrempelte Ärmel, nackte Unterarme mit etwas Ruß ---
+    for arm, sleeve in (("rarm", "rsleeve"), ("larm", "lsleeve")):
+        s.fill_all(arm, shirt, ("top", "right", "front", "left", "back"))
+        s.rows(arm, 5, 11, lambda x, y, w, h: skin[1] if y == 11 else skin[2])
+        s.art(arm, "front", ["....", "....", "....", "....", "....", "....", "....", "..S.", "....", ".S..", "....", "...."], t)
+        s.fill(arm, "bottom", skin[1])
+        s.clear(sleeve)
+        s.band(sleeve, 4, LINEN[4])
+        s.band(sleeve, 5, LINEN[2])
+
+    # --- Beine: graue Hose, Schürze bis an die Knie, derbe Stiefel mit Staub ---
+    for leg, pants in (("rleg", "rpants"), ("lleg", "lpants")):
+        s.fill_all(leg, cloth(WOOL, 2, leg, folds=(1,), shade_bottom=False), ("top", "right", "front", "left", "back"))
+        boots(s, leg, 7, DARK_LEATHER)
+        s.art(leg, "front", ["....", "....", "....", "....", "....", "....", "....", "....", "....", "....", ".D..", "D..D"], t)
+        s.clear(pants)
+        s.art(pants, "front", ["AAAA", "AAAA", "AAsA", "AAAA", "aaaa"], t)
+    return s
+
+
+# =============================================================================
 # Banditen
 # =============================================================================
 
@@ -713,6 +1179,25 @@ def all_skins() -> dict[str, Image.Image]:
     captains = [("light", "brown", "blue", "fullbeard"), ("medium", "gray", "gray", "fullbeard"), ("dark", "black", "brown", "mustache")]
     for i, args in enumerate(captains):
         out[f"soldier/captain_{i + 1}"] = paint_captain(*args).img
+    spearmen = [("tan", "brown", "brown", "stubble", False), ("light", "red", "blue", "fullbeard", False),
+                ("dark", "black", "brown", "woman", True)]
+    for i, args in enumerate(spearmen):
+        out[f"soldier/spearman_{i + 1}"] = paint_spearman(*args).img
+    crossbowmen = [("light", "blond", "gray", "mustache", False, "sallet"), ("medium", "black", "brown", "stubble", False, "cap"),
+                   ("tan", "chestnut", "hazel", "freckles", True, "sallet")]
+    for i, args in enumerate(crossbowmen):
+        out[f"soldier/crossbowman_{i + 1}"] = paint_crossbowman(*args).img
+    shieldbearers = [("medium", "brown", "green", "beard"), ("light", "gray", "blue", "fullbeard"), ("dark", "black", "brown", "mustache")]
+    for i, args in enumerate(shieldbearers):
+        out[f"soldier/shieldbearer_{i + 1}"] = paint_shieldbearer(*args).img
+    for i in range(2):
+        out[f"soldier/man_at_arms_{i + 1}"] = paint_man_at_arms(i).img
+    for i in range(2):
+        out[f"soldier/lancer_{i + 1}"] = paint_lancer(i).img
+    engineers = [("light", "brown", "blue", "fullbeard", False, "cap"), ("tan", "black", "brown", "stubble", False, "hood"),
+                 ("medium", "red", "green", "freckles", True, "cap")]
+    for i, args in enumerate(engineers):
+        out[f"soldier/engineer_{i + 1}"] = paint_engineer(*args).img
     for i in range(3):
         out[f"bandit/bandit_{i + 1}"] = paint_bandit(i, False).img
         out[f"bandit/bandit_archer_{i + 1}"] = paint_bandit(i, True).img

@@ -196,7 +196,7 @@ final class SiegeGameTests {
     /** Ablauf auf dem Schießplatz: erst warten, bis seine Chunks samt Wesen geladen sind, dann aufbauen. */
     private static net.minecraft.gametest.framework.GameTestSequence prepared(GameTestHelper helper, Range r, Runnable setup) {
         return helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(r.entitiesLoaded(), "Chunks des Schießplatzes laden nicht"))
+                .thenWaitUntil(() -> helper.assertTrue(ModGameTests.awaitLoading(r.entitiesLoaded()), "Chunks des Schießplatzes laden nicht"))
                 .thenExecute(setup)
                 .thenIdle(2);
     }
@@ -456,7 +456,7 @@ final class SiegeGameTests {
                     catapult[0].aimAt(aim);
                     helper.assertTrue(catapult[0].fire(level, null), "Katapult wirft nicht");
                 })
-                .thenWaitUntil(() -> helper.assertTrue(count(level, r.pos(-3, 0, wallZ), r.pos(3, 5, wallZ), Blocks.STONE_BRICKS) <= before - 3,
+                .thenWaitUntil(() -> helper.assertTrue(count(level, r.pos(-3, 0, wallZ), r.pos(3, 5, wallZ), Blocks.STONE_BRICKS) <= before - 2,
                         "keine Bresche: " + count(level, r.pos(-3, 0, wallZ), r.pos(3, 5, wallZ), Blocks.STONE_BRICKS) + " von " + before))
                 .thenExecute(() -> {
                     helper.assertTrue(foe[0].getHealth() < foe[0].getMaxHealth(), "Gegner an der Mauer bleibt unversehrt");

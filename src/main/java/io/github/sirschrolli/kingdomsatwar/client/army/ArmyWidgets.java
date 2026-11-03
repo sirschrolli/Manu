@@ -40,12 +40,28 @@ final class ArmyWidgets {
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 40.0f, 8.0f, 24, 24, 8, 8, 128, 64);
     }
 
-    /** Kleines Waffen-Symbol (Bogen oder Schwert) für die Angriffswerte. */
+    /** Kleines Waffen-Symbol (Schwert, Bogen, Armbrust, Speer, Streitkolben, Axt) für die Angriffswerte. */
     static void weaponIcon(GuiGraphicsExtractor g, SoldierType type, int x, int y) {
         g.pose().pushMatrix();
         g.pose().translate(x, y);
         g.pose().scale(0.6875f, 0.6875f);
-        g.item(new ItemStack(type.ranged() ? Items.BOW : Items.IRON_SWORD), 0, 0);
+        g.item(new ItemStack(type.weaponIcon()), 0, 0);
+        g.pose().popMatrix();
+    }
+
+    /** Ein Text, der in {@code width} Pixel passen muss: notfalls etwas kleiner gesetzt (bis 70 %), dann gekürzt. */
+    static void fitText(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int width, int color, boolean shadow) {
+        int w = font.width(text);
+        if (w <= width) {
+            g.text(font, text, x, y, color, shadow);
+            return;
+        }
+        float scale = Math.max(0.7f, (float) width / w);
+        g.pose().pushMatrix();
+        g.pose().translate(x, y + (1.0f - scale) * 4.0f);
+        g.pose().scale(scale, scale);
+        String shown = shorten(font, text.getString(), (int) (width / scale));
+        g.text(font, Component.literal(shown).withStyle(text.getStyle()), 0, 0, color, shadow);
         g.pose().popMatrix();
     }
 

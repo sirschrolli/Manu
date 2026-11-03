@@ -386,15 +386,19 @@ public final class SiegeCrew {
         return hit != null && hit.getEntity() instanceof SiegeWeaponEntity weapon ? weapon : null;
     }
 
-    /** Der nächste eigene Soldat, der nicht schon eine Waffe bedient oder auf dem Weg zu einer ist. */
-    private static @Nullable SoldierEntity nearestFree(ServerPlayer player, SiegeWeaponEntity weapon) {
+    /**
+     * Der nächste eigene Soldat, der nicht schon eine Waffe bedient oder auf dem Weg zu einer ist – Belagerungsknechte zuerst
+     * (sie laden schneller nach und bessern die Waffe aus), wenn sie nicht viel weiter weg sind.
+     */
+    static @Nullable SoldierEntity nearestFree(ServerPlayer player, SiegeWeaponEntity weapon) {
         SoldierEntity best = null;
         double bestDist = Double.MAX_VALUE;
         for (SoldierEntity soldier : SoldierEntity.soldiersOf(player, SoldierEntity.COMMAND_RANGE)) {
             if (soldier.isPassenger() || isAssigned(player.level(), soldier)) {
                 continue;
             }
-            double d = soldier.distanceToSqr(weapon);
+            double d = soldier.distanceToSqr(weapon)
+                    * (soldier.getSoldierType() == io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ENGINEER ? 0.2 : 1.0);
             if (d < bestDist) {
                 best = soldier;
                 bestDist = d;

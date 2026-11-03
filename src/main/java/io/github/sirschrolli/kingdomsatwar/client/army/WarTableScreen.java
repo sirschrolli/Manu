@@ -39,7 +39,9 @@ import org.jspecify.annotations.Nullable;
 /**
  * Das Fenster des Feldherrentischs. Oben „Alle heilen“: der Feldscher versorgt alle Verwundeten im Feldlager (24 Blöcke
  * um den Tisch) – der Knopf nennt seinen Lohn. Links die eigenen Soldaten im Feldlager mit Gesundheit und Proviant, in
- * der Mitte der ausgewählte, rechts Rang, Werte und die Preise fürs Befördern und für die Ausbildung zur nächsten Art.
+ * der Mitte der ausgewählte, rechts Rang, Werte und die Preise fürs Befördern und für die Ausbildung zu einer anderen Art
+ * (gibt es mehrere, wählt man sie mit den Pfeilen: ein Schwertkämpfer wird Ritter, Speerträger, Schildträger oder
+ * Belagerungsknecht, ein Ritter Hauptmann, Lanzenreiter oder Waffenknecht, ein Bogenschütze Armbrustschütze).
  * Unten: Proviant zuteilen (aus dem Stadtlager und dem Gepäck) und mit allen auf den Schlachtzug ziehen bzw. sie heim in
  * die Garnison schicken. Neue Soldaten gibt es hier nicht – die heuert man bei den Rittern und Söldnern der Dörfer an.
  */
@@ -57,12 +59,19 @@ public class WarTableScreen extends Screen {
     private static final int PREVIEW_W = 68;
     private static final int PREVIEW_H = 96;
     private static final int INFO_X = 203;
+    private static final int INFO_W = 96;
+    /** Die Pfeile zur Wahl der Ausbildung (Größe). */
+    private static final int ARROW = 11;
+    /** Wo die gewählte Ausbildung steht (Abstand vom oberen Rand). */
+    private static final int PROMOTE_Y = PREVIEW_Y + 92;
 
     private final BlockPos tablePos;
     private final int armyLimit;
     private final int armySize;
     private final boolean hasTown;
     private int selectedSoldier = -1;
+    /** Welche der möglichen Ausbildungen gewählt ist (für den ausgewählten Soldaten). */
+    private int promoteChoice;
     private int scroll;
     private int left;
     private int top;
@@ -155,19 +164,22 @@ public class WarTableScreen extends Screen {
         // Ausbilden
         SoldierEntity soldier = this.soldier();
         Training.Cost rank = soldier == null ? null : Training.rankCost(soldier.getSoldierType(), soldier.getRank());
-        Training.Cost promote = soldier == null ? null : Training.promoteCost(soldier.getSoldierType());
+        SoldierType chosenTarget = soldier == null ? null : this.target(soldier);
+        Training.Cost promote = chosenTarget == null ? null : Training.promoteCost(soldier.getSoldierType(), chosenTarget);
         this.rankButton.active = rank != null && Training.canAfford(this.minecraft.player, rank);
         this.promoteButton.active = promote != null && Training.canAfford(this.minecraft.player, promote);
         this.rankButton.setTooltip(Tooltip.create(soldier == null ? Component.translatable("gui.kingdomsatwar.recruitment.no_soldier")
                 : rank == null ? Component.translatable("gui.kingdomsatwar.recruitment.max_rank")
                 : Component.translatable("gui.kingdomsatwar.recruitment.rank_up.hint",
                         Component.translatable("soldier.kingdomsatwar.rank." + (soldier.getRank() + 1)))));
-        SoldierType next = soldier == null ? null : Training.promotion(soldier.getSoldierType());
-        this.promoteButton.setMessage(next == null ? Component.translatable("gui.kingdomsatwar.recruitment.promote")
-                : Component.translatable("gui.kingdomsatwar.recruitment.promote_to", Component.translatable(next.translationKey())));
+        SoldierType next = soldier == null ? null : this.target(soldier);
+        this.promoteButton.setMessage(Component.translatable("gui.kingdomsatwar.recruitment.promote"));
         this.promoteButton.setTooltip(Tooltip.create(next == null
                 ? Component.translatable("gui.kingdomsatwar.recruitment.promote.none")
-                : Component.translatable("gui.kingdomsatwar.recruitment.promote.hint", Component.translatable(next.translationKey()))));
+                : Component.translatable("gui.kingdomsatwar.recruitment.promote.hint", Component.translatable(next.translationKey()))
+                        .append("\n\n").append(Component.translatable("soldier.kingdomsatwar." + next.id() + ".role")
+                                .withStyle(ChatFormatting.GOLD))
+                        .append("\n").append(Component.translatable(next.descriptionKey()).withStyle(ChatFormatting.GRAY))));
     }
 
     private void campaign() {
@@ -182,7 +194,27 @@ public class WarTableScreen extends Screen {
     private void train(Training.Action action) {
         SoldierEntity soldier = this.soldier();
         if (soldier != null) {
-            ClientPacketDistributor.sendToServer(new TrainPayload(this.tablePos, soldier.getId(), action.ordinal()));
+            SoldierType target = action == Training.Action.PROMOTE ? this.target(soldier) : null;
+            ClientPacketDistributor.sendToServer(new TrainPayload(this.tablePos, soldier.getId(), action.ordinal(),
+                    target == null ? -1 : target.ordinal()));
+        }
+    }
+
+    /** Die gewählte Ausbildung für diesen Soldaten ({@code null}: keine möglich). */
+    private @Nullable SoldierType target(SoldierEntity soldier) {
+        List<SoldierType> options = Training.promotions(soldier.getSoldierType());
+        return options.isEmpty() ? null : options.get(Math.floorMod(this.promoteChoice, options.size()));
+    }
+
+    /** Für Vorführungen: diese Ausbildung wählen. */
+    public void choose(SoldierType target) {
+        SoldierEntity soldier = this.soldier();
+        if (soldier != null) {
+            int i = Training.promotions(soldier.getSoldierType()).indexOf(target);
+            if (i >= 0) {
+                this.promoteChoice = i;
+                this.updateButtons();
+            }
         }
     }
 
@@ -247,9 +279,29 @@ public class WarTableScreen extends Screen {
                 SoldierEntity soldier = list.get(this.scroll + i);
                 if (soldier.getId() != this.selectedSoldier) {
                     this.selectedSoldier = soldier.getId();
+                    this.promoteChoice = 0;
                     this.feedbackTicks = 0;
                     this.click();
                 }
+                return true;
+            }
+        }
+        // die Pfeile neben der gewählten Ausbildung
+        SoldierEntity chosen = this.soldier();
+        int options = chosen == null ? 0 : Training.promotions(chosen.getSoldierType()).size();
+        if (options > 1) {
+            int ax = this.left + INFO_X;
+            int ay = this.top + PROMOTE_Y;
+            if (this.inArrow(event.x(), event.y(), ax, ay)) {
+                this.promoteChoice = Math.floorMod(this.promoteChoice - 1, options);
+                this.click();
+                this.updateButtons();
+                return true;
+            }
+            if (this.inArrow(event.x(), event.y(), ax + INFO_W - ARROW, ay)) {
+                this.promoteChoice = Math.floorMod(this.promoteChoice + 1, options);
+                this.click();
+                this.updateButtons();
                 return true;
             }
         }
@@ -261,6 +313,10 @@ public class WarTableScreen extends Screen {
         int max = Math.max(0, this.soldiers().size() - VISIBLE);
         this.scroll = Mth.clamp(this.scroll - (int) Math.signum(scrollY), 0, max);
         return true;
+    }
+
+    private boolean inArrow(double mx, double my, int x, int y) {
+        return mx >= x && mx < x + ARROW && my >= y - 1 && my < y + ARROW - 1;
     }
 
     private boolean inEntry(double mx, double my, int row) {
@@ -275,6 +331,9 @@ public class WarTableScreen extends Screen {
 
     /** Für Vorführungen: diesen Soldaten auswählen. */
     public void select(SoldierEntity soldier) {
+        if (soldier.getId() != this.selectedSoldier) {
+            this.promoteChoice = 0;
+        }
         this.selectedSoldier = soldier.getId();
         this.updateButtons();
     }
@@ -380,12 +439,13 @@ public class WarTableScreen extends Screen {
         } else {
             g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.max_rank.short"), x, py + 14, ArmyWidgets.MUTED, false);
         }
-        SoldierType next = Training.promotion(type);
-        Training.Cost promote = Training.promoteCost(type);
+        List<SoldierType> options = Training.promotions(type);
+        SoldierType next = this.target(chosen);
+        Training.Cost promote = next == null ? null : Training.promoteCost(type, next);
         int qy = py + 30;
         if (next != null && promote != null) {
-            g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.promote_cost"), x, qy, ArmyWidgets.LABEL, false);
-            this.trainCostRow(g, x, qy + 9, promote, mouseX, mouseY);
+            this.drawPromotion(g, x, qy, next, options.size(), mouseX, mouseY);
+            this.trainCostRow(g, x, qy + 10, promote, mouseX, mouseY);
         } else {
             List<FormattedCharSequence> none = this.font.split(Component.translatable("gui.kingdomsatwar.recruitment.promote.none.short"), 96);
             for (int i = 0; i < Math.min(2, none.size()); i++) {
@@ -396,6 +456,40 @@ public class WarTableScreen extends Screen {
         String name = chosen.getPersonalName().isEmpty() ? chosen.getDisplayName().getString() : chosen.getPersonalName();
         String shown = this.font.plainSubstrByWidth(name, PREVIEW_W);
         g.text(this.font, shown, x0 + PREVIEW_X + (PREVIEW_W - this.font.width(shown)) / 2, y0 + 119, ArmyWidgets.LABEL, false);
+    }
+
+    /**
+     * Die gewählte Ausbildung: "→ Ritter" – gibt es mehrere, mit Pfeilen links und rechts zum Wählen. Über dem Namen zeigt
+     * ein Tooltip, was die neue Art kann.
+     */
+    private void drawPromotion(GuiGraphicsExtractor g, int x, int y, SoldierType next, int options, int mouseX, int mouseY) {
+        Component name = Component.translatable(next.translationKey());
+        int nameX = x;
+        int nameW = INFO_W;
+        // die Trennlinie des Hintergrunds (unter dem Namen im Bild) läuft hier durch – in dieser Spalte überdecken
+        g.fill(x - 1, y - 2, x + INFO_W + 1, y + ARROW, 0xFFC6C6C6);
+        if (options > 1) {
+            this.arrow(g, x, y - 1, "‹", mouseX, mouseY);
+            this.arrow(g, x + INFO_W - ARROW, y - 1, "›", mouseX, mouseY);
+            nameX = x + ARROW + 1;
+            nameW = INFO_W - 2 * ARROW - 2;
+            int shown = Math.min(nameW, this.font.width(name));
+            ArmyWidgets.fitText(g, this.font, name, nameX + (nameW - shown) / 2, y + 1, nameW, ArmyWidgets.GOLD, false);
+        } else {
+            ArmyWidgets.fitText(g, this.font, Component.literal("→ ").append(name), nameX, y + 1, nameW, ArmyWidgets.GOLD, false);
+        }
+        if (mouseX >= nameX && mouseX < nameX + nameW && mouseY >= y && mouseY < y + 10) {
+            g.setTooltipForNextFrame(this.font, List.of(name.copy().withStyle(ChatFormatting.GOLD),
+                    Component.translatable("soldier.kingdomsatwar." + next.id() + ".role").withStyle(ChatFormatting.YELLOW),
+                    Component.translatable(next.descriptionKey()).withStyle(ChatFormatting.GRAY)).stream()
+                    .flatMap(c -> this.font.split(c, 200).stream()).toList(), mouseX, mouseY);
+        }
+    }
+
+    private void arrow(GuiGraphicsExtractor g, int x, int y, String glyph, int mouseX, int mouseY) {
+        boolean hovered = mouseX >= x && mouseX < x + ARROW && mouseY >= y && mouseY < y + ARROW;
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, hovered ? ArmyWidgets.BUTTON_HIGHLIGHTED : ArmyWidgets.BUTTON, x, y, ARROW, ARROW);
+        g.text(this.font, glyph, x + (ARROW - this.font.width(glyph) + 1) / 2, y + 2, hovered ? 0xFFFFE08A : 0xFFFFFFFF, true);
     }
 
     private void trainCostRow(GuiGraphicsExtractor g, int x, int y, Training.Cost cost, int mouseX, int mouseY) {

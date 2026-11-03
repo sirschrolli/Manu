@@ -79,6 +79,22 @@ public final class ModGameTests {
     private static final Identifier ARENA = KingdomsAtWar.id("test_arena");
     private static final BlockPos TEST_POS = new BlockPos(2, 1, 2);
 
+    /**
+     * Für Tests, die weit draußen Chunks laden (Schießplätze, Felder): Der Testserver tickt so schnell er kann, das Laden
+     * der Chunks und ihrer Wesen läuft aber in anderen Threads. Solange {@code loaded} noch nicht stimmt, wartet dieser
+     * Tick darum ein paar Millisekunden, damit das Laden hinterherkommt (sonst ist die Zeit des Tests in zwei Sekunden um).
+     */
+    static boolean awaitLoading(boolean loaded) {
+        if (!loaded) {
+            try {
+                Thread.sleep(15L);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        return loaded;
+    }
+
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> PLACE_BLOCKS =
             TEST_FUNCTIONS.register("place_blocks", () -> ModGameTests::placeBlocks);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LOOT_TABLES =
@@ -193,6 +209,7 @@ public final class ModGameTests {
         SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
         SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
         RaidGameTests.init();      // Heerhaufen der Reiche gegen die eigene Siedlung
+        TroopGameTests.init();     // die neuen Truppen (Speerträger bis Belagerungsknecht)
     }
 
     private ModGameTests() {}
@@ -229,6 +246,9 @@ public final class ModGameTests {
         ArenaGameTests.register(event, environment);
         SpellGameTests.register(event, environment);
         SiegeGameTests.register(event, environment);
+        // eigene Testgruppe: die Felder der Truppentests laden viele Chunks (wie die Schießplätze) – nicht gleichzeitig
+        // mit den übrigen Tests, die sonst auf ihre Chunks warten
+        TroopGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("troops")));
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg
         RaidGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("raids")));
         FarmGameTests.register(event, environment);

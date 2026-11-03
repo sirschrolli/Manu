@@ -60,8 +60,8 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 
 - **Gegenangriffe:** Wer ein Reich angreift, ist mit ihm im Krieg – es schickt dann von Zeit zu Zeit einen
   Heerhaufen mit Hauptmann gegen die eigene Siedlung (abschaltbar).
-- **Neue Truppen:** Speerträger, Armbrustschützen, Schildträger, schwere Fußknechte, berittene Ritter und
-  Belagerungsknechte für die eigene Armee.
+- **Neue Truppen:** Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross und
+  Belagerungsknechte für die eigene Armee (0.44.0).
 - **Drachen im Krieg** (danach): Drachen greifen auf Befehl Burgen und Heere an.
 
 ---
@@ -81,7 +81,35 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | M3 | Erzmagier: Heilritual und je eine weitere Fähigkeit, sichere Heimkehr in den Turm; Aetherit-Stab mit Mana-Leiste und sechs Stufen (Version 0.41.0) | ✅ |
 | K2 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Version 0.42.0) | ✅ |
 | K3a | Heerhaufen: Gegenangriffe der Reiche auf die eigene Siedlung (Version 0.43.0) | ✅ |
-| K3b | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, schwere Fußknechte, berittene Ritter, Belagerungsknechte | 🔨 |
+| K3b | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte (Version 0.44.0) | ✅ |
+
+## Was in 0.44.0 fertig ist (neue Truppen)
+
+- **Sechs neue Arten** mit eigenem Aussehen (je zwei bis drei Gesichter, bei Speerträgern, Armbrustschützen und
+  Belagerungsknechten ist die letzte eine Frau) und eigenem Spawn-Ei:
+  - **Speerträger** – Eisenspeer mit langer Reichweite (trifft auch, wer ihm auf den Leib rückt); gegen Reiter, Pferde
+    und große Ungetüme × 1,75.
+  - **Armbrustschütze** – spannt (gut eine Sekunde), legt an und schießt einen Bolzen mit 2,6 statt 1,7 (Bogen): weiter,
+    flacher, härter; der Abfall bis zum Ziel ist eingerechnet. Nie, wenn ein Verbündeter in der Schusslinie steht.
+  - **Schildträger** – hält den Schild hoch, sobald ein Gegner in Sicht ist, und senkt ihn nur kurz für den eigenen Hieb;
+    alle paar Sekunden fordert er heraus: Gegner, die einen Verbündeten angreifen, wenden sich ihm zu (bis 6 Blöcke sicher,
+    weiter weg meistens).
+  - **Waffenknecht** – 52 Leben, 18 Rüstung, Streitkolben; trifft auch die Gegner neben dem Ziel mit halber Wucht und
+    wirft sie zurück (nie Kameraden); Pfeile richten 30 % weniger aus.
+  - **Lanzenreiter** – reitet sein eigenes **Schlachtross** (Friese oder Schimmel aus den eigenen Pferden der Mod,
+    gesattelt, im Rossharnisch, gezähmt für den Herrn). Lanzenangriff wie die Zombiereiter von Vanilla: auf Abstand,
+    Lanze senken, durchgaloppieren, wenden – den Schaden macht der Stoß (je schneller, desto härter). Verbündete trifft
+    die Lanze nie. Abgeworfen sitzt er wieder auf; ohne Ross kämpft er zu Fuß, der Feldscher besorgt für 3 Silber ein
+    neues. Unter niedrigen Durchgängen erstickt er im Sattel nicht.
+  - **Belagerungsknecht** – bedient er eine Belagerungswaffe, läuft die Winde um die Hälfte schneller (der Abschuss
+    selbst nicht) und er bessert sie nebenbei aus; frei bessert er beschädigte eigene Waffen bis 16 Blöcke weit aus
+    (3 % alle zwei Sekunden). Der Kommandostab ruft ihn zuerst.
+- **Ausbildungswege** am Feldherrentisch, gewählt mit Pfeilen neben dem Namen der neuen Art (Tooltip mit ihrer Rolle):
+  Schwertkämpfer → Ritter, Speerträger, Schildträger oder Belagerungsknecht; Bogenschütze → Armbrustschütze; Ritter →
+  Hauptmann, Lanzenreiter oder Waffenknecht. Name, Rang, Herr und Geschlecht bleiben.
+- **Söldnerhaus:** Die neuen Arten warten dort auch (Lanzenreiter am seltensten, ihr Ross kommt beim Anheuern).
+- **Geprüft** mit sechs Spieltests (Ausrüstung und Werte, Ausbildungswege samt Preisen, Lanzenangriff und neues Ross,
+  Armbrust, Speer/Streitkolben/Herausforderung, Ausbessern und schnelleres Nachladen).
 
 ## Was in 0.43.0 fertig ist (Heerhaufen)
 

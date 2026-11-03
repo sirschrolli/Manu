@@ -21,9 +21,10 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Söldner in den Dörfern: Im Söldnerhaus jedes Dorfs warten jeden Morgen bis zu drei Kämpfer – Schwertkämpfer,
- * Bogenschützen, Ritter und Hauptleute, manche schon erfahren (Veteran, Elite). An der Söldnertafel sieht man, wer da
- * ist und was er kostet; angeheuert wird mit Münzen (Ritter und Hauptleute bringen ihre Ausrüstung selbst mit, dafür
- * ist ihr Sold höher). Geheilt, ausgebildet und befördert wird später am eigenen Feldherrentisch.
+ * Bogenschützen, Ritter, Speerträger, Armbrustschützen, seltener auch Schildträger, Belagerungsknechte, Waffenknechte,
+ * Hauptleute und Lanzenreiter (deren Ross steht im Stall, bis man sie anheuert), manche schon erfahren (Veteran, Elite).
+ * An der Söldnertafel sieht man, wer da ist und was er kostet; angeheuert wird mit Münzen (wer seine Ausrüstung
+ * selbst mitbringt, will dafür mehr Sold). Geheilt, ausgebildet und befördert wird später am eigenen Feldherrentisch.
  */
 public final class Mercenaries {
     /** So viele Söldner warten höchstens an einer Tafel. */
@@ -70,19 +71,22 @@ public final class Mercenaries {
         return Recruitment.Result.HIRED;
     }
 
-    /** Welche Art als Nächstes kommt: am häufigsten Ritter und Schwertkämpfer, seltener Bogenschützen, Hauptleute am seltensten. */
+    /**
+     * Welche Art als Nächstes kommt: am häufigsten Ritter, Schwertkämpfer und Bogenschützen, öfter auch Speerträger und
+     * Armbrustschützen, seltener Schildträger, Belagerungsknechte und Waffenknechte, Hauptleute und Lanzenreiter am seltensten.
+     */
     public static SoldierType randomType(RandomSource random) {
         int roll = random.nextInt(100);
-        if (roll < 32) {
-            return SoldierType.KNIGHT;
+        SoldierType[] order = {SoldierType.KNIGHT, SoldierType.SWORDSMAN, SoldierType.ARCHER, SoldierType.SPEARMAN, SoldierType.CROSSBOWMAN,
+                SoldierType.SHIELDBEARER, SoldierType.ENGINEER, SoldierType.MAN_AT_ARMS, SoldierType.CAPTAIN, SoldierType.LANCER};
+        int[] weights = {24, 18, 15, 11, 10, 7, 5, 4, 3, 3};
+        for (int i = 0; i < order.length; i++) {
+            roll -= weights[i];
+            if (roll < 0) {
+                return order[i];
+            }
         }
-        if (roll < 60) {
-            return SoldierType.SWORDSMAN;
-        }
-        if (roll < 85) {
-            return SoldierType.ARCHER;
-        }
-        return SoldierType.CAPTAIN;
+        return SoldierType.SWORDSMAN;
     }
 
     /** Wie erfahren er ist: meist Rekrut, oft Veteran, selten Elite. */

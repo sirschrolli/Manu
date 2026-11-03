@@ -1,8 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.entity.soldier;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
+import io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Prediction;
@@ -30,6 +33,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -44,6 +48,8 @@ import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -59,6 +65,8 @@ import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -67,9 +75,13 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -89,8 +101,11 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Patrouille</b> – geht rund um seinen Posten auf und ab</li>
  * </ul>
  * Soldaten verteidigen ihren Besitzer, greifen Monster und Banditen an und verletzen keine Verbündeten.
- * Der Hauptmann stärkt Soldaten in seiner Nähe, Ritter decken sich mit dem Schild. Jeder Soldat hat einen
- * Namen und ein eigenes Gesicht; seine Stimme spricht die Sprache des jeweiligen Spielers.
+ * Der Hauptmann stärkt Soldaten in seiner Nähe, Ritter decken sich mit dem Schild, Schildträger ziehen die Angreifer
+ * ihrer Leute auf sich, Speerträger treffen Reiter besonders hart, Waffenknechte treffen mit dem Streitkolben auch die
+ * Nebenleute, Lanzenreiter reiten mit gesenkter Lanze an, Armbrustschützen spannen und schießen durchschlagende Bolzen,
+ * Belagerungsknechte bessern Belagerungswaffen aus. Jeder Soldat hat einen Namen und ein eigenes Gesicht; seine Stimme
+ * spricht die Sprache des jeweiligen Spielers.
  */
 public class SoldierEntity extends PathfinderMob implements OwnableEntity, RangedAttackMob {
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> DATA_OWNER =
@@ -109,6 +124,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Feldherrentisch ausgebildet oder als Söldner schon erfahren). */
     public static final int MAX_RANK = 2;
     private static final net.minecraft.resources.Identifier RANK_MODIFIER = KingdomsAtWar.id("rank");
+    /** Für einen Schlag: der Speer gegen Reiter, Pferde und große Ungetüme. */
+    private static final net.minecraft.resources.Identifier SPEAR_BONUS = KingdomsAtWar.id("spear_bonus");
 
     public static final int MODE_FOLLOW = 0;
     public static final int MODE_HOLD = 1;
@@ -120,6 +137,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public static final byte EVENT_SALUTE = 112;
     public static final byte EVENT_CHEER = 113;
     public static final int GESTURE_TICKS = 40;
+    /** So schnell fliegt ein Armbrustbolzen (ein Pfeil vom Bogen: 1,7). */
+    private static final float BOLT_SPEED = 2.6f;
 
     private final SoldierType soldierType;
     private @Nullable BlockPos post;
@@ -137,6 +156,11 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     private int idleChatter = 1200;
     private int shieldTicks;
     private int shieldCooldown;
+    /** Schildträger: bis zur nächsten Herausforderung an die Gegner. */
+    private int tauntCooldown = 40;
+    /** Lanzenreiter: soll ein (neues) Schlachtross bekommen; die Kennung seines Rosses. */
+    private boolean steedWanted;
+    private @Nullable UUID steedId;
 
     // nur im Spiel (Client): Startzeitpunkte der Gesten für die Animation
     private int saluteStart = -1000;
@@ -156,10 +180,18 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             ground.setCanOpenDoors(true);
         }
         // Der Angriff hängt von der Soldatenart ab – darum erst hier, nachdem die Art bekannt ist
-        if (soldierType.ranged()) {
+        if (soldierType.crossbow()) {
+            this.goalSelector.addGoal(3, new CrossbowGoal());
+        } else if (soldierType.ranged()) {
             this.goalSelector.addGoal(3, new RangedBowAttackGoal<>(this, 1.0, 20, 18.0f));
         } else {
-            this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.15, true));
+            if (soldierType.mounted()) {
+                this.goalSelector.addGoal(2, new LanceChargeGoal());
+            }
+            if (soldierType == SoldierType.ENGINEER) {
+                this.goalSelector.addGoal(3, new RepairSiegeGoal());
+            }
+            this.goalSelector.addGoal(3, new MeleeAttackGoal(this, soldierType.mounted() ? 1.0 : 1.15, true));
         }
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.setDropChance(slot, 0.0f);
@@ -237,6 +269,12 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         output.putLong("FedDay", this.fedDay);
         output.putBoolean("Hungry", this.isHungry());
         output.putBoolean("Campaign", this.isOnCampaign());
+        if (this.steedWanted) {
+            output.putBoolean("SteedWanted", true);
+        }
+        if (this.steedId != null) {
+            output.store("Steed", net.minecraft.core.UUIDUtil.CODEC, this.steedId);
+        }
     }
 
     @Override
@@ -266,6 +304,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.entityData.set(DATA_HUNGRY, input.getBooleanOr("Hungry", false));
         // ältere Soldaten mit Herrn folgten ihm: sie gelten als auf dem Schlachtzug, bis man sie heimschickt
         this.entityData.set(DATA_CAMPAIGN, input.getBooleanOr("Campaign", this.getOwnerReference() != null));
+        this.steedWanted = input.getBooleanOr("SteedWanted", false);
+        this.steedId = input.read("Steed", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
     }
 
     // =====================================================================================
@@ -421,13 +461,27 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
                         "★".repeat(rank)));
     }
 
+    /**
+     * Welches Gesicht ein Soldat bei der Ausbildung zu einer anderen Art bekommt: eine Frau bleibt eine Frau, ein Mann ein
+     * Mann (soweit die neue Art das Gesicht zeigt), sonst möglichst dieselbe Nummer.
+     */
+    static int faceFor(SoldierType from, int variant, SoldierType to) {
+        int n = to.variants();
+        boolean woman = from.isFeminine(variant);
+        boolean hasWoman = to.isFeminine(n - 1);
+        if (woman && hasWoman) {
+            return n - 1;
+        }
+        return Mth.clamp(variant, 0, hasWoman ? Math.max(0, n - 2) : n - 1);
+    }
+
     /** Übernimmt alles Persönliche von einem anderen Soldaten (bei der Beförderung zu einer anderen Art). */
     public void copyPersonFrom(SoldierEntity other) {
         this.entityData.set(DATA_OWNER, other.entityData.get(DATA_OWNER));
         this.entityData.set(DATA_MODE, (byte) other.getMode());
         this.post = other.post;
         this.village = other.village;
-        this.setVariant(other.getVariant());
+        this.setVariant(faceFor(other.soldierType, other.getVariant(), this.soldierType));
         this.personalName = other.getPersonalName();
         this.entityData.set(DATA_RANK, (byte) other.getRank());
         this.applyRank();
@@ -469,13 +523,17 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     }
 
     /**
-     * Sold eines Söldners in Bronze: der Sold der Art, für Ritter und Hauptleute dazu der Wert ihrer Ausrüstung (im Dorf
+     * Sold eines Söldners in Bronze: der Sold der Art, dazu der Wert der Ausrüstung, die er mitbringt (im Dorf
      * zahlt man nur mit Münzen), je Rang die Hälfte mehr – auf ganze Silber aufgerundet.
      */
     public int hirePrice() {
         int base = this.soldierType.coins() + switch (this.soldierType) {
             case KNIGHT -> 54;
-            case CAPTAIN -> 81;
+            case CAPTAIN, MAN_AT_ARMS -> 81;
+            case SPEARMAN -> 9;
+            case CROSSBOWMAN, ENGINEER -> 18;
+            case SHIELDBEARER -> 27;
+            case LANCER -> 108;
             default -> 0;
         };
         int price = (int) Math.ceil(base * (1.0 + 0.5 * this.getRank()));
@@ -552,7 +610,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public void setMode(int mode, @Nullable BlockPos post) {
         this.entityData.set(DATA_MODE, (byte) Mth.clamp(mode, 0, 2));
         this.post = mode == MODE_FOLLOW ? null : (post != null ? post.immutable() : this.blockPosition());
-        this.navigation.stop();
+        this.getNavigation().stop();
     }
 
     // =====================================================================================
@@ -599,8 +657,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
     /** Ein zufälliger Name aus dem Namensbuch, z. B. "Ritter Konrad". */
     public void giveRandomName() {
-        // Ritter tragen geschlossene Helme – hinter dem Visier kann jeder stecken
-        boolean feminine = this.soldierType == SoldierType.KNIGHT ? this.random.nextInt(4) == 0 : this.soldierType.isFeminine(this.getVariant());
+        // Ritter, Waffenknechte und Lanzenreiter tragen geschlossene Helme – hinter dem Visier kann jeder stecken
+        boolean feminine = this.soldierType.helmeted() ? this.random.nextInt(4) == 0 : this.soldierType.isFeminine(this.getVariant());
         this.personalName = SoldierNames.random(this.random, feminine);
         this.refreshName();
     }
@@ -622,6 +680,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             }
         } else if (other instanceof SoldierEntity soldier && !soldier.hasOwner()) {
             return true; // herrenlose Soldaten halten zusammen
+        }
+        if (other instanceof Warhorse horse && (other.getUUID().equals(this.steedId) || horse.rider() != null && horse.rider() != this
+                && this.considersEntityAsAlly(horse.rider()))) {
+            return true; // das eigene Ross und die Rosse der Kameraden
         }
         return super.considersEntityAsAlly(other);
     }
@@ -645,6 +707,12 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         Entity attacker = source.getEntity();
         if (attacker != null && this.isAlliedTo(attacker)) {
             return false; // kein Beschuss durch Verbündete und kein versehentlicher Schlag des Besitzers
+        }
+        if (source.is(DamageTypes.IN_WALL) && this.getVehicle() instanceof Warhorse) {
+            return false; // im Sattel unter einem niedrigen Durchgang
+        }
+        if (this.soldierType == SoldierType.MAN_AT_ARMS && source.is(DamageTypeTags.IS_PROJECTILE)) {
+            damage *= 0.7f; // am Plattenpanzer gleiten viele Pfeile ab
         }
         boolean hurt = super.hurtServer(level, source, damage);
         if (hurt) {
@@ -729,8 +797,97 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public boolean doHurtTarget(ServerLevel level, Entity target) {
         if (this.isUsingItem()) {
             this.stopUsingItem(); // Schild runter zum Zuschlagen
+            if (this.soldierType == SoldierType.SHIELDBEARER) {
+                this.shieldCooldown = 8 + this.random.nextInt(8);
+            }
         }
-        return super.doHurtTarget(level, target);
+        float bonus = this.spearBonus(target);
+        AttributeInstance damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (bonus > 1.0f && damage != null) {
+            damage.addOrUpdateTransientModifier(new AttributeModifier(SPEAR_BONUS, bonus - 1.0f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
+        boolean hit;
+        try {
+            hit = super.doHurtTarget(level, target);
+        } finally {
+            if (damage != null) {
+                damage.removeModifier(SPEAR_BONUS);
+            }
+        }
+        if (hit && bonus > 1.0f) {
+            level.sendParticles(ParticleTypes.CRIT, target.getX(), target.getY(0.6), target.getZ(), 10, 0.3, 0.3, 0.3, 0.25);
+        }
+        if (hit && this.soldierType == SoldierType.MAN_AT_ARMS) {
+            this.cleave(level, target);
+        }
+        return hit;
+    }
+
+    /**
+     * Speer und Lanze: Reiter, Pferde und große Ungetüme trifft der lange Spieß besonders hart (der Speerträger ist eigens
+     * dafür ausgebildet).
+     */
+    private float spearBonus(Entity target) {
+        if (!this.soldierType.spear() || !this.getMainHandItem().is(ItemTags.SPEARS)) {
+            return 1.0f;
+        }
+        boolean big = target.isPassenger() || target.isVehicle() || target instanceof AbstractHorse || target.getBbWidth() > 1.2f
+                || target.getBbHeight() > 2.6f;
+        return !big ? 1.0f : this.soldierType == SoldierType.SPEARMAN ? 1.75f : 1.3f;
+    }
+
+    /**
+     * Waffenknecht: der Streitkolben trifft auch die Gegner neben dem Ziel – mit halber Wucht – und wirft sie zurück.
+     */
+    private void cleave(ServerLevel level, Entity target) {
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5f;
+        DamageSource source = this.damageSources().mobAttack(this);
+        boolean any = false;
+        for (LivingEntity other : level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(1.75, 0.5, 1.75),
+                e -> e != target && e != this && e.isAlive() && !this.isAlliedTo(e) && this.isFoe(e))) {
+            if (other.hurtServer(level, source, damage)) {
+                other.knockback(0.55, this.getX() - other.getX(), this.getZ() - other.getZ(), source, damage);
+                any = true;
+            }
+        }
+        level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.MACE_SMASH_GROUND, SoundSource.NEUTRAL, 0.55f,
+                0.9f + this.random.nextFloat() * 0.2f);
+        if (any) {
+            double yaw = this.getYRot() * Mth.DEG_TO_RAD;
+            level.sendParticles(ParticleTypes.SWEEP_ATTACK, this.getX() - Math.sin(yaw) * 1.2, this.getY(0.55), this.getZ() + Math.cos(yaw) * 1.2,
+                    1, 0.0, 0.0, 0.0, 0.0);
+            this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 0.9f, 0.8f);
+        }
+    }
+
+    /** Wer gegen uns kämpft: Monster und Banditen – und wer gerade einen der Unseren angreift. */
+    private boolean isFoe(LivingEntity entity) {
+        if (entity instanceof Enemy && !(entity instanceof NeutralMob)) {
+            return true;
+        }
+        return entity instanceof Mob mob && mob.getTarget() != null && (mob.getTarget() == this || this.isAlliedTo(mob.getTarget()));
+    }
+
+    /** Speer und Lanze treffen keine Verbündeten – auch nicht beim Anreiten durch die eigenen Reihen. */
+    @Override
+    public boolean stabAttack(EquipmentSlot slot, Entity target, float damage, boolean dealsDamage, boolean dealsKnockback, boolean dismounts) {
+        if (this.isAlliedTo(target) || target instanceof Warhorse horse && horse.rider() != null && this.isAlliedTo(horse.rider())) {
+            return false;
+        }
+        return super.stabAttack(slot, target, damage * this.spearBonus(target), dealsDamage, dealsKnockback, dismounts);
+    }
+
+    /**
+     * Mit Speer und Lanze reicht der Stoß weit; wer dem Speerträger zu nah auf den Leib rückt, bekommt trotzdem den Schaft
+     * zu spüren (anders als bei Vanilla, wo der Speer erst auf Abstand trifft).
+     */
+    @Override
+    public boolean isWithinMeleeAttackRange(LivingEntity target) {
+        var range = this.getActiveItem().get(DataComponents.ATTACK_RANGE);
+        if (range != null) {
+            return this.getAttackBoundingBox(range.effectiveMaxRange(this)).intersects(target.getHitbox());
+        }
+        return super.isWithinMeleeAttackRange(target);
     }
 
     @Override
@@ -739,7 +896,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     }
 
     private boolean canRaiseShield() {
-        return this.soldierType == SoldierType.KNIGHT && this.getOffhandItem().has(DataComponents.BLOCKS_ATTACKS)
+        return this.soldierType.shielded() && this.getOffhandItem().has(DataComponents.BLOCKS_ATTACKS)
                 && this.shieldCooldown <= 0 && !this.isUsingItem();
     }
 
@@ -749,30 +906,70 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     }
 
     /**
-     * Ritter heben den Schild, wenn Pfeile fliegen oder ein Gegner auf Abstand angreift, und senken ihn,
-     * sobald sie selbst zuschlagen.
+     * Ritter heben den Schild, wenn Pfeile fliegen oder ein Gegner auf Abstand angreift, und senken ihn, sobald sie selbst
+     * zuschlagen. Schildträger halten ihn fast immer oben, sobald ein Gegner in Sicht ist – sie senken ihn nur kurz für
+     * den eigenen Hieb.
      */
     private void updateShield() {
-        if (this.soldierType != SoldierType.KNIGHT) {
+        if (!this.soldierType.shielded()) {
             return;
         }
         if (this.shieldCooldown > 0) {
             this.shieldCooldown--;
         }
+        boolean bearer = this.soldierType == SoldierType.SHIELDBEARER;
         LivingEntity target = this.getTarget();
         if (this.isUsingItem() && this.getUsedItemHand() == InteractionHand.OFF_HAND) {
-            boolean close = target != null && this.distanceToSqr(target) < 3.2 * 3.2;
+            boolean close = !bearer && target != null && this.distanceToSqr(target) < 3.2 * 3.2;
             if (--this.shieldTicks <= 0 || close || target == null && this.tickCount - this.lastHurtTick > 40) {
                 this.stopUsingItem();
-                this.shieldCooldown = 20 + this.random.nextInt(20);
+                this.shieldCooldown = bearer ? 6 + this.random.nextInt(8) : 20 + this.random.nextInt(20);
             }
         } else if (target != null && this.canRaiseShield()) {
             double distance = this.distanceToSqr(target);
-            if ((target instanceof RangedAttackMob && distance < 20.0 * 20.0) || (distance > 5.0 * 5.0 && distance < 9.0 * 9.0
-                    && this.random.nextInt(30) == 0)) {
-                this.raiseShield(40 + this.random.nextInt(20));
+            if (bearer ? distance < 16.0 * 16.0 : (target instanceof RangedAttackMob && distance < 20.0 * 20.0) || (distance > 5.0 * 5.0
+                    && distance < 9.0 * 9.0 && this.random.nextInt(30) == 0)) {
+                this.raiseShield(bearer ? 60 + this.random.nextInt(40) : 40 + this.random.nextInt(20));
             }
         }
+    }
+
+    /**
+     * Schildträger: schlägt mit dem Schwert auf den Schild und zieht die Gegner in der Nähe, die seine Leute angreifen, auf
+     * sich – alle paar Sekunden.
+     */
+    private void taunt(ServerLevel level) {
+        if (--this.tauntCooldown > 0) {
+            return;
+        }
+        this.tauntCooldown = 20;
+        List<Mob> foes = level.getEntitiesOfClass(Mob.class, this.getBoundingBox().inflate(10.0, 4.0, 10.0),
+                m -> m.isAlive() && m.getTarget() != null && m.getTarget() != this && this.isAlliedTo(m.getTarget()) && !this.isAlliedTo(m)
+                        && this.hasLineOfSight(m));
+        int drawn = 0;
+        for (Mob foe : foes) {
+            // wer nah ist, kann die Herausforderung nicht überhören; weiter weg folgt nicht jeder
+            if (foe.distanceToSqr(this) < 6.0 * 6.0 || this.random.nextFloat() < 0.6f) {
+                foe.setTarget(this);
+                level.sendParticles(ParticleTypes.ANGRY_VILLAGER, foe.getX(), foe.getEyeY() + 0.5, foe.getZ(), 1, 0.15, 0.1, 0.15, 0.0);
+                drawn++;
+            }
+        }
+        if (drawn > 0) {
+            this.tauntCooldown = 80 + this.random.nextInt(40);
+            this.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT);
+            level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK.value(), SoundSource.NEUTRAL, 1.0f, 0.75f);
+            this.speak("attack");
+            if (this.getTarget() == null) {
+                this.setTarget(foes.getFirst());
+            }
+        }
+    }
+
+    /** Für Tests: fordert die Gegner sofort heraus. */
+    public void tauntNow(ServerLevel level) {
+        this.tauntCooldown = 0;
+        this.taunt(level);
     }
 
     /** Ausrüstung je nach Soldatenart. */
@@ -785,6 +982,18 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
                 this.setItemSlot(EquipmentSlot.OFFHAND, this.kingdomShield());
             }
             case CAPTAIN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.STEEL_SWORD.get()));
+            case SPEARMAN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SPEAR));
+            case CROSSBOWMAN -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
+            case SHIELDBEARER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                this.setItemSlot(EquipmentSlot.OFFHAND, this.kingdomShield());
+            }
+            case MAN_AT_ARMS -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.MACE));
+            case LANCER -> {
+                this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SPEAR));
+                this.steedWanted = !this.isPassenger();
+            }
+            case ENGINEER -> this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         }
     }
 
@@ -835,7 +1044,15 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             this.callsSentinel = false;
             io.github.sirschrolli.kingdomsatwar.entity.creature.golem.VillageSentinels.summon(level, this.post);
         }
-        this.updateShield();
+        if (!this.isNoAi()) {
+            this.updateShield();
+            if (this.soldierType == SoldierType.SHIELDBEARER) {
+                this.taunt(level);
+            }
+            if (this.soldierType.mounted()) {
+                this.tendSteed(level);
+            }
+        }
         if ((this.tickCount + this.getId()) % 100 == 0) {
             this.rationTick(level);
         }
@@ -862,10 +1079,15 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         super.playStepSound(pos, state);
-        if (this.soldierType != SoldierType.ARCHER) {
-            // leises Klirren der Rüstung
-            this.playSound(ModSounds.SOLDIER_ARMOR.get(), this.soldierType == SoldierType.SWORDSMAN ? 0.15f : 0.25f,
-                    1.25f + this.random.nextFloat() * 0.25f);
+        if (this.soldierType != SoldierType.ARCHER && this.soldierType != SoldierType.ENGINEER) {
+            // leises Klirren der Rüstung – schwerer bei den Gepanzerten
+            float volume = switch (this.soldierType) {
+                case SWORDSMAN, SPEARMAN, CROSSBOWMAN -> 0.15f;
+                case MAN_AT_ARMS -> 0.32f;
+                default -> 0.25f;
+            };
+            this.playSound(ModSounds.SOLDIER_ARMOR.get(), volume, (this.soldierType == SoldierType.MAN_AT_ARMS ? 1.05f : 1.25f)
+                    + this.random.nextFloat() * 0.25f);
         }
     }
 
@@ -968,18 +1190,24 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         return InteractionResult.SUCCESS;
     }
 
-    /** In welche Hand gehört dieser Gegenstand? Schwerter und Äxte für Nahkämpfer, Bögen für Bogenschützen, Schilde für Ritter. */
+    /**
+     * In welche Hand gehört dieser Gegenstand? Schwerter, Äxte, Speere und Streitkolben für Nahkämpfer, Bögen für
+     * Bogenschützen, Armbrüste für Armbrustschützen, Schilde für Ritter und Schildträger.
+     */
     private @Nullable EquipmentSlot weaponSlotFor(ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }
+        if (this.soldierType.crossbow()) {
+            return stack.getItem() instanceof CrossbowItem ? EquipmentSlot.MAINHAND : null;
+        }
         if (this.soldierType.ranged()) {
             return stack.getItem() instanceof BowItem ? EquipmentSlot.MAINHAND : null;
         }
-        if (stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES)) {
+        if (stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES) || stack.is(ItemTags.SPEARS) || stack.is(Items.MACE)) {
             return EquipmentSlot.MAINHAND;
         }
-        if (this.soldierType == SoldierType.KNIGHT && stack.has(DataComponents.BLOCKS_ATTACKS)) {
+        if (this.soldierType.shielded() && stack.has(DataComponents.BLOCKS_ATTACKS)) {
             return EquipmentSlot.OFFHAND;
         }
         return null;
@@ -1026,6 +1254,100 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     /** Jeder Soldat klingt etwas anders – abhängig von seiner Kennung, also immer gleich. */
     private float voicePitch() {
         return 0.92f + ((this.getUUID().hashCode() & 0xff) / 255.0f) * 0.16f;
+    }
+
+    // =====================================================================================
+    // Lanzenreiter und ihr Schlachtross
+    // =====================================================================================
+
+    /** Ein Lanzenreiter ohne Ross (Söldner, die noch auf einen Herrn warten, ausgenommen): am Feldherrentisch gibt es ein neues. */
+    public boolean needsSteed() {
+        return this.soldierType.mounted() && !this.isPassenger() && !this.isMercenary();
+    }
+
+    /** Ein neues Schlachtross aus den Ställen: es steht bereit, sobald Platz zum Aufsitzen ist. */
+    public void provideSteed() {
+        this.steedWanted = true;
+        this.steedId = null;
+    }
+
+    /** Das eigene Ross (wenn es lebt und geladen ist). */
+    public @Nullable Warhorse steed(ServerLevel level) {
+        return this.steedId != null && level.getEntity(this.steedId) instanceof Warhorse horse && horse.isAlive() ? horse : null;
+    }
+
+    /**
+     * Lanzenreiter: Wer kein Ross hat und eines bekommen soll, sitzt auf, sobald Platz ist; wer abgeworfen wurde (oder
+     * abgestiegen ist), geht zu seinem Ross zurück und sitzt wieder auf.
+     */
+    private void tendSteed(ServerLevel level) {
+        if ((this.tickCount + this.getId()) % 10 != 0 || this.isPassenger() || this.isMercenary() || this.isVillageGuard()) {
+            return;
+        }
+        Warhorse steed = this.steed(level);
+        if (steed == null) {
+            if (this.steedWanted && this.roomToRide(level, this.position())) {
+                steed = Warhorse.saddleUp(level, this);
+                if (steed != null) {
+                    this.steedId = steed.getUUID();
+                    this.steedWanted = false;
+                    level.sendParticles(ParticleTypes.POOF, steed.getX(), steed.getY() + 0.8, steed.getZ(), 10, 0.5, 0.4, 0.5, 0.02);
+                    this.mount(level, steed);
+                }
+            }
+            return;
+        }
+        if (steed.isVehicle() || steed.distanceToSqr(this) > 24.0 * 24.0) {
+            return;
+        }
+        if (this.distanceToSqr(steed) < 2.4 * 2.4) {
+            if (this.roomToRide(level, steed.position())) {
+                this.mount(level, steed);
+            }
+        } else if (this.getTarget() == null) {
+            this.getNavigation().moveTo(steed, 1.2);
+        }
+    }
+
+    /** Sitzt auf diesem Ross auf – es ist von nun an seines. */
+    public boolean mountSteed(Warhorse steed) {
+        this.steedId = steed.getUUID();
+        this.steedWanted = false;
+        return this.startRiding(steed, true, true);
+    }
+
+    private void mount(ServerLevel level, Warhorse steed) {
+        this.getNavigation().stop();
+        if (this.startRiding(steed, true, true)) {
+            level.playSound(null, steed.getX(), steed.getY(), steed.getZ(), SoundEvents.HORSE_SADDLE.value(), SoundSource.NEUTRAL, 0.8f, 1.0f);
+        }
+    }
+
+    /** Ist hier Platz für Ross und Reiter (gut drei Blöcke hoch)? */
+    private boolean roomToRide(ServerLevel level, Vec3 at) {
+        AABB horse = ModEntities.WARHORSE.get().getDimensions().makeBoundingBox(at);
+        AABB rider = new AABB(at.x - 0.3, at.y + 1.4, at.z - 0.3, at.x + 0.3, at.y + 3.3, at.z + 0.3);
+        return level.noCollision(horse) && level.noCollision(rider);
+    }
+
+    // =====================================================================================
+    // Armbrust
+    // =====================================================================================
+
+    /** Der gespannte Bolzen fliegt: schnell und flach (der Abfall bis zum Ziel ist eingerechnet), trifft härter als ein Pfeil. */
+    private void shootBolt(ServerLevel level, LivingEntity target, ItemStack crossbow) {
+        crossbow.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY);
+        ItemStack bolt = new ItemStack(Items.ARROW);
+        AbstractArrow arrow = ProjectileUtil.getMobArrow(this, bolt, 1.25f, crossbow);   // der schwere Bolzen
+        arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+        arrow.setSoundEvent(SoundEvents.CROSSBOW_HIT);
+        double dx = target.getX() - this.getX();
+        double dy = target.getY(0.4) - arrow.getY();
+        double dz = target.getZ() - this.getZ();
+        double distance = Math.sqrt(dx * dx + dz * dz);
+        double flight = distance / BOLT_SPEED;
+        Projectile.spawnProjectileUsingShoot(arrow, level, bolt, dx, dy + 0.025 * flight * flight, dz, BOLT_SPEED, 1.2f);
+        this.playSound(SoundEvents.CROSSBOW_SHOOT, 1.0f, 1.0f / (this.random.nextFloat() * 0.4f + 0.8f));
     }
 
     // =====================================================================================
@@ -1168,7 +1490,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         @Override
         public void stop() {
             this.owner = null;
-            SoldierEntity.this.navigation.stop();
+            SoldierEntity.this.getNavigation().stop();
         }
 
         @Override
@@ -1184,19 +1506,24 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             if (SoldierEntity.this.distanceToSqr(this.owner) > 24.0 * 24.0 && this.owner.onGround()) {
                 this.teleportNear(this.owner);
             } else {
-                SoldierEntity.this.navigation.moveTo(this.owner, 1.1);
+                SoldierEntity.this.getNavigation().moveTo(this.owner, 1.1);
             }
         }
 
+        /** Springt zum Besitzer – ein Lanzenreiter samt Ross (wer eine Belagerungswaffe bedient, bleibt, wo er ist). */
         private void teleportNear(LivingEntity owner) {
             BlockPos base = owner.blockPosition();
             SoldierEntity self = SoldierEntity.this;
+            Entity body = self.getVehicle() instanceof Warhorse horse ? horse : self;
+            if (body == self && self.isPassenger()) {
+                return;
+            }
             for (int i = 0; i < 10; i++) {
                 BlockPos pos = base.offset(self.random.nextInt(5) - 2, 0, self.random.nextInt(5) - 2);
                 if (self.level().getBlockState(pos.below()).isFaceSturdy(self.level(), pos.below(), net.minecraft.core.Direction.UP)
-                        && self.level().noCollision(self, self.getBoundingBox().move(Vec3.atBottomCenterOf(pos).subtract(self.position())))) {
-                    self.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, self.getYRot(), self.getXRot());
-                    self.navigation.stop();
+                        && self.level().noCollision(body, body.getBoundingBox().move(Vec3.atBottomCenterOf(pos).subtract(body.position())))) {
+                    body.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, body.getYRot(), body.getXRot());
+                    self.getNavigation().stop();
                     return;
                 }
             }
@@ -1222,14 +1549,14 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
         @Override
         public boolean canContinueToUse() {
-            return SoldierEntity.this.getTarget() == null && SoldierEntity.this.post != null && !SoldierEntity.this.navigation.isDone();
+            return SoldierEntity.this.getTarget() == null && SoldierEntity.this.post != null && !SoldierEntity.this.getNavigation().isDone();
         }
 
         @Override
         public void start() {
             BlockPos post = SoldierEntity.this.post;
             if (post != null) {
-                SoldierEntity.this.navigation.moveTo(post.getX() + 0.5, post.getY(), post.getZ() + 0.5, 1.0);
+                SoldierEntity.this.getNavigation().moveTo(post.getX() + 0.5, post.getY(), post.getZ() + 0.5, 1.0);
             }
         }
     }
@@ -1248,7 +1575,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
         @Override
         public boolean canContinueToUse() {
-            return !SoldierEntity.this.navigation.isDone() && SoldierEntity.this.getTarget() == null;
+            return !SoldierEntity.this.getNavigation().isDone() && SoldierEntity.this.getTarget() == null;
         }
 
         @Override
@@ -1259,7 +1586,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             }
             Vec3 target = DefaultRandomPos.getPosTowards(SoldierEntity.this, 8, 3, Vec3.atBottomCenterOf(post), Math.PI / 2);
             if (target != null) {
-                SoldierEntity.this.navigation.moveTo(target.x, target.y, target.z, 0.7);
+                SoldierEntity.this.getNavigation().moveTo(target.x, target.y, target.z, 0.7);
             }
         }
     }
@@ -1302,6 +1629,326 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         public void start() {
             SoldierEntity.this.setTarget(this.candidate);
             super.start();
+        }
+    }
+
+    /**
+     * Armbrustschütze: spannt die Armbrust (das dauert), legt an und schießt – nie, wenn ein Verbündeter in der Schusslinie
+     * steht. Ist das Ziel zu weit weg oder nicht zu sehen, rückt er näher.
+     */
+    private final class CrossbowGoal extends Goal {
+        private static final double RANGE = 24.0;
+        private int seen;
+        private int aim;
+        private int repath;
+
+        CrossbowGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        private ItemStack crossbow() {
+            ItemStack held = SoldierEntity.this.getMainHandItem();
+            return held.getItem() instanceof CrossbowItem ? held : ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity target = SoldierEntity.this.getTarget();
+            return target != null && target.isAlive() && !this.crossbow().isEmpty();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.canUse();
+        }
+
+        @Override
+        public void start() {
+            SoldierEntity.this.setAggressive(true);
+            this.seen = 0;
+            this.aim = 0;
+            this.repath = 0;
+        }
+
+        @Override
+        public void stop() {
+            SoldierEntity self = SoldierEntity.this;
+            self.setAggressive(false);
+            if (self.isUsingItem()) {
+                self.stopUsingItem();
+            }
+            self.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            SoldierEntity self = SoldierEntity.this;
+            LivingEntity target = self.getTarget();
+            ItemStack crossbow = this.crossbow();
+            if (target == null || crossbow.isEmpty() || !(self.level() instanceof ServerLevel level)) {
+                return;
+            }
+            boolean visible = self.getSensing().hasLineOfSight(target);
+            this.seen = visible ? Math.max(0, this.seen) + 1 : Math.min(0, this.seen) - 1;
+            double distance = self.distanceToSqr(target);
+            boolean approach = distance > RANGE * RANGE * 0.75 || this.seen < -20;
+            if (approach) {
+                if (--this.repath <= 0) {
+                    this.repath = this.adjustedTickDelay(20);
+                    self.getNavigation().moveTo(target, self.isUsingItem() ? 0.6 : 1.0);
+                }
+            } else {
+                self.getNavigation().stop();
+            }
+            self.getLookControl().setLookAt(target, 30.0f, 30.0f);
+            if (CrossbowItem.isCharged(crossbow)) {
+                if (visible && this.seen > 5 && --this.aim <= 0 && distance < RANGE * RANGE && !self.allyInLineOfFire(target)) {
+                    self.shootBolt(level, target, crossbow);
+                    this.aim = 0;
+                }
+            } else if (self.isUsingItem()) {
+                if (self.getTicksUsingItem() >= CrossbowItem.getChargeDuration(crossbow, self)) {
+                    crossbow.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(new ItemStackTemplate(Items.ARROW)));
+                    self.stopUsingItem();
+                    level.playSound(null, self.getX(), self.getY(), self.getZ(), SoundEvents.CROSSBOW_LOADING_END.value(), SoundSource.NEUTRAL,
+                            1.0f, 1.0f / (self.random.nextFloat() * 0.5f + 1.0f) + 0.2f);
+                    this.aim = 10 + self.random.nextInt(14);   // anlegen und zielen
+                }
+            } else {
+                self.startUsingItem(InteractionHand.MAIN_HAND);
+            }
+        }
+    }
+
+    /**
+     * Lanzenangriff (nach dem Speerangriff der Vanilla-Zombiereiter): Der Lanzenreiter reitet auf Abstand, senkt die
+     * Lanze, galoppiert durch den Gegner hindurch und wendet in sicherem Abstand für den nächsten Anritt. Den Schaden macht
+     * der Stoß der Lanze selbst – je schneller das Ross, desto härter.
+     */
+    private final class LanceChargeGoal extends Goal {
+        private static final int FLEE_TIME = 50;
+        private int engage = -1;
+        private int fleeing = -1;
+        private @Nullable Vec3 away;
+        private boolean done;
+        /** Neue Wege nicht jeden Tick suchen (das kostet): erst wenn diese Zeit um ist oder der alte Weg zu Ende. */
+        private int repath;
+
+        LanceChargeGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        private boolean able() {
+            SoldierEntity self = SoldierEntity.this;
+            LivingEntity target = self.getTarget();
+            return target != null && target.isAlive() && self.getVehicle() instanceof Warhorse
+                    && self.getMainHandItem().has(DataComponents.KINETIC_WEAPON);
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.able() && !SoldierEntity.this.isUsingItem();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return !this.done && this.able();
+        }
+
+        @Override
+        public void start() {
+            SoldierEntity.this.setAggressive(true);
+            this.engage = -1;
+            this.fleeing = -1;
+            this.away = null;
+            this.done = false;
+            this.repath = 0;
+        }
+
+        @Override
+        public void stop() {
+            SoldierEntity self = SoldierEntity.this;
+            self.getNavigation().stop();
+            self.setAggressive(false);
+            self.stopUsingItem();
+            this.away = null;
+        }
+
+        /** Dem Gegner nach – der Weg wird alle paar Ticks neu gesucht (oder sofort, wenn der alte zu Ende ist). */
+        private void chase(LivingEntity target, float speed) {
+            if (--this.repath <= 0 || SoldierEntity.this.getNavigation().isDone()) {
+                this.repath = 6;
+                SoldierEntity.this.getNavigation().moveTo(target, speed);
+            }
+        }
+
+        private int lanceTime() {
+            var kinetic = SoldierEntity.this.getMainHandItem().get(DataComponents.KINETIC_WEAPON);
+            return this.reducedTickDelay(kinetic == null ? 0 : kinetic.computeDamageUseDuration());
+        }
+
+        @Override
+        public void tick() {
+            SoldierEntity self = SoldierEntity.this;
+            LivingEntity target = self.getTarget();
+            if (target == null) {
+                return;
+            }
+            double distance = self.distanceToSqr(target);
+            float speed = self.getRootVehicle() instanceof Mob horse ? horse.chargeSpeedModifier() : 1.0f;
+            self.lookAt(target, 30.0f, 30.0f);
+            self.getLookControl().setLookAt(target, 30.0f, 30.0f);
+            if (this.engage < 0) {
+                if (distance > 11.0 * 11.0) {
+                    this.chase(target, speed);
+                    return;
+                }
+                this.engage = this.lanceTime();
+                self.startUsingItem(InteractionHand.MAIN_HAND);
+            }
+            if (this.engage > 0 && --this.engage == 0) {
+                self.stopUsingItem();
+                double d = Math.sqrt(distance);
+                this.away = LandRandomPos.getPosAway(self, Math.max(0.0, 11.0 - d), Math.max(1.0, 13.0 - d), 7, target.position());
+                this.fleeing = 1;
+                this.repath = 0;
+            }
+            if (this.fleeing > 0 && ++this.fleeing > FLEE_TIME) {
+                this.done = true;
+                return;
+            }
+            if (this.away != null) {
+                if (--this.repath <= 0 || self.getNavigation().isDone()) {
+                    this.repath = 10;
+                    self.getNavigation().moveTo(this.away.x, this.away.y, this.away.z, speed);
+                }
+                if (self.getNavigation().isDone()) {
+                    if (this.fleeing > 0) {
+                        this.done = true;
+                        return;
+                    }
+                    this.away = null;
+                }
+            } else {
+                this.chase(target, speed * 1.1f);
+                if (distance < 2.5 * 2.5 || self.getNavigation().isDone()) {
+                    double d = Math.sqrt(distance);
+                    this.away = LandRandomPos.getPosAway(self, 8.0 - d, 9.0 - d, 7, target.position());
+                    this.repath = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * Belagerungsknecht: Ist eine eigene Belagerungswaffe in der Nähe beschädigt (und kein Feind da), geht er hin und
+     * bessert sie mit Hammer und Holz aus – drei Hundertstel alle zwei Sekunden.
+     */
+    private final class RepairSiegeGoal extends Goal {
+        private static final double SEARCH = 16.0;
+        private @Nullable SiegeWeaponEntity weapon;
+        private int work;
+
+        RepairSiegeGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            SoldierEntity self = SoldierEntity.this;
+            // nur ab und zu umsehen (die Ziele werden jeden zweiten Tick geprüft – darum ein Fenster von zwei Ticks)
+            if (self.getTarget() != null || self.isPassenger() || (self.tickCount + self.getId()) % 20 > 1) {
+                return false;
+            }
+            this.weapon = this.damaged();
+            return this.weapon != null;
+        }
+
+        private @Nullable SiegeWeaponEntity damaged() {
+            SoldierEntity self = SoldierEntity.this;
+            UUID owner = self.getOwnerId();
+            if (owner == null) {
+                return null;
+            }
+            SiegeWeaponEntity best = null;
+            double bestDistance = SEARCH * SEARCH;
+            for (var w : self.level().getEntitiesOfClass(SiegeWeaponEntity.class,
+                    self.getBoundingBox().inflate(SEARCH), w -> w.isAlive() && w.healthFraction() < 0.995f && owner.equals(w.owner()))) {
+                // wer Stellung hält, entfernt sich nicht weit von seinem Posten
+                if (self.post != null && self.getMode() != MODE_FOLLOW && !w.blockPosition().closerThan(self.post, 14.0)) {
+                    continue;
+                }
+                double d = self.distanceToSqr(w);
+                if (d < bestDistance) {
+                    best = w;
+                    bestDistance = d;
+                }
+            }
+            return best;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            SoldierEntity self = SoldierEntity.this;
+            return this.weapon != null && this.weapon.isAlive() && this.weapon.healthFraction() < 0.995f && self.getTarget() == null
+                    && !self.isPassenger() && self.distanceToSqr(this.weapon) < 24.0 * 24.0;
+        }
+
+        @Override
+        public void start() {
+            this.work = 0;
+            if (this.weapon != null) {
+                SoldierEntity.this.getNavigation().moveTo(this.weapon, 1.0);
+            }
+        }
+
+        @Override
+        public void stop() {
+            if (this.weapon != null && this.weapon.healthFraction() >= 0.995f) {
+                SoldierEntity.this.salute();
+            }
+            this.weapon = null;
+            SoldierEntity.this.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            SoldierEntity self = SoldierEntity.this;
+            var weapon = this.weapon;
+            if (weapon == null || !(self.level() instanceof ServerLevel level)) {
+                return;
+            }
+            self.getLookControl().setLookAt(weapon.getX(), weapon.getY() + 0.8, weapon.getZ());
+            double reach = weapon.getBbWidth() * 0.5 + 1.6;
+            if (self.distanceToSqr(weapon.getX(), self.getY(), weapon.getZ()) > reach * reach) {
+                if (++this.work % 20 == 0 || self.getNavigation().isDone()) {
+                    self.getNavigation().moveTo(weapon, 1.0);
+                }
+                return;
+            }
+            self.getNavigation().stop();
+            if (++this.work % 10 != 0) {
+                return;
+            }
+            self.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT);
+            Vec3 at = weapon.position().add(self.position().subtract(weapon.position()).normalize().scale(weapon.getBbWidth() * 0.4))
+                    .add(0.0, 0.7, 0.0);
+            level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
+                    net.minecraft.world.level.block.Blocks.OAK_PLANKS.defaultBlockState()), at.x, at.y, at.z, 6, 0.2, 0.2, 0.2, 0.05);
+            level.playSound(null, at.x, at.y, at.z, SoundEvents.WOOD_HIT, SoundSource.NEUTRAL, 0.9f, 0.9f + self.random.nextFloat() * 0.3f);
+            if (this.work % 40 == 0) {
+                weapon.setHealthFraction(weapon.healthFraction() + 0.03f);
+            }
         }
     }
 

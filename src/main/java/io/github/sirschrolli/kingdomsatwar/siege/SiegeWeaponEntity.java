@@ -259,6 +259,9 @@ public class SiegeWeaponEntity extends Entity {
         } else if (rider instanceof SoldierEntity soldier) {
             drive = SiegeCrew.tick(level, this, soldier);
             this.lastJump = false;
+            if (soldier.getSoldierType() == io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ENGINEER) {
+                this.engineerWork(level, soldier);
+            }
         } else {
             this.lastJump = false;
         }
@@ -455,6 +458,24 @@ public class SiegeWeaponEntity extends Entity {
             SiegeProjectile.launch(level, this, shooter);
         }
         this.orders.shotFired();
+    }
+
+    /**
+     * Ein Belagerungsknecht an der Waffe: Er lädt um die Hälfte schneller nach (die Winde läuft schneller – die Zeit seit
+     * dem Schuss rückt jeden zweiten Tick um einen Tick weiter; den Abschuss selbst beschleunigt er nicht) und bessert die
+     * Waffe nebenbei aus.
+     */
+    private void engineerWork(ServerLevel level, SoldierEntity engineer) {
+        long now = level.getGameTime();
+        float since = this.sinceFired(0.0f);
+        if (this.siege != SiegeType.RAM && now % 2 == 0 && since > SiegePoses.releaseTick(this.siege) + 4 && since < this.siege.reload() - 1) {
+            this.entityData.set(DATA_FIRED_AT, this.entityData.get(DATA_FIRED_AT) - 1L);
+        }
+        if (this.healthFraction() < 1.0f && (now + this.getId()) % 40 == 0) {
+            this.setHealthFraction(this.healthFraction() + 0.015f);
+            engineer.swing(net.minecraft.world.InteractionHand.MAIN_HAND, net.minecraft.world.item.component.SwingAnimation.DEFAULT);
+            level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WOOD_HIT, SoundSource.NEUTRAL, 0.7f, 1.0f);
+        }
     }
 
     /** Knarren der Winde beim Nachladen, ein Klacken, wenn die Waffe wieder bereit ist. */

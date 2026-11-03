@@ -31,7 +31,16 @@ import org.jspecify.annotations.Nullable;
 /**
  * Der Feldherrentisch: Eigene Soldaten im Feldlager um den Tisch werden hier geheilt (der Feldscher nimmt ein paar
  * Münzen) und ausgebildet – sie steigen gegen Sold und Ausrüstung im Rang (Rekrut → Veteran → Elite) oder werden zu einer
- * stärkeren Art (Schwertkämpfer → Ritter → Hauptmann).
+ * anderen Art:
+ * <pre>
+ *   Schwertkämpfer ─┬─ Ritter ─┬─ Hauptmann
+ *                   │          ├─ Lanzenreiter
+ *                   │          └─ Waffenknecht
+ *                   ├─ Speerträger
+ *                   ├─ Schildträger
+ *                   └─ Belagerungsknecht
+ *   Bogenschütze ──── Armbrustschütze
+ * </pre>
  */
 public final class Training {
     /** So weit reicht das Feldlager um den Tisch: Soldaten darin lassen sich heilen und ausbilden. */
@@ -66,24 +75,44 @@ public final class Training {
                 : new Cost(coins, List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 2)));
     }
 
-    /** Zu welcher Art sich ein Soldat ausbilden lässt ({@code null}: zu keiner). */
-    public static @Nullable SoldierType promotion(SoldierType type) {
+    /** Zu welchen Arten sich ein Soldat ausbilden lässt (die übliche zuerst; leer: zu keiner). */
+    public static List<SoldierType> promotions(SoldierType type) {
         return switch (type) {
-            case SWORDSMAN -> SoldierType.KNIGHT;
-            case KNIGHT -> SoldierType.CAPTAIN;
+            case SWORDSMAN -> List.of(SoldierType.KNIGHT, SoldierType.SPEARMAN, SoldierType.SHIELDBEARER, SoldierType.ENGINEER);
+            case KNIGHT -> List.of(SoldierType.CAPTAIN, SoldierType.LANCER, SoldierType.MAN_AT_ARMS);
+            case ARCHER -> List.of(SoldierType.CROSSBOWMAN);
+            default -> List.of();
+        };
+    }
+
+    /** Die übliche Ausbildung ({@code null}: keine möglich). */
+    public static @Nullable SoldierType promotion(SoldierType type) {
+        List<SoldierType> options = promotions(type);
+        return options.isEmpty() ? null : options.getFirst();
+    }
+
+    /** Was die Ausbildung von {@code from} zu {@code to} kostet ({@code null}: so nicht möglich). */
+    public static @Nullable Cost promoteCost(SoldierType from, SoldierType to) {
+        if (!promotions(from).contains(to)) {
+            return null;
+        }
+        return switch (to) {
+            case KNIGHT -> new Cost(81, List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 2)));
+            case CAPTAIN -> new Cost(162, List.of(new Part(() -> ModItems.GEMSTONE.get(), 1)));
+            case SPEARMAN -> new Cost(27, List.of(new Part(() -> Items.IRON_SPEAR, 1)));
+            case SHIELDBEARER -> new Cost(45, List.of(new Part(() -> Items.SHIELD, 1), new Part(() -> Items.IRON_INGOT, 2)));
+            case ENGINEER -> new Cost(36, List.of(new Part(() -> Items.IRON_INGOT, 3), new Part(() -> Items.CRAFTING_TABLE, 1)));
+            case CROSSBOWMAN -> new Cost(45, List.of(new Part(() -> Items.CROSSBOW, 1)));
+            case LANCER -> new Cost(162, List.of(new Part(() -> Items.SADDLE, 1), new Part(() -> ModItems.STEEL_INGOT.get(), 2)));
+            case MAN_AT_ARMS -> new Cost(108, List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 4)));
             default -> null;
         };
     }
 
-    /** Was die Ausbildung zur nächsten Art kostet ({@code null}: keine möglich). */
+    /** Was die übliche Ausbildung kostet ({@code null}: keine möglich). */
     public static @Nullable Cost promoteCost(SoldierType type) {
         SoldierType next = promotion(type);
-        if (next == null) {
-            return null;
-        }
-        return next == SoldierType.KNIGHT
-                ? new Cost(81, List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 2)))
-                : new Cost(162, List.of(new Part(() -> ModItems.GEMSTONE.get(), 1)));
+        return next == null ? null : promoteCost(type, next);
     }
 
     private static int round(double coins) {
@@ -127,13 +156,20 @@ public final class Training {
                 soldier -> atTable(player, table, soldier));
     }
 
-    /** Was der Feldscher für diesen Soldaten nimmt (in Bronze; 0, wenn er unverletzt ist). */
+    /** Ein neues Schlachtross für einen Lanzenreiter, der seines verloren hat (in Bronze). */
+    public static final int STEED_COST = 27;
+
+    /**
+     * Was der Feldscher für diesen Soldaten nimmt (in Bronze; 0, wenn er unverletzt ist) – für einen Lanzenreiter ohne Ross
+     * kommt ein neues Schlachtross aus den Ställen dazu.
+     */
     public static int healCost(SoldierEntity soldier) {
+        int steed = soldier.needsSteed() ? STEED_COST : 0;
         float missing = soldier.getMaxHealth() - soldier.getHealth();
         if (missing > 0.01f) {
-            return Math.max(1, Mth.ceil(missing / HEALTH_PER_COIN));
+            return steed + Math.max(1, Mth.ceil(missing / HEALTH_PER_COIN));
         }
-        return hurting(soldier) ? 1 : 0;                                      // nur Gift, Schwäche … loswerden
+        return steed + (hurting(soldier) ? 1 : 0);                            // nur Gift, Schwäche … loswerden
     }
 
     /** Was das Heilen aller dieser Soldaten kostet. */
@@ -178,6 +214,9 @@ public final class Training {
                 }
             }
             soldier.clearFire();
+            if (soldier.needsSteed()) {
+                soldier.provideSteed();
+            }
             level.sendParticles(ParticleTypes.HEART, soldier.getX(), soldier.getY() + 1.4, soldier.getZ(), 6, 0.4, 0.3, 0.4, 0.0);
             level.playSound(null, soldier.blockPosition(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.NEUTRAL, 0.8f, 1.1f);
             soldier.salute();
@@ -186,8 +225,16 @@ public final class Training {
         return Recruitment.Result.HEALED;
     }
 
-    /** Bildet einen Soldaten aus: prüft Tisch, Besitzer, Entfernung und Preis, zieht den Preis ab und befördert ihn. */
+    /** Wie {@link #train(Player, BlockPos, int, Action, SoldierType)} – die Ausbildung zur üblichen Art. */
     public static Recruitment.Result train(Player player, BlockPos table, int entityId, Action action) {
+        return train(player, table, entityId, action, null);
+    }
+
+    /**
+     * Bildet einen Soldaten aus: prüft Tisch, Besitzer, Entfernung und Preis, zieht den Preis ab und befördert ihn – im Rang
+     * oder zur Art {@code target} ({@code null}: zur üblichen).
+     */
+    public static Recruitment.Result train(Player player, BlockPos table, int entityId, Action action, @Nullable SoldierType target) {
         if (!(player.level() instanceof ServerLevel level) || !(level.getBlockState(table).getBlock() instanceof RecruitmentTableBlock)
                 || player.distanceToSqr(Vec3.atCenterOf(table)) > Recruitment.TABLE_RANGE * Recruitment.TABLE_RANGE) {
             return Recruitment.Result.TOO_FAR;
@@ -210,8 +257,8 @@ public final class Training {
             celebrate(level, soldier);
             return Recruitment.Result.TRAINED;
         }
-        SoldierType next = promotion(soldier.getSoldierType());
-        Cost cost = promoteCost(soldier.getSoldierType());
+        SoldierType next = target != null ? target : promotion(soldier.getSoldierType());
+        Cost cost = next == null ? null : promoteCost(soldier.getSoldierType(), next);
         if (next == null || cost == null) {
             return Recruitment.Result.MAX_RANK;
         }
