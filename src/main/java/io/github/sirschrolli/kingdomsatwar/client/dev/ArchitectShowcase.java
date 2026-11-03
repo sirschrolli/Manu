@@ -442,6 +442,344 @@ final class ArchitectShowcase {
         steps.add(Step.screenshot("architect_import_overview"));
     }
 
+    /** Wo die Vorschau der Burg steht (weit weg von den anderen Szenen). */
+    private static final int CX = 2000;
+    private static final int CZ = 2000;
+
+    /** Setzt ein Volumen in die Welt (Lage 0 unter dem Boden), danach passen sich Treppen, Zäune und Scheiben an. */
+    static void paste(ServerLevel level, io.github.sirschrolli.kingdomsatwar.architect.io.Volume v, BlockPos min) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        java.util.List<BlockPos> placed = new java.util.ArrayList<>();
+        for (int y = 0; y < v.sizeY; y++) {
+            for (int z = 0; z < v.sizeZ; z++) {
+                for (int x = 0; x < v.sizeX; x++) {
+                    BlockState state = v.getBlockState(new BlockPos(x, y, z));
+                    if (state.is(Blocks.STRUCTURE_VOID) || state.isAir() && y == 0) {
+                        continue;
+                    }
+                    pos.set(min.getX() + x, min.getY() - 1 + y, min.getZ() + z);
+                    level.setBlock(pos, state, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                    if (!state.isAir()) {
+                        placed.add(pos.immutable());
+                    }
+                }
+            }
+        }
+        for (BlockPos p : placed) {
+            BlockState state = level.getBlockState(p);
+            BlockState shaped = Block.updateFromNeighbourShapes(state, level, p);
+            if (shaped != state && !shaped.isAir()) {
+                level.setBlock(p, shaped, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+            }
+        }
+    }
+
+    /** Vorschau der Burg, die der Dragon Architect selbst entwirft (zum Gestalten). */
+    static void castle(Deque<Step> steps) {
+        int size = Integer.getInteger("kingdomsatwar.castleSize", 160);
+        steps.add(Step.hud(false));
+        steps.add(Step.command("time set 5000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.command("gamerule doDaylightCycle false"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(16)));
+        steps.add(Step.command("tp @s " + (CX + size / 2) + " 180 " + (CZ - 40) + " 0 40"));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.server(level -> {
+            int g = Showcase.ground;
+            for (int cx = (CX - 32) >> 4; cx <= (CX + size + 32) >> 4; cx++) {
+                for (int cz = (CZ - 32) >> 4; cz <= (CZ + size + 32) >> 4; cz++) {
+                    level.getChunk(cx, cz);
+                    level.setChunkForced(cx, cz, true);
+                }
+            }
+            Showcase.fill(level, new BlockPos(CX - 30, g - 4, CZ - 30), new BlockPos(CX + size + 30, g - 2, CZ + size + 30), Blocks.DIRT.defaultBlockState());
+            Showcase.fill(level, new BlockPos(CX - 30, g - 1, CZ - 30), new BlockPos(CX + size + 30, g - 1, CZ + size + 30), Blocks.GRASS_BLOCK.defaultBlockState());
+            long t0 = System.nanoTime();
+            var v = io.github.sirschrolli.kingdomsatwar.architect.castle.CastleGenerator.generate(size, size, 7L);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("[Showcase] Burg {}x{}x{} entworfen in {} ms, {} Blöcke", v.sizeX, v.sizeY, v.sizeZ,
+                    (System.nanoTime() - t0) / 1_000_000, v.blocks());
+            paste(level, v, new BlockPos(CX, g, CZ));
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+        }));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX - 50.0, Showcase.ground + 75.0, CZ - 60.0, CX + size * 0.5, Showcase.ground + 8.0,
+                CZ + size * 0.45)));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.waitTicks(120));
+        steps.add(Step.screenshot("castle_overview"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX + size * 0.5 - 40.0, Showcase.ground + 30.0, CZ + size * 0.5 - 30.0,
+                CX + size * 0.5, Showcase.ground + 14.0, CZ + size - 22.0)));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.screenshot("castle_keep"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX + size * 0.5, Showcase.ground + 16.0, CZ - 34.0, CX + size * 0.5, Showcase.ground + 10.0,
+                CZ + 4.0)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("castle_gate"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX + size * 0.5 + 3.5, Showcase.ground + 3.0, CZ + size * 0.22, CX + size * 0.5,
+                Showcase.ground + 14.0, CZ + size * 0.8)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("castle_courtyard"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX + size + 50.0, Showcase.ground + 60.0, CZ + size + 40.0, CX + size * 0.5,
+                Showcase.ground + 8.0, CZ + size * 0.5)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("castle_back"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, CX + size * 0.5, Showcase.ground + 170.0, CZ + size * 0.5 - 1.0, CX + size * 0.5,
+                Showcase.ground, CZ + size * 0.5)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("castle_top"));
+    }
+
+    /** Wo die Großbaustelle steht. */
+    private static final int GX = 3000;
+    private static final int GZ = 3000;
+
+    /**
+     * Vorführung: eine Großbaustelle. Eine Burg (vom Dragon Architect selbst entworfen, als hätte sie der Spieler gebaut)
+     * wird mit dem Vermessungsstab vermessen und gezeichnet, neben der Siedlung aufgestellt und von zwölf Baumeistern in
+     * Abschnitten nachgebaut – mit der Karte der Abschnitte im Stadtfenster und am Ende Vorbild und Nachbau nebeneinander.
+     */
+    static void great(Deque<Step> steps) {
+        int size = Integer.getInteger("kingdomsatwar.castleSize", 112);
+        BlockPos[] sel = new BlockPos[2];
+        BlockPos[] banner = new BlockPos[1];
+        Town[] town = {null};
+        int[] height = {0};
+        int copyX = GX + size + 48;
+        int copyCenterX = copyX + (size - 1) / 2;
+        int centerZ = GZ + (size - 1) / 2;
+        steps.add(Step.hud(false));
+        steps.add(Step.command("time set 3000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.command("gamerule doDaylightCycle false"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(16)));
+        steps.add(Step.command("tp @s " + (GX + size) + " 150 " + (GZ - 30) + " 0 50"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.server(level -> {
+            int g = Showcase.ground;
+            for (int cx = (GX - 40) >> 4; cx <= (copyX + size + 40) >> 4; cx++) {
+                for (int cz = (GZ - 40) >> 4; cz <= (GZ + size + 40) >> 4; cz++) {
+                    level.getChunk(cx, cz);
+                    level.setChunkForced(cx, cz, true);
+                }
+            }
+            Showcase.fill(level, new BlockPos(GX - 36, g - 4, GZ - 36), new BlockPos(copyX + size + 36, g - 2, GZ + size + 36), Blocks.DIRT.defaultBlockState());
+            // weit und breit Wiese (statt Sand), damit die Bilder von oben natürlich aussehen
+            BlockState grass = Blocks.GRASS_BLOCK.defaultBlockState();
+            for (int x = GX - 200; x <= copyX + size + 200; x++) {
+                for (int z = GZ - 200; z <= GZ + size + 200; z++) {
+                    BlockPos p = new BlockPos(x, g - 1, z);
+                    if (level.hasChunkAt(p)) {
+                        level.setBlock(p, grass, Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            var v = io.github.sirschrolli.kingdomsatwar.architect.castle.CastleGenerator.generate(size, size, 11L);
+            paste(level, v, new BlockPos(GX, g, GZ));
+            height[0] = v.sizeY;
+            sel[0] = new BlockPos(GX, g - 1, GZ);
+            sel[1] = new BlockPos(GX + size - 1, g + v.sizeY - 2, GZ + size - 1);
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            // die Siedlung zwischen Vorbild und Bauplatz
+            BlockPos b = new BlockPos(GX + size + 22, g, GZ + size / 2);
+            BlockState lower = ModBlocks.TOWN_BANNER.get().defaultBlockState().setValue(TownBannerBlock.FACING, Direction.SOUTH);
+            level.setBlock(b, lower, Block.UPDATE_ALL);
+            level.setBlock(b.above(), lower.setValue(TownBannerBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+            TownManager.placeBanner(player, level, b);
+            banner[0] = b;
+            town[0] = Towns.of(level.getServer()).byOwner(player.getUUID());
+            ItemStack rod = new ItemStack(ModItems.SURVEYORS_ROD.get());
+            rod.set(ModDataComponents.SURVEY_FIRST.get(), GlobalPos.of(level.dimension(), sel[0]));
+            rod.set(ModDataComponents.SURVEY_SECOND.get(), GlobalPos.of(level.dimension(), sel[1]));
+            player.getInventory().setSelectedSlot(0);
+            player.getInventory().setItem(0, rod);
+            player.getInventory().setItem(1, new ItemStack(net.minecraft.world.item.Items.PAPER, 12));
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+        }));
+        steps.add(Step.until(() -> town[0] != null, 600));
+
+        // 1. die Burg im Rahmen des Vermessungsstabs (der Spieler steht auf einem unsichtbaren Sockel hoch über dem Sand)
+        double[] eye = {GX - 34.0, 0.0, GZ - 44.0};
+        steps.add(Step.server(level -> {
+            eye[1] = Showcase.ground + 58.0;
+            BlockPos feet = BlockPos.containing(eye[0], eye[1] - 1.62, eye[2]);
+            level.setBlock(feet.below(), Blocks.BARRIER.defaultBlockState(), Block.UPDATE_ALL);
+        }));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, eye[0], eye[1], eye[2], GX + size * 0.5, Showcase.ground + 6.0, GZ + size * 0.42)));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.waitTicks(160));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        steps.add(Step.waitTicks(5));
+        steps.add(Step.screenshot("great_rod"));
+        steps.add(Step.hud(false));
+
+        // 2. „Bauplan zeichnen“ mit Ansicht und Grundriss der Burg (über der Burg, damit alles geladen ist)
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, GX + size * 0.5, Showcase.ground + 60.0, GZ - 30.0, GX + size * 0.5, Showcase.ground,
+                GZ + size * 0.5)));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.once(minecraft -> {
+            SavePlanScreen screen = new SavePlanScreen(sel[0], sel[1]);
+            minecraft.gui.setScreen(screen);
+            screen.setName("Burg Falkenstein");
+            screen.setFront(Direction.NORTH);
+            Showcase.parkMouse(minecraft);
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("great_save"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            player.teleportTo(GX + size / 2.0, Showcase.ground + 40.0, GZ + size / 2.0);
+            int ground = PlanScan.autoGround(level, sel[0], sel[1]);
+            Architect.save(player, sel[0], sel[1], "Burg Falkenstein", ground, Direction.NORTH);
+            // Stab und Bauplan weglegen (sonst zeichnen sie Rahmen und Vorschau in jedes Bild)
+            player.getInventory().clearContent();
+        }));
+        steps.add(Step.waitTicks(40));
+        // 3. neben der Siedlung aufstellen; zwölf Baumeister, ein volles Lager und ein Baustellenlager
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            Town t = town[0];
+            for (PlanInfo info : PlanLibrary.of(level.getServer()).byAuthor(player.getUUID())) {
+                if (!info.name().equals("Burg Falkenstein")) {
+                    continue;
+                }
+                TownManager.startCustom(level, t, info, new BlockPos(copyCenterX, Showcase.ground, centerZ), Rotation.NONE);
+                // ein Baustellenlager vor der Westseite: eine Reihe Truhen voller Baustoffe und kostbarer Blöcke
+                int[] units = info.costs().unitArray();
+                java.util.List<ItemStack> goods = new java.util.ArrayList<>();
+                Object[][] kinds = {{net.minecraft.world.item.Items.OAK_LOG, (units[0] + units[0] / 5 + 64 + 3) / 4},
+                        {net.minecraft.world.item.Items.COBBLESTONE, units[1] + units[1] / 5 + 64},
+                        {net.minecraft.world.item.Items.IRON_INGOT, units[2] + units[2] / 5 + 64}};
+                for (Object[] kind : kinds) {
+                    net.minecraft.world.item.Item item = (net.minecraft.world.item.Item) kind[0];
+                    for (int left = (Integer) kind[1]; left > 0; left -= 64) {
+                        goods.add(new ItemStack(item, Math.min(64, left)));
+                    }
+                }
+                for (PlanInfo.Precious p : info.costs().precious()) {
+                    for (int left = p.count(); left > 0; left -= p.item().getDefaultMaxStackSize()) {
+                        goods.add(new ItemStack(p.item(), Math.min(p.item().getDefaultMaxStackSize(), left)));
+                    }
+                }
+                int slot = 27;
+                net.minecraft.world.Container chest = null;
+                int row = 0;
+                for (ItemStack stack : goods) {
+                    if (chest == null || slot >= chest.getContainerSize()) {
+                        BlockPos at = new BlockPos(copyX - 5, Showcase.ground, GZ + 6 + 2 * row++);
+                        level.setBlock(at, Blocks.CHEST.defaultBlockState(), Block.UPDATE_ALL);
+                        chest = level.getBlockEntity(at) instanceof net.minecraft.world.Container c ? c : null;
+                        slot = 0;
+                        if (chest == null) {
+                            break;
+                        }
+                    }
+                    chest.setItem(slot++, stack);
+                }
+            }
+            for (int i = 0; i < 12; i++) {
+                TownManager.spawnCitizen(level, t, Profession.BUILDER);
+            }
+            player.teleportTo(copyX - 30.0, Showcase.ground + 50.0, GZ - 40.0);
+        }));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.command("tick rate 80"));
+        double[] marks = {0.12, 0.45, 2.0};
+        int[] logTicks = {0};
+        for (int k = 0; k < marks.length; k++) {
+            double target = marks[k];
+            int index = k;
+            steps.add(Step.until(() -> {
+                Town t = town[0];
+                if (t != null && !t.projects().isEmpty() && ++logTicks[0] % 400 == 0) {
+                    Town.Project p = t.projects().getFirst();
+                    var site = p.site();
+                    var server = Minecraft.getInstance().getSingleplayerServer();
+                    long now = server == null ? 0L : server.overworld().getGameTime();
+                    io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info(
+                            "[Showcase] Großbaustelle {} %, {} von {} Abschnitten, {} Baumeister, wartet {} {}, Tick {} ({} ms)",
+                            Math.round(p.fraction() * 100), site == null ? 0 : site.done(), site == null ? 0 : site.count(),
+                            site == null ? 0 : site.builders(now), p.waiting, p.waitingItem, now,
+                            server == null ? 0 : server.getAverageTickTimeNanos() / 1_000_000);
+                }
+                return t != null && (t.projects().isEmpty() || target <= 1.0 && t.projects().getFirst().fraction() >= target);
+            }, 400000));
+            if (index == 2) {
+                steps.add(Step.waitTicks(80));
+            }
+            steps.add(Step.command("tick freeze"));
+            steps.add(Step.once(minecraft -> lookAbs(minecraft, copyX - 18.0, Showcase.ground + 62.0, GZ - 26.0, copyCenterX, Showcase.ground,
+                    GZ + size * 0.5)));
+            steps.add(Step.waitTicks(40));
+            steps.add(Step.waitForChunks(600));
+            steps.add(Step.waitTicks(40));
+            steps.add(Step.screenshot("great_site_" + index));
+            if (index == 1) {
+                // aus der Nähe: der Baumeister, der gerade am höchsten arbeitet (meist auf seinem Gerüst)
+                steps.add(Step.once(minecraft -> {
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity best = null;
+                    for (var e : minecraft.level.entitiesForRendering()) {
+                        if (e instanceof io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity c && c.getX() > copyX && c.getX() < copyX + size
+                                && (best == null || c.getY() > best.getY())) {
+                            best = c;
+                        }
+                    }
+                    double bx = best == null ? copyX + 20.0 : best.getX();
+                    double by = best == null ? Showcase.ground + 6.0 : best.getY() + 1.0;
+                    double bz = best == null ? GZ + 20.0 : best.getZ();
+                    lookAbs(minecraft, bx - 7.0, by + 4.0, bz - 9.0, bx, by, bz);
+                }));
+                steps.add(Step.waitTicks(40));
+                steps.add(Step.screenshot("great_close"));
+            }
+            if (index == 1) {
+                // die Karte der Abschnitte im Stadtfenster
+                steps.add(Step.once(minecraft -> lookAbs(minecraft, banner[0].getX() + 0.5, Showcase.ground + 1.0, banner[0].getZ() - 4.0,
+                        banner[0].getX() + 0.5, Showcase.ground + 1.0, banner[0].getZ() + 0.5)));
+                steps.add(Step.waitTicks(20));
+                steps.add(Step.server(level -> {
+                    ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+                    TownActions.open(player, town[0], banner[0]);
+                }));
+                steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof TownScreen, 200));
+                steps.add(Step.waitTicks(8));
+                steps.add(Step.once(minecraft -> TownShowcase.hover(minecraft, 9 + 158 + 48, 52 + 17 + 18)));
+                steps.add(Step.waitTicks(10));
+                steps.add(Step.screenshot("great_map"));
+                steps.add(Step.once(minecraft -> {
+                    Showcase.parkMouse(minecraft);
+                    minecraft.gui.setScreen(null);
+                }));
+            }
+            steps.add(Step.command("tick unfreeze"));
+        }
+        steps.add(Step.command("tick rate 20"));
+        // 4. Vorbild und Nachbau nebeneinander
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, GX + size + 24.0, Showcase.ground + 92.0, GZ - 62.0, GX + size + 24.0,
+                Showcase.ground, GZ + size * 0.5)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("great_twins"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, copyCenterX + 3.5, Showcase.ground + 3.0, GZ + size * 0.24, copyCenterX,
+                Showcase.ground + 12.0, GZ + size * 0.8)));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("great_inside"));
+    }
+
     /** Kamera an eine Stelle (absolute Höhen), Blick auf einen Punkt. */
     private static void lookAbs(Minecraft minecraft, double ex, double ey, double ez, double tx, double ty, double tz) {
         double lx = tx - ex;

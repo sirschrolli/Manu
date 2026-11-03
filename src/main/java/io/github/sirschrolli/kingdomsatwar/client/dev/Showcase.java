@@ -113,6 +113,8 @@ final class Showcase {
                 case "dragonwar" -> DragonWarShowcase.dragonWar(steps);
                 case "architect" -> ArchitectShowcase.architect(steps);
                 case "architect_io" -> ArchitectShowcase.io(steps);
+                case "architect_castle" -> ArchitectShowcase.castle(steps);
+                case "architect_great" -> ArchitectShowcase.great(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
                 case "golems" -> GolemShowcase.golems(steps);

@@ -106,6 +106,15 @@ public class SavePlanScreen extends Screen {
         }
     }
 
+    /** Für Vorführungen: die Vorderseite vorgeben (vermisst neu). */
+    public void setFront(Direction front) {
+        if (this.front != front) {
+            this.front = front;
+            this.doorFound = false;
+            this.rescan();
+        }
+    }
+
     /** Für Vorführungen: den Namen vorgeben. */
     public void setName(String name) {
         if (this.nameBox != null) {

@@ -403,6 +403,8 @@ final class Jobs {
         private int statRaises;
         private int statForced;
         private static final boolean DEBUG = Boolean.getBoolean("kingdomsatwar.debugBuilder");
+        /** Nur für Vorführungen im Zeitraffer: ohne Pausen, große Abschnitte, Wege im Nu. */
+        private static final boolean TURBO = Boolean.getBoolean("kingdomsatwar.turboBuilders");
         /** Für welche Arbeit die Karten gelten. */
         private Town.@Nullable Work mapped;
         /** Die Arbeit, an der er gerade ist (die ganze Baustelle oder ein Abschnitt einer Großbaustelle). */
@@ -697,7 +699,7 @@ final class Jobs {
             BlockPos origin = first.pos();
             boolean clearing = first.state().isAir();
             // auf einer Großbaustelle arbeitet eine ganze Kolonne: mehr Blöcke auf einmal, etwas weiter verteilt
-            int limit = (clearing ? 2 : 1) * (work.whole() ? SECTION : SECTION_SITE);
+            int limit = (clearing ? 2 : 1) * (work.whole() ? SECTION : SECTION_SITE) * (TURBO ? 3 : 1);
             int reach = work.whole() ? SECTION_REACH : SECTION_REACH + 1;
             BlockPos feet = this.feet();
             int placed = 0;
@@ -735,7 +737,7 @@ final class Jobs {
             if (placed > 0) {
                 this.level().sendParticles(ParticleTypes.POOF, origin.getX() + 0.5, origin.getY() + 0.8, origin.getZ() + 0.5, 6, 1.2, 0.4, 1.2, 0.01);
                 this.level().playSound(null, origin, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.6f, 0.75f);
-                this.cooldown = clearing ? 2 : 6;
+                this.cooldown = TURBO ? 0 : clearing ? 2 : 6;
             }
         }
 
@@ -752,6 +754,17 @@ final class Jobs {
         private static net.minecraft.world.item.@Nullable Item precious(Town.Project project, Blueprint.Step step) {
             return project.custom != null && !step.foundation() && !step.state().isAir()
                     ? io.github.sirschrolli.kingdomsatwar.architect.BuildRules.precious(step.state(), true) : null;
+        }
+
+        /** Bringt, was er an Blöcken bei sich trägt, ins Lager zurück (soweit dort Platz ist). */
+        private void returnCarried(Town town) {
+            SimpleContainer carried = this.citizen.carried();
+            for (int i = 0; i < carried.getContainerSize(); i++) {
+                ItemStack stack = carried.getItem(i);
+                if (!stack.isEmpty()) {
+                    carried.setItem(i, TownStorage.store(this.level(), town, stack, this.citizen.blockPosition()));
+                }
+            }
         }
 
         /** Wie viele Stück eines Gegenstands der Bürger bei sich trägt. */
@@ -968,6 +981,8 @@ final class Jobs {
                     java.util.Arrays.fill(this.spent, 0);
                     this.statRaises = this.statForced = 0;
                 }
+                // kostbare Blöcke, die er für diesen Abschnitt geholt und nicht gebraucht hat, gehören wieder ins Lager
+                this.returnCarried(town);
                 SiteSections site = project.site();
                 if (site != null) {
                     site.complete(this.citizen.getUUID(), work);
@@ -1387,7 +1402,7 @@ final class Jobs {
                     this.citizen.getNavigation().moveTo(path, 0.85);
                 }
             }
-            if (++this.travel > this.travelLimit) {
+            if (++this.travel > (TURBO ? Math.min(this.travelLimit, 8) : this.travelLimit)) {
                 this.teleport(target);
                 return;
             }

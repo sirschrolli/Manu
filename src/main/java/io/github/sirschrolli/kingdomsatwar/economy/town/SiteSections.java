@@ -4,7 +4,6 @@ import io.github.sirschrolli.kingdomsatwar.architect.PlanInfo;
 import io.github.sirschrolli.kingdomsatwar.architect.PlanScan;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +54,9 @@ public final class SiteSections {
     private final int w;
     private final int d;
     private final int[] state;
-    private final Map<Integer, Town.Work> works = new HashMap<>();
-    private final Map<UUID, Claim> claims = new HashMap<>();
+    /** Laufende Arbeiten und wer welchen Abschnitt hat (auch von anderen Fäden lesbar, etwa für Vorführungen). */
+    private final Map<Integer, Town.Work> works = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<UUID, Claim> claims = new java.util.concurrent.ConcurrentHashMap<>();
     private int @Nullable [] frameBlocks;
     private int @Nullable [] detailBlocks;
 

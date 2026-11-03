@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.47.0 – Dragon Architect, Teil 2: Schematiken einlesen und ablegen. Im Stadtfenster liest du Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) als eigenen Bauplan ein – Bodenlinie und Haustür findet der Architekt von selbst, und deine Baumeister bauen sie nach. Umgekehrt legt ein Knopfdruck jeden eigenen Plan in allen drei Formaten ab.**
+> **Testversion 0.48.0 – Dragon Architect, Teil 3: Großbaustellen. Baupläne dürfen jetzt bis 320 × 128 × 320 Blöcke groß sein – eine ganze Burg. Große Pläne bauen viele Baumeister zugleich: Jeder nimmt sich einen Abschnitt von 16 × 16 Säulen, zieht dort den Rohbau Feld für Feld hoch, und sobald ringsum die Mauern stehen, kommen Türen, Fackeln und Laternen dazu. Im Stadtfenster zeigt eine Karte, welche Abschnitte offen, im Rohbau, fertig oder gerade in Arbeit sind.**
+> In 0.47 kamen die Schematiken: Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) lassen sich als eigener Bauplan einlesen, und jeder eigene Plan lässt sich in allen drei Formaten ablegen.
 > In 0.46 kam der Dragon Architect: Mit dem Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier; die Baumeister bauen es nach, Block für Block oder abschnittsweise, kostbare Blöcke nehmen sie genau so aus dem Lager.
 > In 0.45 kamen die Drachen in den Krieg: Mit dem Drachenhorn stoßen deine Drachen im Sturzflug auf einen Feind herab oder fliegen einen Luftangriff auf einen Ort; gegen Heerhaufen verteidigen sie die Siedlung von selbst, schwer verwundet ziehen sie sich zurück.
 > In 0.44 kamen neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter auf dem eigenen Schlachtross und Belagerungsknechte; am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen.
@@ -278,8 +279,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Dragon Architect, Teil 3 – große Bauten bis zur ganzen Burg (300 × 300 Blöcke), an denen mehrere
-> Baumeister gemeinsam in eigenen Abschnitten arbeiten.
+> **Als Nächstes:** die Königsburg – eine fertige Burg mit 300 × 300 Blöcken (Ringmauer, Türme, Torhaus, Innenhof, großer
+> Bergfried) als Bauplan für die Baumeister und als .litematic-Datei.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -351,7 +352,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Drachen im Krieg: Drachenhorn, Sturzangriff mit Odem, Luftangriff, Verteidigung gegen Heerhaufen | ✅ fertig |
 | Dragon Architect, Teil 1: Gebäude vermessen, eigene Baupläne, Nachbau Block für Block oder abschnittsweise | ✅ fertig |
 | Dragon Architect, Teil 2: Schematiken einlesen und ablegen (.litematic, .schem, .nbt) | ✅ fertig |
-| Dragon Architect, Teil 3: große Bauten bis 300 × 300 mit mehreren Baumeistern in eigenen Abschnitten | ⏳ als Nächstes |
+| Dragon Architect, Teil 3: Großbaustellen bis 320 × 320 – viele Baumeister zugleich, jeder in seinem Abschnitt | ✅ fertig |
+| Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ⏳ als Nächstes |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1126,7 +1128,7 @@ reicht.
 
 | Beruf | Lohn | Werkstatt | Arbeit |
 |---|---|---|---|
-| Baumeister | 4 Silber | – | baut die Baustellen nach Plan – Block für Block oder abschnittsweise |
+| Baumeister | 4 Silber | – (einer im Lager und im Weiler, je Stufe einer mehr, vier mehr für eine Großbaustelle) | baut die Baustellen nach Plan – Block für Block oder abschnittsweise |
 | Bauer | 3 Silber | Feld | erntet, sät nach, pflegt die Pflanzen, bringt die Ernte in die Truhe |
 | Holzfäller | 3 Silber | Holzfällerhütte | fällt die Bäume im Hain hinter der Hütte und wilde Bäume ringsum, pflanzt nach |
 | Bergmann | 5 Silber | Mine | steigt in den Schacht und hackt an der Erzwand (Kohle, Eisen, Kupfer, selten Gold und Edelsteine) |
@@ -1197,7 +1199,7 @@ dauerhaft, Befehle in Schildern verschwinden.
 
 **Eigene Pläne:** Im Reiter **Bauen** des Stadtfensters öffnet die blaue Karte **Eigene Pläne** deine Sammlung (bis zu
 64 Pläne): Ansicht, Größe, Baustoffe und Preis; eine **Abschrift** nehmen (ein Blatt Papier) oder einen Plan löschen
-(Gebäude, die nach ihm gebaut sind, bleiben stehen). Vermessen lassen sich Bauten bis 96 × 64 × 96 Blöcke.
+(Gebäude, die nach ihm gebaut sind, bleiben stehen).
 
 **Schematiken einlesen:** Gebäude aus anderen Welten oder aus dem Netz bringst du als Datei mit: **Litematica**
 (.litematic, auch mit mehreren Bereichen), **WorldEdit** und andere Sponge-Schematiken (.schem, alle drei Fassungen)
@@ -1207,7 +1209,7 @@ Pläne** auf **„Schematik einlesen“**: eine Liste mit Art, Name, Ordner und 
 Architekt zeichnet daraus einen eigenen Plan. Bodenlinie und Haustür findet er von selbst, Blöcke älterer
 Minecraft-Fassungen übersetzt er (etwa aus 1.15), Schilder und Banner behält er. Blöcke, die er nicht kennt (etwa aus
 anderen Mods), werden Luft – das sagt er dir; was er nie baut (Spawner, Grundgestein …), lässt er wie beim Vermessen
-weg. Eingelesen werden Bauten bis 96 × 64 × 96 Blöcke; gelesen wird nur in diesen Ordnern.
+weg. Eingelesen werden Bauten bis 320 × 128 × 320 Blöcke; gelesen wird nur in diesen Ordnern.
 
 **Schematiken ablegen:** Der Knopf **↓** neben jedem eigenen Plan schreibt ihn auf einmal als .litematic, .schem und
 .nbt in den Ordner `schematics/kingdomsatwar` – zum Weitergeben, zum Weiterbauen mit Litematica oder WorldEdit oder
@@ -1215,9 +1217,25 @@ für den Strukturblock. Boden unter der Bodenlinie, den der Plan nicht anrührt,
 das Einfügen keine Löcher), und die Bodenlinie reist mit: wieder eingelesen, kommt der Plan Block für Block genau so
 zurück.
 
+**Großbaustellen:** Vermessen und einlesen lassen sich Bauten bis **320 × 128 × 320** Blöcke – eine ganze Burg samt
+Hof. Große Bereiche vermisst der Architekt Lage für Lage, ohne dass das Spiel stockt (im Fenster läuft ein Balken mit).
+Ab 40 Blöcken Breite wird ein Plan zur **Großbaustelle**: Sie ist in **Abschnitte** von je 16 × 16 Säulen geteilt, und
+jeder Baumeister nimmt sich den nächsten freien – so arbeiten viele zugleich. In seinem Abschnitt räumt er den Platz,
+legt das Fundament, hebt Keller aus und zieht dann den **Rohbau** Feld für Feld von unten nach oben hoch; seine Gerüste
+baut er ab, wenn er fertig ist. Die **Einzelheiten** – Türen, Fackeln, Laternen, Teppiche, Pflanzen und Wasser – kommen,
+sobald ringsum der Rohbau steht, damit alles Halt findet. Wer zur anderen Seite einer Mauer muss, steigt hinüber, statt
+außen herumzulaufen, und mit dem Karren holt er auf einmal bis zu acht Stapel je Baustoff. Truhen und Fässer, die du bis
+zu zehn Blöcke neben die Großbaustelle stellst, zählen als **Baustellenlager**. Solange es eine Großbaustelle gibt, darfst
+du **vier Baumeister mehr** anheuern (sonst einer im Lager und im Weiler, dann je Stufe einer mehr). Eine Burg, die nie
+ins Gebiet der Siedlung passen würde, stellst du **neben** die Siedlung: Sie muss das Gebiet berühren, darf aber weder
+das Banner noch Häuser überbauen und kein fremdes Gebiet berühren. Im Stadtfenster zeigt die Karte der Großbaustelle
+(beim Darüberfahren über die Baustelle), welche Abschnitte offen, im Rohbau, fertig oder gerade in Arbeit sind.
+
 ![Dragon Architect: Vermessen, Bauplan zeichnen, eigene Pläne, Nachbau](docs/bilder/architekt.jpg)
 
 ![Dragon Architect: Schematiken einlesen, eigener Plan, Nachbau](docs/bilder/architekt_schematiken.jpg)
+
+![Dragon Architect: eine ganze Burg vermessen, Großbaustelle, Karte der Abschnitte, Burghof](docs/bilder/architekt_grossbaustelle.jpg)
 
 ### Hof- und Weidetiere
 
@@ -1806,9 +1824,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      eigenen Wesen.
 2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen und die Heerhaufen sind
    fertig, als Nächstes kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
-3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen) und Teil 2 (Schematiken
-   einlesen und ablegen) sind fertig; als Nächstes große Bauten bis zur ganzen Burg (300 × 300), an denen mehrere
-   Baumeister gemeinsam in eigenen Abschnitten arbeiten.
+3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
+   einlesen und ablegen) und Teil 3 (Großbaustellen mit vielen Baumeistern) sind fertig; als Nächstes die Königsburg mit
+   300 × 300 Blöcken als Bauplan und als .litematic.
 4. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung
