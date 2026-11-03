@@ -55,7 +55,6 @@ public final class SiegePoses {
             case TREBUCHET -> TREBUCHET_RELEASE;
             case BALLISTA -> BALLISTA_RELEASE;
             case RAM -> RAM_STRIKE;
-            case SIEGE_TOWER, WAGON -> 0;
         };
     }
 

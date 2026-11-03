@@ -5,7 +5,6 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
@@ -28,23 +27,17 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.InterpolationHandler;
-import net.minecraft.world.entity.Leashable;
 import net.minecraft.world.entity.LinearInterpolationHandler;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.animal.equine.AbstractHorse;
-import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -56,7 +49,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.ItemAbilities;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -70,16 +62,12 @@ import org.jspecify.annotations.Nullable;
  *   <li><b>Leertaste</b> feuert (der Rammbock stößt zu), <b>Schleichen</b> steigt ab.</li>
  *   <li>Rechtsklick mit Munition lädt nach, mit Holzbrettern wird repariert; schleichend mit leerer Hand zerlegt man sie
  *   wieder in ihren Bausatz.</li>
- *   <li><b>Leine:</b> Mit einer Leine angebunden rollt sie hinter dem her, der die Leine hält – am besten hinter einem
- *   Pferd (wer ein Pferd an der Leine führt und schleichend auf die Waffe klickt, spannt es vor). Je schwerer die Last,
- *   desto langsamer geht das Zugtier.</li>
  * </ul>
  *
  * Arm, Schlinge, Bogen und Widder bewegen sich nach {@link SiegePoses}: Erst holt die Waffe aus, dann verlässt das
- * Geschoss Löffel, Schlinge oder Bahn genau in dem Moment, in dem das Modell es zeigt. Belagerungsturm und Planwagen
- * ({@link SiegeVehicleEntity}) sind Fahrzeuge derselben Art – sie schießen nicht, tragen aber mehrere Krieger.
+ * Geschoss Löffel, Schlinge oder Bahn genau in dem Moment, in dem das Modell es zeigt.
  */
-public class SiegeWeaponEntity extends Entity implements Leashable {
+public class SiegeWeaponEntity extends Entity {
     private static final EntityDataAccessor<Float> DATA_HEALTH = SynchedEntityData.defineId(SiegeWeaponEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> DATA_AMMO = SynchedEntityData.defineId(SiegeWeaponEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Long> DATA_FIRED_AT = SynchedEntityData.defineId(SiegeWeaponEntity.class, EntityDataSerializers.LONG);
@@ -90,16 +78,11 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
     private static final double AIM_RANGE = 160.0;
     /** Nach so vielen Ticks ohne weiteren Stoß „verheilen“ angeschlagene Tore wieder. */
     private static final int RAM_MEMORY = 600;
-    /** So weit rollt sie am Seil höchstens je Tick hinterher (ein galoppierendes Pferd schafft etwa 0,7). */
-    private static final double MAX_TOW_STEP = 0.9;
 
     private final SiegeType siege;
     private @Nullable UUID owner;
-    protected boolean lastJump;
-    protected int overlayTimer;
-    private Leashable.@Nullable LeashData leashData;
-    /** Hängt sie gerade an einer Leine (dann lenkt das Zugtier, nicht der Schütze)? */
-    private boolean towed;
+    private boolean lastJump;
+    private int overlayTimer;
     /** Der Schuss ist ausgelöst und fliegt in diesem Spieltick los (−1: nichts unterwegs). */
     private long releaseAt = -1L;
     private @Nullable LivingEntity releaseShooter;
@@ -160,13 +143,13 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         return switch (this.siege) {
             case CATAPULT, TREBUCHET -> 16;
             case BALLISTA -> 24;
-            case RAM, SIEGE_TOWER, WAGON -> 0;
+            case RAM -> 0;
         };
     }
 
     /** So viel Munition kostet ein Schuss (der Tribok wirft einen Brocken aus zwei Steinkugeln). */
     public int ammoPerShot() {
-        return this.siege == SiegeType.TREBUCHET ? 2 : this.siege.ammo() == SiegeType.Ammo.NONE ? 0 : 1;
+        return this.siege == SiegeType.TREBUCHET ? 2 : this.siege == SiegeType.RAM ? 0 : 1;
     }
 
     /** Wurfgeschwindigkeit (Wurfwaffen) bzw. Neigung in Grad (Balliste, positiv = nach oben). */
@@ -243,7 +226,7 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         }
     }
 
-    protected void clientTick() {
+    private void clientTick() {
         this.wheelRotO = this.wheelRot;
         Vec3 moved = this.position().subtract(this.xo, this.yo, this.zo);
         Vec3 fwd = Vec3.directionFromRotation(0.0f, this.getYRot());
@@ -255,29 +238,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
     }
 
     private void serverTick(ServerLevel level) {
-        Vec3 tow = this.towing(level);
-        double drive = this.control(level, tow != null);
-        SiegeCrew.tickAssignment(level, this);
-        if (this.releaseAt >= 0L && level.getGameTime() >= this.releaseAt) {
-            this.release(level);
-        }
-        this.reloadSounds(level);
-        this.physics(level, tow != null ? 0.0 : drive, tow);
-        if (this.isOnFire() && this.tickCount % 20 == 0) {
-            this.damage(level, 2.0f, level.damageSources().onFire());
-        }
-        if (!this.ramDamage.isEmpty() && level.getGameTime() - this.lastBlow > RAM_MEMORY) {
-            this.forgetRamDamage(level);
-        }
-    }
-
-    /**
-     * Wer sie bedient, lenkt und schießt: ein Spieler mit seinen Tasten oder ein Soldat der Mannschaft.
-     *
-     * @param towed hängt sie an einer Leine (dann fährt sie nicht selbst)
-     * @return Fahrbefehl (1 vorwärts, negativ rückwärts)
-     */
-    protected double control(ServerLevel level, boolean towed) {
         double drive = 0.0;
         Entity rider = this.getFirstPassenger();
         if (rider instanceof ServerPlayer player) {
@@ -286,7 +246,7 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             this.turnToward(player.getYRot(), this.siege.turnRate() * (drive != 0.0 ? 0.6f : 1.0f));
             this.aimFor(level, player);
             if (input.jump() && !this.lastJump) {
-                this.jump(level, player);
+                this.fire(level, player);
             }
             this.lastJump = input.jump();
             if (this.siege.ammo() != SiegeType.Ammo.NONE && this.tickCount % 3 == 0) {
@@ -305,86 +265,23 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         } else {
             this.lastJump = false;
         }
-        return drive;
-    }
-
-    /** Leertaste: schießen (der Rammbock stößt zu). */
-    protected void jump(ServerLevel level, ServerPlayer player) {
-        this.fire(level, player);
-    }
-
-    /** Darf sie gerade rollen (der Turm nicht, solange seine Brücke unten ist)? */
-    protected boolean canRoll() {
-        return true;
-    }
-
-    /**
-     * Zieht jemand an der Leine – ein Pferd, ein Spieler, ein anderer Wagen? Dann rollt sie hinterher wie ein Anhänger: Das
-     * Seil bleibt gespannt, sie dreht sich zum Zugtier hin (je weiter sie rollt, desto mehr), und das Zugtier geht je nach
-     * Last langsamer. An einem Zaunpfahl angebunden bleibt sie stehen.
-     *
-     * @return wie weit sie in diesem Tick mitgezogen wird; null, wenn sie an keiner Leine hängt
-     */
-    private @Nullable Vec3 towing(ServerLevel level) {
-        Entity holder = this.getLeashHolder();
-        this.towed = holder != null && holder.level() == level;
-        if (holder == null || !this.towed) {
-            return null;
+        SiegeCrew.tickAssignment(level, this);
+        if (this.releaseAt >= 0L && level.getGameTime() >= this.releaseAt) {
+            this.release(level);
         }
-        if (holder instanceof LeashFenceKnotEntity) {
-            return Vec3.ZERO;
+        this.reloadSounds(level);
+        this.physics(level, drive);
+        if (this.isOnFire() && this.tickCount % 20 == 0) {
+            this.damage(level, 2.0f, level.damageSources().onFire());
         }
-        double dx = holder.getX() - this.getX();
-        double dz = holder.getZ() - this.getZ();
-        double dist = Math.sqrt(dx * dx + dz * dz);
-        double slack = dist - this.siege.towLength();
-        if (slack <= 0.0 || dist < 1.0e-4 || !this.canRoll()) {
-            return Vec3.ZERO;
-        }
-        this.burden(holder);
-        double step = Math.min(slack, MAX_TOW_STEP);
-        Vec3 dir = new Vec3(dx / dist, 0.0, dz / dist);
-        float yaw = (float) (Mth.atan2(-dir.x, dir.z) * Mth.RAD_TO_DEG);
-        float after = Mth.approachDegrees(this.getYRot(), yaw, (float) (2.0 + step * 30.0));
-        this.setYRot(after);
-        this.setYHeadRot(after);
-        return dir.scale(step);
-    }
-
-    /** Das Zugtier (hält ein Reiter die Leine: sein Pferd) geht je nach Last langsamer. */
-    private void burden(Entity holder) {
-        int drag = this.siege.towDrag();
-        if (drag < 0 || this.tickCount % 5 != 0) {
-            return;
-        }
-        Entity puller = holder.getVehicle() instanceof LivingEntity mount ? mount : holder;
-        if (puller instanceof LivingEntity living) {
-            living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 15, drag, true, false, true));
+        if (!this.ramDamage.isEmpty() && level.getGameTime() - this.lastBlow > RAM_MEMORY) {
+            this.forgetRamDamage(level);
         }
     }
 
-    /** Hängt sie gerade an einer Leine (Server)? */
-    public boolean towed() {
-        return this.towed;
-    }
-
-    /**
-     * Fahren: auf ebenem Boden zieht die Waffe an, ohne Antrieb bremst sie; Stufen von einem Block nimmt sie. Am Seil
-     * rollt sie genau so weit, wie das Zugtier vorausgegangen ist – hält sie ein Hindernis auf, spannt sich das Seil, bis
-     * es reißt.
-     */
-    private void physics(ServerLevel level, double drive, @Nullable Vec3 tow) {
+    /** Fahren: auf ebenem Boden zieht die Waffe an, ohne Antrieb bremst sie; Stufen von einem Block nimmt sie. */
+    private void physics(ServerLevel level, double drive) {
         Vec3 v = this.getDeltaMovement();
-        if (tow != null) {
-            double vy = this.onGround() ? Math.max(v.y, 0.0) - 0.08 : v.y - 0.08;
-            this.setDeltaMovement(tow.x, vy, tow.z);
-            this.move(MoverType.SELF, this.getDeltaMovement());
-            this.setDeltaMovement(0.0, this.getDeltaMovement().y * 0.98, 0.0);
-            if (this.onGround() && tow.lengthSqr() > 0.01 && this.tickCount % 7 == 0) {
-                level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.WOOD_STEP, SoundSource.NEUTRAL, 0.7f, 0.6f);
-            }
-            return;
-        }
         Vec3 fwd = Vec3.directionFromRotation(0.0f, this.getYRot());
         double along = v.x * fwd.x + v.z * fwd.z;
         double want = drive * this.siege.speed() * (0.5 + 0.5 * this.healthFraction());
@@ -422,9 +319,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
     }
 
     public void turnToward(float yaw, float rate) {
-        if (this.towed) {
-            return;   // am Seil gibt das Zugtier die Richtung vor
-        }
         float before = this.getYRot();
         float after = Mth.approachDegrees(before, yaw, rate);
         if (after != before) {
@@ -462,8 +356,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             }
             // Widderkopf im Stoß
             case RAM -> this.position().add(fwd.scale(2.55)).add(0.0, 1.63, 0.0);
-            // Fahrzeuge schießen nicht
-            case SIEGE_TOWER, WAGON -> this.position().add(0.0, 1.0, 0.0);
         };
     }
 
@@ -516,7 +408,7 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
      * aus dem Gepäck des Schützen. Das Geschoss fliegt erst los, wenn der Arm (die Sehne, der Widder) so weit ist.
      */
     public boolean fire(ServerLevel level, @Nullable LivingEntity shooter) {
-        if (!this.siege.weapon() || !this.ready() || this.releaseAt >= 0L) {
+        if (!this.ready() || this.releaseAt >= 0L) {
             return false;
         }
         if (this.siege != SiegeType.RAM) {
@@ -548,8 +440,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             }
             case BALLISTA -> SiegeImpacts.sound(level, at, SoundEvents.CROSSBOW_QUICK_CHARGE_3.value(), 1.0f, 0.5f);
             case RAM -> SiegeImpacts.sound(level, at, SoundEvents.CHAIN_STEP, 1.2f, 0.6f);
-            case SIEGE_TOWER, WAGON -> {
-            }
         }
         return true;
     }
@@ -575,11 +465,10 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
      * dem Schuss rückt jeden zweiten Tick um einen Tick weiter; den Abschuss selbst beschleunigt er nicht) und bessert die
      * Waffe nebenbei aus.
      */
-    protected void engineerWork(ServerLevel level, SoldierEntity engineer) {
+    private void engineerWork(ServerLevel level, SoldierEntity engineer) {
         long now = level.getGameTime();
         float since = this.sinceFired(0.0f);
-        if (this.siege.ammo() != SiegeType.Ammo.NONE && now % 2 == 0 && since > SiegePoses.releaseTick(this.siege) + 4
-                && since < this.siege.reload() - 1) {
+        if (this.siege != SiegeType.RAM && now % 2 == 0 && since > SiegePoses.releaseTick(this.siege) + 4 && since < this.siege.reload() - 1) {
             this.entityData.set(DATA_FIRED_AT, this.entityData.get(DATA_FIRED_AT) - 1L);
         }
         if (this.healthFraction() < 1.0f && (now + this.getId()) % 40 == 0) {
@@ -591,7 +480,7 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
 
     /** Knarren der Winde beim Nachladen, ein Klacken, wenn die Waffe wieder bereit ist. */
     private void reloadSounds(ServerLevel level) {
-        if (this.siege.ammo() == SiegeType.Ammo.NONE) {
+        if (this.siege == SiegeType.RAM) {
             return;
         }
         float t = this.sinceFired(0.0f);
@@ -634,13 +523,14 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
     }
 
     /** Zeile über der Schnellleiste für den Schützen: Vorrat, Bereitschaft, Wurfweite. */
-    protected Component status() {
+    private Component status() {
         Component name = this.getDisplayName().copy().withStyle(ChatFormatting.GOLD);
         Component state = this.ammo() < this.ammoPerShot() && this.siege != SiegeType.RAM
                 ? Component.translatable("siege.kingdomsatwar.empty").withStyle(ChatFormatting.RED)
                 : this.ready() ? Component.translatable("siege.kingdomsatwar.ready").withStyle(ChatFormatting.GREEN)
                 : Component.translatable("siege.kingdomsatwar.reloading", Math.round(this.reloadProgress(0.0f) * 100)).withStyle(ChatFormatting.GRAY);
-        Component health = this.healthLine();
+        Component health = Component.translatable("siege.kingdomsatwar.health", Math.round(this.healthFraction() * 100))
+                .withStyle(this.healthFraction() < 0.35f ? ChatFormatting.RED : ChatFormatting.GRAY);
         return switch (this.siege) {
             case RAM -> Component.translatable("siege.kingdomsatwar.status.ram", name, state, health);
             case BALLISTA -> Component.translatable("siege.kingdomsatwar.status.ballista", name, this.ammo(), this.ammoName(), state,
@@ -648,12 +538,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             default -> Component.translatable("siege.kingdomsatwar.status", name, this.ammo(), this.ammoName(), state,
                     (int) Math.round(SiegeAim.range(this.siege, this.launchVelocity())), health);
         };
-    }
-
-    /** „Zustand 87 %“ – rot, wenn sie bald auseinanderbricht. */
-    protected Component healthLine() {
-        return Component.translatable("siege.kingdomsatwar.health", Math.round(this.healthFraction() * 100))
-                .withStyle(this.healthFraction() < 0.35f ? ChatFormatting.RED : ChatFormatting.GRAY);
     }
 
     // =====================================================================================
@@ -694,12 +578,7 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return this.getPassengers().size() < this.siege.seats() && (passenger instanceof Player || passenger instanceof SoldierEntity);
-    }
-
-    /** Ist noch ein Platz frei (für einen Spieler oder Soldaten)? */
-    public boolean hasRoom() {
-        return this.getPassengers().size() < this.siege.seats();
+        return this.getPassengers().isEmpty() && (passenger instanceof Player || passenger instanceof SoldierEntity);
     }
 
     @Override
@@ -740,10 +619,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         if (stack.getItem() instanceof CommandBatonItem || stack.getItem() instanceof SiegeKitItem) {
             return InteractionResult.PASS;   // Befehle gibt der Kommandostab selbst
         }
-        InteractionResult leash = this.leashInteract(player, hand, location, stack);
-        if (leash != null) {
-            return leash;
-        }
         if (this.isAmmo(stack)) {
             if (this.ammo() >= this.capacity()) {
                 if (!this.level().isClientSide()) {
@@ -774,138 +649,32 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             }
             return InteractionResult.SUCCESS;
         }
-        if (player.isSecondaryUseActive()) {
-            InteractionResult secondary = this.secondaryUse(player, stack);
-            if (secondary != null) {
-                return secondary;
+        if (player.isSecondaryUseActive() && stack.isEmpty()) {
+            if (this.level() instanceof ServerLevel level) {
+                if (this.owner != null && !this.isOwnedBy(player) && !player.hasInfiniteMaterials()) {
+                    player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.not_yours").withStyle(ChatFormatting.RED));
+                    return InteractionResult.FAIL;
+                }
+                this.dismantle(level, player);
             }
+            return InteractionResult.SUCCESS;
         }
-        if (!player.isSecondaryUseActive() && this.canAddPassenger(player)) {
+        if (!player.isSecondaryUseActive() && !this.isVehicle()) {
             if (!this.level().isClientSide() && player.startRiding(this)) {
                 if (this.owner == null) {
                     this.owner = player.getUUID();
                 }
-                this.boarded(player);
+                player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.controls." + this.siege.id()).withStyle(ChatFormatting.GRAY));
             }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
 
-    /** Schleichend: mit leerer Hand zerlegen (nur, wem sie gehört). @return null: nichts zu tun */
-    protected @Nullable InteractionResult secondaryUse(Player player, ItemStack stack) {
-        if (!stack.isEmpty()) {
-            return null;
-        }
-        if (this.level() instanceof ServerLevel level) {
-            if (!this.mayDismantle(player)) {
-                player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.not_yours").withStyle(ChatFormatting.RED));
-                return InteractionResult.FAIL;
-            }
-            this.dismantle(level, player);
-        }
-        return InteractionResult.SUCCESS;
-    }
-
-    /** Darf der Spieler sie zerlegen (sie gehört ihm oder niemandem, oder er baut im Kreativmodus)? */
-    protected boolean mayDismantle(Player player) {
-        return this.owner == null || this.isOwnedBy(player) || player.hasInfiniteMaterials();
-    }
-
-    /** Gerade aufgestiegen: wie man sie bedient. */
-    protected void boarded(Player player) {
-        player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.controls." + this.siege.id()).withStyle(ChatFormatting.GRAY));
-    }
-
-    // =====================================================================================
-    // Leine
-    // =====================================================================================
-
-    /**
-     * Leine: mit einer Leine anbinden; wer sie hält, nimmt sie per Rechtsklick wieder ab (wie bei Booten). Wer ein Pferd an
-     * der Leine führt und schleichend auf die Waffe klickt, spannt es vor – es zieht sie dann. Andere Leinen in der Hand
-     * des Spielers (etwa die eines zweiten Wagens) werden schleichend hier angebunden.
-     *
-     * @return null, wenn es nicht um die Leine geht
-     */
-    protected @Nullable InteractionResult leashInteract(Player player, InteractionHand hand, Vec3 location, ItemStack stack) {
-        if (player.isSecondaryUseActive()) {
-            List<Leashable> led = Leashable.leashableLeashedTo(player);
-            if (!led.isEmpty()) {
-                for (Leashable leashable : led) {
-                    if (leashable instanceof AbstractHorse horse && horse.isAlive() && !horse.isBaby()) {
-                        if (this.level() instanceof ServerLevel level) {
-                            this.hitch(level, player, horse);
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-                return super.interact(player, hand, location);
-            }
-        }
-        if (stack.is(Items.LEAD) || this.getLeashHolder() == player || stack.canPerformAction(ItemAbilities.SHEARS_HARVEST)) {
-            InteractionResult result = super.interact(player, hand, location);
-            if (result != InteractionResult.PASS) {
-                return result;
-            }
-        }
-        return null;
-    }
-
-    /** Spannt das Pferd vor: Die Leine, an der der Spieler es geführt hat, hängt danach zwischen Pferd und Deichsel. */
-    private void hitch(ServerLevel level, Player player, AbstractHorse horse) {
-        if (this.isLeashed()) {
-            this.dropLeash();
-        }
-        horse.removeLeash();
-        this.setLeashedTo(horse, true);
-        level.playSound(null, horse.getX(), horse.getY(), horse.getZ(), SoundEvents.LEAD_TIED, SoundSource.NEUTRAL, 1.0f, 1.0f);
-        level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.CHAIN_PLACE, SoundSource.NEUTRAL, 0.8f, 0.8f);
-        player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.hitched", horse.getDisplayName(), this.getDisplayName())
-                .withStyle(ChatFormatting.GOLD));
-    }
-
-    @Override
-    public Leashable.@Nullable LeashData getLeashData() {
-        return this.leashData;
-    }
-
-    @Override
-    public void setLeashData(Leashable.@Nullable LeashData leashData) {
-        this.leashData = leashData;
-    }
-
-    /** Kein federndes Seil wie bei Tieren: Sie rollt starr hinterher (siehe {@link #towing}). */
-    @Override
-    public boolean checkElasticInteractions(Entity holder, Leashable.LeashData leashData) {
-        return false;
-    }
-
-    /** Die Leine greift vorn an (beim Wagen an der Deichsel). */
-    @Override
-    public Vec3 getLeashOffset() {
-        return this.siege.hitch();
-    }
-
-    // =====================================================================================
-    // Zerlegen
-    // =====================================================================================
-
-    /** Alle steigen ab (Fahrzeuge: die Krieger halten danach dort Stellung). */
-    protected void unload(ServerLevel level) {
-        this.ejectPassengers();
-    }
-
-    /** Was sie geladen hat, fällt heraus (der Planwagen: sein Laderaum). */
-    protected void dropContents(ServerLevel level) {
-    }
-
     /** Zerlegen: der Bausatz (mit dem Zustand der Waffe) und die übrige Munition. */
-    protected void dismantle(ServerLevel level, Player player) {
-        this.unload(level);
+    private void dismantle(ServerLevel level, Player player) {
+        this.ejectPassengers();
         this.forgetRamDamage(level);
-        this.dropLeash();
-        this.dropContents(level);
         ItemStack kit = SiegeKitItem.kit(this.siege, this.healthFraction());
         if (!player.getInventory().add(kit)) {
             this.spawnAtLocation(level, kit);
@@ -964,7 +733,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         }
         if (attacker instanceof Player player && player.getAbilities().instabuild && source.getDirectEntity() == player) {
             this.forgetRamDamage(level);
-            this.removeLeash();
             this.discard();
             return true;
         }
@@ -998,10 +766,8 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
     }
 
     private void breakApart(ServerLevel level) {
-        this.unload(level);
+        this.ejectPassengers();
         this.forgetRamDamage(level);
-        this.dropLeash();
-        this.dropContents(level);
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.OAK_PLANKS.defaultBlockState()), this.getX(), this.getY(0.5),
                 this.getZ(), 80, this.getBbWidth() * 0.4, this.getBbHeight() * 0.4, this.getBbWidth() * 0.4, 0.15);
         level.sendParticles(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(0.5), this.getZ(), 20, 0.6, 0.6, 0.6, 0.05);
@@ -1038,7 +804,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
             output.store("SiegeOwner", UUIDUtil.CODEC, this.owner);
         }
         this.orders.save(output);
-        this.writeLeashData(output, this.leashData);
     }
 
     @Override
@@ -1049,7 +814,6 @@ public class SiegeWeaponEntity extends Entity implements Leashable {
         this.entityData.set(DATA_FIRED_AT, this.level().getGameTime() - Math.max(since, SiegePoses.releaseTick(this.siege)));
         this.owner = input.read("SiegeOwner", UUIDUtil.CODEC).orElse(null);
         this.orders.load(input);
-        this.readLeashData(input);
     }
 
     /** Nur für Tests und Vorführungen: die Waffe zeigt die Stellung {@code since} Ticks nach einem Schuss (ohne zu schießen). */

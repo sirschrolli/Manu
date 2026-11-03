@@ -83,7 +83,7 @@ public final class SiegeImpacts {
                 sound(level, from, SoundEvents.TRIDENT_THROW.value(), 1.2f, 0.7f);
                 level.sendParticles(ParticleTypes.CRIT, from.x, from.y, from.z, 6, 0.2, 0.1, 0.2, 0.15);
             }
-            case RAM, SIEGE_TOWER, WAGON -> {
+            case RAM -> {
             }
         }
     }

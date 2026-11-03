@@ -5,25 +5,20 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Die Belagerungswaffen, der Belagerungsturm und der Planwagen und ihre Werte.
+ * Die vier Belagerungswaffen und ihre Werte.
  *
  * <ul>
  *     <li><b>Katapult</b>: wirft Steinkugeln im Bogen (16–70 Blöcke weit), reißt kleine Löcher in Mauern</li>
  *     <li><b>Tribok</b>: die große Wurfmaschine – weiter (35–130 Blöcke) und verheerender, aber langsam nachzuladen und schwerfällig</li>
  *     <li><b>Balliste</b>: schießt schwere Bolzen fast gerade, wohin man blickt – gegen Krieger, Reiter und andere Belagerungswaffen</li>
  *     <li><b>Rammbock</b>: fahrbares Schutzdach mit Widder – bricht Tore, Türen, Fallgitter und Gitter</li>
- *     <li><b>Belagerungsturm</b>: zehn Blöcke hoch, rollt an die Mauer; oben fällt eine Brücke auf den Wehrgang, über die
- *     bis zu acht Krieger hinübergehen</li>
- *     <li><b>Planwagen</b>: fährt Baustoffe (sechs Reihen Laderaum) und vier Mitfahrer; ein Pferd zieht ihn an der Leine</li>
  * </ul>
  */
 public enum SiegeType implements StringRepresentable {
     CATAPULT(120.0f, 0.055, 2.2f, 100, Ammo.STONE, 1.0, 2.2, 0.05, 0.99, 14.0f, 1.5, 3.0, 2.2f, 2.35f, new Vec3(-1.35, 0.0, -0.25)),
     TREBUCHET(220.0f, 0.03, 1.0f, 220, Ammo.STONE, 1.6, 3.2, 0.05, 0.99, 24.0f, 2.3, 4.0, 2.7f, 5.0f, new Vec3(-1.85, 0.0, -0.9)),
     BALLISTA(90.0f, 0.075, 3.0f, 60, Ammo.BOLT, 3.6, 3.6, 0.02, 0.99, 18.0f, 0.0, 0.0, 1.8f, 1.5f, new Vec3(0.0, 0.0, -1.3)),
-    RAM(260.0f, 0.065, 2.0f, 34, Ammo.NONE, 0.0, 0.0, 0.0, 1.0, 9.0f, 0.0, 0.0, 2.4f, 2.6f, new Vec3(-0.6, 0.0, -0.3)),
-    SIEGE_TOWER(300.0f, 0.035, 0.9f, 20, Ammo.NONE, 0.0, 0.0, 0.0, 1.0, 0.0f, 0.0, 0.0, 2.9f, 11.5f, new Vec3(-1.95, 0.0, 0.0)),
-    WAGON(90.0f, 0.0, 3.0f, 20, Ammo.NONE, 0.0, 0.0, 0.0, 1.0, 0.0f, 0.0, 0.0, 2.4f, 2.6f, new Vec3(0.0, 1.53, 1.5));
+    RAM(260.0f, 0.065, 2.0f, 34, Ammo.NONE, 0.0, 0.0, 0.0, 1.0, 9.0f, 0.0, 0.0, 2.4f, 2.6f, new Vec3(-0.6, 0.0, -0.3));
 
     /** Welche Munition eine Waffe verschießt. */
     public enum Ammo { STONE, BOLT, NONE }
@@ -139,9 +134,7 @@ public enum SiegeType implements StringRepresentable {
 
     /**
      * Platz des Schützen relativ zur Waffe (x: links +/rechts −, Höhe, z: vorn +/hinten −), wo er steht: bei Katapult und
-     * Tribok rechts neben dem Gestell an der Winde (von dort hat er freie Sicht nach vorn), hinter der Balliste, im Rammbock,
-     * rechts neben dem Belagerungsturm (er schiebt und sieht dabei an ihm vorbei), auf dem Kutschbock des Wagens (die
-     * Höhe ist dort die Sitzfläche).
+     * Tribok rechts neben dem Gestell an der Winde (von dort hat er freie Sicht nach vorn), hinter der Balliste, im Rammbock.
      */
     public Vec3 seat() {
         return this.seat;
@@ -152,55 +145,8 @@ public enum SiegeType implements StringRepresentable {
         return this == CATAPULT || this == TREBUCHET;
     }
 
-    /** Sitzt der Schütze? (Alle stehen: neben dem Gestell, hinter der Balliste, im Rammbock; nur auf dem Wagen sitzt man.) */
+    /** Sitzt der Schütze? (Alle stehen: neben dem Gestell, hinter der Balliste, im Rammbock.) */
     public boolean seated() {
-        return this == WAGON;
-    }
-
-    /** Ist es eine Waffe (die schießt oder stößt) – und nicht ein Fahrzeug (Turm, Wagen)? */
-    public boolean weapon() {
-        return this != SIEGE_TOWER && this != WAGON;
-    }
-
-    /** So viele fahren mit (mit dem, der schiebt oder auf dem Bock sitzt). */
-    public int seats() {
-        return switch (this) {
-            case SIEGE_TOWER -> 9;
-            case WAGON -> 5;
-            default -> 1;
-        };
-    }
-
-    /**
-     * Wie schwer sie zu ziehen ist: Stufe der Langsamkeit für das Pferd (oder wen sonst die Leine zieht), −1: gar nicht.
-     * Der Wagen rollt leicht, der Turm ist eine Last.
-     */
-    public int towDrag() {
-        return switch (this) {
-            case WAGON -> -1;
-            case BALLISTA -> 0;
-            case CATAPULT, RAM -> 1;
-            case TREBUCHET -> 2;
-            case SIEGE_TOWER -> 3;
-        };
-    }
-
-    /** Wo die Leine angreift (x links +, Höhe, z vorn +): an der Deichsel des Wagens, sonst vorn am Gestell. */
-    public Vec3 hitch() {
-        return switch (this) {
-            case WAGON -> new Vec3(0.0, 0.45, 3.15);
-            case SIEGE_TOWER -> new Vec3(0.0, 0.9, 1.5);
-            case RAM -> new Vec3(0.0, 1.0, 2.7);
-            case TREBUCHET -> new Vec3(0.0, 0.7, 1.45);
-            default -> new Vec3(0.0, 0.7, this.width * 0.5 + 0.05);
-        };
-    }
-
-    /**
-     * So weit vor der Mitte geht das Zugtier (Mitte des Tiers bis Mitte der Waffe, in Blöcken) – mindestens so weit, dass
-     * ein Pferd auch schräg davor nicht in das Gestell gerät.
-     */
-    public double towLength() {
-        return Math.max(this.hitch().z + 0.8, (this.width * 0.5 + 0.75) * 1.42);
+        return false;
     }
 }

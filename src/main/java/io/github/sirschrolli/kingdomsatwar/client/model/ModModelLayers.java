@@ -47,8 +47,6 @@ public final class ModModelLayers {
     public static final ModelLayerLocation TREBUCHET = new ModelLayerLocation(KingdomsAtWar.id("trebuchet"), "main");
     public static final ModelLayerLocation BALLISTA = new ModelLayerLocation(KingdomsAtWar.id("ballista"), "main");
     public static final ModelLayerLocation BATTERING_RAM = new ModelLayerLocation(KingdomsAtWar.id("battering_ram"), "main");
-    public static final ModelLayerLocation SIEGE_TOWER = new ModelLayerLocation(KingdomsAtWar.id("siege_tower"), "main");
-    public static final ModelLayerLocation WAGON = new ModelLayerLocation(KingdomsAtWar.id("wagon"), "main");
     public static final ModelLayerLocation SIEGE_STONE = new ModelLayerLocation(KingdomsAtWar.id("siege_stone"), "main");
     public static final ModelLayerLocation BALLISTA_BOLT = new ModelLayerLocation(KingdomsAtWar.id("ballista_bolt"), "main");
 

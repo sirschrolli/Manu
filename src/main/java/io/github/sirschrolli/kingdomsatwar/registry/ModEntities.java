@@ -524,11 +524,6 @@ public final class ModEntities {
             siege("ballista", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.BALLISTA);
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> BATTERING_RAM =
             siege("battering_ram", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.RAM);
-    /** Belagerungsturm (mit Fallbrücke) und Planwagen – Fahrzeuge derselben Art. */
-    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> SIEGE_TOWER =
-            siege("siege_tower", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.SIEGE_TOWER);
-    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> WAGON =
-            siege("wagon", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.WAGON);
 
     /** Steinkugeln, Brocken und Ballistenbolzen. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeProjectile>> SIEGE_PROJECTILE =
@@ -537,11 +532,9 @@ public final class ModEntities {
 
     private static DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> siege(String name,
             io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
-        return ENTITIES.registerEntityType(name, (entityType, level) -> switch (type) {
-            case SIEGE_TOWER -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity(entityType, level);
-            case WAGON -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeWagonEntity(entityType, level);
-            default -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity(entityType, level, type);
-        }, MobCategory.MISC, builder -> builder.sized(type.width(), type.height()).noLootTable().clientTrackingRange(10).updateInterval(1));
+        return ENTITIES.registerEntityType(name, (entityType, level) -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity(entityType,
+                level, type), MobCategory.MISC, builder -> builder.sized(type.width(), type.height()).noLootTable().clientTrackingRange(10)
+                .updateInterval(1));
     }
 
     /** Der Wesenstyp einer Belagerungswaffe. */
@@ -552,8 +545,6 @@ public final class ModEntities {
             case TREBUCHET -> TREBUCHET.get();
             case BALLISTA -> BALLISTA.get();
             case RAM -> BATTERING_RAM.get();
-            case SIEGE_TOWER -> SIEGE_TOWER.get();
-            case WAGON -> WAGON.get();
         };
     }
 
