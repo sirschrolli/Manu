@@ -15,6 +15,10 @@ public final class ModServerConfig {
     public static final ModConfigSpec.IntValue TRADE_PAUSE_MINUTES;
     /** Zerschlagen Belagerungswaffen Blöcke (Mauern, Tore)? */
     public static final ModConfigSpec.BooleanValue SIEGE_BLOCK_DAMAGE;
+    /** Schicken Reiche, mit denen man im Krieg liegt, Heerhaufen gegen die eigene Siedlung? */
+    public static final ModConfigSpec.BooleanValue REALM_RAIDS;
+    /** So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen eines Reichs. */
+    public static final ModConfigSpec.IntValue RAID_INTERVAL_DAYS;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -34,6 +38,14 @@ public final class ModServerConfig {
                 .comment("Belagerungswaffen zerschlagen Mauern, Tore und Türen (nie in Siedlungen, am Siegelkreis oder am Reichsbanner).")
                 .translation("kingdomsatwar.configuration.siegeBlockDamage")
                 .define("siegeBlockDamage", true);
+        REALM_RAIDS = builder
+                .comment("Reiche, mit denen ein Spieler im Krieg liegt, schicken Heerhaufen gegen seine Siedlung (nur, wenn er dort ist).")
+                .translation("kingdomsatwar.configuration.realmRaids")
+                .define("realmRaids", true);
+        RAID_INTERVAL_DAYS = builder
+                .comment("So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen desselben Reichs.")
+                .translation("kingdomsatwar.configuration.raidIntervalDays")
+                .defineInRange("raidIntervalDays", 3, 1, 30);
         SPEC = builder.build();
     }
 

@@ -158,6 +158,11 @@ public final class RealmState {
         }
     }
 
+    /** Frieden: der Spieler liegt nicht mehr mit dem Reich im Krieg. */
+    public void makePeace(Realm realm, UUID player) {
+        this.entry(realm).enemies.remove(player);
+    }
+
     /** Alle Reiche, mit denen der Spieler im Krieg liegt. */
     public List<Realm> wars(UUID player) {
         List<Realm> out = new ArrayList<>();

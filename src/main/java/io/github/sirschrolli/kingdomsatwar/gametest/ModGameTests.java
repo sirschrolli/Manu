@@ -192,6 +192,7 @@ public final class ModGameTests {
         ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
         SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
         SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
+        RaidGameTests.init();      // Heerhaufen der Reiche gegen die eigene Siedlung
     }
 
     private ModGameTests() {}
@@ -228,6 +229,8 @@ public final class ModGameTests {
         ArenaGameTests.register(event, environment);
         SpellGameTests.register(event, environment);
         SiegeGameTests.register(event, environment);
+        // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg
+        RaidGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("raids")));
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);

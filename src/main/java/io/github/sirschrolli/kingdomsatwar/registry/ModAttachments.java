@@ -51,6 +51,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.war.RealmState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.war.RealmState.CODEC.fieldOf("realms")).build());
 
+    /** Fehden und laufende Heerhaufen der Reiche gegen die Siedlungen der Spieler (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.war.RealmRaids.State>> RAIDS = ATTACHMENTS.register("raids",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.war.RealmRaids.State::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.war.RealmRaids.State.CODEC.fieldOf("raids")).build());
+
     /** Die laufenden Kämpfe in der Arkanen Sphäre (an der Oberwelt). */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.arena.ArenaFights>> ARENA_FIGHTS = ATTACHMENTS.register(
             "arena_fights", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.arena.ArenaFights::new)

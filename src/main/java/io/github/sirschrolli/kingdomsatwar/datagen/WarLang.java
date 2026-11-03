@@ -30,6 +30,33 @@ final class WarLang {
         text.add("realm.kingdomsatwar.discover.hint",
                 "%s: The castle guards attack anyone who sets foot inside their walls. Defeat the ruler (%s) and seize the royal standard behind the throne to conquer the castle.",
                 "%s: Die Burgwachen greifen jeden an, der ihre Mauern betritt. Besiege den Herrscher (%s) und ergreife das Reichsbanner hinter dem Thron, um die Burg zu erobern.");
+        // Heerhaufen gegen die eigene Siedlung
+        text.add("raid.kingdomsatwar.title", "War band!", "Heerhaufen!");
+        text.add("raid.kingdomsatwar.subtitle", "%s marches with %s warriors", "%s zieht mit %s Kriegern heran");
+        text.add("raid.kingdomsatwar.start", "A war band of %s marches on %s – %s warriors under a captain!",
+                "Ein Heerhaufen von %s zieht gegen %s – %s Krieger unter einem Hauptmann!");
+        text.add("raid.kingdomsatwar.hint", "Defend your town banner: if nobody guards it, they plunder your storehouse.",
+                "Verteidige dein Stadtbanner: Bewacht es niemand mehr, plündern sie dein Lager.");
+        text.add("raid.kingdomsatwar.bar", "War band of %s (%s of %s)", "Heerhaufen von %s (%s von %s)");
+        text.add("raid.kingdomsatwar.bar.retreat", "War band of %s retreats (%s of %s)", "Heerhaufen von %s zieht ab (%s von %s)");
+        text.add("raid.kingdomsatwar.victory", "The war band of %s is beaten! Its war chest (%s silver coins and more) lies in your storehouse.",
+                "Der Heerhaufen von %s ist geschlagen! Seine Kriegskasse (%s Silbermünzen und mehr) liegt in deinem Lager.");
+        text.add("raid.kingdomsatwar.plunder", "The war band of %s plunders the storehouse of %s (%s items)!",
+                "Der Heerhaufen von %s plündert das Lager von %s (%s Gegenstände)!");
+        text.add("raid.kingdomsatwar.retreat", "The war band of %s retreats.", "Der Heerhaufen von %s zieht ab.");
+        text.add("raid.kingdomsatwar.gone", "The war band of %s has left your lands.", "Der Heerhaufen von %s hat dein Land verlassen.");
+        text.add("command.kingdomsatwar.raid.stopped", "All war bands have been called off", "Alle Heerhaufen abgezogen");
+        text.add("command.kingdomsatwar.raid.no_town", "You have no town with a banner in the overworld", "Du hast keine Siedlung mit Banner in der Oberwelt");
+        text.add("command.kingdomsatwar.raid.running", "A war band is already marching on your town", "Gegen deine Siedlung zieht schon ein Heerhaufen");
+        text.add("command.kingdomsatwar.raid.conquered", "That realm is conquered", "Dieses Reich ist erobert");
+        text.add("command.kingdomsatwar.raid.no_room", "No room for a war band to gather near your town", "Kein Platz für einen Heerhaufen bei deiner Siedlung");
+        text.add("kingdomsatwar.configuration.realmRaids", "War bands of the realms", "Heerhaufen der Reiche");
+        text.add("kingdomsatwar.configuration.realmRaids.tooltip",
+                "Realms you are at war with send war bands against your town (only while you are there).",
+                "Reiche, mit denen du im Krieg liegst, schicken Heerhaufen gegen deine Siedlung (nur, wenn du dort bist).");
+        text.add("kingdomsatwar.configuration.raidIntervalDays", "Days between war bands", "Tage zwischen zwei Heerhaufen");
+        text.add("kingdomsatwar.configuration.raidIntervalDays.tooltip", "At least this many in-game days pass between two war bands of the same realm.",
+                "So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen desselben Reichs.");
         text.add("realm.kingdomsatwar.alarm", "Alarm! The guards of %s have spotted you!", "Alarm! Die Wachen von %s haben dich entdeckt!");
         text.add("realm.kingdomsatwar.lord_fallen", "%s has fallen – %s is without a ruler!", "%s ist gefallen – %s ist ohne Herrscher!");
         text.add("realm.kingdomsatwar.lord_fallen.hint", "Seize the royal standard behind the throne to conquer the castle.",

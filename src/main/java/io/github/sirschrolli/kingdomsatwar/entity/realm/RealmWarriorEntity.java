@@ -83,6 +83,9 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
     private final WarriorRole role;
     private @Nullable BlockPos post;
     private @Nullable BlockPos castle;
+    /** Heerhaufen, zu dem der Krieger gehört (sonst {@code null}: er bewacht seine Burg), und wohin er zieht. */
+    private java.util.@Nullable UUID raid;
+    private @Nullable BlockPos raidGoal;
     private final @Nullable ServerBossEvent bossEvent;
     private int shieldTicks;
     private int shieldCooldown;
@@ -146,6 +149,7 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(5, new ReturnToPostGoal());
+        this.goalSelector.addGoal(5, new MarchGoal());
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 10.0f));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this, RealmWarriorEntity.class).setAlertOthers(RealmWarriorEntity.class));
@@ -212,6 +216,30 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         return this.castle;
     }
 
+    /** Der Krieger zieht mit einem Heerhaufen gegen eine Siedlung (Ziel: das Stadtbanner); er hat dann keinen Posten. */
+    public void joinRaid(java.util.UUID raid, BlockPos goal) {
+        this.raid = raid;
+        this.raidGoal = goal.immutable();
+        this.post = null;
+        this.castle = null;
+        this.clearHome();
+        // er findet seinen Weg auch über weite Strecken
+        this.setBase(Attributes.FOLLOW_RANGE, 64.0);
+    }
+
+    /** Neues Ziel des Heerhaufens (etwa beim Abzug der Sammelplatz). */
+    public void setRaidGoal(BlockPos goal) {
+        this.raidGoal = goal.immutable();
+    }
+
+    public java.util.@Nullable UUID raid() {
+        return this.raid;
+    }
+
+    public @Nullable BlockPos raidGoal() {
+        return this.raidGoal;
+    }
+
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
         super.addAdditionalSaveData(output);
@@ -228,6 +256,10 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
             output.putInt("CastleZ", this.castle.getZ());
         }
         output.putBoolean("DrankPotion", this.drankPotion);
+        if (this.raid != null && this.raidGoal != null) {
+            output.store("Raid", net.minecraft.core.UUIDUtil.CODEC, this.raid);
+            output.store("RaidGoal", BlockPos.CODEC, this.raidGoal);
+        }
     }
 
     @Override
@@ -241,6 +273,11 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
             this.setPost(new BlockPos(input.getIntOr("PostX", 0), input.getIntOr("PostY", 0), input.getIntOr("PostZ", 0)), this.castle);
         }
         this.drankPotion = input.getBooleanOr("DrankPotion", false);
+        java.util.UUID raidId = input.read("Raid", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
+        BlockPos goal = input.read("RaidGoal", BlockPos.CODEC).orElse(null);
+        if (raidId != null && goal != null) {
+            this.joinRaid(raidId, goal);
+        }
     }
 
     // =====================================================================================
@@ -283,6 +320,9 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         if (target instanceof RealmWarriorEntity || !target.isAlive()) {
             return false;
         }
+        if (this.raid != null) {
+            return this.raidEnemy(target);
+        }
         if (this.castle == null) {
             return this.distanceToSqr(target) < 16.0 * 16.0;
         }
@@ -305,6 +345,25 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         // Ritter und Herrscher greifen nur an, wer in den Thronsaal kommt; Schützen, wen sie treffen können
         return this.role.ranged() ? this.distanceToSqr(target) < 26.0 * 26.0
                 : this.post == null || target.distanceToSqr(Vec3.atCenterOf(this.post)) < Math.pow(this.engageRadius() + 4.0, 2);
+    }
+
+    /**
+     * Feinde eines Heerhaufens: Spieler, die mit dem Reich im Krieg liegen, und deren Soldaten – in Sichtweite. Bürger
+     * lassen sie in Ruhe (geplündert wird das Lager).
+     */
+    private boolean raidEnemy(LivingEntity target) {
+        if (!(this.level() instanceof ServerLevel level) || this.distanceToSqr(target) > 28.0 * 28.0) {
+            return false;
+        }
+        RealmState state = RealmState.of(level);
+        if (target instanceof Player player) {
+            return !player.isCreative() && !player.isSpectator() && state.atWar(this.realm(), player.getUUID());
+        }
+        if (target instanceof SoldierEntity soldier) {
+            java.util.UUID owner = soldier.getOwnerId();
+            return owner != null && state.atWar(this.realm(), owner);
+        }
+        return false;
     }
 
     private boolean near(LivingEntity target, double radius) {
@@ -469,7 +528,7 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
                         player.sendSystemMessage(hint);
                     }
                 }
-            } else {
+            } else if (this.raid == null) {
                 state.warriorFallen(this.realm());
                 state.save(level);
             }
@@ -589,6 +648,59 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
     // =====================================================================================
 
     /** Ohne Gegner zurück zum Posten. */
+    /** Heerhaufen: ohne Gegner weiter zum Ziel (Stadtbanner, beim Abzug der Sammelplatz), alle zwei Sekunden neu geplant. */
+    private final class MarchGoal extends Goal {
+        private int repath;
+
+        MarchGoal() {
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            BlockPos goal = RealmWarriorEntity.this.raidGoal;
+            return RealmWarriorEntity.this.raid != null && goal != null && RealmWarriorEntity.this.getTarget() == null
+                    && !RealmWarriorEntity.this.blockPosition().closerThan(goal, 3.5);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.canUse();
+        }
+
+        @Override
+        public void start() {
+            this.repath = 0;
+        }
+
+        @Override
+        public void tick() {
+            if (--this.repath > 0) {
+                return;
+            }
+            this.repath = 40;
+            BlockPos goal = RealmWarriorEntity.this.raidGoal;
+            if (goal == null) {
+                return;
+            }
+            Vec3 from = RealmWarriorEntity.this.position();
+            Vec3 to = Vec3.atBottomCenterOf(goal);
+            // weite Wege in Etappen (höchstens 24 Blöcke je Plan)
+            Vec3 step = from.distanceTo(to) > 24.0 ? from.add(to.subtract(from).normalize().scale(24.0)) : to;
+            if (step != to) {
+                int y = RealmWarriorEntity.this.level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                        Mth.floor(step.x), Mth.floor(step.z));
+                step = new Vec3(step.x, y, step.z);
+            }
+            RealmWarriorEntity.this.navigation.moveTo(step.x, step.y, step.z, 1.0);
+        }
+
+        @Override
+        public void stop() {
+            RealmWarriorEntity.this.navigation.stop();
+        }
+    }
+
     private final class ReturnToPostGoal extends Goal {
         ReturnToPostGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
