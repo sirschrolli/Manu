@@ -42,6 +42,14 @@ public final class ModModelLayers {
     public static final ModelLayerLocation THORN_VINE = new ModelLayerLocation(KingdomsAtWar.id("thorn_vine"), "main");
     public static final ModelLayerLocation POISON_FLOWER = new ModelLayerLocation(KingdomsAtWar.id("poison_flower"), "main");
 
+    /** Belagerungswaffen und ihre Geschosse. */
+    public static final ModelLayerLocation CATAPULT = new ModelLayerLocation(KingdomsAtWar.id("catapult"), "main");
+    public static final ModelLayerLocation TREBUCHET = new ModelLayerLocation(KingdomsAtWar.id("trebuchet"), "main");
+    public static final ModelLayerLocation BALLISTA = new ModelLayerLocation(KingdomsAtWar.id("ballista"), "main");
+    public static final ModelLayerLocation BATTERING_RAM = new ModelLayerLocation(KingdomsAtWar.id("battering_ram"), "main");
+    public static final ModelLayerLocation SIEGE_STONE = new ModelLayerLocation(KingdomsAtWar.id("siege_stone"), "main");
+    public static final ModelLayerLocation BALLISTA_BOLT = new ModelLayerLocation(KingdomsAtWar.id("ballista_bolt"), "main");
+
     /** Drachen-Bosse. */
     public static final ModelLayerLocation NYXAR = new ModelLayerLocation(KingdomsAtWar.id("shadow_dragon_boss"), "main");
     public static final ModelLayerLocation PYRRHON = new ModelLayerLocation(KingdomsAtWar.id("fire_dragon_boss"), "main");

@@ -46,6 +46,9 @@ public final class ModTags {
         public static final TagKey<Block> STORAGE_BLOCKS_WYVERNIT = common("storage_blocks/wyvernit");
         public static final TagKey<Block> STORAGE_BLOCKS_STEEL = common("storage_blocks/steel");
 
+        /** Was Belagerungswaffen nie zerschlagen (Stadtbanner, Siegelkreis, Tore der Welten, Bannsiegel der Magier …). */
+        public static final TagKey<Block> SIEGE_PROOF = mod("siege_proof");
+
         private static TagKey<Block> mod(String path) {
             return TagKey.create(Registries.BLOCK, KingdomsAtWar.id(path));
         }

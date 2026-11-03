@@ -35,6 +35,8 @@ import org.jspecify.annotations.Nullable;
  *     <li>in den Himmel zeigen und klicken: alle <b>folgen</b> (sie ziehen mit auf den Schlachtzug); mit Schleichen:
  *     alle kehren <b>heim</b> in die Garnison der Siedlung</li>
  *     <li>schleichend einen eigenen Soldaten anklicken: aus dem Dienst <b>entlassen</b></li>
+ *     <li>auf eine eigene Belagerungswaffe zeigen: <b>bemannen</b>, ist sie bemannt: wählen und danach ein <b>Ziel</b>
+ *     zeigen; schleichend: die Mannschaft zieht ab (siehe {@code SiegeCrew})</li>
  * </ul>
  */
 public class CommandBatonItem extends Item {
@@ -46,8 +48,15 @@ public class CommandBatonItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (level instanceof ServerLevel serverLevel && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer
+                && io.github.sirschrolli.kingdomsatwar.siege.SiegeCrew.baton(serverLevel, serverPlayer)) {
+            // Befehle an Belagerungswaffen (bemannen, Ziel geben, abziehen)
+            player.getCooldowns().addCooldown(player.getItemInHand(hand), 10);
+            return InteractionResult.SUCCESS;
+        }
         if (level instanceof ServerLevel serverLevel) {
-            List<SoldierEntity> soldiers = SoldierEntity.soldiersOf(player, SoldierEntity.COMMAND_RANGE);
+            List<SoldierEntity> soldiers = new java.util.ArrayList<>(SoldierEntity.soldiersOf(player, SoldierEntity.COMMAND_RANGE));
+            soldiers.removeIf(io.github.sirschrolli.kingdomsatwar.siege.SiegeCrew::isCrew);   // die Mannschaften bleiben an ihren Waffen
             if (soldiers.isEmpty()) {
                 player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.command.none").withStyle(ChatFormatting.GRAY));
             } else {

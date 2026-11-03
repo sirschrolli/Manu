@@ -46,6 +46,7 @@ public final class DataGenerators {
                 .add(Registries.STRUCTURE_SET, io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures::bootstrapStructureSets)
                 .add(Registries.BANNER_PATTERN, io.github.sirschrolli.kingdomsatwar.war.Realm::bootstrapPatterns)
                 .add(Registries.ENCHANTMENT, io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments::bootstrap)
+                .add(Registries.DAMAGE_TYPE, io.github.sirschrolli.kingdomsatwar.registry.ModDamageTypes::bootstrap)
                 .lootTable(
                         new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK),
                         new LootTableProvider.SubProviderEntry(ModExtraLootProvider::new, LootContextParamSets.BLOCK),
@@ -76,5 +77,6 @@ public final class DataGenerators {
         event.createProvider(ModStructureTagsProvider::new);
         event.createProvider(ModEntityTypeTagsProvider::new);
         event.createProvider(ModEnchantmentTagsProvider::new);
+        event.createProvider(ModDamageTypeTagsProvider::new);
     }
 }

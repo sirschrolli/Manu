@@ -32,6 +32,7 @@ public class ModLanguageProvider extends LanguageProvider {
         EconomyLang.register(this::text);
         VillageLang.register(this::text);
         WarLang.register(this::text);
+        SiegeLang.register(this::text);
         RulesLang.register(this::text);
         bosses();
         shadowWorld();
@@ -1329,6 +1330,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text(ModItems.loreKey("command_baton", 4), "Sneak + click your soldier: dismiss", "Schleichen + eigenen Soldaten anklicken: entlassen");
         text(ModItems.loreKey("command_baton", 5), "Sneak + point at the sky: everyone returns to the garrison",
                 "Schleichen + in den Himmel zeigen: alle kehren in die Garnison heim");
+        text(ModItems.loreKey("command_baton", 6), "Click a siege weapon: a soldier mans it, then point at its target",
+                "Belagerungswaffe anklicken: ein Soldat bedient sie, dann aufs Ziel zeigen");
 
         // Fenster des Feldherrentischs
         text("gui.kingdomsatwar.recruitment.title", "Commander's Table", "Feldherrentisch");

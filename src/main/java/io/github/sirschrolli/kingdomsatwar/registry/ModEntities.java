@@ -508,6 +508,42 @@ public final class ModEntities {
             ENTITIES.registerEntityType("spell_projectile", io.github.sirschrolli.kingdomsatwar.magic.fx.SpellProjectile::new, MobCategory.MISC,
                     builder -> builder.sized(0.6f, 0.6f).fireImmune().noLootTable().noSummon().clientTrackingRange(10).updateInterval(1));
 
+    // =====================================================================================
+    // Belagerungswaffen
+    // =====================================================================================
+
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> CATAPULT =
+            siege("catapult", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.CATAPULT);
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> TREBUCHET =
+            siege("trebuchet", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.TREBUCHET);
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> BALLISTA =
+            siege("ballista", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.BALLISTA);
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> BATTERING_RAM =
+            siege("battering_ram", io.github.sirschrolli.kingdomsatwar.siege.SiegeType.RAM);
+
+    /** Steinkugeln, Brocken und Ballistenbolzen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeProjectile>> SIEGE_PROJECTILE =
+            ENTITIES.registerEntityType("siege_projectile", io.github.sirschrolli.kingdomsatwar.siege.SiegeProjectile::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 0.6f).noLootTable().clientTrackingRange(12).updateInterval(2));
+
+    private static DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity>> siege(String name,
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
+        return ENTITIES.registerEntityType(name, (entityType, level) -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity(entityType,
+                level, type), MobCategory.MISC, builder -> builder.sized(type.width(), type.height()).noLootTable().clientTrackingRange(10)
+                .updateInterval(1));
+    }
+
+    /** Der Wesenstyp einer Belagerungswaffe. */
+    public static EntityType<io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity> siegeWeapon(
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
+        return switch (type) {
+            case CATAPULT -> CATAPULT.get();
+            case TREBUCHET -> TREBUCHET.get();
+            case BALLISTA -> BALLISTA.get();
+            case RAM -> BATTERING_RAM.get();
+        };
+    }
+
     /** Unsichtbarer Träger der Lichteffekte beim Siegelbruch. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity>> SEAL_BREAK =
             ENTITIES.registerEntityType("seal_break", io.github.sirschrolli.kingdomsatwar.entity.SealBreakEntity::new, MobCategory.MISC,

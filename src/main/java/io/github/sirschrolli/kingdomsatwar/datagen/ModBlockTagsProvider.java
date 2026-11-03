@@ -52,6 +52,10 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         // das Stadtbanner überlebt Drachen und Wither (die Siedlung hängt an ihm)
         add(BlockTags.DRAGON_IMMUNE, ModBlocks.TOWN_BANNER);
         add(BlockTags.WITHER_IMMUNE, ModBlocks.TOWN_BANNER);
+        // Belagerungswaffen zerschlagen weder Stadtbanner noch Siegelkreis, Tore der Welten oder Bannsiegel
+        this.tag(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Blocks.SIEGE_PROOF).addTag(BlockTags.WITHER_IMMUNE);
+        add(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Blocks.SIEGE_PROOF, ModBlocks.TOWN_BANNER, ModBlocks.SEAL_SOCKET,
+                ModBlocks.SEAL_PLATE, ModBlocks.SHADOW_PORTAL, ModBlocks.DRAGON_LAIR_CORE, ModBlocks.SHADOW_THRONE_CORE, ModBlocks.ARCANE_BARRIER);
 
         // --- Aschelande ---
         add(BlockTags.MINEABLE_WITH_SHOVEL, ModBlocks.ASH_BLOCK, ModBlocks.ASH_LAYER, ModBlocks.CINDER_SOIL);

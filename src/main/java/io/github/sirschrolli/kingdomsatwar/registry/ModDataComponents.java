@@ -34,13 +34,19 @@ public final class ModDataComponents {
                     .persistent(com.mojang.serialization.Codec.INT)
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
 
-    /** Aetherit-Stab: welche Zauber er auf welcher Stufe kennt und welcher gewählt ist. */
     /** Meisterschaft eines Aetherit-Stabs (gesammelte Erfahrung beim Zaubern). */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STAFF_MASTERY =
             COMPONENTS.registerComponentType("staff_mastery", builder -> builder
                     .persistent(com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE))
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
 
+    /** Bausatz einer Belagerungswaffe: Zustand der zerlegten Waffe (0–1, fehlt: unversehrt). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Float>> SIEGE_CONDITION =
+            COMPONENTS.registerComponentType("siege_condition", builder -> builder
+                    .persistent(com.mojang.serialization.Codec.floatRange(0.0f, 1.0f))
+                    .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.FLOAT));
+
+    /** Aetherit-Stab: welche Zauber er auf welcher Stufe kennt und welcher gewählt ist. */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.magic.KnownSpells>> SPELLS =
             COMPONENTS.registerComponentType("spells", builder -> builder
                     .persistent(io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.CODEC)

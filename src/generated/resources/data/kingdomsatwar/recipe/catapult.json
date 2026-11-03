@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks",
+    "S": "minecraft:string"
+  },
+  "pattern": [
+    " L ",
+    "SIS",
+    "PPP"
+  ],
+  "result": {
+    "id": "kingdomsatwar:catapult"
+  }
+}

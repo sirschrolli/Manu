@@ -312,7 +312,42 @@ public final class ModItems {
     /** Kommandostab: Befehle an alle eigenen Soldaten in der Nähe. */
     public static final DeferredItem<CommandBatonItem> COMMAND_BATON = addTo(KINGDOM_TAB, ITEMS.registerItem("command_baton",
             CommandBatonItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)
-                    .component(DataComponents.LORE, lore("command_baton", 5))));
+                    .component(DataComponents.LORE, lore("command_baton", 6))));
+
+    // =====================================================================================
+    // Kingdoms at War – Belagerungswaffen
+    // =====================================================================================
+
+    /** Steinkugel: Munition für Katapult und Tribok (der Tribok wirft zwei auf einmal). */
+    public static final DeferredItem<Item> SIEGE_STONE = addTo(KINGDOM_TAB, ITEMS.registerItem("siege_stone", Item::new,
+            () -> new Item.Properties().stacksTo(16).component(DataComponents.LORE, lore("siege_stone", 1))));
+    /** Ballistenbolzen: Munition der Balliste. */
+    public static final DeferredItem<Item> BALLISTA_BOLT = addTo(KINGDOM_TAB, ITEMS.registerItem("ballista_bolt", Item::new,
+            () -> new Item.Properties().stacksTo(16).component(DataComponents.LORE, lore("ballista_bolt", 1))));
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> CATAPULT_KIT = siegeKit("catapult",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.CATAPULT);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> TREBUCHET_KIT = siegeKit("trebuchet",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.TREBUCHET);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> BALLISTA_KIT = siegeKit("ballista",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.BALLISTA);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> BATTERING_RAM_KIT = siegeKit("battering_ram",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.RAM);
+
+    private static DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> siegeKit(String name,
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
+        return addTo(KINGDOM_TAB, ITEMS.registerItem(name, p -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem(type, p),
+                () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore(name, 3))));
+    }
+
+    /** Der Bausatz einer Belagerungswaffe. */
+    public static Item siegeKit(io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
+        return switch (type) {
+            case CATAPULT -> CATAPULT_KIT.get();
+            case TREBUCHET -> TREBUCHET_KIT.get();
+            case BALLISTA -> BALLISTA_KIT.get();
+            case RAM -> BATTERING_RAM_KIT.get();
+        };
+    }
 
     private static final Map<SoldierType, DeferredItem<SpawnEggItem>> SOLDIER_SPAWN_EGGS_MUTABLE = new EnumMap<>(SoldierType.class);
     /** Spawn-Eier (Kreativmodus) für jede Soldatenart – der Soldat gehört dem, der das Ei benutzt. */

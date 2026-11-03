@@ -347,6 +347,13 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.VILLAGER_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        // Belagerungswaffen: Munition und Bausätze
+        flat(items, ModItems.SIEGE_STONE.get());
+        flat(items, ModItems.BALLISTA_BOLT.get());
+        flat(items, ModItems.CATAPULT_KIT.get());
+        flat(items, ModItems.TREBUCHET_KIT.get());
+        flat(items, ModItems.BALLISTA_KIT.get());
+        flat(items, ModItems.BATTERING_RAM_KIT.get());
         flat(items, ModItems.BLUEPRINT.get());
         for (io.github.sirschrolli.kingdomsatwar.economy.Coin coin : io.github.sirschrolli.kingdomsatwar.economy.Coin.values()) {
             coinModel(items, coin.item(), coin.id() + "_coin");

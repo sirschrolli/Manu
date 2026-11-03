@@ -13,6 +13,8 @@ public final class ModServerConfig {
     public static final ModConfigSpec.IntValue TRADES_BEFORE_PAUSE;
     /** Wie lange die Pause dauert (Minuten Echtzeit). */
     public static final ModConfigSpec.IntValue TRADE_PAUSE_MINUTES;
+    /** Zerschlagen Belagerungswaffen Blöcke (Mauern, Tore)? */
+    public static final ModConfigSpec.BooleanValue SIEGE_BLOCK_DAMAGE;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -28,6 +30,10 @@ public final class ModServerConfig {
                 .comment("Wie lange (Minuten Echtzeit) ein Laden nach Erreichen der Handelsgrenze geschlossen bleibt.")
                 .translation("kingdomsatwar.configuration.tradePauseMinutes")
                 .defineInRange("tradePauseMinutes", 180, 0, 10_080);
+        SIEGE_BLOCK_DAMAGE = builder
+                .comment("Belagerungswaffen zerschlagen Mauern, Tore und Türen (nie in Siedlungen, am Siegelkreis oder am Reichsbanner).")
+                .translation("kingdomsatwar.configuration.siegeBlockDamage")
+                .define("siegeBlockDamage", true);
         SPEC = builder.build();
     }
 

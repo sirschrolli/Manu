@@ -47,6 +47,7 @@ public class ModRecipeProvider extends RecipeProvider {
         dragonRecipes();
         foodRecipes();
         armyRecipes();
+        siegeRecipes();
         equipmentRecipes();
         magicRecipes();
         cookVenison();
@@ -606,6 +607,73 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
     // Armee
     // =====================================================================================
+
+    /** Belagerungswaffen (Bausätze) und ihre Munition. */
+    private void siegeRecipes() {
+        // Steinkugeln: vier Bruchsteine werden zu zwei runden Kugeln behauen
+        shaped(RecipeCategory.COMBAT, ModItems.SIEGE_STONE.get(), 2)
+                .pattern("CC")
+                .pattern("CC")
+                .define('C', Blocks.COBBLESTONE)
+                .unlockedBy("has_cobblestone", has(Blocks.COBBLESTONE))
+                .save(output, key("siege_stone"));
+        // Ballistenbolzen: eiserne Spitze, Schaft, Federn
+        shaped(RecipeCategory.COMBAT, ModItems.BALLISTA_BOLT.get(), 4)
+                .pattern(" I ")
+                .pattern(" S ")
+                .pattern("FSF")
+                .define('I', Items.IRON_INGOT)
+                .define('S', Items.STICK)
+                .define('F', Items.FEATHER)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(output, key("ballista_bolt"));
+        // Katapult: Wurfarm aus einem Stamm, Seile und eiserne Beschläge auf einem Gestell
+        shaped(RecipeCategory.COMBAT, ModItems.CATAPULT_KIT.get())
+                .pattern(" L ")
+                .pattern("SIS")
+                .pattern("PPP")
+                .define('L', ItemTags.LOGS)
+                .define('S', Items.STRING)
+                .define('I', Items.IRON_INGOT)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(output, key("catapult"));
+        // Tribok: hohes Gerüst, Ketten und ein Gegengewicht aus Eisen
+        shaped(RecipeCategory.COMBAT, ModItems.TREBUCHET_KIT.get())
+                .pattern("LCL")
+                .pattern("SBS")
+                .pattern("PPP")
+                .define('L', ItemTags.LOGS)
+                .define('C', Items.IRON_CHAIN)
+                .define('S', Items.STRING)
+                .define('B', Items.IRON_BLOCK)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_iron_block", has(Items.IRON_BLOCK))
+                .save(output, key("trebuchet"));
+        // Balliste: eine Armbrust als Herz, Sehnen, Beschläge und ein Dreibein
+        shaped(RecipeCategory.COMBAT, ModItems.BALLISTA_KIT.get())
+                .pattern("SXS")
+                .pattern("PIP")
+                .pattern("L L")
+                .define('S', Items.STRING)
+                .define('X', Items.CROSSBOW)
+                .define('P', ItemTags.PLANKS)
+                .define('I', Items.IRON_INGOT)
+                .define('L', ItemTags.LOGS)
+                .unlockedBy("has_crossbow", has(Items.CROSSBOW))
+                .save(output, key("ballista"));
+        // Rammbock: Schutzdach, ein an Ketten hängender Stamm mit Eisenkopf, Gestell
+        shaped(RecipeCategory.COMBAT, ModItems.BATTERING_RAM_KIT.get())
+                .pattern("PPP")
+                .pattern("CLC")
+                .pattern("LIL")
+                .define('P', ItemTags.PLANKS)
+                .define('C', Items.IRON_CHAIN)
+                .define('L', ItemTags.LOGS)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
+                .save(output, key("battering_ram"));
+    }
 
     private void armyRecipes() {
         // Feldherrentisch: Buch und Smaragde auf einem Holztisch
