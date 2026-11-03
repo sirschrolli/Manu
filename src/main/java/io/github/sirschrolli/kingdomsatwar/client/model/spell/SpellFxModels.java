@@ -117,7 +117,8 @@ public final class SpellFxModels {
                 seg.xRot += Mth.sin(s.age * 0.22f + i * 0.8f + phase) * 0.14f * k - whip * 0.32f * k;
                 seg.zRot += Mth.cos(s.age * 0.17f + i * 0.9f + phase) * 0.12f * k;
             }
-            this.segments[0].yRot = rand(s, 8) * Mth.TWO_PI;
+            // die Ranke steht zur Stelle hin gedreht (die Wirkung trägt die Richtung), nur wenig zufällig
+            this.segments[0].yRot = (rand(s, 8) - 0.5f) * 0.6f;
         }
     }
 

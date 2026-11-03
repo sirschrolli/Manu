@@ -167,7 +167,7 @@ final class MageSignatures {
         }
         if (t < 16) {
             gather(level, mage, t);
-            level.sendParticles(ModParticles.BOSS_FLAME.get(), mage.staffTip().x, mage.staffTip().y, mage.staffTip().z, 2, 0.2, 0.2, 0.2, 0.02);
+            level.sendParticles(ParticleTypes.SMALL_FLAME, mage.staffTip().x, mage.staffTip().y, mage.staffTip().z, 2, 0.15, 0.15, 0.15, 0.01);
         }
         if (t == 16) {
             List<LivingEntity> targets = victims(mage, target, mage.phase());
@@ -184,7 +184,7 @@ final class MageSignatures {
             }
             sound(level, tip, SoundEvents.BLAZE_SHOOT, 2.0f, 0.55f);
             sound(level, tip, SoundEvents.PHANTOM_FLAP, 2.0f, 0.6f);
-            BossFx.impact(level, ModParticles.BOSS_FLAME.get(), tip, 30, 0.5, 0.5, 0.5, 0.1);
+            BossFx.impact(level, ParticleTypes.FLAME, tip, 24, 0.4, 0.4, 0.4, 0.08);
         }
     }
 
@@ -416,7 +416,14 @@ final class MageSignatures {
         }
         for (Vec3 spot : spots) {
             SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, spot.add(0, 0.02, 0), DragonType.NATURE, 20, 1.5f).onExpire(fx -> {
-                SpellFxEntity.create(level, SpellFxEntity.Kind.VINE, spot, DragonType.NATURE, 44, 1.0f).param(0.3f).spawn();
+                // drei Ranken brechen rings um die Stelle hervor und peitschen nach innen
+                float start = mage.getRandom().nextFloat() * 360.0f;
+                for (int k = 0; k < 3; k++) {
+                    float angle = start + k * 120.0f;
+                    Vec3 at = ground(level, spot.add(-Mth.sin(angle * Mth.DEG_TO_RAD) * 1.0, 0, Mth.cos(angle * Mth.DEG_TO_RAD) * 1.0));
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.VINE, at, DragonType.NATURE, 44, 1.15f + mage.getRandom().nextFloat() * 0.2f)
+                            .param(0.25f + k * 0.06f).facing(angle).spawn();     // der Peitschenhieb geht nach innen
+                }
                 sound(level, spot, SoundEvents.ROOTED_DIRT_BREAK, 1.6f, 0.6f);
                 sound(level, spot, SoundEvents.SWEET_BERRY_BUSH_PLACE, 1.4f, 0.7f);
                 for (LivingEntity e : hitAt(mage, spot, 1.7, 3.5)) {
@@ -444,7 +451,7 @@ final class MageSignatures {
         for (int i = 0; i < count; i++) {
             LivingEntity goal = targets.get(i % targets.size());
             double a = mage.getRandom().nextDouble() * Mth.TWO_PI;
-            Vec3 spot = ground(level, goal.position().add(Math.cos(a) * 1.5, 0, Math.sin(a) * 1.5));
+            Vec3 spot = ground(level, goal.position().add(Math.cos(a) * 2.0, 0, Math.sin(a) * 2.0));
             bloom(level, mage, spot);
         }
     }
@@ -453,12 +460,12 @@ final class MageSignatures {
         float damage = 1.6f * mage.damageMultiplier();
         sound(level, spot, SoundEvents.ROOTED_DIRT_BREAK, 1.6f, 0.8f);
         sound(level, spot, SoundEvents.AZALEA_LEAVES_PLACE, 1.6f, 0.6f);
-        SpellFxEntity.create(level, SpellFxEntity.Kind.FLOWER, spot, DragonType.NATURE, 150, 1.2f).onTick(fx -> {
+        SpellFxEntity.create(level, SpellFxEntity.Kind.FLOWER, spot, DragonType.NATURE, 150, 1.45f).onTick(fx -> {
             int age = fx.tickCount;
             if (age < 24 || age > 140 || age % 10 != 0) {
                 return;
             }
-            level.sendParticles(ModParticles.BOSS_SPORE.get(), spot.x, spot.y + 2.0, spot.z, 24, 1.6, 0.6, 1.6, 0.02);
+            level.sendParticles(ModParticles.BOSS_SPORE.get(), spot.x, spot.y + 2.6, spot.z, 6, 0.9, 0.4, 0.9, 0.02);
             if (age % 30 == 0) {
                 sound(level, spot, SoundEvents.PUFFER_FISH_BLOW_OUT, 1.2f, 0.6f);
             }

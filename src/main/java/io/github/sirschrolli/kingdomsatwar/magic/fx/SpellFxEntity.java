@@ -334,7 +334,7 @@ public class SpellFxEntity extends Entity {
                 if (t == 1) {
                     this.groundBurst(size * 0.8, 12);
                 }
-                if (t > 20 && t < life - 12 && this.random.nextInt(2) == 0) {
+                if (t > 20 && t < life - 12 && this.random.nextInt(5) == 0) {
                     double a = this.random.nextDouble() * Mth.TWO_PI;
                     double r = this.random.nextDouble() * 1.2 * size;
                     level.addParticle(ModParticles.BOSS_SPORE.get(), this.getX() + Math.cos(a) * r, this.getY() + 1.9 * size,

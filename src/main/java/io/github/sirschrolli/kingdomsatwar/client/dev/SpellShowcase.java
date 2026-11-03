@@ -41,6 +41,7 @@ final class SpellShowcase {
         for (DragonType element : DragonType.values()) {
             BlockPos center = ArenaFights.arenaCenter(60 + i);
             MageBossEntity[] mage = new MageBossEntity[1];
+            SoldierEntity[] soldier = new SoldierEntity[1];
             steps.add(Step.server(level -> {
                 ServerLevel arena = level.getServer().getLevel(ArcaneSphere.LEVEL);
                 if (arena == null) {
@@ -49,6 +50,7 @@ final class SpellShowcase {
                 }
                 for (long[] chunk : MageArenaBuilder.chunks(center)) {
                     arena.getChunk((int) chunk[0], (int) chunk[1]);
+                    arena.setChunkForced((int) chunk[0], (int) chunk[1], true);   // sonst entlädt der Chunk, der Magier schläft wieder
                 }
                 MageArenaBuilder.build(arena, center, element);
                 MageBossEntity m = ModEntities.MAGES.get(element).get().create(arena, EntitySpawnReason.COMMAND);
@@ -67,24 +69,68 @@ final class SpellShowcase {
                 target.setHealth(2000.0f);
                 target.setPersistenceRequired();
                 arena.addFreshEntity(target);
+                m.devOnlyEnemy(target);
                 m.devFight(arena);
+                m.setNoAi(true);            // nur die vorgeführten Zauber, kein Umherschweben
                 mage[0] = m;
+                soldier[0] = target;
             }));
             steps.add(Step.until(() -> mage[0] != null, 2000));
             String name = "spell_" + element.id();
-            camera(steps, center, 10.5, 4.5, 2.0, 0.0, 1.6, 0.5, true);
-            steps.add(Step.server(level -> mage[0].devSignatureAttack(false)));
-            steps.add(Step.waitTicks(strikeShot(element)));
+            if (element == DragonType.WATER) {
+                camera(steps, center, 8.0, 4.5, 8.5, 0.0, 1.2, 0.5, true);     // schräg: die Welle von vorn
+            } else {
+                camera(steps, center, 10.5, 4.5, 2.0, 0.0, 1.6, 0.5, true);
+            }
+            int[] tick = {0};
+            int strike = MageBossEntity.signatureDuration(element, false);
+            int trap = MageBossEntity.signatureDuration(element, true);
+            steps.add(drive(mage, soldier, tick, false, 0, strikeShot(element)));
             steps.add(Step.screenshot(name + "_strike"));
-            steps.add(Step.waitTicks(60));
-            steps.add(Step.server(level -> mage[0].devSignatureAttack(true)));
-            steps.add(Step.waitTicks(trapShot(element)));
+            steps.add(drive(mage, soldier, tick, false, strikeShot(element), strike + 40));
+            steps.add(Step.once(minecraft -> tick[0] = 0));
+            steps.add(drive(mage, soldier, tick, true, 0, trapShot(element)));
             steps.add(Step.screenshot(name + "_trap"));
-            steps.add(Step.waitTicks(40));
+            steps.add(drive(mage, soldier, tick, true, trapShot(element), trap + 60));
             i++;
         }
         staff(steps);
         steps.add(Step.hud(true));
+    }
+
+    /**
+     * Treibt einen Meisterzauber Tick für Tick an (Tick {@code from} bis {@code to}), mit der passenden Geste – so ist das
+     * Bild genau dann im Kasten, wenn es am schönsten ist.
+     */
+    private static Step drive(MageBossEntity[] mage, SoldierEntity[] target, int[] tick, boolean trap, int from, int to) {
+        return (minecraft, ticks) -> {
+            if (tick[0] >= to) {
+                return true;
+            }
+            int t = Math.max(tick[0], from);
+            tick[0] = t + 1;
+            var server = minecraft.getSingleplayerServer();
+            MageBossEntity m = mage[0];
+            SoldierEntity s = target[0];
+            if (m == null || s == null) {
+                return true;
+            }
+            server.execute(() -> {
+                ServerLevel arena = server.getLevel(ArcaneSphere.LEVEL);
+                if (arena == null) {
+                    return;
+                }
+                if (t == 0) {
+                    m.devGesture(trap ? MageBossEntity.ANIM_CAST : MageBossEntity.ANIM_MISSILES);
+                }
+                if (t < MageBossEntity.signatureDuration(m.element(), trap)) {
+                    m.devSignature(arena, s, trap, t);
+                } else if (t == MageBossEntity.signatureDuration(m.element(), trap)) {
+                    m.devGesture(MageBossEntity.ANIM_NONE);
+                }
+            });
+            return false;
+        };
     }
 
     /** Wann der Schlag am schönsten zu sehen ist (Ticks nach dem Beginn). */
@@ -124,6 +170,8 @@ final class SpellShowcase {
             }
             MageArenaBuilder.build(arena, center, DragonType.FIRE);
         }));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.waitTicks(5));
         steps.add(Step.once(minecraft -> {
             ItemStack staff = new ItemStack(ModItems.AETHERIT_STAFF.get());
             AetheritStaffItem.setSpells(staff, KnownSpells.DEFAULT.withLevel(Spell.FIRE, 3).select(Spell.FIRE));
@@ -146,6 +194,7 @@ final class SpellShowcase {
         steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("spell_staff_cast"));
         steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
+        steps.add(Step.command("gamemode spectator"));
     }
 
     /** Kamera (Auge) relativ zur Arenamitte mit Blick auf einen Punkt relativ zur Mitte. */
