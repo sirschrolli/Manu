@@ -71,6 +71,25 @@ public class SiegeProjectile extends Projectile {
         SiegeImpacts.launchEffects(level, weapon, from);
     }
 
+    /** Nur für Tests: ein Geschoss dieser Waffe an dieser Stelle (nicht in der Welt), etwa um einen Einschlag auszulösen. */
+    public static SiegeProjectile devCreate(ServerLevel level, SiegeType siege, @Nullable Entity owner, Vec3 at) {
+        SiegeProjectile p = new SiegeProjectile(ModEntities.SIEGE_PROJECTILE.get(), level);
+        p.entityData.set(DATA_SIEGE, (byte) siege.ordinal());
+        p.setOwner(owner);
+        p.setPos(at.x, at.y, at.z);
+        return p;
+    }
+
+    /** Nur für Vorführungen: das Geschoss bleibt in der Luft stehen (wie im Flug angehalten). */
+    public void devStick() {
+        this.entityData.set(DATA_STUCK, true);
+    }
+
+    /** Nur für Tests: die Steinkugel schlägt hier ein (Wucht, Trümmer, Schutzregeln). */
+    public void devImpact(ServerLevel level) {
+        SiegeImpacts.stone(level, this, this.position(), null);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_SIEGE, (byte) 0);

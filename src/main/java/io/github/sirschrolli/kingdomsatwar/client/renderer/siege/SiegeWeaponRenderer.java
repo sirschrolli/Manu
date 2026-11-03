@@ -23,6 +23,9 @@ import net.minecraft.world.phys.AABB;
  * sie qualmt, siehe {@link SiegeWeaponEntity}).
  */
 public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, SiegeModels.State> {
+    /** Nur für Vorführungen: feste Stellung (Ticks nach dem Schuss) je Wesen, unabhängig von der Spielzeit. */
+    public static final java.util.Map<Integer, Float> DEV_POSE = new java.util.concurrent.ConcurrentHashMap<>();
+
     private final Model<SiegeModels.State> model;
     private final Identifier texture;
     private final SiegeType siege;
@@ -61,8 +64,14 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
         super.extractRenderState(entity, state, partialTicks);
         state.siege = entity.siege();
         state.yRot = entity.getYRot(partialTicks);
-        state.since = entity.sinceFired(partialTicks);
-        state.loaded = entity.loaded() || entity.releasing(partialTicks);
+        Float pose = DEV_POSE.get(entity.getId());
+        if (pose != null) {
+            state.since = pose;
+            state.loaded = pose < io.github.sirschrolli.kingdomsatwar.siege.SiegePoses.releaseTick(entity.siege());
+        } else {
+            state.since = entity.sinceFired(partialTicks);
+            state.loaded = entity.loaded() || entity.releasing(partialTicks);
+        }
         state.aim = entity.aim();
         state.wheel = Mth.lerp(partialTicks, entity.wheelRotO, entity.wheelRot);
         state.hurt = Math.max(0.0f, entity.hurtTime() - partialTicks);

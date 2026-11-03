@@ -191,6 +191,7 @@ public final class ModGameTests {
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
         ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
         SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
+        SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
     }
 
     private ModGameTests() {}
@@ -226,6 +227,7 @@ public final class ModGameTests {
         RulesGameTests.register(event, environment);
         ArenaGameTests.register(event, environment);
         SpellGameTests.register(event, environment);
+        SiegeGameTests.register(event, environment);
         FarmGameTests.register(event, environment);
         WildGameTests.register(event, environment);
         MonsterGameTests.register(event, environment);

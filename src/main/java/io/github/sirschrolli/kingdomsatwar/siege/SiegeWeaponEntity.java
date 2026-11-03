@@ -795,6 +795,11 @@ public class SiegeWeaponEntity extends Entity {
         this.orders.load(input);
     }
 
+    /** Nur für Tests und Vorführungen: die Waffe zeigt die Stellung {@code since} Ticks nach einem Schuss (ohne zu schießen). */
+    public void devPose(int since) {
+        this.entityData.set(DATA_FIRED_AT, this.level().getGameTime() - since);
+    }
+
     /** Für die Leuchtspur der Flugbahn: Farbe je Waffe. */
     static DustParticleOptions previewDust(SiegeType siege) {
         return new DustParticleOptions(siege == SiegeType.BALLISTA ? 0xFFD27A : 0xFFB05A, 0.9f);

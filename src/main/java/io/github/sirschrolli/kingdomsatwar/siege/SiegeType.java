@@ -15,8 +15,8 @@ import net.minecraft.world.phys.Vec3;
  * </ul>
  */
 public enum SiegeType implements StringRepresentable {
-    CATAPULT(120.0f, 0.055, 2.2f, 100, Ammo.STONE, 1.0, 2.2, 0.05, 0.99, 14.0f, 1.5, 3.0, 2.2f, 2.35f, new Vec3(-0.72, 1.0, -1.22)),
-    TREBUCHET(220.0f, 0.03, 1.0f, 220, Ammo.STONE, 1.6, 3.2, 0.05, 0.99, 24.0f, 2.3, 4.0, 2.7f, 5.0f, new Vec3(-0.44, 0.75, -1.69)),
+    CATAPULT(120.0f, 0.055, 2.2f, 100, Ammo.STONE, 1.0, 2.2, 0.05, 0.99, 14.0f, 1.5, 3.0, 2.2f, 2.35f, new Vec3(-1.35, 0.0, -0.25)),
+    TREBUCHET(220.0f, 0.03, 1.0f, 220, Ammo.STONE, 1.6, 3.2, 0.05, 0.99, 24.0f, 2.3, 4.0, 2.7f, 5.0f, new Vec3(-1.85, 0.0, -0.9)),
     BALLISTA(90.0f, 0.075, 3.0f, 60, Ammo.BOLT, 3.6, 3.6, 0.02, 0.99, 18.0f, 0.0, 0.0, 1.8f, 1.5f, new Vec3(0.0, 0.0, -1.3)),
     RAM(260.0f, 0.065, 2.0f, 34, Ammo.NONE, 0.0, 0.0, 0.0, 1.0, 9.0f, 0.0, 0.0, 2.4f, 2.6f, new Vec3(-0.6, 0.0, -0.3));
 
@@ -133,8 +133,8 @@ public enum SiegeType implements StringRepresentable {
     }
 
     /**
-     * Platz des Schützen relativ zur Waffe (x: links +/rechts −, Höhe, z: vorn +/hinten −): beim Katapult und beim Tribok
-     * die Sitzfläche der Bank, bei Balliste und Rammbock der Boden, auf dem er steht.
+     * Platz des Schützen relativ zur Waffe (x: links +/rechts −, Höhe, z: vorn +/hinten −), wo er steht: bei Katapult und
+     * Tribok rechts neben dem Gestell an der Winde (von dort hat er freie Sicht nach vorn), hinter der Balliste, im Rammbock.
      */
     public Vec3 seat() {
         return this.seat;
@@ -145,8 +145,8 @@ public enum SiegeType implements StringRepresentable {
         return this == CATAPULT || this == TREBUCHET;
     }
 
-    /** Sitzt der Schütze (auf der Bank) – oder steht er hinter der Waffe bzw. im Rammbock? */
+    /** Sitzt der Schütze? (Alle stehen: neben dem Gestell, hinter der Balliste, im Rammbock.) */
     public boolean seated() {
-        return this == CATAPULT || this == TREBUCHET;
+        return false;
     }
 }
