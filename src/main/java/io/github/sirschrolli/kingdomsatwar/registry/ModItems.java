@@ -337,11 +337,15 @@ public final class ModItems {
             io.github.sirschrolli.kingdomsatwar.siege.SiegeType.BALLISTA);
     public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> BATTERING_RAM_KIT = siegeKit("battering_ram",
             io.github.sirschrolli.kingdomsatwar.siege.SiegeType.RAM);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> SIEGE_TOWER_KIT = siegeKit("siege_tower",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.SIEGE_TOWER);
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> WAGON_KIT = siegeKit("wagon",
+            io.github.sirschrolli.kingdomsatwar.siege.SiegeType.WAGON);
 
     private static DeferredItem<io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem> siegeKit(String name,
             io.github.sirschrolli.kingdomsatwar.siege.SiegeType type) {
         return addTo(KINGDOM_TAB, ITEMS.registerItem(name, p -> new io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem(type, p),
-                () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore(name, 3))));
+                () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore(name, 4))));
     }
 
     /** Der Bausatz einer Belagerungswaffe. */
@@ -351,6 +355,8 @@ public final class ModItems {
             case TREBUCHET -> TREBUCHET_KIT.get();
             case BALLISTA -> BALLISTA_KIT.get();
             case RAM -> BATTERING_RAM_KIT.get();
+            case SIEGE_TOWER -> SIEGE_TOWER_KIT.get();
+            case WAGON -> WAGON_KIT.get();
         };
     }
 

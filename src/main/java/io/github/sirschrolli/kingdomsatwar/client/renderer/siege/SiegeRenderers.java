@@ -6,7 +6,9 @@ import io.github.sirschrolli.kingdomsatwar.client.model.geom.BallistaGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.BatteringRamGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.CatapultGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.SiegeStoneGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.SiegeTowerGeometry;
 import io.github.sirschrolli.kingdomsatwar.client.model.geom.TrebuchetGeometry;
+import io.github.sirschrolli.kingdomsatwar.client.model.geom.WagonGeometry;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.siege.SiegeType;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -20,6 +22,8 @@ public final class SiegeRenderers {
         event.registerLayerDefinition(ModModelLayers.TREBUCHET, TrebuchetGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.BALLISTA, BallistaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.BATTERING_RAM, BatteringRamGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SIEGE_TOWER, SiegeTowerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WAGON, WagonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SIEGE_STONE, SiegeStoneGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.BALLISTA_BOLT, BallistaBoltGeometry::createLayer);
     }

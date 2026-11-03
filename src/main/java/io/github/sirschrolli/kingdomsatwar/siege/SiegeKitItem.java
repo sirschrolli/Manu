@@ -145,6 +145,19 @@ public class SiegeKitItem extends Item {
                 add(loot, Items.STICK, 2 + random.nextInt(3));
                 add(loot, Items.IRON_NUGGET, 3 + random.nextInt(4));
             }
+            case SIEGE_TOWER -> {
+                add(loot, Items.OAK_PLANKS, 8 + random.nextInt(6));
+                add(loot, Items.STICK, 4 + random.nextInt(4));
+                add(loot, Items.LEATHER, 1 + random.nextInt(3));
+                add(loot, Items.LADDER, random.nextInt(3));
+                add(loot, Items.IRON_NUGGET, 4 + random.nextInt(5));
+            }
+            case WAGON -> {
+                add(loot, Items.OAK_PLANKS, 3 + random.nextInt(4));
+                add(loot, Items.STICK, 2 + random.nextInt(3));
+                add(loot, Items.WOOL.pick(net.minecraft.world.item.DyeColor.WHITE), random.nextInt(3));
+                add(loot, Items.IRON_NUGGET, 2 + random.nextInt(3));
+            }
         }
         return loot;
     }

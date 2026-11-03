@@ -34,6 +34,10 @@ public final class SiegeModels {
         public float wheel;
         public float hurt;
         public float health = 1.0f;
+        /** Belagerungsturm: Winkel der Fallbrücke (Grad ab senkrecht). */
+        public float bridge;
+        /** Planwagen: ist etwas geladen? */
+        public boolean cargo;
     }
 
     // =====================================================================================
@@ -222,6 +226,56 @@ public final class SiegeModels {
     // =====================================================================================
 
     /** Steinkugel bzw. Brocken (dasselbe Modell, beim Tribok größer). */
+    // =====================================================================================
+    // Belagerungsturm
+    // =====================================================================================
+
+    /** Der Belagerungsturm: die Fallbrücke schwenkt um ihr Scharnier, die vier Vollräder rollen. */
+    public static final class SiegeTower extends Model<State> {
+        private final ModelPart bridge;
+        private final ModelPart[] wheels;
+
+        public SiegeTower(ModelPart root) {
+            super(root, RenderTypes::entityCutout);
+            this.bridge = root.getChild("frame").getChild("bridge");
+            this.wheels = new ModelPart[] {root.getChild("wheel_fl"), root.getChild("wheel_fr"), root.getChild("wheel_bl"), root.getChild("wheel_br")};
+        }
+
+        @Override
+        public void setupAnim(State s) {
+            super.setupAnim(s);
+            this.bridge.xRot = s.bridge * Mth.DEG_TO_RAD;
+            for (ModelPart wheel : this.wheels) {
+                wheel.xRot = s.wheel;
+            }
+        }
+    }
+
+    // =====================================================================================
+    // Planwagen
+    // =====================================================================================
+
+    /** Der Planwagen: Kisten, Fässer und Säcke nur, wenn etwas geladen ist; die Räder rollen. */
+    public static final class Wagon extends Model<State> {
+        private final ModelPart cargo;
+        private final ModelPart[] wheels;
+
+        public Wagon(ModelPart root) {
+            super(root, RenderTypes::entityCutout);
+            this.cargo = root.getChild("frame").getChild("cargo");
+            this.wheels = new ModelPart[] {root.getChild("wheel_fl"), root.getChild("wheel_fr"), root.getChild("wheel_bl"), root.getChild("wheel_br")};
+        }
+
+        @Override
+        public void setupAnim(State s) {
+            super.setupAnim(s);
+            this.cargo.visible = s.cargo;
+            for (ModelPart wheel : this.wheels) {
+                wheel.xRot = s.wheel;
+            }
+        }
+    }
+
     public static final class Stone extends Model<EntityRenderState> {
         public Stone(ModelPart root) {
             super(root, RenderTypes::entityCutout);

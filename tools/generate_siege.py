@@ -18,7 +18,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import generate_entities  # noqa: E402
-from entitygen.models import ballista, ballista_bolt, battering_ram, catapult, siege_stone, trebuchet  # noqa: E402
+from entitygen.models import ballista, ballista_bolt, battering_ram, catapult, siege_stone, siege_tower, trebuchet, wagon  # noqa: E402
 from entitygen.paint import paint_model  # noqa: E402
 from entitygen.preview import render  # noqa: E402
 from generate_entities import write_model  # noqa: E402
@@ -37,6 +37,12 @@ MODELS = (
     (battering_ram, "BatteringRamGeometry",
      "Geometrie des Rammbocks (fahrbares Schutzdach mit Häuten, Widder als Pendel an zwei Ketten; erzeugt von "
      "tools/generate_siege.py).", "battering_ram"),
+    (siege_tower, "SiegeTowerGeometry",
+     "Geometrie des Belagerungsturms (zehn Blöcke bis zur Plattform, vorn Häute, seitlich Bretter und Streben, hinten "
+     "die Leiter; Fallbrücke hochgezogen gebaut, dreht um X nach vorn; erzeugt von tools/generate_siege.py).", "siege_tower"),
+    (wagon, "WagonGeometry",
+     "Geometrie des Planwagens (Kasten auf vier Rädern, Plane über drei Bögen, Kutschbock, Deichsel; Ladung als eigener "
+     "Knochen; erzeugt von tools/generate_siege.py).", "wagon"),
     (siege_stone, "SiegeStoneGeometry",
      "Geometrie der Steinkugel von Katapult und Tribok (Drehpunkt in der Mitte; erzeugt von tools/generate_siege.py).",
      "siege_stone"),
@@ -55,6 +61,10 @@ VIEWS = {
                  ((-30, 60), None), ((60, 15), "abgefeuert")],
     "battering_ram": [((35, 20), None), ((145, 22), None), ((88, 3), None), ((70, 8), "vor"),
                       ((110, 8), "zurück"), ((-30, 45), None)],
+    "siege_tower": [((35, 15), None), ((145, 15), None), ((88, 3), None), ((60, 12), "unten"),
+                    ((-30, 20), "unten"), ((200, 10), None)],
+    "wagon": [((35, 20), None), ((145, 20), None), ((88, 3), None), ((160, 25), "leer"),
+              ((-30, 45), None), ((0, 10), None)],
     "siege_stone": [((35, 25), None), ((150, -20), None), ((90, 0), None), ((0, 90), None)],
     "ballista_bolt": [((35, 25), None), ((160, 20), None), ((90, 0), None), ((180, 5), None)],
 }
@@ -67,6 +77,7 @@ POSES = {
                                  "string_right": (0, 30, 0), "bow": (-12, 0, 0)},
     ("battering_ram", "vor"): {"log": (-16, 0, 0)},
     ("battering_ram", "zurück"): {"log": (14, 0, 0)},
+    ("siege_tower", "unten"): {"bridge": (90, 0, 0)},
 }
 
 

@@ -1,7 +1,11 @@
 package io.github.sirschrolli.kingdomsatwar.siege;
 
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
@@ -43,6 +47,11 @@ import org.jspecify.annotations.Nullable;
  *
  * Ohne Befehl nimmt die Mannschaft selbst Gegner in Reichweite unter Beschuss. Die Mannschaft eines Rammbocks fährt
  * auf Befehl an das gezeigte Tor und stößt zu, bis es bricht. Munition legt der Spieler selbst in die Waffe.
+ *
+ * <p>Fahrzeuge (Belagerungsturm, Planwagen) tragen mehrere Krieger: Der Stab auf das Fahrzeug ruft so viele freie
+ * Soldaten herbei, wie Platz ist, schleichend sitzen alle wieder ab (und folgen dem Spieler). Ist der Turm besetzt,
+ * zeigt man danach mit dem Stab auf die Mauer: Die Mannschaft schiebt ihn heran, lässt die Brücke fallen, und die
+ * Krieger oben stürmen hinüber.
  */
 public final class SiegeCrew {
     /** So lange bleibt eine Waffe zum Zielen gewählt. */
@@ -69,6 +78,9 @@ public final class SiegeCrew {
         long assignedAt;
         @Nullable UUID autoTarget;
         int idleTicks;
+        /** Fahrzeuge: Soldaten auf dem Weg zum Aufsitzen. */
+        final List<UUID> boarding = new ArrayList<>();
+        long boardingAt;
 
         void shotFired() {
             if (this.targetPos != null) {
@@ -114,6 +126,12 @@ public final class SiegeCrew {
     /** Ein Soldat bedient die Waffe: Ziel wählen, drehen, zielen, schießen. @return Fahrbefehl (nur beim Rammbock) */
     static double tick(ServerLevel level, SiegeWeaponEntity weapon, SoldierEntity crew) {
         Orders orders = weapon.orders;
+        if (weapon instanceof SiegeTowerEntity tower) {
+            return towerTick(level, tower, crew, orders);
+        }
+        if (!weapon.siege().weapon()) {
+            return 0.0;   // den Planwagen zieht ein Pferd
+        }
         if (weapon.siege() == SiegeType.RAM) {
             return ramTick(level, weapon, crew, orders);
         }
@@ -195,6 +213,41 @@ public final class SiegeCrew {
         return 0.0;
     }
 
+    /**
+     * Belagerungsturm: an die befohlene Mauer schieben; sobald die Brücke dort aufliegen kann – der Turm steht an der
+     * Mauer oder die Brücke reicht weit genug hinüber –, fällt sie, und die Krieger oben stürmen hinüber.
+     */
+    private static double towerTick(ServerLevel level, SiegeTowerEntity tower, SoldierEntity crew, Orders orders) {
+        Vec3 goal = orders.targetPos;
+        if (goal == null || !tower.bridgeUp()) {
+            orders.idleTicks = 0;
+            return 0.0;
+        }
+        Vec3 to = goal.subtract(tower.position()).multiply(1.0, 0.0, 1.0);
+        float yaw = (float) (Mth.atan2(-to.x, to.z) * Mth.RAD_TO_DEG);
+        tower.turnToward(yaw, tower.siege().turnRate());
+        crew.getLookControl().setLookAt(goal.x, goal.y, goal.z);
+        boolean aligned = tower.yawError(yaw) < 12.0f;
+        boolean against = tower.horizontalCollision || to.length() < SiegeTowerEntity.HINGE + 1.0;
+        if (aligned && (level.getGameTime() + tower.getId()) % 10 == 0 && (against || orders.idleTicks > 40) && tower.canLand(level)) {
+            tower.lower(level, crew);
+            orders.clearTarget();
+            orders.idleTicks = 0;
+            return 0.0;
+        }
+        // steht er fest (an der Mauer, an einem Hindernis), versucht er es eine Weile – dann gibt er auf
+        if (aligned && tower.getDeltaMovement().horizontalDistanceSqr() < 1.0e-5) {
+            if (++orders.idleTicks > 120) {
+                orders.clearTarget();
+                orders.idleTicks = 0;
+                return 0.0;
+            }
+        } else {
+            orders.idleTicks = 0;
+        }
+        return tower.yawError(yaw) < 20.0f && to.length() > 0.8 ? 1.0 : 0.0;
+    }
+
     /** Steht vor dem Widderkopf ein Tor, eine Tür, ein Gitter oder Holz, das der Rammbock brechen kann? */
     private static boolean gateAhead(ServerLevel level, SiegeWeaponEntity ram) {
         Vec3 fwd = Vec3.directionFromRotation(0.0f, ram.getYRot());
@@ -250,9 +303,12 @@ public final class SiegeCrew {
         return best;
     }
 
-    /** Ein herbeigerufener Soldat läuft zur Waffe und steigt auf. */
+    /** Ein herbeigerufener Soldat läuft zur Waffe und steigt auf (bei Fahrzeugen: alle, die herbeigerufen sind). */
     static void tickAssignment(ServerLevel level, SiegeWeaponEntity weapon) {
         Orders orders = weapon.orders;
+        if (!orders.boarding.isEmpty()) {
+            tickBoarding(level, weapon, orders);
+        }
         if (orders.assigned == null) {
             return;
         }
@@ -274,6 +330,32 @@ public final class SiegeCrew {
         }
     }
 
+    /** Herbeigerufene Krieger laufen zum Fahrzeug und steigen auf, solange Platz ist. */
+    private static void tickBoarding(ServerLevel level, SiegeWeaponEntity vehicle, Orders orders) {
+        boolean expired = level.getGameTime() - orders.boardingAt > ASSIGN_TICKS;
+        double reach = vehicle.getBbWidth() * 0.5 + 2.4;
+        for (Iterator<UUID> it = orders.boarding.iterator(); it.hasNext(); ) {
+            UUID id = it.next();
+            if (expired || !vehicle.hasRoom() || !(level.getEntity(id) instanceof SoldierEntity soldier) || !soldier.isAlive()
+                    || soldier.isPassenger()) {
+                it.remove();
+                continue;
+            }
+            double dx = soldier.getX() - vehicle.getX();
+            double dz = soldier.getZ() - vehicle.getZ();
+            if (dx * dx + dz * dz < reach * reach && Math.abs(soldier.getY() - vehicle.getY()) < 3.0) {
+                soldier.getNavigation().stop();
+                if (soldier.startRiding(vehicle, true, true)) {
+                    level.playSound(null, vehicle.getX(), vehicle.getY(), vehicle.getZ(), SoundEvents.ARMOR_EQUIP_CHAIN.value(), SoundSource.NEUTRAL,
+                            0.7f, 0.9f + level.getRandom().nextFloat() * 0.2f);
+                }
+                it.remove();
+            } else if ((level.getGameTime() + id.hashCode()) % 20 == 0) {
+                soldier.getNavigation().moveTo(vehicle, 1.15);
+            }
+        }
+    }
+
     // =====================================================================================
     // Kommandostab
     // =====================================================================================
@@ -291,6 +373,9 @@ public final class SiegeCrew {
             }
             if (weapon.owner() == null) {
                 weapon.setOwner(player.getUUID());
+            }
+            if (weapon instanceof SiegeVehicleEntity vehicle) {
+                return vehicleBaton(level, player, vehicle);
             }
             Component name = weapon.getDisplayName();
             if (weapon.getFirstPassenger() instanceof SoldierEntity crew) {
@@ -332,12 +417,62 @@ public final class SiegeCrew {
             return false;
         }
         if (level.getGameTime() > selection.until() || !(level.getEntity(selection.weapon()) instanceof SiegeWeaponEntity chosen) || !chosen.isAlive()
-                || !(chosen.getFirstPassenger() instanceof SoldierEntity)) {
+                || !(chosen.getFirstPassenger() instanceof SoldierEntity) && !(chosen instanceof SiegeTowerEntity && !chosen.orders.boarding.isEmpty())) {
             SELECTED.remove(player.getUUID());
             return false;
         }
         order(level, player, chosen);
         SELECTED.remove(player.getUUID());
+        return true;
+    }
+
+    /**
+     * Stab auf ein Fahrzeug: freie Soldaten herbeirufen, bis es voll ist (der Turm ist danach zum Befehl gewählt: Zeigt man
+     * auf eine Mauer, schiebt die Mannschaft ihn heran); schleichend sitzen alle ab und folgen wieder dem Spieler.
+     */
+    private static boolean vehicleBaton(ServerLevel level, ServerPlayer player, SiegeVehicleEntity vehicle) {
+        Component name = vehicle.getDisplayName();
+        Orders orders = vehicle.orders;
+        if (player.isSecondaryUseActive()) {
+            orders.boarding.clear();
+            orders.clearTarget();
+            SELECTED.remove(player.getUUID());
+            int off = vehicle.dismountSoldiers();
+            player.sendOverlayMessage(Component.translatable(off > 0 ? "siege.kingdomsatwar.crew.unboard" : "siege.kingdomsatwar.crew.empty", off, name)
+                    .withStyle(ChatFormatting.GRAY));
+            return true;
+        }
+        int room = vehicle.siege().seats() - vehicle.getPassengers().size() - orders.boarding.size();
+        List<SoldierEntity> called = room > 0 ? freeSoldiers(player, vehicle, room) : List.of();
+        for (SoldierEntity soldier : called) {
+            orders.boarding.add(soldier.getUUID());
+            soldier.setTarget(null);
+            soldier.setMode(SoldierEntity.MODE_HOLD, vehicle.blockPosition());
+            soldier.getNavigation().moveTo(vehicle, 1.15);
+        }
+        if (!called.isEmpty()) {
+            orders.boardingAt = level.getGameTime();
+            called.getFirst().speak("hold");
+        }
+        boolean manned = vehicle.soldiersAboard() > 0 || !orders.boarding.isEmpty();
+        if (vehicle instanceof SiegeTowerEntity && manned) {
+            SELECTED.put(player.getUUID(), new Selection(vehicle.getUUID(), level.getGameTime() + SELECT_TICKS));
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, vehicle.getX(), vehicle.getY() + vehicle.getBbHeight() + 0.3, vehicle.getZ(), 8, 0.4,
+                    0.2, 0.4, 0.0);
+        }
+        Component message;
+        if (!called.isEmpty()) {
+            message = Component.translatable(vehicle instanceof SiegeTowerEntity ? "siege.kingdomsatwar.crew.boarding.siege_tower"
+                    : "siege.kingdomsatwar.crew.boarding", called.size(), name).withStyle(ChatFormatting.GOLD);
+        } else if (room <= 0) {
+            message = Component.translatable(vehicle instanceof SiegeTowerEntity && manned ? "siege.kingdomsatwar.crew.selected.siege_tower"
+                    : "siege.kingdomsatwar.crew.full", name).withStyle(ChatFormatting.GOLD);
+        } else if (vehicle instanceof SiegeTowerEntity && manned) {
+            message = Component.translatable("siege.kingdomsatwar.crew.selected.siege_tower", name).withStyle(ChatFormatting.GOLD);
+        } else {
+            message = Component.translatable("siege.kingdomsatwar.crew.nobody").withStyle(ChatFormatting.RED);
+        }
+        player.sendOverlayMessage(message);
         return true;
     }
 
@@ -352,6 +487,20 @@ public final class SiegeCrew {
                 eye.distanceToSqr(limit));
         Component name = weapon.getDisplayName();
         Orders orders = weapon.orders;
+        if (weapon instanceof SiegeTowerEntity) {
+            // der Turm stürmt eine Mauer: gezeigt wird auf die Mauer (oder einen Gegner darauf)
+            Vec3 at = entity != null ? entity.getEntity().position() : block.getType() != HitResult.Type.MISS ? block.getLocation() : null;
+            orders.clearTarget();
+            if (at == null) {
+                player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.crew.halt", name).withStyle(ChatFormatting.GOLD));
+            } else {
+                orders.targetPos = at;
+                level.sendParticles(ParticleTypes.ANGRY_VILLAGER, at.x, at.y + 0.5, at.z, 4, 0.3, 0.2, 0.3, 0.0);
+                player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.crew.siege_tower", name).withStyle(ChatFormatting.GOLD));
+            }
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.6f, 1.2f);
+            return;
+        }
         if (entity != null && entity.getEntity() instanceof LivingEntity target) {
             orders.clearTarget();
             orders.targetEntity = target.getUUID();
@@ -391,25 +540,26 @@ public final class SiegeCrew {
      * (sie laden schneller nach und bessern die Waffe aus), wenn sie nicht viel weiter weg sind.
      */
     static @Nullable SoldierEntity nearestFree(ServerPlayer player, SiegeWeaponEntity weapon) {
-        SoldierEntity best = null;
-        double bestDist = Double.MAX_VALUE;
+        List<SoldierEntity> free = freeSoldiers(player, weapon, 1);
+        return free.isEmpty() ? null : free.getFirst();
+    }
+
+    /** Bis zu {@code count} freie eigene Soldaten, die nächsten zuerst (Belagerungsknechte bevorzugt). */
+    static List<SoldierEntity> freeSoldiers(ServerPlayer player, SiegeWeaponEntity weapon, int count) {
+        List<SoldierEntity> free = new ArrayList<>();
         for (SoldierEntity soldier : SoldierEntity.soldiersOf(player, SoldierEntity.COMMAND_RANGE)) {
-            if (soldier.isPassenger() || isAssigned(player.level(), soldier)) {
-                continue;
-            }
-            double d = soldier.distanceToSqr(weapon)
-                    * (soldier.getSoldierType() == io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ENGINEER ? 0.2 : 1.0);
-            if (d < bestDist) {
-                best = soldier;
-                bestDist = d;
+            if (!soldier.isPassenger() && soldier.isAlive() && !isAssigned(player.level(), soldier)) {
+                free.add(soldier);
             }
         }
-        return best;
+        free.sort(Comparator.comparingDouble(soldier -> soldier.distanceToSqr(weapon)
+                * (soldier.getSoldierType() == io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.ENGINEER ? 0.2 : 1.0)));
+        return free.size() > count ? List.copyOf(free.subList(0, count)) : free;
     }
 
     private static boolean isAssigned(net.minecraft.world.level.Level level, SoldierEntity soldier) {
         for (SiegeWeaponEntity weapon : level.getEntitiesOfClass(SiegeWeaponEntity.class, soldier.getBoundingBox().inflate(64.0))) {
-            if (soldier.getUUID().equals(weapon.orders.assigned)) {
+            if (soldier.getUUID().equals(weapon.orders.assigned) || weapon.orders.boarding.contains(soldier.getUUID())) {
                 return true;
             }
         }

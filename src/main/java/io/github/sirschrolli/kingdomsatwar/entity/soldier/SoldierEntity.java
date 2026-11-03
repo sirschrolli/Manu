@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
+import io.github.sirschrolli.kingdomsatwar.siege.SiegeCrew;
 import io.github.sirschrolli.kingdomsatwar.siege.SiegeWeaponEntity;
 import java.util.EnumSet;
 import java.util.List;
@@ -1465,7 +1466,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
         @Override
         public boolean canUse() {
-            if (SoldierEntity.this.getMode() != MODE_FOLLOW) {
+            // wer eine Belagerungswaffe bedient oder im Turm, im Wagen mitfährt, läuft niemandem hinterher
+            if (SoldierEntity.this.getMode() != MODE_FOLLOW || SiegeCrew.isCrew(SoldierEntity.this)) {
                 return false;
             }
             LivingEntity owner = SoldierEntity.this.getOwner();
@@ -1544,7 +1546,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         public boolean canUse() {
             BlockPos post = SoldierEntity.this.post;
             return SoldierEntity.this.getMode() != MODE_FOLLOW && post != null && SoldierEntity.this.getTarget() == null
-                    && !SoldierEntity.this.blockPosition().closerThan(post, this.limit());
+                    && !SiegeCrew.isCrew(SoldierEntity.this) && !SoldierEntity.this.blockPosition().closerThan(post, this.limit());
         }
 
         @Override
@@ -1570,7 +1572,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         @Override
         public boolean canUse() {
             return SoldierEntity.this.getMode() == MODE_PATROL && SoldierEntity.this.post != null && SoldierEntity.this.getTarget() == null
-                    && SoldierEntity.this.random.nextInt(this.reducedTickDelay(80)) == 0;
+                    && !SiegeCrew.isCrew(SoldierEntity.this) && SoldierEntity.this.random.nextInt(this.reducedTickDelay(80)) == 0;
         }
 
         @Override
