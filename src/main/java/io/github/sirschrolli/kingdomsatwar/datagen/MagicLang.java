@@ -27,15 +27,21 @@ final class MagicLang {
         t.add("lore.kingdomsatwar.aether_core.1", "The heart of an Aetherit Staff", "Das Herz eines Aetherit-Stabs");
         t.add("lore.kingdomsatwar.aether_core.2", "Aetherit and Wisp Dust around Draconium", "Aetherit und Irrlichtstaub um Draconium");
         t.add("tooltip.kingdomsatwar.staff.rank", "Mastery: %s (%s%% power)", "Meisterschaft: %s (%s %% Kraft)");
-        t.add("tooltip.kingdomsatwar.staff.progress", "%s / %s experience until %s", "%s / %s Erfahrung bis %s");
+        t.add("tooltip.kingdomsatwar.staff.level", "Level %s – %s (%s%% power)", "Stufe %s – %s (%s %% Kraft)");
+        t.add("tooltip.kingdomsatwar.staff.progress", "%s / %s experience until level %s (%s)", "%s / %s Erfahrung bis Stufe %s (%s)");
+        t.add("tooltip.kingdomsatwar.staff.mastered", "Highest level reached (%s experience)", "Höchste Stufe erreicht (%s Erfahrung)");
+        t.add("tooltip.kingdomsatwar.staff.mana", "Mana: %1$s · %3$s costs %2$s", "Mana: %1$s · %3$s kostet %2$s");
+        t.add("message.kingdomsatwar.mana.empty", "Not enough mana (needs %s, you have %s)", "Nicht genug Mana (braucht %s, du hast %s)");
         t.add("tooltip.kingdomsatwar.staff.charge", "Hold to charge: up to +50% power", "Halten zum Aufladen: bis zu +50 % Kraft");
         t.add("staff.kingdomsatwar.rank.apprentice", "Apprentice", "Lehrling");
         t.add("staff.kingdomsatwar.rank.adept", "Adept", "Adept");
+        t.add("staff.kingdomsatwar.rank.mage", "Mage", "Magier");
         t.add("staff.kingdomsatwar.rank.magister", "Magister", "Magister");
         t.add("staff.kingdomsatwar.rank.archmage", "Archmage", "Erzmagier");
-        t.add("staff.kingdomsatwar.rank_up", "Your Aetherit Staff has reached the rank of %s – its spells grow stronger!",
-                "Dein Aetherit-Stab hat den Rang %s erreicht – seine Zauber werden stärker!");
-        t.add("staff.kingdomsatwar.rank_up.overlay", "Staff rank: %s", "Rang des Stabs: %s");
+        t.add("staff.kingdomsatwar.rank.aetherlord", "Aether Lord", "Aetherfürst");
+        t.add("staff.kingdomsatwar.rank_up", "Your Aetherit Staff has reached level %s: %s – its spells grow stronger!",
+                "Dein Aetherit-Stab hat Stufe %s erreicht: %s – seine Zauber werden stärker!");
+        t.add("staff.kingdomsatwar.rank_up.overlay", "Staff level %s: %s", "Stab-Stufe %s: %s");
         t.add("entity.kingdomsatwar.spell_fx", "Spell Effect", "Zauberwirkung");
         t.add("entity.kingdomsatwar.spell_projectile", "Spell Projectile", "Zaubergeschoss");
         t.add("tooltip.kingdomsatwar.staff.spells", "Spells:", "Zauber:");
@@ -68,7 +74,8 @@ final class MagicLang {
                 "Hurls a ball of living flame that sets enemies ablaze – but never your castle.",
                 "Schleudert einen Ball aus lebendigen Flammen, der Feinde in Brand setzt – aber nie die eigene Burg.",
                 "Three firebolts in a fan", "Drei Feuerblitze im Fächer",
-                "They burst into a cloud of flame", "Sie zerbersten in einer Feuerwolke");
+                "A phoenix flies between them, and they burst into a cloud of flame",
+                "Zwischen ihnen fliegt ein Phönix, und sie zerbersten in einer Feuerwolke");
         spell(t, "ice", "Frost Breath", "Frosthauch",
                 "A breath of frost slows and chills enemies and turns water to ice.",
                 "Ein Hauch aus Frost verlangsamt und unterkühlt Feinde und friert Wasser zu Eis.",
@@ -79,8 +86,8 @@ final class MagicLang {
                 "Leaps to two more enemies", "Springt auf zwei weitere Feinde über",
                 "Chain lightning: up to four enemies", "Kettenblitz: bis zu vier weitere Feinde");
         spell(t, "nature", "Healing Bloom", "Heilende Blüte",
-                "Heals you and your allies nearby and makes plants sprout.",
-                "Heilt dich und Verbündete in der Nähe und lässt Pflanzen sprießen.",
+                "Instantly heals you and your allies nearby, keeps healing them for a while and makes plants sprout.",
+                "Heilt dich und Verbündete in der Nähe sofort, heilt sie eine Weile weiter und lässt Pflanzen sprießen.",
                 "Adds a protective barrier", "Dazu ein schützender Schild",
                 "Roots seize nearby enemies", "Wurzeln packen Feinde in der Nähe");
         spell(t, "earth", "Earthquake", "Erdstoß",
@@ -216,9 +223,48 @@ final class MagicLang {
         t.add("book.kingdomsatwar.mage_notes." + element + ".page5", en, de);
     }
 
+    /** Sechste Seite: das Heilritual (alle) und die zweite Gabe des Erzmagiers. */
+    private static void gifts(EconomyLang.Text t) {
+        String renewEn = "When my strength wanes, I gather life force in a circle of runes. Strike me hard and the ritual breaks – then I "
+                + "stagger, and your blows hit deeper.";
+        String renewDe = "Schwindet meine Kraft, sammle ich Lebenskraft in einem Kreis aus Runen. Schlag hart zu, dann zerbricht das "
+                + "Ritual – ich taumle, und deine Hiebe treffen tiefer.";
+        gift(t, "fire", renewEn + "\n\nAnd should you strike me down: the phoenix within me burns once more. From the ashes I rise again.",
+                renewDe + "\n\nUnd streckst du mich nieder: Der Phönix in mir brennt noch einmal. Aus der Asche erhebe ich mich wieder.");
+        gift(t, "ice", renewEn + "\n\nWhen death draws near, I wrap myself in eternal ice and heal within. Shatter the cocoon quickly!",
+                renewDe + "\n\nNaht der Tod, hülle ich mich in ewiges Eis und heile darin. Zerschlag den Kokon schnell!");
+        gift(t, "lightning", renewEn + "\n\nIn the fury of the storm I call lightning down upon myself. It strengthens me – and its charge "
+                        + "strikes all who stand too close.",
+                renewDe + "\n\nIm Zorn des Sturms rufe ich den Blitz auf mich selbst herab. Er stärkt mich – und seine Ladung trifft "
+                        + "alle, die zu nah stehen.");
+        gift(t, "nature", renewEn + "\n\nMy skin bears thorns: whoever strikes me with a blade pricks himself and is poisoned.",
+                renewDe + "\n\nMeine Haut trägt Dornen: Wer mich mit der Klinge trifft, sticht sich und wird vergiftet.");
+        gift(t, "earth", renewEn + "\n\nThe earth feels every footstep. Whoever shoots at me from afar is seized by a fist of stone.",
+                renewDe + "\n\nDie Erde spürt jeden Schritt. Wer mich aus der Ferne beschießt, den packt eine Faust aus Stein.");
+        gift(t, "water", renewEn + "\n\nCrowd me, and the tide answers: a wave washes all of you away.",
+                renewDe + "\n\nBedrängt mich, und die Flut antwortet: Eine Welle spült euch alle fort.");
+        // Meldungen im Kampf
+        t.add("boss.kingdomsatwar.mage.renew", "%s gathers life force – break the ritual!", "%s sammelt Lebenskraft – brich das Ritual!");
+        t.add("boss.kingdomsatwar.mage.renew_broken", "The ritual shatters – %s staggers!", "Das Ritual zerbricht – %s taumelt!");
+        t.add("boss.kingdomsatwar.mage.rebirth_burn", "Ignatius burns – but the flames do not die out …",
+                "Ignatius verbrennt – doch die Flammen erlöschen nicht …");
+        t.add("boss.kingdomsatwar.mage.rebirth", "Ignatius rises from the ashes!", "Ignatius erhebt sich aus der Asche!");
+        t.add("boss.kingdomsatwar.mage.cocoon", "%s seals herself in eternal ice – shatter the cocoon!",
+                "%s hüllt sich in ewiges Eis – zerschlag den Kokon!");
+        t.add("boss.kingdomsatwar.mage.cocoon_broken", "The cocoon shatters – %s is defenceless!", "Der Kokon zerspringt – %s ist schutzlos!");
+        t.add("boss.kingdomsatwar.mage.cocoon_free", "Isolde breaks free from the ice!", "Isolde bricht aus dem Eis hervor!");
+        t.add("boss.kingdomsatwar.mage.earthward", "The earth senses you – a fist of stone rises beneath you!",
+                "Die Erde spürt dich – unter dir bricht eine Steinfaust hervor!");
+    }
+
+    private static void gift(EconomyLang.Text t, String element, String en, String de) {
+        t.add("book.kingdomsatwar.mage_notes." + element + ".page6", en, de);
+    }
+
     /** Die Aufzeichnungen der Erzmagier auf den Lesepulten ihrer Bibliotheken – mit Hinweisen für den Kampf. */
     private static void books(EconomyLang.Text t) {
         signatures(t);
+        gifts(t);
         String hintEn = "My missiles follow you, yet a bold strike sends them back. My rune shield breaks after a few blows, my mirror "
                 + "images after a single one.";
         String hintDe = "Meine Geschosse folgen dir, doch ein beherzter Schlag wirft sie zurück. Mein Runenschild bricht nach einigen "

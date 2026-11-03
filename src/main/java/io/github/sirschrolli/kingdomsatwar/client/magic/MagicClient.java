@@ -29,6 +29,7 @@ public final class MagicClient {
     @SubscribeEvent
     static void registerLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.HOTBAR, SpellHud.LAYER, SpellHud::render);
+        event.registerAbove(VanillaGuiLayers.AIR_LEVEL, ManaHud.LAYER, ManaHud::render);
     }
 
     @SubscribeEvent

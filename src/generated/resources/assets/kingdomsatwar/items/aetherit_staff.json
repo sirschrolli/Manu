@@ -39,7 +39,7 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "kingdomsatwar:item/aetherit_staff_magister",
+          "model": "kingdomsatwar:item/aetherit_staff_mage",
           "tints": [
             {
               "type": "minecraft:constant",
@@ -56,7 +56,7 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "kingdomsatwar:item/aetherit_staff_archmage",
+          "model": "kingdomsatwar:item/aetherit_staff_magister",
           "tints": [
             {
               "type": "minecraft:constant",
@@ -69,6 +69,40 @@
           ]
         },
         "threshold": 2.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_archmage",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 3.5
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "kingdomsatwar:item/aetherit_staff_aetherlord",
+          "tints": [
+            {
+              "type": "minecraft:constant",
+              "value": -1
+            },
+            {
+              "type": "minecraft:custom_model_data",
+              "default": 13081599
+            }
+          ]
+        },
+        "threshold": 4.5
       }
     ],
     "fallback": {

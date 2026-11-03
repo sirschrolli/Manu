@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -208,10 +209,21 @@ public class AetheritStaffItem extends Item {
         if (player.getCooldowns().isOnCooldown(staff) || !spell.canCast(level, player, spellLevel)) {
             return false;
         }
+        int cost = Mana.cost(spell, spellLevel, charge);
+        if (!Mana.has(player, cost)) {
+            if (level instanceof ServerLevel server) {
+                server.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.6f, 1.8f);
+                server.sendParticles(ParticleTypes.SMOKE, player.getX(), player.getY(1.0), player.getZ(), 6, 0.3, 0.3, 0.3, 0.01);
+                player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.mana.empty", cost, Math.round(Mana.get(player)))
+                        .withColor(0x6FA8FF));
+            }
+            return false;
+        }
         if (level instanceof ServerLevel server) {
             if (!spell.cast(server, player, spellLevel, StaffMastery.power(staff, charge))) {
                 return false;
             }
+            Mana.spend(player, cost);
             player.awardStat(Stats.ITEM_USED.get(staff.getItem()));
             if (player instanceof ServerPlayer serverPlayer) {
                 StaffMastery.award(serverPlayer, staff, charge >= 1.0f ? 2 : 1);
@@ -255,14 +267,19 @@ public class AetheritStaffItem extends Item {
             TooltipFlag flag) {
         StaffMastery.Rank rank = StaffMastery.rank(stack);
         StaffMastery.Rank next = rank.next();
-        Component rankLine = Component.translatable("tooltip.kingdomsatwar.staff.rank", rank.displayName().withColor(Spell.AETHER_COLOR),
+        Component rankLine = Component.translatable("tooltip.kingdomsatwar.staff.level", rank.level(),
+                rank.displayName().withColor(rank == StaffMastery.Rank.AETHERLORD ? 0xFFD86A : Spell.AETHER_COLOR),
                 Math.round(rank.power() * 100)).withStyle(ChatFormatting.GRAY);
         builder.accept(rankLine);
         if (next != null) {
             builder.accept(Component.translatable("tooltip.kingdomsatwar.staff.progress", StaffMastery.xp(stack), next.xp(),
-                    next.displayName()).withStyle(ChatFormatting.DARK_GRAY));
+                    next.level(), next.displayName()).withStyle(ChatFormatting.DARK_GRAY));
+        } else {
+            builder.accept(Component.translatable("tooltip.kingdomsatwar.staff.mastered", StaffMastery.xp(stack)).withStyle(ChatFormatting.GOLD));
         }
         KnownSpells spells = KnownSpells.of(stack);
+        builder.accept(Component.translatable("tooltip.kingdomsatwar.staff.mana", Math.round(Mana.max(stack)),
+                Mana.cost(spells.selected(), spells.selectedLevel(), 0.0f), spells.selected().displayName()).withColor(0x6FA8FF));
         builder.accept(Component.translatable("tooltip.kingdomsatwar.staff.spells").withStyle(ChatFormatting.GRAY));
         for (Spell spell : spells.known()) {
             boolean selected = spell == spells.selected();

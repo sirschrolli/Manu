@@ -31,6 +31,8 @@ import net.minecraft.world.phys.Vec3;
  *   <li>Gorvan – Steinhaut: nimmt ein Viertel weniger Schaden.</li>
  *   <li>Marena – Gezeitenschild: Pfeile und Geschosse gleiten oft an einer Wasserhülle ab.</li>
  * </ul>
+ * Dazu kommen die Fähigkeiten aus {@link MageGifts} (Erneuerung, Wiedergeburt, Eiskokon, Blitzableiter, Dornenhaut,
+ * Erdwacht, Gegenwelle).
  */
 final class MagePassives {
     /** Frostpanzer: so viel Schaden fängt er ab (wird mit der Phase stärker). */
@@ -67,6 +69,7 @@ final class MagePassives {
             case EARTH -> {
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.TUFF.defaultBlockState()), mage.getX(), mage.getY(1.0),
                         mage.getZ(), 10, 0.4, 0.6, 0.4, 0.1);
+                MageGifts.earthward(level, mage, source);
                 return damage * 0.75f;
             }
             case WATER -> {
@@ -74,6 +77,15 @@ final class MagePassives {
                     SpellFxEntity.create(level, SpellFxEntity.Kind.BUBBLE, mage.position(), DragonType.WATER, 0x7FE0FF, 8, 3.4f).anchor(mage).spawn();
                     BossFx.sound(level, mage.position(), SoundEvents.GENERIC_SPLASH, 1.0f, 1.6f);
                     return 0.0f;
+                }
+                if (melee) {
+                    MageGifts.counterWave(level, mage);
+                }
+                return damage;
+            }
+            case NATURE -> {
+                if (melee) {
+                    MageGifts.thorns(level, mage, (LivingEntity) attacker, damage);
                 }
                 return damage;
             }

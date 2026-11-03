@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.40.0 – die Macht der Erzmagier: Jeder Erzmagier hat zwei eigene Meisterzauber mit eigener Gestalt (Phönixe, Frostlanzen, Kristallkerker, Kugelblitze, Blitzstrahl, Dornenranken, Giftblüte, Felsspitzen, Steinfaust, Flutwelle, Blasenkerker) und eine besondere Fähigkeit – und alle sind deutlich stärker. Der Aetherit-Stab ist jetzt unzerstörbar und nur noch herstellbar (aufwendig, mit Draconium), beginnt schwach und wächst mit seiner Meisterschaft in vier Rängen; gehalten lädt er Zauber auf.**
+> **Testversion 0.41.0 – Erzmagier: neue Kräfte. Jeder Erzmagier kann sich in einem Heilritual erneuern (wer genug Schaden macht, bricht es), dazu je eine neue Fähigkeit: Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht und Gegenwelle. Gewinnt der Magier, kehrt er sicher in seinen Turm zurück – auch nach einem Neustart mitten im Kampf. Der Aetherit-Stab hat jetzt eine Mana-Leiste und sechs Stufen (1.000 bis 100.000 Erfahrung, zuletzt 150 % Kraft als Aetherfürst); die Heilende Blüte heilt sofort, und die Zauber sehen prächtiger aus.**
+> In 0.40 kam die Macht der Erzmagier: je zwei Meisterzauber mit eigener Gestalt, eine besondere Fähigkeit, deutlich stärker; der Aetherit-Stab unzerstörbar, nur herstellbar und zum Aufladen.
 > In 0.39 kam die Arkane Sphäre: Die Erzmagier ziehen dich, deine Mitspieler und deine Soldaten in ihre eigene Dimension – eine schwebende Arena im Element des Magiers. Dort lässt sich nichts bauen, und wer stirbt, verliert alles, was er bei sich trägt.
 > In 0.38 kam der Krieg der Königreiche, Teil 1: vier feindliche Reiche mit je einer großen Stammburg, Besatzung, Herrscher, Eroberung und Tribut. Dazu: Kingdoms at War läuft nur noch ohne andere Mods, keine Koordinaten mehr (F3), viel härter (Schwer fest, stärkere Gegner, halbe Heilung, Schwäche nach dem Tod), acht eigene Verzauberungen und ein Arachnophobie-Modus.
 > In 0.37 kam das Finale der Geschichte: ein neues erzähltes Intro „Das Siegel“ und der Erzähler, der zu jedem Kapitel spricht; dazu friedliche Drachen, logische Ketten (eigenes Gestein gibt Bruchstein für Steinwerkzeuge und Öfen, Blumen geben Farbstoff …), Köpfe und Schädel im Gesicht der eigenen Wesen und die Sternwarte statt der Endstadt.
@@ -336,6 +337,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Die Arkane Sphäre: Kampf gegen die Erzmagier in einer eigenen Dimension (Arena je Element, Bauverbot, alles verloren beim Tod) | ✅ fertig |
 | Erzmagier: je zwei Meisterzauber mit eigenen Modellen und Effekten, je eine besondere Fähigkeit, deutlich stärker | ✅ fertig |
 | Aetherit-Stab: unzerstörbar, nur herstellbar (Aetherkern), Meisterschaft in vier Rängen, Aufladen, neue Zaubereffekte | ✅ fertig |
+| Erzmagier: Heilritual, je eine weitere Fähigkeit, sichere Heimkehr in den Turm nach dem Sieg | ✅ fertig |
+| Aetherit-Stab: Mana-Leiste, sechs Stufen bis 150 % Kraft, Heilende Blüte heilt sofort, prächtigere Zauber | ✅ fertig |
 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 als Nächstes |
 | Gegenangriffe der Reiche, neue Truppen, Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
@@ -1364,10 +1367,10 @@ der Aether-Blitz wird mit Aetherit allein stärker.
 | Zauber | Tafel | Stufe I | Stufe II | Stufe III |
 |---|---|---|---|---|
 | Aether-Blitz | – | Strahl reiner Magie | mehr Schaden, größere Reichweite | springt auf einen zweiten Feind über |
-| Feuerblitz | Ignatius | Glutball, setzt Feinde in Brand (nie Blöcke) | drei Feuerblitze im Fächer | zerbersten in einer Feuerwolke |
+| Feuerblitz | Ignatius | Glutball, setzt Feinde in Brand (nie Blöcke) | drei Feuerblitze im Fächer | in der Mitte ein Phönix, Feuerwolken |
 | Frosthauch | Isolde | verlangsamt, unterkühlt, friert Wasser | kälter und weiter | friert Feinde fest |
 | Blitzschlag | Fulgor | Blitz an die anvisierte Stelle | springt auf zwei weitere Feinde | Kettenblitz: bis zu vier Feinde |
-| Heilende Blüte | Sylvana | heilt dich und Verbündete | dazu ein Schild | Wurzeln packen Feinde |
+| Heilende Blüte | Sylvana | heilt dich und Verbündete sofort und eine Weile weiter | dazu ein Schild | Wurzeln packen Feinde |
 | Erdstoß | Gorvan | schleudert Feinde fort | stärker und weiter | Felsdornen lassen taumeln |
 | Woge | Marena | drängt zurück, löscht Feuer, Wasseratmung | heilt dich dabei | Wasserschild: weniger Schaden |
 
@@ -1381,20 +1384,31 @@ der Aether-Blitz wird mit Aetherit allein stärker.
 - **Aufladen:** Kurz tippen wirkt den Zauber sofort; **Rechtsklick halten** lädt ihn auf – unter dir erscheint ein
   Zauberkreis in der Farbe des Zaubers, der mit der Ladung wächst, voll geladen klingt er hell auf: **bis zu 50 % mehr
   Kraft**.
-- **Meisterschaft:** Ein neuer Stab ist schwach. Jeder Zauber bringt ihm Erfahrung (voll geladen doppelt), jeder Gegner,
-  den er bezwingt, mehr, ein Boss viel. Mit jedem Rang wird er stärker, kühlt schneller ab, lädt schneller auf – und
-  sieht prächtiger aus; sein Kristall leuchtet immer in der Farbe des gewählten Zaubers.
+- **Mana:** Hältst du den Stab, zeigt eine **Mana-Leiste** über der Hungerleiste, wie viel Mana du hast. Jeder Zauber
+  kostet Mana (Aether-Blitz 10, Feuerblitz 14, Frosthauch 16, Woge 18, Erdstoß 22, Blitzschlag 24, Heilende Blüte 30; auf
+  Stufe II ein Fünftel, auf Stufe III zwei Fünftel mehr, voll geladen die Hälfte mehr) – was der gewählte Zauber kosten
+  würde, leuchtet am Ende der Füllung auf; reicht es nicht, glüht die Leiste rot. Kurz nach einem Zauber füllt sich das
+  Mana wieder auf (4 je Sekunde, 1 mehr je Stufe des Stabs). Man fasst 100 Mana, 20 mehr je Stufe des besten Stabs im
+  Gepäck. Im Kreativmodus kostet Zaubern nichts.
+- **Meisterschaft:** Ein neuer Stab ist schwach. Jeder Zauber bringt ihm Erfahrung (1, voll geladen 2), jeder Gegner,
+  den er bezwingt, 3, ein Boss 40. Mit jeder Stufe wird er stärker, kühlt schneller ab, lädt schneller auf, fasst mehr
+  Mana – und sieht prächtiger aus; sein Kristall leuchtet immer in der Farbe des gewählten Zaubers.
 
-| Rang | ab Erfahrung | Kraft | Abklingzeit | Aufladen | Aussehen |
-|---|---|---|---|---|---|
-| Lehrling | 0 | 60 % | 125 % | 1,2 s | krummer Ast, kleiner Splitter mit Bastschnur |
-| Adept | 60 | 80 % | 110 % | 1,0 s | Dämmerholz mit Silberbändern, Kristall in einer Silberklaue |
-| Magister | 250 | 100 % | 100 % | 0,8 s | Goldbänder, großer Kristall in einer goldenen Sichel (funkelt) |
-| Erzmagier | 700 | 120 % | 85 % | 0,6 s | Ebenholz mit leuchtenden Aetherit-Einlagen, Kristall im Silberring (funkelt) |
+| Stufe | ab Erfahrung | Kraft | Abklingzeit | Aufladen | Mana | Aussehen |
+|---|---|---|---|---|---|---|
+| 0 – Lehrling | 0 | 60 % | 125 % | 1,2 s | 100 | krummer Ast, kleiner Splitter mit Bastschnur |
+| 1 – Adept | 1.000 | 75 % | 115 % | 1,1 s | 120 | Dämmerholz mit Silberbändern, Kristall in einer Silberklaue |
+| 2 – Magier | 2.000 | 90 % | 105 % | 0,95 s | 140 | Mondholz mit Silberspirale, Kristall in einer silbernen Mondsichel |
+| 3 – Magister | 5.000 | 105 % | 100 % | 0,8 s | 160 | Goldbänder, großer Kristall in einer goldenen Sichel (funkelt) |
+| 4 – Erzmagier | 10.000 | 120 % | 90 % | 0,65 s | 180 | Ebenholz mit leuchtenden Aetherit-Einlagen, Kristall im Silberring (funkelt) |
+| 5 – Aetherfürst | 100.000 | **150 %** | 80 % | 0,5 s | 200 | elfenbeinweißer Schaft, großer Kristall im goldenen Strahlenkranz, silberne Schwingen (funkelt) |
 
-- **Neue Zaubereffekte:** Der Aether-Blitz ist ein Strahl reinen Aethers, Kettenblitze zucken als Blitzbögen von Feind zu
-  Feind, der Frosthauch III schließt Feinde in Eiskristalle, die Heilende Blüte III lässt Ranken aus dem Boden brechen,
-  der Erdstoß III Felsspitzen, und die Woge rollt als Welle vor dir her.
+- **Zaubereffekte:** Unter dir blitzt bei jedem Zauber ein Runenkreis in seiner Farbe auf. Der Aether-Blitz ist ein Strahl
+  reinen Aethers; der Feuerblitz III schickt einen Phönix in die Mitte; entlang des Frosthauchs schießen Eiskristalle aus
+  dem Boden, auf Stufe III erstarren Feinde in Eis; der Blitzschlag zuckt als Lichtbogen vom Stab, Kettenblitze springen
+  von Feind zu Feind; über allen, die die Heilende Blüte heilt, steigt grünes Licht auf, Blütenblätter fallen, auf Stufe
+  III brechen Ranken aus dem Boden; um den Erdstoß bricht ein Ring aus Felsspitzen hervor; die Woge rollt als Welle vor
+  dir her, auf Stufe III umhüllt dich kurz eine Wasserblase.
 
 ### Die Erzmagier und ihre Türme
 
@@ -1435,7 +1449,22 @@ Sechs Erzmagier hüten die Zaubertafeln der Elemente – jeder in seinem eigenen
 
 - **Stärker:** 420 statt 300 Lebenspunkte, mehr Rüstung, kürzere Pausen zwischen den Zaubern, mehr Schaden in jeder
   Phase (+10 %, +35 %, +60 %) und ein magisches Geschoss mehr je Salve. Die Aufzeichnungen in der Bibliothek verraten
-  auf einer neuen Seite die Meisterzauber und die Fähigkeit ihres Verfassers.
+  auf zwei neuen Seiten die Meisterzauber und Fähigkeiten ihres Verfassers.
+- **Erneuerung:** Unter 70 % seiner Kraft kann jeder Erzmagier (höchstens zweimal je Kampf) ein **Heilritual** wirken:
+  ein Runenkreis leuchtet auf, eine Lichtsäule umhüllt ihn, und vier Sekunden lang strömt Lebenskraft in ihn (bis gut
+  15 %). Wer ihm in dieser Zeit genug Schaden zufügt (ein Zwanzigstel seiner Kraft), **bricht das Ritual** – dann taumelt
+  er zweieinhalb Sekunden lang erschöpft und nimmt ein Viertel mehr Schaden.
+- **Weitere Fähigkeiten:**
+
+| Erzmagier | Fähigkeit |
+|---|---|
+| Ignatius | **Phönixwiedergeburt:** Der erste tödliche Schlag verbrennt ihn nur – in einer Feuersäule steigt er mit einem Drittel seiner Kraft wieder auf, zwei Phönixe fliegen aus den Flammen |
+| Isolde | **Eiskokon:** Fast besiegt (unter 25 %), hüllt sie sich in Eis und heilt darin; die Kälte lähmt, wer nahe steht. Zerschlägt man den Kokon rechtzeitig, taumelt sie schutzlos – sonst bricht sie mit einer Frostwelle hervor |
+| Fulgor | **Blitzableiter:** Ab der zweiten Phase ruft er einen Blitz auf sich selbst herab, der ihn stärkt; die Ladung entlädt sich in Blitzbögen auf alle in der Nähe |
+| Sylvana | **Dornenhaut:** Wer sie im Nahkampf trifft, sticht sich an Dornen und wird vergiftet |
+| Gorvan | **Erdwacht:** Wer ihn aus der Ferne beschießt, den packt kurz darauf eine Steinfaust aus dem Boden |
+| Marena | **Gegenwelle:** Bedrängt man sie im Nahkampf, stößt eine Welle alle von ihr fort |
+
 - Gegen sein eigenes Element ist er gefeit. **Fliehen gilt nicht:** Sobald er erwacht, versiegelt er das Treppenloch mit
   einem schimmernden **Bannsiegel** in der Farbe seines Elements; solange der Kampf dauert, hält seine Magie Boden,
   Mauern und Fenster zusammen (nichts lässt sich abbauen, setzen oder sprengen), und keine Enderperle trägt hinaus.
@@ -1463,7 +1492,9 @@ leuchtender Spitze, ringsum Felsinseln mit Kristallschreinen und Ruinen und schw
   (auch mit `keepInventory`). Man erwacht an seinem Wiedereinstiegspunkt.
 - **Kein Ausweg nach unten:** Wer vom Rand stürzt, schleudert die Sphäre verletzt in die Arena zurück.
 - **Sieg:** Fällt der Magier, kehren alle an ihren Platz im Sanktum zurück – die Beute und die Erfahrung kommen mit.
-- **Niederlage:** Steht niemand mehr in der Arena, kehrt der Magier geheilt in seinen Turm zurück und meditiert wieder.
+- **Niederlage:** Steht niemand mehr in der Arena, kehrt der Magier geheilt in seinen Turm zurück und meditiert wieder –
+  auch wenn das Spiel mitten im Kampf neu startet. Ein Magier merkt sich seinen Turm: Steht er je ohne Kampf in der
+  Sphäre, findet er von selbst heim.
 - Wer den Magier von draußen angreift (etwa mit Pfeilen durch ein Fenster), ohne im Sanktum zu stehen, kämpft wie
   früher gegen ihn in seinem Turm.
 

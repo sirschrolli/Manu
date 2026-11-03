@@ -450,10 +450,22 @@ final class MageSignatures {
         List<LivingEntity> targets = victims(mage, target, count);
         for (int i = 0; i < count; i++) {
             LivingEntity goal = targets.get(i % targets.size());
-            double a = mage.getRandom().nextDouble() * Mth.TWO_PI;
-            Vec3 spot = ground(level, goal.position().add(Math.cos(a) * 2.0, 0, Math.sin(a) * 2.0));
-            bloom(level, mage, spot);
+            bloom(level, mage, bloomSpot(level, mage, goal));
         }
+    }
+
+    /** Zwei Schritte neben dem Gegner, auf festem Boden in seiner Höhe (nicht über einer Kante oder in einer Grube). */
+    private static Vec3 bloomSpot(ServerLevel level, MageBossEntity mage, LivingEntity goal) {
+        double start = mage.getRandom().nextDouble() * Mth.TWO_PI;
+        for (int k = 0; k < 8; k++) {
+            double a = start + k * Mth.TWO_PI / 8;
+            Vec3 spot = ground(level, goal.position().add(Math.cos(a) * 2.0, 0, Math.sin(a) * 2.0));
+            if (Math.abs(spot.y - goal.getY()) < 1.5 && level.noCollision(new net.minecraft.world.phys.AABB(spot, spot).inflate(0.3, 0.0, 0.3)
+                    .expandTowards(0.0, 1.5, 0.0))) {
+                return spot;
+            }
+        }
+        return ground(level, goal.position());
     }
 
     private static void bloom(ServerLevel level, MageBossEntity mage, Vec3 spot) {

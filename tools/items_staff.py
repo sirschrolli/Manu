@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Aetherit-Stab in vier Rängen der Meisterschaft (Lehrling, Adept, Magister, Erzmagier) und der Aetherkern.
+Aetherit-Stab in sechs Stufen der Meisterschaft (Lehrling, Adept, Magier, Magister, Erzmagier, Aetherfürst) und der
+Aetherkern.
 
 Jeder Rang hat zwei Ebenen: den Stab (Holz, Beschläge) und den Kristall in Graustufen – das Spiel färbt ihn in der
-Farbe des gewählten Zaubers (custom_model_data). Magister- und Erzmagier-Kristall funkeln (Animation).
+Farbe des gewählten Zaubers (custom_model_data). Die Kristalle ab dem Magister funkeln (Animation).
 
-  Lehrling   krummer Ast, ein kleiner Splitter mit Bastschnur festgebunden
-  Adept      Dämmerholz mit Silberbändern, Kristall in einer Silberklaue
-  Magister   Dämmerholz mit Goldbändern, größerer Kristall in einer goldenen Sichel
-  Erzmagier  Ebenholz mit leuchtenden Aetherit-Einlagen, Kristall in einem silbernen Ring mit Goldnieten
+  Lehrling     krummer Ast, ein kleiner Splitter mit Bastschnur festgebunden
+  Adept        Dämmerholz mit Silberbändern, Kristall in einer Silberklaue
+  Magier       Mondholz mit Silberspirale, Kristall in einer silbernen Mondsichel
+  Magister     Dämmerholz mit Goldbändern, größerer Kristall in einer goldenen Sichel
+  Erzmagier    Ebenholz mit leuchtenden Aetherit-Einlagen, Kristall in einem silbernen Ring mit Goldnieten
+  Aetherfürst  elfenbeinweißer Schaft mit Aether-Einlagen, großer Kristall im goldenen Strahlenkranz, silberne Schwingen
 
 Aufruf:  python3 tools/items_staff.py [vorschau.png]   (schreibt die Texturen auch direkt)
 """
@@ -25,6 +28,8 @@ import item_style as st
 OAK = st.ramp("#8a6236", dark=0.2, light=0.82, chroma_dark=0.9)
 TWINE = st.ramp("#c9b07a", dark=0.3, light=0.95, chroma_dark=0.8)
 DUSKWOOD = st.ramp("#5a3f5e", dark=0.18, light=0.72, chroma_dark=0.9, cool=300)
+MOONWOOD = st.ramp("#43577f", dark=0.18, light=0.75, chroma_dark=0.9, cool=230)
+IVORY = st.ramp("#efe4c8", dark=0.38, light=0.99, chroma_dark=0.8, warm=60)
 EBONY = st.ramp("#3a2a3e", dark=0.1, light=0.6, chroma_dark=1.0, cool=300)
 SILVER = st.ramp("#b8c2e0", dark=0.3, light=0.99, chroma_dark=1.4, cool=280)
 GOLD = st.ramp("#d6a838", dark=0.3, light=0.97, cool=30, hue_dark=25, warm=100)
@@ -74,6 +79,25 @@ ADEPT = """
 ................
 """
 
+MAGE = """
+................
+..........ut....
+........jutsr...
+........kutsrq..
+........ltsrqqk.
+.........ksrqj..
+.........lkkj...
+........43......
+.......43.......
+......j3........
+.....43.........
+....k3..........
+...43...........
+..j3............
+.43.............
+.3..............
+"""
+
 MAGISTER = """
 ..........g.u...
 .........f.utt..
@@ -113,6 +137,26 @@ ARCHMAGE = """
 """
 
 
+AETHERLORD = """
+..........g.g...
+.........f.u.f..
+.......mk.tst.km
+......nletsrqrel
+.......jdrsqqd.j
+.........dqqd...
+........fdddf...
+........E5......
+.......53.......
+......F3........
+.....53.........
+....63..........
+...F3...........
+..53............
+.63.............
+G...............
+"""
+
+
 def _split(art: str, prefer: tuple[str, ...]) -> tuple[st.Spr, st.Spr]:
     """Ganzes Bild mit Umriss, dann aufgeteilt in Stab (ohne Kristall) und Kristall (nur Slot D)."""
     full = st.Spr.art(art).outline(prefer=prefer)
@@ -141,15 +185,19 @@ def _strip(frames: list[Image.Image]) -> Image.Image:
     return img
 
 
-ANIMATED = {"magister": 3, "archmage": 2}
+ANIMATED = {"magister": 3, "archmage": 2, "aetherlord": 2}
+#: Reihenfolge der Stufen (wie StaffMastery.Rank)
+TIERS = ("apprentice", "adept", "mage", "magister", "archmage", "aetherlord")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
     tiers = {
         "apprentice": (APPRENTICE, {"A": OAK, "B": TWINE, "C": TWINE, "D": CRYSTAL, "E": OAK}),
         "adept": (ADEPT, {"A": DUSKWOOD, "B": SILVER, "C": DUSKWOOD, "D": CRYSTAL, "E": SILVER}),
+        "mage": (MAGE, {"A": MOONWOOD, "B": GOLD, "C": SILVER, "D": CRYSTAL, "E": GOLD}),
         "magister": (MAGISTER, {"A": DUSKWOOD, "B": GOLD, "C": SILVER, "D": CRYSTAL, "E": GOLD}),
         "archmage": (ARCHMAGE, {"A": EBONY, "B": GOLD, "C": SILVER, "D": CRYSTAL, "E": AETHER_GLOW}),
+        "aetherlord": (AETHERLORD, {"A": IVORY, "B": GOLD, "C": SILVER, "D": CRYSTAL, "E": AETHER_GLOW}),
     }
     for name, (art, ramps) in tiers.items():
         staff, crystal = _split(art, prefer=("D", "B", "E", "C", "A"))
@@ -212,7 +260,7 @@ def main() -> None:
             sheet[key.split("/")[-1]] = img.crop((0, 0, 16, 16))
         # zusammengesetzt, in Aether-Violett und in Feuer-Orange getönt
         for tint_name, tint in (("aether", (199, 155, 255)), ("feuer", (255, 106, 26))):
-            for name in ("apprentice", "adept", "magister", "archmage"):
+            for name in TIERS:
                 base = images[f"item/aetherit_staff_{name}"].copy()
                 crystal = images[f"item/aetherit_staff_{name}_crystal"].crop((0, 0, 16, 16))
                 px = crystal.load()

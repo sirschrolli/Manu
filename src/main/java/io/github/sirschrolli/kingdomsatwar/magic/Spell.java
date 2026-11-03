@@ -210,7 +210,7 @@ public enum Spell implements StringRepresentable {
     public boolean cast(ServerLevel level, LivingEntity caster, int spellLevel, float scale) {
         int lv = Mth.clamp(spellLevel, 1, MAX_LEVEL);
         float p = power(lv) * scale;
-        return switch (this) {
+        boolean done = switch (this) {
             case AETHER_BOLT -> aetherBolt(level, caster, lv, p);
             case FIRE -> fireball(level, caster, lv, p);
             case ICE -> frost(level, caster, lv, p);
@@ -219,6 +219,12 @@ public enum Spell implements StringRepresentable {
             case EARTH -> earthquake(level, caster, lv, p);
             case WATER -> wave(level, caster, lv, p);
         };
+        if (done) {
+            // unter dem Zaubernden blitzt ein Runenkreis in der Farbe des Zaubers auf
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, caster.position().add(0, 0.03, 0), this.element, this.color(), 14,
+                    0.9f + 0.2f * lv).spawn();
+        }
+        return done;
     }
 
     // =====================================================================================
@@ -260,7 +266,13 @@ public enum Spell implements StringRepresentable {
         for (int i = 0; i < count; i++) {
             float spread = count == 1 ? 0.0f : (i - 1) * 9.0f;
             Vec3 dir = look.yRot(spread * Mth.DEG_TO_RAD);
-            SpellProjectile.shoot(level, caster, SpellProjectile.Kind.FIREBOLT, start, dir, 1.35, 5.0f * p, null, lv);
+            if (lv >= 3 && i == 1) {
+                // in der Mitte steigt ein Phönix auf und sucht sich sein Ziel
+                LivingEntity goal = nearestEnemy(level, caster, caster.getEyePosition().add(look.scale(12.0)), 12.0, e -> true);
+                SpellProjectile.shoot(level, caster, SpellProjectile.Kind.PHOENIX, start, dir, 0.9, 7.0f * p, goal, lv);
+            } else {
+                SpellProjectile.shoot(level, caster, SpellProjectile.Kind.FIREBOLT, start, dir, 1.35, 5.0f * p, null, lv);
+            }
         }
         sound(level, caster, SoundEvents.BLAZE_SHOOT, 1.0f, lv >= 3 ? 0.8f : 1.0f);
         level.sendParticles(ParticleTypes.SMALL_FLAME, start.x, start.y, start.z, 6 * count, 0.08, 0.08, 0.08, 0.02);
@@ -279,6 +291,21 @@ public enum Spell implements StringRepresentable {
             if (lv >= 3 && i % 2 == 0) {
                 level.sendParticles(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_FROST.get(), point.x, point.y, point.z,
                         2, spread, spread, spread, 0.01);
+            }
+        }
+        Vec3 flatLook = new Vec3(look.x, 0.0, look.z);
+        if (flatLook.lengthSqr() > 1.0e-4) {
+            flatLook = flatLook.normalize();
+            int crystals = 3 + 2 * lv;
+            for (int i = 0; i < crystals; i++) {
+                double d = 2.0 + (range - 2.5) * i / Math.max(1, crystals - 1);
+                double side = (caster.getRandom().nextDouble() - 0.5) * 0.5 * d;
+                Vec3 spot = caster.position().add(flatLook.scale(d)).add(-flatLook.z * side, 0.0, flatLook.x * side);
+                Vec3 floor = groundAt(level, spot);
+                if (floor != null) {
+                    SpellFxEntity.create(level, SpellFxEntity.Kind.PRISON, floor, DragonType.ICE, 16 + i * 2,
+                            0.28f + 0.05f * lv + caster.getRandom().nextFloat() * 0.08f).spawn();
+                }
             }
         }
         for (LivingEntity target : inCone(level, caster, range, 0.8)) {
@@ -335,6 +362,11 @@ public enum Spell implements StringRepresentable {
         }
         level.addFreshEntity(bolt);
         trail(level, handPosition(caster), at, ParticleTypes.ELECTRIC_SPARK, 2);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, handPosition(caster), DragonType.LIGHTNING, 0xFFF06A, 8, 0.16f + 0.04f * lv)
+                .end(at.add(0, 0.8, 0)).spawn();
+        Vec3 struck = groundAt(level, at);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, (struck != null ? struck : at).add(0, 0.03, 0), DragonType.LIGHTNING, 0xFFF06A,
+                16, 1.2f + 0.4f * lv).spawn();
         if (lv >= 2) {
             // Kettenblitz: springt auf weitere Gegner in der Nähe über (Stufe II zwei, Stufe III vier)
             Entity main = hit instanceof EntityHitResult entityHit ? entityHit.getEntity() : null;
@@ -365,16 +397,28 @@ public enum Spell implements StringRepresentable {
                 .spawn();
         List<LivingEntity> allies = new ArrayList<>(List.of(caster));
         allies.addAll(level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(radius),
-                entity -> entity != caster && entity.isAlive() && isAlly(caster, entity)));
+                entity -> entity != caster && entity.isAlive() && !entity.isSpectator() && isAlly(caster, entity)));
+        float heal = (2.0f + 2.0f * lv) * p;     // sofort: 4, 6 und 8 Lebenspunkte auf voller Kraft
         for (LivingEntity ally : allies) {
+            ally.heal(heal);
             ally.addEffect(effect(MobEffects.REGENERATION, Math.round((lv >= 2 ? 160 : 120) * Math.max(0.6f, p / power(lv))),
                     lv >= 3 ? 2 : 1), caster);
             if (lv >= 2) {
                 ally.addEffect(effect(MobEffects.ABSORPTION, 600, lv - 2), caster);
             }
-            if (ally != caster) {     // beim Zaubernden selbst nicht – direkt vor der Kamera wären die Funken riesig
+            if (ally != caster) {     // beim Zaubernden selbst nicht – direkt vor der Kamera wären Säule und Funken riesig
+                SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, ally.position(), DragonType.NATURE, 0x8CF07A, 22,
+                        Math.max(0.45f, ally.getBbWidth() * 0.8f)).param(ally.getBbHeight() + 0.8f).anchor(ally).spawn();
                 level.sendParticles(ParticleTypes.HAPPY_VILLAGER, ally.getX(), ally.getY(0.6), ally.getZ(), 10, 0.4, 0.5, 0.4, 0.0);
             }
+            level.sendParticles(ParticleTypes.CHERRY_LEAVES, ally.getX(), ally.getY() + ally.getBbHeight() + 0.8, ally.getZ(), 8, 0.6, 0.2, 0.6, 0.0);
+        }
+        // grünes Licht steigt im Kreis um den Zaubernden auf
+        for (int k = 0; k < 18; k++) {
+            double a = k * Mth.TWO_PI / 18;
+            double r = 1.4 + 0.3 * lv;
+            level.sendParticles(ParticleTypes.COMPOSTER, caster.getX() + Math.cos(a) * r, caster.getY() + 0.2, caster.getZ() + Math.sin(a) * r,
+                    1, 0.0, 0.15, 0.0, 0.0);
         }
         if (lv >= 3) {
             // Wurzeln brechen aus dem Boden und halten Gegner fest
@@ -419,6 +463,16 @@ public enum Spell implements StringRepresentable {
         DamageSource source = level.damageSources().indirectMagic(caster, caster);
         double knock = 1.4 * (1.0 + 0.15 * (lv - 1)) * Math.max(0.7f, p / power(lv));
         SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, caster.position().add(0, 0.02, 0), DragonType.EARTH, 10, (float) radius).spawn();
+        int spikes = 6 + 2 * lv;
+        double ringRadius = Math.min(radius - 0.5, 2.2 + 0.4 * lv);
+        for (int k = 0; k < spikes; k++) {
+            double a = k * Mth.TWO_PI / spikes + caster.getRandom().nextDouble() * 0.2;
+            Vec3 floor = groundAt(level, caster.position().add(Math.cos(a) * ringRadius, 0.0, Math.sin(a) * ringRadius));
+            if (floor != null) {
+                SpellFxEntity.create(level, SpellFxEntity.Kind.SPIKE, floor, DragonType.EARTH, 14 + caster.getRandom().nextInt(6),
+                        0.42f + 0.09f * lv + caster.getRandom().nextFloat() * 0.1f).spawn();
+            }
+        }
         BlockState spike = Blocks.POINTED_DRIPSTONE.defaultBlockState();
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, caster.getBoundingBox().inflate(radius, 2.0, radius),
                 entity -> entity.isAlive() && canHit(caster, entity))) {
@@ -496,6 +550,7 @@ public enum Spell implements StringRepresentable {
         if (lv >= 3) {
             // Wasserschild: eine Hülle aus Wasser fängt Schläge ab
             caster.addEffect(effect(MobEffects.RESISTANCE, 120, 0), caster);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.BUBBLE, caster.position(), DragonType.WATER, 0x7FE0FF, 10, 2.6f).anchor(caster).spawn();
             for (int a = 0; a < 24; a++) {
                 double angle = Mth.TWO_PI * a / 24;
                 level.sendParticles(ParticleTypes.DRIPPING_WATER, caster.getX() + Math.cos(angle) * 1.1, caster.getY(0.5) + Math.sin(a) * 0.6,
@@ -562,6 +617,19 @@ public enum Spell implements StringRepresentable {
             Vec3 to = entity.getBoundingBox().getCenter().subtract(eye);
             return to.length() <= range && to.normalize().dot(look) >= minDot;
         });
+    }
+
+    /** Fester Boden unter (oder knapp über) einem Punkt – oder null, wenn dort ein Abgrund ist. */
+    private static @Nullable Vec3 groundAt(ServerLevel level, Vec3 at) {
+        BlockPos.MutableBlockPos pos = BlockPos.containing(at.x, at.y + 1.5, at.z).mutable();
+        for (int i = 0; i < 5; i++) {
+            var shape = level.getBlockState(pos).getCollisionShape(level, pos);
+            if (!shape.isEmpty()) {
+                return new Vec3(at.x, pos.getY() + shape.max(net.minecraft.core.Direction.Axis.Y), at.z);
+            }
+            pos.move(0, -1, 0);
+        }
+        return null;
     }
 
     /** Spitze des Stabs: etwas vor und unterhalb der Augen (Partikel direkt vor der Kamera verdecken sonst die Sicht). */

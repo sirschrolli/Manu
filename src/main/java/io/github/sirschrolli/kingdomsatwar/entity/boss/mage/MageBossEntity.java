@@ -33,6 +33,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -115,7 +116,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
      * Angriffe des Magiers. {@code STRIKE} und {@code TRAP} sind seine beiden Meisterzauber (siehe {@link MageSignatures}),
      * jeder Erzmagier hat eigene.
      */
-    enum Attack { MISSILES, SPELL, BLINK, IMAGES, SHIELD, ULTIMATE, STRIKE, TRAP }
+    enum Attack { MISSILES, SPELL, BLINK, IMAGES, SHIELD, ULTIMATE, STRIKE, TRAP, RENEW, SURGE }
 
     /** Was ein Meisterzauber über mehrere Ticks braucht (Richtung, schon Getroffene, laufende Strahlen). */
     static final class SignatureState {
@@ -147,6 +148,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private final List<UUID> images = new ArrayList<>();
     private @Nullable BlockPos home;
     private double room = ROOM_RADIUS;
+    /** Aus welchem Turm (Welt und Platz im Sanktum) er in die Arkane Sphäre kam – dorthin kehrt er zurück. */
+    private @Nullable ResourceKey<Level> towerLevel;
+    private @Nullable BlockPos towerHome;
     private int stateTicks;
     private @Nullable Attack attack;
     private int attackTicks;
@@ -162,6 +166,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private int strafeTimer;
     private @Nullable DamageSource deathSource;
     final SignatureState signature = new SignatureState();
+    /** Erneuerung, Wiedergeburt, Eiskokon und die übrigen Fähigkeiten (siehe {@link MageGifts}). */
+    final MageGifts.Gifts gifts = new MageGifts.Gifts();
     /** Nur für Tests: allein dieses Wesen gilt als Gegner (andere Tests nebenan bleiben unberührt). */
     private @Nullable UUID onlyEnemy;
     /** Isoldes Frostpanzer (Schaden, den er noch abfängt) und wann er nachwächst. */
@@ -235,6 +241,10 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             output.store("MageHome", BlockPos.CODEC, this.home);
         }
         output.store("MageRoom", com.mojang.serialization.Codec.DOUBLE, this.room);
+        if (this.towerLevel != null && this.towerHome != null) {
+            output.store("MageTowerLevel", Level.RESOURCE_KEY_CODEC, this.towerLevel);
+            output.store("MageTowerHome", BlockPos.CODEC, this.towerHome);
+        }
     }
 
     @Override
@@ -242,6 +252,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         super.readAdditionalSaveData(input);
         input.read("MageHome", BlockPos.CODEC).ifPresent(pos -> this.home = pos);
         input.read("MageRoom", com.mojang.serialization.Codec.DOUBLE).ifPresent(room -> this.room = room);
+        this.towerLevel = input.read("MageTowerLevel", Level.RESOURCE_KEY_CODEC).orElse(null);
+        this.towerHome = input.read("MageTowerHome", BlockPos.CODEC).orElse(null);
         // ein Bannsiegel aus einem unterbrochenen Kampf wird beim nächsten Schritt gelöst
         this.liftSealSoon = true;
         // nach dem Laden meditiert er wieder an seinem Platz (ein unterbrochener Kampf beginnt von vorn)
@@ -270,6 +282,23 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     @Override
     public byte gesture() {
         return this.entityData.get(DATA_GESTURE);
+    }
+
+    /** Für die Fähigkeiten: eine Geste zeigen. */
+    void gesture(byte gesture) {
+        this.setGesture(gesture);
+    }
+
+    /** Für die Fähigkeiten: den laufenden Angriff abbrechen (mit Abklingzeit wie nach einem fertigen Angriff). */
+    void interruptAttack() {
+        if (this.attack != null) {
+            this.finishAttack();
+        }
+    }
+
+    /** Wirkt er gerade das Heilritual? */
+    boolean renewing() {
+        return this.attack == Attack.RENEW;
     }
 
     private void setGesture(byte gesture) {
@@ -337,6 +366,39 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
 
     public void setHome(BlockPos home) {
         this.home = home;
+    }
+
+    /** Merkt sich den Turm, aus dem er in die Arkane Sphäre gezogen wurde. */
+    public void setTower(ResourceKey<Level> level, BlockPos home) {
+        this.towerLevel = level;
+        this.towerHome = home.immutable();
+    }
+
+    /** Wieder daheim: der Turm muss nicht mehr gemerkt werden. */
+    public void clearTower() {
+        this.towerLevel = null;
+        this.towerHome = null;
+    }
+
+    public @Nullable BlockPos towerHome() {
+        return this.towerHome;
+    }
+
+    /**
+     * Sicherheitsnetz: Steht er in der Arkanen Sphäre, ohne dass dort noch ein Kampf mit ihm läuft (etwa weil der
+     * Kampfeintrag verloren ging), kehrt er von selbst in seinen Turm zurück.
+     */
+    private void returnIfStranded(ServerLevel level) {
+        if (this.towerLevel == null || this.towerHome == null || this.tickCount < 100 || this.tickCount % 40 != 0
+                || !io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.is(level) || this.state() == State.DYING) {
+            return;
+        }
+        var fights = io.github.sirschrolli.kingdomsatwar.arena.ArenaFights.of(level.getServer());
+        if (fights.byMage(this.getUUID()) != null) {
+            return;
+        }
+        ServerLevel tower = level.getServer().getLevel(this.towerLevel);
+        io.github.sirschrolli.kingdomsatwar.arena.MageArena.returnHome(this, tower != null ? tower : level.getServer().overworld(), this.towerHome);
     }
 
     public Set<UUID> participants() {
@@ -461,6 +523,12 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         if (!(attacker instanceof Player) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             damage *= DragonBossEntity.NPC_DAMAGE_FACTOR;
         }
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            damage = MageGifts.onHurt(level, this, source, damage);
+            if (damage <= 0.0f) {
+                return false;
+            }
+        }
         damage = MagePassives.onHurt(level, this, source, damage);
         if (damage <= 0.0f) {
             return false;
@@ -478,9 +546,22 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
                 this.pressureTimer = 60;
             }
         }
+        float before = this.getHealth();
         boolean hurt = super.hurtServer(level, source, damage);
         this.setInvulnerableTime(Math.min(this.getInvulnerableTime(), 10));
+        if (hurt && this.isAlive()) {
+            MageGifts.afterHurt(level, this, Math.max(0.0f, before - this.getHealth()));
+        }
         return hurt;
+    }
+
+    /** Ignatius verbrennt beim ersten tödlichen Schlag – und steht aus der Asche wieder auf. */
+    @Override
+    public void die(DamageSource source) {
+        if (this.level() instanceof ServerLevel level && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && MageGifts.rebirth(level, this)) {
+            return;
+        }
+        super.die(source);
     }
 
     /** Gegen sein eigenes Element ist er gefeit. */
@@ -602,6 +683,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         if (this.tickCount % 10 == 0) {
             this.updateBossBar(level);
         }
+        this.returnIfStranded(level);
     }
 
     /** Schweben: eine knappe Handbreit über dem Boden, sanft auf und ab. */
@@ -656,6 +738,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         }
         this.setState(State.AWAKENING);
         this.setGesture(ANIM_AWAKEN);
+        this.gifts.reset();
         this.seal(level);
         int players = Math.max(1, this.nearbyPlayers(level, LEASH_RADIUS).size());
         double difficulty = switch (level.getDifficulty()) {
@@ -723,6 +806,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         this.images.removeIf(id -> !(level.getEntity(id) instanceof MageImageEntity image) || !image.isAlive());
         if (this.transition > 0) {
             this.tickTransition(level);
+            return;
+        }
+        if (MageGifts.tick(level, this)) {
             return;
         }
         LivingEntity target = this.pickTarget(level);
@@ -888,6 +974,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case ULTIMATE -> MageUltimates.duration(this.element);
             case STRIKE -> MageSignatures.duration(this.element, false);
             case TRAP -> MageSignatures.duration(this.element, true);
+            case RENEW -> MageGifts.RENEW_TICKS;
+            case SURGE -> MageGifts.SURGE_TICKS;
         };
     }
 
@@ -901,6 +989,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case ULTIMATE -> this.phase() >= 3 ? 320 : 520;
             case STRIKE -> 130;
             case TRAP -> 190;
+            case RENEW -> MageGifts.RENEW_COOLDOWN;
+            case SURGE -> MageGifts.SURGE_COOLDOWN;
         };
     }
 
@@ -918,6 +1008,13 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             weights.put(Attack.IMAGES, this.images.isEmpty() ? 3.0f : 0.0f);
             weights.put(Attack.SHIELD, this.shielded() ? 0.0f : 2.5f);
             weights.put(Attack.ULTIMATE, this.phase() >= 3 ? 6.0f : 2.0f);
+        }
+        if (MageGifts.canRenew(this)) {
+            weights.put(Attack.RENEW, MageGifts.renewWeight(this));
+        }
+        float surge = MageGifts.surgeWeight(this);
+        if (surge > 0.0f) {
+            weights.put(Attack.SURGE, surge);
         }
         float total = 0.0f;
         for (Map.Entry<Attack, Float> e : weights.entrySet()) {
@@ -963,6 +1060,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case ULTIMATE -> ANIM_ULTIMATE;
             case STRIKE -> this.element == DragonType.ICE || this.element == DragonType.FIRE ? ANIM_MISSILES : ANIM_CAST;
             case TRAP -> ANIM_CAST;
+            case RENEW -> ANIM_SHIELD;
+            case SURGE -> ANIM_ULTIMATE;
         });
         this.signature.clear();
         if (attack == Attack.BLINK) {
@@ -973,6 +1072,9 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
     private void finishAttack() {
         if (this.attack != null) {
             this.cooldowns.put(this.attack, Math.round(this.cooldownOf(this.attack) * this.tempo()));
+        }
+        if (this.attack == Attack.RENEW) {
+            this.gifts.endRenewFx();
         }
         this.attack = null;
         this.signature.clear();
@@ -987,7 +1089,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             return;
         }
         if (current != Attack.BLINK && current != Attack.ULTIMATE) {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(0.5, 1.0, 0.5));
+            double keep = current == Attack.RENEW || current == Attack.SURGE ? 0.2 : 0.5;
+            this.setDeltaMovement(this.getDeltaMovement().multiply(keep, 1.0, keep));
         }
         switch (current) {
             case MISSILES -> this.tickMissiles(level, target, t);
@@ -998,6 +1101,8 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
             case ULTIMATE -> MageUltimates.tick(level, this, target, t);
             case STRIKE -> MageSignatures.strike(level, this, target, t);
             case TRAP -> MageSignatures.trap(level, this, target, t);
+            case RENEW -> MageGifts.renew(level, this, t);
+            case SURGE -> MageGifts.surge(level, this, t);
         }
         if (this.attack == current && t + 1 >= this.duration(current)) {
             this.finishAttack();
@@ -1244,6 +1349,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         this.participants.clear();
         this.attack = null;
         this.signature.clear();
+        this.gifts.reset();
         this.setWard(0.0f);
         this.wardRegrow = 0;
         this.target = null;
@@ -1281,6 +1387,7 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         }
         if (this.deathTime == 1) {
             this.signature.clear();
+            this.gifts.reset();
             this.setWard(0.0f);
             for (ServerPlayer player : this.nearbyPlayers(level, LEASH_RADIUS)) {
                 this.participants.add(player.getUUID());
@@ -1408,10 +1515,6 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         this.entityData.set(DATA_SHIELD, SHIELD_TICKS);
     }
 
-    /**
-     * Nur für Vorführungen: sofort einen Angriff beginnen (0 Geschosse, 1 Zauber, 2 Blinzeln, 3 Spiegelbilder, 4 Schild,
-     * 5 großer Zauber).
-     */
     /** Nur für Tests: allein dieses Wesen gilt als Gegner (null: wieder alle). */
     public void devOnlyEnemy(@Nullable LivingEntity enemy) {
         this.onlyEnemy = enemy != null ? enemy.getUUID() : null;
@@ -1438,10 +1541,60 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         }
     }
 
+    /**
+     * Nur für Vorführungen: sofort einen Angriff beginnen (0 Geschosse, 1 Zauber, 2 Blinzeln, 3 Spiegelbilder, 4 Schild,
+     * 5 großer Zauber, 6 Schlag, 7 Falle, 8 Erneuerung, 9 Blitzableiter).
+     */
     public void devAttack(int index) {
         if (this.state() == State.FIGHT && this.transition <= 0 && this.target != null) {
             this.start(Attack.values()[Mth.clamp(index, 0, Attack.values().length - 1)]);
         }
+    }
+
+    /** Nur für Tests und Vorführungen: das Heilritual bzw. den Blitzableiter Tick für Tick wirken (ohne KI). */
+    public void devGift(ServerLevel level, boolean surge, int tick) {
+        if (surge) {
+            MageGifts.surge(level, this, tick);
+        } else {
+            MageGifts.renew(level, this, tick);
+        }
+    }
+
+    /** Nur für Tests und Vorführungen: Wiedergeburt, Kokon und Taumeln einen Tick weiter (ohne KI). */
+    public boolean devGiftsTick(ServerLevel level) {
+        return MageGifts.tick(level, this);
+    }
+
+    /** Nur für Vorführungen: Ignatius verbrennt, als wäre er gefallen (Phönixwiedergeburt). */
+    public boolean devRebirthStart(ServerLevel level) {
+        return MageGifts.rebirth(level, this);
+    }
+
+    /** Nur für Tests: läuft gerade das Heilritual? */
+    public boolean devRenewing() {
+        return this.renewing();
+    }
+
+    /** Nur für Tests: wie lange er noch taumelt, in den Flammen liegt bzw. im Eis ist; ob er schon wiedergeboren wurde. */
+    public int devStagger() {
+        return this.gifts.stagger;
+    }
+
+    public int devRebirth() {
+        return this.gifts.rebirth;
+    }
+
+    public boolean devReborn() {
+        return this.gifts.reborn;
+    }
+
+    public int devCocoon() {
+        return this.gifts.cocoon;
+    }
+
+    /** Dauer des Heilrituals bzw. des Blitzableiters (Ticks). */
+    public static int giftDuration(boolean surge) {
+        return surge ? MageGifts.SURGE_TICKS : MageGifts.RENEW_TICKS;
     }
 
     @Override

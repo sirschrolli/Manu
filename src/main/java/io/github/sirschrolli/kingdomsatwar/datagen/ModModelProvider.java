@@ -567,7 +567,7 @@ public class ModModelProvider extends ModelProvider {
      * des gewählten Zaubers (custom_model_data, Farbe 0) – siehe {@code StaffMastery#syncLook}.
      */
     private static void staffModel(ItemModelGenerators items, Item staff) {
-        String[] ranks = {"apprentice", "adept", "magister", "archmage"};
+        String[] ranks = {"apprentice", "adept", "mage", "magister", "archmage", "aetherlord"};
         java.util.List<net.minecraft.client.renderer.item.RangeSelectItemModel.Entry> entries = new java.util.ArrayList<>();
         net.minecraft.client.renderer.item.ItemModel.Unbaked first = null;
         for (int i = 0; i < ranks.length; i++) {

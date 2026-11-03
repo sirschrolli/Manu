@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -36,6 +37,7 @@ import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
@@ -181,6 +183,7 @@ public final class MageArena {
         }
         arcane.setHome(center.above());
         arcane.setRoom(ARENA_ROOM);
+        arcane.setTower(tower.dimension(), home);   // so findet er auch ohne Kampfeintrag heim
         long now = server.overworld().getGameTime();
         Fight fight = new Fight(slot, center, mage.element(), arcane.getUUID(), tower.dimension(), home, fighters, now, false, 0L);
         fights.add(fight);
@@ -250,6 +253,10 @@ public final class MageArena {
             return true;
         }
         if (mage == null || mage.isRemoved()) {
+            if (!entitiesLoaded(arena, center)) {
+                // nach einem Neustart sind die Wesen der Arena noch nicht geladen – der Magier ist nicht fort, er kommt gleich
+                return false;
+            }
             // der Magier ist fort, ohne zu sterben (etwa durch einen Befehl entfernt): der Kampf ist vorbei
             fight.win(now - MageBossEntity.DEATH_TICKS);
             return true;
@@ -259,6 +266,16 @@ public final class MageArena {
             return true;
         }
         return false;
+    }
+
+    /** Sind die Wesen in allen Chunks der Arena geladen (sonst lässt sich nicht sagen, wer noch da ist)? */
+    public static boolean entitiesLoaded(ServerLevel arena, BlockPos center) {
+        for (long[] chunk : MageArenaBuilder.chunks(center)) {
+            if (!arena.areEntitiesLoaded(ChunkPos.pack((int) chunk[0], (int) chunk[1]))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** Steht noch ein mitgezogener Spieler lebend in der Arena? */
@@ -315,16 +332,9 @@ public final class MageArena {
                 orb.teleport(new TeleportTransition(tower, loot.add(0, 0.5, 0), Vec3.ZERO, 0.0f, 0.0f, TeleportTransition.PLACE_PORTAL_TICKET));
             }
         } else {
-            // der Magier kehrt geheilt in seinen Turm zurück
+            // der Magier hat gewonnen: er kehrt geheilt in seinen Turm zurück
             if (arena.getEntity(fight.mage()) instanceof MageBossEntity mage && mage.isAlive()) {
-                mage.retreat(arena);
-                Entity back = mage.teleport(new TeleportTransition(tower, Vec3.atBottomCenterOf(fight.towerHome()), Vec3.ZERO, mage.getYRot(), 0.0f,
-                        TeleportTransition.PLACE_PORTAL_TICKET));
-                if (back instanceof MageBossEntity home) {
-                    home.setHome(fight.towerHome());
-                    home.setRoom(MageBossEntity.ROOM_RADIUS);
-                    home.retreat(tower);
-                }
+                returnHome(mage, tower, fight.towerHome());
             }
         }
         Component message = Component.translatable(won ? "message.kingdomsatwar.arena.victory" : "message.kingdomsatwar.arena.defeat")
@@ -351,6 +361,32 @@ public final class MageArena {
         }
         fights.remove(fight);
         KingdomsAtWar.LOGGER.info("Kampf in Arena {} beendet: {}", fight.slot(), won ? "Sieg" : "Niederlage");
+    }
+
+    /**
+     * Der Magier kehrt in seinen Turm zurück: geheilt, an seinen Platz im Sanktum, wieder in Meditation – mit einem
+     * Wirbel aus Funken, wo er erscheint. Gibt den Magier im Turm zurück (oder {@code null}, wenn es nicht ging).
+     */
+    public static @Nullable MageBossEntity returnHome(MageBossEntity mage, ServerLevel tower, BlockPos towerHome) {
+        if (mage.level() instanceof ServerLevel from) {
+            mage.retreat(from);
+        }
+        Vec3 spot = Vec3.atBottomCenterOf(towerHome);
+        Entity back = mage.level() == tower ? mage : mage.teleport(new TeleportTransition(tower, spot, Vec3.ZERO, mage.getYRot(), 0.0f,
+                TeleportTransition.PLACE_PORTAL_TICKET));
+        if (!(back instanceof MageBossEntity home)) {
+            KingdomsAtWar.LOGGER.error("Erzmagier {} fand nicht in seinen Turm bei {} zurück", mage.getUUID(), towerHome);
+            return null;
+        }
+        home.setHome(towerHome);
+        home.setRoom(MageBossEntity.ROOM_RADIUS);
+        home.clearTower();
+        home.retreat(tower);
+        tower.sendParticles(ParticleTypes.REVERSE_PORTAL, spot.x, spot.y + 1.0, spot.z, 60, 0.5, 1.0, 0.5, 0.06);
+        tower.sendParticles(new DustParticleOptions(home.element().color(), 1.6f), spot.x, spot.y + 1.0, spot.z, 30, 0.6, 1.0, 0.6, 0.0);
+        tower.playSound(null, towerHome, SoundEvents.PORTAL_TRAVEL, SoundSource.HOSTILE, 0.5f, 1.6f);
+        KingdomsAtWar.LOGGER.info("{} kehrt in seinen Turm bei {} zurück", home.element().id(), towerHome);
+        return home;
     }
 
     /** Einen Kämpfer dorthin zurückschicken, wo er herkam (wenn er noch in der Arena ist und lebt). */

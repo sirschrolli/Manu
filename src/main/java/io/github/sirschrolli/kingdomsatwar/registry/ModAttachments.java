@@ -65,5 +65,15 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());
 
+    /**
+     * Mana des Spielers (für die Zauber des Aetherit-Stabs). Nur er selbst bekommt es zugeschickt – für die Mana-Leiste.
+     * Nach dem Tod beginnt er mit vollem Mana.
+     */
+    public static final Supplier<AttachmentType<Float>> MANA = ATTACHMENTS.register("mana",
+            () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.magic.Mana.BASE_MAX)
+                    .serialize(Codec.FLOAT.fieldOf("mana"))
+                    .sync((holder, to) -> holder == to, net.minecraft.network.codec.ByteBufCodecs.FLOAT)
+                    .build());
+
     private ModAttachments() {}
 }

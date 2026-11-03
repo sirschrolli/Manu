@@ -47,13 +47,15 @@ final class ArenaGameTests {
             ModGameTests.TEST_FUNCTIONS.register("arena_rules", () -> ArenaGameTests::rules);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FIGHT =
             ModGameTests.TEST_FUNCTIONS.register("arena_fight", () -> ArenaGameTests::fight);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> HOMECOMING =
+            ModGameTests.TEST_FUNCTIONS.register("arena_homecoming", () -> ArenaGameTests::homecoming);
 
     private ArenaGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(BUILDER, RULES, FIGHT)) {
+        for (var test : List.of(BUILDER, RULES, FIGHT, HOMECOMING)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -149,10 +151,28 @@ final class ArenaGameTests {
     private static void fight(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         // der Testserver lädt nur die Grunddimensionen: die Arena entsteht hoch über der Oberwelt, weit draußen
-        ServerLevel arena = level;
         BlockPos base = helper.absolutePos(BlockPos.ZERO);
         BlockPos arenaCenter = new BlockPos(base.getX() + 6000, 200, base.getZ() - 4000);
         BlockPos arenaCenter2 = new BlockPos(base.getX() + 6000, 200, base.getZ() - 6000);
+        // erst die Chunks beider Arenen samt ihrer Wesen laden (unter Last dauert das ein paar Ticks)
+        helper.startSequence()
+                .thenExecute(() -> {
+                    for (BlockPos c : List.of(arenaCenter, arenaCenter2)) {
+                        for (long[] chunk : MageArenaBuilder.chunks(c)) {
+                            level.getChunk((int) chunk[0], (int) chunk[1]);
+                            level.setChunkForced((int) chunk[0], (int) chunk[1], true);
+                        }
+                    }
+                })
+                .thenWaitUntil(() -> helper.assertTrue(MageArena.entitiesLoaded(level, arenaCenter) && MageArena.entitiesLoaded(level, arenaCenter2),
+                        "Arena-Chunks laden nicht"))
+                .thenExecute(() -> fightBody(helper, arenaCenter, arenaCenter2))
+                .thenSucceed();
+    }
+
+    private static void fightBody(GameTestHelper helper, BlockPos arenaCenter, BlockPos arenaCenter2) {
+        ServerLevel level = helper.getLevel();
+        ServerLevel arena = level;
         for (int x = 0; x < 9; x++) {
             for (int z = 0; z < 9; z++) {
                 helper.setBlock(x, 0, z, Blocks.STONE);
@@ -241,6 +261,77 @@ final class ArenaGameTests {
             level.getServer().getPlayerList().remove(player);
         }
         helper.assertTrue(problems.isEmpty(), "Kampf in der Sphäre: " + problems);
+        for (BlockPos c : List.of(arenaCenter, arenaCenter2)) {
+            for (long[] chunk : MageArenaBuilder.chunks(c)) {
+                level.setChunkForced((int) chunk[0], (int) chunk[1], false);
+            }
+        }
+    }
+
+    /**
+     * Der Magier findet immer heim: Sind die Wesen der Arena (etwa nach einem Neustart) noch nicht geladen, gilt der Kampf
+     * nicht als gewonnen; der Magier merkt sich seinen Turm (auch über das Speichern hinweg) und kehrt geheilt und
+     * meditierend an seinen Platz zurück.
+     */
+    private static void homecoming(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        List<String> problems = new ArrayList<>();
+        ArenaFights fights = ArenaFights.of(level.getServer());
+        BlockPos home = helper.absolutePos(new BlockPos(4, 1, 4));
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, Blocks.STONE);
+            }
+        }
+        // Kampf in einer Arena, deren Chunks (noch) nicht geladen sind: kein Sieg, nur weil der Magier nicht zu finden ist
+        BlockPos far = new BlockPos(home.getX() + 40_000, 200, home.getZ() - 40_000);
+        ArenaFights.Fight waiting = new ArenaFights.Fight(905, far, DragonType.FIRE, java.util.UUID.randomUUID(), Level.OVERWORLD, home,
+                List.of(), level.getGameTime(), false, 0L);
+        fights.add(waiting);
+        MageBossEntity mage = ModEntities.MAGES.get(DragonType.FIRE).get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        MageBossEntity copy = ModEntities.MAGES.get(DragonType.FIRE).get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        helper.assertTrue(mage != null && copy != null, "kein Erzmagier");
+        try {
+            MageArena.tick(level.getServer(), level, fights, waiting);
+            if (waiting.won()) {
+                problems.add("Kampf gilt als gewonnen, obwohl die Arena noch nicht geladen ist");
+            }
+            if (fights.byMage(waiting.mage()) == null) {
+                problems.add("Kampf verschwunden, obwohl die Arena noch nicht geladen ist");
+            }
+            // der Turm wird gemerkt und übersteht das Speichern
+            mage.setTower(Level.OVERWORLD, home);
+            copy.restoreFrom(mage);
+            if (!home.equals(copy.towerHome())) {
+                problems.add("Turm nach dem Laden vergessen: " + copy.towerHome());
+            }
+            // Heimkehr: geheilt, meditierend, an seinem Platz
+            mage.snapTo(home.getX() + 3.5, home.getY(), home.getZ() + 2.5, 90.0f, 0.0f);
+            mage.setHome(home.offset(3, 0, 2));
+            level.addFreshEntity(mage);
+            mage.devFight(level);
+            mage.setHealth(mage.getMaxHealth() * 0.3f);
+            MageBossEntity back = MageArena.returnHome(mage, level, home);
+            if (back == null) {
+                problems.add("Heimkehr gescheitert");
+            } else {
+                if (back.position().distanceTo(Vec3.atBottomCenterOf(home)) > 1.0) {
+                    problems.add("nicht an seinem Platz: " + back.position());
+                }
+                if (back.state() != MageBossEntity.State.DORMANT || back.getHealth() < back.getMaxHealth() || !home.equals(back.home())) {
+                    problems.add("nicht geheilt und meditierend daheim: " + back.state() + " " + back.getHealth());
+                }
+                if (back.towerHome() != null) {
+                    problems.add("Turm nach der Heimkehr noch gemerkt");
+                }
+                back.discard();
+            }
+        } finally {
+            fights.remove(waiting);
+            fights.save(level.getServer());
+            mage.discard();
+        }
+        helper.assertTrue(problems.isEmpty(), "Heimkehr des Magiers: " + problems);
         helper.succeed();
     }
 }

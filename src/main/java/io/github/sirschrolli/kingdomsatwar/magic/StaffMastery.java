@@ -27,8 +27,10 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Meisterschaft des Aetherit-Stabs: Ein neuer Stab ist schwach – erst mit jedem Zauber und jedem Gegner, den er
- * bezwingt, wächst seine Kraft. Vier Ränge (Lehrling, Adept, Magister, Erzmagier) bestimmen Stärke, Abklingzeit und wie
- * schnell sich ein Zauber aufladen lässt; mit jedem Rang wird auch der Stab selbst prächtiger.
+ * bezwingt, wächst seine Kraft. Sechs Stufen (Lehrling, dann Stufe 1 bis 5: Adept, Magier, Magister, Erzmagier,
+ * Aetherfürst bei 1.000, 2.000, 5.000, 10.000 und 100.000 Erfahrung) bestimmen Stärke (60 % bis 150 %), Abklingzeit, wie
+ * schnell sich ein Zauber aufladen lässt und wie viel Mana man hat; mit jeder Stufe wird auch der Stab selbst
+ * prächtiger. Erfahrung gibt es für jeden Zauber (aufgeladen doppelt), jeden bezwungenen Gegner und viel für Bosse.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class StaffMastery {
@@ -37,9 +39,11 @@ public final class StaffMastery {
 
     public enum Rank {
         APPRENTICE(0, 0.6f, 24, 1.25f),
-        ADEPT(60, 0.8f, 20, 1.1f),
-        MAGISTER(250, 1.0f, 16, 1.0f),
-        ARCHMAGE(700, 1.2f, 12, 0.85f);
+        ADEPT(1_000, 0.75f, 22, 1.15f),
+        MAGE(2_000, 0.9f, 19, 1.05f),
+        MAGISTER(5_000, 1.05f, 16, 1.0f),
+        ARCHMAGE(10_000, 1.2f, 13, 0.9f),
+        AETHERLORD(100_000, 1.5f, 10, 0.8f);
 
         private final int xp;
         private final float power;
@@ -55,6 +59,11 @@ public final class StaffMastery {
 
         public String id() {
             return this.name().toLowerCase(Locale.ROOT);
+        }
+
+        /** Stufe 0 (Lehrling) bis 5 (Aetherfürst). */
+        public int level() {
+            return this.ordinal();
         }
 
         /** Ab so viel Erfahrung gilt der Rang. */
@@ -139,9 +148,9 @@ public final class StaffMastery {
         Rank after = rank(staff);
         if (after != before) {
             ServerLevel level = player.level();
-            player.sendSystemMessage(Component.translatable("staff.kingdomsatwar.rank_up", after.displayName().withStyle(ChatFormatting.LIGHT_PURPLE))
-                    .withStyle(ChatFormatting.GOLD));
-            player.sendOverlayMessage(Component.translatable("staff.kingdomsatwar.rank_up.overlay", after.displayName())
+            player.sendSystemMessage(Component.translatable("staff.kingdomsatwar.rank_up", after.level(),
+                    after.displayName().withStyle(ChatFormatting.LIGHT_PURPLE)).withStyle(ChatFormatting.GOLD));
+            player.sendOverlayMessage(Component.translatable("staff.kingdomsatwar.rank_up.overlay", after.level(), after.displayName())
                     .withColor(Spell.AETHER_COLOR));
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.2f, 0.8f);
