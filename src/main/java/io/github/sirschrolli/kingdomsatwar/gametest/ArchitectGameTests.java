@@ -72,6 +72,8 @@ final class ArchitectGameTests {
             ModGameTests.TEST_FUNCTIONS.register("architect_sections", () -> ArchitectGameTests::sections);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_GREAT_SITE =
             ModGameTests.TEST_FUNCTIONS.register("architect_great_site", () -> ArchitectGameTests::greatSite);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_ROYAL =
+            ModGameTests.TEST_FUNCTIONS.register("architect_royal", () -> ArchitectGameTests::royal);
 
     private ArchitectGameTests() {}
 
@@ -87,6 +89,7 @@ final class ArchitectGameTests {
         own(event, ARCHITECT_STORE, "architect_store", 200);
         own(event, ARCHITECT_SECTIONS, "architect_sections", 200);
         own(event, ARCHITECT_GREAT_SITE, "architect_great_site", 12000);
+        own(event, ARCHITECT_ROYAL, "architect_royal", 400);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,
@@ -690,6 +693,137 @@ final class ArchitectGameTests {
             return PlanLibrary.of(server).add(server, scan, name, author, "Tester");
         } catch (java.io.IOException e) {
             throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * Die eingebaute Königsburg: 300 × 300 Blöcke, vier Lagen unter der Bodenlinie (der Graben), nichts, was der Architekt
+     * nicht übernimmt, keine kostbaren Blöcke; Scheiben und Mauern mit ihren Nachbarn verbunden; immer gleich entworfen;
+     * als .litematic hinaus und wieder herein genau dieselbe Burg; in der Liste zum Einlesen ganz oben. Mit
+     * {@code -Dkingdomsatwar.castleExport=<Ordner>} legt der Test sie dort als .litematic, .schem und .nbt ab.
+     */
+    private static void royal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        long t0 = System.nanoTime();
+        var castle = io.github.sirschrolli.kingdomsatwar.architect.castle.CastleGenerator.royalCastle();
+        var v = castle.volume();
+        long ms = (System.nanoTime() - t0) / 1_000_000;
+        helper.assertTrue(v.sizeX == 300 && v.sizeZ == 300 && castle.ground() == 4,
+                "Königsburg: " + v.sizeX + "x" + v.sizeY + "x" + v.sizeZ + ", Boden " + castle.ground());
+        PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(v, castle.ground(), level.registryAccess());
+        helper.assertTrue(scan.sizeX == 300 && scan.sizeZ == 300 && scan.ground == 4 && scan.sizeY <= PlanScan.MAX_HEIGHT,
+                "Plan: " + scan.sizeX + "x" + scan.sizeY + "x" + scan.sizeZ + ", Boden " + scan.ground);
+        helper.assertTrue(scan.skipped().isEmpty(), "Nicht übernommen: " + scan.skipped());
+        PlanScan.Costs costs = scan.costs();
+        // nur der Thron im Palas muss im Lager liegen, alles andere bauen die Baumeister aus Holz, Stein und Metall
+        helper.assertTrue(costs.precious().size() == 1 && costs.precious().getOrDefault(
+                io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.THRONE.get().asItem(), 0) == 1, "Kostbare Blöcke: " + costs.precious());
+        helper.assertTrue(costs.blocks() > 150_000, "Zu wenige Blöcke: " + costs.blocks());
+        // verbunden wie in der Welt: Scheiben und Mauern
+        int panes = 0;
+        int panesJoined = 0;
+        int walls = 0;
+        int wallsJoined = 0;
+        java.util.Map<net.minecraft.world.level.block.Block, Integer> kinds = new java.util.HashMap<>();
+        for (int y = 0; y < scan.sizeY; y++) {
+            for (int z = 0; z < scan.sizeZ; z++) {
+                for (int x = 0; x < scan.sizeX; x++) {
+                    BlockState s = scan.get(x, y, z);
+                    if (s == null || s.isAir()) {
+                        continue;
+                    }
+                    kinds.merge(s.getBlock(), 1, Integer::sum);
+                    if (s.getBlock() instanceof net.minecraft.world.level.block.IronBarsBlock) {
+                        panes++;
+                        if (s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.NORTH) || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.SOUTH)
+                                || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.EAST)
+                                || s.getValue(net.minecraft.world.level.block.CrossCollisionBlock.WEST)) {
+                            panesJoined++;
+                        }
+                    } else if (s.getBlock() instanceof net.minecraft.world.level.block.WallBlock) {
+                        walls++;
+                        if (s.getValue(net.minecraft.world.level.block.WallBlock.NORTH) != net.minecraft.world.level.block.state.properties.WallSide.NONE
+                                || s.getValue(net.minecraft.world.level.block.WallBlock.EAST) != net.minecraft.world.level.block.state.properties.WallSide.NONE) {
+                            wallsJoined++;
+                        }
+                    }
+                }
+            }
+        }
+        helper.assertTrue(panes > 100 && panesJoined * 10 >= panes * 9, "Scheiben verbunden: " + panesJoined + " von " + panes);
+        helper.assertTrue(walls > 1000 && wallsJoined * 10 >= walls * 8, "Mauern verbunden: " + wallsJoined + " von " + walls);
+        for (net.minecraft.world.level.block.Block b : new net.minecraft.world.level.block.Block[] {Blocks.IRON_CHAIN, Blocks.PACKED_MUD, Blocks.WATER,
+                Blocks.LECTERN, Blocks.DEEPSLATE_TILE_STAIRS}) {
+            helper.assertTrue(kinds.getOrDefault(b, 0) > 0, "Fehlt in der Königsburg: " + b);
+        }
+        // immer gleich entworfen
+        PlanScan twice = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(
+                io.github.sirschrolli.kingdomsatwar.architect.castle.CastleGenerator.royalCastle().volume(), castle.ground(), level.registryAccess());
+        helper.assertTrue(sameCells(scan, twice), "Zweimal entworfen: verschieden");
+        // als .litematic hinaus und wieder herein
+        try {
+            CompoundTag tag = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.litematic(scan, "Königsburg", "Dragon Architect");
+            java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+            net.minecraft.nbt.NbtIo.writeCompressed(tag, bytes);
+            CompoundTag back = net.minecraft.nbt.NbtIo.readCompressed(new java.io.ByteArrayInputStream(bytes.toByteArray()),
+                    net.minecraft.nbt.NbtAccounter.unlimitedHeap());
+            var result = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.read(back,
+                    io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.LITEMATIC, level.registryAccess());
+            helper.assertValueEqual(result.unknown(), 0, "Unbekannte Blöcke in der .litematic");
+            PlanScan again = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(result.volume(), result.ground(),
+                    level.registryAccess());
+            helper.assertTrue(sameCells(scan, again), "Königsburg aus der .litematic: anders");
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("Königsburg: {} ms entworfen, {} Blöcke, {} Lagen, .litematic {} KB", ms,
+                    costs.blocks(), scan.sizeY, bytes.size() / 1024);
+            String export = System.getProperty("kingdomsatwar.castleExport");
+            if (export != null && !export.isBlank()) {
+                io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.writeAll(scan, "Königsburg", "Dragon Architect",
+                        java.nio.file.Path.of(export));
+            }
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException("Königsburg: " + e.getMessage(), e);
+        }
+        String map = System.getProperty("kingdomsatwar.castleMap");
+        if (map != null && !map.isBlank()) {
+            writeMap(scan, java.nio.file.Path.of(map));
+        }
+        // ganz oben in der Liste zum Einlesen
+        var list = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.list(level.getServer());
+        helper.assertTrue(!list.isEmpty() && list.getFirst().id().equals(io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.ROYAL_CASTLE),
+                "Die Königsburg steht nicht oben in der Liste");
+        helper.succeed();
+    }
+
+    /** Für die Gestaltung: eine Karte des Plans von oben (Farbe des obersten Blocks, nach Höhe schattiert) als PPM-Bild. */
+    private static void writeMap(PlanScan scan, java.nio.file.Path file) {
+        byte[] rgb = new byte[scan.sizeX * scan.sizeZ * 3];
+        for (int z = 0; z < scan.sizeZ; z++) {
+            for (int x = 0; x < scan.sizeX; x++) {
+                int color = 0x6A8F3A;
+                int height = scan.ground - 1;
+                for (int y = scan.sizeY - 1; y >= 0; y--) {
+                    BlockState s = scan.get(x, y, z);
+                    if (s != null && !s.isAir()) {
+                        var mc = s.getMapColor(net.minecraft.world.level.EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
+                        if (mc != net.minecraft.world.level.material.MapColor.NONE) {
+                            color = mc.col;
+                            height = y;
+                            break;
+                        }
+                    }
+                }
+                double shade = 0.55 + 0.45 * Math.min(1.0, Math.max(0.0, (height - scan.ground + 4) / 40.0));
+                int i = (z * scan.sizeX + x) * 3;
+                rgb[i] = (byte) Math.min(255, (int) (((color >> 16) & 255) * shade));
+                rgb[i + 1] = (byte) Math.min(255, (int) (((color >> 8) & 255) * shade));
+                rgb[i + 2] = (byte) Math.min(255, (int) ((color & 255) * shade));
+            }
+        }
+        try (java.io.OutputStream out = java.nio.file.Files.newOutputStream(file)) {
+            out.write(("P6\n" + scan.sizeX + " " + scan.sizeZ + "\n255\n").getBytes(java.nio.charset.StandardCharsets.US_ASCII));
+            out.write(rgb);
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException("Karte: " + e.getMessage(), e);
         }
     }
 

@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.architect.PlanInfo;
 import io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary;
 import io.github.sirschrolli.kingdomsatwar.architect.PlanScan;
+import io.github.sirschrolli.kingdomsatwar.architect.castle.CastleGenerator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -62,9 +63,18 @@ public final class SchematicFiles {
     /** Wie die Ordner im Fenster heißen. */
     private static final String[] FOLDERS = {"schematics", "worldedit", "structures"};
 
-    /** Alle lesbaren Dateien (nach Namen sortiert; auch die eigenen, die der Architekt abgelegt hat). */
+    /** Kennung der eingebauten Königsburg in der Liste (keine Datei: der Architekt entwirft sie beim Einlesen). */
+    public static final String ROYAL_CASTLE = "builtin:royal_castle";
+    /** Art der eingebauten Pläne in der Liste. */
+    public static final String BUILTIN = "builtin";
+
+    /**
+     * Alle lesbaren Dateien (nach Namen sortiert; auch die eigenen, die der Architekt abgelegt hat), davor die eingebauten
+     * Pläne des Dragon Architect.
+     */
     public static List<Entry> list(MinecraftServer server) {
         List<Entry> out = new ArrayList<>();
+        out.add(new Entry(ROYAL_CASTLE, "Königsburg", "Dragon Architect", BUILTIN, 0L));
         List<Path> roots = roots(server);
         for (int r = 0; r < roots.size(); r++) {
             Path root = roots.get(r).normalize();
@@ -92,7 +102,7 @@ public final class SchematicFiles {
                 KingdomsAtWar.LOGGER.warn("Schematik-Ordner {} lässt sich nicht lesen", root, e);
             }
         }
-        out.sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
+        out.subList(1, out.size()).sort((a, b) -> a.name().compareToIgnoreCase(b.name()));
         return out;
     }
 
@@ -130,6 +140,9 @@ public final class SchematicFiles {
     /** Liest eine Datei als eigenen Plan des Spielers ein. */
     public static Imported importFile(ServerPlayer player, String id) {
         MinecraftServer server = player.level().getServer();
+        if (id.equals(ROYAL_CASTLE)) {
+            return royalCastle(player);
+        }
         Path file = resolve(server, id);
         if (file == null) {
             return new Imported(null, "missing", 0);
@@ -156,6 +169,28 @@ public final class SchematicFiles {
         } catch (IOException | RuntimeException e) {
             KingdomsAtWar.LOGGER.warn("Schematik {} lässt sich nicht einlesen", file, e);
             return new Imported(null, String.valueOf(e.getMessage()).startsWith("too large") ? "too_large" : "broken", 0);
+        }
+    }
+
+    /**
+     * Die eingebaute Königsburg als eigener Plan des Spielers: der Architekt entwirft sie (300 × 300 Blöcke) und vermisst
+     * sie wie eine eingelesene Schematik; der Name richtet sich nach der Sprache des Spielers.
+     */
+    private static Imported royalCastle(ServerPlayer player) {
+        MinecraftServer server = player.level().getServer();
+        PlanLibrary library = PlanLibrary.of(server);
+        if (library.byAuthor(player.getUUID()).size() >= PlanLibrary.MAX_PER_PLAYER) {
+            return new Imported(null, "too_many", 0);
+        }
+        try {
+            CastleGenerator.Castle castle = CastleGenerator.royalCastle();
+            PlanScan scan = toScan(castle.volume(), castle.ground(), player.level().registryAccess());
+            String name = player.clientInformation().language().startsWith("de") ? "Königsburg" : "Royal Castle";
+            PlanInfo info = library.add(server, scan, name, player.getUUID(), player.getName().getString());
+            return new Imported(info, "", 0);
+        } catch (IOException | RuntimeException e) {
+            KingdomsAtWar.LOGGER.warn("Die Königsburg lässt sich nicht anlegen", e);
+            return new Imported(null, "broken", 0);
         }
     }
 

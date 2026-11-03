@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.48.0 – Dragon Architect, Teil 3: Großbaustellen. Baupläne dürfen jetzt bis 320 × 128 × 320 Blöcke groß sein – eine ganze Burg. Große Pläne bauen viele Baumeister zugleich: Jeder nimmt sich einen Abschnitt von 16 × 16 Säulen, zieht dort den Rohbau Feld für Feld hoch, und sobald ringsum die Mauern stehen, kommen Türen, Fackeln und Laternen dazu. Im Stadtfenster zeigt eine Karte, welche Abschnitte offen, im Rohbau, fertig oder gerade in Arbeit sind.**
+> **Testversion 0.49.0 – Die Königsburg. Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan für deine Baumeister und als echte Schematik (.litematic): zwei Mauerringe mit über 40 Türmen, Torhäuser mit Fallgitter, ein gemauerter Graben mit Steinbrücke, die Kernburg mit Bergfried, Palas und Thronsaal, eine Kapelle mit Glockenturm, der Marstall und der Königsgarten, davor eine ganze Stadt mit Marktplatz, Brunnen, Straßen und Gassen. Im Stadtfenster steht sie mit einer Krone ganz oben in der Liste zum Einlesen.**
+> In 0.48 kamen die Großbaustellen: Baupläne bis 320 × 128 × 320 Blöcke, viele Baumeister zugleich, jeder in seinem Abschnitt von 16 × 16 Säulen, und im Stadtfenster eine Karte der Abschnitte.
 > In 0.47 kamen die Schematiken: Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) lassen sich als eigener Bauplan einlesen, und jeder eigene Plan lässt sich in allen drei Formaten ablegen.
 > In 0.46 kam der Dragon Architect: Mit dem Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier; die Baumeister bauen es nach, Block für Block oder abschnittsweise, kostbare Blöcke nehmen sie genau so aus dem Lager.
 > In 0.45 kamen die Drachen in den Krieg: Mit dem Drachenhorn stoßen deine Drachen im Sturzflug auf einen Feind herab oder fliegen einen Luftangriff auf einen Ort; gegen Heerhaufen verteidigen sie die Siedlung von selbst, schwer verwundet ziehen sie sich zurück.
@@ -279,8 +280,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die Königsburg – eine fertige Burg mit 300 × 300 Blöcken (Ringmauer, Türme, Torhaus, Innenhof, großer
-> Bergfried) als Bauplan für die Baumeister und als .litematic-Datei.
+> **Als Nächstes:** Fahrzeuge und der Belagerungsturm – ein Planwagen, der Baustoffe und Soldaten fährt, und ein Turm, der
+> an die Mauer rollt und eine Brücke auf den Wehrgang fallen lässt.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -353,7 +354,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Dragon Architect, Teil 1: Gebäude vermessen, eigene Baupläne, Nachbau Block für Block oder abschnittsweise | ✅ fertig |
 | Dragon Architect, Teil 2: Schematiken einlesen und ablegen (.litematic, .schem, .nbt) | ✅ fertig |
 | Dragon Architect, Teil 3: Großbaustellen bis 320 × 320 – viele Baumeister zugleich, jeder in seinem Abschnitt | ✅ fertig |
-| Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ⏳ als Nächstes |
+| Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ✅ fertig |
+| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ als Nächstes |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1237,6 +1239,26 @@ das Banner noch Häuser überbauen und kein fremdes Gebiet berühren. Im Stadtfe
 
 ![Dragon Architect: eine ganze Burg vermessen, Großbaustelle, Karte der Abschnitte, Burghof](docs/bilder/architekt_grossbaustelle.jpg)
 
+**Die Königsburg:** Eine fertige Burg mit **300 × 300 Blöcken**, vom Dragon Architect selbst entworfen. Im Stadtfenster
+steht sie unter „Schematik einlesen“ mit einer Krone ganz oben; „Einlesen“ macht sie zu deinem eigenen Bauplan, den du
+neben der Siedlung aufstellst und von deinen Baumeistern als Großbaustelle bauen lässt – aus Holz, Stein und Metall;
+nur den **Thron** für den Palas musst du ins Lager legen. Mit „Ablegen“ bekommst du sie als .litematic, .schem und .nbt,
+etwa für Litematica oder WorldEdit.
+
+| Teil | Was dort steht |
+|---|---|
+| Äußerer Mauerring | zehn Blöcke hoch mit Wehrgang, Zinnen und Brustwehr, 26 Mauer- und Ecktürme, das Haupttor mit zwei Tortürmen, Fallgitter, Bannern und Treppen zum Wehrgang |
+| Die Stadt | Hauptstraße vom Tor zur Kernburg, Querstraße, Gassen, ein Marktplatz mit Prunkbrunnen, Bürgerhäuser, Tavernen, Markthallen, Schmieden, Lager, Gärten, Bäume und Laternen |
+| Graben | drei Blöcke tief zwischen gemauerter Futter- und Gegenmauer, mit Stampflehm am Grund; auf der Gegenmauer ein Geländer mit Laternen, außen die Ringstraße; eine Steinbrücke mit Bogen führt zum inneren Tor |
+| Kernburg | eine höhere Mauer (vierzehn Blöcke) mit 13 Türmen – die Ecktürme mit spitzen Dächern und Fahnen, ihr Fuß reicht bis in den Graben – und ein eigenes Torhaus |
+| Burghof | Platten in einem Raster, ein Prunkbrunnen, Alleebäume; der **Bergfried** mit Sockel, Gurtgesimsen, Fenstern, Portal, Bannern, vorgekragtem Wehrgang und vier Ecktürmchen; links der **Palas** mit Thronsaal, rechts die **Kapelle** mit Glockenturm, bunten Fenstern, Rosette, Bänken und Altar |
+| Hinter dem Bergfried | der **Königsgarten** mit Hecken, Wegkreuz, Blumenbeeten in Streifen und Brunnen; an der Mauer der **Marstall** mit Boxen, Heu und Laternen, dazu Kaserne, Sternwarte, Schmiede, Lager und Gesindehäuser |
+
+Was in den Häusern der Siedlung sonst kostbar wäre (Ambosse, Kessel, Hochöfen, Braustände, Glocken, Goldblöcke), ist in
+der Königsburg durch Ähnliches aus gewöhnlichen Baustoffen ersetzt. Die Burg ist jedes Mal genau dieselbe.
+
+![Die Königsburg: von oben, Burghof mit Bergfried, Palas und Kapelle, Graben und Brücke, Marktplatz, Königsgarten, Einlesen im Stadtfenster](docs/bilder/architekt_koenigsburg.jpg)
+
 ### Hof- und Weidetiere
 
 ![Die eigenen Hof- und Weidetiere](docs/bilder/hoftiere.jpg)
@@ -1822,11 +1844,12 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
      Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
      eigenen Wesen.
-2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen und die Heerhaufen sind
-   fertig, als Nächstes kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
+2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen, die Heerhaufen, die neuen
+   Truppen und die Drachen im Krieg sind fertig; als Nächstes kommen Fahrzeuge und der Belagerungsturm
+   ([docs/KRIEG.md](docs/KRIEG.md)).
 3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
-   einlesen und ablegen) und Teil 3 (Großbaustellen mit vielen Baumeistern) sind fertig; als Nächstes die Königsburg mit
-   300 × 300 Blöcken als Bauplan und als .litematic.
+   einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
+   eingebauter Bauplan und als .litematic) sind fertig.
 4. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung

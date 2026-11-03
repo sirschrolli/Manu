@@ -1122,6 +1122,14 @@ public class TownScreen extends Screen {
             ".#....#.",
             "..####.."};
 
+    /** Eine Krone (für die eingebauten Pläne des Dragon Architect). */
+    private static final String[] CROWN_ICON = {
+            "#....#....#",
+            "##..###..##",
+            "###########",
+            "###########",
+            "###########"};
+
     /** Zeichnet ein kleines Pixelbild (Zeilen aus '#' und '.') mit Schatten wie die Schrift. */
     private void pixels(GuiGraphicsExtractor g, int x, int y, String[] rows, int color) {
         int shadow = 0xFF000000 | ((color >> 2) & 0x3F3F3F);
@@ -1170,26 +1178,40 @@ public class TownScreen extends Screen {
             int rx = x0 + 2;
             boolean hover = mouseX >= rx && mouseX < rx + rowW && mouseY >= ry && mouseY < ry + IMPORT_ROW_H - 2;
             this.card(g, rx, ry, rowW, IMPORT_ROW_H - 2, hover);
-            // Art der Datei als farbiges Schild
+            // Art der Datei als farbiges Schild (die eingebauten Pläne mit einer Krone)
+            boolean builtin = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.BUILTIN.equals(file.format());
             String badge = switch (file.format()) {
                 case "litematic" -> "LITE";
                 case "schem" -> "SCHEM";
+                case io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.BUILTIN -> "";
                 default -> "NBT";
             };
             int color = switch (file.format()) {
                 case "litematic" -> 0xFF2F6E9E;
                 case "schem" -> 0xFF8A4FB0;
+                case io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.BUILTIN -> 0xFFB07A1E;
                 default -> 0xFF5E7E36;
             };
             g.fill(rx + 3, ry + 4, rx + 37, ry + 15, color);
             g.outline(rx + 3, ry + 4, 34, 11, 0x60000000);
-            g.text(this.font, badge, rx + 20 - this.font.width(badge) / 2, ry + 6, 0xFFF3F7FF, false);
-            g.text(this.font, this.ellipsize(file.name(), 150), rx + 42, ry + 2, TEXT, false);
-            String info = file.folder() + " · " + (file.bytes() >= 1024 ? (file.bytes() + 512) / 1024 + " KB" : file.bytes() + " B");
-            g.text(this.font, info, rx + 42, ry + 11, MUTED, false);
+            if (builtin) {
+                this.pixels(g, rx + 14, ry + 7, CROWN_ICON, 0xFFFFE08A);
+            } else {
+                g.text(this.font, badge, rx + 20 - this.font.width(badge) / 2, ry + 6, 0xFFF3F7FF, false);
+            }
+            Component name = builtin ? Component.translatable("gui.kingdomsatwar.town.import.royal") : Component.literal(file.name());
+            g.text(this.font, this.ellipsize(name.getString(), 150), rx + 42, ry + 2, builtin ? 0xFF7A4A08 : TEXT, false);
+            String info = builtin ? Component.translatable("gui.kingdomsatwar.town.import.royal.info").getString()
+                    : file.folder() + " · " + (file.bytes() >= 1024 ? (file.bytes() + 512) / 1024 + " KB" : file.bytes() + " B");
+            g.text(this.font, this.ellipsize(info, rowW - 108), rx + 42, ry + 11, MUTED, false);
+            List<Component> hint = builtin
+                    ? List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", name).withStyle(ChatFormatting.GRAY),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint1").withStyle(ChatFormatting.DARK_GRAY),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint2").withStyle(ChatFormatting.DARK_GRAY),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint3").withStyle(ChatFormatting.DARK_GRAY))
+                    : List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", file.name()).withStyle(ChatFormatting.GRAY));
             this.woodButton(g, rx + rowW - 58, ry + 3, 54, 14, Component.translatable("gui.kingdomsatwar.town.import.read"), true, mouseX, mouseY,
-                    () -> this.send(TownActions.IMPORT, 0, file.id()),
-                    List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", file.name()).withStyle(ChatFormatting.GRAY)));
+                    () -> this.send(TownActions.IMPORT, 0, file.id()), hint);
         }
         if (max > 0) {
             int sx = x0 + CONTENT_W - 6;

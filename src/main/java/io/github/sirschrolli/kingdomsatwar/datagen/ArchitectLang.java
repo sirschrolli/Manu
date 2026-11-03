@@ -129,6 +129,13 @@ final class ArchitectLang {
                 "Keine Schematiken gefunden. Lege .litematic-, .schem- oder .nbt-Dateien in den Ordner »schematics« deines Minecraft-Ordners (dort legt sie auch Litematica ab). Gefunden werden auch Schematiken in config/worldedit/schematics und Strukturen, die mit dem Strukturblock gespeichert wurden.");
         t.add("gui.kingdomsatwar.town.import.read", "Read", "Einlesen");
         t.add("gui.kingdomsatwar.town.import.read.hint", "Read %s as your own blueprint", "%s als eigenen Bauplan einlesen");
+        t.add("gui.kingdomsatwar.town.import.royal", "Royal Castle", "Königsburg");
+        t.add("gui.kingdomsatwar.town.import.royal.info", "Dragon Architect · 300 × 300 blocks", "Dragon Architect · 300 × 300 Blöcke");
+        t.add("gui.kingdomsatwar.town.import.royal.hint1", "Two ring walls, a moat with a stone bridge, the keep,",
+                "Zwei Mauerringe, ein Graben mit Steinbrücke, der Bergfried,");
+        t.add("gui.kingdomsatwar.town.import.royal.hint2", "palace, chapel, royal garden and a whole town.",
+                "Palas, Kapelle, Königsgarten und eine ganze Stadt.");
+        t.add("gui.kingdomsatwar.town.import.royal.hint3", "Your builders build it in sections.", "Deine Baumeister bauen sie abschnittsweise.");
         t.add("gui.kingdomsatwar.town.import.done", "Read: %s", "Eingelesen: %s");
         t.add("gui.kingdomsatwar.town.import.done_unknown", "Read: %s (%s unknown blocks became air)",
                 "Eingelesen: %s (%s unbekannte Blöcke wurden Luft)");
