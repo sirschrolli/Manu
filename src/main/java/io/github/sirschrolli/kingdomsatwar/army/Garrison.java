@@ -169,7 +169,8 @@ public final class Garrison {
         }
         int sent = 0;
         for (SoldierEntity soldier : SoldierEntity.soldiersOf(player, SoldierEntity.COMMAND_RANGE)) {
-            if (station(soldier)) {
+            // wer eine Belagerungswaffe bedient, bleibt an ihr (abziehen geht mit dem Stab an der Waffe)
+            if (!io.github.sirschrolli.kingdomsatwar.siege.SiegeCrew.isCrew(soldier) && station(soldier)) {
                 sent++;
             }
         }

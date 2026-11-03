@@ -62,23 +62,23 @@ final class SiegeShowcase {
             w[3] = spawn(level, SiegeType.RAM, RAM_X, RAM_Z, 180.0f);
         }));
         steps.add(Step.until(() -> w[3] != null, 400));
-        steps.add(look(CAT_X - 3.3, 2.3, CAT_Z - 3.6, CAT_X, 1.0, CAT_Z));
+        steps.add(look(CAT_X - 2.5, 1.9, CAT_Z - 2.7, CAT_X, 1.0, CAT_Z));
         steps.add(Step.waitTicks(100));
         steps.add(Step.waitForChunks(600));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("siege_catapult"));
 
         // Katapult: der Arm schnellt hoch, die Kugel noch im Löffel
-        pose(steps, w, 0, 3.3f, look(CAT_X - 5.2, 1.7, CAT_Z + 0.3, CAT_X, 1.5, CAT_Z - 0.4), "siege_catapult_throw");
+        pose(steps, w, 0, 3.3f, look(CAT_X - 4.1, 1.6, CAT_Z + 0.2, CAT_X, 1.5, CAT_Z - 0.3), "siege_catapult_throw");
 
         // Tribok: gespannt, dann mitten im Schwung
-        steps.add(look(TREB_X - 6.5, 3.0, TREB_Z - 5.5, TREB_X, 2.4, TREB_Z));
+        steps.add(look(TREB_X - 5.3, 2.6, TREB_Z - 4.6, TREB_X, 2.5, TREB_Z));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("siege_trebuchet"));
-        pose(steps, w, 1, 7.0f, look(TREB_X - 9.5, 3.2, TREB_Z + 0.5, TREB_X, 3.6, TREB_Z - 1.5), "siege_trebuchet_swing");
+        pose(steps, w, 1, 7.0f, look(TREB_X - 8.0, 3.0, TREB_Z + 0.3, TREB_X, 3.7, TREB_Z - 1.5), "siege_trebuchet_swing");
 
         // Balliste: gespannt mit Bolzen, dann der Schuss – die Arme schnellen vor, der Bolzen verlässt die Bahn
-        steps.add(look(BAL_X - 2.3, 1.7, BAL_Z - 2.6, BAL_X, 0.9, BAL_Z));
+        steps.add(look(BAL_X - 1.8, 1.5, BAL_Z - 2.1, BAL_X, 0.9, BAL_Z));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("siege_ballista"));
         SiegeProjectile[] bolt = new SiegeProjectile[1];
@@ -92,7 +92,7 @@ final class SiegeShowcase {
             level.addFreshEntity(p);
             bolt[0] = p;
         }));
-        pose(steps, w, 2, 1.2f, look(BAL_X - 4.2, 1.5, BAL_Z - 1.6, BAL_X, 1.0, BAL_Z - 1.6), "siege_ballista_fire");
+        pose(steps, w, 2, 1.2f, look(BAL_X - 3.4, 1.4, BAL_Z - 1.8, BAL_X, 1.0, BAL_Z - 1.8), "siege_ballista_fire");
         steps.add(Step.server(level -> {
             if (bolt[0] != null) {
                 bolt[0].discard();
@@ -102,7 +102,7 @@ final class SiegeShowcase {
         // Rammbock am Tor: ein Stoß hat die Türen schon angeknackst, der nächste kommt
         steps.add(Step.server(level -> w[3].fire(level, null)));
         steps.add(Step.waitTicks(25));
-        pose(steps, w, 3, 4.6f, look(RAM_X - 4.2, 1.6, RAM_Z + 1.2, RAM_X - 0.2, 1.3, RAM_Z - 1.6), "siege_ram");
+        pose(steps, w, 3, 4.6f, look(RAM_X - 4.6, 1.5, WALL + 1.25, RAM_X, 1.4, WALL + 0.4), "siege_ram");
 
         // Bresche: das Katapult wirft auf die Mauer; ein Bild mit der Kugel im Flug, eins von der zerschlagenen Mauer
         Vec3[] targets = {
@@ -205,10 +205,10 @@ final class SiegeShowcase {
     /** Waffe {@code i} zeigt im Bild die Stellung {@code since} Ticks nach dem Schuss (nur auf dem Bildschirm). */
     private static void pose(Deque<Step> steps, SiegeWeaponEntity[] w, int i, float since, Step camera, String name) {
         steps.add(camera);
-        steps.add(Step.once(minecraft -> SiegeWeaponRenderer.DEV_POSE.put(w[i].getId(), since)));
+        steps.add(Step.once(minecraft -> SiegeWeaponRenderer.DEV_POSE.put(w[i].getUUID(), since)));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot(name));
-        steps.add(Step.once(minecraft -> SiegeWeaponRenderer.DEV_POSE.remove(w[i].getId())));
+        steps.add(Step.once(minecraft -> SiegeWeaponRenderer.DEV_POSE.remove(w[i].getUUID())));
         steps.add(Step.waitTicks(5));
     }
 
@@ -269,16 +269,12 @@ final class SiegeShowcase {
             level.setBlock(new BlockPos(x, g + 1, WALL - 1), door.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_CLIENTS);
             level.setBlock(new BlockPos(x, g + 2, WALL - 1), Blocks.IRON_BARS.defaultBlockState(), Block.UPDATE_ALL);
         }
-        // Torbogen: Steinziegel-Stufen rahmen die Öffnung
-        for (int y = g; y <= g + 3; y++) {
-            level.setBlock(new BlockPos(GATE - 1, y, WALL), Blocks.STONE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
-            level.setBlock(new BlockPos(GATE + 2, y, WALL), Blocks.STONE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
+        // die Chunks des Platzes ticken (sonst schösse niemand – ein Zuschauer hält sie nicht wach)
+        for (int cx = (X0 - 24) >> 4; cx <= (X0 + 48) >> 4; cx++) {
+            for (int cz = (WALL - 8) >> 4; cz <= (Z0 + 24) >> 4; cz++) {
+                level.setChunkForced(cx, cz, true);
+            }
         }
-        for (int x = GATE - 1; x <= GATE + 2; x++) {
-            level.setBlock(new BlockPos(x, g + 3, WALL), Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
-        }
-        level.setBlock(new BlockPos(GATE - 1, g + 4, WALL), Blocks.LANTERN.defaultBlockState(), Block.UPDATE_ALL);
-        level.setBlock(new BlockPos(GATE + 2, g + 4, WALL), Blocks.LANTERN.defaultBlockState(), Block.UPDATE_ALL);
     }
 
     /** Kamera: Auge (Höhe über dem Boden) mit Blick auf einen Punkt (Höhe über dem Boden). */

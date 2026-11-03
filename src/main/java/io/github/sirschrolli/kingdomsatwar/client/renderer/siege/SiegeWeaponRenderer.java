@@ -24,7 +24,7 @@ import net.minecraft.world.phys.AABB;
  */
 public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, SiegeModels.State> {
     /** Nur für Vorführungen: feste Stellung (Ticks nach dem Schuss) je Wesen, unabhängig von der Spielzeit. */
-    public static final java.util.Map<Integer, Float> DEV_POSE = new java.util.concurrent.ConcurrentHashMap<>();
+    public static final java.util.Map<java.util.UUID, Float> DEV_POSE = new java.util.concurrent.ConcurrentHashMap<>();
 
     private final Model<SiegeModels.State> model;
     private final Identifier texture;
@@ -64,7 +64,7 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
         super.extractRenderState(entity, state, partialTicks);
         state.siege = entity.siege();
         state.yRot = entity.getYRot(partialTicks);
-        Float pose = DEV_POSE.get(entity.getId());
+        Float pose = DEV_POSE.isEmpty() ? null : DEV_POSE.get(entity.getUUID());
         if (pose != null) {
             state.since = pose;
             state.loaded = pose < io.github.sirschrolli.kingdomsatwar.siege.SiegePoses.releaseTick(entity.siege());

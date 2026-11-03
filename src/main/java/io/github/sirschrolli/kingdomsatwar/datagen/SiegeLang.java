@@ -61,14 +61,14 @@ final class SiegeLang {
         text.add("siege.kingdomsatwar.placed", "%s set up – right-click to man it", "%s aufgestellt – Rechtsklick zum Bedienen");
         text.add("siege.kingdomsatwar.no_room", "No room for %s here", "Hier ist kein Platz für %s");
         text.add("siege.kingdomsatwar.not_yours", "This siege weapon belongs to someone else", "Diese Belagerungswaffe gehört jemand anderem");
-        text.add("siege.kingdomsatwar.controls.catapult", "Look: aim · W/S: drive · Space: throw · Sneak: get off",
-                "Blick: zielen · W/S: fahren · Leertaste: werfen · Schleichen: absteigen");
-        text.add("siege.kingdomsatwar.controls.trebuchet", "Look: aim · W/S: drive · Space: hurl · Sneak: get off",
-                "Blick: zielen · W/S: fahren · Leertaste: schleudern · Schleichen: absteigen");
-        text.add("siege.kingdomsatwar.controls.ballista", "Look: aim · W/S: move · Space: shoot · Sneak: get off",
-                "Blick: zielen · W/S: schieben · Leertaste: schießen · Schleichen: absteigen");
-        text.add("siege.kingdomsatwar.controls.ram", "W/S: push · Space: strike · Sneak: get off",
-                "W/S: schieben · Leertaste: zustoßen · Schleichen: absteigen");
+        text.add("siege.kingdomsatwar.controls.catapult", "Look: aim · W/S: drive · Space: throw · Sneak: step back",
+                "Blick: zielen · W/S: fahren · Leertaste: werfen · Schleichen: zurücktreten");
+        text.add("siege.kingdomsatwar.controls.trebuchet", "Look: aim · W/S: drive · Space: hurl · Sneak: step back",
+                "Blick: zielen · W/S: fahren · Leertaste: schleudern · Schleichen: zurücktreten");
+        text.add("siege.kingdomsatwar.controls.ballista", "Look: aim · W/S: move · Space: shoot · Sneak: step back",
+                "Blick: zielen · W/S: schieben · Leertaste: schießen · Schleichen: zurücktreten");
+        text.add("siege.kingdomsatwar.controls.ram", "W/S: push · Space: strike · Sneak: step back",
+                "W/S: schieben · Leertaste: zustoßen · Schleichen: zurücktreten");
 
         // --- Mannschaft (Kommandostab) ---
         text.add("siege.kingdomsatwar.crew.assigned", "%2$s: %1$s takes the crew post", "%2$s: %1$s übernimmt die Bedienung");

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.41.0 – Erzmagier: neue Kräfte. Jeder Erzmagier kann sich in einem Heilritual erneuern (wer genug Schaden macht, bricht es), dazu je eine neue Fähigkeit: Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht und Gegenwelle. Gewinnt der Magier, kehrt er sicher in seinen Turm zurück – auch nach einem Neustart mitten im Kampf. Der Aetherit-Stab hat jetzt eine Mana-Leiste und sechs Stufen (1.000 bis 100.000 Erfahrung, zuletzt 150 % Kraft als Aetherfürst); die Heilende Blüte heilt sofort, und die Zauber sehen prächtiger aus.**
+> **Testversion 0.42.0 – Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock. Aus Bausätzen aufgestellt, selbst bedient (zielen mit dem Blick, eine Leuchtspur zeigt Flugbahn und Einschlag) oder von deinen Soldaten: Mit dem Kommandostab läuft ein Soldat zur Waffe und schießt auf das Ziel, auf das du zeigst. Steinkugeln schlagen Breschen in Mauern, Bolzen durchschlagen bis zu drei Gegner, der Rammbock bricht Tore auf – Siedlungen, Siegelkreis und Reichsbanner bleiben geschützt.**
+> In 0.41 kamen neue Kräfte der Erzmagier: ein Heilritual (wer genug Schaden macht, bricht es) und je eine neue Fähigkeit – Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht, Gegenwelle; die sichere Heimkehr in den Turm; der Aetherit-Stab mit Mana-Leiste und sechs Stufen bis zum Aetherfürsten (150 % Kraft).
 > In 0.40 kam die Macht der Erzmagier: je zwei Meisterzauber mit eigener Gestalt, eine besondere Fähigkeit, deutlich stärker; der Aetherit-Stab unzerstörbar, nur herstellbar und zum Aufladen.
 > In 0.39 kam die Arkane Sphäre: Die Erzmagier ziehen dich, deine Mitspieler und deine Soldaten in ihre eigene Dimension – eine schwebende Arena im Element des Magiers. Dort lässt sich nichts bauen, und wer stirbt, verliert alles, was er bei sich trägt.
 > In 0.38 kam der Krieg der Königreiche, Teil 1: vier feindliche Reiche mit je einer großen Stammburg, Besatzung, Herrscher, Eroberung und Tribut. Dazu: Kingdoms at War läuft nur noch ohne andere Mods, keine Koordinaten mehr (F3), viel härter (Schwer fest, stärkere Gegner, halbe Heilung, Schwäche nach dem Tod), acht eigene Verzauberungen und ein Arachnophobie-Modus.
@@ -339,8 +340,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Aetherit-Stab: unzerstörbar, nur herstellbar (Aetherkern), Meisterschaft in vier Rängen, Aufladen, neue Zaubereffekte | ✅ fertig |
 | Erzmagier: Heilritual, je eine weitere Fähigkeit, sichere Heimkehr in den Turm nach dem Sieg | ✅ fertig |
 | Aetherit-Stab: Mana-Leiste, sechs Stufen bis 150 % Kraft, Heilende Blüte heilt sofort, prächtigere Zauber | ✅ fertig |
-| Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 als Nächstes |
-| Gegenangriffe der Reiche, neue Truppen, Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
+| Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Kommandostab) | ✅ fertig |
+| Gegenangriffe der Reiche, neue Truppen | 🔨 als Nächstes |
+| Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
 
@@ -967,6 +969,47 @@ Bauweise (Plan und Stand: [docs/KRIEG.md](docs/KRIEG.md)):
 - **Finden:** Wer sich einer Stammburg nähert, erfährt, wessen Land er betritt; der Kartograf verkauft eine Karte zur
   nächsten noch freien Stammburg.
 
+### Belagerungswaffen
+
+Vier Belagerungswaffen, jede aus einem **Bausatz** von der Werkbank – mit Rechtsklick auf den Boden aufgestellt, sie
+blickt dann in deine Richtung:
+
+| Waffe | Munition | Reichweite | Wirkung | Nachladen |
+|---|---|---|---|---|
+| **Katapult** | Steinkugel | 18–68 Blöcke im Bogen | Wucht 14, schlägt Breschen in Mauern | 5 s |
+| **Tribok** | zwei Steinkugeln je Wurf | 38–118 Blöcke im hohen Bogen | Wucht 24, große Breschen, auch in härterem Gestein | 11 s |
+| **Balliste** | Ballistenbolzen | gerade Schüsse | 18 Schaden, durchschlägt bis zu drei Gegner und Glas | 3 s |
+| **Rammbock** | – | vor dem Widderkopf | bricht Tore, Türen, Gitter, Zäune und Holz auf (1–4 Stöße) | 2 s |
+
+- **Selbst bedienen:** Rechtsklick tritt an die Waffe (an Katapult und Tribok rechts an die Winde, hinter die Balliste,
+  in den Rammbock). W/S fährt, die Waffe dreht sich in deine Blickrichtung. Wurfwaffen stellen die Weite selbst auf
+  das anvisierte Ziel ein – eine **Leuchtspur** zeigt die Flugbahn und ein roter Kreis den Einschlag (nur du siehst
+  sie); die Balliste neigt sich mit deinem Blick. **Leertaste** feuert, **Schleichen** tritt zurück. Über der
+  Schnellleiste stehen Vorrat, Bereitschaft, Wurfweite und Zustand. Arm, Schlinge, Bogen und Widder holen sichtbar aus –
+  das Geschoss fliegt genau in dem Moment los, in dem es Löffel, Schlinge oder Bahn verlässt.
+- **Laden, reparieren, zerlegen:** Rechtsklick mit Munition lädt nach (Katapult und Tribok fassen 16 Steinkugeln, die
+  Balliste 24 Bolzen); ist der Vorrat leer, nimmt die Waffe Munition aus deinem Gepäck. Jedes Brett repariert ein
+  Zehntel. Schleichend mit leerer Hand zerlegst du sie wieder in ihren Bausatz (er merkt sich den Zustand), die übrige
+  Munition bekommst du zurück. Steckengebliebene Bolzen lassen sich aufheben.
+- **Bedienmannschaft:** Mit dem **Kommandostab** auf eine Waffe zeigen – der nächste freie Soldat läuft hin und bedient
+  sie. Noch einmal auf die bediente Waffe zeigen wählt sie aus; dann auf einen Gegner (Angriff), auf eine Stelle
+  (Beschuss, bis zu zwölf Würfe; der Rammbock fährt zum Tor) oder in den Himmel (freies Feuer auf Monster in
+  Reichweite) zeigen. Schleichend auf die Waffe zeigen zieht die Mannschaft ab. Deine Soldaten, Tiere, Drachen und
+  Waffen bleiben vom Beschuss verschont.
+- **Schaden und Schutz:** Pfeile richten am Holz wenig aus, Äxte und Explosionen viel; schwer beschädigt qualmt die
+  Waffe, bei null zerbricht sie in Bretter, Stöcke und Eisen. Siedlungen, der Siegelkreis, die Reichsbanner der
+  Stammburgen und besondere Blöcke (Stadtbanner, Siegelsteine, Tore der Schattenwelt …) halten jedem Beschuss stand; die
+  Einstellung `siegeBlockDamage` schaltet Blockschaden ganz ab.
+
+| Rezept | |
+|---|---|
+| Steinkugel ×2 | vier Bruchsteine (2 × 2) |
+| Ballistenbolzen ×4 | Eisenbarren, zwei Stöcke, zwei Federn |
+| Katapult | Stamm, zwei Fäden, Eisenbarren, drei Bretter |
+| Tribok | zwei Stämme, Eisenkette, zwei Fäden, Eisenblock, drei Bretter |
+| Balliste | Armbrust, zwei Fäden, zwei Bretter, Eisenbarren, zwei Stämme |
+| Rammbock | drei Bretter, zwei Eisenketten, drei Stämme, Eisenbarren |
+
 ### Regeln: allein, ohne Koordinaten, hart
 
 - **Nur ohne andere Mods:** Ist neben Kingdoms at War noch eine andere Mod installiert, bricht das Spiel den Start mit
@@ -1572,6 +1615,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |
+| `siegeBlockDamage` (Server) | Belagerungswaffen zerschlagen Mauern, Tore und Türen (Standard: an; nie in Siedlungen, am Siegelkreis oder am Reichsbanner) |
 
 ---
 
@@ -1642,7 +1686,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
      Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
      eigenen Wesen.
-2. Danach Dragon Architect, Belagerungswaffen, Kriegssystem und die Veröffentlichung auf Modrinth.
+2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen und die Belagerungswaffen sind fertig, als
+   Nächstes greifen die Reiche selbst an, und es kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
+3. Danach Dragon Architect und die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 

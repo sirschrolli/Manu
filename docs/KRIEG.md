@@ -79,8 +79,26 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | M | Die Arkane Sphäre: Erzmagier ziehen Spieler und Truppen in ihre Arena-Dimension (Version 0.39.0) | ✅ |
 | M2 | Die Macht der Erzmagier: Meisterzauber mit eigenen Modellen, Fähigkeiten, stärker; Aetherit-Stab unzerstörbar, nur herstellbar, mit Meisterschaft (Version 0.40.0) | ✅ |
 | M3 | Erzmagier: Heilritual und je eine weitere Fähigkeit, sichere Heimkehr in den Turm; Aetherit-Stab mit Mana-Leiste und sechs Stufen (Version 0.41.0) | ✅ |
-| K2 | Belagerungswaffen: Rammbock, Katapult, Balliste, Tribok | 🔨 |
-| K3 | Gegenangriffe der Reiche, neue Truppen | ⏳ |
+| K2 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Version 0.42.0) | ✅ |
+| K3 | Gegenangriffe der Reiche, neue Truppen | 🔨 |
+
+## Was in 0.42.0 fertig ist (Belagerungswaffen)
+
+- **Vier Waffen aus Bausätzen:** Katapult (Steinkugeln, 18–68 Blöcke), Tribok (zwei Steinkugeln je Wurf, 38–118
+  Blöcke), Balliste (Bolzen, gerade Schüsse, durchschlagen bis zu drei Gegner und Glas) und Rammbock (bricht Tore,
+  Türen, Gitter, Zäune und Holz auf). Aufstellen mit Rechtsklick auf den Boden, zerlegen schleichend mit leerer Hand
+  (der Bausatz merkt sich den Zustand), reparieren mit Brettern.
+- **Selbst bedienen:** Zielen mit dem Blick; Wurfwaffen stellen die Weite auf das anvisierte Ziel ein, eine nur für
+  den Schützen sichtbare Leuchtspur zeigt Flugbahn und Einschlag. Leertaste feuert, W/S fährt.
+- **Bewegte Modelle:** Wurfarm, Schlinge und Gegengewicht, Bogenarme und Sehnen, Widder und Räder bewegen sich; das
+  Geschoss verlässt Löffel, Schlinge oder Bahn genau dann, wenn das Modell es zeigt.
+- **Bedienmannschaft:** Kommandostab auf die Waffe – ein freier Soldat bedient sie; ausgewählt und auf ein Ziel, eine
+  Stelle oder in den Himmel gezeigt, schießt die Mannschaft dorthin bzw. frei auf Monster. Eigene Truppen bleiben
+  verschont.
+- **Schutz:** Siedlungen, Siegelkreis, Reichsbanner und besondere Blöcke halten stand; Blockschaden lässt sich in den
+  Einstellungen abschalten (`siegeBlockDamage`).
+- **Geprüft** mit acht Spieltests (Aufstellen bis Zerlegen, Tor und Gitter, Durchschlag, Bresche, Treffgenauigkeit des
+  Triboks auf 70 Blöcke, Bedienmannschaft ohne Eigenbeschuss, Schutzregeln, Zerbrechen).
 
 ## Was in 0.38.0 fertig ist
 
