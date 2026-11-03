@@ -28,7 +28,7 @@ import net.minecraft.world.phys.Vec3;
  *     <li>Erde: schwere Steinbrocken, schleudert zurück und betäubt</li>
  *     <li>Wasser: Wasserstrahl, stößt weg und löscht Feuer</li>
  * </ul>
- * Blöcke werden nicht verändert – der Odem zerstört keine Bauten.
+ * Blöcke werden nicht verändert – der Odem zerstört keine Bauten und geht nicht durch Mauern.
  */
 public final class DragonBreath {
     private static final double CONE_COS = Math.cos(Math.toRadians(22));
@@ -45,7 +45,7 @@ public final class DragonBreath {
         float damage = (float) (dragon.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE) * 0.35);
         AABB box = new AABB(mouth, mouth.add(dir.scale(range))).inflate(range * 0.35);
         List<LivingEntity> hits = level.getEntitiesOfClass(LivingEntity.class, box, e -> e != dragon && e.isAlive()
-                && !dragon.hasPassenger(e) && inCone(mouth, dir, e, range));
+                && !dragon.hasPassenger(e) && inCone(mouth, dir, e, range) && reachable(level, dragon, mouth, e));
         boolean struck = false;
         for (LivingEntity target : hits) {
             boolean ally = isAlly(dragon, target);
@@ -89,6 +89,17 @@ public final class DragonBreath {
                 }
             }
         }
+    }
+
+    /** Der Odem geht nicht durch Mauern: Kopf oder Mitte des Ziels müssen frei vor dem Maul liegen. */
+    private static boolean reachable(ServerLevel level, DragonEntity dragon, Vec3 mouth, Entity target) {
+        for (Vec3 point : new Vec3[] {target.getEyePosition(), target.getBoundingBox().getCenter()}) {
+            if (level.clip(new net.minecraft.world.level.ClipContext(mouth, point, net.minecraft.world.level.ClipContext.Block.COLLIDER,
+                    net.minecraft.world.level.ClipContext.Fluid.NONE, dragon)).getType() == net.minecraft.world.phys.HitResult.Type.MISS) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean inCone(Vec3 mouth, Vec3 dir, Entity target, double range) {

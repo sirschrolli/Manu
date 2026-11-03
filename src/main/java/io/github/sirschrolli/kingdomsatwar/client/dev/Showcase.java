@@ -110,6 +110,7 @@ final class Showcase {
                 case "siege" -> SiegeShowcase.siege(steps);
                 case "raid" -> RaidShowcase.raid(steps);
                 case "troops" -> TroopShowcase.troops(steps);
+                case "dragonwar" -> DragonWarShowcase.dragonWar(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
                 case "golems" -> GolemShowcase.golems(steps);

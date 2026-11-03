@@ -62,7 +62,7 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
   Heerhaufen mit Hauptmann gegen die eigene Siedlung (abschaltbar).
 - **Neue Truppen:** Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross und
   Belagerungsknechte für die eigene Armee (0.44.0).
-- **Drachen im Krieg** (danach): Drachen greifen auf Befehl Burgen und Heere an.
+- **Drachen im Krieg:** Drachen greifen auf Befehl (Drachenhorn) Burgen und Heere an (0.45.0).
 
 ---
 
@@ -82,6 +82,26 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | K2 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Version 0.42.0) | ✅ |
 | K3a | Heerhaufen: Gegenangriffe der Reiche auf die eigene Siedlung (Version 0.43.0) | ✅ |
 | K3b | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte (Version 0.44.0) | ✅ |
+| K4 | Drachen im Krieg: Drachenhorn, Sturzangriff, Luftangriff, Verteidigung gegen Heerhaufen (Version 0.45.0) | ✅ |
+
+## Was in 0.45.0 fertig ist (Drachen im Krieg)
+
+- **Drachenhorn** (Ziegenhorn, 2 Gold, 2 beliebige Drachenschuppen): ruft alle eigenen Drachen bis 160 Blöcke, die
+  fliegen und Odem speien können (ab Halbwüchsig) und niemanden tragen. Auf einen Feind zeigen = Angriff, auf einen Ort
+  = Luftangriff (20 Blöcke Umkreis, höchstens 2 Minuten, ohne Feinde nach 30 Sekunden zurück), in den Himmel oder
+  schleichend = Rückkehr. Sitzende Drachen stehen dafür auf.
+- **Kriegsflug:** Anflug gut zwölf Blöcke über dem Ziel und seitlich versetzt, Brüllen, Sturzflug knapp über das Ziel
+  hinweg mit dem Odem, wieder hinauf und herum. Beim Luftangriff nach jedem Sturzflug ein anderes Ziel. Ist das Ziel
+  gefallen, die Feinde gleich daneben (16 Blöcke), sonst zurück.
+- **Feinde:** Monster (ohne Creeper und „neutrale“ Wesen), Banditen, Krieger der Reiche im Krieg mit dem Herrn – nie
+  Spieler, Drachen oder Verbündete.
+- **Gegenwehr:** Krieger der Reiche greifen Drachen von Spielern im Krieg an (in der Luft nur die Schützen). Unter einem
+  Viertel des Lebens bricht ein Drache ab und kehrt zurück (Meldung an den Herrn).
+- **Heerhaufen:** Beim Anrücken steigen die Drachen des Spielers in der Nähe auf und verteidigen das Stadtbanner
+  (30 Blöcke Umkreis, solange der Heerhaufen höchstens dauert).
+- Der Odem nimmt keine Bauten auseinander (dafür gibt es die Belagerungswaffen).
+- **Geprüft** mit fünf Spieltests (Angriff aus der Luft, Luftangriff auf drei Gegner, Rückzug, wer Feind ist samt
+  Gegenwehr der Schützen, Verteidigung gegen Heerhaufen).
 
 ## Was in 0.44.0 fertig ist (neue Truppen)
 

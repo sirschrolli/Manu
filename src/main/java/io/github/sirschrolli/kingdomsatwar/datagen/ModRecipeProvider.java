@@ -697,6 +697,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STICK)
                 .unlockedBy("has_recruitment_table", has(ModBlocks.RECRUITMENT_TABLE.get()))
                 .save(output, key("command_baton"));
+        // Drachenhorn: ein Ziegenhorn mit Goldbeschlägen und zwei Drachenschuppen
+        shaped(RecipeCategory.TOOLS, ModItems.DRAGON_HORN.get())
+                .pattern(" G ")
+                .pattern("SHS")
+                .pattern(" G ")
+                .define('G', Items.GOLD_INGOT)
+                .define('S', ModTags.Items.DRAGON_SCALES)
+                .define('H', Items.GOAT_HORN)
+                .unlockedBy("has_dragon_scale", has(ModTags.Items.DRAGON_SCALES))
+                .save(output, key("dragon_horn"));
         // Stadtbanner: ein Banner (beliebige Farbe) mit Goldknauf an einem Mast auf einem Steinsockel
         shaped(RecipeCategory.DECORATIONS, ModBlocks.TOWN_BANNER.get())
                 .pattern(" G ")

@@ -347,6 +347,7 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.VILLAGER_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        items.generateFlatItem(ModItems.DRAGON_HORN.get(), ModelTemplates.FLAT_ITEM);
         // Belagerungswaffen: Munition und Bausätze
         flat(items, ModItems.SIEGE_STONE.get());
         flat(items, ModItems.BALLISTA_BOLT.get());

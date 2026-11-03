@@ -361,6 +361,8 @@ public final class RealmRaids {
         state.raids.add(raid);
         save(level, state);
         announce(level, raid, town);
+        // die Drachen des Spielers in der Nähe steigen auf und verteidigen das Banner
+        io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonWar.defend(level, player.getUUID(), raid.banner(), (int) GIVE_UP);
         KingdomsAtWar.LOGGER.info("Heerhaufen Nr. {} von {} ({} Krieger) gegen {} bei {}", number, realm.id(), raid.raiders.size(), town.name(),
                 muster);
         return raid;

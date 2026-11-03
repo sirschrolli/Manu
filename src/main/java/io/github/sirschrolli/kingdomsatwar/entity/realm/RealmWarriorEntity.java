@@ -157,6 +157,9 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
                 (target, level) -> this.isIntruder(target)));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SoldierEntity.class, 10, true, false,
                 (target, level) -> this.isIntruder(target)));
+        // Drachen der Spieler, mit denen das Reich im Krieg liegt: die Schützen holen sie vom Himmel
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity.class,
+                10, false, false, (target, level) -> this.isIntruder(target)));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Monster.class, 10, true, false,
                 (target, level) -> !(target instanceof RealmWarriorEntity) && this.near(target, 14.0)));
     }
@@ -330,13 +333,17 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         double dz = target.getZ() - (this.castle.getZ() + 0.5);
         double dy = target.getY() - this.castle.getY();
         boolean inside = Math.abs(dx) < CASTLE_RADIUS && Math.abs(dz) < CASTLE_RADIUS && dy > -12 && dy < 48;
-        if (this.level() instanceof ServerLevel level && target instanceof Player player) {
+        if (this.level() instanceof ServerLevel level
+                && (target instanceof Player || target instanceof io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity)) {
             RealmState state = RealmState.of(level);
             if (state.isConquered(this.realm())) {
                 return false;
             }
-            if (state.atWar(this.realm(), player.getUUID()) && dx * dx + dz * dz < 64.0 * 64.0) {
-                return true;
+            java.util.UUID owner = io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonWar.ownerOf(target);
+            if (owner != null && state.atWar(this.realm(), owner) && dx * dx + dz * dz < 64.0 * 64.0) {
+                // Drachen in der Luft erreichen nur die Schützen
+                return !(target instanceof io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity dragon && dragon.isFlying())
+                        || this.role.ranged();
             }
         }
         if (!inside) {
@@ -359,9 +366,10 @@ public class RealmWarriorEntity extends Monster implements CrossbowAttackMob {
         if (target instanceof Player player) {
             return !player.isCreative() && !player.isSpectator() && state.atWar(this.realm(), player.getUUID());
         }
-        if (target instanceof SoldierEntity soldier) {
-            java.util.UUID owner = soldier.getOwnerId();
-            return owner != null && state.atWar(this.realm(), owner);
+        if (target instanceof SoldierEntity || target instanceof io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity) {
+            java.util.UUID owner = io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonWar.ownerOf(target);
+            boolean airborne = target instanceof io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity dragon && dragon.isFlying();
+            return owner != null && state.atWar(this.realm(), owner) && (!airborne || this.role.ranged());
         }
         return false;
     }

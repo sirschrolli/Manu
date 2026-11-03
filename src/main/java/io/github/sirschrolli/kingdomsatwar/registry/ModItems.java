@@ -482,6 +482,11 @@ public final class ModItems {
             ITEMS.registerItem("dragon_compass", io.github.sirschrolli.kingdomsatwar.item.DragonCompassItem::new,
                     p -> p.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_compass", 1))));
 
+    /** Das Drachenhorn: schickt die eigenen Drachen in den Krieg (Angriff, Luftangriff, Rückkehr). */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.DragonHornItem> DRAGON_HORN = addTo(DRAGON_TAB,
+            ITEMS.registerItem("dragon_horn", io.github.sirschrolli.kingdomsatwar.item.DragonHornItem::new,
+                    p -> p.stacksTo(1).rarity(Rarity.RARE).component(DataComponents.LORE, lore("dragon_horn", 4))));
+
     /** Die Chronik des Siegels: Geschichte, Ziele und Hinweise. */
     public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.ChronicleItem> CHRONICLE = addTo(EQUIPMENT_TAB,
             ITEMS.registerItem("chronicle", io.github.sirschrolli.kingdomsatwar.item.ChronicleItem::new,

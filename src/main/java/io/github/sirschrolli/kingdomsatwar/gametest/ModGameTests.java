@@ -210,6 +210,7 @@ public final class ModGameTests {
         SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
         RaidGameTests.init();      // Heerhaufen der Reiche gegen die eigene Siedlung
         TroopGameTests.init();     // die neuen Truppen (Speerträger bis Belagerungsknecht)
+        DragonWarGameTests.init(); // Drachen im Krieg (Drachenhorn, Sturzangriff, Luftangriff)
     }
 
     private ModGameTests() {}
@@ -249,6 +250,7 @@ public final class ModGameTests {
         // eigene Testgruppe: die Felder der Truppentests laden viele Chunks (wie die Schießplätze) – nicht gleichzeitig
         // mit den übrigen Tests, die sonst auf ihre Chunks warten
         TroopGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("troops")));
+        DragonWarGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("dragonwar")));
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg
         RaidGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("raids")));
         FarmGameTests.register(event, environment);

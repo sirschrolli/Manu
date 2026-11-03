@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.44.0 – Neue Truppen: Speerträger (lange Reichweite, hart gegen Reiter), Armbrustschützen (spannen langsam, schießen weit und durchschlagend), Schildträger (halten den großen Schild hoch und ziehen die Angreifer ihrer Kameraden auf sich), Waffenknechte (Plattenpanzer, der Streitkolben trifft auch die Nebenleute), Lanzenreiter auf dem eigenen Schlachtross (Lanzenangriff – je schneller, desto härter) und Belagerungsknechte (laden Belagerungswaffen schneller nach und bessern sie aus). Am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen, im Söldnerhaus warten die neuen Arten auch.**
+> **Testversion 0.45.0 – Drachen im Krieg: Mit dem neuen Drachenhorn schickst du deine Drachen in den Kampf – auf einen Feind zeigen und sie stoßen im Sturzflug mit ihrem Odem auf ihn herab, auf einen Ort zeigen und sie fliegen einen Luftangriff auf jeden Feind dort, in den Himmel zeigen und sie kehren zurück. Gegen Heerhaufen verteidigen sie die Siedlung von selbst; die Schützen der Reiche schießen zurück, schwer verwundet ziehen sich die Drachen zurück.**
+> In 0.44 kamen neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter auf dem eigenen Schlachtross und Belagerungsknechte; am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen.
 > In 0.43 kamen die Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner; besiegt liegt ihre Kriegskasse in deinem Lager, sonst plündern sie ein Drittel.
 > In 0.42 kamen die Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock – selbst bedient (zielen mit dem Blick, Leuchtspur mit Einschlagkreis) oder von Soldaten mit dem Kommandostab; Breschen in Mauern, Bolzen durch bis zu drei Gegner, Tore aufbrechen.
 > In 0.41 kamen neue Kräfte der Erzmagier: ein Heilritual (wer genug Schaden macht, bricht es) und je eine neue Fähigkeit – Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht, Gegenwelle; die sichere Heimkehr in den Turm; der Aetherit-Stab mit Mana-Leiste und sechs Stufen bis zum Aetherfürsten (150 % Kraft).
@@ -345,6 +346,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Kommandostab) | ✅ fertig |
 | Heerhaufen: Reiche im Krieg greifen die eigene Siedlung an (Sammelplatz, Horn, Leiste, Kriegskasse, Plündern) | ✅ fertig |
 | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte | ✅ fertig |
+| Drachen im Krieg: Drachenhorn, Sturzangriff mit Odem, Luftangriff, Verteidigung gegen Heerhaufen | ✅ fertig |
 | Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -892,6 +894,23 @@ versehentlichen Treffer. Ein Drache aus dem Spawn-Ei gehört dem, der das Ei ben
   Drachen: aufsitzen. Springen zum Abheben und Steigen, Schleichen zum Sinken, **R** speit Odem.
 - **Drachenpanzer** aus Stahl oder Draconium (feuerfest) für ausgewachsene Drachen; mit der Schere abnehmen.
 - **Drachenschuppen** fallen von den Bossen und liegen in den Nestern (mit dem Pinsel freilegen).
+
+**Drachen im Krieg:** Mit dem **Drachenhorn** (Ziegenhorn, 2 Gold, 2 Drachenschuppen) schickst du alle eigenen
+Drachen in Hörweite (160 Blöcke), die schon fliegen können und gerade niemanden tragen, in den Kampf:
+
+| Horn blasen und … | Die Drachen … |
+|---|---|
+| auf einen Feind zeigen | steigen auf und stoßen im **Sturzflug** mit ihrem Odem auf ihn herab – fällt er, nehmen sie sich die Feinde gleich daneben vor |
+| auf einen Ort zeigen | fliegen einen **Luftangriff**: kreisen darüber und stoßen nacheinander auf jeden Feind im Umkreis von 20 Blöcken herab (höchstens zwei Minuten, ohne Feinde kehren sie nach einer halben Minute zurück) |
+| in den Himmel zeigen oder schleichen | kehren zu dir zurück |
+
+Feinde sind Monster, Banditen und die Krieger der Reiche, mit denen du im Krieg liegst – nie Spieler und nie deine
+Leute. Kommt ein **Heerhaufen** gegen deine Siedlung, steigen deine Drachen in der Nähe von selbst auf und verteidigen das
+Stadtbanner. Die **Schützen der Reiche** holen Drachen vom Himmel: Ist ein Drache schwer verwundet (ein Viertel seines
+Lebens), bricht er den Angriff ab und kehrt zu dir zurück. Bauten nimmt der Odem nicht auseinander – dafür gibt es die
+Belagerungswaffen.
+
+![Drachen im Krieg: Anflug, Sturzflug mit Feuer und Eis, das Drachenhorn](docs/bilder/drachenkrieg.jpg)
 
 ### Ritter und Soldaten
 

@@ -1343,6 +1343,23 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Hier heilst du deine Soldaten im Feldlager und teilst Proviant zu");
         text(ModItems.loreKey("recruitment_table", 2), "Level them up: higher ranks, knights and captains",
                 "Und hier bildest du sie aus: höhere Ränge, Ritter und Hauptleute");
+        item(ModItems.DRAGON_HORN, "Dragon Horn", "Drachenhorn");
+        text(ModItems.loreKey("dragon_horn", 1), "Calls your dragons to war (up to 160 blocks)",
+                "Ruft deine Drachen in den Krieg (bis 160 Blöcke)");
+        text(ModItems.loreKey("dragon_horn", 2), "Point at an enemy: they dive at it with their breath",
+                "Auf einen Feind zeigen: Sturzangriff mit dem Odem");
+        text(ModItems.loreKey("dragon_horn", 3), "Point at a place: air strike on every enemy around it",
+                "Auf einen Ort zeigen: Luftangriff auf jeden Feind dort");
+        text(ModItems.loreKey("dragon_horn", 4), "Point at the sky or sneak: they return to you",
+                "In den Himmel zeigen oder schleichen: Rückkehr");
+        text("message.kingdomsatwar.dragon_horn.none", "No dragon of yours hears the horn", "Kein Drache von dir hört das Horn");
+        text("message.kingdomsatwar.dragon_horn.attack", "%s dragon(s) attack %s", "%s Drache(n) greifen %s an");
+        text("message.kingdomsatwar.dragon_horn.strike", "%s dragon(s) fly an air strike", "%s Drache(n) fliegen einen Luftangriff");
+        text("message.kingdomsatwar.dragon_horn.recall", "%s dragon(s) return to you", "%s Drache(n) kehren zu dir zurück");
+        text("message.kingdomsatwar.dragon_retreat", "%s is badly wounded and breaks off the attack",
+                "%s ist schwer verwundet und bricht den Angriff ab");
+        text("message.kingdomsatwar.dragon_defend", "%s dragon(s) rise to defend your settlement!",
+                "%s Drache(n) steigen auf und verteidigen deine Siedlung!");
         item(ModItems.COMMAND_BATON, "Command Baton", "Kommandostab");
         text(ModItems.loreKey("command_baton", 1), "Point at an enemy: attack", "Auf einen Feind zeigen: Angriff");
         text(ModItems.loreKey("command_baton", 2), "Point at the ground: hold position (sneak: patrol)",
