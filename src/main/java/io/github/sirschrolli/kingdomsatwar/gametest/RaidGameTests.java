@@ -64,9 +64,9 @@ final class RaidGameTests {
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         add(event, environment, BAND, 40);
-        add(event, environment, VICTORY, 800);
-        add(event, environment, PLUNDER, 800);
-        add(event, environment, SCHEDULE, 400);
+        add(event, environment, VICTORY, 1400);
+        add(event, environment, PLUNDER, 1400);
+        add(event, environment, SCHEDULE, 900);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,

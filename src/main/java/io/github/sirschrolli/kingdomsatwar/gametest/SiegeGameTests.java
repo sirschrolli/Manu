@@ -85,11 +85,11 @@ final class SiegeGameTests {
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         add(event, environment, KIT, 100);
-        add(event, environment, RAM, 200);
-        add(event, environment, BALLISTA, 200);
-        add(event, environment, CATAPULT, 300);
-        add(event, environment, TREBUCHET, 400);
-        add(event, environment, CREW, 900);
+        add(event, environment, RAM, 500);
+        add(event, environment, BALLISTA, 500);
+        add(event, environment, CATAPULT, 700);
+        add(event, environment, TREBUCHET, 900);
+        add(event, environment, CREW, 1400);
         add(event, environment, PROTECTION, 100);
         add(event, environment, BREAK, 100);
     }

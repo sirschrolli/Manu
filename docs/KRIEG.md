@@ -80,7 +80,22 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | M2 | Die Macht der Erzmagier: Meisterzauber mit eigenen Modellen, Fähigkeiten, stärker; Aetherit-Stab unzerstörbar, nur herstellbar, mit Meisterschaft (Version 0.40.0) | ✅ |
 | M3 | Erzmagier: Heilritual und je eine weitere Fähigkeit, sichere Heimkehr in den Turm; Aetherit-Stab mit Mana-Leiste und sechs Stufen (Version 0.41.0) | ✅ |
 | K2 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Version 0.42.0) | ✅ |
-| K3 | Gegenangriffe der Reiche, neue Truppen | 🔨 |
+| K3a | Heerhaufen: Gegenangriffe der Reiche auf die eigene Siedlung (Version 0.43.0) | ✅ |
+| K3b | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, schwere Fußknechte, berittene Ritter, Belagerungsknechte | 🔨 |
+
+## Was in 0.43.0 fertig ist (Heerhaufen)
+
+- **Wann:** Liegt ein Spieler mit einem Reich im Krieg, kommt alle `raidIntervalDays` Spieltage (Standard 3) ein
+  Heerhaufen – aber nur, wenn der Spieler in seiner Siedlung ist (höchstens 96 Blöcke vom Banner), und nie zwei
+  gleichzeitig. Der erste kommt frühestens eine volle Frist nach der Kriegserklärung. Abschaltbar (`realmRaids`).
+- **Wer:** ein Hauptmann, Fußknechte, Bogen- und Armbrustschützen, ab dem zweiten Heerhaufen auch Ritter; sechs beim
+  ersten, jeder weitere einer mehr, je Stufe der Siedlung einer mehr, höchstens 14.
+- **Wie:** Sammelplatz rund 44 Blöcke vor der Siedlung auf der Seite der Stammburg, Horn, Titel und Bossleiste; der
+  Haufen marschiert zum Stadtbanner und kämpft gegen den Spieler und seine Soldaten (Bürger lässt er in Ruhe).
+- **Sieg:** Die Kriegskasse (Silbermünzen, Eisen, Pfeile – mehr bei jedem weiteren Heerhaufen) liegt im Lager.
+- **Niederlage:** Ist das Banner 15 Sekunden lang unverteidigt, während Plünderer davorstehen, nehmen sie von jedem Stapel
+  im Lager ein knappes Drittel und ziehen ab. Nach zwölf Minuten gibt ein Heerhaufen von selbst auf.
+- **Geprüft** mit vier Spieltests (Zusammensetzung, Marsch und Sieg, Plündern und Abzug, Zeitplan samt Einstellung).
 
 ## Was in 0.42.0 fertig ist (Belagerungswaffen)
 

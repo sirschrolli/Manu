@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.42.0 – Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock. Aus Bausätzen aufgestellt, selbst bedient (zielen mit dem Blick, eine Leuchtspur zeigt Flugbahn und Einschlag) oder von deinen Soldaten: Mit dem Kommandostab läuft ein Soldat zur Waffe und schießt auf das Ziel, auf das du zeigst. Steinkugeln schlagen Breschen in Mauern, Bolzen durchschlagen bis zu drei Gegner, der Rammbock bricht Tore auf – Siedlungen, Siegelkreis und Reichsbanner bleiben geschützt.**
+> **Testversion 0.43.0 – Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – Hauptmann, Fußknechte, Schützen und später Ritter, jedes Mal ein paar mehr. Sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner. Schlägst du sie, liegt ihre Kriegskasse in deinem Lager; verteidigt niemand das Banner, plündern sie ein Drittel des Lagers und ziehen ab.**
+> In 0.42 kamen die Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock – selbst bedient (zielen mit dem Blick, Leuchtspur mit Einschlagkreis) oder von Soldaten mit dem Kommandostab; Breschen in Mauern, Bolzen durch bis zu drei Gegner, Tore aufbrechen.
 > In 0.41 kamen neue Kräfte der Erzmagier: ein Heilritual (wer genug Schaden macht, bricht es) und je eine neue Fähigkeit – Phönixwiedergeburt, Eiskokon, Blitzableiter, Dornenhaut, Erdwacht, Gegenwelle; die sichere Heimkehr in den Turm; der Aetherit-Stab mit Mana-Leiste und sechs Stufen bis zum Aetherfürsten (150 % Kraft).
 > In 0.40 kam die Macht der Erzmagier: je zwei Meisterzauber mit eigener Gestalt, eine besondere Fähigkeit, deutlich stärker; der Aetherit-Stab unzerstörbar, nur herstellbar und zum Aufladen.
 > In 0.39 kam die Arkane Sphäre: Die Erzmagier ziehen dich, deine Mitspieler und deine Soldaten in ihre eigene Dimension – eine schwebende Arena im Element des Magiers. Dort lässt sich nichts bauen, und wer stirbt, verliert alles, was er bei sich trägt.
@@ -341,7 +342,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Erzmagier: Heilritual, je eine weitere Fähigkeit, sichere Heimkehr in den Turm nach dem Sieg | ✅ fertig |
 | Aetherit-Stab: Mana-Leiste, sechs Stufen bis 150 % Kraft, Heilende Blüte heilt sofort, prächtigere Zauber | ✅ fertig |
 | Belagerungswaffen: Katapult, Tribok, Balliste, Rammbock – selbst bedient oder mit Bedienmannschaft (Kommandostab) | ✅ fertig |
-| Gegenangriffe der Reiche, neue Truppen | 🔨 als Nächstes |
+| Heerhaufen: Reiche im Krieg greifen die eigene Siedlung an (Sammelplatz, Horn, Leiste, Kriegskasse, Plündern) | ✅ fertig |
+| Neue Truppen: Speerträger, Armbrustschützen, Schildträger, schwere Fußknechte, berittene Ritter, Belagerungsknechte | 🔨 als Nächstes |
 | Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -968,6 +970,13 @@ Bauweise (Plan und Stand: [docs/KRIEG.md](docs/KRIEG.md)):
   Schatztruhe des Herrschers.
 - **Finden:** Wer sich einer Stammburg nähert, erfährt, wessen Land er betritt; der Kartograf verkauft eine Karte zur
   nächsten noch freien Stammburg.
+- **Heerhaufen:** Wer mit einem Reich im Krieg liegt (einen seiner Krieger erschlagen hat), bekommt alle paar Spieltage
+  Besuch – sobald er in seiner Siedlung ist. Der Heerhaufen sammelt sich auf der Seite der Stammburg, stößt ins Horn
+  (Titel und Leiste zeigen, wie viele noch stehen) und zieht zum Stadtbanner; er kämpft gegen dich und deine Soldaten,
+  deine Bürger lässt er in Ruhe. Ist er geschlagen, liegt seine Kriegskasse (Silbermünzen, Eisen, Pfeile) in deinem
+  Lager. Steht aber niemand mehr am Banner, plündert er ein Drittel deines Lagers und zieht ab. Der erste Heerhaufen
+  zählt sechs Krieger, jeder weitere einen mehr (und eine große Siedlung lockt mehr an, höchstens 14); ab dem zweiten
+  reiten Ritter mit. Wer die Stammburg erobert, hat vor diesem Reich Ruhe.
 
 ### Belagerungswaffen
 
@@ -1607,6 +1616,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | `/kaw realms` · `/kaw realms check` · `/kaw realms reset` | (nur Operatoren) Lage und Zustand der vier Reiche, prüfen, ob die Stammburgen in der Welt stehen, alle Reiche zurücksetzen |
+| `/kaw raid [Reich]` · `/kaw raid stop` | (nur Operatoren) sofort einen Heerhaufen gegen die eigene Siedlung schicken (das Reich erklärt dafür den Krieg), alle Heerhaufen abziehen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
@@ -1616,6 +1626,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |
 | `siegeBlockDamage` (Server) | Belagerungswaffen zerschlagen Mauern, Tore und Türen (Standard: an; nie in Siedlungen, am Siegelkreis oder am Reichsbanner) |
+| `realmRaids` (Server) | Reiche, mit denen du im Krieg liegst, schicken Heerhaufen gegen deine Siedlung (Standard: an) |
+| `raidIntervalDays` (Server) | so viele Spieltage vergehen mindestens zwischen zwei Heerhaufen desselben Reichs (Standard: 3) |
 
 ---
 
@@ -1686,8 +1698,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - zuletzt **Nether und End** – die Wesen sind fertig, die Bauwerke des Nethers auch (Aschenesse, Hortfeste,
      Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
      eigenen Wesen.
-2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen und die Belagerungswaffen sind fertig, als
-   Nächstes greifen die Reiche selbst an, und es kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
+2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen und die Heerhaufen sind
+   fertig, als Nächstes kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
 3. Danach Dragon Architect und die Veröffentlichung auf Modrinth.
 
 ## Danksagung
