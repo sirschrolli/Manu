@@ -5,6 +5,20 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "kingdomsatwar:mana_crystal",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 85
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:set_count",
             "count": {

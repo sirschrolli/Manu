@@ -85,5 +85,16 @@ public final class ModAttachments {
                     .sync((holder, to) -> holder == to, net.minecraft.network.codec.ByteBufCodecs.FLOAT)
                     .build());
 
+    /**
+     * Wie viele Herz- und Manakristalle der Spieler aufgenommen hat (bleibt nach dem Tod; nur er selbst bekommt es
+     * zugeschickt – für die Mana-Leiste und die Anzeige im Tooltip).
+     */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.hero.Crystals.Count>> CRYSTALS = ATTACHMENTS.register("crystals",
+            () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.Crystals.Count.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.hero.Crystals.Count.CODEC.fieldOf("crystals"))
+                    .sync((holder, to) -> holder == to, io.github.sirschrolli.kingdomsatwar.hero.Crystals.Count.STREAM_CODEC)
+                    .copyOnDeath()
+                    .build());
+
     private ModAttachments() {}
 }

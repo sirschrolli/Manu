@@ -34,6 +34,7 @@ public class ModLanguageProvider extends LanguageProvider {
         WarLang.register(this::text);
         ArchitectLang.register(this::text);
         SiegeLang.register(this::text);
+        HeroLang.register(this::text);
         RulesLang.register(this::text);
         bosses();
         shadowWorld();

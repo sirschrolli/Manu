@@ -56,6 +56,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
             }
         }
         dropSelf(ModBlocks.STONE_PILLAR.get());
+        // Herz- und Manakristalle in den Höhlen geben den Kristall zum Aufnehmen
+        dropOther(ModBlocks.HEART_CRYSTAL_FORMATION.get(), ModItems.HEART_CRYSTAL.get());
+        dropOther(ModBlocks.MANA_CRYSTAL_FORMATION.get(), ModItems.MANA_CRYSTAL.get());
         dropSelf(ModBlocks.TIMBER_BEAM.get());
         dropSelf(ModBlocks.TIMBER_FRAME.get());
         dropSelf(ModBlocks.TIMBER_FRAME_DIAGONAL.get());

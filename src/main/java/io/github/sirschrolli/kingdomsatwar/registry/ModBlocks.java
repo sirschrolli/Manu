@@ -560,6 +560,18 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> POLISHED_SEALSTONE = sealstone("polished_sealstone");
     /** Gemeißelter Siegelstein mit dem Zeichen des Siegels. */
     public static final DeferredBlock<Block> CHISELED_SEALSTONE = sealstone("chiseled_sealstone");
+    /** Herzkristall, wie er in Höhlen wächst (ohne eigenen Gegenstand: abgebaut gibt er den Kristall zum Aufnehmen). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock> HEART_CRYSTAL_FORMATION =
+            BLOCKS.registerBlock("heart_crystal_formation",
+                    p -> new io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock(io.github.sirschrolli.kingdomsatwar.hero.Crystals.Kind.HEART, p),
+                    p -> p.mapColor(MapColor.COLOR_RED).strength(1.5f).sound(SoundType.AMETHYST_CLUSTER).noOcclusion().lightLevel(s -> 7)
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED));
+    /** Manakristall, wie er in Höhlen wächst. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock> MANA_CRYSTAL_FORMATION =
+            BLOCKS.registerBlock("mana_crystal_formation",
+                    p -> new io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock(io.github.sirschrolli.kingdomsatwar.hero.Crystals.Kind.MANA, p),
+                    p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.5f).sound(SoundType.AMETHYST_CLUSTER).noOcclusion().lightLevel(s -> 9)
+                            .pushReaction(net.minecraft.world.level.material.PushReaction.POPPED));
     /** Stein der Monolithen am Siegelkreis (unzerstörbar). */
     public static final DeferredBlock<Block> SEAL_MONOLITH = BLOCKS.registerBlock("seal_monolith", Block::new,
             p -> p.mapColor(MapColor.TERRACOTTA_CYAN).instrument(NoteBlockInstrument.BASEDRUM).strength(-1.0f, 3600000.0f).noLootTable()

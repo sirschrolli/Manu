@@ -50,6 +50,21 @@ public class ModChestLootProvider implements LootTableSubProvider {
         return table;
     }
 
+    /**
+     * Höchstens ein Herz- oder Manakristall: mit der Wahrscheinlichkeit {@code heart} bzw. {@code mana} (in Hundertsteln),
+     * sonst keiner.
+     */
+    private static LootPool.Builder crystals(int heart, int mana) {
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1));
+        if (heart > 0) {
+            pool.add(LootItem.lootTableItem(ModItems.HEART_CRYSTAL.get()).setWeight(heart));
+        }
+        if (mana > 0) {
+            pool.add(LootItem.lootTableItem(ModItems.MANA_CRYSTAL.get()).setWeight(mana));
+        }
+        return pool.add(EmptyLootItem.emptyItem().setWeight(100 - heart - mana));
+    }
+
     private static UniformContainerBase.Builder<?> item(ItemLike item, int weight, int min, int max) {
         return LootItem.lootTableItem(item).setWeight(weight).apply(SetItemCountFunction.setCount(ContextIntProviders.between(min, max)));
     }
@@ -192,7 +207,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.BOOK, 4, 1, 2), item(Items.CANDLE, 5, 1, 3), item(Items.COMPASS, 2, 1, 1), item(Items.SPYGLASS, 1, 1, 1),
                         item(Items.ENDER_PEARL, 2, 1, 1), item(Items.AMETHYST_SHARD, 4, 1, 4))));
         // Kern des Sterns: Enderperlen und -augen, Obsidian, Amethyst, Gold, ein verzaubertes Buch der Sterndeuter
-        this.output.accept(ModLootTables.SITE_FALLEN_STAR_CORE, coins(LootTable.lootTable(), 0, 0, 2, 6, 0.4f)
+        this.output.accept(ModLootTables.SITE_FALLEN_STAR_CORE, coins(LootTable.lootTable().withPool(crystals(10, 20)), 0, 0, 2, 6, 0.4f)
                 .withPool(pool(1, 1, item(Items.ENDER_PEARL, 1, 2, 5)))
                 .withPool(pool(2, 4, item(Items.ENDER_EYE, 2, 1, 2), item(Items.OBSIDIAN, 6, 2, 6), item(Items.CRYING_OBSIDIAN, 4, 1, 3),
                         item(Items.AMETHYST_SHARD, 6, 3, 8), item(Items.GOLD_INGOT, 4, 1, 4), item(ModItems.GEMSTONE.get(), 3, 1, 2),
@@ -207,7 +222,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.IRON_PICKAXE, 1, 1, 1), item(Items.IRON_SHOVEL, 2, 1, 1),
                         item(Items.STONE_BRICKS, 4, 4, 12), item(Items.CLAY_BALL, 3, 2, 6))));
         // Opfergaben auf dem Grund der Zisterne: Münzen, Gold, Edelsteine, Perlmutt (Prismarin), ein Nautilus
-        this.output.accept(ModLootTables.SITE_AQUEDUCT_CISTERN, coins(LootTable.lootTable(), 4, 12, 2, 6, 0.5f)
+        this.output.accept(ModLootTables.SITE_AQUEDUCT_CISTERN, coins(LootTable.lootTable().withPool(crystals(10, 6)), 4, 12, 2, 6, 0.5f)
                 .withPool(pool(2, 4, item(Items.GOLD_NUGGET, 8, 3, 12), item(Items.GOLD_INGOT, 4, 1, 3), item(ModItems.GEMSTONE.get(), 4, 1, 3),
                         item(Items.PRISMARINE_SHARD, 4, 2, 6), item(Items.NAUTILUS_SHELL, 2, 1, 1), item(Items.EMERALD, 3, 1, 3),
                         item(Items.GLOW_INK_SAC, 3, 1, 3))));
@@ -221,7 +236,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_SEA_DRAGON_CARGO, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_SUPPLY),
                 1, 4, 0, 0, 0.0f)
                 .withPool(pool(0, 2, item(Items.BONE, 6, 1, 4), item(Items.BONE_MEAL, 4, 2, 6))));
-        this.output.accept(ModLootTables.SITE_SEA_DRAGON_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_TREASURE),
+        this.output.accept(ModLootTables.SITE_SEA_DRAGON_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_TREASURE).withPool(crystals(15, 10)),
                 2, 8, 2, 5, 0.3f));
         // Karawanserei: der Schatz der Karawanenmeister (wie im Wüstentempel), Habe eines Reisenden
         this.output.accept(ModLootTables.SITE_CARAVANSERAI_TREASURE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.DESERT_PYRAMID),
@@ -232,7 +247,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         item(Items.CARPET.pick(net.minecraft.world.item.DyeColor.RED), 3, 1, 3), item(Items.DYE.pick(net.minecraft.world.item.DyeColor.ORANGE), 3, 1, 4), item(Items.CACTUS, 3, 1, 4), item(Items.SADDLE, 1, 1, 1),
                         item(Items.LEAD, 2, 1, 1), item(Items.COMPASS, 1, 1, 1), item(Items.GLASS_BOTTLE, 4, 1, 3))));
         // Schlangentempel: die Opfergaben (wie im Dschungeltempel), dazu Gold und Smaragde
-        this.output.accept(ModLootTables.SITE_SERPENT_TEMPLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.JUNGLE_TEMPLE),
+        this.output.accept(ModLootTables.SITE_SERPENT_TEMPLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.JUNGLE_TEMPLE).withPool(crystals(10, 8)),
                 0, 4, 2, 6, 0.4f)
                 .withPool(pool(1, 2, item(Items.GOLD_NUGGET, 6, 3, 9), item(Items.EMERALD, 4, 1, 3), item(ModItems.GEMSTONE.get(), 3, 1, 2),
                         item(Items.COCOA_BEANS, 3, 2, 5))));
@@ -246,7 +261,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_FROST_GROTTO, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.IGLOO_CHEST),
                 1, 4, 0, 1, 0.0f)
                 .withPool(pool(1, 3, item(Items.COD, 5, 1, 4), item(Items.SALMON, 4, 1, 3), item(Items.TORCH, 5, 2, 6), item(Items.LEATHER, 3, 1, 3))));
-        this.output.accept(ModLootTables.SITE_FROST_GROTTO_CELLAR, coins(LootTable.lootTable(), 0, 3, 2, 5, 0.3f)
+        this.output.accept(ModLootTables.SITE_FROST_GROTTO_CELLAR, coins(LootTable.lootTable().withPool(crystals(12, 8)), 0, 3, 2, 5, 0.3f)
                 .withPool(pool(1, 1, item(Items.GOLDEN_APPLE, 1, 1, 1)))
                 .withPool(pool(2, 4, item(Items.GLASS_BOTTLE, 4, 1, 3), item(Items.BLAZE_POWDER, 2, 1, 2), item(Items.FERMENTED_SPIDER_EYE, 3, 1, 2),
                         item(Items.GOLD_NUGGET, 4, 2, 8), item(Items.EMERALD, 3, 1, 2), item(ModItems.GEMSTONE.get(), 2, 1, 1),
@@ -262,7 +277,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_CHARCOAL_CAMP_SECRET, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables
                 .ABANDONED_CAMP_SECRET_CHEST), 0, 0, 2, 6, 0.4f));
         // Sternwarte: der Schatz des Ordens (wie in der Endstadt)
-        this.output.accept(ModLootTables.SITE_STARWATCH, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.END_CITY_TREASURE),
+        this.output.accept(ModLootTables.SITE_STARWATCH, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.END_CITY_TREASURE).withPool(crystals(5, 20)),
                 0, 4, 2, 5, 0.3f));
         // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
         this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
@@ -275,7 +290,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .UNDERWATER_RUIN_SMALL), 1, 4, 0, 1, 0.0f)
                 .withPool(pool(0, 2, item(Items.PRISMARINE_CRYSTALS, 4, 1, 3), item(Items.KELP, 3, 2, 6))));
         // Kloster: Bücher, Schreibzeug, Kerzen, Brot, ein verzaubertes Buch der Mönche
-        this.output.accept(ModLootTables.SITE_BURIED_ABBEY, coins(LootTable.lootTable(), 0, 4, 1, 4, 0.2f)
+        this.output.accept(ModLootTables.SITE_BURIED_ABBEY, coins(LootTable.lootTable().withPool(crystals(12, 10)), 0, 4, 1, 4, 0.2f)
                 .withPool(pool(3, 6, item(Items.BOOK, 6, 1, 3), item(Items.PAPER, 6, 2, 8), item(Items.INK_SAC, 4, 1, 3), item(Items.FEATHER, 4, 1, 3),
                         item(Items.CANDLE, 4, 1, 3), item(Items.BREAD, 3, 1, 2), item(Items.BRUSH, 2, 1, 1), item(Items.GOLD_NUGGET, 3, 2, 6)))
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
@@ -290,18 +305,18 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_CATHEDRAL, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ANCIENT_CITY),
                 2, 8, 1, 3, 0.15f)
                 .withPool(pool(0, 2, item(Items.CANDLE, 4, 1, 3), item(Items.BONE, 4, 1, 4), item(Items.ECHO_SHARD, 1, 1, 1))));
-        this.output.accept(ModLootTables.SITE_CATHEDRAL_RELIQUARY, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ANCIENT_CITY),
+        this.output.accept(ModLootTables.SITE_CATHEDRAL_RELIQUARY, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.ANCIENT_CITY).withPool(crystals(15, 15)),
                 4, 12, 2, 6, 0.4f)
                 .withPool(pool(1, 2, item(Items.ECHO_SHARD, 3, 1, 3), item(ModItems.GEMSTONE.get(), 2, 1, 2), item(Items.SKELETON_SKULL, 1, 1, 1))));
         // Arena der Prüfungen: die Vorräte der Kämpfer (wie in den Prüfungskammern)
-        this.output.accept(ModLootTables.SITE_TRIAL_ARENA, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.TRIAL_CHAMBERS_SUPPLY),
+        this.output.accept(ModLootTables.SITE_TRIAL_ARENA, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.TRIAL_CHAMBERS_SUPPLY).withPool(crystals(8, 8)),
                 1, 6, 0, 2, 0.05f)
                 .withPool(pool(0, 2, item(Items.BREAD, 3, 1, 3), item(Items.ARROW, 3, 4, 12), item(Items.LEATHER, 2, 1, 3))));
         // Raubritterburg: Raubgut (wie im Waldanwesen), in der Kammer des Raubritters sein Hort
         this.output.accept(ModLootTables.SITE_ROBBER_CASTLE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.WOODLAND_MANSION),
                 3, 10, 1, 4, 0.15f)
                 .withPool(pool(0, 2, item(ModItems.STEEL_INGOT.get(), 3, 1, 2), item(Items.LEATHER, 3, 1, 4), item(Items.WHEAT, 3, 2, 6))));
-        this.output.accept(ModLootTables.SITE_ROBBER_CASTLE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.WOODLAND_MANSION),
+        this.output.accept(ModLootTables.SITE_ROBBER_CASTLE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.WOODLAND_MANSION).withPool(crystals(15, 8)),
                 10, 30, 4, 10, 0.5f)
                 .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 1, 4), item(Items.EMERALD, 4, 1, 5), item(ModItems.GEMSTONE.get(), 3, 1, 3),
                         item(Items.DIAMOND, 1, 1, 2), item(Items.SADDLE, 2, 1, 1))));
@@ -311,7 +326,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 1, 6, 0, 2, 0.08f)
                 .withPool(pool(1, 3, item(Items.NETHER_WART, 5, 2, 6), item(Items.MAGMA_CREAM, 3, 1, 2), item(Items.GOLD_NUGGET, 4, 3, 9),
                         item(Items.QUARTZ, 3, 2, 6), item(Items.IRON_INGOT, 2, 1, 3))));
-        this.output.accept(ModLootTables.SITE_ASH_FORGE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.NETHER_BRIDGE),
+        this.output.accept(ModLootTables.SITE_ASH_FORGE_HOARD, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.NETHER_BRIDGE).withPool(crystals(15, 8)),
                 6, 18, 2, 6, 0.4f)
                 .withPool(pool(2, 4, item(Items.GOLD_INGOT, 5, 2, 6), item(Items.GILDED_BLACKSTONE, 3, 1, 3), item(ModItems.GEMSTONE.get(), 2, 1, 2),
                         item(Items.DIAMOND, 2, 1, 2), item(Items.NETHERITE_SCRAP, 1, 1, 1)))
@@ -326,7 +341,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
      * die Vorräte.
      */
     private void realmCastles() {
-        this.output.accept(ModLootTables.REALM_TREASURY, coins(LootTable.lootTable(), 12, 30, 4, 10, 0.5f)
+        this.output.accept(ModLootTables.REALM_TREASURY, coins(LootTable.lootTable().withPool(crystals(30, 15)), 12, 30, 4, 10, 0.5f)
                 .withPool(pool(3, 5, item(Items.GOLD_INGOT, 6, 2, 5), item(ModItems.GEMSTONE.get(), 4, 1, 3), item(Items.EMERALD, 4, 2, 5),
                         item(Items.GOLD_NUGGET, 4, 6, 14), item(Items.DIAMOND, 1, 1, 2), item(ModItems.STEEL_INGOT.get(), 3, 2, 4)))
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
@@ -393,7 +408,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .add(LootItem.lootTableItem(ModItems.AETHERIT.get()).setWeight(1)
                         .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4))))
                 .add(EmptyLootItem.emptyItem().setWeight(8));
-        this.output.accept(ModLootTables.CASTLE_RUIN_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.12f)
+        this.output.accept(ModLootTables.CASTLE_RUIN_CHEST, coins(LootTable.lootTable().withPool(crystals(8, 4)), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(ModItems.BREAD_ROLL.get(), 10, 1, 4))
@@ -413,7 +428,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(ModItems.HOPS.get(), 3, 1, 3)))
                 .withPool(treasure));
         // Sturmwarte: was die Sturmwächter zurückließen – Fernrohr, Kupfer, Aufzeichnungen, mit viel Glück eine Blitz-Zaubertafel
-        this.output.accept(ModLootTables.STORM_WATCHTOWER_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.15f)
+        this.output.accept(ModLootTables.STORM_WATCHTOWER_CHEST, coins(LootTable.lootTable().withPool(crystals(6, 6)), 3, 9, 1, 3, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
                         .add(item(Items.COPPER_INGOT, 10, 2, 7))
@@ -437,7 +452,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(ModItems.DRAGON_COMPASS.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
         // Thron der Tiefe: Schätze des versunkenen Tempels – Perlmutt, Prismarin, Gold, mit Glück ein Dreizack
-        this.output.accept(ModLootTables.SUNKEN_GROTTO_CHEST, coins(LootTable.lootTable(), 4, 9, 2, 5, 0.4f)
+        this.output.accept(ModLootTables.SUNKEN_GROTTO_CHEST, coins(LootTable.lootTable().withPool(crystals(10, 8)), 4, 9, 2, 5, 0.4f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(Items.PRISMARINE_SHARD, 10, 2, 8))
@@ -527,7 +542,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.SPYGLASS).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(5))));
-        this.output.accept(ModLootTables.SHADOW_CITADEL_CHEST, coins(LootTable.lootTable(), 5, 9, 3, 7, 0.5f)
+        this.output.accept(ModLootTables.SHADOW_CITADEL_CHEST, coins(LootTable.lootTable().withPool(crystals(20, 20)), 5, 9, 3, 7, 0.5f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get(), 10, 1, 4))
@@ -566,7 +581,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_BLADE.get()).setWeight(1))
                         .add(EmptyLootItem.emptyItem().setWeight(3))));
-        this.output.accept(ModLootTables.MOON_TEMPLE_CRYPT, coins(LootTable.lootTable(), 4, 9, 2, 6, 0.45f)
+        this.output.accept(ModLootTables.MOON_TEMPLE_CRYPT, coins(LootTable.lootTable().withPool(crystals(12, 18)), 4, 9, 2, 6, 0.45f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 1, 3))
@@ -582,7 +597,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_UPGRADE_SMITHING_TEMPLATE.get()).setWeight(2))
                         .add(LootItem.lootTableItem(Items.BOOK).setWeight(3)
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))));
-        this.output.accept(ModLootTables.CRYSTAL_MINE_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.1f)
+        this.output.accept(ModLootTables.CRYSTAL_MINE_CHEST, coins(LootTable.lootTable().withPool(crystals(12, 15)), 3, 9, 1, 3, 0.1f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 8))
                         .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.RAW_MOONSILVER.get(), 10, 2, 6))
@@ -610,7 +625,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.LEAD, 3, 1, 2))
                         .add(item(Items.SPYGLASS, 2, 1, 1))
                         .add(item(Items.COMPASS, 2, 1, 1))));
-        this.output.accept(ModLootTables.OLD_WORLD_RUIN_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 3, 0.12f)
+        this.output.accept(ModLootTables.OLD_WORLD_RUIN_CHEST, coins(LootTable.lootTable().withPool(crystals(8, 6)), 3, 9, 1, 3, 0.12f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(Items.WHEAT_SEEDS, 8, 2, 6))
@@ -656,7 +671,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(Items.POTION).setWeight(3)
                                 .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
                                         net.minecraft.world.item.alchemy.Potions.HEALING)))));
-        this.output.accept(ModLootTables.MAGE_TOWER_LIBRARY, coins(LootTable.lootTable(), 1, 4, 1, 2, 0.05f)
+        this.output.accept(ModLootTables.MAGE_TOWER_LIBRARY, coins(LootTable.lootTable().withPool(crystals(0, 15)), 1, 4, 1, 2, 0.05f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(Items.BOOK, 10, 1, 4))
@@ -675,7 +690,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                                 .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments))))
                 .withPool(anyTablet.add(EmptyLootItem.emptyItem().setWeight(70)))
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 12)));
-        this.output.accept(ModLootTables.MAGE_TOWER_LABORATORY, coins(LootTable.lootTable(), 1, 4, 1, 2, 0.05f)
+        this.output.accept(ModLootTables.MAGE_TOWER_LABORATORY, coins(LootTable.lootTable().withPool(crystals(3, 15)), 1, 4, 1, 2, 0.05f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))
                         .add(item(Items.GLASS_BOTTLE, 8, 2, 5))
@@ -706,7 +721,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(LootItem.lootTableItem(Items.POTION).setWeight(2)
                                 .apply(net.minecraft.world.level.storage.loot.functions.SetPotionFunction.setPotion(
                                         net.minecraft.world.item.alchemy.Potions.SWIFTNESS)))));
-        this.output.accept(ModLootTables.MAGE_TOWER_QUARTERS, coins(LootTable.lootTable(), 3, 8, 2, 5, 0.35f)
+        this.output.accept(ModLootTables.MAGE_TOWER_QUARTERS, coins(LootTable.lootTable().withPool(crystals(5, 15)), 3, 8, 2, 5, 0.35f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(3, 6))
                         .add(item(ModItems.GEMSTONE.get(), 6, 1, 3))
@@ -719,7 +734,7 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(item(Items.GOLDEN_APPLE, 2, 1, 1))
                         .add(item(ModItems.WINE.get(), 4, 1, 2))
                         .add(item(Items.EXPERIENCE_BOTTLE, 4, 2, 6))));
-        this.output.accept(ModLootTables.MAGE_TOWER_SANCTUM, coins(LootTable.lootTable(), 4, 10, 3, 7, 0.9f)
+        this.output.accept(ModLootTables.MAGE_TOWER_SANCTUM, coins(LootTable.lootTable().withPool(crystals(10, 45)), 4, 10, 3, 7, 0.9f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 6))
                         .add(item(ModItems.AETHERIT.get(), 8, 2, 5))

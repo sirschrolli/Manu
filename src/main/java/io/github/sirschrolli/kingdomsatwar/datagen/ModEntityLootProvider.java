@@ -46,18 +46,21 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         // Drachen-Bosse: viele Schuppen, Draconium und Edelsteine (das Ei erscheint gesondert auf dem Nest)
         this.add(ModEntities.PYRRHON.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         this.add(ModEntities.GLACIARA.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.ICE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         this.add(ModEntities.VERDANTIS.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.NATURE).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
@@ -65,6 +68,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.LIFE_BLOSSOM.get(), 2, 4)));
         this.add(ModEntities.TERRAGON.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.EARTH).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
@@ -72,6 +76,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.AMBER_CRYSTAL.get(), 4, 8)));
         this.add(ModEntities.VOLTARION.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.LIGHTNING).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
@@ -79,6 +84,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.STORM_CRYSTAL.get(), 3, 6)));
         this.add(ModEntities.THALASSA.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14))
                 .withPool(drop(ModItems.DRAGON_SCALES.get(DragonType.WATER).get(), 18, 26))
                 .withPool(drop(ModItems.DRACONIUM.get(), 3, 6))
@@ -88,6 +94,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         // Nyxar: Abyssit, Seelenkristalle und Schattenessenz (das Herz der Schatten erscheint gesondert)
         this.add(ModEntities.NYXAR.get(), LootTable.lootTable()
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 2))
+                .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 1))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 20, 32))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHARD.get(), 6, 10))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 8, 14))
@@ -99,6 +107,7 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
             this.add(ModEntities.MAGES.get(type).get(), LootTable.lootTable()
                     .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                             .add(LootItem.lootTableItem(ModItems.SPELL_TABLETS.get(io.github.sirschrolli.kingdomsatwar.magic.Spell.of(type)).get())))
+                    .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 1))
                     .withPool(drop(ModItems.GOLD_COIN.get(), 3, 6))
                     .withPool(drop(ModItems.AETHERIT.get(), 2, 5))
                     .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 50))
@@ -274,6 +283,12 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
             pool.add(net.minecraft.world.level.storage.loot.entries.EmptyLootItem.emptyItem().setWeight(100 - chance));
         }
         return pool;
+    }
+
+    /** Genau so viele – ohne Plünderung (Herz- und Manakristalle sollen sich nicht vermehren lassen). */
+    private static LootPool.Builder exactly(ItemLike item, int count) {
+        return LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                .add(LootItem.lootTableItem(item).apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(count))));
     }
 
     private LootPool.Builder drop(ItemLike item, int min, int max) {

@@ -191,6 +191,7 @@ public class ModModelProvider extends ModelProvider {
 
         // --- Möbel (Vanilla-Holztexturen) ---
         furniture(blocks);
+        crystals(blocks);
 
         // --- Erze (zweischichtig) ---
         ore(blocks, ModBlocks.CARBON_ORE, Blocks.STONE, "carbon");
@@ -349,6 +350,8 @@ public class ModModelProvider extends ModelProvider {
         items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         items.generateFlatItem(ModItems.DRAGON_HORN.get(), ModelTemplates.FLAT_ITEM);
         // Belagerungswaffen: Munition und Bausätze
+        flat(items, ModItems.HEART_CRYSTAL.get());
+        flat(items, ModItems.MANA_CRYSTAL.get());
         flat(items, ModItems.SIEGE_STONE.get());
         flat(items, ModItems.BALLISTA_BOLT.get());
         flat(items, ModItems.CATAPULT_KIT.get());
@@ -610,6 +613,19 @@ public class ModModelProvider extends ModelProvider {
         Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(coin),
                 TextureMapping.layer0(new Material(KingdomsAtWar.id("item/" + name))), items.modelOutput);
         items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model));
+    }
+
+    /** Herz- und Manakristalle in den Höhlen (auf einem Brocken Tuffstein). */
+    private static void crystals(BlockModelGenerators blocks) {
+        Material rock = vanilla("tuff");
+        Block heart = ModBlocks.HEART_CRYSTAL_FORMATION.get();
+        Material heartGem = new Material(KingdomsAtWar.id("block/heart_crystal"));
+        facing(blocks, heart, CrystalModels.heart().create(heart, new TextureMapping().put(CrystalModels.CRYSTAL, heartGem)
+                .put(CrystalModels.ROCK, rock).put(TextureSlot.PARTICLE, heartGem), blocks.modelOutput));
+        Block mana = ModBlocks.MANA_CRYSTAL_FORMATION.get();
+        Material manaGem = new Material(KingdomsAtWar.id("block/mana_crystal"));
+        facing(blocks, mana, CrystalModels.mana().create(mana, new TextureMapping().put(CrystalModels.CRYSTAL, manaGem)
+                .put(CrystalModels.ROCK, rock).put(TextureSlot.PARTICLE, manaGem), blocks.modelOutput));
     }
 
     /** Stuhl, Bank, Tisch und Thron. */

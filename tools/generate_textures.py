@@ -52,6 +52,7 @@ import items_gear  # noqa: E402
 import items_materials  # noqa: E402
 import items_misc  # noqa: E402
 import items_siege  # noqa: E402
+import crystal_textures  # noqa: E402
 import items_staff  # noqa: E402
 import kingdom_textures  # noqa: E402
 import lair_textures  # noqa: E402
@@ -368,6 +369,7 @@ def build_all() -> dict[str, Image.Image]:
     items_eggs.build(put)
     items_misc.build(put)
     items_siege.build(put)
+    crystal_textures.build(put)
     items_staff.build(put)
     items_dragonwar.build(put)
     items_architect.build(put)

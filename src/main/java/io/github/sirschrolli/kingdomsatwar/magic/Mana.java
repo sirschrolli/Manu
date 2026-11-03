@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * Mana für die Zauber des Aetherit-Stabs. Jeder Zauber kostet Mana (mehr auf höherer Stufe und voll aufgeladen); es
  * füllt sich von selbst wieder auf – kurz nach einem Zauber noch nicht, dann stetig. Wie viel man fassen kann und wie
  * schnell es zurückkehrt, wächst mit der Stufe des besten Stabs, den man bei sich trägt (100 Mana als Lehrling, 20 mehr
- * je Stufe). Im Kreativmodus kostet Zaubern nichts.
+ * je Stufe), und jeder aufgenommene Manakristall fasst 20 mehr. Im Kreativmodus kostet Zaubern nichts.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class Mana {
@@ -54,9 +54,9 @@ public final class Mana {
         return BASE_MAX + PER_LEVEL * StaffMastery.rank(staff).level();
     }
 
-    /** So viel Mana fasst der Spieler – nach dem besten Stab, den er bei sich trägt. */
+    /** So viel Mana fasst der Spieler – nach dem besten Stab, den er bei sich trägt, und seinen Manakristallen. */
     public static float maxFor(Player player) {
-        return max(bestStaff(player));
+        return max(bestStaff(player)) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player);
     }
 
     /** Mana je Sekunde mit diesem Stab. */
@@ -119,10 +119,10 @@ public final class Mana {
         regenerate(player, REGEN_INTERVAL);
     }
 
-    /** Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck). */
+    /** Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck und der Manakristalle). */
     public static void regenerate(Player player, int ticks) {
         ItemStack staff = bestStaff(player);
-        float max = max(staff);
+        float max = max(staff) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player);
         float mana = get(player);
         if (mana < max) {
             set(player, Math.min(max, mana + regen(staff) * ticks / 20.0f));

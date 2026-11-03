@@ -17,6 +17,9 @@ public final class ModFeatureTypes {
 
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<CastleRuinFeature>> CASTLE_RUIN =
             FEATURE_TYPES.register("castle_ruin", () -> CastleRuinFeature.CODEC);
+    /** Herz- und Manakristalle auf Höhlenböden. */
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<CrystalFormationFeature>> CRYSTAL_FORMATION =
+            FEATURE_TYPES.register("crystal_formation", () -> CrystalFormationFeature.CODEC);
 
     // --- Schattenwelt ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.ShadowTreeFeature>> SHADOW_TREE =

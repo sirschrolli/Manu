@@ -76,6 +76,26 @@ public final class ModWorldgen {
         }
     }
 
+    /** Herz- oder Manakristalle auf Höhlenböden: im Schnitt in jedem {@code rarity}-ten Chunk ein Versuch. */
+    public record CrystalVein(String name, Supplier<? extends Block> crystal, int rarity, int minY, int maxY) {
+        public ResourceKey<Feature> featureKey() {
+            return ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id(name));
+        }
+
+        public ResourceKey<PlacedFeature> placedKey() {
+            return ResourceKey.create(Registries.PLACED_FEATURE, KingdomsAtWar.id(name));
+        }
+
+        public ResourceKey<BiomeModifier> modifierKey() {
+            return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id("add_" + name));
+        }
+    }
+
+    /** Herzkristalle wachsen in Höhlen jeder Tiefe, Manakristalle eher tief unten. */
+    public static final List<CrystalVein> CRYSTAL_VEINS = List.of(
+            new CrystalVein("heart_crystals", ModBlocks.HEART_CRYSTAL_FORMATION, 3, -56, 48),
+            new CrystalVein("mana_crystals", ModBlocks.MANA_CRYSTAL_FORMATION, 3, -60, 24));
+
     /** Ein Feld wilder Blumen. */
     public record FlowerPatch(String name, Supplier<? extends Block> flower, int rarity, TagKey<Biome> biomes) {
         public ResourceKey<Feature> featureKey() {
@@ -172,6 +192,10 @@ public final class ModWorldgen {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));
         }
 
+        for (CrystalVein vein : CRYSTAL_VEINS) {
+            context.register(vein.featureKey(), new CrystalFormationFeature(vein.crystal().get().defaultBlockState(), 14));
+        }
+
         for (Ruin ruin : STRUCTURES) {
             context.register(ruin.featureKey(), ruin.feature());
         }
@@ -206,6 +230,15 @@ public final class ModWorldgen {
                             BlockPredicate.ONLY_IN_AIR_PREDICATE,
                             BlockPredicate.wouldSurvive(patch.flower().get()))));
             context.register(patch.placedKey(), new PlacedFeature(features.getOrThrow(patch.featureKey()), placement));
+        }
+
+        for (CrystalVein vein : CRYSTAL_VEINS) {
+            List<PlacementModifier> placement = List.of(
+                    RarityFilter.onAverageOnceEvery(vein.rarity()),
+                    InSquarePlacement.spread(),
+                    HeightRangePlacement.uniform(VerticalAnchor.absolute(vein.minY()), VerticalAnchor.absolute(vein.maxY())),
+                    BiomeFilter.biome());
+            context.register(vein.placedKey(), new PlacedFeature(features.getOrThrow(vein.featureKey()), placement));
         }
 
         for (Ruin ruin : STRUCTURES) {
@@ -291,6 +324,13 @@ public final class ModWorldgen {
                     biomes.getOrThrow(vein.biomes()),
                     HolderSet.direct(placed.getOrThrow(vein.placedKey())),
                     GenerationStep.Decoration.UNDERGROUND_ORES));
+        }
+
+        for (CrystalVein vein : CRYSTAL_VEINS) {
+            context.register(vein.modifierKey(), new BiomeModifiers.AddFeaturesBiomeModifier(
+                    biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                    HolderSet.direct(placed.getOrThrow(vein.placedKey())),
+                    GenerationStep.Decoration.UNDERGROUND_DECORATION));
         }
 
         for (FlowerPatch patch : FLOWER_PATCHES) {

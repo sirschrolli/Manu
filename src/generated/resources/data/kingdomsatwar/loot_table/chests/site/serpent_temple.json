@@ -14,6 +14,25 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "kingdomsatwar:heart_crystal",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kingdomsatwar:mana_crystal",
+          "weight": 8
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 82
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:set_count",
             "count": {

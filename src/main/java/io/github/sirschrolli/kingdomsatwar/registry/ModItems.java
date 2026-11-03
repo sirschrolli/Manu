@@ -81,6 +81,14 @@ public final class ModItems {
             p -> p.component(DataComponents.LORE, lore("konterit", 1)), RESOURCE_TAB);
     public static final DeferredItem<Item> AETHERIT = item("aetherit",
             p -> p.rarity(Rarity.UNCOMMON).component(DataComponents.LORE, lore("aetherit", 1)), RESOURCE_TAB);
+    /** Herzkristall: Rechtsklick – für immer ein Herz mehr (höchstens zehn). */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.hero.CrystalItem> HEART_CRYSTAL = addTo(RESOURCE_TAB, ITEMS.registerItem(
+            "heart_crystal", p -> new io.github.sirschrolli.kingdomsatwar.hero.CrystalItem(io.github.sirschrolli.kingdomsatwar.hero.Crystals.Kind.HEART, p),
+            () -> new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).component(DataComponents.LORE, lore("heart_crystal", 2))));
+    /** Manakristall: Rechtsklick – für immer 20 Mana mehr (höchstens zehn). */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.hero.CrystalItem> MANA_CRYSTAL = addTo(RESOURCE_TAB, ITEMS.registerItem(
+            "mana_crystal", p -> new io.github.sirschrolli.kingdomsatwar.hero.CrystalItem(io.github.sirschrolli.kingdomsatwar.hero.Crystals.Kind.MANA, p),
+            () -> new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).component(DataComponents.LORE, lore("mana_crystal", 2))));
     public static final DeferredItem<Item> DRACONIUM = item("draconium",
             p -> p.rarity(Rarity.RARE).fireResistant().component(DataComponents.LORE, lore("draconium", 1)), RESOURCE_TAB);
     public static final DeferredItem<Item> WYVERNIT = item("wyvernit",
