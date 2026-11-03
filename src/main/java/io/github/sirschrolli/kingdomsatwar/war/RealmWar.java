@@ -18,6 +18,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -31,7 +32,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -49,9 +53,11 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import org.jspecify.annotations.Nullable;
 
@@ -59,8 +65,9 @@ import org.jspecify.annotations.Nullable;
  * Der Krieg der Königreiche auf dem Server: Wer sich einer Stammburg nähert, erfährt, wessen Land er betritt. Gefallene
  * Krieger ersetzt das Reich nach und nach, solange niemand in der Nähe ist (der Herrscher kehrt nie zurück). Ist der
  * Herrscher gefallen und verteidigt niemand mehr das Reichsbanner, erobert der Spieler die Burg mit einem Griff an das
- * Banner: Alle Banner tragen dann sein Wappen, die übrigen Krieger ziehen ab, und jeden Tag liegt Tribut in der
- * Schatztruhe des Herrschers.
+ * Banner (Rechtsklick auf das Tuch oder die Wand dahinter – oder er will es abreißen): Alle Banner tragen dann sein
+ * Wappen, das alte Reichsbanner nimmt er als Trophäe mit, die übrigen Krieger ziehen ab, und jeden Tag liegt Tribut in der
+ * Schatztruhe des Herrschers. Solange der Herrscher fehlt, schimmert das Reichsbanner für jeden, der den Thronsaal betritt.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class RealmWar {
@@ -101,7 +108,12 @@ public final class RealmWar {
 
     /** Die Burg, in der dieser Punkt liegt (oder {@code null}). */
     public static @Nullable RealmCastlePiece castleAt(ServerLevel overworld, BlockPos pos) {
+        int reach = RealmCastle.REACH + 24;
         for (Realm realm : Realm.values()) {
+            ChunkPos chunk = RealmLocator.find(overworld, realm);
+            if (chunk == null || Math.abs(chunk.getMiddleBlockX() - pos.getX()) > reach || Math.abs(chunk.getMiddleBlockZ() - pos.getZ()) > reach) {
+                continue;
+            }
             RealmCastlePiece piece = castle(overworld, realm);
             if (piece != null && piece.getBoundingBox().isInside(pos)) {
                 return piece;
@@ -123,6 +135,9 @@ public final class RealmWar {
         if (time % 40L == 0L) {
             discover(level);
         }
+        if (time % 10L == 7L) {
+            beckon(level);
+        }
         // reihum alle fünf Sekunden ein Reich: Lage merken, Nachschub, Tribut
         if (time % 100L == 50L) {
             Realm realm = Realm.values()[(int) (time / 100L % Realm.values().length)];
@@ -133,6 +148,50 @@ public final class RealmWar {
                 payTribute(level, piece);
             }
         }
+    }
+
+    /**
+     * Ist der Herrscher gefallen, schimmert das Reichsbanner hinter dem Thron für jeden, der in die Nähe kommt – hier wird
+     * die Burg erobert.
+     */
+    private static void beckon(ServerLevel level) {
+        if (level.players().isEmpty()) {
+            return;
+        }
+        RealmState state = RealmState.of(level);
+        for (Realm realm : Realm.values()) {
+            ChunkPos chunk = state.isLordFallen(realm) && !state.isConquered(realm) ? RealmLocator.find(level, realm) : null;
+            if (chunk == null || !anyoneNear(level, chunk.getMiddleBlockX(), chunk.getMiddleBlockZ(), RealmCastle.REACH + 32)) {
+                continue;
+            }
+            RealmCastlePiece piece = castle(level, realm);
+            if (piece == null) {
+                continue;
+            }
+            BlockPos standard = piece.world(RealmCastle.STANDARD.above());
+            if (level.getNearestPlayer(standard.getX() + 0.5, standard.getY(), standard.getZ() + 0.5, 28.0, p -> !p.isSpectator()) == null) {
+                continue;
+            }
+            Direction facing = piece.rotation().rotate(Direction.SOUTH);
+            for (int x = -1; x <= 1; x++) {
+                Vec3 lane = Vec3.atCenterOf(piece.world(RealmCastle.STANDARD.offset(x, 1, 0)))
+                        .add(facing.getStepX() * -0.3, -0.45, facing.getStepZ() * -0.3);
+                level.sendParticles(ParticleTypes.END_ROD, lane.x, lane.y, lane.z, 1, 0.22, 0.5, 0.22, 0.008);
+                level.sendParticles(ParticleTypes.WAX_ON, lane.x, lane.y, lane.z, 3, 0.25, 0.55, 0.25, 0.0);
+            }
+        }
+    }
+
+    /** Ist ein Spieler (kein Zuschauer) waagerecht nicht weiter als {@code range} von (x, z) entfernt? */
+    private static boolean anyoneNear(ServerLevel level, int x, int z, double range) {
+        for (ServerPlayer player : level.players()) {
+            double dx = player.getX() - x;
+            double dz = player.getZ() - z;
+            if (!player.isSpectator() && dx * dx + dz * dz < range * range) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Lage der Burg im Zustand vermerken (für Karten und Befehle). */
@@ -276,19 +335,33 @@ public final class RealmWar {
             return;
         }
         BlockPos pos = event.getPos();
-        if (!(level.getBlockState(pos).getBlock() instanceof WallBannerBlock)) {
-            return;
-        }
         RealmCastlePiece piece = castleAt(level, pos);
-        if (piece == null || !isStandard(piece, pos)) {
+        if (piece == null || !claims(level, piece, pos, false)) {
             return;
         }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        tryConquer(level, player, piece);
+        // Haupt- und Nebenhand lösen beide aus – gegriffen wird nur einmal
+        if (event.getHand() == InteractionHand.MAIN_HAND) {
+            seize(level, player, piece, pos, false);
+        }
     }
 
-    /** Gehört dieses Banner zum Reichsbanner hinter dem Thron? */
+    /** Wer das Reichsbanner abreißen will, greift danach – abreißen lässt es sich erst, wenn die Burg ihm gehört. */
+    @SubscribeEvent
+    static void onBreakBlock(BreakBlockEvent event) {
+        if (!(event.getLevel() instanceof ServerLevel level) || level != level.getServer().overworld()
+                || !(event.getPlayer() instanceof ServerPlayer player) || !(event.getState().getBlock() instanceof WallBannerBlock)) {
+            return;
+        }
+        RealmCastlePiece piece = castleAt(level, event.getPos());
+        if (piece != null && seize(level, player, piece, event.getPos(), true)) {
+            event.setCanceled(true);
+            event.setNotifyClient(true);
+        }
+    }
+
+    /** Gehört dieses Banner zum Reichsbanner hinter dem Thron (eine seiner drei Bahnen)? */
     public static boolean isStandard(RealmCastlePiece piece, BlockPos pos) {
         for (int x = -1; x <= 1; x++) {
             if (piece.world(RealmCastle.STANDARD.offset(x, 1, 0)).equals(pos)) {
@@ -296,6 +369,55 @@ public final class RealmWar {
             }
         }
         return false;
+    }
+
+    /**
+     * Gehört dieser Block zum Reichsbanner – eine seiner drei Bahnen, die Stelle darunter, über die das Tuch herabhängt,
+     * oder die Wand dahinter? Ein Wandbanner lässt sich nur am oberen Rand anklicken; wer mitten auf das Tuch zielt, trifft
+     * die Wand dahinter.
+     */
+    public static boolean inStandard(RealmCastlePiece piece, BlockPos pos) {
+        for (int x = -1; x <= 1; x++) {
+            for (int y = 0; y <= 1; y++) {
+                for (int z = -1; z <= 0; z++) {
+                    if (piece.world(RealmCastle.STANDARD.offset(x, y, z)).equals(pos)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Meint ein Klick auf diesen Block das Reichsbanner? Vor der Eroberung zählt der ganze Bereich des Banners (siehe
+     * {@link #inStandard}), danach – wie beim Abreißen – nur noch die Banner selbst.
+     */
+    public static boolean claims(ServerLevel level, RealmCastlePiece piece, BlockPos pos, boolean breaking) {
+        boolean banner = level.getBlockState(pos).getBlock() instanceof WallBannerBlock && isStandard(piece, pos);
+        if (breaking || banner) {
+            return banner;
+        }
+        return !RealmState.of(level).isConquered(piece.realm()) && inStandard(piece, pos);
+    }
+
+    /**
+     * Der Spieler greift nach dem Reichsbanner – per Rechtsklick oder indem er es abreißen will. Ist die Burg reif, ist sie
+     * damit erobert; sonst bleibt das Banner hängen (sonst ließe sie sich nie mehr erobern), und er erfährt, was noch im
+     * Weg steht. Dem Eroberer gehört es danach – er darf es abnehmen.
+     *
+     * @return ob der Klick damit erledigt ist (dann ist seine gewöhnliche Wirkung aufgehoben)
+     */
+    public static boolean seize(ServerLevel level, ServerPlayer player, RealmCastlePiece piece, BlockPos pos, boolean breaking) {
+        if (!claims(level, piece, pos, breaking)) {
+            return false;
+        }
+        RealmState state = RealmState.of(level);
+        if (breaking && state.isConquered(piece.realm()) && player.getUUID().equals(state.conqueror(piece.realm()))) {
+            return false;
+        }
+        tryConquer(level, player, piece);
+        return true;
     }
 
     /** Was einer Eroberung noch im Weg steht (oder {@code null}, wenn die Burg jetzt erobert werden kann). */
@@ -307,21 +429,57 @@ public final class RealmWar {
                     : "realm.kingdomsatwar.conquer.taken", realm.shortName());
         }
         if (!state.isLordFallen(realm)) {
-            return Component.translatable("realm.kingdomsatwar.conquer.lord_alive", realm.ruler()).withStyle(ChatFormatting.RED);
+            if (lord(level, piece) != null || !level.hasChunkAt(piece.world(RealmCastle.THRONE))) {
+                return Component.translatable("realm.kingdomsatwar.conquer.lord_alive", realm.ruler()).withStyle(ChatFormatting.RED);
+            }
+            // der Herrscher ist verschwunden, ohne zu fallen (etwa auf friedlicher Schwierigkeit) – dann gilt er als gefallen
+            state.lordFallen(realm);
+            state.save(level);
+            KingdomsAtWar.LOGGER.info("{}: Herrscher nicht mehr auffindbar – das Reich gilt als herrenlos", realm.id());
         }
-        AABB guard = new AABB(piece.world(RealmCastle.STANDARD)).inflate(GUARD_RADIUS, 6.0, GUARD_RADIUS);
-        int defenders = level.getEntitiesOfClass(RealmWarriorEntity.class, guard, w -> w.realm() == realm && w.isAlive()).size();
+        int defenders = defenders(level, piece).size();
         if (defenders > 0) {
             return Component.translatable("realm.kingdomsatwar.conquer.defended", realm.shortName(), defenders).withStyle(ChatFormatting.RED);
         }
         return null;
     }
 
-    /** Die Burg erobern, wenn der Herrscher gefallen ist und niemand mehr das Reichsbanner verteidigt. */
+    /** Die Krieger des Reichs, die das Reichsbanner noch verteidigen (im Thronsaal und rings um ihn). */
+    public static List<RealmWarriorEntity> defenders(ServerLevel level, RealmCastlePiece piece) {
+        Realm realm = piece.realm();
+        AABB guard = new AABB(piece.world(RealmCastle.STANDARD)).inflate(GUARD_RADIUS, 6.0, GUARD_RADIUS);
+        return level.getEntitiesOfClass(RealmWarriorEntity.class, guard, w -> w.realm() == realm && w.isAlive());
+    }
+
+    /** Der Herrscher, wenn er noch lebt und in oder bei seiner Burg ist. */
+    private static @Nullable RealmWarriorEntity lord(ServerLevel level, RealmCastlePiece piece) {
+        Realm realm = piece.realm();
+        List<RealmWarriorEntity> lords = level.getEntitiesOfClass(RealmWarriorEntity.class, AABB.of(piece.getBoundingBox()).inflate(64.0),
+                w -> w.realm() == realm && w.role() == WarriorRole.LORD && w.isAlive());
+        return lords.isEmpty() ? null : lords.getFirst();
+    }
+
+    /**
+     * Die Burg erobern, wenn der Herrscher gefallen ist und niemand mehr das Reichsbanner verteidigt. Steht noch etwas im
+     * Weg, leuchten der Herrscher bzw. die letzten Verteidiger zehn Sekunden lang auf (auch durch Wände), damit der Spieler
+     * sie findet.
+     */
     public static boolean tryConquer(ServerLevel level, ServerPlayer player, RealmCastlePiece piece) {
         Component obstacle = obstacle(level, player.getUUID(), piece);
         if (obstacle != null) {
             player.sendOverlayMessage(obstacle);
+            RealmState state = RealmState.of(level);
+            if (!state.isConquered(piece.realm())) {
+                List<RealmWarriorEntity> reveal = new ArrayList<>(defenders(level, piece));
+                RealmWarriorEntity lord = state.isLordFallen(piece.realm()) ? null : lord(level, piece);
+                if (lord != null && !reveal.contains(lord)) {
+                    reveal.add(lord);
+                }
+                for (RealmWarriorEntity warrior : reveal) {
+                    warrior.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0, false, false));
+                }
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 0.8f, 0.6f);
+            }
             return false;
         }
         conquer(level, player, piece);
@@ -334,6 +492,12 @@ public final class RealmWar {
         RealmState state = RealmState.of(level);
         state.conquer(realm, player.getUUID(), level.getGameTime());
         state.save(level);
+        // das alte Reichsbanner nimmt der Eroberer als Trophäe mit; hinter dem Thron hängt fortan sein eigenes
+        ItemStack trophy = realm.banner(level.registryAccess());
+        if (!player.getInventory().add(trophy)) {
+            player.spawnAtLocation(level, trophy);
+        }
+        restoreStandard(level, piece);
         int banners = repaintBanners(level, piece.getBoundingBox());
         // wer noch lebt, legt die Waffen nieder und zieht ab
         for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, AABB.of(piece.getBoundingBox()).inflate(32.0),
@@ -355,8 +519,23 @@ public final class RealmWar {
         for (ServerPlayer other : level.getServer().getPlayerList().getPlayers()) {
             other.sendSystemMessage(announce);
         }
+        player.sendSystemMessage(Component.translatable("realm.kingdomsatwar.conquer.trophy", realm.shortName()).withStyle(ChatFormatting.GOLD));
         player.sendSystemMessage(Component.translatable("realm.kingdomsatwar.conquer.tribute").withStyle(ChatFormatting.YELLOW));
         KingdomsAtWar.LOGGER.info("{} hat {} erobert ({} Banner im neuen Wappen)", player.getName().getString(), realm.id(), banners);
+    }
+
+    /** Fehlt eine Bahn des Reichsbanners (abgerissen, gesprengt), hängt sie der Eroberer neu auf. */
+    private static void restoreStandard(ServerLevel level, RealmCastlePiece piece) {
+        Direction facing = piece.rotation().rotate(Direction.SOUTH);
+        for (int x = -1; x <= 1; x++) {
+            BlockPos pos = piece.world(RealmCastle.STANDARD.offset(x, 1, 0));
+            BlockPos wall = pos.relative(facing.getOpposite());
+            BlockState here = level.getBlockState(pos);
+            if (here.getBlock() instanceof WallBannerBlock || !here.canBeReplaced() || !level.getBlockState(wall).isFaceSturdy(level, wall, facing)) {
+                continue;
+            }
+            level.setBlock(pos, Blocks.WALL_BANNER.pick(DyeColor.BLUE).defaultBlockState().setValue(WallBannerBlock.FACING, facing), 3);
+        }
     }
 
     /** Das Wappen des Spielers: blau mit goldenem Kreuz und goldenem Rand – wie die Schilde seines Heeres. */

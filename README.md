@@ -9,6 +9,7 @@ Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
 > **Testversion 0.49.0 – Die Königsburg. Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan für deine Baumeister und als echte Schematik (.litematic): zwei Mauerringe mit über 40 Türmen, Torhäuser mit Fallgitter, ein gemauerter Graben mit Steinbrücke, die Kernburg mit Bergfried, Palas und Thronsaal, eine Kapelle mit spitzem Turm, der Marstall und der Königsgarten, davor eine ganze Stadt mit Marktplatz, Brunnen, Straßen und Gassen. Im Stadtfenster steht sie mit einer Krone ganz oben in der Liste zum Einlesen.**
+> **0.49.1** repariert die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen – auch mit einem Rechtsklick auf das herabhängende Tuch (dort traf man bisher die Wand dahinter) oder wenn man es abreißen will. Ist der Herrscher gefallen, schimmert das Banner; stehen noch Wachen davor, leuchten sie auf. Das alte Reichsbanner nimmt der Eroberer als Trophäe mit.
 > In 0.48 kamen die Großbaustellen: Baupläne bis 320 × 128 × 320 Blöcke, viele Baumeister zugleich, jeder in seinem Abschnitt von 16 × 16 Säulen, und im Stadtfenster eine Karte der Abschnitte.
 > In 0.47 kamen die Schematiken: Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) lassen sich als eigener Bauplan einlesen, und jeder eigene Plan lässt sich in allen drei Formaten ablegen.
 > In 0.46 kam der Dragon Architect: Mit dem Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier; die Baumeister bauen es nach, Block für Block oder abschnittsweise, kostbare Blöcke nehmen sie genau so aus dem Lager.
@@ -1024,8 +1025,11 @@ Bauweise (Plan und Stand: [docs/KRIEG.md](docs/KRIEG.md)):
   Burghauptmann und der **Herrscher** mit Bossleiste. Wer die Mauern betritt, löst Alarm aus; gefallene Krieger rücken
   nach, solange niemand in der Nähe ist – der Herrscher nie.
 - **Die Eroberung:** Ist der Herrscher gefallen und verteidigt niemand mehr das Reichsbanner, genügt ein Griff an das
-  Banner: Alle Banner tragen dein Wappen, die übrigen Krieger ziehen ab, und jeden Tag liegt **Tribut** in der
-  Schatztruhe des Herrschers.
+  Banner (Rechtsklick – irgendwo auf das Tuch –, oder man will es abreißen): Alle Banner tragen dein Wappen, das alte
+  Reichsbanner nimmst du als Trophäe mit, die übrigen Krieger ziehen ab, und jeden Tag liegt **Tribut** in der
+  Schatztruhe des Herrschers. Ist der Herrscher gefallen, schimmert das Reichsbanner; stehen noch Wachen davor, leuchten
+  sie beim Griff nach dem Banner zehn Sekunden lang auf (auch durch Wände). Bis zur Eroberung lässt sich das Banner
+  nicht abreißen.
 - **Finden:** Wer sich einer Stammburg nähert, erfährt, wessen Land er betritt; der Kartograf verkauft eine Karte zur
   nächsten noch freien Stammburg.
 - **Heerhaufen:** Wer mit einem Reich im Krieg liegt (einen seiner Krieger erschlagen hat), bekommt alle paar Spieltage

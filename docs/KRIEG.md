@@ -175,7 +175,12 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
   als gefallen sind. Der Herrscher kehrt nie zurück.
 - **Eroberung:** Ist der Herrscher gefallen und steht kein Verteidiger mehr im Umkreis von 16 Blöcken um das
   Reichsbanner hinter dem Thron, genügt ein Rechtsklick auf das Banner: alle Banner der Burg tragen dann das Wappen des
-  Spielers (blau mit goldenem Kreuz), die übrigen Krieger ziehen ab.
+  Spielers (blau mit goldenem Kreuz), die übrigen Krieger ziehen ab. Der Griff zählt überall auf dem Tuch und an der
+  Wand dahinter (ein Wandbanner lässt sich sonst nur am oberen Rand anklicken), ebenso der Versuch, es abzureißen – vor
+  der Eroberung bleibt es hängen. Das alte Reichsbanner nimmt der Eroberer als Trophäe mit; fehlt eine Bahn, hängt er
+  sie neu auf. Ist der Herrscher gefallen, schimmert das Reichsbanner; verteidigen es noch Wachen (oder lebt der
+  Herrscher), leuchten sie beim Griff zehn Sekunden lang auf. Ist der Herrscher spurlos verschwunden (etwa auf
+  friedlicher Schwierigkeit), gilt er als gefallen.
 - **Tribut:** Jeden Tag Bronzemünzen und Waren des Landes in der Schatztruhe in der Kammer des Herrschers (höchstens
   eine Woche sammelt sich an).
 - **Finden:** Beim ersten Betreten des Landes erscheint der Name des Reichs und seines Herrschers; der Kartograf

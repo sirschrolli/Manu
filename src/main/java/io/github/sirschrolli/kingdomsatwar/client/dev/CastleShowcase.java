@@ -2,8 +2,12 @@ package io.github.sirschrolli.kingdomsatwar.client.dev;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
+import io.github.sirschrolli.kingdomsatwar.entity.realm.RealmWarriorEntity;
 import io.github.sirschrolli.kingdomsatwar.war.Realm;
 import io.github.sirschrolli.kingdomsatwar.war.RealmLocator;
+import io.github.sirschrolli.kingdomsatwar.war.RealmState;
+import io.github.sirschrolli.kingdomsatwar.war.RealmWar;
+import io.github.sirschrolli.kingdomsatwar.war.WarriorRole;
 import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
 import io.github.sirschrolli.kingdomsatwar.worldgen.realm.RealmCastlePiece;
 import java.util.Arrays;
@@ -14,6 +18,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
@@ -21,6 +27,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 /**
  * Vorführung der Stammburgen der vier Reiche: {@code castles} baut jede Burg auf echtem Gelände (ebenster Platz in der
@@ -68,6 +77,98 @@ final class CastleShowcase {
             steps.add(Step.until(() -> c[3] != 0, 6000));
             views(steps, c, "castleworld_" + realm.id());
         }
+    }
+
+    /**
+     * Eroberung einer echten Stammburg: Der Herrscher ist gefallen, die Ritter stehen noch im Thronsaal. Ein Rechtsklick
+     * auf den unteren Teil des Reichsbanners (dort trifft das Fadenkreuz die Wand hinter dem Tuch) zeigt, wer es noch
+     * verteidigt – die Ritter leuchten auf; sind sie gefallen, ist die Burg mit dem nächsten Griff erobert.
+     */
+    static void conquest(Deque<Step> steps) {
+        Realm realm = Realm.values()[0];
+        double[] c = new double[5];
+        steps.add(Step.command("difficulty normal"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        steps.add(Step.command("time set 6000"));
+        steps.add(Step.server(level -> generate(level, realm, c)));
+        steps.add(Step.until(() -> c[3] != 0, 6000));
+        steps.add(Step.server(level -> prepareConquest(level, realm)));
+        steps.add(Step.hud(true));
+        // der Thronsaal: hinter dem Thron schimmert das Reichsbanner
+        double[] hall = {1.2, 7.07, -16.5, 0.0, 10.2, -23.3};
+        // vor dem Podest, Blick auf den unteren Teil des Tuchs: dort trifft das Fadenkreuz die Wand hinter dem Banner
+        double[] reach = {1.4, 7.07, -20.6, 0.0, 10.45, -23.35};
+        // vom Podest in den Saal: hier stehen die Ritter
+        double[] guards = {2.5, 8.07, -23.0, 0.0, 8.2, -13.0};
+        steps.add(at(c, hall));
+        steps.add(Step.waitTicks(170));
+        steps.add(Step.waitForChunks(1500));
+        steps.add(Step.screenshot("conquest_0_hall"));
+        steps.add(at(c, reach));
+        steps.add(Step.waitTicks(10));
+        steps.add(useOnCrosshair());
+        steps.add(Step.waitTicks(4));
+        steps.add(at(c, guards));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("conquest_1_defended"));
+        steps.add(Step.server(level -> {
+            RealmCastlePiece piece = RealmWar.castle(level, realm);
+            if (piece != null) {
+                for (RealmWarriorEntity defender : RealmWar.defenders(level, piece)) {
+                    defender.kill(level);
+                }
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(at(c, reach));
+        steps.add(Step.waitTicks(10));
+        steps.add(useOnCrosshair());
+        steps.add(Step.waitTicks(25));
+        steps.add(Step.screenshot("conquest_2_title"));
+        steps.add(at(c, hall));
+        steps.add(Step.waitTicks(160));
+        steps.add(Step.server(level -> KingdomsAtWar.LOGGER.info("[Showcase] Eroberung von {}: erobert {}, herrenlos {}", realm.id(),
+                RealmState.of(level).isConquered(realm), RealmState.of(level).isLordFallen(realm))));
+        steps.add(Step.screenshot("conquest_3_banner"));
+    }
+
+    /** Der Herrscher fällt, die übrigen Krieger bleiben stehen, wo sie sind (für ruhige Bilder). */
+    private static void prepareConquest(ServerLevel level, Realm realm) {
+        RealmCastlePiece piece = RealmWar.castle(level, realm);
+        if (piece == null) {
+            KingdomsAtWar.LOGGER.info("[Showcase] Eroberung: keine Burg von {} geladen", realm.id());
+            return;
+        }
+        int still = 0;
+        for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, AABB.of(piece.getBoundingBox()).inflate(16.0))) {
+            if (warrior.role() == WarriorRole.LORD) {
+                warrior.kill(level);
+            } else {
+                warrior.setNoAi(true);
+                still++;
+            }
+        }
+        KingdomsAtWar.LOGGER.info("[Showcase] Eroberung: Herrscher von {} gefallen {}, {} Krieger, {} am Reichsbanner", realm.id(),
+                RealmState.of(level).isLordFallen(realm), still, RealmWar.defenders(level, piece).size());
+    }
+
+    /** Rechtsklick auf den Block im Fadenkreuz – wie im Spiel (erst Haupt-, dann Nebenhand). */
+    private static Step useOnCrosshair() {
+        return Step.once(minecraft -> {
+            if (minecraft.hitResult instanceof BlockHitResult hit && hit.getType() == HitResult.Type.BLOCK && minecraft.gameMode != null
+                    && minecraft.player != null && minecraft.level != null) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Rechtsklick auf {} ({})", hit.getBlockPos(), minecraft.level.getBlockState(hit.getBlockPos()));
+                for (InteractionHand hand : InteractionHand.values()) {
+                    InteractionResult result = minecraft.gameMode.useItemOn(minecraft.player, hand, hit);
+                    if (result.consumesAction()) {
+                        break;
+                    }
+                }
+            } else {
+                KingdomsAtWar.LOGGER.info("[Showcase] Fadenkreuz trifft keinen Block: {}", minecraft.hitResult);
+            }
+        });
     }
 
     private static void views(Deque<Step> steps, double[] c, String prefix) {

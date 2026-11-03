@@ -141,6 +141,7 @@ final class Showcase {
                 case "sites" -> SitesShowcase.sites(steps);
                 case "castles" -> CastleShowcase.castles(steps);
                 case "castleworld" -> CastleShowcase.castleWorld(steps);
+                case "conquest" -> CastleShowcase.conquest(steps);
                 case "siteworld" -> SitesShowcase.siteWorld(steps);
                 case "townplans" -> TownShowcase.plans(steps, "");
                 case "town" -> TownShowcase.town(steps);

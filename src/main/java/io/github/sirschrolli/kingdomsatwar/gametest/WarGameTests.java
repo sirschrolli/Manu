@@ -211,8 +211,11 @@ final class WarGameTests {
 
     /**
      * Nachschub, Eroberung und Tribut: Gefallene Krieger rücken nach (aber nur so viele, wie gefallen sind); solange der
-     * Herrscher lebt oder Wachen am Reichsbanner stehen, lässt sich die Burg nicht erobern; danach tragen alle Banner das
-     * Wappen des Spielers, die Krieger sind abgezogen, und nach drei Tagen liegt dreifacher Tribut in der Schatztruhe.
+     * Herrscher lebt oder Wachen am Reichsbanner stehen, lässt sich die Burg nicht erobern (das Banner bleibt hängen, die
+     * Wachen leuchten auf); ein spurlos verschwundener Herrscher gilt als gefallen. Gegriffen wird das Reichsbanner auch über
+     * sein herabhängendes Tuch und die Wand dahinter; danach tragen alle Banner das Wappen des Spielers (eine abgerissene
+     * Bahn hängt wieder), er hat das alte Reichsbanner als Trophäe, die Krieger sind abgezogen, und nach drei Tagen liegt
+     * dreifacher Tribut in der Schatztruhe.
      */
     private static void conquest(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -240,20 +243,54 @@ final class WarGameTests {
             player.setGameMode(GameType.SURVIVAL);
             BlockPos standard = piece.world(RealmCastle.STANDARD);
             player.snapTo(standard.getX() + 0.5, standard.getY() - 3, standard.getZ() + 3.5, 0.0f, 0.0f);
+            // wer auf das Tuch zielt, trifft den Block darunter oder die Wand dahinter – auch das greift nach dem Banner
+            boolean cloth = io.github.sirschrolli.kingdomsatwar.war.RealmWar.claims(level, piece, piece.world(RealmCastle.STANDARD), false);
+            boolean wall = io.github.sirschrolli.kingdomsatwar.war.RealmWar.claims(level, piece, piece.world(RealmCastle.STANDARD.offset(1, 1, -1)), false);
+            boolean throne = io.github.sirschrolli.kingdomsatwar.war.RealmWar.claims(level, piece, piece.world(RealmCastle.THRONE), false);
+            boolean tear = io.github.sirschrolli.kingdomsatwar.war.RealmWar.claims(level, piece, piece.world(RealmCastle.STANDARD.above()), true);
+            if (!cloth || !wall || throne || !tear) {
+                problems.add("Griff nach dem Reichsbanner: Tuch " + cloth + ", Wand " + wall + ", Thron " + throne + ", Abreißen " + tear);
+            }
             if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.obstacle(level, player.getUUID(), piece) == null) {
                 problems.add("Eroberung möglich, obwohl der Herrscher lebt");
             }
-            state.lordFallen(realm);
+            // der Herrscher verschwindet, ohne zu fallen (etwa auf friedlicher Schwierigkeit): Dann gilt er als gefallen
+            for (RealmWarriorEntity lord : level.getEntitiesOfClass(RealmWarriorEntity.class, area, w -> w.role() == WarriorRole.LORD)) {
+                lord.discard();
+            }
             if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.obstacle(level, player.getUUID(), piece) == null) {
                 problems.add("Eroberung möglich, obwohl Wachen am Reichsbanner stehen");
+            }
+            if (!RealmState.of(level).isLordFallen(realm)) {
+                problems.add("verschwundener Herrscher gilt nicht als gefallen");
+            }
+            // wer das bewachte Banner abreißen will, bekommt es nicht – die Wachen leuchten auf
+            boolean caught = io.github.sirschrolli.kingdomsatwar.war.RealmWar.seize(level, player, piece, piece.world(RealmCastle.STANDARD.above()), true);
+            List<RealmWarriorEntity> guards = io.github.sirschrolli.kingdomsatwar.war.RealmWar.defenders(level, piece);
+            boolean glowing = !guards.isEmpty() && guards.stream().allMatch(w -> w.hasEffect(net.minecraft.world.effect.MobEffects.GLOWING));
+            if (!caught || !glowing || RealmState.of(level).isConquered(realm)) {
+                problems.add("Griff nach dem bewachten Banner: abgefangen " + caught + ", " + guards.size() + " Wachen leuchten " + glowing);
             }
             for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, area)) {
                 warrior.discard();
             }
+            // eine Bahn ist abgerissen – der Eroberer hängt sie neu auf
+            BlockPos torn = piece.world(RealmCastle.STANDARD.offset(1, 1, 0));
+            level.setBlock(torn, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
             boolean standardFound = io.github.sirschrolli.kingdomsatwar.war.RealmWar.isStandard(piece, piece.world(RealmCastle.STANDARD.above()));
-            boolean conquered = io.github.sirschrolli.kingdomsatwar.war.RealmWar.tryConquer(level, player, piece);
-            if (!standardFound || !conquered || !player.getUUID().equals(RealmState.of(level).conqueror(realm))) {
-                problems.add("Eroberung: Reichsbanner erkannt " + standardFound + ", erobert " + conquered);
+            boolean seized = io.github.sirschrolli.kingdomsatwar.war.RealmWar.seize(level, player, piece, piece.world(RealmCastle.STANDARD), false);
+            boolean conquered = player.getUUID().equals(RealmState.of(level).conqueror(realm));
+            if (!standardFound || !seized || !conquered) {
+                problems.add("Eroberung: Reichsbanner erkannt " + standardFound + ", gegriffen " + seized + ", erobert " + conquered);
+            }
+            if (!(level.getBlockState(torn).getBlock() instanceof net.minecraft.world.level.block.WallBannerBlock)) {
+                problems.add("abgerissene Bahn des Reichsbanners hängt nicht wieder: " + level.getBlockState(torn));
+            }
+            if (!player.getInventory().hasAnyMatching(stack -> stack.is(net.minecraft.tags.ItemTags.BANNERS))) {
+                problems.add("kein Reichsbanner als Trophäe im Inventar");
+            }
+            if (io.github.sirschrolli.kingdomsatwar.war.RealmWar.claims(level, piece, piece.world(RealmCastle.STANDARD), false)) {
+                problems.add("nach der Eroberung greift ein Klick auf die Wand noch nach dem Banner");
             }
             // alle Banner im Wappen des Spielers
             int banners = 0;

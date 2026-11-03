@@ -28,8 +28,8 @@ final class WarLang {
         text.add("realm.kingdomsatwar.discover.leaderless", "The realm mourns its fallen ruler", "Das Reich trauert um seinen gefallenen Herrscher");
         text.add("realm.kingdomsatwar.discover.conquered", "Conquered land – your banner flies here", "Erobertes Land – hier weht dein Banner");
         text.add("realm.kingdomsatwar.discover.hint",
-                "%s: The castle guards attack anyone who sets foot inside their walls. Defeat the ruler (%s) and seize the royal standard behind the throne to conquer the castle.",
-                "%s: Die Burgwachen greifen jeden an, der ihre Mauern betritt. Besiege den Herrscher (%s) und ergreife das Reichsbanner hinter dem Thron, um die Burg zu erobern.");
+                "%s: The castle guards attack anyone who sets foot inside their walls. Defeat the ruler (%s) and seize the royal standard behind the throne (right-click it) to conquer the castle.",
+                "%s: Die Burgwachen greifen jeden an, der ihre Mauern betritt. Besiege den Herrscher (%s) und ergreife das Reichsbanner hinter dem Thron (Rechtsklick darauf), um die Burg zu erobern.");
         // Heerhaufen gegen die eigene Siedlung
         text.add("raid.kingdomsatwar.title", "War band!", "Heerhaufen!");
         text.add("raid.kingdomsatwar.subtitle", "%s marches with %s warriors", "%s zieht mit %s Kriegern heran");
@@ -59,17 +59,21 @@ final class WarLang {
                 "So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen desselben Reichs.");
         text.add("realm.kingdomsatwar.alarm", "Alarm! The guards of %s have spotted you!", "Alarm! Die Wachen von %s haben dich entdeckt!");
         text.add("realm.kingdomsatwar.lord_fallen", "%s has fallen – %s is without a ruler!", "%s ist gefallen – %s ist ohne Herrscher!");
-        text.add("realm.kingdomsatwar.lord_fallen.hint", "Seize the royal standard behind the throne to conquer the castle.",
-                "Ergreife das Reichsbanner hinter dem Thron, um die Burg zu erobern.");
+        text.add("realm.kingdomsatwar.lord_fallen.hint",
+                "Seize the shimmering royal standard behind the throne (right-click it) to conquer the castle – once no guard is left in the throne hall.",
+                "Ergreife das schimmernde Reichsbanner hinter dem Thron (Rechtsklick darauf), um die Burg zu erobern – sobald keine Wache mehr im Thronsaal steht.");
         // Eroberung
-        text.add("realm.kingdomsatwar.conquer.lord_alive", "%s still lives – defeat the ruler first!", "%s lebt noch – besiege zuerst den Herrscher!");
-        text.add("realm.kingdomsatwar.conquer.defended", "The guards of %s still defend the standard (%s left)!",
-                "Die Wachen von %s verteidigen noch das Reichsbanner (noch %s)!");
+        text.add("realm.kingdomsatwar.conquer.lord_alive", "%s still lives – defeat the ruler first (he glows now)!",
+                "%s lebt noch – besiege zuerst den Herrscher (er leuchtet jetzt auf)!");
+        text.add("realm.kingdomsatwar.conquer.defended", "The guards of %s still defend the standard (%s left – they glow now)!",
+                "Die Wachen von %s verteidigen noch das Reichsbanner (noch %s – sie leuchten jetzt auf)!");
         text.add("realm.kingdomsatwar.conquer.yours", "This castle already belongs to you.", "Diese Burg gehört bereits dir.");
         text.add("realm.kingdomsatwar.conquer.taken", "The castle of %s has already been conquered.", "Die Stammburg von %s ist bereits erobert.");
         text.add("realm.kingdomsatwar.conquer.title", "Castle conquered!", "Burg erobert!");
         text.add("realm.kingdomsatwar.conquer.subtitle", "%s bows to your banner", "%s beugt sich deinem Banner");
         text.add("realm.kingdomsatwar.conquer.announce", "%s has conquered the castle of %s!", "%s hat die Stammburg von %s erobert!");
+        text.add("realm.kingdomsatwar.conquer.trophy", "You take the royal standard of %s as a trophy – your own banner now hangs behind the throne.",
+                "Du nimmst das Reichsbanner von %s als Trophäe an dich – hinter dem Thron hängt jetzt dein eigenes Banner.");
         text.add("realm.kingdomsatwar.conquer.tribute",
                 "From now on, the realm pays tribute every day into the treasury chest in the ruler's chamber.",
                 "Von nun an zahlt das Reich jeden Tag Tribut in die Schatztruhe in der Kammer des Herrschers.");
