@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.45.0 – Drachen im Krieg: Mit dem neuen Drachenhorn schickst du deine Drachen in den Kampf – auf einen Feind zeigen und sie stoßen im Sturzflug mit ihrem Odem auf ihn herab, auf einen Ort zeigen und sie fliegen einen Luftangriff auf jeden Feind dort, in den Himmel zeigen und sie kehren zurück. Gegen Heerhaufen verteidigen sie die Siedlung von selbst; die Schützen der Reiche schießen zurück, schwer verwundet ziehen sich die Drachen zurück.**
+> **Testversion 0.46.0 – Dragon Architect: Mit dem neuen Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier. In deiner Siedlung bauen es die Baumeister nach, Block für Block oder abschnittsweise (viel schneller, ideal für Burgen); kostbare Blöcke nehmen sie genau so aus dem Lager.**
+> In 0.45 kamen die Drachen in den Krieg: Mit dem Drachenhorn stoßen deine Drachen im Sturzflug auf einen Feind herab oder fliegen einen Luftangriff auf einen Ort; gegen Heerhaufen verteidigen sie die Siedlung von selbst, schwer verwundet ziehen sie sich zurück.
 > In 0.44 kamen neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter auf dem eigenen Schlachtross und Belagerungsknechte; am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen.
 > In 0.43 kamen die Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner; besiegt liegt ihre Kriegskasse in deinem Lager, sonst plündern sie ein Drittel.
 > In 0.42 kamen die Belagerungswaffen: Katapult, Tribok, Balliste und Rammbock – selbst bedient (zielen mit dem Blick, Leuchtspur mit Einschlagkreis) oder von Soldaten mit dem Kommandostab; Breschen in Mauern, Bolzen durch bis zu drei Gegner, Tore aufbrechen.
@@ -276,8 +277,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Feinschliff der Schattenwelt-Pflanzen und der Bewegungen aller Wesen – danach Dragon Architect,
-> Belagerungswaffen und Kriegssystem.
+> **Als Nächstes:** Dragon Architect, Teil 2 – Schematiken (.litematic, .schem, .nbt) importieren und große Bauten, an
+> denen mehrere Baumeister gemeinsam arbeiten.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -347,7 +348,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Heerhaufen: Reiche im Krieg greifen die eigene Siedlung an (Sammelplatz, Horn, Leiste, Kriegskasse, Plündern) | ✅ fertig |
 | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte | ✅ fertig |
 | Drachen im Krieg: Drachenhorn, Sturzangriff mit Odem, Luftangriff, Verteidigung gegen Heerhaufen | ✅ fertig |
-| Dragon Architect, Modrinth-Veröffentlichung | ⏳ später |
+| Dragon Architect, Teil 1: Gebäude vermessen, eigene Baupläne, Nachbau Block für Block oder abschnittsweise | ✅ fertig |
+| Dragon Architect, Teil 2: Import von .litematic, .schem und .nbt, große Bauten mit mehreren Baumeistern | ⏳ als Nächstes |
+| Modrinth-Veröffentlichung | ⏳ später |
 
 ---
 
@@ -1121,7 +1124,7 @@ reicht.
 
 | Beruf | Lohn | Werkstatt | Arbeit |
 |---|---|---|---|
-| Baumeister | 4 Silber | – | baut die Baustellen Block für Block nach Plan |
+| Baumeister | 4 Silber | – | baut die Baustellen nach Plan – Block für Block oder abschnittsweise |
 | Bauer | 3 Silber | Feld | erntet, sät nach, pflegt die Pflanzen, bringt die Ernte in die Truhe |
 | Holzfäller | 3 Silber | Holzfällerhütte | fällt die Bäume im Hain hinter der Hütte und wilde Bäume ringsum, pflanzt nach |
 | Bergmann | 5 Silber | Mine | steigt in den Schacht und hackt an der Erzwand (Kohle, Eisen, Kupfer, selten Gold und Edelsteine) |
@@ -1131,8 +1134,8 @@ reicht.
 | Kartograf | 1 Gold | Kartenhaus | zeichnet Karten zum Siegelkreis und zu Drachennestern |
 
 **Bauen:** Im Stadtfenster nimmst du einen **Bauplan** – er trägt einen der Entwürfe des Gebäudes, zufällig gewählt
-(Tooltip: Name des Entwurfs und seine Baustoffe); mit ihm in der Hand zeigen Lichtpunkte den Umriss, Rechtsklick
-auf den Boden richtet die Baustelle ein (Schleichen + Rechtsklick dreht den Plan). Der **Baumeister** räumt den Platz,
+(Tooltip: Name des Entwurfs und seine Baustoffe); mit ihm in der Hand zeigt ein goldener Rahmen den Umriss und ein
+grüner Pfeil den Eingang, Rechtsklick auf den Boden richtet die Baustelle ein (Schleichen + Rechtsklick dreht den Plan). Der **Baumeister** räumt den Platz,
 legt das Fundament und setzt dann Block für Block – mit Hammerschlag und Staub. Er arbeitet immer aus der Nähe (nie
 dort, wo später noch etwas hinkommt, damit er sich nicht einmauert) und stellt sich an hohen Mauern ein **Baugerüst** auf,
 das er nach dem Bau wieder abbaut.
@@ -1161,6 +1164,40 @@ drei Stunden – in **Echtzeit**, auch wenn das Spiel aus ist (beides einstellba
 trägt, setzt sich im eigenen **Thronsaal** auf den Thron: Glocken läuten, goldenes Licht steigt auf, die Bürger eilen
 herbei, Feuerwerk erhellt den Himmel – und du wirst **König** oder **Königin**. Von da an geben dir deine Bürger alles
 umsonst.
+
+### Dragon Architect: eigene Baupläne
+
+Bau ein Haus, wie es dir gefällt – und lass es deine Baumeister nachbauen, so oft du willst.
+
+**Vermessen:** Mit dem **Vermessungsstab** (zwei Stöcke mit Kupferspitze, oder umsonst im Stadtfenster) tippst du zwei
+gegenüberliegende Ecken des Gebäudes an – auch auf Türen und Truhen. Ein goldener Rahmen zeigt den Bereich mit seinen
+Maßen, eine grüne Ebene die **Bodenlinie** (darunter liegt das Gelände; sie richtet sich nach dem Boden rings um das
+Gebäude) und ein Pfeil die **Vorderseite** (die Seite mit der Haustür). Schleichen + Rechtsklick öffnet **„Bauplan
+zeichnen“**: Ansicht und Grundriss auf Blaupausen-Papier, Name, Vorderseite und Bodenlinie zum Verstellen, was der Bau
+kosten wird und was nicht übernommen wird. „Zeichnen“ braucht ein Blatt Papier und gibt dir den **Bauplan** – eine
+Blaupause, deren Tooltip Ansicht, Grundriss, Größe und Baustoffe zeigt.
+
+**Nachbauen:** Wie jeden Bauplan legst du ihn in deiner Siedlung auf den Boden (der goldene Rahmen zeigt, wo der Bau
+stehen wird, der grüne Pfeil den Eingang; Schleichen + Rechtsklick dreht). Die Baumeister räumen den Platz, legen das
+Fundament, heben einen Keller aus und bauen alles nach – Türen, Betten, Fenster, Möbel, Pflanzen, sogar die Schrift auf
+den Schildern und die Muster der Banner. Betten in eigenen Häusern zählen für deine Bürger.
+
+**Bauweise:** In der Übersicht des Stadtfensters schaltest du jede Baustelle um zwischen **Block für Block** (ein
+Ziegel: eine echte Baustelle mit Gerüst) und **abschnittsweise** (eine Ziegelmauer: der Baumeister zieht bis zu zwölf
+Blöcke einer Lage auf einmal hoch – ideal für Burgen und Mauern; große eigene Pläne beginnen gleich so).
+
+**Kosten:** Münzen (9 Bronze und eine je acht Blöcke, mit Ansehen-Rabatt; als König umsonst) und Baustoffe wie immer –
+eine Einheit Holz, Stein oder Metall je Block. **Kostbare Blöcke** (Erze, Edelstein- und Metallblöcke, Obsidian,
+Amboss, Kessel, Leuchtfeuer, Braustand, Glocke, Köpfe, Drachenei …) macht der Baumeister nicht aus Einheiten: sie müssen
+genau so im Lager liegen, sonst wartet er darauf und sagt dir Bescheid. **Nicht übernommen** werden Spawner, Portale,
+Grundgestein, Befehlsblöcke, das Stadtbanner und Lava; Truhen bleiben leer, Felder werden frisch gesät, Laub bleibt
+dauerhaft, Befehle in Schildern verschwinden.
+
+**Eigene Pläne:** Im Reiter **Bauen** des Stadtfensters öffnet die blaue Karte **Eigene Pläne** deine Sammlung (bis zu
+64 Pläne): Ansicht, Größe, Baustoffe und Preis; eine **Abschrift** nehmen (ein Blatt Papier) oder einen Plan löschen
+(Gebäude, die nach ihm gebaut sind, bleiben stehen). Vermessen lassen sich Bauten bis 96 × 64 × 96 Blöcke.
+
+![Dragon Architect: Vermessen, Bauplan zeichnen, eigene Pläne, Nachbau](docs/bilder/architekt.jpg)
 
 ### Hof- und Weidetiere
 
@@ -1749,7 +1786,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      eigenen Wesen.
 2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen und die Heerhaufen sind
    fertig, als Nächstes kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
-3. Danach Dragon Architect und die Veröffentlichung auf Modrinth.
+3. **Dragon Architect** – Teil 1 ist fertig (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen); als Nächstes
+   der Import von Schematiken (.litematic, .schem, .nbt) und große Bauten, an denen mehrere Baumeister gemeinsam arbeiten.
+4. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 

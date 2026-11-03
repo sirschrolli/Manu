@@ -290,6 +290,76 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             add(BlockItemTags.SMALL_FLOWERS.block(), flower);
             add(BlockTags.FLOWER_POTS, pot);
         });
+        architect();
+    }
+
+    /** Dragon Architect: was beim Vermessen nicht übernommen wird, was kostbar ist und was gewachsener Boden ist. */
+    private void architect() {
+        tag(ModTags.Blocks.ARCHITECT_UNBUILDABLE).addTag(ModTags.Blocks.SIEGE_PROOF)
+                .add(vanilla(net.minecraft.world.level.block.Blocks.SPAWNER), vanilla(net.minecraft.world.level.block.Blocks.TRIAL_SPAWNER),
+                        vanilla(net.minecraft.world.level.block.Blocks.VAULT), vanilla(net.minecraft.world.level.block.Blocks.BUDDING_AMETHYST),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_STONE), vanilla(net.minecraft.world.level.block.Blocks.INFESTED_COBBLESTONE),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_STONE_BRICKS),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_MOSSY_STONE_BRICKS),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_CRACKED_STONE_BRICKS),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_CHISELED_STONE_BRICKS),
+                        vanilla(net.minecraft.world.level.block.Blocks.INFESTED_DEEPSLATE), vanilla(net.minecraft.world.level.block.Blocks.SUSPICIOUS_SAND),
+                        vanilla(net.minecraft.world.level.block.Blocks.SUSPICIOUS_GRAVEL), vanilla(net.minecraft.world.level.block.Blocks.END_PORTAL_FRAME),
+                        vanilla(net.minecraft.world.level.block.Blocks.END_PORTAL), vanilla(net.minecraft.world.level.block.Blocks.END_GATEWAY),
+                        vanilla(net.minecraft.world.level.block.Blocks.NETHER_PORTAL), vanilla(net.minecraft.world.level.block.Blocks.STRUCTURE_VOID),
+                        vanilla(net.minecraft.world.level.block.Blocks.BEDROCK), vanilla(net.minecraft.world.level.block.Blocks.BARRIER),
+                        vanilla(net.minecraft.world.level.block.Blocks.LIGHT), vanilla(net.minecraft.world.level.block.Blocks.COMMAND_BLOCK),
+                        vanilla(net.minecraft.world.level.block.Blocks.CHAIN_COMMAND_BLOCK),
+                        vanilla(net.minecraft.world.level.block.Blocks.REPEATING_COMMAND_BLOCK),
+                        vanilla(net.minecraft.world.level.block.Blocks.STRUCTURE_BLOCK), vanilla(net.minecraft.world.level.block.Blocks.JIGSAW),
+                        vanilla(net.minecraft.world.level.block.Blocks.TEST_BLOCK), vanilla(net.minecraft.world.level.block.Blocks.TEST_INSTANCE_BLOCK),
+                        vanilla(net.minecraft.world.level.block.Blocks.REINFORCED_DEEPSLATE), ModBlocks.BUILDER_SCAFFOLD.key(), ModBlocks.TOWN_BANNER.key());
+        TagAppender<Block> precious = tag(ModTags.Blocks.ARCHITECT_PRECIOUS)
+                .addTag(Tags.Blocks.ORES).addTag(Tags.Blocks.STORAGE_BLOCKS).addTag(Tags.Blocks.OBSIDIANS)
+                .addTag(BlockTags.SHULKER_BOXES).addTag(BlockTags.ANVIL).addTag(ModTags.Blocks.DRAGON_EGGS);
+        for (TagKey<Block> t : ORE_TAGS) {
+            precious.addTag(t);
+        }
+        for (TagKey<Block> t : List.of(ModTags.Blocks.STORAGE_BLOCKS_CARBON, ModTags.Blocks.STORAGE_BLOCKS_GEMSTONE,
+                ModTags.Blocks.STORAGE_BLOCKS_KONTERIT, ModTags.Blocks.STORAGE_BLOCKS_AETHERIT, ModTags.Blocks.STORAGE_BLOCKS_DRACONIUM,
+                ModTags.Blocks.STORAGE_BLOCKS_WYVERNIT, ModTags.Blocks.STORAGE_BLOCKS_STEEL, ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER,
+                ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ModTags.Blocks.STORAGE_BLOCKS_ABYSSITE,
+                ModTags.Blocks.ORES_MOONSILVER, ModTags.Blocks.ORES_NIGHTSTEEL, ModTags.Blocks.ORES_SOUL_CRYSTAL, ModTags.Blocks.ORES_ABYSSITE)) {
+            precious.addTag(t);
+        }
+        for (Block b : List.of(net.minecraft.world.level.block.Blocks.BEACON, net.minecraft.world.level.block.Blocks.CONDUIT,
+                net.minecraft.world.level.block.Blocks.ENCHANTING_TABLE, net.minecraft.world.level.block.Blocks.ENDER_CHEST,
+                net.minecraft.world.level.block.Blocks.RESPAWN_ANCHOR, net.minecraft.world.level.block.Blocks.LODESTONE,
+                net.minecraft.world.level.block.Blocks.TNT, net.minecraft.world.level.block.Blocks.GLOWSTONE,
+                net.minecraft.world.level.block.Blocks.SEA_LANTERN, net.minecraft.world.level.block.Blocks.BREWING_STAND,
+                net.minecraft.world.level.block.Blocks.JUKEBOX, net.minecraft.world.level.block.Blocks.CAULDRON,
+                net.minecraft.world.level.block.Blocks.WATER_CAULDRON, net.minecraft.world.level.block.Blocks.HOPPER,
+                net.minecraft.world.level.block.Blocks.BLAST_FURNACE, net.minecraft.world.level.block.Blocks.IRON_TRAPDOOR,
+                net.minecraft.world.level.block.Blocks.BELL, net.minecraft.world.level.block.Blocks.POWERED_RAIL,
+                net.minecraft.world.level.block.Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, net.minecraft.world.level.block.Blocks.GILDED_BLACKSTONE,
+                net.minecraft.world.level.block.Blocks.SCULK_SENSOR, net.minecraft.world.level.block.Blocks.CALIBRATED_SCULK_SENSOR,
+                net.minecraft.world.level.block.Blocks.SCULK_SHRIEKER, net.minecraft.world.level.block.Blocks.SCULK_CATALYST,
+                net.minecraft.world.level.block.Blocks.HEAVY_CORE, net.minecraft.world.level.block.Blocks.CRAFTER,
+                net.minecraft.world.level.block.Blocks.DRAGON_EGG, net.minecraft.world.level.block.Blocks.AMETHYST_BLOCK,
+                net.minecraft.world.level.block.Blocks.BEEHIVE, net.minecraft.world.level.block.Blocks.BEE_NEST,
+                net.minecraft.world.level.block.Blocks.CAKE, net.minecraft.world.level.block.Blocks.CREAKING_HEART)) {
+            precious.add(vanilla(b));
+        }
+        tag(ModTags.Blocks.ARCHITECT_TERRAIN).addTag(BlockTags.SUBSTRATE_OVERWORLD).addTag(BlockTags.DIRT).addTag(BlockTags.NYLIUM)
+                .addTag(BlockTags.SAND).addTag(BlockTags.SNOW).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.BASE_STONE_NETHER)
+                .addTag(Tags.Blocks.SANDS).addTag(Tags.Blocks.GRAVELS).addTag(Tags.Blocks.NETHERRACKS).addTag(Tags.Blocks.END_STONES)
+                .addTag(ModTags.Blocks.NATURAL_GROUND)
+                .add(vanilla(net.minecraft.world.level.block.Blocks.SNOW_BLOCK), vanilla(net.minecraft.world.level.block.Blocks.SNOW),
+                        vanilla(net.minecraft.world.level.block.Blocks.POWDER_SNOW), vanilla(net.minecraft.world.level.block.Blocks.ICE),
+                        vanilla(net.minecraft.world.level.block.Blocks.PACKED_ICE), vanilla(net.minecraft.world.level.block.Blocks.BLUE_ICE),
+                        vanilla(net.minecraft.world.level.block.Blocks.CLAY), vanilla(net.minecraft.world.level.block.Blocks.SOUL_SAND),
+                        vanilla(net.minecraft.world.level.block.Blocks.SOUL_SOIL), vanilla(net.minecraft.world.level.block.Blocks.DIRT_PATH),
+                        vanilla(net.minecraft.world.level.block.Blocks.FARMLAND), vanilla(net.minecraft.world.level.block.Blocks.CALCITE),
+                        vanilla(net.minecraft.world.level.block.Blocks.SMOOTH_BASALT), vanilla(net.minecraft.world.level.block.Blocks.MAGMA_BLOCK));
+    }
+
+    private static net.minecraft.resources.ResourceKey<Block> vanilla(Block block) {
+        return block.builtInRegistryHolder().key();
     }
 
     /**

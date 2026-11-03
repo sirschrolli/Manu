@@ -48,6 +48,15 @@ public final class ModTags {
 
         /** Was Belagerungswaffen nie zerschlagen (Stadtbanner, Siegelkreis, Tore der Welten, Bannsiegel der Magier …). */
         public static final TagKey<Block> SIEGE_PROOF = mod("siege_proof");
+        /** Dragon Architect: was beim Vermessen nicht in den Bauplan kommt (Spawner, Portale, Grundgestein, Stadtbanner …). */
+        public static final TagKey<Block> ARCHITECT_UNBUILDABLE = mod("architect/unbuildable");
+        /**
+         * Dragon Architect: Kostbares, das der Baumeister nicht aus Baustoff-Einheiten macht, sondern genau so aus dem Lager
+         * nimmt (Erze, Edelstein- und Metallblöcke, Obsidian, Amboss, Leuchtfeuer …).
+         */
+        public static final TagKey<Block> ARCHITECT_PRECIOUS = mod("architect/precious");
+        /** Dragon Architect: gewachsener Boden (Erde, Gras, Fels, Sand, Kies …) – unter der Bodenlinie bleibt er, wie er ist. */
+        public static final TagKey<Block> ARCHITECT_TERRAIN = mod("architect/terrain");
 
         private static TagKey<Block> mod(String path) {
             return TagKey.create(Registries.BLOCK, KingdomsAtWar.id(path));

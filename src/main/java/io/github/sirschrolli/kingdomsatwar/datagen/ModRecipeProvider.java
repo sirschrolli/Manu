@@ -707,6 +707,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('H', Items.GOAT_HORN)
                 .unlockedBy("has_dragon_scale", has(ModTags.Items.DRAGON_SCALES))
                 .save(output, key("dragon_horn"));
+        // Vermessungsstab (Dragon Architect): zwei Stöcke mit Messingspitze
+        shaped(RecipeCategory.TOOLS, ModItems.SURVEYORS_ROD.get())
+                .pattern("  C")
+                .pattern(" S ")
+                .pattern("S  ")
+                .define('C', Items.COPPER_INGOT)
+                .define('S', Items.STICK)
+                .unlockedBy("has_copper_ingot", has(Items.COPPER_INGOT))
+                .save(output, key("surveyors_rod"));
         // Stadtbanner: ein Banner (beliebige Farbe) mit Goldknauf an einem Mast auf einem Steinsockel
         shaped(RecipeCategory.DECORATIONS, ModBlocks.TOWN_BANNER.get())
                 .pattern(" G ")

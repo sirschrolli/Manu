@@ -36,6 +36,11 @@ public final class ModAttachments {
             ATTACHMENTS.register("temporary_blocks", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.world.TemporaryBlocks.Store.CODEC.fieldOf("blocks")).build());
 
+    /** Die eigenen Baupläne der Welt (Dragon Architect; an der Oberwelt, die Blöcke liegen in eigenen Dateien). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary>> PLANS = ATTACHMENTS.register("plans",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.CODEC.fieldOf("plans")).build());
+
     /** Alle Siedlungen der Welt (an der Oberwelt). */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.economy.town.Towns>> TOWNS = ATTACHMENTS.register("towns",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.economy.town.Towns::new)

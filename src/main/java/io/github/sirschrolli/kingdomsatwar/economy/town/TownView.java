@@ -63,12 +63,18 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         }
     }
 
-    /** Eine Baustelle: was gebaut wird, wie weit (Promille) und auf welchen Baustoff sie wartet (−1: auf keinen). */
-    public record ProjectView(int type, int permille, int waiting) {
+    /**
+     * Eine Baustelle: was gebaut wird (bei eigenen Plänen mit Namen), wie weit (Promille), auf welchen Baustoff sie wartet
+     * (−1: auf keinen) oder auf welchen kostbaren Block (leer: keinen), und ob abschnittsweise gebaut wird.
+     */
+    public record ProjectView(int type, String name, int permille, int waiting, net.minecraft.world.item.ItemStack waitingItem, boolean fast) {
         static final StreamCodec<RegistryFriendlyByteBuf, ProjectView> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, ProjectView::type,
+                ByteBufCodecs.STRING_UTF8, ProjectView::name,
                 ByteBufCodecs.VAR_INT, ProjectView::permille,
                 ByteBufCodecs.VAR_INT, ProjectView::waiting,
+                net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC, ProjectView::waitingItem,
+                ByteBufCodecs.BOOL, ProjectView::fast,
                 ProjectView::new);
     }
 
@@ -154,7 +160,10 @@ public record TownView(String name, String owner, boolean isOwner, int tier, int
         }
         List<ProjectView> projects = new ArrayList<>();
         for (Town.Project p : town.projects()) {
-            projects.add(new ProjectView(p.type.ordinal(), Math.round(p.fraction() * 1000), p.waiting == null ? -1 : p.waiting.ordinal()));
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = p.info();
+            projects.add(new ProjectView(p.type.ordinal(), info == null ? "" : info.name(), Math.round(p.fraction() * 1000),
+                    p.waiting == null ? -1 : p.waiting.ordinal(),
+                    p.waitingItem == null ? net.minecraft.world.item.ItemStack.EMPTY : new net.minecraft.world.item.ItemStack(p.waitingItem), p.fast));
         }
         boolean storage = level != null && TownStorage.exists(level, town);
         int[] stock = level == null ? new int[Material.values().length] : TownStorage.counts(level, town);

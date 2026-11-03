@@ -85,6 +85,49 @@ public final class TownStorage {
         return counts;
     }
 
+    /** Wie viele Stück eines Gegenstands im Lager liegen (für die kostbaren Blöcke eigener Baupläne). */
+    public static int count(ServerLevel level, Town town, net.minecraft.world.item.Item item) {
+        int n = 0;
+        for (BlockPos pos : containers(level, town)) {
+            Container c = container(level, pos);
+            if (c == null) {
+                continue;
+            }
+            for (int i = 0; i < c.getContainerSize(); i++) {
+                ItemStack stack = c.getItem(i);
+                if (stack.is(item)) {
+                    n += stack.getCount();
+                }
+            }
+        }
+        return n;
+    }
+
+    /** Nimmt bis zu {@code count} Stück eines Gegenstands aus dem Lager; gibt sie zurück (leer, wenn keiner da ist). */
+    public static ItemStack takeItem(ServerLevel level, Town town, net.minecraft.world.item.Item item, int count) {
+        ItemStack got = ItemStack.EMPTY;
+        for (BlockPos pos : containers(level, town)) {
+            Container c = container(level, pos);
+            if (c == null) {
+                continue;
+            }
+            for (int i = 0; i < c.getContainerSize() && got.getCount() < count; i++) {
+                ItemStack stack = c.getItem(i);
+                if (stack.is(item) && (got.isEmpty() || ItemStack.isSameItemSameComponents(got, stack))) {
+                    int n = Math.min(stack.getCount(), count - got.getCount());
+                    if (got.isEmpty()) {
+                        got = stack.copyWithCount(n);
+                    } else {
+                        got.grow(n);
+                    }
+                    stack.shrink(n);
+                    c.setChanged();
+                }
+            }
+        }
+        return got;
+    }
+
     /**
      * Nimmt Gegenstände für (mindestens) {@code units} Einheiten des Baustoffs aus dem Lager – erst Bretter und Bruchstein,
      * dann Stämme. Gibt zurück, wie viele Einheiten es wirklich waren (ein Stamm bringt vier, auch wenn nur eine fehlte).

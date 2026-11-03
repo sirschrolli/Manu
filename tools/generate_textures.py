@@ -45,6 +45,7 @@ import storm_textures  # noqa: E402
 import deep_textures  # noqa: E402
 import items_armor  # noqa: E402
 import items_dragonwar  # noqa: E402
+import items_architect  # noqa: E402
 import items_eggs  # noqa: E402
 import items_food  # noqa: E402
 import items_gear  # noqa: E402
@@ -369,6 +370,7 @@ def build_all() -> dict[str, Image.Image]:
     items_siege.build(put)
     items_staff.build(put)
     items_dragonwar.build(put)
+    items_architect.build(put)
     economy_textures.build(put)
     town_textures.build(put)
     magic_textures.build(put)

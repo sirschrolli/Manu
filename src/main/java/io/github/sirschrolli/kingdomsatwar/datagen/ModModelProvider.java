@@ -355,7 +355,17 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.TREBUCHET_KIT.get());
         flat(items, ModItems.BALLISTA_KIT.get());
         flat(items, ModItems.BATTERING_RAM_KIT.get());
-        flat(items, ModItems.BLUEPRINT.get());
+        // Bauplan: die eigenen Pläne (Dragon Architect) als Blaupause, die der Siedlung auf Pergament
+        Identifier plainBlueprint = ModelTemplates.FLAT_ITEM.create(ModItems.BLUEPRINT.get(), TextureMapping.layer0(ModItems.BLUEPRINT.get()),
+                items.modelOutput);
+        Identifier customBlueprint = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(ModItems.BLUEPRINT.get(), "_custom"),
+                TextureMapping.layer0(new Material(KingdomsAtWar.id("item/blueprint_custom"))), items.modelOutput);
+        items.itemModelOutput.accept(ModItems.BLUEPRINT.get(), net.minecraft.client.data.models.model.ItemModelUtils.conditional(
+                net.minecraft.client.data.models.model.ItemModelUtils.hasComponent(
+                        io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.CUSTOM_PLAN.get()),
+                net.minecraft.client.data.models.model.ItemModelUtils.plainModel(customBlueprint),
+                net.minecraft.client.data.models.model.ItemModelUtils.plainModel(plainBlueprint)));
+        items.generateFlatItem(ModItems.SURVEYORS_ROD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         for (io.github.sirschrolli.kingdomsatwar.economy.Coin coin : io.github.sirschrolli.kingdomsatwar.economy.Coin.values()) {
             coinModel(items, coin.item(), coin.id() + "_coin");
         }

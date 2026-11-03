@@ -485,11 +485,17 @@ final class Jobs {
                 this.lookAt(at);
                 return;
             }
-            // Baustoff dabei? Sonst erst ins Lager.
-            Material need = project.type.costsMaterials() ? Blueprint.cost(step) : null;
+            // Baustoff dabei? Sonst erst ins Lager. (Kostbare Blöcke eigener Pläne nimmt er genau so aus dem Lager.)
+            Material need = material(project, step);
             if (need != null && this.citizen.stock(need) <= 0) {
                 this.stalled = 0;
-                this.fetch(town, project, need);
+                this.fetch(town, project, need, null);
+                return;
+            }
+            net.minecraft.world.item.Item precious = precious(project, step);
+            if (precious != null && carried(this.citizen, precious) <= 0) {
+                this.stalled = 0;
+                this.fetch(town, project, null, precious);
                 return;
             }
             if (++this.stalled > STALL) {
@@ -585,28 +591,133 @@ final class Jobs {
 
         private void build(Town.Project project, Blueprint.Step step) {
             BlockPos at = step.pos();
-            Material need = project.type.costsMaterials() ? Blueprint.cost(step) : null;
-            if (need != null) {
-                this.citizen.addStock(need, -1);
-            }
             this.citizen.getNavigation().stop();
             this.citizen.setWorking(true);
             this.lookAt(at);
-            BlockState before = this.level().getBlockState(at);
-            Blueprint.apply(this.level(), step);
-            BlockState shown = step.state().isAir() ? before : step.state();
+            this.place(project, step, true);
             this.citizen.swingArm();
-            if (!shown.isAir()) {
-                SoundType sound = shown.getSoundType();
-                this.level().playSound(null, at, step.state().isAir() ? sound.getBreakSound() : sound.getPlaceSound(), SoundSource.BLOCKS,
-                        0.7f, sound.getPitch() * 0.9f);
-                this.level().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, shown), at.getX() + 0.5, at.getY() + 0.5,
-                        at.getZ() + 0.5, 5, 0.3, 0.3, 0.3, 0.05);
-            }
             project.progress++;
             this.stalled = 0;
             // Wegräumen geht schneller als Bauen
             this.cooldown = step.state().isAir() ? 0 : 2;
+            if (project.fast) {
+                this.section(project, step);
+            }
+        }
+
+        /** Setzt einen Schritt (mit Baustoff, Geräusch und Splittern); {@code loud}: mit Geräusch. */
+        private void place(Town.Project project, Blueprint.Step step, boolean loud) {
+            BlockPos at = step.pos();
+            Material need = material(project, step);
+            if (need != null) {
+                this.citizen.addStock(need, -1);
+            }
+            net.minecraft.world.item.Item precious = precious(project, step);
+            if (precious != null) {
+                takeCarried(this.citizen, precious);
+            }
+            BlockState before = this.level().getBlockState(at);
+            Blueprint.apply(this.level(), step);
+            BlockState shown = step.state().isAir() ? before : step.state();
+            if (!shown.isAir()) {
+                SoundType sound = shown.getSoundType();
+                if (loud) {
+                    this.level().playSound(null, at, step.state().isAir() ? sound.getBreakSound() : sound.getPlaceSound(), SoundSource.BLOCKS,
+                            0.7f, sound.getPitch() * 0.9f);
+                }
+                this.level().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, shown), at.getX() + 0.5, at.getY() + 0.5,
+                        at.getZ() + 0.5, loud ? 5 : 3, 0.3, 0.3, 0.3, 0.05);
+            }
+        }
+
+        /** Abschnittsweise: so viele Blöcke setzt er auf einmal (aus derselben Lage, rund um den ersten). */
+        static final int SECTION = 12;
+        /** … und so weit dürfen sie vom ersten entfernt liegen. */
+        static final int SECTION_REACH = 4;
+
+        /**
+         * Abschnittsweise bauen: nach dem ersten Block gleich die nächsten aus derselben Lage, solange sie nah beieinander
+         * liegen, die Baustoffe reichen und er sich nicht selbst einmauert. Dazu Staub und ein Geräusch für den ganzen
+         * Abschnitt; danach eine etwas längere Pause.
+         */
+        private void section(Town.Project project, Blueprint.Step first) {
+            List<Blueprint.Step> steps = project.steps();
+            BlockPos origin = first.pos();
+            boolean clearing = first.state().isAir();
+            int limit = clearing ? SECTION * 2 : SECTION;
+            BlockPos feet = this.feet();
+            int placed = 0;
+            int looked = 0;
+            while (project.progress < steps.size() && placed < limit - 1 && looked < limit * 3) {
+                Blueprint.Step next = steps.get(project.progress);
+                looked++;
+                if (!this.needsWork(next)) {
+                    project.progress++;
+                    continue;
+                }
+                BlockPos at = next.pos();
+                if (next.foundation() != first.foundation() || next.state().isAir() != clearing || at.getY() != origin.getY()
+                        || Math.max(Math.abs(at.getX() - origin.getX()), Math.abs(at.getZ() - origin.getZ())) > SECTION_REACH) {
+                    break;
+                }
+                if (!clearing && (at.equals(feet) || at.equals(feet.above()))) {
+                    break; // nicht sich selbst einmauern
+                }
+                Material need = material(project, next);
+                if (need != null && this.citizen.stock(need) <= 0) {
+                    break;
+                }
+                net.minecraft.world.item.Item precious = precious(project, next);
+                if (precious != null && carried(this.citizen, precious) <= 0) {
+                    break;
+                }
+                this.place(project, next, false);
+                project.progress++;
+                placed++;
+            }
+            if (placed > 0) {
+                this.level().sendParticles(ParticleTypes.POOF, origin.getX() + 0.5, origin.getY() + 0.8, origin.getZ() + 0.5, 6, 1.2, 0.4, 1.2, 0.01);
+                this.level().playSound(null, origin, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.6f, 0.75f);
+                this.cooldown = clearing ? 2 : 6;
+            }
+        }
+
+        /** Was ein Schritt an Baustoff kostet (eigene Pläne nach den Regeln des Dragon Architect). */
+        private static @Nullable Material material(Town.Project project, Blueprint.Step step) {
+            if (!project.type.costsMaterials()) {
+                return null;
+            }
+            return project.custom != null && !step.foundation() ? io.github.sirschrolli.kingdomsatwar.architect.BuildRules.material(step.state())
+                    : Blueprint.cost(step);
+        }
+
+        /** Der kostbare Block, den ein Schritt eines eigenen Plans aus dem Lager braucht ({@code null}: keinen). */
+        private static net.minecraft.world.item.@Nullable Item precious(Town.Project project, Blueprint.Step step) {
+            return project.custom != null && !step.foundation() && !step.state().isAir()
+                    ? io.github.sirschrolli.kingdomsatwar.architect.BuildRules.precious(step.state(), true) : null;
+        }
+
+        /** Wie viele Stück eines Gegenstands der Bürger bei sich trägt. */
+        private static int carried(CitizenEntity citizen, net.minecraft.world.item.Item item) {
+            int n = 0;
+            SimpleContainer carried = citizen.carried();
+            for (int i = 0; i < carried.getContainerSize(); i++) {
+                if (carried.getItem(i).is(item)) {
+                    n += carried.getItem(i).getCount();
+                }
+            }
+            return n;
+        }
+
+        private static void takeCarried(CitizenEntity citizen, net.minecraft.world.item.Item item) {
+            SimpleContainer carried = citizen.carried();
+            for (int i = 0; i < carried.getContainerSize(); i++) {
+                if (carried.getItem(i).is(item)) {
+                    carried.getItem(i).shrink(1);
+                    carried.setChanged();
+                    return;
+                }
+            }
         }
 
         // ------------------------------------------------------------------ Baustoffe
@@ -615,7 +726,7 @@ final class Jobs {
          * Holt Baustoffe aus dem Lager – so viel, wie die nächsten Blöcke brauchen (je Baustoff höchstens einen Stapel). Fehlt
          * der Baustoff im Lager (oder gibt es gar keins), wartet er dort und sagt dem Herrn der Siedlung Bescheid.
          */
-        private void fetch(Town town, Town.Project project, Material need) {
+        private void fetch(Town town, Town.Project project, @Nullable Material need, net.minecraft.world.item.@Nullable Item precious) {
             this.citizen.setWorking(false);
             BlockPos feet = this.feet();
             if (this.onScaffold(feet)) {
@@ -624,7 +735,11 @@ final class Jobs {
             }
             BlockPos store = TownStorage.nearest(this.level(), town, feet);
             if (store == null) {
-                this.waitFor(town, project, need, false);
+                if (need != null) {
+                    this.waitFor(town, project, need, false);
+                } else if (precious != null) {
+                    this.waitForPrecious(town, project, precious, false);
+                }
                 return;
             }
             if (this.citizen.distanceToSqr(Vec3.atCenterOf(store)) > 2.6 * 2.6) {
@@ -650,16 +765,68 @@ final class Jobs {
                     }
                 }
             }
+            // kostbare Blöcke: so viele, wie die nächsten Schritte brauchen (soweit er sie tragen kann)
+            for (Map.Entry<net.minecraft.world.item.Item, Integer> e : this.demandPrecious(project, precious).entrySet()) {
+                int missing = e.getValue() - carried(this.citizen, e.getKey());
+                if (missing > 0) {
+                    ItemStack taken = TownStorage.takeItem(this.level(), town, e.getKey(), missing);
+                    if (!taken.isEmpty()) {
+                        ItemStack rest = this.citizen.carried().addItem(taken);
+                        if (!rest.isEmpty()) {
+                            TownStorage.store(this.level(), town, rest, store);
+                        }
+                        got = true;
+                    }
+                }
+            }
             if (got) {
                 openLid(this.level(), store);
                 this.citizen.swingArm();
             }
-            if (this.citizen.stock(need) <= 0) {
+            if (need != null && this.citizen.stock(need) <= 0) {
                 this.waitFor(town, project, need, true);
+                this.fetchCooldown = 100;
+            } else if (precious != null && carried(this.citizen, precious) <= 0) {
+                this.waitForPrecious(town, project, precious, true);
                 this.fetchCooldown = 100;
             } else {
                 project.waiting = null;
+                project.waitingItem = null;
                 this.goingTo = null;
+            }
+        }
+
+        /** Welche kostbaren Blöcke die nächsten Schritte brauchen (je höchstens ein Stapel), mindestens der gerade nötige. */
+        private Map<net.minecraft.world.item.Item, Integer> demandPrecious(Town.Project project, net.minecraft.world.item.@Nullable Item need) {
+            Map<net.minecraft.world.item.Item, Integer> want = new java.util.LinkedHashMap<>();
+            if (need != null) {
+                want.put(need, 1);
+            }
+            if (project.custom == null) {
+                return want;
+            }
+            List<Blueprint.Step> steps = project.steps();
+            for (int i = project.progress; i < steps.size() && i < project.progress + 400 && want.size() < 6; i++) {
+                Blueprint.Step s = steps.get(i);
+                net.minecraft.world.item.Item item = precious(project, s);
+                if (item != null && this.needsWork(s)) {
+                    want.merge(item, 1, (a, b) -> Math.min(64, a + b));
+                }
+            }
+            return want;
+        }
+
+        /** Ein kostbarer Block fehlt: warten und (einmal) Bescheid sagen. */
+        private void waitForPrecious(Town town, Town.Project project, net.minecraft.world.item.Item item, boolean storage) {
+            this.citizen.getNavigation().stop();
+            if (project.waitingItem != item) {
+                project.waitingItem = item;
+                net.minecraft.server.level.ServerPlayer owner = this.level().getServer().getPlayerList().getPlayer(town.owner());
+                if (owner != null) {
+                    owner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
+                            storage ? "message.kingdomsatwar.town.waiting" : "message.kingdomsatwar.town.no_storage",
+                            TownManager.name(project), new ItemStack(item).getHoverName()).withStyle(net.minecraft.ChatFormatting.GOLD));
+                }
             }
         }
 
@@ -672,7 +839,7 @@ final class Jobs {
             int counted = 0;
             for (int i = project.progress; i < steps.size() && counted < 160; i++) {
                 Blueprint.Step s = steps.get(i);
-                Material m = Blueprint.cost(s);
+                Material m = material(project, s);
                 if (m != null && want[m.ordinal()] < 64 && this.needsWork(s)) {
                     want[m.ordinal()]++;
                     counted++;
@@ -690,7 +857,7 @@ final class Jobs {
                 if (owner != null) {
                     owner.sendSystemMessage(net.minecraft.network.chat.Component.translatable(
                             storage ? "message.kingdomsatwar.town.waiting" : "message.kingdomsatwar.town.no_storage",
-                            net.minecraft.network.chat.Component.translatable(project.type.translationKey()),
+                            TownManager.name(project),
                             net.minecraft.network.chat.Component.translatable(need.translationKey()))
                             .withStyle(net.minecraft.ChatFormatting.GOLD));
                 }

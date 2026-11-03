@@ -112,6 +112,13 @@ public class TownScreen extends Screen {
     /** Bürger, dessen Entlassung gerade bestätigt werden soll (zweiter Klick), und wie lange noch. */
     private int confirmDismiss = -1;
     private int confirmTicks;
+    /** Dragon Architect: eigene Baupläne statt der Baupläne der Siedlung zeigen (im Reiter Bauen). */
+    private boolean showPlans;
+    private List<io.github.sirschrolli.kingdomsatwar.architect.PlanInfo> plans =
+            io.github.sirschrolli.kingdomsatwar.client.architect.ArchitectClient.plans();
+    private int planScroll;
+    /** Plan, dessen Löschen gerade bestätigt werden soll (zweiter Klick). */
+    private @Nullable String confirmDelete;
     private @Nullable Component notice;
     private boolean noticeGood;
     private int noticeTicks;
@@ -130,7 +137,22 @@ public class TownScreen extends Screen {
     /** Für Vorführungen: einen Reiter auswählen (0 = Übersicht … 4 = Krone). */
     public void selectTab(int index) {
         this.tab = Tab.values()[Mth.clamp(index, 0, Tab.values().length - 1)];
+        this.showPlans = false;
         this.updateWidgets();
+    }
+
+    /** Für Vorführungen: im Reiter Bauen die eigenen Baupläne zeigen. */
+    public void showPlans() {
+        this.tab = Tab.BUILD;
+        this.showPlans = true;
+        this.send(TownActions.PLANS, 0, "");
+        this.updateWidgets();
+    }
+
+    /** Neue Liste der eigenen Baupläne vom Server. */
+    public void updatePlans(List<io.github.sirschrolli.kingdomsatwar.architect.PlanInfo> plans) {
+        this.plans = plans;
+        this.planScroll = Mth.clamp(this.planScroll, 0, Math.max(0, plans.size() - PLAN_ROWS));
     }
 
     /** Neue Daten vom Server (nach einer Handlung); Reiter und Bildlauf bleiben. */
@@ -157,6 +179,8 @@ public class TownScreen extends Screen {
         this.nameBox.setHint(Component.translatable("gui.kingdomsatwar.town.name_hint"));
         this.addRenderableWidget(this.nameBox);
         this.updateWidgets();
+        // die eigenen Baupläne frisch vom Server (für die Karte „Eigene Pläne“)
+        this.send(TownActions.PLANS, 0, "");
     }
 
     private void updateWidgets() {
@@ -180,6 +204,7 @@ public class TownScreen extends Screen {
         }
         if (this.confirmTicks > 0 && --this.confirmTicks == 0) {
             this.confirmDismiss = -1;
+            this.confirmDelete = null;
         }
         // alle zwei Sekunden auffrischen (Bewohner wandern, Baustellen wachsen)
         if (this.ticks % 40 == 0) {
@@ -219,6 +244,11 @@ public class TownScreen extends Screen {
         if (this.tab == Tab.RESIDENTS) {
             int max = Math.max(0, this.view.residents().size() - VISIBLE_ROWS);
             this.residentScroll = Mth.clamp(this.residentScroll - (int) Math.signum(scrollY), 0, max);
+            return true;
+        }
+        if (this.tab == Tab.BUILD && this.showPlans) {
+            int max = Math.max(0, this.plans.size() - PLAN_ROWS);
+            this.planScroll = Mth.clamp(this.planScroll - (int) Math.signum(scrollY), 0, max);
             return true;
         }
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
@@ -299,7 +329,13 @@ public class TownScreen extends Screen {
             case OVERVIEW -> this.drawOverview(g, x, y, mouseX, mouseY);
             case HIRE -> this.drawHire(g, x, y, mouseX, mouseY);
             case RESIDENTS -> this.drawResidents(g, x, y, mouseX, mouseY);
-            case BUILD -> this.drawBuild(g, x, y, mouseX, mouseY);
+            case BUILD -> {
+                if (this.showPlans) {
+                    this.drawPlans(g, x, y, mouseX, mouseY);
+                } else {
+                    this.drawBuild(g, x, y, mouseX, mouseY);
+                }
+            }
             case CROWN -> this.drawCrown(g, x, y, mouseX, mouseY);
         }
         if (this.notice != null && this.noticeTicks > 0) {
@@ -373,6 +409,7 @@ public class TownScreen extends Screen {
                 this.hotspots.add(new Hotspot(x, y, w, 17, true, () -> {
                     this.tab = t;
                     this.confirmDismiss = -1;
+                    this.showPlans = false;
                     this.updateWidgets();
                 }));
             }
@@ -487,27 +524,48 @@ public class TownScreen extends Screen {
             }
             BuildingType type = BuildingType.values()[Mth.clamp(p.type(), 0, BuildingType.values().length - 1)];
             this.card(g, rx, ry, 140, 30, false);
-            this.itemScaled(g, new ItemStack(type.icon()), rx + 4, ry + 4, 1.0f);
-            g.text(this.font, Component.translatable(type.translationKey()), rx + 24, ry + 4, TEXT, false);
+            this.itemScaled(g, type.custom() ? new ItemStack(ModItems.BLUEPRINT.get()) : new ItemStack(type.icon()), rx + 4, ry + 4, 1.0f);
             String pct = (p.permille() / 10) + " %";
+            Component title = type.custom() && !p.name().isEmpty() ? Component.literal(p.name()) : Component.translatable(type.translationKey());
+            g.text(this.font, this.ellipsize(title.getString(), 108 - this.font.width(pct)), rx + 24, ry + 4, TEXT, false);
             g.text(this.font, pct, rx + 136 - this.font.width(pct), ry + 4, MUTED, false);
-            if (p.waiting() >= 0 && p.waiting() < Material.values().length) {
+            if (!p.waitingItem().isEmpty()) {
+                // wartet auf einen kostbaren Block: welcher fehlt
+                this.itemScaled(g, p.waitingItem(), rx + 24, ry + 14, 0.625f);
+                Component waiting = Component.translatable("gui.kingdomsatwar.town.waiting", p.waitingItem().getHoverName());
+                g.text(this.font, this.ellipsize(waiting.getString(), 60), rx + 36, ry + 16, BAD, false);
+                if (mouseX >= rx && mouseX < rx + 96 && mouseY >= ry && mouseY < ry + 30) {
+                    List<FormattedCharSequence> tip = new ArrayList<>(this.font.split(Component.translatable(
+                            v.storage() ? "gui.kingdomsatwar.town.waiting.precious" : "gui.kingdomsatwar.town.storage.none",
+                            p.waitingItem().getHoverName()).withStyle(ChatFormatting.GRAY), 200));
+                    g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
+                }
+            } else if (p.waiting() >= 0 && p.waiting() < Material.values().length) {
                 // wartet auf einen Baustoff: statt des Balkens rot, was fehlt
                 Material m = Material.values()[p.waiting()];
                 this.itemScaled(g, m.icon(), rx + 24, ry + 14, 0.625f);
                 Component waiting = Component.translatable("gui.kingdomsatwar.town.waiting", Component.translatable(m.translationKey()));
-                g.text(this.font, this.ellipsize(waiting.getString(), 80), rx + 36, ry + 16, BAD, false);
-                if (mouseX >= rx && mouseX < rx + 116 && mouseY >= ry && mouseY < ry + 30) {
+                g.text(this.font, this.ellipsize(waiting.getString(), 60), rx + 36, ry + 16, BAD, false);
+                if (mouseX >= rx && mouseX < rx + 96 && mouseY >= ry && mouseY < ry + 30) {
                     List<FormattedCharSequence> tip = new ArrayList<>(this.font.split(Component.translatable(
                             v.storage() ? "gui.kingdomsatwar.town.waiting.hint" : "gui.kingdomsatwar.town.storage.none",
                             Component.translatable(m.translationKey())).withStyle(ChatFormatting.GRAY), 200));
                     g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
                 }
             } else {
-                this.bar(g, rx + 24, ry + 16, 90, 6, p.permille() / 1000.0f, 0xFF5E8C3A);
+                this.bar(g, rx + 24, ry + 16, 72, 6, p.permille() / 1000.0f, 0xFF5E8C3A);
             }
             if (v.isOwner()) {
                 final int index = i;
+                // Bauweise: ein Ziegel (Block für Block) oder eine Ziegelmauer (abschnittsweise)
+                this.smallButton(g, rx + 101, ry + 13, 16, 14, Component.empty(), true, mouseX, mouseY,
+                        () -> this.send(TownActions.FAST, index, ""),
+                        List.of(Component.translatable(p.fast() ? "gui.kingdomsatwar.town.mode.fast" : "gui.kingdomsatwar.town.mode.slow")
+                                        .withStyle(ChatFormatting.GOLD),
+                                Component.translatable(p.fast() ? "gui.kingdomsatwar.town.mode.fast.hint" : "gui.kingdomsatwar.town.mode.slow.hint")
+                                        .withStyle(ChatFormatting.GRAY),
+                                Component.translatable("gui.kingdomsatwar.town.mode.switch").withStyle(ChatFormatting.DARK_GRAY)));
+                this.itemScaled(g, new ItemStack(p.fast() ? Items.BRICKS : Items.BRICK), rx + 104, ry + 16, 0.625f);
                 this.smallButton(g, rx + 120, ry + 13, 16, 14, Component.literal("✘"), true, mouseX, mouseY,
                         () -> this.send(TownActions.CANCEL, index, ""),
                         List.of(Component.translatable("gui.kingdomsatwar.town.cancel"),
@@ -715,6 +773,10 @@ public class TownScreen extends Screen {
             int row = type.ordinal() / 5;
             int x = x0 + 2 + col * (cw + 2);
             int y = y0 + 15 + row * (ch + 2);
+            if (type.custom()) {
+                this.drawPlansCard(g, x, y, cw, ch, mouseX, mouseY, type.ordinal() < v.builds().size() ? v.builds().get(type.ordinal()).count() : 0);
+                continue;
+            }
             TownView.BuildView b = v.builds().get(type.ordinal());
             boolean hover = mouseX >= x && mouseX < x + cw && mouseY >= y && mouseY < y + ch;
             boolean usable = v.isOwner() && b.allowed();
@@ -789,6 +851,139 @@ public class TownScreen extends Screen {
                 }
                 g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
             }
+        }
+    }
+
+    // ---------------------------------------------------------------- Eigene Baupläne (Dragon Architect)
+
+    /** So viele eigene Pläne passen untereinander. */
+    private static final int PLAN_ROWS = 4;
+    private static final int PLAN_ROW_H = 32;
+
+    /** Die Karte „Eigene Pläne“ im Reiter Bauen. */
+    private void drawPlansCard(GuiGraphicsExtractor g, int x, int y, int cw, int ch, int mouseX, int mouseY, int built) {
+        boolean hover = mouseX >= x && mouseX < x + cw && mouseY >= y && mouseY < y + ch;
+        g.fill(x, y, x + cw, y + ch, hover ? 0xFF2B4E80 : 0xFF203F6C);
+        for (int gx = x + 6; gx < x + cw; gx += 6) {
+            g.fill(gx, y + 1, gx + 1, y + ch - 1, 0x22A9C8F0);
+        }
+        for (int gy = y + 6; gy < y + ch; gy += 6) {
+            g.fill(x + 1, gy, x + cw - 1, gy + 1, 0x22A9C8F0);
+        }
+        g.outline(x, y, cw, ch, hover ? 0xFFF2C23A : 0xFF9DBBE4);
+        this.itemScaled(g, new ItemStack(ModItems.SURVEYORS_ROD.get()), x + (cw - 16) / 2, y + 3, 1.0f);
+        this.centeredFit(g, Component.translatable("gui.kingdomsatwar.town.plans"), x + cw / 2, y + 21, cw - 4, 0xFFF3F7FF);
+        Component sub = this.plans.isEmpty() ? Component.translatable("gui.kingdomsatwar.town.plans.scan")
+                : Component.translatable("gui.kingdomsatwar.town.plans.count", this.plans.size());
+        this.centeredFit(g, sub, x + cw / 2, y + 31, cw - 4, 0xFFBFD5F2);
+        if (built > 0) {
+            String n = "×" + built;
+            g.text(this.font, n, x + cw - 3 - this.font.width(n), y + 3, 0xFFBFD5F2, false);
+        }
+        this.hotspots.add(new Hotspot(x, y, cw, ch, true, () -> {
+            this.showPlans = true;
+            this.planScroll = 0;
+            this.send(TownActions.PLANS, 0, "");
+        }));
+        if (hover) {
+            List<FormattedCharSequence> tip = new ArrayList<>();
+            tip.add(Component.translatable("gui.kingdomsatwar.town.plans").withStyle(ChatFormatting.GOLD).getVisualOrderText());
+            tip.addAll(this.font.split(Component.translatable("gui.kingdomsatwar.town.plans.description").withStyle(ChatFormatting.GRAY), 210));
+            g.setTooltipForNextFrame(this.font, tip, mouseX, mouseY);
+        }
+    }
+
+    /** Die eigenen Baupläne: Ansicht, Name, Größe, Baustoffe, Preis; Abschrift nehmen oder löschen. */
+    private void drawPlans(GuiGraphicsExtractor g, int x0, int y0, int mouseX, int mouseY) {
+        TownView v = this.view;
+        this.woodButton(g, x0 + 2, y0 + 1, 52, 14, Component.translatable("gui.kingdomsatwar.town.plans.back"), true, mouseX, mouseY,
+                () -> this.showPlans = false, null);
+        Component title = Component.translatable("gui.kingdomsatwar.town.plans.title", this.plans.size()).withStyle(ChatFormatting.BOLD);
+        g.text(this.font, title, x0 + 60, y0 + 4, TEXT, false);
+        if (v.isOwner()) {
+            this.woodButton(g, x0 + CONTENT_W - 92, y0 + 1, 90, 14, Component.translatable("gui.kingdomsatwar.town.plans.rod"), true, mouseX, mouseY,
+                    () -> this.send(TownActions.TAKE_ROD, 0, ""), List.of(Component.translatable("gui.kingdomsatwar.town.plans.rod.hint")
+                            .withStyle(ChatFormatting.GRAY)));
+        }
+        int y = y0 + 19;
+        if (this.plans.isEmpty()) {
+            this.itemScaled(g, new ItemStack(ModItems.SURVEYORS_ROD.get()), x0 + CONTENT_W / 2 - 16, y + 6, 2.0f);
+            int ty = y + 42;
+            for (FormattedCharSequence line : this.font.split(Component.translatable("gui.kingdomsatwar.town.plans.empty"), 270)) {
+                g.text(this.font, line, x0 + (CONTENT_W - this.font.width(line)) / 2, ty, MUTED, false);
+                ty += 10;
+            }
+            return;
+        }
+        var player = this.minecraft.player;
+        int purse = player == null ? 0 : Coins.total(player);
+        boolean creative = player != null && player.hasInfiniteMaterials();
+        int max = Math.max(0, this.plans.size() - PLAN_ROWS);
+        this.planScroll = Mth.clamp(this.planScroll, 0, max);
+        int rowW = CONTENT_W - (max > 0 ? 10 : 4);
+        for (int i = 0; i < PLAN_ROWS && this.planScroll + i < this.plans.size(); i++) {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo plan = this.plans.get(this.planScroll + i);
+            int ry = y + i * PLAN_ROW_H;
+            int rx = x0 + 2;
+            boolean hover = mouseX >= rx && mouseX < rx + rowW && mouseY >= ry && mouseY < ry + PLAN_ROW_H - 2;
+            this.card(g, rx, ry, rowW, PLAN_ROW_H - 2, hover);
+            // Ansicht auf Blaupausen-Papier
+            io.github.sirschrolli.kingdomsatwar.client.architect.PlanTextures.drawPanel(g, plan.id() + "/front", plan.pictures().frontPicture(),
+                    rx + 2, ry + 2, 44, PLAN_ROW_H - 6, 4);
+            g.text(this.font, this.ellipsize(plan.name(), 120), rx + 50, ry + 3, TEXT, false);
+            Component size = Component.translatable("gui.kingdomsatwar.town.plans.size", plan.shape().sizeX(), plan.height(), plan.shape().sizeZ(),
+                    plan.costs().blocks());
+            g.text(this.font, this.ellipsize(size.getString(), 120), rx + 50, ry + 13, MUTED, false);
+            // Baustoffe (und kostbare Blöcke) klein darunter
+            int ix = rx + 50;
+            for (Material m : Material.values()) {
+                int need = plan.costs().units(m);
+                if (need <= 0) {
+                    continue;
+                }
+                this.itemScaled(g, m.icon(), ix, ry + 21, 0.5f);
+                String n = String.valueOf(need);
+                g.text(this.font, n, ix + 9, ry + 22, v.stock(m) >= need ? GOOD : BAD, false);
+                ix += 9 + this.font.width(n) + 5;
+            }
+            if (!plan.costs().precious().isEmpty()) {
+                this.itemScaled(g, new ItemStack(plan.costs().precious().getFirst().item()), ix, ry + 21, 0.5f);
+                g.text(this.font, "+" + plan.costs().precious().size(), ix + 9, ry + 22, 0xFF2A5C7A, false);
+            }
+            // Preis und Knöpfe
+            int bx = rx + rowW - 68;
+            int price = plan.price();
+            int pw = this.priceWidth(price);
+            this.price(g, bx - 6 - pw, ry + 4, price, creative || purse >= price ? TEXT : BAD);
+            if (v.isOwner()) {
+                this.woodButton(g, bx, ry + 3, 46, 14, Component.translatable("gui.kingdomsatwar.town.plans.take"), true, mouseX, mouseY,
+                        () -> this.send(TownActions.TAKE_PLAN, 0, plan.id()),
+                        List.of(Component.translatable(creative ? "gui.kingdomsatwar.town.plans.take.free" : "gui.kingdomsatwar.town.plans.take.hint")
+                                .withStyle(ChatFormatting.GRAY)));
+            }
+            boolean confirm = plan.id().equals(this.confirmDelete);
+            this.smallButton(g, bx + 48, ry + 3, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
+                if (plan.id().equals(this.confirmDelete)) {
+                    this.send(TownActions.DELETE_PLAN, 0, plan.id());
+                    this.confirmDelete = null;
+                } else {
+                    this.confirmDelete = plan.id();
+                    this.confirmTicks = 60;
+                }
+            }, List.of(Component.translatable(confirm ? "gui.kingdomsatwar.town.plans.delete_confirm" : "gui.kingdomsatwar.town.plans.delete",
+                    Component.literal(plan.name()))));
+            // über der Ansicht: der ganze Bauplan als Tooltip (mit Grundriss)
+            if (mouseX >= rx + 2 && mouseX < rx + 46 && mouseY >= ry + 2 && mouseY < ry + PLAN_ROW_H - 4) {
+                g.setTooltipForNextFrame(this.font, io.github.sirschrolli.kingdomsatwar.item.BlueprintItem.of(plan), mouseX, mouseY);
+            }
+        }
+        if (max > 0) {
+            int sx = x0 + CONTENT_W - 6;
+            int sh = PLAN_ROWS * PLAN_ROW_H - 4;
+            g.fill(sx, y, sx + 3, y + sh, 0x40765A34);
+            int knob = Math.max(10, sh * PLAN_ROWS / this.plans.size());
+            int ky = y + (sh - knob) * this.planScroll / max;
+            g.fill(sx, ky, sx + 3, ky + knob, 0xFF8A6A3E);
         }
     }
 

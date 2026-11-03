@@ -46,7 +46,7 @@ final class TownShowcase {
         // "house" zeigt alle Entwürfe des Wohnhauses, "house:2" nur den dritten
         String onlyType = only.contains(":") ? only.substring(0, only.indexOf(':')) : only;
         int onlyDesign = only.contains(":") ? Integer.parseInt(only.substring(only.indexOf(':') + 1)) : -1;
-        for (BuildingType type : BuildingType.values()) {
+        for (BuildingType type : BuildingType.standard()) {
           if (!onlyType.isEmpty() && !type.id().equals(onlyType)) {
               continue;
           }
@@ -435,7 +435,7 @@ final class TownShowcase {
     }
 
     /** Mauszeiger auf eine Stelle des Fensters (in Fensterkoordinaten der Oberfläche, links oben = 0). */
-    private static void hover(Minecraft minecraft, int guiX, int guiY) {
+    static void hover(Minecraft minecraft, int guiX, int guiY) {
         int left = (minecraft.getWindow().getGuiScaledWidth() - 320) / 2;
         int top = (minecraft.getWindow().getGuiScaledHeight() - 210) / 2;
         double scale = minecraft.getWindow().getGuiScale();

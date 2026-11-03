@@ -34,6 +34,21 @@ public final class ModDataComponents {
                     .persistent(com.mojang.serialization.Codec.INT)
                     .networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.VAR_INT));
 
+    /** Bauplan nach einem eigenen, vermessenen Gebäude (Dragon Architect): Kurzfassung mit Grundriss und Ansicht. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.architect.PlanInfo>> CUSTOM_PLAN =
+            COMPONENTS.registerComponentType("custom_plan", builder -> builder
+                    .persistent(io.github.sirschrolli.kingdomsatwar.architect.PlanInfo.CODEC)
+                    .networkSynchronized(io.github.sirschrolli.kingdomsatwar.architect.PlanInfo.STREAM_CODEC));
+    /** Vermessungsstab: die erste und die zweite Ecke des Bereichs (mit der Welt, in der sie liegen). */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.core.GlobalPos>> SURVEY_FIRST =
+            COMPONENTS.registerComponentType("survey_first", builder -> builder
+                    .persistent(net.minecraft.core.GlobalPos.CODEC)
+                    .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<net.minecraft.core.GlobalPos>> SURVEY_SECOND =
+            COMPONENTS.registerComponentType("survey_second", builder -> builder
+                    .persistent(net.minecraft.core.GlobalPos.CODEC)
+                    .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC));
+
     /** Meisterschaft eines Aetherit-Stabs (gesammelte Erfahrung beim Zaubern). */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> STAFF_MASTERY =
             COMPONENTS.registerComponentType("staff_mastery", builder -> builder

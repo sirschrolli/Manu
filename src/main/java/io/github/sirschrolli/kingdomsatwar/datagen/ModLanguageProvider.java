@@ -32,6 +32,7 @@ public class ModLanguageProvider extends LanguageProvider {
         EconomyLang.register(this::text);
         VillageLang.register(this::text);
         WarLang.register(this::text);
+        ArchitectLang.register(this::text);
         SiegeLang.register(this::text);
         RulesLang.register(this::text);
         bosses();

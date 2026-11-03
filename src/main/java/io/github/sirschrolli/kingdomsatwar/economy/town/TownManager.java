@@ -278,7 +278,7 @@ public final class TownManager {
     // =====================================================================================
 
     public enum PlaceResult {
-        PLACED, NOT_OWNER, NO_TOWN, OUTSIDE, OVERLAP, UNEVEN, WATER, TIER, NOT_ENOUGH, LIMIT;
+        PLACED, NOT_OWNER, NO_TOWN, OUTSIDE, OVERLAP, UNEVEN, WATER, TIER, NOT_ENOUGH, LIMIT, UNKNOWN;
 
         public String key() {
             return "message.kingdomsatwar.town.place." + this.name().toLowerCase(Locale.ROOT);
@@ -298,10 +298,14 @@ public final class TownManager {
         if (town.tier().ordinal() < type.tier().ordinal()) {
             return PlaceResult.TIER;
         }
+        return check(level, town, type.blueprint(design), origin, rotation);
+    }
+
+    /** Prüft einen Bauplatz für einen Bauplan (Gebiet, Überschneidungen, Gelände, Zahl der Baustellen). */
+    public static PlaceResult check(ServerLevel level, Town town, Blueprint plan, BlockPos origin, Rotation rotation) {
         if (town.projects().size() >= 3) {
             return PlaceResult.LIMIT;
         }
-        Blueprint plan = type.blueprint(design);
         BoundingBox box = plan.worldBounds(origin, rotation);
         for (BlockPos corner : new BlockPos[] {new BlockPos(box.minX(), origin.getY(), box.minZ()),
                 new BlockPos(box.maxX(), origin.getY(), box.maxZ()), new BlockPos(box.minX(), origin.getY(), box.maxZ()),
@@ -330,7 +334,9 @@ public final class TownManager {
         if (water > plan.footprint().size() / 6) {
             return PlaceResult.WATER;
         }
-        if (max - min > 5 || origin.getY() - min > 5) {
+        // große Bauten dürfen auf etwas unebenerem Gelände stehen (das Fundament gleicht es aus)
+        int slack = 5 + Math.max(box.getXSpan(), box.getZSpan()) / 12;
+        if (max - min > slack || origin.getY() - min > slack) {
             return PlaceResult.UNEVEN;
         }
         return PlaceResult.PLACED;
@@ -383,6 +389,87 @@ public final class TownManager {
         return PlaceResult.PLACED;
     }
 
+    /** Preis eines Baus nach eigenem Plan (nach der Krönung baut der König umsonst). */
+    public static int buildPrice(Town town, io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info, Player player) {
+        if (town.crowned() && town.owner().equals(player.getUUID())) {
+            return 0;
+        }
+        return Reputation.discounted(info.price(), Reputation.rank(player));
+    }
+
+    /** Der Name einer Baustelle: der Name des eigenen Plans oder der Gebäudeart. */
+    public static Component name(Town.Project project) {
+        io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = project.info();
+        return info != null ? Component.literal(info.name()) : Component.translatable(project.type.translationKey());
+    }
+
+    /**
+     * Richtet eine Baustelle nach einem eigenen Bauplan ein (Dragon Architect; bezahlt den Bau). Der Baumeister holt die
+     * Baustoffe und kostbaren Blöcke aus dem Lager.
+     */
+    public static PlaceResult placeCustom(ServerPlayer player, io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info, BlockPos origin,
+            Rotation rotation) {
+        ServerLevel level = player.level();
+        Towns towns = Towns.of(level.getServer());
+        Town town = towns.byOwner(player.getUUID());
+        if (town == null) {
+            return PlaceResult.NO_TOWN;
+        }
+        if (!town.dimension().equals(level.dimension())) {
+            return PlaceResult.OUTSIDE;
+        }
+        Blueprint plan = io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(info.id());
+        if (plan.blocks().isEmpty()) {
+            return PlaceResult.UNKNOWN;
+        }
+        PlaceResult result = check(level, town, plan, origin, rotation);
+        if (result != PlaceResult.PLACED) {
+            return result;
+        }
+        int price = buildPrice(town, info, player);
+        if (!Coins.pay(player, price)) {
+            return PlaceResult.NOT_ENOUGH;
+        }
+        Town.Project project = new Town.Project(BuildingType.CUSTOM, origin, rotation, 0, 0, info.id());
+        // große Bauten gleich abschnittsweise
+        project.fast = info.costs().blocks() >= FAST_FROM;
+        town.addProject(project);
+        towns.save(level.getServer());
+        level.playSound(null, origin, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0f, 0.8f);
+        boolean builder = town.count(Profession.BUILDER) > 0;
+        player.sendSystemMessage(Component.translatable(builder ? "message.kingdomsatwar.town.project_started"
+                : "message.kingdomsatwar.town.project_no_builder", Component.literal(info.name())).withStyle(
+                builder ? ChatFormatting.GREEN : ChatFormatting.GOLD));
+        int[] stock = TownStorage.counts(level, town);
+        Component[] parts = new Component[Material.values().length];
+        for (Material m : Material.values()) {
+            int need = info.costs().units(m);
+            parts[m.ordinal()] = Component.translatable("message.kingdomsatwar.town.material", need, Component.translatable(m.translationKey()),
+                    stock[m.ordinal()]).withStyle(stock[m.ordinal()] >= need ? ChatFormatting.GRAY : ChatFormatting.RED);
+        }
+        player.sendSystemMessage(Component.translatable(TownStorage.exists(level, town) ? "message.kingdomsatwar.town.materials"
+                : "message.kingdomsatwar.town.materials_no_storage", parts[0], parts[1], parts[2]).withStyle(ChatFormatting.GRAY));
+        for (io.github.sirschrolli.kingdomsatwar.architect.PlanInfo.Precious p : info.costs().precious()) {
+            int have = TownStorage.count(level, town, p.item());
+            player.sendSystemMessage(Component.translatable("message.kingdomsatwar.town.precious", p.count(), new net.minecraft.world.item.ItemStack(p.item()).getHoverName(), have)
+                    .withStyle(have >= p.count() ? ChatFormatting.GRAY : ChatFormatting.RED));
+        }
+        return PlaceResult.PLACED;
+    }
+
+    /** Ab so vielen Blöcken baut der Baumeister einen eigenen Plan von Anfang an abschnittsweise. */
+    public static final int FAST_FROM = 1500;
+
+    /** Schaltet die Bauweise einer Baustelle um (Block für Block ↔ abschnittsweise). */
+    public static void toggleFast(ServerPlayer player, Town town, int index) {
+        if (!town.owner().equals(player.getUUID()) || index < 0 || index >= town.projects().size()) {
+            return;
+        }
+        Town.Project project = town.projects().get(index);
+        project.fast = !project.fast;
+        Towns.of(player.level().getServer()).save(player.level().getServer());
+    }
+
     /** Eine Baustelle ist fertig: wird zum Gebäude, Betten und Werkstätten werden verteilt. */
     public static void completeProject(ServerLevel level, Town town, Town.Project project) {
         if (!town.projects().contains(project)) {
@@ -390,7 +477,8 @@ public final class TownManager {
         }
         town.removeProject(project);
         clearScaffolds(level, project.bounds());
-        town.addBuilding(new Town.Building(project.type, project.origin, project.rotation, project.design));
+        town.addBuilding(new Town.Building(project.type, project.origin, project.rotation, project.design,
+                java.util.Optional.ofNullable(project.custom)));
         assignHomes(level, town);
         Towns.of(level.getServer()).save(level.getServer());
         BlockPos door = Blueprint.world(project.origin, project.rotation, project.plan().entrance());
@@ -406,7 +494,7 @@ public final class TownManager {
         ServerPlayer owner = level.getServer().getPlayerList().getPlayer(town.owner());
         if (owner != null) {
             owner.sendSystemMessage(Component.translatable("message.kingdomsatwar.town.project_done",
-                    Component.translatable(project.type.translationKey()), Component.literal(town.name())).withStyle(ChatFormatting.GREEN));
+                    name(project), Component.literal(town.name())).withStyle(ChatFormatting.GREEN));
             Reputation.add(owner, Reputation.BUILDING);
         }
     }
@@ -461,7 +549,8 @@ public final class TownManager {
         town.removeProject(project);
         clearScaffolds(player.level(), project.bounds());
         // halbe Rückzahlung, wenn noch nichts gebaut ist sogar ganz (vom Preis, den der Spieler heute zahlen würde)
-        int price = buildPrice(town, project.type, player);
+        io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = project.info();
+        int price = info != null ? buildPrice(town, info, player) : project.custom != null ? 0 : buildPrice(town, project.type, player);
         int refund = project.progress == 0 ? price : price / 2;
         Coins.give(player, refund);
         Towns.of(player.level().getServer()).save(player.level().getServer());

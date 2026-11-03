@@ -19,6 +19,16 @@ public final class TownActions {
     public static final int DISMISS = 4;
     public static final int CANCEL = 5;
     public static final int REFRESH = 6;
+    /** Dragon Architect: die eigenen Baupläne schicken. */
+    public static final int PLANS = 7;
+    /** Dragon Architect: eine Abschrift eines eigenen Plans nehmen ({@code text} = Kennung). */
+    public static final int TAKE_PLAN = 8;
+    /** Dragon Architect: einen eigenen Plan löschen ({@code text} = Kennung). */
+    public static final int DELETE_PLAN = 9;
+    /** Dragon Architect: einen Vermessungsstab nehmen. */
+    public static final int TAKE_ROD = 10;
+    /** Bauweise einer Baustelle umschalten ({@code arg} = Nummer der Baustelle). */
+    public static final int FAST = 11;
 
     /** Wie weit man vom Banner weg sein darf, solange das Fenster offen ist. */
     public static final double RANGE = 16.0;
@@ -54,7 +64,7 @@ public final class TownActions {
                 }
             }
             case BLUEPRINT -> {
-                if (owner && arg >= 0 && arg < BuildingType.values().length) {
+                if (owner && arg >= 0 && arg < BuildingType.values().length && !BuildingType.values()[arg].custom()) {
                     BuildingType type = BuildingType.values()[arg];
                     if (town.tier().ordinal() < type.tier().ordinal()) {
                         good = false;
@@ -83,9 +93,38 @@ public final class TownActions {
             }
             case CANCEL -> {
                 if (owner && arg >= 0 && arg < town.projects().size()) {
-                    BuildingType type = town.projects().get(arg).type;
+                    Component name = TownManager.name(town.projects().get(arg));
                     TownManager.cancelProject(player, town, arg);
-                    notice = Component.translatable("gui.kingdomsatwar.town.notice.cancelled", Component.translatable(type.translationKey()));
+                    notice = Component.translatable("gui.kingdomsatwar.town.notice.cancelled", name);
+                }
+            }
+            case PLANS -> io.github.sirschrolli.kingdomsatwar.architect.Architect.sendList(player);
+            case TAKE_PLAN -> {
+                io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info =
+                        io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.of(player.level().getServer()).info(text);
+                good = info != null && io.github.sirschrolli.kingdomsatwar.architect.Architect.copy(player, text);
+                notice = good ? Component.translatable("message.kingdomsatwar.town.blueprint_taken", Component.literal(info.name()))
+                        : Component.translatable("gui.kingdomsatwar.town.plans.no_paper");
+            }
+            case DELETE_PLAN -> {
+                io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info =
+                        io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.of(player.level().getServer()).info(text);
+                if (info != null && io.github.sirschrolli.kingdomsatwar.architect.Architect.delete(player, text)) {
+                    notice = Component.translatable("gui.kingdomsatwar.town.plans.deleted", Component.literal(info.name()));
+                }
+                io.github.sirschrolli.kingdomsatwar.architect.Architect.sendList(player);
+            }
+            case TAKE_ROD -> {
+                if (owner) {
+                    io.github.sirschrolli.kingdomsatwar.architect.Architect.giveRod(player);
+                    notice = Component.translatable("gui.kingdomsatwar.town.plans.rod_taken");
+                }
+            }
+            case FAST -> {
+                if (owner && arg >= 0 && arg < town.projects().size()) {
+                    TownManager.toggleFast(player, town, arg);
+                    notice = Component.translatable(town.projects().get(arg).fast ? "gui.kingdomsatwar.town.notice.fast"
+                            : "gui.kingdomsatwar.town.notice.slow", TownManager.name(town.projects().get(arg)));
                 }
             }
             default -> {

@@ -33,8 +33,15 @@ public final class Blueprint {
     /** Ein Block des Plans. */
     public record Entry(BlockPos pos, BlockState state) {}
 
-    /** Ein Bauschritt in der Welt: einen Block setzen (Luft = wegräumen) oder eine Fundamentsäule auffüllen. */
-    public record Step(BlockPos pos, BlockState state, boolean foundation) {}
+    /**
+     * Ein Bauschritt in der Welt: einen Block setzen (Luft = wegräumen) oder eine Fundamentsäule auffüllen; {@code data}
+     * sind die Daten eines Schilds oder Banners aus einem vermessenen Gebäude (sonst {@code null}).
+     */
+    public record Step(BlockPos pos, BlockState state, boolean foundation, net.minecraft.nbt.@Nullable CompoundTag data) {
+        public Step(BlockPos pos, BlockState state, boolean foundation) {
+            this(pos, state, foundation, null);
+        }
+    }
 
     private final List<Entry> blocks;
     private final BoundingBox bounds;
@@ -46,11 +53,29 @@ public final class Blueprint {
     private final BlockPos entrance;
     private final List<BlockPos> marks;
     private final Map<String, BlockPos> anchors;
+    /** Daten von Schildern und Bannern (lokal; nur bei vermessenen Gebäuden). */
+    private final Map<BlockPos, net.minecraft.nbt.CompoundTag> data;
+
+    /**
+     * Ein Bauplan aus einem vermessenen Gebäude (Dragon Architect): mit den Daten der Schilder und Banner und der
+     * vermessenen Ausdehnung (auch wenn der Rand nur aus Luft besteht).
+     */
+    public static Blueprint custom(Map<BlockPos, BlockState> plan, Map<BlockPos, net.minecraft.nbt.CompoundTag> data, List<BlockPos> footprint,
+            BlockState foundation, List<BlockPos> beds, BlockPos entrance, BoundingBox bounds) {
+        return new Blueprint(plan, footprint, foundation, beds, null, null, entrance, List.of(), Map.of(), data, bounds);
+    }
 
     Blueprint(Map<BlockPos, BlockState> plan, List<BlockPos> footprint, BlockState foundation, List<BlockPos> beds, @Nullable BlockPos chest,
             @Nullable BlockPos workSpot, BlockPos entrance, List<BlockPos> marks, Map<String, BlockPos> anchors) {
+        this(plan, footprint, foundation, beds, chest, workSpot, entrance, marks, anchors, Map.of(), null);
+    }
+
+    private Blueprint(Map<BlockPos, BlockState> plan, List<BlockPos> footprint, BlockState foundation, List<BlockPos> beds, @Nullable BlockPos chest,
+            @Nullable BlockPos workSpot, BlockPos entrance, List<BlockPos> marks, Map<String, BlockPos> anchors,
+            Map<BlockPos, net.minecraft.nbt.CompoundTag> data, @Nullable BoundingBox fixedBounds) {
         List<Entry> solid = new ArrayList<>();
         List<Entry> attached = new ArrayList<>();
+        List<Entry> dig = new ArrayList<>();
         int minX = Integer.MAX_VALUE;
         int minY = Integer.MAX_VALUE;
         int minZ = Integer.MAX_VALUE;
@@ -65,15 +90,31 @@ public final class Blueprint {
             maxX = Math.max(maxX, p.getX());
             maxY = Math.max(maxY, p.getY());
             maxZ = Math.max(maxZ, p.getZ());
-            (attached(e.getValue()) ? attached : solid).add(new Entry(p, e.getValue()));
+            if (fixedBounds != null && e.getValue().isAir() && p.getY() < 0) {
+                dig.add(new Entry(p, e.getValue())); // Keller eines vermessenen Gebäudes
+            } else {
+                (attached(e.getValue()) ? attached : solid).add(new Entry(p, e.getValue()));
+            }
         }
         // Lage für Lage von unten nach oben, innerhalb der Lage immer zum nächstgelegenen Block: so zieht der Baumeister
-        // die Mauern im Kreis hoch, statt zwischen den Seiten hin und her zu laufen
+        // die Mauern im Kreis hoch, statt zwischen den Seiten hin und her zu laufen (einen Keller hebt er vorher von oben
+        // nach unten aus)
         BlockPos corner = new BlockPos(minX, 0, minZ);
-        List<Entry> all = new ArrayList<>(sweep(solid, Entry::pos, corner));
+        List<Entry> all = new ArrayList<>();
+        if (!dig.isEmpty()) {
+            List<Entry> down = new ArrayList<>(sweep(dig, Entry::pos, corner));
+            java.util.Map<Integer, List<Entry>> byLayer = new java.util.TreeMap<>(Comparator.reverseOrder());
+            for (Entry e : down) {
+                byLayer.computeIfAbsent(e.pos().getY(), y -> new ArrayList<>()).add(e);
+            }
+            byLayer.values().forEach(all::addAll);
+        }
+        all.addAll(sweep(solid, Entry::pos, all.isEmpty() ? corner : all.getLast().pos()));
         all.addAll(sweep(attached, Entry::pos, all.isEmpty() ? corner : all.getLast().pos()));
         this.blocks = Collections.unmodifiableList(all);
-        this.bounds = new BoundingBox(minX, Math.min(minY, 0), minZ, maxX, maxY, maxZ);
+        this.bounds = fixedBounds != null ? fixedBounds
+                : plan.isEmpty() ? new BoundingBox(0, 0, 0, 0, 0, 0) : new BoundingBox(minX, Math.min(minY, 0), minZ, maxX, maxY, maxZ);
+        this.data = Map.copyOf(data);
         this.footprint = List.copyOf(sweep(new ArrayList<>(footprint), p -> p, corner));
         this.foundation = foundation;
         this.beds = List.copyOf(beds);
@@ -98,6 +139,13 @@ public final class Blueprint {
         int cz = start.getZ();
         for (List<T> layer : layers.values()) {
             layer.sort(Comparator.<T>comparingInt(i -> pos.apply(i).getZ()).thenComparingInt(i -> pos.apply(i).getX()));
+            if (layer.size() > LARGE_LAYER) {
+                // große Lagen (vermessene Burgen): dieselbe Reihenfolge, aber mit Suche in Ringen statt über alle Blöcke
+                long last = sweepLarge(layer, pos, cx, cz, out);
+                cx = (int) (last >> 32);
+                cz = (int) last;
+                continue;
+            }
             boolean[] used = new boolean[layer.size()];
             for (int n = 0; n < layer.size(); n++) {
                 int best = -1;
@@ -120,6 +168,77 @@ public final class Blueprint {
             }
         }
         return out;
+    }
+
+    /** Ab so vielen Blöcken in einer Lage sucht {@link #sweep} in Ringen (die Pläne der Siedlung bleiben darunter). */
+    private static final int LARGE_LAYER = 1200;
+
+    /**
+     * Wie die Suche in {@link #sweep}, aber für große Lagen: die Blöcke liegen in einem Raster, gesucht wird in Ringen
+     * wachsender Entfernung (bei Gleichstand die vordere, dann die linke Stelle – wie oben). Gibt die letzte Stelle zurück
+     * (x in den oberen, z in den unteren 32 Bit).
+     */
+    private static <T> long sweepLarge(List<T> layer, java.util.function.Function<T, BlockPos> pos, int cx, int cz, List<T> out) {
+        int minX = Integer.MAX_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+        for (T item : layer) {
+            BlockPos p = pos.apply(item);
+            minX = Math.min(minX, p.getX());
+            minZ = Math.min(minZ, p.getZ());
+            maxX = Math.max(maxX, p.getX());
+            maxZ = Math.max(maxZ, p.getZ());
+        }
+        int w = maxX - minX + 1;
+        int d = maxZ - minZ + 1;
+        int[] cell = new int[w * d];
+        java.util.Arrays.fill(cell, -1);
+        for (int i = 0; i < layer.size(); i++) {
+            BlockPos p = pos.apply(layer.get(i));
+            int c = (p.getZ() - minZ) * w + (p.getX() - minX);
+            if (cell[c] < 0) {
+                cell[c] = i;
+            } else {
+                out.add(layer.get(i)); // doppelt (sollte nicht vorkommen)
+            }
+        }
+        int left = 0;
+        for (int c : cell) {
+            if (c >= 0) {
+                left++;
+            }
+        }
+        int maxR = w + d + Math.abs(cx - minX) + Math.abs(cz - minZ) + 2;
+        while (left > 0) {
+            int found = -1;
+            for (int r = 0; r <= maxR && found < 0; r++) {
+                for (int dz = -r; dz <= r && found < 0; dz++) {
+                    int z = cz + dz - minZ;
+                    if (z < 0 || z >= d) {
+                        continue;
+                    }
+                    int rest = r - Math.abs(dz);
+                    int x1 = cx - rest - minX;
+                    int x2 = cx + rest - minX;
+                    if (x1 >= 0 && x1 < w && cell[z * w + x1] >= 0) {
+                        found = z * w + x1;
+                    } else if (rest > 0 && x2 >= 0 && x2 < w && cell[z * w + x2] >= 0) {
+                        found = z * w + x2;
+                    }
+                }
+            }
+            if (found < 0) {
+                break;
+            }
+            T item = layer.get(cell[found]);
+            cell[found] = -1;
+            left--;
+            out.add(item);
+            cx = pos.apply(item).getX();
+            cz = pos.apply(item).getZ();
+        }
+        return ((long) cx << 32) | (cz & 0xFFFFFFFFL);
     }
 
     /** Türen, Betten, Laternen, Fackeln, Leitern, Pflanzen, Teppiche … – alles, was an anderen Blöcken hängt. */
@@ -249,9 +368,16 @@ public final class Blueprint {
             steps.add(new Step(world(origin, rotation, column.below()), this.foundation, true));
         }
         for (Entry e : this.blocks) {
-            steps.add(new Step(world(origin, rotation, e.pos()), world(e.state(), rotation), false));
+            steps.add(new Step(world(origin, rotation, e.pos()), world(e.state(), rotation), false, this.data.get(e.pos())));
         }
         return steps;
+    }
+
+    /** Ausdehnung eines lokalen Bereichs in der Welt. */
+    public static BoundingBox worldBounds(BoundingBox local, BlockPos origin, Rotation rotation) {
+        BlockPos a = world(origin, rotation, new BlockPos(local.minX(), local.minY(), local.minZ()));
+        BlockPos b = world(origin, rotation, new BlockPos(local.maxX(), local.maxY(), local.maxZ()));
+        return BoundingBox.fromCorners(a, b);
     }
 
     /** Ist an dieser Stelle noch etwas zu tun? (Verbindungen von Zäunen, Scheiben und Treppen zählen nicht.) */
@@ -338,7 +464,22 @@ public final class Blueprint {
         // bilden Ecken (die Nachbarn, die erst später kommen, passen sich dann selbst an)
         BlockState shaped = Block.updateFromNeighbourShapes(state, level, step.pos());
         level.setBlock(step.pos(), shaped.isAir() ? state : shaped, Block.UPDATE_ALL);
+        loadData(level, step);
         return true;
+    }
+
+    /** Schreibt die Daten eines Schilds oder Banners aus dem Bauplan in den gesetzten Block. */
+    private static void loadData(ServerLevel level, Step step) {
+        if (step.data() == null) {
+            return;
+        }
+        net.minecraft.world.level.block.entity.BlockEntity be = level.getBlockEntity(step.pos());
+        if (be != null) {
+            be.loadWithComponents(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING,
+                    level.registryAccess(), step.data()));
+            be.setChanged();
+            level.sendBlockUpdated(step.pos(), step.state(), level.getBlockState(step.pos()), Block.UPDATE_CLIENTS);
+        }
     }
 
     /** Baut den ganzen Plan auf einmal (für Tests und den Kreativmodus). */

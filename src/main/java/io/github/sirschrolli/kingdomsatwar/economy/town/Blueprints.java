@@ -46,6 +46,7 @@ final class Blueprints {
             case BARRACKS -> List.of(Blueprints::barracks, WorkDesigns::guardTower);
             case MAP_HOUSE -> List.of(Blueprints::mapHouse, WorkDesigns::observatory);
             case THRONE_HALL -> List.of(Blueprints::throneHall);
+            case CUSTOM -> List.of(b -> {}); // eigene Pläne kommen aus dem Verzeichnis der Baupläne
         };
         Blueprint[] plans = new Blueprint[designs.size()];
         for (int i = 0; i < plans.length; i++) {

@@ -42,22 +42,36 @@ public final class Town {
         }
     }
 
-    /** Ein fertiges Gebäude (Entwurf, Ursprung und Drehung des Bauplans in der Welt). */
-    public record Building(BuildingType type, BlockPos origin, Rotation rotation, int design) {
+    /**
+     * Ein fertiges Gebäude (Entwurf, Ursprung und Drehung des Bauplans in der Welt); bei einem eigenen Bauplan (Dragon
+     * Architect) dessen Kennung.
+     */
+    public record Building(BuildingType type, BlockPos origin, Rotation rotation, int design, Optional<String> custom) {
         public static final Codec<Building> CODEC = RecordCodecBuilder.create(i -> i.group(
                 BuildingType.CODEC.fieldOf("type").forGetter(Building::type),
                 BlockPos.CODEC.fieldOf("origin").forGetter(Building::origin),
                 Rotation.CODEC.fieldOf("rotation").forGetter(Building::rotation),
-                Codec.INT.optionalFieldOf("design", 0).forGetter(Building::design)
+                Codec.INT.optionalFieldOf("design", 0).forGetter(Building::design),
+                Codec.STRING.optionalFieldOf("plan").forGetter(Building::custom)
         ).apply(i, Building::new));
 
         public Building(BuildingType type, BlockPos origin, Rotation rotation) {
-            this(type, origin, rotation, 0);
+            this(type, origin, rotation, 0, Optional.empty());
         }
 
-        /** Der Bauplan dieses Gebäudes (sein Entwurf). */
+        public Building(BuildingType type, BlockPos origin, Rotation rotation, int design) {
+            this(type, origin, rotation, design, Optional.empty());
+        }
+
+        /** Der Bauplan dieses Gebäudes (sein Entwurf oder der eigene Plan). */
         public Blueprint plan() {
-            return this.type.blueprint(this.design);
+            return this.custom.isPresent() ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(this.custom.get())
+                    : this.type.blueprint(this.design);
+        }
+
+        /** Die Kurzfassung des eigenen Plans ({@code null}: kein eigener Plan oder unbekannt). */
+        public io.github.sirschrolli.kingdomsatwar.architect.@Nullable PlanInfo info() {
+            return this.custom.isPresent() ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.infoOf(this.custom.get()) : null;
         }
 
         public BlockPos world(BlockPos local) {
@@ -65,7 +79,14 @@ public final class Town {
         }
 
         public BoundingBox bounds() {
-            return this.plan().worldBounds(this.origin, this.rotation);
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.worldBounds(this.origin, this.rotation) : this.plan().worldBounds(this.origin, this.rotation);
+        }
+
+        /** Betten (Kopfende, lokal) – bei eigenen Plänen aus der Kurzfassung, ohne den ganzen Plan zu laden. */
+        public List<BlockPos> bedsLocal() {
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.shape().beds() : this.plan().beds();
         }
     }
 
@@ -76,35 +97,58 @@ public final class Town {
                 BlockPos.CODEC.fieldOf("origin").forGetter(p -> p.origin),
                 Rotation.CODEC.fieldOf("rotation").forGetter(p -> p.rotation),
                 Codec.INT.optionalFieldOf("progress", 0).forGetter(p -> p.progress),
-                Codec.INT.optionalFieldOf("design", 0).forGetter(p -> p.design)
-        ).apply(i, Project::new));
+                Codec.INT.optionalFieldOf("design", 0).forGetter(p -> p.design),
+                Codec.STRING.optionalFieldOf("plan").forGetter(p -> Optional.ofNullable(p.custom)),
+                Codec.BOOL.optionalFieldOf("fast", false).forGetter(p -> p.fast)
+        ).apply(i, (type, origin, rotation, progress, design, plan, fast) -> {
+            Project p = new Project(type, origin, rotation, progress, design, plan.orElse(null));
+            p.fast = fast;
+            return p;
+        }));
 
         public final BuildingType type;
         public final BlockPos origin;
         public final Rotation rotation;
         /** Welcher Entwurf gebaut wird (siehe {@link BuildingType#designs()}). */
         public final int design;
+        /** Kennung des eigenen Bauplans (Dragon Architect), sonst {@code null}. */
+        public final @Nullable String custom;
+        /** Bauweise: {@code false} Block für Block, {@code true} abschnittsweise (schneller, mehrere Blöcke auf einmal). */
+        public boolean fast;
         public int progress;
+        /** Kostbarer Block, auf den die Baustelle gerade wartet (nicht gespeichert). */
+        public net.minecraft.world.item.@Nullable Item waitingItem;
         /** Baustoff, auf den die Baustelle gerade wartet (nicht gespeichert; der Baumeister prüft es neu). */
         public @Nullable Material waiting;
                 /** Bauablauf (wird beim ersten Gebrauch berechnet, nicht gespeichert). */
         private @Nullable List<Blueprint.Step> steps;
 
-        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design) {
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design, @Nullable String custom) {
             this.type = type;
             this.origin = origin;
             this.rotation = rotation;
             this.progress = progress;
             this.design = Math.floorMod(design, Math.max(1, type.designs()));
+            this.custom = custom;
+        }
+
+        public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress, int design) {
+            this(type, origin, rotation, progress, design, null);
         }
 
         public Project(BuildingType type, BlockPos origin, Rotation rotation, int progress) {
             this(type, origin, rotation, progress, 0);
         }
 
-        /** Der Bauplan dieser Baustelle (ihr Entwurf). */
+        /** Der Bauplan dieser Baustelle (ihr Entwurf oder der eigene Plan). */
         public Blueprint plan() {
-            return this.type.blueprint(this.design);
+            return this.custom != null ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.blueprint(this.custom)
+                    : this.type.blueprint(this.design);
+        }
+
+        /** Die Kurzfassung des eigenen Plans ({@code null}: kein eigener Plan oder unbekannt). */
+        public io.github.sirschrolli.kingdomsatwar.architect.@Nullable PlanInfo info() {
+            return this.custom != null ? io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.infoOf(this.custom) : null;
         }
 
         public List<Blueprint.Step> steps() {
@@ -131,7 +175,8 @@ public final class Town {
         }
 
         public BoundingBox bounds() {
-            return this.plan().worldBounds(this.origin, this.rotation);
+            io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info = this.info();
+            return info != null ? info.worldBounds(this.origin, this.rotation) : this.plan().worldBounds(this.origin, this.rotation);
         }
     }
 
@@ -321,7 +366,7 @@ public final class Town {
     public List<BlockPos> beds() {
         List<BlockPos> beds = new ArrayList<>();
         for (Building building : this.buildings) {
-            for (BlockPos bed : building.plan().beds()) {
+            for (BlockPos bed : building.bedsLocal()) {
                 beds.add(building.world(bed));
             }
         }

@@ -305,6 +305,11 @@ public final class ModItems {
     public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.BlueprintItem> BLUEPRINT = ITEMS.registerItem("blueprint",
             io.github.sirschrolli.kingdomsatwar.item.BlueprintItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
+    /** Vermessungsstab (Dragon Architect): Gebäude vermessen und als eigenen Bauplan zeichnen. */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.SurveyorsRodItem> SURVEYORS_ROD = addTo(KINGDOM_TAB,
+            ITEMS.registerItem("surveyors_rod", io.github.sirschrolli.kingdomsatwar.item.SurveyorsRodItem::new,
+                    () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+
     // =====================================================================================
     // Kingdoms at War – Armee
     // =====================================================================================

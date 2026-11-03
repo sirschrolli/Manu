@@ -76,7 +76,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
  * alle Siedlungen weg – so kommen sich die Siedlungen der Tests nicht in die Quere (Mindestabstand).
  */
 final class TownGameTests {
-    private static final Identifier TOWN = KingdomsAtWar.id("test_town");
+    static final Identifier TOWN = KingdomsAtWar.id("test_town");
     /** Mitte der Testfläche (48 × 48, Steinboden). */
     private static final BlockPos CENTER = new BlockPos(24, 1, 24);
 
@@ -136,7 +136,7 @@ final class TownGameTests {
 
     /** Ein Spieler im Überlebensmodus (bezahlt also mit Münzen), an einer Stelle der Testfläche. */
     @SuppressWarnings("removal")
-    private static ServerPlayer player(GameTestHelper helper, BlockPos relative) {
+    static ServerPlayer player(GameTestHelper helper, BlockPos relative) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.getAbilities().instabuild = false;
         Vec3 at = helper.absoluteVec(Vec3.atBottomCenterOf(relative));
@@ -144,13 +144,13 @@ final class TownGameTests {
         return player;
     }
 
-    private static void leave(GameTestHelper helper, ServerPlayer... players) {
+    static void leave(GameTestHelper helper, ServerPlayer... players) {
         for (ServerPlayer p : players) {
             helper.getLevel().getServer().getPlayerList().remove(p);
         }
     }
 
-    private static void clearTowns(MinecraftServer server) {
+    static void clearTowns(MinecraftServer server) {
         for (Town town : Towns.of(server).all()) {
             TownManager.disband(server, town);
         }
@@ -163,7 +163,7 @@ final class TownGameTests {
         level.setBlock(pos.above(), lower.setValue(TownBannerBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
     }
 
-    private static Town found(GameTestHelper helper, ServerPlayer owner, BlockPos relative) {
+    static Town found(GameTestHelper helper, ServerPlayer owner, BlockPos relative) {
         ServerLevel level = helper.getLevel();
         BlockPos pos = helper.absolutePos(relative);
         bannerBlocks(level, pos);
@@ -188,7 +188,7 @@ final class TownGameTests {
      * Räumt die Testfläche: über dem Boden alles weg, darunter (Fundamente, Schächte, Brunnen) wieder der Boden aus der
      * Testfläche – damit jeder Entwurf auf frischem Boden steht.
      */
-    private static void clearArea(GameTestHelper helper) {
+    static void clearArea(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         int ground = ground(helper);
         BlockState floor = helper.getBlockState(new BlockPos(1, ground - 1, 1));
@@ -212,7 +212,7 @@ final class TownGameTests {
      * Die erste Lage über dem Boden der Testfläche – dorthin setzt auch der Bauplan im Spiel den Ursprung (Rechtsklick auf
      * den Boden). Gemessen in einer Ecke, wo nie gebaut wird.
      */
-    private static int ground(GameTestHelper helper) {
+    static int ground(GameTestHelper helper) {
         int y = 2;
         while (y > -4 && helper.getBlockState(new BlockPos(1, y - 1, 1)).isAir()) {
             y--;
@@ -332,7 +332,7 @@ final class TownGameTests {
         ServerLevel level = helper.getLevel();
         // alle Entwürfe prüfen und die Fehler sammeln, statt beim ersten aufzuhören
         List<String> problems = new java.util.ArrayList<>();
-        for (BuildingType type : BuildingType.values()) {
+        for (BuildingType type : BuildingType.standard()) {
           for (int design = 0; design < type.designs(); design++) {
             Blueprint plan = type.blueprint(design);
             String what = type.id() + (type.designs() > 1 ? " (Entwurf " + design + ")" : "");
@@ -711,7 +711,7 @@ final class TownGameTests {
         helper.assertTrue(nearest != null && BuildingType.STOREHOUSE.blueprint().worldBounds(storehouse, Rotation.NONE).isInside(nearest),
                 "Nächster Behälter liegt nicht im Lagerhaus");
         // Baukosten
-        for (BuildingType type : BuildingType.values()) {
+        for (BuildingType type : BuildingType.standard()) {
             int[] c = type.costs();
             if (type == BuildingType.STOREHOUSE) {
                 helper.assertTrue(c[0] == 0 && c[1] == 0 && c[2] == 0, "Das Lagerhaus kostet Baustoffe");
@@ -731,7 +731,7 @@ final class TownGameTests {
         helper.assertValueEqual(house.minCost(Material.WOOD), BuildingType.HOUSE.minCosts()[0], "Fenster: niedrigste Baukosten");
         helper.assertTrue(house.minCost(Material.STONE) < house.cost(Material.STONE), "Fenster: die Entwürfe kosten alle gleich viel Stein");
         // jeder Entwurf kostet etwas anderes (sie unterscheiden sich wirklich)
-        for (BuildingType type : BuildingType.values()) {
+        for (BuildingType type : BuildingType.standard()) {
             for (int a = 0; a < type.designs(); a++) {
                 for (int b2 = a + 1; b2 < type.designs(); b2++) {
                     helper.assertTrue(!java.util.Arrays.equals(type.blueprint(a).costs(), type.blueprint(b2).costs()),

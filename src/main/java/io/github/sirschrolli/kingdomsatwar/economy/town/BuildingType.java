@@ -27,7 +27,9 @@ public enum BuildingType implements StringRepresentable {
     TOWNHOUSE(TownTier.MARKET_TOWN, 135, 4, 0),
     BARRACKS(TownTier.MARKET_TOWN, 243, 0, 0),
     MAP_HOUSE(TownTier.MARKET_TOWN, 189, 1, 1),
-    THRONE_HALL(TownTier.CITY, 567, 0, 0);
+    THRONE_HALL(TownTier.CITY, 567, 0, 0),
+    /** Ein eigener Bauplan (Dragon Architect): Preis, Betten und Baustoffe stehen im Plan selbst ({@link io.github.sirschrolli.kingdomsatwar.architect.PlanInfo}). */
+    CUSTOM(TownTier.CAMP, 0, 0, 0);
 
     public static final Codec<BuildingType> CODEC = StringRepresentable.fromEnum(BuildingType::values);
     private static final Map<BuildingType, Blueprint[]> PLANS = new EnumMap<>(BuildingType.class);
@@ -97,7 +99,20 @@ public enum BuildingType implements StringRepresentable {
             case BARRACKS -> Items.IRON_SWORD;
             case MAP_HOUSE -> Items.CARTOGRAPHY_TABLE;
             case THRONE_HALL -> ModBlocks.THRONE.get().asItem();
+            case CUSTOM -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.SURVEYORS_ROD.get();
         };
+    }
+
+    /** Ein eigener Bauplan (Dragon Architect)? Der steht nicht in der Liste der Baupläne der Siedlung. */
+    public boolean custom() {
+        return this == CUSTOM;
+    }
+
+    /** Die Bauten, die das Stadtfenster zum Nehmen anbietet (alle außer den eigenen Plänen). */
+    public static java.util.List<BuildingType> standard() {
+        java.util.List<BuildingType> list = new java.util.ArrayList<>(java.util.List.of(values()));
+        list.remove(CUSTOM);
+        return list;
     }
 
     /** Kostet der Bau Baustoffe? Das Lagerhaus nicht – es ist das erste, was eine Siedlung braucht. */
