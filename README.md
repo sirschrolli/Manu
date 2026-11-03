@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.46.0 – Dragon Architect: Mit dem neuen Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier. In deiner Siedlung bauen es die Baumeister nach, Block für Block oder abschnittsweise (viel schneller, ideal für Burgen); kostbare Blöcke nehmen sie genau so aus dem Lager.**
+> **Testversion 0.47.0 – Dragon Architect, Teil 2: Schematiken einlesen und ablegen. Im Stadtfenster liest du Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) als eigenen Bauplan ein – Bodenlinie und Haustür findet der Architekt von selbst, und deine Baumeister bauen sie nach. Umgekehrt legt ein Knopfdruck jeden eigenen Plan in allen drei Formaten ab.**
+> In 0.46 kam der Dragon Architect: Mit dem Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier; die Baumeister bauen es nach, Block für Block oder abschnittsweise, kostbare Blöcke nehmen sie genau so aus dem Lager.
 > In 0.45 kamen die Drachen in den Krieg: Mit dem Drachenhorn stoßen deine Drachen im Sturzflug auf einen Feind herab oder fliegen einen Luftangriff auf einen Ort; gegen Heerhaufen verteidigen sie die Siedlung von selbst, schwer verwundet ziehen sie sich zurück.
 > In 0.44 kamen neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter auf dem eigenen Schlachtross und Belagerungsknechte; am Feldherrentisch wählst du den Ausbildungsweg mit Pfeilen.
 > In 0.43 kamen die Heerhaufen: Reiche, mit denen du im Krieg liegst, schicken alle paar Tage einen Heerhaufen gegen deine Siedlung – sie sammeln sich auf der Seite ihrer Stammburg, stoßen ins Horn und ziehen zum Stadtbanner; besiegt liegt ihre Kriegskasse in deinem Lager, sonst plündern sie ein Drittel.
@@ -277,8 +278,8 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Dragon Architect, Teil 2 – Schematiken (.litematic, .schem, .nbt) importieren und große Bauten, an
-> denen mehrere Baumeister gemeinsam arbeiten.
+> **Als Nächstes:** Dragon Architect, Teil 3 – große Bauten bis zur ganzen Burg (300 × 300 Blöcke), an denen mehrere
+> Baumeister gemeinsam in eigenen Abschnitten arbeiten.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -349,7 +350,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte | ✅ fertig |
 | Drachen im Krieg: Drachenhorn, Sturzangriff mit Odem, Luftangriff, Verteidigung gegen Heerhaufen | ✅ fertig |
 | Dragon Architect, Teil 1: Gebäude vermessen, eigene Baupläne, Nachbau Block für Block oder abschnittsweise | ✅ fertig |
-| Dragon Architect, Teil 2: Import von .litematic, .schem und .nbt, große Bauten mit mehreren Baumeistern | ⏳ als Nächstes |
+| Dragon Architect, Teil 2: Schematiken einlesen und ablegen (.litematic, .schem, .nbt) | ✅ fertig |
+| Dragon Architect, Teil 3: große Bauten bis 300 × 300 mit mehreren Baumeistern in eigenen Abschnitten | ⏳ als Nächstes |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1197,7 +1199,25 @@ dauerhaft, Befehle in Schildern verschwinden.
 64 Pläne): Ansicht, Größe, Baustoffe und Preis; eine **Abschrift** nehmen (ein Blatt Papier) oder einen Plan löschen
 (Gebäude, die nach ihm gebaut sind, bleiben stehen). Vermessen lassen sich Bauten bis 96 × 64 × 96 Blöcke.
 
+**Schematiken einlesen:** Gebäude aus anderen Welten oder aus dem Netz bringst du als Datei mit: **Litematica**
+(.litematic, auch mit mehreren Bereichen), **WorldEdit** und andere Sponge-Schematiken (.schem, alle drei Fassungen)
+und der **Strukturblock** (.nbt). Leg die Datei in den Ordner `schematics` des Spiels (bei WorldEdit liegt er unter
+`config/worldedit/schematics`, Strukturen des Strukturblocks im Weltordner unter `generated`) und drück in **Eigene
+Pläne** auf **„Schematik einlesen“**: eine Liste mit Art, Name, Ordner und Größe, ein Klick auf **Einlesen** – und der
+Architekt zeichnet daraus einen eigenen Plan. Bodenlinie und Haustür findet er von selbst, Blöcke älterer
+Minecraft-Fassungen übersetzt er (etwa aus 1.15), Schilder und Banner behält er. Blöcke, die er nicht kennt (etwa aus
+anderen Mods), werden Luft – das sagt er dir; was er nie baut (Spawner, Grundgestein …), lässt er wie beim Vermessen
+weg. Eingelesen werden Bauten bis 96 × 64 × 96 Blöcke; gelesen wird nur in diesen Ordnern.
+
+**Schematiken ablegen:** Der Knopf **↓** neben jedem eigenen Plan schreibt ihn auf einmal als .litematic, .schem und
+.nbt in den Ordner `schematics/kingdomsatwar` – zum Weitergeben, zum Weiterbauen mit Litematica oder WorldEdit oder
+für den Strukturblock. Boden unter der Bodenlinie, den der Plan nicht anrührt, steht darin als Gras und Erde (so reißt
+das Einfügen keine Löcher), und die Bodenlinie reist mit: wieder eingelesen, kommt der Plan Block für Block genau so
+zurück.
+
 ![Dragon Architect: Vermessen, Bauplan zeichnen, eigene Pläne, Nachbau](docs/bilder/architekt.jpg)
+
+![Dragon Architect: Schematiken einlesen, eigener Plan, Nachbau](docs/bilder/architekt_schematiken.jpg)
 
 ### Hof- und Weidetiere
 
@@ -1786,8 +1806,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      eigenen Wesen.
 2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen und die Heerhaufen sind
    fertig, als Nächstes kommen neue Truppen ([docs/KRIEG.md](docs/KRIEG.md)).
-3. **Dragon Architect** – Teil 1 ist fertig (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen); als Nächstes
-   der Import von Schematiken (.litematic, .schem, .nbt) und große Bauten, an denen mehrere Baumeister gemeinsam arbeiten.
+3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen) und Teil 2 (Schematiken
+   einlesen und ablegen) sind fertig; als Nächstes große Bauten bis zur ganzen Burg (300 × 300), an denen mehrere
+   Baumeister gemeinsam in eigenen Abschnitten arbeiten.
 4. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung

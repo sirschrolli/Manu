@@ -284,6 +284,164 @@ final class ArchitectShowcase {
         steps.add(Step.screenshot("architect_twins"));
     }
 
+    /**
+     * Vorführung: Schematiken. Drei eigene Pläne werden als .litematic, .schem und .nbt abgelegt, ein Turm mit dem
+     * Strukturblock-Code als Struktur gespeichert; das Stadtfenster zeigt die Dateien zum Einlesen, eine wird eingelesen
+     * und von den Baumeistern nachgebaut.
+     */
+    static void io(Deque<Step> steps) {
+        BlockPos[] banner = new BlockPos[1];
+        Town[] town = {null};
+        steps.add(Step.hud(false));
+        steps.add(Step.command("time set 1000"));
+        steps.add(Step.command("weather clear"));
+        steps.add(Step.command("gamerule doDaylightCycle false"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(8)));
+        steps.add(Step.command("tp @s " + X0 + " 140 " + (Z0 - 30) + " 0 30"));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.server(level -> {
+            int g = Showcase.ground;
+            for (int cx = (X0 - 48) >> 4; cx <= (X0 + 64) >> 4; cx++) {
+                for (int cz = (Z0 - 40) >> 4; cz <= (Z0 + 48) >> 4; cz++) {
+                    level.getChunk(cx, cz);
+                    level.setChunkForced(cx, cz, true);
+                }
+            }
+            Showcase.fill(level, new BlockPos(X0 - 44, g - 4, Z0 - 36), new BlockPos(X0 + 60, g - 2, Z0 + 44), Blocks.DIRT.defaultBlockState());
+            Showcase.fill(level, new BlockPos(X0 - 44, g - 1, Z0 - 36), new BlockPos(X0 + 60, g - 1, Z0 + 44), Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(X0 - 44, g, Z0 - 36), new BlockPos(X0 + 60, g + 32, Z0 + 44), Blocks.AIR.defaultBlockState());
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            PlanLibrary library = PlanLibrary.of(level.getServer());
+            // drei Bauten vermessen und als Schematiken ablegen
+            String[] names = {"Kaufmannshaus", "Sägehütte", "Brunnen am Markt"};
+            BuildingType[] types = {BuildingType.TOWNHOUSE, BuildingType.LUMBER_HUT, BuildingType.WELL};
+            int[] designs = {2, 1, 1};
+            for (int i = 0; i < types.length; i++) {
+                Blueprint plan = types[i].blueprint(designs[i]);
+                BlockPos at = new BlockPos(X0 - 30 + i * 22, g, Z0 - 10);
+                plan.placeAll(level, at, Rotation.NONE);
+                BoundingBox b = plan.worldBounds(at, Rotation.NONE);
+                BlockPos a = new BlockPos(b.minX(), g - 1, b.minZ());
+                BlockPos c = new BlockPos(b.maxX(), b.maxY(), b.maxZ());
+                int ground = PlanScan.autoGround(level, a, c);
+                Direction door = PlanScan.doorSide(level, a, c, ground, null);
+                try {
+                    PlanInfo info = library.add(level.getServer(), PlanScan.scan(level, a, c, ground, door != null ? door : Direction.NORTH,
+                            level.registryAccess()), names[i], player.getUUID(), player.getName().getString());
+                    if (i == 0) {
+                        io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.export(player, info);
+                        library.hide(level.getServer(), info.id()); // die Abschrift aus der Datei soll gleich neu dazukommen
+                    } else {
+                        io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.export(player, info);
+                    }
+                } catch (java.io.IOException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+            // ein Wachturm, gespeichert wie mit dem Strukturblock
+            Blueprint tower = BuildingType.BARRACKS.blueprint(1);
+            BlockPos at = new BlockPos(X0 + 40, g, Z0 + 30);
+            tower.placeAll(level, at, Rotation.NONE);
+            BoundingBox tb = tower.worldBounds(at, Rotation.NONE);
+            var manager = level.getServer().getStructureTemplateManager();
+            net.minecraft.resources.Identifier id = net.minecraft.resources.Identifier.fromNamespaceAndPath("kingdomsatwar", "wachturm");
+            var template = manager.getOrCreate(id);
+            template.fillFromWorld(level, new BlockPos(tb.minX(), g - 1, tb.minZ()),
+                    new net.minecraft.core.Vec3i(tb.getXSpan(), tb.getYSpan() + 1, tb.getZSpan()), false, java.util.List.of());
+            manager.save(id);
+            // die Siedlung
+            BlockPos b = new BlockPos(X0 + 22, g, Z0 + 14);
+            BlockState lower = ModBlocks.TOWN_BANNER.get().defaultBlockState().setValue(TownBannerBlock.FACING, Direction.NORTH);
+            level.setBlock(b, lower, Block.UPDATE_ALL);
+            level.setBlock(b.above(), lower.setValue(TownBannerBlock.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+            TownManager.placeBanner(player, level, b);
+            Town t = Towns.of(level.getServer()).byOwner(player.getUUID());
+            for (int i = 0; i < 2; i++) {
+                TownManager.spawnCitizen(level, t, Profession.BUILDER);
+            }
+            TownStorage.supply(level, b.offset(2, 0, 1), new int[] {1600, 2400, 300});
+            Coins.give(player, 4000);
+            banner[0] = b;
+            town[0] = t;
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+        }));
+        steps.add(Step.until(() -> town[0] != null, 600));
+        // das Stadtfenster: eigene Pläne, dann die Schematiken zum Einlesen
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, banner[0].getX() + 0.5, Showcase.ground + 1.0, banner[0].getZ() - 4.0,
+                banner[0].getX() + 0.5, Showcase.ground + 1.0, banner[0].getZ() + 0.5)));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            TownActions.open(player, town[0], banner[0]);
+        }));
+        steps.add(Step.until(() -> Minecraft.getInstance().gui.screen() instanceof TownScreen, 200));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof TownScreen screen) {
+                screen.showImport();
+            }
+            Showcase.parkMouse(minecraft);
+        }));
+        steps.add(Step.waitTicks(15));
+        steps.add(Step.screenshot("architect_import"));
+        // die .schem des Kaufmannshauses einlesen (wie mit dem Knopf „Einlesen“)
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            TownActions.handle(player, banner[0], TownActions.IMPORT, 0, "0:" + io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.MODID + "/Kaufmannshaus.schem");
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof TownScreen screen) {
+                screen.showPlans();
+            }
+        }));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("architect_imported"));
+        // Tooltip über dem Knopf zum Ablegen
+        steps.add(Step.once(minecraft -> TownShowcase.hover(minecraft, 9 + 2 + 298 - 86 + 48 + 8, 52 + 19 + 10)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("architect_export_tip"));
+        steps.add(Step.once(minecraft -> {
+            Showcase.parkMouse(minecraft);
+            minecraft.gui.setScreen(null);
+        }));
+        // den eingelesenen Plan aufstellen und bauen lassen
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            for (PlanInfo info : PlanLibrary.of(level.getServer()).byAuthor(player.getUUID())) {
+                if (info.name().equals("Kaufmannshaus")) {
+                    TownManager.placeCustom(player, info, new BlockPos(X0 + COPY_DX, Showcase.ground, Z0), Rotation.NONE);
+                    for (PlanInfo.Precious p : info.costs().precious()) {
+                        TownStorage.store(level, town[0], new ItemStack(p.item(), p.count()), banner[0]);
+                    }
+                    break;
+                }
+            }
+            if (!town[0].projects().isEmpty()) {
+                town[0].projects().getFirst().fast = true;
+            }
+        }));
+        steps.add(Step.command("tick rate 80"));
+        steps.add(Step.until(() -> town[0].projects().isEmpty() || town[0].projects().getFirst().fraction() >= 0.5, 80000));
+        steps.add(Step.command("tick freeze"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, X0 + COPY_DX + 19.0, Showcase.ground + 12.0, Z0 - 21.0, X0 + COPY_DX,
+                Showcase.ground + 7.0, Z0)));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("architect_import_build"));
+        steps.add(Step.command("tick unfreeze"));
+        steps.add(Step.until(() -> town[0].projects().isEmpty(), 80000));
+        steps.add(Step.command("tick rate 20"));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, X0 + COPY_DX + 19.0, Showcase.ground + 12.0, Z0 - 21.0, X0 + COPY_DX,
+                Showcase.ground + 7.0, Z0)));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("architect_import_done"));
+        steps.add(Step.once(minecraft -> lookAbs(minecraft, X0 + 6.0, Showcase.ground + 12.0, Z0 - 30.0, X0 + 6.0, Showcase.ground + 4.0, Z0)));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("architect_import_overview"));
+    }
+
     /** Kamera an eine Stelle (absolute Höhen), Blick auf einen Punkt. */
     private static void lookAbs(Minecraft minecraft, double ex, double ey, double ez, double tx, double ty, double tz) {
         double lx = tx - ex;

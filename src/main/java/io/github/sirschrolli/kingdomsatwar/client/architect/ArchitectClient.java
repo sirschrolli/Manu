@@ -70,6 +70,13 @@ public final class ArchitectClient {
     static void registerHandlers(RegisterClientPayloadHandlersEvent event) {
         event.register(OpenSavePlanPayload.TYPE, ArchitectClient::onOpenSave);
         event.register(PlanListPayload.TYPE, ArchitectClient::onPlanList);
+        event.register(io.github.sirschrolli.kingdomsatwar.network.ImportListPayload.TYPE, ArchitectClient::onImportList);
+    }
+
+    private static void onImportList(io.github.sirschrolli.kingdomsatwar.network.ImportListPayload payload, IPayloadContext context) {
+        if (Minecraft.getInstance().gui.screen() instanceof TownScreen screen) {
+            screen.updateImports(payload.files());
+        }
     }
 
     @SubscribeEvent

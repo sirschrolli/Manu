@@ -117,6 +117,11 @@ public class TownScreen extends Screen {
     private List<io.github.sirschrolli.kingdomsatwar.architect.PlanInfo> plans =
             io.github.sirschrolli.kingdomsatwar.client.architect.ArchitectClient.plans();
     private int planScroll;
+    /** Dragon Architect: die Schematiken des Servers zum Einlesen zeigen (statt der eigenen Pläne). */
+    private boolean showImport;
+    private List<io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.Entry> imports = List.of();
+    private boolean importsLoaded;
+    private int importScroll;
     /** Plan, dessen Löschen gerade bestätigt werden soll (zweiter Klick). */
     private @Nullable String confirmDelete;
     private @Nullable Component notice;
@@ -145,7 +150,24 @@ public class TownScreen extends Screen {
     public void showPlans() {
         this.tab = Tab.BUILD;
         this.showPlans = true;
+        this.showImport = false;
         this.send(TownActions.PLANS, 0, "");
+        this.updateWidgets();
+    }
+
+    /** Neue Liste der Schematiken zum Einlesen vom Server. */
+    public void updateImports(List<io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.Entry> files) {
+        this.imports = files;
+        this.importsLoaded = true;
+        this.importScroll = Mth.clamp(this.importScroll, 0, Math.max(0, files.size() - IMPORT_ROWS));
+    }
+
+    /** Für Vorführungen: die Schematiken zum Einlesen zeigen. */
+    public void showImport() {
+        this.tab = Tab.BUILD;
+        this.showPlans = true;
+        this.showImport = true;
+        this.send(TownActions.IMPORT_LIST, 0, "");
         this.updateWidgets();
     }
 
@@ -246,6 +268,11 @@ public class TownScreen extends Screen {
             this.residentScroll = Mth.clamp(this.residentScroll - (int) Math.signum(scrollY), 0, max);
             return true;
         }
+        if (this.tab == Tab.BUILD && this.showPlans && this.showImport) {
+            int max = Math.max(0, this.imports.size() - IMPORT_ROWS);
+            this.importScroll = Mth.clamp(this.importScroll - (int) Math.signum(scrollY), 0, max);
+            return true;
+        }
         if (this.tab == Tab.BUILD && this.showPlans) {
             int max = Math.max(0, this.plans.size() - PLAN_ROWS);
             this.planScroll = Mth.clamp(this.planScroll - (int) Math.signum(scrollY), 0, max);
@@ -330,7 +357,9 @@ public class TownScreen extends Screen {
             case HIRE -> this.drawHire(g, x, y, mouseX, mouseY);
             case RESIDENTS -> this.drawResidents(g, x, y, mouseX, mouseY);
             case BUILD -> {
-                if (this.showPlans) {
+                if (this.showPlans && this.showImport) {
+                    this.drawImports(g, x, y, mouseX, mouseY);
+                } else if (this.showPlans) {
                     this.drawPlans(g, x, y, mouseX, mouseY);
                 } else {
                     this.drawBuild(g, x, y, mouseX, mouseY);
@@ -410,6 +439,7 @@ public class TownScreen extends Screen {
                     this.tab = t;
                     this.confirmDismiss = -1;
                     this.showPlans = false;
+                    this.showImport = false;
                     this.updateWidgets();
                 }));
             }
@@ -896,14 +926,21 @@ public class TownScreen extends Screen {
     /** Die eigenen Baupläne: Ansicht, Name, Größe, Baustoffe, Preis; Abschrift nehmen oder löschen. */
     private void drawPlans(GuiGraphicsExtractor g, int x0, int y0, int mouseX, int mouseY) {
         TownView v = this.view;
-        this.woodButton(g, x0 + 2, y0 + 1, 52, 14, Component.translatable("gui.kingdomsatwar.town.plans.back"), true, mouseX, mouseY,
-                () -> this.showPlans = false, null);
+        this.woodButton(g, x0 + 2, y0 + 1, 16, 14, Component.literal("◀"), true, mouseX, mouseY, () -> this.showPlans = false,
+                List.of(Component.translatable("gui.kingdomsatwar.town.plans.back")));
         Component title = Component.translatable("gui.kingdomsatwar.town.plans.title", this.plans.size()).withStyle(ChatFormatting.BOLD);
-        g.text(this.font, title, x0 + 60, y0 + 4, TEXT, false);
+        g.text(this.font, title, x0 + 23, y0 + 4, TEXT, false);
+        this.woodButton(g, x0 + CONTENT_W - 120, y0 + 1, 96, 14, Component.translatable("gui.kingdomsatwar.town.import"), true, mouseX, mouseY,
+                () -> {
+                    this.showImport = true;
+                    this.importScroll = 0;
+                    this.send(TownActions.IMPORT_LIST, 0, "");
+                }, List.of(Component.translatable("gui.kingdomsatwar.town.import.hint").withStyle(ChatFormatting.GRAY)));
         if (v.isOwner()) {
-            this.woodButton(g, x0 + CONTENT_W - 92, y0 + 1, 90, 14, Component.translatable("gui.kingdomsatwar.town.plans.rod"), true, mouseX, mouseY,
-                    () -> this.send(TownActions.TAKE_ROD, 0, ""), List.of(Component.translatable("gui.kingdomsatwar.town.plans.rod.hint")
-                            .withStyle(ChatFormatting.GRAY)));
+            this.woodButton(g, x0 + CONTENT_W - 22, y0 + 1, 20, 14, Component.empty(), true, mouseX, mouseY,
+                    () -> this.send(TownActions.TAKE_ROD, 0, ""), List.of(Component.translatable("gui.kingdomsatwar.town.plans.rod"),
+                            Component.translatable("gui.kingdomsatwar.town.plans.rod.hint").withStyle(ChatFormatting.GRAY)));
+            this.itemScaled(g, new ItemStack(ModItems.SURVEYORS_ROD.get()), x0 + CONTENT_W - 17, y0 + 4, 0.625f);
         }
         int y = y0 + 19;
         if (this.plans.isEmpty()) {
@@ -951,7 +988,7 @@ public class TownScreen extends Screen {
                 g.text(this.font, "+" + plan.costs().precious().size(), ix + 9, ry + 22, 0xFF2A5C7A, false);
             }
             // Preis und Knöpfe
-            int bx = rx + rowW - 68;
+            int bx = rx + rowW - 86;
             int price = plan.price();
             int pw = this.priceWidth(price);
             this.price(g, bx - 6 - pw, ry + 4, price, creative || purse >= price ? TEXT : BAD);
@@ -961,8 +998,12 @@ public class TownScreen extends Screen {
                         List.of(Component.translatable(creative ? "gui.kingdomsatwar.town.plans.take.free" : "gui.kingdomsatwar.town.plans.take.hint")
                                 .withStyle(ChatFormatting.GRAY)));
             }
+            this.smallButton(g, bx + 48, ry + 3, 16, 14, Component.literal("↓"), true, mouseX, mouseY,
+                    () -> this.send(TownActions.EXPORT, 0, plan.id()),
+                    List.of(Component.translatable("gui.kingdomsatwar.town.export"),
+                            Component.translatable("gui.kingdomsatwar.town.export.hint").withStyle(ChatFormatting.GRAY)));
             boolean confirm = plan.id().equals(this.confirmDelete);
-            this.smallButton(g, bx + 48, ry + 3, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
+            this.smallButton(g, bx + 66, ry + 3, 16, 14, Component.literal(confirm ? "!" : "✘"), true, mouseX, mouseY, () -> {
                 if (plan.id().equals(this.confirmDelete)) {
                     this.send(TownActions.DELETE_PLAN, 0, plan.id());
                     this.confirmDelete = null;
@@ -983,6 +1024,96 @@ public class TownScreen extends Screen {
             g.fill(sx, y, sx + 3, y + sh, 0x40765A34);
             int knob = Math.max(10, sh * PLAN_ROWS / this.plans.size());
             int ky = y + (sh - knob) * this.planScroll / max;
+            g.fill(sx, ky, sx + 3, ky + knob, 0xFF8A6A3E);
+        }
+    }
+
+    /** Ein kreisender Pfeil (neu einlesen) – die Schrift des Spiels kennt kein solches Zeichen. */
+    private static final String[] REFRESH_ICON = {
+            "..####..",
+            ".#....#.",
+            "#....###",
+            "#.....#.",
+            "#.......",
+            "#......#",
+            ".#....#.",
+            "..####.."};
+
+    /** Zeichnet ein kleines Pixelbild (Zeilen aus '#' und '.') mit Schatten wie die Schrift. */
+    private void pixels(GuiGraphicsExtractor g, int x, int y, String[] rows, int color) {
+        int shadow = 0xFF000000 | ((color >> 2) & 0x3F3F3F);
+        for (int pass = 0; pass < 2; pass++) {
+            int off = pass == 0 ? 1 : 0;
+            for (int r = 0; r < rows.length; r++) {
+                String row = rows[r];
+                for (int c = 0; c < row.length(); c++) {
+                    if (row.charAt(c) == '#') {
+                        g.fill(x + c + off, y + r + off, x + c + off + 1, y + r + off + 1, pass == 0 ? shadow : color);
+                    }
+                }
+            }
+        }
+    }
+
+    /** So viele Schematiken passen untereinander. */
+    private static final int IMPORT_ROWS = 6;
+    private static final int IMPORT_ROW_H = 21;
+
+    /** Die Schematiken in den Ordnern des Servers: Art, Name, Ordner, Größe; Einlesen als eigenen Plan. */
+    private void drawImports(GuiGraphicsExtractor g, int x0, int y0, int mouseX, int mouseY) {
+        this.woodButton(g, x0 + 2, y0 + 1, 16, 14, Component.literal("◀"), true, mouseX, mouseY, () -> this.showImport = false,
+                List.of(Component.translatable("gui.kingdomsatwar.town.plans.back")));
+        Component title = Component.translatable("gui.kingdomsatwar.town.import.title", this.imports.size()).withStyle(ChatFormatting.BOLD);
+        g.text(this.font, title, x0 + 23, y0 + 4, TEXT, false);
+        this.woodButton(g, x0 + CONTENT_W - 22, y0 + 1, 20, 14, Component.empty(), true, mouseX, mouseY,
+                () -> this.send(TownActions.IMPORT_LIST, 0, ""), List.of(Component.translatable("gui.kingdomsatwar.town.import.refresh")));
+        this.pixels(g, x0 + CONTENT_W - 16, y0 + 4, REFRESH_ICON, 0xFFF3E6C4);
+        int y = y0 + 19;
+        if (this.imports.isEmpty()) {
+            Component text = Component.translatable(this.importsLoaded ? "gui.kingdomsatwar.town.import.empty" : "gui.kingdomsatwar.town.import.loading");
+            int ty = y + 8;
+            for (FormattedCharSequence line : this.font.split(text, 280)) {
+                g.text(this.font, line, x0 + (CONTENT_W - this.font.width(line)) / 2, ty, MUTED, false);
+                ty += 10;
+            }
+            return;
+        }
+        int max = Math.max(0, this.imports.size() - IMPORT_ROWS);
+        this.importScroll = Mth.clamp(this.importScroll, 0, max);
+        int rowW = CONTENT_W - (max > 0 ? 10 : 4);
+        for (int i = 0; i < IMPORT_ROWS && this.importScroll + i < this.imports.size(); i++) {
+            var file = this.imports.get(this.importScroll + i);
+            int ry = y + i * IMPORT_ROW_H;
+            int rx = x0 + 2;
+            boolean hover = mouseX >= rx && mouseX < rx + rowW && mouseY >= ry && mouseY < ry + IMPORT_ROW_H - 2;
+            this.card(g, rx, ry, rowW, IMPORT_ROW_H - 2, hover);
+            // Art der Datei als farbiges Schild
+            String badge = switch (file.format()) {
+                case "litematic" -> "LITE";
+                case "schem" -> "SCHEM";
+                default -> "NBT";
+            };
+            int color = switch (file.format()) {
+                case "litematic" -> 0xFF2F6E9E;
+                case "schem" -> 0xFF8A4FB0;
+                default -> 0xFF5E7E36;
+            };
+            g.fill(rx + 3, ry + 4, rx + 37, ry + 15, color);
+            g.outline(rx + 3, ry + 4, 34, 11, 0x60000000);
+            g.text(this.font, badge, rx + 20 - this.font.width(badge) / 2, ry + 6, 0xFFF3F7FF, false);
+            g.text(this.font, this.ellipsize(file.name(), 150), rx + 42, ry + 2, TEXT, false);
+            String info = file.folder() + " · " + (file.bytes() >= 1024 ? (file.bytes() + 512) / 1024 + " KB" : file.bytes() + " B");
+            g.text(this.font, info, rx + 42, ry + 11, MUTED, false);
+            this.woodButton(g, rx + rowW - 58, ry + 3, 54, 14, Component.translatable("gui.kingdomsatwar.town.import.read"), true, mouseX, mouseY,
+                    () -> this.send(TownActions.IMPORT, 0, file.id()),
+                    List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", file.name()).withStyle(ChatFormatting.GRAY)));
+        }
+        if (max > 0) {
+            int sx = x0 + CONTENT_W - 6;
+            int sh = IMPORT_ROWS * IMPORT_ROW_H - 4;
+            g.fill(sx, y, sx + 3, y + sh, 0x40765A34);
+            int knob = Math.max(10, sh * IMPORT_ROWS / this.imports.size());
+            int ky = y + (sh - knob) * this.importScroll / max;
             g.fill(sx, ky, sx + 3, ky + knob, 0xFF8A6A3E);
         }
     }

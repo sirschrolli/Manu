@@ -29,6 +29,12 @@ public final class TownActions {
     public static final int TAKE_ROD = 10;
     /** Bauweise einer Baustelle umschalten ({@code arg} = Nummer der Baustelle). */
     public static final int FAST = 11;
+    /** Dragon Architect: die Schematiken in den Ordnern des Servers schicken. */
+    public static final int IMPORT_LIST = 12;
+    /** Dragon Architect: eine Schematik als eigenen Plan einlesen ({@code text} = Kennung der Datei). */
+    public static final int IMPORT = 13;
+    /** Dragon Architect: einen eigenen Plan als .litematic, .schem und .nbt ablegen ({@code text} = Kennung des Plans). */
+    public static final int EXPORT = 14;
 
     /** Wie weit man vom Banner weg sein darf, solange das Fenster offen ist. */
     public static final double RANGE = 16.0;
@@ -118,6 +124,40 @@ public final class TownActions {
                 if (owner) {
                     io.github.sirschrolli.kingdomsatwar.architect.Architect.giveRod(player);
                     notice = Component.translatable("gui.kingdomsatwar.town.plans.rod_taken");
+                }
+            }
+            case IMPORT_LIST -> io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player,
+                    new io.github.sirschrolli.kingdomsatwar.network.ImportListPayload(
+                            io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.list(player.level().getServer()),
+                            "schematics"));
+            case IMPORT -> {
+                var result = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.importFile(player, text);
+                good = result.plan() != null;
+                notice = good ? (result.unknown() > 0
+                        ? Component.translatable("gui.kingdomsatwar.town.import.done_unknown", Component.literal(result.plan().name()), result.unknown())
+                        : Component.translatable("gui.kingdomsatwar.town.import.done", Component.literal(result.plan().name())))
+                        : Component.translatable("gui.kingdomsatwar.town.import.error." + result.error(),
+                                io.github.sirschrolli.kingdomsatwar.architect.PlanScan.MAX_WIDTH,
+                                io.github.sirschrolli.kingdomsatwar.architect.PlanScan.MAX_HEIGHT);
+                io.github.sirschrolli.kingdomsatwar.architect.Architect.sendList(player);
+            }
+            case EXPORT -> {
+                io.github.sirschrolli.kingdomsatwar.architect.PlanInfo info =
+                        io.github.sirschrolli.kingdomsatwar.architect.PlanLibrary.of(player.level().getServer()).info(text);
+                if (info != null && info.author().equals(player.getUUID())) {
+                    var files = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.export(player, info);
+                    good = !files.isEmpty();
+                    notice = Component.translatable(good ? "gui.kingdomsatwar.town.export.done" : "gui.kingdomsatwar.town.export.failed",
+                            Component.literal(info.name()));
+                    if (good) {
+                        java.nio.file.Path game = player.level().getServer().getServerDirectory().toAbsolutePath().normalize();
+                        for (java.nio.file.Path f : files) {
+                            java.nio.file.Path abs = f.toAbsolutePath().normalize();
+                            String shown = abs.startsWith(game) ? game.relativize(abs).toString().replace('\\', '/') : abs.getFileName().toString();
+                            player.sendSystemMessage(Component.translatable("message.kingdomsatwar.architect.exported", shown)
+                                    .withStyle(net.minecraft.ChatFormatting.GRAY));
+                        }
+                    }
                 }
             }
             case FAST -> {

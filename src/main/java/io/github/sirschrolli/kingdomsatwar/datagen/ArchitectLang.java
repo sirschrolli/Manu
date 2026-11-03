@@ -117,6 +117,33 @@ final class ArchitectLang {
                 "The builder needs %s exactly like this – put it into a chest of the storage.",
                 "Der Baumeister braucht %s genau so – lege es in eine Truhe des Lagers.");
         t.add("message.kingdomsatwar.town.precious", "%s× %s (%s in storage)", "%s× %s (%s im Lager)");
+        t.add("gui.kingdomsatwar.town.import", "Read schematic", "Schematik einlesen");
+        t.add("gui.kingdomsatwar.town.import.hint",
+                "Read a .litematic, .schem or .nbt file from the schematics folder as your own blueprint.",
+                "Eine .litematic-, .schem- oder .nbt-Datei aus dem Ordner »schematics« als eigenen Bauplan einlesen.");
+        t.add("gui.kingdomsatwar.town.import.title", "Schematics (%s)", "Schematiken (%s)");
+        t.add("gui.kingdomsatwar.town.import.refresh", "Look again", "Neu nachsehen");
+        t.add("gui.kingdomsatwar.town.import.loading", "Looking into the folders …", "Sehe in den Ordnern nach …");
+        t.add("gui.kingdomsatwar.town.import.empty",
+                "No schematics found. Put .litematic, .schem or .nbt files into the folder »schematics« of your Minecraft folder (where Litematica keeps them). Schematics in config/worldedit/schematics and structures saved with a structure block are found too.",
+                "Keine Schematiken gefunden. Lege .litematic-, .schem- oder .nbt-Dateien in den Ordner »schematics« deines Minecraft-Ordners (dort legt sie auch Litematica ab). Gefunden werden auch Schematiken in config/worldedit/schematics und Strukturen, die mit dem Strukturblock gespeichert wurden.");
+        t.add("gui.kingdomsatwar.town.import.read", "Read", "Einlesen");
+        t.add("gui.kingdomsatwar.town.import.read.hint", "Read %s as your own blueprint", "%s als eigenen Bauplan einlesen");
+        t.add("gui.kingdomsatwar.town.import.done", "Read: %s", "Eingelesen: %s");
+        t.add("gui.kingdomsatwar.town.import.done_unknown", "Read: %s (%s unknown blocks became air)",
+                "Eingelesen: %s (%s unbekannte Blöcke wurden Luft)");
+        t.add("gui.kingdomsatwar.town.import.error.missing", "The file is gone", "Die Datei gibt es nicht mehr");
+        t.add("gui.kingdomsatwar.town.import.error.too_many", "Too many blueprints – delete old ones first", "Zu viele Baupläne – lösche erst alte");
+        t.add("gui.kingdomsatwar.town.import.error.too_large", "Too large (at most %s wide and %s high)", "Zu groß (höchstens %s breit und %s hoch)");
+        t.add("gui.kingdomsatwar.town.import.error.empty", "There is nothing in this file", "In dieser Datei ist nichts");
+        t.add("gui.kingdomsatwar.town.import.error.broken", "This file cannot be read", "Diese Datei lässt sich nicht lesen");
+        t.add("gui.kingdomsatwar.town.export", "Save as schematic", "Als Schematik ablegen");
+        t.add("gui.kingdomsatwar.town.export.hint",
+                "Saves the blueprint as .litematic, .schem and .nbt in schematics/kingdomsatwar – for Litematica, WorldEdit or the structure block.",
+                "Legt den Bauplan als .litematic, .schem und .nbt in schematics/kingdomsatwar ab – für Litematica, WorldEdit oder den Strukturblock.");
+        t.add("gui.kingdomsatwar.town.export.done", "Saved as schematic: %s", "Als Schematik abgelegt: %s");
+        t.add("gui.kingdomsatwar.town.export.failed", "Could not save %s", "%s ließ sich nicht ablegen");
+        t.add("message.kingdomsatwar.architect.exported", "Saved: %s", "Abgelegt: %s");
         t.add("message.kingdomsatwar.town.place.unknown", "This blueprint is unknown in this world", "Diesen Bauplan kennt diese Welt nicht");
     }
 

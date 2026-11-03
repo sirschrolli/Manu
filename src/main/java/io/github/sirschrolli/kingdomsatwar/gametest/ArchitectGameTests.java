@@ -61,6 +61,10 @@ final class ArchitectGameTests {
             ModGameTests.TEST_FUNCTIONS.register("architect_basement", () -> ArchitectGameTests::basement);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_BUILD =
             ModGameTests.TEST_FUNCTIONS.register("architect_build", () -> ArchitectGameTests::build);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_FORMATS =
+            ModGameTests.TEST_FUNCTIONS.register("architect_formats", () -> ArchitectGameTests::formats);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ARCHITECT_SAMPLES =
+            ModGameTests.TEST_FUNCTIONS.register("architect_samples", () -> ArchitectGameTests::samples);
 
     private ArchitectGameTests() {}
 
@@ -71,6 +75,8 @@ final class ArchitectGameTests {
         own(event, ARCHITECT_SCAN, "architect_scan", 200);
         own(event, ARCHITECT_BASEMENT, "architect_basement", 200);
         own(event, ARCHITECT_BUILD, "architect_build", 9000);
+        own(event, ARCHITECT_FORMATS, "architect_formats", 200);
+        own(event, ARCHITECT_SAMPLES, "architect_samples", 200);
     }
 
     private static void own(RegisterGameTestsEvent event, DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test,
@@ -317,6 +323,148 @@ final class ArchitectGameTests {
             }
         }
         return n + " Abweichungen: " + out;
+    }
+
+    // =====================================================================================
+    // Schematiken: .litematic, .schem, .nbt
+    // =====================================================================================
+
+    /**
+     * Ein vermessenes Haus geht als .litematic, .schem und .nbt hinaus und kommt genau so wieder herein (Blöcke, Drehung,
+     * Schildtext); dazu eine Strukturdatei, die das Spiel selbst mit dem Strukturblock-Code geschrieben hat.
+     */
+    private static void formats(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        TownGameTests.clearArea(helper);
+        BlockPos[] box = house(helper, 6, 4);
+        // unter der Bodenlinie: ein Fundament unter einer Wand und ein Hohlraum unter dem Boden (wird ausgehoben)
+        for (int dx = 0; dx <= 6; dx++) {
+            level.setBlock(box[0].offset(dx, 0, 0), Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+        }
+        level.setBlock(box[0].offset(3, 0, 3), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+        int ground = PlanScan.autoGround(level, box[0], box[1]);
+        Direction door = PlanScan.doorSide(level, box[0], box[1], ground, null);
+        PlanScan scan = PlanScan.scan(level, box[0], box[1], ground, door, level.registryAccess());
+        helper.assertValueEqual(scan.ground, 1, "Bodenlinie über dem Fundament");
+        for (io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format format
+                : io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.values()) {
+            CompoundTag tag = switch (format) {
+                case LITEMATIC -> io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.litematic(scan, "Testhaus", "Tester");
+                case SCHEM -> io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.sponge(scan, "Testhaus", "Tester");
+                case NBT -> io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.structure(scan, "Tester");
+            };
+            try {
+                // wie auf der Platte: gepackt schreiben und wieder lesen
+                java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+                net.minecraft.nbt.NbtIo.writeCompressed(tag, bytes);
+                CompoundTag back = net.minecraft.nbt.NbtIo.readCompressed(new java.io.ByteArrayInputStream(bytes.toByteArray()),
+                        net.minecraft.nbt.NbtAccounter.unlimitedHeap());
+                var result = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.read(back, format, level.registryAccess());
+                helper.assertValueEqual(result.unknown(), 0, format + ": unbekannte Blöcke");
+                helper.assertValueEqual(result.ground(), scan.ground, format + ": Bodenlinie in der Datei");
+                PlanScan again = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(result.volume(), result.ground(),
+                        level.registryAccess());
+                helper.assertTrue(again.sizeX == scan.sizeX && again.sizeY == scan.sizeY && again.sizeZ == scan.sizeZ && again.ground == scan.ground,
+                        format + ": Größe " + again.sizeX + "x" + again.sizeY + "x" + again.sizeZ + ", Boden " + again.ground);
+                // genau gleich: Unberührtes bleibt unberührt, Ausgehobenes wird ausgehoben, alles andere gebaut
+                for (int y = 0; y < scan.sizeY; y++) {
+                    for (int z = 0; z < scan.sizeZ; z++) {
+                        for (int x = 0; x < scan.sizeX; x++) {
+                            BlockState want = scan.get(x, y, z);
+                            BlockState have = again.get(x, y, z);
+                            boolean same = want == null ? have == null : want.equals(have);
+                            helper.assertTrue(same, format + ": bei " + x + "," + y + "," + z + " soll " + want + " ist " + have);
+                        }
+                    }
+                }
+                helper.assertTrue(signText(again).equals("Zum Drachen"), format + ": Schild " + signText(again));
+                // ohne die Angabe des Architekten (fremde Werkzeuge verlieren sie) findet er die Bodenlinie selbst
+                if (format != io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.NBT) {
+                    CompoundTag stripped = back.copy();
+                    CompoundTag holder = format == io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.LITEMATIC
+                            ? stripped.getCompoundOrEmpty("Metadata") : stripped.getCompoundOrEmpty("Schematic").getCompoundOrEmpty("Metadata");
+                    holder.remove("KingdomsAtWar");
+                    var plain = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.read(stripped, format, level.registryAccess());
+                    helper.assertValueEqual(plain.ground(), -1, format + ": Angabe entfernt");
+                    PlanScan guessed = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(plain.volume(), level.registryAccess());
+                    helper.assertTrue(guessed.ground == scan.ground && guessed.sizeY == scan.sizeY,
+                            format + ": Bodenlinie ohne Angabe " + guessed.ground + ", Höhe " + guessed.sizeY);
+                }
+            } catch (java.io.IOException e) {
+                throw new IllegalStateException(format + ": " + e.getMessage(), e);
+            }
+        }
+        // eine Strukturdatei aus dem Code des Strukturblocks
+        net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate template =
+                new net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate();
+        template.fillFromWorld(level, box[0], box[1].subtract(box[0]).offset(1, 1, 1), false, java.util.List.of());
+        CompoundTag vanilla = template.save(new CompoundTag());
+        try {
+            var result = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.read(vanilla,
+                    io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.NBT, level.registryAccess());
+            PlanScan fromStructure = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(result.volume(), level.registryAccess());
+            helper.assertTrue(fromStructure.sizeX == scan.sizeX && fromStructure.sizeY == scan.sizeY && fromStructure.sizeZ == scan.sizeZ
+                    && fromStructure.ground == scan.ground, "Strukturdatei: Größe/Bodenlinie anders");
+            helper.assertValueEqual(fromStructure.costs().precious().getOrDefault(Items.GOLD_BLOCK, 0), 1, "Strukturdatei: Goldblock");
+            helper.assertValueEqual(signText(fromStructure), "Zum Drachen", "Strukturdatei: Schild");
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        helper.succeed();
+    }
+
+    /** Der Text des ersten Schilds in einem Plan. */
+    private static String signText(PlanScan scan) {
+        for (int y = 0; y < scan.sizeY; y++) {
+            for (int z = 0; z < scan.sizeZ; z++) {
+                for (int x = 0; x < scan.sizeX; x++) {
+                    CompoundTag tag = scan.blockEntity(x, y, z);
+                    if (tag != null && tag.contains("front_text")) {
+                        return tag.toString().contains("Zum Drachen") ? "Zum Drachen" : tag.toString();
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Echte Dateien anderer Werkzeuge (nur bei der Entwicklung: Ordner in {@code -Dkingdomsatwar.schematicSamples}):
+     * jede lässt sich lesen und vermessen, ohne unbekannte Blöcke.
+     */
+    private static void samples(GameTestHelper helper) {
+        String dir = System.getProperty("kingdomsatwar.schematicSamples", "");
+        if (dir.isEmpty()) {
+            helper.succeed();
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        java.util.List<String> report = new java.util.ArrayList<>();
+        try (var walk = java.nio.file.Files.walk(java.nio.file.Path.of(dir), 3)) {
+            for (java.nio.file.Path file : (Iterable<java.nio.file.Path>) walk::iterator) {
+                if (io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.Format.of(file.getFileName().toString()) == null
+                        || !java.nio.file.Files.isRegularFile(file)) {
+                    continue;
+                }
+                var result = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicReader.read(file, level.registryAccess());
+                String line = file.getFileName() + ": " + result.volume().sizeX + "x" + result.volume().sizeY + "x" + result.volume().sizeZ
+                        + ", " + result.volume().blocks() + " Blöcke, unbekannt " + result.unknown();
+                try {
+                    PlanScan plan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(result.volume(), level.registryAccess());
+                    line += " → Plan " + plan.sizeX + "x" + plan.sizeY + "x" + plan.sizeZ + " (Boden " + plan.ground + "), "
+                            + plan.costs().blocks() + " Blöcke" + (plan.skipped().isEmpty() ? "" : ", weggelassen " + plan.skipped());
+                } catch (IllegalArgumentException e) {
+                    line += " → nichts zu bauen";
+                }
+                report.add(line);
+                KingdomsAtWar.LOGGER.info("[Test] Schematik {}", line);
+                helper.assertValueEqual(result.unknown(), 0, file.getFileName() + ": unbekannte Blöcke");
+            }
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        helper.assertTrue(!report.isEmpty(), "Keine Beispieldateien in " + dir);
+        helper.succeed();
     }
 
     // =====================================================================================

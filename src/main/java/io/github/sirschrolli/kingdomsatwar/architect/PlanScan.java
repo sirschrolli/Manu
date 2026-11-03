@@ -50,7 +50,7 @@ public final class PlanScan {
     /** Größte Höhe eines Bauplans. */
     public static final int MAX_HEIGHT = 64;
     /** So viele Lagen sucht die Bodenlinie von unten (darüber beginnt immer das Gebäude). */
-    private static final int MAX_GROUND = 12;
+    public static final int MAX_GROUND = 12;
 
     public final int sizeX;
     public final int sizeY;
@@ -102,8 +102,10 @@ public final class PlanScan {
     /**
      * Die Bodenlinie, die das Vermessen von selbst wählen würde (Zahl der Lagen unter ihr): wo rings um den Bereich das
      * Gelände aufhört (die übliche Höhe der Oberfläche direkt neben dem Gebäude) – so liegt auch ein Fundament, das unter
-     * dem Haus das Gras ersetzt hat, richtig unter der Linie. Gibt es ringsum kein Gelände, zählen die Lagen gewachsenen
-     * Bodens von unten im Bereich selbst.
+     * dem Haus das Gras ersetzt hat, richtig unter der Linie. Gibt es ringsum kein Gelände (etwa in einer Schematik), zählen
+     * die Lagen gewachsenen Bodens von unten im Bereich selbst: eine Lage, die zur Hälfte aus Gelände besteht oder deren
+     * Rand es zur Hälfte aus Erde, Gras oder Sand ist (das Fundament in der Mitte, rundum Gras; Stein am Rand zählt da
+     * nicht, er kann auch eine Mauer sein).
      */
     public static int autoGround(BlockGetter level, BlockPos a, BlockPos b) {
         BlockPos min = BlockPos.min(a, b);
@@ -118,19 +120,34 @@ public final class PlanScan {
         int ground = 0;
         while (ground < Math.min(MAX_GROUND, layers - 1)) {
             int terrain = 0;
+            int ring = 0;
+            int ringTerrain = 0;
             for (int z = min.getZ(); z <= max.getZ(); z++) {
                 for (int x = min.getX(); x <= max.getX(); x++) {
-                    if (BuildRules.terrain(level.getBlockState(pos.set(x, min.getY() + ground, z)))) {
+                    BlockState state = level.getBlockState(pos.set(x, min.getY() + ground, z));
+                    if (BuildRules.terrain(state)) {
                         terrain++;
+                    }
+                    if (x == min.getX() || x == max.getX() || z == min.getZ() || z == max.getZ()) {
+                        ring++;
+                        if (soil(state)) {
+                            ringTerrain++;
+                        }
                     }
                 }
             }
-            if (terrain * 2 < area) {
+            if (terrain * 2 < area && ringTerrain * 2 < ring) {
                 break;
             }
             ground++;
         }
         return ground;
+    }
+
+    /** Erde, Gras, Sand, Kies, Schnee, Lehm, Schlamm: lockerer Boden, aus dem kaum jemand Mauern baut. */
+    private static boolean soil(BlockState state) {
+        return state.is(net.minecraft.tags.BlockTags.SUBSTRATE_OVERWORLD) || state.is(net.minecraft.tags.BlockTags.SAND) || state.is(Blocks.GRAVEL)
+                || state.is(Blocks.SNOW_BLOCK) || state.is(Blocks.CLAY) || state.is(Blocks.MUD) || state.is(Blocks.DIRT_PATH) || state.is(Blocks.FARMLAND);
     }
 
     /**
@@ -237,7 +254,8 @@ public final class PlanScan {
                     BuildRules.Kind kind = BuildRules.kind(state);
                     if (kind == BuildRules.Kind.SKIP) {
                         // fließendes Wasser und fließende Lava nicht aufzählen, nur stehende Lava und echte Blöcke
-                        if (!(raw.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock) || raw.getFluidState().isSource()) {
+                        if ((!(raw.getBlock() instanceof net.minecraft.world.level.block.LiquidBlock) || raw.getFluidState().isSource())
+                                && !raw.is(Blocks.STRUCTURE_VOID)) {
                             skipped.merge(raw.getBlock(), 1, Integer::sum);
                         }
                         state = below ? null : Blocks.AIR.defaultBlockState();
@@ -346,6 +364,11 @@ public final class PlanScan {
     /** Der Block an einer Stelle des Gitters ({@code null}: nichts tun). */
     public @Nullable BlockState get(int x, int y, int z) {
         return this.palette[this.data[(y * this.sizeZ + z) * this.sizeX + x]];
+    }
+
+    /** Die Daten eines Schilds oder Banners an einer Stelle des Gitters ({@code null}: keine). */
+    public @Nullable CompoundTag blockEntity(int x, int y, int z) {
+        return this.blockEntities.get((y * this.sizeZ + z) * this.sizeX + x);
     }
 
     /** Wird an dieser Stelle etwas gebaut oder ausgehoben? */
