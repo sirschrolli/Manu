@@ -710,7 +710,9 @@ final class ArchitectGameTests {
         long ms = (System.nanoTime() - t0) / 1_000_000;
         helper.assertTrue(v.sizeX == 300 && v.sizeZ == 300 && castle.ground() == 4,
                 "Königsburg: " + v.sizeX + "x" + v.sizeY + "x" + v.sizeZ + ", Boden " + castle.ground());
+        long t1 = System.nanoTime();
         PlanScan scan = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(v, castle.ground(), level.registryAccess());
+        long scanMs = (System.nanoTime() - t1) / 1_000_000;
         helper.assertTrue(scan.sizeX == 300 && scan.sizeZ == 300 && scan.ground == 4 && scan.sizeY <= PlanScan.MAX_HEIGHT,
                 "Plan: " + scan.sizeX + "x" + scan.sizeY + "x" + scan.sizeZ + ", Boden " + scan.ground);
         helper.assertTrue(scan.skipped().isEmpty(), "Nicht übernommen: " + scan.skipped());
@@ -773,8 +775,8 @@ final class ArchitectGameTests {
             PlanScan again = io.github.sirschrolli.kingdomsatwar.architect.io.SchematicFiles.toScan(result.volume(), result.ground(),
                     level.registryAccess());
             helper.assertTrue(sameCells(scan, again), "Königsburg aus der .litematic: anders");
-            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("Königsburg: {} ms entworfen, {} Blöcke, {} Lagen, .litematic {} KB", ms,
-                    costs.blocks(), scan.sizeY, bytes.size() / 1024);
+            io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.LOGGER.info("Königsburg: {} ms entworfen, {} ms vermessen, {} Blöcke, {} Lagen, .litematic {} KB",
+                    ms, scanMs, costs.blocks(), scan.sizeY, bytes.size() / 1024);
             String export = System.getProperty("kingdomsatwar.castleExport");
             if (export != null && !export.isBlank()) {
                 io.github.sirschrolli.kingdomsatwar.architect.io.SchematicWriter.writeAll(scan, "Königsburg", "Dragon Architect",

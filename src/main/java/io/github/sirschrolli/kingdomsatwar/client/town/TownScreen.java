@@ -1205,10 +1205,10 @@ public class TownScreen extends Screen {
                     : file.folder() + " · " + (file.bytes() >= 1024 ? (file.bytes() + 512) / 1024 + " KB" : file.bytes() + " B");
             g.text(this.font, this.ellipsize(info, rowW - 108), rx + 42, ry + 11, MUTED, false);
             List<Component> hint = builtin
-                    ? List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", name).withStyle(ChatFormatting.GRAY),
-                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint1").withStyle(ChatFormatting.DARK_GRAY),
-                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint2").withStyle(ChatFormatting.DARK_GRAY),
-                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint3").withStyle(ChatFormatting.DARK_GRAY))
+                    ? List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", name).withStyle(ChatFormatting.GOLD),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint1").withStyle(ChatFormatting.GRAY),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint2").withStyle(ChatFormatting.GRAY),
+                            Component.translatable("gui.kingdomsatwar.town.import.royal.hint3").withStyle(ChatFormatting.GRAY))
                     : List.of(Component.translatable("gui.kingdomsatwar.town.import.read.hint", file.name()).withStyle(ChatFormatting.GRAY));
             this.woodButton(g, rx + rowW - 58, ry + 3, 54, 14, Component.translatable("gui.kingdomsatwar.town.import.read"), true, mouseX, mouseY,
                     () -> this.send(TownActions.IMPORT, 0, file.id()), hint);

@@ -42,7 +42,7 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>Ab 200 × 200 Blöcken wird es eine <b>Königsburg</b>: in der Mitte eine Kernburg mit höherer Mauer, eigenen Türmen
  * und Torhaus, rundherum ein gemauerter Graben mit Steinbrücke und eine Ringstraße; im Burghof ein Prunkbrunnen, der
- * Palas mit dem Thronsaal, eine Kapelle mit Glockenturm und hinter dem Bergfried der Königsgarten. Vor der Kernburg liegt
+ * Palas mit dem Thronsaal, eine Kapelle mit spitzem Turm und hinter dem Bergfried der Königsgarten. Vor der Kernburg liegt
  * die Stadt mit Marktplatz, Hauptstraße, Querstraße und Gassen, an denen die Häuser stehen.
  *
  * <p>Koordinaten im Volumen: x nach rechts, z nach hinten (das Tor liegt vorn bei z = 0); die untersten Lagen liegen unter
@@ -1305,7 +1305,7 @@ public final class CastleGenerator {
 
     /**
      * Die Kapelle: ein hohes Schiff mit Strebepfeilern und bunten Fenstern, ein Chor mit Rosette und Altar, vorn der
-     * Glockenturm mit Glockenstube, Laterne und schlankem Helm mit Kreuz; innen Bänke, ein roter Läufer, Kerzen, Lesepult
+     * Turm mit offener Stube, Laterne und schlankem Helm mit Kreuz; innen Bänke, ein roter Läufer, Kerzen, Lesepult
      * und Kronleuchter.
      */
     private void chapel(int cx, int cz, Rotation rot) {
@@ -1422,7 +1422,7 @@ public final class CastleGenerator {
                 this.local(o, rot, x, y, 14, this.stone(cx + x, y, cz + 14));
             }
         }
-        // Turm: Portal mit Stufen, Durchgang ins Schiff, Böden, Leiter, Glockenstube mit Glocke, Helm
+        // Turm: Portal mit Stufen, Durchgang ins Schiff, Böden, Leiter, offene Stube mit Laterne, Helm
         this.local(o, rot, 0, 1, -15, Blocks.DARK_OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.NORTH));
         this.local(o, rot, 0, 2, -15, Blocks.DARK_OAK_DOOR.defaultBlockState().setValue(DoorBlock.FACING, Direction.NORTH)
                 .setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
