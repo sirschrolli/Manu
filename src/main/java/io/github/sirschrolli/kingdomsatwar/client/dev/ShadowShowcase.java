@@ -443,6 +443,135 @@ final class ShadowShowcase {
     }
 
     // =====================================================================================
+    // Pflanzen
+    // =====================================================================================
+
+    /**
+     * Ein Garten der Schattenwelt: auf einer Lichtung in der Schattenwelt ein Tümpel mit Seelenschilf, ringsum Mondfarne,
+     * ein Teppich aus Sternblüten, Geisterpilze, Mondblumen, Seelenbeeren und Glimmerranken an einem Bogen – drei Bilder.
+     */
+    static void plants(Deque<Step> steps) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(10)));
+        double[] c = new double[4];
+        steps.add(Step.server(level -> {
+            ServerLevel shadow = shadow(level);
+            int bx = 160;
+            int bz = 160;
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    shadow.getChunk((bx >> 4) + dx, (bz >> 4) + dz);
+                }
+            }
+            int g = shadow.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, bx, bz);
+            var grass = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_GRASS.get().defaultBlockState();
+            var soil = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SOIL.get().defaultBlockState();
+            var sand = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SAND.get().defaultBlockState();
+            var air = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+            for (int x = bx - 14; x <= bx + 14; x++) {
+                for (int z = bz - 14; z <= bz + 14; z++) {
+                    for (int y = g - 3; y <= g + 16; y++) {
+                        BlockPos pos = new BlockPos(x, y, z);
+                        shadow.setBlock(pos, y < g ? soil : y == g ? grass : air, 2);
+                    }
+                }
+            }
+            // Tümpel mit Sandufer, darin und daneben Seelenschilf
+            for (int x = bx - 3; x <= bx + 3; x++) {
+                for (int z = bz - 2; z <= bz + 2; z++) {
+                    double d = Math.pow((x - bx) / 3.4, 2) + Math.pow((z - bz) / 2.4, 2);
+                    if (d <= 1.0) {
+                        shadow.setBlock(new BlockPos(x, g - 1, z), sand, 2);
+                        shadow.setBlock(new BlockPos(x, g, z), d < 0.6 ? net.minecraft.world.level.block.Blocks.WATER.defaultBlockState() : sand, 2);
+                    } else if (d <= 1.6) {
+                        shadow.setBlock(new BlockPos(x, g, z), sand, 2);
+                    }
+                }
+            }
+            new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature(70,
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SOUL_REEDS.get()).place(shadow,
+                    shadow.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(11L), new BlockPos(bx, g + 1, bz));
+            // ringsum Pflanzen in Gruppen
+            var random = net.minecraft.util.RandomSource.create(4L);
+            for (int i = 0; i < 260; i++) {
+                int x = bx - 12 + random.nextInt(25);
+                int z = bz - 12 + random.nextInt(25);
+                BlockPos pos = new BlockPos(x, g + 1, z);
+                if (!shadow.getBlockState(pos).isAir() || !shadow.getBlockState(pos.below()).is(grass.getBlock())) {
+                    continue;
+                }
+                double angle = Math.atan2(z - bz, x - bx);
+                double r = Math.sqrt((x - bx) * (x - bx) + (z - bz) * (z - bz));
+                net.minecraft.world.level.block.state.BlockState plant;
+                if (r > 8 && Math.sin(angle * 2) > 0.2) {
+                    plant = io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.MOON_FERN.get().defaultBlockState();
+                } else if (Math.cos(angle) > 0.1) {
+                    plant = random.nextInt(5) == 0 ? io.github.sirschrolli.kingdomsatwar.registry.ModBlocks.MOONFLOWER.get().defaultBlockState()
+                            : io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.STAR_BLOSSOM.get().defaultBlockState();
+                } else {
+                    int k = random.nextInt(6);
+                    plant = (k == 0 ? io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.GHOSTCAP.get()
+                            : k == 1 ? io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.PALE_GRASS.get()
+                            : io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.SHADOW_SPROUTS.get()).defaultBlockState();
+                }
+                if (plant.getBlock() instanceof net.minecraft.world.level.block.DoublePlantBlock) {
+                    if (shadow.getBlockState(pos.above()).isAir()) {
+                        net.minecraft.world.level.block.DoublePlantBlock.placeAt(shadow, plant, pos, 2);
+                    }
+                } else {
+                    shadow.setBlock(pos, plant, 2);
+                }
+            }
+            c[0] = bx + 0.5;
+            c[1] = bz + 0.5;
+            c[2] = g + 1;
+            c[3] = 1;
+            KingdomsAtWar.LOGGER.info("[Showcase] Pflanzengarten bei {} {} (Höhe {})", bx, bz, g);
+        }));
+        steps.add(Step.until(() -> c[3] != 0, 2400));
+        steps.add(view(c, -9.0, 3.2, 9.0, 0.6));
+        steps.add(Step.waitTicks(80));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.waitTicks(30));
+        shot(steps, c, "shadow_plants_overview");
+        steps.add(view(c, 7.0, 1.6, -4.5, 0.9));
+        steps.add(Step.waitTicks(30));
+        shot(steps, c, "shadow_plants_reeds");
+        steps.add(view(c, -4.0, 1.4, -8.5, 1.0));
+        steps.add(Step.waitTicks(30));
+        shot(steps, c, "shadow_plants_ferns");
+        // Nahaufnahmen: die Sternblüten im Osten, die Mondfarne im Südosten
+        steps.add(viewAt(c, 9.0, 1.2, -2.5, 4.0, 0.2, 1.5));
+        steps.add(Step.waitTicks(30));
+        shot(steps, c, "shadow_plants_stars");
+        steps.add(viewAt(c, -1.5, 2.4, 13.5, 8.0, 1.0, 7.5));
+        steps.add(Step.waitTicks(30));
+        shot(steps, c, "shadow_plants_fern_close");
+    }
+
+    /** Bild aufnehmen – vorher weg mit allem, was beim Freiräumen herabgefallen ist (Ranken ohne Halt, Beeren …). */
+    private static void shot(Deque<Step> steps, double[] c, String name) {
+        steps.add(Step.server(level -> shadow(level).getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                new net.minecraft.world.phys.AABB(c[0] - 24, c[2] - 10, c[1] - 24, c[0] + 24, c[2] + 24, c[1] + 24))
+                .forEach(net.minecraft.world.entity.Entity::discard)));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.screenshot(name));
+    }
+
+    /** Kamera bei c + (dx, dy, dz), Blick auf c + (tx, ty, tz). */
+    private static Step viewAt(double[] c, double dx, double dy, double dz, double tx, double ty, double tz) {
+        return Step.once(minecraft -> {
+            double lx = tx - dx;
+            double ly = ty - dy;
+            double lz = tz - dz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f",
+                    DIM, c[0] + dx, c[2] + dy - 1.62, c[1] + dz, yaw, pitch));
+        });
+    }
+
+    // =====================================================================================
     // Kreaturen
     // =====================================================================================
 

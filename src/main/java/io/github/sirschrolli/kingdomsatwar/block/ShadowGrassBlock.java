@@ -70,10 +70,18 @@ public class ShadowGrassBlock extends Block implements BonemealableBlock {
             if (!level.getBlockState(target).is(this) || !level.getBlockState(target.above()).isAir()) {
                 continue;
             }
-            BlockState plant = random.nextInt(9) == 0 ? ShadowBlocks.GHOSTCAP.get().defaultBlockState()
-                    : ShadowBlocks.SHADOW_SPROUTS.get().defaultBlockState();
+            // meist Schattenhalme, dazu Geisterpilze, hin und wieder eine Sternblüte oder ein Mondfarn
+            int roll = random.nextInt(24);
+            BlockState plant = (roll == 0 ? ShadowBlocks.MOON_FERN.get() : roll <= 2 ? ShadowBlocks.STAR_BLOSSOM.get()
+                    : roll <= 5 ? ShadowBlocks.GHOSTCAP.get() : ShadowBlocks.SHADOW_SPROUTS.get()).defaultBlockState();
             if (random.nextInt(3) != 0 && plant.canSurvive(level, target.above())) {
-                level.setBlock(target.above(), plant, Block.UPDATE_ALL);
+                if (plant.getBlock() instanceof net.minecraft.world.level.block.DoublePlantBlock) {
+                    if (level.isEmptyBlock(target.above(2))) {
+                        net.minecraft.world.level.block.DoublePlantBlock.placeAt(level, plant, target.above(), Block.UPDATE_ALL);
+                    }
+                } else {
+                    level.setBlock(target.above(), plant, Block.UPDATE_ALL);
+                }
             }
         }
     }

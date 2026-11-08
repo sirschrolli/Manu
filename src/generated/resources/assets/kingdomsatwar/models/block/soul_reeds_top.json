@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/soul_reeds_top",
+    "cross_emissive": "kingdomsatwar:block/soul_reeds_top_emissive"
+  }
+}

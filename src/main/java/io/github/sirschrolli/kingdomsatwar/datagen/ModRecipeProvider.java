@@ -81,6 +81,7 @@ public class ModRecipeProvider extends RecipeProvider {
         dye(ModBlocks.GROVE_BELL.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.BLUE), 1);
         dye(ModBlocks.LIFE_BLOSSOM.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.PINK), 1);
         dye(ModBlocks.GLOW_CORAL.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.CYAN), 2);
+        dye(io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.STAR_BLOSSOM.get(), Items.DYE.pick(net.minecraft.world.item.DyeColor.LIGHT_BLUE), 2);
         // Pilzsuppe auch mit Leuchtpilzen (einer davon muss ein Leuchtpilz sein)
         ItemLike glowcap = ModBlocks.GLOWCAP.get();
         ItemLike ghostcap = ShadowBlocks.GHOSTCAP.get();

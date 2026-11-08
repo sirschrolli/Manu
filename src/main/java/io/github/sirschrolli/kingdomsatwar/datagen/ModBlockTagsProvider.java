@@ -146,7 +146,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MAINTAINS_FARMLAND, ShadowBlocks.DUSKGRAIN);
         add(BlockTags.MINEABLE_WITH_HOE, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SHADOW_LEAVES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS,
-                ShadowBlocks.GHOSTCAP);
+                ShadowBlocks.GHOSTCAP, ShadowBlocks.MOON_FERN, ShadowBlocks.STAR_BLOSSOM, ShadowBlocks.SOUL_REEDS);
         add(ModTags.Blocks.SHADOW_LOGS, ShadowBlocks.SHADOW_LOG, ShadowBlocks.SHADOW_WOOD, ShadowBlocks.STRIPPED_SHADOW_LOG,
                 ShadowBlocks.STRIPPED_SHADOW_WOOD);
         tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.SHADOW_LOGS);
@@ -166,7 +166,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.SUPPORTS_VEGETATION, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
-        add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
+        add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS, ShadowBlocks.MOON_FERN);
         add(BlockTags.REPLACEABLE_BY_MUSHROOMS, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS);
         add(BlockTags.ENDERMAN_HOLDABLE, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.SHADOW_SAND,
                 ShadowBlocks.GHOSTCAP);

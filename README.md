@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.56.1 – lebendige Drachen.** **0.56.1 behebt einen Absturz in der Schattenwelt:** Beim Erzeugen neuer Gegenden (vor allem in den Schattengipfeln, wo sich Felsbrücken über Schluchten spannen) konnte das Spiel abstürzen – die Prüfung, ob ein Dorf der Umbrer in der Nähe steht, griff seit Minecraft 26 auf Chunks zu, die beim Erzeugen noch nicht bereitstehen. Außerdem gehen die Roben der Umbrer beim Laufen mit (sie schweben nicht mehr), die Hexe führt die Flasche weich zum Mund, und der Kupferknecht schwingt seine langen Arme ruhiger. Jeder der sechs Drachen-Bosse kennt **zwei neue große Angriffe**: Pyrrhon jagt die Gegner mit **Feuerwirbeln** und reißt **Magmaspalten** auf, Glaciara fegt mit der **Frostlanze** über das Feld und schleudert einen **Splittersturm**, Voltarion lässt **Kugelblitze** los und sperrt die Gegner in einen **Blitzkäfig**, Verdantis treibt eine **Dornenwelle** heran (wer springt, entkommt) und brennt mit dem **Sonnenstrahl**, Terragon lässt eine **Felslawine** heranrollen und spaltet die Erde mit dem **Erdspalter**, Thalassa lässt ein **Geysirfeld** hochschießen und schickt **Wasserschlangen**. Deine **eigenen Drachen** bewegen sich jetzt wie die Bosse: Hals, Kopf und Schwanz schwingen nach, ein ruhiger Schritt geht fließend in einen Galopp über (die Füße rutschen nicht mehr über den Boden), die Flügel entfalten sich beim Abheben nach oben und bremsen beim Landen, im Kurvenflug legen sie sich in die Kurve, sie sitzen aufrecht wie eine Katze, schnauben, gähnen und sehen sich um. Nichts springt mehr von einer Haltung in die andere – auch nicht beim Wildschwein, bei der Gans und bei den Schmieden.
+> **Testversion 0.57.0 – Pflanzen der Schattenwelt.** Drei neue, leuchtende Pflanzen wachsen in der Schattenwelt: der **Mondfarn** (zwei Blöcke hoch, die eingerollten Wedelspitzen glimmen) im Schattenwald, am Sumpf, in den Glimmerweiten und auf den Schwebenden Inseln, die **Sternblüte** (sternförmige, fahlblau leuchtende Blüten, gibt hellblauen Farbstoff) als dichte Teppiche in den Glimmerweiten und vereinzelt auf den Gipfeln und Inseln, und das **Seelenschilf** mit türkis leuchtenden Samenständen an den Ufern der Seelensümpfe. Aus allen dreien steigen ab und zu leuchtende Funken auf; Knochenmehl auf Schattengras lässt auch sie wachsen.
+> In 0.56 kamen die lebendigen Drachen: zwölf neue Angriffe der Drachen-Bosse (Feuerwirbel, Magmaspalten, Frostlanze, Splittersturm, Kugelblitze, Blitzkäfig, Dornenwelle, Sonnenstrahl, Felslawine, Erdspalter, Geysirfeld, Wasserschlangen), und die eigenen Drachen bewegen sich wie die Bosse – Schritt und Galopp ohne Rutschen, Abheben und Landen mit den Flügeln, Kurvenflug, Sitzen, Launen. 0.56.1 behob einen Absturz beim Erzeugen der Schattenwelt (an den Felsbrücken der Schattengipfel), ließ die Roben der Umbrer beim Laufen mitgehen und den Kupferknecht seine Arme ruhiger schwingen.
 > In 0.55 wurde sauber gebaut: Alle Häuser werden automatisch auf Baufehler geprüft (Betten nicht mehr in Wänden, Laternen an Ketten vom Dach, Leitern mit Halt …), der Feldherrentisch zittert bei vielen Truppen nicht mehr, und die Schwäche nach dem Tod ist kein Statuseffekt mehr.
 > In 0.54 kamen die Fahrzeuge: der Belagerungsturm (7, 10 oder 13 Blöcke, Fallbrücke auf die Zinnen) und der Planwagen am Pferd (sechs Reihen Ladung, vier Mitfahrer), dazu Cheat-Befehle für die Erfahrung (`/kaw hero`, `/kaw army xp`).
 > In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (392.040 Heldenerfahrung), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
@@ -316,7 +317,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
-| Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen; Nyxar und seine Schattenzitadelle | ✅ fertig |
+| Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
@@ -537,6 +538,26 @@ hält Abstand zu Dörfern und anderen Bauwerken und steht auf einer Lichtung. Mi
   (Stahl, Eisen, Saatgut, manchmal eine Karte) und ein Brunnen.
 - **Felsbrücken**: natürliche Bögen aus Schattenstein über Schluchten und Senken, oben bewachsen, unten hängen
   Glimmerranken.
+
+### Pflanzen der Schattenwelt
+
+![Pflanzen der Schattenwelt: Garten, Seelenschilf, Sternblüten, Mondfarne](docs/bilder/schattenpflanzen.jpg)
+
+Im ewigen Zwielicht leuchtet vieles, was wächst – und aus manchem steigen ab und zu Lichtfunken auf:
+
+| Pflanze | Wo | Besonderes |
+|---|---|---|
+| **Schattenhalme**, **Bleichgras** | überall, Bleichgras in der Bleichen Öde und auf den Gipfeln | Gras der Schattenwelt (mit der Schere) |
+| **Geisterpilze** | Wald, Sumpf, Inseln, Tiefen | leuchten wie kleine Laternen |
+| **Mondblumen** | Wald, Glimmerweiten, Inseln | weißer Farbstoff |
+| **Seelenbeerensträucher** | Wald, Sumpf | Seelenbeeren (leuchtend türkis, wenn reif) |
+| **Glimmerranken** | unter den Baumkronen, an Höhlendecken | mit leuchtenden Knospen |
+| **Nachtkristalldrusen** | Kristallschluchten, Glimmerweiten | leuchtende Kristalle |
+| **Mondfarn** (neu) | Schattenwald, Seelensumpf, Glimmerweiten, Schwebende Inseln | zwei Blöcke hoch, die eingerollten Wedelspitzen glimmen |
+| **Sternblüte** (neu) | dichte Teppiche in den Glimmerweiten, vereinzelt auf Gipfeln und Inseln | sternförmige, leuchtende Blüten; hellblauer Farbstoff |
+| **Seelenschilf** (neu) | an den Ufern und im flachen Wasser der Seelensümpfe | türkis leuchtende Samenstände |
+
+Knochenmehl auf Schattengras lässt Schattenhalme, Geisterpilze, Sternblüten und Mondfarne sprießen.
 
 ### Die neue Oberwelt
 

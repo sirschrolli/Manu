@@ -477,6 +477,9 @@ public class ModLanguageProvider extends LanguageProvider {
         block(ShadowBlocks.GHOSTCAP, "Ghostcap", "Geisterpilz");
         block(ShadowBlocks.SHADOW_SPROUTS, "Shadow Sprouts", "Schattenhalme");
         block(ShadowBlocks.PALE_GRASS, "Pale Grass", "Bleichgras");
+        block(ShadowBlocks.MOON_FERN, "Moon Fern", "Mondfarn");
+        block(ShadowBlocks.STAR_BLOSSOM, "Star Blossom", "Sternblüte");
+        block(ShadowBlocks.SOUL_REEDS, "Soul Reeds", "Seelenschilf");
         block(ShadowBlocks.SHADOW_SAPLING, "Shadow Sapling", "Schattensetzling");
         block(ShadowBlocks.POTTED_SHADOW_SAPLING, "Potted Shadow Sapling", "Schattensetzling im Topf");
         block(ShadowBlocks.MOON_LANTERN, "Moon Lantern", "Mondlaterne");

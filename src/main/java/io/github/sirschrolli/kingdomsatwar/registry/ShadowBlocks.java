@@ -179,6 +179,26 @@ public final class ShadowBlocks {
             p -> p.mapColor(MapColor.TERRACOTTA_WHITE).replaceable().noCollision().instabreak().sound(SoundType.GRASS)
                     .offsetType(BlockBehaviour.OffsetType.XYZ).ignitedByLava().pushReaction(PushReaction.POPPED),
             UnaryOperator.identity(), TAB);
+    /** Mondfarn: zwei Blöcke hoher Farn mit silbrig blauen Wedeln, deren eingerollte Spitzen glimmen. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.ShadowTallPlantBlock> MOON_FERN = ModBlocks.blockWithItem(
+            "moon_fern", io.github.sirschrolli.kingdomsatwar.block.ShadowTallPlantBlock::new,
+            p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).replaceable().noCollision().instabreak().sound(SoundType.GRASS)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).lightLevel(state -> 5).ignitedByLava().pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), TAB);
+    /** Sternblüte: sternförmige, fahlblau leuchtende Blüten der Glimmerweiten (gibt hellblauen Farbstoff). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.StarBlossomBlock> STAR_BLOSSOM = ModBlocks.blockWithItem(
+            "star_blossom", io.github.sirschrolli.kingdomsatwar.block.StarBlossomBlock::new,
+            p -> p.mapColor(MapColor.COLOR_LIGHT_BLUE).noCollision().instabreak().sound(SoundType.GRASS)
+                    .offsetType(BlockBehaviour.OffsetType.XZ).lightLevel(state -> 6).pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), TAB);
+    /** Seelenschilf: Schilf der Seelensümpfe mit türkis leuchtenden Samenständen (wächst auch im flachen Wasser). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.SoulReedsBlock> SOUL_REEDS = ModBlocks.blockWithItem(
+            "soul_reeds", io.github.sirschrolli.kingdomsatwar.block.SoulReedsBlock::new,
+            p -> p.mapColor(MapColor.COLOR_CYAN).noCollision().instabreak().sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)
+                    .lightLevel(state -> state.getValue(net.minecraft.world.level.block.DoublePlantBlock.HALF)
+                            == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER ? 6 : 0)
+                    .ignitedByLava().pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), TAB);
 
     /** Schattenackerland: mit der Hacke bearbeitete Schattenerde (wird bei Trockenheit wieder zu Erde). */
     public static final DeferredBlock<FarmlandBlock> SHADOW_FARMLAND = ModBlocks.blockWithItem("shadow_farmland",

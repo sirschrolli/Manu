@@ -168,6 +168,20 @@ public final class ShadowFeatures {
             patch(RarityFilter.onAverageOnceEvery(2), 6));
     static final Entry MOONFLOWERS = entry(VEGETATION, "moonflowers", block(ModBlocks.MOONFLOWER), patch(CountPlacement.of(2), 28));
     static final Entry GHOSTCAPS = entry(VEGETATION, "ghostcaps", block(ShadowBlocks.GHOSTCAP), patch(RarityFilter.onAverageOnceEvery(2), 16));
+    /** Mondfarne in Gruppen (im Wald und am Sumpf häufiger, in den Glimmerweiten und auf den Inseln vereinzelt). */
+    static final Entry MOON_FERNS = entry(VEGETATION, "moon_ferns", block(ShadowBlocks.MOON_FERN), patch(CountPlacement.of(1), 14));
+    static final Entry MOON_FERNS_SPARSE = entry(VEGETATION, "moon_ferns_sparse", block(ShadowBlocks.MOON_FERN),
+            patch(RarityFilter.onAverageOnceEvery(3), 8));
+    /** Sternblüten: dichte, leuchtende Teppiche in den Glimmerweiten, sonst einzelne Flecken. */
+    static final Entry STAR_BLOSSOMS_DENSE = entry(VEGETATION, "star_blossoms_dense", block(ShadowBlocks.STAR_BLOSSOM),
+            patch(CountPlacement.of(3), 36));
+    static final Entry STAR_BLOSSOMS = entry(VEGETATION, "star_blossoms", block(ShadowBlocks.STAR_BLOSSOM),
+            patch(RarityFilter.onAverageOnceEvery(2), 16));
+    /** Seelenschilf an den Ufern der Seelensümpfe. */
+    static final Entry SOUL_REEDS = entry(VEGETATION, "soul_reeds",
+            () -> new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature(24, ShadowBlocks.SOUL_REEDS.get()),
+            List.of(CountPlacement.of(4), InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.WORLD_SURFACE_WG),
+                    BiomeFilter.biome()));
     static final Entry CRYSTAL_CLUSTERS = entry(VEGETATION, "night_crystal_clusters", block(ShadowBlocks.NIGHT_CRYSTAL_CLUSTER),
             patch(RarityFilter.onAverageOnceEvery(3), 10));
     static final Entry SOUL_BERRIES = entry(VEGETATION, "soul_berry_bushes", () -> new SimpleBlockFeature(BlockStateProvider.of(
@@ -222,8 +236,8 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings forest(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, CRYSTALS_DEPTHS, TREE_GIANT, TREES_FOREST, SPROUTS_DENSE, GHOSTCAPS, MOONFLOWERS, SOUL_BERRIES,
-                VINES_TREES);
+        return settings(placed, carvers, CRYSTALS_DEPTHS, TREE_GIANT, TREES_FOREST, SPROUTS_DENSE, GHOSTCAPS, MOON_FERNS, MOONFLOWERS,
+                SOUL_BERRIES, VINES_TREES);
     }
 
     static BiomeGenerationSettings wastes(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
@@ -235,15 +249,17 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings marsh(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, CRYSTALS_DEPTHS, TREES_MARSH, SPROUTS_DENSE, GHOSTCAPS, SOUL_BERRIES, VINES_TREES);
+        return settings(placed, carvers, CRYSTALS_DEPTHS, TREES_MARSH, SPROUTS_DENSE, GHOSTCAPS, MOON_FERNS_SPARSE, SOUL_REEDS, SOUL_BERRIES,
+                VINES_TREES);
     }
 
     static BiomeGenerationSettings peaks(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, SPIRES_PEAKS, ROCK_BRIDGE, CRYSTALS_DEPTHS, PALE_GRASS);
+        return settings(placed, carvers, SPIRES_PEAKS, ROCK_BRIDGE, CRYSTALS_DEPTHS, PALE_GRASS, STAR_BLOSSOMS);
     }
 
     static BiomeGenerationSettings meadows(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, SPIRES_SMALL, CRYSTALS_DEPTHS, TREES_SPARSE, SPROUTS, MOONFLOWERS, CRYSTAL_CLUSTERS);
+        return settings(placed, carvers, SPIRES_SMALL, CRYSTALS_DEPTHS, TREES_SPARSE, SPROUTS, STAR_BLOSSOMS_DENSE, MOON_FERNS_SPARSE,
+                MOONFLOWERS, CRYSTAL_CLUSTERS);
     }
 
     static BiomeGenerationSettings sea(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
@@ -251,7 +267,7 @@ public final class ShadowFeatures {
     }
 
     static BiomeGenerationSettings isles(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, TREES_ISLE, SPROUTS_DENSE, MOONFLOWERS, GHOSTCAPS, VINES_TREES);
+        return settings(placed, carvers, TREES_ISLE, SPROUTS_DENSE, STAR_BLOSSOMS, MOON_FERNS_SPARSE, MOONFLOWERS, GHOSTCAPS, VINES_TREES);
     }
 
     static BiomeGenerationSettings depths(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {

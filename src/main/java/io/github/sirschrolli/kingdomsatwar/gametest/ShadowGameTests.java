@@ -99,6 +99,8 @@ final class ShadowGameTests {
             ModGameTests.TEST_FUNCTIONS.register("shadow_sites", () -> ShadowGameTests::shadowSites);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ROCK_BRIDGE =
             ModGameTests.TEST_FUNCTIONS.register("rock_bridge", () -> ShadowGameTests::rockBridge);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_PLANTS =
+            ModGameTests.TEST_FUNCTIONS.register("shadow_plants", () -> ShadowGameTests::shadowPlants);
 
     private ShadowGameTests() {}
 
@@ -113,7 +115,7 @@ final class ShadowGameTests {
         event.registerTest(NYXAR_LIFECYCLE.getId(), new FunctionGameTestInstance(NYXAR_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 56)));
         for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS,
-                SHADOW_CITADEL, SHADOW_SITES, ROCK_BRIDGE)) {
+                SHADOW_CITADEL, SHADOW_SITES, ROCK_BRIDGE, SHADOW_PLANTS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -615,6 +617,65 @@ final class ShadowGameTests {
     }
 
     /** Die wichtigsten Rezepte der Schattenwelt sind da. */
+    /**
+     * Die neuen Pflanzen der Schattenwelt: Mondfarn (zwei Blöcke hoch, oben leuchtend) und Sternblüte wachsen auf
+     * Schattengras, nicht auf Stein; das Seelenschilf wächst als Gürtel am Ufer eines Tümpels; die Sternblüte gibt
+     * hellblauen Farbstoff; jede Pflanze lässt sich selbst wieder abbauen.
+     */
+    private static void shadowPlants(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(x, 0, z, ShadowBlocks.SHADOW_GRASS.get());
+                for (int y = 1; y < 4; y++) {
+                    helper.setBlock(x, y, z, net.minecraft.world.level.block.Blocks.AIR);
+                }
+            }
+        }
+        // Mondfarn: beide Hälften, oben leuchtend
+        BlockPos fern = helper.absolutePos(new BlockPos(1, 1, 1));
+        BlockState fernState = ShadowBlocks.MOON_FERN.get().defaultBlockState();
+        helper.assertTrue(fernState.canSurvive(level, fern), "Der Mondfarn wächst nicht auf Schattengras");
+        net.minecraft.world.level.block.DoublePlantBlock.placeAt(level, fernState, fern, 3);
+        BlockState upper = level.getBlockState(fern.above());
+        helper.assertTrue(upper.is(ShadowBlocks.MOON_FERN.get()) && upper.getValue(net.minecraft.world.level.block.DoublePlantBlock.HALF)
+                == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER, "Dem Mondfarn fehlt die obere Hälfte");
+        helper.assertTrue(upper.getLightEmission() > 0, "Die Wedelspitzen des Mondfarns leuchten nicht");
+        // Sternblüte: auf Schattengras ja, auf Stein nein
+        BlockPos star = helper.absolutePos(new BlockPos(3, 1, 1));
+        helper.assertTrue(ShadowBlocks.STAR_BLOSSOM.get().defaultBlockState().canSurvive(level, star), "Die Sternblüte wächst nicht auf Schattengras");
+        helper.setBlock(new BlockPos(5, 0, 1), net.minecraft.world.level.block.Blocks.STONE);
+        helper.assertFalse(ShadowBlocks.STAR_BLOSSOM.get().defaultBlockState().canSurvive(level, helper.absolutePos(new BlockPos(5, 1, 1))),
+                "Die Sternblüte wächst auf blankem Stein");
+        // Seelenschilf: ein Tümpel mit Ufer aus Schattensand, der Schilfgürtel wächst darin und daneben
+        for (int x = 2; x <= 6; x++) {
+            for (int z = 3; z <= 7; z++) {
+                boolean water = x >= 3 && x <= 5 && z >= 4 && z <= 6;
+                helper.setBlock(x, 0, z, water ? net.minecraft.world.level.block.Blocks.WATER : ShadowBlocks.SHADOW_SAND.get());
+                if (water) {
+                    helper.setBlock(x, -1, z, ShadowBlocks.SHADOW_SAND.get());
+                }
+            }
+        }
+        new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReedBedFeature(64, ShadowBlocks.SOUL_REEDS.get()).place(level,
+                level.getChunkSource().getGenerator(), net.minecraft.util.RandomSource.create(5L), helper.absolutePos(new BlockPos(4, 1, 5)));
+        int reeds = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(0, 0, 0)), helper.absolutePos(new BlockPos(8, 2, 8)))) {
+            if (level.getBlockState(pos).is(ShadowBlocks.SOUL_REEDS.get())) {
+                reeds++;
+            }
+        }
+        helper.assertTrue(reeds >= 2, "Am Tümpel wächst kein Seelenschilf");
+        // Farbstoff und Beute
+        var recipes = level.getServer().getRecipeManager().recipeMap();
+        helper.assertTrue(recipes.byKey(ResourceKey.create(Registries.RECIPE, KingdomsAtWar.id("light_blue_dye_from_star_blossom"))) != null,
+                "Die Sternblüte gibt keinen Farbstoff");
+        assertDrops(helper, ShadowBlocks.STAR_BLOSSOM, ShadowBlocks.STAR_BLOSSOM.get().asItem());
+        assertDrops(helper, ShadowBlocks.MOON_FERN, ShadowBlocks.MOON_FERN.get().asItem());
+        assertDrops(helper, ShadowBlocks.SOUL_REEDS, ShadowBlocks.SOUL_REEDS.get().asItem());
+        helper.succeed();
+    }
+
     private static void shadowRecipes(GameTestHelper helper) {
         var recipes = helper.getLevel().getServer().getRecipeManager().recipeMap();
         for (String name : List.of("shadow_planks", "shadow_wood", "polished_shadow_stone", "shadow_stone_bricks", "chiseled_shadow_stone",

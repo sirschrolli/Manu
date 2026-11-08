@@ -129,6 +129,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                                 .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.125f))
                                 .apply(ApplyBonusCount.addUniformBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE), 2)))));
         add(ShadowBlocks.PALE_GRASS.get(), block -> this.createShearsOnlyDrop(block));
+        // Mondfarn und Seelenschilf aus der unteren Hälfte (wie hohe Blumen und Schilf), Sternblüte immer
+        for (DeferredBlock<? extends Block> tall : java.util.List.of(ShadowBlocks.MOON_FERN, ShadowBlocks.SOUL_REEDS)) {
+            add(tall.get(), block -> this.createSinglePropConditionTable(block, net.minecraft.world.level.block.DoublePlantBlock.HALF,
+                    net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
+        }
+        dropSelf(ShadowBlocks.STAR_BLOSSOM.get());
         // Schattenholz-Tür, -Falltür, -Zaun und -Zauntor
         add(ShadowBlocks.SHADOW_DOOR.get(), this::createDoorTable);
         for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.SHADOW_TRAPDOOR, ShadowBlocks.SHADOW_FENCE,

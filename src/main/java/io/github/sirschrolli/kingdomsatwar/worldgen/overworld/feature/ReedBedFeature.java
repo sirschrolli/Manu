@@ -2,13 +2,17 @@ package io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.sirschrolli.kingdomsatwar.block.ReedsBlock;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -17,10 +21,18 @@ import net.minecraft.world.level.material.FluidState;
 
 /**
  * Ein Schilfgürtel: rund um den Ursprung wächst Schilf im knietiefen Wasser und auf dem Ufer direkt daneben – dicht an
- * der Wasserkante, nach außen lichter.
+ * der Wasserkante, nach außen lichter. Welches Schilf, steht im Feature (gewöhnliches Schilf oder Seelenschilf).
  */
-public record ReedBedFeature(int tries) implements Feature {
-    public static final MapCodec<ReedBedFeature> CODEC = Codec.intRange(1, 256).fieldOf("tries").xmap(ReedBedFeature::new, ReedBedFeature::tries);
+public record ReedBedFeature(int tries, Block reeds) implements Feature {
+    public static final MapCodec<ReedBedFeature> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            Codec.intRange(1, 256).fieldOf("tries").forGetter(ReedBedFeature::tries),
+            BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("block", Blocks.AIR).forGetter(ReedBedFeature::reeds))
+            .apply(i, (tries, block) -> new ReedBedFeature(tries, block == Blocks.AIR ? ModBlocks.REEDS.get() : block)));
+
+    /** Ein Gürtel aus gewöhnlichem Schilf. */
+    public ReedBedFeature(int tries) {
+        this(tries, ModBlocks.REEDS.get());
+    }
 
     @Override
     public MapCodec<ReedBedFeature> codec() {
@@ -29,7 +41,7 @@ public record ReedBedFeature(int tries) implements Feature {
 
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
-        BlockState reeds = ModBlocks.REEDS.get().defaultBlockState();
+        BlockState reeds = this.reeds.defaultBlockState();
         boolean placed = false;
         for (int t = 0; t < this.tries; t++) {
             int x = origin.getX() + random.nextInt(15) - 7;

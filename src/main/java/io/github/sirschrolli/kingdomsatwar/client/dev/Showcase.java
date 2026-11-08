@@ -248,6 +248,8 @@ final class Showcase {
                         String[] parts = scene.split("_");
                         ShadowShowcase.map(steps, parts.length > 1 ? Integer.parseInt(parts[1]) : 3072,
                                 parts.length > 2 ? Integer.parseInt(parts[2]) : 8);
+                    } else if (scene.equals("shadowplants")) {
+                        ShadowShowcase.plants(steps);
                     } else if (scene.equals("shadowtab")) {
                         ShadowShowcase.tab(steps);
                     } else if (scene.equals("shadowdisplay")) {

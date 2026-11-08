@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "light_blue_dye",
+  "ingredients": [
+    "kingdomsatwar:star_blossom"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:light_blue_dye"
+  }
+}

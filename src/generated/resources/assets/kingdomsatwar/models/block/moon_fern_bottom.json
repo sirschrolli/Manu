@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "kingdomsatwar:block/moon_fern_bottom"
+  }
+}

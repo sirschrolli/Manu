@@ -71,6 +71,10 @@ final class ShadowModels {
         blocks.itemModelOutput.accept(sprouts.asItem(), ItemModelUtils.tintedModel(
                 blocks.createFlatItemModel(sprouts.asItem(), TextureMapping.getBlockTexture(sprouts)), ItemModelUtils.constantTint(GRASS_ITEM_TINT)));
         blocks.createCrossBlockWithDefaultItem(ShadowBlocks.PALE_GRASS.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        // Sternblüte (leuchtende Blüten), Mondfarn und Seelenschilf (zwei Blöcke hoch, oben leuchtend)
+        blocks.createCrossBlockWithDefaultItem(ShadowBlocks.STAR_BLOSSOM.get(), BlockModelGenerators.PlantType.EMISSIVE_NOT_TINTED);
+        glowingDoublePlant(blocks, ShadowBlocks.MOON_FERN.get());
+        glowingDoublePlant(blocks, ShadowBlocks.SOUL_REEDS.get());
 
         // Schattenholz: Tür, Falltür, Zaun, Zauntor
         blocks.createDoor(ShadowBlocks.SHADOW_DOOR.get());
@@ -143,5 +147,19 @@ final class ShadowModels {
         Identifier model = GRASS_BLOCK.create(grass, mapping, blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(grass, BlockModelGenerators.plainVariant(model)));
         blocks.itemModelOutput.accept(grass.asItem(), ItemModelUtils.tintedModel(model, ItemModelUtils.constantTint(GRASS_ITEM_TINT)));
+    }
+
+    /**
+     * Zwei Blöcke hohe Kreuzpflanze, deren obere Hälfte leuchtet: unten {@code <name>_bottom}, oben {@code <name>_top} mit
+     * der Leuchtschicht {@code <name>_top_emissive}; als Gegenstand die obere Hälfte.
+     */
+    private static void glowingDoublePlant(BlockModelGenerators blocks, Block block) {
+        Identifier bottom = ModelTemplates.CROSS.createWithSuffix(block, "_bottom",
+                new TextureMapping().put(TextureSlot.CROSS, TextureMapping.getBlockTexture(block, "_bottom")), blocks.modelOutput);
+        Identifier top = ModelTemplates.CROSS_EMISSIVE.createWithSuffix(block, "_top", new TextureMapping()
+                .put(TextureSlot.CROSS, TextureMapping.getBlockTexture(block, "_top"))
+                .put(TextureSlot.CROSS_EMISSIVE, TextureMapping.getBlockTexture(block, "_top_emissive")), blocks.modelOutput);
+        blocks.createDoubleBlock(block, BlockModelGenerators.plainVariant(top), BlockModelGenerators.plainVariant(bottom));
+        blocks.registerSimpleFlatItemModel(block, "_top");
     }
 }
