@@ -57,19 +57,19 @@ public class AnglerfishRenderer extends MobRenderer<AnglerfishEntity, SeaRenderS
             return;
         }
         // wo der Köder gerade hängt: das Modell für diesen Zustand stellen und der Knochenkette folgen
+        // (in einem eigenen, leeren Stapel – so liegt der Punkt relativ zum Wesen, nicht zur Kamera)
         AnglerfishModel model = this.getModel();
         model.setupAnim(state);
-        poseStack.pushPose();
-        poseStack.scale(state.scale, state.scale, state.scale);
-        this.setupRotations(state, poseStack, state.bodyRot, state.scale);
-        poseStack.scale(-1.0f, -1.0f, 1.0f);
-        this.scale(state, poseStack);
-        poseStack.translate(0.0f, -1.501f, 0.0f);
+        PoseStack local = new PoseStack();
+        local.scale(state.scale, state.scale, state.scale);
+        this.setupRotations(state, local, state.bodyRot, state.scale);
+        local.scale(-1.0f, -1.0f, 1.0f);
+        this.scale(state, local);
+        local.translate(0.0f, -1.501f, 0.0f);
         for (ModelPart part : model.lureChain()) {
-            part.translateAndRotate(poseStack);
+            part.translateAndRotate(local);
         }
-        Vector3f lure = poseStack.last().pose().transformPosition(new Vector3f());
-        poseStack.popPose();
+        Vector3f lure = local.last().pose().transformPosition(new Vector3f());
         float t = state.ageInTicks;
         float strength = 0.55f + 0.12f * Mth.sin(t * 0.13f) + 0.06f * Mth.sin(t * 0.37f);
         float snap = Anim.seconds(state.attack, t);

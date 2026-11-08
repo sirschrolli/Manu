@@ -286,6 +286,23 @@ def lantern_block() -> tuple[Image.Image, Image.Image]:
     return img, glow
 
 
+def halo() -> Image.Image:
+    """Ein weicher, runder Schein (weiß, nach außen durchsichtig) – um Köder und Quallen, im Spiel eingefärbt und additiv."""
+    size = 64
+    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    px = img.load()
+    c = (size - 1) / 2.0
+    for y in range(size):
+        for x in range(size):
+            r = ((x - c) ** 2 + (y - c) ** 2) ** 0.5 / (size / 2.0)
+            if r < 1.0:
+                # vormultipliert: beim additiven Zeichnen zählt die Helligkeit, nicht die Deckkraft
+                a = (1.0 - r) ** 2.2
+                v = round(255 * a)
+                px[x, y] = (v, v, v, v)
+    return img
+
+
 def build(put: Callable[[str, Image.Image], None]) -> None:
     put("item/glow_jelly", render(GLOW_JELLY, {"A": JELLY, "C": JELLY_CORE}))
     put("item/angler_lure", render(ANGLER_LURE, {"A": LURE, "B": STALK}, prefer=("A", "B")))
@@ -298,3 +315,4 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("item/deep_sea_lantern", render(LANTERN_ITEM, {"A": PRISMARINE, "B": IRON, "C": LURE}, prefer=("A", "B")))
     block, block_glow = lantern_block()
     put("block/deep_sea_lantern", block)
+    put("entity/sea/halo", halo())

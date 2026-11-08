@@ -123,6 +123,7 @@ final class Showcase {
                 case "architect_royal_site" -> ArchitectShowcase.royalSite(steps);
                 case "outlaws" -> OutlawShowcase.outlaws(steps);
                 case "water" -> WaterShowcase.water(steps);
+                case "sea" -> SeaShowcase.sea(steps);
                 case "golems" -> GolemShowcase.golems(steps);
                 case "rare" -> RareShowcase.rare(steps);
                 case "nether" -> NetherShowcase.nether(steps);

@@ -80,6 +80,9 @@ def _bell(ctx: Ctx):
     if abs(math.sin(a * 8)) < 0.12 and r > 1.2:
         col = mix(col, pick(ctx.pal["glow"], 0.6), 0.5)
         ctx.glow = mix((0, 0, 0, 255), pick(ctx.pal["glow"], 0.5), 0.45)
+    else:
+        # die ganze Glocke glimmt sanft (nachts sieht man sie als leuchtende Kuppel)
+        ctx.glow = mix((0, 0, 0, 255), pick(ctx.pal["glow"], 0.35), 0.28)
     alpha = 150 if ctx.face != "top" else 175
     return col[:3] + (alpha,)
 

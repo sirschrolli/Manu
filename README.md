@@ -8,13 +8,15 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.60.0 – Der Zerbrochene König.** Hoch in der Leere schwebt der **Thron der Alten** – ein Platz aus Sternenmarmor mit Säulen, Kristalllampen und einem Podest, unter dem Kristalle und Sternenranken ins Nichts hängen. Wer ihn betritt, weckt den **Zerbrochenen König**, den letzten König der Alten: einen schwebenden Riesen aus Marmor und Gold mit offener Brust, zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Er kämpft mit Faustschlag, Wischhieb, Kronensplittern, Schwerkraftbruch, dem Ruf der Wächter und zuletzt dem Sternenstrahl – mit eigener Bossleiste, eigenen Stimmen und Klängen. Besiegt lässt er seine **Krone** fallen: ein Helm als echtes 3D-Modell, über dem die Kristallsplitter schweben; wer ihn trägt, fällt sanft. (Die Drachen bleiben die stärksten Bosse, danach kommen die Erzmagier, dann der König.) Neu dazu: **`/kaw dim <oberwelt|nether|end|schattenwelt|leere>`** wechselt im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen.
+> **Testversion 0.61.0 – Das lebendige Meer.** In den Meeren leben fünf neue Wesen: Der **Mantarochen** gleitet mit langsamen Flügelschlägen durch warme Meere, springt in hohem Bogen aus dem Wasser und schenkt Schwimmern in seiner Nähe die Gnade des Delfins. **Leuchtquallen** treiben in Schwärmen – blau, rosa oder golden –, pumpen leuchtend und nesseln, wer sie berührt; mit dem Eimer lassen sie sich fangen. Der **Hai** umkreist seine Beute, stößt zu und dreht wieder ab. In der dunklen Tiefe lockt der **Anglerfisch** mit seinem leuchtenden Köder und schnappt plötzlich zu. Am Strand klappern **Riesenkrabben** mit den Scheren; mit Seetang lassen sie sich züchten, ihre Schere in der Nebenhand verlängert die Reichweite. Dazu kommen die **Tiefsee-Laterne**, Pfeile aus Haizähnen, Krabbenfleisch und Nachtsicht-Tränke aus Leuchtgelee. Die **Klänge der Welt** sind überarbeitet: Auch die 53 Standard-Biome der Oberwelt haben jetzt eine eigene Klangwelt. Die Klangteppiche laufen nicht mehr ununterbrochen, sondern kommen und gehen, sind leiser, und unter *Mods → Kingdoms at War → Konfiguration* lassen sie sich leiser stellen oder abschalten. Das **Leveln dauert länger**: Heldenstufe 100 braucht jetzt rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 mehr als doppelt so viel Kampferfahrung wie bisher. Die Erfahrung, die du bekommst, bleibt gleich, und erreichte Stufen bleiben erhalten. Der **Zerbrochene König** ist jetzt der stärkste Gegner, stärker als alle Drachen: 1.800 Lebenspunkte, schwere Rüstung, mehr Wächter, ein Doppelschlag, und ab der Hälfte seiner Kraft packt ihn der **Zorn des Königs**.
+> In 0.60 kam der Zerbrochene König: Hoch in der Leere schwebt der Thron der Alten. Wer ihn betritt, weckt den letzten König der Alten, einen schwebenden Riesen aus Marmor und Gold mit zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Besiegt lässt er seine Krone fallen: ein Helm als echtes 3D-Modell, mit dem du sanft fällst. Dazu kam `/kaw dim <oberwelt|nether|end|schattenwelt|leere>`, das im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen wechselt.
+> In 0.59 kam die Leere: eine eigene Dimension hinter dem Herz der Schatten mit sechs Biomen aus treibenden Bruchstücken, Ruinen der Alten und vier Wesen.
 > In 0.58 bekam jedes eigene Biom seine eigene Klangwelt: Laub, Vogelchor, Spechte und Kuckuck im Urhain, Grillen, Käuzchen und ferne Wölfe in der Nacht, Brandung an der Sturmküste, singendes Eis auf den Frostgipfeln, knisternde Glut in den Aschefeldern, ein Drache in der Ferne über den Nestern, Dröhnen und Flüstern in der Schattenwelt.
 > In 0.57 wuchsen drei neue, leuchtende Pflanzen in der Schattenwelt: Mondfarn, Sternblüte und Seelenschilf.
 > In 0.56 kamen die lebendigen Drachen: zwölf neue Angriffe der Drachen-Bosse (Feuerwirbel, Magmaspalten, Frostlanze, Splittersturm, Kugelblitze, Blitzkäfig, Dornenwelle, Sonnenstrahl, Felslawine, Erdspalter, Geysirfeld, Wasserschlangen), und die eigenen Drachen bewegen sich wie die Bosse – Schritt und Galopp ohne Rutschen, Abheben und Landen mit den Flügeln, Kurvenflug, Sitzen, Launen. 0.56.1 behob einen Absturz beim Erzeugen der Schattenwelt (an den Felsbrücken der Schattengipfel), ließ die Roben der Umbrer beim Laufen mitgehen und den Kupferknecht seine Arme ruhiger schwingen.
 > In 0.55 wurde sauber gebaut: Alle Häuser werden automatisch auf Baufehler geprüft (Betten nicht mehr in Wänden, Laternen an Ketten vom Dach, Leitern mit Halt …), der Feldherrentisch zittert bei vielen Truppen nicht mehr, und die Schwäche nach dem Tod ist kein Statuseffekt mehr.
 > In 0.54 kamen die Fahrzeuge: der Belagerungsturm (7, 10 oder 13 Blöcke, Fallbrücke auf die Zinnen) und der Planwagen am Pferd (sechs Reihen Ladung, vier Mitfahrer), dazu Cheat-Befehle für die Erfahrung (`/kaw hero`, `/kaw army xp`).
-> In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (392.040 Heldenerfahrung), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
+> In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (damals 392.040 Heldenerfahrung, seit 0.61 rund 1,17 Millionen), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
 > In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
 > In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
 > In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
@@ -319,13 +321,15 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
 | **Die Leere**: eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
-| **Der Zerbrochene König** (neu): Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm | ✅ fertig |
+| **Der Zerbrochene König**: Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm; seit 0.61 der stärkste Gegner (1.800 Lebenspunkte, Zorn des Königs, Doppelschlag) | ✅ fertig |
+| **Das lebendige Meer** (neu): Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
+| Längeres Leveln (neu): Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
-| Klänge der Welt: eigene Klangwelt für alle 23 eigenen Biome (Tag/Nacht, drinnen/draußen, Regen, Höhe) | ✅ fertig |
+| Klänge der Welt: eigene Klangwelt für alle 29 eigenen Biome und seit 0.61 für 53 Standard-Biome der Oberwelt (Tag/Nacht, drinnen/draußen, Regen, Höhe); die Klangteppiche kommen und gehen, Lautstärke und Ein/Aus in der Konfiguration | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen und vier Grundrissen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
@@ -626,15 +630,18 @@ Angriff aus.
 
 | Angriff | Was geschieht |
 |---|---|
-| **Faustschlag** | eine Hand steigt hoch über die Stelle, an der du stehst, krümmt die Finger zur Klaue – ein leuchtender Kreis warnt – und schlägt flach herab |
+| **Faustschlag** | eine Hand steigt hoch über die Stelle, an der du stehst, krümmt die Finger zur Klaue – ein leuchtender Kreis warnt – und schlägt flach herab; ab der Hälfte seiner Kraft folgt sofort der zweite Schlag der anderen Hand |
 | **Wischhieb** | beide Hände holen weit hinten aus und fegen gegeneinander in einem Bogen vor ihm über den Boden |
-| **Kronensplitter** | der Kopf hebt sich, die Krone steigt und spreizt die Zacken: zwei Fächer aus Kristallsplittern (mit einem Schlag zurückzuschlagen) |
-| **Schwerkraftbruch** (ab 60 %) | die Hände heben sich mit offenen Handflächen – alle auf dem Platz schweben empor –, klatschen über seinem Kopf zusammen und stoßen herab: alle stürzen |
-| **Ruf der Wächter** (bei 60 % und 25 %) | die Hände senken sich zum Boden und reißen zwei Splitterwächter aus dem Platz empor |
-| **Sternenstrahl** (unter 25 %) | die Hände reißen die Brust auf, die Herzhälften klaffen – aus dem Herzen fegt ein Strahl in weitem Bogen über den Platz: hinter Säulen ducken oder darüber springen |
+| **Kronensplitter** | der Kopf hebt sich, die Krone steigt und spreizt die Zacken: zwei Fächer aus Kristallsplittern (mit einem Schlag zurückzuschlagen) – fünf je Fächer, unter der Hälfte sieben, im letzten Viertel neun |
+| **Schwerkraftbruch** (unter 70 %) | die Hände heben sich mit offenen Handflächen – alle auf dem Platz schweben empor –, klatschen über seinem Kopf zusammen und stoßen herab: alle stürzen |
+| **Ruf der Wächter** (bei 70 %, 45 % und 20 %) | die Hände senken sich zum Boden und reißen Splitterwächter aus dem Platz empor – zweimal zwei, beim dritten Ruf drei |
+| **Zorn des Königs** (einmal, bei 50 %) | er brüllt, der Platz bebt, Splitter stieben – „Der Zerbrochene König zürnt!“: von da an greift er schneller an und schlägt doppelt zu |
+| **Sternenstrahl** (unter 50 %) | die Hände reißen die Brust auf, die Herzhälften klaffen – aus dem Herzen fegt ein Strahl in weitem Bogen über den Platz: hinter Säulen ducken oder darüber springen; im letzten Viertel noch öfter |
 
-Er hat 340 Lebenspunkte und ist damit bewusst schwächer als die Erzmagier – die Drachen-Bosse bleiben die stärksten.
-Verlässt jeder den Platz, zerfällt er nach einer halben Minute wieder zu Trümmern und kann später erneut erwachen; besiegt
+Seit 0.61 ist er der **stärkste Gegner** der Mod: 1.800 Lebenspunkte, Rüstung 18 mit Härte 10 und Schläge mit 12
+Grundschaden – mehr als jeder Drache (760 bis 1.150, Nyxar 1.400) und weit mehr als die Erzmagier (420). Je schwächer er
+wird, desto schneller folgt Angriff auf Angriff. So steigt der Weg an: erst die Erzmagier, dann die Drachen, dann der
+Zerbrochene König. Verlässt jeder den Platz, zerfällt er nach einer halben Minute wieder zu Trümmern und kann später erneut erwachen; besiegt
 zerfällt er Stück für Stück, und der Thron bleibt für immer leer.
 
 **Beute:** immer die **Krone des Zerbrochenen Königs** – ein Helm, der als echtes **3D-Modell** getragen wird: ein
@@ -648,29 +655,54 @@ gemeißelter Sternenmarmor und Edelsteine.
 ![Klänge der Welt: Spektrogramme der Klangwelten](docs/bilder/klangwelten.jpg)
 
 Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester, die neun Biome der Schattenwelt und die sechs
-Biome der Leere – hat seine eigene Klangwelt. Darunter liegen leise, nahtlose Klangteppiche (Wind, Laub, Schilf, Brandung, Glut, Eis, das Dröhnen der
-Schattenwelt …), darüber erklingen ab und zu Einzelklänge an einem Ort in der Nähe: ein Vogel im Baum, ein Bussard hoch
-über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne.
+Biome der Leere – und seit 0.61 auch **53 Standard-Biome der Oberwelt** haben ihre eigene Klangwelt. Die Stimmung tragen
+vor allem **Einzelklänge**, die ab und zu an einem Ort in der Nähe erklingen: rauschendes Laub im Baum, Wind im Gras, ein
+Specht, ein Bussard hoch über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne – viele davon echte
+Naturaufnahmen von Minecraft. Darunter liegen nur noch leise Klangteppiche (Wind, Wasser, Brandung, Glut, Eis, das
+Dröhnen fremder Welten), und die **laufen nicht mehr dauernd**: Ein Teppich schwillt für 20 Sekunden bis eine Minute an
+und verklingt dann für eine halbe bis knapp zwei Minuten. Die künstlichen Teppiche aus Laubrauschen, Grillen,
+Insektensummen, Vogelchor, Schilf und Fröschen von 0.58 sind entfallen; zwischen zwei Einzelklängen liegen mindestens
+8 Sekunden, und derselbe Klang kehrt frühestens nach 25 Sekunden wieder.
 
 | Biom | Am Tag | In der Nacht |
 |---|---|---|
-| **Urhain** | Laub, Vogelchor, Amsel, Meise, Fink, Specht, Kuckuck, knarrende Bäume | Grillen, Waldkauz, Glühwürmchen, ferne Wölfe |
-| **Königsauen** | Lerchen, Grashüpfer, Hummeln, Finken, Meisen | Grillen, Nachtigall, Eule |
-| **Nebelmoor** | hohler Wind, Schilf, blubbernder Torf, Brachvogel, Krähen | Frösche und Unken, Rohrdommel, Irrlichter |
+| **Urhain** | rauschendes Laub, Amsel, Meise, Fink, Specht, Kuckuck, knarrende Bäume, knackende Zweige | Waldkauz, Glühwürmchen, ferne Wölfe |
+| **Königsauen** | Wind im Gras, Bienen, Finken, Meisen, Amsel, Kuckuck | Nachtigall, Eule, Glühwürmchen |
+| **Nebelmoor** | hohler Wind, blubbernder Torf, Brachvogel, Krähen, in der Dämmerung die Rohrdommel | Frösche, Eule, ferne Wölfe, Irrlichtfunkeln |
 | **Sturmküste** | Brandung an den Klippen, Seewind, Möwen, Gewitter | Brandung, Gewitter |
-| **Korallenküste** | plätschernde Lagune, sanfte Wellen, Möwen, Delfine | Wellen, Grillen |
-| **Felsschluchten** | trockener Wind, Grashüpfer, kreisender Bussard, rieselnde Steine | spärliches Zirpen, ferne Wölfe |
-| **Frostgipfel** | Sturm mit Pfeifen in den Kanten, singendes und knackendes Eis | dazu heulende Wölfe |
+| **Korallenküste** | plätschernde Lagune, sanfte Wellen, Möwen, Schildkröten, Papageien, Delfine | Wellen, Glühwürmchen |
+| **Felsschluchten** | trockener Wind im Gras, raschelndes Gestrüpp, kreisender Bussard, rieselnde Steine | ferne Wölfe, Glühwürmchen |
+| **Frostgipfel** | Sturm, knackendes und arbeitendes Eis, Grollen aus der Tiefe | dazu heulende Wölfe |
 | **Aschefelder** | staubiger Wind, knisternde Glut, Grollen, fauchende Glutspalten | ebenso |
 | **Drachennester** | je nach Element Lava, Eis, Sturm, Fels, Zauberhain oder Grotte – und ein Drache brüllt in der Ferne | ebenso |
 | **Schattenwelt** | Dröhnen und Flüstern im Schattenwald, singende Kristalle in den Schluchten, Seelenklagen im Sumpf, schwebende Klänge auf den Glimmerweiten, ein Herzschlag in den Tiefen | ewiges Zwielicht |
 | **Die Leere** | tiefes Dröhnen und Sternensirren, gläserne Akkorde im Kristallwald, rieselnder Sternenstaub, Chöre und schabende Steine in den Ruinen, dumpfe Erinnerungen über den Weltenresten, Gesang der Sternenrochen | ewige Nacht |
 
-Die Klänge folgen den Umständen: Vögel singen am Tag und verstummen bei Regen, nachts zirpen Grillen; in Häusern und
-Höhlen verklingen Laub und Vögel, vom Wind bleibt nur ein Hauch; auf Gipfeln pfeift der Wind lauter; unter Wasser wird es
-still. Beim Wechsel des Bioms blenden die Klangwelten sanft ineinander. Die Lautstärke regelt der Schieberegler
-„Umgebung/Umwelt“. Alle Klänge sind eigens für die Mod erzeugt (`tools/audio/ambience.py`); einige Einzelklänge verweisen
-auf Klänge von Minecraft selbst.
+**Die Standard-Biome der Oberwelt** (neu in 0.61) klingen so:
+
+| Biome | Was du hörst |
+|---|---|
+| **Ebenen, Sonnenblumenebenen, Wiesen** | Wind im Gras, Finken, Meisen, Krähen, Bienen über den Blumen, Ziegen auf den Wiesen; nachts Nachtigall, Eule und Glühwürmchen |
+| **Wälder** (Eichen- und Birkenwald, Blumenwald, Kirschhain) | rauschendes Laub, Amsel, Meise, Fink, Specht, Kuckuck, knarrende Stämme, Bienen im Blumenwald; nachts Eulen und Glühwürmchen |
+| **Dunkler Wald, Blasser Garten** | Laub, knackende Zweige, Krähen; nachts Eulen und Wölfe – im Blassen Garten raschelt das Moos, und nachts wispern die Augenblüten |
+| **Taiga** (auch Riesenbaumtaiga und verschneite Taiga) | Wind, knarrende Stämme, Specht, Krähen; nachts Eulen, Füchse und ferne Wölfe |
+| **Schnee, Eis und Gipfel** | Sturmwind, knackendes Eis (am meisten zwischen den Eiszapfen), rieselnde Steine, Ziegen, ein Bussard über den Steingipfeln; nachts Wölfe |
+| **Wüste, Savanne, Tafelberge** | trockener Wind, rieselnder Sand, raschelnde Büsche, Wind im Gras der Savanne, ein kreisender Bussard |
+| **Dschungel** | rauschendes Laub, Papageien, Spechte; nachts Frösche, Eulen und Glühwürmchen |
+| **Sumpf, Mangrovensumpf** | hohler Wind, blubbernder Morast, Krähen, in der Dämmerung die Rohrdommel; nachts Froschkonzert, Eulen und Glühwürmchen |
+| **Flüsse, Strände, Küsten** | fließendes Wasser, Brandung, Seewind, Möwen, Schildkröten, Delfine; am gefrorenen Fluss knackendes Eis |
+| **Meere** | sanftes Plätschern, Seewind, Möwen, Delfine; über tiefem Wasser ferne Walgesänge, in kalten und gefrorenen Meeren Sturm und Eis |
+| **Pilzland, Tropfsteinhöhlen, Üppige Höhlen** | Wellen und Möwen um die Pilzinsel; in den Höhlen tropfendes Wasser und Blubbern |
+
+Nur die Tiefe Finsternis behält ihre eigene, bedrückende Stille von Minecraft.
+
+Die Klänge folgen den Umständen: Vögel singen am Tag und verstummen bei Regen, nachts summen die Glühwürmchen; in Häusern
+und Höhlen verklingen Laub und Vögel, vom Wind bleibt nur ein Hauch; auf Gipfeln pfeift der Wind lauter; unter Wasser
+wird es still. Beim Wechsel des Bioms blenden die Klangwelten sanft ineinander. Unter *Mods → Kingdoms at War →
+Konfiguration* lassen sich die **Biom-Klänge** ganz abschalten, und die **Lautstärke der Biom-Klänge** (0 bis 100 %,
+anfangs 60 %) stellt sie leiser; zusätzlich gilt der Schieberegler „Umgebung/Umwelt“ von Minecraft. Die Klangteppiche und
+viele Einzelklänge sind eigens für die Mod erzeugt (`tools/audio/ambience.py`); die übrigen Einzelklänge verweisen auf
+Naturaufnahmen von Minecraft selbst.
 
 ### Die neue Oberwelt
 
@@ -1141,7 +1173,9 @@ Name, Rang, Kampferfahrung und Herr bleiben bei jeder Ausbildung; eine Frau blei
 **Kampferfahrung und Stufen:** Soldaten lernen im Kampf. Jeder Treffer an einem Gegner gibt Kampferfahrung (ein halber
 Punkt je Schadenspunkt), jeder Sieg die Hälfte der Lebenspunkte des Besiegten – Bosse anderthalbmal so viel –, und
 Kameraden bis 12 Blöcke daneben lernen ein Viertel davon mit. Für Kämpfe gegen Dorfbewohner, Tiere oder die eigenen
-Leute gibt es nichts. Mit der Erfahrung steigt ein Soldat **bis Stufe 20** auf; jede Stufe bringt +3 % Leben, +0,15
+Leute gibt es nichts. Mit der Erfahrung steigt ein Soldat **bis Stufe 20** auf – ein langer Weg: Stufe 5 braucht 270
+Kampferfahrung, Stufe 10 1.305 und Stufe 20 5.610 (seit 0.61; Soldaten aus älteren Spielständen behalten ihre Stufe und
+ihren Fortschritt). Jede Stufe bringt +3 % Leben, +0,15
 Schaden und +0,1 Rüstung (auf Stufe 20 also +57 % Leben, fast 3 Schaden und knapp 2 Rüstung mehr). Steigt er auf, sprühen
 bunte Funken, und über deiner Leiste steht, wer welche Stufe erreicht hat; reicht es für den nächsten Rang, sagt es dir
 eine Nachricht. **Ränge** gibt es am Feldherrentisch erst ab ihrer Stufe (siehe oben) – der Tisch zeigt Stufe,
@@ -1557,6 +1591,34 @@ schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschi
 | **Nautilus** | Nautilus | – | gestreiftes Perlboot mit Fangarmen; zähmbar, mit Sattel und Nautilus-Rüstung reitbar |
 | **Geisternautilus** | Zombienautilus | – | bleiches, rissiges Gehäuse mit Seepocken und Tang, seegrün glimmende Augen; trägt Wasserleichen |
 
+### Das lebendige Meer
+
+![Das lebendige Meer: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabben](docs/bilder/meer.jpg)
+
+Seit 0.61 leben fünf ganz neue Wesen in den Meeren und an den Küsten – keine Vanilla-Gegenstücke, sondern eigene Arten
+mit eigenem Modell, eigenem Verhalten und eigenen Klängen:
+
+| Wesen | Wo | Was es tut |
+|---|---|---|
+| **Mantarochen** | warme, laue und tiefe Meere, einzeln oder zu zweit | gleitet mit langsamen Flügelschlägen und neigt sich in die Kurven; ab und zu nimmt er Anlauf und springt in hohem Bogen aus dem Wasser, dreht sich in der Luft und klatscht zurück. Wer neben ihm schwimmt, bekommt die **Gnade des Delfins**. Friedlich (30 Lebenspunkte); flieht, wenn man ihn angreift |
+| **Leuchtqualle** | in Schwärmen von drei bis sechs in fast allen Meeren – meist blau, in warmen Meeren oft rosa oder golden; ein Schwarm hat eine Farbe | treibt langsam, sinkt und **pumpt** sich leuchtend wieder empor; ihre Glocke schimmert, ein weicher Schein liegt um sie. Wer sie berührt, wird **genesselt** (kurz vergiftet). Mit dem Wassereimer fängst du sie, ihre Farbe bleibt |
+| **Hai** | warme und tiefe Meere | zieht nah unter der Oberfläche seine Bahnen und jagt Fische; Schwimmer greift er an, wenn sie ihm zu nahe kommen – oder weiter weg, wenn sie verwundet sind: er **umkreist** die Beute, **stößt zu** und dreht wieder ab (36 Lebenspunkte, Biss 6) |
+| **Anglerfisch** | nur tief unten in den tiefen Meeren, wo es dunkel ist | treibt langsam durch die Finsternis; sein **Köder** leuchtet in der Finsternis – oft siehst du nur das Licht. Kommst du nah heran, **schnappt** er blitzschnell zu (24 Lebenspunkte, Biss 7). An Land erstickt er |
+| **Riesenkrabbe** | Strände, Steinküsten, Mangroven, Korallen- und Sturmküste, im flachen Wasser | läuft seitwärts, klappert mit den Scheren und kneift zurück – mit ihr die ganze Gruppe (18 Lebenspunkte, Panzer 6). Mit **Seetang** oder Seegras lässt sie sich anlocken und züchten |
+
+**Beute und Neues:**
+
+| Gegenstand | Woher | Wozu |
+|---|---|---|
+| **Leuchtgelee** | Leuchtqualle | im Seltsamen Trank (auch als Wurf- oder Verweiltrank) wird es zum **Trank der Nachtsicht** |
+| **Haizahn** | Hai (1 bis 3) | ein Zahn, ein Stock und eine Feder ergeben **sechs Pfeile** |
+| **Leuchtköder** | Anglerfisch (selten) | mit Prismarinscherben und Eisennuggets zur **Tiefsee-Laterne** – sie leuchtet so hell wie Leuchtstein und hängt oder steht wie eine Laterne |
+| **Krabbenfleisch** | Riesenkrabbe | roh ein Happen, gegart (Ofen, Räucherofen, Lagerfeuer) eine gute Mahlzeit |
+| **Krabbenschere** | Riesenkrabbe (selten) | in der Nebenhand: **+1,5 Blöcke Reichweite** beim Bauen und +1 beim Zuschlagen |
+| **Eimer mit Leuchtqualle** | Wassereimer an einer Qualle | setzt sie in deinem Aquarium wieder aus |
+
+Alle fünf haben ein **Spawn-Ei** im neuen Kreativ-Reiter **„Das Meer“**.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -1801,8 +1863,10 @@ Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrun
 | ein Biom zum ersten Mal betreten | 20 |
 | eine Stammburg erobern | 500 |
 
-Damit steigst du bis **Heldenstufe 100** auf – ein weiter Weg: Stufe *L* braucht 40 · (*L* − 1)² Heldenerfahrung, also
-Stufe 10 3.240, Stufe 50 96.040 und **Stufe 100 392.040**; der letzte Schritt allein kostet 7.880. Jede Stufe bringt
+Damit steigst du bis **Heldenstufe 100** auf – ein weiter Weg: Stufe *L* braucht 60 · (*L* − 1)^2,15 Heldenerfahrung,
+also Stufe 10 6.757, Stufe 20 33.688, Stufe 50 258.269 und **Stufe 100 1.171.566**; der letzte Schritt allein kostet
+25.295. (Bis 0.60 waren es 40 · (*L* − 1)², für Stufe 100 also 392.040. Spielstände von damals behalten ihre Stufe und
+den Fortschritt zur nächsten, die Erfahrung für Monster, Erz und Fortschritte ist gleich geblieben.) Jede Stufe bringt
 einen **Talentpunkt**, und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und
 **zwei Talentpunkte extra**:
 
@@ -2118,8 +2182,10 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/generate_villagers.py` | Texturen der Dorfbewohner neu zeichnen (`--preview` für eine Übersicht) |
 | `python3 tools/generate_undead_villagers.py` | Texturen der untoten Dorfbewohner aus denen der Dorfbewohner ableiten (`--preview`) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
-| `python3 tools/audio/ambience.py` | Klangteppiche und Einzelklänge der Biome neu erzeugen |
+| `python3 tools/audio/ambience.py` | Klangteppiche und Einzelklänge der Biome neu erzeugen (`--events-only`: nur `sounds.json` und `AmbientSounds.java` schreiben, ohne die Klänge neu zu rechnen) |
 | `python3 tools/audio/void_creatures.py` | Stimmen der Wesen der Leere und des Zerbrochenen Königs neu erzeugen |
+| `python3 tools/audio/sea_creatures.py` | Stimmen der Meereswesen neu erzeugen (`--preview ordner` legt Hörproben als WAV ab) |
+| `python3 tools/sea_textures.py` | Gegenstände, Laterne und Leuchthof der Meereswesen (wird von `generate_textures.py` mit aufgerufen) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
@@ -2133,7 +2199,8 @@ src/main/java/io/github/sirschrolli/kingdomsatwar/
 ├── entity/                   Drachen, Drachen-Bosse (entity/boss), Soldaten, Banditen, Kreaturen, Dorfbewohner (entity/villager), Sitz,
 │                             die Hof- und Weidetiere an Stelle der Vanilla-Tiere (entity/creature/farm),
 │                             die Wildtiere an Stelle der Vanilla-Wildtiere (entity/creature/wild),
-│                             die Monster an Stelle der Vanilla-Monster (entity/creature/monster)
+│                             die Monster an Stelle der Vanilla-Monster (entity/creature/monster),
+│                             die Wesen der Leere (entity/voidrealm) und die Meereswesen (entity/sea)
 ├── dragon/  army/  magic/    Drachenarten, Rekrutierung und Befehle, Zauber
 ├── economy/                  Münzen, Ansehen, Siedlung und Baupläne (economy/town), Bürger und Handel (economy/citizen)
 ├── story/  world/            Chronik, Kapitel, Siegel und Schattentor
@@ -2178,7 +2245,25 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
-   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig.
+   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig; seit 0.61 dauert das Leveln
+   länger.
+5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König und die fünf Meereswesen sind fertig, als Nächstes:
+   - **0.62 – Die Tiefe des Meeres:** neue Landschaften unter Wasser (Seetangwälder, Felsnadeln, Anemonengärten,
+     Muschelbänke, heiße Quellen am Grund, leuchtende Felder) und ein **Meeres-Boss**, der einen eigenen
+     **Gezeiten-Speer** als 3D-Waffe fallen lässt;
+   - **0.63 – Das Feenreich:** eine neue Dimension im ewigen Abendrot – Riesenpilze, leuchtende Bäume, Feen, Irrlichter
+     und Ruinen –, betretbar schon vor den Drachen durch einen eigenen **Portal-Rahmen**, mit einem Boss, der
+     **Feen-Elytren** fallen lässt;
+   - danach weitere Bosse im Nether und im End mit eigenen 3D-Speeren und Elytren, neue Monster in allen Welten und
+     neue 3D-Waffen und -Rüstungen;
+   - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
+     Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
+     versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König
+     fällt: ein Portal hinter dem Thron und ein Schlüssel, der Risse in der Leere öffnet. Wer den Weltenfresser
+     besiegt, erhält einen legendären Speer, eine Trophäe und den Titel **„Weltenretter“**.
+
+   Die Bosse werden in dieser Reihenfolge stärker: Meeres-Boss und Feenreich-Boss (früh im Spiel) → Erzmagier →
+   Drachen → Zerbrochener König → Weltenfresser.
 
 ## Danksagung
 

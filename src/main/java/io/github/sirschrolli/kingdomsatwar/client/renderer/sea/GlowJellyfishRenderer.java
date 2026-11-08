@@ -69,8 +69,8 @@ public class GlowJellyfishRenderer extends MobRenderer<GlowJellyfishEntity, SeaR
         if (!state.isInvisible && state.deathTime <= 0.0f) {
             // ein weicher Schein um die Glocke, der beim Pumpen kurz aufflackert
             float pulse = state.sincePulse < 30.0f ? (1.0f - state.sincePulse / 30.0f) * 0.25f : 0.0f;
-            float strength = 0.32f + 0.06f * Mth.sin(state.ageInTicks * 0.1f) + pulse;
-            SeaGlow.halo(poseStack, collector, camera.orientation, new Vector3f(0.0f, 0.82f, 0.0f), 1.5f,
+            float strength = 0.22f + 0.05f * Mth.sin(state.ageInTicks * 0.1f) + pulse;
+            SeaGlow.halo(poseStack, collector, camera.orientation, new Vector3f(0.0f, 0.82f, 0.0f), 1.35f,
                     HALO_COLORS[Mth.clamp(state.variant, 0, 2)], strength);
         }
     }

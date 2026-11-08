@@ -14,7 +14,7 @@ import org.joml.Vector3f;
 
 /** Ein weicher, leuchtender Hof (immer zur Kamera gedreht) – um Köder und Quallen in der dunklen Tiefe. */
 final class SeaGlow {
-    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
+    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/sea/halo.png");
     private static final int FULL_BRIGHT = 0xF000F0;
 
     private SeaGlow() {}
