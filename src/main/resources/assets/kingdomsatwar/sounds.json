@@ -2037,5 +2037,13 @@
       "kingdomsatwar:voice/soldier/victory_en_3b"
     ],
     "subtitle": "subtitles.kingdomsatwar.voice.soldier.victory"
+  },
+  "hero.pat": {
+    "subtitle": "subtitles.kingdomsatwar.hero.pat",
+    "sounds": [
+      "kingdomsatwar:patpat/pat",
+      "kingdomsatwar:patpat/pat1",
+      "kingdomsatwar:patpat/pat2"
+    ]
   }
 }

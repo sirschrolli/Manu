@@ -350,12 +350,22 @@ public final class HeroLevel {
                 world.sendParticles(dust, x + Math.cos(b) * r, y + 0.1 + t * 2.7, z + Math.sin(b) * r, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }
-        world.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, x, y + 1.3, z, rankUp ? 70 : 26, 0.35, 0.6, 0.35, rankUp ? 0.5 : 0.28);
-        world.sendParticles(ParticleTypes.ENCHANT, x, y + 1.0, z, 40, 0.6, 0.8, 0.6, 1.2);
+        // Totem-Funken, Zauberschrift und Feuerwerk sehen nur die anderen – dem Helden selbst flögen sie mitten durchs Bild,
+        // er hat ja die Aufstiegs-Szene
+        for (ServerPlayer viewer : world.players()) {
+            if (viewer == player || viewer.distanceToSqr(player) > 48.0 * 48.0) {
+                continue;
+            }
+            world.sendParticles(viewer, ParticleTypes.TOTEM_OF_UNDYING, false, false, x, y + 1.3, z, rankUp ? 70 : 26, 0.35, 0.6, 0.35,
+                    rankUp ? 0.5 : 0.28);
+            world.sendParticles(viewer, ParticleTypes.ENCHANT, false, false, x, y + 1.0, z, 40, 0.6, 0.8, 0.6, 1.2);
+            if (rankUp) {
+                world.sendParticles(viewer, ParticleTypes.FIREWORK, false, false, x, y + 2.6, z, 60, 0.15, 0.15, 0.15, 0.22);
+            }
+        }
         world.playSound(null, x, y, z, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 0.8f);
         world.playSound(null, x, y, z, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.0f, 1.2f);
         if (rankUp) {
-            world.sendParticles(ParticleTypes.FIREWORK, x, y + 2.6, z, 60, 0.15, 0.15, 0.15, 0.22);
             world.playSound(null, x, y, z, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.7f, 1.0f);
             world.playSound(null, x, y, z, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.8f, 1.1f);
             player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.rank_up", Component.translatable(rank.translationKey())

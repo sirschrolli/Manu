@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.52.0 – dein eigenes Levelsystem. Dein Held sammelt **Heldenerfahrung** – für besiegte Monster und Bosse (ein Viertel auch für die Siege deiner Soldaten und Drachen), für Erz, Fortschritte, neue Biome und eroberte Burgen – und steigt bis **Heldenstufe 50** auf. Jede Stufe bringt einen **Talentpunkt** für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst oder Glück (je höchstens zehn). Alles im neuen **Charakterfenster (Taste K)**. Die Erfahrung von Minecraft bleibt genau, wie sie ist.**
+> **Testversion 0.53.0 – der Weg zur Legende. Die Heldenstufe geht jetzt bis **100** – und das braucht viel: **392.040 Heldenerfahrung**. Unterwegs wirst du **Knappe, Recke, Ritter, Held, Kriegsherr und Legende**, jeder Rang mit eigenem Abzeichen und zwei Talentpunkten extra; Talente fassen jetzt **20 Punkte**. Das **Charakterfenster (K)** ist neu gestaltet (dunkel und gold, mit Animationen), jeder Aufstieg spielt eine **Aufstiegs-Szene** mit Lichtwelle, Strahlenkranz und Funken. Als Legende darfst du **streicheln** – genau wie in der Mod PatPat: Schleichen + Rechtsklick (oder G).**
+> In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
 > In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
 > In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
 > In 0.49 kam die Königsburg: Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan und als .litematic, mit zwei Mauerringen, Graben, Kernburg, Bergfried, Palas, Kapelle, Marstall, Königsgarten und einer ganzen Stadt davor. 0.49.1 reparierte die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen.
@@ -361,6 +362,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Herz- und Manakristalle: für immer mehr Herzen und Mana (Höhlen, Schatztruhen, Drachenbosse, Erzmagier) | ✅ fertig |
 | Truppen weiter leveln: Kampferfahrung, 20 Stufen, die Ränge Meister und Legende | ✅ fertig |
 | Eigenes Levelsystem für den Charakter: Heldenerfahrung, 50 Heldenstufen, sechs Talente, Charakterfenster (K) | ✅ fertig |
+| Heldenstufe bis 100 mit sechs Rängen, neues Charakterfenster, Aufstiegs-Szene, Streicheln als Belohnung | ✅ fertig |
 | Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ als Nächstes |
 | Modrinth-Veröffentlichung | ⏳ später |
 
@@ -1594,7 +1596,7 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 
 ### Heldenstufe und Talente
 
-![Charakterfenster, Heldenerfahrung und Aufstieg](docs/bilder/heldenstufe.jpg)
+![Charakterfenster, Aufstieg, Legende und Streicheln](docs/bilder/heldenstufe.jpg)
 
 Dein Held hat ein **eigenes Levelsystem** – ganz getrennt von der Erfahrung von Minecraft: Erfahrungskugeln, Stufen und
 Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrung**:
@@ -1608,22 +1610,51 @@ Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrun
 | ein Biom zum ersten Mal betreten | 20 |
 | eine Stammburg erobern | 500 |
 
-Damit steigst du bis **Heldenstufe 50** auf. Beim Aufstieg erscheint ein goldener Titel, und jede Stufe bringt einen
-**Talentpunkt**; was du an Heldenerfahrung bekommst, steht kurz links über der Schnellleiste. Im **Charakterfenster
-(Taste K)** siehst du deine Heldenstufe, die Leiste bis zur nächsten, deine Werte, deine Herz- und Manakristalle und
-wie viele Biome du entdeckt hast – und verteilst die Punkte:
+Damit steigst du bis **Heldenstufe 100** auf – ein weiter Weg: Stufe *L* braucht 40 · (*L* − 1)² Heldenerfahrung, also
+Stufe 10 3.240, Stufe 50 96.040 und **Stufe 100 392.040**; der letzte Schritt allein kostet 7.880. Jede Stufe bringt
+einen **Talentpunkt**, und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und
+**zwei Talentpunkte extra**:
 
-| Talent | je Punkt (höchstens 10) |
-|---|---|
-| Stärke | +0,5 Schaden |
-| Lebenskraft | +1 Leben (zehn Punkte: fünf Herzen) |
-| Gewandtheit | +2 % Lauftempo |
-| Zähigkeit | +0,5 Rüstung |
-| Zauberkunst | +10 Mana und 5 % schnellere Erholung des Manas |
-| Glück | +0,25 Glück – bessere Beute in Truhen |
+| Rang | ab Stufe | Abzeichen |
+|---|---|---|
+| Knappe | 1 | Bronze |
+| Recke | 20 | Silber mit Lorbeer |
+| Ritter | 40 | Gold mit Krone und Rubin |
+| Held | 60 | Gold mit Smaragden |
+| Kriegsherr | 80 | Platin mit Schwingen und Diamant |
+| Legende | 100 | Feuergold mit Strahlenkranz – und die Belohnung: **Streicheln** |
 
-Mit 49 Punkten lässt sich nicht alles meistern – du entscheidest, was für ein Held du bist. **Neu verteilen** kostet
-eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
+**Der Aufstieg:** Eine Lichtwelle läuft über den Bildschirm, das Rangabzeichen springt herein, die Stufe zählt hoch,
+Strahlen drehen sich dahinter, Funken sprühen, darunter erscheinen Stufe, Rang und die neuen Talentpunkte; bei einem
+neuen Rang mit Fanfare, zweiter Welle und Feuerwerk. Wer dabeisteht, sieht einen Lichtring über den Boden laufen und
+eine Spirale in der Farbe des Rangs am Helden aufsteigen. Was du an Heldenerfahrung bekommst, zeigt links über der
+Schnellleiste dein Abzeichen mit einer Leiste, die sich fließend füllt.
+
+**Das Charakterfenster (Taste K)** – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und Biome;
+rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), der **Weg zur Legende**
+mit allen sechs Rängen und die sechs Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der
+pulsiert, solange Punkte frei sind:
+
+| Talent | je Punkt (höchstens 20) | mit 20 Punkten |
+|---|---|---|
+| Stärke | +0,3 Schaden | +6 Schaden |
+| Lebenskraft | +1 Leben | zehn Herzen mehr |
+| Gewandtheit | +1,25 % Lauftempo | +25 % |
+| Zähigkeit | +0,4 Rüstung | +8 Rüstung |
+| Zauberkunst | +8 Mana und 4 % schnellere Erholung | +160 Mana, +80 % |
+| Glück | +0,2 Glück – bessere Beute in Truhen | +4 Glück |
+
+Bis Stufe 100 kommen 109 Punkte zusammen, alle Talente fassen 120 – du entscheidest, was für ein Held du bist.
+**Neu verteilen** kostet eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
+Wer aus 0.52 kommt, steht mit derselben Heldenerfahrung auf einer neuen Stufe und bekommt seine Punkte kostenlos
+zurück, falls er mehr verteilt hatte, als die neue Stufe hergibt.
+
+**Streicheln – die Belohnung der Legende.** Genau wie in der Mod [PatPat](https://modrinth.com/mod/patpat): Schleiche
+und klicke ein Lebewesen mit leerer Hand rechts an (oder drücke **G**) – eine Hand tätschelt ihm den Kopf, es wird
+dabei kurz niedriger, sein Name verschwindet so lange, und es macht den PatPat-Tätschelton. Gedrückt halten streichelt
+weiter; wer selbst gestreichelt wird, dem wackelt kurz das Bild. Alle in der Nähe sehen und hören es. Eigene Soldaten,
+gezähmte Tiere und Drachen bekommen dabei ein halbes Herz zurück (höchstens alle drei Sekunden). Unter Stufe 100
+benutzt Schleichen + Rechtsklick die Wesen wie immer.
 
 ### Ausrüstung
 
@@ -1852,6 +1883,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | **K** | Charakterfenster: Heldenstufe, Heldenerfahrung, Talentpunkte verteilen (änderbar unter Optionen → Steuerung) |
+| **G** / Schleichen + Rechtsklick | als Legende (Heldenstufe 100) das Wesen vor dir streicheln, gedrückt halten streichelt weiter (G änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
 | `spiderLook` (Client) | Aussehen der Spinnen: `DETAILED` (eigenes Modell, Standard), `CLASSIC` (Minecrafts Spinne) oder `MOOSLING` (Arachnophobie-Modus: runde Moosbälle ohne Beine statt Spinnen) – im Spiel unter Mods → Kingdoms at War → Konfiguration |
@@ -1938,7 +1970,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
-   Heldenstufen und Talenten sind fertig. Als Nächstes kommen Fahrzeuge und der Belagerungsturm.
+   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig. Als Nächstes kommen Fahrzeuge
+   und der Belagerungsturm.
 5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung
@@ -1952,8 +1985,14 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 - **Musik:** eigene Komposition, gespielt mit dem Soundfont FluidR3_GM von Frank Wen (MIT-Lizenz).
 - **Geräusche der Lebewesen:** nutzen die Original-Geräusche von Minecraft mit veränderter Tonhöhe;
   es werden keine Minecraft-Dateien mitgeliefert (siehe `tools/sound_events.py`).
+- **Streicheln:** die Hand und die drei Tätscheltöne stammen aus der Mod [PatPat](https://modrinth.com/mod/patpat) von
+  LopyMine und nikita51 (LGPL v3.0); die Hand ist in ihre fünf Einzelbilder geteilt, die Töne sind unverändert. Diese
+  Dateien stehen weiter unter der LGPL v3.0 und lassen sich z. B. mit einem Ressourcenpaket ersetzen – Lizenztexte und
+  Hinweise liegen in der Mod unter `licenses/patpat/` (siehe
+  [NOTICE.md](src/main/resources/licenses/patpat/NOTICE.md)). Der Code für das Streicheln ist eigenständig geschrieben.
 
 ## Lizenz
 
 Alle Rechte vorbehalten (siehe `mod_license` in `gradle.properties` – kann vor einer Veröffentlichung geändert werden).
-Die Texturen sind eigene Pixelkunst; es werden keine Original-Minecraft-Dateien mitgeliefert.
+Die Texturen sind eigene Pixelkunst; es werden keine Original-Minecraft-Dateien mitgeliefert. Ausgenommen sind die
+Hand und die Töne des Streichelns aus PatPat: Sie stehen unter der GNU LGPL v3.0 (`src/main/resources/licenses/patpat/`).

@@ -154,18 +154,27 @@ final class HeroShowcase {
             Showcase.fill(level, new BlockPos(-12, ground - 1, oz - 16), new BlockPos(12, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
             Showcase.fill(level, new BlockPos(-12, ground, oz - 16), new BlockPos(12, ground + 8, oz + 8), Blocks.AIR.defaultBlockState());
             Showcase.fill(level, new BlockPos(-3, ground - 1, oz - 6), new BlockPos(3, ground - 1, oz - 2), Blocks.COARSE_DIRT.defaultBlockState());
+            for (int i = 0; i < 18; i++) {
+                int x = -10 + (i * 7) % 21;
+                int z = oz - 14 + (i * 5) % 20;
+                if (Math.abs(x) > 3 || z < oz - 6 || z > oz - 2) {
+                    level.setBlock(new BlockPos(x, ground, z), (i % 3 == 0 ? Blocks.FERN : Blocks.SHORT_GRASS).defaultBlockState(), 2);
+                }
+            }
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
-            Crystals.set(player, new Crystals.Count(4, 3));
-            // Heldenstufe 12 mit acht verteilten Punkten – drei sind noch frei
-            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(12) + (HeroLevel.total(13) - HeroLevel.total(12)) * 2 / 3,
-                    java.util.List.of(3, 2, 0, 2, 1, 0), 17));
+            Crystals.set(player, new Crystals.Count(6, 4));
+            // Heldenstufe 47 (Ritter), zwei Punkte noch frei
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(47) + (HeroLevel.total(48) - HeroLevel.total(47)) * 3 / 5,
+                    java.util.List.of(12, 10, 6, 8, 9, 3), 23));
             player.setHealth(player.getMaxHealth());
         }));
         steps.add(Step.command("gamemode survival"));
         steps.add(Step.command("clear @s"));
-        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:iron_sword"));
-        steps.add(Step.command("item replace entity @s armor.chest with minecraft:iron_chestplate"));
-        steps.add(Step.command("item replace entity @s armor.legs with minecraft:chainmail_leggings"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:diamond_sword"));
+        steps.add(Step.command("item replace entity @s armor.head with minecraft:iron_helmet"));
+        steps.add(Step.command("item replace entity @s armor.chest with minecraft:diamond_chestplate"));
+        steps.add(Step.command("item replace entity @s armor.legs with minecraft:iron_leggings"));
+        steps.add(Step.command("item replace entity @s armor.feet with minecraft:iron_boots"));
         steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:command_baton"));
         steps.add(Step.command("item replace entity @s hotbar.2 with minecraft:bread 12"));
         steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 12));
@@ -174,20 +183,39 @@ final class HeroShowcase {
         steps.add(Step.waitForChunks(200));
         steps.add(Step.waitTicks(40));
 
-        // 1. das Charakterfenster
+        // 1. das Charakterfenster (nach dem Öffnen: Leiste gefüllt, Karten hereingeglitten)
         steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
         steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
-        steps.add(Step.waitTicks(10));
+        steps.add(Step.waitTicks(6));
         steps.add(Step.once(Showcase::parkMouse));
-        steps.add(Step.waitTicks(10));
+        steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("hero_0_screen"));
-        // 2. darüber: wofür es Heldenerfahrung gibt
-        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 92 + 60, 26)));
+        // 2. der Weg zur Legende: die Legende mit ihrer Belohnung
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 116 + 185, 75)));
         steps.add(Step.waitTicks(8));
-        steps.add(Step.screenshot("hero_1_sources"));
+        steps.add(Step.screenshot("hero_1_track"));
+        // ein Talentpunkt geht in die Lebenskraft: das Kästchen blitzt auf
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.server(level -> HeroLevel.spend(level.getServer().getPlayerList().getPlayers().getFirst(), HeroLevel.Talent.VITALITY)));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.screenshot("hero_2_spend"));
+        // der Weg zur Legende: erst im Anflug, dann angekommen, dann das Ende des Weges
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(17));
+        steps.add(Step.screenshot("hero_p0_flight"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("hero_p1_path"));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen path) {
+                path.jumpTo(93.0f);
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("hero_p2_legend"));
         steps.add(Step.screen(minecraft -> null));
 
-        // 3. ein Sieg: die Heldenerfahrung erscheint kurz über der Leiste, die Erfahrungskugeln fallen wie immer
+        // 3. ein Sieg: die Anzeige über der Schnellleiste
         steps.add(Step.server(level -> {
             var zombie = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get().create(level,
                     net.minecraft.world.entity.EntitySpawnReason.COMMAND);
@@ -206,25 +234,129 @@ final class HeroShowcase {
             level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, new net.minecraft.world.phys.AABB(new BlockPos(0, Showcase.ground,
                     oz - 3)).inflate(4)).forEach(zombie -> zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f));
         }));
-        steps.add(Step.waitTicks(14));
-        steps.add(Step.screenshot("hero_2_gained"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("hero_3_gained"));
+        steps.add(Step.waitTicks(70));
 
-        // 4. Aufstieg: Heldenstufe 13
-        steps.add(Step.waitTicks(60));
+        // 4. Aufstieg mit neuem Rang: von 39 auf 40 – Ritter (die Szene mitten im Lauf)
         steps.add(Step.server(level -> {
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
-            HeroLevel.award(player, HeroLevel.total(13) - HeroLevel.of(player).experience() + 4);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(40) - 30, java.util.List.of(), 23));
         }));
-        steps.add(Step.waitTicks(16));
-        steps.add(Step.screenshot("hero_3_levelup"));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> HeroLevel.award(level.getServer().getPlayerList().getPlayers().getFirst(), 45)));
+        steps.add(Step.waitTicks(9));
+        steps.add(Step.screenshot("hero_4_burst"));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("hero_5_rank"));
+        steps.add(Step.waitTicks(80));
+
+        // 5. Legende: von 99 auf 100, mit der Belohnung
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(100) - 20, java.util.List.of(), 23));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> HeroLevel.award(level.getServer().getPlayerList().getPlayers().getFirst(), 40)));
+        steps.add(Step.waitTicks(44));
+        steps.add(Step.screenshot("hero_6_legend"));
+        steps.add(Step.waitTicks(70));
+
+        patScene(steps, oz);
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.hud(false));
     }
 
+    /** Nur der Weg zur Legende (schnell zu prüfen). */
+    static void path(Deque<Step> steps) {
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(47) + (HeroLevel.total(48) - HeroLevel.total(47)) * 3 / 5,
+                    java.util.List.of(12, 10, 6, 8, 9, 3), 23));
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(17));
+        steps.add(Step.screenshot("hero_p0_flight"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("hero_p1_path"));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen path) {
+                path.jumpTo(93.0f);
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("hero_p2_legend"));
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    /** Nur das Streicheln (schnell zu prüfen). */
+    static void pat(Deque<Step> steps) {
+        int oz = -80;
+        steps.add(Step.server(level -> {
+            int ground = Showcase.ground;
+            Showcase.fill(level, new BlockPos(-12, ground - 1, oz - 16), new BlockPos(12, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(-12, ground, oz - 16), new BlockPos(12, ground + 8, oz + 8), Blocks.AIR.defaultBlockState());
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(100), java.util.List.of(), 23));
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitForChunks(200));
+        patScene(steps, oz);
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    private static void patScene(Deque<Step> steps, int oz) {
+        // 6. Streicheln (wie in PatPat): ein eigener Wolf sitzt vor dem Helden, die Hand tätschelt ihm den Kopf, er duckt sich
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            var wolf = net.minecraft.world.entity.EntityTypes.WOLF.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            if (wolf != null) {
+                wolf.snapTo(0.5, Showcase.ground, oz - 1.3, 0.0f, 0.0f);
+                wolf.tame(player);
+                wolf.setOrderedToSit(true);
+                wolf.setInSittingPose(true);
+                wolf.setNoAi(true);
+                wolf.setYRot(0.0f);
+                wolf.setYHeadRot(0.0f);
+                wolf.setYBodyRot(0.0f);
+                level.addFreshEntity(wolf);
+            }
+        }));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:air"));
+        steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 34));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            level.getEntitiesOfClass(net.minecraft.world.entity.animal.wolf.Wolf.class, player.getBoundingBox().inflate(4)).forEach(wolf -> {
+                io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+                io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, wolf);
+            });
+        }));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.hero.PatClient.devProgress = 0.62f));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.screenshot("hero_7_pat"));
+        steps.add(Step.once(minecraft -> {
+            minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+            io.github.sirschrolli.kingdomsatwar.client.hero.PatClient.devProgress = null;
+        }));
+        steps.add(Step.waitTicks(10));
+    }
+
     /** Mauszeiger über eine Stelle des Charakterfensters (Koordinaten im Fenster). */
     private static void hoverCharacter(net.minecraft.client.Minecraft minecraft, int guiX, int guiY) {
-        int left = (minecraft.getWindow().getGuiScaledWidth() - 276) / 2;
-        int top = (minecraft.getWindow().getGuiScaledHeight() - 222) / 2;
+        int left = (minecraft.getWindow().getGuiScaledWidth() - 324) / 2;
+        int top = (minecraft.getWindow().getGuiScaledHeight() - 246) / 2;
         double scale = minecraft.getWindow().getGuiScale();
         try {
             for (String name : new String[] {"xpos", "ypos"}) {

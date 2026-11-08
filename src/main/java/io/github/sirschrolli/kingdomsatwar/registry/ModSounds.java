@@ -73,6 +73,10 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_BREATH = register("entity.nyxar.breath");
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_SHRIEK = register("entity.nyxar.shriek");
 
+    // ---------------------------------------------------------------- Held
+    /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> HERO_PAT = register("hero.pat");
+
     static {
         for (DragonType type : DragonType.values()) {
             DRAGON_BREATH.put(type, register("entity.dragon.breath." + type.id()));

@@ -27,7 +27,7 @@ public final class ModKeyMappings {
             InputConstants.Type.KEYBOARD, InputConstants.KEY_V, MAGIC);
 
     public static final KeyMapping.Category HERO = new KeyMapping.Category(KingdomsAtWar.id("hero"));
-    /** Charakterfenster: Heldenstufe, Heldenerfahrung und Talente (Standard: K). */
+    /** Der Weg zur Legende (Heldenstufe als Pfad), von dort Talente und Werte (Standard: K). */
     public static final KeyMapping CHARACTER = new KeyMapping("key.kingdomsatwar.character", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_K, HERO);
     /** Streicheln, die Belohnung der Legende: das Wesen vor einem (Standard: G; gedrückt halten streichelt weiter). */
@@ -52,7 +52,7 @@ public final class ModKeyMappings {
         Minecraft minecraft = Minecraft.getInstance();
         while (CHARACTER.consumeClick()) {
             if (minecraft.player != null && minecraft.gui.screen() == null) {
-                minecraft.gui.setScreen(new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen());
+                minecraft.gui.setScreen(new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen());
             }
         }
         while (DRAGON_BREATH.consumeClick()) {

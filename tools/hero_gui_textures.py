@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Grafiken der Heldenstufe (eigene Pixelkunst, alles hier gezeichnet):
+Grafiken der Heldenstufe (eigene Pixelkunst, alles hier gezeichnet; die Hand beim Streicheln stammt aus PatPat, siehe
+src/main/resources/licenses/patpat/NOTICE.md):
 
   gui/sprites/hero/panel            Fenster: dunkles Nachtblau, goldener Rahmen mit Eckstücken und Rubinen (Neun-Teile)
   gui/sprites/hero/inset            vertieftes Feld (Neun-Teile)
@@ -13,7 +14,6 @@ Grafiken der Heldenstufe (eigene Pixelkunst, alles hier gezeichnet):
   gui/sprites/hero/badge/<rang>     dieselben Abzeichen klein (15 × 15) für Rangleiste und Anzeige
   gui/sprites/hero/rays|glow|ring|sparkle   Licht für die Aufstiegs-Szene – additiv gezeichnet, also vormultipliziert
                                     (Schwarz = nichts, Weiß = volles Licht)
-  particle/pat_hand_0..4            die Hand, die beim Streicheln den Kopf tätschelt (fünf Bilder)
 
     python3 tools/hero_gui_textures.py            # schreibt nach src/main/resources/assets/kingdomsatwar/...
     python3 tools/hero_gui_textures.py ORDNER     # schreibt stattdessen nach ORDNER (zum Ansehen)
@@ -54,12 +54,14 @@ GOLD_DK = hexc("6E4A1A")
 RUBY = (hexc("FF8A8A"), hexc("D8323A"), hexc("7A1018"))
 
 
-def save(img: Image.Image, path: Path, nine: tuple[int, int, int] | None = None) -> None:
+def save(img: Image.Image, path: Path, nine: tuple | None = None) -> None:
+    """Speichert ein Bild; mit {@code nine} = (Breite, Höhe, Rand) oder (Breite, Höhe, links, oben, rechts, unten) als Neun-Teile."""
     path.parent.mkdir(parents=True, exist_ok=True)
     img.save(path)
     meta = path.with_name(path.name + ".mcmeta")
     if nine is not None:
-        w, h, border = nine
+        w, h = nine[0], nine[1]
+        border = nine[2] if len(nine) == 3 else {"left": nine[2], "top": nine[3], "right": nine[4], "bottom": nine[5]}
         meta.write_text(json.dumps({"gui": {"scaling": {"type": "nine_slice", "width": w, "height": h, "border": border}}}, indent=4) + "\n")
     elif meta.exists():
         meta.unlink()
@@ -113,12 +115,7 @@ def panel() -> Image.Image:
                     t = (x + y) / (2 * (border - 2))
                     px[fx, fy] = mix(GOLD_HI, GOLD_MID, t)
         gem(px, ox + border / 2, oy + border / 2, 2.2, RUBY)
-    # eine feine Goldlinie innen, mit Abstand zum Rahmen
-    for k in range(border + 2, size - border - 2):
-        px[k, border + 1] = mix(BG, GOLD_DK, 0.55)
-        px[border + 1, k] = mix(BG, GOLD_DK, 0.55)
-        px[k, size - border - 2] = mix(BG, GOLD_DK, 0.35)
-        px[size - border - 2, k] = mix(BG, GOLD_DK, 0.35)
+    # das Innere bleibt glatt: es wird gekachelt, jede Linie darin wiederholte sich
     return img
 
 
@@ -453,121 +450,334 @@ def sparkle() -> Image.Image:
 
 
 # =====================================================================================================================
-# Die Hand fürs Streicheln
+# Der Weg zur Legende: Landschaft, Wegsteine, Stufensteine, Banner, Mond, Wahrzeichen der Ränge
 # =====================================================================================================================
 
-SKIN = (hexc("FFE0BC"), hexc("EDB98A"), hexc("CD8E5E"), hexc("8E5634"))
-SLEEVE = (hexc("9A66D6"), hexc("6A36A2"), hexc("40186C"))
-CUFF = (hexc("FFE7A0"), hexc("E2B24A"), hexc("8A5E1C"))
-NAIL = hexc("FBE3D6")
+def _periodic(x: float, terms: list[tuple[float, float, float]]) -> float:
+    return sum(a * math.sin(2 * math.pi * x * f / 256.0 + ph) for (a, f, ph) in terms)
 
 
-def _capsule(px: float, py: float, ax: float, ay: float, bx: float, by: float, r: float) -> float:
-    vx, vy = bx - ax, by - ay
-    t = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / (vx * vx + vy * vy)))
-    return math.hypot(px - (ax + vx * t), py - (ay + vy * t)) - r
-
-
-def _ellipse(px: float, py: float, cx: float, cy: float, rx: float, ry: float) -> float:
-    return (math.hypot((px - cx) / rx, (py - cy) / ry) - 1.0) * min(rx, ry)
-
-
-def _round_rect(px: float, py: float, cx: float, cy: float, hx: float, hy: float, r: float) -> float:
-    qx, qy = abs(px - cx) - hx + r, abs(py - cy) - hy + r
-    return math.hypot(max(qx, 0.0), max(qy, 0.0)) + min(max(qx, qy), 0.0) - r
-
-
-def hand(frame: int) -> Image.Image:
-    """
-    Die Hand von der Seite, die Finger nach rechts: Bild 0 erhoben, 1 im Herabkommen, 2 liegt auf, 3 drückt (flacher, die
-    Finger biegen sich über den Kopf), 4 hebt sich wieder. Links schaut der Ärmel heraus (Purpur mit Goldsaum – die
-    Legende). Gezeichnet aus Abstandsfeldern: Handballen, drei Fingerglieder, Daumen; Licht von oben links.
-    """
-    size = 32
-    lift = (-5.5, -2.5, 0.0, 1.0, -2.0)[frame]
-    squash = (1.0, 0.98, 0.93, 0.84, 0.95)[frame]
-    curl = (-0.6, 0.2, 0.9, 1.8, 0.8)[frame]
-    base = 20.0 + lift
-
-    def parts(x: float, y: float) -> dict[str, float]:
-        palm = min(_ellipse(x, y, 13.6, base - 4.3 * squash, 6.6, 4.7 * squash),
-                   _capsule(x, y, 8.6, base - 4.4 * squash, 15.0, base - 3.6 * squash, 4.1 * squash))
-        p0 = (17.6, base - 4.4 * squash)
-        p1 = (23.4, base - 3.7 + curl * 0.7)
-        p2 = (28.4, base - 1.6 + curl * 1.9)
-        fingers = min(_capsule(x, y, *p0, *p1, 3.0 * (0.94 + 0.06 * squash)), _capsule(x, y, *p1, *p2, 2.35))
-        thumb = _capsule(x, y, 11.2, base - 0.9, 19.4, base + 0.6 + curl * 0.35, 1.6)
-        sleeve = _round_rect(x, y, 4.6, base - 4.6, 3.9, 6.2, 1.6)
-        return {"palm": palm, "fingers": fingers, "thumb": thumb, "sleeve": sleeve}
-
-    def union(x: float, y: float) -> float:
-        return min(parts(x, y).values())
-
-    light = (-0.42, -0.91)
-    img = Image.new("RGBA", (size, size), CLEAR)
+def mountains_far() -> Image.Image:
+    """Ferne Berge (256 × 80, waagerecht kachelbar): Grate mit Mondlicht an der Kante und Schnee auf den Gipfeln."""
+    w, h = 256, 80
+    img = Image.new("RGBA", (w, h), CLEAR)
     px = img.load()
-    for y in range(size):
-        for x in range(size):
-            cx, cy = x + 0.5, y + 0.5
-            hits = sum(1 for sy in range(4) for sx in range(4) if union(x + (sx + 0.5) / 4, y + (sy + 0.5) / 4) <= 0.0)
-            if hits < 8:
-                continue
-            ps = parts(cx, cy)
-            part = min(ps, key=ps.get)
-            if ps["thumb"] <= 0.0:
-                part = "thumb"
-            if ps["sleeve"] <= 0.0:
-                part = "sleeve"
-            d = ps[part]
-            e = 0.25
-            gx = (parts(cx + e, cy)[part] - parts(cx - e, cy)[part]) / (2 * e)
-            gy = (parts(cx, cy + e)[part] - parts(cx, cy - e)[part]) / (2 * e)
-            gl = math.hypot(gx, gy) or 1.0
-            lit = (gx * light[0] + gy * light[1]) / gl          # 1: die Kante zeigt zum Licht
-            rim = max(0.0, 1.0 - (-d) / 1.6)                    # 1 am Rand, 0 innen
-            if part == "sleeve":
-                if cx >= 6.8:
-                    tone = CUFF[0] if lit > 0.3 and rim > 0.3 else CUFF[2] if lit < -0.3 and rim > 0.3 else CUFF[1]
-                else:
-                    tone = SLEEVE[0] if lit > 0.3 and rim > 0.3 else SLEEVE[2] if lit < -0.25 and rim > 0.3 else SLEEVE[1]
-                px[x, y] = tone
-                continue
-            v = lit * rim
-            if part == "thumb":
-                v += 0.15
-            tone = SKIN[0] if v > 0.38 else SKIN[1] if v > -0.22 else SKIN[2]
-            # Fugen zwischen den Fingern (zwei feine Linien längs) und die Knöchel-Falte
-            if part == "fingers" and cx > 19.5 and cx < 27.5 and -d > 0.9:
-                p1y = base - 3.7 + curl * 0.7
-                rel = (cy - (p1y + (cx - 23.4) * 0.25 * (1 + curl * 0.3)))
-                if abs(rel + 0.6) < 0.5 and int(cx) % 3 != 0:
-                    tone = mix(SKIN[1], SKIN[2], 0.75)
-            if part == "palm" and abs(ps["fingers"]) < 0.55 and cy < base - 3.0:
-                tone = mix(SKIN[1], SKIN[2], 0.6)
-            if part == "palm" and abs(ps["thumb"]) < 0.6 and cy < base:
-                tone = SKIN[2]
-            px[x, y] = tone
-    # Fingernagel an der Spitze (oben), ein Glanzpunkt auf dem Handrücken
-    tip_x = 28.4 + 2.35 * 0.7
-    tip_y = base - 1.6 + curl * 1.9 - 1.2
-    for (nx, ny) in ((tip_x - 1.0, tip_y), (tip_x - 2.0, tip_y - 0.4)):
-        ix, iy = int(nx), int(ny)
-        if 0 <= ix < size and 0 <= iy < size and px[ix, iy][3] > 0:
-            px[ix, iy] = NAIL
-    hx, hy = 12, int(base - 4.3 * squash - 3.4 * squash)
-    if px[hx, hy][3] > 0:
-        px[hx, hy] = mix(SKIN[0], (255, 255, 255, 255), 0.5)
-        px[hx + 1, hy] = mix(SKIN[0], (255, 255, 255, 255), 0.3)
-    # Kontur
+    body, rim, snow, deep = hexc("1E1A3A"), hexc("3A3366"), hexc("8E8AB8"), hexc("17142E")
+    for x in range(w):
+        ridge = 34 + _periodic(x, [(13, 2, 0.0), (8, 5, 1.0), (4, 11, 2.0), (2, 23, 0.4)])
+        top = int(round(ridge))
+        for y in range(max(0, top), h):
+            depth = (y - top) / max(1.0, h - top)
+            px[x, y] = mix(body, deep, depth)
+        if 0 <= top < h:
+            px[x, top] = rim
+            if top < 26:   # Schnee auf den hohen Gipfeln
+                for k in range(0, min(4, 27 - top)):
+                    if top + k < h and (x + k) % 3 != 0:
+                        px[x, top + k] = mix(snow, body, k / 4)
+    return img
+
+
+def hills_near() -> Image.Image:
+    """Nahe Hügel (256 × 64, kachelbar) mit Tannen auf dem Kamm."""
+    w, h = 256, 64
+    img = Image.new("RGBA", (w, h), CLEAR)
+    px = img.load()
+    body, rim = hexc("120F24"), hexc("26203F")
+    ridge = [26 + _periodic(x, [(7, 3, 0.3), (4, 7, 1.7), (2, 13, 0.9)]) for x in range(w)]
+    for x in range(w):
+        top = int(round(ridge[x]))
+        for y in range(max(0, top), h):
+            px[x, y] = body
+        if 0 <= top < h:
+            px[x, top] = rim
+    # Tannen: alle paar Pixel eine, verschieden hoch
+    for i, tx in enumerate(range(3, w, 11)):
+        hgt = 9 + (i * 7) % 8
+        base = int(round(ridge[tx])) + 1
+        for dy in range(hgt):
+            half = int((dy + 1) * 3.2 / hgt) + (1 if dy > hgt * 0.6 else 0)
+            y = base - hgt + dy
+            for dx in range(-half, half + 1):
+                xx = (tx + dx) % w
+                if 0 <= y < h:
+                    px[xx, y] = rim if dx == -half and dy % 3 == 0 else body
+        for y in range(base - 1, min(h, base + 2)):
+            px[tx % w, y] = body
+    return img
+
+
+def foreground() -> Image.Image:
+    """Vordergrund (256 × 56, kachelbar): Grasbüschel, Büsche und Felsen als dunkle Schattenrisse mit Mondlicht oben."""
+    w, h = 256, 56
+    img = Image.new("RGBA", (w, h), CLEAR)
+    px = img.load()
+    body, rim = hexc("06050C"), hexc("1E1A34")
+    ground = [40 + _periodic(x, [(3, 2, 0.4), (2, 5, 1.1), (1, 13, 2.2)]) for x in range(w)]
+    for x in range(w):
+        for y in range(int(ground[x]), h):
+            px[x, y] = body
+    # Felsen
+    for (cx, rx, ry) in ((40, 14, 9), (150, 10, 7), (210, 18, 11)):
+        for y in range(h):
+            for x in range(cx - rx - 1, cx + rx + 2):
+                dx, dy = (x - cx) / rx, (y - (ground[x % w] - ry * 0.4)) / ry
+                if dx * dx + dy * dy <= 1.0:
+                    px[x % w, y] = body
+    # Büsche: Gruppen kleiner Kreise
+    for (cx, r) in ((95, 9), (108, 7), (182, 8), (240, 6)):
+        for y in range(h):
+            for x in range(cx - r - 1, cx + r + 2):
+                if (x - cx) ** 2 + (y - (ground[x % w] - r * 0.6)) ** 2 <= r * r:
+                    px[x % w, y] = body
+    # Grasbüschel: dünne, schräge Halme
+    for i, gx in enumerate(range(2, w, 5)):
+        base = int(ground[gx])
+        for blade in range(3):
+            lean = (blade - 1) * 0.35 + ((i * 7) % 5 - 2) * 0.08
+            height = 5 + (i * 13 + blade * 5) % 8
+            for k in range(height):
+                x = int(round(gx + blade + lean * k)) % w
+                y = base - k
+                if 0 <= y < h:
+                    px[x, y] = body
+    # Mondlicht an den oberen Kanten
     out = img.copy()
     opx = out.load()
+    for y in range(1, h):
+        for x in range(w):
+            if px[x, y] == body and px[x, y - 1][3] == 0:
+                opx[x, y] = rim
+    return out
+
+
+def stone(lit: bool) -> Image.Image:
+    """Ein Wegstein (6 × 5): grau oder golden leuchtend."""
+    img = Image.new("RGBA", (6, 5), CLEAR)
+    px = img.load()
+    if lit:
+        hi, mid, dk = hexc("FFF0B8"), hexc("E8B84A"), hexc("8A5E1C")
+    else:
+        hi, mid, dk = hexc("7A7290"), hexc("4E4762"), hexc("2A253A")
+    shape = [".xxxx.", "xxxxxx", "xxxxxx", "xxxxxx", ".xxxx."]
+    for y, row in enumerate(shape):
+        for x, c in enumerate(row):
+            if c == "x":
+                px[x, y] = hi if (y == 0 or (y == 1 and x < 3)) else dk if y == 4 or x == 5 else mid
+    return img
+
+
+def node(kind: str) -> Image.Image:
+    """Stufenstein: klein (13) oder groß (19, für jede zehnte Stufe); grau, golden oder hell (die eigene Stufe)."""
+    big = kind.startswith("big")
+    size = 19 if big else 13
+    state = kind.split("_")[-1] if "_" in kind else "locked"
+    img = Image.new("RGBA", (size, size), CLEAR)
+    px = img.load()
+    c = (size - 1) / 2
+    r_out = size / 2 - 0.6
+    r_in = r_out - (3.6 if big else 2.6)
+    if state == "done":
+        ring, center = (hexc("FFF0B0"), hexc("E2B24A"), hexc("7A5216")), (hexc("FFE7A0"), hexc("C8902E"), hexc("6E4A1A"))
+    elif state == "current":
+        ring, center = (hexc("FFFFFF"), hexc("FFE58A"), hexc("B8862A")), (hexc("FFFFFF"), hexc("FFF2C0"), hexc("E8B84A"))
+    else:
+        ring, center = (hexc("8A8299"), hexc("5A5370"), hexc("2E2840")), (hexc("2A2438"), hexc("1E1A2B"), hexc("15121F"))
     for y in range(size):
         for x in range(size):
-            if px[x, y][3] == 0:
-                for (nx, ny) in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
-                    if 0 <= nx < size and 0 <= ny < size and px[nx, ny][3] > 0:
-                        opx[x, y] = hexc("24103C") if px[nx, ny] in SLEEVE + CUFF else SKIN[3]
-                        break
+            dx, dy = x - c, y - c
+            d = math.hypot(dx, dy)
+            light = 0.5 + 0.5 * (-dx - dy) / max(0.01, d) * 0.7 if d > 0 else 0.5
+            if d <= r_in:
+                t = 0.5 + 0.5 * (-dx - dy) / (2 * r_in)
+                px[x, y] = _shade(center, t if state != "locked" else 0.25 + t * 0.3)
+            elif d <= r_out:
+                px[x, y] = _shade(ring, light)
+            elif d <= r_out + 1.0:
+                px[x, y] = INK
+    return img
+
+
+def banner() -> Image.Image:
+    """Ein Band unter den Rangsteinen (64 × 14, Neun-Teile): Purpur mit Goldsaum, die Enden gegabelt."""
+    w, h = 64, 14
+    img = Image.new("RGBA", (w, h), CLEAR)
+    px = img.load()
+    for y in range(h):
+        for x in range(w):
+            # gegabelte Enden: an den Rändern eine Kerbe in der Mitte
+            edge = min(x, w - 1 - x)
+            if edge < 4 and abs(y - (h - 1) / 2) < (4 - edge) * 0.9:
+                continue
+            if y in (0, h - 1):
+                px[x, y] = INK
+            elif y in (1, h - 2):
+                px[x, y] = GOLD if y == 1 else GOLD_MID
+            else:
+                px[x, y] = mix(hexc("5A2A86"), hexc("3A1660"), (y - 2) / (h - 4))
+    return img
+
+
+def moon() -> Image.Image:
+    size = 40
+    img = Image.new("RGBA", (size, size), CLEAR)
+    px = img.load()
+    c = (size - 1) / 2
+    craters = [(14, 15, 3.2), (24, 22, 2.4), (18, 27, 1.8), (27, 13, 1.6), (11, 24, 1.4)]
+    for y in range(size):
+        for x in range(size):
+            d = math.hypot(x - c, y - c)
+            if d <= 15.5:
+                t = 0.62 + 0.38 * (-(x - c) - (y - c)) / 31.0
+                col = mix(hexc("9E9AB8"), hexc("F4F0FF"), t)
+                for (cx, cy, r) in craters:
+                    if math.hypot(x - cx, y - cy) <= r:
+                        col = mix(col, hexc("6E6A8E"), 0.35)
+                px[x, y] = col
+            elif d <= 16.4:
+                px[x, y] = mix(hexc("C8C4E0"), CLEAR, 0.3)
+    return img
+
+
+def landmark(rank: str) -> Image.Image:
+    """
+    Das Wahrzeichen eines Rangs als Schattenriss vor dem Nachthimmel (96 × 72): Dorf (Knappe), Wachturm mit Palisade
+    (Recke), Burg (Ritter), Schrein im Wald (Held), Festung auf dem Felsen (Kriegsherr), Gipfel mit Kronenburg und Drache
+    (Legende). Fenster leuchten warm, Fahnen in der Farbe des Rangs, die Kanten fängt das Mondlicht.
+    """
+    w, h = 96, 72
+    img = Image.new("RGBA", (w, h), CLEAR)
+    px = img.load()
+    dark = hexc("17132C")
+    flag = {"squire": hexc("D08C52"), "warrior": hexc("D9E1EA"), "knight": hexc("F2C14E"), "hero": hexc("52D98F"),
+            "warlord": hexc("6EE2F5"), "legend": hexc("FF9A3C")}[rank]
+    win = hexc("FFD27A")
+    lit: list[tuple[int, int]] = []
+
+    def rect(x0, y0, x1, y1):
+        for y in range(max(0, y0), min(h, y1)):
+            for x in range(max(0, x0), min(w, x1)):
+                px[x, y] = dark
+
+    def tri(x0, x1, top, base):
+        mid = (x0 + x1) / 2
+        for y in range(top, base):
+            t = (y - top + 1) / max(1, base - top)
+            half = (x1 - x0) / 2 * t
+            for x in range(int(mid - half), int(mid + half) + 1):
+                if 0 <= x < w and 0 <= y < h:
+                    px[x, y] = dark
+
+    def battlements(x0, x1, y):
+        for x in range(x0, x1, 3):
+            rect(x, y - 2, x + 2, y)
+
+    def flagpole(x, top, length=7):
+        for y in range(top, top + length):
+            if 0 <= y < h:
+                px[x, y] = dark
+        for k in range(4):
+            for j in range(3 - k // 2):
+                if 0 <= x + 1 + k < w and 0 <= top + j < h:
+                    px[x + 1 + k, top + j] = flag
+
+    def window(x, y, tall=2):
+        for k in range(tall):
+            lit.append((x, y + k))
+
+    ground = h - 4
+    rect(0, ground, w, h)
+    if rank == "squire":
+        for (x0, wd, ht) in ((14, 16, 10), (36, 20, 13), (62, 15, 9)):
+            rect(x0, ground - ht, x0 + wd, ground)
+            tri(x0 - 3, x0 + wd + 2, ground - ht - 8, ground - ht + 1)
+            window(x0 + wd // 2 - 1, ground - ht + 4)
+            window(x0 + wd // 2 + 2, ground - ht + 4)
+        rect(48, ground - 25, 51, ground - 18)   # Schornstein
+        flagpole(78, ground - 20, 20)
+    elif rank == "warrior":
+        for x in range(4, w - 4, 3):
+            rect(x, ground - 8 - (x * 7 % 3), x + 2, ground)
+            px[x, ground - 9 - (x * 7 % 3)] = dark
+        rect(40, ground - 40, 56, ground)
+        rect(36, ground - 46, 60, ground - 40)
+        battlements(36, 60, ground - 46)
+        window(46, ground - 30, 3)
+        window(47, ground - 20, 3)
+        flagpole(48, ground - 58, 12)
+    elif rank == "knight":
+        rect(20, ground - 22, 76, ground)
+        battlements(20, 76, ground - 22)
+        for tx in (14, 74):
+            rect(tx, ground - 34, tx + 9, ground)
+            tri(tx - 2, tx + 10, ground - 44, ground - 33)
+            window(tx + 4, ground - 26, 3)
+        rect(40, ground - 44, 56, ground - 22)
+        battlements(40, 56, ground - 44)
+        window(44, ground - 36, 3)
+        window(50, ground - 36, 3)
+        rect(45, ground - 9, 51, ground)
+        for x in range(45, 51):
+            lit.append((x, ground - 9))
+        flagpole(47, ground - 56, 12)
+        flagpole(18, ground - 54, 10)
+        flagpole(78, ground - 54, 10)
+    elif rank == "hero":
+        for i, tx in enumerate(range(6, w, 13)):
+            ht = 22 + (i * 11) % 14
+            tri(tx - 6, tx + 6, ground - ht, ground)
+            rect(tx - 1, ground - 3, tx + 1, ground)
+        rect(36, ground - 26, 41, ground)
+        rect(55, ground - 26, 60, ground)
+        rect(34, ground - 31, 62, ground - 26)
+        for y in range(ground - 24, ground):
+            for x in range(41, 55):
+                px[x, y] = CLEAR if (y - (ground - 24)) > 2 else dark
+        for k in range(3):
+            lit.append((47 + k, ground - 18))
+            lit.append((47 + k, ground - 17))
+        win = flag
+    elif rank == "warlord":
+        for y in range(ground - 20, ground):
+            t = (y - (ground - 20)) / 20
+            half = 30 + 18 * t
+            for x in range(int(48 - half), int(48 + half)):
+                if 0 <= x < w:
+                    px[x, y] = dark
+        rect(22, ground - 40, 74, ground - 20)
+        battlements(22, 74, ground - 40)
+        for tx in (16, 44, 72):
+            rect(tx, ground - 54 + (6 if tx != 44 else 0), tx + 9, ground - 20)
+            battlements(tx, tx + 9, ground - 54 + (6 if tx != 44 else 0))
+            window(tx + 4, ground - 44 + (6 if tx != 44 else 0), 3)
+        for x in range(28, 70, 7):
+            window(x, ground - 32)
+        flagpole(48, ground - 66, 12)
+        flagpole(20, ground - 58, 10)
+        flagpole(76, ground - 58, 10)
+    else:
+        tri(4, 92, 6, ground)
+        rect(34, 8, 62, 20)
+        for k in range(5):
+            rect(34 + k * 6, 2 + (4 if k % 2 else 0), 38 + k * 6, 10)
+        window(41, 13)
+        window(47, 12, 3)
+        window(53, 13)
+        # ein Drache im Flug, links oben
+        for (x, y) in ((8, 14), (9, 13), (10, 13), (11, 14), (12, 14), (13, 13), (14, 12), (15, 12), (16, 13), (12, 15), (13, 15),
+                       (6, 12), (5, 11), (17, 11), (18, 10)):
+            px[x, y] = dark
+        flagpole(48, -4, 8)
+    # Mondlicht an den oberen Kanten
+    out = img.copy()
+    opx = out.load()
+    for y in range(1, h):
+        for x in range(w):
+            if px[x, y] == dark and px[x, y - 1][3] == 0:
+                opx[x, y] = hexc("2E2752")
+    for (x, y) in lit:
+        if 0 <= x < w and 0 <= y < h:
+            opx[x, y] = win
     return out
 
 
@@ -591,13 +801,21 @@ def main() -> None:
     save(light(32, glow), sprites / "glow.png")
     save(light(64, ring), sprites / "ring.png")
     save(sparkle(), sprites / "sparkle.png")
-    particles = out / "textures/particle"
-    particles.mkdir(parents=True, exist_ok=True)
-    for frame in range(5):
-        hand(frame).save(particles / f"pat_hand_{frame}.png")
-    defs = out / "particles"
-    defs.mkdir(parents=True, exist_ok=True)
-    (defs / "pat_hand.json").write_text(json.dumps({"textures": [f"kingdomsatwar:pat_hand_{i}" for i in range(5)]}, indent=2) + "\n")
+    path = sprites / "path"
+    save(mountains_far(), path / "ridge.png")
+    # Platzhalter: Das höchste Bild im Bilderatlas der Oberfläche fehlt im Spiel (es bleibt das Ersatzbild) – dieses leere
+    # Bild ist höher als alle anderen und nimmt diesen Platz ein, damit die Berge erscheinen
+    save(Image.new("RGBA", (8, 160), CLEAR), path / "atlas_spacer.png")
+    save(hills_near(), path / "hills_near.png")
+    save(foreground(), path / "foreground.png")
+    save(stone(False), path / "stone.png")
+    save(stone(True), path / "stone_lit.png")
+    for kind in ("small_locked", "small_done", "small_current", "big_locked", "big_done", "big_current"):
+        save(node(kind), path / f"node_{kind}.png")
+    save(banner(), path / "banner.png", (64, 14, 7, 4, 7, 4))
+    save(moon(), path / "moon.png")
+    for rank in RANKS:
+        save(landmark(rank), path / f"landmark_{rank}.png")
     print("Grafiken der Heldenstufe geschrieben nach", out)
 
 

@@ -98,6 +98,20 @@ public final class HeroGui {
         g.pose().popMatrix();
     }
 
+    /** Ein Lichtbild verzerrt auf {@code w} × {@code h} Pixel (z. B. eine Lichtsäule aus dem Glühen). */
+    public static void lightRect(GuiGraphicsExtractor g, Identifier sprite, float cx, float cy, float w, float h, int rgb, float intensity) {
+        if (intensity <= 0.003f || w < 1.0f || h < 1.0f) {
+            return;
+        }
+        float k = Mth.clamp(intensity, 0.0f, 1.0f);
+        int color = ARGB.color(255, Math.round(ARGB.red(rgb) * k), Math.round(ARGB.green(rgb) * k), Math.round(ARGB.blue(rgb) * k));
+        g.pose().pushMatrix();
+        g.pose().translate(cx, cy);
+        g.pose().scale(w / 64.0f, h / 64.0f);
+        g.blitSprite(RenderPipelines.GUI_NAUSEA_OVERLAY, sprite, -32, -32, 64, 64, color);
+        g.pose().popMatrix();
+    }
+
     // ------------------------------------------------------------------------------------------------ Abzeichen
 
     /**
@@ -107,10 +121,16 @@ public final class HeroGui {
      */
     public static void emblem(GuiGraphicsExtractor g, Font font, HeroLevel.Rank rank, int level, float cx, float cy, float scale, float alpha,
             float numberScale, boolean light) {
+        emblem(g, font, rank, level, cx, cy, scale, alpha, numberScale, light, 0xFFFFFFFF);
+    }
+
+    /** Wie oben, das Abzeichen in {@code tint} getönt (z. B. grau für noch nicht erreichte Ränge). */
+    public static void emblem(GuiGraphicsExtractor g, Font font, HeroLevel.Rank rank, int level, float cx, float cy, float scale, float alpha,
+            float numberScale, boolean light, int tint) {
         if (alpha <= 0.01f) {
             return;
         }
-        int color = rankColor(rank);
+        int color = tint == 0xFFFFFFFF ? rankColor(rank) : ARGB.multiply(rankColor(rank), tint);
         if (light) {
             float time = seconds();
             float pulse = 0.85f + 0.15f * Mth.sin(time * 2.4f);
@@ -121,7 +141,7 @@ public final class HeroGui {
         g.pose().pushMatrix();
         g.pose().translate(cx, cy);
         g.pose().scale(scale, scale);
-        g.blitSprite(RenderPipelines.GUI_TEXTURED, emblem(rank), -EMBLEM / 2, -EMBLEM / 2 + 1 - 1, EMBLEM, EMBLEM, ARGB.white(alpha));
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, emblem(rank), -EMBLEM / 2, -EMBLEM / 2, EMBLEM, EMBLEM, ARGB.multiplyAlpha(tint, alpha));
         // die Zahl in der Scheibe (die Scheibe sitzt einen Pixel unter der Mitte)
         String text = String.valueOf(level);
         float fit = Math.min(1.0f, 19.0f / Math.max(1, font.width(text)));

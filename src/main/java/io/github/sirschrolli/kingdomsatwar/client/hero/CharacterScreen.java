@@ -43,10 +43,10 @@ import org.jspecify.annotations.Nullable;
  */
 public class CharacterScreen extends Screen {
     private static final int WIDTH = 324;
-    private static final int HEIGHT = 238;
+    private static final int HEIGHT = 246;
     private static final int LEFT_W = 90;
     private static final int RIGHT_X = 116;
-    private static final int CARD_Y = 100;
+    private static final int CARD_Y = 108;
     private static final int CARD_H = 20;
     private static final int CARD_GAP = 2;
     private static final Identifier HEART = Identifier.withDefaultNamespace("hud/heart/full");
@@ -85,8 +85,8 @@ public class CharacterScreen extends Screen {
         this.reset = this.addRenderableWidget(HeroButton.text(bx, this.top + HEIGHT - 58, LEFT_W,
                 Component.translatable("gui.kingdomsatwar.character.reset"),
                 button -> ClientPacketDistributor.sendToServer(new HeroTalentPayload(HeroTalentPayload.RESET))));
-        this.addRenderableWidget(HeroButton.text(bx, this.top + HEIGHT - 34, LEFT_W, Component.translatable("gui.kingdomsatwar.character.done"),
-                button -> this.onClose()));
+        this.addRenderableWidget(HeroButton.text(bx, this.top + HEIGHT - 34, LEFT_W, Component.translatable("gui.kingdomsatwar.character.path"),
+                button -> this.minecraft.gui.setScreen(new HeroPathScreen())));
         this.updateButtons();
     }
 
@@ -181,11 +181,15 @@ public class CharacterScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
-        super.extractRenderState(g, mouseX, mouseY, a);
         Player player = this.minecraft.player;
-        if (player == null) {
-            return;
+        if (player != null) {
+            this.drawContent(g, player, mouseX, mouseY);
         }
+        // die Knöpfe zuletzt: über den Karten
+        super.extractRenderState(g, mouseX, mouseY, a);
+    }
+
+    private void drawContent(GuiGraphicsExtractor g, Player player, int mouseX, int mouseY) {
         HeroLevel.Hero hero = HeroLevel.of(player);
         int x0 = this.left;
         int y0 = this.top;
@@ -195,7 +199,7 @@ public class CharacterScreen extends Screen {
         int rx = x0 + RIGHT_X;
         int rw = WIDTH - RIGHT_X - 12;
         this.drawHeader(g, player, hero, rx, y0 + 12, rw, mouseX, mouseY);
-        this.drawTrack(g, hero, rx, y0 + 70, rw, mouseX, mouseY);
+        this.drawTrack(g, hero, rx, y0 + 68, rw, mouseX, mouseY);
         int unspent = hero.unspent();
         Component points = unspent > 0 ? Component.translatable("gui.kingdomsatwar.character.points", unspent)
                 : Component.translatable("gui.kingdomsatwar.character.points.none");
@@ -296,8 +300,8 @@ public class CharacterScreen extends Screen {
                     got || rank == next ? 0xFFFFFFFF : 0xFF5A5468);
             String label = String.valueOf(rank.minLevel());
             g.pose().pushMatrix();
-            g.pose().translate(cx, ly + 11);
-            g.pose().scale(0.5f, 0.5f);
+            g.pose().translate(cx, ly + 10);
+            g.pose().scale(0.75f, 0.75f);
             g.text(this.font, label, -this.font.width(label) / 2, 0, got ? HeroGui.rankColor(rank) : HeroGui.MUTED, false);
             g.pose().popMatrix();
             if (Math.abs(mouseX - cx) <= 8 && mouseY >= ly - 7 && mouseY <= ly + 16) {
@@ -396,8 +400,7 @@ public class CharacterScreen extends Screen {
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR, x + 46, sy, 9, 9);
         HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(player.getAttributeValue(Attributes.ARMOR))), x + 57, sy + 1, HeroGui.TEXT);
         icon(g, new ItemStack(Items.IRON_SWORD), x + 45, sy + line - 1);
-        HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(player.getAttributeValue(Attributes.ATTACK_DAMAGE))), x + 57, sy + line + 1,
-                HeroGui.TEXT);
+        HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(damage(player, hero))), x + 57, sy + line + 1, HeroGui.TEXT);
         if (mouseX >= x && mouseX < x + w && mouseY >= sy && mouseY < sy + 2 * line) {
             g.setTooltipForNextFrame(this.font, this.lines(List.of(Component.translatable("gui.kingdomsatwar.character.stats")
                     .withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.stats.hint").withStyle(ChatFormatting.GRAY))),
@@ -421,6 +424,17 @@ public class CharacterScreen extends Screen {
                     Component.translatable("gui.kingdomsatwar.character.biomes", hero.discoveries()).withStyle(ChatFormatting.GREEN))),
                     mouseX, mouseY);
         }
+    }
+
+    /**
+     * Der Schaden eines Schlags: Der Wert des Spielers kommt nicht vollständig beim Spiel an (Waffe und Stärke rechnet der
+     * Server), also hier selbst: Grundwert, Stärke und die Waffe in der Hand.
+     */
+    private static double damage(Player player, HeroLevel.Hero hero) {
+        double base = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + HeroLevel.Talent.STRENGTH.value(hero.points(HeroLevel.Talent.STRENGTH));
+        return player.getMainHandItem().getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS,
+                net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY).compute(Attributes.ATTACK_DAMAGE, base,
+                net.minecraft.world.entity.EquipmentSlot.MAINHAND);
     }
 
     /** Ein Gegenstand als kleines Bild (11 Pixel). */

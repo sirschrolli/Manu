@@ -117,8 +117,8 @@ public final class HeroHud {
         if (gained > 0 && now - gainAt < SHOW) {
             float rise = Mth.clamp((now - gainAt) / 1200.0f, 0.0f, 1.0f);
             Component plus = Component.translatable("hud.kingdomsatwar.hero.plus", HeroGui.number(gained));
-            int px = bx + bw - font.width(plus);
-            int py = y - 1 - Math.round(6 * HeroGui.easeOutCubic(rise));
+            int px = bx + bw + 4;
+            int py = y + 5 - Math.round(6 * HeroGui.easeOutCubic(rise));
             g.text(font, plus, px, py, ARGB.color(Math.round(255 * alpha), 0xFFE7A0), true);
         }
     }

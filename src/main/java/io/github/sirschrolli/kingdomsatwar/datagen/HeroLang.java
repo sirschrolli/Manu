@@ -33,7 +33,7 @@ final class HeroLang {
 
         // --- Heldenstufe und Talente ---
         text.add("key.category.kingdomsatwar.hero", "Kingdoms at War: Hero", "Kingdoms at War: Held");
-        text.add("key.kingdomsatwar.character", "Character", "Charakter");
+        text.add("key.kingdomsatwar.character", "Path to Legend & character", "Weg zur Legende & Charakter");
         text.add("key.kingdomsatwar.pat", "Pat (Legend reward)", "Streicheln (Belohnung der Legende)");
         text.add("gui.kingdomsatwar.character.title", "Character", "Charakter");
         text.add("gui.kingdomsatwar.character.level", "Hero Level %s", "Heldenstufe %s");
@@ -43,7 +43,8 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.spent", "%s of %s spent", "%s von %s verteilt");
         text.add("gui.kingdomsatwar.character.rank.from", "From hero level %s (%s hero experience)", "Ab Heldenstufe %s (%s Heldenerfahrung)");
         text.add("gui.kingdomsatwar.character.rank.bonus", "+%s talent points on reaching it", "+%s Talentpunkte, wenn du ihn erreichst");
-        text.add("gui.kingdomsatwar.character.rank.reward", "Reward: you may pat any creature (%s)", "Belohnung: Du darfst jedes Wesen streicheln (%s)");
+        text.add("gui.kingdomsatwar.character.rank.reward", "Reward: pat any creature (Sneak + right-click or %s)",
+                "Belohnung: jedes Wesen streicheln (Schleichen + Rechtsklick oder %s)");
         text.add("gui.kingdomsatwar.character.rank.reached", "Reached", "Erreicht");
         text.add("gui.kingdomsatwar.character.rank.ahead", "Still ahead of you", "Liegt noch vor dir");
         text.add("gui.kingdomsatwar.character.talent.max", "At %s points: %s", "Mit %s Punkten: %s");
@@ -67,6 +68,17 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.reset.hint", "Take back all points – costs %s", "Alle Punkte zurücknehmen – kostet %s");
         text.add("gui.kingdomsatwar.character.reset.none", "No points spent yet", "Noch keine Punkte verteilt");
         text.add("gui.kingdomsatwar.character.done", "Done", "Fertig");
+        text.add("gui.kingdomsatwar.character.path", "Path", "Zum Weg");
+        text.add("gui.kingdomsatwar.path.title", "The Path to Legend", "Der Weg zur Legende");
+        text.add("gui.kingdomsatwar.path.talents", "Talents & values", "Talente & Werte");
+        text.add("gui.kingdomsatwar.path.total", "%s %% of the path · %s / %s hero experience", "%s %% des Weges · %s / %s Heldenerfahrung");
+        text.add("gui.kingdomsatwar.path.reward.points", "+%s talent points", "+%s Talentpunkte");
+        text.add("gui.kingdomsatwar.path.reward.pat", "Reward: patting", "Belohnung: Streicheln");
+        text.add("gui.kingdomsatwar.path.hint", "Mouse wheel, drag or arrow keys: along the path · click here: jump",
+                "Mausrad, Ziehen oder Pfeiltasten: den Weg entlang · hier klicken: dorthin springen");
+        text.add("gui.kingdomsatwar.path.needs", "From %s hero experience", "Ab %s Heldenerfahrung");
+        text.add("gui.kingdomsatwar.path.missing", "%s hero experience to go", "Noch %s Heldenerfahrung");
+        text.add("gui.kingdomsatwar.path.point", "+1 talent point", "+1 Talentpunkt");
         text.add("gui.kingdomsatwar.character.stats", "Your values", "Deine Werte");
         text.add("gui.kingdomsatwar.character.stats.hint", "Hearts, mana, armour and damage – with crystals, talents and what you wear and hold.",
                 "Herzen, Mana, Rüstung und Schaden – mit Kristallen, Talenten und dem, was du trägst und hältst.");
@@ -77,12 +89,15 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.level_up.rank", "New rank: %s", "Neuer Rang: %s");
         text.add("hero.kingdomsatwar.level_up.point", "+%s talent point – press %s", "+%s Talentpunkt – drücke %s");
         text.add("hero.kingdomsatwar.level_up.points", "+%s talent points – press %s", "+%s Talentpunkte – drücke %s");
-        text.add("hero.kingdomsatwar.level_up.reward", "Reward unlocked: patting – press %s", "Belohnung freigeschaltet: Streicheln – drücke %s");
+        text.add("hero.kingdomsatwar.level_up.reward", "Reward unlocked: patting – Sneak + right-click or %s",
+                "Belohnung freigeschaltet: Streicheln – Schleichen + Rechtsklick oder %s");
         text.add("hero.kingdomsatwar.rank_up", "New rank: %s – %s extra talent points!", "Neuer Rang: %s – %s Talentpunkte extra!");
         text.add("hero.kingdomsatwar.reward.pat",
-                "You are a Legend! Look at any creature and press %s to pat it – your own soldiers and animals get half a heart back.",
-                "Du bist eine Legende! Schau ein Wesen an und drücke %s, um es zu streicheln – deine eigenen Soldaten und Tiere bekommen "
-                        + "dabei ein halbes Herz zurück.");
+                "You are a Legend! Sneak and right-click any creature with an empty hand (or press %s) to pat it – hold to keep patting. "
+                        + "Your own soldiers and animals get half a heart back.",
+                "Du bist eine Legende! Schleiche und klicke ein Wesen mit leerer Hand rechts an (oder drücke %s), um es zu streicheln – "
+                        + "gedrückt halten streichelt weiter. Deine eigenen Soldaten und Tiere bekommen dabei ein halbes Herz zurück.");
+        text.add("subtitles.kingdomsatwar.hero.pat", "Pat", "Streicheln");
         text.add("hero.kingdomsatwar.pat.locked", "Patting is the reward of the Legend (hero level %s)",
                 "Streicheln ist die Belohnung der Legende (Heldenstufe %s)");
         text.add("hero.kingdomsatwar.settled", "The hero levels have changed – you are now hero level %s and get all talent points back to "
