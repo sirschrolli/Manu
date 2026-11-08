@@ -35,6 +35,11 @@
     "kingdomsatwar:shadow_stone_brick_stairs",
     "kingdomsatwar:polished_shadow_stone_stairs",
     "kingdomsatwar:cobbled_deep_shadow_stone_stairs",
-    "kingdomsatwar:shadow_plank_stairs"
+    "kingdomsatwar:shadow_plank_stairs",
+    "kingdomsatwar:void_stone_stairs",
+    "kingdomsatwar:void_stone_brick_stairs",
+    "kingdomsatwar:polished_void_stone_stairs",
+    "kingdomsatwar:astral_marble_stairs",
+    "kingdomsatwar:astral_marble_brick_stairs"
   ]
 }

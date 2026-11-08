@@ -128,3 +128,17 @@ python3 tools/audio/ambience.py --only leaves,bird_owl --preview /tmp/spektren
 
 Es schreibt die `.ogg`-Dateien nach `…/sounds/ambient/`, die Einträge `ambient.bed.*`/`ambient.spot.*` in `sounds.json`
 und `registry/AmbientSounds.java`. Welche Klänge wo erklingen, steht in `world/ambience/AmbienceProfiles.java`.
+
+## Stimmen der Wesen der Leere (`void_creatures.py`)
+
+`void_creatures.py` erzeugt die Stimmen der vier Wesen der Leere aus denselben Bausteinen: das nasse Gurgeln und das
+anschwellende Ansaugen des Leerenschlunds, das kristallene Summen, Erwachen und Aufladen des Splitterwächters, das
+zerhackte Knistern, Flackern, Zerfallen und Springen des Zerrlings (Körner, die springen und sich wiederholen, grob
+abgetastet) und die gleitenden Rufe des Sternenrochens. Wo Vanilla-Klänge passen (Biss, Schritte, splitternder Amethyst,
+Treffer), verweist `sounds.json` nur auf sie.
+
+```bash
+python3 tools/audio/void_creatures.py [--preview /tmp/spektren]
+```
+
+Es schreibt die `.ogg`-Dateien nach `…/sounds/entity/void/` und die Einträge `entity.<wesen>.<klang>` in `sounds.json`.

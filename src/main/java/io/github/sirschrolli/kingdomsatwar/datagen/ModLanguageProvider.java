@@ -39,6 +39,7 @@ public class ModLanguageProvider extends LanguageProvider {
         RulesLang.register(this::text);
         bosses();
         shadowWorld();
+        voidWorld();
         // Untertitel der Umgebungsklänge
         io.github.sirschrolli.kingdomsatwar.registry.AmbientSounds.SUBTITLES
                 .forEach((sound, names) -> this.subtitle("ambient." + sound, names.get(0), names.get(1)));
@@ -428,6 +429,89 @@ public class ModLanguageProvider extends LanguageProvider {
     }
 
     /** Die Schattenwelt: Biome, Blöcke, Meldungen. */
+    /** Die Leere: Dimension, Biome, Blöcke, Gegenstände, Meldungen. */
+    private void voidWorld() {
+        text("itemGroup.kingdomsatwar.the_void", "Kingdoms at War: The Void", "Kingdoms at War: Die Leere");
+        text("dimension.kingdomsatwar.the_void", "The Void", "Die Leere");
+        text("biome.kingdomsatwar.void_expanse", "Starless Expanse", "Sternennichts");
+        text("biome.kingdomsatwar.void_crystal_forest", "Crystal Forest", "Kristallwald");
+        text("biome.kingdomsatwar.void_ruins", "Weightless Ruins", "Schwerelose Ruinen");
+        text("biome.kingdomsatwar.void_stardust_fields", "Stardust Fields", "Sternenstaubfelder");
+        text("biome.kingdomsatwar.void_shard_cliffs", "Shard Cliffs", "Splitterklippen");
+        text("biome.kingdomsatwar.void_world_remnants", "World Remnants", "Weltenreste");
+
+        // Wesen der Leere
+        creature(ModEntities.VOID_MAW, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MAW_SPAWN_EGG, "Void Maw",
+                "Leerenschlund", "Leerenschlund");
+        creature(ModEntities.SHARD_WARDEN, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHARD_WARDEN_SPAWN_EGG, "Shard Warden",
+                "Splitterwächter", "Splitterwächter");
+        creature(ModEntities.DISTORTLING, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.DISTORTLING_SPAWN_EGG, "Distortling",
+                "Zerrling", "Zerrling");
+        creature(ModEntities.STAR_RAY, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_RAY_SPAWN_EGG, "Star Ray",
+                "Sternenrochen", "Sternenrochen");
+        add(ModEntities.WARDEN_SHARD.get(), pick("Crystal Shard", "Kristallsplitter"));
+        subtitle("entity.void_maw.ambient", "Void Maw warbles", "Leerenschlund gurgelt");
+        subtitle("entity.void_maw.hurt", "Void Maw hurts", "Leerenschlund nimmt Schaden");
+        subtitle("entity.void_maw.death", "Void Maw dies", "Leerenschlund stirbt");
+        subtitle("entity.void_maw.inhale", "Void Maw inhales", "Leerenschlund saugt an");
+        subtitle("entity.void_maw.bite", "Void Maw bites", "Leerenschlund schnappt zu");
+        subtitle("entity.shard_warden.ambient", "Shard Warden hums", "Splitterwächter summt");
+        subtitle("entity.shard_warden.hurt", "Shard Warden cracks", "Splitterwächter splittert");
+        subtitle("entity.shard_warden.death", "Shard Warden crumbles", "Splitterwächter zerfällt");
+        subtitle("entity.shard_warden.step", "Shard Warden stomps", "Splitterwächter stampft");
+        subtitle("entity.shard_warden.awaken", "Shard Warden awakens", "Splitterwächter erwacht");
+        subtitle("entity.shard_warden.charge", "Crystals resonate", "Kristalle schwingen");
+        subtitle("entity.shard_warden.shoot", "Shard Warden hurls a shard", "Splitterwächter schleudert einen Splitter");
+        subtitle("entity.shard_warden.slam", "Shard Warden slams", "Splitterwächter schlägt zu");
+        subtitle("entity.warden_shard.hit", "Crystal shard shatters", "Kristallsplitter zerspringt");
+        subtitle("entity.distortling.ambient", "Distortling crackles", "Zerrling knistert");
+        subtitle("entity.distortling.hurt", "Distortling glitches", "Zerrling flackert");
+        subtitle("entity.distortling.death", "Distortling breaks apart", "Zerrling zerfällt");
+        subtitle("entity.distortling.blink", "Distortling blinks", "Zerrling springt");
+        subtitle("entity.distortling.attack", "Distortling slashes", "Zerrling schlägt zu");
+        subtitle("entity.star_ray.ambient", "Star Ray sings", "Sternenrochen singt");
+        subtitle("entity.star_ray.hurt", "Star Ray hurts", "Sternenrochen nimmt Schaden");
+        subtitle("entity.star_ray.death", "Star Ray dies", "Sternenrochen stirbt");
+
+        set("void_stone", "void_stone", "Void Stone", "Leerenstein", "Void Stone", "Leerenstein");
+        set("void_stone_bricks", "void_stone_brick", "Void Stone Bricks", "Leerensteinziegel", "Void Stone Brick", "Leerensteinziegel");
+        set("polished_void_stone", "polished_void_stone", "Polished Void Stone", "Polierter Leerenstein", "Polished Void Stone",
+                "Polierte Leerenstein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS, "Cracked Void Stone Bricks",
+                "Rissige Leerensteinziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE, "Chiseled Void Stone", "Gemeißelter Leerenstein");
+        set("astral_marble", "astral_marble", "Astral Marble", "Sternenmarmor", "Astral Marble", "Sternenmarmor");
+        set("astral_marble_bricks", "astral_marble_brick", "Astral Marble Bricks", "Sternenmarmorziegel", "Astral Marble Brick",
+                "Sternenmarmorziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR, "Astral Pillar", "Sternenmarmorsäule");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE, "Chiseled Astral Marble",
+                "Gemeißelter Sternenmarmor");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS, "Void Moss", "Leerenmoos");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST, "Stardust", "Sternenstaub");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL, "Void Crystal", "Leerenkristall");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL_CLUSTER, "Void Crystal Cluster", "Leerenkristall-Druse");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRYSTAL_FOLIAGE, "Crystal Foliage", "Kristalllaub");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM, "Void Bloom", "Leerenblüte");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES, "Star Vines", "Sternenranke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES_PLANT, "Star Vines", "Sternenranke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT, "Void Rift", "Leerenriss");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD, "Void Shard", "Leerensplitter");
+
+        text(ModItems.loreKey("shadow_heart", 3), "Use on the ground to tear open a rift into the Void",
+                "Auf den Boden gerichtet reißt es einen Riss in die Leere auf");
+        text("item.kingdomsatwar.shadow_heart.in_void", "The Void has no deeper place to tear open.",
+                "In der Leere lässt sich nichts tiefer aufreißen.");
+        text("item.kingdomsatwar.shadow_heart.cannot", "The heart stays still here.", "Das Herz bleibt hier still.");
+        text("item.kingdomsatwar.shadow_heart.no_space", "The rift needs room: 9 blocks wide, 10 high, on solid ground.",
+                "Der Riss braucht Platz: 9 Blöcke breit, 10 hoch, auf festem Grund.");
+        text("item.kingdomsatwar.shadow_heart.too_close", "Another rift is too close.", "Ein anderer Riss ist zu nah.");
+        text("item.kingdomsatwar.shadow_heart.anchor", "This rift is anchored to the Void and cannot be closed.",
+                "Dieser Riss ist in der Leere verankert und lässt sich nicht schließen.");
+        text("message.kingdomsatwar.void.spat_out", "The Void spits you out – wounded, but alive.",
+                "Die Leere spuckt dich wieder aus – verwundet, aber lebendig.");
+        text("block.kingdomsatwar.bed.the_void", "There is no sleep in the Void.", "Die Leere kennt keinen Schlaf.");
+    }
+
     private void shadowWorld() {
         text("itemGroup.kingdomsatwar.shadow_world", "Kingdoms at War: Shadows", "Kingdoms at War: Schatten");
         text("block.kingdomsatwar.bed.shadow_world", "No one finds sleep in the Shadow World – but your bed remembers where you wake.",

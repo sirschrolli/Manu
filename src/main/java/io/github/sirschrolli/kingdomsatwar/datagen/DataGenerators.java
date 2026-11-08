@@ -23,19 +23,31 @@ public final class DataGenerators {
     /** Datapack-Registereinträge: Weltgenerierung, Loot-Tables und Rezepte. */
     @SubscribeEvent
     public static void gatherRegistries(GatherDataRegistryEntriesEvent event) {
-        event.add(Registries.NOISE, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapNoises)
-                .add(Registries.DENSITY_FUNCTION, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapDensityFunctions)
+        event.add(Registries.NOISE, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain.bootstrapNoises(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapNoises(context);
+                })
+                .add(Registries.DENSITY_FUNCTION, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain.bootstrapDensityFunctions(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapDensityFunctions(context);
+                })
                 .add(Registries.MATERIAL_RULE, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowSurface.bootstrap(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidSurface.bootstrap(context);
                     io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface.bootstrap(context);
                 })
-                .add(Registries.NOISE_SETTINGS, io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain::bootstrapSettings)
+                .add(Registries.NOISE_SETTINGS, context -> {
+                    io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain.bootstrapSettings(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapSettings(context);
+                })
                 .add(Registries.DIMENSION_TYPE, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapType(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapType(context);
                 })
                 .add(Registries.LEVEL_STEM, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapStem(context);
+                    io.github.sirschrolli.kingdomsatwar.voidrealm.VoidDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapStem(context);
                 })
                 .add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)

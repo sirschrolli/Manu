@@ -52,6 +52,7 @@ final class AmbienceGameTests {
         List<ResourceKey<Biome>> biomes = new ArrayList<>(OverworldBiomes.ALL);
         biomes.addAll(ModBiomes.NESTS);
         biomes.addAll(ShadowBiomes.ALL);
+        biomes.addAll(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.ALL);
         Set<String> usedBeds = new HashSet<>();
         for (ResourceKey<Biome> biome : biomes) {
             AmbienceProfile profile = AmbienceProfiles.of(biome);

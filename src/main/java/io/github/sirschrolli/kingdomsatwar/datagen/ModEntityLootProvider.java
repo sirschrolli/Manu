@@ -258,6 +258,22 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 0, 1)));
         this.add(ModEntities.GLIMMER_MOTH.get(), LootTable.lootTable()
                 .withPool(drop(Items.GLOWSTONE_DUST, 0, 1)));
+        // Wesen der Leere
+        this.add(ModEntities.VOID_MAW.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 1, 2))
+                .withPool(drop(Items.ENDER_PEARL, 0, 1))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM.get(), 0.2f, 0.05f)));
+        this.add(ModEntities.SHARD_WARDEN.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 3, 6))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_MARBLE.base().get(), 2, 5))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 1, 2))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE.get(), 0.25f, 0.05f)));
+        this.add(ModEntities.DISTORTLING.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 0, 2))
+                .withPool(rare(Items.ENDER_PEARL, 0.3f, 0.05f)));
+        this.add(ModEntities.STAR_RAY.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST.get(), 1, 3))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM.get(), 0, 1)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

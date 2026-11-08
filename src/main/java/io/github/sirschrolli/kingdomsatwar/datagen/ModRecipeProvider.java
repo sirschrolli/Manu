@@ -52,6 +52,7 @@ public class ModRecipeProvider extends RecipeProvider {
         magicRecipes();
         cookVenison();
         shadowRecipes();
+        voidRecipes();
         shadowTreasureRecipes();
         naturalChains();
     }
@@ -344,6 +345,58 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
     // Schattenwelt
     // =====================================================================================
+
+    // =====================================================================================
+    // Die Leere
+    // =====================================================================================
+
+    private void voidRecipes() {
+        ItemLike stone = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE.base().get();
+        ItemLike polished = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.POLISHED_VOID_STONE.base().get();
+        ItemLike bricks = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE_BRICKS.base().get();
+        ItemLike chiseled = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE.get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, polished, 4).pattern("SS").pattern("SS").define('S', stone)
+                .unlockedBy(getHasName(stone), has(stone)).save(output, key("polished_void_stone"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, bricks, 4).pattern("PP").pattern("PP").define('P', polished)
+                .unlockedBy(getHasName(polished), has(polished)).save(output, key("void_stone_bricks"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, chiseled).pattern("S").pattern("S")
+                .define('S', io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE_BRICKS.slab().get())
+                .unlockedBy(getHasName(bricks), has(bricks)).save(output, key("chiseled_void_stone"));
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(bricks), RecipeCategory.BUILDING_BLOCKS, CookingBookCategory.BLOCKS,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS.get(), 0.1f, 200)
+                .unlockedBy(getHasName(bricks), has(bricks)), "cracked_void_stone_bricks");
+        stonecut(polished, 1, stone);
+        stonecut(bricks, 1, stone, polished);
+        stonecut(chiseled, 1, stone, polished, bricks);
+        for (BuildingSet set : List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.POLISHED_VOID_STONE,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE_BRICKS)) {
+            stonecut(set.stairs().get(), 1, stone);
+            stonecut(set.slab().get(), 2, stone);
+            if (set.wall() != null) {
+                stonecut(set.wall().get(), 1, stone);
+            }
+        }
+        // Sternenmarmor (nur aus den Ruinen der Alten)
+        ItemLike marble = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_MARBLE.base().get();
+        ItemLike marbleBricks = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_MARBLE_BRICKS.base().get();
+        ItemLike pillar = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR.get();
+        ItemLike chiseledMarble = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE.get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, marbleBricks, 4).pattern("MM").pattern("MM").define('M', marble)
+                .unlockedBy(getHasName(marble), has(marble)).save(output, key("astral_marble_bricks"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, pillar, 2).pattern("M").pattern("M").define('M', marble)
+                .unlockedBy(getHasName(marble), has(marble)).save(output, key("astral_pillar"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, chiseledMarble).pattern("S").pattern("S")
+                .define('S', io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_MARBLE_BRICKS.slab().get())
+                .unlockedBy(getHasName(marbleBricks), has(marbleBricks)).save(output, key("chiseled_astral_marble"));
+        stonecut(marbleBricks, 1, marble);
+        stonecut(pillar, 1, marble);
+        stonecut(chiseledMarble, 1, marble, marbleBricks);
+        // Leerenkristall aus vier Splittern
+        ItemLike shard = io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get())
+                .pattern("SS").pattern("SS").define('S', shard)
+                .unlockedBy(getHasName(shard), has(shard)).save(output, key("void_crystal"));
+    }
 
     private void shadowRecipes() {
         ItemLike stone = ShadowBlocks.SHADOW_STONE.base().get();

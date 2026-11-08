@@ -22,16 +22,18 @@ public final class AmbientSounds {
             "frogs", "surf_gentle", "surf_storm", "lagoon", "bog", "embers",
             "lava", "ice", "storm_charge", "drips", "deep_water", "magic_grove",
             "earth_rumble", "shadow_forest", "shadow_wastes", "shadow_crystal", "shadow_marsh", "shadow_peaks",
-            "shadow_glimmer", "shadow_sea", "shadow_isles", "shadow_depths", "whispers");
+            "shadow_glimmer", "shadow_sea", "shadow_isles", "shadow_depths", "whispers", "void_hum",
+            "void_wind", "void_crystal", "void_stardust", "void_ruins", "void_remnants");
     public static final List<String> SPOTS = List.of(
             "bird_blackbird", "bird_tit", "bird_finch", "bird_cuckoo", "woodpecker", "bird_owl",
             "bird_nightingale", "bird_crow", "bird_gull", "bird_curlew", "bird_bittern", "bird_buzzard",
             "wolf_howl", "wood_creak", "twig_snap", "ice_crack", "ice_creak", "pebbles",
             "steam_vent", "rumble", "thunder_far", "zap", "bog_burp", "drip",
             "whale_far", "sparkle", "whisper", "shadow_call", "soul_wail", "crystal_chime",
-            "deep_moan", "wing_flutter", "shadow_creak", "dragon_far", "dragon_wings", "fireflies",
-            "amethyst", "soul_voices", "basalt", "thunder", "dolphin", "frog",
-            "whale", "pale_moss", "warped_creak");
+            "deep_moan", "wing_flutter", "shadow_creak", "star_song", "rock_grind", "glitch_far",
+            "void_choir", "dragon_far", "dragon_wings", "fireflies", "amethyst", "soul_voices",
+            "basalt", "thunder", "dolphin", "frog", "whale", "pale_moss",
+            "warped_creak");
     /** Untertitel der Einzelklänge: Englisch, Deutsch. */
     public static final Map<String, List<String>> SUBTITLES = Map.ofEntries(
             Map.entry("bird_blackbird", List.of("Blackbird sings", "Amsel singt")),
@@ -67,6 +69,10 @@ public final class AmbientSounds {
             Map.entry("deep_moan", List.of("Something groans below", "Etwas dröhnt in der Tiefe")),
             Map.entry("wing_flutter", List.of("Wings flutter", "Flügel schlagen")),
             Map.entry("shadow_creak", List.of("Shadow wood groans", "Schattenholz ächzt")),
+            Map.entry("star_song", List.of("Distant star ray song", "Sternenrochen singt in der Ferne")),
+            Map.entry("rock_grind", List.of("Floating rocks grind", "Treibende Felsen schaben")),
+            Map.entry("glitch_far", List.of("Something glitches", "Etwas flackert")),
+            Map.entry("void_choir", List.of("A distant choir", "Ein ferner Chor")),
             Map.entry("dragon_far", List.of("Distant dragon roar", "Drache brüllt in der Ferne")),
             Map.entry("dragon_wings", List.of("Great wings beat", "Schwingen rauschen")),
             Map.entry("fireflies", List.of("Fireflies buzz", "Glühwürmchen summen")),

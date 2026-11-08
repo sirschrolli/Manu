@@ -147,8 +147,9 @@ public final class ShadowItems {
     public static final DeferredItem<Item> SHADOW_ESSENCE = item("shadow_essence", p -> p.rarity(Rarity.UNCOMMON)
             .component(DataComponents.LORE, ModItems.lore("shadow_essence", 1)));
     /** Herz der Schatten: was von Nyxar bleibt – ein Kristallherz, in dem noch eine Seele glimmt. Trophäe des Endsiegs. */
-    public static final DeferredItem<Item> SHADOW_HEART = item("shadow_heart", p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1)
-            .component(DataComponents.LORE, ModItems.lore("shadow_heart", 2)));
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.ShadowHeartItem> SHADOW_HEART = register("shadow_heart",
+            io.github.sirschrolli.kingdomsatwar.item.ShadowHeartItem::new, p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1)
+            .component(DataComponents.LORE, ModItems.lore("shadow_heart", 3)));
     public static final DeferredItem<SpawnEggItem> SHADE_STALKER_SPAWN_EGG = egg("shade_stalker", () -> ModEntities.SHADE_STALKER.get());
     public static final DeferredItem<SpawnEggItem> CRYSTAL_CRAWLER_SPAWN_EGG = egg("crystal_crawler", () -> ModEntities.CRYSTAL_CRAWLER.get());
     public static final DeferredItem<SpawnEggItem> NIGHT_WING_SPAWN_EGG = egg("night_wing", () -> ModEntities.NIGHT_WING.get());

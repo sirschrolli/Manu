@@ -1,0 +1,7 @@
+{
+  "type": "kingdomsatwar:void_shard_spire",
+  "hanging": true,
+  "max_length": 18,
+  "min_length": 6,
+  "radius": 2.2
+}

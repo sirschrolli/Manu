@@ -35,6 +35,11 @@
     "kingdomsatwar:shadow_stone_brick_slab",
     "kingdomsatwar:polished_shadow_stone_slab",
     "kingdomsatwar:cobbled_deep_shadow_stone_slab",
-    "kingdomsatwar:shadow_plank_slab"
+    "kingdomsatwar:shadow_plank_slab",
+    "kingdomsatwar:void_stone_slab",
+    "kingdomsatwar:void_stone_brick_slab",
+    "kingdomsatwar:polished_void_stone_slab",
+    "kingdomsatwar:astral_marble_slab",
+    "kingdomsatwar:astral_marble_brick_slab"
   ]
 }

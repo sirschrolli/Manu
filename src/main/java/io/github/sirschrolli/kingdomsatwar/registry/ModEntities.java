@@ -43,6 +43,11 @@ import io.github.sirschrolli.kingdomsatwar.entity.dragon.DragonEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.BanditEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.DistortlingEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShardWardenEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarRayEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.VoidMawEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.WardenShardEntity;
 import java.util.EnumMap;
 import java.util.Map;
 import net.minecraft.world.entity.EntityType;
@@ -427,6 +432,28 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<GlimmerMothEntity>> GLIMMER_MOTH = ENTITIES.registerEntityType("glimmer_moth",
             GlimmerMothEntity::new, MobCategory.AMBIENT, builder -> builder.sized(0.5f, 0.4f).eyeHeight(0.2f).clientTrackingRange(8));
 
+    // ---------------------------------------------------------------- Wesen der Leere
+    /** Leerenschlund: schwebender Räuber, saugt seine Beute an. */
+    public static final DeferredHolder<EntityType<?>, EntityType<VoidMawEntity>> VOID_MAW = ENTITIES.registerEntityType("void_maw",
+            VoidMawEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.4f, 2.3f).eyeHeight(1.6f).notInPeaceful().clientTrackingRange(10));
+    /** Splitterwächter: ruhender Wächter der Ruinen aus Sternenmarmor. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ShardWardenEntity>> SHARD_WARDEN = ENTITIES.registerEntityType("shard_warden",
+            ShardWardenEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.5f, 2.9f).eyeHeight(2.7f).notInPeaceful().clientTrackingRange(10));
+    /** Zerrling: verzerrtes Wesen, springt durch den Raum. */
+    public static final DeferredHolder<EntityType<?>, EntityType<DistortlingEntity>> DISTORTLING = ENTITIES.registerEntityType("distortling",
+            DistortlingEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(0.7f, 2.3f).eyeHeight(2.0f).notInPeaceful().clientTrackingRange(10));
+    /** Sternenrochen: friedlicher Riese der Leere, mit Leerenblüten zu zähmen und zu reiten. */
+    public static final DeferredHolder<EntityType<?>, EntityType<StarRayEntity>> STAR_RAY = ENTITIES.registerEntityType("star_ray",
+            StarRayEntity::new, MobCategory.CREATURE,
+            builder -> builder.sized(2.4f, 0.8f).eyeHeight(0.5f).passengerAttachments(0.72f).clientTrackingRange(12));
+    /** Kristallsplitter: Geschoss des Splitterwächters. */
+    public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
+            WardenShardEntity::new, MobCategory.MISC,
+            builder -> builder.sized(0.4f, 0.4f).noLootTable().clientTrackingRange(8).updateInterval(1));
+
     // ---------------------------------------------------------------- Die Umbrer (Volk der Schattenwelt)
     /** Umbrer: Bewohner der Dörfer, tauschen gegen Mondsilber (Beruf je Tier). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>> UMBRER =
@@ -707,6 +734,10 @@ public final class ModEntities {
         event.put(NIGHT_WING.get(), NightWingEntity.createAttributes().build());
         event.put(MOON_STAG.get(), DeerEntity.createAttributes().build());
         event.put(GLIMMER_MOTH.get(), GlimmerMothEntity.createAttributes().build());
+        event.put(VOID_MAW.get(), VoidMawEntity.createAttributes().build());
+        event.put(SHARD_WARDEN.get(), ShardWardenEntity.createAttributes().build());
+        event.put(DISTORTLING.get(), DistortlingEntity.createAttributes().build());
+        event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
         event.put(UMBRER.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity.createAttributes().build());
         event.put(UMBRER_GUARD.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity.createAttributes().build());
     }
@@ -826,6 +857,12 @@ public final class ModEntities {
         event.register(NIGHT_WING.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, NightWingEntity::checkNightWingSpawnRules, replace);
         event.register(MOON_STAG.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(GLIMMER_MOTH.get(), SpawnPlacementTypes.NO_RESTRICTIONS, surface, GlimmerMothEntity::checkMothSpawnRules, replace);
+        // Leere: Schlund und Rochen frei in der Luft (unter und neben den Bruchstücken), Wächter und Zerrlinge auf festem Boden
+        var anyHeight = Heightmap.Types.WORLD_SURFACE;
+        event.register(VOID_MAW.get(), SpawnPlacementTypes.NO_RESTRICTIONS, anyHeight, VoidMawEntity::checkMawSpawnRules, replace);
+        event.register(STAR_RAY.get(), SpawnPlacementTypes.NO_RESTRICTIONS, anyHeight, StarRayEntity::checkRaySpawnRules, replace);
+        event.register(SHARD_WARDEN.get(), ground, surface, ShardWardenEntity::checkWardenSpawnRules, replace);
+        event.register(DISTORTLING.get(), ground, surface, DistortlingEntity::checkDistortlingSpawnRules, replace);
     }
 
     private static <T extends Animal> void registerAnimal(RegisterSpawnPlacementsEvent event, EntityType<T> type) {

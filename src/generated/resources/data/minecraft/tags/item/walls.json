@@ -24,6 +24,11 @@
     "kingdomsatwar:cobbled_shadow_stone_wall",
     "kingdomsatwar:shadow_stone_brick_wall",
     "kingdomsatwar:polished_shadow_stone_wall",
-    "kingdomsatwar:cobbled_deep_shadow_stone_wall"
+    "kingdomsatwar:cobbled_deep_shadow_stone_wall",
+    "kingdomsatwar:void_stone_wall",
+    "kingdomsatwar:void_stone_brick_wall",
+    "kingdomsatwar:polished_void_stone_wall",
+    "kingdomsatwar:astral_marble_wall",
+    "kingdomsatwar:astral_marble_brick_wall"
   ]
 }

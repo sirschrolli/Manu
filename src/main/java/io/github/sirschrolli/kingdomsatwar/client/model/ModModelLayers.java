@@ -68,6 +68,12 @@ public final class ModModelLayers {
     public static final ModelLayerLocation NIGHT_WING = new ModelLayerLocation(KingdomsAtWar.id("night_wing"), "main");
     public static final ModelLayerLocation GLIMMER_MOTH = new ModelLayerLocation(KingdomsAtWar.id("glimmer_moth"), "main");
     public static final ModelLayerLocation UMBRER = new ModelLayerLocation(KingdomsAtWar.id("umbrer"), "main");
+    // Wesen der Leere
+    public static final ModelLayerLocation VOID_MAW = new ModelLayerLocation(KingdomsAtWar.id("void_maw"), "main");
+    public static final ModelLayerLocation SHARD_WARDEN = new ModelLayerLocation(KingdomsAtWar.id("shard_warden"), "main");
+    public static final ModelLayerLocation DISTORTLING = new ModelLayerLocation(KingdomsAtWar.id("distortling"), "main");
+    public static final ModelLayerLocation STAR_RAY = new ModelLayerLocation(KingdomsAtWar.id("star_ray"), "main");
+    public static final ModelLayerLocation WARDEN_SHARD = new ModelLayerLocation(KingdomsAtWar.id("warden_shard"), "main");
     /** Erzmagier (alle Elemente, Zubehör je Element). */
     public static final ModelLayerLocation MAGE = new ModelLayerLocation(KingdomsAtWar.id("mage"), "main");
 

@@ -563,6 +563,26 @@ public class ModChestLootProvider implements LootTableSubProvider {
                         .add(EmptyLootItem.emptyItem().setWeight(3)))
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_DRAGON, 20)));
         // Bauwerke der Schattenwelt
+        // Truhen der Alten in den schwerelosen Ruinen der Leere
+        this.output.accept(ModLootTables.VOID_RUIN_CHEST, coins(LootTable.lootTable(), 4, 10, 2, 5, 0.25f)
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.between(4, 7))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 12, 2, 6))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 4, 1, 2))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE.get(), 4, 1, 3))
+                        .add(item(Items.GOLD_INGOT, 8, 2, 5))
+                        .add(item(Items.GOLD_NUGGET, 8, 4, 12))
+                        .add(item(Items.ENDER_PEARL, 6, 1, 3))
+                        .add(item(Items.EXPERIENCE_BOTTLE, 6, 2, 5))
+                        .add(item(Items.AMETHYST_SHARD, 6, 2, 6))
+                        .add(item(Items.DIAMOND, 2, 1, 2))
+                        .add(item(io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.SOUL_CRYSTAL.get(), 4, 1, 2)))
+                .withPool(LootPool.lootPool()
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(5)
+                                .apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1))
+                        .add(EmptyLootItem.emptyItem().setWeight(4))));
         this.output.accept(ModLootTables.MOON_TEMPLE_CHEST, coins(LootTable.lootTable(), 3, 9, 1, 4, 0.15f)
                 .withPool(LootPool.lootPool()
                         .setRolls(ContextIntProviders.between(4, 7))

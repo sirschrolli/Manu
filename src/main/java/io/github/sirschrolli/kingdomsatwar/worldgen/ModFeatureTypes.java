@@ -36,6 +36,22 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature>> ROCK_BRIDGE =
             FEATURE_TYPES.register("rock_bridge", () -> io.github.sirschrolli.kingdomsatwar.shadow.feature.RockBridgeFeature.CODEC);
 
+    // --- Die Leere ---
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.CrystalTreeFeature>> CRYSTAL_TREE =
+            FEATURE_TYPES.register("void_crystal_tree", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.CrystalTreeFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.ShardSpireFeature>> SHARD_SPIRE =
+            FEATURE_TYPES.register("void_shard_spire", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.ShardSpireFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.VoidRuinFeature>> VOID_RUIN =
+            FEATURE_TYPES.register("void_ruin", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.VoidRuinFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.FloatingDebrisFeature>> FLOATING_DEBRIS =
+            FEATURE_TYPES.register("void_floating_debris", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.FloatingDebrisFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.StardustCraterFeature>> STARDUST_CRATER =
+            FEATURE_TYPES.register("void_stardust_crater", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.StardustCraterFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.WorldRemnantFeature>> WORLD_REMNANT =
+            FEATURE_TYPES.register("void_world_remnant", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.WorldRemnantFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature>> HANGING_GROWTH =
+            FEATURE_TYPES.register("void_hanging_growth", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature.CODEC);
+
     // --- Oberwelt (eigene Biome) ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature>> BOULDER =
             FEATURE_TYPES.register("boulder", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature.CODEC);
@@ -76,6 +92,10 @@ public final class ModFeatureTypes {
 
     public static final DeferredRegister<MapCodec<? extends PlacementModifier>> PLACEMENT_TYPES =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, KingdomsAtWar.MODID);
+
+    /** In der Leere: auf eine zufällige Ober- oder Unterseite der übereinander treibenden Bruchstücke. */
+    public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.AnySurfacePlacement>>
+            ANY_SURFACE = PLACEMENT_TYPES.register("any_surface", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.AnySurfacePlacement.CODEC);
 
     /** Bauwerke mit Mindestabstand zueinander und zu den Drachennestern. */
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<SpacedPlacement>> SPACED =

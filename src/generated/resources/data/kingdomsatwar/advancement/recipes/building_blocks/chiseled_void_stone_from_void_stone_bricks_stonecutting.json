@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:chiseled_void_stone_from_void_stone_bricks_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_void_stone_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:void_stone_bricks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_void_stone_bricks"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:chiseled_void_stone_from_void_stone_bricks_stonecutting"
+    ]
+  }
+}

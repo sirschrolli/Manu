@@ -39,6 +39,11 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         coins.add(ModEntities.CAVE_TROLL.key()).add(ModEntities.LINDWORM.key()).add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key()).add(ModEntities.NIGHT_WING.key());
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.CRYSTAL_CRAWLER.key());
+        // Wesen der Leere: Münzen von den feindseligen, kein Fallschaden für die Schwebenden und den Wächter aus Marmor
+        coins.add(ModEntities.VOID_MAW.key()).add(ModEntities.SHARD_WARDEN.key()).add(ModEntities.DISTORTLING.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.VOID_MAW.key()).add(ModEntities.STAR_RAY.key())
+                .add(ModEntities.SHARD_WARDEN.key());
+        this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(ModEntities.WARDEN_SHARD.key());
         // Eigene Hof- und Weidetiere verhalten sich wie die Vanilla-Tiere, die sie ersetzen
         this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.FARM_HORSE.key()).add(ModEntities.FARM_DONKEY.key())
                 .add(ModEntities.FARM_MULE.key()).add(ModEntities.FARM_PIG.key());

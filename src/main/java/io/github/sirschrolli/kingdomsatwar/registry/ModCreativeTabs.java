@@ -101,6 +101,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, ModBlocks.SHADOW_TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THE_VOID = TABS.register("the_void",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.the_void"))
+                    .icon(() -> VoidBlocks.VOID_CRYSTAL.toStack())
+                    .withTabsBefore(SHADOW_WORLD.key())
+                    .displayItems((parameters, output) -> accept(output, VoidBlocks.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

@@ -31,6 +31,8 @@ public final class ModLootTables {
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/sunken_grotto"));
     /** Truhen und Fässer in den Dörfern der Umbrer (Wohnhaus, Schmiede, Kräuterhütte, Seherturm). */
     /** Bauwerke der Schattenwelt. */
+    /** Truhen in den schwerelosen Ruinen der Leere. */
+    public static final ResourceKey<LootTable> VOID_RUIN_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/void_ruin"));
     public static final ResourceKey<LootTable> MOON_TEMPLE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moon_temple"));
     public static final ResourceKey<LootTable> MOON_TEMPLE_CRYPT = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/moon_temple_crypt"));
     public static final ResourceKey<LootTable> CRYSTAL_MINE_CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/crystal_mine"));

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "kingdomsatwar:block/astral_marble_slab"
+    },
+    "type=double": {
+      "model": "kingdomsatwar:block/astral_marble"
+    },
+    "type=top": {
+      "model": "kingdomsatwar:block/astral_marble_slab_top"
+    }
+  }
+}

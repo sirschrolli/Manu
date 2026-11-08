@@ -27,7 +27,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
-                              ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine)
+                              ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
+                              void_maw, shard_warden, distortling, star_ray, warden_shard)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -301,6 +302,28 @@ def main():
     write_model(night_wing, "NightWingGeometry", "Geometrie der Nachtschwinge.", "night_wing", night_wing.PALETTES, preview)
     write_model(glimmer_moth, "GlimmerMothGeometry", "Geometrie des Glimmerfalters.", "glimmer_moth", glimmer_moth.PALETTES, preview)
     write_model(umbrer, "UmbrerGeometry", "Geometrie der Umbrer (alle Berufe, Zubehör je Beruf).", "umbrer", umbrer.PALETTES, preview)
+    # Wesen der Leere
+    write_model(void_maw, "VoidMawGeometry", "Geometrie des Leerenschlunds (Glocke, Saum, Maul mit vier Lippen, Fangfäden).",
+                "void_maw", void_maw.PALETTES, preview)
+    write_model(shard_warden, "ShardWardenGeometry", "Geometrie des Splitterwächters (offene Brust mit kreisendem Herz).",
+                "shard_warden", shard_warden.PALETTES, preview)
+    write_model(distortling, "DistortlingGeometry", "Geometrie des Zerrlings (Leib aus Bruchstücken mit Lücken dazwischen).",
+                "distortling", distortling.PALETTES, preview)
+    if not ONLY or "DistortlingGeometry" in ONLY:
+        # Schatten-Textur für die Farbspaltung (weiß, im Spiel türkis bzw. magenta getönt und durchscheinend)
+        from PIL import Image
+        base = Image.open(TEX / "distortling" / "distortling.png").convert("RGBA")
+        ghost = Image.new("RGBA", base.size, (0, 0, 0, 0))
+        gp, bp = ghost.load(), base.load()
+        for y in range(base.height):
+            for x in range(base.width):
+                if bp[x, y][3] > 0:
+                    gp[x, y] = (255, 255, 255, 255)
+        ghost.save(TEX / "distortling" / "distortling_ghost.png")
+    write_model(star_ray, "StarRayGeometry", "Geometrie des Sternenrochens (Schwingen in drei Gliedern, Peitschenschwanz).",
+                "star_ray", star_ray.PALETTES, preview)
+    write_model(warden_shard, "WardenShardGeometry", "Geometrie des Kristallsplitters (Geschoss des Splitterwächters).",
+                "warden_shard", warden_shard.PALETTES, preview)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

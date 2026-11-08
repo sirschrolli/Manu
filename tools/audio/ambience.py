@@ -1380,6 +1380,151 @@ def bed_whispers():
     return b
 
 
+# --------------------------------------------------------------------- Die Leere
+
+def star_song(sr: int, seed: int) -> np.ndarray:
+    """Ferner Gesang eines Sternenrochens: hohe, langsam gleitende Rufe mit weichen Obertönen, wie Walgesang aus großer Höhe."""
+    r = rng(seed)
+    parts = []
+    for i in range(int(r.integers(2, 4))):
+        n = int(r.uniform(0.9, 1.8) * sr)
+        t = np.arange(n) / sr
+        f0 = r.uniform(240, 400)
+        f = curve(n, [(0, f0), (0.35, f0 * r.uniform(1.2, 1.55)), (0.75, f0 * r.uniform(0.95, 1.2)), (1, f0 * r.uniform(0.7, 0.88))])
+        f = f * (1 + 0.012 * np.sin(2 * np.pi * r.uniform(4.5, 6.0) * t))
+        parts.append(tone(f, env_asr(n, sr, 0.25, 0.5), sr, harmonics=((1, 1.0), (2, 0.32), (3, 0.14), (4, 0.05))))
+        parts.append(r.uniform(0.15, 0.5))
+    y = concat(sr, *parts)
+    y = formant_filter(y, sr, [(620, 300, 1.0), (1400, 500, 0.35)])
+    return filt(y, "low", 3200, sr, 2)
+
+
+def rock_grind(sr: int, seed: int) -> np.ndarray:
+    """Treibende Felsbrocken reiben aneinander: tiefes, knirschendes Schaben, ein paar rieselnde Krümel."""
+    r = rng(seed)
+    base = r.uniform(55, 85)
+    modes = [(base, 12, 1.0), (base * 2.3, 10, 0.6), (base * 3.7, 9, 0.35), (base * 6.2, 8, 0.15)]
+    dur = r.uniform(1.4, 2.4)
+    y = stick_slip(sr, seed, dur, [(0, 6), (0.45, r.uniform(16, 26)), (1, 5)], modes, noise=0.4)
+    crumbs = np.zeros(len(y))
+    for i in range(int(r.integers(3, 8))):
+        m = int(0.03 * sr)
+        st = int(r.uniform(0.3, 0.95) * (len(y) - m))
+        crumbs[st:st + m] += filt(r.standard_normal(m), "band", [900, 4000], sr, 2) * env_ad(m, sr, 0.002) * r.uniform(0.05, 0.15)
+    return filt(y + crumbs, "low", 1800, sr, 2)
+
+
+def glitch_far(sr: int, seed: int) -> np.ndarray:
+    """Ein Bildfehler in der Ferne: stotterndes, digital zerhacktes Knistern mit kurzem Sirren."""
+    r = rng(seed)
+    n = int(r.uniform(0.6, 1.1) * sr)
+    y = np.zeros(n)
+    g = int(r.uniform(0.02, 0.05) * sr)
+    t = np.arange(g) / sr
+    src = filt(r.standard_normal(g), "band", [r.uniform(700, 1400), r.uniform(3000, 6000)], sr, 2)
+    src += 0.6 * np.sign(np.sin(2 * np.pi * r.uniform(300, 900) * t))
+    pos = 0
+    while pos < n - g:
+        if r.random() < 0.72:
+            y[pos:pos + g] += src * env_asr(g, sr, 0.002, 0.004) * r.uniform(0.4, 1.0)
+        pos += int(g * float(r.choice([1.0, 1.0, 2.0, 0.5])))
+    hold = int(r.integers(3, 8))
+    y = np.repeat(y[::hold], hold)[:n]
+    y = np.round(y * 5.0) / 5.0
+    return filt(y, "low", 6000, sr, 2) * env_asr(n, sr, 0.01, 0.08)
+
+
+def void_choir(sr: int, seed: int) -> np.ndarray:
+    """Ein ferner, geisterhafter Chor: gehauchte „Ah“, die langsam von einem Akkord zum nächsten gleiten."""
+    r = rng(seed)
+    n = int(r.uniform(3.5, 5.0) * sr)
+    t = np.arange(n) / sr
+    chords = [(220.0, 261.63, 329.63), (196.0, 246.94, 293.66), (174.61, 220.0, 261.63), (164.81, 207.65, 246.94)]
+    a, b = chords[int(r.integers(len(chords)))], chords[int(r.integers(len(chords)))]
+    y = np.zeros(n)
+    for k in range(3):
+        for det in (-0.004, 0.0, 0.005):
+            f = curve(n, [(0, a[k]), (0.45, a[k]), (0.7, b[k]), (1, b[k])]) * (1 + det)
+            f = f * (1 + 0.006 * np.sin(2 * np.pi * r.uniform(4.0, 5.5) * t + r.uniform(0, 6)))
+            y += saw(f, env_asr(n, sr, 1.2, 1.5), sr, partials=16, rolloff=1.4) * 0.3
+    y = formant_filter(y, sr, [(700, 130, 1.0), (1150, 160, 0.6), (2900, 300, 0.22)])
+    breath = filt(r.standard_normal(n), "band", [600, 3500], sr, 2) * env_asr(n, sr, 1.2, 1.5) * 0.05
+    return filt(y + breath, "low", 3500, sr, 2)
+
+
+def bed_void_hum():
+    """Das Nichts selbst: tiefes, langsam schwebendes Dröhnen, darüber ein feines, hohes Sirren wie Sternenlicht."""
+    b = _shadow(24, BED_SR)
+    drone(b, 301, [(36.71, 0.9), (55.0, 0.5), (73.42, 0.22)], partials=6, rolloff=1.9, detune=3, lp=(110, 380), lfo=(1, 3),
+          breath=0.3, breath_lp=260)
+    S = b.seconds
+    sw = gust_curve(S, 302, 0.0, 1.0, (1, 4))
+    for ch in range(2):
+        y = shaped_noise(b.n, b.sr, lambda t, f, ch=ch: band(f, 5600 + 600 * ch, 0.18) * (0.2 + 0.8 * ctl(sw, t + ch * 5, S)),
+                         303 + ch, 4096, 1024)
+        y = y / (np.std(y) + 1e-9) * 0.007
+        b.add_stereo(y * (ch == 0), y * (ch == 1))
+    return b
+
+
+def bed_void_wind():
+    """Dünner, hohler Wind, der um treibende Felsen pfeift."""
+    b = _shadow(20, BED_SR)
+    g = gust_curve(20, 311, 0.05, 0.7, (1, 10), 0.8)
+    wind(b, 311, lo=420, hi=1700, floor=0.12, body=0.5, whistle=0.8, whistles=((700, 980), (1100, 1500)), slope=-4.2, gusts=g, gain=0.6)
+    return b
+
+
+def bed_void_crystal():
+    """Kristallwald und Splitterklippen: ein gläserner Akkord, der schwebt, dazu singende Kristalle."""
+    b = _shadow(24, BED_SR)
+    drone(b, 321, [(110.0, 0.4), (164.81, 0.35), (246.94, 0.3), (369.99, 0.22), (554.37, 0.15)], partials=4, rolloff=2.2, detune=4,
+          lp=(800, 3600), lfo=(1, 3), breath=0.08, shimmer=1.2, shimmer_ratio=(10, 12, 15, 20))
+    ir = room(BED_SR, 6.0, 322, damping=9000)
+    scatter(b, 323, crystal_chime, count=5, dist=(6, 30), ir=ir, wet=0.75, gain=0.4)
+    b.reverb(ir, 0.35)
+    return b
+
+
+def bed_void_stardust():
+    """Sternenstaubfelder: ein sanftes, rieselndes Zischen und unzählige winzige Funken."""
+    b = _shadow(24, BED_SR)
+    S = b.seconds
+    sw = gust_curve(S, 331, 0.1, 1.0, (1, 6))
+    for ch in range(2):
+        y = shaped_noise(b.n, b.sr, lambda t, f, ch=ch: band(f, 3800, 0.9) * (0.3 + 0.7 * ctl(sw, t + ch * 4, S)), 332 + ch, 2048, 512)
+        y = y / (np.std(y) + 1e-9) * 0.035
+        b.add_stereo(y * (ch == 0), y * (ch == 1))
+    ir = room(BED_SR, 3.0, 334, damping=10000)
+    scatter(b, 335, lambda sr, s: sparkle(sr, s, scale=(1568.0, 1760.0, 2093.0, 2349.3, 2637.0), octave=1.0), count=14, dist=(3, 14),
+            ir=ir, wet=0.5, gain=0.35)
+    drone(b, 336, [(55.0, 0.5), (82.41, 0.3)], partials=5, rolloff=2.0, detune=3, lp=(150, 400), breath=0.0, gain=0.5)
+    return b
+
+
+def bed_void_ruins():
+    """Schwerelose Ruinen: hohles, weites Dröhnen, ferne Chöre der Alten und Steine, die aneinander schaben."""
+    b = _shadow(24, LOW_SR)
+    drone(b, 341, [(41.2, 0.8), (61.74, 0.5), (82.41, 0.3)], partials=8, rolloff=1.6, detune=6, lp=(150, 500), lfo=(1, 3), breath=0.45,
+          breath_lp=320)
+    ir = room(LOW_SR, 5.0, 342, damping=3000, echo=0.35)
+    scatter(b, 343, void_choir, count=2, dist=(25, 50), ir=ir, wet=0.85, gain=0.35)
+    scatter(b, 344, rock_grind, count=2, dist=(15, 40), ir=ir, wet=0.6, gain=0.4)
+    b.reverb(ir, 0.3)
+    return b
+
+
+def bed_void_remnants():
+    """Weltenreste: dumpfe Erinnerungen an verlorene Welten – Wind, ferne Vogelrufe wie durch Watte, ab und zu ein Bildfehler."""
+    b = _shadow(24, BED_SR)
+    wind(b, 351, lo=260, hi=760, floor=0.25, body=0.5, slope=-5.0, gain=0.45)
+    drone(b, 352, [(49.0, 0.5), (73.42, 0.35)], partials=6, rolloff=1.8, detune=8, lp=(160, 450), breath=0.0, gain=0.6)
+    ir = room(BED_SR, 6.0, 353, damping=1800)
+    scatter(b, 354, lambda sr, s: filt(bird_blackbird(sr, s), "low", 1100, sr, 2), count=3, dist=(30, 60), ir=ir, wet=0.9, gain=0.25)
+    scatter(b, 355, glitch_far, count=2, dist=(20, 40), ir=ir, wet=0.5, gain=0.2)
+    return b
+
+
 BEDS = {
     "wind_breeze": bed_wind_breeze, "wind_gale": bed_wind_gale, "wind_coast": bed_wind_coast, "wind_dry": bed_wind_dry,
     "wind_moor": bed_wind_moor, "leaves": bed_leaves, "reeds": bed_reeds, "birds_forest": bed_birds_forest,
@@ -1390,6 +1535,8 @@ BEDS = {
     "shadow_forest": bed_shadow_forest, "shadow_wastes": bed_shadow_wastes, "shadow_crystal": bed_shadow_crystal,
     "shadow_marsh": bed_shadow_marsh, "shadow_peaks": bed_shadow_peaks, "shadow_glimmer": bed_shadow_glimmer,
     "shadow_sea": bed_shadow_sea, "shadow_isles": bed_shadow_isles, "shadow_depths": bed_shadow_depths, "whispers": bed_whispers,
+    "void_hum": bed_void_hum, "void_wind": bed_void_wind, "void_crystal": bed_void_crystal, "void_stardust": bed_void_stardust,
+    "void_ruins": bed_void_ruins, "void_remnants": bed_void_remnants,
 }
 
 
@@ -1440,6 +1587,10 @@ SPOTS = {
     "deep_moan": (deep_moan, 2, VAST, 96, "Etwas dröhnt in der Tiefe", "Something groans below"),
     "wing_flutter": (wing_flutter, 2, DRY, 20, "Flügel schlagen", "Wings flutter"),
     "shadow_creak": (shadow_creak, 3, FOREST, 36, "Schattenholz ächzt", "Shadow wood groans"),
+    "star_song": (star_song, 4, VAST, 128, "Sternenrochen singt in der Ferne", "Distant star ray song"),
+    "rock_grind": (rock_grind, 3, VAST, 48, "Treibende Felsen schaben", "Floating rocks grind"),
+    "glitch_far": (glitch_far, 3, VAST, 32, "Etwas flackert", "Something glitches"),
+    "void_choir": (void_choir, 3, VAST, 96, "Ein ferner Chor", "A distant choir"),
 }
 
 # Sätze, die nur auf Vanilla-Klänge verweisen: (Pfade, Tonhöhe, Lautstärke, Reichweite, Untertitel DE/EN)

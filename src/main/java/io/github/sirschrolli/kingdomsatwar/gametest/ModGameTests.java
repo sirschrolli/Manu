@@ -182,6 +182,7 @@ public final class ModGameTests {
 
     static {
         ShadowGameTests.init();   // meldet die Tests der Schattenwelt an
+        VoidGameTests.init();     // meldet die Tests der Leere an
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -240,6 +241,7 @@ public final class ModGameTests {
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
         ShadowGameTests.register(event, environment);
+        VoidGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

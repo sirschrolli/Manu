@@ -202,6 +202,48 @@
       }
     ]
   },
+  "ambient.bed.void_crystal": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_crystal"
+      }
+    ]
+  },
+  "ambient.bed.void_hum": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_hum"
+      }
+    ]
+  },
+  "ambient.bed.void_remnants": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_remnants"
+      }
+    ]
+  },
+  "ambient.bed.void_ruins": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_ruins"
+      }
+    ]
+  },
+  "ambient.bed.void_stardust": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_stardust"
+      }
+    ]
+  },
+  "ambient.bed.void_wind": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/void_wind"
+      }
+    ]
+  },
   "ambient.bed.whispers": {
     "sounds": [
       {
@@ -850,6 +892,23 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.frog"
   },
+  "ambient.spot.glitch_far": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/glitch_far1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/glitch_far2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/glitch_far3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.glitch_far"
+  },
   "ambient.spot.ice_crack": {
     "sounds": [
       {
@@ -995,6 +1054,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.pebbles"
+  },
+  "ambient.spot.rock_grind": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/rock_grind1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/rock_grind2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/rock_grind3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.rock_grind"
   },
   "ambient.spot.rumble": {
     "sounds": [
@@ -1160,6 +1236,27 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.sparkle"
   },
+  "ambient.spot.star_song": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/star_song1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/star_song2",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/star_song3",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/star_song4",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.star_song"
+  },
   "ambient.spot.steam_vent": {
     "sounds": [
       {
@@ -1229,6 +1326,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.twig_snap"
+  },
+  "ambient.spot.void_choir": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/void_choir1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/void_choir2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/void_choir3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.void_choir"
   },
   "ambient.spot.warped_creak": {
     "sounds": [
@@ -1765,6 +1879,79 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.deer.step"
+  },
+  "entity.distortling.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/distortling_ambient1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_ambient2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_ambient3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.distortling.ambient"
+  },
+  "entity.distortling.attack": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/distortling_attack1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_attack2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.distortling.attack"
+  },
+  "entity.distortling.blink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/distortling_blink1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_blink2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_blink3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.distortling.blink"
+  },
+  "entity.distortling.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/distortling_death1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.distortling.death"
+  },
+  "entity.distortling.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/distortling_hurt1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_hurt2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/void/distortling_hurt3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.distortling.hurt"
   },
   "entity.dragon.ambient": {
     "sounds": [
@@ -2627,6 +2814,146 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
   },
+  "entity.shard_warden.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_ambient1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_ambient2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_ambient3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.ambient"
+  },
+  "entity.shard_warden.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_awaken1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.awaken"
+  },
+  "entity.shard_warden.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_charge1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shard_warden_charge2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.charge"
+  },
+  "entity.shard_warden.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/death",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.death"
+  },
+  "entity.shard_warden.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/break1",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:block/amethyst/break2",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:block/amethyst/break3",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:block/amethyst/break4",
+        "pitch": 0.55
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit1",
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit2",
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit3",
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:mob/irongolem/hit4",
+        "pitch": 0.75
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.hurt"
+  },
+  "entity.shard_warden.shoot": {
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst_cluster/break1",
+        "pitch": 1.35
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break2",
+        "pitch": 1.35
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break3",
+        "pitch": 1.35
+      },
+      {
+        "name": "minecraft:block/amethyst_cluster/break4",
+        "pitch": 1.35
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.shoot"
+  },
+  "entity.shard_warden.slam": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/warden/attack_impact_1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/warden/attack_impact_2",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.slam"
+  },
+  "entity.shard_warden.step": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/irongolem/walk1",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk2",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk3",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:mob/irongolem/walk4",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.step"
+  },
   "entity.soldier.armor": {
     "sounds": [
       {
@@ -2680,6 +3007,151 @@
       "minecraft:damage/hit3"
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.soldier.hurt"
+  },
+  "entity.star_ray.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_ambient1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_ambient2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_ambient3",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_ambient4",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_ray.ambient"
+  },
+  "entity.star_ray.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_ray.death"
+  },
+  "entity.star_ray.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/star_ray_hurt2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.star_ray.hurt"
+  },
+  "entity.void_maw.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/void_maw_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/void_maw_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/void/void_maw_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.void_maw.ambient"
+  },
+  "entity.void_maw.bite": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/ravager/bite1",
+        "pitch": 1.25
+      },
+      {
+        "name": "minecraft:mob/ravager/bite2",
+        "pitch": 1.25
+      },
+      {
+        "name": "minecraft:mob/ravager/bite3",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.void_maw.bite"
+  },
+  "entity.void_maw.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/guardian/guardian_death",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.void_maw.death"
+  },
+  "entity.void_maw.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/guardian/guardian_hit1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit3",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/guardian/guardian_hit4",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.void_maw.hurt"
+  },
+  "entity.void_maw.inhale": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/void_maw_inhale1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/void/void_maw_inhale2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.void_maw.inhale"
+  },
+  "entity.warden_shard.hit": {
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/break1",
+        "pitch": 1.3,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block/amethyst/break2",
+        "pitch": 1.3,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block/amethyst/break3",
+        "pitch": 1.3,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block/amethyst/break4",
+        "pitch": 1.3,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.warden_shard.hit"
   },
   "entity.wild_boar.ambient": {
     "sounds": [

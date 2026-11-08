@@ -1,0 +1,98 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.end"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "kingdomsatwar:star_ray",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 6
+            }
+          ],
+          "monster": [
+            {
+              "type": "kingdomsatwar:distortling",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 45
+            },
+            {
+              "type": "kingdomsatwar:void_maw",
+              "count": 1,
+              "weight": 10
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.002
+      }
+    ],
+    "minecraft:visual/fog_color": "#22183a",
+    "minecraft:visual/fog_end_distance": 260.0,
+    "minecraft:visual/fog_start_distance": 40.0,
+    "minecraft:visual/sky_color": "#0c0a1e",
+    "minecraft:visual/water_fog_color": "#0a0624"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#7a6ab0",
+    "foliage_color": "#7a6ab0",
+    "grass_color": "#6a7a9e",
+    "water_color": "#3a2a8a"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:void/shard_spires_hanging"
+    ],
+    [],
+    [
+      "kingdomsatwar:void/ruin_rare",
+      "kingdomsatwar:void/floating_debris",
+      "kingdomsatwar:void/world_remnants"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:void/remnant_grass",
+      "kingdomsatwar:void/hanging_growth"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

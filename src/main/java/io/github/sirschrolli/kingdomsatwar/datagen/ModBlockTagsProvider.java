@@ -164,6 +164,27 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         }
         add(BlockItemTags.MOSS_BLOCKS.block(), ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_VEGETATION, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
+
+        // Die Leere
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL_CLUSTER,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRYSTAL_FOLIAGE);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST);
+        add(BlockTags.SUPPORTS_VEGETATION, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST);
+        add(BlockTags.SWORD_EFFICIENT, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRYSTAL_FOLIAGE);
+        add(BlockTags.SMALL_FLOWERS, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM);
+        add(BlockTags.CLIMBABLE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES_PLANT);
+        add(BlockTags.PORTALS, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
         add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
         add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS, ShadowBlocks.MOON_FERN);

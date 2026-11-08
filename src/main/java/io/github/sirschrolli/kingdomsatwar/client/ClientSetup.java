@@ -85,6 +85,11 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.CRYSTAL_CRAWLER, CrystalCrawlerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.NIGHT_WING, NightWingGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLIMMER_MOTH, GlimmerMothGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.VOID_MAW, io.github.sirschrolli.kingdomsatwar.client.model.geom.VoidMawGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHARD_WARDEN, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShardWardenGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.DISTORTLING, io.github.sirschrolli.kingdomsatwar.client.model.geom.DistortlingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.STAR_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.StarRayGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WARDEN_SHARD, io.github.sirschrolli.kingdomsatwar.client.model.geom.WardenShardGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.PHOENIX, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhoenixGeometry::createLayer);
@@ -181,6 +186,12 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.NIGHT_WING.get(), NightWingRenderer::new);
         event.registerEntityRenderer(ModEntities.MOON_STAG.get(), MoonStagRenderer::new);
         event.registerEntityRenderer(ModEntities.GLIMMER_MOTH.get(), GlimmerMothRenderer::new);
+        // Wesen der Leere
+        event.registerEntityRenderer(ModEntities.VOID_MAW.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.VoidMawRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHARD_WARDEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.ShardWardenRenderer::new);
+        event.registerEntityRenderer(ModEntities.DISTORTLING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.DistortlingRenderer::new);
+        event.registerEntityRenderer(ModEntities.STAR_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarRayRenderer::new);
+        event.registerEntityRenderer(ModEntities.WARDEN_SHARD.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.WardenShardRenderer::new);
         // die Umbrer
         event.registerEntityRenderer(ModEntities.UMBRER.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);

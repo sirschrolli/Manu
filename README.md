@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.58.0 – Klänge der Welt.** Jedes eigene Biom hat jetzt seine eigene Klangwelt: Im Urhain rauscht das Laub, ein Vogelchor singt, Spechte trommeln und der Kuckuck ruft – nachts zirpen Grillen, der Waldkauz ruft und in der Ferne heulen Wölfe. Auf den Königsauen trillern Lerchen, im Nebelmoor blubbert der Torf, die Rohrdommel dröhnt und Unken rufen, an der Sturmküste donnert die Brandung, auf den Frostgipfeln pfeift der Sturm und das Eis singt und knackt, in den Aschefeldern knistert die Glut. In den Drachennestern grollt es aus der Tiefe und ein Drache brüllt in der Ferne, in der Schattenwelt dröhnt und flüstert es, Kristalle singen. Die Klänge ändern sich mit Tag und Nacht, mit Regen und Höhe, und in Häusern und Höhlen werden sie leiser. Alle Klänge sind eigens für die Mod erzeugt.
+> **Testversion 0.59.0 – Die Leere.** Das **Herz der Schatten** reißt die Welt auf: Wer es auf den Boden richtet, öffnet einen Riss in eine neue Dimension – ein Sternennichts, in dem die Bruchstücke zerbrochener Welten treiben. Auf ihnen wachsen verdrehte Kristallwälder, liegen schwerelose Ruinen aus Sternenmarmor, leuchtende Sternenstaubfelder, Splitterklippen und Weltenreste, auf denen noch Häuser fremder Welten stehen. Dort leben vier neue Wesen mit eigenem Aussehen: der **Leerenschlund** saugt seine Beute an, der **Splitterwächter** erwacht in den Ruinen und schleudert Kristallsplitter, der **Zerrling** flackert und springt durch den Raum, und den riesigen **Sternenrochen** kann man mit Leerenblüten zähmen und durch die Leere reiten. Dazu eigene Klangwelten für alle sechs Biome der Leere.
+> In 0.58 bekam jedes eigene Biom seine eigene Klangwelt: Laub, Vogelchor, Spechte und Kuckuck im Urhain, Grillen, Käuzchen und ferne Wölfe in der Nacht, Brandung an der Sturmküste, singendes Eis auf den Frostgipfeln, knisternde Glut in den Aschefeldern, ein Drache in der Ferne über den Nestern, Dröhnen und Flüstern in der Schattenwelt.
 > In 0.57 wuchsen drei neue, leuchtende Pflanzen in der Schattenwelt: Mondfarn, Sternblüte und Seelenschilf.
 > In 0.56 kamen die lebendigen Drachen: zwölf neue Angriffe der Drachen-Bosse (Feuerwirbel, Magmaspalten, Frostlanze, Splittersturm, Kugelblitze, Blitzkäfig, Dornenwelle, Sonnenstrahl, Felslawine, Erdspalter, Geysirfeld, Wasserschlangen), und die eigenen Drachen bewegen sich wie die Bosse – Schritt und Galopp ohne Rutschen, Abheben und Landen mit den Flügeln, Kurvenflug, Sitzen, Launen. 0.56.1 behob einen Absturz beim Erzeugen der Schattenwelt (an den Felsbrücken der Schattengipfel), ließ die Roben der Umbrer beim Laufen mitgehen und den Kupferknecht seine Arme ruhiger schwingen.
 > In 0.55 wurde sauber gebaut: Alle Häuser werden automatisch auf Baufehler geprüft (Betten nicht mehr in Wänden, Laternen an Ketten vom Dach, Leitern mit Halt …), der Feldherrentisch zittert bei vielen Truppen nicht mehr, und die Schwäche nach dem Tod ist kein Statuseffekt mehr.
@@ -317,6 +318,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
+| **Die Leere** (neu): eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
@@ -561,12 +563,53 @@ Im ewigen Zwielicht leuchtet vieles, was wächst – und aus manchem steigen ab 
 
 Knochenmehl auf Schattengras lässt Schattenhalme, Geisterpilze, Sternblüten und Mondfarne sprießen.
 
+### Die Leere
+
+![Die Leere: treibende Bruchstücke, Kristallwälder, Ruinen und die Wesen der Leere](docs/bilder/die_leere.jpg)
+
+Wer Nyxar besiegt hat, trägt sein **Herz der Schatten**. Richtet man es auf den Boden, sammeln sich Funken, das Herz
+schlägt dreimal – und vor einem reißt die Welt auf: ein senkrechter **Leerenriss** (9 Blöcke breit, 10 hoch) mit einem
+Saum aus Leerenkristall, hinter dem die Sterne treiben. Wer hineintritt, wird nach kurzem Schwindel in die **Leere**
+gezogen und landet auf einer Ankerinsel mit dem Riss zurück. Auf einen Riss gerichtet schließt das Herz ihn wieder; das
+Herz selbst bleibt erhalten.
+
+Die Leere hat keinen Boden und kein Meer: Bruchstücke zerbrochener Welten treiben in Gruppen durch ein ewiges
+Sternennichts, mit flachen Oberseiten und langen, zerklüfteten Unterseiten, dazwischen einzelne Felsbrocken und hoch
+darüber flache Splitter. Wer ins Nichts stürzt, wird verwundet auf die nächste Ankerinsel zurückgespuckt. Schlafen kann
+man hier nicht.
+
+| Biom | Was dort ist |
+|---|---|
+| **Sternennichts** | die weiten, leeren Strecken zwischen den Archipelen: einzelne Felsbrocken, ferne Bruchstücke, das Funkeln der Sterne |
+| **Kristallwald** | verdrehte Kristallbäume mit leuchtendem Kristalllaub, Sternenranken, Leerenblüten und Kristalldrusen |
+| **Schwerelose Ruinen** | die Trümmer der Alten aus Sternenmarmor – Säulenhallen, Torbögen, Schreine mit Truhen, Treppen ins Nichts, zerfallene Türme; darüber schweben Mauerstücke frei in der Luft |
+| **Sternenstaubfelder** | fahl leuchtende Ebenen aus Sternenstaub mit Kratern und gefallenen Sternen |
+| **Splitterklippen** | zerklüftete Bruchstücke, aus denen riesige Kristallspitzen schräg in die Leere ragen |
+| **Weltenreste** | seltene Bruchstücke fremder Welten – ein Stück Wiese, Wüste oder Gletscher mit den Resten der Häuser, die einmal darauf standen |
+
+**Neue Blöcke:** Leerenstein (mit Ziegeln, poliert, gemeißelt, rissig, Treppen, Stufen, Mauern), Sternenmarmor (Ziegel,
+Säule, leuchtend gemeißelt – nur aus den Ruinen), Leerenmoos, Sternenstaub, Leerenkristall und Leerenkristall-Druse,
+Kristalllaub, Leerenblüte und Sternenranken. Aus Drusen und Kristallen fallen **Leerensplitter**.
+
+**Die Wesen der Leere** – alle mit eigenem Modell, eigenen Bewegungen und eigenen Stimmen:
+
+| Wesen | Wie es aussieht | Was es tut |
+|---|---|---|
+| **Leerenschlund** | eine schwebende Glocke wie aus dem Nachthimmel geschnitten, mit Nebelschleiern, Sternen und sechs leuchtenden Augen; drei Kristallsplitter stecken in der Kuppel; darunter ein Maul aus vier Lippen voller Zähne und lange Fangfäden mit Leuchtpunkten | treibt pumpend wie eine Qualle; sieht er Beute, reißt er das Maul auf und **saugt** sie an – an einer Kante zieht er sie ins Nichts; ist sie nah, schnappen die Lippen zu (Hunger). Ducken schwächt den Sog, Treffer unterbrechen ihn |
+| **Splitterwächter** | ein uralter Wächter aus Sternenmarmor mit goldenen Bändern; in seiner offenen Brust kreist ein Herz aus Leerenkristall, aus Schultern und Rücken wachsen Kristalle, um ihn kreisen schwerelose Marmorbrocken | **ruht** wie eine Statue in den Ruinen (die Brocken liegen am Boden), bis man ihm nahe kommt oder ihn trifft – dann erwacht er, schleudert **Kristallsplitter** (drei kurz nacheinander, mit einem Schlag zurückzuschlagen), stößt mit beiden Fäusten einen **Erdstoß** in den Boden und kehrt danach an seinen Platz zurück |
+| **Zerrling** | ein Fehler im Bild: ein hagerer Leib aus Bruchstücken mit Lücken dazwischen, schwarz wie ein Loch, verrutschte Bildzeilen, eine gesprungene Maske mit einem leuchtenden Auge; seine Farben spalten sich in Türkis und Magenta | **springt** ruckhaft durch den Raum – am liebsten in den Rücken seiner Beute – und hinterlässt ein Nachbild; getroffen springt er oft davon; seine Krallen verlangsamen |
+| **Sternenrochen** | ein riesiger Rochen mit fast fünf Blöcken Spannweite, nachtblau mit Sternbildern auf dem Rücken, violettem Nebel an den Schwingen, durchscheinenden Flügelspitzen und einem Peitschenschwanz mit leuchtender Spitze | gleitet friedlich in weiten Bögen um die Bruchstücke und singt; mit **Leerenblüten** gefüttert, fasst er Vertrauen und **trägt seinen Freund durch die Leere**: er gleitet stets voran, schneller mit „vorwärts“, steigt und sinkt mit dem Blick, „springen“ hebt ihn an |
+
+**Klänge der Leere:** ein tiefes, schwebendes Dröhnen mit feinem Sternensirren überall, dazu gläserne Akkorde und
+singende Kristalle im Kristallwald, rieselnder Sternenstaub, ferne Chöre der Alten und schabende Steine in den Ruinen,
+dumpfe Erinnerungen an verlorene Welten über den Weltenresten – und aus der Ferne der Gesang der Sternenrochen.
+
 ### Klänge der Welt
 
 ![Klänge der Welt: Spektrogramme der Klangwelten](docs/bilder/klangwelten.jpg)
 
-Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester und die neun Biome der Schattenwelt – hat seine
-eigene Klangwelt. Darunter liegen leise, nahtlose Klangteppiche (Wind, Laub, Schilf, Brandung, Glut, Eis, das Dröhnen der
+Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester, die neun Biome der Schattenwelt und die sechs
+Biome der Leere – hat seine eigene Klangwelt. Darunter liegen leise, nahtlose Klangteppiche (Wind, Laub, Schilf, Brandung, Glut, Eis, das Dröhnen der
 Schattenwelt …), darüber erklingen ab und zu Einzelklänge an einem Ort in der Nähe: ein Vogel im Baum, ein Bussard hoch
 über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne.
 
@@ -582,6 +625,7 @@ Schattenwelt …), darüber erklingen ab und zu Einzelklänge an einem Ort in de
 | **Aschefelder** | staubiger Wind, knisternde Glut, Grollen, fauchende Glutspalten | ebenso |
 | **Drachennester** | je nach Element Lava, Eis, Sturm, Fels, Zauberhain oder Grotte – und ein Drache brüllt in der Ferne | ebenso |
 | **Schattenwelt** | Dröhnen und Flüstern im Schattenwald, singende Kristalle in den Schluchten, Seelenklagen im Sumpf, schwebende Klänge auf den Glimmerweiten, ein Herzschlag in den Tiefen | ewiges Zwielicht |
+| **Die Leere** | tiefes Dröhnen und Sternensirren, gläserne Akkorde im Kristallwald, rieselnder Sternenstaub, Chöre und schabende Steine in den Ruinen, dumpfe Erinnerungen über den Weltenresten, Gesang der Sternenrochen | ewige Nacht |
 
 Die Klänge folgen den Umständen: Vögel singen am Tag und verstummen bei Regen, nachts zirpen Grillen; in Häusern und
 Höhlen verklingen Laub und Vögel, vom Wind bleibt nur ein Hauch; auf Gipfeln pfeift der Wind lauter; unter Wasser wird es
@@ -2033,6 +2077,8 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/generate_villagers.py` | Texturen der Dorfbewohner neu zeichnen (`--preview` für eine Übersicht) |
 | `python3 tools/generate_undead_villagers.py` | Texturen der untoten Dorfbewohner aus denen der Dorfbewohner ableiten (`--preview`) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
+| `python3 tools/audio/ambience.py` | Klangteppiche und Einzelklänge der Biome neu erzeugen |
+| `python3 tools/audio/void_creatures.py` | Stimmen der Wesen der Leere neu erzeugen |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 

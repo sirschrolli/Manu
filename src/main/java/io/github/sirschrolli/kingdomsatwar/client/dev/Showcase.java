@@ -192,6 +192,14 @@ final class Showcase {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
                     } else if (scene.startsWith("dragon_attacks_")) {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
+                    } else if (scene.equals("void_map")) {
+                        VoidShowcase.map(steps);
+                    } else if (scene.equals("void_creatures")) {
+                        VoidShowcase.creatures(steps);
+                    } else if (scene.equals("void_rift")) {
+                        VoidShowcase.rift(steps);
+                    } else if (scene.equals("void") || scene.startsWith("void_")) {
+                        VoidShowcase.views(steps, scene.equals("void") ? "" : scene.substring(5));
                     } else if (scene.startsWith("ambience_")) {
                         AmbienceShowcase.listen(steps, scene.substring(9));
                     } else if (scene.equals("worldsites")) {

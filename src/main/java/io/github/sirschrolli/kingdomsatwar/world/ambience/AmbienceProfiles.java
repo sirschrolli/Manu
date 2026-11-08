@@ -6,6 +6,7 @@ import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile
 import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile.Time.NIGHT;
 
 import io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes;
+import io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes;
 import io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes;
 import io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public final class AmbienceProfiles {
         overworld();
         nests();
         shadowWorld();
+        theVoid();
     }
 
     private AmbienceProfiles() {}
@@ -263,5 +265,58 @@ public final class AmbienceProfiles {
                 .close("drip", 1.4f, ALWAYS)
                 .close("whisper", 0.6f, ALWAYS)
                 .spot("soul_voices", 0.4f, ALWAYS, 8, 24, -6, 6, false, 0.8f, 1.0f));
+    }
+
+    // =====================================================================================
+    // Die Leere
+    // =====================================================================================
+
+    /**
+     * Die Leere: überall das tiefe, schwebende Dröhnen des Nichts mit feinem Sternensirren; dazu je Biom gläserne
+     * Akkorde und singende Kristalle, rieselnder Sternenstaub, Chöre der Alten zwischen schabenden Steinen oder dumpfe
+     * Erinnerungen an verlorene Welten. Aus der Ferne singen Sternenrochen.
+     */
+    private static void theVoid() {
+        put(VoidBiomes.EXPANSE, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.6f, 0.6f)
+                .wind("void_wind", 0.32f)
+                .far("star_song", 0.6f, ALWAYS)
+                .far("deep_moan", 0.2f, ALWAYS)
+                .spot("rock_grind", 0.4f, ALWAYS)
+                .spot("sparkle", 0.5f, ALWAYS));
+        put(VoidBiomes.CRYSTAL_FOREST, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.38f, 0.4f)
+                .everywhere("void_crystal", 0.45f, 0.5f)
+                .spot("crystal_chime", 1.4f, ALWAYS)
+                .spot("amethyst", 1.0f, ALWAYS)
+                .spot("glitch_far", 0.3f, ALWAYS)
+                .far("star_song", 0.3f, ALWAYS));
+        put(VoidBiomes.WEIGHTLESS_RUINS, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.38f, 0.4f)
+                .everywhere("void_ruins", 0.5f, 0.6f)
+                .wind("void_wind", 0.18f)
+                .far("void_choir", 0.5f, ALWAYS)
+                .spot("rock_grind", 0.8f, ALWAYS)
+                .close("whisper", 0.4f, ALWAYS)
+                .spot("pebbles", 0.4f, ALWAYS));
+        put(VoidBiomes.STARDUST_FIELDS, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.42f, 0.4f)
+                .everywhere("void_stardust", 0.45f, 0.4f)
+                .spot("sparkle", 1.2f, ALWAYS)
+                .far("star_song", 0.5f, ALWAYS));
+        put(VoidBiomes.SHARD_CLIFFS, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.5f, 0.5f)
+                .wind("void_wind", 0.42f)
+                .everywhere("void_crystal", 0.25f, 0.3f)
+                .spot("crystal_chime", 0.8f, ALWAYS)
+                .spot("rock_grind", 0.7f, ALWAYS)
+                .spot("pebbles", 0.6f, ALWAYS)
+                .far("deep_moan", 0.3f, ALWAYS));
+        put(VoidBiomes.WORLD_REMNANTS, AmbienceProfile.builder()
+                .everywhere("void_hum", 0.38f, 0.4f)
+                .everywhere("void_remnants", 0.5f, 0.5f)
+                .spot("glitch_far", 0.6f, ALWAYS)
+                .far("void_choir", 0.2f, ALWAYS)
+                .far("star_song", 0.2f, ALWAYS));
     }
 }

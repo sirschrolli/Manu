@@ -135,6 +135,33 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                     net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
         }
         dropSelf(ShadowBlocks.STAR_BLOSSOM.get());
+
+        // Die Leere
+        for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM)) {
+            dropSelf(block.get());
+        }
+        // Leerenmoos: mit Behutsamkeit das Moos, sonst der Stein darunter
+        add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS.get(), block -> createSingleItemTableWithSilkTouch(block,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE.base().get()));
+        // Kristalllaub: mit Schere oder Behutsamkeit das Laub, sonst manchmal ein Leerensplitter
+        add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRYSTAL_FOLIAGE.get(), block -> createSilkTouchOrShearsDispatchTable(block,
+                (net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>) applyExplosionDecay(block,
+                        LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get())
+                                .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.12f)))));
+        add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
+        add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES_PLANT.get(),
+                block -> createShearsOrSilkTouchOnlyDrop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES.get()));
+        add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL_CLUSTER.get(), block -> createSilkTouchDispatchTable(block,
+                (net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Builder<?>) applyExplosionDecay(block,
+                        LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get())
+                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 3)))
+                                .apply(ApplyBonusCount.addOreBonusCount(this.enchantments.getOrThrow(Enchantments.FORTUNE))))));
         // Schattenholz-Tür, -Falltür, -Zaun und -Zauntor
         add(ShadowBlocks.SHADOW_DOOR.get(), this::createDoorTable);
         for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.SHADOW_TRAPDOOR, ShadowBlocks.SHADOW_FENCE,

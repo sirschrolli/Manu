@@ -33,6 +33,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.SealState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.world.SealState.CODEC.fieldOf("seal")).build());
 
+    /** Die Leerenrisse der Welt und wohin sie führen. */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState>> RIFTS = ATTACHMENTS.register("rifts",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState.CODEC.fieldOf("rifts")).build());
+
     /** Fortschritt des Spielers in der Geschichte „Das Siegel“. */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.story.StoryProgress>> STORY = ATTACHMENTS.register("story",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.story.StoryProgress::new)

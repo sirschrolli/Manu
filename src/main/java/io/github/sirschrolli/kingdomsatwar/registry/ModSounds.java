@@ -73,6 +73,30 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_BREATH = register("entity.nyxar.breath");
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_SHRIEK = register("entity.nyxar.shriek");
 
+    // ---------------------------------------------------------------- Wesen der Leere
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_MAW_AMBIENT = register("entity.void_maw.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_MAW_HURT = register("entity.void_maw.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_MAW_DEATH = register("entity.void_maw.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_MAW_INHALE = register("entity.void_maw.inhale");
+    public static final DeferredHolder<SoundEvent, SoundEvent> VOID_MAW_BITE = register("entity.void_maw.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_AMBIENT = register("entity.shard_warden.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_HURT = register("entity.shard_warden.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_DEATH = register("entity.shard_warden.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_STEP = register("entity.shard_warden.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_AWAKEN = register("entity.shard_warden.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_CHARGE = register("entity.shard_warden.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_SHOOT = register("entity.shard_warden.shoot");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARD_WARDEN_SLAM = register("entity.shard_warden.slam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WARDEN_SHARD_HIT = register("entity.warden_shard.hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DISTORTLING_AMBIENT = register("entity.distortling.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DISTORTLING_HURT = register("entity.distortling.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DISTORTLING_DEATH = register("entity.distortling.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DISTORTLING_BLINK = register("entity.distortling.blink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> DISTORTLING_ATTACK = register("entity.distortling.attack");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_AMBIENT = register("entity.star_ray.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_HURT = register("entity.star_ray.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_DEATH = register("entity.star_ray.death");
+
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */
     public static final DeferredHolder<SoundEvent, SoundEvent> HERO_PAT = register("hero.pat");

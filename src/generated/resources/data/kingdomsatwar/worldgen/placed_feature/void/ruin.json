@@ -1,0 +1,20 @@
+{
+  "feature": "kingdomsatwar:void/ruin",
+  "placement": [
+    {
+      "type": "kingdomsatwar:spaced",
+      "salt": 7311,
+      "separation": 1,
+      "spacing": 3
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:any_surface"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}
