@@ -39,6 +39,7 @@ public final class KingdomsAtWar {
         // Kingdoms at War wird allein gespielt: fremde Mods brechen den Start ab
         io.github.sirschrolli.kingdomsatwar.rules.ModGuard.check(container);
         ModSounds.SOUNDS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.AmbientSounds.SOUNDS.register(modBus);
         ModAttachments.ATTACHMENTS.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.init();

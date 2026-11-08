@@ -1,10 +1,6 @@
 {
   "attributes": {
     "minecraft:audio/ambient_sounds": {
-      "additions": {
-        "sound": "minecraft:entity.lightning_bolt.thunder",
-        "tick_chance": 0.0012
-      },
       "mood": {
         "block_search_extent": 8,
         "offset": 2.0,

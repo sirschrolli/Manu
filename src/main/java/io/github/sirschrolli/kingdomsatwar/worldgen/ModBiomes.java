@@ -10,7 +10,6 @@ import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
-import net.minecraft.world.attribute.AmbientAdditionsSettings;
 import net.minecraft.world.attribute.AmbientMoodSettings;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.AmbientSounds;
@@ -59,6 +58,10 @@ public final class ModBiomes {
         };
     }
 
+    /** Alle Nest-Biome. */
+    public static final List<ResourceKey<Biome>> NESTS = List.of(ASHLANDS, FROSTBASIN, RUGGED_WILDS, ANCIENT_GROVE,
+            STORM_CLIFFS, ABYSSAL_GROTTO);
+
     /** Ist das eines der Nest-Biome? */
     public static boolean isNestBiome(net.minecraft.core.Holder<Biome> biome) {
         return biome.is(ASHLANDS) || biome.is(FROSTBASIN) || biome.is(ANCIENT_GROVE) || biome.is(RUGGED_WILDS) || biome.is(STORM_CLIFFS)
@@ -96,11 +99,11 @@ public final class ModBiomes {
                 .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0x2A5A64))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x15404C))
                 .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_UNDER_WATER))
+                // Klangteppiche und Einzelklänge: world.ambience.AmbienceProfiles
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(
                         Optional.empty(),
                         Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
-                        List.of(new AmbientAdditionsSettings(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT
-                                .wrapAsHolder(SoundEvents.AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE), 0.004))))
+                        List.of()))
                 .mobSpawnSettings(MobSpawnSettings.EMPTY)
                 .generationSettings(BiomeGenerationSettings.EMPTY)
                 .build();
@@ -127,12 +130,11 @@ public final class ModBiomes {
                 .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(
                         new AmbientParticle(ParticleTypes.ELECTRIC_SPARK, 0.003f)))
                 .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS))
+                // Klangteppiche und Einzelklänge: world.ambience.AmbienceProfiles
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(
                         Optional.empty(),
                         Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
-                        List.of(new AmbientAdditionsSettings(
-                                net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.LIGHTNING_BOLT_THUNDER),
-                                0.0012))))
+                        List.of()))
                 .mobSpawnSettings(MobSpawnSettings.EMPTY)
                 .generationSettings(BiomeGenerationSettings.EMPTY)
                 .build();
@@ -240,10 +242,11 @@ public final class ModBiomes {
                         new AmbientParticle(ParticleTypes.WHITE_ASH, 0.045f),
                         new AmbientParticle(ParticleTypes.ASH, 0.02f)))
                 .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(SoundEvents.MUSIC_BIOME_BASALT_DELTAS))
+                // Klangteppiche und Einzelklänge: world.ambience.AmbienceProfiles
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(
-                        Optional.of(SoundEvents.AMBIENT_BASALT_DELTAS_LOOP),
+                        Optional.empty(),
                         Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_BASALT_DELTAS_MOOD, 6000, 8, 2.0)),
-                        List.of(new AmbientAdditionsSettings(SoundEvents.AMBIENT_BASALT_DELTAS_ADDITIONS, 0.0111))))
+                        List.of()))
                 .setAttribute(EnvironmentAttributes.WATER_EVAPORATES, true)
                 .setAttribute(EnvironmentAttributes.SNOW_GOLEM_MELTS, true)
                 .mobSpawnSettings(MobSpawnSettings.EMPTY)

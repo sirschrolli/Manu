@@ -39,6 +39,9 @@ public class ModLanguageProvider extends LanguageProvider {
         RulesLang.register(this::text);
         bosses();
         shadowWorld();
+        // Untertitel der Umgebungsklänge
+        io.github.sirschrolli.kingdomsatwar.registry.AmbientSounds.SUBTITLES
+                .forEach((sound, names) -> this.subtitle("ambient." + sound, names.get(0), names.get(1)));
         // --- Kreativ-Tabs ---
         // (kurz halten: längere Titel ragen im Kreativ-Inventar über den Rand)
         text("itemGroup.kingdomsatwar.building", "Kingdoms at War: Building", "Kingdoms at War: Bauen");

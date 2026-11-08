@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
-import net.minecraft.world.attribute.AmbientAdditionsSettings;
 import net.minecraft.world.attribute.AmbientMoodSettings;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.AmbientSounds;
@@ -122,13 +121,12 @@ public final class ShadowBiomes {
         HolderGetter<WorldCarver> carvers = context.lookup(Registries.CARVER);
         context.register(SHADOW_FOREST, biome(new Look(0x2E2252, 0x3E2E66, 0x3A3C90, 0x101236, 0x6450A8, 0x7A4AC8)
                         .fog(20.0f, 150.0f).particles(new AmbientParticle(ParticleTypes.SPORE_BLOSSOM_AIR, 0.0012f))
-                        .music(SoundEvents.MUSIC_BIOME_DEEP_DARK).loop(SoundEvents.AMBIENT_WARPED_FOREST_LOOP)
-                        .additions(SoundEvents.AMBIENT_WARPED_FOREST_ADDITIONS, 0.0111),
+                        .music(SoundEvents.MUSIC_BIOME_DEEP_DARK),
                 ShadowFeatures.forest(placed, carvers),
                 new Spawns().stalkers(100).crawlers(25).nightWings(8).moonStags(10).moths(25).worldGen(0.08f), false, 0.6f, 0.8f));
         context.register(PALE_WASTES, biome(new Look(0x4C4658, 0x8A8294, 0x5A5A7A, 0x1E1E30, 0xA49EAE, 0x9C94A8)
                         .fog(28.0f, 200.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.012f))
-                        .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_BASALT_DELTAS_LOOP),
+                        .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY),
                 ShadowFeatures.wastes(placed, carvers),
                 new Spawns().stalkers(90).crawlers(20).nightWings(30), false, 1.2f, 0.0f));
         context.register(CRYSTAL_CHASMS, biome(new Look(0x26306A, 0x34488A, 0x2E5AAA, 0x0E1C42, 0x4A68B4, 0x4A7AC4)
@@ -138,8 +136,7 @@ public final class ShadowBiomes {
                 new Spawns().crawlers(100).stalkers(40).nightWings(10).moths(10), false, 0.8f, 0.4f));
         context.register(SOUL_MARSH, biome(new Look(0x203C44, 0x2C5050, 0x2A5E58, 0x0A1E1C, 0x3E7A6A, 0x2E7A62)
                         .fog(10.0f, 110.0f).particles(new AmbientParticle(ParticleTypes.SOUL, 0.0006f))
-                        .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY).loop(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_LOOP)
-                        .additions(SoundEvents.AMBIENT_SOUL_SAND_VALLEY_ADDITIONS, 0.0111),
+                        .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY),
                 ShadowFeatures.marsh(placed, carvers),
                 new Spawns().stalkers(80).crawlers(15).nightWings(10).moonStags(5).moths(35), true, 0.7f, 0.9f));
         context.register(SHADOW_PEAKS, biome(new Look(0x323A62, 0x5A5E80, 0x4A5A8A, 0x121A34, 0x6A70A0, 0x5E6898)
@@ -180,8 +177,6 @@ public final class ShadowBiomes {
         float fogEnd = 200.0f;
         final List<AmbientParticle> particles = new ArrayList<>();
         Holder<SoundEvent> music = SoundEvents.MUSIC_BIOME_DEEP_DARK;
-        Optional<Holder<SoundEvent>> loop = Optional.empty();
-        final List<AmbientAdditionsSettings> additions = new ArrayList<>();
 
         Look(int sky, int fog, int water, int waterFog, int grass, int foliage) {
             this.sky = sky;
@@ -205,16 +200,6 @@ public final class ShadowBiomes {
 
         Look music(Holder<SoundEvent> music) {
             this.music = music;
-            return this;
-        }
-
-        Look loop(Holder<SoundEvent> loop) {
-            this.loop = Optional.of(loop);
-            return this;
-        }
-
-        Look additions(Holder<SoundEvent> sound, double chance) {
-            this.additions.add(new AmbientAdditionsSettings(sound, chance));
             return this;
         }
     }
@@ -277,9 +262,9 @@ public final class ShadowBiomes {
                 .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, look.fogStart)
                 .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, look.fogEnd)
                 .setAttribute(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(look.music))
-                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(look.loop,
-                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)),
-                        List.copyOf(look.additions)))
+                // Klangteppiche und Einzelklänge: world.ambience.AmbienceProfiles
+                .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(Optional.empty(),
+                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)), List.of()))
                 .mobSpawnSettings(spawns.builder.build())
                 .setAttribute(EnvironmentAttributes.CREATURE_WORLD_GEN_SPAWN_PROBABILITY, spawns.worldGen)
                 .generationSettings(generation);

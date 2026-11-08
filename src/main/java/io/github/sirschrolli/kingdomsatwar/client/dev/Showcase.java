@@ -85,6 +85,7 @@ final class Showcase {
         for (String scene : scenes.split(",")) {
             switch (scene.trim()) {
                 case "blocks" -> blocks(steps);
+                case "ambience" -> AmbienceShowcase.listen(steps, "");
                 case "house" -> house(steps);
                 case "samples" -> samples(steps);
                 case "intro" -> intro(steps);
@@ -191,6 +192,8 @@ final class Showcase {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
                     } else if (scene.startsWith("dragon_attacks_")) {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
+                    } else if (scene.startsWith("ambience_")) {
+                        AmbienceShowcase.listen(steps, scene.substring(9));
                     } else if (scene.equals("worldsites")) {
                         WorldSitesShowcase.sites(steps, "");
                     } else if (scene.startsWith("worldsite_")) {

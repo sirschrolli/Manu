@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.57.0 – Pflanzen der Schattenwelt.** Drei neue, leuchtende Pflanzen wachsen in der Schattenwelt: der **Mondfarn** (zwei Blöcke hoch, die eingerollten Wedelspitzen glimmen) im Schattenwald, am Sumpf, in den Glimmerweiten und auf den Schwebenden Inseln, die **Sternblüte** (sternförmige, fahlblau leuchtende Blüten, gibt hellblauen Farbstoff) als dichte Teppiche in den Glimmerweiten und vereinzelt auf den Gipfeln und Inseln, und das **Seelenschilf** mit türkis leuchtenden Samenständen an den Ufern der Seelensümpfe. Aus allen dreien steigen ab und zu leuchtende Funken auf; Knochenmehl auf Schattengras lässt auch sie wachsen.
+> **Testversion 0.58.0 – Klänge der Welt.** Jedes eigene Biom hat jetzt seine eigene Klangwelt: Im Urhain rauscht das Laub, ein Vogelchor singt, Spechte trommeln und der Kuckuck ruft – nachts zirpen Grillen, der Waldkauz ruft und in der Ferne heulen Wölfe. Auf den Königsauen trillern Lerchen, im Nebelmoor blubbert der Torf, die Rohrdommel dröhnt und Unken rufen, an der Sturmküste donnert die Brandung, auf den Frostgipfeln pfeift der Sturm und das Eis singt und knackt, in den Aschefeldern knistert die Glut. In den Drachennestern grollt es aus der Tiefe und ein Drache brüllt in der Ferne, in der Schattenwelt dröhnt und flüstert es, Kristalle singen. Die Klänge ändern sich mit Tag und Nacht, mit Regen und Höhe, und in Häusern und Höhlen werden sie leiser. Alle Klänge sind eigens für die Mod erzeugt.
+> In 0.57 wuchsen drei neue, leuchtende Pflanzen in der Schattenwelt: Mondfarn, Sternblüte und Seelenschilf.
 > In 0.56 kamen die lebendigen Drachen: zwölf neue Angriffe der Drachen-Bosse (Feuerwirbel, Magmaspalten, Frostlanze, Splittersturm, Kugelblitze, Blitzkäfig, Dornenwelle, Sonnenstrahl, Felslawine, Erdspalter, Geysirfeld, Wasserschlangen), und die eigenen Drachen bewegen sich wie die Bosse – Schritt und Galopp ohne Rutschen, Abheben und Landen mit den Flügeln, Kurvenflug, Sitzen, Launen. 0.56.1 behob einen Absturz beim Erzeugen der Schattenwelt (an den Felsbrücken der Schattengipfel), ließ die Roben der Umbrer beim Laufen mitgehen und den Kupferknecht seine Arme ruhiger schwingen.
 > In 0.55 wurde sauber gebaut: Alle Häuser werden automatisch auf Baufehler geprüft (Betten nicht mehr in Wänden, Laternen an Ketten vom Dach, Leitern mit Halt …), der Feldherrentisch zittert bei vielen Truppen nicht mehr, und die Schwäche nach dem Tod ist kein Statuseffekt mehr.
 > In 0.54 kamen die Fahrzeuge: der Belagerungsturm (7, 10 oder 13 Blöcke, Fallbrücke auf die Zinnen) und der Planwagen am Pferd (sechs Reihen Ladung, vier Mitfahrer), dazu Cheat-Befehle für die Erfahrung (`/kaw hero`, `/kaw army xp`).
@@ -321,6 +322,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
+| Klänge der Welt: eigene Klangwelt für alle 23 eigenen Biome (Tag/Nacht, drinnen/draußen, Regen, Höhe) | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen und vier Grundrissen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
@@ -558,6 +560,34 @@ Im ewigen Zwielicht leuchtet vieles, was wächst – und aus manchem steigen ab 
 | **Seelenschilf** (neu) | an den Ufern und im flachen Wasser der Seelensümpfe | türkis leuchtende Samenstände |
 
 Knochenmehl auf Schattengras lässt Schattenhalme, Geisterpilze, Sternblüten und Mondfarne sprießen.
+
+### Klänge der Welt
+
+![Klänge der Welt: Spektrogramme der Klangwelten](docs/bilder/klangwelten.jpg)
+
+Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester und die neun Biome der Schattenwelt – hat seine
+eigene Klangwelt. Darunter liegen leise, nahtlose Klangteppiche (Wind, Laub, Schilf, Brandung, Glut, Eis, das Dröhnen der
+Schattenwelt …), darüber erklingen ab und zu Einzelklänge an einem Ort in der Nähe: ein Vogel im Baum, ein Bussard hoch
+über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne.
+
+| Biom | Am Tag | In der Nacht |
+|---|---|---|
+| **Urhain** | Laub, Vogelchor, Amsel, Meise, Fink, Specht, Kuckuck, knarrende Bäume | Grillen, Waldkauz, Glühwürmchen, ferne Wölfe |
+| **Königsauen** | Lerchen, Grashüpfer, Hummeln, Finken, Meisen | Grillen, Nachtigall, Eule |
+| **Nebelmoor** | hohler Wind, Schilf, blubbernder Torf, Brachvogel, Krähen | Frösche und Unken, Rohrdommel, Irrlichter |
+| **Sturmküste** | Brandung an den Klippen, Seewind, Möwen, Gewitter | Brandung, Gewitter |
+| **Korallenküste** | plätschernde Lagune, sanfte Wellen, Möwen, Delfine | Wellen, Grillen |
+| **Felsschluchten** | trockener Wind, Grashüpfer, kreisender Bussard, rieselnde Steine | spärliches Zirpen, ferne Wölfe |
+| **Frostgipfel** | Sturm mit Pfeifen in den Kanten, singendes und knackendes Eis | dazu heulende Wölfe |
+| **Aschefelder** | staubiger Wind, knisternde Glut, Grollen, fauchende Glutspalten | ebenso |
+| **Drachennester** | je nach Element Lava, Eis, Sturm, Fels, Zauberhain oder Grotte – und ein Drache brüllt in der Ferne | ebenso |
+| **Schattenwelt** | Dröhnen und Flüstern im Schattenwald, singende Kristalle in den Schluchten, Seelenklagen im Sumpf, schwebende Klänge auf den Glimmerweiten, ein Herzschlag in den Tiefen | ewiges Zwielicht |
+
+Die Klänge folgen den Umständen: Vögel singen am Tag und verstummen bei Regen, nachts zirpen Grillen; in Häusern und
+Höhlen verklingen Laub und Vögel, vom Wind bleibt nur ein Hauch; auf Gipfeln pfeift der Wind lauter; unter Wasser wird es
+still. Beim Wechsel des Bioms blenden die Klangwelten sanft ineinander. Die Lautstärke regelt der Schieberegler
+„Umgebung/Umwelt“. Alle Klänge sind eigens für die Mod erzeugt (`tools/audio/ambience.py`); einige Einzelklänge verweisen
+auf Klänge von Minecraft selbst.
 
 ### Die neue Oberwelt
 

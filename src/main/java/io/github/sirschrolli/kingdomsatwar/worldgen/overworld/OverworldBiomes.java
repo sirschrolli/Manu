@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.ARGB;
-import net.minecraft.world.attribute.AmbientAdditionsSettings;
 import net.minecraft.world.attribute.AmbientMoodSettings;
 import net.minecraft.world.attribute.AmbientParticle;
 import net.minecraft.world.attribute.AmbientSounds;
@@ -74,8 +73,7 @@ public final class OverworldBiomes {
 
         context.register(ASH_FIELDS, biome(new Look(0xA89484, 0xB49C88, 0x5C584F, 0x34302B, 0x8E7A50, 0x6E5A40)
                         .particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.010f), new AmbientParticle(ParticleTypes.ASH, 0.0025f))
-                        .music(SoundEvents.MUSIC_BIOME_BADLANDS)
-                        .additions(SoundEvents.AMBIENT_BASALT_DELTAS_ADDITIONS, 0.004),
+                        .music(SoundEvents.MUSIC_BIOME_BADLANDS),
                 OverworldFeatures.ashFields(placed, carvers), spawns -> BiomeDefaultFeatures.desertSpawns(spawns), false, 2.0f, 0.0f, true));
 
         context.register(FROST_PEAKS, biome(new Look(0xB4CCE8, 0xDAE6F4, 0x3A6EA5, 0x2A4A7A, 0x86B69C, 0x66A486)
@@ -88,9 +86,7 @@ public final class OverworldBiomes {
 
         context.register(STORM_COAST, biome(new Look(0x7A8AA4, 0x9AA8BC, 0x3A5A7A, 0x1E3448, 0x6E8A70, 0x5E7A62)
                         .particles(new AmbientParticle(ParticleTypes.ELECTRIC_SPARK, 0.0004f))
-                        .music(SoundEvents.MUSIC_BIOME_STONY_PEAKS)
-                        .additions(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.LIGHTNING_BOLT_THUNDER),
-                                0.0005),
+                        .music(SoundEvents.MUSIC_BIOME_STONY_PEAKS),
                 OverworldFeatures.stormCoast(placed, carvers), BiomeDefaultFeatures::commonSpawns, true, 0.4f, 0.9f, false));
 
         context.register(PRIMEVAL_FOREST, biome(new Look(0x86B4D2, 0xA6C6A8, 0x2E7A5A, 0x1E4A3A, 0x4E8E34, 0x3E7E2C)
@@ -143,7 +139,6 @@ public final class OverworldBiomes {
         float fogEnd = -1.0f;
         final List<AmbientParticle> particles = new ArrayList<>();
         @Nullable Holder<SoundEvent> music;
-        final List<AmbientAdditionsSettings> additions = new ArrayList<>();
 
         Look(int sky, int fog, int water, int waterFog, int grass, int foliage) {
             this.sky = sky;
@@ -177,11 +172,6 @@ public final class OverworldBiomes {
             this.murkyWater = true;
             return this;
         }
-
-        Look additions(Holder<SoundEvent> sound, double chance) {
-            this.additions.add(new AmbientAdditionsSettings(sound, chance));
-            return this;
-        }
     }
 
     private static Biome biome(Look look, BiomeGenerationSettings generation, java.util.function.Consumer<MobSpawnSettings.Builder> spawns,
@@ -201,8 +191,9 @@ public final class OverworldBiomes {
                 .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(look.sky))
                 .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(look.fog))
                 .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(look.waterFog))
+                // Schleifen und Einzelklänge spielt die Mod selbst (world.ambience.AmbienceProfiles), hier nur die Höhlenstimmung
                 .setAttribute(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(Optional.empty(),
-                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)), List.copyOf(look.additions)))
+                        Optional.of(new AmbientMoodSettings(SoundEvents.AMBIENT_CAVE, 6000, 8, 2.0)), List.of()))
                 .mobSpawnSettings(mobs.build())
                 .generationSettings(generation);
         if (look.fogStart >= 0.0f) {

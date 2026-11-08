@@ -111,3 +111,20 @@ immer zu den neuen Dateien passend berechnet.
 > Englische Stimmen: Piper-Stimme „libritts_r“, trainiert auf [LibriTTS-R](https://www.openslr.org/141/)
 > (CC BY 4.0, Y. Koizumi u. a.; Sprecher 680, 248 und 788).
 > **Musik:** eigene Komposition, gespielt mit dem Soundfont FluidR3_GM von Frank Wen (MIT-Lizenz).
+
+## Umgebungsklänge der Biome (`ambience.py`)
+
+`ambience.py` erzeugt alle Klangteppiche und Einzelklänge der Biome ohne Aufnahmen – nur aus Rauschen und Tönen
+(Bausteine in `ambience_dsp.py`): Wind mit Böen und Pfeifen, Laub und Schilf, Grillen, Grashüpfer, Hummeln, Vogelstimmen
+(Amsel, Meise, Fink, Kuckuck, Specht, Waldkauz, Nachtigall, Krähe, Möwe, Brachvogel, Rohrdommel, Bussard, Lerche), Frösche
+und Unken, Brandung, Lagune, Moor, Glut, Lava, Eis, Gewitter, Höhlentropfen, das Dröhnen und Flüstern der Schattenwelt.
+Die Teppiche sind kreisförmig berechnet (Rauschen, Steuerkurven, Ereignisse und Hall laufen über das Ende hinaus wieder am
+Anfang weiter) und schließen deshalb ohne Naht.
+
+```bash
+python3 tools/audio/ambience.py                     # alles neu (etwa eine Minute)
+python3 tools/audio/ambience.py --only leaves,bird_owl --preview /tmp/spektren
+```
+
+Es schreibt die `.ogg`-Dateien nach `…/sounds/ambient/`, die Einträge `ambient.bed.*`/`ambient.spot.*` in `sounds.json`
+und `registry/AmbientSounds.java`. Welche Klänge wo erklingen, steht in `world/ambience/AmbienceProfiles.java`.

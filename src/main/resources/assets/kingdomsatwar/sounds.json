@@ -1,4 +1,1406 @@
 {
+  "ambient.bed.birds_forest": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/birds_forest"
+      }
+    ]
+  },
+  "ambient.bed.birds_meadow": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/birds_meadow"
+      }
+    ]
+  },
+  "ambient.bed.bog": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/bog"
+      }
+    ]
+  },
+  "ambient.bed.crickets": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/crickets"
+      }
+    ]
+  },
+  "ambient.bed.crickets_dry": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/crickets_dry"
+      }
+    ]
+  },
+  "ambient.bed.deep_water": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/deep_water"
+      }
+    ]
+  },
+  "ambient.bed.drips": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/drips"
+      }
+    ]
+  },
+  "ambient.bed.earth_rumble": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/earth_rumble"
+      }
+    ]
+  },
+  "ambient.bed.embers": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/embers"
+      }
+    ]
+  },
+  "ambient.bed.frogs": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/frogs"
+      }
+    ]
+  },
+  "ambient.bed.ice": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/ice"
+      }
+    ]
+  },
+  "ambient.bed.insects_day": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/insects_day"
+      }
+    ]
+  },
+  "ambient.bed.lagoon": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/lagoon"
+      }
+    ]
+  },
+  "ambient.bed.lava": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/lava"
+      }
+    ]
+  },
+  "ambient.bed.leaves": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/leaves"
+      }
+    ]
+  },
+  "ambient.bed.magic_grove": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/magic_grove"
+      }
+    ]
+  },
+  "ambient.bed.reeds": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/reeds"
+      }
+    ]
+  },
+  "ambient.bed.shadow_crystal": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_crystal"
+      }
+    ]
+  },
+  "ambient.bed.shadow_depths": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_depths"
+      }
+    ]
+  },
+  "ambient.bed.shadow_forest": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_forest"
+      }
+    ]
+  },
+  "ambient.bed.shadow_glimmer": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_glimmer"
+      }
+    ]
+  },
+  "ambient.bed.shadow_isles": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_isles"
+      }
+    ]
+  },
+  "ambient.bed.shadow_marsh": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_marsh"
+      }
+    ]
+  },
+  "ambient.bed.shadow_peaks": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_peaks"
+      }
+    ]
+  },
+  "ambient.bed.shadow_sea": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_sea"
+      }
+    ]
+  },
+  "ambient.bed.shadow_wastes": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/shadow_wastes"
+      }
+    ]
+  },
+  "ambient.bed.storm_charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/storm_charge"
+      }
+    ]
+  },
+  "ambient.bed.surf_gentle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/surf_gentle"
+      }
+    ]
+  },
+  "ambient.bed.surf_storm": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/surf_storm"
+      }
+    ]
+  },
+  "ambient.bed.whispers": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/whispers"
+      }
+    ]
+  },
+  "ambient.bed.wind_breeze": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/wind_breeze"
+      }
+    ]
+  },
+  "ambient.bed.wind_coast": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/wind_coast"
+      }
+    ]
+  },
+  "ambient.bed.wind_dry": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/wind_dry"
+      }
+    ]
+  },
+  "ambient.bed.wind_gale": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/wind_gale"
+      }
+    ]
+  },
+  "ambient.bed.wind_moor": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/wind_moor"
+      }
+    ]
+  },
+  "ambient.spot.amethyst": {
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/resonate1",
+        "pitch": 0.8,
+        "volume": 0.8,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate2",
+        "pitch": 0.8,
+        "volume": 0.8,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate3",
+        "pitch": 0.8,
+        "volume": 0.8,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:block/amethyst/resonate4",
+        "pitch": 0.8,
+        "volume": 0.8,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.amethyst"
+  },
+  "ambient.spot.basalt": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/debris1",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/debris2",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/debris3",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/long_debris1",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/long_debris2",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/basaltground1",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/basaltground2",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/basaltground3",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/plode1",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/plode2",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/basalt_deltas/plode3",
+        "pitch": 0.9,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.basalt"
+  },
+  "ambient.spot.bird_bittern": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_bittern1",
+        "attenuation_distance": 72
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_bittern2",
+        "attenuation_distance": 72
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_bittern"
+  },
+  "ambient.spot.bird_blackbird": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_blackbird1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_blackbird2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_blackbird3",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_blackbird4",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_blackbird"
+  },
+  "ambient.spot.bird_buzzard": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_buzzard1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_buzzard2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_buzzard"
+  },
+  "ambient.spot.bird_crow": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_crow1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_crow2",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_crow3",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_crow"
+  },
+  "ambient.spot.bird_cuckoo": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_cuckoo1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_cuckoo2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_cuckoo"
+  },
+  "ambient.spot.bird_curlew": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_curlew1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_curlew2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_curlew"
+  },
+  "ambient.spot.bird_finch": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_finch1",
+        "attenuation_distance": 44
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_finch2",
+        "attenuation_distance": 44
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_finch3",
+        "attenuation_distance": 44
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_finch"
+  },
+  "ambient.spot.bird_gull": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_gull1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_gull2",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_gull3",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_gull"
+  },
+  "ambient.spot.bird_nightingale": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_nightingale1",
+        "attenuation_distance": 56
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_nightingale2",
+        "attenuation_distance": 56
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_nightingale"
+  },
+  "ambient.spot.bird_owl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_owl1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_owl2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_owl3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_owl"
+  },
+  "ambient.spot.bird_tit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_tit1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_tit2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bird_tit3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bird_tit"
+  },
+  "ambient.spot.bog_burp": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/bog_burp1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bog_burp2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/bog_burp3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.bog_burp"
+  },
+  "ambient.spot.crystal_chime": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/crystal_chime1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/crystal_chime2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/crystal_chime3",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/crystal_chime4",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/crystal_chime5",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.crystal_chime"
+  },
+  "ambient.spot.deep_moan": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/deep_moan1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/deep_moan2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.deep_moan"
+  },
+  "ambient.spot.dolphin": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/dolphin/idle_water1",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water2",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water3",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water4",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water5",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water6",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water7",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water8",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water9",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/dolphin/idle_water10",
+        "pitch": 1.0,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.dolphin"
+  },
+  "ambient.spot.dragon_far": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/growl1",
+        "pitch": 0.55,
+        "volume": 0.7,
+        "attenuation_distance": 128
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl2",
+        "pitch": 0.55,
+        "volume": 0.7,
+        "attenuation_distance": 128
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl3",
+        "pitch": 0.55,
+        "volume": 0.7,
+        "attenuation_distance": 128
+      },
+      {
+        "name": "minecraft:mob/enderdragon/growl4",
+        "pitch": 0.55,
+        "volume": 0.7,
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.dragon_far"
+  },
+  "ambient.spot.dragon_wings": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/enderdragon/wings1",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings2",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings3",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings4",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings5",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      },
+      {
+        "name": "minecraft:mob/enderdragon/wings6",
+        "pitch": 0.6,
+        "volume": 0.6,
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.dragon_wings"
+  },
+  "ambient.spot.drip": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/drip1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/drip2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/drip3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/drip4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.drip"
+  },
+  "ambient.spot.fireflies": {
+    "sounds": [
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush1",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush2",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush3",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush4",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush5",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush6",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush7",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush8",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush9",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush10",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "minecraft:block/firefly_bush/firefly_bush11",
+        "pitch": 1.0,
+        "volume": 0.6,
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.fireflies"
+  },
+  "ambient.spot.frog": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/frog/idle1",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle2",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle3",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle4",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle5",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle6",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle7",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:mob/frog/idle8",
+        "pitch": 0.9,
+        "volume": 0.6,
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.frog"
+  },
+  "ambient.spot.ice_crack": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_crack1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_crack2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_crack3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.ice_crack"
+  },
+  "ambient.spot.ice_creak": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_creak1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_creak2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/ice_creak3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.ice_creak"
+  },
+  "ambient.spot.pale_moss": {
+    "sounds": [
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss1",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss2",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss3",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss4",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss5",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss6",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss7",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss8",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss9",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss10",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss11",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss12",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss13",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss14",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      },
+      {
+        "name": "minecraft:block/pale_hanging_moss/pale_hanging_moss15",
+        "pitch": 0.8,
+        "volume": 0.7,
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.pale_moss"
+  },
+  "ambient.spot.pebbles": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/pebbles1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/pebbles2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/pebbles3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.pebbles"
+  },
+  "ambient.spot.rumble": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/rumble1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/rumble2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.rumble"
+  },
+  "ambient.spot.shadow_call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_call1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_call2",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_call3",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.shadow_call"
+  },
+  "ambient.spot.shadow_creak": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_creak1",
+        "attenuation_distance": 36
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_creak2",
+        "attenuation_distance": 36
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/shadow_creak3",
+        "attenuation_distance": 36
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.shadow_creak"
+  },
+  "ambient.spot.soul_voices": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/voices1",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/voices2",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/voices3",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/voices4",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/voices5",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper1",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper2",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper3",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper4",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper5",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper6",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper7",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:ambient/nether/soulsand_valley/whisper8",
+        "pitch": 0.85,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.soul_voices"
+  },
+  "ambient.spot.soul_wail": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/soul_wail1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/soul_wail2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/soul_wail3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.soul_wail"
+  },
+  "ambient.spot.sparkle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/sparkle1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/sparkle2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/sparkle3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.sparkle"
+  },
+  "ambient.spot.steam_vent": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/steam_vent1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/steam_vent2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.steam_vent"
+  },
+  "ambient.spot.thunder": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/weather/thunder1",
+        "pitch": 0.6,
+        "volume": 0.35,
+        "attenuation_distance": 160
+      },
+      {
+        "name": "minecraft:ambient/weather/thunder2",
+        "pitch": 0.6,
+        "volume": 0.35,
+        "attenuation_distance": 160
+      },
+      {
+        "name": "minecraft:ambient/weather/thunder3",
+        "pitch": 0.6,
+        "volume": 0.35,
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.thunder"
+  },
+  "ambient.spot.thunder_far": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/thunder_far1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/thunder_far2",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/thunder_far3",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.thunder_far"
+  },
+  "ambient.spot.twig_snap": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/twig_snap1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/twig_snap2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/twig_snap3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.twig_snap"
+  },
+  "ambient.spot.warped_creak": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/nether/warped_forest/creak1",
+        "pitch": 0.75,
+        "volume": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:ambient/nether/warped_forest/creak2",
+        "pitch": 0.75,
+        "volume": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:ambient/nether/warped_forest/creak3",
+        "pitch": 0.75,
+        "volume": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:ambient/nether/warped_forest/creak4",
+        "pitch": 0.75,
+        "volume": 0.6,
+        "attenuation_distance": 40
+      },
+      {
+        "name": "minecraft:ambient/nether/warped_forest/creak5",
+        "pitch": 0.75,
+        "volume": 0.6,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.warped_creak"
+  },
+  "ambient.spot.whale": {
+    "sounds": [
+      {
+        "name": "minecraft:ambient/underwater/additions/bass_whale1",
+        "pitch": 0.8,
+        "volume": 0.6,
+        "attenuation_distance": 128
+      },
+      {
+        "name": "minecraft:ambient/underwater/additions/bass_whale2",
+        "pitch": 0.8,
+        "volume": 0.6,
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.whale"
+  },
+  "ambient.spot.whale_far": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/whale_far1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/whale_far2",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.whale_far"
+  },
+  "ambient.spot.whisper": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/whisper1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/whisper2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/whisper3",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/whisper4",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/whisper5",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.whisper"
+  },
+  "ambient.spot.wing_flutter": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/wing_flutter1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/wing_flutter2",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.wing_flutter"
+  },
+  "ambient.spot.wolf_howl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/wolf_howl1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/wolf_howl2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/wolf_howl3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.wolf_howl"
+  },
+  "ambient.spot.wood_creak": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/wood_creak1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/wood_creak2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/wood_creak3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.wood_creak"
+  },
+  "ambient.spot.woodpecker": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/woodpecker1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/woodpecker2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/woodpecker3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.woodpecker"
+  },
+  "ambient.spot.zap": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/zap1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/zap2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/zap3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.zap"
+  },
   "block.dragon_egg.crack": {
     "sounds": [
       {
@@ -1527,6 +2929,14 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.will_o_wisp.vanish"
   },
+  "hero.pat": {
+    "subtitle": "subtitles.kingdomsatwar.hero.pat",
+    "sounds": [
+      "kingdomsatwar:patpat/pat",
+      "kingdomsatwar:patpat/pat1",
+      "kingdomsatwar:patpat/pat2"
+    ]
+  },
   "intro.music": {
     "sounds": [
       {
@@ -2037,13 +3447,5 @@
       "kingdomsatwar:voice/soldier/victory_en_3b"
     ],
     "subtitle": "subtitles.kingdomsatwar.voice.soldier.victory"
-  },
-  "hero.pat": {
-    "subtitle": "subtitles.kingdomsatwar.hero.pat",
-    "sounds": [
-      "kingdomsatwar:patpat/pat",
-      "kingdomsatwar:patpat/pat1",
-      "kingdomsatwar:patpat/pat2"
-    ]
   }
 }
