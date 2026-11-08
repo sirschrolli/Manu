@@ -34,6 +34,12 @@ public final class SiegeModels {
         public float wheel;
         public float hurt;
         public float health = 1.0f;
+        /** Belagerungsturm: Winkel der Fallbrücke (Grad ab senkrecht). */
+        public float bridge;
+        /** Belagerungsturm: aufgesetzte Stockwerke (0 bis 2). */
+        public int storeys = 1;
+        /** Planwagen: ist etwas geladen? */
+        public boolean cargo;
     }
 
     // =====================================================================================
@@ -222,6 +228,72 @@ public final class SiegeModels {
     // =====================================================================================
 
     /** Steinkugel bzw. Brocken (dasselbe Modell, beim Tribok größer). */
+    // =====================================================================================
+    // Belagerungsturm
+    // =====================================================================================
+
+    /**
+     * Der Belagerungsturm: Fehlende Stockwerke sind ausgeblendet, die Plattform sitzt je fehlendem Stockwerk 48 Pixel
+     * tiefer (gebaut ist der höchste Turm); die Fallbrücke schwenkt um ihr Scharnier, die vier Vollräder rollen.
+     */
+    public static final class SiegeTower extends Model<State> {
+        private static final float STOREY_PX = 48.0f;
+        private final ModelPart storeyA;
+        private final ModelPart storeyB;
+        private final ModelPart top;
+        private final float topY;
+        private final ModelPart bridge;
+        private final ModelPart[] wheels;
+
+        public SiegeTower(ModelPart root) {
+            super(root, RenderTypes::entityCutout);
+            ModelPart frame = root.getChild("frame");
+            this.storeyA = frame.getChild("storey_a");
+            this.storeyB = frame.getChild("storey_b");
+            this.top = frame.getChild("top");
+            this.topY = this.top.y;
+            this.bridge = this.top.getChild("bridge");
+            this.wheels = new ModelPart[] {root.getChild("wheel_fl"), root.getChild("wheel_fr"), root.getChild("wheel_bl"), root.getChild("wheel_br")};
+        }
+
+        @Override
+        public void setupAnim(State s) {
+            super.setupAnim(s);
+            this.storeyA.visible = s.storeys >= 1;
+            this.storeyB.visible = s.storeys >= 2;
+            this.top.y = this.topY + STOREY_PX * (2 - Mth.clamp(s.storeys, 0, 2));
+            this.bridge.xRot = s.bridge * Mth.DEG_TO_RAD;
+            for (ModelPart wheel : this.wheels) {
+                wheel.xRot = s.wheel;
+            }
+        }
+    }
+
+    // =====================================================================================
+    // Planwagen
+    // =====================================================================================
+
+    /** Der Planwagen: Kisten, Fässer und Säcke nur, wenn etwas geladen ist; die Räder rollen. */
+    public static final class Wagon extends Model<State> {
+        private final ModelPart cargo;
+        private final ModelPart[] wheels;
+
+        public Wagon(ModelPart root) {
+            super(root, RenderTypes::entityCutout);
+            this.cargo = root.getChild("frame").getChild("cargo");
+            this.wheels = new ModelPart[] {root.getChild("wheel_fl"), root.getChild("wheel_fr"), root.getChild("wheel_bl"), root.getChild("wheel_br")};
+        }
+
+        @Override
+        public void setupAnim(State s) {
+            super.setupAnim(s);
+            this.cargo.visible = s.cargo;
+            for (ModelPart wheel : this.wheels) {
+                wheel.xRot = s.wheel;
+            }
+        }
+    }
+
     public static final class Stone extends Model<EntityRenderState> {
         public Stone(ModelPart root) {
             super(root, RenderTypes::entityCutout);

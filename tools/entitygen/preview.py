@@ -39,6 +39,8 @@ def _bone_transforms(model: Model, pose: dict | None) -> dict[str, tuple[np.ndar
         extra = pose.get(b.name, (0.0, 0.0, 0.0))
         rx, ry, rz = (math.radians(b.rotation[i] + extra[i]) for i in range(3))
         p = pos + rot @ (np.array(b.pivot) / 16.0)
+        if len(extra) >= 9:   # Verschiebung wie ModelPart.x/y/z (Pixel, im Raum des Elternknochens)
+            p = p + rot @ (np.array(extra[6:9]) / 16.0)
         r = rot @ _rot_zyx(rx, ry, rz)
         if len(extra) >= 6:   # Skalierung wie ModelPart.xScale/yScale/zScale (wirkt auch auf Kinder)
             r = r @ np.diag([extra[3], extra[4], extra[5]])

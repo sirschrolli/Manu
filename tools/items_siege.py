@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
 Gegenstände der Belagerungswaffen im Vanilla-Stil (siehe tools/item_style.py): Steinkugel, Ballistenbolzen und die
-Bausätze von Katapult, Tribok, Balliste und Rammbock (in Seitenansicht, nach rechts gewandt).
+Bausätze von Katapult, Tribok, Balliste, Rammbock, Belagerungsturm und Planwagen (in Seitenansicht, nach rechts gewandt).
 
 Materialien: A = Eichenholz (Rahmen, Arm), B = dunkles Holz (Räder, Balken), C = Eisen (Beschläge, Naben, Spitzen),
-D = Seil und Sehne, E = Stein, F = rot gefärbte Federn, G = dunkles Gusseisen (Gegengewicht).
+D = Seil und Sehne, E = Stein, F = rot gefärbte Federn, G = dunkles Gusseisen (Gegengewicht), H = Rinderhäute
+(Zeichen v–z), I = Leinenplane (Zeichen V–Z).
 """
 from __future__ import annotations
 
@@ -21,8 +22,11 @@ ROPE = st.ramp("#c8ae76", dark=0.3, light=0.93, chroma_dark=0.9, cool=40)
 STONE = st.ramp("#8d8c86", dark=0.2, light=0.9, chroma_dark=0.6, cool=250, hue_dark=12)
 FLETCH = st.ramp("#b4392d", dark=0.2, light=0.86, chroma_light=0.5)
 CAST = st.ramp("#5a5c63", dark=0.14, light=0.72, chroma_dark=1.2)
+HIDE = st.ramp("#6e3b25", dark=0.16, light=0.74, chroma_dark=1.0)
+CANVAS = st.ramp("#ddd2b6", dark=0.42, light=0.97, base_level=4, chroma_dark=0.8, cool=60)
 
-RAMPS = {"A": OAK, "B": DARK, "C": IRON, "D": ROPE, "E": STONE, "F": FLETCH, "G": CAST}
+RAMPS = {"A": OAK, "B": DARK, "C": IRON, "D": ROPE, "E": STONE, "F": FLETCH, "G": CAST, "H": HIDE, "I": CANVAS}
+LEGEND = {**{ch: ("H", i + 1) for i, ch in enumerate("vwxyz")}, **{ch: ("I", i + 1) for i, ch in enumerate("VWXYZ")}}
 
 # Katapult: Wurfarm halb ausgeholt, Steinkugel im Löffel, vorn der gepolsterte Prellbalken, zwei Räder
 CATAPULT = """
@@ -104,6 +108,47 @@ RAM = """
 ...iji....iji...
 """
 
+# Belagerungsturm: Wimpel hinten, Zinnen, vorn die hochgezogene Fallbrücke mit Haken, die Front mit Häuten verkleidet
+# (zwei Schießscharten), die Seite mit gekreuzten Streben, darunter das Fahrgestell mit zwei Vollrädern
+SIEGE_TOWER = """
+LLKc........kl..
+.KJc........54..
+...c........54..
+...5.5.5.5.554..
+...44444444454..
+..cdddddddddddc.
+...c434bbcxyx...
+...c4bb34cyvy...
+...cb3434cxyx...
+...cccccccwww...
+...c434bbcxyx...
+...c4bb34cyvy...
+...cb3434cxyx...
+..cdedbbbbdedc..
+...emc....emc...
+....b......b....
+"""
+
+# Planwagen: Leinenplane über drei Bögen, vorn Laterne und Kutschbock, Kasten mit Rungen, zwei Speichenräder, Deichsel
+WAGON = """
+................
+................
+...XYWYYWYX.....
+..XYZWZZWZYXl...
+..XYZWZZWZYXt...
+..XYYWYYWYYX3...
+..WXYWYYWYXW3...
+..WXXWXXWXXW44..
+..55c55555c553..
+..33c33333c333..
+..1kjk222kjk21..
+..kcecj.kcecjbbl
+..jemej.jemej...
+..kcecj.kcecj...
+...jkj...jkj....
+................
+"""
+
 # Ballistenbolzen: breite Eisenspitze oben rechts, dicker Schaft, rote Federn unten links
 BOLT = """
 ................
@@ -164,8 +209,8 @@ def stone_ball() -> st.Spr:
     return st.despeckle(ball, ("E",))
 
 
-def render(art: str, prefer: tuple[str, ...] = ("B", "A", "C", "D", "E", "F", "G")) -> Image.Image:
-    return st.Spr.art(art).outline(prefer=prefer).image(RAMPS)
+def render(art: str, prefer: tuple[str, ...] = ("B", "A", "C", "D", "E", "F", "G", "H", "I")) -> Image.Image:
+    return st.Spr.art(art, legend=LEGEND).outline(prefer=prefer).image(RAMPS)
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -175,6 +220,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("item/trebuchet", render(TREBUCHET))
     put("item/ballista", render(BALLISTA))
     put("item/battering_ram", render(RAM))
+    put("item/siege_tower", render(SIEGE_TOWER))
+    put("item/wagon", render(WAGON, prefer=("B", "A", "I", "C")))
 
 
 if __name__ == "__main__":

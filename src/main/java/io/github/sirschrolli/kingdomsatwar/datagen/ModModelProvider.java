@@ -358,6 +358,8 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.TREBUCHET_KIT.get());
         flat(items, ModItems.BALLISTA_KIT.get());
         flat(items, ModItems.BATTERING_RAM_KIT.get());
+        flat(items, ModItems.SIEGE_TOWER_KIT.get());
+        flat(items, ModItems.WAGON_KIT.get());
         // Bauplan: die eigenen Pläne (Dragon Architect) als Blaupause, die der Siedlung auf Pergament
         Identifier plainBlueprint = ModelTemplates.FLAT_ITEM.create(ModItems.BLUEPRINT.get(), TextureMapping.layer0(ModItems.BLUEPRINT.get()),
                 items.modelOutput);

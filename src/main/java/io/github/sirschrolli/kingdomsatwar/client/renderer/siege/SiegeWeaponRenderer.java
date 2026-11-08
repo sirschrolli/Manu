@@ -19,8 +19,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
 /**
- * Katapult, Tribok, Balliste und Rammbock. Getroffen wackelt die Waffe kurz, stark beschädigt dunkelt das Holz nach (und
- * sie qualmt, siehe {@link SiegeWeaponEntity}).
+ * Katapult, Tribok, Balliste, Rammbock, Belagerungsturm und Planwagen. Getroffen wackelt die Waffe kurz, stark beschädigt
+ * dunkelt das Holz nach (und sie qualmt, siehe {@link SiegeWeaponEntity}). Die Fallbrücke des Turms folgt dem Winkel, den
+ * der Server schickt; die Ladung des Wagens ist zu sehen, sobald etwas geladen ist.
  */
 public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, SiegeModels.State> {
     /** Nur für Vorführungen: feste Stellung (Ticks nach dem Schuss) je Wesen, unabhängig von der Spielzeit. */
@@ -38,6 +39,8 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
             case TREBUCHET -> new SiegeModels.Trebuchet(context.bakeLayer(ModModelLayers.TREBUCHET));
             case BALLISTA -> new SiegeModels.Ballista(context.bakeLayer(ModModelLayers.BALLISTA));
             case RAM -> new SiegeModels.BatteringRam(context.bakeLayer(ModModelLayers.BATTERING_RAM));
+            case SIEGE_TOWER -> new SiegeModels.SiegeTower(context.bakeLayer(ModModelLayers.SIEGE_TOWER));
+            case WAGON -> new SiegeModels.Wagon(context.bakeLayer(ModModelLayers.WAGON));
         };
         String id = textureId(siege);
         this.texture = KingdomsAtWar.id("textures/entity/siege/" + id + "/" + id + ".png");
@@ -51,6 +54,8 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
             case TREBUCHET -> "trebuchet";
             case BALLISTA -> "ballista";
             case RAM -> "battering_ram";
+            case SIEGE_TOWER -> "siege_tower";
+            case WAGON -> "wagon";
         };
     }
 
@@ -76,12 +81,20 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
         state.wheel = Mth.lerp(partialTicks, entity.wheelRotO, entity.wheelRot);
         state.hurt = Math.max(0.0f, entity.hurtTime() - partialTicks);
         state.health = entity.healthFraction();
+        state.bridge = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity tower ? tower.bridge(partialTicks) : 0.0f;
+        state.storeys = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity tower ? tower.storeys() : 1;
+        state.cargo = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeWagonEntity wagon && wagon.cargoLevel() > 0;
     }
 
     @Override
     protected AABB getBoundingBoxForCulling(SiegeWeaponEntity entity, float partialTicks) {
-        // Wurfarm, Schlinge, Widderkopf und Bolzen ragen weit über den Rahmen hinaus
-        return entity.getBoundingBox().inflate(this.siege == SiegeType.TREBUCHET ? 3.5 : 1.75);
+        // Wurfarm, Schlinge, Widderkopf und Bolzen ragen weit über den Rahmen hinaus, ebenso die Brücke des Turms und die Deichsel
+        return entity.getBoundingBox().inflate(switch (this.siege) {
+            case TREBUCHET -> 3.5;
+            case SIEGE_TOWER -> 4.6;
+            case WAGON -> 2.3;
+            default -> 1.75;
+        });
     }
 
     @Override

@@ -673,6 +673,31 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT))
                 .save(output, key("battering_ram"));
+        // Belagerungsturm: Balkengerüst, vorn Häute, innen eine Leiter, oben die Kette der Fallbrücke, eiserne Achsen
+        shaped(RecipeCategory.COMBAT, ModItems.SIEGE_TOWER_KIT.get())
+                .pattern("LCL")
+                .pattern("HAH")
+                .pattern("PIP")
+                .define('L', ItemTags.LOGS)
+                .define('C', Items.IRON_CHAIN)
+                .define('H', Items.LEATHER)
+                .define('A', Items.LADDER)
+                .define('P', ItemTags.PLANKS)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_leather", has(Items.LEATHER))
+                .save(output, key("siege_tower"));
+        // Planwagen: Leinenplane aus Wolle über dem Kasten mit einer Truhe, Räder mit eisernen Reifen
+        shaped(RecipeCategory.TRANSPORTATION, ModItems.WAGON_KIT.get())
+                .pattern("WWW")
+                .pattern("PCP")
+                .pattern("LIL")
+                .define('W', ItemTags.WOOL)
+                .define('P', ItemTags.PLANKS)
+                .define('C', Items.CHEST)
+                .define('L', ItemTags.LOGS)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_chest", has(Items.CHEST))
+                .save(output, key("wagon"));
     }
 
     private void armyRecipes() {

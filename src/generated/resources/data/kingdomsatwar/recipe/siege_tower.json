@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "minecraft:ladder",
+    "C": "minecraft:iron_chain",
+    "H": "minecraft:leather",
+    "I": "minecraft:iron_ingot",
+    "L": "#minecraft:logs",
+    "P": "#minecraft:planks"
+  },
+  "pattern": [
+    "LCL",
+    "HAH",
+    "PIP"
+  ],
+  "result": {
+    "id": "kingdomsatwar:siege_tower"
+  }
+}
