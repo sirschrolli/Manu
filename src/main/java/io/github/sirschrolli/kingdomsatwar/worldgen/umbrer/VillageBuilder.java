@@ -197,7 +197,32 @@ public final class VillageBuilder {
     }
 
     public void hangingLantern(int x, int y, int z, Block lantern) {
-        this.set(x, y, z, lantern.defaultBlockState().setValue(LanternBlock.HANGING, true));
+        this.hang(x, y, z, lantern.defaultBlockState().setValue(LanternBlock.HANGING, true));
+    }
+
+    /**
+     * Hängt {@code state} (Laterne, Kronleuchter) bei (x, y, z) auf. Fehlt direkt darüber der Halt (offener Dachstuhl,
+     * hohe Halle), hängt es an einer Kette vom nächsten Balken, Boden oder Dach herab – höchstens neun Glieder.
+     */
+    public void hang(int x, int y, int z, BlockState state) {
+        int support = -1;
+        for (int yy = y + 1; yy <= y + 10; yy++) {
+            BlockPos pos = this.world(x, yy, z);
+            if (!this.inside(pos)) {
+                break;
+            }
+            if (Block.canSupportCenter(this.level, pos, Direction.DOWN)) {
+                support = yy;
+                break;
+            }
+            if (!this.level.getBlockState(pos).isAir()) {
+                break;
+            }
+        }
+        for (int yy = y + 1; yy < support; yy++) {
+            this.set(x, yy, z, Blocks.IRON_CHAIN.defaultBlockState());
+        }
+        this.set(x, y, z, state);
     }
 
     /**

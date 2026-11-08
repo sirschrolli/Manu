@@ -117,6 +117,7 @@ final class MageGameTests {
             MageTowerPiece piece = build(level, element, new BlockPos(x, groundY(level, x, z), z),
                     Rotation.values()[element.ordinal() % 4]);
             forceChunks(level, piece, true);
+            BuildAudit.log(level, piece.getBoundingBox(), new BlockPos(x, groundY(level, x, z), z), "Magierturm " + element.id());
             pieces.add(piece);
         }
         // geprüft wird, wenn die Chunks samt ihrer Wesen bereitstehen (wie nach dem Laden in der echten Welt)

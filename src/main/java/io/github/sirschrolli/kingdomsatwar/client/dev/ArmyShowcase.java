@@ -149,7 +149,7 @@ final class ArmyShowcase {
         steps.add(Step.waitTicks(5));
     }
 
-    private static void spawn(ServerLevel level, SoldierType type, int rank, int x, int z, float yaw, Player owner) {
+    static void spawn(ServerLevel level, SoldierType type, int rank, int x, int z, float yaw, Player owner) {
         SoldierEntity soldier = ModEntities.SOLDIERS.get(type).get().create(level, EntitySpawnReason.COMMAND);
         if (soldier == null) {
             return;

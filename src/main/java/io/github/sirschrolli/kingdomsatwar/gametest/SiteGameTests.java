@@ -161,6 +161,13 @@ final class SiteGameTests {
         ServerLevel level = helper.getLevel();
         piece.postProcess(level, level.structureManager(), level.getChunkSource().getGenerator(), RandomSource.create(5), area(helper),
                 ChunkPos.containing(piece.origin()), piece.origin());
+        BoundingBox p = piece.getBoundingBox();
+        BoundingBox a = area(helper);
+        if (p.intersects(a)) {
+            BoundingBox box = new BoundingBox(Math.max(p.minX(), a.minX()), Math.max(p.minY(), a.minY()), Math.max(p.minZ(), a.minZ()),
+                    Math.min(p.maxX(), a.maxX()), Math.min(p.maxY(), a.maxY()), Math.min(p.maxZ(), a.maxZ()));
+            BuildAudit.log(level, box, piece.origin(), "Bauwerk " + piece.getClass().getSimpleName() + " " + helper.testInfo.id());
+        }
     }
 
     private static void fill(GameTestHelper helper, BlockPos a, BlockPos b, BlockState state) {

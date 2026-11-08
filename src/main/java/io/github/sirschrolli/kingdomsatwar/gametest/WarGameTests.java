@@ -89,6 +89,7 @@ final class WarGameTests {
                         new ChunkPos(cx, cz), center);
             }
         }
+        BuildAudit.log(level, box, center, "Stammburg " + realm + " " + rotation);
         return piece;
     }
 

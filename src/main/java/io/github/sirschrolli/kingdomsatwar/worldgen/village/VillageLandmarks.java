@@ -93,7 +93,8 @@ final class VillageLandmarks {
         }
         b.fill(3, 8, 1, 5, 8, 3, a.p.planks());
         b.set(3, 8, 3, Blocks.AIR.defaultBlockState());
-        b.ladder(3, 1, 8, 3, Direction.NORTH);
+        // die Leiter hängt an der Westwand des Turms (hinter ihr liegt der Durchgang ins Schiff)
+        b.ladder(3, 1, 8, 3, Direction.EAST);
         b.fill(3, 11, 2, 5, 11, 2, a.p.post(Direction.Axis.X));
         b.set(4, 10, 2, Blocks.BELL.defaultBlockState().setValue(BellBlock.FACING, Direction.EAST).setValue(BellBlock.ATTACHMENT, BellAttachType.CEILING));
         // Turmdach: Zeltdach (Lehm: Kuppel aus Kalkputz)
@@ -129,7 +130,7 @@ final class VillageLandmarks {
             if (a.style != VillageStyle.CLAY) {
                 b.fill(1, 6, z, 7, 6, z, a.p.post(Direction.Axis.X));
             }
-            b.set(4, 5, z, ModBlocks.CHANDELIER.get().defaultBlockState());
+            a.hang(4, 5, z, ModBlocks.CHANDELIER.get().defaultBlockState());
         }
     }
 
@@ -189,9 +190,13 @@ final class VillageLandmarks {
         }
         b.fill(3, 9, 3, 5, 9, 5, a.p.planks());
         b.set(5, 9, 5, Blocks.AIR.defaultBlockState());
-        b.set(3, 5, 5, Blocks.AIR.defaultBlockState());
-        b.ladder(3, 1, 5, 6, Direction.NORTH);
-        b.ladder(5, 6, 9, 6, Direction.NORTH);
+        // Leitern: unten an einem Pfosten vor der Rückwand durch das Loch bei (3, 5, 5) ins Turmgeschoss, oben an der Turmwand
+        // durch das Loch bei (5, 9, 5) unter die Haube
+        for (int y = 1; y <= 4; y++) {
+            b.set(3, y, 6, a.p.post(Direction.Axis.Y));
+        }
+        b.ladder(3, 1, 5, 5, Direction.NORTH);
+        b.ladder(5, 6, 9, 5, Direction.NORTH);
         // Haube
         int top = a.gable(2, 2, 6, 6, 13, true, a.style == VillageStyle.NORDIC);
         // Tür und Fenster
@@ -245,7 +250,7 @@ final class VillageLandmarks {
         b.set(6, 2, 2, Blocks.HAY_BLOCK.defaultBlockState());
         b.set(6, 1, 3, barrel(Direction.UP));
         b.bed(5, 1, 5, a.bed(true), Direction.SOUTH);
-        chest(a, 2, 1, 6, Direction.EAST, ModLootTables.VILLAGE_FARM);
+        chest(a, 2, 1, 6, Direction.NORTH, ModLootTables.VILLAGE_FARM);
         a.hangingLantern(4, 4, 3);
         piece.resident(b, 4, 1, 3, VillageProfession.FARMER, at(5, 1, 6), at(3, 1, 4));
     }
@@ -301,12 +306,13 @@ final class VillageLandmarks {
         }
         b.set(2, 10, 3, Blocks.AIR.defaultBlockState());
         b.ladder(2, 1, 10, 3, Direction.NORTH);
-        a.hangingLantern(2, 13, 2);
         if (a.style == VillageStyle.CLAY) {
             a.flatRoof(-1, -1, 5, 5, 14);
         } else {
             a.hip(-1, -1, 5, 5, 14);
         }
+        // erst unter dem fertigen Dach: die Laterne hängt (an einer Kette) vom Dach herab
+        a.hangingLantern(2, 13, 2);
         chest(a, 1, 1, 3, Direction.EAST, ModLootTables.VILLAGE_WATCHTOWER);
         piece.guard(b, 1, 11, 1, true);
     }
@@ -344,9 +350,11 @@ final class VillageLandmarks {
                 }
             }
         }
+        // die Leiter zum Heuboden lehnt an einem Stützpfosten des Bodens
+        for (int y = 1; y <= 3; y++) {
+            b.set(9, y, 5, a.p.post(Direction.Axis.Y));
+        }
         b.ladder(9, 1, 4, 4, Direction.NORTH);
-        b.set(9, 4, 4, Blocks.AIR.defaultBlockState());
-        b.ladder(9, 4, 4, 4, Direction.NORTH);
         // Heu, Fässer, Komposter
         for (int x : new int[] {1, 2, 8}) {
             b.set(x, 1, 1, Blocks.HAY_BLOCK.defaultBlockState());
@@ -462,6 +470,10 @@ final class VillageLandmarks {
         b.set(5, 0, 1, Arch.slab(a.p.wood.slab(), SlabType.TOP));
         VillageBuildings.entrance(a, piece, 5, 5);
         // Vogelscheuche
+        // Vogelscheuche, Komposter und Fass stehen auf festem Boden (Ackerboden unter einem Block würde zu Erde)
+        for (BlockPos ground : new BlockPos[] {at(2, 0, 6), at(9, 0, 11), at(9, 0, 10)}) {
+            b.set(ground.getX(), ground.getY(), ground.getZ(), Blocks.COARSE_DIRT.defaultBlockState());
+        }
         b.set(2, 1, 6, a.p.fence());
         b.set(2, 2, 6, Blocks.HAY_BLOCK.defaultBlockState());
         b.set(1, 2, 6, a.p.fence());

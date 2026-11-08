@@ -377,6 +377,11 @@ public final class Arch {
         if (!this.b.get(x, y, z).isAir() && !this.b.get(x, y, z).canBeReplaced()) {
             return;
         }
+        // nicht auf ein Beet oder einen Weg (unter dem Kasten würden sie zu Erde)
+        BlockState below = this.b.get(x, y - 1, z);
+        if (below.is(Blocks.FARMLAND) || below.is(Blocks.DIRT_PATH)) {
+            return;
+        }
         this.b.set(x, y, z, slab(this.p.trim.slab(), SlabType.TOP));
         this.b.set(x, y + 1, z, this.flower(x, y, z));
     }
@@ -515,8 +520,17 @@ public final class Arch {
     }
 
     public void hangingLantern(int x, int y, int z) {
-        this.b.set(x, y, z, this.p.lantern.defaultBlockState().setValue(LanternBlock.HANGING, true));
+        this.hang(x, y, z, this.p.lantern.defaultBlockState().setValue(LanternBlock.HANGING, true));
     }
+
+    /**
+     * Hängt {@code state} (Laterne, Kronleuchter) bei (x, y, z) auf. Fehlt direkt darüber der Halt – unter einem offenen
+     * Dachstuhl –, hängt es an einer Kette vom nächsten Balken oder vom Dach herab (höchstens acht Glieder).
+     */
+    public void hang(int x, int y, int z, BlockState state) {
+        this.b.hang(x, y, z, state);
+    }
+
 
     public void standingLantern(int x, int y, int z) {
         this.b.set(x, y, z, this.p.lantern.defaultBlockState().setValue(LanternBlock.HANGING, false));

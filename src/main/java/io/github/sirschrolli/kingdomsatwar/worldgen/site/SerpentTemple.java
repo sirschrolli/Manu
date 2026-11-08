@@ -319,7 +319,11 @@ final class SerpentTemple {
                 }
                 this.b.set(c[0], f + 5, c[1], Blocks.GLAZED_TERRACOTTA.pick(DyeColor.GREEN).defaultBlockState());
                 this.b.set(c[0], f + 6, c[1], Blocks.MOSSY_STONE_BRICKS.defaultBlockState());
-                this.b.set(c[0] + (c[0] < 0 ? 1 : -1), f + 5, c[1], Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, false));
+                // der Oberkiefer ragt zum Gang hin vor, darunter hängt die Laterne
+                int jaw = c[0] + (c[0] < 0 ? 1 : -1);
+                this.b.set(jaw, f + 6, c[1], VillageBuilder.slab(Blocks.MOSSY_STONE_BRICK_SLAB,
+                        net.minecraft.world.level.block.state.properties.SlabType.BOTTOM));
+                this.b.set(jaw, f + 5, c[1], Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
             }
             // Graben um den Altar (z 23..27), eine Brücke
             for (int x = -3; x <= 3; x++) {

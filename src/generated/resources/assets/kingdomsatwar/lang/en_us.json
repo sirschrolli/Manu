@@ -2014,7 +2014,7 @@
   "message.kingdomsatwar.garrison.joined": "%s moves into the garrison of %s.",
   "message.kingdomsatwar.garrison.no_town": "You have no settlement – there is no garrison to return to.",
   "message.kingdomsatwar.garrison.sent_home": "%s soldiers return to the garrison of %s.",
-  "message.kingdomsatwar.hardness.weakened": "Death has left its mark: you are weakened for two minutes.",
+  "message.kingdomsatwar.hardness.weakened": "Death still lingers in your bones – your blows are weaker for a while.",
   "message.kingdomsatwar.mage.sealed": "The archmage's magic holds the sanctum together – defeat him to get out.",
   "message.kingdomsatwar.mana.empty": "Not enough mana (needs %s, you have %s)",
   "message.kingdomsatwar.recruit.army_full": "Your army is complete – you can't lead more soldiers.",

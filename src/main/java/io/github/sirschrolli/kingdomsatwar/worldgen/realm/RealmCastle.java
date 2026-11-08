@@ -283,9 +283,12 @@ public final class RealmCastle {
                 // Gesims an der Hofseite und darunter Laternen
                 int ix = x - out.getStepX();
                 int iz = z - out.getStepZ();
-                this.b.set(ix, WALK, iz, this.trimStairs(out, Half.TOP));
                 if (Math.floorMod(along, 10) == 5 && Math.abs(along) < WALL - 6) {
+                    // eine Konsole im Gesims trägt die Laterne (unter der Stufe fände sie keinen Halt)
+                    this.b.set(ix, WALK, iz, this.s.trim());
                     this.b.hangingLantern(ix, WALK - 1, iz, Blocks.LANTERN);
+                } else {
+                    this.b.set(ix, WALK, iz, this.trimStairs(out, Half.TOP));
                 }
             }
         }
@@ -467,12 +470,13 @@ public final class RealmCastle {
             this.b.set(window[0], WALK + 2, window[1], this.s.window());
             int[] inner = flank(cx, cz, out, 0, 0);
             this.b.hangingLantern(inner[0], 5, inner[1], Blocks.LANTERN);
-            this.b.hangingLantern(inner[0], top, inner[1], Blocks.LANTERN);
             // Zeltdach mit einem Block Überstand
             int[] lo = flank(cx, cz, out, -4, -4);
             int[] hi = flank(cx, cz, out, 4, 4);
             this.b.hipRoof(Math.min(lo[0], hi[0]), Math.min(lo[1], hi[1]), Math.max(lo[0], hi[0]), Math.max(lo[1], hi[1]), top + 1,
                     this.s.roofStairs(), this.s.roof().defaultBlockState());
+            // erst unter dem fertigen Dach: die obere Laterne hängt an einer Kette vom Dachstuhl
+            this.b.hangingLantern(inner[0], top, inner[1], Blocks.LANTERN);
             // Banner außen unter dem Dach
             int[] banner = flank(cx, cz, out, 0, 4);
             this.wallBanner(banner[0], top - 1, banner[1], out);

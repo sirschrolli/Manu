@@ -60,6 +60,9 @@ public final class Hardness {
     public static final double ENEMY_FOLLOW_RANGE = 0.25;
     public static final float NATURAL_REGENERATION = 0.5f;
     public static final int RESPAWN_WEAKNESS_TICKS = 2400;
+    /** Um so viel sind die Schläge nach dem Tod schwächer (wie Schwäche I). */
+    public static final double DEATH_WEAKNESS_DAMAGE = -4.0;
+    static final Identifier DEATH_WEAKNESS = KingdomsAtWar.id("death_weakness");
 
     static final Identifier HEALTH = KingdomsAtWar.id("hardness_health");
     static final Identifier FOLLOW_RANGE = KingdomsAtWar.id("hardness_follow_range");
@@ -111,6 +114,7 @@ public final class Hardness {
     @SubscribeEvent
     static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            recover(player);
             // die Spielregel schickt das Signal beim Betreten schon – sicher ist sicher
             player.connection.send(new net.minecraft.network.protocol.game.ClientboundEntityEventPacket(player,
                     net.minecraft.world.entity.EntityEvent.REDUCED_DEBUG_INFO));
@@ -196,6 +200,9 @@ public final class Hardness {
     static void onPlayerTickPost(PlayerTickEvent.Post event) {
         if (!event.getEntity().level().isClientSide()) {
             ticking = event.getEntity();
+            if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 20 == 0) {
+                recover(player);
+            }
         }
     }
 
@@ -229,9 +236,41 @@ public final class Hardness {
         weaken(player);
     }
 
-    /** Nach dem Tod: zwei Minuten Schwäche. */
+    /**
+     * Nach dem Tod: zwei Minuten Schwäche – nicht als Statuseffekt (kein Symbol, keine Partikel, Milch hilft nicht), sondern
+     * einfach so: Die Schläge sind um {@value #DEATH_WEAKNESS_DAMAGE} schwächer, so viel wie bei Schwäche I. Die Zeit läuft
+     * in der Spielzeit weiter (auch über Ab- und Anmelden hinweg); danach ist der Abzug wieder weg.
+     */
     public static void weaken(ServerPlayer player) {
-        player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, RESPAWN_WEAKNESS_TICKS, 0));
+        AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (attack != null) {
+            attack.addOrReplacePermanentModifier(new AttributeModifier(DEATH_WEAKNESS, DEATH_WEAKNESS_DAMAGE, AttributeModifier.Operation.ADD_VALUE));
+        }
+        player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.WEAKENED_UNTIL,
+                player.level().getGameTime() + RESPAWN_WEAKNESS_TICKS);
         player.sendSystemMessage(Component.translatable("message.kingdomsatwar.hardness.weakened").withStyle(ChatFormatting.DARK_RED));
+    }
+
+    /** Ist der Spieler (nach seinem Tod) noch geschwächt? */
+    public static boolean weakened(Player player) {
+        AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+        return attack != null && attack.getModifier(DEATH_WEAKNESS) != null;
+    }
+
+    /** Ist die Zeit um, verschwindet der Abzug wieder (geprüft jede Sekunde und beim Anmelden). */
+    public static void recover(ServerPlayer player) {
+        if (!weakened(player)) {
+            return;
+        }
+        long until = player.getData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.WEAKENED_UNTIL);
+        long now = player.level().getGameTime();
+        // abgelaufen – oder die Spielzeit lief zurück (Welt neu erzeugt): dann auch weg
+        if (now >= until || until - now > RESPAWN_WEAKNESS_TICKS) {
+            AttributeInstance attack = player.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (attack != null) {
+                attack.removeModifier(DEATH_WEAKNESS);
+            }
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.WEAKENED_UNTIL, 0L);
+        }
     }
 }

@@ -179,7 +179,7 @@ final class TownGameTests {
         return originFor(helper, type.blueprint(), x, z);
     }
 
-    private static BlockPos originFor(GameTestHelper helper, Blueprint plan, int x, int z) {
+    static BlockPos originFor(GameTestHelper helper, Blueprint plan, int x, int z) {
         BoundingBox b = plan.bounds();
         return helper.absolutePos(new BlockPos(x - (b.minX() + b.maxX()) / 2, ground(helper), z - (b.minZ() + b.maxZ()) / 2));
     }

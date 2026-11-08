@@ -6,8 +6,8 @@ final class RulesLang {
 
     static void register(WarLang.Text text) {
         // Härte
-        text.add("message.kingdomsatwar.hardness.weakened", "Death has left its mark: you are weakened for two minutes.",
-                "Der Tod hat Spuren hinterlassen: Du bist zwei Minuten lang geschwächt.");
+        text.add("message.kingdomsatwar.hardness.weakened", "Death still lingers in your bones – your blows are weaker for a while.",
+                "Der Tod steckt dir noch in den Knochen – deine Schläge sind eine Weile schwächer.");
         // Die Arkane Sphäre
         text.add("message.kingdomsatwar.arena.pulled", "%s pulls you into the Arcane Sphere!", "%s zieht dich in die Arkane Sphäre!");
         text.add("message.kingdomsatwar.arena.rules",

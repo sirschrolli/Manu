@@ -48,6 +48,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class WarTableScreen extends Screen {
     private static final Identifier BACKGROUND = KingdomsAtWar.id("textures/gui/recruitment_table.png");
+    private static final Identifier SCROLLER = Identifier.withDefaultNamespace("widget/scroller");
+    private static final Identifier SCROLLER_BACKGROUND = Identifier.withDefaultNamespace("widget/scroller_background");
     private static final int WIDTH = 306;
     private static final int HEIGHT = 176;
     private static final int LIST_X = 7;
@@ -55,6 +57,8 @@ public class WarTableScreen extends Screen {
     private static final int ENTRY_W = 116;
     private static final int ENTRY_H = 36;
     private static final int VISIBLE = 4;
+    /** Breite des Rollbalkens rechts in der Liste (erscheint erst, wenn mehr Soldaten da sind als Platz). */
+    private static final int SCROLLBAR = 6;
     private static final int PREVIEW_X = 128;
     private static final int PREVIEW_Y = 18;
     private static final int PREVIEW_W = 68;
@@ -74,6 +78,8 @@ public class WarTableScreen extends Screen {
     /** Welche der möglichen Ausbildungen gewählt ist (für den ausgewählten Soldaten). */
     private int promoteChoice;
     private int scroll;
+    /** Wird gerade der Rollbalken der Liste gezogen? */
+    private boolean draggingScroll;
     private int left;
     private int top;
     private @Nullable Button healButton;
@@ -255,19 +261,29 @@ public class WarTableScreen extends Screen {
         return this.armySize;
     }
 
-    /** Die eigenen Soldaten im Feldlager, die nächsten zuerst. */
+    /**
+     * Feste Reihenfolge der Liste: nach Art, dann die höchsten Ränge und Stufen zuerst, dann nach Namen. (Früher standen
+     * die nächsten oben – im vollen Feldlager laufen die Soldaten aber ständig umher, und die Liste sprang dann von Bild zu
+     * Bild hin und her, sodass man niemanden mehr anklicken konnte.)
+     */
+    private static final Comparator<SoldierEntity> ORDER = Comparator.<SoldierEntity>comparingInt(s -> s.getSoldierType().ordinal())
+            .thenComparing(Comparator.comparingInt(SoldierEntity::getRank).reversed())
+            .thenComparing(Comparator.comparingInt(SoldierEntity::getCombatLevel).reversed())
+            .thenComparing(s -> s.getPersonalName().isEmpty() ? "\uffff" : s.getPersonalName())
+            .thenComparing(s -> s.getUUID());
+
+    /** Die eigenen Soldaten im Feldlager, in fester Reihenfolge (siehe {@link #ORDER}). */
     private List<SoldierEntity> soldiers() {
         List<SoldierEntity> list = new ArrayList<>();
         if (this.minecraft.level == null || this.minecraft.player == null) {
             return list;
         }
-        Vec3 table = Vec3.atCenterOf(this.tablePos);
         for (var entity : this.minecraft.level.entitiesForRendering()) {
             if (entity instanceof SoldierEntity soldier && Training.atTable(this.minecraft.player, this.tablePos, soldier)) {
                 list.add(soldier);
             }
         }
-        list.sort(Comparator.comparingDouble(s -> s.distanceToSqr(table)));
+        list.sort(ORDER);
         return list;
     }
 
@@ -293,6 +309,11 @@ public class WarTableScreen extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         List<SoldierEntity> list = this.soldiers();
+        if (list.size() > VISIBLE && this.inScrollbar(event.x(), event.y())) {
+            this.draggingScroll = true;
+            this.scrollTo(event.y(), list.size());
+            return true;
+        }
         for (int i = 0; i < VISIBLE && this.scroll + i < list.size(); i++) {
             if (this.inEntry(event.x(), event.y(), i)) {
                 SoldierEntity soldier = list.get(this.scroll + i);
@@ -328,9 +349,74 @@ public class WarTableScreen extends Screen {
     }
 
     @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (this.draggingScroll) {
+            this.scrollTo(event.y(), this.soldiers().size());
+            return true;
+        }
+        return super.mouseDragged(event, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        this.draggingScroll = false;
+        return super.mouseReleased(event);
+    }
+
+    @Override
     public boolean mouseScrolled(double x, double y, double scrollX, double scrollY) {
         int max = Math.max(0, this.soldiers().size() - VISIBLE);
         this.scroll = Mth.clamp(this.scroll - (int) Math.signum(scrollY), 0, max);
+        return true;
+    }
+
+    /** Die Liste so verschieben, dass der Griff des Rollbalkens bei {@code mouseY} liegt. */
+    private void scrollTo(double mouseY, int size) {
+        int max = Math.max(0, size - VISIBLE);
+        int trackY = this.top + LIST_Y;
+        int trackH = VISIBLE * ENTRY_H - 2;
+        int thumb = this.thumbHeight(size);
+        double f = (mouseY - trackY - thumb / 2.0) / Math.max(1, trackH - thumb);
+        this.scroll = Mth.clamp((int) Math.round(f * max), 0, max);
+    }
+
+    private int thumbHeight(int size) {
+        int trackH = VISIBLE * ENTRY_H - 2;
+        return Mth.clamp(trackH * VISIBLE / Math.max(1, size), 14, trackH);
+    }
+
+    private boolean inScrollbar(double mx, double my) {
+        int x = this.left + LIST_X + ENTRY_W - SCROLLBAR;
+        int y = this.top + LIST_Y;
+        return mx >= x && mx < x + SCROLLBAR && my >= y && my < y + VISIBLE * ENTRY_H - 2;
+    }
+
+    /** Pfeiltasten: den vorigen bzw. nächsten Soldaten wählen (die Liste rollt mit); Bild auf/ab blättert. */
+    private boolean moveSelection(int step) {
+        List<SoldierEntity> list = this.soldiers();
+        if (list.isEmpty()) {
+            return false;
+        }
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == this.selectedSoldier) {
+                index = i;
+                break;
+            }
+        }
+        int next = Mth.clamp(index + step, 0, list.size() - 1);
+        if (next != index || list.get(next).getId() != this.selectedSoldier) {
+            this.selectedSoldier = list.get(next).getId();
+            this.promoteChoice = 0;
+            this.feedbackTicks = 0;
+            this.click();
+        }
+        if (next < this.scroll) {
+            this.scroll = next;
+        } else if (next >= this.scroll + VISIBLE) {
+            this.scroll = next - VISIBLE + 1;
+        }
+        this.updateButtons();
         return true;
     }
 
@@ -341,7 +427,12 @@ public class WarTableScreen extends Screen {
     private boolean inEntry(double mx, double my, int row) {
         int x = this.left + LIST_X;
         int y = this.top + LIST_Y + row * ENTRY_H;
-        return mx >= x && mx < x + ENTRY_W && my >= y && my < y + ENTRY_H - 2;
+        return mx >= x && mx < x + this.entryWidth() && my >= y && my < y + ENTRY_H - 2;
+    }
+
+    /** Breite eines Eintrags: Mit Rollbalken (mehr Soldaten als Platz) wird die Liste etwas schmaler. */
+    private int entryWidth() {
+        return this.soldiers().size() > VISIBLE ? ENTRY_W - SCROLLBAR - 2 : ENTRY_W;
     }
 
     private void click() {
@@ -363,7 +454,23 @@ public class WarTableScreen extends Screen {
             this.onClose();
             return true;
         }
-        return super.keyPressed(event);
+        switch (event.key()) {
+            case com.mojang.blaze3d.platform.InputConstants.KEY_UP -> {
+                return this.moveSelection(-1);
+            }
+            case com.mojang.blaze3d.platform.InputConstants.KEY_DOWN -> {
+                return this.moveSelection(1);
+            }
+            case com.mojang.blaze3d.platform.InputConstants.KEY_PAGEUP -> {
+                return this.moveSelection(-VISIBLE);
+            }
+            case com.mojang.blaze3d.platform.InputConstants.KEY_PAGEDOWN -> {
+                return this.moveSelection(VISIBLE);
+            }
+            default -> {
+                return super.keyPressed(event);
+            }
+        }
     }
 
     @Override
@@ -418,10 +525,12 @@ public class WarTableScreen extends Screen {
             }
         }
         this.scroll = Mth.clamp(this.scroll, 0, Math.max(0, list.size() - VISIBLE));
+        int entryW = this.entryWidth();
         for (int i = 0; i < VISIBLE && this.scroll + i < list.size(); i++) {
-            this.drawSoldierEntry(g, list.get(this.scroll + i), chosen, x0 + LIST_X, y0 + LIST_Y + i * ENTRY_H, mouseX, mouseY);
+            this.drawSoldierEntry(g, list.get(this.scroll + i), chosen, x0 + LIST_X, y0 + LIST_Y + i * ENTRY_H, entryW, mouseX, mouseY);
         }
         if (list.size() > VISIBLE) {
+            this.drawScrollbar(g, list.size(), mouseX, mouseY);
             String more = (this.scroll + 1) + "–" + Math.min(list.size(), this.scroll + VISIBLE) + " / " + list.size();
             g.text(this.font, more, x0 + LIST_X + ENTRY_W - this.font.width(more), y0 + 6 + 160, ArmyWidgets.MUTED, false);
         }
@@ -526,23 +635,36 @@ public class WarTableScreen extends Screen {
         ArmyWidgets.costRow(g, this.font, this.minecraft.player, x, y, cost.coins(), items, counts, mouseX, mouseY);
     }
 
+    /** Der Rollbalken rechts neben der Liste: Rinne und Griff wie bei den Listen des Spiels. */
+    private void drawScrollbar(GuiGraphicsExtractor g, int size, int mouseX, int mouseY) {
+        int x = this.left + LIST_X + ENTRY_W - SCROLLBAR;
+        int y = this.top + LIST_Y;
+        int h = VISIBLE * ENTRY_H - 2;
+        int thumb = this.thumbHeight(size);
+        int max = Math.max(1, size - VISIBLE);
+        int ty = y + Math.round((h - thumb) * (this.scroll / (float) max));
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_BACKGROUND, x, y, SCROLLBAR, h);
+        boolean hot = this.draggingScroll || this.inScrollbar(mouseX, mouseY);
+        g.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER, x, ty, SCROLLBAR, thumb, hot ? 0xFFFFFFFF : 0xFFE6E6E6);
+    }
+
     /** Ein Soldat der Liste, darunter seine Gesundheit als Balken (grün, gelb, rot bei schweren Wunden). */
-    private void drawSoldierEntry(GuiGraphicsExtractor g, SoldierEntity soldier, @Nullable SoldierEntity chosen, int x, int y, int mouseX,
-            int mouseY) {
-        boolean hovered = mouseX >= x && mouseX < x + ENTRY_W && mouseY >= y && mouseY < y + ENTRY_H - 2;
+    private void drawSoldierEntry(GuiGraphicsExtractor g, SoldierEntity soldier, @Nullable SoldierEntity chosen, int x, int y, int entryW,
+            int mouseX, int mouseY) {
+        boolean hovered = mouseX >= x && mouseX < x + entryW && mouseY >= y && mouseY < y + ENTRY_H - 2;
         boolean isSelected = chosen != null && soldier.getId() == chosen.getId();
         String name = soldier.getPersonalName().isEmpty() ? soldier.getDisplayName().getString() : soldier.getPersonalName();
         // rechts in der zweiten Zeile stehen Proviant und Schlachtzug – die Art des Soldaten muss davor enden
         String days = soldier.isHungry() ? "!" : String.valueOf(soldier.getRations());
-        int dx = x + ENTRY_W - 6 - this.font.width(days);
+        int dx = x + entryW - 6 - this.font.width(days);
         int iconsLeft = dx - (soldier.isOnCampaign() ? 22 : 11);
-        ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
+        ArmyWidgets.entry(g, this.font, x, y, entryW, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
                 Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank(), iconsLeft - (x + 33) - 2);
         ArmyWidgets.levelBadge(g, this.font, x + 5, y + 5, soldier.getCombatLevel());
         float part = Mth.clamp(soldier.getHealth() / Math.max(1.0f, soldier.getMaxHealth()), 0.0f, 1.0f);
         int bx = x + 33;
         int by = y + 29;
-        int bw = ENTRY_W - 38;
+        int bw = entryW - 38;
         g.fill(bx - 1, by - 1, bx + bw + 1, by + 3, 0xFF1E1E1E);
         g.fill(bx, by, bx + bw, by + 2, 0xFF5A1414);
         int color = part > 0.66f ? 0xFF4CAF50 : part > 0.33f ? 0xFFE0B030 : 0xFFE04030;
@@ -561,7 +683,7 @@ public class WarTableScreen extends Screen {
             g.item(new ItemStack(net.minecraft.world.item.Items.IRON_SWORD), 0, 0);
             g.pose().popMatrix();
         }
-        if (mouseX >= dx - 22 && mouseX < x + ENTRY_W - 4 && mouseY >= y + 17 && mouseY < y + 27) {
+        if (mouseX >= dx - 22 && mouseX < x + entryW - 4 && mouseY >= y + 17 && mouseY < y + 27) {
             g.setTooltipForNextFrame(this.font, Component.translatable(soldier.isHungry() ? "gui.kingdomsatwar.recruitment.rations.hungry"
                     : "gui.kingdomsatwar.recruitment.rations", soldier.getRations()).append(soldier.isOnCampaign()
                     ? Component.translatable("gui.kingdomsatwar.recruitment.on_campaign") : Component.translatable(this.hasTown

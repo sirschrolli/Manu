@@ -1151,7 +1151,8 @@ dazwischen **sechs Reihen Laderaum** (so viel wie eine große Truhe) für Bausto
 - **Keine Koordinaten:** Die Debug-Anzeige (F3) ist immer verkürzt – keine Koordinaten, kein Kopieren der Position;
   Meldungen nennen Entfernung und Himmelsrichtung statt Koordinaten.
 - **Viel härter:** Schwierigkeit fest auf *Schwer*, Gegner mit 50 % mehr Leben und 30 % härteren Treffern (Bosse 25 und
-  15 %), die natürliche Heilung halbiert, nach dem Tod zwei Minuten Schwäche.
+  15 %), die natürliche Heilung halbiert, nach dem Tod zwei Minuten lang schwächere Schläge (kein Statuseffekt – der Tod
+  steckt einem einfach noch in den Knochen; Milch hilft nicht).
 - **Der Boden unter dem Erzmagier** lässt sich nicht abbauen oder wegsprengen.
 
 ### Verzauberungen

@@ -641,7 +641,7 @@ final class ShadowSites {
         b.hangingLantern(-8, 3, -5, ShadowBlocks.MOON_LANTERN.get());
         b.chest(-7, 1, -4, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.LIGHTHOUSE_CHEST);
         b.bed(-7, 1, -6, Blocks.BED.purple(), Direction.SOUTH);
-        b.set(-10, 1, -5, s(Blocks.BARREL));
+        b.set(-9, 1, -4, s(Blocks.BARREL));
         b.set(-10, 1, -7, s(Blocks.CRAFTING_TABLE));
         // Stufe vor der Tür und ein Laternenpfahl am Weg
         b.column(-8, -9, stone(), 3);

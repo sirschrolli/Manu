@@ -1102,19 +1102,19 @@ final class Blueprints {
             b.set(0, y, 0, s(Blocks.SPRUCE_FENCE));
         }
         b.set(0, 11, 0, Blocks.BANNER.red().defaultBlockState());
-        // innen: Pritschen, Speerständer, Tische, Banner
-        for (int x : new int[] {-4, -2}) {
+        // innen: Pritschen (neben den Ecktürmen, die innen eine Ecke einnehmen), Speerständer, Tische, Banner
+        for (int x : new int[] {-3, -1}) {
             b.set(x, 1, 2, Blocks.BED.red().defaultBlockState().setValue(net.minecraft.world.level.block.BedBlock.FACING, Direction.SOUTH)
                     .setValue(net.minecraft.world.level.block.BedBlock.PART, net.minecraft.world.level.block.state.properties.BedPart.FOOT));
             b.set(x, 1, 3, Blocks.BED.red().defaultBlockState().setValue(net.minecraft.world.level.block.BedBlock.FACING, Direction.SOUTH)
                     .setValue(net.minecraft.world.level.block.BedBlock.PART, net.minecraft.world.level.block.state.properties.BedPart.HEAD));
         }
-        b.set(-3, 1, 3, barrel(Direction.UP));
+        b.set(-2, 1, 3, barrel(Direction.UP));
         for (int z = -2; z <= 0; z++) {
             b.set(4, 1, z, PlanBuilder.slab(Blocks.SPRUCE_SLAB, SlabType.BOTTOM));
             b.set(4, 2, z, s(Blocks.LIGHTNING_ROD.weathering().unaffected()));
         }
-        b.chestAt(4, 1, 3, Direction.WEST);
+        b.chestAt(2, 1, 3, Direction.NORTH);
         b.set(3, 1, 3, s(Blocks.SMITHING_TABLE));
         b.set(-1, 1, -1, ModBlocks.OAK_TABLE.get());
         b.set(0, 1, -1, ModBlocks.OAK_TABLE.get());

@@ -2014,7 +2014,7 @@
   "message.kingdomsatwar.garrison.joined": "%s zieht in die Garnison von %s.",
   "message.kingdomsatwar.garrison.no_town": "Du hast keine Siedlung – es gibt keine Garnison, in die sie heimkehren könnten.",
   "message.kingdomsatwar.garrison.sent_home": "%s Soldaten kehren in die Garnison von %s heim.",
-  "message.kingdomsatwar.hardness.weakened": "Der Tod hat Spuren hinterlassen: Du bist zwei Minuten lang geschwächt.",
+  "message.kingdomsatwar.hardness.weakened": "Der Tod steckt dir noch in den Knochen – deine Schläge sind eine Weile schwächer.",
   "message.kingdomsatwar.mage.sealed": "Die Magie des Erzmagiers hält das Sanktum zusammen – besiege ihn, um hinauszukommen.",
   "message.kingdomsatwar.mana.empty": "Nicht genug Mana (braucht %s, du hast %s)",
   "message.kingdomsatwar.recruit.army_full": "Deine Armee ist vollzählig – mehr Soldaten kannst du nicht führen.",

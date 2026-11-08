@@ -150,8 +150,8 @@ final class WitchTree {
                     .setValue(CandleBlock.LIT, true));
             this.b.set(1, 0, -2, Blocks.DYED_CANDLE.pick(DyeColor.BLACK).defaultBlockState().setValue(CandleBlock.CANDLES, 2)
                     .setValue(CandleBlock.LIT, true));
-            this.b.chest(2, 0, 1, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.SITE_WITCH_TREE);
-            this.b.set(-2, 0, 1, Blocks.RED_MUSHROOM);
+            this.b.chest(1, 0, 1, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.SITE_WITCH_TREE);
+            this.b.set(-2, 0, 1, Blocks.POTTED_RED_MUSHROOM);
             this.b.set(-1, 0, 1, Blocks.CARPET.pick(DyeColor.PURPLE));
             // Kräuter und leuchtende Beeren an Ranken von der Decke
             for (int[] c : new int[][] {{-1, -1}, {1, 1}, {-1, 1}, {1, -1}}) {

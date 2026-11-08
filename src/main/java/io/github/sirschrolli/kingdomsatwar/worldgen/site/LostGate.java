@@ -431,8 +431,8 @@ final class LostGate {
             }
             // vorn und hinten am Sturz hängt je eine Seelenlaterne
             for (int z : new int[] {-1, 1}) {
-                this.b.set(0, lintel, z, VillageBuilder.slab(Blocks.POLISHED_BLACKSTONE_BRICK_SLAB,
-                        net.minecraft.world.level.block.state.properties.SlabType.TOP));
+                // ein kurzer Zapfen unter dem Sturz trägt die Laterne (unter einer oberen Stufe fände sie keinen Halt)
+                this.b.set(0, lintel, z, s(Blocks.POLISHED_BLACKSTONE_BRICK_WALL));
                 this.b.set(0, lintel - 1, z, Blocks.SOUL_LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
             }
             // was vom Bogen herabgestürzt ist, liegt auf der Seite

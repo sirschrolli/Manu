@@ -118,7 +118,7 @@ final class VillageShowcase {
     }
 
     /** Boden: Gras (Fachwerk, nordisch), Sand (Lehm), ein flacher Weiher über Schlamm (Pfahlbau). */
-    private static void prepare(ServerLevel level, VillageStyle style, BlockPos origin, VillageBuilding kind) {
+    static void prepare(ServerLevel level, VillageStyle style, BlockPos origin, VillageBuilding kind) {
         BlockState top = switch (style) {
             case TIMBER -> Blocks.GRASS_BLOCK.defaultBlockState();
             case NORDIC -> Blocks.PODZOL.defaultBlockState();
@@ -176,7 +176,7 @@ final class VillageShowcase {
         }
     }
 
-    private static void build(ServerLevel level, net.minecraft.world.level.levelgen.structure.StructurePiece piece) {
+    static void build(ServerLevel level, net.minecraft.world.level.levelgen.structure.StructurePiece piece) {
         BoundingBox box = piece.getBoundingBox();
         var generator = level.getChunkSource().getGenerator();
         for (int cx = box.minX() >> 4; cx <= box.maxX() >> 4; cx++) {

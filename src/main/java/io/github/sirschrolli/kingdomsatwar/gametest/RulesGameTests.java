@@ -177,6 +177,31 @@ final class RulesGameTests {
             if (Hardness.active(level.getServer())) {
                 problems.add("volle Härte auf dem Testserver aktiv");
             }
+            // Schwäche nach dem Tod: kein Statuseffekt, sondern ein stiller Abzug beim Schaden, der nach zwei Minuten vergeht
+            net.minecraft.server.level.ServerPlayer dead = helper.makeMockServerPlayerInLevel();
+            try {
+                double before = dead.getAttributeBaseValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
+                Hardness.weaken(dead);
+                var attack = dead.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE);
+                double modifier = attack.getModifiers().stream().mapToDouble(m -> m.amount()).sum();
+                if (dead.hasEffect(MobEffects.WEAKNESS) || !dead.getActiveEffects().isEmpty()) {
+                    problems.add("Schwäche als Statuseffekt: " + dead.getActiveEffects());
+                }
+                if (!Hardness.weakened(dead) || Math.abs(modifier - Hardness.DEATH_WEAKNESS_DAMAGE) > 1.0e-6) {
+                    problems.add("keine stille Schwäche: " + modifier + " (Grundwert " + before + ")");
+                }
+                Hardness.recover(dead);
+                if (!Hardness.weakened(dead)) {
+                    problems.add("Schwäche schon vor Ablauf vorbei");
+                }
+                dead.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.WEAKENED_UNTIL, level.getGameTime() - 1);
+                Hardness.recover(dead);
+                if (Hardness.weakened(dead)) {
+                    problems.add("Schwäche nach Ablauf noch da");
+                }
+            } finally {
+                level.getServer().getPlayerList().remove(dead);
+            }
         } finally {
             zombie.discard();
             lord.discard();

@@ -297,6 +297,7 @@ final class ShadowGameTests {
                             new net.minecraft.world.level.ChunkPos(cx, cz), origin);
                 }
             }
+            BuildAudit.log(level, box, origin, "Schattenbauwerk " + kind.id());
             switch (kind) {
                 case TEMPLE -> {
                     assertChest(helper, origin.offset(3, 4, 14), io.github.sirschrolli.kingdomsatwar.loot.ModLootTables.MOON_TEMPLE_CHEST, "Tempel");

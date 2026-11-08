@@ -16,6 +16,13 @@ public final class ModAttachments {
     public static final Supplier<AttachmentType<Boolean>> INTRO_SEEN = ATTACHMENTS.register("intro_seen",
             () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("seen")).copyOnDeath().build());
 
+    /**
+     * Bis wann (Spielzeit in Ticks) der Spieler nach seinem Tod noch geschwächt ist (0: nicht). Die Schwäche ist kein
+     * Statuseffekt, sondern ein stiller Abzug beim Angriffsschaden – siehe {@code Hardness#weaken}.
+     */
+    public static final Supplier<AttachmentType<Long>> WEAKENED_UNTIL = ATTACHMENTS.register("weakened_until",
+            () -> AttachmentType.builder(() -> 0L).serialize(Codec.LONG.fieldOf("until")).build());
+
     /** Lage und Zustand der sechs Drachennester (an der Oberwelt). */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.world.LairRecords>> LAIRS = ATTACHMENTS.register("lairs",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.world.LairRecords::new)

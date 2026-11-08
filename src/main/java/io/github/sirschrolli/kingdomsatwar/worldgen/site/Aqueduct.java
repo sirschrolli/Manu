@@ -670,8 +670,8 @@ final class Aqueduct {
             this.b.set(-5, 2, -2, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP));
             this.b.chest(4, 1, -3, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.WEST), ModLootTables.SITE_AQUEDUCT_ALCOVE);
             this.b.set(4, 1, 3, Blocks.CAULDRON);
-            this.b.set(-4, 5, 4, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
-            this.b.set(4, 5, -4, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
+            this.b.hang(-4, 5, 4, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
+            this.b.hang(4, 5, -4, Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true));
             if (shaft <= 0) {
                 return;
             }

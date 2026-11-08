@@ -240,8 +240,9 @@ final class VillageBuildings {
         b.bed(bed, 1, 2, a.bed(true), Direction.NORTH);
         b.set(side, 1, 5, furnace(Blocks.FURNACE, Direction.NORTH));
         chimney(a, side, 5, top);
-        b.set(side, 1, 4, barrel(Direction.UP));
-        b.set(side, 2, 4, a.flower(side, 2, 4));
+        // vor dem Ofen bleibt Platz; das Fass mit dem Blumentopf steht unter dem Seitenfenster
+        b.set(side, 1, 3, barrel(Direction.UP));
+        b.set(side, 2, 3, a.flower(side, 2, 3));
         chest(a, 3, 1, 5, Direction.NORTH);
         b.set(side, 1, 2, a.table());
         b.set(side, 1, 1, a.chair(Direction.SOUTH));
@@ -288,7 +289,8 @@ final class VillageBuildings {
         b.set(7, 1, 7, furnace(Blocks.SMOKER, Direction.NORTH));
         chimney(a, 7, 7, top);
         b.set(6, 1, 7, barrel(Direction.UP));
-        b.set(7, 1, 6, Blocks.CRAFTING_TABLE.defaultBlockState());
+        // die Werkbank steht neben dem Herd, nicht davor
+        b.set(7, 1, 5, Blocks.CRAFTING_TABLE.defaultBlockState());
         b.set(5, 1, 3, a.table());
         b.set(5, 1, 4, a.table());
         b.set(4, 1, 3, a.chair(Direction.EAST));
@@ -298,22 +300,22 @@ final class VillageBuildings {
         b.set(5, 2, 3, a.flower(5, 2, 3));
         a.hangingLantern(5, 4, 4);
         b.set(3, 1, 1, a.p.wood.shelf().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.SOUTH));
-        // Obergeschoss: drei Betten, Truhe, Teppich, Laterne
-        b.bed(4, 6, 7, a.bed(false), Direction.SOUTH);
-        b.bed(6, 6, 7, a.bed(false), Direction.SOUTH);
+        // Obergeschoss: drei Betten (mit dem Kopfende an der Wand, nicht darin), Truhe zwischen den Betten, Teppich, Laterne
+        b.bed(4, 6, 6, a.bed(false), Direction.SOUTH);
+        b.bed(6, 6, 6, a.bed(false), Direction.SOUTH);
         b.bed(7, 6, 2, a.bed(false), Direction.NORTH);
         chest(a, 5, 6, 7, Direction.NORTH);
+        b.set(5, 6, 3, a.carpet());
         b.set(5, 6, 4, a.carpet());
-        b.set(5, 6, 5, a.carpet());
+        b.set(4, 6, 3, a.carpet());
         b.set(4, 6, 4, a.carpet());
-        b.set(4, 6, 5, a.carpet());
         if (a.style != VillageStyle.CLAY) {
             a.hangingLantern(5, 8, 4);
         } else {
             a.hangingLantern(5, 8, 4);
         }
-        piece.resident(b, 5, 1, 2, VillageProfession.PEASANT, at(4, 6, 8), at(5, 1, 2));
-        piece.resident(b, 3, 1, 5, VillageProfession.PEASANT, at(6, 6, 8), at(4, 1, 5));
+        piece.resident(b, 5, 1, 2, VillageProfession.PEASANT, at(4, 6, 7), at(5, 1, 2));
+        piece.resident(b, 3, 1, 5, VillageProfession.PEASANT, at(6, 6, 7), at(4, 1, 5));
         piece.resident(b, 6, 1, 5, VillageProfession.PEASANT, at(7, 6, 1), at(6, 1, 5));
     }
 
@@ -349,7 +351,12 @@ final class VillageBuildings {
         entrance(a, piece, 4, 6);
         b.set(4, 1, 0, Arch.stairs(a.p.stoneStairs(), Direction.EAST, Half.BOTTOM));
         b.set(6, 1, 0, Arch.stairs(a.p.stoneStairs(), Direction.WEST, Half.BOTTOM));
-        a.hangingLantern(5, 4, 0);
+        if (jetty) {
+            a.hangingLantern(5, 4, 0);
+        } else {
+            // ohne Vorkragung ist über dem Vorplatz nichts: die Laterne hängt an einem Ausleger über der Tür
+            a.bracketLantern(5, 4, 0);
+        }
         a.window(2, 2, 1, Direction.NORTH, 2);
         a.window(8, 2, 1, Direction.NORTH, 2);
         a.window(2, 6, uz0, Direction.NORTH, 2);

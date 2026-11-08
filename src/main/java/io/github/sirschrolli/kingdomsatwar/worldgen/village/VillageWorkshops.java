@@ -418,7 +418,10 @@ final class VillageWorkshops {
         }
         b.bed(7, 1, 5, a.bed(false), Direction.SOUTH);
         chest(a, 1, 1, 4, Direction.EAST, ModLootTables.VILLAGE_HERB_HOUSE);
-        // getrocknete Kräuter an einer Stange unter der Decke
+        // getrocknete Kräuter an einer Stange unter der Decke (die Stange liegt quer von Wand zu Wand)
+        for (int x = 1; x <= 7; x++) {
+            b.set(x, 4, 5, a.p.post(Direction.Axis.X));
+        }
         for (int x = 2; x <= 6; x++) {
             b.set(x, 3, 5, x % 2 == 0 ? Blocks.SPORE_BLOSSOM.defaultBlockState() : Blocks.AIR.defaultBlockState());
         }

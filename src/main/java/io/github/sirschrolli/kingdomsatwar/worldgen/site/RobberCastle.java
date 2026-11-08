@@ -298,6 +298,8 @@ final class RobberCastle {
             // Tür zum Hof (in der Wand zur Mitte hin)
             int dz = cz + sz * 2;
             this.b.door(cx, 1, dz, Blocks.SPRUCE_DOOR, sz > 0 ? Direction.NORTH : Direction.SOUTH);
+            // die Mauer ist dort zwei Blöcke dick: hinter der Tür ein Durchgang zum Hof
+            this.b.air(cx, 1, dz + sz, cx, 2, dz + sz);
             this.b.set(cx, 0, dz + sz, this.yardFloor(cx, dz + sz));
             this.lantern(cx + sx, 6, cz, true);
             this.lantern(cx + sx, 11, cz + sz, true);

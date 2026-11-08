@@ -300,7 +300,7 @@ final class HouseDesigns {
         b.set(2, 1, 2, facing(Blocks.FURNACE, Direction.NORTH));
         chimney(b, 2, 3, 1, top);
         b.set(1, 1, 2, barrel(Direction.UP));
-        b.set(2, 1, 1, s(Blocks.CRAFTING_TABLE));
+        b.set(2, 1, 0, s(Blocks.CRAFTING_TABLE));
         b.set(2, 1, -2, waterCauldron());
         b.set(0, 1, 0, ModBlocks.OAK_TABLE.get());
         b.set(0, 1, -1, seat(ModBlocks.OAK_CHAIR.get(), Direction.SOUTH));
@@ -650,7 +650,7 @@ final class HouseDesigns {
         b.set(2, 2, 1, s(Blocks.BREWING_STAND));
         b.set(2, 2, 3, candle());
         b.fill(4, 1, 1, 4, 2, 2, barrel(Direction.WEST));
-        b.set(4, 2, 3, barrel(Direction.WEST));
+        b.set(4, 2, 3, s(Blocks.POTTED_FERN));
         b.chestAt(4, 1, 3, Direction.WEST);
         // Tische mit Bänken
         for (int x : new int[] {-2, 0}) {
