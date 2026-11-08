@@ -268,12 +268,31 @@ public class CharacterScreen extends Screen {
                     .withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.stats.hint").withStyle(ChatFormatting.GRAY))),
                     mouseX, mouseY);
         }
+        // was er gefunden hat: Herz- und Manakristalle, Biome
         Crystals.Count crystals = Crystals.of(player);
         HeroLevel.Hero hero = HeroLevel.of(player);
-        int cy = y + 2 * line + 6;
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.character.hearts", crystals.hearts(), Crystals.MAX), x, cy, MUTED, false);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.character.mana", crystals.mana(), Crystals.MAX), x, cy + 10, MUTED, false);
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.character.biomes", hero.discoveries()), x, cy + 20, MUTED, false);
+        int cy = y + 2 * line + 7;
+        g.fill(x, cy - 4, x + LEFT_W - 6, cy - 3, 0xFF8B8B8B);
+        this.found(g, new ItemStack(ModItems.HEART_CRYSTAL.get()), crystals.hearts() + "/" + Crystals.MAX, x, cy);
+        this.found(g, new ItemStack(ModItems.MANA_CRYSTAL.get()), crystals.mana() + "/" + Crystals.MAX, x + 40, cy);
+        this.found(g, new ItemStack(Items.FILLED_MAP), String.valueOf(hero.discoveries()), x, cy + line + 1);
+        if (mouseX >= x && mouseX < x + LEFT_W - 6 && mouseY >= cy - 1 && mouseY < cy + 2 * line + 1) {
+            g.setTooltipForNextFrame(this.font, this.lines(List.of(
+                    Component.translatable("gui.kingdomsatwar.character.hearts", crystals.hearts(), Crystals.MAX).withStyle(ChatFormatting.RED),
+                    Component.translatable("gui.kingdomsatwar.character.mana", crystals.mana(), Crystals.MAX).withStyle(ChatFormatting.AQUA),
+                    Component.translatable("gui.kingdomsatwar.character.biomes", hero.discoveries()).withStyle(ChatFormatting.GREEN))),
+                    mouseX, mouseY);
+        }
+    }
+
+    /** Ein kleines Bild und eine Zahl daneben. */
+    private void found(GuiGraphicsExtractor g, ItemStack icon, String text, int x, int y) {
+        g.pose().pushMatrix();
+        g.pose().translate(x - 1, y - 1);
+        g.pose().scale(0.6875f, 0.6875f);
+        g.item(icon, 0, 0);
+        g.pose().popMatrix();
+        g.text(this.font, text, x + 12, y + 1, MUTED, false);
     }
 
     private List<FormattedCharSequence> lines(List<Component> components) {

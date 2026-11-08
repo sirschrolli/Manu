@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.51.0 – Kampferfahrung der Truppen. Deine Soldaten lernen im Kampf: Jeder Treffer und jeder Sieg gibt Kampferfahrung, Kameraden lernen mit, und Stufe um Stufe (bis 20) werden sie stärker. Über Elite hinaus gibt es zwei neue Ränge: **Meister** (erholt sich doppelt so schnell) und **Legende** (zweiter Atem im Kampf, an ihrer Seite lernen die Kameraden schneller) – mit eigenen Schärpen, Orden und Lorbeerkranz. Ränge gibt es erst ab ihrer Stufe; ein Schild unter dem Fadenkreuz zeigt Stufe und Erfahrung jedes Soldaten.**
+> **Testversion 0.52.0 – dein eigenes Levelsystem. Dein Held sammelt **Heldenerfahrung** – für besiegte Monster und Bosse (ein Viertel auch für die Siege deiner Soldaten und Drachen), für Erz, Fortschritte, neue Biome und eroberte Burgen – und steigt bis **Heldenstufe 50** auf. Jede Stufe bringt einen **Talentpunkt** für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst oder Glück (je höchstens zehn). Alles im neuen **Charakterfenster (Taste K)**. Die Erfahrung von Minecraft bleibt genau, wie sie ist.**
+> In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
 > In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
 > In 0.49 kam die Königsburg: Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan und als .litematic, mit zwei Mauerringen, Graben, Kernburg, Bergfried, Palas, Kapelle, Marstall, Königsgarten und einer ganzen Stadt davor. 0.49.1 reparierte die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen.
 > In 0.48 kamen die Großbaustellen: Baupläne bis 320 × 128 × 320 Blöcke, viele Baumeister zugleich, jeder in seinem Abschnitt von 16 × 16 Säulen, und im Stadtfenster eine Karte der Abschnitte.
@@ -359,8 +360,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ✅ fertig |
 | Herz- und Manakristalle: für immer mehr Herzen und Mana (Höhlen, Schatztruhen, Drachenbosse, Erzmagier) | ✅ fertig |
 | Truppen weiter leveln: Kampferfahrung, 20 Stufen, die Ränge Meister und Legende | ✅ fertig |
-| Eigenes Levelsystem für den Charakter (eigene Punkte – die Erfahrung von Minecraft bleibt, wie sie ist) | ⏳ als Nächstes |
-| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ danach |
+| Eigenes Levelsystem für den Charakter: Heldenerfahrung, 50 Heldenstufen, sechs Talente, Charakterfenster (K) | ✅ fertig |
+| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ als Nächstes |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1591,6 +1592,39 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 - **Für immer:** Aufgenommene Kristalle bleiben, auch nach dem Tod – man kehrt mit allen Herzen zurück. In kargen
   Truhen gehen Kristalle nie verloren.
 
+### Heldenstufe und Talente
+
+![Charakterfenster, Heldenerfahrung und Aufstieg](docs/bilder/heldenstufe.jpg)
+
+Dein Held hat ein **eigenes Levelsystem** – ganz getrennt von der Erfahrung von Minecraft: Erfahrungskugeln, Stufen und
+Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrung**:
+
+| Wofür | Heldenerfahrung |
+|---|---|
+| ein besiegtes Monster | die Hälfte seiner Lebenspunkte (ein Zombie 10), Bosse doppelt so viel (höchstens 500) |
+| ein Sieg deiner Soldaten oder gezähmten Drachen | ein Viertel davon |
+| Erz abbauen (nicht mit Behutsamkeit) | Kohle 1, Eisen und Kupfer 2, die meisten Erze 3, Edelstein, Aetherit und Wyvernit 5, Diamant, Smaragd, Antiker Schutt und Draconium 8 |
+| ein Fortschritt | Aufgabe 25, Ziel 60, Herausforderung 150 |
+| ein Biom zum ersten Mal betreten | 20 |
+| eine Stammburg erobern | 500 |
+
+Damit steigst du bis **Heldenstufe 50** auf. Beim Aufstieg erscheint ein goldener Titel, und jede Stufe bringt einen
+**Talentpunkt**; was du an Heldenerfahrung bekommst, steht kurz links über der Schnellleiste. Im **Charakterfenster
+(Taste K)** siehst du deine Heldenstufe, die Leiste bis zur nächsten, deine Werte, deine Herz- und Manakristalle und
+wie viele Biome du entdeckt hast – und verteilst die Punkte:
+
+| Talent | je Punkt (höchstens 10) |
+|---|---|
+| Stärke | +0,5 Schaden |
+| Lebenskraft | +1 Leben (zehn Punkte: fünf Herzen) |
+| Gewandtheit | +2 % Lauftempo |
+| Zähigkeit | +0,5 Rüstung |
+| Zauberkunst | +10 Mana und 5 % schnellere Erholung des Manas |
+| Glück | +0,25 Glück – bessere Beute in Truhen |
+
+Mit 49 Punkten lässt sich nicht alles meistern – du entscheidest, was für ein Held du bist. **Neu verteilen** kostet
+eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
+
 ### Ausrüstung
 
 ![Rüstungen aus Stahl, Konterit und Drachenschuppen](docs/bilder/ausruestung.jpg)
@@ -1817,6 +1851,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw raid [Reich]` · `/kaw raid stop` | (nur Operatoren) sofort einen Heerhaufen gegen die eigene Siedlung schicken (das Reich erklärt dafür den Krieg), alle Heerhaufen abziehen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
+| **K** | Charakterfenster: Heldenstufe, Heldenerfahrung, Talentpunkte verteilen (änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
 | `spiderLook` (Client) | Aussehen der Spinnen: `DETAILED` (eigenes Modell, Standard), `CLASSIC` (Minecrafts Spinne) oder `MOOSLING` (Arachnophobie-Modus: runde Moosbälle ohne Beine statt Spinnen) – im Spiel unter Mods → Kingdoms at War → Konfiguration |
@@ -1902,9 +1937,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
-4. **Der eigene Held** – Herz- und Manakristalle und die Kampferfahrung der Truppen sind fertig; als Nächstes bekommt
-   dein Charakter ein eigenes Levelsystem mit eigenen Punkten – die Erfahrung von Minecraft bleibt dabei genau, wie sie
-   ist. Danach kommen Fahrzeuge und der Belagerungsturm.
+4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
+   Heldenstufen und Talenten sind fertig. Als Nächstes kommen Fahrzeuge und der Belagerungsturm.
 5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung

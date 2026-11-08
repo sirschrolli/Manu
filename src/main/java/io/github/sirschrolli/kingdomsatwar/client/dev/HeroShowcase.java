@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock;
 import io.github.sirschrolli.kingdomsatwar.client.dev.ShowcaseRunner.Step;
 import io.github.sirschrolli.kingdomsatwar.hero.Crystals;
+import io.github.sirschrolli.kingdomsatwar.hero.HeroLevel;
 import io.github.sirschrolli.kingdomsatwar.magic.Mana;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -12,6 +13,7 @@ import java.util.Locale;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -138,6 +140,101 @@ final class HeroShowcase {
         }));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.hud(false));
+    }
+
+    /**
+     * Das eigene Levelsystem: das Charakterfenster (Heldenstufe, Talente, Werte), der Titel beim Aufstieg, die kurze
+     * Anzeige der Heldenerfahrung nach einem Sieg (die Erfahrungskugeln von Minecraft fallen wie immer) und der Tooltip,
+     * wofür es Heldenerfahrung gibt.
+     */
+    static void character(Deque<Step> steps) {
+        int oz = -80;
+        steps.add(Step.server(level -> {
+            int ground = Showcase.ground;
+            Showcase.fill(level, new BlockPos(-12, ground - 1, oz - 16), new BlockPos(12, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(-12, ground, oz - 16), new BlockPos(12, ground + 8, oz + 8), Blocks.AIR.defaultBlockState());
+            Showcase.fill(level, new BlockPos(-3, ground - 1, oz - 6), new BlockPos(3, ground - 1, oz - 2), Blocks.COARSE_DIRT.defaultBlockState());
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            Crystals.set(player, new Crystals.Count(4, 3));
+            // Heldenstufe 12 mit acht verteilten Punkten – drei sind noch frei
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(12) + (HeroLevel.total(13) - HeroLevel.total(12)) * 2 / 3,
+                    java.util.List.of(3, 2, 0, 2, 1, 0), 17));
+            player.setHealth(player.getMaxHealth());
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:iron_sword"));
+        steps.add(Step.command("item replace entity @s armor.chest with minecraft:iron_chestplate"));
+        steps.add(Step.command("item replace entity @s armor.legs with minecraft:chainmail_leggings"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:command_baton"));
+        steps.add(Step.command("item replace entity @s hotbar.2 with minecraft:bread 12"));
+        steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 12));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.waitTicks(40));
+
+        // 1. das Charakterfenster
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("hero_0_screen"));
+        // 2. darüber: wofür es Heldenerfahrung gibt
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 92 + 60, 26)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("hero_1_sources"));
+        steps.add(Step.screen(minecraft -> null));
+
+        // 3. ein Sieg: die Heldenerfahrung erscheint kurz über der Leiste, die Erfahrungskugeln fallen wie immer
+        steps.add(Step.server(level -> {
+            var zombie = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get().create(level,
+                    net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            if (zombie != null) {
+                zombie.snapTo(0.5, Showcase.ground, oz - 2.5, 0.0f, 0.0f);
+                zombie.setNoAi(true);
+                // mit Helm brennt er in der Sonne nicht
+                zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new net.minecraft.world.item.ItemStack(
+                        net.minecraft.world.item.Items.IRON_HELMET));
+                level.addFreshEntity(zombie);
+            }
+        }));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, new net.minecraft.world.phys.AABB(new BlockPos(0, Showcase.ground,
+                    oz - 3)).inflate(4)).forEach(zombie -> zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f));
+        }));
+        steps.add(Step.waitTicks(14));
+        steps.add(Step.screenshot("hero_2_gained"));
+
+        // 4. Aufstieg: Heldenstufe 13
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.award(player, HeroLevel.total(13) - HeroLevel.of(player).experience() + 4);
+        }));
+        steps.add(Step.waitTicks(16));
+        steps.add(Step.screenshot("hero_3_levelup"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
+    /** Mauszeiger über eine Stelle des Charakterfensters (Koordinaten im Fenster). */
+    private static void hoverCharacter(net.minecraft.client.Minecraft minecraft, int guiX, int guiY) {
+        int left = (minecraft.getWindow().getGuiScaledWidth() - 276) / 2;
+        int top = (minecraft.getWindow().getGuiScaledHeight() - 222) / 2;
+        double scale = minecraft.getWindow().getGuiScale();
+        try {
+            for (String name : new String[] {"xpos", "ypos"}) {
+                java.lang.reflect.Field field = minecraft.mouseHandler.getClass().getDeclaredField(name);
+                field.setAccessible(true);
+                field.setDouble(minecraft.mouseHandler, name.equals("xpos") ? (left + guiX) * scale : (top + guiY) * scale);
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** Rechtsklick mit dem Gegenstand in der Haupthand – wie im Spiel. */
