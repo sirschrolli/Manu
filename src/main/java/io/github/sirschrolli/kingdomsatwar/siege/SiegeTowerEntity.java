@@ -183,7 +183,7 @@ public class SiegeTowerEntity extends SiegeVehicleEntity {
             problem = "siege.kingdomsatwar.bridge.raise_first";
         } else if (change > 0 && stack.getCount() < LADDERS && !player.hasInfiniteMaterials()) {
             problem = "siege.kingdomsatwar.tower.ladders";
-        } else if (change > 0 && !level.noCollision(this, this.getBoundingBox().expandTowards(0.0, STOREY, 0.0))) {
+        } else if (change > 0 && !this.roomAbove(level)) {
             problem = "siege.kingdomsatwar.tower.no_room";
         }
         if (problem != null) {
@@ -207,6 +207,16 @@ public class SiegeTowerEntity extends SiegeVehicleEntity {
         player.sendOverlayMessage(Component.translatable("siege.kingdomsatwar.tower.height", this.getDisplayName(), (int) this.platform())
                 .withStyle(ChatFormatting.GOLD));
         return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * Ist über dem Turm Platz für ein weiteres Stockwerk? Nur Blöcke (und der Weltrand) zählen: Wer neben dem Turm steht
+     * oder schon oben ist, hindert den Aufbau nicht.
+     */
+    private boolean roomAbove(ServerLevel level) {
+        AABB box = this.getBoundingBox();
+        AABB storey = new AABB(box.minX, box.maxY, box.minZ, box.maxX, box.maxY + STOREY, box.maxZ).deflate(0.01, 0.0, 0.01);
+        return level.noBlockCollision(this, storey) && level.noBorderCollision(this, storey);
     }
 
     // =====================================================================================

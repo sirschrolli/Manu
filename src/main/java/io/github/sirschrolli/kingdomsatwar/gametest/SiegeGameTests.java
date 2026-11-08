@@ -8,6 +8,8 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
+import io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity;
+import io.github.sirschrolli.kingdomsatwar.siege.SiegeWagonEntity;
 import io.github.sirschrolli.kingdomsatwar.siege.SiegeCrew;
 import io.github.sirschrolli.kingdomsatwar.siege.SiegeKitItem;
 import io.github.sirschrolli.kingdomsatwar.siege.SiegeProjectile;
@@ -78,6 +80,10 @@ final class SiegeGameTests {
             ModGameTests.TEST_FUNCTIONS.register("siege_protection", () -> SiegeGameTests::protection);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BREAK =
             ModGameTests.TEST_FUNCTIONS.register("siege_break_apart", () -> SiegeGameTests::breakApart);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TOWER =
+            ModGameTests.TEST_FUNCTIONS.register("siege_tower_bridge", () -> SiegeGameTests::tower);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WAGON =
+            ModGameTests.TEST_FUNCTIONS.register("siege_wagon", () -> SiegeGameTests::wagon);
 
     private SiegeGameTests() {}
 
@@ -92,12 +98,162 @@ final class SiegeGameTests {
         add(event, environment, CREW, 1400);
         add(event, environment, PROTECTION, 100);
         add(event, environment, BREAK, 100);
+        add(event, environment, TOWER, 700);
+        add(event, environment, WAGON, 400);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
             DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> test, int maxTicks) {
         event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, maxTicks, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+    }
+
+    // =====================================================================================
+    // Fahrzeuge
+    // =====================================================================================
+
+    /**
+     * Der Belagerungsturm (aufgestellt mit zehn Blöcken Plattformhöhe) vor einer dreizehn Blöcke hohen Mauer: Die Brücke
+     * fällt nicht; drei Leitern machen den Turm ein Stockwerk höher, dann fällt sie, liegt auf der Mauerkrone auf, und der
+     * Krieger oben stürmt hinüber auf die Mauer (wer schiebt, bleibt). Hochgezogen wird der Turm mit der Axt wieder
+     * niedriger (die Leitern kommen zurück). Ohne Mauer davor fällt nichts.
+     */
+    private static void tower(GameTestHelper helper) {
+        Range r = range(helper, 6, 6, 4, 14);
+        ServerLevel level = r.level();
+        ServerPlayer player = player(helper, r.at(4.5, 0.0, 2.5));
+        SiegeTowerEntity[] t = {null};
+        SoldierEntity[] crew = {null, null};
+        prepared(helper, r, () -> {
+            // eine Mauer drei Blöcke vor dem Turm: dreizehn Blöcke hoch, so hoch wie die Plattform mit zwei Stockwerken
+            for (int x = -4; x <= 4; x++) {
+                for (int z = -6; z <= -4; z++) {
+                    for (int y = 0; y < 13; y++) {
+                        level.setBlock(r.pos(x, y, z), Blocks.STONE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            t[0] = (SiegeTowerEntity) weapon(level, SiegeType.SIEGE_TOWER, r.at(0.5, 0.0, 0.5), 180.0f);
+            t[0].setOwner(player.getUUID());
+            for (int i = 0; i < 2; i++) {
+                SoldierEntity soldier = ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get().create(level, EntitySpawnReason.COMMAND);
+                soldier.snapTo(r.at(1.5 + i, 0.0, 1.5));
+                level.addFreshEntity(soldier);
+                soldier.recruitBy(player);
+                crew[i] = soldier;
+            }
+        })
+                .thenExecute(() -> {
+                    SiegeTowerEntity tower = t[0];
+                    helper.assertTrue(tower.storeys() == 1 && Math.abs(tower.platform() - (SiegeTowerEntity.BASE_PLATFORM + SiegeTowerEntity.STOREY))
+                            < 1.0e-6, "Plattform nicht zehn Blöcke hoch: " + tower.platform());
+                    helper.assertTrue(!tower.lower(level, player), "Brücke fällt auf eine Mauer, die höher ist als die Plattform");
+                    // ein Stockwerk höher: drei Leitern
+                    player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.LADDER, 5));
+                    helper.assertTrue(tower.interact(player, InteractionHand.MAIN_HAND, tower.position()).consumesAction(),
+                            "Leitern machen den Turm nicht höher");
+                    helper.assertValueEqual(tower.storeys(), 2, "Stockwerke nach den Leitern");
+                    helper.assertValueEqual(player.getMainHandItem().getCount(), 5 - SiegeTowerEntity.LADDERS, "verbrauchte Leitern");
+                    helper.assertTrue(Math.abs(tower.platform() - (SiegeTowerEntity.BASE_PLATFORM + 2 * SiegeTowerEntity.STOREY)) < 1.0e-6,
+                            "Plattform nicht dreizehn Blöcke hoch");
+                    // zwei Krieger steigen auf: der erste schiebt, der zweite steht oben
+                    crew[0].startRiding(tower, true, false);
+                    crew[1].startRiding(tower, true, false);
+                    helper.assertTrue(tower.soldiersAboard() == 2, "Krieger steigen nicht auf den Turm");
+                    helper.assertTrue(tower.lower(level, player), "Brücke fällt nicht auf die Mauer");
+                })
+                .thenWaitUntil(() -> helper.assertTrue(t[0].open(), "Brücke liegt nicht auf (Winkel " + t[0].bridge() + ")"))
+                .thenExecute(() -> {
+                    Vec3 landing = t[0].landing();
+                    helper.assertTrue(landing != null && landing.y >= r.at(0, 13, 0).y - 0.01 && landing.z <= r.at(0, 0, -3).z,
+                            "Landestelle nicht oben auf der Mauer: " + landing);
+                    helper.assertTrue(t[0].bridge() > 60.0f && t[0].bridge() < 130.0f, "Brücke liegt schief: " + t[0].bridge());
+                })
+                .thenWaitUntil(() -> helper.assertTrue(crew[1].getVehicle() == null && crew[1].getY() >= r.at(0, 12.9, 0).y
+                        && crew[1].getZ() <= r.at(0, 0, -3).z, "Krieger stürmt nicht auf die Mauer (bei " + crew[1].position() + ")"))
+                .thenExecute(() -> {
+                    helper.assertTrue(crew[0].getVehicle() == t[0], "wer schiebt, sollte beim Turm bleiben");
+                    // Brücke hoch, dann mit der Axt ein Stockwerk niedriger
+                    t[0].raise(level);
+                })
+                .thenWaitUntil(() -> helper.assertTrue(t[0].bridgeUp(), "Brücke wird nicht hochgezogen"))
+                .thenExecute(() -> {
+                    player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
+                    player.setShiftKeyDown(true);
+                    helper.assertTrue(t[0].interact(player, InteractionHand.MAIN_HAND, t[0].position()).consumesAction(), "Axt macht den Turm nicht niedriger");
+                    player.setShiftKeyDown(false);
+                    helper.assertValueEqual(t[0].storeys(), 1, "Stockwerke nach der Axt");
+                    helper.assertTrue(player.getInventory().countItem(Items.LADDER) >= SiegeTowerEntity.LADDERS, "Leitern kommen nicht zurück");
+                    // ohne Mauer davor: nach Süden gedreht fällt nichts
+                    t[0].setYRot(0.0f);
+                    helper.assertTrue(!t[0].lower(level, player), "Brücke fällt ins Leere");
+                    crew[0].discard();
+                    crew[1].discard();
+                    leave(helper, player);
+                    r.close();
+                })
+                .thenSucceed();
+    }
+
+    /**
+     * Der Planwagen: Ladung bleibt beim Speichern und Laden erhalten; an der Leine eines Pferds rollt er hinterher, bis das
+     * Seil wieder kurz ist (das Pferd wird nicht langsamer); schleichend mit der Axt zerlegt, fällt die Ladung heraus.
+     */
+    private static void wagon(GameTestHelper helper) {
+        Range r = range(helper, 7, 6, 4, 22);
+        ServerLevel level = r.level();
+        ServerPlayer player = player(helper, r.at(4.5, 0.0, 2.5));
+        SiegeWagonEntity[] w = {null};
+        net.minecraft.world.entity.animal.equine.Horse[] horse = {null};
+        double[] start = {0.0};
+        prepared(helper, r, () -> {
+            w[0] = (SiegeWagonEntity) weapon(level, SiegeType.WAGON, r.at(0.5, 0.0, 0.5), 180.0f);
+            w[0].setOwner(player.getUUID());
+            horse[0] = net.minecraft.world.entity.EntityTypes.HORSE.create(level, EntitySpawnReason.COMMAND);
+            horse[0].snapTo(r.at(0.5, 0.0, -9.5));
+            horse[0].setNoAi(true);
+            level.addFreshEntity(horse[0]);
+        })
+                .thenExecute(() -> {
+                    SiegeWagonEntity wagon = w[0];
+                    wagon.cargo().setItem(0, new ItemStack(Items.STONE_BRICKS, 64));
+                    wagon.cargo().setItem(9, new ItemStack(Items.BREAD, 16));
+                    helper.assertValueEqual(wagon.usedSlots(), 2, "belegte Plätze im Laderaum");
+                    helper.assertValueEqual(wagon.cargo().getContainerSize(), 9 * SiegeWagonEntity.ROWS, "Größe des Laderaums");
+                    // Speichern und Laden
+                    net.minecraft.world.level.storage.TagValueOutput out = net.minecraft.world.level.storage.TagValueOutput.createWithContext(
+                            net.minecraft.util.ProblemReporter.DISCARDING, level.registryAccess());
+                    wagon.saveWithoutId(out);
+                    SiegeWagonEntity loaded = (SiegeWagonEntity) ModEntities.siegeWeapon(SiegeType.WAGON).create(level, EntitySpawnReason.LOAD);
+                    loaded.load(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING,
+                            level.registryAccess(), out.buildResult()));
+                    helper.assertTrue(loaded.cargo().getItem(0).is(Items.STONE_BRICKS) && loaded.cargo().getItem(0).getCount() == 64
+                            && loaded.cargo().getItem(9).is(Items.BREAD), "Ladung geht beim Speichern verloren");
+                    // an die Leine des Pferds
+                    start[0] = wagon.getZ();
+                    wagon.setLeashedTo(horse[0], true);
+                })
+                .thenWaitUntil(() -> helper.assertTrue(w[0].getZ() < start[0] - 4.0 && w[0].towed(), "Wagen rollt dem Pferd nicht hinterher (bei "
+                        + w[0].position() + ")"))
+                .thenExecute(() -> {
+                    helper.assertTrue(w[0].getLeashHolder() == horse[0], "Leine löst sich");
+                    helper.assertTrue(!horse[0].hasEffect(net.minecraft.world.effect.MobEffects.SLOWNESS), "der leere Wagen macht das Pferd langsamer");
+                    // zerlegen: die Ladung fällt heraus
+                    Vec3 at = w[0].position();
+                    player.snapTo(at.add(2.0, 0.0, 0.0));
+                    player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
+                    player.setShiftKeyDown(true);
+                    w[0].interact(player, InteractionHand.MAIN_HAND, at);
+                    player.setShiftKeyDown(false);
+                    helper.assertTrue(!w[0].isAlive(), "Wagen lässt sich nicht zerlegen");
+                    List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(at, at).inflate(4.0));
+                    helper.assertTrue(drops.stream().anyMatch(d -> d.getItem().is(Items.STONE_BRICKS)) && drops.stream().anyMatch(d -> d.getItem().is(Items.BREAD)),
+                            "Ladung fällt beim Zerlegen nicht heraus");
+                    horse[0].discard();
+                    leave(helper, player);
+                    r.close();
+                })
+                .thenSucceed();
     }
 
     // =====================================================================================
