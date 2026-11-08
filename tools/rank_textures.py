@@ -6,8 +6,8 @@ ihm liegt (siehe SoldierRankLayer).
   * veteran  – purpurne Schärpe mit Silbersaum, ein silberner Ärmelstreifen
   * elite    – purpurne Schärpe mit Goldsaum, zwei goldene Ärmelstreifen, goldene Schulterstücke, Ehrenmedaille
   * meister  – karmesinrote Schärpe mit Goldsaum, drei Ärmelstreifen, Schulterstücke, zwei Orden
-  * legende  – königsblaue Schärpe mit Goldsaum, drei Ärmelstreifen, Schulterstücke, ein goldener Stern auf der Brust
-               und ein goldener Lorbeerkranz um den Kopf
+  * legende  – elfenbeinweiße Schärpe mit hellem Goldsaum, drei Ärmelstreifen, Schulterstücke, ein goldener Stern auf
+               der Brust und ein goldener Lorbeerkranz um den Kopf (auch oben auf dem Kopf zu sehen)
 
     python3 tools/rank_textures.py            # schreibt nach src/main/resources/assets/kingdomsatwar/textures/entity/soldier/rank
 """
@@ -29,7 +29,7 @@ def hexc(h: str, a: int = 255) -> tuple[int, int, int, int]:
 SASHES = {
     "purple": (hexc("8540AD"), hexc("6A2C8C"), hexc("4A1D64")),
     "crimson": (hexc("D0464A"), hexc("A82A30"), hexc("74161C")),
-    "royal": (hexc("4A72D6"), hexc("2E52B0"), hexc("1D3478")),
+    "ivory": (hexc("FFFDF4"), hexc("EDE6D2"), hexc("C9BFA6")),
 }
 SILVER = (hexc("D3D7DD"), hexc("9EA4AD"))
 GOLD = (hexc("E8B83A"), hexc("A9791C"))
@@ -39,7 +39,7 @@ BRIGHT_GOLD = (hexc("F6CF52"), hexc("B8862A"))
 def make(rank: int) -> Image.Image:
     img = Image.new("RGBA", (128, 64), (0, 0, 0, 0))
     px = img.load()
-    light, mid, dark = SASHES["purple" if rank <= 2 else "crimson" if rank == 3 else "royal"]
+    light, mid, dark = SASHES["purple" if rank <= 2 else "crimson" if rank == 3 else "ivory"]
     trim, trim_dark = SILVER if rank == 1 else BRIGHT_GOLD if rank == 4 else GOLD
 
     def sash_face(u0: int, v0: int, reverse: bool) -> None:
@@ -121,13 +121,16 @@ def make(rank: int) -> Image.Image:
         for (u, v, c) in ((22, 21, "FFF0B0"), (21, 22, "F6CF52"), (22, 22, "FFE58A"), (23, 22, "F6CF52"), (22, 23, "E8B83A"),
                           (21, 24, "B8862A"), (23, 24, "B8862A")):
             px[u, v] = hexc(c)
-        # Lorbeerkranz: rund um den Kopf (Seiten 0..31, Zeilen 8..15) ein goldenes Band mit Blättern darüber
+        # Lorbeerkranz: rund um den Kopf (Seiten 0..31, Zeilen 8..15) ein goldenes Band mit Blättern darüber und darunter
         for u in range(32):
-            px[u, 10] = trim_dark if u % 4 == 3 else trim
-            if u % 2 == 0:
-                px[u, 9] = trim
+            px[u, 9] = trim_dark if u % 4 == 3 else trim
+            px[u, 8] = trim if u % 2 == 0 else (0, 0, 0, 0)
             if u % 4 == 1:
-                px[u, 8] = trim_dark
+                px[u, 10] = trim_dark
+        # oben auf dem Kopf (8..15, 0..7): der Kranz als goldener Ring am Rand
+        for k in range(8):
+            for (u, v) in ((8 + k, 0), (8 + k, 7), (8, k), (15, k)):
+                px[u, v] = trim if (u + v) % 2 == 0 else trim_dark
         # vorn über der Stirn treffen sich die Zweige: ein kleines Juwel
         px[11, 9] = hexc("E04A44")
         px[12, 9] = hexc("E04A44")

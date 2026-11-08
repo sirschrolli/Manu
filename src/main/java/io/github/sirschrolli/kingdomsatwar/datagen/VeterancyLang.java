@@ -31,7 +31,7 @@ final class VeterancyLang {
         text.add("gui.kingdomsatwar.recruitment.result.needs_level", "More experience needed", "Mehr Erfahrung nötig");
         text.add("gui.kingdomsatwar.recruitment.rank_up.needs", "Promotion to %1$s from level %2$s – %3$s combat experience to go",
                 "Befördern zum Rang %1$s ab Stufe %2$s – noch %3$s Kampferfahrung");
-        text.add("gui.kingdomsatwar.recruitment.rank_requirement", "from level %s", "ab Stufe %s");
+        text.add("gui.kingdomsatwar.recruitment.rank_requirement", "From level %s:", "Ab Stufe %s:");
         text.add("gui.kingdomsatwar.recruitment.rank_up.perk.3", "Master: recovers twice as fast outside battle",
                 "Meister: erholt sich außerhalb des Kampfes doppelt so schnell");
         text.add("gui.kingdomsatwar.recruitment.rank_up.perk.4", "Legend: a second wind once per battle, comrades nearby learn faster",

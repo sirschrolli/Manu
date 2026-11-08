@@ -13,7 +13,7 @@ import net.minecraft.resources.Identifier;
 /**
  * Rangabzeichen über der Rüstung: Veteranen tragen eine purpurne Schärpe mit silbernem Saum und einen silbernen
  * Ärmelstreifen, Elitekämpfer die Schärpe mit Goldsaum, zwei goldene Ärmelstreifen, goldene Schulterstücke und eine
- * Ehrenmedaille, Meister eine karmesinrote Schärpe, drei Streifen und zwei Orden, Legenden eine königsblaue Schärpe,
+ * Ehrenmedaille, Meister eine karmesinrote Schärpe, drei Streifen und zwei Orden, Legenden eine elfenbeinweiße Schärpe,
  * einen goldenen Stern auf der Brust und einen Lorbeerkranz (siehe tools/rank_textures.py). Das Modell ist ein wenig
  * größer als der Soldat und macht jede Geste mit.
  */

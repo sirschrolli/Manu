@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.50.0 – Herz- und Manakristalle. Tief in den Höhlen wachsen leuchtende Kristalle: Jeder Herzkristall gibt dir für immer ein Herz mehr, jeder Manakristall 20 Mana mehr – bis zu zehn von jeder Sorte, also zwanzig Herzen und 200 Mana mehr. Du findest sie auf Höhlenböden, in den Schatztruhen der Bauwerke, Burgen und Magiertürme; jeder Drachenboss hinterlässt einen Herzkristall, jeder Erzmagier einen Manakristall. Was du aufgenommen hast, bleibt – auch nach dem Tod.**
+> **Testversion 0.51.0 – Kampferfahrung der Truppen. Deine Soldaten lernen im Kampf: Jeder Treffer und jeder Sieg gibt Kampferfahrung, Kameraden lernen mit, und Stufe um Stufe (bis 20) werden sie stärker. Über Elite hinaus gibt es zwei neue Ränge: **Meister** (erholt sich doppelt so schnell) und **Legende** (zweiter Atem im Kampf, an ihrer Seite lernen die Kameraden schneller) – mit eigenen Schärpen, Orden und Lorbeerkranz. Ränge gibt es erst ab ihrer Stufe; ein Schild unter dem Fadenkreuz zeigt Stufe und Erfahrung jedes Soldaten.**
+> In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
 > In 0.49 kam die Königsburg: Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan und als .litematic, mit zwei Mauerringen, Graben, Kernburg, Bergfried, Palas, Kapelle, Marstall, Königsgarten und einer ganzen Stadt davor. 0.49.1 reparierte die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen.
 > In 0.48 kamen die Großbaustellen: Baupläne bis 320 × 128 × 320 Blöcke, viele Baumeister zugleich, jeder in seinem Abschnitt von 16 × 16 Säulen, und im Stadtfenster eine Karte der Abschnitte.
 > In 0.47 kamen die Schematiken: Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) lassen sich als eigener Bauplan einlesen, und jeder eigene Plan lässt sich in allen drei Formaten ablegen.
@@ -357,7 +358,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Dragon Architect, Teil 3: Großbaustellen bis 320 × 320 – viele Baumeister zugleich, jeder in seinem Abschnitt | ✅ fertig |
 | Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ✅ fertig |
 | Herz- und Manakristalle: für immer mehr Herzen und Mana (Höhlen, Schatztruhen, Drachenbosse, Erzmagier) | ✅ fertig |
-| Truppen weiter leveln: Kampferfahrung, mehr Ränge und stärkere Veteranen | ⏳ als Nächstes |
+| Truppen weiter leveln: Kampferfahrung, 20 Stufen, die Ränge Meister und Legende | ✅ fertig |
 | Eigenes Levelsystem für den Charakter (eigene Punkte – die Erfahrung von Minecraft bleibt, wie sie ist) | ⏳ als Nächstes |
 | Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ danach |
 | Modrinth-Veröffentlichung | ⏳ später |
@@ -964,8 +965,10 @@ Art mit den Pfeilen neben ihrem Namen:
 
 | Ausbildung | Preis | Wirkung |
 |---|---|---|
-| Rekrut → Veteran ★ | halber Sold + 3 Eisenbarren | +25 % Leben, +2 Rüstung, +1 Schaden, Schärpe mit Silbersaum |
-| Veteran → Elite ★★ | ganzer Sold + 2 Stahlbarren | noch einmal so viel, Goldsaum, Schulterstücke, Ehrenmedaille |
+| Rekrut → Veteran ★ (ab Stufe 3) | halber Sold + 3 Eisenbarren | +25 % Leben, +2 Rüstung, +1 Schaden, Schärpe mit Silbersaum |
+| Veteran → Elite ★★ (ab Stufe 6) | ganzer Sold + 2 Stahlbarren | noch einmal so viel, Goldsaum, Schulterstücke, Ehrenmedaille |
+| Elite → Meister ★★★ (ab Stufe 10) | anderthalbfacher Sold + 3 Stahlbarren + 1 Edelstein | noch einmal so viel, erholt sich außerhalb des Kampfes doppelt so schnell, karmesinrote Schärpe, zwei Orden |
+| Meister → Legende ★★★★ (ab Stufe 15) | doppelter Sold + 2 Edelsteine + 1 Draconium | noch einmal so viel, **zweiter Atem** und **Vorbild** (siehe unten), elfenbeinweiße Schärpe, goldener Stern, Lorbeerkranz, goldener Schimmer |
 | Schwertkämpfer → Ritter | 1 Gold + 2 Stahlbarren | wird Ritter mit Schild – Name und Rang bleiben |
 | Schwertkämpfer → Speerträger | 3 Silber + 1 Eisenspeer | lange Reichweite, hart gegen Reiter |
 | Schwertkämpfer → Schildträger | 5 Silber + 1 Schild + 2 Eisenbarren | zieht die Angreifer auf sich |
@@ -975,7 +978,26 @@ Art mit den Pfeilen neben ihrem Namen:
 | Ritter → Lanzenreiter | 2 Gold + 1 Sattel + 2 Stahlbarren | bekommt sein Schlachtross (gesattelt, im Rossharnisch) |
 | Ritter → Waffenknecht | 1 Gold 3 Silber + 4 Stahlbarren | Plattenpanzer und Streitkolben |
 
-Name, Rang und Herr bleiben bei jeder Ausbildung; eine Frau bleibt eine Frau, ein Mann ein Mann.
+Name, Rang, Kampferfahrung und Herr bleiben bei jeder Ausbildung; eine Frau bleibt eine Frau, ein Mann ein Mann.
+
+**Kampferfahrung und Stufen:** Soldaten lernen im Kampf. Jeder Treffer an einem Gegner gibt Kampferfahrung (ein halber
+Punkt je Schadenspunkt), jeder Sieg die Hälfte der Lebenspunkte des Besiegten – Bosse anderthalbmal so viel –, und
+Kameraden bis 12 Blöcke daneben lernen ein Viertel davon mit. Für Kämpfe gegen Dorfbewohner, Tiere oder die eigenen
+Leute gibt es nichts. Mit der Erfahrung steigt ein Soldat **bis Stufe 20** auf; jede Stufe bringt +3 % Leben, +0,15
+Schaden und +0,1 Rüstung (auf Stufe 20 also +57 % Leben, fast 3 Schaden und knapp 2 Rüstung mehr). Steigt er auf, sprühen
+bunte Funken, und über deiner Leiste steht, wer welche Stufe erreicht hat; reicht es für den nächsten Rang, sagt es dir
+eine Nachricht. **Ränge** gibt es am Feldherrentisch erst ab ihrer Stufe (siehe oben) – der Tisch zeigt Stufe,
+Erfahrungsleiste und „ab Stufe …“, der Knopf verrät, wie viel noch fehlt. Schaust du einen Soldaten an (bis 16 Blöcke
+weit), zeigt ein kleines Schild unter dem Fadenkreuz seinen Namen, seine Stufe und den Weg zur nächsten. Söldner bringen
+so viel Erfahrung mit, wie ihr Rang verlangt (und kosten je Stufe ein wenig mehr); Soldaten aus älteren Spielständen
+bekommen ebenso viel, wie ihr Rang voraussetzt. Die Erfahrung deines eigenen Charakters bleibt davon ganz unberührt.
+
+**Meister und Legenden:** Ein Meister erholt sich außerhalb des Kampfes doppelt so schnell. Eine Legende rafft sich einmal
+in jedem Kampf mit einem **zweiten Atem** auf: Sinkt sie unter ein Viertel ihrer Lebenspunkte, ist sie mit einem
+goldenen Leuchten wieder bei der Hälfte (danach zwei Minuten nicht wieder). Und sie ist ein **Vorbild**: Kameraden bis 12
+Blöcke um sie lernen ein Viertel schneller.
+
+![Vom Rekruten zur Legende: Stufen, Aufstieg und Feldherrentisch](docs/bilder/kampferfahrung.jpg)
 
 **Die neuen Truppen im Kampf:** Der **Lanzenreiter** reitet auf Abstand, senkt die Lanze, galoppiert durch den Gegner
 hindurch und wendet für den nächsten Anritt; die Lanze trifft keine eigenen Leute. Wird er abgeworfen, geht er zu seinem
@@ -1880,9 +1902,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
-4. **Der eigene Held** – Herz- und Manakristalle sind fertig; als Nächstes werden die Truppen weiter gelevelt
-   (Kampferfahrung, mehr Ränge) und dein Charakter bekommt ein eigenes Levelsystem mit eigenen Punkten – die
-   Erfahrung von Minecraft bleibt dabei genau, wie sie ist. Danach kommen Fahrzeuge und der Belagerungsturm.
+4. **Der eigene Held** – Herz- und Manakristalle und die Kampferfahrung der Truppen sind fertig; als Nächstes bekommt
+   dein Charakter ein eigenes Levelsystem mit eigenen Punkten – die Erfahrung von Minecraft bleibt dabei genau, wie sie
+   ist. Danach kommen Fahrzeuge und der Belagerungsturm.
 5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung

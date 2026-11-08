@@ -1142,7 +1142,7 @@
   "gui.kingdomsatwar.recruitment.purse": "Your purse: %s",
   "gui.kingdomsatwar.recruitment.ranged": "Bow",
   "gui.kingdomsatwar.recruitment.rank_cost": "Promotion:",
-  "gui.kingdomsatwar.recruitment.rank_requirement": "from level %s",
+  "gui.kingdomsatwar.recruitment.rank_requirement": "From level %s:",
   "gui.kingdomsatwar.recruitment.rank_up": "Promote",
   "gui.kingdomsatwar.recruitment.rank_up.hint": "Promote to %s: +25%% health, +2 armour, +1 damage",
   "gui.kingdomsatwar.recruitment.rank_up.needs": "Promotion to %1$s from level %2$s – %3$s combat experience to go",

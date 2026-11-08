@@ -447,18 +447,22 @@ public class WarTableScreen extends Screen {
         double armor = type.armor() + 2.0 * rank + Veterancy.ARMOR_PER_LEVEL * (level - 1);
         double attack = type.attack() + rank + Veterancy.DAMAGE_PER_LEVEL * (level - 1);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.HEART, x, sy, 9, 9);
-        ArmyWidgets.stat(g, this.font, x + 12, sy + 1, Mth.ceil(chosen.getHealth()) + "/" + (int) Math.round(health),
-                rankCost == null ? null : String.valueOf((int) Math.round(health + type.health() * 0.25)));
+        ArmyWidgets.stat(g, this.font, x + 12, sy + 1, Mth.ceil(chosen.getHealth()) + "/" + Mth.ceil(health),
+                rankCost == null ? null : String.valueOf(Mth.ceil(health + type.health() * 0.25)));
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 11, 9, 9);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 12, String.valueOf((int) Math.round(armor)), rankCost == null ? null : String.valueOf((int) Math.round(armor + 2)));
         ArmyWidgets.weaponIcon(g, type, x - 1, sy + 21);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 23, String.valueOf((int) Math.round(attack)), rankCost == null ? null : String.valueOf((int) Math.round(attack + 1)));
         // Preise – und ab welcher Stufe befördert werden kann
         int py = y + 68;
-        g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.rank_cost"), x, py, ArmyWidgets.LABEL, false);
+        if (rankCost != null && !Training.readyForRank(chosen)) {
+            // noch zu wenig Erfahrung: statt "Befördern:" steht da, ab welcher Stufe es geht
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.rank_requirement", Veterancy.minLevel(rank + 1)), x, py,
+                    0xFFB02A20, false);
+        } else {
+            g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.rank_cost"), x, py, ArmyWidgets.LABEL, false);
+        }
         if (rankCost != null) {
-            Component needs = Component.translatable("gui.kingdomsatwar.recruitment.rank_requirement", Veterancy.minLevel(rank + 1));
-            g.text(this.font, needs, x + INFO_W - this.font.width(needs), py, Training.readyForRank(chosen) ? 0xFF3F7F2A : 0xFFB02A20, false);
             this.trainCostRow(g, x, py + 9, rankCost, mouseX, mouseY);
         } else {
             g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.max_rank.short"), x, py + 14, ArmyWidgets.MUTED, false);

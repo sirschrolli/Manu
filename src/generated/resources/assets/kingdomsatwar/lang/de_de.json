@@ -1142,7 +1142,7 @@
   "gui.kingdomsatwar.recruitment.purse": "Deine Börse: %s",
   "gui.kingdomsatwar.recruitment.ranged": "Bogen",
   "gui.kingdomsatwar.recruitment.rank_cost": "Befördern:",
-  "gui.kingdomsatwar.recruitment.rank_requirement": "ab Stufe %s",
+  "gui.kingdomsatwar.recruitment.rank_requirement": "Ab Stufe %s:",
   "gui.kingdomsatwar.recruitment.rank_up": "Befördern",
   "gui.kingdomsatwar.recruitment.rank_up.hint": "Befördern zum Rang %s: +25 %% Leben, +2 Rüstung, +1 Schaden",
   "gui.kingdomsatwar.recruitment.rank_up.needs": "Befördern zum Rang %1$s ab Stufe %2$s – noch %3$s Kampferfahrung",
