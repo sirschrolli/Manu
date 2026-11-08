@@ -85,6 +85,19 @@ public final class ModAttachments {
                     .sync((holder, to) -> holder == to, net.minecraft.network.codec.ByteBufCodecs.FLOAT)
                     .build());
 
+    /** Das eigene Levelsystem des Helden: Heldenerfahrung, Talente, Zahl der entdeckten Biome (nur der Spieler selbst sieht es). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero>> HERO = ATTACHMENTS.register("hero",
+            () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero.CODEC.fieldOf("hero"))
+                    .sync((holder, to) -> holder == to, io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.Hero.STREAM_CODEC)
+                    .copyOnDeath()
+                    .build());
+    /** Welche Biome der Held schon betreten hat (nur auf dem Server). */
+    public static final Supplier<AttachmentType<java.util.List<String>>> HERO_BIOMES = ATTACHMENTS.register("hero_biomes",
+            () -> AttachmentType.<java.util.List<String>>builder(() -> java.util.List.of())
+                    .serialize(com.mojang.serialization.Codec.STRING.listOf().fieldOf("biomes"))
+                    .copyOnDeath()
+                    .build());
     /**
      * Wie viele Herz- und Manakristalle der Spieler aufgenommen hat (bleibt nach dem Tod; nur er selbst bekommt es
      * zugeschickt – für die Mana-Leiste und die Anzeige im Tooltip).

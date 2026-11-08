@@ -56,7 +56,8 @@ public final class Mana {
 
     /** So viel Mana fasst der Spieler – nach dem besten Stab, den er bei sich trägt, und seinen Manakristallen. */
     public static float maxFor(Player player) {
-        return max(bestStaff(player)) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player);
+        return max(bestStaff(player)) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player)
+                + io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.bonusMana(player);
     }
 
     /** Mana je Sekunde mit diesem Stab. */
@@ -119,13 +120,13 @@ public final class Mana {
         regenerate(player, REGEN_INTERVAL);
     }
 
-    /** Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck und der Manakristalle). */
+    /** Erholung über so viele Ticks (bis zum Höchstwert des besten Stabs im Gepäck, der Manakristalle und der Zauberkunst). */
     public static void regenerate(Player player, int ticks) {
         ItemStack staff = bestStaff(player);
-        float max = max(staff) + io.github.sirschrolli.kingdomsatwar.hero.Crystals.bonusMana(player);
+        float max = maxFor(player);
         float mana = get(player);
         if (mana < max) {
-            set(player, Math.min(max, mana + regen(staff) * ticks / 20.0f));
+            set(player, Math.min(max, mana + regen(staff) * io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.manaRegenFactor(player) * ticks / 20.0f));
         }
     }
 

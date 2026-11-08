@@ -26,6 +26,11 @@ public final class ModKeyMappings {
     public static final KeyMapping SPELL_WHEEL = new KeyMapping("key.kingdomsatwar.spell_wheel", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_V, MAGIC);
 
+    public static final KeyMapping.Category HERO = new KeyMapping.Category(KingdomsAtWar.id("hero"));
+    /** Charakterfenster: Heldenstufe, Heldenerfahrung und Talente (Standard: K). */
+    public static final KeyMapping CHARACTER = new KeyMapping("key.kingdomsatwar.character", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_K, HERO);
+
     private ModKeyMappings() {}
 
     @SubscribeEvent
@@ -34,11 +39,18 @@ public final class ModKeyMappings {
         event.register(DRAGON_BREATH);
         event.registerCategory(MAGIC);
         event.register(SPELL_WHEEL);
+        event.registerCategory(HERO);
+        event.register(CHARACTER);
     }
 
     @SubscribeEvent
     static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
+        while (CHARACTER.consumeClick()) {
+            if (minecraft.player != null && minecraft.gui.screen() == null) {
+                minecraft.gui.setScreen(new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen());
+            }
+        }
         while (DRAGON_BREATH.consumeClick()) {
             if (minecraft.player != null && minecraft.player.getVehicle() instanceof DragonEntity dragon
                     && dragon.getControllingPassenger() == minecraft.player) {

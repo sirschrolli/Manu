@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.CrystalFormationBlock;
 import io.github.sirschrolli.kingdomsatwar.hero.Crystals;
+import io.github.sirschrolli.kingdomsatwar.hero.HeroLevel;
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
 import io.github.sirschrolli.kingdomsatwar.magic.Mana;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
@@ -69,13 +70,19 @@ final class HeroGameTests {
             ModGameTests.TEST_FUNCTIONS.register("hero_crystal_caves", () -> HeroGameTests::crystalCaves);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CRYSTAL_LOOT =
             ModGameTests.TEST_FUNCTIONS.register("hero_crystal_loot", () -> HeroGameTests::crystalLoot);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> LEVELS =
+            ModGameTests.TEST_FUNCTIONS.register("hero_levels", () -> HeroGameTests::levels);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> TALENTS =
+            ModGameTests.TEST_FUNCTIONS.register("hero_talents", () -> HeroGameTests::talents);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOURCES =
+            ModGameTests.TEST_FUNCTIONS.register("hero_sources", () -> HeroGameTests::sources);
 
     private HeroGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT)) {
+        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -276,6 +283,151 @@ final class HeroGameTests {
             level.getServer().getPlayerList().remove(victim);
         }
         helper.succeed();
+    }
+
+    /** Heldenstufen: steigende Schwellen, jede Stufe zu genau ihrer Erfahrung, ein Talentpunkt je Stufe, Höchststufe 50. */
+    private static void levels(GameTestHelper helper) {
+        helper.assertValueEqual(HeroLevel.total(1), 0, "Stufe 1 ohne Erfahrung");
+        for (int level = 2; level <= HeroLevel.MAX_LEVEL; level++) {
+            int need = HeroLevel.total(level);
+            helper.assertTrue(need > HeroLevel.total(level - 1), "Schwelle zu Heldenstufe " + level + " steigt nicht");
+            helper.assertValueEqual(HeroLevel.levelFor(need), level, "Heldenstufe zur Schwelle " + need);
+            helper.assertValueEqual(HeroLevel.levelFor(need - 1), level - 1, "Heldenstufe knapp unter der Schwelle " + need);
+        }
+        helper.assertValueEqual(HeroLevel.levelFor(Integer.MAX_VALUE / 2), HeroLevel.MAX_LEVEL, "höchste Heldenstufe");
+        HeroLevel.Hero hero = new HeroLevel.Hero(HeroLevel.total(12), List.of(3, 2), 0);
+        helper.assertValueEqual(hero.talents().size(), HeroLevel.Talent.values().length, "Talente werden aufgefüllt");
+        helper.assertValueEqual(hero.unspent(), 11 - 5, "freie Talentpunkte auf Stufe 12");
+        helper.assertTrue(HeroLevel.total(HeroLevel.MAX_LEVEL) - 1 > 30_000, "Heldenstufe 50 ist zu schnell erreicht");
+        helper.assertTrue(HeroLevel.MAX_LEVEL - 1 < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
+                "mit allen Punkten ließe sich jedes Talent meistern");
+        helper.succeed();
+    }
+
+    /**
+     * Talente: Punkte gibt es nur, so viele die Stufe hergibt, höchstens zehn je Talent; jeder Punkt wirkt sofort (Schaden,
+     * Leben, Tempo, Rüstung, Mana, Glück). Neu verteilen kostet eine Silbermünze je Punkt – ohne Geld geht es nicht.
+     * Die Erfahrung von Minecraft bleibt dabei unberührt.
+     */
+    private static void talents(GameTestHelper helper) {
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            player.getInventory().clearContent();
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            double damage = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            double health = player.getAttributeValue(Attributes.MAX_HEALTH);
+            double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+            double armor = player.getAttributeValue(Attributes.ARMOR);
+            double luck = player.getAttributeValue(Attributes.LUCK);
+            float mana = Mana.maxFor(player);
+            int vanilla = player.totalExperience;
+            helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "Punkt ohne Heldenstufe");
+            HeroLevel.award(player, HeroLevel.total(7));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 7, "Heldenstufe nach der Erfahrung");
+            helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
+            for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
+                helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
+            }
+            helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.5)) < 1.0e-6, "Stärke");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0)) < 1.0e-6, "Lebenskraft");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.02) < 1.0e-6, "Gewandtheit");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.5)) < 1.0e-6, "Zähigkeit");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.25)) < 1.0e-6, "Glück");
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 10.0f)) < 1.0e-3f, "Zauberkunst");
+            // höchstens zehn Punkte je Talent
+            HeroLevel.award(player, HeroLevel.total(30));
+            int spent = 0;
+            while (HeroLevel.spend(player, HeroLevel.Talent.STRENGTH)) {
+                spent++;
+            }
+            helper.assertValueEqual(HeroLevel.of(player).points(HeroLevel.Talent.STRENGTH), HeroLevel.MAX_TALENT, "Stärke voll");
+            helper.assertValueEqual(spent, HeroLevel.MAX_TALENT - 1, "Punkte bis zum vollen Talent");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 5.0)) < 1.0e-6, "Stärke gemeistert");
+            // die Werte kommen nach dem Wiedereinstieg zurück
+            player.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(KingdomsAtWar.id("hero_strength"));
+            HeroLevel.apply(player);
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 5.0)) < 1.0e-6, "Stärke nach dem Wiedereinstieg");
+            // neu verteilen: erst ohne, dann mit Geld
+            int cost = HeroLevel.resetCost(HeroLevel.of(player));
+            helper.assertValueEqual(cost, HeroLevel.of(player).spent() * HeroLevel.RESET_PER_POINT, "Preis des Neuverteilens");
+            helper.assertTrue(!HeroLevel.reset(player), "Neu verteilen ohne Geld");
+            player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 9));
+            int before = io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player);
+            helper.assertTrue(HeroLevel.reset(player), "Neu verteilen mit Geld");
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), before - cost, "Münzen nach dem Neuverteilen");
+            HeroLevel.Hero hero = HeroLevel.of(player);
+            helper.assertTrue(hero.spent() == 0 && hero.unspent() == hero.level() - 1, "nach dem Neuverteilen sind alle Punkte frei");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - damage) < 1.0e-6, "Stärke nach dem Neuverteilen");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - health) < 1.0e-6, "Leben nach dem Neuverteilen");
+            helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            helper.succeed();
+        } finally {
+            level(helper).getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /**
+     * Woher Heldenerfahrung kommt: ein besiegter Zombie (die Hälfte seiner Lebenspunkte), ein Viertel davon, wenn ein
+     * eigener Soldat siegt, nichts für Tiere; Erze nach ihrem Wert (Diamant viel, Kohle wenig, Stein gar nicht);
+     * Fortschritte nach ihrer Art; Biome werden zu ihrem Namen.
+     */
+    private static void sources(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            // die Fortschritte, die der erste Sieg bringt, hat er schon (die gäben selbst Heldenerfahrung)
+            var advancements = level.getServer().getAdvancements();
+            for (String id : List.of("adventure/root", "adventure/kill_a_mob")) {
+                var holder = advancements.get(net.minecraft.resources.Identifier.withDefaultNamespace(id));
+                if (holder != null) {
+                    holder.value().criteria().keySet().forEach(criterion -> player.getAdvancements().award(holder, criterion));
+                }
+            }
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            int vanilla = player.totalExperience;
+            var zombie = helper.spawn(ModEntities.ZOMBIE.get(), new BlockPos(4, 1, 6));
+            int expected = HeroLevel.killExperience(zombie);
+            zombie.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f);
+            helper.assertValueEqual(HeroLevel.of(player).experience(), expected, "Heldenerfahrung für den Zombie");
+            helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
+            // ein eigener Soldat siegt: ein Viertel
+            var soldier = helper.spawn(ModEntities.SOLDIERS.get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.SWORDSMAN).get(),
+                    new BlockPos(2, 1, 2));
+            soldier.setOwner(player);
+            var second = helper.spawn(ModEntities.ZOMBIE.get(), new BlockPos(6, 1, 6));
+            second.hurtServer(level, level.damageSources().mobAttack(soldier), 1000.0f);
+            helper.assertValueEqual(HeroLevel.of(player).experience(), expected + Math.round(expected * HeroLevel.FOLLOWER_SHARE),
+                    "Anteil am Sieg des Soldaten");
+            // Tiere geben nichts
+            int before = HeroLevel.of(player).experience();
+            var cow = helper.spawn(net.minecraft.world.entity.EntityTypes.COW, new BlockPos(6, 1, 2));
+            cow.hurtServer(level, level.damageSources().playerAttack(player), 1000.0f);
+            helper.assertValueEqual(HeroLevel.of(player).experience(), before, "Heldenerfahrung für eine Kuh");
+            // Erze
+            helper.assertTrue(HeroLevel.oreExperience(net.minecraft.world.level.block.Blocks.DIAMOND_ORE.defaultBlockState())
+                    > HeroLevel.oreExperience(net.minecraft.world.level.block.Blocks.IRON_ORE.defaultBlockState()), "Diamant lohnt nicht mehr als Eisen");
+            helper.assertTrue(HeroLevel.oreExperience(net.minecraft.world.level.block.Blocks.IRON_ORE.defaultBlockState())
+                    > HeroLevel.oreExperience(net.minecraft.world.level.block.Blocks.COAL_ORE.defaultBlockState()), "Eisen lohnt nicht mehr als Kohle");
+            helper.assertValueEqual(HeroLevel.oreExperience(net.minecraft.world.level.block.Blocks.STONE.defaultBlockState()), 0, "Stein gibt etwas");
+            helper.assertTrue(HeroLevel.oreExperience(ModBlocks.GEMSTONE_ORE.get().defaultBlockState()) >= 5, "Edelsteinerz gibt zu wenig");
+            // Fortschritte
+            var task = advancements.get(net.minecraft.resources.Identifier.withDefaultNamespace("story/mine_stone"));
+            var challenge = advancements.get(net.minecraft.resources.Identifier.withDefaultNamespace("adventure/kill_all_mobs"));
+            helper.assertTrue(task != null && challenge != null, "Vanilla-Fortschritte fehlen");
+            helper.assertTrue(HeroLevel.advancementExperience(challenge.value().display().orElseThrow())
+                    > HeroLevel.advancementExperience(task.value().display().orElseThrow()), "Herausforderung lohnt nicht mehr als Aufgabe");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    private static ServerLevel level(GameTestHelper helper) {
+        return helper.getLevel();
     }
 
     // --- Hilfen ---

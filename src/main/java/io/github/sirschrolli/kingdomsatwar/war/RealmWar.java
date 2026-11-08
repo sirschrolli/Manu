@@ -498,6 +498,7 @@ public final class RealmWar {
             player.spawnAtLocation(level, trophy);
         }
         restoreStandard(level, piece);
+        io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.award(player, io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.CONQUEST);
         int banners = repaintBanners(level, piece.getBoundingBox());
         // wer noch lebt, legt die Waffen nieder und zieht ab
         for (RealmWarriorEntity warrior : level.getEntitiesOfClass(RealmWarriorEntity.class, AABB.of(piece.getBoundingBox()).inflate(32.0),
