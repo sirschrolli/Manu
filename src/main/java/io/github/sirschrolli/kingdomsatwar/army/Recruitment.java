@@ -32,7 +32,9 @@ public final class Recruitment {
         /** Schlachtzug: die Soldaten des Feldlagers ziehen mit – bzw. kehren in die Garnison zurück. */
         MARCHED, RETURNED,
         /** Ohne eigene Siedlung gibt es keine Garnison; im Feldlager steht niemand, der mitziehen könnte. */
-        NO_TOWN, NO_SOLDIERS;
+        NO_TOWN, NO_SOLDIERS,
+        /** Für den nächsten Rang fehlt dem Soldaten noch Kampferfahrung. */
+        NEEDS_LEVEL;
 
         public String translationKey() {
             return "message.kingdomsatwar.recruit." + this.name().toLowerCase(java.util.Locale.ROOT);

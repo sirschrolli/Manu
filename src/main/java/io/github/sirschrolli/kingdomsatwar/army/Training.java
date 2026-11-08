@@ -30,8 +30,8 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Der Feldherrentisch: Eigene Soldaten im Feldlager um den Tisch werden hier geheilt (der Feldscher nimmt ein paar
- * Münzen) und ausgebildet – sie steigen gegen Sold und Ausrüstung im Rang (Rekrut → Veteran → Elite) oder werden zu einer
- * anderen Art:
+ * Münzen) und ausgebildet – sie steigen gegen Sold und Ausrüstung im Rang (Rekrut → Veteran → Elite → Meister →
+ * Legende, jeder Rang erst ab einer Stufe der Kampferfahrung) oder werden zu einer anderen Art:
  * <pre>
  *   Schwertkämpfer ─┬─ Ritter ─┬─ Hauptmann
  *                   │          ├─ Lanzenreiter
@@ -64,15 +64,28 @@ public final class Training {
 
     private Training() {}
 
-    /** Was der nächste Rang kostet ({@code null}: schon Elite). */
+    /**
+     * Was der nächste Rang kostet ({@code null}: schon Legende): Veteran Eisen, Elite Stahl, Meister Stahl und ein
+     * Edelstein, Legende Edelsteine und Draconium – und Sold, der mit jedem Rang steigt. Befördern lässt sich nur, wer die
+     * Stufe dafür erreicht hat ({@link Veterancy#minLevel(int)}).
+     */
     public static @Nullable Cost rankCost(SoldierType type, int rank) {
         if (rank >= SoldierEntity.MAX_RANK) {
             return null;
         }
-        int coins = round(type.coins() * (rank == 0 ? 0.5 : 1.0));
-        return rank == 0
-                ? new Cost(coins, List.of(new Part(() -> Items.IRON_INGOT, 3)))
-                : new Cost(coins, List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 2)));
+        return switch (rank) {
+            case 0 -> new Cost(round(type.coins() * 0.5), List.of(new Part(() -> Items.IRON_INGOT, 3)));
+            case 1 -> new Cost(round(type.coins()), List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 2)));
+            case 2 -> new Cost(round(type.coins() * 1.5), List.of(new Part(() -> ModItems.STEEL_INGOT.get(), 3),
+                    new Part(() -> ModItems.GEMSTONE.get(), 1)));
+            default -> new Cost(round(type.coins() * 2.0), List.of(new Part(() -> ModItems.GEMSTONE.get(), 2),
+                    new Part(() -> ModItems.DRACONIUM.get(), 1)));
+        };
+    }
+
+    /** Hat der Soldat die Stufe für seinen nächsten Rang? */
+    public static boolean readyForRank(SoldierEntity soldier) {
+        return soldier.getRank() < SoldierEntity.MAX_RANK && soldier.getCombatLevel() >= Veterancy.minLevel(soldier.getRank() + 1);
     }
 
     /** Zu welchen Arten sich ein Soldat ausbilden lässt (die übliche zuerst; leer: zu keiner). */
@@ -247,6 +260,9 @@ public final class Training {
             Cost cost = rankCost(soldier.getSoldierType(), soldier.getRank());
             if (cost == null) {
                 return Recruitment.Result.MAX_RANK;
+            }
+            if (!readyForRank(soldier)) {
+                return Recruitment.Result.NEEDS_LEVEL;
             }
             if (!canAfford(player, cost)) {
                 return Recruitment.Result.NOT_ENOUGH;

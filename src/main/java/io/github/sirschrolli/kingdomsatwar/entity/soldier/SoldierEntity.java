@@ -120,10 +120,16 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     private static final EntityDataAccessor<Byte> DATA_RATIONS = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> DATA_HUNGRY = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_CAMPAIGN = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.BOOLEAN);
+    /** Kampferfahrung (die Stufe folgt daraus, siehe {@link io.github.sirschrolli.kingdomsatwar.army.Veterancy}). */
+    private static final EntityDataAccessor<Integer> DATA_EXPERIENCE = SynchedEntityData.defineId(SoldierEntity.class, EntityDataSerializers.INT);
 
-    /** Ränge: 0 Rekrut, 1 Veteran, 2 Elite (am Feldherrentisch ausgebildet oder als Söldner schon erfahren). */
-    public static final int MAX_RANK = 2;
+    /**
+     * Ränge: 0 Rekrut, 1 Veteran, 2 Elite, 3 Meister, 4 Legende (am Feldherrentisch befördert, ab einer Stufe der
+     * Kampferfahrung – oder als Söldner schon erfahren).
+     */
+    public static final int MAX_RANK = 4;
     private static final net.minecraft.resources.Identifier RANK_MODIFIER = KingdomsAtWar.id("rank");
+    private static final net.minecraft.resources.Identifier LEVEL_MODIFIER = KingdomsAtWar.id("level");
     /** Für einen Schlag: der Speer gegen Reiter, Pferde und große Ungetüme. */
     private static final net.minecraft.resources.Identifier SPEAR_BONUS = KingdomsAtWar.id("spear_bonus");
 
@@ -149,6 +155,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     /** Der eigene Name (ohne Art und Rang), z. B. "Konrad". */
     private String personalName = "";
     private int lastHurtTick = -1000;
+    /** Kampferfahrung unter einem ganzen Punkt (aus kleinen Treffern), wird beim nächsten Treffer weitergezählt. */
+    private float experienceRemainder;
+    /** Wann eine Legende zuletzt den zweiten Atem hatte (-1: noch nie). */
+    private long lastSecondWind = -1;
     /** Der Tag (seit Weltbeginn), an dem er zuletzt eine Ration gegessen hat ({@code -1}: noch nie). */
     /** Tag der letzten Mahlzeit ({@link Long#MIN_VALUE}: noch nie – dann kommt er satt an). */
     private long fedDay = Long.MIN_VALUE;
@@ -236,6 +246,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         builder.define(DATA_RATIONS, (byte) 0);
         builder.define(DATA_HUNGRY, false);
         builder.define(DATA_CAMPAIGN, false);
+        builder.define(DATA_EXPERIENCE, 0);
     }
 
     @Override
@@ -256,6 +267,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             output.putBoolean("CallsSentinel", true);
         }
         output.putInt("Rank", this.getRank());
+        output.putInt("Experience", this.getCombatExperience());
         if (!this.personalName.isEmpty()) {
             output.putString("PersonalName", this.personalName);
         }
@@ -293,6 +305,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.callsSentinel = input.getBooleanOr("CallsSentinel", false);
         this.entityData.set(DATA_RANK, (byte) Mth.clamp(input.getIntOr("Rank", 0), 0, MAX_RANK));
         this.applyRank();
+        // Soldaten aus älteren Spielständen haben noch keine Kampferfahrung: Sie bekommen so viel, wie ihr Rang voraussetzt
+        int rankFloor = io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(io.github.sirschrolli.kingdomsatwar.army.Veterancy.minLevel(this.getRank()));
+        this.entityData.set(DATA_EXPERIENCE, Math.max(input.getIntOr("Experience", rankFloor), 0));
+        this.applyLevel();
         this.personalName = input.getStringOr("PersonalName", "");
         this.entityData.set(DATA_HALL, input.getIntOr("HallY", Integer.MIN_VALUE) != Integer.MIN_VALUE
                 ? Optional.of(new BlockPos(input.getIntOr("HallX", 0), input.getIntOr("HallY", 0), input.getIntOr("HallZ", 0)))
@@ -427,14 +443,82 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     }
 
     private void rankModifier(Holder<Attribute> attribute, double amount, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation op) {
+        this.modifier(RANK_MODIFIER, attribute, amount, op);
+    }
+
+    private void modifier(net.minecraft.resources.Identifier id, Holder<Attribute> attribute, double amount,
+            net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation op) {
         var instance = this.getAttribute(attribute);
         if (instance == null) {
             return;
         }
-        instance.removeModifier(RANK_MODIFIER);
+        instance.removeModifier(id);
         if (amount != 0.0) {
-            instance.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(RANK_MODIFIER, amount, op));
+            instance.addPermanentModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(id, amount, op));
         }
+    }
+
+    // =====================================================================================
+    // Kampferfahrung und Stufen
+    // =====================================================================================
+
+    /** Gesammelte Kampferfahrung. */
+    public int getCombatExperience() {
+        return this.entityData.get(DATA_EXPERIENCE);
+    }
+
+    /** Die Stufe (1 bis 20) aus der Kampferfahrung. */
+    public int getCombatLevel() {
+        return io.github.sirschrolli.kingdomsatwar.army.Veterancy.levelFor(this.getCombatExperience());
+    }
+
+    /** Setzt die Kampferfahrung (Befehle, Tests, Söldner) – Leben, Schaden und Rüstung folgen der Stufe. */
+    public void setCombatExperience(int experience) {
+        float missing = this.getMaxHealth() - this.getHealth();
+        this.entityData.set(DATA_EXPERIENCE, Mth.clamp(experience, 0,
+                io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL)));
+        this.applyLevel();
+        this.setHealth(Math.max(1.0f, this.getMaxHealth() - missing));
+    }
+
+    /**
+     * Sammelt Kampferfahrung (Bruchteile werden aufgehoben). Steigt er dabei eine Stufe auf, wächst sein Leben mit (die
+     * Wunden bleiben, wie sie sind) und es wird gefeiert.
+     */
+    public void gainCombatExperience(float amount) {
+        if (amount <= 0.0f || !(this.level() instanceof ServerLevel level)) {
+            return;
+        }
+        int cap = io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL);
+        if (this.getCombatExperience() >= cap) {
+            return;
+        }
+        this.experienceRemainder += amount;
+        int whole = (int) this.experienceRemainder;
+        if (whole <= 0) {
+            return;
+        }
+        this.experienceRemainder -= whole;
+        int before = this.getCombatLevel();
+        float missing = this.getMaxHealth() - this.getHealth();
+        this.entityData.set(DATA_EXPERIENCE, Math.min(cap, this.getCombatExperience() + whole));
+        int after = this.getCombatLevel();
+        if (after > before) {
+            this.applyLevel();
+            this.setHealth(Math.max(1.0f, this.getMaxHealth() - missing));
+            io.github.sirschrolli.kingdomsatwar.army.Veterancy.celebrate(level, this, before, after);
+        }
+    }
+
+    /** Je Stufe über der ersten: +3 % Leben, +0,15 Schaden, +0,1 Rüstung. */
+    private void applyLevel() {
+        int steps = this.getCombatLevel() - 1;
+        this.modifier(LEVEL_MODIFIER, Attributes.MAX_HEALTH, io.github.sirschrolli.kingdomsatwar.army.Veterancy.HEALTH_PER_LEVEL * steps,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        this.modifier(LEVEL_MODIFIER, Attributes.ATTACK_DAMAGE, io.github.sirschrolli.kingdomsatwar.army.Veterancy.DAMAGE_PER_LEVEL * steps,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
+        this.modifier(LEVEL_MODIFIER, Attributes.ARMOR, io.github.sirschrolli.kingdomsatwar.army.Veterancy.ARMOR_PER_LEVEL * steps,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE);
     }
 
     /** Der eigene Name ohne Art und Rang (bei alten Soldaten aus dem gespeicherten Namen gelesen). */
@@ -485,6 +569,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.personalName = other.getPersonalName();
         this.entityData.set(DATA_RANK, (byte) other.getRank());
         this.applyRank();
+        this.entityData.set(DATA_EXPERIENCE, other.getCombatExperience());
+        this.experienceRemainder = other.experienceRemainder;
+        this.applyLevel();
         this.setHealth(Math.max(1.0f, other.getHealth() / Math.max(1.0f, other.getMaxHealth()) * this.getMaxHealth()));
         this.refreshName();
         this.entityData.set(DATA_RATIONS, (byte) other.getRations());
@@ -536,7 +623,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
             case LANCER -> 108;
             default -> 0;
         };
-        int price = (int) Math.ceil(base * (1.0 + 0.5 * this.getRank()));
+        int price = (int) Math.ceil(base * (1.0 + 0.5 * this.getRank()) * (1.0 + 0.04 * (this.getCombatLevel() - 1)));
         return (price + 8) / 9 * 9;
     }
 
@@ -717,6 +804,9 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         boolean hurt = super.hurtServer(level, source, damage);
         if (hurt) {
             this.lastHurtTick = this.tickCount;
+            if (io.github.sirschrolli.kingdomsatwar.army.Veterancy.secondWind(level, this, this.lastSecondWind)) {
+                this.lastSecondWind = this.tickCount;
+            }
             if (source.getDirectEntity() instanceof Projectile && this.canRaiseShield()) {
                 this.raiseShield(30);
             }
@@ -1035,6 +1125,11 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
     public void aiStep() {
         super.aiStep();
         if (!(this.level() instanceof ServerLevel level)) {
+            // eine Legende umgibt ein feiner goldener Schimmer
+            if (this.getRank() == MAX_RANK && this.random.nextInt(7) == 0) {
+                this.level().addParticle(new net.minecraft.core.particles.DustParticleOptions(this.random.nextBoolean() ? 0xF2C14E : 0xFFE9A8, 0.55f),
+                        this.getRandomX(0.6), this.getY() + 0.3 + this.random.nextDouble() * 1.5, this.getRandomZ(0.6), 0.0, 0.02, 0.0);
+            }
             return;
         }
         if (this.voiceCooldown > 0) {
@@ -1056,8 +1151,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         if ((this.tickCount + this.getId()) % 100 == 0) {
             this.rationTick(level);
         }
-        // langsame Heilung außerhalb des Kampfes – nur wer satt ist
-        if (this.tickCount - this.lastHurtTick > 200 && this.tickCount % 80 == 0 && this.getHealth() < this.getMaxHealth() && !this.isHungry()) {
+        // langsame Heilung außerhalb des Kampfes – nur wer satt ist; ein Meister (und eine Legende) erholt sich doppelt so schnell
+        boolean master = this.getRank() >= 3;
+        if (this.tickCount - this.lastHurtTick > (master ? 120 : 200) && this.tickCount % (master ? 40 : 80) == 0
+                && this.getHealth() < this.getMaxHealth() && !this.isHungry()) {
             this.heal(1.0f);
         }
         // der Hauptmann stärkt seine Leute
@@ -1153,7 +1250,8 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
 
     public Component statusMessage() {
         return Component.translatable("message.kingdomsatwar.soldier_status", Component.translatable("soldier.kingdomsatwar.rank." + this.getRank())
-                        .append(" ").append(this.getDisplayName()),
+                        .append(" ").append(this.getDisplayName()).append(" · ")
+                        .append(Component.translatable("soldier.kingdomsatwar.level", this.getCombatLevel())),
                 Mth.ceil(this.getHealth()), Mth.ceil(this.getMaxHealth()),
                 Component.translatable("message.kingdomsatwar.soldier_mode." + this.getMode()),
                 this.isHungry() ? Component.translatable("gui.kingdomsatwar.recruitment.rations.hungry")

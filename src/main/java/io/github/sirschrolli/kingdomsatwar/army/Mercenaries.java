@@ -112,6 +112,9 @@ public final class Mercenaries {
         soldier.setYBodyRot(yaw);
         soldier.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), EntitySpawnReason.EVENT, null);
         soldier.setRank(rank);
+        // so erfahren, wie sein Rang verlangt, dazu ein Stück des Wegs zur nächsten Stufe
+        int floor = Veterancy.total(Veterancy.minLevel(rank));
+        soldier.setCombatExperience(floor + level.getRandom().nextInt(Math.max(1, Veterancy.total(Veterancy.minLevel(rank) + 2) - floor)));
         soldier.setHealth(soldier.getMaxHealth());
         soldier.waitForHire(board, spot);
         soldier.setPersistenceRequired();
