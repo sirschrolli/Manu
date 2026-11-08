@@ -87,8 +87,8 @@ public class UmbrerVillageStructure extends Structure {
     /**
      * Liegt der Punkt höchstens {@code margin} Blöcke neben einem Bauteil eines Umbrer-Dorfs? Für Merkmale, die erst nach
      * dem Dorf entstehen (Bäume, Felsnadeln, Ranken): sie lassen das Dorf frei, als stünde es auf einer Lichtung. Gelesen
-     * werden nur Chunks, die beim Erzeugen ohnehin bereitstehen (Bezüge in der Nähe, der Startchunk höchstens 8 Chunks
-     * entfernt).
+     * werden nur Chunks, die beim Erzeugen ohnehin bereitstehen ({@link io.github.sirschrolli.kingdomsatwar.worldgen.GenChunks}:
+     * Bezüge in den Nachbarchunks, Startchunks höchstens 8 Chunks entfernt) – weiter draußen liegende Teile zählen nicht.
      */
     public static boolean isNearVillage(net.minecraft.world.level.WorldGenLevel level, BlockPos pos, int margin) {
         // auch rund um Nyxars Zitadelle bleibt das Land frei (Bäume ragten sonst über die Mauern in den Thronhof)
@@ -114,7 +114,8 @@ public class UmbrerVillageStructure extends Structure {
             for (int dz = -1; dz <= 1; dz += 2) {
                 int cx = (pos.getX() + dx * margin) >> 4;
                 int cz = (pos.getZ() + dz * margin) >> 4;
-                var chunk = level.getChunk(cx, cz, net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_REFERENCES, false);
+                var chunk = io.github.sirschrolli.kingdomsatwar.worldgen.GenChunks.readable(level, cx, cz,
+                        net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_REFERENCES);
                 if (chunk != null) {
                     starts.addAll(chunk.getReferencesForStructure(village));
                 }
@@ -122,7 +123,8 @@ public class UmbrerVillageStructure extends Structure {
         }
         for (long key : starts) {
             ChunkPos startPos = ChunkPos.unpack(key);
-            var chunk = level.getChunk(startPos.x(), startPos.z(), net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS, false);
+            var chunk = io.github.sirschrolli.kingdomsatwar.worldgen.GenChunks.readable(level, startPos.x(), startPos.z(),
+                    net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS);
             var start = chunk != null ? chunk.getStartForStructure(village) : null;
             if (start == null || !start.isValid()) {
                 continue;

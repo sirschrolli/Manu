@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.worldgen.village;
 
 import com.mojang.serialization.MapCodec;
+import io.github.sirschrolli.kingdomsatwar.worldgen.GenChunks;
 import io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -41,8 +42,8 @@ public final class VillageClearing {
             seen.clear();
             for (int dx = -1; dx <= 1; dx += 2) {
                 for (int dz = -1; dz <= 1; dz += 2) {
-                    ChunkAccess chunk = level.getChunk((pos.getX() + dx * margin) >> 4, (pos.getZ() + dz * margin) >> 4,
-                            ChunkStatus.STRUCTURE_REFERENCES, false);
+                    ChunkAccess chunk = GenChunks.readable(level, (pos.getX() + dx * margin) >> 4, (pos.getZ() + dz * margin) >> 4,
+                            ChunkStatus.STRUCTURE_REFERENCES);
                     if (chunk != null) {
                         seen.addAll(chunk.getReferencesForStructure(village));
                     }
@@ -50,7 +51,7 @@ public final class VillageClearing {
             }
             for (long key : seen) {
                 ChunkPos start = ChunkPos.unpack(key);
-                ChunkAccess chunk = level.getChunk(start.x(), start.z(), ChunkStatus.STRUCTURE_STARTS, false);
+                ChunkAccess chunk = GenChunks.readable(level, start.x(), start.z(), ChunkStatus.STRUCTURE_STARTS);
                 StructureStart found = chunk != null ? chunk.getStartForStructure(village) : null;
                 if (found == null || !found.isValid()) {
                     continue;
