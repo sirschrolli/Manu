@@ -285,7 +285,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** die Veröffentlichung auf Modrinth vorbereiten – und was ihr euch noch wünscht.
+> **Als Nächstes:** was ihr euch noch wünscht.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -365,7 +365,6 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Heldenstufe bis 100 mit sechs Rängen, neues Charakterfenster, Aufstiegs-Szene, Streicheln als Belohnung | ✅ fertig |
 | Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ✅ fertig |
 | Cheat-Befehle für Heldenerfahrung und Kampferfahrung (`/kaw hero`, `/kaw army xp`) | ✅ fertig |
-| Modrinth-Veröffentlichung | ⏳ später |
 
 ---
 
@@ -2020,7 +2019,6 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    eingebauter Bauplan und als .litematic) sind fertig.
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
    100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig.
-5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 

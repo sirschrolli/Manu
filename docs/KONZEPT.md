@@ -20,7 +20,7 @@ Zunächst haben wir festgelegt, auf welcher Minecraft-Version unser Projekt lauf
 | Minecraft-Version | 26.3 |
 | Mod-Loader | NeoForge |
 | Projekt | Eigenes Minecraft-Modpack |
-| Veröffentlichung | Modrinth |
+| Veröffentlichung | nicht auf Modrinth (so entschieden) – die fertige JAR gibt es direkt |
 | Grundidee | Eigenständiges mittelalterliches Modprojekt |
 | Inspiration | Ancient Warfare und Ice and Fire |
 | Sprache unserer Unterhaltung | Deutsch |
@@ -709,7 +709,7 @@ Hier ist die zusammengefasste Übersicht unseres gesamten Vorhabens.
 | Nr. | Bereich | Geplante Funktionen | Priorität im Gesamtkonzept |
 |---|---|---|---|
 | 1 | Technische Basis | Minecraft 26.3, NeoForge | Grundvoraussetzung |
-| 2 | Modprojekt | Eigenständiges Projekt für Modrinth | Grundvoraussetzung |
+| 2 | Modprojekt | Eigenständiges Projekt | Grundvoraussetzung |
 | 3 | Soldaten | Verschiedene Einheitentypen | Hoch |
 | 4 | Armeen | Truppen organisieren und befehligen | Hoch |
 | 5 | NPCs | Bewohner, Arbeiter, Wachen und Soldaten | Hoch |
@@ -734,7 +734,7 @@ Hier ist die zusammengefasste Übersicht unseres gesamten Vorhabens.
 | 24 | Ressourcen | Smaragde und Netherite erhalten | Wichtig |
 | 25 | Rekrutierung | Smaragde für NPC-Rekrutierung | Wichtig |
 | 26 | Burgschematik | Große Burg mit 300 × 300 Blöcken | Wichtig |
-| 27 | Modrinth | Projekt veröffentlichen | Später |
+| 27 | ~~Modrinth~~ | entfällt – nicht mehr gewünscht | – |
 | 28 | Testversion | Spielbare JAR und Testmodpack | Erforderlich |
 
 Die Prioritäten sind eine Zusammenfassung der Bedeutung der Funktionen für unser Gesamtprojekt, keine bereits verbindlich festgelegte Entwicklungsreihenfolge.
@@ -783,7 +783,6 @@ Damit aus unserem Konzept tatsächlich ein spielbares Modpack wird, würde ich d
 - Fehler beheben.
 - Ein vollständiges Modpack zusammenstellen.
 - Eine spielbare Testversion erstellen.
-- Die Veröffentlichung für Modrinth vorbereiten.
 
 Diese Reihenfolge ist ein Entwicklungsvorschlag, nicht die Beschreibung bereits abgeschlossener Arbeit.
 
