@@ -28,7 +28,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
-                              void_maw, shard_warden, distortling, star_ray, warden_shard)
+                              void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
+                              shattered_crown)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -324,6 +325,13 @@ def main():
                 "star_ray", star_ray.PALETTES, preview)
     write_model(warden_shard, "WardenShardGeometry", "Geometrie des Kristallsplitters (Geschoss des Splitterwächters).",
                 "warden_shard", warden_shard.PALETTES, preview)
+    write_model(shattered_king, "ShatteredKingGeometry",
+                "Geometrie des Zerbrochenen Königs (Boss der Leere): Leib mit offener Brust und zersprungenem Herz, Kopf mit Bart "
+                "und schwebender Kristallkrone, Schultern, Gewand in Bahnen, zwei frei schwebende Hände und kreisende Trümmer.",
+                "shattered_king", shattered_king.PALETTES, preview)
+    write_model(shattered_crown, "ShatteredCrownGeometry",
+                "Getragene Krone des Zerbrochenen Königs (Teile wie HumanoidModel, nur der Kopf trägt Reif und schwebende "
+                "Kristallsplitter); Textur als Rüstungsschicht.", "equipment/humanoid", shattered_crown.PALETTES, preview)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

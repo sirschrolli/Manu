@@ -296,6 +296,125 @@ final class VoidShowcase {
         steps.add(Step.screenshot("void_creatures_dormant"));
     }
 
+    // =====================================================================================
+    // Der Thron der Alten und der Zerbrochene König
+    // =====================================================================================
+
+    /** Der Thron der Alten (von oben, von unten, das Podest), dann das Erwachen des Königs und jeder seiner Angriffe. */
+    static void throne(Deque<Step> steps) {
+        double[] c = new double[3];
+        boolean[] ready = new boolean[1];
+        io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity[] king =
+                new io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity[1];
+        net.minecraft.world.entity.LivingEntity[] dummy = new net.minecraft.world.entity.LivingEntity[1];
+        steps.add(Step.hud(false));
+        steps.add(Step.command("gamerule spawn_monsters false"));
+        steps.add(Step.command("difficulty normal"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(VoidGate.THE_VOID);
+            BlockPos center = level == null ? null : io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(level);
+            if (center == null) {
+                ready[0] = true;
+                return;
+            }
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    level.setChunkForced((center.getX() >> 4) + dx, (center.getZ() >> 4) + dz, true);
+                }
+            }
+            c[0] = center.getX() + 0.5;
+            c[1] = center.getY();
+            c[2] = center.getZ() + 0.5;
+            ready[0] = true;
+        }));
+        steps.add(Step.until(() -> ready[0], 6000));
+        double[] cam = new double[3];
+        steps.add(at(c, cam, 30, 15, 42, 0, -1, -3));
+        steps.add(arrived(cam));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(1500));
+        steps.add(Step.waitTicks(100));
+        steps.add(Step.screenshot("void_throne_overview"));
+        steps.add(at(c, cam, 30, -34, 30, 0, -16, 0));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("void_throne_below"));
+        steps.add(at(c, cam, 7, 3, -5, 0, 4, -17));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("void_throne_dais"));
+        // der König erwacht; ein unverwundbarer Ritter dient als Ziel
+        steps.add(at(c, cam, 5.5, 2.5, 3.5, 0, 5.0, -6.5));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(VoidGate.THE_VOID);
+            BlockPos center = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(level);
+            if (!(level.getBlockEntity(io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.seal(center))
+                    instanceof io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity seal)) {
+                return;
+            }
+            seal.reset(level);
+            king[0] = seal.awaken(level);
+            var soldier = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SOLDIERS
+                    .get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get()
+                    .create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            if (soldier != null && king[0] != null) {
+                soldier.setNoAi(true);
+                soldier.setPermanentlyInvulnerable(true);
+                soldier.snapTo(c[0], c[1], c[2] + 5.0, 180.0f, 0.0f);
+                level.addFreshEntity(soldier);
+                dummy[0] = soldier;
+                king[0].forceAttack(level, "", soldier, true);
+            }
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("void_king_awaken"));
+        steps.add(Step.waitTicks(31));
+        steps.add(Step.screenshot("void_king_roar"));
+        steps.add(at(c, cam, 4, 2.2, 12, -0.5, 5.2, -0.5));
+        steps.add(Step.waitTicks(60));
+        String[][] attacks = {{"slam_right", "17", "void_king_slam_raise"}, {"", "6", "void_king_slam"}, {"sweep", "15", "void_king_sweep"},
+                {"volley", "19", "void_king_volley"}, {"gravity", "32", "void_king_gravity"}, {"beam", "62", "void_king_beam"}};
+        for (String[] attack : attacks) {
+            if (!attack[0].isEmpty()) {
+                steps.add(Step.server(overworld -> {
+                    if (king[0] != null && dummy[0] != null) {
+                        king[0].forceAttack(overworld.getServer().getLevel(VoidGate.THE_VOID), attack[0], dummy[0], true);
+                    }
+                }));
+            }
+            steps.add(Step.waitTicks(Integer.parseInt(attack[1])));
+            steps.add(Step.screenshot(attack[2]));
+            if (!attack[0].equals("slam_right")) {
+                steps.add(Step.waitTicks(attack[0].equals("beam") ? 70 : 50));
+            }
+        }
+        steps.add(Step.server(overworld -> {
+            if (king[0] != null) {
+                ServerLevel level = overworld.getServer().getLevel(VoidGate.THE_VOID);
+                king[0].setHealth(1.0f);
+                king[0].hurtServer(level, level.damageSources().generic(), 50.0f);
+            }
+        }));
+        steps.add(Step.waitTicks(36));
+        steps.add(Step.screenshot("void_king_death"));
+        steps.add(Step.waitTicks(60));
+        // seine Krone, getragen (3D-Modell): der Spieler selbst trägt sie, von vorn gesehen, dahinter der Thron
+        steps.add(Step.command("kill @e[type=item]"));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("item replace entity @s armor.head with kingdomsatwar:shattered_crown"));
+        steps.add(Step.command("item replace entity @s armor.chest with minecraft:golden_chestplate"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.once(minecraft -> minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                "execute in kingdomsatwar:the_void run tp @s %.2f %.2f %.2f 20 -22", c[0] + 1.5, c[1], c[2] + 1.5))));
+        steps.add(Step.once(minecraft -> minecraft.options.fov().set(30)));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("void_king_crown"));
+        steps.add(Step.once(minecraft -> {
+            minecraft.options.fov().set(70);
+            minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
+        }));
+    }
+
     private static <T extends net.minecraft.world.entity.Mob> T creature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
             double x, double y, double z, float yaw, java.util.function.Consumer<T> setup) {
         T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);

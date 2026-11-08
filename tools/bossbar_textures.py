@@ -53,6 +53,9 @@ ELEMENTS = {
                   f0="#063a5e", f1="#0e78b8", f2="#3cc4ec", f3="#d8faff"),
     "shadow": dict(m0="#0c0812", m1="#2e2442", m2="#8a7ca8", acc="#b46cff", glow="#f0e0ff", deep="#12061e",
                    f0="#2a0a4e", f1="#6420b0", f2="#a660ff", f3="#f2e4ff"),
+    # der Zerbrochene König (Boss der Leere): Sternenmarmor mit Goldsaum, Füllung wie ein Sternennebel
+    "void": dict(m0="#16121f", m1="#4a4262", m2="#d2cae6", acc="#d6a23c", glow="#f4ecff", deep="#0a0618",
+                 f0="#1a0c40", f1="#4c26a0", f2="#9a6ae8", f3="#f4eeff", gold="#e2b04a", gold_dark="#7a5420"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -456,7 +459,107 @@ def deco_shadow(img: Image.Image, pal: dict) -> None:
             put(px, img, ex + k, ey + dy, col)
 
 
-DECOS = {"shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_void(img: Image.Image, pal: dict) -> None:
+    """Schwebende Bruchstücke aus Sternenmarmor über der Leiste (am Medaillon dichter), dazwischen Sterne; darunter
+    Sternenstaub; am Medaillon die Krone aus sieben Kristallsplittern des Königs; als Spitze sein zersprungenes Herz."""
+    px = img.load()
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    m0, m1, m2 = c(pal, "m0"), c(pal, "m1"), c(pal, "m2")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def chunk(cx: int, cy: int, w: int, h: int, seed: int):
+        """Ein kleines Bruchstück: unregelmäßiger Umriss, oben hell, eine goldene Kante."""
+        for dy in range(h):
+            for dx in range(w):
+                corner = (dx in (0, w - 1)) and (dy in (0, h - 1)) and hash01(seed, dx, dy) > 0.35
+                if corner:
+                    continue
+                edge = dx in (0, w - 1) or dy in (0, h - 1)
+                if edge:
+                    col = OUTLINE
+                elif dy == 1:
+                    col = m2
+                elif dy == h - 2 and hash01(seed, 3) > 0.4:
+                    col = gold
+                else:
+                    col = mix(m1, m2, 0.35 + 0.3 * hash01(seed, dx, dy))
+                put(px, img, cx + dx, cy + dy, col)
+
+    def star(x: int, y: int, big: bool):
+        put(px, img, x, y, f3)
+        if big:
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                put(px, img, x + dx, y + dy, f2)
+
+    # ein zerbrochener Fries: am Medaillon liegen die Stücke noch auf dem Rahmen, nach rechts lösen sie sich, steigen
+    # und werden kleiner, bis nur noch Sterne treiben
+    x = BAR_X + 1
+    while x < BAR_X + BAR_W - 6:
+        rel = (x - BAR_X) / BAR_W
+        w = max(3, round(7 - 4 * rel + hash01(x, 31)))
+        h = 4 if rel < 0.55 else 3
+        lift = round(rel * 8 + (hash01(x, 41) - 0.5) * 2.0 * min(1.0, rel * 3))
+        near_gem = any(abs(x + w // 2 - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS)
+        if not near_gem and rel < 0.9:
+            chunk(x, top - lift - h + 1, w, h, x)
+            if hash01(x, 89) > 0.55 and w >= 4:
+                put(px, img, x + 1 + round(hash01(x, 97) * (w - 3)), top - lift - h + 3, f2)   # leuchtender Riss
+        gap = 2 + round(rel * 6 + hash01(x, 59) * 2)
+        if rel > 0.25 and hash01(x, 43) > 0.4:
+            star(x + w + gap // 2, top - lift - 3 - round(hash01(x, 47) * 5), hash01(x, 53) > 0.75)
+        x += w + gap
+    # Sternenstaub unter der Leiste
+    for x in range(BAR_X + 2, BAR_X + BAR_W, 6):
+        if hash01(x, 61) > 0.6:
+            y = bottom + 2 + round(hash01(x, 67) * 4)
+            put(px, img, x, y, f3 if hash01(x, 71) > 0.5 else f2)
+            if hash01(x, 73) > 0.8:
+                put(px, img, x + 1, y + 1, f1)
+    # die Krone aus sieben Kristallsplittern über dem Medaillon (die mittlere am höchsten)
+
+    def shard(cx: int, base: int, h: int, w: int, lean: float):
+        for k2 in range(h):
+            t = k2 / max(1, h - 1)
+            half = max(0, round((w / 2) * (1 - t)))
+            off = round(lean * k2)
+            for dx in range(-half, half + 1):
+                if abs(dx) == half:
+                    col = mix(f0, m0, 0.35)
+                else:
+                    col = f3 if (dx < 0 and t > 0.35) else (f2 if dx <= 0 else f1)
+                put(px, img, cx + dx + off, base - k2, col)
+    angles = [-90 + (i - 3) * 22 for i in range(7)]
+    for i, ang in enumerate(angles):
+        a = math.radians(ang)
+        x = round(EMB_X + math.cos(a) * (EMB_R - 1))
+        y = round(EMB_Y + math.sin(a) * (EMB_R - 1))
+        h = 10 if i == 3 else (8 if i in (2, 4) else 6)
+        shard(x, y, h, 3 if i != 3 else 4, math.cos(a) * 0.55)
+    # goldener Reif um das Medaillon (oben)
+    for ang in range(-170, -9, 4):
+        a = math.radians(ang)
+        put(px, img, round(EMB_X + math.cos(a) * (EMB_R + 0.2)), round(EMB_Y + math.sin(a) * (EMB_R + 0.2)),
+            gold if ang < -90 else gold_dark)
+    # Spitze: das zersprungene Herz – zwei Kristallhälften, dazwischen ein leuchtender Spalt
+    ex, ey = BAR_X + BAR_W + 3, BAR_Y + BAR_H // 2
+    for kx in range(12):
+        half = round(4.6 * math.sin(math.pi * (kx + 0.5) / 12) + (1.2 if kx in (2, 3, 8, 9) else 0.0))
+        for dy in range(-half, half + 1):
+            gap = abs(kx - 6 + (1 if dy > 0 else 0) * (dy % 2)) <= 0
+            if abs(dy) == half:
+                col = OUTLINE
+            elif gap:
+                col = f3
+            else:
+                t = (dy + half) / max(1, 2 * half)
+                col = mix(f2, f0, t) if kx < 6 else mix(f1, f0, t * 0.8)
+                if kx in (2, 3) and dy == -half + 1:
+                    col = f3
+            put(px, img, ex + kx, ey + dy, col)
+
+
+DECOS = {"void": deco_void, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -493,6 +596,10 @@ def fill_value(element: str, x: int, y: int) -> float:
         return 0.35 + 0.4 * hash01(x // 2, y // 2, 7) * (0.5 + 0.5 * math.sin(tau * x / 64))
     if element == "water":
         return 0.5 + 0.5 * math.sin(tau * (x / 32 - y / 9))
+    if element == "void":
+        # ein Sternennebel: weiche Schleier, darin einzelne helle Sterne
+        neb = 0.4 + 0.2 * math.sin(tau * x / 64 + 1.4 * math.sin(tau * y / 9)) + 0.12 * math.sin(tau * x / 32 - tau * y / 18)
+        return 1.0 if hash01(x, y, 83) > 0.965 else neb
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -592,21 +699,32 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water
+    from entitygen.models import boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, shattered_king
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
-           "water": boss_water, "shadow": boss_shadow}[element]
+           "water": boss_water, "shadow": boss_shadow, "void": shattered_king}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
     tex, glow = paint_model(m, mod.materials(variant), mod.PALETTES[variant], seed=100)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38}.get(element, -42)
+    if element == "void":
+        # nur Kopf, Bart und Krone (Schultern, Hände und Trümmer würden das kleine Bildnis überladen)
+        keep = {"body", "head", "beard", "beard_tip", "crown"} | {f"crown_{k}" for k in range(7)}
+
+        def strip(bone):
+            if bone.name not in keep:
+                bone.cubes.clear()
+            for child in bone.children:
+                strip(child)
+        strip(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26}.get(element, -42)
     big = render(m, tex, glow, yaw, 6, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["head"])
     img = big.resize((64, 64), Image.LANCZOS)
-    img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4}.get(element, 1.4))
+    img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
+                                                 "void": 1.0}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

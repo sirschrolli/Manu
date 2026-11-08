@@ -77,10 +77,15 @@ public final class ModGameEvents {
                 .then(Commands.literal("citadel").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> citadel(context.getSource().getPlayerOrException(), false))
                         .then(Commands.literal("tp").executes(context -> citadel(context.getSource().getPlayerOrException(), true))))
+                .then(Commands.literal("throne").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> throne(context.getSource().getPlayerOrException(), ""))
+                        .then(Commands.literal("tp").executes(context -> throne(context.getSource().getPlayerOrException(), "tp")))
+                        .then(Commands.literal("reset").executes(context -> throne(context.getSource().getPlayerOrException(), "reset"))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
                         .then(Commands.literal("reset").executes(context -> resetLair(context.getSource().getPlayerOrException()))))
+                .then(io.github.sirschrolli.kingdomsatwar.command.DimensionCommand.command())
                 .then(storyCommand())
                 .then(sealCommand())
                 .then(io.github.sirschrolli.kingdomsatwar.war.RealmWar.command())
@@ -278,6 +283,32 @@ public final class ModGameEvents {
             shadow.getChunk(center.getX() >> 4, (center.getZ() + 76) >> 4);
             int y = shadow.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center.getX(), center.getZ() + 76);
             player.teleportTo(shadow, center.getX() + 0.5, y, center.getZ() + 76.5, java.util.Set.of(), 180.0f, 0.0f, true);
+        }
+        return 1;
+    }
+
+    /** {@code /kaw throne [tp|reset]}: wo der Thron der Alten schwebt; hinbringen; den König wieder schlafen legen. */
+    private static int throne(ServerPlayer player, String mode) {
+        ServerLevel voidLevel = player.level().getServer().getLevel(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID);
+        BlockPos center = voidLevel == null ? null : io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(voidLevel);
+        if (center == null) {
+            player.sendSystemMessage(Component.translatable("command.kingdomsatwar.throne.none").withStyle(net.minecraft.ChatFormatting.RED));
+            return 0;
+        }
+        player.sendSystemMessage(Component.translatable("command.kingdomsatwar.throne.at", center.getX(), center.getY(), center.getZ()));
+        if (mode.equals("tp")) {
+            voidLevel.getChunk(center.getX() >> 4, (center.getZ() + 20) >> 4);
+            player.teleportTo(voidLevel, center.getX() + 0.5, center.getY(), center.getZ() + 20.5, java.util.Set.of(), 180.0f, 0.0f, true);
+        } else if (mode.equals("reset")) {
+            BlockPos seal = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.seal(center);
+            voidLevel.getChunk(seal.getX() >> 4, seal.getZ() >> 4);
+            if (voidLevel.getBlockEntity(seal) instanceof io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity throne) {
+                throne.reset(voidLevel);
+                player.sendSystemMessage(Component.translatable("command.kingdomsatwar.throne.reset"));
+            } else {
+                player.sendSystemMessage(Component.translatable("command.kingdomsatwar.throne.no_seal").withStyle(net.minecraft.ChatFormatting.RED));
+                return 0;
+            }
         }
         return 1;
     }

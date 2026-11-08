@@ -568,6 +568,61 @@ def void_shard() -> Image.Image:
     return img
 
 
+def throne_seal() -> tuple[Image.Image, Image.Image]:
+    """Thronsiegel: polierter Leerenstein, darin ein goldener Ring mit einer Krone aus sieben Splittern (leuchtend)."""
+    img = polished_void_stone()
+    px = img.load()
+    glow = pa.new()
+    gp = glow.load()
+    for y in range(N):
+        for x in range(N):
+            d = math.hypot(x - 7.5, y - 7.5)
+            if 5.6 < d < 6.6:
+                col = GOLD[2] if (x + y) % 3 else GOLD[1]
+                px[x, y] = col
+                gp[x, y] = pa.mix((0, 0, 0, 255), col, 0.8)
+    # die Krone: sieben Splitter über einem Reif
+    for x in range(5, 11):
+        px[x, 9] = GOLD[2]
+        px[x, 10] = GOLD[1]
+        gp[x, 9] = GOLD[2]
+    for (x, top) in ((5, 7), (6, 6), (7, 4), (8, 4), (9, 6), (10, 7)):
+        for y in range(top, 9):
+            col = CRYSTAL[5] if y == top else CRYSTAL[3]
+            px[x, y] = col
+            gp[x, y] = col
+    return img, glow
+
+
+CROWN = [
+    "................",
+    ".......5........",
+    ".......53.......",
+    "...5...43...5...",
+    ".5.43..43..43.5.",
+    ".4.43..42..42.4.",
+    ".3.32..42..32.3.",
+    ".2.21..21..21.2.",
+    "................",
+    "................",
+    "..y..........y..",
+    "..YWYYYYYYYYWY..",
+    "..yGyGyVvyGyGy..",
+    "..GgGgGgGgGgGg..",
+    "................",
+    "................",
+]
+
+
+def shattered_crown() -> Image.Image:
+    """Krone des Zerbrochenen Königs: ein goldener Reif mit Leerenkristall, darüber schweben fünf Kristallsplitter."""
+    colors = {"1": hexc("#3a1f78"), "2": hexc("#5a32a8"), "3": hexc("#8a5ae0"), "4": hexc("#b896f4"), "5": hexc("#efe6ff"),
+              "g": hexc("#7a5420"), "G": hexc("#b07a2c"), "y": hexc("#dca640"), "Y": hexc("#f4d066"), "W": hexc("#fff4b8"),
+              "V": hexc("#c49cff"), "v": hexc("#7040c8")}
+    img = pa.sprite(CROWN, colors)
+    return pa.outline(img, hexc("#1a0f2e"))
+
+
 def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/void_stone", void_stone())
     put("block/void_stone_bricks", void_stone_bricks())
@@ -605,3 +660,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/star_vines_plant_emissive", plant_glow)
     put("block/void_rift", void_rift())
     put("item/void_shard", void_shard())
+    put("item/shattered_crown", shattered_crown())
+    seal, seal_glow = throne_seal()
+    put("block/throne_seal", seal)
+    put("block/throne_seal_glow", seal_glow)

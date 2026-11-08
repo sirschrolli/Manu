@@ -57,6 +57,8 @@ public final class BossBarRenderer {
             STYLES.put(type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/" + type.id() + ".png"), type.color()));
         }
         STYLES.put("shadow", new Style(KingdomsAtWar.id("textures/gui/boss_bar/shadow.png"), 0xB46CFF));
+        // der Zerbrochene König (Boss der Leere): Sternenmarmor, Goldsaum, Sternennebel
+        STYLES.put("void", new Style(KingdomsAtWar.id("textures/gui/boss_bar/void.png"), 0xD8C4FF));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

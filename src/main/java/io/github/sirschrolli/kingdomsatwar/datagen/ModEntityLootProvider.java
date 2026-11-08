@@ -271,6 +271,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.DISTORTLING.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 0, 2))
                 .withPool(rare(Items.ENDER_PEARL, 0.3f, 0.05f)));
+        // der Zerbrochene König: immer seine Krone, dazu Kristalle und Schätze der Alten
+        this.add(ModEntities.SHATTERED_KING.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHATTERED_CROWN.get(), 1))
+                .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 1))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 10, 18))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 10, 16))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE.get(), 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 3, 6)));
         this.add(ModEntities.STAR_RAY.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST.get(), 1, 3))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM.get(), 0, 1)));

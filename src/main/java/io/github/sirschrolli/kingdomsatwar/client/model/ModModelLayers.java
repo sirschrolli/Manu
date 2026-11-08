@@ -74,6 +74,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation DISTORTLING = new ModelLayerLocation(KingdomsAtWar.id("distortling"), "main");
     public static final ModelLayerLocation STAR_RAY = new ModelLayerLocation(KingdomsAtWar.id("star_ray"), "main");
     public static final ModelLayerLocation WARDEN_SHARD = new ModelLayerLocation(KingdomsAtWar.id("warden_shard"), "main");
+    public static final ModelLayerLocation SHATTERED_KING = new ModelLayerLocation(KingdomsAtWar.id("shattered_king"), "main");
+    public static final ModelLayerLocation SHATTERED_CROWN = new ModelLayerLocation(KingdomsAtWar.id("shattered_crown"), "main");
     /** Erzmagier (alle Elemente, Zubehör je Element). */
     public static final ModelLayerLocation MAGE = new ModelLayerLocation(KingdomsAtWar.id("mage"), "main");
 

@@ -139,6 +139,18 @@ final class Showcase {
                 case "bossmotion" -> bossMotion(steps, DragonType.FIRE, false);
                 case "seal" -> seal(steps);
                 case "bossbars" -> bossBars(steps);
+                case "dim" -> {
+                    // /kaw dim: durch alle Dimensionen und zurück (jeweils ein Bild vom Ankunftsort)
+                    steps.add(Step.hud(true));
+                    for (String[] target : new String[][] {{"nether", "dim_nether"}, {"end", "dim_end"}, {"leere", "dim_void"},
+                            {"schattenwelt", "dim_shadow"}, {"oberwelt", "dim_overworld"}}) {
+                        steps.add(Step.command("kaw dim " + target[0]));
+                        steps.add(Step.waitTicks(80));
+                        steps.add(Step.waitForChunks(600));
+                        steps.add(Step.waitTicks(40));
+                        steps.add(Step.screenshot(target[1]));
+                    }
+                }
                 case "citadel" -> CitadelShowcase.citadel(steps, false);
                 case "nyxar" -> CitadelShowcase.citadel(steps, true);
                 case "citadelmap" -> CitadelShowcase.citadel(steps, false, true);
@@ -194,6 +206,8 @@ final class Showcase {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.equals("void_map")) {
                         VoidShowcase.map(steps);
+                    } else if (scene.equals("void_throne")) {
+                        VoidShowcase.throne(steps);
                     } else if (scene.equals("void_creatures")) {
                         VoidShowcase.creatures(steps);
                     } else if (scene.equals("void_rift")) {

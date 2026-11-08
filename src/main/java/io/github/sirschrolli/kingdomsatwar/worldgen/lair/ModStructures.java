@@ -66,6 +66,13 @@ public final class ModStructures {
             SHADOW_CITADEL = TYPES.register("shadow_citadel", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> SHADOW_CITADEL_PIECE =
             PIECES.register("shadow_citadel", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPiece::new);
+    /** Thron der Alten: einmal in der Leere, der Platz des Zerbrochenen Königs. */
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement>>
+            VOID_THRONE_PLACEMENT = PLACEMENTS.register("void_throne", () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
+            VOID_THRONE = TYPES.register("void_throne", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> VOID_THRONE_PIECE =
+            PIECES.register("void_throne", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePiece::new);
 
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure>>
             SHADOW_SITE = TYPES.register("shadow_site", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.CODEC);
@@ -148,6 +155,8 @@ public final class ModStructures {
     /** Nyxars Schattenzitadelle (einmal in der Schattenwelt). */
     public static final ResourceKey<Structure> SHADOW_CITADEL_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("shadow_citadel"));
     public static final ResourceKey<StructureSet> SHADOW_CITADEL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("shadow_citadel"));
+    public static final ResourceKey<Structure> VOID_THRONE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("void_throne"));
+    public static final ResourceKey<StructureSet> VOID_THRONE_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("void_throne"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -202,6 +211,19 @@ public final class ModStructures {
         context.register(SHADOW_CITADEL_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL))
                         // ganz zum Schluss: so räumt die Zitadelle auch Bäume und Pflanzen auf ihrem Grund ab
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // auf dem Thron der Alten erscheinen keine Wesen von selbst (dort wacht der König)
+        context.register(VOID_THRONE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_VOID_THRONE))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of()),
+                                net.minecraft.world.entity.MobCategory.CREATURE, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
@@ -403,6 +425,8 @@ public final class ModStructures {
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
+        context.register(VOID_THRONE_SET, new StructureSet(structures.getOrThrow(VOID_THRONE_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement(450, 800, 77_031)));
         // Magiertürme: Felder von 46 Chunks, mindestens 16 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
         for (DragonType type : DragonType.values()) {

@@ -73,6 +73,18 @@ public class DragonCompassItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (level instanceof ServerLevel server && server.dimension() == io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID) {
+            // in der Leere kennt der Kompass nur ein Ziel: den Thron der Alten
+            BlockPos throne = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(server);
+            if (throne == null) {
+                player.sendOverlayMessage(Component.translatable("item.kingdomsatwar.dragon_compass.no_nests").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.FAIL;
+            }
+            aimThrone(stack, throne);
+            player.sendOverlayMessage(describePlace(player, throne, "item.kingdomsatwar.dragon_compass.throne", THRONE_COLOR));
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS, 1.0f, 0.4f);
+            return InteractionResult.SUCCESS;
+        }
         if (level instanceof ServerLevel server && server.dimension() == io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD) {
             // in der Schattenwelt kennt der Kompass nur ein Ziel: Nyxars Zitadelle
             BlockPos citadel = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.approximateCenter(server);
@@ -81,7 +93,7 @@ public class DragonCompassItem extends Item {
                 return InteractionResult.FAIL;
             }
             aimCitadel(stack, citadel);
-            player.sendOverlayMessage(describeCitadel(player, citadel));
+            player.sendOverlayMessage(describePlace(player, citadel, "item.kingdomsatwar.dragon_compass.citadel", 0xB46CFF));
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS, 1.0f, 0.5f);
             return InteractionResult.SUCCESS;
         }
@@ -114,6 +126,13 @@ public class DragonCompassItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         if ((level.getGameTime() + owner.getId()) % 20 != 0) {
+            return;
+        }
+        if (level.dimension() == io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID) {
+            BlockPos throne = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(level);
+            if (throne != null) {
+                aimThrone(stack, throne);
+            }
             return;
         }
         if (level.dimension() == io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD) {
@@ -197,9 +216,25 @@ public class DragonCompassItem extends Item {
         }
     }
 
-    /** „Nyxars Schattenzitadelle – etwa 1240 Blöcke im Nordosten“. */
-    private static Component describeCitadel(Player player, BlockPos center) {
-        MutableComponent name = Component.translatable("item.kingdomsatwar.dragon_compass.citadel").withColor(0xB46CFF);
+    /** Farbe des Edelsteins, wenn der Kompass in der Leere den Thron der Alten sucht (blasses Violett). */
+    public static final int THRONE_COLOR = 0xC9A8FF;
+
+    /** Richtet den Kompass auf den Thron der Alten in der Leere aus. */
+    public static void aimThrone(ItemStack stack, BlockPos throne) {
+        LodestoneTracker tracker = new LodestoneTracker(Optional.of(GlobalPos.of(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID,
+                throne)), false);
+        if (!tracker.equals(stack.get(DataComponents.LODESTONE_TRACKER))) {
+            stack.set(DataComponents.LODESTONE_TRACKER, tracker);
+        }
+        CustomModelData color = new CustomModelData(List.of(), List.of(), List.of(), List.of(THRONE_COLOR));
+        if (!color.equals(stack.get(DataComponents.CUSTOM_MODEL_DATA))) {
+            stack.set(DataComponents.CUSTOM_MODEL_DATA, color);
+        }
+    }
+
+    /** „Nyxars Schattenzitadelle – etwa 1240 Blöcke im Nordosten“ (oder der Thron der Alten in der Leere). */
+    private static Component describePlace(Player player, BlockPos center, String key, int color) {
+        MutableComponent name = Component.translatable(key).withColor(color);
         double dx = center.getX() + 0.5 - player.getX();
         double dz = center.getZ() + 0.5 - player.getZ();
         int distance = (int) Math.round(Math.sqrt(dx * dx + dz * dz));

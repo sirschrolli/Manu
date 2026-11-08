@@ -90,6 +90,8 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.DISTORTLING, io.github.sirschrolli.kingdomsatwar.client.model.geom.DistortlingGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STAR_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.StarRayGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.WARDEN_SHARD, io.github.sirschrolli.kingdomsatwar.client.model.geom.WardenShardGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHATTERED_KING, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredKingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredCrownGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.PHOENIX, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhoenixGeometry::createLayer);
@@ -192,6 +194,7 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.DISTORTLING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.DistortlingRenderer::new);
         event.registerEntityRenderer(ModEntities.STAR_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarRayRenderer::new);
         event.registerEntityRenderer(ModEntities.WARDEN_SHARD.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.WardenShardRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHATTERED_KING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.ShatteredKingRenderer::new);
         // die Umbrer
         event.registerEntityRenderer(ModEntities.UMBRER.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);

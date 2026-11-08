@@ -2954,6 +2954,102 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.shard_warden.step"
   },
+  "entity.shattered_king.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_ambient1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_ambient2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_ambient3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.ambient"
+  },
+  "entity.shattered_king.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_awaken1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.awaken"
+  },
+  "entity.shattered_king.beam": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_beam1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.beam"
+  },
+  "entity.shattered_king.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_death1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.death"
+  },
+  "entity.shattered_king.gravity": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_gravity1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.gravity"
+  },
+  "entity.shattered_king.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_hurt1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_hurt2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_hurt3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.hurt"
+  },
+  "entity.shattered_king.roar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_roar1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_roar2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.roar"
+  },
+  "entity.shattered_king.sweep": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_sweep1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_sweep2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.sweep"
+  },
   "entity.soldier.armor": {
     "sounds": [
       {

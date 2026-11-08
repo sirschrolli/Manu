@@ -143,6 +143,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_LIGHTHOUSE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_lighthouse"));
         public static final TagKey<Biome> HAS_OLD_WORLD_RUIN = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_old_world_ruin"));
         public static final TagKey<Biome> HAS_SHADOW_CITADEL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_shadow_citadel"));
+        /** Wo der Thron der Alten schweben kann (alle Biome der Leere – er schwebt frei über allem). */
+        public static final TagKey<Biome> HAS_VOID_THRONE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_void_throne"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */
@@ -195,6 +197,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_STEEL_ARMOR = mod("repairs_steel_armor");
         public static final TagKey<Item> REPAIRS_KONTERIT_ARMOR = mod("repairs_konterit_armor");
         public static final TagKey<Item> REPAIRS_CROWN = mod("repairs_gemstone_crown");
+        public static final TagKey<Item> REPAIRS_SHATTERED_CROWN = mod("repairs_shattered_crown");
         public static final TagKey<Item> REPAIRS_GLIDER = mod("repairs_wyvernit_glider");
         public static final TagKey<Item> REPAIRS_DRACONIUM = mod("repairs_draconium");
         /** Alle Rüstungsteile aus Drachenschuppen. */

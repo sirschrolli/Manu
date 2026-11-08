@@ -134,8 +134,13 @@ und `registry/AmbientSounds.java`. Welche Klänge wo erklingen, steht in `world/
 `void_creatures.py` erzeugt die Stimmen der vier Wesen der Leere aus denselben Bausteinen: das nasse Gurgeln und das
 anschwellende Ansaugen des Leerenschlunds, das kristallene Summen, Erwachen und Aufladen des Splitterwächters, das
 zerhackte Knistern, Flackern, Zerfallen und Springen des Zerrlings (Körner, die springen und sich wiederholen, grob
-abgetastet) und die gleitenden Rufe des Sternenrochens. Wo Vanilla-Klänge passen (Biss, Schritte, splitternder Amethyst,
-Treffer), verweist `sounds.json` nur auf sie.
+abgetastet) und die gleitenden Rufe des Sternenrochens. Dazu der **Zerbrochene König**: ein tiefes, trauerndes
+Summen wie von einem fernen Chor (Sägezahn durch Vokal-Formanten), brechender Marmor mit kurzem Stöhnen, ein gewaltiger,
+rauer Schrei, das Erwachen (Trümmer klicken immer schneller zusammen, ein Chor schwillt an und bricht hell auf), das
+schwere Fauchen des Wischhiebs, der Schwerkraftbruch (ein schwebendes Anschwellen, nach 2,1 Sekunden ein donnernder
+Schlag – genau, wenn die Hände zusammenschlagen), das Brausen des Sternenstrahls und sein Zerfallen in einer Kaskade aus
+zerspringendem Kristall. Wo Vanilla-Klänge passen (Biss, Schritte, splitternder Amethyst, Treffer), verweist
+`sounds.json` nur auf sie.
 
 ```bash
 python3 tools/audio/void_creatures.py [--preview /tmp/spektren]

@@ -5,6 +5,8 @@ import io.github.sirschrolli.kingdomsatwar.block.voidrealm.CrystalFoliageBlock;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.StarVinesBlock;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.StarVinesPlantBlock;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.StardustBlock;
+import io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlock;
+import io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.VoidBloomBlock;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.VoidMossBlock;
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.VoidRiftBlock;
@@ -22,11 +24,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
@@ -141,20 +145,38 @@ public final class VoidBlocks {
                     .sound(SoundType.AMETHYST).pushReaction(PushReaction.IMMOVEABLE));
 
     // =====================================================================================
+    // Der Thron der Alten
+    // =====================================================================================
+
+    /** Thronsiegel: verborgen unter dem Thron der Alten, weckt den Zerbrochenen König (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<ThroneSealBlock> THRONE_SEAL = ModBlocks.BLOCKS.registerBlock("throne_seal", ThroneSealBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PURPLE).strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.AMETHYST)
+                    .lightLevel(s -> 7).pushReaction(PushReaction.IMMOVEABLE));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThroneSealBlockEntity>> THRONE_SEAL_ENTITY =
+            ModBlockEntities.BLOCK_ENTITIES.register("throne_seal", () -> new BlockEntityType<>(ThroneSealBlockEntity::new, THRONE_SEAL.get()));
+
+    // =====================================================================================
     // Gegenstände
     // =====================================================================================
 
     /** Leerensplitter: aus den Drusen und Kristallen der Leere – vier ergeben einen Leerenkristall. */
     public static final DeferredItem<Item> VOID_SHARD = item("void_shard", p -> p.rarity(Rarity.UNCOMMON));
 
+    /** Krone des Zerbrochenen Königs: seine Beute – ein Helm, über dem sieben Kristallsplitter schweben; wer sie trägt, fällt sanft. */
+    public static final DeferredItem<Item> SHATTERED_CROWN = item("shattered_crown",
+            p -> p.humanoidArmor(ModEquipment.SHATTERED_CROWN, net.minecraft.world.item.equipment.ArmorType.HELMET).rarity(Rarity.EPIC)
+                    .fireResistant().component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("shattered_crown", 2)));
+
     // ---------------------------------------------------------------- Spawn-Eier der Wesen der Leere
     public static final DeferredItem<SpawnEggItem> VOID_MAW_SPAWN_EGG = egg("void_maw", () -> ModEntities.VOID_MAW.get());
     public static final DeferredItem<SpawnEggItem> SHARD_WARDEN_SPAWN_EGG = egg("shard_warden", () -> ModEntities.SHARD_WARDEN.get());
     public static final DeferredItem<SpawnEggItem> DISTORTLING_SPAWN_EGG = egg("distortling", () -> ModEntities.DISTORTLING.get());
     public static final DeferredItem<SpawnEggItem> STAR_RAY_SPAWN_EGG = egg("star_ray", () -> ModEntities.STAR_RAY.get());
+    public static final DeferredItem<SpawnEggItem> SHATTERED_KING_SPAWN_EGG = egg("shattered_king", () -> ModEntities.SHATTERED_KING.get());
 
     public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
-        return List.of(VOID_MAW_SPAWN_EGG, SHARD_WARDEN_SPAWN_EGG, DISTORTLING_SPAWN_EGG, STAR_RAY_SPAWN_EGG);
+        return List.of(VOID_MAW_SPAWN_EGG, SHARD_WARDEN_SPAWN_EGG, DISTORTLING_SPAWN_EGG, STAR_RAY_SPAWN_EGG, SHATTERED_KING_SPAWN_EGG);
     }
 
     private static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {

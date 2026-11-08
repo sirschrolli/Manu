@@ -183,8 +183,10 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.CLIMBABLE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES_PLANT);
         add(BlockTags.PORTALS, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
-        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
-        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL);
         add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
         add(BlockTags.REPLACEABLE_BY_TREES, ShadowBlocks.SHADOW_SPROUTS, ShadowBlocks.PALE_GRASS, ShadowBlocks.MOON_FERN);

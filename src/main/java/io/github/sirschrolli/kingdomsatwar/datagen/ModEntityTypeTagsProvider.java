@@ -42,7 +42,10 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         // Wesen der Leere: Münzen von den feindseligen, kein Fallschaden für die Schwebenden und den Wächter aus Marmor
         coins.add(ModEntities.VOID_MAW.key()).add(ModEntities.SHARD_WARDEN.key()).add(ModEntities.DISTORTLING.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.VOID_MAW.key()).add(ModEntities.STAR_RAY.key())
-                .add(ModEntities.SHARD_WARDEN.key());
+                .add(ModEntities.SHARD_WARDEN.key()).add(ModEntities.SHATTERED_KING.key());
+        // der Zerbrochene König: ein Boss (nicht von Tränken der Schwäche und dergleichen zu stark beeinflusst)
+        this.tag(net.neoforged.neoforge.common.Tags.EntityTypes.BOSSES).add(ModEntities.SHATTERED_KING.key());
+        this.tag(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES).add(ModEntities.SHATTERED_KING.key());
         this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(ModEntities.WARDEN_SHARD.key());
         // Eigene Hof- und Weidetiere verhalten sich wie die Vanilla-Tiere, die sie ersetzen
         this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.FARM_HORSE.key()).add(ModEntities.FARM_DONKEY.key())

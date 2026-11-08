@@ -30,6 +30,10 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
         output.accept(ModEquipment.CROWN_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(ModEquipment.CROWN_ASSET.identifier()))
                 .build());
+        // Krone des Zerbrochenen Königs: eigenes 3D-Modell (Reif und schwebende Splitter), nur auf dem Kopf
+        output.accept(ModEquipment.SHATTERED_CROWN_ASSET, EquipmentClientInfo.builder()
+                .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(ModEquipment.SHATTERED_CROWN_ASSET.identifier()))
+                .build());
         // Gleiter: eigene Flügel-Textur (nicht vom Umhang des Spielers ersetzt)
         output.accept(ModEquipment.GLIDER_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,

@@ -69,6 +69,10 @@ final class VoidGameTests {
             ModGameTests.TEST_FUNCTIONS.register("distortling_blinks", () -> VoidGameTests::distortlingBlinks);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STAR_RAY_RIDES =
             ModGameTests.TEST_FUNCTIONS.register("star_ray_rides", () -> VoidGameTests::starRayRides);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHATTERED_KING_FIGHT =
+            ModGameTests.TEST_FUNCTIONS.register("shattered_king_fight", () -> VoidGameTests::shatteredKingFight);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> VOID_THRONE =
+            ModGameTests.TEST_FUNCTIONS.register("void_throne", () -> VoidGameTests::voidThrone);
 
     private VoidGameTests() {}
 
@@ -76,10 +80,14 @@ final class VoidGameTests {
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(VOID_WORLD, VOID_CREATURES, VOID_MAW_PULLS, SHARD_WARDEN_GUARDS, DISTORTLING_BLINKS, STAR_RAY_RIDES)) {
+        for (var test : List.of(VOID_WORLD, VOID_CREATURES, VOID_MAW_PULLS, SHARD_WARDEN_GUARDS, DISTORTLING_BLINKS, STAR_RAY_RIDES,
+                VOID_THRONE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
+        // der Kampf gegen den König dauert länger (Erwachen, vier Angriffe, Zerfallen)
+        event.registerTest(SHATTERED_KING_FIGHT.getId(), new FunctionGameTestInstance(SHATTERED_KING_FIGHT.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     private static void floor(GameTestHelper helper, int size) {
@@ -284,6 +292,110 @@ final class VoidGameTests {
         distortling.blinkNear(level, air, 0.5);
         helper.assertTrue(distortling.blockPosition().getY() < helper.absolutePos(new BlockPos(0, 10, 0)).getY() || was.equals(distortling.blockPosition()),
                 "Der Zerrling springt ins Nichts");
+        helper.succeed();
+    }
+
+    /**
+     * Der Zerbrochene König: das Thronsiegel weckt ihn (beim Erwachen unverwundbar), danach treffen Faustschlag,
+     * Kronensplitter, Ruf der Wächter und Sternenstrahl; besiegt zerfällt er, lässt seine Krone fallen und der Thron
+     * bleibt leer.
+     */
+    private static void shatteredKingFight(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        floor(helper, 9);
+        BlockPos sealPos = helper.absolutePos(new BlockPos(4, 0, 8));
+        level.setBlock(sealPos, VoidBlocks.THRONE_SEAL.get().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        if (!(level.getBlockEntity(sealPos) instanceof io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity seal)) {
+            helper.fail("Das Thronsiegel hat keine Blockentität");
+            return;
+        }
+        seal.setup(helper.absolutePos(new BlockPos(4, 1, 4)));
+        helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.DORMANT,
+                "Der Thron ruht nicht");
+        var king = seal.awaken(level);
+        helper.assertTrue(king != null, "Das Siegel weckt den König nicht");
+        helper.assertTrue(king.isAwakening(), "Der König erwacht nicht");
+        helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.AWAKE,
+                "Der Thron merkt das Erwachen nicht");
+        float before = king.getHealth();
+        king.hurtServer(level, level.damageSources().generic(), 20.0f);
+        helper.assertTrue(king.getHealth() >= before, "Beim Erwachen ist der König verwundbar");
+        var soldier = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get(),
+                new BlockPos(4, 1, 7));
+        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.AWAKEN_TICKS + 4, () -> {
+            helper.assertFalse(king.isAwakening(), "Der König erhebt sich nicht ganz");
+            float health = soldier.getHealth();
+            king.forceAttack(level, "slam_left", soldier, true);
+            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.SLAM_IMPACT + 3, () -> {
+                helper.assertTrue(soldier.getHealth() < health, "Der Faustschlag trifft nicht");
+                king.forceAttack(level, "volley", soldier, true);
+                helper.runAfterDelay(22, () -> {
+                    helper.assertFalse(level.getEntitiesOfClass(WardenShardEntity.class, king.getBoundingBox().inflate(30)).isEmpty(),
+                            "Die Krone schleudert keine Splitter");
+                    king.forceAttack(level, "summon", soldier, true);
+                    helper.runAfterDelay(24, () -> {
+                        helper.assertFalse(level.getEntitiesOfClass(ShardWardenEntity.class, king.getBoundingBox().inflate(30)).isEmpty(),
+                                "Der König ruft keine Wächter");
+                        king.forceAttack(level, "beam", soldier, true);
+                        helper.runAfterDelay(40, () -> {
+                            helper.assertTrue(king.isBeaming(), "Kein Sternenstrahl");
+                            king.setHealth(1.0f);
+                            king.hurtServer(level, level.damageSources().generic(), 50.0f);
+                            helper.assertTrue(king.isDeadOrDying(), "Der König fällt nicht");
+                            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.DEATH_TICKS + 6, () -> {
+                                helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.DEFEATED,
+                                        "Der Thron merkt den Sieg nicht");
+                                helper.assertTrue(level.getEntitiesOfClass(ShardWardenEntity.class, new net.minecraft.world.phys.AABB(
+                                        helper.absolutePos(BlockPos.ZERO)).inflate(40), net.minecraft.world.entity.Entity::isAlive).isEmpty(),
+                                        "Die gerufenen Wächter zerfallen nicht mit dem König");
+                                helper.assertFalse(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                                        new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).inflate(40),
+                                        e -> e.getItem().is(VoidBlocks.SHATTERED_CROWN.get())).isEmpty(), "Der König lässt seine Krone nicht fallen");
+                                helper.succeed();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Der Thron der Alten: als Bauwerk der Leere angemeldet (alle Biome der Leere), genau einer je Welt im Ring 450–800
+     * Blöcke um die Mitte, sein Siegel unter dem Thron; die Oberwelt hat keinen.
+     */
+    private static void voidThrone(GameTestHelper helper) {
+        var server = helper.getLevel().getServer();
+        var registries = server.registryAccess();
+        var structure = registries.lookupOrThrow(Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.VOID_THRONE_STRUCTURE);
+        helper.assertTrue(structure.isPresent(), "Das Bauwerk Thron der Alten fehlt");
+        var set = registries.lookupOrThrow(Registries.STRUCTURE_SET).get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.VOID_THRONE_SET);
+        helper.assertTrue(set.isPresent() && set.get().value().placement()
+                instanceof io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement, "Die Platzierung des Throns fehlt");
+        var placement = (io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement) set.get().value().placement();
+        for (long seed : new long[] {1L, 42L, -77L, 20_261_108L, "kingdoms at war".hashCode()}) {
+            var chunk = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.chunk(seed, placement);
+            double distance = Math.sqrt(Math.pow(chunk.getMiddleBlockX(), 2) + Math.pow(chunk.getMiddleBlockZ(), 2));
+            helper.assertTrue(distance > 430 && distance < 830, "Der Thron liegt nicht im Ring: " + distance);
+            helper.assertTrue(chunk.equals(io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.chunk(seed, placement)),
+                    "Der Ort des Throns ist nicht fest");
+        }
+        var biomes = registries.lookupOrThrow(Registries.BIOME);
+        for (ResourceKey<Biome> biome : VoidBiomes.ALL) {
+            helper.assertTrue(biomes.getOrThrow(biome).is(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Biomes.HAS_VOID_THRONE),
+                    "Der Thron kann nicht über " + biome.identifier() + " schweben");
+        }
+        ServerLevel voidLevel = server.getLevel(VoidGate.THE_VOID);
+        if (voidLevel != null) {
+            BlockPos center = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(voidLevel);
+            helper.assertTrue(center != null, "Kein Thron der Alten in der Leere");
+            helper.assertTrue(center.getY() == io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePiece.FLOOR + 1, "Falsche Höhe");
+            BlockPos seal = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.seal(center);
+            helper.assertTrue(seal.getZ() < center.getZ() && seal.getY() < center.getY(), "Das Siegel liegt nicht unter dem Thron");
+        }
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.find(helper.getLevel()) == null,
+                "Auch die Oberwelt hat einen Thron der Alten");
         helper.succeed();
     }
 

@@ -473,6 +473,30 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("entity.star_ray.hurt", "Star Ray hurts", "Sternenrochen nimmt Schaden");
         subtitle("entity.star_ray.death", "Star Ray dies", "Sternenrochen stirbt");
 
+        // Der Zerbrochene König und sein Thron
+        creature(ModEntities.SHATTERED_KING, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHATTERED_KING_SPAWN_EGG,
+                "The Shattered King", "Der Zerbrochene König", "Zerbrochener-König");
+        text("boss.kingdomsatwar.void", "The Shattered King", "Der Zerbrochene König");
+        text("boss.kingdomsatwar.void.title", "Last King of the Ancients", "Der letzte König der Alten");
+        text("throne.kingdomsatwar.warning", "A throne of starlight hovers ahead – something old is watching.",
+                "Vor dir schwebt ein Thron aus Sternenlicht – etwas Altes wacht dort.");
+        block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, "Throne Seal", "Thronsiegel");
+        item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHATTERED_CROWN, "Crown of the Shattered King",
+                "Krone des Zerbrochenen Königs");
+        text(ModItems.loreKey("shattered_crown", 1), "Seven shards of the King's crown hover above it",
+                "Über ihr schweben sieben Splitter der Königskrone");
+        text(ModItems.loreKey("shattered_crown", 2), "Its wearer falls gently, as if weightless (sneak to drop)",
+                "Wer sie trägt, fällt sanft wie schwerelos (Schleichen: normal fallen)");
+        text("item.kingdomsatwar.dragon_compass.throne", "Throne of the Ancients", "Thron der Alten");
+        subtitle("entity.shattered_king.ambient", "The Shattered King hums", "Der Zerbrochene König summt");
+        subtitle("entity.shattered_king.hurt", "Marble cracks", "Marmor bricht");
+        subtitle("entity.shattered_king.death", "The Shattered King falls apart", "Der Zerbrochene König zerfällt");
+        subtitle("entity.shattered_king.awaken", "The Shattered King rises", "Der Zerbrochene König erhebt sich");
+        subtitle("entity.shattered_king.roar", "The Shattered King roars", "Der Zerbrochene König brüllt");
+        subtitle("entity.shattered_king.sweep", "A giant hand sweeps", "Eine riesige Hand fegt heran");
+        subtitle("entity.shattered_king.gravity", "Gravity breaks", "Die Schwerkraft bricht");
+        subtitle("entity.shattered_king.beam", "Starbeam roars", "Sternenstrahl braust");
+
         set("void_stone", "void_stone", "Void Stone", "Leerenstein", "Void Stone", "Leerenstein");
         set("void_stone_bricks", "void_stone_brick", "Void Stone Bricks", "Leerensteinziegel", "Void Stone Brick", "Leerensteinziegel");
         set("polished_void_stone", "polished_void_stone", "Polished Void Stone", "Polierter Leerenstein", "Polished Void Stone",
@@ -738,6 +762,23 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.INTRO_VISION.get(), pick("Vision of the Seal", "Vision des Siegels"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
         text("command.kingdomsatwar.citadel.none", "There is no Shadow Citadel in this world.", "In dieser Welt gibt es keine Schattenzitadelle.");
+        text("command.kingdomsatwar.dim.done", "You are now %s (%s, %s, %s).", "Du bist jetzt %s (%s, %s, %s).");
+        text("command.kingdomsatwar.dim.already", "You are already %s.", "Du bist schon %s.");
+        text("command.kingdomsatwar.dim.missing", "This dimension does not exist in this world.", "Diese Dimension gibt es in dieser Welt nicht.");
+        text("command.kingdomsatwar.dim.name.oberwelt", "in the Overworld", "in der Oberwelt");
+        text("command.kingdomsatwar.dim.name.nether", "in the Nether", "im Nether");
+        text("command.kingdomsatwar.dim.name.end", "in the End", "im End");
+        text("command.kingdomsatwar.dim.name.schattenwelt", "in the Shadow World", "in der Schattenwelt");
+        text("command.kingdomsatwar.dim.name.leere", "in the Void", "in der Leere");
+        text("command.kingdomsatwar.dim.name.sphaere", "in the Arcane Sphere", "in der Arkanen Sphäre");
+        text("command.kingdomsatwar.dim.name.other", "in %s", "in %s");
+        text("command.kingdomsatwar.throne.none", "There is no Throne of the Ancients in this world.",
+                "In dieser Welt gibt es keinen Thron der Alten.");
+        text("command.kingdomsatwar.throne.at", "The Throne of the Ancients hovers at x %s, y %s, z %s (the Void).",
+                "Der Thron der Alten schwebt bei x %s, y %s, z %s (Die Leere).");
+        text("command.kingdomsatwar.throne.reset", "The Shattered King sleeps again.", "Der Zerbrochene König schläft wieder.");
+        text("command.kingdomsatwar.throne.no_seal", "The throne seal has not been generated yet.",
+                "Das Thronsiegel ist noch nicht erzeugt.");
         text("command.kingdomsatwar.citadel.at", "The Shadow Citadel lies at x %s, z %s (Shadow World).",
                 "Die Schattenzitadelle liegt bei x %s, z %s (Schattenwelt).");
         lairs();

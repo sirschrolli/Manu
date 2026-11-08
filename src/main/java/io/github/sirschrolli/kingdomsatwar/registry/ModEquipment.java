@@ -35,6 +35,8 @@ public final class ModEquipment {
     public static final ResourceKey<EquipmentAsset> STEEL_ASSET = asset("steel");
     public static final ResourceKey<EquipmentAsset> KONTERIT_ASSET = asset("konterit");
     public static final ResourceKey<EquipmentAsset> CROWN_ASSET = asset("gemstone_crown");
+    /** Krone des Zerbrochenen Königs (3D-Modell, siehe client/model/voidrealm/ShatteredCrownModel). */
+    public static final ResourceKey<EquipmentAsset> SHATTERED_CROWN_ASSET = asset("shattered_crown");
     public static final ResourceKey<EquipmentAsset> GLIDER_ASSET = asset("wyvernit_glider");
     public static final ResourceKey<EquipmentAsset> STEEL_DRAGON_ARMOR_ASSET = asset("steel_dragon_armor");
     public static final ResourceKey<EquipmentAsset> DRACONIUM_DRAGON_ARMOR_ASSET = asset("draconium_dragon_armor");
@@ -60,6 +62,9 @@ public final class ModEquipment {
             ModTags.Items.REPAIRS_KONTERIT_ARMOR, KONTERIT_ASSET);
     public static final ArmorMaterial CROWN = armor(18, 0, 0, 0, 2, 0, 25, SoundEvents.ARMOR_EQUIP_GOLD, 0.0f, 0.0f,
             ModTags.Items.REPAIRS_CROWN, CROWN_ASSET);
+    /** Beute des Zerbrochenen Königs: fester als jeder Helm aus Diamant, dazu sanftes Fallen (siehe ShatteredCrownEffects). */
+    public static final ArmorMaterial SHATTERED_CROWN = armor(40, 0, 0, 0, 3, 0, 20, SoundEvents.ARMOR_EQUIP_NETHERITE, 2.5f, 0.05f,
+            ModTags.Items.REPAIRS_SHATTERED_CROWN, SHATTERED_CROWN_ASSET);
     /** Drachenpanzer (nur der Körper-Wert zählt). */
     public static final ArmorMaterial STEEL_DRAGON_ARMOR = armor(20, 0, 0, 0, 0, 10, 8, SoundEvents.ARMOR_EQUIP_IRON, 1.0f, 0.0f,
             ModTags.Items.REPAIRS_STEEL_ARMOR, STEEL_DRAGON_ARMOR_ASSET);

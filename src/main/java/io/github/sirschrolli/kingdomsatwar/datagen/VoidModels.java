@@ -80,6 +80,8 @@ final class VoidModels {
                 .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(ew))));
 
         ModModelProvider.flat(items, VoidBlocks.VOID_SHARD.get());
+        ModModelProvider.flat(items, VoidBlocks.SHATTERED_CROWN.get());
+        ModModelProvider.glowingCube(blocks, VoidBlocks.THRONE_SEAL.get());
         for (var egg : VoidBlocks.spawnEggs()) {
             ModModelProvider.flat(items, egg.get());
         }

@@ -148,6 +148,7 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ModTags.Items.REPAIRS_KONTERIT_ARMOR, ModItems.KONTERIT);
         add(ModTags.Items.REPAIRS_GLIDER, ModItems.WYVERNIT);
         add(ModTags.Items.REPAIRS_CROWN, ModItems.GEMSTONE);
+        add(ModTags.Items.REPAIRS_SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD);
         tag(ModTags.Items.REPAIRS_CROWN).addTag(Tags.Items.INGOTS_GOLD);
         ModItems.DRAGON_SCALES.forEach((type, scale) -> add(ModTags.Items.scaleArmorRepair(type), scale));
 
@@ -156,7 +157,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.AXES, ModItems.STEEL_AXE, ModItems.DRACONIUM_AXE);
         add(ItemTags.SHOVELS, ModItems.STEEL_SHOVEL);
         add(ItemTags.HOES, ModItems.STEEL_HOE);
-        add(ItemTags.HEAD_ARMOR, ModItems.STEEL_HELMET, ModItems.KONTERIT_HELMET, ModItems.GEMSTONE_CROWN);
+        add(ItemTags.HEAD_ARMOR, ModItems.STEEL_HELMET, ModItems.KONTERIT_HELMET, ModItems.GEMSTONE_CROWN,
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHATTERED_CROWN);
         add(ItemTags.CHEST_ARMOR, ModItems.STEEL_CHESTPLATE, ModItems.KONTERIT_CHESTPLATE);
         add(ItemTags.LEG_ARMOR, ModItems.STEEL_LEGGINGS, ModItems.KONTERIT_LEGGINGS);
         add(ItemTags.FOOT_ARMOR, ModItems.STEEL_BOOTS, ModItems.KONTERIT_BOOTS);

@@ -96,6 +96,14 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_AMBIENT = register("entity.star_ray.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_HURT = register("entity.star_ray.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_RAY_DEATH = register("entity.star_ray.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_AMBIENT = register("entity.shattered_king.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_HURT = register("entity.shattered_king.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_DEATH = register("entity.shattered_king.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_AWAKEN = register("entity.shattered_king.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_ROAR = register("entity.shattered_king.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_SWEEP = register("entity.shattered_king.sweep");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_GRAVITY = register("entity.shattered_king.gravity");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_BEAM = register("entity.shattered_king.beam");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

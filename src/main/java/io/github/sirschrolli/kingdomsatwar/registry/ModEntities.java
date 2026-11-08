@@ -45,6 +45,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.DistortlingEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShardWardenEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarRayEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.VoidMawEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.WardenShardEntity;
@@ -449,6 +450,10 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<StarRayEntity>> STAR_RAY = ENTITIES.registerEntityType("star_ray",
             StarRayEntity::new, MobCategory.CREATURE,
             builder -> builder.sized(2.4f, 0.8f).eyeHeight(0.5f).passengerAttachments(0.72f).clientTrackingRange(12));
+    /** Der Zerbrochene König: Boss der Leere, schwebt über seinem Thron der Alten. */
+    public static final DeferredHolder<EntityType<?>, EntityType<ShatteredKingEntity>> SHATTERED_KING = ENTITIES.registerEntityType(
+            "shattered_king", ShatteredKingEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(3.2f, 6.0f).eyeHeight(5.2f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
             WardenShardEntity::new, MobCategory.MISC,
@@ -738,6 +743,7 @@ public final class ModEntities {
         event.put(SHARD_WARDEN.get(), ShardWardenEntity.createAttributes().build());
         event.put(DISTORTLING.get(), DistortlingEntity.createAttributes().build());
         event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
+        event.put(SHATTERED_KING.get(), ShatteredKingEntity.createAttributes().build());
         event.put(UMBRER.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity.createAttributes().build());
         event.put(UMBRER_GUARD.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity.createAttributes().build());
     }

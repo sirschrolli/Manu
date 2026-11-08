@@ -64,13 +64,15 @@ final class RulesGameTests {
             ModGameTests.TEST_FUNCTIONS.register("rules_enchantments", () -> RulesGameTests::enchantments);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MAGE_GROUND =
             ModGameTests.TEST_FUNCTIONS.register("rules_mage_ground", () -> RulesGameTests::mageGround);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DIMENSION_COMMAND =
+            ModGameTests.TEST_FUNCTIONS.register("rules_dimension_command", () -> RulesGameTests::dimensionCommand);
 
     private RulesGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(MOD_GUARD, COORDINATES, HARDNESS, ENCHANTMENTS, MAGE_GROUND)) {
+        for (var test : List.of(MOD_GUARD, COORDINATES, HARDNESS, ENCHANTMENTS, MAGE_GROUND, DIMENSION_COMMAND)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -329,6 +331,37 @@ final class RulesGameTests {
         helper.assertTrue(under, "Boden unter dem Magier abbaubar");
         helper.assertFalse(beside, "Boden neben dem Magier geschützt");
         helper.assertFalse(afterwards, "Boden bleibt geschützt, obwohl der Magier fort ist");
+        helper.succeed();
+    }
+
+    /**
+     * {@code /kaw dim}: der Befehl ist angemeldet, nur im Kreativmodus (oder mit Cheats) nutzbar, und er findet überall
+     * sicheren Boden – im Nether eine Höhle mit festem Grund, im End die Obsidianplattform, in der Oberwelt die Oberfläche.
+     */
+    private static void dimensionCommand(GameTestHelper helper) {
+        var server = helper.getLevel().getServer();
+        var kaw = server.getCommands().getDispatcher().getRoot().getChild("kaw");
+        helper.assertTrue(kaw != null && kaw.getChild("dim") != null, "Der Befehl /kaw dim fehlt");
+        var dim = kaw.getChild("dim");
+        for (String name : new String[] {"oberwelt", "nether", "end", "schattenwelt", "leere"}) {
+            helper.assertTrue(dim.getChild(name) != null, "Ziel fehlt: " + name);
+        }
+        ServerLevel nether = server.getLevel(Level.NETHER);
+        if (nether != null) {
+            BlockPos spot = io.github.sirschrolli.kingdomsatwar.command.DimensionCommand.safeSpot(nether, 40, -24);
+            helper.assertTrue(nether.getBlockState(spot).isAir() && nether.getBlockState(spot.above()).isAir(), "Im Nether kein Platz zum Stehen");
+            helper.assertTrue(nether.getBlockState(spot.below()).isSolidRender(), "Im Nether kein fester Grund");
+            helper.assertTrue(spot.getY() < nether.getMinY() + nether.dimensionType().logicalHeight() - 2, "Im Nether über der Decke gelandet");
+        }
+        ServerLevel end = server.getLevel(Level.END);
+        if (end != null) {
+            BlockPos spot = io.github.sirschrolli.kingdomsatwar.command.DimensionCommand.safeSpot(end, 5000, 5000);
+            helper.assertTrue(end.getBlockState(spot.below()).is(net.minecraft.world.level.block.Blocks.OBSIDIAN), "Im End keine Obsidianplattform");
+        }
+        BlockPos home = io.github.sirschrolli.kingdomsatwar.command.DimensionCommand.safeSpot(helper.getLevel(),
+                helper.absolutePos(BlockPos.ZERO).getX() + 200, helper.absolutePos(BlockPos.ZERO).getZ() + 200);
+        helper.assertTrue(helper.getLevel().getBlockState(home).isAir() || helper.getLevel().getBlockState(home).canBeReplaced(),
+                "In der Oberwelt im Boden gelandet");
         helper.succeed();
     }
 }

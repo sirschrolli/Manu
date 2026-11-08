@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.59.0 – Die Leere.** Das **Herz der Schatten** reißt die Welt auf: Wer es auf den Boden richtet, öffnet einen Riss in eine neue Dimension – ein Sternennichts, in dem die Bruchstücke zerbrochener Welten treiben. Auf ihnen wachsen verdrehte Kristallwälder, liegen schwerelose Ruinen aus Sternenmarmor, leuchtende Sternenstaubfelder, Splitterklippen und Weltenreste, auf denen noch Häuser fremder Welten stehen. Dort leben vier neue Wesen mit eigenem Aussehen: der **Leerenschlund** saugt seine Beute an, der **Splitterwächter** erwacht in den Ruinen und schleudert Kristallsplitter, der **Zerrling** flackert und springt durch den Raum, und den riesigen **Sternenrochen** kann man mit Leerenblüten zähmen und durch die Leere reiten. Dazu eigene Klangwelten für alle sechs Biome der Leere.
+> **Testversion 0.60.0 – Der Zerbrochene König.** Hoch in der Leere schwebt der **Thron der Alten** – ein Platz aus Sternenmarmor mit Säulen, Kristalllampen und einem Podest, unter dem Kristalle und Sternenranken ins Nichts hängen. Wer ihn betritt, weckt den **Zerbrochenen König**, den letzten König der Alten: einen schwebenden Riesen aus Marmor und Gold mit offener Brust, zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Er kämpft mit Faustschlag, Wischhieb, Kronensplittern, Schwerkraftbruch, dem Ruf der Wächter und zuletzt dem Sternenstrahl – mit eigener Bossleiste, eigenen Stimmen und Klängen. Besiegt lässt er seine **Krone** fallen: ein Helm als echtes 3D-Modell, über dem die Kristallsplitter schweben; wer ihn trägt, fällt sanft. (Die Drachen bleiben die stärksten Bosse, danach kommen die Erzmagier, dann der König.) Neu dazu: **`/kaw dim <oberwelt|nether|end|schattenwelt|leere>`** wechselt im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen.
 > In 0.58 bekam jedes eigene Biom seine eigene Klangwelt: Laub, Vogelchor, Spechte und Kuckuck im Urhain, Grillen, Käuzchen und ferne Wölfe in der Nacht, Brandung an der Sturmküste, singendes Eis auf den Frostgipfeln, knisternde Glut in den Aschefeldern, ein Drache in der Ferne über den Nestern, Dröhnen und Flüstern in der Schattenwelt.
 > In 0.57 wuchsen drei neue, leuchtende Pflanzen in der Schattenwelt: Mondfarn, Sternblüte und Seelenschilf.
 > In 0.56 kamen die lebendigen Drachen: zwölf neue Angriffe der Drachen-Bosse (Feuerwirbel, Magmaspalten, Frostlanze, Splittersturm, Kugelblitze, Blitzkäfig, Dornenwelle, Sonnenstrahl, Felslawine, Erdspalter, Geysirfeld, Wasserschlangen), und die eigenen Drachen bewegen sich wie die Bosse – Schritt und Galopp ohne Rutschen, Abheben und Landen mit den Flügeln, Kurvenflug, Sitzen, Launen. 0.56.1 behob einen Absturz beim Erzeugen der Schattenwelt (an den Felsbrücken der Schattengipfel), ließ die Roben der Umbrer beim Laufen mitgehen und den Kupferknecht seine Arme ruhiger schwingen.
@@ -318,7 +318,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
-| **Die Leere** (neu): eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
+| **Die Leere**: eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
+| **Der Zerbrochene König** (neu): Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
@@ -603,6 +604,44 @@ Kristalllaub, Leerenblüte und Sternenranken. Aus Drusen und Kristallen fallen *
 **Klänge der Leere:** ein tiefes, schwebendes Dröhnen mit feinem Sternensirren überall, dazu gläserne Akkorde und
 singende Kristalle im Kristallwald, rieselnder Sternenstaub, ferne Chöre der Alten und schabende Steine in den Ruinen,
 dumpfe Erinnerungen an verlorene Welten über den Weltenresten – und aus der Ferne der Gesang der Sternenrochen.
+
+### Der Zerbrochene König
+
+![Der Zerbrochene König: der Thron der Alten, das Erwachen und seine Angriffe](docs/bilder/zerbrochener_koenig.jpg)
+
+Einmal in jeder Welt schwebt in der Leere, 450 bis 800 Blöcke von ihrer Mitte entfernt, der **Thron der Alten**: ein
+runder Platz aus Sternenmarmor (44 Blöcke breit) allein in einem weiten, leeren Raum – mit dunklen Bändern, acht
+Strahlen voller leuchtender Kristalle und einem Siegel in der Mitte, einer niedrigen, zerbrochenen Brüstung, sechs
+Säulen (zwei zerbrochen, ihre Trommeln schweben über dem Stumpf), vier Kristalllampen und im Norden einem Podest in drei
+Stufen mit dem Thron, zwei Obelisken und einem Turm aus Kristall. Darunter hängt ein zerklüfteter Kegel aus Leerenstein,
+aus dem Kristalle und Sternenranken ins Nichts hängen; im Süden führen schwebende Trittsteine heran, ringsum treiben
+Trümmer. Der **Drachenkompass** zeigt in der Leere den Weg dorthin (Rechtsklick nennt Richtung und Entfernung).
+
+Wer sich nähert, spürt, dass dort etwas wacht. Wer den Platz betritt, weckt den **Zerbrochenen König**: die Trümmer
+fliegen zusammen, Leib, Hände und Krone erheben sich vom Boden und fügen sich – dann ein Schrei. Er ist ein schwebender
+Riese aus bleichem Sternenmarmor mit goldenen Säumen; durch Risse leuchtet die Leere, in seiner offenen Brust schwebt
+sein **zersprungenes Herz**, über dem Haupt kreist eine Krone aus sieben Kristallsplittern, sein Gewand aus Sternennacht
+läuft in Fetzen aus. Seine Arme enden in gezackten Bruchstellen – die **Hände schweben frei** neben ihm und führen jeden
+Angriff aus.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Faustschlag** | eine Hand steigt hoch über die Stelle, an der du stehst, krümmt die Finger zur Klaue – ein leuchtender Kreis warnt – und schlägt flach herab |
+| **Wischhieb** | beide Hände holen weit hinten aus und fegen gegeneinander in einem Bogen vor ihm über den Boden |
+| **Kronensplitter** | der Kopf hebt sich, die Krone steigt und spreizt die Zacken: zwei Fächer aus Kristallsplittern (mit einem Schlag zurückzuschlagen) |
+| **Schwerkraftbruch** (ab 60 %) | die Hände heben sich mit offenen Handflächen – alle auf dem Platz schweben empor –, klatschen über seinem Kopf zusammen und stoßen herab: alle stürzen |
+| **Ruf der Wächter** (bei 60 % und 25 %) | die Hände senken sich zum Boden und reißen zwei Splitterwächter aus dem Platz empor |
+| **Sternenstrahl** (unter 25 %) | die Hände reißen die Brust auf, die Herzhälften klaffen – aus dem Herzen fegt ein Strahl in weitem Bogen über den Platz: hinter Säulen ducken oder darüber springen |
+
+Er hat 340 Lebenspunkte und ist damit bewusst schwächer als die Erzmagier – die Drachen-Bosse bleiben die stärksten.
+Verlässt jeder den Platz, zerfällt er nach einer halben Minute wieder zu Trümmern und kann später erneut erwachen; besiegt
+zerfällt er Stück für Stück, und der Thron bleibt für immer leer.
+
+**Beute:** immer die **Krone des Zerbrochenen Königs** – ein Helm, der als echtes **3D-Modell** getragen wird: ein
+goldener Reif mit einem Leerenkristall über der Stirn, darüber schweben sieben Kristallsplitter (Rüstung 3, Härte 2,5,
+feuerfest, mit Leerensplittern zu reparieren). Wer sie trägt, **fällt sanft wie schwerelos** (Schleichen: normal fallen).
+Dazu ein Herzkristall, ein Manakristall, ein verzaubertes Buch der Arkanen, Goldmünzen, Leerensplitter, Leerenkristalle,
+gemeißelter Sternenmarmor und Edelsteine.
 
 ### Klänge der Welt
 
@@ -2041,6 +2080,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
 | `/kaw lair` · `/kaw lair awaken` · `/kaw lair reset` | (nur Operatoren) Lage aller Nester anzeigen, den Drachen im Nest wecken, ein Nest zurücksetzen |
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
+| `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
+| `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | `/kaw realms` · `/kaw realms check` · `/kaw realms reset` | (nur Operatoren) Lage und Zustand der vier Reiche, prüfen, ob die Stammburgen in der Welt stehen, alle Reiche zurücksetzen |
@@ -2078,7 +2119,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/generate_undead_villagers.py` | Texturen der untoten Dorfbewohner aus denen der Dorfbewohner ableiten (`--preview`) |
 | `python3 tools/audio/build_audio.py` | Musik, Intro-Zeitplan und Stimmen neu bauen (siehe `tools/audio/README.md`) |
 | `python3 tools/audio/ambience.py` | Klangteppiche und Einzelklänge der Biome neu erzeugen |
-| `python3 tools/audio/void_creatures.py` | Stimmen der Wesen der Leere neu erzeugen |
+| `python3 tools/audio/void_creatures.py` | Stimmen der Wesen der Leere und des Zerbrochenen Königs neu erzeugen |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
