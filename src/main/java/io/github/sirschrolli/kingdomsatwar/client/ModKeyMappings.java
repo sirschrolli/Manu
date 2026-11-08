@@ -30,6 +30,9 @@ public final class ModKeyMappings {
     /** Charakterfenster: Heldenstufe, Heldenerfahrung und Talente (Standard: K). */
     public static final KeyMapping CHARACTER = new KeyMapping("key.kingdomsatwar.character", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_K, HERO);
+    /** Streicheln, die Belohnung der Legende: das Wesen vor einem (Standard: G; gedrückt halten streichelt weiter). */
+    public static final KeyMapping PAT = new KeyMapping("key.kingdomsatwar.pat", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_G, HERO);
 
     private ModKeyMappings() {}
 
@@ -41,6 +44,7 @@ public final class ModKeyMappings {
         event.register(SPELL_WHEEL);
         event.registerCategory(HERO);
         event.register(CHARACTER);
+        event.register(PAT);
     }
 
     @SubscribeEvent

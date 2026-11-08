@@ -19,6 +19,8 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> BOSS_WATER = simple("boss_water");
     /** Schattenrauch (Nyxar): violett glimmender, schwerer Dunst. */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> BOSS_SHADOW = simple("boss_shadow");
+    /** Die Hand beim Streicheln (folgt dem Kopf des Wesens; als Befehl nur ein stehendes Bild). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PAT_HAND = simple("pat_hand");
 
     private ModParticles() {}
 

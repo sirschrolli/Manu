@@ -21,9 +21,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,16 +58,22 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * <p>Der Held sammelt <b>Heldenerfahrung</b>: für besiegte Monster und Bosse (auch ein Viertel dessen, was seine
  * Soldaten und gezähmten Drachen besiegen), für Erz, das er abbaut, für jeden Fortschritt (Aufgabe, Ziel, Herausforderung),
  * für jedes Biom, das er zum ersten Mal betritt, und für jede eroberte Burg. Damit steigt er bis zur
- * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf und bekommt mit jeder Stufe einen <b>Talentpunkt</b>, den er im
- * Charakterfenster (Taste K) auf sechs Talente verteilt – je Talent höchstens {@value #MAX_TALENT} Punkte, also lässt sich
- * nicht alles meistern. Neu verteilen kostet eine Silbermünze je verteiltem Punkt.
+ * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf – ein weiter Weg: Stufe {@value #MAX_LEVEL} braucht 392.040 Heldenerfahrung.
+ * Jede Stufe bringt einen <b>Talentpunkt</b>, jeder neue <b>Rang</b> (Knappe, Recke, Ritter, Held, Kriegsherr, Legende)
+ * {@value #RANK_BONUS} Punkte dazu. Die Punkte verteilt er im Charakterfenster (Taste K) auf sechs Talente – je Talent
+ * höchstens {@value #MAX_TALENT} Punkte, also lässt sich nicht alles meistern. Neu verteilen kostet eine Silbermünze je
+ * verteiltem Punkt. Wer Legende wird, darf streicheln ({@link HeroPat}).
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class HeroLevel {
     /** Die höchste Heldenstufe. */
-    public static final int MAX_LEVEL = 50;
+    public static final int MAX_LEVEL = 100;
     /** So viele Punkte fasst ein Talent. */
-    public static final int MAX_TALENT = 10;
+    public static final int MAX_TALENT = 20;
+    /** Talentpunkte, die jeder neue Rang zusätzlich bringt. */
+    public static final int RANK_BONUS = 2;
+    /** Heldenerfahrung für Stufe L: 40 · (L − 1)², für Stufe 100 also 392.040. */
+    public static final int CURVE = 40;
     /** Neu verteilen: eine Silbermünze (9 Bronze) je verteiltem Punkt. */
     public static final int RESET_PER_POINT = 9;
     /** Heldenerfahrung für einen Sieg: die Hälfte der Lebenspunkte, Bosse doppelt, höchstens so viel. */
@@ -82,29 +85,48 @@ public final class HeroLevel {
     public static final int NEW_BIOME = 20;
     public static final int CONQUEST = 500;
 
-    /** Die sechs Talente: was ein Punkt bringt und welches Bild sie im Charakterfenster haben. */
+    /** Die sechs Talente: was ein Punkt bringt, welches Bild und welche Farbe sie im Charakterfenster haben. */
     public enum Talent implements StringRepresentable {
-        /** +0,5 Schaden je Punkt. */
-        STRENGTH(() -> Items.IRON_SWORD),
-        /** +1 Lebenspunkt je Punkt. */
-        VITALITY(() -> Items.GOLDEN_APPLE),
-        /** +2 % Lauftempo je Punkt. */
-        AGILITY(() -> Items.FEATHER),
-        /** +0,5 Rüstung je Punkt. */
-        TOUGHNESS(() -> Items.IRON_CHESTPLATE),
-        /** +10 Mana und +5 % Erholung je Punkt. */
-        ARCANA(() -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get()),
-        /** +0,25 Glück je Punkt (bessere Beute in Truhen). */
-        FORTUNE(() -> Items.RABBIT_FOOT);
+        /** +0,3 Schaden je Punkt (20 Punkte: +6). */
+        STRENGTH(() -> Items.IRON_SWORD, 0.3, 0xFFE0584A),
+        /** +1 Lebenspunkt je Punkt (20 Punkte: zehn Herzen). */
+        VITALITY(() -> Items.GOLDEN_APPLE, 1.0, 0xFFF06A8A),
+        /** +1,25 % Lauftempo je Punkt (20 Punkte: +25 %). */
+        AGILITY(() -> Items.FEATHER, 1.25, 0xFF8FE07A),
+        /** +0,4 Rüstung je Punkt (20 Punkte: +8). */
+        TOUGHNESS(() -> Items.IRON_CHESTPLATE, 0.4, 0xFFB8C4D6),
+        /** +8 Mana und +4 % Erholung je Punkt (20 Punkte: +160 Mana, +80 %). */
+        ARCANA(() -> io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get(), 8.0, 0xFF6FA8FF),
+        /** +0,2 Glück je Punkt (bessere Beute in Truhen; 20 Punkte: +4). */
+        FORTUNE(() -> Items.RABBIT_FOOT, 0.2, 0xFFF2C14E);
 
         private final Supplier<Item> icon;
+        private final double perPoint;
+        private final int color;
 
-        Talent(Supplier<Item> icon) {
+        Talent(Supplier<Item> icon, double perPoint, int color) {
             this.icon = icon;
+            this.perPoint = perPoint;
+            this.color = color;
         }
 
         public ItemStack icon() {
             return new ItemStack(this.icon.get());
+        }
+
+        /** Was ein Punkt bringt (Schaden, Leben, Prozent Tempo, Rüstung, Mana, Glück). */
+        public double perPoint() {
+            return this.perPoint;
+        }
+
+        /** Was {@code points} Punkte zusammen bringen. */
+        public double value(int points) {
+            return this.perPoint * points;
+        }
+
+        /** Farbe im Charakterfenster (ARGB). */
+        public int color() {
+            return this.color;
         }
 
         @Override
@@ -118,6 +140,61 @@ public final class HeroLevel {
 
         Identifier modifierId() {
             return KingdomsAtWar.id("hero_" + this.getSerializedName());
+        }
+    }
+
+    /**
+     * Die Ränge des Helden: Wer eine dieser Stufen erreicht, steigt im Rang auf, bekommt {@value #RANK_BONUS} Talentpunkte
+     * dazu und ein neues Abzeichen. Die Legende (Stufe 100) darf außerdem streicheln.
+     */
+    public enum Rank implements StringRepresentable {
+        SQUIRE(1, 0xFFD08C52),
+        WARRIOR(20, 0xFFD9E1EA),
+        KNIGHT(40, 0xFFF2C14E),
+        HERO(60, 0xFF52D98F),
+        WARLORD(80, 0xFF6EE2F5),
+        LEGEND(MAX_LEVEL, 0xFFFF9A3C);
+
+        private final int minLevel;
+        private final int color;
+
+        Rank(int minLevel, int color) {
+            this.minLevel = minLevel;
+            this.color = color;
+        }
+
+        /** Ab dieser Heldenstufe. */
+        public int minLevel() {
+            return this.minLevel;
+        }
+
+        /** Die Farbe des Rangs (ARGB). */
+        public int color() {
+            return this.color;
+        }
+
+        /** Der nächste Rang (null für die Legende). */
+        public @org.jspecify.annotations.Nullable Rank next() {
+            return this.ordinal() + 1 < values().length ? values()[this.ordinal() + 1] : null;
+        }
+
+        public static Rank of(int level) {
+            Rank rank = SQUIRE;
+            for (Rank r : values()) {
+                if (level >= r.minLevel) {
+                    rank = r;
+                }
+            }
+            return rank;
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name().toLowerCase(Locale.ROOT);
+        }
+
+        public String translationKey() {
+            return "hero.kingdomsatwar.rank." + this.getSerializedName();
         }
     }
 
@@ -159,9 +236,19 @@ public final class HeroLevel {
             return this.talents.stream().mapToInt(Integer::intValue).sum();
         }
 
+        /** Sein Rang. */
+        public Rank rank() {
+            return Rank.of(this.level());
+        }
+
+        /** Alle Talentpunkte, die seine Stufe und seine Ränge hergeben. */
+        public int earned() {
+            return pointsFor(this.level());
+        }
+
         /** Noch zu verteilende Talentpunkte. */
         public int unspent() {
-            return Math.max(0, this.level() - 1 - this.spent());
+            return Math.max(0, this.earned() - this.spent());
         }
 
         Hero with(Talent talent, int points) {
@@ -175,12 +262,18 @@ public final class HeroLevel {
 
     // ------------------------------------------------------------------------------------------------ Stufen
 
-    /** Wie viel Heldenerfahrung man für diese Heldenstufe insgesamt braucht (Stufe 1: keine). */
+    /** Wie viel Heldenerfahrung man für diese Heldenstufe insgesamt braucht (Stufe 1: keine; Stufe 100: 392.040). */
     public static int total(int level) {
         if (level <= 1) {
             return 0;
         }
-        return (int) Math.round(50.0 * Math.pow(Math.min(level, MAX_LEVEL) - 1, 1.7) / 10.0) * 10;
+        int steps = Math.min(level, MAX_LEVEL) - 1;
+        return CURVE * steps * steps;
+    }
+
+    /** Talentpunkte auf dieser Stufe: einer je Stufe über der ersten und {@value #RANK_BONUS} für jeden erreichten Rang. */
+    public static int pointsFor(int level) {
+        return Math.max(0, Math.min(level, MAX_LEVEL) - 1) + RANK_BONUS * Rank.of(level).ordinal();
     }
 
     public static int levelFor(int experience) {
@@ -224,20 +317,56 @@ public final class HeroLevel {
         Hero next = new Hero(Math.min(cap, hero.experience() + amount), hero.talents(), hero.discoveries());
         player.setData(ModAttachments.HERO, next);
         if (next.level() > before) {
-            celebrate(player, next.level());
+            celebrate(player, before, next.level());
         }
     }
 
-    private static void celebrate(ServerPlayer player, int level) {
+    /**
+     * Der Aufstieg: Auf dem Bildschirm des Helden läuft die Aufstiegs-Szene (Abzeichen, Strahlen, Rangtitel); in der Welt
+     * sehen alle einen Lichtring, der vom Helden aus über den Boden läuft, eine Spirale in der Farbe seines Rangs, die an ihm
+     * aufsteigt, und Funken – bei einem neuen Rang dazu ein Feuerwerk, eine Fanfare und eine Nachricht im Chat.
+     */
+    private static void celebrate(ServerPlayer player, int from, int level) {
         ServerLevel world = player.level();
-        world.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY() + 1.0, player.getZ(), 30, 0.5, 0.8, 0.5, 0.3);
-        world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.55f,
-                1.15f);
-        player.connection.send(new ClientboundSetTitlesAnimationPacket(8, 50, 16));
-        player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable("hero.kingdomsatwar.level_up.title", level)
-                .withStyle(ChatFormatting.GOLD)));
-        player.connection.send(new ClientboundSetSubtitleTextPacket(Component.translatable("hero.kingdomsatwar.level_up.subtitle",
-                Component.keybind("key.kingdomsatwar.character")).withStyle(ChatFormatting.YELLOW)));
+        Rank rank = Rank.of(level);
+        boolean rankUp = Rank.of(from) != rank;
+        double x = player.getX();
+        double y = player.getY();
+        double z = player.getZ();
+        for (int i = 0; i < 36; i++) {
+            double a = i * Mth.TWO_PI / 36.0;
+            world.sendParticles(ParticleTypes.END_ROD, x + Math.cos(a) * 0.5, y + 0.15, z + Math.sin(a) * 0.5, 0, Math.cos(a), 0.015, Math.sin(a),
+                    0.2);
+        }
+        int rgb = rank.color() & 0xFFFFFF;
+        net.minecraft.core.particles.DustColorTransitionOptions dust = new net.minecraft.core.particles.DustColorTransitionOptions(rgb, 0xFFF6DC,
+                1.0f);
+        for (int i = 0; i < 48; i++) {
+            double t = i / 48.0;
+            double a = t * Mth.TWO_PI * 3.0;
+            double r = 1.05 - t * 0.45;
+            for (int k = 0; k < 2; k++) {
+                double b = a + k * Math.PI;
+                world.sendParticles(dust, x + Math.cos(b) * r, y + 0.1 + t * 2.7, z + Math.sin(b) * r, 1, 0.0, 0.0, 0.0, 0.0);
+            }
+        }
+        world.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, x, y + 1.3, z, rankUp ? 70 : 26, 0.35, 0.6, 0.35, rankUp ? 0.5 : 0.28);
+        world.sendParticles(ParticleTypes.ENCHANT, x, y + 1.0, z, 40, 0.6, 0.8, 0.6, 1.2);
+        world.playSound(null, x, y, z, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 0.8f);
+        world.playSound(null, x, y, z, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.0f, 1.2f);
+        if (rankUp) {
+            world.sendParticles(ParticleTypes.FIREWORK, x, y + 2.6, z, 60, 0.15, 0.15, 0.15, 0.22);
+            world.playSound(null, x, y, z, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.7f, 1.0f);
+            world.playSound(null, x, y, z, SoundEvents.BEACON_POWER_SELECT, SoundSource.PLAYERS, 0.8f, 1.1f);
+            player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.rank_up", Component.translatable(rank.translationKey())
+                    .withColor(rank.color() & 0xFFFFFF).withStyle(ChatFormatting.BOLD), RANK_BONUS).withStyle(ChatFormatting.GOLD));
+            if (rank == Rank.LEGEND) {
+                player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.reward.pat", Component.keybind("key.kingdomsatwar.pat"))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+        }
+        io.github.sirschrolli.kingdomsatwar.network.ModNetwork.send(player,
+                new io.github.sirschrolli.kingdomsatwar.network.HeroLevelUpPayload(from, level));
     }
 
     /** Heldenerfahrung für einen Sieg über {@code victim}. */
@@ -393,24 +522,29 @@ public final class HeroLevel {
         apply(player);
     }
 
+    /** Erholung des Manas: je Punkt Zauberkunst 4 % schneller. */
+    public static final float REGEN_PER_ARCANA = 0.04f;
+
     /** Mana mehr durch Zauberkunst. */
     public static float bonusMana(Player player) {
-        return of(player).points(Talent.ARCANA) * 10.0f;
+        return (float) Talent.ARCANA.value(of(player).points(Talent.ARCANA));
     }
 
-    /** Erholung des Manas: je Punkt Zauberkunst 5 % schneller. */
+    /** Erholung des Manas: je Punkt Zauberkunst 4 % schneller. */
     public static float manaRegenFactor(Player player) {
-        return 1.0f + of(player).points(Talent.ARCANA) * 0.05f;
+        return 1.0f + of(player).points(Talent.ARCANA) * REGEN_PER_ARCANA;
     }
 
     /** Die Talente als dauerhafte Steigerungen der Werte des Spielers. */
     public static void apply(Player player) {
         Hero hero = of(player);
-        modifier(player, Attributes.ATTACK_DAMAGE, Talent.STRENGTH, 0.5 * hero.points(Talent.STRENGTH), AttributeModifier.Operation.ADD_VALUE);
-        modifier(player, Attributes.MAX_HEALTH, Talent.VITALITY, 1.0 * hero.points(Talent.VITALITY), AttributeModifier.Operation.ADD_VALUE);
-        modifier(player, Attributes.MOVEMENT_SPEED, Talent.AGILITY, 0.02 * hero.points(Talent.AGILITY), AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-        modifier(player, Attributes.ARMOR, Talent.TOUGHNESS, 0.5 * hero.points(Talent.TOUGHNESS), AttributeModifier.Operation.ADD_VALUE);
-        modifier(player, Attributes.LUCK, Talent.FORTUNE, 0.25 * hero.points(Talent.FORTUNE), AttributeModifier.Operation.ADD_VALUE);
+        modifier(player, Attributes.ATTACK_DAMAGE, Talent.STRENGTH, Talent.STRENGTH.value(hero.points(Talent.STRENGTH)),
+                AttributeModifier.Operation.ADD_VALUE);
+        modifier(player, Attributes.MAX_HEALTH, Talent.VITALITY, Talent.VITALITY.value(hero.points(Talent.VITALITY)), AttributeModifier.Operation.ADD_VALUE);
+        modifier(player, Attributes.MOVEMENT_SPEED, Talent.AGILITY, Talent.AGILITY.value(hero.points(Talent.AGILITY)) / 100.0,
+                AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        modifier(player, Attributes.ARMOR, Talent.TOUGHNESS, Talent.TOUGHNESS.value(hero.points(Talent.TOUGHNESS)), AttributeModifier.Operation.ADD_VALUE);
+        modifier(player, Attributes.LUCK, Talent.FORTUNE, Talent.FORTUNE.value(hero.points(Talent.FORTUNE)), AttributeModifier.Operation.ADD_VALUE);
         if (player.getHealth() > player.getMaxHealth()) {
             player.setHealth(player.getMaxHealth());
         }
@@ -430,7 +564,24 @@ public final class HeroLevel {
 
     @SubscribeEvent
     static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            settle(player);
+        }
         apply(event.getEntity());
+    }
+
+    /**
+     * Stimmen verteilte Punkte und Stufe nicht mehr zusammen (ältere Spielstände: früher reichte weniger Erfahrung für eine
+     * Stufe, und ein Talent fasste weniger Punkte), bekommt der Held seine Punkte kostenlos zurück und verteilt neu.
+     */
+    public static boolean settle(ServerPlayer player) {
+        Hero hero = of(player);
+        if (hero.spent() <= hero.earned()) {
+            return false;
+        }
+        player.setData(ModAttachments.HERO, new Hero(hero.experience(), List.of(), hero.discoveries()));
+        player.sendSystemMessage(Component.translatable("hero.kingdomsatwar.settled", hero.level()).withStyle(ChatFormatting.GOLD));
+        return true;
     }
 
     @SubscribeEvent

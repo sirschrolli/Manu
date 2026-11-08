@@ -76,13 +76,17 @@ final class HeroGameTests {
             ModGameTests.TEST_FUNCTIONS.register("hero_talents", () -> HeroGameTests::talents);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SOURCES =
             ModGameTests.TEST_FUNCTIONS.register("hero_sources", () -> HeroGameTests::sources);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SETTLE =
+            ModGameTests.TEST_FUNCTIONS.register("hero_settle", () -> HeroGameTests::settle);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> PAT =
+            ModGameTests.TEST_FUNCTIONS.register("hero_pat", () -> HeroGameTests::pat);
 
     private HeroGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES)) {
+        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -285,7 +289,11 @@ final class HeroGameTests {
         helper.succeed();
     }
 
-    /** Heldenstufen: steigende Schwellen, jede Stufe zu genau ihrer Erfahrung, ein Talentpunkt je Stufe, Höchststufe 50. */
+    /**
+     * Heldenstufen: steigende Schwellen bis Stufe 100 (392.040 Heldenerfahrung), jede Stufe zu genau ihrer Erfahrung, ein
+     * Talentpunkt je Stufe und zwei für jeden neuen Rang (Recke 20, Ritter 40, Held 60, Kriegsherr 80, Legende 100); mit
+     * allen Punkten lässt sich nicht jedes Talent meistern.
+     */
     private static void levels(GameTestHelper helper) {
         helper.assertValueEqual(HeroLevel.total(1), 0, "Stufe 1 ohne Erfahrung");
         for (int level = 2; level <= HeroLevel.MAX_LEVEL; level++) {
@@ -298,14 +306,27 @@ final class HeroGameTests {
         HeroLevel.Hero hero = new HeroLevel.Hero(HeroLevel.total(12), List.of(3, 2), 0);
         helper.assertValueEqual(hero.talents().size(), HeroLevel.Talent.values().length, "Talente werden aufgefüllt");
         helper.assertValueEqual(hero.unspent(), 11 - 5, "freie Talentpunkte auf Stufe 12");
-        helper.assertTrue(HeroLevel.total(HeroLevel.MAX_LEVEL) - 1 > 30_000, "Heldenstufe 50 ist zu schnell erreicht");
-        helper.assertTrue(HeroLevel.MAX_LEVEL - 1 < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
+        helper.assertValueEqual(HeroLevel.MAX_LEVEL, 100, "höchste Heldenstufe");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 392_040, "Heldenerfahrung für Stufe 100");
+        helper.assertTrue(HeroLevel.total(51) - HeroLevel.total(50) > 3_000, "eine Stufe um 50 ist zu schnell erreicht");
+        // Ränge und ihre Punkte
+        helper.assertValueEqual(HeroLevel.Rank.of(1), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 1");
+        helper.assertValueEqual(HeroLevel.Rank.of(19), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 19");
+        helper.assertValueEqual(HeroLevel.Rank.of(20), HeroLevel.Rank.WARRIOR, "Rang auf Stufe 20");
+        helper.assertValueEqual(HeroLevel.Rank.of(40), HeroLevel.Rank.KNIGHT, "Rang auf Stufe 40");
+        helper.assertValueEqual(HeroLevel.Rank.of(79), HeroLevel.Rank.HERO, "Rang auf Stufe 79");
+        helper.assertValueEqual(HeroLevel.Rank.of(99), HeroLevel.Rank.WARLORD, "Rang auf Stufe 99");
+        helper.assertValueEqual(HeroLevel.Rank.of(100), HeroLevel.Rank.LEGEND, "Rang auf Stufe 100");
+        helper.assertValueEqual(HeroLevel.pointsFor(19), 18, "Talentpunkte auf Stufe 19");
+        helper.assertValueEqual(HeroLevel.pointsFor(20), 19 + HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 20 (mit Rangbonus)");
+        helper.assertValueEqual(HeroLevel.pointsFor(100), 99 + 5 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 100");
+        helper.assertTrue(HeroLevel.pointsFor(HeroLevel.MAX_LEVEL) < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
                 "mit allen Punkten ließe sich jedes Talent meistern");
         helper.succeed();
     }
 
     /**
-     * Talente: Punkte gibt es nur, so viele die Stufe hergibt, höchstens zehn je Talent; jeder Punkt wirkt sofort (Schaden,
+     * Talente: Punkte gibt es nur, so viele die Stufe hergibt, höchstens zwanzig je Talent; jeder Punkt wirkt sofort (Schaden,
      * Leben, Tempo, Rüstung, Mana, Glück). Neu verteilen kostet eine Silbermünze je Punkt – ohne Geld geht es nicht.
      * Die Erfahrung von Minecraft bleibt dabei unberührt.
      */
@@ -330,13 +351,13 @@ final class HeroGameTests {
                 helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
             }
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.5)) < 1.0e-6, "Stärke");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3)) < 1.0e-6, "Stärke");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0)) < 1.0e-6, "Lebenskraft");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.02) < 1.0e-6, "Gewandtheit");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.5)) < 1.0e-6, "Zähigkeit");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.25)) < 1.0e-6, "Glück");
-            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 10.0f)) < 1.0e-3f, "Zauberkunst");
-            // höchstens zehn Punkte je Talent
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.0125) < 1.0e-6, "Gewandtheit");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.4)) < 1.0e-6, "Zähigkeit");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.2)) < 1.0e-6, "Glück");
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f)) < 1.0e-3f, "Zauberkunst");
+            // höchstens zwanzig Punkte je Talent
             HeroLevel.award(player, HeroLevel.total(30));
             int spent = 0;
             while (HeroLevel.spend(player, HeroLevel.Talent.STRENGTH)) {
@@ -344,11 +365,11 @@ final class HeroGameTests {
             }
             helper.assertValueEqual(HeroLevel.of(player).points(HeroLevel.Talent.STRENGTH), HeroLevel.MAX_TALENT, "Stärke voll");
             helper.assertValueEqual(spent, HeroLevel.MAX_TALENT - 1, "Punkte bis zum vollen Talent");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 5.0)) < 1.0e-6, "Stärke gemeistert");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 6.0)) < 1.0e-6, "Stärke gemeistert");
             // die Werte kommen nach dem Wiedereinstieg zurück
             player.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(KingdomsAtWar.id("hero_strength"));
             HeroLevel.apply(player);
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 5.0)) < 1.0e-6, "Stärke nach dem Wiedereinstieg");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 6.0)) < 1.0e-6, "Stärke nach dem Wiedereinstieg");
             // neu verteilen: erst ohne, dann mit Geld
             int cost = HeroLevel.resetCost(HeroLevel.of(player));
             helper.assertValueEqual(cost, HeroLevel.of(player).spent() * HeroLevel.RESET_PER_POINT, "Preis des Neuverteilens");
@@ -358,7 +379,7 @@ final class HeroGameTests {
             helper.assertTrue(HeroLevel.reset(player), "Neu verteilen mit Geld");
             helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), before - cost, "Münzen nach dem Neuverteilen");
             HeroLevel.Hero hero = HeroLevel.of(player);
-            helper.assertTrue(hero.spent() == 0 && hero.unspent() == hero.level() - 1, "nach dem Neuverteilen sind alle Punkte frei");
+            helper.assertTrue(hero.spent() == 0 && hero.unspent() == HeroLevel.pointsFor(hero.level()), "nach dem Neuverteilen sind alle Punkte frei");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - damage) < 1.0e-6, "Stärke nach dem Neuverteilen");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - health) < 1.0e-6, "Leben nach dem Neuverteilen");
             helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
@@ -423,6 +444,97 @@ final class HeroGameTests {
             helper.succeed();
         } finally {
             level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /**
+     * Alte Spielstände: Wer nach den neuen Stufen weniger Punkte hat, als er verteilt hat, bekommt alle zurück (kostenlos);
+     * wer genug hat, behält seine Verteilung.
+     */
+    private static void settle(GameTestHelper helper) {
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            // früher Stufe 13 mit zwölf verteilten Punkten – heute ist das Stufe 10 mit neun Punkten
+            HeroLevel.set(player, new HeroLevel.Hero(3_420, List.of(5, 5, 2, 0, 0, 0), 4));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 10, "Stufe mit 3.420 Heldenerfahrung");
+            helper.assertTrue(HeroLevel.settle(player), "zu viele verteilte Punkte werden nicht zurückgegeben");
+            HeroLevel.Hero hero = HeroLevel.of(player);
+            helper.assertTrue(hero.spent() == 0 && hero.experience() == 3_420 && hero.discoveries() == 4 && hero.unspent() == 9,
+                    "nach dem Zurückgeben: " + hero);
+            HeroLevel.set(player, new HeroLevel.Hero(3_420, List.of(5, 4, 0, 0, 0, 0), 4));
+            helper.assertTrue(!HeroLevel.settle(player) && HeroLevel.of(player).spent() == 9, "passende Verteilung wurde angetastet");
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            helper.succeed();
+        } finally {
+            level(helper).getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /**
+     * Streicheln, die Belohnung der Legende: unter Stufe 100 geht es nicht; als Legende streichelt man das Wesen vor sich,
+     * nicht zweimal im selben Augenblick und nicht aus der Ferne. Ein eigenes, verletztes Tier bekommt ein halbes Herz
+     * zurück – aber nicht bei jedem Streicheln.
+     */
+    private static void pat(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        BlockPos floor = helper.absolutePos(new BlockPos(1, 1, 1));
+        net.minecraft.world.entity.animal.wolf.Wolf[] wolf = {null};
+        net.minecraft.world.entity.animal.cow.Cow[] far = {null};
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            player.snapTo(floor.getX() + 0.5, floor.getY(), floor.getZ() + 0.5, 0.0f, 0.0f);
+            wolf[0] = net.minecraft.world.entity.EntityTypes.WOLF.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            wolf[0].snapTo(floor.getX() + 0.5, floor.getY(), floor.getZ() + 2.5, 0.0f, 0.0f);
+            wolf[0].setNoAi(true);
+            level.addFreshEntity(wolf[0]);
+            far[0] = net.minecraft.world.entity.EntityTypes.COW.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            far[0].snapTo(floor.getX() + 0.5, floor.getY(), floor.getZ() + 12.5, 0.0f, 0.0f);
+            far[0].setNoAi(true);
+            level.addFreshEntity(far[0]);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(99), List.of(), 0));
+            HeroPatCheck.locked(helper, player, wolf[0]);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(100), List.of(), 0));
+            helper.assertValueEqual(HeroLevel.of(player).rank(), HeroLevel.Rank.LEGEND, "Rang auf Stufe 100");
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, wolf[0]),
+                    io.github.sirschrolli.kingdomsatwar.hero.HeroPat.Result.PATTED, "Streicheln als Legende");
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, wolf[0]),
+                    io.github.sirschrolli.kingdomsatwar.hero.HeroPat.Result.WAIT, "gleich noch einmal");
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, far[0]),
+                    io.github.sirschrolli.kingdomsatwar.hero.HeroPat.Result.TOO_FAR, "Streicheln aus zwölf Blöcken");
+            // ein eigener, verletzter Wolf: ein halbes Herz zurück, beim nächsten Streicheln gleich danach nicht noch eins
+            wolf[0].tame(player);
+            wolf[0].setHealth(wolf[0].getMaxHealth() - 6.0f);
+            float before = wolf[0].getHealth();
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, wolf[0]);
+            helper.assertTrue(Math.abs(wolf[0].getHealth() - (before + io.github.sirschrolli.kingdomsatwar.hero.HeroPat.HEAL)) < 1.0e-4f,
+                    "der eigene Wolf bekommt kein halbes Herz: " + before + " → " + wolf[0].getHealth());
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, wolf[0]);
+            helper.assertTrue(Math.abs(wolf[0].getHealth() - (before + io.github.sirschrolli.kingdomsatwar.hero.HeroPat.HEAL)) < 1.0e-4f,
+                    "Leben bei jedem Streicheln");
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            helper.succeed();
+        } finally {
+            if (wolf[0] != null) {
+                wolf[0].discard();
+            }
+            if (far[0] != null) {
+                far[0].discard();
+            }
+            level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /** Unter Stufe 100: Streicheln geht nicht. */
+    private static final class HeroPatCheck {
+        static void locked(GameTestHelper helper, ServerPlayer player, net.minecraft.world.entity.Entity target) {
+            io.github.sirschrolli.kingdomsatwar.hero.HeroPat.forget(player);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.hero.HeroPat.pat(player, target),
+                    io.github.sirschrolli.kingdomsatwar.hero.HeroPat.Result.LOCKED, "Streicheln unter Stufe 100");
         }
     }
 

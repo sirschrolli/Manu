@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "9";
+    private static final String PROTOCOL = "10";
 
     private ModNetwork() {}
 
@@ -32,6 +32,7 @@ public final class ModNetwork {
                 .playToServer(CampaignPayload.TYPE, CampaignPayload.STREAM_CODEC, CampaignPayload::handle)
                 .playToServer(TrainPayload.TYPE, TrainPayload.STREAM_CODEC, TrainPayload::handle)
                 .playToServer(HeroTalentPayload.TYPE, HeroTalentPayload.STREAM_CODEC, HeroTalentPayload::handle)
+                .playToServer(HeroPatPayload.TYPE, HeroPatPayload.STREAM_CODEC, HeroPatPayload::handle)
                 .playToServer(HirePayload.TYPE, HirePayload.STREAM_CODEC, HirePayload::handle)
                 .playToServer(TradePayload.TYPE, TradePayload.STREAM_CODEC, TradePayload::handle)
                 .playToServer(TownActionPayload.TYPE, TownActionPayload.STREAM_CODEC, TownActionPayload::handle)
@@ -48,6 +49,8 @@ public final class ModNetwork {
                 .playToClient(RecruitResultPayload.TYPE, RecruitResultPayload.STREAM_CODEC)
                 .playToClient(ScreenShakePayload.TYPE, ScreenShakePayload.STREAM_CODEC)
                 .playToClient(OpenChroniclePayload.TYPE, OpenChroniclePayload.STREAM_CODEC)
-                .playToClient(ChapterCardPayload.TYPE, ChapterCardPayload.STREAM_CODEC);
+                .playToClient(ChapterCardPayload.TYPE, ChapterCardPayload.STREAM_CODEC)
+                .playToClient(HeroLevelUpPayload.TYPE, HeroLevelUpPayload.STREAM_CODEC)
+                .playToClient(HeroPatEffectPayload.TYPE, HeroPatEffectPayload.STREAM_CODEC);
     }
 }
