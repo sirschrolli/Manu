@@ -40,6 +40,41 @@ final class ArmyWidgets {
         g.blit(RenderPipelines.GUI_TEXTURED, skin, x, y, 40.0f, 8.0f, 24, 24, 8, 8, 128, 64);
     }
 
+    /** Die Stufe in der Ecke des Gesichts (wie die Zahl an einem Stapel), ab Stufe 2. */
+    static void levelBadge(GuiGraphicsExtractor g, Font font, int x, int y, int level) {
+        if (level < 2) {
+            return;
+        }
+        String text = String.valueOf(level);
+        g.text(font, text, x + 25 - font.width(text), y + 17, level >= io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL
+                ? 0xFFFFE08A : 0xFFF2C14E, true);
+    }
+
+    /**
+     * "Stufe 7" und daneben der Weg zur nächsten Stufe als Leiste (auf der höchsten Stufe ganz gefüllt); darüber zeigt ein
+     * Tooltip die Kampferfahrung in Zahlen und wie man sie sammelt.
+     */
+    static void levelLine(GuiGraphicsExtractor g, Font font, int x, int y, int width, int level, int experience, int mouseX, int mouseY) {
+        Component text = Component.translatable("soldier.kingdomsatwar.level", level);
+        g.text(font, text, x, y, LABEL, false);
+        int bx = x + font.width(text) + 5;
+        int bw = width - (bx - x) - 1;
+        float progress = io.github.sirschrolli.kingdomsatwar.army.Veterancy.progress(experience);
+        g.fill(bx - 1, y + 1, bx + bw + 1, y + 7, 0xFF3A3122);
+        g.fill(bx, y + 2, bx + bw, y + 6, 0xFF6E6250);
+        g.fill(bx, y + 2, bx + Math.round(bw * progress), y + 6, 0xFFE0A93A);
+        g.fill(bx, y + 2, bx + Math.round(bw * progress), y + 3, 0xFFF6D27A);
+        if (mouseX >= x && mouseX < x + width && mouseY >= y - 1 && mouseY < y + 9) {
+            boolean max = level >= io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL;
+            Component numbers = max ? Component.translatable("gui.kingdomsatwar.soldier.experience.max", experience)
+                    : Component.translatable("gui.kingdomsatwar.soldier.experience", experience,
+                            io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(level + 1));
+            g.setTooltipForNextFrame(font, java.util.stream.Stream.of(numbers.copy().withStyle(net.minecraft.ChatFormatting.GOLD),
+                    Component.translatable("gui.kingdomsatwar.soldier.experience.hint").withStyle(net.minecraft.ChatFormatting.GRAY))
+                    .flatMap(c -> font.split(c, 200).stream()).toList(), mouseX, mouseY);
+        }
+    }
+
     /** Kleines Waffen-Symbol (Schwert, Bogen, Armbrust, Speer, Streitkolben, Axt) für die Angriffswerte. */
     static void weaponIcon(GuiGraphicsExtractor g, SoldierType type, int x, int y) {
         g.pose().pushMatrix();

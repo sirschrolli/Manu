@@ -264,6 +264,7 @@ public class MercenaryScreen extends Screen {
         String name = soldier.getPersonalName().isEmpty() ? soldier.getDisplayName().getString() : soldier.getPersonalName();
         ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
                 Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank());
+        ArmyWidgets.levelBadge(g, this.font, x + 5, y + 5, soldier.getCombatLevel());
     }
 
     private void drawInfo(GuiGraphicsExtractor g, SoldierEntity soldier, int x, int y, int mouseX, int mouseY) {
@@ -271,15 +272,19 @@ public class MercenaryScreen extends Screen {
         int rank = soldier.getRank();
         g.text(this.font, Component.translatable(type.translationKey()).withStyle(ChatFormatting.BOLD), x, y + 2, ArmyWidgets.LABEL, false);
         g.text(this.font, ArmyWidgets.rank(rank, SoldierEntity.MAX_RANK), x, y + 13, rank == 0 ? ArmyWidgets.MUTED : ArmyWidgets.GOLD, false);
-        int sy = y + 28;
+        int level = soldier.getCombatLevel();
+        ArmyWidgets.levelLine(g, this.font, x, y + 23, 96, level, soldier.getCombatExperience(), mouseX, mouseY);
+        int sy = y + 34;
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.HEART, x, sy, 9, 9);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 1, String.valueOf(Mth.ceil(soldier.getAttributeValue(Attributes.MAX_HEALTH))), null);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 12, 9, 9);
-        ArmyWidgets.stat(g, this.font, x + 12, sy + 13, String.valueOf((int) Math.round(type.armor() + 2.0 * rank)), null);
+        ArmyWidgets.stat(g, this.font, x + 12, sy + 13, String.valueOf((int) Math.round(type.armor() + 2.0 * rank
+                + io.github.sirschrolli.kingdomsatwar.army.Veterancy.ARMOR_PER_LEVEL * (level - 1))), null);
         ArmyWidgets.weaponIcon(g, type, x - 1, sy + 23);
         g.text(this.font, Component.translatable(type.ranged() ? "gui.kingdomsatwar.recruitment.ranged" : "gui.kingdomsatwar.recruitment.melee")
-                .append(" " + (int) Math.round(type.attack() + rank)), x + 12, sy + 25, ArmyWidgets.LABEL, false);
-        int py = y + 68;
+                .append(" " + (int) Math.round(type.attack() + rank + io.github.sirschrolli.kingdomsatwar.army.Veterancy.DAMAGE_PER_LEVEL * (level - 1))),
+                x + 12, sy + 25, ArmyWidgets.LABEL, false);
+        int py = y + 72;
         g.text(this.font, Component.translatable("gui.kingdomsatwar.mercenaries.wage"), x, py, ArmyWidgets.LABEL, false);
         ArmyWidgets.costRow(g, this.font, this.minecraft.player, x, py + 10, soldier.hirePrice(), List.of(), List.of(), mouseX, mouseY);
     }

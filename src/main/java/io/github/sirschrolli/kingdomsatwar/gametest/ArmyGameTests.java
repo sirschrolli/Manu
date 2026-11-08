@@ -184,8 +184,9 @@ final class ArmyGameTests {
     // =====================================================================================
 
     /**
-     * Ein Schwertkämpfer wird am Tisch Veteran (27 Bronze und 3 Eisen), dann Elite (45 Bronze und 2 Stahl) und dann
-     * Ritter (81 Bronze und 2 Stahl): Er behält Herrn, Namen und Rang, seine Werte wachsen mit.
+     * Ein Schwertkämpfer mit Kampferfahrung (Stufe 6) wird am Tisch Veteran (27 Bronze und 3 Eisen), dann Elite (45 Bronze
+     * und 2 Stahl) und dann Ritter (81 Bronze und 2 Stahl): Er behält Herrn, Namen, Rang und Erfahrung, seine Werte wachsen
+     * mit. Meister wird er erst ab Stufe 10.
      */
     private static void training(GameTestHelper helper) {
         floor(helper);
@@ -201,7 +202,17 @@ final class ArmyGameTests {
             String name = soldier.getPersonalName();
             helper.assertTrue(!name.isEmpty(), "Soldat ohne eigenen Namen");
             helper.assertValueEqual(soldier.getRank(), 0, "Rang am Anfang");
+            // ohne Kampferfahrung kein Rang
+            player.getInventory().add(new ItemStack(Items.IRON_INGOT, 3));
+            player.getInventory().add(new ItemStack(ModItems.GOLD_COIN.get(), 2));
+            helper.assertTrue(Training.train(player, table, soldier.getId(), Training.Action.RANK) == Recruitment.Result.NEEDS_LEVEL,
+                    "Befördern ohne Kampferfahrung muss scheitern");
+            player.getInventory().clearContent();
+            soldier.setCombatExperience(io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(6));
+            helper.assertValueEqual(soldier.getCombatLevel(), 6, "Stufe nach der Erfahrung");
+            double base = SoldierType.SWORDSMAN.health();
             double health = soldier.getAttributeValue(Attributes.MAX_HEALTH);
+            helper.assertTrue(Math.abs(health - base * 1.15) < 0.01, "Leben auf Stufe 6: " + health);
             double armor = soldier.getAttributeValue(Attributes.ARMOR);
             // ohne Geld geht nichts
             helper.assertTrue(Training.train(player, table, soldier.getId(), Training.Action.RANK) == Recruitment.Result.NOT_ENOUGH,
@@ -215,7 +226,7 @@ final class ArmyGameTests {
             helper.assertValueEqual(soldier.getRank(), 1, "Rang nach dem ersten Befördern");
             helper.assertValueEqual(Coins.total(player), 162 - 27, "Münzen nach dem ersten Befördern");
             helper.assertValueEqual(player.getInventory().countItem(Items.IRON_INGOT), 0, "Eisen nach dem ersten Befördern");
-            helper.assertTrue(Math.abs(soldier.getAttributeValue(Attributes.MAX_HEALTH) - health * 1.25) < 0.01, "Leben des Veteranen");
+            helper.assertTrue(Math.abs(soldier.getAttributeValue(Attributes.MAX_HEALTH) - base * 1.40) < 0.01, "Leben des Veteranen");
             helper.assertTrue(Math.abs(soldier.getAttributeValue(Attributes.ARMOR) - (armor + 2.0)) < 0.01, "Rüstung des Veteranen");
             helper.assertTrue(soldier.getCustomName() != null && soldier.getCustomName().getString().contains("★"), "Name zeigt den Rang nicht");
             // Elite
@@ -223,8 +234,8 @@ final class ArmyGameTests {
                     "Befördern zur Elite klappt nicht");
             helper.assertValueEqual(soldier.getRank(), 2, "Rang nach dem zweiten Befördern");
             helper.assertValueEqual(Coins.total(player), 162 - 27 - 45, "Münzen nach dem zweiten Befördern");
-            helper.assertTrue(Training.train(player, table, soldier.getId(), Training.Action.RANK) == Recruitment.Result.MAX_RANK,
-                    "über Elite hinaus darf es nicht gehen");
+            helper.assertTrue(Training.train(player, table, soldier.getId(), Training.Action.RANK) == Recruitment.Result.NEEDS_LEVEL,
+                    "Meister erst ab Stufe 10");
             // zum Ritter
             helper.assertTrue(Training.train(player, table, soldier.getId(), Training.Action.PROMOTE) == Recruitment.Result.PROMOTED,
                     "Ausbildung zum Ritter klappt nicht");
@@ -238,7 +249,8 @@ final class ArmyGameTests {
             helper.assertTrue(knight.isOwnedBy(player), "der Ritter gehört nicht dem Spieler");
             helper.assertValueEqual(knight.getPersonalName(), name, "Name des Ritters");
             helper.assertValueEqual(knight.getRank(), 2, "Rang des Ritters");
-            helper.assertTrue(Math.abs(knight.getAttributeValue(Attributes.MAX_HEALTH) - SoldierType.KNIGHT.health() * 1.5) < 0.01,
+            helper.assertValueEqual(knight.getCombatLevel(), 6, "Stufe des Ritters");
+            helper.assertTrue(Math.abs(knight.getAttributeValue(Attributes.MAX_HEALTH) - SoldierType.KNIGHT.health() * 1.65) < 0.01,
                     "Leben des Elite-Ritters");
             helper.assertTrue(knight.getOffhandItem().is(Items.SHIELD), "der Ritter hat keinen Schild");
             // Hauptmann braucht einen Edelstein
@@ -255,8 +267,10 @@ final class ArmyGameTests {
             SoldierEntity loaded = ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get().create(level, EntitySpawnReason.LOAD);
             loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), tag));
             helper.assertValueEqual(loaded.getRank(), 2, "Rang nach dem Laden");
+            helper.assertValueEqual(loaded.getCombatExperience(), io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(6),
+                    "Kampferfahrung nach dem Laden");
             helper.assertValueEqual(loaded.getPersonalName(), name, "Name nach dem Laden");
-            helper.assertTrue(Math.abs(loaded.getAttributeValue(Attributes.MAX_HEALTH) - SoldierType.KNIGHT.health() * 1.5) < 0.01,
+            helper.assertTrue(Math.abs(loaded.getAttributeValue(Attributes.MAX_HEALTH) - SoldierType.KNIGHT.health() * 1.65) < 0.01,
                     "Leben nach dem Laden");
             helper.succeed();
         } finally {

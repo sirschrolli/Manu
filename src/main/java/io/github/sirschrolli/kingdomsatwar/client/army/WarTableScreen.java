@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.army.Provisions;
 import io.github.sirschrolli.kingdomsatwar.army.Recruitment;
 import io.github.sirschrolli.kingdomsatwar.army.Training;
+import io.github.sirschrolli.kingdomsatwar.army.Veterancy;
 import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
@@ -166,12 +167,12 @@ public class WarTableScreen extends Screen {
         Training.Cost rank = soldier == null ? null : Training.rankCost(soldier.getSoldierType(), soldier.getRank());
         SoldierType chosenTarget = soldier == null ? null : this.target(soldier);
         Training.Cost promote = chosenTarget == null ? null : Training.promoteCost(soldier.getSoldierType(), chosenTarget);
-        this.rankButton.active = rank != null && Training.canAfford(this.minecraft.player, rank);
+        boolean ready = soldier != null && Training.readyForRank(soldier);
+        this.rankButton.active = rank != null && ready && Training.canAfford(this.minecraft.player, rank);
         this.promoteButton.active = promote != null && Training.canAfford(this.minecraft.player, promote);
         this.rankButton.setTooltip(Tooltip.create(soldier == null ? Component.translatable("gui.kingdomsatwar.recruitment.no_soldier")
                 : rank == null ? Component.translatable("gui.kingdomsatwar.recruitment.max_rank")
-                : Component.translatable("gui.kingdomsatwar.recruitment.rank_up.hint",
-                        Component.translatable("soldier.kingdomsatwar.rank." + (soldier.getRank() + 1)))));
+                : this.rankHint(soldier, ready)));
         SoldierType next = soldier == null ? null : this.target(soldier);
         this.promoteButton.setMessage(Component.translatable("gui.kingdomsatwar.recruitment.promote"));
         this.promoteButton.setTooltip(Tooltip.create(next == null
@@ -180,6 +181,24 @@ public class WarTableScreen extends Screen {
                         .append("\n\n").append(Component.translatable("soldier.kingdomsatwar." + next.id() + ".role")
                                 .withStyle(ChatFormatting.GOLD))
                         .append("\n").append(Component.translatable(next.descriptionKey()).withStyle(ChatFormatting.GRAY))));
+    }
+
+    /**
+     * Was das Befördern bringt (beim Meister und bei der Legende dazu ihre Gabe) – oder ab welcher Stufe es geht und wie
+     * viel Kampferfahrung noch fehlt.
+     */
+    private Component rankHint(SoldierEntity soldier, boolean ready) {
+        int next = soldier.getRank() + 1;
+        Component rankName = Component.translatable("soldier.kingdomsatwar.rank." + next);
+        if (!ready) {
+            int needed = Veterancy.minLevel(next);
+            return Component.translatable("gui.kingdomsatwar.recruitment.rank_up.needs", rankName, needed,
+                    Math.max(0, Veterancy.total(needed) - soldier.getCombatExperience())).withStyle(ChatFormatting.RED)
+                    .append("\n\n").append(Component.translatable("gui.kingdomsatwar.soldier.experience.hint").withStyle(ChatFormatting.GRAY));
+        }
+        Component hint = Component.translatable("gui.kingdomsatwar.recruitment.rank_up.hint", rankName);
+        return next >= 3 ? hint.copy().append("\n").append(Component.translatable("gui.kingdomsatwar.recruitment.rank_up.perk." + next)
+                .withStyle(ChatFormatting.GOLD)) : hint;
     }
 
     private void campaign() {
@@ -417,24 +436,29 @@ public class WarTableScreen extends Screen {
         int rank = chosen.getRank();
         g.text(this.font, Component.translatable(type.translationKey()).withStyle(ChatFormatting.BOLD), x, y + 2, ArmyWidgets.LABEL, false);
         g.text(this.font, ArmyWidgets.rank(rank, SoldierEntity.MAX_RANK), x, y + 13, rank == 0 ? ArmyWidgets.MUTED : ArmyWidgets.GOLD, false);
+        // Stufe und der Weg zur nächsten
+        int level = chosen.getCombatLevel();
+        ArmyWidgets.levelLine(g, this.font, x, y + 23, INFO_W, level, chosen.getCombatExperience(), mouseX, mouseY);
         // Werte jetzt und nach dem Befördern
         Training.Cost rankCost = Training.rankCost(type, rank);
-        int sy = y + 26;
+        int sy = y + 34;
         double health = chosen.getAttributeValue(Attributes.MAX_HEALTH);
-        // Rüstung und Schaden aus Art und Rang (der Schaden wird nicht an das Spiel übertragen)
-        double armor = type.armor() + 2.0 * rank;
-        double attack = type.attack() + rank;
+        // Rüstung und Schaden aus Art, Rang und Stufe (der Schaden wird nicht an das Spiel übertragen)
+        double armor = type.armor() + 2.0 * rank + Veterancy.ARMOR_PER_LEVEL * (level - 1);
+        double attack = type.attack() + rank + Veterancy.DAMAGE_PER_LEVEL * (level - 1);
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.HEART, x, sy, 9, 9);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 1, Mth.ceil(chosen.getHealth()) + "/" + (int) Math.round(health),
-                rankCost == null ? null : String.valueOf((int) Math.round(type.health() * (1.0 + 0.25 * (rank + 1)))));
+                rankCost == null ? null : String.valueOf((int) Math.round(health + type.health() * 0.25)));
         g.blitSprite(RenderPipelines.GUI_TEXTURED, ArmyWidgets.ARMOR, x, sy + 11, 9, 9);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 12, String.valueOf((int) Math.round(armor)), rankCost == null ? null : String.valueOf((int) Math.round(armor + 2)));
         ArmyWidgets.weaponIcon(g, type, x - 1, sy + 21);
         ArmyWidgets.stat(g, this.font, x + 12, sy + 23, String.valueOf((int) Math.round(attack)), rankCost == null ? null : String.valueOf((int) Math.round(attack + 1)));
-        // Preise
-        int py = y + 62;
+        // Preise – und ab welcher Stufe befördert werden kann
+        int py = y + 68;
         g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.rank_cost"), x, py, ArmyWidgets.LABEL, false);
         if (rankCost != null) {
+            Component needs = Component.translatable("gui.kingdomsatwar.recruitment.rank_requirement", Veterancy.minLevel(rank + 1));
+            g.text(this.font, needs, x + INFO_W - this.font.width(needs), py, Training.readyForRank(chosen) ? 0xFF3F7F2A : 0xFFB02A20, false);
             this.trainCostRow(g, x, py + 9, rankCost, mouseX, mouseY);
         } else {
             g.text(this.font, Component.translatable("gui.kingdomsatwar.recruitment.max_rank.short"), x, py + 14, ArmyWidgets.MUTED, false);
@@ -510,6 +534,7 @@ public class WarTableScreen extends Screen {
         int iconsLeft = dx - (soldier.isOnCampaign() ? 22 : 11);
         ArmyWidgets.entry(g, this.font, x, y, ENTRY_W, ENTRY_H - 2, hovered, isSelected, soldier.getSoldierType(), soldier.getVariant(), name,
                 Component.translatable(soldier.getSoldierType().translationKey()), soldier.getRank(), iconsLeft - (x + 33) - 2);
+        ArmyWidgets.levelBadge(g, this.font, x + 5, y + 5, soldier.getCombatLevel());
         float part = Mth.clamp(soldier.getHealth() / Math.max(1.0f, soldier.getMaxHealth()), 0.0f, 1.0f);
         int bx = x + 33;
         int by = y + 29;

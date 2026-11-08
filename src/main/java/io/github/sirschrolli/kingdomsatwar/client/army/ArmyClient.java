@@ -12,10 +12,18 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Nachrichten vom Server rund um die Armee: Feldherrentisch und Söldnertafel öffnen und Ergebnisse anzeigen. */
+/**
+ * Nachrichten vom Server rund um die Armee: Feldherrentisch und Söldnertafel öffnen und Ergebnisse anzeigen; dazu das
+ * Schild mit Stufe und Kampferfahrung des Soldaten unter dem Fadenkreuz.
+ */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class ArmyClient {
     private ArmyClient() {}
+
+    @SubscribeEvent
+    static void registerLayers(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) {
+        event.registerAbove(net.neoforged.neoforge.client.gui.VanillaGuiLayers.CROSSHAIR, SoldierHud.LAYER, SoldierHud::render);
+    }
 
     @SubscribeEvent
     static void registerHandlers(RegisterClientPayloadHandlersEvent event) {

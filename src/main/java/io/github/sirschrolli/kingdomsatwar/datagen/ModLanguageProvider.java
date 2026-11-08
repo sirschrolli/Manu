@@ -35,6 +35,7 @@ public class ModLanguageProvider extends LanguageProvider {
         ArchitectLang.register(this::text);
         SiegeLang.register(this::text);
         HeroLang.register(this::text);
+        VeterancyLang.register(this::text);
         RulesLang.register(this::text);
         bosses();
         shadowWorld();
@@ -1325,6 +1326,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("soldier.kingdomsatwar.rank.0", "Recruit", "Rekrut");
         text("soldier.kingdomsatwar.rank.1", "Veteran", "Veteran");
         text("soldier.kingdomsatwar.rank.2", "Elite", "Elite");
+        text("soldier.kingdomsatwar.rank.3", "Master", "Meister");
+        text("soldier.kingdomsatwar.rank.4", "Legend", "Legende");
         text("message.kingdomsatwar.soldier_trained", "%s has completed the training!", "%s hat die Ausbildung abgeschlossen!");
         add(ModEntities.BANDIT.get(), pick("Bandit", "Bandit"));
         // Krieger der fremden Reiche ("Fußknecht von Eisenmark", "Eisenmark Footman")
@@ -1481,7 +1484,7 @@ public class ModLanguageProvider extends LanguageProvider {
         text("gui.kingdomsatwar.recruitment.rank_up", "Promote", "Befördern");
         text("gui.kingdomsatwar.recruitment.rank_up.hint", "Promote to %s: +25%% health, +2 armour, +1 damage",
                 "Befördern zum Rang %s: +25 %% Leben, +2 Rüstung, +1 Schaden");
-        text("gui.kingdomsatwar.recruitment.max_rank", "Already elite – the highest rank", "Schon Elite – der höchste Rang");
+        text("gui.kingdomsatwar.recruitment.max_rank", "Already a legend – the highest rank", "Schon Legende – der höchste Rang");
         text("gui.kingdomsatwar.recruitment.max_rank.short", "Highest rank reached", "Höchster Rang erreicht");
         text("gui.kingdomsatwar.recruitment.promote", "Train", "Ausbilden");
         text("gui.kingdomsatwar.recruitment.promote_to", "To %s", "Zum %s");
