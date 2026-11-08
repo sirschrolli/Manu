@@ -533,6 +533,93 @@ public final class HeroLevel {
         return true;
     }
 
+    /**
+     * Setzt die Heldenerfahrung (Befehle): Steigt der Held dabei auf, läuft die Aufstiegs-Szene; sinkt er, bekommt er zu viel
+     * verteilte Punkte zurück.
+     */
+    public static void setExperience(ServerPlayer player, int experience) {
+        Hero hero = of(player);
+        int before = hero.level();
+        Hero next = new Hero(Mth.clamp(experience, 0, total(MAX_LEVEL)), hero.talents(), hero.discoveries());
+        player.setData(ModAttachments.HERO, next);
+        if (next.level() > before) {
+            celebrate(player, before, next.level());
+        }
+        settle(player);
+        apply(player);
+    }
+
+    // ------------------------------------------------------------------------------------------------ Befehle
+
+    /**
+     * {@code /kaw hero} (nur mit Cheats bzw. für Operatoren): {@code /kaw hero} zeigt Stufe, Rang und Erfahrung;
+     * {@code xp add <Menge> [Spieler]} gibt Heldenerfahrung (mit Aufstiegs-Szene), {@code xp set <Menge> [Spieler]} setzt
+     * sie, {@code level <Stufe> [Spieler]} springt auf eine Heldenstufe, {@code reset [Spieler]} fängt von vorn an.
+     */
+    public static com.mojang.brigadier.builder.LiteralArgumentBuilder<net.minecraft.commands.CommandSourceStack> command() {
+        var amount = com.mojang.brigadier.arguments.IntegerArgumentType.integer(0, total(MAX_LEVEL));
+        var levels = com.mojang.brigadier.arguments.IntegerArgumentType.integer(1, MAX_LEVEL);
+        return net.minecraft.commands.Commands.literal("hero")
+                .requires(net.minecraft.commands.Commands.hasPermission(net.minecraft.commands.Commands.LEVEL_GAMEMASTERS))
+                .executes(c -> status(c.getSource(), List.of(c.getSource().getPlayerOrException())))
+                .then(net.minecraft.commands.Commands.literal("xp")
+                        .then(net.minecraft.commands.Commands.literal("add")
+                                .then(net.minecraft.commands.Commands.argument("amount", amount)
+                                        .executes(c -> change(c.getSource(), List.of(c.getSource().getPlayerOrException()), Change.ADD,
+                                                com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "amount")))
+                                        .then(net.minecraft.commands.Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+                                                .executes(c -> change(c.getSource(), net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"),
+                                                        Change.ADD, com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "amount"))))))
+                        .then(net.minecraft.commands.Commands.literal("set")
+                                .then(net.minecraft.commands.Commands.argument("amount", amount)
+                                        .executes(c -> change(c.getSource(), List.of(c.getSource().getPlayerOrException()), Change.SET,
+                                                com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "amount")))
+                                        .then(net.minecraft.commands.Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+                                                .executes(c -> change(c.getSource(), net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"),
+                                                        Change.SET, com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "amount")))))))
+                .then(net.minecraft.commands.Commands.literal("level")
+                        .then(net.minecraft.commands.Commands.argument("level", levels)
+                                .executes(c -> change(c.getSource(), List.of(c.getSource().getPlayerOrException()), Change.LEVEL,
+                                        com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "level")))
+                                .then(net.minecraft.commands.Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+                                        .executes(c -> change(c.getSource(), net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"),
+                                                Change.LEVEL, com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "level"))))))
+                .then(net.minecraft.commands.Commands.literal("reset")
+                        .executes(c -> change(c.getSource(), List.of(c.getSource().getPlayerOrException()), Change.RESET, 0))
+                        .then(net.minecraft.commands.Commands.argument("targets", net.minecraft.commands.arguments.EntityArgument.players())
+                                .executes(c -> change(c.getSource(), net.minecraft.commands.arguments.EntityArgument.getPlayers(c, "targets"),
+                                        Change.RESET, 0))));
+    }
+
+    private enum Change { ADD, SET, LEVEL, RESET }
+
+    private static int change(net.minecraft.commands.CommandSourceStack source, java.util.Collection<ServerPlayer> players, Change change, int value) {
+        for (ServerPlayer player : players) {
+            Hero hero = of(player);
+            switch (change) {
+                case ADD -> setExperience(player, (int) Math.min((long) total(MAX_LEVEL), (long) hero.experience() + value));
+                case SET -> setExperience(player, value);
+                case LEVEL -> setExperience(player, total(value));
+                case RESET -> {
+                    player.setData(ModAttachments.HERO, new Hero(0, List.of(), hero.discoveries()));
+                    apply(player);
+                }
+            }
+        }
+        return status(source, players);
+    }
+
+    private static int status(net.minecraft.commands.CommandSourceStack source, java.util.Collection<ServerPlayer> players) {
+        for (ServerPlayer player : players) {
+            Hero hero = of(player);
+            Rank rank = hero.rank();
+            source.sendSuccess(() -> Component.translatable("commands.kingdomsatwar.hero.status", player.getDisplayName(), hero.level(),
+                    Component.translatable(rank.translationKey()).withColor(rank.color() & 0xFFFFFF), String.format(Locale.GERMANY, "%,d", hero.experience()),
+                    String.format(Locale.GERMANY, "%,d", hero.level() >= MAX_LEVEL ? total(MAX_LEVEL) : total(hero.level() + 1)), hero.unspent()), true);
+        }
+        return players.size();
+    }
+
     /** Setzt alles auf einmal (Befehle, Tests) und wendet die Talente an. */
     public static void set(Player player, Hero hero) {
         player.setData(ModAttachments.HERO, hero);

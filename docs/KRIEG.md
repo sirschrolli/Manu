@@ -51,7 +51,8 @@ schießt; mit dem Kommandostab weist er eine Mannschaft aus eigenen Soldaten zu 
 | **Katapult** | wirft Steinkugeln im Bogen: reißt Löcher in Mauern und Dächer |
 | **Balliste** | schießt schwere Bolzen flach und weit: gegen Krieger, Reiter und andere Belagerungswaffen |
 | **Tribok** | die große Wurfmaschine: weiter und verheerender als das Katapult, langsam nachzuladen |
-| **Belagerungsturm** (später) | rollt an die Mauer, oben fällt eine Brücke auf den Wehrgang |
+| **Belagerungsturm** | rollt an die Mauer, oben fällt eine Brücke auf den Wehrgang (0.54.0) |
+| **Planwagen** | fährt hinter einem Pferd Baustoffe, Proviant und Krieger (0.54.0) |
 
 Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), und nur außerhalb geschützter Bereiche
 (eigene Siedlung, Siegelkreis).
@@ -83,6 +84,22 @@ Belagerungswaffen beschädigen nur, was sie treffen (keine Kettenreaktionen), un
 | K3a | Heerhaufen: Gegenangriffe der Reiche auf die eigene Siedlung (Version 0.43.0) | ✅ |
 | K3b | Neue Truppen: Speerträger, Armbrustschützen, Schildträger, Waffenknechte, Lanzenreiter mit Schlachtross, Belagerungsknechte (Version 0.44.0) | ✅ |
 | K4 | Drachen im Krieg: Drachenhorn, Sturzangriff, Luftangriff, Verteidigung gegen Heerhaufen (Version 0.45.0) | ✅ |
+| K5 | Fahrzeuge: Belagerungsturm (drei Höhen, Fallbrücke, Sturm auf den Wehrgang) und Planwagen (Laderaum, am Pferd) (Version 0.54.0) | ✅ |
+
+## Was in 0.54.0 fertig ist (Fahrzeuge)
+
+- **Belagerungsturm** (Stamm, Eisenkette, Leder, Leiter, Bretter, Eisenbarren): vorn mit Häuten verkleidet, einer
+  schiebt (W/S), bis zu acht Krieger oben, ein Pferd zieht ihn an der Leine. Die Plattform ist 7, 10 oder 13 Blöcke
+  hoch – drei Leitern setzen ein Stockwerk auf, die Axt nimmt eins ab. Die **Leertaste** lässt die Fallbrücke fallen,
+  bis sie auf Zinnen oder Wehrgang aufliegt (der Server rechnet aus, wo); dann stürmen die Krieger einer nach dem anderen
+  hinüber und halten Stellung, Spieler gehen schleichend hinüber. Zu hohe Mauer, keine Mauer, kein Platz drüben: der Turm
+  sagt es.
+- **Planwagen** (Wolle, Bretter, Truhe, Stämme, Eisenbarren): sechs Reihen Laderaum, ein Kutschbock und vier Plätze
+  hinten; ein Pferd zieht ihn an der Leine, ohne langsamer zu werden. Je voller, desto mehr Ladung steht auf dem Wagen
+  (drei Stufen). Laderaum schleichend mit leerer Hand oder im Wagen mit der Inventartaste; die Axt zerlegt ihn, die
+  Ladung fällt heraus.
+- **Spieltests:** Turm (Leitern, Brücke auf der Mauerkrone, ein Krieger stürmt hinüber, Axt) und Wagen (Ladung bleibt
+  beim Speichern, das Pferd zieht ihn, Zerlegen gibt die Ladung frei).
 
 ## Was in 0.45.0 fertig ist (Drachen im Krieg)
 

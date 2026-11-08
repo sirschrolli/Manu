@@ -38,8 +38,8 @@ public final class SiegeModels {
         public float bridge;
         /** Belagerungsturm: aufgesetzte Stockwerke (0 bis 2). */
         public int storeys = 1;
-        /** Planwagen: ist etwas geladen? */
-        public boolean cargo;
+        /** Planwagen: wie voll der Laderaum ist (0 leer, 1 bis 3 – so viel Ladung steht auf dem Wagen). */
+        public int cargo;
     }
 
     // =====================================================================================
@@ -276,18 +276,25 @@ public final class SiegeModels {
     /** Der Planwagen: Kisten, Fässer und Säcke nur, wenn etwas geladen ist; die Räder rollen. */
     public static final class Wagon extends Model<State> {
         private final ModelPart cargo;
+        private final ModelPart cargo2;
+        private final ModelPart cargo3;
         private final ModelPart[] wheels;
 
         public Wagon(ModelPart root) {
             super(root, RenderTypes::entityCutout);
             this.cargo = root.getChild("frame").getChild("cargo");
+            this.cargo2 = this.cargo.getChild("cargo_2");
+            this.cargo3 = this.cargo.getChild("cargo_3");
             this.wheels = new ModelPart[] {root.getChild("wheel_fl"), root.getChild("wheel_fr"), root.getChild("wheel_bl"), root.getChild("wheel_br")};
         }
 
         @Override
         public void setupAnim(State s) {
             super.setupAnim(s);
-            this.cargo.visible = s.cargo;
+            // je voller der Laderaum, desto mehr Ladung: erst Kiste und Fässer, dann Säcke und Stroh, dann bis unter die Plane
+            this.cargo.visible = s.cargo >= 1;
+            this.cargo2.visible = s.cargo >= 2;
+            this.cargo3.visible = s.cargo >= 3;
             for (ModelPart wheel : this.wheels) {
                 wheel.xRot = s.wheel;
             }

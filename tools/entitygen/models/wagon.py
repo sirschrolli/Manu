@@ -5,7 +5,8 @@ sehen, wenn etwas geladen ist), vorn am ersten Bogen eine Laterne.
 
 Knochen (Namen und Drehpunkte sind ein fester Vertrag mit SiegeModels.Wagon in Java):
   frame (0, 24, 0)         Fahrgestell, Kasten, Plane, Bock, Deichsel; y = 24 ist der Boden
-  cargo (Kind von frame)   die Ladung (Kisten, Fässer, Säcke)
+  cargo (Kind von frame)   die Ladung, Stufe 1 (Kiste und Fässer hinten)
+  cargo_2, cargo_3         mehr Ladung (Kinder von cargo): Säcke und Stroh, dann bis unter die Plane
   wheel_fl/fr/bl/br        Räder (Kinder von root), Drehpunkt = Radmitte, rollen um X
 Hilfsknochen cover_l/cover_r (die schrägen Planenteile) sind fest gedreht (nicht animieren).
 """
@@ -92,17 +93,31 @@ def build() -> Model:
     box(m, f, -1.2, COVER_TOP + 0.8, BOWS[0] - 2.2, 1.2, COVER_TOP + 1.6, BOWS[0] - 0.8, "iron_plain")
     box(m, f, -1.6, COVER_TOP + 1.6, BOWS[0] - 2.6, 1.6, COVER_TOP + 5.0, BOWS[0] - 0.4, "lantern")
 
-    # ------------------------------------------------------------------ Ladung
+    # ------------------------------------------------------------------ Ladung (drei Stufen, je nachdem wie voll der Laderaum ist)
     m.bone("cargo", f, pivot=sc.abs_to_local(m, f, 0.0, FLOOR_Y, 4.0))
-    cg = "cargo"
+    m.bone("cargo_2", "cargo", pivot=(0.0, 0.0, 0.0))
+    m.bone("cargo_3", "cargo", pivot=(0.0, 0.0, 0.0))
+    cg, c2, c3 = "cargo", "cargo_2", "cargo_3"
+    # Stufe 1: hinten eine große Kiste und zwei Fässer
     lbox(m, cg, -10, -8, 8, -2, 0, 16, "crate")                       # Kiste hinten links
-    lbox(m, cg, -9, -14, 9, -3, -8, 15, "crate")                      # kleine Kiste darauf
     for (cx, cz) in ((6.0, 12.0), (6.0, 4.5)):                        # zwei Fässer rechts
         lbox(m, cg, cx - 3.5, -9, cz - 2.5, cx + 3.5, 0, cz + 2.5, "barrel")
         lbox(m, cg, cx - 2.5, -9, cz - 3.5, cx + 2.5, 0, cz + 3.5, "barrel")
-    for (cx, cz) in ((-6.0, -2.0), (-1.0, -8.0), (5.0, -6.0)):        # Säcke vorn
-        lbox(m, cg, cx - 3, -5, cz - 2.5, cx + 3, 0, cz + 2.5, "sack")
-        lbox(m, cg, cx - 2, -6, cz - 1.5, cx + 2, -5, cz + 1.5, "sack")
+    # Stufe 2: eine kleine Kiste obenauf, Säcke in der Mitte, vorn ein Strohballen
+    lbox(m, c2, -9, -14, 9, -3, -8, 15, "crate")                      # kleine Kiste auf der großen
+    for (cx, cz) in ((-6.0, -2.0), (-1.0, -8.0), (5.0, -6.0)):        # Säcke
+        lbox(m, c2, cx - 3, -5, cz - 2.5, cx + 3, 0, cz + 2.5, "sack")
+        lbox(m, c2, cx - 2, -6, cz - 1.5, cx + 2, -5, cz + 1.5, "sack")
+    lbox(m, c2, -11, -7, -23, -2, 0, -14, "hay")                      # Strohballen vorn links
+    # Stufe 3 (voll): eine Kiste quer über den Fässern, noch mehr Säcke, zwei weitere Ballen
+    lbox(m, c3, 1.5, -17, 1.5, 10.5, -9, 15.0, "crate")
+    for (cx, cz) in ((-4.0, -5.0), (2.5, -4.5)):
+        lbox(m, c3, cx - 3, -11, cz - 2.5, cx + 3, -6, cz + 2.5, "sack")
+        lbox(m, c3, cx - 2, -12, cz - 1.5, cx + 2, -11, cz + 1.5, "sack")
+    lbox(m, c3, 2, -8, -23, 11, 0, -14, "hay")                        # Strohballen vorn rechts
+    lbox(m, c3, -10, -14, -22, -3, -7, -15, "hay")                    # Ballen auf dem Ballen
+    lbox(m, c3, -9, -19, 9.5, -3, -14, 14.5, "sack")                  # ein Sack auf der kleinen Kiste
+    lbox(m, c3, -8, -20, 10.5, -4, -19, 13.5, "sack")
 
     # ------------------------------------------------------------------ Räder
     for name, (x, y, z) in WHEELS.items():
@@ -171,7 +186,22 @@ def _lantern(ctx: Ctx):
     return pick(sc.PALETTE["straw"], 0.92 + (hash01(ctx.u, ctx.v, 31) - 0.5) * 0.08)
 
 
+def _hay(ctx: Ctx):
+    """Strohballen: Halme längs (in x), zwei Schnüre herum; an den Enden die Schnittflächen."""
+    r = sc.rel(ctx)
+    size = ctx.cube.size
+    if ctx.face not in ("west", "east"):
+        for t in (0.28, 0.72):
+            if abs(r[0] - size[0] * t) < 0.6:
+                return pick(sc.PALETTE["rope"], 0.35)
+        stripe = hash01(0, math.floor(ctx.v), 41)
+        v = 0.55 + (stripe - 0.5) * 0.3 + (hash01(math.floor(ctx.u * 0.5), math.floor(ctx.v), 43) - 0.5) * 0.1
+        return pick(sc.PALETTE["straw"], v)
+    v = 0.48 + (hash01(ctx.u, ctx.v, 47) - 0.5) * 0.3
+    return pick(sc.PALETTE["straw"], v)
+
+
 def materials(variant: str) -> dict:
     mats = sc.materials()
-    mats.update({"canvas": _canvas, "bow": _bow, "floor": _floor, "barrel": _barrel, "sack": _sack, "lantern": _lantern})
+    mats.update({"canvas": _canvas, "bow": _bow, "floor": _floor, "barrel": _barrel, "sack": _sack, "lantern": _lantern, "hay": _hay})
     return mats

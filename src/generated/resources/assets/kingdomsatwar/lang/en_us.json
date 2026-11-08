@@ -666,6 +666,8 @@
   "command.kingdomsatwar.seal.state.intact": "seal intact",
   "command.kingdomsatwar.seal.status": "Seal Circle at %s – %s of 6 shards – %s",
   "command.kingdomsatwar.story.reset": "Your story progress has been reset.",
+  "commands.kingdomsatwar.army.xp": "%s combat experience for each of your %s soldiers nearby",
+  "commands.kingdomsatwar.hero.status": "%s: hero level %s (%s) · %s / %s hero experience · %s talent points free",
   "container.kingdomsatwar.magic_table": "Magic Table",
   "death.attack.kingdomsatwar.ballista_bolt": "%1$s was skewered by %2$s",
   "death.attack.kingdomsatwar.ballista_bolt.item": "%1$s was skewered by %2$s using %3$s",

@@ -108,6 +108,7 @@ final class Showcase {
                 case "spells" -> SpellShowcase.spells(steps);
                 case "gifts" -> GiftShowcase.gifts(steps);
                 case "siege" -> SiegeShowcase.siege(steps);
+                case "vehicles" -> VehicleShowcase.vehicles(steps);
                 case "raid" -> RaidShowcase.raid(steps);
                 case "troops" -> TroopShowcase.troops(steps);
                 case "dragonwar" -> DragonWarShowcase.dragonWar(steps);

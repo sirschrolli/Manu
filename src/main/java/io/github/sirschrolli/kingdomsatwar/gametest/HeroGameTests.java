@@ -80,13 +80,15 @@ final class HeroGameTests {
             ModGameTests.TEST_FUNCTIONS.register("hero_settle", () -> HeroGameTests::settle);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> PAT =
             ModGameTests.TEST_FUNCTIONS.register("hero_pat", () -> HeroGameTests::pat);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMMAND =
+            ModGameTests.TEST_FUNCTIONS.register("hero_command", () -> HeroGameTests::command);
 
     private HeroGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT)) {
+        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT, COMMAND)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -527,6 +529,53 @@ final class HeroGameTests {
             }
             level.getServer().getPlayerList().remove(player);
         }
+    }
+
+    /**
+     * Mit Cheats: {@code /kaw hero level} springt auf eine Heldenstufe, {@code xp add} gibt Heldenerfahrung dazu,
+     * {@code xp set} setzt sie, {@code reset} fängt von vorn an; die Erfahrung von Minecraft bleibt dabei, wie sie ist.
+     */
+    private static void command(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            int vanilla = player.totalExperience;
+            // Der Testspieler gibt die Befehle selbst (mit Cheat-Rechten) – im großen Testlauf heißen viele Testspieler gleich.
+            var source = player.createCommandSourceStack()
+                    .withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.GAMEMASTER)
+                    .withSuppressedOutput();
+            run(helper, source, "kaw hero level 40");
+            helper.assertValueEqual(HeroLevel.of(player).level(), 40, "Heldenstufe nach /kaw hero level 40");
+            helper.assertValueEqual(HeroLevel.of(player).rank(), HeroLevel.Rank.KNIGHT, "Rang nach /kaw hero level 40");
+            run(helper, source, "kaw hero xp add 1000");
+            helper.assertValueEqual(HeroLevel.of(player).experience(), HeroLevel.total(40) + 1000, "Heldenerfahrung nach xp add");
+            run(helper, source, "kaw hero xp set " + HeroLevel.total(100));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 100, "Heldenstufe nach xp set");
+            run(helper, source, "kaw hero reset");
+            helper.assertValueEqual(HeroLevel.of(player).experience(), 0, "Heldenerfahrung nach reset");
+            helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /**
+     * Führt einen Befehl sofort aus und meldet, warum er scheiterte. (Über {@code performPrefixedCommand} liefe er im großen
+     * Testlauf womöglich erst später – wenn gerade schon ein Befehl läuft, reiht das Spiel neue nur ein – und Fehler gingen
+     * stumm verloren.)
+     */
+    private static void run(GameTestHelper helper, net.minecraft.commands.CommandSourceStack source, String command) {
+        int result;
+        try {
+            result = source.getServer().getCommands().getDispatcher().execute(command, source);
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            throw helper.assertionException(net.minecraft.network.chat.Component.literal("/" + command + ": " + e.getMessage()));
+        } catch (RuntimeException e) {
+            throw helper.assertionException(net.minecraft.network.chat.Component.literal("/" + command + ": " + e));
+        }
+        helper.assertTrue(result > 0, "/" + command + " traf keinen Spieler");
     }
 
     /** Unter Stufe 100: Streicheln geht nicht. */

@@ -61,6 +61,9 @@ public final class ModGameEvents {
                             .executes(context -> summonArmy(context.getSource().getPlayerOrException(), type,
                                     IntegerArgumentType.getInteger(context, "count")))));
         }
+        army.then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer(1,
+                io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(io.github.sirschrolli.kingdomsatwar.army.Veterancy.MAX_LEVEL)))
+                .executes(context -> armyExperience(context.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(context, "amount")))));
         event.getDispatcher().register(Commands.literal("kaw")
                 .then(Commands.literal("intro").executes(context -> {
                     ServerPlayer player = context.getSource().getPlayerOrException();
@@ -81,7 +84,8 @@ public final class ModGameEvents {
                 .then(storyCommand())
                 .then(sealCommand())
                 .then(io.github.sirschrolli.kingdomsatwar.war.RealmWar.command())
-                .then(io.github.sirschrolli.kingdomsatwar.war.RealmRaids.command()));
+                .then(io.github.sirschrolli.kingdomsatwar.war.RealmRaids.command())
+                .then(io.github.sirschrolli.kingdomsatwar.hero.HeroLevel.command()));
     }
 
     /** {@code /kaw story reset|card <Kapitel>|chronicle}: Geschichte zurücksetzen, Titelkarte zeigen, Chronik geben. */
@@ -299,6 +303,19 @@ public final class ModGameEvents {
         boss.beginAwakening(level, home);
         player.sendSystemMessage(Component.translatable("command.kingdomsatwar.boss.summoned", boss.getDisplayName()));
         return 1;
+    }
+
+    /** {@code /kaw army xp <Menge>}: Alle eigenen Soldaten in der Nähe (128 Blöcke) bekommen so viel Kampferfahrung. */
+    private static int armyExperience(ServerPlayer player, int amount) {
+        ServerLevel level = player.level();
+        List<io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity> soldiers = level.getEntitiesOfClass(
+                io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierEntity.class, player.getBoundingBox().inflate(128.0),
+                soldier -> soldier.isAlive() && soldier.isOwnedBy(player));
+        for (var soldier : soldiers) {
+            soldier.gainCombatExperience(amount);
+        }
+        player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("commands.kingdomsatwar.army.xp", amount, soldiers.size()));
+        return soldiers.size();
     }
 
     private static int summonArmy(ServerPlayer player, SoldierType type, int count) {

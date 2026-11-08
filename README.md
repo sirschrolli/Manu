@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.53.0 – der Weg zur Legende. Die Heldenstufe geht jetzt bis **100** – und das braucht viel: **392.040 Heldenerfahrung**. Unterwegs wirst du **Knappe, Recke, Ritter, Held, Kriegsherr und Legende**, jeder Rang mit eigenem Abzeichen und zwei Talentpunkten extra; Talente fassen jetzt **20 Punkte**. Taste K zeigt den **Weg zur Legende**: alle 100 Stufen als leuchtender Pfad über eine nächtliche Landschaft, mit den Wahrzeichen der Ränge und deinem Kopf auf deiner Stufe. Talente und Werte sind neu gestaltet (dunkel und gold, mit Animationen), jeder Aufstieg spielt eine **Aufstiegs-Szene** mit Lichtwelle, Strahlenkranz und Funken. Als Legende darfst du **streicheln** – genau wie in der Mod PatPat: Schleichen + Rechtsklick (oder G).**
+> **Testversion 0.54.0 – Fahrzeuge.** Der **Belagerungsturm** rollt an die Mauer (Plattform 7, 10 oder 13 Blöcke hoch – mit Leitern ein Stockwerk mehr), lässt seine Fallbrücke auf die Zinnen fallen, und die Krieger oben stürmen hinüber auf den Wehrgang. Der **Planwagen** fährt hinter einem Pferd an der Leine, trägt sechs Reihen Ladung und vier Mitfahrer – je voller, desto mehr Kisten, Fässer, Säcke und Stroh stehen auf ihm. Dazu **Cheat-Befehle** für die Erfahrung: `/kaw hero xp add`, `/kaw hero level`, `/kaw army xp`.
+> In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (392.040 Heldenerfahrung), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
 > In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
 > In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
 > In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
@@ -284,8 +285,7 @@ ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 > Seit 0.26 schweben **Rauchquallen** statt Ghasts über dem Nether, **Glutgeister** statt Lohen bewachen die Festungen
 > und **Glutschleime** hüpfen statt Magmawürfeln.
 > Alles läuft auf einem echten Minecraft-26.3-Server und besteht die automatischen Tests.
-> **Als Nächstes:** Fahrzeuge und der Belagerungsturm – ein Planwagen, der Baustoffe und Soldaten fährt, und ein Turm, der
-> an die Mauer rollt und eine Brücke auf den Wehrgang fallen lässt.
+> **Als Nächstes:** die Veröffentlichung auf Modrinth vorbereiten – und was ihr euch noch wünscht.
 
 Das Konzept steht in [docs/KONZEPT.md](docs/KONZEPT.md) (mit allen Konzeptbildern), die Geschichte und der Plan des
 großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
@@ -363,7 +363,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Truppen weiter leveln: Kampferfahrung, 20 Stufen, die Ränge Meister und Legende | ✅ fertig |
 | Eigenes Levelsystem für den Charakter: Heldenerfahrung, 50 Heldenstufen, sechs Talente, Charakterfenster (K) | ✅ fertig |
 | Heldenstufe bis 100 mit sechs Rängen, neues Charakterfenster, Aufstiegs-Szene, Streicheln als Belohnung | ✅ fertig |
-| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ als Nächstes |
+| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ✅ fertig |
+| Cheat-Befehle für Heldenerfahrung und Kampferfahrung (`/kaw hero`, `/kaw army xp`) | ✅ fertig |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1108,6 +1109,41 @@ blickt dann in deine Richtung:
 | Tribok | zwei Stämme, Eisenkette, zwei Fäden, Eisenblock, drei Bretter |
 | Balliste | Armbrust, zwei Fäden, zwei Bretter, Eisenbarren, zwei Stämme |
 | Rammbock | drei Bretter, zwei Eisenketten, drei Stämme, Eisenbarren |
+
+### Fahrzeuge: Belagerungsturm und Planwagen
+
+![Belagerungsturm mit gefallener Brücke, Planwagen am Pferd, Ladung](docs/bilder/fahrzeuge.jpg)
+
+**Der Belagerungsturm** ist vorn mit nassen Häuten verkleidet und trägt oben eine Fallbrücke. Einer schiebt ihn (W/S,
+der Turm dreht sich in die Blickrichtung), oben auf der Plattform stehen bis zu acht Krieger; ein Pferd zieht ihn an der
+Leine schneller.
+
+- **Drei Höhen:** Die Plattform ist 7, 10 oder 13 Blöcke hoch. Rechtsklick mit **drei Leitern** setzt ein Stockwerk
+  auf, schleichend mit einer **Axt** nimmt man eins ab (die Leitern gibt es zurück) – nur mit hochgezogener Brücke und
+  nur am eigenen Turm. So passt er zu jeder Mauer.
+- **Die Brücke:** Die **Leertaste** lässt sie nach vorn fallen, bis sie aufliegt – auf den Zinnen oder dem Wehrgang
+  einer Mauer, deren Krone nicht höher als die Plattform liegt. Ist die Mauer zu hoch, sagt der Turm es (dann mit
+  Leitern aufstocken); steht keine Mauer davor, fällt nichts.
+- **Der Sturm:** Liegt die Brücke auf, laufen die Soldaten oben einer nach dem anderen hinüber und halten auf dem
+  Wehrgang Stellung; wer schiebt, bleibt unten. Spieler gehen mit **Schleichen** hinüber. Noch einmal die Leertaste
+  zieht die Brücke hoch – erst dann rollt der Turm wieder.
+
+**Der Planwagen** ist ein Kastenwagen unter einer Leinenplane: ein Platz auf dem Kutschbock, vier hinten im Wagen und
+dazwischen **sechs Reihen Laderaum** (so viel wie eine große Truhe) für Baustoffe, Proviant und Munition.
+
+- **Ziehen:** Selbst fährt er nicht – ein **Pferd** zieht ihn an der Leine (Leine an den Wagen, dann schleichend auf
+  das Pferd klicken, oder das Pferd an der Leine führen und schleichend auf den Wagen klicken). Wer auf dem Pferd
+  reitet, fährt den Wagen; das Pferd wird dabei nicht langsamer.
+- **Laderaum:** schleichend mit leerer Hand öffnen – oder im Wagen sitzend mit der Inventartaste. Je voller er ist,
+  desto mehr Ladung steht sichtbar auf dem Wagen: erst eine Kiste und zwei Fässer, dann Säcke und Stroh, voll bis unter
+  die Plane.
+- **Zerlegen:** schleichend mit einer Axt – die Ladung fällt dabei heraus. Beide Fahrzeuge lassen sich wie die
+  Belagerungswaffen mit Brettern reparieren.
+
+| Rezept | |
+|---|---|
+| Belagerungsturm | Stamm, Eisenkette, Stamm · Leder, Leiter, Leder · Brett, Eisenbarren, Brett |
+| Planwagen | drei Wolle · Brett, Truhe, Brett · Stamm, Eisenbarren, Stamm |
 
 ### Regeln: allein, ohne Koordinaten, hart
 
@@ -1885,6 +1921,8 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 |---|---|
 | `/kaw intro` | das Intro noch einmal ansehen |
 | `/kaw army <swordsman\|archer\|knight\|captain> [Anzahl]` | (nur Operatoren) Soldaten sofort in den Dienst stellen, z. B. `/kaw army knight 4` |
+| `/kaw army xp <Menge>` | (mit Cheats) allen eigenen Soldaten in der Nähe Kampferfahrung geben |
+| `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
 | `/kaw lair` · `/kaw lair awaken` · `/kaw lair reset` | (nur Operatoren) Lage aller Nester anzeigen, den Drachen im Nest wecken, ein Nest zurücksetzen |
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
@@ -1975,14 +2013,13 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
      eigenen Wesen.
 2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen, die Heerhaufen, die neuen
-   Truppen und die Drachen im Krieg sind fertig; nach dem eigenen Helden kommen Fahrzeuge und der Belagerungsturm
+   Truppen, die Drachen im Krieg und die Fahrzeuge (Belagerungsturm und Planwagen) sind fertig
    ([docs/KRIEG.md](docs/KRIEG.md)).
 3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
-   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig. Als Nächstes kommen Fahrzeuge
-   und der Belagerungsturm.
+   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig.
 5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung

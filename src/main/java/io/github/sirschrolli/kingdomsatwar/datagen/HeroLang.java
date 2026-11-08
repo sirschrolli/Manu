@@ -112,6 +112,10 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.discovered", "New biome discovered: %s", "Neues Biom entdeckt: %s");
         text.add("hud.kingdomsatwar.hero.gained", "+%s hero experience", "+%s Heldenerfahrung");
         text.add("hud.kingdomsatwar.hero.plus", "+%s", "+%s");
+        text.add("commands.kingdomsatwar.hero.status", "%s: hero level %s (%s) · %s / %s hero experience · %s talent points free",
+                "%s: Heldenstufe %s (%s) · %s / %s Heldenerfahrung · %s Talentpunkte frei");
+        text.add("commands.kingdomsatwar.army.xp", "%s combat experience for each of your %s soldiers nearby",
+                "%s Kampferfahrung für jeden deiner %s Soldaten in der Nähe");
         talent(text, "strength", "Strength", "Stärke", "+%s damage", "+%s Schaden",
                 "+0.3 damage per point with every blow", "+0,3 Schaden je Punkt bei jedem Schlag");
         talent(text, "vitality", "Vitality", "Lebenskraft", "+%s health", "+%s Leben",

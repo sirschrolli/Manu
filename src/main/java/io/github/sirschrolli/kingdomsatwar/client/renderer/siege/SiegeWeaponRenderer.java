@@ -83,7 +83,7 @@ public class SiegeWeaponRenderer extends EntityRenderer<SiegeWeaponEntity, Siege
         state.health = entity.healthFraction();
         state.bridge = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity tower ? tower.bridge(partialTicks) : 0.0f;
         state.storeys = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeTowerEntity tower ? tower.storeys() : 1;
-        state.cargo = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeWagonEntity wagon && wagon.cargoLevel() > 0;
+        state.cargo = entity instanceof io.github.sirschrolli.kingdomsatwar.siege.SiegeWagonEntity wagon ? wagon.cargoLevel() : 0;
     }
 
     @Override

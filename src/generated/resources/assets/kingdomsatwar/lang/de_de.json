@@ -666,6 +666,8 @@
   "command.kingdomsatwar.seal.state.intact": "Siegel unversehrt",
   "command.kingdomsatwar.seal.status": "Siegelkreis bei %s – %s von 6 Splittern – %s",
   "command.kingdomsatwar.story.reset": "Dein Fortschritt in der Geschichte wurde zurückgesetzt.",
+  "commands.kingdomsatwar.army.xp": "%s Kampferfahrung für jeden deiner %s Soldaten in der Nähe",
+  "commands.kingdomsatwar.hero.status": "%s: Heldenstufe %s (%s) · %s / %s Heldenerfahrung · %s Talentpunkte frei",
   "container.kingdomsatwar.magic_table": "Magietisch",
   "death.attack.kingdomsatwar.ballista_bolt": "%1$s wurde von %2$s aufgespießt",
   "death.attack.kingdomsatwar.ballista_bolt.item": "%1$s wurde von %2$s mit %3$s aufgespießt",
