@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.54.0 – Fahrzeuge.** Der **Belagerungsturm** rollt an die Mauer (Plattform 7, 10 oder 13 Blöcke hoch – mit Leitern ein Stockwerk mehr), lässt seine Fallbrücke auf die Zinnen fallen, und die Krieger oben stürmen hinüber auf den Wehrgang. Der **Planwagen** fährt hinter einem Pferd an der Leine, trägt sechs Reihen Ladung und vier Mitfahrer – je voller, desto mehr Kisten, Fässer, Säcke und Stroh stehen auf ihm. Dazu **Cheat-Befehle** für die Erfahrung: `/kaw hero xp add`, `/kaw hero level`, `/kaw army xp`.
+> **Testversion 0.55.0 – sauber gebaut.** Alle Häuser werden jetzt automatisch auf Baufehler geprüft – jedes Dorfgebäude in jeder Bauweise und Drehung, jeder Entwurf der eigenen Siedlung und jedes Haus der Umbrer. Dabei kam einiges ans Licht: Im **Wohnhaus** steckten die Betten oben mit dem Kopfende in der Rückwand (jetzt stehen sie im Raum), in der **Kaserne** steckten Pritschen und Truhe in den Ecktürmen, **Laternen und Kronleuchter** schwebten unter offenen Dachstühlen (jetzt hängen sie an Ketten vom Dach), Leitern hatten keinen Halt, Öfen schauten in Werkbänke, Turmtüren der Raubritterburg führten in die Mauer. Der **Feldherrentisch** zittert bei vielen Truppen nicht mehr: feste Reihenfolge (Art, Rang, Stufe), Rollbalken zum Ziehen und Pfeiltasten. Die **Schwäche nach dem Tod** ist kein Statuseffekt mehr – die Schläge sind einfach zwei Minuten lang schwächer.
+> In 0.54 kamen die Fahrzeuge: der Belagerungsturm (7, 10 oder 13 Blöcke, Fallbrücke auf die Zinnen) und der Planwagen am Pferd (sechs Reihen Ladung, vier Mitfahrer), dazu Cheat-Befehle für die Erfahrung (`/kaw hero`, `/kaw army xp`).
 > In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (392.040 Heldenerfahrung), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
 > In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
 > In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
@@ -365,6 +366,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Heldenstufe bis 100 mit sechs Rängen, neues Charakterfenster, Aufstiegs-Szene, Streicheln als Belohnung | ✅ fertig |
 | Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ✅ fertig |
 | Cheat-Befehle für Heldenerfahrung und Kampferfahrung (`/kaw hero`, `/kaw army xp`) | ✅ fertig |
+| Bauprüfung aller Häuser (Betten, Türen, Truhen, Halt) und die gefundenen Baufehler behoben | ✅ fertig |
 
 ---
 
@@ -611,6 +613,12 @@ haben seit 0.32 ein satteres Grün wie in den eigenen Biomen (die Taiga kühler,
 ### Dörfer und Dorfbewohner
 
 ![Dörfer in den vier Bauweisen: Fachwerk, Nordisch, Lehm und Pfahlbau](docs/bilder/doerfer.jpg)
+
+Jedes Gebäude wird automatisch auf Baufehler geprüft (in jeder Bauweise, Spielart und Drehung): Betten stehen im Raum
+und nicht in der Wand, unter keiner Decke eingeklemmt; Türen sind frei, Truhen lassen sich öffnen, Öfen schauen in den
+Raum, und Laternen, Kronleuchter und Leitern haben Halt – unter offenen Dachstühlen hängen Laternen an Ketten vom Dach.
+
+![Betten im Raum, Kräuterstange, Kronleuchter an Ketten, der Feldherrentisch mit 28 Soldaten](docs/bilder/sauber_gebaut.jpg)
 
 Die Vanilla-Dörfer sind fort – an ihrer Stelle stehen **eigene Dörfer in vier Bauweisen**, jede passend zu ihrem Land:
 
@@ -961,7 +969,8 @@ steht im Stall und kommt, sobald du ihn anheuerst.
 ![Das Söldnerhaus und seine Tafel](docs/bilder/soeldnerhaus.jpg)
 
 **Am Feldherrentisch** stehen links alle deine Soldaten im **Feldlager** (bis 24 Blöcke um den Tisch) mit ihrer
-Gesundheit. **„Alle heilen“** ruft den Feldscher: Er versorgt alle Verwundeten auf einmal – volle Gesundheit, kein Gift
+Gesundheit – in fester Reihenfolge (nach Art, die höchsten Ränge und Stufen zuerst), auch wenn sie umherlaufen. Bei vielen
+Soldaten rollst du die Liste mit dem Mausrad, am Rollbalken oder wählst mit den Pfeiltasten (Bild auf/ab blättert). **„Alle heilen“** ruft den Feldscher: Er versorgt alle Verwundeten auf einmal – volle Gesundheit, kein Gift
 und kein Feuer mehr – und nimmt dafür 1 Bronze je 4 fehlende Leben; ein Lanzenreiter, der sein Ross verloren hat, bekommt
 für 3 Silber ein neues aus den Ställen. **Ausbilden** kannst du jeden einzeln – gibt es mehrere Wege, wählst du die neue
 Art mit den Pfeilen neben ihrem Namen:

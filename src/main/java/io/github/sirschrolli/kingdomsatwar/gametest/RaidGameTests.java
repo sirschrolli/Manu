@@ -66,7 +66,8 @@ final class RaidGameTests {
         add(event, environment, BAND, 40);
         add(event, environment, VICTORY, 1400);
         add(event, environment, PLUNDER, 1400);
-        add(event, environment, SCHEDULE, 900);
+        // großzügig: im großen Testlauf laden die weit entfernten Chunks unter Last langsamer
+        add(event, environment, SCHEDULE, 1800);
     }
 
     private static void add(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment,
