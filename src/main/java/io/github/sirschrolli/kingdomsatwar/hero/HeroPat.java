@@ -72,7 +72,8 @@ public final class HeroPat {
     @SubscribeEvent
     static void onInteract(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
-        if (!gesture(player, event.getHand(), event.getTarget()) || !unlocked(player)) {
+        // im Spiel selbst kümmert sich PatClient darum (bricht ab und schickt die Streichel-Nachricht)
+        if (event.getLevel().isClientSide() || !gesture(player, event.getHand(), event.getTarget()) || !unlocked(player)) {
             return;
         }
         event.setCanceled(true);

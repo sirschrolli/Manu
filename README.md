@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.53.0 – der Weg zur Legende. Die Heldenstufe geht jetzt bis **100** – und das braucht viel: **392.040 Heldenerfahrung**. Unterwegs wirst du **Knappe, Recke, Ritter, Held, Kriegsherr und Legende**, jeder Rang mit eigenem Abzeichen und zwei Talentpunkten extra; Talente fassen jetzt **20 Punkte**. Das **Charakterfenster (K)** ist neu gestaltet (dunkel und gold, mit Animationen), jeder Aufstieg spielt eine **Aufstiegs-Szene** mit Lichtwelle, Strahlenkranz und Funken. Als Legende darfst du **streicheln** – genau wie in der Mod PatPat: Schleichen + Rechtsklick (oder G).**
+> **Testversion 0.53.0 – der Weg zur Legende. Die Heldenstufe geht jetzt bis **100** – und das braucht viel: **392.040 Heldenerfahrung**. Unterwegs wirst du **Knappe, Recke, Ritter, Held, Kriegsherr und Legende**, jeder Rang mit eigenem Abzeichen und zwei Talentpunkten extra; Talente fassen jetzt **20 Punkte**. Taste K zeigt den **Weg zur Legende**: alle 100 Stufen als leuchtender Pfad über eine nächtliche Landschaft, mit den Wahrzeichen der Ränge und deinem Kopf auf deiner Stufe. Talente und Werte sind neu gestaltet (dunkel und gold, mit Animationen), jeder Aufstieg spielt eine **Aufstiegs-Szene** mit Lichtwelle, Strahlenkranz und Funken. Als Legende darfst du **streicheln** – genau wie in der Mod PatPat: Schleichen + Rechtsklick (oder G).**
 > In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
 > In 0.51 kam die Kampferfahrung der Truppen: Soldaten lernen im Kampf, steigen bis Stufe 20 auf, und über Elite gibt es die Ränge Meister und Legende (zweiter Atem, Vorbild für die Kameraden) – Ränge erst ab ihrer Stufe.
 > In 0.50 kamen die Herz- und Manakristalle: Jeder Herzkristall gibt für immer ein Herz mehr, jeder Manakristall 20 Mana mehr (je bis zu zehn) – sie wachsen leuchtend in Höhlen, liegen in Schatztruhen und fallen von Drachenbossen und Erzmagiern.
@@ -1630,10 +1630,21 @@ neuen Rang mit Fanfare, zweiter Welle und Feuerwerk. Wer dabeisteht, sieht einen
 eine Spirale in der Farbe des Rangs am Helden aufsteigen. Was du an Heldenerfahrung bekommst, zeigt links über der
 Schnellleiste dein Abzeichen mit einer Leiste, die sich fließend füllt.
 
-**Das Charakterfenster (Taste K)** – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und Biome;
-rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), der **Weg zur Legende**
-mit allen sechs Rängen und die sechs Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der
-pulsiert, solange Punkte frei sind:
+**Der Weg zur Legende (Taste K):** Die Heldenstufe ist ein Pfad – ein Weg aus Steinen schlängelt sich über eine
+nächtliche Landschaft mit Sternenhimmel, Mond, fernen Bergen und Tannenhügeln, die beim Fahren verschieden schnell
+vorbeiziehen. Jede Stufe ist ein Stein, jede zehnte ein großer, jeder Rang sein Abzeichen mit Band und Belohnung; über
+jedem Rang steht sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg, Schrein im Wald, Festung, Gipfel mit Kronenburg)
+und färbt seinen Abschnitt. Der gegangene Weg glüht golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine
+Lichtsäule; voraus liegt der Weg im Nebel, ganz am Ende leuchtet ein Polarlicht über der Legende. Dein Kopf schwebt im
+Goldrahmen über deiner Stufe, das Stück bis zur nächsten leuchtet so weit, wie du gekommen bist. Beim Öffnen fliegt die
+Ansicht von Stufe 1 bis zu dir, die Steine leuchten nacheinander auf, dann sprühen Funken. Mausrad, Ziehen oder die
+Pfeiltasten fahren den Weg ab, unten zeigt eine Übersicht den ganzen Weg (anklicken springt dorthin); jeder Stein sagt,
+wie viel Heldenerfahrung er braucht.
+
+**Talente & Werte** (Knopf auf dem Weg) – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und
+Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), die sechs Ränge auf
+einer Linie und die sechs Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der pulsiert,
+solange Punkte frei sind:
 
 | Talent | je Punkt (höchstens 20) | mit 20 Punkten |
 |---|---|---|
@@ -1882,7 +1893,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw raid [Reich]` · `/kaw raid stop` | (nur Operatoren) sofort einen Heerhaufen gegen die eigene Siedlung schicken (das Reich erklärt dafür den Krieg), alle Heerhaufen abziehen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
-| **K** | Charakterfenster: Heldenstufe, Heldenerfahrung, Talentpunkte verteilen (änderbar unter Optionen → Steuerung) |
+| **K** | Der Weg zur Legende (die Heldenstufe als Pfad); von dort Talente & Werte (änderbar unter Optionen → Steuerung) |
 | **G** / Schleichen + Rechtsklick | als Legende (Heldenstufe 100) das Wesen vor dir streicheln, gedrückt halten streichelt weiter (G änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |

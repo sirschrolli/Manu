@@ -341,13 +341,20 @@ public final class HeroLevel {
         int rgb = rank.color() & 0xFFFFFF;
         net.minecraft.core.particles.DustColorTransitionOptions dust = new net.minecraft.core.particles.DustColorTransitionOptions(rgb, 0xFFF6DC,
                 1.0f);
-        for (int i = 0; i < 48; i++) {
-            double t = i / 48.0;
-            double a = t * Mth.TWO_PI * 3.0;
-            double r = 1.05 - t * 0.45;
-            for (int k = 0; k < 2; k++) {
-                double b = a + k * Math.PI;
-                world.sendParticles(dust, x + Math.cos(b) * r, y + 0.1 + t * 2.7, z + Math.sin(b) * r, 1, 0.0, 0.0, 0.0, 0.0);
+        // die Spirale sehen nur die anderen (dem Helden selbst flöge sie dicht vor den Augen vorbei)
+        for (ServerPlayer viewer : world.players()) {
+            if (viewer == player || viewer.distanceToSqr(player) > 48.0 * 48.0) {
+                continue;
+            }
+            for (int i = 0; i < 48; i++) {
+                double t = i / 48.0;
+                double a = t * Mth.TWO_PI * 3.0;
+                double r = 1.05 - t * 0.45;
+                for (int k = 0; k < 2; k++) {
+                    double b = a + k * Math.PI;
+                    world.sendParticles(viewer, dust, false, false, x + Math.cos(b) * r, y + 0.1 + t * 2.7, z + Math.sin(b) * r, 1, 0.0, 0.0, 0.0,
+                            0.0);
+                }
             }
         }
         // Totem-Funken, Zauberschrift und Feuerwerk sehen nur die anderen – dem Helden selbst flögen sie mitten durchs Bild,

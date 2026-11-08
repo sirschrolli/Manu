@@ -229,7 +229,8 @@ final class FarmGameTests {
             i++;
         }
         helper.runAfterDelay(2, () -> {
-            AABB box = new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(12.0);
+            // nur die eigene Weide (9 × 9) zählen – im großen Testlauf stehen andere Weiden mit eigenen Tieren dicht daneben
+            AABB box = AABB.encapsulatingFullBlocks(helper.absolutePos(BlockPos.ZERO), helper.absolutePos(new BlockPos(8, 3, 8))).inflate(0.5);
             helper.assertTrue(level.getEntitiesOfClass(Mob.class, box, m -> m.getType() == EntityTypes.SHEEP || m.getType() == EntityTypes.GOAT
                     || m.getType() == EntityTypes.RABBIT || m.getType() == EntityTypes.MOOSHROOM || m.getType() == EntityTypes.CHICKEN).isEmpty(),
                     "Vanilla-Tiere sind noch da");

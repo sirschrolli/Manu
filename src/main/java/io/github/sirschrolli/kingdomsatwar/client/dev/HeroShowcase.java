@@ -351,6 +351,26 @@ final class HeroShowcase {
             io.github.sirschrolli.kingdomsatwar.client.hero.PatClient.devProgress = null;
         }));
         steps.add(Step.waitTicks(10));
+        // wie im Spiel: schleichen und mit leerer Hand rechtsklicken (der Weg über die Eingabe, nicht über den Server)
+        steps.add(Step.once(minecraft -> minecraft.options.keyShift.setDown(true)));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player == null || minecraft.gameMode == null || minecraft.level == null) {
+                return;
+            }
+            for (net.minecraft.world.entity.Entity entity : minecraft.level.entitiesForRendering()) {
+                if (entity instanceof net.minecraft.world.entity.animal.wolf.Wolf wolf) {
+                    InteractionResult result = minecraft.gameMode.interact(minecraft.player, wolf,
+                            new net.minecraft.world.phys.EntityHitResult(wolf), InteractionHand.MAIN_HAND);
+                    KingdomsAtWar.LOGGER.info("[Showcase] Schleichen + Rechtsklick auf den Wolf: {} (schleicht: {})", result,
+                            minecraft.player.isShiftKeyDown());
+                }
+            }
+        }));
+        steps.add(Step.waitTicks(2));
+        steps.add(Step.screenshot("hero_7b_gesture"));
+        steps.add(Step.once(minecraft -> minecraft.options.keyShift.setDown(false)));
+        steps.add(Step.waitTicks(10));
     }
 
     /** Mauszeiger über eine Stelle des Charakterfensters (Koordinaten im Fenster). */
