@@ -48,7 +48,9 @@ public class BossProjectile extends AbstractHurtingProjectile {
         /** Dornensaat (Verdantis, vom Himmel): vergiftet, wo sie einschlägt, wächst kurz Dornengestrüpp. */
         SEED(1.0f, 2.8, 4, true),
         /** Seelenpfeil (Nyxar): zehrt (Verdorren) und lässt die Sicht verdunkeln. */
-        SOUL_BOLT(1.1f, 3.0, 3, false);
+        SOUL_BOLT(1.1f, 3.0, 3, false),
+        /** Rollender Felsbrocken (Terragons Felslawine): rollt über den Boden, Stufen hinauf und Mulden hinab, zerschellt an Wänden. */
+        ROLLING(2.0f, 3.0, 0, false);
 
         public final float size;
         public final double radius;
@@ -66,6 +68,8 @@ public class BossProjectile extends AbstractHurtingProjectile {
     private static final EntityDataAccessor<Byte> DATA_KIND = SynchedEntityData.defineId(BossProjectile.class, EntityDataSerializers.BYTE);
     private float damage = 8.0f;
     private int life;
+    /** Rollender Brocken: seine (waagerechte) Geschwindigkeit bleibt gleich. */
+    private @Nullable Vec3 roll;
 
     public BossProjectile(EntityType<? extends BossProjectile> type, Level level) {
         super(type, level);
@@ -119,12 +123,36 @@ public class BossProjectile extends AbstractHurtingProjectile {
         if (kind.falls && !this.level().isClientSide()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, kind == Kind.BOULDER ? -0.05 : -0.04, 0));
         }
+        if (kind == Kind.ROLLING && !this.level().isClientSide()) {
+            this.rollAlong();
+        }
         super.tick();
         if (this.level().isClientSide()) {
             this.trail(kind);
         } else if (++this.life > 200) {
             this.discard();
         }
+    }
+
+    /**
+     * Ein rollender Brocken folgt dem Boden: Stufen bis gut einen Block hinauf, Mulden hinab; vor einer höheren Wand rollt
+     * er weiter hinein und zerschellt dort (der Treffer am Block).
+     */
+    private void rollAlong() {
+        if (this.roll == null) {
+            Vec3 v = this.getDeltaMovement();
+            this.roll = new Vec3(v.x, 0.0, v.z);
+            this.accelerationPower = 0.0;
+        }
+        Vec3 next = this.position().add(this.roll);
+        int ground = this.level().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(next.x),
+                Mth.floor(next.z));
+        double rise = ground - this.getY();
+        if (rise <= 1.25) {
+            double y = rise >= 0.0 ? ground + 0.02 : Math.max(ground + 0.02, this.getY() - 0.8);
+            this.setPos(this.getX(), y, this.getZ());
+        }
+        this.setDeltaMovement(this.roll.x, 0.0, this.roll.z);
     }
 
     /** Spur hinter dem Geschoss (nur auf dem Bildschirm). */
@@ -151,11 +179,11 @@ public class BossProjectile extends AbstractHurtingProjectile {
                 smoke = ParticleTypes.COMPOSTER;
                 count = 1;
             }
-            case BOULDER -> {
+            case BOULDER, ROLLING -> {
                 main = new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
                         net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState());
-                smoke = io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get();
-                count = 2;
+                smoke = kind == Kind.ROLLING ? ParticleTypes.CLOUD : io.github.sirschrolli.kingdomsatwar.registry.ModParticles.BOSS_DUST.get();
+                count = kind == Kind.ROLLING ? 4 : 2;
             }
             case SPARK -> {
                 main = ParticleTypes.ELECTRIC_SPARK;
@@ -222,13 +250,13 @@ public class BossProjectile extends AbstractHurtingProjectile {
                     : this.damageSources().explosion(this, null);
             e.hurtServer(level, source, this.damage * f);
             BossEffects.apply(e, kind, kind.effectSeconds);
-            double push = kind == Kind.BOULDER ? 1.4 : kind == Kind.BUBBLE ? 1.0 : 0.7;
+            double push = kind == Kind.BOULDER || kind == Kind.ROLLING ? 1.4 : kind == Kind.BUBBLE ? 1.0 : 0.7;
             DragonBossEntity.pushAway(e, c, push * f, 0.4 * f);
         }
     }
 
     private void impactEffects(ServerLevel level, Kind kind, Vec3 c) {
-        float volume = kind == Kind.METEOR || kind == Kind.BOULDER ? 3.0f : 1.6f;
+        float volume = kind == Kind.METEOR || kind == Kind.BOULDER || kind == Kind.ROLLING ? 3.0f : 1.6f;
         float pitch = 0.7f + this.random.nextFloat() * 0.2f;
         switch (kind) {
             case FIREBALL, METEOR -> {
@@ -262,7 +290,7 @@ public class BossProjectile extends AbstractHurtingProjectile {
                         kind.radius * 0.4, 0.4, kind.radius * 0.4, 0.02);
                 this.sound(level, c, SoundEvents.SWEET_BERRY_BUSH_BREAK, volume, pitch);
             }
-            case BOULDER -> {
+            case BOULDER, ROLLING -> {
                 BossFx.impact(level, new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK,
                         net.minecraft.world.level.block.Blocks.TUFF.defaultBlockState()), c, 60, kind.radius * 0.35, 0.4,
                         kind.radius * 0.35, 0.2);

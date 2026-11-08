@@ -51,14 +51,15 @@ public class BossProjectileRenderer extends EntityRenderer<BossProjectile, BossP
     public void extractRenderState(BossProjectile entity, State state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         state.kind = entity.getKind();
-        state.spin = (entity.tickCount + partialTicks) * 12.0f;
+        state.spin = (entity.tickCount + partialTicks) * (entity.getKind() == BossProjectile.Kind.ROLLING ? -22.0f : 12.0f);
     }
 
     @Override
     public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         poseStack.pushPose();
         float size = state.kind.size * 1.6f;
-        poseStack.translate(0.0f, 0.25f * size, 0.0f);
+        // ein rollender Brocken liegt auf dem Boden auf
+        poseStack.translate(0.0f, (state.kind == BossProjectile.Kind.ROLLING ? 0.5f : 0.25f) * size, 0.0f);
         poseStack.scale(size, size, size);
         poseStack.rotate(camera.orientation);
         poseStack.rotateDegrees(com.mojang.math.Axis.ZP, state.spin);

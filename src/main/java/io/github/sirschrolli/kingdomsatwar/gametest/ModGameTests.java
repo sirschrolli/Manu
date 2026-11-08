@@ -215,6 +215,7 @@ public final class ModGameTests {
         HeroGameTests.init();      // der eigene Held: Herz- und Manakristalle
         VeterancyGameTests.init(); // Kampferfahrung der Truppen: Stufen, Meister, Legende
         AuditGameTests.init();     // Bauprüfung aller Gebäude (Betten, Türen, Halt)
+        DragonAttackGameTests.init(); // die großen eigenen Angriffe der Drachen-Bosse
     }
 
     private ModGameTests() {}
@@ -259,6 +260,7 @@ public final class ModGameTests {
         HeroGameTests.register(event, environment);
         VeterancyGameTests.register(event, environment);
         AuditGameTests.register(event, environment);
+        DragonAttackGameTests.register(event, environment);
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg
         RaidGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("raids")));
         FarmGameTests.register(event, environment);

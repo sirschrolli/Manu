@@ -110,6 +110,7 @@ final class Showcase {
                 case "siege" -> SiegeShowcase.siege(steps);
                 case "vehicles" -> VehicleShowcase.vehicles(steps);
                 case "fixes" -> FixShowcase.fixes(steps);
+                case "dragon_attacks" -> DragonAttackShowcase.attacks(steps, "");
                 case "raid" -> RaidShowcase.raid(steps);
                 case "troops" -> TroopShowcase.troops(steps);
                 case "dragonwar" -> DragonWarShowcase.dragonWar(steps);
@@ -182,6 +183,10 @@ final class Showcase {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         VillageShowcase.villagers(steps, g);
+                    } else if (scene.equals("anim") || scene.startsWith("anim_")) {
+                        AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
+                    } else if (scene.startsWith("dragon_attacks_")) {
+                        DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.equals("worldsites")) {
                         WorldSitesShowcase.sites(steps, "");
                     } else if (scene.startsWith("worldsite_")) {

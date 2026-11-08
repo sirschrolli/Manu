@@ -193,6 +193,80 @@ public final class BossFx {
         }
     }
 
+    // =====================================================================================
+    // Formen (für die großen Element-Angriffe)
+    // =====================================================================================
+
+    /**
+     * Schraube aus Teilchen um eine senkrechte Achse (Wirbelsturm, Säule): {@code arms} Arme von unten (Radius {@code r0})
+     * nach oben (Radius {@code r1}) mit {@code turns} Umdrehungen; die Teilchen fliegen tangential weiter, als drehe sich
+     * alles.
+     */
+    public static void helix(ServerLevel level, ParticleOptions particle, Vec3 base, double height, double r0, double r1, int arms,
+            double turns, double phase, int perArm, double swirl) {
+        for (int arm = 0; arm < arms; arm++) {
+            for (int i = 0; i < perArm; i++) {
+                double t = (i + 0.5) / perArm;
+                double a = phase + arm * Mth.TWO_PI / arms + t * turns * Mth.TWO_PI;
+                double r = Mth.lerp(t, r0, r1);
+                // Anzahl 0: dx/dy/dz sind die Flugrichtung (tangential und etwas aufwärts), "speed" ihr Betrag
+                level.sendParticles(particle, base.x + Math.cos(a) * r, base.y + t * height, base.z + Math.sin(a) * r, 0,
+                        -Math.sin(a), 0.25, Math.cos(a), swirl);
+            }
+        }
+    }
+
+    /** Teilchen entlang der Strecke a → b (etwa alle {@code step} Blöcke eines, leicht gestreut). */
+    public static void line(ServerLevel level, ParticleOptions particle, Vec3 a, Vec3 b, double step, double spread) {
+        Vec3 d = b.subtract(a);
+        int n = Math.max(1, (int) Math.ceil(d.length() / step));
+        for (int i = 0; i <= n; i++) {
+            Vec3 p = a.add(d.scale((double) i / n));
+            level.sendParticles(particle, p.x, p.y, p.z, 1, spread, spread, spread, 0.0);
+        }
+    }
+
+    /** Kugelschale aus Teilchen um {@code c}. */
+    public static void sphere(ServerLevel level, ParticleOptions particle, Vec3 c, double r, int count, double speed) {
+        var random = level.getRandom();
+        for (int i = 0; i < count; i++) {
+            double u = random.nextDouble() * 2.0 - 1.0;
+            double a = random.nextDouble() * Mth.TWO_PI;
+            double s = Math.sqrt(1.0 - u * u);
+            level.sendParticles(particle, c.x + s * Math.cos(a) * r, c.y + u * r, c.z + s * Math.sin(a) * r, 1, 0.0, 0.0, 0.0, speed);
+        }
+    }
+
+    /** Abstand eines Punkts von der Strecke a–b. */
+    public static double distanceToSegment(Vec3 p, Vec3 a, Vec3 b) {
+        Vec3 ab = b.subtract(a);
+        double len2 = ab.lengthSqr();
+        double t = len2 < 1.0e-6 ? 0.0 : Mth.clamp(p.subtract(a).dot(ab) / len2, 0.0, 1.0);
+        return p.distanceTo(a.add(ab.scale(t)));
+    }
+
+    /** Die Mitte der Arena (das Nest), sonst der Boss selbst. */
+    public static Vec3 arena(DragonBossEntity boss) {
+        return boss.getHome() != null ? Vec3.atBottomCenterOf(boss.getHome()) : boss.position();
+    }
+
+    /** Ein Punkt auf dem Boden (oberste feste Fläche) bei x/z. */
+    public static Vec3 ground(DragonBossEntity boss, double x, double z) {
+        return new Vec3(x, boss.groundY(x, z), z);
+    }
+
+    /** Hält einen Punkt in der Arena (waagerecht höchstens {@code radius} von der Mitte). */
+    public static Vec3 keepInArena(DragonBossEntity boss, Vec3 p, double radius) {
+        Vec3 c = arena(boss);
+        Vec3 d = new Vec3(p.x - c.x, 0.0, p.z - c.z);
+        double len = d.length();
+        if (len <= radius) {
+            return p;
+        }
+        d = d.scale(radius / len);
+        return new Vec3(c.x + d.x, p.y, c.z + d.z);
+    }
+
     /** Kleiner Zufallsgenerator auf Basis des Level-Zufalls (für Partikel). */
     static final class RandomPoints {
         private final ServerLevel level;
