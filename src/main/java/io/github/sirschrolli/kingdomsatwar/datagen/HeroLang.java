@@ -23,8 +23,8 @@ final class HeroLang {
         text.add("block.kingdomsatwar.mana_crystal_formation", "Mana Crystal", "Manakristall");
         text.add("message.kingdomsatwar.crystal.heart.absorbed", "❤ One more heart! Now %1$s hearts (%2$s/%3$s heart crystals)",
                 "❤ Ein Herz mehr! Jetzt %1$s Herzen (%2$s/%3$s Herzkristalle)");
-        text.add("message.kingdomsatwar.crystal.mana.absorbed", "✦ More mana! Now up to %1$s mana (%2$s/%3$s mana crystals)",
-                "✦ Mehr Mana! Jetzt bis zu %1$s Mana (%2$s/%3$s Manakristalle)");
+        text.add("message.kingdomsatwar.crystal.mana.absorbed", "◆ More mana! Now up to %1$s mana (%2$s/%3$s mana crystals)",
+                "◆ Mehr Mana! Jetzt bis zu %1$s Mana (%2$s/%3$s Manakristalle)");
         text.add("message.kingdomsatwar.crystal.heart.full", "You have already absorbed all %s heart crystals",
                 "Du hast schon alle %s Herzkristalle aufgenommen");
         text.add("message.kingdomsatwar.crystal.mana.full", "You have already absorbed all %s mana crystals",

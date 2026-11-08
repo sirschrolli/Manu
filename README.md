@@ -8,8 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.49.0 – Die Königsburg. Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan für deine Baumeister und als echte Schematik (.litematic): zwei Mauerringe mit über 40 Türmen, Torhäuser mit Fallgitter, ein gemauerter Graben mit Steinbrücke, die Kernburg mit Bergfried, Palas und Thronsaal, eine Kapelle mit spitzem Turm, der Marstall und der Königsgarten, davor eine ganze Stadt mit Marktplatz, Brunnen, Straßen und Gassen. Im Stadtfenster steht sie mit einer Krone ganz oben in der Liste zum Einlesen.**
-> **0.49.1** repariert die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen – auch mit einem Rechtsklick auf das herabhängende Tuch (dort traf man bisher die Wand dahinter) oder wenn man es abreißen will. Ist der Herrscher gefallen, schimmert das Banner; stehen noch Wachen davor, leuchten sie auf. Das alte Reichsbanner nimmt der Eroberer als Trophäe mit.
+> **Testversion 0.50.0 – Herz- und Manakristalle. Tief in den Höhlen wachsen leuchtende Kristalle: Jeder Herzkristall gibt dir für immer ein Herz mehr, jeder Manakristall 20 Mana mehr – bis zu zehn von jeder Sorte, also zwanzig Herzen und 200 Mana mehr. Du findest sie auf Höhlenböden, in den Schatztruhen der Bauwerke, Burgen und Magiertürme; jeder Drachenboss hinterlässt einen Herzkristall, jeder Erzmagier einen Manakristall. Was du aufgenommen hast, bleibt – auch nach dem Tod.**
+> In 0.49 kam die Königsburg: Der Dragon Architect hat eine ganze Burg mit 300 × 300 Blöcken entworfen – als eingebauten Bauplan und als .litematic, mit zwei Mauerringen, Graben, Kernburg, Bergfried, Palas, Kapelle, Marstall, Königsgarten und einer ganzen Stadt davor. 0.49.1 reparierte die Eroberung der Stammburgen: Das Reichsbanner lässt sich jetzt sicher ergreifen.
 > In 0.48 kamen die Großbaustellen: Baupläne bis 320 × 128 × 320 Blöcke, viele Baumeister zugleich, jeder in seinem Abschnitt von 16 × 16 Säulen, und im Stadtfenster eine Karte der Abschnitte.
 > In 0.47 kamen die Schematiken: Dateien von Litematica (.litematic), WorldEdit (.schem) und dem Strukturblock (.nbt) lassen sich als eigener Bauplan einlesen, und jeder eigene Plan lässt sich in allen drei Formaten ablegen.
 > In 0.46 kam der Dragon Architect: Mit dem Vermessungsstab vermisst du ein Gebäude, das du selbst gebaut hast, und zeichnest es als eigenen Bauplan – mit Ansicht und Grundriss auf Blaupausen-Papier; die Baumeister bauen es nach, Block für Block oder abschnittsweise, kostbare Blöcke nehmen sie genau so aus dem Lager.
@@ -356,7 +356,10 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Dragon Architect, Teil 2: Schematiken einlesen und ablegen (.litematic, .schem, .nbt) | ✅ fertig |
 | Dragon Architect, Teil 3: Großbaustellen bis 320 × 320 – viele Baumeister zugleich, jeder in seinem Abschnitt | ✅ fertig |
 | Die Königsburg: eine fertige Burg mit 300 × 300 Blöcken als Bauplan und als .litematic | ✅ fertig |
-| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ als Nächstes |
+| Herz- und Manakristalle: für immer mehr Herzen und Mana (Höhlen, Schatztruhen, Drachenbosse, Erzmagier) | ✅ fertig |
+| Truppen weiter leveln: Kampferfahrung, mehr Ränge und stärkere Veteranen | ⏳ als Nächstes |
+| Eigenes Levelsystem für den Charakter (eigene Punkte – die Erfahrung von Minecraft bleibt, wie sie ist) | ⏳ als Nächstes |
+| Fahrzeuge und Belagerungsturm: Planwagen für Baustoffe und Soldaten, Turm mit Fallbrücke | ⏳ danach |
 | Modrinth-Veröffentlichung | ⏳ später |
 
 ---
@@ -1543,6 +1546,29 @@ Mauer verarbeiten und wird im Ofen wieder zum Gestein.
 | Schattenstein | Schattenbruchstein | Schattenwelt |
 | Tiefschattenstein | Tiefschattenbruchstein | tief in der Schattenwelt |
 
+### Herz- und Manakristalle
+
+![Herz- und Manakristalle in ihren Höhlen und beim Aufnehmen](docs/bilder/kristalle.jpg)
+
+Tief in den Höhlen wachsen selten leuchtende Kristalle auf dem Gestein: ein geschliffenes Herz aus rotem Kristall oder
+ein Grüppchen blauer Kristallspitzen. Sie funkeln (rote Funken und ab und zu ein kleines Herz, blaue Funken und
+aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie schon von Weitem.
+
+| | Herzkristall | Manakristall |
+|---|---|---|
+| Wirkung | ein Herz mehr, gleich gefüllt | 20 Mana mehr, gleich gefüllt |
+| Höchstens | zehn – also zwanzig Herzen | zehn – also 200 Mana mehr (mit dem Stab eines Lehrlings 300) |
+| In Höhlen | auf Gestein, von tief unten bis Höhe 48 | auf Gestein, eher in der Tiefe (bis Höhe 24) |
+| In Truhen | Schatzkammern der Stammburgen, Raubritterburg, Kathedrale, Schattenzitadelle, Ruinen … | Magiertürme (im Allerheiligsten fast jede zweite Truhe), Mondtempel, Sternwarte … |
+| Von Bossen | jeder Drachenboss einen, Nyxar zwei | jeder Erzmagier einen, Nyxar einen |
+
+- **Aufnehmen:** Rechtsklick mit dem Kristall in der Hand – ein heller Klang, ein Kranz aus Funken um dich herum, und
+  über der Leiste steht, wie viele Herzen bzw. wie viel Mana du jetzt hast. Der Tooltip zeigt, wie viele du schon
+  aufgenommen hast; sind es zehn, bleibt der Kristall in der Hand.
+- **Abbauen:** mit der Spitzhacke; der Kristall fällt auch heraus, wenn man ihm den Boden wegschlägt.
+- **Für immer:** Aufgenommene Kristalle bleiben, auch nach dem Tod – man kehrt mit allen Herzen zurück. In kargen
+  Truhen gehen Kristalle nie verloren.
+
 ### Ausrüstung
 
 ![Rüstungen aus Stahl, Konterit und Drachenschuppen](docs/bilder/ausruestung.jpg)
@@ -1849,12 +1875,15 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Riesengebeine, Verlorene Pforte) und des Ends (die Sternwarte) ebenso, und die Köpfe tragen das Gesicht der
      eigenen Wesen.
 2. **Krieg der Königreiche** – die vier Reiche mit ihren Stammburgen, die Belagerungswaffen, die Heerhaufen, die neuen
-   Truppen und die Drachen im Krieg sind fertig; als Nächstes kommen Fahrzeuge und der Belagerungsturm
+   Truppen und die Drachen im Krieg sind fertig; nach dem eigenen Helden kommen Fahrzeuge und der Belagerungsturm
    ([docs/KRIEG.md](docs/KRIEG.md)).
 3. **Dragon Architect** – Teil 1 (vermessen, als eigenen Bauplan zeichnen, nachbauen lassen), Teil 2 (Schematiken
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
-4. Danach die Veröffentlichung auf Modrinth.
+4. **Der eigene Held** – Herz- und Manakristalle sind fertig; als Nächstes werden die Truppen weiter gelevelt
+   (Kampferfahrung, mehr Ränge) und dein Charakter bekommt ein eigenes Levelsystem mit eigenen Punkten – die
+   Erfahrung von Minecraft bleibt dabei genau, wie sie ist. Danach kommen Fahrzeuge und der Belagerungsturm.
+5. Danach die Veröffentlichung auf Modrinth.
 
 ## Danksagung
 
