@@ -42,12 +42,13 @@ public class HagModel extends HumanoidModel<HagRenderState> {
             this.nose.y = this.nose.getInitialPose().y() + Mth.sin(t * 0.8f) * 0.25f;
             this.nose.xRot = this.nose.getInitialPose().xRot() + Mth.sin(t * 0.6f) * 0.06f;
         }
-        if (state.drinking) {
-            // die Flasche zum Mund, den Kopf in den Nacken
-            this.rightArm.xRot = -1.85f + Mth.sin(t * 0.9f) * 0.05f;
-            this.rightArm.yRot = -0.55f;
-            this.rightArm.zRot = 0.0f;
-            this.head.xRot = -0.45f;
+        float drink = state.drink;
+        if (drink > 0.001f) {
+            // die Flasche zum Mund, den Kopf in den Nacken (weich hinein und heraus)
+            this.rightArm.xRot = Mth.lerp(drink, this.rightArm.xRot, -1.85f + Mth.sin(t * 0.9f) * 0.05f);
+            this.rightArm.yRot = Mth.lerp(drink, this.rightArm.yRot, -0.55f);
+            this.rightArm.zRot = Mth.lerp(drink, this.rightArm.zRot, 0.0f);
+            this.head.xRot = Mth.lerp(drink, this.head.xRot, -0.45f);
         }
     }
 }

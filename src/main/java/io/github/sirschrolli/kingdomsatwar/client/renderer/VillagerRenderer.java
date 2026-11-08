@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer;
 
 import io.github.sirschrolli.kingdomsatwar.client.model.CitizenModel;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession;
 import io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity;
 import net.minecraft.client.model.HumanoidModel;
@@ -53,7 +54,7 @@ public class VillagerRenderer extends HumanoidMobRenderer<VillagerEntity, Citize
         state.feminine = villager.isFeminine();
         state.working = villager.isWorking();
         state.hammer = profession.hammer();
-        state.ready = io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim.follow(villager, 0,
+        state.ready = Anim.follow(villager, 0,
                 state.working && state.hammer ? 1.0f : 0.0f, state.ageInTicks, 5.0f);
     }
 

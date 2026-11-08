@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.client.renderer.monster;
 
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.client.model.monster.HagModel;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.monster.Hag;
 import net.minecraft.client.model.HumanoidModel;
@@ -35,6 +36,7 @@ public class HagRenderer extends HumanoidMobRenderer<Hag, HagRenderState, HagMod
         state.look = Mth.clamp(hag.getLook().ordinal(), 0, NAMES.length - 1);
         state.holdingPotion = !hag.getMainHandItem().isEmpty();
         state.drinking = hag.isDrinkingPotion();
+        state.drink = Anim.follow(hag, 0, state.drinking ? 1.0f : 0.0f, state.ageInTicks, 7.0f);
     }
 
     @Override

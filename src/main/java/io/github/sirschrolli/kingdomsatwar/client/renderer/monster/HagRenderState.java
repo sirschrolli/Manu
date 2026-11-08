@@ -7,4 +7,6 @@ public class HagRenderState extends HumanoidRenderState {
     public int look;
     public boolean holdingPotion;
     public boolean drinking;
+    /** Wie weit die Flasche gerade zum Mund geführt ist (0..1, weich). */
+    public float drink;
 }

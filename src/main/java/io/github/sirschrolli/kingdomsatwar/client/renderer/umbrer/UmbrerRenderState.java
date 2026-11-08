@@ -11,6 +11,9 @@ public class UmbrerRenderState extends LivingEntityRenderState {
     public boolean trading;
     /** Schüttelt den Kopf (nichts zu tauschen). */
     public boolean unhappy;
+    /** Wie weit die Ware gerade vorgezeigt wird bzw. der Kopf geschüttelt wird (0..1, weich). */
+    public float show;
+    public float sulk;
     /** Wächter: Kampfhaltung 0..1 (Speer gesenkt). */
     public float stance;
     /** Wächter: Speerstoß. */

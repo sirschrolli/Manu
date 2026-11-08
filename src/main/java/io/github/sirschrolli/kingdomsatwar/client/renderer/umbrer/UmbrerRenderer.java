@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.client.model.umbrer.UmbrerModel;
 import io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity;
@@ -69,5 +70,8 @@ public class UmbrerRenderer<T extends PathfinderMob & UmbrerLike> extends MobRen
             state.stance = Mth.lerp(partialTicks, guard.stanceO, guard.stance);
             state.thrust.copyFrom(guard.thrustAnimation);
         }
+        // Ware zeigen und Kopfschütteln weich hinein und heraus
+        state.show = Anim.follow(entity, 0, state.trading ? 1.0f : 0.0f, state.ageInTicks, 6.0f);
+        state.sulk = Anim.follow(entity, 1, state.unhappy ? 1.0f : 0.0f, state.ageInTicks, 8.0f);
     }
 }

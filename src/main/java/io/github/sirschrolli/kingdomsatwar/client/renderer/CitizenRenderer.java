@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.CitizenModel;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.economy.citizen.CitizenEntity;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import net.minecraft.client.model.HumanoidModel;
@@ -50,7 +51,7 @@ public class CitizenRenderer extends HumanoidMobRenderer<CitizenEntity, CitizenR
         state.feminine = citizen.isFeminine();
         state.working = citizen.isWorking();
         state.hammer = profession == Profession.SMITH;
-        state.ready = io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim.follow(citizen, 0,
+        state.ready = Anim.follow(citizen, 0,
                 state.working && state.hammer ? 1.0f : 0.0f, state.ageInTicks, 5.0f);
     }
 

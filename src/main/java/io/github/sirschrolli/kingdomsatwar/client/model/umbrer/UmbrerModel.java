@@ -71,14 +71,18 @@ public class UmbrerModel extends EntityModel<UmbrerRenderState> {
         float speed = Math.min(state.walkAnimationSpeed, 1.0f);
         float stride = state.walkAnimationPos * 0.6662f;
 
-        // Beine unter der Robe, die Robe schwingt leicht mit
+        // Beine unter der Robe; die Robe geht mit: der Saum dreht sich mit den Hüften zum vorderen Bein, schwingt zur
+        // Seite, weht beim Gehen ein wenig nach hinten und flattert bei jedem Schritt – sonst sähe es aus, als schwebe
+        // das Wesen
         this.leftLeg.xRot = Mth.cos(stride) * 0.85f * speed;
         this.rightLeg.xRot = Mth.cos(stride + Mth.PI) * 0.85f * speed;
-        this.skirt.zRot = Mth.sin(stride) * 0.035f * speed;
-        this.skirt.xRot = -Math.abs(Mth.sin(stride)) * 0.06f * speed;
+        this.skirt.yRot = Mth.sin(stride) * 0.14f * speed;
+        this.skirt.zRot = Mth.sin(stride) * 0.06f * speed;
+        this.skirt.xRot = 0.08f * speed + Mth.cos(stride * 2.0f) * 0.05f * speed;
         this.cape.xRot += speed * 0.35f + Mth.sin(t * 0.08f) * 0.03f;
-        // Atem und gelassene Kopfbewegung
-        this.body.xRot = Mth.sin(t * 0.06f) * 0.012f;
+        // Atem und gelassene Kopfbewegung; beim Gehen wippt der Körper mit jedem Schritt und neigt sich leicht vor
+        this.body.xRot = Mth.sin(t * 0.06f) * 0.012f + 0.05f * speed;
+        this.body.y += Math.abs(Mth.sin(stride)) * 0.6f * speed;
         this.head.yRot = state.yRot * DEG;
         this.head.xRot = state.xRot * DEG;
         // die Ohren zucken ab und zu
@@ -92,9 +96,10 @@ public class UmbrerModel extends EntityModel<UmbrerRenderState> {
         } else {
             this.civilianArms(state, speed, stride);
         }
-        if (state.unhappy) {
-            this.head.zRot = 0.3f * Mth.sin(0.45f * t);
-            this.head.xRot = 0.35f;
+        if (state.sulk > 0.001f) {
+            // Kopfschütteln (weich hinein und heraus)
+            this.head.zRot = Mth.lerp(state.sulk, this.head.zRot, 0.3f * Mth.sin(0.45f * t));
+            this.head.xRot = Mth.lerp(state.sulk, this.head.xRot, 0.35f);
         }
     }
 
@@ -105,11 +110,13 @@ public class UmbrerModel extends EntityModel<UmbrerRenderState> {
         this.rightArm.xRot = Mth.lerp(fold, Mth.cos(stride) * 0.55f * speed, -0.62f);
         this.leftArm.zRot = Mth.lerp(fold, 0.0f, 0.34f);
         this.rightArm.zRot = Mth.lerp(fold, 0.0f, -0.34f);
-        if (state.trading) {
-            this.rightArm.xRot = -1.05f;
-            this.rightArm.zRot = -0.12f;
-            this.rightArm.yRot = 0.2f;
-            this.head.xRot += 0.18f;
+        float show = state.show;
+        if (show > 0.001f) {
+            // die Ware vorzeigen (weich hinein und heraus)
+            this.rightArm.xRot = Mth.lerp(show, this.rightArm.xRot, -1.05f);
+            this.rightArm.zRot = Mth.lerp(show, this.rightArm.zRot, -0.12f);
+            this.rightArm.yRot = Mth.lerp(show, this.rightArm.yRot, 0.2f);
+            this.head.xRot += 0.18f * show;
         }
     }
 

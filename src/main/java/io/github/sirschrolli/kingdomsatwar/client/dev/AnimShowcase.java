@@ -49,7 +49,54 @@ final class AnimShowcase {
             new Subject("enderman", ModEntities.ENDERMAN::get, 0.12, 7.0, 1.6),
             new Subject("dragon", () -> ModEntities.DRAGONS.get(DragonType.FIRE).get(), 0.16, 12.0, 1.8));
 
+    /** Zweite Runde: alle übrigen Wesen mit eigenem Modell, die laufen. */
+    private static final List<Subject> MORE = List.of(
+            new Subject("citizen", ModEntities.CITIZEN::get, 0.1, 5.0, 1.0),
+            new Subject("bandit", ModEntities.BANDIT::get, 0.12, 5.0, 1.0),
+            new Subject("umbrer", ModEntities.UMBRER::get, 0.1, 5.0, 1.0),
+            new Subject("umbrer_guard", ModEntities.UMBRER_GUARD::get, 0.12, 5.0, 1.0),
+            new Subject("pillager", ModEntities.PILLAGER::get, 0.12, 5.0, 1.0),
+            new Subject("vindicator", ModEntities.VINDICATOR::get, 0.12, 5.0, 1.0),
+            new Subject("witch", ModEntities.WITCH::get, 0.1, 5.0, 1.0),
+            new Subject("piglin_brute", ModEntities.PIGLIN_BRUTE::get, 0.12, 5.0, 1.0),
+            new Subject("wither_skeleton", ModEntities.WITHER_SKELETON::get, 0.12, 6.0, 1.2),
+            new Subject("creeper", ModEntities.CREEPER::get, 0.1, 5.0, 0.8),
+            new Subject("spider", ModEntities.SPIDER::get, 0.13, 5.0, 0.5),
+            new Subject("iron_golem", ModEntities.IRON_GOLEM::get, 0.08, 7.0, 1.4),
+            new Subject("snow_golem", ModEntities.SNOW_GOLEM::get, 0.08, 5.0, 1.0),
+            new Subject("copper_golem", ModEntities.COPPER_GOLEM::get, 0.08, 3.5, 0.4),
+            new Subject("ravager", ModEntities.RAVAGER::get, 0.12, 9.0, 1.4),
+            new Subject("creaking", ModEntities.CREAKING::get, 0.1, 6.0, 1.4),
+            new Subject("warden", ModEntities.WARDEN::get, 0.08, 8.0, 1.5),
+            new Subject("sniffer", ModEntities.SNIFFER::get, 0.06, 8.0, 1.0),
+            new Subject("camel", ModEntities.CAMEL::get, 0.1, 8.0, 1.4),
+            new Subject("llama", ModEntities.LLAMA::get, 0.1, 6.0, 1.2),
+            new Subject("goat", ModEntities.FARM_GOAT::get, 0.12, 5.0, 0.7),
+            new Subject("donkey", ModEntities.FARM_DONKEY::get, 0.1, 6.0, 0.9),
+            new Subject("hare", ModEntities.HARE::get, 0.12, 3.0, 0.3),
+            new Subject("cat", ModEntities.CAT::get, 0.12, 3.0, 0.3),
+            new Subject("panda", ModEntities.PANDA::get, 0.08, 6.0, 0.8),
+            new Subject("armadillo", ModEntities.ARMADILLO::get, 0.06, 3.0, 0.3),
+            new Subject("frog", ModEntities.FROG::get, 0.06, 3.0, 0.3),
+            new Subject("turtle", ModEntities.TURTLE::get, 0.04, 4.0, 0.4),
+            new Subject("strider", ModEntities.STRIDER::get, 0.08, 5.0, 1.0),
+            new Subject("lindworm", ModEntities.LINDWORM::get, 0.1, 8.0, 0.8),
+            new Subject("shade_stalker", ModEntities.SHADE_STALKER::get, 0.14, 6.0, 1.0),
+            new Subject("crystal_crawler", ModEntities.CRYSTAL_CRAWLER::get, 0.12, 5.0, 0.5),
+            new Subject("moon_stag", ModEntities.MOON_STAG::get, 0.12, 7.0, 1.3),
+            new Subject("vineling", ModEntities.VINELING::get, 0.1, 4.0, 0.5),
+            new Subject("goose", ModEntities.GOOSE::get, 0.08, 3.5, 0.4),
+            new Subject("mule", ModEntities.FARM_MULE::get, 0.1, 6.0, 0.9));
+
+    static void more(Deque<Step> steps, String only) {
+        run(steps, MORE, only);
+    }
+
     static void review(Deque<Step> steps, String only) {
+        run(steps, SUBJECTS, only);
+    }
+
+    private static void run(Deque<Step> steps, List<Subject> subjects, String only) {
         steps.add(Step.hud(false));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.command("time set 6000"));
@@ -57,8 +104,8 @@ final class AnimShowcase {
         steps.add(Step.command("weather clear"));
         int z0 = 12000;
         int row = 0;
-        for (Subject subject : SUBJECTS) {
-            if (!only.isEmpty() && !subject.name().equals(only)) {
+        for (Subject subject : subjects) {
+            if (!only.isEmpty() && !java.util.Arrays.asList(only.split(",")).contains(subject.name())) {
                 continue;
             }
             int x0 = 12000;
