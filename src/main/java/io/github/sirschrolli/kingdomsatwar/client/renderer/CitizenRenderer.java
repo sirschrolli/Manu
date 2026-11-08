@@ -50,6 +50,8 @@ public class CitizenRenderer extends HumanoidMobRenderer<CitizenEntity, CitizenR
         state.feminine = citizen.isFeminine();
         state.working = citizen.isWorking();
         state.hammer = profession == Profession.SMITH;
+        state.ready = io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim.follow(citizen, 0,
+                state.working && state.hammer ? 1.0f : 0.0f, state.ageInTicks, 5.0f);
     }
 
     @Override

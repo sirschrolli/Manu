@@ -13,4 +13,6 @@ public class CitizenRenderState extends HumanoidRenderState {
     public boolean working;
     /** Hält bei der Arbeit einen Hammer bereit (Schmiede, Steinmetz). */
     public boolean hammer;
+    /** Wie weit der Hammer gerade bereitgehalten wird (0..1, weich). */
+    public float ready;
 }

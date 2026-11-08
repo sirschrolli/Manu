@@ -50,14 +50,33 @@ final class DragonAttackShowcase {
                     new Shot("geyser_field", new int[] {30, 60}, 24.0, 24.0, 9.0, 1.0),
                     new Shot("water_serpents", new int[] {30, 44}, 22.0, 24.0, 10.0, 3.0))));
 
+    /** Schaubilder für die Übersicht: je ein Angriff aus der Nähe, im besten Moment. */
+    private static final List<Arena> HEROES = List.of(
+            new Arena(DragonType.FIRE, Blocks.BASALT.defaultBlockState(), Blocks.BLACKSTONE.defaultBlockState(), List.of(
+                    new Shot("fire_tornado", new int[] {58}, 26.0, 15.0, 5.5, 5.0))),
+            new Arena(DragonType.ICE, Blocks.PACKED_ICE.defaultBlockState(), Blocks.BLUE_ICE.defaultBlockState(), List.of(
+                    new Shot("shard_nova", new int[] {33}, 14.0, 15.0, 6.0, 3.0))),
+            new Arena(DragonType.LIGHTNING, Blocks.STONE.defaultBlockState(), Blocks.DEEPSLATE.defaultBlockState(), List.of(
+                    new Shot("storm_cage", new int[] {73}, 30.0, 15.0, 6.5, 3.0))),
+            new Arena(DragonType.WATER, Blocks.SAND.defaultBlockState(), Blocks.PRISMARINE_BRICKS.defaultBlockState(), List.of(
+                    new Shot("water_serpents", new int[] {44}, 22.0, 14.0, 6.0, 3.0))));
+
     static void attacks(Deque<Step> steps, String only) {
+        if (only.equals("hero")) {
+            run(steps, HEROES, "");
+            return;
+        }
+        run(steps, ARENAS, only);
+    }
+
+    private static void run(Deque<Step> steps, List<Arena> arenas, String only) {
         steps.add(Step.hud(false));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.command("time set 6000"));
         steps.add(Step.command("gamerule advance_time false"));
         steps.add(Step.command("weather clear"));
         int index = 0;
-        for (Arena arena : ARENAS) {
+        for (Arena arena : arenas) {
             int ox = 9000 + index * 160;
             int oz = 9000;
             index++;

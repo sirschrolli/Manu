@@ -53,11 +53,10 @@ public class WildBoarModel extends EntityModel<CreatureRenderState> {
         this.earL.zRot += Mth.sin(t * 0.09f) * 0.07f;
         this.earR.zRot -= Mth.sin(t * 0.09f + 1.3f) * 0.07f;
 
-        if (state.charging) {
-            this.head.xRot += 0.45f;
-            this.earL.xRot -= 0.5f;
-            this.earR.xRot -= 0.5f;
-        }
+        // Sturmangriff: Kopf gesenkt, Ohren angelegt (weich hinein und heraus)
+        this.head.xRot += 0.45f * state.rage;
+        this.earL.xRot -= 0.5f * state.rage;
+        this.earR.xRot -= 0.5f * state.rage;
         float s = Anim.seconds(state.attack, t);
         if (s >= 0.0f) {
             this.head.xRot -= 0.9f * Anim.bump(s, 0.1f, 0.15f, 0.45f);   // Hauerstoß nach oben

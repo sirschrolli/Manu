@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.creature;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.client.model.creature.WildBoarModel;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.WildBoarEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -40,6 +41,7 @@ public class WildBoarRenderer extends MobRenderer<WildBoarEntity, CreatureRender
     public void extractRenderState(WildBoarEntity entity, CreatureRenderState state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         state.charging = entity.isCharging();
+        state.rage = Anim.follow(entity, 0, state.charging ? 1.0f : 0.0f, state.ageInTicks, 7.0f);
         state.attack.copyFrom(entity.attackAnimation);
     }
 }

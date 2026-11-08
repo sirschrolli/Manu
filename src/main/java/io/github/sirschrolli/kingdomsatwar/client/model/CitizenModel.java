@@ -181,9 +181,9 @@ public class CitizenModel extends HumanoidModel<CitizenRenderState> {
         this.feather.xRot = -0.55f + Mth.sin(state.walkAnimationPos * 0.6662f * 2.0f) * state.walkAnimationSpeed * 0.12f;
         // die Haare schwingen mit dem Kopf nach (bleiben hinten am Rücken, wenn der Kopf nach unten schaut)
         this.hair.xRot = -0.24f - Math.max(0.0f, this.head.xRot) * 0.9f;
-        if (state.working && state.hammer) {
-            // Schmied und Steinmetz halten den Hammer bereit
-            this.rightArm.xRot = Math.min(this.rightArm.xRot, -0.45f);
+        if (state.ready > 0.001f) {
+            // Schmied und Steinmetz halten den Hammer bereit (weich hinein und heraus)
+            this.rightArm.xRot = Mth.lerp(state.ready, this.rightArm.xRot, Math.min(this.rightArm.xRot, -0.45f));
         }
     }
 }

@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.entity.dragon;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.entity.boss.BossAnims;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.EnumSet;
@@ -93,6 +94,32 @@ public class DragonEntity extends TamableAnimal {
     public final AnimationState biteAnimation = new AnimationState();
     public float flapPhase;
     public float flapPhaseO;
+    /** 0 = am Boden (Flügel angelegt), 1 = in der Luft – weich, damit Abheben und Landen fließen. */
+    public float airBlend;
+    public float airBlendO;
+    /** 0 = stehend, 1 = sitzend (weich). */
+    public float sitBlend;
+    public float sitBlendO;
+    /** Schräglage im Kurvenflug (Grad, geglättet). */
+    public float bank;
+    public float bankO;
+    /** Steigen (positiv) oder Sinken im Flug (Grad, geglättet). */
+    public float flightPitch;
+    public float flightPitchO;
+    /** Zurückgelegter Weg in Schrittfolgen ({@link DragonGait}): der Gang passt immer zur Geschwindigkeit. */
+    public float stride;
+    public float strideO;
+    /** Wie kräftig der Drache gerade schreitet (0 = steht, 1 = Galopp; geglättet). */
+    public float strideSpeed;
+    public float strideSpeedO;
+    /** Beginn des laufenden Odems (Spieltick des Wesens). */
+    public int breathStart;
+    private boolean wasBreathing;
+    /** Laune in ruhigen Momenten ({@code BossAnims.MOOD_*}), ihr Beginn und ihre Richtung (±1). */
+    public int idleEvent;
+    public int idleEventStart;
+    public float idleSide = 1.0f;
+    private int nextIdleEvent = 80;
 
     private final DragonType dragonType;
     private int growth;
@@ -599,14 +626,120 @@ public class DragonEntity extends TamableAnimal {
     public void tick() {
         super.tick();
         if (this.level().isClientSide()) {
-            this.flapPhaseO = this.flapPhase;
-            float speed = this.isFlying() ? (this.getDeltaMovement().y < -0.05 ? 0.08f : 0.32f) : 0.0f;
-            this.flapPhase += speed;
-            if (this.isFlying() && Mth.sin(this.flapPhase) > 0.98f && Mth.sin(this.flapPhaseO) <= 0.98f) {
-                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.DRAGON_FLAP.get(), this.getSoundSource(),
-                        0.6f + this.getStage().scale() * 0.6f, this.getVoicePitch(), false);
-            }
+            this.clientAnimTick();
         }
+    }
+
+    /**
+     * Alles, was nur fürs Aussehen zählt (nur auf dem Client): Flügelschlag, weiche Übergänge zwischen Boden und Luft,
+     * Stehen und Sitzen, Schräglage in Kurven, Schritte und kleine Launen in ruhigen Momenten.
+     */
+    private void clientAnimTick() {
+        boolean flying = this.isFlying();
+        float scale = this.getStage().scale();
+        double dx = this.getX() - this.xo;
+        double dy = this.getY() - this.yo;
+        double dz = this.getZ() - this.zo;
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        float turn = Mth.wrapDegrees(this.yBodyRot - this.yBodyRotO);
+
+        // Steigen und Sinken, Schräglage in Kurven
+        this.flightPitchO = this.flightPitch;
+        float pitch = flying ? (float) Mth.clamp(Math.atan2(dy, Math.max(horizontal, 0.08)) * Mth.RAD_TO_DEG, -40.0, 35.0) : 0.0f;
+        this.flightPitch += (pitch - this.flightPitch) * 0.15f;
+        this.bankO = this.bank;
+        float bankWanted = flying ? Mth.clamp(-turn * 4.0f, -32.0f, 32.0f) : 0.0f;
+        this.bank += (bankWanted - this.bank) * 0.12f;
+
+        // Flügelschlag: kräftig beim Steigen und Schweben, im Sinkflug gleitet der Drache
+        this.flapPhaseO = this.flapPhase;
+        boolean gliding = this.flightPitch < -8.0f;
+        this.flapPhase += flying ? (gliding ? 0.07f : 0.3f) : 0.0f;
+        if (flying && !gliding && Mth.sin(this.flapPhase) > 0.98f && Mth.sin(this.flapPhaseO) <= 0.98f) {
+            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.DRAGON_FLAP.get(), this.getSoundSource(),
+                    0.6f + scale * 0.6f, this.getVoicePitch(), false);
+        }
+
+        // Abheben und Landen, Hinsetzen und Aufstehen fließen ineinander
+        this.airBlendO = this.airBlend;
+        this.airBlend = Mth.approach(this.airBlend, flying ? 1.0f : 0.0f, 0.075f);
+        this.sitBlendO = this.sitBlend;
+        this.sitBlend = Mth.approach(this.sitBlend, this.isInSittingPose() ? 1.0f : 0.0f, 0.06f);
+
+        // Schritte: der Weg in Schrittfolgen (beim Drehen auf der Stelle treten die Füße mit)
+        float moved = flying || this.isPassenger() ? 0.0f
+                : (float) horizontal + Math.abs(turn) * Mth.DEG_TO_RAD * 0.5f * scale;
+        this.strideSpeedO = this.strideSpeed;
+        this.strideSpeed += (Mth.clamp(moved / (0.26f * scale), 0.0f, 1.0f) - this.strideSpeed) * 0.3f;
+        this.strideO = this.stride;
+        this.stride += moved / DragonGait.length(scale, this.strideSpeed);
+
+        boolean breathing = this.isBreathing();
+        if (breathing && !this.wasBreathing) {
+            this.breathStart = this.tickCount;
+        }
+        this.wasBreathing = breathing;
+        this.tickMood();
+    }
+
+    /** Launen in ruhigen Momenten: Schnauben, Kopfschütteln, Schwanzschlagen, Flügel lockern, Umsehen, Gähnen. */
+    private void tickMood() {
+        int mood = this.idleEvent;
+        if (mood != BossAnims.MOOD_NONE && this.tickCount - this.idleEventStart > BossAnims.MOOD_TICKS[mood]) {
+            this.idleEvent = BossAnims.MOOD_NONE;
+        }
+        boolean roaring = this.roarAnimation.isStarted() && this.roarAnimation.getTimeInMillis(this.tickCount) < 2200L;
+        boolean biting = this.biteAnimation.isStarted() && this.biteAnimation.getTimeInMillis(this.tickCount) < 700L;
+        if (this.isBreathing() || this.isDeadOrDying() || roaring || biting) {
+            this.idleEvent = BossAnims.MOOD_NONE;
+            return;
+        }
+        if (this.idleEvent == BossAnims.MOOD_NONE && this.tickCount >= this.nextIdleEvent) {
+            int[] choices;
+            if (this.isFlying()) {
+                choices = new int[] {BossAnims.MOOD_GLANCE, BossAnims.MOOD_SHAKE, BossAnims.MOOD_SNORT};
+            } else if (this.isVehicle()) {
+                // mit Reiter: nichts, was den Blick vom Weg nimmt
+                choices = new int[] {BossAnims.MOOD_SNORT, BossAnims.MOOD_SHAKE, BossAnims.MOOD_TAIL_FLICK};
+            } else if (this.isInSittingPose()) {
+                choices = new int[] {BossAnims.MOOD_GLANCE, BossAnims.MOOD_GLANCE, BossAnims.MOOD_YAWN, BossAnims.MOOD_TAIL_FLICK,
+                        BossAnims.MOOD_SNORT, BossAnims.MOOD_SHRUG};
+            } else {
+                choices = new int[] {BossAnims.MOOD_SNORT, BossAnims.MOOD_SNORT, BossAnims.MOOD_SHAKE, BossAnims.MOOD_TAIL_FLICK,
+                        BossAnims.MOOD_TAIL_FLICK, BossAnims.MOOD_SHRUG, BossAnims.MOOD_GLANCE, BossAnims.MOOD_GLANCE,
+                        BossAnims.MOOD_YAWN};
+            }
+            this.idleEvent = choices[this.random.nextInt(choices.length)];
+            this.idleEventStart = this.tickCount;
+            this.idleSide = this.random.nextBoolean() ? 1.0f : -1.0f;
+            this.nextIdleEvent = this.tickCount + 70 + this.random.nextInt(130);
+        }
+        if (this.idleEvent == BossAnims.MOOD_SNORT && this.tickCount - this.idleEventStart == 4) {
+            this.snortParticles();
+        }
+    }
+
+    /** Rauch (und ein Hauch des Elements) aus den Nüstern beim Schnauben. */
+    private void snortParticles() {
+        float scale = this.getStage().scale();
+        Vec3 mouth = this.headPosition();
+        Vec3 dir = Vec3.directionFromRotation(15.0f, this.yHeadRot);
+        net.minecraft.core.particles.ParticleOptions element = switch (this.dragonType) {
+            case FIRE -> net.minecraft.core.particles.ParticleTypes.SMALL_FLAME;
+            case ICE -> net.minecraft.core.particles.ParticleTypes.SNOWFLAKE;
+            case LIGHTNING -> net.minecraft.core.particles.ParticleTypes.ELECTRIC_SPARK;
+            case NATURE -> net.minecraft.core.particles.ParticleTypes.SPORE_BLOSSOM_AIR;
+            case WATER -> net.minecraft.core.particles.ParticleTypes.SPLASH;
+            default -> net.minecraft.core.particles.ParticleTypes.WHITE_ASH;
+        };
+        for (int i = 0; i < 5; i++) {
+            double spread = 0.08 * scale;
+            double speed = (0.05 + this.random.nextDouble() * 0.05) * (0.6 + scale * 0.6);
+            this.level().addParticle(net.minecraft.core.particles.ParticleTypes.SMOKE,
+                    mouth.x + (this.random.nextDouble() - 0.5) * spread, mouth.y + (this.random.nextDouble() - 0.5) * spread,
+                    mouth.z + (this.random.nextDouble() - 0.5) * spread, dir.x * speed, dir.y * speed + 0.01, dir.z * speed);
+        }
+        this.level().addParticle(element, mouth.x, mouth.y, mouth.z, dir.x * 0.06, dir.y * 0.06 + 0.02, dir.z * 0.06);
     }
 
     @Override

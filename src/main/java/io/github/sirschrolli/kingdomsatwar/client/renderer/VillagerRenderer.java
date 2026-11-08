@@ -53,6 +53,8 @@ public class VillagerRenderer extends HumanoidMobRenderer<VillagerEntity, Citize
         state.feminine = villager.isFeminine();
         state.working = villager.isWorking();
         state.hammer = profession.hammer();
+        state.ready = io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim.follow(villager, 0,
+                state.working && state.hammer ? 1.0f : 0.0f, state.ageInTicks, 5.0f);
     }
 
     @Override

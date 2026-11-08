@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.55.0 – sauber gebaut.** Alle Häuser werden jetzt automatisch auf Baufehler geprüft – jedes Dorfgebäude in jeder Bauweise und Drehung, jeder Entwurf der eigenen Siedlung und jedes Haus der Umbrer. Dabei kam einiges ans Licht: Im **Wohnhaus** steckten die Betten oben mit dem Kopfende in der Rückwand (jetzt stehen sie im Raum), in der **Kaserne** steckten Pritschen und Truhe in den Ecktürmen, **Laternen und Kronleuchter** schwebten unter offenen Dachstühlen (jetzt hängen sie an Ketten vom Dach), Leitern hatten keinen Halt, Öfen schauten in Werkbänke, Turmtüren der Raubritterburg führten in die Mauer. Der **Feldherrentisch** zittert bei vielen Truppen nicht mehr: feste Reihenfolge (Art, Rang, Stufe), Rollbalken zum Ziehen und Pfeiltasten. Die **Schwäche nach dem Tod** ist kein Statuseffekt mehr – die Schläge sind einfach zwei Minuten lang schwächer.
+> **Testversion 0.56.0 – lebendige Drachen.** Jeder der sechs Drachen-Bosse kennt **zwei neue große Angriffe**: Pyrrhon jagt die Gegner mit **Feuerwirbeln** und reißt **Magmaspalten** auf, Glaciara fegt mit der **Frostlanze** über das Feld und schleudert einen **Splittersturm**, Voltarion lässt **Kugelblitze** los und sperrt die Gegner in einen **Blitzkäfig**, Verdantis treibt eine **Dornenwelle** heran (wer springt, entkommt) und brennt mit dem **Sonnenstrahl**, Terragon lässt eine **Felslawine** heranrollen und spaltet die Erde mit dem **Erdspalter**, Thalassa lässt ein **Geysirfeld** hochschießen und schickt **Wasserschlangen**. Deine **eigenen Drachen** bewegen sich jetzt wie die Bosse: Hals, Kopf und Schwanz schwingen nach, ein ruhiger Schritt geht fließend in einen Galopp über (die Füße rutschen nicht mehr über den Boden), die Flügel entfalten sich beim Abheben nach oben und bremsen beim Landen, im Kurvenflug legen sie sich in die Kurve, sie sitzen aufrecht wie eine Katze, schnauben, gähnen und sehen sich um. Nichts springt mehr von einer Haltung in die andere – auch nicht beim Wildschwein, bei der Gans und bei den Schmieden.
+> In 0.55 wurde sauber gebaut: Alle Häuser werden automatisch auf Baufehler geprüft (Betten nicht mehr in Wänden, Laternen an Ketten vom Dach, Leitern mit Halt …), der Feldherrentisch zittert bei vielen Truppen nicht mehr, und die Schwäche nach dem Tod ist kein Statuseffekt mehr.
 > In 0.54 kamen die Fahrzeuge: der Belagerungsturm (7, 10 oder 13 Blöcke, Fallbrücke auf die Zinnen) und der Planwagen am Pferd (sechs Reihen Ladung, vier Mitfahrer), dazu Cheat-Befehle für die Erfahrung (`/kaw hero`, `/kaw army xp`).
 > In 0.53 kam der Weg zur Legende: Heldenstufe bis 100 (392.040 Heldenerfahrung), sechs Ränge mit eigenen Abzeichen, Talente bis 20 Punkte, die Heldenstufe als leuchtender Pfad (Taste K), eine Aufstiegs-Szene und das Streicheln der Legende wie in PatPat.
 > In 0.52 kam das eigene Levelsystem: Heldenerfahrung für Monster, Erz, Fortschritte, neue Biome und eroberte Burgen, Talentpunkte für Stärke, Lebenskraft, Gewandtheit, Zähigkeit, Zauberkunst und Glück – die Erfahrung von Minecraft bleibt genau, wie sie ist.
@@ -303,9 +304,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Erzähltes Intro „Das Siegel“ beim ersten Betreten einer Welt (die sechs Drachen schmieden das Siegel, Musik, Erzähler DE/EN) | ✅ fertig |
 | Der Erzähler spricht zu jedem Kapitel der Geschichte (Stimme und Text, DE/EN) | ✅ fertig |
 | Geschichte „Das Siegel“: Chronik als Buch, Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelbruch, Schattentor | ✅ fertig |
-| Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen und Bossleiste | ✅ fertig |
+| Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen (je zwei große neue seit 0.56) und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
-| Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer | ✅ fertig |
+| Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer, lebendige Bewegungen (Schritt und Galopp, Abheben, Landen, Kurvenflug, Sitzen, Launen) | ✅ fertig |
 | Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung, Rängen und Proviant, Garnison und Schlachtzug, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
@@ -456,6 +457,8 @@ Ausholen und Nachschwingen), eine eigene Erweckung und eine eigene Bossleiste.
 
 Dazu kommen Biss, Klaue, Schwanzhieb, Flügelschlag, Stampfen und Brüllen. Jeder Angriff kündigt sich an (Ausholen,
 Ausführen, Erholen).
+
+![Neue Drachenangriffe: Feuerwirbel, Splittersturm, Blitzkäfig, Wasserschlangen](docs/bilder/drachenangriffe.jpg)
 
 - **Erwacht erst aus nächster Nähe:** Der Drache schläft, bis man höchstens fünf Blöcke an ihn herankommt – wer nur
   am Nest vorbeiläuft, weckt ihn nicht (und sieht auch noch keine Bossleiste).
@@ -919,6 +922,15 @@ versehentlichen Treffer. Ein Drache aus dem Spawn-Ei gehört dem, der das Ei ben
   Drachen: aufsitzen. Springen zum Abheben und Steigen, Schleichen zum Sinken, **R** speit Odem.
 - **Drachenpanzer** aus Stahl oder Draconium (feuerfest) für ausgewachsene Drachen; mit der Schere abnehmen.
 - **Drachenschuppen** fallen von den Bossen und liegen in den Nestern (mit dem Pinsel freilegen).
+- **Lebendige Bewegungen:** Drachen bewegen sich nach derselben Bewegungslehre wie die Bosse – sichtbares Atmen,
+  Gewicht verlagern, Hals, Kopf und Schwanz federn nach (dreht sich der Drache, schwingt der Schwanz hinterher). Langsam
+  geht er im ruhigen Schritt, schnell galoppiert er mit schaukelndem Rumpf; die Schrittlänge passt zur Geschwindigkeit
+  und zur Größe, die Füße bleiben in der Standphase stehen. Beim Abheben entfalten sich die Flügel nach oben, beim
+  Landen bremsen sie, im Kurvenflug legt er sich schräg, im Sinkflug gleitet er. Sitzend richtet er die Brust auf und
+  legt den Schwanz um den Körper; in ruhigen Momenten schnaubt er (mit Rauch und einem Hauch seines Elements), gähnt,
+  schüttelt den Kopf, sieht sich um oder lockert die Flügel.
+
+![Lebendige Drachen: Sitzen, Brüllen, Landen, Kurvenflug](docs/bilder/drachen_bewegung.jpg)
 
 **Drachen im Krieg:** Mit dem **Drachenhorn** (Ziegenhorn, 2 Gold, 2 Drachenschuppen) schickst du alle eigenen
 Drachen in Hörweite (160 Blöcke), die schon fliegen können und gerade niemanden tragen, in den Kampf:

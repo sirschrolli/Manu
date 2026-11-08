@@ -3,6 +3,7 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.creature;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.client.model.ModModelLayers;
+import io.github.sirschrolli.kingdomsatwar.client.model.creature.Anim;
 import io.github.sirschrolli.kingdomsatwar.client.model.creature.GooseModel;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.GooseEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -43,6 +44,7 @@ public class GooseRenderer extends MobRenderer<GooseEntity, CreatureRenderState,
         super.extractRenderState(entity, state, partialTicks);
         state.variant = entity.getVariant();
         state.angry = entity.isAggressive();
+        state.rage = Anim.follow(entity, 0, state.angry ? 1.0f : 0.0f, state.ageInTicks, 6.0f);
         state.flap = Mth.lerp(partialTicks, entity.oFlap, entity.flap);
         state.flapSpeed = Mth.lerp(partialTicks, entity.oFlapSpeed, entity.flapSpeed);
         state.attack.copyFrom(entity.honkAnimation);

@@ -52,13 +52,12 @@ public class GooseModel extends EntityModel<CreatureRenderState> {
         this.leftWing.zRot -= flapAngle;
         this.rightWing.zRot += flapAngle;
 
-        if (state.angry) {
-            // Drohhaltung: Hals nach vorne, Flügel leicht gespreizt
-            this.neck.xRot += 0.95f;
-            this.head.xRot -= 0.8f;
-            this.leftWing.zRot -= 0.5f;
-            this.rightWing.zRot += 0.5f;
-        }
+        // Drohhaltung: Hals nach vorne, Flügel leicht gespreizt (weich hinein und heraus)
+        float rage = state.rage;
+        this.neck.xRot += 0.95f * rage;
+        this.head.xRot -= 0.8f * rage;
+        this.leftWing.zRot -= 0.5f * rage;
+        this.rightWing.zRot += 0.5f * rage;
         float s = Anim.seconds(state.attack, t);
         if (s >= 0.0f) {
             float honk = Anim.bump(s, 0.08f, 0.3f, 0.5f);

@@ -11,6 +11,8 @@ public class CreatureRenderState extends LivingEntityRenderState {
     public boolean charging;
     public boolean stag;
     public boolean angry;
+    /** Wie sehr die Kreatur gerade stürmt bzw. droht (0..1, weich – die Haltung springt nicht um). */
+    public float rage;
     /** Troll im Sonnenlicht. */
     public boolean petrifying;
     /** Gans: Flügelschlag. */

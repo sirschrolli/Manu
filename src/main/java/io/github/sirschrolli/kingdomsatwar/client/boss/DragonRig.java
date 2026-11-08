@@ -139,9 +139,10 @@ public final class DragonRig {
         float yawFrom = this.bodyYawAbs;
         this.bodyYawAbs += dYaw;
 
-        if (dt <= 0.0f || dt > 0.3f) {
+        if (dt < 0.0f || dt > 0.3f) {
             this.snap(p);
-        } else {
+        } else if (dt > 0.0f) {
+            // (dt = 0: dasselbe Bild noch einmal, etwa für eine Vorschau – die Federn stehen schon richtig)
             int steps = Math.max(1, Mth.ceil(dt / MAX_STEP));
             float h = dt / steps;
             for (int k = 1; k <= steps; k++) {

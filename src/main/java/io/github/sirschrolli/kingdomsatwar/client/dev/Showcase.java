@@ -183,6 +183,8 @@ final class Showcase {
                         int[] g = new int[1];
                         steps.add(Step.once(minecraft -> g[0] = ground));
                         VillageShowcase.villagers(steps, g);
+                    } else if (scene.equals("dragonanim") || scene.startsWith("dragonanim_")) {
+                        DragonAnimShowcase.review(steps, scene.equals("dragonanim") ? "" : scene.substring(11));
                     } else if (scene.equals("anim") || scene.startsWith("anim_")) {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
                     } else if (scene.startsWith("dragon_attacks_")) {

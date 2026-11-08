@@ -36,6 +36,7 @@ public class TravelingMerchantRenderer extends HumanoidMobRenderer<TravelingMerc
         state.feminine = merchant.isFeminine();
         state.working = false;
         state.hammer = false;
+        state.ready = 0.0f;
     }
 
     @Override
