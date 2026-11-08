@@ -1893,7 +1893,7 @@
   "message.kingdomsatwar.crown.title_queen": "Long live the Queen!",
   "message.kingdomsatwar.crystal.heart.absorbed": "❤ One more heart! Now %1$s hearts (%2$s/%3$s heart crystals)",
   "message.kingdomsatwar.crystal.heart.full": "You have already absorbed all %s heart crystals",
-  "message.kingdomsatwar.crystal.mana.absorbed": "✦ More mana! Now up to %1$s mana (%2$s/%3$s mana crystals)",
+  "message.kingdomsatwar.crystal.mana.absorbed": "◆ More mana! Now up to %1$s mana (%2$s/%3$s mana crystals)",
   "message.kingdomsatwar.crystal.mana.full": "You have already absorbed all %s mana crystals",
   "message.kingdomsatwar.dragon_armor_too_young": "%s must be tamed and fully grown to wear armour",
   "message.kingdomsatwar.dragon_defend": "%s dragon(s) rise to defend your settlement!",

@@ -1,7 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.hero;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.DustColorTransitionOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -55,7 +55,11 @@ public class CrystalItem extends Item {
         return InteractionResult.SUCCESS_SERVER;
     }
 
-    /** Klang, ein Kranz aus Funken um den Spieler und die Nachricht, wie viele es jetzt sind. */
+    /**
+     * Klang, eine Spirale feiner Funken, die um den Spieler aufsteigt, und die Nachricht, wie viele es jetzt sind. Beim
+     * Herzkristall steigen über ihm kleine Herzen auf, beim Manakristall fliegen Zauberzeichen in ihn hinein und über ihm
+     * funkeln blaue Lichter.
+     */
     private void celebrate(ServerLevel level, ServerPlayer player) {
         Crystals.Count count = Crystals.of(player);
         boolean heart = this.kind == Crystals.Kind.HEART;
@@ -63,15 +67,19 @@ public class CrystalItem extends Item {
                 heart ? 0.7f : 1.1f);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), heart ? SoundEvents.BEACON_POWER_SELECT : SoundEvents.ENCHANTMENT_TABLE_USE,
                 SoundSource.PLAYERS, 1.0f, heart ? 1.4f : 1.0f);
-        DustParticleOptions dust = new DustParticleOptions(heart ? 0xFF3B5C : 0x4FA8FF, 1.2f);
-        for (int i = 0; i < 24; i++) {
-            float a = i * Mth.TWO_PI / 24.0f;
-            double x = player.getX() + Mth.cos(a) * 0.9;
-            double z = player.getZ() + Mth.sin(a) * 0.9;
-            level.sendParticles(dust, x, player.getY() + 0.2 + (i % 4) * 0.45, z, 1, 0.0, 0.0, 0.0, 0.0);
+        DustColorTransitionOptions dust = heart ? new DustColorTransitionOptions(0xFF3B5C, 0xFFD0D8, 0.75f)
+                : new DustColorTransitionOptions(0x4FA8FF, 0xE6F7FF, 0.75f);
+        for (int i = 0; i < 36; i++) {
+            float a = i * Mth.TWO_PI / 18.0f;
+            level.sendParticles(dust, player.getX() + Mth.cos(a) * 1.25, player.getY() + 0.1 + i * 0.034, player.getZ() + Mth.sin(a) * 1.25, 1,
+                    0.0, 0.0, 0.0, 0.0);
         }
-        level.sendParticles(heart ? ParticleTypes.HEART : ParticleTypes.ENCHANT, player.getX(), player.getY() + 1.4, player.getZ(), heart ? 7 : 40,
-                0.5, 0.5, 0.5, heart ? 0.05 : 0.6);
+        if (heart) {
+            level.sendParticles(ParticleTypes.HEART, player.getX(), player.getY() + 2.2, player.getZ(), 6, 0.45, 0.15, 0.45, 0.02);
+        } else {
+            level.sendParticles(ParticleTypes.ENCHANT, player.getX(), player.getY() + 1.2, player.getZ(), 48, 0.4, 0.5, 0.4, 0.9);
+            level.sendParticles(ParticleTypes.GLOW, player.getX(), player.getY() + 2.2, player.getZ(), 6, 0.45, 0.15, 0.45, 0.01);
+        }
         Component message = heart
                 ? Component.translatable("message.kingdomsatwar.crystal.heart.absorbed", (int) Math.round(player.getMaxHealth() / 2.0), count.hearts(),
                         Crystals.MAX)

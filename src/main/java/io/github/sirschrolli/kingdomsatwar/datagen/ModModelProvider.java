@@ -615,16 +615,18 @@ public class ModModelProvider extends ModelProvider {
         items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model));
     }
 
-    /** Herz- und Manakristalle in den Höhlen (auf einem Brocken Tuffstein). */
+    /** Herz- und Manakristalle in den Höhlen (auf einem Brocken Tuffstein, die Spitzen aus durchsichtigen Dreiecken). */
     private static void crystals(BlockModelGenerators blocks) {
         Material rock = vanilla("tuff");
         Block heart = ModBlocks.HEART_CRYSTAL_FORMATION.get();
         Material heartGem = new Material(KingdomsAtWar.id("block/heart_crystal"));
         facing(blocks, heart, CrystalModels.heart().create(heart, new TextureMapping().put(CrystalModels.CRYSTAL, heartGem)
+                .put(CrystalModels.TIP, new Material(KingdomsAtWar.id("block/heart_crystal_tip")))
                 .put(CrystalModels.ROCK, rock).put(TextureSlot.PARTICLE, heartGem), blocks.modelOutput));
         Block mana = ModBlocks.MANA_CRYSTAL_FORMATION.get();
         Material manaGem = new Material(KingdomsAtWar.id("block/mana_crystal"));
         facing(blocks, mana, CrystalModels.mana().create(mana, new TextureMapping().put(CrystalModels.CRYSTAL, manaGem)
+                .put(CrystalModels.TIP, new Material(KingdomsAtWar.id("block/mana_crystal_tip")))
                 .put(CrystalModels.ROCK, rock).put(TextureSlot.PARTICLE, manaGem), blocks.modelOutput));
     }
 

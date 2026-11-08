@@ -102,7 +102,7 @@ final class HeroShowcase {
             player.getFoodData().setFoodLevel(20);
         }));
         steps.add(Step.command("item replace entity @s weapon.mainhand with kingdomsatwar:heart_crystal 3"));
-        steps.add(Step.command("item replace entity @s hotbar.1 with minecraft:iron_pickaxe"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with minecraft:stone_pickaxe"));
         steps.add(Step.command("item replace entity @s hotbar.2 with minecraft:torch 24"));
         steps.add(Step.command("item replace entity @s hotbar.3 with minecraft:bread 9"));
         steps.add(heart.go(false));
@@ -111,8 +111,9 @@ final class HeroShowcase {
         steps.add(Step.waitTicks(20));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
         steps.add(use());
-        steps.add(Step.waitTicks(5));
+        steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("crystals_2_heart_absorb"));
 
         // 4. vor dem Manakristall, den Stab in der anderen Hand: den zehnten aufnehmen – 300 Mana
@@ -126,8 +127,9 @@ final class HeroShowcase {
         steps.add(Step.waitTicks(20));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
         steps.add(use());
-        steps.add(Step.waitTicks(6));
+        steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("crystals_3_mana_absorb"));
         steps.add(Step.server(level -> {
             ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
@@ -215,7 +217,7 @@ final class HeroShowcase {
                 if (heart && align < 0.75) {
                     continue;
                 }
-                for (double distance : new double[] {2.6, 3.2, 3.8}) {
+                for (double distance : new double[] {2.0, 2.5, 3.0}) {
                     double fx = target.x + dx * distance;
                     double fz = target.z + dz * distance;
                     Double floor = floor(level, fx, pos.getY(), fz);
@@ -227,11 +229,11 @@ final class HeroShowcase {
                         continue;
                     }
                     // die Kamera: etwas näher und tiefer, wenn dort Platz und freie Sicht ist
-                    Vec3 camera = new Vec3(target.x + dx * distance * 0.75, pos.getY() + 1.05, target.z + dz * distance * 0.75);
+                    Vec3 camera = new Vec3(target.x + dx * distance * 0.62, pos.getY() + 0.8, target.z + dz * distance * 0.62);
                     if (!clearAround(level, camera, 0.3) || !sees(level, camera, target, pos)) {
                         camera = standing;
                     }
-                    double score = open + (heart ? align * 20.0 : 0.0) - Math.abs(distance - 3.2) * 4.0 - Math.abs(floor - pos.getY()) * 6.0;
+                    double score = open + (heart ? align * 20.0 : 0.0) - Math.abs(distance - 2.5) * 4.0 - Math.abs(floor - pos.getY()) * 6.0;
                     if (score > best) {
                         best = score;
                         view.feetX = fx;

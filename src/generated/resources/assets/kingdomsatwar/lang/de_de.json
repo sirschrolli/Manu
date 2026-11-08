@@ -1893,7 +1893,7 @@
   "message.kingdomsatwar.crown.title_queen": "Lang lebe die Königin!",
   "message.kingdomsatwar.crystal.heart.absorbed": "❤ Ein Herz mehr! Jetzt %1$s Herzen (%2$s/%3$s Herzkristalle)",
   "message.kingdomsatwar.crystal.heart.full": "Du hast schon alle %s Herzkristalle aufgenommen",
-  "message.kingdomsatwar.crystal.mana.absorbed": "✦ Mehr Mana! Jetzt bis zu %1$s Mana (%2$s/%3$s Manakristalle)",
+  "message.kingdomsatwar.crystal.mana.absorbed": "◆ Mehr Mana! Jetzt bis zu %1$s Mana (%2$s/%3$s Manakristalle)",
   "message.kingdomsatwar.crystal.mana.full": "Du hast schon alle %s Manakristalle aufgenommen",
   "message.kingdomsatwar.dragon_armor_too_young": "%s muss gezähmt und ausgewachsen sein, um einen Panzer zu tragen",
   "message.kingdomsatwar.dragon_defend": "%s Drache(n) steigen auf und verteidigen deine Siedlung!",
