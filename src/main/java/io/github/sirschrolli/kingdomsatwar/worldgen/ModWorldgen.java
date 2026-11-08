@@ -23,6 +23,7 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -293,6 +294,12 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> LYNX_SPAWNS = spawnModifier("add_lynx_spawns");
     public static final ResourceKey<BiomeModifier> FOREST_WILDCAT_SPAWNS = spawnModifier("add_forest_wildcat_spawns");
     public static final ResourceKey<BiomeModifier> BACTRIAN_CAMEL_SPAWNS = spawnModifier("add_bactrian_camel_spawns");
+    // Wesen des Meeres
+    public static final ResourceKey<BiomeModifier> MANTA_RAY_SPAWNS = spawnModifier("add_manta_ray_spawns");
+    public static final ResourceKey<BiomeModifier> GLOW_JELLYFISH_SPAWNS = spawnModifier("add_glow_jellyfish_spawns");
+    public static final ResourceKey<BiomeModifier> SHARK_SPAWNS = spawnModifier("add_shark_spawns");
+    public static final ResourceKey<BiomeModifier> ANGLERFISH_SPAWNS = spawnModifier("add_anglerfish_spawns");
+    public static final ResourceKey<BiomeModifier> GIANT_CRAB_SPAWNS = spawnModifier("add_giant_crab_spawns");
 
     private static ResourceKey<BiomeModifier> spawnModifier(String name) {
         return ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS, KingdomsAtWar.id(name));
@@ -490,6 +497,22 @@ public final class ModWorldgen {
                 net.minecraft.world.level.biome.Biomes.BADLANDS, net.minecraft.world.level.biome.Biomes.ERODED_BADLANDS,
                 net.minecraft.world.level.biome.Biomes.SAVANNA_PLATEAU,
                 io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.ROCK_GORGES));
+        // Wesen des Meeres: Rochen und Haie in warmen und tiefen Meeren, Quallen in Schwärmen fast überall, Anglerfische in
+        // der dunklen Tiefe, Krabben an Stränden, Felsküsten und auf dem Grund flacher, warmer Meere
+        var water = net.minecraft.world.entity.MobCategory.WATER_CREATURE;
+        context.register(MANTA_RAY_SPAWNS, spawnsIn(biomes, ModEntities.MANTA_RAY.get(), 2, 1, 2, water,
+                Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN, Biomes.OCEAN));
+        context.register(GLOW_JELLYFISH_SPAWNS, spawnsIn(biomes, ModEntities.GLOW_JELLYFISH.get(), 8, 3, 6,
+                net.minecraft.world.entity.MobCategory.WATER_AMBIENT, Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN,
+                Biomes.OCEAN, Biomes.DEEP_OCEAN, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN));
+        context.register(SHARK_SPAWNS, spawnsIn(biomes, ModEntities.SHARK.get(), 2, 1, 2, water,
+                Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN, Biomes.DEEP_COLD_OCEAN));
+        context.register(ANGLERFISH_SPAWNS, spawnsIn(biomes, ModEntities.ANGLERFISH.get(), 15, 1, 1, net.minecraft.world.entity.MobCategory.MONSTER,
+                Biomes.DEEP_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN));
+        context.register(GIANT_CRAB_SPAWNS, spawnsIn(biomes, ModEntities.GIANT_CRAB.get(), 6, 2, 4, net.minecraft.world.entity.MobCategory.CREATURE,
+                Biomes.BEACH, Biomes.STONY_SHORE, Biomes.MANGROVE_SWAMP, Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN,
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.CORAL_COAST,
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.STORM_COAST));
         // Bäume, Kakteen und Felsbrocken der Dorf-Biome wachsen nicht mehr in die Dörfer hinein
         io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapBiomeModifiers(context);
     }

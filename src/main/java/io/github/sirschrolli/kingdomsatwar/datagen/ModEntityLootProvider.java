@@ -285,6 +285,20 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.STAR_RAY.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST.get(), 1, 3))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM.get(), 0, 1)));
+        // Wesen des Meeres
+        this.add(ModEntities.MANTA_RAY.get(), LootTable.lootTable()
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 0, 2)));
+        this.add(ModEntities.GLOW_JELLYFISH.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLY.get(), 0, 1)));
+        this.add(ModEntities.SHARK.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SHARK_TOOTH.get(), 1, 3))
+                .withPool(meat(net.minecraft.world.item.Items.COD, 0, 2)));
+        this.add(ModEntities.ANGLERFISH.get(), LootTable.lootTable()
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ANGLER_LURE.get(), 0.6f, 0.1f))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 0, 2)));
+        this.add(ModEntities.GIANT_CRAB.get(), LootTable.lootTable()
+                .withPool(meat(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 1, 2))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW.get(), 0.2f, 0.05f)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

@@ -29,7 +29,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
-                              shattered_crown)
+                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -332,6 +332,21 @@ def main():
     write_model(shattered_crown, "ShatteredCrownGeometry",
                 "Getragene Krone des Zerbrochenen Königs (Teile wie HumanoidModel, nur der Kopf trägt Reif und schwebende "
                 "Kristallsplitter); Textur als Rüstungsschicht.", "equipment/humanoid", shattered_crown.PALETTES, preview)
+    # Wesen des Meeres
+    write_model(manta_ray, "MantaRayGeometry",
+                "Geometrie des Mantarochens (Brustflossen in drei Gliedern, Kopfflossen, Peitschenschwanz).", "manta_ray",
+                manta_ray.PALETTES, preview)
+    write_model(glow_jellyfish, "GlowJellyfishGeometry",
+                "Geometrie der Leuchtqualle (Glocke in Stufen, leuchtender Saum, vier Mundarme, acht Fangfäden in drei Gliedern; "
+                "durchscheinend).", "glow_jellyfish", glow_jellyfish.PALETTES, preview)
+    write_model(shark, "SharkGeometry", "Geometrie des Hais (Kopf mit aufklappbarem Kiefer, Schwanz in zwei Gliedern).", "shark",
+                shark.PALETTES, preview)
+    write_model(anglerfish, "AnglerfishGeometry",
+                "Geometrie des Anglerfischs (Unterkiefer mit Nadelzähnen, Angel in zwei Gliedern mit leuchtendem Köder).",
+                "anglerfish", anglerfish.PALETTES, preview)
+    write_model(giant_crab, "GiantCrabGeometry",
+                "Geometrie der Riesenkrabbe (Scheren mit beweglichem Finger, sechs Laufbeine in zwei Gliedern, Stielaugen).",
+                "giant_crab", giant_crab.PALETTES, preview)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

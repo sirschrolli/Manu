@@ -183,6 +183,7 @@ public final class ModGameTests {
     static {
         ShadowGameTests.init();   // meldet die Tests der Schattenwelt an
         VoidGameTests.init();     // meldet die Tests der Leere an
+        SeaGameTests.init();      // meldet die Tests des Meeres an
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -242,6 +243,7 @@ public final class ModGameTests {
         }
         ShadowGameTests.register(event, environment);
         VoidGameTests.register(event, environment);
+        SeaGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

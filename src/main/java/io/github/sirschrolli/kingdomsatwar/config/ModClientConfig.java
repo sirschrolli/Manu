@@ -14,6 +14,10 @@ public final class ModClientConfig {
     public static final ModConfigSpec.BooleanValue NARRATOR_VOICE;
     /** Wie Spinnen aussehen: detailliert, klassisch (Minecraft) oder – im Arachnophobie-Modus – als Mooslinge. */
     public static final ModConfigSpec.EnumValue<SpiderLook> SPIDER_LOOK;
+    /** Die Klangwelten der Biome (Wind, Laub, Vögel, Brandung …) abspielen. */
+    public static final ModConfigSpec.BooleanValue BIOME_AMBIENCE;
+    /** Wie laut die Klangwelten der Biome sind (Prozent). */
+    public static final ModConfigSpec.IntValue BIOME_AMBIENCE_VOLUME;
 
     /** Aussehen der Spinnen. */
     public enum SpiderLook implements net.neoforged.neoforge.common.TranslatableEnum {
@@ -45,6 +49,16 @@ public final class ModClientConfig {
                         + " (Arachnophobie-Modus: runde Moosbälle ohne Beine statt Spinnen).")
                 .translation("kingdomsatwar.configuration.spiderLook")
                 .defineEnum("spiderLook", SpiderLook.DETAILED);
+        BIOME_AMBIENCE = builder
+                .comment("Spielt die Klangwelten der Biome: Wind, rauschendes Laub, Vögel, Brandung, Grollen … – nie dauerhaft,"
+                        + " sondern ab und zu, mit langen ruhigen Pausen.")
+                .translation("kingdomsatwar.configuration.biomeAmbience")
+                .define("biomeAmbience", true);
+        BIOME_AMBIENCE_VOLUME = builder
+                .comment("Lautstärke der Biom-Klänge in Prozent (0 = stumm). Zusätzlich gilt der Regler „Umgebung“ in den Musik- und"
+                        + " Toneinstellungen von Minecraft.")
+                .translation("kingdomsatwar.configuration.biomeAmbienceVolume")
+                .defineInRange("biomeAmbienceVolume", 60, 0, 100);
         SPEC = builder.build();
     }
 

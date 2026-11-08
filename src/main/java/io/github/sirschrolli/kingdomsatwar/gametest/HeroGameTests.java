@@ -292,7 +292,7 @@ final class HeroGameTests {
     }
 
     /**
-     * Heldenstufen: steigende Schwellen bis Stufe 100 (392.040 Heldenerfahrung), jede Stufe zu genau ihrer Erfahrung, ein
+     * Heldenstufen: steigende Schwellen bis Stufe 100 (1.171.566 Heldenerfahrung), jede Stufe zu genau ihrer Erfahrung, ein
      * Talentpunkt je Stufe und zwei für jeden neuen Rang (Recke 20, Ritter 40, Held 60, Kriegsherr 80, Legende 100); mit
      * allen Punkten lässt sich nicht jedes Talent meistern.
      */
@@ -309,8 +309,27 @@ final class HeroGameTests {
         helper.assertValueEqual(hero.talents().size(), HeroLevel.Talent.values().length, "Talente werden aufgefüllt");
         helper.assertValueEqual(hero.unspent(), 11 - 5, "freie Talentpunkte auf Stufe 12");
         helper.assertValueEqual(HeroLevel.MAX_LEVEL, 100, "höchste Heldenstufe");
-        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 392_040, "Heldenerfahrung für Stufe 100");
-        helper.assertTrue(HeroLevel.total(51) - HeroLevel.total(50) > 3_000, "eine Stufe um 50 ist zu schnell erreicht");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 1_171_566, "Heldenerfahrung für Stufe 100");
+        helper.assertTrue(HeroLevel.total(51) - HeroLevel.total(50) > 10_000, "eine Stufe um 50 ist zu schnell erreicht");
+        // seit 0.61: alte Spielstände behalten Stufe und Fortschritt, nur der weitere Weg wird länger
+        for (int level = 1; level < HeroLevel.MAX_LEVEL; level += 7) {
+            int old = 40 * (level - 1) * (level - 1);
+            int half = old + (40 * level * level - old) / 2;
+            helper.assertValueEqual(HeroLevel.levelFor(HeroLevel.migrate(old)), level, "Stufe nach dem Umrechnen (Stufe " + level + ")");
+            helper.assertValueEqual(HeroLevel.levelFor(HeroLevel.migrate(half)), level, "halbe Stufe nach dem Umrechnen (Stufe " + level + ")");
+            float progress = HeroLevel.progress(HeroLevel.migrate(half));
+            helper.assertTrue(progress > 0.45f && progress < 0.55f, "Fortschritt nach dem Umrechnen: " + progress);
+        }
+        helper.assertValueEqual(HeroLevel.migrate(392_040), HeroLevel.total(HeroLevel.MAX_LEVEL), "Legende bleibt Legende");
+        net.minecraft.nbt.CompoundTag legacyTag = new net.minecraft.nbt.CompoundTag();
+        legacyTag.putInt("experience", 3240);
+        legacyTag.putInt("discoveries", 4);
+        HeroLevel.Hero legacy = HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, legacyTag).getOrThrow();
+        helper.assertValueEqual(legacy.level(), 10, "alter Held (Stufe 10) nach dem Laden");
+        helper.assertValueEqual(legacy.experience(), HeroLevel.total(10), "alter Held: Erfahrung auf die neue Kurve umgerechnet");
+        net.minecraft.nbt.Tag saved = HeroLevel.Hero.CODEC.encodeStart(net.minecraft.nbt.NbtOps.INSTANCE, legacy).getOrThrow();
+        helper.assertValueEqual(HeroLevel.Hero.CODEC.parse(net.minecraft.nbt.NbtOps.INSTANCE, saved).getOrThrow().experience(),
+                legacy.experience(), "neuer Held wird beim Laden nicht noch einmal umgerechnet");
         // Ränge und ihre Punkte
         helper.assertValueEqual(HeroLevel.Rank.of(1), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 1");
         helper.assertValueEqual(HeroLevel.Rank.of(19), HeroLevel.Rank.SQUIRE, "Rang auf Stufe 19");
@@ -456,14 +475,15 @@ final class HeroGameTests {
     private static void settle(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
-            // früher Stufe 13 mit zwölf verteilten Punkten – heute ist das Stufe 10 mit neun Punkten
-            HeroLevel.set(player, new HeroLevel.Hero(3_420, List.of(5, 5, 2, 0, 0, 0), 4));
-            helper.assertValueEqual(HeroLevel.of(player).level(), 10, "Stufe mit 3.420 Heldenerfahrung");
+            // mehr verteilte Punkte, als die Stufe hergibt: Stufe 10 hat nur neun Punkte
+            int xp = HeroLevel.total(10) + 100;
+            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 5, 2, 0, 0, 0), 4));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 10, "Stufe mit " + xp + " Heldenerfahrung");
             helper.assertTrue(HeroLevel.settle(player), "zu viele verteilte Punkte werden nicht zurückgegeben");
             HeroLevel.Hero hero = HeroLevel.of(player);
-            helper.assertTrue(hero.spent() == 0 && hero.experience() == 3_420 && hero.discoveries() == 4 && hero.unspent() == 9,
+            helper.assertTrue(hero.spent() == 0 && hero.experience() == xp && hero.discoveries() == 4 && hero.unspent() == 9,
                     "nach dem Zurückgeben: " + hero);
-            HeroLevel.set(player, new HeroLevel.Hero(3_420, List.of(5, 4, 0, 0, 0, 0), 4));
+            HeroLevel.set(player, new HeroLevel.Hero(xp, List.of(5, 4, 0, 0, 0, 0), 4));
             helper.assertTrue(!HeroLevel.settle(player) && HeroLevel.of(player).spent() == 9, "passende Verteilung wurde angetastet");
             HeroLevel.set(player, HeroLevel.Hero.NONE);
             helper.succeed();

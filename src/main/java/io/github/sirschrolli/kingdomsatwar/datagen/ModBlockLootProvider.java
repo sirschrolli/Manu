@@ -137,6 +137,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ShadowBlocks.STAR_BLOSSOM.get());
 
         // Die Leere
+        // das Meer: die Tiefseelaterne fällt als sie selbst
+        this.dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get());
         for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,

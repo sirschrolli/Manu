@@ -447,6 +447,7 @@ public class ModModelProvider extends ModelProvider {
         // --- Schattenwelt ---
         ShadowModels.register(blocks, items);
         VoidModels.register(blocks, items);
+        SeaModels.register(blocks, items);
 
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();

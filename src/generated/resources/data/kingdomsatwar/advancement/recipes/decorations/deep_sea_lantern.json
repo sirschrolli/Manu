@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_angler_lure": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:angler_lure"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:deep_sea_lantern"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_angler_lure"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:deep_sea_lantern"
+    ]
+  }
+}

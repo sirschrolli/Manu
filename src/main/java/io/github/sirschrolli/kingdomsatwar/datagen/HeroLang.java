@@ -52,12 +52,12 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.sources",
                 "You gain it for defeated monsters and bosses (a quarter also for those your soldiers and dragons defeat), for ore you "
                         + "mine, for advancements, for every biome you set foot in for the first time and for every castle you conquer. "
-                        + "Every level brings a talent point, every new rank two more. Hero level 100 – the Legend – takes 392,040 hero "
-                        + "experience. Minecraft's own experience stays exactly as it is.",
+                        + "Every level brings a talent point, every new rank two more. Hero level 100 – the Legend – takes about 1.17 million "
+                        + "hero experience. Minecraft's own experience stays exactly as it is.",
                 "Es gibt sie für besiegte Monster und Bosse (ein Viertel auch für die, die deine Soldaten und Drachen besiegen), für Erz, "
                         + "das du abbaust, für Fortschritte, für jedes Biom, das du zum ersten Mal betrittst, und für jede eroberte Burg. "
-                        + "Jede Stufe bringt einen Talentpunkt, jeder neue Rang zwei dazu. Heldenstufe 100 – die Legende – braucht 392.040 "
-                        + "Heldenerfahrung. Die Erfahrung von Minecraft bleibt genau, wie sie ist.");
+                        + "Jede Stufe bringt einen Talentpunkt, jeder neue Rang zwei dazu. Heldenstufe 100 – die Legende – braucht rund 1,17 "
+                        + "Millionen Heldenerfahrung. Die Erfahrung von Minecraft bleibt genau, wie sie ist.");
         text.add("gui.kingdomsatwar.character.points", "Talent points: %s", "Talentpunkte: %s");
         text.add("gui.kingdomsatwar.character.points.none", "All talent points spent", "Alle Talentpunkte verteilt");
         text.add("gui.kingdomsatwar.character.talent.spend", "Click: spend a point", "Klick: einen Punkt verteilen");

@@ -68,13 +68,39 @@ public final class Veterancy {
 
     // ------------------------------------------------------------------------------------------------ Stufen
 
-    /** Wie viel Kampferfahrung man für diese Stufe insgesamt braucht (Stufe 1: keine). */
+    /**
+     * Wie viel Kampferfahrung man für diese Stufe insgesamt braucht (Stufe 1: keine). Seit 0.61 liegen die Stufen weiter
+     * auseinander (Stufe 20: rund 5.600 statt 2.300); die Erfahrung je Treffer und Sieg ist gleich geblieben.
+     */
     public static int total(int level) {
         if (level <= 1) {
             return 0;
         }
         int clamped = Math.min(level, MAX_LEVEL);
+        return (int) Math.round(18.0 * Math.pow(clamped - 1, 1.95) / 5.0) * 5;
+    }
+
+    /** Die alte Kurve (bis 0.60). */
+    static int oldTotal(int level) {
+        if (level <= 1) {
+            return 0;
+        }
+        int clamped = Math.min(level, MAX_LEVEL);
         return (int) Math.round(10.0 * Math.pow(clamped - 1, 1.85) / 5.0) * 5;
+    }
+
+    /** Rechnet Kampferfahrung der alten Kurve auf die neue um: gleiche Stufe, gleicher Anteil des Wegs zur nächsten. */
+    public static int migrate(int oldExperience) {
+        int level = 1;
+        while (level < MAX_LEVEL && oldExperience >= oldTotal(level + 1)) {
+            level++;
+        }
+        if (level >= MAX_LEVEL) {
+            return total(MAX_LEVEL);
+        }
+        int from = oldTotal(level);
+        float progress = Mth.clamp((oldExperience - from) / (float) (oldTotal(level + 1) - from), 0.0f, 1.0f);
+        return total(level) + (int) Math.floor(progress * (total(level + 1) - total(level)));
     }
 
     /** Die Stufe zu so viel Kampferfahrung. */

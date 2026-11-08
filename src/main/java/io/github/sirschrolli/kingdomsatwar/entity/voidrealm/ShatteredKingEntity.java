@@ -115,6 +115,10 @@ public class ShatteredKingEntity extends Monster {
     private @Nullable Vec3 slamPoint;
     private float beamStart;
     private int summons;
+    /** Ob der laufende Faustschlag schon der zweite einer Doppelfaust ist (im Zorn). */
+    private boolean chained;
+    /** Zorn: unter der Hälfte seiner Leben (einmal ausgerufen). */
+    private boolean wrath;
     private int lonely;
     private @Nullable BlockPos home;
     private @Nullable BlockPos seal;
@@ -136,9 +140,11 @@ public class ShatteredKingEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 340.0)
-                .add(Attributes.ARMOR, 8.0)
-                .add(Attributes.ATTACK_DAMAGE, 5.5)
+                // seit 0.61 der stärkste Gegner vor dem Abgrund: mehr Leben als jeder Drache (Nyxar 1400), schwer gepanzert
+                .add(Attributes.MAX_HEALTH, 1800.0)
+                .add(Attributes.ARMOR, 18.0)
+                .add(Attributes.ARMOR_TOUGHNESS, 10.0)
+                .add(Attributes.ATTACK_DAMAGE, 12.0)
                 .add(Attributes.FOLLOW_RANGE, 48.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
                 .add(Attributes.FLYING_SPEED, 0.4)
@@ -442,8 +448,24 @@ public class ShatteredKingEntity extends Monster {
     private void chooseAttack(ServerLevel level, LivingEntity target) {
         float hp = this.healthFraction();
         double d = this.distanceTo(target);
-        // die Wächter rufen: einmal unter 60 %, einmal unter 25 %
-        if (this.summons == 0 && hp < 0.6f || this.summons == 1 && hp < 0.25f) {
+        if (!this.wrath && hp < 0.5f) {
+            // Zorn: ein gewaltiger Schrei, die Erde bebt – ab jetzt schlägt er schneller und doppelt zu
+            this.wrath = true;
+            level.playSound(null, this.blockPosition(), ModSounds.SHATTERED_KING_ROAR.get(), SoundSource.HOSTILE, 4.0f, 0.85f);
+            this.shake(level, 48.0, 1.4f, 40);
+            Vec3 h = this.heartPosition();
+            level.sendParticles(ParticleTypes.REVERSE_PORTAL, h.x, h.y, h.z, 120, 2.5, 2.5, 2.5, 0.4);
+            for (ServerPlayer player : level.players()) {
+                if (player.distanceTo(this) < 64.0) {
+                    player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("message.kingdomsatwar.shattered_king.wrath")
+                            .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE, net.minecraft.ChatFormatting.BOLD));
+                }
+            }
+            this.cooldown = 30;
+            return;
+        }
+        // die Wächter rufen: unter 70 %, unter 45 % und noch einmal unter 20 %
+        if (this.summons == 0 && hp < 0.7f || this.summons == 1 && hp < 0.45f || this.summons == 2 && hp < 0.2f) {
             this.summons++;
             this.start(level, Attack.SUMMON, EVENT_SUMMON);
             return;
@@ -453,11 +475,15 @@ public class ShatteredKingEntity extends Monster {
             options.add(Attack.SWEEP);
             options.add(Attack.SWEEP);
         }
-        if (hp < 0.6f) {
+        if (hp < 0.7f) {
             options.add(Attack.GRAVITY);
         }
-        if (hp < 0.25f) {
+        if (hp < 0.5f) {
+            // Zorn: der Schwerkraftbruch kommt öfter, der Sternenstrahl kommt dazu
+            options.add(Attack.GRAVITY);
             options.add(Attack.BEAM);
+        }
+        if (hp < 0.25f) {
             options.add(Attack.BEAM);
         }
         Attack next = options.get(this.random.nextInt(options.size()));
@@ -524,9 +550,20 @@ public class ShatteredKingEntity extends Monster {
 
     private void finish() {
         float hp = this.healthFraction();
+        // im Zorn (unter der Hälfte) folgt jedem Faustschlag sofort der Schlag der anderen Hand
+        if (this.attack == Attack.SLAM && hp < 0.5f && !this.chained && this.getTarget() != null && this.level() instanceof ServerLevel level) {
+            this.chained = true;
+            LivingEntity target = this.getTarget();
+            this.leftHand = !this.leftHand;
+            this.slamPoint = target.position();
+            this.entityData.set(DATA_SLAM_POINT, this.slamPoint.toVector3f());
+            this.start(level, Attack.SLAM, this.leftHand ? EVENT_SLAM_LEFT : EVENT_SLAM_RIGHT);
+            return;
+        }
+        this.chained = false;
         // in den späteren Phasen schlägt er schneller zu
-        int base = hp < 0.25f ? 18 : hp < 0.6f ? 26 : 34;
-        this.cooldown = base + this.random.nextInt(20);
+        int base = hp < 0.25f ? 14 : hp < 0.5f ? 20 : 30;
+        this.cooldown = base + this.random.nextInt(hp < 0.5f ? 14 : 18);
         this.attack = Attack.NONE;
         this.entityData.set(DATA_BEAMING, false);
     }
@@ -612,7 +649,7 @@ public class ShatteredKingEntity extends Monster {
             Vec3 from = this.position().add(0.0, 6.5, 0.0);
             Vec3 aim = target != null ? target.getEyePosition().subtract(from)
                     : this.getLookAngle().multiply(1.0, 0.0, 1.0).normalize().scale(10.0).add(0.0, -4.0, 0.0);
-            int count = this.healthFraction() < 0.25f ? 7 : 5;
+            int count = this.healthFraction() < 0.25f ? 9 : this.healthFraction() < 0.5f ? 7 : 5;
             float spread = 11.0f;
             for (int i = 0; i < count; i++) {
                 float off = (i - (count - 1) / 2.0f) * spread * Mth.DEG_TO_RAD;
@@ -657,7 +694,8 @@ public class ShatteredKingEntity extends Monster {
         if (t == 20 && this.home != null) {
             level.playSound(null, this.blockPosition(), ModSounds.SHARD_WARDEN_AWAKEN.get(), SoundSource.HOSTILE, 3.0f, 0.8f);
             int placed = 0;
-            for (int attempt = 0; attempt < 24 && placed < 2; attempt++) {
+            int wanted = this.summons >= 2 ? 3 : 2;
+            for (int attempt = 0; attempt < 30 && placed < wanted; attempt++) {
                 double a = this.random.nextDouble() * Math.PI * 2.0;
                 // erst in einem weiten Ring um den Thron, auf engem Raum näher heran
                 double r = attempt < 12 ? 4.5 + this.random.nextDouble() * 4.0 : 2.0 + this.random.nextDouble() * 2.5;
@@ -878,6 +916,7 @@ public class ShatteredKingEntity extends Monster {
             output.putLong("Seal", this.seal.asLong());
         }
         output.putInt("Summons", this.summons);
+        output.putBoolean("Wrath", this.wrath);
         output.store("Guards", net.minecraft.core.UUIDUtil.CODEC.listOf(), this.guards);
     }
 
@@ -887,6 +926,7 @@ public class ShatteredKingEntity extends Monster {
         this.home = input.getLong("Home").map(BlockPos::of).orElse(null);
         this.seal = input.getLong("Seal").map(BlockPos::of).orElse(null);
         this.summons = input.getIntOr("Summons", 0);
+        this.wrath = input.getBooleanOr("Wrath", false);
         this.guards.clear();
         input.read("Guards", net.minecraft.core.UUIDUtil.CODEC.listOf()).ifPresent(this.guards::addAll);
         this.bossBar.setProgress(this.getHealth() / this.getMaxHealth());

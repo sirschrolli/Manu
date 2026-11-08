@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_shark_tooth": {
+      "conditions": {
+        "items": [
+          {
+            "items": "kingdomsatwar:shark_tooth"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "kingdomsatwar:arrows_from_shark_tooth"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_shark_tooth"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "kingdomsatwar:arrows_from_shark_tooth"
+    ]
+  }
+}

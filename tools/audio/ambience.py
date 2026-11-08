@@ -1525,11 +1525,14 @@ def bed_void_remnants():
     return b
 
 
+# Seit 0.61 nicht mehr dabei (künstlich und auf Dauer anstrengend): Laubrauschen, Schilf, Vogelchor, Grillen, Insektensummen
+# und Froschchor – an ihre Stelle treten Einzelklänge, viele davon echte Naturaufnahmen von Minecraft (VANILLA_SPOTS).
+RETIRED_BEDS = {"leaves": bed_leaves, "reeds": bed_reeds, "birds_forest": bed_birds_forest, "birds_meadow": bed_birds_meadow,
+                "crickets": bed_crickets, "crickets_dry": bed_crickets_dry, "insects_day": bed_insects_day, "frogs": bed_frogs}
+
 BEDS = {
     "wind_breeze": bed_wind_breeze, "wind_gale": bed_wind_gale, "wind_coast": bed_wind_coast, "wind_dry": bed_wind_dry,
-    "wind_moor": bed_wind_moor, "leaves": bed_leaves, "reeds": bed_reeds, "birds_forest": bed_birds_forest,
-    "birds_meadow": bed_birds_meadow, "crickets": bed_crickets, "crickets_dry": bed_crickets_dry, "insects_day": bed_insects_day,
-    "frogs": bed_frogs, "surf_gentle": bed_surf_gentle, "surf_storm": bed_surf_storm, "lagoon": bed_lagoon, "bog": bed_bog,
+    "wind_moor": bed_wind_moor, "surf_gentle": bed_surf_gentle, "surf_storm": bed_surf_storm, "lagoon": bed_lagoon, "bog": bed_bog,
     "embers": bed_embers, "lava": bed_lava, "ice": bed_ice, "storm_charge": bed_storm_charge, "drips": bed_drips,
     "deep_water": bed_deep_water, "magic_grove": bed_magic_grove, "earth_rumble": bed_earth_rumble,
     "shadow_forest": bed_shadow_forest, "shadow_wastes": bed_shadow_wastes, "shadow_crystal": bed_shadow_crystal,
@@ -1611,6 +1614,23 @@ VANILLA_SPOTS = {
               "Walgesang", "Whale song"),
     "pale_moss": ([f"block/pale_hanging_moss/pale_hanging_moss{i}" for i in range(1, 16)], 0.8, 0.7, 32, "Etwas raschelt", "Something rustles"),
     "warped_creak": ([f"ambient/nether/warped_forest/creak{i}" for i in range(1, 6)], 0.75, 0.6, 40, "Schattenholz knarrt", "Shadow wood creaks"),
+    # Seit 0.61: echte Naturaufnahmen von Minecraft statt dauernder, künstlicher Teppiche (Blätter, Gras, Sand, Insekten)
+    "leaves_rustle": ([f"block/poplar_leaves/ambient{i}" for i in range(1, 25)] + [f"block/poplar_leaves/wind{i}" for i in range(1, 4)],
+                      1.0, 0.55, 24, "Blätter rascheln", "Leaves rustle"),
+    "grass_wind": ([f"block/dry_grass/wind{i}" for i in range(1, 13)], 1.0, 0.6, 32, "Wind streicht durchs Gras", "Wind in the grass"),
+    "sand_wind": ([f"block/sand/sand{i}" for i in range(1, 22)], 1.0, 0.6, 24, "Sand rieselt", "Sand trickles"),
+    "desert_brush": ([f"block/deadbush/sandblock_version/{n}" for n in ("bushrustle1", "bushrustle2", "bushrustle3", "creakysand1",
+                                                                       "crickets", "howlingwind1", "insect1", "leaves", "movingsand1",
+                                                                       "movingsand2", "movingsand3")],
+                     1.0, 0.6, 24, "Trockenes Gestrüpp raschelt", "Dry brush rustles"),
+    "parrot": ([f"mob/parrot/idle{i}" for i in range(1, 7)], 1.0, 0.6, 48, "Papagei ruft", "Parrot calls"),
+    "bees": ([f"mob/bee/loop{i}" for i in range(1, 6)], 1.0, 0.3, 16, "Bienen summen", "Bees buzz"),
+    "goat": ([f"mob/goat/idle{i}" for i in range(1, 9)], 1.0, 0.45, 64, "Ziege meckert in der Ferne", "Distant goat bleats"),
+    "eyeblossom": ([f"block/eyeblossom/eyeblossom_idle{i}" for i in range(1, 7)], 1.0, 0.6, 24, "Augenblüten wispern", "Eyeblossoms whisper"),
+    "turtle": ([f"mob/turtle/idle{i}" for i in range(1, 4)], 1.0, 0.5, 24, "Schildkröte fiept", "Turtle chirps"),
+    "water_flow": (["liquid/water"], 1.0, 0.45, 24, "Wasser plätschert", "Water burbles"),
+    "bubbles": ([f"ambient/underwater/additions/bubbles{i}" for i in range(1, 7)], 1.0, 0.5, 16, "Blasen steigen auf", "Bubbles rise"),
+    "fox": ([f"mob/fox/idle{i}" for i in range(1, 7)], 1.0, 0.45, 48, "Fuchs keckert in der Ferne", "Distant fox yips"),
 }
 
 
@@ -1669,8 +1689,31 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--only", default="", help="nur diese Teppiche/Sätze (Komma-getrennt)")
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--events-only", action="store_true",
+                    help="nur sounds.json und AmbientSounds.java schreiben (die Klangdateien bleiben, wie sie sind)")
     args = ap.parse_args()
     only = set(filter(None, args.only.split(",")))
+    if args.events_only:
+        events: dict = {}
+        for name in BEDS:
+            events[f"ambient.bed.{name}"] = {"sounds": [{"name": f"kingdomsatwar:ambient/bed/{name}"}]}
+        for name, spec in SPOTS.items():
+            files = [f"kingdomsatwar:ambient/spot/{name}{i + 1}" for i in range(spec[1])]
+            events[f"ambient.spot.{name}"] = {"sounds": [{"name": f, "attenuation_distance": spec[3]} for f in files],
+                                              "subtitle": subtitle_key(name)}
+        for name, (paths, pitch, volume, reach, _, _) in VANILLA_SPOTS.items():
+            events[f"ambient.spot.{name}"] = {"sounds": [{"name": f"minecraft:{p}", "pitch": pitch, "volume": volume,
+                                                          "attenuation_distance": reach} for p in paths],
+                                              "subtitle": subtitle_key(name)}
+        data = json.loads(SOUNDS_JSON.read_text(encoding="utf-8")) if SOUNDS_JSON.exists() else {}
+        for name in RETIRED_BEDS:
+            data.pop(f"ambient.bed.{name}", None)
+            (OUT / "bed" / f"{name}.ogg").unlink(missing_ok=True)
+        data.update(events)
+        SOUNDS_JSON.write_text(json.dumps(dict(sorted(data.items())), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        write_java()
+        print(f"{len(events)} Klangereignisse geschrieben (ohne neue Klänge)")
+        return
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
 

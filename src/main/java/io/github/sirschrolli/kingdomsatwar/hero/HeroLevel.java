@@ -58,7 +58,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * <p>Der Held sammelt <b>Heldenerfahrung</b>: für besiegte Monster und Bosse (auch ein Viertel dessen, was seine
  * Soldaten und gezähmten Drachen besiegen), für Erz, das er abbaut, für jeden Fortschritt (Aufgabe, Ziel, Herausforderung),
  * für jedes Biom, das er zum ersten Mal betritt, und für jede eroberte Burg. Damit steigt er bis zur
- * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf – ein weiter Weg: Stufe {@value #MAX_LEVEL} braucht 392.040 Heldenerfahrung.
+ * <b>Heldenstufe {@value #MAX_LEVEL}</b> auf – ein weiter Weg: Stufe {@value #MAX_LEVEL} braucht seit 0.61 rund 1,17 Millionen
+ * Heldenerfahrung (vorher 392.040; die Erfahrung je Sieg, Erz und Entdeckung ist gleich geblieben, nur die Stufen liegen
+ * weiter auseinander – wer schon aufgestiegen war, behält beim Umstieg seine Stufe).
  * Jede Stufe bringt einen <b>Talentpunkt</b>, jeder neue <b>Rang</b> (Knappe, Recke, Ritter, Held, Kriegsherr, Legende)
  * {@value #RANK_BONUS} Punkte dazu. Die Punkte verteilt er im Charakterfenster (Taste K) auf sechs Talente – je Talent
  * höchstens {@value #MAX_TALENT} Punkte, also lässt sich nicht alles meistern. Neu verteilen kostet eine Silbermünze je
@@ -72,8 +74,11 @@ public final class HeroLevel {
     public static final int MAX_TALENT = 20;
     /** Talentpunkte, die jeder neue Rang zusätzlich bringt. */
     public static final int RANK_BONUS = 2;
-    /** Heldenerfahrung für Stufe L: 40 · (L − 1)², für Stufe 100 also 392.040. */
-    public static final int CURVE = 40;
+    /** Heldenerfahrung für Stufe L: 60 · (L − 1)^2,15 (gerundet), für Stufe 100 also rund 1,17 Millionen. */
+    public static final int CURVE = 60;
+    public static final double CURVE_POWER = 2.15;
+    /** Fassung der Stufenkurve in gespeicherten Helden (1: bis 0.60 – 40 · (L − 1)², 2: seit 0.61). */
+    public static final int CURVE_VERSION = 2;
     /** Neu verteilen: eine Silbermünze (9 Bronze) je verteiltem Punkt. */
     public static final int RESET_PER_POINT = 9;
     /** Heldenerfahrung für einen Sieg: die Hälfte der Lebenspunkte, Bosse doppelt, höchstens so viel. */
@@ -204,10 +209,14 @@ public final class HeroLevel {
      */
     public record Hero(int experience, List<Integer> talents, int discoveries) {
         public static final Hero NONE = new Hero(0, List.of(0, 0, 0, 0, 0, 0), 0);
+        /** Gespeichert mit der Fassung der Stufenkurve; ältere Helden werden beim Laden auf die neue Kurve umgerechnet. */
         public static final Codec<Hero> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Codec.INT.optionalFieldOf("experience", 0).forGetter(Hero::experience),
                 Codec.INT.listOf().optionalFieldOf("talents", List.of()).forGetter(Hero::talents),
-                Codec.INT.optionalFieldOf("discoveries", 0).forGetter(Hero::discoveries)).apply(i, Hero::new));
+                Codec.INT.optionalFieldOf("discoveries", 0).forGetter(Hero::discoveries),
+                Codec.INT.optionalFieldOf("curve", 1).forGetter(h -> CURVE_VERSION)).apply(i,
+                (experience, talents, discoveries, curve) -> new Hero(curve < CURVE_VERSION ? migrate(experience) : experience, talents,
+                        discoveries)));
         public static final StreamCodec<ByteBuf, Hero> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.VAR_INT, Hero::experience,
                 ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list(Talent.values().length)), Hero::talents,
@@ -262,13 +271,39 @@ public final class HeroLevel {
 
     // ------------------------------------------------------------------------------------------------ Stufen
 
-    /** Wie viel Heldenerfahrung man für diese Heldenstufe insgesamt braucht (Stufe 1: keine; Stufe 100: 392.040). */
+    /** Wie viel Heldenerfahrung man für diese Heldenstufe insgesamt braucht (Stufe 1: keine; Stufe 100: rund 1,17 Millionen). */
     public static int total(int level) {
         if (level <= 1) {
             return 0;
         }
         int steps = Math.min(level, MAX_LEVEL) - 1;
-        return CURVE * steps * steps;
+        return (int) Math.round(CURVE * Math.pow(steps, CURVE_POWER));
+    }
+
+    /** Die alte Kurve (bis 0.60): 40 · (L − 1)². */
+    static int oldTotal(int level) {
+        if (level <= 1) {
+            return 0;
+        }
+        int steps = Math.min(level, MAX_LEVEL) - 1;
+        return 40 * steps * steps;
+    }
+
+    /**
+     * Rechnet Heldenerfahrung der alten Kurve auf die neue um: gleiche Stufe, gleicher Anteil des Wegs zur nächsten –
+     * niemand verliert eine Stufe, nur der weitere Weg wird länger.
+     */
+    public static int migrate(int oldExperience) {
+        int level = 1;
+        while (level < MAX_LEVEL && oldExperience >= oldTotal(level + 1)) {
+            level++;
+        }
+        if (level >= MAX_LEVEL) {
+            return total(MAX_LEVEL);
+        }
+        int from = oldTotal(level);
+        float progress = Mth.clamp((oldExperience - from) / (float) (oldTotal(level + 1) - from), 0.0f, 1.0f);
+        return total(level) + (int) Math.floor(progress * (total(level + 1) - total(level)));
     }
 
     /** Talentpunkte auf dieser Stufe: einer je Stufe über der ersten und {@value #RANK_BONUS} für jeden erreichten Rang. */

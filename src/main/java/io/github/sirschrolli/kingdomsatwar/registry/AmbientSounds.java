@@ -17,13 +17,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public final class AmbientSounds {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, KingdomsAtWar.MODID);
     public static final List<String> BEDS = List.of(
-            "wind_breeze", "wind_gale", "wind_coast", "wind_dry", "wind_moor", "leaves",
-            "reeds", "birds_forest", "birds_meadow", "crickets", "crickets_dry", "insects_day",
-            "frogs", "surf_gentle", "surf_storm", "lagoon", "bog", "embers",
-            "lava", "ice", "storm_charge", "drips", "deep_water", "magic_grove",
-            "earth_rumble", "shadow_forest", "shadow_wastes", "shadow_crystal", "shadow_marsh", "shadow_peaks",
-            "shadow_glimmer", "shadow_sea", "shadow_isles", "shadow_depths", "whispers", "void_hum",
-            "void_wind", "void_crystal", "void_stardust", "void_ruins", "void_remnants");
+            "wind_breeze", "wind_gale", "wind_coast", "wind_dry", "wind_moor", "surf_gentle",
+            "surf_storm", "lagoon", "bog", "embers", "lava", "ice",
+            "storm_charge", "drips", "deep_water", "magic_grove", "earth_rumble", "shadow_forest",
+            "shadow_wastes", "shadow_crystal", "shadow_marsh", "shadow_peaks", "shadow_glimmer", "shadow_sea",
+            "shadow_isles", "shadow_depths", "whispers", "void_hum", "void_wind", "void_crystal",
+            "void_stardust", "void_ruins", "void_remnants");
     public static final List<String> SPOTS = List.of(
             "bird_blackbird", "bird_tit", "bird_finch", "bird_cuckoo", "woodpecker", "bird_owl",
             "bird_nightingale", "bird_crow", "bird_gull", "bird_curlew", "bird_bittern", "bird_buzzard",
@@ -33,7 +32,9 @@ public final class AmbientSounds {
             "deep_moan", "wing_flutter", "shadow_creak", "star_song", "rock_grind", "glitch_far",
             "void_choir", "dragon_far", "dragon_wings", "fireflies", "amethyst", "soul_voices",
             "basalt", "thunder", "dolphin", "frog", "whale", "pale_moss",
-            "warped_creak");
+            "warped_creak", "leaves_rustle", "grass_wind", "sand_wind", "desert_brush", "parrot",
+            "bees", "goat", "eyeblossom", "turtle", "water_flow", "bubbles",
+            "fox");
     /** Untertitel der Einzelklänge: Englisch, Deutsch. */
     public static final Map<String, List<String>> SUBTITLES = Map.ofEntries(
             Map.entry("bird_blackbird", List.of("Blackbird sings", "Amsel singt")),
@@ -84,7 +85,19 @@ public final class AmbientSounds {
             Map.entry("frog", List.of("Frog croaks", "Frosch quakt")),
             Map.entry("whale", List.of("Whale song", "Walgesang")),
             Map.entry("pale_moss", List.of("Something rustles", "Etwas raschelt")),
-            Map.entry("warped_creak", List.of("Shadow wood creaks", "Schattenholz knarrt"))
+            Map.entry("warped_creak", List.of("Shadow wood creaks", "Schattenholz knarrt")),
+            Map.entry("leaves_rustle", List.of("Leaves rustle", "Blätter rascheln")),
+            Map.entry("grass_wind", List.of("Wind in the grass", "Wind streicht durchs Gras")),
+            Map.entry("sand_wind", List.of("Sand trickles", "Sand rieselt")),
+            Map.entry("desert_brush", List.of("Dry brush rustles", "Trockenes Gestrüpp raschelt")),
+            Map.entry("parrot", List.of("Parrot calls", "Papagei ruft")),
+            Map.entry("bees", List.of("Bees buzz", "Bienen summen")),
+            Map.entry("goat", List.of("Distant goat bleats", "Ziege meckert in der Ferne")),
+            Map.entry("eyeblossom", List.of("Eyeblossoms whisper", "Augenblüten wispern")),
+            Map.entry("turtle", List.of("Turtle chirps", "Schildkröte fiept")),
+            Map.entry("water_flow", List.of("Water burbles", "Wasser plätschert")),
+            Map.entry("bubbles", List.of("Bubbles rise", "Blasen steigen auf")),
+            Map.entry("fox", List.of("Distant fox yips", "Fuchs keckert in der Ferne"))
     );
     private static final Map<String, DeferredHolder<SoundEvent, SoundEvent>> EVENTS = new LinkedHashMap<>();
 

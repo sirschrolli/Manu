@@ -53,6 +53,10 @@ final class AmbienceGameTests {
         biomes.addAll(ModBiomes.NESTS);
         biomes.addAll(ShadowBiomes.ALL);
         biomes.addAll(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.ALL);
+        // seit 0.61 haben auch die Standard-Biome der Oberwelt eine Klangwelt
+        biomes.addAll(AmbienceProfiles.STANDARD);
+        helper.assertTrue(AmbienceProfiles.all().keySet().containsAll(biomes) && biomes.containsAll(AmbienceProfiles.all().keySet()),
+                "Klangwelten und Biomlisten passen nicht zusammen");
         Set<String> usedBeds = new HashSet<>();
         for (ResourceKey<Biome> biome : biomes) {
             AmbienceProfile profile = AmbienceProfiles.of(biome);

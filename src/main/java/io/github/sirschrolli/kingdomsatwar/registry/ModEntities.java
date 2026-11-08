@@ -454,6 +454,27 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<ShatteredKingEntity>> SHATTERED_KING = ENTITIES.registerEntityType(
             "shattered_king", ShatteredKingEntity::new, MobCategory.MONSTER,
             builder -> builder.sized(3.2f, 6.0f).eyeHeight(5.2f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    // ---------------------------------------------------------------- Wesen des Meeres
+    /** Mantarochen: friedlicher Riese der warmen und tiefen Meere, springt aus dem Wasser. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity>> MANTA_RAY =
+            ENTITIES.registerEntityType("manta_ray", io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity::new,
+                    MobCategory.WATER_CREATURE, builder -> builder.sized(2.2f, 0.7f).eyeHeight(0.35f).clientTrackingRange(12));
+    /** Leuchtqualle: treibt in leuchtenden Schwärmen, nesselt bei Berührung; lässt sich im Eimer fangen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity>> GLOW_JELLYFISH =
+            ENTITIES.registerEntityType("glow_jellyfish", io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity::new,
+                    MobCategory.WATER_AMBIENT, builder -> builder.sized(0.7f, 0.9f).eyeHeight(0.45f).clientTrackingRange(8));
+    /** Hai: Jäger der warmen und tiefen Meere – kreist um Schwimmer und stößt dann zu. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity>> SHARK =
+            ENTITIES.registerEntityType("shark", io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity::new,
+                    MobCategory.WATER_CREATURE, builder -> builder.sized(1.3f, 0.85f).eyeHeight(0.45f).clientTrackingRange(10));
+    /** Anglerfisch: lauert in der dunklen Tiefsee hinter seinem leuchtenden Köder. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.AnglerfishEntity>> ANGLERFISH =
+            ENTITIES.registerEntityType("anglerfish", io.github.sirschrolli.kingdomsatwar.entity.sea.AnglerfishEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.0f, 0.9f).eyeHeight(0.55f).notInPeaceful().clientTrackingRange(10));
+    /** Riesenkrabbe: läuft seitwärts über Strände und flachen Meeresgrund, kneift zu, wenn man sie reizt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity>> GIANT_CRAB =
+            ENTITIES.registerEntityType("giant_crab", io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity::new,
+                    MobCategory.CREATURE, builder -> builder.sized(1.1f, 0.6f).eyeHeight(0.5f).clientTrackingRange(10));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
             WardenShardEntity::new, MobCategory.MISC,
@@ -744,6 +765,11 @@ public final class ModEntities {
         event.put(DISTORTLING.get(), DistortlingEntity.createAttributes().build());
         event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
         event.put(SHATTERED_KING.get(), ShatteredKingEntity.createAttributes().build());
+        event.put(MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity.createAttributes().build());
+        event.put(GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity.createAttributes().build());
+        event.put(SHARK.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity.createAttributes().build());
+        event.put(ANGLERFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.AnglerfishEntity.createAttributes().build());
+        event.put(GIANT_CRAB.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity.createAttributes().build());
         event.put(UMBRER.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity.createAttributes().build());
         event.put(UMBRER_GUARD.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity.createAttributes().build());
     }
@@ -869,6 +895,15 @@ public final class ModEntities {
         event.register(STAR_RAY.get(), SpawnPlacementTypes.NO_RESTRICTIONS, anyHeight, StarRayEntity::checkRaySpawnRules, replace);
         event.register(SHARD_WARDEN.get(), ground, surface, ShardWardenEntity::checkWardenSpawnRules, replace);
         event.register(DISTORTLING.get(), ground, surface, DistortlingEntity::checkDistortlingSpawnRules, replace);
+        // Meer: Rochen, Haie und Quallen im offenen Wasser, Anglerfische in der dunklen Tiefe, Krabben am Ufer und auf flachem Grund
+        event.register(MANTA_RAY.get(), water, noLeaves, io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity::checkMantaSpawnRules, replace);
+        event.register(GLOW_JELLYFISH.get(), water, noLeaves,
+                io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity::checkJellyfishSpawnRules, replace);
+        event.register(SHARK.get(), water, noLeaves, io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity::checkSharkSpawnRules, replace);
+        event.register(ANGLERFISH.get(), water, noLeaves, io.github.sirschrolli.kingdomsatwar.entity.sea.AnglerfishEntity::checkAnglerSpawnRules,
+                replace);
+        event.register(GIANT_CRAB.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.OCEAN_FLOOR,
+                io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity::checkCrabSpawnRules, replace);
     }
 
     private static <T extends Animal> void registerAnimal(RegisterSpawnPlacementsEvent event, EntityType<T> type) {

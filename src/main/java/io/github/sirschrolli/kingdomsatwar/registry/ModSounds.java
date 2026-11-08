@@ -105,6 +105,29 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_GRAVITY = register("entity.shattered_king.gravity");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_BEAM = register("entity.shattered_king.beam");
 
+    // ---------------------------------------------------------------- Wesen des Meeres
+    public static final DeferredHolder<SoundEvent, SoundEvent> MANTA_RAY_HURT = register("entity.manta_ray.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MANTA_RAY_DEATH = register("entity.manta_ray.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MANTA_RAY_LEAP = register("entity.manta_ray.leap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MANTA_RAY_SPLASH = register("entity.manta_ray.splash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLOW_JELLYFISH_AMBIENT = register("entity.glow_jellyfish.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLOW_JELLYFISH_HURT = register("entity.glow_jellyfish.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLOW_JELLYFISH_DEATH = register("entity.glow_jellyfish.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLOW_JELLYFISH_STING = register("entity.glow_jellyfish.sting");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARK_HURT = register("entity.shark.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARK_DEATH = register("entity.shark.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHARK_BITE = register("entity.shark.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANGLERFISH_AMBIENT = register("entity.anglerfish.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANGLERFISH_HURT = register("entity.anglerfish.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANGLERFISH_DEATH = register("entity.anglerfish.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANGLERFISH_SNAP = register("entity.anglerfish.snap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANGLERFISH_BITE = register("entity.anglerfish.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_CLACK = register("entity.giant_crab.clack");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_PINCH = register("entity.giant_crab.pinch");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_HURT = register("entity.giant_crab.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_DEATH = register("entity.giant_crab.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_STEP = register("entity.giant_crab.step");
+
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */
     public static final DeferredHolder<SoundEvent, SoundEvent> HERO_PAT = register("hero.pat");

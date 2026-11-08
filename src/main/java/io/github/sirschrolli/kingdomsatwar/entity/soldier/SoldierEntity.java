@@ -269,6 +269,7 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         }
         output.putInt("Rank", this.getRank());
         output.putInt("Experience", this.getCombatExperience());
+        output.putInt("ExperienceCurve", 2);
         if (!this.personalName.isEmpty()) {
             output.putString("PersonalName", this.personalName);
         }
@@ -308,7 +309,12 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
         this.applyRank();
         // Soldaten aus älteren Spielständen haben noch keine Kampferfahrung: Sie bekommen so viel, wie ihr Rang voraussetzt
         int rankFloor = io.github.sirschrolli.kingdomsatwar.army.Veterancy.total(io.github.sirschrolli.kingdomsatwar.army.Veterancy.minLevel(this.getRank()));
-        this.entityData.set(DATA_EXPERIENCE, Math.max(input.getIntOr("Experience", rankFloor), 0));
+        int experience = Math.max(input.getIntOr("Experience", rankFloor), 0);
+        if (input.getIntOr("ExperienceCurve", 1) < 2 && input.getIntOr("Experience", -1) >= 0) {
+            // Spielstand von vor 0.61: auf die längere Stufenkurve umrechnen (gleiche Stufe, gleicher Fortschritt)
+            experience = io.github.sirschrolli.kingdomsatwar.army.Veterancy.migrate(experience);
+        }
+        this.entityData.set(DATA_EXPERIENCE, experience);
         this.applyLevel();
         this.personalName = input.getStringOr("PersonalName", "");
         this.entityData.set(DATA_HALL, input.getIntOr("HallY", Integer.MIN_VALUE) != Integer.MIN_VALUE

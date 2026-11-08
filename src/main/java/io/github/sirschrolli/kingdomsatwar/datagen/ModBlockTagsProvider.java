@@ -45,6 +45,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         }
         ModBlocks.COPPER_ROOF.all().forEach(block -> add(BlockTags.NEEDS_STONE_TOOL, block));
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STONE_PILLAR);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.HEART_CRYSTAL_FORMATION);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.MANA_CRYSTAL_FORMATION);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.GOLD_LEAF_BLOCK);

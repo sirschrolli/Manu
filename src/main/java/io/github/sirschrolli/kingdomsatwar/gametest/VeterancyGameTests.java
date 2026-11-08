@@ -78,6 +78,12 @@ final class VeterancyGameTests {
         }
         helper.assertValueEqual(Veterancy.levelFor(1_000_000), Veterancy.MAX_LEVEL, "höchste Stufe");
         helper.assertTrue(Veterancy.progress(Veterancy.total(Veterancy.MAX_LEVEL)) == 1.0f, "auf der höchsten Stufe ist die Leiste voll");
+        // seit 0.61 dauert der Aufstieg länger; alte Kampferfahrung wird so umgerechnet, dass Stufe und Fortschritt bleiben
+        helper.assertTrue(Veterancy.total(Veterancy.MAX_LEVEL) > 5_000, "Stufe 20 ist zu schnell erreicht");
+        for (int level = 2; level < Veterancy.MAX_LEVEL; level++) {
+            int old = (int) Math.round(10.0 * Math.pow(level - 1, 1.85) / 5.0) * 5;
+            helper.assertValueEqual(Veterancy.levelFor(Veterancy.migrate(old)), level, "Stufe nach dem Umrechnen (Stufe " + level + ")");
+        }
         for (int rank = 1; rank <= SoldierEntity.MAX_RANK; rank++) {
             helper.assertTrue(Veterancy.minLevel(rank) > Veterancy.minLevel(rank - 1), "Rang " + rank + " verlangt keine höhere Stufe");
         }

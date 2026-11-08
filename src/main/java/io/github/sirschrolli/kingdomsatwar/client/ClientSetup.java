@@ -91,6 +91,11 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.STAR_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.StarRayGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.WARDEN_SHARD, io.github.sirschrolli.kingdomsatwar.client.model.geom.WardenShardGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHATTERED_KING, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredKingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MANTA_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.MantaRayGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GLOW_JELLYFISH, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlowJellyfishGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SHARK, io.github.sirschrolli.kingdomsatwar.client.model.geom.SharkGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ANGLERFISH, io.github.sirschrolli.kingdomsatwar.client.model.geom.AnglerfishGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GIANT_CRAB, io.github.sirschrolli.kingdomsatwar.client.model.geom.GiantCrabGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredCrownGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
@@ -195,6 +200,11 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.STAR_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarRayRenderer::new);
         event.registerEntityRenderer(ModEntities.WARDEN_SHARD.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.WardenShardRenderer::new);
         event.registerEntityRenderer(ModEntities.SHATTERED_KING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.ShatteredKingRenderer::new);
+        event.registerEntityRenderer(ModEntities.MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.MantaRayRenderer::new);
+        event.registerEntityRenderer(ModEntities.GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.GlowJellyfishRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHARK.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.SharkRenderer::new);
+        event.registerEntityRenderer(ModEntities.ANGLERFISH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.AnglerfishRenderer::new);
+        event.registerEntityRenderer(ModEntities.GIANT_CRAB.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.GiantCrabRenderer::new);
         // die Umbrer
         event.registerEntityRenderer(ModEntities.UMBRER.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);

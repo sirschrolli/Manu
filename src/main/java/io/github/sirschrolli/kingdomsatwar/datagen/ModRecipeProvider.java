@@ -51,6 +51,7 @@ public class ModRecipeProvider extends RecipeProvider {
         equipmentRecipes();
         magicRecipes();
         cookVenison();
+        sea();
         shadowRecipes();
         voidRecipes();
         shadowTreasureRecipes();
@@ -605,6 +606,45 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_smoking");
         save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_campfire_cooking");
+    }
+
+    /** Das Meer: Tiefseelaterne aus dem Leuchtköder, Pfeile mit Haizahnspitzen, gegartes Krabbenfleisch. */
+    private void sea() {
+        Item lure = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ANGLER_LURE.get();
+        shaped(RecipeCategory.DECORATIONS, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get())
+                .pattern("NPN")
+                .pattern("PLP")
+                .pattern("NPN")
+                .define('N', Items.IRON_NUGGET)
+                .define('P', Items.PRISMARINE_SHARD)
+                .define('L', lure)
+                .unlockedBy(getHasName(lure), has(lure))
+                .save(output, key("deep_sea_lantern"));
+        Item tooth = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SHARK_TOOTH.get();
+        shaped(RecipeCategory.COMBAT, Items.ARROW, 6)
+                .pattern("T")
+                .pattern("S")
+                .pattern("F")
+                .define('T', tooth)
+                .define('S', Items.STICK)
+                .define('F', Items.FEATHER)
+                .unlockedBy(getHasName(tooth), has(tooth))
+                .save(output, key("arrows_from_shark_tooth"));
+        Item raw = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get();
+        Item cooked = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.COOKED_CRAB_MEAT.get();
+        save(SimpleCookingRecipeBuilder.smelting(Ingredient.of(raw), RecipeCategory.FOOD, CookingBookCategory.FOOD, cooked, 0.35f, 200)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_crab_meat");
+        save(SimpleCookingRecipeBuilder.smoking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 100)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_crab_meat_from_smoking");
+        save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
+                .unlockedBy(getHasName(raw), has(raw)), "cooked_crab_meat_from_campfire_cooking");
+        // Leuchtgelee im seltsamen Trank: Nachtsicht (für Trank, Wurftrank und Verweiltrank)
+        Item jelly = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLY.get();
+        for (Item container : java.util.List.of(Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION)) {
+            net.minecraft.data.recipes.BrewingRecipeBuilder.brewingMix(container, net.minecraft.world.item.alchemy.Potions.AWKWARD, jelly,
+                            net.minecraft.world.item.alchemy.Potions.NIGHT_VISION)
+                    .save(output, key("night_vision_from_glow_jelly_" + net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(container).getPath()));
+        }
     }
 
     /** Werkzeug und Schwert: Kopf bzw. Klinge aus dem Stoff am beschlagenen Griff (unten ein einfacher Stock). */

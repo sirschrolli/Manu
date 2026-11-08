@@ -360,6 +360,12 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Plays the narrated intro the first time you enter a world. You can watch it again at any time with /kaw intro.",
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
         text("kingdomsatwar.configuration.spiderLook", "Spider look (arachnophobia mode)", "Aussehen der Spinnen (Arachnophobie-Modus)");
+        text("kingdomsatwar.configuration.biomeAmbience", "Biome sounds", "Biom-Klänge");
+        text("kingdomsatwar.configuration.biomeAmbience.tooltip", "Wind, rustling leaves, birds, surf … – now and then, never permanently.",
+                "Wind, raschelndes Laub, Vögel, Brandung … – ab und zu, nie dauerhaft.");
+        text("kingdomsatwar.configuration.biomeAmbienceVolume", "Biome sound volume (%)", "Lautstärke der Biom-Klänge (%)");
+        text("kingdomsatwar.configuration.biomeAmbienceVolume.tooltip", "0 = silent. Minecraft's \"Ambient/Environment\" slider also applies.",
+                "0 = stumm. Zusätzlich gilt der Minecraft-Regler „Umgebung“.");
         text("kingdomsatwar.configuration.spiderLook.tooltip",
                 "Detailed: the mod's lifelike spiders. Classic: Minecraft's plain spiders. Mooslings: arachnophobia mode – round, friendly moss balls without legs instead of spiders.",
                 "Detailliert: die lebensechten Spinnen der Mod. Klassisch: die schlichten Spinnen von Minecraft. Mooslinge: Arachnophobie-Modus – runde, freundliche Moosbälle ohne Beine statt Spinnen.");
@@ -478,6 +484,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "The Shattered King", "Der Zerbrochene König", "Zerbrochener-König");
         text("boss.kingdomsatwar.void", "The Shattered King", "Der Zerbrochene König");
         text("boss.kingdomsatwar.void.title", "Last King of the Ancients", "Der letzte König der Alten");
+        text("message.kingdomsatwar.shattered_king.wrath", "The Shattered King rages!", "Der Zerbrochene König zürnt!");
         text("throne.kingdomsatwar.warning", "A throne of starlight hovers ahead – something old is watching.",
                 "Vor dir schwebt ein Thron aus Sternenlicht – etwas Altes wacht dort.");
         block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, "Throne Seal", "Thronsiegel");
@@ -520,6 +527,47 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STAR_VINES_PLANT, "Star Vines", "Sternenranke");
         block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT, "Void Rift", "Leerenriss");
         item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD, "Void Shard", "Leerensplitter");
+
+        // Das Meer
+        text("itemGroup.kingdomsatwar.the_sea", "Kingdoms at War: The Sea", "Kingdoms at War: Das Meer");
+        creature(ModEntities.MANTA_RAY, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.MANTA_RAY_SPAWN_EGG, "Manta Ray", "Mantarochen", "Mantarochen");
+        creature(ModEntities.GLOW_JELLYFISH, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLYFISH_SPAWN_EGG, "Glow Jellyfish", "Leuchtqualle", "Leuchtquallen");
+        creature(ModEntities.SHARK, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SHARK_SPAWN_EGG, "Shark", "Hai", "Hai");
+        creature(ModEntities.ANGLERFISH, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ANGLERFISH_SPAWN_EGG, "Anglerfish", "Anglerfisch", "Anglerfisch");
+        creature(ModEntities.GIANT_CRAB, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_CRAB_SPAWN_EGG, "Giant Crab", "Riesenkrabbe", "Riesenkrabben");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN, "Deep Sea Lantern", "Tiefseelaterne");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLY, "Glow Jelly", "Leuchtgelee");
+        lore("glow_jelly", "Brew into an Awkward Potion for Night Vision", "In einen seltsamen Trank gebraut: Nachtsicht");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ANGLER_LURE, "Angler Lure", "Leuchtköder");
+        lore("angler_lure", "Still glowing – the heart of a Deep Sea Lantern", "Leuchtet noch immer – das Herz einer Tiefseelaterne");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SHARK_TOOTH, "Shark Tooth", "Haizahn");
+        lore("shark_tooth", "With a stick and a feather: six arrows", "Mit Stock und Feder: sechs Pfeile");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW, "Crab Claw", "Krabbenschere");
+        lore("crab_claw", "In the off hand you reach further", "In der Zweithand greifst du weiter");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT, "Raw Crab Meat", "Rohes Krabbenfleisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.COOKED_CRAB_MEAT, "Cooked Crab Meat", "Gegartes Krabbenfleisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLYFISH_BUCKET, "Bucket of Glow Jellyfish", "Eimer mit Leuchtqualle");
+        subtitle("entity.manta_ray.hurt", "Manta Ray hurts", "Mantarochen nimmt Schaden");
+        subtitle("entity.manta_ray.death", "Manta Ray dies", "Mantarochen stirbt");
+        subtitle("entity.manta_ray.leap", "Manta Ray leaps", "Mantarochen springt");
+        subtitle("entity.manta_ray.splash", "Manta Ray splashes down", "Mantarochen klatscht ins Wasser");
+        subtitle("entity.glow_jellyfish.ambient", "Glow Jellyfish shimmers", "Leuchtqualle schimmert");
+        subtitle("entity.glow_jellyfish.hurt", "Glow Jellyfish hurts", "Leuchtqualle nimmt Schaden");
+        subtitle("entity.glow_jellyfish.death", "Glow Jellyfish dies", "Leuchtqualle stirbt");
+        subtitle("entity.glow_jellyfish.sting", "Glow Jellyfish stings", "Leuchtqualle nesselt");
+        subtitle("entity.shark.hurt", "Shark hurts", "Hai nimmt Schaden");
+        subtitle("entity.shark.death", "Shark dies", "Hai stirbt");
+        subtitle("entity.shark.bite", "Shark bites", "Hai beißt zu");
+        subtitle("entity.anglerfish.ambient", "Anglerfish hums", "Anglerfisch summt");
+        subtitle("entity.anglerfish.hurt", "Anglerfish hurts", "Anglerfisch nimmt Schaden");
+        subtitle("entity.anglerfish.death", "Anglerfish dies", "Anglerfisch stirbt");
+        subtitle("entity.anglerfish.snap", "Anglerfish snaps", "Anglerfisch schnappt zu");
+        subtitle("entity.anglerfish.bite", "Anglerfish bites", "Anglerfisch beißt");
+        subtitle("entity.giant_crab.clack", "Giant Crab clacks", "Riesenkrabbe klappert");
+        subtitle("entity.giant_crab.pinch", "Giant Crab pinches", "Riesenkrabbe kneift");
+        subtitle("entity.giant_crab.hurt", "Giant Crab hurts", "Riesenkrabbe nimmt Schaden");
+        subtitle("entity.giant_crab.death", "Giant Crab dies", "Riesenkrabbe stirbt");
+        subtitle("entity.giant_crab.step", "Giant Crab scuttles", "Riesenkrabbe trippelt");
 
         text(ModItems.loreKey("shadow_heart", 3), "Use on the ground to tear open a rift into the Void",
                 "Auf den Boden gerichtet reißt es einen Riss in die Leere auf");
