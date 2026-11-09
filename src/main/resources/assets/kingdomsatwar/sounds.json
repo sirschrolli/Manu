@@ -2339,6 +2339,201 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.anglerfish.snap"
   },
+  "entity.asteria.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_ambient1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_ambient2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_ambient3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.ambient"
+  },
+  "entity.asteria.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_charge1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_charge2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.charge"
+  },
+  "entity.asteria.comet_impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_comet_impact1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_comet_impact2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.comet_impact"
+  },
+  "entity.asteria.comet_throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_comet_throw1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_comet_throw2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.comet_throw"
+  },
+  "entity.asteria.constellation": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_constellation1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_constellation2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.constellation"
+  },
+  "entity.asteria.cry": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_cry1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_cry2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.cry"
+  },
+  "entity.asteria.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_death1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.death"
+  },
+  "entity.asteria.descent": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_descent1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.descent"
+  },
+  "entity.asteria.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.hurt"
+  },
+  "entity.asteria.impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_impact1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_impact2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_impact3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.impact"
+  },
+  "entity.asteria.star_impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_star_impact1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_star_impact2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_star_impact3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.star_impact"
+  },
+  "entity.asteria.starfall": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_starfall1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_starfall2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.starfall"
+  },
+  "entity.asteria.supernova": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_supernova1",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.supernova"
+  },
+  "entity.asteria.supernova_charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_supernova_charge1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.supernova_charge"
+  },
+  "entity.asteria.wingbeat": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_wingbeat1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_wingbeat2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.wingbeat"
+  },
   "entity.bandit.ambient": {
     "sounds": [
       {
@@ -5461,6 +5656,19 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.fae_elytra.flap"
+  },
+  "item.star_wings.boost": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/star_wings_boost1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:star/star_wings_boost2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.star_wings.boost"
   },
   "story.all_fallen.de": {
     "sounds": [

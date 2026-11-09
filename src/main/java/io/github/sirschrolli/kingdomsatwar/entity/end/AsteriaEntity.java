@@ -495,15 +495,15 @@ public class AsteriaEntity extends Monster {
         if (v.length() > max) {
             v = v.normalize().scale(max);
         }
-        this.setDeltaMovement(this.keepAboveGround(v));
+        this.setDeltaMovement(this.keepAboveGround(v, 1.4));
     }
 
-    /** Nie in den Boden: liegt ihr nächster Schritt keine anderthalb Blöcke über dem Grund, steigt sie. */
-    private Vec3 keepAboveGround(Vec3 v) {
+    /** Nie in den Boden: liegt ihr nächster Schritt nicht {@code clearance} Blöcke über dem Grund, steigt sie. */
+    private Vec3 keepAboveGround(Vec3 v, double clearance) {
         Vec3 next = this.position().add(v);
         int ground = this.level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(next.x), Mth.floor(next.z));
-        if (ground > this.level().getMinY() && next.y < ground + 1.4) {
-            return new Vec3(v.x, Math.max(v.y, ground + 1.4 - this.getY()) * 0.5 + 0.05, v.z);
+        if (ground > this.level().getMinY() && next.y < ground + clearance && next.y > ground - 8.0) {
+            return new Vec3(v.x, Math.max(v.y, ground + clearance - this.getY()) * 0.5 + 0.05, v.z);
         }
         return v;
     }
@@ -570,10 +570,10 @@ public class AsteriaEntity extends Monster {
         entity.needsSync = true;
     }
 
-    /** Der Boden unter einer Stelle (oder die Stelle selbst, wenn darunter nur Leere ist). */
+    /** Der Boden unter einer Stelle (oder die Stelle selbst, wenn darunter Leere ist oder der Boden weit entfernt liegt). */
     private Vec3 ground(Vec3 at) {
         int y = this.level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(at.x), Mth.floor(at.z));
-        if (y <= this.level().getMinY() || y > at.y + 6.0) {
+        if (y <= this.level().getMinY() || y > at.y + 6.0 || y < at.y - 12.0) {
             return at;
         }
         return new Vec3(at.x, y, at.z);
@@ -669,8 +669,10 @@ public class AsteriaEntity extends Monster {
             Vec3 aim = target.position().add(0.0, 1.0, 0.0);
             Vec3 flat = new Vec3(aim.x - this.getX(), 0.0, aim.z - this.getZ());
             this.lineDir = flat.lengthSqr() < 1.0 ? this.forward() : flat.normalize();
-            this.lineStart = aim.subtract(this.lineDir.scale(16.0));
-            this.lineStart = new Vec3(this.lineStart.x, Math.max(this.ground(this.lineStart).y + 1.4, aim.y), this.lineStart.z);
+            // die Bahn verläuft dicht über dem Boden, auf dem ihr Ziel steht: der Rochen streift fast den Grund, die Lanze
+            // trifft in Kopfhöhe
+            Vec3 start = aim.subtract(this.lineDir.scale(16.0));
+            this.lineStart = new Vec3(start.x, target.getY() + 0.5, start.z);
         }
         Vec3 end = this.lineStart.add(this.lineDir.scale(34.0));
         if (t < TJOST_CHARGE) {
@@ -697,11 +699,11 @@ public class AsteriaEntity extends Monster {
             double speed = this.isRadiant() ? 1.45 : 1.25;
             Vec3 along = this.lineDir.scale(speed);
             double dy = Mth.clamp(this.lineStart.y - this.getY(), -0.4, 0.4);
-            this.setDeltaMovement(this.keepAboveGround(new Vec3(along.x, dy, along.z)));
-            Vec3 tip = this.position().add(this.lineDir.scale(2.4)).add(0.0, 1.2, 0.0);
+            this.setDeltaMovement(this.keepAboveGround(new Vec3(along.x, dy, along.z), 0.4));
+            Vec3 tip = this.position().add(this.lineDir.scale(2.6)).add(0.0, 1.6, 0.0);
             level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY(0.5), this.getZ(), 4, 1.2, 0.5, 1.2, 0.02);
             level.sendParticles(STAR_DUST_BRIGHT, tip.x, tip.y, tip.z, 3, 0.2, 0.2, 0.2, 0.0);
-            AABB hit = this.getBoundingBox().inflate(0.6, 0.4, 0.6).minmax(new AABB(tip, tip).inflate(1.6));
+            AABB hit = this.getBoundingBox().inflate(0.8, 0.6, 0.8).minmax(new AABB(tip, tip).inflate(1.6));
             for (LivingEntity victim : this.victims(level, hit)) {
                 if (!this.struck.add(victim.getUUID())) {
                     continue;
