@@ -215,7 +215,8 @@ final class OverworldGameTests {
 
     /**
      * Jedes eigene Feature, wie es aus den Daten geladen wurde, entsteht auf passendem Boden: Bäume, Felsen, Nadeln,
-     * Risse, Riffe, Tümpel, Schilf, Eiszapfen und Pflanzen. Jedes bekommt ein eigenes Stück Land weit draußen.
+     * Risse, Riffe, Tümpel, Schilf, Eiszapfen und Pflanzen. Jedes bekommt ein eigenes Stück Land weit draußen – die
+     * Landschaften des Meeresgrunds ein Stück Meer, so tief, wie sie es brauchen.
      */
     private static void features(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -231,10 +232,24 @@ final class OverworldGameTests {
             BlockPos origin = new BlockPos(60_000 + index * 80, y0, 60_000);
             index++;
             Feature feature = features.getOrThrow(entry.featureKey()).value();
+            boolean sea = entry.name().startsWith("standard/ocean/");
+            int seaLevel = y0 + seaDepth(entry.name());
+            if (sea) {
+                // ein Stück Meer, so tief, wie die Landschaft es braucht (die flache Testwelt hat ihren Meeresspiegel tief unten)
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaLevel.override(seaLevel);
+            }
             boolean placed = false;
-            for (int attempt = 0; attempt < 6 && !placed; attempt++) {
-                prepare(level, origin, entry.name());
-                placed = feature.place(level, generator, RandomSource.create(7_000L + attempt * 131L + index), origin);
+            try {
+                for (int attempt = 0; attempt < 6 && !placed; attempt++) {
+                    if (sea) {
+                        prepareSea(level, origin, seaLevel);
+                    } else {
+                        prepare(level, origin, entry.name());
+                    }
+                    placed = feature.place(level, generator, RandomSource.create(7_000L + attempt * 131L + index), origin);
+                }
+            } finally {
+                io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaLevel.override(null);
             }
             if (!placed) {
                 failed.add(entry.name());
@@ -242,6 +257,33 @@ final class OverworldGameTests {
         }
         helper.assertTrue(failed.isEmpty(), "Diese Features entstanden nicht: " + failed);
         helper.succeed();
+    }
+
+    /** Wie tief das Wasser für eine Landschaft des Meeresgrunds sein muss (heiße Quellen und Leuchtfelder nur in der Tiefe). */
+    private static int seaDepth(String name) {
+        if (name.endsWith("vent_fields") || name.endsWith("glow_fields")) {
+            return 20;
+        }
+        if (name.endsWith("shell_beds")) {
+            return 4;
+        }
+        return 10;
+    }
+
+    /** Ein Stück Meer: Stein, darüber Sand bis unter {@code origin}, Wasser bis unter den Meeresspiegel, darüber Luft. */
+    private static void prepareSea(ServerLevel level, BlockPos origin, int sea) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int dx = -15; dx <= 15; dx++) {
+            for (int dz = -15; dz <= 15; dz++) {
+                for (int y = origin.getY() - 6; y <= sea + 30; y++) {
+                    pos.set(origin.getX() + dx, y, origin.getZ() + dz);
+                    BlockState state = y == origin.getY() - 6 ? Blocks.STONE.defaultBlockState()
+                            : y < origin.getY() ? Blocks.SAND.defaultBlockState()
+                            : y < sea ? Blocks.WATER.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                    level.setBlock(pos, state, 2);
+                }
+            }
+        }
     }
 
     /** Ein Stück Land für ein Feature: Boden je nach Biom, darüber Luft; für manche ein Teich, ein Becken oder ein Felsdach. */

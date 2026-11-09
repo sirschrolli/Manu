@@ -193,6 +193,7 @@ final class AtollShowcase {
         // Blick von vorn (er erwacht mit dem Gesicht nach Norden), ohne Säule davor (der Hügel ist jetzt fort)
         steps.add(pickView(c, near, 14.0, 4.8, 2.4, -70));
         steps.add(pickView(c, wide, 21.0, 7.0, 2.8, -75));
+        steps.add(Step.until(() -> near[1] != 0.0 && wide[1] != 0.0, 40));
         steps.add(lookFromCam(c, near, 2.0));
         steps.add(Step.waitTicks(22));
         steps.add(Step.screenshot("reef_awaken_1"));
@@ -325,7 +326,7 @@ final class AtollShowcase {
     private static final Scene[] SCENES = {
             new Scene("seafloor_kelp", 10, 22, 13.0, 4.0, false, false),
             new Scene("seafloor_anemones", 4, 12, 7.0, 2.6, false, false),
-            new Scene("seafloor_shells", 2, 7, 6.0, 2.4, false, false),
+            new Scene("seafloor_shells", 2, 4, 4.5, 1.7, false, false),
             new Scene("seafloor_vents", 15, 32, 11.0, 4.0, false, false),
             new Scene("seafloor_glow", 13, 32, 11.0, 4.5, false, true),
             new Scene("seafloor_stacks", 6, 16, 26.0, 7.0, true, false),
@@ -337,6 +338,7 @@ final class AtollShowcase {
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(10)));
         double[][] spots = new double[SCENES.length][4];   // x, z, Grund, gefunden
+        boolean[] ready = new boolean[1];
         steps.add(Step.server(level -> {
             var generator = level.getChunkSource().getGenerator();
             var random = level.getChunkSource().randomState();
@@ -344,11 +346,13 @@ final class AtollShowcase {
             for (int i = 0; i < SCENES.length; i++) {
                 Scene scene = SCENES[i];
                 BlockPos found = null;
+                // jede Landschaft in ihrer eigenen Richtung (erst ein Sechstel des Kreises, dann überall)
                 search:
+                for (int pass = 0; pass < 2 && found == null; pass++) {
                 for (int r = 70; r <= 420 && found == null; r += 9) {
                     int n = Math.max(16, (int) (2 * Math.PI * r / 12));
                     for (int k = 0; k < n; k++) {
-                        double a = i * 1.05 + 2 * Math.PI * k / n;
+                        double a = i * Math.PI / 3.0 + (pass == 0 ? (k / (double) n - 0.5) * Math.PI / 3.0 : 2 * Math.PI * k / n);
                         int x = (int) Math.round(c[0] + Math.cos(a) * r);
                         int z = (int) Math.round(c[1] + Math.sin(a) * r);
                         int floor = generator.getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, level, random);
@@ -371,6 +375,7 @@ final class AtollShowcase {
                         }
                     }
                 }
+                }
                 if (found == null) {
                     KingdomsAtWar.LOGGER.info("[Showcase] Keine Stelle für {}", scene.name());
                     continue;
@@ -382,6 +387,11 @@ final class AtollShowcase {
                 }
                 int floor = level.getHeight(Heightmap.Types.OCEAN_FLOOR, found.getX(), found.getZ());
                 BlockPos at = new BlockPos(found.getX(), floor, found.getZ());
+                if (!"seafloor_kelp".equals(scene.name()) && !scene.above()) {
+                    // freie Sicht: Tang und Seegras zwischen Kamera und Landschaft weg (nur für das Bild)
+                    Vec3 eye = new Vec3(at.getX() + 0.5 + scene.distance() * 0.35, floor + scene.eye(), at.getZ() + 0.5 + scene.distance());
+                    clearView(level, eye, Vec3.atBottomCenterOf(at), 3.0, "seafloor_shells".equals(scene.name()) ? 7.0 : 4.0);
+                }
                 boolean placed = place(level, scene.name(), at);
                 spots[i][0] = at.getX() + 0.5;
                 spots[i][1] = at.getZ() + 0.5;
@@ -389,7 +399,9 @@ final class AtollShowcase {
                 spots[i][3] = 1;
                 KingdomsAtWar.LOGGER.info("[Showcase] {} bei {} (Tiefe {}, gesetzt {})", scene.name(), at, sea - floor, placed);
             }
+            ready[0] = true;
         }));
+        steps.add(Step.until(() -> ready[0], 6000));
         for (int i = 0; i < SCENES.length; i++) {
             Scene scene = SCENES[i];
             double[] s = spots[i];
@@ -436,6 +448,40 @@ final class AtollShowcase {
         steps.add(Step.hud(true));
     }
 
+    /** Ersetzt Tang, Riesentang und Seegras entlang der Sichtlinie (und rund um das Ziel) durch Wasser. */
+    private static void clearView(ServerLevel level, Vec3 eye, Vec3 target, double radius, double around) {
+        int x0 = (int) Math.floor(Math.min(eye.x, target.x) - around);
+        int x1 = (int) Math.ceil(Math.max(eye.x, target.x) + around);
+        int z0 = (int) Math.floor(Math.min(eye.z, target.z) - around);
+        int z1 = (int) Math.ceil(Math.max(eye.z, target.z) + around);
+        int y0 = (int) Math.floor(Math.min(eye.y, target.y)) - 1;
+        int y1 = level.getSeaLevel();
+        Vec3 d = eye.subtract(target);
+        double len2 = d.lengthSqr();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = x0; x <= x1; x++) {
+            for (int z = z0; z <= z1; z++) {
+                Vec3 p = new Vec3(x + 0.5, target.y, z + 0.5);
+                double t = len2 < 1.0e-6 ? 0.0 : Math.max(0.0, Math.min(1.0, p.subtract(target).dot(d) / len2));
+                Vec3 closest = target.add(d.scale(t));
+                double dist = Math.hypot(p.x - closest.x, p.z - closest.z);
+                double near = Math.hypot(p.x - target.x, p.z - target.z);
+                if (dist > radius && near > around) {
+                    continue;
+                }
+                for (int y = y0; y <= y1; y++) {
+                    pos.set(x, y, z);
+                    var state = level.getBlockState(pos);
+                    if (state.is(Blocks.KELP) || state.is(Blocks.KELP_PLANT) || state.is(Blocks.SEAGRASS) || state.is(Blocks.TALL_SEAGRASS)
+                            || state.is(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP.get())
+                            || state.is(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP_PLANT.get())) {
+                        level.setBlock(pos, Blocks.WATER.defaultBlockState(), 2);
+                    }
+                }
+            }
+        }
+    }
+
     private static boolean place(ServerLevel level, String name, BlockPos at) {
         var generator = level.getChunkSource().getGenerator();
         RandomSource random = RandomSource.create(name.hashCode());
@@ -448,7 +494,8 @@ final class AtollShowcase {
             case "seafloor_anemones" -> new AnemoneGardenFeature().place(level, generator, random, at);
             case "seafloor_shells" -> {
                 boolean a = new ShellBedFeature().place(level, generator, random, at);
-                new ShellBedFeature().place(level, generator, random, at.offset(4, 0, -3));
+                new ShellBedFeature().place(level, generator, random, at.offset(3, 0, -2));
+                new ShellBedFeature().place(level, generator, random, at.offset(-2, 0, 2));
                 yield a;
             }
             case "seafloor_vents" -> new VentFieldFeature().place(level, generator, random, at);

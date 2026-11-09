@@ -182,33 +182,32 @@ final class ReefGameTests {
     }
 
     /**
-     * Die Landschaften des Meeresgrunds: ein Tangwald setzt Tang (auch Riesentang), ein Anemonengarten Anemonen; eine
-     * Muschelbank liegt am Strand und im seichten Wasser, nicht in der Tiefe (die Testwelt liegt tief unter dem
-     * Meeresspiegel); in den Meeren der Oberwelt kommt jede Landschaft vor.
+     * Die Landschaften des Meeresgrunds: eine Muschelbank liegt im seichten Wasser, nicht in der Tiefe; ein Tangwald setzt
+     * Tang (auch Riesentang), ein Anemonengarten Anemonen; in den Meeren der Oberwelt kommt jede Landschaft vor.
      */
     private static void seaFloorFeatures(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         pool(helper, Blocks.SAND);
         var generator = level.getChunkSource().getGenerator();
         BlockPos center = helper.absolutePos(new BlockPos(4, 1, 4));
+        int surface = helper.absolutePos(new BlockPos(0, 5, 0)).getY();
+        try {
+            // tief unter dem Meeresspiegel keine Muscheln, im Seichten schon
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaLevel.override(surface + 16);
+            new ShellBedFeature().place(level, generator, RandomSource.create(13), center);
+            helper.assertTrue(count(helper, s -> SeaBlocks.shells().stream().anyMatch(b -> s.is(b.get()))) == 0, "Muschelbänke in der Tiefe");
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaLevel.override(surface);
+            new ShellBedFeature().place(level, generator, RandomSource.create(13), center);
+            helper.assertTrue(count(helper, s -> SeaBlocks.shells().stream().anyMatch(b -> s.is(b.get()))) > 0, "Im Seichten liegen keine Muscheln");
+        } finally {
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaLevel.override(null);
+        }
         helper.assertTrue(new KelpForestFeature(1.0f).place(level, generator, RandomSource.create(11), center), "Kein Tangwald");
         int kelp = count(helper, s -> s.is(SeaBlocks.GIANT_KELP.get()) || s.is(SeaBlocks.GIANT_KELP_PLANT.get()));
         helper.assertTrue(kelp > 0, "Der Tangwald hat keinen Riesentang");
         new AnemoneGardenFeature().place(level, generator, RandomSource.create(12), center);
         int anemones = count(helper, s -> SeaBlocks.anemones().stream().anyMatch(b -> s.is(b.get())));
         helper.assertTrue(anemones > 0, "Der Anemonengarten hat keine Anemonen");
-        new ShellBedFeature().place(level, generator, RandomSource.create(13), center);
-        helper.assertTrue(count(helper, s -> SeaBlocks.shells().stream().anyMatch(b -> s.is(b.get()))) == 0, "Muschelbänke in der Tiefe");
-        // trockengelegt: ein Strand
-        for (int x = 1; x < 8; x++) {
-            for (int z = 1; z < 8; z++) {
-                for (int y = 4; y >= 1; y--) {
-                    helper.setBlock(x, y, z, Blocks.AIR);
-                }
-            }
-        }
-        new ShellBedFeature().place(level, generator, RandomSource.create(13), center);
-        helper.assertTrue(count(helper, s -> SeaBlocks.shells().stream().anyMatch(b -> s.is(b.get()))) > 0, "Am Strand liegen keine Muscheln");
         // jede Landschaft hat ihr Meer
         var registries = level.getServer().registryAccess();
         var placed = registries.lookupOrThrow(Registries.PLACED_FEATURE);

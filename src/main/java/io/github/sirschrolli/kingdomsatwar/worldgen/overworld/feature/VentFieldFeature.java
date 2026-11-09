@@ -28,7 +28,7 @@ public record VentFieldFeature() implements Feature {
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         int floor0 = level.getHeight(Heightmap.Types.OCEAN_FLOOR, origin.getX(), origin.getZ());
-        if (generator.getSeaLevel() - floor0 < 14) {
+        if (SeaLevel.of(generator) - floor0 < 14) {
             return false;   // nur in der Tiefe
         }
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -47,6 +47,8 @@ public record VentFieldFeature() implements Feature {
                 if (Kit.ground(level.getBlockState(pos))) {
                     level.setBlock(pos, random.nextFloat() < 0.8f ? SeaBlocks.VENT_ROCK.get().defaultBlockState()
                             : SeaBlocks.SULFUR_CRUST.get().defaultBlockState(), 2);
+                    // im heißen Wasser wächst kein Tang und kein Seegras
+                    clearPlants(level, pos.above());
                 }
             }
         }
@@ -73,6 +75,21 @@ public record VentFieldFeature() implements Feature {
             }
         }
         return placed > 0;
+    }
+
+    /** Entfernt Tang, Riesentang und Seegras über dieser Stelle (sie werden zu Wasser). */
+    static void clearPlants(WorldGenLevel level, BlockPos from) {
+        BlockPos.MutableBlockPos p = from.mutable();
+        for (int i = 0; i < 48; i++) {
+            BlockState state = level.getBlockState(p);
+            if (state.is(Blocks.KELP) || state.is(Blocks.KELP_PLANT) || state.is(Blocks.SEAGRASS) || state.is(Blocks.TALL_SEAGRASS)
+                    || state.is(SeaBlocks.GIANT_KELP.get()) || state.is(SeaBlocks.GIANT_KELP_PLANT.get())) {
+                level.setBlock(p, Blocks.WATER.defaultBlockState(), 2);
+                p.move(Direction.UP);
+            } else {
+                break;
+            }
+        }
     }
 
     /** Ein Schlot: unten zwei mal zwei Blöcke, dann einer, oben die glühende Öffnung; hier und da Kruste. */

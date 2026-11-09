@@ -33,7 +33,7 @@ public record SeaStackFeature(BlockState body, BlockState band, BlockState weath
 
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
-        int sea = generator.getSeaLevel();
+        int sea = SeaLevel.of(generator);
         int count = 1 + (random.nextFloat() < 0.55f ? 1 : 0) + (random.nextFloat() < 0.3f ? 1 : 0);
         BlockPos first = null;
         int placed = 0;

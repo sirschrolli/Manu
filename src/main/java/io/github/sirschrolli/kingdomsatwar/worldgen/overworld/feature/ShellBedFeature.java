@@ -52,7 +52,7 @@ public record ShellBedFeature() implements Feature {
                 continue;
             }
             // tief im Meer liegen keine Muschelbänke mehr
-            if (water && generator.getSeaLevel() - floor > 12) {
+            if (water && SeaLevel.of(generator) - floor > 12) {
                 continue;
             }
             SeashellBlock kind = kinds.get(random.nextInt(kinds.size())).get();

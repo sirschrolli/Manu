@@ -32,7 +32,7 @@ public record GlowFieldFeature() implements Feature {
     @Override
     public boolean place(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos origin) {
         int floor0 = level.getHeight(Heightmap.Types.OCEAN_FLOOR, origin.getX(), origin.getZ());
-        if (generator.getSeaLevel() - floor0 < 12) {
+        if (SeaLevel.of(generator) - floor0 < 12) {
             return false;
         }
         SimplexNoise noise = new SimplexNoise(new WorldgenRandom(new LegacyRandomSource(random.nextLong())));
