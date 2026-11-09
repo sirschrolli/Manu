@@ -81,6 +81,11 @@ public final class ModGameEvents {
                         .executes(context -> throne(context.getSource().getPlayerOrException(), ""))
                         .then(Commands.literal("tp").executes(context -> throne(context.getSource().getPlayerOrException(), "tp")))
                         .then(Commands.literal("reset").executes(context -> throne(context.getSource().getPlayerOrException(), "reset"))))
+                .then(Commands.literal("atoll").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> atoll(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> atoll(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> atoll(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> atoll(context.getSource(), "reset"))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
@@ -309,6 +314,50 @@ public final class ModGameEvents {
                 player.sendSystemMessage(Component.translatable("command.kingdomsatwar.throne.no_seal").withStyle(net.minecraft.ChatFormatting.RED));
                 return 0;
             }
+        }
+        return 1;
+    }
+
+    /**
+     * {@code /kaw atoll}: wo das Versunkene Atoll liegt ({@code /locate} findet es nicht, seine Lage ergibt sich aus dem
+     * Startwert); {@code tp} bringt dich an den Rand der Lagune, {@code awaken} weckt Karkinos, {@code reset} schüttet den
+     * Hügel wieder auf und lässt einen wachen Koloss verschwinden.
+     */
+    private static int atoll(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel overworld = source.getServer().overworld();
+        BlockPos center = io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollLocator.center(overworld);
+        if (center == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.atoll.none"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.atoll.at", center.getX(), center.getY(), center.getZ()), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            overworld.getChunk(center.getX() >> 4, (center.getZ() + 16) >> 4);
+            player.teleportTo(overworld, center.getX() + 0.5, center.getY() + 2, center.getZ() + 16.5, java.util.Set.of(), 180.0f, 10.0f, true);
+            return 1;
+        }
+        BlockPos corePos = io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollLocator.core(center);
+        overworld.getChunk(corePos.getX() >> 4, corePos.getZ() >> 4);
+        if (!(overworld.getBlockEntity(corePos) instanceof io.github.sirschrolli.kingdomsatwar.block.sea.AtollCoreBlockEntity core)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.atoll.no_core"));
+            return 0;
+        }
+        if (mode.equals("awaken")) {
+            if (core.phase() == io.github.sirschrolli.kingdomsatwar.block.sea.AtollCoreBlockEntity.Phase.AWAKE) {
+                source.sendFailure(Component.translatable("command.kingdomsatwar.atoll.awake"));
+                return 0;
+            }
+            core.reset(overworld);
+            core.awaken(overworld);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.atoll.awakened"), true);
+        } else {
+            core.reset(overworld);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.atoll.reset"), true);
         }
         return 1;
     }

@@ -1646,7 +1646,8 @@ lebenden Korallen. Durch drei Durchlässe strömt das Meer in die türkise Lagun
 Anemonen. In ihrer Mitte liegt der Tempelplatz des Meeresvolks aus Prismarin – sechs Säulen, manche zerbrochen,
 Seelaternen und eine Truhe. Auf dem Platz ein **Sandhügel, aus dem der leuchtende Gezeiten-Speer ragt**. Wer ihm zu nahe
 kommt, weckt, was darunter schläft. Das **Gezeitenhorn** (zwei Wellhornschnecken, ein Goldbarren und ein
-Prismarinkristall) verrät, aus welcher Richtung und wie weit entfernt das Meer antwortet.
+Prismarinkristall) verrät, aus welcher Richtung und wie weit entfernt das Meer antwortet (Operatoren finden es mit
+`/kaw atoll`).
 
 **Karkinos, der Riffkoloss** – eine Krabbe, groß wie ein Haus, auf deren Rücken ein ganzes Riff wächst, mit leuchtenden
 Stielaugen, einer Brecherschere und einer Greifschere. In seiner Kuppel steckt der Speer des letzten Gezeitenkönigs. Er ist
@@ -2209,6 +2210,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
 | `/kaw lair` · `/kaw lair awaken` · `/kaw lair reset` | (nur Operatoren) Lage aller Nester anzeigen, den Drachen im Nest wecken, ein Nest zurücksetzen |
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
+| `/kaw atoll` · `/kaw atoll tp` · `/kaw atoll awaken` · `/kaw atoll reset` | (nur Operatoren) Lage des Versunkenen Atolls anzeigen (`/locate` findet es nicht), an den Rand der Lagune reisen, Karkinos wecken, den Hügel wieder aufschütten |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |

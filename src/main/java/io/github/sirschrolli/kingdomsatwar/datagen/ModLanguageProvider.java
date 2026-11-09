@@ -868,6 +868,13 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.dim.name.leere", "in the Void", "in der Leere");
         text("command.kingdomsatwar.dim.name.sphaere", "in the Arcane Sphere", "in der Arkanen Sphäre");
         text("command.kingdomsatwar.dim.name.other", "in %s", "in %s");
+        text("command.kingdomsatwar.atoll.none", "There is no Sunken Atoll in this world.", "In dieser Welt gibt es kein Versunkenes Atoll.");
+        text("command.kingdomsatwar.atoll.at", "The Sunken Atoll lies at x %s, y %s, z %s.", "Das Versunkene Atoll liegt bei x %s, y %s, z %s.");
+        text("command.kingdomsatwar.atoll.no_core", "The heart of the atoll has not been generated yet – travel there first.",
+                "Das Herz des Atolls ist noch nicht entstanden – reise erst einmal hin.");
+        text("command.kingdomsatwar.atoll.awake", "Karkinos is already awake.", "Karkinos ist schon wach.");
+        text("command.kingdomsatwar.atoll.awakened", "Karkinos awakens!", "Karkinos erwacht!");
+        text("command.kingdomsatwar.atoll.reset", "The mound is heaped up again – Karkinos sleeps.", "Der Hügel ist wieder aufgeschüttet – Karkinos schläft.");
         text("command.kingdomsatwar.throne.none", "There is no Throne of the Ancients in this world.",
                 "In dieser Welt gibt es keinen Thron der Alten.");
         text("command.kingdomsatwar.throne.at", "The Throne of the Ancients hovers at x %s, y %s, z %s (the Void).",
