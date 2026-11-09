@@ -372,7 +372,7 @@ final class VoidGameTests {
         soldier.setHealth(soldier.getMaxHealth());
         king.forceAttack(level, "rift", soldier, true);
         helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 2, () -> {
-            helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30), e -> e.kind() == SpellFxEntity.Kind.ARC)
+            helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30), e -> e.kind() == SpellFxEntity.Kind.FISSURE)
                     .isEmpty(), "Der Boden reißt nicht auf");
             float before = soldier.getHealth();
             helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_ERUPT

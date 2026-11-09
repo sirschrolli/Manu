@@ -11,6 +11,7 @@ Texturen der Zauberwirkungen (textures/entity/spell/): weiße Vorlagen, die das 
   disk.png     Wirbelscheibe eines Schwarzen Lochs: Spiralarme, heißer Innenrand, Loch in der Mitte (additiv)
   core.png     Kern eines Schwarzen Lochs: volle Scheibe mit weichem Rand (wird schwarz gefärbt)
   lens.png     Lichtring um den Kern (gebeugtes Licht): schmaler, heller Ring mit Schein (additiv)
+  glow.png     weicher, runder Schein (additiv)
 
 Aufruf (aus dem Projektordner):  python3 tools/spell_fx_textures.py [--preview datei.png]
 """
@@ -278,12 +279,29 @@ def lens() -> Image.Image:
     return Image.fromarray(img, "RGBA")
 
 
-BLUR = {"fill", "beam", "pillar", "bubble", "disk", "core", "lens"}
+def glow() -> Image.Image:
+    size = 64
+
+    def fn(u, v):
+        r = np.sqrt(u * u + v * v)
+        return np.exp(-(r / 0.42) ** 2) * np.clip((1.0 - r) / 0.25, 0, 1)
+
+    val = _supersample(fn, size)
+    img = np.zeros((size, size, 4), dtype=np.uint8)
+    rgb = np.clip(val * 255, 0, 255).astype(np.uint8)
+    img[..., 0] = rgb
+    img[..., 1] = rgb
+    img[..., 2] = rgb
+    img[..., 3] = 255
+    return Image.fromarray(img, "RGBA")
+
+
+BLUR = {"fill", "beam", "pillar", "bubble", "disk", "core", "lens", "glow"}
 
 
 def build() -> dict[str, Image.Image]:
     return {"ring": ring(), "fill": fill(), "beam": beam(), "pillar": pillar(), "wave": wave(), "bubble": bubble(), "disk": disk(),
-            "core": core(), "lens": lens()}
+            "core": core(), "lens": lens(), "glow": glow()}
 
 
 def main() -> None:

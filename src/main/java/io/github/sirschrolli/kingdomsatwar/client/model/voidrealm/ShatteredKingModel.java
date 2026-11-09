@@ -465,7 +465,7 @@ public class ShatteredKingModel extends EntityModel<ShatteredKingRenderState> {
             float shiver = reach * (1.0f - dig);
             h.x += Mth.sin(t * 2.4f + h.side) * 0.3f * shiver;
             // … fahren vor ihm in den Boden …
-            h.to(dig, lx + 6.0f * h.side, ly - 2.6f, lz + 2.5f, toward, 0.7f, 0.0f);
+            h.to(dig, lx + 7.0f * h.side, ly - 3.3f, lz + 3.0f, toward, 0.42f, 0.0f);
             // … ziehen ihn auseinander (sie zittern vor Anstrengung) …
             float hold = dig * (1.0f - rip);
             h.x += 4.5f * h.side * drag * (1.0f - rip) + Mth.sin(t * 2.9f + h.side) * 0.35f * hold;

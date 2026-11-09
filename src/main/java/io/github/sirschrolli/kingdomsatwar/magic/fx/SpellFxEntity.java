@@ -33,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Sichtbare Zauberwirkungen der Erzmagier, des Aetherit-Stabs und einiger Bosse: Runenkreise am Boden, Strahlen und
  * Blitzbögen, Säulen aus Feuer und Wasser, Felsspitzen, Steinfäuste, Dornenranken, Giftblüten, Eiskerker, Wasserblasen,
- * Flutwellen, Mondsicheln, Schwarze Löcher und Bebenringe. Gezeichnet wird sie von {@code SpellFxRenderer}; den Schaden richtet aus, wer den Zauber wirkt – über
+ * Flutwellen, Mondsicheln, Schwarze Löcher, Bebenringe und Risse im Boden. Gezeichnet wird sie von {@code SpellFxRenderer}; den Schaden richtet aus, wer den Zauber wirkt – über
  * {@link #onTick} und {@link #onExpire} genau dann, wenn die Wirkung zu sehen ist (auch wenn der Zaubernde längst etwas
  * anderes tut). Wird nicht gespeichert.
  */
@@ -72,7 +72,12 @@ public class SpellFxEntity extends Entity {
         /** Schwarzes Loch: dunkler Kern, gleißender Lichtring, wirbelnde Scheibe; saugt Teilchen an. Größe = Halbmesser der Scheibe. */
         VORTEX,
         /** Ring aus Energie, der sich am Boden ausbreitet (wer nicht darüber springt, wird getroffen). Größe = Anfangshalbmesser, Zusatz = Zuwachs je Tick. */
-        SHOCKWAVE;
+        SHOCKWAVE,
+        /**
+         * Riss im Boden: ein gezackter, dunkler Spalt vom Ursprung zum Endpunkt, in dem Licht glüht; er reißt vom Ursprung her
+         * auf. Größe = Breite, Zusatz = Ticks, bevor er aufreißt.
+         */
+        FISSURE;
 
         public static Kind of(int index) {
             return values()[Mth.clamp(index, 0, values().length - 1)];
@@ -434,6 +439,14 @@ public class SpellFxEntity extends Entity {
                             this.getZ() + Math.sin(a) * r, vx, 0.0, vz);
                 }
             }
+            case FISSURE -> {
+                // aus dem offenen Spalt steigen violette Funken
+                if (t > this.param() + 3 && this.random.nextInt(2) == 0) {
+                    Vec3 at = this.position().add(this.endOffset().scale(this.random.nextDouble()));
+                    level.addParticle(ParticleTypes.REVERSE_PORTAL, at.x + (this.random.nextDouble() - 0.5) * 0.3, at.y + 0.1,
+                            at.z + (this.random.nextDouble() - 0.5) * 0.3, 0.0, 0.03, 0.0);
+                }
+            }
             case SHOCKWAVE -> {
                 double r = this.ringRadius(0.0f);
                 int count = 2 + (int) (r * 0.5);
@@ -501,7 +514,7 @@ public class SpellFxEntity extends Entity {
         AABB box = this.getBoundingBox();
         float size = this.size();
         return switch (this.kind()) {
-            case BEAM, ARC -> box.expandTowards(this.endOffset()).inflate(size + 1.0);
+            case BEAM, ARC, FISSURE -> box.expandTowards(this.endOffset()).inflate(size + 1.0);
             case PILLAR -> box.inflate(size + 0.5).expandTowards(0.0, this.param(), 0.0);
             case WAVE -> box.inflate(size * 0.6 + 1.0, 3.0, size * 0.6 + 1.0);
             case CRESCENT -> box.inflate(size * 0.6 + 1.5, 2.5, size * 0.6 + 1.5);

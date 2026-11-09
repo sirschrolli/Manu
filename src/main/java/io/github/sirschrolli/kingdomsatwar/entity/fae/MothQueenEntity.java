@@ -766,7 +766,7 @@ public class MothQueenEntity extends Monster {
         }
         float damage = this.isEnraged() ? 3.0f : 2.0f;
         SpellFxEntity.create(level, SpellFxEntity.Kind.BUBBLE, victim.position(), null, 0xEFE6D2, COCOON_LIFE,
-                Math.max(2.0f, victim.getBbHeight() * 1.2f)).anchor(victim).onTick(fx -> {
+                Math.max(2.4f, victim.getBbHeight() * 1.45f)).anchor(victim).onTick(fx -> {
                     if (!victim.isAlive()) {
                         fx.discard();
                         return;
@@ -777,8 +777,9 @@ public class MothQueenEntity extends Monster {
                     if (fx.tickCount % 20 == 10) {
                         victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
                     }
-                    if (fx.tickCount % 4 == 0) {
-                        level.sendParticles(ParticleTypes.WHITE_ASH, victim.getX(), victim.getY(0.5), victim.getZ(), 4, 0.5, 0.7, 0.5, 0.0);
+                    if (fx.tickCount % 3 == 0) {
+                        level.sendParticles(ParticleTypes.WHITE_ASH, victim.getX(), victim.getY(0.5), victim.getZ(), 6, 0.55, 0.75, 0.55, 0.0);
+                        level.sendParticles(ParticleTypes.END_ROD, victim.getX(), victim.getY(0.5), victim.getZ(), 1, 0.6, 0.8, 0.6, 0.0);
                     }
                 }).onExpire(fx -> {
                     level.playSound(null, victim.getX(), victim.getY(), victim.getZ(), ModSounds.MOTH_QUEEN_GUST.get(), SoundSource.HOSTILE, 1.0f, 1.8f);

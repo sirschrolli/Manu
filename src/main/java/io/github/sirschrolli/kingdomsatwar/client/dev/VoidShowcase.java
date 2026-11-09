@@ -381,6 +381,8 @@ final class VoidShowcase {
                 continue;
             }
             if (!attack[0].isEmpty()) {
+                // die Risse von der Seite (sie laufen auf den Ritter zu und an ihm vorbei), sonst hinter dem Ritter
+                steps.add(attack[0].equals("rift") ? at(c, cam, 14, 5.0, 14, 0, 1.5, 7) : at(c, cam, 4, 2.2, 12, -0.5, 5.2, -0.5));
                 steps.add(Step.server(overworld -> {
                     if (king[0] != null && dummy[0] != null) {
                         king[0].forceAttack(overworld.getServer().getLevel(VoidGate.THE_VOID), attack[0], dummy[0], true);

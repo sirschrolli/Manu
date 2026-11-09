@@ -130,8 +130,8 @@ final class ForgeShowcase {
         // {Angriff, Ticks bis zum Bild, Name, Blickwinkel zur Linie Schmied–Ritter (Grad), Abstand, Höhe}
         for (String[] shot : new String[][] {{"THRUST", "9", "forge_thrust", "-82", "5.6", "0.5"}, {"SLAM", "20", "forge_slam", "-62", "7.6", "3.6"},
                 {"SPARKS", "24", "forge_sparks", "-72", "5.6", "0.7"}, {"GLOBS", "18", "forge_globs", "-105", "8.0", "1.4"},
-                {"CALL", "18", "forge_call", "-62", "6.4", "1.0"}, {"CHAIN", "20", "forge_chain", "-80", "7.0", "1.2"},
-                {"MOLTEN", "27", "forge_molten", "-62", "8.0", "3.0"}, {"STOKE", "22", "forge_stoke", "-62", "6.8", "2.2"}}) {
+                {"CALL", "18", "forge_call", "-62", "6.4", "1.0"}, {"CHAIN", "19", "forge_chain", "-75", "6.5", "1.6"},
+                {"MOLTEN", "27", "forge_molten", "-128", "10.0", "5.5"}, {"STOKE", "22", "forge_stoke", "-62", "6.8", "2.2"}}) {
             if (!Step.wanted(shot[2])) {
                 continue;
             }

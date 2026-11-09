@@ -43,6 +43,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private static final Identifier DISK = KingdomsAtWar.id("textures/entity/spell/disk.png");
     private static final Identifier CORE = KingdomsAtWar.id("textures/entity/spell/core.png");
     private static final Identifier LENS = KingdomsAtWar.id("textures/entity/spell/lens.png");
+    private static final Identifier GLOW = KingdomsAtWar.id("textures/entity/spell/glow.png");
     private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
     private static final Identifier SIGIL = KingdomsAtWar.id("textures/entity/mage/sigil.png");
     private static final Identifier GLYPHS = KingdomsAtWar.id("textures/block/magic_table_glyphs.png");
@@ -130,6 +131,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             case CRESCENT -> this.crescent(state, poseStack, collector);
             case VORTEX -> this.vortex(state, poseStack, collector, camera);
             case SHOCKWAVE -> this.shockwave(state, poseStack, collector);
+            case FISSURE -> this.fissure(state, poseStack, collector);
             case BUBBLE -> this.bubble(state, poseStack, collector, camera);
             case SPIKE -> this.model(this.spike, "stone_spike", false, state, poseStack, collector, 1.0f);
             case FIST -> this.model(this.fist, "stone_fist", false, state, poseStack, collector, 1.0f);
@@ -462,8 +464,9 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     }
 
     /**
-     * Schwarzes Loch: eine wirbelnde Scheibe aus Sternenstaub (außen langsam, innen schnell, leicht gekippt), ein Schein
-     * ringsum, darin der schwarze Kern mit seinem gleißenden Lichtring. Zum Schluss stürzt alles in sich zusammen.
+     * Schwarzes Loch: ein weicher Schein, ein Wirbel aus Sternenstaub, der sich zum Betrachter dreht, dazu die gekippte
+     * Scheibe (außen langsam, innen schnell), darin der schwarze Kern mit seinem gleißenden Lichtring. Zum Schluss stürzt
+     * alles in sich zusammen.
      */
     private void vortex(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         float grow = ease(s.age / 10.0f);
@@ -474,20 +477,29 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         }
         float radius = s.size * k;
         float pulse = 1.0f + 0.05f * Mth.sin(s.age * 0.7f);
-        float coreSize = s.size * 0.24f * grow * (0.35f + 0.65f * collapse) * pulse;
-        float tilt = 14.0f + 6.0f * Mth.sin(s.seed * 0.7f);
-        // weiter Schein
-        RenderType halo = RenderTypes.energySwirl(HALO, 0.0f, 0.0f);
-        int haloColor = scale(s.color, 0.32f * k);
+        float coreSize = s.size * 0.28f * grow * (0.35f + 0.65f * collapse) * pulse;
+        float tilt = 24.0f + 6.0f * Mth.sin(s.seed * 0.7f);
+        // weicher Schein
+        RenderType halo = RenderTypes.energySwirl(GLOW, 0.0f, 0.0f);
+        int haloColor = scale(s.color, 0.22f * k);
         poseStack.pushPose();
         poseStack.rotate(camera.orientation);
-        poseStack.scale(radius * 2.6f, radius * 2.6f, radius * 2.6f);
+        poseStack.scale(radius * 2.4f, radius * 2.4f, radius * 2.4f);
         collector.submitCustomGeometry(poseStack, halo, (pose, buffer) -> billboard(pose, buffer, haloColor));
         poseStack.popPose();
-        // die Wirbelscheibe: zwei Lagen, die innere schneller und heller
+        // der Wirbel, zum Betrachter gedreht
         RenderType disk = RenderTypes.energySwirl(DISK, 0.0f, 0.0f);
-        int outer = scale(s.color, 0.85f * k);
-        int inner = scale(ARGB.srgbLerp(0.45f, s.color, 0xFFFFFF), 0.9f * k);
+        int swirl = scale(ARGB.srgbLerp(0.12f, s.color, 0xFFFFFF), k);
+        float swirlSize = radius * 1.5f;
+        poseStack.pushPose();
+        poseStack.rotate(camera.orientation);
+        poseStack.rotate(Axis.ZP.rotationDegrees(s.age * 9.0f + s.seed * 31.0f));
+        poseStack.scale(swirlSize, swirlSize, swirlSize);
+        collector.submitCustomGeometry(poseStack, disk, (pose, buffer) -> billboard(pose, buffer, swirl));
+        poseStack.popPose();
+        // die gekippte Scheibe: zwei Lagen, die innere schneller und heller
+        int outer = scale(s.color, 0.75f * k);
+        int inner = scale(ARGB.srgbLerp(0.45f, s.color, 0xFFFFFF), 0.85f * k);
         for (int layer = 0; layer < 2; layer++) {
             float r = layer == 0 ? radius : radius * 0.62f;
             float spin = s.age * (layer == 0 ? 5.0f : 11.0f) + s.seed * 23.0f;
@@ -533,6 +545,67 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             ringWall(pose, buffer, radius, h * 0.15f, h * 0.85f, core);
             ringFloor(pose, buffer, radius - 0.9f, radius + 0.35f, 0.04f, glow);
         });
+    }
+
+    /**
+     * Riss im Boden: ein dunkler, gezackter Spalt (an den Enden spitz), darin ein glühender Kern, der pulsiert. Er reißt nach
+     * {@code param} Ticks vom Ursprung her auf und schließt sich am Ende wieder.
+     */
+    private void fissure(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector) {
+        double length = Math.sqrt(s.end.x * s.end.x + s.end.z * s.end.z);
+        float open = ease((s.age - s.param) / 5.0f);
+        float fade = Mth.clamp((s.life - s.age) / 5.0f, 0.0f, 1.0f);
+        if (length < 0.05 || open <= 0.01f || fade <= 0.01f) {
+            return;
+        }
+        RandomSource random = RandomSource.create(s.seed * 7919L);
+        int segments = Math.max(3, (int) (length / 0.45));
+        Vec3 dir = new Vec3(s.end.x, 0.0, s.end.z).scale(1.0 / length);
+        Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+        // nur so weit, wie er schon aufgerissen ist
+        int shown = Math.max(1, Math.round(segments * open));
+        Vec3[] points = new Vec3[shown + 1];
+        for (int i = 0; i <= shown; i++) {
+            double t = i / (double) segments;
+            double jag = i == 0 || i == segments ? 0.0 : (random.nextDouble() - 0.5) * 0.55;
+            points[i] = s.end.scale(t).add(side.scale(jag)).add(0.0, 0.035, 0.0);
+        }
+        float width = s.size * (0.6f + 0.4f * open);
+        int dark = ARGB.color(Math.round(225 * fade), 0x14061F);
+        float pulse = 0.8f + 0.2f * Mth.sin(s.age * 0.9f + s.seed);
+        int glow = scale(s.color, 0.8f * pulse * fade);
+        int core = scale(ARGB.srgbLerp(0.65f, s.color, 0xFFFFFF), pulse * fade);
+        collector.submitCustomGeometry(poseStack, CORE_TYPE, (pose, buffer) -> flatStrip(pose, buffer, points, segments, width, 0.0f, dark, true));
+        RenderType type = RenderTypes.energySwirl(BEAM, 0.0f, -s.age * 0.1f);
+        collector.submitCustomGeometry(poseStack, type, (pose, buffer) -> {
+            flatStrip(pose, buffer, points, segments, width * 0.95f, 0.004f, glow, false);
+            flatStrip(pose, buffer, points, segments, width * 0.35f, 0.008f, core, false);
+        });
+    }
+
+    /** Flaches Band entlang {@code points} (an beiden Enden spitz); {@code solid}: einfarbig (Mitte der Kerntextur). */
+    private static void flatStrip(PoseStack.Pose pose, VertexConsumer buffer, Vec3[] points, int segments, float width, float lift, int color,
+            boolean solid) {
+        for (int i = 0; i + 1 < points.length; i++) {
+            Vec3 p = points[i].add(0.0, lift, 0.0);
+            Vec3 q = points[i + 1].add(0.0, lift, 0.0);
+            Vec3 d = q.subtract(p);
+            if (d.horizontalDistanceSqr() < 1.0e-6) {
+                continue;
+            }
+            Vec3 n = new Vec3(-d.z, 0.0, d.x).normalize();
+            float w0 = width * 0.5f * taper(i / (float) segments);
+            float w1 = width * 0.5f * taper((i + 1) / (float) segments);
+            float v0 = solid ? 0.5f : i * 0.25f;
+            float v1 = solid ? 0.5f : (i + 1) * 0.25f;
+            quadTwoSided(pose, buffer, p.subtract(n.scale(w0)), p.add(n.scale(w0)), q.add(n.scale(w1)), q.subtract(n.scale(w1)),
+                    solid ? 0.5f : 0.0f, solid ? 0.5f : 1.0f, v0, v1, color, FULL_BRIGHT);
+        }
+    }
+
+    /** Breite eines Risses entlang seiner Länge (0–1): an den Enden spitz, in der Mitte voll. */
+    private static float taper(float t) {
+        return 0.12f + 0.88f * (float) Math.pow(Mth.sin(Mth.clamp(t, 0.0f, 1.0f) * Mth.PI), 0.6);
     }
 
     /** Senkrechter Ring (Halbmesser {@code radius}) von {@code y0} bis {@code y1}; die Textur liegt quer (heller Kern in der Mitte). */

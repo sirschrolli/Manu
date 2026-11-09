@@ -130,6 +130,8 @@ public class ShatteredKingEntity extends Monster {
     public final AnimationState riftAnimation = new AnimationState();
     public final AnimationState quakeAnimation = new AnimationState();
     private static final int RIFT_COLOR = 0xA070FF;
+    /** Die Säulen aus Leere sind tiefer gefärbt (dicht an dicht überstrahlen sie sonst zu Weiß). */
+    private static final int RIFT_PILLAR_COLOR = 0x6A2CE0;
     private static final int QUAKE_COLOR = 0xB98CFF;
     private static final DustParticleOptions RIFT_DUST = new DustParticleOptions(0xB98CFF, 1.3f);
 
@@ -921,22 +923,29 @@ public class ShatteredKingEntity extends Monster {
             }
             Vec3[] line = points.toArray(new Vec3[0]);
             this.rifts.add(line);
-            // knisternde Blitze am Boden entlang, bis die Leere hervorbricht
-            Vec3 from = origin.add(0.0, 0.12, 0.0);
+            // der Boden reißt auf: Stück um Stück, von ihm fort – bis die Leere aus dem Spalt hervorbricht
+            Vec3 from = origin;
+            int piece = 0;
             for (int j = 2; j < line.length + 2; j += 3) {
-                Vec3 to = line[Math.min(j, line.length - 1)].add(0.0, 0.12, 0.0);
-                SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, from, null, RIFT_COLOR, RIFT_ERUPT - RIFT_TEAR + j + 2, 0.2f).end(to).spawn();
+                int end = Math.min(j, line.length - 1);
+                Vec3 to = line[end];
+                SpellFxEntity.create(level, SpellFxEntity.Kind.FISSURE, from, null, RIFT_COLOR, RIFT_ERUPT - RIFT_TEAR + end + 5, 0.85f)
+                        .end(to).param(piece * 2.0f).spawn();
                 from = to;
+                piece++;
                 if (j >= line.length - 1) {
                     break;
                 }
             }
+            // ein knisternder Blitz läuft den Riss entlang
+            SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, origin.add(0.0, 0.25, 0.0), null, RIFT_COLOR, 8, 0.18f)
+                    .end(line[line.length - 1].add(0.0, 0.25, 0.0)).spawn();
         }
     }
 
     /** Die Leere bricht aus einem Riss hervor: eine Säule aus violettem Licht; wer darauf steht, fliegt empor. */
     private void erupt(ServerLevel level, Vec3 p, List<LivingEntity> near, boolean first) {
-        SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, p, null, RIFT_COLOR, 14, 0.85f).param(4.5f).spawn();
+        SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, p, null, RIFT_PILLAR_COLOR, 14, 0.8f).param(4.5f).spawn();
         BlockState floor = level.getBlockState(BlockPos.containing(p).below());
         if (!floor.isAir()) {
             level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, floor), p.x, p.y + 0.2, p.z, 10, 0.4, 0.1, 0.4, 0.15);

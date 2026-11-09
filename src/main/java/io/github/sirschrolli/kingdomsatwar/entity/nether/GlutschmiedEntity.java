@@ -722,6 +722,17 @@ public class GlutschmiedEntity extends Monster {
                 this.chained = target.getUUID();
                 level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.CHAIN_HIT, SoundSource.HOSTILE, 2.0f, 0.7f);
                 target.igniteForSeconds(2.0f);
+                // die glühende Kette: von seiner Hand bis zu seinem Opfer gespannt, bis er zuschlägt
+                LivingEntity victim = target;
+                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, hand, DragonType.FIRE, 0xFF7A20, CHAIN_TICKS, 0.3f)
+                        .end(victim.position().add(0.0, victim.getBbHeight() * 0.6, 0.0)).onTick(fx -> {
+                            if (this.attack != Attack.CHAIN || this.attackTick >= CHAIN_SMASH || !victim.isAlive() || this.isRemoved()) {
+                                fx.discard();
+                                return;
+                            }
+                            fx.setPos(this.chainHand());
+                            fx.moveEnd(victim.position().add(0.0, victim.getBbHeight() * 0.6, 0.0));
+                        }).spawn();
             } else {
                 Vec3 miss = hand.add(target.position().add(0.0, 1.0, 0.0).subtract(hand).normalize().scale(CHAIN_RANGE * 0.6));
                 SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, hand, DragonType.FIRE, 0xFF7A20, 6, 0.22f).end(miss).spawn();
@@ -730,10 +741,12 @@ public class GlutschmiedEntity extends Monster {
         }
         LivingEntity caught = this.chained != null && level.getEntity(this.chained) instanceof LivingEntity e && e.isAlive() ? e : null;
         if (caught != null && t > CHAIN_THROW && t < CHAIN_SMASH) {
-            // die Kette spannt sich, er reißt sein Opfer heran
-            if ((t - CHAIN_THROW) % 2 == 1) {
-                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, hand, DragonType.FIRE, 0xFF7A20, 3, 0.22f)
-                        .end(caught.position().add(0.0, caught.getBbHeight() * 0.6, 0.0)).spawn();
+            // die Kette spannt sich, er reißt sein Opfer heran; Funken sprühen an ihr entlang
+            if (t % 2 == 0) {
+                Vec3 chest = caught.position().add(0.0, caught.getBbHeight() * 0.6, 0.0);
+                Vec3 along = hand.add(chest.subtract(hand).scale(this.random.nextDouble()));
+                level.sendParticles(ParticleTypes.LAVA, along.x, along.y, along.z, 1, 0.05, 0.05, 0.05, 0.0);
+                level.sendParticles(ParticleTypes.FLAME, along.x, along.y, along.z, 2, 0.1, 0.1, 0.1, 0.01);
             }
             Vec3 to = this.position().subtract(caught.position());
             double d = to.multiply(1.0, 0.0, 1.0).length();
