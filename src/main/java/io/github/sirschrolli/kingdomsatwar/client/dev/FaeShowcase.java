@@ -516,7 +516,9 @@ final class FaeShowcase {
             } else {
                 steps.add(Step.waitTicks(Integer.parseInt(shot[1])));
             }
-            steps.add(shot[0].equals("BEAM") ? at(c, cam, 5.0, 5.0, -1.5, 0.0, 0.8, -9.5) : follow(ids, 6.5));
+            // Mondstrahl, Mondfinsternis und Seidenkokon spielen sich beim Ritter ab
+            boolean atKnight = shot[0].equals("BEAM") || shot[0].equals("ECLIPSE") || shot[0].equals("COCOON");
+            steps.add(atKnight ? at(c, cam, 5.0, 5.0, -1.5, 0.0, 0.8, -9.5) : follow(ids, 6.5));
             steps.add(Step.waitTicks(3));
             steps.add(Step.screenshot(shot[2]));
             steps.add(Step.waitTicks(shot[0].equals("DIVE") ? 14 : 50));
