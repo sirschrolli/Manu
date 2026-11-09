@@ -217,6 +217,8 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_STAR_LANCE = mod("repairs_star_lance");
         /** Repariert die Sternenschwingen (Phantomhaut, Sternsplitter). */
         public static final TagKey<Item> REPAIRS_STAR_WINGS = mod("repairs_star_wings");
+        /** Repariert Kartendeck und Zylinder der Mystik (Feenstaub). */
+        public static final TagKey<Item> REPAIRS_MYSTIC_GEAR = mod("repairs_mystic_gear");
         public static final TagKey<Item> REPAIRS_DRACONIUM = mod("repairs_draconium");
         /** Alle Rüstungsteile aus Drachenschuppen. */
         public static final TagKey<Item> DRAGON_SCALE_ARMOR = mod("dragon_scale_armor");

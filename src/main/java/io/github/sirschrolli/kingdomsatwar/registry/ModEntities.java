@@ -449,6 +449,32 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.CometLanceEntity>> COMET_LANCE =
             ENTITIES.registerEntityType("comet_lance", io.github.sirschrolli.kingdomsatwar.entity.end.CometLanceEntity::new,
                     MobCategory.MISC, builder -> builder.sized(0.6f, 0.6f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
+    /** MissMystik, die Feen-Zauberkünstlerin: springt aus dem großen Zylinder der Zauberbühne im Feenreich. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity>> MISS_MYSTIK =
+            ENTITIES.registerEntityType("miss_mystik", io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(0.9f, 2.8f).eyeHeight(2.3f).notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein Spiegelbild MissMystiks (Spiegelkabinett). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity>> MYSTIK_IMAGE =
+            ENTITIES.registerEntityType("mystik_image", io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.9f, 2.8f).eyeHeight(2.3f).noLootTable().noSave().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Eine Zauberkarte (MissMystiks Kartenfächer, das Kartendeck der Mystik) – oder die riesige Karte von „Zieh eine Karte!“. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MagicCardEntity>> MAGIC_CARD =
+            ENTITIES.registerEntityType("magic_card", io.github.sirschrolli.kingdomsatwar.entity.fae.MagicCardEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.4f, 0.25f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** Eine Lichttaube (MissMystik). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.LightDoveEntity>> LIGHT_DOVE =
+            ENTITIES.registerEntityType("light_dove", io.github.sirschrolli.kingdomsatwar.entity.fae.LightDoveEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.4f, 0.35f).noLootTable().clientTrackingRange(8).updateInterval(1));
+    /** MissMystiks Zylinder beim Hut-Trick. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MagicHatEntity>> MAGIC_HAT =
+            ENTITIES.registerEntityType("magic_hat", io.github.sirschrolli.kingdomsatwar.entity.fae.MagicHatEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.7f, 0.6f).noLootTable().noSave().clientTrackingRange(10).updateInterval(1));
+    /** Ein Schwert der Schwerterkiste (MissMystik). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MagicSwordEntity>> MAGIC_SWORD =
+            ENTITIES.registerEntityType("magic_sword", io.github.sirschrolli.kingdomsatwar.entity.fae.MagicSwordEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.3f, 0.3f).noLootTable().noSave().clientTrackingRange(10).updateInterval(2));
     /** Mondfalter: die kleinen Diener der Mottenkönigin (verglimmen nach einer halben Minute). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity>> MOON_MOTH =
             ENTITIES.registerEntityType("moon_moth", io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity::new, MobCategory.MONSTER,
@@ -802,6 +828,8 @@ public final class ModEntities {
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
+        event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
+        event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());

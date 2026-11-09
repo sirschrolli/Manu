@@ -197,6 +197,29 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_HURT = register("entity.asteria.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_DEATH = register("entity.asteria.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WINGS_BOOST = register("item.star_wings.boost");
+    // MissMystik, die Feen-Zauberkünstlerin (0.66)
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_AMBIENT = register("entity.miss_mystik.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_LAUGH = register("entity.miss_mystik.laugh");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_HURT = register("entity.miss_mystik.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_DEATH = register("entity.miss_mystik.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_DRUMROLL = register("entity.miss_mystik.drumroll");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_TADA = register("entity.miss_mystik.tada");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_APPLAUSE = register("entity.miss_mystik.applause");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_CARD_THROW = register("entity.miss_mystik.card_throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_CARD_HIT = register("entity.miss_mystik.card_hit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_DOVES = register("entity.miss_mystik.doves");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_VANISH = register("entity.miss_mystik.vanish");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_REAPPEAR = register("entity.miss_mystik.reappear");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_MIRRORS = register("entity.miss_mystik.mirrors");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_HAT_THROW = register("entity.miss_mystik.hat_throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_VORTEX = register("entity.miss_mystik.vortex");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_SWORDS = register("entity.miss_mystik.swords");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_STAB = register("entity.miss_mystik.stab");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_SPOTLIGHT = register("entity.miss_mystik.spotlight");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_CARD_TRICK = register("entity.miss_mystik.card_trick");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_FIREWORK = register("entity.miss_mystik.firework");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIC_DECK_THROW = register("item.mystic_deck.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIC_HAT_VANISH = register("item.mystic_top_hat.vanish");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

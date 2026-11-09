@@ -27,6 +27,8 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_GLOW = simple("sea_glow");
     /** Feenfunkeln: winzige, goldrosa glitzernde Sterne, die langsam aufsteigen und verlöschen (Feenreich, Feenstaub). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FAE_SPARK = simple("fae_spark");
+    /** Konfetti: bunte Schnipsel, Sterne und Kreise, die taumelnd zu Boden schweben (MissMystiks Auftritte und Tricks). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CONFETTI = simple("confetti");
 
     private ModParticles() {}
 
