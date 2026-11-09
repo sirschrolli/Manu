@@ -76,6 +76,8 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.MothQueenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLUTSCHMIED,
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.GlutschmiedGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ASTERIA,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.AsteriaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
@@ -177,6 +179,12 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.nether.GlutschmiedRenderer::new);
         event.registerEntityRenderer(ModEntities.GLUTKLUMPEN.get(),
                 context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 1.6f, true));
+        event.registerEntityRenderer(ModEntities.ASTERIA.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.end.AsteriaRenderer::new);
+        event.registerEntityRenderer(ModEntities.STARFALL.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.end.StarfallRenderer::new);
+        event.registerEntityRenderer(ModEntities.COMET_LANCE.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.end.CometLanceRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)

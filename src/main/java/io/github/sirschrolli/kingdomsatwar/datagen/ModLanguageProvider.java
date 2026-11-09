@@ -717,6 +717,57 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"death", "Ember Smith crumbles", "Glutschmied zerfällt"}, {"step", "Heavy footsteps", "Schwere Schritte"}}) {
             subtitle("entity.glutschmied." + e[0], e[1], e[2]);
         }
+        // Asteria, die Sternenreiterin (0.65)
+        creature(ModEntities.ASTERIA, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.ASTERIA_SPAWN_EGG,
+                "Asteria, the Star Rider", "Asteria, die Sternenreiterin", "Sternenreiterin");
+        add(ModEntities.STARFALL.get(), pick("Falling Star", "Fallender Stern"));
+        add(ModEntities.COMET_LANCE.get(), pick("Comet Lance", "Kometenlanze"));
+        text("boss.kingdomsatwar.star", "Asteria, the Star Rider", "Asteria, die Sternenreiterin");
+        text("boss.kingdomsatwar.star.title", "Last Rider of the Star Order", "Letzte Reiterin des Sternenordens");
+        text("entity.kingdomsatwar.asteria.supernova", "Asteria gathers the light of the stars – take cover!",
+                "Asteria sammelt das Licht der Sterne – geh in Deckung!");
+        block(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE, "Starstone", "Sternstein");
+        lore("starstone", "The star crystal of the Star Order, in the court of the Starwatch",
+                "Der Sternkristall des Sternenordens im Sternenhof der Sternwarte");
+        text(ModItems.loreKey("starstone", 2), "Dimmed: an End Crystal rekindles it – and calls her back",
+                "Erloschen: Ein Endkristall entzündet ihn neu – und ruft sie zurück");
+        text("block.kingdomsatwar.starstone.hint", "The crystal hums … whoever steps up to it calls the Star Rider down from the sky.",
+                "Der Kristall summt … wer an ihn herantritt, ruft die Sternenreiterin vom Himmel.");
+        text("block.kingdomsatwar.starstone.awake", "The Starstone blazes – the Star Rider is here.",
+                "Der Sternstein lodert – die Sternenreiterin ist da.");
+        text("block.kingdomsatwar.starstone.dim", "The Starstone has dimmed. An End Crystal might rekindle it.",
+                "Der Sternstein ist erloschen. Ein Endkristall könnte ihn neu entzünden.");
+        text("block.kingdomsatwar.starstone.warning", "Above the Starwatch, a star moves against the sky …",
+                "Über der Sternwarte zieht ein Stern gegen den Himmel …");
+        text("block.kingdomsatwar.starstone.peaceful", "The Starstone stays dark (the world is set to Peaceful).",
+                "Der Sternstein bleibt dunkel (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE, "Star Lance", "Sternenlanze");
+        lore("star_lance", "The lance of Asteria, the Star Rider", "Die Lanze Asterias, der Sternenreiterin");
+        text(ModItems.loreKey("star_lance", 2), "In the End or under the night sky: strikes harder; every third hit calls down a star",
+                "Im End oder unter dem Nachthimmel: trifft härter; jeder dritte Treffer ruft einen Stern herab");
+        text(ModItems.loreKey("star_lance", 3), "Targets glow; in hand you fall gently like a shooting star",
+                "Getroffene leuchten; in der Hand sinkst du sanft wie eine Sternschnuppe");
+        item(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS, "Star Wings", "Sternenschwingen");
+        lore("star_wings", "The wings of Asteria's armored star ray", "Die Schwingen von Asterias gepanzertem Sternenrochen");
+        text(ModItems.loreKey("star_wings", 2), "While gliding, jump: a star thrust like a rocket",
+                "Im Gleitflug springen: ein Sternenschub wie eine Rakete");
+        text(ModItems.loreKey("star_wings", 3), "Leave a trail of starlight", "Hinterlassen eine Spur aus Sternenlicht");
+        text(ModItems.loreKey("star_wings", 4), "Repair with Phantom Membrane or Star Shards", "Mit Phantomhaut oder Sternsplittern reparieren");
+        item(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD, "Star Shard", "Sternsplitter");
+        lore("star_shard", "A shard of fallen starlight – repairs the Star Lance and Star Wings",
+                "Ein Splitter gefallenen Sternenlichts – repariert Sternenlanze und Sternenschwingen");
+        for (String[] e : new String[][] {{"cry", "Star Rider calls out", "Sternenreiterin ruft"},
+                {"descent", "Starlight descends", "Sternenlicht stößt herab"}, {"charge", "Star Rider charges", "Sternenreiterin stürmt an"},
+                {"impact", "Lance strikes", "Lanze trifft"}, {"starfall", "Stars whistle down", "Sterne fallen pfeifend"},
+                {"star_impact", "Star shatters", "Stern zerspringt"}, {"constellation", "Constellation chimes", "Sternbild klingt"},
+                {"comet_throw", "Lance is hurled", "Lanze wird geschleudert"}, {"comet_impact", "Comet bursts", "Komet zerplatzt"},
+                {"wingbeat", "Star ray beats its wings", "Sternenrochen schlägt die Schwingen"},
+                {"supernova_charge", "Starlight gathers", "Sternenlicht sammelt sich"}, {"supernova", "Supernova", "Supernova"},
+                {"ambient", "Star ray hums", "Sternenrochen summt"}, {"hurt", "Star Rider hurts", "Sternenreiterin nimmt Schaden"},
+                {"death", "Star Rider fades into starlight", "Sternenreiterin vergeht in Sternenlicht"}}) {
+            subtitle("entity.asteria." + e[0], e[1], e[2]);
+        }
+        subtitle("item.star_wings.boost", "Star thrust", "Sternenschub");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

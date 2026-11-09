@@ -40,6 +40,7 @@ public final class ModEquipment {
     public static final ResourceKey<EquipmentAsset> GLIDER_ASSET = asset("wyvernit_glider");
     /** Feen-Elytren: die Flügel der Mottenkönigin. */
     public static final ResourceKey<EquipmentAsset> FAE_ELYTRA_ASSET = asset("fae_elytra");
+    public static final ResourceKey<EquipmentAsset> STAR_WINGS_ASSET = asset("star_wings");
     public static final ResourceKey<EquipmentAsset> STEEL_DRAGON_ARMOR_ASSET = asset("steel_dragon_armor");
     public static final ResourceKey<EquipmentAsset> DRACONIUM_DRAGON_ARMOR_ASSET = asset("draconium_dragon_armor");
     public static final Map<DragonType, ResourceKey<EquipmentAsset>> SCALE_ASSETS = new EnumMap<>(DragonType.class);

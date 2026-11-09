@@ -213,6 +213,10 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_FAE_ELYTRA = mod("repairs_fae_elytra");
         /** Womit sich der Glutspeer reparieren lässt (Netheritschrott). */
         public static final TagKey<Item> REPAIRS_GLUT_SPEAR = mod("repairs_glut_spear");
+        /** Repariert die Sternenlanze (Sternsplitter). */
+        public static final TagKey<Item> REPAIRS_STAR_LANCE = mod("repairs_star_lance");
+        /** Repariert die Sternenschwingen (Phantomhaut, Sternsplitter). */
+        public static final TagKey<Item> REPAIRS_STAR_WINGS = mod("repairs_star_wings");
         public static final TagKey<Item> REPAIRS_DRACONIUM = mod("repairs_draconium");
         /** Alle Rüstungsteile aus Drachenschuppen. */
         public static final TagKey<Item> DRAGON_SCALE_ARMOR = mod("dragon_scale_armor");

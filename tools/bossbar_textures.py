@@ -74,6 +74,12 @@ ELEMENTS = {
     "forge": dict(m0="#141012", m1="#4a4246", m2="#a89c98", acc="#ff7a1a", glow="#fff0c0", deep="#1c0804",
                   f0="#3e0a02", f1="#a8300a", f2="#ff8a24", f3="#fff2b8", gold="#e6ac48", gold_dark="#7a5218",
                   iron="#2e2c32", iron_light="#7c7880", ember="#ff9a30", ember_dark="#8a2406", wood="#4a2e1e"),
+    # Asteria, die Sternenreiterin: poliertes Silber mit Goldsaum, dahinter die Schwingen ihres Sternenrochens und die
+    # Sternenlanze; Füllung wie der Nachthimmel mit Nebelschleiern und funkelnden Sternen
+    "star": dict(m0="#121628", m1="#5a6488", m2="#dce4f6", acc="#9ad8ff", glow="#f2f8ff", deep="#060a22",
+                 f0="#0b1236", f1="#2a3d8a", f2="#7ab0ff", f3="#eef6ff", gold="#e8c25a", gold_dark="#8a6018",
+                 night="#141c48", night_dark="#070b22", nebula="#7a3ab4", nebula_light="#c08ae8", silver="#c8d0e4",
+                 silver_dark="#5a6488", crystal="#9ad0ff"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1009,7 +1015,111 @@ def deco_forge(img: Image.Image, pal: dict) -> None:
     _ = m1
 
 
-DECOS = {"forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_star(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon breitet der Sternenrochen seine Schwingen aus (Nachthimmel mit Sternen, violette Vorderkante,
+    nach außen spitz zulaufend); schräg dahinter die Sternenlanze mit leuchtender Kristallspitze. Oben auf dem Rahmen
+    funkeln kleine vierzackige Sterne, unter der Leiste fallen Sternschnuppen; als Spitze ein Sternkristall."""
+    px = img.load()
+    f2, f3 = c(pal, "f2"), c(pal, "f3")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    night, night_dark = c(pal, "night"), c(pal, "night_dark")
+    nebula, nebula_light = c(pal, "nebula"), c(pal, "nebula_light")
+    silver, silver_dark, crystal = c(pal, "silver"), c(pal, "silver_dark"), c(pal, "crystal")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def wing(cx: float, cy: float, length: float, lead: float, trail: float, ang: float):
+        """Ein Rochenflügel ab (cx, cy) nach rechts: vorn die Vorderkante (Neigung lead), hinten geschwungen zur Spitze."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - cx, y + 0.5 - cy
+                u = dx * ca + dy * sa
+                v = -dx * sa + dy * ca
+                if u < 0.0 or u > length:
+                    continue
+                k = u / length
+                v_lead = -lead * (1.0 - k)
+                v_trail = trail * (1.0 - k) ** 1.4 - 1.2 * math.sin(math.pi * k)
+                if v < v_lead or v > v_trail:
+                    continue
+                edge = v < v_lead + 1.0
+                rim = v > v_trail - 0.9 or u > length - 1.2
+                col = mix(night_dark, night, 0.4 + 0.6 * (1.0 - k))
+                if hash01(x, y, 131) > 0.93:
+                    col = f3 if hash01(x, y, 137) > 0.5 else crystal
+                if edge:
+                    col = nebula_light if v < v_lead + 0.5 else nebula
+                elif rim:
+                    col = mix(nebula, OUTLINE, 0.35)
+                put(px, img, x, y, col)
+
+    wing(EMB_X + 10, EMB_Y - 9, 34, 6.0, 9.0, math.radians(-24))
+    # die Lanze: von unten links nach oben rechts hinter dem Medaillon, die Kristallspitze leuchtet
+    x0, y0, x1, y1 = EMB_X - 17, EMB_Y + 20, EMB_X + 30, EMB_Y - 21
+    length = math.hypot(x1 - x0, y1 - y0)
+    ax, ay = (x1 - x0) / length, (y1 - y0) / length
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            dx, dy = x + 0.5 - x0, y + 0.5 - y0
+            t = (dx * ax + dy * ay) / length
+            off = -dx * ay + dy * ax
+            if not 0.0 <= t <= 1.0:
+                continue
+            if t < 0.8:
+                w = 1.1
+                if abs(off) > w:
+                    continue
+                col = OUTLINE if abs(off) > w - 0.55 else ((gold if off < 0 else gold_dark) if (t * 26) % 1.0 < 0.22 else
+                                                          (silver if off < 0 else silver_dark))
+            elif t < 0.84:
+                w = 2.7
+                if abs(off) > w:
+                    continue
+                col = OUTLINE if abs(off) > w - 0.6 else (gold if off < 0 else gold_dark)
+            else:
+                u = (t - 0.84) / 0.16
+                w = 2.4 * max(0.0, 1.0 - u) ** 0.8 + 0.3
+                if abs(off) > w:
+                    continue
+                col = mix(crystal, OUTLINE, 0.4) if abs(off) > w - 0.6 else (f3 if abs(off) < 0.7 else crystal)
+            put(px, img, x, y, col)
+
+    def star(sx: int, sy: int, r: int, col, core):
+        for k in range(-r, r + 1):
+            shade = col if abs(k) < r else mix(col, OUTLINE, 0.3)
+            put(px, img, sx + k, sy, shade)
+            put(px, img, sx, sy + k, shade)
+        put(px, img, sx, sy, core)
+
+    # kleine Sterne oben auf dem Rahmen
+    for x in range(BAR_X + 14, BAR_X + BAR_W - 6, 27):
+        big = hash01(x, 151) > 0.5
+        star(x, top - 4 - round(hash01(x, 157) * 2), 2 if big else 1, crystal, f3)
+    # Sternschnuppen unter der Leiste (schräg fallend, mit Schweif)
+    for x in range(BAR_X + 18, BAR_X + BAR_W - 6, 31):
+        length = 4 + round(hash01(x, 163) * 4)
+        for k in range(length):
+            t = k / max(1, length - 1)
+            put(px, img, x - k, bottom + 2 + k // 2, mix(f2, nebula, t * 0.6) if k else f3)
+        put(px, img, x + 1, bottom + 2, crystal)
+    # Spitze: ein Sternkristall nach rechts
+    ex, ey = BAR_X + BAR_W + 3, BAR_Y + BAR_H // 2
+    for k in range(11):
+        half = round(3.6 * (1 - k / 11) ** 0.75) if k > 1 else 2
+        for dy in range(-half, half + 1):
+            if abs(dy) == half:
+                col = OUTLINE if k > 1 else gold_dark
+            elif k <= 1:
+                col = gold
+            else:
+                col = f3 if dy == 0 else (crystal if dy < 0 else f2)
+            put(px, img, ex + k, ey + dy, col)
+    for dy in (-5, -4, 4, 5):
+        put(px, img, ex + 4, ey + dy, crystal if abs(dy) == 4 else OUTLINE)
+    put(px, img, ex + 11, ey, f2)
+
+
+DECOS = {"star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -1058,6 +1168,15 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x, y, 91) > 0.975:
             return 1.0
         return 0.92 if near < 0.14 else (0.66 if near < 0.3 else 0.36 + 0.1 * math.sin(tau * x / 64))
+    if element == "star":
+        # Nachthimmel: Nebelschleier, die langsam ziehen, darin funkelnde Sterne und ab und zu ein heller Stern
+        neb = 0.32 + 0.18 * math.sin(tau * x / 64 + 1.2 * math.sin(tau * y / 9)) + 0.1 * math.sin(tau * x / 32 + tau * y / 18)
+        h = hash01(x, y, 59)
+        if h > 0.97:
+            return 1.0
+        if h > 0.94:
+            return 0.8
+        return neb
     if element == "forge":
         # fließendes, glühendes Metall: langsame Wellen, darin helle Risse und einzelne Funken
         flow = 0.46 + 0.2 * math.sin(tau * x / 64 + 1.3 * math.sin(tau * y / 9 + tau * x / 128))
@@ -1173,13 +1292,13 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, glutschmied,
-                                  moth_queen, reef_colossus, shattered_king)
+    from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
+                                  glutschmied, moth_queen, reef_colossus, shattered_king)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
-           "forge": glutschmied}[element]
+           "forge": glutschmied, "star": asteria}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -1219,14 +1338,22 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_forge(child)
         strip_forge(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14}.get(element, -42)
-    pitch = {"reef": 8, "moth": 4, "forge": 4}.get(element, 6)
+    if element == "star":
+        # Asterias Helm mit Krone und Schweif, die Schultern (ohne Rochen, Lanze, Schild und Umhang)
+        def strip_star(bone):
+            if bone.name not in ("torso", "helm", "crown", "plume", "plume_mid", "plume_tip", "rider"):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_star(child)
+        strip_star(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24}.get(element, -42)
+    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
-                 focus=["body"] if element == "reef" else ["head"])
+                 focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

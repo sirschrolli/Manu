@@ -39,6 +39,11 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,
                         new EquipmentClientInfo.Layer(ModEquipment.FAE_ELYTRA_ASSET.identifier(), Optional.empty(), false))
                 .build());
+        // Sternenschwingen: die Schwingen von Asterias Sternenrochen (nicht vom Umhang des Spielers ersetzt)
+        output.accept(ModEquipment.STAR_WINGS_ASSET, EquipmentClientInfo.builder()
+                .addLayers(EquipmentClientInfo.LayerType.WINGS,
+                        new EquipmentClientInfo.Layer(ModEquipment.STAR_WINGS_ASSET.identifier(), Optional.empty(), false))
+                .build());
         // Gleiter: eigene Flügel-Textur (nicht vom Umhang des Spielers ersetzt)
         output.accept(ModEquipment.GLIDER_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,

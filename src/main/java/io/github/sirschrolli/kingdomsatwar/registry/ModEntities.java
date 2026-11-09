@@ -436,6 +436,19 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity>> GLUTKLUMPEN =
             ENTITIES.registerEntityType("molten_glob", io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity::new,
                     MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(8).updateInterval(2));
+    /** Asteria, die Sternenreiterin: stößt vom Himmel herab, wenn jemand an den Sternstein der Sternwarte tritt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity>> ASTERIA =
+            ENTITIES.registerEntityType("asteria", io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(3.6f, 2.7f).eyeHeight(2.3f).fireImmune().notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein fallender Stern (Asterias Sternenregen, die kleinen Sterne der Sternenlanze). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.StarfallEntity>> STARFALL =
+            ENTITIES.registerEntityType("starfall", io.github.sirschrolli.kingdomsatwar.entity.end.StarfallEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
+    /** Asterias Komet: die als Komet geschleuderte Sternenlanze. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.end.CometLanceEntity>> COMET_LANCE =
+            ENTITIES.registerEntityType("comet_lance", io.github.sirschrolli.kingdomsatwar.entity.end.CometLanceEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.6f, 0.6f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
     /** Mondfalter: die kleinen Diener der Mottenkönigin (verglimmen nach einer halben Minute). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity>> MOON_MOTH =
             ENTITIES.registerEntityType("moon_moth", io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity::new, MobCategory.MONSTER,
@@ -788,6 +801,7 @@ public final class ModEntities {
         event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
+        event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());

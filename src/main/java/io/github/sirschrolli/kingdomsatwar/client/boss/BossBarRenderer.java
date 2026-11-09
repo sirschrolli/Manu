@@ -65,6 +65,8 @@ public final class BossBarRenderer {
         STYLES.put("moth", new Style(KingdomsAtWar.id("textures/gui/boss_bar/moth.png"), 0xFFB8E8));
         // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt
         STYLES.put("forge", new Style(KingdomsAtWar.id("textures/gui/boss_bar/forge.png"), 0xFF8A30));
+        // Asteria, die Sternenreiterin: Silber mit Goldsaum, Sterne und Nachthimmel, ein Stern im Medaillon
+        STYLES.put("star", new Style(KingdomsAtWar.id("textures/gui/boss_bar/star.png"), 0x9AD8FF));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

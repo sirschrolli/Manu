@@ -345,6 +345,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 4, 8))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 5, 10)));
+        // Asteria, die Sternenreiterin: ihre Lanze und die Schwingen ihres Rochens, dazu Sternsplitter
+        this.add(ModEntities.ASTERIA.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get(), 4, 8))
+                .withPool(drop(net.minecraft.world.item.Items.ENDER_PEARL, 2, 4))
+                .withPool(drop(net.minecraft.world.item.Items.CHORUS_FRUIT, 2, 5))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 4, 8))
+                .withPool(drop(ModItems.GEMSTONE.get(), 3, 5))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 6, 12)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

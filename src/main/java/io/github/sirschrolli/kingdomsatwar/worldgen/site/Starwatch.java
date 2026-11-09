@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.worldgen.site;
 
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
+import io.github.sirschrolli.kingdomsatwar.registry.StarBlocks;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.VillageBuilder;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
@@ -51,6 +52,8 @@ final class Starwatch {
     /** Der Sternenhof: Mitte bei z = PLAZA_Z. */
     static final int PLAZA_Z = 4;
     static final int PLAZA_R = 12;
+    /** Der Sternstein in der Mitte des Sternenhofs (auf dem Pfeiler). */
+    static final int[] STARSTONE = {0, 2, PLAZA_Z};
     private static final int REACH_X = 23;
     private static final int REACH_BACK = -22;
     private static final int REACH_FRONT = 20;
@@ -257,10 +260,9 @@ final class Starwatch {
                             : outline ? s(Blocks.OBSIDIAN) : s(Blocks.SMOOTH_QUARTZ));
                 }
             }
-            // der Sternstein: ein Sockel mit Kristall, vier Leuchtstäbe ringsum
+            // der Sternstein auf seinem Pfeiler (ruft Asteria, die Sternenreiterin), vier Leuchtstäbe ringsum
             this.b.set(0, 1, PLAZA_Z, pillar());
-            this.b.set(0, 2, PLAZA_Z, s(Blocks.AMETHYST_BLOCK));
-            this.b.set(0, 3, PLAZA_Z, s(Blocks.AMETHYST_CLUSTER));
+            this.b.set(STARSTONE[0], STARSTONE[1], STARSTONE[2], StarBlocks.STARSTONE.get().defaultBlockState());
             for (Direction d : Direction.Plane.HORIZONTAL) {
                 this.b.set(d.getStepX() * 2, 1, PLAZA_Z + d.getStepZ() * 2, s(Blocks.END_ROD));
             }

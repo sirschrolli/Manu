@@ -187,6 +187,11 @@ public final class SiteSamples {
     }
 
     /** Hängen in der Sternwarte mit diesem Samen die Elytren? */
+    /** Der Sternstein einer Sternwarte (Mitte des Sternenhofs) in Weltkoordinaten. */
+    public static BlockPos starwatchStone(SitePiece piece) {
+        return piece.origin().offset(new BlockPos(Starwatch.STARSTONE[0], Starwatch.STARSTONE[1], Starwatch.STARSTONE[2]).rotate(piece.rotation()));
+    }
+
     public static boolean starwatchWings(long seed) {
         return Starwatch.hasWings(seed);
     }

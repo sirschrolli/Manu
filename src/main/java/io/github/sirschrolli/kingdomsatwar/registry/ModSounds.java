@@ -180,6 +180,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_DEATH = register("entity.glutschmied.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_STEP = register("entity.glutschmied.step");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
+    // Asteria, die Sternenreiterin (0.65)
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CRY = register("entity.asteria.cry");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_DESCENT = register("entity.asteria.descent");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CHARGE = register("entity.asteria.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_IMPACT = register("entity.asteria.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_STARFALL = register("entity.asteria.starfall");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_STAR_IMPACT = register("entity.asteria.star_impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CONSTELLATION = register("entity.asteria.constellation");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_COMET_THROW = register("entity.asteria.comet_throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_COMET_IMPACT = register("entity.asteria.comet_impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_WINGBEAT = register("entity.asteria.wingbeat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_SUPERNOVA_CHARGE = register("entity.asteria.supernova_charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_SUPERNOVA = register("entity.asteria.supernova");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_AMBIENT = register("entity.asteria.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_HURT = register("entity.asteria.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_DEATH = register("entity.asteria.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WINGS_BOOST = register("item.star_wings.boost");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

@@ -257,6 +257,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.WITHER_IMMUNE, FaeBlocks.MOTH_COCOON);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);
         add(ModTags.Blocks.GLIMMERWOOD_LOGS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD, FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
                 FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD);
         tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.GLIMMERWOOD_LOGS);

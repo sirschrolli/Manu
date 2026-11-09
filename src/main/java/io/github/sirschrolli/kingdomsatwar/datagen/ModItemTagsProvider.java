@@ -186,7 +186,14 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 .getResourceKey(net.minecraft.world.item.Items.NETHERITE_SCRAP).orElseThrow());
         // die Speere der Bosse sind Speere wie die von Minecraft: verzauberbar (Ausfallschritt, Schärfe, Haltbarkeit …)
         add(ItemTags.SPEARS, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR,
-                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR);
+                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE);
+        // Asteria: Sternsplitter reparieren Lanze und Schwingen, die Schwingen auch Phantomhaut; verzauberbar wie Elytren
+        add(ModTags.Items.REPAIRS_STAR_LANCE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);
+        add(ModTags.Items.REPAIRS_STAR_WINGS, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);
+        tag(ModTags.Items.REPAIRS_STAR_WINGS).add(net.minecraft.core.registries.BuiltInRegistries.ITEM
+                .getResourceKey(net.minecraft.world.item.Items.PHANTOM_MEMBRANE).orElseThrow());
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
+        add(ItemTags.EQUIPPABLE_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
         add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.TROLL_CLUB);
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, ModItems.TROLL_CLUB);
