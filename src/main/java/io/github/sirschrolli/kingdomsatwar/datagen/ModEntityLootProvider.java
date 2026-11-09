@@ -335,6 +335,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
         this.add(ModEntities.MOON_MOTH.get(), LootTable.lootTable());
+        // Malleus, der Glutschmied: der Glutspeer, ein Herzkristall, Glutklumpen, Netheritschrott und Schätze; seine
+        // Glutklumpen zerplatzen ohne Beute
+        this.add(ModEntities.GLUTSCHMIED.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.MOLTEN_GLOB.get(), 3, 6))
+                .withPool(drop(net.minecraft.world.item.Items.NETHERITE_SCRAP, 1, 2))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 4, 8))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 5, 10)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

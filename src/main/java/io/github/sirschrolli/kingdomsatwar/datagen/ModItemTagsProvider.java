@@ -182,6 +182,11 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ModTags.Items.REPAIRS_FAE_ELYTRA, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        tag(ModTags.Items.REPAIRS_GLUT_SPEAR).add(net.minecraft.core.registries.BuiltInRegistries.ITEM
+                .getResourceKey(net.minecraft.world.item.Items.NETHERITE_SCRAP).orElseThrow());
+        // die Speere der Bosse sind Speere wie die von Minecraft: verzauberbar (Ausfallschritt, Schärfe, Haltbarkeit …)
+        add(ItemTags.SPEARS, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR,
+                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR);
         add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.TROLL_CLUB);
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, ModItems.TROLL_CLUB);

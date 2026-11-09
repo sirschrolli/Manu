@@ -3496,6 +3496,211 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.glow_jellyfish.sting"
   },
+  "entity.glutschmied.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.ambient"
+  },
+  "entity.glutschmied.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_call1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_call2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.call"
+  },
+  "entity.glutschmied.clang": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_clang1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_clang2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_clang3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_clang4",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.clang"
+  },
+  "entity.glutschmied.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_death1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.death"
+  },
+  "entity.glutschmied.glob": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_glob1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_glob2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_glob3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.glob"
+  },
+  "entity.glutschmied.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.hurt"
+  },
+  "entity.glutschmied.roar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_roar1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_roar2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.roar"
+  },
+  "entity.glutschmied.slam": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_slam1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_slam2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.slam"
+  },
+  "entity.glutschmied.sparks": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_sparks1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_sparks2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_sparks3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.sparks"
+  },
+  "entity.glutschmied.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_step3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_step4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.step"
+  },
+  "entity.glutschmied.stoke": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_stoke1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_stoke2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.stoke"
+  },
+  "entity.glutschmied.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_throw1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_throw2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_throw3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.throw"
+  },
+  "entity.glutschmied.thrust": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:forge/glutschmied_thrust1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_thrust2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:forge/glutschmied_thrust3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.glutschmied.thrust"
+  },
   "entity.goose.ambient": {
     "sounds": [
       {

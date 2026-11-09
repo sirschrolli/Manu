@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.worldgen.site;
 
+import io.github.sirschrolli.kingdomsatwar.block.nether.GlutAnvilBlock;
 import io.github.sirschrolli.kingdomsatwar.loot.ModLootTables;
+import io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.VillageBuilder;
 import java.util.ArrayList;
@@ -76,6 +78,8 @@ final class AshForge {
     static final int DECK = 9;
     /** Oberkante der Glutkrone. */
     static final int CROWN = 59;
+    /** Der Glutamboss auf dem Dach, vor dem Schlot (Malleus kniet zwei Blöcke weiter vorn, mit Blick zum Schlot). */
+    static final int[] ANVIL = {0, ROOF + 1, 6};
     /** So tief reichen Fundament und Pfeiler höchstens. */
     static final int DEPTH = 36;
     static final int MAX_BRIDGE = 44;
@@ -1013,6 +1017,18 @@ final class AshForge {
                 this.b.set(x, ROOF + 4, z, s(Blocks.CHISELED_POLISHED_BLACKSTONE));
                 this.b.set(x, ROOF + 5, z, s(Blocks.SOUL_CAMPFIRE));
             }
+            this.anvil();
+        }
+
+        /**
+         * Die Werkstatt des Glutschmieds vor dem Schlot: der Glutamboss (auf ihm liegt der Glutspeer, an ihm kniet Malleus,
+         * sobald jemand die Esse hinaufsteigt), daneben ein Kessel voll Lava zum Abschrecken und ein Schleifstein.
+         */
+        private void anvil() {
+            this.b.set(ANVIL[0], ANVIL[1], ANVIL[2], ForgeBlocks.GLUT_ANVIL.get().defaultBlockState().setValue(GlutAnvilBlock.FACING, Direction.SOUTH));
+            this.b.set(ANVIL[0] + 3, ANVIL[1], ANVIL[2], s(Blocks.LAVA_CAULDRON));
+            this.b.set(ANVIL[0] - 3, ANVIL[1], ANVIL[2],
+                    Blocks.GRINDSTONE.defaultBlockState().setValue(GrindstoneBlock.FACE, AttachFace.FLOOR).setValue(GrindstoneBlock.FACING, Direction.EAST));
         }
 
         /** Der Anleger vor dem unteren Tor: eine Plattform im Lavagraben, mit Pollern und Laternen. */

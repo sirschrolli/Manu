@@ -572,6 +572,7 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ATOLL_CORE, "Heart of the Atoll", "Herz des Atolls");
         // Das Feenreich (0.63)
         text("itemGroup.kingdomsatwar.the_fae_realm", "Kingdoms at War: The Fae Realm", "Kingdoms at War: Das Feenreich");
+        text("itemGroup.kingdomsatwar.legends", "Kingdoms at War: Legends", "Kingdoms at War: Legenden");
         text("dimension.kingdomsatwar.fae_realm", "The Fae Realm", "Das Feenreich");
         text("biome.kingdomsatwar.fae_meadows", "Blossom Meadows", "Blütenwiesen");
         text("biome.kingdomsatwar.glimmerwood", "Glimmerwood", "Glimmerwald");
@@ -678,6 +679,44 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.mondhain.awakened", "The Moth Queen awakens.", "Die Mottenkönigin erwacht.");
         text("command.kingdomsatwar.mondhain.no_cocoon", "There is no cocoon on the altar (is the queen already awake?).",
                 "Auf dem Altar liegt kein Kokon (ist die Königin schon wach?).");
+        // Malleus, der Glutschmied (0.64)
+        creature(ModEntities.GLUTSCHMIED, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUTSCHMIED_SPAWN_EGG,
+                "Malleus, the Ember Smith", "Malleus, der Glutschmied", "Glutschmied");
+        add(ModEntities.GLUTKLUMPEN.get(), pick("Molten Glob", "Glutklumpen"));
+        text("boss.kingdomsatwar.forge", "Malleus, the Ember Smith", "Malleus, der Glutschmied");
+        text("boss.kingdomsatwar.forge.title", "Master Smith of the Ash Forge", "Meisterschmied der Aschenesse");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_ANVIL, "Ember Anvil", "Glutamboss");
+        lore("glut_anvil", "The anvil of Malleus, atop the Ash Forge", "Der Amboss von Malleus auf dem Dach der Aschenesse");
+        text(ModItems.loreKey("glut_anvil", 2), "Gone cold: a Netherite Ingot rekindles the forge – and calls him back",
+                "Erkaltet: Ein Netheritbarren facht die Esse neu an – und ruft ihn zurück");
+        text("block.kingdomsatwar.glut_anvil.hint", "A spear of glowing metal lies on the anvil … whoever comes close wakes the smith.",
+                "Auf dem Amboss liegt ein Speer aus glühendem Metall … wer näher kommt, weckt den Schmied.");
+        text("block.kingdomsatwar.glut_anvil.awake", "The anvil is empty – the smith has taken up his spear.",
+                "Der Amboss ist leer – der Schmied hat seinen Speer genommen.");
+        text("block.kingdomsatwar.glut_anvil.cold", "The anvil has gone cold. A Netherite Ingot might rekindle the forge.",
+                "Der Amboss ist erkaltet. Ein Netheritbarren könnte die Esse neu entfachen.");
+        text("block.kingdomsatwar.glut_anvil.warning", "Hammer blows ring out from the roof of the Ash Forge …",
+                "Vom Dach der Aschenesse hallen Hammerschläge …");
+        text("block.kingdomsatwar.glut_anvil.peaceful", "The forge stays cold (the world is set to Peaceful).",
+                "Die Esse bleibt kalt (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR, "Ember Spear", "Glutspeer");
+        lore("glut_spear", "The masterpiece of Malleus, the Ember Smith", "Das Meisterstück von Malleus, dem Glutschmied");
+        text(ModItems.loreKey("glut_spear", 2), "In the Nether or while burning: strikes harder; every hit sets foes ablaze",
+                "Im Nether oder brennend: trifft härter; jeder Treffer setzt in Brand");
+        text(ModItems.loreKey("glut_spear", 3), "In hand, in the Nether: shields you from fire and lava",
+                "In der Hand, im Nether: schützt vor Feuer und Lava");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.MOLTEN_GLOB, "Molten Glob", "Glutklumpen");
+        lore("molten_glob", "Molten metal from the Ember Smith's forge – burns like a Blaze Rod",
+                "Geschmolzenes Metall aus der Esse des Glutschmieds – brennt wie eine Lohenrute");
+        for (String[] e : new String[][] {{"clang", "Hammer rings on the anvil", "Hammer klingt auf dem Amboss"},
+                {"roar", "Ember Smith roars", "Glutschmied brüllt"}, {"thrust", "Spear thrusts", "Speer stößt zu"},
+                {"slam", "Hammer shakes the roof", "Hammerschlag erschüttert das Dach"}, {"sparks", "Sparks fly", "Funken stieben"},
+                {"throw", "Molten metal is hurled", "Glut wird geschleudert"}, {"glob", "Molten glob bursts", "Glutklumpen zerplatzt"},
+                {"call", "Ember Smith calls his apprentices", "Glutschmied ruft seine Gesellen"}, {"stoke", "The forge flares up", "Die Esse lodert auf"},
+                {"ambient", "Ember Smith breathes", "Glutschmied atmet"}, {"hurt", "Ember Smith hurts", "Glutschmied nimmt Schaden"},
+                {"death", "Ember Smith crumbles", "Glutschmied zerfällt"}, {"step", "Heavy footsteps", "Schwere Schritte"}}) {
+            subtitle("entity.glutschmied." + e[0], e[1], e[2]);
+        }
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

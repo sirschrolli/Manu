@@ -140,6 +140,15 @@ public class GlutAnvilBlockEntity extends BlockEntity {
         }
     }
 
+    /** Ruft den Schmied herbei (für die Vorführung): kniend am Amboss, schmiedend – sofern er nicht schon da ist. */
+    public @Nullable GlutschmiedEntity summon(ServerLevel level) {
+        if (this.phase != Phase.DORMANT) {
+            return null;
+        }
+        GlutschmiedEntity entity = this.smith(level);
+        return entity != null ? entity : this.spawn(level, false);
+    }
+
     /** Ruft den Schmied herbei: kniend am Amboss, schmiedend ({@code fight}: gleich erwachend). */
     private @Nullable GlutschmiedEntity spawn(ServerLevel level, boolean fight) {
         GlutschmiedEntity entity = ModEntities.GLUTSCHMIED.get().create(level, EntitySpawnReason.STRUCTURE);

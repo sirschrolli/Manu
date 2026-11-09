@@ -69,6 +69,11 @@ ELEMENTS = {
                  f0="#3a1458", f1="#8a3aa8", f2="#e47ac8", f3="#fff0fa", gold="#ffd878", gold_dark="#8a6420",
                  wing="#9ee8c8", wing_dark="#3a8a74", wing_light="#e4fff2", spot="#ff7ab8", spot_dark="#5a1e4e",
                  silk="#f4eefc", silk_dark="#a898c4"),
+    # Malleus, der Glutschmied: geschwärztes Eisen mit Nieten und glühenden Nähten, dahinter Hammer und Speer gekreuzt;
+    # Füllung wie fließendes, glühendes Metall mit hellen Rissen
+    "forge": dict(m0="#141012", m1="#4a4246", m2="#a89c98", acc="#ff7a1a", glow="#fff0c0", deep="#1c0804",
+                  f0="#3e0a02", f1="#a8300a", f2="#ff8a24", f3="#fff2b8", gold="#e6ac48", gold_dark="#7a5218",
+                  iron="#2e2c32", iron_light="#7c7880", ember="#ff9a30", ember_dark="#8a2406", wood="#4a2e1e"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -918,7 +923,93 @@ def deco_moth(img: Image.Image, pal: dict) -> None:
     put(px, img, ex + 7, ey, f2)
 
 
-DECOS = {"moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_forge(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon gekreuzt: der Schmiedehammer (Kopf oben links) und der Glutspeer (glühende Klinge oben
+    rechts); oben auf dem Rahmen kleine Glutzungen mit aufstiebenden Funken, unter der Leiste tropft geschmolzenes Metall
+    (die Tropfen glühen); als Spitze die Klinge des Glutspeers."""
+    px = img.load()
+    f1, f2, f3 = c(pal, "f1"), c(pal, "f2"), c(pal, "f3")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    iron, iron_light = c(pal, "iron"), c(pal, "iron_light")
+    ember, ember_dark, wood = c(pal, "ember"), c(pal, "ember_dark"), c(pal, "wood")
+    m1 = c(pal, "m1")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def stick(x0: float, y0: float, x1: float, y1: float, width: float, col_fn):
+        length = math.hypot(x1 - x0, y1 - y0)
+        ax, ay = (x1 - x0) / length, (y1 - y0) / length
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - x0, y + 0.5 - y0
+                t = dx * ax + dy * ay
+                off = -dx * ay + dy * ax
+                if 0 <= t <= length:
+                    w = width(t / length) if callable(width) else width
+                    if abs(off) <= w:
+                        put(px, img, x, y, col_fn(t / length, off, w))
+
+    # der Speer: von unten links nach oben rechts, die Klinge glüht
+    def spear_col(t, off, w):
+        if t < 0.72:
+            return OUTLINE if abs(off) > w - 0.6 else (wood if off < 0 else mix(wood, OUTLINE, 0.4))
+        if t < 0.76:
+            return gold if off < 0 else gold_dark
+        if abs(off) > w - 0.6:
+            return ember_dark
+        return f3 if abs(off) < 0.6 else (f2 if off < 0 else ember)
+    stick(EMB_X - 16, EMB_Y + 22, EMB_X + 40, EMB_Y - 21, lambda u: 1.1 if u < 0.72 else (2.6 if u < 0.76 else 2.6 * (1 - (u - 0.76) / 0.24) ** 0.8 + 0.3),
+          spear_col)
+    # der Hammer: von unten rechts nach oben links, oben der Kopf quer
+    def handle_col(t, off, w):
+        return OUTLINE if abs(off) > w - 0.6 else (mix(wood, iron_light, 0.15) if off < 0 else wood)
+    stick(EMB_X + 17, EMB_Y + 21, EMB_X - 13, EMB_Y - 17, 1.1, handle_col)
+    hx, hy = EMB_X - 13, EMB_Y - 17
+    for y in range(-6, 7):
+        for x in range(-6, 7):
+            u = (x - y) / 1.414
+            v = (x + y) / 1.414
+            if abs(u) <= 5.2 and abs(v) <= 2.6:
+                edge = abs(u) > 4.4 or abs(v) > 1.9
+                face = abs(u) > 4.0
+                col = OUTLINE if edge and not face else (ember if face else (iron_light if v < -0.6 else iron))
+                put(px, img, hx + x, hy + y, col)
+    # Glutzungen und Funken oben auf dem Rahmen
+    for x in range(BAR_X + 6, BAR_X + BAR_W - 2, 11):
+        hgt = 2 + round(hash01(x, 13) * 3)
+        for k in range(hgt):
+            t = k / max(1, hgt - 1)
+            col = f1 if t < 0.4 else (f2 if t < 0.8 else f3)
+            put(px, img, x, top - 1 - k, col)
+            if k == 0:
+                put(px, img, x - 1, top - 1, ember_dark)
+                put(px, img, x + 1, top - 1, ember_dark)
+        if hash01(x, 17) > 0.45:
+            put(px, img, x + round(hash01(x, 19) * 4) - 2, top - hgt - 2 - round(hash01(x, 23) * 3), f2 if hash01(x, 29) > 0.5 else f3)
+    # geschmolzenes Metall tropft von der Leiste
+    for x in range(BAR_X + 9, BAR_X + BAR_W - 4, 13):
+        length = 2 + round(hash01(x, 31) * 4)
+        for k in range(length):
+            put(px, img, x, bottom + 1 + k, ember_dark if k < length - 2 else ember)
+        put(px, img, x, bottom + 1 + length, f2)
+        put(px, img, x, bottom + 2 + length, f3)
+        put(px, img, x + 1, bottom + 1, ember_dark)
+    # Spitze: die Klinge des Glutspeers nach rechts
+    ex, ey = BAR_X + BAR_W + 3, BAR_Y + BAR_H // 2
+    for k in range(12):
+        half = round(4.2 * (1 - k / 12) ** 0.75) if k > 1 else 2
+        for dy in range(-half, half + 1):
+            if abs(dy) == half:
+                col = OUTLINE if k > 1 else gold_dark
+            elif k <= 1:
+                col = gold
+            else:
+                col = f3 if dy == 0 else (f2 if dy < 0 else ember)
+            put(px, img, ex + k, ey + dy, col)
+    put(px, img, ex + 12, ey, ember_dark)
+    _ = m1
+
+
+DECOS = {"forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -967,6 +1058,13 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x, y, 91) > 0.975:
             return 1.0
         return 0.92 if near < 0.14 else (0.66 if near < 0.3 else 0.36 + 0.1 * math.sin(tau * x / 64))
+    if element == "forge":
+        # fließendes, glühendes Metall: langsame Wellen, darin helle Risse und einzelne Funken
+        flow = 0.46 + 0.2 * math.sin(tau * x / 64 + 1.3 * math.sin(tau * y / 9 + tau * x / 128))
+        crack = abs(math.sin(math.pi * (x / 13 + 0.45 * math.sin(tau * (y / 9 + x / 48)))))
+        if hash01(x, y, 47) > 0.975:
+            return 1.0
+        return 0.9 if crack < 0.1 else (0.7 if crack < 0.22 else flow)
     if element == "moth":
         # Flügelstaub: versetzte Reihen kleiner Schuppen (Bögen), dazwischen Glitzer
         row = y // 3
@@ -1075,12 +1173,13 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, moth_queen,
-                                  reef_colossus, shattered_king)
+    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, glutschmied,
+                                  moth_queen, reef_colossus, shattered_king)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
-           "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen}[element]
+           "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
+           "forge": glutschmied}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -1111,14 +1210,23 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_moth(child)
         strip_moth(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8}.get(element, -42)
-    pitch = {"reef": 8, "moth": 4}.get(element, 6)
+    if element == "forge":
+        # der Widderschädel mit Hörnern, Flammen und Kiefer (ohne Arme, Waffen und Beine)
+        def strip_forge(bone):
+            if bone.name.startswith(("left_arm", "right_arm", "left_forearm", "right_forearm", "hammer", "spear", "left_leg",
+                                     "right_leg", "apron")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_forge(child)
+        strip_forge(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14}.get(element, -42)
+    pitch = {"reef": 8, "moth": 4, "forge": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0, "reef": 1.35, "moth": 1.25}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

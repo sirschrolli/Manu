@@ -186,6 +186,7 @@ public final class ModGameTests {
         SeaGameTests.init();      // meldet die Tests des Meeres an
         ReefGameTests.init();     // Meeresgrund, Versunkenes Atoll, Karkinos
         FaeGameTests.init();      // das Feenreich, der Mondhain, Noctua
+        ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -248,6 +249,7 @@ public final class ModGameTests {
         SeaGameTests.register(event, environment);
         ReefGameTests.register(event, environment);
         FaeGameTests.register(event, environment);
+        ForgeGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

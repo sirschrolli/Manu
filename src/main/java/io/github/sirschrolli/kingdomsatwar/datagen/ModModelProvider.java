@@ -449,6 +449,7 @@ public class ModModelProvider extends ModelProvider {
         VoidModels.register(blocks, items);
         SeaModels.register(blocks, items);
         FaeModels.register(blocks, items);
+        ForgeModels.register(blocks, items);
 
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();

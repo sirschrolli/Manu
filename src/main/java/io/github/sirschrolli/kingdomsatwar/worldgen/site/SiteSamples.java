@@ -139,6 +139,21 @@ public final class SiteSamples {
         return AshForge.tower(center, Rotation.NONE, 0xA5E5L);
     }
 
+    /** Wo auf dem Dach eines Turms der Aschenesse der Glutamboss steht. */
+    public static BlockPos ashForgeAnvil(SitePiece tower) {
+        return ashForgeRoof(tower, AshForge.ANVIL[0], AshForge.ANVIL[1], AshForge.ANVIL[2]);
+    }
+
+    /** Ein Punkt im Rahmen eines Turms der Aschenesse (Mitte bei 0, 0, 0; vorn ist +z) in Weltkoordinaten. */
+    public static BlockPos ashForgeRoof(SitePiece tower, int x, int y, int z) {
+        return tower.origin().offset(new BlockPos(x, y, z).rotate(tower.rotation()));
+    }
+
+    /** Ist das der Turm der Aschenesse (und keine ihrer Brücken)? */
+    public static boolean isAshForgeTower(SitePiece piece) {
+        return piece.kind() == SiteKind.ASH_FORGE && piece.part() == AshForge.TOWER;
+    }
+
     /**
      * Eine Brücke der Aschenesse nach Süden (+z) vom Turm bei {@code center}: {@code len} lang, am Ende ein Wachturm
      * ({@code rock} falsch) oder eine Felsstube ({@code variant}: 0 Glutkammer, 1 Vorrat, 2 Wachstube, 3 Kerker) mit einem

@@ -211,6 +211,8 @@ final class Showcase {
                         FaeShowcase.map(steps);
                     } else if (scene.equals("fae_boss")) {
                         FaeShowcase.boss(steps);
+                    } else if (scene.equals("forge_boss")) {
+                        ForgeShowcase.boss(steps);
                     } else if (scene.equals("fae_creatures")) {
                         FaeShowcase.creatures(steps);
                     } else if (scene.equals("fae_portal")) {
