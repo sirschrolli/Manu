@@ -194,6 +194,13 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 .getResourceKey(net.minecraft.world.item.Items.PHANTOM_MEMBRANE).orElseThrow());
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
         add(ModTags.Items.REPAIRS_MYSTIC_GEAR, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER,
+                io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER);
+        add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER);
+        add(net.neoforged.neoforge.common.Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER);
+        add(ItemTags.EQUIPPABLE_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS);
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_DECK,
                 io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT);
         add(ItemTags.HEAD_ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT);

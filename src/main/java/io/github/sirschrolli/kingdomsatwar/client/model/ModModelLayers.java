@@ -39,6 +39,7 @@ public final class ModModelLayers {
     public static final ModelLayerLocation GLUTSCHMIED = new ModelLayerLocation(KingdomsAtWar.id("glutschmied"), "main");
     public static final ModelLayerLocation ASTERIA = new ModelLayerLocation(KingdomsAtWar.id("asteria"), "main");
     public static final ModelLayerLocation MISS_MYSTIK = new ModelLayerLocation(KingdomsAtWar.id("miss_mystik"), "main");
+    public static final ModelLayerLocation ANNI_TROLL = new ModelLayerLocation(KingdomsAtWar.id("anni_troll"), "main");
     public static final ModelLayerLocation LIGHT_DOVE = new ModelLayerLocation(KingdomsAtWar.id("light_dove"), "main");
     public static final ModelLayerLocation MAGIC_SWORD = new ModelLayerLocation(KingdomsAtWar.id("magic_sword"), "main");
     public static final ModelLayerLocation CAVE_TROLL = new ModelLayerLocation(KingdomsAtWar.id("cave_troll"), "main");

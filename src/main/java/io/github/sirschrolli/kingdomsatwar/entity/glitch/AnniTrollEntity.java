@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.glitch;
 
+import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.block.glitch.ErrorCoreBlockEntity;
 import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
@@ -24,6 +25,7 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,6 +41,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -102,6 +106,25 @@ public class AnniTrollEntity extends Monster {
     public static final int SCAN_HIGH = 36;
     public static final int CRASH_RESTART = 70;
     public static final int CRASH_WAVE = 80;
+    /** Wiederherstellung: In diesem Tick zerfällt sie in Pixel … */
+    public static final int REVIVE_SHATTER = 30;
+    /** … hier ist die Sicherung gefunden, von hier bis REVIVE_FILLED füllt sich ihre Leiste … */
+    public static final int REVIVE_FOUND = 48;
+    public static final int REVIVE_FILL = 56;
+    public static final int REVIVE_FILLED = 104;
+    /** … hier setzt sie sich als Anni 2.0 zusammen, und hier rollt die Welle los. */
+    public static final int REVIVE_ASSEMBLE = 112;
+    public static final int REVIVE_WAVE = 118;
+    /** Wie viel ihrer Lebenskraft die Sicherung enthält (Anni 2.0 hat eine volle, aber kürzere Leiste). */
+    public static final double BACKUP_HEALTH = 0.6;
+    /** Speedhack (nur Anni 2.0): erster Ansturm, Abstand der Anstürme, Zielen und Rasen (Ticks), Zahl der Anstürme. */
+    public static final int HACK_FIRST = 6;
+    public static final int HACK_STEP = 26;
+    public static final int HACK_AIM = 10;
+    public static final int HACK_DASH = 12;
+    public static final int HACK_DASHES = 3;
+    private static final Identifier BACKUP_HEALTH_ID = KingdomsAtWar.id("anni_backup_health");
+    private static final Identifier BACKUP_SPEED_ID = KingdomsAtWar.id("anni_backup_speed");
     private static final double LEASH = 40.0;
     private static final int RETURN_TICKS = 600;
 
@@ -122,7 +145,11 @@ public class AnniTrollEntity extends Monster {
         /** Troll-Lachen: eine kurze Pause zwischen den Angriffen. */
         LAUGH(30),
         /** Verbindung getrennt: Sie zerfällt in Pixel und kehrt in den Kern zurück. */
-        EXIT(46);
+        EXIT(46),
+        /** Speedhack (nur Anni 2.0): Sie zielt (Ladekreis) und rast dreimal geradeaus los. */
+        SPEEDHACK(HACK_FIRST + HACK_DASHES * HACK_STEP + 14),
+        /** Wiederherstellung (einmal, statt zu sterben): Sie lädt eine Sicherung und kehrt als Anni 2.0 zurück. */
+        REVIVE(150);
 
         public final int duration;
 
@@ -140,9 +167,12 @@ public class AnniTrollEntity extends Monster {
     /** Kurz nicht zu sehen (beim Springen und vor dem Zusammensetzen). */
     private static final EntityDataAccessor<Boolean> DATA_HIDDEN = SynchedEntityData.defineId(AnniTrollEntity.class,
             EntityDataSerializers.BOOLEAN);
+    /** Anni 2.0 (aus der Sicherung wiederhergestellt): rote Augen, noch schneller, noch härter. */
+    private static final EntityDataAccessor<Boolean> DATA_V2 = SynchedEntityData.defineId(AnniTrollEntity.class, EntityDataSerializers.BOOLEAN);
     static final ParticleOptions MAGENTA = new DustParticleOptions(0xF800F8, 1.4f);
     static final ParticleOptions CYAN = new DustParticleOptions(0x20E8FF, 1.4f);
     static final ParticleOptions SMOKE = new DustParticleOptions(0x1A1420, 2.4f);
+    static final ParticleOptions RED = new DustParticleOptions(0xFF2040, 1.4f);
 
     private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), Component.translatable("boss.kingdomsatwar.anni"),
             BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_12);
@@ -152,7 +182,11 @@ public class AnniTrollEntity extends Monster {
     private int cooldown = 30;
     private int idleTicks;
     private boolean crashed;
+    /** Hat sie ihre Sicherung schon geladen (dann stirbt sie beim nächsten Mal wirklich)? */
+    private boolean revived;
     private @Nullable BlockPos home;
+    // Speedhack: wohin sie rast
+    private Vec3 dash = Vec3.ZERO;
     // Lag-Hieb: wann sie aufhört zu hängen und wann der Hammer trifft
     private int lagUntil;
     private int slamAt;
@@ -172,6 +206,9 @@ public class AnniTrollEntity extends Monster {
     private int stuckTicks;
     private int clipTicks;
     private int clientAttackStart;
+    /** Nur im Client: wann sie zuletzt zu hängen begann und wann sie wieder losließ (für die Animationen). */
+    private int clientLagStart = -100;
+    private int clientLagEnd = -100;
 
     public AnniTrollEntity(EntityType<? extends AnniTrollEntity> type, Level level) {
         super(type, level);
@@ -203,6 +240,7 @@ public class AnniTrollEntity extends Monster {
         builder.define(DATA_LAG, false);
         builder.define(DATA_GLITCH, false);
         builder.define(DATA_HIDDEN, false);
+        builder.define(DATA_V2, false);
     }
 
     // ------------------------------------------------------------------ Zustand
@@ -230,6 +268,16 @@ public class AnniTrollEntity extends Monster {
         return this.entityData.get(DATA_HIDDEN);
     }
 
+    /** Anni 2.0 (nach der Wiederherstellung)? */
+    public boolean isVersion2() {
+        return this.entityData.get(DATA_V2);
+    }
+
+    /** Hat sie ihre Sicherung schon verbraucht? */
+    public boolean isRevived() {
+        return this.revived;
+    }
+
     private void setHidden(boolean hidden) {
         this.entityData.set(DATA_HIDDEN, hidden);
     }
@@ -239,11 +287,28 @@ public class AnniTrollEntity extends Monster {
         return this.tickCount - this.clientAttackStart + partialTicks;
     }
 
+    /** Ticks, seit sie zuletzt losließ (nach dem Hängen; im Client, für den Hieb des Lag-Hiebs). */
+    public float sinceLag(float partialTicks) {
+        return this.isLagging() ? -1.0f : this.tickCount - this.clientLagEnd + partialTicks;
+    }
+
+    /** Ticks, seit sie zu hängen begann (im Client). */
+    public float lagTime(float partialTicks) {
+        return this.isLagging() ? this.tickCount - this.clientLagStart + partialTicks : -1.0f;
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (DATA_ATTACK.equals(key)) {
             this.clientAttackStart = this.tickCount;
+        }
+        if (DATA_LAG.equals(key)) {
+            if (this.isLagging()) {
+                this.clientLagStart = this.tickCount;
+            } else {
+                this.clientLagEnd = this.tickCount;
+            }
         }
     }
 
@@ -274,11 +339,44 @@ public class AnniTrollEntity extends Monster {
         this.entityData.set(DATA_GLITCH, true);
     }
 
+    /** Sofort Anni 2.0 mit voller Leiste (für Tests und die Vorführung). */
+    public void forceVersion2() {
+        this.revived = true;
+        this.forceGlitchMode();
+        this.becomeVersion2();
+        this.setHealth(this.getMaxHealth());
+    }
+
+    /** Die Sicherung ist geladen: kürzere Leiste, schneller, rote Augen, ein neuer Name über der Leiste. */
+    private void becomeVersion2() {
+        AttributeInstance health = this.getAttribute(Attributes.MAX_HEALTH);
+        if (health != null && !health.hasModifier(BACKUP_HEALTH_ID)) {
+            health.addPermanentModifier(new AttributeModifier(BACKUP_HEALTH_ID, BACKUP_HEALTH - 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
+        AttributeInstance speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        if (speed != null && !speed.hasModifier(BACKUP_SPEED_ID)) {
+            speed.addPermanentModifier(new AttributeModifier(BACKUP_SPEED_ID, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        }
+        this.entityData.set(DATA_GLITCH, true);
+        this.entityData.set(DATA_V2, true);
+        this.nameBossBar();
+    }
+
+    private void nameBossBar() {
+        if (this.hasCustomName()) {
+            this.bossBar.setName(this.getDisplayName());
+        } else {
+            this.bossBar.setName(Component.translatable(this.isVersion2() ? "boss.kingdomsatwar.anni2" : "boss.kingdomsatwar.anni"));
+        }
+        this.bossBar.setColor(this.isVersion2() ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.PINK);
+    }
+
     private void begin(Attack next) {
         this.attack = next;
         this.attackTick = 0;
         this.entityData.set(DATA_ATTACK, next.ordinal());
-        if (next != Attack.NONE && next != Attack.SPAWN && next != Attack.CRASH && next != Attack.EXIT && next != Attack.LAUGH) {
+        if (next != Attack.NONE && next != Attack.SPAWN && next != Attack.CRASH && next != Attack.EXIT && next != Attack.LAUGH
+                && next != Attack.REVIVE) {
             this.lastAttack = next;
         }
         if (this.isHidden() && next != Attack.SPAWN && next != Attack.EXIT) {
@@ -354,15 +452,17 @@ public class AnniTrollEntity extends Monster {
                 || source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL) || source.is(DamageTypes.CRAMMING)) {
             return false;
         }
-        if (this.attack == Attack.CRASH && this.attackTick < CRASH_RESTART) {
-            this.notRegistered(level, source.getSourcePosition() != null ? source.getSourcePosition() : this.position().add(0, 2, 0));
+        if (this.attack == Attack.CRASH && this.attackTick < CRASH_RESTART || this.attack == Attack.REVIVE) {
+            if (!this.isHidden()) {
+                this.notRegistered(level, source.getSourcePosition() != null ? source.getSourcePosition() : this.position().add(0, 2, 0));
+            }
             return false;
         }
         if (source.getDirectEntity() instanceof Projectile shot && this.random.nextFloat() < (this.isGlitchMode() ? 0.35f : 0.25f)) {
             this.notRegistered(level, shot.position());
             return false;
         }
-        boolean hurt = super.hurtServer(level, source, this.isGlitchMode() ? amount * 0.9f : amount);
+        boolean hurt = super.hurtServer(level, source, this.isVersion2() ? amount * 0.85f : this.isGlitchMode() ? amount * 0.9f : amount);
         if (hurt && source.getEntity() instanceof LivingEntity attacker && attacker != this && this.canStrike(attacker)) {
             if (!(this.getTarget() instanceof Player)) {
                 this.setTarget(attacker);
@@ -404,10 +504,13 @@ public class AnniTrollEntity extends Monster {
             return;
         }
         Level level = this.level();
-        int chance = this.isGlitchMode() ? 2 : 4;
+        int chance = this.isVersion2() ? 1 : this.isGlitchMode() ? 2 : 4;
         if (this.random.nextInt(chance) == 0) {
             level.addParticle(ModParticles.GLITCH_PIXEL.get(), this.getRandomX(1.0), this.getY() + this.random.nextDouble() * 3.6,
                     this.getRandomZ(1.0), 0.0, 0.02, 0.0);
+        }
+        if (this.isVersion2() && this.random.nextInt(3) == 0) {
+            level.addParticle(RED, this.getRandomX(1.2), this.getY() + this.random.nextDouble() * 3.8, this.getRandomZ(1.2), 0.0, 0.0, 0.0);
         }
         if (this.isLagging() && this.random.nextInt(2) == 0) {
             level.addParticle(this.random.nextBoolean() ? MAGENTA : CYAN, this.getRandomX(1.1), this.getY() + this.random.nextDouble() * 3.4,
@@ -431,6 +534,15 @@ public class AnniTrollEntity extends Monster {
         }
         if (this.attack == Attack.EXIT) {
             this.tickExit(level);
+            return;
+        }
+        if (this.attack == Attack.REVIVE) {
+            this.attackTick++;
+            this.tickRevive(level);
+            if (this.attackTick >= Attack.REVIVE.duration) {
+                this.begin(Attack.NONE);
+                this.cooldown = 10;
+            }
             return;
         }
         if (!this.crashed && this.getHealth() < this.getMaxHealth() * 0.5f && this.attack != Attack.SMASH) {
@@ -473,13 +585,15 @@ public class AnniTrollEntity extends Monster {
             case ROLLBACK -> this.tickRollback(level, target);
             case SCANLINE -> this.tickScanline(level, target);
             case LAUGH -> this.tickLaugh(level, target);
+            case SPEEDHACK -> this.tickSpeedhack(level, target);
             default -> { }
         }
         boolean done = this.attack == Attack.SMASH ? this.slamAt > 0 && this.attackTick >= this.slamAt + 14
                 : this.attackTick >= this.attack.duration;
         if (done) {
             this.begin(Attack.NONE);
-            this.cooldown = this.isGlitchMode() ? 10 + this.random.nextInt(12) : 22 + this.random.nextInt(18);
+            this.cooldown = this.isVersion2() ? 6 + this.random.nextInt(10) : this.isGlitchMode() ? 10 + this.random.nextInt(12)
+                    : 22 + this.random.nextInt(18);
         }
     }
 
@@ -575,13 +689,13 @@ public class AnniTrollEntity extends Monster {
                 this.setLagging(false);
                 Vec3 to = target.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
                 if (to.length() > 4.0) {
-                    this.blinkTo(level, this.position().add(to.normalize().scale(Math.min(3.5, to.length() - 3.0))));
+                    this.blinkTo(level, this.position().add(to.normalize().scale(Math.min(this.isVersion2() ? 5.0 : 3.5, to.length() - 3.0))));
                 }
             }
             return;
         }
         if (--this.nextStutter <= 0) {
-            this.nextStutter = (this.isGlitchMode() ? 70 : 140) + this.random.nextInt(80);
+            this.nextStutter = (this.isVersion2() ? 50 : this.isGlitchMode() ? 70 : 140) + this.random.nextInt(this.isVersion2() ? 60 : 80);
             this.stutter = 6 + this.random.nextInt(6);
             this.setLagging(true);
             this.sound(level, ModSounds.ANNI_LAG.get(), 1.4f, 1.0f);
@@ -589,7 +703,7 @@ public class AnniTrollEntity extends Monster {
         }
         double distance = this.distanceTo(target);
         if (distance > 3.6) {
-            this.getNavigation().moveTo(target, this.isGlitchMode() ? 1.25 : 1.0);
+            this.getNavigation().moveTo(target, this.isVersion2() ? 1.3 : this.isGlitchMode() ? 1.25 : 1.0);
         } else {
             this.getNavigation().stop();
         }
@@ -661,6 +775,12 @@ public class AnniTrollEntity extends Monster {
         if (!this.isGlitchMode() && this.random.nextInt(4) == 0) {
             options.add(Attack.LAUGH);
         }
+        if (this.isVersion2()) {
+            options.add(Attack.SPEEDHACK);
+            if (distance > 6.0) {
+                options.add(Attack.SPEEDHACK);
+            }
+        }
         if (level.getEntitiesOfClass(GlitchCloneEntity.class, this.getBoundingBox().inflate(40.0)).size() > 2) {
             options.removeIf(a -> a == Attack.CLONES);
         }
@@ -687,15 +807,7 @@ public class AnniTrollEntity extends Monster {
             }
         }
         if (t < SPAWN_ASSEMBLE && t % 2 == 0) {
-            // Pixel strömen herbei
-            for (int i = 0; i < 6; i++) {
-                double a = this.random.nextDouble() * Math.PI * 2.0;
-                double r = 6.0 + this.random.nextDouble() * 6.0;
-                double y = this.random.nextDouble() * 5.0 - 1.0;
-                Vec3 from = c.add(Math.cos(a) * r, y, Math.sin(a) * r);
-                Vec3 v = c.subtract(from).scale(0.09);
-                level.sendParticles(ModParticles.GLITCH_PIXEL.get(), from.x, from.y, from.z, 0, v.x, v.y, v.z, 1.0);
-            }
+            this.streamPixels(level, c, 6);
         }
         if (t == SPAWN_ASSEMBLE) {
             this.setHidden(false);
@@ -768,7 +880,7 @@ public class AnniTrollEntity extends Monster {
             this.sound(level, ModSounds.ANNI_WINDUP.get(), 2.0f, 1.0f);
         }
         if (t == SMASH_RAISE) {
-            int lag = this.isGlitchMode() ? 3 + this.random.nextInt(9) : 5 + this.random.nextInt(14);
+            int lag = this.isVersion2() ? 2 + this.random.nextInt(7) : this.isGlitchMode() ? 3 + this.random.nextInt(9) : 5 + this.random.nextInt(14);
             this.lagUntil = t + lag;
             this.setLagging(true);
             this.sound(level, ModSounds.ANNI_LAG.get(), 1.6f, 1.0f);
@@ -797,7 +909,7 @@ public class AnniTrollEntity extends Monster {
             double r0 = this.wave;
             this.wave += 0.7;
             this.ring(level, impact, this.wave, 28);
-            if (this.wave <= 7.0) {
+            if (this.wave <= (this.isVersion2() ? 9.5 : 7.0)) {
                 for (LivingEntity victim : this.victims(level, new AABB(impact, impact).inflate(this.wave + 1.0, 2.0, this.wave + 1.0))) {
                     double d = Math.sqrt(victim.distanceToSqr(impact.x, victim.getY(), impact.z));
                     if (d >= r0 - 0.5 && d < this.wave + 0.5 && victim.onGround() && victim.getY() < impact.y + 1.2
@@ -812,13 +924,18 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
+    /** Wie oft sie beim Gummiband springt (im Fehlermodus einmal mehr, als Anni 2.0 zweimal mehr). */
+    public static int hops(boolean glitchMode, boolean version2) {
+        return RUBBER_HOPS + (version2 ? 2 : glitchMode ? 1 : 0);
+    }
+
     /**
      * Gummiband: Sie flackert und ist fort – und steht woanders, drei-, im Fehlermodus viermal, immer um ihr Ziel herum
      * (Nachbilder bleiben stehen). Dann taucht sie direkt neben ihm auf und schlägt zu.
      */
     private void tickRubberband(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
-        int hopsTotal = this.isGlitchMode() ? RUBBER_HOPS + 1 : RUBBER_HOPS;
+        int hopsTotal = hops(this.isGlitchMode(), this.isVersion2());
         int last = RUBBER_FIRST + (hopsTotal - 1) * RUBBER_STEP;
         this.faceTarget(target, 30.0f);
         if (t >= RUBBER_FIRST && t <= last && (t - RUBBER_FIRST) % RUBBER_STEP == 0) {
@@ -859,7 +976,7 @@ public class AnniTrollEntity extends Monster {
             this.sound(level, ModSounds.ANNI_CLONE.get(), 2.5f, 1.0f);
         }
         if (t == CLONES_SPLIT) {
-            int count = this.isGlitchMode() ? 5 : 3;
+            int count = this.isVersion2() ? 6 : this.isGlitchMode() ? 5 : 3;
             Vec3 fwd = this.forward();
             Vec3 side = new Vec3(-fwd.z, 0.0, fwd.x);
             for (int i = 0; i < count; i++) {
@@ -899,8 +1016,13 @@ public class AnniTrollEntity extends Monster {
                 spots.add(other != null ? this.ground(other.position())
                         : this.ground(target.position().add(this.random.nextBoolean() ? 7.0 : -7.0, 0.0, this.random.nextBoolean() ? 6.0 : -6.0)));
             }
+            if (this.isVersion2()) {
+                // Anni 2.0: ein drittes Feld – dort, wohin ihr Ziel gerade läuft
+                Vec3 lead = target.position().add(target.getDeltaMovement().multiply(30.0, 0.0, 30.0));
+                spots.add(this.ground(lead.distanceToSqr(target.position()) < 16.0 ? target.position().add(this.forward().scale(-8.0)) : lead));
+            }
             List<MissingZoneEntity> zones = level.getEntitiesOfClass(MissingZoneEntity.class, this.getBoundingBox().inflate(48.0));
-            for (int i = 0; i < zones.size() - 2; i++) {
+            for (int i = 0; i < zones.size() - 3; i++) {
                 zones.get(i).discard();
             }
             for (Vec3 spot : spots) {
@@ -923,23 +1045,31 @@ public class AnniTrollEntity extends Monster {
         }
         int every = this.isGlitchMode() ? 2 : 3;
         if (t >= RAIN_START && t <= RAIN_END && t % every == 0) {
-            List<LivingEntity> watchers = this.victims(level, this.getBoundingBox().inflate(24.0, 10.0, 24.0));
-            Vec3 spot;
-            if (!watchers.isEmpty() && this.random.nextInt(5) < 3) {
-                LivingEntity who = watchers.get(this.random.nextInt(watchers.size()));
-                Vec3 lead = who.position().add(who.getDeltaMovement().multiply(14.0, 0.0, 14.0));
-                spot = lead.add((this.random.nextDouble() - 0.5) * 3.0, 0.0, (this.random.nextDouble() - 0.5) * 3.0);
-            } else {
-                double a = this.random.nextDouble() * Math.PI * 2.0;
-                double r = 3.0 + this.random.nextDouble() * 11.0;
-                spot = this.position().add(Math.cos(a) * r, 0.0, Math.sin(a) * r);
+            this.dropPixel(level);
+            if (this.isVersion2() && this.random.nextInt(5) < 2) {
+                this.dropPixel(level);
             }
-            Vec3 ground = this.ground(spot);
-            PixelCubeEntity pixel = new PixelCubeEntity(level, this, ground, this.random.nextInt(6), this.scaled(7.0f));
-            level.addFreshEntity(pixel);
-            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, ground.add(0.0, 0.05, 0.0), null, PixelCubeEntity.COLORS[pixel.colorIndex()],
-                    PixelCubeEntity.FALL_TICKS, 1.3f).spawn();
         }
+    }
+
+    /** Ein Pixelblock stürzt herab: meist dorthin, wo gleich jemand sein wird, sonst irgendwo um sie herum. */
+    private void dropPixel(ServerLevel level) {
+        List<LivingEntity> watchers = this.victims(level, this.getBoundingBox().inflate(24.0, 10.0, 24.0));
+        Vec3 spot;
+        if (!watchers.isEmpty() && this.random.nextInt(5) < 3) {
+            LivingEntity who = watchers.get(this.random.nextInt(watchers.size()));
+            Vec3 lead = who.position().add(who.getDeltaMovement().multiply(14.0, 0.0, 14.0));
+            spot = lead.add((this.random.nextDouble() - 0.5) * 3.0, 0.0, (this.random.nextDouble() - 0.5) * 3.0);
+        } else {
+            double a = this.random.nextDouble() * Math.PI * 2.0;
+            double r = 3.0 + this.random.nextDouble() * 11.0;
+            spot = this.position().add(Math.cos(a) * r, 0.0, Math.sin(a) * r);
+        }
+        Vec3 ground = this.ground(spot);
+        PixelCubeEntity pixel = new PixelCubeEntity(level, this, ground, this.random.nextInt(6), this.scaled(7.0f));
+        level.addFreshEntity(pixel);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, ground.add(0.0, 0.05, 0.0), null, PixelCubeEntity.COLORS[pixel.colorIndex()],
+                PixelCubeEntity.FALL_TICKS, 1.3f).spawn();
     }
 
     /**
@@ -1041,6 +1171,12 @@ public class AnniTrollEntity extends Monster {
             ScanlineEntity line = new ScanlineEntity(level, this, this.ground(this.position()), low ? 0.45f : 1.62f, low, start, speed,
                     this.scaled(12.0f));
             level.addFreshEntity(line);
+            if (!low && this.isVersion2()) {
+                // Anni 2.0: mit der blauen Zeile kreist zugleich eine zweite rote, gegenläufig (erst springen, dann ducken – oder umgekehrt)
+                float second = toTarget + (100.0f + this.random.nextFloat() * 60.0f) * (this.random.nextBoolean() ? 1.0f : -1.0f) + 180.0f;
+                level.addFreshEntity(new ScanlineEntity(level, this, this.ground(this.position()), 0.45f, true, second, -speed * 0.85f,
+                        this.scaled(12.0f)));
+            }
         }
     }
 
@@ -1090,25 +1226,212 @@ public class AnniTrollEntity extends Monster {
             this.wave = 1.5;
             this.struck.clear();
         }
-        if (this.wave > 0.0) {
-            double r0 = this.wave;
-            this.wave += 0.65;
-            Vec3 c = this.position();
-            this.ring(level, c, this.wave, 44);
-            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(this.wave + 1.0, 3.0, this.wave + 1.0))) {
-                double d = Math.sqrt(victim.distanceToSqr(c.x, victim.getY(), c.z));
-                if (d >= r0 - 0.6 && d < this.wave + 0.6 && victim.onGround() && victim.getY() < c.y + 2.0 && this.struck.add(victim.getUUID())) {
-                    victim.hurtServer(level, this.damageSources().indirectMagic(this, this), 18.0f);
-                    push(victim, victim.position().subtract(c).multiply(1.0, 0.0, 1.0).normalize().scale(0.8).add(0.0, 0.9, 0.0));
-                }
-            }
-            if (this.wave > 16.0) {
-                this.wave = -1.0;
-            }
-        }
+        this.rollWave(level, 16.0, 18.0f);
         if (t == CRASH_WAVE + 10) {
             this.sound(level, ModSounds.ANNI_LAUGH.get(), 4.0f, 0.8f);
         }
+    }
+
+    /** Die Welle aus Pixeln rollt von ihr aus über den Boden bis zum Halbmesser maxRadius (wer springt, entgeht ihr). */
+    private void rollWave(ServerLevel level, double maxRadius, float damage) {
+        if (this.wave <= 0.0) {
+            return;
+        }
+        double r0 = this.wave;
+        this.wave += 0.65;
+        Vec3 c = this.position();
+        this.ring(level, c, this.wave, 44);
+        for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(this.wave + 1.0, 3.0, this.wave + 1.0))) {
+            double d = Math.sqrt(victim.distanceToSqr(c.x, victim.getY(), c.z));
+            if (d >= r0 - 0.6 && d < this.wave + 0.6 && victim.onGround() && victim.getY() < c.y + 2.0 && this.struck.add(victim.getUUID())) {
+                victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
+                push(victim, victim.position().subtract(c).multiply(1.0, 0.0, 1.0).normalize().scale(0.8).add(0.0, 0.9, 0.0));
+            }
+        }
+        if (this.wave > maxRadius) {
+            this.wave = -1.0;
+        }
+    }
+
+    /**
+     * Wiederherstellung – statt zu sterben: „Schwerer Ausnahmefehler“. Sie sackt zusammen, erstarrt und zerfällt in Pixel.
+     * „Suche nach einer Sicherung …“ – „Sicherung gefunden“: Die Pixel strömen von allen Seiten zurück, ihre Leiste füllt
+     * sich Stück für Stück (bis dahin ist sie nicht zu treffen). Dann setzt sie sich als Anni 2.0 zusammen – rote Augen, ein
+     * neuer Name über der Leiste –, schlägt den Hammer in den Boden (eine Welle rollt los: springen!) und lacht.
+     */
+    private void tickRevive(ServerLevel level) {
+        int t = this.attackTick;
+        this.getNavigation().stop();
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0.0, 1.0, 0.0));
+        Vec3 c = this.position().add(0.0, 2.0, 0.0);
+        if (t == 1) {
+            this.sound(level, ModSounds.ANNI_REVIVE.get(), 4.0f, 1.0f);
+            this.tell(level, Component.translatable("entity.kingdomsatwar.anni_troll.fatal").withColor(0xFF3030));
+        }
+        if (t < REVIVE_SHATTER && t % 3 == 0) {
+            double k = t / (double) REVIVE_SHATTER;
+            level.sendParticles(ModParticles.GLITCH_PIXEL.get(), this.getX(), this.getY(0.2 + k * 0.8), this.getZ(), 4 + (int) (k * 12), 0.9, 0.5,
+                    0.9, 0.08);
+        }
+        if (t == REVIVE_SHATTER) {
+            this.setHidden(true);
+            this.pixelBurst(level, c, 180, 1.6);
+            level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFF2040), c.x, c.y, c.z, 2, 0.3, 0.3, 0.3, 0.0);
+            this.tell(level, Component.translatable("entity.kingdomsatwar.anni_troll.searching").withColor(0xA0A0A0));
+            AttributeInstance health = this.getAttribute(Attributes.MAX_HEALTH);
+            if (health != null && !health.hasModifier(BACKUP_HEALTH_ID)) {
+                health.addPermanentModifier(new AttributeModifier(BACKUP_HEALTH_ID, BACKUP_HEALTH - 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            }
+            this.setHealth(1.0f);
+        }
+        if (t > REVIVE_SHATTER && t < REVIVE_ASSEMBLE && t % 2 == 0) {
+            this.streamPixels(level, c, t > REVIVE_FOUND ? 8 : 3);
+        }
+        if (t == REVIVE_FOUND) {
+            this.tell(level, Component.translatable("entity.kingdomsatwar.anni_troll.found").withColor(0x20E8FF));
+        }
+        if (t >= REVIVE_FILL && t <= REVIVE_FILLED) {
+            float k = (t - REVIVE_FILL) / (float) (REVIVE_FILLED - REVIVE_FILL);
+            this.setHealth(Math.max(1.0f, this.getMaxHealth() * k));
+            if ((t - REVIVE_FILL) % 8 == 0) {
+                int percent = Math.round(k * 100.0f);
+                this.tell(level, Component.translatable("entity.kingdomsatwar.anni_troll.restoring", bar(k) + " " + percent + " %").withColor(0x20E8FF));
+            }
+        }
+        if (t == REVIVE_ASSEMBLE) {
+            this.becomeVersion2();
+            this.setHealth(this.getMaxHealth());
+            this.setHidden(false);
+            this.sound(level, ModSounds.ANNI_TELEPORT.get(), 3.0f, 0.6f);
+            level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFF2040), c.x, c.y, c.z, 2, 0.2, 0.2, 0.2, 0.0);
+            this.pixelBurst(level, c, 120, 1.5);
+            Component title = Component.translatable("boss.kingdomsatwar.anni2").withColor(0xFF2040);
+            Component subtitle = Component.translatable("boss.kingdomsatwar.anni2.title").withStyle(ChatFormatting.GRAY);
+            for (ServerPlayer player : level.players()) {
+                if (player.distanceToSqr(this) < 64.0 * 64.0) {
+                    player.connection.send(new ClientboundSetTitlesAnimationPacket(6, 60, 20));
+                    player.connection.send(new ClientboundSetTitleTextPacket(title));
+                    player.connection.send(new ClientboundSetSubtitleTextPacket(subtitle));
+                }
+            }
+        }
+        if (t == REVIVE_WAVE) {
+            this.sound(level, ModSounds.ANNI_SMASH.get(), 4.0f, 0.55f);
+            level.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY() + 0.5, this.getZ(), 3, 1.2, 0.2, 1.2, 0.0);
+            this.wave = 1.5;
+            this.struck.clear();
+        }
+        this.rollWave(level, 18.0, 20.0f);
+        if (t == REVIVE_WAVE + 12) {
+            this.sound(level, ModSounds.ANNI_LAUGH.get(), 4.0f, 0.75f);
+        }
+        Player nearest = level.getNearestPlayer(this, 40.0);
+        if (nearest != null && t > REVIVE_ASSEMBLE) {
+            this.getLookControl().setLookAt(nearest, 20.0f, 20.0f);
+            this.turnTo((float) (Mth.atan2(nearest.getZ() - this.getZ(), nearest.getX() - this.getX()) * Mth.RAD_TO_DEG) - 90.0f, 10.0f);
+        }
+    }
+
+    /** Ein Ladebalken aus zehn Kästchen. */
+    private static String bar(float k) {
+        int full = Mth.clamp(Math.round(k * 10.0f), 0, 10);
+        return "█".repeat(full) + "░".repeat(10 - full);
+    }
+
+    /** Pixel strömen von allen Seiten auf sie zu (beim Laden und bei der Wiederherstellung). */
+    private void streamPixels(ServerLevel level, Vec3 c, int count) {
+        for (int i = 0; i < count; i++) {
+            double a = this.random.nextDouble() * Math.PI * 2.0;
+            double r = 6.0 + this.random.nextDouble() * 6.0;
+            double y = this.random.nextDouble() * 5.0 - 1.0;
+            Vec3 from = c.add(Math.cos(a) * r, y, Math.sin(a) * r);
+            Vec3 v = c.subtract(from).scale(0.09);
+            level.sendParticles(ModParticles.GLITCH_PIXEL.get(), from.x, from.y, from.z, 0, v.x, v.y, v.z, 1.0);
+        }
+    }
+
+    /** Eine Zeile über der Schnellleiste für alle in der Nähe. */
+    private void tell(ServerLevel level, Component message) {
+        for (ServerPlayer player : level.players()) {
+            if (player.distanceToSqr(this) < 64.0 * 64.0) {
+                player.sendOverlayMessage(message);
+            }
+        }
+    }
+
+    /**
+     * Speedhack (nur Anni 2.0): Sie zielt – ein Ladekreis dreht sich über ihr, eine Spur aus Farbpunkten zeigt, wohin –,
+     * dann rast sie geradeaus los, schneller als jedes Pferd, bis sie gegen etwas prallt. Wen sie erwischt, den schleudert
+     * sie zur Seite; Nachbilder und kleine Felder fehlender Textur bleiben auf ihrer Bahn zurück. Dreimal hintereinander.
+     */
+    private void tickSpeedhack(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        if (t < HACK_FIRST) {
+            this.faceTarget(target, 20.0f);
+            return;
+        }
+        int k = (t - HACK_FIRST) / HACK_STEP;
+        int p = (t - HACK_FIRST) % HACK_STEP;
+        if (k >= HACK_DASHES) {
+            if (t == HACK_FIRST + HACK_DASHES * HACK_STEP + 2) {
+                this.sound(level, ModSounds.ANNI_LAUGH.get(), 2.5f, 1.15f);
+            }
+            this.faceTarget(target, 10.0f);
+            return;
+        }
+        if (p == 0) {
+            this.setLagging(true);
+            this.sound(level, ModSounds.ANNI_LAG.get(), 1.6f, 1.2f);
+            this.struck.clear();
+        }
+        if (p < HACK_AIM) {
+            this.faceTarget(target, 40.0f);
+            Vec3 to = target.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
+            this.dash = to.lengthSqr() < 1.0e-4 ? this.forward() : to.normalize();
+            if (p % 2 == 0) {
+                for (int i = 2; i <= 14; i += 2) {
+                    Vec3 at = this.ground(this.position().add(this.dash.scale(i)));
+                    level.sendParticles(i % 4 == 0 ? RED : CYAN, at.x, at.y + 0.3, at.z, 1, 0.12, 0.05, 0.12, 0.0);
+                }
+            }
+            return;
+        }
+        if (p == HACK_AIM) {
+            this.setLagging(false);
+            this.sound(level, ModSounds.ANNI_TELEPORT.get(), 2.5f, 0.6f);
+            this.sound(level, ModSounds.ANNI_WINDUP.get(), 2.0f, 1.4f);
+        }
+        if (p < HACK_AIM + HACK_DASH) {
+            Vec3 v = this.dash.scale(1.15);
+            this.setDeltaMovement(v.x, this.getDeltaMovement().y, v.z);
+            this.faceTowards(this.position().add(this.dash), 360.0f);
+            if (p % 2 == 0) {
+                level.addFreshEntity(AfterimageEntity.ofTroll(level, this, 10));
+            }
+            if (p % 4 == 1) {
+                level.addFreshEntity(new MissingZoneEntity(level, this, this.ground(this.position()), 1, this.scaled(3.0f)));
+            }
+            Vec3 side = new Vec3(-this.dash.z, 0.0, this.dash.x);
+            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(1.2, 0.5, 1.2))) {
+                if (this.struck.add(victim.getUUID()) && victim.hurtServer(level, this.damageSources().mobAttack(this), this.scaled(15.0f))) {
+                    double sign = side.dot(victim.position().subtract(this.position())) < 0.0 ? -1.0 : 1.0;
+                    push(victim, side.scale(1.2 * sign).add(this.dash.scale(0.5)).add(0.0, 0.55, 0.0));
+                    this.pixelBurst(level, victim.position().add(0.0, 1.0, 0.0), 24, 0.6);
+                }
+            }
+            if (this.horizontalCollision && p > HACK_AIM + 1) {
+                // gegen etwas geprallt: ein Stoß, Pixel – und dieser Ansturm ist vorbei
+                this.sound(level, ModSounds.ANNI_SMASH.get(), 2.0f, 1.3f);
+                this.pixelBurst(level, this.position().add(this.dash.scale(1.4)).add(0.0, 1.6, 0.0), 30, 0.8);
+                this.setDeltaMovement(0.0, this.getDeltaMovement().y, 0.0);
+                this.attackTick = HACK_FIRST + k * HACK_STEP + HACK_AIM + HACK_DASH;
+            }
+            return;
+        }
+        if (p == HACK_AIM + HACK_DASH) {
+            this.setDeltaMovement(this.getDeltaMovement().multiply(0.2, 1.0, 0.2));
+        }
+        this.faceTarget(target, 12.0f);
     }
 
     // ------------------------------------------------------------------ Hilfen
@@ -1200,7 +1523,7 @@ public class AnniTrollEntity extends Monster {
     }
 
     float scaled(float damage) {
-        return this.isGlitchMode() ? damage * 1.2f : damage;
+        return this.isVersion2() ? damage * 1.4f : this.isGlitchMode() ? damage * 1.2f : damage;
     }
 
     // ------------------------------------------------------------------ Klänge und Tod
@@ -1220,9 +1543,10 @@ public class AnniTrollEntity extends Monster {
         return ModSounds.ANNI_HURT.get();
     }
 
+    /** Kein Todesklang beim tödlichen Treffer: Ob sie wirklich stirbt oder ihre Sicherung lädt, entscheidet sich erst in die(). */
     @Override
-    protected SoundEvent getDeathSound() {
-        return ModSounds.ANNI_DEATH.get();
+    protected @Nullable SoundEvent getDeathSound() {
+        return null;
     }
 
     @Override
@@ -1235,9 +1559,21 @@ public class AnniTrollEntity extends Monster {
         this.playSound(ModSounds.ANNI_STEP.get(), 1.2f, 0.9f + this.random.nextFloat() * 0.2f);
     }
 
-    /** Sie stürzt endgültig ab: Sie erstarrt, flackert, zerfällt in Pixel; der Kern erlischt. */
+    /**
+     * Beim ersten tödlichen Treffer stirbt sie nicht: Sie lädt ihre Sicherung und kehrt als Anni 2.0 zurück (nicht bei
+     * Schaden, der jede Unverwundbarkeit durchschlägt, etwa /kill oder die Leere). Beim zweiten Mal stürzt sie endgültig ab:
+     * Sie erstarrt, flackert, zerfällt in Pixel; der Kern erlischt.
+     */
     @Override
     public void die(DamageSource source) {
+        if (!this.revived && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.level() instanceof ServerLevel level
+                && !this.isRemoved()) {
+            this.revive(level);
+            return;
+        }
+        if (this.level() instanceof ServerLevel level) {
+            this.sound(level, ModSounds.ANNI_DEATH.get(), 4.0f, 1.0f);
+        }
         super.die(source);
         if (this.level() instanceof ServerLevel level) {
             level.getEntitiesOfClass(GlitchCloneEntity.class, this.getBoundingBox().inflate(48.0), c -> c.isCloneOf(this)).forEach(Entity::discard);
@@ -1251,6 +1587,22 @@ public class AnniTrollEntity extends Monster {
                 core.onTrollDefeated(level);
             }
         }
+    }
+
+    /** Statt zu sterben: Leben auf eins, Klone und Felder fort – und die Wiederherstellung beginnt. */
+    private void revive(ServerLevel level) {
+        this.revived = true;
+        this.crashed = true;
+        this.setHealth(1.0f);
+        this.deathTime = 0;
+        this.clipTicks = 0;
+        this.noPhysics = false;
+        this.stutter = 0;
+        this.setLagging(false);
+        this.getNavigation().stop();
+        level.getEntitiesOfClass(GlitchCloneEntity.class, this.getBoundingBox().inflate(48.0), c -> c.isCloneOf(this)).forEach(Entity::discard);
+        level.getEntitiesOfClass(MissingZoneEntity.class, this.getBoundingBox().inflate(48.0)).forEach(Entity::discard);
+        this.begin(Attack.REVIVE);
     }
 
     @Override
@@ -1284,6 +1636,9 @@ public class AnniTrollEntity extends Monster {
         }
         output.putBoolean("Crashed", this.crashed);
         output.putBoolean("GlitchMode", this.isGlitchMode());
+        output.putBoolean("Revived", this.revived || this.attack == Attack.REVIVE);
+        output.putBoolean("Version2", this.isVersion2() || this.attack == Attack.REVIVE);
+        output.putBoolean("Reviving", this.attack == Attack.REVIVE);
     }
 
     @Override
@@ -1292,8 +1647,14 @@ public class AnniTrollEntity extends Monster {
         this.home = input.getLong("Home").map(BlockPos::of).orElse(null);
         this.crashed = input.getBooleanOr("Crashed", false);
         this.entityData.set(DATA_GLITCH, input.getBooleanOr("GlitchMode", false));
-        if (this.hasCustomName()) {
-            this.bossBar.setName(this.getDisplayName());
+        this.revived = input.getBooleanOr("Revived", false);
+        if (input.getBooleanOr("Version2", false)) {
+            this.becomeVersion2();
         }
+        if (input.getBooleanOr("Reviving", false)) {
+            // mitten in der Wiederherstellung gespeichert: die Sicherung ist nun ganz geladen
+            this.setHealth(this.getMaxHealth());
+        }
+        this.nameBossBar();
     }
 }

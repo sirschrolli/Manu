@@ -836,6 +836,77 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("item.mystic_deck.throw", "Cards fly", "Karten fliegen");
         subtitle("item.mystic_top_hat.vanish", "Vanishing trick", "Verschwindetrick");
+        // Anni der Troll (0.67)
+        creature(ModEntities.ANNI_TROLL, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ANNI_TROLL_SPAWN_EGG, "Anni the Troll", "Anni der Troll", "Anni");
+        add(ModEntities.GLITCH_CLONE.get(), pick("Glitch Clone", "Fehler-Klon"));
+        add(ModEntities.PIXEL_CUBE.get(), pick("Pixel", "Pixel"));
+        add(ModEntities.MISSING_ZONE.get(), pick("Missing Texture", "Fehlende Textur"));
+        add(ModEntities.SCANLINE.get(), pick("Scanline Error", "Zeilenfehler"));
+        add(ModEntities.AFTERIMAGE.get(), pick("Afterimage", "Nachbild"));
+        text("boss.kingdomsatwar.anni", "Anni the Troll", "Anni der Troll");
+        text("boss.kingdomsatwar.anni.title", "Error 404: mercy not found", "Fehler 404: Gnade nicht gefunden");
+        text("entity.kingdomsatwar.anni_troll.loading", "Loading Anni … ██████░░░░ 60 %", "Lade Anni … ██████░░░░ 60 %");
+        text("entity.kingdomsatwar.anni_troll.disconnect", "Anni lost the connection.", "Anni hat die Verbindung verloren.");
+        text("entity.kingdomsatwar.anni_troll.rollback", "Rollback! The world jerked you back.", "Rückruck! Die Welt hat dich zurückgerissen.");
+        text("entity.kingdomsatwar.anni_troll.crash", "Anni.exe is not responding.", "Anni.exe reagiert nicht.");
+        text("entity.kingdomsatwar.anni_troll.restart", "Restarting Anni … – jump when the wave comes!",
+                "Anni wird neu gestartet … – spring, wenn die Welle kommt!");
+        text("entity.kingdomsatwar.anni_troll.game_over", "GAME OVER – Anni crashed for good.", "GAME OVER – Anni ist endgültig abgestürzt.");
+        text("boss.kingdomsatwar.anni2", "Anni the Troll 2.0", "Anni der Troll 2.0");
+        text("boss.kingdomsatwar.anni2.title", "Now with even more bugs!", "Jetzt mit noch mehr Fehlern!");
+        text("entity.kingdomsatwar.anni_troll.fatal", "Fatal exception – Anni.exe has stopped.", "Schwerer Ausnahmefehler – Anni.exe wurde beendet.");
+        text("entity.kingdomsatwar.anni_troll.searching", "Searching for a backup …", "Suche nach einer Sicherung …");
+        text("entity.kingdomsatwar.anni_troll.found", "Backup found: anni_final_FINAL_v2.sav", "Sicherung gefunden: anni_final_ENDGUELTIG_v2.sav");
+        text("entity.kingdomsatwar.anni_troll.restoring", "Restoring Anni … %s", "Stelle Anni wieder her … %s");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE, "Error Core", "Fehlerkern");
+        lore("error_core", "The heart of an Error Zone – Anni the Troll is loaded here", "Das Herz einer Fehlerzone – hier wird Anni der Troll geladen");
+        text(ModItems.loreKey("error_core", 2), "Crashed after her defeat: a block of redstone restarts it",
+                "Nach ihrer Niederlage abgestürzt: ein Redstoneblock startet ihn neu");
+        text("block.kingdomsatwar.error_core.hint", "The core flickers. Something big is waiting to be loaded …",
+                "Der Kern flimmert. Etwas Großes wartet darauf, geladen zu werden …");
+        text("block.kingdomsatwar.error_core.running", "Anni is running – the core hums.", "Anni läuft – der Kern summt.");
+        text("block.kingdomsatwar.error_core.crashed", "The core has crashed. A block of redstone might restart it.",
+                "Der Kern ist abgestürzt. Ein Redstoneblock könnte ihn neu starten.");
+        text("block.kingdomsatwar.error_core.warning", "The world flickers … something here is broken.", "Die Welt flimmert … hier ist etwas kaputt.");
+        text("block.kingdomsatwar.error_core.peaceful", "The core stays dark (the world is set to Peaceful).",
+                "Der Kern bleibt dunkel (die Welt steht auf „Friedlich“).");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK, "Missing Texture Block", "Fehlerblock");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK, "Static", "Bildrauschen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD, "Glitch Shard", "Fehlersplitter");
+        lore("glitch_shard", "A splinter of a broken world – repairs the Bannhammer and the Glitch Wings",
+                "Ein Splitter kaputter Welt – repariert Bannhammer und Fehlerflügel");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER, "Bannhammer", "Bannhammer");
+        lore("bannhammer", "Anni's hammer – half of its head is missing", "Annis Hammer – die Hälfte seines Kopfes fehlt");
+        text(ModItems.loreKey("bannhammer", 2), "Every third hit: jolt (the target freezes and is pulled back)",
+                "Jeder dritte Treffer: Ruckler (das Ziel hängt fest und wird zurückgerissen)");
+        text(ModItems.loreKey("bannhammer", 3), "Every fifth hit: ban – a burst of pixels hits everything around",
+                "Jeder fünfte Treffer: Bann – ein Knall aus Pixeln trifft alles ringsum");
+        text("item.kingdomsatwar.bannhammer.ban", "Banned!", "Gebannt!");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS, "Glitch Wings", "Fehlerflügel");
+        lore("glitch_wings", "Wings of missing texture – glide like elytra", "Flügel aus fehlender Textur – gleiten wie Elytren");
+        text(ModItems.loreKey("glitch_wings", 2), "While gliding, jump: blink eight blocks ahead (every 2 s)",
+                "Im Gleitflug Springen: acht Blöcke nach vorn blinzeln (alle 2 s)");
+        text(ModItems.loreKey("glitch_wings", 3), "Leaves colour fringes behind", "Ziehen Farbsäume hinter sich her");
+        for (String[] e : new String[][] {{"ambient", "Anni chuckles", "Anni kichert"}, {"laugh", "Anni laughs", "Anni lacht"},
+                {"hurt", "Anni hurts", "Anni nimmt Schaden"}, {"death", "Anni crashes for good", "Anni stürzt endgültig ab"},
+                {"step", "Heavy footsteps", "Schwere Schritte"}, {"boot", "Something is loading", "Etwas wird geladen"},
+                {"disconnect", "Connection lost", "Verbindung verloren"}, {"windup", "Anni winds up", "Anni holt aus"},
+                {"smash", "Hammer smashes", "Hammer kracht"}, {"lag", "Anni lags", "Anni hängt"},
+                {"teleport", "Anni glitches away", "Anni springt"}, {"miss", "Hit not registered", "Treffer nicht registriert"},
+                {"clone", "Anni duplicates", "Anni verdoppelt sich"}, {"clone_crash", "Clone crashes", "Klon stürzt ab"},
+                {"clone_pop", "Clone pops", "Klon zerplatzt"}, {"missing", "Texture goes missing", "Textur fehlt"},
+                {"rain", "Pixels fall", "Pixel regnen"}, {"pixel", "Pixel impacts", "Pixel schlägt ein"},
+                {"rollback_mark", "Positions saved", "Stellen gespeichert"}, {"rollback", "Rollback", "Rückruck"},
+                {"scan", "Scanline sweeps", "Zeile fegt"}, {"crash", "Error sound", "Fehlerklang"},
+                {"restart", "Anni restarts", "Anni startet neu"}, {"revive", "Anni restores a backup", "Anni lädt eine Sicherung"}}) {
+            subtitle("entity.anni_troll." + e[0], e[1], e[2]);
+        }
+        subtitle("block.error_core.hum", "Error core hums", "Fehlerkern summt");
+        subtitle("block.error_core.on", "Error core restarts", "Fehlerkern startet");
+        subtitle("block.error_core.off", "Error core crashes", "Fehlerkern stürzt ab");
+        subtitle("item.bannhammer.jolt", "Target jolts", "Ziel ruckelt");
+        subtitle("item.bannhammer.ban", "Ban!", "Bann!");
+        subtitle("item.glitch_wings.blink", "Blink", "Blinzeln");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

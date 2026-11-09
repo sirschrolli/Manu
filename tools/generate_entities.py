@@ -31,7 +31,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
-                              miss_mystik, light_dove, magic_sword)
+                              miss_mystik, light_dove, magic_sword, anni_troll)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -43,7 +43,7 @@ PACKAGE = "io.github.sirschrolli.kingdomsatwar.client.model.geom"
 ONLY: set[str] = set()
 
 
-def write_model(module, class_name: str, doc: str, folder: str, variants: dict, preview: bool):
+def write_model(module, class_name: str, doc: str, folder: str, variants: dict, preview: bool, same_seed: bool = False):
     if ONLY and class_name not in ONLY:
         return
     model = module.build()
@@ -53,7 +53,8 @@ def write_model(module, class_name: str, doc: str, folder: str, variants: dict, 
     out = TEX / folder
     out.mkdir(parents=True, exist_ok=True)
     for i, (variant, pal) in enumerate(variants.items()):
-        img, glow = paint_model(model, module.materials(variant), pal, seed=100 + i, params={"variant": variant})
+        # same_seed: alle Varianten mit demselben Zufall bemalt (sie unterscheiden sich nur in den Farben)
+        img, glow = paint_model(model, module.materials(variant), pal, seed=100 if same_seed else 100 + i, params={"variant": variant})
         img.save(out / f"{variant}.png")
         if glow.getbbox() is not None:
             glow.save(out / f"{variant}_glow.png")
@@ -91,6 +92,9 @@ def main():
     write_model(light_dove, "LightDoveGeometry", "Geometrie der Lichttaube (MissMystik).", "miss_mystik", light_dove.PALETTES, preview)
     write_model(magic_sword, "MagicSwordGeometry", "Geometrie eines Schwerts der Schwerterkiste (MissMystik).", "miss_mystik",
                 magic_sword.PALETTES, preview)
+    write_model(anni_troll, "AnniTrollGeometry",
+                "Geometrie Annis, des Trolls (im Spiel 1,2-fach vergrößert): Flickenkittel, Bannhammer, Haarschopf, Pixelkrone, zerfallener Arm.",
+                "anni_troll", anni_troll.PALETTES, preview, same_seed=True)
     write_model(moth_queen, "MothQueenGeometry", "Geometrie der Mottenkönigin (im Spiel 2,5-fach vergrößert).", "moth_queen",
                 moth_queen.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)

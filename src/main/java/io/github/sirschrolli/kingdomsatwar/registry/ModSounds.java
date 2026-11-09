@@ -244,6 +244,7 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_SCAN = register("entity.anni_troll.scan");
     public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_CRASH = register("entity.anni_troll.crash");
     public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_RESTART = register("entity.anni_troll.restart");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_REVIVE = register("entity.anni_troll.revive");
     public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_HUM = register("block.error_core.hum");
     public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_ON = register("block.error_core.on");
     public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_OFF = register("block.error_core.off");

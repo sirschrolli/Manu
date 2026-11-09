@@ -366,6 +366,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 3, 6))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 5, 10)));
+        // Anni der Troll: ihr Bannhammer, die Fehlerflügel, Fehlersplitter und Redstone aus der kaputten Welt
+        this.add(ModEntities.ANNI_TROLL.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.BANNHAMMER.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_WINGS.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD.get(), 5, 9))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get(), 2, 5))
+                .withPool(drop(net.minecraft.world.item.Items.REDSTONE, 8, 16))
+                .withPool(drop(net.minecraft.world.item.Items.DIAMOND, 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 3, 5))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 8, 14)));
+        this.add(ModEntities.GLITCH_CLONE.get(), LootTable.lootTable());
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

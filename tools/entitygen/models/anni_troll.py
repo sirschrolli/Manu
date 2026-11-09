@@ -54,6 +54,10 @@ PALETTES = {
         "warn": stops("#3a2a00", "#c09000", "#ffd400", "#fff080"),
     },
 }
+# Anni 2.0 (aus der Sicherung wiederhergestellt): dieselbe Haut, aber ein rot glühendes Auge und ein roter Bildschirm
+PALETTES["anni_troll_v2"] = dict(PALETTES["anni_troll"],
+                                 eye=stops("#2a0000", "#7a0008", "#d01020", "#ff4848", "#ffc8c8"),
+                                 screen=stops("#1c0404", "#4a0a0a", "#900a14", "#e82030", "#ff9a9a", "#ffffff"))
 
 # Pixel, die um Anni schweben: (Knochen, Elternknochen, Lage, Größe, Farbe)
 PIXELS = [

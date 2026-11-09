@@ -86,6 +86,17 @@ ELEMENTS = {
                    f0="#2e0a44", f1="#7a2496", f2="#e46ad0", f3="#fff0fa", gold="#ffd86a", gold_dark="#8a6020",
                    card="#fbf7ff", card_dark="#a898c0", red="#e8344a", black="#1c1428", wand="#121016",
                    confetti="#4ae0e8"),
+    # Anni der Troll: dunkles Metall mit Farbsäumen (magenta und cyan), hinter dem Medaillon der Bannhammer mit fehlender
+    # Textur, ringsum lose Pixel; Füllung wie ein kaputtes Bild: Zeilen, verrutschte Blöcke, Farbrauschen
+    "anni": dict(m0="#121218", m1="#3e3e4c", m2="#b8b8c8", acc="#f800f8", glow="#c8fcff", deep="#0a040e",
+                 f0="#3a0040", f1="#8a0a8a", f2="#f040c8", f3="#d8ffff", cyan="#22d8e8", cyan_dark="#0a5a66",
+                 red="#ff3040", green="#40ff70", blue="#4080ff", yellow="#ffd400", wood="#5a3a20", wood_dark="#2a1a0c",
+                 stone="#8a8a92", stone_dark="#4a4a52", iron="#2e2e36"),
+    # Anni der Troll 2.0 (aus der Sicherung wiederhergestellt): derselbe Rahmen, aber Säume, Füllung und Schein in Alarmrot
+    "anni2": dict(m0="#160c0e", m1="#4a2e34", m2="#d0b0b8", acc="#ff2040", glow="#ffd0d4", deep="#120406",
+                  f0="#3a0008", f1="#8a0a18", f2="#ff3a48", f3="#ffe0e0", cyan="#ff8a30", cyan_dark="#6a2a0a",
+                  red="#ff3040", green="#40ff70", blue="#4080ff", yellow="#ffd400", wood="#5a3a20", wood_dark="#2a1a0c",
+                  stone="#8a8a92", stone_dark="#4a4a52", iron="#2e2e36"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1223,7 +1234,79 @@ def deco_mystic(img: Image.Image, pal: dict) -> None:
     put(px, img, sx - 1, sy + 1, gold)
 
 
-DECOS = {"mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_anni(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon schräg der Bannhammer (Baumstamm-Stiel, Steinklotz, dessen vordere Hälfte fehlende Textur ist);
+    um den Rahmen schweben lose Pixel in Rot, Grün, Blau, Magenta und Cyan, der Rahmen hat Farbsäume (oben magenta, unten
+    cyan), und an der Spitze sitzt ein gelbes Warndreieck."""
+    px = img.load()
+    acc, cyan = c(pal, "acc"), c(pal, "cyan")
+    wood, wood_dark = c(pal, "wood"), c(pal, "wood_dark")
+    stone, stone_dark, iron = c(pal, "stone"), c(pal, "stone_dark"), c(pal, "iron")
+    pixels = [c(pal, k) for k in ("red", "green", "blue", "acc", "cyan", "yellow")]
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # der Stiel: von unten links nach oben rechts hinter dem Medaillon, der Kopf rechts oben über dem Rahmen
+    x0, y0, x1, y1 = EMB_X - 16, EMB_Y + 18, EMB_X + 27, EMB_Y - 14
+    length = math.hypot(x1 - x0, y1 - y0)
+    for k in range(int(length) + 1):
+        t = k / length
+        x = x0 + (x1 - x0) * t
+        y = y0 + (y1 - y0) * t
+        for o in (-1, 0, 1):
+            col = OUTLINE if o != 0 else (wood if (k // 3) % 2 else wood_dark)
+            put(px, img, round(x + o * 0.7), round(y + o * 0.7), col)
+    # der Kopf: ein schräger Klotz um das obere Ende, die vordere Hälfte fehlende Textur
+    hx, hy = x1 + 2, y1 + 1
+    ang = math.atan2(y1 - y0, x1 - x0)
+    ca, sa = math.cos(ang), math.sin(ang)
+    for y in range(FRAME_H):
+        for x in range(FRAME_W):
+            if x >= BAR_X - 3 and y >= BAR_Y - 3:
+                continue
+            dx, dy = x + 0.5 - hx, y + 0.5 - hy
+            u = dx * ca + dy * sa            # entlang des Stiels
+            v = -dx * sa + dy * ca           # quer
+            if abs(u) > 4.2 or abs(v) > 7.2:
+                continue
+            if abs(u) > 3.4 or abs(v) > 6.4:
+                col = OUTLINE
+            elif v < 0:
+                col = acc if (int(math.floor(u + 8)) // 2 + int(math.floor(v + 8)) // 2) % 2 == 0 else (8, 0, 10, 255)
+            else:
+                col = mix(stone, stone_dark, 0.2 + 0.5 * hash01(x, y, 5)) if abs(v - 2.5) > 0.7 else iron
+            put(px, img, x, y, col)
+    # Farbsäume am Rahmen: oben magenta, unten cyan (verrutscht)
+    for x in range(BAR_X - 2, BAR_X + BAR_W + 2):
+        if hash01(x // 6, 81) > 0.45:
+            put(px, img, x, top - 1, acc)
+        if hash01(x // 5, 83) > 0.5:
+            put(px, img, x + 1, bottom + 1, cyan)
+    # lose Pixel um den Rahmen (je 2 x 2)
+    for i in range(26):
+        x = BAR_X + int(hash01(i, 91) * (BAR_W - 4))
+        above = hash01(i, 93) > 0.5
+        y = top - 4 - int(hash01(i, 95) * 6) if above else bottom + 2 + int(hash01(i, 97) * 4)
+        col = pixels[int(hash01(i, 99) * len(pixels)) % len(pixels)]
+        for gx in range(2):
+            for gy in range(2):
+                if 0 <= y + gy < FRAME_H:
+                    put(px, img, x + gx, y + gy, col)
+    # Spitze: ein gelbes Warndreieck mit schwarzem Ausrufezeichen (am rechten Ende des Rahmens)
+    yellow = c(pal, "yellow")
+    ex, ey = 234, BAR_Y + BAR_H // 2
+    for y in range(-6, 6):
+        half = (y + 6) * 0.45
+        for x in range(-6, 7):
+            if abs(x) > half + 0.3:
+                continue
+            edge = abs(x) > half - 1.0 or y == 5
+            col = OUTLINE if edge else yellow
+            if x == 0 and (-2 <= y <= 1 or y == 3):
+                col = OUTLINE
+            put(px, img, ex + x, ey + y, col)
+
+
+DECOS = {"anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -1308,6 +1391,14 @@ def fill_value(element: str, x: int, y: int) -> float:
         if edge < 0.07:
             return 0.82
         return 0.62 if cell else 0.36
+    if element in ("anni", "anni2"):
+        # ein kaputtes Bild: Zeilen, verrutschte Blöcke (4 x 1), dazwischen helle Fehlerpixel
+        block = hash01(x // 4 + (y % 3) * 7, y, 71)
+        if hash01(x, y, 73) > 0.975:
+            return 1.0
+        if y % 3 == 0:
+            return 0.3
+        return 0.4 + block * 0.45
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -1408,15 +1499,15 @@ def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
-                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king)
+                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
-           "forge": glutschmied, "star": asteria, "mystic": miss_mystik}[element]
+           "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll}[element]
     m = mod.build()
     m.pack()
-    variant = next(iter(mod.PALETTES))
+    variant = "anni_troll_v2" if element == "anni2" else next(iter(mod.PALETTES))
     tex, glow = paint_model(m, mod.materials(variant), mod.PALETTES[variant], seed=100)
     if element == "void":
         # nur Kopf, Bart und Krone (Schultern, Hände und Trümmer würden das kleine Bildnis überladen)
@@ -1469,14 +1560,28 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_mystic(child)
         strip_mystic(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22}.get(element, -42)
-    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2}.get(element, 6)
+    if element in ("anni", "anni2"):
+        # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
+        def strip_anni(bone):
+            if bone.name not in ("head", "jaw", "left_ear", "right_ear", "tuft"):
+                bone.cubes.clear()
+            if bone.name == "tuft":
+                # nur der Ansatz des Schopfs (sonst wäre das Gesicht im Bildnis zu klein)
+                del bone.cubes[2:]
+            for child in bone.children:
+                strip_anni(child)
+        strip_anni(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
+            "anni": 1.0, "anni2": 1.0}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
+           "anni2": -24}.get(element, -42)
+    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
+                                                 "anni": 1.45, "anni2": 1.45}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

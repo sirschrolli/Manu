@@ -261,6 +261,10 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STARSTONE);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.STAGE_HAT);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.STAGE_HAT);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE);
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK,
+                io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK);
         add(ModTags.Blocks.GLIMMERWOOD_LOGS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD, FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
                 FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD);
         tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.GLIMMERWOOD_LOGS);

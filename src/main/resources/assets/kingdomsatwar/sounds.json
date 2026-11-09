@@ -2229,6 +2229,41 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.dragon_egg.hatch"
   },
+  "block.error_core.hum": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/error_core_hum1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:anni/error_core_hum2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:anni/error_core_hum3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.error_core.hum"
+  },
+  "block.error_core.off": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/error_core_off1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.error_core.off"
+  },
+  "block.error_core.on": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/error_core_on1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.error_core.on"
+  },
   "block.fae_portal.ambient": {
     "sounds": [
       {
@@ -2338,6 +2373,342 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.anglerfish.snap"
+  },
+  "entity.anni_troll.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_ambient1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_ambient2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_ambient3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.ambient"
+  },
+  "entity.anni_troll.boot": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_boot1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.boot"
+  },
+  "entity.anni_troll.clone": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.clone"
+  },
+  "entity.anni_troll.clone_crash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone_crash1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone_crash2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.clone_crash"
+  },
+  "entity.anni_troll.clone_pop": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone_pop1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone_pop2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_clone_pop3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.clone_pop"
+  },
+  "entity.anni_troll.crash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_crash1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.crash"
+  },
+  "entity.anni_troll.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_death1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.death"
+  },
+  "entity.anni_troll.disconnect": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_disconnect1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.disconnect"
+  },
+  "entity.anni_troll.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.hurt"
+  },
+  "entity.anni_troll.lag": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_lag1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_lag2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_lag3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.lag"
+  },
+  "entity.anni_troll.laugh": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_laugh1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_laugh2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_laugh3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.laugh"
+  },
+  "entity.anni_troll.miss": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_miss1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_miss2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_miss3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.miss"
+  },
+  "entity.anni_troll.missing": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_missing1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_missing2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.missing"
+  },
+  "entity.anni_troll.pixel": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_pixel1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_pixel2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_pixel3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_pixel4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.pixel"
+  },
+  "entity.anni_troll.rain": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rain1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rain2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.rain"
+  },
+  "entity.anni_troll.restart": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_restart1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.restart"
+  },
+  "entity.anni_troll.revive": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_revive1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.revive"
+  },
+  "entity.anni_troll.rollback": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rollback1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rollback2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.rollback"
+  },
+  "entity.anni_troll.rollback_mark": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rollback_mark1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_rollback_mark2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.rollback_mark"
+  },
+  "entity.anni_troll.scan": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_scan1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_scan2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.scan"
+  },
+  "entity.anni_troll.smash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_smash1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_smash2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_smash3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.smash"
+  },
+  "entity.anni_troll.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_step1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_step2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_step3",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_step4",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.step"
+  },
+  "entity.anni_troll.teleport": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_teleport1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_teleport2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_teleport3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.teleport"
+  },
+  "entity.anni_troll.windup": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/anni_troll_windup1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/anni_troll_windup2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.windup"
   },
   "entity.asteria.ambient": {
     "sounds": [
@@ -5898,6 +6269,32 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.intro.narration"
   },
+  "item.bannhammer.ban": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/bannhammer_ban1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:anni/bannhammer_ban2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.bannhammer.ban"
+  },
+  "item.bannhammer.jolt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/bannhammer_jolt1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:anni/bannhammer_jolt2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.bannhammer.jolt"
+  },
   "item.command_baton.command": {
     "sounds": [
       {
@@ -5924,6 +6321,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.fae_elytra.flap"
+  },
+  "item.glitch_wings.blink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:anni/glitch_wings_blink1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:anni/glitch_wings_blink2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:anni/glitch_wings_blink3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.glitch_wings.blink"
   },
   "item.mystic_deck.throw": {
     "sounds": [
