@@ -98,6 +98,9 @@ public class MissMystikRenderer extends MobRenderer<MissMystikEntity, MissMystik
         state.flap = Mth.lerp(partialTicks, entity.flapO, entity.flap);
         state.image = false;
         state.speed = (float) entity.getDeltaMovement().length();
+        if (entity.isHidden()) {
+            state.isInvisible = true;
+        }
         if (entity.deathTime > 0) {
             state.hasRedOverlay = false;
         }

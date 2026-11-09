@@ -188,9 +188,10 @@ public class MystikImageEntity extends Monster {
         return false;
     }
 
+    /** Es vergeht nach zwölf Sekunden von selbst (oder wenn MissMystik fort ist) – nicht, weil niemand in der Nähe ist. */
     @Override
     public boolean removeWhenFarAway(double distanceSqr) {
-        return true;
+        return false;
     }
 
     @Override

@@ -133,6 +133,9 @@ public class MissMystikEntity extends Monster {
     private static final EntityDataAccessor<Boolean> DATA_ENCORE = SynchedEntityData.defineId(MissMystikEntity.class,
             EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_HAT = SynchedEntityData.defineId(MissMystikEntity.class, EntityDataSerializers.BOOLEAN);
+    /** Verschwunden (im Hut vor dem Auftritt, beim Verschwindetrick, beim Abgang) – nicht zu sehen, nicht zu treffen. */
+    private static final EntityDataAccessor<Boolean> DATA_HIDDEN = SynchedEntityData.defineId(MissMystikEntity.class,
+            EntityDataSerializers.BOOLEAN);
     static final ParticleOptions MAGIC_DUST = new DustParticleOptions(0xC88CFF, 1.3f);
     static final ParticleOptions GOLD_DUST = new DustParticleOptions(0xFFD86A, 1.2f);
     static final ParticleOptions SMOKE = new DustParticleOptions(0x6A4A9A, 2.6f);
@@ -161,6 +164,7 @@ public class MissMystikEntity extends Monster {
     private final List<Integer> markTicks = new ArrayList<>();
     private @Nullable Suit suit;
     private Vec3 trickAt = Vec3.ZERO;
+    private Vec3 finaleCenter = Vec3.ZERO;
     private @Nullable MagicCardEntity bigCard;
     private @Nullable UUID hatId;
     private final Set<UUID> struck = new HashSet<>();
@@ -194,6 +198,16 @@ public class MissMystikEntity extends Monster {
         builder.define(DATA_ATTACK, 0);
         builder.define(DATA_ENCORE, false);
         builder.define(DATA_HAT, true);
+        builder.define(DATA_HIDDEN, false);
+    }
+
+    /** Ist sie gerade verschwunden (nicht zu sehen, nicht zu treffen)? */
+    public boolean isHidden() {
+        return this.entityData.get(DATA_HIDDEN);
+    }
+
+    private void setHidden(boolean hidden) {
+        this.entityData.set(DATA_HIDDEN, hidden);
     }
 
     public Attack currentAttack() {
@@ -235,7 +249,7 @@ public class MissMystikEntity extends Monster {
 
     /** Ihr Auftritt: Trommelwirbel, dann springt sie aus dem Zylinder (unverwundbar bis nach der Verbeugung). */
     public void appear() {
-        this.setInvisible(true);
+        this.setHidden(true);
         this.begin(Attack.APPEAR);
     }
 
@@ -263,8 +277,8 @@ public class MissMystikEntity extends Monster {
             this.bigCard.discard();
         }
         this.bigCard = null;
-        if (this.isInvisible() && next != Attack.APPEAR) {
-            this.setInvisible(false);
+        if (this.isHidden() && next != Attack.APPEAR) {
+            this.setHidden(false);
         }
         this.attack = next;
         this.attackTick = 0;
@@ -348,7 +362,7 @@ public class MissMystikEntity extends Monster {
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return super.hurtServer(level, source, amount);
         }
-        if (this.attack == Attack.APPEAR || this.attack == Attack.EXIT || this.isInvisible() || source.is(DamageTypes.IN_WALL)
+        if (this.attack == Attack.APPEAR || this.attack == Attack.EXIT || this.isHidden() || source.is(DamageTypes.IN_WALL)
                 || source.is(DamageTypes.FALL) || source.is(DamageTypes.FLY_INTO_WALL)) {
             return false;
         }
@@ -397,7 +411,7 @@ public class MissMystikEntity extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level().isClientSide() && !this.isInvisible()) {
+        if (this.level().isClientSide() && !this.isHidden()) {
             // Feenfunken rieseln von den Flügeln
             Level level = this.level();
             if (this.random.nextInt(this.isEncore() ? 2 : 3) == 0) {
@@ -719,7 +733,7 @@ public class MissMystikEntity extends Monster {
             return;
         }
         if (t == APPEAR_BURST) {
-            this.setInvisible(false);
+            this.setHidden(false);
             this.sound(level, ModSounds.MYSTIK_TADA.get(), 4.0f, 1.0f);
             this.setPos(hat.x, hat.y + 0.6, hat.z);
             this.setDeltaMovement(0.0, 0.55, 0.0);
@@ -771,7 +785,7 @@ public class MissMystikEntity extends Monster {
             this.sound(level, ModSounds.MYSTIK_VANISH.get(), 2.5f, 1.0f);
             level.sendParticles(SMOKE, this.getX(), this.getY(1.0), this.getZ(), 50, 0.6, 0.9, 0.6, 0.03);
             confetti(level, this.position().add(0.0, 1.6, 0.0), 30, 0.5, 0.2);
-            this.setInvisible(true);
+            this.setHidden(true);
         }
         if (t >= Attack.EXIT.duration) {
             if (this.home != null && level.getBlockEntity(this.home) instanceof StageHatBlockEntity hat && hat.owns(this)) {
@@ -864,7 +878,7 @@ public class MissMystikEntity extends Monster {
             level.sendParticles(SMOKE, this.getX(), this.getY(1.0), this.getZ(), 60, 0.6, 1.0, 0.6, 0.03);
             level.sendParticles(ParticleTypes.POOF, this.getX(), this.getY(1.0), this.getZ(), 20, 0.5, 0.8, 0.5, 0.05);
             confetti(level, this.position().add(0.0, 1.5, 0.0), 30, 0.5, 0.2);
-            this.setInvisible(true);
+            this.setHidden(true);
             this.setDeltaMovement(Vec3.ZERO);
         }
         if (t > VANISH_POOF && t < VANISH_BACK) {
@@ -882,7 +896,7 @@ public class MissMystikEntity extends Monster {
             return;
         }
         if (t == VANISH_BACK) {
-            this.setInvisible(false);
+            this.setHidden(false);
             this.teleportTo(this.vanishTo.x, this.vanishTo.y, this.vanishTo.z);
             this.setDeltaMovement(Vec3.ZERO);
             this.faceTarget(target, 360.0f);
@@ -1290,7 +1304,11 @@ public class MissMystikEntity extends Monster {
      */
     private void tickFinale(ServerLevel level) {
         int t = this.attackTick;
-        Vec3 stage = this.home != null ? Vec3.atBottomCenterOf(this.home) : this.position();
+        if (t == 1) {
+            // die Mitte der Vorstellung: ihr Zylinder (ohne Bühne: der Boden unter ihr, als das Finale begann)
+            this.finaleCenter = this.home != null ? Vec3.atBottomCenterOf(this.home) : this.ground(this.position());
+        }
+        Vec3 stage = this.finaleCenter;
         Vec3 want = stage.add(0.0, 7.5, 0.0);
         Vec3 to = want.subtract(this.position());
         this.setDeltaMovement(to.length() > 0.5 ? to.normalize().scale(0.5) : to.scale(0.3));
@@ -1447,12 +1465,12 @@ public class MissMystikEntity extends Monster {
         this.finaleDone = input.getBooleanOr("Finale", false);
         // nach dem Laden: Hut auf, sichtbar, kein halber Trick
         this.entityData.set(DATA_HAT, true);
-        this.setInvisible(false);
+        this.setHidden(false);
     }
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return this.isInvisible() ? null : ModSounds.MYSTIK_AMBIENT.get();
+        return this.isHidden() ? null : ModSounds.MYSTIK_AMBIENT.get();
     }
 
     @Override
