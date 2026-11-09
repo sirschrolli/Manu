@@ -1177,8 +1177,8 @@
     }
   ],
   "textures": {
-    "particle": "kingdomsatwar:item/tide_spear",
-    "spear": "kingdomsatwar:item/tide_spear_model",
-    "spear_glow": "kingdomsatwar:item/tide_spear_model_glow"
+    "particle": "kingdomsatwar:block/embedded_tide_spear",
+    "spear": "kingdomsatwar:block/embedded_tide_spear",
+    "spear_glow": "kingdomsatwar:block/embedded_tide_spear_glow"
   }
 }

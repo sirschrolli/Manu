@@ -141,7 +141,15 @@ final class SeaModels {
                 .requiredTextureSlot(SPEAR).requiredTextureSlot(SPEAR_GLOW).requiredTextureSlot(TextureSlot.PARTICLE)
                 .ambientOcclusion(false);
         spearElements(stuck, 2.0f, new float[] {8, 0, 8}, new float[] {-22, 30, 12});
-        Identifier stuckModel = stuck.build().create(embedded, spearTextures, blocks.modelOutput);
+        // Blockmodelle sehen nur den Block-Atlas: dort liegt eine Kopie der Textur des Speers
+        TextureMapping stuckTextures = new TextureMapping()
+                .put(SPEAR, new net.minecraft.client.resources.model.sprite.Material(
+                        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("block/embedded_tide_spear")))
+                .put(SPEAR_GLOW, new net.minecraft.client.resources.model.sprite.Material(
+                        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("block/embedded_tide_spear_glow")))
+                .put(TextureSlot.PARTICLE, new net.minecraft.client.resources.model.sprite.Material(
+                        io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("block/embedded_tide_spear")));
+        Identifier stuckModel = stuck.build().create(embedded, stuckTextures, blocks.modelOutput);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(embedded, BlockModelGenerators.plainVariant(stuckModel)));
 
         // Herz des Atolls: verborgen unter dem Sand, wie dunkles Prismarin

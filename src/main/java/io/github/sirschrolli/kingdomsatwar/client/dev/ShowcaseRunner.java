@@ -76,7 +76,7 @@ public final class ShowcaseRunner {
         boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal") || SCENES.contains("tower")
                 || SCENES.contains("magefight") || SCENES.contains("biome") || SCENES.contains("villages") || SCENES.contains("worldsite")
                 || SCENES.contains("castleworld") || SCENES.contains("conquest")
-                || SCENES.contains("crystals"));
+                || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor"));
         try {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,

@@ -632,8 +632,18 @@ public class ReefColossusEntity extends Monster {
     }
 
     private void start(ServerLevel level, Attack attack, byte event) {
+        if (this.attack == Attack.BURROW) {
+            // ein Eingraben, das unterbrochen wird (nur durch Befehle): wieder an die Oberfläche
+            this.noPhysics = false;
+            this.setNoGravity(false);
+            this.setSink(0.0f);
+        }
         this.attack = attack;
         this.attackTick = 0;
+        this.grabbed = null;
+        this.entityData.set(DATA_JETTING, false);
+        this.entityData.set(DATA_ROLLING, false);
+        this.entityData.set(DATA_STUNNED, false);
         this.getNavigation().stop();
         level.broadcastEntityEvent(this, event);
     }

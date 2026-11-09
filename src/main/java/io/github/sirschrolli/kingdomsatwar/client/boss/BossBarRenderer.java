@@ -59,6 +59,8 @@ public final class BossBarRenderer {
         STYLES.put("shadow", new Style(KingdomsAtWar.id("textures/gui/boss_bar/shadow.png"), 0xB46CFF));
         // der Zerbrochene König (Boss der Leere): Sternenmarmor, Goldsaum, Sternennebel
         STYLES.put("void", new Style(KingdomsAtWar.id("textures/gui/boss_bar/void.png"), 0xD8C4FF));
+        // Karkinos, der Riffkoloss: Muschelkalk mit Goldsaum, Korallenriff, Licht einer Lagune
+        STYLES.put("reef", new Style(KingdomsAtWar.id("textures/gui/boss_bar/reef.png"), 0x7AE8FF));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

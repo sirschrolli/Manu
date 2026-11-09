@@ -33,10 +33,13 @@ import net.minecraft.world.level.storage.loot.LootTable;
 /**
  * Baut das Versunkene Atoll Chunk für Chunk (alle Formen ergeben sich aus Mitte und Startwert):
  * <ol>
- *     <li>Ein Ring aus Klippen (Fels in Schichten, oben Gras, Palmen und hier und da eine hohe Felsnadel) umschließt
- *     eine Lagune; durch drei Durchlässe strömt das Meer herein. Außen fällt der Ring zum Meeresgrund ab.</li>
+ *     <li>Ein Ring aus flachen Sandinseln (Motus) umschließt eine Lagune: weiße Strände mit Muscheln und Gelegen der
+ *     Meeresschildkröten, in der Mitte der Inseln Grün mit Farnen, Büschen und Bambus, darüber Kokospalmen und zwei, drei
+ *     Nadeln aus hellem Korallenkalk. Zwischen den Inseln liegen Riffdächer knapp unter dem Wasser, durch drei Durchlässe
+ *     strömt das Meer herein. Außen säumt eine Riffkante aus lebenden Korallen den Ring, dann fällt der Hang zum
+ *     Meeresgrund ab.</li>
  *     <li>Die Lagune ist flach und türkis: knietiefes Wasser über hellem Sand, dazwischen trockene Sandbänke und ein paar
- *     tiefere Rinnen; Seegras, Korallen, Anemonen und Muscheln.</li>
+ *     tiefere Rinnen, Korallenköpfe bis knapp unter die Oberfläche; Seegras, Anemonen und Muscheln.</li>
  *     <li>In der Mitte die Ruine eines Tempels des Meeresvolks: ein runder Platz aus Prismarin mit Ringen aus dunklem
  *     Prismarin und vier eingelassenen Seelaternen, sechs Säulen (manche zerbrochen, ihre Trommeln liegen in der Lagune),
  *     Stufen hinab ins Wasser und eine Truhe.</li>
@@ -95,30 +98,89 @@ public class AtollPiece extends StructurePiece {
         return block.defaultBlockState();
     }
 
-    /** Innerer Radius des Klippenrings in Richtung {@code a}. */
+    /** Innerer Radius des Inselrings in Richtung {@code a}. */
     private double ringInner(LairContext ctx, double a) {
         return 22.0 + 2.2 * Math.sin(3 * a + ctx.rand(1, 0, 11) * 6.28) + 1.4 * Math.sin(5 * a + ctx.rand(2, 0, 11) * 6.28);
     }
 
     private double ringWidth(LairContext ctx, double a) {
-        return 6.0 + 1.6 * Math.sin(2 * a + ctx.rand(3, 0, 11) * 6.28);
+        return 7.0 + 1.6 * Math.sin(2 * a + ctx.rand(3, 0, 11) * 6.28);
     }
 
-    /** Höhe des Rings über dem Meer (negativ: ein Durchlass für das Meer). */
+    /**
+     * Höhe des Rings über dem Meer: flache Inseln (Motus) aus Sand, dazwischen Riffdächer knapp unter dem Wasser und drei
+     * Durchlässe, durch die das Meer in die Lagune strömt (negativ: unter Wasser).
+     */
     private double ringHeight(LairContext ctx, double a) {
         double base = ctx.rand(4, 0, 11) * 6.28;
         for (int k = 0; k < 3; k++) {
             double gap = base + k * 2.094 + (ctx.rand(5, k, 11) - 0.5) * 0.6;
             double d = Math.abs(Mth.wrapDegrees((a - gap) * Mth.RAD_TO_DEG));
-            if (d < 9.0) {
+            if (d < 8.0) {
                 return -3.0;
             }
-            if (d < 16.0) {
-                return -3.0 + (d - 9.0) / 7.0 * 5.0;
+            if (d < 15.0) {
+                return -3.0 + (d - 8.0) / 7.0 * 4.0;
             }
         }
-        double n = ctx.noise(Math.cos(a) * 30.0, Math.sin(a) * 30.0, 0.09, 13);
-        return 3.0 + 9.0 * n * n;
+        // zwischen den Inseln flache Riffdächer, auf den Inseln sanfte Dünen
+        double n = ctx.angleNoise(a, 2.6, 13);
+        if (n < 0.3) {
+            return -1.0 + n * 3.0;
+        }
+        return 1.2 + 3.4 * Mth.clamp((n - 0.3) / 0.6, 0.0, 1.0);
+    }
+
+    private enum Kind { PLATFORM, LAGOON, ISLAND, REEF, SLOPE }
+
+    /** Form einer Säule: Art, Oberkante (oberster fester Block), Lage im Ring (u: 0 innen, 1 außen) und Abstand außerhalb. */
+    private record Profile(Kind kind, int top, double r, double u, double outside) {}
+
+    private Profile profile(LairContext ctx, int x, int z) {
+        double dx = x - this.center.getX();
+        double dz = z - this.center.getZ();
+        double r = Math.sqrt(dx * dx + dz * dz);
+        double a = Math.atan2(dz, dx);
+        int water = this.sea - 1;
+        if (r < PLATFORM) {
+            return new Profile(Kind.PLATFORM, platformTop(this.sea), r, -1.0, 0.0);
+        }
+        double inner = this.ringInner(ctx, a);
+        double width = this.ringWidth(ctx, a);
+        double u = (r - inner) / width;
+        if (u < 0.0) {
+            // Lagune: knietief, Sandbänke, Rinnen; zum Ring hin flacher Strand
+            double n = ctx.noise(x, z, 0.075, 21) + (ctx.noise(x, z, 0.21, 22) - 0.5) * 0.25;
+            int top = water - 1;
+            if (n > 0.62 || u > -0.1 && this.ringHeight(ctx, a) > 0.0) {
+                top = water;
+            } else if (n < 0.3 && r > PLATFORM + 3) {
+                top = water - 2;
+            }
+            return new Profile(Kind.LAGOON, top, r, u, 0.0);
+        }
+        if (u <= 1.0) {
+            double h = this.ringHeight(ctx, a);
+            double shape = 1.0 - Math.pow(Math.abs(2.0 * u - 1.0), 2.4);
+            double rough = (ctx.noise(x, z, 0.22, 24) - 0.5) * 1.4;
+            int top = (int) Math.round(water + Math.max(-3.0, h * shape + (h > 0 ? rough : rough * 0.5)));
+            if (h <= 0.0) {
+                top = Math.min(top, water - 1);
+            }
+            return new Profile(top > water ? Kind.ISLAND : Kind.REEF, top, r, u, 0.0);
+        }
+        // außen: erst die Riffkante knapp unter dem Wasser, dann der Hang hinab zum Meeresgrund
+        double o = (u - 1.0) * width;
+        double rough = (ctx.noise(x, z, 0.25, 25) - 0.5) * 2.0;
+        if (o < 4.0) {
+            int top = water - 1 - (int) Math.floor(o * 0.55 + Math.max(0.0, rough) * 0.6);
+            return new Profile(Kind.REEF, top, r, u, o);
+        }
+        int ground = ctx.originalHeight(x, z, true) - 1;
+        double span = Math.max(4.0, REACH - inner - width - 4.0);
+        double t = Mth.clamp((o - 4.0) / span, 0.0, 1.0);
+        int top = (int) Math.round(Mth.lerp(LairContext.smooth(t), water - 3.0, Math.min(ground, water - 3.0)) + rough);
+        return new Profile(Kind.SLOPE, top, r, u, o);
     }
 
     @Override
@@ -129,17 +191,17 @@ public class AtollPiece extends StructurePiece {
         int cz = this.center.getZ();
         for (int x = chunkBB.minX(); x <= chunkBB.maxX(); x++) {
             for (int z = chunkBB.minZ(); z <= chunkBB.maxZ(); z++) {
-                double dx = x + 0.5 - (cx + 0.5);
-                double dz = z + 0.5 - (cz + 0.5);
-                double r = Math.sqrt(dx * dx + dz * dz);
-                if (r > REACH) {
+                double dx = x - cx;
+                double dz = z - cz;
+                if (dx * dx + dz * dz > REACH * REACH) {
                     continue;
                 }
-                this.column(ctx, x, z, r, Math.atan2(dz, dx));
+                this.column(ctx, x, z);
             }
         }
+        this.coralHeads(ctx);
         this.temple(ctx);
-        this.spires(ctx);
+        this.pinnacles(ctx);
         this.palms(ctx);
         buildMound(level, chunkBB, this.center);
         BlockPos core = AtollLocator.core(this.center);
@@ -156,63 +218,49 @@ public class AtollPiece extends StructurePiece {
                 .setValue(net.minecraft.world.level.block.ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random)));
     }
 
-    /** Eine Säule des Geländes: Fels und Sand bis zur Oberkante, darüber Wasser bis zum Meeresspiegel, darüber Luft. */
-    private void column(LairContext ctx, int x, int z, double r, double a) {
-        int ground = ctx.originalHeight(x, z, true) - 1;
-        int water = this.sea - 1;                          // oberster Wasserblock
-        double inner = this.ringInner(ctx, a);
-        double width = this.ringWidth(ctx, a);
-        int top;
-        BlockState topBlock;
-        BlockState under = s(Blocks.SAND);
-        boolean rock = false;
-        double u = (r - inner) / width;
-        if (r < PLATFORM) {
-            top = platformTop(this.sea);
-            topBlock = this.platformBlock(ctx, x, z, r, a);
-            under = s(Blocks.PRISMARINE_BRICKS);
-        } else if (u < 0.0) {
-            // Lagune: knietief, Sandbänke, Rinnen; zum Ring hin ein trockener Strand
-            double n = ctx.noise(x, z, 0.075, 21) + (ctx.noise(x, z, 0.21, 22) - 0.5) * 0.25;
-            top = water - 1;
-            if (n > 0.6 || u > -0.12) {
-                top = water;
-            } else if (n < 0.28 && r > PLATFORM + 3) {
-                top = water - 2;
-            }
-            topBlock = n > 0.7 && ctx.rand(x, z, 23) < 0.3 ? s(Blocks.SANDSTONE) : s(Blocks.SAND);
-        } else if (u <= 1.0) {
-            // der Klippenring: steile Flanken, flache Krone
-            double h = this.ringHeight(ctx, a);
-            double shape = 1.0 - Math.pow(Math.abs(2.0 * u - 1.0), 3.0);
-            double rough = (ctx.noise(x, z, 0.3, 24) - 0.5) * 2.0;
-            top = (int) Math.round(water + Math.max(-2.0, h * shape + rough));
-            if (top > water) {
-                rock = true;
-                topBlock = top > water + 1 ? s(Blocks.GRASS_BLOCK) : s(Blocks.SAND);
-            } else {
-                topBlock = s(Blocks.SAND);
-            }
-        } else {
-            // außen: zum Meeresgrund hin abfallend
-            double t = Mth.clamp((u - 1.0) * width / 9.0, 0.0, 1.0);
-            double rough = (ctx.noise(x, z, 0.25, 25) - 0.5) * 2.0;
-            top = (int) Math.round(Mth.lerp(t * t * (3 - 2 * t), water - 2.0, Math.min(ground, water - 2.0)) + rough);
-            topBlock = ctx.rand(x, z, 26) < 0.25 ? s(Blocks.GRAVEL) : s(Blocks.SAND);
+    private static final Block[] CORAL_BLOCKS = {Blocks.BRAIN_CORAL_BLOCK, Blocks.TUBE_CORAL_BLOCK, Blocks.FIRE_CORAL_BLOCK,
+            Blocks.HORN_CORAL_BLOCK, Blocks.BUBBLE_CORAL_BLOCK};
+    private static final Block[] DEAD_CORAL_BLOCKS = {Blocks.DEAD_BRAIN_CORAL_BLOCK, Blocks.DEAD_TUBE_CORAL_BLOCK, Blocks.DEAD_HORN_CORAL_BLOCK};
+    private static final Block[] CORALS = {Blocks.BRAIN_CORAL, Blocks.TUBE_CORAL, Blocks.FIRE_CORAL, Blocks.HORN_CORAL, Blocks.BUBBLE_CORAL};
+    private static final Block[] CORAL_FANS = {Blocks.TUBE_CORAL_FAN, Blocks.BRAIN_CORAL_FAN, Blocks.BUBBLE_CORAL_FAN, Blocks.FIRE_CORAL_FAN,
+            Blocks.HORN_CORAL_FAN};
+
+    /** Ein Riffblock: meist lebende Koralle, dazwischen abgestorbene und Sand. */
+    private BlockState reefBlock(LairContext ctx, int x, int y, int z) {
+        double n = ctx.noise(x, z, 0.35, 32);
+        double roll = ctx.rand(x, y * 31 + z, 33);
+        if (n < 0.3 || roll < 0.12) {
+            return roll < 0.5 ? s(Blocks.SAND) : s(DEAD_CORAL_BLOCKS[(int) (ctx.rand(x, z, 34) * DEAD_CORAL_BLOCKS.length)]);
         }
+        return s(CORAL_BLOCKS[(int) (ctx.noise(x, z, 0.18, 35) * 4.99)]);
+    }
+
+    /** Eine Säule des Geländes: Sand, Sandstein und Korallenkalk bis zur Oberkante, darüber Wasser, darüber Luft. */
+    private void column(LairContext ctx, int x, int z) {
+        Profile p = this.profile(ctx, x, z);
+        int ground = ctx.originalHeight(x, z, true) - 1;
+        int water = this.sea - 1;
+        int top = p.top();
         int bottom = Math.min(ground, top) - 4;
+        boolean grass = p.kind() == Kind.ISLAND && top >= water + 2 && p.u() > 0.18 && p.u() < 0.82
+                && ctx.noise(x, z, 0.14, 36) > 0.42;
         for (int y = bottom; y <= top; y++) {
-            BlockState state;
             int depth = top - y;
-            if (y == top) {
-                state = topBlock;
-            } else if (rock) {
-                state = this.cliffRock(ctx, x, y, z, depth);
-            } else if (depth < 3) {
-                state = under;
-            } else {
-                state = s(Blocks.STONE);
-            }
+            BlockState state = switch (p.kind()) {
+                case PLATFORM -> y == top ? this.platformBlock(ctx, x, z, p.r(), Math.atan2(z - this.center.getZ(), x - this.center.getX()))
+                        : depth < 3 ? s(Blocks.PRISMARINE_BRICKS) : s(Blocks.CALCITE);
+                case ISLAND -> y == top ? (grass ? s(Blocks.GRASS_BLOCK) : s(Blocks.SAND))
+                        : depth == 1 && grass ? s(Blocks.DIRT)
+                        : depth < 3 ? s(Blocks.SAND) : depth < 5 ? s(Blocks.SANDSTONE)
+                        : ctx.rand(x, y * 7 + z, 37) < 0.15 ? s(Blocks.DIORITE) : s(Blocks.CALCITE);
+                case REEF -> depth == 0 && top >= water - 4 ? this.reefBlock(ctx, x, y, z)
+                        : depth < 2 ? s(Blocks.SAND) : s(Blocks.CALCITE);
+                case LAGOON -> y == top ? (ctx.noise(x, z, 0.075, 21) > 0.7 && ctx.rand(x, z, 23) < 0.3 ? s(Blocks.SANDSTONE) : s(Blocks.SAND))
+                        : depth < 3 ? s(Blocks.SAND) : s(Blocks.SANDSTONE);
+                case SLOPE -> y == top ? (p.outside() < 7.0 && ctx.rand(x, z, 38) < 0.3 ? this.reefBlock(ctx, x, y, z)
+                        : ctx.rand(x, z, 26) < 0.22 ? s(Blocks.GRAVEL) : s(Blocks.SAND))
+                        : depth < 3 ? s(Blocks.SAND) : s(Blocks.STONE);
+            };
             ctx.set(x, y, z, state);
         }
         for (int y = top + 1; y <= water; y++) {
@@ -221,20 +269,7 @@ public class AtollPiece extends StructurePiece {
         for (int y = Math.max(top + 1, water + 1); y <= this.sea + 22; y++) {
             ctx.set(x, y, z, s(Blocks.AIR));
         }
-        this.decorate(ctx, x, z, r, top, water, rock);
-    }
-
-    private BlockState cliffRock(LairContext ctx, int x, int y, int z, int depth) {
-        if (depth < 2) {
-            return s(Blocks.DIRT);
-        }
-        int band = Math.floorMod(y + (int) (ctx.noise(x, z, 0.05, 27) * 4), 5);
-        return switch (band) {
-            case 0 -> s(Blocks.CALCITE);
-            case 1, 2 -> s(Blocks.STONE);
-            case 3 -> s(Blocks.ANDESITE);
-            default -> ctx.rand(x, y * 31 + z, 28) < 0.15 ? s(Blocks.MOSSY_COBBLESTONE) : s(Blocks.STONE);
-        };
+        this.decorate(ctx, x, z, p, grass);
     }
 
     /** Der Tempelplatz: Prismarinziegel, zwei Ringe aus dunklem Prismarin, vier Seelaternen, am Rand Stufen. */
@@ -255,38 +290,84 @@ public class AtollPiece extends StructurePiece {
         return ctx.rand(x, z, 29) < 0.12 ? s(Blocks.PRISMARINE) : s(Blocks.PRISMARINE_BRICKS);
     }
 
-    /** Was in einer Säule wächst und liegt: Seegras, Korallen, Anemonen, Muscheln; auf den Klippen Gras. */
-    private void decorate(LairContext ctx, int x, int z, double r, int top, int water, boolean rock) {
+    /**
+     * Was in einer Säule wächst und liegt: unter Wasser Seegras, Korallen, Anemonen und Muscheln; am Strand Muscheln und
+     * Schildkröteneier; im Grün der Inseln Farne, Gras, Büsche und Bambus.
+     */
+    private void decorate(LairContext ctx, int x, int z, Profile p, boolean grass) {
+        int water = this.sea - 1;
+        int top = p.top();
         double roll = ctx.rand(x, z, 41);
-        if (rock) {
-            if (top > water + 1 && roll < 0.3) {
-                ctx.set(x, top + 1, z, roll < 0.05 ? s(Blocks.FERN) : s(Blocks.SHORT_GRASS));
-            }
-            return;
-        }
-        if (r < PLATFORM) {
+        if (p.kind() == Kind.PLATFORM) {
             return;
         }
         if (top < water) {
-            // unter Wasser
             BlockState plant = null;
-            if (roll < 0.16) {
+            if (p.kind() == Kind.REEF || p.kind() == Kind.SLOPE && p.outside() < 7.0) {
+                // auf dem Riff: Korallen, Fächer und Seegurken
+                if (roll < 0.22) {
+                    plant = s(CORALS[(int) (ctx.rand(x, z, 48) * CORALS.length)]);
+                } else if (roll < 0.36) {
+                    plant = s(CORAL_FANS[(int) (ctx.rand(x, z, 43) * CORAL_FANS.length)]);
+                } else if (roll < 0.42) {
+                    plant = s(Blocks.SEA_PICKLE).setValue(SeaPickleBlock.PICKLES, 1 + (int) (ctx.rand(x, z, 44) * 4));
+                } else if (roll < 0.47) {
+                    plant = SeaBlocks.anemones().get((int) (ctx.rand(x, z, 42) * 4)).get().defaultBlockState();
+                } else if (roll < 0.55) {
+                    plant = s(Blocks.SEAGRASS);
+                }
+            } else if (roll < 0.16) {
                 plant = s(Blocks.SEAGRASS);
-            } else if (roll < 0.19) {
+            } else if (roll < 0.195) {
                 plant = SeaBlocks.anemones().get((int) (ctx.rand(x, z, 42) * 4)).get().defaultBlockState();
-            } else if (roll < 0.215) {
-                Block[] fans = {Blocks.TUBE_CORAL_FAN, Blocks.BRAIN_CORAL_FAN, Blocks.BUBBLE_CORAL_FAN, Blocks.FIRE_CORAL_FAN, Blocks.HORN_CORAL_FAN};
-                plant = s(fans[(int) (ctx.rand(x, z, 43) * fans.length)]);
-            } else if (roll < 0.235) {
+            } else if (roll < 0.22) {
+                plant = s(CORAL_FANS[(int) (ctx.rand(x, z, 43) * CORAL_FANS.length)]);
+            } else if (roll < 0.24) {
                 plant = s(Blocks.SEA_PICKLE).setValue(SeaPickleBlock.PICKLES, 1 + (int) (ctx.rand(x, z, 44) * 3));
-            } else if (roll < 0.26) {
+            } else if (roll < 0.27) {
                 plant = this.shells(ctx, x, z, true);
             }
-            if (plant != null && top + 1 <= water) {
+            if (plant != null) {
                 ctx.set(x, top + 1, z, plant);
             }
-        } else if (top == water && roll < 0.05 && r < 26) {
+            return;
+        }
+        if (top == water) {
+            // trockene Sandbank in der Lagune
+            if (roll < 0.05 && p.r() < 26) {
+                ctx.set(x, top + 1, z, this.shells(ctx, x, z, false));
+            }
+            return;
+        }
+        if (grass) {
+            if (roll < 0.22) {
+                ctx.set(x, top + 1, z, roll < 0.08 ? s(Blocks.FERN) : s(Blocks.SHORT_GRASS));
+            } else if (roll < 0.25) {
+                // ein Busch aus Dschungellaub
+                BlockState bush = s(Blocks.JUNGLE_LEAVES).setValue(LeavesBlock.PERSISTENT, true);
+                ctx.set(x, top + 1, z, bush);
+                if (ctx.rand(x, z, 49) < 0.4) {
+                    ctx.setIfOpen(x, top + 2, z, bush);
+                }
+            } else if (roll < 0.265) {
+                int h = 2 + (int) (ctx.rand(x, z, 50) * 4);
+                for (int i = 1; i <= h; i++) {
+                    ctx.set(x, top + i, z, s(Blocks.BAMBOO).setValue(net.minecraft.world.level.block.BambooStalkBlock.LEAVES,
+                            i == h ? net.minecraft.world.level.block.state.properties.BambooLeaves.LARGE
+                                    : i == h - 1 ? net.minecraft.world.level.block.state.properties.BambooLeaves.SMALL
+                                    : net.minecraft.world.level.block.state.properties.BambooLeaves.NONE));
+                }
+            }
+            return;
+        }
+        // Strand der Inseln: Muscheln, hier und da ein Gelege der Meeresschildkröten
+        if (roll < 0.06) {
             ctx.set(x, top + 1, z, this.shells(ctx, x, z, false));
+        } else if (roll < 0.068 && top == water + 1) {
+            ctx.set(x, top + 1, z, s(Blocks.TURTLE_EGG).setValue(net.minecraft.world.level.block.TurtleEggBlock.EGGS,
+                    1 + (int) (ctx.rand(x, z, 51) * 3)));
+        } else if (roll < 0.09) {
+            ctx.set(x, top + 1, z, s(Blocks.SHORT_DRY_GRASS));
         }
     }
 
@@ -296,6 +377,49 @@ public class AtollPiece extends StructurePiece {
                 .setValue(SeashellBlock.SHELLS, 1 + (int) (ctx.rand(x, z, 46) * 2.4))
                 .setValue(SeashellBlock.FACING, Direction.Plane.HORIZONTAL.stream().toList().get((int) (ctx.rand(x, z, 47) * 4)))
                 .setValue(SeashellBlock.WATERLOGGED, wet);
+    }
+
+    /** Korallenköpfe in der Lagune: kleine Riffe, die bis knapp unter die Oberfläche wachsen. */
+    private void coralHeads(LairContext ctx) {
+        int water = this.sea - 1;
+        for (int k = 0; k < 12; k++) {
+            double a = ctx.rand(k, 1, 55) * Math.PI * 2.0;
+            double inner = this.ringInner(ctx, a);
+            double r = PLATFORM + 3.5 + ctx.rand(k, 2, 55) * Math.max(1.0, inner - PLATFORM - 7.0);
+            int x0 = this.center.getX() + (int) Math.round(Math.cos(a) * r);
+            int z0 = this.center.getZ() + (int) Math.round(Math.sin(a) * r);
+            if (!ctx.near(x0, z0, 3)) {
+                continue;
+            }
+            double size = 1.2 + ctx.rand(k, 3, 55) * 1.3;
+            Block body = CORAL_BLOCKS[(int) (ctx.rand(k, 4, 55) * CORAL_BLOCKS.length)];
+            Block second = CORAL_BLOCKS[(int) (ctx.rand(k, 5, 55) * CORAL_BLOCKS.length)];
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    double d = Math.sqrt(dx * dx + dz * dz);
+                    if (d > size) {
+                        continue;
+                    }
+                    int x = x0 + dx;
+                    int z = z0 + dz;
+                    Profile p = this.profile(ctx, x, z);
+                    if (p.kind() != Kind.LAGOON || p.top() >= water) {
+                        continue;
+                    }
+                    int peak = d < size * 0.5 ? water - 1 : water - 2;
+                    for (int y = p.top() + 1; y <= peak; y++) {
+                        ctx.set(x, y, z, s(ctx.rand(x, y * 13 + z, 56) < 0.3 ? second : body));
+                    }
+                    if (peak + 1 <= water) {
+                        double roll = ctx.rand(x, z, 57);
+                        BlockState cap = roll < 0.45 ? s(CORALS[(int) (ctx.rand(x, z, 58) * CORALS.length)])
+                                : roll < 0.75 ? s(CORAL_FANS[(int) (ctx.rand(x, z, 59) * CORAL_FANS.length)])
+                                : s(Blocks.SEA_PICKLE).setValue(SeaPickleBlock.PICKLES, 1 + (int) (ctx.rand(x, z, 60) * 3));
+                        ctx.set(x, peak + 1, z, cap);
+                    }
+                }
+            }
+        }
     }
 
     /** Sechs Säulen um den Platz; die zerbrochenen haben ihre Trommeln in die Lagune geworfen. */
@@ -330,85 +454,116 @@ public class AtollPiece extends StructurePiece {
         }
     }
 
-    /** Ein paar hohe Felsnadeln auf dem Ring – die Wahrzeichen des Atolls, von weitem zu sehen. */
-    private void spires(LairContext ctx) {
-        for (int k = 0; k < 4; k++) {
+    /** Zwei, drei Nadeln aus hellem Korallenkalk auf den Inseln – die Wahrzeichen des Atolls, von weitem zu sehen. */
+    private void pinnacles(LairContext ctx) {
+        int water = this.sea - 1;
+        for (int k = 0; k < 5; k++) {
             double a = ctx.rand(k, 11, 61) * Math.PI * 2.0;
-            double r = this.ringInner(ctx, a) + this.ringWidth(ctx, a) * 0.5;
-            if (this.ringHeight(ctx, a) < 2.0) {
+            if (this.ringHeight(ctx, a) < 2.2) {
                 continue;
             }
+            double r = this.ringInner(ctx, a) + this.ringWidth(ctx, a) * 0.55;
             int x = this.center.getX() + (int) Math.round(Math.cos(a) * r);
             int z = this.center.getZ() + (int) Math.round(Math.sin(a) * r);
             if (!ctx.near(x, z, 4)) {
                 continue;
             }
-            int base = this.sea - 3;
-            int height = 10 + (int) (ctx.rand(k, 12, 61) * 9);
-            double radius = 2.2 + ctx.rand(k, 13, 61);
-            for (int y = 0; y < height + 10; y++) {
-                double t = y / (double) (height + 10);
-                double rr = radius * (1.0 - 0.55 * t);
+            int height = 6 + (int) (ctx.rand(k, 12, 61) * 7);
+            double radius = 1.7 + ctx.rand(k, 13, 61) * 0.9;
+            double leanX = (ctx.rand(k, 14, 61) - 0.5) * 0.25;
+            double leanZ = (ctx.rand(k, 15, 61) - 0.5) * 0.25;
+            for (int y = -4; y <= height; y++) {
+                double t = Math.max(0.0, y) / (double) height;
+                double rr = radius * (1.0 - 0.6 * t) + (y < 1 ? 0.8 : 0.0);
+                int ox = (int) Math.round(leanX * y);
+                int oz = (int) Math.round(leanZ * y);
                 int reach = (int) Math.ceil(rr);
                 for (int dx = -reach; dx <= reach; dx++) {
                     for (int dz = -reach; dz <= reach; dz++) {
-                        if (dx * dx + dz * dz > rr * rr) {
+                        double d2 = dx * dx + dz * dz;
+                        double edge = rr + (ctx.rand(x + dx, y * 17 + z + dz, 62) - 0.5) * 0.8;
+                        if (d2 > edge * edge) {
                             continue;
                         }
-                        int by = base + y;
-                        if (by > this.sea + height) {
-                            continue;
-                        }
-                        BlockState state = by == this.sea + height || by == this.sea + height - 1 && dx * dx + dz * dz > rr * rr * 0.4
-                                ? s(Blocks.GRASS_BLOCK) : this.cliffRock(ctx, x + dx, by, z + dz, 3);
-                        ctx.set(x + dx, by, z + dz, state);
+                        int by = water + 1 + y;
+                        int band = Math.floorMod(by + (int) (ctx.noise(x + dx, z + dz, 0.3, 63) * 3), 4);
+                        BlockState state = band == 0 ? s(Blocks.DIORITE) : band == 1 && ctx.rand(x + dx, by, 64) < 0.5
+                                ? s(Blocks.SMOOTH_SANDSTONE) : s(Blocks.CALCITE);
+                        ctx.set(x + dx + ox, by, z + dz + oz, state);
                     }
                 }
             }
         }
     }
 
-    /** Palmen auf der Krone des Rings (Stamm geneigt, Wedel aus Dschungellaub). */
+    /**
+     * Kokospalmen auf den Inseln: ein schlanker, gebogener Stamm, oben eine Krone aus acht hängenden Wedeln, darunter
+     * Kokosnüsse (Kakaofrüchte am Stamm).
+     */
     private void palms(LairContext ctx) {
-        for (int k = 0; k < 9; k++) {
+        int water = this.sea - 1;
+        for (int k = 0; k < 26; k++) {
             double a = ctx.rand(k, 21, 71) * Math.PI * 2.0;
-            double h = this.ringHeight(ctx, a);
-            if (h < 3.0) {
+            if (this.ringHeight(ctx, a) < 1.5) {
                 continue;
             }
-            double r = this.ringInner(ctx, a) + this.ringWidth(ctx, a) * (0.3 + ctx.rand(k, 22, 71) * 0.4);
+            double r = this.ringInner(ctx, a) + this.ringWidth(ctx, a) * (0.2 + ctx.rand(k, 22, 71) * 0.6);
             int x = this.center.getX() + (int) Math.round(Math.cos(a) * r);
             int z = this.center.getZ() + (int) Math.round(Math.sin(a) * r);
-            if (!ctx.near(x, z, 5) || !ctx.reachable(x, z)) {
+            if (!ctx.near(x, z, 6)) {
                 continue;
             }
-            int y = ctx.originalHeight(x, z, false);
-            BlockState below = ctx.get(x, y - 1, z);
-            if (!below.is(Blocks.GRASS_BLOCK) && !below.is(Blocks.SAND)) {
+            Profile p = this.profile(ctx, x, z);
+            if (p.kind() != Kind.ISLAND || p.top() < water + 1) {
                 continue;
             }
-            int height = 5 + (int) (ctx.rand(k, 23, 71) * 3);
-            double lean = ctx.rand(k, 24, 71) * Math.PI * 2.0;
-            double lx = Math.cos(lean);
-            double lz = Math.sin(lean);
-            int tx = x;
-            int tz = z;
-            for (int i = 0; i < height; i++) {
-                tx = x + (int) Math.round(lx * i * i / (double) (height * 2));
-                tz = z + (int) Math.round(lz * i * i / (double) (height * 2));
-                ctx.set(tx, y + i, tz, s(Blocks.JUNGLE_LOG));
+            this.palm(ctx, x, p.top() + 1, z, k);
+        }
+    }
+
+    private void palm(LairContext ctx, int x, int y, int z, int k) {
+        int height = 6 + (int) (ctx.rand(k, 23, 71) * 4);
+        double lean = ctx.rand(k, 24, 71) * Math.PI * 2.0;
+        double bend = 2.0 + ctx.rand(k, 25, 71) * 1.6;
+        double lx = Math.cos(lean);
+        double lz = Math.sin(lean);
+        int px = x;
+        int pz = z;
+        for (int i = 0; i < height; i++) {
+            double t = i / (double) (height - 1);
+            int tx = x + (int) Math.round(lx * bend * t * t);
+            int tz = z + (int) Math.round(lz * bend * t * t);
+            if (tx != px || tz != pz) {
+                // ein Knick: den Stamm verbunden halten
+                ctx.set(tx, y + i - 1, tz, s(Blocks.JUNGLE_LOG));
             }
-            int ty = y + height;
-            BlockState leaves = s(Blocks.JUNGLE_LEAVES).setValue(LeavesBlock.PERSISTENT, true);
-            ctx.set(tx, ty, tz, leaves);
-            for (Direction d : Direction.Plane.HORIZONTAL) {
-                for (int i = 1; i <= 3; i++) {
-                    int droop = i == 3 ? -1 : 0;
-                    ctx.setIfOpen(tx + d.getStepX() * i, ty + droop, tz + d.getStepZ() * i, leaves);
-                }
-                ctx.setIfOpen(tx + d.getStepX() + d.getClockWise().getStepX(), ty, tz + d.getStepZ() + d.getClockWise().getStepZ(), leaves);
+            ctx.set(tx, y + i, tz, s(Blocks.JUNGLE_LOG));
+            px = tx;
+            pz = tz;
+        }
+        int ty = y + height;
+        BlockState leaves = s(Blocks.JUNGLE_LEAVES).setValue(LeavesBlock.PERSISTENT, true);
+        ctx.set(px, ty, pz, leaves);
+        ctx.setIfOpen(px, ty + 1, pz, leaves);
+        for (Direction d : Direction.Plane.HORIZONTAL) {
+            // lange Wedel in die vier Richtungen, die sich nach außen hinabneigen
+            int[] droop = {0, 0, -1, -2};
+            for (int i = 1; i <= 4; i++) {
+                ctx.setIfOpen(px + d.getStepX() * i, ty + droop[i - 1], pz + d.getStepZ() * i, leaves);
             }
-            ctx.setIfOpen(tx, ty + 1, tz, leaves);
+            ctx.setIfOpen(px + d.getStepX(), ty + 1, pz + d.getStepZ(), leaves);
+            // kürzere Wedel schräg dazwischen
+            Direction side = d.getClockWise();
+            int sx = d.getStepX() + side.getStepX();
+            int sz = d.getStepZ() + side.getStepZ();
+            ctx.setIfOpen(px + sx, ty, pz + sz, leaves);
+            ctx.setIfOpen(px + sx * 2, ty - 1, pz + sz * 2, leaves);
+            // Kokosnüsse unter der Krone
+            if (ctx.rand(k, d.get2DDataValue(), 72) < 0.45) {
+                ctx.setIfOpen(px + d.getStepX(), ty - 1, pz + d.getStepZ(), s(Blocks.COCOA)
+                        .setValue(net.minecraft.world.level.block.CocoaBlock.AGE, 2)
+                        .setValue(net.minecraft.world.level.block.CocoaBlock.FACING, d.getOpposite()));
+            }
         }
     }
 

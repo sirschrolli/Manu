@@ -56,6 +56,13 @@ ELEMENTS = {
     # der Zerbrochene König (Boss der Leere): Sternenmarmor mit Goldsaum, Füllung wie ein Sternennebel
     "void": dict(m0="#16121f", m1="#4a4262", m2="#d2cae6", acc="#d6a23c", glow="#f4ecff", deep="#0a0618",
                  f0="#1a0c40", f1="#4c26a0", f2="#9a6ae8", f3="#f4eeff", gold="#e2b04a", gold_dark="#7a5420"),
+    # Karkinos, der Riffkoloss: ausgebleichter Muschelkalk mit Goldsaum, darauf ein Korallenriff; Füllung wie das
+    # Licht einer Lagune (Wellennetz und Blasen)
+    "reef": dict(m0="#2a2219", m1="#7a6850", m2="#eadfc4", acc="#2ad8c8", glow="#d4fff4", deep="#03222a",
+                 f0="#043e48", f1="#0a8486", f2="#38d4c4", f3="#e4fff6", gold="#e8b84a", gold_dark="#7a5a1e",
+                 coral="#ee5a40", coral_dark="#7e2420", coral_light="#ffb08a", fan="#c25ab8", fan_dark="#5e2058",
+                 sponge="#f0a428", sponge_dark="#7a4a10", brain="#d8c060", brain_dark="#7a6420",
+                 anemone="#7ae8a8", anemone_dark="#1e6a4c", star="#ff8a3a"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -559,7 +566,262 @@ def deco_void(img: Image.Image, pal: dict) -> None:
             put(px, img, ex + kx, ey + dy, col)
 
 
-DECOS = {"void": deco_void, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_reef(img: Image.Image, pal: dict) -> None:
+    """Ein Korallenriff wächst auf dem Rahmen (am Medaillon hoch und dicht, nach rechts niedriger, am Ende nur noch
+    Muscheln und ein Seestern): Geweihkorallen, Gorgonienfächer, Tischkorallen, Hirnkorallen, Röhrenschwämme, Seegras
+    und Anemonen, dazwischen zwei kleine Fische. Unter der Leiste hängen Seepocken und Rotalgen, Blasen steigen auf.
+    Um das Medaillon ein Kranz aus Korallenästen mit Goldreif, als Spitze die geöffnete Schere des Karkinos."""
+    px = img.load()
+    f1, f2, f3 = (c(pal, k) for k in ("f1", "f2", "f3"))
+    m0, m1, m2 = c(pal, "m0"), c(pal, "m1"), c(pal, "m2")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    coral, coral_dark, coral_light = c(pal, "coral"), c(pal, "coral_dark"), c(pal, "coral_light")
+    fan, fan_dark = c(pal, "fan"), c(pal, "fan_dark")
+    sponge, sponge_dark = c(pal, "sponge"), c(pal, "sponge_dark")
+    brain, brain_dark = c(pal, "brain"), c(pal, "brain_dark")
+    anemone, anemone_dark = c(pal, "anemone"), c(pal, "anemone_dark")
+    star_col = c(pal, "star")
+    white = (255, 250, 236, 255)
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+    base = top - 1                                   # unterste Zeile über dem Rahmen
+
+    def line(x0: float, y0: float, x1: float, y1: float, col0, col1, width: int = 1):
+        n = max(1, round(max(abs(x1 - x0), abs(y1 - y0))))
+        for k in range(n + 1):
+            t = k / n
+            x, y = round(x0 + (x1 - x0) * t), round(y0 + (y1 - y0) * t)
+            col = mix(col0, col1, t)
+            put(px, img, x, y, col)
+            if width > 1:
+                put(px, img, x + 1, y, mix(col, OUTLINE, 0.35))
+
+    def staghorn(x: float, y: float, ang: float, length: float, depth: int, seed: int, palette=None):
+        """Geweihkoralle: dicker Stamm, Äste verzweigen sich, an den Spitzen helle Polypen."""
+        dark, mid, light = palette or (coral_dark, coral, coral_light)
+        x1, y1 = x + math.cos(ang) * length, y + math.sin(ang) * length
+        line(x, y, x1, y1, mix(dark, mid, 0.4) if depth >= 2 else mid, mid if depth else light, 2 if depth >= 2 else 1)
+        if depth == 0:
+            put(px, img, round(x1), round(y1), light)
+            put(px, img, round(x1), round(y1) - 1 if math.sin(ang) < 0 else round(y1) + 1, white)
+            return
+        spread = 0.5 + 0.25 * hash01(seed, 1)
+        staghorn(x1, y1, ang - spread, length * 0.7, depth - 1, seed * 3 + 1, palette)
+        staghorn(x1, y1, ang + spread * 0.9, length * 0.62, depth - 1, seed * 3 + 2, palette)
+        if depth >= 2 and hash01(seed, 4) > 0.4:
+            staghorn((x + x1) / 2, (y + y1) / 2, ang + (spread + 0.3) * (1 if hash01(seed, 5) > 0.5 else -1),
+                     length * 0.45, 0, seed * 3 + 3, palette)
+
+    def gorgonian(cx: int, r: int, seed: int):
+        """Gorgonienfächer, von vorn gesehen: fünf feine Adern strahlen vom Fuß aus und verzweigen sich, am Rand
+        hellere Polypen – dazwischen bleibt der Fächer offen."""
+        for k in range(5):
+            a = math.radians(-150 + k * 30 + (hash01(seed, k) - 0.5) * 10)
+            mx, my = cx + math.cos(a) * r * 0.55, base + math.sin(a) * r * 0.5
+            line(cx, base, mx, my, fan_dark, mix(fan_dark, fan, 0.6))
+            for side in (-0.28, 0.28):
+                ex, ey = cx + math.cos(a + side) * r, base + math.sin(a + side) * r * 0.92
+                line(mx, my, ex, ey, mix(fan_dark, fan, 0.6), fan)
+                put(px, img, round(ex), round(ey), mix(fan, white, 0.5))
+        put(px, img, cx, base, fan_dark)
+
+    def table_coral(cx: int, h: int, w: int, seed: int):
+        """Tischkoralle: dünner Fuß, oben eine flache, gewellte Platte."""
+        for k in range(h):
+            put(px, img, cx, base - k, mix(f1, OUTLINE, 0.35))
+        for dx in range(-w, w + 1):
+            y = base - h - (1 if abs(dx) < w - 1 and hash01(seed, dx) > 0.7 else 0)
+            put(px, img, cx + dx, y, mix(f2, white, 0.25) if dx < 0 else f2)
+            put(px, img, cx + dx, y + 1, mix(f1, OUTLINE, 0.25) if abs(dx) < w else OUTLINE)
+        put(px, img, cx - w, base - h - 1, mix(f2, white, 0.5))
+
+    def brain_coral(cx: int, w: int, h: int, seed: int):
+        """Hirnkoralle: Kuppel mit gewundenen Furchen, oben links im Licht."""
+        for dy in range(h + 1):
+            for dx in range(-w, w + 1):
+                e = (dx / (w + 0.5)) ** 2 + (dy / (h + 0.4)) ** 2
+                if e > 1.0:
+                    continue
+                if e > 0.78:
+                    col = mix(brain_dark, OUTLINE, 0.25)
+                elif (dx + round(1.6 * math.sin(dy * 1.9 + seed))) % 3 == 0:
+                    col = brain_dark
+                else:
+                    col = mix(brain, white, 0.35) if (dx < 0 and dy > h // 2) else brain
+                put(px, img, cx + dx, base - dy, col)
+
+    def sponge_tubes(cx: int, heights):
+        """Röhrenschwämme: je zwei Pixel breit, oben eine dunkle Öffnung."""
+        for i, h in enumerate(heights):
+            x = cx + i * 3
+            for k in range(h):
+                t = k / max(1, h - 1)
+                put(px, img, x, base - k, mix(sponge, (255, 236, 170, 255), 0.4 * t))
+                put(px, img, x + 1, base - k, sponge_dark if k < h - 1 else sponge)
+            put(px, img, x, base - h, mix(sponge, white, 0.4))
+            put(px, img, x + 1, base - h, sponge)
+            put(px, img, x, base - h + 1, OUTLINE)
+            put(px, img, x + 1, base - h + 1, mix(sponge_dark, OUTLINE, 0.5))
+
+    def anemone_tuft(cx: int, h: int, seed: int, pink: bool = False):
+        """Anemone: kurzer Fuß, darüber ein Büschel geschwungener Tentakel mit leuchtenden Spitzen."""
+        light = (255, 150, 200, 255) if pink else anemone
+        dark = (120, 30, 80, 255) if pink else anemone_dark
+        put(px, img, cx, base, dark)
+        put(px, img, cx + 1, base, dark)
+        put(px, img, cx, base - 1, mix(dark, light, 0.4))
+        put(px, img, cx + 1, base - 1, mix(dark, light, 0.4))
+        for i, lean in enumerate((-1.4, -0.8, -0.25, 0.25, 0.8, 1.4)):
+            x = cx + 0.5 + lean * 0.5
+            hh = h - abs(round(lean))
+            for k in range(hh):
+                x += lean * (0.18 + 0.12 * k) + 0.3 * math.sin(seed + k * 1.3 + i)
+                put(px, img, round(x), base - 2 - k, mix(dark, light, 0.3 + 0.7 * k / max(1, hh - 1)))
+            put(px, img, round(x), base - 2 - hh, f3)
+
+    def seagrass(cx: int, h: int, seed: int):
+        """Seegras: zwei, drei schmale Halme, die in der Strömung schwanken."""
+        for b in range(2 + (1 if hash01(seed, 9) > 0.5 else 0)):
+            x = cx + b * 2
+            for k in range(h - b * 2):
+                sway = round(1.2 * math.sin(k * 0.7 + seed + b))
+                col = mix((40, 96, 40, 255), (150, 210, 90, 255), k / max(1, h - 1))
+                put(px, img, x + sway, base - k, col)
+
+    def scallop(cx: int):
+        for dy in range(3):
+            half = 2 if dy < 2 else 1
+            for dx in range(-half, half + 1):
+                col = mix(m2, coral_light, 0.4) if dx % 2 == 0 else mix(m1, coral, 0.35)
+                put(px, img, cx + dx, base - dy, col)
+        put(px, img, cx - 2, base - 2, OUTLINE if False else mix(m2, coral_light, 0.2))
+
+    def starfish(cx: int, cy: int):
+        for k in range(5):
+            a = -math.pi / 2 + k * math.tau / 5
+            for r in range(1, 3):
+                put(px, img, round(cx + math.cos(a) * r), round(cy + math.sin(a) * r), star_col if r < 2 else coral)
+        put(px, img, cx, cy, mix(star_col, (255, 230, 160, 255), 0.5))
+
+    def fish(x: int, y: int, body, stripe, facing: int):
+        """Ein kleiner Rifffisch (4 x 3 Pixel) mit Schwanzflosse."""
+        for dx in range(4):
+            for dy in (-1, 0, 1):
+                if abs(dy) == 1 and dx in (0, 3):
+                    continue
+                col = stripe if dx == 2 else body
+                put(px, img, x + dx * facing, y + dy, col)
+        put(px, img, x + (3 if facing > 0 else -3), y - 1 if False else y, OUTLINE)        # Auge vorn
+        put(px, img, x - facing, y - 1, body)
+        put(px, img, x - facing, y + 1, body)
+
+    # Fuß des Riffs: Geröll aus Kalk und Korallenbruch auf dem Rahmen (Lücken zwischen den Gruppen)
+    def rubble(x0: int, x1: int):
+        for x in range(x0, x1):
+            col = mix(m1, m2, 0.25 + 0.5 * hash01(x, 3)) if hash01(x, 2) > 0.25 else mix(coral_dark, coral, 0.5)
+            put(px, img, x, base, col)
+            if hash01(x, 4) > 0.55:
+                put(px, img, x, base - 1, mix(m1, m2, 0.5 * hash01(x, 6)))
+
+    # das Riff: Gruppen von zwei, drei Korallen, nach rechts niedriger und lichter
+    groups = []
+    x = BAR_X + 1
+    i = 0
+    while x < BAR_X + BAR_W - 6:
+        rel = (x - BAR_X) / BAR_W
+        width = 13 + round(hash01(x, 1) * 6) - round(rel * 5)
+        if any(abs(x + width / 2 - (BAR_X + round(BAR_W * f))) < width / 2 + 6 for f in GEMS):
+            x += 4
+            continue
+        groups.append((x, width, rel, i))
+        x += width + 2 + round(rel * 6)
+        i += 1
+    for gx, width, rel, i in groups:
+        if rel < 0.86:
+            rubble(gx, gx + width)
+    for gx, width, rel, i in groups:
+        scale = 1.0 - 0.55 * rel
+        kind = i % 5
+        seed = gx * 7 + i
+        if rel >= 0.86:
+            scallop(gx + 2)
+            if i % 2 == 0:
+                anemone_tuft(gx + 7, 4, seed, pink=True)
+            continue
+        if kind == 0:
+            staghorn(gx + 4, base, -math.pi / 2 - 0.15, 4.2 * scale + 1.0, 2, seed)
+            anemone_tuft(gx + 9, max(3, round(5 * scale)), seed)
+        elif kind == 1:
+            gorgonian(gx + 6, max(4, round(7 * scale)), seed)
+            seagrass(gx + 12, max(4, round(8 * scale)), seed)
+        elif kind == 2:
+            brain_coral(gx + 4, 4 if scale > 0.7 else 3, 3, seed)
+            sponge_tubes(gx + 9, [max(2, round(h * scale)) for h in (7, 9, 5)][: 3 if scale > 0.6 else 2])
+        elif kind == 3:
+            table_coral(gx + 5, max(3, round(6 * scale)), 5 if scale > 0.7 else 4, seed)
+            staghorn(gx + 12, base, -math.pi / 2 + 0.2, 3.2 * scale + 1.0, 1, seed, (fan_dark, fan, (255, 190, 240, 255)))
+        else:
+            anemone_tuft(gx + 3, max(3, round(6 * scale)), seed, pink=True)
+            seagrass(gx + 8, max(4, round(9 * scale)), seed)
+            brain_coral(gx + 13, 2, 2, seed)
+    starfish(BAR_X + BAR_W - 14, base - 2)
+    # zwei kleine Fische: ein Anemonenfisch nahe dem Medaillon, ein blauer Doktorfisch weiter rechts
+    fish(BAR_X + round(BAR_W * 0.42), top - 11, (255, 128, 30, 255), white, 1)
+    fish(BAR_X + round(BAR_W * 0.74), top - 8, (60, 120, 230, 255), (255, 214, 60, 255), -1)
+    # Seepocken und Rotalgen unter der Leiste, aufsteigende Blasen
+    for x in range(BAR_X + 3, BAR_X + BAR_W - 3, 7):
+        h = hash01(x, 19)
+        if h > 0.62:
+            for dx in range(-1, 2):
+                put(px, img, x + dx, bottom + 1, mix(m2, m1, 0.2 + 0.25 * (dx + 1)))
+            put(px, img, x, bottom + 2, mix(m1, m0, 0.3))
+            put(px, img, x - 1, bottom + 2, mix(m2, m1, 0.5))
+            put(px, img, x, bottom + 1, mix(m0, OUTLINE, 0.5))                 # Öffnung
+        elif h > 0.4:
+            length = 3 + round(hash01(x, 21) * 4)
+            for k in range(length):
+                sway = round(0.8 * math.sin(k * 0.9 + x))
+                put(px, img, x + sway, bottom + 1 + k, mix(coral_dark, coral, k / max(1, length - 1)))
+    for x in range(BAR_X + 9, BAR_X + BAR_W, 14):
+        y = bottom + 6 + round(hash01(x, 23) * 6)
+        if hash01(x, 29) > 0.5:
+            for dx, dy in ((0, -1), (-1, 0), (1, 0), (0, 1)):
+                put(px, img, x + dx, y + dy, f2)
+            put(px, img, x - 1, y - 1, f3)
+            put(px, img, x + 2, y - 4, f2)
+        else:
+            put(px, img, x, y, f2)
+            put(px, img, x + 1, y - 2, f3)
+    # Kranz aus Korallenästen um das Medaillon, darüber ein Goldreif
+    for k, ang in enumerate((-158, -136, -112, -68, -44, -22)):
+        a = math.radians(ang)
+        bx = EMB_X + math.cos(a) * (EMB_R - 0.5)
+        by = EMB_Y + math.sin(a) * (EMB_R - 0.5)
+        staghorn(bx, by, a, 3.6, 1, 50 + k)
+    for ang in range(-178, -1, 3):
+        a = math.radians(ang)
+        put(px, img, round(EMB_X + math.cos(a) * (EMB_R + 0.3)), round(EMB_Y + math.sin(a) * (EMB_R + 0.3)),
+            gold if ang < -90 else gold_dark)
+    # Spitze: die geöffnete Schere des Karkinos
+    claw = ["OO.....",
+            "LLOO...",
+            "HLLLOO.",
+            "LLLLLLO",
+            "CCCCCLO",
+            "CCOOOWO",
+            "CO.....",
+            "CCOOWO.",
+            "DCCCCO.",
+            "DDDDO..",
+            "OOOO..."]
+    cols = {"O": OUTLINE, "L": coral_light, "H": white, "C": coral, "D": coral_dark, "W": (60, 30, 28, 255)}
+    ex, ey = BAR_X + BAR_W + 3, BAR_Y + BAR_H // 2 - 6
+    for dy, row in enumerate(claw):
+        for dx, ch in enumerate(row):
+            if ch != ".":
+                put(px, img, ex + dx, ey + dy, cols[ch])
+
+
+DECOS = {"void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -600,6 +862,14 @@ def fill_value(element: str, x: int, y: int) -> float:
         # ein Sternennebel: weiche Schleier, darin einzelne helle Sterne
         neb = 0.4 + 0.2 * math.sin(tau * x / 64 + 1.4 * math.sin(tau * y / 9)) + 0.12 * math.sin(tau * x / 32 - tau * y / 18)
         return 1.0 if hash01(x, y, 83) > 0.965 else neb
+    if element == "reef":
+        # Licht einer Lagune: ein schwankendes Netz heller Linien, dazwischen einzelne Blasen
+        line1 = abs(math.sin(math.pi * (x / 16 + 0.35 * math.sin(tau * (y / 18 + x / 64)))))
+        line2 = abs(math.sin(math.pi * (-x / 16 + y / 4.5 + 0.3 * math.sin(tau * x / 32))))
+        near = min(line1, line2)
+        if hash01(x, y, 91) > 0.975:
+            return 1.0
+        return 0.92 if near < 0.14 else (0.66 if near < 0.3 else 0.36 + 0.1 * math.sin(tau * x / 64))
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -699,11 +969,12 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, shattered_king
+    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, reef_colossus,
+                                  shattered_king)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
-           "water": boss_water, "shadow": boss_shadow, "void": shattered_king}[element]
+           "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -718,13 +989,22 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip(child)
         strip(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26}.get(element, -42)
-    big = render(m, tex, glow, yaw, 6, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
-                 focus=["head"])
+    if element == "reef":
+        # Karkinos von vorn: Panzer mit Riff, Stielaugen, Stirn (ohne Beine, Tangsträhnen und Speer)
+        def strip_extra(bone):
+            if bone.name.startswith(("kelp", "spear")) or "leg" in bone.name:
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_extra(child)
+        strip_extra(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20}.get(element, -42)
+    pitch = {"reef": 8}.get(element, 6)
+    big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
+                 focus=["body"] if element == "reef" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

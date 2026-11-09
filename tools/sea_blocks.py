@@ -71,7 +71,7 @@ def anemone_body(color: str) -> Image.Image:
     arm: list[Color] = pal["arm"]  # type: ignore[assignment]
     img = pa.new()
     px = img.load()
-    rnd = random.Random(hash(color) % 9973)
+    rnd = random.Random(sum(map(ord, color)) * 17 % 9973)
     # Mundscheibe 8x8
     for y in range(8):
         for x in range(8):
