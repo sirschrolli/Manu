@@ -203,7 +203,7 @@ final class ErrorZone {
             if (pick < 0.17f) {
                 return this.noise;
             }
-            // Netherrack, Endstein und Wirrnyzel sind die letzten drei: seltener
+            // Netherrack, Endstein und Wirr-Nezel sind die letzten drei: seltener
             int common = FOREIGN.length - 3;
             int index = pick < 0.9f ? (int) ((pick - 0.17f) / 0.73f * common) : common + (int) ((pick - 0.9f) / 0.1f * 3);
             return FOREIGN[Math.clamp(index, 0, FOREIGN.length - 1)].defaultBlockState();

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.66.0 – MissMystik, die Feen-Zauberkünstlerin.** Im Feenreich steht jetzt eine verlassene **Zauberbühne**: eine Lichtung mit Samtvorhängen, Rampenlichtern aus Mondstein und einem Zuschauerrund, das in einen Hügel voller Blumen gebaut ist. Mitten auf der Bühne wartet der **Große Zauberzylinder** – tritt man heran, ertönt ein Trommelwirbel, und mit einem Knall und einem Regen aus Konfetti springt **MissMystik** heraus und verbeugt sich: eine Feen-Zauberkünstlerin mit Zylinder, Frack, Zauberstab, einem Fächer aus Karten und Flügeln, auf denen Herz, Pik, Karo und Kreuz leuchten (520 Lebenspunkte, Rüstung 10). Sie schwebt um ihr Publikum und zeigt Trick um Trick: den **Kartenfächer**, die **Lichttauben**, den **Verschwindetrick** (sie taucht hinter dir wieder auf), das **Spiegelkabinett** (Spiegelbilder, die beim ersten Treffer zerspringen), den **Hut-Trick** (ihr Zylinder wächst, saugt alle an und wirft sie in die Luft), die **Schwerterkiste** und **„Zieh eine Karte!“** (Herz heilt sie, Pik fällt wie ein Fallbeil, Karo regnet Splitter, Kreuz verflucht). Unter 60 % gibt sie eine **Zugabe** mit dem **Rampenlicht**, und fast besiegt das **große Finale** mit Feuerwerk – wer sie dann sehen kann und keine Deckung sucht, wird schwer getroffen. Besiegt verbeugt sie sich ein letztes Mal und hinterlässt das **Kartendeck der Mystik** (wirft Fächer aus leuchtenden Karten, jeder fünfte Wurf ist ein Ass im Ärmel) und den **Zylinder der Mystik** (ein 3D-Hut mit Feder, Rose und Herz-Ass, der dich in höchster Not unsichtbar macht). Eine Prise **Feenstaub** ruft sie zurück.
+> **Testversion 0.67.0 – Anni der Troll.** Irgendwo in der Oberwelt ist die Welt kaputtgegangen: In einer seltenen **Fehlerzone** ist der Boden aus den falschen Biomen zusammengewürfelt (Gras neben Schnee, Sand neben Myzel, dazwischen Netherrack, Endstein, fehlende Textur und Bildrauschen), herausgerissene Chunkfetzen schweben in der Luft – manche mit einem Baum, der kopfüber nach unten wächst –, Schächte sind in den Boden gestanzt, wo Chunks nicht geladen wurden, Blöcke sind zu dünnen Säulen gestreckt, lose Pixel hängen in der Luft, und auf einer Seite steht in großen Lettern „404“. In der Mitte flimmert der **Fehlerkern**. Tritt man heran, strömen Pixel herbei, und **Anni der Troll** wird geladen: ein riesiger, buckliger Troll mit einem Haarschopf, der in der Mitte von Magenta zu Cyan wechselt, einer Krone aus drei Pixeln, einem Bildschirm als Auge und dem **Bannhammer**, dessen halber Kopf fehlende Textur ist (1.500 Lebenspunkte, Rüstung 16). Er **glitcht wie ein Spielfehler**: Er ruckelt, hängt mit einem Ladekreis fest und springt dann vorwärts, läuft durch Wände, und manche Treffer werden nicht registriert. Seine Angriffe: der **Lag-Hieb** (er hängt fest – wie lange, weiß niemand –, dann kracht der Hammer und eine Schockwelle läuft über den Boden), das **Gummiband**, **Fehler-Klone** in Rot, Grün und Blau, **fehlende Textur** (der Boden wird Magenta und Schwarz und hält dich fest), der **Pixelregen**, der **Rückruck** (er merkt sich, wo du stehst, und reißt dich drei Sekunden später dorthin zurück) und der **Zeilenfehler** (eine rote Zeile zum Überspringen, eine blaue zum Ducken). Unter halber Kraft **stürzt er ab** („Anni.exe reagiert nicht.“) und kämpft nach dem Neustart im Fehlermodus weiter. Und wer glaubt, ihn besiegt zu haben, irrt: Beim ersten tödlichen Treffer lädt er eine **Sicherung** und steht als **Anni 2.0** wieder auf – mit roten Augen, einer neuen, vollen Leiste („Jetzt mit noch mehr Fehlern!“), noch schneller und härter und mit dem **Speedhack**. Erst danach ist er wirklich besiegt und hinterlässt den **Bannhammer** (jeder dritte Treffer ein Ruckler, jeder fünfte ein Bann) und die **Fehlerflügel** (Elytren, mit denen du im Gleitflug acht Blöcke weit blinzelst). Ein **Redstoneblock** startet den Kern neu.
+> In 0.66 kam MissMystik, die Feen-Zauberkünstlerin: Auf verlassenen **Zauberbühnen** im Feenreich springt sie aus dem Großen Zauberzylinder, sobald man herantritt – neun Tricks mit Karten, Lichttauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, eine Zugabe unter 60 % und das große Finale; besiegt hinterlässt sie das **Kartendeck der Mystik** und den **Zylinder der Mystik** (ein 3D-Hut, der dich in höchster Not unsichtbar macht).
 > In 0.65 kam Asteria, die Sternenreiterin: Der zweite neue Boss wartet im End: Mitten im Sternenhof jeder **Sternwarte** leuchtet jetzt der **Sternstein** – tritt man an ihn heran, stößt **Asteria, die Sternenreiterin**, in einer Säule aus Sternenlicht vom Himmel herab: die letzte Reiterin des Sternenordens in silberner Rüstung mit Sternenkrone, auf einem gewaltigen, gepanzerten **Sternenrochen** (gut acht Blöcke Spannweite). Sie ist stärker als die Drachen (700 Lebenspunkte, Rüstung 14, Zähigkeit 6), kämpft aus der Luft und hat sechs Angriffe: die **Tjost** (ein Sturmritt mit eingelegter Lanze, die Bahn zeigen Sternfunken), den **Sternenregen** (Sterne stürzen auf leuchtende Ringe), das **Sternbild** (ein Pentagramm aus Licht – wer drinnen bleibt, schwebt hilflos empor), den **Kometen** (die Lanze fliegt als Komet und kehrt zurück), den **Schwingenschlag** (eine Druckwelle, die auch Pfeile fortbläst) und unter halber Kraft die **Supernova** – wer sie dann sehen kann, wird geblendet und schwer getroffen; Deckung hinter Mauern und Pfeilern schützt. Besiegt hinterlässt sie die **Sternenlanze** (ein 3D-Speer, der im End und unter dem Nachthimmel härter trifft, Getroffene leuchten lässt und bei jedem dritten Treffer einen Stern herabruft) und die **Sternenschwingen** (Elytren mit **Sternenschub** wie eine Rakete und einer Spur aus Sternenlicht). Der Sternstein erlischt; ein **Endkristall** entzündet ihn neu und ruft sie zurück.
 > In 0.64 kam Malleus, der Glutschmied: Der erste der neuen Bosse jenseits des Feenreichs wartet im Nether: Auf dem Dach jeder **Aschenesse** kniet **Malleus, der Glutschmied**, an seinem **Glutamboss** und schmiedet am **Glutspeer** – ein knapp vier Blöcke großes, verkohltes Gerippe mit Widderschädel, Flammen auf dem Kopf und einer glühenden Herzesse in der Brust. Wer die Treppe hinaufsteigt, hört schon von Weitem seine Hammerschläge; tritt man an den Amboss heran, richtet er sich auf, nimmt den Speer vom Amboss und brüllt. Er ist stärker als die Erzmagier (560 Lebenspunkte, Rüstung 12) und kämpft mit sechs Angriffen: **Speerstoß**, **Hammerschlag** mit einer Schockwelle über das Dach, **Funkenflug**, **Glutwurf** mit Klumpen geschmolzenen Metalls, **Ruf der Gesellen** (Brandgebeine) und unter halber Kraft das **Anfachen der Esse** – dann wird er weißglühend. Besiegt lässt er den **Glutspeer** fallen, einen eigenen 3D-Speer, der im Nether (und wenn du brennst) härter trifft, jeden Getroffenen in Brand setzt, einen Flammenring auflodern lässt und dich in der Hand vor Feuer und Lava schützt. Der Amboss erkaltet; ein **Netheritbarren** facht ihn neu an und ruft den Schmied zurück. Neu ist auch der Kreativ-Reiter **„Legenden“**; der Gezeiten-Speer und der Glutspeer lassen sich jetzt wie die Speere von Minecraft verzaubern.
 > In 0.63 kam das Feenreich: Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
@@ -332,7 +333,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Das Feenreich**: eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
 | **Malleus, der Glutschmied**: Boss auf dem Dach jeder Aschenesse im Nether – kniet schmiedend an seinem Glutamboss, erwacht, wenn man herantritt; sechs Angriffe, Weißglut unter halber Kraft, eigene Bossleiste und Klänge; der **Glutspeer** als 3D-Waffe; Rückruf mit einem Netheritbarren | ✅ fertig |
 | **Asteria, die Sternenreiterin**: Boss jeder Sternwarte im End – stößt vom Himmel herab, wenn man an den Sternstein tritt; fliegend auf einem gepanzerten Sternenrochen, sechs Angriffe mit der Supernova unter halber Kraft, eigene Bossleiste und Klänge; die **Sternenlanze** als 3D-Speer und die **Sternenschwingen** mit Sternenschub; Rückruf mit einem Endkristall | ✅ fertig |
-| **MissMystik, die Feen-Zauberkünstlerin** (neu): Boss der Zauberbühne im Feenreich – springt aus dem Großen Zauberzylinder, wenn man herantritt; schwebend, neun Tricks mit Karten, Tauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, Zugabe und großes Finale, eigene Bossleiste und Klänge; das **Kartendeck der Mystik** und der **Zylinder der Mystik** als 3D-Hut; Rückruf mit Feenstaub | ✅ fertig |
+| **MissMystik, die Feen-Zauberkünstlerin**: Boss der Zauberbühne im Feenreich – springt aus dem Großen Zauberzylinder, wenn man herantritt; schwebend, neun Tricks mit Karten, Tauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, Zugabe und großes Finale, eigene Bossleiste und Klänge; das **Kartendeck der Mystik** und der **Zylinder der Mystik** als 3D-Hut; Rückruf mit Feenstaub | ✅ fertig |
+| **Anni der Troll** (neu): Boss der Fehlerzone in der Oberwelt (Boden aus falschen Biomen, schwebende Chunkfetzen, ausgestanzte Schächte, „404“) – wird aus dem Fehlerkern geladen; glitcht wie ein Spielfehler (Ruckler, Ladekreis, durch Wände, nicht registrierte Treffer), acht Angriffe, Absturz und Neustart unter halber Kraft, **Wiederherstellung als Anni 2.0** statt zu sterben (mit dem Speedhack), eigene Bossleisten und Klänge; der **Bannhammer** als 3D-Waffe und die **Fehlerflügel** mit Blinzeln; Neustart mit einem Redstoneblock | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -1939,6 +1941,89 @@ Feenrose, Feder und einem Herz-Ass im Band:
 Zauberzylinder, Kartendeck, Zylinder der Mystik und das Spawn-Ei liegen im Kreativ-Reiter **„Legenden“**, die
 **Samtvorhänge** (auch mit Fransen) zum Bauen eigener Bühnen im Reiter des Feenreichs.
 
+### Anni der Troll
+
+![Anni der Troll in seiner Fehlerzone – und als Anni 2.0](docs/bilder/anni_troll.jpg)
+
+Seit 0.67 gibt es in der Oberwelt seltene **Fehlerzonen** – Stellen, an denen die Welt kaputtgegangen ist. In der Mitte
+liegt eine runde, eingeebnete Arena, deren Boden aus den **falschen Biomen** zusammengewürfelt ist: Gras neben Schnee,
+Sand neben Myzel und Moos, hier und da Netherrack, Endstein und Wirr-Nezel, dazwischen **fehlende Textur** (Magenta und
+Schwarz) und **Bildrauschen**; manche Felder sind um einen Block verrutscht. Ringsum schweben herausgerissene
+**Chunkfetzen** (Erde, Stein und Erz, manche mit einem Baum, der kopfüber nach unten wächst), in den Boden sind
+**Schächte** gestanzt, wo Chunks nicht geladen wurden, einzelne Blöcke sind zu dünnen Säulen **in die Höhe gestreckt**,
+**lose Pixel** aus Beton hängen in der Luft, Bäume tragen Laub aus fehlender Textur, zwei Zeilen Bildrauschen ziehen sich
+über den Boden – und auf einer Seite steht in großen Lettern **„404“**. Nach außen hin verliert sich der Fehler. Am Rand
+der Arena liegt eine Truhe mit Fundstücken (Fehlersplitter, Fehlerblöcke, Redstone, Smaragde, mit Glück ein Diamant).
+Nachts leuchten fehlende Textur und Bildrauschen. Wer sich nähert, merkt es schon von Weitem („Die Welt flimmert … hier
+ist etwas kaputt.“). Fehlerzonen liegen auf eher flachem Land – Wiesen, Wälder, Savannen, Schnee, Wüste und Tafelberge
+(Finden: `/kaw fehlerzone`).
+
+Mitten in der Arena flimmert auf einem Sockel aus fehlender Textur der **Fehlerkern**. Trittst du näher als zwölf Blöcke
+heran, erscheint „Lade Anni …“, Pixel strömen von allen Seiten herbei und kreisen – dann setzt er sich mit einem Ruck
+zusammen, reckt den Hammer und lacht: **Anni der Troll** („Fehler 404: Gnade nicht gefunden“). Ein riesiger, buckliger
+Troll (gut vier Blöcke bis zur Haarspitze) mit moosgrauer, warziger Haut und Bartstoppeln, Hauern, Knollennase und
+Segelohren mit goldenen Ringen; sein Haarschopf wechselt genau in der Mitte die Farbe – links Magenta, rechts Cyan –,
+darüber kreist eine Krone aus drei Pixeln. Sein rechtes Auge ist ein flimmernder Bildschirm, sein linker Unterarm ist in
+drei schwebende Brocken zerfallen, sein rechter Unterschenkel ist nur noch fehlende Textur. Er schleift den
+**Bannhammer** hinter sich her: einen Steinklotz mit Eisenbändern an einem Baumstamm-Stiel, dessen vordere Hälfte fehlt.
+Er steht in der Reihe der Bosse **zwischen Asteria und dem Zerbrochenen König** (1.500 Lebenspunkte – mehr, als die
+Lebensleiste von Minecraft fasst –, Rüstung 16, Zähigkeit 6, lässt sich nicht wegstoßen).
+
+Anni **glitcht wie ein Spielfehler**: Zwei farbverschobene Abbilder (rot und cyan) laufen neben ihm her, für einzelne
+Ticks springt ein Glied in eine falsche Haltung oder er zeigt nur fehlende Textur. Alle paar Sekunden **hängt er beim
+Gehen fest** (über ihm dreht sich ein Ladekreis) und springt dann ein Stück vorwärts; kommt er nicht weiter, **läuft er
+durch Wände**. Pfeile und andere Geschosse gehen manchmal einfach durch ihn hindurch („Treffer nicht registriert“), und
+ein Hieb lässt ihn manchmal zur Seite springen. Eigene Bossleiste (dunkles Metall mit Farbsäumen, der Bannhammer, ein
+kaputtes Bild als Füllung, sein Bildnis), eigene Klänge – eine raue, tiefe Trollstimme, die beim Lachen hängen bleibt,
+Ruckler, Bitrauschen und Spieltöne.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Lag-Hieb** | er holt aus und **hängt fest** – über seinem Kopf dreht sich ein Ladekreis, mal kurz, mal lang. Verschwindet er, kracht der Hammer herab: Wer vor ihm steht, wird schwer getroffen, und eine **Schockwelle** läuft über den Boden (springen!) |
+| **Gummiband** | er flackert und ist fort – und steht woanders, drei-, viermal um dich herum (Nachbilder bleiben stehen); dann taucht er direkt neben dir auf und schlägt zu |
+| **Fehler-Klone** | die Farben laufen auseinander, und plötzlich sind da drei **Kopien** von ihm in Rot, Grün und Blau – sie rennen los und „stürzen ab“, wenn sie dich erreichen; ein Treffer lässt eine Kopie zerplatzen |
+| **Fehlende Textur** | er rammt den Hammer in den Boden – unter dir wird der Boden zu **Magenta und Schwarz**: Eine halbe Sekunde blinkt nur der Rand, dann hält er dich fest (stark verlangsamt) und schadet dir |
+| **Pixelregen** | er reckt den Hammer zum Himmel – leuchtende **Pixelblöcke** stürzen auf Ringe am Boden, meist dorthin, wo du gleich sein wirst |
+| **Rückruck** | sein Bildschirmauge flackert: Er merkt sich, **wo alle stehen** (ein flimmerndes Abbild bleibt dort). Drei Sekunden später reißt es alle dorthin zurück – kurz schwindlig –, und er stürmt auf den Nächsten los |
+| **Zeilenfehler** | er stampft auf: Eine leuchtende **Zeile** kreist um ihn – die rote dicht über dem Boden (**springen!**), dann die blaue in Kopfhöhe (**ducken!**) |
+| **Absturz** | einmal, unter halber Kraft: „Anni.exe reagiert nicht.“ – er erstarrt verdreht und ist nicht zu treffen. „Anni wird neu gestartet …“, dann rollt eine **Welle aus Pixeln** über den Boden (springen!). Danach kämpft er im **Fehlermodus**: mehr Klone und Felder, dichterer Pixelregen, schneller, härter |
+| **Wiederherstellung** | einmal, statt zu sterben: „Schwerer Ausnahmefehler – Anni.exe wurde beendet.“ Er sackt zusammen und zerfällt in Pixel. „Suche nach einer Sicherung …“ – „Sicherung gefunden“: Die Pixel strömen zurück, seine Leiste füllt sich Stück für Stück, und er setzt sich als **Anni 2.0** wieder zusammen, schlägt den Hammer in den Boden (eine Welle rollt los) und lacht |
+| **Speedhack** | nur Anni 2.0: Er zielt (Ladekreis, eine Spur aus Farbpunkten zeigt die Bahn) und **rast dreimal geradeaus** los, schneller als jedes Pferd – wen er erwischt, den schleudert er zur Seite; auf seiner Bahn bleiben Nachbilder und kleine Felder fehlender Textur |
+
+**Anni 2.0** („Jetzt mit noch mehr Fehlern!“) hat ein rot glühendes Auge, einen roten Bildschirm und eine eigene, rote
+Bossleiste. Die Sicherung ist nicht ganz vollständig – seine neue Leiste ist voll, fasst aber nur 60 % (900
+Lebenspunkte). Dafür ist er noch schneller, trifft noch härter, hält mehr aus und glitcht noch öfter: Er hängt beim
+Lag-Hieb kürzer (kaum vorherzusehen) und seine Schockwelle reicht weiter, beim Gummiband springt er fünfmal, er ruft
+sechs Klone, legt drei Felder fehlender Textur, lässt dichteren Pixelregen fallen, beim Zeilenfehler kreist mit der
+blauen zugleich eine zweite rote Zeile (gegenläufig) – und er beherrscht den **Speedhack**.
+
+Findet Anni niemanden mehr, zerfällt er nach einer halben Minute in Pixel („Anni hat die Verbindung verloren.“) und
+kehrt in den Kern zurück. Besiegt (ein zweites Mal) erstarrt er, flackert und zerfällt in Pixel – **GAME OVER**. Er
+hinterlässt den **Bannhammer**, die **Fehlerflügel**, einen **Herzkristall**, Fehlersplitter, Fehlerblöcke, Redstone,
+Diamanten, Edelsteine und Münzen. Der Kern ist dann **abgestürzt** – ein **Redstoneblock** (Rechtsklick auf den Kern)
+startet ihn neu, und Anni wird sofort wieder geladen.
+
+**Der Bannhammer** – Annis Hammer; in der Hand ein echtes 3D-Modell mit Lappen am Stiel, Eisenbändern und schwebenden
+Pixeln:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schaden | 14, sehr langsam (0,8 Hiebe je Sekunde), starker Rückstoß, **zerschmettert Schilde** |
+| **Ruckler** | jeder **dritte Treffer**: Das Ziel hängt einen Augenblick fest (stark verlangsamt) und wird an die Stelle zurückgerissen, an der es vor einer Sekunde stand |
+| **Bann!** | jeder **fünfte Treffer**: Ein Knall aus Pixeln trifft alle Gegner in dreieinhalb Blöcken (10 Schaden) und wirft sie empor |
+| Haltbarkeit | 2.600, mit **Fehlersplittern** zu reparieren, verzauberbar wie ein Schwert, episch, verbrennt nicht |
+
+**Die Fehlerflügel** – Flügel aus fehlender Textur mit Löchern und leuchtenden Kanten (vorn Magenta, hinten Cyan):
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Gleiten | wie Elytren; hinter den Flügeln ziehen Farbsäume her |
+| **Blinzeln** | im Gleitflug **Springen** drücken: Du springst acht Blöcke in Blickrichtung (nicht durch Wände) und fliegst mit deinem Schwung weiter – alle zwei Sekunden, kostet einen Punkt Haltbarkeit |
+| Haltbarkeit | 600, mit **Fehlersplittern** zu reparieren, mit Büchern verzauberbar, episch, verbrennt nicht |
+
+Fehlerkern, Fehlerblock, Bildrauschen, Fehlersplitter, Bannhammer, Fehlerflügel und das Spawn-Ei liegen im Kreativ-Reiter
+**„Legenden“**; Fehlerblock und Bildrauschen (beide leuchten schwach) lassen sich auch zum Bauen verwenden.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2467,6 +2552,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw atoll` · `/kaw atoll tp` · `/kaw atoll awaken` · `/kaw atoll reset` | (nur Operatoren) Lage des Versunkenen Atolls anzeigen (`/locate` findet es nicht), an den Rand der Lagune reisen, Karkinos wecken, den Hügel wieder aufschütten |
 | `/kaw mondhain` · `/kaw mondhain tp` · `/kaw mondhain awaken` | (nur Operatoren) Lage des nächsten Mondhains im Feenreich anzeigen (`/locate` findet ihn nicht), dorthin reisen (auch aus einer anderen Welt), die Mottenkönigin aus ihrem Kokon wecken |
 | `/kaw zauberbuehne` · `/kaw zauberbuehne tp` · `/kaw zauberbuehne awaken` · `/kaw zauberbuehne reset` | (nur Operatoren) Lage der nächsten Zauberbühne im Feenreich anzeigen (`/locate` findet sie nicht), in den Zuschauergang reisen (auch aus einer anderen Welt), MissMystiks Vorstellung beginnen, den Zylinder wieder füllen |
+| `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
@@ -2579,9 +2665,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      **Sternenschwingen**;
    - **0.66 – MissMystik, die Feen-Zauberkünstlerin** (fertig): der Boss der Zauberbühne im Feenreich mit dem
      **Kartendeck der Mystik** und dem **Zylinder der Mystik**;
-   - **0.67 – Anni der Troll:** ein Boss, der **glitcht wie ein Spielfehler** – er flackert, ruckelt, springt durch den
-     Raum, verdoppelt sich und verschiebt die Farben –, in einer seltenen **Fehlerzone** in der Oberwelt, wo die Welt
-     selbst kaputt ist (1.500 Lebenspunkte);
+   - **0.67 – Anni der Troll** (fertig): der Boss der Fehlerzone in der Oberwelt, der glitcht wie ein Spielfehler und
+     beim ersten Tod als **Anni 2.0** zurückkehrt – mit dem **Bannhammer** und den **Fehlerflügeln**;
    - **0.68 – neue Angriffe** für Karkinos, Noctua, Malleus, Asteria und den Zerbrochenen König;
    - danach neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
    - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
