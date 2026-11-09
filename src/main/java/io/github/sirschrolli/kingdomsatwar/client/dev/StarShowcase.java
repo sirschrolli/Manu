@@ -150,7 +150,14 @@ final class StarShowcase {
                 {"CONSTELLATION", "38", "star_constellation", "-140", "12.0", "9.0", "0.8"},
                 {"COMET", "22", "star_comet", "-105", "9.0", "2.5", "0.4"},
                 {"WINGBEAT", "17", "star_wingbeat", "-35", "8.0", "2.5", "0.0"},
-                {"SUPERNOVA", "52", "star_supernova", "0", "0", "0", "0"}}) {
+                {"BLACK_HOLE", "46", "star_black_hole", "-100", "13.0", "2.0", "0.7"},
+                {"BLACK_HOLE", "78", "star_black_hole_collapse", "-100", "13.0", "3.0", "0.7"},
+                {"CRESCENT", "21", "star_crescent", "-75", "9.0", "1.4", "0.5"},
+                {"SUPERNOVA", "52", "star_supernova", "0", "0", "0", "0"},
+                {"CRESCENT", "21", "star_crescent_radiant", "-60", "11.0", "4.0", "0.5"}}) {
+            if (!Step.wanted(shot[2]) && !shot[0].equals("SUPERNOVA")) {
+                continue;
+            }
             steps.add(Step.server(any -> {
                 ServerLevel level = end(any);
                 if (level.getEntity(stage.rider) instanceof AsteriaEntity asteria && level.getEntity(stage.knight) instanceof LivingEntity knight) {

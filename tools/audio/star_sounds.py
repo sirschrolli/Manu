@@ -3,12 +3,13 @@
 Erzeugt die Klänge von Asteria, der Sternenreiterin: ihr Ruf (ein heller Hornruf über einem schwebenden Chor), das
 Herabstoßen in der Lichtsäule, der Sturmritt, der Lanzentreffer, das Pfeifen fallender Sterne und ihr kristallenes
 Zerspringen, das Glockenspiel der Sternbilder, Wurf und Einschlag des Kometen, der Schwingenschlag des Rochens, das
-Anschwellen und Losbrechen der Supernova, das Summen des Rochens, Schmerz und Tod – dazu der Sternenschub der
-Sternenschwingen. Alles entsteht aus Rauschen und Tönen (siehe ambience_dsp.py); es werden keine Minecraft-Dateien
+Anschwellen und Losbrechen der Supernova, das Summen des Rochens, Schmerz und Tod, das Schwarze Loch (ein saugender,
+wirbelnder Sog über einem tiefen Grollen), sein Zusammensturz und das helle Zischen der Mondsicheln – dazu der
+Sternenschub der Sternenschwingen. Alles entsteht aus Rauschen und Tönen (siehe ambience_dsp.py); es werden keine Minecraft-Dateien
 kopiert.
 
 Aufruf (aus dem Projektordner):
-    python3 tools/audio/star_sounds.py [--preview /pfad]
+    python3 tools/audio/star_sounds.py [--only name ...] [--preview /pfad]
 Ergebnis:
     src/main/resources/assets/kingdomsatwar/sounds/star/<name><n>.ogg
     Einträge "entity.asteria.*" und "item.star_wings.boost" in assets/kingdomsatwar/sounds.json
@@ -348,6 +349,83 @@ def boost(seed: int) -> np.ndarray:
 
 
 # Name: (Funktion, Varianten, Raum (Nachhall s, Anteil) oder None, Ziel-Pegel dBFS)
+def black_hole(seed: int) -> np.ndarray:
+    """Schwarzes Loch: ein tiefes, schwebendes Grollen, darüber ein Sog, der immer schneller wirbelt (Rauschen durch ein
+    kreisendes Filter), ein dunkler Chor, der absinkt, und Funken, die hineinstürzen."""
+    n = int(3.8 * SR)
+    t = np.arange(n) / SR
+    y = np.zeros(n)
+    grow = curve(n, [(0, 0.0), (0.12, 0.55), (0.85, 1.0), (1, 0.7)])
+    # Grollen: zwei tiefe Töne, die gegeneinander schweben
+    rumble = tone(glide(n, 38, 62, 1.3), grow, SR, harmonics=((1, 1.0), (2, 0.4), (3, 0.15))) \
+        + tone(glide(n, 39.5, 64, 1.3), grow, SR, harmonics=((1, 0.8), (2, 0.3)))
+    mix_at(y, rumble, 0.0, 0.5)
+    # der Sog: ein Bandpass, dessen Mitte im Kreis läuft – das Kreisen wird schneller
+    x = noise(n, seed)
+    rate = 1.6 + 5.0 * (t / t[-1]) ** 1.4
+    phase = np.cumsum(rate) / SR * 2 * np.pi
+    center = 900 * 2.0 ** (1.4 * np.sin(phase))
+    out = np.zeros(n)
+    steps = 160
+    for i in range(steps):
+        a, b = i * n // steps, (i + 1) * n // steps
+        f = float(center[(a + b) // 2])
+        seg = filt(x[max(0, a - 512):b], "band", [f / 1.6, f * 1.6], SR, 2)
+        out[a:b] = seg[-(b - a):]
+    mix_at(y, out * grow, 0.0, 0.55)
+    # ein dunkler Chor, der langsam absinkt
+    m = int(3.6 * SR)
+    ch = choir(m, [110.0, 164.8, 207.7], seed + 3, "o")
+    ch = ch * curve(m, [(0, 0.0), (0.3, 0.7), (1, 1.0)])
+    mix_at(y, filt(ch, "low", 1400, SR, 2), 0.25, 0.35)
+    # Funken, die hineinstürzen: hohe Pfeiftöne, die nach unten gleiten
+    r = rng(seed + 7)
+    for k in range(9):
+        d = r.uniform(0.35, 0.7)
+        q = int(d * SR)
+        f0 = r.uniform(2400, 4200)
+        mix_at(y, tone(glide(q, f0, f0 * 0.35, 1.0), env_ad(q, SR, 0.02, d * 0.5), SR), r.uniform(0.5, 3.1), 0.05)
+    mix_at(y, shimmer(n, seed + 9, 70) * grow ** 2, 0.0, 0.25)
+    return y
+
+
+def collapse(seed: int) -> np.ndarray:
+    """Zusammensturz: alles wird in den Kern gesogen (ein steigendes Zischen, immer lauter) – dann ein gewaltiger Schlag,
+    ein strahlender Akkord und zerspringendes Kristall."""
+    r = rng(seed)
+    n = int(3.2 * SR)
+    y = np.zeros(n)
+    hit = 0.42
+    m = int(hit * SR)
+    suck = whoosh(m, seed, 300, 7000, 0.7) * curve(m, [(0, 0.0), (0.7, 0.6), (0.97, 1.0), (1, 0.0)]) ** 1.5
+    mix_at(y, suck, 0.0, 0.9)
+    mix_at(y, tone(glide(m, 200, 1200, 2.0), curve(m, [(0, 0.0), (0.9, 0.6), (1, 0.0)]), SR), 0.0, 0.12)
+    mix_at(y, thud(int(1.8 * SR), 64, 22, 0.55), hit, 1.3)
+    mix_at(y, impact(int(0.6 * SR), seed + 1, 80, 8000, 0.22), hit, 1.0)
+    for k in range(5):
+        mix_at(y, crystal(r.uniform(900, 2600), 1.6, seed + 2 + k, 0.6), hit + k * 0.015, 0.13)
+    c = int(2.6 * SR)
+    mix_at(y, choir(c, [207.7, 311.1, 415.3, 622.3], seed + 8, "a") * curve(c, [(0, 0.0), (0.03, 1.0), (0.4, 0.5), (1, 0.0)]), hit, 0.35)
+    mix_at(y, shimmer(n, seed + 9, 160) * curve(n, [(0, 0.0), (hit / 3.2, 0.0), (hit / 3.2 + 0.02, 1.0), (1, 0.0)]), 0.0, 0.45)
+    return y
+
+
+def crescent(seed: int) -> np.ndarray:
+    """Mondsichel: ein scharfes, helles Zischen (wie eine Klinge durch die Luft), darin ein klingender Kristallton."""
+    n = int(1.3 * SR)
+    y = np.zeros(n)
+    m = int(0.75 * SR)
+    swish = whoosh(m, seed, 1200, 7500, 0.5) * curve(m, [(0, 0.0), (0.12, 1.0), (0.35, 0.55), (1, 0.0)])
+    mix_at(y, swish, 0.0, 0.9)
+    mix_at(y, filt(noise(int(0.3 * SR), seed + 1), "band", [180, 900], SR, 2) * env_ad(int(0.3 * SR), SR, 0.03, 0.12), 0.0, 0.5)
+    ring = chime(PENTA[5], 1.2, seed + 2, 1.6)
+    mix_at(y, ring * curve(len(ring), [(0, 1.0), (0.7, 1.0), (1, 0.0)]), 0.04, 0.16)
+    glass = crystal(PENTA[8] * 1.5, 0.9, seed + 3, 0.7)
+    mix_at(y, glass * curve(len(glass), [(0, 1.0), (0.7, 1.0), (1, 0.0)]), 0.05, 0.08)
+    mix_at(y, shimmer(n, seed + 4, 120) * env_ad(n, SR, 0.02, 0.35), 0.0, 0.3)
+    return y
+
+
 SYNTH = {
     "cry": (cry, 2, (2.6, 0.4), -14.0),
     "descent": (descent, 1, (3.0, 0.45), -15.0),
@@ -365,14 +443,22 @@ SYNTH = {
     "hurt": (hurt, 3, (1.0, 0.2), -17.0),
     "death": (death, 1, (3.4, 0.5), -14.0),
     "boost": (boost, 2, (1.0, 0.2), -17.0),
+    "black_hole": (black_hole, 1, (2.4, 0.35), -15.0),
+    "collapse": (collapse, 2, (3.0, 0.45), -13.0),
+    "crescent": (crescent, 3, (1.4, 0.3), -16.0),
 }
 
 # Ereignis: (Klänge, Reichweite)
 EVENTS = {f"entity.asteria.{name}": ([name], reach) for name, reach in (
     ("cry", 96), ("descent", 96), ("charge", 64), ("impact", 32), ("starfall", 64), ("star_impact", 48), ("constellation", 48),
     ("comet_throw", 48), ("comet_impact", 64), ("wingbeat", 48), ("supernova_charge", 96), ("supernova", 128), ("ambient", 32),
-    ("hurt", 32), ("death", 96))}
+    ("hurt", 32), ("death", 96), ("black_hole", 64), ("collapse", 80), ("crescent", 40))}
 EVENTS["item.star_wings.boost"] = (["boost"], 24)
+
+
+def files_of(name: str) -> list[str]:
+    stem = "star_wings_boost" if name == "boost" else f"asteria_{name}"
+    return [f"kingdomsatwar:star/{stem}{i + 1}" for i in range(SYNTH[name][1])]
 
 
 def render(name: str, preview: Path | None) -> list[str]:
@@ -399,11 +485,12 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

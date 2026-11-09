@@ -104,6 +104,9 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_SWEEP = register("entity.shattered_king.sweep");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_GRAVITY = register("entity.shattered_king.gravity");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_BEAM = register("entity.shattered_king.beam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_RIFT = register("entity.shattered_king.rift");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_ERUPT = register("entity.shattered_king.erupt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_QUAKE = register("entity.shattered_king.quake");
 
     // ---------------------------------------------------------------- Wesen des Meeres
     public static final DeferredHolder<SoundEvent, SoundEvent> MANTA_RAY_HURT = register("entity.manta_ray.hurt");
@@ -196,6 +199,9 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_AMBIENT = register("entity.asteria.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_HURT = register("entity.asteria.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_DEATH = register("entity.asteria.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_BLACK_HOLE = register("entity.asteria.black_hole");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_COLLAPSE = register("entity.asteria.collapse");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASTERIA_CRESCENT = register("entity.asteria.crescent");
     public static final DeferredHolder<SoundEvent, SoundEvent> STAR_WINGS_BOOST = register("item.star_wings.boost");
     // MissMystik, die Feen-Zauberkünstlerin (0.66)
     public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_AMBIENT = register("entity.miss_mystik.ambient");

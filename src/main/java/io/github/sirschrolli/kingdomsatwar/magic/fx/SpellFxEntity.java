@@ -31,9 +31,9 @@ import org.joml.Vector3fc;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Sichtbare Zauberwirkungen der Erzmagier und des Aetherit-Stabs: Runenkreise am Boden, Strahlen und Blitzbögen,
- * Säulen aus Feuer und Wasser, Felsspitzen, Steinfäuste, Dornenranken, Giftblüten, Eiskerker, Wasserblasen und
- * Flutwellen. Gezeichnet wird sie von {@code SpellFxRenderer}; den Schaden richtet aus, wer den Zauber wirkt – über
+ * Sichtbare Zauberwirkungen der Erzmagier, des Aetherit-Stabs und einiger Bosse: Runenkreise am Boden, Strahlen und
+ * Blitzbögen, Säulen aus Feuer und Wasser, Felsspitzen, Steinfäuste, Dornenranken, Giftblüten, Eiskerker, Wasserblasen,
+ * Flutwellen, Mondsicheln, Schwarze Löcher und Bebenringe. Gezeichnet wird sie von {@code SpellFxRenderer}; den Schaden richtet aus, wer den Zauber wirkt – über
  * {@link #onTick} und {@link #onExpire} genau dann, wenn die Wirkung zu sehen ist (auch wenn der Zaubernde längst etwas
  * anderes tut). Wird nicht gespeichert.
  */
@@ -63,7 +63,16 @@ public class SpellFxEntity extends Entity {
         /** Wasserblase um ein Wesen (folgt ihm). Größe = Durchmesser. */
         BUBBLE,
         /** Flutwelle, die in Blickrichtung rollt. Größe = Breite, Zusatz = Geschwindigkeit je Tick. */
-        WAVE;
+        WAVE,
+        /**
+         * Mondsichel aus Licht, die in Blickrichtung dicht über den Boden gleitet (Stufen hinauf, Kanten hinab); die Mitte
+         * eilt den Spitzen um {@link #CRESCENT_BULGE} Blöcke voraus. Größe = Spannweite, Zusatz = Geschwindigkeit je Tick.
+         */
+        CRESCENT,
+        /** Schwarzes Loch: dunkler Kern, gleißender Lichtring, wirbelnde Scheibe; saugt Teilchen an. Größe = Halbmesser der Scheibe. */
+        VORTEX,
+        /** Ring aus Energie, der sich am Boden ausbreitet (wer nicht darüber springt, wird getroffen). Größe = Anfangshalbmesser, Zusatz = Zuwachs je Tick. */
+        SHOCKWAVE;
 
         public static Kind of(int index) {
             return values()[Mth.clamp(index, 0, values().length - 1)];
@@ -72,6 +81,10 @@ public class SpellFxEntity extends Entity {
 
     /** Kein Element: der Aether (Zauber ohne Element, Stab). */
     public static final int AETHER = 255;
+    /** So weit (Blöcke) eilt die Mitte einer Mondsichel ihren Spitzen voraus. */
+    public static final float CRESCENT_BULGE = 1.1f;
+    /** So hoch (Blöcke über dem Boden) reicht ein Bebenring; wer im Sprung höher ist, bleibt unversehrt. */
+    public static final float SHOCKWAVE_HEIGHT = 0.9f;
 
     private static final EntityDataAccessor<Byte> DATA_KIND = SynchedEntityData.defineId(SpellFxEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> DATA_STYLE = SynchedEntityData.defineId(SpellFxEntity.class, EntityDataSerializers.INT);
@@ -245,6 +258,11 @@ public class SpellFxEntity extends Entity {
         return Vec3.directionFromRotation(0.0f, this.getYRot());
     }
 
+    /** Halbmesser eines Bebenrings in diesem Augenblick. */
+    public float ringRadius(float partialTicks) {
+        return this.size() + this.param() * (this.tickCount + partialTicks);
+    }
+
     // ------------------------------------------------------------------ Ablauf
 
     @Override
@@ -261,8 +279,11 @@ public class SpellFxEntity extends Entity {
                 this.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
             }
         }
-        if (this.kind() == Kind.WAVE) {
+        if (this.kind() == Kind.WAVE || this.kind() == Kind.CRESCENT) {
             this.setPos(this.position().add(this.forward().scale(this.param())));
+            if (this.kind() == Kind.CRESCENT) {
+                this.followGround();
+            }
         }
         if (this.level() instanceof ServerLevel) {
             if (this.onTick != null) {
@@ -382,6 +403,68 @@ public class SpellFxEntity extends Entity {
                     level.addParticle(ParticleTypes.BUBBLE_POP, this.getX() + side.x * s, this.getY() + 0.3, this.getZ() + side.z * s, 0.0, 0.05, 0.0);
                 }
             }
+            case CRESCENT -> {
+                // Funken lösen sich von der Schneide und bleiben glitzernd zurück
+                Vec3 fwd = this.forward();
+                Vec3 side = new Vec3(-fwd.z, 0.0, fwd.x);
+                for (int i = 0; i < 3; i++) {
+                    double x = this.random.nextDouble() * 2.0 - 1.0;
+                    double along = CRESCENT_BULGE * (1.0 - x * x) - 0.2;
+                    double h = 0.85 + (this.random.nextDouble() - 0.5) * 0.9 * Math.pow(1.0 - x * x, 0.6);
+                    level.addParticle(i == 0 ? ParticleTypes.END_ROD : new DustParticleOptions(this.color(), 0.8f),
+                            this.getX() + side.x * x * size * 0.5 + fwd.x * along, this.getY() + h, this.getZ() + side.z * x * size * 0.5 + fwd.z * along,
+                            -fwd.x * 0.04, 0.01, -fwd.z * 0.04);
+                }
+            }
+            case VORTEX -> {
+                // Teilchen stürzen spiralförmig in den Kern (das Portal-Teilchen fliegt von Ursprung + Versatz zum Ursprung)
+                float grow = Math.min(1.0f, t / 10.0f);
+                for (int i = 0; i < 4; i++) {
+                    double a = this.random.nextDouble() * Mth.TWO_PI;
+                    double r = size * (0.7 + this.random.nextDouble() * 0.9) * grow;
+                    double h = (this.random.nextDouble() - 0.5) * size * 0.35;
+                    level.addParticle(ParticleTypes.PORTAL, this.getX(), this.getY(), this.getZ(), Math.cos(a) * r, h - 1.0, Math.sin(a) * r);
+                }
+                if (this.random.nextInt(2) == 0) {
+                    double a = this.random.nextDouble() * Mth.TWO_PI;
+                    double r = size * (0.5 + this.random.nextDouble() * 0.6) * grow;
+                    double vx = -Math.sin(a) * 0.16 - Math.cos(a) * 0.07;
+                    double vz = Math.cos(a) * 0.16 - Math.sin(a) * 0.07;
+                    level.addParticle(ParticleTypes.END_ROD, this.getX() + Math.cos(a) * r, this.getY() + (this.random.nextDouble() - 0.5) * 0.4,
+                            this.getZ() + Math.sin(a) * r, vx, 0.0, vz);
+                }
+            }
+            case SHOCKWAVE -> {
+                double r = this.ringRadius(0.0f);
+                int count = 2 + (int) (r * 0.5);
+                for (int i = 0; i < count; i++) {
+                    double a = this.random.nextDouble() * Mth.TWO_PI;
+                    double ox = Math.cos(a);
+                    double oz = Math.sin(a);
+                    level.addParticle(this.random.nextInt(3) == 0 ? ParticleTypes.REVERSE_PORTAL : new DustParticleOptions(this.color(), 1.1f),
+                            this.getX() + ox * r, this.getY() + 0.1 + this.random.nextDouble() * 0.5, this.getZ() + oz * r,
+                            ox * 0.05, 0.06, oz * 0.05);
+                }
+            }
+        }
+    }
+
+    /** Die Mondsichel gleitet über den Boden: eine Stufe hinauf, über einer Kante hinab (je Tick höchstens einen Block). */
+    private void followGround() {
+        Level level = this.level();
+        BlockPos feet = BlockPos.containing(this.getX(), this.getY() + 0.01, this.getZ());
+        if (!level.getBlockState(feet).getCollisionShape(level, feet).isEmpty()) {
+            BlockPos up = feet.above();
+            if (level.getBlockState(up).getCollisionShape(level, up).isEmpty()) {
+                this.setPos(this.getX(), feet.getY() + 1.0, this.getZ());
+            }
+            return;
+        }
+        BlockPos below = feet.below();
+        BlockPos deeper = below.below();
+        if (level.getBlockState(below).getCollisionShape(level, below).isEmpty()
+                && !level.getBlockState(deeper).getCollisionShape(level, deeper).isEmpty()) {
+            this.setPos(this.getX(), below.getY(), this.getZ());
         }
     }
 
@@ -421,6 +504,9 @@ public class SpellFxEntity extends Entity {
             case BEAM, ARC -> box.expandTowards(this.endOffset()).inflate(size + 1.0);
             case PILLAR -> box.inflate(size + 0.5).expandTowards(0.0, this.param(), 0.0);
             case WAVE -> box.inflate(size * 0.6 + 1.0, 3.0, size * 0.6 + 1.0);
+            case CRESCENT -> box.inflate(size * 0.6 + 1.5, 2.5, size * 0.6 + 1.5);
+            case VORTEX -> box.inflate(size * 1.3 + 1.0);
+            case SHOCKWAVE -> box.inflate(size + this.param() * this.life() + 1.0, 2.0, size + this.param() * this.life() + 1.0);
             case CIRCLE, CAST_CIRCLE -> box.inflate(size + 0.5, 1.0, size + 0.5);
             default -> box.inflate(Math.max(2.0, size * 2.5), 3.5 * Math.max(1.0, size), Math.max(2.0, size * 2.5));
         };

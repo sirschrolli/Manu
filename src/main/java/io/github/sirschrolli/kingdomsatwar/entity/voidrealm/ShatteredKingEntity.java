@@ -1,12 +1,16 @@
 package io.github.sirschrolli.kingdomsatwar.entity.voidrealm;
 
 import io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -57,6 +61,12 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Ruf der Wächter</b> (bei 60 % und 25 %): zwei Splitterwächter erheben sich aus dem Platz.</li>
  *     <li><b>Sternenstrahl</b> (unter 25 %): aus seinem zersprungenen Herzen fegt ein Strahl im Kreis über den Platz –
  *     über ihn springen oder hinter Säulen ducken.</li>
+ *     <li><b>Risse der Leere</b>: er gräbt die Klauen vor sich in den Boden und reißt ihn auf – Risse aus violettem Licht
+ *     laufen fächerförmig auf sein Ziel zu (im Zorn fünf statt drei), dann bricht die Leere Säule um Säule aus ihnen
+ *     hervor, von ihm fort; wer auf einem Riss steht, wird emporgeschleudert. Die Risse enden an Säulen und Wänden.</li>
+ *     <li><b>Leerenbeben</b>: beide Fäuste hoch über dem Haupt, dann rammt er sie in den Boden – Ringe aus Leerenenergie
+ *     rollen über den ganzen Platz (im Zorn vier statt drei); wer nicht im rechten Augenblick darüber springt (oder auf
+ *     einem Block steht), wird getroffen und zurückgeworfen.</li>
  * </ul>
  * Er ist bewusst schwächer als die Erzmagier (und die Drachen-Bosse sind die stärksten von allen).
  */
@@ -69,6 +79,8 @@ public class ShatteredKingEntity extends Monster {
     public static final byte EVENT_GRAVITY = 95;
     public static final byte EVENT_SUMMON = 96;
     public static final byte EVENT_BEAM = 97;
+    public static final byte EVENT_RIFT = 98;
+    public static final byte EVENT_QUAKE = 99;
 
     private static final EntityDataAccessor<Float> DATA_BEAM_YAW = SynchedEntityData.defineId(ShatteredKingEntity.class,
             EntityDataSerializers.FLOAT);
@@ -88,6 +100,19 @@ public class ShatteredKingEntity extends Monster {
     public static final int GRAVITY_DROP = 52;
     public static final int SUMMON_TICKS = 50;
     public static final int BEAM_TICKS = 110;
+    /** Risse der Leere: Dauer, in diesem Tick reißt der Boden auf, in diesem bricht die Leere hervor. */
+    public static final int RIFT_TICKS = 64;
+    public static final int RIFT_TEAR = 18;
+    public static final int RIFT_ERUPT = 36;
+    /** So lang wird ein Riss (Blöcke), so weit liegen seine Ausbrüche auseinander. */
+    public static final double RIFT_LENGTH = 22.0;
+    public static final double RIFT_SPACING = 1.6;
+    /** Leerenbeben: Dauer, der erste Schlag, der Abstand der Ringe, ihre Geschwindigkeit (Blöcke je Tick) und Lebensdauer. */
+    public static final int QUAKE_TICKS = 72;
+    public static final int QUAKE_SLAM = 22;
+    public static final int QUAKE_STEP = 10;
+    public static final float QUAKE_SPEED = 0.55f;
+    public static final int QUAKE_LIFE = 42;
     public static final int DEATH_TICKS = 80;
     /** So weit (waagerecht) reicht der Thronplatz um die Mitte. */
     public static final double ARENA_RADIUS = 24.0;
@@ -102,11 +127,16 @@ public class ShatteredKingEntity extends Monster {
     public final AnimationState gravityAnimation = new AnimationState();
     public final AnimationState summonAnimation = new AnimationState();
     public final AnimationState beamAnimation = new AnimationState();
+    public final AnimationState riftAnimation = new AnimationState();
+    public final AnimationState quakeAnimation = new AnimationState();
+    private static final int RIFT_COLOR = 0xA070FF;
+    private static final int QUAKE_COLOR = 0xB98CFF;
+    private static final DustParticleOptions RIFT_DUST = new DustParticleOptions(0xB98CFF, 1.3f);
 
     private final ServerBossEvent bossBar = new ServerBossEvent(java.util.UUID.randomUUID(),
             Component.translatable("boss.kingdomsatwar.void"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10);
 
-    private enum Attack { NONE, AWAKEN, SLAM, SWEEP, VOLLEY, GRAVITY, SUMMON, BEAM }
+    private enum Attack { NONE, AWAKEN, SLAM, SWEEP, VOLLEY, GRAVITY, SUMMON, BEAM, RIFT, QUAKE }
 
     private Attack attack = Attack.NONE;
     private int attackTick;
@@ -119,6 +149,11 @@ public class ShatteredKingEntity extends Monster {
     private boolean chained;
     /** Zorn: unter der Hälfte seiner Leben (einmal ausgerufen). */
     private boolean wrath;
+    /** Risse der Leere: die Punkte jedes Risses (am Boden, von ihm fort) und wen die Leere schon emporgeschleudert hat. */
+    private final List<Vec3[]> rifts = new ArrayList<>();
+    private final Set<UUID> riftStruck = new HashSet<>();
+    /** Wo seine Fäuste beim Leerenbeben (oder seine Klauen bei den Rissen) in den Boden fahren. */
+    private Vec3 groundPoint = Vec3.ZERO;
     private int lonely;
     private @Nullable BlockPos home;
     private @Nullable BlockPos seal;
@@ -470,7 +505,7 @@ public class ShatteredKingEntity extends Monster {
             this.start(level, Attack.SUMMON, EVENT_SUMMON);
             return;
         }
-        List<Attack> options = new ArrayList<>(List.of(Attack.SLAM, Attack.SLAM, Attack.VOLLEY));
+        List<Attack> options = new ArrayList<>(List.of(Attack.SLAM, Attack.SLAM, Attack.VOLLEY, Attack.RIFT, Attack.QUAKE));
         if (d < 9.0) {
             options.add(Attack.SWEEP);
             options.add(Attack.SWEEP);
@@ -501,9 +536,24 @@ public class ShatteredKingEntity extends Monster {
                 this.beamStart = this.getYRot() - 100.0f;
                 this.start(level, Attack.BEAM, EVENT_BEAM);
             }
+            case RIFT -> this.startGroundAttack(level, Attack.RIFT, EVENT_RIFT, 4.0);
+            case QUAKE -> this.startGroundAttack(level, Attack.QUAKE, EVENT_QUAKE, 3.5);
             default -> {
             }
         }
+    }
+
+    /** Risse oder Beben: die Stelle vor ihm am Boden, wo seine Hände hineinfahren, steht fest, bevor sie sich heben. */
+    private void startGroundAttack(ServerLevel level, Attack attack, byte event, double ahead) {
+        Vec3 forward = this.getLookAngle().multiply(1.0, 0.0, 1.0);
+        forward = forward.lengthSqr() < 1.0e-4 ? new Vec3(0.0, 0.0, 1.0) : forward.normalize();
+        Vec3 at = this.position().add(forward.scale(ahead));
+        LivingEntity target = this.getTarget();
+        this.groundPoint = new Vec3(at.x, this.floorBelow(level, at, target != null ? target.getY() : this.getY() - 2.5), at.z);
+        this.entityData.set(DATA_SLAM_POINT, this.groundPoint.toVector3f());
+        this.rifts.clear();
+        this.riftStruck.clear();
+        this.start(level, attack, event);
     }
 
     /**
@@ -532,12 +582,30 @@ public class ShatteredKingEntity extends Monster {
                 this.beamStart = this.getYRot() - 100.0f;
                 this.start(level, Attack.BEAM, EVENT_BEAM);
             }
+            case "rift" -> {
+                this.faceNow(target);
+                this.startGroundAttack(level, Attack.RIFT, EVENT_RIFT, 4.0);
+            }
+            case "quake" -> {
+                this.faceNow(target);
+                this.startGroundAttack(level, Attack.QUAKE, EVENT_QUAKE, 3.5);
+            }
             default -> {
             }
         }
     }
 
-    /** Welcher Angriff gerade läuft (für Tests): none, awaken, slam, sweep, volley, gravity, summon, beam. */
+    /** Dreht sich sofort zu {@code target} (für Tests und die Vorführung). */
+    private void faceNow(@Nullable LivingEntity target) {
+        if (target != null) {
+            float yaw = -((float) Mth.atan2(target.getX() - this.getX(), target.getZ() - this.getZ())) * Mth.RAD_TO_DEG;
+            this.setYRot(yaw);
+            this.yBodyRot = yaw;
+            this.yHeadRot = yaw;
+        }
+    }
+
+    /** Welcher Angriff gerade läuft (für Tests): none, awaken, slam, sweep, volley, gravity, summon, beam, rift, quake. */
     public String currentAttack() {
         return this.attack.name().toLowerCase(java.util.Locale.ROOT);
     }
@@ -577,6 +645,8 @@ public class ShatteredKingEntity extends Monster {
             case GRAVITY -> this.tickGravity(level, t);
             case SUMMON -> this.tickSummon(level, t);
             case BEAM -> this.tickBeam(level, t);
+            case RIFT -> this.tickRift(level, target, t);
+            case QUAKE -> this.tickQuake(level, t);
             default -> this.finish();
         }
     }
@@ -778,10 +848,243 @@ public class ShatteredKingEntity extends Monster {
         }
     }
 
+    /**
+     * Risse der Leere: er gräbt die Klauen vor sich in den Boden und reißt ihn auf – Risse aus violettem Licht laufen
+     * fächerförmig auf sein Ziel zu. Kurz darauf bricht die Leere aus ihnen hervor, Säule um Säule, von ihm fort.
+     */
+    private void tickRift(ServerLevel level, @Nullable LivingEntity target, int t) {
+        this.hover(this.clampToArena(this.position()), target);
+        if (t == 4) {
+            level.playSound(null, this.groundPoint.x, this.groundPoint.y, this.groundPoint.z, ModSounds.SHATTERED_KING_RIFT.get(),
+                    SoundSource.HOSTILE, 3.0f, 1.0f);
+        }
+        if (t == RIFT_TEAR) {
+            this.tearRifts(level, target);
+        }
+        if (t > RIFT_TEAR && t < RIFT_ERUPT && t % 2 == 0) {
+            // die Risse glimmen und knistern
+            for (Vec3[] line : this.rifts) {
+                for (Vec3 p : line) {
+                    level.sendParticles(t % 4 == 0 ? ParticleTypes.REVERSE_PORTAL : RIFT_DUST, p.x, p.y + 0.12, p.z, 1, 0.2, 0.02, 0.2, 0.01);
+                }
+            }
+        }
+        int k = t - RIFT_ERUPT;
+        if (k >= 0 && !this.rifts.isEmpty()) {
+            List<LivingEntity> near = this.enemiesNear(level, RIFT_LENGTH + 8.0);
+            for (Vec3[] line : this.rifts) {
+                if (k < line.length) {
+                    this.erupt(level, line[k], near, k == 0);
+                }
+            }
+        }
+        if (t >= RIFT_TICKS) {
+            this.rifts.clear();
+            this.finish();
+        }
+    }
+
+    /** Die Risse: vom Punkt vor ihm fächerförmig auf sein Ziel zu, über den Boden, bis zu einer Säule, Wand oder Kante. */
+    private void tearRifts(ServerLevel level, @Nullable LivingEntity target) {
+        this.rifts.clear();
+        this.riftStruck.clear();
+        Vec3 origin = this.groundPoint;
+        Vec3 aim = target != null ? target.position().subtract(origin) : this.getLookAngle();
+        double base = Math.atan2(aim.z, aim.x);
+        int count = this.healthFraction() < 0.5f ? 5 : 3;
+        double spread = 21.0 * Mth.DEG_TO_RAD;
+        BlockState ground = level.getBlockState(BlockPos.containing(origin).below());
+        if (!ground.isAir()) {
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, ground), origin.x, origin.y + 0.2, origin.z, 40, 1.2, 0.2, 1.2, 0.2);
+        }
+        this.shake(level, 30.0, 0.35f, 10);
+        for (int i = 0; i < count; i++) {
+            double a = base + (i - (count - 1) / 2.0) * spread;
+            Vec3 dir = new Vec3(Math.cos(a), 0.0, Math.sin(a));
+            Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+            List<Vec3> points = new ArrayList<>();
+            double y = origin.y;
+            double wobble = 0.0;
+            for (double d = 1.0; d <= RIFT_LENGTH; d += RIFT_SPACING) {
+                // ein Riss ist nie gerade: er zuckt hin und her
+                wobble = Mth.clamp(wobble + (this.random.nextDouble() - 0.5) * 0.9, -1.0, 1.0);
+                Vec3 p = origin.add(dir.scale(d)).add(side.scale(wobble));
+                Double floor = floorAt(level, p.x, p.z, y);
+                if (floor == null) {
+                    break;
+                }
+                y = floor;
+                points.add(new Vec3(p.x, y, p.z));
+            }
+            if (points.size() < 2) {
+                continue;
+            }
+            Vec3[] line = points.toArray(new Vec3[0]);
+            this.rifts.add(line);
+            // knisternde Blitze am Boden entlang, bis die Leere hervorbricht
+            Vec3 from = origin.add(0.0, 0.12, 0.0);
+            for (int j = 2; j < line.length + 2; j += 3) {
+                Vec3 to = line[Math.min(j, line.length - 1)].add(0.0, 0.12, 0.0);
+                SpellFxEntity.create(level, SpellFxEntity.Kind.ARC, from, null, RIFT_COLOR, RIFT_ERUPT - RIFT_TEAR + j + 2, 0.2f).end(to).spawn();
+                from = to;
+                if (j >= line.length - 1) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /** Die Leere bricht aus einem Riss hervor: eine Säule aus violettem Licht; wer darauf steht, fliegt empor. */
+    private void erupt(ServerLevel level, Vec3 p, List<LivingEntity> near, boolean first) {
+        SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, p, null, RIFT_COLOR, 14, 0.85f).param(4.5f).spawn();
+        BlockState floor = level.getBlockState(BlockPos.containing(p).below());
+        if (!floor.isAir()) {
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, floor), p.x, p.y + 0.2, p.z, 10, 0.4, 0.1, 0.4, 0.15);
+        }
+        level.sendParticles(ParticleTypes.REVERSE_PORTAL, p.x, p.y + 0.6, p.z, 8, 0.3, 0.6, 0.3, 0.12);
+        if (first) {
+            level.playSound(null, p.x, p.y, p.z, ModSounds.SHATTERED_KING_ERUPT.get(), SoundSource.HOSTILE, 2.5f, 0.9f + this.random.nextFloat() * 0.2f);
+        }
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.95f;
+        for (LivingEntity e : near) {
+            double dx = e.getX() - p.x;
+            double dz = e.getZ() - p.z;
+            double reach = 1.25 + e.getBbWidth() * 0.5;
+            if (dx * dx + dz * dz > reach * reach || e.getY() < p.y - 0.6 || e.getY() > p.y + 4.0 || !e.isAlive()) {
+                continue;
+            }
+            if (!this.riftStruck.add(e.getUUID())) {
+                continue;
+            }
+            if (e.hurtServer(level, this.damageSources().indirectMagic(this, this), damage)) {
+                e.push(0.0, 1.05, 0.0);
+                e.needsSync = true;
+                e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 1), this);
+            }
+        }
+    }
+
+    /**
+     * Leerenbeben: beide Fäuste hoch über dem Haupt (ein Kreis zeigt, wo sie einschlagen), dann rammt er sie in den Boden –
+     * Ringe aus Leerenenergie rollen über den ganzen Platz. Darüber springen!
+     */
+    private void tickQuake(ServerLevel level, int t) {
+        this.hover(this.clampToArena(this.position()), this.getTarget());
+        if (t == 1) {
+            level.playSound(null, this.blockPosition(), ModSounds.SHATTERED_KING_QUAKE.get(), SoundSource.HOSTILE, 4.0f, 1.0f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, this.groundPoint.add(0.0, 0.05, 0.0), null, QUAKE_COLOR, QUAKE_SLAM - 1, 3.0f)
+                    .spawn();
+        }
+        int rings = this.healthFraction() < 0.5f ? 4 : 3;
+        for (int i = 0; i < rings; i++) {
+            if (t == QUAKE_SLAM + i * QUAKE_STEP) {
+                this.quakeRing(level, i);
+            }
+        }
+        if (t >= QUAKE_TICKS) {
+            this.finish();
+        }
+    }
+
+    private void quakeRing(ServerLevel level, int index) {
+        Vec3 c = this.groundPoint;
+        Set<UUID> hit = new HashSet<>();
+        if (index == 0) {
+            this.shake(level, 48.0, 0.9f, 18);
+            level.playSound(null, c.x, c.y, c.z, ModSounds.SHARD_WARDEN_SLAM.get(), SoundSource.HOSTILE, 4.0f, 0.5f);
+            level.sendParticles(ParticleTypes.EXPLOSION, c.x, c.y + 0.3, c.z, 3, 0.8, 0.1, 0.8, 0.0);
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, VoidBlocks.VOID_CRYSTAL.get().defaultBlockState()), c.x, c.y + 0.2, c.z,
+                    60, 1.5, 0.2, 1.5, 0.25);
+            // wer genau dort steht, wo die Fäuste einschlagen, trifft es am härtesten (der erste Ring verschont ihn dann)
+            float fists = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.1f;
+            for (LivingEntity e : this.enemiesNear(level, 30.0)) {
+                double dx = e.getX() - c.x;
+                double dz = e.getZ() - c.z;
+                if (dx * dx + dz * dz > 2.3 * 2.3 || e.getY() < c.y - 1.0 || e.getY() > c.y + 2.5) {
+                    continue;
+                }
+                hit.add(e.getUUID());
+                if (e.hurtServer(level, this.damageSources().mobAttack(this), fists)) {
+                    e.push(0.0, 0.6, 0.0);
+                    e.needsSync = true;
+                }
+            }
+        } else {
+            this.shake(level, 40.0, 0.4f, 8);
+            level.playSound(null, c.x, c.y, c.z, ModSounds.SHARD_WARDEN_SLAM.get(), SoundSource.HOSTILE, 2.5f, 0.6f + index * 0.08f);
+        }
+        level.sendParticles(ParticleTypes.REVERSE_PORTAL, c.x, c.y + 0.3, c.z, 30, 0.6, 0.1, 0.6, 0.3);
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.8f;
+        SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, c.add(0.0, 0.05, 0.0), null, QUAKE_COLOR, QUAKE_LIFE, 1.2f).param(QUAKE_SPEED)
+                .onTick(fx -> this.ringHits(level, fx, hit, damage)).spawn();
+    }
+
+    /** Wen der Bebenring gerade erreicht: wer auf dem Boden steht (nicht im Sprung darüber, nicht auf einem Block) – jeden einmal. */
+    private void ringHits(ServerLevel level, SpellFxEntity fx, Set<UUID> hit, float damage) {
+        double r = fx.ringRadius(0.0f);
+        Vec3 c = fx.position();
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(c, c).inflate(r + 1.5, 3.0, r + 1.5), this::canQuake)) {
+            if (hit.contains(e.getUUID())) {
+                continue;
+            }
+            double dx = e.getX() - c.x;
+            double dz = e.getZ() - c.z;
+            double d = Math.sqrt(dx * dx + dz * dz);
+            double up = e.getY() - c.y;
+            if (Math.abs(d - r) > 0.75 + e.getBbWidth() * 0.5 || up < -1.0 || up > SpellFxEntity.SHOCKWAVE_HEIGHT) {
+                continue;
+            }
+            hit.add(e.getUUID());
+            if (e.hurtServer(level, this.damageSources().indirectMagic(this, this), damage)) {
+                Vec3 away = d < 1.0e-3 ? new Vec3(1.0, 0.0, 0.0) : new Vec3(dx / d, 0.0, dz / d);
+                e.push(away.x * 0.75, 0.45, away.z * 0.75);
+                e.needsSync = true;
+            }
+        }
+    }
+
+    private boolean canQuake(LivingEntity e) {
+        return e != this && e.isAlive() && !(e instanceof ShardWardenEntity) && !(e instanceof ShatteredKingEntity)
+                && !(e instanceof Player p && (p.isCreative() || p.isSpectator()));
+    }
+
+    /** Die Höhe des Bodens bei (x, z) nahe {@code y}, wo man stehen kann – oder null (Säule, Wand oder Abgrund). */
+    private static @Nullable Double floorAt(ServerLevel level, double x, double z, double y) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        int bx = Mth.floor(x);
+        int bz = Mth.floor(z);
+        int by = Mth.floor(y + 0.5);
+        for (int dy = 1; dy >= -2; dy--) {
+            pos.set(bx, by + dy, bz);
+            if (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()) {
+                continue;
+            }
+            BlockPos below = pos.below();
+            if (level.getBlockState(below).getCollisionShape(level, below).isEmpty()) {
+                continue;
+            }
+            BlockPos above = pos.above();
+            return level.getBlockState(above).getCollisionShape(level, above).isEmpty() ? (double) pos.getY() : null;
+        }
+        return null;
+    }
+
+    /** Der Boden unter einer Stelle (bis zwölf Blöcke tief), sonst {@code fallback}. */
+    private double floorBelow(ServerLevel level, Vec3 at, double fallback) {
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(Mth.floor(at.x), Mth.floor(at.y), Mth.floor(at.z));
+        for (int i = 0; i < 12; i++) {
+            BlockPos below = pos.below();
+            if (level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()
+                    && !level.getBlockState(below).getCollisionShape(level, below).isEmpty()) {
+                return pos.getY();
+            }
+            pos.move(0, -1, 0);
+        }
+        return fallback;
+    }
+
     private List<LivingEntity> enemiesNear(ServerLevel level, double radius) {
-        return level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(radius, 12.0, radius),
-                e -> e != this && e.isAlive() && !(e instanceof ShardWardenEntity) && !(e instanceof ShatteredKingEntity)
-                        && !(e instanceof Player p && (p.isCreative() || p.isSpectator())));
+        return level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(radius, 12.0, radius), this::canQuake);
     }
 
     /** Lässt den Bildschirm der Spieler in der Nähe beben (schwächer mit der Entfernung). */
@@ -839,6 +1142,8 @@ public class ShatteredKingEntity extends Monster {
             case EVENT_GRAVITY -> this.gravityAnimation.start(this.tickCount);
             case EVENT_SUMMON -> this.summonAnimation.start(this.tickCount);
             case EVENT_BEAM -> this.beamAnimation.start(this.tickCount);
+            case EVENT_RIFT -> this.riftAnimation.start(this.tickCount);
+            case EVENT_QUAKE -> this.quakeAnimation.start(this.tickCount);
             default -> super.handleEntityEvent(id);
         }
     }

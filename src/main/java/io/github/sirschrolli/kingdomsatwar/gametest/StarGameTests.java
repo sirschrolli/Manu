@@ -9,6 +9,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.end.CometLanceEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.end.StarfallEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType;
 import io.github.sirschrolli.kingdomsatwar.item.end.StarLanceItem;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.StarBlocks;
 import java.util.List;
@@ -219,7 +220,7 @@ final class StarGameTests {
     /**
      * Ihre Angriffe gegen einen Ritter (hoch über dem Testfeld, schwebend): die Tjost reitet ihn nieder, der Sternenregen
      * trifft, das Sternbild trifft und lässt ihn schweben, der Komet trifft und lässt ihn leuchten, der Schwingenschlag
-     * wirft ihn fort.
+     * wirft ihn fort; das Schwarze Loch zerreibt ihn am Kern und trifft ihn mit der Lichtwelle, die Mondsicheln treffen.
      */
     private static void attacks(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -277,10 +278,52 @@ final class StarGameTests {
                                     helper.assertTrue(knight.getHealth() < hp[0], "Der Schwingenschlag trifft nicht");
                                     helper.assertTrue(knight.position().distanceTo(spot) > 0.5 || knight.getDeltaMovement().horizontalDistance() > 0.05,
                                             "Der Schwingenschlag wirft ihn nicht fort");
-                                    field.close();
-                                    helper.succeed();
+                                    blackHoleAndCrescents(helper, level, asteria, knight, spot, hp, area, () -> {
+                                        field.close();
+                                        helper.succeed();
+                                    });
                                 });
                             });
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    /** Die Künste von 0.68: das Schwarze Loch (Kern, Wirbel, Lichtwelle beim Zusammensturz) und die Mondsicheln. */
+    private static void blackHoleAndCrescents(GameTestHelper helper, ServerLevel level, AsteriaEntity asteria, LivingEntity knight, Vec3 spot,
+            float[] hp, AABB area, Runnable then) {
+        reset(knight, spot, hp);
+        asteria.teleportTo(spot.x, spot.y + 6.0, spot.z - 8.0);
+        asteria.setDeltaMovement(Vec3.ZERO);
+        asteria.setTarget(knight);
+        asteria.forceAttack(AsteriaEntity.Attack.BLACK_HOLE);
+        helper.runAfterDelay(AsteriaEntity.HOLE_OPEN + 4, () -> {
+            helper.assertTrue(asteria.currentAttack() == AsteriaEntity.Attack.BLACK_HOLE, "Das Schwarze Loch bricht ab: " + asteria.currentAttack());
+            helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, area, e -> e.kind() == SpellFxEntity.Kind.VORTEX).isEmpty(),
+                    "Es öffnet sich kein Wirbel");
+            helper.assertTrue(knight.getHealth() < hp[0], "Der Kern zerreibt ihn nicht");
+            helper.assertTrue(knight.hasEffect(MobEffects.SLOWNESS), "Der Kern hält ihn nicht fest");
+            // vier Blöcke neben dem Kern: dort zerreibt er nicht mehr, aber die Lichtwelle reicht so weit
+            reset(knight, spot.add(4.0, 0.0, 0.0), hp);
+            helper.runAfterDelay(AsteriaEntity.HOLE_COLLAPSE - AsteriaEntity.HOLE_OPEN - 8, () -> {
+                helper.assertTrue(knight.getHealth() >= hp[0], "Der Kern trifft auch neben ihm");
+                helper.runAfterDelay(12, () -> {
+                    helper.assertTrue(knight.getHealth() < hp[0], "Die Lichtwelle trifft nicht, wenn das Loch zusammenstürzt");
+                    helper.assertTrue(level.getEntitiesOfClass(SpellFxEntity.class, area, e -> e.kind() == SpellFxEntity.Kind.VORTEX).isEmpty(),
+                            "Der Wirbel bleibt nach dem Zusammensturz");
+                    reset(knight, spot, hp);
+                    asteria.teleportTo(spot.x, spot.y + 5.0, spot.z - 9.0);
+                    asteria.setDeltaMovement(Vec3.ZERO);
+                    asteria.setTarget(knight);
+                    asteria.forceAttack(AsteriaEntity.Attack.CRESCENT);
+                    helper.runAfterDelay(AsteriaEntity.CRESCENT_FIRST + 2, () -> {
+                        helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, area, e -> e.kind() == SpellFxEntity.Kind.CRESCENT).isEmpty(),
+                                "Sie sendet keine Mondsichel");
+                        helper.runAfterDelay(16, () -> {
+                            helper.assertTrue(knight.getHealth() < hp[0], "Die Mondsichel trifft nicht");
+                            then.run();
                         });
                     });
                 });

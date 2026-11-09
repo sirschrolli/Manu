@@ -103,6 +103,11 @@ final class GlutschmiedPoses {
     static final int[][] GLOBS = {{0, P_READY, 0}, {8, P_GLOBS_BACK, 0}, {12, P_GLOBS_FLING, 1}, {16, P_GLOBS_BACK, 0}, {20, P_GLOBS_FLING, 1}, {24, P_GLOBS_BACK, 0}, {28, P_GLOBS_FLING, 1}, {32, P_GLOBS_BACK, 0}, {36, P_GLOBS_FLING, 1}, {42, P_READY, 0}};
     static final int[][] CALL = {{0, P_READY, 0}, {8, P_CALL_RAISE, 0}, {12, P_CALL_HIGH, 0}, {15, P_CALL_STAMP, 1}, {22, P_CALL_STAMP, 0}, {30, P_READY, 0}};
     static final int[][] STOKE = {{0, P_READY, 0}, {12, P_STOKE_RAISE, 2}, {18, P_STOKE_PLANT, 1}, {40, P_STOKE_PLANT, 0}, {50, P_READY, 0}};
+    /** Glutkette: ausholen (die Kette kreist), schleudern, heranziehen – und der Hammer empfängt das Opfer. */
+    static final int[][] CHAIN = {{0, P_READY, 0}, {6, P_GLOBS_BACK, 0}, {12, P_GLOBS_BACK, 0}, {14, P_GLOBS_FLING, 1}, {20, P_GLOBS_BACK, 0},
+            {24, P_SLAM_RAISE, 2}, {28, P_SLAM_HIT, 1}, {36, P_SLAM_HIT, 0}, {50, P_READY, 0}};
+    /** Schmelzfluss: der Hammer hoch über den Kopf, dann auf das Dach – und er hält inne, während die Rinnen laufen. */
+    static final int[][] MOLTEN = {{0, P_READY, 0}, {12, P_SLAM_RAISE, 2}, {17, P_SLAM_HIT, 1}, {40, P_SLAM_HIT, 0}, {58, P_READY, 0}};
 
     private GlutschmiedPoses() {}
 }

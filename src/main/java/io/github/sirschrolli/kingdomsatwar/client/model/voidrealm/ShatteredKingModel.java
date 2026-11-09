@@ -25,6 +25,10 @@ import org.joml.Quaternionf;
  *     zusammen und stoßen dann gemeinsam herab;</li>
  *     <li><b>Ruf der Wächter:</b> die Hände senken sich zum Boden und reißen die Wächter empor;</li>
  *     <li><b>Sternenstrahl:</b> die Hände packen die Ränder der Brust und reißen sie auf, die Herzhälften klaffen auseinander;</li>
+ *     <li><b>Risse der Leere:</b> die Hände heben sich zu Klauen, fahren vor ihm in den Boden, ziehen ihn auseinander und
+ *     reißen ihn auf, wenn die Leere hervorbricht – der Kopf fährt dabei empor, die Krone spreizt sich;</li>
+ *     <li><b>Leerenbeben:</b> beide Fäuste steigen hoch über das Haupt, rammen nebeneinander in den Boden und stoßen bei
+ *     jedem weiteren Ring nach;</li>
  *     <li><b>Tod:</b> er sinkt, die Hände fallen, die Kronensplitter und Trümmer treiben davon.</li>
  * </ul>
  */
@@ -132,6 +136,14 @@ public class ShatteredKingModel extends EntityModel<ShatteredKingRenderState> {
         float beam = Anim.seconds(state.beam, t);
         if (beam >= 0.0f && beam < ShatteredKingEntity.BEAM_TICKS / 20.0f + 0.45f) {
             this.beam(beam, t);
+        }
+        float rift = Anim.seconds(state.rift, t);
+        if (rift >= 0.0f && rift < ShatteredKingEntity.RIFT_TICKS / 20.0f) {
+            this.rift(state, rift, t);
+        }
+        float quake = Anim.seconds(state.quake, t);
+        if (quake >= 0.0f && quake < ShatteredKingEntity.QUAKE_TICKS / 20.0f) {
+            this.quake(state, quake, t);
         }
         if (state.deathTime > 0.0f) {
             this.death(Mth.clamp(state.deathTime / ShatteredKingEntity.DEATH_TICKS, 0.0f, 1.0f), t);
@@ -428,6 +440,94 @@ public class ShatteredKingModel extends EntityModel<ShatteredKingRenderState> {
             h.to(on, 11.0f * h.side, -5.0f, -12.0f, 1.0f * h.side, 0.2f, 1.3f * h.side);
             h.curl = Mth.lerp(on, h.curl, 0.7f);
             h.x += Mth.sin(t * 2.3f + h.side) * 0.2f * on;
+        }
+    }
+
+    // ------------------------------------------------------------------ Risse der Leere
+
+    private void rift(ShatteredKingRenderState state, float s, float t) {
+        float lx = state.slamX;
+        float ly = state.slamY;
+        float lz = state.slamZ;
+        float toward = (float) Mth.atan2(-lx, -lz);
+        float tear = ShatteredKingEntity.RIFT_TEAR / 20.0f;
+        float erupt = ShatteredKingEntity.RIFT_ERUPT / 20.0f;
+        float reach = smooth(s, 0.0f, tear - 0.35f);
+        float dig = easeIn(s, tear - 0.28f, tear);
+        float drag = smooth(s, tear, erupt - 0.05f);
+        float rip = smooth(s, erupt - 0.05f, erupt + 0.18f);
+        float back = smooth(s, erupt + 0.75f, erupt + 1.3f);
+        for (Hand h : this.hands) {
+            // die Hände heben sich, die Finger zu Klauen gekrümmt
+            h.to(reach, 17.0f * h.side, -13.0f, -12.0f, -0.35f * h.side, -0.75f, 0.25f * h.side);
+            h.curl = Mth.lerp(reach, h.curl, 0.8f);
+            h.spread = Mth.lerp(reach, h.spread, 0.32f);
+            float shiver = reach * (1.0f - dig);
+            h.x += Mth.sin(t * 2.4f + h.side) * 0.3f * shiver;
+            // … fahren vor ihm in den Boden …
+            h.to(dig, lx + 6.0f * h.side, ly - 2.6f, lz + 2.5f, toward, 0.7f, 0.0f);
+            // … ziehen ihn auseinander (sie zittern vor Anstrengung) …
+            float hold = dig * (1.0f - rip);
+            h.x += 4.5f * h.side * drag * (1.0f - rip) + Mth.sin(t * 2.9f + h.side) * 0.35f * hold;
+            h.z += 2.0f * drag * (1.0f - rip);
+            h.y += Mth.cos(t * 3.3f + h.side) * 0.25f * hold;
+            // … und reißen ihn auf, wenn die Leere hervorbricht
+            h.to(rip, 27.0f * h.side, -5.0f, -12.0f, -0.55f * h.side, -0.5f, 0.45f * h.side);
+            h.curl = Mth.lerp(rip, h.curl, 0.2f);
+            h.spread = Mth.lerp(rip, h.spread, 0.4f);
+            h.toIdle(back);
+        }
+        float lean = dig * (1.0f - rip);
+        float open = rip * (1.0f - back);
+        this.body.xRot += 0.3f * lean - 0.14f * open;
+        this.head.xRot += 0.4f * lean - 0.42f * open;
+        this.beard.xRot -= 0.12f * open;
+        this.flareCrown(0.4f * open);
+        this.leftShoulder.zRot -= 0.12f * lean;
+        this.rightShoulder.zRot += 0.12f * lean;
+        this.body.y += Anim.bump(s - tear, 0.03f, 0.05f, 0.25f) * 1.0f;
+    }
+
+    // ------------------------------------------------------------------ Leerenbeben
+
+    private void quake(ShatteredKingRenderState state, float s, float t) {
+        float lx = state.slamX;
+        float ly = state.slamY;
+        float lz = state.slamZ;
+        float toward = (float) Mth.atan2(-lx, -lz);
+        float hit = ShatteredKingEntity.QUAKE_SLAM / 20.0f;
+        float step = ShatteredKingEntity.QUAKE_STEP / 20.0f;
+        float lift = smooth(s, 0.0f, hit - 0.4f);
+        float slam = easeIn(s, hit - 0.2f, hit);
+        float back = smooth(s, hit + 3 * step + 0.2f, hit + 3 * step + 0.8f);
+        for (Hand h : this.hands) {
+            // beide Fäuste hoch über dem Haupt
+            h.to(lift, 9.0f * h.side, -31.0f, 1.0f, -0.2f * h.side, -1.15f, 0.2f * h.side);
+            h.curl = Mth.lerp(lift, h.curl, 1.0f);
+            h.spread = Mth.lerp(lift, h.spread, 0.0f);
+            float raised = lift * (1.0f - slam);
+            h.x += Mth.sin(t * 2.5f + h.side) * 0.3f * raised;
+            h.y += Mth.cos(t * 2.1f + h.side) * 0.3f * raised;
+            // mit voller Wucht nebeneinander in den Boden
+            h.to(slam, lx + 4.2f * h.side, ly - 3.6f, lz + 2.5f, toward, 0.15f, 0.0f);
+            // bei jedem weiteren Ring heben sie sich ein wenig und stoßen nach
+            float pulse = 0.0f;
+            for (int k = 1; k <= 3; k++) {
+                pulse += Anim.bump(s - (hit + k * step) + 0.16f, 0.12f, 0.13f, 0.22f);
+            }
+            h.y -= 3.0f * pulse * slam;
+            h.toIdle(back);
+        }
+        float raised = lift * (1.0f - slam);
+        float down = slam * (1.0f - back);
+        this.body.xRot += -0.2f * raised + 0.34f * down;
+        this.head.xRot += -0.35f * raised + 0.25f * down;
+        this.flareCrown(0.3f * raised);
+        this.leftShoulder.zRot += 0.15f * raised;
+        this.rightShoulder.zRot -= 0.15f * raised;
+        this.body.y += Anim.bump(s - hit, 0.03f, 0.05f, 0.3f) * 1.8f;
+        for (int k = 1; k <= 3; k++) {
+            this.body.y += Anim.bump(s - hit - k * step, 0.03f, 0.04f, 0.2f) * 0.8f;
         }
     }
 

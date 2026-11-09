@@ -2727,6 +2727,15 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.asteria.ambient"
   },
+  "entity.asteria.black_hole": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_black_hole1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.black_hole"
+  },
   "entity.asteria.charge": {
     "sounds": [
       {
@@ -2739,6 +2748,19 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.asteria.charge"
+  },
+  "entity.asteria.collapse": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_collapse1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_collapse2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.collapse"
   },
   "entity.asteria.comet_impact": {
     "sounds": [
@@ -2778,6 +2800,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.asteria.constellation"
+  },
+  "entity.asteria.crescent": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:star/asteria_crescent1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_crescent2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:star/asteria_crescent3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.asteria.crescent"
   },
   "entity.asteria.cry": {
     "sounds": [
@@ -5608,6 +5647,23 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.death"
   },
+  "entity.shattered_king.erupt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_erupt1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_erupt2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_erupt3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.erupt"
+  },
   "entity.shattered_king.gravity": {
     "sounds": [
       {
@@ -5633,6 +5689,32 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.hurt"
+  },
+  "entity.shattered_king.quake": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_quake1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_quake2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.quake"
+  },
+  "entity.shattered_king.rift": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_rift1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/shattered_king_rift2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.rift"
   },
   "entity.shattered_king.roar": {
     "sounds": [

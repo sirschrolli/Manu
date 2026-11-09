@@ -118,9 +118,21 @@ public class AsteriaModel extends EntityModel<AsteriaRenderState> {
         float hail = attack == AsteriaEntity.Attack.AWAKEN ? Anim.bump(a - 66.0f, 7.0f, 14.0f, 24.0f) : 0.0f;
         float climbUp = attack == AsteriaEntity.Attack.ASCEND ? Anim.bump(a, 10.0f, 60.0f, 70.0f) : 0.0f;
         float raise = Math.max(starfall, hail);
+        // Schwarzes Loch: die Lanze weist auf den Wirbel, die freie Hand hält ihn offen; beim Zusammensturz ein Stoß
+        float hole = attack == AsteriaEntity.Attack.BLACK_HOLE ? Anim.bump(a, 10.0f, AsteriaEntity.HOLE_COLLAPSE, AsteriaEntity.HOLE_COLLAPSE + 16.0f) : 0.0f;
+        float holeThrust = attack == AsteriaEntity.Attack.BLACK_HOLE ? Anim.bump(a - AsteriaEntity.HOLE_COLLAPSE + 5.0f, 3.0f, 6.0f, 16.0f) : 0.0f;
+        // Mondsicheln: weite Hiebe, abwechselnd von rechts nach links und zurück
+        float slashOn = 0.0f;
+        float slash = 0.0f;
+        if (attack == AsteriaEntity.Attack.CRESCENT) {
+            float last = AsteriaEntity.CRESCENT_FIRST + (AsteriaEntity.CRESCENT_SWINGS - 1) * AsteriaEntity.CRESCENT_STEP;
+            slashOn = Anim.bump(a - AsteriaEntity.CRESCENT_FIRST + 9.0f, 7.0f, last - AsteriaEntity.CRESCENT_FIRST + 13.0f,
+                    last - AsteriaEntity.CRESCENT_FIRST + 24.0f);
+            slash = slashSweep(a);
+        }
 
         // ---------------------------------------------------------- der Rochen
-        float calm = 1.0f - Math.max(Math.max(charge * 0.8f, rear), Math.max(beat, Math.max(glide * 0.6f, nova * 0.7f)));
+        float calm = 1.0f - Math.max(Math.max(charge * 0.8f, rear), Math.max(beat, Math.max(glide * 0.6f, Math.max(nova * 0.7f, hole * 0.55f))));
         calm *= 1.0f - death;
         float[] amp = {0.3f, 0.4f, 0.48f};
         float[] lag = {0.0f, 0.65f, 1.3f};
@@ -202,6 +214,24 @@ public class AsteriaModel extends EntityModel<AsteriaRenderState> {
         add(this.lance, nova, 144, 0, 10);
         add(this.armL, nova, -150, 0, 15);
 
+        // Schwarzes Loch: vorgebeugt, die Lanze zum Wirbel hinab, die Linke mit offener Hand erhoben
+        add(this.torso, hole, 10, 0, 0);
+        add(this.helm, hole, 12, 0, 0);
+        add(this.armR, hole, -78, 0, -6);
+        add(this.lance, hole, 128, 0, 10);
+        add(this.armL, hole, -120, 0, 26);
+        add(this.shield, hole, 0, 20, 0);
+        add(this.torso, holeThrust, 8, 0, 0);
+        add(this.armR, holeThrust, -22, 0, 0);
+        // Mondsicheln: der Oberkörper dreht mit, der Arm fegt die Lanze waagrecht von einer Seite zur anderen
+        add(this.torso, slashOn, 6, 0, 0);
+        add(this.torso, slashOn, 0, -22.0f * slash, 4.0f * slash);
+        add(this.armR, slashOn, -84, 0, -10);
+        add(this.armR, slashOn, 0, 62.0f * slash, 0);
+        add(this.lance, slashOn, 96, 0, 10);
+        add(this.armL, slashOn, -36, 0, 20);
+        add(this.helm, slashOn, 0, -10.0f * slash, 0);
+
         add(this.torso, death, 26, 0, 0);
         add(this.helm, death, 22, 0, 0);
         add(this.armR, death, 25, 0, 0);
@@ -220,5 +250,26 @@ public class AsteriaModel extends EntityModel<AsteriaRenderState> {
         this.pennant.yRot += Mth.sin(t * 0.5f) * 14.0f * D;
         this.pennantTip.yRot += Mth.sin(t * 0.5f - 0.9f) * 24.0f * D;
         this.lance.visible = state.lance;
+    }
+
+    /**
+     * Wo die Lanze bei den Mondsicheln gerade steht (−1 eine Seite, +1 die andere): vor dem ersten Hieb holt sie aus, jeder
+     * Hieb fegt in drei Ticks hinüber, bis zum nächsten hält sie (der kommt von dort zurück).
+     */
+    private static float slashSweep(float a) {
+        float pos = 0.0f;
+        for (int k = 0; k < AsteriaEntity.CRESCENT_SWINGS; k++) {
+            float strike = AsteriaEntity.CRESCENT_FIRST + k * AsteriaEntity.CRESCENT_STEP;
+            float dir = k % 2 == 0 ? 1.0f : -1.0f;
+            if (k == 0 && a < strike) {
+                float wind = Mth.clamp((a - strike + 8.0f) / 8.0f, 0.0f, 1.0f);
+                return -dir * wind * wind * (3.0f - 2.0f * wind);
+            }
+            if (a >= strike) {
+                float u = Mth.clamp((a - strike) / 3.0f, 0.0f, 1.0f);
+                pos = Mth.lerp(u * u * (3.0f - 2.0f * u), -dir, dir);
+            }
+        }
+        return pos;
     }
 }

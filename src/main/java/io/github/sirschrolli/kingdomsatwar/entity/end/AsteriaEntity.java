@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.entity.end;
 
 import io.github.sirschrolli.kingdomsatwar.block.end.StarstoneBlockEntity;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -69,6 +70,11 @@ import org.jspecify.annotations.Nullable;
  *     (solange sie wartet, schwebt sie tief);</li>
  *     <li><b>Schwingenschlag</b> – der Rochen bäumt sich auf und schlägt die Schwingen: eine Druckwelle wirft alle fort und
  *     bläst Pfeile aus der Luft;</li>
+ *     <li><b>Schwarzes Loch</b> – sie richtet die Lanze auf ihr Ziel, ein Kreis am Boden warnt, darüber öffnet sich ein
+ *     Wirbel aus Sternenstaub um einen schwarzen Kern: er saugt alles an (Wesen, Pfeile, Licht), wer ihm zu nahe kommt,
+ *     wird zerrieben – und wer noch im Kreis steht, wenn er in sich zusammenstürzt, wird fortgeschleudert;</li>
+ *     <li><b>Mondsicheln</b> – sie schwingt die Lanze in weiten Bögen hin und her, jeder Hieb sendet eine Sichel aus
+ *     Mondlicht dicht über den Boden auf ihr Ziel zu (strahlend: drei auf einmal); zur Seite treten oder darüber springen;</li>
  *     <li><b>Supernova</b> – unter halber Kraft steigt sie auf und sammelt das Licht der Sterne: wer sie dann sieht und
  *     nicht hinter einer Mauer, einem Pfeiler oder einem Turm Schutz sucht, wird geblendet und schwer getroffen. Danach
  *     strahlt sie: schneller, mehr Sterne.</li>
@@ -91,6 +97,22 @@ public class AsteriaEntity extends Monster {
     public static final int TJOST_END = 48;
     /** In diesem Tick der Supernova bricht das Licht los. */
     public static final int NOVA_BLAST = 64;
+    /** Schwarzes Loch: in diesem Tick öffnet es sich (und zieht), in diesem stürzt es in sich zusammen. */
+    public static final int HOLE_OPEN = 16;
+    public static final int HOLE_COLLAPSE = 76;
+    /** So weit zieht das Schwarze Loch, so weit reicht die Lichtwelle, wenn es zusammenstürzt. */
+    public static final double HOLE_PULL_RADIUS = 15.0;
+    public static final double HOLE_BLAST_RADIUS = 5.5;
+    /** So hoch über dem Boden schwebt der Kern des Schwarzen Lochs. */
+    public static final double HOLE_HEIGHT = 2.2;
+    /** Mondsicheln: der erste Hieb, der Abstand zwischen zwei Hieben, wie viele Hiebe. */
+    public static final int CRESCENT_FIRST = 14;
+    public static final int CRESCENT_STEP = 12;
+    public static final int CRESCENT_SWINGS = 3;
+    /** Spannweite, Geschwindigkeit (Blöcke je Tick) und Lebensdauer einer Mondsichel. */
+    public static final float CRESCENT_SPAN = 6.0f;
+    public static final float CRESCENT_SPEED = 0.8f;
+    public static final int CRESCENT_LIFE = 30;
     /** Weiter als so weit vom Sternstein folgt sie niemandem. */
     private static final double LEASH = 48.0;
     /** So lange ohne Gegner, dann kehrt sie in den Himmel zurück. */
@@ -98,7 +120,8 @@ public class AsteriaEntity extends Monster {
     private static final double NOVA_RADIUS = 20.0;
 
     public enum Attack {
-        NONE(0), AWAKEN(AWAKEN_TICKS), TJOST(78), STARFALL(66), CONSTELLATION(66), COMET(58), WINGBEAT(42), SUPERNOVA(104), ASCEND(70);
+        NONE(0), AWAKEN(AWAKEN_TICKS), TJOST(78), STARFALL(66), CONSTELLATION(66), COMET(58), WINGBEAT(42), SUPERNOVA(104), ASCEND(70),
+        BLACK_HOLE(96), CRESCENT(CRESCENT_FIRST + (CRESCENT_SWINGS - 1) * CRESCENT_STEP + 22);
 
         public final int duration;
 
@@ -113,6 +136,10 @@ public class AsteriaEntity extends Monster {
     /** Farbe der Sternbilder und Warnringe. */
     private static final ParticleOptions STAR_DUST = new DustParticleOptions(0x9AD8FF, 1.2f);
     private static final ParticleOptions STAR_DUST_BRIGHT = new DustParticleOptions(0xEAF6FF, 1.6f);
+    /** Farben des Schwarzen Lochs (Wirbel und Lichtwelle) und der Mondsicheln. */
+    private static final int HOLE_COLOR = 0x7C6CFF;
+    private static final int HOLE_LIGHT = 0xC4B8FF;
+    private static final int CRESCENT_COLOR = 0xA8DCFF;
 
     private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), Component.translatable("boss.kingdomsatwar.star"),
             BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_10);
@@ -131,6 +158,9 @@ public class AsteriaEntity extends Monster {
     // Sternenregen und Sternbild
     private final List<Vec3> marks = new ArrayList<>();
     private Vec3 constellation = Vec3.ZERO;
+    // Schwarzes Loch: der Kern und der Boden darunter
+    private Vec3 holeCenter = Vec3.ZERO;
+    private Vec3 holeGround = Vec3.ZERO;
     private int clientAttackStart;
     /** Nur im Client: Phase des Flügelschlags und Neigung in Kurven (für die Animationen). */
     public float flap;
@@ -401,6 +431,8 @@ public class AsteriaEntity extends Monster {
             case CONSTELLATION -> this.tickConstellation(level, target);
             case COMET -> this.tickComet(level, target);
             case WINGBEAT -> this.tickWingbeat(level, target);
+            case BLACK_HOLE -> this.tickBlackHole(level, target);
+            case CRESCENT -> this.tickCrescent(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -526,6 +558,10 @@ public class AsteriaEntity extends Monster {
         this.turnTo((float) (Mth.atan2(target.getZ() - this.getZ(), target.getX() - this.getX()) * Mth.RAD_TO_DEG) - 90.0f, step);
     }
 
+    private float yawTo(Vec3 at) {
+        return (float) (Mth.atan2(at.z - this.getZ(), at.x - this.getX()) * Mth.RAD_TO_DEG) - 90.0f;
+    }
+
     private void turnTo(float yaw, float step) {
         float next = Mth.approachDegrees(this.getYRot(), yaw, step);
         this.setYRot(next);
@@ -545,6 +581,12 @@ public class AsteriaEntity extends Monster {
         }
         if (distance < 20.0) {
             options.add(Attack.COMET);
+        }
+        // die neuen Künste (0.68): die Mondsicheln auf jede Entfernung, das Schwarze Loch nicht zu oft
+        options.add(Attack.CRESCENT);
+        if (distance < 28.0) {
+            options.add(Attack.CRESCENT);
+            options.add(Attack.BLACK_HOLE);
         }
         options.removeIf(a -> a == this.lastAttack);
         return options.get(this.random.nextInt(options.size()));
@@ -918,6 +960,194 @@ public class AsteriaEntity extends Monster {
             Vec3 away = shot.position().subtract(c);
             shot.setDeltaMovement(away.normalize().scale(1.4).add(0.0, 0.3, 0.0));
             shot.needsSync = true;
+        }
+    }
+
+    /**
+     * Schwarzes Loch: Sie richtet die Lanze auf ihr Ziel; ein Kreis am Boden zeigt, wohin die Lichtwelle reichen wird.
+     * Darüber öffnet sich ein Wirbel aus Sternenstaub um einen schwarzen Kern – er saugt alles an, immer stärker: Wesen,
+     * Pfeile, Licht. Wer dem Kern zu nahe kommt, wird zerrieben; wer noch im Kreis steht, wenn das Loch in sich
+     * zusammenstürzt, wird von der Lichtwelle getroffen und fortgeschleudert.
+     */
+    private void tickBlackHole(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        this.circle(target);
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.85));
+        if (t == 4) {
+            this.holeGround = this.ground(target.position());
+            this.holeCenter = this.holeGround.add(0.0, HOLE_HEIGHT, 0.0);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, this.holeGround.add(0.0, 0.05, 0.0), null, HOLE_COLOR,
+                    HOLE_COLLAPSE - 4, (float) HOLE_BLAST_RADIUS).spawn();
+            this.sound(level, ModSounds.ASTERIA_BLACK_HOLE.get(), 4.0f, 1.0f);
+        }
+        if (t < 4) {
+            this.faceTarget(target, 8.0f);
+            return;
+        }
+        Vec3 c = this.holeCenter;
+        this.turnTo(this.yawTo(c), 8.0f);
+        if (t < HOLE_OPEN) {
+            // Sternenstaub strömt von der Lanze zur Stelle und sammelt sich
+            if (t % 2 == 0) {
+                Vec3 hand = this.lanceHand();
+                Vec3 to = c.subtract(hand);
+                double len = to.length();
+                for (double d = 0.0; d < len; d += 0.8) {
+                    Vec3 q = hand.add(to.scale(d / len));
+                    level.sendParticles(STAR_DUST, q.x, q.y, q.z, 1, 0.05, 0.05, 0.05, 0.0);
+                }
+                level.sendParticles(ParticleTypes.REVERSE_PORTAL, c.x, c.y, c.z, 8, 0.3, 0.3, 0.3, 0.02);
+            }
+            return;
+        }
+        if (t == HOLE_OPEN) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.VORTEX, c, null, HOLE_COLOR, HOLE_COLLAPSE - HOLE_OPEN + 6, 5.2f).spawn();
+            level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFF8E7CFF), c.x, c.y, c.z, 1, 0.0, 0.0, 0.0, 0.0);
+        }
+        if (t < HOLE_COLLAPSE) {
+            float k = (t - HOLE_OPEN) / (float) (HOLE_COLLAPSE - HOLE_OPEN);
+            double pull = (this.isRadiant() ? 0.045 : 0.035) + 0.055 * k;
+            for (LivingEntity victim : this.victims(level, new AABB(c, c).inflate(HOLE_PULL_RADIUS))) {
+                Vec3 to = c.subtract(victim.getX(), victim.getY(0.5), victim.getZ());
+                double d = to.length();
+                if (d > HOLE_PULL_RADIUS || d < 1.0e-3) {
+                    continue;
+                }
+                double f = pull * (0.35 + 0.65 * (1.0 - d / HOLE_PULL_RADIUS));
+                Vec3 dir = to.scale(1.0 / d);
+                push(victim, new Vec3(dir.x * f, dir.y * f * 0.6, dir.z * f));
+                if (d < 2.7 && (t - HOLE_OPEN) % 8 == 0) {
+                    // der Kern zerreibt, was ihm zu nahe kommt
+                    victim.hurtServer(level, this.damageSources().indirectMagic(this, this), this.isRadiant() ? 5.0f : 4.0f);
+                    victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 24, 1), this);
+                    level.sendParticles(ParticleTypes.REVERSE_PORTAL, victim.getX(), victim.getY(0.5), victim.getZ(), 10, 0.3, 0.4, 0.3, 0.05);
+                }
+            }
+            // Pfeile und andere Geschosse biegen in den Wirbel ab und vergehen im Kern
+            for (Projectile shot : level.getEntitiesOfClass(Projectile.class, new AABB(c, c).inflate(HOLE_PULL_RADIUS),
+                    p -> !(p.getOwner() instanceof AsteriaEntity))) {
+                Vec3 to = c.subtract(shot.position());
+                double d = to.length();
+                if (d < 1.0) {
+                    level.sendParticles(ParticleTypes.REVERSE_PORTAL, shot.getX(), shot.getY(), shot.getZ(), 8, 0.1, 0.1, 0.1, 0.05);
+                    shot.discard();
+                    continue;
+                }
+                shot.setDeltaMovement(shot.getDeltaMovement().scale(0.96).add(to.scale(0.14 / d)));
+                shot.needsSync = true;
+            }
+            if (t % 4 == 0) {
+                ring(level, this.holeGround.add(0.0, 0.15, 0.0), HOLE_PULL_RADIUS * (1.0 - (t % 16) / 16.0) + 0.5, STAR_DUST, 36);
+            }
+            if (t == HOLE_COLLAPSE - 8) {
+                this.sound(level, ModSounds.ASTERIA_COLLAPSE.get(), 5.0f, 1.0f);
+            }
+            return;
+        }
+        if (t == HOLE_COLLAPSE) {
+            this.collapseHole(level, c);
+        }
+    }
+
+    /** Das Schwarze Loch stürzt in sich zusammen: ein Lichtblitz, eine Säule aus Sternenlicht, ein Ring rollt über den Boden. */
+    private void collapseHole(ServerLevel level, Vec3 c) {
+        level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFC4B8FF), c.x, c.y, c.z, 2, 0.2, 0.2, 0.2, 0.0);
+        level.sendParticles(ParticleTypes.END_ROD, c.x, c.y, c.z, 140, 0.3, 0.3, 0.3, 0.55);
+        level.sendParticles(ParticleTypes.REVERSE_PORTAL, c.x, c.y, c.z, 120, 0.4, 0.4, 0.4, 0.9);
+        level.sendParticles(ParticleTypes.FIREWORK, c.x, c.y, c.z, 40, 0.3, 0.3, 0.3, 0.35);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, this.holeGround, null, HOLE_LIGHT, 18, 2.4f).param(18.0f).spawn();
+        SpellFxEntity.create(level, SpellFxEntity.Kind.SHOCKWAVE, this.holeGround.add(0.0, 0.05, 0.0), null, HOLE_COLOR, 12, 0.8f)
+                .param((float) ((HOLE_BLAST_RADIUS + 0.6) / 12.0)).spawn();
+        for (LivingEntity victim : this.victims(level, new AABB(c, c).inflate(HOLE_BLAST_RADIUS + 1.0, 6.0, HOLE_BLAST_RADIUS + 1.0))) {
+            double dx = victim.getX() - c.x;
+            double dz = victim.getZ() - c.z;
+            double d = Math.sqrt(dx * dx + dz * dz);
+            if (d > HOLE_BLAST_RADIUS + 0.3 || victim.getY() < this.holeGround.y - 1.5 || victim.getY() > c.y + 4.0) {
+                continue;
+            }
+            victim.hurtServer(level, this.damageSources().indirectMagic(this, this), this.isRadiant() ? 15.0f : 12.0f);
+            Vec3 away = d < 0.2 ? this.forward() : new Vec3(dx / d, 0.0, dz / d);
+            push(victim, away.scale(1.3).add(0.0, 0.7, 0.0));
+            level.sendParticles(ParticleTypes.END_ROD, victim.getX(), victim.getY(0.5), victim.getZ(), 12, 0.3, 0.5, 0.3, 0.08);
+        }
+    }
+
+    /**
+     * Mondsicheln: Sie sinkt tiefer und schwingt die Lanze in weiten Bögen hin und her; jeder Hieb sendet eine Sichel aus
+     * Mondlicht dicht über den Boden auf ihr Ziel zu (strahlend: drei auf einmal, gefächert). Wer zur Seite tritt oder im
+     * rechten Augenblick darüber springt, bleibt unversehrt.
+     */
+    private void tickCrescent(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        Vec3 away = this.position().subtract(target.position()).multiply(1.0, 0.0, 1.0);
+        away = away.lengthSqr() < 1.0e-4 ? this.forward().scale(-1.0) : away.normalize();
+        this.steer(target.position().add(away.scale(9.0)).add(0.0, 4.5, 0.0), 0.07, 0.6);
+        this.faceTarget(target, 14.0f);
+        for (int k = 0; k < CRESCENT_SWINGS; k++) {
+            int strike = CRESCENT_FIRST + k * CRESCENT_STEP;
+            if (t == strike - 6) {
+                Vec3 hand = this.lanceHand();
+                level.sendParticles(STAR_DUST_BRIGHT, hand.x, hand.y, hand.z, 6, 0.4, 0.3, 0.4, 0.0);
+            }
+            if (t == strike) {
+                this.slashCrescent(level, target, k);
+            }
+        }
+    }
+
+    private void slashCrescent(ServerLevel level, LivingEntity target, int swing) {
+        this.sound(level, ModSounds.ASTERIA_CRESCENT.get(), 3.0f, 0.92f + swing * 0.07f);
+        // ein wenig vorhalten, wohin das Ziel läuft
+        Vec3 aim = target.position().add(target.getDeltaMovement().multiply(5.0, 0.0, 5.0));
+        // die Sichel entsteht am Boden unter ihr (schwebt sie über einem Abgrund: auf der Höhe ihres Ziels)
+        Vec3 base = this.position().add(this.forward().scale(1.5));
+        Vec3 ground = this.ground(base);
+        Vec3 from = ground.y < base.y - 0.01 ? ground : new Vec3(base.x, Math.min(base.y, target.getY()), base.z);
+        float yaw = (float) (Mth.atan2(aim.z - from.z, aim.x - from.x) * Mth.RAD_TO_DEG) - 90.0f;
+        // die Lanze zieht eine Spur aus Sternenlicht hinab zum Boden
+        Vec3 hand = this.lanceHand();
+        Vec3 down = from.add(0.0, 0.8, 0.0).subtract(hand);
+        double len = down.length();
+        for (double d = 0.0; d < len; d += 0.5) {
+            Vec3 q = hand.add(down.scale(d / len));
+            level.sendParticles(ParticleTypes.END_ROD, q.x, q.y, q.z, 1, 0.05, 0.05, 0.05, 0.0);
+        }
+        float damage = this.isRadiant() ? 10.0f : 8.0f;
+        int count = this.isRadiant() ? 3 : 1;
+        for (int i = 0; i < count; i++) {
+            float spread = (i - (count - 1) / 2.0f) * 24.0f;
+            Set<UUID> hit = new HashSet<>();
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CRESCENT, from, null, CRESCENT_COLOR, CRESCENT_LIFE, CRESCENT_SPAN)
+                    .param(CRESCENT_SPEED).facing(yaw + spread).onTick(fx -> this.crescentHits(level, fx, hit, damage)).spawn();
+        }
+    }
+
+    /** Wen die Mondsichel gerade trifft: wer vor ihrer Schneide steht (und nicht im Sprung darüber ist) – jeden nur einmal. */
+    private void crescentHits(ServerLevel level, SpellFxEntity fx, Set<UUID> hit, float damage) {
+        Vec3 f = fx.forward();
+        Vec3 side = new Vec3(-f.z, 0.0, f.x);
+        double half = fx.size() * 0.5;
+        Vec3 p = fx.position();
+        for (LivingEntity victim : this.victims(level, new AABB(p, p).inflate(half + 1.5, 2.5, half + 1.5))) {
+            if (hit.contains(victim.getUUID())) {
+                continue;
+            }
+            Vec3 rel = victim.position().subtract(p);
+            double across = rel.dot(side);
+            if (Math.abs(across) > half + victim.getBbWidth() * 0.5) {
+                continue;
+            }
+            double x = Mth.clamp(across / half, -1.0, 1.0);
+            double along = rel.dot(f) - SpellFxEntity.CRESCENT_BULGE * (1.0 - x * x);
+            double up = victim.getY() - p.y;
+            if (along < -1.2 || along > 0.8 || up < -1.0 || up > 1.1) {
+                continue;
+            }
+            hit.add(victim.getUUID());
+            victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
+            push(victim, f.scale(0.55).add(0.0, 0.3, 0.0));
+            level.sendParticles(ParticleTypes.END_ROD, victim.getX(), victim.getY(0.5), victim.getZ(), 10, 0.3, 0.4, 0.3, 0.06);
+            level.sendParticles(STAR_DUST_BRIGHT, victim.getX(), victim.getY(0.5), victim.getZ(), 6, 0.3, 0.4, 0.3, 0.0);
         }
     }
 

@@ -8,6 +8,9 @@ Texturen der Zauberwirkungen (textures/entity/spell/): weiße Vorlagen, die das 
   pillar.png   Säule aus Feuer/Wasser/Licht: aufsteigende Flammenzungen (in beide Richtungen kachelbar)
   wave.png     Flutwelle: tiefes Blau unten, Gischtkamm oben (kachelbar in der Breite)
   bubble.png   Wasserblase: klarer Kern, glänzender Rand, Lichtpunkt oben links
+  disk.png     Wirbelscheibe eines Schwarzen Lochs: Spiralarme, heißer Innenrand, Loch in der Mitte (additiv)
+  core.png     Kern eines Schwarzen Lochs: volle Scheibe mit weichem Rand (wird schwarz gefärbt)
+  lens.png     Lichtring um den Kern (gebeugtes Licht): schmaler, heller Ring mit Schein (additiv)
 
 Aufruf (aus dem Projektordner):  python3 tools/spell_fx_textures.py [--preview datei.png]
 """
@@ -213,11 +216,74 @@ def bubble() -> Image.Image:
     return Image.fromarray(np.clip(img, 0, 255).astype(np.uint8), "RGBA")
 
 
-BLUR = {"fill", "beam", "pillar", "bubble"}
+def disk() -> Image.Image:
+    size = 128
+    n = _fbm(size, size, [(16, 16), (8, 8)], 113)
+
+    def fn(u, v):
+        r = np.sqrt(u * u + v * v)
+        th = np.arctan2(v, u)
+        lr = np.log(np.maximum(r, 0.05))
+        # zwei Scharen logarithmischer Spiralarme, die sich zum Kern hin enger winden
+        arms = 0.5 + 0.5 * np.cos(3 * th + 7.5 * lr)
+        fine = 0.5 + 0.5 * np.cos(7 * th + 13.0 * lr + 1.3)
+        inner = np.clip((r - 0.21) / 0.05, 0, 1)
+        env = inner * np.clip((1.0 - r) / 0.72, 0, 1) ** 1.5
+        hot = np.exp(-((r - 0.27) / 0.045) ** 2) * inner
+        val = env * (0.3 + 0.5 * arms ** 1.5 + 0.2 * fine) + hot * 0.95
+        return np.clip(val, 0, 1)
+
+    val = _supersample(fn, size)
+    val = np.clip(val * (0.8 + 0.4 * n), 0, 1)
+    img = np.zeros((size, size, 4), dtype=np.uint8)
+    rgb = np.clip(val * 255, 0, 255).astype(np.uint8)
+    img[..., 0] = rgb
+    img[..., 1] = rgb
+    img[..., 2] = rgb
+    img[..., 3] = 255
+    return Image.fromarray(img, "RGBA")
+
+
+def core() -> Image.Image:
+    size = 64
+
+    def fn(u, v):
+        r = np.sqrt(u * u + v * v)
+        return np.clip((0.98 - r) / 0.2, 0, 1) ** 1.4
+
+    alpha = _supersample(fn, size)
+    img = np.zeros((size, size, 4), dtype=np.uint8)
+    img[..., 0:3] = 255
+    img[..., 3] = np.clip(alpha * 255, 0, 255).astype(np.uint8)
+    return Image.fromarray(img, "RGBA")
+
+
+def lens() -> Image.Image:
+    size = 128
+
+    def fn(u, v):
+        r = np.sqrt(u * u + v * v)
+        ring_ = np.exp(-((r - 0.74) / 0.028) ** 2)
+        glow = np.exp(-((r - 0.74) / 0.13) ** 2) * 0.45
+        inner = np.exp(-((r - 0.62) / 0.05) ** 2) * 0.25 * (r < 0.74)
+        return np.clip(ring_ + glow + inner, 0, 1) * (r < 0.99)
+
+    val = _supersample(fn, size)
+    img = np.zeros((size, size, 4), dtype=np.uint8)
+    rgb = np.clip(val * 255, 0, 255).astype(np.uint8)
+    img[..., 0] = rgb
+    img[..., 1] = rgb
+    img[..., 2] = rgb
+    img[..., 3] = 255
+    return Image.fromarray(img, "RGBA")
+
+
+BLUR = {"fill", "beam", "pillar", "bubble", "disk", "core", "lens"}
 
 
 def build() -> dict[str, Image.Image]:
-    return {"ring": ring(), "fill": fill(), "beam": beam(), "pillar": pillar(), "wave": wave(), "bubble": bubble()}
+    return {"ring": ring(), "fill": fill(), "beam": beam(), "pillar": pillar(), "wave": wave(), "bubble": bubble(), "disk": disk(),
+            "core": core(), "lens": lens()}
 
 
 def main() -> None:

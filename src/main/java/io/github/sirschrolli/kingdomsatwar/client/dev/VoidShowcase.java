@@ -373,8 +373,13 @@ final class VoidShowcase {
         steps.add(at(c, cam, 4, 2.2, 12, -0.5, 5.2, -0.5));
         steps.add(Step.waitTicks(60));
         String[][] attacks = {{"slam_right", "17", "void_king_slam_raise"}, {"", "6", "void_king_slam"}, {"sweep", "15", "void_king_sweep"},
-                {"volley", "19", "void_king_volley"}, {"gravity", "32", "void_king_gravity"}, {"beam", "62", "void_king_beam"}};
+                {"volley", "19", "void_king_volley"}, {"gravity", "32", "void_king_gravity"}, {"rift", "30", "void_king_rift_tear"},
+                {"rift", "41", "void_king_rift_erupt"}, {"quake", "15", "void_king_quake_raise"}, {"quake", "38", "void_king_quake_rings"},
+                {"beam", "62", "void_king_beam"}};
         for (String[] attack : attacks) {
+            if (!Step.wanted(attack[2]) && !(attack[0].isEmpty() && Step.wanted("void_king_slam_raise"))) {
+                continue;
+            }
             if (!attack[0].isEmpty()) {
                 steps.add(Step.server(overworld -> {
                     if (king[0] != null && dummy[0] != null) {

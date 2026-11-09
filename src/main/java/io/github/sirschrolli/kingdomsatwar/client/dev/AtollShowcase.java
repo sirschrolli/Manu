@@ -226,9 +226,12 @@ final class AtollShowcase {
         steps.add(Step.screenshot("reef_fight_bar"));
         steps.add(Step.hud(false));
         Object[][] attacks = {{"slam", 19}, {"grab", 24}, {"jet", 36}, {"roll", 44}, {"summon", 32}, {"tide", 34}, {"lance", 37},
-                {"burrow", 52}};
+                {"maelstrom", 44}, {"bubbles", 30}, {"burrow", 52}};
         for (Object[] attack : attacks) {
             String name = (String) attack[0];
+            if (!Step.wanted("reef_" + name)) {
+                continue;
+            }
             steps.add(Step.until(() -> boss[0] == null || "none".equals(boss[0].currentAttack()), 160));
             steps.add(Step.server(level -> {
                 ReefColossusEntity b = boss[0];
@@ -245,7 +248,8 @@ final class AtollShowcase {
                 }
                 b.forceAttack(level, name, soldiers.isEmpty() ? null : soldiers.get(0), true);
             }));
-            steps.add(lookFromCam(c, "tide".equals(name) || "lance".equals(name) || "summon".equals(name) ? wide : near, 2.0));
+            steps.add(lookFromCam(c, "tide".equals(name) || "lance".equals(name) || "summon".equals(name) || "maelstrom".equals(name)
+                    || "bubbles".equals(name) ? wide : near, 2.0));
             steps.add(Step.waitTicks((Integer) attack[1]));
             steps.add(Step.screenshot("reef_" + name));
             if ("burrow".equals(name)) {
@@ -255,6 +259,10 @@ final class AtollShowcase {
             if ("roll".equals(name)) {
                 steps.add(Step.waitTicks(40));
                 steps.add(Step.screenshot("reef_dizzy"));
+            }
+            if ("maelstrom".equals(name)) {
+                steps.add(Step.waitTicks(ReefColossusEntity.MAELSTROM_BURST - 44 + 2));
+                steps.add(Step.screenshot("reef_maelstrom_burst"));
             }
         }
         // Tod: er sackt zusammen und versinkt, der Speer fällt in den Sand

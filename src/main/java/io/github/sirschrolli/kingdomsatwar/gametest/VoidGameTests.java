@@ -6,6 +6,7 @@ import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShardWardenEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarRayEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.VoidMawEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.voidrealm.WardenShardEntity;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks;
 import io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState;
@@ -297,8 +298,8 @@ final class VoidGameTests {
 
     /**
      * Der Zerbrochene König: das Thronsiegel weckt ihn (beim Erwachen unverwundbar), danach treffen Faustschlag,
-     * Kronensplitter, Ruf der Wächter und Sternenstrahl; besiegt zerfällt er, lässt seine Krone fallen und der Thron
-     * bleibt leer.
+     * Kronensplitter, Ruf der Wächter, Risse der Leere, Leerenbeben und Sternenstrahl; besiegt zerfällt er, lässt seine
+     * Krone fallen und der Thron bleibt leer.
      */
     private static void shatteredKingFight(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -336,22 +337,69 @@ final class VoidGameTests {
                     helper.runAfterDelay(24, () -> {
                         helper.assertFalse(level.getEntitiesOfClass(ShardWardenEntity.class, king.getBoundingBox().inflate(30)).isEmpty(),
                                 "Der König ruft keine Wächter");
-                        king.forceAttack(level, "beam", soldier, true);
-                        helper.runAfterDelay(40, () -> {
-                            helper.assertTrue(king.isBeaming(), "Kein Sternenstrahl");
-                            king.setHealth(1.0f);
-                            king.hurtServer(level, level.damageSources().generic(), 50.0f);
-                            helper.assertTrue(king.isDeadOrDying(), "Der König fällt nicht");
-                            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.DEATH_TICKS + 6, () -> {
-                                helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.DEFEATED,
-                                        "Der Thron merkt den Sieg nicht");
-                                helper.assertTrue(level.getEntitiesOfClass(ShardWardenEntity.class, new net.minecraft.world.phys.AABB(
-                                        helper.absolutePos(BlockPos.ZERO)).inflate(40), net.minecraft.world.entity.Entity::isAlive).isEmpty(),
-                                        "Die gerufenen Wächter zerfallen nicht mit dem König");
-                                helper.assertFalse(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
-                                        new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).inflate(40),
-                                        e -> e.getItem().is(VoidBlocks.SHATTERED_CROWN.get())).isEmpty(), "Der König lässt seine Krone nicht fallen");
-                                helper.succeed();
+                        riftAndQuake(helper, level, king, soldier, () -> {
+                            king.forceAttack(level, "beam", soldier, true);
+                            helper.runAfterDelay(40, () -> {
+                                helper.assertTrue(king.isBeaming(), "Kein Sternenstrahl");
+                                king.setHealth(1.0f);
+                                king.hurtServer(level, level.damageSources().generic(), 50.0f);
+                                helper.assertTrue(king.isDeadOrDying(), "Der König fällt nicht");
+                                helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.DEATH_TICKS + 6, () -> {
+                                    helper.assertTrue(seal.phase() == io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity.Phase.DEFEATED,
+                                            "Der Thron merkt den Sieg nicht");
+                                    helper.assertTrue(level.getEntitiesOfClass(ShardWardenEntity.class, new net.minecraft.world.phys.AABB(
+                                            helper.absolutePos(BlockPos.ZERO)).inflate(40), net.minecraft.world.entity.Entity::isAlive).isEmpty(),
+                                            "Die gerufenen Wächter zerfallen nicht mit dem König");
+                                    helper.assertFalse(level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                                            new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).inflate(40),
+                                            e -> e.getItem().is(VoidBlocks.SHATTERED_CROWN.get())).isEmpty(), "Der König lässt seine Krone nicht fallen");
+                                    helper.succeed();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Risse der Leere (der Boden reißt auf, die Leere bricht unter dem Ritter hervor) und Leerenbeben (ein Ring rollt bis zu
+     * ihm, fünf Blöcke von den Fäusten entfernt).
+     */
+    private static void riftAndQuake(GameTestHelper helper, ServerLevel level, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity king,
+            net.minecraft.world.entity.LivingEntity soldier, Runnable then) {
+        soldier.setHealth(soldier.getMaxHealth());
+        king.forceAttack(level, "rift", soldier, true);
+        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 2, () -> {
+            helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30), e -> e.kind() == SpellFxEntity.Kind.ARC)
+                    .isEmpty(), "Der Boden reißt nicht auf");
+            float before = soldier.getHealth();
+            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_ERUPT
+                    - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 4, () -> {
+                helper.assertTrue(soldier.getHealth() < before, "Die Leere bricht nicht unter ihm hervor");
+                helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30),
+                        e -> e.kind() == SpellFxEntity.Kind.PILLAR).isEmpty(), "Keine Säulen aus Leere");
+                helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TICKS
+                        - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_ERUPT, () -> {
+                    helper.assertTrue(king.currentAttack().equals("none"), "Die Risse enden nicht: " + king.currentAttack());
+                    soldier.setHealth(soldier.getMaxHealth());
+                    king.forceAttack(level, "quake", soldier, true);
+                    // fünf Blöcke vor der Stelle, wo die Fäuste einschlagen (zum König hin): nur der Ring erreicht ihn
+                    net.minecraft.world.phys.Vec3 g = king.slamPoint();
+                    net.minecraft.world.phys.Vec3 back = king.position().subtract(g).multiply(1.0, 0.0, 1.0).normalize();
+                    soldier.teleportTo(g.x + back.x * 5.0, g.y, g.z + back.z * 5.0);
+                    float quakeBefore = soldier.getHealth();
+                    helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_SLAM + 2, () -> {
+                        helper.assertTrue(soldier.getHealth() >= quakeBefore, "Die Fäuste treffen ihn auf fünf Blöcke");
+                        helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30),
+                                e -> e.kind() == SpellFxEntity.Kind.SHOCKWAVE).isEmpty(), "Kein Bebenring");
+                        helper.runAfterDelay(12, () -> {
+                            helper.assertTrue(soldier.getHealth() < quakeBefore, "Der Bebenring trifft nicht");
+                            helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_TICKS
+                                    - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_SLAM - 10, () -> {
+                                soldier.setHealth(soldier.getMaxHealth());
+                                then.run();
                             });
                         });
                     });

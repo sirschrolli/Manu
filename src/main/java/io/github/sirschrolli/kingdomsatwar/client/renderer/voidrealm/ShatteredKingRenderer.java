@@ -131,6 +131,8 @@ public class ShatteredKingRenderer extends MobRenderer<ShatteredKingEntity, Shat
         state.gravity.copyFrom(entity.gravityAnimation);
         state.summon.copyFrom(entity.summonAnimation);
         state.beam.copyFrom(entity.beamAnimation);
+        state.rift.copyFrom(entity.riftAnimation);
+        state.quake.copyFrom(entity.quakeAnimation);
 
         Vec3 position = entity.getPosition(partialTicks);
         // Ziel des Faustschlags in den Modellraum drehen (wie LivingEntityRenderer das Modell in die Welt dreht)

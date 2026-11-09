@@ -91,6 +91,21 @@ public class MothQueenModel extends EntityModel<FaeRenderState> {
                 lift = 0.25f;
                 this.head.zRot += Mth.sin(t * 0.08f) * 0.15f;
             }
+            case ECLIPSE -> {
+                // die Flügel weit und fast reglos ausgebreitet, der Kopf erhoben – sie verdunkelt den Mond
+                lift = -0.75f;
+                amp = 0.12f;
+                speed = 0.09f;
+                this.head.xRot -= 0.35f * Math.min(1.0f, a / 10.0f);
+            }
+            case COCOON -> {
+                // schnelles Schwirren, der Kopf senkt sich: Sie spinnt den Faden
+                speed = 0.85f;
+                amp = 0.28f;
+                lift = 0.1f;
+                this.head.xRot += 0.45f * Anim.bump(a / 24.0f, 0.2f, 0.7f, 1.0f);
+                this.body.xRot += 0.2f * Anim.bump(a / 24.0f, 0.2f, 0.7f, 1.0f);
+            }
             case AWAKEN -> {
                 float open = Mth.clamp((a - 10.0f) / 50.0f, 0.0f, 1.0f);
                 float shut = 1.0f - open;

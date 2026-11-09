@@ -187,6 +187,20 @@ public final class ShowcaseRunner {
             return once(minecraft -> minecraft.gui.setScreen(factory.apply(minecraft)));
         }
 
+        /** Nur diese Bilder der Angriffsreihen ({@code -Dkingdomsatwar.shots=a,b,c}); ohne Angabe alle. */
+        static boolean wanted(String shot) {
+            String only = System.getProperty("kingdomsatwar.shots", "");
+            if (only.isBlank()) {
+                return true;
+            }
+            for (String name : only.split(",")) {
+                if (name.trim().equals(shot)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         static Step screenshot(String name) {
             // drei Ticks warten, damit Änderungen (HUD aus, Chat geleert) sicher im Bild angekommen sind
             return (minecraft, ticks) -> {

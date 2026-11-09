@@ -338,7 +338,7 @@ final class ReefGameTests {
                                         boss.forceAttack(level, "lance", fresh, true);
                                         helper.runAfterDelay(ReefColossusEntity.LANCE_STRIKE + 3, () -> {
                                             helper.assertTrue(fresh.getHealth() < lanceBefore, "Die Flutlanzen treffen nicht");
-                                            death(helper, level, boss, core, center);
+                                            maelstromAndBubbles(helper, level, boss, fresh, () -> death(helper, level, boss, core, center));
                                         });
                                     });
                                 });
@@ -346,6 +346,25 @@ final class ReefGameTests {
                         });
                     });
                 });
+            });
+        });
+    }
+
+    /** Mahlstrom (die Scheren mahlen, die Wassersäule wirft empor) und Blasenfalle (das Ziel schwebt in einer Blase). */
+    private static void maelstromAndBubbles(GameTestHelper helper, ServerLevel level, ReefColossusEntity boss, net.minecraft.world.entity.LivingEntity knight, Runnable then) {
+        knight.setHealth(knight.getMaxHealth());
+        float before = knight.getHealth();
+        boss.forceAttack(level, "maelstrom", knight, true);
+        helper.runAfterDelay(ReefColossusEntity.MAELSTROM_BURST + 2, () -> {
+            helper.assertTrue("maelstrom".equals(boss.currentAttack()), "Kein Mahlstrom: " + boss.currentAttack());
+            helper.assertTrue(knight.getHealth() < before, "Der Mahlstrom trifft nicht");
+            knight.setHealth(knight.getMaxHealth());
+            boss.forceAttack(level, "bubbles", knight, true);
+            helper.runAfterDelay(ReefColossusEntity.BUBBLE_BLOW + 12, () -> {
+                helper.assertTrue(knight.hasEffect(net.minecraft.world.effect.MobEffects.LEVITATION), "Die Blasenfalle fängt nicht");
+                helper.assertFalse(level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.class,
+                        knight.getBoundingBox().inflate(2.0)).isEmpty(), "Keine Blase um das Ziel");
+                then.run();
             });
         });
     }

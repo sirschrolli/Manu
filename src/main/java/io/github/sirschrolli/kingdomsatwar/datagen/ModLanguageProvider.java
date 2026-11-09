@@ -503,6 +503,9 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("entity.shattered_king.sweep", "A giant hand sweeps", "Eine riesige Hand fegt heran");
         subtitle("entity.shattered_king.gravity", "Gravity breaks", "Die Schwerkraft bricht");
         subtitle("entity.shattered_king.beam", "Starbeam roars", "Sternenstrahl braust");
+        subtitle("entity.shattered_king.rift", "Claws tear the ground open", "Klauen reißen den Boden auf");
+        subtitle("entity.shattered_king.erupt", "The void erupts", "Die Leere bricht hervor");
+        subtitle("entity.shattered_king.quake", "The Shattered King shakes the ground", "Der Zerbrochene König lässt den Boden beben");
 
         set("void_stone", "void_stone", "Void Stone", "Leerenstein", "Void Stone", "Leerenstein");
         set("void_stone_bricks", "void_stone_brick", "Void Stone Bricks", "Leerensteinziegel", "Void Stone Brick", "Leerensteinziegel");
@@ -652,6 +655,9 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.moth", "Noctua, the Moth Queen", "Noctua, die Mottenkönigin");
         text("boss.kingdomsatwar.moth.title", "Mistress of the Moon Grove", "Herrin des Mondhains");
         text("message.kingdomsatwar.moth_queen.lullaby", "Don't look at her while she sings!", "Sieh nicht hin, wenn sie singt!");
+        text("message.kingdomsatwar.moth_queen.eclipse", "The moon goes dark … watch the glowing rings!",
+                "Der Mond verfinstert sich … achte auf die leuchtenden Kreise!");
+        text("message.kingdomsatwar.moth_queen.cocoon", "You are spun into a silk cocoon!", "Du bist in einen Seidenkokon gesponnen!");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_SILK, "Moth Silk", "Mottenseide");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.SILK_STRANDS, "Silk Strands", "Seidenfäden");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_COCOON, "Moth Queen's Cocoon", "Kokon der Mottenkönigin");
@@ -776,7 +782,10 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"wingbeat", "Star ray beats its wings", "Sternenrochen schlägt die Schwingen"},
                 {"supernova_charge", "Starlight gathers", "Sternenlicht sammelt sich"}, {"supernova", "Supernova", "Supernova"},
                 {"ambient", "Star ray hums", "Sternenrochen summt"}, {"hurt", "Star Rider hurts", "Sternenreiterin nimmt Schaden"},
-                {"death", "Star Rider fades into starlight", "Sternenreiterin vergeht in Sternenlicht"}}) {
+                {"death", "Star Rider fades into starlight", "Sternenreiterin vergeht in Sternenlicht"},
+                {"black_hole", "A black hole opens", "Ein Schwarzes Loch öffnet sich"},
+                {"collapse", "Black hole collapses", "Schwarzes Loch stürzt in sich zusammen"},
+                {"crescent", "Moonlight crescent hisses", "Mondsichel zischt"}}) {
             subtitle("entity.asteria." + e[0], e[1], e[2]);
         }
         subtitle("item.star_wings.boost", "Star thrust", "Sternenschub");

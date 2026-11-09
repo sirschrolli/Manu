@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.entity.sea;
 
 import io.github.sirschrolli.kingdomsatwar.block.sea.AtollCoreBlockEntity;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
@@ -66,6 +68,10 @@ import org.jspecify.annotations.Nullable;
  *     unter ihm hervor.</li>
  *     <li><b>Panzerwirbel:</b> er zieht sich in seine Kuppel zurück und rollt dreimal quer durch die Lagune – Pfeile prallen
  *     ab; danach ist er benommen.</li>
+ *     <li><b>Mahlstrom:</b> er reckt Scheren und Speer und dreht sich – ein Strudel zieht alle zu ihm hin, die Scheren
+ *     mahlen, wer zu nahe kommt; zuletzt schießt eine Wassersäule empor und wirft alle in die Luft.</li>
+ *     <li><b>Blasenfalle:</b> er bläst schimmernde Blasen – wer darin gefangen ist, schwebt hilflos empor und stürzt
+ *     herab, wenn sie platzt.</li>
  *     <li><b>Ruf der Brut</b> (bei zwei Dritteln und einem Drittel): Riesenkrabben brechen aus dem Sand.</li>
  *     <li><b>Gezeitenzorn</b> (unter 40 %): der Speer in seiner Kuppel erwacht – fortan rufen Flutlanzen Wassersäulen
  *     auf seine Feinde herab, und jeder Scherenschlag schickt eine Brandungswelle über die Lagune.</li>
@@ -127,6 +133,15 @@ public class ReefColossusEntity extends Monster {
     public static final int LANCE_TICKS = 60;
     public static final int LANCE_STRIKE = 36;
     public static final int DEATH_TICKS = 100;
+    /** Mahlstrom: Dauer, Beginn des Strudels, Wassersäule. */
+    public static final int MAELSTROM_TICKS = 76;
+    public static final int MAELSTROM_START = 12;
+    public static final int MAELSTROM_BURST = 62;
+    public static final double MAELSTROM_RADIUS = 14.0;
+    /** Blasenfalle: Dauer, Ausblasen, wie lange eine Blase hält. */
+    public static final int BUBBLE_TICKS = 44;
+    public static final int BUBBLE_BLOW = 14;
+    public static final int BUBBLE_LIFE = 64;
     /** So weit (waagerecht) reicht die Lagune um ihre Mitte. */
     public static final double ARENA_RADIUS = 24.0;
 
@@ -146,7 +161,7 @@ public class ReefColossusEntity extends Monster {
     private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), Component.translatable("boss.kingdomsatwar.reef"),
             BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_10);
 
-    private enum Attack { NONE, AWAKEN, SLAM, STUCK, GRAB, JET, BURROW, ROLL, DIZZY, SUMMON, TIDE, LANCE }
+    private enum Attack { NONE, AWAKEN, SLAM, STUCK, GRAB, JET, BURROW, ROLL, DIZZY, SUMMON, TIDE, LANCE, MAELSTROM, BUBBLES }
 
     private Attack attack = Attack.NONE;
     private Attack last = Attack.NONE;
@@ -159,6 +174,8 @@ public class ReefColossusEntity extends Monster {
     private final Set<UUID> waveHits = new HashSet<>();
     private @Nullable Vec3 eruptPoint;
     private final List<Vec3> lances = new ArrayList<>();
+    /** Blasenfalle: wen die Blasen fangen sollen. */
+    private final List<UUID> bubbleVictims = new ArrayList<>();
     /** Brandungswellen nach Scherenschlägen im Gezeitenzorn: Mitte, Alter (Ticks). */
     private final List<double[]> waves = new ArrayList<>();
     private int summons;
@@ -583,6 +600,12 @@ public class ReefColossusEntity extends Monster {
             options.add(Attack.LANCE);
             options.add(Attack.LANCE);
         }
+        if (dist < MAELSTROM_RADIUS - 2.0) {
+            options.add(Attack.MAELSTROM);
+        }
+        if (dist > 4.0) {
+            options.add(Attack.BUBBLES);
+        }
         options.removeIf(a -> a == this.last && options.stream().anyMatch(b -> b != this.last));
         Attack next = options.get(this.random.nextInt(options.size()));
         this.begin(level, next, target);
@@ -610,6 +633,10 @@ public class ReefColossusEntity extends Monster {
                 this.lances.clear();
                 this.start(level, Attack.LANCE, EVENT_LANCE);
             }
+            // der Mahlstrom: Scheren und Speer erhoben (wie im Gezeitenzorn), dann dreht er sich
+            case MAELSTROM -> this.start(level, Attack.MAELSTROM, EVENT_TIDE);
+            // die Blasenfalle: er bläst (wie beim Blasenstrahl)
+            case BUBBLES -> this.start(level, Attack.BUBBLES, EVENT_JET);
             default -> {
             }
         }
@@ -617,7 +644,8 @@ public class ReefColossusEntity extends Monster {
 
     /**
      * Für Tests und die Vorführung: er greift nur noch auf Befehl an ({@code hold}) und richtet seine Angriffe auf
-     * {@code target}. {@code name}: slam, grab, jet, burrow, roll, summon, tide, lance (sonst nur Ziel setzen).
+     * {@code target}. {@code name}: slam, grab, jet, burrow, roll, summon, tide, lance, maelstrom, bubbles (sonst nur Ziel
+     * setzen).
      */
     public void forceAttack(ServerLevel level, String name, @Nullable LivingEntity target, boolean hold) {
         this.debugTarget = target;
@@ -634,6 +662,8 @@ public class ReefColossusEntity extends Monster {
             case "summon" -> Attack.SUMMON;
             case "tide" -> Attack.TIDE;
             case "lance" -> Attack.LANCE;
+            case "maelstrom" -> Attack.MAELSTROM;
+            case "bubbles" -> Attack.BUBBLES;
             default -> Attack.NONE;
         };
         if (next == Attack.TIDE) {
@@ -645,7 +675,7 @@ public class ReefColossusEntity extends Monster {
         }
     }
 
-    /** Welcher Angriff gerade läuft (für Tests): none, awaken, slam, stuck, grab, jet, burrow, roll, dizzy, summon, tide, lance. */
+    /** Welcher Angriff gerade läuft (für Tests): none, awaken, slam, stuck, grab, jet, burrow, roll, dizzy, summon, tide, lance, maelstrom, bubbles. */
     public String currentAttack() {
         return this.attack.name().toLowerCase(java.util.Locale.ROOT);
     }
@@ -711,6 +741,8 @@ public class ReefColossusEntity extends Monster {
             case SUMMON -> this.tickSummon(level, target, t);
             case TIDE -> this.tickTide(level, t);
             case LANCE -> this.tickLance(level, target, t);
+            case MAELSTROM -> this.tickMaelstrom(level, target, t);
+            case BUBBLES -> this.tickBubbles(level, target, t);
             default -> this.finish();
         }
     }
@@ -1094,6 +1126,152 @@ public class ReefColossusEntity extends Monster {
         if (t >= LANCE_TICKS) {
             this.finish();
         }
+    }
+
+    /**
+     * Mahlstrom: Er reckt Scheren und Speer und beginnt sich zu drehen, immer schneller. Um ihn kreist ein Strudel (ein
+     * Wasserkreis, Blasen und Gischt in Spiralen): Er zieht alle in vierzehn Blöcken zu ihm hin und um ihn herum; wer ihm zu
+     * nahe kommt, gerät zwischen die mahlenden Scheren. Zuletzt schießt um ihn eine Wassersäule empor und wirft alle in die
+     * Luft.
+     */
+    private void tickMaelstrom(ServerLevel level, @Nullable LivingEntity target, int t) {
+        this.getNavigation().stop();
+        this.setDeltaMovement(this.getDeltaMovement().multiply(0.0, 1.0, 0.0));
+        Vec3 c = this.position();
+        if (t == 2) {
+            level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_ROAR.get(), SoundSource.HOSTILE, 3.0f, 0.9f);
+        }
+        if (t == MAELSTROM_START) {
+            level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_TIDE.get(), SoundSource.HOSTILE, 3.5f, 1.2f);
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CAST_CIRCLE, c.add(0.0, 0.05, 0.0), DragonType.WATER, 0x40B8FF,
+                    MAELSTROM_BURST - MAELSTROM_START + 4, (float) MAELSTROM_RADIUS).param(0.9f).anchor(this).spawn();
+        }
+        if (t >= MAELSTROM_START && t < MAELSTROM_BURST) {
+            // immer schneller drehen
+            float spin = 6.0f + 16.0f * Math.min(1.0f, (t - MAELSTROM_START) / 20.0f);
+            float yaw = this.getYRot() + spin;
+            this.setYRot(yaw);
+            this.yBodyRot = yaw;
+            this.yHeadRot = yaw;
+            if ((t - MAELSTROM_START) % 24 == 0) {
+                level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_JET.get(), SoundSource.HOSTILE, 2.5f, 0.7f);
+            }
+            if (t % 2 == 0) {
+                // Spiralen aus Blasen und Gischt, die nach innen laufen
+                for (int i = 0; i < 6; i++) {
+                    double a = t * 0.32 + i * Math.PI / 3.0;
+                    double r = MAELSTROM_RADIUS - ((t * 0.55 + i * 2.3) % (MAELSTROM_RADIUS - 2.0));
+                    double x = c.x + Math.cos(a) * r;
+                    double z = c.z + Math.sin(a) * r;
+                    level.sendParticles(ParticleTypes.SPLASH, x, c.y + 0.3, z, 3, 0.3, 0.1, 0.3, 0.05);
+                    level.sendParticles(ParticleTypes.BUBBLE_POP, x, c.y + 0.5, z, 1, 0.2, 0.2, 0.2, 0.0);
+                }
+            }
+            for (LivingEntity e : this.enemiesNear(level, MAELSTROM_RADIUS)) {
+                Vec3 to = c.subtract(e.position()).multiply(1.0, 0.0, 1.0);
+                double d = to.length();
+                if (d > MAELSTROM_RADIUS || d < 1.0e-3) {
+                    continue;
+                }
+                Vec3 in = to.normalize();
+                Vec3 around = new Vec3(-in.z, 0.0, in.x);
+                double pull = 0.035 + 0.05 * (1.0 - d / MAELSTROM_RADIUS);
+                e.push(in.x * pull + around.x * 0.045, 0.0, in.z * pull + around.z * 0.045);
+                e.needsSync = true;
+                if (d < 4.2 && t % 8 == 0) {
+                    float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.45f;
+                    if (e.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                        e.push(around.x * 0.6, 0.2, around.z * 0.6);
+                    }
+                }
+            }
+        }
+        if (t == MAELSTROM_BURST) {
+            SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, c, DragonType.WATER, 0x60C8FF, 22, 4.5f).param(11.0f).spawn();
+            level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_LANCE.get(), SoundSource.HOSTILE, 3.5f, 0.7f);
+            this.impact(level, c, 7.5, (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.0f, 1.3, 1.1);
+        }
+        if (t >= MAELSTROM_TICKS) {
+            this.finish();
+        }
+    }
+
+    /**
+     * Blasenfalle: Er bläst – schimmernde Blasen schweben auf seine Feinde zu (bis zu drei). Wer darin gefangen ist, schwebt
+     * langsam empor und kommt kaum vom Fleck, die Luft wird knapp; nach gut drei Sekunden platzt die Blase, und er stürzt
+     * herab.
+     */
+    private void tickBubbles(ServerLevel level, @Nullable LivingEntity target, int t) {
+        this.getNavigation().stop();
+        if (target != null) {
+            this.face(target.position(), 10.0f);
+        }
+        if (t == 2) {
+            level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_ROAR.get(), SoundSource.HOSTILE, 2.0f, 1.5f);
+        }
+        if (t < BUBBLE_BLOW) {
+            Vec3 m = this.mouthPosition();
+            level.sendParticles(ParticleTypes.BUBBLE_POP, m.x, m.y, m.z, 3, 0.5, 0.3, 0.5, 0.03);
+            return;
+        }
+        if (t == BUBBLE_BLOW) {
+            this.bubbleVictims.clear();
+            level.playSound(null, this.blockPosition(), ModSounds.REEF_COLOSSUS_JET.get(), SoundSource.HOSTILE, 2.5f, 1.6f);
+            if (target != null && this.isEnemy(target)) {
+                this.bubbleVictims.add(target.getUUID());
+            }
+            for (LivingEntity e : this.enemiesNear(level, 22.0)) {
+                if (this.bubbleVictims.size() < 3 && !this.bubbleVictims.contains(e.getUUID()) && e instanceof Player) {
+                    this.bubbleVictims.add(e.getUUID());
+                }
+            }
+        }
+        int flight = 10;
+        if (t > BUBBLE_BLOW && t < BUBBLE_BLOW + flight) {
+            // die Blasen schweben vom Maul zu den Opfern
+            Vec3 m = this.mouthPosition();
+            double k = (t - BUBBLE_BLOW) / (double) flight;
+            for (UUID id : this.bubbleVictims) {
+                if (level.getEntity(id) instanceof LivingEntity e) {
+                    Vec3 at = m.add(e.position().add(0.0, 1.0, 0.0).subtract(m).scale(k));
+                    level.sendParticles(ParticleTypes.BUBBLE, at.x, at.y, at.z, 6, 0.4, 0.4, 0.4, 0.02);
+                    level.sendParticles(ParticleTypes.BUBBLE_POP, at.x, at.y, at.z, 2, 0.5, 0.5, 0.5, 0.0);
+                }
+            }
+        }
+        if (t == BUBBLE_BLOW + flight) {
+            for (UUID id : this.bubbleVictims) {
+                if (level.getEntity(id) instanceof LivingEntity e && e.isAlive() && e.distanceTo(this) < 30.0) {
+                    this.trap(level, e);
+                }
+            }
+        }
+        if (t >= BUBBLE_TICKS) {
+            this.finish();
+        }
+    }
+
+    /** Eine Blase um ein Wesen: Es schwebt empor, kommt kaum vom Fleck und verliert Luft – bis sie platzt. */
+    private void trap(ServerLevel level, LivingEntity e) {
+        level.playSound(null, e.getX(), e.getY(), e.getZ(), ModSounds.REEF_COLOSSUS_JET.get(), SoundSource.HOSTILE, 1.5f, 2.0f);
+        float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.12f;
+        SpellFxEntity.create(level, SpellFxEntity.Kind.BUBBLE, e.position(), DragonType.WATER, 0x9AE8FF, BUBBLE_LIFE,
+                Math.max(2.2f, e.getBbHeight() * 1.25f)).anchor(e).onTick(fx -> {
+                    if (!e.isAlive()) {
+                        fx.discard();
+                        return;
+                    }
+                    e.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 6, 1, false, false), this);
+                    e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 6, 3, false, false), this);
+                    if (fx.tickCount % 16 == 8) {
+                        e.hurtServer(level, this.damageSources().drown(), damage);
+                    }
+                }).onExpire(fx -> {
+                    e.removeEffect(MobEffects.LEVITATION);
+                    level.playSound(null, e.getX(), e.getY(), e.getZ(), ModSounds.REEF_COLOSSUS_LANCE.get(), SoundSource.HOSTILE, 1.2f, 1.8f);
+                    level.sendParticles(ParticleTypes.SPLASH, e.getX(), e.getY(0.5), e.getZ(), 50, 0.8, 0.8, 0.8, 0.3);
+                    level.sendParticles(ParticleTypes.BUBBLE_POP, e.getX(), e.getY(0.5), e.getZ(), 30, 0.9, 0.9, 0.9, 0.1);
+                }).spawn();
     }
 
     /** Brandungswellen: Ringe, die sich von einem Scherenschlag aus über die Lagune ausbreiten – wer am Boden steht, wird getroffen. */

@@ -1,5 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.entity.fae;
 
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModParticles;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
@@ -52,7 +53,11 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Mottenschwarm</b> – ein schriller Ruf, und Mondfalter stürzen sich auf die Gegner;</li>
  *     <li><b>Mondstrahl</b> – leuchtende Kreise am Boden, dann fallen Strahlen aus Mondlicht hinein;</li>
  *     <li><b>Sturzflug</b> – sie stößt herab und rammt ihr Ziel;</li>
- *     <li><b>Schlaflied</b> – ein betörendes Lied: wer sie dabei ansieht, wird schwer und schläfrig.</li>
+ *     <li><b>Schlaflied</b> – ein betörendes Lied: wer sie dabei ansieht, wird schwer und schläfrig;</li>
+ *     <li><b>Mondfinsternis</b> – der Mond verfinstert sich, Dunkelheit legt sich über alle; nur leuchtende Kreise warnen,
+ *     wo gleich Mondlicht herabfällt;</li>
+ *     <li><b>Seidenkokon</b> – ein Faden aus Seide schnellt auf ihr Ziel, und es wird in einen Kokon gesponnen (kaum zu
+ *     bewegen, schwach, die Seide schnürt zu).</li>
  * </ul>
  * Verfehlt sie im Sturzflug ihr Ziel und prallt auf den Boden, liegt sie drei Sekunden benommen da – die Gelegenheit für
  * Schwertkämpfer. Unter halber Kraft wird sie rasend: schneller, mehr Falter, mehr Strahlen. Besiegt hinterlässt sie die
@@ -61,9 +66,20 @@ import org.jspecify.annotations.Nullable;
 public class MothQueenEntity extends Monster {
     public static final float MAX_HEALTH = 360.0f;
     public static final int AWAKEN_TICKS = 80;
+    /** Mondfinsternis: Dauer, erster Mondstrahl, Abstand der Strahlen, Vorwarnzeit eines Kreises. */
+    public static final int ECLIPSE_TICKS = 92;
+    public static final int ECLIPSE_FIRST = 14;
+    public static final int ECLIPSE_STEP = 12;
+    public static final int ECLIPSE_WARN = 16;
+    /** Seidenkokon: Dauer, der Faden schnellt, der Kokon schließt sich, wie lange er hält. */
+    public static final int COCOON_TICKS = 48;
+    public static final int COCOON_THREAD = 10;
+    public static final int COCOON_WRAP = 18;
+    public static final int COCOON_LIFE = 70;
 
     public enum Attack {
-        NONE(0), AWAKEN(AWAKEN_TICKS), GUST(44), SCALES(56), SWARM(34), BEAM(64), DIVE(50), LULLABY(70), STUNNED(60);
+        NONE(0), AWAKEN(AWAKEN_TICKS), GUST(44), SCALES(56), SWARM(34), BEAM(64), DIVE(50), LULLABY(70), STUNNED(60), ECLIPSE(ECLIPSE_TICKS),
+        COCOON(COCOON_TICKS);
 
         public final int duration;
 
@@ -88,6 +104,8 @@ public class MothQueenEntity extends Monster {
     private Vec3 diveDir = Vec3.ZERO;
     private boolean diveHit;
     private boolean lullabyWarned;
+    /** Seidenkokon: wen die Fäden treffen. */
+    private final List<LivingEntity> cocoonVictims = new ArrayList<>();
     private int idleTicks;
     /** Nur im Client: seit wann der laufende Angriff läuft (für die Animationen). */
     private int clientAttackStart;
@@ -305,6 +323,8 @@ public class MothQueenEntity extends Monster {
             case BEAM -> this.tickBeam(level, target);
             case DIVE -> this.tickDive(level, target);
             case LULLABY -> this.tickLullaby(level, target);
+            case ECLIPSE -> this.tickEclipse(level, target);
+            case COCOON -> this.tickCocoon(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -360,7 +380,8 @@ public class MothQueenEntity extends Monster {
     }
 
     private Attack chooseAttack(LivingEntity target) {
-        List<Attack> options = new ArrayList<>(List.of(Attack.GUST, Attack.SCALES, Attack.SWARM, Attack.BEAM, Attack.DIVE, Attack.LULLABY));
+        List<Attack> options = new ArrayList<>(List.of(Attack.GUST, Attack.SCALES, Attack.SWARM, Attack.BEAM, Attack.DIVE, Attack.LULLABY,
+                Attack.ECLIPSE, Attack.COCOON));
         options.remove(this.lastAttack);
         if (this.distanceTo(target) > 18.0) {
             options.remove(Attack.GUST);
@@ -651,6 +672,118 @@ public class MothQueenEntity extends Monster {
                 }
             }
         }
+    }
+
+    /**
+     * Mondfinsternis: Sie steigt höher, und der Mond verfinstert sich – Dunkelheit legt sich über alle in vierzig Blöcken.
+     * Dann fallen nacheinander Strahlen aus Mondlicht auf ihre Gegner; ein leuchtender Kreis am Boden warnt jeweils kurz
+     * vorher. Wen ein Strahl trifft, der leuchtet und ist im Dunkeln gut zu sehen.
+     */
+    private void tickEclipse(ServerLevel level, LivingEntity target) {
+        this.circle(target, 0.35);
+        this.setDeltaMovement(this.getDeltaMovement().add(0.0, 0.012, 0.0));
+        int t = this.attackTick;
+        if (t == 4) {
+            level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_LULLABY.get(), SoundSource.HOSTILE, 3.5f, 0.6f);
+            for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(40.0), this::canStrike)) {
+                player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, ECLIPSE_TICKS - 4, 0, false, false), this);
+                player.connection.send(new ClientboundSetActionBarTextPacket(
+                        Component.translatable("message.kingdomsatwar.moth_queen.eclipse").withStyle(ChatFormatting.LIGHT_PURPLE)));
+            }
+            level.sendParticles(ModParticles.FAE_SPARK.get(), this.getX(), this.getY(0.5), this.getZ(), 60, 2.5, 1.5, 2.5, 0.05);
+        }
+        int step = this.isEnraged() ? 8 : ECLIPSE_STEP;
+        if (t >= ECLIPSE_FIRST && t <= ECLIPSE_TICKS - ECLIPSE_WARN - 4 && (t - ECLIPSE_FIRST) % step == 0) {
+            List<LivingEntity> marked = new ArrayList<>(level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0), this::canStrike));
+            if (!marked.contains(target)) {
+                marked.add(target);
+            }
+            LivingEntity at = marked.get(((t - ECLIPSE_FIRST) / step) % marked.size());
+            // dorthin, wo es gleich sein wird
+            Vec3 lead = at.position().add(at.getDeltaMovement().multiply(8.0, 0.0, 8.0));
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(lead.x), Mth.floor(lead.z));
+            Vec3 spot = new Vec3(lead.x, Math.abs(y - at.getY()) < 6 ? y : at.getY(), lead.z);
+            float damage = this.isEnraged() ? 11.0f : 9.0f;
+            SpellFxEntity.create(level, SpellFxEntity.Kind.CIRCLE, spot.add(0.0, 0.05, 0.0), null, 0xCFDCFF, ECLIPSE_WARN, 2.2f)
+                    .onExpire(fx -> this.moonbeam(level, fx.position(), damage)).spawn();
+        }
+        if (t == ECLIPSE_TICKS - 4) {
+            level.sendParticles(net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFE8F0FF), this.getX(), this.getY(0.5),
+                    this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+        }
+    }
+
+    /** Ein Strahl aus Mondlicht fällt an dieser Stelle herab. */
+    private void moonbeam(ServerLevel level, Vec3 at, float damage) {
+        level.playSound(null, BlockPos.containing(at), ModSounds.MOTH_QUEEN_BEAM.get(), SoundSource.HOSTILE, 2.5f, 0.9f);
+        SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, at, null, 0xE4ECFF, 16, 1.6f).param(16.0f).spawn();
+        level.sendParticles(ModParticles.FAE_SPARK.get(), at.x, at.y + 1.0, at.z, 30, 1.0, 1.5, 1.0, 0.05);
+        for (LivingEntity hit : this.victims(level, new AABB(at, at).inflate(2.2, 3.0, 2.2))) {
+            if (hit.distanceToSqr(at.x, hit.getY(), at.z) < 2.2 * 2.2 && hit.hurtServer(level, this.damageSources().indirectMagic(this, this), damage)) {
+                hit.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0), this);
+            }
+        }
+    }
+
+    /**
+     * Seidenkokon: Sie hält inne, ein Faden aus Seide schnellt auf ihr Ziel – und wenn es ihn nicht abschüttelt (aus dem
+     * Blick geht oder zu weit fort ist), wird es in einen Kokon gesponnen: kaum zu bewegen, geschwächt, und die Seide
+     * schnürt alle Sekunde zu. In Rage spinnt sie auch einen zweiten Gegner ein.
+     */
+    private void tickCocoon(ServerLevel level, LivingEntity target) {
+        this.setDeltaMovement(this.getDeltaMovement().scale(0.75));
+        int t = this.attackTick;
+        if (t == 4) {
+            level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_SCREECH.get(), SoundSource.HOSTILE, 2.5f, 1.5f);
+        }
+        if (t == COCOON_THREAD) {
+            this.cocoonVictims.clear();
+            this.cocoonVictims.add(target);
+            if (this.isEnraged()) {
+                level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(28.0), p -> p != target && this.canStrike(p)).stream()
+                        .findFirst().ifPresent(this.cocoonVictims::add);
+            }
+            for (LivingEntity victim : this.cocoonVictims) {
+                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, this.position().add(0.0, this.getBbHeight() * 0.5, 0.0), null, 0xF6F0E2,
+                        COCOON_WRAP - COCOON_THREAD + 4, 0.14f).end(victim.position().add(0.0, victim.getBbHeight() * 0.6, 0.0)).spawn();
+            }
+        }
+        if (t == COCOON_WRAP) {
+            for (LivingEntity victim : this.cocoonVictims) {
+                if (victim.isAlive() && victim.distanceTo(this) < 34.0 && this.hasLineOfSight(victim)) {
+                    this.spin(level, victim);
+                }
+            }
+        }
+    }
+
+    /** Spinnt ein Wesen in einen Kokon. */
+    private void spin(ServerLevel level, LivingEntity victim) {
+        level.playSound(null, victim.getX(), victim.getY(), victim.getZ(), ModSounds.MOTH_QUEEN_BEAM_CHARGE.get(), SoundSource.HOSTILE, 1.6f, 1.6f);
+        if (victim instanceof ServerPlayer player) {
+            player.connection.send(new ClientboundSetActionBarTextPacket(
+                    Component.translatable("message.kingdomsatwar.moth_queen.cocoon").withStyle(ChatFormatting.LIGHT_PURPLE)));
+        }
+        float damage = this.isEnraged() ? 3.0f : 2.0f;
+        SpellFxEntity.create(level, SpellFxEntity.Kind.BUBBLE, victim.position(), null, 0xEFE6D2, COCOON_LIFE,
+                Math.max(2.0f, victim.getBbHeight() * 1.2f)).anchor(victim).onTick(fx -> {
+                    if (!victim.isAlive()) {
+                        fx.discard();
+                        return;
+                    }
+                    victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 6, 5, false, false), this);
+                    victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 6, 1, false, false), this);
+                    victim.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 6, 2, false, false), this);
+                    if (fx.tickCount % 20 == 10) {
+                        victim.hurtServer(level, this.damageSources().indirectMagic(this, this), damage);
+                    }
+                    if (fx.tickCount % 4 == 0) {
+                        level.sendParticles(ParticleTypes.WHITE_ASH, victim.getX(), victim.getY(0.5), victim.getZ(), 4, 0.5, 0.7, 0.5, 0.0);
+                    }
+                }).onExpire(fx -> {
+                    level.playSound(null, victim.getX(), victim.getY(), victim.getZ(), ModSounds.MOTH_QUEEN_GUST.get(), SoundSource.HOSTILE, 1.0f, 1.8f);
+                    level.sendParticles(ParticleTypes.CLOUD, victim.getX(), victim.getY(0.5), victim.getZ(), 24, 0.6, 0.8, 0.6, 0.05);
+                }).spawn();
     }
 
     // ------------------------------------------------------------------ Tod, Speichern, Geräusche

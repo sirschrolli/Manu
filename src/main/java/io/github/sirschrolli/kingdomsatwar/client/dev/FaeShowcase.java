@@ -480,7 +480,10 @@ final class FaeShowcase {
         steps.add(Step.waitTicks(60));
         for (String[] shot : new String[][] {{"GUST", "18", "fae_moth_gust"}, {"BEAM", "30", "fae_moth_beam_rings"}, {"BEAM", "6", "fae_moth_beam"},
                 {"SWARM", "26", "fae_moth_swarm"}, {"SCALES", "30", "fae_moth_scales"}, {"LULLABY", "40", "fae_moth_lullaby"},
-                {"DIVE", "17", "fae_moth_dive"}}) {
+                {"ECLIPSE", "46", "fae_moth_eclipse"}, {"COCOON", "30", "fae_moth_cocoon"}, {"DIVE", "17", "fae_moth_dive"}}) {
+            if (!Step.wanted(shot[2]) && !(shot[2].equals("fae_moth_beam_rings") && Step.wanted("fae_moth_beam"))) {
+                continue;
+            }
             boolean chain = shot[2].equals("fae_moth_beam");
             if (!chain) {
                 steps.add(Step.server(overworld -> {

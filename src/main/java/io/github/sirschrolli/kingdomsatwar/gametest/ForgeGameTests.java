@@ -261,12 +261,40 @@ final class ForgeGameTests {
                             helper.runAfterDelay(18, () -> {
                                 var apprentices = level.getEntitiesOfClass(Brandgebein.class, area);
                                 helper.assertTrue(apprentices.size() == 2, "Der Ruf holt keine zwei Brandgebeine: " + apprentices.size());
-                                cleanup(level, area);
-                                helper.succeed();
+                                apprentices.forEach(net.minecraft.world.entity.Entity::discard);
+                                chainAndMolten(helper, level, smith, knight, hp, () -> {
+                                    cleanup(level, area);
+                                    helper.succeed();
+                                });
                             });
                         });
                     });
                 });
+            });
+        });
+    }
+
+    /**
+     * Glutkette (sie erwischt den Ritter – er glüht und wird gebremst –, der Hammer trifft) und Schmelzfluss (die Rinnen aus
+     * Glut erreichen ihn). Der Ritter hat keinen eigenen Willen und bleibt stehen (heranziehen lässt er sich so nicht).
+     */
+    private static void chainAndMolten(GameTestHelper helper, ServerLevel level, GlutschmiedEntity smith, LivingEntity knight, float[] hp,
+            Runnable then) {
+        reset(knight, hp);
+        smith.setTarget(knight);
+        smith.forceAttack(GlutschmiedEntity.Attack.CHAIN);
+        helper.runAfterDelay(GlutschmiedEntity.CHAIN_THROW + 3, () -> {
+            helper.assertTrue(knight.isOnFire() && knight.hasEffect(net.minecraft.world.effect.MobEffects.SLOWNESS), "Die Glutkette erwischt den Ritter nicht");
+        });
+        helper.runAfterDelay(GlutschmiedEntity.CHAIN_SMASH + 1, () -> {
+            helper.assertTrue(knight.getHealth() < hp[0], "Der Hammer nach der Glutkette trifft nicht");
+            reset(knight, hp);
+            smith.setTarget(knight);
+            smith.forceAttack(GlutschmiedEntity.Attack.MOLTEN);
+            helper.runAfterDelay(GlutschmiedEntity.MOLTEN_HIT + 12, () -> {
+                helper.assertTrue(knight.getHealth() < hp[0], "Der Schmelzfluss trifft nicht");
+                helper.assertTrue(knight.isOnFire(), "Der Schmelzfluss setzt nicht in Brand");
+                then.run();
             });
         });
     }

@@ -1,7 +1,9 @@
 package io.github.sirschrolli.kingdomsatwar.entity.nether;
 
 import io.github.sirschrolli.kingdomsatwar.block.nether.GlutAnvilBlockEntity;
+import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.nether.Brandgebein;
+import io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.ModEntities;
 import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -62,6 +66,10 @@ import org.jspecify.annotations.Nullable;
  *     (wer im rechten Moment springt, entgeht ihr);</li>
  *     <li><b>Funkenflug</b> – Hammer auf Klinge: ein Kegel aus glühenden Funken;</li>
  *     <li><b>Glutwurf</b> – mit dem Hammer schleudert er Klumpen geschmolzenen Metalls im Bogen;</li>
+ *     <li><b>Glutkette</b> – er schleudert eine glühende Kette: wen sie erwischt, den reißt er zu sich heran und
+ *     empfängt ihn mit dem Hammer;</li>
+ *     <li><b>Schmelzfluss</b> – er schmettert den Hammer auf das Dach, und Rinnen aus geschmolzenem Metall schießen
+ *     fächerförmig über das Dach (wer darin steht, brennt);</li>
  *     <li><b>Ruf der Gesellen</b> – Brandgebeine treten aus den Flammen und eilen ihm zu Hilfe;</li>
  *     <li><b>Esse anfachen</b> – unter halber Kraft stößt er den Speer in das Dach und wird weißglühend: schneller,
  *     härter, und wer ihm zu nahe kommt, verbrennt.</li>
@@ -77,6 +85,16 @@ public class GlutschmiedEntity extends Monster {
     public static final int TAKE_SPEAR = 34;
     /** Alle so viele Ticks fällt am Amboss ein Hammerschlag (in Tick 15 des Takts). */
     public static final int FORGE_BEAT = 26;
+    /** Glutkette: Dauer, Wurf, Hammerschlag; so weit reicht die Kette. */
+    public static final int CHAIN_TICKS = 50;
+    public static final int CHAIN_THROW = 14;
+    public static final int CHAIN_SMASH = 28;
+    public static final double CHAIN_RANGE = 22.0;
+    /** Schmelzfluss: Dauer, Hammerschlag (die Rinnen beginnen), Abstand der Glutsäulen, so weit reichen die Rinnen. */
+    public static final int MOLTEN_TICKS = 58;
+    public static final int MOLTEN_HIT = 17;
+    public static final int MOLTEN_STEP = 2;
+    public static final int MOLTEN_LENGTH = 14;
     /** Weiter als so weit von seinem Platz am Amboss folgt er niemandem. */
     private static final double LEASH = 40.0;
     /** Das Dach der Esse: wer weiter fort gerät (oder hinunterfällt), kehrt in einer Flammensäule zurück. */
@@ -85,7 +103,8 @@ public class GlutschmiedEntity extends Monster {
     private static final int RETURN_TICKS = 600;
 
     public enum Attack {
-        NONE(0), FORGE(0), AWAKEN(AWAKEN_TICKS), THRUST(40), SLAM(36), SPARKS(50), GLOBS(42), CALL(30), STOKE(50);
+        NONE(0), FORGE(0), AWAKEN(AWAKEN_TICKS), THRUST(40), SLAM(36), SPARKS(50), GLOBS(42), CALL(30), STOKE(50), CHAIN(CHAIN_TICKS),
+        MOLTEN(MOLTEN_TICKS);
 
         public final int duration;
 
@@ -109,6 +128,10 @@ public class GlutschmiedEntity extends Monster {
     private @Nullable BlockPos home;
     private @Nullable BlockPos anvil;
     private final Set<UUID> slamHit = new HashSet<>();
+    /** Glutkette: wen die Kette erwischt hat. */
+    private @Nullable UUID chained;
+    /** Schmelzfluss: die Richtungen der Rinnen. */
+    private final List<Vec3> molten = new ArrayList<>();
     private int clientAttackStart;
 
     public GlutschmiedEntity(EntityType<? extends GlutschmiedEntity> type, Level level) {
@@ -378,6 +401,8 @@ public class GlutschmiedEntity extends Monster {
             case SPARKS -> this.tickSparks(level, target);
             case GLOBS -> this.tickGlobs(level, target);
             case CALL -> this.tickCall(level);
+            case CHAIN -> this.tickChain(level, target);
+            case MOLTEN -> this.tickMolten(level, target);
             default -> { }
         }
         if (this.attackTick >= this.attack.duration) {
@@ -493,11 +518,11 @@ public class GlutschmiedEntity extends Monster {
         double distance = this.distanceTo(target);
         List<Attack> options = new ArrayList<>();
         if (distance < 5.5) {
-            options.addAll(List.of(Attack.THRUST, Attack.THRUST, Attack.SLAM, Attack.SPARKS));
+            options.addAll(List.of(Attack.THRUST, Attack.THRUST, Attack.SLAM, Attack.SPARKS, Attack.MOLTEN));
         } else if (distance < 11.0) {
-            options.addAll(List.of(Attack.SLAM, Attack.SPARKS, Attack.GLOBS, Attack.GLOBS));
+            options.addAll(List.of(Attack.SLAM, Attack.SPARKS, Attack.GLOBS, Attack.GLOBS, Attack.CHAIN, Attack.MOLTEN));
         } else {
-            options.addAll(List.of(Attack.GLOBS, Attack.GLOBS, Attack.GLOBS));
+            options.addAll(List.of(Attack.GLOBS, Attack.GLOBS, Attack.GLOBS, Attack.CHAIN, Attack.CHAIN));
         }
         if (this.calls < 3 && this.getHealth() < this.getMaxHealth() * 0.85f && this.apprentices(level) < 2) {
             options.add(Attack.CALL);
@@ -661,6 +686,135 @@ public class GlutschmiedEntity extends Monster {
                 Vec3 out = new Vec3(victim.getX() - this.getX(), 0.0, victim.getZ() - this.getZ()).normalize();
                 victim.push(out.x * 0.5, 0.65, out.z * 0.5);
                 victim.needsSync = true;
+            }
+        }
+    }
+
+    /** Wo er die Kette hält (die linke Hand, auf Brusthöhe vor ihm). */
+    private Vec3 chainHand() {
+        return this.position().add(this.forward().scale(0.9)).add(0.0, 2.3, 0.0);
+    }
+
+    /**
+     * Glutkette: Er lässt eine glühende Kette über dem Kopf kreisen und schleudert sie. Wen sie erwischt (in zweiundzwanzig
+     * Blöcken, freie Sicht), den reißt er zu sich heran – und empfängt ihn mit einem Hammerschlag. Wer hinter Deckung geht
+     * oder weit genug fort ist, entgeht ihr.
+     */
+    private void tickChain(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        Vec3 hand = this.chainHand();
+        if (t == 2) {
+            this.sound(level, ModSounds.GLUTSCHMIED_STOKE.get(), 2.0f, 1.4f);
+        }
+        if (t < CHAIN_THROW) {
+            // die Kette kreist über seinem Kopf
+            for (int i = 0; i < 3; i++) {
+                double a = t * 0.9 + i * Math.PI * 2.0 / 3.0;
+                level.sendParticles(ParticleTypes.FLAME, hand.x + Math.cos(a) * 1.4, hand.y + 1.2, hand.z + Math.sin(a) * 1.4, 1, 0.0, 0.0, 0.0, 0.0);
+                level.sendParticles(ParticleTypes.SMALL_FLAME, hand.x + Math.cos(a) * 0.9, hand.y + 1.0, hand.z + Math.sin(a) * 0.9, 1, 0.0, 0.0, 0.0, 0.0);
+            }
+            return;
+        }
+        if (t == CHAIN_THROW) {
+            this.sound(level, ModSounds.GLUTSCHMIED_THROW.get(), 2.5f, 0.8f);
+            this.chained = null;
+            if (target.isAlive() && target.distanceTo(this) < CHAIN_RANGE && this.hasLineOfSight(target)) {
+                this.chained = target.getUUID();
+                level.playSound(null, target.getX(), target.getY(), target.getZ(), SoundEvents.CHAIN_HIT, SoundSource.HOSTILE, 2.0f, 0.7f);
+                target.igniteForSeconds(2.0f);
+            } else {
+                Vec3 miss = hand.add(target.position().add(0.0, 1.0, 0.0).subtract(hand).normalize().scale(CHAIN_RANGE * 0.6));
+                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, hand, DragonType.FIRE, 0xFF7A20, 6, 0.22f).end(miss).spawn();
+                level.sendParticles(ParticleTypes.LAVA, miss.x, miss.y, miss.z, 6, 0.3, 0.3, 0.3, 0.0);
+            }
+        }
+        LivingEntity caught = this.chained != null && level.getEntity(this.chained) instanceof LivingEntity e && e.isAlive() ? e : null;
+        if (caught != null && t > CHAIN_THROW && t < CHAIN_SMASH) {
+            // die Kette spannt sich, er reißt sein Opfer heran
+            if ((t - CHAIN_THROW) % 2 == 1) {
+                SpellFxEntity.create(level, SpellFxEntity.Kind.BEAM, hand, DragonType.FIRE, 0xFF7A20, 3, 0.22f)
+                        .end(caught.position().add(0.0, caught.getBbHeight() * 0.6, 0.0)).spawn();
+            }
+            Vec3 to = this.position().subtract(caught.position());
+            double d = to.multiply(1.0, 0.0, 1.0).length();
+            if (d > 2.6) {
+                Vec3 pull = to.normalize().scale(Math.min(1.3, 0.35 + d * 0.08));
+                caught.setDeltaMovement(pull.x, Math.max(caught.getDeltaMovement().y, 0.12), pull.z);
+                caught.needsSync = true;
+                caught.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 20, 2), this);
+            }
+            if (t % 3 == 0) {
+                level.sendParticles(ParticleTypes.FLAME, caught.getX(), caught.getY(0.5), caught.getZ(), 4, 0.3, 0.4, 0.3, 0.01);
+            }
+        }
+        if (t == CHAIN_SMASH) {
+            this.sound(level, ModSounds.GLUTSCHMIED_SLAM.get(), 3.0f, 1.1f);
+            Vec3 hit = this.position().add(this.forward().scale(1.8));
+            level.sendParticles(ParticleTypes.EXPLOSION, hit.x, this.getY() + 0.8, hit.z, 1, 0.0, 0.0, 0.0, 0.0);
+            level.sendParticles(ParticleTypes.LAVA, hit.x, this.getY() + 0.5, hit.z, 10, 0.5, 0.2, 0.5, 0.0);
+            float damage = this.isStoked() ? 16.0f : 12.0f;
+            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(3.4, 1.5, 3.4))) {
+                if (victim.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                    Vec3 out = victim.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
+                    out = out.lengthSqr() < 1.0e-4 ? this.forward() : out.normalize();
+                    victim.push(out.x * 0.9, 0.6, out.z * 0.9);
+                    victim.needsSync = true;
+                    victim.igniteForSeconds(4.0f);
+                }
+            }
+            this.chained = null;
+        }
+    }
+
+    /**
+     * Schmelzfluss: Er holt aus und schmettert den Hammer auf das Dach – fünf (weißglühend sieben) Rinnen aus geschmolzenem
+     * Metall schießen fächerförmig über das Dach auf seine Gegner zu, Glutsäule um Glutsäule. Wer darin steht, brennt.
+     */
+    private void tickMolten(ServerLevel level, LivingEntity target) {
+        int t = this.attackTick;
+        if (t == 4) {
+            this.sound(level, ModSounds.GLUTSCHMIED_ROAR.get(), 2.0f, 1.2f);
+        }
+        if (t == MOLTEN_HIT) {
+            this.sound(level, ModSounds.GLUTSCHMIED_SLAM.get(), 3.5f, 0.8f);
+            Vec3 dir = target.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
+            dir = dir.lengthSqr() < 1.0e-4 ? this.forward() : dir.normalize();
+            this.molten.clear();
+            int count = this.isStoked() ? 7 : 5;
+            for (int i = 0; i < count; i++) {
+                double k = count == 1 ? 0.0 : i / (count - 1.0) - 0.5;
+                this.molten.add(dir.yRot((float) (k * Math.toRadians(this.isStoked() ? 150.0 : 110.0))));
+            }
+            this.slamHit.clear();
+            Vec3 hit = this.position().add(this.forward().scale(2.0));
+            level.sendParticles(ParticleTypes.EXPLOSION, hit.x, this.getY() + 0.2, hit.z, 2, 0.4, 0.0, 0.4, 0.0);
+            level.sendParticles(ParticleTypes.LAVA, hit.x, this.getY() + 0.2, hit.z, 20, 0.8, 0.1, 0.8, 0.0);
+        }
+        if (t > MOLTEN_HIT && (t - MOLTEN_HIT) % MOLTEN_STEP == 0) {
+            int step = (t - MOLTEN_HIT) / MOLTEN_STEP;
+            if (step > MOLTEN_LENGTH) {
+                return;
+            }
+            if (step % 3 == 1) {
+                this.sound(level, ModSounds.GLUTSCHMIED_GLOB.get(), 1.6f, 0.7f + step * 0.03f);
+            }
+            float damage = this.isStoked() ? 7.0f : 5.0f;
+            for (Vec3 dir : this.molten) {
+                Vec3 at = this.position().add(dir.scale(1.6 + step * 1.05));
+                SpellFxEntity.create(level, SpellFxEntity.Kind.PILLAR, at, DragonType.FIRE, 0xFF6A10, 16, 0.7f).param(2.2f).spawn();
+                level.sendParticles(ParticleTypes.LAVA, at.x, at.y + 0.2, at.z, 1, 0.2, 0.0, 0.2, 0.0);
+                for (LivingEntity victim : this.victims(level, new AABB(at, at).inflate(1.2, 2.0, 1.2))) {
+                    if (victim.distanceToSqr(at.x, victim.getY(), at.z) < 1.2 * 1.2 && this.slamHit.add(victim.getUUID())
+                            && victim.hurtServer(level, this.damageSources().mobAttack(this), damage)) {
+                        victim.igniteForSeconds(5.0f);
+                        victim.push(dir.x * 0.35, 0.35, dir.z * 0.35);
+                        victim.needsSync = true;
+                    }
+                }
+            }
+            if (step % 4 == 0) {
+                // jede Rinne kann ein Wesen nur alle paar Säulen treffen
+                this.slamHit.clear();
             }
         }
     }

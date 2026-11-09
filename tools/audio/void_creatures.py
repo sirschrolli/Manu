@@ -2,12 +2,13 @@
 """
 Erzeugt die Stimmen der Wesen der Leere: Gurgeln und Ansaugen des Leerenschlunds, das Erwachen und Aufladen des
 Splitterwächters, das Knistern, Flackern und Springen des Zerrlings, den Gesang des Sternenrochens und Stimme, Schrei,
-Hiebe, Schwerkraftbruch und Sternenstrahl des Zerbrochenen Königs. Alles entsteht
+Hiebe, Schwerkraftbruch, Sternenstrahl, Risse der Leere (Klauen schrammen über Stein, die Leere knistert und bricht
+hervor) und Leerenbeben des Zerbrochenen Königs. Alles entsteht
 aus Rauschen und Tönen (siehe ambience_dsp.py). Wo Vanilla-Klänge passen (Bisse, Schritte, splitternder Amethyst),
 verweist sounds.json nur auf sie – es werden keine Minecraft-Dateien kopiert.
 
 Aufruf (aus dem Projektordner):
-    python3 tools/audio/void_creatures.py [--preview /pfad]
+    python3 tools/audio/void_creatures.py [--only name ...] [--preview /pfad]
 Ergebnis:
     src/main/resources/assets/kingdomsatwar/sounds/entity/void/<name><n>.ogg
     Einträge "entity.<wesen>.<klang>" in assets/kingdomsatwar/sounds.json
@@ -475,6 +476,93 @@ def king_beam(seed: int) -> np.ndarray:
     return y
 
 
+def king_rift(seed: int) -> np.ndarray:
+    """Risse der Leere: ein tiefes Knurren beim Ausholen, dann schrammen Klauen über Stein (raues, ruckendes Kratzen),
+    und die Risse knistern vor Leerenenergie (helles, elektrisches Zirpen), darunter ein dunkles Grollen."""
+    r = rng(seed)
+    n = int(2.6 * SR)
+    y = np.zeros(n)
+    # Knurren beim Ausholen
+    m = int(0.8 * SR)
+    f = curve(m, [(0, 62), (0.5, 74), (1, 58)])
+    growl = _voice(m, f, curve(m, [(0, 0), (0.2, 0.7), (0.8, 0.6), (1, 0)]), "o", r, rough=0.7)
+    mix_at(y, soft_clip(growl * 1.4, 0.9), 0.0, 0.6)
+    # Klauen in Stein: Rauschen, ruckweise geöffnet, durch ein tiefes Band
+    k = int(1.1 * SR)
+    grit = r.standard_normal(k)
+    knots = np.arange(0, k + 600, 600)
+    jerk = np.interp(np.arange(k), knots, r.uniform(0.15, 1.0, len(knots)))
+    scrape = filt(grit, "band", [250, 2400], SR, 2) * jerk * curve(k, [(0, 0), (0.05, 1.0), (0.7, 0.8), (1, 0)])
+    mix_at(y, scrape, 0.62, 0.9)
+    stone = filt(r.standard_normal(k), "low", 300, SR, 2) * curve(k, [(0, 0), (0.08, 1.0), (1, 0)])
+    mix_at(y, stone, 0.62, 0.8)
+    # Knistern der Risse
+    crackle = np.zeros(n)
+    for _ in range(140):
+        q = int(r.uniform(0.002, 0.008) * SR)
+        burst = filt(r.standard_normal(q), "high", 2500, SR, 2) * env_ad(q, SR, 0.0004, 0.002)
+        mix_at(crackle, burst, r.uniform(0.85, 2.4), r.uniform(0.2, 0.7))
+    y += crackle * 0.5
+    t = np.arange(n) / SR
+    zap = tone(np.full(n, 1760.0) * (1 + 0.02 * np.sin(2 * np.pi * 37 * t)), curve(n, [(0, 0), (0.33, 0), (0.4, 0.4), (0.9, 0.25), (1, 0)]), SR,
+               harmonics=((1, 1.0), (2, 0.3), (3, 0.2)))
+    y += zap * 0.06
+    rumble = filt(r.standard_normal(n), "low", 120, SR, 2) * curve(n, [(0, 0), (0.3, 0.2), (0.6, 0.6), (1, 0)])
+    return y + rumble * 0.6
+
+
+def king_erupt(seed: int) -> np.ndarray:
+    """Die Leere bricht hervor: ein dumpfer Stoß von unten, ein aufsteigendes Fauchen, splitternder Kristall."""
+    r = rng(seed)
+    n = int(1.6 * SR)
+    y = np.zeros(n)
+    k = int(0.9 * SR)
+    thud = tone(curve(k, [(0, 90), (1, 40)]), env_ad(k, SR, 0.002, 0.2), SR, harmonics=((1, 1.0), (2, 0.4), (3, 0.1)))
+    mix_at(y, thud, 0.0, 1.0)
+    boom = filt(r.standard_normal(k), "low", 260, SR, 2) * env_ad(k, SR, 0.003, 0.18)
+    mix_at(y, boom, 0.0, 1.0)
+    m = int(1.0 * SR)
+    noise = r.standard_normal(m)
+    rise = np.zeros(m)
+    block = 2048
+    for s0 in range(0, m, block // 2):
+        e = min(m, s0 + block)
+        c = 300 * (12.0 ** (s0 / m))
+        rise[s0:e] += filt(noise[s0:e], "band", [c * 0.6, c * 1.7], SR, 2) * np.hanning(e - s0)
+    mix_at(y, rise * curve(m, [(0, 0), (0.08, 1.0), (1, 0)]), 0.02, 0.6)
+    for i in range(3):
+        b = _bell(float(r.uniform(1500, 3200)), 0.9, SR, decay=0.5, seed=seed + i)
+        mix_at(y, b, 0.03 + i * 0.02, 0.1)
+    return y
+
+
+def king_quake(seed: int) -> np.ndarray:
+    """Leerenbeben: ein drohendes Anschwellen, während die Fäuste sich heben – nach 1,05 s ein gewaltiger Schlag, der
+    Boden grollt nach, ein dunkler, schwingender Ton rollt fort."""
+    r = rng(seed)
+    n = int(3.6 * SR)
+    y = np.zeros(n)
+    hit = 1.05
+    m = int(hit * SR)
+    f = curve(m, [(0, 55), (1, 82)])
+    swell = tone(f, curve(m, [(0, 0), (0.7, 0.5), (1, 1.0)]) ** 1.4, SR, harmonics=((1, 1.0), (1.5, 0.4), (2, 0.3), (3, 0.15)))
+    hiss = filt(r.standard_normal(m), "band", [400, 2500], SR, 2) * curve(m, [(0, 0), (0.8, 0.4), (1, 1.0)]) ** 2
+    mix_at(y, swell * 0.7 + hiss * 0.3, 0.0, 1.0)
+    k = int(2.4 * SR)
+    thud = tone(curve(k, [(0, 66), (0.3, 34), (1, 28)]), env_ad(k, SR, 0.002, 0.6), SR, harmonics=((1, 1.0), (2, 0.5), (3, 0.2)))
+    boom = filt(r.standard_normal(k), "low", 200, SR, 2) * env_ad(k, SR, 0.003, 0.5)
+    crack = filt(r.standard_normal(k), "band", [700, 6000], SR, 2) * env_ad(k, SR, 0.001, 0.07)
+    fade = curve(k, [(0, 1.0), (0.75, 1.0), (1, 0.0)])
+    mix_at(y, (thud * 1.2 + boom * 1.3 + crack * 0.6) * fade, hit, 1.0)
+    t = np.arange(k) / SR
+    ring = tone(np.full(k, 98.0) * (1 + 0.01 * np.sin(2 * np.pi * 3.2 * t)), env_ad(k, SR, 0.05, 1.1), SR,
+                harmonics=((1, 1.0), (2.02, 0.5), (3.01, 0.25), (4.5, 0.1)))
+    mix_at(y, ring * fade, hit + 0.02, 0.35)
+    rumble = filt(r.standard_normal(k), "low", 90, SR, 2) * curve(k, [(0, 0), (0.05, 1.0), (1, 0)])
+    mix_at(y, rumble, hit, 0.9)
+    return y
+
+
 # =====================================================================================
 # Ausgabe
 # =====================================================================================
@@ -502,6 +590,9 @@ SYNTH = {
     "shattered_king_sweep": (king_sweep, 2, (1.2, 0.2), -14.0),
     "shattered_king_gravity": (king_gravity, 1, (2.6, 0.3), -13.0),
     "shattered_king_beam": (king_beam, 1, (2.0, 0.25), -14.0),
+    "shattered_king_rift": (king_rift, 2, (1.8, 0.25), -14.0),
+    "shattered_king_erupt": (king_erupt, 3, (1.4, 0.2), -14.0),
+    "shattered_king_quake": (king_quake, 2, (2.6, 0.3), -12.0),
 }
 
 
@@ -549,7 +640,14 @@ EVENTS = {
     "entity.shattered_king.sweep": (["shattered_king_sweep"], 40),
     "entity.shattered_king.gravity": (["shattered_king_gravity"], 64),
     "entity.shattered_king.beam": (["shattered_king_beam"], 64),
+    "entity.shattered_king.rift": (["shattered_king_rift"], 48),
+    "entity.shattered_king.erupt": (["shattered_king_erupt"], 40),
+    "entity.shattered_king.quake": (["shattered_king_quake"], 80),
 }
+
+
+def files_of(name: str) -> list[str]:
+    return [f"kingdomsatwar:entity/void/{name}{i + 1}" for i in range(SYNTH[name][1])]
 
 
 def render(name: str, preview: Path | None) -> list[str]:
@@ -575,10 +673,11 @@ def render(name: str, preview: Path | None) -> list[str]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--preview", type=Path, help="Ordner für Spektrogramme")
+    ap.add_argument("--only", nargs="*", help="nur diese Klänge neu erzeugen (die übrigen Dateien bleiben)")
     args = ap.parse_args()
     if args.preview:
         args.preview.mkdir(parents=True, exist_ok=True)
-    rendered = {name: render(name, args.preview) for name in SYNTH}
+    rendered = {name: render(name, args.preview) if not args.only or name in args.only else files_of(name) for name in SYNTH}
     events = {}
     for key, (sounds, reach) in EVENTS.items():
         entries = []

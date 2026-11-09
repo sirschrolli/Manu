@@ -28,8 +28,9 @@ import org.joml.Quaternionf;
 /**
  * Zeichnet die Zauberwirkungen ({@link SpellFxEntity}): leuchtende Runenkreise mit wachsender Füllung, Lichtstrahlen
  * und zuckende Blitzbögen (additiv, sie überstrahlen), Säulen aus aufsteigenden Flammenzungen, eine gekrümmte
- * Flutwelle mit Gischtkamm, schillernde Wasserblasen – und die Modelle der Felsspitze, Steinfaust, Dornenranke,
- * Giftblüte und des Eiskerkers mit ihren Leuchtebenen.
+ * Flutwelle mit Gischtkamm, schillernde Wasserblasen, gleißende Mondsicheln, Schwarze Löcher (dunkler Kern, Lichtring,
+ * wirbelnde Scheibe) und Bebenringe – und die Modelle der Felsspitze, Steinfaust, Dornenranke, Giftblüte und des
+ * Eiskerkers mit ihren Leuchtebenen.
  */
 public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRenderState> {
     private static final int FULL_BRIGHT = 0xF000F0;
@@ -39,6 +40,9 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private static final Identifier PILLAR = KingdomsAtWar.id("textures/entity/spell/pillar.png");
     private static final Identifier WAVE = KingdomsAtWar.id("textures/entity/spell/wave.png");
     private static final Identifier BUBBLE = KingdomsAtWar.id("textures/entity/spell/bubble.png");
+    private static final Identifier DISK = KingdomsAtWar.id("textures/entity/spell/disk.png");
+    private static final Identifier CORE = KingdomsAtWar.id("textures/entity/spell/core.png");
+    private static final Identifier LENS = KingdomsAtWar.id("textures/entity/spell/lens.png");
     private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
     private static final Identifier SIGIL = KingdomsAtWar.id("textures/entity/mage/sigil.png");
     private static final Identifier GLYPHS = KingdomsAtWar.id("textures/block/magic_table_glyphs.png");
@@ -48,6 +52,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private static final RenderType GLYPH_TYPE = RenderTypes.entityTranslucentEmissive(GLYPHS);
     private static final RenderType WAVE_TYPE = RenderTypes.entityTranslucent(WAVE);
     private static final RenderType BUBBLE_TYPE = RenderTypes.entityTranslucentEmissive(BUBBLE);
+    private static final RenderType CORE_TYPE = RenderTypes.entityTranslucent(CORE);
 
     private final SpellFxModels.Spike spike;
     private final SpellFxModels.Fist fist;
@@ -122,6 +127,9 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
             case ARC -> this.arc(state, poseStack, collector);
             case PILLAR -> this.pillar(state, poseStack, collector);
             case WAVE -> this.wave(state, poseStack, collector);
+            case CRESCENT -> this.crescent(state, poseStack, collector);
+            case VORTEX -> this.vortex(state, poseStack, collector, camera);
+            case SHOCKWAVE -> this.shockwave(state, poseStack, collector);
             case BUBBLE -> this.bubble(state, poseStack, collector, camera);
             case SPIKE -> this.model(this.spike, "stone_spike", false, state, poseStack, collector, 1.0f);
             case FIST -> this.model(this.fist, "stone_fist", false, state, poseStack, collector, 1.0f);
@@ -370,6 +378,193 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         poseStack.scale(size, size * (1.0f + 0.05f * Mth.sin(s.age * 0.37f)), size);
         collector.submitCustomGeometry(poseStack, BUBBLE_TYPE, (pose, buffer) -> billboardTwoSided(pose, buffer, color));
         poseStack.popPose();
+    }
+
+    // =====================================================================================
+    // Mondsichel, Schwarzes Loch, Bebenring
+    // =====================================================================================
+
+    /**
+     * Mondsichel: eine nach vorn gewölbte Klinge aus Licht – in der Mitte hoch, zu den Spitzen hin schmal –, stehend und
+     * liegend (von der Seite wie von oben zu sehen), mit hellem Kern, weitem Schein und einem verblassenden Nachbild.
+     */
+    private void crescent(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector) {
+        float grow = ease(s.age / 3.0f);
+        float fade = Mth.clamp((s.life - s.age) / 6.0f, 0.0f, 1.0f);
+        float intensity = grow * fade;
+        if (intensity <= 0.01f) {
+            return;
+        }
+        float yawRad = s.yaw * Mth.DEG_TO_RAD;
+        Vec3 fwd = new Vec3(-Mth.sin(yawRad), 0.0, Mth.cos(yawRad));
+        Vec3 side = new Vec3(-fwd.z, 0.0, fwd.x);
+        float half = s.size * 0.5f * (0.75f + 0.25f * grow);
+        float bulge = SpellFxEntity.CRESCENT_BULGE;
+        RenderType type = RenderTypes.energySwirl(BEAM, 0.0f, -s.age * 0.3f);
+        int glow = scale(s.color, 0.7f * intensity);
+        int core = scale(ARGB.srgbLerp(0.75f, s.color, 0xFFFFFF), intensity);
+        int ghost = scale(s.color, 0.35f * intensity);
+        // das Nachbild liegt ein Stück zurück (in Flugrichtung gesehen)
+        Vec3 behind = fwd.scale(-Math.min(1.4, s.param * 1.8));
+        collector.submitCustomGeometry(poseStack, type, (pose, buffer) -> {
+            crescentBlade(pose, buffer, fwd, side, Vec3.ZERO, half, bulge, 0.95f, 0.85f, glow);
+            crescentBlade(pose, buffer, fwd, side, Vec3.ZERO, half, bulge, 0.38f, 0.85f, core);
+            crescentFlat(pose, buffer, fwd, side, half, bulge, 0.75f, 0.85f, glow);
+            crescentFlat(pose, buffer, fwd, side, half, bulge, 0.3f, 0.86f, core);
+            crescentBlade(pose, buffer, fwd, side, behind, half * 0.92f, bulge * 0.9f, 0.6f, 0.85f, ghost);
+        });
+    }
+
+    /** Stehende Klinge entlang des Sichelbogens: Höhe {@code height} in der Mitte, zu den Spitzen hin null. */
+    private static void crescentBlade(PoseStack.Pose pose, VertexConsumer buffer, Vec3 fwd, Vec3 side, Vec3 shift, float half, float bulge,
+            float height, float center, int color) {
+        int n = 16;
+        for (int i = 0; i < n; i++) {
+            float x0 = -1.0f + 2.0f * i / n;
+            float x1 = -1.0f + 2.0f * (i + 1) / n;
+            Vec3 a = crescentPoint(fwd, side, half, bulge, x0).add(shift);
+            Vec3 b = crescentPoint(fwd, side, half, bulge, x1).add(shift);
+            float h0 = height * (float) Math.pow(1.0f - x0 * x0, 0.6);
+            float h1 = height * (float) Math.pow(1.0f - x1 * x1, 0.6);
+            quadTwoSided(pose, buffer, a.add(0.0, center - h0, 0.0), a.add(0.0, center + h0, 0.0), b.add(0.0, center + h1, 0.0),
+                    b.add(0.0, center - h1, 0.0), 0.0f, 1.0f, i / (float) n * 2.0f, (i + 1) / (float) n * 2.0f, color, FULL_BRIGHT);
+        }
+    }
+
+    /** Liegende Sichel in Höhe {@code y}: in der Mitte {@code width} breit, zu den Spitzen hin spitz. */
+    private static void crescentFlat(PoseStack.Pose pose, VertexConsumer buffer, Vec3 fwd, Vec3 side, float half, float bulge, float width,
+            float y, int color) {
+        int n = 16;
+        for (int i = 0; i < n; i++) {
+            float x0 = -1.0f + 2.0f * i / n;
+            float x1 = -1.0f + 2.0f * (i + 1) / n;
+            Vec3 a = crescentPoint(fwd, side, half, bulge, x0).add(0.0, y, 0.0);
+            Vec3 b = crescentPoint(fwd, side, half, bulge, x1).add(0.0, y, 0.0);
+            Vec3 na = crescentNormal(fwd, side, half, bulge, x0).scale(width * Math.pow(1.0f - x0 * x0, 0.8));
+            Vec3 nb = crescentNormal(fwd, side, half, bulge, x1).scale(width * Math.pow(1.0f - x1 * x1, 0.8));
+            // die Sichel ist vorn rund und hinten hohl: der Vorderrand reicht weiter als der Hinterrand
+            quadTwoSided(pose, buffer, a.subtract(na.scale(0.8)), a.add(na.scale(0.45)), b.add(nb.scale(0.45)), b.subtract(nb.scale(0.8)),
+                    0.0f, 1.0f, i / (float) n * 2.0f, (i + 1) / (float) n * 2.0f, color, FULL_BRIGHT);
+        }
+    }
+
+    /** Punkt auf dem Sichelbogen ({@code x} von −1 bis 1 quer): die Mitte eilt um {@code bulge} voraus. */
+    private static Vec3 crescentPoint(Vec3 fwd, Vec3 side, float half, float bulge, float x) {
+        return side.scale(x * half).add(fwd.scale(bulge * (1.0f - x * x)));
+    }
+
+    /** Waagerechte Normale des Sichelbogens (zeigt nach vorn außen). */
+    private static Vec3 crescentNormal(Vec3 fwd, Vec3 side, float half, float bulge, float x) {
+        // Ableitung des Bogens nach x: side·half − fwd·2·bulge·x; die Normale steht senkrecht dazu
+        Vec3 tangent = side.scale(half).subtract(fwd.scale(2.0f * bulge * x));
+        Vec3 n = new Vec3(-tangent.z, 0.0, tangent.x).normalize();
+        return n.dot(fwd) < 0.0 ? n.scale(-1.0) : n;
+    }
+
+    /**
+     * Schwarzes Loch: eine wirbelnde Scheibe aus Sternenstaub (außen langsam, innen schnell, leicht gekippt), ein Schein
+     * ringsum, darin der schwarze Kern mit seinem gleißenden Lichtring. Zum Schluss stürzt alles in sich zusammen.
+     */
+    private void vortex(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        float grow = ease(s.age / 10.0f);
+        float collapse = Mth.clamp((s.life - s.age) / 6.0f, 0.0f, 1.0f);
+        float k = grow * collapse * collapse;
+        if (k <= 0.01f) {
+            return;
+        }
+        float radius = s.size * k;
+        float pulse = 1.0f + 0.05f * Mth.sin(s.age * 0.7f);
+        float coreSize = s.size * 0.24f * grow * (0.35f + 0.65f * collapse) * pulse;
+        float tilt = 14.0f + 6.0f * Mth.sin(s.seed * 0.7f);
+        // weiter Schein
+        RenderType halo = RenderTypes.energySwirl(HALO, 0.0f, 0.0f);
+        int haloColor = scale(s.color, 0.32f * k);
+        poseStack.pushPose();
+        poseStack.rotate(camera.orientation);
+        poseStack.scale(radius * 2.6f, radius * 2.6f, radius * 2.6f);
+        collector.submitCustomGeometry(poseStack, halo, (pose, buffer) -> billboard(pose, buffer, haloColor));
+        poseStack.popPose();
+        // die Wirbelscheibe: zwei Lagen, die innere schneller und heller
+        RenderType disk = RenderTypes.energySwirl(DISK, 0.0f, 0.0f);
+        int outer = scale(s.color, 0.85f * k);
+        int inner = scale(ARGB.srgbLerp(0.45f, s.color, 0xFFFFFF), 0.9f * k);
+        for (int layer = 0; layer < 2; layer++) {
+            float r = layer == 0 ? radius : radius * 0.62f;
+            float spin = s.age * (layer == 0 ? 5.0f : 11.0f) + s.seed * 23.0f;
+            int col = layer == 0 ? outer : inner;
+            poseStack.pushPose();
+            poseStack.rotate(Axis.XP.rotationDegrees(tilt));
+            poseStack.rotate(Axis.YP.rotationDegrees(-spin));
+            poseStack.scale(2 * r, 1.0f, 2 * r);
+            collector.submitCustomGeometry(poseStack, disk, (pose, buffer) -> flatQuad(pose, buffer, col, FULL_BRIGHT));
+            poseStack.popPose();
+        }
+        // der schwarze Kern (zur Kamera gedreht) und sein Lichtring
+        int dark = ARGB.color(Math.round(250 * Math.min(1.0f, grow * 1.3f)), 0x05020C);
+        poseStack.pushPose();
+        poseStack.rotate(camera.orientation);
+        poseStack.pushPose();
+        poseStack.scale(2 * coreSize, 2 * coreSize, 2 * coreSize);
+        collector.submitCustomGeometry(poseStack, CORE_TYPE, (pose, buffer) -> billboardTwoSided(pose, buffer, dark));
+        poseStack.popPose();
+        RenderType lens = RenderTypes.energySwirl(LENS, 0.0f, 0.0f);
+        int ring = scale(ARGB.srgbLerp(0.6f, s.color, 0xFFFFFF), k * (0.85f + 0.15f * Mth.sin(s.age * 1.1f)));
+        float lensSize = coreSize * 2.0f * 1.32f;
+        poseStack.scale(lensSize, lensSize, lensSize);
+        collector.submitCustomGeometry(poseStack, lens, (pose, buffer) -> billboard(pose, buffer, ring));
+        poseStack.popPose();
+    }
+
+    /** Bebenring: eine niedrige, gleißende Wand, die sich am Boden ausbreitet, dazu ein Schein auf dem Boden. */
+    private void shockwave(SpellFxRenderState s, PoseStack poseStack, SubmitNodeCollector collector) {
+        float radius = s.size + s.param * s.age;
+        float appear = ease(s.age / 2.0f);
+        float fade = Mth.clamp((s.life - s.age) / 6.0f, 0.0f, 1.0f);
+        float intensity = appear * fade;
+        if (intensity <= 0.01f || radius <= 0.05f) {
+            return;
+        }
+        RenderType type = RenderTypes.energySwirl(BEAM, 0.0f, s.age * 0.12f);
+        int glow = scale(s.color, 0.75f * intensity);
+        int core = scale(ARGB.srgbLerp(0.65f, s.color, 0xFFFFFF), intensity);
+        float h = SpellFxEntity.SHOCKWAVE_HEIGHT;
+        collector.submitCustomGeometry(poseStack, type, (pose, buffer) -> {
+            ringWall(pose, buffer, radius, 0.0f, h * 1.35f, glow);
+            ringWall(pose, buffer, radius, h * 0.15f, h * 0.85f, core);
+            ringFloor(pose, buffer, radius - 0.9f, radius + 0.35f, 0.04f, glow);
+        });
+    }
+
+    /** Senkrechter Ring (Halbmesser {@code radius}) von {@code y0} bis {@code y1}; die Textur liegt quer (heller Kern in der Mitte). */
+    private static void ringWall(PoseStack.Pose pose, VertexConsumer buffer, float radius, float y0, float y1, int color) {
+        int sides = Math.max(24, Math.min(96, (int) (radius * 6.0f)));
+        for (int i = 0; i < sides; i++) {
+            float a0 = i * Mth.TWO_PI / sides;
+            float a1 = (i + 1) * Mth.TWO_PI / sides;
+            Vec3 p0 = new Vec3(Mth.cos(a0) * radius, 0.0, Mth.sin(a0) * radius);
+            Vec3 p1 = new Vec3(Mth.cos(a1) * radius, 0.0, Mth.sin(a1) * radius);
+            float v0 = i / (float) sides * radius * 0.6f;
+            float v1 = (i + 1) / (float) sides * radius * 0.6f;
+            quadTwoSided(pose, buffer, p0.add(0.0, y0, 0.0), p0.add(0.0, y1, 0.0), p1.add(0.0, y1, 0.0), p1.add(0.0, y0, 0.0), 0.0f, 1.0f,
+                    v0, v1, color, FULL_BRIGHT);
+        }
+    }
+
+    /** Flacher Ring am Boden (von {@code inner} bis {@code outer}). */
+    private static void ringFloor(PoseStack.Pose pose, VertexConsumer buffer, float inner, float outer, float y, int color) {
+        float in = Math.max(0.0f, inner);
+        int sides = Math.max(24, Math.min(96, (int) (outer * 6.0f)));
+        for (int i = 0; i < sides; i++) {
+            float a0 = i * Mth.TWO_PI / sides;
+            float a1 = (i + 1) * Mth.TWO_PI / sides;
+            Vec3 i0 = new Vec3(Mth.cos(a0) * in, y, Mth.sin(a0) * in);
+            Vec3 o0 = new Vec3(Mth.cos(a0) * outer, y, Mth.sin(a0) * outer);
+            Vec3 o1 = new Vec3(Mth.cos(a1) * outer, y, Mth.sin(a1) * outer);
+            Vec3 i1 = new Vec3(Mth.cos(a1) * in, y, Mth.sin(a1) * in);
+            float v0 = i / (float) sides * outer * 0.6f;
+            float v1 = (i + 1) / (float) sides * outer * 0.6f;
+            quadTwoSided(pose, buffer, i0, o0, o1, i1, 0.0f, 1.0f, v0, v1, color, FULL_BRIGHT);
+        }
     }
 
     // =====================================================================================

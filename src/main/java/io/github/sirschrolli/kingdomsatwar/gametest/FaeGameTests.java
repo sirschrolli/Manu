@@ -431,10 +431,35 @@ final class FaeGameTests {
                                     "Die Schuppenwolke wirkt nicht (waagrecht %.1f, Höhe %.1f, Ritter lebt: %s, Angriff %s)",
                                     Math.hypot(queen.getX() - knight.getX(), queen.getZ() - knight.getZ()), queen.getY() - knight.getY(),
                                     knight.isAlive(), queen.currentAttack()));
-                            dive(helper, level, queen, knight, home);
+                            eclipseAndCocoon(helper, level, queen, knight, () -> dive(helper, level, queen, knight, home));
                         });
                     });
                 });
+            });
+        });
+    }
+
+    /** Mondfinsternis (der erste Mondstrahl fällt auf den Ritter) und Seidenkokon (er wird eingesponnen). */
+    private static void eclipseAndCocoon(GameTestHelper helper, ServerLevel level, MothQueenEntity queen,
+            net.minecraft.world.entity.LivingEntity knight, Runnable then) {
+        knight.setHealth(knight.getMaxHealth());
+        float hp = knight.getHealth();
+        queen.snapTo(knight.getX() + 2.0, knight.getY() + 6.0, knight.getZ() + 4.0, 0.0f, 0.0f);
+        queen.setDeltaMovement(Vec3.ZERO);
+        queen.setTarget(knight);
+        queen.forceAttack(MothQueenEntity.Attack.ECLIPSE);
+        helper.runAfterDelay(MothQueenEntity.ECLIPSE_FIRST + MothQueenEntity.ECLIPSE_WARN + 3, () -> {
+            helper.assertTrue(knight.getHealth() < hp, "Der Mondstrahl der Finsternis trifft nicht");
+            helper.assertTrue(knight.hasEffect(MobEffects.GLOWING), "Wen der Strahl trifft, der leuchtet nicht");
+            knight.setHealth(knight.getMaxHealth());
+            queen.snapTo(knight.getX() + 2.0, knight.getY() + 5.0, knight.getZ() + 4.0, 0.0f, 0.0f);
+            queen.setDeltaMovement(Vec3.ZERO);
+            queen.setTarget(knight);
+            queen.forceAttack(MothQueenEntity.Attack.COCOON);
+            helper.runAfterDelay(MothQueenEntity.COCOON_WRAP + 3, () -> {
+                var slow = knight.getEffect(MobEffects.SLOWNESS);
+                helper.assertTrue(slow != null && slow.getAmplifier() >= 5, "Der Ritter wird nicht eingesponnen");
+                then.run();
             });
         });
     }
