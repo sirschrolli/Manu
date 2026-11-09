@@ -27,7 +27,7 @@ import org.jspecify.annotations.Nullable;
  * Grundrichtung (das Atoll formt seine Umgebung selbst).
  */
 public final class AtollLocator {
-    public static final int AREA = 40;
+    public static final int AREA = 46;
     public static final int NEST_SPACING = 400;
     private static final Map<ChunkGeneratorStructureState, ChunkPos> CACHE = Collections.synchronizedMap(new WeakHashMap<>());
 

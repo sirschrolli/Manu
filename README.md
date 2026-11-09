@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.61.0 – Das lebendige Meer.** In den Meeren leben fünf neue Wesen: Der **Mantarochen** gleitet mit langsamen Flügelschlägen durch warme Meere, springt in hohem Bogen aus dem Wasser und schenkt Schwimmern in seiner Nähe die Gnade des Delfins. **Leuchtquallen** treiben in Schwärmen – blau, rosa oder golden –, pumpen leuchtend und nesseln, wer sie berührt; mit dem Eimer lassen sie sich fangen. Der **Hai** umkreist seine Beute, stößt zu und dreht wieder ab. In der dunklen Tiefe lockt der **Anglerfisch** mit seinem leuchtenden Köder und schnappt plötzlich zu. Am Strand klappern **Riesenkrabben** mit den Scheren; mit Seetang lassen sie sich züchten, ihre Schere in der Nebenhand verlängert die Reichweite. Dazu kommen die **Tiefsee-Laterne**, Pfeile aus Haizähnen, Krabbenfleisch und Nachtsicht-Tränke aus Leuchtgelee. Die **Klänge der Welt** sind überarbeitet: Auch die 53 Standard-Biome der Oberwelt haben jetzt eine eigene Klangwelt. Die Klangteppiche laufen nicht mehr ununterbrochen, sondern kommen und gehen, sind leiser, und unter *Mods → Kingdoms at War → Konfiguration* lassen sie sich leiser stellen oder abschalten. Das **Leveln dauert länger**: Heldenstufe 100 braucht jetzt rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 mehr als doppelt so viel Kampferfahrung wie bisher. Die Erfahrung, die du bekommst, bleibt gleich, und erreichte Stufen bleiben erhalten. Der **Zerbrochene König** ist jetzt der stärkste Gegner, stärker als alle Drachen: 1.800 Lebenspunkte, schwere Rüstung, mehr Wächter, ein Doppelschlag, und ab der Hälfte seiner Kraft packt ihn der **Zorn des Königs**.
+> **Testversion 0.62.0 – Die Tiefe des Meeres.** Weit draußen liegt das **Versunkene Atoll**: ein Ring aus weißen Sandinseln mit Kokospalmen, Schildkrötengelegen und Nadeln aus Korallenkalk, außen gesäumt von einem lebenden Korallenriff, innen eine türkise Lagune mit Korallenköpfen – und in ihrer Mitte die Ruine eines Tempels des Meeresvolks. Auf dem Tempelplatz liegt ein Sandhügel, aus dem ein leuchtender Speer ragt. Wer ihn greifen will, weckt **Karkinos, den Riffkoloss**: eine riesige Krabbe mit einem ganzen Riff auf dem Rücken, dem neuen ersten Boss der Mod mit eigener Bossleiste, eigenen Klängen und acht Angriffen – Scherenschlag, Zangengriff, Blasenstrahl, Panzerwirbel, Eingraben, Ruf der Brut, Gezeitenzorn und Flutlanzen. Besiegt lässt er den **Gezeiten-Speer** fallen, die erste eigene 3D-Waffe der Mod: Im Wasser und im Regen trifft er härter und schlägt bei jedem Treffer eine Welle, wer ihn hält, schwimmt wie ein Delfin. Mit dem **Gezeitenhorn** hört man, wo das Atoll liegt, und ruft Karkinos zurück. Der **Meeresgrund** bekommt sechs neue Landschaften: Tangwälder mit **Riesentang**, Felsnadeln, **Anemonengärten**, **Muschelbänke**, **heiße Quellen** mit Schloten und Röhrenwürmern und **Leuchtfelder**; nachts leuchtet das Meer, wo es bewegt wird.
+> In 0.61 kam das lebendige Meer: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, dazu Tiefsee-Laterne, Haizahn-Pfeile und Nachtsicht aus Leuchtgelee. Die 53 Standard-Biome der Oberwelt bekamen eine eigene Klangwelt (die Klangteppiche kommen und gehen und lassen sich in der Konfiguration leiser stellen), das Leveln dauert länger (Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung; die Erfahrung, die du bekommst, bleibt gleich), und der Zerbrochene König wurde zum stärksten Gegner der Mod.
 > In 0.60 kam der Zerbrochene König: Hoch in der Leere schwebt der Thron der Alten. Wer ihn betritt, weckt den letzten König der Alten, einen schwebenden Riesen aus Marmor und Gold mit zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Besiegt lässt er seine Krone fallen: ein Helm als echtes 3D-Modell, mit dem du sanft fällst. Dazu kam `/kaw dim <oberwelt|nether|end|schattenwelt|leere>`, das im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen wechselt.
 > In 0.59 kam die Leere: eine eigene Dimension hinter dem Herz der Schatten mit sechs Biomen aus treibenden Bruchstücken, Ruinen der Alten und vier Wesen.
 > In 0.58 bekam jedes eigene Biom seine eigene Klangwelt: Laub, Vogelchor, Spechte und Kuckuck im Urhain, Grillen, Käuzchen und ferne Wölfe in der Nacht, Brandung an der Sturmküste, singendes Eis auf den Frostgipfeln, knisternde Glut in den Aschefeldern, ein Drache in der Ferne über den Nestern, Dröhnen und Flüstern in der Schattenwelt.
@@ -322,8 +323,9 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Landwirtschaft: sieben Feldfrüchte, Gerichte, Getränke, Festmahl, Zierblumen | ✅ fertig |
 | **Die Leere**: eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
 | **Der Zerbrochene König**: Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm; seit 0.61 der stärkste Gegner (1.800 Lebenspunkte, Zorn des Königs, Doppelschlag) | ✅ fertig |
-| **Das lebendige Meer** (neu): Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
-| Längeres Leveln (neu): Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
+| **Das lebendige Meer**: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
+| **Die Tiefe des Meeres** (neu): sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
+| Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
@@ -1619,6 +1621,69 @@ mit eigenem Modell, eigenem Verhalten und eigenen Klängen:
 
 Alle fünf haben ein **Spawn-Ei** im neuen Kreativ-Reiter **„Das Meer“**.
 
+### Die Tiefe des Meeres
+
+![Die Tiefe des Meeres: das Versunkene Atoll, Karkinos und der Gezeiten-Speer](docs/bilder/atoll.jpg)
+
+Seit 0.62 ist auch der **Meeresgrund** lebendig. In den Meeren der Oberwelt findest du sechs neue Landschaften:
+
+| Landschaft | Wo | Was dort ist |
+|---|---|---|
+| **Tangwald** | gemäßigte und kalte Meere (in kalten vor allem Riesentang) | dichte Säulen aus Tang und **Riesentang**, der mit breiten, wogenden Blättern bis knapp unter die Oberfläche wächst; dazwischen hohes Seegras |
+| **Felsnadeln** | gemäßigte, kalte, laue und warme Meere | Türme aus geschichtetem Fels (in lauen und warmen Meeren aus hellem Kalk und Sandstein), die aus dem Wasser ragen, manchmal durch einen Felsbogen verbunden |
+| **Anemonengarten** | warme und laue Meere | Felder aus **Seeanemonen** in vier Farben um flache Felsbrocken; ihre Fangarme wiegen sich, ihre Spitzen leuchten nachts |
+| **Muschelbank** | Strände und seichtes Wasser | **Herzmuscheln, Jakobsmuscheln und Wellhornschnecken** (eine bis drei Schalen; mit derselben Muschel in der Hand kommt eine dazu) |
+| **Heiße Quellen** | tiefe Meere, ab 14 Blöcken Tiefe | Felder aus Schlotgestein und Schwefelkruste, darauf rauchende Schlote mit glühender Öffnung; **heiße Quellen** treiben Blasensäulen nach oben (wer darauf tritt, verbrennt sich), dazwischen **Röhrenwürmer** |
+| **Leuchtfeld** | tiefe Meere, ab 12 Blöcken Tiefe | Teppiche aus **Leuchtalgen**, die den Grund in der Tiefe türkis erhellen |
+
+Nachts **leuchtet das Meer**, wo es bewegt wird: Wer schwimmt, rudert oder taucht, zieht eine Spur winziger türkiser
+Lichter hinter sich her – Fische, Delfine und Boote ebenso –, und wo Wellen brechen, glimmt die Oberfläche.
+
+**Das Versunkene Atoll** liegt genau einmal in jeder Welt, 450 bis 1.300 Blöcke vom Ursprung entfernt in einem warmen
+oder gemäßigten Meer: ein Ring aus flachen Sandinseln mit Kokospalmen (die Kokosnüsse sind Kakaofrüchte), Büschen,
+Bambus, Muscheln und Gelegen der Meeresschildkröten, zwei, drei Nadeln aus hellem Korallenkalk und einer Riffkante aus
+lebenden Korallen. Durch drei Durchlässe strömt das Meer in die türkise Lagune mit Korallenköpfen, Seegras und
+Anemonen. In ihrer Mitte liegt der Tempelplatz des Meeresvolks aus Prismarin – sechs Säulen, manche zerbrochen,
+Seelaternen und eine Truhe. Auf dem Platz ein **Sandhügel, aus dem der leuchtende Gezeiten-Speer ragt**. Wer ihm zu nahe
+kommt, weckt, was darunter schläft. Das **Gezeitenhorn** (zwei Wellhornschnecken, ein Goldbarren und ein
+Prismarinkristall) verrät, aus welcher Richtung und wie weit entfernt das Meer antwortet.
+
+**Karkinos, der Riffkoloss** – eine Krabbe, groß wie ein Haus, auf deren Rücken ein ganzes Riff wächst, mit leuchtenden
+Stielaugen, einer Brecherschere und einer Greifschere. In seiner Kuppel steckt der Speer des letzten Gezeitenkönigs. Er ist
+der **erste Boss** der Mod (320 Lebenspunkte, Rüstung 10) und gut zu schaffen, bevor man sich an die Erzmagier und Drachen
+wagt. Er hat eine eigene Bossleiste mit Korallenriff und Lagunenlicht und eigene Klänge:
+
+| Angriff | Was geschieht |
+|---|---|
+| **Scherenschlag** | die Brecherschere steigt, ein Blasenring warnt, sie schmettert herab – danach steckt sie kurz fest (dann trifft man ihn härter) |
+| **Zangengriff** | er stürmt vor, packt zu, kneift zweimal und schleudert die Beute weit fort |
+| **Blasenstrahl** | aus seinem Maul schießt ein Wasserstrahl, der seinem Ziel langsam folgt, zurückdrängt und verlangsamt |
+| **Panzerwirbel** | er zieht sich in die Kuppel zurück und rollt dreimal quer über den Platz – Pfeile prallen ab; danach ist er benommen |
+| **Eingraben** | er versinkt im Sand (vergraben ist er unverwundbar), wühlt sich unter sein Ziel – der Boden bebt – und bricht hervor |
+| **Ruf der Brut** | er klappert mit beiden Scheren, und Riesenkrabben brechen aus dem Sand (bei zwei Dritteln und einem Drittel) |
+| **Gezeitenzorn** | unter 40 % erwacht der Speer in seiner Kuppel: Er greift schneller an, jeder Scherenschlag schickt Brandungswellen über den Platz |
+| **Flutlanzen** | im Zorn: Blasenringe zeigen, wo gleich Wassersäulen auf seine Feinde herabstürzen |
+
+Wer die Lagune verlässt, den lässt er ziehen und gräbt sich nach einer Weile wieder ein. Besiegt bricht der
+**Gezeiten-Speer** aus seiner Kuppel und fällt leuchtend in den Sand; dazu das Herz des Meeres, ein Herzkristall,
+Prismarin, Gold und ein Gezeitenhorn. Mit dem Gezeitenhorn und einem Herz des Meeres in der anderen Hand rufst du ihn in
+der Lagune zurück, um noch einmal gegen ihn zu kämpfen.
+
+**Der Gezeiten-Speer** ist die erste eigene **3D-Waffe** der Mod: ein Speer wie die Speere von Minecraft (Stoß und
+Ansturm), mit einem Schaft aus Treibholz, goldenen Ringen, einer Perle und einer Klinge aus leuchtendem Aquamarin.
+In der Hand siehst du ihn als echtes 3D-Modell, im Inventar als Bild.
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Gezeitenkraft** | im Wasser oder im Regen trifft er um ein Drittel härter |
+| **Brandungsstoß** | jeder Treffer im Wasser oder im Regen lässt eine Welle aufschäumen, die Gegner ringsum zurückwirft |
+| **Gnade der Gezeiten** | wer ihn im Wasser in der Hand hält, schwimmt wie ein Delfin |
+| Haltbarkeit | 2.031 (wie Diamant), feuerfest, mit Prismarinkristallen zu reparieren, episch |
+
+Alle neuen Blöcke (Anemonen, Muscheln, Röhrenwürmer, Schlotgestein, Schwefelkruste, heiße Quelle, Leuchtalgen,
+Riesentang) und das Spawn-Ei von Karkinos liegen im Kreativ-Reiter **„Das Meer“**. Muscheln werden in der Werkbank zu
+Knochenmehl.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2247,10 +2312,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
    100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig; seit 0.61 dauert das Leveln
    länger.
-5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König und die fünf Meereswesen sind fertig, als Nächstes:
-   - **0.62 – Die Tiefe des Meeres:** neue Landschaften unter Wasser (Seetangwälder, Felsnadeln, Anemonengärten,
-     Muschelbänke, heiße Quellen am Grund, leuchtende Felder) und ein **Meeres-Boss**, der einen eigenen
-     **Gezeiten-Speer** als 3D-Waffe fallen lässt;
+5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König, die fünf Meereswesen und die Tiefe des Meeres
+   (Landschaften am Meeresgrund, das Versunkene Atoll mit Karkinos und dem Gezeiten-Speer) sind fertig, als Nächstes:
    - **0.63 – Das Feenreich:** eine neue Dimension im ewigen Abendrot – Riesenpilze, leuchtende Bäume, Feen, Irrlichter
      und Ruinen –, betretbar schon vor den Drachen durch einen eigenen **Portal-Rahmen**, mit einem Boss, der
      **Feen-Elytren** fallen lässt;
@@ -2262,7 +2325,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      fällt: ein Portal hinter dem Thron und ein Schlüssel, der Risse in der Leere öffnet. Wer den Weltenfresser
      besiegt, erhält einen legendären Speer, eine Trophäe und den Titel **„Weltenretter“**.
 
-   Die Bosse werden in dieser Reihenfolge stärker: Meeres-Boss und Feenreich-Boss (früh im Spiel) → Erzmagier →
+   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und der Feenreich-Boss (früh im Spiel) → Erzmagier →
    Drachen → Zerbrochener König → Weltenfresser.
 
 ## Danksagung

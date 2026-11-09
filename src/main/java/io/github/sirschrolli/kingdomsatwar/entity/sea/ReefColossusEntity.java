@@ -381,33 +381,52 @@ public class ReefColossusEntity extends Monster {
         if (this.isJetting()) {
             Vec3 from = this.mouthPosition();
             Vec3 dir = jetDirection(this.entityData.get(DATA_JET_YAW));
-            for (int i = 0; i < 8; i++) {
+            boolean underwater = level.getFluidState(BlockPos.containing(from)).is(net.minecraft.tags.FluidTags.WATER);
+            // der Strahl: Wasserballen schießen aus dem Maul und weiten sich auf ihrem Weg
+            for (int i = 0; i < 4; i++) {
+                double sx = (this.random.nextDouble() - 0.5) * 0.3;
+                double sy = (this.random.nextDouble() - 0.5) * 0.3;
+                double sz = (this.random.nextDouble() - 0.5) * 0.3;
+                double speed = 1.0 + this.random.nextDouble() * 0.3;
+                level.addParticle(ModParticles.BOSS_WATER.get(), from.x + sx, from.y + sy, from.z + sz, dir.x * speed + sx * 0.15,
+                        dir.y * speed + 0.03, dir.z * speed + sz * 0.15);
+            }
+            // Gischt und Blasen entlang des Strahls
+            for (int i = 0; i < 7; i++) {
                 double d = this.random.nextDouble() * JET_RANGE;
                 Vec3 p = from.add(dir.scale(d));
-                double spread = 0.2 + d * 0.06;
-                level.addParticle(i % 2 == 0 ? ParticleTypes.BUBBLE : ParticleTypes.SPLASH, p.x + (this.random.nextDouble() - 0.5) * spread,
-                        p.y + (this.random.nextDouble() - 0.5) * spread, p.z + (this.random.nextDouble() - 0.5) * spread,
-                        dir.x * 0.4, dir.y * 0.4 + 0.02, dir.z * 0.4);
+                double spread = 0.3 + d * 0.08;
+                var particle = underwater ? ParticleTypes.BUBBLE : i % 3 == 0 ? ParticleTypes.BUBBLE_POP : ParticleTypes.SPLASH;
+                level.addParticle(particle, p.x + (this.random.nextDouble() - 0.5) * spread, p.y + (this.random.nextDouble() - 0.5) * spread,
+                        p.z + (this.random.nextDouble() - 0.5) * spread, dir.x * 0.35, dir.y * 0.35 + 0.03, dir.z * 0.35);
             }
-            level.addParticle(ModParticles.BOSS_WATER.get(), from.x, from.y, from.z, dir.x * 0.9, dir.y * 0.9, dir.z * 0.9);
+            // wo er auftrifft, schäumt es
+            Vec3 end = from.add(dir.scale(JET_RANGE * (0.8 + this.random.nextDouble() * 0.2)));
+            for (int i = 0; i < 3; i++) {
+                level.addParticle(ParticleTypes.SPLASH, end.x + (this.random.nextDouble() - 0.5) * 1.6, end.y + 0.2,
+                        end.z + (this.random.nextDouble() - 0.5) * 1.6, 0.0, 0.25, 0.0);
+            }
+            if (this.random.nextInt(3) == 0) {
+                level.addParticle(ModParticles.SEA_GLOW.get(), from.x, from.y, from.z, dir.x * 0.6, dir.y * 0.6 + 0.05, dir.z * 0.6);
+            }
         }
     }
 
     /** Wo die Spitze des Speers in der Kuppel steckt (für Leuchten und das Herausbrechen im Tod). */
     public static Vec3 spearTip(Vec3 position, float bodyYaw) {
         float yaw = bodyYaw * Mth.DEG_TO_RAD;
-        // Modell: Speer rechts hinten über der Kuppel (×2), gedreht mit dem Körper
-        double lx = -1.4;
-        double lz = 0.6;
+        // Modell: Speer rechts hinten über der Kuppel (×2,5), gedreht mit dem Körper
+        double lx = -1.75;
+        double lz = 0.75;
         double x = lx * Mth.cos(yaw) - lz * Mth.sin(yaw);
         double z = lx * Mth.sin(yaw) + lz * Mth.cos(yaw);
-        return position.add(x, 5.6, z);
+        return position.add(x, 7.0, z);
     }
 
     /** Das Maul (Ursprung des Blasenstrahls). */
     public Vec3 mouthPosition() {
         float yaw = this.yBodyRot * Mth.DEG_TO_RAD;
-        return this.position().add(-Mth.sin(yaw) * 2.0, 1.2, Mth.cos(yaw) * 2.0);
+        return this.position().add(-Mth.sin(yaw) * 2.5, 1.5, Mth.cos(yaw) * 2.5);
     }
 
     public static Vec3 jetDirection(float yawDegrees) {
@@ -418,7 +437,7 @@ public class ReefColossusEntity extends Monster {
     /** Wo die Greifschere zupackt (vor ihm, auf Hüfthöhe). */
     private Vec3 clawPoint() {
         float yaw = this.yBodyRot * Mth.DEG_TO_RAD;
-        return this.position().add(-Mth.sin(yaw) * 3.6 - Mth.cos(yaw) * 0.9, 1.4, Mth.cos(yaw) * 3.6 - Mth.sin(yaw) * 0.9);
+        return this.position().add(-Mth.sin(yaw) * 4.5 - Mth.cos(yaw) * 1.1, 1.75, Mth.cos(yaw) * 4.5 - Mth.sin(yaw) * 1.1);
     }
 
     @Override
@@ -700,7 +719,7 @@ public class ReefColossusEntity extends Monster {
     private void tickSlam(ServerLevel level, @Nullable LivingEntity target, int t) {
         Vec3 p = this.slamPoint != null ? this.slamPoint : this.position();
         // nahe genug heran, damit die Schere die Stelle erreicht
-        if (t < SLAM_IMPACT - 6 && this.position().distanceTo(p) > 4.5) {
+        if (t < SLAM_IMPACT - 6 && this.position().distanceTo(p) > 5.4) {
             this.walkTo(p, 1.3);
         } else {
             this.getNavigation().stop();
@@ -738,7 +757,7 @@ public class ReefColossusEntity extends Monster {
             level.playSound(null, this.blockPosition(), ModSounds.GIANT_CRAB_PINCH.get(), SoundSource.HOSTILE, 3.0f, 0.5f);
             Vec3 claw = this.clawPoint();
             LivingEntity caught = this.enemiesNear(level, 8.0).stream()
-                    .filter(e -> e.position().add(0.0, e.getBbHeight() * 0.5, 0.0).distanceTo(claw) < 2.8)
+                    .filter(e -> e.position().add(0.0, e.getBbHeight() * 0.5, 0.0).distanceTo(claw) < 3.2)
                     .min(Comparator.comparingDouble(e -> e.position().distanceTo(claw))).orElse(null);
             if (caught != null) {
                 this.grabbed = caught.getUUID();

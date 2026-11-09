@@ -49,7 +49,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
  */
 public class AtollPiece extends StructurePiece {
     /** Radius, bis zu dem das Atoll sein Gelände formt. */
-    static final int REACH = 40;
+    static final int REACH = 46;
     static final double PLATFORM = 9.6;
     static final double MOUND = 4.6;
     public static final ResourceKey<LootTable> CHEST = ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/sunken_atoll"));
@@ -104,7 +104,7 @@ public class AtollPiece extends StructurePiece {
     }
 
     private double ringWidth(LairContext ctx, double a) {
-        return 7.0 + 1.6 * Math.sin(2 * a + ctx.rand(3, 0, 11) * 6.28);
+        return 8.0 + 1.8 * Math.sin(2 * a + ctx.rand(3, 0, 11) * 6.28);
     }
 
     /**
@@ -123,12 +123,12 @@ public class AtollPiece extends StructurePiece {
                 return -3.0 + (d - 8.0) / 7.0 * 4.0;
             }
         }
-        // zwischen den Inseln flache Riffdächer, auf den Inseln sanfte Dünen
-        double n = ctx.angleNoise(a, 2.6, 13);
-        if (n < 0.3) {
-            return -1.0 + n * 3.0;
+        // zwischen den Inseln schmale Riffdächer, auf den Inseln sanfte Dünen
+        double n = ctx.angleNoise(a, 3.2, 13);
+        if (n < 0.16) {
+            return -1.0 + n * 6.0;
         }
-        return 1.2 + 3.4 * Mth.clamp((n - 0.3) / 0.6, 0.0, 1.0);
+        return 1.4 + 3.2 * Mth.clamp((n - 0.16) / 0.6, 0.0, 1.0);
     }
 
     private enum Kind { PLATFORM, LAGOON, ISLAND, REEF, SLOPE }
@@ -161,7 +161,7 @@ public class AtollPiece extends StructurePiece {
         }
         if (u <= 1.0) {
             double h = this.ringHeight(ctx, a);
-            double shape = 1.0 - Math.pow(Math.abs(2.0 * u - 1.0), 2.4);
+            double shape = 1.0 - Math.pow(Math.abs(2.0 * u - 1.0), 3.2);
             double rough = (ctx.noise(x, z, 0.22, 24) - 0.5) * 1.4;
             int top = (int) Math.round(water + Math.max(-3.0, h * shape + (h > 0 ? rough : rough * 0.5)));
             if (h <= 0.0) {
@@ -524,7 +524,7 @@ public class AtollPiece extends StructurePiece {
     private void palm(LairContext ctx, int x, int y, int z, int k) {
         int height = 6 + (int) (ctx.rand(k, 23, 71) * 4);
         double lean = ctx.rand(k, 24, 71) * Math.PI * 2.0;
-        double bend = 2.0 + ctx.rand(k, 25, 71) * 1.6;
+        double bend = 1.2 + ctx.rand(k, 25, 71) * 1.2;
         double lx = Math.cos(lean);
         double lz = Math.sin(lean);
         int px = x;

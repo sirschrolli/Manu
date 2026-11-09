@@ -478,7 +478,7 @@ public final class ModEntities {
     /** Karkinos, der Riffkoloss: Boss des Versunkenen Atolls – ein riesiger Einsiedler mit einer Tempelkuppel als Gehäuse. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity>> REEF_COLOSSUS =
             ENTITIES.registerEntityType("reef_colossus", io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity::new,
-                    MobCategory.MONSTER, builder -> builder.sized(4.2f, 3.4f).eyeHeight(2.6f).notInPeaceful().clientTrackingRange(16)
+                    MobCategory.MONSTER, builder -> builder.sized(5.2f, 4.2f).eyeHeight(3.2f).notInPeaceful().clientTrackingRange(16)
                             .updateInterval(2));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",

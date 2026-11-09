@@ -25,7 +25,11 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 /**
  * Nur zur Prüfung des Meeres (0.62), in einer echten Welt: das Versunkene Atoll aus der Luft, in der Lagune, am Hügel
@@ -72,6 +76,54 @@ final class AtollShowcase {
         });
     }
 
+    /**
+     * Sucht rund um die Mitte einen Blickpunkt ({@code distance} Blöcke entfernt, {@code height} hoch), von dem aus keine
+     * Säule und keine Palme die Sicht auf den Koloss verstellt – beginnend bei {@code prefer} Grad (0 = Osten, -90 = Norden).
+     */
+    private static Step pickView(double[] c, double[] cam, double distance, double height, double ty, double prefer) {
+        return Step.server(level -> {
+            Vec3 target = new Vec3(c[0], c[2] + ty, c[1]);
+            for (int i = 0; i < 36; i++) {
+                double off = (i % 2 == 0 ? 1 : -1) * ((i + 1) / 2) * 10.0;
+                double a = Math.toRadians(prefer + off);
+                Vec3 eye = new Vec3(c[0] + Math.cos(a) * distance, c[2] + height, c[1] + Math.sin(a) * distance);
+                boolean clear = true;
+                for (double up : new double[] {-1.8, 0.0, 1.8, 3.4}) {
+                    for (double side : new double[] {-3.8, -2.0, 0.0, 2.0, 3.8}) {
+                        Vec3 to = target.add(-Math.sin(a) * side, up, Math.cos(a) * side);
+                        if (level.clip(new ClipContext(eye, to, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, CollisionContext.empty()))
+                                .getType() != HitResult.Type.MISS) {
+                            clear = false;
+                        }
+                    }
+                }
+                if (clear) {
+                    cam[0] = eye.x - c[0];
+                    cam[1] = height;
+                    cam[2] = eye.z - c[1];
+                    KingdomsAtWar.LOGGER.info("[Showcase] Freier Blick bei {} Grad", Math.round(prefer + off));
+                    return;
+                }
+            }
+            cam[0] = Math.cos(Math.toRadians(prefer)) * distance;
+            cam[1] = height;
+            cam[2] = Math.sin(Math.toRadians(prefer)) * distance;
+        });
+    }
+
+    /** Kamera an den gewählten Blickpunkt, Blick auf die Mitte (plus {@code ty}). */
+    private static Step lookFromCam(double[] c, double[] cam, double ty) {
+        return Step.once(minecraft -> {
+            double dx = cam[0];
+            double dy = cam[1];
+            double dz = cam[2];
+            float yaw = (float) (-Math.atan2(-dx, -dz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ty - dy, Math.sqrt(dx * dx + dz * dz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", c[0] + dx, c[2] + dy - 1.62,
+                    c[1] + dz, yaw, pitch));
+        });
+    }
+
     private static void shot(Deque<Step> steps, String name, double[] c, double dx, double dy, double dz, double tx, double ty, double tz,
             int settle) {
         steps.add(look(c, dx, dy, dz, tx, ty, tz));
@@ -103,16 +155,22 @@ final class AtollShowcase {
             KingdomsAtWar.LOGGER.info("[Showcase] Säule Mitte: {}", col);
             KingdomsAtWar.LOGGER.info("[Showcase] Herz: {}", level.getBlockEntity(AtollLocator.core(center)));
         }));
+        steps.add(Step.waitTicks(200));
+        steps.add(Step.waitForChunks(1500));
         steps.add(Step.screenshot("atoll_aerial"));
-        shot(steps, "atoll_aerial_low", c, -58, 24, -46, 0, 0, 0, 60);
-        shot(steps, "atoll_lagoon", c, 15, 3.2, 23, 0, 2.0, 0, 50);
+        shot(steps, "atoll_aerial_low", c, -58, 26, -46, 0, 0, 0, 200);
+        shot(steps, "atoll_lagoon", c, 15, 3.2, 23, 0, 2.0, 0, 60);
         shot(steps, "atoll_mound", c, 5.5, 2.6, 8.5, 0, 1.2, 0, 40);
-        shot(steps, "atoll_ring", c, -24, 3.5, 12, -36, 2.0, -6, 40);
-        // unter Wasser vor dem Außenhang
-        shot(steps, "atoll_underwater", c, 3, -7, 50, 0, -9, 30, 60);
+        shot(steps, "atoll_islands", c, -14, 3.0, 6, -30, 3.0, -14, 60);
+        shot(steps, "atoll_beach", c, 21, 2.4, -6, 28, 2.5, -18, 60);
+        // unter Wasser: die Riffkante außen am Ring und ein Korallenkopf in der Lagune
+        shot(steps, "atoll_reef", c, 0, -3.2, 41, 0, -3.5, 30, 80);
+        shot(steps, "atoll_lagoon_underwater", c, 9, -0.6, 15, 3, -1.2, 9, 60);
         // Nacht: die Lagune leuchtet
         steps.add(Step.command("time set 18000"));
         shot(steps, "atoll_night", c, 14, 4.5, 20, 0, 1.5, 0, 80);
+        steps.add(Step.command("time set 23200"));
+        shot(steps, "atoll_dawn", c, -40, 16, 30, 0, 2, 0, 80);
         steps.add(Step.command("time set 6000"));
         fight(steps, c);
     }
@@ -121,8 +179,9 @@ final class AtollShowcase {
     private static void fight(Deque<Step> steps, double[] c) {
         ReefColossusEntity[] boss = new ReefColossusEntity[1];
         List<LivingEntity> soldiers = new ArrayList<>();
-        // Blick von vorn (er erwacht mit dem Gesicht nach Norden)
-        steps.add(look(c, 9, 5.5, -19, 0, 2.2, 0));
+        double[] near = new double[3];
+        double[] wide = new double[3];
+        steps.add(look(c, 6, 4.0, -13, 0, 2.0, 0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.server(level -> {
             BlockPos center = BlockPos.containing(c[0], c[2], c[1]);
@@ -131,6 +190,10 @@ final class AtollShowcase {
             }
             KingdomsAtWar.LOGGER.info("[Showcase] Karkinos erwacht: {}", boss[0]);
         }));
+        // Blick von vorn (er erwacht mit dem Gesicht nach Norden), ohne Säule davor (der Hügel ist jetzt fort)
+        steps.add(pickView(c, near, 14.0, 4.8, 2.4, -70));
+        steps.add(pickView(c, wide, 21.0, 7.0, 2.8, -75));
+        steps.add(lookFromCam(c, near, 2.0));
         steps.add(Step.waitTicks(22));
         steps.add(Step.screenshot("reef_awaken_1"));
         steps.add(Step.waitTicks(26));
@@ -155,8 +218,10 @@ final class AtollShowcase {
             }
         }));
         steps.add(Step.hud(true));
-        steps.add(look(c, 6, 6.5, -24, 0, 2.6, 0));
-        steps.add(Step.waitTicks(40));
+        steps.add(lookFromCam(c, wide, 2.4));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("reef_title"));
+        steps.add(Step.waitTicks(110));
         steps.add(Step.screenshot("reef_fight_bar"));
         steps.add(Step.hud(false));
         Object[][] attacks = {{"slam", 19}, {"grab", 24}, {"jet", 36}, {"roll", 44}, {"summon", 32}, {"tide", 34}, {"lance", 37},
@@ -179,7 +244,7 @@ final class AtollShowcase {
                 }
                 b.forceAttack(level, name, soldiers.isEmpty() ? null : soldiers.get(0), true);
             }));
-            steps.add(look(c, 10, 6.0, -20, 0, 2.0, -3));
+            steps.add(lookFromCam(c, "tide".equals(name) || "lance".equals(name) || "summon".equals(name) ? wide : near, 2.0));
             steps.add(Step.waitTicks((Integer) attack[1]));
             steps.add(Step.screenshot("reef_" + name));
             if ("burrow".equals(name)) {
@@ -206,7 +271,7 @@ final class AtollShowcase {
             b.hurtServer(level, b.damageSources().genericKill(), 100.0f);
             soldiers.forEach(LivingEntity::discard);
         }));
-        steps.add(look(c, 8, 5.0, -15, 0, 1.6, 0));
+        steps.add(lookFromCam(c, near, 1.4));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("reef_death"));
         steps.add(Step.waitTicks(42));
@@ -235,6 +300,8 @@ final class AtollShowcase {
         steps.add(Step.hud(true));
         steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
         steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        steps.add(Step.waitTicks(2));
         steps.add(Step.screenshot("tide_spear_hand"));
         steps.add(Step.hud(false));
         steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.THIRD_PERSON_FRONT)));

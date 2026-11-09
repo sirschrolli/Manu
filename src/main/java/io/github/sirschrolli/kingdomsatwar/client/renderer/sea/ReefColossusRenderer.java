@@ -24,20 +24,20 @@ import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Karkinos, der Riffkoloss, doppelt vergrößert: Augen, Speerklinge, Perle und Anemonen leuchten (im Gezeitenzorn
+ * Karkinos, der Riffkoloss, zweieinhalbfach vergrößert: Augen, Speerklinge, Perle und Anemonen leuchten (im Gezeitenzorn
  * pulsierend heller, im Tod verlöschend); um die Spitze des Speers liegt ein türkiser Schein. Er versinkt im Sand (beim
  * Erwachen, Eingraben und im Tod) und kreiselt im Panzerwirbel.
  */
 public class ReefColossusRenderer extends MobRenderer<ReefColossusEntity, ReefColossusRenderState, ReefColossusModel> {
-    public static final float SCALE = 2.0f;
+    public static final float SCALE = 2.5f;
     /** So tief (Blöcke) sinkt er, wenn er ganz vergraben ist. */
-    public static final float BURIED = 4.2f;
+    public static final float BURIED = 5.3f;
     private static final Identifier TEXTURE = KingdomsAtWar.id("textures/entity/reef_colossus/reef_colossus.png");
     private static final RenderType GLOW = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/reef_colossus/reef_colossus_glow.png"));
     private static final int SPEAR_GLOW = 0x5AE8F0;
 
     public ReefColossusRenderer(EntityRendererProvider.Context context) {
-        super(context, new ReefColossusModel(context.bakeLayer(ModModelLayers.REEF_COLOSSUS)), 2.4f);
+        super(context, new ReefColossusModel(context.bakeLayer(ModModelLayers.REEF_COLOSSUS)), 3.0f);
         this.addLayer(new RenderLayer<>(this) {
             @Override
             public void submit(PoseStack poseStack, SubmitNodeCollector collector, int light, ReefColossusRenderState state, float yRot,
@@ -117,7 +117,7 @@ public class ReefColossusRenderer extends MobRenderer<ReefColossusEntity, ReefCo
 
     @Override
     protected AABB getBoundingBoxForCulling(ReefColossusEntity entity, float partialTicks) {
-        return super.getBoundingBoxForCulling(entity, partialTicks).inflate(5.0);
+        return super.getBoundingBoxForCulling(entity, partialTicks).inflate(6.5);
     }
 
     @Override
@@ -174,6 +174,6 @@ public class ReefColossusRenderer extends MobRenderer<ReefColossusEntity, ReefCo
         if (state.deathTime > 0.0f) {
             strength *= 1.0f - Mth.clamp(state.deathTime / 55.0f, 0.0f, 1.0f);
         }
-        SeaGlow.halo(poseStack, collector, camera.orientation, tip, state.inTide ? 3.4f : 2.4f, SPEAR_GLOW, strength);
+        SeaGlow.halo(poseStack, collector, camera.orientation, tip, state.inTide ? 4.2f : 3.0f, SPEAR_GLOW, strength);
     }
 }
