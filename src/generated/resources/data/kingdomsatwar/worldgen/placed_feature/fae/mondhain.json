@@ -1,0 +1,14 @@
+{
+  "feature": "kingdomsatwar:fae/mondhain",
+  "placement": [
+    {
+      "type": "kingdomsatwar:spaced",
+      "salt": 9163,
+      "separation": 6,
+      "spacing": 20
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

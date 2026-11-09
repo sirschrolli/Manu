@@ -100,9 +100,10 @@ public class MoonMothEntity extends Monster {
         return false;
     }
 
+    /** Sie verschwinden nicht einfach in der Ferne – sie verglimmen nach einer halben Minute (oder mit ihrer Königin). */
     @Override
     public boolean removeWhenFarAway(double distanceSqr) {
-        return true;
+        return false;
     }
 
     @Override

@@ -141,7 +141,8 @@ public final class FaeFeatures {
     // --- Der Mondhain (einer pro Feld, in allen Biomen; die Lichtung der Mottenkönigin) ---
     static final Entry MONDHAIN = entry(STRUCTURES, "mondhain", io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature::new,
             List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SPACING,
-                    io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SALT, 0)));
+                    io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SALT, 0),
+                    BiomeFilter.biome()));
 
     // --- Ruinen ---
     static final Entry RUINS = entry(STRUCTURES, "ruins", FaeRuinFeature::new,

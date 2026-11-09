@@ -71,7 +71,8 @@ public class FairyEntity extends PathfinderMob {
                 .add(Attributes.MAX_HEALTH, 6.0)
                 .add(Attributes.FLYING_SPEED, 0.45)
                 .add(Attributes.MOVEMENT_SPEED, 0.22)
-                .add(Attributes.FOLLOW_RANGE, 16.0);
+                .add(Attributes.FOLLOW_RANGE, 16.0)
+                .add(Attributes.TEMPT_RANGE, 10.0);
     }
 
     @Override

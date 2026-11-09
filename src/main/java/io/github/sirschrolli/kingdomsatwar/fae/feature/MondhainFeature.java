@@ -1,7 +1,6 @@
 package io.github.sirschrolli.kingdomsatwar.fae.feature;
 
 import com.mojang.serialization.MapCodec;
-import io.github.sirschrolli.kingdomsatwar.fae.FaeTerrain;
 import io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,18 +60,25 @@ public record MondhainFeature() implements Feature {
         return true;
     }
 
-    /** Höhe der Lichtung: der Median der Bodenhöhen ringsum, aber mindestens zwei Blöcke über dem Wasser. */
+    /** Höhe der Lichtung: der Median der Bodenhöhen ringsum, aber mindestens zwei Blöcke über dem höchsten Wasser. */
     static int floorHeight(WorldGenLevel level, int cx, int cz) {
         List<Integer> heights = new ArrayList<>();
+        int water = Integer.MIN_VALUE;
         for (int dx = -12; dx <= 12; dx += 3) {
             for (int dz = -12; dz <= 12; dz += 3) {
                 if (dx * dx + dz * dz <= 144) {
-                    heights.add(groundAt(level, cx + dx, cz + dz));
+                    int ground = groundAt(level, cx + dx, cz + dz);
+                    heights.add(ground);
+                    int top = FaeBuild.surface(level, cx + dx, cz + dz) - 1;
+                    if (top > ground && level.getFluidState(new BlockPos(cx + dx, top, cz + dz)).is(FluidTags.WATER)) {
+                        water = Math.max(water, top);
+                    }
                 }
             }
         }
         Collections.sort(heights);
-        return Math.max(FaeTerrain.SEA_LEVEL + 1, heights.get(heights.size() / 2));
+        int median = heights.get(heights.size() / 2);
+        return water == Integer.MIN_VALUE ? median : Math.max(median, water + 2);
     }
 
     /** Oberster Boden-Block der Spalte (unter Wasser, Pflanzen, Pilzen und Laub). */

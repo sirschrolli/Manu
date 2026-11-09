@@ -49,6 +49,7 @@ public class MothQueenRenderer extends MobRenderer<MothQueenEntity, FaeRenderSta
 
     @Override
     protected int getBlockLightLevel(MothQueenEntity entity, BlockPos pos) {
-        return Math.max(9, super.getBlockLightLevel(entity, pos));
+        // sie schimmert selbst im Schatten der Bäume (sonst wirkt sie von unten fast schwarz)
+        return Math.max(13, super.getBlockLightLevel(entity, pos));
     }
 }

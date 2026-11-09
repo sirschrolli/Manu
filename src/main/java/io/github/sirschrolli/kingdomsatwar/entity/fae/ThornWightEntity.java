@@ -90,7 +90,7 @@ public class ThornWightEntity extends Monster {
     }
 
     /** Eine Salve aus drei Dornen, leicht gefächert, auf das Ziel. */
-    void volley(ServerLevel level, LivingEntity target) {
+    public void volley(ServerLevel level, LivingEntity target) {
         this.playSound(ModSounds.THORN_VOLLEY.get(), 1.0f, 0.9f + this.random.nextFloat() * 0.2f);
         for (int i = -1; i <= 1; i++) {
             ThornProjectile thorn = new ThornProjectile(level, this);

@@ -387,6 +387,219 @@ final class FaeShowcase {
         steps.add(Step.screenshot("fae_creatures_wisp"));
     }
 
+    // =====================================================================================
+    // Der Mondhain und Noctua, die Mottenkönigin
+    // =====================================================================================
+
+    /**
+     * Der nächste echte Mondhain (aus der Weltgenerierung): Übersicht und Altar, dann erwacht die Königin, und für jeden
+     * Angriff folgt die Kamera ihr. Ziel ist ein unverwundbarer, reglos stehender Dummy in der Mitte; zuletzt die
+     * Feen-Elytren an einem Rüstungsständer.
+     */
+    static void boss(Deque<Step> steps) {
+        double[] c = new double[3];
+        int[] cocoon = new int[3];
+        int[] ids = new int[2];
+        boolean[] ready = new boolean[1];
+        steps.add(Step.hud(false));
+        steps.add(Step.command("gamerule spawn_monsters false"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("difficulty normal"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level == null) {
+                ready[0] = true;
+                return;
+            }
+            BlockPos center = io.github.sirschrolli.kingdomsatwar.fae.Mondhain.nearest(level.getSeed(), 600, 600);
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    level.setChunkForced((center.getX() >> 4) + dx, (center.getZ() >> 4) + dz, true);
+                }
+            }
+            int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center.getX(), center.getZ());
+            BlockPos found = null;
+            for (int y = top + 2; y > top - 12 && found == null; y--) {
+                BlockPos p = new BlockPos(center.getX(), y, center.getZ());
+                if (level.getBlockState(p).is(FaeBlocks.MOTH_COCOON.get())) {
+                    found = p;
+                }
+            }
+            BlockPos home = found != null ? found : new BlockPos(center.getX(), top, center.getZ());
+            cocoon[0] = home.getX();
+            cocoon[1] = home.getY();
+            cocoon[2] = home.getZ();
+            c[0] = home.getX() + 0.5;
+            c[1] = home.getY() - io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature.COCOON_HEIGHT + 1;
+            c[2] = home.getZ() + 0.5;
+            ready[0] = true;
+        }));
+        steps.add(Step.until(() -> ready[0], 6000));
+        double[] cam = new double[3];
+        // Übersicht von schräg oben
+        steps.add(at(c, cam, -5.0, 38.0, -22.0, 0.0, 0.0, 0.0));
+        steps.add(arrived(cam));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(900));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("fae_mondhain_overview"));
+        steps.add(at(c, cam, 9.0, 5.0, -16.0, 0.0, 2.0, 0.0));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.waitForChunks(300));
+        steps.add(Step.screenshot("fae_mondhain_henge"));
+        steps.add(at(c, cam, 0.0, 1.0, -6.8, 0.0, 3.3, 0.0));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("fae_mondhain_cocoon"));
+        // die Königin erwacht (Ziel: ein reglos stehender, unverwundbarer Dummy auf dem Pfad)
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level == null) {
+                return;
+            }
+            var dummy = creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.SOLDIERS.get(
+                    io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get(), c[0], c[1], c[2] - 9.5, 180, m -> {
+                // unverwundbar, aber ein echter Gegner (Unverwundbare übersieht sie)
+                m.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 1_000_000, 4,
+                        false, false));
+                m.setSilent(true);
+            });
+            ids[1] = dummy.getId();
+            BlockPos home = new BlockPos(cocoon[0], cocoon[1], cocoon[2]);
+            io.github.sirschrolli.kingdomsatwar.block.fae.MothCocoonBlock.awaken(level, home, null);
+            var queens = level.getEntitiesOfClass(io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.class,
+                    new net.minecraft.world.phys.AABB(home).inflate(8.0));
+            if (!queens.isEmpty()) {
+                ids[0] = queens.getFirst().getId();
+                queens.getFirst().setTarget(dummy);
+            }
+        }));
+        steps.add(at(c, cam, 0.0, 2.6, -9.0, 0.0, 5.4, 0.0));
+        steps.add(Step.waitTicks(52));
+        steps.add(Step.screenshot("fae_moth_awaken"));
+        steps.add(Step.waitTicks(60));
+        for (String[] shot : new String[][] {{"GUST", "18", "fae_moth_gust"}, {"BEAM", "30", "fae_moth_beam_rings"}, {"BEAM", "6", "fae_moth_beam"},
+                {"SWARM", "26", "fae_moth_swarm"}, {"SCALES", "30", "fae_moth_scales"}, {"LULLABY", "40", "fae_moth_lullaby"},
+                {"DIVE", "17", "fae_moth_dive"}}) {
+            boolean chain = shot[2].equals("fae_moth_beam");
+            if (!chain) {
+                steps.add(Step.server(overworld -> {
+                    ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+                    if (level != null && level.getEntity(ids[0]) instanceof io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity queen) {
+                        if (level.getEntity(ids[1]) instanceof net.minecraft.world.entity.LivingEntity dummy) {
+                            // der Ritter steht wieder auf seinem Platz auf dem Pfad, die Königin schwebt über der Lichtung
+                            dummy.teleportTo(c[0], c[1], c[2] - 9.5);
+                            dummy.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                            if (shot[0].equals("BEAM") || shot[0].equals("DIVE")) {
+                                queen.snapTo(c[0] + 2.0, c[1] + 8.0, c[2] - 3.0, 180.0f, 0.0f);
+                                queen.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                            }
+                            queen.setTarget(dummy);
+                        }
+                        queen.forceAttack(io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.Attack.valueOf(shot[0]));
+                    }
+                }));
+            }
+            if (shot[0].equals("DIVE")) {
+                // der Ritter weicht im letzten Moment aus: sie prallt auf und liegt benommen da
+                steps.add(Step.waitTicks(11));
+                steps.add(Step.server(overworld -> {
+                    ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+                    if (level != null && level.getEntity(ids[1]) instanceof net.minecraft.world.entity.Entity dummy) {
+                        dummy.teleportTo(dummy.getX() + 5.0, dummy.getY(), dummy.getZ());
+                    }
+                }));
+                steps.add(Step.waitTicks(Integer.parseInt(shot[1]) - 11));
+            } else {
+                steps.add(Step.waitTicks(Integer.parseInt(shot[1])));
+            }
+            steps.add(shot[0].equals("BEAM") ? at(c, cam, 5.0, 5.0, -1.5, 0.0, 0.8, -9.5) : follow(ids, 6.5));
+            steps.add(Step.waitTicks(3));
+            steps.add(Step.screenshot(shot[2]));
+            steps.add(Step.waitTicks(shot[0].equals("DIVE") ? 14 : 50));
+        }
+        // nach dem Sturzflug: benommen am Boden
+        steps.add(follow(ids, 7.0));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.screenshot("fae_moth_stunned"));
+        steps.add(Step.waitTicks(70));
+        // Nahaufnahme
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level != null && level.getEntity(ids[0]) instanceof io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity queen) {
+                queen.setNoAi(true);
+                queen.forceAttack(io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.Attack.NONE);
+                queen.snapTo(c[0], c[1] + 3.5, c[2] - 2.0, 0.0f, 0.0f);
+                queen.setYBodyRot(0.0f);
+                queen.setYHeadRot(0.0f);
+                queen.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+            }
+        }));
+        steps.add(at(c, cam, -2.5, 7.0, 5.2, 0.0, 5.3, -2.0));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("fae_moth_closeup"));
+        steps.add(at(c, cam, 0.0, 9.5, -2.0, 0.0, 4.0, -2.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("fae_moth_top"));
+        // die Feen-Elytren an einem Rüstungsständer
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level == null) {
+                return;
+            }
+            var stand = new net.minecraft.world.entity.decoration.ArmorStand(level, c[0] + 6.5, c[1], c[2] - 6.5);
+            stand.setYRot(180.0f);
+            stand.setYBodyRot(180.0f);
+            stand.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new net.minecraft.world.item.ItemStack(FaeBlocks.FAE_ELYTRA.get()));
+            stand.addTag(STAGE_TAG);
+            level.addFreshEntity(stand);
+        }));
+        steps.add(at(c, cam, 6.5, -0.2, -3.6, 6.5, 1.2, -6.5));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("fae_elytra_back"));
+        steps.add(at(c, cam, 8.6, 0.2, -4.4, 6.5, 1.2, -6.5));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("fae_elytra_side"));
+    }
+
+    /** Kamera schräg über dem Ziel der Königin (für die Leuchtkreise und Strahlen des Mondstrahls), Blick auf den Boden. */
+    private static Step watchGround(int[] ids, double distance) {
+        return Step.once(minecraft -> {
+            if (minecraft.level == null || !(minecraft.level.getEntity(ids[1]) instanceof net.minecraft.world.entity.Entity target)) {
+                return;
+            }
+            net.minecraft.world.phys.Vec3 t = target.position();
+            net.minecraft.world.phys.Vec3 eye = t.add(distance * 0.55, distance * 0.6, -distance * 0.6);
+            net.minecraft.world.phys.Vec3 look = t.add(0.0, 1.5, 0.0).subtract(eye);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                    "execute in kingdomsatwar:fae_realm run tp @s %.2f %.2f %.2f %.1f %.1f", eye.x, eye.y - 1.62, eye.z, yaw, pitch));
+        });
+    }
+
+    /** Kamera im Abstand {@code distance} vor der Königin (zwischen ihr und ihrem Ziel), leicht erhöht, Blick auf sie. */
+    private static Step follow(int[] ids, double distance) {
+        return Step.once(minecraft -> {
+            if (minecraft.level == null || !(minecraft.level.getEntity(ids[0]) instanceof net.minecraft.world.entity.Entity queen)) {
+                return;
+            }
+            net.minecraft.world.phys.Vec3 q = queen.position().add(0.0, 1.8, 0.0);
+            net.minecraft.world.phys.Vec3 toward = minecraft.level.getEntity(ids[1]) instanceof net.minecraft.world.entity.Entity t
+                    ? t.position().subtract(q).multiply(1.0, 0.0, 1.0) : new net.minecraft.world.phys.Vec3(0.0, 0.0, -1.0);
+            if (toward.lengthSqr() < 1.0e-3) {
+                toward = new net.minecraft.world.phys.Vec3(0.0, 0.0, -1.0);
+            }
+            net.minecraft.world.phys.Vec3 dir = toward.normalize().yRot(0.6f);
+            net.minecraft.world.phys.Vec3 eye = q.add(dir.scale(distance)).add(0.0, distance * 0.12, 0.0);
+            net.minecraft.world.phys.Vec3 look = q.subtract(eye);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                    "execute in kingdomsatwar:fae_realm run tp @s %.2f %.2f %.2f %.1f %.1f", eye.x, eye.y - 1.62, eye.z, yaw, pitch));
+        });
+    }
+
     private static <T extends net.minecraft.world.entity.Mob> T creature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
             double x, double y, double z, float yaw, java.util.function.Consumer<T> setup) {
         T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);

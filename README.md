@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.62.0 – Die Tiefe des Meeres.** Weit draußen liegt das **Versunkene Atoll**: ein Ring aus weißen Sandinseln mit Kokospalmen, Schildkrötengelegen und Nadeln aus Korallenkalk, außen gesäumt von einem lebenden Korallenriff, innen eine türkise Lagune mit Korallenköpfen – und in ihrer Mitte die Ruine eines Tempels des Meeresvolks. Auf dem Tempelplatz liegt ein Sandhügel, aus dem ein leuchtender Speer ragt. Wer ihn greifen will, weckt **Karkinos, den Riffkoloss**: eine riesige Krabbe mit einem ganzen Riff auf dem Rücken, dem neuen ersten Boss der Mod mit eigener Bossleiste, eigenen Klängen und acht Angriffen – Scherenschlag, Zangengriff, Blasenstrahl, Panzerwirbel, Eingraben, Ruf der Brut, Gezeitenzorn und Flutlanzen. Besiegt lässt er den **Gezeiten-Speer** fallen, die erste eigene 3D-Waffe der Mod: Im Wasser und im Regen trifft er härter und schlägt bei jedem Treffer eine Welle, wer ihn hält, schwimmt wie ein Delfin. Mit dem **Gezeitenhorn** hört man, wo das Atoll liegt, und ruft Karkinos zurück. Der **Meeresgrund** bekommt sechs neue Landschaften: Tangwälder mit **Riesentang**, Felsnadeln, **Anemonengärten**, **Muschelbänke**, **heiße Quellen** mit Schloten und Röhrenwürmern und **Leuchtfelder**; nachts leuchtet das Meer, wo es bewegt wird.
+> **Testversion 0.63.0 – Das Feenreich.** Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
+> In 0.62 kam die Tiefe des Meeres: das **Versunkene Atoll** mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), der **Gezeiten-Speer** als erste eigene 3D-Waffe und das Gezeitenhorn, dazu sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und das Meeresleuchten.
 > In 0.61 kam das lebendige Meer: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, dazu Tiefsee-Laterne, Haizahn-Pfeile und Nachtsicht aus Leuchtgelee. Die 53 Standard-Biome der Oberwelt bekamen eine eigene Klangwelt (die Klangteppiche kommen und gehen und lassen sich in der Konfiguration leiser stellen), das Leveln dauert länger (Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung; die Erfahrung, die du bekommst, bleibt gleich), und der Zerbrochene König wurde zum stärksten Gegner der Mod.
 > In 0.60 kam der Zerbrochene König: Hoch in der Leere schwebt der Thron der Alten. Wer ihn betritt, weckt den letzten König der Alten, einen schwebenden Riesen aus Marmor und Gold mit zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Besiegt lässt er seine Krone fallen: ein Helm als echtes 3D-Modell, mit dem du sanft fällst. Dazu kam `/kaw dim <oberwelt|nether|end|schattenwelt|leere>`, das im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen wechselt.
 > In 0.59 kam die Leere: eine eigene Dimension hinter dem Herz der Schatten mit sechs Biomen aus treibenden Bruchstücken, Ruinen der Alten und vier Wesen.
@@ -324,7 +325,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Die Leere**: eigene Dimension hinter dem Herz der Schatten – sechs Biome aus treibenden Bruchstücken, Ruinen der Alten, eigene Blöcke, Klangwelten und vier Wesen (Leerenschlund, Splitterwächter, Zerrling, reitbarer Sternenrochen) | ✅ fertig |
 | **Der Zerbrochene König**: Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm; seit 0.61 der stärkste Gegner (1.800 Lebenspunkte, Zorn des Königs, Doppelschlag) | ✅ fertig |
 | **Das lebendige Meer**: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
-| **Die Tiefe des Meeres** (neu): sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
+| **Die Tiefe des Meeres**: sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
+| **Das Feenreich** (neu): eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -1685,6 +1687,83 @@ Alle neuen Blöcke (Anemonen, Muscheln, Röhrenwürmer, Schlotgestein, Schwefelk
 Riesentang) und das Spawn-Ei von Karkinos liegen im Kreativ-Reiter **„Das Meer“**. Muscheln werden in der Werkbank zu
 Knochenmehl.
 
+### Das Feenreich
+
+![Das Feenreich: Landschaften, Wesen, der Mondhain, Noctua und die Feen-Elytren](docs/bilder/feenreich.jpg)
+
+Seit 0.63 gibt es eine neue Dimension, die du **schon vor den Drachen** betreten kannst: das **Feenreich**. Dort geht
+die Sonne nie unter – sie steht für immer am Horizont, der Himmel glüht in Orange und Rosa, auf der anderen Seite hängt
+der volle Mond über dem Land. Es gibt keine Nacht, Monster erscheinen nur in der Dornenwildnis.
+
+**Der Weg hinein:** Baue einen Rahmen aus **Mondsteinziegeln** wie ein Netherportal (mindestens 4 breit und 5 hoch) und
+streue **Feenstaub** darauf (Rechtsklick auf den Rahmen) – der Rahmen füllt sich mit einem wogenden Schleier in Violett,
+Rosa und Gold. Auf der anderen Seite entsteht ein Gegenstück auf einer kleinen Plattform; durch dasselbe Portal geht es
+zurück.
+
+| Gegenstand | Rezept |
+|---|---|
+| **Feenstaub** (2) | ein Amethystsplitter, Leuchtbeeren und eine kleine Blume (formlos) |
+| **Mondsteinziegel** (4) | vier Steinziegel um einen Amethystsplitter |
+| **Gemeißelter Mondstein** | zwei Mondsteinziegel-Stufen übereinander (oder Steinsäge) – eine leuchtende Mondsichel |
+
+| Biom | Was dort ist |
+|---|---|
+| **Blütenwiesen** | sanfte Hügel voller Feenhalme, Mondglocken, Feenrosen und Sternspitzen, einzelne Glimmerbäume, Feenringe |
+| **Glimmerwald** | ein Wald aus schlanken Glimmerbäumen und gewaltigen **Glimmerriesen** (zwei Stämme dick, mit Brettwurzeln und Leuchtranken), deren Laub rosa oder türkis leuchtet |
+| **Pilzhain** | **Riesenpilze** in Rosa, Himmelblau und Violett (Schirm, Kuppel oder Glocke), dazwischen Laternenpilze und Moos mit leuchtenden Sporen; hier leben die Pilzlinge |
+| **Mondseen** | stille Seen mit **Mondlilien**, deren Blüten leuchten, an den Ufern Trauerglimmer mit hängenden Zweigen und helle Findlinge |
+| **Dornenwildnis** | dunkle, verdrehte Dornenbäume, Hecken aus **Dornen** (sie stechen) und Dornenranken – die Heimat der Dornwichte |
+
+Überall stehen **Ruinen** eines Volkes, das hier lange vor den Feen Mondstein brach: Steinkreise mit Altar, Pavillons mit
+Brunnenbecken, frei stehende Feentore und Turmstümpfe mit Resten einer Wendeltreppe. In vielen liegt eine Truhe mit
+Feenstaub, Mondstein, Amethyst, Leuchtbeeren, Gold, Smaragden und Erfahrungsfläschchen. **Feenringe** aus
+Laternenpilzen wachsen auf den Wiesen. Alle Blöcke – **Feenstein** und **Feensteinziegel**, Mondstein, Feenerde,
+**Feengras** (nimmt die Farbe seines Bioms an), **Feenmoos**, **Glimmerholz** (vier Setzlinge im Quadrat werden zu einem
+Glimmerriesen), Riesenpilze und die Pflanzen – liegen im Kreativ-Reiter **„Das Feenreich“**.
+
+| Wesen | Wie es sich verhält |
+|---|---|
+| **Fee** | schwirrt in vier Farben über die Wiesen; mit einer kleinen Blume in der Hand folgt sie dir – schenkst du sie ihr, tanzt sie vor Freude und lässt **Feenstaub** fallen (alle zwei, drei Minuten einmal); wer keine Blume trägt, vor dem flieht sie |
+| **Feen-Irrlicht** | ein goldenes Licht, das dich zu einem verborgenen Schatz führt: Es fliegt voraus zur nächsten Ruinentruhe, wartet, wenn du zurückfällst, und verglimmt in einem Funkenregen, wenn ihr angekommen seid |
+| **Pilzling** | ein knapp kniehohes Pilzwesen; kommst du zu nah (ohne zu schleichen), duckt es sich unter seinen Hut und sieht aus wie ein gewöhnlicher Pilz. Wer es schlägt, bekommt eine Wolke Sporen ins Gesicht (Übelkeit und Langsamkeit) |
+| **Dornwicht** | nur in der Dornenwildnis: ein mannshoher Geist aus Dornenranken (40 Lebenspunkte); sein Hieb vergiftet und verlangsamt, aus der Ferne schießt er Salven aus drei giftigen Dornen |
+
+**Der Mondhain:** Etwa alle 300 Blöcke liegt im Feenreich eine runde Lichtung, umgeben von Glimmerbäumen, behängt mit
+**Mottenseide** und langen **Seidenfäden**. Ein Kreis aus fünf Trilithen aus Mondstein (einer ist eingestürzt) umgibt
+einen Pfadring, vier Wege führen zum Altar in der Mitte – und auf ihm liegt ein mannshoher **Kokon**, in dem es leise
+pulsiert. Streust du **Feenstaub** darauf, reißt er auf, und **Noctua, die Mottenkönigin** steigt empor (Operatoren
+finden den nächsten Mondhain mit `/kaw mondhain`).
+
+**Noctua, die Mottenkönigin** – ein riesiger Mondfalter mit mondgrünen und fliederfarbenen Flügeln, leuchtenden
+Augenflecken, gefiederten Fühlern und einer goldenen Mondsichel-Krone. Sie ist wie Karkinos ein **früher Boss**
+(360 Lebenspunkte, Rüstung 6), eigene Bossleiste mit Mottenflügeln und Flügelstaub, eigene Klänge. Sie umkreist ihre
+Gegner hoch in der Luft:
+
+| Angriff | Was geschieht |
+|---|---|
+| **Flügelsturm** | sie hält inne und schlägt dreimal gewaltig mit den Flügeln – alles vor ihr wird zurückgeworfen |
+| **Schuppenwolke** | über ihrem Ziel rieselt glitzernder Schuppenstaub: Schwäche, Langsamkeit und Schaden, solange man darin steht |
+| **Mottenschwarm** | ein schriller Ruf, und Mondfalter stürzen sich auf ihre Feinde (sie verglimmen nach einer halben Minute) |
+| **Mondstrahl** | leuchtende Kreise am Boden zeigen, wo gleich Strahlen aus Mondlicht einschlagen – raus aus dem Kreis! |
+| **Sturzflug** | sie steigt und stößt pfeilschnell herab. Weichst du aus, prallt sie auf den Boden und liegt drei Sekunden **benommen** da – dann trifft man sie härter |
+| **Schlaflied** | sie singt: Wer sie dabei ansieht, wird schwer, langsam und schläfrig – also wegsehen |
+| **Raserei** | unter halber Kraft wird sie schneller, ruft mehr Falter und schickt mehr Strahlen |
+
+Wer ihre Lichtung verlässt, den lässt sie ziehen; ohne Gegner heilt sie sich langsam. Besiegt hinterlässt sie die
+**Feen-Elytren**, dazu viel Feenstaub, Mottenseide, gemeißelten Mondstein, einen **Herzkristall**, Edelsteine und Gold.
+Auf dem Altar spinnt sich danach ein neuer Kokon – du (oder deine Freunde) könnt sie noch einmal herausfordern.
+
+**Die Feen-Elytren** sind die Flügel der Mottenkönigin – und am Rücken siehst du sie als echte Mottenflügel mit
+Augenflecken und langen Schwänzen:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Gleiten** | wie Elytren (auch mit Feuerwerk) |
+| **Flügelschlag** | im Gleitflug **Springen** drücken: ein kräftiger Schlag trägt dich nach vorn und nach oben, mit einem Wirbel aus Funken (alle zwei Sekunden, kostet einen Punkt Haltbarkeit) |
+| **Feenleicht** | wer sie trägt, nimmt beim Aufprall an Wänden im Flug keinen Schaden |
+| **Funkenspur** | hinter den Flügelspitzen zieht eine Spur aus Feenfunken her |
+| Haltbarkeit | 540 (mehr als Elytren), mit **Feenstaub** zu reparieren, verzauberbar wie Elytren, episch |
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2211,6 +2290,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw lair` · `/kaw lair awaken` · `/kaw lair reset` | (nur Operatoren) Lage aller Nester anzeigen, den Drachen im Nest wecken, ein Nest zurücksetzen |
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
 | `/kaw atoll` · `/kaw atoll tp` · `/kaw atoll awaken` · `/kaw atoll reset` | (nur Operatoren) Lage des Versunkenen Atolls anzeigen (`/locate` findet es nicht), an den Rand der Lagune reisen, Karkinos wecken, den Hügel wieder aufschütten |
+| `/kaw mondhain` · `/kaw mondhain tp` · `/kaw mondhain awaken` | (nur Operatoren) Lage des nächsten Mondhains im Feenreich anzeigen (`/locate` findet ihn nicht), dorthin reisen (auch aus einer anderen Welt), die Mottenkönigin aus ihrem Kokon wecken |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |

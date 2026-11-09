@@ -63,7 +63,7 @@ public class MothQueenEntity extends Monster {
     public static final int AWAKEN_TICKS = 80;
 
     public enum Attack {
-        NONE(0), AWAKEN(AWAKEN_TICKS), GUST(44), SCALES(56), SWARM(34), BEAM(64), DIVE(46), LULLABY(70), STUNNED(60);
+        NONE(0), AWAKEN(AWAKEN_TICKS), GUST(44), SCALES(56), SWARM(34), BEAM(64), DIVE(50), LULLABY(70), STUNNED(60);
 
         public final int duration;
 
@@ -86,6 +86,7 @@ public class MothQueenEntity extends Monster {
     private @Nullable BlockPos home;
     private final List<Vec3> beams = new ArrayList<>();
     private Vec3 diveDir = Vec3.ZERO;
+    private boolean diveHit;
     private boolean lullabyWarned;
     private int idleTicks;
     /** Nur im Client: seit wann der laufende Angriff läuft (für die Animationen). */
@@ -148,6 +149,11 @@ public class MothQueenEntity extends Monster {
         this.begin(Attack.AWAKEN);
     }
 
+    /** Beginnt sofort einen bestimmten Angriff (für Tests und die Vorführung). */
+    public void forceAttack(Attack next) {
+        this.begin(next);
+    }
+
     private void begin(Attack next) {
         this.attack = next;
         this.attackTick = 0;
@@ -185,10 +191,20 @@ public class MothQueenEntity extends Monster {
         if (this.attack == Attack.AWAKEN && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return false;
         }
+        if (source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL)) {
+            return false;
+        }
         if (this.attack == Attack.STUNNED) {
             amount *= 1.5f;
         }
-        return super.hurtServer(level, source, amount);
+        boolean hurt = super.hurtServer(level, source, amount);
+        // wer sie angreift (auch Wölfe oder Golems), wird ihr Ziel
+        if (hurt && source.getEntity() instanceof LivingEntity attacker && attacker != this
+                && !(attacker instanceof Player player && (player.isCreative() || player.isSpectator()))
+                && !(this.getTarget() instanceof Player)) {
+            this.setTarget(attacker);
+        }
+        return hurt;
     }
 
     @Override
@@ -216,6 +232,13 @@ public class MothQueenEntity extends Monster {
     public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossBar.removePlayer(player);
+    }
+
+    @Override
+    public void tick() {
+        // sie gleitet durch Laub und Äste; nur benommen fällt sie wie ein Körper zu Boden
+        this.noPhysics = this.currentAttack() != Attack.STUNNED;
+        super.tick();
     }
 
     @Override
@@ -296,8 +319,8 @@ public class MothQueenEntity extends Monster {
             return null;
         }
         LivingEntity current = this.getTarget();
-        if (current instanceof Player player && player.isAlive() && !player.isCreative() && !player.isSpectator()
-                && player.distanceToSqr(this) < 56.0 * 56.0) {
+        if (current != null && current.isAlive() && current.distanceToSqr(this) < 56.0 * 56.0
+                && !(current instanceof Player player && (player.isCreative() || player.isSpectator()))) {
             return current;
         }
         return level.getNearestPlayer(this.getX(), this.getY(), this.getZ(), 40.0,
@@ -377,6 +400,25 @@ public class MothQueenEntity extends Monster {
 
     // ------------------------------------------------------------------ Angriffe
 
+    /**
+     * Wen ihre Angriffe treffen: alle Lebewesen außer ihr selbst, den Wesen des Feenreichs (Feen, Pilzlinge, ihre Falter),
+     * Rüstungsständern und Spielern im Kreativ- oder Zuschauermodus – also Spieler, ihre Soldaten, Tiere und Begleiter.
+     */
+    private boolean canStrike(LivingEntity entity) {
+        return entity != this && entity.isAlive() && !entity.is(io.github.sirschrolli.kingdomsatwar.registry.ModTags.EntityTypes.FAE_CREATURES)
+                && !(entity instanceof net.minecraft.world.entity.decoration.ArmorStand)
+                && !(entity instanceof Player player && (player.isCreative() || player.isSpectator()));
+    }
+
+    private List<LivingEntity> victims(ServerLevel level, AABB area) {
+        return level.getEntitiesOfClass(LivingEntity.class, area, this::canStrike);
+    }
+
+    private static void push(LivingEntity entity, Vec3 push) {
+        entity.push(push.x, push.y, push.z);
+        entity.needsSync = true;
+    }
+
     /** Flügelsturm: anhalten, dreimal gewaltig schlagen – alles vor ihr wird zurückgeworfen. */
     private void tickGust(ServerLevel level, LivingEntity target) {
         this.setDeltaMovement(this.getDeltaMovement().scale(0.6));
@@ -384,18 +426,14 @@ public class MothQueenEntity extends Monster {
         if (t == 12 || t == 24 || t == 36) {
             level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_GUST.get(), SoundSource.HOSTILE, 3.0f, 0.9f + t * 0.005f);
             Vec3 forward = target.position().subtract(this.position()).normalize();
-            for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(16.0))) {
-                if (player.isCreative() || player.isSpectator()) {
-                    continue;
-                }
-                Vec3 to = player.position().subtract(this.position());
+            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(16.0))) {
+                Vec3 to = victim.position().subtract(this.position());
                 if (to.normalize().dot(forward) < 0.25) {
                     continue;
                 }
-                Vec3 push = to.normalize().scale(1.3).add(0.0, 0.45, 0.0);
-                player.push(push.x, push.y, push.z);
-                player.needsSync = true;
-                player.hurtServer(level, this.damageSources().mobAttack(this), 2.0f);
+                double resist = 1.0 - victim.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * 0.6;
+                push(victim, to.normalize().scale(1.3 * resist).add(0.0, 0.45 * resist, 0.0));
+                victim.hurtServer(level, this.damageSources().mobAttack(this), 2.0f);
             }
             for (int i = 0; i < 30; i++) {
                 double s = this.random.nextDouble() * 12.0;
@@ -422,16 +460,14 @@ public class MothQueenEntity extends Monster {
                 double a = this.random.nextDouble() * Math.PI * 2.0;
                 double r = Math.sqrt(this.random.nextDouble()) * radius;
                 double y = center.y + this.random.nextDouble() * 6.0;
-                level.sendParticles(i % 3 == 0 ? ModParticles.FAE_SPARK.get() : ModParticles.BOSS_DUST.get(), center.x + Math.cos(a) * r, y,
+                // silbriger Schuppenstaub mit rosa Glitzer
+                level.sendParticles(i % 3 == 0 ? ModParticles.FAE_SPARK.get() : ParticleTypes.WHITE_ASH, center.x + Math.cos(a) * r, y,
                         center.z + Math.sin(a) * r, 1, 0.0, -0.05, 0.0, 0.01);
             }
-            for (Player player : level.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(radius, 7.0, radius))) {
-                if (player.isCreative() || player.isSpectator()) {
-                    continue;
-                }
-                player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 80, 0), this);
-                player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 1), this);
-                player.hurtServer(level, this.damageSources().indirectMagic(this, this), 1.5f);
+            for (LivingEntity victim : this.victims(level, new AABB(center, center).inflate(radius, 7.0, radius))) {
+                victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 80, 0), this);
+                victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 1), this);
+                victim.hurtServer(level, this.damageSources().indirectMagic(this, this), 1.5f);
             }
         }
     }
@@ -467,11 +503,15 @@ public class MothQueenEntity extends Monster {
             this.beams.clear();
             level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_BEAM_CHARGE.get(), SoundSource.HOSTILE, 3.0f, 1.0f);
             int count = this.isEnraged() ? 4 : 3;
-            List<Player> players = level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0),
-                    p -> !p.isCreative() && !p.isSpectator());
+            // ein Strahl auf jeden Spieler (und das Ziel), die übrigen streuen um das Ziel
+            List<LivingEntity> marked = new ArrayList<>(level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0),
+                    this::canStrike));
+            if (!marked.contains(target)) {
+                marked.addFirst(target);
+            }
             for (int i = 0; i < count; i++) {
-                LivingEntity at = players.isEmpty() ? target : players.get(i % players.size());
-                double spread = i < players.size() ? 0.0 : 4.0;
+                LivingEntity at = marked.get(i % marked.size());
+                double spread = i < marked.size() ? 0.0 : 4.0;
                 double x = at.getX() + (this.random.nextDouble() - 0.5) * 2.0 * spread;
                 double z = at.getZ() + (this.random.nextDouble() - 0.5) * 2.0 * spread;
                 int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(x), Mth.floor(z));
@@ -494,52 +534,45 @@ public class MothQueenEntity extends Monster {
                     level.sendParticles(ModParticles.FAE_SPARK.get(), b.x, b.y + h * 0.8, b.z, 2, 0.6, 0.3, 0.6, 0.02);
                 }
                 level.sendParticles(net.minecraft.core.particles.ColorParticleOption.create(ParticleTypes.FLASH, 0xFFFFD8F4), b.x, b.y + 0.5, b.z, 1, 0.0, 0.0, 0.0, 0.0);
-                for (LivingEntity hit : level.getEntitiesOfClass(LivingEntity.class, new AABB(b, b).inflate(2.4, 3.0, 2.4),
-                        e -> e != this && !(e instanceof MoonMothEntity))) {
-                    if (hit instanceof Player p && (p.isCreative() || p.isSpectator())) {
-                        continue;
-                    }
+                for (LivingEntity hit : this.victims(level, new AABB(b, b).inflate(2.4, 3.0, 2.4))) {
                     hit.hurtServer(level, this.damageSources().indirectMagic(this, this), this.isEnraged() ? 11.0f : 9.0f);
                 }
             }
         }
     }
 
-    /** Sturzflug: kurz steigen, dann pfeilschnell auf das Ziel herab; wer getroffen wird, fliegt. */
+    /**
+     * Sturzflug: kurz steigen, dann pfeilschnell auf die Stelle herab, an der das Ziel stand. Trifft sie, fliegt das Ziel
+     * davon, und sie fängt sich wieder; weicht es aus, prallt sie auf den Boden und liegt benommen da.
+     */
     private void tickDive(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
         if (t < 12) {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.8).add(0.0, 0.06, 0.0));
             if (t == 10) {
-                this.diveDir = target.position().add(0.0, 1.0, 0.0).subtract(this.position()).normalize();
+                this.diveDir = target.position().add(0.0, 0.4, 0.0).subtract(this.position()).normalize();
+                this.diveHit = false;
                 level.playSound(null, this.blockPosition(), ModSounds.MOTH_QUEEN_DIVE.get(), SoundSource.HOSTILE, 3.0f, 1.0f);
             }
             return;
         }
-        if (t < 34) {
+        if (t < 36 && !this.diveHit) {
             double speed = this.isEnraged() ? 1.5 : 1.25;
             this.setDeltaMovement(this.diveDir.scale(speed));
             if (t % 2 == 0) {
                 level.sendParticles(ModParticles.FAE_SPARK.get(), this.getX(), this.getY(0.5), this.getZ(), 6, 1.5, 0.5, 1.5, 0.02);
             }
-            for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(0.6))) {
-                if (player.isCreative() || player.isSpectator()) {
-                    continue;
-                }
-                if (player.hurtServer(level, this.damageSources().mobAttack(this), this.isEnraged() ? 10.0f : 8.0f)) {
-                    Vec3 push = this.diveDir.scale(1.4).add(0.0, 0.5, 0.0);
-                    player.push(push.x, push.y, push.z);
-                    player.needsSync = true;
+            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(0.6))) {
+                if (victim.hurtServer(level, this.damageSources().mobAttack(this), this.isEnraged() ? 10.0f : 8.0f)) {
+                    push(victim, this.diveDir.scale(1.4).add(0.0, 0.5, 0.0));
+                    // nur wenn sie ihr Ziel (oder einen Spieler) erwischt, fängt sie sich – ein Hase im Weg zählt nicht
+                    if (victim == target || victim instanceof Player) {
+                        this.diveHit = true;
+                    }
                 }
             }
-            BlockPos below = BlockPos.containing(this.position().add(this.diveDir.scale(2.0)));
-            if (!level.getBlockState(below).getCollisionShape(level, below).isEmpty() || this.horizontalCollision) {
-                // aufgeprallt: benommen am Boden
+            if (!this.diveHit && this.groundAhead(level)) {
                 this.crash(level);
-                return;
-            }
-            if (this.getY() < target.getY() + 0.5) {
-                this.attackTick = 34;
             }
             return;
         }
@@ -547,15 +580,25 @@ public class MothQueenEntity extends Monster {
         this.setDeltaMovement(this.getDeltaMovement().scale(0.85).add(0.0, 0.12, 0.0));
     }
 
+    /** Liegt in Flugrichtung (oder unter ihr) fester Boden? Laub zählt nicht. */
+    private boolean groundAhead(ServerLevel level) {
+        for (Vec3 probe : new Vec3[] {this.position().add(this.diveDir.scale(1.6)), this.position().add(0.0, -0.4, 0.0)}) {
+            BlockPos pos = BlockPos.containing(probe);
+            BlockState state = level.getBlockState(pos);
+            if (!state.is(net.minecraft.tags.BlockTags.LEAVES) && !state.getCollisionShape(level, pos).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Prallt auf: Staub, ein dumpfer Schlag, Funken; dann liegt sie benommen da. */
     private void crash(ServerLevel level) {
         level.playSound(null, this.blockPosition(), net.minecraft.sounds.SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.HOSTILE, 2.0f, 0.6f);
         level.sendParticles(ParticleTypes.CLOUD, this.getX(), this.getY() + 0.3, this.getZ(), 30, 2.0, 0.3, 2.0, 0.05);
         level.sendParticles(ModParticles.FAE_SPARK.get(), this.getX(), this.getY() + 0.5, this.getZ(), 40, 2.0, 0.5, 2.0, 0.1);
-        for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(2.5))) {
-            if (!player.isCreative() && !player.isSpectator()) {
-                player.hurtServer(level, this.damageSources().mobAttack(this), 4.0f);
-            }
+        for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(2.5))) {
+            victim.hurtServer(level, this.damageSources().mobAttack(this), 4.0f);
         }
         this.setDeltaMovement(Vec3.ZERO);
         this.begin(Attack.STUNNED);
@@ -595,17 +638,16 @@ public class MothQueenEntity extends Monster {
             }
         }
         if (t >= 22 && t % 10 == 0) {
-            for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(20.0))) {
-                if (player.isCreative() || player.isSpectator()) {
-                    continue;
-                }
-                Vec3 look = player.getViewVector(1.0f);
-                Vec3 to = this.getEyePosition().subtract(player.getEyePosition()).normalize();
+            for (LivingEntity victim : this.victims(level, this.getBoundingBox().inflate(20.0))) {
+                Vec3 look = victim.getViewVector(1.0f);
+                Vec3 to = this.getEyePosition().subtract(victim.getEyePosition()).normalize();
                 if (look.dot(to) > 0.55) {
-                    player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 70, 2), this);
-                    player.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 70, 1), this);
-                    player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 70, 0), this);
-                    player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0), this);
+                    victim.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 70, 2), this);
+                    victim.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 70, 1), this);
+                    if (victim instanceof Player) {
+                        victim.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 70, 0), this);
+                        victim.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100, 0), this);
+                    }
                 }
             }
         }

@@ -209,6 +209,8 @@ final class Showcase {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.equals("fae_map")) {
                         FaeShowcase.map(steps);
+                    } else if (scene.equals("fae_boss")) {
+                        FaeShowcase.boss(steps);
                     } else if (scene.equals("fae_creatures")) {
                         FaeShowcase.creatures(steps);
                     } else if (scene.equals("fae_portal")) {

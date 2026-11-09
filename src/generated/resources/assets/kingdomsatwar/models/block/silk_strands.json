@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/silk_strands",
+    "cross_emissive": "kingdomsatwar:block/silk_strands_emissive"
+  }
+}

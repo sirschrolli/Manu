@@ -64,14 +64,25 @@ def build() -> Model:
     return m
 
 
-_LIT = {"top": 0.1, "front": 0.04, "west": 0.0, "east": -0.03, "back": -0.06, "bottom": -0.16}
+# Unterseiten nur wenig dunkler: das Spiel schattiert sie ohnehin, und man sieht sie meist von unten
+_LIT = {"top": 0.1, "front": 0.04, "west": 0.0, "east": -0.03, "back": -0.06, "bottom": -0.04}
+
+
+def _underglow(ctx: Ctx, col, strength: float):
+    """
+    Unterseiten schimmern im Mondlicht: Das Spiel zeigt Flächen, die nach unten zeigen, nur mit 40 % Helligkeit – und die
+    Königin sieht man fast immer von unten. Eine gedämpfte Kopie der Farbe auf der Leuchtebene hellt sie wieder auf.
+    """
+    if ctx.face == "bottom" and ctx.glow is None and col is not None:
+        ctx.glow = (round(col[0] * strength), round(col[1] * strength), round(col[2] * strength), col[3] if len(col) > 3 else 255)
+    return col
 
 
 def _fur(ctx: Ctx):
     x, y, z = ctx.world
     tuft = noise3(x * 1.3, y * 1.3, z * 1.3, 4)
     v = 0.74 + tuft * 0.22 + _LIT[ctx.face] - rel_y(ctx) * 0.08
-    return pick(ctx.pal["fur"], v + (hash01(ctx.u, ctx.v) - 0.5) * 0.08)
+    return _underglow(ctx, pick(ctx.pal["fur"], v + (hash01(ctx.u, ctx.v) - 0.5) * 0.08), 0.42)
 
 
 def _abdomen(ctx: Ctx):
@@ -200,16 +211,16 @@ def _wing_cell(ctx: Ctx, shape: list[str], spot: tuple[float, float], spot_r: fl
     vein = abs(math.sin(angle * 6.0)) < 0.13 and col > 1
     if vein:
         return pick(ctx.pal["vein2" if pal == "wing2" else "vein"], 0.6)
-    v = 0.5 + col / w * 0.36 + (hash01(ctx.u, ctx.v) - 0.5) * 0.06 + (0.05 if ctx.face == "top" else -0.03)
+    v = 0.5 + col / w * 0.36 + (hash01(ctx.u, ctx.v) - 0.5) * 0.06 + (0.05 if ctx.face == "top" else 0.12)
     return pick(ctx.pal[pal], v)
 
 
 def _forewing(ctx: Ctx):
-    return _wing_cell(ctx, _FORE, (11.5, 6.0), 2.6, "wing")
+    return _underglow(ctx, _wing_cell(ctx, _FORE, (11.5, 6.0), 2.6, "wing"), 0.55)
 
 
 def _hindwing(ctx: Ctx):
-    return _wing_cell(ctx, _HIND, (7.0, 3.5), 2.0, "wing2")
+    return _underglow(ctx, _wing_cell(ctx, _HIND, (7.0, 3.5), 2.0, "wing2"), 0.55)
 
 
 def _leg(ctx: Ctx):
