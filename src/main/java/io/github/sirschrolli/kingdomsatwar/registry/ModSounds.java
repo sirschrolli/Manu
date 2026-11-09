@@ -165,6 +165,20 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_HURT = register("entity.moth_queen.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DEATH = register("entity.moth_queen.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DIVE = register("entity.moth_queen.dive");
+    // Malleus, der Glutschmied (0.64)
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_ROAR = register("entity.glutschmied.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_CLANG = register("entity.glutschmied.clang");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_THRUST = register("entity.glutschmied.thrust");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_SLAM = register("entity.glutschmied.slam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_SPARKS = register("entity.glutschmied.sparks");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_THROW = register("entity.glutschmied.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_GLOB = register("entity.glutschmied.glob");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_CALL = register("entity.glutschmied.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_STOKE = register("entity.glutschmied.stoke");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_AMBIENT = register("entity.glutschmied.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_HURT = register("entity.glutschmied.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_DEATH = register("entity.glutschmied.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLUTSCHMIED_STEP = register("entity.glutschmied.step");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
 
     // ---------------------------------------------------------------- Held

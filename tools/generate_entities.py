@@ -30,7 +30,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
-                              fairy, mushroomling, thorn_wight, moth_queen)
+                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -79,6 +79,8 @@ def main():
     write_model(fairy, "FairyGeometry", "Geometrie der Fee (Skelett des Hilfsgeists).", "fairy", fairy.PALETTES, preview)
     write_model(mushroomling, "MushroomlingGeometry", "Geometrie des Pilzlings.", "mushroomling", mushroomling.PALETTES, preview)
     write_model(thorn_wight, "ThornWightGeometry", "Geometrie des Dornwichts.", "thorn_wight", thorn_wight.PALETTES, preview)
+    write_model(glutschmied, "GlutschmiedGeometry", "Geometrie des Glutschmieds Malleus (im Spiel 1,4-fach vergrößert).",
+                "glutschmied", glutschmied.PALETTES, preview)
     write_model(moth_queen, "MothQueenGeometry", "Geometrie der Mottenkönigin (im Spiel 2,5-fach vergrößert).", "moth_queen",
                 moth_queen.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)

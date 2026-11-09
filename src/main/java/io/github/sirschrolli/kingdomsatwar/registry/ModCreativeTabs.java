@@ -125,6 +125,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, FaeBlocks.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> LEGENDS = TABS.register("legends",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.legends"))
+                    .icon(() -> ForgeBlocks.GLUT_SPEAR.toStack())
+                    .withTabsBefore(THE_FAE_REALM.key())
+                    .displayItems((parameters, output) -> accept(output, ForgeBlocks.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

@@ -63,6 +63,8 @@ public final class BossBarRenderer {
         STYLES.put("reef", new Style(KingdomsAtWar.id("textures/gui/boss_bar/reef.png"), 0x7AE8FF));
         // Noctua, die Mottenkönigin (Feenreich): Mondsilber mit Mottenflügeln, Füllung aus schimmerndem Flügelstaub
         STYLES.put("moth", new Style(KingdomsAtWar.id("textures/gui/boss_bar/moth.png"), 0xFFB8E8));
+        // Malleus, der Glutschmied: geschwärztes Eisen mit Nieten, glühende Nähte, Hammer und Speer gekreuzt
+        STYLES.put("forge", new Style(KingdomsAtWar.id("textures/gui/boss_bar/forge.png"), 0xFF8A30));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

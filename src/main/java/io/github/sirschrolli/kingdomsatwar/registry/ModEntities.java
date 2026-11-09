@@ -427,6 +427,15 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity>> MOTH_QUEEN =
             ENTITIES.registerEntityType("moth_queen", io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity::new, MobCategory.MONSTER,
                     builder -> builder.sized(3.2f, 2.6f).eyeHeight(2.0f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Malleus, der Glutschmied: kniet auf dem Dach der Aschenesse an seinem Amboss, bis jemand ihm zu nahe kommt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity>> GLUTSCHMIED =
+            ENTITIES.registerEntityType("glutschmied", io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(1.9f, 3.9f).eyeHeight(3.4f).fireImmune().notInPeaceful()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Glutklumpen: geschmolzenes Metall, das Malleus im Bogen schleudert. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity>> GLUTKLUMPEN =
+            ENTITIES.registerEntityType("molten_glob", io.github.sirschrolli.kingdomsatwar.entity.nether.GlutklumpenEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.5f, 0.5f).fireImmune().noLootTable().clientTrackingRange(8).updateInterval(2));
     /** Mondfalter: die kleinen Diener der Mottenkönigin (verglimmen nach einer halben Minute). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity>> MOON_MOTH =
             ENTITIES.registerEntityType("moon_moth", io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity::new, MobCategory.MONSTER,
@@ -778,6 +787,7 @@ public final class ModEntities {
         event.put(THORN_WIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity.createAttributes().build());
         event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
         event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
+        event.put(GLUTSCHMIED.get(), io.github.sirschrolli.kingdomsatwar.entity.nether.GlutschmiedEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
