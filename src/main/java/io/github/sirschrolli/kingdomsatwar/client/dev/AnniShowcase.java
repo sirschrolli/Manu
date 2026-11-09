@@ -79,7 +79,7 @@ final class AnniShowcase {
         steps.add(Step.server(any -> locate(overworld(any), s)));
         steps.add(Step.until(() -> s.ready, 12000));
         // die Zone von oben
-        steps.add(at(s, 4.0, 24.0, 36.0, 0.0, 2.0, -2.0));
+        steps.add(at(s, 0.0, 30.0, 21.0, 0.0, 0.0, -1.5));
         steps.add(arrived(s.cam));
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(1500));
@@ -91,16 +91,19 @@ final class AnniShowcase {
         }));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("anni_zone_overview"));
-        steps.add(at(s, -22.0, 13.0, 18.0, 2.0, 2.0, -4.0));
+        steps.add(at(s, 7.0, 5.0, 8.0, -9.0, 8.0, -12.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("anni_zone"));
+        steps.add(at(s, -8.0, 4.5, 7.0, 10.0, 7.0, -10.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("anni_zone_side"));
         steps.add(at(s, 2.6, 2.6, 3.4, 0.0, 1.3, 0.0));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("anni_core"));
         // ein Ritter tritt in die Arena: der Kern lädt Anni
         steps.add(Step.server(any -> {
             ServerLevel level = overworld(any);
-            Mob knight = creature(level, ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), ground(level, s, -6, 6), 180.0f);
+            Mob knight = creature(level, ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), ground(level, s, -3, 6), 180.0f);
             knight.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1_000_000, 4, false, false));
             knight.setSilent(true);
             s.knight = knight.getId();
@@ -112,7 +115,7 @@ final class AnniShowcase {
                 }
             }
         }));
-        steps.add(at(s, 7.0, 4.0, 9.0, 0.0, 2.6, 1.0));
+        steps.add(at(s, 6.0, 4.0, 7.5, 0.0, 2.6, 1.0));
         steps.add(attackAt(s, AnniTrollEntity.Attack.SPAWN, 26));
         steps.add(Step.screenshot("anni_loading"));
         steps.add(attackAt(s, AnniTrollEntity.Attack.SPAWN, AnniTrollEntity.SPAWN_ASSEMBLE - 2));
@@ -123,17 +126,17 @@ final class AnniShowcase {
         steps.add(Step.hud(false));
         steps.add(Step.waitTicks(40));
         // Bildnisse: er hält still, der Kamera zugewandt
-        steps.add(pose(s, -6.0, -3.0, 0.0, 6.0));
-        steps.add(at(s, -3.8, 4.4, 4.4, -6.0, 3.0, -3.0));
+        steps.add(pose(s, -4.0, -2.0, 6.0, 8.0));
+        steps.add(faceCam(s, 6.5, 2.4, 2.4, 18.0));
         steps.add(Step.waitTicks(12));
         steps.add(Step.screenshot("anni_portrait"));
-        steps.add(at(s, -5.4, 5.6, 0.6, -6.0, 5.2, -3.0));
+        steps.add(faceCam(s, 3.0, 3.3, 3.7, 12.0));
         steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("anni_portrait_face"));
-        steps.add(at(s, -10.6, 4.0, -0.8, -6.0, 3.0, -3.0));
+        steps.add(faceCam(s, 5.5, 2.2, 2.6, 80.0));
         steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("anni_portrait_side"));
-        steps.add(at(s, -2.6, 4.4, -8.6, -6.0, 3.2, -3.0));
+        steps.add(faceCam(s, 5.5, 3.0, 2.6, 155.0));
         steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("anni_portrait_back"));
         steps.add(release(s));
@@ -155,14 +158,14 @@ final class AnniShowcase {
         steps.add(Step.screenshot("anni_smash"));
         // die übrigen Angriffe: {Angriff, Tick des Bildes, Name, Blickwinkel zur Linie Anni → Ritter (Grad), Abstand, Höhe, Blick zum Ritter 0..1}
         java.util.Set<String> started = new java.util.HashSet<>();
-        for (String[] shot : new String[][] {{"RUBBERBAND", "17", "anni_rubberband", "-60", "11", "3.0", "0.4"},
-                {"CLONES", "24", "anni_clones", "-30", "11", "3.5", "0.55"},
-                {"MISSING", "34", "anni_missing", "-70", "11", "6.0", "0.7"},
-                {"PIXEL_RAIN", "44", "anni_pixel_rain", "-45", "14", "6.0", "0.45"},
-                {"ROLLBACK", "44", "anni_rollback", "-80", "10", "3.0", "0.5"},
-                {"SCANLINE", "22", "anni_scanline", "-35", "11", "4.5", "0.3"},
-                {"CRASH", "30", "anni_crash", "-30", "8", "1.8", "0.0"},
-                {"CRASH", "86", "anni_crash_wave", "-30", "15", "7.0", "0.0"}}) {
+        for (String[] shot : new String[][] {{"RUBBERBAND", "17", "anni_rubberband", "-60", "9", "3.0", "0.4"},
+                {"CLONES", "24", "anni_clones", "-30", "9", "3.5", "0.55"},
+                {"MISSING", "34", "anni_missing", "-70", "9", "6.0", "0.7"},
+                {"PIXEL_RAIN", "44", "anni_pixel_rain", "-45", "10", "7.0", "0.45"},
+                {"ROLLBACK", "44", "anni_rollback", "-80", "8", "3.0", "0.5"},
+                {"SCANLINE", "22", "anni_scanline", "-35", "8", "4.5", "0.3"},
+                {"CRASH", "30", "anni_crash", "-30", "7", "1.8", "0.0"},
+                {"CRASH", "86", "anni_crash_wave", "-30", "10", "8.0", "0.0"}}) {
             String name = shot[0];
             AnniTrollEntity.Attack attack = AnniTrollEntity.Attack.valueOf(name);
             int tick = Integer.parseInt(shot[1]);
@@ -197,17 +200,17 @@ final class AnniShowcase {
         steps.add(Step.screenshot("anni_v2_title"));
         steps.add(Step.hud(false));
         steps.add(attackAt(s, AnniTrollEntity.Attack.REVIVE, AnniTrollEntity.REVIVE_WAVE + 1));
-        steps.add(follow(s, -30.0, 15.0, 7.0, 0.0));
+        steps.add(follow(s, -30.0, 10.0, 8.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(Step.screenshot("anni_v2_wave"));
         steps.add(Step.waitTicks(30));
         // Anni 2.0 aus der Nähe
         steps.add(Step.server(any -> clearEffects(overworld(any), s)));
-        steps.add(pose(s, -6.0, -3.0, 0.0, 6.0));
-        steps.add(at(s, -3.8, 4.4, 4.4, -6.0, 3.0, -3.0));
+        steps.add(pose(s, -4.0, -2.0, 6.0, 8.0));
+        steps.add(faceCam(s, 6.5, 2.4, 2.4, -18.0));
         steps.add(Step.waitTicks(12));
         steps.add(Step.screenshot("anni_v2_portrait"));
-        steps.add(at(s, -5.4, 5.6, 0.6, -6.0, 5.2, -3.0));
+        steps.add(faceCam(s, 3.0, 3.3, 3.7, -12.0));
         steps.add(Step.waitTicks(8));
         steps.add(Step.screenshot("anni_v2_face"));
         steps.add(release(s));
@@ -238,7 +241,7 @@ final class AnniShowcase {
         steps.add(Step.waitTicks(1));
         steps.add(Step.screenshot("anni_speedhack_aim"));
         steps.add(attackAt(s, AnniTrollEntity.Attack.SPEEDHACK, AnniTrollEntity.HACK_FIRST + AnniTrollEntity.HACK_AIM + 3));
-        steps.add(at(s, -18.0, 9.0, 4.0, -2.0, 1.5, 1.0));
+        steps.add(at(s, 3.5, 6.0, -3.5, -4.0, 1.5, 2.0));
         steps.add(Step.waitTicks(1));
         steps.add(Step.screenshot("anni_speedhack"));
         steps.add(Step.waitTicks(80));
@@ -288,15 +291,15 @@ final class AnniShowcase {
             stand.addTag(TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(at(s, 6.4, 2.1, 6.6, 5.0, 1.0, 4.0));
+        steps.add(at(s, 6.0, 2.0, 5.9, 5.0, 1.2, 4.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("anni_gear"));
-        steps.add(at(s, 3.6, 2.3, 1.6, 5.0, 1.2, 4.0));
+        steps.add(at(s, 4.1, 2.1, 2.3, 5.0, 1.2, 4.0));
         steps.add(Step.waitTicks(10));
         steps.add(Step.screenshot("anni_gear_back"));
         // bei Nacht leuchten fehlende Textur und Bildrauschen
-        steps.add(Step.command("time set 18000"));
-        steps.add(at(s, -22.0, 13.0, 18.0, 2.0, 2.0, -4.0));
+        steps.add(Step.command("time set 13200"));
+        steps.add(at(s, 0.0, 30.0, 21.0, 0.0, 0.0, -1.5));
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("anni_zone_night"));
         steps.add(Step.command("time set 6000"));
@@ -317,13 +320,13 @@ final class AnniShowcase {
     /** Anni und Ritter an ihre Plätze (Anni im Abstand {@code distance} hinter dem Ritter), einander zugewandt. */
     private static void place(ServerLevel level, Zone s, double distance) {
         if (level.getEntity(s.anni) instanceof AnniTrollEntity anni && level.getEntity(s.knight) instanceof LivingEntity knight) {
-            Vec3 k = ground(level, s, -6, 5);
+            Vec3 k = ground(level, s, -3, 6);
             knight.teleportTo(k.x, k.y, k.z);
             knight.setDeltaMovement(Vec3.ZERO);
             knight.removeAllEffects();
             knight.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1_000_000, 4, false, false));
             knight.setHealth(knight.getMaxHealth());
-            Vec3 a = ground(level, s, -6, (int) Math.round(5 - distance));
+            Vec3 a = ground(level, s, -3, (int) Math.round(6 - distance));
             anni.setNoAi(false);
             anni.teleportTo(a.x, a.y, a.z);
             anni.setDeltaMovement(Vec3.ZERO);
@@ -419,12 +422,46 @@ final class AnniShowcase {
             }
             Vec3 focus = c.add(k.subtract(c).scale(toward));
             Vec3 dir = line.normalize().yRot((float) Math.toRadians(angle));
-            Vec3 eye = focus.add(dir.scale(distance)).add(0.0, height, 0.0);
+            Vec3 eye = inArena(s, focus.add(dir.scale(distance)).add(0.0, height, 0.0));
             Vec3 look = focus.subtract(eye);
             float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
             float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
             var player = any.getServer().getPlayerList().getPlayers().getFirst();
             player.teleportTo(level, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), yaw, pitch, true);
+        });
+    }
+
+    /** Hält die Kamera über der Arena (nicht in den Bäumen ringsum): höchstens elf Blöcke von der Mitte. */
+    private static Vec3 inArena(Zone s, Vec3 eye) {
+        double dx = eye.x - s.c[0];
+        double dz = eye.z - s.c[2];
+        double r = Math.sqrt(dx * dx + dz * dz);
+        if (r <= 11.0) {
+            return eye;
+        }
+        double k = 11.0 / r;
+        return new Vec3(s.c[0] + dx * k, eye.y, s.c[2] + dz * k);
+    }
+
+    /**
+     * Kamera vor Anni (aus seiner Blickrichtung um {@code angle} Grad gedreht) im Abstand {@code distance}, {@code height}
+     * über dem Boden; Blick auf ihn in der Höhe {@code look}.
+     */
+    private static Step faceCam(Zone s, double distance, double height, double look, double angle) {
+        return Step.server(any -> {
+            ServerLevel level = overworld(any);
+            if (!(level.getEntity(s.anni) instanceof Entity anni) || any.getServer().getPlayerList().getPlayers().isEmpty()) {
+                return;
+            }
+            double yaw = Math.toRadians(anni.getYRot() + angle);
+            Vec3 forward = new Vec3(-Math.sin(yaw), 0.0, Math.cos(yaw));
+            Vec3 eye = anni.position().add(forward.scale(distance)).add(0.0, height, 0.0);
+            Vec3 focus = anni.position().add(0.0, look, 0.0);
+            Vec3 dir = focus.subtract(eye);
+            float camYaw = (float) (-Math.atan2(dir.x, dir.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(dir.y, Math.sqrt(dir.x * dir.x + dir.z * dir.z)) * 180.0 / Math.PI);
+            var player = any.getServer().getPlayerList().getPlayers().getFirst();
+            player.teleportTo(level, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), camYaw, pitch, true);
         });
     }
 
