@@ -407,6 +407,30 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<WillOWispEntity>> WILL_O_WISP = ENTITIES.registerEntityType("will_o_wisp",
             WillOWispEntity::new, MobCategory.AMBIENT,
             builder -> builder.sized(0.45f, 0.45f).eyeHeight(0.22f).fireImmune().clientTrackingRange(8));
+    // ---------------------------------------------------------------- Wesen des Feenreichs
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.FairyEntity>> FAIRY =
+            ENTITIES.registerEntityType("fairy", io.github.sirschrolli.kingdomsatwar.entity.fae.FairyEntity::new, MobCategory.CREATURE,
+                    builder -> builder.sized(0.4f, 0.65f).eyeHeight(0.5f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.FaeWispEntity>> FAE_WISP =
+            ENTITIES.registerEntityType("fae_wisp", io.github.sirschrolli.kingdomsatwar.entity.fae.FaeWispEntity::new, MobCategory.AMBIENT,
+                    builder -> builder.sized(0.45f, 0.45f).eyeHeight(0.22f).fireImmune().clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MushroomlingEntity>> MUSHROOMLING =
+            ENTITIES.registerEntityType("mushroomling", io.github.sirschrolli.kingdomsatwar.entity.fae.MushroomlingEntity::new,
+                    MobCategory.CREATURE, builder -> builder.sized(0.6f, 0.95f).eyeHeight(0.55f).clientTrackingRange(8));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity>> THORN_WIGHT =
+            ENTITIES.registerEntityType("thorn_wight", io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(0.8f, 2.3f).eyeHeight(2.0f).clientTrackingRange(10));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.ThornProjectile>> THORN =
+            ENTITIES.registerEntityType("thorn", io.github.sirschrolli.kingdomsatwar.entity.fae.ThornProjectile::new, MobCategory.MISC,
+                    builder -> builder.sized(0.4f, 0.4f).eyeHeight(0.13f).noLootTable().clientTrackingRange(4).updateInterval(20));
+    /** Noctua, die Mottenkönigin: Herrin des Mondhains im Feenreich, schläft in einem Kokon, bis man ihn mit Feenstaub weckt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity>> MOTH_QUEEN =
+            ENTITIES.registerEntityType("moth_queen", io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(3.2f, 2.6f).eyeHeight(2.0f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    /** Mondfalter: die kleinen Diener der Mottenkönigin (verglimmen nach einer halben Minute). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity>> MOON_MOTH =
+            ENTITIES.registerEntityType("moon_moth", io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(0.6f, 0.5f).eyeHeight(0.25f).notInPeaceful().clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<CaveTrollEntity>> CAVE_TROLL = ENTITIES.registerEntityType("cave_troll",
             CaveTrollEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.4f, 2.9f).eyeHeight(2.45f).clientTrackingRange(10));
     public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
@@ -748,6 +772,12 @@ public final class ModEntities {
         event.put(DEER.get(), DeerEntity.createAttributes().build());
         event.put(GOOSE.get(), GooseEntity.createAttributes().build());
         event.put(WILL_O_WISP.get(), WillOWispEntity.createAttributes().build());
+        event.put(FAE_WISP.get(), WillOWispEntity.createAttributes().build());
+        event.put(FAIRY.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.FairyEntity.createAttributes().build());
+        event.put(MUSHROOMLING.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MushroomlingEntity.createAttributes().build());
+        event.put(THORN_WIGHT.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity.createAttributes().build());
+        event.put(MOTH_QUEEN.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MothQueenEntity.createAttributes().build());
+        event.put(MOON_MOTH.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MoonMothEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
@@ -887,6 +917,14 @@ public final class ModEntities {
         event.register(DEER.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(GOOSE.get(), ground, surface, Animal::checkAnimalSpawnRules, replace);
         event.register(WILL_O_WISP.get(), ground, surface, WillOWispEntity::checkWispSpawnRules, replace);
+        // Feenreich: Feen und Irrlichter schweben über Gras und Moos, Pilzlinge tapsen am Boden, Dornwichte nur in der Wildnis
+        event.register(FAIRY.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.fae.FairyEntity::checkFairySpawnRules, replace);
+        event.register(FAE_WISP.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.fae.FaeWispEntity::checkFaeWispSpawnRules,
+                replace);
+        event.register(MUSHROOMLING.get(), ground, surface,
+                io.github.sirschrolli.kingdomsatwar.entity.fae.MushroomlingEntity::checkMushroomlingSpawnRules, replace);
+        event.register(THORN_WIGHT.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.fae.ThornWightEntity::checkWightSpawnRules,
+                replace);
         event.register(CAVE_TROLL.get(), ground, surface, CaveTrollEntity::checkTrollSpawnRules, replace);
         event.register(LINDWORM.get(), ground, surface, LindwormEntity::checkLindwormSpawnRules, replace);
         // Schattenwelt: Pirscher überall im Dunkeln, Kriecher in Höhlen und Schluchten, Schwingen und Falter in der Luft

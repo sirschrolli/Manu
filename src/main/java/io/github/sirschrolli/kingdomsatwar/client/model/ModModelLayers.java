@@ -30,6 +30,11 @@ public final class ModModelLayers {
     public static final ModelLayerLocation DEER = new ModelLayerLocation(KingdomsAtWar.id("deer"), "main");
     public static final ModelLayerLocation GOOSE = new ModelLayerLocation(KingdomsAtWar.id("goose"), "main");
     public static final ModelLayerLocation WILL_O_WISP = new ModelLayerLocation(KingdomsAtWar.id("will_o_wisp"), "main");
+    // Feenreich
+    public static final ModelLayerLocation FAIRY = new ModelLayerLocation(KingdomsAtWar.id("fairy"), "main");
+    public static final ModelLayerLocation MUSHROOMLING = new ModelLayerLocation(KingdomsAtWar.id("mushroomling"), "main");
+    public static final ModelLayerLocation THORN_WIGHT = new ModelLayerLocation(KingdomsAtWar.id("thorn_wight"), "main");
+    public static final ModelLayerLocation MOTH_QUEEN = new ModelLayerLocation(KingdomsAtWar.id("moth_queen"), "main");
     public static final ModelLayerLocation CAVE_TROLL = new ModelLayerLocation(KingdomsAtWar.id("cave_troll"), "main");
     public static final ModelLayerLocation LINDWORM = new ModelLayerLocation(KingdomsAtWar.id("lindworm"), "main");
 

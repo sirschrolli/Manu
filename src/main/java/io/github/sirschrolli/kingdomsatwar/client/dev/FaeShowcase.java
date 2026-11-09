@@ -77,8 +77,18 @@ final class FaeShowcase {
                 double a = Math.toRadians(view.turn());
                 cam[0] = at.getX() + Math.cos(a) * view.distance();
                 cam[2] = at.getZ() + Math.sin(a) * view.distance();
-                int below = generator.getBaseHeight((int) cam[0], (int) cam[2], Heightmap.Types.WORLD_SURFACE_WG, level, random);
-                cam[1] = Math.max(at.getY() + view.height(), below + 4);
+                // über Bäumen und Pilzen bleiben (die fertigen Chunks zählen, nicht nur das Gelände)
+                int cx = (int) Math.floor(cam[0]);
+                int cz = (int) Math.floor(cam[2]);
+                level.getChunk(cx >> 4, cz >> 4);
+                int below = level.getHeight(Heightmap.Types.MOTION_BLOCKING, cx, cz);
+                for (int dx = -2; dx <= 2; dx += 2) {
+                    for (int dz = -2; dz <= 2; dz += 2) {
+                        level.getChunk((cx + dx) >> 4, (cz + dz) >> 4);
+                        below = Math.max(below, level.getHeight(Heightmap.Types.MOTION_BLOCKING, cx + dx, cz + dz));
+                    }
+                }
+                cam[1] = Math.max(at.getY() + view.height(), below + 3);
                 double dx = at.getX() - cam[0];
                 double dz = at.getZ() - cam[2];
                 cam[3] = -Math.toDegrees(Math.atan2(dx, dz));
@@ -237,5 +247,176 @@ final class FaeShowcase {
             return minecraft.level != null && minecraft.player != null && minecraft.level.dimension() == FaeGate.FAE_REALM
                     && minecraft.player.distanceToSqr(cam[0], cam[1], cam[2]) < 4.0;
         }, 1200);
+    }
+
+    // =====================================================================================
+    // Die Wesen des Feenreichs
+    // =====================================================================================
+
+    private static final String STAGE_TAG = "kaw_fae_stage";
+
+    static void creatures(Deque<Step> steps) {
+        double[] c = new double[3];
+        boolean[] ready = new boolean[1];
+        int[] wight = new int[1];
+        steps.add(Step.hud(false));
+        steps.add(Step.command("gamerule spawn_monsters false"));
+        steps.add(Step.command("gamerule spawn_mobs false"));
+        steps.add(Step.command("difficulty normal"));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level == null) {
+                ready[0] = true;
+                return;
+            }
+            var found = level.findClosestBiome3d(h -> h.is(FaeBiomes.FAE_MEADOWS), new BlockPos(300, 70, 300), 3000, 32, 64);
+            BlockPos target = found != null ? found.getFirst() : new BlockPos(300, 70, 300);
+            int x0 = target.getX();
+            int z0 = target.getZ();
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    level.setChunkForced((x0 >> 4) + dx, (z0 >> 4) + dz, true);
+                }
+            }
+            // eine schwebende Lichtung hoch über den Bäumen (so stört nichts im Bild)
+            int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x0, z0) + 24;
+            BlockState grass = FaeBlocks.FAE_GRASS.get().defaultBlockState();
+            BlockState soil = FaeBlocks.FAE_SOIL.get().defaultBlockState();
+            BlockState air = Blocks.AIR.defaultBlockState();
+            var random = net.minecraft.util.RandomSource.create(63);
+            // eine ebene Lichtung: Gras auf Erde, darüber frei; hinten Blumen, ein Glimmerbaum und ein Riesenpilz
+            for (int dx = -16; dx <= 16; dx++) {
+                for (int dz = -12; dz <= 14; dz++) {
+                    BlockPos base = new BlockPos(x0 + dx, y - 1, z0 + dz);
+                    double edge = Math.sqrt(dx * dx / 289.0 + (dz - 1) * (dz - 1) / 196.0);
+                    if (edge > 1.0) {
+                        continue;
+                    }
+                    level.setBlock(base, grass, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    int depth = 1 + (int) ((1.0 - edge) * 7) + random.nextInt(2);
+                    for (int d = 1; d <= depth; d++) {
+                        level.setBlock(base.below(d), d > 3 ? FaeBlocks.FAESTONE.base().get().defaultBlockState() : soil,
+                                net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    }
+                    for (int h = 0; h <= 14; h++) {
+                        level.setBlock(base.above(1 + h), air, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            BlockState[] flowers = {FaeBlocks.MOONBELL.get().defaultBlockState(), FaeBlocks.FAE_ROSE.get().defaultBlockState(),
+                    FaeBlocks.FAE_SPROUTS.get().defaultBlockState(), FaeBlocks.LANTERN_MUSHROOM.get().defaultBlockState()};
+            for (int i = 0; i < 70; i++) {
+                int dx = random.nextInt(31) - 15;
+                int dz = random.nextInt(25) - 11;
+                if (dz < 3 && dz > -10 && Math.abs(dx) < 12 || dx * dx / 289.0 + (dz - 1) * (dz - 1) / 196.0 > 0.9) {
+                    continue;
+                }
+                level.setBlock(new BlockPos(x0 + dx, y, z0 + dz), flowers[random.nextInt(flowers.length)],
+                        net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+            var placer = level.getChunkSource().getGenerator();
+            new io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.Kind.SLENDER,
+                    io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.Palette.ROSE)
+                    .place(level, placer, random, new BlockPos(x0 - 9, y, z0 + 9));
+            new io.github.sirschrolli.kingdomsatwar.fae.feature.GiantMushroomFeature(
+                    io.github.sirschrolli.kingdomsatwar.fae.feature.GiantMushroomFeature.Kind.VIOLET, false)
+                    .place(level, placer, random, new BlockPos(x0 + 10, y, z0 + 9));
+            new io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.Kind.SLENDER,
+                    io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.Palette.AZURE)
+                    .place(level, placer, random, new BlockPos(x0 + 1, y, z0 + 13));
+            double lz = z0 + 0.5;
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FAIRY.get(), x0 - 7.5, y + 1.4, lz, 160, m -> {
+                m.setNoGravity(true);
+                m.setVariant(0);
+            });
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FAIRY.get(), x0 - 5.2, y + 2.3, lz + 1.0, 200, m -> {
+                m.setNoGravity(true);
+                m.setVariant(1);
+            });
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FAIRY.get(), x0 - 3.0, y + 1.2, lz - 0.8, 185, m -> {
+                m.setNoGravity(true);
+                m.setVariant(2);
+            });
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.FAE_WISP.get(), x0 - 0.5, y + 1.9, lz, 180,
+                    m -> m.setNoGravity(true));
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MUSHROOMLING.get(), x0 + 2.0, y, lz - 0.5, 195,
+                    m -> m.setVariant(0));
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MUSHROOMLING.get(), x0 + 3.6, y, lz + 0.6, 170,
+                    m -> m.setVariant(1));
+            creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.MUSHROOMLING.get(), x0 + 5.0, y, lz - 0.2, 150, m -> {
+                m.setVariant(2);
+                m.setHiding(true);
+            });
+            var w = creature(level, io.github.sirschrolli.kingdomsatwar.registry.ModEntities.THORN_WIGHT.get(), x0 + 9.0, y, lz + 0.5, 200,
+                    m -> { });
+            wight[0] = w.getId();
+            c[0] = x0;
+            c[1] = y;
+            c[2] = lz;
+            ready[0] = true;
+        }));
+        steps.add(Step.until(() -> ready[0], 6000));
+        double[] cam = new double[3];
+        steps.add(at(c, cam, 0.8, 1.2, -8.0, 0.8, 1.4, 0.0));
+        steps.add(arrived(cam));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.waitForChunks(600));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.screenshot("fae_creatures_overview"));
+        steps.add(at(c, cam, -5.2, 0.6, -2.6, -5.2, 1.9, 0.0));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("fae_creatures_fairies"));
+        steps.add(at(c, cam, 3.2, -0.6, -2.7, 3.4, 0.4, 0.0));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("fae_creatures_mushroomlings"));
+        steps.add(at(c, cam, 7.8, 0.5, -3.6, 9.0, 1.6, 0.5));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(overworld -> {
+            ServerLevel level = overworld.getServer().getLevel(FaeGate.FAE_REALM);
+            if (level != null && level.getEntity(wight[0]) instanceof net.minecraft.world.entity.Entity e) {
+                level.broadcastEntityEvent(e, (byte) 71);
+            }
+        }));
+        steps.add(Step.waitTicks(9));
+        steps.add(Step.screenshot("fae_creatures_wight"));
+        steps.add(at(c, cam, -1.4, 0.6, -2.2, -0.5, 1.9, 0.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("fae_creatures_wisp"));
+    }
+
+    private static <T extends net.minecraft.world.entity.Mob> T creature(ServerLevel level, net.minecraft.world.entity.EntityType<T> type,
+            double x, double y, double z, float yaw, java.util.function.Consumer<T> setup) {
+        T mob = type.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        if (mob == null) {
+            throw new IllegalStateException("Wesen lässt sich nicht erzeugen: " + type);
+        }
+        mob.setNoAi(true);
+        mob.setPersistenceRequired();
+        mob.addTag(STAGE_TAG);
+        mob.snapTo(x, y, z, yaw, 0);
+        mob.setYBodyRot(yaw);
+        mob.setYHeadRot(yaw);
+        setup.accept(mob);
+        level.addFreshEntity(mob);
+        return mob;
+    }
+
+    /** Kamera an c + (dx, dy, dz) (Augenhöhe), Blick auf c + (tx, ty, tz) – im Feenreich. */
+    private static Step at(double[] c, double[] cam, double dx, double dy, double dz, double tx, double ty, double tz) {
+        return Step.once(minecraft -> {
+            cam[0] = c[0] + dx;
+            cam[1] = c[1] + dy;
+            cam[2] = c[2] + dz;
+            double lx = tx - dx;
+            double ly = ty - (dy + 1.62);
+            double lz = tz - dz;
+            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+            minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
+                    "execute in kingdomsatwar:fae_realm run tp @s %.2f %.2f %.2f %.1f %.1f", cam[0], cam[1], cam[2], yaw, pitch));
+        });
     }
 }

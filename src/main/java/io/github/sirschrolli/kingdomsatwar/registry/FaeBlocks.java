@@ -232,6 +232,27 @@ public final class FaeBlocks {
             UnaryOperator.identity(), TAB);
 
     // =====================================================================================
+    // Der Mondhain (die Lichtung der Mottenkönigin)
+    // =====================================================================================
+
+    /** Mottenseide: weiche, schimmernde Seide, mit der Noctua ihren Hain umspinnt (leuchtet schwach). */
+    public static final DeferredBlock<Block> MOTH_SILK = ModBlocks.blockWithItem("moth_silk", Block::new,
+            p -> p.mapColor(MapColor.SNOW).strength(0.8f).sound(SoundType.WOOL).lightLevel(s -> 5).ignitedByLava(),
+            UnaryOperator.identity(), TAB);
+    /** Seidenfäden: lange, glitzernde Fäden, die im Mondhain von Laub und Ästen hängen. */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.fae.SilkStrandsBlock> SILK_STRANDS = ModBlocks.blockWithItem(
+            "silk_strands", io.github.sirschrolli.kingdomsatwar.block.fae.SilkStrandsBlock::new,
+            p -> p.mapColor(MapColor.SNOW).noCollision().instabreak().sound(SoundType.WOOL).lightLevel(s -> 4).noOcclusion()
+                    .ignitedByLava().pushReaction(PushReaction.POPPED),
+            UnaryOperator.identity(), TAB);
+    /** Der Kokon der Mottenkönigin (unzerstörbar; mit Feenstaub geweckt, steigt Noctua daraus empor). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.fae.MothCocoonBlock> MOTH_COCOON = ModBlocks.blockWithItem(
+            "moth_cocoon", io.github.sirschrolli.kingdomsatwar.block.fae.MothCocoonBlock::new,
+            p -> p.mapColor(MapColor.COLOR_PINK).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.WOOL).lightLevel(s -> 10)
+                    .noOcclusion().pushReaction(PushReaction.IMMOVEABLE).isValidSpawn((state, level, pos, type) -> false),
+            ip -> ip.rarity(Rarity.EPIC).component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("moth_cocoon", 1)), TAB);
+
+    // =====================================================================================
     // Das Portal
     // =====================================================================================
 
@@ -247,6 +268,20 @@ public final class FaeBlocks {
     /** Feenstaub: Amethyst, Leuchtbeeren und eine Blüte – entzündet das Feenportal. */
     public static final DeferredItem<FaeDustItem> FAE_DUST = addItem(ModItems.ITEMS.registerItem("fae_dust", FaeDustItem::new,
             p -> p.rarity(Rarity.UNCOMMON).component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("fae_dust", 2))));
+
+    /**
+     * Feen-Elytren: die Flügel der Mottenkönigin. Gleiten wie Elytren – dazu im Gleitflug (Springen) ein kräftiger
+     * Flügelschlag, der höher und weiter trägt (alle zwei Sekunden); im Flug schützen sie vor dem Aufprall an Wänden.
+     */
+    public static final DeferredItem<Item> FAE_ELYTRA = addItem(ModItems.ITEMS.registerSimpleItem("fae_elytra",
+            p -> p.durability(540).rarity(Rarity.EPIC)
+                    .component(net.minecraft.core.component.DataComponents.GLIDER, net.minecraft.util.Unit.INSTANCE)
+                    .component(net.minecraft.core.component.DataComponents.EQUIPPABLE,
+                            net.minecraft.world.item.equipment.Equippable.builder(net.minecraft.world.entity.EquipmentSlot.CHEST)
+                                    .setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.FAE_ELYTRA_ASSET)
+                                    .setDamageOnHurt(false).build())
+                    .repairable(ModTags.Items.REPAIRS_FAE_ELYTRA)
+                    .component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("fae_elytra", 4))));
 
     // ---------------------------------------------------------------- Hilfen
 
@@ -288,7 +323,21 @@ public final class FaeBlocks {
         return item;
     }
 
-    /** Spawn-Eier der Wesen des Feenreichs (werden mit den Wesen ergänzt). */
+    // =====================================================================================
+    // Spawn-Eier
+    // =====================================================================================
+
+    public static final DeferredItem<SpawnEggItem> FAIRY_SPAWN_EGG = egg("fairy", () -> ModEntities.FAIRY.get());
+    public static final DeferredItem<SpawnEggItem> FAE_WISP_SPAWN_EGG = egg("fae_wisp", () -> ModEntities.FAE_WISP.get());
+    public static final DeferredItem<SpawnEggItem> MUSHROOMLING_SPAWN_EGG = egg("mushroomling", () -> ModEntities.MUSHROOMLING.get());
+    public static final DeferredItem<SpawnEggItem> THORN_WIGHT_SPAWN_EGG = egg("thorn_wight", () -> ModEntities.THORN_WIGHT.get());
+    public static final DeferredItem<SpawnEggItem> MOTH_QUEEN_SPAWN_EGG = egg("moth_queen", () -> ModEntities.MOTH_QUEEN.get());
+
+    public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
+        return List.of(FAIRY_SPAWN_EGG, FAE_WISP_SPAWN_EGG, MUSHROOMLING_SPAWN_EGG, THORN_WIGHT_SPAWN_EGG, MOTH_QUEEN_SPAWN_EGG);
+    }
+
+    /** Spawn-Eier der Wesen des Feenreichs. */
     static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {
         DeferredItem<SpawnEggItem> item = ModItems.ITEMS.registerItem(name + "_spawn_egg", SpawnEggItem::new, p -> p.spawnEgg(type.get()));
         TAB.add(item);

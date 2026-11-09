@@ -90,10 +90,10 @@ public record ThornTreeFeature(Kind kind) implements Feature {
             a += (random.nextDouble() - 0.5) * 1.6;
             double l2 = 1.2 + random.nextDouble() * 1.4;
             BlockPos tip = tree.branch(wood, kx, ky, kz, kx + Math.cos(a) * l2, ky + 1.0 + random.nextDouble(), kz + Math.sin(a) * l2);
-            tree.blob(tip, 1.5 + random.nextDouble() * 0.6, 1.1, hedge, random, 0.45);
+            tree.blob(tip, 1.1 + random.nextDouble() * 0.5, 0.9, hedge, random, 0.55);
         }
         BlockPos top = BlockPos.containing(x, y, z);
-        tree.blob(top.above(), 1.8 + random.nextDouble() * 0.5, 1.2, hedge, random, 0.4);
+        tree.blob(top.above(), 1.3 + random.nextDouble() * 0.4, 1.0, hedge, random, 0.5);
         if (!tree.place(level, random, 0.18f, 4)) {
             return false;
         }

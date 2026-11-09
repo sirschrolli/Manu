@@ -145,6 +145,27 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_AMBIENT = register("block.fae_portal.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_LIGHT = register("block.fae_portal.light");
     public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_TRAVEL = register("block.fae_portal.travel");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAIRY_AMBIENT = register("entity.fairy.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAIRY_HURT = register("entity.fairy.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAIRY_DEATH = register("entity.fairy.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAIRY_GIFT = register("entity.fairy.gift");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUSHROOMLING_AMBIENT = register("entity.mushroomling.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUSHROOMLING_HURT = register("entity.mushroomling.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUSHROOMLING_DEATH = register("entity.mushroomling.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MUSHROOMLING_PUFF = register("entity.mushroomling.puff");
+    public static final DeferredHolder<SoundEvent, SoundEvent> THORN_VOLLEY = register("entity.thorn_wight.volley");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_SCREECH = register("entity.moth_queen.screech");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_AWAKEN = register("entity.moth_queen.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_GUST = register("entity.moth_queen.gust");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_SCALES = register("entity.moth_queen.scales");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_BEAM_CHARGE = register("entity.moth_queen.beam_charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_BEAM = register("entity.moth_queen.beam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_LULLABY = register("entity.moth_queen.lullaby");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_AMBIENT = register("entity.moth_queen.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_HURT = register("entity.moth_queen.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DEATH = register("entity.moth_queen.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MOTH_QUEEN_DIVE = register("entity.moth_queen.dive");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAE_ELYTRA_FLAP = register("item.fae_elytra.flap");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

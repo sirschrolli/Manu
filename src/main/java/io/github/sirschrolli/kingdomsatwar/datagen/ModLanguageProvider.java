@@ -624,9 +624,60 @@ public class ModLanguageProvider extends LanguageProvider {
         text(ModItems.loreKey("fae_dust", 2), "to open a gate into the Fae Realm", "öffnet ein Tor ins Feenreich");
         text("item.kingdomsatwar.fae_dust.no_frame", "The dust glitters, but finds no frame of Moonstone Bricks.",
                 "Der Staub glitzert, doch er findet keinen Rahmen aus Mondsteinziegeln.");
+        creature(ModEntities.FAIRY, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAIRY_SPAWN_EGG, "Fairy", "Fee", "Feen");
+        creature(ModEntities.FAE_WISP, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_WISP_SPAWN_EGG, "Fae Wisp", "Feen-Irrlicht",
+                "Feen-Irrlicht");
+        creature(ModEntities.MUSHROOMLING, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MUSHROOMLING_SPAWN_EGG, "Mushroomling",
+                "Pilzling", "Pilzling");
+        creature(ModEntities.THORN_WIGHT, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORN_WIGHT_SPAWN_EGG, "Thorn Wight",
+                "Dornwicht", "Dornwicht");
+        add(ModEntities.THORN.get(), pick("Thorn", "Dorn"));
+        subtitle("entity.fairy.ambient", "Fairy chimes", "Fee klingt");
+        subtitle("entity.fairy.hurt", "Fairy hurts", "Fee wird verletzt");
+        subtitle("entity.fairy.death", "Fairy fades", "Fee verblasst");
+        subtitle("entity.fairy.gift", "Fairy rejoices", "Fee freut sich");
+        subtitle("entity.mushroomling.ambient", "Mushroomling squeaks", "Pilzling quiekt");
+        subtitle("entity.mushroomling.hurt", "Mushroomling hurts", "Pilzling wird verletzt");
+        subtitle("entity.mushroomling.death", "Mushroomling pops", "Pilzling platzt");
+        subtitle("entity.mushroomling.puff", "Spores burst", "Sporen stieben");
+        subtitle("entity.thorn_wight.volley", "Thorns fly", "Dornen fliegen");
         subtitle("block.fae_portal.ambient", "Fae Portal shimmers", "Feenportal schimmert");
         subtitle("block.fae_portal.light", "Fae Portal opens", "Feenportal öffnet sich");
         subtitle("block.fae_portal.travel", "Fae Portal whirls", "Feenportal wirbelt");
+        // Noctua, die Mottenkönigin, und der Mondhain
+        creature(ModEntities.MOTH_QUEEN, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_QUEEN_SPAWN_EGG,
+                "Noctua, the Moth Queen", "Noctua, die Mottenkönigin", "Mottenkönigin");
+        add(ModEntities.MOON_MOTH.get(), pick("Moon Moth", "Mondfalter"));
+        text("boss.kingdomsatwar.moth", "Noctua, the Moth Queen", "Noctua, die Mottenkönigin");
+        text("boss.kingdomsatwar.moth.title", "Mistress of the Moon Grove", "Herrin des Mondhains");
+        text("message.kingdomsatwar.moth_queen.lullaby", "Don't look at her while she sings!", "Sieh nicht hin, wenn sie singt!");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_SILK, "Moth Silk", "Mottenseide");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.SILK_STRANDS, "Silk Strands", "Seidenfäden");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_COCOON, "Moth Queen's Cocoon", "Kokon der Mottenkönigin");
+        lore("moth_cocoon", "Sprinkle Fae Dust on it to wake the Moth Queen", "Mit Feenstaub bestreuen, um die Mottenkönigin zu wecken");
+        text("block.kingdomsatwar.moth_cocoon.hint", "Something pulses softly inside … perhaps a pinch of Fae Dust would wake it.",
+                "Darin pulsiert etwas sanft … vielleicht weckt es eine Prise Feenstaub.");
+        text("block.kingdomsatwar.moth_cocoon.peaceful", "The cocoon sleeps soundly (the world is set to Peaceful).",
+                "Der Kokon schläft tief und fest (die Welt steht auf „Friedlich“).");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA, "Fae Elytra", "Feen-Elytren");
+        lore("fae_elytra", "The wings of Noctua, the Moth Queen", "Die Flügel Noctuas, der Mottenkönigin");
+        text(ModItems.loreKey("fae_elytra", 2), "While gliding, jump: a mighty wingbeat", "Im Gleitflug springen: ein kräftiger Flügelschlag");
+        text(ModItems.loreKey("fae_elytra", 3), "No damage when crashing into walls", "Kein Schaden beim Aufprall an Wänden");
+        text(ModItems.loreKey("fae_elytra", 4), "Repair with Fae Dust", "Mit Feenstaub reparieren");
+        for (String[] e : new String[][] {{"ambient", "Moth Queen hums", "Mottenkönigin summt"}, {"hurt", "Moth Queen hurts", "Mottenkönigin nimmt Schaden"},
+                {"death", "Moth Queen fades", "Mottenkönigin verglimmt"}, {"screech", "Moth Queen shrieks", "Mottenkönigin kreischt"},
+                {"awaken", "The cocoon tears open", "Der Kokon reißt auf"}, {"gust", "Mighty wingbeats", "Mächtige Flügelschläge"},
+                {"scales", "Glittering scales trickle", "Glitzernde Schuppen rieseln"}, {"beam_charge", "Moonlight gathers", "Mondlicht sammelt sich"},
+                {"beam", "Moonbeam strikes", "Mondstrahl schlägt ein"}, {"lullaby", "Moth Queen sings", "Mottenkönigin singt"},
+                {"dive", "Moth Queen dives", "Mottenkönigin stößt herab"}}) {
+            subtitle("entity.moth_queen." + e[0], e[1], e[2]);
+        }
+        subtitle("item.fae_elytra.flap", "Wings beat", "Flügel schlagen");
+        text("command.kingdomsatwar.mondhain.where", "Nearest Moon Grove: %s (%s blocks)", "Nächster Mondhain: %s (%s Blöcke)");
+        text("command.kingdomsatwar.mondhain.not_fae", "Moon Groves only exist in the Fae Realm.", "Mondhaine gibt es nur im Feenreich.");
+        text("command.kingdomsatwar.mondhain.awakened", "The Moth Queen awakens.", "Die Mottenkönigin erwacht.");
+        text("command.kingdomsatwar.mondhain.no_cocoon", "There is no cocoon on the altar (is the queen already awake?).",
+                "Auf dem Altar liegt kein Kokon (ist die Königin schon wach?).");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

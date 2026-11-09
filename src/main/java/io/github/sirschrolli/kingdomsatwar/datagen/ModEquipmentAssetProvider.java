@@ -34,6 +34,11 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
         output.accept(ModEquipment.SHATTERED_CROWN_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.HUMANOID, new EquipmentClientInfo.Layer(ModEquipment.SHATTERED_CROWN_ASSET.identifier()))
                 .build());
+        // Feen-Elytren: die Flügel der Mottenkönigin (nicht vom Umhang des Spielers ersetzt)
+        output.accept(ModEquipment.FAE_ELYTRA_ASSET, EquipmentClientInfo.builder()
+                .addLayers(EquipmentClientInfo.LayerType.WINGS,
+                        new EquipmentClientInfo.Layer(ModEquipment.FAE_ELYTRA_ASSET.identifier(), Optional.empty(), false))
+                .build());
         // Gleiter: eigene Flügel-Textur (nicht vom Umhang des Spielers ersetzt)
         output.accept(ModEquipment.GLIDER_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,

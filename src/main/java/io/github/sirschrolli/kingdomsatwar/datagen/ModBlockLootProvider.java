@@ -326,6 +326,10 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(FaeBlocks.GLOW_VINES.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
         add(FaeBlocks.GLOW_VINES_PLANT.get(), block -> createShearsOrSilkTouchOnlyDrop(FaeBlocks.GLOW_VINES.get()));
         add(FaeBlocks.THORN_HEDGE.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
+        dropSelf(FaeBlocks.MOTH_SILK.get());
+        add(FaeBlocks.SILK_STRANDS.get(), block -> createSilkTouchOrShearsDispatchTable(block, this.applyExplosionDecay(block,
+                LootItem.lootTableItem(net.minecraft.world.item.Items.STRING)
+                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 1))))));
     }
 
     /** Der Meeresgrund (0.62): Anemonen, Röhrenwürmer, Gestein; Muscheln so viele, wie liegen; Algen nur mit Schere. */

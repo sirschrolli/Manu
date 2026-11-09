@@ -29,7 +29,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
-                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus)
+                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
+                              fairy, mushroomling, thorn_wight, moth_queen)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -74,6 +75,12 @@ def main():
     write_model(deer, "DeerGeometry", "Geometrie des Rothirschs (mit Geweih).", "deer", deer.PALETTES, preview)
     write_model(goose, "GooseGeometry", "Geometrie der Gans.", "goose", goose.PALETTES, preview)
     write_model(will_o_wisp, "WillOWispGeometry", "Geometrie des Irrlichts.", "will_o_wisp", will_o_wisp.PALETTES, preview)
+    # Wesen des Feenreichs
+    write_model(fairy, "FairyGeometry", "Geometrie der Fee (Skelett des Hilfsgeists).", "fairy", fairy.PALETTES, preview)
+    write_model(mushroomling, "MushroomlingGeometry", "Geometrie des Pilzlings.", "mushroomling", mushroomling.PALETTES, preview)
+    write_model(thorn_wight, "ThornWightGeometry", "Geometrie des Dornwichts.", "thorn_wight", thorn_wight.PALETTES, preview)
+    write_model(moth_queen, "MothQueenGeometry", "Geometrie der Mottenkönigin (im Spiel 2,5-fach vergrößert).", "moth_queen",
+                moth_queen.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)

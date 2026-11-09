@@ -67,6 +67,13 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.DEER, DeerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GOOSE, GooseGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.WILL_O_WISP, WillOWispGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.FAIRY, io.github.sirschrolli.kingdomsatwar.client.model.geom.FairyGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MUSHROOMLING,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.MushroomlingGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.THORN_WIGHT,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.ThornWightGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MOTH_QUEEN,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.MothQueenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
@@ -152,6 +159,18 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.GOOSE.get(), GooseRenderer::new);
         event.registerEntityRenderer(ModEntities.SEAT.get(), NoopRenderer::new);
         event.registerEntityRenderer(ModEntities.WILL_O_WISP.get(), WillOWispRenderer::new);
+        event.registerEntityRenderer(ModEntities.FAE_WISP.get(), context -> new WillOWispRenderer(context, WillOWispRenderer.FAE_TEXTURE));
+        event.registerEntityRenderer(ModEntities.FAIRY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.fae.FairyRenderer::new);
+        event.registerEntityRenderer(ModEntities.MUSHROOMLING.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MushroomlingRenderer::new);
+        event.registerEntityRenderer(ModEntities.THORN_WIGHT.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.ThornWightRenderer::new);
+        event.registerEntityRenderer(ModEntities.THORN.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.ThornProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.MOTH_QUEEN.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MothQueenRenderer::new);
+        event.registerEntityRenderer(ModEntities.MOON_MOTH.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MoonMothRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)

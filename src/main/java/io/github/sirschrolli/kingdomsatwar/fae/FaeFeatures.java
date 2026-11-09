@@ -78,7 +78,8 @@ public final class FaeFeatures {
     /** Auf dem Boden (auch am Grund von höchstens {@code maxWater} Blöcken Wasser). */
     private static List<PlacementModifier> ground(PlacementModifier frequency, int maxWater) {
         return List.of(frequency, InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(maxWater),
-                HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome());
+                HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome(),
+                io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter.INSTANCE);
     }
 
     /** Ein Grüppchen Pflanzen: {@code tries} Versuche rund um eine Stelle (nur in Luft). */
@@ -137,10 +138,16 @@ public final class FaeFeatures {
             Blocks.CALCITE.defaultBlockState(), 0.3f, state(FaeBlocks.MOONSTONE_BRICKS.base()), 0.0f, Blocks.AIR.defaultBlockState(),
             1.2f, 2.4f, true), ground(rare(3), 4));
 
+    // --- Der Mondhain (einer pro Feld, in allen Biomen; die Lichtung der Mottenkönigin) ---
+    static final Entry MONDHAIN = entry(STRUCTURES, "mondhain", io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature::new,
+            List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SPACING,
+                    io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SALT, 0)));
+
     // --- Ruinen ---
     static final Entry RUINS = entry(STRUCTURES, "ruins", FaeRuinFeature::new,
             List.of(new SpacedPlacement(6, 2, 7_411, 0), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0),
-                    HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome()));
+                    HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome(),
+                    io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter.INSTANCE));
 
     // --- Bäume und Riesenpilze ---
     static final Entry GRAND_TREES = entry(VEGETATION, "glimmer_giants",
@@ -226,26 +233,26 @@ public final class FaeFeatures {
     }
 
     static BiomeGenerationSettings meadows(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS);
     }
 
     static BiomeGenerationSettings glimmerwood(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings mushroomGrove(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_MOSSY, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
+        return settings(placed, carvers, BOULDERS_MOSSY, MONDHAIN, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
                 FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings moonlitLakes(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_SHORE, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
+        return settings(placed, carvers, BOULDERS_SHORE, MONDHAIN, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
     }
 
     static BiomeGenerationSettings thornwild(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
                 BRIARS, LILIES_RARE);
     }
 }

@@ -86,6 +86,10 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> atoll(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> atoll(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> atoll(context.getSource(), "reset"))))
+                .then(Commands.literal("mondhain").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> mondhain(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> mondhain(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> mondhain(context.getSource(), "awaken"))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
@@ -360,6 +364,65 @@ public final class ModGameEvents {
             source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.atoll.reset"), true);
         }
         return 1;
+    }
+
+    /**
+     * {@code /kaw mondhain}: Lage des nächsten Mondhains im Feenreich; {@code tp} bringt einen dorthin (auch aus einer
+     * anderen Welt), {@code awaken} weckt die Mottenkönigin aus ihrem Kokon.
+     */
+    private static int mondhain(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel fae = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.fae.FaeGate.FAE_REALM);
+        if (fae == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondhain.not_fae"));
+            return 0;
+        }
+        boolean inRealm = source.getLevel() == fae;
+        if (!inRealm && mode.isEmpty()) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondhain.not_fae"));
+            return 0;
+        }
+        net.minecraft.world.phys.Vec3 from = source.getPosition();
+        BlockPos center = io.github.sirschrolli.kingdomsatwar.fae.Mondhain.nearest(fae.getSeed(), (int) Math.floor(from.x), (int) Math.floor(from.z));
+        int distance = (int) Math.sqrt(Math.pow(center.getX() - from.x, 2) + Math.pow(center.getZ() - from.z, 2));
+        Component where = Component.literal(center.getX() + ", " + center.getZ()).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondhain.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        fae.getChunk(center.getX() >> 4, center.getZ() >> 4);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int x = center.getX();
+            int z = center.getZ() + 9;
+            fae.getChunk(x >> 4, z >> 4);
+            int y = fae.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            player.teleportTo(fae, x + 0.5, y, z + 0.5, java.util.Set.of(), 180.0f, 10.0f, true);
+            return 1;
+        }
+        BlockPos cocoon = findCocoon(fae, center);
+        if (cocoon == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondhain.no_cocoon"));
+            return 0;
+        }
+        if (!io.github.sirschrolli.kingdomsatwar.block.fae.MothCocoonBlock.awaken(fae, cocoon, null)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.mondhain.no_cocoon"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondhain.awakened"), true);
+        return 1;
+    }
+
+    /** Sucht den Kokon in der Mitte des Mondhains (von oben nach unten). */
+    private static @org.jspecify.annotations.Nullable BlockPos findCocoon(ServerLevel level, BlockPos center) {
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, center.getX(), center.getZ());
+        for (int y = top + 2; y > top - 12; y--) {
+            BlockPos pos = new BlockPos(center.getX(), y, center.getZ());
+            if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_COCOON.get())) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     private static int summonBoss(ServerPlayer player, boolean nyxar) {

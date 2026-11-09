@@ -93,15 +93,15 @@ public final class FaeBiomes {
     public static void bootstrap(BootstrapContext<Biome> context) {
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<WorldCarver> carvers = context.lookup(Registries.CARVER);
-        context.register(FAE_MEADOWS, biome(new Look(0x7A5AB8, 0xF2A27C, 0x8FE6B4, 0xF6A6C8, 0x4FA8D8), ModParticles.FAE_SPARK.get(), 0.0025f,
+        context.register(FAE_MEADOWS, biome(new Look(0x7A5AB8, 0xF2A27C, 0xA6F0BE, 0xF6A6C8, 0x4FA8D8), ModParticles.FAE_SPARK.get(), 0.0025f,
                 SoundEvents.MUSIC_BIOME_CHERRY_GROVE, FaeFeatures.meadows(placed, carvers), FaeSpawns.meadows()));
-        context.register(GLIMMERWOOD, biome(new Look(0x6E4FB0, 0xE89A88, 0x7ADBB0, 0xF0A0D0, 0x3E9ACC), ModParticles.FAE_SPARK.get(), 0.006f,
+        context.register(GLIMMERWOOD, biome(new Look(0x6E4FB0, 0xE89A88, 0x8EE6BC, 0xF0A0D0, 0x3E9ACC), ModParticles.FAE_SPARK.get(), 0.006f,
                 SoundEvents.MUSIC_BIOME_CHERRY_GROVE, FaeFeatures.glimmerwood(placed, carvers), FaeSpawns.glimmerwood()));
-        context.register(MUSHROOM_GROVE, biome(new Look(0x5E4AA8, 0xD890A8, 0x86D8C0, 0xC890E8, 0x4A88D0), ParticleTypes.SPORE_BLOSSOM_AIR,
-                0.008f, SoundEvents.MUSIC_BIOME_LUSH_CAVES, FaeFeatures.mushroomGrove(placed, carvers), FaeSpawns.mushroomGrove()));
-        context.register(MOONLIT_LAKES, biome(new Look(0x6A5AC0, 0xF0A890, 0x92E4BE, 0xE8A8D8, 0x5AB4E8), ModParticles.FAE_SPARK.get(), 0.0035f,
+        context.register(MUSHROOM_GROVE, biome(new Look(0x5E4AA8, 0xD890A8, 0x96E2CC, 0xC890E8, 0x4A88D0), ModParticles.FAE_SPARK.get(),
+                0.009f, SoundEvents.MUSIC_BIOME_LUSH_CAVES, FaeFeatures.mushroomGrove(placed, carvers), FaeSpawns.mushroomGrove()));
+        context.register(MOONLIT_LAKES, biome(new Look(0x6A5AC0, 0xF0A890, 0xA2EEC6, 0xE8A8D8, 0x5AB4E8), ModParticles.FAE_SPARK.get(), 0.0035f,
                 SoundEvents.MUSIC_BIOME_MEADOW, FaeFeatures.moonlitLakes(placed, carvers), FaeSpawns.moonlitLakes()));
-        context.register(THORNWILD, biome(new Look(0x4A3478, 0xB0708A, 0x6AAE98, 0x9A70B8, 0x3A6A9A), ParticleTypes.WHITE_ASH, 0.004f,
+        context.register(THORNWILD, biome(new Look(0x4A3478, 0xB0708A, 0x78B8A0, 0x9A70B8, 0x3A6A9A), ParticleTypes.WHITE_ASH, 0.004f,
                 SoundEvents.MUSIC_BIOME_OLD_GROWTH_TAIGA, FaeFeatures.thornwild(placed, carvers), FaeSpawns.thornwild()));
     }
 

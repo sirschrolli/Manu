@@ -210,6 +210,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_SHATTERED_CROWN = mod("repairs_shattered_crown");
         public static final TagKey<Item> REPAIRS_TIDE_SPEAR = mod("repairs_tide_spear");
         public static final TagKey<Item> REPAIRS_GLIDER = mod("repairs_wyvernit_glider");
+        public static final TagKey<Item> REPAIRS_FAE_ELYTRA = mod("repairs_fae_elytra");
         public static final TagKey<Item> REPAIRS_DRACONIUM = mod("repairs_draconium");
         /** Alle Rüstungsteile aus Drachenschuppen. */
         public static final TagKey<Item> DRAGON_SCALE_ARMOR = mod("dragon_scale_armor");

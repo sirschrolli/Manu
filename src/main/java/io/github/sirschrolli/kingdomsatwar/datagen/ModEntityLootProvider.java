@@ -311,6 +311,30 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 3))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9))
                 .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
+        // Wesen des Feenreichs: Feen lassen beim Sterben Feenstaub, Pilzlinge Laternenpilze, Dornwichte Stöcke und Dornen
+        this.add(ModEntities.FAIRY.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0, 1)));
+        this.add(ModEntities.FAE_WISP.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0, 1))
+                .withPool(drop(ModItems.WISP_DUST.get(), 1, 2)));
+        this.add(ModEntities.MUSHROOMLING.get(), LootTable.lootTable()
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.LANTERN_MUSHROOM.get(), 0, 2)));
+        this.add(ModEntities.THORN_WIGHT.get(), LootTable.lootTable()
+                .withPool(drop(net.minecraft.world.item.Items.STICK, 1, 3))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORNBRIAR.get(), 0, 2))
+                .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 0.25f, 0.05f))
+                .withPool(drop(ModItems.SILVER_COIN.get(), 0, 2)));
+        // Noctua, die Mottenkönigin: die Feen-Elytren, viel Feenstaub, Mottenseide, gemeißelter Mondstein und Schätze;
+        // ihre Mondfalter verglimmen ohne Beute
+        this.add(ModEntities.MOTH_QUEEN.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 8, 16))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOTH_SILK.get(), 4, 8))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.CHISELED_MOONSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9)));
+        this.add(ModEntities.MOON_MOTH.get(), LootTable.lootTable());
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

@@ -16,6 +16,11 @@ PALETTES = {
         "body": ramp("#141a30", "#5a6a9a"), "wing": ramp("#26325e", "#a8b8ec"), "spot": ramp("#5ac8ff", "#f0fbff"),
         "back": ramp("#141a30", "#5a6a9a"),
     },
+    # Mondfalter: die Diener der Mottenkönigin – flieder mit rosa leuchtenden Augenflecken
+    "moon_moth": {
+        "body": ramp("#4a3a6a", "#e8dcff"), "wing": ramp("#6a5aa0", "#f0e8ff"), "spot": ramp("#ff6aa8", "#fff4e0"),
+        "back": ramp("#4a3a6a", "#e8dcff"),
+    },
 }
 
 

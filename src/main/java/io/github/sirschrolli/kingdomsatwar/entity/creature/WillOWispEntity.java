@@ -73,11 +73,11 @@ public class WillOWispEntity extends PathfinderMob {
         Level level = this.level();
         if (level.isClientSide()) {
             if (this.random.nextInt(3) == 0) {
-                level.addParticle(ParticleTypes.GLOW, this.getRandomX(0.6), this.getY(0.5) + (this.random.nextDouble() - 0.5) * 0.4,
+                level.addParticle(this.glowParticle(), this.getRandomX(0.6), this.getY(0.5) + (this.random.nextDouble() - 0.5) * 0.4,
                         this.getRandomZ(0.6), 0.0, 0.01, 0.0);
             }
             if (this.random.nextInt(12) == 0) {
-                level.addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(0.5), this.getZ(),
+                level.addParticle(this.sparkParticle(), this.getX(), this.getY(0.5), this.getZ(),
                         (this.random.nextDouble() - 0.5) * 0.02, 0.02, (this.random.nextDouble() - 0.5) * 0.02);
             }
             return;
@@ -92,7 +92,16 @@ public class WillOWispEntity extends PathfinderMob {
         }
     }
 
-    private void vanish(ServerLevel level) {
+    /** Der Schein um das Licht (Feen-Irrlichter funkeln golden). */
+    protected net.minecraft.core.particles.ParticleOptions glowParticle() {
+        return ParticleTypes.GLOW;
+    }
+
+    protected net.minecraft.core.particles.ParticleOptions sparkParticle() {
+        return ParticleTypes.END_ROD;
+    }
+
+    protected void vanish(ServerLevel level) {
         level.sendParticles(ParticleTypes.GLOW, this.getX(), this.getY(0.5), this.getZ(), 20, 0.3, 0.3, 0.3, 0.05);
         this.playSound(ModSounds.WISP_VANISH.get(), 0.8f, 1.2f);
         this.discard();

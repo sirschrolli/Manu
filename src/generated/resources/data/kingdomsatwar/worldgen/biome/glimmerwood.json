@@ -19,7 +19,23 @@
       "argument": {
         "spawn_costs": {},
         "spawns_by_category": {
+          "ambient": [
+            {
+              "type": "kingdomsatwar:fae_wisp",
+              "count": 1,
+              "weight": 5
+            }
+          ],
           "creature": [
+            {
+              "type": "kingdomsatwar:fairy",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "weight": 12
+            },
             {
               "type": "minecraft:fox",
               "count": {
@@ -27,7 +43,7 @@
                 "max_inclusive": 3,
                 "min_inclusive": 2
               },
-              "weight": 6
+              "weight": 5
             },
             {
               "type": "minecraft:rabbit",
@@ -36,7 +52,7 @@
                 "max_inclusive": 2,
                 "min_inclusive": 1
               },
-              "weight": 3
+              "weight": 2
             }
           ]
         }
@@ -60,7 +76,7 @@
   "effects": {
     "dry_foliage_color": "#f0a0d0",
     "foliage_color": "#f0a0d0",
-    "grass_color": "#7adbb0",
+    "grass_color": "#8ee6bc",
     "water_color": "#3e9acc"
   },
   "features": [

@@ -63,6 +63,12 @@ ELEMENTS = {
                  coral="#ee5a40", coral_dark="#7e2420", coral_light="#ffb08a", fan="#c25ab8", fan_dark="#5e2058",
                  sponge="#f0a428", sponge_dark="#7a4a10", brain="#d8c060", brain_dark="#7a6420",
                  anemone="#7ae8a8", anemone_dark="#1e6a4c", star="#ff8a3a"),
+    # Noctua, die Mottenkönigin: Mondsilber mit Goldsaum, darauf Mottenflügel, Seidenfäden und Mondsicheln; Füllung wie
+    # schimmernder Flügelstaub (Schuppenreihen, Glitzer)
+    "moth": dict(m0="#1a1428", m1="#5a4e78", m2="#e2dcf2", acc="#ff8ad0", glow="#fff0fa", deep="#140c24",
+                 f0="#3a1458", f1="#8a3aa8", f2="#e47ac8", f3="#fff0fa", gold="#ffd878", gold_dark="#8a6420",
+                 wing="#9ee8c8", wing_dark="#3a8a74", wing_light="#e4fff2", spot="#ff7ab8", spot_dark="#5a1e4e",
+                 silk="#f4eefc", silk_dark="#a898c4"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -821,7 +827,98 @@ def deco_reef(img: Image.Image, pal: dict) -> None:
                 put(px, img, ex + dx, ey + dy, cols[ch])
 
 
-DECOS = {"void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_moth(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon breitet die Mottenkönigin ihre Flügel aus (Vorderflügel nach oben, Hinterflügel mit langen
+    Schwänzen nach unten, mit Augenflecken); oben auf dem Rahmen sitzen gefiederte Fühler und kleine Mondsicheln,
+    unter der Leiste hängen Seidenfäden mit Tautropfen; zwei kleine Falter schwirren über der Leiste. Als Spitze eine
+    liegende Mondsichel mit Stern."""
+    px = img.load()
+    f2, f3 = c(pal, "f2"), c(pal, "f3")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    wing, wing_dark, wing_light = c(pal, "wing"), c(pal, "wing_dark"), c(pal, "wing_light")
+    spot, spot_dark = c(pal, "spot"), c(pal, "spot_dark")
+    silk, silk_dark = c(pal, "silk"), c(pal, "silk_dark")
+    m1 = c(pal, "m1")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def wing_shape(cx: float, cy: float, rx: float, ry: float, ang: float, tail: float):
+        """Ein Flügel als gedrehte Ellipse, der Rand hell, innen Adern, ein Augenfleck; optional ein Schwanz."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - cx, y + 0.5 - cy
+                u = (dx * ca + dy * sa) / rx
+                v = (-dx * sa + dy * ca) / ry
+                d = u * u + v * v
+                if d > 1.0 or u < 0.0:
+                    continue
+                col = mix(wing_dark, wing, 0.35 + 0.65 * u)
+                if d > 0.72:
+                    col = wing_light if d < 0.86 else mix(wing_dark, OUTLINE, 0.3)
+                elif abs(math.sin(math.atan2(v, u) * 5.0)) < 0.12:
+                    col = mix(wing_dark, wing, 0.3)
+                es = (u - 0.62) ** 2 + (v * 1.2) ** 2
+                if es < 0.012:
+                    col = f3
+                elif es < 0.03:
+                    col = spot
+                elif es < 0.05:
+                    col = gold
+                elif es < 0.07:
+                    col = spot_dark
+                put(px, img, x, y, col)
+        if tail > 0:
+            tx, ty = cx + ca * rx * 0.9, cy + sa * rx * 0.9
+            for k in range(int(tail)):
+                t = k / max(1, tail - 1)
+                put(px, img, round(tx + ca * k * 0.8 + t * t * 3.0), round(ty + sa * k * 0.8), wing if k < tail - 1 else wing_light)
+
+    # Flügel, die hinter dem Medaillon hervorkommen: oben der Vorderflügel, unten der Hinterflügel mit Schwanz
+    wing_shape(EMB_X + 13, EMB_Y - 8, 27, 8.5, math.radians(-17), 0)
+    wing_shape(EMB_X + 12, EMB_Y + 8, 19, 6.0, math.radians(20), 8)
+    # gefiederte Fühler über dem Medaillon
+    for side in (-1, 1):
+        x0, y0 = EMB_X + side * 4, EMB_Y - EMB_R + 1
+        for k in range(9):
+            x = round(x0 + side * k * 0.6)
+            y = y0 - k
+            put(px, img, x, y, m1 if k < 8 else gold)
+            if 1 < k < 8 and k % 2 == 0:
+                put(px, img, x - side, y, mix(m1, silk, 0.4))
+                put(px, img, x + side, y + 1, mix(m1, silk, 0.25))
+    # kleine Mondsicheln auf dem Rahmen (nach rechts offen), daneben ein Stern
+    crescent = (".gg.", "g..o", "g...", "g..o", ".gg.")
+    for x0 in range(BAR_X + 34, BAR_X + BAR_W - 10, 38):
+        for dy, row in enumerate(crescent):
+            for dx, ch in enumerate(row):
+                if ch == "g":
+                    put(px, img, x0 + dx, top - 7 + dy, gold if dy < 3 else gold_dark)
+                elif ch == "o":
+                    put(px, img, x0 + dx, top - 7 + dy, mix(gold, f3, 0.5))
+        put(px, img, x0 + 6, top - 8, f3)
+    # Seidenfäden mit Tautropfen unter der Leiste
+    for x in range(BAR_X + 11, BAR_X + BAR_W - 4, 17):
+        length = 3 + round(hash01(x, 41) * 7)
+        for k in range(length):
+            put(px, img, x, bottom + 1 + k, silk if k % 4 else silk_dark)
+        put(px, img, x, bottom + 1 + length, f3)
+        put(px, img, x, bottom + 2 + length, f2)
+    # zwei kleine Falter über der Leiste
+    for (mx, my) in ((BAR_X + 70, top - 9), (BAR_X + 140, top - 7)):
+        for dx, dy, col in ((-2, -1, wing), (-1, -1, wing_light), (-1, 0, wing), (0, 0, silk_dark), (1, 0, wing), (1, -1, wing_light),
+                            (2, -1, wing), (-1, 1, wing_dark), (1, 1, wing_dark), (0, -1, silk_dark)):
+            put(px, img, mx + dx, my + dy, col)
+    # Spitze: eine liegende Mondsichel mit Stern
+    ex, ey = BAR_X + BAR_W + 2, BAR_Y + BAR_H // 2
+    for k in range(9):
+        a = math.radians(-120 + k * 30)
+        put(px, img, round(ex + 3 + math.cos(a) * 4), round(ey + math.sin(a) * 4), gold if 1 <= k <= 7 else gold_dark)
+        put(px, img, round(ex + 3 + math.cos(a) * 3), round(ey + math.sin(a) * 3), mix(gold, f3, 0.4) if 2 <= k <= 6 else gold_dark)
+    put(px, img, ex + 7, ey - 1, f3)
+    put(px, img, ex + 7, ey, f2)
+
+
+DECOS = {"moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -870,6 +967,15 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x, y, 91) > 0.975:
             return 1.0
         return 0.92 if near < 0.14 else (0.66 if near < 0.3 else 0.36 + 0.1 * math.sin(tau * x / 64))
+    if element == "moth":
+        # Flügelstaub: versetzte Reihen kleiner Schuppen (Bögen), dazwischen Glitzer
+        row = y // 3
+        sx = (x + (row % 2) * 3) % 6
+        arc = abs(sx - 2.5) / 2.5
+        scale = 0.42 + 0.3 * (1.0 - arc) * (1.0 if y % 3 else 0.6)
+        if hash01(x, y, 61) > 0.97:
+            return 1.0
+        return scale + 0.08 * math.sin(tau * x / 64)
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -969,12 +1075,12 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
-    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, reef_colossus,
-                                  shattered_king)
+    from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water, moth_queen,
+                                  reef_colossus, shattered_king)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
-           "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus}[element]
+           "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -997,14 +1103,22 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_extra(child)
         strip_extra(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20}.get(element, -42)
-    pitch = {"reef": 8}.get(element, 6)
+    if element == "moth":
+        # nur Kopf mit Krone und Fühlern, Brust und der Ansatz der Flügel
+        def strip_moth(bone):
+            if bone.name.startswith(("left_leg", "right_leg", "abdomen", "tail", "left_wing", "right_wing", "left_hind", "right_hind")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_moth(child)
+        strip_moth(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8}.get(element, -42)
+    pitch = {"reef": 8, "moth": 4}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0, "reef": 1.35}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35, "moth": 1.25}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()

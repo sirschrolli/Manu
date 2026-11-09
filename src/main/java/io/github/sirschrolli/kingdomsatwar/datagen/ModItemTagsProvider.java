@@ -179,8 +179,9 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
             }
         });
         // Der Gleiter lässt sich wie Elytren verzaubern (Haltbarkeit, Reparatur, Flüche)
-        add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
-        add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER);
+        add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
+        add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
+        add(ModTags.Items.REPAIRS_FAE_ELYTRA, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
         add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.TROLL_CLUB);
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, ModItems.TROLL_CLUB);

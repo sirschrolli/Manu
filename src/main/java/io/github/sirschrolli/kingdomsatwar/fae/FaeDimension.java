@@ -51,8 +51,8 @@ public final class FaeDimension {
         EnvironmentAttributeMap attributes = EnvironmentAttributeMap.builder()
                 .set(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(0x7A5AB8))
                 .set(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(0xF2A27C))
-                .set(EnvironmentAttributes.FOG_START_DISTANCE, 36.0f)
-                .set(EnvironmentAttributes.FOG_END_DISTANCE, 240.0f)
+                .set(EnvironmentAttributes.FOG_START_DISTANCE, 72.0f)
+                .set(EnvironmentAttributes.FOG_END_DISTANCE, 340.0f)
                 // die Abendröte am Horizont: kräftiges Orange-Rosa
                 .set(EnvironmentAttributes.SUNRISE_SUNSET_COLOR, ARGB.vector4fFromARGB32(0xE6FF8A4C))
                 .set(EnvironmentAttributes.CLOUD_COLOR, ARGB.vector4fFromARGB32(0xE6FFC2CC))

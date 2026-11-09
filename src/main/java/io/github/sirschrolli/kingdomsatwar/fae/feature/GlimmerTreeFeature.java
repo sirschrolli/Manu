@@ -220,32 +220,38 @@ public record GlimmerTreeFeature(Kind kind, Palette palette) implements Feature 
 
     /** Kurzer Stamm, Bogenäste rundum, eine flache Kuppel und Laubvorhänge, die tief herabhängen. */
     private static void weeping(FaeTree tree, RandomSource random, BlockPos origin, BlockState leaf) {
-        int height = 5 + random.nextInt(3);
+        int height = 6 + random.nextInt(3);
         double x0 = origin.getX() + 0.5;
         double z0 = origin.getZ() + 0.5;
         int y0 = origin.getY();
         double lean = random.nextDouble() * Math.PI * 2.0;
-        double tx = x0 + Math.cos(lean) * 0.8;
-        double tz = z0 + Math.sin(lean) * 0.8;
-        BlockPos top = tree.branch(log(), x0, y0, z0, tx, y0 + height, tz);
+        double tx = x0 + Math.cos(lean) * 1.1;
+        double tz = z0 + Math.sin(lean) * 1.1;
+        tree.branch(log(), x0, y0, z0, x0, y0 + 2, z0);
+        BlockPos top = tree.branch(log(), x0, y0 + 2, z0, tx, y0 + height, tz);
+        // Bogenäste: erst schräg hinauf, dann weit hinaus und wieder ein wenig hinab
         int arms = 5 + random.nextInt(3);
+        java.util.List<BlockPos> tips = new java.util.ArrayList<>();
         for (int b = 0; b < arms; b++) {
             double a = (b + random.nextDouble() * 0.4) * Math.PI * 2.0 / arms;
-            double length = 3.0 + random.nextDouble() * 1.4;
-            double ex = tx + Math.cos(a) * length;
-            double ez = tz + Math.sin(a) * length;
-            BlockPos tip = tree.branch(wood(), tx, y0 + height - 1, tz, ex, y0 + height + 0.5, ez);
-            tree.blob(tip, 1.7 + random.nextDouble() * 0.4, 1.1, leaf, random, 0.3);
+            double length = 3.6 + random.nextDouble() * 1.6;
+            double kx = tx + Math.cos(a) * length * 0.5;
+            double kz = tz + Math.sin(a) * length * 0.5;
+            double ky = y0 + height + 1.2;
+            tree.branch(wood(), tx, y0 + height - 1, tz, kx, ky, kz);
+            BlockPos tip = tree.branch(wood(), kx, ky, kz, tx + Math.cos(a) * length, ky - 0.6, tz + Math.sin(a) * length);
+            tips.add(tip);
+            tree.blob(tip.above(), 1.5, 0.9, leaf, random, 0.35);
         }
-        tree.blob(top.above(), 3.4 + random.nextDouble() * 0.6, 1.8, leaf, random, 0.25);
-        // Vorhänge: vom Kronenrand hängt das Laub in Strähnen herab
+        tree.blob(top.above(2), 3.0 + random.nextDouble() * 0.5, 1.4, leaf, random, 0.3);
+        // Vorhänge: von den Astenden und dem Kronenrand hängt das Laub in Strähnen herab – mit Lücken dazwischen
         double cx = top.getX() + 0.5;
         double cz = top.getZ() + 0.5;
         for (BlockPos pos : tree.leafPositions()) {
             double dx = pos.getX() + 0.5 - cx;
             double dz = pos.getZ() + 0.5 - cz;
             double d = Math.sqrt(dx * dx + dz * dz);
-            if (d < 2.4 || tree.hasLeaf(pos.below()) || random.nextFloat() > 0.6f) {
+            if (d < 2.6 || tree.hasLeaf(pos.below()) || tree.hasLog(pos.below()) || random.nextFloat() > 0.42f) {
                 continue;
             }
             int hang = 2 + random.nextInt(4);

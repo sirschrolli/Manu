@@ -63,6 +63,8 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("fae_thorn_tree", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.ThornTreeFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.FaeRuinFeature>> FAE_RUIN =
             FEATURE_TYPES.register("fae_ruin", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.FaeRuinFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature>> MONDHAIN =
+            FEATURE_TYPES.register("fae_mondhain", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature.CODEC);
 
     // --- Oberwelt (eigene Biome) ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature>> BOULDER =
@@ -131,6 +133,10 @@ public final class ModFeatureTypes {
     /** Nur außerhalb der Dörfer (Bäume, Felsen, Teiche und Ruinen halten Abstand zu Häusern und Wegen). */
     public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter>>
             NOT_IN_VILLAGE = PLACEMENT_TYPES.register("not_in_village", () -> io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageClearing.Filter.CODEC);
+
+    /** Im Feenreich: nicht im Mondhain (Bäume, Pilze, Felsen und Ruinen lassen die Lichtung der Mottenkönigin frei). */
+    public static final DeferredHolder<MapCodec<? extends PlacementModifier>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter>>
+            NOT_IN_MONDHAIN = PLACEMENT_TYPES.register("not_in_mondhain", () -> io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter.CODEC);
 
     /** Eigene Biom-Änderungen (Tausch der Vanilla-Wildtiere gegen die eigenen, siehe {@link ReplaceSpawnsBiomeModifier}). */
     public static final DeferredRegister<MapCodec<? extends net.neoforged.neoforge.common.world.BiomeModifier>> BIOME_MODIFIERS =

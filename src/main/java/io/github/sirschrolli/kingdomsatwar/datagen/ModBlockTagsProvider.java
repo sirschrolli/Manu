@@ -250,7 +250,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 FaeBlocks.VIOLET_MUSHROOM_CAP);
         add(BlockTags.SWORD_EFFICIENT, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES, FaeBlocks.FAE_SPROUTS,
                 FaeBlocks.MOONBELL, FaeBlocks.FAE_ROSE, FaeBlocks.STARLACE, FaeBlocks.LANTERN_MUSHROOM, FaeBlocks.GLOW_VINES,
-                FaeBlocks.GLOW_VINES_PLANT, FaeBlocks.THORNBRIAR, FaeBlocks.THORN_HEDGE);
+                FaeBlocks.GLOW_VINES_PLANT, FaeBlocks.THORNBRIAR, FaeBlocks.THORN_HEDGE, FaeBlocks.SILK_STRANDS);
+        // der Mondhain: Mottenseide (wie Wolle), der Kokon ist unzerstörbar
+        add(BlockItemTags.WOOL.block(), FaeBlocks.MOTH_SILK);
+        add(BlockTags.DRAGON_IMMUNE, FaeBlocks.MOTH_COCOON);
+        add(BlockTags.WITHER_IMMUNE, FaeBlocks.MOTH_COCOON);
         add(ModTags.Blocks.GLIMMERWOOD_LOGS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD, FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
                 FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD);
         tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.GLIMMERWOOD_LOGS);

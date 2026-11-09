@@ -38,6 +38,8 @@ public final class ModEquipment {
     /** Krone des Zerbrochenen Königs (3D-Modell, siehe client/model/voidrealm/ShatteredCrownModel). */
     public static final ResourceKey<EquipmentAsset> SHATTERED_CROWN_ASSET = asset("shattered_crown");
     public static final ResourceKey<EquipmentAsset> GLIDER_ASSET = asset("wyvernit_glider");
+    /** Feen-Elytren: die Flügel der Mottenkönigin. */
+    public static final ResourceKey<EquipmentAsset> FAE_ELYTRA_ASSET = asset("fae_elytra");
     public static final ResourceKey<EquipmentAsset> STEEL_DRAGON_ARMOR_ASSET = asset("steel_dragon_armor");
     public static final ResourceKey<EquipmentAsset> DRACONIUM_DRAGON_ARMOR_ASSET = asset("draconium_dragon_armor");
     public static final Map<DragonType, ResourceKey<EquipmentAsset>> SCALE_ASSETS = new EnumMap<>(DragonType.class);

@@ -98,6 +98,54 @@ final class FaeModels {
         }
     }
 
+    private static final TextureSlot SILK = TextureSlot.create("silk");
+    private static final TextureSlot SILK_GLOW = TextureSlot.create("silk_glow");
+
+    /**
+     * Kokon der Mottenkönigin: eine Spindel aus übereinander gestapelten Quadern (fast zwei Blöcke hoch), die Seitenflächen
+     * teilen sich die Höhe der Textur (die Wicklung läuft so über die ganze Spindel). Darüber liegt dieselbe Spindel noch
+     * einmal mit der pulsierenden Leuchtschicht.
+     */
+    private static final int[][] COCOON_PROFILE = {
+            // von unten nach oben: {y0, y1, halbe Breite × 2}
+            {0, 2, 6}, {2, 5, 10}, {5, 10, 13}, {10, 18, 14}, {18, 23, 12}, {23, 27, 9}, {27, 30, 5}, {30, 32, 2}};
+
+    private static final ModelTemplate COCOON = cocoonTemplate();
+
+    private static ModelTemplate cocoonTemplate() {
+        ExtendedModelTemplateBuilder builder = ExtendedModelTemplateBuilder.builder()
+                .parent(Identifier.withDefaultNamespace("block/block"))
+                .requiredTextureSlot(SILK)
+                .requiredTextureSlot(SILK_GLOW)
+                .requiredTextureSlot(TextureSlot.PARTICLE)
+                .ambientOcclusion(false);
+        for (boolean glow : new boolean[] {false, true}) {
+            for (int[] layer : COCOON_PROFILE) {
+                float y0 = layer[0];
+                float y1 = layer[1];
+                float w = layer[2];
+                float a = 8.0f - w / 2.0f;
+                float b = 8.0f + w / 2.0f;
+                // die Textur deckt die ganze Höhe (32) ab: v läuft von oben (0) nach unten (16)
+                float v0 = (32.0f - y1) / 2.0f;
+                float v1 = (32.0f - y0) / 2.0f;
+                TextureSlot slot = glow ? SILK_GLOW : SILK;
+                builder.element(e -> {
+                    e.from(a, y0, a).to(b, y1, b);
+                    for (Direction side : new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
+                        e.face(side, f -> f.uvs(a, v0, b, v1).texture(slot));
+                    }
+                    e.face(Direction.UP, f -> f.uvs(a, a, b, b).texture(slot));
+                    e.face(Direction.DOWN, f -> f.uvs(a, a, b, b).texture(slot));
+                    if (glow) {
+                        e.lightEmission(15);
+                    }
+                });
+            }
+        }
+        return builder.build();
+    }
+
     /** Pilzhut: oben und an den Seiten die Haut mit Tupfen, unten die Lamellen. */
     private static void cap(BlockModelGenerators blocks, Block cap) {
         blocks.createTrivialBlock(cap, TexturedModel.CUBE_BOTTOM_TOP);
@@ -181,8 +229,25 @@ final class FaeModels {
                 .select(Direction.Axis.X, BlockModelGenerators.plainVariant(ns))
                 .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(ew))));
 
+        // der Mondhain: Mottenseide (leuchtende Glanzpunkte, zufällig gedreht), Seidenfäden, der Kokon
+        Block silk = FaeBlocks.MOTH_SILK.get();
+        Identifier silkModel = ModModelProvider.glowingCubeModel(blocks, silk);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(silk,
+                BlockModelGenerators.createRotatedVariants(BlockModelGenerators.plainModel(silkModel))));
+        blocks.createCrossBlockWithDefaultItem(FaeBlocks.SILK_STRANDS.get(), BlockModelGenerators.PlantType.EMISSIVE_NOT_TINTED);
+        Block cocoon = FaeBlocks.MOTH_COCOON.get();
+        Material cocoonTexture = TextureMapping.getBlockTexture(cocoon);
+        Identifier cocoonModel = COCOON.create(cocoon, new TextureMapping().put(SILK, cocoonTexture).put(TextureSlot.PARTICLE, cocoonTexture)
+                .put(SILK_GLOW, TextureMapping.getBlockTexture(cocoon, "_glow")), blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(cocoon, BlockModelGenerators.plainVariant(cocoonModel)));
+        ModModelProvider.flat(items, FaeBlocks.MOTH_COCOON.get().asItem());
+        items.generateElytra(FaeBlocks.FAE_ELYTRA.get());
+
         // Gegenstände
         ModModelProvider.flat(items, FaeBlocks.FAE_DUST.get());
+        for (var egg : FaeBlocks.spawnEggs()) {
+            ModModelProvider.flat(items, egg.get());
+        }
     }
 
     /**

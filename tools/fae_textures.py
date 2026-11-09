@@ -36,9 +36,9 @@ FAESTONE = vs.tones("#b7aec8", 4, spread=0.13, cool=255, warm=320, hue=10, sat=0
 FAE_BRICK = vs.tones("#b3a9c4", 7, spread=0.26, cool=255, warm=320, hue=12, sat=0.06)
 MOONSTONE = vs.tones("#d8dff0", 7, spread=0.17, cool=225, warm=290, hue=14, sat=0.08)
 SHEEN = [hexc("#bfe6ff"), hexc("#f6d4ff"), hexc("#d4fff4")]
-SOIL = vs.tones("#59405e", 5, spread=0.26, cool=280, warm=330, hue=10, sat=0.06)
+SOIL = vs.tones("#735a76", 5, spread=0.24, cool=280, warm=330, hue=10, sat=0.06)
 PEBBLE = vs.tones("#9a8cab", 2, spread=0.12)
-GREY = [(v, v, v, 255) for v in (0x6c, 0x78, 0x84, 0x90, 0x9c, 0xa8)]
+GREY = [(v, v, v, 255) for v in (0x86, 0x92, 0x9e, 0xaa, 0xb6, 0xc2)]
 MOSS = vs.tones("#9a78c8", 6, spread=0.28, cool=265, warm=310, hue=10, sat=0.04)
 MOSS_GLOW = [hexc("#ffd6f4"), hexc("#d6fbff")]
 BARK = vs.tones("#9d99ae", 6, spread=0.30, cool=250, warm=300, hue=10, sat=0.04)
@@ -62,7 +62,7 @@ GILLS = {
 }
 PLANT = [hexc("#2f6b52"), hexc("#3e8a64"), hexc("#58a878"), hexc("#82c896")]
 DARK_PLANT = [hexc("#2a3f4e"), hexc("#3a5466"), hexc("#4f6e80")]
-THORN = [hexc("#2a1838"), hexc("#46265c"), hexc("#68388a"), hexc("#9050b8"), hexc("#c088e0")]
+THORN = [hexc("#1e1028"), hexc("#34183f"), hexc("#4f2463"), hexc("#6e3488"), hexc("#e8a0ff")]
 
 
 def _img(g: vs.Grid, pal: list[Color]) -> Image.Image:
@@ -709,14 +709,16 @@ def thorn_hedge() -> Image.Image:
     Dornenhecke: ein dichtes Geflecht dunkler, violetter Ranken (mit Lücken wie Laub), auf dem hier und da helle
     Dornenspitzen sitzen.
     """
-    g = vs.leaves(64601, holes=0.18)
+    g = vs.leaves(64601, holes=0.28)
     img = vs.paint(g, THORN[:4])
     rnd = random.Random(64602)
     count = 0
-    while count < 10:
+    while count < 9:
         x, y = rnd.randrange(N), rnd.randrange(N)
-        if g[y][x] >= 2:
+        if g[y][x] >= 1 and g[(y - 1) % N][x] < 0:
+            # eine Dornenspitze, die aus dem Geflecht nach oben ragt
             img.putpixel((x, y), THORN[4])
+            img.putpixel((x, (y - 1) % N), (THORN[4][0], THORN[4][1], THORN[4][2], 255))
             count += 1
     # durchgehende Ranken quer durch
     for k in range(3):
@@ -884,6 +886,32 @@ def glimmerwood_trapdoor() -> Image.Image:
     return img
 
 
+def thorn_projectile() -> Image.Image:
+    """
+    Der geschleuderte Dorn (Aufteilung wie der Vanilla-Pfeil, 32 × 32): oben die Seitenansicht – links die helle, scharfe
+    Spitze, nach rechts ein dicker werdender, violetter Dorn mit dunklem Ende; darunter (5 × 5) der Querschnitt von hinten.
+    """
+    img = Image.new("RGBA", (32, 32), CLEAR)
+    tip, light, mid, dark, deep = hexc("#fbe8ff"), THORN[4], THORN[3], THORN[2], THORN[1]
+    rows = [
+        "................",
+        "..tlmmmmmmmdd...",
+        "tllmmmmmddddddk.",
+        "..tlmmmmmmmdd...",
+        "................",
+    ]
+    colors = {"t": tip, "l": light, "m": mid, "d": dark, "k": deep}
+    for y, row in enumerate(rows):
+        for x, ch in enumerate(row):
+            if ch in colors:
+                img.putpixel((x, y), colors[ch])
+    for y in range(5):
+        for x in range(5):
+            if abs(x - 2) + abs(y - 2) <= 2:
+                img.putpixel((x, 5 + y), dark if abs(x - 2) + abs(y - 2) == 2 else mid)
+    return img
+
+
 def fae_spark(frame: int) -> Image.Image:
     """Feenfunkeln (4 Bilder): ein kleiner, vierstrahliger Stern in Gold und Rosa, der zu einem Punkt verglimmt."""
     img = pa.new()
@@ -972,8 +1000,12 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/fae_portal", fae_portal())
     ANIMATIONS["block/fae_portal"] = (32, 2, True)
     put("item/fae_dust", fae_dust())
+    put("entity/projectiles/thorn", thorn_projectile())
     for frame in range(4):
         put(f"particle/fae_spark_{frame}", fae_spark(frame))
+    # der Mondhain, der Kokon und die Feen-Elytren
+    import fae_boss_textures
+    fae_boss_textures.build(put, ANIMATIONS)
 
 
 if __name__ == "__main__":

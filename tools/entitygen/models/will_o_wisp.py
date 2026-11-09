@@ -16,6 +16,11 @@ PALETTES = {
         "core": ramp("#58e6d8", "#f4fffe"), "halo": ramp("#1aa8a0", "#8ff8ee"), "spark": ramp("#9af8f0", "#ffffff"),
         "back": ramp("#1aa8a0", "#8ff8ee"),
     },
+    # Feen-Irrlicht: golden mit rosa Schein
+    "fae_wisp": {
+        "core": ramp("#ffc860", "#fffbea"), "halo": ramp("#e8608a", "#ffc4dc"), "spark": ramp("#ffe0a0", "#ffffff"),
+        "back": ramp("#e8608a", "#ffc4dc"),
+    },
 }
 
 
