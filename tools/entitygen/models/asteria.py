@@ -32,6 +32,8 @@ PALETTES = {
         "visor": [hexc(c) for c in ("#04050c", "#0a0c1a")],
         "eyes": [hexc(c) for c in ("#3aa0f0", "#8ad8ff", "#e6f8ff")],
         "crystal": [hexc(c) for c in ("#2a5ac8", "#4a86f0", "#7ab0ff", "#b4d6ff", "#e6f4ff", "#ffffff")],
+        # der Bauch des großen Rochens: tiefer, schieferblau-violett (nicht so bleich wie bei den Sternenrochen der Leere)
+        "belly": [hexc(c) for c in ("#3e3e68", "#4e4e7c", "#62608e", "#7a78a6", "#9290bc", "#aaa8d0")],
     },
 }
 
@@ -66,19 +68,20 @@ def _mount(m: Model):
     m.cube("body", (4.0, -4.0, -6.8), (2.4, 0.6, 3.6), "saddle")
 
     m.bone("head", "body", pivot=_k((0, 0.2, -8.5)))
-    m.cube("head", _k((-5.0, -1.4, -3.5)), _k((10, 2.8, 3.5)), "head")
+    m.cube("head", _k((-5.0, -1.4, -3.5)), _k((10, 2.8, 3.5)), "mount_head")
     # silberne Stirnplatte mit eingelassenem Sternkristall
     m.cube("head", (-4.8, -2.8, -5.0), (9.6, 0.8, 4.6), "barding")
     m.cube("head", (-0.8, -3.4, -4.4), (1.6, 0.6, 1.6), "crystal")
     for side, sx in (("left", 1), ("right", -1)):
         eye_x = 5.0 if sx > 0 else -5.6
         m.cube("head", _k((eye_x, -1.0, -2.6)), _k((0.6, 1.2, 1.2)), "eye")
+        # Kopflappen: schlanker als beim Sternenrochen, leicht nach oben gestellt und eingerollt
         fin = f"{side}_cephalic"
-        m.bone(fin, "head", pivot=_k((4.0 * sx, 0.0, -3.2)), rotation=(6, 6 * sx, 0))
-        m.cube(fin, _k((-0.8, -0.6, -4.0)), _k((1.6, 1.4, 4.0)), "fin")
+        m.bone(fin, "head", pivot=_k((4.0 * sx, -0.2, -3.2)), rotation=(-10, 8 * sx, 0))
+        m.cube(fin, _k((-0.6, -0.45, -3.4)), _k((1.2, 0.9, 3.4)), "mount_fin")
         curl = f"{side}_cephalic_curl"
-        m.bone(curl, fin, pivot=_k((0, 0.6, -4.0)), rotation=(-55, 0, 0))
-        m.cube(curl, _k((-0.7, -0.5, -1.6)), _k((1.4, 1.1, 1.6)), "fin")
+        m.bone(curl, fin, pivot=_k((0, 0.45, -3.4)), rotation=(-62, 0, 0))
+        m.cube(curl, _k((-0.55, -0.4, -1.3)), _k((1.1, 0.8, 1.3)), "mount_fin")
 
     for side, sx in (("left", 1), ("right", -1)):
         w1 = f"{side}_wing"
@@ -215,6 +218,41 @@ def _scaled(painter):
         ctx.world = (BODY[0] + (x - BODY[0]) / K, BODY[1] + (y - BODY[1]) / K, BODY[2] + (z - BODY[2]) / K)
         return painter(ctx)
     return paint
+
+
+def _mount_head(ctx: Ctx):
+    """Kopf des großen Rochens: vorn dunkel wie der Rücken (mit violettem Schimmer nach unten), darunter das breite Maul."""
+    x, y, z = star_ray._pos(ctx)
+    if ctx.face == "front":
+        t = (ctx.t + 0.5) / max(ctx.h, 1)
+        if t > 0.64 and abs(x) < 3.4:
+            return pick(ctx.pal["back"], 0.02)
+        col = star_ray._back_col(ctx, x, y, z)
+        if ctx.t == 0:
+            return mix(col, pick(ctx.pal["nebula"], 0.6), 0.35)
+        return mix(col, pick(ctx.pal["nebula"], 0.25), max(0.0, t - 0.3) * 0.35)
+    return star_ray._head(ctx)
+
+
+def _mount_wing(ctx: Ctx):
+    """Schwingen wie beim Sternenrochen, nur der Saum an den (beim großen Rochen dicken) Kanten dunkler."""
+    col = star_ray._wing(ctx)
+    if ctx.face in ("top", "bottom"):
+        return col
+    x, y, z = star_ray._pos(ctx)
+    rim = mix(star_ray._back_col(ctx, x, y, z), pick(ctx.pal["nebula"], 0.55), 0.24 if ctx.t > 0 else 0.5)
+    return rim[:3] + (col[3],)
+
+
+def _mount_fin(ctx: Ctx):
+    """Kopflappen: oben und an den Seiten dunkel wie der Rücken mit violettem Saum, unten der Bauch."""
+    x, y, z = star_ray._pos(ctx)
+    if ctx.face == "bottom":
+        return star_ray._belly(ctx, x, z)
+    col = star_ray._back_col(ctx, x, y, z)
+    if ctx.face in ("front", "west", "east") and ctx.t >= ctx.h - 1:
+        col = mix(col, pick(ctx.pal["nebula"], 0.6), 0.4)
+    return col
 
 
 def _plate(ctx: Ctx, base: float = 0.6, trim: bool = True):
@@ -556,6 +594,9 @@ def _crystal(ctx: Ctx):
 
 def materials(variant: str) -> dict:
     mats = {name: _scaled(p) for name, p in star_ray.materials("star_ray").items()}
+    mats["mount_head"] = _scaled(_mount_head)
+    mats["mount_fin"] = _scaled(_mount_fin)
+    mats["wing"] = _scaled(_mount_wing)
     mats.update({
         "barding": _barding, "scale_plate": _scale_plate, "caparison": _caparison, "saddle": _saddle, "pommel": _pommel,
         "cantle": _cantle, "crystal": _crystal, "faulds": _faulds, "cuirass": _cuirass, "chest": _chest,

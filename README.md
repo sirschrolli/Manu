@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.64.0 – Malleus, der Glutschmied.** Der erste der neuen Bosse jenseits des Feenreichs wartet im Nether: Auf dem Dach jeder **Aschenesse** kniet **Malleus, der Glutschmied**, an seinem **Glutamboss** und schmiedet am **Glutspeer** – ein knapp vier Blöcke großes, verkohltes Gerippe mit Widderschädel, Flammen auf dem Kopf und einer glühenden Herzesse in der Brust. Wer die Treppe hinaufsteigt, hört schon von Weitem seine Hammerschläge; tritt man an den Amboss heran, richtet er sich auf, nimmt den Speer vom Amboss und brüllt. Er ist stärker als die Erzmagier (560 Lebenspunkte, Rüstung 12) und kämpft mit sechs Angriffen: **Speerstoß**, **Hammerschlag** mit einer Schockwelle über das Dach, **Funkenflug**, **Glutwurf** mit Klumpen geschmolzenen Metalls, **Ruf der Gesellen** (Brandgebeine) und unter halber Kraft das **Anfachen der Esse** – dann wird er weißglühend. Besiegt lässt er den **Glutspeer** fallen, einen eigenen 3D-Speer, der im Nether (und wenn du brennst) härter trifft, jeden Getroffenen in Brand setzt, einen Flammenring auflodern lässt und dich in der Hand vor Feuer und Lava schützt. Der Amboss erkaltet; ein **Netheritbarren** facht ihn neu an und ruft den Schmied zurück. Neu ist auch der Kreativ-Reiter **„Legenden“**; der Gezeiten-Speer und der Glutspeer lassen sich jetzt wie die Speere von Minecraft verzaubern.
+> **Testversion 0.65.0 – Asteria, die Sternenreiterin.** Der zweite neue Boss wartet im End: Mitten im Sternenhof jeder **Sternwarte** leuchtet jetzt der **Sternstein** – tritt man an ihn heran, stößt **Asteria, die Sternenreiterin**, in einer Säule aus Sternenlicht vom Himmel herab: die letzte Reiterin des Sternenordens in silberner Rüstung mit Sternenkrone, auf einem gewaltigen, gepanzerten **Sternenrochen** (gut acht Blöcke Spannweite). Sie ist stärker als die Drachen (700 Lebenspunkte, Rüstung 14, Zähigkeit 6), kämpft aus der Luft und hat sechs Angriffe: die **Tjost** (ein Sturmritt mit eingelegter Lanze, die Bahn zeigen Sternfunken), den **Sternenregen** (Sterne stürzen auf leuchtende Ringe), das **Sternbild** (ein Pentagramm aus Licht – wer drinnen bleibt, schwebt hilflos empor), den **Kometen** (die Lanze fliegt als Komet und kehrt zurück), den **Schwingenschlag** (eine Druckwelle, die auch Pfeile fortbläst) und unter halber Kraft die **Supernova** – wer sie dann sehen kann, wird geblendet und schwer getroffen; Deckung hinter Mauern und Pfeilern schützt. Besiegt hinterlässt sie die **Sternenlanze** (ein 3D-Speer, der im End und unter dem Nachthimmel härter trifft, Getroffene leuchten lässt und bei jedem dritten Treffer einen Stern herabruft) und die **Sternenschwingen** (Elytren mit **Sternenschub** wie eine Rakete und einer Spur aus Sternenlicht). Der Sternstein erlischt; ein **Endkristall** entzündet ihn neu und ruft sie zurück.
+> In 0.64 kam Malleus, der Glutschmied: Der erste der neuen Bosse jenseits des Feenreichs wartet im Nether: Auf dem Dach jeder **Aschenesse** kniet **Malleus, der Glutschmied**, an seinem **Glutamboss** und schmiedet am **Glutspeer** – ein knapp vier Blöcke großes, verkohltes Gerippe mit Widderschädel, Flammen auf dem Kopf und einer glühenden Herzesse in der Brust. Wer die Treppe hinaufsteigt, hört schon von Weitem seine Hammerschläge; tritt man an den Amboss heran, richtet er sich auf, nimmt den Speer vom Amboss und brüllt. Er ist stärker als die Erzmagier (560 Lebenspunkte, Rüstung 12) und kämpft mit sechs Angriffen: **Speerstoß**, **Hammerschlag** mit einer Schockwelle über das Dach, **Funkenflug**, **Glutwurf** mit Klumpen geschmolzenen Metalls, **Ruf der Gesellen** (Brandgebeine) und unter halber Kraft das **Anfachen der Esse** – dann wird er weißglühend. Besiegt lässt er den **Glutspeer** fallen, einen eigenen 3D-Speer, der im Nether (und wenn du brennst) härter trifft, jeden Getroffenen in Brand setzt, einen Flammenring auflodern lässt und dich in der Hand vor Feuer und Lava schützt. Der Amboss erkaltet; ein **Netheritbarren** facht ihn neu an und ruft den Schmied zurück. Neu ist auch der Kreativ-Reiter **„Legenden“**; der Gezeiten-Speer und der Glutspeer lassen sich jetzt wie die Speere von Minecraft verzaubern.
 > In 0.63 kam das Feenreich: Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
 > In 0.62 kam die Tiefe des Meeres: das **Versunkene Atoll** mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), der **Gezeiten-Speer** als erste eigene 3D-Waffe und das Gezeitenhorn, dazu sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und das Meeresleuchten.
 > In 0.61 kam das lebendige Meer: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, dazu Tiefsee-Laterne, Haizahn-Pfeile und Nachtsicht aus Leuchtgelee. Die 53 Standard-Biome der Oberwelt bekamen eine eigene Klangwelt (die Klangteppiche kommen und gehen und lassen sich in der Konfiguration leiser stellen), das Leveln dauert länger (Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung; die Erfahrung, die du bekommst, bleibt gleich), und der Zerbrochene König wurde zum stärksten Gegner der Mod.
@@ -328,7 +329,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Das lebendige Meer**: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
 | **Die Tiefe des Meeres**: sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
 | **Das Feenreich**: eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
-| **Malleus, der Glutschmied** (neu): Boss auf dem Dach jeder Aschenesse im Nether – kniet schmiedend an seinem Glutamboss, erwacht, wenn man herantritt; sechs Angriffe, Weißglut unter halber Kraft, eigene Bossleiste und Klänge; der **Glutspeer** als 3D-Waffe; Rückruf mit einem Netheritbarren | ✅ fertig |
+| **Malleus, der Glutschmied**: Boss auf dem Dach jeder Aschenesse im Nether – kniet schmiedend an seinem Glutamboss, erwacht, wenn man herantritt; sechs Angriffe, Weißglut unter halber Kraft, eigene Bossleiste und Klänge; der **Glutspeer** als 3D-Waffe; Rückruf mit einem Netheritbarren | ✅ fertig |
+| **Asteria, die Sternenreiterin** (neu): Boss jeder Sternwarte im End – stößt vom Himmel herab, wenn man an den Sternstein tritt; fliegend auf einem gepanzerten Sternenrochen, sechs Angriffe mit der Supernova unter halber Kraft, eigene Bossleiste und Klänge; die **Sternenlanze** als 3D-Speer und die **Sternenschwingen** mit Sternenschub; Rückruf mit einem Endkristall | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -1022,7 +1024,8 @@ die Sterne beobachtet, die der Sternenfresser verschlingt. Seine Sternwarte steh
 wie ein Zapfen unter der Insel hängt, wo sie nicht trägt.
 
 - **Der Sternenhof:** ein achtzackiger Stern aus Quarz mit schwarzem Umriss im Pflaster, in der Mitte der **Sternstein**
-  (ein Amethyst auf einem Quarzpfeiler zwischen Leuchtstäben), ringsum eine Brüstung mit Laternenpfosten, vorn eine
+  (seit 0.65 ein leuchtender Sternkristall auf einem Quarzpfeiler zwischen Leuchtstäben – er ruft **Asteria, die
+  Sternenreiterin**, siehe unten), ringsum eine Brüstung mit Laternenpfosten, vorn eine
   Treppe hinab; zu beiden Seiten ein kleiner **Schrein** unter einem Plattendach – im einen eine Truhe, im anderen ein
   Schreinling.
 - **Der Turm:** achteckig, aus Endsteinziegeln mit Quarzpfeilern an den Ecken, Gesimsen an jedem Geschoss und schmalen
@@ -1815,6 +1818,63 @@ der Hand ein echtes 3D-Modell; ein Speer wie die von Minecraft (Stoß und Anstur
 
 Glutamboss, Glutspeer, Glutklumpen und das Spawn-Ei liegen im neuen Kreativ-Reiter **„Legenden“**.
 
+### Asteria, die Sternenreiterin
+
+![Asteria, die Sternenreiterin, über dem Sternenhof der Sternwarte](docs/bilder/asteria.jpg)
+
+Seit 0.65 hat jede **Sternwarte** im End eine Wächterin. Die Sternwarten gehörten einem Orden von Sternenreitern – in
+ihren Reliquienkammern hängen noch die Schwingen eines gefallenen Reiters. Die letzte von ihnen lebt noch: In der Mitte
+des Sternenhofs leuchtet der **Sternstein**, ein hoher Kristall auf einem Quarzpfeiler. Schon von Weitem zieht über der
+Warte ein Stern gegen den Himmel („Über der Sternwarte zieht ein Stern gegen den Himmel …“); trittst du näher als neun
+Blöcke an den Stein heran, stößt **Asteria, die Sternenreiterin**, in einer Säule aus Sternenlicht in weiter Spirale vom
+Himmel herab, reckt die Lanze und ruft ihren Namen (Finden: `/locate structure kingdomsatwar:starwatch`).
+
+Asteria trägt eine silberne Plattenrüstung mit Goldsaum und einem leuchtenden Stern auf der Brust, einen nachtblauen
+Wappenrock, einen geschlossenen Helm mit glimmenden Augen und einer Krone aus fünf goldenen Zacken, dahinter weht ein
+Schweif aus Sternenlicht und ein Umhang wie der Nachthimmel. Sie reitet einen gewaltigen, gepanzerten **Sternenrochen**
+(gut acht Blöcke Spannweite, Schwingen voller Sterne und Sternbilder, Stirnplatte und Satteldecke) und führt die
+**Sternenlanze** mit einem Wimpel des Ordens und einen runden Schild. Sie steht in der Reihe der Bosse **zwischen den
+Drachen und dem Zerbrochenen König** (700 Lebenspunkte, Rüstung 14, Zähigkeit 6, lässt sich nicht wegstoßen) und kämpft
+aus der Luft: Sie kreist hoch über ihren Gegnern und stößt zum Angriff herab. Eigene Bossleiste (Silber, Nachthimmel,
+die Schwingen des Rochens und die Lanze), eigene Klänge.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Tjost** | sie fliegt an den Anfang einer Bahn quer durch dich und senkt die Lanze – **Sternfunken** zeigen die Bahn –, dann reitet sie im Sturm dicht über dem Boden hindurch: wer in der Bahn steht, wird niedergeritten; danach wendet sie tief (die Gelegenheit für Nahkämpfer) |
+| **Sternenregen** | sie reckt die Lanze zum Himmel, **leuchtende Ringe** erscheinen am Boden (unter dir und jedem anderen in der Nähe) – dann stürzen Sterne hinein |
+| **Sternbild** | fünf Sterne um dich, **Linien aus Licht** verbinden sie Zug um Zug zum Pentagramm; wer drinnen bleibt, wenn es zerspringt, wird verletzt und **schwebt hilflos empor** |
+| **Komet** | sie holt aus und schleudert die Lanze: Als **Komet** zerplatzt sie in Sternenlicht (wer getroffen wird, leuchtet) und fliegt zurück in ihre Hand – bis dahin schwebt sie tief |
+| **Schwingenschlag** | der Rochen bäumt sich auf und schlägt die Schwingen: eine **Druckwelle** wirft alle fort und bläst Pfeile aus der Luft |
+| **Supernova** | unter halber Kraft steigt sie über den Hof und sammelt das Licht der Sterne („geh in Deckung!“) – dann bricht es los: Wer sie sehen kann, wird **geblendet und schwer getroffen**; wer hinter einer Mauer, einem Pfeiler oder dem Turm steht, ist geschützt. Danach **strahlt** sie: schneller, mehr Sterne |
+
+Findet sie niemanden mehr, steigt sie nach einer halben Minute in einer Lichtsäule in den Himmel zurück (und kommt
+geheilt wieder). Im Tod sinkt sie in einer langsamen Spirale hinab und vergeht in Sternenlicht. Sie hinterlässt die
+**Sternenlanze**, die **Sternenschwingen**, einen **Herzkristall**, **Sternsplitter**, Enderperlen, Chorusfrüchte, Gold,
+Edelsteine und Münzen. Der Sternstein **erlischt** – hältst du einen **Endkristall** daran (Rechtsklick), entzündet er
+sich neu, und Asteria kehrt zurück.
+
+**Die Sternenlanze** – Asterias Lanze: ein silberner Schaft mit goldener Wendel, violette Griffwicklung, Brechscheibe,
+ein Wimpel mit dem Stern des Ordens und eine Spitze aus einem leuchtenden, vierzackigen Sternkristall. In der Hand ein
+echtes 3D-Modell; ein Speer wie die von Minecraft (Stoß und Ansturm), verzauberbar wie sie – der stärkste Speer der Mod.
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Sternenkraft** | im End – oder nachts unter freiem Himmel – trifft sie um ein Drittel härter |
+| **Sternenmal** | wen sie trifft, der **leuchtet**; jeder **dritte Treffer** ruft einen kleinen Stern herab, der auf das Ziel stürzt |
+| **Sternenfall** | in der Hand sinkst du sanft wie eine Sternschnuppe (kein Fallschaden) |
+| Werkstoff | härter und schärfer als Netherit; 2.800 Haltbarkeit, Verzauberbarkeit 18, mit **Sternsplittern** zu reparieren, feuerfest, episch |
+
+**Die Sternenschwingen** – die Schwingen ihres Rochens, Elytren aus Nachthimmel mit Sternen und violetter Vorderkante:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Gleiten** | wie Elytren |
+| **Sternenschub** | im Gleitflug **Springen**: ein kräftiger Stoß in Blickrichtung wie von einer Feuerwerksrakete (alle drei Sekunden, kostet einen Punkt Haltbarkeit) |
+| **Sternenspur** | hinter den Schwingen zieht eine Spur aus Sternenlicht |
+| Haltbarkeit | 640, mit **Phantomhaut** oder **Sternsplittern** zu reparieren, verzauberbar wie Elytren, feuerfest, episch |
+
+Sternstein, Sternenlanze, Sternenschwingen, Sternsplitter und das Spawn-Ei liegen im Kreativ-Reiter **„Legenden“**.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2450,8 +2510,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.63 – Das Feenreich** (fertig): eine neue Dimension im ewigen Abendrot mit **Noctua, der Mottenkönigin**, und
      den **Feen-Elytren**;
    - **0.64 – Malleus, der Glutschmied** (fertig): der Boss auf dem Dach der Aschenesse mit dem **Glutspeer**;
-   - **0.65 – Asteria, die Sternenreiterin:** ein Boss im End mit der **Sternenlanze** und den **Sternenschwingen**;
-   - danach neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
+   - **0.65 – Asteria, die Sternenreiterin** (fertig): der Boss der Sternwarte im End mit der **Sternenlanze** und den
+     **Sternenschwingen**;
+   - als Nächstes neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
    - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
      versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König

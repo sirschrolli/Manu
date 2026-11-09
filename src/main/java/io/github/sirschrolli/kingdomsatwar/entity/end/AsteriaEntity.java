@@ -341,12 +341,12 @@ public class AsteriaEntity extends Monster {
         Level level = this.level();
         float yaw = this.yBodyRot * Mth.DEG_TO_RAD;
         boolean radiant = this.isRadiant();
-        for (int i = 0; i < (radiant ? 3 : 2); i++) {
+        if (this.random.nextInt(radiant ? 2 : 3) == 0) {
             double side = (this.random.nextBoolean() ? 1 : -1) * (1.0 + this.random.nextDouble() * 3.4);
             level.addParticle(ParticleTypes.END_ROD, this.getX() + Mth.cos(yaw) * side, this.getY() + 0.5,
                     this.getZ() + Mth.sin(yaw) * side, 0.0, -0.02, 0.0);
         }
-        if (radiant && this.random.nextInt(2) == 0) {
+        if (radiant && this.random.nextInt(3) == 0) {
             level.addParticle(ParticleTypes.FIREWORK, this.getRandomX(1.6), this.getY(0.3 + this.random.nextDouble() * 0.8),
                     this.getRandomZ(1.6), 0.0, 0.0, 0.0);
         }
@@ -608,7 +608,7 @@ public class AsteriaEntity extends Monster {
         if (t <= 60 && t % 2 == 0) {
             // die Lichtsäule vom Sternstein bis zu ihr hinauf
             double top = this.getY() - center.y;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 6; i++) {
                 double y = center.y + 1.0 + this.random.nextDouble() * Math.max(2.0, top);
                 level.sendParticles(ParticleTypes.END_ROD, center.x + (this.random.nextDouble() - 0.5) * 0.9, y,
                         center.z + (this.random.nextDouble() - 0.5) * 0.9, 1, 0.0, 0.0, 0.0, 0.0);
@@ -616,8 +616,8 @@ public class AsteriaEntity extends Monster {
         }
         if (t == 76) {
             this.sound(level, ModSounds.ASTERIA_CRY.get(), 4.5f, 1.0f);
-            level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY(0.8), this.getZ(), 90, 1.4, 1.0, 1.4, 0.15);
-            level.sendParticles(ParticleTypes.FIREWORK, this.getX(), this.getY(0.8), this.getZ(), 40, 1.0, 0.8, 1.0, 0.1);
+            level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY(0.8), this.getZ(), 36, 1.4, 1.0, 1.4, 0.12);
+            level.sendParticles(ParticleTypes.FIREWORK, this.getX(), this.getY(0.8), this.getZ(), 16, 1.0, 0.8, 1.0, 0.08);
             level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFB8E2FF), this.getX(), this.getY(1.2), this.getZ(), 1, 0.0, 0.0,
                     0.0, 0.0);
             Component title = Component.translatable("boss.kingdomsatwar.star").withColor(0x9AD8FF);
@@ -701,7 +701,7 @@ public class AsteriaEntity extends Monster {
             double dy = Mth.clamp(this.lineStart.y - this.getY(), -0.4, 0.4);
             this.setDeltaMovement(this.keepAboveGround(new Vec3(along.x, dy, along.z), 0.4));
             Vec3 tip = this.position().add(this.lineDir.scale(2.6)).add(0.0, 1.6, 0.0);
-            level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY(0.5), this.getZ(), 4, 1.2, 0.5, 1.2, 0.02);
+            level.sendParticles(ParticleTypes.END_ROD, this.getX(), this.getY(0.5), this.getZ(), 2, 1.2, 0.4, 1.2, 0.01);
             level.sendParticles(STAR_DUST_BRIGHT, tip.x, tip.y, tip.z, 3, 0.2, 0.2, 0.2, 0.0);
             AABB hit = this.getBoundingBox().inflate(0.8, 0.6, 0.8).minmax(new AABB(tip, tip).inflate(1.6));
             for (LivingEntity victim : this.victims(level, hit)) {
