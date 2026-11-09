@@ -440,6 +440,29 @@ public final class OverworldFeatures {
     static final Entry STD_SNOW_DRIFTS = own(TOP, "standard/snowy/snow_drifts", () -> new DuneFeature(Blocks.SNOW.defaultBlockState(), 4.0f, 3),
             ground(count(1), 0));
 
+    // --- das Meer (0.62): Felsnadeln, Tangwälder, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder ---
+    /** Felsnadeln aus geschichtetem Fels in gemäßigten und kalten Meeren. */
+    static final Entry STD_SEA_STACKS = own(LOCAL, "standard/ocean/sea_stacks", () -> new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature
+            .SeaStackFeature(Blocks.STONE.defaultBlockState(), Blocks.ANDESITE.defaultBlockState(), Blocks.MOSSY_COBBLESTONE.defaultBlockState()),
+            ground(rare(30), 24));
+    /** … und aus hellem Kalk und Sandstein in warmen Meeren. */
+    static final Entry STD_WARM_SEA_STACKS = own(LOCAL, "standard/ocean/warm_sea_stacks", () -> new io.github.sirschrolli.kingdomsatwar.worldgen
+            .overworld.feature.SeaStackFeature(Blocks.SANDSTONE.defaultBlockState(), Blocks.CALCITE.defaultBlockState(),
+            Blocks.SMOOTH_SANDSTONE.defaultBlockState()), ground(rare(30), 24));
+    /** Tangwälder: in kalten Meeren vor allem Riesentang, sonst gemischt. */
+    static final Entry STD_COLD_KELP_FORESTS = own(VEGETATION, "standard/ocean/cold_kelp_forests",
+            () -> new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature(0.7f), ground(rare(9), 64));
+    static final Entry STD_KELP_FORESTS = own(VEGETATION, "standard/ocean/kelp_forests",
+            () -> new io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature(0.35f), ground(rare(14), 64));
+    static final Entry STD_ANEMONE_GARDENS = own(VEGETATION, "standard/ocean/anemone_gardens",
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.AnemoneGardenFeature::new, ground(rare(5), 64));
+    static final Entry STD_SHELL_BEDS = own(VEGETATION, "standard/ocean/shell_beds",
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ShellBedFeature::new, ground(rare(3), 12));
+    static final Entry STD_VENT_FIELDS = own(VEGETATION, "standard/ocean/vent_fields",
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.VentFieldFeature::new, ground(rare(22), 64));
+    static final Entry STD_GLOW_FIELDS = own(VEGETATION, "standard/ocean/glow_fields",
+            io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GlowFieldFeature::new, ground(rare(7), 64));
+
     // =====================================================================================
     // Registrierung (Datengenerierung)
     // =====================================================================================

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,shells=1": {
+      "model": "kingdomsatwar:block/scallop_shells",
+      "y": 90
+    },
+    "facing=east,shells=2": {
+      "model": "kingdomsatwar:block/scallop_shells_2",
+      "y": 90
+    },
+    "facing=east,shells=3": {
+      "model": "kingdomsatwar:block/scallop_shells_3",
+      "y": 90
+    },
+    "facing=north,shells=1": {
+      "model": "kingdomsatwar:block/scallop_shells"
+    },
+    "facing=north,shells=2": {
+      "model": "kingdomsatwar:block/scallop_shells_2"
+    },
+    "facing=north,shells=3": {
+      "model": "kingdomsatwar:block/scallop_shells_3"
+    },
+    "facing=south,shells=1": {
+      "model": "kingdomsatwar:block/scallop_shells",
+      "y": 180
+    },
+    "facing=south,shells=2": {
+      "model": "kingdomsatwar:block/scallop_shells_2",
+      "y": 180
+    },
+    "facing=south,shells=3": {
+      "model": "kingdomsatwar:block/scallop_shells_3",
+      "y": 180
+    },
+    "facing=west,shells=1": {
+      "model": "kingdomsatwar:block/scallop_shells",
+      "y": 270
+    },
+    "facing=west,shells=2": {
+      "model": "kingdomsatwar:block/scallop_shells_2",
+      "y": 270
+    },
+    "facing=west,shells=3": {
+      "model": "kingdomsatwar:block/scallop_shells_3",
+      "y": 270
+    }
+  }
+}

@@ -127,6 +127,20 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_HURT = register("entity.giant_crab.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_DEATH = register("entity.giant_crab.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> GIANT_CRAB_STEP = register("entity.giant_crab.step");
+    // Karkinos, der Riffkoloss
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_AMBIENT = register("entity.reef_colossus.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_HURT = register("entity.reef_colossus.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_DEATH = register("entity.reef_colossus.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_ROAR = register("entity.reef_colossus.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_CLACK = register("entity.reef_colossus.clack");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_SLAM = register("entity.reef_colossus.slam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_JET = register("entity.reef_colossus.jet");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_BURROW = register("entity.reef_colossus.burrow");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_ERUPT = register("entity.reef_colossus.erupt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_ROLL = register("entity.reef_colossus.roll");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_STEP = register("entity.reef_colossus.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_TIDE = register("entity.reef_colossus.tide");
+    public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_LANCE = register("entity.reef_colossus.lance");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

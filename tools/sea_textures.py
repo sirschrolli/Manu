@@ -242,6 +242,263 @@ LANTERN_ITEM = """
 """
 
 
+# =============================================================================
+# Meeresgrund (0.62): Muscheln, Röhrenwürmer, Leuchtalgen, Riesentang
+# =============================================================================
+
+COCKLE = st.ramp("#d8bf96", dark=0.3, light=0.97, cool=40, warm=70, chroma_light=0.5)
+COCKLE_BAND = st.ramp("#9a6a40", dark=0.25, light=0.8, cool=20, warm=40)
+SCALLOP = st.ramp("#ee8a62", dark=0.28, light=0.97, cool=10, warm=50, chroma_light=0.6)
+WHELK = st.ramp("#b8986e", dark=0.25, light=0.95, cool=30, warm=60)
+NACRE = st.ramp("#f0c8d8", dark=0.5, light=1.0, cool=330, warm=20, chroma_light=0.4)
+TUBE = st.ramp("#e2dccf", dark=0.35, light=1.0, cool=60, warm=80, chroma_light=0.2)
+PLUME = st.ramp("#e0362c", dark=0.2, light=0.92, cool=5, warm=35, chroma_light=0.8)
+ALGAE = st.ramp("#1e6a6a", dark=0.15, light=0.6, cool=200, warm=170)
+ALGAE_GLOW = st.ramp("#5ae8e0", dark=0.45, light=1.0, cool=190, warm=160, chroma_light=0.4)
+KELP = st.ramp("#b8902a", dark=0.2, light=0.95, cool=40, warm=75, chroma_light=0.7)
+KELP_STIPE = st.ramp("#5e4418", dark=0.12, light=0.55, cool=30)
+
+COCKLE_ITEM = """
+................
+................
+.......44.......
+................
+....54656554....
+...4656565655...
+..556565656564..
+..556565656564..
+..556565656564..
+..hihihihihihi..
+..556565656564..
+...4656565655...
+...ihihihihih...
+....54556454....
+.......45.......
+................
+"""
+
+SCALLOP_ITEM = """
+................
+................
+................
+......6556......
+..565566665665..
+.65556566565556.
+.66656565565656.
+.55665655656655.
+.66565655656566.
+..665655556566..
+....65444456....
+......4444......
+....34444443....
+....33333333....
+................
+................
+"""
+
+WHELK_ITEM = """
+................
+............45..
+...........4564.
+..........45253.
+.........426553.
+........4526543.
+.......42652543.
+.....4452656243.
+....45626566243.
+...4kkkk656623..
+...kllmk56653...
+...klmmk5653....
+...jkllk553.....
+....jkkj433.....
+.....3333.......
+................
+"""
+
+TUBE_WORMS_ITEM = """
+................
+..hjkj.....ij...
+.hjkkkj...hjkj..
+.hjkjkj..hjkkkj.
+..hj6jh..hjkjkj.
+...456....j6jh..
+...565.....56...
+...454..ij.45...
+...565.hjkj56...
+...454.hj6j45...
+...565..565.6...
+...454..454.5...
+...565..565.4...
+..34543.454.5...
+..3444434543433.
+....33333333....
+"""
+
+ALGAE_ITEM = """
+................
+................
+................
+................
+.......q........
+......qp....q...
+...q..p..r.pq...
+...pq.p.qp.p....
+....p.pqp..p.r..
+..r.pqopo.pq.q..
+..qp.oppopop.p..
+...ppoooooopqp..
+..oooaoaoaoaooo.
+..aaobaabaaboa..
+...aaaaaaaaaaa..
+................
+"""
+
+KELP_ITEM = """
+................
+..........33666.
+.........33455..
+........33456...
+.......334666...
+......334666....
+.44...555566....
+..433st5666.....
+..54qrs.........
+..5543c.........
+...55c..........
+.....c..........
+.....c..........
+....c...........
+....c...........
+....c...........
+"""
+
+
+# =============================================================================
+# Gezeiten-Speer und Gezeitenhorn (0.62)
+# =============================================================================
+
+SPEAR_WOOD = st.ramp("#b0a088", dark=0.25, light=0.95, cool=40, warm=60)
+SPEAR_GOLD = st.ramp("#d4a440", dark=0.25, light=0.98, cool=40, warm=60, chroma_light=0.6)
+SPEAR_BLADE = st.ramp("#2ab0c0", dark=0.25, light=1.0, cool=210, warm=170, chroma_light=0.3)
+SPEAR_GRIP = st.ramp("#2a5a5c", dark=0.15, light=0.65, cool=200)
+PEARL = st.ramp("#e8dcf0", dark=0.55, light=1.0, cool=280, warm=330, chroma_light=0.3)
+
+
+def _diagonal_art(profile) -> str:
+    """Zeichnet einen Gegenstand entlang der Diagonale (unten links -> oben rechts). {@code profile(t)} gibt für die
+    Stelle t (0..1) eine Liste (Abstand von der Achse, Zeichen) zurück."""
+    rows = [["."] * 16 for _ in range(16)]
+    import math as _m
+    p0 = (0.6, 15.4)
+    p1 = (15.4, 0.6)
+    length = _m.hypot(p1[0] - p0[0], p1[1] - p0[1])
+    ax, ay = (p1[0] - p0[0]) / length, (p1[1] - p0[1]) / length
+    nx, ny = ay, -ax          # senkrecht (nach rechts unten)
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x + 0.5 - p0[0], y + 0.5 - p0[1]
+            t = (dx * ax + dy * ay) / length
+            off = dx * nx + dy * ny
+            if t < 0.0 or t > 1.0:
+                continue
+            for limit, ch in profile(t, off):
+                if abs(off) <= limit:
+                    rows[y][x] = ch
+                    break
+    return "\n" + "\n".join("".join(r) for r in rows) + "\n"
+
+
+def tide_spear_icon() -> Image.Image:
+    """Der Gezeiten-Speer schräg: goldene Kappe, Treibholzschaft mit Griffwicklung und Goldringen, goldener Kragen mit
+    Perle und zwei Widerhaken, darüber die leuchtende Klinge aus Aquamarin."""
+    def profile(t: float, off: float):
+        if t < 0.07:
+            return [(0.95, "d" if off < 0 else "b")]
+        if t < 0.22:
+            band = int(t * 60) % 2 == 0
+            return [(0.85, "s" if band else "q")]
+        if t < 0.58:
+            if abs(t - 0.44) < 0.02:
+                return [(0.9, "d")]
+            return [(0.75, "4" if off < 0 else "2")]
+        if t < 0.64:
+            if abs(off) < 0.6:
+                return [(0.6, "E")]
+            return [(2.4, "c" if off < 0 else "b")]
+        if t < 0.72 and abs(off) > 1.4:
+            return [(2.6, "k" if off < 0 else "j")]
+        w = 1.9 * (1.0 - (t - 0.64) / 0.36) ** 0.8 + 0.25
+        if abs(off) < 0.45:
+            return [(w, "n")]
+        return [(w, "l" if off < 0 else "j")]
+    art = _diagonal_art(profile)
+    return render(st.Spr.art(art), {"A": SPEAR_WOOD, "B": SPEAR_GOLD, "C": SPEAR_BLADE, "D": SPEAR_GRIP, "E": PEARL},
+                  prefer=("C", "B", "A", "D", "E"))
+
+
+def tide_spear_model() -> tuple[Image.Image, Image.Image]:
+    """
+    Atlas für das 3D-Modell in der Hand: (0..2, 0..16) Treibholz längs gemasert, (2..4, 0..16) Griffwicklung in Bändern,
+    (4..6, 0..8) Gold, (6..10, 0..10) Klinge (Aquamarin, Verlauf), (10..12, 0..10) leuchtende Ader, (12..14, 0..2) Perle.
+    Dazu die Leuchtmaske (Ader und Klinge schwach).
+    """
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    glow = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    px, gp = img.load(), glow.load()
+    import random as _r
+    rnd = _r.Random(62801)
+    for y in range(16):
+        for x in range(2):
+            v = 3 + (1 if x == 0 else 0) - (1 if rnd.random() < 0.25 else 0)
+            px[x, y] = SPEAR_WOOD[v]
+        for x in range(2, 4):
+            px[x, y] = SPEAR_GRIP[3 if y % 2 == 0 else 2] if x == 2 else SPEAR_GRIP[2 if y % 2 == 0 else 1]
+    for y in range(8):
+        for x in range(4, 6):
+            px[x, y] = SPEAR_GOLD[5 if x == 4 and y % 3 != 2 else 3]
+    for y in range(10):
+        for x in range(6, 10):
+            v = 2 + (x - 6) // 2 + (1 if y < 3 else 0)
+            col = SPEAR_BLADE[min(6, v)]
+            px[x, y] = col
+            gp[x, y] = (int(col[0] * 0.45), int(col[1] * 0.45), int(col[2] * 0.45), 255)
+        for x in range(10, 12):
+            col = SPEAR_BLADE[6] if (y + x) % 3 else st.hexc("#ffffff")
+            px[x, y] = col
+            gp[x, y] = col
+    for y in range(2):
+        for x in range(12, 14):
+            px[x, y] = PEARL[6 if (x + y) % 2 == 0 else 4]
+            gp[x, y] = PEARL[4]
+    return img, glow
+
+
+def tide_horn_icon() -> Image.Image:
+    """Das Gezeitenhorn: eine große Wellhornschnecke mit Spiralbändern, links das goldene Mundstück, rechts die rosige Öffnung."""
+    rows = [["."] * 16 for _ in range(16)]
+    import math as _m
+    for x in range(16):
+        u = (x - 1.5) / 12.0
+        if u < 0 or u > 1:
+            continue
+        cy = 9.0 - 2.4 * u * u
+        half = 0.7 + 3.6 * u ** 1.4
+        for y in range(16):
+            d = y + 0.5 - cy
+            if abs(d) > half:
+                continue
+            if u < 0.14:
+                ch = "d" if d < 0 else "b"
+            elif u > 0.86 and abs(d) < half - 0.8:
+                ch = "q" if abs(d) < half * 0.5 else "p"
+            else:
+                band = int((x * 0.9 + d * 1.3) % 4)
+                ch = "2" if band == 0 else ("5" if d < -half * 0.3 else "4" if d < half * 0.3 else "3")
+            rows[y][x] = ch
+    art = "\n" + "\n".join("".join(r) for r in rows) + "\n"
+    return render(st.Spr.art(art), {"A": WHELK, "B": SPEAR_GOLD, "D": NACRE}, prefer=("A", "B", "D"))
+
+
 def lantern_block() -> tuple[Image.Image, Image.Image]:
     """Die Blocktextur in der Aufteilung der Vanilla-Laterne (eigene Pixel): Gehäuseseiten (0..5, 2..8), Boden/Deckel
     (0..5, 9..14), Deckelrand (1..4, 0..1) und -oben (1..4, 10..13), Bügel und Kette (11..13, 1..11)."""
@@ -313,6 +570,17 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     bucket = st.Spr.art(BUCKET, legend={"h": ("C", 3)}).over(st.Spr.art(JELLY_IN_BUCKET))
     put("item/glow_jellyfish_bucket", render(bucket, {"A": IRON, "B": IRON, "C": WATER, "D": JELLY}, prefer=("A", "B")))
     put("item/deep_sea_lantern", render(LANTERN_ITEM, {"A": PRISMARINE, "B": IRON, "C": LURE}, prefer=("A", "B")))
+    put("item/cockle_shells", render(st.Spr.art(COCKLE_ITEM), {"A": COCKLE, "C": COCKLE_BAND}))
+    put("item/scallop_shells", render(st.Spr.art(SCALLOP_ITEM), {"A": SCALLOP}))
+    put("item/whelk_shells", render(st.Spr.art(WHELK_ITEM), {"A": WHELK, "C": NACRE}))
+    put("item/tube_worms", render(st.Spr.art(TUBE_WORMS_ITEM), {"A": TUBE, "C": PLUME}, prefer=("C", "A")))
+    put("item/glow_algae", render(st.Spr.art(ALGAE_ITEM), {"A": ALGAE, "B": ALGAE, "D": ALGAE_GLOW}, prefer=("D", "B")))
+    put("item/giant_kelp", render(st.Spr.art(KELP_ITEM), {"A": KELP, "B": KELP_STIPE, "D": KELP}, prefer=("A", "D", "B")))
+    put("item/tide_spear", tide_spear_icon())
+    spear_model, spear_glow = tide_spear_model()
+    put("item/tide_spear_model", spear_model)
+    put("item/tide_spear_model_glow", spear_glow)
+    put("item/tide_horn", tide_horn_icon())
     block, block_glow = lantern_block()
     put("block/deep_sea_lantern", block)
     put("entity/sea/halo", halo())

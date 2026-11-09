@@ -272,6 +272,11 @@
     "kingdomsatwar:void_crystal",
     "kingdomsatwar:crystal_foliage",
     "kingdomsatwar:throne_seal",
-    "kingdomsatwar:deep_sea_lantern"
+    "kingdomsatwar:deep_sea_lantern",
+    "kingdomsatwar:vent_rock",
+    "kingdomsatwar:sulfur_crust",
+    "kingdomsatwar:hydrothermal_vent",
+    "kingdomsatwar:atoll_core",
+    "kingdomsatwar:embedded_tide_spear"
   ]
 }

@@ -73,6 +73,21 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("palm", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.PalmFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReefFeature>> REEF =
             FEATURE_TYPES.register("reef", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ReefFeature.CODEC);
+
+    // --- Meer (0.62) ---
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaStackFeature>> SEA_STACK =
+            FEATURE_TYPES.register("sea_stack", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaStackFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature>> KELP_FOREST =
+            FEATURE_TYPES.register("kelp_forest", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.AnemoneGardenFeature>> ANEMONE_GARDEN =
+            FEATURE_TYPES.register("anemone_garden", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.AnemoneGardenFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ShellBedFeature>> SHELL_BED =
+            FEATURE_TYPES.register("shell_bed", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ShellBedFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.VentFieldFeature>> VENT_FIELD =
+            FEATURE_TYPES.register("vent_field", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.VentFieldFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GlowFieldFeature>> GLOW_FIELD =
+            FEATURE_TYPES.register("glow_field", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GlowFieldFeature.CODEC);
+
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GrandOakFeature>> GRAND_OAK =
             FEATURE_TYPES.register("grand_oak", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GrandOakFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.WindsweptTreeFeature>> WINDSWEPT_TREE =

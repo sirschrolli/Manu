@@ -119,6 +119,12 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.PALE_WASTES)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
+        this.tag(ModTags.Biomes.HAS_SUNKEN_ATOLL)
+                .add(net.minecraft.world.level.biome.Biomes.WARM_OCEAN)
+                .add(net.minecraft.world.level.biome.Biomes.LUKEWARM_OCEAN)
+                .add(net.minecraft.world.level.biome.Biomes.DEEP_LUKEWARM_OCEAN)
+                .add(net.minecraft.world.level.biome.Biomes.OCEAN)
+                .add(net.minecraft.world.level.biome.Biomes.DEEP_OCEAN);
         var throne = this.tag(ModTags.Biomes.HAS_VOID_THRONE);
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.ALL.forEach(throne::add);
         this.tag(ModTags.Biomes.HAS_SHADOW_CITADEL)

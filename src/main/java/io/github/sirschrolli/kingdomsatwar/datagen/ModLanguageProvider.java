@@ -547,6 +547,54 @@ public class ModLanguageProvider extends LanguageProvider {
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT, "Raw Crab Meat", "Rohes Krabbenfleisch");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.COOKED_CRAB_MEAT, "Cooked Crab Meat", "Gegartes Krabbenfleisch");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLYFISH_BUCKET, "Bucket of Glow Jellyfish", "Eimer mit Leuchtqualle");
+        // Meeresgrund (0.62)
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PURPLE_SEA_ANEMONE, "Purple Sea Anemone", "Purpur-Seeanemone");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.RED_SEA_ANEMONE, "Fire Sea Anemone", "Feuer-Seeanemone");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GREEN_SEA_ANEMONE, "Emerald Sea Anemone", "Smaragd-Seeanemone");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ORANGE_SEA_ANEMONE, "Sun Sea Anemone", "Sonnen-Seeanemone");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.COCKLE_SHELLS, "Cockle Shells", "Herzmuscheln");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SCALLOP_SHELLS, "Scallop Shells", "Kammmuscheln");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.WHELK_SHELLS, "Whelk Shells", "Wellhornschnecken");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TUBE_WORMS, "Tube Worms", "Röhrenwürmer");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK, "Vent Rock", "Schlotgestein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SULFUR_CRUST, "Sulfur Crust", "Schwefelkruste");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.HYDROTHERMAL_VENT, "Hydrothermal Vent", "Heißer Schlot");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_ALGAE, "Glow Algae", "Leuchtalgen");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP, "Giant Kelp", "Riesentang");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP_PLANT, "Giant Kelp", "Riesentang");
+        // Karkinos, der Riffkoloss, und das Versunkene Atoll (0.62)
+        creature(ModEntities.REEF_COLOSSUS, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.REEF_COLOSSUS_SPAWN_EGG,
+                "Karkinos, the Reef Colossus", "Karkinos, der Riffkoloss", "Karkinos");
+        text("boss.kingdomsatwar.reef", "Karkinos, the Reef Colossus", "Karkinos, der Riffkoloss");
+        text("boss.kingdomsatwar.reef.title", "Lord of the Sunken Atoll", "Herr des Versunkenen Atolls");
+        text("message.kingdomsatwar.reef_colossus.tide", "Karkinos calls the tide!", "Karkinos ruft die Flut!");
+        text("atoll.kingdomsatwar.warning", "Something stirs beneath the sand of the lagoon …", "Unter dem Sand der Lagune regt sich etwas …");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ATOLL_CORE, "Heart of the Atoll", "Herz des Atolls");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
+        lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");
+        text(ModItems.loreKey("tide_spear", 2), "In water and rain: strikes harder, every hit raises a wave",
+                "Im Wasser und Regen: trifft härter, jeder Treffer schlägt eine Welle");
+        text(ModItems.loreKey("tide_spear", 3), "In hand: swim like a dolphin", "In der Hand: schwimmen wie ein Delfin");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN, "Tide Horn", "Gezeitenhorn");
+        lore("tide_horn", "Blow it: the sea answers from the Sunken Atoll", "Hineinblasen: Das Meer antwortet aus Richtung des Versunkenen Atolls");
+        text(ModItems.loreKey("tide_horn", 2), "At a quiet atoll, with a Heart of the Sea: calls Karkinos back",
+                "Im stillen Atoll mit einem Herz des Meeres: ruft Karkinos zurück");
+        text("item.kingdomsatwar.tide_horn.direction", "The sea answers from the %s – %s blocks away",
+                "Das Meer antwortet aus dem %s – %s Blöcke entfernt");
+        text("item.kingdomsatwar.tide_horn.none", "Only the wind answers.", "Nur der Wind antwortet.");
+        text("item.kingdomsatwar.tide_horn.offering", "The sea wants an offering: hold a Heart of the Sea in your other hand.",
+                "Das Meer verlangt eine Gabe: Halte ein Herz des Meeres in der anderen Hand.");
+        text("item.kingdomsatwar.tide_horn.recalled", "The sand of the lagoon begins to churn …", "Der Sand der Lagune gerät in Bewegung …");
+        for (String[] e : new String[][] {{"ambient", "Karkinos rumbles", "Karkinos grummelt"}, {"hurt", "Karkinos hurts", "Karkinos nimmt Schaden"},
+                {"death", "Karkinos dies", "Karkinos stirbt"}, {"roar", "Karkinos roars", "Karkinos brüllt"},
+                {"clack", "Karkinos clacks his claws", "Karkinos klappert mit den Scheren"}, {"slam", "Claw slams down", "Schere schmettert herab"},
+                {"jet", "Bubble jet roars", "Blasenstrahl rauscht"}, {"burrow", "Something digs", "Etwas gräbt"},
+                {"erupt", "Karkinos breaks out", "Karkinos bricht hervor"}, {"roll", "Shell rolls", "Panzer rollt"},
+                {"step", "Heavy steps", "Schwere Schritte"}, {"tide", "The tide rises", "Die Flut steigt"},
+                {"lance", "Water crashes down", "Wasser stürzt herab"}}) {
+            subtitle("entity.reef_colossus." + e[0], e[1], e[2]);
+        }
         subtitle("entity.manta_ray.hurt", "Manta Ray hurts", "Mantarochen nimmt Schaden");
         subtitle("entity.manta_ray.death", "Manta Ray dies", "Mantarochen stirbt");
         subtitle("entity.manta_ray.leap", "Manta Ray leaps", "Mantarochen springt");

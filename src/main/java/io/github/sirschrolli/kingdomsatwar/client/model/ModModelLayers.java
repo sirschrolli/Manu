@@ -80,6 +80,7 @@ public final class ModModelLayers {
     public static final ModelLayerLocation SHARK = new ModelLayerLocation(KingdomsAtWar.id("shark"), "main");
     public static final ModelLayerLocation ANGLERFISH = new ModelLayerLocation(KingdomsAtWar.id("anglerfish"), "main");
     public static final ModelLayerLocation GIANT_CRAB = new ModelLayerLocation(KingdomsAtWar.id("giant_crab"), "main");
+    public static final ModelLayerLocation REEF_COLOSSUS = new ModelLayerLocation(KingdomsAtWar.id("reef_colossus"), "main");
     public static final ModelLayerLocation SHATTERED_CROWN = new ModelLayerLocation(KingdomsAtWar.id("shattered_crown"), "main");
     /** Erzmagier (alle Elemente, Zubehör je Element). */
     public static final ModelLayerLocation MAGE = new ModelLayerLocation(KingdomsAtWar.id("mage"), "main");

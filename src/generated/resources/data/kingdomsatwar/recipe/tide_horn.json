@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "kingdomsatwar:whelk_shells",
+    "kingdomsatwar:whelk_shells",
+    "minecraft:gold_ingot",
+    "minecraft:prismarine_crystals"
+  ],
+  "result": {
+    "id": "kingdomsatwar:tide_horn"
+  }
+}

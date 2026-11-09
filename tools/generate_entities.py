@@ -29,7 +29,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
-                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab)
+                              shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -347,6 +347,10 @@ def main():
     write_model(giant_crab, "GiantCrabGeometry",
                 "Geometrie der Riesenkrabbe (Scheren mit beweglichem Finger, sechs Laufbeine in zwei Gliedern, Stielaugen).",
                 "giant_crab", giant_crab.PALETTES, preview)
+    write_model(reef_colossus, "ReefColossusGeometry",
+                "Geometrie von Karkinos, dem Riffkoloss (Panzer mit Stielaugen, Fühlern und Mundplatten, Brecher- und Greifschere "
+                "mit beweglichem Finger, sechs Laufbeine in drei Gliedern, die Tempelkuppel mit Korallen, Tang und dem Gezeiten-Speer; "
+                "im Spiel ×2).", "reef_colossus", reef_colossus.PALETTES, preview)
     # Zauber-Effekte
     write_model(phoenix, "PhoenixGeometry",
                 "Geometrie des Phönix (Geschoss des Feuerzaubers, fliegt nach -Z, Rumpfmitte im Ursprung; Flügel schlagen über "

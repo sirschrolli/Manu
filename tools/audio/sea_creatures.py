@@ -175,6 +175,111 @@ def crab_death(seed: int) -> np.ndarray:
 
 
 # =====================================================================================
+# Karkinos, der Riffkoloss
+# =====================================================================================
+
+def colossus_clack(seed: int) -> np.ndarray:
+    """Das Klappern der Riesenscheren: drei bis fünf schwere Schläge, jeder mit tiefem, hohlem Körper."""
+    r = rng(seed)
+    y = np.zeros(int(1.3 * SR))
+    at = 0.02
+    for i in range(int(r.integers(3, 6))):
+        c = click(r, r.uniform(900, 1400), r.uniform(4, 7), body=r.uniform(1.4, 2.2))
+        mix_at(y, c, at, r.uniform(0.75, 1.0))
+        at += r.uniform(0.12, 0.2)
+    return y
+
+
+def colossus_roar(seed: int) -> np.ndarray:
+    """Ein tiefes, gurgelndes Brüllen: Rauschen durch wandernde Resonanzen, darunter Brodeln und klappernder Panzer."""
+    r = rng(seed)
+    dur = 2.6
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    noise = r.standard_normal(n)
+    env = env_asr(n, SR, 0.25, 0.9)
+    body = np.zeros(n)
+    for f0, q, g in ((180, 4.0, 1.0), (420, 5.0, 0.7), (760, 6.0, 0.35)):
+        sweep = f0 * (1.0 + 0.25 * np.sin(2 * np.pi * 0.6 * t + r.uniform(0, 6)))
+        seg = 2048
+        out = np.zeros(n)
+        for s0 in range(0, n, seg):
+            part = noise[s0:s0 + seg]
+            out[s0:s0 + len(part)] = resonator(part, float(sweep[min(s0, n - 1)]), q, SR)
+        body += out * g
+    y = body * env * 0.6
+    y += tone(55 + 10 * np.sin(2 * np.pi * 0.9 * t), env, SR, harmonics=((1, 1.0), (2, 0.5), (3, 0.25))) * 0.5
+    for i in range(14):
+        mix_at(y, blip(r.uniform(120, 380), r.uniform(0.05, 0.12), r.uniform(0.6, 1.5), seed + i), r.uniform(0.2, dur - 0.3), 0.25)
+    for i in range(5):
+        mix_at(y, click(r, r.uniform(1000, 1600), 5.0, body=1.0), r.uniform(0.1, 1.8), 0.35)
+    return y
+
+
+def colossus_ambient(seed: int) -> np.ndarray:
+    """Ein tiefes Grummeln aus dem Panzer, Mundplatten klicken, ein paar Blasen steigen auf."""
+    r = rng(seed)
+    dur = 2.2
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    env = env_asr(n, SR, 0.4, 0.8)
+    y = filt(r.standard_normal(n), "band", [70, 260], SR, 2) * env * 1.4
+    y += tone(48 + 6 * np.sin(2 * np.pi * 0.5 * t), env, SR, harmonics=((1, 1.0), (2, 0.4))) * 0.35
+    at = r.uniform(0.2, 0.5)
+    for i in range(int(r.integers(4, 8))):
+        mix_at(y, click(r, r.uniform(1800, 2800), 8.0, body=0.4), at, r.uniform(0.25, 0.45))
+        at += r.uniform(0.07, 0.16)
+    for i in range(6):
+        mix_at(y, blip(r.uniform(200, 450), r.uniform(0.04, 0.09), 1.0, seed + 40 + i), r.uniform(0.3, dur - 0.2), 0.2)
+    return y
+
+
+def colossus_roll(seed: int) -> np.ndarray:
+    """Der Panzer rollt: dumpfes Poltern und Schleifen über Sand und Stein."""
+    r = rng(seed)
+    dur = 1.6
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    rumble = filt(r.standard_normal(n), "low", 180, SR, 3) * 3.0
+    grind = filt(r.standard_normal(n), "band", [400, 1800], SR, 2) * (0.5 + 0.5 * np.sin(2 * np.pi * r.uniform(9, 14) * t))
+    env = env_asr(n, SR, 0.08, 0.3)
+    y = (rumble + grind * 0.35) * env
+    for i in range(6):
+        mix_at(y, click(r, r.uniform(600, 1100), 3.5, body=1.6), r.uniform(0.05, dur - 0.2), 0.35)
+    return y
+
+
+def colossus_jet(seed: int) -> np.ndarray:
+    """Der Blasenstrahl: Wasser schießt unter Druck hervor – Zischen, Rauschen und ein Sturm aus Blasen."""
+    r = rng(seed)
+    dur = 2.4
+    n = int(dur * SR)
+    env = env_asr(n, SR, 0.15, 0.45)
+    hiss = filt(r.standard_normal(n), "band", [900, 6000], SR, 2) * 0.8
+    roar = filt(r.standard_normal(n), "low", 400, SR, 2) * 1.6
+    y = (hiss + roar) * env
+    for i in range(40):
+        mix_at(y, blip(r.uniform(250, 900), r.uniform(0.03, 0.08), r.uniform(0.8, 2.0), seed + 80 + i), r.uniform(0.1, dur - 0.2), 0.18)
+    return y
+
+
+def colossus_death(seed: int) -> np.ndarray:
+    """Der Panzer bricht mit tiefem Krachen, ein langes Stöhnen, die Scheren klicken noch – immer leiser."""
+    r = rng(seed)
+    dur = 3.4
+    y = np.zeros(int(dur * SR))
+    mix_at(y, click(r, 700, 2.5, body=2.4), 0.0, 1.0)
+    mix_at(y, click(r, 520, 2.2, body=2.0), 0.09, 0.9)
+    groan = colossus_roar(seed + 7)
+    mix_at(y, groan[: int(2.2 * SR)] * np.linspace(1.0, 0.2, int(2.2 * SR)), 0.25, 0.6)
+    at = 1.4
+    for i in range(7):
+        mix_at(y, click(r, r.uniform(1100, 1800), 6.0, body=0.8), at, 0.5 * 0.75 ** i)
+        at += r.uniform(0.12, 0.22)
+    return y
+
+
+# =====================================================================================
 # Ausgabe
 # =====================================================================================
 
@@ -187,6 +292,12 @@ SYNTH = {
     "giant_crab_pinch": (crab_pinch, 2, (0.4, 0.1), -17.0),
     "giant_crab_hurt": (crab_hurt, 2, (0.4, 0.1), -17.0),
     "giant_crab_death": (crab_death, 1, (0.6, 0.15), -17.0),
+    "reef_colossus_clack": (colossus_clack, 3, (0.8, 0.2), -15.0),
+    "reef_colossus_roar": (colossus_roar, 2, (1.6, 0.3), -13.0),
+    "reef_colossus_ambient": (colossus_ambient, 3, (1.0, 0.25), -18.0),
+    "reef_colossus_roll": (colossus_roll, 2, (0.6, 0.15), -15.0),
+    "reef_colossus_jet": (colossus_jet, 2, (0.8, 0.2), -15.0),
+    "reef_colossus_death": (colossus_death, 1, (1.8, 0.3), -13.0),
 }
 
 
@@ -224,6 +335,21 @@ EVENTS = {
     "entity.giant_crab.hurt": (["giant_crab_hurt"], 16),
     "entity.giant_crab.death": (["giant_crab_death"], 16),
     "entity.giant_crab.step": ([v(f"mob/spider/step{i}", 1.7, 0.5) for i in range(1, 5)], None),
+    "entity.reef_colossus.ambient": (["reef_colossus_ambient"], 32),
+    "entity.reef_colossus.hurt": ([v(f"mob/turtle/hurt{i}", 0.5) for i in range(1, 5)] + [v(f"block/basalt/break{i}", 0.6, 0.8) for i in range(1, 5)],
+                                  None),
+    "entity.reef_colossus.death": (["reef_colossus_death"], 64),
+    "entity.reef_colossus.roar": (["reef_colossus_roar"], 64),
+    "entity.reef_colossus.clack": (["reef_colossus_clack"], 40),
+    "entity.reef_colossus.slam": ([v("mob/warden/attack_impact_1", 0.75, 1.0, 40), v("mob/warden/attack_impact_2", 0.75, 1.0, 40)], None),
+    "entity.reef_colossus.jet": (["reef_colossus_jet"], 40),
+    "entity.reef_colossus.burrow": ([v("mob/warden/dig", 1.1, 1.0, 40), v("mob/sniffer/longdig1", 0.7, 1.0, 40),
+                                     v("mob/sniffer/longdig2", 0.7, 1.0, 40)], None),
+    "entity.reef_colossus.erupt": ([v("mob/warden/emerge", 1.2, 1.0, 48)], None),
+    "entity.reef_colossus.roll": (["reef_colossus_roll"], 40),
+    "entity.reef_colossus.step": ([v(f"mob/ravager/step{i}", 0.75, 0.8) for i in range(1, 5)], None),
+    "entity.reef_colossus.tide": ([v("mob/guardian/curse", 0.7, 1.0, 64)], None),
+    "entity.reef_colossus.lance": ([v("liquid/heavy_splash", 0.8, 1.0, 40)] + [v(f"item/trident/thunder{i}", 1.4, 0.5, 40) for i in (1, 2)], None),
 }
 
 

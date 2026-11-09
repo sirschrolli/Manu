@@ -149,6 +149,7 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ModTags.Items.REPAIRS_GLIDER, ModItems.WYVERNIT);
         add(ModTags.Items.REPAIRS_CROWN, ModItems.GEMSTONE);
         add(ModTags.Items.REPAIRS_SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD);
+        tag(ModTags.Items.REPAIRS_TIDE_SPEAR).add(net.minecraft.core.registries.BuiltInRegistries.ITEM.getResourceKey(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS).orElseThrow());
         tag(ModTags.Items.REPAIRS_CROWN).addTag(Tags.Items.INGOTS_GOLD);
         ModItems.DRAGON_SCALES.forEach((type, scale) -> add(ModTags.Items.scaleArmorRepair(type), scale));
 

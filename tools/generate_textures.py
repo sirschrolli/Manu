@@ -18,6 +18,7 @@ Benötigt: Pillow (pip install pillow)
 from __future__ import annotations
 
 import math
+import json
 import sys
 from pathlib import Path
 
@@ -64,6 +65,7 @@ import shadow_textures  # noqa: E402
 import shadow_gear_textures  # noqa: E402
 import void_textures  # noqa: E402
 import sea_textures  # noqa: E402
+import sea_blocks  # noqa: E402
 import world_blocks  # noqa: E402
 from pixelart import Color, hexc  # noqa: E402
 
@@ -362,6 +364,7 @@ def build_all() -> dict[str, Image.Image]:
     shadow_gear_textures.build(put)
     void_textures.build(put)
     sea_textures.build(put)
+    sea_blocks.build(put)
     equipment_textures.build_entity(put)
     armor_art.build(put)
     plants()
@@ -390,6 +393,10 @@ def main() -> None:
         target = TEXTURES / f"{key}.png"
         target.parent.mkdir(parents=True, exist_ok=True)
         img.save(target)
+    # Bildfolgen der Meeresblöcke: .mcmeta daneben
+    for key, (frames, frametime, interpolate) in sea_blocks.ANIMATIONS.items():
+        meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
+        (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     print(f"{len(GENERATED)} Texturen geschrieben nach {TEXTURES}")
     if "--preview" in sys.argv:
         i = sys.argv.index("--preview")

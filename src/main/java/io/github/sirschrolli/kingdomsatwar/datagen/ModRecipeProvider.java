@@ -638,6 +638,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_crab_meat_from_smoking");
         save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_crab_meat_from_campfire_cooking");
+        // Gezeitenhorn: eine große Wellhornschnecke mit goldenem Mundstück und Prismarin
+        Item whelk = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.WHELK_SHELLS.get().asItem();
+        shapeless(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get())
+                .requires(whelk).requires(whelk).requires(Items.GOLD_INGOT).requires(Items.PRISMARINE_CRYSTALS)
+                .unlockedBy(getHasName(whelk), has(whelk))
+                .save(output, key("tide_horn"));
+        // Muscheln: zerstoßen zu Knochenmehl (Kalk)
+        for (var shells : io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.shells()) {
+            shapeless(RecipeCategory.MISC, Items.BONE_MEAL, 1).requires(shells.get())
+                    .unlockedBy(getHasName(shells.get()), has(shells.get()))
+                    .save(output, key("bone_meal_from_" + shells.getId().getPath()));
+        }
         // Leuchtgelee im seltsamen Trank: Nachtsicht (für Trank, Wurftrank und Verweiltrank)
         Item jelly = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_JELLY.get();
         for (Item container : java.util.List.of(Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION)) {

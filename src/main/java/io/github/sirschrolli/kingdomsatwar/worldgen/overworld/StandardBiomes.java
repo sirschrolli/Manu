@@ -102,6 +102,17 @@ public record StandardBiomes() implements BiomeModifier {
         // Flüsse (die Steinküsten, vereisten Gipfel, Savannen-Hochebenen und warmen Strände sind schon eigene Biome)
         touch(List.of(Biomes.RIVER), OverworldFeatures.STD_REEDS);
 
+        // das Meer (0.62): Felsnadeln, Tangwälder, Anemonengärten, Muschelbänke, heiße Quellen und Leuchtfelder
+        touch(List.of(Biomes.OCEAN, Biomes.COLD_OCEAN), OverworldFeatures.STD_SEA_STACKS);
+        touch(List.of(Biomes.LUKEWARM_OCEAN, Biomes.WARM_OCEAN), OverworldFeatures.STD_WARM_SEA_STACKS);
+        touch(List.of(Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN), OverworldFeatures.STD_COLD_KELP_FORESTS);
+        touch(List.of(Biomes.OCEAN, Biomes.DEEP_OCEAN), OverworldFeatures.STD_KELP_FORESTS);
+        touch(List.of(Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN), OverworldFeatures.STD_ANEMONE_GARDENS);
+        touch(List.of(Biomes.BEACH, Biomes.WARM_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.COLD_OCEAN, Biomes.STONY_SHORE),
+                OverworldFeatures.STD_SHELL_BEDS);
+        touch(List.of(Biomes.DEEP_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_FROZEN_OCEAN),
+                OverworldFeatures.STD_VENT_FIELDS, OverworldFeatures.STD_GLOW_FIELDS);
+
         // Unterholz: Büsche aus Laub und junge Bäume zwischen den großen
         touch(List.of(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW), OverworldFeatures.STD_FIELD_BUSHES);
         touch(List.of(Biomes.FOREST, Biomes.FLOWER_FOREST), OverworldFeatures.STD_OAK_BUSHES, OverworldFeatures.STD_BIRCH_BUSHES,

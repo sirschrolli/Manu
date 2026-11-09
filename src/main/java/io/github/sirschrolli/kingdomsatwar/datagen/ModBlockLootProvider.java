@@ -139,6 +139,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         // Die Leere
         // das Meer: die Tiefseelaterne fällt als sie selbst
         this.dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get());
+        sea();
         for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,
@@ -295,6 +296,29 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(crop.get(), createCropDrops(crop.get(), produce, seeds,
                 MatchBlock.blockMatches(this.blocks, crop.get(),
                         StatePropertiesPredicate.Builder.properties().hasProperty(CropBlock.AGE, CropBlock.MAX_AGE))));
+    }
+
+    /** Der Meeresgrund (0.62): Anemonen, Röhrenwürmer, Gestein; Muscheln so viele, wie liegen; Algen nur mit Schere. */
+    private void sea() {
+        for (var anemone : io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.anemones()) {
+            dropSelf(anemone.get());
+        }
+        for (var shells : io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.shells()) {
+            add(shells.get(), block -> LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                    .add(this.applyExplosionDecay(block, LootItem.lootTableItem(block)
+                            .apply(java.util.List.of(2, 3), count -> SetItemCountFunction.setCount(ContextIntProviders.exactly(count))
+                                    .when(MatchBlock.blockMatches(this.blocks, block, StatePropertiesPredicate.Builder.properties()
+                                            .hasProperty(io.github.sirschrolli.kingdomsatwar.block.sea.SeashellBlock.SHELLS, count.intValue()))))))));
+        }
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TUBE_WORMS.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SULFUR_CRUST.get());
+        add(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.HYDROTHERMAL_VENT.get(), block -> this.createSingleItemTableWithSilkTouch(block,
+                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK.get()));
+        add(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GLOW_ALGAE.get(), block -> this.createShearsOrSilkTouchOnlyDrop(block));
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP.get());
+        dropOther(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP_PLANT.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.GIANT_KELP.get());
     }
 
     @Override

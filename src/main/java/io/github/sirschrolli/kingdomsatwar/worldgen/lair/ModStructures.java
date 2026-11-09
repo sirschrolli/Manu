@@ -69,6 +69,13 @@ public final class ModStructures {
     /** Thron der Alten: einmal in der Leere, der Platz des Zerbrochenen Königs. */
     public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement>>
             VOID_THRONE_PLACEMENT = PLACEMENTS.register("void_throne", () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement.CODEC);
+    // das Versunkene Atoll (0.62): einmal je Welt im Meer, Boss Karkinos
+    public static final DeferredHolder<MapCodec<? extends StructurePlacement>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPlacement>>
+            SUNKEN_ATOLL_PLACEMENT = PLACEMENTS.register("sunken_atoll", () -> io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPlacement.CODEC);
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollStructure>>
+            SUNKEN_ATOLL = TYPES.register("sunken_atoll", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SUNKEN_ATOLL_PIECE =
+            PIECES.register("sunken_atoll", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
             VOID_THRONE = TYPES.register("void_throne", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> VOID_THRONE_PIECE =
@@ -157,6 +164,8 @@ public final class ModStructures {
     public static final ResourceKey<StructureSet> SHADOW_CITADEL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("shadow_citadel"));
     public static final ResourceKey<Structure> VOID_THRONE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("void_throne"));
     public static final ResourceKey<StructureSet> VOID_THRONE_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("void_throne"));
+    public static final ResourceKey<Structure> SUNKEN_ATOLL_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("sunken_atoll"));
+    public static final ResourceKey<StructureSet> SUNKEN_ATOLL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sunken_atoll"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -222,6 +231,16 @@ public final class ModStructures {
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                                         net.minecraft.util.random.WeightedList.of()),
                                 net.minecraft.world.entity.MobCategory.CREATURE, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // im Versunkenen Atoll erscheinen keine Monster von selbst (dort schläft Karkinos)
+        context.register(SUNKEN_ATOLL_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SUNKEN_ATOLL))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                                         net.minecraft.util.random.WeightedList.of())))
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
@@ -427,6 +446,9 @@ public final class ModStructures {
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
         context.register(VOID_THRONE_SET, new StructureSet(structures.getOrThrow(VOID_THRONE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement(450, 800, 77_031)));
+        context.register(SUNKEN_ATOLL_SET, new StructureSet(structures.getOrThrow(SUNKEN_ATOLL_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPlacement(450, 1300, biomes.getOrThrow(ModTags.Biomes.HAS_SUNKEN_ATOLL),
+                        88_207)));
         // Magiertürme: Felder von 46 Chunks, mindestens 16 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
         for (DragonType type : DragonType.values()) {

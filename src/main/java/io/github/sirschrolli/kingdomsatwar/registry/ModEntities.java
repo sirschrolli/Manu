@@ -475,6 +475,11 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity>> GIANT_CRAB =
             ENTITIES.registerEntityType("giant_crab", io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity::new,
                     MobCategory.CREATURE, builder -> builder.sized(1.1f, 0.6f).eyeHeight(0.5f).clientTrackingRange(10));
+    /** Karkinos, der Riffkoloss: Boss des Versunkenen Atolls – ein riesiger Einsiedler mit einer Tempelkuppel als Gehäuse. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity>> REEF_COLOSSUS =
+            ENTITIES.registerEntityType("reef_colossus", io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(4.2f, 3.4f).eyeHeight(2.6f).notInPeaceful().clientTrackingRange(16)
+                            .updateInterval(2));
     /** Kristallsplitter: Geschoss des Splitterwächters. */
     public static final DeferredHolder<EntityType<?>, EntityType<WardenShardEntity>> WARDEN_SHARD = ENTITIES.registerEntityType("warden_shard",
             WardenShardEntity::new, MobCategory.MISC,
@@ -765,6 +770,7 @@ public final class ModEntities {
         event.put(DISTORTLING.get(), DistortlingEntity.createAttributes().build());
         event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
         event.put(SHATTERED_KING.get(), ShatteredKingEntity.createAttributes().build());
+        event.put(REEF_COLOSSUS.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity.createAttributes().build());
         event.put(MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity.createAttributes().build());
         event.put(GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity.createAttributes().build());
         event.put(SHARK.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.SharkEntity.createAttributes().build());

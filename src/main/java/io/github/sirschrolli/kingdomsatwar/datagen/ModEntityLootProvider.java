@@ -299,6 +299,18 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.GIANT_CRAB.get(), LootTable.lootTable()
                 .withPool(meat(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 1, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW.get(), 0.2f, 0.05f)));
+        // Karkinos: der Gezeiten-Speer bricht im Tod aus seiner Kuppel (nicht in der Beute); dazu Perlmutt, Gold, ein Herz des
+        // Meeres und das Gezeitenhorn (um ihn später zurückzurufen)
+        this.add(ModEntities.REEF_COLOSSUS.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), 1))
+                .withPool(exactly(net.minecraft.world.item.Items.HEART_OF_THE_SEA, 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_CLAW.get(), 1, 2))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CRAB_MEAT.get(), 4, 8))
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_CRYSTALS, 8, 16))
+                .withPool(drop(net.minecraft.world.item.Items.NAUTILUS_SHELL, 1, 3))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 4, 9))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

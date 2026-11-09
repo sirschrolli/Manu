@@ -230,6 +230,17 @@ public class ModChestLootProvider implements LootTableSubProvider {
         this.output.accept(ModLootTables.SITE_TIDE_SHRINE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.BURIED_TREASURE),
                 0, 0, 3, 8, 0.8f)
                 .withPool(pool(0, 1, item(ModItems.GEMSTONE.get(), 1, 1, 3))));
+        // Versunkenes Atoll: der Schatz des Meeresvolks im Tempel – Perlmutt, Gold, Nautilusse, Edelsteine, ein Gezeitenhorn
+        this.output.accept(io.github.sirschrolli.kingdomsatwar.worldgen.atoll.AtollPiece.CHEST,
+                coins(LootTable.lootTable().withPool(crystals(20, 15)), 2, 8, 2, 6, 0.6f)
+                .withPool(pool(3, 6, item(Items.PRISMARINE_CRYSTALS, 6, 2, 6), item(Items.PRISMARINE_SHARD, 6, 3, 8),
+                        item(Items.GOLD_INGOT, 4, 1, 4), item(Items.GOLD_NUGGET, 6, 4, 12), item(Items.NAUTILUS_SHELL, 3, 1, 2),
+                        item(ModItems.GEMSTONE.get(), 3, 1, 3), item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SCALLOP_SHELLS.get(), 4, 1, 3),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_HORN.get(), 1, 1, 1),
+                        item(Items.SEA_LANTERN, 3, 1, 2)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
         // Seedrache: die verschluckte Fracht eines Schiffs (Seekarte, Vorräte, Schatz)
         this.output.accept(ModLootTables.SITE_SEA_DRAGON_MAP, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_MAP),
                 1, 5, 0, 1, 0.0f));
