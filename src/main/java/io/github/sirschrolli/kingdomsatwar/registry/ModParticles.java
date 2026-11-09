@@ -29,6 +29,8 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FAE_SPARK = simple("fae_spark");
     /** Konfetti: bunte Schnipsel, Sterne und Kreise, die taumelnd zu Boden schweben (MissMystiks Auftritte und Tricks). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CONFETTI = simple("confetti");
+    /** Fehlerpixel: kleine, leuchtende Quadrate in Rot, Grün, Blau, Magenta, Cyan, Gelb oder Weiß, die flackern (Anni der Troll). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GLITCH_PIXEL = simple("glitch_pixel");
 
     private ModParticles() {}
 

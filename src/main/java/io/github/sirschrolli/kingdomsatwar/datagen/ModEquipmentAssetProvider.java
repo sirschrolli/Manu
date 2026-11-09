@@ -44,6 +44,11 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,
                         new EquipmentClientInfo.Layer(ModEquipment.STAR_WINGS_ASSET.identifier(), Optional.empty(), false))
                 .build());
+        // Fehlerflügel: fehlende Textur mit Löchern und Farbsäumen (nicht vom Umhang des Spielers ersetzt)
+        output.accept(ModEquipment.GLITCH_WINGS_ASSET, EquipmentClientInfo.builder()
+                .addLayers(EquipmentClientInfo.LayerType.WINGS,
+                        new EquipmentClientInfo.Layer(ModEquipment.GLITCH_WINGS_ASSET.identifier(), Optional.empty(), false))
+                .build());
         // Gleiter: eigene Flügel-Textur (nicht vom Umhang des Spielers ersetzt)
         output.accept(ModEquipment.GLIDER_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,

@@ -454,6 +454,32 @@ public final class ModEntities {
             ENTITIES.registerEntityType("miss_mystik", io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity::new,
                     MobCategory.MONSTER, builder -> builder.sized(0.9f, 2.8f).eyeHeight(2.3f).notInPeaceful()
                             .clientTrackingRange(16).updateInterval(2));
+    /** Anni der Troll (0.67): der glitchende Boss der Fehlerzone. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.AnniTrollEntity>> ANNI_TROLL =
+            ENTITIES.registerEntityType("anni_troll", io.github.sirschrolli.kingdomsatwar.entity.glitch.AnniTrollEntity::new,
+                    MobCategory.MONSTER, builder -> builder.sized(2.2f, 3.8f).eyeHeight(3.2f).notInPeaceful().fireImmune()
+                            .clientTrackingRange(16).updateInterval(2));
+    /** Ein Fehler-Klon Annis. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.GlitchCloneEntity>> GLITCH_CLONE =
+            ENTITIES.registerEntityType("glitch_clone", io.github.sirschrolli.kingdomsatwar.entity.glitch.GlitchCloneEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.8f, 3.0f).eyeHeight(2.5f).noLootTable().noSave().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Ein Pixel aus Annis Pixelregen. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.PixelCubeEntity>> PIXEL_CUBE =
+            ENTITIES.registerEntityType("pixel_cube", io.github.sirschrolli.kingdomsatwar.entity.glitch.PixelCubeEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(0.6f, 0.6f).noLootTable().noSave().clientTrackingRange(10).updateInterval(1));
+    /** Ein Feld fehlender Textur (Anni). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.MissingZoneEntity>> MISSING_ZONE =
+            ENTITIES.registerEntityType("missing_zone", io.github.sirschrolli.kingdomsatwar.entity.glitch.MissingZoneEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.0f, 0.1f).noLootTable().noSave().clientTrackingRange(10).updateInterval(20));
+    /** Ein Zeilenfehler (Anni): eine leuchtende Zeile, die um sie herumfegt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.ScanlineEntity>> SCANLINE =
+            ENTITIES.registerEntityType("scanline", io.github.sirschrolli.kingdomsatwar.entity.glitch.ScanlineEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.0f, 0.2f).noLootTable().noSave().clientTrackingRange(10).updateInterval(20));
+    /** Ein Nachbild (Anni beim Springen, die Stellen beim Rückruck). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.glitch.AfterimageEntity>> AFTERIMAGE =
+            ENTITIES.registerEntityType("afterimage", io.github.sirschrolli.kingdomsatwar.entity.glitch.AfterimageEntity::new,
+                    MobCategory.MISC, builder -> builder.sized(1.0f, 1.0f).noLootTable().noSave().clientTrackingRange(10).updateInterval(20));
     /** Ein Spiegelbild MissMystiks (Spiegelkabinett). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity>> MYSTIK_IMAGE =
             ENTITIES.registerEntityType("mystik_image", io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity::new,
@@ -830,6 +856,8 @@ public final class ModEntities {
         event.put(ASTERIA.get(), io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity.createAttributes().build());
         event.put(MISS_MYSTIK.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MissMystikEntity.createAttributes().build());
         event.put(MYSTIK_IMAGE.get(), io.github.sirschrolli.kingdomsatwar.entity.fae.MystikImageEntity.createAttributes().build());
+        event.put(ANNI_TROLL.get(), io.github.sirschrolli.kingdomsatwar.entity.glitch.AnniTrollEntity.createAttributes().build());
+        event.put(GLITCH_CLONE.get(), io.github.sirschrolli.kingdomsatwar.entity.glitch.GlitchCloneEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());

@@ -220,6 +220,36 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIK_FIREWORK = register("entity.miss_mystik.firework");
     public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIC_DECK_THROW = register("item.mystic_deck.throw");
     public static final DeferredHolder<SoundEvent, SoundEvent> MYSTIC_HAT_VANISH = register("item.mystic_top_hat.vanish");
+    // Anni der Troll (0.67)
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_AMBIENT = register("entity.anni_troll.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_LAUGH = register("entity.anni_troll.laugh");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_HURT = register("entity.anni_troll.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_DEATH = register("entity.anni_troll.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_STEP = register("entity.anni_troll.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_BOOT = register("entity.anni_troll.boot");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_DISCONNECT = register("entity.anni_troll.disconnect");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_WINDUP = register("entity.anni_troll.windup");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_SMASH = register("entity.anni_troll.smash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_LAG = register("entity.anni_troll.lag");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_TELEPORT = register("entity.anni_troll.teleport");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_MISS = register("entity.anni_troll.miss");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_CLONE = register("entity.anni_troll.clone");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_CLONE_CRASH = register("entity.anni_troll.clone_crash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_CLONE_POP = register("entity.anni_troll.clone_pop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_MISSING = register("entity.anni_troll.missing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_RAIN = register("entity.anni_troll.rain");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_PIXEL = register("entity.anni_troll.pixel");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_ROLLBACK_MARK = register("entity.anni_troll.rollback_mark");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_ROLLBACK = register("entity.anni_troll.rollback");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_SCAN = register("entity.anni_troll.scan");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_CRASH = register("entity.anni_troll.crash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ANNI_RESTART = register("entity.anni_troll.restart");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_HUM = register("block.error_core.hum");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_ON = register("block.error_core.on");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ERROR_CORE_OFF = register("block.error_core.off");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BANNHAMMER_JOLT = register("item.bannhammer.jolt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BANNHAMMER_BAN = register("item.bannhammer.ban");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GLITCH_WINGS_BLINK = register("item.glitch_wings.blink");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */
