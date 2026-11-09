@@ -117,6 +117,10 @@ public class MagicHatEntity extends Entity {
                 if (k >= 1.0f) {
                     this.setPhase(Phase.SPIN);
                     level.playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.MYSTIK_VORTEX.get(), SoundSource.HOSTILE, 2.5f, 1.0f);
+                    // ein Zauberkreis zeigt, wie weit der Sog reicht
+                    io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.create(level,
+                            io.github.sirschrolli.kingdomsatwar.magic.fx.SpellFxEntity.Kind.CIRCLE, this.position().add(0.0, 0.05, 0.0), null,
+                            0xC890FF, BURST, (float) PULL_RADIUS).spawn();
                     level.sendParticles(ParticleTypes.POOF, this.getX(), this.getY() + 0.2, this.getZ(), 10, 0.3, 0.1, 0.3, 0.02);
                 }
             }
@@ -197,6 +201,25 @@ public class MagicHatEntity extends Entity {
     }
 
     private void clientEffects() {
+        if (this.phase() == Phase.SPIN && this.phaseTime(0.0f) < BURST) {
+            // der Strudel: drei Arme aus Funken und Zauberstaub kreisen nach innen, je näher dem Knall, desto schneller
+            float t = this.phaseTime(0.0f);
+            double spin = t * (0.22 + t * 0.004);
+            for (int i = 0; i < 3; i++) {
+                double frac = (t * 0.045 + i / 3.0 + this.random.nextDouble() * 0.05) % 1.0;
+                double r = PULL_RADIUS * (1.0 - frac) + 0.35;
+                double a = spin + i * Math.PI * 2.0 / 3.0 + frac * 5.0;
+                double x = this.getX() + Math.cos(a) * r;
+                double z = this.getZ() + Math.sin(a) * r;
+                double tangential = 0.12 + 0.18 * frac;
+                double vx = -Math.sin(a) * tangential - Math.cos(a) * 0.08;
+                double vz = Math.cos(a) * tangential - Math.sin(a) * 0.08;
+                this.level().addParticle(ModParticles.FAE_SPARK.get(), x, this.getY() + 0.15 + frac * 0.9, z, vx, 0.01, vz);
+                if (this.random.nextInt(2) == 0) {
+                    this.level().addParticle(MissMystikEntity.MAGIC_DUST, x, this.getY() + 0.2 + frac * 0.9, z, 0.0, 0.0, 0.0);
+                }
+            }
+        }
         if (this.phase() == Phase.SPIN && this.random.nextInt(2) == 0) {
             double a = this.random.nextDouble() * Math.PI * 2.0;
             this.level().addParticle(ParticleTypes.END_ROD, this.getX() + Math.cos(a) * 0.4, this.getY() + 0.7, this.getZ() + Math.sin(a) * 0.4,

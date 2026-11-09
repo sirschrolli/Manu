@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.65.0 – Asteria, die Sternenreiterin.** Der zweite neue Boss wartet im End: Mitten im Sternenhof jeder **Sternwarte** leuchtet jetzt der **Sternstein** – tritt man an ihn heran, stößt **Asteria, die Sternenreiterin**, in einer Säule aus Sternenlicht vom Himmel herab: die letzte Reiterin des Sternenordens in silberner Rüstung mit Sternenkrone, auf einem gewaltigen, gepanzerten **Sternenrochen** (gut acht Blöcke Spannweite). Sie ist stärker als die Drachen (700 Lebenspunkte, Rüstung 14, Zähigkeit 6), kämpft aus der Luft und hat sechs Angriffe: die **Tjost** (ein Sturmritt mit eingelegter Lanze, die Bahn zeigen Sternfunken), den **Sternenregen** (Sterne stürzen auf leuchtende Ringe), das **Sternbild** (ein Pentagramm aus Licht – wer drinnen bleibt, schwebt hilflos empor), den **Kometen** (die Lanze fliegt als Komet und kehrt zurück), den **Schwingenschlag** (eine Druckwelle, die auch Pfeile fortbläst) und unter halber Kraft die **Supernova** – wer sie dann sehen kann, wird geblendet und schwer getroffen; Deckung hinter Mauern und Pfeilern schützt. Besiegt hinterlässt sie die **Sternenlanze** (ein 3D-Speer, der im End und unter dem Nachthimmel härter trifft, Getroffene leuchten lässt und bei jedem dritten Treffer einen Stern herabruft) und die **Sternenschwingen** (Elytren mit **Sternenschub** wie eine Rakete und einer Spur aus Sternenlicht). Der Sternstein erlischt; ein **Endkristall** entzündet ihn neu und ruft sie zurück.
+> **Testversion 0.66.0 – MissMystik, die Feen-Zauberkünstlerin.** Im Feenreich steht jetzt eine verlassene **Zauberbühne**: eine Lichtung mit Samtvorhängen, Rampenlichtern aus Mondstein und einem Zuschauerrund, das in einen Hügel voller Blumen gebaut ist. Mitten auf der Bühne wartet der **Große Zauberzylinder** – tritt man heran, ertönt ein Trommelwirbel, und mit einem Knall und einem Regen aus Konfetti springt **MissMystik** heraus und verbeugt sich: eine Feen-Zauberkünstlerin mit Zylinder, Frack, Zauberstab, einem Fächer aus Karten und Flügeln, auf denen Herz, Pik, Karo und Kreuz leuchten (520 Lebenspunkte, Rüstung 10). Sie schwebt um ihr Publikum und zeigt Trick um Trick: den **Kartenfächer**, die **Lichttauben**, den **Verschwindetrick** (sie taucht hinter dir wieder auf), das **Spiegelkabinett** (Spiegelbilder, die beim ersten Treffer zerspringen), den **Hut-Trick** (ihr Zylinder wächst, saugt alle an und wirft sie in die Luft), die **Schwerterkiste** und **„Zieh eine Karte!“** (Herz heilt sie, Pik fällt wie ein Fallbeil, Karo regnet Splitter, Kreuz verflucht). Unter 60 % gibt sie eine **Zugabe** mit dem **Rampenlicht**, und fast besiegt das **große Finale** mit Feuerwerk – wer sie dann sehen kann und keine Deckung sucht, wird schwer getroffen. Besiegt verbeugt sie sich ein letztes Mal und hinterlässt das **Kartendeck der Mystik** (wirft Fächer aus leuchtenden Karten, jeder fünfte Wurf ist ein Ass im Ärmel) und den **Zylinder der Mystik** (ein 3D-Hut mit Feder, Rose und Herz-Ass, der dich in höchster Not unsichtbar macht). Eine Prise **Feenstaub** ruft sie zurück.
+> In 0.65 kam Asteria, die Sternenreiterin: Der zweite neue Boss wartet im End: Mitten im Sternenhof jeder **Sternwarte** leuchtet jetzt der **Sternstein** – tritt man an ihn heran, stößt **Asteria, die Sternenreiterin**, in einer Säule aus Sternenlicht vom Himmel herab: die letzte Reiterin des Sternenordens in silberner Rüstung mit Sternenkrone, auf einem gewaltigen, gepanzerten **Sternenrochen** (gut acht Blöcke Spannweite). Sie ist stärker als die Drachen (700 Lebenspunkte, Rüstung 14, Zähigkeit 6), kämpft aus der Luft und hat sechs Angriffe: die **Tjost** (ein Sturmritt mit eingelegter Lanze, die Bahn zeigen Sternfunken), den **Sternenregen** (Sterne stürzen auf leuchtende Ringe), das **Sternbild** (ein Pentagramm aus Licht – wer drinnen bleibt, schwebt hilflos empor), den **Kometen** (die Lanze fliegt als Komet und kehrt zurück), den **Schwingenschlag** (eine Druckwelle, die auch Pfeile fortbläst) und unter halber Kraft die **Supernova** – wer sie dann sehen kann, wird geblendet und schwer getroffen; Deckung hinter Mauern und Pfeilern schützt. Besiegt hinterlässt sie die **Sternenlanze** (ein 3D-Speer, der im End und unter dem Nachthimmel härter trifft, Getroffene leuchten lässt und bei jedem dritten Treffer einen Stern herabruft) und die **Sternenschwingen** (Elytren mit **Sternenschub** wie eine Rakete und einer Spur aus Sternenlicht). Der Sternstein erlischt; ein **Endkristall** entzündet ihn neu und ruft sie zurück.
 > In 0.64 kam Malleus, der Glutschmied: Der erste der neuen Bosse jenseits des Feenreichs wartet im Nether: Auf dem Dach jeder **Aschenesse** kniet **Malleus, der Glutschmied**, an seinem **Glutamboss** und schmiedet am **Glutspeer** – ein knapp vier Blöcke großes, verkohltes Gerippe mit Widderschädel, Flammen auf dem Kopf und einer glühenden Herzesse in der Brust. Wer die Treppe hinaufsteigt, hört schon von Weitem seine Hammerschläge; tritt man an den Amboss heran, richtet er sich auf, nimmt den Speer vom Amboss und brüllt. Er ist stärker als die Erzmagier (560 Lebenspunkte, Rüstung 12) und kämpft mit sechs Angriffen: **Speerstoß**, **Hammerschlag** mit einer Schockwelle über das Dach, **Funkenflug**, **Glutwurf** mit Klumpen geschmolzenen Metalls, **Ruf der Gesellen** (Brandgebeine) und unter halber Kraft das **Anfachen der Esse** – dann wird er weißglühend. Besiegt lässt er den **Glutspeer** fallen, einen eigenen 3D-Speer, der im Nether (und wenn du brennst) härter trifft, jeden Getroffenen in Brand setzt, einen Flammenring auflodern lässt und dich in der Hand vor Feuer und Lava schützt. Der Amboss erkaltet; ein **Netheritbarren** facht ihn neu an und ruft den Schmied zurück. Neu ist auch der Kreativ-Reiter **„Legenden“**; der Gezeiten-Speer und der Glutspeer lassen sich jetzt wie die Speere von Minecraft verzaubern.
 > In 0.63 kam das Feenreich: Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
 > In 0.62 kam die Tiefe des Meeres: das **Versunkene Atoll** mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), der **Gezeiten-Speer** als erste eigene 3D-Waffe und das Gezeitenhorn, dazu sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und das Meeresleuchten.
@@ -330,7 +331,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Die Tiefe des Meeres**: sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
 | **Das Feenreich**: eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
 | **Malleus, der Glutschmied**: Boss auf dem Dach jeder Aschenesse im Nether – kniet schmiedend an seinem Glutamboss, erwacht, wenn man herantritt; sechs Angriffe, Weißglut unter halber Kraft, eigene Bossleiste und Klänge; der **Glutspeer** als 3D-Waffe; Rückruf mit einem Netheritbarren | ✅ fertig |
-| **Asteria, die Sternenreiterin** (neu): Boss jeder Sternwarte im End – stößt vom Himmel herab, wenn man an den Sternstein tritt; fliegend auf einem gepanzerten Sternenrochen, sechs Angriffe mit der Supernova unter halber Kraft, eigene Bossleiste und Klänge; die **Sternenlanze** als 3D-Speer und die **Sternenschwingen** mit Sternenschub; Rückruf mit einem Endkristall | ✅ fertig |
+| **Asteria, die Sternenreiterin**: Boss jeder Sternwarte im End – stößt vom Himmel herab, wenn man an den Sternstein tritt; fliegend auf einem gepanzerten Sternenrochen, sechs Angriffe mit der Supernova unter halber Kraft, eigene Bossleiste und Klänge; die **Sternenlanze** als 3D-Speer und die **Sternenschwingen** mit Sternenschub; Rückruf mit einem Endkristall | ✅ fertig |
+| **MissMystik, die Feen-Zauberkünstlerin** (neu): Boss der Zauberbühne im Feenreich – springt aus dem Großen Zauberzylinder, wenn man herantritt; schwebend, neun Tricks mit Karten, Tauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, Zugabe und großes Finale, eigene Bossleiste und Klänge; das **Kartendeck der Mystik** und der **Zylinder der Mystik** als 3D-Hut; Rückruf mit Feenstaub | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -1875,6 +1877,68 @@ echtes 3D-Modell; ein Speer wie die von Minecraft (Stoß und Ansturm), verzauber
 
 Sternstein, Sternenlanze, Sternenschwingen, Sternsplitter und das Spawn-Ei liegen im Kreativ-Reiter **„Legenden“**.
 
+### MissMystik, die Feen-Zauberkünstlerin
+
+![MissMystik, die Feen-Zauberkünstlerin, auf ihrer Zauberbühne im Feenreich](docs/bilder/miss_mystik.jpg)
+
+Seit 0.66 gibt es im Feenreich verlassene **Zauberbühnen**. Auf einer großen Lichtung steht eine Bühne aus Glimmerholz und
+Mondstein: Säulen mit einem Giebel und einem Stern, schwere **Samtvorhänge** in Violett mit goldenen Fransen, an der
+Vorderkante Rampenlichter aus gemeißeltem Mondstein, zu beiden Seiten ein Riesenpilz, Leuchtranken am Gerüst. Davor liegt
+ein **Zuschauerrund**: drei Reihen Bänke im Halbkreis, jede eine Stufe höher als die vor ihr, in einen Hügel voller
+Feenrosen und Mondglocken gebaut, mit Laternen und einem Weg durch die Mitte. Einst unterhielt hier **MissMystik** den
+Feenhof mit ihren Tricks; seit das Siegel zerbrach, ist ihr Publikum fort – und ihre Illusionen sind gefährlich geworden.
+Schon von Weitem weht Musik über die Lichtung („Musik weht über die Lichtung … irgendwo wartet eine Bühne auf ihr
+Publikum.“). Mitten auf der Bühne steht der **Große Zauberzylinder**, und in ihm raschelt es. Trittst du näher als zehn
+Blöcke heran, ertönt ein Trommelwirbel, Funken kreisen um den Hut – dann ein Knall, Konfetti, und sie springt heraus,
+wirbelt empor, verbeugt sich und lacht (Finden: `/kaw zauberbuehne` im Feenreich).
+
+MissMystik trägt einen Zylinder mit Feder und Feenrose, eine Maske, einen violetten Frack mit goldenen Knöpfen und
+Schößen, eine Fliege, weiße Handschuhe, einen Rock und hohe Stiefel; in der rechten Hand den Zauberstab, in der linken
+einen Fächer aus Karten. Ihre Feenflügel sind durchscheinend, und auf ihnen leuchten **Herz, Pik, Karo und Kreuz**. Sie
+steht in der Reihe der Bosse **zwischen den Erzmagiern und Malleus** (520 Lebenspunkte, Rüstung 10, Zähigkeit 4, lässt
+sich nicht wegstoßen) und schwebt in weiten Kreisen um ihr Publikum. Pfeile und andere Geschosse fängt sie dann und wann
+mit einer Karte ab. Eigene Bossleiste (ein Harlekin-Muster mit Kartenzeichen, ihr Bildnis mit Zylinder und ein Fächer aus
+Karten), eigene Klänge und Melodien.
+
+| Trick | Was geschieht |
+|---|---|
+| **Kartenfächer** | sie fächert die Karten auf, holt aus – und fünf leuchtende Karten fliegen im Bogen auf dich zu (in der Zugabe sieben, dann noch drei) |
+| **Lichttauben** | ein Fingerschnippen, und **Tauben aus Licht** flattern auf, kreisen – und stürzen sich nacheinander auf dich; wer getroffen wird, leuchtet |
+| **Verschwindetrick** | sie wirbelt herum, eine Rauchwolke, sie ist fort … Funken zeigen, wo sie wiederkommt: **hinter dir**. Dann sticht sie mit dem Zauberstab zu und verlangsamt dich |
+| **Spiegelkabinett** | sie dreht sich mit ausgebreiteten Armen – dann schweben **vier MissMystiks** um dich herum (in der Zugabe fünf), nur eine ist echt, und die Spiegelbilder werfen Karten. Ein Spiegelbild zerspringt beim ersten Treffer (mit einem Knall, der dich zurückwirft); triffst du die echte MissMystik, zerspringen alle |
+| **Hut-Trick** | sie wirft ihren Zylinder: Er landet kopfüber, **wächst** und dreht sich immer schneller, ein Zauberkreis zeigt den **Sog**, der alle zu ihm zieht – dann ein Knall, der alle in die Luft wirft, und acht Karten fliegen im Kreis heraus. Danach fliegt der Hut zurück auf ihren Kopf |
+| **Schwerterkiste** | um dich bildet sich eine **Kiste aus Licht**, ringsum erscheinen acht Schwerter – wer dann noch drin steht, wenn sie zustoßen, wird schwer getroffen (in der Zugabe zwei Kisten) |
+| **„Zieh eine Karte!“** | eine **riesige Karte** schwebt über dir und dreht sich um: **Herz** heilt sie, **Pik** fällt wie ein Fallbeil auf dich herab, **Karo** lässt Splitter auf neun leuchtende Ringe regnen, **Kreuz** verflucht alle ringsum (Langsamkeit, Schwäche, Leuchten) |
+| **Rampenlicht** | nur in der Zugabe: drei **Lichtkegel** jagen ihre Zuschauer (etwas langsamer, als man rennt) – ein Ring warnt, dann brennen sie zu und blenden |
+| **Großes Finale** | einmal, wenn sie fast besiegt ist: „Und nun … das große Finale!“ – sie steigt über den Bühnenrand, Raketen steigen auf und regnen auf leuchtende Ringe herab, Licht sammelt sich in ihr, und dann trifft ein letzter Knall **jeden, der sie sehen kann** – wer hinter einer Säule, einem Pilz oder einer Bank in Deckung geht, ist geschützt |
+
+Unter 60 % ihrer Kraft gibt sie eine **Zugabe** („Zugabe! Zugabe!“): Sie schimmert rosa, wird schneller, wirft mehr
+Karten, ruft mehr Tauben und zeigt das Rampenlicht. Findet sie niemanden mehr, verbeugt sie sich nach einer halben Minute
+und verschwindet in ihrem Zylinder (und kommt geheilt wieder). Besiegt verbeugt sie sich ein letztes Mal, das Publikum
+applaudiert, und sie vergeht in einem Regen aus Konfetti. Sie hinterlässt das **Kartendeck der Mystik**, den **Zylinder der
+Mystik**, einen **Herzkristall**, Feenstaub, Amethyst, Gold, Edelsteine und Münzen. Der Zylinder ist dann **leer** – streust
+du eine Prise **Feenstaub** hinein (Rechtsklick), kehrt sie zurück.
+
+**Das Kartendeck der Mystik** – MissMystiks eigene Zauberkarten; in der Hand ein Fächer aus fünf Karten:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Kartenfächer** | Rechtsklick wirft einen Fächer aus **drei leuchtenden Karten**, die wirbelnd geradeaus fliegen (je 6 Schaden) |
+| **Ass im Ärmel** | jeder **fünfte Wurf** ist ein Ass im Ärmel: fünf Karten, jede härter (je 9 Schaden), mit Konfetti |
+| Haltbarkeit | 750 (jeder Wurf kostet einen Punkt), mit **Feenstaub** zu reparieren, verzauberbar, episch |
+
+**Der Zylinder der Mystik** – ihr Zylinder, auf dem Kopf ein echtes 3D-Modell mit Satinband, goldener Schnalle,
+Feenrose, Feder und einem Herz-Ass im Band:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schutz | wie ein guter Helm (Rüstung 3, Zähigkeit 2) und **+1 Glück** |
+| **Verschwindetrick** | sinkt dein Leben unter ein Drittel, verschwindest du in einer Rauchwolke: **vier Sekunden unsichtbar und schnell**, und Monster verlieren dich aus den Augen (alle 90 Sekunden) |
+| Haltbarkeit | 520, mit **Feenstaub** zu reparieren, verzauberbar wie ein Helm, episch |
+
+Zauberzylinder, Kartendeck, Zylinder der Mystik und das Spawn-Ei liegen im Kreativ-Reiter **„Legenden“**, die
+**Samtvorhänge** (auch mit Fransen) zum Bauen eigener Bühnen im Reiter des Feenreichs.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2402,6 +2466,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
 | `/kaw atoll` · `/kaw atoll tp` · `/kaw atoll awaken` · `/kaw atoll reset` | (nur Operatoren) Lage des Versunkenen Atolls anzeigen (`/locate` findet es nicht), an den Rand der Lagune reisen, Karkinos wecken, den Hügel wieder aufschütten |
 | `/kaw mondhain` · `/kaw mondhain tp` · `/kaw mondhain awaken` | (nur Operatoren) Lage des nächsten Mondhains im Feenreich anzeigen (`/locate` findet ihn nicht), dorthin reisen (auch aus einer anderen Welt), die Mottenkönigin aus ihrem Kokon wecken |
+| `/kaw zauberbuehne` · `/kaw zauberbuehne tp` · `/kaw zauberbuehne awaken` · `/kaw zauberbuehne reset` | (nur Operatoren) Lage der nächsten Zauberbühne im Feenreich anzeigen (`/locate` findet sie nicht), in den Zuschauergang reisen (auch aus einer anderen Welt), MissMystiks Vorstellung beginnen, den Zylinder wieder füllen |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
@@ -2512,15 +2577,21 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.64 – Malleus, der Glutschmied** (fertig): der Boss auf dem Dach der Aschenesse mit dem **Glutspeer**;
    - **0.65 – Asteria, die Sternenreiterin** (fertig): der Boss der Sternwarte im End mit der **Sternenlanze** und den
      **Sternenschwingen**;
-   - als Nächstes neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
+   - **0.66 – MissMystik, die Feen-Zauberkünstlerin** (fertig): der Boss der Zauberbühne im Feenreich mit dem
+     **Kartendeck der Mystik** und dem **Zylinder der Mystik**;
+   - **0.67 – Anni der Troll:** ein Boss, der **glitcht wie ein Spielfehler** – er flackert, ruckelt, springt durch den
+     Raum, verdoppelt sich und verschiebt die Farben –, in einer seltenen **Fehlerzone** in der Oberwelt, wo die Welt
+     selbst kaputt ist (1.500 Lebenspunkte);
+   - **0.68 – neue Angriffe** für Karkinos, Noctua, Malleus, Asteria und den Zerbrochenen König;
+   - danach neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
    - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
      versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König
      fällt: ein Portal hinter dem Thron und ein Schlüssel, der Risse in der Leere öffnet. Wer den Weltenfresser
      besiegt, erhält einen legendären Speer, eine Trophäe und den Titel **„Weltenretter“**.
 
-   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → Malleus →
-   Drachen → Asteria → Zerbrochener König → Weltenfresser.
+   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
+   Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser.
 
 ## Danksagung
 

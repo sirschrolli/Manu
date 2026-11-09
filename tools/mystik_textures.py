@@ -408,28 +408,91 @@ def mystic_top_hat_icon() -> Image.Image:
 
 
 def mystic_top_hat_model() -> Image.Image:
-    """Atlas des 3D-Huts (16 x 16): Filz mit Glanz (0–8, 0–8), Krempe oben (8–16, 0–8), Band (0–8, 8–11), Gold (8–12,
-    8–12), Feder (12–16, 8–16), Deckel (0–8, 11–16)."""
-    img = Image.new("RGBA", (16, 16), CLEAR)
+    """Atlas des 3D-Huts (32 x 32, im Modell 16 x 16): Filz mit Glanz und Seidenstreifen (0–16, 0–16), Krempe oben mit
+    Goldrand (16–32, 0–16), Satinband mit Goldkante und Karo-Rauten (0–16, 16–21), Deckel (0–16, 21–32), Schnalle (16–22,
+    16–22), Feenrose (22–28, 16–22), Herz-Ass (16–23, 22–32), Blatt (23–28, 22–27), Feder (28–32, 16–32)."""
+    img = Image.new("RGBA", (32, 32), CLEAR)
     px = img.load()
-    for y in range(8):
-        for x in range(8):
-            px[x, y] = col(FELT, 1.6 + max(0.0, 1.4 - abs(x - 2.5) * 0.6) + noise(x, y, 51) * 0.4)
-            px[x + 8, y] = col(FELT, 1.6 + (1.4 if x in (0, 7) or y in (0, 7) else 0.0) + noise(x, y, 52) * 0.3)
-    for y in range(8, 11):
-        for x in range(8):
-            px[x, y] = col(GOLD, 4.2) if y in (8, 10) and x % 2 == 0 else col(MAGENTA, 3.8 if y == 9 else 3.2)
-    for y in range(8, 12):
-        for x in range(8, 12):
-            px[x, y] = col(GOLD, 5.0 if (x + y) % 2 else 4.0)
-    for y in range(8, 16):
-        for x in range(12, 16):
-            k = (y - 8) / 7.0
-            px[x, y] = mix(col(PINK, 4.6), col(TEAL, 4.4), k) if x in (13, 14) else mix(col(PINK, 3.6), col(TEAL, 3.4), k)
-    for y in range(11, 16):
-        for x in range(8):
-            d = math.hypot(x + 0.5 - 4, y + 0.5 - 13.5)
-            px[x, y] = col(FELT, 1.4 + (1.0 if d > 2.6 else 0.0))
+    # Filz: senkrechter Glanzstreifen, feine Seidenstreifen, unten (am Band) dunkler, oben ein heller Saum
+    for y in range(16):
+        for x in range(16):
+            sheen = max(0.0, 2.0 - abs(x - 4.5) * 0.4) + max(0.0, 0.8 - abs(x - 12.0) * 0.35)
+            stripe = 0.3 if x % 3 == 1 else 0.0
+            shade = -0.6 * (y / 15.0) + (0.7 if y == 0 else 0.0)
+            px[x, y] = col(FELT, 1.9 + sheen + stripe + shade + noise(x, y, 51) * 0.3)
+    # Krempe oben: Filz, außen ein Goldrand, innen ein heller Saum
+    for y in range(16):
+        for x in range(16):
+            edge = min(x, y, 15 - x, 15 - y)
+            if edge == 0:
+                px[16 + x, y] = col(GOLD, 4.4 if (x + y) % 2 else 3.6)
+            else:
+                px[16 + x, y] = col(FELT, 1.5 + (0.9 if edge == 1 else 0.0) + noise(x, y, 52) * 0.3)
+    # Band: Goldkante oben und unten, dazwischen Satin mit kleinen goldenen Karo-Rauten
+    for y in range(5):
+        for x in range(16):
+            if y in (0, 4):
+                px[x, 16 + y] = col(GOLD, 4.6 if x % 2 == 0 else 3.8)
+            else:
+                cx = (x // 4) * 4 + 2
+                diamond = abs(x - cx) + abs(y - 2) <= 1
+                px[x, 16 + y] = col(GOLD, 4.8 if x == cx and y == 2 else 3.9) if diamond \
+                    else col(MAGENTA, 3.9 if y == 1 else 3.3 if y == 2 else 2.8)
+    # Deckel: Filz, außen ein heller Saum
+    for y in range(11):
+        for x in range(16):
+            edge = min(x, y, 15 - x, 10 - y)
+            px[x, 21 + y] = col(FELT, 1.4 + (1.1 if edge == 0 else 0.4 if edge == 1 else 0.0) + noise(x, y, 53) * 0.25)
+    # Schnalle: Goldrahmen um ein dunkles Fenster
+    for y in range(6):
+        for x in range(6):
+            frame = x in (0, 5) or y in (0, 5) or (x in (1, 4) and y in (1, 4))
+            px[16 + x, 16 + y] = col(GOLD, 5.0 - y * 0.25 if frame else 3.0) if frame or x in (1, 4) or y in (1, 4) else col(FELT, 1.2)
+    # Feenrose: eine Spirale aus Blütenblättern
+    rose = ["..pPp.",
+            ".pRrPp",
+            "pRdDrP",
+            "PrDdRp",
+            "pPrRp.",
+            ".ppP.."]
+    roses = {"p": col(PINK, 2.6), "P": col(PINK, 4.2), "R": col(MAGENTA, 4.4), "r": col(MAGENTA, 3.2), "d": col(MAGENTA, 1.8),
+             "D": col(MAGENTA, 2.6)}
+    for y, row in enumerate(rose):
+        for x, c in enumerate(row):
+            if c != ".":
+                px[22 + x, 16 + y] = roses[c]
+    # Herz-Ass: weiße Karte mit zartem Rand, einem roten Herzen in der Mitte und roten Eckzeichen
+    for y in range(10):
+        for x in range(7):
+            border = x in (0, 6) or y in (0, 9)
+            px[16 + x, 22 + y] = col(CARD, 3.6 if border else 5.6)
+    heart = {(1, 3), (2, 3), (4, 3), (5, 3), (1, 4), (2, 4), (3, 4), (4, 4), (5, 4), (2, 5), (3, 5), (4, 5), (3, 6)}
+    for x, y in heart:
+        px[16 + x, 22 + y] = col(RED, 4.6 if y == 3 else 3.9 if y == 4 else 3.2)
+    px[16 + 1, 22 + 1] = col(RED, 3.6)
+    px[16 + 5, 22 + 8] = col(RED, 3.6)
+    # Blatt
+    leaf = [".gG..",
+            "gGLg.",
+            "GLlGg",
+            ".gLGg",
+            "..gg."]
+    leaves = {"g": (52, 112, 66, 255), "G": (74, 150, 84, 255), "L": (126, 200, 120, 255), "l": (160, 222, 140, 255)}
+    for y, row in enumerate(leaf):
+        for x, c in enumerate(row):
+            if c != ".":
+                px[23 + x, 22 + y] = leaves[c]
+    # Feder: unten rosa, zur Spitze türkis, in der Mitte der helle Kiel, die Fahne zur Spitze hin zerzaust
+    for y in range(16):
+        k = y / 15.0
+        for x in range(4):
+            if y >= 14 and x in (0, 3):
+                continue
+            if x == 0 and y % 3 == 2:
+                continue
+            quill = x in (1, 2) and (x == 1 or y < 3)
+            base = mix(col(PINK, 4.8 if quill else 3.6 + (x % 2) * 0.4), col(TEAL, 4.8 if quill else 3.4 + (x % 2) * 0.4), 1.0 - k)
+            px[28 + x, 16 + y] = base
     return img
 
 

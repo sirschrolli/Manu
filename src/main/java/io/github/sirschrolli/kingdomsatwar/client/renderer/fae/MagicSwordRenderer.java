@@ -80,7 +80,7 @@ public class MagicSwordRenderer extends EntityRenderer<MagicSwordEntity, MagicSw
         poseStack.rotate(Axis.YP.rotationDegrees(180.0f + yaw));
         poseStack.rotate(Axis.XP.rotationDegrees(pitch));
         poseStack.rotate(Axis.ZP.rotationDegrees(state.age * 6.0f * (1.0f - state.thrust)));
-        poseStack.scale(-1.2f, -1.2f, 1.2f);
+        poseStack.scale(-1.6f, -1.6f, 1.6f);
         this.sword.resetPose();
         int color = ARGB.color(Math.round(state.alpha * 230.0f), 0xFFFFFF);
         collector.submitModelPart(this.sword, poseStack, BODY, 0xF000F0, OverlayTexture.NO_OVERLAY, null, color);

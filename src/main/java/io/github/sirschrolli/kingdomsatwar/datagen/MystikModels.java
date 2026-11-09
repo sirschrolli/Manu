@@ -140,8 +140,8 @@ final class MystikModels {
                 .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT)
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, t -> t.rotation(0, -75, 18).translation(1.5f, 3.2f, 1.0f).scale(0.68f))
                 .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, t -> t.rotation(0, 75, -18).translation(1.5f, 3.2f, 1.0f).scale(0.68f))
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(-10, 90, 0).translation(0, 3.0f, 1.0f).scale(0.55f))
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(-10, -90, 0).translation(0, 3.0f, 1.0f).scale(0.55f));
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(-10, 0, 0).translation(0, 3.0f, 1.0f).scale(0.55f))
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(-10, 0, 0).translation(0, 3.0f, 1.0f).scale(0.55f));
         float[] angles = {-34, -17, 0, 17, 34};
         for (int i = 0; i < angles.length; i++) {
             float a = angles[i];
@@ -167,14 +167,25 @@ final class MystikModels {
     // Der Zylinder der Mystik
     // =====================================================================================
 
-    /** {von x, y, z, bis x, y, z, Atlas u0, v0, u1, v1}: Krempe, Hut, Band, Deckel, Schnalle, Feder (Kopf-Mitte bei 8, 8, 8). */
+    /**
+     * Ein Teil des Huts: {von x, y, z, bis x, y, z, Atlas u0, v0, u1, v1, Drehung x, y, z, Drehpunkt x, y, z} (Kopf-Mitte bei
+     * 8, 8, 8; vorn ist Norden).
+     */
     private static final float[][] TOP_HAT_PARTS = {
-            {-0.8f, 14.0f, -0.8f, 16.8f, 15.2f, 16.8f, 8, 0, 16, 8},
-            {2.4f, 15.2f, 2.4f, 13.6f, 25.6f, 13.6f, 0, 0, 8, 8},
-            {2.2f, 15.4f, 2.2f, 13.8f, 17.8f, 13.8f, 0, 8, 8, 11},
-            {2.2f, 25.0f, 2.2f, 13.8f, 26.4f, 13.8f, 0, 11, 8, 16},
-            {6.6f, 15.5f, 1.7f, 9.4f, 17.7f, 2.2f, 8, 8, 12, 12},
-            {13.7f, 16.6f, 6.6f, 14.0f, 25.0f, 9.6f, 12, 8, 16, 16},
+            // Krempe, Hut, Band, Deckel, Schnalle
+            {-0.8f, 14.0f, -0.8f, 16.8f, 15.2f, 16.8f, 8, 0, 16, 8, 0, 0, 0, 8, 8, 8},
+            {2.4f, 15.2f, 2.4f, 13.6f, 25.6f, 13.6f, 0, 0, 8, 8, 0, 0, 0, 8, 8, 8},
+            {2.2f, 15.4f, 2.2f, 13.8f, 17.8f, 13.8f, 0, 8, 8, 10.5f, 0, 0, 0, 8, 8, 8},
+            {2.2f, 25.0f, 2.2f, 13.8f, 26.4f, 13.8f, 0, 10.5f, 8, 16, 0, 0, 0, 8, 8, 8},
+            {6.6f, 15.5f, 1.7f, 9.4f, 17.7f, 2.2f, 8, 8, 11, 11, 0, 0, 0, 8, 8, 8},
+            // vorn rechts am Band eine Feenrose mit einem Blatt
+            {10.4f, 15.0f, 1.2f, 13.2f, 17.8f, 3.4f, 11, 8, 14, 11, 0, 20, 0, 11.8f, 16.4f, 2.3f},
+            {12.4f, 14.9f, 0.4f, 15.2f, 15.1f, 3.2f, 11.5f, 11, 14, 13.5f, 0, -25, 0, 13.8f, 15.0f, 1.8f},
+            // dahinter eine Feder (zwei gekreuzte Fahnen), nach hinten und außen geneigt
+            {11.3f, 16.4f, 3.9f, 14.3f, 28.4f, 4.1f, 14, 8, 16, 16, 22, 0, -16, 12.8f, 16.4f, 4.0f},
+            {12.7f, 16.4f, 2.5f, 12.9f, 28.4f, 5.5f, 14, 8, 16, 16, 22, 0, -16, 12.8f, 16.4f, 4.0f},
+            // links im Band steckt ein Herz-Ass
+            {1.9f, 15.6f, 5.4f, 2.1f, 20.6f, 9.0f, 8, 11, 11.5f, 16, -10, 0, 12, 2.0f, 15.6f, 7.2f},
     };
 
     private static void topHat(ItemModelGenerators items) {
@@ -191,6 +202,9 @@ final class MystikModels {
             worn.element(e -> {
                 e.from(p[0], p[1], p[2]).to(p[3], p[4], p[5]);
                 e.allFaces((direction, face) -> face.texture(HAT).uvs(p[6], p[7], p[8], p[9]));
+                if (p[10] != 0.0f || p[11] != 0.0f || p[12] != 0.0f) {
+                    e.rotation(r -> r.origin(p[13], p[14], p[15]).eulerXYZ(p[10], p[11], p[12]));
+                }
             });
         }
         Identifier model3d = worn.build().create(ModelLocationUtils.getModelLocation(hat, "_worn"), textures, items.modelOutput);

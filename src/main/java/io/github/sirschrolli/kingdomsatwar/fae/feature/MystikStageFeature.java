@@ -108,8 +108,8 @@ public record MystikStageFeature() implements Feature {
             this.frame();
             this.curtains();
             this.hat();
-            this.audience();
             this.lamps();
+            this.audience();
             this.mushrooms();
             this.vines();
             this.plants();
@@ -359,25 +359,49 @@ public record MystikStageFeature() implements Feature {
 
         // ------------------------------------------------------------ Zuschauer
 
-        /** Drei ansteigende Reihen Bänke im Halbkreis vor der Bühne, in der Mitte ein Gang. */
+        /**
+         * Das Zuschauerrund: drei Reihen Bänke im Halbkreis vor der Bühne, jede eine Stufe höher als die vor ihr – Terrassen
+         * aus Feensteinziegeln, Sitze aus Glimmerholz, vor jedem Sitz Platz für die Füße –, in der Mitte ein Gang. Hinten ist
+         * das Rund in einen Hügel gebaut: Gras mit Blumen fällt sanft zur Lichtung ab.
+         */
         private void audience() {
             double[] radii = {11.0, 13.0, 15.0};
-            for (int dx = -16; dx <= 16; dx++) {
-                for (int dz = 5; dz <= 13; dz++) {
+            double back = radii[radii.length - 1] + 0.5;
+            for (int dx = -20; dx <= 20; dx++) {
+                for (int dz = 5; dz <= 16; dz++) {
                     if (Math.abs(dx) <= 1) {
                         continue;
                     }
                     double d = Math.sqrt(dx * dx + (dz + 3) * (dz + 3));
+                    Direction facing = Math.abs(dx) > (dz + 3) ? (dx < 0 ? Direction.WEST : Direction.EAST) : Direction.SOUTH;
                     for (int row = 0; row < radii.length; row++) {
-                        if (d < radii[row] - 0.5 || d >= radii[row] + 0.5) {
+                        boolean seat = d >= radii[row] - 0.5 && d < radii[row] + 0.5;
+                        boolean feet = d >= radii[row] - 1.5 && d < radii[row] - 0.5;
+                        if (!seat && !feet) {
                             continue;
                         }
                         this.reserve(dx, dz);
-                        for (int y = this.floor + 1; y < this.floor + 1 + row; y++) {
-                            this.set(dx, y, dz, state(FaeBlocks.GLIMMERWOOD_PLANKS.base()));
+                        for (int y = this.floor + 1; y <= this.floor + row; y++) {
+                            this.set(dx, y, dz, state(FaeBlocks.FAESTONE_BRICKS.base()));
                         }
-                        Direction facing = Math.abs(dx) > (dz + 3) ? (dx < 0 ? Direction.WEST : Direction.EAST) : Direction.SOUTH;
-                        this.set(dx, this.floor + 1 + row, dz, stairs(FaeBlocks.GLIMMERWOOD_PLANKS.stairs(), facing));
+                        if (seat) {
+                            this.set(dx, this.floor + 1 + row, dz, stairs(FaeBlocks.GLIMMERWOOD_PLANKS.stairs(), facing));
+                        }
+                    }
+                    // der Hügel hinter der letzten Reihe: drei, zwei, ein Block hoch, obenauf Feengras und Blumen
+                    int berm = d < back ? 0 : d < back + 1.0 ? 3 : d < back + 2.0 ? 2 : d < back + 3.0 ? 1 : 0;
+                    if (berm > 0 && !this.isReserved(dx, dz)) {
+                        this.reserve(dx, dz);
+                        for (int y = this.floor + 1; y < this.floor + berm; y++) {
+                            this.set(dx, y, dz, state(FaeBlocks.FAE_SOIL));
+                        }
+                        this.set(dx, this.floor + berm, dz, state(FaeBlocks.FAE_GRASS));
+                        float roll = this.random.nextFloat();
+                        BlockState plant = roll < 0.16f ? state(FaeBlocks.FAE_ROSE) : roll < 0.3f ? state(FaeBlocks.MOONBELL)
+                                : roll < 0.5f ? state(FaeBlocks.FAE_SPROUTS) : null;
+                        if (plant != null) {
+                            this.set(dx, this.floor + berm + 1, dz, plant);
+                        }
                     }
                 }
             }

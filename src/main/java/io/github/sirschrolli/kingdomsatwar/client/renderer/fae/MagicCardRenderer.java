@@ -106,12 +106,13 @@ public class MagicCardRenderer extends EntityRenderer<MagicCardEntity, MagicCard
                 vertex(buffer, pose, w, -h, 0.0f, 1, 1, -1);
             });
         } else {
-            // flach, in Flugrichtung, wirbelnd
-            float w = 0.19f;
-            float h = 0.27f;
+            // fast flach, in Flugrichtung, wirbelnd – ein wenig zur Seite gekippt (so sieht man sie auch von vorn)
+            float w = 0.22f;
+            float h = 0.31f;
             poseStack.translate(0.0f, 0.12f, 0.0f);
             poseStack.rotate(Axis.YP.rotationDegrees(state.yRot));
             poseStack.rotate(Axis.XP.rotationDegrees(-state.xRot * 0.5f));
+            poseStack.rotate(Axis.ZP.rotationDegrees(30.0f + Mth.sin(state.age * 0.4f) * 8.0f));
             poseStack.rotate(Axis.YP.rotationDegrees(state.age * 47.0f));
             collector.submitCustomGeometry(poseStack, front, (pose, buffer) -> {
                 flat(buffer, pose, -w, -h, 0, 0);

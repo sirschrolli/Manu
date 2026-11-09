@@ -67,13 +67,15 @@ public class MagicHatRenderer extends EntityRenderer<MagicHatEntity, MagicHatRen
             }
             case SPIN -> {
                 // kopfüber, die Öffnung nach oben, sich immer schneller drehend und leicht wippend
+                // gelandet wächst er zu einem großen Zauberhut heran (und schrumpft nach dem Knall wieder)
                 float t = state.phaseTime;
                 float spin = t * (6.0f + t * 0.35f);
-                poseStack.translate(0.0f, 0.55f + Mth.sin(t * 0.5f) * 0.04f, 0.0f);
+                float grow = 1.0f + 0.8f * Mth.clamp(t / 8.0f, 0.0f, 1.0f) - 0.8f * Mth.clamp((t - MagicHatEntity.BURST - 1.0f) / 4.0f, 0.0f, 1.0f);
+                float pop = t > MagicHatEntity.BURST - 3 && t < MagicHatEntity.BURST + 2 ? 1.2f : 1.0f;
+                poseStack.translate(0.0f, 0.55f * grow * pop + Mth.sin(t * 0.5f) * 0.04f, 0.0f);
                 poseStack.rotate(Axis.YP.rotationDegrees(spin));
                 poseStack.rotate(Axis.XP.rotationDegrees(180.0f + Mth.sin(t * 0.7f) * 6.0f));
-                float pop = t > MagicHatEntity.BURST - 3 && t < MagicHatEntity.BURST + 4 ? 1.25f : 1.0f;
-                poseStack.scale(pop, pop, pop);
+                poseStack.scale(grow * pop, grow * pop, grow * pop);
             }
             case BACK -> {
                 poseStack.popPose();

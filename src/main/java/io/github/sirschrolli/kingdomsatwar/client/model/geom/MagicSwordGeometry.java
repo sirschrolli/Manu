@@ -23,13 +23,13 @@ public final class MagicSwordGeometry {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
         PartDefinition p_sword = root.addOrReplaceChild("sword", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-0.5F, -1F, -13F, 1F, 2F, 11F, new CubeDeformation(-0.3F, -0.35F, 0F))
-                .texOffs(57, 0).addBox(-0.5F, -0.5F, -14.75F, 1F, 1F, 2F, new CubeDeformation(-0.35F, -0.05F, -0.25F))
-                .texOffs(0, 14).addBox(-0.5F, -0.5F, -15.5F, 1F, 1F, 1F, new CubeDeformation(-0.4F, -0.3F, 0F))
-                .texOffs(25, 0).addBox(-0.5F, -2.5F, -2.45F, 1F, 5F, 1F, new CubeDeformation(-0.05F, -0.25F, -0.05F))
-                .texOffs(30, 0).addBox(-1F, -1F, -2.95F, 2F, 2F, 2F, new CubeDeformation(-0.45F, -0.45F, -0.45F))
-                .texOffs(39, 0).addBox(-0.5F, -0.5F, -1.5F, 1F, 1F, 3F, new CubeDeformation(-0.15F, -0.15F, 0F))
-                .texOffs(48, 0).addBox(-1F, -1F, 1.1F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
+                .texOffs(0, 0).addBox(-0.5F, -1F, -13F, 1F, 2F, 11F, new CubeDeformation(-0.2F, 0F, 0F))
+                .texOffs(57, 0).addBox(-0.5F, -1F, -14.75F, 1F, 2F, 2F, new CubeDeformation(-0.25F, -0.3F, -0.25F))
+                .texOffs(0, 14).addBox(-0.5F, -0.5F, -16.1F, 1F, 1F, 2F, new CubeDeformation(-0.3F, -0.15F, -0.4F))
+                .texOffs(25, 0).addBox(-0.5F, -3F, -2.5F, 1F, 6F, 1F)
+                .texOffs(30, 0).addBox(-1F, -1F, -3F, 2F, 2F, 2F, new CubeDeformation(-0.35F, -0.35F, -0.35F))
+                .texOffs(39, 0).addBox(-0.5F, -0.5F, -1.5F, 1F, 1F, 3F, new CubeDeformation(-0.1F, -0.1F, 0F))
+                .texOffs(48, 0).addBox(-1F, -1F, 1.2F, 2F, 2F, 2F, new CubeDeformation(-0.3F, -0.3F, -0.3F)),
                 PartPose.offset(0F, 0F, 0F));
         return mesh;
     }

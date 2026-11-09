@@ -848,9 +848,10 @@ public class MissMystikEntity extends Monster {
         }
         this.sound(level, ModSounds.MYSTIK_DOVES.get(), 2.5f, 1.0f);
         int count = this.isEncore() ? 8 : 6;
-        Vec3 c = this.position().add(0.0, 1.8, 0.0);
-        level.sendParticles(ParticleTypes.CLOUD, c.x, c.y, c.z, 12, 0.4, 0.3, 0.4, 0.05);
-        confetti(level, c, 24, 0.4, 0.25);
+        // aus ihrer Hand (über dem Kopf geschnippt) – ein Wölkchen, Konfetti, und die Tauben flattern auf
+        Vec3 c = this.cardHand().add(0.0, 0.4, 0.0);
+        level.sendParticles(ParticleTypes.CLOUD, c.x, c.y, c.z, 6, 0.2, 0.15, 0.2, 0.03);
+        confetti(level, c, 24, 0.3, 0.25);
         for (int i = 0; i < count; i++) {
             double a = i * Math.PI * 2.0 / count + this.random.nextDouble() * 0.3;
             LightDoveEntity dove = new LightDoveEntity(level, this);
@@ -1052,7 +1053,7 @@ public class MissMystikEntity extends Monster {
             for (Vec3 box : this.boxes) {
                 for (int i = 0; i < 8; i++) {
                     double a = i * Math.PI / 4.0 + Math.PI / 8.0;
-                    Vec3 start = box.add(Math.cos(a) * 2.9, 1.0 + (i % 2) * 0.7, Math.sin(a) * 2.9);
+                    Vec3 start = box.add(Math.cos(a) * 3.4, 1.0 + (i % 2) * 0.7, Math.sin(a) * 3.4);
                     MagicSwordEntity sword = new MagicSwordEntity(level, start, box.add(0.0, 1.0 + (i % 2) * 0.7, 0.0), SWORDS_STAB - 6 + i % 2);
                     level.addFreshEntity(sword);
                 }
@@ -1112,7 +1113,8 @@ public class MissMystikEntity extends Monster {
     private void tickSpotlight(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
         Vec3 stage = this.home != null ? Vec3.atBottomCenterOf(this.home) : target.position();
-        Vec3 want = new Vec3(stage.x, Math.max(stage.y, target.getY()) + 6.0, stage.z);
+        // auf der Bühne schwebt sie über dem Bühnenrand vor dem Vorhang, sonst über ihrem Ziel
+        Vec3 want = new Vec3(stage.x, Math.max(stage.y, target.getY()) + (this.home != null ? 5.0 : 6.0), stage.z + (this.home != null ? 4.0 : 0.0));
         this.steer(want, 0.05, 0.4);
         this.faceTarget(target, 8.0f);
         if (t == 4) {
@@ -1309,7 +1311,8 @@ public class MissMystikEntity extends Monster {
             this.finaleCenter = this.home != null ? Vec3.atBottomCenterOf(this.home) : this.ground(this.position());
         }
         Vec3 stage = this.finaleCenter;
-        Vec3 want = stage.add(0.0, 7.5, 0.0);
+        // auf der Bühne: hoch über dem Bühnenrand vor dem Vorhang (dort sehen sie alle, auf der Bühne und im Zuschauerrund)
+        Vec3 want = this.home != null ? stage.add(0.0, 6.0, 4.5) : stage.add(0.0, 7.5, 0.0);
         Vec3 to = want.subtract(this.position());
         this.setDeltaMovement(to.length() > 0.5 ? to.normalize().scale(0.5) : to.scale(0.3));
         LivingEntity target = this.getTarget();
