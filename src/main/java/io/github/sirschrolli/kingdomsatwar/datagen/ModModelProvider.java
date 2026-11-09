@@ -448,6 +448,7 @@ public class ModModelProvider extends ModelProvider {
         ShadowModels.register(blocks, items);
         VoidModels.register(blocks, items);
         SeaModels.register(blocks, items);
+        FaeModels.register(blocks, items);
 
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();
@@ -685,10 +686,15 @@ public class ModModelProvider extends ModelProvider {
     }
 
     static void glowingCube(BlockModelGenerators blocks, Block block) {
+        Identifier model = glowingCubeModel(blocks, block);
+        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
+    }
+
+    /** Nur das Modell eines Würfels mit Leuchtebene ({@code <name>_glow}), ohne Blockzustand. */
+    static Identifier glowingCubeModel(BlockModelGenerators blocks, Block block) {
         TextureMapping mapping = TextureMapping.cube(block).copySlot(TextureSlot.ALL, TextureSlot.PARTICLE)
                 .put(GLOW, TextureMapping.getBlockTexture(block, "_glow"));
-        Identifier model = CUBE_GLOW.create(block, mapping, blocks.modelOutput);
-        blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
+        return CUBE_GLOW.create(block, mapping, blocks.modelOutput);
     }
 
     static void flat(ItemModelGenerators items, Item item) {

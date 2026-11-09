@@ -38,6 +38,11 @@ public final class ModAttachments {
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.voidrealm.RiftState.CODEC.fieldOf("rifts")).build());
 
+    /** Die Feenportale der Welt (Oberwelt und Feenreich). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.fae.FaeGateState>> FAE_GATES = ATTACHMENTS.register(
+            "fae_gates", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState.CODEC.fieldOf("gates")).build());
+
     /** Fortschritt des Spielers in der Geschichte „Das Siegel“. */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.story.StoryProgress>> STORY = ATTACHMENTS.register("story",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.story.StoryProgress::new)

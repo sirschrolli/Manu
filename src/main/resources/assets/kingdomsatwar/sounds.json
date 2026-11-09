@@ -2229,6 +2229,43 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.dragon_egg.hatch"
   },
+  "block.fae_portal.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/portal_ambient1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:fae/portal_ambient2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:fae/portal_ambient3",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.fae_portal.ambient"
+  },
+  "block.fae_portal.light": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:fae/portal_light1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:fae/portal_light2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.fae_portal.light"
+  },
+  "block.fae_portal.travel": {
+    "sounds": [
+      "kingdomsatwar:fae/portal_travel1",
+      "kingdomsatwar:fae/portal_travel2"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.fae_portal.travel"
+  },
   "entity.anglerfish.ambient": {
     "sounds": [
       {

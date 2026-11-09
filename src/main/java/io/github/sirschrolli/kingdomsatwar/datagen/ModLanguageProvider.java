@@ -570,6 +570,63 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.reef_colossus.tide", "Karkinos calls the tide!", "Karkinos ruft die Flut!");
         text("atoll.kingdomsatwar.warning", "Something stirs beneath the sand of the lagoon …", "Unter dem Sand der Lagune regt sich etwas …");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ATOLL_CORE, "Heart of the Atoll", "Herz des Atolls");
+        // Das Feenreich (0.63)
+        text("itemGroup.kingdomsatwar.the_fae_realm", "Kingdoms at War: The Fae Realm", "Kingdoms at War: Das Feenreich");
+        text("dimension.kingdomsatwar.fae_realm", "The Fae Realm", "Das Feenreich");
+        text("biome.kingdomsatwar.fae_meadows", "Blossom Meadows", "Blütenwiesen");
+        text("biome.kingdomsatwar.glimmerwood", "Glimmerwood", "Glimmerwald");
+        text("biome.kingdomsatwar.fae_mushroom_grove", "Mushroom Grove", "Pilzhain");
+        text("biome.kingdomsatwar.moonlit_lakes", "Moonlit Lakes", "Mondseen");
+        text("biome.kingdomsatwar.thornwild", "Thornwild", "Dornenwildnis");
+        text("block.kingdomsatwar.bed.fae_realm", "Night never falls in the Fae Realm – but your bed will remember this place.",
+                "Im Feenreich wird es nie Nacht – aber dein Bett merkt sich diesen Ort.");
+        set("faestone", "faestone", "Faestone", "Feenstein", "Faestone", "Feenstein");
+        set("faestone_bricks", "faestone_brick", "Faestone Bricks", "Feensteinziegel", "Faestone Brick", "Feensteinziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOSSY_FAESTONE_BRICKS, "Mossy Faestone Bricks", "Bemooste Feensteinziegel");
+        set("moonstone_bricks", "moonstone_brick", "Moonstone Bricks", "Mondsteinziegel", "Moonstone Brick", "Mondsteinziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.CHISELED_MOONSTONE, "Chiseled Moonstone", "Gemeißelter Mondstein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_LOG, "Glimmerwood Log", "Glimmerholzstamm");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD, "Glimmerwood", "Glimmerholz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_LOG, "Stripped Glimmerwood Log",
+                "Entrindeter Glimmerholzstamm");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD, "Stripped Glimmerwood", "Entrindetes Glimmerholz");
+        roof("glimmerwood_planks", "glimmerwood_plank", "Glimmerwood Planks", "Glimmerholzbretter", "Glimmerwood", "Glimmerholz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_DOOR, "Glimmerwood Door", "Glimmerholztür");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_TRAPDOOR, "Glimmerwood Trapdoor", "Glimmerholzfalltür");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_FENCE, "Glimmerwood Fence", "Glimmerholzzaun");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_FENCE_GATE, "Glimmerwood Fence Gate", "Glimmerholzzauntor");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.ROSE_GLIMMER_LEAVES, "Rose Glimmer Leaves", "Rosenglimmerlaub");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.AZURE_GLIMMER_LEAVES, "Azure Glimmer Leaves", "Türkisglimmerlaub");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_SAPLING, "Glimmerwood Sapling", "Glimmerholzsetzling");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.POTTED_GLIMMERWOOD_SAPLING, "Potted Glimmerwood Sapling",
+                "Eingetopfter Glimmerholzsetzling");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MUSHROOM_STEM, "Giant Mushroom Stem", "Riesenpilzstiel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.ROSE_MUSHROOM_CAP, "Rose Mushroom Cap", "Rosenpilzhut");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.AZURE_MUSHROOM_CAP, "Sky Mushroom Cap", "Himmelspilzhut");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.VIOLET_MUSHROOM_CAP, "Violet Mushroom Cap", "Veilchenpilzhut");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SPROUTS, "Fae Sprouts", "Feenhalme");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOONBELL, "Moonbell", "Mondglocke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ROSE, "Fae Rose", "Feenrose");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STARLACE, "Starlace", "Sternspitze");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.LANTERN_MUSHROOM, "Lantern Mushrooms", "Laternenpilze");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLOW_VINES, "Glow Vines", "Leuchtranke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLOW_VINES_PLANT, "Glow Vines", "Leuchtranke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.MOON_LILY, "Moon Lily", "Mondlilie");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORNBRIAR, "Thornbriar", "Dornenranke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORN_HEDGE, "Thorn Hedge", "Dornenhecke");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_PORTAL, "Fae Portal", "Feenportal");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST, "Fae Dust", "Feenstaub");
+        text(ModItems.loreKey("fae_dust", 1), "Use on a frame of Moonstone Bricks (at least 4 × 5)",
+                "Auf einen Rahmen aus Mondsteinziegeln anwenden (mindestens 4 × 5)");
+        text(ModItems.loreKey("fae_dust", 2), "to open a gate into the Fae Realm", "öffnet ein Tor ins Feenreich");
+        text("item.kingdomsatwar.fae_dust.no_frame", "The dust glitters, but finds no frame of Moonstone Bricks.",
+                "Der Staub glitzert, doch er findet keinen Rahmen aus Mondsteinziegeln.");
+        subtitle("block.fae_portal.ambient", "Fae Portal shimmers", "Feenportal schimmert");
+        subtitle("block.fae_portal.light", "Fae Portal opens", "Feenportal öffnet sich");
+        subtitle("block.fae_portal.travel", "Fae Portal whirls", "Feenportal wirbelt");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

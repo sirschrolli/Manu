@@ -17,6 +17,10 @@
     "kingdomsatwar:peat",
     "minecraft:dripstone_block",
     "minecraft:basalt",
-    "minecraft:blackstone"
+    "minecraft:blackstone",
+    "kingdomsatwar:faestone",
+    "kingdomsatwar:fae_soil",
+    "kingdomsatwar:fae_grass",
+    "kingdomsatwar:fae_moss"
   ]
 }

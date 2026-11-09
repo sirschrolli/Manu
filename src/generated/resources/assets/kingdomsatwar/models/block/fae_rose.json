@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross_emissive",
+  "textures": {
+    "cross": "kingdomsatwar:block/fae_rose",
+    "cross_emissive": "kingdomsatwar:block/fae_rose_emissive"
+  }
+}

@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
+import io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
@@ -140,6 +141,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         // das Meer: die Tiefseelaterne fällt als sie selbst
         this.dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get());
         sea();
+        fae();
         for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,
@@ -296,6 +298,34 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(crop.get(), createCropDrops(crop.get(), produce, seeds,
                 MatchBlock.blockMatches(this.blocks, crop.get(),
                         StatePropertiesPredicate.Builder.properties().hasProperty(CropBlock.AGE, CropBlock.MAX_AGE))));
+    }
+
+    /**
+     * Das Feenreich (0.63): Gestein, Holz, Pilze und Blumen wie gewohnt; Feengras gibt Feenerde, Laub manchmal Setzlinge,
+     * Halme, Leuchtranken und Dornenhecken nur mit Schere oder Behutsamkeit; die Sternspitze aus der unteren Hälfte.
+     */
+    private void fae() {
+        for (DeferredBlock<? extends Block> block : java.util.List.of(FaeBlocks.MOSSY_FAESTONE_BRICKS, FaeBlocks.CHISELED_MOONSTONE,
+                FaeBlocks.FAE_SOIL, FaeBlocks.FAE_MOSS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD,
+                FaeBlocks.STRIPPED_GLIMMERWOOD_LOG, FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD, FaeBlocks.GLIMMERWOOD_TRAPDOOR,
+                FaeBlocks.GLIMMERWOOD_FENCE, FaeBlocks.GLIMMERWOOD_FENCE_GATE, FaeBlocks.GLIMMERWOOD_SAPLING, FaeBlocks.FAE_MUSHROOM_STEM,
+                FaeBlocks.ROSE_MUSHROOM_CAP, FaeBlocks.AZURE_MUSHROOM_CAP, FaeBlocks.VIOLET_MUSHROOM_CAP, FaeBlocks.MOONBELL,
+                FaeBlocks.FAE_ROSE, FaeBlocks.LANTERN_MUSHROOM, FaeBlocks.THORNBRIAR, FaeBlocks.MOON_LILY)) {
+            dropSelf(block.get());
+        }
+        add(FaeBlocks.FAE_GRASS.get(), block -> createSingleItemTableWithSilkTouch(block, FaeBlocks.FAE_SOIL.get()));
+        add(FaeBlocks.ROSE_GLIMMER_LEAVES.get(), block -> createLeavesDrops(block, FaeBlocks.GLIMMERWOOD_SAPLING.get(),
+                NORMAL_LEAVES_SAPLING_CHANCES));
+        add(FaeBlocks.AZURE_GLIMMER_LEAVES.get(), block -> createLeavesDrops(block, FaeBlocks.GLIMMERWOOD_SAPLING.get(),
+                NORMAL_LEAVES_SAPLING_CHANCES));
+        dropPottedContents(FaeBlocks.POTTED_GLIMMERWOOD_SAPLING.get());
+        add(FaeBlocks.GLIMMERWOOD_DOOR.get(), this::createDoorTable);
+        add(FaeBlocks.FAE_SPROUTS.get(), block -> this.createShearsOnlyDrop(block));
+        add(FaeBlocks.STARLACE.get(), block -> this.createSinglePropConditionTable(block, net.minecraft.world.level.block.DoublePlantBlock.HALF,
+                net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
+        add(FaeBlocks.GLOW_VINES.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
+        add(FaeBlocks.GLOW_VINES_PLANT.get(), block -> createShearsOrSilkTouchOnlyDrop(FaeBlocks.GLOW_VINES.get()));
+        add(FaeBlocks.THORN_HEDGE.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
     }
 
     /** Der Meeresgrund (0.62): Anemonen, Röhrenwürmer, Gestein; Muscheln so viele, wie liegen; Algen nur mit Schere. */

@@ -117,6 +117,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, SeaBlocks.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THE_FAE_REALM = TABS.register("the_fae_realm",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.the_fae_realm"))
+                    .icon(() -> FaeBlocks.FAE_DUST.toStack())
+                    .withTabsBefore(THE_SEA.key())
+                    .displayItems((parameters, output) -> accept(output, FaeBlocks.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

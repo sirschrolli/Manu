@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/grass_block",
+  "textures": {
+    "bottom": "kingdomsatwar:block/fae_soil",
+    "overlay": "kingdomsatwar:block/fae_grass_side_overlay",
+    "particle": "kingdomsatwar:block/fae_soil",
+    "side": "kingdomsatwar:block/fae_grass_side",
+    "top": "kingdomsatwar:block/fae_grass_top"
+  }
+}

@@ -2,6 +2,7 @@ package io.github.sirschrolli.kingdomsatwar.datagen;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
+import io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 import io.github.sirschrolli.kingdomsatwar.registry.ModTags;
@@ -55,6 +56,7 @@ public class ModRecipeProvider extends RecipeProvider {
         shadowRecipes();
         voidRecipes();
         shadowTreasureRecipes();
+        faeRecipes();
         naturalChains();
     }
 
@@ -475,6 +477,73 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('#', ShadowBlocks.ASH_SNOW.get())
                 .unlockedBy(getHasName(ShadowBlocks.ASH_SNOW.get()), has(ShadowBlocks.ASH_SNOW.get()))
                 .save(output, key("ash_snow_block_from_layers"));
+    }
+
+    /**
+     * Das Feenreich: Feenstein- und Mondsteinziegel, gemeißelter Mondstein, Glimmerholz – und der Feenstaub, der das Portal
+     * entzündet (Amethyst, Leuchtbeeren und eine Blüte). Mondsteinziegel gibt es schon in der Oberwelt: vier Steinziegel um
+     * einen Amethystsplitter.
+     */
+    private void faeRecipes() {
+        Item amethyst = Items.AMETHYST_SHARD;
+        shapeless(RecipeCategory.MISC, FaeBlocks.FAE_DUST.get(), 2)
+                .requires(amethyst)
+                .requires(Items.GLOW_BERRIES)
+                .requires(net.minecraft.tags.BlockItemTags.SMALL_FLOWERS.item())
+                .unlockedBy(getHasName(amethyst), has(amethyst))
+                .save(output, key("fae_dust"));
+        ItemLike moonstone = FaeBlocks.MOONSTONE_BRICKS.base().get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, moonstone, 4)
+                .pattern(" B ")
+                .pattern("BAB")
+                .pattern(" B ")
+                .define('B', Blocks.STONE_BRICKS)
+                .define('A', amethyst)
+                .unlockedBy(getHasName(amethyst), has(amethyst))
+                .save(output, key("moonstone_bricks"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, FaeBlocks.CHISELED_MOONSTONE.get())
+                .pattern("#")
+                .pattern("#")
+                .define('#', FaeBlocks.MOONSTONE_BRICKS.slab().get())
+                .unlockedBy(getHasName(moonstone), has(moonstone))
+                .save(output, key("chiseled_moonstone"));
+        stonecut(FaeBlocks.CHISELED_MOONSTONE.get(), 1, moonstone);
+        ItemLike faestone = FaeBlocks.FAESTONE.base().get();
+        ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
+                .pattern("##")
+                .pattern("##")
+                .define('#', faestone)
+                .unlockedBy(getHasName(faestone), has(faestone))
+                .save(output, key("faestone_bricks"));
+        stonecut(faeBricks, 1, faestone);
+        for (ItemLike part : List.of(FaeBlocks.FAESTONE_BRICKS.stairs().get(), FaeBlocks.FAESTONE_BRICKS.wall().get())) {
+            stonecut(part, 1, faestone);
+        }
+        stonecut(FaeBlocks.FAESTONE_BRICKS.slab().get(), 2, faestone);
+        shapeless(RecipeCategory.BUILDING_BLOCKS, FaeBlocks.MOSSY_FAESTONE_BRICKS.get())
+                .requires(faeBricks)
+                .requires(FaeBlocks.FAE_MOSS.get())
+                .unlockedBy(getHasName(FaeBlocks.FAE_MOSS.get()), has(FaeBlocks.FAE_MOSS.get()))
+                .save(output, key("mossy_faestone_bricks"));
+
+        // Glimmerholz
+        ItemLike planks = FaeBlocks.GLIMMERWOOD_PLANKS.base().get();
+        shapeless(RecipeCategory.BUILDING_BLOCKS, planks, 4)
+                .requires(ModTags.Items.GLIMMERWOOD_LOGS)
+                .unlockedBy("has_glimmerwood_log", has(ModTags.Items.GLIMMERWOOD_LOGS))
+                .save(output, key("glimmerwood_planks"));
+        wood(FaeBlocks.GLIMMERWOOD_WOOD.get(), FaeBlocks.GLIMMERWOOD_LOG.get(), "glimmerwood_wood");
+        wood(FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD.get(), FaeBlocks.STRIPPED_GLIMMERWOOD_LOG.get(), "stripped_glimmerwood_wood");
+        Ingredient glimmerPlanks = Ingredient.of(planks);
+        doorBuilder(FaeBlocks.GLIMMERWOOD_DOOR.get(), glimmerPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("glimmerwood_door"));
+        trapdoorBuilder(FaeBlocks.GLIMMERWOOD_TRAPDOOR.get(), glimmerPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("glimmerwood_trapdoor"));
+        fenceBuilder(FaeBlocks.GLIMMERWOOD_FENCE.get(), glimmerPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("glimmerwood_fence"));
+        fenceGateBuilder(FaeBlocks.GLIMMERWOOD_FENCE_GATE.get(), glimmerPlanks).unlockedBy(getHasName(planks), has(planks))
+                .save(output, key("glimmerwood_fence_gate"));
     }
 
     /** Erze, Barren, Werkzeuge, Rüstungen und die Abyssit-Aufwertung der Schattenwelt. */

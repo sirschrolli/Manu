@@ -40,6 +40,10 @@
     "kingdomsatwar:void_stone_brick_slab",
     "kingdomsatwar:polished_void_stone_slab",
     "kingdomsatwar:astral_marble_slab",
-    "kingdomsatwar:astral_marble_brick_slab"
+    "kingdomsatwar:astral_marble_brick_slab",
+    "kingdomsatwar:faestone_slab",
+    "kingdomsatwar:faestone_brick_slab",
+    "kingdomsatwar:moonstone_brick_slab",
+    "kingdomsatwar:glimmerwood_plank_slab"
   ]
 }

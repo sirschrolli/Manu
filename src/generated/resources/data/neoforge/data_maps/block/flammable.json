@@ -20,6 +20,10 @@
       "burn_odds": 20,
       "ignite_odds": 5
     },
+    "kingdomsatwar:azure_glimmer_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
     "kingdomsatwar:bramble": {
       "burn_odds": 100,
       "ignite_odds": 60
@@ -34,6 +38,38 @@
     },
     "kingdomsatwar:charred_planks": {
       "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:fae_mushroom_stem": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_fence": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_fence_gate": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_plank_slab": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_plank_stairs": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_planks": {
+      "burn_odds": 20,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:glimmerwood_wood": {
+      "burn_odds": 5,
       "ignite_odds": 5
     },
     "kingdomsatwar:gnarled_roots": {
@@ -51,6 +87,10 @@
     "kingdomsatwar:oak_table": {
       "burn_odds": 20,
       "ignite_odds": 5
+    },
+    "kingdomsatwar:rose_glimmer_leaves": {
+      "burn_odds": 60,
+      "ignite_odds": 30
     },
     "kingdomsatwar:shadow_fence": {
       "burn_odds": 20,
@@ -84,6 +124,14 @@
       "burn_odds": 5,
       "ignite_odds": 5
     },
+    "kingdomsatwar:stripped_glimmerwood_log": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
+    "kingdomsatwar:stripped_glimmerwood_wood": {
+      "burn_odds": 5,
+      "ignite_odds": 5
+    },
     "kingdomsatwar:stripped_shadow_log": {
       "burn_odds": 5,
       "ignite_odds": 5
@@ -91,6 +139,14 @@
     "kingdomsatwar:stripped_shadow_wood": {
       "burn_odds": 5,
       "ignite_odds": 5
+    },
+    "kingdomsatwar:thorn_hedge": {
+      "burn_odds": 60,
+      "ignite_odds": 30
+    },
+    "kingdomsatwar:thornbriar": {
+      "burn_odds": 100,
+      "ignite_odds": 60
     },
     "kingdomsatwar:throne": {
       "burn_odds": 20,

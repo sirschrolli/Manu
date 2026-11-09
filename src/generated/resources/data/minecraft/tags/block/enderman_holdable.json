@@ -3,6 +3,9 @@
     "kingdomsatwar:shadow_soil",
     "kingdomsatwar:shadow_grass",
     "kingdomsatwar:shadow_sand",
-    "kingdomsatwar:ghostcap"
+    "kingdomsatwar:ghostcap",
+    "kingdomsatwar:fae_soil",
+    "kingdomsatwar:fae_grass",
+    "kingdomsatwar:lantern_mushroom"
   ]
 }

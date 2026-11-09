@@ -207,6 +207,12 @@ final class Showcase {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
                     } else if (scene.startsWith("dragon_attacks_")) {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
+                    } else if (scene.equals("fae_map")) {
+                        FaeShowcase.map(steps);
+                    } else if (scene.equals("fae_portal")) {
+                        FaeShowcase.portal(steps);
+                    } else if (scene.equals("fae") || scene.startsWith("fae_")) {
+                        FaeShowcase.views(steps, scene.equals("fae") ? "" : scene.substring(4));
                     } else if (scene.equals("void_map")) {
                         VoidShowcase.map(steps);
                     } else if (scene.equals("void_throne")) {

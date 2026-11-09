@@ -45,6 +45,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.init();
         io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.init();
+        io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.init();
         ModBlocks.BLOCKS.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPONENTS.register(modBus);
         ModItems.ITEMS.register(modBus);

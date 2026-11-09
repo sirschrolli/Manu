@@ -19,6 +19,8 @@ public final class ModTags {
         public static final TagKey<Block> NATURAL_GROUND = mod("natural_ground");
         /** Stämme und Holz der Schattenbäume (für die Bretter). */
         public static final TagKey<Block> SHADOW_LOGS = mod("shadow_logs");
+        /** Glimmerholz-Stämme (Feenreich). */
+        public static final TagKey<Block> GLIMMERWOOD_LOGS = mod("glimmerwood_logs");
         /** Bruchstein aus eigenem Gestein (für Steinwerkzeuge, Öfen und Braustände). */
         public static final TagKey<Block> COBBLED_STONES = mod("cobbled_stones");
         /** Gestein der Schattenwelt, in dem Erze entstehen können. */
@@ -79,6 +81,12 @@ public final class ModTags {
         /** Drachen aller Art: Drachen, Drachen-Bosse, Lindwürmer (Drachentöter trifft sie hart, Drachenschuppe schützt vor ihnen). */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> DRAGONS = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("dragons"));
+        /** Wesen des Feenreichs (Feen, Irrlichter, Pilzlinge, Dornwichte …). */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> FAE_CREATURES = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("fae_creatures"));
+        /** Wer sich an Dornenhecken nicht sticht (die Wesen der Dornenwildnis). */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> THORN_IMMUNE = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("thorn_immune"));
 
         private EntityTypes() {}
     }
@@ -214,6 +222,7 @@ public final class ModTags {
         /** Essen, das Bürger und Soldaten nicht nehmen: Verdorbenes, Giftiges, rohes Huhn und Kostbares. */
         public static final TagKey<Item> UNFIT_FOOD = mod("unfit_food");
         public static final TagKey<Item> SHADOW_LOGS = mod("shadow_logs");
+        public static final TagKey<Item> GLIMMERWOOD_LOGS = mod("glimmerwood_logs");
         /** Bruchstein aus eigenem Gestein (für Steinwerkzeuge, Öfen und Braustände). */
         public static final TagKey<Item> COBBLED_STONES = mod("cobbled_stones");
         public static final TagKey<Item> NIGHTSTEEL_TOOL_MATERIALS = mod("nightsteel_tool_materials");

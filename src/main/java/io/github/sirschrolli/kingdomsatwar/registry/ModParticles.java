@@ -25,6 +25,8 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> VENT_SMOKE = simple("vent_smoke");
     /** Meeresleuchten: winzige, türkis leuchtende Punkte im Kielwasser – nachts im Meer. */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SEA_GLOW = simple("sea_glow");
+    /** Feenfunkeln: winzige, goldrosa glitzernde Sterne, die langsam aufsteigen und verlöschen (Feenreich, Feenstaub). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> FAE_SPARK = simple("fae_spark");
 
     private ModParticles() {}
 

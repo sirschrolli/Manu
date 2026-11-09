@@ -5,6 +5,7 @@ import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile
 import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile.Time.DUSK;
 import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile.Time.NIGHT;
 
+import io.github.sirschrolli.kingdomsatwar.fae.FaeBiomes;
 import io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes;
 import io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes;
 import io.github.sirschrolli.kingdomsatwar.worldgen.ModBiomes;
@@ -37,6 +38,7 @@ public final class AmbienceProfiles {
         nests();
         shadowWorld();
         theVoid();
+        faeRealm();
     }
 
     private AmbienceProfiles() {}
@@ -558,5 +560,59 @@ public final class AmbienceProfiles {
                 .spot("glitch_far", 0.5f, ALWAYS)
                 .far("void_choir", 0.2f, ALWAYS)
                 .far("star_song", 0.2f, ALWAYS));
+    }
+    // =====================================================================================
+    // Das Feenreich
+    // =====================================================================================
+
+    /**
+     * Das Feenreich: ein leiser, magischer Hain-Teppich, der kommt und geht; darüber Abendvögel, das Funkeln und Klingen
+     * der Feen, rauschendes Laub und summende Bienen – im Pilzhain tropft und flirrt es, an den Mondseen quaken Frösche
+     * und plätschert Wasser, in der Dornenwildnis knackt und raschelt es, und manchmal flüstert etwas.
+     */
+    private static void faeRealm() {
+        put(FaeBiomes.FAE_MEADOWS, AmbienceProfile.builder()
+                .outside("magic_grove", 0.18f)
+                .wind("wind_breeze", 0.12f)
+                .spot("grass_wind", 1.0f, ALWAYS)
+                .spot("bees", 0.9f, ALWAYS)
+                .spot("bird_nightingale", 0.7f, ALWAYS)
+                .spot("bird_finch", 0.5f, ALWAYS)
+                .close("sparkle", 1.2f, ALWAYS)
+                .spot("wing_flutter", 0.4f, ALWAYS));
+        put(FaeBiomes.GLIMMERWOOD, AmbienceProfile.builder()
+                .outside("magic_grove", 0.26f)
+                .spot("leaves_rustle", 1.6f, ALWAYS)
+                .spot("bird_nightingale", 0.9f, ALWAYS)
+                .spot("bird_tit", 0.5f, ALWAYS)
+                .close("sparkle", 1.4f, ALWAYS)
+                .close("fireflies", 1.0f, ALWAYS)
+                .spot("crystal_chime", 0.5f, ALWAYS)
+                .spot("wood_creak", 0.4f, ALWAYS));
+        put(FaeBiomes.MUSHROOM_GROVE, AmbienceProfile.builder()
+                .outside("magic_grove", 0.2f)
+                .everywhere("shadow_glimmer", 0.1f, 0.2f)
+                .spot("drip", 0.8f, ALWAYS)
+                .close("sparkle", 1.6f, ALWAYS)
+                .spot("eyeblossom", 0.8f, ALWAYS)
+                .spot("amethyst", 0.6f, ALWAYS)
+                .close("fireflies", 1.2f, ALWAYS));
+        put(FaeBiomes.MOONLIT_LAKES, AmbienceProfile.builder()
+                .outside("magic_grove", 0.14f)
+                .wind("wind_breeze", 0.1f)
+                .spot("frog", 1.4f, ALWAYS)
+                .spot("water_flow", 0.8f, ALWAYS)
+                .spot("bird_nightingale", 0.5f, ALWAYS)
+                .close("sparkle", 1.0f, ALWAYS)
+                .spot("crystal_chime", 0.4f, ALWAYS));
+        put(FaeBiomes.THORNWILD, AmbienceProfile.builder()
+                .everywhere("whispers", 0.08f, 0.25f)
+                .wind("wind_moor", 0.14f)
+                .spot("twig_snap", 1.0f, ALWAYS)
+                .spot("leaves_rustle", 1.0f, ALWAYS)
+                .spot("bird_crow", 0.6f, ALWAYS)
+                .spot("wood_creak", 0.8f, ALWAYS)
+                .close("whisper", 0.3f, ALWAYS)
+                .spot("bird_owl", 0.4f, ALWAYS));
     }
 }

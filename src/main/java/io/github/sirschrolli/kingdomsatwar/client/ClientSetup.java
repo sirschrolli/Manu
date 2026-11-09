@@ -226,5 +226,6 @@ public final class ClientSetup {
         event.registerSpriteSet(ModParticles.PAT_HAND.get(), io.github.sirschrolli.kingdomsatwar.client.hero.PatHandParticle.Provider::new);
         event.registerSpriteSet(ModParticles.VENT_SMOKE.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.VENT_SMOKE));
         event.registerSpriteSet(ModParticles.SEA_GLOW.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SEA_GLOW));
+        event.registerSpriteSet(ModParticles.FAE_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FAE_SPARK));
     }
 }

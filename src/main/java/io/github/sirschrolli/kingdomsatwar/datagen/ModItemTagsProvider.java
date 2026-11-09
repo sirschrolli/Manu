@@ -54,6 +54,7 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(ItemTags.STONE_CRAFTING_MATERIALS).addTag(ModTags.Items.COBBLED_STONES);
         copy(BlockItemTags.MOSS_BLOCKS);
         copy(ModTags.Blocks.SHADOW_LOGS, ModTags.Items.SHADOW_LOGS);
+        copy(ModTags.Blocks.GLIMMERWOOD_LOGS, ModTags.Items.GLIMMERWOOD_LOGS);
         copy(BlockItemTags.SAPLINGS);
         copy(BlockItemTags.LANTERNS);
         copy(ModTags.Blocks.ORES_MOONSILVER, ModTags.Items.ORES_MOONSILVER);

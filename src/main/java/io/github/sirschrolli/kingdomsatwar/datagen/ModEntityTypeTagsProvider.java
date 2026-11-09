@@ -26,6 +26,9 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key())
                 .add(ModEntities.NIGHT_WING.key());
+        // Wesen des Feenreichs (werden mit den Wesen ergänzt)
+        this.tag(ModTags.EntityTypes.FAE_CREATURES);
+        this.tag(ModTags.EntityTypes.THORN_IMMUNE);
         // Münzen: alle Monster der Oberwelt, des Nethers und des Ends, dazu die feindseligen Wesen der Mod
         var coins = this.tag(ModTags.EntityTypes.DROPS_COINS);
         for (String name : java.util.List.of("zombie", "husk", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "creeper",

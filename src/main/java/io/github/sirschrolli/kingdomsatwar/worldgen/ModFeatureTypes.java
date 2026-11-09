@@ -52,6 +52,18 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature>> HANGING_GROWTH =
             FEATURE_TYPES.register("void_hanging_growth", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature.CODEC);
 
+    // --- Das Feenreich ---
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature>> GLIMMER_TREE =
+            FEATURE_TYPES.register("fae_glimmer_tree", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.GiantMushroomFeature>> FAE_GIANT_MUSHROOM =
+            FEATURE_TYPES.register("fae_giant_mushroom", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.GiantMushroomFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.FairyRingFeature>> FAIRY_RING =
+            FEATURE_TYPES.register("fae_fairy_ring", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.FairyRingFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.ThornTreeFeature>> THORN_TREE =
+            FEATURE_TYPES.register("fae_thorn_tree", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.ThornTreeFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.FaeRuinFeature>> FAE_RUIN =
+            FEATURE_TYPES.register("fae_ruin", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.FaeRuinFeature.CODEC);
+
     // --- Oberwelt (eigene Biome) ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature>> BOULDER =
             FEATURE_TYPES.register("boulder", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature.CODEC);

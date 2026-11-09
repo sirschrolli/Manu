@@ -1,5 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.datagen;
 
+import io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks;
+
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.BuildingSet;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
@@ -236,6 +238,51 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.SWORD_EFFICIENT, ShadowBlocks.SOUL_BERRY_BUSH, ShadowBlocks.GLIMMER_VINES, ShadowBlocks.GLIMMER_VINES_PLANT);
         add(BlockTags.BEE_GROWABLES, ShadowBlocks.DUSKGRAIN, ShadowBlocks.SOUL_BERRY_BUSH);
         tag(BlockTags.BASE_STONE_OVERWORLD).add(ShadowBlocks.SHADOW_STONE.base().key());
+
+        // --- Das Feenreich ---
+        add(BlockTags.MINEABLE_WITH_PICKAXE, FaeBlocks.MOSSY_FAESTONE_BRICKS, FaeBlocks.CHISELED_MOONSTONE);
+        add(BlockTags.MINEABLE_WITH_SHOVEL, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
+        add(BlockTags.MINEABLE_WITH_HOE, FaeBlocks.FAE_MOSS, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES,
+                FaeBlocks.THORN_HEDGE);
+        add(BlockTags.MINEABLE_WITH_AXE, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD, FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
+                FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD, FaeBlocks.GLIMMERWOOD_DOOR, FaeBlocks.GLIMMERWOOD_TRAPDOOR, FaeBlocks.GLIMMERWOOD_FENCE,
+                FaeBlocks.GLIMMERWOOD_FENCE_GATE, FaeBlocks.FAE_MUSHROOM_STEM, FaeBlocks.ROSE_MUSHROOM_CAP, FaeBlocks.AZURE_MUSHROOM_CAP,
+                FaeBlocks.VIOLET_MUSHROOM_CAP);
+        add(BlockTags.SWORD_EFFICIENT, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES, FaeBlocks.FAE_SPROUTS,
+                FaeBlocks.MOONBELL, FaeBlocks.FAE_ROSE, FaeBlocks.STARLACE, FaeBlocks.LANTERN_MUSHROOM, FaeBlocks.GLOW_VINES,
+                FaeBlocks.GLOW_VINES_PLANT, FaeBlocks.THORNBRIAR, FaeBlocks.THORN_HEDGE);
+        add(ModTags.Blocks.GLIMMERWOOD_LOGS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD, FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
+                FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD);
+        tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(ModTags.Blocks.GLIMMERWOOD_LOGS);
+        tag(BlockTags.LOGS).addTag(ModTags.Blocks.GLIMMERWOOD_LOGS);
+        add(BlockItemTags.PLANKS.block(), FaeBlocks.GLIMMERWOOD_PLANKS.base());
+        add(BlockItemTags.WOODEN_STAIRS.block(), FaeBlocks.GLIMMERWOOD_PLANKS.stairs());
+        add(BlockItemTags.WOODEN_SLABS.block(), FaeBlocks.GLIMMERWOOD_PLANKS.slab());
+        add(BlockItemTags.WOODEN_DOORS.block(), FaeBlocks.GLIMMERWOOD_DOOR);
+        add(BlockItemTags.WOODEN_TRAPDOORS.block(), FaeBlocks.GLIMMERWOOD_TRAPDOOR);
+        add(BlockItemTags.WOODEN_FENCES.block(), FaeBlocks.GLIMMERWOOD_FENCE);
+        add(BlockItemTags.FENCE_GATES.block(), FaeBlocks.GLIMMERWOOD_FENCE_GATE);
+        add(BlockTags.LEAVES, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES);
+        add(BlockItemTags.SAPLINGS.block(), FaeBlocks.GLIMMERWOOD_SAPLING);
+        add(BlockTags.FLOWER_POTS, FaeBlocks.POTTED_GLIMMERWOOD_SAPLING);
+        add(BlockItemTags.DIRT.block(), FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
+        add(BlockItemTags.MOSS_BLOCKS.block(), FaeBlocks.FAE_MOSS);
+        add(BlockTags.SUPPORTS_VEGETATION, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS);
+        add(BlockTags.ANIMALS_SPAWNABLE_ON, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS);
+        add(BlockTags.RABBITS_SPAWNABLE_ON, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS);
+        add(BlockTags.FOXES_SPAWNABLE_ON, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS);
+        add(BlockTags.FROGS_SPAWNABLE_ON, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS, FaeBlocks.FAE_SOIL);
+        add(BlockTags.SMALL_FLOWERS, FaeBlocks.MOONBELL, FaeBlocks.FAE_ROSE);
+        add(BlockTags.FLOWERS, FaeBlocks.STARLACE);
+        add(BlockTags.REPLACEABLE_BY_TREES, FaeBlocks.FAE_SPROUTS, FaeBlocks.GLOW_VINES, FaeBlocks.GLOW_VINES_PLANT);
+        add(BlockTags.REPLACEABLE_BY_MUSHROOMS, FaeBlocks.FAE_SPROUTS);
+        add(BlockTags.CLIMBABLE, FaeBlocks.GLOW_VINES, FaeBlocks.GLOW_VINES_PLANT);
+        add(BlockTags.ENDERMAN_HOLDABLE, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS, FaeBlocks.LANTERN_MUSHROOM);
+        add(BlockTags.PORTALS, FaeBlocks.FAE_PORTAL);
+        add(BlockTags.DRAGON_IMMUNE, FaeBlocks.FAE_PORTAL);
+        add(BlockTags.WITHER_IMMUNE, FaeBlocks.FAE_PORTAL);
+        add(BlockTags.BASE_STONE_OVERWORLD, FaeBlocks.FAESTONE.base());
+        add(ModTags.Blocks.NATURAL_GROUND, FaeBlocks.FAESTONE.base(), FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS, FaeBlocks.FAE_MOSS);
 
         // --- Einrichtung ---
         add(Tags.BlockItems.GLASS_BLOCKS.block(), ModBlocks.LEADED_GLASS);

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kingdomsatwar:block/fae_rose",
+    "layer1": "kingdomsatwar:block/fae_rose_emissive"
+  }
+}

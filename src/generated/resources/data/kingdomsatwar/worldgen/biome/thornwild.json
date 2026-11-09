@@ -1,0 +1,84 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.overworld.old_growth_taiga"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "minecraft:fox",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 3
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:white_ash"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#b0708a",
+    "minecraft:visual/sky_color": "#4a3478",
+    "minecraft:visual/water_fog_color": "#2a2a6a"
+  },
+  "carvers": [],
+  "downfall": 0.6,
+  "effects": {
+    "dry_foliage_color": "#9a70b8",
+    "foliage_color": "#9a70b8",
+    "grass_color": "#6aae98",
+    "water_color": "#3a6a9a"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:fae/boulders"
+    ],
+    [],
+    [
+      "kingdomsatwar:fae/ruins"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:fae/weeping_glimmers_rare",
+      "kingdomsatwar:fae/giant_mushrooms_rare",
+      "kingdomsatwar:fae/thorn_trees",
+      "kingdomsatwar:fae/thorn_thickets",
+      "kingdomsatwar:fae/sprouts",
+      "kingdomsatwar:fae/lantern_mushrooms_rare",
+      "kingdomsatwar:fae/thornbriars",
+      "kingdomsatwar:fae/moon_lilies_rare"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.7
+}

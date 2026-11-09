@@ -1,0 +1,49 @@
+{
+  "debug_functions": [
+    {
+      "function": "kingdomsatwar:fae/final_density",
+      "label": "N"
+    },
+    {
+      "function": "kingdomsatwar:fae/temperature",
+      "label": "T"
+    },
+    {
+      "function": "kingdomsatwar:fae/vegetation",
+      "label": "V"
+    },
+    {
+      "function": "kingdomsatwar:fae/lakes",
+      "label": "C"
+    },
+    {
+      "function": "kingdomsatwar:fae/zone",
+      "label": "E"
+    },
+    {
+      "function": "kingdomsatwar:fae/height",
+      "label": "H"
+    }
+  ],
+  "default_block": "kingdomsatwar:faestone",
+  "default_fluid": "minecraft:water",
+  "disable_mob_generation": false,
+  "legacy_random_source": false,
+  "material_rule": "kingdomsatwar:fae_realm",
+  "noise": {
+    "height": 256,
+    "min_y": 0
+  },
+  "noise_router": {
+    "chunk_surface_level": "kingdomsatwar:fae/height",
+    "continents": "kingdomsatwar:fae/lakes",
+    "depth": 0.0,
+    "erosion": "kingdomsatwar:fae/zone",
+    "final_density": "kingdomsatwar:fae/final_density",
+    "ridges": 0.0,
+    "temperature": "kingdomsatwar:fae/temperature",
+    "vegetation": "kingdomsatwar:fae/vegetation"
+  },
+  "sea_level": 62,
+  "spawn_target": []
+}

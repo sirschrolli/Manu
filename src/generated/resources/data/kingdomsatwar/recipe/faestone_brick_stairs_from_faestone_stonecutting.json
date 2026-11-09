@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:faestone",
+  "result": {
+    "id": "kingdomsatwar:faestone_brick_stairs"
+  }
+}

@@ -49,6 +49,25 @@ public class ModDataMapProvider extends DataMapProvider {
             flammable.add(wood.key(), LIKE_PLANKS, false);
         }
         flammable.add(ShadowBlocks.SHADOW_LEAVES.key(), new Flammable(FireBlock.IGNITE_EASY, FireBlock.BURN_EASY), false);
+        // Feenreich: Glimmerholz, Laub, Pilze und Dornen
+        for (var wood : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_LOG,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_LOG,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MUSHROOM_STEM)) {
+            flammable.add(wood.key(), LIKE_LOGS, false);
+        }
+        for (var wood : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_FENCE,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_FENCE_GATE)) {
+            flammable.add(wood.key(), LIKE_PLANKS, false);
+        }
+        for (var leaves : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.ROSE_GLIMMER_LEAVES,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.AZURE_GLIMMER_LEAVES,
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORN_HEDGE)) {
+            flammable.add(leaves.key(), new Flammable(FireBlock.IGNITE_EASY, FireBlock.BURN_EASY), false);
+        }
+        flammable.add(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORNBRIAR.key(),
+                new Flammable(FireBlock.IGNITE_INSTANT, FireBlock.BURN_INSTANT), false);
 
         // Eigene Monster wie ihre Vanilla-Gegenstücke: Papageien ahmen sie nach, Dorfbewohner halten Abstand
         var imitations = builder(NeoForgeDataMaps.PARROT_IMITATIONS);
@@ -79,6 +98,12 @@ public class ModDataMapProvider extends DataMapProvider {
                 ShadowBlocks.STRIPPED_SHADOW_LOG.get()), false);
         transform.add(ShadowBlocks.SHADOW_WOOD.key(), Transformable.stripping(ShadowBlocks.SHADOW_WOOD.get(),
                 ShadowBlocks.STRIPPED_SHADOW_WOOD.get()), false);
+        transform.add(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_LOG.key(), Transformable.stripping(
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_LOG.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_LOG.get()), false);
+        transform.add(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD.key(), Transformable.stripping(
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD.get()), false);
         for (var soil : java.util.List.of(ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS)) {
             Block block = soil.get();
             transform.add(soil.key(), new Transformable(java.util.Map.of(

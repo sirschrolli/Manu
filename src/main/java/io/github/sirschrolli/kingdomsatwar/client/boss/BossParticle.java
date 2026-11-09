@@ -32,6 +32,8 @@ public class BossParticle extends SingleQuadParticle {
     public static final Style VENT_SMOKE = new Style(40, 70, 0.4f, 1.9f, 0.95f, -0.0025f, false, true, 0.03f);
     /** Meeresleuchten: winzige, leuchtende Punkte, die kaum treiben und verlöschen. */
     public static final Style SEA_GLOW = new Style(16, 34, 0.09f, 0.05f, 0.86f, -0.0015f, true, true, 0.0f);
+    /** Feenfunkeln: winzige Sterne, die funkeln, langsam aufsteigen und verlöschen. */
+    public static final Style FAE_SPARK = new Style(20, 40, 0.11f, 0.05f, 0.9f, -0.0025f, true, true, 0.08f);
 
     private final SpriteSet sprites;
     private final Style style;

@@ -141,6 +141,10 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_STEP = register("entity.reef_colossus.step");
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_TIDE = register("entity.reef_colossus.tide");
     public static final DeferredHolder<SoundEvent, SoundEvent> REEF_COLOSSUS_LANCE = register("entity.reef_colossus.lance");
+    // Feenreich (0.63)
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_AMBIENT = register("block.fae_portal.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_LIGHT = register("block.fae_portal.light");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FAE_PORTAL_TRAVEL = register("block.fae_portal.travel");
 
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */

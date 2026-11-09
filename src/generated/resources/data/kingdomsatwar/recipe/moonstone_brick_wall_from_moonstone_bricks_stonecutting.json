@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:moonstone_bricks",
+  "result": {
+    "id": "kingdomsatwar:moonstone_brick_wall"
+  }
+}

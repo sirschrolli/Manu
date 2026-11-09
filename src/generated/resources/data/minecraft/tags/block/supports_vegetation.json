@@ -7,6 +7,9 @@
     "kingdomsatwar:shadow_grass",
     "kingdomsatwar:glimmer_moss",
     "kingdomsatwar:void_moss",
-    "kingdomsatwar:stardust"
+    "kingdomsatwar:stardust",
+    "kingdomsatwar:fae_soil",
+    "kingdomsatwar:fae_grass",
+    "kingdomsatwar:fae_moss"
   ]
 }

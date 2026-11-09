@@ -77,6 +77,7 @@ public final class ModBiomes {
         context.register(ABYSSAL_GROTTO, abyssalGrotto());
         io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.bootstrap(context);
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.bootstrap(context);
+        io.github.sirschrolli.kingdomsatwar.fae.FaeBiomes.bootstrap(context);
         context.register(io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.BIOME, io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.biome());
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.bootstrap(context);
     }

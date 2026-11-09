@@ -1,0 +1,160 @@
+{
+  "type": "minecraft:cache",
+  "input": {
+    "type": "minecraft:add",
+    "left": {
+      "type": "minecraft:sub",
+      "left": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:noise",
+                "noise": "kingdomsatwar:fae/hills",
+                "xz_scale": 1.0,
+                "y_scale": 0.0
+              },
+              "right": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": {
+                      "type": "minecraft:noise",
+                      "noise": "kingdomsatwar:fae/rugged",
+                      "xz_scale": 1.0,
+                      "y_scale": 0.0
+                    },
+                    "max": 0.5,
+                    "min": -0.45
+                  },
+                  "right": 12.631579
+                },
+                "right": 10.684211
+              }
+            },
+            "right": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:noise",
+                "noise": "kingdomsatwar:fae/bumps",
+                "xz_scale": 1.0,
+                "y_scale": 0.0
+              },
+              "right": 2.6
+            }
+          },
+          "right": {
+            "type": "minecraft:add",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:clamp",
+                "input": "kingdomsatwar:fae/lakes",
+                "max": -0.22,
+                "min": -0.5
+              },
+              "right": 1.9642857
+            },
+            "right": 1.4321429
+          }
+        },
+        "right": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:mul",
+            "left": {
+              "type": "minecraft:mul",
+              "left": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": {
+                      "type": "minecraft:noise",
+                      "noise": "kingdomsatwar:fae/mounds",
+                      "xz_scale": 1.0,
+                      "y_scale": 0.0
+                    },
+                    "max": 0.78,
+                    "min": 0.5
+                  },
+                  "right": 3.571429
+                },
+                "right": -1.7857145
+              },
+              "right": {
+                "type": "minecraft:add",
+                "left": {
+                  "type": "minecraft:mul",
+                  "left": {
+                    "type": "minecraft:clamp",
+                    "input": {
+                      "type": "minecraft:noise",
+                      "noise": "kingdomsatwar:fae/mounds",
+                      "xz_scale": 1.0,
+                      "y_scale": 0.0
+                    },
+                    "max": 0.78,
+                    "min": 0.5
+                  },
+                  "right": 3.571429
+                },
+                "right": -1.7857145
+              }
+            },
+            "right": {
+              "type": "minecraft:sub",
+              "left": 3.0,
+              "right": {
+                "type": "minecraft:mul",
+                "left": {
+                  "type": "minecraft:add",
+                  "left": {
+                    "type": "minecraft:mul",
+                    "left": {
+                      "type": "minecraft:clamp",
+                      "input": {
+                        "type": "minecraft:noise",
+                        "noise": "kingdomsatwar:fae/mounds",
+                        "xz_scale": 1.0,
+                        "y_scale": 0.0
+                      },
+                      "max": 0.78,
+                      "min": 0.5
+                    },
+                    "right": 3.571429
+                  },
+                  "right": -1.7857145
+                },
+                "right": 2.0
+              }
+            }
+          },
+          "right": 13.0
+        }
+      },
+      "right": {
+        "type": "minecraft:add",
+        "left": {
+          "type": "minecraft:mul",
+          "left": {
+            "type": "minecraft:clamp",
+            "input": "kingdomsatwar:fae/lakes",
+            "max": -0.2,
+            "min": -0.46
+          },
+          "right": -57.69231
+        },
+        "right": -11.538464
+      }
+    },
+    "right": 70.0
+  }
+}

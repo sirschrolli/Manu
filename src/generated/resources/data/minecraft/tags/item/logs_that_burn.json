@@ -2,6 +2,7 @@
   "values": [
     "kingdomsatwar:charred_log",
     "kingdomsatwar:ancient_log",
-    "#kingdomsatwar:shadow_logs"
+    "#kingdomsatwar:shadow_logs",
+    "#kingdomsatwar:glimmerwood_logs"
   ]
 }
