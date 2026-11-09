@@ -327,6 +327,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         add(FaeBlocks.GLOW_VINES_PLANT.get(), block -> createShearsOrSilkTouchOnlyDrop(FaeBlocks.GLOW_VINES.get()));
         add(FaeBlocks.THORN_HEDGE.get(), block -> createShearsOrSilkTouchOnlyDrop(block));
         dropSelf(FaeBlocks.MOTH_SILK.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN_FRINGE.get());
         add(FaeBlocks.SILK_STRANDS.get(), block -> createSilkTouchOrShearsDispatchTable(block, this.applyExplosionDecay(block,
                 LootItem.lootTableItem(net.minecraft.world.item.Items.STRING)
                         .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 1))))));

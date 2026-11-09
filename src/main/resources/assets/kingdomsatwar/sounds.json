@@ -4250,6 +4250,274 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.manta_ray.splash"
   },
+  "entity.miss_mystik.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_ambient1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_ambient2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_ambient3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.ambient"
+  },
+  "entity.miss_mystik.applause": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_applause1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.applause"
+  },
+  "entity.miss_mystik.card_hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_hit1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_hit2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_hit3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.card_hit"
+  },
+  "entity.miss_mystik.card_throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_throw1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_throw2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_throw3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.card_throw"
+  },
+  "entity.miss_mystik.card_trick": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_trick1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_card_trick2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.card_trick"
+  },
+  "entity.miss_mystik.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_death1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.death"
+  },
+  "entity.miss_mystik.doves": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_doves1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_doves2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.doves"
+  },
+  "entity.miss_mystik.drumroll": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_drumroll1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.drumroll"
+  },
+  "entity.miss_mystik.firework": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_firework1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_firework2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_firework3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.firework"
+  },
+  "entity.miss_mystik.hat_throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_hat_throw1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_hat_throw2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.hat_throw"
+  },
+  "entity.miss_mystik.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.hurt"
+  },
+  "entity.miss_mystik.laugh": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_laugh1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_laugh2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_laugh3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.laugh"
+  },
+  "entity.miss_mystik.mirrors": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_mirrors1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_mirrors2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.mirrors"
+  },
+  "entity.miss_mystik.reappear": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_reappear1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_reappear2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.reappear"
+  },
+  "entity.miss_mystik.spotlight": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_spotlight1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_spotlight2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.spotlight"
+  },
+  "entity.miss_mystik.stab": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_stab1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_stab2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.stab"
+  },
+  "entity.miss_mystik.swords": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_swords1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_swords2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.swords"
+  },
+  "entity.miss_mystik.tada": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_tada1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_tada2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.tada"
+  },
+  "entity.miss_mystik.vanish": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_vanish1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_vanish2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.vanish"
+  },
+  "entity.miss_mystik.vortex": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/miss_mystik_vortex1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.miss_mystik.vortex"
+  },
   "entity.moth_queen.ambient": {
     "sounds": [
       {
@@ -5656,6 +5924,36 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.fae_elytra.flap"
+  },
+  "item.mystic_deck.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/mystic_deck_throw1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:mystik/mystic_deck_throw2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:mystik/mystic_deck_throw3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.mystic_deck.throw"
+  },
+  "item.mystic_top_hat.vanish": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:mystik/mystic_hat_vanish1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:mystik/mystic_hat_vanish2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.mystic_top_hat.vanish"
   },
   "item.star_wings.boost": {
     "sounds": [

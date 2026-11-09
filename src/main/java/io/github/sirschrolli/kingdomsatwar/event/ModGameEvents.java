@@ -90,6 +90,11 @@ public final class ModGameEvents {
                         .executes(context -> mondhain(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> mondhain(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> mondhain(context.getSource(), "awaken"))))
+                .then(Commands.literal("zauberbuehne").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> mystikStage(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> mystikStage(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> mystikStage(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> mystikStage(context.getSource(), "reset"))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
@@ -411,6 +416,73 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.mondhain.awakened"), true);
         return 1;
+    }
+
+    /**
+     * {@code /kaw zauberbuehne}: Lage der nächsten Zauberbühne im Feenreich; {@code tp} bringt einen in den Zuschauergang (auch
+     * aus einer anderen Welt), {@code awaken} beginnt MissMystiks Vorstellung, {@code reset} füllt den Zylinder wieder.
+     */
+    private static int mystikStage(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel fae = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.fae.FaeGate.FAE_REALM);
+        if (fae == null || (source.getLevel() != fae && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.zauberbuehne.not_fae"));
+            return 0;
+        }
+        net.minecraft.world.phys.Vec3 from = source.getLevel() == fae ? source.getPosition() : net.minecraft.world.phys.Vec3.ZERO;
+        BlockPos center = io.github.sirschrolli.kingdomsatwar.fae.MystikStage.nearest(fae.getSeed(), (int) Math.floor(from.x),
+                (int) Math.floor(from.z));
+        if (center == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.zauberbuehne.none"));
+            return 0;
+        }
+        int distance = (int) Math.sqrt(Math.pow(center.getX() - from.x, 2) + Math.pow(center.getZ() - from.z, 2));
+        Component where = Component.literal(center.getX() + ", " + center.getZ()).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.zauberbuehne.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        fae.getChunk(center.getX() >> 4, center.getZ() >> 4);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int x = center.getX();
+            int z = center.getZ() + 17;
+            fae.getChunk(x >> 4, z >> 4);
+            int y = fae.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            player.teleportTo(fae, x + 0.5, y, z + 0.5, java.util.Set.of(), 180.0f, 10.0f, true);
+            return 1;
+        }
+        BlockPos hatPos = findStageHat(fae, center);
+        if (hatPos == null || !(fae.getBlockEntity(hatPos) instanceof io.github.sirschrolli.kingdomsatwar.block.fae.StageHatBlockEntity hat)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.zauberbuehne.no_hat"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            hat.reset(fae);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.zauberbuehne.reset"), true);
+            return 1;
+        }
+        if (hat.summon(fae) == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.zauberbuehne.no_hat"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.zauberbuehne.awakened"), true);
+        return 1;
+    }
+
+    /** Sucht den großen Zylinder auf der Zauberbühne (von oben nach unten). */
+    private static @org.jspecify.annotations.Nullable BlockPos findStageHat(ServerLevel level, BlockPos center) {
+        int x = center.getX();
+        int z = center.getZ() + io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature.HAT_DZ;
+        level.getChunk(x >> 4, z >> 4);
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        for (int y = top + 2; y > top - 16; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.STAGE_HAT.get())) {
+                return pos;
+            }
+        }
+        return null;
     }
 
     /** Sucht den Kokon in der Mitte des Mondhains (von oben nach unten). */

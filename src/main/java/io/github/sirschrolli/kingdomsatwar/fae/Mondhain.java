@@ -72,7 +72,7 @@ public final class Mondhain {
         return best;
     }
 
-    /** Platzierungsfilter: nicht im Mondhain. */
+    /** Platzierungsfilter: nicht im Mondhain und nicht auf der Lichtung einer Zauberbühne. */
     public enum Filter implements PlacementFilter {
         INSTANCE;
 
@@ -80,7 +80,9 @@ public final class Mondhain {
 
         @Override
         public boolean shouldPlace(PlacementContext context, RandomSource random, BlockPos origin) {
-            return !near(context.getLevel().getSeed(), origin.getX(), origin.getZ(), CLEARING);
+            long seed = context.getLevel().getSeed();
+            return !near(seed, origin.getX(), origin.getZ(), CLEARING)
+                    && !MystikStage.near(seed, origin.getX(), origin.getZ(), MystikStage.CLEARING);
         }
 
         @Override

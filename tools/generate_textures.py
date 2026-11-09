@@ -68,6 +68,7 @@ import sea_textures  # noqa: E402
 import fae_textures  # noqa: E402
 import forge_textures  # noqa: E402
 import star_textures  # noqa: E402
+import mystik_textures  # noqa: E402
 import sea_blocks  # noqa: E402
 import world_blocks  # noqa: E402
 from pixelart import Color, hexc  # noqa: E402
@@ -371,6 +372,7 @@ def build_all() -> dict[str, Image.Image]:
     fae_textures.build(put)
     forge_textures.build(put)
     star_textures.build(put)
+    mystik_textures.build(put)
     equipment_textures.build_entity(put)
     armor_art.build(put)
     plants()

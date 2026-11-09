@@ -30,7 +30,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
-                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria)
+                              fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
+                              miss_mystik, light_dove, magic_sword)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -84,6 +85,12 @@ def main():
     write_model(asteria, "AsteriaGeometry",
                 "Geometrie Asterias, der Sternenreiterin, auf ihrem gepanzerten Sternenrochen (im Spiel 1,2-fach vergrößert).",
                 "asteria", asteria.PALETTES, preview)
+    write_model(miss_mystik, "MissMystikGeometry",
+                "Geometrie MissMystiks, der Feen-Zauberkünstlerin (Frack, Zylinder, Maske, zwei Paar Feenflügel, Zauberstab, Kartenfächer).",
+                "miss_mystik", miss_mystik.PALETTES, preview)
+    write_model(light_dove, "LightDoveGeometry", "Geometrie der Lichttaube (MissMystik).", "miss_mystik", light_dove.PALETTES, preview)
+    write_model(magic_sword, "MagicSwordGeometry", "Geometrie eines Schwerts der Schwerterkiste (MissMystik).", "miss_mystik",
+                magic_sword.PALETTES, preview)
     write_model(moth_queen, "MothQueenGeometry", "Geometrie der Mottenkönigin (im Spiel 2,5-fach vergrößert).", "moth_queen",
                 moth_queen.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)

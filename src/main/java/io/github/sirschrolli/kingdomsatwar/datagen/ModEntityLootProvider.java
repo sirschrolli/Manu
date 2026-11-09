@@ -356,6 +356,16 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 4, 8))
                 .withPool(drop(ModItems.GEMSTONE.get(), 3, 5))
                 .withPool(drop(ModItems.GOLD_COIN.get(), 6, 12)));
+        // MissMystik, die Feen-Zauberkünstlerin: ihr Kartendeck und ihr Zylinder, dazu Feenstaub und Amethyst
+        this.add(ModEntities.MISS_MYSTIK.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_DECK.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT.get(), 1))
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get(), 4, 8))
+                .withPool(drop(net.minecraft.world.item.Items.AMETHYST_SHARD, 3, 6))
+                .withPool(drop(net.minecraft.world.item.Items.GOLD_INGOT, 3, 6))
+                .withPool(drop(ModItems.GEMSTONE.get(), 2, 4))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 5, 10)));
         // Umbrer lassen nichts fallen (wie Dorfbewohner), Wächter ein wenig Mondsilber
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()

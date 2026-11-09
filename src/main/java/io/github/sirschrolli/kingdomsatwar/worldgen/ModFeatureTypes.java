@@ -65,6 +65,8 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("fae_ruin", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.FaeRuinFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature>> MONDHAIN =
             FEATURE_TYPES.register("fae_mondhain", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MondhainFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature>> MYSTIK_STAGE =
+            FEATURE_TYPES.register("fae_mystik_stage", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature.CODEC);
 
     // --- Oberwelt (eigene Biome) ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.BoulderFeature>> BOULDER =

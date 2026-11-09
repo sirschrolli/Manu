@@ -193,6 +193,11 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(ModTags.Items.REPAIRS_STAR_WINGS).add(net.minecraft.core.registries.BuiltInRegistries.ITEM
                 .getResourceKey(net.minecraft.world.item.Items.PHANTOM_MEMBRANE).orElseThrow());
         add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
+        add(ModTags.Items.REPAIRS_MYSTIC_GEAR, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_DECK,
+                io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT);
+        add(ItemTags.HEAD_ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT);
+        add(ItemTags.ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT);
         add(ItemTags.EQUIPPABLE_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_WINGS);
         add(Tags.Items.ARMORS, ModItems.STEEL_DRAGON_ARMOR, ModItems.DRACONIUM_DRAGON_ARMOR);
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.TROLL_CLUB);

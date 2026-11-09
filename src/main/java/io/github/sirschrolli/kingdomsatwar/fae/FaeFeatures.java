@@ -144,6 +144,12 @@ public final class FaeFeatures {
                     io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.Mondhain.SALT, 0),
                     BiomeFilter.biome()));
 
+    // --- Die Zauberbühne (höchstens eine pro Feld, in allen Biomen; MissMystiks Bühne) ---
+    static final Entry MYSTIK_STAGE = entry(STRUCTURES, "mystik_stage", io.github.sirschrolli.kingdomsatwar.fae.feature.MystikStageFeature::new,
+            List.of(new SpacedPlacement(io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SPACING,
+                    io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SEPARATION, io.github.sirschrolli.kingdomsatwar.fae.MystikStage.SALT, 0),
+                    BiomeFilter.biome()));
+
     // --- Ruinen ---
     static final Entry RUINS = entry(STRUCTURES, "ruins", FaeRuinFeature::new,
             List.of(new SpacedPlacement(6, 2, 7_411, 0), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0),
@@ -234,26 +240,26 @@ public final class FaeFeatures {
     }
 
     static BiomeGenerationSettings meadows(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, MEADOW_TREES, MUSHROOMS_RARE, SPROUTS_DENSE, MEADOW_FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS);
     }
 
     static BiomeGenerationSettings glimmerwood(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, GRAND_TREES, FOREST_TREES, MUSHROOMS_RARE, SPROUTS, FLOWERS, STARLACE,
                 LANTERNS_RARE, LILIES_RARE, FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings mushroomGrove(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_MOSSY, MONDHAIN, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
+        return settings(placed, carvers, BOULDERS_MOSSY, MONDHAIN, MYSTIK_STAGE, RUINS, MUSHROOM_CLUSTERS, MUSHROOMS, SPROUTS, FLOWERS, LANTERNS, LILIES_RARE,
                 FAIRY_RINGS_RARE);
     }
 
     static BiomeGenerationSettings moonlitLakes(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS_SHORE, MONDHAIN, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
+        return settings(placed, carvers, BOULDERS_SHORE, MONDHAIN, MYSTIK_STAGE, RUINS, LAKE_TREES, MEADOW_TREES, SPROUTS_DENSE, FLOWERS, STARLACE, LILIES);
     }
 
     static BiomeGenerationSettings thornwild(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers) {
-        return settings(placed, carvers, BOULDERS, MONDHAIN, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
+        return settings(placed, carvers, BOULDERS, MONDHAIN, MYSTIK_STAGE, RUINS, THORN_TREES, SHORE_TREES, MUSHROOMS_RARE, THICKETS, SPROUTS, LANTERNS_RARE,
                 BRIARS, LILIES_RARE);
     }
 }

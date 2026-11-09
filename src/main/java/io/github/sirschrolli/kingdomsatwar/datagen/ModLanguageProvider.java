@@ -675,6 +675,12 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("item.fae_elytra.flap", "Wings beat", "Flügel schlagen");
         text("command.kingdomsatwar.mondhain.where", "Nearest Moon Grove: %s (%s blocks)", "Nächster Mondhain: %s (%s Blöcke)");
+        text("command.kingdomsatwar.zauberbuehne.where", "Nearest Magic Stage: %s (%s blocks)", "Nächste Zauberbühne: %s (%s Blöcke)");
+        text("command.kingdomsatwar.zauberbuehne.not_fae", "Magic Stages only exist in the Fae Realm.", "Zauberbühnen gibt es nur im Feenreich.");
+        text("command.kingdomsatwar.zauberbuehne.none", "No Magic Stage nearby.", "Keine Zauberbühne in der Nähe.");
+        text("command.kingdomsatwar.zauberbuehne.no_hat", "There is no waiting top hat on the stage.", "Auf der Bühne wartet kein Zylinder.");
+        text("command.kingdomsatwar.zauberbuehne.awakened", "The show begins!", "Die Vorstellung beginnt!");
+        text("command.kingdomsatwar.zauberbuehne.reset", "The top hat waits again.", "Der Zylinder wartet wieder.");
         text("command.kingdomsatwar.mondhain.not_fae", "Moon Groves only exist in the Fae Realm.", "Mondhaine gibt es nur im Feenreich.");
         text("command.kingdomsatwar.mondhain.awakened", "The Moth Queen awakens.", "Die Mottenkönigin erwacht.");
         text("command.kingdomsatwar.mondhain.no_cocoon", "There is no cocoon on the altar (is the queen already awake?).",
@@ -768,6 +774,68 @@ public class ModLanguageProvider extends LanguageProvider {
             subtitle("entity.asteria." + e[0], e[1], e[2]);
         }
         subtitle("item.star_wings.boost", "Star thrust", "Sternenschub");
+        // MissMystik, die Feen-Zauberkünstlerin (0.66)
+        creature(ModEntities.MISS_MYSTIK, io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MISS_MYSTIK_SPAWN_EGG,
+                "MissMystik, the Fae Illusionist", "MissMystik, die Feen-Zauberkünstlerin", "MissMystik");
+        add(ModEntities.MYSTIK_IMAGE.get(), pick("Mirror Image of MissMystik", "Spiegelbild MissMystiks"));
+        add(ModEntities.MAGIC_CARD.get(), pick("Magic Card", "Zauberkarte"));
+        add(ModEntities.LIGHT_DOVE.get(), pick("Light Dove", "Lichttaube"));
+        add(ModEntities.MAGIC_HAT.get(), pick("MissMystik's Top Hat", "MissMystiks Zylinder"));
+        add(ModEntities.MAGIC_SWORD.get(), pick("Sword of Light", "Schwert aus Licht"));
+        text("boss.kingdomsatwar.mystic", "MissMystik", "MissMystik");
+        text("boss.kingdomsatwar.mystic.title", "The Fae Illusionist – her last performance", "Die Feen-Zauberkünstlerin – ihre letzte Vorstellung");
+        text("entity.kingdomsatwar.miss_mystik.encore", "MissMystik: »Encore! Encore!«", "MissMystik: »Zugabe! Zugabe!«");
+        text("entity.kingdomsatwar.miss_mystik.pick_a_card", "MissMystik: »Pick a card … any card!«",
+                "MissMystik: »Zieh eine Karte … irgendeine!«");
+        text("entity.kingdomsatwar.miss_mystik.finale", "MissMystik: »And now … the grand finale!« – take cover!",
+                "MissMystik: »Und nun … das große Finale!« – geh in Deckung!");
+        block(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.STAGE_HAT, "Great Magic Top Hat", "Großer Zauberzylinder");
+        lore("stage_hat", "On the Magic Stage of the Fae Realm – MissMystik waits inside",
+                "Auf der Zauberbühne des Feenreichs – darin wartet MissMystik");
+        text(ModItems.loreKey("stage_hat", 2), "Empty after her defeat: Fae Dust calls her back",
+                "Nach ihrer Niederlage leer: Feenstaub ruft sie zurück");
+        text("block.kingdomsatwar.stage_hat.hint", "Something rustles inside the top hat … step closer, if you dare.",
+                "Im Zylinder raschelt es … tritt näher, wenn du dich traust.");
+        text("block.kingdomsatwar.stage_hat.show", "The show is on – MissMystik is performing.",
+                "Die Vorstellung läuft – MissMystik tritt auf.");
+        text("block.kingdomsatwar.stage_hat.empty", "The top hat is empty. A pinch of Fae Dust might bring her back.",
+                "Der Zylinder ist leer. Eine Prise Feenstaub könnte sie zurückholen.");
+        text("block.kingdomsatwar.stage_hat.warning", "Music drifts across the glade … somewhere a stage awaits its audience.",
+                "Musik weht über die Lichtung … irgendwo wartet eine Bühne auf ihr Publikum.");
+        text("block.kingdomsatwar.stage_hat.peaceful", "The top hat stays silent (the world is set to Peaceful).",
+                "Der Zylinder bleibt still (die Welt steht auf „Friedlich“).");
+        block(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN, "Velvet Curtain", "Samtvorhang");
+        block(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN_FRINGE, "Fringed Velvet Curtain",
+                "Samtvorhang mit Fransen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_DECK, "Mystic Deck", "Kartendeck der Mystik");
+        lore("mystic_deck", "MissMystik's own magic cards", "MissMystiks eigene Zauberkarten");
+        text(ModItems.loreKey("mystic_deck", 2), "Use: throws a fan of three glowing cards",
+                "Benutzen: wirft einen Fächer aus drei leuchtenden Karten");
+        text(ModItems.loreKey("mystic_deck", 3), "Every fifth throw: an ace up the sleeve – five harder cards",
+                "Jeder fünfte Wurf: ein Ass im Ärmel – fünf härtere Karten");
+        text("item.kingdomsatwar.mystic_deck.ace", "An ace up the sleeve!", "Ein Ass im Ärmel!");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.MYSTIC_TOP_HAT, "Mystic Top Hat", "Zylinder der Mystik");
+        lore("mystic_top_hat", "MissMystik's top hat – worn on the head", "MissMystiks Zylinder – auf dem Kopf zu tragen");
+        text(ModItems.loreKey("mystic_top_hat", 2), "Protects like a fine helmet and brings luck",
+                "Schützt wie ein guter Helm und bringt Glück");
+        text(ModItems.loreKey("mystic_top_hat", 3), "Below a third of your health: vanishing trick (invisible and fast, every 90 s)",
+                "Unter einem Drittel Leben: Verschwindetrick (unsichtbar und schnell, alle 90 s)");
+        text("item.kingdomsatwar.mystic_top_hat.vanish", "Vanishing trick!", "Verschwindetrick!");
+        for (String[] e : new String[][] {{"ambient", "MissMystik hums a tune", "MissMystik summt eine Melodie"},
+                {"laugh", "MissMystik giggles", "MissMystik kichert"}, {"hurt", "MissMystik hurts", "MissMystik nimmt Schaden"},
+                {"death", "MissMystik takes her final bow", "MissMystik verbeugt sich ein letztes Mal"},
+                {"drumroll", "Drumroll", "Trommelwirbel"}, {"tada", "Ta-da!", "Tada!"}, {"applause", "Applause", "Applaus"},
+                {"card_throw", "Cards whirl", "Karten wirbeln"}, {"card_hit", "Card strikes", "Karte trifft"},
+                {"doves", "Doves flutter up", "Tauben flattern auf"}, {"vanish", "MissMystik vanishes", "MissMystik verschwindet"},
+                {"reappear", "MissMystik reappears", "MissMystik taucht auf"}, {"mirrors", "Mirrors chime", "Spiegel klingen"},
+                {"hat_throw", "Top hat whirls", "Zylinder wirbelt"}, {"vortex", "Magic vortex", "Zaubersog"},
+                {"swords", "Swords appear", "Schwerter erscheinen"}, {"stab", "Swords strike", "Schwerter stoßen zu"},
+                {"spotlight", "Spotlights flare", "Scheinwerfer flammen auf"}, {"card_trick", "A card is drawn", "Eine Karte wird gezogen"},
+                {"firework", "Fireworks", "Feuerwerk"}}) {
+            subtitle("entity.miss_mystik." + e[0], e[1], e[2]);
+        }
+        subtitle("item.mystic_deck.throw", "Cards fly", "Karten fliegen");
+        subtitle("item.mystic_top_hat.vanish", "Vanishing trick", "Verschwindetrick");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");

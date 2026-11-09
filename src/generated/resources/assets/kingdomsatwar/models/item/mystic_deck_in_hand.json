@@ -1,0 +1,469 @@
+{
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        75,
+        -18
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.5,
+        3.2,
+        1
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -75,
+        18
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "translation": [
+        1.5,
+        3.2,
+        1
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        -10,
+        -90,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        -10,
+        90,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ]
+    }
+  },
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            15.0,
+            8.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#cards",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        4,
+        7.6
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -34.0
+      },
+      "to": [
+        11,
+        13,
+        7.7999997
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            15.0,
+            8.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#cards",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        4,
+        7.8599997
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": -17.0
+      },
+      "to": [
+        11,
+        13,
+        8.059999
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            15.0,
+            8.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#cards",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        4,
+        8.12
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "to": [
+        11,
+        13,
+        8.32
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            15.0,
+            8.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#cards",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        4,
+        8.38
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": 17.0
+      },
+      "to": [
+        11,
+        13,
+        8.58
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            15.0,
+            8.0,
+            16.0
+          ]
+        },
+        "east": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "north": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        },
+        "south": {
+          "texture": "#cards",
+          "uv": [
+            8.0,
+            0.0,
+            16.0,
+            16.0
+          ]
+        },
+        "up": {
+          "texture": "#cards",
+          "uv": [
+            0.0,
+            0.0,
+            8.0,
+            1.0
+          ]
+        },
+        "west": {
+          "texture": "#cards",
+          "uv": [
+            7.0,
+            0.0,
+            8.0,
+            16.0
+          ]
+        }
+      },
+      "from": [
+        5,
+        4,
+        8.639999
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          4,
+          8
+        ],
+        "x": 0.0,
+        "y": 0.0,
+        "z": 34.0
+      },
+      "to": [
+        11,
+        13,
+        8.839999
+      ]
+    }
+  ],
+  "gui_light": "front",
+  "textures": {
+    "cards": "kingdomsatwar:item/mystic_deck_model",
+    "particle": "kingdomsatwar:item/mystic_deck"
+  }
+}

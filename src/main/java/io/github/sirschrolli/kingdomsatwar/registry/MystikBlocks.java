@@ -60,7 +60,7 @@ public final class MystikBlocks {
 
     /** Das Kartendeck der Mystik: wirft Fächer aus Zauberkarten (jeder fünfte Wurf: ein Ass im Ärmel). */
     public static final DeferredItem<MysticDeckItem> MYSTIC_DECK = add(ModItems.ITEMS.registerItem("mystic_deck", MysticDeckItem::new,
-            () -> new Item.Properties().stacksTo(1).durability(750).rarity(Rarity.EPIC).repairable(ModTags.Items.REPAIRS_MYSTIC_GEAR)
+            () -> new Item.Properties().stacksTo(1).durability(750).rarity(Rarity.EPIC).enchantable(15).repairable(ModTags.Items.REPAIRS_MYSTIC_GEAR)
                     .component(DataComponents.LORE, ModItems.lore("mystic_deck", 3))));
     /**
      * Der Zylinder der Mystik: MissMystiks Hut, auf dem Kopf zu tragen (als echter Zylinder). Schützt wie ein guter Helm,
@@ -68,7 +68,7 @@ public final class MystikBlocks {
      * (Verschwindetrick, siehe {@link io.github.sirschrolli.kingdomsatwar.item.fae.MysticTopHatEffects}).
      */
     public static final DeferredItem<Item> MYSTIC_TOP_HAT = add(ModItems.ITEMS.registerSimpleItem("mystic_top_hat",
-            p -> p.stacksTo(1).durability(520).rarity(Rarity.EPIC).repairable(ModTags.Items.REPAIRS_MYSTIC_GEAR)
+            p -> p.stacksTo(1).durability(520).rarity(Rarity.EPIC).enchantable(15).repairable(ModTags.Items.REPAIRS_MYSTIC_GEAR)
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD).setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
                             .build())
                     .attributes(ItemAttributeModifiers.builder()

@@ -1,0 +1,14 @@
+{
+  "feature": "kingdomsatwar:fae/mystik_stage",
+  "placement": [
+    {
+      "type": "kingdomsatwar:spaced",
+      "salt": 52919,
+      "separation": 7,
+      "spacing": 22
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

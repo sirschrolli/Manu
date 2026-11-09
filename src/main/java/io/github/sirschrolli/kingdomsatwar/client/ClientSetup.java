@@ -76,6 +76,12 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.MothQueenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLUTSCHMIED,
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.GlutschmiedGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MISS_MYSTIK,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.MissMystikGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.LIGHT_DOVE,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.LightDoveGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MAGIC_SWORD,
+                io.github.sirschrolli.kingdomsatwar.client.model.geom.MagicSwordGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ASTERIA,
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.AsteriaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
@@ -179,6 +185,18 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.nether.GlutschmiedRenderer::new);
         event.registerEntityRenderer(ModEntities.GLUTKLUMPEN.get(),
                 context -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(context, 1.6f, true));
+        event.registerEntityRenderer(ModEntities.MISS_MYSTIK.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MissMystikRenderer::new);
+        event.registerEntityRenderer(ModEntities.MYSTIK_IMAGE.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MystikImageRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_CARD.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MagicCardRenderer::new);
+        event.registerEntityRenderer(ModEntities.LIGHT_DOVE.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.LightDoveRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_HAT.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MagicHatRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGIC_SWORD.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.fae.MagicSwordRenderer::new);
         event.registerEntityRenderer(ModEntities.ASTERIA.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.end.AsteriaRenderer::new);
         event.registerEntityRenderer(ModEntities.STARFALL.get(),
@@ -260,5 +278,6 @@ public final class ClientSetup {
         event.registerSpriteSet(ModParticles.VENT_SMOKE.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.VENT_SMOKE));
         event.registerSpriteSet(ModParticles.SEA_GLOW.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.SEA_GLOW));
         event.registerSpriteSet(ModParticles.FAE_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FAE_SPARK));
+        event.registerSpriteSet(ModParticles.CONFETTI.get(), io.github.sirschrolli.kingdomsatwar.client.fae.ConfettiParticle.Provider::new);
     }
 }

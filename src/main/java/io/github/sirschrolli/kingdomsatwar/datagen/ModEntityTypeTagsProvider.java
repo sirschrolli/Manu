@@ -33,11 +33,15 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.MUSHROOMLING.key())
                 .add(ModEntities.THORN_WIGHT.key())
                 .add(ModEntities.MOTH_QUEEN.key())
-                .add(ModEntities.MOON_MOTH.key());
+                .add(ModEntities.MOON_MOTH.key())
+                .add(ModEntities.MISS_MYSTIK.key())
+                .add(ModEntities.MYSTIK_IMAGE.key());
         this.tag(ModTags.EntityTypes.THORN_IMMUNE)
                 .add(ModEntities.THORN_WIGHT.key())
                 .add(ModEntities.MOTH_QUEEN.key())
-                .add(ModEntities.MOON_MOTH.key());
+                .add(ModEntities.MOON_MOTH.key())
+                .add(ModEntities.MISS_MYSTIK.key())
+                .add(ModEntities.MYSTIK_IMAGE.key());
         // Münzen: alle Monster der Oberwelt, des Nethers und des Ends, dazu die feindseligen Wesen der Mod
         var coins = this.tag(ModTags.EntityTypes.DROPS_COINS);
         for (String name : java.util.List.of("zombie", "husk", "drowned", "zombie_villager", "skeleton", "stray", "bogged", "creeper",

@@ -80,6 +80,12 @@ ELEMENTS = {
                  f0="#0b1236", f1="#2a3d8a", f2="#7ab0ff", f3="#eef6ff", gold="#e8c25a", gold_dark="#8a6018",
                  night="#141c48", night_dark="#070b22", nebula="#7a3ab4", nebula_light="#c08ae8", silver="#c8d0e4",
                  silver_dark="#5a6488", crystal="#9ad0ff"),
+    # MissMystik, die Feen-Zauberkünstlerin: violetter Samt mit Goldsaum, dahinter ein Fächer aus Zauberkarten und ihr
+    # Zauberstab; Füllung wie ein Harlekin-Rautenmuster aus Samt, in dem Pailletten funkeln
+    "mystic": dict(m0="#140c1e", m1="#4e3470", m2="#dcc8f4", acc="#ff7ac8", glow="#fff0fa", deep="#10061a",
+                   f0="#2e0a44", f1="#7a2496", f2="#e46ad0", f3="#fff0fa", gold="#ffd86a", gold_dark="#8a6020",
+                   card="#fbf7ff", card_dark="#a898c0", red="#e8344a", black="#1c1428", wand="#121016",
+                   confetti="#4ae0e8"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1119,7 +1125,105 @@ def deco_star(img: Image.Image, pal: dict) -> None:
     put(px, img, ex + 11, ey, f2)
 
 
-DECOS = {"star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_mystic(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon ein Fächer aus fünf Zauberkarten (weiß mit Goldrand, rote und schwarze Farben), schräg dahinter
+    ihr Zauberstab (schwarz mit weißen Spitzen); oben auf dem Rahmen die vier Kartenfarben, unter der Leiste rieselt
+    Konfetti. Als Spitze die weiße Spitze des Zauberstabs mit einem Funkelstern."""
+    px = img.load()
+    f2, f3 = c(pal, "f2"), c(pal, "f3")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    card, card_dark = c(pal, "card"), c(pal, "card_dark")
+    red, black, wand = c(pal, "red"), c(pal, "black"), c(pal, "wand")
+    confetti = [c(pal, "acc"), gold, c(pal, "confetti"), f2, card]
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+    pips = {"heart": (".#.#.", "#####", "#####", ".###.", "..#.."),
+            "spade": ("..#..", ".###.", "#####", "#####", "..#.."),
+            "diamond": ("..#..", ".###.", "#####", ".###.", "..#.."),
+            "club": (".###.", ".###.", "#####", "#.#.#", "..#..")}
+
+    # der Zauberstab: von unten links nach oben rechts hinter dem Medaillon
+    x0, y0, x1, y1 = EMB_X - 15, EMB_Y + 19, EMB_X + 34, EMB_Y - 20
+    length = math.hypot(x1 - x0, y1 - y0)
+    for k in range(int(length) + 1):
+        t = k / length
+        x = x0 + (x1 - x0) * t
+        y = y0 + (y1 - y0) * t
+        tip = t < 0.08 or t > 0.9
+        for o in (-1, 0, 1):
+            col = OUTLINE if o != 0 else (card if tip else wand)
+            put(px, img, round(x + o * 0.7), round(y + o * 0.7), col)
+
+    def card_at(cx: float, cy: float, ang: float, suit: str):
+        """Eine kleine Karte (8 x 11) um (cx, cy) gedreht: Goldrand, weiße Fläche, die Farbe in der Mitte – nie über der
+        Leiste (die bleibt frei)."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        w, h = 4.0, 5.6
+        red_suit = suit in ("heart", "diamond")
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                if x >= BAR_X - 3 and y >= BAR_Y - 3:
+                    continue
+                dx, dy = x + 0.5 - cx, y + 0.5 - cy
+                u = dx * ca + dy * sa
+                v = -dx * sa + dy * ca
+                if abs(u) > w or abs(v) > h:
+                    continue
+                if abs(u) > w - 0.9 or abs(v) > h - 0.9:
+                    col = OUTLINE
+                elif abs(u) > w - 1.8 or abs(v) > h - 1.8:
+                    col = gold if (u + v) < 0 else gold_dark
+                else:
+                    col = mix(card, card_dark, 0.1 + 0.25 * (v + h) / (2 * h))
+                    gx, gy = int(math.floor(u + 1.5)), int(math.floor(v + 1.5))
+                    small_pip = {"heart": ("#.#", "###", ".#."), "spade": (".#.", "###", "#.#"),
+                                 "diamond": (".#.", "###", ".#."), "club": (".#.", "###", ".#.")}[suit]
+                    if 0 <= gx < 3 and 0 <= gy < 3 and small_pip[gy][gx] == "#":
+                        col = red if red_suit else black
+                put(px, img, x, y, col)
+
+    # ein Fächer aus vier Karten steigt hinter dem Medaillon nach rechts oben auf
+    for i, suit in enumerate(("club", "diamond", "spade", "heart")):
+        ang = math.radians(-35 + i * 20)
+        card_at(EMB_X + 17 + i * 6.0, EMB_Y - 12 + abs(i - 1.5) * 1.2, ang, suit)
+
+    # die vier Kartenfarben auf dem Rahmen
+    small = {"heart": ("#.#", "###", ".#."), "spade": (".#.", "###", "#.#"), "diamond": (".#.", "###", ".#."),
+             "club": (".#.", "###", ".#.")}
+    order = ("spade", "heart", "club", "diamond")
+    for k, x in enumerate(range(BAR_X + 12, BAR_X + BAR_W - 6, 22)):
+        suit = order[k % 4]
+        col = red if suit in ("heart", "diamond") else card
+        for gy, row in enumerate(small[suit]):
+            for gx, ch in enumerate(row):
+                if ch == "#":
+                    put(px, img, x + gx - 1, top - 3 + gy, col)
+        for gx, gy in ((-2, -1), (2, -1), (-2, 3), (2, 3)):
+            put(px, img, x + gx, top - 3 + gy, gold_dark)
+    # Konfetti unter der Leiste
+    for x in range(BAR_X + 4, BAR_X + BAR_W - 4):
+        h = hash01(x, 977)
+        if h > 0.82:
+            y = bottom + 1 + int(hash01(x, 979) * 5)
+            put(px, img, x, y, confetti[int(hash01(x, 983) * len(confetti)) % len(confetti)])
+            if h > 0.93:
+                put(px, img, x + 1, y, confetti[int(hash01(x, 991) * len(confetti)) % len(confetti)])
+    # Spitze: die weiße Spitze des Zauberstabs mit Funkelstern
+    ex, ey = BAR_X + BAR_W + 2, BAR_Y + BAR_H // 2
+    for k in range(9):
+        for dy in (-1, 0, 1):
+            col = OUTLINE if abs(dy) == 1 else (card if k > 4 else wand)
+            put(px, img, ex + k, ey + dy, col)
+    sx, sy = ex + 11, ey
+    for d in range(-3, 4):
+        put(px, img, sx + d, sy, f3 if abs(d) < 2 else gold)
+        put(px, img, sx, sy + d, f3 if abs(d) < 2 else gold)
+    put(px, img, sx + 1, sy + 1, gold)
+    put(px, img, sx - 1, sy - 1, gold)
+    put(px, img, sx + 1, sy - 1, gold)
+    put(px, img, sx - 1, sy + 1, gold)
+
+
+DECOS = {"mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -1193,6 +1297,17 @@ def fill_value(element: str, x: int, y: int) -> float:
         if hash01(x, y, 61) > 0.97:
             return 1.0
         return scale + 0.08 * math.sin(tau * x / 64)
+    if element == "mystic":
+        # Harlekin-Rauten aus Samt im Wechsel hell und dunkel, darin funkelnde Pailletten
+        a = (x / 8.0 + y / 4.5) % 2.0
+        b = (x / 8.0 - y / 4.5) % 2.0
+        cell = (int(a) + int(b)) % 2
+        edge = min(a % 1.0, 1.0 - a % 1.0, b % 1.0, 1.0 - b % 1.0)
+        if hash01(x, y, 67) > 0.972:
+            return 1.0
+        if edge < 0.07:
+            return 0.82
+        return 0.62 if cell else 0.36
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -1293,12 +1408,12 @@ def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
-                                  glutschmied, moth_queen, reef_colossus, shattered_king)
+                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
-           "forge": glutschmied, "star": asteria}[element]
+           "forge": glutschmied, "star": asteria, "mystic": miss_mystik}[element]
     m = mod.build()
     m.pack()
     variant = next(iter(mod.PALETTES))
@@ -1346,14 +1461,22 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_star(child)
         strip_star(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24}.get(element, -42)
-    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4}.get(element, 6)
+    if element == "mystic":
+        # Kopf mit Maske, Zylinder, Feder und Pferdeschwanz (ohne Leib, Arme und Flügel)
+        def strip_mystic(bone):
+            if bone.name not in ("head", "hat", "feather", "ponytail", "ponytail_tip"):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_mystic(child)
+        strip_mystic(m.root)
+    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95}.get(element, 1.2)
+    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22}.get(element, -42)
+    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
-                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15}.get(element, 1.4))
+                                                 "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()
