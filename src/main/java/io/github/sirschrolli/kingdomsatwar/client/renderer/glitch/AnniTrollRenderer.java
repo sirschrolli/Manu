@@ -22,10 +22,10 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Anni der Troll – mit ihren Bildfehlern: Zwei farbverschobene Abbilder (rot und cyan) laufen neben ihr her, je weiter,
- * je kaputter sie gerade ist (beim Hängen, im Absturz, im Fehlermodus). Für einzelne Ticks springt sie ein Stück zur
- * Seite oder zeigt statt ihrer Haut nur fehlende Textur. Hängt sie, dreht sich über ihrem Kopf ein Ladekreis. Augen,
- * Bildschirmauge, Pixel, Schnalle und die Bruchflächen des Arms leuchten. Im Tod zerfällt sie flackernd.
+ * Anni der Troll – mit seinen Bildfehlern: Zwei farbverschobene Abbilder (rot und cyan) laufen neben ihm her, je weiter,
+ * je kaputter er gerade ist (beim Hängen, im Absturz, im Fehlermodus). Für einzelne Ticks springt er ein Stück zur
+ * Seite oder zeigt statt seiner Haut nur fehlende Textur. Hängt er, dreht sich über seinem Kopf ein Ladekreis. Augen,
+ * Bildschirmauge, Pixel, Schnalle und die Bruchflächen des Arms leuchten (als Anni 2.0 rot). Im Tod zerfällt er flackernd.
  */
 public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRenderState, AnniTrollModel> {
     public static final Identifier TEXTURE = KingdomsAtWar.id("textures/entity/anni_troll/anni_troll.png");
@@ -53,7 +53,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
         return (h & 0xFFFF) / 65535.0f;
     }
 
-    /** Wie kaputt sie gerade ist (0 ruhig … 1 völlig zerfallen). */
+    /** Wie kaputt er gerade ist (0 ruhig … 1 völlig zerfallen). */
     static float glitchLevel(AnniTrollRenderState state) {
         float g = state.version2 ? 0.55f : state.glitchMode ? 0.45f : 0.2f;
         if (state.lagging) {
@@ -66,7 +66,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
             g = 0.9f;
         }
         if (state.attack == AnniTrollEntity.Attack.REVIVE.ordinal() && state.attackTime < AnniTrollEntity.REVIVE_ASSEMBLE + 10) {
-            // erst zerfällt sie (alles flackert), dann setzt sie sich ruckelnd zusammen
+            // erst zerfällt er (alles flackert), dann setzt er sich ruckelnd zusammen
             g = state.attackTime < AnniTrollEntity.REVIVE_SHATTER ? 1.0f : 0.9f;
         }
         if (state.deathTime > 0.0f) {
@@ -75,7 +75,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
         return g;
     }
 
-    /** Zeigt sie in diesem Tick nur fehlende Textur? */
+    /** Zeigt er in diesem Tick nur fehlende Textur? */
     static boolean missingFrame(AnniTrollRenderState state) {
         float g = glitchLevel(state);
         float chance = g >= 1.0f ? 0.3f : g >= 0.7f ? 0.1f : g * 0.06f;
@@ -124,7 +124,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
         }
     }
 
-    /** Im Sterben: das letzte Drittel wird sie durchsichtig (sie zerfällt in Pixel). */
+    /** Im Sterben: das letzte Drittel wird er durchsichtig (er zerfällt in Pixel). */
     static float fade(AnniTrollRenderState state) {
         if (state.deathTime <= 0.0f) {
             return state.alpha;
@@ -185,7 +185,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
         poseStack.scale(SCALE, SCALE, SCALE);
     }
 
-    /** Sie kippt im Tod nicht um, sie sackt zusammen und zerfällt (siehe {@link AnniTrollModel}). */
+    /** Er kippt im Tod nicht um, er sackt zusammen und zerfällt (siehe {@link AnniTrollModel}). */
     @Override
     protected float getFlipDegrees() {
         return 0.0f;
@@ -223,7 +223,7 @@ public class AnniTrollRenderer extends MobRenderer<AnniTrollEntity, AnniTrollRen
         state.splitZ = uz * amount;
     }
 
-    /** Ein Ruck: für einzelne Ticks steht sie ein Stück daneben (im Absturz und im Fehlermodus öfter). */
+    /** Ein Ruck: für einzelne Ticks steht er ein Stück daneben (im Absturz und im Fehlermodus öfter). */
     static void jitter(AnniTrollRenderState state, PoseStack poseStack) {
         float g = glitchLevel(state);
         int tick = (int) state.ageInTicks;

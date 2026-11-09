@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Erzeugt die Klänge von Anni der Troll, dem Boss, der wie ein Spielfehler glitcht: ihr Kichern und ihr Lachen (eine
+Erzeugt die Klänge von Anni der Troll, dem Boss, der wie ein Spielfehler glitcht: sein Kichern und sein Lachen (eine
 raue, tiefe Trollstimme, die hängen bleibt), Schmerz und den endgültigen Absturz (die Stimme läuft langsamer und tiefer,
 zerfällt in grobe Stufen, der Bildschirm geht aus), schwere Schritte, das Laden und das Verbindungsende, Ausholen und
 Hammerschlag, Hänger (der Ton bleibt im Puffer stecken und brummt), Sprünge, nicht registrierte Treffer, Klone
@@ -247,7 +247,7 @@ TROLL = {
 
 def troll(n: int, f0: float, f1: float, vowel: str, seed: int, growl: float = 0.4, shape: float = 0.7,
           breath: float = 0.05) -> np.ndarray:
-    """Eine Silbe von Anni: eine raue, tiefe Stimme aus einem großen Rachen – jede zweite Schwingung schwächer (das
+    """Eine Silbe von Anni: eine raue, tiefe Männerstimme aus einem großen Rachen – jede zweite Schwingung schwächer (das
     Knurren), dazu ein Kratzen im Takt der Stimmbänder. Spitze 1."""
     r = rng(seed)
     t = np.arange(n) / SR
@@ -299,11 +299,11 @@ def power_off(seed: int) -> np.ndarray:
 # =====================================================================================
 
 def ambient(seed: int) -> np.ndarray:
-    """Sie kichert in sich hinein: zwei, drei tiefe „hm-hö“, der letzte Laut bleibt kurz im Puffer hängen, dazu ein
+    """Er kichert in sich hinein: zwei, drei tiefe „hm-hö“, der letzte Laut bleibt kurz im Puffer hängen, dazu ein
     leises Datenzirpen."""
     r = rng(seed)
     y = np.zeros(int(1.6 * SR))
-    f = r.uniform(140, 158)
+    f = r.uniform(96, 108)
     t = 0.04
     last = t
     for k in range(int(r.integers(2, 4))):
@@ -320,11 +320,11 @@ def ambient(seed: int) -> np.ndarray:
 
 
 def laugh(seed: int) -> np.ndarray:
-    """Ihr Lachen: „HA-ha-hö-ha-HAAA“ – rau und tief. Der letzte Lacher bleibt hängen und stottert (jedes Mal ein wenig
+    """Sein Lachen: „HA-ha-hö-ha-HAAA“ – rau und tief. Der letzte Lacher bleibt hängen und stottert (jedes Mal ein wenig
     tiefer), dann zerfällt er grob gestuft. Manchmal piepst danach noch ein kleines, schiefes Spielmotiv."""
     r = rng(seed)
     y = np.zeros(int(2.2 * SR))
-    f = r.uniform(170, 186)
+    f = r.uniform(118, 130)
     t = 0.02
     count = int(r.integers(4, 6))
     last = t
@@ -356,7 +356,7 @@ def hurt(seed: int) -> np.ndarray:
     """Getroffen: ein kurzes, raues „Uargh!“, das in Schnipsel zerfällt, dazu ein Fehlerblitz."""
     r = rng(seed)
     y = np.zeros(int(0.8 * SR))
-    f = r.uniform(185, 205)
+    f = r.uniform(128, 142)
     mix_at(y, syllable(f * 1.25, f * 0.78, str(r.choice(["a", "ö"])), r.uniform(0.2, 0.25), seed, h=0.025, growl=0.55, shape=0.5), 0.0)
     y = scramble(y, seed + 5, 0.028, 0.35)
     m = int(0.06 * SR)
@@ -369,8 +369,8 @@ def death(seed: int) -> np.ndarray:
     """Endgültiger Absturz: ein langes „Nööö…“, das hängt, dann wie ein Band langsamer und tiefer läuft, immer gröber
     zerfällt – und der Bildschirm geht aus."""
     groan = np.zeros(int(1.7 * SR))
-    mix_at(groan, troll(int(0.1 * SR), 200, 195, "m", seed, growl=0.4), 0.0, 0.7)
-    mix_at(groan, troll(int(1.55 * SR), 205, 150, "ö", seed + 1, growl=0.55, shape=1.2), 0.07)
+    mix_at(groan, troll(int(0.1 * SR), 140, 136, "m", seed, growl=0.45), 0.0, 0.7)
+    mix_at(groan, troll(int(1.55 * SR), 145, 104, "ö", seed + 1, growl=0.6, shape=1.2), 0.07)
     groan = freeze(groan, 0.55, 0.06, 5, fall=0.985, gain=0.95)
     slowed = varispeed(groan, curve(int(len(groan) / 0.5), [(0, 1.0), (0.3, 0.85), (1.0, 0.1)]))
     w = curve(len(slowed), [(0, 0.0), (0.35, 0.3), (1.0, 1.0)])
@@ -398,7 +398,7 @@ def step(seed: int) -> np.ndarray:
 
 def boot(seed: int) -> np.ndarray:
     """Das Laden: ein dumpfes Einschalten, ein anschwellendes Brummen, leises Datenzirpen und eine Tonfolge, die immer
-    schneller steigt wie ein Ladebalken – bei 2,3 s (wenn sie sich zusammensetzt) ein heller Akkord."""
+    schneller steigt wie ein Ladebalken – bei 2,3 s (wenn er sich zusammensetzt) ein heller Akkord."""
     r = rng(seed)
     y = np.zeros(int(3.6 * SR))
     mix_at(y, thud(int(0.6 * SR), 90, 38, 0.14), 0.0, 0.8)
@@ -426,7 +426,7 @@ def boot(seed: int) -> np.ndarray:
 
 
 def disconnect(seed: int) -> np.ndarray:
-    """Verbindung verloren: drei fallende Töne, ein Rauschstoß, der Ton läuft aus wie ein Band – dann ist sie fort."""
+    """Verbindung verloren: drei fallende Töne, ein Rauschstoß, der Ton läuft aus wie ein Band – dann ist er fort."""
     y = np.zeros(int(2.6 * SR))
     for k, s in enumerate((7, 3, -2)):
         mix_at(y, chip(note(s, 440.0), 0.16 if k < 2 else 0.4, 0.5, 0.09 if k < 2 else 0.2), 0.02 + k * 0.17, 0.2)
@@ -434,7 +434,7 @@ def disconnect(seed: int) -> np.ndarray:
     burst = lp(crush(noise(m, seed), 4, 4), 6500) * curve(m, [(0, 0.0), (0.05, 1.0), (1.0, 0.0)]) ** 2
     mix_at(y, burst, 0.62, 0.2)
     src = np.zeros(int(0.9 * SR))
-    mix_at(src, troll(int(0.5 * SR), 160, 120, "o", seed + 2, growl=0.5), 0.0, 0.6)
+    mix_at(src, troll(int(0.5 * SR), 112, 84, "o", seed + 2, growl=0.55), 0.0, 0.6)
     mix_at(src, chip(note(-2, 440.0), 0.8, 0.5, 0.4), 0.0, 0.3)
     mix_at(y, varispeed(src, curve(int(len(src) / 0.45), [(0, 1.0), (1, 0.05)])), 0.7, 0.5)
     mix_at(y, power_off(seed + 5), 1.6, 0.6)
@@ -445,7 +445,7 @@ def windup(seed: int) -> np.ndarray:
     """Ausholen: ein gepresstes Knurren, ein steigender, grob gestufter Ladeton und der Luftzug des Hammers."""
     r = rng(seed)
     y = np.zeros(int(0.9 * SR))
-    mix_at(y, syllable(r.uniform(150, 165), r.uniform(185, 200), "a", 0.55, seed, h=0.06, growl=0.7, shape=1.0), 0.03, 0.55)
+    mix_at(y, syllable(r.uniform(100, 110), r.uniform(125, 135), "a", 0.55, seed, h=0.06, growl=0.7, shape=1.0), 0.03, 0.55)
     m = int(0.75 * SR)
     charge = saw(glide(m, 90, 560, 1.6), curve(m, [(0, 0.0), (0.75, 0.8), (1.0, 1.0)]), SR, partials=20, rolloff=1.2)
     mix_at(y, lp(crush(charge, 5, 2), 4800) * env_asr(m, SR, 0.01, 0.04), 0.0, 0.3)
@@ -474,7 +474,7 @@ def lag(seed: int) -> np.ndarray:
     """Ein Hänger: das letzte Stückchen Ton bleibt im Puffer stecken und brummt („brrrrt“) – dann springt es weiter."""
     r = rng(seed)
     src = np.zeros(int(0.4 * SR))
-    mix_at(src, troll(int(0.3 * SR), r.uniform(120, 150), r.uniform(110, 135), str(r.choice(["a", "o"])), seed, growl=0.5), 0.0, 0.7)
+    mix_at(src, troll(int(0.3 * SR), r.uniform(85, 100), r.uniform(78, 92), str(r.choice(["a", "o"])), seed, growl=0.55), 0.0, 0.7)
     mix_at(src, chip(r.uniform(180, 260), 0.35, 0.5, 0.3), 0.0, 0.35)
     mix_at(src, impact(int(0.3 * SR), seed + 1, 200, 3000, 0.2), 0.0, 0.25)
     loop = buffer_loop(src, r.uniform(0.08, 0.14), r.uniform(0.028, 0.045), r.uniform(0.38, 0.5), sag=0.25)
@@ -486,7 +486,7 @@ def lag(seed: int) -> np.ndarray:
 
 
 def teleport(seed: int) -> np.ndarray:
-    """Ein Sprung: ein fallender Zischton, ein grob gestufter Rauschstoß – und ein steigendes Piepen, wo sie auftaucht."""
+    """Ein Sprung: ein fallender Zischton, ein grob gestufter Rauschstoß – und ein steigendes Piepen, wo er auftaucht."""
     r = rng(seed)
     y = np.zeros(int(0.45 * SR))
     m = int(0.17 * SR)
@@ -510,11 +510,11 @@ def miss(seed: int) -> np.ndarray:
 
 
 def clone(seed: int) -> np.ndarray:
-    """Sie verdoppelt sich: ein „Heh!“ im Chor aus drei, vier Annis (versetzt und verstimmt), dazu steigende
+    """Er verdoppelt sich: ein „Heh!“ im Chor aus drei, vier Annis (versetzt und verstimmt), dazu steigende
     Spieltöne und ein verschmierter Luftzug."""
     r = rng(seed)
     y = np.zeros(int(1.3 * SR))
-    f = r.uniform(165, 180)
+    f = r.uniform(112, 124)
     for k, (ratio, delay, g) in enumerate(((1.0, 0.0, 1.0), (0.89, 0.045, 0.75), (1.12, 0.09, 0.65), (0.8, 0.14, 0.5))):
         mix_at(y, syllable(f * ratio * 1.1, f * ratio * 0.92, "e", 0.17, seed + k, h=0.04, growl=0.45), 0.05 + delay, 0.5 * g)
     base = r.uniform(300, 350)
@@ -614,7 +614,7 @@ def rollback(seed: int) -> np.ndarray:
     Schnapp, und alle stehen wieder dort, wo sie waren."""
     r = rng(seed)
     src = np.zeros(int(1.4 * SR))
-    mix_at(src, syllable(170, 140, "a", 0.3, seed, growl=0.5), 0.1, 0.5)
+    mix_at(src, syllable(118, 98, "a", 0.3, seed, growl=0.55), 0.1, 0.5)
     mix_at(src, impact(int(0.8 * SR), seed + 1, 200, 3000, 0.3), 0.3, 0.4)
     for k in range(5):
         mix_at(src, chip(r.uniform(300, 900), 0.15, 0.5, 0.06), 0.1 + k * 0.2, 0.25)
@@ -655,7 +655,7 @@ def crash(seed: int) -> np.ndarray:
     (ein Schnipsel von 40 ms, immer wieder), bricht hart ab, und nach einer Stille kommen zwei tiefe Fehlertöne."""
     r = rng(seed)
     pre = np.zeros(int(0.5 * SR))
-    mix_at(pre, syllable(190, 230, "a", 0.32, seed, h=0.04, growl=0.6), 0.0, 0.8)
+    mix_at(pre, syllable(130, 160, "a", 0.32, seed, h=0.04, growl=0.6), 0.0, 0.8)
     for k in range(4):
         mix_at(pre, chip(r.uniform(300, 1200), 0.1, 0.25, 0.05), 0.05 + k * 0.09, 0.25)
     mix_at(pre, lp(crush(noise(int(0.5 * SR), seed + 1), 4, 6), 5000) * 0.15, 0.0)
@@ -690,16 +690,16 @@ def restart(seed: int) -> np.ndarray:
 
 
 def revive(seed: int) -> np.ndarray:
-    """Die Wiederherstellung (genau auf die Ticks ihrer Vorführung gelegt): ein Aufschrei, der im Puffer hängen bleibt und
-    abreißt („Schwerer Ausnahmefehler“), der Ton läuft aus – bei 1,5 s zerspringt sie in Pixel. Leises Suchen (Knistern,
+    """Die Wiederherstellung (genau auf die Ticks seiner Vorführung gelegt): ein Aufschrei, der im Puffer hängen bleibt und
+    abreißt („Schwerer Ausnahmefehler“), der Ton läuft aus – bei 1,5 s zerspringt er in Pixel. Leises Suchen (Knistern,
     Datenzirpen), bei 2,4 s „Sicherung gefunden“ (zwei steigende Töne), dann füllt sich die Leiste: eine Tonfolge, die immer
-    schneller steigt, ein anschwellendes Brummen und ein rückwärts laufender Sog – bei 5,6 s setzt sie sich als Anni 2.0
+    schneller steigt, ein anschwellendes Brummen und ein rückwärts laufender Sog – bei 5,6 s setzt er sich als Anni 2.0
     zusammen: ein tiefer Schlag und ein finsterer, verminderter Akkord."""
     r = rng(seed)
     y = np.zeros(int(7.2 * SR))
     # Ausnahmefehler: Aufschrei, hängender Puffer, Abriss
     pre = np.zeros(int(0.45 * SR))
-    mix_at(pre, syllable(200, 240, "a", 0.3, seed, h=0.03, growl=0.6), 0.0, 0.8)
+    mix_at(pre, syllable(135, 165, "a", 0.3, seed, h=0.03, growl=0.6), 0.0, 0.8)
     mix_at(pre, chip(note(6, 220.0), 0.3, 0.25, 0.2), 0.02, 0.2)
     pre = scramble(pre, seed + 1, 0.03, 0.4)
     mix_at(y, pre, 0.0)
@@ -710,9 +710,9 @@ def revive(seed: int) -> np.ndarray:
     src = np.zeros(int(0.6 * SR))
     for s_, a in ((0, 1.0), (3, 0.8), (6, 0.7)):
         mix_at(src, chip(note(s_, 220.0), 0.6, 0.5, 0.5), 0.0, 0.12 * a)
-    mix_at(src, troll(int(0.5 * SR), 170, 150, "o", seed + 3, growl=0.5), 0.0, 0.35)
+    mix_at(src, troll(int(0.5 * SR), 115, 100, "o", seed + 3, growl=0.55), 0.0, 0.35)
     mix_at(y, varispeed(src, curve(int(len(src) / 0.5), [(0, 1.0), (1, 0.06)])), 0.85, 0.6)
-    # bei 1,5 s: sie zerspringt in Pixel
+    # bei 1,5 s: er zerspringt in Pixel
     t0 = 1.5
     mix_at(y, thud(int(0.9 * SR), 110, 32, 0.22), t0, 0.9)
     mix_at(y, lp(crush(impact(int(0.5 * SR), seed + 4, 300, 7000, 0.09), 4, 4), 7500), t0, 0.6)

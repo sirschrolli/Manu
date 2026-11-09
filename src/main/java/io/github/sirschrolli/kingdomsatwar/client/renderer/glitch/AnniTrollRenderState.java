@@ -2,15 +2,15 @@ package io.github.sirschrolli.kingdomsatwar.client.renderer.glitch;
 
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
-/** Was Annis Modell zum Zeichnen braucht (auch für ihre Klone und Nachbilder). */
+/** Was Annis Modell zum Zeichnen braucht (auch für seine Klone und Nachbilder). */
 public class AnniTrollRenderState extends LivingEntityRenderState {
     public int attack;
     public float attackTime;
-    /** Hängt sie gerade (Ladekreis)? */
+    /** Hängt er gerade (Ladekreis)? */
     public boolean lagging;
     /** Ticks seit Beginn des Hängens (oder -1). */
     public float lagTime = -1.0f;
-    /** Ticks seit dem Loslassen (oder -1, solange sie hängt). */
+    /** Ticks seit dem Loslassen (oder -1, solange er hängt). */
     public float sinceLag = 999.0f;
     public boolean glitchMode;
     /** Anni 2.0 (aus der Sicherung wiederhergestellt): rote Augen, noch mehr Bildfehler. */

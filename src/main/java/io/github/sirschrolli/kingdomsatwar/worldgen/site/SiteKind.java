@@ -72,7 +72,13 @@ public enum SiteKind implements StringRepresentable {
      * Bibliothek, Armillarsphäre, Reliquienkammer (meist mit Elytren), Kupferkuppel mit Fernrohr und zwei Seitentürmen;
      * Schreinlinge halten Wache (an Stelle der Endstadt und des Endschiffs). Ganz zuletzt gebaut.
      */
-    STARWATCH(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    STARWATCH(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Fehlerzone: ein kaputtgegangenes Stück Oberwelt – eine Arena aus den falschen Biomen, schwebende Chunkfetzen,
+     * ausgestanzte Schächte, gestreckte Blöcke und lose Pixel; in der Mitte der Fehlerkern, aus dem Anni der Troll geladen
+     * wird (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Zuletzt gebaut, damit auch die Bäume ringsum „kaputtgehen“.
+     */
+    ERROR_ZONE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

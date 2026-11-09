@@ -27,8 +27,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Ein Fehler-Klon Annis: eine Kopie von ihr in nur einer Farbe (rot, grün, blau, magenta oder cyan), etwas kleiner,
- * durchscheinend und flackernd. Er rennt auf ihr Ziel zu und „stürzt ab“, sobald er jemanden erreicht (oder nach
+ * Ein Fehler-Klon Annis: eine Kopie von ihm in nur einer Farbe (rot, grün, blau, magenta oder cyan), etwas kleiner,
+ * durchscheinend und flackernd. Er rennt auf sein Ziel zu und „stürzt ab“, sobald er jemanden erreicht (oder nach
  * dreieinhalb Sekunden): ein Knall aus Pixeln. Ein einziger Treffer lässt ihn zerplatzen, bevor er abstürzt. Keine Beute,
  * keine Erfahrung; wird nicht gespeichert.
  */

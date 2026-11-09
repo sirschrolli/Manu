@@ -15,8 +15,8 @@ import net.minecraft.util.ARGB;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Ein Fehler-Klon: Annis Gestalt in nur einer Farbe, leuchtend und durchscheinend, etwas kleiner als sie; er flackert und
- * ruckt wie sie, und manchmal ist er nur fehlende Textur.
+ * Ein Fehler-Klon: Annis Gestalt in nur einer Farbe, leuchtend und durchscheinend, etwas kleiner als er; er flackert und
+ * ruckt wie er, und manchmal ist er nur fehlende Textur.
  */
 public class GlitchCloneRenderer extends MobRenderer<GlitchCloneEntity, AnniTrollRenderState, AnniTrollModel> {
     private static final float SCALE = AnniTrollRenderer.SCALE * 0.8f;

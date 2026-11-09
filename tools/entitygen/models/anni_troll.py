@@ -1,13 +1,14 @@
 """
-Anni der Troll: eine riesige, bucklige Trollfrau, die in einer Fehlerzone der Oberwelt haust – dort, wo die Welt selbst
-kaputtgegangen ist, und Anni gleich mit. Moosgraue, warzige Haut, ein gewaltiger Schädel mit Unterbiss, zwei Hauern und
-einer Knollennase, Segelohren mit goldenen Ringen und – wie bei einem Trollpüppchen – ein hoch aufragender Haarschopf,
-der genau in der Mitte die Farbe wechselt: links Magenta, rechts Cyan (ein Farbfehler, der an ihr hängen geblieben ist).
-Über dem Schopf schweben drei Pixel als Krone (rot, grün, blau). Sie trägt einen Kittel aus Flicken mit einem Gürtel, auf
-dessen Schnalle ein Warnzeichen sitzt; ein Flicken ist ein Stück „fehlender Textur“. Ihr linker Unterarm ist in drei
-Brocken zerfallen, die mit kleinen Lücken übereinander schweben, ihr rechter Unterschenkel und Fuß sind nur noch fehlende
-Textur, und ihr rechtes Auge ist ein flimmernder Bildschirm. In der rechten Hand schleift sie den Bannhammer: einen
-Steinklotz mit Eisenbändern an einem Baumstamm-Stiel – dessen vordere Hälfte ebenfalls fehlt.
+Anni der Troll: ein riesiger, buckliger Troll, der in einer Fehlerzone der Oberwelt haust – dort, wo die Welt selbst
+kaputtgegangen ist, und Anni gleich mit. Moosgraue, warzige Haut mit Bartstoppeln, ein gewaltiger Schädel mit Unterbiss,
+zwei Hauern und einer Knollennase, Segelohren mit goldenen Ringen und – wie bei einem Trollpüppchen – ein hoch
+aufragender Haarschopf, der genau in der Mitte die Farbe wechselt: links Magenta, rechts Cyan (ein Farbfehler, der an
+ihm hängen geblieben ist). Über dem Schopf schweben drei Pixel als Krone (rot, grün, blau). Er trägt einen Kittel aus
+Flicken mit einem Gürtel, auf dessen Schnalle ein Warnzeichen sitzt; ein Flicken ist ein Stück „fehlender Textur“. Sein
+linker Unterarm ist in drei Brocken zerfallen, die mit kleinen Lücken übereinander schweben, sein rechter Unterschenkel
+und Fuß sind nur noch fehlende Textur, und sein rechtes Auge ist ein flimmernder Bildschirm. In der rechten Hand schleift
+er den Bannhammer: einen Steinklotz mit Eisenbändern an einem Baumstamm-Stiel – dessen vordere Hälfte ebenfalls fehlt.
+Als Anni 2.0 (aus der Sicherung wiederhergestellt) glühen Auge und Bildschirm rot.
 
 Im Spiel 1,2-fach vergrößert (gut vier Blöcke bis zur Haarspitze). Knochen-Namen werden in AnniTrollModel (Java) für die
 Animationen verwendet.
@@ -27,6 +28,7 @@ PALETTES = {
         "skin": ramp("#20302c", "#9fb49c", steps=8),
         "wart": ramp("#1a2622", "#6e8668", steps=5),
         "blush": ramp("#5a3a3a", "#d8968e", steps=5),
+        "stubble": ramp("#141c18", "#4a5a4c", steps=5),
         "nose": ramp("#3a3a34", "#c8a49a", steps=6),
         "tusk": ramp("#5a4e3a", "#fff6dc", steps=6),
         "mouth": ramp("#0c0606", "#5a2424", steps=4),
@@ -169,7 +171,7 @@ def build() -> Model:
         m.cube(shin, (-3.5, 0, -3.5), (7.0, 7.4, 7.0), "glitch" if glitched else "leg", tag="calf")
         m.cube(shin, (-4.1, 6.6, -7.4), (8.2, 2.2, 10.8), "glitch" if glitched else "foot", tag="foot")
 
-    # --- Pixel, die sich von ihr gelöst haben und um sie schweben
+    # --- Pixel, die sich von ihm gelöst haben und um ihn schweben
     for name, parent, pos, size, mat in PIXELS:
         m.bone(name, parent, pivot=pos)
         h = size / 2
@@ -251,13 +253,11 @@ def _face(ctx: Ctx):
         return pick(ctx.pal["mouth"], 0.3 if t == 21 else 0.15)
     if t >= 21:
         return pick(ctx.pal["skin"], v - 0.12)
-    # Wangen: Rouge und je eine Warze
-    for cx, cy in ((4.2, 17.0), (21.8, 17.0)):
-        d = ((s + 0.5 - cx) / 3.4) ** 2 + ((t + 0.5 - cy) / 2.2) ** 2
-        if d < 1.0:
-            return mix(pick(ctx.pal["skin"], v), pick(ctx.pal["blush"], 0.72), 0.45 * (1.0 - d) + 0.12)
+    # Warzen auf den Wangen, darunter Bartstoppeln bis zum Mund
     if (s, t) in ((2, 15), (23, 16), (22, 15)):
         return pick(ctx.pal["wart"], 0.75)
+    if t >= 16 and _stubble(ctx, 0.5 if t == 16 else 0.38):
+        return pick(ctx.pal["stubble"], 0.3 + hash01(ctx.u, ctx.v, "stb") * 0.25)
     # Lachfalten neben der Nase, die Oberlippe
     if t in (16, 17, 18) and s in (7, 18):
         v -= 0.14
@@ -320,8 +320,13 @@ def _nose(ctx: Ctx):
     return mix(pick(ctx.pal["skin"], v), pick(ctx.pal["nose"], v), red)
 
 
+def _stubble(ctx: Ctx, threshold: float) -> bool:
+    """Ein Bartstoppel an dieser Stelle? (Je kleiner die Schwelle, desto dichter.)"""
+    return hash01(ctx.u, ctx.v, "stubble") > threshold
+
+
 def _jaw(ctx: Ctx):
-    """Unterkiefer: oben die untere Zahnreihe (schief), darunter die Lippe und ein kräftiges Kinn."""
+    """Unterkiefer: oben die untere Zahnreihe (schief), darunter die Lippe und ein kräftiges, stoppeliges Kinn."""
     if ctx.face == "front":
         s, t, w = ctx.s, ctx.t, ctx.w
         if t == 0:
@@ -332,6 +337,10 @@ def _jaw(ctx: Ctx):
             return pick(ctx.pal["nose"], 0.42)                   # Unterlippe
         if t == 5 and 8 <= s <= w - 9:
             return pick(ctx.pal["skin"], 0.45)                   # Kinnfurche
+        if t >= 2 and _stubble(ctx, 0.36):
+            return pick(ctx.pal["stubble"], 0.3 + hash01(ctx.u, ctx.v, "stb") * 0.25)
+    if ctx.face in ("west", "east", "bottom") and _stubble(ctx, 0.5):
+        return pick(ctx.pal["stubble"], 0.35 + hash01(ctx.u, ctx.v, "stb") * 0.2)
     if ctx.face == "top":
         return pick(ctx.pal["mouth"], 0.35 if ctx.t > 2 else 0.2)
     return _skin(ctx)

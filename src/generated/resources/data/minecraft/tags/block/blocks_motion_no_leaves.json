@@ -317,6 +317,9 @@
     "kingdomsatwar:starstone",
     "kingdomsatwar:stage_hat",
     "kingdomsatwar:velvet_curtain",
-    "kingdomsatwar:velvet_curtain_fringe"
+    "kingdomsatwar:velvet_curtain_fringe",
+    "kingdomsatwar:error_core",
+    "kingdomsatwar:missing_block",
+    "kingdomsatwar:static_block"
   ]
 }

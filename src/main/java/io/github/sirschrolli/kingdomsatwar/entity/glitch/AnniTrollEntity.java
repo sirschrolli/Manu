@@ -63,33 +63,36 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Anni der Troll: eine riesige Trollfrau, die in einer Fehlerzone der Oberwelt haust – dort, wo die Welt kaputtgegangen
- * ist, und Anni mit ihr. Sie glitcht wie ein Spielfehler: Sie flackert und ruckelt, hängt mitten in der Bewegung fest und
- * holt dann ruckartig auf, springt durch den Raum, zerfällt in Farben und läuft, wenn sie feststeckt, einfach durch Wände.
- * Manche Treffer werden nicht registriert. Sie kämpft mit ihrem Bannhammer und mit Fehlern:
+ * Anni der Troll: ein riesiger Troll, der in einer Fehlerzone der Oberwelt haust – dort, wo die Welt kaputtgegangen ist,
+ * und Anni mit ihr. Er glitcht wie ein Spielfehler: Er flackert und ruckelt, hängt mitten in der Bewegung fest und holt
+ * dann ruckartig auf, springt durch den Raum, zerfällt in Farben und läuft, wenn er feststeckt, einfach durch Wände.
+ * Manche Treffer werden nicht registriert. Er kämpft mit seinem Bannhammer und mit Fehlern:
  * <ul>
- *     <li><b>Lag-Hieb</b> – sie holt aus und hängt fest (über ihr dreht sich ein Ladekreis); wenn er verschwindet, kracht
+ *     <li><b>Lag-Hieb</b> – er holt aus und hängt fest (über ihm dreht sich ein Ladekreis); wenn der verschwindet, kracht
  *     der Hammer herab, eine Schockwelle läuft über den Boden (springen!);</li>
- *     <li><b>Gummiband</b> – sie springt flackernd drei-, viermal um ihr Ziel herum und schlägt dann neben ihm zu;</li>
- *     <li><b>Fehler-Klone</b> – sie verdoppelt sich: rote, grüne und blaue Kopien rennen los und stürzen ab (ein Treffer lässt
+ *     <li><b>Gummiband</b> – er springt flackernd drei-, viermal um sein Ziel herum und schlägt dann neben ihm zu;</li>
+ *     <li><b>Fehler-Klone</b> – er verdoppelt sich: rote, grüne und blaue Kopien rennen los und stürzen ab (ein Treffer lässt
  *     sie zerplatzen);</li>
- *     <li><b>Fehlende Textur</b> – unter ihrem Ziel wird der Boden zu Magenta und Schwarz: Wer darin steht, hängt fest und
+ *     <li><b>Fehlende Textur</b> – unter seinem Ziel wird der Boden zu Magenta und Schwarz: Wer darin steht, hängt fest und
  *     nimmt Schaden;</li>
  *     <li><b>Pixelregen</b> – leuchtende Pixel stürzen vom Himmel auf markierte Stellen;</li>
- *     <li><b>Rückruck</b> – sie merkt sich, wo alle stehen, und reißt sie drei Sekunden später dorthin zurück – dann stürmt sie
+ *     <li><b>Rückruck</b> – er merkt sich, wo alle stehen, und reißt sie drei Sekunden später dorthin zurück – dann stürmt er
  *     los;</li>
- *     <li><b>Zeilenfehler</b> – eine leuchtende Zeile kreist um sie: die rote dicht über dem Boden (springen!), die blaue in
+ *     <li><b>Zeilenfehler</b> – eine leuchtende Zeile kreist um ihn: die rote dicht über dem Boden (springen!), die blaue in
  *     Kopfhöhe (ducken!);</li>
- *     <li><b>Absturz</b> (einmal, unter halber Kraft) – „Anni.exe reagiert nicht.“: Sie erstarrt, dann startet sie neu – eine
- *     Welle aus Pixeln rollt über den Boden – und kämpft im <b>Fehlermodus</b> weiter: schneller, härter, mehr Klone.</li>
+ *     <li><b>Absturz</b> (einmal, unter halber Kraft) – „Anni.exe reagiert nicht.“: Er erstarrt, dann startet er neu – eine
+ *     Welle aus Pixeln rollt über den Boden – und kämpft im <b>Fehlermodus</b> weiter: schneller, härter, mehr Klone;</li>
+ *     <li><b>Wiederherstellung</b> (einmal, statt zu sterben) – „Schwerer Ausnahmefehler“: Er zerfällt in Pixel, lädt eine
+ *     Sicherung und kehrt als <b>Anni 2.0</b> zurück – rote Augen, eine neue, volle Leiste, noch schneller und härter, mit
+ *     dem <b>Speedhack</b> (dreimal rast er geradeaus durch die Arena) und verstärkten Angriffen.</li>
  * </ul>
- * Findet sie niemanden mehr, zerfällt sie nach einer halben Minute in Pixel und kehrt in ihren Fehlerkern zurück. Besiegt
- * stürzt sie endgültig ab und zerfällt in Pixel; der Kern erlischt (ein Redstoneblock startet ihn neu).
+ * Findet er niemanden mehr, zerfällt er nach einer halben Minute in Pixel und kehrt in seinen Fehlerkern zurück. Besiegt
+ * stürzt er endgültig ab und zerfällt in Pixel; der Kern erlischt (ein Redstoneblock startet ihn neu).
  */
 public class AnniTrollEntity extends Monster {
     public static final float MAX_HEALTH = 1500.0f;
     public static final int SPAWN_TICKS = 90;
-    /** In diesem Tick des Ladens setzt sie sich zusammen (davor fliegen nur Pixel). */
+    /** In diesem Tick des Ladens setzt er sich zusammen (davor fliegen nur Pixel). */
     public static final int SPAWN_ASSEMBLE = 46;
     public static final int DEATH_TICKS = 80;
     public static final int SMASH_RAISE = 12;
@@ -106,16 +109,16 @@ public class AnniTrollEntity extends Monster {
     public static final int SCAN_HIGH = 36;
     public static final int CRASH_RESTART = 70;
     public static final int CRASH_WAVE = 80;
-    /** Wiederherstellung: In diesem Tick zerfällt sie in Pixel … */
+    /** Wiederherstellung: In diesem Tick zerfällt er in Pixel … */
     public static final int REVIVE_SHATTER = 30;
-    /** … hier ist die Sicherung gefunden, von hier bis REVIVE_FILLED füllt sich ihre Leiste … */
+    /** … hier ist die Sicherung gefunden, von hier bis REVIVE_FILLED füllt sich seine Leiste … */
     public static final int REVIVE_FOUND = 48;
     public static final int REVIVE_FILL = 56;
     public static final int REVIVE_FILLED = 104;
-    /** … hier setzt sie sich als Anni 2.0 zusammen, und hier rollt die Welle los. */
+    /** … hier setzt er sich als Anni 2.0 zusammen, und hier rollt die Welle los. */
     public static final int REVIVE_ASSEMBLE = 112;
     public static final int REVIVE_WAVE = 118;
-    /** Wie viel ihrer Lebenskraft die Sicherung enthält (Anni 2.0 hat eine volle, aber kürzere Leiste). */
+    /** Wie viel seiner Lebenskraft die Sicherung enthält (Anni 2.0 hat eine volle, aber kürzere Leiste). */
     public static final double BACKUP_HEALTH = 0.6;
     /** Speedhack (nur Anni 2.0): erster Ansturm, Abstand der Anstürme, Zielen und Rasen (Ticks), Zahl der Anstürme. */
     public static final int HACK_FIRST = 6;
@@ -130,9 +133,9 @@ public class AnniTrollEntity extends Monster {
 
     public enum Attack {
         NONE(0),
-        /** Laden: Pixel fliegen zusammen, „Lädt …“, dann setzt sie sich zusammen und lacht. */
+        /** Laden: Pixel fliegen zusammen, „Lädt …“, dann setzt er sich zusammen und lacht. */
         SPAWN(SPAWN_TICKS),
-        /** Lag-Hieb (die Dauer hängt davon ab, wie lange sie hängt). */
+        /** Lag-Hieb (die Dauer hängt davon ab, wie lange er hängt). */
         SMASH(48),
         RUBBERBAND(56),
         CLONES(44),
@@ -144,11 +147,11 @@ public class AnniTrollEntity extends Monster {
         CRASH(110),
         /** Troll-Lachen: eine kurze Pause zwischen den Angriffen. */
         LAUGH(30),
-        /** Verbindung getrennt: Sie zerfällt in Pixel und kehrt in den Kern zurück. */
+        /** Verbindung getrennt: Er zerfällt in Pixel und kehrt in den Kern zurück. */
         EXIT(46),
-        /** Speedhack (nur Anni 2.0): Sie zielt (Ladekreis) und rast dreimal geradeaus los. */
+        /** Speedhack (nur Anni 2.0): Er zielt (Ladekreis) und rast dreimal geradeaus los. */
         SPEEDHACK(HACK_FIRST + HACK_DASHES * HACK_STEP + 14),
-        /** Wiederherstellung (einmal, statt zu sterben): Sie lädt eine Sicherung und kehrt als Anni 2.0 zurück. */
+        /** Wiederherstellung (einmal, statt zu sterben): Er lädt eine Sicherung und kehrt als Anni 2.0 zurück. */
         REVIVE(150);
 
         public final int duration;
@@ -159,7 +162,7 @@ public class AnniTrollEntity extends Monster {
     }
 
     private static final EntityDataAccessor<Integer> DATA_ATTACK = SynchedEntityData.defineId(AnniTrollEntity.class, EntityDataSerializers.INT);
-    /** Hängt sie gerade (Ladekreis über dem Kopf)? */
+    /** Hängt er gerade (Ladekreis über dem Kopf)? */
     private static final EntityDataAccessor<Boolean> DATA_LAG = SynchedEntityData.defineId(AnniTrollEntity.class, EntityDataSerializers.BOOLEAN);
     /** Fehlermodus (nach dem Absturz): stärkere Glitches, schneller, härter. */
     private static final EntityDataAccessor<Boolean> DATA_GLITCH = SynchedEntityData.defineId(AnniTrollEntity.class,
@@ -182,15 +185,15 @@ public class AnniTrollEntity extends Monster {
     private int cooldown = 30;
     private int idleTicks;
     private boolean crashed;
-    /** Hat sie ihre Sicherung schon geladen (dann stirbt sie beim nächsten Mal wirklich)? */
+    /** Hat er seine Sicherung schon geladen (dann stirbt er beim nächsten Mal wirklich)? */
     private boolean revived;
     private @Nullable BlockPos home;
-    // Speedhack: wohin sie rast
+    // Speedhack: wohin er rast
     private Vec3 dash = Vec3.ZERO;
-    // Lag-Hieb: wann sie aufhört zu hängen und wann der Hammer trifft
+    // Lag-Hieb: wann er aufhört zu hängen und wann der Hammer trifft
     private int lagUntil;
     private int slamAt;
-    // Gummiband: wohin sie springt, zuletzt neben das Ziel
+    // Gummiband: wohin er springt, zuletzt neben das Ziel
     private int hops;
     private Vec3 lunge = Vec3.ZERO;
     // Rückruck: wo die Spieler standen
@@ -206,7 +209,7 @@ public class AnniTrollEntity extends Monster {
     private int stuckTicks;
     private int clipTicks;
     private int clientAttackStart;
-    /** Nur im Client: wann sie zuletzt zu hängen begann und wann sie wieder losließ (für die Animationen). */
+    /** Nur im Client: wann er zuletzt zu hängen begann und wann er wieder losließ (für die Animationen). */
     private int clientLagStart = -100;
     private int clientLagEnd = -100;
 
@@ -250,7 +253,7 @@ public class AnniTrollEntity extends Monster {
         return i >= 0 && i < Attack.values().length ? Attack.values()[i] : Attack.NONE;
     }
 
-    /** Hängt sie gerade fest (Ladekreis)? */
+    /** Hängt er gerade fest (Ladekreis)? */
     public boolean isLagging() {
         return this.entityData.get(DATA_LAG);
     }
@@ -273,7 +276,7 @@ public class AnniTrollEntity extends Monster {
         return this.entityData.get(DATA_V2);
     }
 
-    /** Hat sie ihre Sicherung schon verbraucht? */
+    /** Hat er seine Sicherung schon verbraucht? */
     public boolean isRevived() {
         return this.revived;
     }
@@ -287,12 +290,12 @@ public class AnniTrollEntity extends Monster {
         return this.tickCount - this.clientAttackStart + partialTicks;
     }
 
-    /** Ticks, seit sie zuletzt losließ (nach dem Hängen; im Client, für den Hieb des Lag-Hiebs). */
+    /** Ticks, seit er zuletzt losließ (nach dem Hängen; im Client, für den Hieb des Lag-Hiebs). */
     public float sinceLag(float partialTicks) {
         return this.isLagging() ? -1.0f : this.tickCount - this.clientLagEnd + partialTicks;
     }
 
-    /** Ticks, seit sie zu hängen begann (im Client). */
+    /** Ticks, seit er zu hängen begann (im Client). */
     public float lagTime(float partialTicks) {
         return this.isLagging() ? this.tickCount - this.clientLagStart + partialTicks : -1.0f;
     }
@@ -316,12 +319,12 @@ public class AnniTrollEntity extends Monster {
         return this.home;
     }
 
-    /** Bindet sie an ihren Fehlerkern (dort wird sie geladen, dorthin kehrt sie zurück). */
+    /** Bindet ihn an seinen Fehlerkern (dort wird er geladen, dorthin kehrt er zurück). */
     public void bindTo(BlockPos core) {
         this.home = core.immutable();
     }
 
-    /** Sie wird geladen: Pixel fliegen zusammen, dann setzt sie sich zusammen (bis dahin unverwundbar). */
+    /** Er wird geladen: Pixel fliegen zusammen, dann setzt er sich zusammen (bis dahin unverwundbar). */
     public void load() {
         this.setHidden(true);
         this.begin(Attack.SPAWN);
@@ -440,8 +443,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Beim Laden, Abstürzen (bis zum Neustart) und Gehen trifft sie nichts; manche Geschosse gehen einfach durch sie
-     * hindurch („Treffer nicht registriert“). Ein Hieb lässt sie manchmal ein Stück zur Seite springen.
+     * Beim Laden, Abstürzen (bis zum Neustart) und Gehen trifft ihn nichts; manche Geschosse gehen einfach durch ihn
+     * hindurch („Treffer nicht registriert“). Ein Hieb lässt ihn manchmal ein Stück zur Seite springen.
      */
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
@@ -462,6 +465,8 @@ public class AnniTrollEntity extends Monster {
             this.notRegistered(level, shot.position());
             return false;
         }
+        // mehr Lebenskraft, als die Leiste von Minecraft fasst (höchstens 1024): Treffer zählen entsprechend weniger
+        amount *= this.healthScale();
         boolean hurt = super.hurtServer(level, source, this.isVersion2() ? amount * 0.85f : this.isGlitchMode() ? amount * 0.9f : amount);
         if (hurt && source.getEntity() instanceof LivingEntity attacker && attacker != this && this.canStrike(attacker)) {
             if (!(this.getTarget() instanceof Player)) {
@@ -480,7 +485,7 @@ public class AnniTrollEntity extends Monster {
         this.sound(level, ModSounds.ANNI_MISS.get(), 1.2f, 0.9f + this.random.nextFloat() * 0.3f);
     }
 
-    /** Sie springt drei, vier Blöcke zur Seite (ein Nachbild bleibt stehen). */
+    /** Er springt drei, vier Blöcke zur Seite (ein Nachbild bleibt stehen). */
     private void sidestep(ServerLevel level, LivingEntity from) {
         Vec3 away = this.position().subtract(from.position()).multiply(1.0, 0.0, 1.0);
         away = away.lengthSqr() < 1.0e-4 ? this.forward().scale(-1.0) : away.normalize();
@@ -490,7 +495,7 @@ public class AnniTrollEntity extends Monster {
 
     @Override
     public void tick() {
-        // durch Wände laufen, solange sie „hindurchclippt“
+        // durch Wände laufen, solange er „hindurchclippt“
         this.noPhysics = this.clipTicks > 0;
         super.tick();
         if (this.level().isClientSide()) {
@@ -498,7 +503,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Pixel lösen sich von ihr; im Fehlermodus mehr, beim Hängen flimmern Farbsäume um sie. */
+    /** Pixel lösen sich von ihm; im Fehlermodus mehr, beim Hängen flimmern Farbsäume um ihn. */
     private void clientEffects() {
         if (this.isHidden()) {
             return;
@@ -598,8 +603,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Gehört sie (noch) zu ihrem Kern? Ist dort inzwischen eine andere Anni gebunden (etwa nach dem Neuladen der Welt),
-     * vergeht diese hier; ist der Kern fort, bleibt sie frei.
+     * Gehört er (noch) zu seinem Kern? Ist dort inzwischen eine andere Anni gebunden (etwa nach dem Neuladen der Welt),
+     * vergeht dieser hier; ist der Kern fort, bleibt er frei.
      */
     private boolean strayed(ServerLevel level) {
         if (this.home == null || !level.isLoaded(this.home)) {
@@ -618,8 +623,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Wen ihre Angriffe treffen: Spieler (nicht im Kreativ- oder Zuschauermodus), ihre Begleiter und Soldaten, Tiere – aber
-     * keine Monster (außer sie greifen sie an), nicht sich selbst, nicht ihre Klone, keine Rüstungsständer.
+     * Wen seine Angriffe treffen: Spieler (nicht im Kreativ- oder Zuschauermodus), ihre Begleiter und Soldaten, Tiere – aber
+     * keine Monster (außer sie greifen ihn an), nicht sich selbst, nicht seine Klone, keine Rüstungsständer.
      */
     boolean canStrike(LivingEntity entity) {
         if (entity == this || !entity.isAlive() || entity instanceof AnniTrollEntity || entity instanceof GlitchCloneEntity
@@ -650,8 +655,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Niemand da: zurück zum Kern, erholen – und nach einer halben Minute „Verbindung getrennt“: Sie zerfällt in Pixel und
-     * kehrt in den Kern zurück. Ist sie zu weit fortgelaufen, ruckt sie zurück.
+     * Niemand da: zurück zum Kern, erholen – und nach einer halben Minute „Verbindung getrennt“: Er zerfällt in Pixel und
+     * kehrt in den Kern zurück. Ist er zu weit fortgelaufen, ruckt er zurück.
      */
     private void idle(ServerLevel level) {
         if (this.attack != Attack.NONE) {
@@ -678,8 +683,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Auf ihr Ziel zu – stampfend, mit Rucklern: Alle paar Sekunden hängt sie fest (Ladekreis) und ruckt dann ein Stück
-     * vorwärts. Kommt sie nicht weiter, läuft sie durch die Wand.
+     * Auf sein Ziel zu – stampfend, mit Rucklern: Alle paar Sekunden hängt er fest (Ladekreis) und ruckt dann ein Stück
+     * vorwärts. Kommt er nicht weiter, läuft er durch die Wand.
      */
     private void chase(ServerLevel level, LivingEntity target) {
         this.getLookControl().setLookAt(target, 30.0f, 30.0f);
@@ -707,7 +712,7 @@ public class AnniTrollEntity extends Monster {
         } else {
             this.getNavigation().stop();
         }
-        // steckt sie fest? dann läuft sie durch die Wand
+        // steckt er fest? dann läuft er durch die Wand
         if (this.tickCount % 20 == 0) {
             if (distance > 5.0 && this.position().distanceToSqr(this.lastSpot) < 1.0 && this.clipTicks == 0) {
                 this.stuckTicks += 20;
@@ -730,7 +735,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Durch Wände: zwei Sekunden lang geht sie geradewegs auf ihr Ziel zu, durch alles hindurch. */
+    /** Durch Wände: zwei Sekunden lang geht er geradewegs auf sein Ziel zu, durch alles hindurch. */
     private void startClip(ServerLevel level, LivingEntity target) {
         this.clipTicks = 40;
         this.getNavigation().stop();
@@ -738,7 +743,7 @@ public class AnniTrollEntity extends Monster {
         this.pixelBurst(level, this.position().add(0.0, 2.0, 0.0), 24, 1.0);
     }
 
-    /** Ende des Durchclippens: steckt sie noch in Blöcken, schiebt es sie nach oben heraus (oder sie clippt noch ein Stück). */
+    /** Ende des Durchclippens: steckt er noch in Blöcken, schiebt es ihn nach oben heraus (oder er clippt noch ein Stück). */
     private void endClip(ServerLevel level) {
         this.noPhysics = false;
         if (level.noCollision(this)) {
@@ -791,7 +796,7 @@ public class AnniTrollEntity extends Monster {
     // ------------------------------------------------------------------ Laden und Gehen
 
     /**
-     * Laden: Pixel fliegen von allen Seiten herbei und kreisen um den Kern, „Lädt …“ – dann setzt sie sich mit einem Ruck
+     * Laden: Pixel fliegen von allen Seiten herbei und kreisen um den Kern, „Lädt …“ – dann setzt er sich mit einem Ruck
      * zusammen, flackert, reckt den Hammer und lacht. Der Titel erscheint.
      */
     private void tickSpawn(ServerLevel level) {
@@ -839,7 +844,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Verbindung getrennt: Sie flackert, zerfällt Stück für Stück in Pixel und ist fort; der Kern wartet wieder. */
+    /** Verbindung getrennt: Er flackert, zerfällt Stück für Stück in Pixel und ist fort; der Kern wartet wieder. */
     private void tickExit(ServerLevel level) {
         int t = ++this.attackTick;
         this.getNavigation().stop();
@@ -867,8 +872,8 @@ public class AnniTrollEntity extends Monster {
     // ------------------------------------------------------------------ Angriffe
 
     /**
-     * Lag-Hieb: Sie holt aus – und hängt fest, über ihrem Kopf dreht sich ein Ladekreis (mal kurz, mal lang). Verschwindet
-     * er, kracht der Hammer zwei Ticks später herab: Wer vor ihr steht, wird schwer getroffen, und eine Schockwelle läuft
+     * Lag-Hieb: Er holt aus – und hängt fest, über seinem Kopf dreht sich ein Ladekreis (mal kurz, mal lang). Verschwindet
+     * der, kracht der Hammer zwei Ticks später herab: Wer vor ihm steht, wird schwer getroffen, und eine Schockwelle läuft
      * über den Boden (wer springt, entgeht ihr).
      */
     private void tickSmash(ServerLevel level, LivingEntity target) {
@@ -924,14 +929,41 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Wie oft sie beim Gummiband springt (im Fehlermodus einmal mehr, als Anni 2.0 zweimal mehr). */
+    /**
+     * Seine Lebenskraft, wie sie gedacht ist – ohne die Obergrenze, die Minecraft der Lebensleiste setzt (1024): Grundwert
+     * mit allen Zuschlägen (etwa der Härte von Kingdoms at War und der kürzeren Leiste von Anni 2.0).
+     */
+    public double designedMaxHealth() {
+        AttributeInstance health = this.getAttribute(Attributes.MAX_HEALTH);
+        if (health == null) {
+            return this.getMaxHealth();
+        }
+        double add = health.getBaseValue();
+        double base = 0.0;
+        double total = 1.0;
+        for (AttributeModifier modifier : health.getModifiers()) {
+            switch (modifier.operation()) {
+                case ADD_VALUE -> add += modifier.amount();
+                case ADD_MULTIPLIED_BASE -> base += modifier.amount();
+                case ADD_MULTIPLIED_TOTAL -> total *= 1.0 + modifier.amount();
+            }
+        }
+        return Math.max(1.0, add * (1.0 + base) * total);
+    }
+
+    /** Um wie viel ein Treffer zählt: die echte Leiste geteilt durch die gedachte (1, solange sie hineinpasst). */
+    public float healthScale() {
+        return (float) Math.min(1.0, this.getMaxHealth() / this.designedMaxHealth());
+    }
+
+    /** Wie oft er beim Gummiband springt (im Fehlermodus einmal mehr, als Anni 2.0 zweimal mehr). */
     public static int hops(boolean glitchMode, boolean version2) {
         return RUBBER_HOPS + (version2 ? 2 : glitchMode ? 1 : 0);
     }
 
     /**
-     * Gummiband: Sie flackert und ist fort – und steht woanders, drei-, im Fehlermodus viermal, immer um ihr Ziel herum
-     * (Nachbilder bleiben stehen). Dann taucht sie direkt neben ihm auf und schlägt zu.
+     * Gummiband: Er flackert und ist fort – und steht woanders, drei-, im Fehlermodus viermal, immer um sein Ziel herum
+     * (Nachbilder bleiben stehen). Dann taucht er direkt neben ihm auf und schlägt zu.
      */
     private void tickRubberband(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
@@ -965,8 +997,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Fehler-Klone: Sie schüttelt sich, die Farben laufen auseinander – und plötzlich sind da drei (im Fehlermodus fünf)
-     * Kopien von ihr, rot, grün und blau. Sie rennen los und „stürzen ab“, wenn sie jemanden erreichen; ein Treffer lässt
+     * Fehler-Klone: Er schüttelt sich, die Farben laufen auseinander – und plötzlich sind da drei (im Fehlermodus fünf)
+     * Kopien von ihm, rot, grün und blau. Sie rennen los und „stürzen ab“, wenn sie jemanden erreichen; ein Treffer lässt
      * eine Kopie zerplatzen.
      */
     private void tickClones(ServerLevel level, LivingEntity target) {
@@ -995,7 +1027,7 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Fehlende Textur: Sie hebt den Hammer mit beiden Händen und rammt ihn in den Boden – unter ihrem Ziel (im Fehlermodus
+     * Fehlende Textur: Er hebt den Hammer mit beiden Händen und rammt ihn in den Boden – unter seinem Ziel (im Fehlermodus
      * auch unter einem zweiten) wird der Boden zu Magenta und Schwarz. Wer darin steht, hängt fest und nimmt Schaden.
      */
     private void tickMissing(ServerLevel level, LivingEntity target) {
@@ -1017,7 +1049,7 @@ public class AnniTrollEntity extends Monster {
                         : this.ground(target.position().add(this.random.nextBoolean() ? 7.0 : -7.0, 0.0, this.random.nextBoolean() ? 6.0 : -6.0)));
             }
             if (this.isVersion2()) {
-                // Anni 2.0: ein drittes Feld – dort, wohin ihr Ziel gerade läuft
+                // Anni 2.0: ein drittes Feld – dort, wohin sein Ziel gerade läuft
                 Vec3 lead = target.position().add(target.getDeltaMovement().multiply(30.0, 0.0, 30.0));
                 spots.add(this.ground(lead.distanceToSqr(target.position()) < 16.0 ? target.position().add(this.forward().scale(-8.0)) : lead));
             }
@@ -1034,8 +1066,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Pixelregen: Sie reckt den Hammer zum Himmel – leuchtende Pixel stürzen herab, auf Stellen, die ein Ring am Boden
-     * zeigt (meist dort, wo ihre Gegner gleich sein werden).
+     * Pixelregen: Er reckt den Hammer zum Himmel – leuchtende Pixel stürzen herab, auf Stellen, die ein Ring am Boden
+     * zeigt (meist dort, wo seine Gegner gleich sein werden).
      */
     private void tickPixelRain(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
@@ -1052,7 +1084,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Ein Pixelblock stürzt herab: meist dorthin, wo gleich jemand sein wird, sonst irgendwo um sie herum. */
+    /** Ein Pixelblock stürzt herab: meist dorthin, wo gleich jemand sein wird, sonst irgendwo um ihn herum. */
     private void dropPixel(ServerLevel level) {
         List<LivingEntity> watchers = this.victims(level, this.getBoundingBox().inflate(24.0, 10.0, 24.0));
         Vec3 spot;
@@ -1073,8 +1105,8 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Rückruck: Sie hebt den zerfallenen Arm, ihr Bildschirmauge flackert – und sie merkt sich, wo alle stehen (ein
-     * flimmerndes Abbild bleibt dort). Drei Sekunden später reißt es alle dorthin zurück (kurz schwindlig); dann stürmt sie
+     * Rückruck: Er hebt den zerfallenen Arm, sein Bildschirmauge flackert – und er merkt sich, wo alle stehen (ein
+     * flimmerndes Abbild bleibt dort). Drei Sekunden später reißt es alle dorthin zurück (kurz schwindlig); dann stürmt er
      * auf den Nächsten los und schlägt zu.
      */
     private void tickRollback(ServerLevel level, LivingEntity target) {
@@ -1125,7 +1157,7 @@ public class AnniTrollEntity extends Monster {
             }
         }
         if (t > ROLLBACK_SNAP && this.charge != null && t < ROLLBACK_SNAP + 10) {
-            // sie stürmt auf die Stelle zu, an die es den Nächsten zurückgerissen hat
+            // er stürmt auf die Stelle zu, an die es den Nächsten zurückgerissen hat
             Vec3 to = this.lunge.subtract(this.position()).multiply(1.0, 0.0, 1.0);
             if (to.length() > 2.4) {
                 this.setDeltaMovement(to.normalize().scale(0.75).add(0.0, this.getDeltaMovement().y, 0.0));
@@ -1150,7 +1182,7 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Zeilenfehler: Sie stampft auf – eine leuchtende Zeile kreist um sie, die rote dicht über dem Boden (springen!), dann
+     * Zeilenfehler: Er stampft auf – eine leuchtende Zeile kreist um ihn, die rote dicht über dem Boden (springen!), dann
      * eine blaue in Kopfhöhe (ducken!). Im Fehlermodus drehen sie sich schneller.
      */
     private void tickScanline(ServerLevel level, LivingEntity target) {
@@ -1180,7 +1212,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Troll-Lachen: Sie wirft den Kopf zurück und lacht (eine kurze Pause). */
+    /** Troll-Lachen: Er wirft den Kopf zurück und lacht (eine kurze Pause). */
     private void tickLaugh(ServerLevel level, LivingEntity target) {
         this.faceTarget(target, 8.0f);
         if (this.attackTick == 3) {
@@ -1189,9 +1221,9 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Absturz: „Anni.exe reagiert nicht.“ Sie erstarrt in einer verdrehten Haltung, flackert und ist nicht zu treffen. Dann
-     * „wird neu gestartet“ – sie richtet sich auf, und eine Welle aus Pixeln rollt über den Boden (springen!). Danach kämpft
-     * sie im Fehlermodus weiter.
+     * Absturz: „Anni.exe reagiert nicht.“ Er erstarrt in einer verdrehten Haltung, flackert und ist nicht zu treffen. Dann
+     * „wird neu gestartet“ – er richtet sich auf, und eine Welle aus Pixeln rollt über den Boden (springen!). Danach kämpft
+     * er im Fehlermodus weiter.
      */
     private void tickCrash(ServerLevel level) {
         int t = this.attackTick;
@@ -1232,7 +1264,7 @@ public class AnniTrollEntity extends Monster {
         }
     }
 
-    /** Die Welle aus Pixeln rollt von ihr aus über den Boden bis zum Halbmesser maxRadius (wer springt, entgeht ihr). */
+    /** Die Welle aus Pixeln rollt von ihm aus über den Boden bis zum Halbmesser maxRadius (wer springt, entgeht ihr). */
     private void rollWave(ServerLevel level, double maxRadius, float damage) {
         if (this.wave <= 0.0) {
             return;
@@ -1254,9 +1286,9 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Wiederherstellung – statt zu sterben: „Schwerer Ausnahmefehler“. Sie sackt zusammen, erstarrt und zerfällt in Pixel.
-     * „Suche nach einer Sicherung …“ – „Sicherung gefunden“: Die Pixel strömen von allen Seiten zurück, ihre Leiste füllt
-     * sich Stück für Stück (bis dahin ist sie nicht zu treffen). Dann setzt sie sich als Anni 2.0 zusammen – rote Augen, ein
+     * Wiederherstellung – statt zu sterben: „Schwerer Ausnahmefehler“. Er sackt zusammen, erstarrt und zerfällt in Pixel.
+     * „Suche nach einer Sicherung …“ – „Sicherung gefunden“: Die Pixel strömen von allen Seiten zurück, seine Leiste füllt
+     * sich Stück für Stück (bis dahin ist er nicht zu treffen). Dann setzt er sich als Anni 2.0 zusammen – rote Augen, ein
      * neuer Name über der Leiste –, schlägt den Hammer in den Boden (eine Welle rollt los: springen!) und lacht.
      */
     private void tickRevive(ServerLevel level) {
@@ -1338,7 +1370,7 @@ public class AnniTrollEntity extends Monster {
         return "█".repeat(full) + "░".repeat(10 - full);
     }
 
-    /** Pixel strömen von allen Seiten auf sie zu (beim Laden und bei der Wiederherstellung). */
+    /** Pixel strömen von allen Seiten auf ihn zu (beim Laden und bei der Wiederherstellung). */
     private void streamPixels(ServerLevel level, Vec3 c, int count) {
         for (int i = 0; i < count; i++) {
             double a = this.random.nextDouble() * Math.PI * 2.0;
@@ -1360,9 +1392,9 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Speedhack (nur Anni 2.0): Sie zielt – ein Ladekreis dreht sich über ihr, eine Spur aus Farbpunkten zeigt, wohin –,
-     * dann rast sie geradeaus los, schneller als jedes Pferd, bis sie gegen etwas prallt. Wen sie erwischt, den schleudert
-     * sie zur Seite; Nachbilder und kleine Felder fehlender Textur bleiben auf ihrer Bahn zurück. Dreimal hintereinander.
+     * Speedhack (nur Anni 2.0): Er zielt – ein Ladekreis dreht sich über ihm, eine Spur aus Farbpunkten zeigt, wohin –,
+     * dann rast er geradeaus los, schneller als jedes Pferd, bis er gegen etwas prallt. Wen er erwischt, den schleudert
+     * er zur Seite; Nachbilder und kleine Felder fehlender Textur bleiben auf seiner Bahn zurück. Dreimal hintereinander.
      */
     private void tickSpeedhack(ServerLevel level, LivingEntity target) {
         int t = this.attackTick;
@@ -1436,7 +1468,7 @@ public class AnniTrollEntity extends Monster {
 
     // ------------------------------------------------------------------ Hilfen
 
-    /** Ein flackernder Sprung: ein Nachbild bleibt stehen, Pixel stieben, und sie steht woanders. */
+    /** Ein flackernder Sprung: ein Nachbild bleibt stehen, Pixel stieben, und er steht woanders. */
     void blinkTo(ServerLevel level, Vec3 to) {
         Vec3 from = this.position();
         level.addFreshEntity(AfterimageEntity.ofTroll(level, this, 14));
@@ -1465,7 +1497,7 @@ public class AnniTrollEntity extends Monster {
         level.sendParticles(ModParticles.GLITCH_PIXEL.get(), at.x, at.y, at.z, count, spread, spread * 0.8, spread, 0.12);
     }
 
-    /** Wohin sie an einer Stelle tritt: auf den Boden (nicht in Blöcke, nicht in die Luft). */
+    /** Wohin er an einer Stelle tritt: auf den Boden (nicht in Blöcke, nicht in die Luft). */
     Vec3 standOn(Vec3 at) {
         Vec3 g = this.ground(at);
         BlockPos pos = BlockPos.containing(g);
@@ -1543,7 +1575,7 @@ public class AnniTrollEntity extends Monster {
         return ModSounds.ANNI_HURT.get();
     }
 
-    /** Kein Todesklang beim tödlichen Treffer: Ob sie wirklich stirbt oder ihre Sicherung lädt, entscheidet sich erst in die(). */
+    /** Kein Todesklang beim tödlichen Treffer: Ob er wirklich stirbt oder seine Sicherung lädt, entscheidet sich erst in die(). */
     @Override
     protected @Nullable SoundEvent getDeathSound() {
         return null;
@@ -1560,9 +1592,9 @@ public class AnniTrollEntity extends Monster {
     }
 
     /**
-     * Beim ersten tödlichen Treffer stirbt sie nicht: Sie lädt ihre Sicherung und kehrt als Anni 2.0 zurück (nicht bei
-     * Schaden, der jede Unverwundbarkeit durchschlägt, etwa /kill oder die Leere). Beim zweiten Mal stürzt sie endgültig ab:
-     * Sie erstarrt, flackert, zerfällt in Pixel; der Kern erlischt.
+     * Beim ersten tödlichen Treffer stirbt er nicht: Er lädt seine Sicherung und kehrt als Anni 2.0 zurück (nicht bei
+     * Schaden, der jede Unverwundbarkeit durchschlägt, etwa /kill oder die Leere). Beim zweiten Mal stürzt er endgültig ab:
+     * Er erstarrt, flackert, zerfällt in Pixel; der Kern erlischt.
      */
     @Override
     public void die(DamageSource source) {

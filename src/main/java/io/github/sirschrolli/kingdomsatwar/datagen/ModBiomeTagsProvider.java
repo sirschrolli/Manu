@@ -248,6 +248,11 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         // die Sternwarte auf den äußeren Inseln des Ends (statt der Endstadt)
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.STARWATCH))
                 .add(net.minecraft.world.level.biome.Biomes.END_HIGHLANDS).add(net.minecraft.world.level.biome.Biomes.END_MIDLANDS);
+        // die Fehlerzone (Anni der Troll): auf festem, eher flachem Land – Wiesen, Wälder, Savannen, Schnee, Wüste und Tafelberge
+        this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ERROR_ZONE)).addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_TAIGA)
+                .addTag(BiomeTags.IS_SAVANNA).addTag(BiomeTags.IS_BADLANDS).add(net.minecraft.world.level.biome.Biomes.PLAINS)
+                .add(net.minecraft.world.level.biome.Biomes.SUNFLOWER_PLAINS).add(net.minecraft.world.level.biome.Biomes.MEADOW)
+                .add(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS).add(net.minecraft.world.level.biome.Biomes.DESERT);
         this.tag(BiomeTags.HAS_END_CITY).replace();
         for (TagKey<Biome> old : java.util.List.of(BiomeTags.HAS_STRONGHOLD, BiomeTags.HAS_MINESHAFT, BiomeTags.HAS_MINESHAFT_MESA,
                 BiomeTags.HAS_BURIED_TREASURE, BiomeTags.HAS_SHIPWRECK, BiomeTags.HAS_SHIPWRECK_BEACHED, BiomeTags.HAS_DESERT_PYRAMID,

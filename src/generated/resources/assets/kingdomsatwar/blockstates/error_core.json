@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "phase=crashed": {
+      "model": "kingdomsatwar:block/error_core_crashed"
+    },
+    "phase=running": {
+      "model": "kingdomsatwar:block/error_core"
+    },
+    "phase=waiting": {
+      "model": "kingdomsatwar:block/error_core"
+    }
+  }
+}

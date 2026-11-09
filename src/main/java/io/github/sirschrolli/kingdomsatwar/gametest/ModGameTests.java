@@ -189,6 +189,7 @@ public final class ModGameTests {
         ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
         StarGameTests.init();     // Asteria, die Sternenreiterin, Sternenlanze und Sternenschwingen
         MystikGameTests.init();   // MissMystik, die Feen-Zauberkünstlerin, Kartendeck, Zylinder, Zauberbühne
+        AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -254,6 +255,7 @@ public final class ModGameTests {
         ForgeGameTests.register(event, environment);
         StarGameTests.register(event, environment);
         MystikGameTests.register(event, environment);
+        AnniGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

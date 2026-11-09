@@ -347,6 +347,8 @@ public final class ModStructures {
                 case GIANT_BONES, LOST_GATE -> null;
                 // die Sternwarte nimmt die Plätze der Endstädte ein (end_cities.json)
                 case STARWATCH -> null;
+                // die Fehlerzone (Anni der Troll): selten, ein Fund für sich
+                case ERROR_ZONE -> spread(56, 18, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 40_404_404, castles);
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));

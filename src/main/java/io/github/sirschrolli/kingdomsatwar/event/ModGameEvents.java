@@ -95,6 +95,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> mystikStage(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> mystikStage(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> mystikStage(context.getSource(), "reset"))))
+                .then(Commands.literal("fehlerzone").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> errorZone(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> errorZone(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> errorZone(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> errorZone(context.getSource(), "reset"))))
                 .then(Commands.literal("lair").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> listLairs(context.getSource()))
                         .then(Commands.literal("awaken").executes(context -> awakenLair(context.getSource().getPlayerOrException())))
@@ -468,6 +473,84 @@ public final class ModGameEvents {
         }
         source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.zauberbuehne.awakened"), true);
         return 1;
+    }
+
+    /**
+     * {@code /kaw fehlerzone}: Lage der nächsten Fehlerzone in der Oberwelt; {@code tp} bringt einen an ihren Rand (auch aus
+     * einer anderen Welt), {@code awaken} lädt Anni den Troll aus dem Fehlerkern, {@code reset} setzt den Kern zurück.
+     */
+    private static int errorZone(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel overworld = source.getServer().overworld();
+        BlockPos from = source.getLevel() == overworld ? BlockPos.containing(source.getPosition()) : BlockPos.ZERO;
+        var structure = overworld.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.site(
+                        io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.ERROR_ZONE));
+        var found = structure.isEmpty() ? null : overworld.getChunkSource().getGenerator().findNearestMapStructure(overworld,
+                net.minecraft.core.HolderSet.direct(structure.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.fehlerzone.none"));
+            return 0;
+        }
+        // die Mitte der Zone liegt in der Mitte ihres Chunks
+        BlockPos chunkCorner = found.getFirst();
+        int cx = (chunkCorner.getX() & ~15) + 8;
+        int cz = (chunkCorner.getZ() & ~15) + 8;
+        int distance = (int) Math.sqrt(Math.pow(cx - from.getX(), 2) + Math.pow(cz - from.getZ(), 2));
+        Component where = Component.literal(cx + ", " + cz).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.fehlerzone.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        overworld.getChunk(cx >> 4, cz >> 4);
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            int x = cx;
+            int z = cz + 19;
+            overworld.getChunk(x >> 4, z >> 4);
+            int y = overworld.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+            player.teleportTo(overworld, x + 0.5, y, z + 0.5, java.util.Set.of(), 180.0f, 10.0f, true);
+            return 1;
+        }
+        BlockPos corePos = findErrorCore(overworld, cx, cz);
+        if (corePos == null
+                || !(overworld.getBlockEntity(corePos) instanceof io.github.sirschrolli.kingdomsatwar.block.glitch.ErrorCoreBlockEntity core)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.fehlerzone.no_core"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            core.reset(overworld);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.fehlerzone.reset"), true);
+            return 1;
+        }
+        if (core.summon(overworld) == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.fehlerzone.no_core"));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.fehlerzone.awakened"), true);
+        return 1;
+    }
+
+    /** Sucht den Fehlerkern in der Mitte einer Fehlerzone (erst in der Säule der Mitte, dann ringsum). */
+    private static @org.jspecify.annotations.Nullable BlockPos findErrorCore(ServerLevel level, int cx, int cz) {
+        int surface = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cx, cz);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int r = 0; r <= 3; r++) {
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    for (int y = surface + 4; y >= surface - 24; y--) {
+                        pos.set(cx + dx, y, cz + dz);
+                        if (level.getBlockState(pos).is(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE.get())) {
+                            return pos.immutable();
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /** Sucht den großen Zylinder auf der Zauberbühne (von oben nach unten). */

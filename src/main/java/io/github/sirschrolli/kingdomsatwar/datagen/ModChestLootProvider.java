@@ -290,6 +290,13 @@ public class ModChestLootProvider implements LootTableSubProvider {
         // Sternwarte: der Schatz des Ordens (wie in der Endstadt)
         this.output.accept(ModLootTables.SITE_STARWATCH, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.END_CITY_TREASURE).withPool(crystals(5, 20)),
                 0, 4, 2, 5, 0.3f));
+        // Fehlerzone: was beim Absturz der Welt liegen blieb – Fehlersplitter, Fehlerblöcke, Redstone, Smaragde, selten ein Diamant
+        this.output.accept(ModLootTables.SITE_ERROR_ZONE, coins(LootTable.lootTable(), 2, 6, 1, 3, 0.2f)
+                .withPool(pool(1, 1, item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD.get(), 1, 2, 4)))
+                .withPool(pool(2, 4, item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get(), 4, 2, 6),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK.get(), 4, 2, 6), item(Items.REDSTONE, 5, 4, 12),
+                        item(Items.EMERALD, 3, 1, 3), item(Items.ENDER_PEARL, 2, 1, 2), item(Items.DIAMOND, 1, 1, 1),
+                        item(Items.GLOWSTONE_DUST, 3, 2, 6), item(Items.COMPASS, 1, 1, 1), item(Items.CLOCK, 1, 1, 1))));
         // Glutpforte: das Gold der Feuerdiener (wie in der Portalruine)
         this.output.accept(ModLootTables.SITE_EMBER_GATE, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.RUINED_PORTAL),
                 0, 3, 1, 3, 0.1f));

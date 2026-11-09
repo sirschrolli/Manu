@@ -2,7 +2,7 @@
 """
 Texturen zu Anni dem Troll (0.67), im Vanilla-Stil (siehe tools/item_style.py):
 
-  * Annis Haut als fehlende Textur (für die Ticks, in denen sie nur noch Magenta und Schwarz ist), der Ladekreis über ihrem
+  * Annis Haut als fehlende Textur (für die Ticks, in denen er nur noch Magenta und Schwarz ist), der Ladekreis über seinem
     Kopf, das Zeilen-Abbild beim Rückruck, ein Pixel des Pixelregens, ein Feld des Fehlerfelds und die Zeile des
     Zeilenfehlers;
   * die Fehlerpixel (Partikel);

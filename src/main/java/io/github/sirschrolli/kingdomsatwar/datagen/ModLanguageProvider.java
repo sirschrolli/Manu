@@ -681,6 +681,12 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.zauberbuehne.no_hat", "There is no waiting top hat on the stage.", "Auf der Bühne wartet kein Zylinder.");
         text("command.kingdomsatwar.zauberbuehne.awakened", "The show begins!", "Die Vorstellung beginnt!");
         text("command.kingdomsatwar.zauberbuehne.reset", "The top hat waits again.", "Der Zylinder wartet wieder.");
+        text("command.kingdomsatwar.fehlerzone.where", "Nearest Error Zone: %s (%s blocks)", "Nächste Fehlerzone: %s (%s Blöcke)");
+        text("command.kingdomsatwar.fehlerzone.none", "No Error Zone found nearby.", "Keine Fehlerzone in der Nähe gefunden.");
+        text("command.kingdomsatwar.fehlerzone.no_core", "The error core cannot be found (or it is not waiting).",
+                "Der Fehlerkern ist nicht zu finden (oder er wartet nicht).");
+        text("command.kingdomsatwar.fehlerzone.awakened", "Loading Anni …", "Anni wird geladen …");
+        text("command.kingdomsatwar.fehlerzone.reset", "The error core waits again.", "Der Fehlerkern wartet wieder.");
         text("command.kingdomsatwar.mondhain.not_fae", "Moon Groves only exist in the Fae Realm.", "Mondhaine gibt es nur im Feenreich.");
         text("command.kingdomsatwar.mondhain.awakened", "The Moth Queen awakens.", "Die Mottenkönigin erwacht.");
         text("command.kingdomsatwar.mondhain.no_cocoon", "There is no cocoon on the altar (is the queen already awake?).",
@@ -860,8 +866,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("entity.kingdomsatwar.anni_troll.restoring", "Restoring Anni … %s", "Stelle Anni wieder her … %s");
         block(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE, "Error Core", "Fehlerkern");
         lore("error_core", "The heart of an Error Zone – Anni the Troll is loaded here", "Das Herz einer Fehlerzone – hier wird Anni der Troll geladen");
-        text(ModItems.loreKey("error_core", 2), "Crashed after her defeat: a block of redstone restarts it",
-                "Nach ihrer Niederlage abgestürzt: ein Redstoneblock startet ihn neu");
+        text(ModItems.loreKey("error_core", 2), "Crashed after his defeat: a block of redstone restarts it",
+                "Nach seiner Niederlage abgestürzt: ein Redstoneblock startet ihn neu");
         text("block.kingdomsatwar.error_core.hint", "The core flickers. Something big is waiting to be loaded …",
                 "Der Kern flimmert. Etwas Großes wartet darauf, geladen zu werden …");
         text("block.kingdomsatwar.error_core.running", "Anni is running – the core hums.", "Anni läuft – der Kern summt.");

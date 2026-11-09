@@ -33,7 +33,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
  * Anni der Troll (0.67): der Fehlerkern im Herzen der Fehlerzone, die Fehlerblöcke und das Bildrauschen, der Bannhammer,
- * die Fehlerflügel, die Fehlersplitter und ihr Spawn-Ei – im Kreativ-Tab „Legenden“ (nach MissMystik).
+ * die Fehlerflügel, die Fehlersplitter und sein Spawn-Ei – im Kreativ-Tab „Legenden“ (nach MissMystik).
  */
 public final class AnniBlocks {
     private AnniBlocks() {}
@@ -41,7 +41,7 @@ public final class AnniBlocks {
     /** Lädt die Klasse, damit sich alles anmeldet, bevor die Register gefüllt werden. */
     public static void init() {}
 
-    /** Der Fehlerkern: lädt Anni, merkt sich ihren Absturz und startet (mit einem Redstoneblock) neu. Unzerstörbar. */
+    /** Der Fehlerkern: lädt Anni, merkt sich seinen Absturz und startet (mit einem Redstoneblock) neu. Unzerstörbar. */
     public static final DeferredBlock<ErrorCoreBlock> ERROR_CORE = ModBlocks.blockWithItem("error_core", ErrorCoreBlock::new,
             p -> p.mapColor(MapColor.COLOR_MAGENTA).strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.AMETHYST)
                     .lightLevel(s -> s.getValue(ErrorCoreBlock.PHASE).light).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)

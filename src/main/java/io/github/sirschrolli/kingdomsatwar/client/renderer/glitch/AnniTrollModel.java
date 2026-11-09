@@ -7,20 +7,20 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 
 /**
- * Anni der Troll. Sie stapft gebeugt, den Bannhammer tief vor sich, der Haarschopf wippt, die Pixelkrone kreist, die
- * Brocken ihres linken Unterarms und die losen Pixel schweben auf und ab, der Kiefer mahlt. Für jeden Angriff nimmt sie
- * ihre Haltung ein (weich überblendet):
+ * Anni der Troll. Er stapft gebeugt, den Bannhammer tief vor sich, der Haarschopf wippt, die Pixelkrone kreist, die
+ * Brocken seines linken Unterarms und die losen Pixel schweben auf und ab, der Kiefer mahlt. Für jeden Angriff nimmt er
+ * seine Haltung ein (weich überblendet):
  * <ul>
- *     <li>Lag-Hieb: den Hammer hoch über den Kopf – erstarrt, solange sie hängt –, dann kracht er herab;</li>
+ *     <li>Lag-Hieb: den Hammer hoch über den Kopf – erstarrt, solange er hängt –, dann kracht der Hammer herab;</li>
  *     <li>Gummiband: ausgebreitete Arme beim Springen, zuletzt ein Rundumschlag;</li>
- *     <li>Fehler-Klone: die Arme weit, der Körper bebt, dann lacht sie;</li>
+ *     <li>Fehler-Klone: die Arme weit, der Körper bebt, dann lacht er;</li>
  *     <li>Fehlende Textur und Zeilenfehler: den Hammer beidhändig empor und in den Boden;</li>
  *     <li>Pixelregen: den Hammer zum Himmel, den Kopf im Nacken;</li>
  *     <li>Rückruck: den zerfallenen Arm ausgestreckt, dann ein Ansturm mit Hieb;</li>
- *     <li>Absturz: in einer verdrehten Haltung erstarrt, dann richtet sie sich auf und schlägt zu;</li>
- *     <li>Wiederherstellung: Sie sackt zusammen wie im Tod und erstarrt; als Anni 2.0 reckt sie den Hammer, schlägt zu, lacht;</li>
- *     <li>Speedhack: ausholen (erstarrt, solange sie zielt), dann vorgebeugt mit rudernden Beinen voran;</li>
- *     <li>Lachen: den Kopf im Nacken, die Hand am Bauch; Tod: die Knie geben nach, sie sackt zusammen.</li>
+ *     <li>Absturz: in einer verdrehten Haltung erstarrt, dann richtet er sich auf und schlägt zu;</li>
+ *     <li>Wiederherstellung: Er sackt zusammen wie im Tod und erstarrt; als Anni 2.0 reckt er den Hammer, schlägt zu, lacht;</li>
+ *     <li>Speedhack: ausholen (erstarrt, solange er zielt), dann vorgebeugt mit rudernden Beinen voran;</li>
+ *     <li>Lachen: den Kopf im Nacken, die Hand am Bauch; Tod: die Knie geben nach, er sackt zusammen.</li>
  * </ul>
  * Dazu kommen Bildfehler: Für einzelne Ticks springt ein Glied in eine falsche Haltung (im Fehlermodus öfter).
  */

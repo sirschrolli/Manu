@@ -28,8 +28,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Wacht über den Fehlerkern: Tritt jemand näher als zwölf Blöcke heran, wird Anni geladen – Pixel strömen herbei, und sie
- * setzt sich neben dem Kern zusammen. Findet sie niemanden mehr, kehrt sie in den Kern zurück (er wartet wieder); nach ihrem
+ * Wacht über den Fehlerkern: Tritt jemand näher als zwölf Blöcke heran, wird Anni geladen – Pixel strömen herbei, und er
+ * setzt sich neben dem Kern zusammen. Findet er niemanden mehr, kehrt er in den Kern zurück (der wartet wieder); nach seinem
  * Absturz ist er erloschen, und erst ein Redstoneblock startet ihn neu.
  */
 public class ErrorCoreBlockEntity extends BlockEntity {
@@ -51,7 +51,7 @@ public class ErrorCoreBlockEntity extends BlockEntity {
         return this.phase;
     }
 
-    /** Ob diese Anni die ist, die zu diesem Kern gehört (sonst ist sie eine verirrte Kopie). */
+    /** Ob diese Anni die ist, die zu diesem Kern gehört (sonst ist er eine verirrte Kopie). */
     public boolean owns(Entity entity) {
         return this.phase != Phase.CRASHED && entity.getUUID().equals(this.troll);
     }
@@ -118,7 +118,7 @@ public class ErrorCoreBlockEntity extends BlockEntity {
         return this.begin(level);
     }
 
-    /** Anni wird geladen: Sie setzt sich auf einem freien Platz neben dem Kern zusammen. */
+    /** Anni wird geladen: Er setzt sich auf einem freien Platz neben dem Kern zusammen. */
     private @Nullable AnniTrollEntity begin(ServerLevel level) {
         AnniTrollEntity entity = ModEntities.ANNI_TROLL.get().create(level, EntitySpawnReason.STRUCTURE);
         if (entity == null) {
@@ -169,7 +169,7 @@ public class ErrorCoreBlockEntity extends BlockEntity {
         }
     }
 
-    /** Sie hat niemanden mehr gefunden und ist in den Kern zurückgekehrt: er wartet wieder. */
+    /** Er hat niemanden mehr gefunden und ist in den Kern zurückgekehrt: der wartet wieder. */
     public void onTrollDeparted(ServerLevel level) {
         if (this.phase == Phase.CRASHED) {
             return;

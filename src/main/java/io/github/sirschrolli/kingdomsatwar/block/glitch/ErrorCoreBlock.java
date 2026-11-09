@@ -35,8 +35,8 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Der Fehlerkern: das Herz einer Fehlerzone – ein zerbrochener Würfel, dessen Ecken fehlen, in der Mitte ein flimmernder
- * Kern aus Bildrauschen in Rot, Grün und Blau. Darin wartet Anni der Troll; tritt jemand heran, wird sie geladen. Nach
- * ihrem Absturz ist der Kern erloschen, und nur ein Redstoneblock startet ihn neu. Unzerstörbar.
+ * Kern aus Bildrauschen in Rot, Grün und Blau. Darin wartet Anni der Troll; tritt jemand heran, wird er geladen. Nach
+ * seinem Absturz ist der Kern erloschen, und nur ein Redstoneblock startet ihn neu. Unzerstörbar.
  */
 public class ErrorCoreBlock extends Block implements EntityBlock {
     public static final EnumProperty<Phase> PHASE = EnumProperty.create("phase", Phase.class);

@@ -109,6 +109,9 @@ final class SiteGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STARWATCH =
             ModGameTests.TEST_FUNCTIONS.register("site_starwatch", () -> SiteGameTests::starwatch);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ERROR_ZONE =
+            ModGameTests.TEST_FUNCTIONS.register("site_error_zone", () -> SiteGameTests::errorZone);
+
     private SiteGameTests() {}
 
     static void init() {}
@@ -124,6 +127,7 @@ final class SiteGameTests {
         add(event, environment, FROST_GROTTO, 100);
         add(event, environment, BANDIT_CAMP, 100);
         add(event, environment, CHARCOAL_CAMP, 100);
+        add(event, environment, ERROR_ZONE, 100);
         add(event, environment, EMBER_GATE, 100);
         add(event, environment, CLAM_FIELD, 100);
         add(event, environment, CORAL_PALACE, 100);
@@ -638,6 +642,62 @@ final class SiteGameTests {
         int logs = count(helper, o.offset(-10, 0, -10), o.offset(10, 3, 10), s -> s.is(Blocks.SPRUCE_LOG));
         if (logs < 20) {
             problems.add("Holz: " + logs);
+        }
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Die Fehlerzone: in der Mitte der Fehlerkern (wartend) auf einem Sockel aus fehlender Textur, die Arena darüber frei,
+     * der Boden aus falschen Biomen mit fehlender Textur und Bildrauschen, eine Truhe, schwebende Chunkfetzen.
+     */
+    private static void errorZone(GameTestHelper helper) {
+        BlockPos g = ground(helper, 6, Blocks.GRASS_BLOCK.defaultBlockState());
+        BlockPos o = g.above();
+        build(helper, SiteSamples.errorZone(o, 0));
+        ServerLevel level = helper.getLevel();
+        List<String> problems = new ArrayList<>();
+        if (!level.getBlockState(o.above()).is(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.ERROR_CORE.get())) {
+            problems.add("kein Fehlerkern: " + level.getBlockState(o.above()));
+        } else if (!(level.getBlockEntity(o.above()) instanceof io.github.sirschrolli.kingdomsatwar.block.glitch.ErrorCoreBlockEntity core)
+                || core.phase() != io.github.sirschrolli.kingdomsatwar.block.glitch.ErrorCoreBlockEntity.Phase.WAITING) {
+            problems.add("der Fehlerkern wartet nicht");
+        }
+        if (!level.getBlockState(o).is(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get())) {
+            problems.add("kein Sockel: " + level.getBlockState(o));
+        }
+        BoundingBox a = area(helper);
+        BlockPos lo = new BlockPos(a.minX(), a.minY(), a.minZ());
+        BlockPos hi = new BlockPos(a.maxX(), a.maxY(), a.maxZ());
+        int chests = lootChests(helper, lo, hi, s -> true);
+        if (chests != 1) {
+            problems.add("Truhen: " + chests);
+        }
+        int missing = count(helper, lo, hi, s -> s.is(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get()));
+        int noise = count(helper, lo, hi, s -> s.is(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK.get()));
+        if (missing < 40 || noise < 25) {
+            problems.add("fehlende Textur " + missing + ", Bildrauschen " + noise);
+        }
+        int blocked = 0;
+        int floating = 0;
+        for (BlockPos p : BlockPos.betweenClosed(o.offset(-23, 1, -23), o.offset(23, 22, 23))) {
+            int dx = p.getX() - o.getX();
+            int dz = p.getZ() - o.getZ();
+            int dy = p.getY() - o.getY();
+            double r = Math.sqrt(dx * dx + dz * dz);
+            boolean solid = !level.getBlockState(p).isAir();
+            if (r <= 10.5 && dy <= 4 && dy >= 2 && solid) {
+                blocked++;
+            }
+            if (r >= 14.5 && dy >= 6 && solid) {
+                floating++;
+            }
+        }
+        if (blocked > 0) {
+            problems.add("die Arena ist nicht frei: " + blocked);
+        }
+        if (floating < 30) {
+            problems.add("schwebende Fetzen: " + floating);
         }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();

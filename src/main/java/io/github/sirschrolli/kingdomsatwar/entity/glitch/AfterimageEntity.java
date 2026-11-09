@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 /**
- * Ein Nachbild: Wo Anni eben noch stand (beim Springen), bleibt für einen Augenblick ihr erstarrtes, farbverschobenes
+ * Ein Nachbild: Wo Anni eben noch stand (beim Springen), bleibt für einen Augenblick sein erstarrtes, farbverschobenes
  * Abbild stehen und zerfällt. Beim Rückruck markiert ein flimmerndes Abbild die Stelle, an die es jemanden gleich
  * zurückreißt (eine Säule in Größe des Wesens, mit Zeilen und Farbsäumen).
  */
@@ -33,7 +33,7 @@ public class AfterimageEntity extends Entity {
         this.setNoGravity(true);
     }
 
-    /** Annis Nachbild (in der Haltung, die sie gerade hat). */
+    /** Annis Nachbild (in der Haltung, die er gerade hat). */
     public static AfterimageEntity ofTroll(ServerLevel level, AnniTrollEntity troll, int life) {
         AfterimageEntity image = new AfterimageEntity(ModEntities.AFTERIMAGE.get(), level);
         image.snapTo(troll.getX(), troll.getY(), troll.getZ(), troll.getYRot(), 0.0f);

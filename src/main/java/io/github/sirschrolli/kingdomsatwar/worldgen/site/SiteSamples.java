@@ -96,6 +96,12 @@ public final class SiteSamples {
                 new BoundingBox(origin.getX() - 11, origin.getY() - 5, origin.getZ() - 11, origin.getX() + 11, origin.getY() + 13, origin.getZ() + 11));
     }
 
+    /** Eine Fehlerzone mit der Mitte (dem Fehlerkern) bei {@code origin} (y = über dem Boden), Boden der Gegend {@code home}. */
+    public static SitePiece errorZone(BlockPos origin, int home) {
+        return new SitePiece(SiteKind.ERROR_ZONE, 0, origin, Rotation.NONE, 0x404L, new int[] {home},
+                new BoundingBox(origin.getX() - 26, origin.getY() - 15, origin.getZ() - 26, origin.getX() + 26, origin.getY() + 33, origin.getZ() + 26));
+    }
+
     /** Eine Glutpforte mit der Mitte vor dem Tor bei {@code origin} (y = über dem Boden); das Tor steht bei z = −2. */
     public static SitePiece emberGate(BlockPos origin) {
         return new SitePiece(SiteKind.EMBER_GATE, 0, origin, Rotation.NONE, 0xE3BL, new int[0],
