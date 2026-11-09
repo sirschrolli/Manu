@@ -58,14 +58,17 @@ final class ForgeShowcase {
     static void boss(Deque<Step> steps) {
         Stage stage = new Stage();
         steps.add(Step.hud(false));
-        steps.add(Step.once(minecraft -> minecraft.options.renderDistance().set(12)));
+        steps.add(Step.once(minecraft -> {
+            minecraft.options.renderDistance().set(12);
+            minecraft.options.gamma().set(1.0);
+        }));
         steps.add(Step.command("gamerule spawn_monsters false"));
         steps.add(Step.command("difficulty normal"));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.server(any -> locate(nether(any), stage)));
         steps.add(Step.until(() -> stage.state != 0, 9000));
         // das Dach: der Schmied kniet am Amboss und schmiedet
-        steps.add(at(stage, -9.5, 8.5, 1.5, 0, 2.0, 7.0));
+        steps.add(at(stage, -7.0, 6.5, 13.5, 0.0, 1.5, 7.0));
         steps.add(Step.waitTicks(80));
         steps.add(Step.waitForChunks(1500));
         steps.add(Step.server(any -> {
@@ -84,9 +87,12 @@ final class ForgeShowcase {
         steps.add(Step.waitTicks(60));
         steps.add(Step.screenshot("forge_roof"));
         steps.add(at(stage, 0.0, 3.4, 3.4, 0.0, 2.0, 8.0));
-        steps.add(Step.waitTicks(GlutschmiedEntity.FORGE_BEAT - 3));
+        steps.add(Step.waitTicks(GlutschmiedEntity.FORGE_BEAT - 1));
         steps.add(Step.screenshot("forge_smith_working"));
-        steps.add(at(stage, 2.2, 2.6, 4.4, 0.0, 1.0, 6.0));
+        steps.add(at(stage, 4.2, 4.6, 12.0, 0.0, 1.6, 7.0));
+        steps.add(Step.waitTicks(GlutschmiedEntity.FORGE_BEAT - 2));
+        steps.add(Step.screenshot("forge_smith_working_side"));
+        steps.add(at(stage, 1.6, 3.2, 4.4, 0.0, 1.0, 6.0));
         steps.add(Step.waitTicks(20));
         steps.add(Step.screenshot("forge_anvil_spear"));
         // er erwacht: ein Ritter tritt heran
@@ -114,14 +120,22 @@ final class ForgeShowcase {
         steps.add(Step.waitTicks(14));
         steps.add(Step.screenshot("forge_awaken_roar"));
         steps.add(Step.waitTicks(30));
-        // die Angriffe: jeweils beide an ihre Plätze, dann der Angriff
-        for (String[] shot : new String[][] {{"THRUST", "9", "forge_thrust"}, {"SLAM", "21", "forge_slam"}, {"SPARKS", "24", "forge_sparks"},
-                {"GLOBS", "16", "forge_globs"}, {"CALL", "18", "forge_call"}, {"STOKE", "22", "forge_stoke"}}) {
+        // mit Bossleiste
+        steps.add(Step.hud(true));
+        steps.add(at(stage, -2.5, 2.4, 3.6, 0.0, 2.8, 8.0));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.screenshot("forge_bossbar"));
+        steps.add(Step.hud(false));
+        // die Angriffe auf dem freien Teil des Dachs (westlich des Schlots): beide an ihre Plätze, dann der Angriff
+        // {Angriff, Ticks bis zum Bild, Name, Blickwinkel zur Linie Schmied–Ritter (Grad), Abstand, Höhe}
+        for (String[] shot : new String[][] {{"THRUST", "9", "forge_thrust", "-82", "5.6", "0.5"}, {"SLAM", "20", "forge_slam", "-62", "7.6", "3.6"},
+                {"SPARKS", "24", "forge_sparks", "-72", "5.6", "0.7"}, {"GLOBS", "18", "forge_globs", "-105", "8.0", "1.4"},
+                {"CALL", "18", "forge_call", "-62", "6.4", "1.0"}, {"STOKE", "22", "forge_stoke", "-62", "6.8", "2.2"}}) {
             steps.add(Step.server(any -> {
                 ServerLevel level = nether(any);
                 if (level.getEntity(stage.smith) instanceof GlutschmiedEntity smith && level.getEntity(stage.knight) instanceof LivingEntity knight) {
-                    Vec3 s = local(stage, 0, 1, 8);
-                    Vec3 k = shot[0].equals("GLOBS") ? local(stage, -8, 1, 3) : local(stage, shot[0].equals("SPARKS") ? 2 : 0, 1, 4);
+                    Vec3 s = local(stage, -6, 1, 8);
+                    Vec3 k = shot[0].equals("GLOBS") ? local(stage, -6, 1, -6) : local(stage, -6, 1, shot[0].equals("THRUST") ? 4 : 3);
                     smith.teleportTo(s.x, s.y, s.z);
                     knight.teleportTo(k.x, k.y, k.z);
                     knight.setDeltaMovement(Vec3.ZERO);
@@ -129,14 +143,14 @@ final class ForgeShowcase {
                     knight.clearFire();
                     smith.setTarget(knight);
                     smith.lookAt(knight, 360.0f, 360.0f);
+                    smith.setYBodyRot(smith.getYRot());
+                    smith.setYHeadRot(smith.getYRot());
                     smith.forceAttack(GlutschmiedEntity.Attack.valueOf(shot[0]));
                 }
             }));
-            steps.add(Step.waitTicks(Integer.parseInt(shot[1])));
-            steps.add(shot[0].equals("GLOBS") ? at(stage, 5.5, 3.0, 9.0, -4.0, 3.0, 5.5)
-                    : shot[0].equals("SLAM") || shot[0].equals("CALL") || shot[0].equals("STOKE") ? at(stage, 7.0, 4.5, 12.0, 0.5, 1.5, 8.0)
-                    : at(stage, 6.0, 2.4, 7.0, 0.0, 2.2, 6.0));
-            steps.add(Step.waitTicks(2));
+            steps.add(Step.waitTicks(Integer.parseInt(shot[1]) - 4));
+            steps.add(follow(stage, Double.parseDouble(shot[3]), Double.parseDouble(shot[4]), Double.parseDouble(shot[5])));
+            steps.add(Step.waitTicks(4));
             steps.add(Step.screenshot(shot[2]));
             steps.add(Step.waitTicks(45));
             if (shot[0].equals("CALL")) {
@@ -155,31 +169,43 @@ final class ForgeShowcase {
             if (level.getEntity(stage.smith) instanceof GlutschmiedEntity smith) {
                 smith.forceStoked();
                 smith.forceAttack(GlutschmiedEntity.Attack.NONE);
-                Vec3 s = local(stage, 0, 1, 8);
+                Vec3 s = local(stage, -6, 1, 8);
                 smith.teleportTo(s.x, s.y, s.z);
                 if (level.getEntity(stage.knight) instanceof LivingEntity knight) {
-                    Vec3 k = local(stage, 0, 1, 4);
+                    Vec3 k = local(stage, -6, 1, 3);
                     knight.teleportTo(k.x, k.y, k.z);
                     smith.setTarget(knight);
                 }
             }
         }));
-        steps.add(at(stage, 2.6, 3.4, 4.4, 0.0, 3.0, 8.0));
-        steps.add(Step.waitTicks(12));
+        steps.add(Step.waitTicks(10));
+        steps.add(follow(stage, -72.0, 4.8, 0.7));
+        steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("forge_stoked_closeup"));
-        // sein Ende
+        // sein Ende (der Ritter tritt beiseite)
         steps.add(Step.server(any -> {
             ServerLevel level = nether(any);
+            if (level.getEntity(stage.knight) instanceof LivingEntity knight) {
+                Vec3 k = local(stage, -9, 1, -2);
+                knight.teleportTo(k.x, k.y, k.z);
+            }
             if (level.getEntity(stage.smith) instanceof GlutschmiedEntity smith) {
                 smith.setHealth(1.0f);
                 smith.hurtServer(level, level.damageSources().genericKill(), 1000.0f);
             }
         }));
-        steps.add(at(stage, 3.0, 2.6, 4.0, 0.0, 1.6, 8.0));
-        steps.add(Step.waitTicks(28));
+        steps.add(Step.waitTicks(24));
+        steps.add(follow(stage, -58.0, 5.0, 0.2));
+        steps.add(Step.waitTicks(4));
         steps.add(Step.screenshot("forge_death"));
         steps.add(Step.waitTicks(GlutschmiedEntity.DEATH_TICKS));
-        steps.add(at(stage, 2.2, 2.4, 4.4, 0.0, 1.0, 6.0));
+        steps.add(Step.server(any -> {
+            ServerLevel level = nether(any);
+            if (level.getEntity(stage.knight) instanceof Entity knight) {
+                knight.discard();
+            }
+        }));
+        steps.add(at(stage, 1.6, 3.2, 4.4, 0.0, 1.0, 6.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("forge_anvil_cold"));
         // der Glutspeer am Rüstungsständer
@@ -195,9 +221,37 @@ final class ForgeShowcase {
             stand.addTag(STAGE_TAG);
             level.addFreshEntity(stand);
         }));
-        steps.add(at(stage, -2.6, 2.0, 9.4, -5.0, 1.6, 8.0));
+        steps.add(at(stage, -3.7, 1.7, 9.2, -5.0, 1.9, 8.0));
         steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("forge_spear_stand"));
+    }
+
+    /**
+     * Kamera beim Schmied: im Abstand {@code distance}, um {@code angle} Grad aus der Linie Schmied → Ritter gedreht,
+     * {@code height} über seiner Brust; Blick auf ihn (etwas zum Ritter hin). Auf dem Server berechnet (dort stehen beide
+     * schon an ihren neuen Plätzen) und der Zuschauer dorthin versetzt.
+     */
+    private static Step follow(Stage stage, double angle, double distance, double height) {
+        return Step.server(any -> {
+            ServerLevel level = nether(any);
+            if (level == null || !(level.getEntity(stage.smith) instanceof Entity smith) || any.getServer().getPlayerList().getPlayers().isEmpty()) {
+                return;
+            }
+            Vec3 c = smith.position().add(0.0, 2.2, 0.0);
+            Vec3 toward = level.getEntity(stage.knight) instanceof Entity knight ? knight.position().subtract(smith.position())
+                    .multiply(1.0, 0.0, 1.0) : new Vec3(0.0, 0.0, -1.0);
+            if (toward.lengthSqr() < 1.0e-3) {
+                toward = new Vec3(0.0, 0.0, -1.0);
+            }
+            Vec3 dir = toward.normalize().yRot((float) Math.toRadians(angle));
+            Vec3 focus = c.add(toward.normalize().scale(Math.min(1.5, toward.length() * 0.25)));
+            Vec3 eye = c.add(dir.scale(distance)).add(0.0, height, 0.0);
+            Vec3 look = focus.subtract(eye);
+            float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
+            float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            var player = any.getServer().getPlayerList().getPlayers().getFirst();
+            player.teleportTo(level, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), yaw, pitch, true);
+        });
     }
 
     /** Sucht die nächste Aschenesse, lässt ihre Chunks entstehen und merkt sich Turm und Amboss. */

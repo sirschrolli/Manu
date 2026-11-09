@@ -78,6 +78,10 @@ public class GlutschmiedRenderer extends MobRenderer<GlutschmiedEntity, Glutschm
         state.stoked = entity.isStoked();
         state.spear = entity.holdsSpear(state.attackTime);
         state.owner = entity;
+        // im langen Sterben nicht rot getönt (er verglüht, siehe die Leuchtebene)
+        if (entity.deathTime > 0) {
+            state.hasRedOverlay = false;
+        }
     }
 
     @Override

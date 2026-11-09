@@ -107,7 +107,7 @@ final class ForgeGameTests {
             return;
         }
         helper.assertTrue(forge.phase() == GlutAnvilBlockEntity.Phase.DORMANT, "Der Amboss ruht nicht");
-        AABB area = new AABB(pos).inflate(6, 4, 6);
+        AABB area = new AABB(pos).inflate(5, 4, 5);
         // ein Spieler im Überlebensmodus (die Testhilfe kennt nur Kreativspieler – die übersieht der Amboss)
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-forge-visitor", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
         move(player, pos.getX() + 0.5, pos.getY(), pos.getZ() + 9.0);
@@ -230,7 +230,7 @@ final class ForgeGameTests {
         floor(helper);
         GlutschmiedEntity smith = helper.spawn(ModEntities.GLUTSCHMIED.get(), new BlockPos(4, 1, 1));
         LivingEntity knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(4, 1, 4));
-        AABB area = smith.getBoundingBox().inflate(7, 3, 7);
+        AABB area = smith.getBoundingBox().inflate(5.5, 3, 5.5);
         float[] hp = {knight.getHealth()};
         smith.setTarget(knight);
         smith.forceAttack(GlutschmiedEntity.Attack.THRUST);
@@ -310,7 +310,9 @@ final class ForgeGameTests {
         helper.assertTrue(target.isOnFire(), "Der Treffer setzt nicht in Brand");
         helper.assertTrue(other.isOnFire(), "Kein Flammenring um das Ziel");
         level.getServer().getPlayerList().remove(player);
-        cleanup(level, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(12));
+        // nur die eigenen Wesen wegräumen (ein weiter Bereich träfe die Nachbartests)
+        target.discard();
+        other.discard();
         helper.succeed();
     }
 }

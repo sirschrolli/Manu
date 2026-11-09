@@ -12,17 +12,23 @@ from __future__ import annotations
 import math
 
 from ..geometry import Model
-from ..paint import Ctx, Voronoi3D, hash01, mix, noise3, pick, ramp, rel_y
+from ..paint import Ctx, Voronoi3D, hash01, hexc, mix, noise3, pick, ramp, rel_y
+
+
+def stops(*colors: str) -> list:
+    """Handverlesene Tonleiter (für Glut und Flammen: der lineare Verlauf von Dunkelrot nach Gelb würde braun)."""
+    return [hexc(c) for c in colors]
 
 PALETTES = {
     "glutschmied": {
         "bone": ramp("#140f0d", "#7a6e66", steps=8), "socket": ramp("#010000", "#140806"),
-        "ember": ramp("#5c1404", "#ffb84a", steps=7), "heart": ramp("#6a1002", "#ffe27a", steps=7),
+        "ember": stops("#5c1404", "#a02806", "#de4a0c", "#ff7418", "#ff9c2c", "#ffc860", "#fff0b0"),
+        "heart": stops("#6a1002", "#b02408", "#f0500e", "#ff8020", "#ffb040", "#ffe07a", "#fff6c8"),
         "iron": ramp("#0c0c0e", "#5c5a5e", steps=7), "rivet": ramp("#3a2a0c", "#e8b850"),
         "leather": ramp("#120a06", "#5a3a22", steps=6), "eye": ramp("#8a2002", "#fff2b0"),
         "horn": ramp("#0e0a08", "#4e4038", steps=6), "wood": ramp("#100a06", "#4a2e1a", steps=6),
-        "gold": ramp("#5a3a0a", "#ffe08a"), "blade": ramp("#6a1002", "#ffe070", steps=7),
-        "chain": ramp("#0a0a0a", "#4a4644", steps=5), "flame": ramp("#7a1a02", "#fff0b0", steps=6),
+        "gold": ramp("#5a3a0a", "#ffe08a"), "blade": stops("#5a0c02", "#9c1e04", "#dc420a", "#ff6c16", "#ff9a2a", "#ffc850", "#fff0a0"),
+        "chain": ramp("#0a0a0a", "#4a4644", steps=5), "flame": stops("#8a1c02", "#e0480a", "#ff7a16", "#ffa832", "#ffd66a", "#fff4c0"),
     },
 }
 
@@ -86,9 +92,12 @@ def build() -> Model:
     m.cube("spear", (-1.0, -6, -1.0), (2, 1.2, 2), "ring")
     m.cube("spear", (-1.0, 12, -1.0), (2, 1.2, 2), "ring")
     m.cube("spear", (-2.4, 20.5, -1.1), (4.8, 1.6, 2.2), "guard")
-    m.cube("spear", (-1.4, 22, -0.5), (2.8, 6.5, 1.0), "blade")
-    m.cube("spear", (-0.8, 28.5, -0.4), (1.6, 2.5, 0.8), "blade")
-    m.cube("spear", (-0.3, 31, -0.3), (0.6, 1.5, 0.6), "blade")
+    # die Klinge: breit und blattförmig wie die des Glutspeers, den Spieler ihm abringen
+    m.cube("spear", (-1.5, 22, -0.5), (3.0, 2.4, 1.0), "blade")
+    m.cube("spear", (-2.0, 24.4, -0.5), (4.0, 3.0, 1.0), "blade")
+    m.cube("spear", (-1.4, 27.4, -0.45), (2.8, 2.2, 0.9), "blade")
+    m.cube("spear", (-0.8, 29.6, -0.4), (1.6, 1.8, 0.8), "blade")
+    m.cube("spear", (-0.3, 31.4, -0.3), (0.6, 1.4, 0.6), "blade")
     # --- Beine: Oberschenkelknochen, Knie, Beinschienen, eisenbeschlagene Füße
     for side, sx in (("left", 1), ("right", -1)):
         leg = f"{side}_leg"

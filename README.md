@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.63.0 – Das Feenreich.** Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
+> **Testversion 0.64.0 – Malleus, der Glutschmied.** Der erste der neuen Bosse jenseits des Feenreichs wartet im Nether: Auf dem Dach jeder **Aschenesse** kniet **Malleus, der Glutschmied**, an seinem **Glutamboss** und schmiedet am **Glutspeer** – ein knapp vier Blöcke großes, verkohltes Gerippe mit Widderschädel, Flammen auf dem Kopf und einer glühenden Herzesse in der Brust. Wer die Treppe hinaufsteigt, hört schon von Weitem seine Hammerschläge; tritt man an den Amboss heran, richtet er sich auf, nimmt den Speer vom Amboss und brüllt. Er ist stärker als die Erzmagier (560 Lebenspunkte, Rüstung 12) und kämpft mit sechs Angriffen: **Speerstoß**, **Hammerschlag** mit einer Schockwelle über das Dach, **Funkenflug**, **Glutwurf** mit Klumpen geschmolzenen Metalls, **Ruf der Gesellen** (Brandgebeine) und unter halber Kraft das **Anfachen der Esse** – dann wird er weißglühend. Besiegt lässt er den **Glutspeer** fallen, einen eigenen 3D-Speer, der im Nether (und wenn du brennst) härter trifft, jeden Getroffenen in Brand setzt, einen Flammenring auflodern lässt und dich in der Hand vor Feuer und Lava schützt. Der Amboss erkaltet; ein **Netheritbarren** facht ihn neu an und ruft den Schmied zurück. Neu ist auch der Kreativ-Reiter **„Legenden“**; der Gezeiten-Speer und der Glutspeer lassen sich jetzt wie die Speere von Minecraft verzaubern.
+> In 0.63 kam das Feenreich: Noch vor den Drachen öffnet sich eine neue Welt: das **Feenreich**, eine Dimension im ewigen Abendrot. Ein Rahmen aus **Mondsteinziegeln** (mindestens 4 × 5), bestreut mit **Feenstaub**, wird zum schimmernden **Feenportal**. Dahinter liegen fünf Biome – **Blütenwiesen**, der **Glimmerwald** mit leuchtenden Bäumen in Rosa und Türkis, der **Pilzhain** mit Riesenpilzen, die **Mondseen** mit Mondlilien und die **Dornenwildnis** –, dazu Ruinen eines alten Volkes, Feenringe und vier Wesen: **Feen**, die für eine Blume tanzen und Feenstaub schenken, **Feen-Irrlichter**, die zu verborgenen Schätzen führen, scheue **Pilzlinge** und der gefährliche **Dornwicht**. Auf den **Mondhainen** – Lichtungen mit Steinkreisen aus Mondstein – schläft in einem Seidenkokon **Noctua, die Mottenkönigin**: ein riesiger Mondfalter mit eigener Bossleiste, eigenen Klängen und sechs Angriffen (Flügelsturm, Schuppenwolke, Mottenschwarm, Mondstrahl, Sturzflug und Schlaflied). Besiegt hinterlässt sie die **Feen-Elytren**: Sie gleiten wie Elytren, schlagen im Gleitflug mit einem Druck auf Springen kräftig mit den Flügeln und fangen den Aufprall an Wänden ab.
 > In 0.62 kam die Tiefe des Meeres: das **Versunkene Atoll** mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), der **Gezeiten-Speer** als erste eigene 3D-Waffe und das Gezeitenhorn, dazu sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und das Meeresleuchten.
 > In 0.61 kam das lebendige Meer: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, dazu Tiefsee-Laterne, Haizahn-Pfeile und Nachtsicht aus Leuchtgelee. Die 53 Standard-Biome der Oberwelt bekamen eine eigene Klangwelt (die Klangteppiche kommen und gehen und lassen sich in der Konfiguration leiser stellen), das Leveln dauert länger (Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung; die Erfahrung, die du bekommst, bleibt gleich), und der Zerbrochene König wurde zum stärksten Gegner der Mod.
 > In 0.60 kam der Zerbrochene König: Hoch in der Leere schwebt der Thron der Alten. Wer ihn betritt, weckt den letzten König der Alten, einen schwebenden Riesen aus Marmor und Gold mit zersprungenem Herzen, einer Krone aus sieben Kristallsplittern und zwei frei schwebenden Händen. Besiegt lässt er seine Krone fallen: ein Helm als echtes 3D-Modell, mit dem du sanft fällst. Dazu kam `/kaw dim <oberwelt|nether|end|schattenwelt|leere>`, das im Kreativmodus (oder mit Cheats) sofort zwischen den Dimensionen wechselt.
@@ -326,7 +327,8 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Zerbrochene König**: Boss der Leere auf dem schwebenden Thron der Alten – eigenes Modell mit frei schwebenden Händen, sechs Angriffe und Sternenstrahl, eigene Bossleiste, Stimmen und Klänge; seine Krone als 3D-Helm; seit 0.61 der stärkste Gegner (1.800 Lebenspunkte, Zorn des Königs, Doppelschlag) | ✅ fertig |
 | **Das lebendige Meer**: Mantarochen, Leuchtquallen, Hai, Anglerfisch und Riesenkrabbe mit eigenen Modellen, eigenem Verhalten und eigenen Klängen; Tiefsee-Laterne, Haizahn-Pfeile, Krabbenfleisch, Krabbenschere, Nachtsicht aus Leuchtgelee | ✅ fertig |
 | **Die Tiefe des Meeres**: sechs Landschaften am Meeresgrund (Tangwälder mit Riesentang, Felsnadeln, Anemonengärten, Muschelbänke, heiße Quellen, Leuchtfelder) und Meeresleuchten; das Versunkene Atoll mit **Karkinos, dem Riffkoloss** (acht Angriffe, eigene Bossleiste), dem **Gezeiten-Speer** als 3D-Waffe und dem Gezeitenhorn | ✅ fertig |
-| **Das Feenreich** (neu): eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
+| **Das Feenreich**: eigene Dimension im ewigen Abendrot, schon vor den Drachen über ein Portal aus Mondsteinziegeln und Feenstaub erreichbar – fünf Biome, Riesenpilze, leuchtende Glimmerbäume, Ruinen und Feenringe, vier Wesen (Fee, Feen-Irrlicht, Pilzling, Dornwicht); die Mondhaine mit **Noctua, der Mottenkönigin** (sechs Angriffe, eigene Bossleiste) und die **Feen-Elytren** mit Flügelschlag | ✅ fertig |
+| **Malleus, der Glutschmied** (neu): Boss auf dem Dach jeder Aschenesse im Nether – kniet schmiedend an seinem Glutamboss, erwacht, wenn man herantritt; sechs Angriffe, Weißglut unter halber Kraft, eigene Bossleiste und Klänge; der **Glutspeer** als 3D-Waffe; Rückruf mit einem Netheritbarren | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -929,7 +931,8 @@ aus Schwarzstein, gestützt von Strebepfeilern, mit roten Bändern an jedem Bode
   Thron, einem Schädel darauf und dem **Hort** (Gold, vergoldeter Schwarzstein, Edelsteine, Diamanten,
   Netheritschrott, selten ein Witherskelettschädel).
 - **Auf dem Dach** Zinnen, Dornen, Seelenfeuer auf den Spitzen und ein schlanker Schlot mit der **Glutkrone**, einer
-  Feuerschale, die man weithin glühen sieht.
+  Feuerschale, die man weithin glühen sieht. Vor dem Schlot steht der **Glutamboss** – dort schmiedet **Malleus, der
+  Glutschmied** (siehe unten).
 - **Vier Brücken** gehen von der Schmiede nach allen Seiten, auf Bögen und Pfeilern, mit Geländern und Laternen. Wo sie
   auf Fels treffen, enden sie hinter einem Tor mit Feuerschalen in **Stuben im Gestein** – eine Glutkammer mit einem
   weiteren Glutgeist, ein Vorrat, eine Wachstube, ein Kerker mit Ketten –, oft mit einem Stollen in die nächste Höhle;
@@ -1764,6 +1767,54 @@ Augenflecken und langen Schwänzen:
 | **Funkenspur** | hinter den Flügelspitzen zieht eine Spur aus Feenfunken her |
 | Haltbarkeit | 540 (mehr als Elytren), mit **Feenstaub** zu reparieren, verzauberbar wie Elytren, episch |
 
+### Malleus, der Glutschmied
+
+![Malleus, der Glutschmied, auf dem Dach der Aschenesse](docs/bilder/glutschmied.jpg)
+
+Seit 0.64 hat jede **Aschenesse** im Nether einen Meister: Auf ihrem Dach, vor dem Schlot mit der Glutkrone, steht der
+**Glutamboss** – ein massiger Amboss aus geschwärztem Eisen mit glühenden Nähten, und auf ihm liegt rotglühend ein
+Speer. Steigst du die Wendeltreppe hinauf, hallen dir schon von Weitem Hammerschläge entgegen („Vom Dach der Aschenesse
+hallen Hammerschläge …“): **Malleus, der Glutschmied**, kniet am Amboss und schmiedet. Solange er arbeitet, bemerkt er
+dich nicht und ist unverwundbar. Trittst du näher als sieben Blöcke heran (oder greifst ihn an), hält er inne, richtet
+sich auf, nimmt den Glutspeer vom Amboss, reckt Hammer und Speer empor und brüllt (Finden: `/locate structure
+kingdomsatwar:ash_forge`).
+
+Malleus ist ein knapp **vier Blöcke großes**, verkohltes Gerippe: ein Widderschädel mit glühenden Augen und Flammen,
+Schulterplatten aus Eisen, ein Brustkorb, in dem eine **Herzesse** glüht, Ketten um die Unterarme, eine angesengte
+Lederschürze. Links schwingt er den Schmiedehammer, rechts führt er den **Glutspeer**. Er steht in der Reihe der Bosse
+**zwischen den Erzmagiern und den Drachen** (560 Lebenspunkte, Rüstung 12, Zähigkeit 4, lässt sich nicht wegstoßen);
+Feuer, Lava und Wände schaden ihm nicht. Eigene Bossleiste mit gekreuztem Hammer und Speer und fließender Glut, eigene
+Klänge.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Speerstoß** | drei schnelle Stöße mit dem Glutspeer, gut fünf Blöcke weit – jeder setzt in Brand |
+| **Hammerschlag** | er holt über den Kopf aus und schmettert den Hammer auf das Dach: eine **Schockwelle** läuft als Ring nach außen – wer im richtigen Moment springt, entgeht ihr |
+| **Funkenflug** | Hammer auf Klinge: ein Kegel glühender Funken, gut acht Blöcke weit |
+| **Glutwurf** | mit dem Hammer schleudert er **Glutklumpen** im hohen Bogen dorthin, wo du gleich sein wirst; sie zerplatzen und setzen in Brand |
+| **Ruf der Gesellen** | er reckt den Speer empor und stößt ihn auf das Dach – zwei **Brandgebeine** treten aus den Flammen (höchstens dreimal) |
+| **Esse anfachen** | unter halber Kraft stößt er den Speer ins Dach, Flammen brechen ringsum hervor, und er wird **weißglühend**: schneller, härter, und wer ihm zu nahe kommt, verbrennt |
+
+Er bleibt auf seinem Dach (stürzt er hinunter, kehrt er in einer Flammensäule zurück). Findet er niemanden mehr, kehrt
+er an den Amboss zurück, legt den Speer darauf und schmiedet weiter – geheilt. Im Tod sinkt er auf die Knie, Glut und
+Rauch steigen aus ihm auf, bis die Esse in seiner Brust erlischt. Er hinterlässt den **Glutspeer**, einen
+**Herzkristall**, **Glutklumpen** (Brennstoff wie eine Lohenrute), Netheritschrott, Gold, Edelsteine und Münzen. Der
+Amboss **erkaltet** – legst du einen **Netheritbarren** darauf (Rechtsklick), facht sich die Esse neu an, und Malleus
+kehrt zurück.
+
+**Der Glutspeer** – das Meisterstück des Glutschmieds: ein Schaft aus geschwärztem Eisenholz mit Goldringen und
+Lederwicklung, ein Parierstück mit Widderhörnern und Glutstein und eine breite, blattförmige Klinge, die nie erkaltet. In
+der Hand ein echtes 3D-Modell; ein Speer wie die von Minecraft (Stoß und Ansturm), verzauberbar wie sie.
+
+| Eigenschaft | Wirkung |
+|---|---|
+| **Glutkraft** | im Nether – oder wenn du selbst brennst – trifft er um ein Drittel härter |
+| **Glutstoß** | jeder Treffer setzt in Brand; im Nether (oder brennend) lodert zudem ein **Flammenring** um das Ziel auf und entzündet die Gegner ringsum |
+| **Hitzeschutz** | in der Hand, im Nether: **Feuerresistenz** (Feuer und Lava tun dir nichts) |
+| Werkstoff | so hart wie Netherit, ein wenig schärfer; 2.431 Haltbarkeit, mit **Netheritschrott** zu reparieren, feuerfest, episch |
+
+Glutamboss, Glutspeer, Glutklumpen und das Spawn-Ei liegen im neuen Kreativ-Reiter **„Legenden“**.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -2396,19 +2447,19 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    länger.
 5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König, die fünf Meereswesen und die Tiefe des Meeres
    (Landschaften am Meeresgrund, das Versunkene Atoll mit Karkinos und dem Gezeiten-Speer) sind fertig, als Nächstes:
-   - **0.63 – Das Feenreich:** eine neue Dimension im ewigen Abendrot – Riesenpilze, leuchtende Bäume, Feen, Irrlichter
-     und Ruinen –, betretbar schon vor den Drachen durch einen eigenen **Portal-Rahmen**, mit einem Boss, der
-     **Feen-Elytren** fallen lässt;
-   - danach weitere Bosse im Nether und im End mit eigenen 3D-Speeren und Elytren, neue Monster in allen Welten und
-     neue 3D-Waffen und -Rüstungen;
+   - **0.63 – Das Feenreich** (fertig): eine neue Dimension im ewigen Abendrot mit **Noctua, der Mottenkönigin**, und
+     den **Feen-Elytren**;
+   - **0.64 – Malleus, der Glutschmied** (fertig): der Boss auf dem Dach der Aschenesse mit dem **Glutspeer**;
+   - **0.65 – Asteria, die Sternenreiterin:** ein Boss im End mit der **Sternenlanze** und den **Sternenschwingen**;
+   - danach neue Monster in allen Welten und neue 3D-Waffen und -Rüstungen;
    - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
      versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König
      fällt: ein Portal hinter dem Thron und ein Schlüssel, der Risse in der Leere öffnet. Wer den Weltenfresser
      besiegt, erhält einen legendären Speer, eine Trophäe und den Titel **„Weltenretter“**.
 
-   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und der Feenreich-Boss (früh im Spiel) → Erzmagier →
-   Drachen → Zerbrochener König → Weltenfresser.
+   Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → Malleus →
+   Drachen → Asteria → Zerbrochener König → Weltenfresser.
 
 ## Danksagung
 

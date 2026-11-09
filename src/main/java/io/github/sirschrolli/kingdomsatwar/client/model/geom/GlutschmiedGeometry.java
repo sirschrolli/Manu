@@ -26,7 +26,7 @@ public final class GlutschmiedGeometry {
                 .texOffs(83, 59).addBox(-4.5F, -1F, -2.5F, 9F, 3F, 5F)
                 .texOffs(114, 46).addBox(-1F, -9F, 0.6F, 2F, 9F, 2F)
                 .texOffs(18, 0).addBox(-5.5F, -17F, -3.5F, 11F, 9F, 7F)
-                .texOffs(60, 69).addBox(-2F, -15F, -1.5F, 4F, 4F, 3F)
+                .texOffs(51, 69).addBox(-2F, -15F, -1.5F, 4F, 4F, 3F)
                 .texOffs(39, 46).addBox(-8F, -19.5F, -4F, 16F, 3F, 8F)
                 .texOffs(50, 59).addBox(-5F, -2.4F, -3F, 10F, 2F, 6F),
                 PartPose.offsetAndRotation(0F, 6F, 0F, 0.1047F, 0F, 0F));
@@ -35,36 +35,36 @@ public final class GlutschmiedGeometry {
                 PartPose.offsetAndRotation(0F, -1F, -3.2F, -0.0698F, 0F, 0F));
         PartDefinition p_head = p_body.addOrReplaceChild("head", CubeListBuilder.create()
                 .texOffs(55, 0).addBox(-3.5F, -7F, -4.5F, 7F, 7F, 7F)
-                .texOffs(94, 69).addBox(-2.5F, -3.5F, -6.9F, 5F, 3F, 3F, new CubeDeformation(0F, 0F, -0.4F)),
+                .texOffs(85, 69).addBox(-2.5F, -3.5F, -6.9F, 5F, 3F, 3F, new CubeDeformation(0F, 0F, -0.4F)),
                 PartPose.offsetAndRotation(0F, -19.5F, -1F, -0.1047F, 0F, 0F));
         PartDefinition p_left_horn = p_head.addOrReplaceChild("left_horn", CubeListBuilder.create()
                 .texOffs(85, 78).addBox(1.5F, -8.5F, -2.3F, 3F, 3F, 3F, new CubeDeformation(-0.1F, -0.1F, -0.1F))
                 .texOffs(98, 78).addBox(3.1F, -8.9F, -0.5F, 3F, 3F, 3F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
                 .texOffs(111, 78).addBox(4.4F, -7.7F, 1.1F, 3F, 3F, 3F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
                 .texOffs(0, 85).addBox(5.1F, -5.5F, 1.3F, 3F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(104, 85).addBox(5.6F, -3F, 0.6F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
-                .texOffs(113, 85).addBox(5.1F, -1.6F, -1.2F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
-                .texOffs(0, 92).addBox(4.4F, -0.8F, -2.6F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
+                .texOffs(115, 85).addBox(5.6F, -3F, 0.6F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(0, 92).addBox(5.1F, -1.6F, -1.2F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
+                .texOffs(9, 92).addBox(4.4F, -0.8F, -2.6F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_right_horn = p_head.addOrReplaceChild("right_horn", CubeListBuilder.create()
                 .texOffs(13, 85).addBox(-4.5F, -8.5F, -2.3F, 3F, 3F, 3F, new CubeDeformation(-0.1F, -0.1F, -0.1F))
                 .texOffs(26, 85).addBox(-6.1F, -8.9F, -0.5F, 3F, 3F, 3F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
                 .texOffs(39, 85).addBox(-7.4F, -7.7F, 1.1F, 3F, 3F, 3F, new CubeDeformation(-0.3F, -0.3F, -0.3F))
                 .texOffs(52, 85).addBox(-8.1F, -5.5F, 1.3F, 3F, 3F, 3F, new CubeDeformation(-0.4F, -0.4F, -0.4F))
-                .texOffs(9, 92).addBox(-7.6F, -3F, 0.6F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
-                .texOffs(18, 92).addBox(-7.1F, -1.6F, -1.2F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
-                .texOffs(27, 92).addBox(-6.4F, -0.8F, -2.6F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
+                .texOffs(18, 92).addBox(-7.6F, -3F, 0.6F, 2F, 2F, 2F, new CubeDeformation(-0.05F, -0.05F, -0.05F))
+                .texOffs(27, 92).addBox(-7.1F, -1.6F, -1.2F, 2F, 2F, 2F, new CubeDeformation(-0.2F, -0.2F, -0.2F))
+                .texOffs(36, 92).addBox(-6.4F, -0.8F, -2.6F, 2F, 2F, 2F, new CubeDeformation(-0.4F, -0.4F, -0.4F)),
                 PartPose.offset(0F, 0F, 0F));
         PartDefinition p_flames = p_head.addOrReplaceChild("flames", CubeListBuilder.create(),
                 PartPose.offset(0F, -7F, -1F));
         PartDefinition p_flame_1 = p_flames.addOrReplaceChild("flame_1", CubeListBuilder.create()
-                .texOffs(111, 69).addBox(-4F, -6F, 0F, 8F, 6F, 0F),
+                .texOffs(102, 69).addBox(-4F, -6F, 0F, 8F, 6F, 0F),
                 PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 0.7854F, 0F));
         PartDefinition p_flame_2 = p_flames.addOrReplaceChild("flame_2", CubeListBuilder.create()
                 .texOffs(0, 78).addBox(-4F, -6F, 0F, 8F, 6F, 0F),
                 PartPose.offsetAndRotation(0F, 0F, 0F, 0F, 2.3562F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
-                .texOffs(75, 69).addBox(-2.5F, -0.1F, -3.2F, 5F, 2F, 4F, new CubeDeformation(0F, -0.1F, 0F)),
+                .texOffs(66, 69).addBox(-2.5F, -0.1F, -3.2F, 5F, 2F, 4F, new CubeDeformation(0F, -0.1F, 0F)),
                 PartPose.offsetAndRotation(0F, -0.8F, -3.2F, 0.1396F, 0F, 0F));
         PartDefinition p_left_arm = p_body.addOrReplaceChild("left_arm", CubeListBuilder.create()
                 .texOffs(84, 0).addBox(-3F, -3.25F, -3.5F, 6F, 5F, 7F, new CubeDeformation(0F, -0.25F, 0F))
@@ -94,12 +94,14 @@ public final class GlutschmiedGeometry {
                 PartPose.offsetAndRotation(0F, 9F, 0F, -0.2094F, 0F, 0F));
         PartDefinition p_spear = p_right_forearm.addOrReplaceChild("spear", CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-1F, -9F, -1F, 2F, 30F, 2F, new CubeDeformation(-0.3F, 0F, -0.3F))
-                .texOffs(36, 92).addBox(-1F, -6.4F, -1F, 2F, 2F, 2F, new CubeDeformation(0F, -0.4F, 0F))
-                .texOffs(45, 92).addBox(-1F, 11.6F, -1F, 2F, 2F, 2F, new CubeDeformation(0F, -0.4F, 0F))
+                .texOffs(45, 92).addBox(-1F, -6.4F, -1F, 2F, 2F, 2F, new CubeDeformation(0F, -0.4F, 0F))
+                .texOffs(54, 92).addBox(-1F, 11.6F, -1F, 2F, 2F, 2F, new CubeDeformation(0F, -0.4F, 0F))
                 .texOffs(65, 85).addBox(-2.5F, 20.3F, -1.5F, 5F, 2F, 3F, new CubeDeformation(-0.1F, -0.2F, -0.4F))
-                .texOffs(51, 69).addBox(-1.5F, 21.75F, -0.5F, 3F, 7F, 1F, new CubeDeformation(-0.1F, -0.25F, 0F))
-                .texOffs(54, 92).addBox(-1F, 28.25F, -0.5F, 2F, 3F, 1F, new CubeDeformation(-0.2F, -0.25F, -0.1F))
-                .texOffs(61, 92).addBox(-0.5F, 30.75F, -0.5F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.25F, -0.2F)),
+                .texOffs(63, 92).addBox(-1.5F, 21.7F, -0.5F, 3F, 3F, 1F, new CubeDeformation(0F, -0.3F, 0F))
+                .texOffs(104, 85).addBox(-2F, 24.4F, -0.5F, 4F, 3F, 1F)
+                .texOffs(72, 92).addBox(-1.5F, 27F, -0.5F, 3F, 3F, 1F, new CubeDeformation(-0.1F, -0.4F, -0.05F))
+                .texOffs(81, 92).addBox(-1F, 29.5F, -0.5F, 2F, 2F, 1F, new CubeDeformation(-0.2F, -0.1F, -0.1F))
+                .texOffs(88, 92).addBox(-0.5F, 31.1F, -0.5F, 1F, 2F, 1F, new CubeDeformation(-0.2F, -0.3F, -0.2F)),
                 PartPose.offsetAndRotation(0F, 10F, 0F, -1.5708F, 0F, 0F));
         PartDefinition p_left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create()
                 .texOffs(88, 46).addBox(-1.5F, -0.25F, -1.5F, 3F, 8F, 3F, new CubeDeformation(-0.2F, -0.25F, -0.2F))
