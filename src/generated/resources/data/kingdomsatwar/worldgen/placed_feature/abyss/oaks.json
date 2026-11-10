@@ -1,0 +1,18 @@
+{
+  "feature": "minecraft:oak",
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 2
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:any_surface"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

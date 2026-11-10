@@ -4,6 +4,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -96,6 +97,12 @@ public final class AbyssLanding {
         }
     }
 
+    private static boolean vegetation(BlockState state) {
+        return state.is(BlockTags.REPLACEABLE) || state.is(BlockTags.LEAVES) || state.is(BlockTags.FLOWERS) || state.is(Blocks.CHORUS_PLANT)
+                || state.is(Blocks.CHORUS_FLOWER) || state.is(Blocks.CACTUS) || state.is(Blocks.VINE) || state.is(Blocks.WEEPING_VINES)
+                || state.is(Blocks.WEEPING_VINES_PLANT) || state.is(Blocks.CRIMSON_FUNGUS) || state.is(Blocks.CRIMSON_ROOTS);
+    }
+
     /** Der Platz: Ringe aus poliertem Chaosgestein und Ziegeln, glühende Nähte, vier Pfeiler mit Schwebekristallen. */
     private static void plaza(ServerLevel level, BlockPos center) {
         BlockState polished = AbyssBlocks.POLISHED_CHAOS_STONE.base().get().defaultBlockState();
@@ -134,6 +141,20 @@ public final class AbyssLanding {
                     BlockPos air = floor.above(dy);
                     if (!level.getBlockState(air).isAir()) {
                         level.setBlock(air, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+        }
+        // Pflanzen ringsum, die in den Platz oder den Riss ragen würden (Chorus, Laub, Ranken …), weichen
+        for (int dx = -PLAZA - 4; dx <= PLAZA + 4; dx++) {
+            for (int dz = -PLAZA - 4; dz <= PLAZA + 4; dz++) {
+                if (dx * dx + dz * dz > (PLAZA + 4.5) * (PLAZA + 4.5)) {
+                    continue;
+                }
+                for (int dy = 1; dy <= AbyssGate.RIFT_HEIGHT + 6; dy++) {
+                    BlockPos at = center.offset(dx, dy, dz);
+                    if (vegetation(level.getBlockState(at))) {
+                        level.setBlock(at, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
                     }
                 }
             }

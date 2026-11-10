@@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 /**
  * Der Abgrund als Dimension: ein Himmel aus tiefem Karmesin und Tinte, ohne Sonne und Mond, nur ein paar verlorene Sterne;
  * roter Dunst in der Ferne, gedämpftes, rötliches Licht, und immer rieselt Asche. Die Zeit steht still. Schlafen kann man
- * hier nicht. Die Risse am Himmel sind echte Risse in der Welt (siehe AbyssFeatures, Himmelsrisse).
+ * hier nicht. Über allem klaffen glühende Risse im Himmel (gezeichnet von client.abyss.AbyssSkyRenderer).
  */
 public final class AbyssDimension {
     public static final ResourceKey<DimensionType> TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, KingdomsAtWar.id("the_abyss"));

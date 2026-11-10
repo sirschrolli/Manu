@@ -47,7 +47,6 @@ final class AbyssModels {
         blocks.createTrivialCube(AbyssBlocks.CRACKED_CHAOS_STONE_BRICKS.get());
         ModModelProvider.glowingCube(blocks, AbyssBlocks.CHISELED_CHAOS_STONE.get());
         ModModelProvider.glowingCube(blocks, AbyssBlocks.WORLD_SEAM.get());
-        ModModelProvider.glowingCube(blocks, AbyssBlocks.SKY_RIFT.get());
         crystal(blocks, AbyssBlocks.FLOAT_CRYSTAL.get());
         crystal(blocks, AbyssBlocks.LIFT_CRYSTAL.get());
 

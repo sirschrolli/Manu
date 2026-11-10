@@ -5,6 +5,7 @@ import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile
 import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile.Time.DUSK;
 import static io.github.sirschrolli.kingdomsatwar.world.ambience.AmbienceProfile.Time.NIGHT;
 
+import io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes;
 import io.github.sirschrolli.kingdomsatwar.fae.FaeBiomes;
 import io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes;
 import io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes;
@@ -20,8 +21,8 @@ import net.minecraft.world.level.biome.Biomes;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Klangwelten der Biome – der eigenen (Oberwelt, Drachennester, Schattenwelt, Leere) und, seit 0.61, auch der
- * Standard-Biome der Oberwelt.
+ * Die Klangwelten der Biome – der eigenen (Oberwelt, Drachennester, Schattenwelt, Leere, Feenreich, Abgrund) und, seit
+ * 0.61, auch der Standard-Biome der Oberwelt.
  *
  * <p>Seit 0.61 tragen vor allem <b>Einzelklänge</b> die Stimmung: rauschendes Laub, Wind im Gras, rieselnder Sand, Insekten
  * in der Nacht, Bienen über Blumen, Papageien im Dschungel, Möwen an der Küste – vieles davon echte Naturaufnahmen von
@@ -39,6 +40,7 @@ public final class AmbienceProfiles {
         shadowWorld();
         theVoid();
         faeRealm();
+        abyss();
     }
 
     private AmbienceProfiles() {}
@@ -614,5 +616,57 @@ public final class AmbienceProfiles {
                 .spot("wood_creak", 0.8f, ALWAYS)
                 .close("whisper", 0.3f, ALWAYS)
                 .spot("bird_owl", 0.4f, ALWAYS));
+    }
+    // =====================================================================================
+    // Der Abgrund
+    // =====================================================================================
+
+    /**
+     * Der Abgrund: unter allem liegt das schiefe Dröhnen des Chaos, durch das ab und zu ein fernes Reißen geht; in der Ferne
+     * reißt die Welt weiter auf. Dazu klingt in jedem Biom die Welt nach, aus der seine Bruchstücke stammen – Blätter und
+     * Krähen in den Bruchlanden, Glut und Lava im Glutsturz, singende Kristalle in den Sternentrümmern, Klagen und Flüstern
+     * im Schattenschlund. In der Naht knistern die Weltennähte.
+     */
+    private static void abyss() {
+        put(AbyssBiomes.FRACTURED_LANDS, AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.34f, 0.5f)
+                .wind("void_wind", 0.16f)
+                .far("world_tear", 0.5f, ALWAYS)
+                .spot("leaves_rustle", 0.6f, ALWAYS)
+                .spot("bird_crow", 0.3f, ALWAYS)
+                .spot("rock_grind", 0.6f, ALWAYS)
+                .spot("pebbles", 0.5f, ALWAYS));
+        put(AbyssBiomes.EMBER_FALLS, AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.28f, 0.4f)
+                .everywhere("lava", 0.2f, 0.3f)
+                .outside("embers", 0.12f)
+                .far("world_tear", 0.5f, ALWAYS)
+                .spot("steam_vent", 0.6f, ALWAYS)
+                .spot("basalt", 0.7f, ALWAYS)
+                .far("rumble", 0.4f, ALWAYS));
+        put(AbyssBiomes.STAR_WRECK, AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.26f, 0.4f)
+                .everywhere("void_crystal", 0.16f, 0.3f)
+                .far("world_tear", 0.4f, ALWAYS)
+                .spot("crystal_chime", 0.8f, ALWAYS)
+                .spot("amethyst", 0.6f, ALWAYS)
+                .spot("glitch_far", 0.4f, ALWAYS)
+                .far("star_song", 0.25f, ALWAYS));
+        put(AbyssBiomes.SHADOW_CHASM, AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.28f, 0.4f)
+                .everywhere("whispers", 0.08f, 0.3f)
+                .far("world_tear", 0.4f, ALWAYS)
+                .spot("shadow_call", 0.5f, ALWAYS)
+                .spot("soul_voices", 0.5f, ALWAYS)
+                .far("deep_moan", 0.35f, ALWAYS)
+                .close("whisper", 0.3f, ALWAYS));
+        put(AbyssBiomes.THE_SEAM, AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.42f, 0.6f)
+                .far("world_tear", 0.8f, ALWAYS)
+                .spot("zap", 0.8f, ALWAYS)
+                .spot("glitch_far", 0.6f, ALWAYS)
+                .far("rumble", 0.4f, ALWAYS)
+                .far("void_choir", 0.25f, ALWAYS)
+                .close("whisper", 0.3f, ALWAYS));
     }
 }

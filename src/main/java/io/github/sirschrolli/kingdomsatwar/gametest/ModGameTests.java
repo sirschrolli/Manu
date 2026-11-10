@@ -193,6 +193,7 @@ public final class ModGameTests {
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
         RealmGameTests.init();    // Monster der Schattenwelt und des Ends
+        AbyssGameTests.init();    // der Abgrund
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -262,6 +263,7 @@ public final class ModGameTests {
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);
         RealmGameTests.register(event, environment);
+        AbyssGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

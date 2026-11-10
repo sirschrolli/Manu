@@ -411,6 +411,8 @@ def main() -> None:
     for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS}.items():
         meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+    for key, meta in abyss_textures.META.items():
+        (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     print(f"{len(GENERATED)} Texturen geschrieben nach {TEXTURES}")
     if "--preview" in sys.argv:
         i = sys.argv.index("--preview")

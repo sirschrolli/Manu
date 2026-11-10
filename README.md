@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.71.0 – Monster der Schattenwelt und des Ends.** Vier neue Monster, jedes mit eigenem Modell, eigenen Animationen, Angriffen und Klängen. In den Seelensümpfen der Schattenwelt waten **Seelenreiher** – zweieinhalb Blöcke hohe Watvögel mit seelentürkis glimmendem Gefieder: Sie stoßen mit dem Speerschnabel zu, schlagen mit den Schwingen (das treibt zurück und blendet) und greifen aus der Luft an – steil hinauf, über ihr Opfer und im Sturzflug herab. Auf den Schattengipfeln und in der Bleichen Öde scharrt der **Nachtwidder** mit seinen Hörnern aus Nachtkristall und stürmt los; wer ausweicht, lässt ihn gegen die Wand krachen – dann ist er benommen und verwundbar; aufgebäumt stampft er einen Ring aus Kristallsplittern aus dem Boden. Auf den äußeren End-Inseln jagen **Rissjäger** zu zweit: Sie versinken in einem Riss und tauchen hinter ihrem Opfer wieder auf, weichen Pfeilen durch die Leere aus und heulen das Rudel schneller. Und zwischen den Chorusbäumen wartet der **Chorusschlund** – geschlossen eine Chorusknospe wie jede andere, doch kommt man näher, blüht er zu einem glühenden Schlund mit Zähnen auf, peitscht mit Ranken, schnappt zu und spuckt Chorussamen, die einen wie eine Chorusfrucht davonversetzen.
+> **Testversion 0.72.0 – Der Abgrund.** Hinter der Leere liegt das reine Chaos: der **Abgrund**, eine neue Dimension aus Bruchstücken aller Welten – Wiesen und Wälder der Oberwelt, Netherrack mit Lavafällen, Endstein mit Chorus, Schattengras, Eis und Wüste –, gekippt, steil wie Wände oder ganz kopfüber, zusammengeschweißt von glühenden **Weltennähten**, unter einem Himmel voller weißglühender **Risse**, die langsam atmen und aufflammen. Fünf Biome (Bruchlande, Glutsturz, Sternentrümmer, Schattenschlund und die Naht) mit Monstern aus allen Welten und einer eigenen Klangwelt, in der die Welt in der Ferne weiterreißt. **Schwebekristalle** heben die Schwerkraft fast auf, über **Hebekristallen** wird man emporgetragen. Der Weg hinein öffnet sich, wenn der Zerbrochene König fällt: Hinter seinem Thron reißt ein **Abgrundriss** auf, und er lässt den **Rissschlüssel** fallen, mit dem man überall in der Leere einen Riss öffnen und wieder schließen kann. Wer ins Nichts stürzt, wird vom Abgrund ausgespien – zurück auf die nächste Ankerinsel, aber nicht unversehrt.
+> In 0.71 kamen vier Monster in die Schattenwelt und ins End, jedes mit eigenem Modell, eigenen Animationen, Angriffen und Klängen: der **Seelenreiher** in den Seelensümpfen (Speerschnabel, Schwingenschlag und Sturzflug aus der Luft), der **Nachtwidder** auf den Schattengipfeln (scharrt und stürmt los – wer ausweicht, lässt ihn gegen die Wand krachen), die **Rissjäger** auf den äußeren End-Inseln (versinken in einem Riss und tauchen hinter ihrem Opfer auf) und der **Chorusschlund**, der zwischen den Chorusbäumen wie eine Knospe wartet, bis er zu einem Schlund mit Zähnen aufblüht.
 > In 0.70 kamen Waffen und Rüstungen aus Monsterteilen: vier Waffen – die **Krallenklinge** (nachts härter, Blutrausch nach jedem Sieg), die **Moorkeule** (Wurzeln packen zu), die **Glutzahn-Klinge** (setzt in Brand) und die **Seelensense** (Rechtsklick: **Verwehen**) – und zwei Rüstungen: der **Werwolfspelz** mit Wolfskopf, Umhang und Schwanz (voller Satz: nachts schneller, Nachtsicht) und der **Glutwurm-Panzer** mit glühenden Hörnern, Flossenkamm und Rückenstacheln (voller Satz: feuerfest, Angreifer fangen Feuer) – in der Hand und am Körper als echte 3D-Modelle.
 > In 0.69 kamen vier neue Monster in die Oberwelt und den Nether – mit eigenen Modellen, Animationen, Angriffen und Klängen. Der **Werwolf** streift nachts durch Wälder und Taiga (bei Vollmond öfter): Er heult und wird danach schneller und stärker, jagt auf allen vieren und springt sein Opfer aus mehreren Blöcken an – im Tageslicht wird er matt, und die **Mondsilberklinge** trifft ihn besonders hart. Der **Moorschlurfer** lauert halb versunken in Sümpfen und Mooren, steigt aus dem Schlamm, sobald man herankommt, schleudert Schlammklumpen (verlangsamen und blenden) und packt mit Wurzeln zu; in Wasser und Regen heilt er. Im Nether bricht der **Glutwurm** aus großen Lavaseen hervor, richtet sich wie eine Kobra auf, beißt zu oder spuckt Magma – an Land erkaltet er. Und durch das Seelensandtal schweben **Aschengeister**: Sie werfen Seelenfeuer, lassen Aschewolken aufwallen und verwehen zu Asche, um hinter ihrem Gegner wieder aufzutauchen.
 > In 0.68 lernten fünf Bosse je zwei neue Angriffe, mit eigenen Effekten und Klängen: **Karkinos** stemmt sich in den Sand und dreht sich zum **Mahlstrom**: Ein Strudel zieht alle in einer Spirale zu ihm, dann bricht eine Wassersäule los; seine **Blasenfalle** schließt bis zu drei Gegner in schillernde Blasen ein, in denen sie hilflos emporschweben und Luft verlieren. **Noctua** lässt den Mond sich **verfinstern** – Dunkelheit, dann stürzen Mondstrahlen in leuchtende Kreise – und spinnt ihr Ziel in einen **Seidenkokon**. **Malleus** schleudert die **Glutkette**, reißt dich heran und schmettert den Hammer nieder; sein **Glutfächer** jagt Feuersäulen über das Dach. **Asteria** öffnet ein **Schwarzes Loch**: ein Wirbel aus Sternenstaub um einen schwarzen Kern mit gleißendem Lichtring, der alles ansaugt – Wesen, Pfeile, Licht – und schließlich in sich zusammenstürzt; dazu schickt sie **Mondsicheln** aus Licht dicht über den Boden (zur Seite treten oder darüber springen!). Der **Zerbrochene König** gräbt die Klauen in den Boden und reißt die **Risse der Leere** auf, aus denen die Leere Säule um Säule hervorbricht, und im **Leerenbeben** rollen Ringe aus Leerenenergie über den ganzen Platz.
@@ -346,7 +347,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
-| Klänge der Welt: eigene Klangwelt für alle 29 eigenen Biome und seit 0.61 für 53 Standard-Biome der Oberwelt (Tag/Nacht, drinnen/draußen, Regen, Höhe); die Klangteppiche kommen und gehen, Lautstärke und Ein/Aus in der Konfiguration | ✅ fertig |
+| Klänge der Welt: eigene Klangwelt für alle 39 eigenen Biome und seit 0.61 für 53 Standard-Biome der Oberwelt (Tag/Nacht, drinnen/draußen, Regen, Höhe); die Klangteppiche kommen und gehen, Lautstärke und Ein/Aus in der Konfiguration | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen und vier Grundrissen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
@@ -354,6 +355,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Eigene Monster statt Vanilla: Untote und Nachtwesen in 19 Arten und 39 Gestalten, 51 untote Dorfbewohner (heilbar) | ✅ fertig |
 | Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
 | Neue Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist (0.69); Seelenreiher, Nachtwidder, Rissjäger, Chorusschlund in der Schattenwelt und im End (0.71) | ✅ fertig |
+| **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
@@ -667,15 +669,70 @@ zerfällt er Stück für Stück, und der Thron bleibt für immer leer.
 **Beute:** immer die **Krone des Zerbrochenen Königs** – ein Helm, der als echtes **3D-Modell** getragen wird: ein
 goldener Reif mit einem Leerenkristall über der Stirn, darüber schweben sieben Kristallsplitter (Rüstung 3, Härte 2,5,
 feuerfest, mit Leerensplittern zu reparieren). Wer sie trägt, **fällt sanft wie schwerelos** (Schleichen: normal fallen).
-Dazu ein Herzkristall, ein Manakristall, ein verzaubertes Buch der Arkanen, Goldmünzen, Leerensplitter, Leerenkristalle,
-gemeißelter Sternenmarmor und Edelsteine.
+Dazu der **Rissschlüssel** (seit 0.72), ein Herzkristall, ein Manakristall, ein verzaubertes Buch der Arkanen,
+Goldmünzen, Leerensplitter, Leerenkristalle, gemeißelter Sternenmarmor und Edelsteine. Und wenn er fällt, reißt **hinter
+dem Thron** die Leere auf: der Weg in den **Abgrund** (siehe unten).
+
+### Der Abgrund
+
+![Der Abgrund: Bruchstücke aller Welten unter einem Himmel voller Risse](docs/bilder/der_abgrund.jpg)
+
+Hinter der Leere liegt der **Abgrund** – das reine Chaos, in das zerbrochene Welten stürzen. Es gibt keinen Boden und
+keinen Horizont: In allen Höhen treiben **Bruchstücke** durcheinander, gekippt, steil wie Wände oder ganz kopfüber, aus
+dunklem **Chaosgestein** gebacken und überzogen mit dem, was einmal ihre Welt war – Wiese und Wald der Oberwelt,
+Netherrack und Karmesinnyzel, Endstein mit Chorus, Schattengras, Sternenmarmor, Eis und Wüste. Wo Welten aneinanderstoßen,
+glühen **Weltennähte**; von den Rändern stürzen **Lava- und Wasserfälle** ins Nichts; kopfüber treibende Inseln lassen
+Laub, Ranken und Endstäbe nach unten hängen. Darüber – und darunter, denn unten ist hier nur wieder Himmel – klafft ein
+Himmel aus tiefem Karmesin voller weißglühender **Risse**: ein großer Sprung quer über den Zenit, sternförmige
+Einschläge, ein klaffendes „Auge“, hinter dem fremde Sterne funkeln. Sie atmen langsam und flammen ab und zu auf. Asche
+rieselt, das Licht ist rot und gedämpft, die Zeit steht still, und schlafen kann man hier nicht.
+
+**Der Weg hinein** öffnet sich, wenn der Zerbrochene König fällt:
+
+- **Hinter dem Thron** reißt die Leere auf: 28 Blöcke nördlich der Mitte des Thronplatzes entsteht auf einer Plattform
+  aus Chaosgestein ein **Abgrundriss** (fünf Blöcke breit, elf hoch), mit einer Brücke zum Platz. Er bleibt für immer
+  offen – auch in Welten, in denen der König schon vor 0.72 besiegt wurde.
+- Der König lässt den **Rissschlüssel** fallen. Richtet man ihn **in der Leere** auf den Boden, sammeln sich Glutfunken,
+  die Welt knirscht dreimal – und nach vier Sekunden reißt zwei Schritte vor einem ein Abgrundriss auf. Auf einen Riss
+  gerichtet schließt der Schlüssel ihn wieder (nur den hinter dem Thron nicht); der Schlüssel bleibt erhalten.
+
+Wer hindurchgeht, landet auf einer **Ankerinsel**: einem Platz aus poliertem Chaosgestein mit glühender Naht und vier
+zerbrochenen Pfeilern, auf denen Schwebekristalle sitzen – in der Mitte der Riss zurück. Wer ins Nichts stürzt, wird vom
+Abgrund **ausgespien**: verwundet, geblendet und benommen auf die nächste Ankerinsel.
+
+| Biom | Was dort treibt | Wesen |
+|---|---|---|
+| **Bruchlande** | Wiesen und Wälder der Oberwelt mit Eichen und Blumen, dazwischen Eis- und Wüstenstücke | Untote, Skelette, Spinnen, Zerrlinge |
+| **Glutsturz** | Netherrack, Karmesinnyzel, Basalt und Magma, Karmesinpilze, Lava, die von den Rändern stürzt | Glutgeister, Brandgebeine, Aschengeister, selten ein Ghast |
+| **Sternentrümmer** | Endstein mit Chorus, Sternenmarmor und Leerenstein mit Leerenblüten und Kristallen | Leerwandler, Rissjäger, Chorusschlünde, Leerenschlünde |
+| **Schattenschlund** | Schattengras, Schattenbäume und Mondfarn; Sternenranken hängen von kopfüber treibenden Inseln | Schattenpirscher, Nachtwidder, Seelenreiher |
+| **Die Naht** | alles durcheinander, durchzogen von unzähligen glühenden Weltennähten – hier ist das Chaos am dichtesten | Zerrlinge, Splitterwächter, Leerenschlünde, Rissjäger, Schattenpirscher |
+
+**Verdrehte Schwerkraft:** An den Rändern der Bruchstücke wachsen Kristalle, die sich abbauen und anderswo aufstellen
+lassen. Um einen **Schwebekristall** (eisblau) wiegt man in sieben Blöcken Umkreis nur ein Fünftel: Man springt fünf
+Blöcke hoch, sinkt sanft und nimmt keinen Fallschaden. Über einem **Hebekristall** (rosenrot) kehrt sich die Schwerkraft
+um – in einer Säule aus aufsteigenden Funken wird man langsam bis zu zwanzig Blöcke emporgetragen, hinüber zum nächsten
+Bruchstück; wer schleicht, sinkt darin sachte.
+
+**Neue Blöcke:** Chaosgestein (mit Ziegeln, rissigen Ziegeln – aus den Rissen glüht es –, poliert und gemeißelt mit einem
+glimmenden Auge, dazu Treppen, Stufen und Mauern), die leuchtende **Weltennaht**, Schwebe- und Hebekristall und der
+Abgrundriss.
+
+**Klänge des Abgrunds:** Unter allem liegt ein tiefes, schiefes Dröhnen aus Tönen, die nicht zueinander passen, durch das
+ab und zu ein fernes Reißen geht. In der Ferne **reißt die Welt**: erst ein immer dichteres Splittern, dann ein langes
+Bersten und ein hohles Einatmen, als sauge der frische Spalt die Luft an. Dazu klingt in jedem Biom die Welt nach, aus
+der seine Bruchstücke stammen – Laub, Krähen und schabende Felsen in den Bruchlanden, Lava, Glut und fauchende Spalten
+im Glutsturz, singende Kristalle in den Sternentrümmern, Klagen und Flüstern im Schattenschlund, knisternde Nähte und
+flackernde Bildfehler in der Naht.
+
+Was im Abgrund wartet, den **Weltenfresser**, bringt 0.73.
 
 ### Klänge der Welt
 
 ![Klänge der Welt: Spektrogramme der Klangwelten](docs/bilder/klangwelten.jpg)
 
-Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester, die neun Biome der Schattenwelt und die sechs
-Biome der Leere – und seit 0.61 auch **53 Standard-Biome der Oberwelt** haben ihre eigene Klangwelt. Die Stimmung tragen
+Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester, die neun Biome der Schattenwelt, die sechs
+Biome der Leere, die fünf des Feenreichs und die fünf des Abgrunds – und seit 0.61 auch **53 Standard-Biome der Oberwelt** haben ihre eigene Klangwelt. Die Stimmung tragen
 vor allem **Einzelklänge**, die ab und zu an einem Ort in der Nähe erklingen: rauschendes Laub im Baum, Wind im Gras, ein
 Specht, ein Bussard hoch über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne – viele davon echte
 Naturaufnahmen von Minecraft. Darunter liegen nur noch leise Klangteppiche (Wind, Wasser, Brandung, Glut, Eis, das
@@ -697,6 +754,7 @@ Insektensummen, Vogelchor, Schilf und Fröschen von 0.58 sind entfallen; zwische
 | **Drachennester** | je nach Element Lava, Eis, Sturm, Fels, Zauberhain oder Grotte – und ein Drache brüllt in der Ferne | ebenso |
 | **Schattenwelt** | Dröhnen und Flüstern im Schattenwald, singende Kristalle in den Schluchten, Seelenklagen im Sumpf, schwebende Klänge auf den Glimmerweiten, ein Herzschlag in den Tiefen | ewiges Zwielicht |
 | **Die Leere** | tiefes Dröhnen und Sternensirren, gläserne Akkorde im Kristallwald, rieselnder Sternenstaub, Chöre und schabende Steine in den Ruinen, dumpfe Erinnerungen über den Weltenresten, Gesang der Sternenrochen | ewige Nacht |
+| **Der Abgrund** | ein tiefes, schiefes Dröhnen, durch das ab und zu ein fernes Reißen geht; in der Ferne reißt die Welt (Splittern, Bersten, ein hohles Einatmen); dazu je Biom die Welt seiner Bruchstücke – Laub und Krähen, Lava und Glut, singende Kristalle, Klagen und Flüstern, knisternde Nähte | ewiges Rot |
 
 **Die Standard-Biome der Oberwelt** (neu in 0.61) klingen so:
 
@@ -2768,11 +2826,12 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.70 – Waffen und Rüstungen aus Monsterteilen** (fertig): Krallenklinge, Moorkeule, Glutzahn-Klinge und Seelensense,
      Werwolfspelz und Glutwurm-Panzer – alle als 3D-Modelle;
    - **0.71 – Monster der Schattenwelt und des Ends** (fertig): Seelenreiher, Nachtwidder, Rissjäger und Chorusschlund;
-   - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
-     Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
-     versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König
-     fällt: ein Portal hinter dem Thron und ein Schlüssel, der Risse in der Leere öffnet. Wer den Weltenfresser
-     besiegt, erhält einen legendären Speer, eine Trophäe und den Titel **„Weltenretter“**.
+   - **0.72 – Der Abgrund** (fertig): hinter der Leere das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
+     Schwerkraft und einem Himmel voller Risse; der Weg hinein öffnet sich, wenn der König fällt – ein Riss hinter dem
+     Thron und der Rissschlüssel, der Risse in der Leere öffnet;
+   - zuletzt **0.73 – Der Weltenfresser:** Im Abgrund wartet das Wesen, das der Zerbrochene König einst versiegelte, als
+     er seine Krone zerbrach – das stärkste Wesen der Mod. Wer es besiegt, erhält einen legendären Speer, eine Trophäe
+     und den Titel **„Weltenretter“**.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser.

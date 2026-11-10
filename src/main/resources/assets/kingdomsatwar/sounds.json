@@ -1,4 +1,11 @@
 {
+  "ambient.bed.abyss_chaos": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/bed/abyss_chaos"
+      }
+    ]
+  },
   "ambient.bed.bog": {
     "sounds": [
       {
@@ -2173,6 +2180,27 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.woodpecker"
+  },
+  "ambient.spot.world_tear": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:ambient/spot/world_tear1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/world_tear2",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/world_tear3",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:ambient/spot/world_tear4",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.ambient.world_tear"
   },
   "ambient.spot.zap": {
     "sounds": [

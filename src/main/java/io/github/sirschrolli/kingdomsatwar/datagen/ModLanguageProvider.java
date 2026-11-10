@@ -543,7 +543,6 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.FLOAT_CRYSTAL, "Float Crystal", "Schwebekristall");
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL, "Lift Crystal", "Hebekristall");
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT, "Abyss Rift", "Abgrundriss");
-        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SKY_RIFT, "Sky Rift", "Himmelsriss");
         item(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.RIFT_KEY, "Rift Key", "Rissschlüssel");
         text(ModItems.loreKey("rift_key", 1), "Forged from the shards of the Shattered King's crown",
                 "Aus den Splittern der Krone des Zerbrochenen Königs geschmiedet");

@@ -213,6 +213,8 @@ final class Showcase {
                         BeastShowcase.beasts(steps, scene.substring(7));
                     } else if (scene.equals("realm_beasts") || scene.startsWith("realm_beasts_")) {
                         RealmBeastShowcase.beasts(steps, scene.equals("realm_beasts") ? "" : scene.substring(13));
+                    } else if (scene.equals("abyss_tour") || scene.startsWith("abyss_tour_")) {
+                        AbyssShowcase.tour(steps, scene.equals("abyss_tour") ? "" : scene.substring(11));
                     } else if (scene.equals("fae_map")) {
                         FaeShowcase.map(steps);
                     } else if (scene.equals("fae_boss")) {

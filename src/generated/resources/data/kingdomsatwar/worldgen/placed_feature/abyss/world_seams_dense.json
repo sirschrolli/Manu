@@ -1,0 +1,18 @@
+{
+  "feature": "kingdomsatwar:abyss/world_seams_dense",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 4
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "kingdomsatwar:any_surface"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

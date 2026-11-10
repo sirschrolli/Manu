@@ -7,7 +7,8 @@ Texturen des Abgrunds (im Vanilla-Stil, siehe tools/vanilla_style.py):
     Auge, durch das ein Riss läuft – es glimmt)
   * Weltennaht – eine zackige Fuge, die weißglühend durch dunklen Fels läuft, rot gesäumt (leuchtend)
   * Schwebekristall (eisblau) und Hebekristall (rosenrot) – Drusen mit leuchtenden Spitzen
-  * der Abgrundriss (bewegt: ein roter Wirbel um einen schwarzen Kern, in den Splitter stürzen)
+  * der Abgrundriss (bewegt und kachelbar: dunkles Karminrot, durch das glühende Adern wandern, dazu fallende Funken)
+  * die Risse am Himmel (tools/abyss_sky.py, weich gezeichnet und additiv über den Himmel gelegt)
   * Gegenstand: der Rissschlüssel
 
 Wird von tools/generate_textures.py aufgerufen (build(put)).
@@ -20,6 +21,7 @@ from typing import Callable
 
 from PIL import Image
 
+import abyss_sky
 import pixelart as pa
 import vanilla_style as vs
 from pixelart import Color, hexc
@@ -246,41 +248,48 @@ def lift_crystal() -> tuple[Image.Image, Image.Image]:
 # Der Abgrundriss
 # =============================================================================
 
-def abyss_rift(frames: int = 24) -> Image.Image:
+def abyss_rift(frames: int = 32) -> Image.Image:
     """
-    Der Riss als Bildfolge: ein roter Wirbel um einen schwarzen Kern; helle Splitter stürzen spiralförmig hinein, die
-    Ränder glühen orange. Leicht durchscheinend.
+    Der Riss als Bildfolge (nahtlos kachelbar wie ein Netherportal): ein dunkles, karminrotes Wogen, durch das glühende
+    Adern ziehen – sie entstehen an den Nullstellen eines gewundenen Wellenfelds und wandern langsam weiter; dazu ein paar
+    Funken, die nach unten in den Riss stürzen. Leicht durchscheinend.
     """
-    sheet = Image.new("RGBA", (N, N * frames))
+    import numpy as np
     rnd = random.Random(72101)
-    shards = [(rnd.uniform(0, 2 * math.pi), rnd.uniform(1.5, 11.0), rnd.choice([EMBER[4], EMBER[3], hexc("#ffffff"), hexc("#ffb0c8")]))
-              for _ in range(22)]
+    yy, xx = np.mgrid[0:N, 0:N].astype(float)
+    waves = [(k, rnd.choice([1, -1]), rnd.uniform(0, 2 * math.pi), a)
+             for k, a in (((1, 0), 1.0), ((0, 1), 0.9), ((1, 1), 0.7), ((1, -1), 0.6), ((2, 1), 0.35), ((1, 2), 0.3))]
+    warp_x = ((rnd.choice([1, 2]), rnd.choice([-1, 1])), rnd.uniform(0, 2 * math.pi))
+    warp_y = ((rnd.choice([1, 2]), rnd.choice([-1, 1])), rnd.uniform(0, 2 * math.pi))
+    ramp = [(0.0, (6, 1, 4)), (0.25, (40, 4, 14)), (0.45, (110, 12, 26)), (0.62, (190, 34, 30)), (0.78, (240, 96, 40)),
+            (0.9, (255, 170, 90)), (1.0, (255, 236, 200))]
+    xs = [p[0] for p in ramp]
+    sparks = [(rnd.uniform(0, N), rnd.uniform(0, N), rnd.choice([1, 2]), rnd.uniform(0.6, 1.0)) for _ in range(4)]
+    sheet = np.zeros((N * frames, N, 4), dtype=np.uint8)
     for f in range(frames):
         t = f / frames
-        frame = Image.new("RGBA", (N, N))
-        px = frame.load()
-        for y in range(N):
-            for x in range(N):
-                dx, dy = x - 7.5, y - 7.5
-                r = math.hypot(dx, dy)
-                a = math.atan2(dy, dx)
-                swirl = math.sin(a * 3 - r * 0.8 + t * 2 * math.pi) * 0.5 + 0.5
-                swirl2 = math.sin(a * 2 + r * 0.5 - t * 2 * math.pi * 2) * 0.5 + 0.5
-                v = 0.2 + 0.5 * swirl + 0.2 * swirl2
-                v *= 0.35 + 0.65 * min(1.0, r / 8.0)
-                c = pa.mix(hexc("#080204"), hexc("#8a0e1a"), v)
-                c = pa.mix(c, hexc("#ff6a2a"), max(0.0, swirl2 - 0.7) * 0.9)
-                px[x, y] = (c[0], c[1], c[2], 220)
-        for (a0, r0, col) in shards:
-            r = (r0 - t * 9.0) % 11.0 + 0.8
-            a = a0 - t * 2 * math.pi * 0.5 - 2.0 / (r + 0.5)
-            x = int(round(7.5 + math.cos(a) * r))
-            y = int(round(7.5 + math.sin(a) * r))
-            if 0 <= x < N and 0 <= y < N:
-                b = min(1.0, r / 4.0)
-                px[x, y] = pa.mix(px[x, y], col, 0.9 * b)[:3] + (240,)
-        sheet.paste(frame, (0, f * N))
-    return sheet
+        (kx, ky), px0 = warp_x
+        (qx, qy), py0 = warp_y
+        px = xx + 1.6 * np.sin(2 * math.pi * (kx * xx + ky * yy) / N + 2 * math.pi * t + px0)
+        py = yy + 1.6 * np.cos(2 * math.pi * (qy * xx - qx * yy) / N - 2 * math.pi * t + py0)
+        v = np.zeros((N, N))
+        total = 0.0
+        for (k0, k1), m, ph, a in waves:
+            v += a * np.sin(2 * math.pi * (k0 * px + k1 * py) / N + 2 * math.pi * m * t + ph)
+            total += a
+        v /= total
+        ridge = (1 - np.abs(v)) ** 7.0
+        body = 0.5 + 0.5 * v
+        heat = np.clip(0.10 + 0.34 * body ** 1.5 + 0.62 * ridge, 0, 1)
+        rgb = np.stack([np.interp(heat, xs, [c[1][j] for c in ramp]) for j in range(3)], -1)
+        for sx, sy, speed, b in sparks:
+            y = (sy + t * N * speed) % N
+            x = (sx + 0.6 * math.sin(2 * math.pi * (t + sy / N))) % N
+            ix, iy = int(x) % N, int(y) % N
+            rgb[iy, ix] = rgb[iy, ix] * (1 - b) + np.array([255, 226, 180]) * b
+        alpha = np.full((N, N, 1), 228.0)
+        sheet[f * N:(f + 1) * N] = np.clip(np.concatenate([rgb, alpha], -1), 0, 255).astype(np.uint8)
+    return Image.fromarray(sheet, "RGBA")
 
 
 # =============================================================================
@@ -324,32 +333,9 @@ def rift_key() -> Image.Image:
     return img
 
 
-def sky_rift() -> tuple[Image.Image, Image.Image]:
-    """Himmelsriss: weißglühendes, zuckendes Licht mit roten und orangen Adern (Grundbild und Leuchtebene gleich)."""
-    img = Image.new("RGBA", (N, N))
-    px = img.load()
-    rnd = random.Random(72201)
-    field = vs.layered(72202, [(4, 4, 0.6), (8, 8, 0.4)])
-    for y in range(N):
-        for x in range(N):
-            v = field[y][x]
-            if v > 0.62:
-                c = EMBER[5]
-            elif v > 0.5:
-                c = EMBER[4]
-            elif v > 0.38:
-                c = EMBER[3]
-            elif v > 0.26:
-                c = EMBER[2]
-            else:
-                c = EMBER[1]
-            if rnd.random() < 0.06:
-                c = hexc("#ffffff")
-            px[x, y] = c
-    return img, img.copy()
-
-
-ANIMATIONS = {"block/abyss_rift": (24, 2, True)}
+ANIMATIONS = {"block/abyss_rift": (32, 2, True)}
+# Bilder mit eigener Abtastung (weich gefiltert, nicht wiederholt): die Risse am Himmel
+META = {"environment/abyss_rifts": {"texture": {"blur": True, "clamp": True}}}
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -368,9 +354,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
         put(f"block/{name}", img)
         put(f"block/{name}_emissive", glow)
     put("block/abyss_rift", abyss_rift())
-    sky, sky_glow = sky_rift()
-    put("block/sky_rift", sky)
-    put("block/sky_rift_glow", sky_glow)
+    put("environment/abyss_rifts", abyss_sky.rifts())
     put("item/rift_key", rift_key())
 
 

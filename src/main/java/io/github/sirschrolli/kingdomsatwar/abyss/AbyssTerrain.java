@@ -27,7 +27,7 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
  *     <li>Überall schweben einzelne Felsbrocken.</li>
  *     <li>Weite Strecken bleiben ganz leer – dort sieht man das Chaos in der Ferne treiben.</li>
  * </ul>
- * Alles liegt zwischen den Höhen 30 und 220; darüber hängen nur die Himmelsrisse.
+ * Alles liegt zwischen den Höhen 30 und 220.
  */
 public final class AbyssTerrain {
     public static final ResourceKey<NoiseGeneratorSettings> SETTINGS = ResourceKey.create(Registries.NOISE_SETTINGS, KingdomsAtWar.id("the_abyss"));

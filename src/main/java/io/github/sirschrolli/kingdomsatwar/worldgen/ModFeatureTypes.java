@@ -55,8 +55,6 @@ public final class ModFeatureTypes {
     // --- Der Abgrund ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.WorldShardFeature>> WORLD_SHARD =
             FEATURE_TYPES.register("abyss_world_shard", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.WorldShardFeature.CODEC);
-    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.SkyRiftFeature>> SKY_RIFT =
-            FEATURE_TYPES.register("abyss_sky_rift", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.SkyRiftFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.SeamVeinFeature>> SEAM_VEIN =
             FEATURE_TYPES.register("abyss_seam_vein", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.SeamVeinFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.GravityCrystalFeature>> GRAVITY_CRYSTAL =

@@ -1525,6 +1525,84 @@ def bed_void_remnants():
     return b
 
 
+# --------------------------------------------------------------------- Der Abgrund (0.72)
+
+def world_tear(sr: int, seed: int) -> np.ndarray:
+    """
+    Irgendwo reißt die Welt: erst ein trockenes, immer dichteres Splittern wie Stein unter Spannung, dann ein tiefes,
+    langes Bersten mit einem reißenden Rauschen, das nach unten gleitet – und zuletzt ein hohles Einatmen, als würde der
+    frische Spalt die Luft ansaugen.
+    """
+    r = rng(seed)
+    n = int(r.uniform(3.6, 4.8) * sr)
+    t = np.arange(n) / sr
+    y = np.zeros(n)
+    # 1) Splittern: Klicks mit steinernen Eigenresonanzen, immer dichter
+    crack_len = r.uniform(0.45, 0.8)
+    clicks = np.zeros(n)
+    count = int(r.integers(28, 60))
+    for k in range(count):
+        u = (k / count) ** 0.6
+        s = int((u * crack_len + r.uniform(-0.01, 0.01)) * sr)
+        if 0 <= s < n - 8:
+            clicks[s:s + 3] += r.uniform(-1, 1, 3) * (0.3 + 0.7 * u)
+    body = np.zeros(n)
+    for f0, q, a in ((r.uniform(320, 420), 9, 1.0), (r.uniform(780, 980), 11, 0.7), (r.uniform(1700, 2300), 14, 0.45),
+                     (r.uniform(3200, 4200), 16, 0.25)):
+        body += resonator(clicks, f0, q, sr) * a
+    y += filt(body + clicks * 0.4, "high", 180, sr, 2) * 1.6
+    # 2) Bersten: dumpfer Schlag und ein Reißen, das von hell nach dunkel gleitet
+    s0 = int(crack_len * sr)
+    m = n - s0
+    tt = np.arange(m) / sr
+    boom = filt(r.standard_normal(m), "low", 110, sr, 4) * 9.0 * (1 - np.exp(-tt / 0.02)) * np.exp(-tt / r.uniform(1.1, 1.6))
+    sweep = curve(m, [(0, r.uniform(2600, 3400)), (0.25, 900), (1, 260)])
+    rip_src = r.standard_normal(m)
+    rip = np.zeros(m)
+    seg = int(0.05 * sr)
+    for a in range(0, m, seg):
+        b = min(m, a + seg + seg // 2)
+        fc = float(sweep[a])
+        part = filt(rip_src[a:b], "band", [fc * 0.6, min(fc * 1.6, sr * 0.45)], sr, 2)
+        w = np.hanning(b - a)
+        rip[a:b] += part * w
+    rip_env = (1 - np.exp(-tt / 0.03)) * np.exp(-tt / r.uniform(0.6, 0.9))
+    flutter = 0.6 + 0.4 * np.abs(np.sin(2 * np.pi * r.uniform(9, 15) * tt))
+    y[s0:] += boom + rip * rip_env * flutter * 1.4
+    # 3) Ansaugen: ein hohles, gleitendes Heulen mit Atem
+    s1 = int((crack_len + r.uniform(0.9, 1.3)) * sr)
+    if s1 < n - sr // 2:
+        k = n - s1
+        f = curve(k, [(0, r.uniform(520, 680)), (1, r.uniform(170, 230))])
+        howl = tone(f, env_asr(k, sr, 0.5, 0.9), sr, harmonics=((1, 1.0), (2, 0.25), (3, 0.08)))
+        breath = filt(r.standard_normal(k), "band", [400, 2200], sr, 2) * env_asr(k, sr, 0.5, 0.9) * 0.35
+        y[s1:] += formant_filter(howl * 0.5 + breath, sr, [(500, 220, 1.0), (1100, 400, 0.4)]) * 0.6
+    return filt(y, "low", 6500, sr, 2) * env_asr(n, sr, 0.005, 0.4)
+
+
+def bed_abyss_chaos():
+    """
+    Das Chaos des Abgrunds: ein tiefes, schiefes Dröhnen aus Tönen, die nicht zueinander passen (Tritonus, kleine Sekunde),
+    das langsam schwankt; darüber gelegentlich ein fernes Reißen, als würde der Himmel weiter aufbrechen, und dumpfes
+    Grollen treibender Welten.
+    """
+    b = _shadow(24, BED_SR)
+    drone(b, 401, [(32.70, 0.9), (46.25, 0.5), (49.0, 0.32), (69.3, 0.18)], partials=7, rolloff=1.7, detune=11, lp=(120, 520),
+          lfo=(1, 3), breath=0.42, breath_lp=300)
+    S = b.seconds
+    tear = smoothstep(gust_curve(S, 402, 0.0, 1.0, (1, 4), 0.9), 0.62, 1.0)
+    for ch in range(2):
+        y = shaped_noise(b.n, b.sr, lambda t, f, ch=ch: band(f, 1500 - 300 * ch, 0.7) * (0.02 + 0.98 * ctl(tear, t + ch * 2.5, S)),
+                         403 + ch, 2048, 512)
+        y = y / (np.std(y) + 1e-9) * 0.012
+        b.add_stereo(y * (ch == 0), y * (ch == 1))
+    ir = room(BED_SR, 6.0, 404, damping=2500, echo=0.3)
+    scatter(b, 405, lambda sr, s: rumble(sr, s, 4.0, 80.0), count=2, dist=(30, 60), ir=ir, wet=0.7, gain=0.55)
+    scatter(b, 406, rock_grind, count=1, dist=(30, 50), ir=ir, wet=0.7, gain=0.3)
+    b.reverb(ir, 0.25)
+    return b
+
+
 # Seit 0.61 nicht mehr dabei (künstlich und auf Dauer anstrengend): Laubrauschen, Schilf, Vogelchor, Grillen, Insektensummen
 # und Froschchor – an ihre Stelle treten Einzelklänge, viele davon echte Naturaufnahmen von Minecraft (VANILLA_SPOTS).
 RETIRED_BEDS = {"leaves": bed_leaves, "reeds": bed_reeds, "birds_forest": bed_birds_forest, "birds_meadow": bed_birds_meadow,
@@ -1539,7 +1617,7 @@ BEDS = {
     "shadow_marsh": bed_shadow_marsh, "shadow_peaks": bed_shadow_peaks, "shadow_glimmer": bed_shadow_glimmer,
     "shadow_sea": bed_shadow_sea, "shadow_isles": bed_shadow_isles, "shadow_depths": bed_shadow_depths, "whispers": bed_whispers,
     "void_hum": bed_void_hum, "void_wind": bed_void_wind, "void_crystal": bed_void_crystal, "void_stardust": bed_void_stardust,
-    "void_ruins": bed_void_ruins, "void_remnants": bed_void_remnants,
+    "void_ruins": bed_void_ruins, "void_remnants": bed_void_remnants, "abyss_chaos": bed_abyss_chaos,
 }
 
 
@@ -1594,6 +1672,7 @@ SPOTS = {
     "rock_grind": (rock_grind, 3, VAST, 48, "Treibende Felsen schaben", "Floating rocks grind"),
     "glitch_far": (glitch_far, 3, VAST, 32, "Etwas flackert", "Something glitches"),
     "void_choir": (void_choir, 3, VAST, 96, "Ein ferner Chor", "A distant choir"),
+    "world_tear": (world_tear, 4, VAST, 128, "Die Welt reißt in der Ferne", "The world tears in the distance"),
 }
 
 # Sätze, die nur auf Vanilla-Klänge verweisen: (Pfade, Tonhöhe, Lautstärke, Reichweite, Untertitel DE/EN)

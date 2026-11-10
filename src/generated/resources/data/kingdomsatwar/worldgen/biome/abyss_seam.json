@@ -1,0 +1,104 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.basalt_deltas.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.basalt_deltas"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "monster": [
+            {
+              "type": "kingdomsatwar:distortling",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 40
+            },
+            {
+              "type": "kingdomsatwar:shard_warden",
+              "count": 1,
+              "weight": 15
+            },
+            {
+              "type": "kingdomsatwar:void_maw",
+              "count": 1,
+              "weight": 15
+            },
+            {
+              "type": "kingdomsatwar:rift_hound",
+              "count": 2,
+              "weight": 20
+            },
+            {
+              "type": "kingdomsatwar:shade_stalker",
+              "count": 1,
+              "weight": 20
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.006
+      }
+    ],
+    "minecraft:visual/fog_color": "#3a0a16",
+    "minecraft:visual/fog_end_distance": 240.0,
+    "minecraft:visual/fog_start_distance": 30.0,
+    "minecraft:visual/sky_color": "#22060e",
+    "minecraft:visual/water_fog_color": "#1a0408"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#9a5a7a",
+    "foliage_color": "#9a5a7a",
+    "grass_color": "#8a4a6a",
+    "water_color": "#5a1a2a"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:abyss/shards_seam",
+      "kingdomsatwar:abyss/shards_great",
+      "kingdomsatwar:abyss/world_seams",
+      "kingdomsatwar:abyss/world_seams_dense",
+      "kingdomsatwar:abyss/float_crystals",
+      "kingdomsatwar:abyss/lift_crystals"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:abyss/grass",
+      "kingdomsatwar:abyss/crimson_roots",
+      "kingdomsatwar:abyss/void_clusters"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.6
+}

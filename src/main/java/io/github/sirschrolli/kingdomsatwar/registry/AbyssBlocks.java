@@ -99,14 +99,6 @@ public final class AbyssBlocks {
             p -> p.mapColor(MapColor.COLOR_RED).noCollision().strength(-1.0f, 3_600_000.0f).noLootTable().lightLevel(s -> 12)
                     .sound(SoundType.AMETHYST).pushReaction(PushReaction.IMMOVEABLE));
 
-    /** Himmelsriss: wo die Welt am Himmel gesprungen ist – weißglühend, man fliegt hindurch und verbrennt (ohne Gegenstand). */
-    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.abyss.SkyRiftBlock> SKY_RIFT = ModBlocks.BLOCKS.registerBlock(
-            "sky_rift", io.github.sirschrolli.kingdomsatwar.block.abyss.SkyRiftBlock::new,
-            p -> p.mapColor(MapColor.COLOR_RED).noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f).noLootTable().lightLevel(s -> 15)
-                    .emissiveRendering(state -> true).sound(SoundType.AMETHYST).pushReaction(PushReaction.IMMOVEABLE)
-                    .isValidSpawn((state, level, pos, type) -> false).isViewBlocking((state, level, pos, box) -> false)
-                    .isSuffocating((state, level, pos) -> false).isRedstoneConductor((state, level, pos) -> false));
-
     // =====================================================================================
     // Gegenstände
     // =====================================================================================

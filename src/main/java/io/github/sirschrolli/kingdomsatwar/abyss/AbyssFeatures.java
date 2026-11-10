@@ -3,7 +3,6 @@ package io.github.sirschrolli.kingdomsatwar.abyss;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.abyss.feature.GravityCrystalFeature;
 import io.github.sirschrolli.kingdomsatwar.abyss.feature.SeamVeinFeature;
-import io.github.sirschrolli.kingdomsatwar.abyss.feature.SkyRiftFeature;
 import io.github.sirschrolli.kingdomsatwar.abyss.feature.WorldShardFeature;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks;
@@ -42,8 +41,8 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.RarityFilter;
 
 /**
- * Was im Abgrund treibt, steht und wächst: die Weltensplitter (gekippt und kopfüber, aus allen Welten), die Himmelsrisse,
- * die Weltennähte über dem Boden, die Kristalle der verdrehten Schwerkraft – und auf den Bruchstücken, was in ihrer Welt
+ * Was im Abgrund treibt, steht und wächst: die Weltensplitter (gekippt und kopfüber, aus allen Welten), die Weltennähte
+ * über dem Boden, die Kristalle der verdrehten Schwerkraft – und auf den Bruchstücken, was in ihrer Welt
  * wächst: Eichen und Gras, Karmesinwurzeln, Chorus, Schattenbäume, Leerenblüten. Alle Biome bekommen ihre Features je
  * Erzeugungsschritt in derselben Reihenfolge.
  */
@@ -101,7 +100,6 @@ public final class AbyssFeatures {
         return () -> new WorldShardFeature(List.of(palettes), min, max, inverted);
     }
 
-    private static final GenerationStep.Decoration RAW = GenerationStep.Decoration.RAW_GENERATION;
     private static final GenerationStep.Decoration LOCAL = GenerationStep.Decoration.LOCAL_MODIFICATIONS;
     private static final GenerationStep.Decoration VEGETATION = GenerationStep.Decoration.VEGETAL_DECORATION;
 
@@ -116,8 +114,6 @@ public final class AbyssFeatures {
     // =====================================================================================
     // Die Features (Reihenfolge je Schritt = Reihenfolge in den Biomen)
     // =====================================================================================
-
-    static final Entry SKY_RIFTS = entry(RAW, "sky_rifts", SkyRiftFeature::new, air(RarityFilter.onAverageOnceEvery(2), 222, 246));
 
     static final Entry SHARDS_LANDS = entry(LOCAL, "shards_lands", shards(4, 11, 0.2f, O, O, O, O, F, D), air(CountPlacement.of(1), 45, 205));
     static final Entry SHARDS_EMBER = entry(LOCAL, "shards_ember", shards(4, 11, 0.2f, N, N, N, N, D), air(CountPlacement.of(1), 45, 205));
@@ -177,7 +173,6 @@ public final class AbyssFeatures {
     private static BiomeGenerationSettings settings(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers, Entry... chosen) {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(placed, carvers);
         List<Entry> wanted = new ArrayList<>(List.of(chosen));
-        wanted.add(SKY_RIFTS);
         wanted.add(SHARDS_GREAT);
         wanted.add(SEAMS);
         wanted.add(FLOAT_CRYSTALS);

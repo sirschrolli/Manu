@@ -339,7 +339,7 @@ public final class AbyssGate {
                 }
             }
         }
-        // zwei Hebekristalle und ein Schwebekristall an den Rändern – hier beginnt die verdrehte Schwerkraft
+        // zwei Schwebekristalle an den Rändern – hier beginnt die verdrehte Schwerkraft
         level.setBlock(floor.offset(-4, 1, -2), AbyssBlocks.FLOAT_CRYSTAL.get().defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(floor.offset(4, 1, -2), AbyssBlocks.FLOAT_CRYSTAL.get().defaultBlockState(), Block.UPDATE_ALL);
     }

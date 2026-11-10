@@ -22,7 +22,7 @@ public final class AmbientSounds {
             "storm_charge", "drips", "deep_water", "magic_grove", "earth_rumble", "shadow_forest",
             "shadow_wastes", "shadow_crystal", "shadow_marsh", "shadow_peaks", "shadow_glimmer", "shadow_sea",
             "shadow_isles", "shadow_depths", "whispers", "void_hum", "void_wind", "void_crystal",
-            "void_stardust", "void_ruins", "void_remnants");
+            "void_stardust", "void_ruins", "void_remnants", "abyss_chaos");
     public static final List<String> SPOTS = List.of(
             "bird_blackbird", "bird_tit", "bird_finch", "bird_cuckoo", "woodpecker", "bird_owl",
             "bird_nightingale", "bird_crow", "bird_gull", "bird_curlew", "bird_bittern", "bird_buzzard",
@@ -30,11 +30,11 @@ public final class AmbientSounds {
             "steam_vent", "rumble", "thunder_far", "zap", "bog_burp", "drip",
             "whale_far", "sparkle", "whisper", "shadow_call", "soul_wail", "crystal_chime",
             "deep_moan", "wing_flutter", "shadow_creak", "star_song", "rock_grind", "glitch_far",
-            "void_choir", "dragon_far", "dragon_wings", "fireflies", "amethyst", "soul_voices",
-            "basalt", "thunder", "dolphin", "frog", "whale", "pale_moss",
-            "warped_creak", "leaves_rustle", "grass_wind", "sand_wind", "desert_brush", "parrot",
-            "bees", "goat", "eyeblossom", "turtle", "water_flow", "bubbles",
-            "fox");
+            "void_choir", "world_tear", "dragon_far", "dragon_wings", "fireflies", "amethyst",
+            "soul_voices", "basalt", "thunder", "dolphin", "frog", "whale",
+            "pale_moss", "warped_creak", "leaves_rustle", "grass_wind", "sand_wind", "desert_brush",
+            "parrot", "bees", "goat", "eyeblossom", "turtle", "water_flow",
+            "bubbles", "fox");
     /** Untertitel der Einzelklänge: Englisch, Deutsch. */
     public static final Map<String, List<String>> SUBTITLES = Map.ofEntries(
             Map.entry("bird_blackbird", List.of("Blackbird sings", "Amsel singt")),
@@ -74,6 +74,7 @@ public final class AmbientSounds {
             Map.entry("rock_grind", List.of("Floating rocks grind", "Treibende Felsen schaben")),
             Map.entry("glitch_far", List.of("Something glitches", "Etwas flackert")),
             Map.entry("void_choir", List.of("A distant choir", "Ein ferner Chor")),
+            Map.entry("world_tear", List.of("The world tears in the distance", "Die Welt reißt in der Ferne")),
             Map.entry("dragon_far", List.of("Distant dragon roar", "Drache brüllt in der Ferne")),
             Map.entry("dragon_wings", List.of("Great wings beat", "Schwingen rauschen")),
             Map.entry("fireflies", List.of("Fireflies buzz", "Glühwürmchen summen")),

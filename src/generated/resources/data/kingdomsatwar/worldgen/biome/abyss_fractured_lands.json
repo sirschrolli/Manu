@@ -1,0 +1,110 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.basalt_deltas.mood",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.nether.basalt_deltas"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "monster": [
+            {
+              "type": "kingdomsatwar:zombie",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 60
+            },
+            {
+              "type": "kingdomsatwar:skeleton",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 50
+            },
+            {
+              "type": "kingdomsatwar:spider",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 30
+            },
+            {
+              "type": "kingdomsatwar:distortling",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 20
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.003
+      }
+    ],
+    "minecraft:visual/fog_color": "#2c1018",
+    "minecraft:visual/fog_end_distance": 240.0,
+    "minecraft:visual/fog_start_distance": 30.0,
+    "minecraft:visual/sky_color": "#1a0a12",
+    "minecraft:visual/water_fog_color": "#1a0408"
+  },
+  "carvers": [],
+  "downfall": 0.0,
+  "effects": {
+    "dry_foliage_color": "#6a9a4a",
+    "foliage_color": "#6a9a4a",
+    "grass_color": "#5a8a3a",
+    "water_color": "#5a1a2a"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:abyss/shards_lands",
+      "kingdomsatwar:abyss/shards_great",
+      "kingdomsatwar:abyss/world_seams",
+      "kingdomsatwar:abyss/float_crystals",
+      "kingdomsatwar:abyss/lift_crystals"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:abyss/oaks",
+      "kingdomsatwar:abyss/grass",
+      "kingdomsatwar:abyss/flowers"
+    ]
+  ],
+  "has_precipitation": false,
+  "temperature": 0.6
+}

@@ -19,6 +19,19 @@
         {
           "type": "minecraft:item",
           "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:rift_key"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
             "type": "minecraft:enchant_randomly",
             "options": "#kingdomsatwar:loot/arcane"
           },
