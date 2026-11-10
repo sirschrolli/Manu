@@ -77,6 +77,13 @@ public final class BossBarRenderer {
         STYLES.put("schrolli", new Style(KingdomsAtWar.id("textures/gui/boss_bar/schrolli.png"), 0xFFD24A));
         // seine Wahre Gestalt: violettes Metall, Schwingen wie ein Sternenhimmel, Augen auf dem Ring, eine Füllung aus Nebeln
         STYLES.put("schrolli_true", new Style(KingdomsAtWar.id("textures/gui/boss_bar/schrolli_true.png"), 0xD8A8FF));
+        // Schrolli der Allmächtige (dritte Gestalt): Weißgold mit Glutsaum, Schwingen mit brennenden Federn, eine Sonnenkrone aus
+        // Flammen und Strahlen, im Medaillon lodert hinter ihm die Sonne, als Spitze die Sonne; die Füllung das Plasma einer Sonne
+        STYLES.put("schrolli_almighty", new Style(KingdomsAtWar.id("textures/gui/boss_bar/schrolli_almighty.png"), 0xFFAA3C));
+        // der Weltenfresser: Chaosgestein mit glühenden Fugen, auf dem Rahmen Stücke verschlungener Welten, darunter sein Gebiss,
+        // Kronensplitter und Hauer am Medaillon (darin sein Rachen), die Kristallflosse als Spitze; die Füllung die Glut seines
+        // Schlunds mit einem violetten Riss
+        STYLES.put("world_eater", new Style(KingdomsAtWar.id("textures/gui/boss_bar/world_eater.png"), 0xFF8A3A));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

@@ -110,6 +110,30 @@ ELEMENTS = {
                           f0="#1a0838", f1="#5a2a9a", f2="#c870f0", f3="#ffffff", gold="#ffd86a", gold_dark="#8a6020",
                           feather="#4a2a92", feather_mid="#22125e", feather_dark="#0a0630", tip="#a0f0ff", gem_blue="#ffe07a",
                           gem_light="#fff8dc", ray="#e8d0ff", prism1="#ffa0a8", prism2="#e890ff", prism3="#80e0ff"),
+    # Schrolli der Allmächtige (dritte Gestalt): Weißgold mit Glutsaum; hinter dem Medaillon die Schwingen aus weißen Federn,
+    # deren Spitzen in Flammen stehen, auf dem Rahmen eine Sonnenkrone aus Flammenzungen und Strahlen, darunter tropft
+    # flüssiges Gold, als Spitze die Sonne; auf dem Ring des Medaillons sieben Sonnensteine; Füllung wie das Plasma einer
+    # Sonne (Körnung, Bögen, Funken)
+    "schrolli_almighty": dict(m0="#3a1406", m1="#b8601c", m2="#fff0c4", acc="#ff7a1a", glow="#fff2c8", deep="#2c0a02",
+                              f0="#a82206", f1="#f8600e", f2="#ffc040", f3="#fffbea", gold="#ffd24a", gold_dark="#8a4a10",
+                              feather="#fffaf0", feather_mid="#e8d4b4", feather_dark="#9a7656", ray="#fff2b0",
+                              flame0="#5a0a04", flame1="#b82408", flame2="#f0600e", flame3="#ffa024", flame4="#ffd65a",
+                              flame5="#fff8d8", sun_dark="#a8280a", sun="#ff8a1e", sun_light="#ffe27a"),
+    # der Weltenfresser: Chaosgestein in Platten mit glühenden Fugen; auf dem Rahmen Stücke verschlungener Welten (Wiese mit
+    # Baum, Netherrack mit Magma, Endstein mit Chorus, Eis mit Zacken), darunter sein Gebiss, hinter dem Medaillon drei
+    # Kronensplitter und ein Hauer, als Spitze die Kristallflosse seines Schwanzes; Füllung wie die Glut seines Schlunds,
+    # durch die violette Risse ziehen
+    "world_eater": dict(m0="#140f13", m1="#54444e", m2="#ab97a2", acc="#ff5a14", glow="#ffe0a0", deep="#220604",
+                        f0="#2e0204", f1="#a01c08", f2="#ff7418", f3="#fff0c0",
+                        seam0="#5a0a04", seam1="#e8541a", seam2="#ffd88a",
+                        crystal0="#2a1052", crystal1="#6a3cc0", crystal2="#a47cf0", crystal3="#f0e6ff",
+                        gold="#e8b84a", gold_dark="#7a5218", tooth="#ddd0b4", tooth_light="#fbf4e4", tooth_dark="#8a7a64",
+                        gum="#7a1418", gum_dark="#3a0608",
+                        grass="#5a8a32", grass_light="#94c45c", dirt="#6a482e", dirt_dark="#3e2818", wood="#6a4a2c",
+                        wood_dark="#3a2614", leaves="#2e5a1e", leaves_light="#5c9a3e", netherrack="#7e2222",
+                        netherrack_dark="#481010", magma="#ff8a2a", magma_light="#ffe08a", fungus="#d8342a",
+                        fungus_light="#ff7a5a", endstone="#e0daa4", endstone_dark="#a49e66", chorus="#7a4a86",
+                        chorus_light="#d0a8d8", ice="#a8ccf4", ice_dark="#5a86c4", ice_light="#f0f8ff"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1441,10 +1465,536 @@ def post_schrolli(img: Image.Image, pal: dict) -> None:
         put(px, img, x, y, c(pal, "tip"))
 
 
-POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli}
+# =============================================================================================
+# Schrolli der Allmächtige (dritte Gestalt) und der Weltenfresser
+# =============================================================================================
+
+def _ramp(cols, t: float):
+    """Verlauf über mehrere Stützfarben (t von 0 bis 1)."""
+    t = max(0.0, min(1.0, t)) * (len(cols) - 1)
+    i = min(len(cols) - 2, int(t))
+    return mix(cols[i], cols[i + 1], t - i)
 
 
-DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def _outline(layer: Image.Image, col) -> None:
+    """Freie Pixel, die (4er-Nachbarschaft) an die Form auf der Ebene grenzen, bekommen die Kontur."""
+    src = layer.load()
+    w, h = layer.size
+    edge = []
+    for y in range(h):
+        for x in range(w):
+            if src[x, y][3]:
+                continue
+            for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                if 0 <= nx < w and 0 <= ny < h and src[nx, ny][3]:
+                    edge.append((x, y))
+                    break
+    for x, y in edge:
+        src[x, y] = col
+
+
+def _worley(x: float, y: float, cell: float, period: int, seed: int) -> tuple[float, float]:
+    """Abstand zum nächsten und zweitnächsten Zellpunkt; waagrecht nahtlos (period Zellen × cell = 256)."""
+    cx, cy = int(math.floor(x / cell)), int(math.floor(y / cell))
+    d1 = d2 = 99.0
+    for gy in range(cy - 1, cy + 2):
+        for gx in range(cx - 1, cx + 2):
+            wx = gx % period
+            fx = (gx + 0.15 + 0.7 * hash01(wx, gy, seed)) * cell
+            fy = (gy + 0.15 + 0.7 * hash01(wx, gy, seed + 1)) * cell
+            d = math.hypot(x + 0.5 - fx, y + 0.5 - fy)
+            if d < d1:
+                d1, d2 = d, d1
+            elif d < d2:
+                d2 = d
+    return d1, d2
+
+
+def _gem_sockets(px, img: Image.Image, pal: dict, fill0, fill1) -> None:
+    """Fassungen der Phasen-Edelsteine über dem Rahmen (wie in frame_border)."""
+    y0 = BAR_Y - 3
+    for f in GEMS:
+        gx = BAR_X + round(BAR_W * f)
+        for dy in range(-6, 1):
+            half = 5 - abs(dy + 3) + 1
+            for dx in range(-half, half + 1):
+                x, y = gx + dx, y0 + dy
+                edge = abs(dx) == half or dy in (-6, 0)
+                put(px, img, x, y, OUTLINE if edge else (fill0 if dx < 0 else fill1))
+
+
+def deco_almighty(img: Image.Image, pal: dict) -> None:
+    """Schrolli der Allmächtige: hinter dem Medaillon die beiden Schwingen wie in den ersten Gestalten, doch die Spitzen der
+    Federn stehen in Flammen (sie züngeln und teilen sich); auf dem Rahmen eine Sonnenkrone – Flammenzungen im Wechsel mit
+    goldenen Strahlen –, unter der Leiste tropft flüssiges Gold, dazwischen fallen Funken; als Spitze die Sonne selbst."""
+    px = img.load()
+    fire = [c(pal, f"flame{k}") for k in range(6)]
+    feather, feather_mid, feather_dark = c(pal, "feather"), c(pal, "feather_mid"), c(pal, "feather_dark")
+    gold, gold_dark, ray = c(pal, "gold"), c(pal, "gold_dark"), c(pal, "ray")
+    sun, sun_dark, sun_light = c(pal, "sun"), c(pal, "sun_dark"), c(pal, "sun_light")
+    ember_line = mix(OUTLINE, fire[0], 0.6)
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    wing_fire = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    wf = wing_fire.load()
+    tips = []
+
+    def flame_quill(x0: float, y0: float, ang: float, length: float, width: float, seed: int):
+        """Eine Feder wie in deco_schrolli, deren Spitze brennt: ab 56 % der Länge schlägt eine Flamme aus ihr, breiter als
+        die Feder, die über sie hinaus züngelt (die Flammen aller Federn kommen auf eine eigene Ebene mit Glutkontur)."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        u_fire, u_end = length * 0.6, length * 1.42
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - x0, y + 0.5 - y0
+                u = dx * ca + dy * sa
+                v = -dx * sa + dy * ca
+                if u < 0.0 or u > u_end:
+                    continue
+                k = u / length
+                if u < u_fire + 1.2:
+                    half = width * (0.55 + 0.45 * math.sin(math.pi * min(1.0, k * 1.15)))
+                    if abs(v) <= half:
+                        if abs(v) > half - 0.75:
+                            col = OUTLINE
+                        elif abs(v) < 0.45:
+                            col = mix(feather_mid, feather_dark, 0.3)
+                        else:
+                            lit = 0.35 + 0.65 * (1.0 - (v + half) / (2 * half))
+                            col = mix(feather_mid, feather, lit)
+                            if (u * 1.3 + seed) % 5.0 < 0.6:
+                                col = mix(col, feather_mid, 0.5)
+                        put(px, img, x, y, col)
+                if u >= u_fire:
+                    t = (u - u_fire) / (u_end - u_fire)
+                    vv = v - 1.5 * math.sin(t * 4.6 + seed * 1.9) * t
+                    half = width * 1.02 * (1.0 - t) ** 0.8 * (0.86 + 0.24 * math.sin(t * 8.0 + seed))
+                    if abs(vv) <= half and half > 0.3 and not (t > 0.5 and abs(vv + 0.4) < (t - 0.5) * half * 1.7):
+                        core = 1.0 - abs(vv) / half
+                        wf[x, y] = _ramp(fire[1:], 0.92 - 0.72 * t + 0.4 * core)
+        tips.append((x0 + ca * u_end, y0 + sa * u_end))
+
+    # die erhobene Schwinge: fünf Federn (flacher als in den ersten Gestalten, damit die Flammen Platz haben)
+    for j in range(5):
+        k = j / 4
+        flame_quill(EMB_X + 12 + 3 * j, EMB_Y - 9 - j * 0.6, math.radians(-40 + 20 * k), 12.5 + 9.5 * k, 3.1 - 0.3 * k, j)
+    # die gesenkte Schwinge: vier Federn
+    for j in range(4):
+        k = j / 3
+        flame_quill(EMB_X + 12 + 3 * j, EMB_Y + 8 + j * 0.5, math.radians(36 - 18 * k), 11.5 + 7.5 * k, 2.8 - 0.3 * k, 20 + j)
+    _outline(wing_fire, ember_line)
+    img.alpha_composite(wing_fire)
+    px = img.load()
+    # Funken, die von den brennenden Spitzen stieben
+    for i, (tx, ty) in enumerate(tips):
+        for n in range(2):
+            sx = round(tx + 1.5 + 3.0 * hash01(i, n, 341))
+            sy = round(ty - 1.0 - 3.0 * hash01(i, n, 343))
+            if 0 <= sy < FRAME_H and not (BAR_X - 3 <= sx and BAR_Y - 3 <= sy <= BAR_Y + BAR_H + 2):
+                put(px, img, sx, sy, fire[5] if n == 0 else fire[3])
+
+    # die Sonnenkrone auf dem Rahmen: Flammenzungen im Wechsel mit goldenen Strahlen (nicht über den Fassungen)
+    gems = [BAR_X + round(BAR_W * f) for f in GEMS]
+    flames = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    fp = flames.load()
+
+    def tongue(cx: float, base: int, h: int, w: float, lean: float, seed: int):
+        for k in range(h):
+            t = k / max(1, h - 1)
+            half = (w / 2) * (1.0 - t) ** 0.65 * (0.92 + 0.16 * math.sin(k * 1.9 + seed))
+            mid = cx + lean * t ** 1.4 + 0.5 * math.sin(k * 0.9 + seed) * t
+            for x in range(round(mid - half), round(mid + half) + 1):
+                d = abs(x - mid) / max(0.6, half + 0.5)
+                heat = 1.12 - t * 0.8 - d * 0.5
+                y = base - k
+                if 0 <= x < FRAME_W and 0 <= y < FRAME_H:
+                    fp[x, y] = _ramp(fire[1:], heat)
+
+    rays = []
+    for i, x in enumerate(range(BAR_X + 22, BAR_X + BAR_W - 2, 5)):
+        if any(abs(x - g) < 8 for g in gems):
+            continue
+        if i % 2 == 0:
+            tongue(x, top - 1, 4 + (2 if i % 4 == 0 else 0) + round(hash01(x, 301)), 4.6, (hash01(x, 303) - 0.5) * 1.6, i)
+        else:
+            rays.append((x, 7 + (2 if i % 4 == 1 else 0) + round(hash01(x, 305))))
+    for x, h in rays:
+        for dy in range(h):
+            half = 1 if dy < h - 3 else 0
+            for dx in range(-half, half + 1):
+                col = OUTLINE if abs(dx) == half and half > 0 else (ray if dx <= 0 else gold)
+                if dy >= h - 2:
+                    col = c(pal, "f3")
+                put(px, img, x + dx, top - 1 - dy, col)
+    _outline(flames, ember_line)
+    img.alpha_composite(flames)
+    px = img.load()
+    # kleine Funken über der Krone
+    for x, h in rays:
+        if hash01(x, 307) > 0.55:
+            sx, sy = x + (3 if hash01(x, 309) > 0.5 else -3), top - h - 1
+            put(px, img, sx, sy, fire[5])
+            if hash01(x, 311) > 0.5:
+                for ox, oy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    put(px, img, sx + ox, sy + oy, fire[3])
+
+    # unter der Leiste: flüssiges Gold, das in glühenden Tropfen abreißt, dazwischen Funken
+    for i, x in enumerate(range(BAR_X + 4, BAR_X + BAR_W - 2, 9)):
+        length = 2 + round(3 * hash01(x, 321))
+        for dy in range(length):
+            t = dy / max(1, length - 1)
+            put(px, img, x, bottom + 1 + dy, _ramp((gold, fire[4], fire[5]), t))
+            put(px, img, x + 1, bottom + 1 + dy, gold_dark if t < 0.7 else fire[3])
+        if hash01(x, 323) > 0.4:
+            dy = length + 1 + round(2 * hash01(x, 325))
+            put(px, img, x, bottom + 1 + dy, fire[5])
+            put(px, img, x + 1, bottom + 1 + dy, fire[3])
+            put(px, img, x, bottom + 2 + dy, fire[3])
+            put(px, img, x + 1, bottom + 2 + dy, fire[2])
+        if hash01(x, 327) > 0.6:
+            put(px, img, x + 4, bottom + 4 + round(5 * hash01(x, 329)), fire[4] if hash01(x, 331) > 0.5 else fire[3])
+
+    # Spitze: die Sonne – eine glühende Scheibe mit einem Kranz aus langen und kurzen Strahlen
+    ex, ey = BAR_X + BAR_W + 4, BAR_Y + BAR_H // 2
+    for k in range(16):
+        a = math.radians(k * 22.5)
+        r = 5.6 if k % 4 == 0 else (4.8 if k % 2 == 0 else 4.2)
+        ca, sa = math.cos(a), math.sin(a)
+        steps = int(r * 3)
+        for s in range(steps + 1):
+            rr = 2.6 + (r - 2.6) * s / steps
+            put(px, img, round(ex + ca * rr), round(ey + sa * rr), fire[3] if rr < r - 0.8 else fire[4])
+    for y in range(ey - 4, ey + 5):
+        for x in range(ex - 4, ex + 5):
+            d = math.hypot(x - ex, y - ey)
+            if d <= 3.0:
+                col = _ramp((fire[5], sun_light, sun, sun_dark), d / 3.0)
+                if d > 2.4:
+                    col = mix(col, ember_line, 0.55)
+                put(px, img, x, y, col)
+    put(px, img, ex - 1, ey - 1, (255, 255, 255, 255))
+
+
+def post_almighty(img: Image.Image, pal: dict) -> None:
+    """Nach dem Medaillon: sieben Sonnensteine auf seinem Ring (wo in der Wahren Gestalt die Augen waren)."""
+    px = img.load()
+    for k in range(7):
+        a = math.radians(-150 + k * 50)
+        x = round(EMB_X - 0.5 + math.cos(a) * (EMB_R - 2.5))
+        y = round(EMB_Y - 0.5 + math.sin(a) * (EMB_R - 2.5))
+        put(px, img, x - 1, y, c(pal, "flame3"))
+        put(px, img, x + 1, y, c(pal, "sun_dark"))
+        put(px, img, x, y - 1, c(pal, "flame4"))
+        put(px, img, x, y + 1, c(pal, "sun_dark"))
+        put(px, img, x, y, c(pal, "flame5"))
+
+
+def frame_border_stone(img: Image.Image, pal: dict) -> None:
+    """Rahmen des Weltenfressers: Platten aus Chaosgestein (jede an ihrem Anfang heller, wie gewölbt), dazwischen glühende
+    Fugen wie die Nähte seiner Glieder, ein paar glimmende Risse; dazu die Fassungen der Edelsteine."""
+    px = img.load()
+    m0, m1, m2 = c(pal, "m0"), c(pal, "m1"), c(pal, "m2")
+    seam0, seam1, seam2 = c(pal, "seam0"), c(pal, "seam1"), c(pal, "seam2")
+    x0, x1, y0, y1 = BAR_X - 3, BAR_X + BAR_W + 2, BAR_Y - 3, BAR_Y + BAR_H + 2
+    joints = [x for x in range(x0 + 15, x1 - 5, 16) if not any(abs(x - (BAR_X + round(BAR_W * f))) < 6 for f in GEMS)]
+    for y in range(y0, y1 + 1):
+        for x in range(x0, x1 + 1):
+            if BAR_X <= x < BAR_X + BAR_W and BAR_Y <= y < BAR_Y + BAR_H:
+                continue
+            ring = min(x - x0, x1 - x, y - y0, y1 - y)
+            prev = max([j for j in joints if j <= x], default=x0)
+            along = (x - prev) / 16.0                                   # 0 am Anfang einer Platte
+            n = hash01(x // 2, y, 401)
+            if ring == 0:
+                col = OUTLINE
+            elif ring == 1:
+                upper = (y - y0 <= 1 or x - x0 <= 1) and not (y1 - y <= 1)
+                col = mix(m2, m1, 0.25 + 0.5 * along + 0.2 * n) if upper else mix(m1, m0, 0.3 + 0.4 * along + 0.2 * n)
+            else:
+                col = mix(m0, OUTLINE, 0.25 + 0.2 * n)
+            if x in joints and ring >= 1:
+                col = seam2 if ring == 2 else seam1
+            elif ring >= 1 and (x - 1 in joints or x + 1 in joints):
+                col = mix(col, seam0, 0.5)
+            px[x, y] = col
+    # glimmende Risse in der oberen und unteren Kante
+    for i, x in enumerate(range(x0 + 7, x1 - 4, 23)):
+        if hash01(x, 403) < 0.5:
+            continue
+        y = y0 + 1 if i % 2 == 0 else y1 - 1
+        for k in range(3):
+            put(px, img, x + k, y + (1 if (k == 1 and y == y0 + 1) else (-1 if k == 1 else 0)), seam1 if k != 1 else seam2)
+    _gem_sockets(px, img, pal, mix(m1, m0, 0.2), mix(m0, OUTLINE, 0.2))
+
+
+def deco_world_eater(img: Image.Image, pal: dict) -> None:
+    """Der Weltenfresser: hinter dem Medaillon oben drei seiner Kronensplitter (violette Kristalle in goldener Fassung),
+    unten ein gebogener Hauer; auf dem Rahmen – seinem Rücken – Stücke verschlungener Welten (Wiese mit Eiche, Netherrack mit
+    Magma und Karmesinpilz, Endstein mit Chorus, Packeis mit Zacken), dazwischen Glut; unter der Leiste sein Gebiss (Zahnfleisch
+    und Zähne, die Fänge zur Mitte gebogen); als Spitze die Kristallflosse seines Schwanzes."""
+    px = img.load()
+    g = {k: c(pal, k) for k in pal}
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    # die Kronensplitter: violette Kristalle, wo sie hinter dem Ring hervortreten in Gold gefasst
+    shards = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    sp = shards.load()
+
+    def shard(x0: float, y0: float, ang: float, length: float, width: float, seed: int):
+        ca, sa = math.cos(ang), math.sin(ang)
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - x0, y + 0.5 - y0
+                u = dx * ca + dy * sa
+                v = -dx * sa + dy * ca
+                if u < 0.0 or u > length:
+                    continue
+                k = u / length
+                half = width if k < 0.7 else width * (1.0 - (k - 0.7) / 0.3) + 0.15
+                if abs(v) > half:
+                    continue
+                ring = math.hypot(x + 0.5 - EMB_X, y + 0.5 - EMB_Y)
+                if EMB_R - 0.5 <= ring <= EMB_R + 2.2:
+                    col = g["gold"] if v < 0.3 else g["gold_dark"]
+                    if abs(v) > half - 0.8 or abs(ring - (EMB_R + 2.2)) < 0.6:
+                        col = mix(g["gold_dark"], OUTLINE, 0.4)
+                elif v < -half * 0.2:
+                    col = g["crystal2"]
+                elif v < half * 0.15:
+                    col = g["crystal3"] if k > 0.25 else g["crystal2"]
+                else:
+                    col = g["crystal1"]
+                if abs(v) > half - 0.7 and not (EMB_R - 0.5 <= ring <= EMB_R + 2.2):
+                    col = mix(col, g["crystal0"], 0.55)
+                if k > 0.8 and v < 0.5:
+                    col = mix(col, g["crystal3"], 0.5)
+                if hash01(x, y, seed, 411) > 0.94 and abs(v) < half - 0.8:
+                    col = g["crystal3"]
+                sp[x, y] = col
+
+    shard(29.0, 12.0, math.radians(-60), 14.0, 2.4, 1)
+    shard(33.0, 12.5, math.radians(-40), 19.0, 2.8, 2)
+    shard(36.5, 14.0, math.radians(-22), 21.0, 2.4, 3)
+    _outline(shards, OUTLINE)
+    img.alpha_composite(shards)
+    px = img.load()
+
+    # der Hauer: von hinter dem Medaillon nach unten rechts gebogen, die Spitze wieder nach oben
+    tusk = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tp = tusk.load()
+    p0, p1, p2 = (30.0, 33.0), (45.0, 46.5), (61.0, 34.5)
+    samples = []
+    for i in range(241):
+        t = i / 240
+        bx = (1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p2[0]
+        by = (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p2[1]
+        tx = 2 * (1 - t) * (p1[0] - p0[0]) + 2 * t * (p2[0] - p1[0])
+        ty = 2 * (1 - t) * (p1[1] - p0[1]) + 2 * t * (p2[1] - p1[1])
+        n = math.hypot(tx, ty)
+        samples.append((t, bx, by, -ty / n, tx / n, 2.9 * (1.0 - t) ** 0.8 + 0.25))
+    for y in range(26, FRAME_H):
+        for x in range(24, 66):
+            best = None
+            for (t, bx, by, nx, ny, r) in samples:
+                d = math.hypot(x + 0.5 - bx, y + 0.5 - by)
+                if d <= r and (best is None or d - r < best[0]):
+                    side = (x + 0.5 - bx) * nx + (y + 0.5 - by) * ny
+                    best = (d - r, t, side / r)
+            if best is None:
+                continue
+            _, t, side = best
+            col = _ramp((g["tooth_light"], g["tooth"], g["tooth_dark"]), 0.5 + 0.55 * side)
+            if any(abs(t - b) < 0.012 for b in (0.3, 0.46)):
+                col = mix(col, g["tooth_dark"], 0.6)
+            if t < 0.12:
+                col = mix(col, g["gum_dark"], 0.5)
+            tp[x, y] = col
+    _outline(tusk, OUTLINE)
+    img.alpha_composite(tusk)
+    px = img.load()
+
+    # die verschlungenen Welten auf seinem Rücken
+    worlds = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    wp = worlds.load()
+    base = top - 1
+
+    def wput(x, y, col):
+        if 0 <= x < FRAME_W and 0 <= y < FRAME_H:
+            wp[x, y] = col
+
+    def chunk(cx: int, w: int, h: int, surface, surface_light, body, body_dark, seed: int):
+        """Ein Brocken Welt auf dem Rücken: oben die Oberfläche (zwei Reihen), darunter Gestein, unregelmäßig gebrochen."""
+        x0 = cx - w // 2
+        for x in range(x0, x0 + w):
+            rel = (x - x0) / max(1, w - 1)
+            hh = h - (1 if (rel < 0.12 or rel > 0.88) else 0) - (1 if hash01(x, seed, 421) > 0.8 else 0)
+            for k in range(hh):
+                y = base - k
+                if k >= hh - 1:
+                    col = surface_light if hash01(x, seed, 423) > 0.45 else surface
+                elif k >= hh - 2:
+                    col = surface if hash01(x, k, seed, 425) > 0.25 else body
+                else:
+                    col = body if hash01(x, k, seed, 427) > 0.3 else body_dark
+                    if k == 0:
+                        col = mix(col, body_dark, 0.5)
+                wput(x, y, col)
+        return x0
+
+    def surface_y(x: int, cx: int, w: int, h: int, seed: int) -> int:
+        x0 = cx - w // 2
+        rel = (x - x0) / max(1, w - 1)
+        hh = h - (1 if (rel < 0.12 or rel > 0.88) else 0) - (1 if hash01(x, seed, 421) > 0.8 else 0)
+        return base - hh
+
+    # Wiese mit Eiche und Blume
+    cx, w, h, s = 75, 17, 4, 1
+    chunk(cx, w, h, g["grass"], g["grass_light"], g["dirt"], g["dirt_dark"], s)
+    tx = cx - 1
+    ty = surface_y(tx, cx, w, h, s)
+    for k in range(4):
+        wput(tx, ty - k, g["wood"])
+        wput(tx + 1, ty - k, g["wood_dark"])
+    for y in range(ty - 11, ty - 3):
+        for x in range(tx - 5, tx + 7):
+            d = math.hypot((x - tx - 0.5) / 5.3, (y - (ty - 6.8)) / 3.7)
+            if d > 1.0 or (d > 0.86 and hash01(x, y, 431) > 0.5):
+                continue
+            lit = (x - tx) < 0 and y < ty - 6
+            col = g["leaves_light"] if (lit and hash01(x, y, 433) > 0.3) else g["leaves"]
+            if hash01(x, y, 435) > 0.82:
+                col = mix(col, g["leaves_light"], 0.6)
+            wput(x, y, col)
+    fx = cx + 4
+    fy = surface_y(fx, cx, w, h, s)
+    wput(fx, fy, g["grass_light"])
+    wput(fx, fy - 1, (230, 56, 48, 255))
+    wput(cx - 6, surface_y(cx - 6, cx, w, h, s), g["grass_light"])
+    wput(cx + 6, surface_y(cx + 6, cx, w, h, s), (255, 214, 64, 255))
+
+    # Netherrack mit einem Becken aus Magma, einem Karmesinpilz und Flämmchen
+    cx, w, h, s = 131, 17, 4, 2
+    chunk(cx, w, h, g["netherrack"], g["fungus"], g["netherrack"], g["netherrack_dark"], s)
+    for x in range(cx - 1, cx + 4):
+        y = surface_y(x, cx, w, h, s) + 1
+        wput(x, y, g["magma_light"] if x in (cx, cx + 1) else g["magma"])
+        wput(x, y + 1, g["magma"] if x in (cx, cx + 2) else g["netherrack_dark"])
+    px_ = cx - 4
+    py_ = surface_y(px_, cx, w, h, s)
+    for k in range(3):
+        wput(px_, py_ - k, (226, 196, 150, 255))
+    for x in range(px_ - 3, px_ + 4):
+        wput(x, py_ - 3, g["fungus"])
+    for x in range(px_ - 2, px_ + 3):
+        wput(x, py_ - 4, g["fungus_light"] if x < px_ else g["fungus"])
+    wput(px_ - 2, py_ - 3, (255, 222, 120, 255))
+    wput(px_ + 2, py_ - 4, (255, 222, 120, 255))
+    for fxp, fh in ((cx + 5, 3), (cx + 6, 2)):
+        fy = surface_y(fxp, cx, w, h, s)
+        for k in range(fh):
+            wput(fxp, fy - k, (255, 236, 140, 255) if k == 0 else (255, 150, 40, 255))
+
+    # Endstein mit einer Chorus-Pflanze
+    cx, w, h, s = 186, 16, 4, 3
+    chunk(cx, w, h, g["endstone"], g["endstone"], g["endstone"], g["endstone_dark"], s)
+    sx = cx
+    sy = surface_y(sx, cx, w, h, s)
+    stem = [(0, 0), (0, -1), (0, -2), (0, -3), (0, -4), (-1, -4), (-2, -4), (-2, -5), (-2, -6), (1, -2), (2, -2), (2, -3),
+            (2, -4), (2, -5), (2, -6), (2, -7), (0, -5), (0, -6), (0, -7), (0, -8)]
+    for ox, oy in stem:
+        wput(sx + ox, sy + oy, g["chorus"])
+    for ox, oy in ((-2, -7), (2, -8), (0, -9)):
+        for bx, by in ((0, 0), (1, 0), (0, -1), (1, -1)):
+            wput(sx + ox + bx - (1 if ox < 0 else 0), sy + oy + by, g["chorus_light"] if (bx, by) != (1, 0) else g["chorus"])
+    # Packeis mit Eiszacken
+    cx, w, h, s = 215, 16, 4, 4
+    chunk(cx, w, h, g["ice_light"], g["ice_light"], g["ice"], g["ice_dark"], s)
+    for ox, sh in ((-5, 4), (-2, 6), (0, 9), (2, 5), (5, 3)):
+        x = cx + ox
+        y = surface_y(x, cx, w, h, s)
+        for k in range(sh):
+            wput(x, y - k, g["ice_light"] if k > sh - 3 else g["ice"])
+            if k < sh - 3:
+                wput(x + 1, y - k, g["ice_dark"])
+    _outline(worlds, OUTLINE)
+    img.alpha_composite(worlds)
+    px = img.load()
+    # Glut zwischen den Welten
+    for i, x in enumerate(range(BAR_X + 6, BAR_X + BAR_W - 4, 7)):
+        if hash01(x, 441) > 0.62 and not any(abs(x - X) < 11 for X in (75, 131, 186, 215, 103, 157)):
+            y = top - 2 - round(4 * hash01(x, 443))
+            put(px, img, x, y, g["seam2"] if hash01(x, 445) > 0.5 else g["seam1"])
+
+    # das Gebiss unter der Leiste: Zahnfleisch, daraus Zähne; die großen Fänge zur Mitte gebogen
+    teeth = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    tq = teeth.load()
+    for x in range(BAR_X - 1, BAR_X + BAR_W + 1):
+        tq[x, bottom + 1] = g["gum"] if hash01(x, 451) > 0.2 else g["gum_dark"]
+    mid = BAR_X + BAR_W / 2
+    for i, x in enumerate(range(BAR_X + 4, BAR_X + BAR_W - 2, 6)):
+        big = i % 3 == 1
+        width = 4.6 if big else 3.0
+        length = (7 if big else 3) + (1 if hash01(x, 453) > 0.6 else 0)
+        bend = (1.6 if big else 0.4) * (1 if x < mid else -1)
+        for k in range(length):
+            t = k / max(1, length - 1)
+            half = (width / 2) * (1.0 - t) ** 0.85
+            cxk = x + bend * t * t
+            for xx in range(round(cxk - half), round(cxk + half) + 1):
+                d = (xx - cxk) / max(0.5, half + 0.5)
+                col = _ramp((g["tooth_light"], g["tooth"], g["tooth_dark"]), 0.45 + 0.6 * d)
+                if k == 0:
+                    col = mix(col, g["gum"], 0.35)
+                tq[xx, bottom + 2 + k] = col
+    _outline(teeth, OUTLINE)
+    img.alpha_composite(teeth)
+    px = img.load()
+
+    # Spitze: die Kristallflosse am Schwanz – zwei Schwingen aus Kristall, dazwischen ein Dorn
+    fin = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    fq = fin.load()
+    ex, ey = BAR_X + BAR_W + 2, BAR_Y + BAR_H // 2
+    for y in range(ey - 12, ey + 13):
+        for x in range(ex, FRAME_W - 1):
+            rx = x - ex
+            dy = y + 0.5 - (ey + 0.5)
+            reach = 3.2 + rx * 1.55
+            if abs(dy) > reach or abs(dy) < rx * 0.95 - 1.2:
+                continue
+            if rx > 5 and abs(dy) < reach - 3.0:
+                continue
+            outer = abs(dy) / max(1.0, reach)
+            col = _ramp((g["crystal1"], g["crystal2"], g["crystal3"]), 0.2 + 0.7 * outer)
+            if dy > 0:
+                col = mix(col, g["crystal0"], 0.3)
+            fq[x, y] = col
+    for x in range(ex, ex + 6):
+        fq[x, ey] = g["crystal3"] if x > ex + 2 else g["crystal2"]
+    _outline(fin, OUTLINE)
+    img.alpha_composite(fin)
+
+
+def post_world_eater(img: Image.Image, pal: dict) -> None:
+    """Nach dem Medaillon: der Ring ist sein Rachen – acht Lippen aus Chaosgestein mit glühenden Fugen dazwischen."""
+    px = img.load()
+    seam1, seam2 = c(pal, "seam1"), c(pal, "seam2")
+    for y in range(FRAME_H):
+        for x in range(0, int(EMB_X + EMB_R) + 2):
+            d = math.hypot(x - EMB_X + 0.5, y - EMB_Y + 0.5)
+            if not (EMB_R - 4.0 < d <= EMB_R - 1.0):
+                continue
+            ang = math.degrees(math.atan2(y - EMB_Y + 0.5, x - EMB_X + 0.5)) % 45.0
+            if ang < 3.2 or ang > 45.0 - 3.2:
+                px[x, y] = seam2 if EMB_R - 3.0 < d <= EMB_R - 2.0 else seam1
+
+
+POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
+        "world_eater": post_world_eater}
+BORDERS = {"world_eater": frame_border_stone}
+
+
+DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
+         "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -1452,7 +2002,7 @@ def frame(element: str) -> Image.Image:
     pal = ELEMENTS[element]
     img = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
     DECOS[element](img, pal)
-    frame_border(img, pal)
+    BORDERS.get(element, frame_border)(img, pal)
     emblem(img, pal)
     if element in POST:
         POST[element](img, pal)
@@ -1555,6 +2105,22 @@ def fill_value(element: str, x: int, y: int) -> float:
         if h > 0.94:
             return 0.78
         return neb
+    if element == "schrolli_almighty":
+        # das Plasma einer Sonne: wogende Glut mit feiner Körnung, darin Bögen aus Licht und einzelne Funken
+        flow = 0.5 + 0.5 * math.sin(tau * x / 64 + 1.5 * math.sin(tau * y / 9 + tau * x / 128))
+        d1, d2 = _worley(x, y * 1.2, 4.0, 64, 431)
+        grain = min(1.0, (d2 - d1) / 2.0)
+        arc = abs(y - (4.0 + 3.0 * math.sin(tau * x / 64 + 0.7)))
+        if arc < 0.6 and math.sin(tau * x / 128) > 0.2:
+            return 1.0
+        if hash01(x, y, 433) > 0.978:
+            return 1.0
+        return 0.36 + 0.28 * flow + 0.14 * grain + (0.12 if arc < 1.5 and math.sin(tau * x / 128) > 0.2 else 0.0)
+    if element == "world_eater":
+        # Krusten auf Glut: zwischen den Schollen fließt es hell
+        d1, d2 = _worley(x, y * 1.35, 256 / 24, 24, 451)
+        crack = d2 - d1
+        return 0.95 if crack < 0.75 else (0.7 if crack < 1.9 else 0.3 + 0.1 * math.sin(tau * x / 64) + 0.06 * hash01(x, y, 453))
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -1562,7 +2128,48 @@ def fill_value(element: str, x: int, y: int) -> float:
     return 0.5
 
 
+def fill_strip_world_eater() -> Image.Image:
+    """Füllung des Weltenfressers: die Glut seines Schlunds – dunkle Krusten, zwischen denen es hell fließt, und ein violetter
+    Riss, der sich hindurchzieht und funkelt (wie der Riss in seinem Rachen)."""
+    pal = ELEMENTS["world_eater"]
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    cr1, cr2, cr3 = c(pal, "crystal1"), c(pal, "crystal2"), c(pal, "crystal3")
+    tau = math.tau
+    img = Image.new("RGBA", (256, BAR_H), CLEAR)
+    px = img.load()
+    for y in range(BAR_H):
+        top = 1.0 - y / (BAR_H - 1)
+        for x in range(256):
+            v = fill_value("world_eater", x, y)
+            flow = 0.5 + 0.5 * math.sin(tau * x / 64 + 1.3 * math.sin(tau * y / 9 + tau * x / 128))
+            if v > 0.9:
+                col = mix(f2, f3, 0.45 + 0.3 * flow)
+            elif v > 0.6:
+                col = mix(f1, f2, 0.5 + 0.3 * flow)
+            else:
+                col = mix(f0, f1, 0.2 + 0.4 * top + 0.25 * flow)
+            gate = math.sin(tau * x / 128 + 0.3)
+            if gate > 0.2:
+                # der Riss: ein gezackter Spalt, aus dem violettes Licht dringt
+                ry = 4.0 + 2.2 * math.sin(tau * x / 64 + 0.8) + (hash01(x // 3, 471) - 0.5) * 1.8
+                d = abs(y - ry)
+                if d < 0.6:
+                    col = cr3 if hash01(x, 461) > 0.55 else cr2
+                elif d < 1.6:
+                    col = mix(col, cr1, 0.6 * min(1.0, (gate - 0.2) * 4))
+                elif d < 2.6 and hash01(x, y, 463) > 0.9:
+                    col = cr2
+            if y == 1:
+                col = mix(col, f3, 0.25)
+            if y == BAR_H - 1:
+                col = mix(col, f0, 0.5)
+            px[x, y] = col
+    return img
+
+
 def fill_strip(element: str) -> Image.Image:
+    if element == "world_eater":
+        return fill_strip_world_eater()
     pal = ELEMENTS[element]
     f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
     img = Image.new("RGBA", (256, BAR_H), CLEAR)
@@ -1651,17 +2258,52 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
 # Bildnis aus dem 3D-Modell
 # =============================================================================================
 
+def _sun_behind(head: Image.Image) -> Image.Image:
+    """Bildnis des Allmächtigen: hinter seinem Kopf lodert eine Sonne aus Flammenzungen; der Kopf bekommt eine dunkle Kontur,
+    damit sich Krone und Haar von den Flammen abheben."""
+    pal = ELEMENTS["schrolli_almighty"]
+    fire = [c(pal, f"flame{k}") for k in range(6)]
+    out = Image.new("RGBA", (64, 64), CLEAR)
+    op = out.load()
+    hp = head.load()
+    cx, cy = 32.0, 27.0
+    for y in range(64):
+        for x in range(64):
+            dx, dy = x + 0.5 - cx, y + 0.5 - cy
+            r = math.hypot(dx, dy)
+            a = math.atan2(dy, dx)
+            tongue = 0.5 + 0.5 * math.cos(14 * a + 1.4 * math.sin(3 * a + 0.5))
+            reach = 19.0 + 12.0 * tongue ** 1.5 + 2.0 * math.sin(5 * a + 0.4)
+            if r > reach:
+                continue
+            t = r / reach
+            col = _ramp((fire[1], fire[2], fire[3], fire[4], fire[5]), 1.05 - 0.95 * t)
+            if t > 0.9:
+                col = mix(col, fire[0], 0.35)
+            op[x, y] = col
+    solid = [[hp[x, y][3] > 140 for y in range(64)] for x in range(64)]
+    for y in range(64):
+        for x in range(64):
+            if solid[x][y]:
+                op[x, y] = hp[x, y][:3] + (255,)
+            elif any(0 <= x + dx < 64 and 0 <= y + dy < 64 and solid[x + dx][y + dy]
+                     for dx in (-2, -1, 0, 1, 2) for dy in (-2, -1, 0, 1, 2) if abs(dx) + abs(dy) <= 2):
+                op[x, y] = (40, 8, 4, 255)
+    return out
+
+
 def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
-                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll, schrolli)
+                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll, schrolli,
+                                  world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
-           "schrolli": schrolli, "schrolli_true": schrolli}[element]
+           "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -1670,7 +2312,7 @@ def portrait(element: str) -> Image.Image:
         # Kopf mit Haar, Krone und Heiligenschein (in der Wahren Gestalt mit dem Strahlenkranz), die Schultern
         def strip_schrolli(bone):
             if bone.name.startswith(("wing_", "left_", "right_", "scepter", "orb", "robe", "true_rings", "halo", "true_corona",
-                                     "hair_tip")):
+                                     "hair_tip", "almighty", "blade")):
                 bone.cubes.clear()
             for child in bone.children:
                 strip_schrolli(child)
@@ -1737,19 +2379,22 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_anni(child)
         strip_anni(m.root)
-    zoom = {"schrolli": 1.0, "schrolli_true": 1.0, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
+    zoom = {"schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
             "anni": 1.0, "anni2": 1.0}.get(element, 1.2)
-    yaw = {"schrolli": -22, "schrolli_true": -22, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
+    yaw = {"schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
            "anni2": -24}.get(element, -42)
-    pitch = {"schrolli": 4, "schrolli_true": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
+    pitch = {"schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
-                                                 "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5}.get(element, 1.4))
+                                                 "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
+                                                 "schrolli_almighty": 1.45, "world_eater": 2.0}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
+    if element == "schrolli_almighty":
+        img = _sun_behind(img)
     px = img.load()
     solid = [[False] * 64 for _ in range(64)]
     for y in range(64):
