@@ -67,6 +67,8 @@ final class HoardGameTests {
             ModGameTests.TEST_FUNCTIONS.register("world_spear_worlds", () -> HoardGameTests::spear);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WORLD_EATER_TROPHY =
             ModGameTests.TEST_FUNCTIONS.register("world_eater_trophy", () -> HoardGameTests::trophy);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BOSS_HEALTH_BEYOND_LIMIT =
+            ModGameTests.TEST_FUNCTIONS.register("boss_health_beyond_limit", () -> HoardGameTests::bossHealth);
 
     private HoardGameTests() {}
 
@@ -74,7 +76,7 @@ final class HoardGameTests {
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(WORLD_EATER_HOARD, WORLD_SPEAR_WORLDS, WORLD_EATER_TROPHY)) {
+        for (var test : List.of(WORLD_EATER_HOARD, WORLD_SPEAR_WORLDS, WORLD_EATER_TROPHY, BOSS_HEALTH_BEYOND_LIMIT)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -377,6 +379,42 @@ final class HoardGameTests {
         List<ItemStack> drops = Block.getDrops(level.getBlockState(pos), level, pos, level.getBlockEntity(pos));
         helper.assertTrue(drops.stream().anyMatch(s -> s.is(AbyssBlocks.WORLD_EATER_TROPHY.get().asItem())), "Die Trophäe lässt sich nicht abbauen");
         helper.assertTrue(new ItemStack(AbyssBlocks.WORLD_EATER_TROPHY.get()).getRarity() == Rarity.EPIC, "Die Trophäe ist nicht episch");
+        helper.succeed();
+    }
+
+    /**
+     * Lebenskraft über der Grenze von Minecraft (1.024): Die Leiste des Zerbrochenen Königs, Nyxars und Terragons fasst nur
+     * 1.024, aber Treffer zählen so viel weniger, dass sie genau so viel aushalten wie vorgesehen (1.800, 1.400, 1.150);
+     * ein Ritter ist davon unberührt. Ein Treffer am König zählt entsprechend weniger.
+     */
+    private static void bossHealth(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        floor(helper, 9);
+        record Boss(net.minecraft.world.entity.EntityType<? extends net.minecraft.world.entity.Mob> type, double designed) {}
+        for (Boss boss : List.of(new Boss(ModEntities.SHATTERED_KING.get(), 1800.0), new Boss(ModEntities.NYXAR.get(), 1400.0),
+                new Boss(ModEntities.TERRAGON.get(), 1150.0))) {
+            var mob = boss.type().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            helper.assertTrue(mob != null, "Lässt sich nicht erzeugen: " + boss.type());
+            helper.assertTrue(Math.abs(io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.designed(mob) - boss.designed()) < 0.5,
+                    "Falsche vorgesehene Lebenskraft: " + boss.type() + " " + io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.designed(mob));
+            helper.assertTrue(Math.abs(io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.scale(mob) - mob.getMaxHealth() / boss.designed())
+                    < 1.0e-3, "Treffer zählen nicht entsprechend weniger: " + boss.type());
+        }
+        var knight = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(2, 1, 2));
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.scale(knight) == 1.0f, "Auch gewöhnliche Wesen sind betroffen");
+        // ein Treffer, der Rüstung durchschlägt: am König zählt er nur 1.024/1.800
+        var king = ModEntities.SHATTERED_KING.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        king.snapTo(helper.absolutePos(new BlockPos(6, 1, 6)).getX() + 0.5, helper.absolutePos(new BlockPos(6, 1, 6)).getY(),
+                helper.absolutePos(new BlockPos(6, 1, 6)).getZ() + 0.5, 0.0f, 0.0f);
+        king.setNoAi(true);
+        level.addFreshEntity(king);
+        float before = king.getHealth();
+        king.hurtServer(level, level.damageSources().fellOutOfWorld(), 90.0f);
+        float lost = before - king.getHealth();
+        if (lost > 0.0f) {
+            helper.assertTrue(Math.abs(lost - 90.0f * king.getMaxHealth() / 1800.0f) < 0.6f, "Der Treffer am König zählt falsch: " + lost);
+        }
+        king.discard();
         helper.succeed();
     }
 

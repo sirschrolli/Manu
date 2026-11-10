@@ -114,7 +114,7 @@ public class WorldEaterEntity extends Monster {
     public static final double ORBIT = 40.0;
     /** Erfahrung beim Sieg (wie beim Zerbrochenen König und bei Asteria). */
     public static final int XP_REWARD = 500;
-    /** So viel Lebenskraft hat er (mehr, als Minecraft erlaubt: Treffer zählen entsprechend weniger, siehe WorldEaterDamage). */
+    /** So viel Lebenskraft hat er (mehr, als Minecraft erlaubt: Treffer zählen entsprechend weniger, siehe BossHealth). */
     public static final float DESIGNED_HEALTH = 2600.0f;
 
     private static final EntityDataAccessor<Float> DATA_MAW = SynchedEntityData.defineId(WorldEaterEntity.class, EntityDataSerializers.FLOAT);
@@ -389,7 +389,7 @@ public class WorldEaterEntity extends Monster {
 
     /** Wie stark Treffer zählen: 1, wenn die volle Lebenskraft in die Leiste passt, sonst entsprechend weniger. */
     public float healthScale() {
-        return Math.min(1.0f, this.getMaxHealth() / DESIGNED_HEALTH);
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.scale(this);
     }
 
     /** Ein Treffer auf ein Glied. */

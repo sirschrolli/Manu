@@ -1006,8 +1006,10 @@ public final class ModGameTests {
             float before = boss.getHealth();
             boss.hurtServer(level, level.damageSources().magic(), 50.0f);
             float body = before - boss.getHealth();
-            helper.assertTrue(Math.abs(body - 50.0f * io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.NPC_DAMAGE_FACTOR) < 0.6f,
-                    "Schaden ohne Spieler sollte gemindert sein: " + body);
+            // über der Grenze von 1.024 Lebenspunkten (auf „Schwer“ 1.170) zählt jeder Treffer entsprechend weniger
+            float expected = 50.0f * io.github.sirschrolli.kingdomsatwar.entity.boss.DragonBossEntity.NPC_DAMAGE_FACTOR
+                    * io.github.sirschrolli.kingdomsatwar.entity.boss.BossHealth.scale(boss);
+            helper.assertTrue(Math.abs(body - expected) < 0.6f, "Schaden ohne Spieler sollte gemindert sein: " + body + " statt " + expected);
             before = boss.getHealth();
             boss.bossParts()[0].hurtServer(level, level.damageSources().magic(), 50.0f);
             float head = before - boss.getHealth();
