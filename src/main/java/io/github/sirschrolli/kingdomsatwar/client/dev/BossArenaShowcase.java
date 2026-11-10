@@ -95,10 +95,7 @@ final class BossArenaShowcase {
             }
             lair.arenaReset(level);
             ServerPlayer player = any.getServer().getPlayerList().getPlayers().getFirst();
-            player.getAbilities().invulnerable = true;
-            player.getAbilities().mayfly = true;
-            player.getAbilities().flying = true;
-            player.onUpdateAbilities();
+            hover(player);
             Vec3 a = spot.approach;
             player.teleportTo(level, a.x, a.y, a.z, java.util.Set.of(), 0.0f, 10.0f, true);
             KingdomsAtWar.LOGGER.info("[Showcase] {}: Spieler am Hort bei {}", kind.id(), a);
@@ -203,9 +200,21 @@ final class BossArenaShowcase {
             Vec3 look = target.subtract(eye);
             float yaw = (float) (-Math.atan2(look.x, look.z) * 180.0 / Math.PI);
             float pitch = (float) (-Math.atan2(look.y, Math.sqrt(look.x * look.x + look.z * look.z)) * 180.0 / Math.PI);
+            // der Wechsel der Welt setzt die Fähigkeiten des Überlebensmodus zurück: wieder unverwundbar und schwebend
+            hover(player);
             player.setDeltaMovement(Vec3.ZERO);
             player.teleportTo(arena, eye.x, eye.y - 1.62, eye.z, java.util.Set.of(), yaw, pitch, true);
         });
+    }
+
+    /** Unverwundbar und schwebend (die Kamera), dazu Widerstand, falls die Welt die Fähigkeiten zurücksetzt. */
+    private static void hover(ServerPlayer player) {
+        player.getAbilities().invulnerable = true;
+        player.getAbilities().mayfly = true;
+        player.getAbilities().flying = true;
+        player.onUpdateAbilities();
+        player.resetFallDistance();
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.RESISTANCE, 1200, 4, false, false));
     }
 
     /** Steht die Kamera (Augenhöhe) frei – kein fester Block, kein Laub um sie herum? */
