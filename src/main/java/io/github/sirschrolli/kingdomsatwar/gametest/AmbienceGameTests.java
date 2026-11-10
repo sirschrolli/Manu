@@ -54,6 +54,7 @@ final class AmbienceGameTests {
         biomes.addAll(ShadowBiomes.ALL);
         biomes.addAll(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.ALL);
         biomes.addAll(io.github.sirschrolli.kingdomsatwar.fae.FaeBiomes.ALL);
+        biomes.addAll(io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes.ALL);
         // seit 0.61 haben auch die Standard-Biome der Oberwelt eine Klangwelt
         biomes.addAll(AmbienceProfiles.STANDARD);
         helper.assertTrue(AmbienceProfiles.all().keySet().containsAll(biomes) && biomes.containsAll(AmbienceProfiles.all().keySet()),

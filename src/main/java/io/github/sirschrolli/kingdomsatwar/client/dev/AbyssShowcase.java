@@ -29,7 +29,7 @@ final class AbyssShowcase {
 
     private AbyssShowcase() {}
 
-    /** {@code only}: nur „vista“, „anchor“ oder „gate“ – oder alles. */
+    /** {@code only}: nur „vista“, „sky“ (der Blick hinauf), „anchor“ oder „gate“ – oder alles. */
     static void tour(Deque<Step> steps, String only) {
         BlockPos[] anchor = new BlockPos[1];
         steps.add(Step.command("gamerule spawn_monsters false"));
@@ -39,7 +39,7 @@ final class AbyssShowcase {
             minecraft.options.renderDistance().set(12);
         }));
 
-        if (only.isEmpty() || only.equals("vista")) {
+        if (only.isEmpty() || only.equals("vista") || only.equals("sky")) {
             // Fernblicke: (Standort, Blickziel) – an weit verstreuten Orten, damit verschiedene Biome ins Bild kommen
             double[][] vistas = {
                     {0, 150, 0, 120, 125, 160},
@@ -52,7 +52,7 @@ final class AbyssShowcase {
                     {300, 110, 1200, 450, 112, 1300},
                     {600, 120, 2600, 640, 260, 2690},
             };
-            for (int i = 0; i < vistas.length; i++) {
+            for (int i = only.equals("sky") ? vistas.length - 1 : 0; i < vistas.length; i++) {
                 double[] v = vistas[i];
                 arrive(steps, ABYSS, v[0], v[1], v[2], v[3], v[4], v[5]);
                 steps.add(Step.screenshot(i == vistas.length - 1 ? "abyss_sky" : "abyss_vista_" + (i + 1)));

@@ -93,7 +93,7 @@ public final class AbyssBiomes {
                         .addSpawn(ModEntities.SPIDER.get(), 30, 1, 2)
                         .addSpawn(ModEntities.DISTORTLING.get(), 20, 1, 2)
                         .build()));
-        context.register(EMBER_FALLS, biome(0x2A0808, 0x3A0C0A, 0x8A3A1A, 0x9A4A2A, 0x8A4A2A, ParticleTypes.LAVA, 0.0006f,
+        context.register(EMBER_FALLS, biome(0x2A0808, 0x3A0C0A, 0x8A3A1A, 0x9A4A2A, 0x8A4A2A, ParticleTypes.CRIMSON_SPORE, 0.012f,
                 SoundEvents.MUSIC_BIOME_CRIMSON_FOREST, AbyssFeatures.emberFalls(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.BLAZE.get(), 30, 1, 2)
                         .addSpawn(ModEntities.WITHER_SKELETON.get(), 30, 1, 2)

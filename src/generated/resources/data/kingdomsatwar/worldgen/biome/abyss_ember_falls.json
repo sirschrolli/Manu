@@ -60,9 +60,9 @@
     "minecraft:visual/ambient_particles": [
       {
         "particle": {
-          "type": "minecraft:lava"
+          "type": "minecraft:crimson_spore"
         },
-        "probability": 6.0E-4
+        "probability": 0.012
       }
     ],
     "minecraft:visual/fog_color": "#3a0c0a",
