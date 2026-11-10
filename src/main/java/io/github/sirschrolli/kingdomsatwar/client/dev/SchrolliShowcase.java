@@ -467,6 +467,145 @@ final class SchrolliShowcase {
         steps.add(Step.command("gamerule advance_time true"));
     }
 
+    /**
+     * Nahkampf ({@code creator_melee}): der Weg in die Schöpfung (am Altar), dann Schrolli am Boden – die Landung, seine
+     * Kampfhaltung, die Künste der Klinge gegen den Ritter, in der Wahren Gestalt die Weltenklinge.
+     */
+    static void melee(Deque<Step> steps) {
+        Court s = new Court();
+        enter(steps, s);
+        steps.add(Step.server(any -> knight(court(any.getServer()), s)));
+        // die Landung
+        steps.add(Step.server(any -> {
+            ServerLevel court = court(any.getServer());
+            clearEffects(court, s);
+            place(court, s, 16.0, 10.0);
+            if (boss(court, s) instanceof SchrolliEntity boss) {
+                boss.forceAttack(Attack.DESCEND);
+            }
+        }));
+        steps.add(attackAt(s, Attack.DESCEND, SchrolliEntity.DESCEND_LAND - 3));
+        steps.add(follow(s, -62.0, 15.0, 0.6, 0.15));
+        steps.add(Step.waitTicks(3));
+        steps.add(shot("schoepfer_landung"));
+        steps.add(Step.waitTicks(30));
+        // die Kampfhaltung (er hält still, der Kamera zugewandt)
+        steps.add(groundPose(s));
+        steps.add(faceCam(s, 10.5, 1.4, 3.6, 22.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("schoepfer_kampfhaltung"));
+        steps.add(faceCam(s, 8.0, 1.2, 3.4, 62.0));
+        steps.add(Step.waitTicks(6));
+        steps.add(shot("schoepfer_kampfhaltung_seite"));
+        steps.add(faceCam(s, 6.2, 2.4, 3.0, -38.0));
+        steps.add(Step.waitTicks(6));
+        steps.add(shot("schoepfer_klinge_nah"));
+        steps.add(release(s));
+        // die Künste der Klinge
+        arts(steps, s, new String[][] {
+                {"STRIKE", "19", "schoepfer_klingenhieb", "-70", "12", "-0.8", "0.3"},
+                {"STRIKE", "37", "schoepfer_klingenhieb_zwei", "-110", "12", "-0.6", "0.3"},
+                {"STRIKE", "62", "schoepfer_spaltschlag", "-58", "15", "0.0", "0.35"},
+                {"SLASHES", "19", "schoepfer_lichtsicheln_hieb", "-60", "12", "-0.5", "0.3"},
+                {"SLASHES", "28", "schoepfer_lichtsicheln", "-30", "13", "3.5", "0.6"},
+                {"DASH", "16", "schoepfer_sturmlauf_linie", "-50", "17", "3.0", "0.5"},
+                {"DASH", "26", "schoepfer_sturmlauf", "-80", "16", "-0.5", "0.5"},
+                {"WHIRL", "27", "schoepfer_klingenwirbel", "-40", "15", "0.5", "0.2"},
+                {"PLUNGE", "35", "schoepfer_himmelssturz_sprung", "-60", "20", "-3.0", "0.4"},
+                {"PLUNGE", "48", "schoepfer_himmelssturz", "-55", "16", "-0.5", "0.3"},
+                {"GUARD", "30", "schoepfer_schwingenwehr", "-30", "13", "-0.8", "0.2"},
+                {"COUNTER", "10", "schoepfer_gegenschlag", "-75", "13", "-0.5", "0.3"},
+        }, 0.0);
+        // die Wahre Gestalt: die Weltenklinge
+        steps.add(Step.server(any -> {
+            ServerLevel court = court(any.getServer());
+            if (boss(court, s) instanceof SchrolliEntity boss) {
+                boss.forceTrueForm();
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        arts(steps, s, new String[][] {
+                {"STRIKE", "19", "schoepfer_wahr_klingenhieb", "-70", "16", "-0.6", "0.3"},
+                {"WORLD_BLADE", "34", "schoepfer_weltenklinge", "-35", "28", "2.0", "0.2"},
+                {"WORLD_BLADE", "51", "schoepfer_weltenklinge_rund", "-50", "30", "8.0", "0.2"},
+                {"WORLD_BLADE", "88", "schoepfer_weltenklinge_spalt", "-75", "26", "3.0", "0.5"},
+                {"PLUNGE", "48", "schoepfer_wahr_himmelssturz", "-55", "18", "3.0", "0.3"},
+        }, 0.0);
+        steps.add(groundPose(s));
+        steps.add(faceCam(s, 13.0, 1.6, 4.6, 22.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("schoepfer_wahr_kampfhaltung"));
+        steps.add(release(s));
+        steps.add(Step.command("gamerule advance_time true"));
+        steps.add(Step.quit());
+    }
+
+    /** Der Weg in die Schöpfung: das Heiligtum mit dem Altar, die Berührung, der Sog – bis der Hof geladen ist. */
+    private static void enter(Deque<Step> steps, Court s) {
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = true));
+        steps.add(Step.once(minecraft -> {
+            minecraft.options.renderDistance().set(16);
+            minecraft.options.gamma().set(1.0);
+        }));
+        for (String command : new String[] {"gamerule spawn_monsters false", "gamerule spawn_mobs false", "gamerule advance_time false",
+                "time set 6000", "weather clear", "difficulty normal", "clear", "gamemode spectator"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> shrine(any.getServer().overworld(), s)));
+        steps.add(Step.until(() -> s.state != 0, 600));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.server(any -> {
+            ServerLevel level = any.getServer().overworld();
+            ServerPlayer player = cam(any.getServer());
+            hover(player);
+            Vec3 a = Vec3.atBottomCenterOf(s.altar);
+            look(player, level, a.add(4.0, 4.5, 6.0), a.add(0.0, 2.0, 0.0));
+            if (level.getBlockEntity(s.altar) instanceof CreatorAltarBlockEntity altar) {
+                altar.touch(level, player);
+            }
+        }));
+        steps.add(Step.until(() -> inCourt(Minecraft.getInstance()), 1200));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.server(any -> findCourt(any.getServer(), s)));
+        steps.add(Step.until(() -> s.state != 1, 200));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(1600));
+        // er erscheint (ohne Bilder) und kommt zur Ruhe
+        steps.add(Step.server(any -> {
+            ServerLevel court = court(any.getServer());
+            clearEffects(court, s);
+            if (boss(court, s) instanceof SchrolliEntity boss) {
+                boss.setNoAi(false);
+                boss.awaken();
+            }
+        }));
+        steps.add(attackAt(s, Attack.AWAKEN, SchrolliEntity.AWAKEN_TICKS - 2));
+        steps.add(Step.waitTicks(10));
+    }
+
+    /** Er steht still am Boden in der Mitte des Hofs, in Kampfhaltung, nach Süden gewandt. */
+    private static Step groundPose(Court s) {
+        return Step.server(any -> {
+            ServerLevel court = court(any.getServer());
+            clearEffects(court, s);
+            if (court.getEntity(s.knight) instanceof Mob knight) {
+                knight.teleportTo(s.c.x + 26.0, s.c.y, s.c.z - 20.0);
+            }
+            if (boss(court, s) instanceof SchrolliEntity boss) {
+                boss.snapTo(s.c.x, s.c.y + 4.0, s.c.z, 0.0f, 0.0f);
+                boss.forceAttack(Attack.GUARD);
+                boss.forceAttack(Attack.NONE);
+                boss.setNoAi(true);
+                boss.setYRot(0.0f);
+                boss.setYBodyRot(0.0f);
+                boss.setYHeadRot(0.0f);
+                boss.setDeltaMovement(Vec3.ZERO);
+            }
+        });
+    }
+
     /** Kurzprobe ({@code creator_hand}): das Zepter in der Hand (erste Person, dann von vorn) und sein Lichtspeer. */
     static void hand(Deque<Step> steps) {
         steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
@@ -499,6 +638,130 @@ final class SchrolliShowcase {
         steps.add(Step.quit());
     }
 
+    /**
+     * Haltungsprobe ({@code creator_pose}): Schrolli in der flachen Welt, jede Haltung des Nahkampfs festgehalten (die
+     * Zeichnung zeigt eine bestimmte Kunst zu einem bestimmten Augenblick), von schräg vorn gesehen.
+     */
+    static void poses(Deque<Step> steps) {
+        Court s = new Court();
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = true));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "gamemode spectator"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerLevel level = any.getServer().overworld();
+            BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            s.c = Vec3.atBottomCenterOf(top);
+            SchrolliEntity boss = ModEntities.SCHROLLI.get().create(level, EntitySpawnReason.COMMAND);
+            if (boss != null) {
+                boss.snapTo(s.c.x, s.c.y, s.c.z, 0.0f, 0.0f);
+                boss.setYBodyRot(0.0f);
+                boss.setYHeadRot(0.0f);
+                boss.setNoAi(true);
+                boss.bindTo(null, s.c);
+                level.addFreshEntity(boss);
+                s.boss = boss.getId();
+            }
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.waitForChunks(400));
+        String only = System.getProperty("kingdomsatwar.poses", "");
+        Object[][] list = {
+                {"stance", Attack.NONE, 0.0f, 13.0, 25.0},
+                {"strike_wind", Attack.STRIKE, 16.0f, 13.0, 25.0},
+                {"strike_cut", Attack.STRIKE, 19.5f, 13.0, 25.0},
+                {"strike_wind2", Attack.STRIKE, 34.0f, 13.0, 25.0},
+                {"strike_cut2", Attack.STRIKE, 37.5f, 13.0, 25.0},
+                {"chop_up", Attack.STRIKE, 55.0f, 13.0, 25.0},
+                {"chop_down", Attack.STRIKE, 62.0f, 13.0, 25.0},
+                {"slash_wind", Attack.SLASHES, 16.0f, 13.0, 25.0},
+                {"slash_cut", Attack.SLASHES, 20.0f, 13.0, 25.0},
+                {"dash_aim", Attack.DASH, 15.0f, 13.0, 60.0},
+                {"dash_run", Attack.DASH, 24.0f, 13.0, 60.0},
+                {"whirl_wind", Attack.WHIRL, 13.0f, 13.0, 25.0},
+                {"whirl_spin", Attack.WHIRL, 25.0f, 13.0, 25.0},
+                {"plunge_dip", Attack.PLUNGE, 8.0f, 13.0, 25.0},
+                {"plunge_hold", Attack.PLUNGE, 34.0f, 13.0, 25.0},
+                {"plunge_fall", Attack.PLUNGE, 44.0f, 13.0, 25.0},
+                {"plunge_kneel", Attack.PLUNGE, 56.0f, 13.0, 25.0},
+                {"guard", Attack.GUARD, 30.0f, 13.0, 25.0},
+                {"counter_wind", Attack.COUNTER, 5.0f, 13.0, 25.0},
+                {"counter_cut", Attack.COUNTER, 10.0f, 13.0, 25.0},
+                {"descend_land", Attack.DESCEND, 28.0f, 13.0, 25.0},
+                {"rise_dip", Attack.RISE, 9.0f, 13.0, 25.0},
+                {"side_stance", Attack.NONE, 0.0f, 13.0, 90.0},
+                {"back_stance", Attack.NONE, 0.0f, 13.0, 160.0},
+                {"walk_a", Attack.NONE, 3.7f, 13.0, 70.0},
+                {"walk_b", Attack.NONE, 11.2f, 13.0, 70.0},
+                {"guard_front", Attack.GUARD, 30.0f, 13.0, 5.0},
+        };
+        for (Object[] pose : list) {
+            String name = (String) pose[0];
+            if (!only.isBlank() && !java.util.Arrays.asList(only.split(",")).contains(name)) {
+                continue;
+            }
+            int attack = ((Attack) pose[1]).ordinal();
+            float time = (Float) pose[2];
+            boolean walking = name.startsWith("walk");
+            steps.add(Step.once(minecraft -> {
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugAttack = attack;
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugTime = time;
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugGround = 1.0f;
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugWalk = walking ? 1.0f : 0.0f;
+            }));
+            steps.add(poseCam(s, (Double) pose[3] * 0.8, 3.6, (Double) pose[4], 3.3));
+            steps.add(Step.waitTicks(2));
+            steps.add(Step.screenshot("pose_" + name));
+        }
+        // die Wahre Gestalt und die Weltenklinge
+        steps.add(Step.server(any -> {
+            if (any.getServer().overworld().getEntity(s.boss) instanceof SchrolliEntity boss) {
+                boss.forceTrueForm();
+            }
+        }));
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugWalk = 0.0f));
+        steps.add(Step.waitTicks(4));
+        Object[][] world = {
+                {"true_stance", 0.0f, Attack.NONE, 16.0},
+                {"world_raise", 32.0f, Attack.WORLD_BLADE, 34.0},
+                {"world_sweep", 50.0f, Attack.WORLD_BLADE, 34.0},
+                {"world_lift", 76.0f, Attack.WORLD_BLADE, 34.0},
+                {"world_chop", 92.0f, Attack.WORLD_BLADE, 34.0},
+                {"true_strike", 19.5f, Attack.STRIKE, 16.0},
+        };
+        for (Object[] pose : world) {
+            String name = (String) pose[0];
+            if (!only.isBlank() && !java.util.Arrays.asList(only.split(",")).contains(name)) {
+                continue;
+            }
+            int attack = ((Attack) pose[2]).ordinal();
+            float time = (Float) pose[1];
+            steps.add(Step.once(minecraft -> {
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugAttack = attack;
+                io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugTime = time;
+            }));
+            double distance = (Double) pose[3];
+            steps.add(poseCam(s, distance, distance > 20.0 ? 8.0 : 5.0, 25.0, distance > 20.0 ? 8.0 : 4.4));
+            steps.add(Step.waitTicks(2));
+            steps.add(Step.screenshot("pose_" + name));
+        }
+        steps.add(Step.once(minecraft -> io.github.sirschrolli.kingdomsatwar.client.renderer.creator.SchrolliRenderer.debugAttack = -1));
+        steps.add(Step.quit());
+    }
+
+    /** Kamera für die Haltungsprobe: im Abstand {@code distance} vor ihm, um {@code angle} Grad gedreht, Blick auf {@code look}. */
+    private static Step poseCam(Court s, double distance, double height, double angle, double look) {
+        return Step.server(any -> {
+            ServerLevel level = any.getServer().overworld();
+            double yaw = Math.toRadians(angle);
+            Vec3 forward = new Vec3(-Math.sin(yaw), 0.0, Math.cos(yaw));
+            Vec3 eye = s.c.add(forward.scale(distance)).add(0.0, height, 0.0);
+            look(cam(any.getServer()), level, eye, s.c.add(0.0, look, 0.0));
+        });
+    }
+
     // =====================================================================================
     // Die Künste
     // =====================================================================================
@@ -509,6 +772,10 @@ final class SchrolliShowcase {
      * zur Mitte, der Blick auf ihn.
      */
     private static void arts(Deque<Step> steps, Court s, String[][] shots) {
+        arts(steps, s, shots, 6.5);
+    }
+
+    private static void arts(Deque<Step> steps, Court s, String[][] shots, double height) {
         java.util.Set<String> started = new java.util.HashSet<>();
         for (String[] shot : shots) {
             Attack attack = Attack.valueOf(shot[0]);
@@ -517,9 +784,13 @@ final class SchrolliShowcase {
                 double distance = switch (attack) {
                     case SMITE, BLINK, GALE, COMET -> 11.0;
                     case SUNWHEEL, SUPERNOVA, GENESIS, APOCALYPSE -> 10.0;
+                    case STRIKE, WHIRL, GUARD, COUNTER -> 6.5;
+                    case SLASHES, DASH -> 15.0;
+                    case PLUNGE -> 10.0;
+                    case WORLD_BLADE -> 14.0;
                     default -> 12.0;
                 };
-                steps.add(reset(s, attack, distance, 6.5));
+                steps.add(reset(s, attack, distance, height));
             }
             boolean hud = shot.length > 7 && shot[7].equals("hud");
             if (hud) {

@@ -235,6 +235,10 @@ final class Showcase {
                         SchrolliShowcase.boss(steps);
                     } else if (scene.equals("creator_hand")) {
                         SchrolliShowcase.hand(steps);
+                    } else if (scene.equals("creator_pose")) {
+                        SchrolliShowcase.poses(steps);
+                    } else if (scene.equals("creator_melee")) {
+                        SchrolliShowcase.melee(steps);
                     } else if (scene.equals("fae_creatures")) {
                         FaeShowcase.creatures(steps);
                     } else if (scene.equals("fae_portal")) {

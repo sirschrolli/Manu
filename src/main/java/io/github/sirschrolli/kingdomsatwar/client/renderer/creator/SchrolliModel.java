@@ -108,6 +108,21 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         this.footR = this.shinR.getChild("right_foot");
     }
 
+    /** Ist die Klinge gerade zu sehen (am Boden)? */
+    public boolean bladeVisible() {
+        return this.blade.visible;
+    }
+
+    /** Führt {@code poseStack} vom Ursprung des Modells bis in die Klinge (Knochen blade_edge; ihre Spitze liegt bei y -31). */
+    public void toBlade(com.mojang.blaze3d.vertex.PoseStack poseStack) {
+        this.root().translateAndRotate(poseStack);
+        this.body.translateAndRotate(poseStack);
+        this.armR.translateAndRotate(poseStack);
+        this.foreR.translateAndRotate(poseStack);
+        this.blade.translateAndRotate(poseStack);
+        this.bladeEdge.translateAndRotate(poseStack);
+    }
+
     /** Dreht einen Teil (gewichtet) auf eine feste Haltung in Grad – statt sie hinzuzufügen. */
     private static void toward(ModelPart part, float w, float x, float y, float z) {
         if (w <= 0.0f) {
@@ -179,7 +194,15 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         }
     }
 
-    /** Schwenkt eine Schwinge nach vorn (negativ) oder hinten (positiv). */
+    /** Biegt ein Glied einer Schwinge um die Hochachse: positiv nach vorn und einwärts (wie ein Schild um ihn). */
+    private void fold(int w, int joint, float weight, float degrees) {
+        if (weight != 0.0f) {
+            this.wingsL[w][joint].yRot += degrees * D * weight;
+            this.wingsR[w][joint].yRot -= degrees * D * weight;
+        }
+    }
+
+    /** Schwenkt eine Schwinge um die Hochachse: positiv nach vorn, negativ nach hinten. */
     private void sweep(int w, float weight, float degrees) {
         if (weight != 0.0f) {
             this.wingsL[w][0].yRot += degrees * D * weight;
@@ -463,15 +486,15 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         for (int w = 0; w < 3; w++) {
             // am Boden halb angelegt und zurückgenommen
             this.wing(w, 0, g, w == 2 ? 12.0f : 6.0f);
-            this.sweep(w, g, 14.0f);
-            // Schwingenwehr: die Schwingen schließen sich wie ein Schild vor ihm
-            this.sweep(w, shield, w == 1 ? -88.0f : -70.0f);
-            this.wing(w, 0, shield, w == 0 ? 26.0f : w == 1 ? 4.0f : -14.0f);
-            this.wing(w, 1, shield, 22.0f);
-            this.wing(w, 2, shield, 18.0f);
+            this.sweep(w, g, -14.0f);
+            // Schwingenwehr: die Schwingen schwenken nach vorn und biegen sich wie ein Schild um ihn
+            this.sweep(w, shield, w == 1 ? 78.0f : 70.0f);
+            this.fold(w, 1, shield, 58.0f);
+            this.fold(w, 2, shield, 38.0f);
+            this.wing(w, 0, shield, w == 0 ? 22.0f : w == 1 ? 4.0f : -18.0f);
             // Klingenwirbel: weit und flach ausgebreitet
             this.wing(w, 0, whirlWings, w == 0 ? 30.0f : w == 2 ? -26.0f : 0.0f);
-            this.sweep(w, whirlWings, 20.0f);
+            this.sweep(w, whirlWings, -10.0f);
             this.wing(w, 0, wingsUp, w == 2 ? -18.0f : -30.0f);
             this.wing(w, 1, wingsUp, -12.0f);
             this.sweep(w, wingsUp, 18.0f);
@@ -554,10 +577,11 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         if (g <= 0.0f) {
             return false;
         }
-        // ---------------------------------------------------------- die Kampfhaltung
-        this.sword(g, -30.0f, 10.0f, -2.0f, -62.0f, 135.0f);
-        this.off(g, -38.0f, -10.0f, 16.0f, -50.0f);
-        toward(this.body, g, 6.0f, 12.0f, 0.0f);
+        // ---------------------------------------------------------- die Kampfhaltung: die Klinge tief an seiner Rechten, die Spitze
+        // schräg hinab und zurück (das Gesicht bleibt frei), die Linke halb erhoben
+        this.sword(g, -12.0f, 0.0f, 30.0f, -40.0f, -75.0f);
+        this.off(g, -40.0f, -10.0f, 14.0f, -48.0f);
+        toward(this.body, g, 6.0f, 10.0f, 0.0f);
         this.crouch(g, 0.0f);
         // ---------------------------------------------------------- Schritte (ein Riese: lange, langsame Schritte)
         float stride = Math.min(1.0f, state.walkAnimationSpeed * 1.6f) * g;
@@ -645,9 +669,9 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
                     float cut = Anim.bump(a - (h - 1.0f), 1.5f, 3.0f, 10.0f);
                     float side = i % 2 == 0 ? 1.0f : -1.0f;
                     // waagrecht: ausholen zur einen Seite, durchziehen zur anderen – tief, dicht über dem Boden
-                    this.sword(wind, -80.0f, 72.0f * side, 10.0f * side, -10.0f, 195.0f);
-                    toward(this.body, wind, 6.0f, 30.0f * side, 0.0f);
-                    this.sword(cut, -80.0f, -78.0f * side, -10.0f * side, -10.0f, 195.0f);
+                    this.sword(wind, -52.0f, 72.0f * side, 10.0f * side, -10.0f, 178.0f);
+                    toward(this.body, wind, 8.0f, 30.0f * side, 0.0f);
+                    this.sword(cut, -52.0f, -78.0f * side, -10.0f * side, -10.0f, 178.0f);
                     toward(this.body, cut, 12.0f, -30.0f * side, 0.0f);
                     this.off(Math.max(wind, cut), -30.0f, 0.0f, -40.0f * side, -30.0f);
                     this.crouch(Math.max(wind, cut), 0.4f);

@@ -1,6 +1,8 @@
 package io.github.sirschrolli.kingdomsatwar.client.renderer.creator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity.Attack;
@@ -10,11 +12,18 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -22,6 +31,10 @@ import org.jspecify.annotations.Nullable;
  * Heiligenschein, Sonne auf der Brust, Zepterstern und Federspitzen leuchten; das Gewand der Wahren Gestalt ist ein
  * leuchtendes Weltall. Beim Erscheinen, Aufsteigen, im Lichtsprung, bei der Neuschöpfung und im Vergehen leuchtet seine
  * ganze Gestalt in weißem (oder violettem) Licht auf.
+ *
+ * <p>Am Boden zieht seine Klinge eine Spur aus Licht hinter sich her: ein Band, das der Schneide folgt und rasch verblasst
+ * (golden-weiß, in der Wahren Gestalt violett und türkis). Die Spur wird aus seiner Bewegung berechnet – aus den Haltungen
+ * der letzten Augenblicke, mit seiner Drehung und seinem Weg –, darum ist sie bei jeder Bildrate gleich glatt.
  */
 public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRenderState, SchrolliModel> {
     public static final float SCALE = 2.0f;
@@ -29,6 +42,7 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
     public static volatile int debugAttack = -1;
     public static volatile float debugTime;
     public static volatile float debugGround = 1.0f;
+    public static volatile float debugWalk;
     private static final Identifier TEXTURE = tex("schrolli");
     private static final Identifier TEXTURE_TRUE = tex("schrolli_true");
     private static final RenderType GLOW = RenderTypes.eyes(tex("schrolli_glow"));
@@ -39,6 +53,13 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
     private static Identifier tex(String name) {
         return KingdomsAtWar.id("textures/entity/schrolli/" + name + ".png");
     }
+
+    /** Die Spur der Klinge: so viele Zwischenlagen, so weit auseinander (Ticks). */
+    private static final int TRAIL_STEPS = 26;
+    private static final float TRAIL_STEP = 0.2f;
+    /** Was sich jeder Schöpfer über seine letzten Augenblicke merkt: {Zeit, Drehung, x, y, z}. */
+    private final Map<Integer, ArrayDeque<double[]>> history = new HashMap<>();
+    private final SchrolliRenderState probe = new SchrolliRenderState();
 
     public SchrolliRenderer(EntityRendererProvider.Context context) {
         super(context, new SchrolliModel(context.bakeLayer(CreatorRenderers.SCHROLLI)), 2.6f);
@@ -146,9 +167,14 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
             state.attack = debugAttack;
             state.attackTime = debugTime;
             state.ground = debugGround;
+            if (debugWalk > 0.0f) {
+                state.walkAnimationPos = debugTime;
+                state.walkAnimationSpeed = debugWalk;
+            }
         }
         state.ascension = entity.ascension(partialTicks);
         state.flash = flash(entity, attack, state.attackTime, state.ageInTicks);
+        state.id = entity.getId();
         if ((state.flags & SchrolliEntity.FLAG_HIDDEN) != 0) {
             state.isInvisible = true;
         }
@@ -156,6 +182,158 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
         if (entity.deathTime > 0) {
             state.hasRedOverlay = false;
         }
+    }
+
+    @Override
+    public void submit(SchrolliRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        super.submit(state, poseStack, collector, camera);
+        if (state.ground > 0.9f && !state.isInvisible && state.deathTime <= 0.0f) {
+            this.submitTrail(state, poseStack, collector);
+        } else {
+            this.history.remove(state.id);
+        }
+    }
+
+    /** Merkt sich, wo er gerade ist und wohin er sich dreht (für die Spur seiner Klinge). */
+    private ArrayDeque<double[]> remember(SchrolliRenderState state) {
+        ArrayDeque<double[]> past = this.history.computeIfAbsent(state.id, id -> new ArrayDeque<>());
+        double now = state.ageInTicks;
+        if (!past.isEmpty() && past.peekLast()[0] > now) {
+            past.clear();
+        }
+        if (past.isEmpty() || now - past.peekLast()[0] > 1.0e-3) {
+            past.addLast(new double[] {now, state.bodyRot, state.x, state.y, state.z});
+        }
+        while (past.size() > 2 && now - past.peekFirst()[0] > TRAIL_STEPS * TRAIL_STEP + 1.0) {
+            past.removeFirst();
+        }
+        // vergessene Schöpfer (nicht mehr zu sehen) räumen
+        if (this.history.size() > 6) {
+            this.history.values().removeIf(d -> d.isEmpty() || now - d.peekLast()[0] > 200.0 || d.peekLast()[0] - now > 200.0);
+        }
+        return past;
+    }
+
+    /** Wo er zur Zeit {@code time} war: {Drehung, x, y, z} (zwischen den gemerkten Augenblicken gemittelt). */
+    private static double[] at(ArrayDeque<double[]> past, double time) {
+        double[] before = past.peekFirst();
+        double[] after = before;
+        for (Iterator<double[]> it = past.iterator(); it.hasNext(); ) {
+            double[] e = it.next();
+            if (e[0] <= time) {
+                before = e;
+                after = e;
+            } else {
+                after = e;
+                break;
+            }
+        }
+        double span = after[0] - before[0];
+        double k = span > 1.0e-6 ? Mth.clamp((time - before[0]) / span, 0.0, 1.0) : 0.0;
+        double rot = before[1] + Mth.wrapDegrees(after[1] - before[1]) * k;
+        return new double[] {rot, Mth.lerp(k, before[2], after[2]), Mth.lerp(k, before[3], after[3]), Mth.lerp(k, before[4], after[4])};
+    }
+
+    /**
+     * Die Spur der Klinge: für die letzten Augenblicke wird seine Haltung noch einmal berechnet (mit der Drehung und dem
+     * Ort von damals) und die Schneide zu einem Band verbunden – je schneller sie fuhr, desto heller; je älter, desto blasser.
+     */
+    private void submitTrail(SchrolliRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
+        ArrayDeque<double[]> past = this.remember(state);
+        SchrolliModel model = this.getModel();
+        SchrolliRenderState p = this.probe;
+        p.attack = state.attack;
+        p.trueForm = state.trueForm;
+        p.flags = state.flags;
+        p.ascension = state.ascension;
+        p.ground = state.ground;
+        p.flash = state.flash;
+        p.deathTime = 0.0f;
+        p.yRot = state.yRot;
+        p.xRot = state.xRot;
+        p.walkAnimationPos = state.walkAnimationPos;
+        p.walkAnimationSpeed = state.walkAnimationSpeed;
+        p.scale = state.scale;
+        double now = state.ageInTicks;
+        Vector3f[] inner = new Vector3f[TRAIL_STEPS + 1];
+        Vector3f[] outer = new Vector3f[TRAIL_STEPS + 1];
+        Vector3f[] edge = new Vector3f[TRAIL_STEPS + 1];
+        int count = 0;
+        for (int i = 0; i <= TRAIL_STEPS; i++) {
+            float back = i * TRAIL_STEP;
+            if (state.attackTime - back < 0.0f && state.attack != 0) {
+                break;
+            }
+            double[] then = at(past, now - back);
+            p.attackTime = state.attackTime - back;
+            p.ageInTicks = state.ageInTicks - back;
+            p.wing = state.wing - back * 0.06f;
+            model.setupAnim(p);
+            if (!model.bladeVisible()) {
+                break;
+            }
+            PoseStack local = new PoseStack();
+            local.translate((float) (then[1] - state.x), (float) (then[2] - state.y), (float) (then[3] - state.z));
+            local.scale(state.scale, state.scale, state.scale);
+            local.rotateDegrees(Axis.YP, 180.0f - (float) then[0]);
+            local.scale(-1.0f, -1.0f, 1.0f);
+            local.scale(SCALE, SCALE, SCALE);
+            local.translate(0.0f, -1.501f, 0.0f);
+            model.toBlade(local);
+            Matrix4f m = local.last().pose();
+            inner[count] = m.transformPosition(new Vector3f(0.0f, -11.0f / 16.0f, 0.0f));
+            outer[count] = m.transformPosition(new Vector3f(0.0f, -31.0f / 16.0f, 0.0f));
+            edge[count] = m.transformPosition(new Vector3f(0.0f, -24.0f / 16.0f, 0.0f));
+            count++;
+        }
+        model.setupAnim(state);
+        if (count < 2) {
+            return;
+        }
+        // wie schnell die Spitze fuhr (Blöcke je Tick) – nur rasche Hiebe ziehen eine Spur
+        float[] glow = new float[count];
+        boolean any = false;
+        for (int i = 0; i < count - 1; i++) {
+            float speed = outer[i].distance(outer[i + 1]) / TRAIL_STEP;
+            float age = 1.0f - i / (float) (count - 1);
+            glow[i] = Mth.clamp((speed - 0.6f) / 1.8f, 0.0f, 1.0f) * (float) Math.pow(age, 1.2);
+            any |= glow[i] > 0.02f;
+        }
+        if (!any) {
+            return;
+        }
+        boolean truly = state.trueForm;
+        int soft = truly ? 0xA050FF : 0xFFA820;
+        int core = truly ? 0xD8F8FF : 0xFFF4D0;
+        final int n = count;
+        collector.order(4).submitCustomGeometry(poseStack, RenderTypes.lightning(), (pose, buffer) -> {
+            for (int i = 0; i < n - 1; i++) {
+                float a = glow[i];
+                float b = glow[Math.min(n - 2, i + 1)] * (i + 1 < n - 1 ? 1.0f : 0.0f);
+                if (a <= 0.02f && b <= 0.02f) {
+                    continue;
+                }
+                // ein weiches, breites Band (innen durchsichtig, zur Spitze hin leuchtend) …
+                band(pose, buffer, inner[i], outer[i], outer[i + 1], inner[i + 1], ARGB.color(0, soft), ARGB.color(Math.round(190 * a), soft),
+                        ARGB.color(Math.round(190 * b), soft), ARGB.color(0, soft));
+                // … und eine gleißende Schneide
+                band(pose, buffer, edge[i], outer[i], outer[i + 1], edge[i + 1], ARGB.color(Math.round(40 * a), core),
+                        ARGB.color(Math.round(255 * a), core), ARGB.color(Math.round(255 * b), core), ARGB.color(Math.round(40 * b), core));
+            }
+        });
+    }
+
+    /** Ein Viereck mit Farben je Ecke, von beiden Seiten sichtbar. */
+    private static void band(PoseStack.Pose pose, VertexConsumer buffer, Vector3f p0, Vector3f p1, Vector3f p2, Vector3f p3, int c0, int c1, int c2,
+            int c3) {
+        buffer.addVertex(pose, p0.x, p0.y, p0.z).setColor(c0);
+        buffer.addVertex(pose, p1.x, p1.y, p1.z).setColor(c1);
+        buffer.addVertex(pose, p2.x, p2.y, p2.z).setColor(c2);
+        buffer.addVertex(pose, p3.x, p3.y, p3.z).setColor(c3);
+        buffer.addVertex(pose, p3.x, p3.y, p3.z).setColor(c3);
+        buffer.addVertex(pose, p2.x, p2.y, p2.z).setColor(c2);
+        buffer.addVertex(pose, p1.x, p1.y, p1.z).setColor(c1);
+        buffer.addVertex(pose, p0.x, p0.y, p0.z).setColor(c0);
     }
 
     @Override

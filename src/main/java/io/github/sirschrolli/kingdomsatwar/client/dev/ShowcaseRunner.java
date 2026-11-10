@@ -80,7 +80,7 @@ public final class ShowcaseRunner {
                 || SCENES.contains("castleworld") || SCENES.contains("conquest")
                 || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor") || SCENES.contains("forge_boss")
                 || SCENES.contains("star_boss") || SCENES.contains("anni_boss") || SCENES.contains("boss_arena")
-                || SCENES.contains("creator_boss"));
+                || SCENES.contains("creator_boss") || SCENES.contains("creator_melee"));
         try {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,

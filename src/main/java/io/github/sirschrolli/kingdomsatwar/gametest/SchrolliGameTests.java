@@ -45,7 +45,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 /**
  * Schrolli der Schöpfer (0.75): Lebenskraft und Erscheinen, der Aufstieg in die Wahre Gestalt statt des Todes, seine
  * Künste (jede wird erzwungen und muss ihre Wirkung zeigen), die Künste der Wahren Gestalt, der Altar mit dem Funken und die
- * Beute samt Titel.
+ * Beute samt Titel. Seit 0.76 der Nahkampf am Boden: Landung, die Künste der Klinge, die Schwingenwehr samt Gegenschlag
+ * und dass er von selbst landet und sich wieder emporschwingt.
  */
 final class SchrolliGameTests {
     private static final Identifier ARENA = KingdomsAtWar.id("test_arena");
@@ -59,13 +60,19 @@ final class SchrolliGameTests {
             ModGameTests.TEST_FUNCTIONS.register("schrolli_altar", () -> SchrolliGameTests::altar);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WINGS =
             ModGameTests.TEST_FUNCTIONS.register("schrolli_wings", () -> SchrolliGameTests::wings);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MELEE =
+            ModGameTests.TEST_FUNCTIONS.register("schrolli_melee", () -> SchrolliGameTests::melee);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GUARD =
+            ModGameTests.TEST_FUNCTIONS.register("schrolli_guard", () -> SchrolliGameTests::guard);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STANCE =
+            ModGameTests.TEST_FUNCTIONS.register("schrolli_stance", () -> SchrolliGameTests::stance);
 
     private SchrolliGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR, WINGS)) {
+        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR, WINGS, MELEE, GUARD, STANCE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 2400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -490,6 +497,231 @@ final class SchrolliGameTests {
             helper.succeed();
         } finally {
             level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    // =====================================================================================
+    // Am Boden: die Klinge aus Licht (seit 0.76)
+    // =====================================================================================
+
+    /** Stellt den Ritter {@code distance} Blöcke vor den Schöpfer (mit voller Lebenskraft) und gibt seine Lebenskraft zurück. */
+    private static float before(SchrolliEntity boss, LivingEntity knight, double distance) {
+        Vec3 at = boss.position().add(boss.getForward().multiply(1.0, 0.0, 1.0).normalize().scale(distance));
+        knight.teleportTo(at.x, boss.getY(), at.z);
+        knight.setDeltaMovement(Vec3.ZERO);
+        knight.setHealth(knight.getMaxHealth());
+        knight.damageCooldownTime = 0;
+        boss.setTarget(knight);
+        return knight.getHealth();
+    }
+
+    /**
+     * Landung (er steht danach am Boden, Beine und Klinge geformt), Klingenhieb (trifft, zuletzt der Spaltschlag mit seinem
+     * Riss), Lichtsicheln (gleiten und treffen), Klingenwirbel, Sturmlauf (er stürmt weit), Himmelssturz (er schlägt am Boden
+     * ein) und in der Wahren Gestalt die Weltenklinge.
+     */
+    private static void melee(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Field field = field(helper, 5, 34);
+        BlockPos pos = field.origin();
+        AABB area = field.area();
+        SchrolliEntity boss = schrolli(level, pos);
+        LivingEntity knight = dummy(level, pos.offset(0, 0, 12));
+        List<String> problems = new ArrayList<>();
+        boss.setTarget(knight);
+        boss.forceAttack(Attack.DESCEND);
+        helper.assertFalse(boss.isGrounded(), "Vor der Landung schon am Boden");
+        helper.runAfterDelay(SchrolliEntity.DESCEND_LAND + 3, () -> {
+            if (!boss.isGrounded() || !boss.hasFlag(SchrolliEntity.FLAG_GROUND)) {
+                problems.add("Landung: nicht am Boden");
+            }
+            if (Math.abs(boss.getY() - pos.getY()) > 0.6) {
+                problems.add("Landung: " + String.format("%.1f", boss.getY() - pos.getY()) + " über dem Boden");
+            }
+            float hp = before(boss, knight, 5.0);
+            boss.forceAttack(Attack.STRIKE);
+            helper.runAfterDelay(64, () -> {
+                if (knight.getHealth() >= hp) {
+                    problems.add("Klingenhieb: der Ritter blieb unversehrt");
+                }
+                if (fx(level, area, SpellFxEntity.Kind.FISSURE) < 1) {
+                    problems.add("Klingenhieb: kein Spaltschlag");
+                }
+                if (!boss.isGrounded()) {
+                    problems.add("Klingenhieb: nicht mehr am Boden");
+                }
+                float hp2 = before(boss, knight, 13.0);
+                boss.forceAttack(Attack.SLASHES);
+                helper.runAfterDelay(22, () -> {
+                    if (fx(level, area, SpellFxEntity.Kind.CRESCENT) < 1) {
+                        problems.add("Lichtsicheln: keine Sichel");
+                    }
+                    helper.runAfterDelay(30, () -> {
+                        if (knight.getHealth() >= hp2) {
+                            problems.add("Lichtsicheln: kein Treffer");
+                        }
+                        float hp3 = before(boss, knight, 5.0);
+                        boss.forceAttack(Attack.WHIRL);
+                        helper.runAfterDelay(50, () -> {
+                            if (knight.getHealth() >= hp3) {
+                                problems.add("Klingenwirbel: kein Treffer");
+                            }
+                            float hp4 = before(boss, knight, 12.0);
+                            Vec3 start = boss.position();
+                            boss.forceAttack(Attack.DASH);
+                            helper.runAfterDelay(34, () -> {
+                                double run = DivineFxProbe.flat(start, boss.position());
+                                if (run < 10.0) {
+                                    problems.add("Sturmlauf: nur " + String.format("%.1f", run) + " Blöcke");
+                                }
+                                if (knight.getHealth() >= hp4) {
+                                    problems.add("Sturmlauf: kein Treffer");
+                                }
+                                float hp5 = before(boss, knight, 8.0);
+                                boss.forceAttack(Attack.PLUNGE);
+                                helper.runAfterDelay(SchrolliEntity.PLUNGE_IMPACT + 2, () -> {
+                                    if (Math.abs(boss.getY() - pos.getY()) > 0.8) {
+                                        problems.add("Himmelssturz: nicht am Boden eingeschlagen (" + String.format("%.1f", boss.getY() - pos.getY()) + ")");
+                                    }
+                                    if (knight.getHealth() >= hp5) {
+                                        problems.add("Himmelssturz: kein Treffer");
+                                    }
+                                    boss.forceTrueForm();
+                                    float hp6 = before(boss, knight, 15.0);
+                                    boss.forceAttack(Attack.WORLD_BLADE);
+                                    helper.runAfterDelay(64, () -> {
+                                        if (knight.getHealth() >= hp6) {
+                                            problems.add("Weltenklinge: der Rundschlag trifft nicht");
+                                        }
+                                        boss.forceAttack(Attack.RISE);
+                                        helper.runAfterDelay(Attack.RISE.duration + 2, () -> {
+                                            if (boss.isGrounded() || boss.hasFlag(SchrolliEntity.FLAG_GROUND)) {
+                                                problems.add("Aufschwung: noch am Boden");
+                                            }
+                                            if (boss.getY() - pos.getY() < 3.0) {
+                                                problems.add("Aufschwung: nur " + String.format("%.1f", boss.getY() - pos.getY()) + " hoch");
+                                            }
+                                            field.close();
+                                            helper.assertTrue(problems.isEmpty(), "Nahkampf: " + problems);
+                                            helper.succeed();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Schwingenwehr: ein Hieb von vorn wird pariert (kein Schaden) und mit dem Gegenschlag beantwortet, der den Angreifer
+     * trifft; von hinten trifft man ihn.
+     */
+    private static void guard(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Field field = field(helper, 6, 16);
+        BlockPos pos = field.origin();
+        SchrolliEntity boss = schrolli(level, pos);
+        ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-creator-guard", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        player.connection.markClientLoaded();
+        player.getAbilities().invulnerable = false;
+        player.getAbilities().instabuild = false;
+        Runnable done = () -> {
+            level.getServer().getPlayerList().remove(player);
+            field.close();
+        };
+        try {
+            boss.forceAttack(Attack.GUARD);
+            boss.setYRot(0.0f);
+            boss.setYBodyRot(0.0f);
+            boss.setYHeadRot(0.0f);
+            player.teleportTo(level, boss.getX(), boss.getY(), boss.getZ() + 4.5, java.util.Set.of(), 180.0f, 0.0f, true);
+            boss.setTarget(player);
+        } catch (Throwable e) {
+            done.run();
+            throw e;
+        }
+        helper.runAfterDelay(10, () -> {
+            float php;
+            try {
+                float hp = boss.getHealth();
+                boss.damageCooldownTime = 0;
+                boolean hurt = boss.hurtServer(level, player.damageSources().playerAttack(player), 20.0f);
+                helper.assertFalse(hurt, "Schwingenwehr: der Hieb von vorn trifft");
+                helper.assertTrue(boss.getHealth() >= hp, "Schwingenwehr: er verliert Lebenskraft");
+                helper.assertTrue(boss.currentAttack() == Attack.COUNTER, "Kein Gegenschlag: " + boss.currentAttack());
+                php = player.getHealth();
+            } catch (Throwable e) {
+                done.run();
+                throw e;
+            }
+            helper.runAfterDelay(14, () -> {
+                try {
+                    helper.assertTrue(player.getHealth() < php, "Der Gegenschlag trifft nicht (" + php + " -> " + player.getHealth() + ")");
+                    player.setHealth(player.getMaxHealth());
+                    boss.forceAttack(Attack.GUARD);
+                    boss.setYRot(0.0f);
+                    boss.setYBodyRot(0.0f);
+                    boss.setYHeadRot(0.0f);
+                    player.teleportTo(level, boss.getX(), boss.getY(), boss.getZ() - 4.5, java.util.Set.of(), 0.0f, 0.0f, true);
+                } catch (Throwable e) {
+                    done.run();
+                    throw e;
+                }
+                helper.runAfterDelay(6, () -> {
+                    try {
+                        float hp2 = boss.getHealth();
+                        boss.damageCooldownTime = 0;
+                        boolean hurt = boss.hurtServer(level, player.damageSources().playerAttack(player), 20.0f);
+                        helper.assertTrue(hurt && boss.getHealth() < hp2, "Von hinten trifft man ihn nicht");
+                        helper.assertTrue(boss.currentAttack() == Attack.GUARD, "Von hinten getroffen pariert er doch: " + boss.currentAttack());
+                    } finally {
+                        done.run();
+                    }
+                    helper.succeed();
+                });
+            });
+        });
+    }
+
+    /** Er landet von selbst (nach einigen Künsten in der Luft), ficht am Boden – und schwingt sich wieder empor. */
+    private static void stance(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Field field = field(helper, 7, 36);
+        BlockPos pos = field.origin();
+        SchrolliEntity boss = schrolli(level, pos);
+        LivingEntity knight = dummy(level, pos.offset(3, 0, 10));
+        boss.setTarget(knight);
+        boolean[] seen = {false, false};
+        int[] meleeArts = {0};
+        Attack[] last = {Attack.NONE};
+        helper.onEachTick(() -> {
+            knight.setHealth(knight.getMaxHealth());
+            if (boss.isGrounded()) {
+                seen[0] = true;
+            } else if (seen[0]) {
+                seen[1] = true;
+            }
+            Attack now = boss.currentAttack();
+            if (now != last[0] && now.melee()) {
+                meleeArts[0]++;
+            }
+            last[0] = now;
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(seen[0], "Er landet nicht von selbst");
+            helper.assertTrue(meleeArts[0] >= 2, "Am Boden ficht er nicht: " + meleeArts[0]);
+            helper.assertTrue(seen[1], "Er schwingt sich nicht wieder empor");
+            field.close();
+        });
+    }
+
+    /** Waagrechter Abstand (für die Tests). */
+    private static final class DivineFxProbe {
+        static double flat(Vec3 a, Vec3 b) {
+            return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z));
         }
     }
 }

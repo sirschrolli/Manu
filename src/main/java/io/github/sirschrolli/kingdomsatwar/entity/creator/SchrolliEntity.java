@@ -408,11 +408,13 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
      */
     public void forceAttack(Attack next) {
         if (next.melee() || next == Attack.RISE) {
-            if (!this.grounded && this.level() instanceof ServerLevel) {
+            if (this.level() instanceof ServerLevel) {
                 Vec3 g = this.ground(this.position());
                 this.setPos(g.x, g.y, g.z);
                 this.setDeltaMovement(Vec3.ZERO);
-                this.setGrounded(true);
+                if (!this.grounded) {
+                    this.setGrounded(true);
+                }
             }
         } else if (next.isArt() || next == Attack.DESCEND) {
             this.setGrounded(false);
@@ -800,10 +802,12 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             }
             this.idleTicks = 0;
             if (this.grounded) {
-                // am Boden: auf das Ziel zu schreiten, dann fechten – oder sich wieder emporschwingen
+                // am Boden: auf das Ziel zu schreiten, dann fechten – oder sich wieder emporschwingen (auch, wenn sein Ziel
+                // hoch über ihm fliegt)
                 this.stalk(target, 5.2 * this.getScale(), this.isTrueForm() ? 0.34 : 0.28);
-                if (--this.cooldown <= 0) {
-                    this.begin(this.stanceArts >= this.stanceBudget || this.forcedPending() ? Attack.RISE : this.chooseOnGround(target));
+                boolean flying = target.getY() - this.getY() > 8.0;
+                if (--this.cooldown <= 0 || flying && this.cooldown < 10) {
+                    this.begin(this.stanceArts >= this.stanceBudget || this.forcedPending() || flying ? Attack.RISE : this.chooseOnGround(target));
                 }
                 return;
             }

@@ -19,4 +19,6 @@ public class SchrolliRenderState extends LivingEntityRenderState {
     public float flash;
     /** Wie weit Beine und Klinge geformt sind (0 schwebend – 1 am Boden). */
     public float ground;
+    /** Wer er ist (für die Spur seiner Klinge). */
+    public int id;
 }
