@@ -427,7 +427,8 @@ def main():
     write_model(schrolli, "SchrolliGeometry",
                 "Geometrie Schrollis des Schöpfers (im Spiel ×2, in der Wahren Gestalt ×2,6): Gewand, Brustpanzer, sechs Schwingen, "
                 "Heiligenschein, Lichtkrone, Zepter und Weltkugel; nur in der Wahren Gestalt sichtbar: true_rings (zwei Räder mit "
-                "Augen) und true_corona (Strahlenkranz).", "schrolli", schrolli.PALETTES, preview)
+                "Augen) und true_corona (Strahlenkranz); nur am Boden (seit 0.76): Beine (left_leg/right_leg) und die Klinge aus "
+                "Licht (blade).", "schrolli", schrolli.PALETTES, preview)
     write_model(seraphling, "SeraphlingGeometry", "Geometrie des Seraphlings (Lichtbote Schrollis): Antlitz, Heiligenschein, "
                 "zwei Paar Schwingen.", "schrolli", seraphling.PALETTES, preview)
     write_model(divine_spear, "DivineSpearGeometry", "Geometrie des Lichtspeers (Knochen \"spear\", Spitze bei -Z).", "schrolli/shots",

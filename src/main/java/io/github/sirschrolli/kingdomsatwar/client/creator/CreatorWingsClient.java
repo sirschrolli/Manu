@@ -50,7 +50,7 @@ public final class CreatorWingsClient {
             if (!player.getCooldowns().isOnCooldown(chest)) {
                 player.getCooldowns().addCooldown(chest, CreatorWings.BOOST_COOLDOWN);
                 player.setDeltaMovement(CreatorWings.boostVelocity(player.getDeltaMovement(), player.getLookAngle()));
-                player.playSound(ModSounds.SCHROLLI_WINGS.get(), 1.0f, 1.3f);
+                player.playSound(ModSounds.SCHROLLI_WINGS.get(), 1.0f, 1.1f);
                 burst(level, player);
                 ClientPacketDistributor.sendToServer(CreatorBoostPayload.INSTANCE);
             }

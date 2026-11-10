@@ -6175,6 +6175,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.beam"
   },
+  "entity.schrolli.blade": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/blade1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/blade2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.blade"
+  },
   "entity.schrolli.blast": {
     "sounds": [
       {
@@ -6235,6 +6248,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.choir"
   },
+  "entity.schrolli.dash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/dash1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/dash2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.dash"
+  },
   "entity.schrolli.death": {
     "sounds": [
       {
@@ -6256,6 +6282,19 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.feathers"
+  },
+  "entity.schrolli.guard": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/guard1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/guard2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.guard"
   },
   "entity.schrolli.halo": {
     "sounds": [
@@ -6330,6 +6369,19 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.judgment"
   },
+  "entity.schrolli.land": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/land1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/land2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.land"
+  },
   "entity.schrolli.orb": {
     "sounds": [
       {
@@ -6342,6 +6394,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.orb"
+  },
+  "entity.schrolli.parry": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/parry1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/parry2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/parry3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.parry"
   },
   "entity.schrolli.pillar": {
     "sounds": [
@@ -6372,6 +6441,23 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.planet"
+  },
+  "entity.schrolli.slash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/slash1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/slash2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/slash3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.slash"
   },
   "entity.schrolli.smite": {
     "sounds": [
@@ -6455,6 +6541,27 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.supernova"
   },
+  "entity.schrolli.swing": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/swing1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/swing2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/swing3",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/swing4",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.swing"
+  },
   "entity.schrolli.tick": {
     "sounds": [
       {
@@ -6502,6 +6609,19 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.schrolli.voice"
+  },
+  "entity.schrolli.whirl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/whirl1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/whirl2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.whirl"
   },
   "entity.schrolli.wings": {
     "sounds": [

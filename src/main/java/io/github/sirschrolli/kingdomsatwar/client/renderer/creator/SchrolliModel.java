@@ -14,6 +14,13 @@ import net.minecraft.util.Mth;
  * oder die Weltkugel geworfen, Schwingen gespreizt und geschlagen, die Arme weit ausgebreitet, kniend, wenn er taumelt.
  * In der Wahren Gestalt drehen sich die Räder mit den Augen um ihn, hinter dem Heiligenschein steht der Strahlenkranz,
  * und seine Krone ist größer.
+ *
+ * <p>Am Boden (seit 0.76) wachsen aus dem Saum Beine in goldenen Beinschienen, das Zepter wird zur Klinge aus Licht (die
+ * Weltkugel vergeht), und er steht in Kampfhaltung: das linke Bein vor, die Klinge schräg nach vorn gerichtet, die
+ * Schwingen halb angelegt. Er schreitet (die Sohlen bleiben am Boden, das Gewand öffnet sich mit den Schritten), holt aus
+ * und schlägt durch – schräge Schnitte, waagrechte Hiebe, der Spaltschlag mit beiden Händen, der Stoß im Sturmlauf, der
+ * Wirbel, der Sprung und das Knien nach dem Himmelssturz, die Schwingen als Schild vor sich, der Gegenschlag; in der
+ * Wahren Gestalt reckt er die Weltenklinge empor, die zu gewaltiger Länge wächst.
  */
 public class SchrolliModel extends EntityModel<SchrolliRenderState> {
     private static final float D = Anim.DEG;
@@ -44,6 +51,15 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
     private final ModelPart rings;
     private final ModelPart ringA;
     private final ModelPart ringB;
+    // am Boden (seit 0.76)
+    private final ModelPart blade;
+    private final ModelPart bladeEdge;
+    private final ModelPart legL;
+    private final ModelPart legR;
+    private final ModelPart shinL;
+    private final ModelPart shinR;
+    private final ModelPart footL;
+    private final ModelPart footR;
 
     public SchrolliModel(ModelPart root) {
         super(root);
@@ -82,6 +98,69 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         this.rings = this.body.getChild("true_rings");
         this.ringA = this.rings.getChild("true_ring_a");
         this.ringB = this.rings.getChild("true_ring_b");
+        this.blade = this.foreR.getChild("blade");
+        this.bladeEdge = this.blade.getChild("blade_edge");
+        this.legL = root.getChild("left_leg");
+        this.legR = root.getChild("right_leg");
+        this.shinL = this.legL.getChild("left_shin");
+        this.shinR = this.legR.getChild("right_shin");
+        this.footL = this.shinL.getChild("left_foot");
+        this.footR = this.shinR.getChild("right_foot");
+    }
+
+    /** Dreht einen Teil (gewichtet) auf eine feste Haltung in Grad – statt sie hinzuzufügen. */
+    private static void toward(ModelPart part, float w, float x, float y, float z) {
+        if (w <= 0.0f) {
+            return;
+        }
+        w = Math.min(w, 1.0f);
+        part.xRot += (x * D - part.xRot) * w;
+        part.yRot += (y * D - part.yRot) * w;
+        part.zRot += (z * D - part.zRot) * w;
+    }
+
+    /** Der rechte Arm samt Klinge: Oberarm (x, y, z), Unterarm (x), Klinge (x) – in Grad, gewichtet. */
+    private void sword(float w, float ax, float ay, float az, float fx, float bx) {
+        toward(this.armR, w, ax, ay, az);
+        toward(this.foreR, w, fx, 0.0f, 0.0f);
+        toward(this.blade, w, bx, 0.0f, -10.0f);
+    }
+
+    /** Der linke Arm: Oberarm (x, y, z), Unterarm (x). */
+    private void off(float w, float ax, float ay, float az, float fx) {
+        toward(this.armL, w, ax, ay, az);
+        toward(this.foreL, w, fx, 0.0f, 0.0f);
+    }
+
+    /** Die Beine: Oberschenkel und Schienbein links, rechts (die Sohlen bleiben waagrecht). */
+    private void legs(float w, float lx, float lsx, float rx, float rsx) {
+        toward(this.legL, w, lx, 0.0f, -5.0f);
+        toward(this.shinL, w, lsx, 0.0f, 0.0f);
+        toward(this.footL, w, -(lx + lsx), 0.0f, 0.0f);
+        toward(this.legR, w, rx, 0.0f, 5.0f);
+        toward(this.shinR, w, rsx, 0.0f, 0.0f);
+        toward(this.footR, w, -(rx + rsx), 0.0f, 0.0f);
+    }
+
+    /** Geduckt (0 Kampfhaltung – 1 tief in den Knien), das linke Bein vorn. */
+    private void crouch(float w, float c) {
+        this.legs(w, -16.0f - 46.0f * c, 14.0f + 62.0f * c, 14.0f + 10.0f * c, 16.0f + 58.0f * c);
+    }
+
+    /**
+     * Setzt ein Bein auf den Boden (y 24): verschiebt das Hüftgelenk um so viel, wie Oberschenkel, Schienbein und Sohle in
+     * ihrer Haltung kürzer sind als ausgestreckt. Gibt die Verschiebung zurück.
+     */
+    private static float plant(ModelPart leg, ModelPart shin, ModelPart foot) {
+        float a = leg.xRot;
+        float b = a + shin.xRot;
+        float c = b + foot.xRot;
+        float splay = Mth.cos(leg.zRot);
+        float sole = 2.8f * Mth.cos(c) + (c > 0.0f ? 5.7f * Mth.sin(c) : -1.9f * Mth.sin(c));
+        float reach = (11.0f * Mth.cos(a) + 9.6f * Mth.cos(b)) * splay + sole;
+        float drop = 23.4f - reach;
+        leg.y += drop;
+        return drop;
     }
 
     private static void add(ModelPart part, float w, float x, float y, float z) {
@@ -146,13 +225,14 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         this.scepterHead.yRot += t * 0.05f;
 
         // ---------------------------------------------------------- Schweben, Atmen, Wehen
+        float g = Mth.clamp(state.ground, 0.0f, 1.0f);
         float calm = 1.0f - death * 0.7f;
-        this.body.y += Mth.sin(t * 0.06f) * 1.1f * calm;
+        this.body.y += Mth.sin(t * 0.06f) * 1.1f * calm * (1.0f - g);
         this.body.xRot += Mth.sin(t * 0.045f) * 0.03f;
         float f = state.wing;
         float[] lag = {0.0f, 0.55f, 1.1f};
         for (int w = 0; w < 3; w++) {
-            float amp = (w == 1 ? 9.0f : 7.0f) * calm;
+            float amp = (w == 1 ? 9.0f : 7.0f) * calm * (1.0f - 0.55f * g);
             for (int j = 0; j < 3; j++) {
                 float s = Mth.sin(f - lag[w] - j * 0.5f) * amp * (j == 0 ? 1.0f : 0.6f);
                 this.wing(w, j, 1.0f, s);
@@ -347,8 +427,51 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         add(this.armR, kneel, 30, 0, 10);
         add(this.armL, kneel, 30, 0, -10);
 
+        // ---------------------------------------------------------- am Boden: Beine, Klinge, Kampfhaltung, Hiebe
+        float shield = 0.0f;
+        float whirlWings = 0.0f;
+        boolean airborne = this.ground(state, attack, a, g, t);
+        if (attack == Attack.GUARD) {
+            shield = Anim.bump(a, 6.0f, 66.0f, 70.0f);
+            beat = Math.max(beat, Anim.bump(a - 67.0f, 2.0f, 4.0f, 9.0f));
+        }
+        if (attack == Attack.WHIRL) {
+            whirlWings = Anim.bump(a - 10.0f, 6.0f, 36.0f, 46.0f);
+        }
+        if (attack == Attack.PLUNGE) {
+            beat = Math.max(beat, Anim.bump(a - 9.0f, 2.0f, 4.0f, 12.0f));
+            dive = Math.max(dive, Anim.bump(a - 38.0f, 2.0f, 8.0f, 10.0f));
+            wingsUp = Math.max(wingsUp, Anim.bump(a - 18.0f, 6.0f, 20.0f, 24.0f));
+        }
+        if (attack == Attack.DESCEND) {
+            dive = Math.max(dive, Anim.bump(a - 7.0f, 4.0f, 16.0f, 19.0f));
+            spread = Math.max(spread, Anim.bump(a - SchrolliEntity.DESCEND_LAND, 3.0f, 8.0f, 22.0f));
+            wingsUp = Math.max(wingsUp, Anim.bump(a, 4.0f, 6.0f, 9.0f));
+        }
+        if (attack == Attack.RISE) {
+            wingsUp = Math.max(wingsUp, Anim.bump(a, 6.0f, 10.0f, 13.0f));
+            beat = Math.max(beat, Anim.bump(a - SchrolliEntity.RISE_LIFT, 2.0f, 4.0f, 14.0f));
+        }
+        if (attack == Attack.DASH) {
+            dive = Math.max(dive, 0.6f * (Anim.bump(a - 19.0f, 2.0f, 12.0f, 18.0f) + Anim.bump(a - 41.0f, 2.0f, 12.0f, 18.0f)));
+        }
+        spread = Math.min(1.0f, spread);
+        beat = Math.min(1.0f, beat);
+        dive = Math.min(1.0f, dive);
+
         // die Schwingen: gespreizt, geschlagen, angelegt
         for (int w = 0; w < 3; w++) {
+            // am Boden halb angelegt und zurückgenommen
+            this.wing(w, 0, g, w == 2 ? 12.0f : 6.0f);
+            this.sweep(w, g, 14.0f);
+            // Schwingenwehr: die Schwingen schließen sich wie ein Schild vor ihm
+            this.sweep(w, shield, w == 1 ? -88.0f : -70.0f);
+            this.wing(w, 0, shield, w == 0 ? 26.0f : w == 1 ? 4.0f : -14.0f);
+            this.wing(w, 1, shield, 22.0f);
+            this.wing(w, 2, shield, 18.0f);
+            // Klingenwirbel: weit und flach ausgebreitet
+            this.wing(w, 0, whirlWings, w == 0 ? 30.0f : w == 2 ? -26.0f : 0.0f);
+            this.sweep(w, whirlWings, 20.0f);
             this.wing(w, 0, wingsUp, w == 2 ? -18.0f : -30.0f);
             this.wing(w, 1, wingsUp, -12.0f);
             this.sweep(w, wingsUp, 18.0f);
@@ -365,6 +488,51 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
             this.wing(w, 1, death, 20.0f);
         }
 
+        // ---------------------------------------------------------- Beine und Klinge formen sich aus Licht
+        boolean legs = g > 0.01f;
+        this.legL.visible = legs;
+        this.legR.visible = legs;
+        this.blade.visible = legs;
+        float form = Mth.clamp(g * 1.25f, 0.0f, 1.0f);
+        this.legL.yScale = form;
+        this.legR.yScale = form;
+        this.blade.xScale = form;
+        this.blade.yScale = form;
+        this.blade.zScale = form;
+        float melt = 1.0f - Mth.clamp(g * 1.6f, 0.0f, 1.0f);
+        this.scepter.visible = melt > 0.01f;
+        this.scepter.xScale = melt;
+        this.scepter.yScale = melt;
+        this.scepter.zScale = melt;
+        this.orb.visible = this.orb.visible && melt > 0.01f;
+        this.orb.xScale = melt;
+        this.orb.yScale = melt;
+        this.orb.zScale = melt;
+        // Weltenklinge: die Klinge wächst zu gewaltiger Länge
+        if (attack == Attack.WORLD_BLADE) {
+            float grow = Anim.bump(a - 6.0f, 24.0f, 104.0f, 124.0f);
+            this.bladeEdge.yScale = 1.0f + 3.0f * grow;
+            this.bladeEdge.xScale = 1.0f + 0.9f * grow;
+            this.bladeEdge.zScale = 1.0f + 0.9f * grow;
+        }
+        // die Sohlen auf den Boden (nicht im Sprung, nicht im Sturz, nicht solange die Beine noch wachsen)
+        if (g >= 0.999f && !airborne) {
+            float dl = plant(this.legL, this.shinL, this.footL);
+            float dr = plant(this.legR, this.shinR, this.footR);
+            this.body.y += (dl + dr) * 0.5f;
+        }
+        // mit den Schritten öffnet sich das Gewand, beim Ducken breitet es sich aus
+        if (legs) {
+            float fwd = Math.max(0.0f, -Math.min(this.legL.xRot, this.legR.xRot));
+            float back = Math.max(0.0f, Math.max(this.legL.xRot, this.legR.xRot));
+            this.robePanels[0].xRot -= fwd * 0.8f * g;
+            this.robePanels[1].xRot += back * 0.8f * g;
+            float low = 1.0f - 0.22f * g;
+            for (ModelPart lowPart : this.robeLows) {
+                lowPart.yScale = low;
+            }
+        }
+
         // ---------------------------------------------------------- der Aufstieg und das Vergehen
         if (attack == Attack.ASCEND && a < SchrolliEntity.ASCEND_SHATTER) {
             float shake = a / SchrolliEntity.ASCEND_SHATTER;
@@ -376,5 +544,214 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         add(this.head, death, -26, 0, 0);
         add(this.armR, death, 10, 0, 34);
         add(this.armL, death, 10, 0, -34);
+    }
+
+    /**
+     * Haltung am Boden: Kampfhaltung, Schritte und die Hiebe der Klinge. Gibt zurück, ob er gerade in der Luft ist (Sprung
+     * und Sturz des Himmelssturzes, die Landung bis zum Aufsetzen) – dann stehen die Sohlen nicht auf dem Boden.
+     */
+    private boolean ground(SchrolliRenderState state, Attack attack, float a, float g, float t) {
+        if (g <= 0.0f) {
+            return false;
+        }
+        // ---------------------------------------------------------- die Kampfhaltung
+        this.sword(g, -30.0f, 10.0f, -2.0f, -62.0f, 135.0f);
+        this.off(g, -38.0f, -10.0f, 16.0f, -50.0f);
+        toward(this.body, g, 6.0f, 12.0f, 0.0f);
+        this.crouch(g, 0.0f);
+        // ---------------------------------------------------------- Schritte (ein Riese: lange, langsame Schritte)
+        float stride = Math.min(1.0f, state.walkAnimationSpeed * 1.6f) * g;
+        boolean posed = attack == Attack.DASH || attack == Attack.PLUNGE || attack == Attack.WORLD_BLADE || attack == Attack.GUARD
+                || attack == Attack.DESCEND || attack == Attack.RISE;
+        if (stride > 0.01f && !posed) {
+            float phase = state.walkAnimationPos * 0.42f;
+            float swing = Mth.sin(phase) * 24.0f * stride;
+            this.legL.xRot -= swing * D;
+            this.legR.xRot += swing * D;
+            this.shinL.xRot += Math.max(0.0f, Mth.sin(phase + 1.3f)) * 30.0f * stride * D;
+            this.shinR.xRot += Math.max(0.0f, Mth.sin(phase + 1.3f + Mth.PI)) * 30.0f * stride * D;
+            this.footL.xRot += swing * 0.4f * D;
+            this.footR.xRot -= swing * 0.4f * D;
+            this.body.zRot += Mth.sin(phase) * 2.0f * stride * D;
+            this.armL.xRot += swing * 0.5f * D;
+        }
+        boolean truly = state.trueForm;
+        boolean airborne = false;
+        switch (attack) {
+            case DESCEND -> {
+                // bis zum Aufsetzen wachsen die Beine noch; dann tief in den Knien, die Klinge seitwärts
+                float land = Anim.bump(a - SchrolliEntity.DESCEND_LAND, 1.5f, 6.0f, 22.0f);
+                airborne = a < SchrolliEntity.DESCEND_LAND;
+                this.crouch(land, 0.85f);
+                this.sword(land, -22.0f, 0.0f, 48.0f, -20.0f, 100.0f);
+                this.off(land, -30.0f, 0.0f, -55.0f, -20.0f);
+                toward(this.body, land, 24.0f, 0.0f, 0.0f);
+                toward(this.head, land, -16.0f, 0.0f, 0.0f);
+            }
+            case RISE -> {
+                float dip = Anim.bump(a, 6.0f, 10.0f, 14.0f);
+                this.crouch(dip, 0.7f);
+                toward(this.body, dip, 16.0f, 0.0f, 0.0f);
+            }
+            case STRIKE -> {
+                int[] hits = truly ? new int[] {16, 30, 44, 62} : new int[] {18, 36, 60};
+                for (int i = 0; i < hits.length; i++) {
+                    float h = hits[i];
+                    boolean chop = i == hits.length - 1;
+                    if (chop) {
+                        float up = Anim.bump(a - (h - 14.0f), 8.0f, 13.0f, 14.0f);
+                        float down = Anim.bump(a - (h - 1.0f), 1.5f, 9.0f, 20.0f);
+                        // beide Hände über dem Kopf …
+                        this.sword(up, -172.0f, 0.0f, 8.0f, -22.0f, 164.0f);
+                        this.off(up, -168.0f, 0.0f, -12.0f, -26.0f);
+                        toward(this.body, up, -10.0f, 0.0f, 0.0f);
+                        toward(this.head, up, -12.0f, 0.0f, 0.0f);
+                        this.crouch(up, 0.15f);
+                        // … und mit aller Kraft hinab: die Spitze fährt vor ihm in den Boden
+                        this.sword(down, -62.0f, 0.0f, -6.0f, -16.0f, 195.0f);
+                        this.off(down, -64.0f, 0.0f, 16.0f, -16.0f);
+                        toward(this.body, down, 26.0f, 0.0f, 0.0f);
+                        toward(this.head, down, -14.0f, 0.0f, 0.0f);
+                        this.crouch(down, 0.6f);
+                        continue;
+                    }
+                    float wind = Anim.bump(a - (h - 9.0f), 6.0f, 8.0f, 9.0f);
+                    float cut = Anim.bump(a - (h - 1.0f), 1.5f, 4.0f, 12.0f);
+                    boolean fromRight = i % 2 == 0;
+                    if (fromRight) {
+                        // hoch über der rechten Schulter – schräg hinab nach links
+                        this.sword(wind, -165.0f, 30.0f, 25.0f, -30.0f, 150.0f);
+                        toward(this.body, wind, -4.0f, 28.0f, 0.0f);
+                        this.off(wind, -60.0f, 0.0f, 20.0f, -40.0f);
+                        this.sword(cut, -55.0f, -45.0f, -15.0f, -10.0f, 185.0f);
+                        toward(this.body, cut, 14.0f, -24.0f, 0.0f);
+                        this.off(cut, -20.0f, 0.0f, -30.0f, -30.0f);
+                    } else {
+                        // tief links – schräg hinauf nach rechts
+                        this.sword(wind, -55.0f, -45.0f, -15.0f, -10.0f, 185.0f);
+                        toward(this.body, wind, 14.0f, -24.0f, 0.0f);
+                        this.sword(cut, -150.0f, 50.0f, 35.0f, -20.0f, 160.0f);
+                        toward(this.body, cut, -4.0f, 26.0f, 0.0f);
+                        this.off(cut, -40.0f, 0.0f, -10.0f, -40.0f);
+                    }
+                    this.crouch(Math.max(wind, cut), 0.25f);
+                }
+            }
+            case SLASHES -> {
+                int[] times = truly ? new int[] {16, 30, 44, 58} : new int[] {18, 34, 50};
+                for (int i = 0; i < times.length; i++) {
+                    float h = times[i];
+                    float wind = Anim.bump(a - (h - 7.0f), 5.0f, 6.0f, 7.0f);
+                    float cut = Anim.bump(a - (h - 1.0f), 1.5f, 3.0f, 10.0f);
+                    float side = i % 2 == 0 ? 1.0f : -1.0f;
+                    // waagrecht: ausholen zur einen Seite, durchziehen zur anderen – tief, dicht über dem Boden
+                    this.sword(wind, -80.0f, 72.0f * side, 10.0f * side, -10.0f, 195.0f);
+                    toward(this.body, wind, 6.0f, 30.0f * side, 0.0f);
+                    this.sword(cut, -80.0f, -78.0f * side, -10.0f * side, -10.0f, 195.0f);
+                    toward(this.body, cut, 12.0f, -30.0f * side, 0.0f);
+                    this.off(Math.max(wind, cut), -30.0f, 0.0f, -40.0f * side, -30.0f);
+                    this.crouch(Math.max(wind, cut), 0.4f);
+                }
+            }
+            case DASH -> {
+                for (int k = 0; k < (truly ? 2 : 1); k++) {
+                    float go = k == 0 ? 20.0f : 42.0f;
+                    float aim = Anim.bump(a - (go - 18.0f), 8.0f, 17.0f, 18.0f);
+                    float run = Anim.bump(a - (go - 1.0f), 1.5f, 12.0f, 20.0f);
+                    // geduckt, die Klinge zurückgenommen, die Linke weist auf das Ziel …
+                    this.sword(aim, 20.0f, 0.0f, 26.0f, -30.0f, -80.0f);
+                    this.off(aim, -70.0f, 0.0f, 10.0f, -20.0f);
+                    toward(this.body, aim, 18.0f, 22.0f, 0.0f);
+                    this.crouch(aim, 0.7f);
+                    // … dann der Stoß: die Klinge voran, ein weiter Ausfallschritt
+                    this.sword(run, -88.0f, 0.0f, 0.0f, 0.0f, 178.0f);
+                    this.off(run, 12.0f, 0.0f, -24.0f, -20.0f);
+                    toward(this.body, run, 26.0f, -8.0f, 0.0f);
+                    this.legs(run, -48.0f, 30.0f, 34.0f, 8.0f);
+                }
+            }
+            case WHIRL -> {
+                float wind = Anim.bump(a, 8.0f, 15.0f, 17.0f);
+                float spin = Anim.bump(a - 15.0f, 2.0f, 30.0f, 40.0f);
+                this.sword(wind, -80.0f, 80.0f, 0.0f, -5.0f, 175.0f);
+                toward(this.body, wind, 2.0f, 34.0f, 0.0f);
+                this.off(wind, -70.0f, -20.0f, 30.0f, -30.0f);
+                this.crouch(wind, 0.5f);
+                // der Wirbel: die Klinge weit vorn rechts, waagrecht
+                this.sword(spin, -84.0f, 58.0f, 0.0f, -4.0f, 178.0f);
+                this.off(spin, -20.0f, 0.0f, -70.0f, -10.0f);
+                toward(this.body, spin, 8.0f, 10.0f, 0.0f);
+                this.crouch(spin, 0.35f);
+            }
+            case PLUNGE -> {
+                float dip = Anim.bump(a, 6.0f, 9.0f, 11.0f);
+                float hold = Anim.bump(a - 10.0f, 6.0f, 36.0f, 37.0f);
+                float kneel = Anim.bump(a - SchrolliEntity.PLUNGE_IMPACT, 1.0f, 28.0f, 40.0f);
+                airborne = a > 10.0f && a < SchrolliEntity.PLUNGE_IMPACT;
+                this.crouch(dip, 0.8f);
+                this.sword(dip, -40.0f, 0.0f, 20.0f, -40.0f, 120.0f);
+                // im Sprung und über dem Ziel: beide Hände am Griff, die Spitze zeigt hinab; die Knie angezogen
+                this.sword(hold, -150.0f, 0.0f, -6.0f, -40.0f, 10.0f);
+                this.off(hold, -150.0f, 0.0f, 10.0f, -40.0f);
+                toward(this.body, hold, 6.0f, 0.0f, 0.0f);
+                this.legs(hold * (a < 38.0f ? 1.0f : 0.0f), -60.0f, 90.0f, -20.0f, 70.0f);
+                // im Sturz die Beine gestreckt, die Klinge voran
+                float fall = Anim.bump(a - 38.0f, 2.0f, 8.0f, 9.0f);
+                this.sword(fall, -60.0f, 0.0f, -10.0f, -40.0f, 280.0f);
+                this.off(fall, -60.0f, 0.0f, 14.0f, -40.0f);
+                this.legs(fall, -10.0f, 10.0f, 10.0f, 10.0f);
+                // Einschlag: tief gekniet, die Klinge steckt vor ihm im Boden
+                this.crouch(kneel, 1.0f);
+                this.sword(kneel, -48.0f, 0.0f, -8.0f, -30.0f, 258.0f);
+                this.off(kneel, -48.0f, 0.0f, 16.0f, -30.0f);
+                toward(this.body, kneel, 30.0f, 0.0f, 0.0f);
+                toward(this.head, kneel, -20.0f, 0.0f, 0.0f);
+            }
+            case GUARD -> {
+                float guard = Anim.bump(a, 6.0f, 66.0f, 72.0f);
+                // die Klinge senkrecht vor der Brust, beide Hände am Griff, breiter Stand
+                this.sword(guard, -55.0f, -10.0f, -15.0f, -50.0f, 105.0f);
+                this.off(guard, -52.0f, 0.0f, 26.0f, -50.0f);
+                toward(this.body, guard, 4.0f, 0.0f, 0.0f);
+                this.legs(guard, -22.0f, 26.0f, 22.0f, 22.0f);
+            }
+            case COUNTER -> {
+                float wind = Anim.bump(a, 3.0f, 6.0f, 8.0f);
+                float cut = Anim.bump(a - 7.0f, 1.5f, 6.0f, 16.0f);
+                this.sword(wind, -80.0f, -80.0f, -10.0f, -20.0f, 190.0f);
+                toward(this.body, wind, 6.0f, -30.0f, 0.0f);
+                this.sword(cut, -80.0f, 85.0f, 15.0f, -10.0f, 185.0f);
+                toward(this.body, cut, 12.0f, 32.0f, 0.0f);
+                this.off(Math.max(wind, cut), -30.0f, 0.0f, -40.0f, -30.0f);
+                this.crouch(Math.max(wind, cut), 0.45f);
+            }
+            case WORLD_BLADE -> {
+                float raise = Anim.bump(a - 2.0f, 10.0f, 40.0f, 44.0f);
+                float sweep = Anim.bump(a - 42.0f, 2.0f, 20.0f, 24.0f);
+                float lift = Anim.bump(a - 62.0f, 10.0f, 22.0f, 24.0f);
+                float chop = Anim.bump(a - 85.0f, 1.5f, 18.0f, 40.0f);
+                // die Klinge zum Himmel
+                this.sword(raise, -176.0f, 0.0f, 10.0f, -6.0f, 182.0f);
+                this.off(raise, -172.0f, 0.0f, -12.0f, -10.0f);
+                toward(this.body, raise, -8.0f, 0.0f, 0.0f);
+                toward(this.head, raise, -22.0f, 0.0f, 0.0f);
+                // der Rundschlag dicht über dem Boden
+                this.sword(sweep, -62.0f, 60.0f, -5.0f, 0.0f, 167.0f);
+                this.off(sweep, -20.0f, 0.0f, -60.0f, -10.0f);
+                toward(this.body, sweep, 10.0f, 16.0f, 0.0f);
+                this.crouch(sweep, 0.5f);
+                // noch einmal empor – und der Spaltschlag
+                this.sword(lift, -172.0f, 0.0f, 8.0f, -15.0f, 160.0f);
+                this.off(lift, -168.0f, 0.0f, -12.0f, -20.0f);
+                toward(this.body, lift, -8.0f, 0.0f, 0.0f);
+                this.sword(chop, -60.0f, 0.0f, -6.0f, -10.0f, 175.0f);
+                this.off(chop, -62.0f, 0.0f, 16.0f, -12.0f);
+                toward(this.body, chop, 28.0f, 0.0f, 0.0f);
+                this.crouch(chop, 0.7f);
+            }
+            default -> {
+            }
+        }
+        return airborne;
     }
 }

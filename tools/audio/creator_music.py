@@ -262,10 +262,11 @@ def compose_battle(true_form: bool, seed: int = 11) -> Score:
 # Mischung
 # =====================================================================================
 
+# seit 0.76 weicher: Trompeten, Glocken, Celesta, Glockenspiel und Orchesterschläge leiser, der Chor etwas zurück
 LEVELS = {
-    "choir": -5.0, "voices": -6.0, "organ": -11.0, "strings": -8.0, "lowstr": -12.0, "horns": -6.0, "trumpets": -8.0, "brass": -10.0,
-    "timpani": -7.0, "bells": -14.0, "drums": -7.0, "bass": -11.0, "hits": -11.0,
-    "harp": -9.0, "celesta": -12.0, "glock": -15.0, "pad": -14.0, "flute": -9.0,
+    "choir": -6.5, "voices": -8.0, "organ": -11.0, "strings": -8.0, "lowstr": -11.0, "horns": -6.0, "trumpets": -12.0, "brass": -10.0,
+    "timpani": -7.0, "bells": -18.0, "drums": -8.0, "bass": -10.0, "hits": -14.0,
+    "harp": -9.0, "celesta": -16.0, "glock": -20.0, "pad": -13.0, "flute": -10.0,
 }
 SENDS = {"choir": 0.45, "voices": 0.45, "organ": 0.4, "strings": 0.3, "lowstr": 0.25, "horns": 0.35, "trumpets": 0.3, "brass": 0.25,
          "timpani": 0.3, "bells": 0.5, "drums": 0.15, "bass": 0.1, "hits": 0.35, "harp": 0.4, "celesta": 0.5, "glock": 0.5, "pad": 0.4,
@@ -289,7 +290,9 @@ def render(sc: Score, sf2: Path, name: str, target_lufs: float, rt60: float) -> 
     hall = dsp.impulse_response(SR, rt60=rt60, predelay=0.03, stereo=True, damping_hz=5000, seed=31, early=12)
     wet = dsp.reverb(send, hall, wet=1.0)[:len(mix)] - send
     master = mix + 0.85 * wet
-    master = dsp.eq(master, SR, [("highpass", 30, 0.707, 0), ("lowshelf", 120, 0.707, -1.0), ("highshelf", 8000, 0.707, 1.5)])
+    # warm statt grell: die Höhen sanft zurück, unten etwas mehr Fülle
+    master = dsp.eq(master, SR, [("highpass", 30, 0.707, 0), ("lowshelf", 140, 0.707, 1.0), ("highshelf", 5000, 0.707, -4.0),
+                                 ("lowpass", 11000, 0.707, 0)])
     master = dsp.fade(master, SR, fade_in=0.4, fade_out=2.4)
     master = dsp.normalize(master, SR, target_lufs, ceiling_db=-1.5)
     master = dsp.limiter(master, SR, -1.0)
@@ -304,9 +307,9 @@ def main() -> None:
     ap.add_argument("--only", nargs="*")
     args = ap.parse_args()
     todo = {
-        "creation": lambda: render(compose_creation(), args.sf2, "creation", -21.0, 3.6),
-        "creation_battle": lambda: render(compose_battle(False), args.sf2, "creation_battle", -17.0, 2.6),
-        "creation_true": lambda: render(compose_battle(True), args.sf2, "creation_true", -16.0, 2.4),
+        "creation": lambda: render(compose_creation(), args.sf2, "creation", -23.0, 3.6),
+        "creation_battle": lambda: render(compose_battle(False), args.sf2, "creation_battle", -20.5, 2.6),
+        "creation_true": lambda: render(compose_battle(True), args.sf2, "creation_true", -20.0, 2.4),
     }
     for key, fn in todo.items():
         if not args.only or key in args.only:

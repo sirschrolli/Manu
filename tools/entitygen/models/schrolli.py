@@ -10,7 +10,12 @@ und Gold, gut sechs Blöcke groß.
     goldenen Spitzen, die Schwungfedern an den Enden gefächert
   * in der rechten Hand das Zepter mit einem achtstrahligen Sonnenstern, in der linken die Weltkugel (ein blauer
     Himmelsglobus mit goldenen Ländern, Goldband und Kreuz)
-  * unten fließt das Gewand in Bahnen aus, die in Licht vergehen – er hat keine Füße, er schwebt
+  * unten fließt das Gewand in Bahnen aus, die in Licht vergehen – solange er schwebt, hat er keine Füße
+  * seit 0.76 der Nahkampf am Boden: landet er, formen sich aus dem Licht seines Saums Beine in goldenen Beinschienen und
+    Sabatons (an den Knöcheln kleine goldene Schwingen), und sein Zepter wird zur Klinge aus Licht – ein Griff mit
+    Sonnenknauf, eine Parierstange aus Gold mit Strahlen, eine lange, gleißende Klinge (in der Wahren Gestalt ein
+    Schnitt durch das Weltall). Knochen left_leg/right_leg (mit _shin, _foot) und blade (mit blade_edge); im Java-Modell
+    anfangs unsichtbar.
 
 Knochen-Namen werden in SchrolliModel (Java) animiert. Im Spiel ×2,0.
 """
@@ -172,6 +177,39 @@ def build() -> Model:
     m.cube("orb", (-3.0, -0.4, -3.0), (6.0, 0.8, 6.0), "gold_band")
     m.cube("orb", (-0.35, -5.0, -0.35), (0.7, 2.2, 0.7), "gold")                  # Kreuz
     m.cube("orb", (-1.0, -4.4, -0.35), (2.0, 0.6, 0.7), "gold")
+
+    # die Klinge aus Licht (seit 0.76; am Boden statt des Zepters): Griff mit Sonnenknauf, Parierstange aus Gold mit
+    # Strahlen, darüber die Klinge – ihre Spitze zeigt (wie der Stern des Zepters) nach -Y
+    m.bone("blade", "right_forearm", pivot=(0, 7.6, -0.4), rotation=(60.0, 0.0, -10.0))
+    m.cube("blade", (-0.75, -2.6, -0.75), (1.5, 6.4, 1.5), "grip")
+    m.cube("blade", (-1.2, 3.8, -1.2), (2.4, 2.4, 2.4), "sun_gem")                  # Sonnenknauf
+    m.cube("blade", (-5.4, -4.0, -0.9), (10.8, 1.4, 1.8), "gold_edge")             # Parierstange
+    m.cube("blade", (-1.7, -4.8, -1.15), (3.4, 2.8, 2.3), "gem")                   # Stein in der Mitte
+    for sx in (-1, 1):
+        name = f"blade_guard_{'l' if sx > 0 else 'r'}"
+        m.bone(name, "blade", pivot=(5.0 * sx, -3.4, 0), rotation=(0, 0, -38.0 * sx))
+        m.cube(name, (-0.5, -4.6, -0.55), (1.0, 4.6, 1.1), "ray")                    # Strahl an jedem Ende
+    m.bone("blade_edge", "blade", pivot=(0, -4.8, 0))
+    m.cube("blade_edge", (-1.7, -26.0, -0.4), (3.4, 26.0, 0.8), "blade")
+    m.cube("blade_edge", (-0.45, -25.0, -0.5), (0.9, 24.6, 1.0), "blade_core")     # gleißende Mitte
+    m.cube("blade_edge", (-1.25, -28.0, -0.35), (2.5, 2.0, 0.7), "blade")          # die Spitze, schmaler werdend
+    m.cube("blade_edge", (-0.75, -29.7, -0.3), (1.5, 1.7, 0.6), "blade")
+    m.cube("blade_edge", (-0.3, -31.0, -0.25), (0.6, 1.3, 0.5), "blade")
+
+    # ---------------------------------------------------------------- Beine (seit 0.76; nur am Boden sichtbar)
+    # vom Hüftgelenk (y 0,6) bis zur Sohle (y 24): Beinkleid, Beinschiene mit Kniekachel und Knöchelschwinge, Sabaton
+    for side, sx in (("left", 1), ("right", -1)):
+        leg = f"{side}_leg"
+        m.bone(leg, "root", pivot=(3.0 * sx, 0.6, 0.2))
+        m.cube(leg, (-2.1, 0, -2.1), (4.2, 11.0, 4.2), "leg_cloth")
+        m.bone(f"{side}_shin", leg, pivot=(0, 11.0, 0))
+        m.cube(f"{side}_shin", (-2.0, 0, -2.1), (4.0, 9.6, 4.2), "greave")
+        m.cube(f"{side}_shin", (-2.35, -1.7, -2.7), (4.7, 3.2, 1.9), "gold_edge")    # Kniekachel
+        m.cube(f"{side}_shin", (2.0 * sx, 3.2, -1.6) if sx > 0 else (-2.0, 3.2, -1.6), (0, 5.4, 4.6), "ankle_wing",
+               tag=f"aw{side}")                                                       # kleine Schwinge außen
+        m.bone(f"{side}_foot", f"{side}_shin", pivot=(0, 9.6, 0))
+        m.cube(f"{side}_foot", (-2.15, 0, -4.3), (4.3, 2.8, 6.2), "sabaton")
+        m.cube(f"{side}_foot", (-1.5, 0.9, -5.7), (3.0, 1.9, 1.5), "gold")            # Kappe
 
     # ---------------------------------------------------------------- das Gewand, das in Licht vergeht
     m.bone("robe", "body", pivot=(0, 0.4, 0))
@@ -713,6 +751,82 @@ def _primary(ctx: Ctx):
     return col
 
 
+def _blade(ctx: Ctx):
+    """Die Klinge aus Licht: weiß gleißend, zu den Schneiden hin golden (Wahre Gestalt: ein Schnitt durch das Weltall)."""
+    s = (ctx.s + 0.5) / max(ctx.w, 1)
+    t = (ctx.t + 0.5) / max(ctx.h, 1)
+    across = abs(s - 0.5) * 2.0 if ctx.face in ("front", "back") else 0.5
+    if _true(ctx):
+        x, y, z = ctx.world
+        n = noise3(x * 0.5, y * 0.35, z * 0.5, 91)
+        if across > 0.72:
+            col = pick(ctx.pal["prism"], 0.25 + n * 0.6)                               # schillernde Schneide
+        else:
+            col = mix(pick(ctx.pal["space"], 0.55 + n * 0.4), pick(ctx.pal["nebula"], n), 0.45 + (1.0 - across) * 0.3)
+            if hash01(ctx.u, ctx.v, 92) > 0.9:
+                col = pick(ctx.pal["light"], 0.95)                                    # Sterne in der Klinge
+        ctx.glow = col
+        return col
+    v = 0.98 - across * 0.32 + math.sin(t * 40.0) * 0.015
+    col = pick(ctx.pal["light"], v)
+    if across > 0.8:
+        col = mix(col, pick(ctx.pal["gold"], 0.8), 0.55)                              # goldene Schneide
+    ctx.glow = col
+    return col
+
+
+def _blade_core(ctx: Ctx):
+    col = pick(ctx.pal["light"], 1.0) if not _true(ctx) else mix(pick(ctx.pal["light"], 1.0), hexc("#e8c8ff"), 0.4)
+    ctx.glow = col
+    return col
+
+
+def _grip(ctx: Ctx):
+    """Der Griff: weiß umwickelt, dazwischen goldene Bänder."""
+    if ctx.face in ("top", "bottom"):
+        return pick(ctx.pal["gold"], 0.6)
+    if ctx.t % 3 == 0:
+        return pick(ctx.pal["gold"], 0.72)
+    return pick(ctx.pal["cloth"], 0.82 - (ctx.s % 2) * 0.06)
+
+
+def _leg_cloth(ctx: Ctx):
+    col = _cloth_base(ctx, 0.62)
+    if ctx.face in ("front", "back", "west", "east") and ctx.t >= ctx.h - 2:
+        col = pick(ctx.pal["gold"], 0.6)
+    return col
+
+
+def _greave(ctx: Ctx):
+    """Die Beinschiene: Gold mit einem Grat in der Mitte, oben ein Himmelsstein, unten Ringe."""
+    col = _gold(ctx)
+    if ctx.face == "front":
+        c = ctx.w / 2 - 0.5
+        if abs(ctx.s - c) < 0.8:
+            col = pick(ctx.pal["gold"], 0.88)                                         # Grat
+        if 2 <= ctx.t <= 4 and abs(ctx.s - c) < 1.6:
+            col = pick(ctx.pal["gem"], 0.7)
+            ctx.glow = col
+    if ctx.face in ("front", "back", "west", "east") and ctx.t >= ctx.h - 3 and ctx.t % 2 == 0:
+        col = pick(ctx.pal["gold"], 0.4)
+    return col
+
+
+def _sabaton(ctx: Ctx):
+    """Der Sabaton: geschuppte Goldplatten, an der Spitze heller."""
+    col = _gold(ctx)
+    if ctx.face in ("top", "west", "east") and ctx.t % 3 == 0:
+        col = pick(ctx.pal["gold"], 0.42)
+    if ctx.face == "bottom":
+        col = pick(ctx.pal["gold"], 0.3)
+    return col
+
+
+def _ankle_wing(ctx: Ctx):
+    """Eine kleine Schwinge am Knöchel: drei goldgespitzte Federn."""
+    return _feather_rows(ctx, 1, 0.3)
+
+
 def materials(variant: str) -> dict:
     return {
         "tunic": _tunic, "cuirass": _cuirass, "gold": _gold, "gold_edge": _gold_edge, "gold_band": _gold_band, "gem": _gem,
@@ -721,4 +835,6 @@ def materials(variant: str) -> dict:
         "bracer": _bracer, "staff": _staff, "globe": _globe, "robe": _robe, "robe_light": _robe_light,
         "wing_arm": _wing_arm, "covert": _covert, "feather": _feather, "primary": _primary,
         "ring_eye": _ring_eye, "ring_rune": _ring_rune, "corona": _corona, "robe_stole": _robe_stole, "cuff": _cuff,
+        "blade": _blade, "blade_core": _blade_core, "grip": _grip, "leg_cloth": _leg_cloth, "greave": _greave,
+        "sabaton": _sabaton, "ankle_wing": _ankle_wing,
     }

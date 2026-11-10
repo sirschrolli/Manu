@@ -89,7 +89,16 @@ import org.jspecify.annotations.Nullable;
  *     weiteren Künsten: Weltenwurf, Supernova, Urknall, Sternbild, Doppelklinge, Jüngstes Gericht, Augenstrahlen,
  *     Kometensturz, Weltenriss und Neuschöpfung.</li>
  * </ol>
- * Sein Licht geht durch jede Rüstung (Verzauberungen schützen weiter). Wer fällt, verliert in seinem Hof alles. Wer ihn
+ * Seit 0.76 kämpft er nicht nur aus der Luft: Immer wieder <b>landet</b> er (Warnkreis, Einschlag, Ring – springen!),
+ * aus dem Licht seines Saums formen sich Beine in goldenen Beinschienen, und sein Zepter wird zur <b>Klinge aus Licht</b>.
+ * Am Boden schreitet er auf sein Ziel zu und ficht: Klingenhieb (eine Folge von Hieben, zuletzt ein Spaltschlag),
+ * Lichtsicheln (über den Boden gleitend – springen!), Sturmlauf (eine leuchtende Linie zeigt den Weg), Klingenwirbel,
+ * Himmelssturz (danach steckt die Klinge im Boden: jetzt zuschlagen!) und Schwingenwehr (er pariert alles von vorn und
+ * schlägt zurück – also von hinten angreifen); in der Wahren Gestalt dazu die Weltenklinge. Nach einigen Künsten schwingt
+ * er sich wieder empor. Am Boden ist er mit Schwert und Axt zu erreichen – leichte Hiebe lassen sich mit dem Schild
+ * abfangen, die goldenen (Spaltschlag, Sicheln, Einschläge) nicht.
+ *
+ * <p>Sein Licht geht durch jede Rüstung (Verzauberungen schützen weiter). Wer fällt, verliert in seinem Hof alles. Wer ihn
  * besiegt, trägt fortan den Titel „Gottbezwinger“.
  */
 public class SchrolliEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
@@ -152,6 +161,20 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         COMET(118),
         WORLD_SPLIT(100),
         RECREATION(172),
+        // ---------------------------------------------------------------- am Boden, mit der Klinge aus Licht (seit 0.76)
+        /** Landung: aus der Luft hinab, die Beine formen sich, das Zepter wird zur Klinge. */
+        DESCEND(46),
+        /** Aufschwung: ein Schwingenschlag, und er schwebt wieder (die Klinge wird wieder zum Zepter). */
+        RISE(34),
+        STRIKE(80),
+        SLASHES(74),
+        DASH(66),
+        WHIRL(64),
+        PLUNGE(86),
+        GUARD(76),
+        /** Gegenschlag: nach einer Parade (Schwingenwehr). */
+        COUNTER(30),
+        WORLD_BLADE(134),
         // ---------------------------------------------------------------- Zustände
         STUNNED(80),
         EXIT(64);
@@ -164,11 +187,16 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
 
         /** Gehört diese Kunst nur der Wahren Gestalt? */
         public boolean trueOnly() {
-            return this.ordinal() >= PLANETS.ordinal() && this.ordinal() <= RECREATION.ordinal();
+            return this.ordinal() >= PLANETS.ordinal() && this.ordinal() <= RECREATION.ordinal() || this == WORLD_BLADE;
         }
 
         public boolean isArt() {
-            return this.ordinal() >= LANCES.ordinal() && this.ordinal() <= RECREATION.ordinal();
+            return this.ordinal() >= LANCES.ordinal() && this.ordinal() <= RECREATION.ordinal() || this.melee() && this != COUNTER;
+        }
+
+        /** Eine Kunst am Boden, mit der Klinge (auch der Gegenschlag). */
+        public boolean melee() {
+            return this.ordinal() >= STRIKE.ordinal() && this.ordinal() <= WORLD_BLADE.ordinal();
         }
     }
 
@@ -178,6 +206,14 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     public static final int FLAG_CHANNEL = 8;
     public static final int FLAG_STUN = 16;
     public static final int FLAG_GLARE = 32;
+    /** Am Boden: Beine und die Klinge aus Licht (seit 0.76). */
+    public static final int FLAG_GROUND = 64;
+    /** Landung: hier setzt er auf. Himmelssturz: hier schlägt er ein; bis hierher steckt die Klinge im Boden. */
+    public static final int DESCEND_LAND = 24;
+    public static final int PLUNGE_IMPACT = 46;
+    public static final int PLUNGE_STUCK = 74;
+    /** Aufschwung: hier schlägt er die Schwingen und hebt ab. */
+    public static final int RISE_LIFT = 12;
 
     private static final EntityDataAccessor<Integer> DATA_ATTACK = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_TRUE = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.BOOLEAN);
@@ -207,6 +243,16 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     boolean recreationDone;
     float channelDamage;
     private int targetSwitch;
+    private int lastHurtSound = -100;
+    /** Wann zuletzt eine Säule erklang (viele zugleich: nur eine). */
+    long pillarSoundTick = -1L;
+    /** Am Boden (Nahkampf)? Wie viele Künste in dieser Haltung, wie viele es werden sollen, wie viele seit der letzten Landung in der Luft. */
+    boolean grounded;
+    private int stanceArts;
+    private int stanceBudget = 3;
+    private int airArts;
+    private boolean saidHand;
+    private boolean saidWorldBlade;
     final List<UUID> minions = new ArrayList<>();
 
     // ------------------------------------------------------------------ Zustand der laufenden Kunst (für SchrolliAttacks)
@@ -230,6 +276,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     private int clientAttackStart;
     public float wingO;
     public float wing;
+    /** Wie weit Beine und Klinge geformt sind (0 schwebend – 1 am Boden). */
+    public float groundO;
+    public float ground;
 
     public SchrolliEntity(EntityType<? extends SchrolliEntity> type, Level level) {
         super(type, level);
@@ -353,9 +402,38 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.begin(Attack.AWAKEN);
     }
 
-    /** Beginnt sofort eine bestimmte Kunst (für Tests und die Vorführung). */
+    /**
+     * Beginnt sofort eine bestimmte Kunst (für Tests und die Vorführung): Künste der Klinge beginnt er am Boden (er setzt
+     * sofort auf), die übrigen in der Luft.
+     */
     public void forceAttack(Attack next) {
+        if (next.melee() || next == Attack.RISE) {
+            if (!this.grounded && this.level() instanceof ServerLevel) {
+                Vec3 g = this.ground(this.position());
+                this.setPos(g.x, g.y, g.z);
+                this.setDeltaMovement(Vec3.ZERO);
+                this.setGrounded(true);
+            }
+        } else if (next.isArt() || next == Attack.DESCEND) {
+            this.setGrounded(false);
+        }
         this.begin(next);
+    }
+
+    /** Am Boden (Nahkampf)? */
+    public boolean isGrounded() {
+        return this.grounded;
+    }
+
+    void setGrounded(boolean on) {
+        this.grounded = on;
+        this.setFlag(FLAG_GROUND, on);
+        this.stanceArts = 0;
+        if (on) {
+            this.stanceBudget = 3 + this.random.nextInt(2) + (this.isTrueForm() ? 1 : 0);
+        } else {
+            this.airArts = 0;
+        }
     }
 
     /** Sofort in der Wahren Gestalt mit voller Leiste (für Tests und die Vorführung). */
@@ -407,6 +485,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.setFlag(FLAG_GLARE, false);
         if (next != Attack.STUNNED) {
             this.setFlag(FLAG_STUN, false);
+        }
+        // Erscheinen, Aufstieg, Gehen und Taumeln geschehen schwebend
+        if (this.grounded && (next == Attack.AWAKEN || next == Attack.ASCEND || next == Attack.EXIT || next == Attack.STUNNED)) {
+            this.setGrounded(false);
         }
     }
 
@@ -528,6 +610,23 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             }
             return false;
         }
+        // Schwingenwehr: was von vorn kommt, pariert er – und schlägt zurück; von hinten ist er ungeschützt
+        if (this.attack == Attack.GUARD && this.attackTick >= 4 && this.attackTick < Attack.GUARD.duration - 6) {
+            Entity direct = source.getDirectEntity();
+            Vec3 from = direct != null ? direct.position() : source.getSourcePosition();
+            if (from != null && this.inFront(from, 100.0)) {
+                if (direct instanceof Projectile shot) {
+                    this.deflect(level, shot);
+                    return false;
+                }
+                if (source.getEntity() instanceof LivingEntity attacker && attacker == direct && this.canStrike(attacker)) {
+                    this.parry(level, attacker);
+                    return false;
+                }
+            } else if (from != null) {
+                amount *= 1.3f;
+            }
+        }
         // die Räder der Wahren Gestalt lenken manches Geschoss ab
         if (this.isTrueForm() && source.getDirectEntity() instanceof Projectile shot && this.random.nextFloat() < 0.15f) {
             this.deflect(level, shot);
@@ -538,6 +637,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (this.attack == Attack.STUNNED) {
             amount *= 1.5f;
         }
+        // nach dem Himmelssturz steckt die Klinge im Boden: jetzt zuschlagen!
+        if (this.attack == Attack.PLUNGE && this.attackTick >= PLUNGE_IMPACT && this.attackTick < PLUNGE_STUCK) {
+            amount *= 1.3f;
+        }
         if (this.attack == Attack.RECREATION) {
             this.channelDamage += amount;
         }
@@ -547,6 +650,27 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             this.setTarget(attacker);
         }
         return hurt;
+    }
+
+    /** Liegt {@code at} vor ihm (innerhalb von {@code halfAngle} Grad seiner Blickrichtung)? */
+    boolean inFront(Vec3 at, double halfAngle) {
+        Vec3 to = at.subtract(this.position()).multiply(1.0, 0.0, 1.0);
+        if (to.lengthSqr() < 1.0e-4) {
+            return true;
+        }
+        return to.normalize().dot(this.forward()) >= Math.cos(Math.toRadians(halfAngle));
+    }
+
+    /** Parade: die Klinge fängt den Hieb, Funken sprühen – und er schlägt zurück. */
+    private void parry(ServerLevel level, LivingEntity attacker) {
+        this.sound(level, ModSounds.SCHROLLI_PARRY.get(), 3.0f, 1.0f);
+        Vec3 at = this.local(-0.2, 3.2, 1.6);
+        DivineFx.flash(level, at, DivineFx.WHITE);
+        DivineFx.sparks(level, at, 40, 0.8, 0.25);
+        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, at.x, at.y, at.z, 16, 0.6, 0.6, 0.6, 0.3);
+        knock(attacker, this.position(), 0.5, 0.2);
+        this.begin(Attack.COUNTER);
+        this.marked = attacker.getUUID();
     }
 
     /** Ein Geschoss prallt an den Rädern ab und fliegt zurück. */
@@ -577,6 +701,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
                 rate *= Math.max(0.0f, 1.0f - this.deathTime / (float) DEATH_TICKS);
             }
             this.wing += rate;
+            this.groundO = this.ground;
+            float want = this.hasFlag(FLAG_GROUND) ? 1.0f : 0.0f;
+            this.ground += Mth.clamp(want - this.ground, -0.09f, 0.09f);
         }
     }
 
@@ -608,6 +735,14 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (this.isTrueForm() && this.random.nextInt(2) == 0) {
             level.addParticle(this.random.nextBoolean() ? ParticleTypes.END_ROD : ParticleTypes.REVERSE_PORTAL, this.getRandomX(2.2),
                     this.getY(this.random.nextDouble()), this.getRandomZ(2.2), 0.0, 0.0, 0.0);
+        }
+        // am Boden: bei jedem Schritt ein wenig Licht unter den Sohlen
+        if (this.hasFlag(FLAG_GROUND)) {
+            double speed = this.getDeltaMovement().horizontalDistance();
+            if (speed > 0.05 && this.random.nextInt(3) == 0) {
+                level.addParticle(ParticleTypes.END_ROD, this.getRandomX(1.0), this.getY() + 0.1, this.getRandomZ(1.0), 0.0, 0.03, 0.0);
+            }
+            return;
         }
         // unter ihm: ein Schein aus Licht auf dem Boden
         if (this.tickCount % 3 == 0) {
@@ -656,10 +791,22 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         }
         if (this.attack == Attack.NONE) {
             if (target == null) {
+                if (this.grounded) {
+                    this.begin(Attack.RISE);
+                    return;
+                }
                 this.idle(level);
                 return;
             }
             this.idleTicks = 0;
+            if (this.grounded) {
+                // am Boden: auf das Ziel zu schreiten, dann fechten – oder sich wieder emporschwingen
+                this.stalk(target, 5.2 * this.getScale(), this.isTrueForm() ? 0.34 : 0.28);
+                if (--this.cooldown <= 0) {
+                    this.begin(this.stanceArts >= this.stanceBudget || this.forcedPending() ? Attack.RISE : this.chooseOnGround(target));
+                }
+                return;
+            }
             this.hover(target, 11.0, 8.0);
             this.face(target.position(), 12.0f);
             Attack forced = this.forcedArt();
@@ -679,10 +826,26 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
 
     /** Eine Kunst ist zu Ende: kurze Pause (je schwächer, desto kürzer; in der Wahren Gestalt kaum). */
     void endArt() {
+        Attack done = this.attack;
+        if (done == Attack.DESCEND) {
+            this.setGrounded(true);
+        } else if (done == Attack.RISE) {
+            this.setGrounded(false);
+        } else if (done.isArt()) {
+            if (this.grounded) {
+                this.stanceArts++;
+            } else {
+                this.airArts++;
+            }
+        }
         this.begin(Attack.NONE);
         float k = this.getHealth() / this.getMaxHealth();
         int base = this.isTrueForm() ? 12 : k > 0.7f ? 30 : k > 0.4f ? 22 : 16;
-        this.cooldown = base + this.random.nextInt(12);
+        // am Boden folgen die Hiebe dichter aufeinander
+        if (this.grounded) {
+            base = this.isTrueForm() ? 8 : k > 0.7f ? 18 : 12;
+        }
+        this.cooldown = base + this.random.nextInt(done == Attack.DESCEND ? 6 : 12);
     }
 
     /** Ohne Gegner: über der Mitte schweben und sich langsam erholen; draußen in der Welt geht er nach einer Minute. */
@@ -738,6 +901,15 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         return null;
     }
 
+    /** Steht eine der Künste an, die zu ihrer Zeit kommen müssen (sie geschehen in der Luft)? */
+    private boolean forcedPending() {
+        if (!this.isTrueForm()) {
+            return false;
+        }
+        float k = this.getHealth() / this.getMaxHealth();
+        return !this.novaDone && k < 0.6f || !this.apocalypseDone && k < 0.45f || !this.recreationDone && k < 0.25f;
+    }
+
     /** Wählt die nächste Kunst: nach Gestalt, Kraft und Abstand gewichtet, nie eine der letzten drei. */
     private Attack choose(LivingEntity target) {
         float k = this.getHealth() / this.getMaxHealth();
@@ -784,8 +956,44 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             }
         }
         pool.removeIf(a -> this.recent.stream().limit(3).anyMatch(r -> r == a));
+        // nach einigen Künsten in der Luft landet er und kämpft mit der Klinge (nach vieren immer)
+        boolean reachable = Math.abs(target.getY() - this.ground(target.position()).y) < 4.0;
+        if (reachable && this.airArts >= 4) {
+            return Attack.DESCEND;
+        }
+        if (reachable && this.airArts >= 1) {
+            add(pool, Attack.DESCEND, this.airArts >= 2 ? 6 : 2);
+        }
         if (pool.isEmpty()) {
             return Attack.LANCES;
+        }
+        return pool.get(this.random.nextInt(pool.size()));
+    }
+
+    /** Wählt die nächste Kunst am Boden: nach Abstand gewichtet, nie eine der letzten beiden. */
+    private Attack chooseOnGround(LivingEntity target) {
+        double distance = DivineFx.flat(this.position(), target.position());
+        double s = this.getScale();
+        boolean truly = this.isTrueForm();
+        List<Attack> pool = new ArrayList<>();
+        if (distance < 10.0 * s) {
+            add(pool, Attack.STRIKE, 4);
+            add(pool, Attack.WHIRL, 2);
+            add(pool, Attack.GUARD, 2);
+        } else {
+            add(pool, Attack.DASH, 3);
+        }
+        add(pool, Attack.SLASHES, distance < 10.0 * s ? 2 : 3);
+        add(pool, Attack.PLUNGE, 2);
+        if (distance >= 5.0 && distance < 28.0) {
+            add(pool, Attack.DASH, 1);
+        }
+        if (truly && this.stanceArts >= 1) {
+            add(pool, Attack.WORLD_BLADE, 2);
+        }
+        pool.removeIf(a -> this.recent.stream().limit(2).anyMatch(r -> r == a));
+        if (pool.isEmpty()) {
+            return Attack.STRIKE;
         }
         return pool.get(this.random.nextInt(pool.size()));
     }
@@ -906,6 +1114,40 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.steer(want, 0.06, this.isTrueForm() ? 0.85 : 0.65);
     }
 
+    /** Hält die Füße am Boden (am Boden: jeden Takt nach der Bewegung). */
+    void stick() {
+        Vec3 g = this.ground(this.position());
+        Vec3 v = this.getDeltaMovement();
+        this.setDeltaMovement(v.x, Mth.clamp(g.y - this.getY(), -1.6, 1.6), v.z);
+    }
+
+    /** Schreitet mit {@code velocity} (waagrecht; sanft beschleunigt), nicht über den Rand seines Hofs hinaus. */
+    void walk(Vec3 velocity) {
+        Vec3 v = this.getDeltaMovement();
+        Vec3 next = new Vec3(Mth.lerp(0.3, v.x, velocity.x), 0.0, Mth.lerp(0.3, v.z, velocity.z));
+        Vec3 c = this.center();
+        Vec3 at = this.position().add(next);
+        double limit = io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.isArena(this.level()) ? 34.0 : 60.0;
+        double flat = DivineFx.flat(at, c);
+        if (flat > limit) {
+            Vec3 in = c.subtract(at).multiply(1.0, 0.0, 1.0).normalize();
+            next = next.add(in.scale(flat - limit));
+        }
+        this.setDeltaMovement(next.x, 0.0, next.z);
+        this.stick();
+    }
+
+    /** Am Boden auf das Ziel zu (bis auf {@code reach} Blöcke), dabei leicht seitwärts; der Blick bleibt beim Ziel. */
+    void stalk(LivingEntity target, double reach, double speed) {
+        Vec3 to = target.position().subtract(this.position()).multiply(1.0, 0.0, 1.0);
+        double d = to.length();
+        Vec3 dir = d < 1.0e-3 ? this.forward() : to.scale(1.0 / d);
+        double along = d > reach + 1.0 ? speed : d < reach - 2.5 ? -speed * 0.45 : 0.0;
+        Vec3 side = new Vec3(-dir.z, 0.0, dir.x).scale(Math.sin(this.tickCount * 0.035) * speed * 0.35);
+        this.walk(dir.scale(along).add(side));
+        this.face(target.position(), 14.0f);
+    }
+
     void face(Vec3 at, float step) {
         this.turnTo((float) DivineFx.yaw(this.position(), at), step);
     }
@@ -961,7 +1203,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     }
 
     void sound(ServerLevel level, SoundEvent sound, float volume, float pitch) {
-        level.playSound(null, this.getX(), this.getY() + 3.0, this.getZ(), sound, SoundSource.HOSTILE, volume, pitch);
+        level.playSound(null, this.getX(), this.getY() + 3.0, this.getZ(), sound, SoundSource.HOSTILE, volume, DivineFx.soft(pitch));
     }
 
     /** Eine Zeile Schrollis, für alle im Hof (im Chat, golden), dazu ein Chorakkord. */
@@ -977,6 +1219,17 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             }
         }
         this.sound(level, ModSounds.SCHROLLI_VOICE.get(), 4.0f, this.isTrueForm() ? 0.8f : 1.0f);
+    }
+
+    /** Beim ersten Mal ein paar Worte (Landung, Weltenklinge). */
+    void sayOnce(ServerLevel level, String line) {
+        if (line.equals("hand") && !this.saidHand) {
+            this.saidHand = true;
+            this.say(level, line);
+        } else if (line.equals("world_blade") && !this.saidWorldBlade) {
+            this.saidWorldBlade = true;
+            this.say(level, line);
+        }
     }
 
     /** Groß auf den Bildschirm aller im Hof. */
@@ -1362,6 +1615,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         output.putBoolean("NovaDone", this.novaDone);
         output.putBoolean("ApocalypseDone", this.apocalypseDone);
         output.putBoolean("RecreationDone", this.recreationDone);
+        output.putBoolean("Grounded", this.grounded && this.attack != Attack.DESCEND);
     }
 
     @Override
@@ -1373,6 +1627,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.novaDone = input.getBooleanOr("NovaDone", false);
         this.apocalypseDone = input.getBooleanOr("ApocalypseDone", false);
         this.recreationDone = input.getBooleanOr("RecreationDone", false);
+        if (input.getBooleanOr("Grounded", false)) {
+            this.setGrounded(true);
+        }
         if (input.getBooleanOr("TrueForm", false)) {
             this.becomeTrue();
             this.setHealth(Math.max(this.getHealth(), 1.0f));
@@ -1387,7 +1644,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
 
     @Override
     public int getAmbientSoundInterval() {
-        return 180;
+        return 260;
     }
 
     @Override
@@ -1395,9 +1652,18 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         return ModSounds.SCHROLLI_HURT.get();
     }
 
+    /** Nicht bei jedem Treffer ein Laut (bei vielen Angreifern wäre das ein Dauerton): höchstens alle 0,7 Sekunden. */
+    @Override
+    protected void playHurtSound(DamageSource source) {
+        if (this.tickCount - this.lastHurtSound >= 14 || this.tickCount < this.lastHurtSound) {
+            this.lastHurtSound = this.tickCount;
+            super.playHurtSound(source);
+        }
+    }
+
     @Override
     protected float getSoundVolume() {
-        return 4.0f;
+        return 3.0f;
     }
 
     @Override

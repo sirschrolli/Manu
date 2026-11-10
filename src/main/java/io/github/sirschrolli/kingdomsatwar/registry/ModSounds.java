@@ -366,6 +366,15 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_STAR = register("entity.schrolli.star");
     public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_STUN = register("entity.schrolli.stun");
     public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_HEAL = register("entity.schrolli.heal");
+    // seit 0.76: der Nahkampf am Boden (die Klinge aus Licht)
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_BLADE = register("entity.schrolli.blade");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SWING = register("entity.schrolli.swing");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SLASH = register("entity.schrolli.slash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_DASH = register("entity.schrolli.dash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_WHIRL = register("entity.schrolli.whirl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_GUARD = register("entity.schrolli.guard");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_PARRY = register("entity.schrolli.parry");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_LAND = register("entity.schrolli.land");
     public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_AMBIENT = register("entity.seraphling.ambient");
     public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_HURT = register("entity.seraphling.hurt");
     public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_DEATH = register("entity.seraphling.death");

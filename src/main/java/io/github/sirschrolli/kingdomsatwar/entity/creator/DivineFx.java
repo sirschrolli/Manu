@@ -80,7 +80,15 @@ public final class DivineFx {
     }
 
     public static void sound(ServerLevel level, Vec3 at, SoundEvent sound, float volume, float pitch) {
-        level.playSound(null, at.x, at.y, at.z, sound, SoundSource.HOSTILE, volume, pitch);
+        level.playSound(null, at.x, at.y, at.z, sound, SoundSource.HOSTILE, volume, soft(pitch));
+    }
+
+    /**
+     * Hohe Tonlagen werden gestaucht (seit 0.76): Klänge des Schöpfers klingen höchstens ein wenig heller, nie schrill –
+     * 1,6 wird zu 1,21, 1,4 zu 1,14; tiefere Lagen bleiben, wie sie sind.
+     */
+    public static float soft(float pitch) {
+        return pitch > 1.0f ? 1.0f + (pitch - 1.0f) * 0.35f : pitch;
     }
 
     /** Abstand eines Punkts von einer Strecke. */

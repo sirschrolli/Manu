@@ -17,4 +17,6 @@ public class SchrolliRenderState extends LivingEntityRenderState {
     public float ascension;
     /** Wie hell er gerade aufleuchtet (Erscheinen, Aufsteigen, Lichtsprung, Neuschöpfung, Vergehen). */
     public float flash;
+    /** Wie weit Beine und Klinge geformt sind (0 schwebend – 1 am Boden). */
+    public float ground;
 }

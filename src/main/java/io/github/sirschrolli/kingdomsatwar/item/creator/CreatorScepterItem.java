@@ -63,7 +63,7 @@ public class CreatorScepterItem extends Item {
                 player.getCooldowns().addCooldown(stack, SPEAR_COOLDOWN);
             }
             server.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.CREATOR_SCEPTER_CAST.get(), SoundSource.PLAYERS, 1.0f,
-                    player.isShiftKeyDown() ? 0.7f : 1.1f + server.getRandom().nextFloat() * 0.2f);
+                    player.isShiftKeyDown() ? 0.7f : 0.95f + server.getRandom().nextFloat() * 0.15f);
         }
         return InteractionResult.SUCCESS;
     }

@@ -1979,6 +1979,8 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"impossible", "Impossible …!", "Unmöglich …!"},
                 {"defeated", "You … have defeated … creation itself …", "Ihr … habt … die Schöpfung selbst … bezwungen …"},
                 {"farewell", "Then go … and create your own world.", "So geht … und erschafft … eure eigene Welt."},
+                {"hand", "Now I shall test you with my own hand!", "Nun prüfe ich euch mit eigener Hand!"},
+                {"world_blade", "This blade parted night from day!", "Diese Klinge schied die Nacht vom Tag!"},
         };
         for (String[] l : lines) {
             text("entity.kingdomsatwar.schrolli.line." + l[0], l[1], l[2]);
@@ -1988,6 +1990,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("entity.kingdomsatwar.schrolli.judged", "%s has been judged – step into the circle to share the judgment!",
                 "%s wurde gerichtet – tretet in den Kreis, um das Urteil zu teilen!");
         text("entity.kingdomsatwar.schrolli.look_away", "Look away!", "Seht weg!");
+        text("entity.kingdomsatwar.schrolli.guard", "He raises his wings in guard – strike him from behind!",
+                "Er hebt die Schwingen zur Wehr – greift ihn von hinten an!");
+        text("entity.kingdomsatwar.schrolli.stuck", "His blade is stuck in the ground – strike now!",
+                "Seine Klinge steckt im Boden – jetzt zuschlagen!");
         text("entity.kingdomsatwar.schrolli.blinded", "Blinded by the light!", "Vom Licht geblendet!");
         text("entity.kingdomsatwar.schrolli.looked_away", "You looked away – the light spares you.", "Du hast weggesehen – das Licht verschont dich.");
         text("entity.kingdomsatwar.schrolli.time_stands", "Time stands still …", "Die Zeit steht still …");
@@ -2056,7 +2062,11 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"tick", "Clock ticks", "Uhr tickt"}, {"word", "Light blazes", "Licht gleißt"}, {"supernova", "Supernova", "Supernova"},
                 {"planet", "A world forms", "Eine Welt entsteht"}, {"impact", "Heavy impact", "Schwerer Einschlag"},
                 {"star", "Star falls", "Stern fällt"}, {"stun", "The Creator falls", "Der Schöpfer stürzt"},
-                {"heal", "The Creator re-creates himself", "Der Schöpfer erschafft sich neu"}}) {
+                {"heal", "The Creator re-creates himself", "Der Schöpfer erschafft sich neu"},
+                {"blade", "Blade of light forms", "Klinge aus Licht entsteht"}, {"swing", "Blade swings", "Klinge schwingt"},
+                {"slash", "Blade cuts", "Klinge schneidet"}, {"dash", "The Creator dashes", "Der Schöpfer stürmt vor"},
+                {"whirl", "Blade whirls", "Klinge wirbelt"}, {"guard", "The Creator raises his wings", "Der Schöpfer hebt die Schwingen"},
+                {"parry", "The Creator parries", "Der Schöpfer pariert"}, {"land", "The Creator lands", "Der Schöpfer landet"}}) {
             subtitle("entity.schrolli." + e[0], e[1], e[2]);
         }
         for (String[] e : new String[][] {{"ambient", "Seraphling hums", "Seraphling summt"}, {"hurt", "Seraphling hurts", "Seraphling nimmt Schaden"},

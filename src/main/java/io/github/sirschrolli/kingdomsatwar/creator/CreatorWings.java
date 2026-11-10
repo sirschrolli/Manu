@@ -56,7 +56,7 @@ public final class CreatorWings {
         player.getCooldowns().addCooldown(chest, BOOST_COOLDOWN);
         player.resetFallDistance();
         ServerLevel level = player.level();
-        level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.SCHROLLI_WINGS.get(), SoundSource.PLAYERS, 1.2f, 1.3f);
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.SCHROLLI_WINGS.get(), SoundSource.PLAYERS, 1.2f, 1.1f);
         level.sendParticles(ModParticles.DIVINE_FEATHER.get(), player.getX(), player.getY(0.5), player.getZ(), 18, 0.9, 0.3, 0.9, 0.06);
         level.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY(0.5), player.getZ(), 20, 0.8, 0.3, 0.8, 0.08);
         return true;

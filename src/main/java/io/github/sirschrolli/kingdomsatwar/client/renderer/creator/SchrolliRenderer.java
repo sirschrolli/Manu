@@ -25,6 +25,10 @@ import org.jspecify.annotations.Nullable;
  */
 public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRenderState, SchrolliModel> {
     public static final float SCALE = 2.0f;
+    /** Nur für die Vorführung: eine Kunst und ihr Augenblick, die alle Schöpfer zeigen (-1: aus). */
+    public static volatile int debugAttack = -1;
+    public static volatile float debugTime;
+    public static volatile float debugGround = 1.0f;
     private static final Identifier TEXTURE = tex("schrolli");
     private static final Identifier TEXTURE_TRUE = tex("schrolli_true");
     private static final RenderType GLOW = RenderTypes.eyes(tex("schrolli_glow"));
@@ -91,6 +95,9 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
             case RECREATION -> 0.3f + Mth.sin(age * 0.25f) * 0.18f;
             case WORD -> Mth.clamp((a - 20.0f) / 36.0f, 0.0f, 1.0f) * (a < 58.0f ? 0.8f : 0.0f);
             case SUPERNOVA -> a > 120.0f && a < 145.0f ? Mth.clamp((a - 120.0f) / 20.0f, 0.0f, 0.7f) : 0.0f;
+            // die Landung: Beine und Klinge formen sich in einem Aufleuchten
+            case DESCEND -> Mth.clamp(1.0f - Math.abs(a - SchrolliEntity.DESCEND_LAND - 2.0f) / 9.0f, 0.0f, 0.75f);
+            case RISE -> Mth.clamp(1.0f - Math.abs(a - SchrolliEntity.RISE_LIFT) / 8.0f, 0.0f, 0.6f);
             default -> 0.0f;
         };
     }
@@ -133,6 +140,13 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
                 | (entity.hasFlag(SchrolliEntity.FLAG_STUN) ? SchrolliEntity.FLAG_STUN : 0)
                 | (entity.hasFlag(SchrolliEntity.FLAG_GLARE) ? SchrolliEntity.FLAG_GLARE : 0);
         state.wing = Mth.lerp(partialTicks, entity.wingO, entity.wing);
+        state.ground = Mth.lerp(partialTicks, entity.groundO, entity.ground);
+        if (debugAttack >= 0) {
+            // Vorführung: eine Haltung festhalten
+            state.attack = debugAttack;
+            state.attackTime = debugTime;
+            state.ground = debugGround;
+        }
         state.ascension = entity.ascension(partialTicks);
         state.flash = flash(entity, attack, state.attackTime, state.ageInTicks);
         if ((state.flags & SchrolliEntity.FLAG_HIDDEN) != 0) {
