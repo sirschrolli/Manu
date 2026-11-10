@@ -114,6 +114,7 @@ public class MireShamblerEntity extends Monster {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SoldierEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity.class, false));
     }
 
     /** Lauert er halb versunken im Schlamm? */

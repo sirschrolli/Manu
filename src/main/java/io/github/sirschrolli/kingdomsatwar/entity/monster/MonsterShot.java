@@ -66,10 +66,16 @@ public class MonsterShot extends ThrowableItemProjectile {
         return shot;
     }
 
-    /** Geschwindigkeit, mit der ein Wurf im Bogen (Schwerkraft {@code gravity}) nach {@code ticks} Ticks bei {@code to} ankommt. */
+    /**
+     * Geschwindigkeit, mit der ein Wurf im Bogen (Schwerkraft {@code gravity}) nach {@code ticks} Ticks bei {@code to} ankommt –
+     * mit der Luftreibung der Geschosse (je Tick erst Schwerkraft, dann ×0,99, dann die Bewegung).
+     */
     public static Vec3 lob(Vec3 from, Vec3 to, int ticks, double gravity) {
         Vec3 d = to.subtract(from);
-        return new Vec3(d.x / ticks, d.y / ticks + 0.5 * gravity * ticks, d.z / ticks);
+        double drag = 0.99;
+        double sum = drag * (1.0 - Math.pow(drag, ticks)) / (1.0 - drag);
+        double fall = gravity * drag / (1.0 - drag) * (ticks - sum);
+        return new Vec3(d.x / sum, (d.y + fall) / sum, d.z / sum);
     }
 
     public Kind kind() {

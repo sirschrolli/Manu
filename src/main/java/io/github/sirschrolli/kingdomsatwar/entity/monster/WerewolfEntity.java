@@ -108,6 +108,7 @@ public class WerewolfEntity extends Monster {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SoldierEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity.class, false));
     }
 
     /** Rennt er gerade auf allen vieren (jagend)? */
@@ -123,6 +124,11 @@ public class WerewolfEntity extends Monster {
     /** Lässt ihn sofort heulen (für Tests und die Vorführung). */
     public void forceHowl() {
         this.startHowl();
+    }
+
+    /** Für die Vorführung: auf allen vieren, auch ohne Jagd. */
+    public void forceRunning(boolean running) {
+        this.entityData.set(DATA_RUNNING, running);
     }
 
     /** Lässt ihn sofort anspringen (für Tests und die Vorführung). */
