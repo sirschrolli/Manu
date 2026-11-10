@@ -180,18 +180,18 @@ final class SchrolliGameTests {
             helper.assertTrue(boss.currentAttack() != Attack.AWAKEN, "Er erscheint nicht zu Ende");
             // kein Treffer zählt mehr als ein Zwanzigstel seiner Kraft
             float full = boss.getHealth();
-            boss.setInvulnerableTime(0);
+            boss.damageCooldownTime = 0;
             boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
             helper.assertTrue(full - boss.getHealth() < boss.getMaxHealth() * 0.06f && !boss.isDeadOrDying(),
                     "Ein Schlag fällt ihn: " + full + " -> " + boss.getHealth());
             boss.setHealth(5.0f);
-            boss.setInvulnerableTime(0);
+            boss.damageCooldownTime = 0;
             boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
             helper.assertFalse(boss.isDeadOrDying(), "Der tödliche Treffer tötet ihn");
             helper.assertTrue(boss.currentAttack() == Attack.ASCEND, "Kein Aufstieg: " + boss.currentAttack());
             helper.runAfterDelay(SchrolliEntity.ASCEND_SHATTER + 4, () -> {
                 float hp = boss.getHealth();
-                boss.setInvulnerableTime(0);
+                boss.damageCooldownTime = 0;
                 boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
                 helper.assertTrue(boss.getHealth() >= hp && !boss.isDeadOrDying(), "Im Aufstieg verwundbar");
                 helper.runAfterDelay(SchrolliEntity.ASCEND_TICKS - SchrolliEntity.ASCEND_SHATTER, () -> {
@@ -199,7 +199,7 @@ final class SchrolliGameTests {
                     helper.assertTrue(boss.getScale() > 1.2f, "Die Wahre Gestalt ist nicht größer: " + boss.getScale());
                     helper.assertTrue(boss.getHealth() >= boss.getMaxHealth() - 0.5f, "Die neue Leiste ist nicht voll");
                     boss.setHealth(5.0f);
-                    boss.setInvulnerableTime(0);
+                    boss.damageCooldownTime = 0;
                     boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
                     helper.assertTrue(boss.isDeadOrDying(), "Ein zweites Mal steigt er auf");
                     field.close();
@@ -364,7 +364,7 @@ final class SchrolliGameTests {
                             }
                             // … bis genug Schaden ihn unterbricht
                             for (int k = 0; k < 3; k++) {
-                                boss.setInvulnerableTime(0);
+                                boss.damageCooldownTime = 0;
                                 boss.hurtServer(level, level.damageSources().generic(), 60.0f);
                             }
                             helper.runAfterDelay(2, () -> {
@@ -427,7 +427,7 @@ final class SchrolliGameTests {
                 boss.forceAttack(Attack.NONE);
                 boss.forceTrueForm();
                 boss.setHealth(5.0f);
-                boss.setInvulnerableTime(0);
+                boss.damageCooldownTime = 0;
                 boss.hurtServer(level, player.damageSources().playerAttack(player), 1.0e6f);
                 helper.assertTrue(boss.isDeadOrDying(), "Er fällt nicht");
                 helper.assertTrue(altar.state() == CreatorAltarBlockEntity.State.EMPTY, "Der Funke verglüht nicht: " + altar.state());

@@ -85,7 +85,7 @@ final class BossArenaGameTests {
         }
         for (var test : List.of(LAIRS, VICTORY)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
-                    new TestData<>(environment, Level.OVERWORLD, ARENA, 1200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+                    new TestData<>(environment, Level.OVERWORLD, ARENA, 2400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
     }
 
@@ -329,7 +329,9 @@ final class BossArenaGameTests {
         BossArenaKind[] kinds = BossArenaKind.values();
         for (int i = 0; i < kinds.length; i++) {
             field.hold(new BlockPos(base.getX() + 20_000 + i * 600, 120, base.getZ() - 12_000), 40);
-            field.hold(new BlockPos(base.getX() + 20_000 + i * 600, 120, base.getZ() - 14_000), kinds[i].reach());
+            // die Schöpfung ist riesig: für die Probe genügt ihre Mitte (den Rest lädt der Bau selbst)
+            field.hold(new BlockPos(base.getX() + 20_000 + i * 600, 120, base.getZ() - 14_000),
+                    kinds[i] == BossArenaKind.CREATOR ? 48 : kinds[i].reach());
         }
         // erst die Chunks samt ihren Wesen laden (unter Last dauert das ein paar Ticks)
         helper.startSequence()

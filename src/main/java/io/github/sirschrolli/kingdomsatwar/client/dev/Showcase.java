@@ -231,6 +231,8 @@ final class Showcase {
                         MystikShowcase.boss(steps);
                     } else if (scene.equals("anni_boss")) {
                         AnniShowcase.boss(steps);
+                    } else if (scene.equals("creator_boss")) {
+                        SchrolliShowcase.boss(steps);
                     } else if (scene.equals("fae_creatures")) {
                         FaeShowcase.creatures(steps);
                     } else if (scene.equals("fae_portal")) {
