@@ -330,6 +330,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(ModItems.GEMSTONE.get(), 3, 6)));
         // der Weltenfresser: die Beute des stärksten Wesens der Mod (liegt nach dem Sieg auf dem Ring im Norden)
         this.add(ModEntities.WORLD_EATER.get(), LootTable.lootTable()
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SPEAR.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_TROPHY.get(), 1))
                 .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 2))
                 .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 2))
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100))

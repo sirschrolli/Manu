@@ -88,21 +88,21 @@ public class HoardSealBlockEntity extends BlockEntity {
     /** Lichtketten von den Kronensplittern zum Schlund (nur, wo noch ein Splitter steht). */
     private void chains(ServerLevel level) {
         BlockPos c = this.center();
-        Vec3 hub = new Vec3(c.getX() + 0.5, c.getY() + 3.0, c.getZ() + 0.5);
+        // Funken wandern die Lichtketten entlang: vom schwebenden Kristall zum Siegelstern über dem Schlund
+        Vec3 hub = new Vec3(c.getX() + 0.5, c.getY() + 5.5, c.getZ() + 0.5);
         for (int k = 0; k < HoardPiece.SHARDS; k++) {
             BlockPos shard = HoardPiece.shardPosition(c, k);
             if (!level.getBlockState(shard).is(AbyssBlocks.SEAL_SHARD.get())) {
                 continue;
             }
-            Vec3 from = Vec3.atCenterOf(shard).add(0.0, 0.4, 0.0);
+            Vec3 from = Vec3.atBottomCenterOf(shard).add(0.0, 2.5, 0.0);
             Vec3 d = hub.subtract(from);
-            for (int i = 1; i < 8; i++) {
-                double t = (i + level.getRandom().nextDouble() * 0.6) / 8.0;
-                Vec3 p = from.add(d.scale(t)).add(0.0, Math.sin(t * Math.PI) * 1.5, 0.0);
-                level.sendParticles(new DustParticleOptions(0xC8A8FF, 1.1f), p.x, p.y, p.z, 1, 0.0, 0.0, 0.0, 0.0);
+            for (int i = 0; i < 3; i++) {
+                Vec3 p = from.add(d.scale(level.getRandom().nextDouble()));
+                level.sendParticles(new DustParticleOptions(0xC8A8FF, 0.9f), p.x, p.y, p.z, 1, 0.05, 0.05, 0.05, 0.0);
             }
-            level.sendParticles(ParticleTypes.END_ROD, from.x, from.y + 0.4, from.z, 1, 0.1, 0.2, 0.1, 0.01);
         }
+        level.sendParticles(ParticleTypes.END_ROD, hub.x, hub.y, hub.z, 2, 0.4, 0.4, 0.4, 0.02);
     }
 
     private void tickDormant(ServerLevel level) {

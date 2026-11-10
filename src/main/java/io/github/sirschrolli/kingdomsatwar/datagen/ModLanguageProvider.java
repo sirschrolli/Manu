@@ -544,6 +544,16 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.WORLD_EATER.get(), pick("The World-Eater", "Der Weltenfresser"));
         add(ModEntities.WORLD_CHUNK.get(), pick("World Chunk", "Weltbrocken"));
         text("boss.kingdomsatwar.world_eater", "The World-Eater", "Der Weltenfresser");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SPEAR, "World Spear", "Weltenspeer");
+        lore("world_spear", "Forged from the fang of the World-Eater", "Aus dem Fangzahn des Weltenfressers geschmiedet");
+        text(ModItems.loreKey("world_spear", 2), "In the Abyss and the Void: strikes harder; every hit carries one of four worlds",
+                "Im Abgrund und in der Leere: trifft härter; jeder Treffer trägt eine von vier Welten in sich");
+        text(ModItems.loreKey("world_spear", 3), "Embers burn, frost slows, End lifts, shadow blinds – every fourth hit calls down a world chunk",
+                "Glut brennt, Frost lähmt, End hebt, Schatten blendet – jeder vierte Treffer ruft einen Weltbrocken herab");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_TROPHY, "Head of the World-Eater", "Kopf des Weltenfressers");
+        lore("world_eater_trophy", "The trophy of the World Savior", "Die Trophäe des Weltenretters");
+        text(ModItems.loreKey("world_eater_trophy", 2), "Its seams still glow; now and then embers rise from its maw",
+                "Seine Nähte glühen noch; ab und zu steigt Glut aus seinem Rachen");
         text("message.kingdomsatwar.world_eater.wrath", "The World-Eater rages – the ring is breaking!", "Der Weltenfresser tobt – der Ring bricht!");
         text("hoard.kingdomsatwar.warning", "Beneath the ring ahead, something vast is stirring.", "Unter dem Ring vor dir regt sich etwas Gewaltiges.");
         block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SEAL_SHARD, "Crown Shard", "Kronensplitter");

@@ -136,7 +136,7 @@ final class AbyssShowcase {
     }
 
     /** Wartet, bis der Client die Chunks ringsum hat und alles gezeichnet ist (neue Welten erzeugen sich langsam). */
-    private static Step settle(int maxTicks) {
+    static Step settle(int maxTicks) {
         int[] last = {-1, -1};
         int[] stable = {0, 0};
         return (minecraft, ticks) -> {
@@ -162,15 +162,18 @@ final class AbyssShowcase {
     }
 
     /** Kamera mit den Füßen bei (x, y, z) in der Dimension {@code dim}, Blick auf (tx, ty, tz). */
-    private static void look(Deque<Step> steps, String dim, double x, double y, double z, double tx, double ty, double tz) {
-        steps.add(Step.once(minecraft -> {
-            double lx = tx - x;
-            double ly = ty - (y + 1.62);
-            double lz = tz - z;
-            float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
-            float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
-            minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f", dim, x, y, z,
-                    yaw, pitch));
-        }));
+    static void look(Deque<Step> steps, String dim, double x, double y, double z, double tx, double ty, double tz) {
+        steps.add(Step.once(minecraft -> lookNow(minecraft, dim, x, y, z, tx, ty, tz)));
+    }
+
+    /** Wie {@link #look}, sofort. */
+    static void lookNow(net.minecraft.client.Minecraft minecraft, String dim, double x, double y, double z, double tx, double ty, double tz) {
+        double lx = tx - x;
+        double ly = ty - (y + 1.62);
+        double lz = tz - z;
+        float yaw = (float) (-Math.atan2(lx, lz) * 180.0 / Math.PI);
+        float pitch = (float) (-Math.atan2(ly, Math.sqrt(lx * lx + lz * lz)) * 180.0 / Math.PI);
+        minecraft.player.connection.sendCommand(String.format(Locale.ROOT, "execute in %s run tp @s %.2f %.2f %.2f %.1f %.1f", dim, x, y, z,
+                yaw, pitch));
     }
 }

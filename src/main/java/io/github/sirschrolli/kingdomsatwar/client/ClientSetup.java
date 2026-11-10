@@ -165,6 +165,8 @@ public final class ClientSetup {
     @SubscribeEvent
     static void registerSpecialRenderers(net.neoforged.neoforge.client.event.RegisterSpecialModelRendererEvent event) {
         io.github.sirschrolli.kingdomsatwar.client.renderer.golem.GolemRenderers.registerSpecialRenderers(event);
+        event.register(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("world_eater_trophy"),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldEaterTrophyRenderer.ItemRenderer.Unbaked.MAP_CODEC);
     }
 
     @SubscribeEvent
@@ -304,6 +306,10 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.SHATTERED_KING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.ShatteredKingRenderer::new);
         event.registerEntityRenderer(ModEntities.WORLD_EATER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldEaterRenderer::new);
         event.registerEntityRenderer(ModEntities.WORLD_CHUNK.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldChunkRenderer::new);
+        event.registerBlockEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_TROPHY_ENTITY.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldEaterTrophyRenderer::new);
+        event.registerBlockEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SEAL_SHARD_ENTITY.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.SealShardRenderer::new);
         event.registerEntityRenderer(ModEntities.MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.MantaRayRenderer::new);
         event.registerEntityRenderer(ModEntities.GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.GlowJellyfishRenderer::new);
         event.registerEntityRenderer(ModEntities.SHARK.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.SharkRenderer::new);

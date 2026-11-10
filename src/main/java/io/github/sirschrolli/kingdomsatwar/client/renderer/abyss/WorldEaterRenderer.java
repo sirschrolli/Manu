@@ -37,6 +37,7 @@ public class WorldEaterRenderer extends EntityRenderer<WorldEaterEntity, WorldEa
     private static final Identifier BEAM = KingdomsAtWar.id("textures/entity/spell/beam.png");
     private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
     private static final int EMBER = 0xFF7A2A;
+    private static final int DEEP_EMBER = 0x9A240C;
     private static final int WHITE_HOT = 0xFFF0C8;
     private static final int FULL_BRIGHT = 0xF000F0;
 
@@ -189,15 +190,19 @@ public class WorldEaterRenderer extends EntityRenderer<WorldEaterEntity, WorldEa
         Vec3 d = span.scale(1.0 / length);
         pose.rotate(new Quaternionf().rotationTo(0.0f, 1.0f, 0.0f, (float) d.x, (float) d.y, (float) d.z));
         pose.rotate(Axis.YP.rotationDegrees(t * 11.0f));
-        float wide = 2.4f * flicker;
-        float thin = 0.8f * flicker;
+        // ein gewaltiger Strahl: ein breiter, glühender Mantel, darin ein orangeroter Strom und ein weißglühender Kern
+        float outer = 6.4f * flicker;
+        float wide = 3.6f * flicker;
+        float thin = 1.4f * flicker;
+        RenderType slow = RenderTypes.energySwirl(BEAM, 0.0f, -t * 0.12f);
+        collector.submitCustomGeometry(pose, slow, (p, buffer) -> cross(p, buffer, len, outer, repeat * 0.5f, DEEP_EMBER | 0xFF000000));
         collector.submitCustomGeometry(pose, swirl, (p, buffer) -> cross(p, buffer, len, wide, repeat, EMBER | 0xFF000000));
         collector.submitCustomGeometry(pose, swirl, (p, buffer) -> cross(p, buffer, len, thin, repeat, WHITE_HOT | 0xFF000000));
         pose.popPose();
         RenderType halo = RenderTypes.energySwirl(HALO, 0.0f, 0.0f);
         for (int end = 0; end < 2; end++) {
             Vec3 at = end == 0 ? from : state.breathTo;
-            float size = (end == 0 ? 3.0f : 4.6f) * (1.0f + 0.2f * Mth.sin(t * 1.5f + end));
+            float size = (end == 0 ? 6.0f : 9.0f) * (1.0f + 0.2f * Mth.sin(t * 1.5f + end));
             int col = ARGB.srgbLerp(0.4f, EMBER, 0xFFFFFF) | 0xFF000000;
             pose.pushPose();
             pose.translate(at.x, at.y, at.z);

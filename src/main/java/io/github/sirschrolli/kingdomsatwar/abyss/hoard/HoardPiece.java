@@ -46,9 +46,10 @@ public class HoardPiece extends StructurePiece {
     public static final int SHARDS = 7;
     /** Wo das Siegel liegt (relativ zur Mitte, im Kegel unter dem Norden des Rings). */
     public static final int SEAL_Z = -19;
-    static final double R_CLEAR = 64.0;
-    static final int CLEAR_DOWN = 56;
-    static final int CLEAR_UP = 44;
+    /** Der freigeräumte Raum: so weit reicht er höchstens (sein Rand ist unregelmäßig, siehe {@link #clearEdge}). */
+    static final double R_CLEAR = 100.0;
+    static final int CLEAR_DOWN = 74;
+    static final int CLEAR_UP = 86;
 
     private final BlockPos center;
     private final long seed;
@@ -207,15 +208,24 @@ public class HoardPiece extends StructurePiece {
         this.seal(ctx);
     }
 
+    /** Rand des freien Raums in Richtung {@code angle} auf Höhe {@code y}: zwischen 72 % und 100 % von {@link #R_CLEAR}. */
+    private static double clearEdge(LairContext ctx, double angle, int y) {
+        double n = 0.6 * ctx.angleNoise(angle + y * 0.013, 4.0, 151) + 0.4 * ctx.noise(angle * 9.0, y * 0.11, 1.0, 153);
+        return R_CLEAR * (0.72 + 0.28 * n);
+    }
+
     private void column(LairContext ctx, int x, int z, int dx, int dz) {
         double r = Math.sqrt(dx * dx + dz * dz);
         if (r > R_CLEAR + 0.5) {
             return;
         }
-        // den Raum ringsum freiräumen (ein flaches Ellipsoid)
+        // den Raum ringsum freiräumen: ein weites, flaches Auge im Chaos mit unregelmäßigem Rand (die Bruchstücke ringsum
+        // enden zerklüftet, nicht wie abgeschnitten)
+        double angle = Math.atan2(dz, dx);
         for (int y = FLOOR - CLEAR_DOWN; y <= FLOOR + CLEAR_UP; y++) {
-            double dy = (y - FLOOR) * (y < FLOOR ? 1.15 : 1.45);
-            if (r * r + dy * dy <= R_CLEAR * R_CLEAR && !ctx.get(x, y, z).isAir()) {
+            double dy = (y - FLOOR) * (y < FLOOR ? 1.3 : 1.2);
+            double edge = clearEdge(ctx, angle, y);
+            if (r * r + dy * dy <= edge * edge && !ctx.get(x, y, z).isAir()) {
                 ctx.set(x, y, z, Blocks.AIR.defaultBlockState());
             }
         }
@@ -277,6 +287,11 @@ public class HoardPiece extends StructurePiece {
         }
         ctx.set(x, FLOOR + 1, z, chiseled());
         ctx.set(x, FLOOR + 2, z, AbyssBlocks.SEAL_SHARD.get().defaultBlockState().setValue(AmethystClusterBlock.FACING, Direction.UP));
+        // der Splitter kennt die Mitte: seine Lichtkette führt zum Siegelstern über dem Schlund
+        BlockPos pos = new BlockPos(x, FLOOR + 2, z);
+        if (ctx.inside(x, FLOOR + 2, z) && ctx.level.getBlockEntity(pos) instanceof io.github.sirschrolli.kingdomsatwar.block.abyss.SealShardBlockEntity be) {
+            be.setup(this.center.above());
+        }
     }
 
     /** Drei Lavafälle stürzen vom äußeren Rand des Kegels ins Nichts. */
@@ -295,13 +310,14 @@ public class HoardPiece extends StructurePiece {
 
     /** Ringsum treibende Bruchstücke verschlungener Welten (kleine, unförmige Klumpen). */
     private void debris(LairContext ctx) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 26; i++) {
+            // außerhalb der Bahn des Weltenfressers (40 Blöcke), bis an den Rand des freien Raums
             double a = ctx.rand(i, 7, 121) * Mth.TWO_PI;
-            double r = 34.0 + ctx.rand(i, 9, 123) * 24.0;
+            double r = 52.0 + ctx.rand(i, 9, 123) * 22.0;
             int x0 = this.center.getX() + (int) Math.round(Math.cos(a) * r);
             int z0 = this.center.getZ() + (int) Math.round(Math.sin(a) * r);
-            int y0 = FLOOR - 26 + (int) (ctx.rand(i, 11, 125) * 50.0);
-            int size = 2 + (int) (ctx.rand(i, 13, 127) * 3.5);
+            int y0 = FLOOR - 34 + (int) (ctx.rand(i, 11, 125) * 70.0);
+            int size = 2 + (int) (ctx.rand(i, 13, 127) * 4.5);
             int kind = (int) (ctx.rand(i, 15, 129) * 6);
             for (int ox = -size; ox <= size; ox++) {
                 for (int oz = -size; oz <= size; oz++) {

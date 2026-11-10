@@ -1,0 +1,18 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "kingdomsatwar:block/world_eater_trophy"
+      },
+      {
+        "type": "minecraft:special",
+        "base": "kingdomsatwar:block/world_eater_trophy",
+        "model": {
+          "type": "kingdomsatwar:world_eater_trophy"
+        }
+      }
+    ]
+  }
+}

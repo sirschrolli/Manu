@@ -69,6 +69,7 @@ import sea_textures  # noqa: E402
 import fae_textures  # noqa: E402
 import forge_textures  # noqa: E402
 import star_textures  # noqa: E402
+import hoard_textures  # noqa: E402
 import mystik_textures  # noqa: E402
 import anni_textures  # noqa: E402
 import monster_gear_textures  # noqa: E402
@@ -376,6 +377,7 @@ def build_all() -> dict[str, Image.Image]:
     fae_textures.build(put)
     forge_textures.build(put)
     star_textures.build(put)
+    hoard_textures.build(put)
     mystik_textures.build(put)
     anni_textures.build(put)
     monster_gear_textures.build(put)

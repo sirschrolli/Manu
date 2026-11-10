@@ -104,12 +104,16 @@ public final class AbyssBlocks {
     // =====================================================================================
 
     /** Kronensplitter: einer der sieben Splitter der Königskrone, die den Weltenfresser versiegeln (unzerstörbar, ohne Gegenstand). */
-    public static final DeferredBlock<net.minecraft.world.level.block.AmethystClusterBlock> SEAL_SHARD = ModBlocks.BLOCKS.registerBlock(
-            "seal_shard", p -> new net.minecraft.world.level.block.AmethystClusterBlock(9.0f, 3.0f, p),
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.abyss.SealShardBlock> SEAL_SHARD = ModBlocks.BLOCKS.registerBlock(
+            "seal_shard", io.github.sirschrolli.kingdomsatwar.block.abyss.SealShardBlock::new,
             p -> p.mapColor(MapColor.COLOR_PURPLE).noOcclusion().strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.AMETHYST_CLUSTER)
                     .lightLevel(s -> 12).pushReaction(PushReaction.IMMOVEABLE).isValidSpawn((state, level, pos, type) -> false)
                     .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false)
                     .isRedstoneConductor((state, level, pos) -> false));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.abyss.SealShardBlockEntity>>
+            SEAL_SHARD_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register("seal_shard",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.abyss.SealShardBlockEntity::new, SEAL_SHARD.get()));
 
     /** Siegel des Horts: verborgen unter dem Ring, weckt den Weltenfresser (unzerstörbar, ohne Gegenstand). */
     public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlock> HOARD_SEAL = ModBlocks.BLOCKS.registerBlock(
@@ -121,9 +125,37 @@ public final class AbyssBlocks {
             HOARD_SEAL_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register("hoard_seal",
                     () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlockEntity::new, HOARD_SEAL.get()));
 
+    /**
+     * Kopf des Weltenfressers: die Trophäe des Weltenretters – auf einem Sockel aus Chaosgestein (den Kopf zeichnet ein
+     * eigener Renderer; seine Nähte glühen, der Rachen atmet).
+     */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.abyss.WorldEaterTrophyBlock> WORLD_EATER_TROPHY =
+            ModBlocks.blockWithItem("world_eater_trophy", io.github.sirschrolli.kingdomsatwar.block.abyss.WorldEaterTrophyBlock::new,
+                    p -> p.mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).strength(5.0f, 1200.0f)
+                            .sound(SoundType.POLISHED_DEEPSLATE).lightLevel(s -> 6).noOcclusion().pushReaction(PushReaction.IMMOVEABLE),
+                    p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1)
+                            .component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("world_eater_trophy", 2)), TAB);
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.abyss.WorldEaterTrophyBlockEntity>>
+            WORLD_EATER_TROPHY_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register("world_eater_trophy",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.abyss.WorldEaterTrophyBlockEntity::new,
+                            WORLD_EATER_TROPHY.get()));
+
     // =====================================================================================
     // Gegenstände
     // =====================================================================================
+
+    /** Werkstoff des Weltenspeers: härter und schärfer als die Sternenlanze; mit Weltennähten zu reparieren. */
+    public static final net.minecraft.world.item.ToolMaterial WORLD_MATERIAL = new net.minecraft.world.item.ToolMaterial(
+            net.minecraft.tags.BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 3600, 10.0f, 6.0f, 20, ModTags.Items.REPAIRS_WORLD_SPEAR);
+    /**
+     * Der Weltenspeer: aus dem Fangzahn des Weltenfressers geschmiedet (Stoß und Ansturm wie ein Speer, stärker im Abgrund und
+     * in der Leere, Weltenmal und Weltenbrocken).
+     */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.item.abyss.WorldSpearItem> WORLD_SPEAR = item("world_spear",
+            io.github.sirschrolli.kingdomsatwar.item.abyss.WorldSpearItem::new,
+            p -> p.spear(WORLD_MATERIAL, 1.1f, 1.6f, 0.3f, 3.0f, 8.0f, 6.5f, 5.1f, 9.5f, 4.2f).rarity(Rarity.EPIC).fireResistant()
+                    .component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("world_spear", 3)));
 
     /**
      * Rissschlüssel: aus der zerbrochenen Krone des Königs geschmiedet – in der Leere reißt er einen Riss in den Abgrund auf

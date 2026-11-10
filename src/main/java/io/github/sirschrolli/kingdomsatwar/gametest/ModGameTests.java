@@ -194,6 +194,7 @@ public final class ModGameTests {
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
         RealmGameTests.init();    // Monster der Schattenwelt und des Ends
         AbyssGameTests.init();    // der Abgrund
+        HoardGameTests.init();    // der Schlund der Welten und der Weltenfresser
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -264,6 +265,7 @@ public final class ModGameTests {
         GearGameTests.register(event, environment);
         RealmGameTests.register(event, environment);
         AbyssGameTests.register(event, environment);
+        HoardGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

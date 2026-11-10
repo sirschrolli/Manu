@@ -7,6 +7,32 @@
           "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:world_spear"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:world_eater_trophy"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
             "count": 2
           },
           "name": "kingdomsatwar:heart_crystal"

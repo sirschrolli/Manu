@@ -95,6 +95,8 @@ public class WorldEaterEntity extends Monster {
     private static final int TRAIL = 900;
 
     public static final int AWAKEN_TICKS = 160;
+    /** Ab diesem Tick des Erwachens steigt er empor (nach dem letzten Kronensplitter). */
+    public static final int RISE_TICK = 84;
     public static final int BITE_TICKS = 72;
     public static final int BITE_STRIKE = 34;
     public static final int DEVOUR_TICKS = 104;
@@ -110,6 +112,8 @@ public class WorldEaterEntity extends Monster {
     public static final int WRATH_TICKS = 70;
     public static final int DEATH_TICKS = 170;
     public static final double ORBIT = 40.0;
+    /** Erfahrung beim Sieg (wie beim Zerbrochenen König und bei Asteria). */
+    public static final int XP_REWARD = 500;
 
     private static final EntityDataAccessor<Float> DATA_MAW = SynchedEntityData.defineId(WorldEaterEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> DATA_BREATH = SynchedEntityData.defineId(WorldEaterEntity.class,
@@ -723,7 +727,7 @@ public class WorldEaterEntity extends Monster {
         if (t == 2) {
             level.playSound(null, BlockPos.containing(c), ModSounds.WORLD_EATER_AWAKEN.get(), SoundSource.HOSTILE, 6.0f, 1.0f);
         }
-        if (t < 96) {
+        if (t < RISE_TICK) {
             // er wartet tief unter dem Schlund; aus der Tiefe steigt Glut auf
             if (t % 3 == 0) {
                 level.sendParticles(ParticleTypes.LAVA, c.x, c.y - 2.0, c.z, 6, HoardPiece.R_IN * 0.4, 1.0, HoardPiece.R_IN * 0.4, 0.0);
@@ -731,11 +735,20 @@ public class WorldEaterEntity extends Monster {
             }
             return;
         }
-        // er steigt durch den Schlund empor, beschreibt einen Bogen und brüllt
-        this.setMaw(t > 118 ? 1.0f : 0.4f);
-        Vec3 goal = t < 130 ? c.add(0.0, 30.0, 0.0) : this.orbitPoint(0.0, 10.0);
-        this.steer(goal, t < 130 ? 1.3 : 1.0, 9.0);
-        if (t == 120) {
+        // er steigt durch den Schlund empor (der Kopf bricht nach gut 26 Ticks durch), beschreibt einen Bogen und brüllt
+        this.setMaw(t > RISE_TICK + 36 ? 1.0f : 0.4f);
+        boolean ascending = t < RISE_TICK + 54;
+        Vec3 goal = ascending ? c.add(0.0, 30.0, 0.0) : this.orbitPoint(0.0, 10.0);
+        this.steer(goal, ascending ? 1.3 : 1.0, 9.0);
+        Vec3 head = this.headCenter();
+        if (t > RISE_TICK + 16 && head.y > c.y - 6.0 && head.y < c.y + 4.0) {
+            // der Durchbruch: Glut und Brocken spritzen aus dem Schlund
+            level.sendParticles(ParticleTypes.LAVA, head.x, c.y, head.z, 14, 3.0, 0.5, 3.0, 0.0);
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, AbyssBlocks.CHAOS_STONE.base().get().defaultBlockState()), head.x, c.y,
+                    head.z, 30, 4.0, 1.0, 4.0, 0.3);
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, head.x, c.y, head.z, 12, 4.0, 1.0, 4.0, 0.05);
+        }
+        if (t == RISE_TICK + 42) {
             this.roar(level, 2.0f);
         }
         if (t >= AWAKEN_TICKS) {
@@ -1130,12 +1143,13 @@ public class WorldEaterEntity extends Monster {
                     BlockPos p = pos.above(dy);
                     BlockState state = level.getBlockState(p);
                     if (!state.isAir() && !state.is(AbyssBlocks.HOARD_SEAL.get()) && state.getDestroySpeed(level, p) >= 0.0f) {
-                        FallingBlockEntity.fall(level, p, state);
+                        // die Brocken stürzen ins Nichts: wo sie aufschlagen, zerschellen sie (kein Block, kein Gegenstand)
+                        FallingBlockEntity.fall(level, p, state).disableDrop();
                     }
                 }
                 BlockPos above = pos.above();
                 if (!level.getBlockState(above).isAir() && level.getBlockState(above).getDestroySpeed(level, above) >= 0.0f) {
-                    FallingBlockEntity.fall(level, above, level.getBlockState(above));
+                    FallingBlockEntity.fall(level, above, level.getBlockState(above)).disableDrop();
                 }
             }
         }
@@ -1279,6 +1293,7 @@ public class WorldEaterEntity extends Monster {
                 falling.setDeltaMovement((this.random.nextDouble() - 0.5) * 0.8, 0.3 + this.random.nextDouble() * 0.4,
                         (this.random.nextDouble() - 0.5) * 0.8);
                 falling.dropItem = false;
+                falling.disableDrop();
             }
         }
         if (this.deathTime == DEATH_TICKS - 12) {
@@ -1334,7 +1349,8 @@ public class WorldEaterEntity extends Monster {
                 level.addFreshEntity(item);
             }
         }
-        net.minecraft.world.entity.ExperienceOrb.award(level, spot, 2000);
+        // Erfahrung wie bei den anderen großen Gegnern (Zerbrochener König, Asteria): fest 500, auf dem Ring statt über dem Nichts
+        net.minecraft.world.entity.ExperienceOrb.award(level, spot, XP_REWARD);
         level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, spot.x, spot.y + 1.0, spot.z, 80, 1.0, 1.5, 1.0, 0.4);
     }
 

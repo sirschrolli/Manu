@@ -135,8 +135,11 @@ public class WorldChunkEntity extends ThrowableProjectile {
         level.playSound(null, BlockPos.containing(at), ModSounds.WORLD_EATER_CHUNK.get(), SoundSource.HOSTILE, 2.5f,
                 kind == Kind.FROST ? 1.25f : kind == Kind.END ? 1.1f : 0.9f);
         Entity owner = this.getOwner();
+        // ein Brocken des Weltenspeers trifft weder seinen Träger noch dessen Verbündete und Tiere
+        boolean fromPlayer = owner instanceof net.minecraft.world.entity.player.Player;
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(at, at).inflate(2.8),
-                e -> e.isAlive() && !(e instanceof WorldEaterEntity))) {
+                e -> e.isAlive() && !(e instanceof WorldEaterEntity) && (!fromPlayer || e != owner && !e.isAlliedTo(owner)
+                        && !(e instanceof net.minecraft.world.entity.OwnableEntity pet && pet.getOwner() == owner)))) {
             double d = e.position().add(0.0, e.getBbHeight() * 0.5, 0.0).distanceTo(at);
             if (d > 3.2) {
                 continue;

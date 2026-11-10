@@ -232,6 +232,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_GLUT_SPEAR = mod("repairs_glut_spear");
         /** Repariert die Sternenlanze (Sternsplitter). */
         public static final TagKey<Item> REPAIRS_STAR_LANCE = mod("repairs_star_lance");
+        public static final TagKey<Item> REPAIRS_WORLD_SPEAR = mod("repairs_world_spear");
         /** Repariert die Sternenschwingen (Phantomhaut, Sternsplitter). */
         public static final TagKey<Item> REPAIRS_STAR_WINGS = mod("repairs_star_wings");
         /** Repariert Kartendeck und Zylinder der Mystik (Feenstaub). */

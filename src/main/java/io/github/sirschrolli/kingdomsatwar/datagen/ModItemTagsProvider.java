@@ -200,7 +200,11 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 .getResourceKey(net.minecraft.world.item.Items.NETHERITE_SCRAP).orElseThrow());
         // die Speere der Bosse sind Speere wie die von Minecraft: verzauberbar (Ausfallschritt, Schärfe, Haltbarkeit …)
         add(ItemTags.SPEARS, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR,
-                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE);
+                io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_LANCE,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SPEAR);
+        // der Weltenspeer: mit Weltennähten zu reparieren
+        tag(ModTags.Items.REPAIRS_WORLD_SPEAR).add(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ITEM,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM.getId()));
         // Asteria: Sternsplitter reparieren Lanze und Schwingen, die Schwingen auch Phantomhaut; verzauberbar wie Elytren
         add(ModTags.Items.REPAIRS_STAR_LANCE, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);
         add(ModTags.Items.REPAIRS_STAR_WINGS, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);

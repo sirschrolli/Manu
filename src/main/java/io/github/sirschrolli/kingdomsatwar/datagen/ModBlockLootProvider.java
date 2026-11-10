@@ -156,7 +156,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.FLOAT_CRYSTAL,
-                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL)) {
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_TROPHY)) {
             dropSelf(block.get());
         }
         // Leerenmoos: mit Behutsamkeit das Moos, sonst der Stein darunter

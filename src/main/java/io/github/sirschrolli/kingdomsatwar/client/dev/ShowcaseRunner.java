@@ -84,7 +84,8 @@ public final class ShowcaseRunner {
                     new LevelSettings.DifficultySettings(Difficulty.PEACEFUL, false, false), true, WorldDataConfiguration.DEFAULT);
             // Bauwerke: in echten Welten immer, in der flachen Testwelt nur für Szenen, die sie brauchen (z. B. Dörfer)
             boolean structures = !flat || SCENES.contains("village") || SCENES.contains("citadel") || SCENES.contains("nyxar")
-                    || SCENES.contains("siteworld") || SCENES.contains("void_throne") || SCENES.contains("forge_boss") || SCENES.contains("star_boss");
+                    || SCENES.contains("siteworld") || SCENES.contains("void_throne") || SCENES.contains("forge_boss") || SCENES.contains("star_boss")
+                    || SCENES.contains("abyss_hoard");
             WorldOptions options = new WorldOptions("kingdoms at war".hashCode(), structures, false);
             WorldOpenFlows flows = minecraft.createWorldOpenFlows();
             LOGGER.info("[Showcase] Erzeuge Welt '{}' (flach: {})", folder, flat);

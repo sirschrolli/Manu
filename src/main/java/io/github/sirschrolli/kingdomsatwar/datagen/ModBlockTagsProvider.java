@@ -201,7 +201,8 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.FLOAT_CRYSTAL,
-                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL);
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_TROPHY);
         add(BlockTags.NEEDS_IRON_TOOL, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM);
         add(BlockTags.ANIMALS_SPAWNABLE_ON, ShadowBlocks.SHADOW_GRASS, ShadowBlocks.GLIMMER_MOSS);
         add(BlockTags.SUPPORTS_DRY_VEGETATION, ShadowBlocks.SHADOW_SAND, ShadowBlocks.SHADOW_SOIL, ShadowBlocks.ASH_SNOW_BLOCK);
