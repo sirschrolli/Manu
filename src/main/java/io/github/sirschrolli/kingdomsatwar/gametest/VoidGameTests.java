@@ -301,6 +301,17 @@ final class VoidGameTests {
      * Kronensplitter, Ruf der Wächter, Risse der Leere, Leerenbeben und Sternenstrahl; besiegt zerfällt er, lässt seine
      * Krone fallen und der Thron bleibt leer.
      */
+    /** Wartet höchstens {@code maxTicks}, bis {@code done} gilt, und macht dann weiter – sonst schlägt der Test fehl. */
+    private static void await(GameTestHelper helper, java.util.function.BooleanSupplier done, int maxTicks, String message, Runnable then) {
+        if (done.getAsBoolean()) {
+            then.run();
+        } else if (maxTicks <= 0) {
+            helper.fail(message);
+        } else {
+            helper.runAfterDelay(1, () -> await(helper, done, maxTicks - 1, message, then));
+        }
+    }
+
     private static void shatteredKingFight(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         floor(helper, 9);
@@ -323,8 +334,9 @@ final class VoidGameTests {
         helper.assertTrue(king.getHealth() >= before, "Beim Erwachen ist der König verwundbar");
         var soldier = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(io.github.sirschrolli.kingdomsatwar.entity.soldier.SoldierType.KNIGHT).get(),
                 new BlockPos(4, 1, 7));
-        helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.AWAKEN_TICKS + 4, () -> {
-            helper.assertFalse(king.isAwakening(), "Der König erhebt sich nicht ganz");
+        // das Erwachen zählt KI-Takte, nicht Spieltakte: warten, bis er ganz steht (höchstens 40 Takte länger)
+        await(helper, () -> !king.isAwakening(), io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.AWAKEN_TICKS + 40,
+                "Der König erhebt sich nicht ganz", () -> {
             float health = soldier.getHealth();
             king.forceAttack(level, "slam_left", soldier, true);
             helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.SLAM_IMPACT + 3, () -> {
@@ -398,14 +410,22 @@ final class VoidGameTests {
                     // fünf Blöcke vor der Stelle, wo die Fäuste einschlagen (zum König hin): nur der Ring erreicht ihn
                     net.minecraft.world.phys.Vec3 g = king.slamPoint();
                     net.minecraft.world.phys.Vec3 back = king.position().subtract(g).multiply(1.0, 0.0, 1.0).normalize();
+                    // was von den Rissen noch glimmt, räumen (sonst trifft ihn das und nicht die Fäuste)
+                    level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30),
+                            e -> e.kind() == SpellFxEntity.Kind.PILLAR || e.kind() == SpellFxEntity.Kind.FISSURE).forEach(net.minecraft.world.entity.Entity::discard);
                     soldier.teleportTo(g.x + back.x * 5.0, g.y, g.z + back.z * 5.0);
-                    float quakeBefore = soldier.getHealth();
+                    float[] quakeBefore = {soldier.getHealth()};
+                    // gemessen wird erst kurz vor dem Einschlag: es zählt nur, was die Fäuste anrichten
+                    helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_SLAM - 2, () -> {
+                        soldier.setHealth(soldier.getMaxHealth());
+                        quakeBefore[0] = soldier.getHealth();
+                    });
                     helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_SLAM + 2, () -> {
-                        helper.assertTrue(soldier.getHealth() >= quakeBefore, "Die Fäuste treffen ihn auf fünf Blöcke");
+                        helper.assertTrue(soldier.getHealth() >= quakeBefore[0], "Die Fäuste treffen ihn auf fünf Blöcke");
                         helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30),
                                 e -> e.kind() == SpellFxEntity.Kind.SHOCKWAVE).isEmpty(), "Kein Bebenring");
                         helper.runAfterDelay(12, () -> {
-                            helper.assertTrue(soldier.getHealth() < quakeBefore, "Der Bebenring trifft nicht");
+                            helper.assertTrue(soldier.getHealth() < quakeBefore[0], "Der Bebenring trifft nicht");
                             helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_TICKS
                                     - io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.QUAKE_SLAM - 10, () -> {
                                 soldier.setHealth(soldier.getMaxHealth());

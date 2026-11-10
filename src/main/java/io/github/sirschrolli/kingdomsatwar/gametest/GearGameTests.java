@@ -143,7 +143,8 @@ final class GearGameTests {
         ServerLevel level = helper.getLevel();
         floor(helper);
         Mob wearer = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get(), new BlockPos(2, 1, 4));
-        Mob attacker = helper.spawnWithNoFreeWill(ModEntities.SOLDIERS.get(SoldierType.SWORDSMAN).get(), new BlockPos(4, 1, 4));
+        // ein Feind (Verbündete der Soldaten richten keinen Schaden an – dann gäbe es auch keine Vergeltung)
+        Mob attacker = helper.spawnWithNoFreeWill(net.minecraft.world.entity.EntityTypes.VINDICATOR, new BlockPos(4, 1, 4));
         EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
         List<DeferredItem<net.minecraft.world.item.Item>> pelt = MonsterGear.peltSet();
         List<DeferredItem<net.minecraft.world.item.Item>> ember = MonsterGear.emberSet();
@@ -159,6 +160,8 @@ final class GearGameTests {
         helper.assertTrue(MonsterGearEvents.fullSet(wearer) == MonsterGearEvents.ArmorSet.EMBER, "Der Glutwurmsatz wird nicht erkannt");
         MonsterGearEvents.applySetBonus(wearer, MonsterGearEvents.ArmorSet.EMBER);
         helper.assertTrue(wearer.hasEffect(MobEffects.FIRE_RESISTANCE), "Der Glutwurm-Panzer macht nicht feuerfest");
+        attacker.clearFire();
+        helper.assertTrue(!attacker.isOnFire(), "Der Angreifer brennt schon vorher");
         wearer.hurtServer(level, level.damageSources().mobAttack(attacker), 2.0f);
         helper.assertTrue(attacker.isOnFire(), "Wer den Glutwurm-Panzer trifft, fängt kein Feuer");
         helper.assertTrue(new ItemStack(MonsterGear.EMBER_CHESTPLATE.get()).has(net.minecraft.core.component.DataComponents.DAMAGE_RESISTANT),

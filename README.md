@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.69.0 – Neue Monster.** Vier neue Monster jagen in der Oberwelt und im Nether – mit eigenen Modellen, Animationen, Angriffen und Klängen. Der **Werwolf** streift nachts durch Wälder und Taiga (bei Vollmond öfter): Er heult und wird danach schneller und stärker, jagt auf allen vieren und springt sein Opfer aus mehreren Blöcken an – im Tageslicht wird er matt, und die **Mondsilberklinge** trifft ihn besonders hart. Der **Moorschlurfer** lauert halb versunken in Sümpfen und Mooren, steigt aus dem Schlamm, sobald man herankommt, schleudert Schlammklumpen (verlangsamen und blenden) und packt mit Wurzeln zu; in Wasser und Regen heilt er. Im Nether bricht der **Glutwurm** aus großen Lavaseen hervor, richtet sich wie eine Kobra auf, beißt zu oder spuckt Magma – an Land erkaltet er. Und durch das Seelensandtal schweben **Aschengeister**: Sie werfen Seelenfeuer, lassen Aschewolken aufwallen und verwehen zu Asche, um hinter ihrem Gegner wieder aufzutauchen.
+> **Testversion 0.70.0 – Waffen und Rüstungen aus Monsterteilen.** Die neuen Monster lassen Teile fallen – Pelz und Klauen des Werwolfs, Wurzeln und das glühende Herz des Moorschlurfers, Schuppen und Fangzahn des Glutwurms, Asche und Schleier des Aschengeists –, und daraus entstehen vier Waffen und zwei Rüstungen, in der Hand und am Körper als echte 3D-Modelle. Die **Krallenklinge** trägt drei gekrümmte Werwolfsklauen, trifft nachts härter und versetzt nach jedem Sieg in einen Blutrausch; die **Moorkeule** mit dem grün glühenden Moorherz lässt Wurzeln zupacken und heilt sich in Wasser und Regen; die **Glutzahn-Klinge** aus einem gewaltigen Fangzahn mit glühender Ader setzt in Brand und trifft Brennende härter; die **Seelensense** mit Schädel und blau glühender Schneide schwächt und brennt – und mit Rechtsklick **verweht** man ein Stück nach vorn. Der **Werwolfspelz** setzt einem einen Wolfskopf mit glühenden Bernsteinaugen auf, dazu Pelzumhang, Wolfsschwanz und Pelzstulpen (voller Satz: nachts schneller und Nachtsicht); der **Glutwurm-Panzer** trägt große, nach hinten geschwungene Hörner, einen Flossenkamm, Rückenstacheln und Schulterdornen, alle glühend (voller Satz: feuerfest, und wer seinen Träger trifft, fängt Feuer).
+> In 0.69 kamen vier neue Monster in die Oberwelt und den Nether – mit eigenen Modellen, Animationen, Angriffen und Klängen. Der **Werwolf** streift nachts durch Wälder und Taiga (bei Vollmond öfter): Er heult und wird danach schneller und stärker, jagt auf allen vieren und springt sein Opfer aus mehreren Blöcken an – im Tageslicht wird er matt, und die **Mondsilberklinge** trifft ihn besonders hart. Der **Moorschlurfer** lauert halb versunken in Sümpfen und Mooren, steigt aus dem Schlamm, sobald man herankommt, schleudert Schlammklumpen (verlangsamen und blenden) und packt mit Wurzeln zu; in Wasser und Regen heilt er. Im Nether bricht der **Glutwurm** aus großen Lavaseen hervor, richtet sich wie eine Kobra auf, beißt zu oder spuckt Magma – an Land erkaltet er. Und durch das Seelensandtal schweben **Aschengeister**: Sie werfen Seelenfeuer, lassen Aschewolken aufwallen und verwehen zu Asche, um hinter ihrem Gegner wieder aufzutauchen.
 > In 0.68 lernten fünf Bosse je zwei neue Angriffe, mit eigenen Effekten und Klängen: **Karkinos** stemmt sich in den Sand und dreht sich zum **Mahlstrom**: Ein Strudel zieht alle in einer Spirale zu ihm, dann bricht eine Wassersäule los; seine **Blasenfalle** schließt bis zu drei Gegner in schillernde Blasen ein, in denen sie hilflos emporschweben und Luft verlieren. **Noctua** lässt den Mond sich **verfinstern** – Dunkelheit, dann stürzen Mondstrahlen in leuchtende Kreise – und spinnt ihr Ziel in einen **Seidenkokon**. **Malleus** schleudert die **Glutkette**, reißt dich heran und schmettert den Hammer nieder; sein **Glutfächer** jagt Feuersäulen über das Dach. **Asteria** öffnet ein **Schwarzes Loch**: ein Wirbel aus Sternenstaub um einen schwarzen Kern mit gleißendem Lichtring, der alles ansaugt – Wesen, Pfeile, Licht – und schließlich in sich zusammenstürzt; dazu schickt sie **Mondsicheln** aus Licht dicht über den Boden (zur Seite treten oder darüber springen!). Der **Zerbrochene König** gräbt die Klauen in den Boden und reißt die **Risse der Leere** auf, aus denen die Leere Säule um Säule hervorbricht, und im **Leerenbeben** rollen Ringe aus Leerenenergie über den ganzen Platz.
 > In 0.67 kam Anni der Troll: In seltenen **Fehlerzonen** der Oberwelt wird er aus dem Fehlerkern geladen – ein riesiger Troll, der glitcht wie ein Spielfehler (1.500 Lebenspunkte, acht Angriffe, Absturz und Neustart unter halber Kraft); beim ersten Tod lädt er eine Sicherung und kehrt als **Anni 2.0** mit dem Speedhack zurück. Besiegt hinterlässt er den **Bannhammer** und die **Fehlerflügel**.
 > In 0.66 kam MissMystik, die Feen-Zauberkünstlerin: Auf verlassenen **Zauberbühnen** im Feenreich springt sie aus dem Großen Zauberzylinder, sobald man herantritt – neun Tricks mit Karten, Lichttauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, eine Zugabe unter 60 % und das große Finale; besiegt hinterlässt sie das **Kartendeck der Mystik** und den **Zylinder der Mystik** (ein 3D-Hut, der dich in höchster Not unsichtbar macht).
@@ -323,7 +324,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung, Rängen und Proviant, Garnison und Schlachtzug, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
-| Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule | ✅ fertig |
+| Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
 | Bauen: Steine, Dächer, Fachwerk, Putz, Bleiglas, Burgtür, Fensterläden, Laternen, Kronleuchter, Zinnen, Möbel | ✅ fertig |
@@ -2231,6 +2232,37 @@ Aschengeister zu dritt.
 | **Glutwurm** | große Lavaseen in Netherödnis, Basaltdeltas und Karmesinwald | schwimmt dicht unter der Lava (nur der glühende Kamm schaut heraus), **taucht auf** und richtet sich wie eine Kobra auf: Wer nah ist, den **beißt** er (bis 6,5 Blöcke weit, setzt in Brand), nach dem Fernen **spuckt** er drei Magmabatzen (entzünden, wo sie aufschlagen); an Land erkaltet er und sucht die Lava | Magmacreme, selten Lohenstaub oder Feuerdrachen-Schuppen |
 | **Aschengeist** | Seelensandtal, Basaltdeltas | schwebt und umkreist sein Ziel; **Seelenfeuer** (fliegt gerade, setzt in Brand, verlangsamt, schwächt), **Aschewolke** um sein Opfer (blendet, verlangsamt), Krallen mit Verdorrung; getroffen **verweht** er zu Asche – unsichtbar und unverwundbar – und setzt sich hinter seinem Gegner wieder zusammen; Wasser schadet ihm, Feuer und Stürze nicht | Schwarzpulver, Knochen, selten Ghastträne |
 
+#### Waffen und Rüstungen aus Monsterteilen (seit 0.70)
+
+![Krallenklinge, Glutzahn-Klinge, Moorkeule, Seelensense, Werwolfspelz und Glutwurm-Panzer](docs/bilder/monsterausruestung.jpg)
+
+Aus den Teilen der neuen Monster entstehen vier Waffen und zwei Rüstungen. Im Inventar sind sie Bilder, in der Hand und am
+Körper echte 3D-Modelle – gekrümmte Klauen, Klingen und Hörner aus vielen gedrehten Gliedern; was glüht, leuchtet auch im
+Dunkeln.
+
+| Teil | von | Beute |
+|---|---|---|
+| **Werwolfspelz** | Werwolf | 60 % (+10 % je Stufe Plünderung) |
+| **Werwolfsklaue** | Werwolf | 0–2 |
+| **Moorwurzel** | Moorschlurfer | 1–2 |
+| **Moorherz** | Moorschlurfer | 30 % (+6 % je Stufe) |
+| **Glutwurmschuppe** | Glutwurm | 1–3 |
+| **Glutzahn** | Glutwurm | 40 % (+8 % je Stufe) |
+| **Seelenasche** | Aschengeist | 1–2 |
+| **Aschenschleier** | Aschengeist | 30 % (+6 % je Stufe) |
+
+| Waffe | Rezept | Schaden / Tempo | Haltbarkeit | Kräfte |
+|---|---|---|---|---|
+| **Krallenklinge** | 3 Werwolfsklauen, Werwolfspelz, Eisenbarren | 6,5 / 2,1 | 900 | nachts +2 Schaden; nach jedem Sieg 8 Sekunden **Blutrausch** (Schnelligkeit und Stärke) |
+| **Moorkeule** | Moorherz, 4 Moorwurzeln | 8,5 / 0,9 | 1.100 | bei etwa jedem dritten Treffer packen **Wurzeln** zu (Langsamkeit V, 1,5 Sekunden); repariert sich in Wasser und Regen |
+| **Glutzahn-Klinge** | 2 Glutzähne, 2 Glutwurmschuppen, Lohenrute | 7,5 / 1,6 | 1.600 | setzt 5 Sekunden in Brand; gegen Brennende +4 Schaden; verbrennt nicht in Lava |
+| **Seelensense** | 3 Seelenasche, Aschenschleier, 2 Knochen | 9 / 1,1 | 1.400 | schwächt und setzt in Brand (3 Sekunden); **Rechtsklick: Verwehen** – bis zu 7 Blöcke nach vorn, kurz unsichtbar und unverwundbar (7 Sekunden Abklingzeit) |
+
+| Rüstung | Rezept | Schutz | voller Satz | Aussehen |
+|---|---|---|---|---|
+| **Werwolfspelz** (Wolfskopf-Haube, Pelzmantel, Pelzbeinlinge, Pelzstiefel) | Werwolfspelz und Leder | 15 wie Eisen; je Teil +2 % Tempo; schützt vor der Kälte im Pulverschnee | nachts Schnelligkeit und Nachtsicht | Wolfskopf mit Schnauze, Fängen, spitzen Ohren und glühenden Bernsteinaugen; Pelzkragen, Schulterpelz, Umhang bis zur Hüfte, Wolfsschwanz, Pelzstulpen |
+| **Glutwurm-Panzer** (Hörnerhelm, Schuppenpanzer, Beinschienen, Stiefel) | Glutwurmschuppen | 20 und Härte 2 wie Diamant; etwas Rückstoßresistenz; verbrennt nicht in Lava | feuerfest; wer den Träger im Nahkampf trifft, brennt 4 Sekunden | große, nach hinten geschwungene Hörner mit glühenden Spitzen, Flossenkamm, Stirnplatte mit Glutnaht, vier Rückenstacheln, Schulterplatten mit Dornen |
+
 ### Wilde Kreaturen
 
 ![Wildschweine, Hirsche, Gänse, Irrlicht, Höhlentroll und Lindwurm](docs/bilder/kreaturen.jpg)
@@ -2380,6 +2412,9 @@ benutzt Schleichen + Rechtsklick die Wesen wie immer.
 - **Drachenschuppen-Rüstung** (6 Arten) mit Set-Bonus: Feuerresistenz (Feuer), Tempo und Frostschutz (Eis),
   doppeltes Tempo (Blitz), Regeneration (Natur), Resistenz (Erde), Wasseratmung und Delfinsgunst (Wasser).
 - **Wyvernit-Gleiter:** gleitet wie Elytren. **Königskrone:** Glück +2. **Trollkeule:** schwer, schleudert Gegner weg.
+- **Aus Monsterteilen** (seit 0.70): Krallenklinge, Moorkeule, Glutzahn-Klinge und Seelensense, Werwolfspelz und
+  Glutwurm-Panzer – als 3D-Modelle, mit eigenen Kräften und Satzboni (siehe
+  [Waffen und Rüstungen aus Monsterteilen](#waffen-und-rüstungen-aus-monsterteilen-seit-070)).
 
 ### Magie
 
@@ -2714,7 +2749,9 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Seidenkokon), Malleus (Glutkette, Glutfächer), Asteria (Schwarzes Loch, Mondsicheln) und den Zerbrochenen König
      (Risse der Leere, Leerenbeben);
    - **0.69 – Neue Monster** (fertig): Werwolf, Moorschlurfer, Glutwurm und Aschengeist;
-   - danach weitere Monster (Schattenwelt und End) und neue 3D-Waffen und -Rüstungen (auch aus Teilen der neuen Monster);
+   - **0.70 – Waffen und Rüstungen aus Monsterteilen** (fertig): Krallenklinge, Moorkeule, Glutzahn-Klinge und Seelensense,
+     Werwolfspelz und Glutwurm-Panzer – alle als 3D-Modelle;
+   - danach weitere Monster (Schattenwelt und End);
    - zuletzt **Der Abgrund:** Hinter der Leere liegt das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse. Dort wartet der **Weltenfresser**, den der Zerbrochene König einst
      versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Der Weg dorthin öffnet sich, wenn der König

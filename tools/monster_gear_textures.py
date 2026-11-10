@@ -438,12 +438,12 @@ def ember_fang_atlas() -> tuple[Image.Image, Image.Image]:
     img, glow = _atlas()
 
     def wrap(x, y, w, h):
-        a = (y // 2) % 4
-        if x == a:
-            return BLAZE[4] if y % 2 == 0 else BLAZE[3]                    # Kordel, oben
-        if x == 3 - a:
-            return BLAZE[2]                                                # Kordel, unten
-        return BASALT[3] if (x + y) % 4 == 0 else BASALT[2]
+        k = (y + x) % 5                                                    # eine glutrote Kordel, schräg herumgewickelt
+        if k == 0:
+            return BLAZE[4] if x in (1, 2) else BLAZE[3]
+        if k == 1:
+            return BLAZE[2]
+        return BASALT[3] if k == 2 else BASALT[2]
     _paint(img, R["wrap"], wrap)
 
     def scales(x, y, w, h):
@@ -801,7 +801,7 @@ def armor_icons(put: Callable[[str, Image.Image], None]) -> None:
     pieces = (("helmet", armor.OPEN_HELMET), ("chestplate", armor.CHESTPLATE), ("leggings", armor.LEGGINGS), ("boots", armor.BOOTS))
     for (piece, shape), overlay in zip(pieces, (PELT_HELMET, PELT_CHEST, PELT_LEGS, PELT_BOOTS)):
         s = _fur_pattern(armor.base(shape))
-        put(f"item/werewolf_pelt_{piece}", armor.finish(s, overlay, {"A": FUR, "B": LEATHER, "C": BONE}, prefer=("A", "C", "B")))
+        put(f"item/werewolf_pelt_{piece}", armor.finish(s, overlay, {"A": FUR_SOFT, "B": LEATHER, "C": BONE}, prefer=("A", "C", "B")))
     for (piece, shape), overlay in zip(pieces, (EMBER_HELMET, EMBER_CHEST, EMBER_LEGS, EMBER_BOOTS)):
         s = armor.scale_pattern(armor.base(shape))
         put(f"item/ember_scale_{piece}", armor.finish(s, overlay, {"A": BASALT, "C": BASALT, "D": EMBER}, prefer=("A", "C", "D")))
@@ -912,9 +912,9 @@ def pelt_parts() -> tuple[Image.Image, Image.Image]:
     for u in (28, 34):
         _box(img, u, 8, 1, 2, 1, lambda x, y, f, fw, fh: BONE[6] if y == fh - 1 or f == "bottom" else BONE[5])
     for v in (8, 10):
-        for target, colors in ((img, (AMBER[4], AMBER[3])), (glow, (AMBER[5], AMBER[4]))):
-            target.putpixel((40, v), colors[0])
-            target.putpixel((41, v), colors[1])
+        for target, color in ((img, AMBER[4]), (glow, AMBER[5])):
+            target.putpixel((40, v), color)
+            target.putpixel((41, v), color)
     _box(img, 0, 12, 10, 3, 6, _fur_px(71, ragged=True))
     _box(img, 0, 22, 6, 2, 6, _fur_px(72, ragged=True))
     _box(img, 24, 22, 6, 2, 6, _fur_px(73, light=False, ragged=True))
