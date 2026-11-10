@@ -57,7 +57,61 @@ public class ModRecipeProvider extends RecipeProvider {
         voidRecipes();
         shadowTreasureRecipes();
         faeRecipes();
+        monsterGearRecipes();
         naturalChains();
+    }
+
+    // =====================================================================================
+    // Waffen und Rüstungen aus Monsterteilen (0.70)
+    // =====================================================================================
+
+    private void monsterGearRecipes() {
+        Item claw = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW.get();
+        Item pelt = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT.get();
+        Item root = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT.get();
+        Item heart = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_HEART.get();
+        Item scale = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE.get();
+        Item fang = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG.get();
+        Item ash = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH.get();
+        Item veil = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.ASH_VEIL.get();
+        // Krallenklinge: drei Klauen, mit Pelz an einen eisernen Faustgriff gebunden
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.CLAW_BLADE.get())
+                .pattern("CCC").pattern(" P ").pattern(" I ")
+                .define('C', claw).define('P', pelt).define('I', Items.IRON_INGOT)
+                .unlockedBy(getHasName(claw), has(claw)).save(output, key("claw_blade"));
+        // Moorkeule: Wurzeln um ein Moorherz geflochten
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_CLUB.get())
+                .pattern(" HR").pattern(" RR").pattern("R  ")
+                .define('H', heart).define('R', root)
+                .unlockedBy(getHasName(heart), has(heart)).save(output, key("bog_club"));
+        // Glutzahn-Klinge: zwei Fangzähne, Schuppen als Parierstange, eine Lohenrute als Griff
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG_BLADE.get())
+                .pattern(" F ").pattern("SFS").pattern(" B ")
+                .define('F', fang).define('S', scale).define('B', Items.BLAZE_ROD)
+                .unlockedBy(getHasName(fang), has(fang)).save(output, key("ember_fang_blade"));
+        // Seelensense: Seelenasche als Klinge, ein Aschenschleier, Knochen als Schaft
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_SCYTHE.get())
+                .pattern("AAV").pattern(" BA").pattern("B  ")
+                .define('A', ash).define('V', veil).define('B', Items.BONE)
+                .unlockedBy(getHasName(veil), has(veil)).save(output, key("soul_scythe"));
+        // Werwolfspelz-Rüstung: Pelz auf Leder
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_HELMET.get()).pattern("LPL").pattern("L L")
+                .define('P', pelt).define('L', Items.LEATHER).unlockedBy(getHasName(pelt), has(pelt)).save(output, key("werewolf_pelt_helmet"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_CHESTPLATE.get()).pattern("P P").pattern("LPL").pattern("LLL")
+                .define('P', pelt).define('L', Items.LEATHER).unlockedBy(getHasName(pelt), has(pelt)).save(output, key("werewolf_pelt_chestplate"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_LEGGINGS.get()).pattern("LPL").pattern("L L").pattern("L L")
+                .define('P', pelt).define('L', Items.LEATHER).unlockedBy(getHasName(pelt), has(pelt)).save(output, key("werewolf_pelt_leggings"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_BOOTS.get()).pattern("P P").pattern("L L")
+                .define('P', pelt).define('L', Items.LEATHER).unlockedBy(getHasName(pelt), has(pelt)).save(output, key("werewolf_pelt_boots"));
+        // Glutwurm-Panzer: Schuppen wie bei jeder Rüstung
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_HELMET.get()).pattern("SSS").pattern("S S")
+                .define('S', scale).unlockedBy(getHasName(scale), has(scale)).save(output, key("ember_scale_helmet"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_CHESTPLATE.get()).pattern("S S").pattern("SSS").pattern("SSS")
+                .define('S', scale).unlockedBy(getHasName(scale), has(scale)).save(output, key("ember_scale_chestplate"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_LEGGINGS.get()).pattern("SSS").pattern("S S").pattern("S S")
+                .define('S', scale).unlockedBy(getHasName(scale), has(scale)).save(output, key("ember_scale_leggings"));
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_BOOTS.get()).pattern("S S").pattern("S S")
+                .define('S', scale).unlockedBy(getHasName(scale), has(scale)).save(output, key("ember_scale_boots"));
     }
 
     // =====================================================================================

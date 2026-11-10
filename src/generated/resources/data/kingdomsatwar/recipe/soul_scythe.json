@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "kingdomsatwar:soul_ash",
+    "B": "minecraft:bone",
+    "V": "kingdomsatwar:ash_veil"
+  },
+  "pattern": [
+    "AAV",
+    " BA",
+    "B  "
+  ],
+  "result": {
+    "id": "kingdomsatwar:soul_scythe"
+  }
+}

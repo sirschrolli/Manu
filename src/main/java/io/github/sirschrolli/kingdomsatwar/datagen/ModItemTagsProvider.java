@@ -182,6 +182,20 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ModTags.Items.REPAIRS_FAE_ELYTRA, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        // Waffen und Rüstungen aus Monsterteilen (0.70)
+        add(ModTags.Items.REPAIRS_CLAW_BLADE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW);
+        add(ModTags.Items.REPAIRS_BOG_CLUB, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT);
+        add(ModTags.Items.REPAIRS_EMBER_FANG, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE);
+        add(ModTags.Items.REPAIRS_SOUL_SCYTHE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH);
+        add(ModTags.Items.REPAIRS_PELT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT);
+        add(ModTags.Items.REPAIRS_EMBER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE);
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.CLAW_BLADE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_CLUB, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG_BLADE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_SCYTHE);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_HELMET, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_CHESTPLATE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_LEGGINGS, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_BOOTS, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_BOOTS);
+        // Pelz schützt vor dem Frost im Pulverschnee
+        add(ItemTags.FREEZE_IMMUNE_WEARABLES, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_HELMET, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_CHESTPLATE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_LEGGINGS, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_BOOTS);
         tag(ModTags.Items.REPAIRS_GLUT_SPEAR).add(net.minecraft.core.registries.BuiltInRegistries.ITEM
                 .getResourceKey(net.minecraft.world.item.Items.NETHERITE_SCRAP).orElseThrow());
         // die Speere der Bosse sind Speere wie die von Minecraft: verzauberbar (Ausfallschritt, Schärfe, Haltbarkeit …)

@@ -336,7 +336,7 @@ class Design:
     name: str
     ramps: dict[str, st.Ramp]
     open_face: bool = False
-    texture: str = ""                       # "" | "scales" | "facets"
+    texture: str = ""                       # "" | "scales" | "facets" | "fur"
     d: dict[str, Art] = field(default_factory=dict)
 
 
@@ -346,6 +346,8 @@ def _art(design: Design, key: str, base_key: str | None = None) -> Art:
         base = scale(base, key)
     elif design.texture == "facets":
         base = facet(base, key)
+    elif design.texture == "fur":
+        base = fur(base, key)
     return over(base, design.d.get(key))
 
 
@@ -361,6 +363,29 @@ def scale(art: Art, key: str) -> Art:
         for x, ch in enumerate(row):
             if ch in "45" and 0 < x < len(row) - 1 and 0 < y < len(art) - 1:
                 line.append(tile[(y - 1) % 6][x % 4])
+            else:
+                line.append(ch)
+        out.append("".join(line))
+    return out
+
+
+def fur(art: Art, key: str) -> Art:
+    """
+    Pelz: senkrechte Haarsträhnen, je Spalte versetzt – oben die helleren Spitzen, darunter dunkler; an der Unterkante
+    fransig (eine Stufe dunkler).
+    """
+    strands = ["5443", "4432", "5543", "4332", "4543", "3432"]
+    out = []
+    h = len(art)
+    for y, row in enumerate(art):
+        line = []
+        for x, ch in enumerate(row):
+            if ch in "45" and 0 < x < len(row) - 1 and 0 < y < h - 1:
+                col = strands[(x * 7 + (x // 3)) % len(strands)]
+                v = col[(y + (x * 5) % 3) % 4]
+                if y == h - 2 and (x * 3) % 4 == 1:
+                    v = str(max(1, int(v) - 1))
+                line.append(v)
             else:
                 line.append(ch)
         out.append("".join(line))
@@ -552,8 +577,47 @@ def dragon(kind: str) -> Design:
     })
 
 
+def werewolf_pelt() -> Design:
+    """Werwolfspelz: dunkles, strähniges Fell; eine Haube mit offenem Gesicht (die Wolfsschnauze darüber kommt als 3D-Teil),
+    Lederriemen über der Brust mit Klauen als Schmuck, Pelzsäume an Armen und Stiefeln."""
+    return Design("werewolf_pelt", {"A": st.ramp("#5c5047", dark=0.14, light=0.86, cool=290, chroma_light=0.35),
+                                    "B": st.ramp("#6a4428", dark=0.15, light=0.8, cool=20),
+                                    "C": st.ramp("#e2d8c0", dark=0.35, light=0.98)}, open_face=True, texture="fur", d={
+        "head_front": ["l......l", "ml....lm", ".", "."],
+        "head_top": [".", ".", ".", ".", ".", ".", ".", "."],
+        "body_front": [".", ".d....b.", "..d..b..", "...dc...", "...cb...", "...lm...", ".", ".", ".", ".", "..dccb.."],
+        "arm_side": [".", ".", ".", ".", ".", ".", ".", ".", "dccb"],
+        "boot_side": ["."] * 6 + ["dccb"],
+        "boot_front": ["."] * 6 + ["dccb", ".", ".", ".", "l..l"],
+        "belt_front": ["."] * 7 + ["dccbbccb"],
+        "belt_back": ["."] * 7 + ["dccccccb"],
+        "belt_side": ["."] * 7 + ["dccb"],
+    })
+
+
+def ember_scale() -> Design:
+    """Glutwurm-Panzer: dunkle Basaltschuppen, an den Nähten glühend; Stirnplatte, glühende Längsnaht über Brust und Rücken
+    (Hörner und Rückenstacheln kommen als 3D-Teile)."""
+    return Design("ember_scale", {"A": st.ramp("#3c3232", dark=0.1, light=0.66, cool=300, chroma_dark=1.0),
+                                  "C": st.ramp("#2a2222", dark=0.08, light=0.5, cool=300),
+                                  "D": st.ramp("#ff7a1a", dark=0.35, light=1.0, cool=20, warm=90)}, open_face=True, texture="scales", d={
+        "head_top": ["...ts...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr..."],
+        "head_front": ["...ts...", "kjjjjjjk", "."],
+        "head_back": ["...sr...", "...sr...", "...rq..."],
+        "body_front": [".", ".", "...ts...", "...sr...", "..s..r..", ".s....r.", "...sr...", "...sr...", "...sr...", "...rq...",
+                       "..rqqp.."],
+        "body_back": [".", ".", "...ts...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr...", "...rq..."],
+        "arm_side": [".", ".", ".", ".", "qrrq", ".", ".", ".", "qrrq"],
+        "boot_front": ["."] * 6 + ["qrrq", ".", ".", ".", "k..k"],
+        "boot_side": ["."] * 6 + ["qrrq"],
+        "belt_front": ["."] * 7 + ["qrsttsrq"],
+        "belt_back": ["."] * 7 + ["qrrrrrrq"],
+        "belt_side": ["."] * 7 + ["qrrq"],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit()] + [dragon(k) for k in icons.DRAGONS]
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale()] + [dragon(k) for k in icons.DRAGONS]
 
 
 # =============================================================================

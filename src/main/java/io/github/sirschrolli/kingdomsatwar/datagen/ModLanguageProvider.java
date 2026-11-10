@@ -717,6 +717,53 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Vom Dach der Aschenesse hallen Hammerschläge …");
         text("block.kingdomsatwar.glut_anvil.peaceful", "The forge stays cold (the world is set to Peaceful).",
                 "Die Esse bleibt kalt (die Welt steht auf „Friedlich“).");
+        // Waffen und Rüstungen aus Monsterteilen (0.70)
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_PELT, "Werewolf Pelt", "Werwolfspelz");
+        lore("werewolf_pelt", "Thick, dark fur – still warm", "Dichtes, dunkles Fell – noch warm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW, "Werewolf Claw", "Werwolfsklaue");
+        lore("werewolf_claw", "Long, curved and razor-sharp", "Lang, gebogen und messerscharf");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT, "Bog Root", "Moorwurzel");
+        lore("bog_root", "Gnarled, wet and as tough as leather", "Knorrig, nass und zäh wie Leder");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_HEART, "Bog Heart", "Moorherz");
+        lore("bog_heart", "A lump of mud and roots that still beats softly", "Ein Klumpen aus Schlamm und Wurzeln, der noch leise schlägt");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE, "Ember Scale", "Glutwurmschuppe");
+        lore("ember_scale", "Basalt-hard, glowing at the seams", "Hart wie Basalt, an den Rändern glühend");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG, "Ember Fang", "Glutzahn");
+        lore("ember_fang", "The fang of an Ember Wyrm – it never cools", "Der Fangzahn eines Glutwurms – er erkaltet nie");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH, "Soul Ash", "Seelenasche");
+        lore("soul_ash", "Fine grey ash with a faint blue shimmer", "Feine graue Asche mit einem blassblauen Schimmer");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.ASH_VEIL, "Ash Veil", "Aschenschleier");
+        lore("ash_veil", "A shred of an Ash Wraith's shroud", "Ein Fetzen aus dem Gewand eines Aschengeists");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.CLAW_BLADE, "Claw Blade", "Krallenklinge");
+        lore("claw_blade", "Three werewolf claws on a fist grip – fast", "Drei Werwolfsklauen an einem Faustgriff – schnell");
+        text(ModItems.loreKey("claw_blade", 2), "Stronger at night; every kill sends you into a frenzy",
+                "Nachts schärfer; jeder Sieg versetzt in einen Blutrausch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_CLUB, "Bog Club", "Moorkeule");
+        lore("bog_club", "A gnarled root club with glowing toadstools", "Ein knorriger Wurzelknüppel mit leuchtenden Pilzen");
+        text(ModItems.loreKey("bog_club", 2), "Roots grasp what it strikes; mends itself in rain and water",
+                "Wurzeln packen, was sie trifft; heilt sich in Regen und Wasser");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_FANG_BLADE, "Ember Fang Blade", "Glutzahn-Klinge");
+        lore("ember_fang_blade", "A curved blade forged from an Ember Wyrm's fang", "Eine gebogene Klinge aus dem Fangzahn eines Glutwurms");
+        text(ModItems.loreKey("ember_fang_blade", 2), "Sets foes ablaze and strikes burning foes harder",
+                "Setzt in Brand und trifft Brennende härter");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_SCYTHE, "Soul Scythe", "Seelensense");
+        lore("soul_scythe", "Its blade is soul fire – it weakens and burns", "Ihre Klinge ist Seelenfeuer – sie schwächt und brennt");
+        text(ModItems.loreKey("soul_scythe", 2), "Use: drift like ash up to seven blocks ahead, unseen and unharmed",
+                "Benutzen: wie Asche bis zu sieben Blöcke nach vorn verwehen, unsichtbar und unverwundbar");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_HELMET, "Wolf Head Hood", "Wolfskopf-Haube");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_CHESTPLATE, "Pelt Mantle", "Pelzmantel");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_LEGGINGS, "Pelt Leggings", "Pelzbeinlinge");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.PELT_BOOTS, "Pelt Boots", "Pelzstiefel");
+        lore("werewolf_pelt_armor", "Werewolf pelt – light and warm, each piece makes you faster",
+                "Werwolfspelz – leicht und warm, jedes Teil macht schneller");
+        text(ModItems.loreKey("werewolf_pelt_armor", 2), "Full set: swift and keen-eyed at night", "Voller Satz: nachts schnell und nachtsichtig");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_HELMET, "Horned Ember Helm", "Glutwurm-Hörnerhelm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_CHESTPLATE, "Ember Scale Cuirass", "Glutwurm-Schuppenpanzer");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_LEGGINGS, "Ember Scale Greaves", "Glutwurm-Beinschienen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_BOOTS, "Ember Scale Boots", "Glutwurm-Stiefel");
+        lore("ember_scale_armor", "Ember Wyrm scales – glowing at the seams", "Glutwurmschuppen – an den Nähten glühend");
+        text(ModItems.loreKey("ember_scale_armor", 2), "Full set: immune to fire; whoever strikes you catches fire",
+                "Voller Satz: feuerfest; wer dich trifft, fängt Feuer");
         item(io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUT_SPEAR, "Ember Spear", "Glutspeer");
         lore("glut_spear", "The masterpiece of Malleus, the Ember Smith", "Das Meisterstück von Malleus, dem Glutschmied");
         text(ModItems.loreKey("glut_spear", 2), "In the Nether or while burning: strikes harder; every hit sets foes ablaze",

@@ -61,6 +61,8 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerLayers(event);
+        event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER,
+                io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer::createLayer);
         // die Köpfe von Vanilla bekommen die Texturen der eigenen Wesen (die Modelle setzt SkullBlockRendererMixin ein)
         io.github.sirschrolli.kingdomsatwar.client.renderer.OwnHeads.install();
         event.registerLayerDefinition(ModModelLayers.WILD_BOAR, WildBoarGeometry::createLayer);
@@ -137,6 +139,18 @@ public final class ClientSetup {
     @SubscribeEvent
     static void addLayers(EntityRenderersEvent.AddLayers event) {
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.replaceShoulderParrots(event);
+        // die 3D-Teile der Monsterrüstungen (Spieler und Rüstungsständer)
+        var parts = event.getEntityModels().bakeLayer(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER);
+        for (var skin : event.getSkins()) {
+            var player = event.getPlayerRenderer(skin);
+            if (player != null) {
+                player.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer<>(player, parts));
+            }
+        }
+        if (event.getRenderer(net.minecraft.world.entity.EntityTypes.ARMOR_STAND)
+                instanceof net.minecraft.client.renderer.entity.ArmorStandRenderer stand) {
+            stand.addLayer(new io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer<>(stand, parts));
+        }
     }
 
     @SubscribeEvent

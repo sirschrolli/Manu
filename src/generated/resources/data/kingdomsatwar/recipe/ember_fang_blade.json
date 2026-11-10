@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "minecraft:blaze_rod",
+    "F": "kingdomsatwar:ember_fang",
+    "S": "kingdomsatwar:ember_scale"
+  },
+  "pattern": [
+    " F ",
+    "SFS",
+    " B "
+  ],
+  "result": {
+    "id": "kingdomsatwar:ember_fang_blade"
+  }
+}

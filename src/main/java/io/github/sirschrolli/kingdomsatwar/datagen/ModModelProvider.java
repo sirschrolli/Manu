@@ -454,6 +454,7 @@ public class ModModelProvider extends ModelProvider {
         StarModels.register(blocks, items);
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);
+        MonsterGearModels.register(items);
 
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();
