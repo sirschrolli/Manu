@@ -120,6 +120,11 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.STAR_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.StarRayGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.WARDEN_SHARD, io.github.sirschrolli.kingdomsatwar.client.model.geom.WardenShardGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHATTERED_KING, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredKingGeometry::createLayer);
+        // der Weltenfresser
+        event.registerLayerDefinition(ModModelLayers.WORLD_EATER, io.github.sirschrolli.kingdomsatwar.client.model.geom.WorldEaterGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WORLD_EATER_SEGMENT, io.github.sirschrolli.kingdomsatwar.client.model.geom.WorldEaterSegmentGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WORLD_EATER_TAIL, io.github.sirschrolli.kingdomsatwar.client.model.geom.WorldEaterTailGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WORLD_CHUNK, io.github.sirschrolli.kingdomsatwar.client.model.geom.WorldChunkGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MANTA_RAY, io.github.sirschrolli.kingdomsatwar.client.model.geom.MantaRayGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.GLOW_JELLYFISH, io.github.sirschrolli.kingdomsatwar.client.model.geom.GlowJellyfishGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHARK, io.github.sirschrolli.kingdomsatwar.client.model.geom.SharkGeometry::createLayer);
@@ -297,6 +302,8 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.STAR_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.StarRayRenderer::new);
         event.registerEntityRenderer(ModEntities.WARDEN_SHARD.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.WardenShardRenderer::new);
         event.registerEntityRenderer(ModEntities.SHATTERED_KING.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.voidrealm.ShatteredKingRenderer::new);
+        event.registerEntityRenderer(ModEntities.WORLD_EATER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldEaterRenderer::new);
+        event.registerEntityRenderer(ModEntities.WORLD_CHUNK.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.abyss.WorldChunkRenderer::new);
         event.registerEntityRenderer(ModEntities.MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.MantaRayRenderer::new);
         event.registerEntityRenderer(ModEntities.GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.GlowJellyfishRenderer::new);
         event.registerEntityRenderer(ModEntities.SHARK.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sea.SharkRenderer::new);

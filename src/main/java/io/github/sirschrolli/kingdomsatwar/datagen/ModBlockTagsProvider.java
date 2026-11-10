@@ -191,9 +191,11 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.PORTALS, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT);
         add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT,
-                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT);
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SEAL_SHARD, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.HOARD_SEAL);
         add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT,
-                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT);
+                io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.THRONE_SEAL, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SEAL_SHARD, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.HOARD_SEAL);
         // Der Abgrund
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CRACKED_CHAOS_STONE_BRICKS,
                 io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE,

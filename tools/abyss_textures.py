@@ -245,6 +245,66 @@ def lift_crystal() -> tuple[Image.Image, Image.Image]:
 
 
 # =============================================================================
+# Der Schlund der Welten: Kronensplitter und Siegel
+# =============================================================================
+
+CROWN = [hexc("#2a1048"), hexc("#5a2a9a"), hexc("#9a5ae0"), hexc("#d6b0ff"), hexc("#fbf2ff")]
+GOLD = [hexc("#4a2a08"), hexc("#8a5a14"), hexc("#c8922a"), hexc("#f0c85a"), hexc("#fff0b0")]
+
+
+def seal_shard() -> tuple[Image.Image, Image.Image]:
+    """Kronensplitter: violette Kristallspitzen (hell glühend) auf einem Stück goldener Kronenfassung."""
+    img, glow = _crystal(CROWN)
+    px, gp = img.load(), glow.load()
+    # die goldene Fassung: die unteren beiden Reihen und ein paar Zacken
+    for x in range(1, 15):
+        px[x, 15] = GOLD[1] if x % 3 else GOLD[2]
+        if px[x, 14][3]:
+            px[x, 14] = GOLD[3] if x % 4 == 1 else GOLD[2]
+    for (x, y) in ((1, 15), (14, 15)):
+        px[x, y] = GOLD[0]
+    for (x, y) in ((5, 14), (10, 14)):
+        px[x, y] = GOLD[4]
+        gp[x, y] = GOLD[3]
+    return img, glow
+
+
+SEAL_RING = 5.6
+
+
+def hoard_seal() -> tuple[Image.Image, Image.Image]:
+    """Siegel des Horts: poliertes Chaosgestein, darin ein eingelassener Ring mit sieben Speichen, die rot glimmen."""
+    g = vs.polished(73311)
+    img = _img(g, POLISHED)
+    px = img.load()
+    glow = pa.new()
+    gp = glow.load()
+    cx = cy = 7.5
+    for y in range(N):
+        for x in range(N):
+            dx, dy = x - cx, y - cy
+            r = math.hypot(dx, dy)
+            a = math.atan2(dy, dx)
+            ring = abs(r - SEAL_RING) < 0.5
+            spoke = False
+            if 1.4 < r < SEAL_RING - 0.4:
+                k = round((a + math.pi / 2) / (2 * math.pi / 7))
+                ang = -math.pi / 2 + k * 2 * math.pi / 7
+                spoke = abs(math.sin(a - ang)) * r < 0.42 and math.cos(a - ang) > 0
+            if ring or spoke:
+                hot = 0.15 + 0.55 * (1.0 - min(r, SEAL_RING) / SEAL_RING)
+                col = pa.mix(EMBER[1], EMBER[3], hot)
+                px[x, y] = col
+                gp[x, y] = col
+            elif abs(r - SEAL_RING) < 1.3:
+                px[x, y] = pa.mix(px[x, y], DARK, 0.55)
+    for (x, y) in ((7, 7), (8, 7), (7, 8), (8, 8)):
+        px[x, y] = EMBER[4]
+        gp[x, y] = EMBER[4]
+    return img, glow
+
+
+# =============================================================================
 # Der Abgrundriss
 # =============================================================================
 
@@ -353,6 +413,12 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
         img, glow = fn()
         put(f"block/{name}", img)
         put(f"block/{name}_emissive", glow)
+    shard, shard_glow = seal_shard()
+    put("block/seal_shard", shard)
+    put("block/seal_shard_emissive", shard_glow)
+    seal, seal_glow = hoard_seal()
+    put("block/hoard_seal", seal)
+    put("block/hoard_seal_glow", seal_glow)
     put("block/abyss_rift", abyss_rift())
     put("environment/abyss_rifts", abyss_sky.rifts())
     put("item/rift_key", rift_key())

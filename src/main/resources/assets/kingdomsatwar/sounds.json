@@ -7095,6 +7095,247 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.will_o_wisp.vanish"
   },
+  "entity.world_eater.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_ambient1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_ambient2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_ambient3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.ambient"
+  },
+  "entity.world_eater.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_awaken1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.awaken"
+  },
+  "entity.world_eater.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_bite1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_bite2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_bite3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.bite"
+  },
+  "entity.world_eater.breath": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_breath1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.breath"
+  },
+  "entity.world_eater.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_call1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_call2",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.call"
+  },
+  "entity.world_eater.chunk": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_chunk1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_chunk2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_chunk3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.chunk"
+  },
+  "entity.world_eater.crumble": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_crumble1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_crumble2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_crumble3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.crumble"
+  },
+  "entity.world_eater.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_death1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.death"
+  },
+  "entity.world_eater.gravity": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_gravity1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.gravity"
+  },
+  "entity.world_eater.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_hurt1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_hurt2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_hurt3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.hurt"
+  },
+  "entity.world_eater.inhale": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_inhale1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_inhale2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.inhale"
+  },
+  "entity.world_eater.rift": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_rift1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_rift2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_rift3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.rift"
+  },
+  "entity.world_eater.roar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_roar1",
+        "attenuation_distance": 160
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_roar2",
+        "attenuation_distance": 160
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_roar3",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.roar"
+  },
+  "entity.world_eater.shatter": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_shatter1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_shatter2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_shatter3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.shatter"
+  },
+  "entity.world_eater.snap": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_snap1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_snap2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.snap"
+  },
+  "entity.world_eater.spit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_spit1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_spit2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_spit3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.spit"
+  },
+  "entity.world_eater.sweep": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_sweep1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/void/world_eater_sweep2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.world_eater.sweep"
+  },
   "hero.pat": {
     "subtitle": "subtitles.kingdomsatwar.hero.pat",
     "sounds": [

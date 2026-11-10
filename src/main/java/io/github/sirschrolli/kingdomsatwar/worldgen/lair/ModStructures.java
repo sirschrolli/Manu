@@ -80,6 +80,11 @@ public final class ModStructures {
             VOID_THRONE = TYPES.register("void_throne", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> VOID_THRONE_PIECE =
             PIECES.register("void_throne", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePiece::new);
+    // der Schlund der Welten (0.73): der Hort des Weltenfressers im Abgrund
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardStructure>>
+            WORLD_EATER_HOARD = TYPES.register("world_eater_hoard", () -> () -> io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> WORLD_EATER_HOARD_PIECE =
+            PIECES.register("world_eater_hoard", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardPiece::new);
 
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure>>
             SHADOW_SITE = TYPES.register("shadow_site", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.umbrer.ShadowSiteStructure.CODEC);
@@ -164,6 +169,9 @@ public final class ModStructures {
     public static final ResourceKey<StructureSet> SHADOW_CITADEL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("shadow_citadel"));
     public static final ResourceKey<Structure> VOID_THRONE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("void_throne"));
     public static final ResourceKey<StructureSet> VOID_THRONE_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("void_throne"));
+    public static final ResourceKey<Structure> WORLD_EATER_HOARD_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("world_eater_hoard"));
+    public static final ResourceKey<StructureSet> WORLD_EATER_HOARD_SET = ResourceKey.create(Registries.STRUCTURE_SET,
+            KingdomsAtWar.id("world_eater_hoard"));
     public static final ResourceKey<Structure> SUNKEN_ATOLL_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("sunken_atoll"));
     public static final ResourceKey<StructureSet> SUNKEN_ATOLL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sunken_atoll"));
 
@@ -222,6 +230,14 @@ public final class ModStructures {
                         // ganz zum Schluss: so räumt die Zitadelle auch Bäume und Pflanzen auf ihrem Grund ab
                         .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
                         .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // am Schlund der Welten erscheinen keine Wesen von selbst (dort wartet der Weltenfresser)
+        context.register(WORLD_EATER_HOARD_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_WORLD_EATER_HOARD))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
                         .build()));
         // auf dem Thron der Alten erscheinen keine Wesen von selbst (dort wacht der König)
         context.register(VOID_THRONE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure(
@@ -446,6 +462,8 @@ public final class ModStructures {
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
                         biomes.getOrThrow(ModTags.Biomes.HAS_SHADOW_CITADEL), 66_613)));
+        context.register(WORLD_EATER_HOARD_SET, new StructureSet(structures.getOrThrow(WORLD_EATER_HOARD_STRUCTURE),
+                new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement(500, 900, 73_731)));
         context.register(VOID_THRONE_SET, new StructureSet(structures.getOrThrow(VOID_THRONE_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThronePlacement(450, 800, 77_031)));
         context.register(SUNKEN_ATOLL_SET, new StructureSet(structures.getOrThrow(SUNKEN_ATOLL_STRUCTURE),

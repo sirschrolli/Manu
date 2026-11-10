@@ -85,6 +85,18 @@ public class DragonCompassItem extends Item {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS, 1.0f, 0.4f);
             return InteractionResult.SUCCESS;
         }
+        if (level instanceof ServerLevel server && server.dimension() == io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS) {
+            // im Abgrund kennt der Kompass nur ein Ziel: den Schlund der Welten, den Hort des Weltenfressers
+            BlockPos hoard = io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardLocator.center(server);
+            if (hoard == null) {
+                player.sendOverlayMessage(Component.translatable("item.kingdomsatwar.dragon_compass.no_nests").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.FAIL;
+            }
+            aimHoard(stack, hoard);
+            player.sendOverlayMessage(describePlace(player, hoard, "item.kingdomsatwar.dragon_compass.hoard", HOARD_COLOR));
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.PLAYERS, 1.0f, 0.35f);
+            return InteractionResult.SUCCESS;
+        }
         if (level instanceof ServerLevel server && server.dimension() == io.github.sirschrolli.kingdomsatwar.world.ShadowGate.SHADOW_WORLD) {
             // in der Schattenwelt kennt der Kompass nur ein Ziel: Nyxars Zitadelle
             BlockPos citadel = io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelLocator.approximateCenter(server);
@@ -132,6 +144,13 @@ public class DragonCompassItem extends Item {
             BlockPos throne = io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneLocator.center(level);
             if (throne != null) {
                 aimThrone(stack, throne);
+            }
+            return;
+        }
+        if (level.dimension() == io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS) {
+            BlockPos hoard = io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardLocator.center(level);
+            if (hoard != null) {
+                aimHoard(stack, hoard);
             }
             return;
         }
@@ -218,6 +237,22 @@ public class DragonCompassItem extends Item {
 
     /** Farbe des Edelsteins, wenn der Kompass in der Leere den Thron der Alten sucht (blasses Violett). */
     public static final int THRONE_COLOR = 0xC9A8FF;
+
+    /** Farbe des Edelsteins, wenn der Kompass im Abgrund den Schlund der Welten sucht (Glutrot). */
+    public static final int HOARD_COLOR = 0xFF5A2A;
+
+    /** Richtet den Kompass auf den Schlund der Welten im Abgrund aus. */
+    public static void aimHoard(ItemStack stack, BlockPos hoard) {
+        LodestoneTracker tracker = new LodestoneTracker(Optional.of(GlobalPos.of(io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS,
+                hoard)), false);
+        if (!tracker.equals(stack.get(DataComponents.LODESTONE_TRACKER))) {
+            stack.set(DataComponents.LODESTONE_TRACKER, tracker);
+        }
+        CustomModelData color = new CustomModelData(List.of(), List.of(), List.of(), List.of(HOARD_COLOR));
+        if (!color.equals(stack.get(DataComponents.CUSTOM_MODEL_DATA))) {
+            stack.set(DataComponents.CUSTOM_MODEL_DATA, color);
+        }
+    }
 
     /** Richtet den Kompass auf den Thron der Alten in der Leere aus. */
     public static void aimThrone(ItemStack stack, BlockPos throne) {

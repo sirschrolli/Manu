@@ -95,6 +95,10 @@ public final class ModModelLayers {
     public static final ModelLayerLocation STAR_RAY = new ModelLayerLocation(KingdomsAtWar.id("star_ray"), "main");
     public static final ModelLayerLocation WARDEN_SHARD = new ModelLayerLocation(KingdomsAtWar.id("warden_shard"), "main");
     public static final ModelLayerLocation SHATTERED_KING = new ModelLayerLocation(KingdomsAtWar.id("shattered_king"), "main");
+    public static final ModelLayerLocation WORLD_EATER = new ModelLayerLocation(KingdomsAtWar.id("world_eater"), "main");
+    public static final ModelLayerLocation WORLD_EATER_SEGMENT = new ModelLayerLocation(KingdomsAtWar.id("world_eater"), "segment");
+    public static final ModelLayerLocation WORLD_EATER_TAIL = new ModelLayerLocation(KingdomsAtWar.id("world_eater"), "tail");
+    public static final ModelLayerLocation WORLD_CHUNK = new ModelLayerLocation(KingdomsAtWar.id("world_chunk"), "main");
     public static final ModelLayerLocation MANTA_RAY = new ModelLayerLocation(KingdomsAtWar.id("manta_ray"), "main");
     public static final ModelLayerLocation GLOW_JELLYFISH = new ModelLayerLocation(KingdomsAtWar.id("glow_jellyfish"), "main");
     public static final ModelLayerLocation SHARK = new ModelLayerLocation(KingdomsAtWar.id("shark"), "main");

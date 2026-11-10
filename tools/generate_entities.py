@@ -32,7 +32,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
                               miss_mystik, light_dove, magic_sword, anni_troll,
-                              werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw)
+                              werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
+                              world_eater, world_eater_segment, world_eater_tail, world_chunk)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -110,6 +111,16 @@ def main():
     write_model(night_ram, "NightRamGeometry", "Geometrie des Nachtwidders.", "night_ram", night_ram.PALETTES, preview)
     write_model(rift_hound, "RiftHoundGeometry", "Geometrie des Rissjägers.", "rift_hound", rift_hound.PALETTES, preview)
     write_model(chorus_maw, "ChorusMawGeometry", "Geometrie des Chorusschlunds.", "chorus_maw", chorus_maw.PALETTES, preview)
+    # Der Weltenfresser (0.73): Kopf, Leibglied, Schwanz und die Weltbrocken, die er ausspeit
+    write_model(world_eater, "WorldEaterGeometry", "Geometrie des Kopfs des Weltenfressers (im Spiel doppelt so groß).",
+                "world_eater", world_eater.PALETTES, preview)
+    write_model(world_eater_segment, "WorldEaterSegmentGeometry",
+                "Geometrie eines Leibglieds des Weltenfressers (je Glied ist eines der vier Weltstücke zu sehen).", "world_eater",
+                {"world_eater_segment": world_eater_segment.PALETTES["world_eater"]}, preview)
+    write_model(world_eater_tail, "WorldEaterTailGeometry", "Geometrie des Schwanzes des Weltenfressers.", "world_eater",
+                {"world_eater_tail": world_eater_tail.PALETTES["world_eater"]}, preview)
+    write_model(world_chunk, "WorldChunkGeometry", "Geometrie eines Weltbrockens (Glut, Frost, End, Schatten).", "world_chunk",
+                world_chunk.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)
     write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",

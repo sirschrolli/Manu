@@ -100,6 +100,28 @@ public final class AbyssBlocks {
                     .sound(SoundType.AMETHYST).pushReaction(PushReaction.IMMOVEABLE));
 
     // =====================================================================================
+    // Der Schlund der Welten (0.73)
+    // =====================================================================================
+
+    /** Kronensplitter: einer der sieben Splitter der Königskrone, die den Weltenfresser versiegeln (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<net.minecraft.world.level.block.AmethystClusterBlock> SEAL_SHARD = ModBlocks.BLOCKS.registerBlock(
+            "seal_shard", p -> new net.minecraft.world.level.block.AmethystClusterBlock(9.0f, 3.0f, p),
+            p -> p.mapColor(MapColor.COLOR_PURPLE).noOcclusion().strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.AMETHYST_CLUSTER)
+                    .lightLevel(s -> 12).pushReaction(PushReaction.IMMOVEABLE).isValidSpawn((state, level, pos, type) -> false)
+                    .isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos, box) -> false)
+                    .isRedstoneConductor((state, level, pos) -> false));
+
+    /** Siegel des Horts: verborgen unter dem Ring, weckt den Weltenfresser (unzerstörbar, ohne Gegenstand). */
+    public static final DeferredBlock<io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlock> HOARD_SEAL = ModBlocks.BLOCKS.registerBlock(
+            "hoard_seal", io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlock::new,
+            p -> p.mapColor(MapColor.COLOR_BLACK).strength(-1.0f, 3_600_000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 7)
+                    .pushReaction(PushReaction.IMMOVEABLE));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlockEntity>>
+            HOARD_SEAL_ENTITY = ModBlockEntities.BLOCK_ENTITIES.register("hoard_seal",
+                    () -> new BlockEntityType<>(io.github.sirschrolli.kingdomsatwar.block.abyss.HoardSealBlockEntity::new, HOARD_SEAL.get()));
+
+    // =====================================================================================
     // Gegenstände
     // =====================================================================================
 

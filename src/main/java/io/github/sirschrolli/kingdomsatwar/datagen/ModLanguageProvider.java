@@ -539,6 +539,38 @@ public class ModLanguageProvider extends LanguageProvider {
         text("biome.kingdomsatwar.abyss_star_wreck", "Star Wreck", "Sternentrümmer");
         text("biome.kingdomsatwar.abyss_shadow_chasm", "Shadow Chasm", "Schattenschlund");
         text("biome.kingdomsatwar.abyss_seam", "The Seam", "Die Naht");
+
+        // Der Weltenfresser und der Schlund der Welten (0.73)
+        add(ModEntities.WORLD_EATER.get(), pick("The World-Eater", "Der Weltenfresser"));
+        add(ModEntities.WORLD_CHUNK.get(), pick("World Chunk", "Weltbrocken"));
+        text("boss.kingdomsatwar.world_eater", "The World-Eater", "Der Weltenfresser");
+        text("message.kingdomsatwar.world_eater.wrath", "The World-Eater rages – the ring is breaking!", "Der Weltenfresser tobt – der Ring bricht!");
+        text("hoard.kingdomsatwar.warning", "Beneath the ring ahead, something vast is stirring.", "Unter dem Ring vor dir regt sich etwas Gewaltiges.");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SEAL_SHARD, "Crown Shard", "Kronensplitter");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.HOARD_SEAL, "Hoard Seal", "Siegel des Horts");
+        text("title.kingdomsatwar.world_savior", "World Savior", "Weltenretter");
+        text("title.kingdomsatwar.world_savior.sub", "The World-Eater has fallen", "Der Weltenfresser ist gefallen");
+        text("title.kingdomsatwar.world_savior.prefix", "World Savior", "Weltenretter");
+        text("message.kingdomsatwar.world_savior", "%s has helped slay the World-Eater and is now a World Savior!",
+                "%s hat den Weltenfresser mit bezwungen und ist jetzt Weltenretter!");
+        text("item.kingdomsatwar.dragon_compass.hoard", "Maw of Worlds", "Schlund der Welten");
+        subtitle("entity.world_eater.ambient", "The World-Eater growls", "Der Weltenfresser grollt");
+        subtitle("entity.world_eater.hurt", "Chaos stone cracks", "Chaosgestein bricht");
+        subtitle("entity.world_eater.death", "The World-Eater breaks apart", "Der Weltenfresser zerbricht");
+        subtitle("entity.world_eater.awaken", "Something rises from the abyss", "Etwas steigt aus dem Abgrund");
+        subtitle("entity.world_eater.shatter", "A crown shard shatters", "Ein Kronensplitter zerspringt");
+        subtitle("entity.world_eater.roar", "The World-Eater roars", "Der Weltenfresser brüllt");
+        subtitle("entity.world_eater.bite", "Stone jaws snap", "Steinerne Kiefer schnappen zu");
+        subtitle("entity.world_eater.inhale", "The World-Eater inhales", "Der Weltenfresser saugt an");
+        subtitle("entity.world_eater.snap", "The maw slams shut", "Der Rachen schlägt zu");
+        subtitle("entity.world_eater.spit", "The World-Eater spits", "Der Weltenfresser speit");
+        subtitle("entity.world_eater.chunk", "A world chunk shatters", "Ein Weltbrocken zerschellt");
+        subtitle("entity.world_eater.sweep", "A colossal body sweeps past", "Ein gewaltiger Leib fegt vorbei");
+        subtitle("entity.world_eater.breath", "Rift fire roars", "Rissfeuer braust");
+        subtitle("entity.world_eater.gravity", "Gravity breaks", "Die Schwerkraft bricht");
+        subtitle("entity.world_eater.call", "The World-Eater calls", "Der Weltenfresser ruft");
+        subtitle("entity.world_eater.rift", "A rift tears open", "Ein Riss reißt auf");
+        subtitle("entity.world_eater.crumble", "A segment crumbles", "Ein Leibglied zerbricht");
         set("chaos_stone", "chaos_stone", "Chaos Stone", "Chaosgestein", "Chaos Stone", "Chaosgestein");
         set("chaos_stone_bricks", "chaos_stone_brick", "Chaos Stone Bricks", "Chaossteinziegel", "Chaos Stone Brick", "Chaossteinziegel");
         set("polished_chaos_stone", "polished_chaos_stone", "Polished Chaos Stone", "Poliertes Chaosgestein", "Polished Chaos Stone",

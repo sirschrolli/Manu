@@ -160,6 +160,24 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_DEATH = register("entity.shattered_king.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_AWAKEN = register("entity.shattered_king.awaken");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_ROAR = register("entity.shattered_king.roar");
+    // der Weltenfresser (0.73)
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_AMBIENT = register("entity.world_eater.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_HURT = register("entity.world_eater.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_DEATH = register("entity.world_eater.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_AWAKEN = register("entity.world_eater.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_SHATTER = register("entity.world_eater.shatter");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_ROAR = register("entity.world_eater.roar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_BITE = register("entity.world_eater.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_INHALE = register("entity.world_eater.inhale");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_SNAP = register("entity.world_eater.snap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_SPIT = register("entity.world_eater.spit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_CHUNK = register("entity.world_eater.chunk");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_SWEEP = register("entity.world_eater.sweep");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_BREATH = register("entity.world_eater.breath");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_GRAVITY = register("entity.world_eater.gravity");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_CALL = register("entity.world_eater.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_RIFT = register("entity.world_eater.rift");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WORLD_EATER_CRUMBLE = register("entity.world_eater.crumble");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_SWEEP = register("entity.shattered_king.sweep");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_GRAVITY = register("entity.shattered_king.gravity");
     public static final DeferredHolder<SoundEvent, SoundEvent> SHATTERED_KING_BEAM = register("entity.shattered_king.beam");

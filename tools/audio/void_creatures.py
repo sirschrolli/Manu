@@ -564,6 +564,254 @@ def king_quake(seed: int) -> np.ndarray:
 
 
 # =====================================================================================
+# Der Weltenfresser (0.73)
+# =====================================================================================
+
+def _grind(n: int, r, lo: float = 60.0, hi: float = 420.0, rate: float = 22.0) -> np.ndarray:
+    """Mahlender Stein: ein Rauschen in der Tiefe, zerhackt von unregelmäßigen Rucken."""
+    y = filt(r.standard_normal(n), "band", [lo, hi], SR, 2)
+    jerk = np.abs(filt(r.standard_normal(n), "low", rate, SR, 2))
+    jerk = jerk / (jerk.max() + 1e-9)
+    return y * (0.35 + 0.65 * jerk)
+
+
+def eater_roar(seed: int) -> np.ndarray:
+    """Sein Brüllen: tiefer und länger als das des Königs, zwei raue Stimmen übereinander, darunter mahlender Fels und ein
+    Grollen, das noch lange nachhallt."""
+    r = rng(seed)
+    n = int(r.uniform(3.2, 3.8) * SR)
+    f = curve(n, [(0, 38), (0.1, 56), (0.45, 62), (0.75, 54), (1, 34)]) * r.uniform(0.95, 1.05)
+    amp = curve(n, [(0, 0), (0.05, 0.7), (0.2, 1.0), (0.65, 0.9), (1, 0)])
+    y = _voice(n, f, amp, "o", r, rough=0.8)
+    y += 0.7 * _voice(n, f * 1.49, amp, "a", r, rough=0.6)
+    y += 0.35 * _voice(n, f * 2.02, amp, "u", r, rough=0.3)
+    y = soft_clip(y * 1.8, 0.9)
+    y += _grind(n, r) * amp * 0.6
+    y += filt(r.standard_normal(n), "low", 70, SR, 3) * curve(n, [(0, 0), (0.1, 1.0), (1, 0)]) * 2.5
+    return y
+
+
+def eater_ambient(seed: int) -> np.ndarray:
+    """Ein fernes, rollendes Knurren, als drehe sich ein Berg im Schlaf; dazwischen knirscht der Panzer."""
+    r = rng(seed)
+    n = int(r.uniform(2.2, 3.0) * SR)
+    f = curve(n, [(0, 34), (0.5, r.uniform(40, 46)), (1, 32)])
+    amp = curve(n, [(0, 0), (0.3, 0.8), (0.7, 0.7), (1, 0)])
+    y = _voice(n, f, amp, "u", r, rough=0.9) * 0.9
+    y += _grind(n, r, 40, 260, 12) * amp * 0.5
+    return filt(y, "low", 1800, SR, 2)
+
+
+def eater_hurt(seed: int) -> np.ndarray:
+    """Getroffen: Gestein bricht, und er stößt ein kurzes, wütendes Grollen aus."""
+    r = rng(seed)
+    n = int(0.9 * SR)
+    f = curve(n, [(0, 70), (0.3, 96), (1, 50)])
+    amp = curve(n, [(0, 0), (0.05, 1.0), (0.4, 0.6), (1, 0)])
+    y = soft_clip(_voice(n, f, amp, "a", r, rough=0.7) * 1.5, 0.9)
+    crack = filt(r.standard_normal(int(0.12 * SR)), "band", [800, 5000], SR, 2) * env_ad(int(0.12 * SR), SR, 0.002)
+    mix_at(y, crack, 0.0, 0.8)
+    return y
+
+
+def eater_death(seed: int) -> np.ndarray:
+    """Sein Ende: ein langer, brechender Schrei, der in Bersten und Poltern übergeht, dann ein letztes, tiefes Ausatmen."""
+    r = rng(seed)
+    n = int(7.5 * SR)
+    f = curve(n, [(0, 60), (0.15, 74), (0.45, 48), (0.75, 30), (1, 22)])
+    amp = curve(n, [(0, 0), (0.04, 1.0), (0.45, 0.8), (0.8, 0.35), (1, 0)])
+    y = soft_clip(_voice(n, f, amp, "o", r, rough=0.9) * 1.6 + 0.6 * _voice(n, f * 1.5, amp, "a", r, rough=0.5), 0.9)
+    for k in range(9):
+        t0 = 1.0 + k * 0.6 + r.uniform(-0.1, 0.1)
+        m = int(r.uniform(0.6, 1.1) * SR)
+        burst = filt(r.standard_normal(m), "low", r.uniform(140, 320), SR, 3) * env_ad(m, SR, 0.01) * 3.0
+        burst += filt(r.standard_normal(m), "band", [600, 4000], SR, 2) * env_ad(m, SR, 0.002, 0.15) * 0.6
+        mix_at(y, burst, t0, 0.8)
+    return y
+
+
+def eater_awaken(seed: int) -> np.ndarray:
+    """Das Erwachen: aus der Tiefe ein anschwellendes Dröhnen, Herzschläge wie Erdbeben, dann ein Riss, der aufbricht."""
+    r = rng(seed)
+    n = int(6.0 * SR)
+    t = np.arange(n) / SR
+    drone = sum(np.sin(2 * np.pi * f * t + r.uniform(0, 6)) for f in (27.5, 41.2, 55.0, 61.7))
+    y = drone * curve(n, [(0, 0), (0.6, 0.9), (0.85, 1.0), (1, 0)]) * 0.35
+    y = filt(y, "low", 400, SR, 2)
+    for k in range(4):
+        m = int(0.5 * SR)
+        beat = filt(r.standard_normal(m), "low", 60, SR, 3) * env_ad(m, SR, 0.01) * 4.0
+        mix_at(y, beat, 0.6 + k * 1.05, 0.9 + k * 0.15)
+    tear = filt(r.standard_normal(int(1.6 * SR)), "band", [300, 3500], SR, 2) * curve(int(1.6 * SR), [(0, 0), (0.1, 1.0), (1, 0)])
+    mix_at(y, tear, 4.3, 0.6)
+    return y
+
+
+def eater_shatter(seed: int) -> np.ndarray:
+    """Ein Kronensplitter zerspringt: helles Klirren, ein kristallener Nachklang, ein dumpfer Schlag darunter."""
+    r = rng(seed)
+    n = int(2.0 * SR)
+    y = np.zeros(n)
+    for i in range(6):
+        b = _bell(float(r.uniform(900, 2600)), 1.5, SR, decay=r.uniform(0.6, 1.2), seed=seed + i)
+        mix_at(y, b, r.uniform(0.0, 0.08), r.uniform(0.15, 0.3))
+    crack = filt(r.standard_normal(int(0.25 * SR)), "high", 1500, SR, 2) * env_ad(int(0.25 * SR), SR, 0.001)
+    mix_at(y, crack, 0.0, 0.9)
+    thud = filt(r.standard_normal(int(0.6 * SR)), "low", 90, SR, 3) * env_ad(int(0.6 * SR), SR, 0.005) * 3.0
+    mix_at(y, thud, 0.0, 0.7)
+    return y
+
+
+def eater_bite(seed: int) -> np.ndarray:
+    """Der Biss: ein mahlendes Zuschnappen aus Stein, Splitter fliegen."""
+    r = rng(seed)
+    n = int(1.0 * SR)
+    y = np.zeros(n)
+    for k in range(3):
+        m = int(0.18 * SR)
+        clack = filt(r.standard_normal(m), "band", [200, 2400], SR, 2) * env_ad(m, SR, 0.002) * 1.6
+        mix_at(y, clack, k * 0.035, 1.0 - k * 0.2)
+    boom = filt(r.standard_normal(int(0.8 * SR)), "low", 110, SR, 3) * env_ad(int(0.8 * SR), SR, 0.004) * 3.5
+    mix_at(y, boom, 0.0, 1.0)
+    return y
+
+
+def eater_inhale(seed: int) -> np.ndarray:
+    """Weltenhunger: ein gewaltiges Einsaugen – ein Sturm, der anschwillt und in der Tonhöhe steigt, darunter Dröhnen."""
+    r = rng(seed)
+    n = int(2.8 * SR)
+    noise = r.standard_normal(n)
+    y = np.zeros(n)
+    block = 2048
+    for s0 in range(0, n, block // 2):
+        e = min(n, s0 + block)
+        k = s0 / n
+        center = 220 + 1300 * k
+        y[s0:e] += filt(noise[s0:e], "band", [center * 0.5, center * 1.9], SR, 2) * np.hanning(e - s0)
+    y *= curve(n, [(0, 0), (0.25, 0.6), (0.85, 1.0), (1, 0.6)])
+    f = curve(n, [(0, 30), (1, 46)])
+    y += _voice(n, f, curve(n, [(0, 0), (0.3, 0.6), (1, 0.8)]), "u", r, rough=0.6) * 0.6
+    return y
+
+
+def eater_snap(seed: int) -> np.ndarray:
+    """Er schnappt zu: ein krachendes Zusammenschlagen der Lippen, Stein auf Stein."""
+    r = rng(seed)
+    n = int(1.2 * SR)
+    y = np.zeros(n)
+    hit = filt(r.standard_normal(int(0.3 * SR)), "band", [150, 3200], SR, 2) * env_ad(int(0.3 * SR), SR, 0.001) * 2.0
+    mix_at(y, hit, 0.0, 1.0)
+    boom = filt(r.standard_normal(n), "low", 90, SR, 3) * env_ad(n, SR, 0.003) * 4.0
+    mix_at(y, boom, 0.0, 1.0)
+    for i in range(3):
+        mix_at(y, _bell(float(r.uniform(400, 900)), 0.6, SR, decay=0.35, seed=seed + i), 0.0, 0.12)
+    return y
+
+
+def eater_spit(seed: int) -> np.ndarray:
+    """Er speit: ein tiefes Würgen und ein schweres Fauchen, mit dem der Brocken davonfliegt."""
+    r = rng(seed)
+    n = int(1.1 * SR)
+    f = curve(n, [(0, 80), (0.3, 64), (1, 50)])
+    amp = curve(n, [(0, 0), (0.08, 0.8), (0.3, 0.4), (1, 0)])
+    y = _voice(n, f, amp, "o", r, rough=0.6) * 0.8
+    whoosh = filt(r.standard_normal(n), "band", [300, 2500], SR, 2) * curve(n, [(0, 0), (0.15, 1.0), (0.6, 0.2), (1, 0)])
+    return y + whoosh * 0.7
+
+
+def eater_chunk(seed: int) -> np.ndarray:
+    """Ein Weltbrocken zerschellt: Krachen, Poltern, rieselnde Splitter."""
+    r = rng(seed)
+    n = int(1.4 * SR)
+    y = filt(r.standard_normal(n), "low", 160, SR, 3) * env_ad(n, SR, 0.003) * 3.0
+    crack = filt(r.standard_normal(int(0.2 * SR)), "band", [700, 5000], SR, 2) * env_ad(int(0.2 * SR), SR, 0.001)
+    mix_at(y, crack, 0.0, 1.0)
+    for i in range(10):
+        m = int(0.04 * SR)
+        pebble = filt(r.standard_normal(m), "band", [1500, 6000], SR, 2) * env_ad(m, SR, 0.001)
+        mix_at(y, pebble, 0.1 + r.uniform(0, 0.9), r.uniform(0.1, 0.3))
+    return y
+
+
+def eater_sweep(seed: int) -> np.ndarray:
+    """Der Leibhieb: ein riesiger Leib rauscht vorbei – Fauchen, das von fern heranzieht, und mahlender Panzer."""
+    r = rng(seed)
+    n = int(2.4 * SR)
+    noise = r.standard_normal(n)
+    y = np.zeros(n)
+    block = 2048
+    for s0 in range(0, n, block // 2):
+        e = min(n, s0 + block)
+        k = s0 / n
+        center = 160 + 700 * np.sin(np.pi * k) ** 2
+        y[s0:e] += filt(noise[s0:e], "band", [center * 0.5, center * 2.0], SR, 2) * np.hanning(e - s0)
+    y *= curve(n, [(0, 0), (0.4, 0.8), (0.55, 1.0), (0.8, 0.4), (1, 0)])
+    y += _grind(n, r, 50, 300, 30) * curve(n, [(0, 0), (0.4, 0.2), (0.6, 0.9), (1, 0)]) * 0.9
+    return y
+
+
+def eater_breath(seed: int) -> np.ndarray:
+    """Der Rissatem: ein tiefes Ansaugen, dann ein brausender, glühender Strom, der lange anhält und flackert."""
+    r = rng(seed)
+    n = int(5.5 * SR)
+    t = np.arange(n) / SR
+    roar = filt(r.standard_normal(n), "band", [120, 2400], SR, 2)
+    flick = 0.75 + 0.25 * np.sin(2 * np.pi * 9.0 * t + np.sin(2 * np.pi * 0.7 * t) * 3.0)
+    y = roar * flick * curve(n, [(0, 0), (0.25, 0.1), (0.32, 1.0), (0.9, 0.9), (1, 0)])
+    hum = sum(np.sin(2 * np.pi * f * t) for f in (55.0, 82.4, 110.0)) * 0.15
+    y += hum * curve(n, [(0, 0), (0.3, 0.2), (0.35, 1.0), (0.95, 0.8), (1, 0)])
+    return y
+
+
+def eater_gravity(seed: int) -> np.ndarray:
+    """Schwerkraftsturz: ein aufsteigender, hohler Ton, als hebe sich die Welt, dann ein dumpfer Fall."""
+    r = rng(seed)
+    n = int(3.6 * SR)
+    t = np.arange(n) / SR
+    f = curve(n, [(0, 90), (0.8, 300), (1, 60)])
+    y = tone(f, curve(n, [(0, 0), (0.2, 0.6), (0.8, 0.9), (0.85, 0.0), (1, 0)]), SR, harmonics=((1, 1.0), (2, 0.4), (3, 0.2)))
+    y = y * (1 + 0.3 * np.sin(2 * np.pi * 6.0 * t))
+    boom = filt(r.standard_normal(int(1.0 * SR)), "low", 80, SR, 3) * env_ad(int(1.0 * SR), SR, 0.005) * 4.0
+    mix_at(y, boom, 2.9, 1.0)
+    return y
+
+
+def eater_call(seed: int) -> np.ndarray:
+    """Ruf der Welten: ein heulender, mehrstimmiger Ruf, der in Rissen widerhallt."""
+    r = rng(seed)
+    n = int(3.0 * SR)
+    amp = curve(n, [(0, 0), (0.15, 0.9), (0.7, 0.8), (1, 0)])
+    y = np.zeros(n)
+    for base in (52.0, 78.0, 104.0):
+        f = curve(n, [(0, base), (0.4, base * 1.26), (1, base * 0.9)]) * r.uniform(0.98, 1.02)
+        y += _voice(n, f, amp, "u" if base < 60 else "o", r, rough=0.4) * (0.8 if base < 60 else 0.5)
+    return soft_clip(y, 0.9)
+
+
+def eater_rift(seed: int) -> np.ndarray:
+    """Ein Riss öffnet sich im Ring: knisterndes Reißen, ein Sog, ein Klirren."""
+    r = rng(seed)
+    n = int(1.3 * SR)
+    y = filt(r.standard_normal(n), "band", [400, 4000], SR, 2) * curve(n, [(0, 0), (0.1, 1.0), (0.5, 0.4), (1, 0)])
+    y += filt(r.standard_normal(n), "low", 120, SR, 3) * env_ad(n, SR, 0.01) * 2.0
+    mix_at(y, _bell(float(r.uniform(700, 1200)), 1.0, SR, decay=0.6, seed=seed), 0.05, 0.2)
+    return y
+
+
+def eater_crumble(seed: int) -> np.ndarray:
+    """Ein Glied zerbricht: Bersten, Poltern und das Rieseln einer ganzen Welt, die ins Nichts fällt."""
+    r = rng(seed)
+    n = int(2.2 * SR)
+    y = filt(r.standard_normal(n), "low", 180, SR, 3) * env_ad(n, SR, 0.005) * 3.5
+    y += _grind(n, r, 80, 900, 40) * curve(n, [(0, 0), (0.1, 1.0), (0.6, 0.5), (1, 0)]) * 0.8
+    for i in range(16):
+        m = int(0.05 * SR)
+        pebble = filt(r.standard_normal(m), "band", [1200, 6000], SR, 2) * env_ad(m, SR, 0.001)
+        mix_at(y, pebble, 0.2 + r.uniform(0, 1.7), r.uniform(0.08, 0.25))
+    return y
+
+
+# =====================================================================================
 # Ausgabe
 # =====================================================================================
 
@@ -593,6 +841,23 @@ SYNTH = {
     "shattered_king_rift": (king_rift, 2, (1.8, 0.25), -14.0),
     "shattered_king_erupt": (king_erupt, 3, (1.4, 0.2), -14.0),
     "shattered_king_quake": (king_quake, 2, (2.6, 0.3), -12.0),
+    "world_eater_roar": (eater_roar, 3, (3.2, 0.35), -11.0),
+    "world_eater_ambient": (eater_ambient, 3, (2.8, 0.35), -16.0),
+    "world_eater_hurt": (eater_hurt, 3, (1.4, 0.2), -14.0),
+    "world_eater_death": (eater_death, 1, (3.5, 0.35), -11.0),
+    "world_eater_awaken": (eater_awaken, 1, (3.5, 0.35), -12.0),
+    "world_eater_shatter": (eater_shatter, 3, (2.5, 0.3), -13.0),
+    "world_eater_bite": (eater_bite, 3, (1.4, 0.2), -12.0),
+    "world_eater_inhale": (eater_inhale, 2, (2.2, 0.25), -13.0),
+    "world_eater_snap": (eater_snap, 2, (1.6, 0.2), -12.0),
+    "world_eater_spit": (eater_spit, 3, (1.2, 0.2), -14.0),
+    "world_eater_chunk": (eater_chunk, 3, (1.2, 0.2), -14.0),
+    "world_eater_sweep": (eater_sweep, 2, (1.6, 0.2), -12.0),
+    "world_eater_breath": (eater_breath, 1, (2.0, 0.25), -13.0),
+    "world_eater_gravity": (eater_gravity, 1, (2.6, 0.3), -13.0),
+    "world_eater_call": (eater_call, 2, (3.0, 0.35), -13.0),
+    "world_eater_rift": (eater_rift, 3, (1.6, 0.25), -14.0),
+    "world_eater_crumble": (eater_crumble, 3, (2.4, 0.3), -12.0),
 }
 
 
@@ -643,6 +908,23 @@ EVENTS = {
     "entity.shattered_king.rift": (["shattered_king_rift"], 48),
     "entity.shattered_king.erupt": (["shattered_king_erupt"], 40),
     "entity.shattered_king.quake": (["shattered_king_quake"], 80),
+    "entity.world_eater.ambient": (["world_eater_ambient"], 96),
+    "entity.world_eater.hurt": (["world_eater_hurt"], 64),
+    "entity.world_eater.death": (["world_eater_death"], 160),
+    "entity.world_eater.awaken": (["world_eater_awaken"], 160),
+    "entity.world_eater.shatter": (["world_eater_shatter"], 96),
+    "entity.world_eater.roar": (["world_eater_roar"], 160),
+    "entity.world_eater.bite": (["world_eater_bite"], 64),
+    "entity.world_eater.inhale": (["world_eater_inhale"], 80),
+    "entity.world_eater.snap": (["world_eater_snap"], 64),
+    "entity.world_eater.spit": (["world_eater_spit"], 64),
+    "entity.world_eater.chunk": (["world_eater_chunk"], 48),
+    "entity.world_eater.sweep": (["world_eater_sweep"], 80),
+    "entity.world_eater.breath": (["world_eater_breath"], 96),
+    "entity.world_eater.gravity": (["world_eater_gravity"], 96),
+    "entity.world_eater.call": (["world_eater_call"], 128),
+    "entity.world_eater.rift": (["world_eater_rift"], 48),
+    "entity.world_eater.crumble": (["world_eater_crumble"], 96),
 }
 
 

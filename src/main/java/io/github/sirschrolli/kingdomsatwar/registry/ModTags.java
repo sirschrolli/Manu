@@ -162,6 +162,7 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_SHADOW_CITADEL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_shadow_citadel"));
         /** Wo der Thron der Alten schweben kann (alle Biome der Leere – er schwebt frei über allem). */
         public static final TagKey<Biome> HAS_VOID_THRONE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_void_throne"));
+        public static final TagKey<Biome> HAS_WORLD_EATER_HOARD = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_world_eater_hoard"));
         /** Wo das Versunkene Atoll liegen kann (Meere). */
         public static final TagKey<Biome> HAS_SUNKEN_ATOLL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sunken_atoll"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */

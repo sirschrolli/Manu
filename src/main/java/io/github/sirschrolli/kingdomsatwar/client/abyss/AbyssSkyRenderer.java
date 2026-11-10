@@ -97,11 +97,20 @@ public final class AbyssSkyRenderer {
             pass.setUniform("Sampler0", texture.getTextureView(), texture.getSampler());
             pass.setVertexBuffer(0, vertices.slice());
             pass.setIndexBuffer(indexBuffer, indices.type());
+            // der Zorn des Weltenfressers lässt alle Risse zugleich aufflammen: ein zweiter, additiver Durchgang
+            float flare = io.github.sirschrolli.kingdomsatwar.abyss.SkyFlare.strength(
+                    level.getGameTime() + minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false));
             for (int i = 0; i < RIFTS.length; i++) {
                 float glow = glow(RIFTS[i], seconds);
                 GpuBufferSlice transforms = RenderSystem.getDynamicUniforms().writeTransform(view, new Vector4f(1.0f, 1.0f, 1.0f, glow));
                 pass.setUniform("DynamicTransforms", transforms);
                 pass.drawIndexed(6, 1, 0, i * 4, 0);
+                if (flare > 0.01f) {
+                    GpuBufferSlice flash = RenderSystem.getDynamicUniforms().writeTransform(view,
+                            new Vector4f(1.0f, 0.92f, 0.85f, Mth.clamp(flare * (0.75f + 0.25f * RIFTS[i].brightness()), 0.0f, 1.0f)));
+                    pass.setUniform("DynamicTransforms", flash);
+                    pass.drawIndexed(6, 1, 0, i * 4, 0);
+                }
             }
         }
     }

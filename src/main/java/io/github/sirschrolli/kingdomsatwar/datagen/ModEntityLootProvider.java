@@ -328,6 +328,15 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_CRYSTAL.get(), 4, 8))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_ASTRAL_MARBLE.get(), 2, 4))
                 .withPool(drop(ModItems.GEMSTONE.get(), 3, 6)));
+        // der Weltenfresser: die Beute des stärksten Wesens der Mod (liegt nach dem Sieg auf dem Ring im Norden)
+        this.add(ModEntities.WORLD_EATER.get(), LootTable.lootTable()
+                .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 2))
+                .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 2))
+                .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100))
+                .withPool(drop(ModItems.GOLD_COIN.get(), 20, 32))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM.get(), 6, 12))
+                .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE.get(), 4, 8))
+                .withPool(drop(ModItems.GEMSTONE.get(), 6, 10)));
         this.add(ModEntities.STAR_RAY.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.STARDUST.get(), 1, 3))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM.get(), 0, 1)));

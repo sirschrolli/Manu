@@ -49,6 +49,9 @@ final class AbyssModels {
         ModModelProvider.glowingCube(blocks, AbyssBlocks.WORLD_SEAM.get());
         crystal(blocks, AbyssBlocks.FLOAT_CRYSTAL.get());
         crystal(blocks, AbyssBlocks.LIFT_CRYSTAL.get());
+        // der Schlund der Welten: Kronensplitter und Siegel (beide ohne Gegenstand)
+        crystalBlock(blocks, AbyssBlocks.SEAL_SHARD.get());
+        ModModelProvider.glowingCube(blocks, AbyssBlocks.HOARD_SEAL.get());
 
         Block rift = AbyssBlocks.ABYSS_RIFT.get();
         Material riftTexture = TextureMapping.getBlockTexture(rift).withForceTranslucent(true);
@@ -64,9 +67,14 @@ final class AbyssModels {
 
     /** Eine Kristalldruse mit Leuchtebene, nach ihrer Wuchsrichtung gedreht (wie eine Amethystdruse). */
     private static void crystal(BlockModelGenerators blocks, Block block) {
+        crystalBlock(blocks, block);
+        blocks.registerSimpleFlatItemModel(block);
+    }
+
+    /** Nur Blockmodell und -zustand einer Druse (für Blöcke ohne Gegenstand). */
+    private static void crystalBlock(BlockModelGenerators blocks, Block block) {
         BlockModelGenerators.PlantType type = BlockModelGenerators.PlantType.EMISSIVE_NOT_TINTED;
         Identifier model = type.getCross().create(block, type.getTextureMapping(block), blocks.modelOutput);
-        blocks.registerSimpleFlatItemModel(block);
         blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, BlockModelGenerators.plainVariant(model))
                 .with(BlockModelGenerators.ROTATIONS_COLUMN_WITH_FACING));
     }

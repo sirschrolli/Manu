@@ -152,6 +152,8 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(net.minecraft.world.level.biome.Biomes.DEEP_OCEAN);
         var throne = this.tag(ModTags.Biomes.HAS_VOID_THRONE);
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.ALL.forEach(throne::add);
+        var hoard = this.tag(ModTags.Biomes.HAS_WORLD_EATER_HOARD);
+        io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes.ALL.forEach(hoard::add);
         this.tag(ModTags.Biomes.HAS_SHADOW_CITADEL)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.PALE_WASTES)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)

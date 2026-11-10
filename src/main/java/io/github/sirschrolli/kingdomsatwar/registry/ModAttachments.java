@@ -89,6 +89,11 @@ public final class ModAttachments {
                     .serialize(Codec.STRING.listOf().fieldOf("realms")).copyOnDeath().build());
 
     /** Ansehen des Spielers im Königreich (Punkte; bleibt nach dem Tod). */
+    /** Ehrentitel „Weltenretter“: wer beim Sieg über den Weltenfresser dabei war (für alle sichtbar, bleibt nach dem Tod). */
+    public static final Supplier<AttachmentType<Boolean>> WORLD_SAVIOR = ATTACHMENTS.register("world_savior",
+            () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("savior"))
+                    .sync((holder, to) -> true, net.minecraft.network.codec.ByteBufCodecs.BOOL).copyOnDeath().build());
+
     public static final Supplier<AttachmentType<Integer>> REPUTATION = ATTACHMENTS.register("reputation",
             () -> AttachmentType.builder(() -> 0).serialize(Codec.INT.fieldOf("points")).copyOnDeath().build());
 

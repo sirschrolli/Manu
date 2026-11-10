@@ -591,6 +591,13 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<ShatteredKingEntity>> SHATTERED_KING = ENTITIES.registerEntityType(
             "shattered_king", ShatteredKingEntity::new, MobCategory.MONSTER,
             builder -> builder.sized(3.2f, 6.0f).eyeHeight(5.2f).fireImmune().notInPeaceful().clientTrackingRange(16).updateInterval(2));
+    // ---------------------------------------------------------------- der Weltenfresser (0.73)
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldEaterEntity>> WORLD_EATER =
+            ENTITIES.registerEntityType("world_eater", io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldEaterEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(5.0f, 4.5f).eyeHeight(2.6f).fireImmune().notInPeaceful().clientTrackingRange(24).updateInterval(1));
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldChunkEntity>> WORLD_CHUNK =
+            ENTITIES.registerEntityType("world_chunk", io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldChunkEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(1.0f, 1.0f).noLootTable().clientTrackingRange(10).updateInterval(2));
     // ---------------------------------------------------------------- Wesen des Meeres
     /** Mantarochen: friedlicher Riese der warmen und tiefen Meere, springt aus dem Wasser. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity>> MANTA_RAY =
@@ -927,6 +934,7 @@ public final class ModEntities {
         event.put(DISTORTLING.get(), DistortlingEntity.createAttributes().build());
         event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
         event.put(SHATTERED_KING.get(), ShatteredKingEntity.createAttributes().build());
+        event.put(WORLD_EATER.get(), io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldEaterEntity.createAttributes().build());
         event.put(REEF_COLOSSUS.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity.createAttributes().build());
         event.put(MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity.createAttributes().build());
         event.put(GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity.createAttributes().build());
