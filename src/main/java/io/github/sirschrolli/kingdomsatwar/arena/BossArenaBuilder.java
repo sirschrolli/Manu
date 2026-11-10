@@ -45,7 +45,10 @@ public final class BossArenaBuilder {
         switch (kind) {
             case WORLD_EATER -> {
                 BlockPos piece = center.below();
-                HoardPiece hoard = new HoardPiece(piece, SEED);
+                // erst den Platz leeren (schnell, Abschnitt für Abschnitt), dann ohne das langsame Freiräumen bauen
+                int[] clearing = HoardPiece.clearing();
+                ArenaIsland.clear(arena, piece, clearing[0], clearing[1], clearing[2]);
+                HoardPiece hoard = new HoardPiece(piece, SEED).withoutClearing();
                 BoundingBox box = hoard.getBoundingBox();
                 hoard.postProcess(arena, arena.structureManager(), arena.getChunkSource().getGenerator(), RandomSource.create(SEED), box,
                         ChunkPos.containing(piece), piece);
@@ -79,19 +82,19 @@ public final class BossArenaBuilder {
         BlockPos focus = lair.arenaFocus();
         return switch (kind) {
             // die Bühne mit Zuschauerrund und Lichtung (der Zylinder steht 6 Blöcke hinter der Mitte, 3 über dem Boden)
-            case MYSTIK -> new Cut(new BlockPos(focus.getX(), focus.getY() - 3, focus.getZ() + 6), new ArenaIsland.Shape(31, 18, 32, false, 11));
+            case MYSTIK -> new Cut(new BlockPos(focus.getX(), focus.getY() - 3, focus.getZ() + 6), new ArenaIsland.Shape(31, 18, 32, false, 11, 0.86));
             // die Esse im Glutdom, oben aufgerissen: ein Krater unter dem brennenden Himmel (der Amboss steht 47 über dem
             // Boden der Schlackenhalle, 6 vor der Mitte des Turms)
             case MALLEUS -> {
                 Direction facing = lair instanceof io.github.sirschrolli.kingdomsatwar.block.nether.GlutAnvilBlockEntity anvil
                         ? anvil.facing() : Direction.SOUTH;
                 BlockPos tower = lairPos.relative(facing, -6).below(47);
-                yield new Cut(tower, new ArenaIsland.Shape(38, 10, 58, true, 23));
+                yield new Cut(tower, new ArenaIsland.Shape(40, 12, 58, true, 23, 0.6));
             }
             // die Sternwarte mit ihrem Hof und den Seitentürmen (der Sternstein steht zwei über dem Pflaster)
             case ASTERIA -> new Cut(focus.below(2), new ArenaIsland.Shape(37, 30, 48, false, 37));
             // die Fehlerzone (der Kern steht auf seinem Sockel, zwei über dem Boden der Arena)
-            case ANNI -> new Cut(focus.below(2), new ArenaIsland.Shape(34, 18, 38, false, 41));
+            case ANNI -> new Cut(focus.below(2), new ArenaIsland.Shape(34, 18, 38, false, 41, 0.84));
             default -> new Cut(focus, new ArenaIsland.Shape(30, 16, 30, false, 53));
         };
     }

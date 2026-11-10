@@ -213,6 +213,8 @@ final class Showcase {
                         BeastShowcase.beasts(steps, scene.substring(7));
                     } else if (scene.equals("realm_beasts") || scene.startsWith("realm_beasts_")) {
                         RealmBeastShowcase.beasts(steps, scene.equals("realm_beasts") ? "" : scene.substring(13));
+                    } else if (scene.equals("boss_arenas") || scene.startsWith("boss_arena_")) {
+                        BossArenaShowcase.arenas(steps, scene.equals("boss_arenas") ? "" : scene.substring(11));
                     } else if (scene.equals("abyss_hoard") || scene.startsWith("abyss_hoard_")) {
                         HoardShowcase.hoard(steps, scene.equals("abyss_hoard") ? "" : scene.substring(12));
                     } else if (scene.equals("abyss_tour") || scene.startsWith("abyss_tour_")) {

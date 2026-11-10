@@ -53,6 +53,8 @@ public class HoardPiece extends StructurePiece {
 
     private final BlockPos center;
     private final long seed;
+    /** Den Raum ringsum freiräumen (beim Erzeugen der Welt; im Abbild in der Kampfdimension ist er schon leer). */
+    private boolean clear = true;
 
     public HoardPiece(BlockPos center, long seed) {
         super(ModStructures.WORLD_EATER_HOARD_PIECE.get(), 0, makeBox(center));
@@ -69,6 +71,17 @@ public class HoardPiece extends StructurePiece {
     private static BoundingBox makeBox(BlockPos c) {
         int r = (int) R_CLEAR + 1;
         return new BoundingBox(c.getX() - r, c.getY() - CLEAR_DOWN, c.getZ() - r, c.getX() + r, c.getY() + CLEAR_UP, c.getZ() + r);
+    }
+
+    /** Für das Abbild in der Kampfdimension: ohne das (langsame) Freiräumen – der Raum ist dort schon leer. */
+    public HoardPiece withoutClearing() {
+        this.clear = false;
+        return this;
+    }
+
+    /** So weit reicht der freigeräumte Raum (Halbmesser, nach unten, nach oben). */
+    public static int[] clearing() {
+        return new int[] {(int) R_CLEAR + 1, CLEAR_DOWN, CLEAR_UP};
     }
 
     @Override
@@ -222,7 +235,7 @@ public class HoardPiece extends StructurePiece {
         // den Raum ringsum freiräumen: ein weites, flaches Auge im Chaos mit unregelmäßigem Rand (die Bruchstücke ringsum
         // enden zerklüftet, nicht wie abgeschnitten)
         double angle = Math.atan2(dz, dx);
-        for (int y = FLOOR - CLEAR_DOWN; y <= FLOOR + CLEAR_UP; y++) {
+        for (int y = FLOOR - CLEAR_DOWN; this.clear && y <= FLOOR + CLEAR_UP; y++) {
             double dy = (y - FLOOR) * (y < FLOOR ? 1.3 : 1.2);
             double edge = clearEdge(ctx, angle, y);
             if (r * r + dy * dy <= edge * edge && !ctx.get(x, y, z).isAir()) {

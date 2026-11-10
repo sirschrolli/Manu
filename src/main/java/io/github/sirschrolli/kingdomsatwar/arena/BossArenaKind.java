@@ -24,8 +24,8 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  */
 public enum BossArenaKind implements net.minecraft.util.StringRepresentable {
-    MYSTIK("moon_stage", 34, 30, 22.0, 12.0, 4, 11),
-    MALLEUS("ember_forge", 40, 30, 20.0, 12.0, 3, 7),
+    MYSTIK("moon_stage", 34, 30, 22.0, 12.0, 9, 15),
+    MALLEUS("ember_forge", 40, 60, 20.0, 12.0, 3, 7),
     ASTERIA("star_canopy", 40, 34, 22.0, 14.0, 4, 9),
     ANNI("error_space", 36, 28, 22.0, 14.0, 5, 10),
     KING("throne_realm", 48, 40, 26.0, 16.0, 6, 13),

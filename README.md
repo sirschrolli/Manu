@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.73.1 – Der Weltenfresser.** Im Abgrund schwebt der **Schlund der Welten**: ein Ring aus Chaosgestein in einem weiten, leer gefegten Auge des Chaos, in der Mitte ein Loch bis ins Nichts. Um den Schlund schweben sieben **Kronensplitter** – die Splitter der Krone, die der Zerbrochene König einst zerbrach, um das Wesen darunter zu versiegeln –, und Ketten aus Licht laufen von ihnen zu einem Siegelstern. Wer den Ring betritt, weckt den **Weltenfresser**: Die Splitter zerspringen, und aus dem Schlund bricht ein gewaltiger Wurm aus Chaosgestein mit einem Rachen wie eine Blüte und zwölf Gliedern, auf denen Stücke der Welten liegen, die er verschlungen hat – das **stärkste Wesen der Mod** (2.600 Lebenspunkte), mit Biss, Weltenhunger, Weltenspucke, Leibhieb, Rissatem, Schwerkraftsturz, Ruf der Welten und seinem **Zorn**, in dem der Himmel aufflammt und der Ring zerbricht. Besiegt hinterlässt er den **Weltenspeer** (3D, jeder Treffer trägt eine von vier Welten in sich, jeder vierte ruft einen Weltbrocken vom Himmel) und seinen **Kopf** als Trophäe – und wer dabei war, trägt fortan den Titel **„Weltenretter“** in Gold vor seinem Namen. Damit ist der Weg der Geschichte bis zum Ende gegangen. **Neu in 0.73.1:** Die großen Gegner halten jetzt wirklich so viel aus, wie für sie vorgesehen ist – Minecraft erlaubt einem Wesen nur 1.024 Lebenspunkte, und der Zerbrochene König (1.800), Nyxar (1.400), Terragon (1.150) und die Drachen auf „Schwer“ oder gegen mehrere Spieler blieben bisher darunter; ihre Leiste fasst weiter 1.024, aber jeder Treffer zählt entsprechend weniger.
+> **Testversion 0.74 – Die Kampfdimensionen.** Die sechs großen Bosse nach den Erzmagiern kämpfen jetzt wie die Erzmagier in ihrer eigenen Welt: Wer ihren Hort betritt, wird – mit allen Mitstreitern am Hort und ihren Soldaten – in die **Kampfdimension** des Bosses gezogen. Dort schwebt ein Abbild seines Horts unter einem fremden Himmel: MissMystiks **Mondbühne** (die Zauberbühne als Feeninsel unter dem Vollmond, tief unten ein rosa Wolkenmeer), Malleus' **Glutesse** (der Glutdom als Vulkan unter einem brennenden Himmel), Asterias **Sternenzelt** (die Sternwarte auf ihrer Endinsel zwischen unzähligen Sternen), Annis **Fehlerraum** (die Fehlerzone als herausgerissener Chunk im Bildrauschen), die **Thronwelt** des Zerbrochenen Königs und der **Weltenschlund** des Weltenfressers unter flammenden Rissen. Es gelten die Regeln der Arkanen Sphäre: nichts bauen, nichts abbauen, wer stirbt, verliert alles, was er bei sich trägt, wer abstürzt, wird zurückgeworfen – und wer später an den Hort kommt, folgt den anderen. Fällt der Boss, kehren alle mit Beute und Erfahrung an den Hort zurück. Fallen alle, die gegen ihn stehen, **vergeht der Boss und erwacht beim nächsten Mal mit voller Kraft und in seiner ursprünglichen Gestalt** – auch dann, wenn (etwa nach einem Angriff aus der Ferne) am Hort selbst gekämpft wird. Dazu: ein **Spawn-Ei des Weltenfressers**, und `/locate structure` findet jetzt den Schlund der Welten (im Abgrund) und den Thron der Alten (in der Leere).
+> In 0.73 kam der Weltenfresser: Im Abgrund schwebt der **Schlund der Welten**: ein Ring aus Chaosgestein in einem weiten, leer gefegten Auge des Chaos, in der Mitte ein Loch bis ins Nichts. Um den Schlund schweben sieben **Kronensplitter** – die Splitter der Krone, die der Zerbrochene König einst zerbrach, um das Wesen darunter zu versiegeln –, und Ketten aus Licht laufen von ihnen zu einem Siegelstern. Wer den Ring betritt, weckt den **Weltenfresser**: Die Splitter zerspringen, und aus dem Schlund bricht ein gewaltiger Wurm aus Chaosgestein mit einem Rachen wie eine Blüte und zwölf Gliedern, auf denen Stücke der Welten liegen, die er verschlungen hat – das **stärkste Wesen der Mod** (2.600 Lebenspunkte), mit Biss, Weltenhunger, Weltenspucke, Leibhieb, Rissatem, Schwerkraftsturz, Ruf der Welten und seinem **Zorn**, in dem der Himmel aufflammt und der Ring zerbricht. Besiegt hinterlässt er den **Weltenspeer** (3D, jeder Treffer trägt eine von vier Welten in sich, jeder vierte ruft einen Weltbrocken vom Himmel) und seinen **Kopf** als Trophäe – und wer dabei war, trägt fortan den Titel **„Weltenretter“** in Gold vor seinem Namen. Damit ist der Weg der Geschichte bis zum Ende gegangen. In 0.73.1 lernten die großen Gegner, wirklich so viel auszuhalten, wie für sie vorgesehen ist – Minecraft erlaubt einem Wesen nur 1.024 Lebenspunkte, und der Zerbrochene König (1.800), Nyxar (1.400), Terragon (1.150) und die Drachen auf „Schwer“ oder gegen mehrere Spieler blieben bisher darunter; ihre Leiste fasst weiter 1.024, aber jeder Treffer zählt entsprechend weniger.
 > In 0.72 kam der Abgrund: eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden **Weltennähten**, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller weißglühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt, **Schwebe- und Hebekristalle** der verdrehten Schwerkraft, der **Abgrundriss** hinter dem Thron des Zerbrochenen Königs und der **Rissschlüssel**, der Risse in der Leere öffnet.
 > In 0.71 kamen vier Monster in die Schattenwelt und ins End, jedes mit eigenem Modell, eigenen Animationen, Angriffen und Klängen: der **Seelenreiher** in den Seelensümpfen (Speerschnabel, Schwingenschlag und Sturzflug aus der Luft), der **Nachtwidder** auf den Schattengipfeln (scharrt und stürmt los – wer ausweicht, lässt ihn gegen die Wand krachen), die **Rissjäger** auf den äußeren End-Inseln (versinken in einem Riss und tauchen hinter ihrem Opfer auf) und der **Chorusschlund**, der zwischen den Chorusbäumen wie eine Knospe wartet, bis er zu einem Schlund mit Zähnen aufblüht.
 > In 0.70 kamen Waffen und Rüstungen aus Monsterteilen: vier Waffen – die **Krallenklinge** (nachts härter, Blutrausch nach jedem Sieg), die **Moorkeule** (Wurzeln packen zu), die **Glutzahn-Klinge** (setzt in Brand) und die **Seelensense** (Rechtsklick: **Verwehen**) – und zwei Rüstungen: der **Werwolfspelz** mit Wolfskopf, Umhang und Schwanz (voller Satz: nachts schneller, Nachtsicht) und der **Glutwurm-Panzer** mit glühenden Hörnern, Flossenkamm und Rückenstacheln (voller Satz: feuerfest, Angreifer fangen Feuer) – in der Hand und am Körper als echte 3D-Modelle.
@@ -358,6 +359,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Neue Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist (0.69); Seelenreiher, Nachtwidder, Rissjäger, Chorusschlund in der Schattenwelt und im End (0.71) | ✅ fertig |
 | **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
 | **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
+| **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
@@ -787,6 +789,11 @@ Spieler erfahren davon.
 **Klänge:** ein Grollen aus der Tiefe, Kronensplitter, die glockenhell zerspringen, ein Brüllen, das den Ring erbeben
 lässt, mahlendes Gestein, das Einsaugen und Zuschnappen des Rachens, das Fauchen des Rissatems und das Zerbersten seiner
 Glieder – alles eigene Klänge.
+
+Seit 0.74 kämpft der Weltenfresser im **Weltenschlund**, seiner eigenen Kampfdimension (siehe „Die Kampfdimensionen der
+großen Bosse“). Im Kreativ-Reiter liegt ein **Spawn-Ei des Weltenfressers** (ohne Hort kreist er um die Stelle, an der
+er erscheint), und `/locate structure kingdomsatwar:world_eater_hoard` findet den Schlund im Abgrund (ebenso
+`kingdomsatwar:void_throne` den Thron der Alten in der Leere).
 
 ### Klänge der Welt
 
@@ -2697,6 +2704,50 @@ leuchtender Spitze, ringsum Felsinseln mit Kristallschreinen und Ruinen und schw
 - Wer den Magier von draußen angreift (etwa mit Pfeilen durch ein Fenster), ohne im Sanktum zu stehen, kämpft wie
   früher gegen ihn in seinem Turm.
 
+### Die Kampfdimensionen der großen Bosse
+
+![Die sechs Kampfdimensionen: Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund](docs/bilder/die_kampfdimensionen.jpg)
+
+Wie die Erzmagier kämpfen auch die sechs großen Bosse nach ihnen nicht mehr in ihrem Hort, sondern in ihrer eigenen
+Welt. Betritt jemand den Hort – tritt an den Zauberzylinder, den Glutamboss, den Sternstein oder den Fehlerkern, betritt
+den Thronplatz oder den Ring um den Schlund –, zieht der Boss ihn, alle Spieler am Hort und ihre Soldaten in der Nähe in
+seine **Kampfdimension**. Dort schwebt ein Abbild seines Horts: Der Schlund der Welten und der Thron der Alten entstehen
+neu aus ihren Bauplänen; die übrigen Horte werden samt ihrem Boden aus der Welt gerissen – genau so, wie sie gerade
+aussehen, nur ohne Beute (die Truhen bleiben leer) und ohne Wesen – und schweben als Insel unter einem fremden Himmel:
+
+- **Die Mondbühne** (MissMystik): die Zauberbühne mit Zuschauerrund und Glimmerbäumen als Feeninsel; violette Nacht,
+  der Vollmond hoch über der Bühne, ein rosa Nachglühen am Horizont und ein Meer aus fliederfarbenen Wolken tief unten,
+  Feenfunken in der Luft – und die Spieluhr. Man landet im Zuschauerrund, mit Blick auf die Bühne.
+- **Die Glutesse** (Malleus): die Aschenesse im Glutdom, oben aufgerissen – ein Vulkan mit Lavasee, aus dem der Turm
+  aufragt; ein Himmel wie glimmende Kohle, am Horizont brennt es, Rauchwolken ziehen darüber, Asche rieselt.
+- **Das Sternenzelt** (Asteria): die Sternwarte auf ihrer Endinsel; tiefblaue Nacht voller Sterne, eine schmale
+  Mondsichel und ein silbern leuchtendes Wolkenmeer – dazu die Musik des Drachenkampfs.
+- **Der Fehlerraum** (Anni der Troll): die Fehlerzone als herausgerissener Chunk Oberwelt; fast schwarz, Dunst in
+  Magenta, der Mond steht senkrecht oben, türkise Pixelwolken und Bildrauschen in der Luft.
+- **Die Thronwelt** (der Zerbrochene König): der Thron der Alten unter einem violetten Himmel voller kalter Sterne.
+- **Der Weltenschlund** (der Weltenfresser): der Schlund der Welten unter den flammenden Rissen des Abgrunds,
+  Glutasche in der Luft.
+
+Es gelten die Regeln der Arkanen Sphäre:
+
+- **Nichts bauen, nichts abbauen:** keine Blöcke, kein Wasser, kein Feuer, keine Wesen aus Eiern; Explosionen reißen
+  nichts heraus.
+- **Alles verloren:** Wer in einer Kampfdimension stirbt, verliert alles, was er bei sich trägt (auch mit
+  `keepInventory`), und erwacht an seinem Wiedereinstiegspunkt.
+- **Kein Ausweg nach unten:** Wer von der Insel stürzt, wird verletzt zurückgeworfen.
+- **Nachzügler:** Wer an den Hort kommt, während drüben gekämpft wird, folgt den anderen in die Kampfdimension – auch
+  wer gefallen ist und zurückkehrt.
+- **Sieg:** Fällt der Boss, kehren alle an ihren Platz zurück; Beute und Erfahrung landen am Hort. Der Hort gilt als
+  besiegt – mit allem, was dazugehört: Der Sternstein erlischt, der Amboss erkaltet, der Kern stürzt ab, der Zylinder ist
+  leer, und hinter dem Thron reißt der Weg in den Abgrund auf.
+- **Niederlage:** Steht niemand mehr in der Arena, ist der Kampf verloren: Der Boss vergeht, der Hort ruht wieder – und
+  wer wiederkommt, trifft auf einen Boss **mit voller Kraft und in seiner ursprünglichen Gestalt**. Ein Kampf übersteht
+  auch einen Neustart; wer abgemeldet war, als sein Kampf endete, kehrt beim Anmelden an seinen Platz zurück.
+- Wer den Boss von draußen angreift, ohne am Hort zu stehen (etwa Malleus mit Pfeilen), kämpft wie früher am Hort.
+  Fällt dort der letzte Gegner, vergeht der Boss ebenso und erwacht beim nächsten Mal unversehrt.
+- Sternenlanze, Glutspeer und Weltenspeer sind in den Kampfdimensionen so stark wie in ihrer Heimat (im End, im Nether,
+  im Abgrund und in der Leere).
+
 ### Bauen und Einrichten
 
 ![Eine Halle aus den neuen Bau-Blöcken](docs/bilder/burg.jpg)
@@ -2890,9 +2941,12 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.72 – Der Abgrund** (fertig): hinter der Leere das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse; der Weg hinein öffnet sich, wenn der König fällt – ein Riss hinter dem
      Thron und der Rissschlüssel, der Risse in der Leere öffnet;
-   - zuletzt **0.73 – Der Weltenfresser** (fertig): Im Abgrund wartet im Schlund der Welten das Wesen, das der
+   - **0.73 – Der Weltenfresser** (fertig): Im Abgrund wartet im Schlund der Welten das Wesen, das der
      Zerbrochene König einst versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Wer es besiegt,
-     erhält den **Weltenspeer**, den **Kopf des Weltenfressers** als Trophäe und den Titel **„Weltenretter“**.
+     erhält den **Weltenspeer**, den **Kopf des Weltenfressers** als Trophäe und den Titel **„Weltenretter“**;
+   - zuletzt **0.74 – Die Kampfdimensionen** (fertig): MissMystik, Malleus, Asteria, Anni der Troll, der Zerbrochene
+     König und der Weltenfresser ziehen ihre Gegner wie die Erzmagier in ihre eigene Welt – sechs Kampfdimensionen mit
+     eigenem Himmel; nach einer Niederlage erwacht der Boss wieder mit voller Kraft und in seiner ursprünglichen Gestalt.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 

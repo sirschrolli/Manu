@@ -34,9 +34,14 @@ public final class ArenaIsland {
 
     /**
      * Die Form: Halbmesser (größter), Tiefe der Unterseite unter dem Boden, Höhe über dem Boden; {@code jaggedTop}: die
-     * Oberkante ist zerrissen (etwa der Rand eines Kraters).
+     * Oberkante ist zerrissen (etwa der Rand eines Kraters); {@code taper}: so viel des Halbmessers bleibt an der Oberkante
+     * (1 = senkrechte Wand, weniger = ein Kegel wie ein Vulkan).
      */
-    public record Shape(int radius, int below, int above, boolean jaggedTop, int salt) {
+    public record Shape(int radius, int below, int above, boolean jaggedTop, int salt, double taper) {
+        public Shape(int radius, int below, int above, boolean jaggedTop, int salt) {
+            this(radius, below, above, jaggedTop, salt, 1.0);
+        }
+
         /** Gehört die Stelle (relativ zur Mitte auf Bodenhöhe) zur Insel? */
         public boolean inside(int dx, int dy, int dz) {
             if (dy > this.above || dy < -this.below) {
@@ -51,6 +56,11 @@ public final class ArenaIsland {
             // der zerklüftete Rand: weiche Buchten und Zacken
             double edge = this.radius * (0.82 + 0.18 * angleNoise(angle + dy * 0.021, 5.0, this.salt));
             if (dy >= 0) {
+                // nach oben enger (ein Kegel), mit Rippen und Rinnen in der Flanke
+                if (this.taper < 1.0) {
+                    double t = (double) dy / Math.max(1, this.above);
+                    edge *= Mth.lerp(t, 1.0, this.taper) * (0.92 + 0.08 * noise(angle * 6.0, dy * 0.18, 1.0, this.salt + 13));
+                }
                 if (this.jaggedTop) {
                     double cut = this.above - 2 - angleNoise(angle * 1.7, 9.0, this.salt + 7) * 9.0 - rand(dx, dz, this.salt + 11) * 1.6;
                     if (dy > cut) {
