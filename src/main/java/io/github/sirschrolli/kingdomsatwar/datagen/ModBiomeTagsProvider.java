@@ -74,6 +74,22 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .addTag(BiomeTags.IS_BADLANDS)
                 .addTag(BiomeTags.IS_HILL)
                 .add(OverworldBiomes.ROCK_GORGES);
+        // Neue Monster (0.69)
+        this.tag(ModTags.Biomes.HAS_WEREWOLVES)
+                .addTag(BiomeTags.IS_FOREST)
+                .addTag(BiomeTags.IS_TAIGA)
+                .add(Biomes.PALE_GARDEN)
+                .add(OverworldBiomes.PRIMEVAL_FOREST);
+        this.tag(ModTags.Biomes.HAS_MIRE_SHAMBLERS)
+                .addTag(Tags.Biomes.IS_SWAMP)
+                .add(OverworldBiomes.MIST_MOOR);
+        this.tag(ModTags.Biomes.HAS_EMBER_WYRMS)
+                .add(Biomes.NETHER_WASTES)
+                .add(Biomes.BASALT_DELTAS)
+                .add(Biomes.CRIMSON_FOREST);
+        this.tag(ModTags.Biomes.HAS_ASH_WRAITHS)
+                .add(Biomes.SOUL_SAND_VALLEY)
+                .add(Biomes.BASALT_DELTAS);
 
         // Drachennester (je eins pro Welt): jede Art in ihrem eigenen Gebiet – Eis im Eis-Biom, Wasser im tiefen Ozean
         var nests = ModTags.Biomes.HAS_DRAGON_NESTS;

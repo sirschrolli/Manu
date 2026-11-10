@@ -88,6 +88,10 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.model.geom.AsteriaGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.CAVE_TROLL, CaveTrollGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.LINDWORM, LindwormGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.WEREWOLF, io.github.sirschrolli.kingdomsatwar.client.model.geom.WerewolfGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MIRE_SHAMBLER, io.github.sirschrolli.kingdomsatwar.client.model.geom.MireShamblerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.EMBER_WYRM, io.github.sirschrolli.kingdomsatwar.client.model.geom.EmberWyrmGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ASH_WRAITH, io.github.sirschrolli.kingdomsatwar.client.model.geom.AshWraithGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER_RANK,
                 () -> SoldierModel.createLayer(new net.minecraft.client.model.geom.builders.CubeDeformation(0.3f)));
@@ -219,6 +223,11 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.end.CometLanceRenderer::new);
         event.registerEntityRenderer(ModEntities.CAVE_TROLL.get(), CaveTrollRenderer::new);
         event.registerEntityRenderer(ModEntities.LINDWORM.get(), LindwormRenderer::new);
+        event.registerEntityRenderer(ModEntities.WEREWOLF.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.WerewolfRenderer::new);
+        event.registerEntityRenderer(ModEntities.MIRE_SHAMBLER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MireShamblerRenderer::new);
+        event.registerEntityRenderer(ModEntities.EMBER_WYRM.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.EmberWyrmRenderer::new);
+        event.registerEntityRenderer(ModEntities.ASH_WRAITH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.AshWraithRenderer::new);
+        event.registerEntityRenderer(ModEntities.MONSTER_SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
         event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,
                 new DragonBossModel(context.bakeLayer(ModModelLayers.PYRRHON), 6, 8, true, 4, 32.0f),

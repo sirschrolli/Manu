@@ -22,6 +22,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
 
     @Override
     protected void addTags(HolderLookup.Provider registries) {
+        // Werwesen: Mondsilber trifft sie besonders hart
+        this.tag(ModTags.EntityTypes.WEREBEASTS).add(ModEntities.WEREWOLF.key());
         this.tag(ModTags.EntityTypes.SHADOW_CREATURES)
                 .add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key())
@@ -52,6 +54,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
             coins.addOptional(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE,
                     net.minecraft.resources.Identifier.withDefaultNamespace(name)));
         }
+        coins.add(ModEntities.WEREWOLF.key()).add(ModEntities.MIRE_SHAMBLER.key()).add(ModEntities.EMBER_WYRM.key()).add(ModEntities.ASH_WRAITH.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.ASH_WRAITH.key());
         coins.add(ModEntities.CAVE_TROLL.key()).add(ModEntities.LINDWORM.key()).add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key()).add(ModEntities.NIGHT_WING.key());
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.CRYSTAL_CRAWLER.key());

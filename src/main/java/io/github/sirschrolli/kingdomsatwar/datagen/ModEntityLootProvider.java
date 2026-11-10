@@ -242,6 +242,25 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(drop(Items.BONE, 1, 3))
                 .withPool(rare(ModItems.DRACONIUM.get(), 0.1f, 0.03f)));
 
+        // Neue Monster (0.69)
+        this.add(ModEntities.WEREWOLF.get(), LootTable.lootTable()
+                .withPool(drop(Items.LEATHER, 1, 3))
+                .withPool(drop(Items.BONE, 0, 2))
+                .withPool(rare(ModItems.GEMSTONE.get(), 0.06f, 0.02f)));
+        this.add(ModEntities.MIRE_SHAMBLER.get(), LootTable.lootTable()
+                .withPool(drop(Items.CLAY_BALL, 1, 3))
+                .withPool(drop(Items.MUD, 0, 2))
+                .withPool(drop(Items.SLIME_BALL, 0, 1))
+                .withPool(rare(Items.LILY_PAD, 0.25f, 0.05f)));
+        this.add(ModEntities.EMBER_WYRM.get(), LootTable.lootTable()
+                .withPool(drop(Items.MAGMA_CREAM, 1, 3))
+                .withPool(rare(Items.BLAZE_POWDER, 0.3f, 0.08f))
+                .withPool(rare(ModItems.DRAGON_SCALES.get(DragonType.FIRE).get(), 0.08f, 0.03f)));
+        this.add(ModEntities.ASH_WRAITH.get(), LootTable.lootTable()
+                .withPool(drop(Items.GUNPOWDER, 0, 2))
+                .withPool(drop(Items.BONE, 0, 1))
+                .withPool(rare(Items.GHAST_TEAR, 0.08f, 0.03f)));
+
         // Kreaturen der Schattenwelt
         this.add(ModEntities.SHADE_STALKER.get(), LootTable.lootTable()
                 .withPool(drop(ShadowItems.SHADOW_ESSENCE.get(), 0, 2))

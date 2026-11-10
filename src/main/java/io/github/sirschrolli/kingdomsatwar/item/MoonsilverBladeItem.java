@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Die Mondsilberklinge: eine leichte, schnelle Klinge, die Schattenwesen und Untote besonders hart trifft – getroffene
+ * Die Mondsilberklinge: eine leichte, schnelle Klinge, die Schattenwesen, Untote und Werwesen besonders hart trifft – getroffene
  * leuchten kurz auf, sodass sie sich im Zwielicht nicht mehr verbergen können.
  */
 public class MoonsilverBladeItem extends Item {
@@ -26,7 +26,7 @@ public class MoonsilverBladeItem extends Item {
 
     /** Trifft die Klinge dieses Wesen besonders hart? */
     public static boolean isBane(Entity target) {
-        return target.is(ModTags.EntityTypes.SHADOW_CREATURES) || target.is(EntityTypeTags.UNDEAD);
+        return target.is(ModTags.EntityTypes.SHADOW_CREATURES) || target.is(EntityTypeTags.UNDEAD) || target.is(ModTags.EntityTypes.WEREBEASTS);
     }
 
     @Override

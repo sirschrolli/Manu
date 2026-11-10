@@ -510,6 +510,28 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<LindwormEntity>> LINDWORM = ENTITIES.registerEntityType("lindworm",
             LindwormEntity::new, MobCategory.MONSTER, builder -> builder.sized(1.6f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
 
+    // ---------------------------------------------------------------- Neue Monster (0.69)
+    /** Werwolf: nachts in den Wäldern, bei Vollmond besonders oft. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.WerewolfEntity>> WEREWOLF = ENTITIES.registerEntityType(
+            "werewolf", io.github.sirschrolli.kingdomsatwar.entity.monster.WerewolfEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.0f, 2.35f).eyeHeight(2.05f).clientTrackingRange(10));
+    /** Moorschlurfer: lauert halb versunken in Sümpfen und Mooren. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity>> MIRE_SHAMBLER = ENTITIES.registerEntityType(
+            "mire_shambler", io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.4f, 2.1f).eyeHeight(1.75f).clientTrackingRange(10));
+    /** Glutwurm: schwimmt in den Lavaseen des Nethers. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity>> EMBER_WYRM = ENTITIES.registerEntityType(
+            "ember_wyrm", io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.8f, 1.3f).eyeHeight(1.0f).fireImmune().clientTrackingRange(12));
+    /** Aschengeist: schwebt durch Seelensandtäler und Basaltdeltas. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity>> ASH_WRAITH = ENTITIES.registerEntityType(
+            "ash_wraith", io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(0.9f, 2.2f).eyeHeight(1.9f).fireImmune().clientTrackingRange(10));
+    /** Geschosse der neuen Monster: Schlammklumpen, Magmabatzen, Seelenfeuer. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.MonsterShot>> MONSTER_SHOT = ENTITIES.registerEntityType(
+            "monster_shot", io.github.sirschrolli.kingdomsatwar.entity.monster.MonsterShot::new, MobCategory.MISC,
+            builder -> builder.sized(0.4f, 0.4f).noLootTable().clientTrackingRange(6).updateInterval(10));
+
     // ---------------------------------------------------------------- Kreaturen der Schattenwelt
     /** Schattenpirscher: unsichtbar, solange man ihn nicht ansieht. */
     public static final DeferredHolder<EntityType<?>, EntityType<ShadeStalkerEntity>> SHADE_STALKER = ENTITIES.registerEntityType("shade_stalker",
@@ -860,6 +882,10 @@ public final class ModEntities {
         event.put(GLITCH_CLONE.get(), io.github.sirschrolli.kingdomsatwar.entity.glitch.GlitchCloneEntity.createAttributes().build());
         event.put(CAVE_TROLL.get(), CaveTrollEntity.createAttributes().build());
         event.put(LINDWORM.get(), LindwormEntity.createAttributes().build());
+        event.put(WEREWOLF.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.WerewolfEntity.createAttributes().build());
+        event.put(MIRE_SHAMBLER.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity.createAttributes().build());
+        event.put(EMBER_WYRM.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity.createAttributes().build());
+        event.put(ASH_WRAITH.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
         event.put(GLACIARA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity.createAttributes().build());
         event.put(VERDANTIS.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity.createAttributes().build());
@@ -1007,6 +1033,11 @@ public final class ModEntities {
                 replace);
         event.register(CAVE_TROLL.get(), ground, surface, CaveTrollEntity::checkTrollSpawnRules, replace);
         event.register(LINDWORM.get(), ground, surface, LindwormEntity::checkLindwormSpawnRules, replace);
+        // Neue Monster: Werwölfe in den Wäldern, Moorschlurfer in den Sümpfen, Glutwürmer in der Lava, Aschengeister im Nether
+        event.register(WEREWOLF.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.WerewolfEntity::checkWerewolfSpawnRules, replace);
+        event.register(MIRE_SHAMBLER.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity::checkShamblerSpawnRules, replace);
+        event.register(EMBER_WYRM.get(), SpawnPlacementTypes.IN_LAVA, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity::checkWyrmSpawnRules, replace);
+        event.register(ASH_WRAITH.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity::checkWraithSpawnRules, replace);
         // Schattenwelt: Pirscher überall im Dunkeln, Kriecher in Höhlen und Schluchten, Schwingen und Falter in der Luft
         event.register(SHADE_STALKER.get(), ground, surface, ShadeStalkerEntity::checkStalkerSpawnRules, replace);
         event.register(CRYSTAL_CRAWLER.get(), ground, surface, CrystalCrawlerEntity::checkCrawlerSpawnRules, replace);

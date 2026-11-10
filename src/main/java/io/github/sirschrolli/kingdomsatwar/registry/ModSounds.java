@@ -69,6 +69,34 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_DEATH = register("entity.lindworm.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_BITE = register("entity.lindworm.bite");
     public static final DeferredHolder<SoundEvent, SoundEvent> LINDWORM_SLITHER = register("entity.lindworm.slither");
+    // Neue Monster (0.69)
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_GROWL = register("entity.werewolf.growl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_HOWL = register("entity.werewolf.howl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_SNARL = register("entity.werewolf.snarl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_HURT = register("entity.werewolf.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_DEATH = register("entity.werewolf.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> WEREWOLF_STEP = register("entity.werewolf.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_AMBIENT = register("entity.mire_shambler.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_HURT = register("entity.mire_shambler.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_DEATH = register("entity.mire_shambler.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_STEP = register("entity.mire_shambler.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_THROW = register("entity.mire_shambler.throw");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_GRASP = register("entity.mire_shambler.grasp");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_RISE = register("entity.mire_shambler.rise");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SHAMBLER_SPLAT = register("entity.mire_shambler.splat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_AMBIENT = register("entity.ember_wyrm.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_HURT = register("entity.ember_wyrm.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_DEATH = register("entity.ember_wyrm.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_SURFACE = register("entity.ember_wyrm.surface");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_SPIT = register("entity.ember_wyrm.spit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_BITE = register("entity.ember_wyrm.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_WYRM_DIVE = register("entity.ember_wyrm.dive");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_AMBIENT = register("entity.ash_wraith.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_HURT = register("entity.ash_wraith.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_DEATH = register("entity.ash_wraith.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_CLOUD = register("entity.ash_wraith.cloud");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_BOLT = register("entity.ash_wraith.bolt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_FADE = register("entity.ash_wraith.fade");
 
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_BREATH = register("entity.nyxar.breath");
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_SHRIEK = register("entity.nyxar.shriek");

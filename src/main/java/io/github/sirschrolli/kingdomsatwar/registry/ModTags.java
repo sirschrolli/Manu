@@ -84,6 +84,9 @@ public final class ModTags {
         /** Wesen des Feenreichs (Feen, Irrlichter, Pilzlinge, Dornwichte …). */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> FAE_CREATURES = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("fae_creatures"));
+        /** Werwesen (der Werwolf): Mondsilber trifft sie besonders hart. */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> WEREBEASTS = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("werebeasts"));
         /** Wer sich an Dornenhecken nicht sticht (die Wesen der Dornenwildnis). */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> THORN_IMMUNE = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("thorn_immune"));
@@ -133,6 +136,10 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_WILL_O_WISPS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_will_o_wisps"));
         public static final TagKey<Biome> HAS_CAVE_TROLLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_cave_trolls"));
         public static final TagKey<Biome> HAS_LINDWORMS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_lindworms"));
+        public static final TagKey<Biome> HAS_WEREWOLVES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_werewolves"));
+        public static final TagKey<Biome> HAS_MIRE_SHAMBLERS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_mire_shamblers"));
+        public static final TagKey<Biome> HAS_EMBER_WYRMS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_ember_wyrms"));
+        public static final TagKey<Biome> HAS_ASH_WRAITHS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_ash_wraiths"));
         /** Wo Drachennester der jeweiligen Art entstehen. */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_DRAGON_NESTS = nestTags();
         public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));

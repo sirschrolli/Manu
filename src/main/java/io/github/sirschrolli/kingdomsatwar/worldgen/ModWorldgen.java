@@ -284,6 +284,10 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> WILL_O_WISP_SPAWNS = spawnModifier("add_will_o_wisp_spawns");
     public static final ResourceKey<BiomeModifier> CAVE_TROLL_SPAWNS = spawnModifier("add_cave_troll_spawns");
     public static final ResourceKey<BiomeModifier> LINDWORM_SPAWNS = spawnModifier("add_lindworm_spawns");
+    public static final ResourceKey<BiomeModifier> WEREWOLF_SPAWNS = spawnModifier("add_werewolf_spawns");
+    public static final ResourceKey<BiomeModifier> MIRE_SHAMBLER_SPAWNS = spawnModifier("add_mire_shambler_spawns");
+    public static final ResourceKey<BiomeModifier> EMBER_WYRM_SPAWNS = spawnModifier("add_ember_wyrm_spawns");
+    public static final ResourceKey<BiomeModifier> ASH_WRAITH_SPAWNS = spawnModifier("add_ash_wraith_spawns");
     // eigene Wildtiere (E3b): Tausch gegen die Vanilla-Wildtiere, dazu neue Arten in neuen Gegenden
     public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
     public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
@@ -403,6 +407,11 @@ public final class ModWorldgen {
         context.register(WILL_O_WISP_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILL_O_WISPS, ModEntities.WILL_O_WISP.get(), 12, 1, 3));
         context.register(CAVE_TROLL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CAVE_TROLLS, ModEntities.CAVE_TROLL.get(), 6, 1, 1));
         context.register(LINDWORM_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_LINDWORMS, ModEntities.LINDWORM.get(), 3, 1, 1));
+        // Neue Monster (0.69)
+        context.register(WEREWOLF_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WEREWOLVES, ModEntities.WEREWOLF.get(), 10, 1, 1));
+        context.register(MIRE_SHAMBLER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_MIRE_SHAMBLERS, ModEntities.MIRE_SHAMBLER.get(), 14, 1, 1));
+        context.register(EMBER_WYRM_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_EMBER_WYRMS, ModEntities.EMBER_WYRM.get(), 6, 1, 1));
+        context.register(ASH_WRAITH_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_ASH_WRAITHS, ModEntities.ASH_WRAITH.get(), 14, 1, 2));
 
         // Eigene Wildtiere: überall, wo Vanilla seine Wildtiere vorsieht, erscheinen mit gleichem Gewicht die eigenen
         context.register(SWAP_WILD_ANIMALS, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),

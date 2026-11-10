@@ -239,6 +239,11 @@ public final class ModItems {
     public static final DeferredItem<SpawnEggItem> WILL_O_WISP_SPAWN_EGG = creatureEgg("will_o_wisp", () -> ModEntities.WILL_O_WISP.get());
     public static final DeferredItem<SpawnEggItem> CAVE_TROLL_SPAWN_EGG = creatureEgg("cave_troll", () -> ModEntities.CAVE_TROLL.get());
     public static final DeferredItem<SpawnEggItem> LINDWORM_SPAWN_EGG = creatureEgg("lindworm", () -> ModEntities.LINDWORM.get());
+    // Neue Monster (0.69)
+    public static final DeferredItem<SpawnEggItem> WEREWOLF_SPAWN_EGG = creatureEgg("werewolf", () -> ModEntities.WEREWOLF.get());
+    public static final DeferredItem<SpawnEggItem> MIRE_SHAMBLER_SPAWN_EGG = creatureEgg("mire_shambler", () -> ModEntities.MIRE_SHAMBLER.get());
+    public static final DeferredItem<SpawnEggItem> EMBER_WYRM_SPAWN_EGG = creatureEgg("ember_wyrm", () -> ModEntities.EMBER_WYRM.get());
+    public static final DeferredItem<SpawnEggItem> ASH_WRAITH_SPAWN_EGG = creatureEgg("ash_wraith", () -> ModEntities.ASH_WRAITH.get());
 
     /** Irrlichtstaub: leuchtender Staub der Irrlichter – eine Zutat für Magie. */
     public static final DeferredItem<Item> WISP_DUST = item("wisp_dust",

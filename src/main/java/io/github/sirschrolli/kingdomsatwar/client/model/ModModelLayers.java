@@ -44,6 +44,10 @@ public final class ModModelLayers {
     public static final ModelLayerLocation MAGIC_SWORD = new ModelLayerLocation(KingdomsAtWar.id("magic_sword"), "main");
     public static final ModelLayerLocation CAVE_TROLL = new ModelLayerLocation(KingdomsAtWar.id("cave_troll"), "main");
     public static final ModelLayerLocation LINDWORM = new ModelLayerLocation(KingdomsAtWar.id("lindworm"), "main");
+    public static final ModelLayerLocation WEREWOLF = new ModelLayerLocation(KingdomsAtWar.id("werewolf"), "main");
+    public static final ModelLayerLocation MIRE_SHAMBLER = new ModelLayerLocation(KingdomsAtWar.id("mire_shambler"), "main");
+    public static final ModelLayerLocation EMBER_WYRM = new ModelLayerLocation(KingdomsAtWar.id("ember_wyrm"), "main");
+    public static final ModelLayerLocation ASH_WRAITH = new ModelLayerLocation(KingdomsAtWar.id("ash_wraith"), "main");
 
     /** Zauberwirkungen und Zaubergeschosse. */
     public static final ModelLayerLocation PHOENIX = new ModelLayerLocation(KingdomsAtWar.id("phoenix"), "main");

@@ -1496,6 +1496,34 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.WILL_O_WISP, ModItems.WILL_O_WISP_SPAWN_EGG, "Will-o'-the-Wisp", "Irrlicht", "Irrlicht");
         creature(ModEntities.CAVE_TROLL, ModItems.CAVE_TROLL_SPAWN_EGG, "Cave Troll", "Höhlentroll", "Höhlentroll");
         creature(ModEntities.LINDWORM, ModItems.LINDWORM_SPAWN_EGG, "Lindworm", "Lindwurm", "Lindwurm");
+        // Neue Monster (0.69)
+        creature(ModEntities.WEREWOLF, ModItems.WEREWOLF_SPAWN_EGG, "Werewolf", "Werwolf", "Werwolf");
+        creature(ModEntities.MIRE_SHAMBLER, ModItems.MIRE_SHAMBLER_SPAWN_EGG, "Mire Shambler", "Moorschlurfer", "Moorschlurfer");
+        creature(ModEntities.EMBER_WYRM, ModItems.EMBER_WYRM_SPAWN_EGG, "Ember Wyrm", "Glutwurm", "Glutwurm");
+        creature(ModEntities.ASH_WRAITH, ModItems.ASH_WRAITH_SPAWN_EGG, "Ash Wraith", "Aschengeist", "Aschengeist");
+        add(ModEntities.MONSTER_SHOT.get(), pick("Monster Missile", "Monstergeschoss"));
+        for (String[] e : new String[][] {
+                {"werewolf.growl", "Werewolf growls", "Werwolf knurrt"}, {"werewolf.howl", "Werewolf howls", "Werwolf heult"},
+                {"werewolf.snarl", "Werewolf snarls", "Werwolf faucht"}, {"werewolf.hurt", "Werewolf hurts", "Werwolf wird verletzt"},
+                {"werewolf.death", "Werewolf dies", "Werwolf stirbt"}, {"werewolf.step", "Footsteps", "Schritte"},
+                {"mire_shambler.ambient", "Mire shambler gurgles", "Moorschlurfer gurgelt"},
+                {"mire_shambler.hurt", "Mire shambler hurts", "Moorschlurfer wird verletzt"},
+                {"mire_shambler.death", "Mire shambler collapses", "Moorschlurfer zerfällt"},
+                {"mire_shambler.step", "Squelching footsteps", "Schmatzende Schritte"},
+                {"mire_shambler.throw", "Mud is hurled", "Schlamm wird geschleudert"},
+                {"mire_shambler.grasp", "Roots grasp", "Wurzeln packen zu"},
+                {"mire_shambler.rise", "Something rises from the mud", "Etwas steigt aus dem Schlamm"},
+                {"mire_shambler.splat", "Mud splats", "Schlamm klatscht"},
+                {"ember_wyrm.ambient", "Ember wyrm rumbles", "Glutwurm grollt"}, {"ember_wyrm.hurt", "Ember wyrm hurts", "Glutwurm wird verletzt"},
+                {"ember_wyrm.death", "Ember wyrm dies", "Glutwurm stirbt"}, {"ember_wyrm.surface", "Ember wyrm surfaces", "Glutwurm taucht auf"},
+                {"ember_wyrm.spit", "Ember wyrm spits magma", "Glutwurm spuckt Magma"}, {"ember_wyrm.bite", "Ember wyrm bites", "Glutwurm beißt"},
+                {"ember_wyrm.dive", "Ember wyrm dives", "Glutwurm taucht ab"},
+                {"ash_wraith.ambient", "Ash wraith whispers", "Aschengeist flüstert"}, {"ash_wraith.hurt", "Ash wraith hurts", "Aschengeist wird verletzt"},
+                {"ash_wraith.death", "Ash wraith crumbles to ash", "Aschengeist zerfällt zu Asche"},
+                {"ash_wraith.cloud", "Ash billows", "Asche wallt auf"}, {"ash_wraith.bolt", "Soul fire hisses", "Seelenfeuer zischt"},
+                {"ash_wraith.fade", "Ash wraith fades", "Aschengeist verweht"}}) {
+            subtitle("entity." + e[0], e[1], e[2]);
+        }
 
         item(ModItems.VENISON, "Raw Venison", "Rohes Wildbret");
         item(ModItems.COOKED_VENISON, "Cooked Venison", "Wildbraten");

@@ -31,7 +31,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
-                              miss_mystik, light_dove, magic_sword, anni_troll)
+                              miss_mystik, light_dove, magic_sword, anni_troll,
+                              werewolf, mire_shambler, ember_wyrm, ash_wraith)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -98,6 +99,12 @@ def main():
     write_model(moth_queen, "MothQueenGeometry", "Geometrie der Mottenkönigin (im Spiel 2,5-fach vergrößert).", "moth_queen",
                 moth_queen.PALETTES, preview)
     write_model(cave_troll, "CaveTrollGeometry", "Geometrie des Höhlentrolls.", "cave_troll", cave_troll.PALETTES, preview)
+    # Neue Monster (0.69)
+    write_model(werewolf, "WerewolfGeometry", "Geometrie des Werwolfs.", "werewolf", werewolf.PALETTES, preview)
+    write_model(mire_shambler, "MireShamblerGeometry", "Geometrie des Moorschlurfers.", "mire_shambler", mire_shambler.PALETTES, preview)
+    write_model(ember_wyrm, "EmberWyrmGeometry", "Geometrie des Glutwurms (Schädel als Ursprung, sechs Glieder).", "ember_wyrm",
+                ember_wyrm.PALETTES, preview)
+    write_model(ash_wraith, "AshWraithGeometry", "Geometrie des Aschengeists.", "ash_wraith", ash_wraith.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)
     write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",
