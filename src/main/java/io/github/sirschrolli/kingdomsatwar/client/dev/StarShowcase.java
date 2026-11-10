@@ -182,8 +182,10 @@ final class StarShowcase {
             }));
             steps.add(Step.waitTicks(Integer.parseInt(shot[1]) - 4));
             // die Supernova von vorn unten (sie steigt über den Sternstein), sonst neben ihr
-            steps.add(shot[0].equals("SUPERNOVA") ? watch(stage, 3.0, 12.0, 11.5) : follow(stage, Double.parseDouble(shot[3]),
-                    Double.parseDouble(shot[4]), Double.parseDouble(shot[5]), Double.parseDouble(shot[6])));
+            // das Schwarze Loch (über dem Ritter) von schräg vorn, unabhängig davon, wo sie gerade kreist
+            steps.add(shot[0].equals("SUPERNOVA") ? watch(stage, 3.0, 12.0, 11.5)
+                    : shot[0].equals("BLACK_HOLE") ? at(stage, 5.0, 9.5, 17.5, 0.0, 3.0, 9.0)
+                    : follow(stage, Double.parseDouble(shot[3]), Double.parseDouble(shot[4]), Double.parseDouble(shot[5]), Double.parseDouble(shot[6])));
             steps.add(Step.waitTicks(4));
             steps.add(Step.screenshot(shot[2]));
             steps.add(Step.waitTicks(shot[0].equals("SUPERNOVA") ? 60 : 45));

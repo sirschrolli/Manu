@@ -369,6 +369,8 @@ final class VoidGameTests {
      */
     private static void riftAndQuake(GameTestHelper helper, ServerLevel level, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity king,
             net.minecraft.world.entity.LivingEntity soldier, Runnable then) {
+        // die gerufenen Wächter treten ab (sonst greifen sie den Ritter an und verfälschen die Treffer)
+        level.getEntitiesOfClass(ShardWardenEntity.class, king.getBoundingBox().inflate(40)).forEach(net.minecraft.world.entity.Entity::discard);
         soldier.setHealth(soldier.getMaxHealth());
         king.forceAttack(level, "rift", soldier, true);
         helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 2, () -> {

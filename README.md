@@ -336,7 +336,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Asteria, die Sternenreiterin**: Boss jeder Sternwarte im End – stößt vom Himmel herab, wenn man an den Sternstein tritt; fliegend auf einem gepanzerten Sternenrochen, acht Angriffe (mit Schwarzem Loch und Mondsicheln) und die Supernova unter halber Kraft, eigene Bossleiste und Klänge; die **Sternenlanze** als 3D-Speer und die **Sternenschwingen** mit Sternenschub; Rückruf mit einem Endkristall | ✅ fertig |
 | **MissMystik, die Feen-Zauberkünstlerin**: Boss der Zauberbühne im Feenreich – springt aus dem Großen Zauberzylinder, wenn man herantritt; schwebend, neun Tricks mit Karten, Tauben, Spiegelbildern, Hut, Schwertern und Feuerwerk, Zugabe und großes Finale, eigene Bossleiste und Klänge; das **Kartendeck der Mystik** und der **Zylinder der Mystik** als 3D-Hut; Rückruf mit Feenstaub | ✅ fertig |
 | **Anni der Troll**: Boss der Fehlerzone in der Oberwelt (Boden aus falschen Biomen, schwebende Chunkfetzen, ausgestanzte Schächte, „404“) – wird aus dem Fehlerkern geladen; glitcht wie ein Spielfehler (Ruckler, Ladekreis, durch Wände, nicht registrierte Treffer), acht Angriffe, Absturz und Neustart unter halber Kraft, **Wiederherstellung als Anni 2.0** statt zu sterben (mit dem Speedhack), eigene Bossleisten und Klänge; der **Bannhammer** als 3D-Waffe und die **Fehlerflügel** mit Blinzeln; Neustart mit einem Redstoneblock | ✅ fertig |
-| **Neue Angriffe** (neu): je zwei für Karkinos (Mahlstrom, Blasenfalle), Noctua (Mondfinsternis, Seidenkokon), Malleus (Glutkette, Glutfächer), Asteria (Schwarzes Loch, Mondsicheln) und den Zerbrochenen König (Risse der Leere, Leerenbeben) – mit neuen Effekten (Mondsicheln aus Licht, ein Schwarzes Loch mit Wirbelscheibe und Lichtring, Bebenringe) und eigenen Klängen | ✅ fertig |
+| **Neue Angriffe** (neu): je zwei für Karkinos (Mahlstrom, Blasenfalle), Noctua (Mondfinsternis, Seidenkokon), Malleus (Glutkette, Glutfächer), Asteria (Schwarzes Loch, Mondsicheln) und den Zerbrochenen König (Risse der Leere, Leerenbeben) – mit neuen Effekten (Mondsicheln aus Licht, ein Schwarzes Loch mit Wirbelscheibe und Lichtring, Bebenringe, aufreißende Risse im Boden) und eigenen Klängen | ✅ fertig |
 | Längeres Leveln: Heldenstufe 100 bei rund 1,17 Millionen Heldenerfahrung, Soldaten-Stufe 20 bei 5.610 Kampferfahrung; alte Spielstände werden umgerechnet | ✅ fertig |
 | Deutsch und Englisch | ✅ fertig |
 | Schattenwelt: eigene Dimension mit Biomen, Schattenvolk und Dörfern, Erzen, Kreaturen, leuchtenden Pflanzen (Mondfarn, Sternblüte, Seelenschilf …); Nyxar und seine Schattenzitadelle | ✅ fertig |
@@ -2041,10 +2041,11 @@ Fehlerkern, Fehlerblock, Bildrauschen, Fehlersplitter, Bannhammer, Fehlerflügel
 ![Die neuen Angriffe: Schwarzes Loch, Mondsicheln, Risse der Leere, Leerenbeben, Mahlstrom, Blasenfalle, Mondfinsternis, Seidenkokon, Glutkette und Glutfächer](docs/bilder/neue_angriffe.jpg)
 
 Seit 0.68 haben **Karkinos**, **Noctua**, **Malleus**, **Asteria** und der **Zerbrochene König** je zwei neue Angriffe
-gelernt (in ihren Tabellen mit „seit 0.68“ markiert). Dafür gibt es drei neue Effekte: **Mondsicheln** – nach vorn
+gelernt (in ihren Tabellen mit „seit 0.68“ markiert). Dafür gibt es vier neue Effekte: **Mondsicheln** – nach vorn
 gewölbte Klingen aus Licht, die dicht über den Boden gleiten (Stufen hinauf, über Kanten hinab) –, ein **Schwarzes Loch**
 mit wirbelnder Scheibe aus Sternenstaub, schwarzem Kern und gleißendem Lichtring, in das Teilchen spiralförmig
-hineinstürzen, und **Bebenringe**, die sich als leuchtende Wand über den Boden ausbreiten. Jeder neue Angriff hat eine
+hineinstürzen, **Bebenringe**, die sich als leuchtende Wand über den Boden ausbreiten, und **Risse im Boden** – dunkle,
+gezackte Spalten, die Stück um Stück aufreißen und in denen violettes Licht glüht. Jeder neue Angriff hat eine
 eigene Haltung (Asterias Lanze fegt hin und her, die Klauen des Königs fahren in den Boden und reißen ihn auf, seine
 Fäuste steigen über sein Haupt) und eigene Klänge: ein saugender, immer schneller wirbelnder Sog über tiefem Grollen, ein
 Zusammensturz mit gewaltigem Schlag, das helle Zischen der Sicheln, Klauen, die über Stein schrammen, das Knistern der

@@ -12,6 +12,7 @@ Texturen der Zauberwirkungen (textures/entity/spell/): weiße Vorlagen, die das 
   core.png     Kern eines Schwarzen Lochs: volle Scheibe mit weichem Rand (wird schwarz gefärbt)
   lens.png     Lichtring um den Kern (gebeugtes Licht): schmaler, heller Ring mit Schein (additiv)
   glow.png     weicher, runder Schein (additiv)
+  swirl.png    dunkler Wirbel eines Schwarzen Lochs: dieselben Spiralarme als Deckkraft (wird dunkelviolett gefärbt)
 
 Aufruf (aus dem Projektordner):  python3 tools/spell_fx_textures.py [--preview datei.png]
 """
@@ -245,6 +246,27 @@ def disk() -> Image.Image:
     return Image.fromarray(img, "RGBA")
 
 
+def swirl() -> Image.Image:
+    size = 128
+    n = _fbm(size, size, [(16, 16), (8, 8)], 131)
+
+    def fn(u, v):
+        r = np.sqrt(u * u + v * v)
+        th = np.arctan2(v, u)
+        lr = np.log(np.maximum(r, 0.05))
+        arms = 0.5 + 0.5 * np.cos(3 * th + 7.5 * lr + 0.4)
+        inner = np.clip((r - 0.16) / 0.06, 0, 1)
+        env = inner * np.clip((1.0 - r) / 0.6, 0, 1) ** 1.2
+        return np.clip(env * (0.35 + 0.65 * arms ** 1.3), 0, 1)
+
+    alpha = _supersample(fn, size)
+    alpha = np.clip(alpha * (0.85 + 0.3 * n), 0, 1)
+    img = np.zeros((size, size, 4), dtype=np.uint8)
+    img[..., 0:3] = 255
+    img[..., 3] = np.clip(alpha * 255, 0, 255).astype(np.uint8)
+    return Image.fromarray(img, "RGBA")
+
+
 def core() -> Image.Image:
     size = 64
 
@@ -296,12 +318,12 @@ def glow() -> Image.Image:
     return Image.fromarray(img, "RGBA")
 
 
-BLUR = {"fill", "beam", "pillar", "bubble", "disk", "core", "lens", "glow"}
+BLUR = {"fill", "beam", "pillar", "bubble", "disk", "core", "lens", "glow", "swirl"}
 
 
 def build() -> dict[str, Image.Image]:
     return {"ring": ring(), "fill": fill(), "beam": beam(), "pillar": pillar(), "wave": wave(), "bubble": bubble(), "disk": disk(),
-            "core": core(), "lens": lens(), "glow": glow()}
+            "core": core(), "lens": lens(), "glow": glow(), "swirl": swirl()}
 
 
 def main() -> None:

@@ -44,6 +44,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private static final Identifier CORE = KingdomsAtWar.id("textures/entity/spell/core.png");
     private static final Identifier LENS = KingdomsAtWar.id("textures/entity/spell/lens.png");
     private static final Identifier GLOW = KingdomsAtWar.id("textures/entity/spell/glow.png");
+    private static final Identifier SWIRL = KingdomsAtWar.id("textures/entity/spell/swirl.png");
     private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
     private static final Identifier SIGIL = KingdomsAtWar.id("textures/entity/mage/sigil.png");
     private static final Identifier GLYPHS = KingdomsAtWar.id("textures/block/magic_table_glyphs.png");
@@ -54,6 +55,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
     private static final RenderType WAVE_TYPE = RenderTypes.entityTranslucent(WAVE);
     private static final RenderType BUBBLE_TYPE = RenderTypes.entityTranslucentEmissive(BUBBLE);
     private static final RenderType CORE_TYPE = RenderTypes.entityTranslucent(CORE);
+    private static final RenderType SWIRL_TYPE = RenderTypes.entityTranslucent(SWIRL);
 
     private final SpellFxModels.Spike spike;
     private final SpellFxModels.Fist fist;
@@ -477,7 +479,7 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         }
         float radius = s.size * k;
         float pulse = 1.0f + 0.05f * Mth.sin(s.age * 0.7f);
-        float coreSize = s.size * 0.28f * grow * (0.35f + 0.65f * collapse) * pulse;
+        float coreSize = s.size * 0.32f * grow * (0.35f + 0.65f * collapse) * pulse;
         float tilt = 24.0f + 6.0f * Mth.sin(s.seed * 0.7f);
         // weicher Schein
         RenderType halo = RenderTypes.energySwirl(GLOW, 0.0f, 0.0f);
@@ -487,13 +489,20 @@ public class SpellFxRenderer extends EntityRenderer<SpellFxEntity, SpellFxRender
         poseStack.scale(radius * 2.4f, radius * 2.4f, radius * 2.4f);
         collector.submitCustomGeometry(poseStack, halo, (pose, buffer) -> billboard(pose, buffer, haloColor));
         poseStack.popPose();
-        // der Wirbel, zum Betrachter gedreht
+        // der Wirbel, zum Betrachter gedreht: ein dunkler Sog (sichtbar auch vor hellem Grund), darüber leuchtende Arme
         RenderType disk = RenderTypes.energySwirl(DISK, 0.0f, 0.0f);
+        int smoke = ARGB.color(Math.round(205 * k), 0x1C0B33);
         int swirl = scale(ARGB.srgbLerp(0.12f, s.color, 0xFFFFFF), k);
         float swirlSize = radius * 1.5f;
+        float turn = s.age * 9.0f + s.seed * 31.0f;
         poseStack.pushPose();
         poseStack.rotate(camera.orientation);
-        poseStack.rotate(Axis.ZP.rotationDegrees(s.age * 9.0f + s.seed * 31.0f));
+        poseStack.pushPose();
+        poseStack.rotate(Axis.ZP.rotationDegrees(turn - 25.0f));
+        poseStack.scale(swirlSize * 1.08f, swirlSize * 1.08f, swirlSize * 1.08f);
+        collector.submitCustomGeometry(poseStack, SWIRL_TYPE, (pose, buffer) -> billboardTwoSided(pose, buffer, smoke));
+        poseStack.popPose();
+        poseStack.rotate(Axis.ZP.rotationDegrees(turn));
         poseStack.scale(swirlSize, swirlSize, swirlSize);
         collector.submitCustomGeometry(poseStack, disk, (pose, buffer) -> billboard(pose, buffer, swirl));
         poseStack.popPose();

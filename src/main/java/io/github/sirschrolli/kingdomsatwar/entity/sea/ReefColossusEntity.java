@@ -1081,8 +1081,12 @@ public class ReefColossusEntity extends Monster {
             this.face(target.position(), 6.0f);
         }
         if (t == 6) {
+            // sein Ziel immer, dazu bis zu fünf weitere Feinde
+            if (target != null) {
+                this.lances.add(target.position());
+            }
             for (LivingEntity e : this.enemiesNear(level, ARENA_RADIUS + 4)) {
-                if (this.lances.size() < 5) {
+                if (this.lances.size() < 6 && e != target) {
                     this.lances.add(e.position());
                 }
             }
