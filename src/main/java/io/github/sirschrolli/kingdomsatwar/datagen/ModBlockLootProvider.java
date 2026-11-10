@@ -151,6 +151,14 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_BLOOM)) {
             dropSelf(block.get());
         }
+        // Der Abgrund
+        for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CRACKED_CHAOS_STONE_BRICKS,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.FLOAT_CRYSTAL,
+                io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL)) {
+            dropSelf(block.get());
+        }
         // Leerenmoos: mit Behutsamkeit das Moos, sonst der Stein darunter
         add(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_MOSS.get(), block -> createSingleItemTableWithSilkTouch(block,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_STONE.base().get()));

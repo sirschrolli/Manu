@@ -1205,7 +1205,7 @@ public class ShatteredKingEntity extends Monster {
             if (this.deathTime >= DEATH_TICKS && !this.isRemoved()) {
                 this.bossBar.removeAllPlayers();
                 if (this.seal != null && level.getBlockEntity(this.seal) instanceof ThroneSealBlockEntity throne) {
-                    throne.onKingDefeated();
+                    throne.onKingDefeated(level);
                 }
                 this.remove(Entity.RemovalReason.KILLED);
             }

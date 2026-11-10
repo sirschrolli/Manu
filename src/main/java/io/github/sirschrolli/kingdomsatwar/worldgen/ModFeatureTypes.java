@@ -52,6 +52,16 @@ public final class ModFeatureTypes {
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature>> HANGING_GROWTH =
             FEATURE_TYPES.register("void_hanging_growth", () -> io.github.sirschrolli.kingdomsatwar.voidrealm.feature.HangingGrowthFeature.CODEC);
 
+    // --- Der Abgrund ---
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.WorldShardFeature>> WORLD_SHARD =
+            FEATURE_TYPES.register("abyss_world_shard", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.WorldShardFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.SkyRiftFeature>> SKY_RIFT =
+            FEATURE_TYPES.register("abyss_sky_rift", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.SkyRiftFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.SeamVeinFeature>> SEAM_VEIN =
+            FEATURE_TYPES.register("abyss_seam_vein", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.SeamVeinFeature.CODEC);
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.abyss.feature.GravityCrystalFeature>> GRAVITY_CRYSTAL =
+            FEATURE_TYPES.register("abyss_gravity_crystal", () -> io.github.sirschrolli.kingdomsatwar.abyss.feature.GravityCrystalFeature.CODEC);
+
     // --- Das Feenreich ---
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature>> GLIMMER_TREE =
             FEATURE_TYPES.register("fae_glimmer_tree", () -> io.github.sirschrolli.kingdomsatwar.fae.feature.GlimmerTreeFeature.CODEC);

@@ -35,7 +35,7 @@ public final class RiftState {
                 Partner.CODEC.optionalFieldOf("partner").forGetter(Rift::partner)
         ).apply(instance, Rift::new));
 
-        Rift withPartner(Partner partner) {
+        public Rift withPartner(Partner partner) {
             return new Rift(this.dimension, this.bottom, this.axis, Optional.of(partner));
         }
 

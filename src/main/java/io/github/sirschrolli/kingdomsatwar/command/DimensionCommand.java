@@ -33,7 +33,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
- * {@code /kaw dim <oberwelt|nether|end|schattenwelt|leere>} (oder eine beliebige Dimension als ID): wechselt sofort in
+ * {@code /kaw dim <oberwelt|nether|end|schattenwelt|leere|abgrund>} (oder eine beliebige Dimension als ID): wechselt sofort in
  * eine andere Dimension – für den Kreativmodus (und für alle mit Cheats). Man landet an derselben Stelle (im Nether an
  * einem Achtel der Koordinaten, wie bei einem Portal) auf sicherem Boden: im Nether in einer Höhle mit festem Grund, im
  * End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück (sonst auf einer kleinen Plattform).
@@ -49,6 +49,7 @@ public final class DimensionCommand {
         NAMES.put("end", Level.END);
         NAMES.put("schattenwelt", ShadowGate.SHADOW_WORLD);
         NAMES.put("leere", VoidGate.THE_VOID);
+        NAMES.put("abgrund", io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS);
     }
 
     private DimensionCommand() {}
@@ -163,9 +164,11 @@ public final class DimensionCommand {
                 }
             }
         }
+        boolean abyss = level.dimension() == io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS;
         BlockState floor = level.dimension() == VoidGate.THE_VOID ? VoidBlocks.VOID_STONE.base().get().defaultBlockState()
+                : abyss ? io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHAOS_STONE.base().get().defaultBlockState()
                 : Blocks.STONE.defaultBlockState();
-        return platform(level, x, level.dimension() == VoidGate.THE_VOID ? 110 : Math.max(level.getSeaLevel() + 2, 70), z, floor);
+        return platform(level, x, level.dimension() == VoidGate.THE_VOID || abyss ? 120 : Math.max(level.getSeaLevel() + 2, 70), z, floor);
     }
 
     /** Oberfläche einer Säule (null, wenn dort nichts ist oder Lava liegt). */

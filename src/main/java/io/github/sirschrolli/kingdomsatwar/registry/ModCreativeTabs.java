@@ -109,11 +109,19 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, VoidBlocks.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THE_ABYSS = TABS.register("the_abyss",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.the_abyss"))
+                    .icon(() -> AbyssBlocks.WORLD_SEAM.toStack())
+                    .withTabsBefore(THE_VOID.key())
+                    .displayItems((parameters, output) -> accept(output, AbyssBlocks.TAB))
+                    .build());
+
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THE_SEA = TABS.register("the_sea",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.kingdomsatwar.the_sea"))
                     .icon(() -> SeaBlocks.DEEP_SEA_LANTERN.toStack())
-                    .withTabsBefore(THE_VOID.key())
+                    .withTabsBefore(THE_ABYSS.key())
                     .displayItems((parameters, output) -> accept(output, SeaBlocks.TAB))
                     .build());
 

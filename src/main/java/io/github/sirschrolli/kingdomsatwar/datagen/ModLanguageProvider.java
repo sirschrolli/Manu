@@ -531,6 +531,37 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_RIFT, "Void Rift", "Leerenriss");
         item(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD, "Void Shard", "Leerensplitter");
 
+        // Der Abgrund
+        text("itemGroup.kingdomsatwar.the_abyss", "Kingdoms at War: The Abyss", "Kingdoms at War: Der Abgrund");
+        set("chaos_stone", "chaos_stone", "Chaos Stone", "Chaosgestein", "Chaos Stone", "Chaosgestein");
+        set("chaos_stone_bricks", "chaos_stone_brick", "Chaos Stone Bricks", "Chaossteinziegel", "Chaos Stone Brick", "Chaossteinziegel");
+        set("polished_chaos_stone", "polished_chaos_stone", "Polished Chaos Stone", "Poliertes Chaosgestein", "Polished Chaos Stone",
+                "Polierte Chaosgestein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CRACKED_CHAOS_STONE_BRICKS, "Cracked Chaos Stone Bricks", "Rissige Chaossteinziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.CHISELED_CHAOS_STONE, "Chiseled Chaos Stone", "Gemeißeltes Chaosgestein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM, "World Seam", "Weltennaht");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.FLOAT_CRYSTAL, "Float Crystal", "Schwebekristall");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.LIFT_CRYSTAL, "Lift Crystal", "Hebekristall");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.ABYSS_RIFT, "Abyss Rift", "Abgrundriss");
+        block(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.SKY_RIFT, "Sky Rift", "Himmelsriss");
+        item(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.RIFT_KEY, "Rift Key", "Rissschlüssel");
+        text(ModItems.loreKey("rift_key", 1), "Forged from the shards of the Shattered King's crown",
+                "Aus den Splittern der Krone des Zerbrochenen Königs geschmiedet");
+        text(ModItems.loreKey("rift_key", 2), "Use on the ground in the Void: tears open a rift into the Abyss",
+                "In der Leere auf den Boden gerichtet: reißt einen Riss in den Abgrund auf");
+        text("item.kingdomsatwar.rift_key.not_void", "Only in the Void does the world tear deep enough.",
+                "Nur in der Leere reißt die Welt tief genug auf.");
+        text("item.kingdomsatwar.rift_key.in_abyss", "There is nothing deeper than the Abyss.", "Tiefer als der Abgrund geht es nicht.");
+        text("item.kingdomsatwar.rift_key.cannot", "The Abyss cannot be reached from here.", "Der Abgrund ist von hier aus nicht zu erreichen.");
+        text("item.kingdomsatwar.rift_key.no_space", "There is not enough room for a rift here.", "Hier ist nicht genug Platz für einen Riss.");
+        text("item.kingdomsatwar.rift_key.too_close", "Another rift is too close.", "Ein anderer Riss ist zu nah.");
+        text("item.kingdomsatwar.rift_key.anchor", "This rift cannot be closed.", "Dieser Riss lässt sich nicht schließen.");
+        text("message.kingdomsatwar.abyss.spat_out", "The Abyss hurls you back – wounded, but alive.",
+                "Der Abgrund schleudert dich zurück – verwundet, aber lebendig.");
+        text("message.kingdomsatwar.abyss.throne_gate", "Behind the throne, the world tears open – a rift into the Abyss.",
+                "Hinter dem Thron reißt die Welt auf – ein Riss in den Abgrund.");
+        text("block.kingdomsatwar.bed.the_abyss", "There is no sleep in the Abyss.", "Im Abgrund schläft niemand.");
+
         // Das Meer
         text("itemGroup.kingdomsatwar.the_sea", "Kingdoms at War: The Sea", "Kingdoms at War: Das Meer");
         creature(ModEntities.MANTA_RAY, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.MANTA_RAY_SPAWN_EGG, "Manta Ray", "Mantarochen", "Mantarochen");

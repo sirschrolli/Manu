@@ -72,8 +72,9 @@ public class ThroneSealBlockEntity extends BlockEntity {
         switch (this.phase) {
             case DORMANT -> this.tickDormant(level);
             case AWAKE -> this.tickAwake(level);
-            case DEFEATED -> {
-            }
+            // besiegt: hinter dem Thron steht der Riss in den Abgrund offen (auch in Welten, in denen der König schon vor
+            // 0.72 fiel)
+            case DEFEATED -> io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), false);
         }
     }
 
@@ -142,10 +143,12 @@ public class ThroneSealBlockEntity extends BlockEntity {
         }
     }
 
-    public void onKingDefeated() {
+    public void onKingDefeated(ServerLevel level) {
         this.phase = Phase.DEFEATED;
         this.king = null;
         this.setChanged();
+        // hinter dem Thron reißt die Welt auf: der Weg in den Abgrund
+        io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), true);
     }
 
     public void onKingSlumber() {

@@ -315,9 +315,11 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.DISTORTLING.get(), LootTable.lootTable()
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), 0, 2))
                 .withPool(rare(Items.ENDER_PEARL, 0.3f, 0.05f)));
-        // der Zerbrochene König: immer seine Krone, dazu Kristalle und Schätze der Alten
+        // der Zerbrochene König: immer seine Krone und der Rissschlüssel (der Weg in den Abgrund), dazu Kristalle und Schätze
+        // der Alten
         this.add(ModEntities.SHATTERED_KING.get(), LootTable.lootTable()
                 .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.SHATTERED_CROWN.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.RIFT_KEY.get(), 1))
                 .withPool(this.modBook(io.github.sirschrolli.kingdomsatwar.registry.ModTags.Enchantments.LOOT_ARCANE, 100))
                 .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 1))
                 .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 1))
