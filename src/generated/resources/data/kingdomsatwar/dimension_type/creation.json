@@ -51,9 +51,9 @@
         "probability": 6.0E-4
       }
     ],
-    "minecraft:visual/cloud_color": "#f2ffe6a6",
-    "minecraft:visual/cloud_height": 106.0,
-    "minecraft:visual/fog_color": "#e6c27e",
+    "minecraft:visual/cloud_color": "#e8fff6f0",
+    "minecraft:visual/cloud_height": 88.0,
+    "minecraft:visual/fog_color": "#ebb48e",
     "minecraft:visual/fog_end_distance": 460.0,
     "minecraft:visual/fog_start_distance": 90.0,
     "minecraft:visual/moon_angle": 180.0,

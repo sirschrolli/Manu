@@ -1109,7 +1109,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             level.sendParticles(ParticleTypes.REVERSE_PORTAL, heart.x, heart.y, heart.z, 200, 3.0, 3.0, 3.0, 0.4);
             this.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 5.0f, 1.2f);
             this.say(level, "true_face");
-            this.announce(level, Component.translatable("boss.kingdomsatwar.schrolli_true").withColor(0xD8A8FF).withStyle(ChatFormatting.BOLD),
+            this.announce(level, Component.translatable("entity.kingdomsatwar.schrolli.true_title").withColor(0xD8A8FF).withStyle(ChatFormatting.BOLD),
                     Component.translatable("boss.kingdomsatwar.schrolli_true.title").withColor(0xA8E8FF), 80);
         }
         if (t > ASCEND_REVEAL && t <= ASCEND_FILLED) {

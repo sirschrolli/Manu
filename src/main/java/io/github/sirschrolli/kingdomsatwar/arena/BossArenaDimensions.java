@@ -97,8 +97,8 @@ public final class BossArenaDimensions {
                     0.1f, 0x8EB971, 0x71A74D, 0x8A3A2A);
             // die Schöpfung: ein tiefvioletter Himmel, am Horizont goldener Dunst, Sterne auch am Tag, ein Meer aus goldenen
             // Wolken tief unten, Lichtfunken in der Luft – darüber Sonnenrad, Nebel und Welten (eigener Himmel) und eigene Musik
-            case CREATOR -> new Look(0x2A1C64, 0xE6C27E, 90.0f, 460.0f, 0x00000000, 180.0f, 180.0f, MoonPhase.NEW_MOON,
-                    25.0f, 1.0f, 0xF2FFE6A6, CreatorArena.FLOOR_Y - 34.0f, 15.0f, 1.0f, 0xFFF0D2, 0x5A4A86,
+            case CREATOR -> new Look(0x2A1C64, 0xEBB48E, 90.0f, 460.0f, 0x00000000, 180.0f, 180.0f, MoonPhase.NEW_MOON,
+                    25.0f, 1.0f, 0xE8FFF6F0, CreatorArena.FLOOR_Y - 52.0f, 15.0f, 1.0f, 0xFFF0D2, 0x5A4A86,
                     List.of(new AmbientParticle(ModParticles.DIVINE_SPARK.get(), 0.0035f), new AmbientParticle(ParticleTypes.END_ROD, 0.0006f)),
                     Holder.direct(SoundEvent.createVariableRangeEvent(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id("music.creation"))),
                     SoundEvents.AMBIENT_CAVE, -64, 384, BlockTags.INFINIBURN_OVERWORLD, 0.18f, 0x9AE07A, 0x7ACC5A, 0x5AC8FF);

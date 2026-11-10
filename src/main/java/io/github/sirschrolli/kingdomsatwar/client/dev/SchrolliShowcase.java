@@ -74,18 +74,21 @@ final class SchrolliShowcase {
             minecraft.options.gamma().set(1.0);
         }));
         for (String command : new String[] {"gamerule spawn_monsters false", "gamerule spawn_mobs false", "gamerule advance_time false",
-                "time set 6000", "weather clear", "difficulty normal", "gamemode spectator"}) {
+                "time set 6000", "weather clear", "difficulty normal", "clear", "gamemode spectator"}) {
             steps.add(Step.command(command));
         }
         // ------------------------------------------------------------------ der Altar in der Oberwelt
         steps.add(Step.server(any -> shrine(any.getServer().overworld(), s)));
         steps.add(Step.until(() -> s.state != 0, 600));
-        steps.add(overworldCam(s, 3.6, 2.3, 4.6, 0.0, 1.25, 0.0));
+        steps.add(overworldCam(s, 1.6, 2.0, 4.4, 0.0, 1.15, 0.0));
         steps.add(Step.waitTicks(40));
-        steps.add(Step.waitForChunks(800));
-        steps.add(overworldCam(s, 3.6, 2.3, 4.6, 0.0, 1.25, 0.0));
+        steps.add(Step.waitForChunks(1200));
+        steps.add(overworldCam(s, 1.6, 2.0, 4.4, 0.0, 1.15, 0.0));
         steps.add(Step.waitTicks(10));
         steps.add(shot("schoepfer_altar"));
+        steps.add(overworldCam(s, -9.0, 6.0, 13.0, 0.0, 2.0, 0.0));
+        steps.add(Step.waitTicks(20));
+        steps.add(shot("schoepfer_heiligtum"));
         // die Berührung: der Altar ruft, und wer im Kreis steht, wird in die Schöpfung gezogen
         steps.add(Step.command("gamemode survival"));
         steps.add(Step.server(any -> {
@@ -163,14 +166,14 @@ final class SchrolliShowcase {
         steps.add(shot("schoepfer_ankunft"));
         steps.add(Step.hud(true));
         steps.add(attackAt(s, Attack.AWAKEN, SchrolliEntity.AWAKEN_LAND + 14));
-        steps.add(courtLook(s, 0.0, 3.4, 22.0, true, 3.2));
+        steps.add(courtLook(s, 0.0, 2.2, 19.0, true, 9.0));
         steps.add(Step.waitTicks(2));
         steps.add(shot("schoepfer_titel"));
         steps.add(Step.hud(false));
         steps.add(Step.waitTicks(60));
         // Bildnisse (er hält still, der Kamera zugewandt)
         steps.add(pose(s, 3.0));
-        steps.add(faceCam(s, 12.5, 2.6, 3.0, 14.0));
+        steps.add(faceCam(s, 9.5, 3.0, 3.4, 14.0));
         steps.add(Step.waitTicks(12));
         steps.add(shot("schoepfer_bild"));
         steps.add(faceCam(s, 5.2, 5.4, 4.9, 10.0));
@@ -191,24 +194,24 @@ final class SchrolliShowcase {
         // ------------------------------------------------------------------ die Künste der ersten Gestalt
         steps.add(Step.server(any -> knight(court(any.getServer()), s)));
         arts(steps, s, new String[][] {
-                {"LANCES", "13", "schoepfer_lichtspeere", "-30", "17", "2.5", "0.15"},
-                {"LANCES", "30", "schoepfer_lichtspeere_flug", "-70", "14", "3", "0.55"},
-                {"HALO", "24", "schoepfer_heiligenschein", "-60", "16", "3", "0.55"},
-                {"PILLARS", "35", "schoepfer_saeulen", "-35", "22", "9", "0.75"},
-                {"STARFALL", "54", "schoepfer_sternenregen", "-25", "28", "13", "0.55"},
+                {"LANCES", "13", "schoepfer_lichtspeere", "-55", "11", "3", "0.1"},
+                {"LANCES", "30", "schoepfer_lichtspeere_flug", "-85", "14", "3", "0.5"},
+                {"HALO", "24", "schoepfer_heiligenschein", "-80", "14", "3", "0.5"},
+                {"PILLARS", "35", "schoepfer_saeulen", "-60", "16", "8", "0.8"},
+                {"STARFALL", "54", "schoepfer_sternenregen", "-40", "24", "14", "0.6"},
                 {"SMITE", "36", "schoepfer_zepterschlag", "-50", "15", "4.5", "0.25"},
-                {"SUNBEAM", "64", "schoepfer_strahl", "-60", "21", "6", "0.45"},
-                {"ORB", "32", "schoepfer_weltkugel", "-60", "17", "4", "0.6"},
-                {"FEATHERS", "24", "schoepfer_federsturm", "-40", "16", "3", "0.4"},
-                {"JUDGMENT", "44", "schoepfer_urteil_kreis", "-40", "15", "7", "0.85"},
-                {"JUDGMENT", "71", "schoepfer_urteil", "-40", "19", "7", "0.75"},
-                {"SERAPHS", "38", "schoepfer_seraphim", "-30", "16", "3", "0.2"},
+                {"SUNBEAM", "64", "schoepfer_strahl", "-70", "16", "5", "0.4"},
+                {"ORB", "32", "schoepfer_weltkugel", "-70", "15", "4", "0.6"},
+                {"FEATHERS", "24", "schoepfer_federsturm", "-45", "11", "3", "0.25"},
+                {"JUDGMENT", "44", "schoepfer_urteil_kreis", "-50", "12", "6", "0.85"},
+                {"JUDGMENT", "71", "schoepfer_urteil", "-45", "16", "6", "0.75"},
+                {"SERAPHS", "38", "schoepfer_seraphim", "-40", "12", "3", "0.1"},
                 {"BLINK", "21", "schoepfer_lichtsprung", "-60", "12", "3", "0.5"},
-                {"GALE", "32", "schoepfer_schwingensturm", "-45", "17", "4", "0.2"},
+                {"GALE", "32", "schoepfer_schwingensturm", "-45", "14", "4", "0.2"},
                 {"SUNWHEEL", "58", "schoepfer_sonnenrad", "-20", "30", "17", "0.0"},
-                {"CHOIR", "45", "schoepfer_engelschor", "-45", "22", "6", "0.3"},
-                {"WORD", "46", "schoepfer_es_werde_licht", "-20", "19", "2", "0.0"},
-                {"TIMESTOP", "62", "schoepfer_zeitstillstand", "-50", "16", "4", "0.6"},
+                {"CHOIR", "45", "schoepfer_engelschor", "-45", "18", "6", "0.3"},
+                {"WORD", "44", "schoepfer_es_werde_licht", "-25", "13", "2", "0.0", "hud"},
+                {"TIMESTOP", "62", "schoepfer_zeitstillstand", "-60", "11", "4", "0.8"},
         });
         steps.add(Step.waitTicks(30));
         // ------------------------------------------------------------------ der Aufstieg in die Wahre Gestalt
@@ -224,20 +227,20 @@ final class SchrolliShowcase {
             }
         }));
         steps.add(attackAt(s, Attack.ASCEND, 44));
-        steps.add(follow(s, -30.0, 19.0, 2.0, 0.0));
+        steps.add(follow(s, -30.0, 15.0, 2.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(shot("schoepfer_aufstieg"));
         steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_SHATTER + 2));
-        steps.add(follow(s, -30.0, 20.0, 2.0, 0.0));
+        steps.add(follow(s, -30.0, 15.0, 2.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(shot("schoepfer_zerbrochen"));
         steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_REVEAL - 8));
-        steps.add(follow(s, -30.0, 22.0, 2.0, 0.0));
+        steps.add(follow(s, -30.0, 16.0, 2.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(shot("schoepfer_sonne"));
         steps.add(Step.hud(true));
         steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_REVEAL + 10));
-        steps.add(follow(s, -25.0, 17.0, 1.5, 0.0));
+        steps.add(follow(s, -25.0, 15.0, -1.0, 0.0));
         steps.add(Step.waitTicks(2));
         steps.add(shot("schoepfer_wahre_gestalt"));
         steps.add(Step.hud(false));
@@ -245,7 +248,7 @@ final class SchrolliShowcase {
         steps.add(follow(s, -30.0, 26.0, 11.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(shot("schoepfer_welle"));
-        steps.add(attackAt(s, Attack.ASCEND, Attack.ASCEND.ordinal() == 0 ? 0 : SchrolliEntity.ASCEND_TICKS + 2));
+        steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_TICKS + 2));
         steps.add(Step.waitTicks(20));
         // der Himmel hat sich geöffnet: das Auge aus Sternen, Risse aus Licht
         steps.add(pose(s, 13.0));
@@ -280,22 +283,23 @@ final class SchrolliShowcase {
         steps.add(Step.hud(false));
         // ------------------------------------------------------------------ die Künste der Wahren Gestalt
         arts(steps, s, new String[][] {
-                {"PLANETS", "40", "schoepfer_weltenwurf", "-35", "24", "6", "0.25"},
-                {"PLANETS", "72", "schoepfer_weltenwurf_flug", "-70", "22", "6", "0.6"},
-                {"SUPERNOVA", "124", "schoepfer_supernova", "@", "30", "8", "44"},
-                {"SUPERNOVA", "142", "schoepfer_supernova_blitz", "@", "30", "8", "44"},
-                {"GENESIS", "86", "schoepfer_urknall_sog", "@", "20", "12", "26"},
-                {"GENESIS", "112", "schoepfer_urknall", "@", "24", "14", "30"},
-                {"CONSTELLATION", "46", "schoepfer_sternbild_linien", "-40", "19", "8", "0.8"},
-                {"CONSTELLATION", "62", "schoepfer_sternbild", "-40", "19", "8", "0.8"},
-                {"TWIN_HALOS", "46", "schoepfer_doppelklinge", "-30", "24", "11", "0.5"},
+                {"PLANETS", "40", "schoepfer_weltenwurf", "-40", "17", "5", "0.1"},
+                {"PLANETS", "72", "schoepfer_weltenwurf_flug", "-75", "20", "5", "0.6"},
+                {"SUPERNOVA", "40", "schoepfer_supernova_ruf", "@", "18", "4", "30", "hud"},
+                {"SUPERNOVA", "126", "schoepfer_supernova", "@", "26", "6", "40"},
+                {"GENESIS", "86", "schoepfer_urknall_sog", "@", "16", "10", "22"},
+                {"GENESIS", "112", "schoepfer_urknall", "@", "18", "12", "24"},
+                {"CONSTELLATION", "46", "schoepfer_sternbild_linien", "-40", "16", "7", "0.85"},
+                {"CONSTELLATION", "62", "schoepfer_sternbild", "-40", "16", "7", "0.85"},
+                {"TWIN_HALOS", "46", "schoepfer_doppelklinge", "-30", "20", "10", "0.5"},
+                {"APOCALYPSE", "40", "schoepfer_juengstes_gericht_ruf", "@", "20", "4", "30", "hud"},
                 {"APOCALYPSE", "92", "schoepfer_juengstes_gericht", "@", "42", "30", "62"},
-                {"EYE_BEAMS", "66", "schoepfer_augenstrahlen", "-45", "21", "5", "0.4"},
-                {"COMET", "58", "schoepfer_komet", "-60", "22", "5", "0.75"},
-                {"COMET", "72", "schoepfer_komet_einschlag", "-50", "19", "6", "0.5"},
-                {"WORLD_SPLIT", "30", "schoepfer_weltenriss", "-30", "23", "12", "0.2"},
-                {"WORLD_SPLIT", "40", "schoepfer_weltenriss_licht", "-30", "23", "12", "0.2"},
-                {"TIMESTOP", "66", "schoepfer_wahr_zeitstillstand", "-50", "18", "5", "0.6"},
+                {"EYE_BEAMS", "66", "schoepfer_augenstrahlen", "-50", "17", "4", "0.35"},
+                {"COMET", "58", "schoepfer_komet", "-70", "22", "12", "0.7"},
+                {"COMET", "72", "schoepfer_komet_einschlag", "-50", "16", "5", "0.5"},
+                {"WORLD_SPLIT", "30", "schoepfer_weltenriss", "-30", "22", "12", "0.2"},
+                {"WORLD_SPLIT", "40", "schoepfer_weltenriss_licht", "-30", "22", "12", "0.2"},
+                {"TIMESTOP", "66", "schoepfer_wahr_zeitstillstand", "-60", "12", "4", "0.8"},
         });
         // die Neuschöpfung – und wie man sie abbricht
         steps.add(Step.server(any -> {
@@ -326,13 +330,18 @@ final class SchrolliShowcase {
         steps.add(follow(s, -40.0, 13.0, 3.0, 0.0));
         steps.add(Step.waitTicks(1));
         steps.add(shot("schoepfer_taumelnd"));
+        steps.add(Step.server(any -> {
+            if (boss(court(any.getServer()), s) instanceof SchrolliEntity boss) {
+                boss.setHealth(boss.getMaxHealth());
+            }
+        }));
         steps.add(Step.waitTicks(70));
         // ------------------------------------------------------------------ Zepter und Schwingen
         steps.add(Step.server(any -> gear(court(any.getServer()), s)));
-        steps.add(standCam(s, 4.4, 1.9, 0.0, 1.25));
+        steps.add(standCam(s, 3.0, 1.55, 18.0, 1.2));
         steps.add(Step.waitTicks(20));
         steps.add(shot("schoepfer_beute"));
-        steps.add(standCam(s, 4.0, 2.2, 175.0, 1.35));
+        steps.add(standCam(s, 2.9, 1.9, 150.0, 1.3));
         steps.add(Step.waitTicks(8));
         steps.add(shot("schoepfer_beute_ruecken"));
         steps.add(Step.server(any -> {
@@ -399,7 +408,7 @@ final class SchrolliShowcase {
         }, 1200));
         steps.add(Step.command("gamemode spectator"));
         steps.add(Step.waitTicks(20));
-        steps.add(overworldCam(s, 3.6, 2.3, 4.6, 0.0, 1.25, 0.0));
+        steps.add(overworldCam(s, 1.6, 2.0, 4.4, 0.0, 1.15, 0.0));
         steps.add(Step.waitTicks(30));
         steps.add(shot("schoepfer_altar_erloschen"));
         steps.add(Step.server(any -> {
@@ -426,11 +435,15 @@ final class SchrolliShowcase {
             int tick = Integer.parseInt(shot[1]);
             if (started.add(shot[0])) {
                 double distance = switch (attack) {
-                    case SMITE, BLINK, GALE, COMET -> 13.0;
+                    case SMITE, BLINK, GALE, COMET -> 11.0;
                     case SUNWHEEL, SUPERNOVA, GENESIS, APOCALYPSE -> 10.0;
-                    default -> 15.0;
+                    default -> 12.0;
                 };
-                steps.add(reset(s, attack, distance, 8.0));
+                steps.add(reset(s, attack, distance, 6.5));
+            }
+            boolean hud = shot.length > 7 && shot[7].equals("hud");
+            if (hud) {
+                steps.add(Step.hud(true));
             }
             steps.add(attackAt(s, attack, tick - 4));
             if (shot[3].equals("@")) {
@@ -438,8 +451,11 @@ final class SchrolliShowcase {
             } else {
                 steps.add(follow(s, Double.parseDouble(shot[3]), Double.parseDouble(shot[4]), Double.parseDouble(shot[5]), Double.parseDouble(shot[6])));
             }
-            steps.add(Step.waitTicks(1));
+            steps.add(Step.waitTicks(hud ? 2 : 1));
             steps.add(shot(shot[2]));
+            if (hud) {
+                steps.add(Step.hud(false));
+            }
         }
     }
 
@@ -542,12 +558,12 @@ final class SchrolliShowcase {
         if (court.getEntity(s.knight) instanceof Mob knight) {
             knight.teleportTo(s.c.x + 20.0, s.c.y, s.c.z + 20.0);
         }
-        Vec3 p = s.c.add(-6.0, 0.0, -9.0);
+        Vec3 p = s.c.add(-4.0, 0.0, -14.0);
         ArmorStand stand = new ArmorStand(court, p.x, p.y, p.z);
         stand.setShowArms(true);
-        stand.setYRot(160.0f);
-        stand.setYBodyRot(160.0f);
-        stand.setYHeadRot(160.0f);
+        stand.setYRot(-20.0f);
+        stand.setYBodyRot(-20.0f);
+        stand.setYHeadRot(-20.0f);
         stand.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CreatorBlocks.CREATOR_SCEPTER.get()));
         stand.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
         court.addFreshEntity(stand);
@@ -560,14 +576,55 @@ final class SchrolliShowcase {
 
     /** Ein kleines Heiligtum aus Quarz und Gold in der flachen Welt; darauf der Altar mit dem Schöpferfunken. */
     private static void shrine(ServerLevel level, Court s) {
-        for (int cx = -3; cx <= 3; cx++) {
-            for (int cz = -3; cz <= 3; cz++) {
+        // ein Stück Land nahe dem Ursprung: Gras, nicht zu steil, kein Wasser
+        BlockPos spot = null;
+        for (int ring = 0; ring <= 12 && spot == null; ring++) {
+            for (int k = 0; k < Math.max(1, ring * 8) && spot == null; k++) {
+                double a = Math.PI * 2.0 * k / Math.max(1, ring * 8);
+                int x = (int) Math.round(Math.cos(a) * ring * 24.0);
+                int z = (int) Math.round(Math.sin(a) * ring * 24.0);
+                level.getChunk(x >> 4, z >> 4);
+                if (flatLand(level, x, z)) {
+                    spot = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+                }
+            }
+        }
+        if (spot == null) {
+            spot = new BlockPos(0, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, 0, 0), 0);
+        }
+        for (int cx = (spot.getX() >> 4) - 3; cx <= (spot.getX() >> 4) + 3; cx++) {
+            for (int cz = (spot.getZ() >> 4) - 3; cz <= (spot.getZ() >> 4) + 3; cz++) {
                 level.setChunkForced(cx, cz, true);
                 level.getChunk(cx, cz);
             }
         }
-        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, 0, 0);
-        BlockPos base = new BlockPos(0, y, 0);
+        BlockPos base = spot;
+        // der Platz wird frei: Bäume und Pflanzen ringsum fort, unter dem Heiligtum fester Grund
+        BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
+        for (int dx = -15; dx <= 15; dx++) {
+            for (int dz = -15; dz <= 15; dz++) {
+                double r = Math.sqrt(dx * dx + dz * dz);
+                if (r > 15.5) {
+                    continue;
+                }
+                for (int dy = 0; dy < 20; dy++) {
+                    p.set(base.getX() + dx, base.getY() + dy, base.getZ() + dz);
+                    if (!level.getBlockState(p).isAir()) {
+                        level.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
+                    }
+                }
+                if (r <= 9.5) {
+                    for (int dy = -1; dy >= -8; dy--) {
+                        p.set(base.getX() + dx, base.getY() + dy, base.getZ() + dz);
+                        BlockState under = level.getBlockState(p);
+                        if (under.isSolid() && under.getFluidState().isEmpty()) {
+                            break;
+                        }
+                        level.setBlock(p, dy == -1 && r > 7.3 ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.STONE.defaultBlockState(), 2);
+                    }
+                }
+            }
+        }
         BlockState smooth = Blocks.SMOOTH_QUARTZ.defaultBlockState();
         BlockState gold = Blocks.GOLD_BLOCK.defaultBlockState();
         BlockState chiseled = Blocks.CHISELED_QUARTZ_BLOCK.defaultBlockState();
@@ -587,12 +644,29 @@ final class SchrolliShowcase {
         }
         for (int k = 0; k < 4; k++) {
             double a = Math.toRadians(45.0 + k * 90.0);
-            BlockPos p = base.offset((int) Math.round(Math.cos(a) * 6.0), 0, (int) Math.round(Math.sin(a) * 6.0));
+            BlockPos q = base.offset((int) Math.round(Math.cos(a) * 6.0), 0, (int) Math.round(Math.sin(a) * 6.0));
             for (int h = 0; h < 4; h++) {
-                level.setBlock(p.above(h), h == 3 ? chiseled : Blocks.QUARTZ_PILLAR.defaultBlockState(), 3);
+                level.setBlock(q.above(h), h == 3 ? chiseled : Blocks.QUARTZ_PILLAR.defaultBlockState(), 3);
             }
-            level.setBlock(p.above(4), gold, 3);
-            level.setBlock(p.above(5), Blocks.END_ROD.defaultBlockState().setValue(EndRodBlock.FACING, Direction.UP), 3);
+            level.setBlock(q.above(4), gold, 3);
+            level.setBlock(q.above(5), Blocks.END_ROD.defaultBlockState().setValue(EndRodBlock.FACING, Direction.UP), 3);
+        }
+        // Blumen ringsum
+        BlockState[] flowers = {Blocks.OXEYE_DAISY.defaultBlockState(), Blocks.CORNFLOWER.defaultBlockState(), Blocks.LILY_OF_THE_VALLEY.defaultBlockState(),
+                Blocks.SHORT_GRASS.defaultBlockState(), Blocks.SHORT_GRASS.defaultBlockState(), Blocks.DANDELION.defaultBlockState()};
+        for (int dx = -14; dx <= 14; dx++) {
+            for (int dz = -14; dz <= 14; dz++) {
+                double r = Math.sqrt(dx * dx + dz * dz);
+                double h = net.minecraft.util.Mth.frac(Math.sin(dx * 12.9898 + dz * 78.233) * 43758.5453);
+                if (r < 8.3 || r > 14.5 || h > 0.32) {
+                    continue;
+                }
+                BlockPos f = new BlockPos(base.getX() + dx, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, base.getX() + dx,
+                        base.getZ() + dz), base.getZ() + dz);
+                if (level.getBlockState(f.below()).is(Blocks.GRASS_BLOCK) && level.getBlockState(f).isAir()) {
+                    level.setBlock(f, flowers[(int) (h * 100) % flowers.length], 2);
+                }
+            }
         }
         s.altar = base;
         level.setBlock(base, CreatorBlocks.CREATOR_ALTAR.get().defaultBlockState().setValue(CreatorAltarBlock.FACING, Direction.SOUTH), 3);
@@ -601,6 +675,24 @@ final class SchrolliShowcase {
         }
         KingdomsAtWar.LOGGER.info("[Showcase] Schöpfer: Altar bei {} ({})", base, level.getBlockState(base));
         s.state = 1;
+    }
+
+    /** Ist (x, z) ein Stück Wiese, auf dem das Heiligtum flach liegt (kein Wasser, kaum Gefälle)? */
+    private static boolean flatLand(ServerLevel level, int x, int z) {
+        int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        if (!level.getBlockState(new BlockPos(x, y - 1, z)).is(Blocks.GRASS_BLOCK)) {
+            return false;
+        }
+        for (int dx = -8; dx <= 8; dx += 4) {
+            for (int dz = -8; dz <= 8; dz += 4) {
+                int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x + dx, z + dz);
+                BlockState top = level.getBlockState(new BlockPos(x + dx, h - 1, z + dz));
+                if (Math.abs(h - y) > 2 || !top.getFluidState().isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /** Findet den Kampf des Spielers: die Mitte des Hofs und den Schöpfer. */

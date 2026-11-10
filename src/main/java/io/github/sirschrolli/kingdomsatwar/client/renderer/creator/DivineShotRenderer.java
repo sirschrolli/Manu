@@ -105,9 +105,9 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
             case HALO -> this.halo(state, poseStack, collector, camera);
             case ORB -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_GLOBE, 0.42f, true,
                     state.shotState == DivineShotEntity.VORTEX ? 3.6f : 1.6f);
-            case PLANET -> this.planet(state, poseStack, collector, camera, state.variant, 1.5f * state.scale,
-                    state.variant == DivineShotEntity.PLANET_ICE || state.variant == DivineShotEntity.PLANET_VOID, 4.5f * state.scale);
-            case SUN -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 0.5f * state.scale, false, 2.6f * state.scale);
+            case PLANET -> this.planet(state, poseStack, collector, camera, state.variant, 3.2f * state.scale,
+                    state.variant == DivineShotEntity.PLANET_ICE || state.variant == DivineShotEntity.PLANET_VOID, 7.0f * state.scale);
+            case SUN -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 2.0f * state.scale, false, 4.8f * state.scale);
             case STAR -> this.star(state, poseStack, collector, camera, 1.5f);
             case FIXED_STAR -> this.star(state, poseStack, collector, camera, 1.0f + Mth.sin(state.age * 0.5f) * 0.15f);
         }

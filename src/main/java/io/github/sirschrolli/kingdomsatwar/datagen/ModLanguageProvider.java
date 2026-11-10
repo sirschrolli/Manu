@@ -1993,10 +1993,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("entity.kingdomsatwar.schrolli.time_stands", "Time stands still …", "Die Zeit steht still …");
         text("entity.kingdomsatwar.schrolli.time_runs", "Time runs again – dodge the spears!", "Die Zeit läuft weiter – weicht den Speeren aus!");
         text("entity.kingdomsatwar.schrolli.nova", "SUPERNOVA", "SUPERNOVA");
-        text("entity.kingdomsatwar.schrolli.nova.hint", "Hide behind a pillar – or flee as far as you can!",
-                "Versteckt euch hinter einer Säule – oder flieht, so weit ihr könnt!");
+        text("entity.kingdomsatwar.schrolli.nova.hint", "Get behind a pillar – or flee!", "Hinter eine Säule – oder flieht!");
         text("entity.kingdomsatwar.schrolli.nova.covered", "The pillar shielded you.", "Die Säule hat dich geschützt.");
-        text("entity.kingdomsatwar.schrolli.apocalypse", "THE LAST JUDGMENT", "DAS JÜNGSTE GERICHT");
+        text("entity.kingdomsatwar.schrolli.apocalypse", "LAST JUDGMENT", "JÜNGSTES GERICHT");
+        text("entity.kingdomsatwar.schrolli.true_title", "The True Form", "Die Wahre Gestalt");
         text("entity.kingdomsatwar.schrolli.comet", "A comet is falling on you – run!", "Ein Komet stürzt auf dich herab – lauf!");
         text("entity.kingdomsatwar.schrolli.recreation", "Re-creation … interrupt him! (%s %%)", "Neuschöpfung … unterbrecht ihn! (%s %%)");
         text("entity.kingdomsatwar.schrolli.stunned", "The re-creation was interrupted – strike now!",

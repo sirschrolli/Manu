@@ -506,7 +506,7 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
             this.setVisualScale(Math.min(1.0f, 0.15f + this.tickCount / 14.0f * 0.85f));
             double a = Math.toRadians(this.slot * 120.0 + this.tickCount * 3.0);
             double s = owner instanceof LivingEntity l ? l.getScale() : 1.0;
-            Vec3 at = owner.position().add(Math.cos(a) * 5.0 * s * 0.5, 9.0 * s * 0.5 + 2.0, Math.sin(a) * 5.0 * s * 0.5);
+            Vec3 at = owner.position().add(Math.cos(a) * 4.4 * s, 6.6 * s + 1.5, Math.sin(a) * 4.4 * s);
             this.setDeltaMovement(at.subtract(this.position()));
             this.setPos(at);
             return;

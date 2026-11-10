@@ -26,7 +26,7 @@ _BASE = {
     "cloth": ramp("#b8b0c8", "#fffdf6", steps=7, hue_shift=-0.03),
     "gold": [hexc(c) for c in ("#5a3a10", "#8a5e1c", "#b8862a", "#dcae3e", "#f2cf62", "#ffe8a0", "#fff8dc")],
     "light": [hexc(c) for c in ("#c08a2a", "#f0c050", "#ffe08a", "#fff2c4", "#fffbea", "#ffffff")],
-    "skin": ramp("#b88a6a", "#fff4e6", steps=7, hue_shift=-0.02),
+    "skin": ramp("#c08660", "#ffefdc", steps=7, hue_shift=-0.02),
     "hair": [hexc(c) for c in ("#7a4e14", "#a8701e", "#d09a2e", "#ecc04a", "#fadc7a", "#fff0b8")],
     "eye": [hexc(c) for c in ("#5aa8e0", "#a8dcff", "#e8f8ff", "#ffffff")],
     "gem": [hexc(c) for c in ("#0e3a7a", "#1a62b8", "#3a94e8", "#7cc4ff", "#c8ecff", "#ffffff")],
@@ -43,7 +43,7 @@ PALETTES = {
     "schrolli": dict(_BASE),
     "schrolli_true": dict(_BASE, **{
         "gold": [hexc(c) for c in ("#6a4a18", "#9a7024", "#cc9c34", "#ecc450", "#ffe07a", "#fff2b8", "#ffffff")],
-        "skin": ramp("#d8b48a", "#fffaf0", steps=7, hue_shift=-0.02),
+        "skin": ramp("#dcb07e", "#fff6e4", steps=7, hue_shift=-0.02),
         "eye": [hexc(c) for c in ("#fff4c0", "#fffbe0", "#ffffff", "#ffffff")],
         "hair": [hexc(c) for c in ("#b08020", "#d8a830", "#f0c850", "#ffe080", "#fff0b0", "#ffffff")],
         "feather": ramp("#b0a8d0", "#ffffff", steps=7, hue_shift=-0.03),

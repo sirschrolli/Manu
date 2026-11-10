@@ -73,6 +73,10 @@ public final class BossBarRenderer {
         STYLES.put("anni", new Style(KingdomsAtWar.id("textures/gui/boss_bar/anni.png"), 0xF800F8));
         // Anni 2.0 (aus der Sicherung wiederhergestellt): derselbe Rahmen, aber alles in Alarmrot
         STYLES.put("anni2", new Style(KingdomsAtWar.id("textures/gui/boss_bar/anni2.png"), 0xFF2040));
+        // Schrolli der Schöpfer: Elfenbein und Gold, Schwingen hinter dem Medaillon, ein Kranz aus Strahlen, strömendes Licht
+        STYLES.put("schrolli", new Style(KingdomsAtWar.id("textures/gui/boss_bar/schrolli.png"), 0xFFD24A));
+        // seine Wahre Gestalt: violettes Metall, Schwingen wie ein Sternenhimmel, Augen auf dem Ring, eine Füllung aus Nebeln
+        STYLES.put("schrolli_true", new Style(KingdomsAtWar.id("textures/gui/boss_bar/schrolli_true.png"), 0xD8A8FF));
         // die Erzmagier: Rahmen ihres Elements, im Medaillon ihr Bildnis
         for (DragonType type : DragonType.values()) {
             STYLES.put("mage_" + type.id(), new Style(KingdomsAtWar.id("textures/gui/boss_bar/mage_" + type.id() + ".png"), type.color()));

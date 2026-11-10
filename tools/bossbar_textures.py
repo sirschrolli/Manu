@@ -97,6 +97,19 @@ ELEMENTS = {
                   f0="#3a0008", f1="#8a0a18", f2="#ff3a48", f3="#ffe0e0", cyan="#ff8a30", cyan_dark="#6a2a0a",
                   red="#ff3040", green="#40ff70", blue="#4080ff", yellow="#ffd400", wood="#5a3a20", wood_dark="#2a1a0c",
                   stone="#8a8a92", stone_dark="#4a4a52", iron="#2e2e36"),
+    # Schrolli der Schöpfer: Elfenbein und Gold, hinter dem Medaillon zwei Schwingen aus weißen Federn mit goldenen
+    # Spitzen, oben ein Kranz aus Strahlen, unten goldene Tropfen, als Spitze der achtstrahlige Zepterstern; Füllung aus
+    # strömendem goldenem Licht mit Strahlen und Funkeln
+    "schrolli": dict(m0="#3a2808", m1="#a8802a", m2="#fff4cc", acc="#ffc83a", glow="#fff8dc", deep="#2a1a06",
+                     f0="#7a4a06", f1="#e0a01c", f2="#ffe070", f3="#ffffff", gold="#ffd24a", gold_dark="#8a5e14",
+                     feather="#fbf8f0", feather_mid="#d8d4e4", feather_dark="#8c88a4", tip="#f2c44a", gem_blue="#3a94e8",
+                     gem_light="#c8ecff", ray="#fff2b0"),
+    # Schrolli der Schöpfer – Wahre Gestalt: dasselbe in den Farben des Weltalls – violettes Metall mit Goldsaum, Schwingen
+    # wie ein Sternenhimmel mit schillernden Spitzen, ringsum Augen und Sterne; Füllung aus Nebeln und Sternen
+    "schrolli_true": dict(m0="#140a2a", m1="#5a3c9a", m2="#f0e2ff", acc="#c080ff", glow="#f8f0ff", deep="#0a0418",
+                          f0="#1a0838", f1="#5a2a9a", f2="#c870f0", f3="#ffffff", gold="#ffd86a", gold_dark="#8a6020",
+                          feather="#4a2a92", feather_mid="#22125e", feather_dark="#0a0630", tip="#a0f0ff", gem_blue="#ffe07a",
+                          gem_light="#fff8dc", ray="#e8d0ff", prism1="#ffa0a8", prism2="#e890ff", prism3="#80e0ff"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1306,7 +1319,132 @@ def deco_anni(img: Image.Image, pal: dict) -> None:
             put(px, img, ex + x, ey + y, col)
 
 
-DECOS = {"anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
+def deco_schrolli(img: Image.Image, pal: dict) -> None:
+    """Hinter dem Medaillon zwei Schwingen (eine nach oben rechts erhoben, eine nach unten rechts gesenkt), jede aus fünf
+    gefächerten Federn mit Schaft und Spitze; oben auf dem Rahmen ein Kranz aus Strahlen mit Funkeln dazwischen, unter der
+    Leiste goldene Tropfen; als Spitze der achtstrahlige Zepterstern um einen Himmelsstein. In der Wahren Gestalt sind die
+    Federn ein Sternenhimmel mit schillernden Spitzen, die Strahlen Sterne und die Tropfen Sternenstaub."""
+    px = img.load()
+    truly = "prism1" in pal
+    f3 = c(pal, "f3")
+    gold, gold_dark = c(pal, "gold"), c(pal, "gold_dark")
+    feather, feather_mid, feather_dark = c(pal, "feather"), c(pal, "feather_mid"), c(pal, "feather_dark")
+    tip, ray = c(pal, "tip"), c(pal, "ray")
+    gem_blue, gem_light = c(pal, "gem_blue"), c(pal, "gem_light")
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+
+    def quill(x0: float, y0: float, ang: float, length: float, width: float, seed: int):
+        """Eine Feder ab (x0, y0) in Richtung ang: spitz zulaufend, mit Schaft, Fahne und farbiger Spitze."""
+        ca, sa = math.cos(ang), math.sin(ang)
+        for y in range(FRAME_H):
+            for x in range(FRAME_W):
+                dx, dy = x + 0.5 - x0, y + 0.5 - y0
+                u = dx * ca + dy * sa
+                v = -dx * sa + dy * ca
+                if u < 0.0 or u > length:
+                    continue
+                k = u / length
+                half = width * (0.55 + 0.45 * math.sin(math.pi * min(1.0, k * 1.15))) * (1.0 - max(0.0, k - 0.82) * 3.2)
+                if half <= 0.2 or abs(v) > half:
+                    continue
+                edge = abs(v) > half - 0.75
+                if edge:
+                    col = OUTLINE
+                elif abs(v) < 0.45 and k < 0.9:
+                    col = mix(feather_mid, feather_dark, 0.35)                       # Schaft
+                else:
+                    lit = 0.35 + 0.65 * (1.0 - (v + half) / (2 * half))          # Licht von oben
+                    col = mix(feather_mid, feather, lit)
+                    if truly and hash01(x, y, seed, 211) > 0.9:
+                        col = f3 if hash01(x, y, seed, 213) > 0.5 else c(pal, "prism3")
+                    if k > 0.68:
+                        t = (k - 0.68) / 0.32
+                        tipcol = tip
+                        if truly:
+                            tipcol = mix(c(pal, "prism1"), c(pal, "prism3"), hash01(seed, 217)) if t > 0.5 else c(pal, "prism2")
+                        col = mix(col, tipcol, min(1.0, t * 1.6))
+                    elif not truly and (u * 1.3 + seed) % 5.0 < 0.6:
+                        col = mix(col, feather_mid, 0.6)                             # Rippen der Fahne
+                put(px, img, x, y, col)
+
+    # die erhobene Schwinge: fünf Federn, nach außen länger und flacher
+    for j in range(5):
+        k = j / 4
+        quill(EMB_X + 12 + 3 * j, EMB_Y - 9 - j * 0.6, math.radians(-46 + 22 * k), 17 + 13 * k, 3.1 - 0.3 * k, j)
+    # die gesenkte Schwinge: vier Federn
+    for j in range(4):
+        k = j / 3
+        quill(EMB_X + 12 + 3 * j, EMB_Y + 8 + j * 0.5, math.radians(38 - 20 * k), 14 + 9 * k, 2.8 - 0.3 * k, 20 + j)
+
+    def spark(sx: int, sy: int, r: int, col, core):
+        for k in range(-r, r + 1):
+            shade = col if abs(k) < r else mix(col, OUTLINE, 0.25)
+            put(px, img, sx + k, sy, shade)
+            put(px, img, sx, sy + k, shade)
+        put(px, img, sx, sy, core)
+
+    # der Kranz aus Strahlen auf dem Rahmen (nicht über den Fassungen der Edelsteine)
+    gems = [BAR_X + round(BAR_W * f) for f in GEMS]
+    for i, x in enumerate(range(BAR_X + 10, BAR_X + BAR_W - 4, 9)):
+        if any(abs(x - g) < 9 for g in gems):
+            continue
+        h = 3 + (2 if i % 2 == 0 else 0) + (1 if i % 4 == 0 else 0)
+        if truly:
+            spark(x, top - h, 1 if i % 2 else 2, ray, f3)
+            continue
+        for dy in range(h):
+            half = 1 if dy < h - 2 else 0
+            for dx in range(-half, half + 1):
+                col = OUTLINE if abs(dx) == half and half > 0 else (ray if dx <= 0 else gold)
+                put(px, img, x + dx, top - 1 - dy, col)
+        put(px, img, x, top - h, f3)
+        if i % 3 == 1:
+            spark(x + 4, top - 6, 1, ray, f3)
+    # unter der Leiste: goldene Tropfen (in der Wahren Gestalt Sternenstaub)
+    for i, x in enumerate(range(BAR_X + 6, BAR_X + BAR_W - 2, 12)):
+        length = 2 + (i % 3)
+        for dy in range(length):
+            col = gold if dy < length - 1 else (f3 if not truly else ray)
+            if truly:
+                col = mix(ray, f3, dy / max(1, length - 1)) if hash01(x, dy, 223) > 0.3 else c(pal, "prism2")
+            put(px, img, x, bottom + 1 + dy, col)
+            if not truly:
+                put(px, img, x + 1, bottom + 1 + dy, gold_dark if dy < length - 1 else OUTLINE)
+        if truly and i % 2 == 0:
+            spark(x + 6, bottom + 4, 1, ray, f3)
+    # Spitze: der achtstrahlige Zepterstern um einen Himmelsstein
+    ex, ey = BAR_X + BAR_W + 4, BAR_Y + BAR_H // 2
+    for ang in range(0, 360, 45):
+        r = 4 if ang % 90 == 0 else 3
+        ca, sa = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+        for k in range(1, r + 1):
+            put(px, img, round(ex + ca * k), round(ey + sa * k), gold if k < r else ray)
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            put(px, img, ex + dx, ey + dy, gem_light if dx == -1 and dy == -1 else gem_blue)
+    put(px, img, ex, ey, gem_light)
+
+
+def post_schrolli(img: Image.Image, pal: dict) -> None:
+    """Nach dem Medaillon: in der Wahren Gestalt sieben Augen auf seinem Ring (wie auf den Rädern im Rad)."""
+    if "prism1" not in pal:
+        return
+    px = img.load()
+    for k in range(7):
+        a = math.radians(-150 + k * 50)
+        x = round(EMB_X - 0.5 + math.cos(a) * (EMB_R - 2.5))
+        y = round(EMB_Y - 0.5 + math.sin(a) * (EMB_R - 2.5))
+        put(px, img, x - 1, y, c(pal, "f3"))
+        put(px, img, x + 1, y, c(pal, "f3"))
+        put(px, img, x, y - 1, c(pal, "gold"))
+        put(px, img, x, y + 1, c(pal, "gold_dark"))
+        put(px, img, x, y, c(pal, "tip"))
+
+
+POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli}
+
+
+DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
          "water": deco_water}
 
 
@@ -1316,6 +1454,8 @@ def frame(element: str) -> Image.Image:
     DECOS[element](img, pal)
     frame_border(img, pal)
     emblem(img, pal)
+    if element in POST:
+        POST[element](img, pal)
     return img
 
 
@@ -1399,6 +1539,22 @@ def fill_value(element: str, x: int, y: int) -> float:
         if y % 3 == 0:
             return 0.3
         return 0.4 + block * 0.45
+    if element == "schrolli":
+        # strömendes goldenes Licht: weiche Wellen, schräge Strahlen und Funkeln
+        flow = 0.48 + 0.16 * math.sin(tau * x / 64 + 1.2 * math.sin(tau * y / 9)) + 0.08 * math.sin(tau * x / 32 - tau * y / 18)
+        beam = ((x + 2 * y) % 32) < 2
+        if hash01(x, y, 227) > 0.972:
+            return 1.0
+        return 0.88 if beam else flow
+    if element == "schrolli_true":
+        # das Weltall: violette Nebel, die ziehen, Sterne und ab und zu ein heller Stern
+        neb = 0.36 + 0.2 * math.sin(tau * x / 64 + 1.5 * math.sin(tau * y / 9)) + 0.12 * math.sin(tau * x / 32 + tau * y / 9)
+        h = hash01(x, y, 229)
+        if h > 0.968:
+            return 1.0
+        if h > 0.94:
+            return 0.78
+        return neb
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -1499,16 +1655,26 @@ def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
-                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll)
+                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll, schrolli)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
-           "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll}[element]
+           "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
+           "schrolli": schrolli, "schrolli_true": schrolli}[element]
     m = mod.build()
     m.pack()
-    variant = "anni_troll_v2" if element == "anni2" else next(iter(mod.PALETTES))
-    tex, glow = paint_model(m, mod.materials(variant), mod.PALETTES[variant], seed=100)
+    variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
+    tex, glow = paint_model(m, mod.materials(variant), mod.PALETTES[variant], seed=100, params={"variant": variant})
+    if element.startswith("schrolli"):
+        # Kopf mit Haar, Krone und Heiligenschein (in der Wahren Gestalt mit dem Strahlenkranz), die Schultern
+        def strip_schrolli(bone):
+            if bone.name.startswith(("wing_", "left_", "right_", "scepter", "orb", "robe", "true_rings", "halo", "true_corona",
+                                     "hair_tip")):
+                bone.cubes.clear()
+            for child in bone.children:
+                strip_schrolli(child)
+        strip_schrolli(m.root)
     if element == "void":
         # nur Kopf, Bart und Krone (Schultern, Hände und Trümmer würden das kleine Bildnis überladen)
         keep = {"body", "head", "beard", "beard_tip", "crown"} | {f"crown_{k}" for k in range(7)}
@@ -1571,17 +1737,17 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_anni(child)
         strip_anni(m.root)
-    zoom = {"nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
+    zoom = {"schrolli": 1.0, "schrolli_true": 1.0, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
             "anni": 1.0, "anni2": 1.0}.get(element, 1.2)
-    yaw = {"water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
+    yaw = {"schrolli": -22, "schrolli_true": -22, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
            "anni2": -24}.get(element, -42)
-    pitch = {"reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
+    pitch = {"schrolli": 4, "schrolli_true": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
                  focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
     img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
-                                                 "anni": 1.45, "anni2": 1.45}.get(element, 1.4))
+                                                 "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5}.get(element, 1.4))
     img = ImageEnhance.Color(img).enhance(1.15)
     img = ImageEnhance.Contrast(img).enhance(1.12)
     px = img.load()
