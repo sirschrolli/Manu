@@ -466,6 +466,9 @@ final class SchrolliGameTests {
     private static void wings(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-creator-wings", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        player.connection.markClientLoaded();   // sonst ist er unverwundbar wie ein Spieler, der gerade erst die Welt lädt
+        player.getAbilities().invulnerable = false;   // die Testwelt läuft im Kreativmodus
+        player.getAbilities().instabuild = false;
         try {
             player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
             helper.assertTrue(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.wearing(player), "Die Schwingen sitzen nicht");

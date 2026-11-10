@@ -467,6 +467,38 @@ final class SchrolliShowcase {
         steps.add(Step.command("gamerule advance_time true"));
     }
 
+    /** Kurzprobe ({@code creator_hand}): das Zepter in der Hand (erste Person, dann von vorn) und sein Lichtspeer. */
+    static void hand(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "clear", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CreatorBlocks.CREATOR_SCEPTER.get()));
+            player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
+            player.teleportTo(any.getServer().overworld(), 0.5, player.getY(), 0.5, Set.of(), 0.0f, 5.0f, true);
+        }));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        steps.add(shot("zepter_hand_test"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.waitTicks(10));
+        steps.add(shot("zepter_front_test"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.waitTicks(10));
+        steps.add(shot("zepter_back_test"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.getMainHandItem().use(any.getServer().overworld(), player, InteractionHand.MAIN_HAND);
+        }));
+        steps.add(Step.waitTicks(2));
+        steps.add(shot("zepter_speer_test"));
+        steps.add(Step.quit());
+    }
+
     // =====================================================================================
     // Die Künste
     // =====================================================================================

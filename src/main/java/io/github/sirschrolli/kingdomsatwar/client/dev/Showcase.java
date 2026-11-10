@@ -233,6 +233,8 @@ final class Showcase {
                         AnniShowcase.boss(steps);
                     } else if (scene.equals("creator_boss")) {
                         SchrolliShowcase.boss(steps);
+                    } else if (scene.equals("creator_hand")) {
+                        SchrolliShowcase.hand(steps);
                     } else if (scene.equals("fae_creatures")) {
                         FaeShowcase.creatures(steps);
                     } else if (scene.equals("fae_portal")) {

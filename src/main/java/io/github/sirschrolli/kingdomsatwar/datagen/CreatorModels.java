@@ -167,10 +167,10 @@ final class CreatorModels {
         ExtendedModelTemplateBuilder hand = ExtendedModelTemplateBuilder.builder()
                 .requiredTextureSlot(STAFF).requiredTextureSlot(STAFF_GLOW).requiredTextureSlot(TextureSlot.PARTICLE)
                 .guiLight(net.minecraft.client.resources.model.UnbakedModel.GuiLight.FRONT)
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, t -> t.rotation(0, -90, 32).translation(1.13f, 0.6f, 1.13f).scale(0.5f))
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, t -> t.rotation(0, 90, -32).translation(1.13f, 0.6f, 1.13f).scale(0.5f))
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(0, -90, 55).translation(0, 4.0f, 0.5f).scale(0.85f))
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(0, 90, -55).translation(0, 4.0f, 0.5f).scale(0.85f));
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, t -> t.rotation(0, -90, 25).translation(1.13f, 3.2f, 1.13f).scale(0.5f))
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, t -> t.rotation(0, 90, -25).translation(1.13f, 3.2f, 1.13f).scale(0.5f))
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(0, 90, 55).translation(0, 4.0f, 0.5f).scale(0.85f))
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(0, -90, -55).translation(0, 4.0f, 0.5f).scale(0.85f));
         for (float[] p : SCEPTER_PARTS) {
             boolean glow = p[10] > 0;
             hand.element(e -> {
@@ -179,7 +179,7 @@ final class CreatorModels {
                 if (glow) {
                     e.lightEmission(14);
                 }
-                e.rotation(r -> r.origin(8, 8, 8).eulerXYZ(0, 0, -45));
+                e.rotation(r -> r.origin(8, 8, 8).eulerXYZ(0, 0, 45));
             });
         }
         Identifier inHand = hand.build().create(ModelLocationUtils.getModelLocation(scepter, "_in_hand"), textures, items.modelOutput);
