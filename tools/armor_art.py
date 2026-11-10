@@ -371,25 +371,34 @@ def scale(art: Art, key: str) -> Art:
 
 def fur(art: Art, key: str) -> Art:
     """
-    Pelz: senkrechte Haarsträhnen, je Spalte versetzt – oben die helleren Spitzen, darunter dunkler; an der Unterkante
-    fransig (eine Stufe dunkler).
+    Pelz: jede Spalte ist eine Folge von Strähnen (Läufe von 2–4 Pixeln), meist im Grundton, öfter eine Stufe dunkler,
+    selten eine heller – so entstehen feine senkrechte Striche statt Flecken. Oben ein Glanz, unten fransig dunkler. Auf der
+    Brust (body_front) ist das Fell heller (Slot D), wie beim Wolf.
     """
-    strands = ["5443", "4432", "5543", "4332", "4543", "3432"]
-    out = []
+    import random
+    import zlib
+    rnd = random.Random(zlib.crc32(key.encode()))
     h = len(art)
-    for y, row in enumerate(art):
-        line = []
-        for x, ch in enumerate(row):
-            if ch in "45" and 0 < x < len(row) - 1 and 0 < y < h - 1:
-                col = strands[(x * 7 + (x // 3)) % len(strands)]
-                v = col[(y + (x * 5) % 3) % 4]
-                if y == h - 2 and (x * 3) % 4 == 1:
-                    v = str(max(1, int(v) - 1))
-                line.append(v)
-            else:
-                line.append(ch)
-        out.append("".join(line))
-    return out
+    out = [list(r) for r in art]
+    for x in range(1, max(len(r) for r in art) - 1):
+        y = 1
+        while y < h - 1:
+            run = rnd.choice((2, 3, 3, 4))
+            mod = rnd.choices((0, -1, 1), weights=(6, 3, 1))[0]
+            for yy in range(y, min(h - 1, y + run)):
+                row = art[yy]
+                if x >= len(row) - 1 or row[x] not in "45":
+                    continue
+                v = int(row[x]) + mod
+                if yy == h - 2 and (x * 3) % 4 == 1:
+                    v -= 1
+                v = max(2, min(5, v))
+                if key == "body_front" and 2 <= x <= 5 and 1 <= yy <= 8:
+                    out[yy][x] = "opqrstu"[min(6, v + 1)]
+                else:
+                    out[yy][x] = str(v)
+            y += run
+    return ["".join(r) for r in out]
 
 
 def facet(art: Art, key: str) -> Art:
@@ -578,12 +587,15 @@ def dragon(kind: str) -> Design:
 
 
 def werewolf_pelt() -> Design:
-    """Werwolfspelz: dunkles, strähniges Fell; eine Haube mit offenem Gesicht (die Wolfsschnauze darüber kommt als 3D-Teil),
-    Lederriemen über der Brust mit Klauen als Schmuck, Pelzsäume an Armen und Stiefeln."""
-    return Design("werewolf_pelt", {"A": st.ramp("#5c5047", dark=0.14, light=0.86, cool=290, chroma_light=0.35),
+    """Werwolfspelz: dunkles, strähniges Fell mit hellerer Brust; eine Haube mit offenem Gesicht und Bernsteinaugen (der
+    Wolfskopf darüber kommt als 3D-Teil), Lederriemen über der Brust mit Klauen als Schmuck, Pelzsäume an Armen und Stiefeln."""
+    return Design("werewolf_pelt", {"A": st.ramp("#5c5047", dark=0.16, light=0.68, cool=290, chroma_light=0.35),
                                     "B": st.ramp("#6a4428", dark=0.15, light=0.8, cool=20),
-                                    "C": st.ramp("#e2d8c0", dark=0.35, light=0.98)}, open_face=True, texture="fur", d={
-        "head_front": ["l......l", "ml....lm", ".", "."],
+                                    "C": st.ramp("#e2d8c0", dark=0.35, light=0.98),
+                                    "D": st.ramp("#8a7c6c", dark=0.24, light=0.8, cool=290, chroma_light=0.35),
+                                    "E": st.fixed("#3a2406", "#6a3c08", "#a8600c", "#e08a16", "#ffb02a", "#ffd060", "#fff0b0")},
+                  open_face=True, texture="fur", d={
+        "head_front": [".", ".a....a.", ".", "."],
         "head_top": [".", ".", ".", ".", ".", ".", ".", "."],
         "body_front": [".", ".d....b.", "..d..b..", "...dc...", "...cb...", "...lm...", ".", ".", ".", ".", "..dccb.."],
         "arm_side": [".", ".", ".", ".", ".", ".", ".", ".", "dccb"],
