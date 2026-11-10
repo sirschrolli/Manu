@@ -7,15 +7,15 @@ import net.minecraft.util.Mth;
 
 /**
  * Chorusschlund: Der Stamm wiegt sich langsam, die Seitenäste schwanken mit, die Ranken rollen sich ein und aus. Wacht er
- * auf, klappt der Deckel der Blüte nach hinten auf, die Blütenblätter spreizen sich und der Schlund zittert. Beim Biss
- * schnellt der Kopf vor und der Deckel schlägt zu; beim Rankenhieb holt eine Ranke aus und peitscht nach vorn (die Glieder
- * folgen nacheinander wie eine Peitsche); beim Spucken bäumt sich der Kopf zurück und stößt dann vor.
+ * auf, blüht die Knospe auf: die vier Blütenblätter klappen weit auseinander und zittern, innen glüht der Schlund. Beim
+ * Biss reißt er sie noch weiter auf, schnellt vor und lässt sie zuschnappen; beim Rankenhieb holt eine Ranke aus und
+ * peitscht nach vorn (die Glieder folgen nacheinander wie eine Peitsche); beim Spucken bäumt sich die Blüte zurück und
+ * stößt dann vor.
  */
 public class ChorusMawModel extends EntityModel<ChorusMawRenderState> {
     private final ModelPart stalk2;
     private final ModelPart stalk3;
     private final ModelPart head;
-    private final ModelPart lid;
     private final ModelPart petalLeft;
     private final ModelPart petalRight;
     private final ModelPart petalFront;
@@ -35,7 +35,6 @@ public class ChorusMawModel extends EntityModel<ChorusMawRenderState> {
         this.stalk2 = stalk1.getChild("stalk2");
         this.stalk3 = this.stalk2.getChild("stalk3");
         this.head = this.stalk3.getChild("head");
-        this.lid = this.head.getChild("lid");
         this.petalLeft = this.head.getChild("petal_left");
         this.petalRight = this.head.getChild("petal_right");
         this.petalFront = this.head.getChild("petal_front");
@@ -71,13 +70,32 @@ public class ChorusMawModel extends EntityModel<ChorusMawRenderState> {
         this.vineRightTip.zRot -= Mth.sin(t * 0.05f + 1.3f) * 0.18f;
         this.head.yRot += Mth.clamp(state.yRot, -35.0f, 35.0f) * Anim.DEG * 0.6f;
 
-        // ------------------------------------------------------------ Schlund auf
-        float quiver = Mth.sin(t * 0.9f) * 0.03f * open;
-        this.lid.xRot += -0.95f * open + quiver;
-        this.petalLeft.zRot += -0.45f * open;
-        this.petalRight.zRot += 0.45f * open;
-        this.petalFront.xRot += 0.45f * open;
-        this.petalBack.xRot += -0.35f * open;
+        // ------------------------------------------------------------ die Blüte geht auf
+        float quiver = Mth.sin(t * 0.9f) * 0.04f * open;
+        float bloom = 1.25f * open;
+        // Biss: noch weiter auf, dann schnappen die Blätter zu (und ein wenig darüber hinaus)
+        float bite = Anim.seconds(state.bite, t);
+        if (bite >= 0.0f && bite < 0.6f) {
+            float gape = Anim.bump(bite, 0.12f, 0.18f, 0.25f);
+            float snap = Anim.bump(bite - 0.22f, 0.03f, 0.15f, 0.35f);
+            bloom += 0.3f * gape - (bloom + 0.12f) * snap;
+            this.head.xRot += 0.2f * gape + 0.25f * snap;
+            this.head.z += -1.5f * snap;
+            this.stalk3.xRot += 0.15f * snap;
+        }
+        // Spucken: weit auf, zurückbäumen, vorstoßen
+        float spit = Anim.seconds(state.spit, t);
+        if (spit >= 0.0f && spit < 0.8f) {
+            float back = Anim.bump(spit, 0.3f, 0.36f, 0.42f);
+            float thrust = Anim.bump(spit - 0.38f, 0.05f, 0.14f, 0.35f);
+            bloom += 0.25f * thrust;
+            this.stalk3.xRot += -0.3f * back + 0.35f * thrust;
+            this.head.xRot += -0.35f * back + 0.4f * thrust;
+        }
+        this.petalFront.xRot += bloom + quiver;
+        this.petalBack.xRot -= bloom + Mth.sin(t * 0.9f + 1.1f) * 0.04f * open;
+        this.petalLeft.zRot += bloom + Mth.sin(t * 0.9f + 2.3f) * 0.04f * open;
+        this.petalRight.zRot -= bloom + Mth.sin(t * 0.9f + 3.4f) * 0.04f * open;
         this.head.xRot += 0.08f * open;
         // offen recken sich die Ranken der Beute entgegen
         this.vineLeft.zRot += 0.25f * open;
@@ -85,30 +103,9 @@ public class ChorusMawModel extends EntityModel<ChorusMawRenderState> {
         this.vineLeft.yRot += 0.35f * open;
         this.vineRight.yRot -= 0.35f * open;
 
-        // ------------------------------------------------------------ Biss
-        float bite = Anim.seconds(state.bite, t);
-        if (bite >= 0.0f && bite < 0.6f) {
-            float gape = Anim.bump(bite, 0.12f, 0.18f, 0.25f);
-            float snap = Anim.bump(bite - 0.22f, 0.03f, 0.15f, 0.35f);
-            this.lid.xRot += -0.45f * gape + 0.95f * open * snap;
-            this.head.xRot += 0.25f * gape + 0.2f * snap;
-            this.head.z += -1.5f * snap;
-            this.stalk3.xRot += 0.15f * snap;
-        }
-
         // ------------------------------------------------------------ Rankenhiebe
         this.lash(Anim.seconds(state.lashLeft, t), this.vineLeft, this.vineLeftMid, this.vineLeftTip, 1.0f);
         this.lash(Anim.seconds(state.lashRight, t), this.vineRight, this.vineRightMid, this.vineRightTip, -1.0f);
-
-        // ------------------------------------------------------------ Spucken
-        float spit = Anim.seconds(state.spit, t);
-        if (spit >= 0.0f && spit < 0.8f) {
-            float back = Anim.bump(spit, 0.3f, 0.36f, 0.42f);
-            float thrust = Anim.bump(spit - 0.38f, 0.05f, 0.14f, 0.35f);
-            this.stalk3.xRot += -0.3f * back + 0.35f * thrust;
-            this.head.xRot += -0.35f * back + 0.4f * thrust;
-            this.lid.xRot += -0.4f * thrust;
-        }
     }
 
     /** Ein Rankenhieb: ausholen (nach hinten oben), dann peitschen die Glieder nacheinander nach vorn. */

@@ -37,8 +37,8 @@ public final class NightRamGeometry {
                 .texOffs(0, 29).addBox(-3.5F, -6.2F, -9.9F, 7F, 7F, 7F, new CubeDeformation(-0.3F, -0.3F, -0.1F))
                 .texOffs(89, 29).addBox(-2.5F, -4.3F, -14.1F, 5F, 5F, 5F, new CubeDeformation(-0.1F, -0.3F, -0.3F))
                 .texOffs(100, 63).addBox(-1.5F, -3.5F, -14.4F, 3F, 2F, 1F, new CubeDeformation(0F, -0.3F, -0.3F))
-                .texOffs(109, 63).addBox(2.775F, -4.45F, -9.65F, 1F, 1F, 2F, new CubeDeformation(-0.375F, -0.05F, -0.25F))
-                .texOffs(116, 63).addBox(-3.775F, -4.45F, -9.65F, 1F, 1F, 2F, new CubeDeformation(-0.375F, -0.05F, -0.25F)),
+                .texOffs(109, 63).addBox(2.825F, -4.45F, -9.65F, 1F, 1F, 2F, new CubeDeformation(-0.275F, -0.05F, -0.25F))
+                .texOffs(116, 63).addBox(-3.825F, -4.45F, -9.65F, 1F, 1F, 2F, new CubeDeformation(-0.275F, -0.05F, -0.25F)),
                 PartPose.offsetAndRotation(0F, -3.2F, -8F, 0.3142F, 0F, 0F));
         PartDefinition p_jaw = p_head.addOrReplaceChild("jaw", CubeListBuilder.create()
                 .texOffs(101, 55).addBox(-2F, -0.4F, -3.8F, 4F, 2F, 4F, new CubeDeformation(-0.1F, -0.4F, -0.2F)),

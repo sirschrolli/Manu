@@ -44,8 +44,8 @@ def build() -> Model:
     m.cube("head", (-3.2, -5.9, -9.8), (6.4, 6.4, 6.8), "face")                   # Schädel
     m.cube("head", (-2.4, -4.0, -13.8), (4.8, 4.4, 4.4), "muzzle")                # Schnauze (Ramsnase)
     m.cube("head", (-1.5, -3.2, -14.1), (3.0, 1.4, 0.4), "nose")
-    m.cube("head", (3.15, -4.4, -9.4), (0.25, 0.9, 1.5), "eye")
-    m.cube("head", (-3.4, -4.4, -9.4), (0.25, 0.9, 1.5), "eye")
+    m.cube("head", (3.1, -4.4, -9.4), (0.45, 0.9, 1.5), "eye")
+    m.cube("head", (-3.55, -4.4, -9.4), (0.45, 0.9, 1.5), "eye")
     m.bone("jaw", "head", pivot=(0, 0.2, -9.4), rotation=(4, 0, 0))
     m.cube("jaw", (-1.9, 0, -3.6), (3.8, 1.2, 3.6), "muzzle")
     m.bone("beard", "jaw", pivot=(0, 1.0, -2.0), rotation=(-8, 0, 0))
@@ -118,13 +118,35 @@ def _face(ctx: Ctx):
 
 
 def _muzzle(ctx: Ctx):
+    """Ramsnase: dunkler als der Schädel, zum Nasenspiegel hin fast schwarz, vorn unten die Maullinie und die Mundwinkel."""
     x, y, z = ctx.world
-    v = 0.7 + _LIT[ctx.face] + (noise3(x, y, z, 57) - 0.5) * 0.1 - (0.15 if ctx.face == "bottom" else 0.0)
+    ry = rel_y(ctx)
+    v = 0.5 + _LIT[ctx.face] + (noise3(x, y, z, 57) - 0.5) * 0.1 - (0.15 if ctx.face == "bottom" else 0.0)
+    if ctx.face == "front":
+        if ry > 0.86:
+            return pick(ctx.pal["hoof"], 0.2)                        # die Maullinie
+        v += 0.1 * (1.0 - ry) - 0.06
+    elif ctx.face in ("west", "east"):
+        front = max(0.0, min(1.0, (-ctx.local[2] - 9.4) / 4.4))   # 0 hinten am Schädel, 1 vorn an der Nase
+        if ry > 0.86 and front > 0.55:
+            return pick(ctx.pal["hoof"], 0.25)                       # der Mundwinkel
+        v += 0.08 - front * 0.12
+    elif ctx.face == "top":
+        v += 0.06                                                    # der glänzende Nasenrücken
     return pick(ctx.pal["face"], v)
 
 
 def _nose(ctx: Ctx):
-    return pick(ctx.pal["hoof"], 0.15)
+    """Nasenspiegel: dunkel und feucht glänzend, oben ein Lichtsaum, darunter zwei schräge Nüstern."""
+    if ctx.face != "front":
+        return pick(ctx.pal["hoof"], 0.35 + _LIT[ctx.face])
+    rs = (ctx.s + 0.5) / max(ctx.w, 1)
+    rt = (ctx.t + 0.5) / max(ctx.h, 1)
+    if rt < 0.3:
+        return pick(ctx.pal["face"], 0.46)
+    if 0.12 < abs(rs - 0.5) < 0.36:
+        return pick(ctx.pal["hoof"], 0.0)
+    return pick(ctx.pal["hoof"], 0.5)
 
 
 def _eye(ctx: Ctx):

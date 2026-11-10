@@ -5,6 +5,7 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModSounds;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -371,11 +372,14 @@ public class NightRamEntity extends Monster {
                 Vec3 head = this.position().add(this.getViewVector(1.0f).multiply(1.0, 0.0, 1.0).normalize().scale(1.1)).add(0.0, 1.8, 0.0);
                 level.addParticle(ParticleTypes.CRIT, head.x + Math.cos(a) * 0.5, head.y, head.z + Math.sin(a) * 0.5, 0.0, 0.0, 0.0);
             }
-            if (this.random.nextInt(30) == 0) {
-                // Frostatem
+            if (this.random.nextInt(50) == 0) {
+                // Frostatem: ein feiner, bleichblauer Hauch aus den Nüstern
                 Vec3 look = this.getViewVector(1.0f);
-                level.addParticle(ParticleTypes.WHITE_SMOKE, this.getX() + look.x * 1.4, this.getY() + 1.15, this.getZ() + look.z * 1.4,
-                        look.x * 0.02, 0.01, look.z * 0.02);
+                for (int i = 0; i < 4; i++) {
+                    level.addParticle(new DustParticleOptions(0xD4E2FF, 0.45f + this.random.nextFloat() * 0.25f), this.getX() + look.x * 1.3,
+                            this.getY() + 1.02, this.getZ() + look.z * 1.3, look.x * 0.05 + this.random.nextGaussian() * 0.01, 0.0,
+                            look.z * 0.05 + this.random.nextGaussian() * 0.01);
+                }
             }
         }
     }

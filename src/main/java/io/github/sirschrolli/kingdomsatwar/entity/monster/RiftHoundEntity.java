@@ -52,6 +52,8 @@ public class RiftHoundEntity extends Monster {
     /** So lange zerfällt er, bevor er hinter seinem Opfer erscheint. */
     public static final int PHASE_TICKS = 10;
     public static final int HOWL_TICKS = 32;
+    /** Clientseitig: so lange taucht er nach dem Phasensprung aus dem Riss wieder auf. */
+    private static final int APPEAR_TICKS = 5;
 
     public final AnimationState biteAnimation = new AnimationState();
     public final AnimationState phaseAnimation = new AnimationState();
@@ -63,6 +65,7 @@ public class RiftHoundEntity extends Monster {
     private @Nullable LivingEntity lastTarget;
     /** Clientseitig: so lange nach dem Zerfall unsichtbar (bis er wieder erscheint). */
     private int fadedTicks;
+    private int appearTicks;
 
     public RiftHoundEntity(EntityType<? extends RiftHoundEntity> type, Level level) {
         super(type, level);
@@ -241,18 +244,22 @@ public class RiftHoundEntity extends Monster {
             case EVENT_PHASE_IN -> {
                 this.phaseAnimation.stop();
                 this.fadedTicks = 0;
+                this.appearTicks = APPEAR_TICKS;
             }
             case EVENT_HOWL -> this.howlAnimation.start(this.tickCount);
             default -> super.handleEntityEvent(id);
         }
     }
 
-    /** Clientseitig: während des Phasensprungs ist von ihm nur ein Flimmern zu sehen. */
+    /** Clientseitig: 0 ganz da … 1 fort – er versinkt im Riss und taucht danach rasch wieder daraus auf. */
     public float fade(float partialTicks) {
-        if (this.fadedTicks <= 0) {
-            return 0.0f;
+        if (this.fadedTicks > 0) {
+            return Math.min(1.0f, (PHASE_TICKS - this.fadedTicks + partialTicks) / 6.0f);
         }
-        return Math.min(1.0f, (PHASE_TICKS - this.fadedTicks + partialTicks) / 4.0f);
+        if (this.appearTicks > 0) {
+            return Math.max(0.0f, (this.appearTicks - partialTicks) / APPEAR_TICKS);
+        }
+        return 0.0f;
     }
 
     @Override
@@ -260,6 +267,9 @@ public class RiftHoundEntity extends Monster {
         super.aiStep();
         Level level = this.level();
         if (level.isClientSide()) {
+            if (this.appearTicks > 0) {
+                this.appearTicks--;
+            }
             if (this.fadedTicks > 0) {
                 this.fadedTicks--;
                 level.addParticle(ParticleTypes.REVERSE_PORTAL, this.getRandomX(0.6), this.getRandomY(), this.getRandomZ(0.6), 0.0, 0.05, 0.0);

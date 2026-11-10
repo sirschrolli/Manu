@@ -226,8 +226,8 @@ public class ChorusMawEntity extends Monster {
         }
         if (target.hurtServer(level, this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE))) {
             Vec3 pull = this.position().subtract(target.position()).multiply(1.0, 0.0, 1.0);
-            pull = pull.lengthSqr() < 1.0e-4 ? Vec3.ZERO : pull.normalize().scale(0.6);
-            target.push(pull.x, 0.18, pull.z);
+            pull = pull.lengthSqr() < 1.0e-4 ? Vec3.ZERO : pull.normalize().scale(0.9);
+            target.push(pull.x, 0.22, pull.z);
             target.needsSync = true;
             level.sendParticles(ParticleTypes.PORTAL, target.getX(), target.getY(0.5), target.getZ(), 12, 0.3, 0.4, 0.3, 0.3);
         }
@@ -288,13 +288,16 @@ public class ChorusMawEntity extends Monster {
         return false;
     }
 
-    /** Verpflanzt sich selbst: sucht eine Stelle mit festem Boden in bis zu zehn Blöcken. */
+    /**
+     * Verpflanzt sich selbst: sucht eine Stelle mit festem Boden bis zu sechs Blöcke weiter (von etwas oberhalb sinkt sie
+     * auf den Boden – so findet sie auch Hänge, die höher liegen).
+     */
     private boolean replant(ServerLevel level) {
         Vec3 from = this.position();
         for (int i = 0; i < 16; i++) {
-            double x = this.getX() + (this.random.nextDouble() - 0.5) * 20.0;
-            double y = this.getY() + this.random.nextInt(9) - 4;
-            double z = this.getZ() + (this.random.nextDouble() - 0.5) * 20.0;
+            double x = this.getX() + (this.random.nextDouble() - 0.5) * 12.0;
+            double y = this.getY() + this.random.nextInt(7);
+            double z = this.getZ() + (this.random.nextDouble() - 0.5) * 12.0;
             if (this.randomTeleport(x, y, z, false, BlockTags.CONSUMABLE_DOES_NOT_TELEPORT_TO)) {
                 this.replantCooldown = 300;
                 this.playSound(ModSounds.CHORUS_MAW_TELEPORT.get(), 1.6f, 1.0f);

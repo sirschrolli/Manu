@@ -192,6 +192,7 @@ public final class ModGameTests {
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
+        RealmGameTests.init();    // Monster der Schattenwelt und des Ends
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -260,6 +261,7 @@ public final class ModGameTests {
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);
+        RealmGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

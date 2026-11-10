@@ -2,7 +2,9 @@
 """
 Erzeugt die Klänge der neuen Monster (0.69): das Knurren, Heulen und Fauchen des Werwolfs, das Gurgeln, Schmatzen und
 Aufsteigen des Moorschlurfers (dazu sein klatschender Schlamm), das Grollen, Auftauchen, Spucken und Beißen des
-Glutwurms sowie das Flüstern, die Aschewolke, das Seelenfeuer und das Verwehen des Aschengeists. Alles entsteht aus
+Glutwurms sowie das Flüstern, die Aschewolke, das Seelenfeuer und das Verwehen des Aschengeists – und die der Monster
+der Schattenwelt und des Ends (0.71): Ruf, Stoß und Schwingen des Seelenreihers, Röhren, Ansturm und Kristallstampfen des
+Nachtwidders, Knurren, Heulen und Phasensprung des Rissjägers, Rascheln, Peitschen und Schnappen des Chorusschlunds. Alles entsteht aus
 Rauschen und Tönen (siehe ambience_dsp.py); es werden keine Minecraft-Dateien kopiert.
 
 Bausteine:
@@ -704,6 +706,388 @@ def wraith_fade(seed: int) -> np.ndarray:
 
 
 # =====================================================================================
+# Seelenreiher (0.71)
+# =====================================================================================
+
+def soul_glint(dur: float, seed: int, count: int = 8, lo: float = 2400.0, hi: float = 5600.0) -> np.ndarray:
+    """Feines Seelenglitzern: einzelne hohe, rasch verklingende Töne."""
+    r = rng(seed)
+    y = np.zeros(int(dur * SR))
+    for _ in range(count):
+        f = r.uniform(lo, hi)
+        d = r.uniform(0.06, 0.18)
+        m = int(d * SR)
+        t = np.arange(m) / SR
+        mix_at(y, np.sin(2 * np.pi * f * t) * np.exp(-t / (d / 4)) * np.minimum(1.0, t / 0.003), r.uniform(0.0, dur * 0.8),
+               r.uniform(0.3, 1.0))
+    return norm(y)
+
+
+def heron_call(seed: int) -> np.ndarray:
+    """Der Ruf: ein heiseres, lautes "Kraaak" wie beim Graureiher – manchmal zweimal –, dahinter ein Hauch Seelenglitzern."""
+    r = rng(seed)
+    y = np.zeros(int(1.3 * SR))
+    for k in range(1 + int(r.integers(0, 2))):
+        n = int(r.uniform(0.38, 0.52) * SR)
+        f = r.uniform(250, 300) * curve(n, [(0, 0.9), (0.15, 1.08), (0.7, 1.0), (1, 0.82)])
+        amp = curve(n, [(0, 0), (0.05, 1), (0.6, 0.85), (1, 0)])
+        mix_at(y, pulse_voice(f, amp, seed + k, vowel="a", size=0.95, jitter=0.16, shimmer=0.45, sub=0.45, breath=0.35, bright=4200),
+               0.05 + k * r.uniform(0.5, 0.62), 1.0)
+    mix_at(y, soul_glint(1.0, seed + 9, 6), 0.1, 0.06)
+    return y
+
+
+def heron_stab(seed: int) -> np.ndarray:
+    """Der Stoß: ein scharfes Zischen durch die Luft und das harte Klacken des Schnabels."""
+    r = rng(seed)
+    y = np.zeros(int(0.45 * SR))
+    mix_at(y, swept(0.16, [(0, 1600), (1, 3800)], 0.6, [(0, 0), (0.6, 1), (1, 0)], seed), 0.0, 0.7)
+    mix_at(y, clack([(1900, 1.0), (3100, 0.6), (4700, 0.3)], 0.02, seed + 1, q=16), 0.13 + r.uniform(0, 0.02), 0.9)
+    return y
+
+
+def heron_wings(seed: int) -> np.ndarray:
+    """Schwingenschläge: zwei, drei tiefe, weiche Luftstöße, in denen es leise flattert."""
+    r = rng(seed)
+    y = np.zeros(int(1.0 * SR))
+    beats = 2 + int(r.integers(0, 2))
+    for k in range(beats):
+        mix_at(y, swept(0.28, [(0, 260), (0.5, 700), (1, 380)], 1.1, [(0, 0), (0.35, 1), (1, 0)], seed + k, flicker=0.45,
+                        flicker_rate=(30.0, 45.0)), k * r.uniform(0.26, 0.32), 1.0 - k * 0.15)
+    return y
+
+
+def heron_hurt(seed: int) -> np.ndarray:
+    """Schmerz: ein schrilles, kurzes Kreischen."""
+    r = rng(seed)
+    n = int(0.32 * SR)
+    f = r.uniform(560, 640) * curve(n, [(0, 1.0), (0.2, 1.15), (1, 0.7)])
+    return pulse_voice(f, curve(n, [(0, 0), (0.04, 1), (0.5, 0.7), (1, 0)]), seed, vowel="e", size=1.1, jitter=0.12, shimmer=0.4,
+                       sub=0.3, breath=0.3, bright=5200)
+
+
+def heron_death(seed: int) -> np.ndarray:
+    """Tod: ein langer, absinkender Ruf, ein letztes Flattern, ein Platschen."""
+    y = np.zeros(int(2.4 * SR))
+    n = int(1.2 * SR)
+    f = 290.0 * curve(n, [(0, 1.0), (0.2, 1.05), (1, 0.55)])
+    mix_at(y, pulse_voice(f, curve(n, [(0, 0), (0.06, 1), (0.7, 0.6), (1, 0)]), seed, vowel="a", size=0.95, jitter=0.2, shimmer=0.5,
+                          sub=0.5, breath=0.45, bright=3800), 0.0, 1.0)
+    mix_at(y, heron_wings(seed + 3), 0.9, 0.5)
+    mix_at(y, squelch(0.4, seed + 5, hi=1100, lo=260), 1.7, 0.6)
+    mix_at(y, soul_glint(0.9, seed + 7, 10), 1.4, 0.08)
+    return y
+
+
+def heron_step(seed: int) -> np.ndarray:
+    """Waten: ein leises Platschen, kleine Tropfen."""
+    r = rng(seed)
+    y = np.zeros(int(0.35 * SR))
+    mix_at(y, swept(0.18, [(0, r.uniform(1300, 1700)), (1, 700)], 0.5, [(0, 0), (0.08, 1), (1, 0)], seed), 0.0, 0.8)
+    mix_at(y, bubbles(0.3, seed + 1, 18.0, 500, 1400, cycles=(4, 8)), 0.02, 0.3)
+    return y
+
+
+# =====================================================================================
+# Nachtwidder (0.71)
+# =====================================================================================
+
+def crystal_pings(dur: float, seed: int, count: int = 10) -> np.ndarray:
+    """Nachtkristall: klingende Splitter (zwei Eigentöne je Splitter, lang ausklingend)."""
+    r = rng(seed)
+    y = np.zeros(int(dur * SR))
+    for _ in range(count):
+        f = r.uniform(1800, 4800)
+        d = r.uniform(0.15, 0.45)
+        m = int(d * SR)
+        t = np.arange(m) / SR
+        tone_ = np.sin(2 * np.pi * f * t) + 0.45 * np.sin(2 * np.pi * f * 2.76 * t)
+        mix_at(y, tone_ * np.exp(-t / (d / 5)) * np.minimum(1.0, t / 0.001), r.uniform(0.0, dur * 0.5), r.uniform(0.3, 1.0))
+    return norm(y)
+
+
+def ram_ambient(seed: int) -> np.ndarray:
+    """Ein tiefes, schnaubendes Brummen."""
+    r = rng(seed)
+    n = int(r.uniform(0.6, 0.8) * SR)
+    f = r.uniform(82, 96) * curve(n, [(0, 0.95), (0.3, 1.05), (1, 0.85)])
+    y = pulse_voice(f, curve(n, [(0, 0), (0.1, 1), (0.7, 0.8), (1, 0)]), seed, vowel="o", size=0.75, jitter=0.1, shimmer=0.3,
+                    sub=0.3, breath=0.5, bright=2600)
+    mix_at(y, swept(0.3, [(0, 900), (1, 600)], 0.8, [(0, 0), (0.1, 1), (1, 0)], seed + 2), len(y) / SR * 0.6, 0.2)
+    return y
+
+
+def ram_bleat(seed: int) -> np.ndarray:
+    """Das Röhren: ein tiefes, bebendes Blöken, das in ein Brüllen übergeht (Tremolo wie bei Schafen, aber gewaltig)."""
+    r = rng(seed)
+    n = int(1.15 * SR)
+    t = np.arange(n) / SR
+    f = r.uniform(125, 140) * curve(n, [(0, 0.9), (0.2, 1.15), (0.6, 1.1), (1, 0.8)])
+    trem = 1.0 + 0.35 * np.sin(2 * np.pi * r.uniform(10, 13) * t) * curve(n, [(0, 1), (0.6, 0.6), (1, 0.2)])
+    amp = curve(n, [(0, 0), (0.06, 1), (0.75, 0.9), (1, 0)]) * trem
+    y = pulse_voice(f, amp, seed, vowel="e", size=0.8, jitter=0.08, shimmer=0.25, sub=0.35, breath=0.35, bright=3600)
+    y = y + 0.4 * pulse_voice(f * 0.5, amp, seed + 1, vowel="a", size=0.7, jitter=0.15, shimmer=0.35, sub=0.4, breath=0.2, bright=2000)
+    return y
+
+
+def ram_scrape(seed: int) -> np.ndarray:
+    """Scharren: der Huf reißt über Stein und Frost."""
+    r = rng(seed)
+    y = np.zeros(int(0.45 * SR))
+    mix_at(y, swept(0.35, [(0, 2600), (1, 1500)], 0.8, [(0, 0), (0.1, 1), (0.6, 0.7), (1, 0)], seed, flicker=0.6), 0.0, 0.8)
+    mix_at(y, crackle(0.35, seed + 1, 140.0, 1500, 6000), 0.02, 0.5)
+    mix_at(y, thud(0.15, r.uniform(110, 130), 70, seed + 2, 400), 0.0, 0.4)
+    return y
+
+
+def ram_charge(seed: int) -> np.ndarray:
+    """Der Ansturm: ein wütendes Schnauben, dann donnernde Hufe."""
+    r = rng(seed)
+    y = np.zeros(int(1.3 * SR))
+    mix_at(y, swept(0.3, [(0, 1800), (1, 700)], 1.0, [(0, 0), (0.08, 1), (1, 0)], seed), 0.0, 0.8)
+    t = 0.32
+    for k in range(9):
+        mix_at(y, thud(0.18, r.uniform(65, 85), 40, seed + 3 + k, 380, grit=0.8), t, 0.9 - k * 0.04)
+        t += r.uniform(0.09, 0.12)
+    return y
+
+
+def ram_impact(seed: int) -> np.ndarray:
+    """Aufprall: ein schwerer Schlag, die Kristallhörner klirren nach, Splitter rieseln."""
+    y = np.zeros(int(1.4 * SR))
+    mix_at(y, thud(0.6, 95, 38, seed, 420, grit=0.9), 0.0, 1.0)
+    mix_at(y, clack([(2300, 1.0), (3550, 0.7), (5200, 0.4)], 0.18, seed + 1, q=40), 0.0, 0.5)
+    mix_at(y, crystal_pings(1.0, seed + 2, 7), 0.05, 0.25)
+    mix_at(y, crackle(0.6, seed + 3, 90.0, 1200, 5000), 0.05, 0.3)
+    return y
+
+
+def ram_stomp(seed: int) -> np.ndarray:
+    """Stampfen: zwei Hufe schlagen nieder, der Boden birst, ein Ring aus Kristallsplittern klirrt."""
+    y = np.zeros(int(1.6 * SR))
+    mix_at(y, thud(0.5, 80, 34, seed, 380, grit=1.0), 0.0, 1.0)
+    mix_at(y, thud(0.5, 74, 32, seed + 1, 380, grit=1.0), 0.07, 0.9)
+    mix_at(y, crackle(0.8, seed + 2, 260.0, 900, 6000), 0.05, 0.55)
+    mix_at(y, crystal_pings(1.2, seed + 3, 16), 0.08, 0.45)
+    return y
+
+
+def ram_hurt(seed: int) -> np.ndarray:
+    """Schmerz: ein kurzes, gequetschtes Blöken."""
+    r = rng(seed)
+    n = int(0.38 * SR)
+    t = np.arange(n) / SR
+    f = r.uniform(190, 220) * curve(n, [(0, 1.1), (1, 0.8)])
+    amp = curve(n, [(0, 0), (0.05, 1), (1, 0)]) * (1.0 + 0.3 * np.sin(2 * np.pi * 14 * t))
+    return pulse_voice(f, amp, seed, vowel="e", size=0.85, jitter=0.12, shimmer=0.35, sub=0.35, breath=0.3, bright=3800)
+
+
+def ram_death(seed: int) -> np.ndarray:
+    """Tod: ein langes, absinkendes Blöken, ein schwerer Fall, die Hörner klirren ein letztes Mal."""
+    y = np.zeros(int(2.4 * SR))
+    n = int(1.4 * SR)
+    t = np.arange(n) / SR
+    f = 150.0 * curve(n, [(0, 1.0), (0.3, 1.05), (1, 0.6)])
+    amp = curve(n, [(0, 0), (0.06, 1), (0.7, 0.6), (1, 0)]) * (1.0 + 0.3 * np.sin(2 * np.pi * 9 * t))
+    mix_at(y, pulse_voice(f, amp, seed, vowel="e", size=0.8, jitter=0.15, shimmer=0.4, sub=0.45, breath=0.45, bright=3000), 0.0)
+    mix_at(y, thud(0.7, 70, 30, seed + 3, 360, grit=0.9), 1.45, 1.0)
+    mix_at(y, crystal_pings(0.8, seed + 4, 5), 1.5, 0.2)
+    return y
+
+
+def ram_step(seed: int) -> np.ndarray:
+    """Ein Hufschlag auf Stein."""
+    r = rng(seed)
+    y = np.zeros(int(0.25 * SR))
+    mix_at(y, clack([(r.uniform(850, 1000), 1.0), (1750, 0.5), (2900, 0.25)], 0.03, seed, q=10), 0.0, 0.6)
+    mix_at(y, thud(0.15, r.uniform(90, 110), 60, seed + 1, 320), 0.0, 0.5)
+    return y
+
+
+# =====================================================================================
+# Rissjäger (0.71)
+# =====================================================================================
+
+def ring_mod(y: np.ndarray, f: float, depth: float) -> np.ndarray:
+    t = np.arange(len(y)) / SR
+    return y * (1.0 - depth + depth * np.sin(2 * np.pi * f * t))
+
+
+def hound_ambient(seed: int) -> np.ndarray:
+    """Hohles Knurren, als käme es aus großer Entfernung durch die Leere: tief, dazu ein schwebender Oberton."""
+    r = rng(seed)
+    n = int(r.uniform(1.0, 1.3) * SR)
+    f = r.uniform(68, 78) * curve(n, [(0, 0.95), (0.4, 1.05), (1, 0.9)])
+    amp = curve(n, [(0, 0), (0.12, 1), (0.8, 0.8), (1, 0)])
+    y = pulse_voice(f, amp, seed, vowel="u", size=0.7, jitter=0.1, shimmer=0.3, sub=0.4, breath=0.3, bright=2400)
+    y = ring_mod(y, r.uniform(28, 36), 0.35)
+    mix_at(y, tone_voice(f * 6.0, amp * 0.3, seed + 1, harmonics=((1, 1.0), (2, 0.2)), vib_depth=0.01, vib_rate=3.0), 0.0, 0.08)
+    return y
+
+
+def hound_howl(seed: int) -> np.ndarray:
+    """Das Heulen der Leere: zwei Stimmen im Abstand einer Quinte, gegeneinander verstimmt, mit tiefem Schwebeton."""
+    r = rng(seed)
+    n = int(2.8 * SR)
+    t = np.arange(n) / SR
+    k = r.uniform(0.95, 1.05)
+    f = curve(n, [(0, 260), (0.15, 380), (0.3, 520), (0.7, 500), (0.85, 420), (1, 330)]) * k
+    amp = curve(n, [(0, 0), (0.1, 0.6), (0.3, 1.0), (0.8, 0.9), (1, 0)])
+    vib = 0.02 * smoothstep(t, 0.6, 1.3)
+    y = tone_voice(f, amp, seed, harmonics=((1, 1.0), (2, 0.3), (3, 0.12)), vib_depth=vib, vib_rate=4.6, vowel="u", wet=0.4, chorus=0.4)
+    y = y + 0.55 * tone_voice(f * 1.498, amp * 0.8, seed + 1, harmonics=((1, 1.0), (2, 0.2)), vib_depth=vib * 1.3, vib_rate=4.1,
+                              vowel="o", wet=0.4)
+    y = y + 0.25 * tone(f * 0.25, amp, SR, harmonics=((1, 1.0), (2, 0.3)))
+    return y
+
+
+def hound_phase(seed: int) -> np.ndarray:
+    """Phasensprung: ein rückwärts anschwellendes Rauschen, das jäh abreißt, darunter ein Absacken, dahinter Glitzern."""
+    y = np.zeros(int(1.0 * SR))
+    mix_at(y, swept(0.5, [(0, 400), (1, 3000)], 1.2, [(0, 0), (0.9, 1), (1, 0)], seed), 0.0, 1.0)
+    m = int(0.5 * SR)
+    mix_at(y, tone(glide(m, 120, 45, 0.8), curve(m, [(0, 0), (0.1, 1), (1, 0)]), SR, harmonics=((1, 1.0), (2, 0.25))), 0.42, 0.7)
+    mix_at(y, soul_glint(0.5, seed + 2, 12, 2600, 6400), 0.45, 0.25)
+    return y
+
+
+def hound_bite(seed: int) -> np.ndarray:
+    """Biss: Zähne schlagen aufeinander, ein kurzes Fauchen."""
+    r = rng(seed)
+    y = np.zeros(int(0.5 * SR))
+    mix_at(y, clack([(1200, 1.0), (2500, 0.7), (3800, 0.4)], 0.02, seed, q=14), 0.0, 1.0)
+    n = int(0.3 * SR)
+    snarl = pulse_voice(r.uniform(110, 130) * curve(n, [(0, 1.1), (1, 0.8)]), curve(n, [(0, 0), (0.08, 1), (1, 0)]), seed + 1,
+                        vowel="a", size=0.8, jitter=0.18, shimmer=0.4, sub=0.4, breath=0.6, bright=4200)
+    mix_at(y, ring_mod(snarl, 40.0, 0.3), 0.02, 0.5)
+    return y
+
+
+def hound_hurt(seed: int) -> np.ndarray:
+    """Schmerz: ein kurzes Aufjaulen mit metallischem Nachklang."""
+    r = rng(seed)
+    m = int(0.35 * SR)
+    yelp = tone_voice(glide(m, r.uniform(700, 780), 380, 0.7), curve(m, [(0, 0), (0.05, 1), (0.5, 0.6), (1, 0)]), seed,
+                      harmonics=((1, 1.0), (2, 0.5), (3, 0.25), (4, 0.1)), vowel="a", wet=0.5, breath=0.1)
+    return ring_mod(yelp, r.uniform(55, 70), 0.4)
+
+
+def hound_death(seed: int) -> np.ndarray:
+    """Tod: ein absinkendes Winseln, das sich in die Leere auflöst – Rauschen und Glitzern verwehen."""
+    y = np.zeros(int(2.2 * SR))
+    m = int(1.2 * SR)
+    t = np.arange(m) / SR
+    whine = tone_voice(glide(m, 640, 180, 1.0), curve(m, [(0, 0), (0.06, 1), (0.6, 0.6), (1, 0)]), seed,
+                       harmonics=((1, 1.0), (2, 0.3), (3, 0.1)), vib_depth=0.03 * smoothstep(t, 0.2, 0.9), vib_rate=7.0, vowel="u",
+                       wet=0.5)
+    mix_at(y, ring_mod(whine, 45.0, 0.35), 0.0)
+    mix_at(y, swept(1.0, [(0, 2800), (1, 300)], 1.2, [(0, 0), (0.1, 1), (1, 0)], seed + 2), 0.8, 0.6)
+    mix_at(y, soul_glint(1.0, seed + 3, 16, 2400, 6400), 0.9, 0.25)
+    return y
+
+
+def hound_step(seed: int) -> np.ndarray:
+    """Weiche Pfoten, ein feines Kristallticken."""
+    r = rng(seed)
+    y = np.zeros(int(0.25 * SR))
+    mix_at(y, thud(0.12, r.uniform(85, 100), 55, seed, 300), 0.0, 0.8)
+    mix_at(y, clack([(r.uniform(3200, 3800), 1.0), (5200, 0.5)], 0.01, seed + 1, q=30), 0.01, 0.12)
+    return y
+
+
+# =====================================================================================
+# Chorusschlund (0.71)
+# =====================================================================================
+
+# Chorusholz: höher und heller als das Holz des Moorschlurfers
+CHORUS = ((620, 22, 1.0), (1380, 24, 0.6), (2350, 26, 0.35), (3900, 28, 0.2))
+
+
+def rustle(dur: float, seed: int, amps) -> np.ndarray:
+    """Rascheln trockener Blätter und Stängel."""
+    return swept(dur, [(0, 3400), (0.5, 2600), (1, 3000)], 0.9, amps, seed, flicker=0.75, flicker_rate=(35.0, 60.0))
+
+
+def maw_ambient(seed: int) -> np.ndarray:
+    """Rascheln, ein leises Knarren der Chorusglieder, darunter ein gedämpftes Schnurren aus dem Schlund."""
+    r = rng(seed)
+    y = np.zeros(int(1.6 * SR))
+    mix_at(y, rustle(1.2, seed, [(0, 0), (0.2, 1), (0.7, 0.8), (1, 0)]), 0.0, 0.5)
+    mix_at(y, creak(0.6, [(0, 18), (1, 30)], seed + 1, modes=CHORUS, amps=[(0, 0), (0.2, 1), (1, 0)]), r.uniform(0.2, 0.6), 0.5)
+    n = int(1.0 * SR)
+    mix_at(y, pulse_voice(np.full(n, r.uniform(48, 56)), curve(n, [(0, 0), (0.3, 1), (1, 0)]), seed + 2, vowel="u", size=0.6,
+                          jitter=0.08, shimmer=0.2, sub=0.3, breath=0.2, bright=900), 0.3, 0.35)
+    return y
+
+
+def maw_open(seed: int) -> np.ndarray:
+    """Die Blüte klappt auf: ein schnelles Knarren, ein feuchtes Lösen, ein Hauch."""
+    y = np.zeros(int(0.9 * SR))
+    mix_at(y, creak(0.45, [(0, 25), (1, 60)], seed, modes=CHORUS, amps=[(0, 0), (0.1, 1), (0.8, 0.7), (1, 0)]), 0.0, 0.9)
+    mix_at(y, squelch(0.3, seed + 1, hi=1800, lo=500, width=0.5), 0.25, 0.45)
+    mix_at(y, swept(0.4, [(0, 700), (1, 1400)], 1.0, [(0, 0), (0.4, 1), (1, 0)], seed + 2), 0.35, 0.25)
+    return y
+
+
+def maw_lash(seed: int) -> np.ndarray:
+    """Peitschenhieb: ein rasend schnelles Zischen, dann der Knall."""
+    y = np.zeros(int(0.5 * SR))
+    mix_at(y, swept(0.14, [(0, 500), (1, 4200)], 0.8, [(0, 0), (0.8, 1), (1, 0)], seed), 0.0, 0.8)
+    k = int(0.03 * SR)
+    crack = rng(seed + 1).standard_normal(k) * np.exp(-np.arange(k) / (k / 5))
+    mix_at(y, norm(filt(crack, "band", [1200, 7000], SR, 2)), 0.13, 1.0)
+    mix_at(y, clack([(2900, 1.0), (4400, 0.5)], 0.015, seed + 2, q=12), 0.13, 0.4)
+    return y
+
+
+def maw_bite(seed: int) -> np.ndarray:
+    """Zuschnappen: ein saftiges Schmatzen, Zähne schlagen aufeinander, es knirscht."""
+    y = np.zeros(int(0.6 * SR))
+    mix_at(y, squelch(0.3, seed, hi=1300, lo=350, width=0.45), 0.0, 0.7)
+    mix_at(y, clack([(900, 1.0), (1900, 0.6), (3100, 0.3)], 0.03, seed + 1, q=10), 0.06, 1.0)
+    mix_at(y, crackle(0.25, seed + 2, 120.0, 1500, 5000), 0.08, 0.35)
+    return y
+
+
+def maw_spit(seed: int) -> np.ndarray:
+    """Spucken: ein tiefes "Plopp", ein Luftstoß."""
+    r = rng(seed)
+    y = np.zeros(int(0.5 * SR))
+    mix_at(y, bubble(r.uniform(110, 140), 5.0, 1.6), 0.0, 1.0)
+    mix_at(y, swept(0.18, [(0, 1500), (1, 700)], 1.0, [(0, 0), (0.1, 1), (1, 0)], seed + 1), 0.02, 0.45)
+    return y
+
+
+def maw_teleport(seed: int) -> np.ndarray:
+    """Verschwinden: ein schimmerndes, auf- und absteigendes Wabern, darüber feines Glitzern."""
+    r = rng(seed)
+    n = int(0.9 * SR)
+    t = np.arange(n) / SR
+    f = curve(n, [(0, 300), (0.3, 900), (0.6, 500), (1, 1100)]) * r.uniform(0.92, 1.08)
+    amp = curve(n, [(0, 0), (0.08, 1), (0.8, 0.7), (1, 0)]) * (0.6 + 0.4 * np.sin(2 * np.pi * 16 * t) ** 2)
+    y = tone(f, amp, SR, harmonics=((1, 1.0), (2, 0.35), (3, 0.15)))
+    mix_at(y, soul_glint(0.8, seed + 1, 14, 2000, 6000), 0.1, 0.3)
+    return y
+
+
+def maw_hurt(seed: int) -> np.ndarray:
+    """Schmerz: Knarren und ein wütendes Zischen."""
+    y = np.zeros(int(0.5 * SR))
+    mix_at(y, creak(0.35, [(0, 40), (1, 20)], seed, modes=CHORUS, amps=[(0, 0), (0.05, 1), (1, 0)]), 0.0, 0.9)
+    mix_at(y, swept(0.35, [(0, 3600), (1, 2600)], 0.6, [(0, 0), (0.1, 1), (1, 0)], seed + 1), 0.02, 0.5)
+    return y
+
+
+def maw_death(seed: int) -> np.ndarray:
+    """Welken: ein langes, absinkendes Knarren, Blätter rascheln zu Boden, ein letztes Seufzen entweicht."""
+    y = np.zeros(int(2.2 * SR))
+    mix_at(y, creak(1.4, [(0, 30), (1, 8)], seed, modes=CHORUS, amps=[(0, 0), (0.1, 1), (0.8, 0.6), (1, 0)]), 0.0, 0.9)
+    mix_at(y, rustle(1.0, seed + 1, [(0, 0), (0.3, 1), (1, 0)]), 0.6, 0.5)
+    mix_at(y, swept(1.0, [(0, 1200), (1, 400)], 1.1, [(0, 0), (0.2, 1), (1, 0)], seed + 2), 1.0, 0.35)
+    return y
+
+
+# =====================================================================================
 # Ausgabe
 # =====================================================================================
 
@@ -736,6 +1120,37 @@ SYNTH = {
     "ash_wraith_cloud": (wraith_cloud, 2, (1.6, 0.3), -15.0),
     "ash_wraith_bolt": (wraith_bolt, 3, (1.2, 0.25), -16.0),
     "ash_wraith_fade": (wraith_fade, 2, (1.4, 0.3), -16.0),
+    # 0.71
+    "soul_heron_call": (heron_call, 3, (1.6, 0.3), -16.0),
+    "soul_heron_stab": (heron_stab, 3, (0.5, 0.1), -15.0),
+    "soul_heron_wings": (heron_wings, 3, (0.8, 0.15), -17.0),
+    "soul_heron_hurt": (heron_hurt, 3, (0.8, 0.15), -15.0),
+    "soul_heron_death": (heron_death, 1, (1.6, 0.3), -15.0),
+    "soul_heron_step": (heron_step, 4, None, -23.0),
+    "night_ram_ambient": (ram_ambient, 3, (0.8, 0.15), -18.0),
+    "night_ram_bleat": (ram_bleat, 3, (1.6, 0.3), -14.0),
+    "night_ram_scrape": (ram_scrape, 3, (0.6, 0.12), -17.0),
+    "night_ram_charge": (ram_charge, 2, (1.0, 0.2), -14.0),
+    "night_ram_impact": (ram_impact, 3, (1.2, 0.25), -13.0),
+    "night_ram_stomp": (ram_stomp, 2, (1.4, 0.28), -13.0),
+    "night_ram_hurt": (ram_hurt, 3, (0.6, 0.12), -15.0),
+    "night_ram_death": (ram_death, 1, (1.4, 0.25), -15.0),
+    "night_ram_step": (ram_step, 4, None, -22.0),
+    "rift_hound_ambient": (hound_ambient, 3, (2.2, 0.4), -18.0),
+    "rift_hound_howl": (hound_howl, 2, (3.2, 0.45), -14.0),
+    "rift_hound_phase": (hound_phase, 3, (1.8, 0.35), -15.0),
+    "rift_hound_bite": (hound_bite, 3, (0.6, 0.12), -15.0),
+    "rift_hound_hurt": (hound_hurt, 3, (1.0, 0.2), -15.0),
+    "rift_hound_death": (hound_death, 1, (2.4, 0.4), -15.0),
+    "rift_hound_step": (hound_step, 4, None, -23.0),
+    "chorus_maw_ambient": (maw_ambient, 3, (1.0, 0.2), -19.0),
+    "chorus_maw_open": (maw_open, 2, (0.8, 0.15), -16.0),
+    "chorus_maw_lash": (maw_lash, 3, (0.6, 0.12), -15.0),
+    "chorus_maw_bite": (maw_bite, 3, (0.6, 0.12), -15.0),
+    "chorus_maw_spit": (maw_spit, 3, (0.6, 0.12), -16.0),
+    "chorus_maw_teleport": (maw_teleport, 2, (1.4, 0.3), -16.0),
+    "chorus_maw_hurt": (maw_hurt, 3, (0.6, 0.12), -16.0),
+    "chorus_maw_death": (maw_death, 1, (1.4, 0.25), -15.0),
 }
 
 # Wesen: {Klang: Reichweite in Blöcken}
@@ -744,6 +1159,10 @@ REACH = {
     "mire_shambler": {"ambient": 24, "hurt": 24, "death": 32, "step": 16, "throw": 24, "grasp": 24, "rise": 32, "splat": 20},
     "ember_wyrm": {"ambient": 32, "hurt": 32, "death": 48, "surface": 64, "spit": 40, "bite": 32, "dive": 40},
     "ash_wraith": {"ambient": 24, "hurt": 24, "death": 32, "cloud": 32, "bolt": 32, "fade": 32},
+    "soul_heron": {"call": 48, "stab": 20, "wings": 24, "hurt": 24, "death": 32, "step": 12},
+    "night_ram": {"ambient": 20, "bleat": 48, "scrape": 20, "charge": 40, "impact": 32, "stomp": 32, "hurt": 24, "death": 32, "step": 16},
+    "rift_hound": {"ambient": 24, "howl": 80, "phase": 32, "bite": 20, "hurt": 24, "death": 32, "step": 12},
+    "chorus_maw": {"ambient": 16, "open": 20, "lash": 24, "bite": 20, "spit": 24, "teleport": 32, "hurt": 20, "death": 24},
 }
 
 # Ereignis "entity.<wesen>.<klang>": (Klänge, Reichweite)

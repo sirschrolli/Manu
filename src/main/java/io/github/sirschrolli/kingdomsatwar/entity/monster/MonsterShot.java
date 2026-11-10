@@ -167,7 +167,7 @@ public class MonsterShot extends ThrowableItemProjectile {
                 case MAGMA -> living.igniteForSeconds(5.0f);
                 case CHORUS -> {
                     // wie nach einer Chorusfrucht: weg, an eine zufällige Stelle in der Nähe – und ihm wird übel
-                    ChorusMawEntity.chorusTeleport(level, living, 16.0);
+                    ChorusMawEntity.chorusTeleport(level, living, 10.0);
                     ChorusMawEntity.dizzy(living, owner);
                 }
                 case SOUL -> {

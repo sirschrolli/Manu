@@ -3238,6 +3238,126 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.cave_troll.step"
   },
+  "entity.chorus_maw.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_ambient1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_ambient2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_ambient3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.ambient"
+  },
+  "entity.chorus_maw.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_bite1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_bite2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_bite3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.bite"
+  },
+  "entity.chorus_maw.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_death1",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.death"
+  },
+  "entity.chorus_maw.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_hurt1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_hurt2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_hurt3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.hurt"
+  },
+  "entity.chorus_maw.lash": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_lash1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_lash2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_lash3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.lash"
+  },
+  "entity.chorus_maw.open": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_open1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_open2",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.open"
+  },
+  "entity.chorus_maw.spit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_spit1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_spit2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_spit3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.spit"
+  },
+  "entity.chorus_maw.teleport": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_teleport1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/chorus_maw_teleport2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.chorus_maw.teleport"
+  },
   "entity.deer.ambient": {
     "sounds": [
       {
@@ -5420,6 +5540,147 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.mushroomling.puff"
   },
+  "entity.night_ram.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_ambient1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_ambient2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_ambient3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.ambient"
+  },
+  "entity.night_ram.bleat": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_bleat1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_bleat2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_bleat3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.bleat"
+  },
+  "entity.night_ram.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_charge1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_charge2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.charge"
+  },
+  "entity.night_ram.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.death"
+  },
+  "entity.night_ram.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.hurt"
+  },
+  "entity.night_ram.impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_impact1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_impact2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_impact3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.impact"
+  },
+  "entity.night_ram.scrape": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_scrape1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_scrape2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_scrape3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.scrape"
+  },
+  "entity.night_ram.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_step3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_step4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.step"
+  },
+  "entity.night_ram.stomp": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_stomp1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/night_ram_stomp2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.night_ram.stomp"
+  },
   "entity.nyxar.breath": {
     "sounds": [
       {
@@ -5704,6 +5965,117 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.reef_colossus.tide"
+  },
+  "entity.rift_hound.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.ambient"
+  },
+  "entity.rift_hound.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_bite1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_bite2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_bite3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.bite"
+  },
+  "entity.rift_hound.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.death"
+  },
+  "entity.rift_hound.howl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_howl1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_howl2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.howl"
+  },
+  "entity.rift_hound.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.hurt"
+  },
+  "entity.rift_hound.phase": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_phase1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_phase2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_phase3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.phase"
+  },
+  "entity.rift_hound.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_step1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_step2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_step3",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/rift_hound_step4",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.step"
   },
   "entity.shard_warden.ambient": {
     "sounds": [
@@ -6096,6 +6468,104 @@
       "minecraft:damage/hit3"
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.soldier.hurt"
+  },
+  "entity.soul_heron.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_call1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_call2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_call3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.call"
+  },
+  "entity.soul_heron.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.death"
+  },
+  "entity.soul_heron.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.hurt"
+  },
+  "entity.soul_heron.stab": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_stab1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_stab2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_stab3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.stab"
+  },
+  "entity.soul_heron.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_step1",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_step2",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_step3",
+        "attenuation_distance": 12
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_step4",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.step"
+  },
+  "entity.soul_heron.wings": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_wings1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_wings2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/soul_heron_wings3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.soul_heron.wings"
   },
   "entity.star_ray.ambient": {
     "sounds": [

@@ -70,8 +70,8 @@ public class SoulHeronModel extends EntityModel<SoulHeronRenderState> {
         this.body.xRot += sway * 0.02f;
         this.neck1.xRot += Mth.sin(t * 0.04f) * 0.05f;
         this.neck2.xRot += Mth.sin(t * 0.04f + 0.8f) * 0.06f;
-        this.head.yRot += Mth.clamp(state.yRot, -60.0f, 60.0f) * Anim.DEG * 0.7f;
-        this.neck3.yRot += Mth.clamp(state.yRot, -60.0f, 60.0f) * Anim.DEG * 0.3f;
+        this.head.yRot += Mth.clamp(state.yRot, -60.0f, 60.0f) * Anim.DEG * 0.7f * ground;
+        this.neck3.yRot += Mth.clamp(state.yRot, -60.0f, 60.0f) * Anim.DEG * 0.3f * ground;
         this.head.xRot += Mth.clamp(state.xRot, -30.0f, 30.0f) * Anim.DEG * 0.5f;
         this.crest.xRot += Mth.sin(t * 0.12f) * 0.1f;
         this.crest.yRot += Mth.sin(t * 0.07f) * 0.08f;
@@ -90,46 +90,53 @@ public class SoulHeronModel extends EntityModel<SoulHeronRenderState> {
         this.body.y += Math.abs(Mth.sin(pos * 0.55f)) * -0.4f * speed;
 
         // ------------------------------------------------------------ Flug
+        float dive = Anim.seconds(state.dive, t);
+        float tuck = dive >= 0.0f && dive < 1.6f ? Anim.bump(dive, 0.25f, 1.2f, 1.6f) * fly : 0.0f;
         if (fly > 0.0f) {
-            float flap = Mth.sin(t * 0.55f);
-            // Leib waagrecht, Hals eingezogen, Beine nach hinten
-            this.body.xRot += 0.3f * fly;
-            this.neck1.xRot += -0.6f * fly;
-            this.neck2.xRot += 0.9f * fly;
-            this.neck3.xRot += -0.4f * fly;
-            this.head.xRot += 0.05f * fly;
-            this.leftLeg.xRot += 1.25f * fly;
-            this.rightLeg.xRot += 1.25f * fly;
-            this.leftShin.xRot += -0.2f * fly;
-            this.rightShin.xRot += -0.2f * fly;
-            this.leftFoot.xRot += 0.6f * fly;
-            this.rightFoot.xRot += 0.6f * fly;
-            // Schwingen auf (nach außen gedreht) und schlagen
-            this.leftWing.yRot += 1.45f * fly;
-            this.rightWing.yRot -= 1.45f * fly;
-            this.leftWing.zRot += (-0.15f - flap * 0.65f) * fly;
-            this.rightWing.zRot += (0.15f + flap * 0.65f) * fly;
-            this.leftWingOuter.xRot += 0.06f * fly;
-            this.rightWingOuter.xRot += 0.06f * fly;
-            this.leftWingOuter.zRot += -Mth.sin(t * 0.55f - 0.7f) * 0.35f * fly;
-            this.rightWingOuter.zRot += Mth.sin(t * 0.55f - 0.7f) * 0.35f * fly;
-            this.tail.xRot += -0.2f * fly;
-            this.crest.xRot += 0.25f * fly;
+            float beat = 1.0f - tuck;
+            float flap = Mth.sin(t * 0.55f) * beat;
+            float lag = Mth.sin(t * 0.55f - 0.7f) * beat;
+            // Leib waagrecht; der Hals liegt in einem engen S, der Kopf ruht vorn zwischen den Schultern, der Schnabel voran
+            this.body.xRot += 0.21f * fly;
+            this.neck1.xRot += 1.47f * fly;
+            this.neck2.xRot += -1.47f * fly;
+            this.neck3.xRot += 1.2f * fly;
+            this.head.xRot += -1.41f * fly;
+            // die Beine lang nach hinten gestreckt
+            this.leftLeg.xRot += 1.6f * fly;
+            this.rightLeg.xRot += 1.6f * fly;
+            this.leftShin.xRot += -0.25f * fly;
+            this.rightShin.xRot += -0.25f * fly;
+            this.leftFoot.xRot += 0.5f * fly;
+            this.rightFoot.xRot += 0.5f * fly;
+            // die Schwingen waagrecht ausgebreitet (die glimmende Hinterkante nach hinten) und weit gestreckt; sie schlagen
+            // auf und ab, die Handschwingen folgen ein wenig später
+            this.leftWing.xRot += Mth.HALF_PI * fly;
+            this.rightWing.xRot += Mth.HALF_PI * fly;
+            this.leftWing.zRot += (Mth.HALF_PI - 0.1f - flap * 0.6f) * fly;
+            this.rightWing.zRot += (-Mth.HALF_PI + 0.1f + flap * 0.6f) * fly;
+            this.leftWing.zScale = 1.0f + 0.3f * fly;
+            this.rightWing.zScale = 1.0f + 0.3f * fly;
+            this.leftWing.yScale = 1.0f + 0.12f * fly;
+            this.rightWing.yScale = 1.0f + 0.12f * fly;
+            this.leftWingOuter.yRot += -lag * 0.4f * fly;
+            this.rightWingOuter.yRot += lag * 0.4f * fly;
+            this.tail.xRot += -0.38f * fly;
+            this.crest.xRot += -0.75f * fly;                      // der Schopf weht flach nach hinten
         }
 
         // ------------------------------------------------------------ Sturzflug
-        float dive = Anim.seconds(state.dive, t);
-        if (dive >= 0.0f && dive < 1.6f && fly > 0.3f) {
-            float tuck = Anim.bump(dive, 0.25f, 1.2f, 1.6f) * fly;
-            this.leftWing.zRot += 0.55f * tuck;
-            this.rightWing.zRot -= 0.55f * tuck;
-            this.leftWing.yRot -= 0.5f * tuck;
-            this.rightWing.yRot += 0.5f * tuck;
+        if (tuck > 0.0f) {
+            // die Schwingen hoch zum V angelegt, der Leib kippt nach vorn, der Hals streckt sich wie ein Speer
+            this.leftWing.zRot += -0.95f * tuck;
+            this.rightWing.zRot += 0.95f * tuck;
+            this.leftWing.zScale -= 0.2f * tuck;
+            this.rightWing.zScale -= 0.2f * tuck;
             this.body.xRot += 0.35f * tuck;
-            this.neck1.xRot += 0.9f * tuck;
-            this.neck2.xRot += -0.6f * tuck;
-            this.neck3.xRot += 0.4f * tuck;
-            this.head.xRot += 0.2f * tuck;
+            this.neck1.xRot += -0.6f * tuck;
+            this.neck2.xRot += 2.44f * tuck;
+            this.neck3.xRot += -1.83f * tuck;
+            this.head.xRot += -0.09f * tuck;
         }
 
         // ------------------------------------------------------------ Schnabelstoß
@@ -137,11 +144,12 @@ public class SoulHeronModel extends EntityModel<SoulHeronRenderState> {
         if (stab >= 0.0f && stab < 0.95f) {
             float coil = Anim.bump(stab, 0.3f, 0.42f, 0.5f);
             float thrust = Anim.bump(stab - 0.44f, 0.06f, 0.2f, 0.5f);
+            // ausholen: ein enges S nach hinten; zustoßen: der Hals streckt sich weit vor, der Kopf bleibt waagrecht
             this.body.xRot += -0.12f * coil + 0.22f * thrust;
-            this.neck1.xRot += -0.45f * coil + 0.75f * thrust;
-            this.neck2.xRot += -0.5f * coil + 0.95f * thrust;
-            this.neck3.xRot += 0.35f * coil + 0.3f * thrust;
-            this.head.xRot += 0.4f * coil - 0.65f * thrust;
+            this.neck1.xRot += -0.65f * coil + 0.58f * thrust;
+            this.neck2.xRot += 0.1f * coil + 1.06f * thrust;
+            this.neck3.xRot += 1.1f * coil - 0.54f * thrust;
+            this.head.xRot += -0.45f * coil - 1.15f * thrust;
             this.jaw.xRot += 0.15f * thrust;
             this.crest.xRot += 0.3f * coil - 0.2f * thrust;
         }

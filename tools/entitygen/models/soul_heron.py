@@ -16,8 +16,8 @@ from ..paint import Ctx, hash01, hexc, mix, noise3, pick, rel_y
 
 PALETTES = {
     "soul_heron": {
-        "plume": [hexc(c) for c in ("#10141c", "#1c2430", "#2a3644", "#3c4a5c", "#566880", "#7a8ca4", "#a4b4c8")],
-        "belly": [hexc(c) for c in ("#2a3240", "#3e4a5a", "#56667a", "#728498", "#94a6b8", "#b8c8d6")],
+        "plume": [hexc(c) for c in ("#1e2632", "#2e3a4a", "#44546a", "#5c6e86", "#7a8ca4", "#9cacc0", "#c2ceda")],
+        "belly": [hexc(c) for c in ("#5a6676", "#7a8696", "#9aa6b4", "#b8c2ce", "#d4dce4", "#eef2f6")],
         "dark": [hexc(c) for c in ("#06080c", "#0e1218", "#181e28", "#242c38", "#344050")],
         "soul": [hexc(c) for c in ("#0e3a40", "#146a70", "#20a0a0", "#3ad8d0", "#7af4ea", "#c8fff8")],
         "beak": [hexc(c) for c in ("#3a3830", "#6a665a", "#9a9482", "#c8c0aa", "#e8e0cc", "#f8f4e8")],
@@ -140,8 +140,12 @@ def _primaries(ctx: Ctx):
     x, y, z = ctx.world
     lz = ctx.local[2]
     along = max(0.0, min(1.0, lz / 7.0))
-    feather = int((ctx.local[1] + 0.3) / 1.1)
-    edge = ((ctx.local[1] + 0.3) / 1.1) % 1.0 > 0.8
+    fy = (ctx.local[1] + 0.3) / 1.1
+    feather = int(fy)
+    edge = fy % 1.0 > 0.8
+    # gefingerte Enden: zwischen den Federn klaffen Lücken, und jede zweite Feder ist etwas kürzer
+    if ctx.face in ("west", "east") and (along > 0.8 and fy % 1.0 > 0.62 or along > 0.92 and feather % 2):
+        return None
     if along > 0.62 and (edge or along > 0.86):
         col = pick(ctx.pal["soul"], 0.45 + along * 0.4)
         ctx.glow = mix((0, 0, 0, 255), col, 0.5 + along * 0.4)

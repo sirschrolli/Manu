@@ -3,8 +3,12 @@
 Vorschau der Wesen-Modelle aus tools/entitygen ohne Spiel: baut ein Modell, bemalt es und zeichnet es von mehreren Seiten
 (Ruhehaltung, so wie die Knochen im Modell stehen; die Animationen aus dem Java-Modell fehlen).
 
-Aufruf (aus dem Projektordner):  python3 tools/entity_preview.py <modul> [variante] [ausgabe.png]
+Aufruf (aus dem Projektordner):  python3 tools/entity_preview.py <modul> [variante] [ausgabe.png] [pose=…] [views=…]
 z. B.  python3 tools/entity_preview.py soul_heron
+       python3 tools/entity_preview.py soul_heron "pose=neck1:84,0,0 left_wing:90,0,84@1,1.12,1.3" "views=-35,12;90,0"
+
+pose: je Knochen eine Zusatzdrehung in Grad (x,y,z), wahlweise mit Skalierung @x,y,z – wie die Animation in Java, die zu
+den Ruhewinkeln addiert. views: Blickrichtungen (Gierwinkel,Neigung) durch Semikolon getrennt.
 """
 from __future__ import annotations
 
@@ -29,14 +33,30 @@ def _rot(deg):
     return rz @ ry @ rx
 
 
+POSE: dict = {}
+
+
 def _bone_world(bone):
-    """(Drehung, Verschiebung) des Knochens im Modell – wie ModelPart.translateAndRotate."""
+    """(Drehung, Verschiebung) des Knochens im Modell – wie ModelPart.translateAndRotate (mit der Zusatzhaltung POSE)."""
     if bone.parent is None:
         return np.eye(3), np.zeros(3)
     pr, pt = _bone_world(bone.parent)
-    r = pr @ _rot(bone.rotation)
+    extra, scale = POSE.get(bone.name, ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)))
+    rot = tuple(a + b for a, b in zip(bone.rotation, extra))
+    r = pr @ _rot(rot) @ np.diag(scale)
     t = pt + pr @ np.array(bone.pivot, dtype=float)
     return r, t
+
+
+def _parse_pose(text: str) -> dict:
+    pose = {}
+    for item in text.split():
+        name, _, rest = item.partition(":")
+        rot, _, sc = rest.partition("@")
+        r = tuple(float(v) for v in rot.split(",")) if rot else (0.0, 0.0, 0.0)
+        k = tuple(float(v) for v in sc.split(",")) if sc else (1.0, 1.0, 1.0)
+        pose[name] = (r, k)
+    return pose
 
 
 _NORMAL = {"top": (0, -1, 0), "bottom": (0, 1, 0), "west": (-1, 0, 0), "east": (1, 0, 0), "front": (0, 0, -1), "back": (0, 0, 1)}
@@ -115,6 +135,14 @@ def render(model, tex: Image.Image, glow: Image.Image, yaw: float, pitch: float,
 
 
 def main(argv: list[str]) -> None:
+    views = [(-35, 12, False), (90, 0, False), (180 + 30, 15, False), (-35, 12, True)]
+    for a in list(argv):
+        if a.startswith("pose="):
+            POSE.update(_parse_pose(a[5:]))
+            argv.remove(a)
+        elif a.startswith("views="):
+            views = [(float(v.split(",")[0]), float(v.split(",")[1]), False) for v in a[6:].split(";")]
+            argv.remove(a)
     name = argv[0]
     module = importlib.import_module(f"entitygen.models.{name}")
     variant = argv[1] if len(argv) > 1 and not argv[1].endswith(".png") else next(iter(module.PALETTES))
@@ -122,7 +150,6 @@ def main(argv: list[str]) -> None:
     model = module.build()
     model.pack()
     tex, glow = paint_model(model, module.materials(variant), module.PALETTES[variant], seed=100, params={"variant": variant})
-    views = [(-35, 12, False), (90, 0, False), (180 + 30, 15, False), (-35, 12, True)]
     tiles = [render(model, tex, glow, yaw, pitch, night=night) for yaw, pitch, night in views]
     sheet = Image.new("RGB", (sum(t.width for t in tiles), tiles[0].height))
     x = 0

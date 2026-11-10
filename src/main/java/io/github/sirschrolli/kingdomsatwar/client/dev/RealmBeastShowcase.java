@@ -66,25 +66,26 @@ final class RealmBeastShowcase {
         // ------------------------------------------------------------------ Seelensumpf
         if (only.isEmpty() || only.equals("marsh")) {
             build(steps, ShadowGate.SHADOW_WORLD, level -> marsh(level, MX, SY, MZ), ShadowBiomes.SOUL_MARSH, MX, SY, MZ);
-            arrive(steps, SHADOW, MX + 0.5, SY + 1.4, MZ - 9.0, MX + 0.5, SY + 1.8, MZ + 2.0);
+            arrive(steps, SHADOW, MX + 0.6, SY + 0.4, MZ - 2.0, MX + 0.6, SY + 1.5, MZ + 3.2);
             steps.add(Step.server(o -> {
                 ServerLevel level = shadow(o);
-                m[0] = creature(level, ModEntities.SOUL_HERON.get(), MX - 2.6, SY - 0.9, MZ + 1.5, 200.0f, h -> { });
-                m[1] = creature(level, ModEntities.SOUL_HERON.get(), MX + 3.4, SY - 0.9, MZ + 4.5, 140.0f, h -> { });
+                m[0] = creature(level, ModEntities.SOUL_HERON.get(), MX - 1.8, SY, MZ + 2.4, 245.0f, h -> { });
+                m[1] = creature(level, ModEntities.SOUL_HERON.get(), MX + 3.0, SY, MZ + 4.6, 160.0f, h -> { });
             }));
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[1], SoulHeronEntity.EVENT_BUFFET)));
-            steps.add(Step.waitTicks(9));
+            steps.add(Step.waitTicks(6));
             steps.add(Step.screenshot("realm_heron_marsh"));
             // der Stoß nach einem Ritter, von der Seite
             steps.add(Step.server(o -> {
                 ServerLevel level = shadow(o);
                 m[1].discard();
-                m[2] = soldier(level, MX + 0.8, SY, MZ + 1.5, 90.0f);
+                m[0].snapTo(MX - 2.0, SY, MZ + 2.5, 0.0f, 0.0f);
+                m[2] = soldier(level, MX + 1.3, SY, MZ + 2.5, 90.0f);
                 face(m[0], m[2]);
                 face(m[2], m[0]);
             }));
-            look(steps, SHADOW, MX - 1.0, SY + 0.9, MZ - 4.6, MX - 0.9, SY + 2.2, MZ + 1.5);
+            look(steps, SHADOW, MX - 0.4, SY + 0.6, MZ - 2.2, MX - 0.4, SY + 1.8, MZ + 2.5);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[0], SoulHeronEntity.EVENT_STAB)));
             steps.add(Step.waitTicks(10));
@@ -94,17 +95,17 @@ final class RealmBeastShowcase {
                 ServerLevel level = shadow(o);
                 m[0].discard();
                 m[2].discard();
-                m[3] = creature(level, ModEntities.SOUL_HERON.get(), MX + 0.5, SY + 3.2, MZ + 4.0, 160.0f, h -> h.forceFlying(true));
+                m[3] = creature(level, ModEntities.SOUL_HERON.get(), MX + 0.5, SY + 2.4, MZ + 3.4, 125.0f, h -> h.forceFlying(true));
             }));
-            look(steps, SHADOW, MX - 2.5, SY + 1.0, MZ - 3.0, MX + 0.5, SY + 4.4, MZ + 4.0);
+            look(steps, SHADOW, MX - 1.4, SY + 0.6, MZ - 0.9, MX + 0.3, SY + 3.4, MZ + 3.4);
             steps.add(Step.waitTicks(36));
             steps.add(Step.screenshot("realm_heron_flight"));
             // der Kopf aus der Nähe
             steps.add(Step.server(o -> {
                 m[3].discard();
-                m[4] = creature(shadow(o), ModEntities.SOUL_HERON.get(), MX + 0.5, SY - 0.9, MZ + 2.0, 200.0f, h -> { });
+                m[4] = creature(shadow(o), ModEntities.SOUL_HERON.get(), MX + 0.5, SY, MZ + 2.6, 200.0f, h -> { });
             }));
-            look(steps, SHADOW, MX - 0.4, SY + 0.9, MZ - 0.6, MX + 0.5, SY + 2.2, MZ + 1.8);
+            look(steps, SHADOW, MX - 0.5, SY + 1.0, MZ + 0.2, MX + 0.5, SY + 2.2, MZ + 2.4);
             steps.add(Step.waitTicks(35));
             steps.add(Step.screenshot("realm_heron_close"));
             steps.add(Step.server(o -> clear(shadow(o), MX, SY, MZ)));
@@ -113,11 +114,11 @@ final class RealmBeastShowcase {
         // ------------------------------------------------------------------ Schattengipfel
         if (only.isEmpty() || only.equals("peaks")) {
             build(steps, ShadowGate.SHADOW_WORLD, level -> peaks(level, PX, SY, PZ), ShadowBiomes.SHADOW_PEAKS, PX, SY, PZ);
-            arrive(steps, SHADOW, PX + 0.5, SY + 1.4, PZ - 9.5, PX + 0.5, SY + 1.3, PZ + 2.0);
+            arrive(steps, SHADOW, PX + 0.3, SY + 0.3, PZ - 1.5, PX + 0.3, SY + 0.9, PZ + 3.6);
             steps.add(Step.server(o -> {
                 ServerLevel level = shadow(o);
-                m[0] = creature(level, ModEntities.NIGHT_RAM.get(), PX - 3.0, SY, PZ + 2.5, 205.0f, r -> { });
-                m[1] = creature(level, ModEntities.NIGHT_RAM.get(), PX + 3.5, SY, PZ + 5.0, 150.0f, r -> r.forceState(NightRamEntity.PREPARE));
+                m[0] = creature(level, ModEntities.NIGHT_RAM.get(), PX - 2.2, SY, PZ + 2.6, 210.0f, r -> { });
+                m[1] = creature(level, ModEntities.NIGHT_RAM.get(), PX + 2.6, SY, PZ + 4.6, 150.0f, r -> r.forceState(NightRamEntity.PREPARE));
             }));
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[1], NightRamEntity.EVENT_PREPARE)));
@@ -127,26 +128,31 @@ final class RealmBeastShowcase {
             steps.add(Step.server(o -> {
                 m[0].discard();
                 ((NightRamEntity) m[1]).forceState(NightRamEntity.CHARGE);
-                m[1].snapTo(PX - 1.0, SY, PZ + 3.0, 90.0f, 0.0f);
+                m[1].snapTo(PX - 0.5, SY, PZ + 2.6, 90.0f, 0.0f);
                 m[1].setYBodyRot(90.0f);
                 m[1].setYHeadRot(90.0f);
             }));
-            look(steps, SHADOW, PX - 1.0, SY + 0.6, PZ - 4.5, PX - 1.0, SY + 1.1, PZ + 3.0);
+            look(steps, SHADOW, PX - 0.5, SY + 0.5, PZ - 1.9, PX - 0.5, SY + 0.9, PZ + 2.6);
             steps.add(Step.waitTicks(33));
             steps.add(Step.screenshot("realm_ram_charge"));
             // aufgebäumt zum Stampfen
             steps.add(Step.server(o -> {
                 m[1].discard();
-                m[2] = creature(shadow(o), ModEntities.NIGHT_RAM.get(), PX + 0.5, SY, PZ + 2.5, 200.0f, r -> r.forceState(NightRamEntity.STOMP));
+                m[2] = creature(shadow(o), ModEntities.NIGHT_RAM.get(), PX + 0.5, SY, PZ + 2.5, 240.0f, r -> r.forceState(NightRamEntity.STOMP));
             }));
-            look(steps, SHADOW, PX - 2.5, SY + 0.7, PZ - 3.2, PX + 0.5, SY + 1.6, PZ + 2.5);
+            look(steps, SHADOW, PX + 0.2, SY + 0.1, PZ - 1.2, PX + 0.6, SY + 1.4, PZ + 2.5);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[2], NightRamEntity.EVENT_STOMP)));
             steps.add(Step.waitTicks(11));
             steps.add(Step.screenshot("realm_ram_stomp"));
             // die Hörner aus der Nähe
-            steps.add(Step.server(o -> ((NightRamEntity) m[2]).forceState(NightRamEntity.IDLE)));
-            look(steps, SHADOW, PX + 1.6, SY + 0.6, PZ - 0.2, PX + 0.4, SY + 1.5, PZ + 1.7);
+            steps.add(Step.server(o -> {
+                ((NightRamEntity) m[2]).forceState(NightRamEntity.IDLE);
+                m[2].snapTo(PX + 0.5, SY, PZ + 2.5, 250.0f, 0.0f);
+                m[2].setYBodyRot(250.0f);
+                m[2].setYHeadRot(250.0f);
+            }));
+            look(steps, SHADOW, PX + 2.0, SY - 0.25, PZ + 0.4, PX + 0.6, SY + 1.15, PZ + 2.4);
             steps.add(Step.waitTicks(35));
             steps.add(Step.screenshot("realm_ram_close"));
             steps.add(Step.server(o -> clear(shadow(o), PX, SY, PZ)));
@@ -155,49 +161,52 @@ final class RealmBeastShowcase {
         // ------------------------------------------------------------------ End-Insel mit Choruswald
         if (only.isEmpty() || only.equals("end")) {
             build(steps, Level.END, level -> endIsland(level, EX, EY, EZ), Biomes.END_HIGHLANDS, EX, EY, EZ);
-            arrive(steps, END, EX + 0.5, EY + 1.6, EZ - 10.0, EX + 0.5, EY + 1.6, EZ + 2.0);
+            arrive(steps, END, EX + 0.2, EY + 0.1, EZ - 1.6, EX + 0.2, EY + 0.8, EZ + 3.0);
             steps.add(Step.server(o -> {
                 ServerLevel level = end(o);
-                m[0] = creature(level, ModEntities.RIFT_HOUND.get(), EX - 3.0, EY, EZ + 1.0, 200.0f, h -> { });
-                m[1] = creature(level, ModEntities.RIFT_HOUND.get(), EX + 1.5, EY, EZ + 3.0, 170.0f, h -> { });
-                m[2] = creature(level, ModEntities.CHORUS_MAW.get(), EX + 5.5, EY, EZ + 7.0, 200.0f, c -> c.forceOpen(true));
-                m[3] = creature(level, ModEntities.CHORUS_MAW.get(), EX - 7.5, EY, EZ + 9.0, 160.0f, c -> { });
+                purge(level, EX, EY, EZ);
+                m[0] = creature(level, ModEntities.RIFT_HOUND.get(), EX - 1.4, EY, EZ + 2.0, 235.0f, h -> { });
+                m[1] = creature(level, ModEntities.RIFT_HOUND.get(), EX + 1.8, EY, EZ + 3.4, 120.0f, h -> { });
+                m[2] = creature(level, ModEntities.CHORUS_MAW.get(), EX + 4.5, EY, EZ + 7.5, 205.0f, c -> c.forceOpen(true));
+                m[3] = creature(level, ModEntities.CHORUS_MAW.get(), EX - 3.8, EY, EZ + 7.6, 160.0f, c -> { });
             }));
+            look(steps, END, EX + 0.2, EY + 0.1, EZ - 1.6, EX + 0.2, EY + 0.8, EZ + 3.0);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[1], RiftHoundEntity.EVENT_HOWL)));
             steps.add(Step.waitTicks(16));
             steps.add(Step.screenshot("realm_end_hounds"));
             // der Phasensprung: zerfließend, daneben einer, der zubeißt
             steps.add(Step.server(o -> {
-                m[1].snapTo(EX + 0.5, EY, EZ + 2.0, 160.0f, 0.0f);
-                m[0].snapTo(EX - 2.0, EY, EZ + 1.5, 230.0f, 0.0f);
-                m[0].setYBodyRot(230.0f);
+                m[1].snapTo(EX + 1.2, EY, EZ + 2.4, 160.0f, 0.0f);
+                m[0].snapTo(EX - 1.4, EY, EZ + 2.2, 270.0f, 0.0f);
+                m[0].setYBodyRot(270.0f);
+                m[0].setYHeadRot(270.0f);
             }));
-            look(steps, END, EX - 0.8, EY + 0.7, EZ - 3.5, EX - 0.6, EY + 1.0, EZ + 1.8);
+            look(steps, END, EX - 0.1, EY + 0.0, EZ - 0.9, EX - 0.1, EY + 0.8, EZ + 2.3);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> {
                 event(m[1], RiftHoundEntity.EVENT_PHASE_OUT);
                 event(m[0], RiftHoundEntity.EVENT_BITE);
             }));
-            steps.add(Step.waitTicks(5));
+            steps.add(Step.waitTicks(3));
             steps.add(Step.screenshot("realm_hound_phase"));
             // der Chorusschlund, offen, mit einem Rankenhieb nach einem Ritter
             steps.add(Step.server(o -> {
                 m[0].discard();
                 m[1].discard();
                 m[3].discard();
-                m[4] = soldier(end(o), EX + 2.2, EY, EZ + 4.0, 0.0f);
+                m[4] = soldier(end(o), EX + 2.0, EY, EZ + 4.6, 0.0f);
                 face(m[2], m[4]);
                 face(m[4], m[2]);
             }));
-            look(steps, END, EX + 1.0, EY + 1.2, EZ + 0.4, EX + 4.6, EY + 2.0, EZ + 6.4);
+            look(steps, END, EX + 5.6, EY + 0.0, EZ + 4.0, EX + 3.3, EY + 1.3, EZ + 6.1);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[2], ChorusMawEntity.EVENT_LASH_LEFT)));
             steps.add(Step.waitTicks(7));
             steps.add(Step.screenshot("realm_maw_lash"));
             // der offene Schlund aus der Nähe
             steps.add(Step.server(o -> m[4].discard()));
-            look(steps, END, EX + 4.2, EY + 2.6, EZ + 4.6, EX + 5.5, EY + 2.4, EZ + 7.0);
+            look(steps, END, EX + 3.2, EY + 0.6, EZ + 5.4, EX + 4.5, EY + 1.8, EZ + 7.5);
             steps.add(Step.waitTicks(35));
             steps.add(Step.screenshot("realm_maw_close"));
             steps.add(Step.server(o -> clear(end(o), EX, EY, EZ)));
@@ -240,7 +249,7 @@ final class RealmBeastShowcase {
         Showcase.fill(level, new BlockPos(cx - 46, y - 1, cz - 30), new BlockPos(cx + 46, y - 1, cz + 48),
                 ShadowBlocks.SHADOW_GRASS.get().defaultBlockState());
         // Wasserlöcher (eins vorn, wo die Reiher waten)
-        double[][] pools = {{-1.0, 3.0, 5.2}, {9.0, 9.0, 4.0}, {-12.0, 12.0, 5.0}, {6.0, 22.0, 6.0}, {-20.0, 26.0, 7.0}, {22.0, 2.0, 4.0}};
+        double[][] pools = {{-6.5, 6.0, 3.4}, {7.0, 10.0, 3.6}, {-12.0, 13.0, 5.0}, {6.0, 22.0, 6.0}, {-20.0, 26.0, 7.0}, {22.0, 2.0, 4.0}};
         for (int x = cx - 46; x <= cx + 46; x++) {
             for (int z = cz - 30; z <= cz + 48; z++) {
                 boolean water = false;
@@ -298,11 +307,11 @@ final class RealmBeastShowcase {
         for (int x = cx - 46; x <= cx + 46; x++) {
             for (int z = cz - 30; z <= cz + 48; z++) {
                 int r = random.nextInt(100);
-                if (r < 30) {
+                if (r < 9) {
                     set(level, x, y - 1, z, ShadowBlocks.ASH_SNOW_BLOCK.get().defaultBlockState());
-                } else if (r < 46) {
+                } else if (r < 30) {
                     set(level, x, y, z, ShadowBlocks.PALE_GRASS.get().defaultBlockState());
-                } else if (r < 52) {
+                } else if (r < 33) {
                     set(level, x, y, z, ShadowBlocks.ASH_SNOW.get().defaultBlockState());
                 }
             }
@@ -362,6 +371,10 @@ final class RealmBeastShowcase {
                 continue;
             }
             ChorusFlowerBlock.generatePlant(level, new BlockPos(x, y, z), random, 8);
+        }
+        // ein paar Endstäbe als Licht (sonst sind die dunklen Wesen im End kaum zu sehen)
+        for (int[] p : new int[][] {{-5, 0}, {5, 1}, {-3, 6}, {7, 5}, {0, 11}}) {
+            set(level, cx + p[0], y, cz + p[1], Blocks.END_ROD.defaultBlockState());
         }
     }
 
@@ -448,6 +461,15 @@ final class RealmBeastShowcase {
     private static void event(Entity entity, byte id) {
         if (entity.level() instanceof ServerLevel level) {
             level.broadcastEntityEvent(entity, id);
+        }
+    }
+
+    /** Wilde Monster der Gegend (Endermen …) verlassen die Bühne. */
+    private static void purge(ServerLevel level, int cx, int y, int cz) {
+        AABB all = new AABB(cx - 64, y - 20, cz - 48, cx + 64, y + 40, cz + 64);
+        for (Entity e : level.getEntitiesOfClass(net.minecraft.world.entity.monster.Monster.class, all,
+                e -> !e.entityTags().contains(STAGE_TAG))) {
+            e.discard();
         }
     }
 

@@ -10,15 +10,19 @@ import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.util.ARGB;
+import org.jspecify.annotations.Nullable;
 
-/** Rissjäger mit glühenden Rissen, Sternsprenkeln und schwebenden Splittern; beim Phasensprung fällt er in sich zusammen. */
+/** Rissjäger mit glühenden Rissen, Sternsprenkeln und schwebenden Splittern; beim Phasensprung versinkt er in einem Riss. */
 public class RiftHoundRenderer extends MobRenderer<RiftHoundEntity, RiftHoundRenderState, RiftHoundModel> {
     private static final Identifier TEXTURE = KingdomsAtWar.id("textures/entity/rift_hound/rift_hound.png");
     private static final RenderType GLOW = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/rift_hound/rift_hound_glow.png"));
 
     public RiftHoundRenderer(EntityRendererProvider.Context context) {
         super(context, new RiftHoundModel(context.bakeLayer(ModModelLayers.RIFT_HOUND)), 0.5f);
-        this.addLayer(new GlowLayer<>(this, state -> GLOW));
+        // die Risse erlöschen, sobald er zur Hälfte im Riss versunken ist
+        this.addLayer(new GlowLayer<>(this, state -> state.fade > 0.5f ? null : GLOW));
     }
 
     @Override
@@ -41,10 +45,24 @@ public class RiftHoundRenderer extends MobRenderer<RiftHoundEntity, RiftHoundRen
 
     @Override
     protected void scale(RiftHoundRenderState state, PoseStack poseStack) {
-        // beim Phasensprung: schmal und lang gezogen, bis nur ein Flimmern bleibt
+        // beim Phasensprung sinkt er in einen Riss im Boden: er wird flach und breit, dreht sich ein und verblasst
         if (state.fade > 0.0f) {
             float f = state.fade;
-            poseStack.scale(Math.max(0.04f, 1.0f - f), 1.0f + f * 0.6f, Math.max(0.04f, 1.0f - f * 0.8f));
+            poseStack.rotate(Axis.YP.rotation(f * f * 2.4f));
+            poseStack.scale(1.0f + f * 0.35f, Math.max(0.03f, 1.0f - f * 0.97f), 1.0f + f * 0.2f);
         }
+    }
+
+    @Override
+    protected @Nullable RenderType getRenderType(RiftHoundRenderState state, boolean bodyVisible, boolean translucent, boolean glowing) {
+        if (state.fade > 0.02f && bodyVisible) {
+            return RenderTypes.entityTranslucent(TEXTURE);
+        }
+        return super.getRenderType(state, bodyVisible, translucent, glowing);
+    }
+
+    @Override
+    protected int getModelTint(RiftHoundRenderState state) {
+        return state.fade > 0.02f ? ARGB.white(Math.max(0.0f, 1.0f - state.fade * 1.1f)) : -1;
     }
 }
