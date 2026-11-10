@@ -86,34 +86,34 @@ public final class AbyssBiomes {
     public static void bootstrap(BootstrapContext<Biome> context) {
         HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<WorldCarver> carvers = context.lookup(Registries.CARVER);
-        context.register(FRACTURED_LANDS, biome(0x1A0A12, 0x2C1018, 0x5A8A3A, 0x6A9A4A, ParticleTypes.ASH, 0.003f,
+        context.register(FRACTURED_LANDS, biome(0x1A0A12, 0x2C1018, 0x5A8A3A, 0x6A9A4A, 0x4A7ADA, ParticleTypes.ASH, 0.003f,
                 SoundEvents.MUSIC_BIOME_BASALT_DELTAS, AbyssFeatures.fracturedLands(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.ZOMBIE.get(), 60, 1, 3)
                         .addSpawn(ModEntities.SKELETON.get(), 50, 1, 2)
                         .addSpawn(ModEntities.SPIDER.get(), 30, 1, 2)
                         .addSpawn(ModEntities.DISTORTLING.get(), 20, 1, 2)
                         .build()));
-        context.register(EMBER_FALLS, biome(0x2A0808, 0x3A0C0A, 0x8A3A1A, 0x9A4A2A, ParticleTypes.LAVA, 0.0006f,
+        context.register(EMBER_FALLS, biome(0x2A0808, 0x3A0C0A, 0x8A3A1A, 0x9A4A2A, 0x8A4A2A, ParticleTypes.LAVA, 0.0006f,
                 SoundEvents.MUSIC_BIOME_CRIMSON_FOREST, AbyssFeatures.emberFalls(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.BLAZE.get(), 30, 1, 2)
                         .addSpawn(ModEntities.WITHER_SKELETON.get(), 30, 1, 2)
                         .addSpawn(ModEntities.ASH_WRAITH.get(), 30, 1, 2)
                         .addSpawn(ModEntities.GHAST.get(), 6, 1, 1)
                         .build()));
-        context.register(STAR_WRECK, biome(0x140818, 0x24102C, 0x9A70C8, 0xAA80D8, ParticleTypes.REVERSE_PORTAL, 0.002f,
+        context.register(STAR_WRECK, biome(0x140818, 0x24102C, 0x9A70C8, 0xAA80D8, 0x7A5AD8, ParticleTypes.REVERSE_PORTAL, 0.002f,
                 SoundEvents.MUSIC_END, AbyssFeatures.starWreck(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.ENDERMAN.get(), 40, 1, 2)
                         .addSpawn(ModEntities.RIFT_HOUND.get(), 30, 2, 2)
                         .addSpawn(ModEntities.CHORUS_MAW.get(), 12, 1, 1)
                         .addSpawn(ModEntities.VOID_MAW.get(), 10, 1, 1)
                         .build()));
-        context.register(SHADOW_CHASM, biome(0x0E0A18, 0x1A1028, 0x4A5A8A, 0x5A6A9A, ParticleTypes.WHITE_ASH, 0.004f,
+        context.register(SHADOW_CHASM, biome(0x0E0A18, 0x1A1028, 0x4A5A8A, 0x5A6A9A, 0x3A52B0, ParticleTypes.WHITE_ASH, 0.004f,
                 SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY, AbyssFeatures.shadowChasm(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.SHADE_STALKER.get(), 40, 1, 2)
                         .addSpawn(ModEntities.NIGHT_RAM.get(), 20, 1, 2)
                         .addSpawn(ModEntities.SOUL_HERON.get(), 8, 1, 1)
                         .build()));
-        context.register(THE_SEAM, biome(0x22060E, 0x3A0A16, 0x8A4A6A, 0x9A5A7A, ParticleTypes.ASH, 0.006f,
+        context.register(THE_SEAM, biome(0x22060E, 0x3A0A16, 0x8A4A6A, 0x9A5A7A, 0x9A4A7A, ParticleTypes.ASH, 0.006f,
                 SoundEvents.MUSIC_BIOME_BASALT_DELTAS, AbyssFeatures.seam(placed, carvers), new MobSpawnSettings.Builder()
                         .addSpawn(ModEntities.DISTORTLING.get(), 40, 1, 2)
                         .addSpawn(ModEntities.SHARD_WARDEN.get(), 15, 1, 1)
@@ -123,21 +123,22 @@ public final class AbyssBiomes {
                         .build()));
     }
 
-    private static Biome biome(int sky, int fog, int grass, int foliage, ParticleOptions particle, float density,
+    /** {@code water}: Wasserfarbe – je Welt anders, damit die Wasserfälle ins Nichts als Wasser zu erkennen sind. */
+    private static Biome biome(int sky, int fog, int grass, int foliage, int water, ParticleOptions particle, float density,
             Holder<SoundEvent> music, BiomeGenerationSettings generation, MobSpawnSettings spawns) {
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(false)
                 .temperature(0.6f)
                 .downfall(0.0f)
                 .specialEffects(new BiomeSpecialEffects.Builder()
-                        .waterColor(0x5A1A2A)
+                        .waterColor(water)
                         .grassColorOverride(grass)
                         .foliageColorOverride(foliage)
                         .dryFoliageColorOverride(foliage)
                         .build())
                 .setAttribute(EnvironmentAttributes.SKY_COLOR, ARGB.vector3fFromRGB24(sky))
                 .setAttribute(EnvironmentAttributes.FOG_COLOR, ARGB.vector3fFromRGB24(fog))
-                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(0x1A0408))
+                .setAttribute(EnvironmentAttributes.WATER_FOG_COLOR, ARGB.vector3fFromRGB24(ARGB.scaleRGB(water, 0.35f)))
                 .setAttribute(EnvironmentAttributes.FOG_START_DISTANCE, 30.0f)
                 .setAttribute(EnvironmentAttributes.FOG_END_DISTANCE, 240.0f)
                 .setAttribute(EnvironmentAttributes.AMBIENT_PARTICLES, List.of(new AmbientParticle(particle, density)))

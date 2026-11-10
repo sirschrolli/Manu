@@ -66,7 +66,7 @@
     "minecraft:visual/fog_end_distance": 240.0,
     "minecraft:visual/fog_start_distance": 30.0,
     "minecraft:visual/sky_color": "#22060e",
-    "minecraft:visual/water_fog_color": "#1a0408"
+    "minecraft:visual/water_fog_color": "#35192a"
   },
   "carvers": [],
   "downfall": 0.0,
@@ -74,7 +74,7 @@
     "dry_foliage_color": "#9a5a7a",
     "foliage_color": "#9a5a7a",
     "grass_color": "#8a4a6a",
-    "water_color": "#5a1a2a"
+    "water_color": "#9a4a7a"
   },
   "features": [
     [],

@@ -234,18 +234,21 @@ final class AbyssGameTests {
     private static void abyssGravity(GameTestHelper helper) {
         floor(helper, 9);
         helper.setBlock(new BlockPos(1, 1, 1), AbyssBlocks.FLOAT_CRYSTAL.get());
-        helper.setBlock(new BlockPos(6, 1, 6), AbyssBlocks.LIFT_CRYSTAL.get());
+        helper.setBlock(new BlockPos(4, 1, 3), AbyssBlocks.LIFT_CRYSTAL.get());
         // Dorfbewohner der Mod (Vanilla-Tiere würden beim Erscheinen gegen die eigenen Tiere der Mod getauscht)
         Mob floater = helper.spawnWithNoFreeWill(ModEntities.VILLAGER.get(), new BlockPos(1, 1, 3));
-        Mob lifted = helper.spawnWithNoFreeWill(ModEntities.VILLAGER.get(), new BlockPos(6, 1, 7));
-        Mob outside = helper.spawnWithNoFreeWill(ModEntities.VILLAGER.get(), new BlockPos(4, 1, 8));
+        // steht zugleich im Schwebefeld und in der Hebesäule – die Säule muss gewinnen (mit eigenem Willen)
+        Mob lifted = helper.spawn(ModEntities.VILLAGER.get(), new BlockPos(4, 1, 4));
+        Mob outside = helper.spawnWithNoFreeWill(ModEntities.VILLAGER.get(), new BlockPos(8, 1, 8));
         double start = lifted.getY();
         double normal = floater.getAttributeValue(Attributes.GRAVITY);
         helper.runAfterDelay(40, () -> {
             helper.assertTrue(GravityField.affected(floater), "Der Schwebekristall wirkt nicht");
             helper.assertTrue(floater.getAttributeValue(Attributes.GRAVITY) < normal * 0.3, "Am Schwebekristall ist die Schwerkraft nicht gering");
+            helper.assertTrue(floater.getAttributeValue(Attributes.GRAVITY) > 0.0, "Am Schwebekristall fällt man nach oben");
             helper.assertTrue(GravityField.affected(lifted), "Der Hebekristall wirkt nicht");
-            helper.assertTrue(lifted.getY() > start + 1.0, "Über dem Hebekristall steigt nichts auf: " + (lifted.getY() - start));
+            helper.assertTrue(lifted.getY() > start + 1.0, "Über dem Hebekristall steigt nichts auf (neben einem Schwebekristall): "
+                    + (lifted.getY() - start));
             helper.assertFalse(GravityField.affected(outside), "Die verdrehte Schwerkraft reicht zu weit");
             helper.assertTrue(lifted.fallDistance < 0.5, "Im Hebefeld sammelt sich Fallhöhe an");
             helper.setBlock(new BlockPos(1, 1, 1), Blocks.AIR);

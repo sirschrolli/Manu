@@ -44,6 +44,8 @@ public final class GravityField {
     private static final int LINGER = 6;
 
     private static final Map<LivingEntity, Integer> TOUCHED = new WeakHashMap<>();
+    /** Wer gerade in einer Hebesäule ist: Die Säule geht dem Schweben vor (sonst hielte ein naher Schwebekristall einen unten). */
+    private static final Map<LivingEntity, Integer> LIFTED = new WeakHashMap<>();
 
     private GravityField() {}
 
@@ -62,22 +64,32 @@ public final class GravityField {
                 if (e.position().add(0.0, e.getBbHeight() * 0.5, 0.0).distanceToSqr(c) > FLOAT_RADIUS * FLOAT_RADIUS) {
                     continue;
                 }
-                apply(e, FLOAT_FACTOR, now);
+                apply(e, FLOAT_FACTOR, now, false);
             } else {
                 double dx = e.getX() - c.x;
                 double dz = e.getZ() - c.z;
                 if (dx * dx + dz * dz > LIFT_RADIUS * LIFT_RADIUS) {
                     continue;
                 }
-                apply(e, e.isShiftKeyDown() ? SINK_FACTOR : LIFT_FACTOR, now);
+                apply(e, e.isShiftKeyDown() ? SINK_FACTOR : LIFT_FACTOR, now, true);
             }
         }
     }
 
-    /** Gibt dem Lebewesen die veränderte Schwerkraft (oder lässt sie ihm) und verhindert den Fallschaden. */
-    public static void apply(LivingEntity entity, double factor, int now) {
+    /**
+     * Gibt dem Lebewesen die veränderte Schwerkraft (oder lässt sie ihm) und verhindert den Fallschaden. Eine Hebesäule
+     * ({@code lift}) geht einem Schwebefeld vor, in dem man zugleich steht.
+     */
+    public static void apply(LivingEntity entity, double factor, int now, boolean lift) {
         AttributeInstance gravity = entity.getAttribute(Attributes.GRAVITY);
         if (gravity == null) {
+            return;
+        }
+        if (lift) {
+            LIFTED.put(entity, now + LINGER);
+        } else if (LIFTED.getOrDefault(entity, Integer.MIN_VALUE) >= now) {
+            entity.resetFallDistance();
+            TOUCHED.merge(entity, now + LINGER, Math::max);
             return;
         }
         AttributeModifier current = gravity.getModifier(MODIFIER);
@@ -101,6 +113,7 @@ public final class GravityField {
             return;
         }
         int now = event.getServer().getTickCount();
+        LIFTED.values().removeIf(until -> now > until);
         Iterator<Map.Entry<LivingEntity, Integer>> it = TOUCHED.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<LivingEntity, Integer> entry = it.next();

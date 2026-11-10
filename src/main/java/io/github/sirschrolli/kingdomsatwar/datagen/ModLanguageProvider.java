@@ -533,6 +533,12 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Der Abgrund
         text("itemGroup.kingdomsatwar.the_abyss", "Kingdoms at War: The Abyss", "Kingdoms at War: Der Abgrund");
+        text("dimension.kingdomsatwar.the_abyss", "The Abyss", "Der Abgrund");
+        text("biome.kingdomsatwar.abyss_fractured_lands", "Fractured Lands", "Bruchlande");
+        text("biome.kingdomsatwar.abyss_ember_falls", "Ember Falls", "Glutsturz");
+        text("biome.kingdomsatwar.abyss_star_wreck", "Star Wreck", "Sternentrümmer");
+        text("biome.kingdomsatwar.abyss_shadow_chasm", "Shadow Chasm", "Schattenschlund");
+        text("biome.kingdomsatwar.abyss_seam", "The Seam", "Die Naht");
         set("chaos_stone", "chaos_stone", "Chaos Stone", "Chaosgestein", "Chaos Stone", "Chaosgestein");
         set("chaos_stone_bricks", "chaos_stone_brick", "Chaos Stone Bricks", "Chaossteinziegel", "Chaos Stone Brick", "Chaossteinziegel");
         set("polished_chaos_stone", "polished_chaos_stone", "Polished Chaos Stone", "Poliertes Chaosgestein", "Polished Chaos Stone",
