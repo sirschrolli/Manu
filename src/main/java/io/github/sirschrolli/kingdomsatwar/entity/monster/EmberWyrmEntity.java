@@ -58,6 +58,8 @@ public class EmberWyrmEntity extends Monster {
     public static final int DIVE_TICK = 60;
     /** Bis zu dieser Entfernung (waagerecht) schnappt er zu, statt zu spucken. */
     public static final double BITE_REACH = 6.5;
+    /** So tief (unter der Oberfläche) schwimmt er: nur der glühende Kamm ragt heraus. */
+    public static final double SWIM_DEPTH = 1.3;
     private static final EntityDimensions REARED = EntityDimensions.scalable(1.8f, 3.9f).withEyeHeight(3.4f);
 
     private static final EntityDataAccessor<Boolean> DATA_REARING = SynchedEntityData.defineId(EmberWyrmEntity.class,
@@ -238,7 +240,7 @@ public class EmberWyrmEntity extends Monster {
         }
         // die Höhe: knapp unter der Oberfläche, nur der Kamm schaut heraus
         double surface = this.lavaSurface(level);
-        double wantY = surface - 0.95;
+        double wantY = surface - SWIM_DEPTH;
         v = new Vec3(v.x, Mth.clamp((wantY - this.getY()) * 0.2, -0.12, 0.12), v.z);
         double h = v.horizontalDistance();
         if (h > 0.24) {

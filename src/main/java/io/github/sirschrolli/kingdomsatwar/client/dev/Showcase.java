@@ -208,6 +208,8 @@ final class Showcase {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
                     } else if (scene.startsWith("dragon_attacks_")) {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
+                    } else if (scene.startsWith("beasts_")) {
+                        BeastShowcase.beasts(steps, scene.substring(7));
                     } else if (scene.equals("fae_map")) {
                         FaeShowcase.map(steps);
                     } else if (scene.equals("fae_boss")) {

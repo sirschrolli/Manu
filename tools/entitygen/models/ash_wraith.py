@@ -15,7 +15,7 @@ from ..paint import Ctx, hash01, hexc, mix, noise3, pick, rel_y
 
 PALETTES = {
     "ash_wraith": {
-        "ash": [hexc(c) for c in ("#151413", "#22201e", "#33302d", "#46423e", "#5c5752", "#77716a", "#958e86", "#b3aca3")],
+        "ash": [hexc(c) for c in ("#1c1a19", "#2c2927", "#3f3b38", "#56514c", "#6f6963", "#8c857d", "#aaa298", "#c9c1b5", "#e0d9cd")],
         "char": [hexc(c) for c in ("#070707", "#100f0e", "#1b1918", "#282523")],
         "bone": [hexc(c) for c in ("#2c2722", "#463e36", "#62574c", "#807264", "#9e8f7e", "#bcae9a")],
         "soul": [hexc(c) for c in ("#0a3a52", "#13708e", "#1fa6c4", "#4fd6ec", "#a6f4ff", "#e8feff")],
@@ -78,7 +78,7 @@ def build() -> Model:
 _LIT = {"top": 0.12, "front": 0.04, "west": 0.0, "east": -0.04, "back": -0.06, "bottom": -0.2}
 
 
-def _ash_value(ctx: Ctx, base: float = 0.45) -> float:
+def _ash_value(ctx: Ctx, base: float = 0.6) -> float:
     x, y, z = ctx.world
     big = (noise3(x * 0.18, y * 0.18, z * 0.18, 201) - 0.5) * 0.3
     fine = (noise3(x * 0.9, y * 0.6, z * 0.9, 202) - 0.5) * 0.18
@@ -101,14 +101,14 @@ def _robe(ctx: Ctx):
 
 
 def _mantle(ctx: Ctx):
-    v = _ash_value(ctx, 0.38)
+    v = _ash_value(ctx, 0.56)
     if ctx.face not in ("top", "bottom") and ctx.t >= ctx.h - 1 and hash01(ctx.u, 0, 207) > 0.4:
         return (0, 0, 0, 0)                                             # zerfranster Saum
     return pick(ctx.pal["ash"], v)
 
 
 def _hood(ctx: Ctx):
-    v = _ash_value(ctx, 0.36)
+    v = _ash_value(ctx, 0.58)
     if ctx.face == "front":
         rs = (ctx.s + 0.5) / max(ctx.w, 1)
         rt = (ctx.t + 0.5) / max(ctx.h, 1)
@@ -171,7 +171,7 @@ def _ribs(ctx: Ctx):
 
 
 def _sleeve(ctx: Ctx):
-    v = _ash_value(ctx, 0.4)
+    v = _ash_value(ctx, 0.56)
     if ctx.face not in ("top", "bottom") and rel_y(ctx) > 0.55 and hash01(ctx.u, 1, 210) > 0.45:
         return (0, 0, 0, 0)                                             # Fetzen
     if ctx.face == "bottom":
@@ -201,7 +201,7 @@ def _rag(ctx: Ctx):
         return (0, 0, 0, 0)
     if ctx.face != "top" and ctx.t >= ctx.h - 2 and hash01(ctx.u, 2, 213) > 0.35:
         return (0, 0, 0, 0)
-    return pick(ctx.pal["ash"], _ash_value(ctx, 0.36) - rel_y(ctx) * 0.12)
+    return pick(ctx.pal["ash"], _ash_value(ctx, 0.52) - rel_y(ctx) * 0.14)
 
 
 def _rag_end(ctx: Ctx):
@@ -211,7 +211,7 @@ def _rag_end(ctx: Ctx):
     col_len = 0.3 + hash01(int(ctx.s), 3, 214 + len(ctx.face)) * 0.7
     if rel_y(ctx) > col_len or hash01(int(ctx.s), 4, 215 + len(ctx.face)) < 0.3:
         return (0, 0, 0, 0)
-    return pick(ctx.pal["ash"], _ash_value(ctx, 0.3) - rel_y(ctx) * 0.25)
+    return pick(ctx.pal["ash"], _ash_value(ctx, 0.48) - rel_y(ctx) * 0.3)
 
 
 def _cinder(ctx: Ctx):

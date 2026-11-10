@@ -55,7 +55,7 @@ public class MonsterShot extends ThrowableItemProjectile {
         shot.entityData.set(DATA_KIND, (byte) kind.ordinal());
         shot.setItem(switch (kind) {
             case MUD -> new ItemStack(Items.MUD);
-            case MAGMA -> new ItemStack(Items.MAGMA_CREAM);
+            case MAGMA -> new ItemStack(Items.FIRE_CHARGE);
             case SOUL -> ItemStack.EMPTY;
         });
         shot.damage = damage;

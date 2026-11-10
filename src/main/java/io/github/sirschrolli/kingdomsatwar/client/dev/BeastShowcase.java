@@ -48,6 +48,11 @@ final class BeastShowcase {
     private BeastShowcase() {}
 
     static void beasts(Deque<Step> steps) {
+        beasts(steps, "");
+    }
+
+    /** {@code only}: nur diese Bühne (forest, moor, lava, soul) – oder alle. */
+    static void beasts(Deque<Step> steps, String only) {
         Mob[] m = new Mob[8];
         boolean[] ready = new boolean[1];
         steps.add(Step.command("difficulty hard"));
@@ -55,9 +60,13 @@ final class BeastShowcase {
         steps.add(Step.server(level -> {
             int g = Showcase.ground;
             forest(level, g);
+            biome(level, FOREST, g, net.minecraft.world.level.biome.Biomes.OLD_GROWTH_SPRUCE_TAIGA);
             moor(level, g);
+            biome(level, MOOR, g, net.minecraft.world.level.biome.Biomes.SWAMP);
             lava(level, g);
+            biome(level, LAVA, g, net.minecraft.world.level.biome.Biomes.BASALT_DELTAS);
             soul(level, g);
+            biome(level, SOUL, g, net.minecraft.world.level.biome.Biomes.SOUL_SAND_VALLEY);
             ready[0] = true;
         }));
         steps.add(Step.until(() -> ready[0], 3000));
@@ -65,6 +74,7 @@ final class BeastShowcase {
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(55)));
 
         // ------------------------------------------------------------------ Waldlichtung im Abendrot
+        if (only.isEmpty() || only.equals("forest")) {
         steps.add(Step.command("time set 12350"));
         arrive(steps, FOREST + 0.5, 1.2, OZ - 8.5, FOREST + 0.5, 1.7, OZ + 3.0);
         steps.add(Step.server(level -> {
@@ -82,7 +92,7 @@ final class BeastShowcase {
             m[0].discard();
             m[1].discard();
         }));
-        steps.add(look(FOREST - 2.2, 0.4, OZ + 2.6, FOREST + 0.5, 3.0, OZ + 6.0));
+        steps.add(look(FOREST - 1.6, 0.2, OZ + 3.4, FOREST + 0.5, 3.1, OZ + 6.0));
         steps.add(Step.waitTicks(25));
         steps.add(Step.server(level -> ((WerewolfEntity) m[2]).forceHowl()));
         steps.add(Step.waitTicks(18));
@@ -113,9 +123,12 @@ final class BeastShowcase {
         steps.add(Step.screenshot("beast_werewolf_pounce"));
         steps.add(Step.server(BeastShowcase::clearStage));
 
+        }
+
         // ------------------------------------------------------------------ Moor am späten Nachmittag
+        if (only.isEmpty() || only.equals("moor")) {
         steps.add(Step.command("time set 11200"));
-        arrive(steps, MOOR + 0.5, 1.3, OZ - 8.5, MOOR + 0.5, 1.3, OZ + 3.5);
+        arrive(steps, MOOR + 0.5, 1.2, OZ - 6.5, MOOR + 0.5, 1.3, OZ + 3.5);
         steps.add(Step.server(level -> {
             int g = Showcase.ground;
             m[0] = creature(level, ModEntities.MIRE_SHAMBLER.get(), MOOR - 1.0, g, OZ + 3.0, 185.0f, s -> { });
@@ -153,15 +166,19 @@ final class BeastShowcase {
         steps.add(Step.screenshot("beast_moor_grasp"));
         steps.add(Step.server(BeastShowcase::clearStage));
 
+        }
+
         // ------------------------------------------------------------------ Lavasee bei Nacht
+        if (only.isEmpty() || only.equals("lava")) {
         steps.add(Step.command("time set 18000"));
-        arrive(steps, LAVA + 0.5, 1.4, OZ - 9.5, LAVA + 0.5, 2.0, OZ + 4.0);
+        arrive(steps, LAVA + 0.5, 1.0, OZ - 6.5, LAVA + 0.5, 2.4, OZ + 4.0);
         steps.add(Step.server(level -> {
             int g = Showcase.ground;
             m[3] = soldier(level, LAVA + 4.5, g, OZ - 4.0, 330.0f);
             m[0] = creature(level, ModEntities.EMBER_WYRM.get(), LAVA + 0.5, g - 1.05, OZ + 4.0, 200.0f, w -> w.setNoGravity(true));
             ((EmberWyrmEntity) m[0]).forceSurface((Mob) m[3]);
-            m[1] = creature(level, ModEntities.EMBER_WYRM.get(), LAVA - 6.0, g - 1.05, OZ + 8.0, 110.0f, w -> w.setNoGravity(true));
+            m[1] = creature(level, ModEntities.EMBER_WYRM.get(), LAVA - 6.0, g - 0.1 - EmberWyrmEntity.SWIM_DEPTH, OZ + 8.0, 110.0f,
+                    w -> w.setNoGravity(true));
         }));
         steps.add(Step.waitTicks(40));
         steps.add(Step.server(level -> event(level, m[0], EmberWyrmEntity.EVENT_SPIT)));
@@ -188,7 +205,10 @@ final class BeastShowcase {
         steps.add(Step.screenshot("beast_wyrm_swim"));
         steps.add(Step.server(BeastShowcase::clearStage));
 
+        }
+
         // ------------------------------------------------------------------ Seelensandtal bei Nacht
+        if (only.isEmpty() || only.equals("soul")) {
         arrive(steps, SOUL + 1.0, 1.3, OZ - 8.5, SOUL + 1.0, 2.0, OZ + 3.0);
         steps.add(Step.server(level -> {
             int g = Showcase.ground;
@@ -222,6 +242,7 @@ final class BeastShowcase {
         steps.add(Step.waitTicks(14));
         steps.add(Step.screenshot("beast_wraith_cloud"));
         steps.add(Step.server(BeastShowcase::clearStage));
+        }
     }
 
     /** Kamera hin, warten bis die Chunks da sind. */
@@ -244,6 +265,27 @@ final class BeastShowcase {
 
     private static void set(ServerLevel level, int x, int y, int z, BlockState state) {
         level.setBlock(new BlockPos(x, y, z), state, Block.UPDATE_CLIENTS);
+    }
+
+    /** Die Standorte der Moorschlurfer und des Ritters bleiben frei von Pflanzen. */
+    private static boolean nearSpot(int x, int z, int cx) {
+        for (double[] spot : new double[][] {{-1.0, 3.0}, {5.0, 6.0}, {-6.0, 0.5}, {-1.0, 0.9}}) {
+            double dx = x + 0.5 - (cx + spot[0]);
+            double dz = z + 0.5 - (OZ + spot[1]);
+            if (dx * dx + dz * dz < 5.0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Färbt die Bühne in ihr Biom (Gras, Laub, Wasser, Nebel und Teilchen der Luft). */
+    private static void biome(ServerLevel level, int cx, int g, net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome> key) {
+        var holder = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME).getOrThrow(key);
+        for (int x = cx - 44; x <= cx + 44; x += 8) {
+            net.minecraft.server.commands.FillBiomeCommand.fill(level, new BlockPos(x, g - 8, OZ - 28), new BlockPos(x + 7, g + 24, OZ + 54),
+                    holder);
+        }
     }
 
     private static boolean inFront(int x, int z, int cx) {
@@ -352,12 +394,13 @@ final class BeastShowcase {
                     continue;
                 }
                 int r = random.nextInt(100);
-                if (r < 14) {
+                if (r < 12) {
                     set(level, x, g - 1, z, Blocks.MUDDY_MANGROVE_ROOTS.defaultBlockState());
-                } else if (r < 20) {
-                    set(level, x, g - 1, z, Blocks.PACKED_MUD.defaultBlockState());
-                } else if (r < 24) {
+                } else if (r < 16) {
                     set(level, x, g - 1, z, Blocks.MOSS_BLOCK.defaultBlockState());
+                }
+                if (nearSpot(x, z, cx)) {
+                    continue;
                 }
                 boolean nearWater = false;
                 for (Direction d : Direction.Plane.HORIZONTAL) {
@@ -370,11 +413,11 @@ final class BeastShowcase {
                     for (int y = 0; y < h; y++) {
                         set(level, x, g + y, z, Blocks.SUGAR_CANE.defaultBlockState());
                     }
-                } else if (d < (front ? 7 : 18)) {
+                } else if (d < (front ? 6 : 18)) {
                     set(level, x, g, z, Blocks.SHORT_GRASS.defaultBlockState());
-                } else if (d < (front ? 10 : 22)) {
+                } else if (d < (front ? 8 : 22)) {
                     set(level, x, g, z, Blocks.MOSS_CARPET.defaultBlockState());
-                } else if (d < (front ? 11 : 24)) {
+                } else if (!front && d < 24) {
                     set(level, x, g, z, Blocks.SHORT_DRY_GRASS.defaultBlockState());
                 }
             }

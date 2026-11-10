@@ -258,10 +258,11 @@ public class WerewolfEntity extends Monster {
         super.aiStep();
         if (this.level().isClientSide() && this.howlTicks > 0) {
             this.howlTicks--;
-            if (this.random.nextInt(3) == 0) {
+            if (this.random.nextInt(6) == 0) {
+                // sein Atem steigt in der kalten Nachtluft auf
                 Vec3 look = this.getViewVector(1.0f);
-                this.level().addParticle(ParticleTypes.CLOUD, this.getX() + look.x * 0.8, this.getEyeY() + 0.4, this.getZ() + look.z * 0.8,
-                        look.x * 0.02, 0.04, look.z * 0.02);
+                this.level().addParticle(ParticleTypes.WHITE_SMOKE, this.getX() + look.x * 1.1, this.getEyeY() + 0.7, this.getZ() + look.z * 1.1,
+                        look.x * 0.01, 0.03, look.z * 0.01);
             }
         }
     }

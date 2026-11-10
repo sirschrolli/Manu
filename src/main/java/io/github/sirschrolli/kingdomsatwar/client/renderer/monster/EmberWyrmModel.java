@@ -63,15 +63,17 @@ public class EmberWyrmModel extends EntityModel<EmberWyrmRenderState> {
             this.head.y -= 26.0f * rear;
             this.head.z += 2.0f * rear;
             this.head.x += sway * rear;
-            // der Hals senkrecht hinab, dann liegt der Leib flach auf der Lava
-            this.segments[0].xRot += -Mth.HALF_PI * rear;
-            this.segments[1].xRot += Mth.sin(t * 0.09f + 0.5f) * 0.06f * rear;
-            this.segments[2].xRot += 0.05f * rear;
+            // der Hals steigt wie bei einer Kobra aus der Lava: zurückgelehnt, darunter wieder senkrecht, dann liegt der Leib
+            // flach unter der Oberfläche
+            float lean = 0.26f + Mth.sin(t * 0.07f) * 0.04f;
+            this.segments[0].xRot += (-Mth.HALF_PI - lean) * rear;
+            this.segments[1].xRot += (lean * 0.7f + Mth.sin(t * 0.09f + 0.5f) * 0.06f) * rear;
+            this.segments[2].xRot += (lean * 0.3f + 0.05f) * rear;
             this.segments[3].xRot += Mth.HALF_PI * rear - 0.05f * rear;
             this.segments[0].zRot += -sway * 0.04f * rear;
-            // der Kopf blickt leicht hinab auf seine Beute
-            this.head.xRot += 0.18f * rear;
-            this.segments[0].xRot -= 0.18f * rear;
+            // der Kopf neigt sich vor und blickt hinab auf seine Beute
+            this.head.xRot += 0.34f * rear;
+            this.segments[0].xRot -= 0.34f * rear;
             this.jaw.xRot += 0.12f * rear;
         }
 

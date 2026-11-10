@@ -372,6 +372,14 @@ final class VoidGameTests {
         // die gerufenen Wächter treten ab (sonst greifen sie den Ritter an und verfälschen die Treffer)
         level.getEntitiesOfClass(ShardWardenEntity.class, king.getBoundingBox().inflate(40)).forEach(net.minecraft.world.entity.Entity::discard);
         soldier.setHealth(soldier.getMaxHealth());
+        // erst muss der Ritter wieder fest stehen (die Stöße der Wächter), sonst laufen die Risse an ihm vorbei
+        helper.runAfterDelay(15, () -> rift(helper, level, king, soldier, then));
+    }
+
+    private static void rift(GameTestHelper helper, ServerLevel level, io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity king,
+            net.minecraft.world.entity.LivingEntity soldier, Runnable then) {
+        soldier.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        soldier.setHealth(soldier.getMaxHealth());
         king.forceAttack(level, "rift", soldier, true);
         helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.ShatteredKingEntity.RIFT_TEAR + 2, () -> {
             helper.assertFalse(level.getEntitiesOfClass(SpellFxEntity.class, king.getBoundingBox().inflate(30), e -> e.kind() == SpellFxEntity.Kind.FISSURE)
