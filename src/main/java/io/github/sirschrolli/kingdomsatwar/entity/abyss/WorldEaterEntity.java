@@ -114,6 +114,8 @@ public class WorldEaterEntity extends Monster {
     public static final double ORBIT = 40.0;
     /** Erfahrung beim Sieg (wie beim Zerbrochenen König und bei Asteria). */
     public static final int XP_REWARD = 500;
+    /** So viel Lebenskraft hat er (mehr, als Minecraft erlaubt: Treffer zählen entsprechend weniger, siehe WorldEaterDamage). */
+    public static final float DESIGNED_HEALTH = 2600.0f;
 
     private static final EntityDataAccessor<Float> DATA_MAW = SynchedEntityData.defineId(WorldEaterEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> DATA_BREATH = SynchedEntityData.defineId(WorldEaterEntity.class,
@@ -184,7 +186,7 @@ public class WorldEaterEntity extends Monster {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 // das stärkste Wesen der Mod: mehr Leben und Panzer als der Zerbrochene König (1800, Rüstung 18)
-                .add(Attributes.MAX_HEALTH, 2600.0)
+                .add(Attributes.MAX_HEALTH, DESIGNED_HEALTH)
                 .add(Attributes.ARMOR, 20.0)
                 .add(Attributes.ARMOR_TOUGHNESS, 12.0)
                 .add(Attributes.ATTACK_DAMAGE, 16.0)
@@ -383,6 +385,11 @@ public class WorldEaterEntity extends Monster {
         // der offene Rachen ist die verwundbarste Stelle
         float factor = this.entityData.get(DATA_MAW) > 0.6f ? 1.5f : 1.0f;
         return super.hurtServer(level, source, damage * factor);
+    }
+
+    /** Wie stark Treffer zählen: 1, wenn die volle Lebenskraft in die Leiste passt, sonst entsprechend weniger. */
+    public float healthScale() {
+        return Math.min(1.0f, this.getMaxHealth() / DESIGNED_HEALTH);
     }
 
     /** Ein Treffer auf ein Glied. */

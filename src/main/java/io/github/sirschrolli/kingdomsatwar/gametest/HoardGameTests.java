@@ -229,6 +229,9 @@ final class HoardGameTests {
             helper.assertTrue(eater.isAwakening(), "Der Weltenfresser erwacht nicht");
             helper.assertTrue(seal.phase() == HoardSealBlockEntity.Phase.AWAKE, "Der Schlund merkt das Erwachen nicht");
             helper.assertTrue(eater.eaterParts().length == WorldEaterEntity.SEGMENTS + 1, "Falsche Zahl an Gliedern");
+            // mehr Lebenskraft, als Minecraft erlaubt: Treffer zählen so viel weniger, dass er so viel aushält wie geplant
+            helper.assertTrue(Math.abs(eater.getMaxHealth() / eater.healthScale() - WorldEaterEntity.DESIGNED_HEALTH) < 1.0f,
+                    "Er hält nicht so viel aus wie geplant: " + eater.getMaxHealth() + " / " + eater.healthScale());
             float before = eater.getHealth();
             eater.hurtServer(level, level.damageSources().generic(), 40.0f);
             helper.assertTrue(eater.getHealth() >= before, "Beim Erwachen ist der Weltenfresser verwundbar");
