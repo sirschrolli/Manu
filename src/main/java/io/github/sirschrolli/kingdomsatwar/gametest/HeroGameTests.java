@@ -57,9 +57,10 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein Herz bzw. 20 Mana mehr (höchstens zehn jeder
- * Sorte), sie wachsen auf Höhlenböden (nie unter freiem Himmel, im Wasser oder auf Erde), lassen sich abbauen, und
- * Schatztruhen, Drachenbosse und Erzmagier geben sie her.
+ * Tests zum eigenen Helden: Herz- und Manakristalle geben dauerhaft ein Herz bzw. 20 Mana mehr (seit 0.77 höchstens 25
+ * jeder Sorte), sie wachsen auf Höhlenböden (nie unter freiem Himmel, im Wasser oder auf Erde), lassen sich abbauen, und
+ * Schatztruhen, Drachenbosse und Erzmagier geben sie her. Dazu die Heldenstufen bis 200, die Talente mit ihrer
+ * Meisterschaft, die Heldenkraft und das Licht der Unsterblichkeit.
  */
 final class HeroGameTests {
     private static final Identifier ARENA = KingdomsAtWar.id("test_arena");
@@ -82,13 +83,17 @@ final class HeroGameTests {
             ModGameTests.TEST_FUNCTIONS.register("hero_pat", () -> HeroGameTests::pat);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMMAND =
             ModGameTests.TEST_FUNCTIONS.register("hero_command", () -> HeroGameTests::command);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MIGHT =
+            ModGameTests.TEST_FUNCTIONS.register("hero_might", () -> HeroGameTests::might);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMMORTAL =
+            ModGameTests.TEST_FUNCTIONS.register("hero_immortal", () -> HeroGameTests::immortal);
 
     private HeroGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT, COMMAND)) {
+        for (var test : List.of(CRYSTALS, CRYSTAL_CAVES, CRYSTAL_LOOT, LEVELS, TALENTS, SOURCES, SETTLE, PAT, COMMAND, MIGHT, IMMORTAL)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -109,21 +114,22 @@ final class HeroGameTests {
 
             // --- Herzkristalle ---
             player.setHealth(10.0f);
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.HEART_CRYSTAL.get(), 12));
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.HEART_CRYSTAL.get(), Crystals.MAX + 2));
             InteractionResult first = player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             helper.assertTrue(first.consumesAction(), "Herzkristall lässt sich nicht aufnehmen: " + first);
             helper.assertTrue(Crystals.of(player).hearts() == 1 && near(player.getMaxHealth(), 22.0f) && near(player.getHealth(), 12.0f),
                     "Ein Herzkristall sollte ein Herz mehr geben (und es füllen): " + Crystals.of(player) + ", "
                             + player.getHealth() + "/" + player.getMaxHealth());
-            helper.assertTrue(player.getMainHandItem().getCount() == 11, "Der Kristall wird nicht verbraucht");
+            helper.assertTrue(player.getMainHandItem().getCount() == Crystals.MAX + 1, "Der Kristall wird nicht verbraucht");
             for (int i = 1; i < Crystals.MAX; i++) {
                 player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             }
-            helper.assertTrue(Crystals.of(player).hearts() == Crystals.MAX && near(player.getMaxHealth(), 40.0f),
-                    "Zehn Herzkristalle sollten zwanzig Herzen geben: " + player.getMaxHealth());
+            helper.assertValueEqual(Crystals.MAX, 25, "so viele Kristalle jeder Sorte (seit 0.77)");
+            helper.assertTrue(Crystals.of(player).hearts() == Crystals.MAX && near(player.getMaxHealth(), 20.0f + 2.0f * Crystals.MAX),
+                    "Alle Herzkristalle sollten 35 Herzen geben: " + player.getMaxHealth());
             InteractionResult full = player.getMainHandItem().use(level, player, InteractionHand.MAIN_HAND);
             helper.assertTrue(!full.consumesAction() && player.getMainHandItem().getCount() == 2 && Crystals.of(player).hearts() == Crystals.MAX,
-                    "Über zehn Herzkristalle hinaus sollte nichts gehen: " + full + ", " + player.getMainHandItem().getCount());
+                    "Über alle Herzkristalle hinaus sollte nichts gehen: " + full + ", " + player.getMainHandItem().getCount());
 
             // nach dem Tod oder Wiedereinstieg: die Herzen kommen zurück
             var health = player.getAttribute(Attributes.MAX_HEALTH);
@@ -131,7 +137,7 @@ final class HeroGameTests {
             health.removeModifier(Crystals.HEALTH_ID);
             helper.assertTrue(near(player.getMaxHealth(), 20.0f), "Steigerung lässt sich nicht entfernen");
             Crystals.applyHealth(player);
-            helper.assertTrue(near(player.getMaxHealth(), 40.0f), "Die Herzen kommen nicht zurück: " + player.getMaxHealth());
+            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 2.0f * Crystals.MAX), "Die Herzen kommen nicht zurück: " + player.getMaxHealth());
 
             // --- Manakristalle ---
             Mana.set(player, 0.0f);
@@ -308,11 +314,13 @@ final class HeroGameTests {
         HeroLevel.Hero hero = new HeroLevel.Hero(HeroLevel.total(12), List.of(3, 2), 0);
         helper.assertValueEqual(hero.talents().size(), HeroLevel.Talent.values().length, "Talente werden aufgefüllt");
         helper.assertValueEqual(hero.unspent(), 11 - 5, "freie Talentpunkte auf Stufe 12");
-        helper.assertValueEqual(HeroLevel.MAX_LEVEL, 100, "höchste Heldenstufe");
-        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 1_171_566, "Heldenerfahrung für Stufe 100");
+        helper.assertValueEqual(HeroLevel.MAX_LEVEL, 200, "höchste Heldenstufe (seit 0.77)");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.LEGEND_LEVEL), 1_171_566, "Heldenerfahrung für Stufe 100 (unverändert)");
+        helper.assertValueEqual(HeroLevel.total(101) - HeroLevel.total(100), 25_295 + HeroLevel.LATE_GROWTH, "Stufe 101: sanft weiter");
+        helper.assertValueEqual(HeroLevel.total(HeroLevel.MAX_LEVEL), 4_307_066, "Heldenerfahrung für Stufe 200");
         helper.assertTrue(HeroLevel.total(51) - HeroLevel.total(50) > 10_000, "eine Stufe um 50 ist zu schnell erreicht");
         // seit 0.61: alte Spielstände behalten Stufe und Fortschritt, nur der weitere Weg wird länger
-        for (int level = 1; level < HeroLevel.MAX_LEVEL; level += 7) {
+        for (int level = 1; level < HeroLevel.LEGEND_LEVEL; level += 7) {
             int old = 40 * (level - 1) * (level - 1);
             int half = old + (40 * level * level - old) / 2;
             helper.assertValueEqual(HeroLevel.levelFor(HeroLevel.migrate(old)), level, "Stufe nach dem Umrechnen (Stufe " + level + ")");
@@ -320,7 +328,7 @@ final class HeroGameTests {
             float progress = HeroLevel.progress(HeroLevel.migrate(half));
             helper.assertTrue(progress > 0.45f && progress < 0.55f, "Fortschritt nach dem Umrechnen: " + progress);
         }
-        helper.assertValueEqual(HeroLevel.migrate(392_040), HeroLevel.total(HeroLevel.MAX_LEVEL), "Legende bleibt Legende");
+        helper.assertValueEqual(HeroLevel.migrate(392_040), HeroLevel.total(HeroLevel.LEGEND_LEVEL), "Legende bleibt Legende");
         net.minecraft.nbt.CompoundTag legacyTag = new net.minecraft.nbt.CompoundTag();
         legacyTag.putInt("experience", 3240);
         legacyTag.putInt("discoveries", 4);
@@ -338,16 +346,24 @@ final class HeroGameTests {
         helper.assertValueEqual(HeroLevel.Rank.of(79), HeroLevel.Rank.HERO, "Rang auf Stufe 79");
         helper.assertValueEqual(HeroLevel.Rank.of(99), HeroLevel.Rank.WARLORD, "Rang auf Stufe 99");
         helper.assertValueEqual(HeroLevel.Rank.of(100), HeroLevel.Rank.LEGEND, "Rang auf Stufe 100");
+        helper.assertValueEqual(HeroLevel.Rank.of(119), HeroLevel.Rank.LEGEND, "Rang auf Stufe 119");
+        helper.assertValueEqual(HeroLevel.Rank.of(120), HeroLevel.Rank.MYTH, "Rang auf Stufe 120");
+        helper.assertValueEqual(HeroLevel.Rank.of(140), HeroLevel.Rank.DEMIGOD, "Rang auf Stufe 140");
+        helper.assertValueEqual(HeroLevel.Rank.of(160), HeroLevel.Rank.TITAN, "Rang auf Stufe 160");
+        helper.assertValueEqual(HeroLevel.Rank.of(199), HeroLevel.Rank.STARWALKER, "Rang auf Stufe 199");
+        helper.assertValueEqual(HeroLevel.Rank.of(200), HeroLevel.Rank.IMMORTAL, "Rang auf Stufe 200");
+        helper.assertTrue(HeroLevel.Rank.IMMORTAL.next() == null, "nach dem Unsterblichen kommt kein Rang mehr");
         helper.assertValueEqual(HeroLevel.pointsFor(19), 18, "Talentpunkte auf Stufe 19");
         helper.assertValueEqual(HeroLevel.pointsFor(20), 19 + HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 20 (mit Rangbonus)");
         helper.assertValueEqual(HeroLevel.pointsFor(100), 99 + 5 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 100");
+        helper.assertValueEqual(HeroLevel.pointsFor(200), 199 + 10 * HeroLevel.RANK_BONUS, "Talentpunkte auf Stufe 200");
         helper.assertTrue(HeroLevel.pointsFor(HeroLevel.MAX_LEVEL) < HeroLevel.Talent.values().length * HeroLevel.MAX_TALENT,
                 "mit allen Punkten ließe sich jedes Talent meistern");
         helper.succeed();
     }
 
     /**
-     * Talente: Punkte gibt es nur, so viele die Stufe hergibt, höchstens zwanzig je Talent; jeder Punkt wirkt sofort (Schaden,
+     * Talente: Punkte gibt es nur, so viele die Stufe hergibt, höchstens vierzig je Talent; jeder Punkt wirkt sofort (Schaden,
      * Leben, Tempo, Rüstung, Mana, Glück). Neu verteilen kostet eine Silbermünze je Punkt – ohne Geld geht es nicht.
      * Die Erfahrung von Minecraft bleibt dabei unberührt.
      */
@@ -372,25 +388,31 @@ final class HeroGameTests {
                 helper.assertTrue(HeroLevel.spend(player, talent), "Punkt für " + talent + " geht nicht");
             }
             helper.assertTrue(!HeroLevel.spend(player, HeroLevel.Talent.STRENGTH), "mehr Punkte als die Stufe hergibt");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3)) < 1.0e-6, "Stärke");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0)) < 1.0e-6, "Lebenskraft");
+            double might = HeroLevel.levelDamage(7);
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 0.3 + might)) < 1.0e-6, "Stärke");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + 1.0 + HeroLevel.levelHealth(7))) < 1.0e-6,
+                    "Lebenskraft");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.0125) < 1.0e-6, "Gewandtheit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR) - (armor + 0.4)) < 1.0e-6, "Zähigkeit");
             helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.LUCK) - (luck + 0.2)) < 1.0e-6, "Glück");
-            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f)) < 1.0e-3f, "Zauberkunst");
-            // höchstens zwanzig Punkte je Talent
-            HeroLevel.award(player, HeroLevel.total(30));
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 8.0f + HeroLevel.levelMana(7))) < 1.0e-3f, "Zauberkunst");
+            // höchstens vierzig Punkte je Talent (seit 0.77; die zweiten zwanzig sind die Meisterschaft)
+            HeroLevel.award(player, HeroLevel.total(60));
             int spent = 0;
             while (HeroLevel.spend(player, HeroLevel.Talent.STRENGTH)) {
                 spent++;
             }
             helper.assertValueEqual(HeroLevel.of(player).points(HeroLevel.Talent.STRENGTH), HeroLevel.MAX_TALENT, "Stärke voll");
             helper.assertValueEqual(spent, HeroLevel.MAX_TALENT - 1, "Punkte bis zum vollen Talent");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 6.0)) < 1.0e-6, "Stärke gemeistert");
+            double mightNow = HeroLevel.levelDamage(HeroLevel.of(player).level());
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 12.0 + mightNow)) < 1.0e-6,
+                    "Stärke gemeistert: " + player.getAttributeValue(Attributes.ATTACK_DAMAGE));
             // die Werte kommen nach dem Wiedereinstieg zurück
             player.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(KingdomsAtWar.id("hero_strength"));
+            player.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(KingdomsAtWar.id("hero_level_damage"));
             HeroLevel.apply(player);
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 6.0)) < 1.0e-6, "Stärke nach dem Wiedereinstieg");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 12.0 + mightNow)) < 1.0e-6,
+                    "Stärke nach dem Wiedereinstieg");
             // neu verteilen: erst ohne, dann mit Geld
             int cost = HeroLevel.resetCost(HeroLevel.of(player));
             helper.assertValueEqual(cost, HeroLevel.of(player).spent() * HeroLevel.RESET_PER_POINT, "Preis des Neuverteilens");
@@ -401,8 +423,10 @@ final class HeroGameTests {
             helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player), before - cost, "Münzen nach dem Neuverteilen");
             HeroLevel.Hero hero = HeroLevel.of(player);
             helper.assertTrue(hero.spent() == 0 && hero.unspent() == HeroLevel.pointsFor(hero.level()), "nach dem Neuverteilen sind alle Punkte frei");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - damage) < 1.0e-6, "Stärke nach dem Neuverteilen");
-            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - health) < 1.0e-6, "Leben nach dem Neuverteilen");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + mightNow)) < 1.0e-6,
+                    "Stärke nach dem Neuverteilen (die Heldenkraft bleibt)");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MAX_HEALTH) - (health + HeroLevel.levelHealth(hero.level()))) < 1.0e-6,
+                    "Leben nach dem Neuverteilen (die Heldenkraft bleibt)");
             helper.assertValueEqual(player.totalExperience, vanilla, "die Minecraft-Erfahrung darf sich nicht ändern");
             HeroLevel.set(player, HeroLevel.Hero.NONE);
             helper.succeed();
@@ -660,5 +684,112 @@ final class HeroGameTests {
             }
         }
         return found;
+    }
+
+    /**
+     * Heldenkraft und Meisterschaft (seit 0.77): Auf Stufe 150 hat der Held von selbst 14 Herzen, knapp sechs Schaden, 298
+     * Mana und 5 Rüstungshärte mehr; in der Meisterschaft gibt die Gewandtheit weniger, die Zähigkeit dazu Härte.
+     */
+    private static void might(GameTestHelper helper) {
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            player.getInventory().clearContent();
+            Crystals.set(player, Crystals.Count.NONE);
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            double damage = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+            double toughness = player.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+            double speed = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
+            float mana = Mana.maxFor(player);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(150), List.of(), 0));
+            helper.assertValueEqual(HeroLevel.of(player).level(), 150, "Stufe");
+            helper.assertTrue(near(player.getMaxHealth(), 20.0f + 28.0f), "Heldenkraft: 14 Herzen mehr auf Stufe 150: " + player.getMaxHealth());
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ATTACK_DAMAGE) - (damage + 149 * HeroLevel.LEVEL_DAMAGE)) < 1.0e-6,
+                    "Heldenkraft: Schaden");
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS) - (toughness + 5.0)) < 1.0e-6, "Heldenkraft: Härte");
+            helper.assertTrue(Math.abs(Mana.maxFor(player) - (mana + 298.0f)) < 1.0e-3f, "Heldenkraft: Mana " + Mana.maxFor(player));
+            helper.assertTrue(Math.abs(HeroLevel.manaRegenFactor(player) - (1.0f + 149 * HeroLevel.LEVEL_REGEN)) < 1.0e-4f, "Heldenkraft: Erholung");
+            // Meisterschaft: Gewandtheit 30 Punkte = 25 % + 10 · 0,5 %; Zähigkeit 30 Punkte = 12 Rüstung und 2,5 Härte
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(150), List.of(0, 0, 30, 30, 0, 0), 0));
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.MOVEMENT_SPEED) - speed * 1.30) < 1.0e-6,
+                    "Gewandtheit in der Meisterschaft: " + player.getAttributeValue(Attributes.MOVEMENT_SPEED) / speed);
+            helper.assertTrue(Math.abs(player.getAttributeValue(Attributes.ARMOR_TOUGHNESS) - (toughness + 5.0 + 2.5)) < 1.0e-6,
+                    "Zähigkeit in der Meisterschaft: Härte");
+            helper.assertTrue(Math.abs(HeroLevel.Talent.TOUGHNESS.value(30) - 12.0) < 1.0e-9, "Zähigkeit: Rüstung");
+            helper.assertValueEqual(HeroLevel.of(player).points(HeroLevel.Talent.AGILITY), 30, "Punkte über zwanzig bleiben");
+            // ein Aufstieg bringt die Heldenkraft sofort (und füllt das neue Herz)
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(161) - 10, List.of(), 0));
+            player.setHealth(player.getMaxHealth());
+            float before = player.getMaxHealth();
+            HeroLevel.award(player, 20);
+            helper.assertValueEqual(HeroLevel.of(player).level(), 161, "Aufstieg auf 161");
+            helper.assertTrue(near(player.getMaxHealth(), before + 2.0f) && near(player.getHealth(), player.getMaxHealth()),
+                    "Stufe 161 bringt ein Herz (gleich gefüllt): " + before + " → " + player.getMaxHealth() + ", " + player.getHealth());
+            HeroLevel.set(player, HeroLevel.Hero.NONE);
+            helper.succeed();
+        } finally {
+            level(helper).getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /**
+     * Das Licht der Unsterblichkeit: Auf Stufe 199 hilft es nicht; als Unsterblicher (200) übersteht man einen tödlichen
+     * Treffer einmal (halbe Herzen, Regeneration), danach ruht es – der nächste tödliche Treffer tötet. Ein echtes Totem
+     * wirkt zuerst (das Licht bleibt bereit).
+     */
+    private static void immortal(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // Stufe 199: kein Licht
+        ServerPlayer mortal = MageGameTests.survivalPlayer(helper, "test-hero-mortal", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        try {
+            vulnerable(mortal);
+            HeroLevel.set(mortal, new HeroLevel.Hero(HeroLevel.total(199), List.of(), 0));
+            mortal.setHealth(mortal.getMaxHealth());
+            mortal.hurtServer(level, level.damageSources().generic(), 10_000.0f);
+            helper.assertTrue(mortal.isDeadOrDying(), "Auf Stufe 199 sollte das Licht nicht helfen");
+        } finally {
+            level.getServer().getPlayerList().remove(mortal);
+        }
+        ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-hero-immortal", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        try {
+            vulnerable(player);
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(200), List.of(), 0));
+            helper.assertValueEqual(HeroLevel.of(player).rank(), HeroLevel.Rank.IMMORTAL, "Rang auf Stufe 200");
+            player.setHealth(player.getMaxHealth());
+            // zuerst hilft ein Totem in der Hand
+            player.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(net.minecraft.world.item.Items.TOTEM_OF_UNDYING));
+            player.hurtServer(level, level.damageSources().generic(), 10_000.0f);
+            helper.assertTrue(player.isAlive() && !player.isDeadOrDying() && player.getOffhandItem().isEmpty(),
+                    "Das Totem wirkt nicht zuerst: " + player.getHealth() + ", " + player.getOffhandItem());
+            helper.assertTrue(HeroLevel.immortalCooldown(player) == 0L, "Nach dem Totem sollte das Licht noch bereit sein");
+            // dann das Licht
+            player.setHealth(player.getMaxHealth());
+            player.damageCooldownTime = 0;
+            player.hurtServer(level, level.damageSources().generic(), 10_000.0f);
+            helper.assertTrue(player.isAlive() && player.getHealth() >= player.getMaxHealth() * 0.5f - 0.01f,
+                    "Das Licht bewahrt nicht vor dem Tod: " + player.getHealth());
+            helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.REGENERATION), "Keine Regeneration nach dem Licht");
+            helper.assertTrue(HeroLevel.immortalCooldown(player) > 0L, "Das Licht ruht nicht: zuletzt "
+                    + player.getData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL) + ", jetzt " + level.getGameTime()
+                    + ", Leben " + player.getHealth() + "/" + player.getMaxHealth() + ", Wirkungen " + player.getActiveEffects());
+            // es ruht: der nächste tödliche Treffer tötet
+            player.damageCooldownTime = 0;
+            player.removeAllEffects();
+            player.setAbsorptionAmount(0.0f);
+            player.hurtServer(level, level.damageSources().generic(), 10_000.0f);
+            helper.assertTrue(player.isDeadOrDying(), "Ein zweites Mal sollte das Licht nicht gleich helfen");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
+    }
+
+    /** Ein Testspieler, der Schaden nimmt (im Spiel angekommen, nicht unverwundbar, keine Kreativkräfte). */
+    private static void vulnerable(ServerPlayer player) {
+        player.connection.markClientLoaded();
+        player.getAbilities().invulnerable = false;
+        player.getAbilities().instabuild = false;
+        player.damageCooldownTime = 0;
+        player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL, -1L);
     }
 }

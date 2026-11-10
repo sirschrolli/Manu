@@ -15,10 +15,10 @@ final class HeroLang {
         // --- Herz- und Manakristalle ---
         text.add("item.kingdomsatwar.heart_crystal", "Heart Crystal", "Herzkristall");
         text.add(ModItems.loreKey("heart_crystal", 1), "Right-click: one more heart, for good", "Rechtsklick: ein Herz mehr, für immer");
-        text.add(ModItems.loreKey("heart_crystal", 2), "Grows rarely in caves – at most 10", "Wächst selten in Höhlen – höchstens 10");
+        text.add(ModItems.loreKey("heart_crystal", 2), "Grows rarely in caves – at most 25", "Wächst selten in Höhlen – höchstens 25");
         text.add("item.kingdomsatwar.mana_crystal", "Mana Crystal", "Manakristall");
         text.add(ModItems.loreKey("mana_crystal", 1), "Right-click: 20 more mana, for good", "Rechtsklick: 20 Mana mehr, für immer");
-        text.add(ModItems.loreKey("mana_crystal", 2), "Grows rarely deep in caves – at most 10", "Wächst selten tief in Höhlen – höchstens 10");
+        text.add(ModItems.loreKey("mana_crystal", 2), "Grows rarely deep in caves – at most 25", "Wächst selten tief in Höhlen – höchstens 25");
         text.add("block.kingdomsatwar.heart_crystal_formation", "Heart Crystal", "Herzkristall");
         text.add("block.kingdomsatwar.mana_crystal_formation", "Mana Crystal", "Manakristall");
         text.add("message.kingdomsatwar.crystal.heart.absorbed", "❤ One more heart! Now %1$s hearts (%2$s/%3$s heart crystals)",
@@ -33,7 +33,7 @@ final class HeroLang {
 
         // --- Heldenstufe und Talente ---
         text.add("key.category.kingdomsatwar.hero", "Kingdoms at War: Hero", "Kingdoms at War: Held");
-        text.add("key.kingdomsatwar.character", "Path to Legend & character", "Weg zur Legende & Charakter");
+        text.add("key.kingdomsatwar.character", "Hero's path & character", "Heldenweg & Charakter");
         text.add("key.kingdomsatwar.pat", "Pat (Legend reward)", "Streicheln (Belohnung der Legende)");
         text.add("gui.kingdomsatwar.character.title", "Character", "Charakter");
         text.add("gui.kingdomsatwar.character.level", "Hero Level %s", "Heldenstufe %s");
@@ -45,19 +45,36 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.rank.bonus", "+%s talent points on reaching it", "+%s Talentpunkte, wenn du ihn erreichst");
         text.add("gui.kingdomsatwar.character.rank.reward", "Reward: pat any creature (Sneak + right-click or %s)",
                 "Belohnung: jedes Wesen streicheln (Schleichen + Rechtsklick oder %s)");
+        text.add("gui.kingdomsatwar.character.rank.reward.immortal", "Reward: once every %s minutes the light saves you from death",
+                "Belohnung: Einmal alle %s Minuten bewahrt dich das Licht vor dem Tod");
         text.add("gui.kingdomsatwar.character.rank.reached", "Reached", "Erreicht");
         text.add("gui.kingdomsatwar.character.rank.ahead", "Still ahead of you", "Liegt noch vor dir");
         text.add("gui.kingdomsatwar.character.talent.max", "At %s points: %s", "Mit %s Punkten: %s");
+        text.add("gui.kingdomsatwar.character.talent.mastery", "Mastery: points %s to %s glow golden", "Meisterschaft: die Punkte %s bis %s leuchten golden");
+        text.add("gui.kingdomsatwar.character.might", "Hero's might", "Heldenkraft");
+        text.add("gui.kingdomsatwar.character.might.hint", "Grows by itself with every hero level – no talent points needed.",
+                "Wächst mit jeder Heldenstufe von selbst – ohne Talentpunkte.");
+        text.add("gui.kingdomsatwar.character.might.health", "+%s hearts (one every 10 levels)", "+%s Herzen (eins alle 10 Stufen)");
+        text.add("gui.kingdomsatwar.character.might.damage", "+%s damage", "+%s Schaden");
+        text.add("gui.kingdomsatwar.character.might.mana", "+%s mana · recovers %s %% faster", "+%s Mana · erholt sich %s %% schneller");
+        text.add("gui.kingdomsatwar.character.might.toughness", "+%s armour toughness (one every 25 levels)",
+                "+%s Rüstungshärte (eins alle 25 Stufen)");
+        text.add("gui.kingdomsatwar.character.might.next", "Next heart at hero level %s", "Nächstes Herz auf Heldenstufe %s");
+        text.add("gui.kingdomsatwar.character.immortal.ready", "Light of immortality: ready", "Licht der Unsterblichkeit: bereit");
+        text.add("gui.kingdomsatwar.character.immortal.rest", "Light of immortality: rests for %s more minutes",
+                "Licht der Unsterblichkeit: ruht noch %s Minuten");
         text.add("gui.kingdomsatwar.character.sources.title", "Hero experience", "Heldenerfahrung");
         text.add("gui.kingdomsatwar.character.sources",
                 "You gain it for defeated monsters and bosses (a quarter also for those your soldiers and dragons defeat), for ore you "
                         + "mine, for advancements, for every biome you set foot in for the first time and for every castle you conquer. "
-                        + "Every level brings a talent point, every new rank two more. Hero level 100 – the Legend – takes about 1.17 million "
-                        + "hero experience. Minecraft's own experience stays exactly as it is.",
+                        + "Every level brings a talent point, every new rank two more, and every level makes you stronger by itself (hero's "
+                        + "might). Hero level 100 – the Legend – takes about 1.17 million hero experience, hero level 200 – the Immortal – "
+                        + "about 4.3 million. Minecraft's own experience stays exactly as it is.",
                 "Es gibt sie für besiegte Monster und Bosse (ein Viertel auch für die, die deine Soldaten und Drachen besiegen), für Erz, "
                         + "das du abbaust, für Fortschritte, für jedes Biom, das du zum ersten Mal betrittst, und für jede eroberte Burg. "
-                        + "Jede Stufe bringt einen Talentpunkt, jeder neue Rang zwei dazu. Heldenstufe 100 – die Legende – braucht rund 1,17 "
-                        + "Millionen Heldenerfahrung. Die Erfahrung von Minecraft bleibt genau, wie sie ist.");
+                        + "Jede Stufe bringt einen Talentpunkt, jeder neue Rang zwei dazu, und jede Stufe macht von selbst stärker (Heldenkraft). "
+                        + "Heldenstufe 100 – die Legende – braucht rund 1,17 Millionen Heldenerfahrung, Heldenstufe 200 – der Unsterbliche – rund "
+                        + "4,3 Millionen. Die Erfahrung von Minecraft bleibt genau, wie sie ist.");
         text.add("gui.kingdomsatwar.character.points", "Talent points: %s", "Talentpunkte: %s");
         text.add("gui.kingdomsatwar.character.points.none", "All talent points spent", "Alle Talentpunkte verteilt");
         text.add("gui.kingdomsatwar.character.talent.spend", "Click: spend a point", "Klick: einen Punkt verteilen");
@@ -69,11 +86,12 @@ final class HeroLang {
         text.add("gui.kingdomsatwar.character.reset.none", "No points spent yet", "Noch keine Punkte verteilt");
         text.add("gui.kingdomsatwar.character.done", "Done", "Fertig");
         text.add("gui.kingdomsatwar.character.path", "Path", "Zum Weg");
-        text.add("gui.kingdomsatwar.path.title", "The Path to Legend", "Der Weg zur Legende");
+        text.add("gui.kingdomsatwar.path.title", "The Hero's Path", "Der Heldenweg");
         text.add("gui.kingdomsatwar.path.talents", "Talents & values", "Talente & Werte");
         text.add("gui.kingdomsatwar.path.total", "%s %% of the path · %s / %s hero experience", "%s %% des Weges · %s / %s Heldenerfahrung");
         text.add("gui.kingdomsatwar.path.reward.points", "+%s talent points", "+%s Talentpunkte");
         text.add("gui.kingdomsatwar.path.reward.pat", "Reward: patting", "Belohnung: Streicheln");
+        text.add("gui.kingdomsatwar.path.reward.immortal", "Reward: immortality", "Belohnung: Unsterblichkeit");
         text.add("gui.kingdomsatwar.path.hint", "Mouse wheel, drag or arrow keys: along the path · click here: jump",
                 "Mausrad, Ziehen oder Pfeiltasten: den Weg entlang · hier klicken: dorthin springen");
         text.add("gui.kingdomsatwar.path.needs", "From %s hero experience", "Ab %s Heldenerfahrung");
@@ -91,6 +109,22 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.level_up.points", "+%s talent points – press %s", "+%s Talentpunkte – drücke %s");
         text.add("hero.kingdomsatwar.level_up.reward", "Reward unlocked: patting – Sneak + right-click or %s",
                 "Belohnung freigeschaltet: Streicheln – Schleichen + Rechtsklick oder %s");
+        text.add("hero.kingdomsatwar.level_up.reward.immortal", "Reward unlocked: the light of immortality",
+                "Belohnung freigeschaltet: das Licht der Unsterblichkeit");
+        text.add("hero.kingdomsatwar.level_up.might", "Hero's might: %s", "Heldenkraft: %s");
+        text.add("hero.kingdomsatwar.might.heart", "+%s heart", "+%s Herz");
+        text.add("hero.kingdomsatwar.might.hearts", "+%s hearts", "+%s Herzen");
+        text.add("hero.kingdomsatwar.might.damage", "+%s damage", "+%s Schaden");
+        text.add("hero.kingdomsatwar.might.mana", "+%s mana", "+%s Mana");
+        text.add("hero.kingdomsatwar.might.toughness", "+%s toughness", "+%s Härte");
+        text.add("hero.kingdomsatwar.reward.immortal", "You are Immortal! Once every %s minutes the light saves you from death – "
+                + "like a totem, when no totem helps any more.", "Du bist unsterblich! Einmal alle %s Minuten bewahrt dich das Licht vor dem "
+                + "Tod – wie ein Totem, wenn kein Totem mehr hilft.");
+        text.add("hero.kingdomsatwar.immortal.title", "The Light of Immortality", "Das Licht der Unsterblichkeit");
+        text.add("hero.kingdomsatwar.immortal.subtitle", "You rise again – now the light rests for %s minutes",
+                "Du stehst wieder auf – nun ruht das Licht %s Minuten");
+        text.add("hero.kingdomsatwar.immortal.saved", "✦ The light of immortality saves you – now it rests for %s minutes",
+                "✦ Das Licht der Unsterblichkeit bewahrt dich – nun ruht es %s Minuten");
         text.add("hero.kingdomsatwar.rank_up", "New rank: %s – %s extra talent points!", "Neuer Rang: %s – %s Talentpunkte extra!");
         text.add("hero.kingdomsatwar.reward.pat",
                 "You are a Legend! Sneak and right-click any creature with an empty hand (or press %s) to pat it – hold to keep patting. "
@@ -109,6 +143,11 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.rank.hero", "Hero", "Held");
         text.add("hero.kingdomsatwar.rank.warlord", "Warlord", "Kriegsherr");
         text.add("hero.kingdomsatwar.rank.legend", "Legend", "Legende");
+        text.add("hero.kingdomsatwar.rank.myth", "Myth", "Mythos");
+        text.add("hero.kingdomsatwar.rank.demigod", "Demigod", "Halbgott");
+        text.add("hero.kingdomsatwar.rank.titan", "Titan", "Titan");
+        text.add("hero.kingdomsatwar.rank.starwalker", "Starwalker", "Sternenwanderer");
+        text.add("hero.kingdomsatwar.rank.immortal", "Immortal", "Unsterblicher");
         text.add("hero.kingdomsatwar.discovered", "New biome discovered: %s", "Neues Biom entdeckt: %s");
         text.add("hud.kingdomsatwar.hero.gained", "+%s hero experience", "+%s Heldenerfahrung");
         text.add("hud.kingdomsatwar.hero.plus", "+%s", "+%s");
@@ -119,11 +158,13 @@ final class HeroLang {
         talent(text, "strength", "Strength", "Stärke", "+%s damage", "+%s Schaden",
                 "+0.3 damage per point with every blow", "+0,3 Schaden je Punkt bei jedem Schlag");
         talent(text, "vitality", "Vitality", "Lebenskraft", "+%s health", "+%s Leben",
-                "+1 health per point (twenty points: ten hearts)", "+1 Leben je Punkt (zwanzig Punkte: zehn Herzen)");
+                "+1 health per point – a heart for every two", "+1 Leben je Punkt – ein Herz für je zwei");
         talent(text, "agility", "Agility", "Gewandtheit", "+%s %% speed", "+%s %% Tempo",
-                "+1.25 % walking speed per point", "+1,25 % Lauftempo je Punkt");
+                "+1.25 % walking speed per point, +0.5 % in mastery", "+1,25 % Lauftempo je Punkt, in der Meisterschaft +0,5 %");
         talent(text, "toughness", "Toughness", "Zähigkeit", "+%s armour", "+%s Rüstung",
-                "+0.4 armour per point", "+0,4 Rüstung je Punkt");
+                "+0.4 armour per point, in mastery also +0.25 armour toughness", "+0,4 Rüstung je Punkt, in der Meisterschaft dazu +0,25 Rüstungshärte");
+        text.add("hero.kingdomsatwar.talent.toughness.effect_mastery", "+%s armour · +%s toughness", "+%s Rüstung · +%s Härte");
+        text.add("hero.kingdomsatwar.talent.toughness.effect_hard", "+%s toughness", "+%s Rüstungshärte");
         talent(text, "arcana", "Arcana", "Zauberkunst", "+%s mana", "+%s Mana",
                 "+8 mana and 4 % faster mana recovery per point", "+8 Mana und 4 % schnellere Erholung des Manas je Punkt");
         talent(text, "fortune", "Fortune", "Glück", "+%s luck", "+%s Glück",

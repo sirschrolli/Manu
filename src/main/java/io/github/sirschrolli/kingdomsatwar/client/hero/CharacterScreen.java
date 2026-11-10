@@ -34,10 +34,12 @@ import org.jspecify.annotations.Nullable;
  * <ul>
  *   <li>links der Held selbst (er folgt der Maus), sein Rang, seine Werte (Leben, Mana, Rüstung, Schaden), was er gefunden
  *       hat (Herz- und Manakristalle, Biome) und die Knöpfe;</li>
- *   <li>rechts oben das Rangabzeichen mit der Stufe (Strahlen drehen sich dahinter), die Leiste der Heldenerfahrung (sie
- *       füllt sich beim Öffnen) und der Weg zur Legende: die sechs Ränge auf einer Linie, der nächste leuchtet;</li>
+ *   <li>rechts oben das Rangabzeichen mit der Stufe (Strahlen drehen sich dahinter; darüber verrät ein Hinweis die
+ *       Heldenkraft und das Licht der Unsterblichkeit), die Leiste der Heldenerfahrung (sie füllt sich beim Öffnen) und der
+ *       Heldenweg: die elf Ränge auf einer Linie, der nächste leuchtet;</li>
  *   <li>darunter die sechs Talente als Karten: Bild, Name, was die Punkte bringen, zwanzig Kästchen in der Farbe des Talents
- *       und ein goldener Plus-Knopf, der pulsiert, solange Punkte frei sind. Ein neuer Punkt blitzt auf und sprüht Funken.</li>
+ *       (in der Meisterschaft, ab Punkt 21, werden sie nacheinander golden) und ein goldener Plus-Knopf, der pulsiert,
+ *       solange Punkte frei sind. Ein neuer Punkt blitzt auf und sprüht Funken.</li>
  * </ul>
  * Im Hintergrund steigen langsam Glutfunken auf.
  */
@@ -210,8 +212,13 @@ public class CharacterScreen extends Screen {
             HeroGui.light(g, HeroGui.GLOW, sx + 3.5f, y0 + CARD_Y - 7.5f, 18.0f, 0.0f, HeroGui.GOLD, 0.3f + 0.4f * pulse);
             g.text(this.font, "★", sx, y0 + CARD_Y - 11, ARGB.color(Math.round(170 + 85 * pulse), 0xFFE7A0), false);
         }
+        // klein und rechtsbündig, damit auch "Talentpunkte: 219" mit dem Stern daneben Platz hat
         Component spent = Component.translatable("gui.kingdomsatwar.character.spent", hero.spent(), hero.earned());
-        g.text(this.font, spent, rx + rw - this.font.width(spent) - 2, y0 + CARD_Y - 11, HeroGui.MUTED, false);
+        g.pose().pushMatrix();
+        g.pose().translate(rx + rw - 2, y0 + CARD_Y - 9);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(this.font, spent, -this.font.width(spent), 0, HeroGui.MUTED, false);
+        g.pose().popMatrix();
         for (HeroLevel.Talent talent : HeroLevel.Talent.values()) {
             this.drawTalent(g, hero, talent, rx, y0 + CARD_Y + talent.ordinal() * (CARD_H + CARD_GAP), rw, mouseX, mouseY);
         }
@@ -248,6 +255,9 @@ public class CharacterScreen extends Screen {
         g.pose().scale(0.75f, 0.75f);
         g.text(this.font, numbers, -this.font.width(numbers), 0, HeroGui.MUTED, false);
         g.pose().popMatrix();
+        if (mouseX >= x && mouseX < tx + bw && mouseY >= y && mouseY < y + 27) {
+            g.setTooltipForNextFrame(this.font, this.lines(this.mightLines(player, hero)), mouseX, mouseY);
+        }
         if (mouseX >= tx && mouseX < tx + bw && mouseY >= y + 27 && mouseY < y + 48) {
             List<Component> lines = new ArrayList<>();
             lines.add(Component.translatable("gui.kingdomsatwar.character.sources.title").withStyle(ChatFormatting.GOLD));
@@ -260,7 +270,7 @@ public class CharacterScreen extends Screen {
         }
     }
 
-    /** Der Weg zur Legende: sechs kleine Abzeichen auf einer Linie, erreichte golden, der nächste Rang leuchtet. */
+    /** Der Heldenweg: elf kleine Abzeichen auf einer Linie, erreichte golden, der nächste Rang leuchtet. */
     private void drawTrack(GuiGraphicsExtractor g, HeroLevel.Hero hero, int x, int y, int width, int mouseX, int mouseY) {
         HeroLevel.Rank[] ranks = HeroLevel.Rank.values();
         int level = hero.level();
@@ -316,6 +326,10 @@ public class CharacterScreen extends Screen {
                     lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward", Component.keybind("key.kingdomsatwar.pat"))
                             .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
+                if (rank == HeroLevel.Rank.IMMORTAL) {
+                    lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward.immortal", HeroLevel.IMMORTAL_MINUTES)
+                            .withStyle(ChatFormatting.GOLD));
+                }
                 lines.add(Component.translatable(got ? "gui.kingdomsatwar.character.rank.reached" : "gui.kingdomsatwar.character.rank.ahead")
                         .withStyle(got ? ChatFormatting.GOLD : ChatFormatting.DARK_GRAY));
                 g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
@@ -340,17 +354,49 @@ public class CharacterScreen extends Screen {
         int nx = x + 21;
         Component name = Component.translatable(talent.translationKey());
         HeroGui.text(g, this.font, name, nx, y + 2, points > 0 ? HeroGui.TEXT : HeroGui.MUTED);
-        Component effect = effect(talent, points);
-        g.text(this.font, effect, x + width - 20 - this.font.width(effect), y + 2, points > 0 ? color : HeroGui.MUTED, false);
-        // zwanzig Kästchen, nach je fünf ein Spalt
+        int ex = x + width - 20;
+        if (talent == HeroLevel.Talent.TOUGHNESS && points > HeroLevel.MASTERY) {
+            // Rüstung und Härte passen nicht zusammen in eine Zeile: sie wechseln sich sanft ab, die Härte der Meisterschaft golden
+            float phase = (HeroGui.seconds() % 7.0f) / 7.0f;
+            float hard = HeroGui.easeInOut(Mth.clamp(phase < 0.5f ? (phase - 0.42f) / 0.08f : (1.0f - phase) / 0.08f, 0.0f, 1.0f));
+            Component armor = Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points)));
+            Component toughness = Component.translatable(talent.translationKey() + ".effect_hard", HeroGui.decimal(HeroLevel.masteryToughness(points)));
+            if (hard < 0.98f) {
+                g.text(this.font, armor, ex - this.font.width(armor), y + 2, ARGB.color(Math.round(255 * (1.0f - hard)), color), false);
+            }
+            if (hard > 0.02f) {
+                g.text(this.font, toughness, ex - this.font.width(toughness), y + 2, ARGB.color(Math.round(255 * hard), HeroGui.GOLD), false);
+            }
+        } else {
+            Component effect = effect(talent, points);
+            g.text(this.font, effect, ex - this.font.width(effect), y + 2, points > 0 ? color : HeroGui.MUTED, false);
+        }
+        // zwanzig Kästchen, nach je fünf ein Spalt; in der Meisterschaft (ab Punkt 21) werden sie nacheinander golden
         long now = Util.getMillis();
         float flash = 1.0f - Mth.clamp((now - this.spentAt[talent.ordinal()]) / 600.0f, 0.0f, 1.0f);
         int py = y + 13;
-        for (int i = 0; i < HeroLevel.MAX_TALENT; i++) {
+        int mastered = Math.max(0, points - HeroLevel.MASTERY);
+        int newest = points > HeroLevel.MASTERY ? mastered - 1 : points - 1;
+        float shimmer = HeroGui.seconds();
+        for (int i = 0; i < HeroLevel.MASTERY; i++) {
             int px = nx + i * 4 + (i / 5) * 2;
-            if (i < points) {
+            if (i < mastered) {
+                // golden, mit einem Schimmer, der über die Meisterschaft wandert
+                float wave = 0.5f + 0.5f * Mth.sin(shimmer * 3.2f - i * 0.55f);
+                g.fillGradient(px, py, px + 3, py + 4, ARGB.srgbLerp(0.35f * wave, 0xFFFFE27A, 0xFFFFFFFF), 0xFFC07A18);
+                g.fill(px, py, px + 3, py + 1, ARGB.srgbLerp(0.5f + 0.5f * wave, 0xFFFFE7A0, 0xFFFFFFFF));
+                if (i == newest && flash > 0.0f) {
+                    g.fill(px - 1, py - 1, px + 4, py + 5, ARGB.color(Math.round(230 * flash), 255, 255, 255));
+                    HeroGui.light(g, HeroGui.GLOW, px + 1.5f, py + 2.0f, 30.0f, 0.0f, 0xFFFFD27A, flash);
+                    for (int k = 0; k < 4; k++) {
+                        float rise = 1.0f - flash;
+                        HeroGui.light(g, HeroGui.SPARKLE, px + 1.5f + (k - 1.5f) * 5.0f * rise, py - 11.0f * rise - k * 2.0f, 8.0f, rise * 3.0f,
+                                0xFFFFE7A0, flash);
+                    }
+                }
+            } else if (i < points) {
                 g.fillGradient(px, py, px + 3, py + 4, ARGB.srgbLerp(0.4f, color, 0xFFFFFFFF), ARGB.srgbLerp(0.25f, color, 0xFF000000));
-                if (i == points - 1 && flash > 0.0f) {
+                if (i == newest && flash > 0.0f) {
                     g.fill(px - 1, py - 1, px + 4, py + 5, ARGB.color(Math.round(230 * flash), 255, 255, 255));
                     HeroGui.light(g, HeroGui.GLOW, px + 1.5f, py + 2.0f, 26.0f, 0.0f, color, flash);
                     for (int k = 0; k < 3; k++) {
@@ -375,14 +421,48 @@ public class CharacterScreen extends Screen {
                     Component.translatable(talent.translationKey()).withColor(color & 0xFFFFFF)
                             .append(Component.literal("  " + points + "/" + HeroLevel.MAX_TALENT).withStyle(ChatFormatting.YELLOW)),
                     Component.translatable(talent.translationKey() + ".desc").withStyle(ChatFormatting.GRAY),
-                    Component.translatable("gui.kingdomsatwar.character.talent.max", effect(talent, HeroLevel.MAX_TALENT)).withStyle(ChatFormatting.DARK_GRAY))),
+                    Component.translatable("gui.kingdomsatwar.character.talent.mastery", HeroLevel.MASTERY + 1, HeroLevel.MAX_TALENT)
+                            .withStyle(ChatFormatting.GOLD),
+                    Component.translatable("gui.kingdomsatwar.character.talent.max", HeroLevel.MAX_TALENT, effect(talent, HeroLevel.MAX_TALENT))
+                            .withStyle(ChatFormatting.DARK_GRAY))),
                     mouseX, mouseY);
         }
     }
 
-    /** Was die Punkte eines Talents zusammen bringen ("+1,5 Schaden"). */
+    /** Was die Punkte eines Talents zusammen bringen ("+1,5 Schaden"; die Zähigkeit in der Meisterschaft auch die Härte). */
     static Component effect(HeroLevel.Talent talent, int points) {
+        if (talent == HeroLevel.Talent.TOUGHNESS && points > HeroLevel.MASTERY) {
+            return Component.translatable(talent.translationKey() + ".effect_mastery", HeroGui.decimal(talent.value(points)),
+                    HeroGui.decimal(HeroLevel.masteryToughness(points)));
+        }
         return Component.translatable(talent.translationKey() + ".effect", HeroGui.decimal(talent.value(points)));
+    }
+
+    /** Die Heldenkraft dieser Stufe (und, für den Unsterblichen, ob das Licht bereit ist). */
+    private List<Component> mightLines(Player player, HeroLevel.Hero hero) {
+        int level = hero.level();
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might").withStyle(ChatFormatting.GOLD));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.hint").withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.health", HeroGui.decimal(HeroLevel.levelHealth(level) / 2.0))
+                .withStyle(ChatFormatting.RED));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.damage", HeroGui.decimal2(HeroLevel.levelDamage(level)))
+                .withStyle(ChatFormatting.YELLOW));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.mana", HeroLevel.levelMana(level),
+                Math.round(HeroLevel.levelRegen(level) * 100.0f)).withStyle(ChatFormatting.AQUA));
+        lines.add(Component.translatable("gui.kingdomsatwar.character.might.toughness", HeroGui.decimal(HeroLevel.levelToughness(level)))
+                .withStyle(ChatFormatting.WHITE));
+        if (level < HeroLevel.MAX_LEVEL) {
+            int next = ((level - 1) / HeroLevel.LEVELS_PER_HEART + 1) * HeroLevel.LEVELS_PER_HEART + 1;
+            lines.add(Component.translatable("gui.kingdomsatwar.character.might.next", Math.min(next, HeroLevel.MAX_LEVEL))
+                    .withStyle(ChatFormatting.DARK_GRAY));
+        }
+        if (level >= HeroLevel.MAX_LEVEL) {
+            long rest = HeroLevel.immortalCooldown(player);
+            lines.add(rest <= 0L ? Component.translatable("gui.kingdomsatwar.character.immortal.ready").withStyle(ChatFormatting.GOLD)
+                    : Component.translatable("gui.kingdomsatwar.character.immortal.rest", (rest + 1199L) / 1200L).withStyle(ChatFormatting.DARK_GRAY));
+        }
+        return lines;
     }
 
     /** Links unter dem Bild: Rang, Werte mit kleinen Bildern, dann Kristalle und Biome. */
@@ -402,9 +482,10 @@ public class CharacterScreen extends Screen {
         icon(g, new ItemStack(Items.IRON_SWORD), x + 45, sy + line - 1);
         HeroGui.text(g, this.font, Component.literal(HeroGui.decimal(damage(player, hero))), x + 57, sy + line + 1, HeroGui.TEXT);
         if (mouseX >= x && mouseX < x + w && mouseY >= sy && mouseY < sy + 2 * line) {
-            g.setTooltipForNextFrame(this.font, this.lines(List.of(Component.translatable("gui.kingdomsatwar.character.stats")
-                    .withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.stats.hint").withStyle(ChatFormatting.GRAY))),
-                    mouseX, mouseY);
+            List<Component> lines = new ArrayList<>(List.of(Component.translatable("gui.kingdomsatwar.character.stats")
+                    .withStyle(ChatFormatting.GOLD), Component.translatable("gui.kingdomsatwar.character.stats.hint").withStyle(ChatFormatting.GRAY)));
+            lines.addAll(this.mightLines(player, hero));
+            g.setTooltipForNextFrame(this.font, this.lines(lines), mouseX, mouseY);
         }
         // was er gefunden hat
         Crystals.Count crystals = Crystals.of(player);
@@ -431,7 +512,8 @@ public class CharacterScreen extends Screen {
      * Server), also hier selbst: Grundwert, Stärke und die Waffe in der Hand.
      */
     private static double damage(Player player, HeroLevel.Hero hero) {
-        double base = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + HeroLevel.Talent.STRENGTH.value(hero.points(HeroLevel.Talent.STRENGTH));
+        double base = player.getAttributeBaseValue(Attributes.ATTACK_DAMAGE) + HeroLevel.Talent.STRENGTH.value(hero.points(HeroLevel.Talent.STRENGTH))
+                + HeroLevel.levelDamage(hero.level());
         return player.getMainHandItem().getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS,
                 net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY).compute(Attributes.ATTACK_DAMAGE, base,
                 net.minecraft.world.entity.EquipmentSlot.MAINHAND);

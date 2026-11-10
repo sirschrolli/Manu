@@ -22,15 +22,15 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
  * Herz- und Manakristalle: Wer einen aufnimmt (Rechtsklick), hat für immer ein Herz mehr bzw. {@value #MANA_PER_CRYSTAL}
- * Mana mehr – höchstens {@value #MAX} von jeder Sorte, also zehn Herzen und 200 Mana mehr. Sie wachsen selten in Höhlen
+ * Mana mehr – höchstens {@value #MAX} von jeder Sorte (bis 0.76 zehn), also 25 Herzen und 500 Mana mehr. Sie wachsen selten in Höhlen
  * (siehe {@link io.github.sirschrolli.kingdomsatwar.worldgen.CrystalFormationFeature}), liegen in Schatztruhen, und jeder
  * Drachenboss hinterlässt einen Herzkristall, jeder Erzmagier einen Manakristall. Was aufgenommen ist, bleibt auch nach
  * dem Tod.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class Crystals {
-    /** So viele Kristalle jeder Sorte kann man aufnehmen. */
-    public static final int MAX = 10;
+    /** So viele Kristalle jeder Sorte kann man aufnehmen (bis 0.76: 10). */
+    public static final int MAX = 25;
     /** Lebenspunkte je Herzkristall (ein Herz). */
     public static final double HEALTH_PER_HEART = 2.0;
     /** Mana je Manakristall. */
@@ -83,7 +83,7 @@ public final class Crystals {
      * Nimmt einen Kristall auf: Ein Herzkristall gibt ein Herz mehr (und füllt es gleich), ein Manakristall 20 Mana mehr
      * (ebenso gleich gefüllt).
      *
-     * @return ob er aufgenommen wurde (nicht, wenn schon alle zehn dieser Sorte aufgenommen sind)
+     * @return ob er aufgenommen wurde (nicht, wenn schon alle dieser Sorte aufgenommen sind)
      */
     public static boolean absorb(ServerPlayer player, Kind kind) {
         Count count = of(player);

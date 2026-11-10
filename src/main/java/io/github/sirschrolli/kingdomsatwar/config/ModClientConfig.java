@@ -18,6 +18,8 @@ public final class ModClientConfig {
     public static final ModConfigSpec.BooleanValue BIOME_AMBIENCE;
     /** Wie laut die Klangwelten der Biome sind (Prozent). */
     public static final ModConfigSpec.IntValue BIOME_AMBIENCE_VOLUME;
+    /** Ab 21 Herzen die Lebensleiste als eine Reihe in farbigen Schichten zeigen (sonst stapelt Minecraft die Reihen). */
+    public static final ModConfigSpec.BooleanValue HERO_HEARTS;
 
     /** Aussehen der Spinnen. */
     public enum SpiderLook implements net.neoforged.neoforge.common.TranslatableEnum {
@@ -59,6 +61,11 @@ public final class ModClientConfig {
                         + " Toneinstellungen von Minecraft.")
                 .translation("kingdomsatwar.configuration.biomeAmbienceVolume")
                 .defineInRange("biomeAmbienceVolume", 60, 0, 100);
+        HERO_HEARTS = builder
+                .comment("Ab 21 Herzen zeigt die Lebensleiste eine einzige Reihe in farbigen Schichten (je zehn Herzen eine Farbe) und"
+                        + " daneben die Zahl der Herzen, statt die Herzen zu einer Wand aus Reihen zu stapeln.")
+                .translation("kingdomsatwar.configuration.heroHearts")
+                .define("heroHearts", true);
         SPEC = builder.build();
     }
 

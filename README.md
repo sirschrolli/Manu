@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.76 – Schrolli der Schöpfer greift zur Klinge.** Der Schöpfer kämpft nicht mehr nur aus der Luft: Immer wieder **landet** er – ein Warnkreis, der Einschlag, ein Ring rollt über den Hof (springen!) –, aus dem Licht seines Saums formen sich **Beine in goldenen Beinschienen**, und sein Zepter wird zur **Klinge aus Licht**. Am Boden schreitet er auf euch zu und ficht mit **sieben neuen Künsten**: **Klingenhieb** (schräge Schnitte, zuletzt ein Spaltschlag, der den Boden aufreißt), **Lichtsicheln** (über den Boden gleitend – springen!), **Sturmlauf** (eine goldene Linie zeigt den Weg), **Klingenwirbel**, **Himmelssturz** (danach steckt die Klinge im Boden – jetzt zuschlagen!), **Schwingenwehr** (er pariert alles von vorn und schlägt zurück – greift ihn von hinten an!) und in der Wahren Gestalt die **Weltenklinge**, die zu zwanzig Blöcken Länge wächst. Jeder Hieb zieht eine **Spur aus Licht**. Am Boden erreicht ihn jedes Schwert – leichte Hiebe fängt ein Schild ab, die goldenen nicht. Dazu **neue Klänge**: alle Klänge und die Musik des Schöpfers sind jetzt warm, tief und leiser – nichts gellt oder schrillt mehr.
+> **Testversion 0.77 – Der Weg zum Unsterblichen.** Der Held kann jetzt bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
+> In 0.76 griff **Schrolli der Schöpfer zur Klinge** – er kämpft nicht mehr nur aus der Luft: Immer wieder **landet** er – ein Warnkreis, der Einschlag, ein Ring rollt über den Hof (springen!) –, aus dem Licht seines Saums formen sich **Beine in goldenen Beinschienen**, und sein Zepter wird zur **Klinge aus Licht**. Am Boden schreitet er auf euch zu und ficht mit **sieben neuen Künsten**: **Klingenhieb** (schräge Schnitte, zuletzt ein Spaltschlag, der den Boden aufreißt), **Lichtsicheln** (über den Boden gleitend – springen!), **Sturmlauf** (eine goldene Linie zeigt den Weg), **Klingenwirbel**, **Himmelssturz** (danach steckt die Klinge im Boden – jetzt zuschlagen!), **Schwingenwehr** (er pariert alles von vorn und schlägt zurück – greift ihn von hinten an!) und in der Wahren Gestalt die **Weltenklinge**, die zu zwanzig Blöcken Länge wächst. Jeder Hieb zieht eine **Spur aus Licht**. Am Boden erreicht ihn jedes Schwert – leichte Hiebe fängt ein Schild ab, die goldenen nicht. Dazu **neue Klänge**: alle Klänge und die Musik des Schöpfers sind jetzt warm, tief und leiser – nichts gellt oder schrillt mehr.
 > In 0.75 kam **Schrolli der Schöpfer**, der stärkste Gegner von allen: Wer einen **Schöpferfunken** (Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet) in den **Altar des Schöpfers** legt und ihn berührt, wird mit allen, die im goldenen Kreis stehen, in **die Schöpfung** gehoben – die größte aller Kampfdimensionen: ein Kreis aus weißem Quarz und Gold über einem Meer aus Wolken, zwölf Säulen, der Thron mit der Sonnenscheibe, vier Brücken zu vier Welten, hoch darüber die Räder des Himmels – unter einem **eigenen Himmel** mit Sonnenrad, Nebeln, einer Galaxie und fernen Welten, dazu eigene Musik. In einer Säule aus Licht steigt **Schrolli der Schöpfer** herab: ein Seraph mit sechs Schwingen, Krone aus Lichtstrahlen und Heiligenschein, Zepter und Weltkugel – **3.200 Lebenspunkte**, und mit **26 eigenen Künsten** (Lichtspeere, Heiligenschein-Klinge, Säulen des Lichts, Sternenregen, Zepterschlag, Strahl der Schöpfung, Weltkugel, Federsturm, Göttliches Urteil, Seraphim, Lichtsprung, Schwingensturm, Sonnenrad, Engelschor, „Es werde Licht!“ und die **Zeit, die stillsteht**). Fällt er, stirbt er nicht: Er steigt in seine **Wahre Gestalt** auf – größer, das Gewand ein Weltall, Räder voller Augen um ihn, eine neue volle Leiste –, und der Himmel öffnet sich: ein **Auge aus Sternen** und Risse aus Licht. Dann wirft er **Welten**, entfacht die **Supernova** (nur hinter einer Säule ist man sicher), ruft den **Urknall**, Sternbilder, Kometen, das **Jüngste Gericht** und den **Weltenriss** – und versucht, sich **neu zu erschaffen** (unterbrecht ihn!). Wer ihn bezwingt, erhält das **Zepter des Schöpfers** (3D, Lichtspeere und Säulen aus Licht), die **Schwingen des Schöpfers** (Schwingenschlag im Gleitflug, kein Fall- und Aufprallschaden) und den höchsten Titel: **„Gottbezwinger“**.
 > In 0.74 kamen die Kampfdimensionen: Die sechs großen Bosse nach den Erzmagiern kämpfen jetzt wie die Erzmagier in ihrer eigenen Welt: Wer ihren Hort betritt, wird – mit allen Mitstreitern am Hort und ihren Soldaten – in die **Kampfdimension** des Bosses gezogen. Dort schwebt ein Abbild seines Horts unter einem fremden Himmel: MissMystiks **Mondbühne** (die Zauberbühne als Feeninsel unter dem Vollmond, tief unten ein rosa Wolkenmeer), Malleus' **Glutesse** (der Glutdom als Vulkan unter einem brennenden Himmel), Asterias **Sternenzelt** (die Sternwarte auf ihrer Endinsel zwischen unzähligen Sternen), Annis **Fehlerraum** (die Fehlerzone als herausgerissener Chunk im Bildrauschen), die **Thronwelt** des Zerbrochenen Königs und der **Weltenschlund** des Weltenfressers unter flammenden Rissen. Es gelten die Regeln der Arkanen Sphäre: nichts bauen, nichts abbauen, wer stirbt, verliert alles, was er bei sich trägt, wer abstürzt, wird zurückgeworfen – und wer später an den Hort kommt, folgt den anderen. Fällt der Boss, kehren alle mit Beute und Erfahrung an den Hort zurück. Fallen alle, die gegen ihn stehen, **vergeht der Boss und erwacht beim nächsten Mal mit voller Kraft und in seiner ursprünglichen Gestalt** – auch dann, wenn (etwa nach einem Angriff aus der Ferne) am Hort selbst gekämpft wird. Dazu: ein **Spawn-Ei des Weltenfressers**, und `/locate structure` findet jetzt den Schlund der Welten (im Abgrund) und den Thron der Alten (in der Leere).
 > In 0.73 kam der Weltenfresser: Im Abgrund schwebt der **Schlund der Welten**: ein Ring aus Chaosgestein in einem weiten, leer gefegten Auge des Chaos, in der Mitte ein Loch bis ins Nichts. Um den Schlund schweben sieben **Kronensplitter** – die Splitter der Krone, die der Zerbrochene König einst zerbrach, um das Wesen darunter zu versiegeln –, und Ketten aus Licht laufen von ihnen zu einem Siegelstern. Wer den Ring betritt, weckt den **Weltenfresser**: Die Splitter zerspringen, und aus dem Schlund bricht ein gewaltiger Wurm aus Chaosgestein mit einem Rachen wie eine Blüte und zwölf Gliedern, auf denen Stücke der Welten liegen, die er verschlungen hat – das **stärkste Wesen der Mod** (2.600 Lebenspunkte), mit Biss, Weltenhunger, Weltenspucke, Leibhieb, Rissatem, Schwerkraftsturz, Ruf der Welten und seinem **Zorn**, in dem der Himmel aufflammt und der Ring zerbricht. Besiegt hinterlässt er den **Weltenspeer** (3D, jeder Treffer trägt eine von vier Welten in sich, jeder vierte ruft einen Weltbrocken vom Himmel) und seinen **Kopf** als Trophäe – und wer dabei war, trägt fortan den Titel **„Weltenretter“** in Gold vor seinem Namen. Damit ist der Weg der Geschichte bis zum Ende gegangen. In 0.73.1 lernten die großen Gegner, wirklich so viel auszuhalten, wie für sie vorgesehen ist – Minecraft erlaubt einem Wesen nur 1.024 Lebenspunkte, und der Zerbrochene König (1.800), Nyxar (1.400), Terragon (1.150) und die Drachen auf „Schwer“ oder gegen mehrere Spieler blieben bisher darunter; ihre Leiste fasst weiter 1.024, aber jeder Treffer zählt entsprechend weniger.
@@ -362,6 +363,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
 | **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
 | **Schrolli der Schöpfer** (0.75): der stärkste Gegner – Schöpferfunke und Altar des Schöpfers, die Schöpfung (die größte Kampfdimension, eigener Himmel, eigene Musik), ein Seraph mit 26 Künsten, die Wahre Gestalt statt des Todes (der Himmel öffnet sich), Seraphlinge, eigene Bossleisten; Zepter des Schöpfers (3D), Schwingen des Schöpfers und der Titel „Gottbezwinger“ | ✅ fertig |
+| **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
@@ -2461,14 +2463,22 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 | | Herzkristall | Manakristall |
 |---|---|---|
 | Wirkung | ein Herz mehr, gleich gefüllt | 20 Mana mehr, gleich gefüllt |
-| Höchstens | zehn – also zwanzig Herzen | zehn – also 200 Mana mehr (mit dem Stab eines Lehrlings 300) |
+| Höchstens (seit 0.77) | 25 – also 35 Herzen | 25 – also 500 Mana mehr (mit dem Stab eines Lehrlings 600) |
 | In Höhlen | auf Gestein, von tief unten bis Höhe 48 | auf Gestein, eher in der Tiefe (bis Höhe 24) |
 | In Truhen | Schatzkammern der Stammburgen, Raubritterburg, Kathedrale, Schattenzitadelle, Ruinen … | Magiertürme (im Allerheiligsten fast jede zweite Truhe), Mondtempel, Sternwarte … |
 | Von Bossen | jeder Drachenboss einen, Nyxar zwei | jeder Erzmagier einen, Nyxar einen |
 
 - **Aufnehmen:** Rechtsklick mit dem Kristall in der Hand – ein heller Klang, ein Kranz aus Funken um dich herum, und
   über der Leiste steht, wie viele Herzen bzw. wie viel Mana du jetzt hast. Der Tooltip zeigt, wie viele du schon
-  aufgenommen hast; sind es zehn, bleibt der Kristall in der Hand.
+  aufgenommen hast; sind es alle 25, bleibt der Kristall in der Hand (bis 0.76 waren es höchstens zehn).
+
+**Heldenherzen (seit 0.77):** Mit Herzkristallen, Heldenkraft und Lebenskraft hat ein Held bald mehr als zwanzig Herzen –
+bis über siebzig. Statt sie zu einer Wand aus sieben, acht Herzreihen zu stapeln, zeigt die Lebensleiste ab 21 Herzen
+**eine einzige Reihe in Schichten**: Die ersten zehn Herzen sind rot wie gewohnt, jede weitere Schicht von zehn hat ihre
+Farbe (Orange, Rosa, Violett, Blau, Türkis, Smaragd, Silber), die oberste gefüllte liegt über der darunter, und links
+daneben steht die Zahl der Herzen. Die Absorption liegt als goldene Reihe darüber; Gift, Verdorren und Frost färben die
+Herzen wie gewohnt, nach einem Treffer blinken sie, mit Regeneration läuft die Welle über die Reihe. Wer die Reihen von
+Minecraft lieber mag, schaltet *Herzen in Schichten* unter *Mods → Kingdoms at War → Konfiguration* ab.
 - **Abbauen:** mit der Spitzhacke; der Kristall fällt auch heraus, wenn man ihm den Boden wegschlägt.
 - **Für immer:** Aufgenommene Kristalle bleiben, auch nach dem Tod – man kehrt mit allen Herzen zurück. In kargen
   Truhen gehen Kristalle nie verloren.
@@ -2476,6 +2486,8 @@ aufsteigende Zeichen) und tauchen ihre Höhle in Licht – so sieht man sie scho
 ### Heldenstufe und Talente
 
 ![Charakterfenster, Aufstieg, Legende und Streicheln](docs/bilder/heldenstufe.jpg)
+
+![Der Weg zum Unsterblichen: Meisterschaft, Heldenkraft, die neuen Ränge und das Licht der Unsterblichkeit](docs/bilder/heldenstufe_200.jpg)
 
 Dein Held hat ein **eigenes Levelsystem** – ganz getrennt von der Erfahrung von Minecraft: Erfahrungskugeln, Stufen und
 Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrung**:
@@ -2489,12 +2501,13 @@ Verzaubern bleiben genau, wie sie sind. Stattdessen sammelst du **Heldenerfahrun
 | ein Biom zum ersten Mal betreten | 20 |
 | eine Stammburg erobern | 500 |
 
-Damit steigst du bis **Heldenstufe 100** auf – ein weiter Weg: Stufe *L* braucht 60 · (*L* − 1)^2,15 Heldenerfahrung,
-also Stufe 10 6.757, Stufe 20 33.688, Stufe 50 258.269 und **Stufe 100 1.171.566**; der letzte Schritt allein kostet
-25.295. (Bis 0.60 waren es 40 · (*L* − 1)², für Stufe 100 also 392.040. Spielstände von damals behalten ihre Stufe und
-den Fortschritt zur nächsten, die Erfahrung für Monster, Erz und Fortschritte ist gleich geblieben.) Jede Stufe bringt
-einen **Talentpunkt**, und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und
-**zwei Talentpunkte extra**:
+Damit steigst du seit 0.77 bis **Heldenstufe 200** auf – ein weiter Weg: Bis zur Legende braucht Stufe *L*
+60 · (*L* − 1)^2,15 Heldenerfahrung, also Stufe 10 6.757, Stufe 20 33.688, Stufe 50 258.269 und **Stufe 100 1.171.566**;
+der hundertste Schritt allein kostet 25.295. Dahinter kostet jede Stufe so viel wie die hundertste und 120 mehr je Stufe
+über 100 – Stufe 150 braucht 2.589.316, **Stufe 200 4.307.066**. (Bis 0.60 waren es 40 · (*L* − 1)², für Stufe 100 also
+392.040; bis 0.76 endete der Weg bei 100. Spielstände von damals behalten ihre Stufe und den Fortschritt zur nächsten,
+die Erfahrung für Monster, Erz und Fortschritte ist immer gleich geblieben.) Jede Stufe bringt einen **Talentpunkt**,
+und unterwegs steigst du im **Rang** auf – jeder neue Rang bringt ein eigenes Abzeichen und **zwei Talentpunkte extra**:
 
 | Rang | ab Stufe | Abzeichen |
 |---|---|---|
@@ -2504,6 +2517,25 @@ einen **Talentpunkt**, und unterwegs steigst du im **Rang** auf – jeder neue R
 | Held | 60 | Gold mit Smaragden |
 | Kriegsherr | 80 | Platin mit Schwingen und Diamant |
 | Legende | 100 | Feuergold mit Strahlenkranz – und die Belohnung: **Streicheln** |
+| Mythos | 120 | Violettes Silber mit Amethyst, zwölf Strahlen und Sternen |
+| Halbgott | 140 | Weißgold mit Diamant, 24 Strahlen und Heiligenschein |
+| Titan | 160 | Bronze und Glut mit Feuerrubin, Krone mit sieben Zacken |
+| Sternenwanderer | 180 | Sternenstahl mit Saphir und acht Sternenstrahlen |
+| Unsterblicher | 200 | Weißgold, das in allen Farben des Lichts schillert, mit Heiligenschein – und die Belohnung: das **Licht der Unsterblichkeit** |
+
+**Die Heldenkraft** (seit 0.77): Jede Stufe macht dich auch **von selbst** stärker, ohne Talentpunkte – alle zehn Stufen
+ein Herz (das erste auf Stufe 11), je Stufe +0,04 Schaden, +2 Mana und ein halbes Prozent schnellere Erholung des Manas,
+alle 25 Stufen ein Punkt Rüstungshärte. Auf Stufe 100 sind das 9 Herzen, fast 4 Schaden, 198 Mana und 3 Härte mehr, auf
+**Stufe 200 19 Herzen, fast 8 Schaden, 398 Mana, doppelt so schnelle Erholung und 7 Härte**. Das neue Herz ist beim
+Aufstieg gleich gefüllt; die Aufstiegs-Szene zeigt, was die Stufe an Heldenkraft bringt, und im Charakterfenster verrät
+ein Hinweis über dem Abzeichen (und über deinen Werten) deine ganze Heldenkraft und wann das nächste Herz kommt.
+
+**Das Licht der Unsterblichkeit – die Belohnung des Unsterblichen.** Wer Stufe 200 erreicht, den bewahrt das Licht einmal
+alle **20 Minuten** vor dem Tod: Wie bei einem Totem (es wirkt erst, wenn kein Totem mehr hilft) stehst du mit der Hälfte
+deiner Herzen wieder auf, mit Regeneration, Absorption und Feuerschutz – ein goldener Lichtring, Licht steigt an dir auf.
+Auf deinem Bildschirm wird es weiß-golden, aus dem Licht tritt das Abzeichen des Unsterblichen mit schillernden
+Strahlen, Lichtfunken steigen auf. Danach ruht es; im Charakterfenster steht, wie lange noch. Gegen /kill und die Leere
+hilft es nicht.
 
 **Der Aufstieg:** Eine Lichtwelle läuft über den Bildschirm, das Rangabzeichen springt herein, die Stufe zählt hoch,
 Strahlen drehen sich dahinter, Funken sprühen, darunter erscheinen Stufe, Rang und die neuen Talentpunkte; bei einem
@@ -2511,32 +2543,36 @@ neuen Rang mit Fanfare, zweiter Welle und Feuerwerk. Wer dabeisteht, sieht einen
 eine Spirale in der Farbe des Rangs am Helden aufsteigen. Was du an Heldenerfahrung bekommst, zeigt links über der
 Schnellleiste dein Abzeichen mit einer Leiste, die sich fließend füllt.
 
-**Der Weg zur Legende (Taste K):** Die Heldenstufe ist ein Pfad – ein Weg aus Steinen schlängelt sich über eine
+**Der Heldenweg (Taste K):** Die Heldenstufe ist ein Pfad – ein Weg aus Steinen schlängelt sich über eine
 nächtliche Landschaft mit Sternenhimmel, Mond, fernen Bergen und Tannenhügeln, die beim Fahren verschieden schnell
 vorbeiziehen. Jede Stufe ist ein Stein, jede zehnte ein großer, jeder Rang sein Abzeichen mit Band und Belohnung; über
-jedem Rang steht sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg, Schrein im Wald, Festung, Gipfel mit Kronenburg)
-und färbt seinen Abschnitt. Der gegangene Weg glüht golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine
-Lichtsäule; voraus liegt der Weg im Nebel, ganz am Ende leuchtet ein Polarlicht über der Legende. Dein Kopf schwebt im
+jedem Rang steht sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg, Schrein im Wald, Festung, Gipfel mit Kronenburg –
+seit 0.77 dahinter ein Tempel mit schwebendem Kristall, ein Wolkenpalast, ein Koloss mit glühenden Augen, eine Sternwarte
+mit Sternenstrahl und die Himmelszitadelle mit ihrem Lichtring) und färbt seinen Abschnitt. Der gegangene Weg glüht
+golden, Licht fließt auf ihm zu dir, erreichte Ränge tragen eine Lichtsäule; voraus liegt der Weg im Nebel, ganz am Ende
+leuchtet ein Polarlicht über dem Unsterblichen. Dein Kopf schwebt im
 Goldrahmen über deiner Stufe, das Stück bis zur nächsten leuchtet so weit, wie du gekommen bist. Beim Öffnen fliegt die
 Ansicht von Stufe 1 bis zu dir, die Steine leuchten nacheinander auf, dann sprühen Funken. Mausrad, Ziehen oder die
 Pfeiltasten fahren den Weg ab, unten zeigt eine Übersicht den ganzen Weg (anklicken springt dorthin); jeder Stein sagt,
 wie viel Heldenerfahrung er braucht.
 
 **Talente & Werte** (Knopf auf dem Weg) – dunkel und gold: links dein Held, sein Rang, seine Werte, Kristalle und
-Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), die sechs Ränge auf
+Biome; rechts das Abzeichen mit der Stufe, die Leiste bis zur nächsten (sie füllt sich beim Öffnen), die elf Ränge auf
 einer Linie und die sechs Talente als Karten mit je zwanzig Kästchen und einem goldenen Plus-Knopf, der pulsiert,
-solange Punkte frei sind:
+solange Punkte frei sind. Seit 0.77 fasst jedes Talent **40 Punkte**: Die zweiten zwanzig sind die **Meisterschaft** –
+die Kästchen werden nacheinander golden, ein Schimmer wandert über sie:
 
-| Talent | je Punkt (höchstens 20) | mit 20 Punkten |
-|---|---|---|
-| Stärke | +0,3 Schaden | +6 Schaden |
-| Lebenskraft | +1 Leben | zehn Herzen mehr |
-| Gewandtheit | +1,25 % Lauftempo | +25 % |
-| Zähigkeit | +0,4 Rüstung | +8 Rüstung |
-| Zauberkunst | +8 Mana und 4 % schnellere Erholung | +160 Mana, +80 % |
-| Glück | +0,2 Glück – bessere Beute in Truhen | +4 Glück |
+| Talent | je Punkt (1–20) | in der Meisterschaft (21–40) | mit 40 Punkten |
+|---|---|---|---|
+| Stärke | +0,3 Schaden | +0,3 Schaden | +12 Schaden |
+| Lebenskraft | +1 Leben | +1 Leben | zwanzig Herzen mehr |
+| Gewandtheit | +1,25 % Lauftempo | +0,5 % | +35 % |
+| Zähigkeit | +0,4 Rüstung | +0,4 Rüstung und +0,25 Rüstungshärte | +16 Rüstung, +5 Härte |
+| Zauberkunst | +8 Mana und 4 % schnellere Erholung | ebenso | +320 Mana, +160 % |
+| Glück | +0,2 Glück – bessere Beute in Truhen | ebenso | +8 Glück |
 
-Bis Stufe 100 kommen 109 Punkte zusammen, alle Talente fassen 120 – du entscheidest, was für ein Held du bist.
+Bis Stufe 100 kommen 109 Punkte zusammen, bis Stufe 200 219, alle Talente fassen 240 – du entscheidest, was für ein Held
+du bist.
 **Neu verteilen** kostet eine Silbermünze je verteiltem Punkt. Heldenerfahrung und Talente bleiben auch nach dem Tod.
 Wer aus 0.52 kommt, steht mit derselben Heldenerfahrung auf einer neuen Stufe und bekommt seine Punkte kostenlos
 zurück, falls er mehr verteilt hatte, als die neue Stufe hergibt.
@@ -2990,7 +3026,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw raid [Reich]` · `/kaw raid stop` | (nur Operatoren) sofort einen Heerhaufen gegen die eigene Siedlung schicken (das Reich erklärt dafür den Krieg), alle Heerhaufen abziehen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
-| **K** | Der Weg zur Legende (die Heldenstufe als Pfad); von dort Talente & Werte (änderbar unter Optionen → Steuerung) |
+| **K** | Der Heldenweg (die Heldenstufe als Pfad); von dort Talente & Werte (änderbar unter Optionen → Steuerung) |
 | **G** / Schleichen + Rechtsklick | als Legende (Heldenstufe 100) das Wesen vor dir streicheln, gedrückt halten streichelt weiter (G änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
@@ -3083,7 +3119,8 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    einlesen und ablegen), Teil 3 (Großbaustellen mit vielen Baumeistern) und die Königsburg (300 × 300 Blöcke als
    eingebauter Bauplan und als .litematic) sind fertig.
 4. **Der eigene Held** – Herz- und Manakristalle, die Kampferfahrung der Truppen und das eigene Levelsystem mit
-   100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig; seit 0.61 dauert das Leveln
+   200 Heldenstufen (seit 0.77; vorher 100), elf Rängen, Talenten mit Meisterschaft, der Heldenkraft, dem Streicheln
+   der Legende und dem Licht der Unsterblichkeit sind fertig; seit 0.61 dauert das Leveln
    länger.
 5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König, die fünf Meereswesen und die Tiefe des Meeres
    (Landschaften am Meeresgrund, das Versunkene Atoll mit Karkinos und dem Gezeiten-Speer) sind fertig, ebenso:
@@ -3115,9 +3152,12 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.75 – Schrolli der Schöpfer** (fertig): der stärkste Gegner von allen, gerufen mit einem Schöpferfunken
      am Altar des Schöpfers – in der Schöpfung, der größten Kampfdimension mit eigenem Himmel und eigener Musik; 26 Künste,
      die Wahre Gestalt statt des Todes, das **Zepter** und die **Schwingen des Schöpfers** und der Titel **„Gottbezwinger“**;
-   - zuletzt **0.76 – Schrolli greift zur Klinge** (fertig): der Schöpfer landet und ficht am Boden – Beine in goldenen
+   - **0.76 – Schrolli greift zur Klinge** (fertig): der Schöpfer landet und ficht am Boden – Beine in goldenen
      Beinschienen, die Klinge aus Licht mit ihrer Lichtspur, sieben Künste der Klinge bis zur Weltenklinge (jetzt 33
-     Künste); dazu warme, leisere Klänge und Musik.
+     Künste); dazu warme, leisere Klänge und Musik;
+   - zuletzt **0.77 – Der Weg zum Unsterblichen** (fertig): Heldenstufe bis 200 mit fünf neuen Rängen, die Heldenkraft
+     je Stufe, Talente bis 40 Punkte, je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit und die Heldenherzen
+     (die Lebensleiste in farbigen Schichten).
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 

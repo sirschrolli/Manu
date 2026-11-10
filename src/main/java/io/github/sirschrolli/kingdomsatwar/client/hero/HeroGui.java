@@ -65,14 +65,57 @@ public final class HeroGui {
     }
 
     /**
-     * Die Farbe eines Rangs; die Legende schimmert langsam zwischen Feuergold und Rosé.
+     * Die Farbe eines Rangs; die Legende schimmert langsam zwischen Feuergold und Rosé, der Unsterbliche durch alle Farben
+     * des Lichts (Weißgold, Himmelblau, Rosé).
      */
     public static int rankColor(HeroLevel.Rank rank) {
-        if (rank != HeroLevel.Rank.LEGEND) {
-            return rank.color();
+        if (rank == HeroLevel.Rank.LEGEND) {
+            float t = 0.5f + 0.5f * Mth.sin(seconds() * 2.2f);
+            return ARGB.srgbLerp(t, 0xFFFF9A3C, 0xFFFFD27A);
         }
-        float t = 0.5f + 0.5f * Mth.sin(seconds() * 2.2f);
-        return ARGB.srgbLerp(t, 0xFFFF9A3C, 0xFFFFD27A);
+        if (rank == HeroLevel.Rank.IMMORTAL) {
+            float t = (seconds() * 0.35f) % 3.0f;
+            int[] colors = {0xFFFFE9A6, 0xFFA8E4FF, 0xFFFFB8E8};
+            int i = (int) t;
+            return ARGB.srgbLerp(HeroGui.easeInOut(t - i), colors[i % 3], colors[(i + 1) % 3]);
+        }
+        return rank.color();
+    }
+
+    /**
+     * Was die Heldenkraft zwischen zwei Stufen dazugibt ("+1 Herz · +0,04 Schaden · +2 Mana") – leer, wenn nichts.
+     */
+    public static Component might(int from, int to) {
+        double hearts = (HeroLevel.levelHealth(to) - HeroLevel.levelHealth(from)) / 2.0;
+        double damage = HeroLevel.levelDamage(to) - HeroLevel.levelDamage(from);
+        int mana = HeroLevel.levelMana(to) - HeroLevel.levelMana(from);
+        double toughness = HeroLevel.levelToughness(to) - HeroLevel.levelToughness(from);
+        net.minecraft.network.chat.MutableComponent line = Component.empty();
+        boolean any = false;
+        if (hearts > 0.0) {
+            line.append(Component.translatable(hearts == 1.0 ? "hero.kingdomsatwar.might.heart" : "hero.kingdomsatwar.might.hearts", decimal(hearts)));
+            any = true;
+        }
+        if (damage > 0.0) {
+            line.append(any ? " · " : "").append(Component.translatable("hero.kingdomsatwar.might.damage", decimal2(damage)));
+            any = true;
+        }
+        if (mana > 0) {
+            line.append(any ? " · " : "").append(Component.translatable("hero.kingdomsatwar.might.mana", mana));
+            any = true;
+        }
+        if (toughness > 0.0) {
+            line.append(any ? " · " : "").append(Component.translatable("hero.kingdomsatwar.might.toughness", decimal(toughness)));
+        }
+        return line;
+    }
+
+    /** Eine Zahl mit bis zu zwei Nachkommastellen (für kleine Schritte wie 0,04), im Deutschen mit Komma. */
+    public static String decimal2(double value) {
+        String text = Math.abs(value - Math.round(value)) < 0.005 ? String.valueOf(Math.round(value))
+                : String.format(Locale.ROOT, "%.2f", value).replaceAll("0+$", "");
+        String language = Minecraft.getInstance().options.languageCode;
+        return language.startsWith("de") ? text.replace('.', ',') : text;
     }
 
     // ------------------------------------------------------------------------------------------------ Licht

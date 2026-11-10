@@ -267,6 +267,151 @@ final class HeroShowcase {
         steps.add(Step.hud(false));
     }
 
+    /**
+     * Der Weg zum Unsterblichen (seit 0.77): das Charakterfenster eines Helden auf Stufe 157 (Meisterschaft in Stärke und
+     * Lebenskraft, alle Herzkristalle), die Heldenkraft, die Ränge hinter der Legende auf dem Heldenweg, zwei Aufstiege
+     * (Titan, Unsterblicher) und das Licht der Unsterblichkeit, das ihn vor dem Tod bewahrt.
+     */
+    static void ascension(Deque<Step> steps) {
+        int oz = -80;
+        steps.add(Step.server(level -> {
+            int ground = Showcase.ground;
+            Showcase.fill(level, new BlockPos(-12, ground - 1, oz - 16), new BlockPos(12, ground - 1, oz + 8), Blocks.GRASS_BLOCK.defaultBlockState());
+            Showcase.fill(level, new BlockPos(-12, ground, oz - 16), new BlockPos(12, ground + 8, oz + 8), Blocks.AIR.defaultBlockState());
+            for (int i = 0; i < 18; i++) {
+                int x = -10 + (i * 7) % 21;
+                int z = oz - 14 + (i * 5) % 20;
+                if (Math.abs(x) > 3 || z < oz - 6 || z > oz - 2) {
+                    level.setBlock(new BlockPos(x, ground, z), (i % 3 == 0 ? Blocks.FERN : Blocks.SHORT_GRASS).defaultBlockState(), 2);
+                }
+            }
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            Crystals.set(player, new Crystals.Count(Crystals.MAX, 18));
+            // Heldenstufe 157 (Halbgott): Stärke gemeistert, Lebenskraft und Zauberkunst in der Meisterschaft, zehn Punkte frei
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(157) + (HeroLevel.total(158) - HeroLevel.total(157)) * 2 / 3,
+                    java.util.List.of(40, 32, 20, 26, 30, 12), 61));
+            player.setData(io.github.sirschrolli.kingdomsatwar.registry.ModAttachments.HERO_IMMORTAL, -1L);
+            player.setHealth(player.getMaxHealth());
+        }));
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.command("clear @s"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with minecraft:netherite_sword"));
+        steps.add(Step.command("item replace entity @s armor.head with minecraft:diamond_helmet"));
+        steps.add(Step.command("item replace entity @s armor.chest with minecraft:netherite_chestplate"));
+        steps.add(Step.command("item replace entity @s armor.legs with minecraft:diamond_leggings"));
+        steps.add(Step.command("item replace entity @s armor.feet with minecraft:diamond_boots"));
+        steps.add(Step.command("item replace entity @s hotbar.1 with kingdomsatwar:command_baton"));
+        steps.add(Step.command("item replace entity @s hotbar.2 with minecraft:bread 12"));
+        steps.add(Showcase.tp(0.5, 0.0, oz + 0.5, 180, 12));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.chatVisibility().set(net.minecraft.world.entity.player.ChatVisiblity.HIDDEN)));
+        steps.add(Step.waitForChunks(200));
+        steps.add(Step.command("kill @e[type=!minecraft:player]"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.once(minecraft -> minecraft.gui.toastManager().clear()));
+        steps.add(Step.screenshot("ascend_hud"));
+        // die Heldenherzen in Schichten: 48,5 von 66 Herzen (die blaue Schicht über der violetten)
+        steps.add(Step.server(level -> level.getServer().getPlayerList().getPlayers().getFirst().setHealth(97.0f)));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("ascend_hud_hearts"));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            player.setHealth(player.getMaxHealth());
+        }));
+
+        // das Charakterfenster: Meisterschaft (goldene Kästchen), Heldenkraft, die elf Ränge
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.CharacterScreen()));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("ascend_0_screen"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 141, 37)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("ascend_1_might"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 176, 113)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("ascend_2_mastery"));
+        steps.add(Step.once(minecraft -> hoverCharacter(minecraft, 301, 75)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("ascend_3_immortal_rank"));
+        // ein Punkt in die Lebenskraft: das goldene Kästchen blitzt auf
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.server(level -> HeroLevel.spend(level.getServer().getPlayerList().getPlayers().getFirst(), HeroLevel.Talent.VITALITY)));
+        steps.add(Step.waitTicks(3));
+        steps.add(Step.screenshot("ascend_3b_spend"));
+
+        // der Heldenweg: der Held auf 157, dann die neuen Ränge bis zum Unsterblichen
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(60));
+        steps.add(Step.screenshot("ascend_4_path"));
+        for (float[] stop : new float[][] {{121.0f, 5}, {141.0f, 6}, {161.0f, 7}, {181.0f, 8}, {196.0f, 9}}) {
+            float at = stop[0];
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen path) {
+                    path.jumpTo(at);
+                }
+            }));
+            steps.add(Step.waitTicks(10));
+            steps.add(Step.screenshot("ascend_" + (int) stop[1] + "_path_" + (int) at));
+        }
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.waitTicks(10));
+
+        // Aufstieg zum Titan (159 → 160)
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(160) - 30, java.util.List.of(40, 32, 20, 26, 30, 12), 61));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> HeroLevel.award(level.getServer().getPlayerList().getPlayers().getFirst(), 45)));
+        steps.add(Step.waitTicks(36));
+        steps.add(Step.screenshot("ascend_10_titan"));
+        steps.add(Step.waitTicks(90));
+
+        // Aufstieg zum Unsterblichen (199 → 200), mit der Belohnung
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            HeroLevel.set(player, new HeroLevel.Hero(HeroLevel.total(200) - 20, java.util.List.of(40, 32, 20, 26, 30, 12), 61));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> HeroLevel.award(level.getServer().getPlayerList().getPlayers().getFirst(), 40)));
+        steps.add(Step.waitTicks(44));
+        steps.add(Step.screenshot("ascend_11_immortal"));
+        steps.add(Step.waitTicks(90));
+        // am Ziel: der Heldenweg des Unsterblichen, die Himmelszitadelle erreicht
+        steps.add(Step.screen(minecraft -> new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen()));
+        steps.add(Step.once(Showcase::parkMouse));
+        steps.add(Step.waitTicks(70));
+        steps.add(Step.screenshot("ascend_11b_path_200"));
+        steps.add(Step.screen(minecraft -> null));
+        steps.add(Step.waitTicks(10));
+
+        // das Licht der Unsterblichkeit: ein tödlicher Treffer – und er steht wieder (von vorn gesehen)
+        steps.add(Step.command("kill @e[type=!minecraft:player]"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            player.setHealth(player.getMaxHealth());
+            player.damageCooldownTime = 0;
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.server(level -> {
+            ServerPlayer player = level.getServer().getPlayerList().getPlayers().getFirst();
+            player.hurtServer(level, level.damageSources().generic(), 10_000.0f);
+        }));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.screenshot("ascend_12a_flash"));
+        steps.add(Step.waitTicks(22));
+        steps.add(Step.screenshot("ascend_12_saved"));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("ascend_13_saved_late"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.command("gamemode spectator"));
+        steps.add(Step.hud(false));
+    }
+
     /** Nur der Weg zur Legende (schnell zu prüfen). */
     static void path(Deque<Step> steps) {
         steps.add(Step.server(level -> {

@@ -372,6 +372,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("kingdomsatwar.configuration.spiderLook.detailed", "Detailed", "Detailliert");
         text("kingdomsatwar.configuration.spiderLook.classic", "Classic (Minecraft)", "Klassisch (Minecraft)");
         text("kingdomsatwar.configuration.spiderLook.moosling", "Mooslings (arachnophobia)", "Mooslinge (Arachnophobie)");
+        text("kingdomsatwar.configuration.heroHearts", "Hearts in layers", "Herzen in Schichten");
+        text("kingdomsatwar.configuration.heroHearts.tooltip",
+                "From 21 hearts on, the health bar shows a single row in coloured layers (one colour per ten hearts) with the number of hearts next to it, instead of stacking the hearts into a wall of rows.",
+                "Ab 21 Herzen zeigt die Lebensleiste eine einzige Reihe in farbigen Schichten (je zehn Herzen eine Farbe) und daneben die Zahl der Herzen, statt die Herzen zu einer Wand aus Reihen zu stapeln.");
         text("kingdomsatwar.configuration.narratorVoice", "Narrator voice for chapters", "Erzählerstimme zu den Kapiteln");
         text("kingdomsatwar.configuration.narratorVoice.tooltip",
                 "The narrator speaks at the start of every chapter of the story (otherwise only his words appear).",

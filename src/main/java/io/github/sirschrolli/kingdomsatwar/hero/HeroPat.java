@@ -24,7 +24,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
- * Streicheln – die Belohnung der Legende (Heldenstufe {@value HeroLevel#MAX_LEVEL}), so wie in der Mod PatPat: Schleichen
+ * Streicheln – die Belohnung der Legende (Heldenstufe {@value HeroLevel#LEGEND_LEVEL}), so wie in der Mod PatPat: Schleichen
  * und mit leerer Hand rechtsklicken (oder die Streicheln-Taste G) tätschelt dem Wesen den Kopf. Alle in der Nähe sehen die
  * Hand und wie das Wesen beim Tätscheln niedriger wird, und hören den Tätschel-Ton; wer gestreichelt wird, dessen Name
  * verschwindet so lange. Gedrückt halten streichelt immer weiter. Eigene Soldaten, gezähmte Tiere und Drachen bekommen
@@ -36,7 +36,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 @EventBusSubscriber(modid = io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.MODID)
 public final class HeroPat {
     /** Ab dieser Heldenstufe. */
-    public static final int LEVEL = HeroLevel.MAX_LEVEL;
+    public static final int LEVEL = HeroLevel.LEGEND_LEVEL;
     /** So weit reicht die Hand (Blöcke, von den Augen bis zum Wesen). */
     public static final double RANGE = 5.0;
     /** Ticks zwischen zwei Streicheleinheiten desselben Helden (gedrückt halten wiederholt alle vier Ticks). */

@@ -130,6 +130,12 @@ public final class ModAttachments {
                     .serialize(com.mojang.serialization.Codec.STRING.listOf().fieldOf("biomes"))
                     .copyOnDeath()
                     .build());
+    /** Wann das Licht der Unsterblichkeit den Spieler zuletzt bewahrt hat (Spielzeit; -1: nie) – bleibt nach dem Tod. */
+    public static final Supplier<AttachmentType<Long>> HERO_IMMORTAL = ATTACHMENTS.register("hero_immortal",
+            () -> AttachmentType.builder(() -> -1L)
+                    .serialize(com.mojang.serialization.Codec.LONG.fieldOf("last"))
+                    .copyOnDeath()
+                    .build());
     /**
      * Wie viele Herz- und Manakristalle der Spieler aufgenommen hat (bleibt nach dem Tod; nur er selbst bekommt es
      * zugeschickt – für die Mana-Leiste und die Anzeige im Tooltip).

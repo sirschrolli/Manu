@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 
 /**
  * Herz- oder Manakristall in der Hand: Rechtsklick nimmt ihn auf – ein Herz bzw. 20 Mana mehr, für immer (siehe
- * {@link Crystals}). Sind schon alle zehn dieser Sorte aufgenommen, bleibt er in der Hand.
+ * {@link Crystals}). Sind schon alle dieser Sorte aufgenommen (seit 0.77 je 25), bleibt er in der Hand.
  */
 public class CrystalItem extends Item {
     private final Crystals.Kind kind;

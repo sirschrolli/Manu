@@ -55,6 +55,7 @@ public final class ModNetwork {
                 .playToClient(OpenChroniclePayload.TYPE, OpenChroniclePayload.STREAM_CODEC)
                 .playToClient(ChapterCardPayload.TYPE, ChapterCardPayload.STREAM_CODEC)
                 .playToClient(HeroLevelUpPayload.TYPE, HeroLevelUpPayload.STREAM_CODEC)
+                .playToClient(HeroImmortalPayload.TYPE, HeroImmortalPayload.STREAM_CODEC)
                 .playToClient(HeroPatEffectPayload.TYPE, HeroPatEffectPayload.STREAM_CODEC);
     }
 }

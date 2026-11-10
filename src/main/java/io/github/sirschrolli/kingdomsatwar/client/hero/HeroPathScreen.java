@@ -21,13 +21,14 @@ import net.minecraft.world.entity.player.Player;
 import com.mojang.blaze3d.platform.InputConstants;
 
 /**
- * Der Weg zur Legende (Taste K): Die Heldenstufe als Pfad über eine nächtliche Landschaft.
+ * Der Heldenweg (Taste K): Die Heldenstufe als Pfad über eine nächtliche Landschaft.
  *
  * <ul>
  *   <li>Hinten Sternenhimmel und Mond, ferne Berge und nahe Hügel mit Tannen, die beim Fahren verschieden schnell
  *       vorbeiziehen; jeder Rang färbt seinen Abschnitt und hat sein Wahrzeichen am Horizont (Dorf, Wachturm, Burg,
- *       Schrein im Wald, Festung, Gipfel mit Kronenburg).</li>
- *   <li>Der Weg aus Steinen schlängelt sich von Stufe 1 bis 100; jede Stufe ein Stein, jede zehnte ein großer, jeder Rang
+ *       Schrein im Wald, Festung, Gipfel mit Kronenburg – seit 0.77 dahinter ein Tempel mit schwebendem Kristall, ein
+ *       Wolkenpalast, ein Koloss, eine Sternwarte und die Himmelszitadelle mit ihrem Lichtring).</li>
+ *   <li>Der Weg aus Steinen schlängelt sich von Stufe 1 bis 200; jede Stufe ein Stein, jede zehnte ein großer, jeder Rang
  *       sein Abzeichen mit Band und Belohnung. Gegangen ist er golden und Licht fließt darauf zum Helden; voraus liegt
  *       er im Nebel.</li>
  *   <li>Über der eigenen Stufe schwebt der Kopf des Helden in einem Goldrahmen, das Stück bis zur nächsten Stufe leuchtet
@@ -340,7 +341,7 @@ public class HeroPathScreen extends Screen {
                 if (done) {
                     HeroGui.lightRect(g, HeroGui.GLOW, sx, sy - 70, 30.0f, 200.0f, HeroGui.rankColor(rank), 0.3f + 0.1f * Mth.sin(time * 2.0f + level));
                 }
-                this.drawRankNode(g, rank, sx, sy, done, time);
+                this.drawRankNode(g, rank, sx, sy, done, current, time);
                 if (Math.abs(mouseX - sx) <= 18 && Math.abs(mouseY - sy) <= 18) {
                     tooltip = this.rankTooltip(rank, hero);
                 }
@@ -404,8 +405,11 @@ public class HeroPathScreen extends Screen {
         return null;
     }
 
-    /** Ein Rangstein: das Abzeichen (erreicht mit Strahlen, sonst grau), darunter das Band, darüber die Belohnung. */
-    private void drawRankNode(GuiGraphicsExtractor g, HeroLevel.Rank rank, float x, float y, boolean done, float time) {
+    /**
+     * Ein Rangstein: das Abzeichen (erreicht mit Strahlen, sonst grau), darunter das Band, darüber die Belohnung – steht der
+     * Held selbst auf dem Stein (sein Kopf schwebt darüber), unter dem Band.
+     */
+    private void drawRankNode(GuiGraphicsExtractor g, HeroLevel.Rank rank, float x, float y, boolean done, boolean here, float time) {
         int tint = done ? 0xFFFFFFFF : 0xFF77708A;
         HeroGui.emblem(g, this.font, rank, rank.minLevel(), x, y, 0.8f, 1.0f, 1.0f, done, tint);
         Component name = Component.translatable(rank.translationKey());
@@ -416,12 +420,17 @@ public class HeroPathScreen extends Screen {
         g.text(this.font, name, Math.round(x - this.font.width(name) / 2.0f), by + 3, done ? HeroGui.rankColor(rank) : 0xFFB8B0C8, false);
         // die Belohnung über dem Abzeichen
         Component reward = rank == HeroLevel.Rank.LEGEND ? Component.translatable("gui.kingdomsatwar.path.reward.pat")
+                : rank == HeroLevel.Rank.IMMORTAL ? Component.translatable("gui.kingdomsatwar.path.reward.immortal")
                 : rank.ordinal() > 0 ? Component.translatable("gui.kingdomsatwar.path.reward.points", HeroLevel.RANK_BONUS) : null;
         if (reward != null) {
-            float bob = Mth.sin(time * 2.0f + rank.ordinal()) * 1.5f;
-            int color = rank == HeroLevel.Rank.LEGEND ? 0xFFE0B8FF : done ? HeroGui.GOOD : 0xFFB8B0C8;
+            float bob = Mth.sin(time * 2.0f + rank.ordinal()) * 1.5f + (here ? 76.0f : 0.0f);
+            int color = rank == HeroLevel.Rank.LEGEND ? 0xFFE0B8FF : rank == HeroLevel.Rank.IMMORTAL ? 0xFFFFE9A6 : done ? HeroGui.GOOD : 0xFFB8B0C8;
             if (rank == HeroLevel.Rank.LEGEND) {
                 HeroGui.light(g, HeroGui.GLOW, x, y - 32 + bob, 70.0f, 0.0f, 0xFFB070FF, 0.4f + 0.2f * Mth.sin(time * 3.0f));
+            }
+            if (rank == HeroLevel.Rank.IMMORTAL) {
+                HeroGui.light(g, HeroGui.GLOW, x, y - 32 + bob, 90.0f, 0.0f, 0xFFFFE27A, 0.45f + 0.2f * Mth.sin(time * 3.0f));
+                HeroGui.light(g, HeroGui.RAYS, x, y - 32 + bob, 80.0f, time * 0.3f, 0xFFFFF4E0, 0.25f);
             }
             HeroGui.centered(g, this.font, reward, x, y - 36 + bob, color, 1.0f);
         }
@@ -528,6 +537,10 @@ public class HeroPathScreen extends Screen {
                     .withStyle(ChatFormatting.DARK_GRAY));
         }
         lines.add(Component.translatable("gui.kingdomsatwar.path.point").withStyle(ChatFormatting.YELLOW));
+        Component might = HeroGui.might(level - 1, level);
+        if (level > 1 && !might.getString().isEmpty()) {
+            lines.add(Component.translatable("hero.kingdomsatwar.level_up.might", might).withStyle(ChatFormatting.GOLD));
+        }
         return lines;
     }
 
@@ -543,6 +556,10 @@ public class HeroPathScreen extends Screen {
         if (rank == HeroLevel.Rank.LEGEND) {
             lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward", Component.keybind("key.kingdomsatwar.pat"))
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        if (rank == HeroLevel.Rank.IMMORTAL) {
+            lines.add(Component.translatable("gui.kingdomsatwar.character.rank.reward.immortal", HeroLevel.IMMORTAL_MINUTES)
+                    .withStyle(ChatFormatting.GOLD));
         }
         lines.add(got ? Component.translatable("gui.kingdomsatwar.character.rank.reached").withStyle(ChatFormatting.GOLD)
                 : Component.translatable("gui.kingdomsatwar.path.missing", HeroGui.number(HeroLevel.total(rank.minLevel()) - hero.experience()))

@@ -153,14 +153,25 @@ public final class HeroLevelUpOverlay {
             HeroGui.centered(g, font, line, cx, textTop + (rankUp ? 40.0f : 38.0f) + 6.0f * (1.0f - in3),
                     ARGB.color(Math.round(255 * in3 * out), 0xEDE3C8), 1.0f);
         }
-        if (rank == HeroLevel.Rank.LEGEND && rankUp) {
+        // die Heldenkraft, die diese Stufe(n) mitbringen
+        float inMight = HeroGui.easeOutCubic(HeroGui.span(t, 1.25f, 1.65f));
+        Component might = HeroGui.might(from, to);
+        if (inMight > 0.0f && !might.getString().isEmpty()) {
+            Component line = Component.translatable("hero.kingdomsatwar.level_up.might", might);
+            HeroGui.centered(g, font, line, cx, textTop + (rankUp ? 52.0f : 50.0f) + 6.0f * (1.0f - inMight),
+                    ARGB.color(Math.round(255 * inMight * out), 0xF2C14E), 1.0f);
+        }
+        boolean special = rankUp && (rank == HeroLevel.Rank.LEGEND || rank == HeroLevel.Rank.IMMORTAL);
+        if (special) {
             float in4 = HeroGui.easeOutCubic(HeroGui.span(t, 1.5f, 1.95f));
             if (in4 > 0.0f) {
-                Component line = Component.translatable("hero.kingdomsatwar.level_up.reward",
-                        Component.keybind("key.kingdomsatwar.pat").copy().withStyle(ChatFormatting.GOLD));
-                float y = textTop + 54.0f + 6.0f * (1.0f - in4);
-                HeroGui.light(g, HeroGui.GLOW, cx, y + 4.0f, 150.0f, 0.0f, 0xFFB070FF, 0.35f * in4 * out);
-                HeroGui.centered(g, font, line, cx, y, ARGB.color(Math.round(255 * in4 * out), 0xE0B8FF), 1.0f);
+                boolean immortal = rank == HeroLevel.Rank.IMMORTAL;
+                Component line = immortal ? Component.translatable("hero.kingdomsatwar.level_up.reward.immortal")
+                        : Component.translatable("hero.kingdomsatwar.level_up.reward",
+                                Component.keybind("key.kingdomsatwar.pat").copy().withStyle(ChatFormatting.GOLD));
+                float y = textTop + 66.0f + 6.0f * (1.0f - in4);
+                HeroGui.light(g, HeroGui.GLOW, cx, y + 4.0f, 150.0f, 0.0f, immortal ? 0xFFFFE27A : 0xFFB070FF, 0.35f * in4 * out);
+                HeroGui.centered(g, font, line, cx, y, ARGB.color(Math.round(255 * in4 * out), immortal ? 0xFFF0C0 : 0xE0B8FF), 1.0f);
             }
         }
     }

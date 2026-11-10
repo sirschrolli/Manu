@@ -65,6 +65,7 @@ public final class PatClient {
     static void registerHandlers(RegisterClientPayloadHandlersEvent event) {
         event.register(HeroPatEffectPayload.TYPE, PatClient::onPat);
         event.register(HeroLevelUpPayload.TYPE, HeroLevelUpOverlay::onPayload);
+        event.register(io.github.sirschrolli.kingdomsatwar.network.HeroImmortalPayload.TYPE, ImmortalOverlay::onPayload);
     }
 
     private static void onPat(HeroPatEffectPayload payload, IPayloadContext context) {

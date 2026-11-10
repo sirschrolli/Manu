@@ -209,7 +209,7 @@ def plus(state: str) -> Image.Image:
 # Rangabzeichen
 # =====================================================================================================================
 
-RANKS = ("squire", "warrior", "knight", "hero", "warlord", "legend")
+RANKS = ("squire", "warrior", "knight", "hero", "warlord", "legend", "myth", "demigod", "titan", "starwalker", "immortal")
 # Metall des Rings: hell, mittel, dunkel
 METAL = {
     "squire": (hexc("F2B47C"), hexc("C07A42"), hexc("6A3A18")),
@@ -218,12 +218,23 @@ METAL = {
     "hero": (hexc("FFF0B0"), hexc("E4B23E"), hexc("7A5216")),
     "warlord": (hexc("FFFFFF"), hexc("C8E8F2"), hexc("5A7E92")),
     "legend": (hexc("FFF6C8"), hexc("FFB43A"), hexc("A03A10")),
+    # seit 0.77: die Ränge hinter der Legende
+    "myth": (hexc("F6EEFF"), hexc("B48CF0"), hexc("4A2884")),
+    "demigod": (hexc("FFFFF6"), hexc("F4E0A0"), hexc("8C6C2C")),
+    "titan": (hexc("FFD8B8"), hexc("C8643A"), hexc("561E0C")),
+    "starwalker": (hexc("EEF6FF"), hexc("82AAEC"), hexc("1C3874")),
+    "immortal": (hexc("FFFFFF"), hexc("FFEBB0"), hexc("A8782A")),
 }
 GEMS = {
     "knight": RUBY,
     "hero": (hexc("B8FFD8"), hexc("2FC46E"), hexc("0E5A30")),
     "warlord": (hexc("F2FFFF"), hexc("5FE0F2"), hexc("1A6E8A")),
     "legend": (hexc("FFD0E0"), hexc("FF3A5A"), hexc("7A0A24")),
+    "myth": (hexc("F2DCFF"), hexc("A85AF0"), hexc("481886")),
+    "demigod": (hexc("FFFFFF"), hexc("BDF2FF"), hexc("4AA6C8")),
+    "titan": (hexc("FFE0B8"), hexc("FF5A2A"), hexc("781A08")),
+    "starwalker": (hexc("DCEEFF"), hexc("3E7CFF"), hexc("10286E")),
+    "immortal": (hexc("FFFFFF"), hexc("FFB8F0"), hexc("6A8AFF")),
 }
 LAUREL = {
     "warrior": (hexc("E6EBF2"), hexc("9AA6B6"), hexc("4E5868")),
@@ -231,12 +242,40 @@ LAUREL = {
     "hero": (hexc("A8F0A0"), hexc("3EA84A"), hexc("1A5420")),
     "warlord": (hexc("FFE58A"), hexc("D49A2E"), hexc("6E4614")),
     "legend": (hexc("FFE58A"), hexc("E8A02E"), hexc("7A3E10")),
+    "myth": (hexc("EEE0FF"), hexc("9C7ACC"), hexc("482E70")),
+    "demigod": (hexc("FFF6C8"), hexc("E8C450"), hexc("7A5A16")),
+    "titan": (hexc("FFCC94"), hexc("B8642A"), hexc("561E08")),
+    "starwalker": (hexc("F2F8FF"), hexc("A8BCDC"), hexc("48587A")),
+    "immortal": (hexc("FFFFFF"), hexc("FFE58A"), hexc("A8782A")),
 }
 WINGS = {
     "warlord": (hexc("FFFFFF"), hexc("D2E2EE"), hexc("7890A8")),
     "legend": (hexc("FFF2C0"), hexc("FFB447"), hexc("B04A12")),
+    "myth": (hexc("FFFFFF"), hexc("DCCCF6"), hexc("7864AC")),
+    "demigod": (hexc("FFFFFF"), hexc("FFF2C8"), hexc("C8A050")),
+    "titan": (hexc("FFD4AC"), hexc("A85A2A"), hexc("481C0A")),
+    "starwalker": (hexc("EAF2FF"), hexc("7C9CE2"), hexc("1C2C6C")),
+    "immortal": (hexc("FFFFFF"), hexc("FFF4D2"), hexc("E0B050")),
 }
+# Strahlenkranz hinter allem (Legende und höher): Anzahl, lange und kurze Strahlen, Breite, Farben
+RAYS = {
+    "legend": (16, 23.4, 20.0, 0.26, (hexc("FFF6C8"), hexc("FFC24A"), hexc("C05A10"))),
+    "myth": (12, 23.4, 19.0, 0.30, (hexc("F8EEFF"), hexc("C890FF"), hexc("6A2AB0"))),
+    "demigod": (24, 23.0, 20.5, 0.30, (hexc("FFFFFF"), hexc("FFF0B4"), hexc("C89A40"))),
+    "titan": (8, 23.6, 21.0, 0.34, (hexc("FFE4C4"), hexc("FF7A3A"), hexc("8A260A"))),
+    "starwalker": (8, 23.8, 16.5, 0.18, (hexc("FFFFFF"), hexc("A8C8FF"), hexc("3A5AC8"))),
+    "immortal": (16, 23.8, 21.0, 0.24, (hexc("FFFFFF"), hexc("FFEBA6"), hexc("E08AC8"))),
+}
+# ein Heiligenschein-Ring hinter dem Abzeichen (Halbgott, Unsterblicher)
+HALO = {"demigod": hexc("FFF4C8"), "immortal": hexc("FFFFFF")}
 DISK = (hexc("2E2840"), hexc("120F1A"))
+
+
+def _prism(angle: float) -> RGBA:
+    """Ein zarter Regenbogenton je Winkel (für den Unsterblichen)."""
+    import colorsys
+    r, g, b = colorsys.hsv_to_rgb((angle / (2 * math.pi)) % 1.0, 0.32, 1.0)
+    return (int(r * 255), int(g * 255), int(b * 255), 255)
 
 
 def _shade(colors: tuple[RGBA, RGBA, RGBA], t: float) -> RGBA:
@@ -286,7 +325,11 @@ def emblem(rank: str, size: int = 48) -> Image.Image:
             band_top = cy - r_ring - 1.6
             if band_top - 0.2 <= y <= cy - r_ring + 1.8 and abs(dx) <= 8.6:
                 return _shade(METAL[rank], 0.7 if y < band_top + 1.2 else 0.42)
-            for (sx, hgt, w) in ((-7.4, 4.4, 1.5), (-3.8, 6.0, 1.6), (0.0, 8.4, 1.9), (3.8, 6.0, 1.6), (7.4, 4.4, 1.5)):
+            spikes = ((-7.4, 4.4, 1.5), (-3.8, 6.0, 1.6), (0.0, 8.4, 1.9), (3.8, 6.0, 1.6), (7.4, 4.4, 1.5))
+            if rank in ("titan", "immortal"):
+                spikes = ((-8.6, 3.6, 1.2), (-5.8, 5.2, 1.3), (-2.9, 6.8, 1.4), (0.0, 8.8, 1.8), (2.9, 6.8, 1.4), (5.8, 5.2, 1.3),
+                          (8.6, 3.6, 1.2))
+            for (sx, hgt, w) in spikes:
                 top = band_top - hgt
                 if top <= y <= band_top and abs(dx - sx) <= w * (y - top) / hgt + 0.35:
                     return _shade(METAL[rank], 0.82 if dx < sx else 0.5)
@@ -307,6 +350,9 @@ def emblem(rank: str, size: int = 48) -> Image.Image:
                     rx, ry = cx + math.cos(a) * rr, cy + math.sin(a) * rr
                     if math.hypot(x - rx, y - ry) <= 1.45:
                         return _shade(GEMS[rank], 0.8 if (x - rx) + (y - ry) < 0 else 0.38)
+            if rank == "immortal":
+                # der Ring des Unsterblichen schillert in allen Farben des Lichts
+                return mix(_shade(METAL[rank], t), _prism(ang), 0.42)
             return _shade(METAL[rank], t)
         if d <= r_ring + 1.0:
             return INK
@@ -350,15 +396,32 @@ def emblem(rank: str, size: int = 48) -> Image.Image:
                         bottom = top_edge + depth * (1.0 - tt * 0.35) - teeth * 2.2
                         if top_edge <= dy <= bottom:
                             shade = (0.88, 0.62, 0.4)[row] - (dy - top_edge) / max(0.5, bottom - top_edge) * 0.18
+                            if rank == "immortal" and tt > 0.55:
+                                return mix(_shade(WINGS[rank], shade), _prism(tt * 9.0 + row), 0.45)
                             return _shade(WINGS[rank], shade)
-        # Strahlenkranz (Legende) hinter allem
+        # Heiligenschein-Ring (Halbgott, Unsterblicher)
+        if rank in HALO and abs(d - 17.4) <= 0.62:
+            return mix(HALO[rank], hexc("C89A40"), 0.15 + 0.35 * (0.5 + 0.5 * math.sin(ang * 2.0)))
+        # kleine Sterne (Mythos, Sternenwanderer): vier Zacken, oben schräg zwischen Krone und Schwingen
+        if rank in ("myth", "starwalker", "immortal"):
+            for (sa, sr, size) in ((-62.0, 20.6, 2.6), (-118.0, 20.6, 2.6), (-90.0, 22.4, 0.0)):
+                if size <= 0.0:
+                    continue
+                sxp, syp = cx + math.cos(math.radians(sa)) * sr, cy + math.sin(math.radians(sa)) * sr
+                ex, ey = abs(x - sxp), abs(y - syp)
+                if (ex <= 0.55 and ey <= size) or (ey <= 0.55 and ex <= size) or (ex + ey <= 1.2):
+                    return mix(hexc("FFFFFF"), RAYS[rank][4][1], 0.25)
+        # Strahlenkranz (Legende und höher) hinter allem
         if tier >= 5:
-            rays_n = 16
+            rays_n, long_len, short_len, width, colors = RAYS[rank]
             a = (ang + math.pi) / (2 * math.pi) * rays_n
             frac = abs(a - round(a))
-            length = 23.4 if round(a) % 2 == 0 else 20.0
-            if r_ring < d <= length and frac <= 0.26 * (1 - (d - r_ring) / (length - r_ring)) + 0.03:
-                return _shade((hexc("FFF6C8"), hexc("FFC24A"), hexc("C05A10")), 0.85 - (d - r_ring) / (length - r_ring) * 0.55)
+            length = long_len if round(a) % 2 == 0 else short_len
+            if r_ring < d <= length and frac <= width * (1 - (d - r_ring) / (length - r_ring)) + 0.03:
+                col = _shade(colors, 0.85 - (d - r_ring) / (length - r_ring) * 0.55)
+                if rank == "immortal":
+                    col = mix(col, _prism(round(a) / rays_n * 2 * math.pi), 0.35)
+                return col
         return None
 
     img = Image.new("RGBA", (size, size), CLEAR)
@@ -650,9 +713,20 @@ def landmark(rank: str) -> Image.Image:
     px = img.load()
     dark = hexc("17132C")
     flag = {"squire": hexc("D08C52"), "warrior": hexc("D9E1EA"), "knight": hexc("F2C14E"), "hero": hexc("52D98F"),
-            "warlord": hexc("6EE2F5"), "legend": hexc("FF9A3C")}[rank]
+            "warlord": hexc("6EE2F5"), "legend": hexc("FF9A3C"), "myth": hexc("C08CFF"), "demigod": hexc("FFE9A6"),
+            "titan": hexc("FF6B4A"), "starwalker": hexc("7FB8FF"), "immortal": hexc("FFF4E0")}[rank]
     win = hexc("FFD27A")
     lit: list[tuple[int, int]] = []
+    glows: list[tuple[int, int, tuple]] = []
+
+    def glow(x, y, col):
+        glows.append((int(x), int(y), col))
+
+    def disc(cx0, cy0, rx, ry):
+        for y in range(int(cy0 - ry) - 1, int(cy0 + ry) + 2):
+            for x in range(int(cx0 - rx) - 1, int(cx0 + rx) + 2):
+                if 0 <= x < w and 0 <= y < h and ((x + 0.5 - cx0) / rx) ** 2 + ((y + 0.5 - cy0) / ry) ** 2 <= 1.0:
+                    px[x, y] = dark
 
     def rect(x0, y0, x1, y1):
         for y in range(max(0, y0), min(h, y1)):
@@ -755,6 +829,118 @@ def landmark(rank: str) -> Image.Image:
         flagpole(48, ground - 66, 12)
         flagpole(20, ground - 58, 10)
         flagpole(76, ground - 58, 10)
+    elif rank == "myth":
+        # ein Tempel aus alter Zeit, Säulen zum Teil gebrochen – über ihm schwebt ein leuchtender Kristall
+        rect(18, ground - 3, 78, ground)
+        rect(21, ground - 6, 75, ground - 3)
+        rect(24, ground - 8, 72, ground - 6)
+        cols = ((27, 26), (36, 26), (45, 26), (54, 18), (63, 11))
+        for (x0, ht) in cols:
+            rect(x0, ground - 8 - ht, x0 + 4, ground - 8)
+            rect(x0 - 1, ground - 8 - ht, x0 + 5, ground - 7 - ht)
+        rect(24, ground - 37, 58, ground - 34)                  # Gebälk (nur über den heilen Säulen)
+        for y in range(ground - 46, ground - 37):              # Giebel, zur Hälfte
+            t = (y - (ground - 46)) / 9
+            for x in range(int(41 - 17 * t), int(41 + 17 * t) + 1):
+                if x < 58:
+                    px[x, y] = dark
+        for (x, y) in ((70, ground - 3), (72, ground - 4), (75, ground - 2)):    # Trümmer
+            rect(x, y - 2, x + 3, y + 1)
+        kx, ky = 48, 12                                          # der Kristall
+        for y in range(ky - 8, ky + 9):
+            half = (8 - abs(y - ky)) * 0.55
+            for x in range(int(kx - half), int(kx + half) + 1):
+                glow(x, y, mix(hexc("F6E8FF"), flag, abs(x - kx) / max(1.0, half + 0.5)))
+        for k in range(1, 4):
+            glow(kx, ky + 9 + k * 3, mix(flag, hexc("17132C"), 0.4))
+    elif rank == "demigod":
+        # ein Palast auf einer Wolkenbank – Kuppel, zwei schlanke Türme, ein leuchtendes Tor
+        for (cx0, cy0, rx, ry) in ((16, ground - 6, 14, 6), (34, ground - 9, 16, 8), (56, ground - 8, 18, 7), (78, ground - 6, 15, 6),
+                                   (46, ground - 3, 40, 4)):
+            disc(cx0, cy0, rx, ry)
+        rect(30, ground - 34, 66, ground - 14)
+        disc(48, ground - 34, 12, 11)
+        rect(47, ground - 50, 49, ground - 44)
+        for tx in (24, 68):
+            rect(tx, ground - 44, tx + 5, ground - 14)
+            tri(tx - 1, tx + 6, ground - 54, ground - 43)
+            window(tx + 2, ground - 36, 3)
+        for y in range(ground - 26, ground - 14):              # Tor
+            for x in range(44, 53):
+                if y > ground - 24 or abs(x - 48) <= 2:
+                    glow(x, y, mix(hexc("FFFFFF"), flag, (y - (ground - 26)) / 12))
+        for x in range(34, 64, 6):
+            window(x, ground - 30)
+        flagpole(48, ground - 58, 8)
+    elif rank == "titan":
+        # ein Koloss auf einer Klippe, das Schwert vor sich auf den Fels gestützt, die Augen glühen
+        for y in range(ground - 10, ground):
+            t = (y - (ground - 10)) / 10
+            for x in range(int(30 - 16 * t), int(66 + 18 * t)):
+                if 0 <= x < w:
+                    px[x, y] = dark
+        rect(38, ground - 30, 45, ground - 10)               # Beine
+        rect(51, ground - 30, 58, ground - 10)
+        rect(36, ground - 50, 60, ground - 29)               # Rumpf
+        rect(32, ground - 52, 64, ground - 46)               # Schultern
+        disc(48, ground - 57, 4.6, 5.2)                      # Kopf
+        tri(43, 54, ground - 66, ground - 60)                # Helmkamm
+        rect(28, ground - 50, 33, ground - 34)               # Arme hinab zum Schwert
+        rect(63, ground - 50, 68, ground - 34)
+        rect(46, ground - 40, 50, ground - 10)               # die Klinge vor ihm
+        rect(40, ground - 42, 56, ground - 40)               # Parierstange
+        for (ex, ey) in ((46, ground - 58), (50, ground - 58)):
+            glow(ex, ey, hexc("FFD0A0"))
+            glow(ex, ey + 1, flag)
+    elif rank == "starwalker":
+        # eine Sternwarte: Turm mit Kuppel, Spalt und Fernrohr; ein Strahl aus Sternenlicht steigt auf
+        rect(10, ground - 6, 86, ground)
+        rect(38, ground - 40, 58, ground - 6)
+        disc(48, ground - 40, 12, 10)
+        rect(30, ground - 18, 38, ground - 6)
+        rect(58, ground - 22, 70, ground - 6)
+        tri(57, 71, ground - 30, ground - 21)
+        for k in range(14):                                   # Fernrohr schräg nach rechts oben
+            for j in range(3):
+                x, y = 52 + k, ground - 46 - k + j
+                if 0 <= x < w and 0 <= y < h:
+                    px[x, y] = dark
+        for k in range(1, 18):                                # der Sternenstrahl
+            glow(66 + k, ground - 61 - k, mix(hexc("FFFFFF"), flag, k / 18))
+        for (x, y) in ((80, 8), (88, 16), (72, 6), (90, 4), (14, 10), (24, 4)):
+            glow(x, y, hexc("FFFFFF"))
+        window(46, ground - 30, 3)
+        window(50, ground - 20, 3)
+        window(63, ground - 14)
+    elif rank == "immortal":
+        # die Himmelszitadelle auf einem schwebenden Fels, hinter der höchsten Spitze ein Ring aus Licht
+        for a in range(0, 360, 3):                            # der Lichtring
+            for rr in (19.0, 19.6):
+                x = 48 + math.cos(math.radians(a)) * rr
+                y = 24 + math.sin(math.radians(a)) * rr * 0.92
+                glow(x, y, mix(hexc("FFFFFF"), flag, 0.3 + 0.3 * math.sin(math.radians(a * 2))))
+        for y in range(ground - 14, ground + 3):              # der schwebende Fels (darunter Luft)
+            t = (y - (ground - 14)) / 17
+            half = 34 * (1 - t ** 1.6)
+            for x in range(int(48 - half), int(48 + half) + 1):
+                if 0 <= x < w and 0 <= y < h:
+                    px[x, y] = dark
+        for y in range(ground, h):
+            for x in range(w):
+                if px[x, y] == dark and abs(x - 48) > 12 - (y - ground) * 3:
+                    px[x, y] = CLEAR
+        rect(42, ground - 50, 54, ground - 14)                # die hohe Spitze
+        tri(40, 56, ground - 64, ground - 49)
+        for (tx, ht) in ((24, 26), (32, 34), (62, 34), (70, 26)):
+            rect(tx, ground - 14 - ht, tx + 6, ground - 14)
+            tri(tx - 1, tx + 7, ground - 22 - ht, ground - 13 - ht)
+            window(tx + 3, ground - ht, 3)
+        rect(30, ground - 22, 66, ground - 14)
+        battlements(30, 66, ground - 22)
+        for k in range(3):
+            window(46 + k * 2, ground - 40, 4)
+        for k in range(1, 9):
+            glow(48, ground - 64 - k, mix(hexc("FFFFFF"), flag, k / 9))
     else:
         tri(4, 92, 6, ground)
         rect(34, 8, 62, 20)
@@ -778,6 +964,9 @@ def landmark(rank: str) -> Image.Image:
     for (x, y) in lit:
         if 0 <= x < w and 0 <= y < h:
             opx[x, y] = win
+    for (x, y, col) in glows:
+        if 0 <= x < w and 0 <= y < h:
+            opx[x, y] = col
     return out
 
 
