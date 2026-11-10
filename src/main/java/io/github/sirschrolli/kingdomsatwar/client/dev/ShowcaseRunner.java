@@ -41,6 +41,8 @@ public final class ShowcaseRunner {
 
     private static final Deque<Step> STEPS = new ArrayDeque<>();
     private static boolean worldRequested;
+    /** Hand ausblenden (für Bilder mit Anzeige, aber ohne leere Hand im Bild). */
+    static boolean hideHand;
     private static boolean scenesQueued;
     private static int waitTicks;
     private static int stepTicks;
@@ -94,6 +96,13 @@ public final class ShowcaseRunner {
                     flat ? WorldPresets::createTestWorldDimensions : WorldPresets::createNormalWorldDimensions, title);
         } catch (IOException e) {
             LOGGER.error("[Showcase] Welt konnte nicht erzeugt werden", e);
+        }
+    }
+
+    @SubscribeEvent
+    static void onRenderHand(net.neoforged.neoforge.client.event.RenderHandEvent event) {
+        if (enabled() && hideHand) {
+            event.setCanceled(true);
         }
     }
 

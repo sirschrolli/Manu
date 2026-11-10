@@ -30,6 +30,7 @@ public final class ModNetwork {
                 .playToServer(HealPayload.TYPE, HealPayload.STREAM_CODEC, HealPayload::handle)
                 .playToServer(FaeFlapPayload.TYPE, FaeFlapPayload.STREAM_CODEC, FaeFlapPayload::handle)
                 .playToServer(StarBoostPayload.TYPE, StarBoostPayload.STREAM_CODEC, StarBoostPayload::handle)
+                .playToServer(CreatorBoostPayload.TYPE, CreatorBoostPayload.STREAM_CODEC, CreatorBoostPayload::handle)
                 .playToServer(GlitchBlinkPayload.TYPE, GlitchBlinkPayload.STREAM_CODEC, GlitchBlinkPayload::handle)
                 .playToServer(ProvisionPayload.TYPE, ProvisionPayload.STREAM_CODEC, ProvisionPayload::handle)
                 .playToServer(CampaignPayload.TYPE, CampaignPayload.STREAM_CODEC, CampaignPayload::handle)

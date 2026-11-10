@@ -82,7 +82,7 @@ public final class CreatorBlocks {
                     .component(DataComponents.UNBREAKABLE, Unit.INSTANCE)
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
                             .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.CREATOR_WINGS_ASSET).setDamageOnHurt(false).build())
-                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 2))));
+                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 4))));
 
     // ---------------------------------------------------------------- Spawn-Eier
     public static final DeferredItem<SpawnEggItem> SCHROLLI_SPAWN_EGG = egg("schrolli", () -> ModEntities.SCHROLLI.get());

@@ -69,6 +69,7 @@ final class SchrolliShowcase {
     static void boss(Deque<Step> steps) {
         Court s = new Court();
         steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = true));
         steps.add(Step.once(minecraft -> {
             minecraft.options.renderDistance().set(16);
             minecraft.options.gamma().set(1.0);
@@ -286,16 +287,16 @@ final class SchrolliShowcase {
                 {"PLANETS", "40", "schoepfer_weltenwurf", "-40", "17", "5", "0.1"},
                 {"PLANETS", "72", "schoepfer_weltenwurf_flug", "-75", "20", "5", "0.6"},
                 {"SUPERNOVA", "40", "schoepfer_supernova_ruf", "@", "18", "4", "30", "hud"},
-                {"SUPERNOVA", "126", "schoepfer_supernova", "@", "26", "6", "40"},
+                {"SUPERNOVA", "126", "schoepfer_supernova", "@", "16", "3", "30"},
                 {"GENESIS", "86", "schoepfer_urknall_sog", "@", "16", "10", "22"},
                 {"GENESIS", "112", "schoepfer_urknall", "@", "18", "12", "24"},
                 {"CONSTELLATION", "46", "schoepfer_sternbild_linien", "-40", "16", "7", "0.85"},
                 {"CONSTELLATION", "62", "schoepfer_sternbild", "-40", "16", "7", "0.85"},
-                {"TWIN_HALOS", "46", "schoepfer_doppelklinge", "-30", "20", "10", "0.5"},
+                {"TWIN_HALOS", "46", "schoepfer_doppelklinge", "-30", "16", "6", "0.3"},
                 {"APOCALYPSE", "40", "schoepfer_juengstes_gericht_ruf", "@", "20", "4", "30", "hud"},
                 {"APOCALYPSE", "92", "schoepfer_juengstes_gericht", "@", "42", "30", "62"},
                 {"EYE_BEAMS", "66", "schoepfer_augenstrahlen", "-50", "17", "4", "0.35"},
-                {"COMET", "58", "schoepfer_komet", "-70", "22", "12", "0.7"},
+                {"COMET", "58", "schoepfer_komet", "-70", "26", "0", "0.45"},
                 {"COMET", "72", "schoepfer_komet_einschlag", "-50", "16", "5", "0.5"},
                 {"WORLD_SPLIT", "30", "schoepfer_weltenriss", "-30", "22", "12", "0.2"},
                 {"WORLD_SPLIT", "40", "schoepfer_weltenriss_licht", "-30", "22", "12", "0.2"},
@@ -350,6 +351,7 @@ final class SchrolliShowcase {
         }));
         steps.add(courtLook(s, 10.0, 2.0, 30.0, true, 3.0));
         steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
         steps.add(Step.waitTicks(10));
         steps.add(shot("schoepfer_zepter_hand"));
         steps.add(Step.server(any -> {
@@ -360,8 +362,54 @@ final class SchrolliShowcase {
         }));
         steps.add(Step.waitTicks(3));
         steps.add(shot("schoepfer_zepter_speer"));
-        steps.add(Step.server(any -> cam(any.getServer()).setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY)));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = true));
         steps.add(Step.hud(false));
+        // mit den Schwingen über dem Hof: von hinten gesehen, im Gleitflug – und der Schwingenschlag
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            ServerLevel court = court(any.getServer());
+            player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
+            player.getAbilities().invulnerable = true;
+            player.getAbilities().flying = false;
+            player.getAbilities().mayfly = false;
+            player.onUpdateAbilities();
+            Vec3 at = s.c.add(-30.0, 26.0, 30.0);
+            player.teleportTo(court, at.x, at.y, at.z, Set.of(), -135.0f, 12.0f, true);
+        }));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.startFallFlying();
+            player.setDeltaMovement(new Vec3(0.9, -0.15, -0.9));
+            player.needsSync = true;
+        }));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player != null) {
+                minecraft.player.setDeltaMovement(new Vec3(0.9, -0.15, -0.9));
+            }
+        }));
+        steps.add(Step.waitTicks(14));
+        steps.add(shot("schoepfer_schwingen_flug"));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player != null && minecraft.player.isFallFlying()) {
+                minecraft.player.setDeltaMovement(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.boostVelocity(
+                        minecraft.player.getDeltaMovement(), minecraft.player.getLookAngle()));
+                net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(
+                        io.github.sirschrolli.kingdomsatwar.network.CreatorBoostPayload.INSTANCE);
+            }
+        }));
+        steps.add(Step.waitTicks(3));
+        steps.add(shot("schoepfer_schwingenschlag"));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+        }));
         // ------------------------------------------------------------------ sein Vergehen
         steps.add(Step.server(any -> {
             ServerLevel court = court(any.getServer());

@@ -2038,7 +2038,11 @@ public class ModLanguageProvider extends LanguageProvider {
         text(ModItems.loreKey("creator_scepter", 4), "Strikes harder than any sword", "Trifft härter als jedes Schwert");
         item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS, "Wings of the Creator", "Schwingen des Schöpfers");
         lore("creator_wings", "White feathers with golden tips – glide like elytra", "Weiße Federn mit goldenen Spitzen – gleiten wie Elytren");
-        text(ModItems.loreKey("creator_wings", 2), "They never break", "Sie zerbrechen nie");
+        text(ModItems.loreKey("creator_wings", 2), "Jump while gliding: Wingbeat – a surge forward (every 1.5 seconds)",
+                "Im Gleitflug springen: Schwingenschlag – ein Stoß nach vorn (alle 1,5 Sekunden)");
+        text(ModItems.loreKey("creator_wings", 3), "No fall or impact damage – the wings catch you",
+                "Kein Fall- und Aufprallschaden – die Schwingen fangen dich auf");
+        text(ModItems.loreKey("creator_wings", 4), "They never break", "Sie zerbrechen nie");
         for (String[] e : new String[][] {{"ambient", "The Creator hums", "Der Schöpfer summt"}, {"hurt", "The Creator hurts", "Der Schöpfer nimmt Schaden"},
                 {"death", "The Creator fades", "Der Schöpfer vergeht"}, {"awaken", "The Creator descends", "Der Schöpfer steigt herab"},
                 {"ascend", "The Creator ascends", "Der Schöpfer steigt auf"}, {"voice", "The Creator speaks", "Der Schöpfer spricht"},

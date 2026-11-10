@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.74 – Die Kampfdimensionen.** Die sechs großen Bosse nach den Erzmagiern kämpfen jetzt wie die Erzmagier in ihrer eigenen Welt: Wer ihren Hort betritt, wird – mit allen Mitstreitern am Hort und ihren Soldaten – in die **Kampfdimension** des Bosses gezogen. Dort schwebt ein Abbild seines Horts unter einem fremden Himmel: MissMystiks **Mondbühne** (die Zauberbühne als Feeninsel unter dem Vollmond, tief unten ein rosa Wolkenmeer), Malleus' **Glutesse** (der Glutdom als Vulkan unter einem brennenden Himmel), Asterias **Sternenzelt** (die Sternwarte auf ihrer Endinsel zwischen unzähligen Sternen), Annis **Fehlerraum** (die Fehlerzone als herausgerissener Chunk im Bildrauschen), die **Thronwelt** des Zerbrochenen Königs und der **Weltenschlund** des Weltenfressers unter flammenden Rissen. Es gelten die Regeln der Arkanen Sphäre: nichts bauen, nichts abbauen, wer stirbt, verliert alles, was er bei sich trägt, wer abstürzt, wird zurückgeworfen – und wer später an den Hort kommt, folgt den anderen. Fällt der Boss, kehren alle mit Beute und Erfahrung an den Hort zurück. Fallen alle, die gegen ihn stehen, **vergeht der Boss und erwacht beim nächsten Mal mit voller Kraft und in seiner ursprünglichen Gestalt** – auch dann, wenn (etwa nach einem Angriff aus der Ferne) am Hort selbst gekämpft wird. Dazu: ein **Spawn-Ei des Weltenfressers**, und `/locate structure` findet jetzt den Schlund der Welten (im Abgrund) und den Thron der Alten (in der Leere).
+> **Testversion 0.75 – Schrolli der Schöpfer.** Der stärkste Gegner von allen: Wer einen **Schöpferfunken** (Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet) in den **Altar des Schöpfers** legt und ihn berührt, wird mit allen, die im goldenen Kreis stehen, in **die Schöpfung** gehoben – die größte aller Kampfdimensionen: ein Kreis aus weißem Quarz und Gold über einem Meer aus Wolken, zwölf Säulen, der Thron mit der Sonnenscheibe, vier Brücken zu vier Welten, hoch darüber die Räder des Himmels – unter einem **eigenen Himmel** mit Sonnenrad, Nebeln, einer Galaxie und fernen Welten, dazu eigene Musik. In einer Säule aus Licht steigt **Schrolli der Schöpfer** herab: ein Seraph mit sechs Schwingen, Krone aus Lichtstrahlen und Heiligenschein, Zepter und Weltkugel – **3.200 Lebenspunkte**, und mit **26 eigenen Künsten** (Lichtspeere, Heiligenschein-Klinge, Säulen des Lichts, Sternenregen, Zepterschlag, Strahl der Schöpfung, Weltkugel, Federsturm, Göttliches Urteil, Seraphim, Lichtsprung, Schwingensturm, Sonnenrad, Engelschor, „Es werde Licht!“ und die **Zeit, die stillsteht**). Fällt er, stirbt er nicht: Er steigt in seine **Wahre Gestalt** auf – größer, das Gewand ein Weltall, Räder voller Augen um ihn, eine neue volle Leiste –, und der Himmel öffnet sich: ein **Auge aus Sternen** und Risse aus Licht. Dann wirft er **Welten**, entfacht die **Supernova** (nur hinter einer Säule ist man sicher), ruft den **Urknall**, Sternbilder, Kometen, das **Jüngste Gericht** und den **Weltenriss** – und versucht, sich **neu zu erschaffen** (unterbrecht ihn!). Wer ihn bezwingt, erhält das **Zepter des Schöpfers** (3D, Lichtspeere und Säulen aus Licht), die **Schwingen des Schöpfers** (Schwingenschlag im Gleitflug, kein Fall- und Aufprallschaden) und den höchsten Titel: **„Gottbezwinger“**.
+> In 0.74 kamen die Kampfdimensionen: Die sechs großen Bosse nach den Erzmagiern kämpfen jetzt wie die Erzmagier in ihrer eigenen Welt: Wer ihren Hort betritt, wird – mit allen Mitstreitern am Hort und ihren Soldaten – in die **Kampfdimension** des Bosses gezogen. Dort schwebt ein Abbild seines Horts unter einem fremden Himmel: MissMystiks **Mondbühne** (die Zauberbühne als Feeninsel unter dem Vollmond, tief unten ein rosa Wolkenmeer), Malleus' **Glutesse** (der Glutdom als Vulkan unter einem brennenden Himmel), Asterias **Sternenzelt** (die Sternwarte auf ihrer Endinsel zwischen unzähligen Sternen), Annis **Fehlerraum** (die Fehlerzone als herausgerissener Chunk im Bildrauschen), die **Thronwelt** des Zerbrochenen Königs und der **Weltenschlund** des Weltenfressers unter flammenden Rissen. Es gelten die Regeln der Arkanen Sphäre: nichts bauen, nichts abbauen, wer stirbt, verliert alles, was er bei sich trägt, wer abstürzt, wird zurückgeworfen – und wer später an den Hort kommt, folgt den anderen. Fällt der Boss, kehren alle mit Beute und Erfahrung an den Hort zurück. Fallen alle, die gegen ihn stehen, **vergeht der Boss und erwacht beim nächsten Mal mit voller Kraft und in seiner ursprünglichen Gestalt** – auch dann, wenn (etwa nach einem Angriff aus der Ferne) am Hort selbst gekämpft wird. Dazu: ein **Spawn-Ei des Weltenfressers**, und `/locate structure` findet jetzt den Schlund der Welten (im Abgrund) und den Thron der Alten (in der Leere).
 > In 0.73 kam der Weltenfresser: Im Abgrund schwebt der **Schlund der Welten**: ein Ring aus Chaosgestein in einem weiten, leer gefegten Auge des Chaos, in der Mitte ein Loch bis ins Nichts. Um den Schlund schweben sieben **Kronensplitter** – die Splitter der Krone, die der Zerbrochene König einst zerbrach, um das Wesen darunter zu versiegeln –, und Ketten aus Licht laufen von ihnen zu einem Siegelstern. Wer den Ring betritt, weckt den **Weltenfresser**: Die Splitter zerspringen, und aus dem Schlund bricht ein gewaltiger Wurm aus Chaosgestein mit einem Rachen wie eine Blüte und zwölf Gliedern, auf denen Stücke der Welten liegen, die er verschlungen hat – das **stärkste Wesen der Mod** (2.600 Lebenspunkte), mit Biss, Weltenhunger, Weltenspucke, Leibhieb, Rissatem, Schwerkraftsturz, Ruf der Welten und seinem **Zorn**, in dem der Himmel aufflammt und der Ring zerbricht. Besiegt hinterlässt er den **Weltenspeer** (3D, jeder Treffer trägt eine von vier Welten in sich, jeder vierte ruft einen Weltbrocken vom Himmel) und seinen **Kopf** als Trophäe – und wer dabei war, trägt fortan den Titel **„Weltenretter“** in Gold vor seinem Namen. Damit ist der Weg der Geschichte bis zum Ende gegangen. In 0.73.1 lernten die großen Gegner, wirklich so viel auszuhalten, wie für sie vorgesehen ist – Minecraft erlaubt einem Wesen nur 1.024 Lebenspunkte, und der Zerbrochene König (1.800), Nyxar (1.400), Terragon (1.150) und die Drachen auf „Schwer“ oder gegen mehrere Spieler blieben bisher darunter; ihre Leiste fasst weiter 1.024, aber jeder Treffer zählt entsprechend weniger.
 > In 0.72 kam der Abgrund: eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden **Weltennähten**, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller weißglühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt, **Schwebe- und Hebekristalle** der verdrehten Schwerkraft, der **Abgrundriss** hinter dem Thron des Zerbrochenen Königs und der **Rissschlüssel**, der Risse in der Leere öffnet.
 > In 0.71 kamen vier Monster in die Schattenwelt und ins End, jedes mit eigenem Modell, eigenen Animationen, Angriffen und Klängen: der **Seelenreiher** in den Seelensümpfen (Speerschnabel, Schwingenschlag und Sturzflug aus der Luft), der **Nachtwidder** auf den Schattengipfeln (scharrt und stürmt los – wer ausweicht, lässt ihn gegen die Wand krachen), die **Rissjäger** auf den äußeren End-Inseln (versinken in einem Riss und tauchen hinter ihrem Opfer auf) und der **Chorusschlund**, der zwischen den Chorusbäumen wie eine Knospe wartet, bis er zu einem Schlund mit Zähnen aufblüht.
@@ -359,6 +360,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Neue Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist (0.69); Seelenreiher, Nachtwidder, Rissjäger, Chorusschlund in der Schattenwelt und im End (0.71) | ✅ fertig |
 | **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
 | **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
+| **Schrolli der Schöpfer** (0.75): der stärkste Gegner – Schöpferfunke und Altar des Schöpfers, die Schöpfung (die größte Kampfdimension, eigener Himmel, eigene Musik), ein Seraph mit 26 Künsten, die Wahre Gestalt statt des Todes (der Himmel öffnet sich), Seraphlinge, eigene Bossleisten; Zepter des Schöpfers (3D), Schwingen des Schöpfers und der Titel „Gottbezwinger“ | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
@@ -2727,6 +2729,8 @@ aussehen, nur ohne Beute (die Truhen bleiben leer) und ohne Wesen – und schweb
 - **Die Thronwelt** (der Zerbrochene König): der Thron der Alten unter einem violetten Himmel voller kalter Sterne.
 - **Der Weltenschlund** (der Weltenfresser): der Schlund der Welten unter den flammenden Rissen des Abgrunds,
   Glutasche in der Luft.
+- **Die Schöpfung** (Schrolli der Schöpfer, seit 0.75): sein Hof – keine Kopie, sondern immer derselbe, eigens gebaute Ort,
+  die größte aller Kampfdimensionen (siehe „Schrolli der Schöpfer“).
 
 Es gelten die Regeln der Arkanen Sphäre:
 
@@ -2747,6 +2751,126 @@ Es gelten die Regeln der Arkanen Sphäre:
   Fällt dort der letzte Gegner, vergeht der Boss ebenso und erwacht beim nächsten Mal unversehrt.
 - Sternenlanze, Glutspeer und Weltenspeer sind in den Kampfdimensionen so stark wie in ihrer Heimat (im End, im Nether,
   im Abgrund und in der Leere).
+
+### Schrolli der Schöpfer
+
+![Schrolli der Schöpfer in der Schöpfung – und in seiner Wahren Gestalt](docs/bilder/die_schoepfung.jpg)
+
+Seit 0.75 wartet jenseits aller Geschichten der **stärkste Gegner der Mod**: der, der die Welt erschaffen hat.
+
+**Der Schöpferfunke und der Altar.** Ein **Schöpferfunke** – ein Splitter des ersten Lichts – fällt bei jedem Sieg über
+den Weltenfresser. Wer ihn anders erlangen will, schmiedet ihn aus den Trophäen aller großen Gegner: zwei Herzkristalle,
+ein Sternsplitter, ein Fehlersplitter, ein Netherstern, ein Leerensplitter, Feenstaub, eine Weltennaht und ein
+Glutklumpen. Den **Altar des Schöpfers** baut man selbst (zwei Goldblöcke, ein Totem der Unsterblichkeit, ein
+Diamantblock und gemeißelter Quarz) und stellt ihn auf, wo man will. Ein Rechtsklick mit dem Funken legt ihn hinein – über
+dem Altar schwebt dann ein gleißender Kristall (schleichend nimmt man den Funken wieder heraus). **Berührt** man den
+Altar, erwacht er: Eine Säule aus Licht steigt in den Himmel, ein goldener Kreis (16 Blöcke) leuchtet am Boden auf, und nach
+fünf Sekunden wird jeder, der im Kreis steht, samt seinen Soldaten **in die Schöpfung gehoben**. Rufen können ihn nur
+Überlebende (nicht im Kreativmodus).
+
+**Die Schöpfung** ist der Hof des Schöpfers und die **größte aller Kampfdimensionen** – fast 200 Blöcke weit: in der Mitte
+der **Schöpfungskreis** (85 Blöcke im Durchmesser) aus weißem Quarz und Gold mit einer Sonne aus zwölf Strahlen, Ringen aus
+Gold, einem Sternenfeld aus leuchtenden Steinen und zwölf Feldern wie die Zeichen des Himmels; darunter ein Kegel aus
+Kalzit mit Goldadern, an dessen Spitze ein Kern aus Licht hängt. Am Rand stehen **zwölf Säulen** mit Flammen aus Licht
+(hinter ihnen findet man Schutz), im Norden der **Thron** auf seinen goldenen Stufen mit der Sonnenscheibe, davor das
+Abbild des Altars. Vier **Brücken** führen zu vier **Welten**, die um den Hof schweben – ein Garten, eine Glutwelt, eine
+Eiswelt und ein Stück End –, hoch darüber kreisen die **Räder des Himmels** (drei Ringe aus Gold), ringsum schweben Felsen,
+und tief unten liegt ein Meer aus Wolken. Der **Himmel** ist ganz eigen: tiefes Violett voller Sterne, hoch oben ein
+goldenes **Sonnenrad**, das sich langsam dreht, Nebel in Violett, Rosa und Türkis, eine Galaxie, ferne Welten (eine mit
+Ring), Bündel aus Lichtstrahlen am Horizont; Lichtfunken schweben in der Luft. Dazu eigene **Musik**: ein Choral für den
+Hof, ein Kampfthema – und ein eigenes für die Wahre Gestalt. Es gelten die Regeln der Kampfdimensionen (nichts bauen, wer
+stirbt, verliert alles, wer stürzt, wird zurückgeworfen, Nachzügler folgen am Altar).
+
+**Schrolli der Schöpfer** steigt in einer Säule aus Licht aus dem Himmel herab (solange er erscheint, ist er
+unverwundbar): ein schwebender **Seraph**, fast sechs Blöcke groß, mit **sechs Schwingen** – zwei erhoben, zwei weit
+ausgebreitet, zwei gesenkt, weiße Federn mit goldenen Spitzen. Er trägt ein strahlend weißes Gewand mit goldenen
+Stickereien und Stola, einen goldenen Brustpanzer mit einer leuchtenden Sonne, eine **Krone aus neun Lichtstrahlen**, langes
+goldenes Haar und hinter dem Kopf einen großen **Heiligenschein** (ein Sonnenrad aus Gold mit zwölf Strahlen). In der
+Rechten hält er das **Zepter** mit dem achtstrahligen Sonnenstern, in der Linken die **Weltkugel**; unten vergeht sein
+Gewand in Licht – er hat keine Füße. „Ich habe eure Welt erschaffen. Ich kann sie auch wieder nehmen.“
+
+Er hat **3.200 Lebenspunkte** (mit jedem weiteren Spieler ein Viertel mehr), Rüstung 24 und Zähigkeit 16, kein einzelner
+Treffer zählt mehr als ein Zwanzigstel seiner Kraft, und außer dem Leuchten wirkt kein Trank auf ihn. Eigene Bossleisten
+(Elfenbein und Gold mit Schwingen und einem Kranz aus Strahlen – in der Wahren Gestalt violett wie das Weltall, mit Augen
+auf dem Ring), eine eigene Stimme und eigene Klänge für jede seiner Künste:
+
+| Kunst | Was geschieht |
+|---|---|
+| **Lichtspeere** | hinter ihm erscheinen im Bogen sieben Speere aus Licht und fliegen einer nach dem anderen auf dich zu |
+| **Heiligenschein-Klinge** | er wirft seinen Heiligenschein – die Scheibe saust zu dir und kehrt zu ihm zurück |
+| **Säulen des Lichts** | Warnkreise unter allen Gegnern und um sie herum, dann brechen Säulen aus Licht hervor – zwei Wellen |
+| **Sternenregen** | Arme empor: Sterne stürzen auf leuchtende Kreise, über den ganzen Hof |
+| **Zepterschlag** | er stürzt auf sein Ziel herab und schlägt das Zepter in den Boden – Risse aus Licht, und ein Ring rollt los (**springen!**) |
+| **Strahl der Schöpfung** | aus dem Zepter fegt ein Strahl aus Licht über den Boden und setzt in Brand |
+| **Die Weltkugel** | er schleudert sie; wo sie anhält, wird sie zum Sog – und zerbirst in Licht |
+| **Federsturm** | die Schwingen weit: drei Wellen goldener Federn fächern auf dich zu |
+| **Göttliches Urteil** | ein Kreis aus Licht heftet sich an einen Gegner; ist er voll, fährt das Urteil herab – sein Schaden wird auf alle verteilt, die im Kreis stehen (allein trägt man ihn ganz) |
+| **Seraphim** | aus Licht formen sich drei **Seraphlinge** – kleine Lichtboten, die durch Wände fliegen und Lichtpfeile schießen |
+| **Lichtsprung** | er zerfällt in Licht, erscheint hinter seinem Ziel und fegt mit dem Zepter |
+| **Schwingensturm** | alle sechs Schwingen schlagen zugleich – ein Sturm wirft alles fort (Vorsicht am Rand!) |
+| **Sonnenrad** | ab 70 %: über der Mitte drehen sich sechs Strahlen dicht über dem Boden – springen oder ausweichen |
+| **Engelschor** | ab 70 %: Ringe aus Klang rollen von ihm aus – goldene dicht über dem Boden (**springen!**), türkise in Kopfhöhe (**ducken!**) |
+| **„Es werde Licht!“** | ab 40 %: er sammelt alles Licht in sich – wer im Augenblick des Blitzes zu ihm hinsieht, ist geblendet und verbrannt. **Wegsehen** schützt |
+| **Die Zeit steht still** | ab 40 %: alle Gegner erstarren, der Hof wird grau, er stellt Speere um jeden – wenn die Zeit weiterläuft, fliegen sie (weglaufen!) |
+
+**Die Wahre Gestalt.** Der erste tödliche Treffer tötet ihn nicht: „Ihr habt meine Gestalt zerbrochen …“ Er steigt empor,
+Licht strömt in ihn, seine Gestalt zerbricht in einem Blitz zu einer kleinen Sonne – und aus dem Licht tritt seine **Wahre
+Gestalt**: ein Drittel größer, das Gewand ein **Weltall** mit Nebeln und Sternen, die Federspitzen schillernd in allen
+Farben des Lichts, hinter dem Heiligenschein ein Kranz aus 24 Strahlen, und um ihn kreisen zwei **Räder im Rad, mit Augen
+besetzt**. „… so seht nun mein wahres Antlitz!“ Der **Himmel öffnet sich**: Ein gewaltiges **Auge aus Sternen** erscheint
+im Zenit, Risse aus weißem Licht klaffen, das Sonnenrad flammt violett. Seine neue Leiste füllt sich, dann rollt eine Welle
+über den Hof (springen!). Solange er aufsteigt, ist er unverwundbar. In der Wahren Gestalt trifft alles ein Drittel
+härter, die Künste werden größer (elf Speere, zwei Scheiben, drei Wellen von Säulen, fünf Seraphlinge, acht Strahlen im
+Sonnenrad, die die Richtung wechseln …), seine Räder lenken manches Geschoss ab – und es kommen zehn neue Künste dazu:
+
+| Kunst | Was geschieht |
+|---|---|
+| **Weltenwurf** | drei Welten entstehen über ihm – Glut, Eis, Erde oder Leere – und er schleudert sie auf seine Gegner |
+| **Supernova** | bei 60 %: er steigt über die Mitte, eine Sonne wächst über ihm – wer nicht **hinter einer Säule** Schutz sucht oder weit genug flieht, verbrennt im Licht der ersten Sonne |
+| **Urknall** | ein Wirbel in der Mitte zieht alles an – dann zerbirst alles in einem neuen Anfang |
+| **Sternbild** | Sterne erscheinen um dich, dünne Linien zeigen, wo – dann verbinden sie Strahlen aus Licht |
+| **Doppelklinge** | zwei Heiligenscheine kreisen in einer Spirale um ihn – weit hinaus und wieder zurück |
+| **Das Jüngste Gericht** | bei 45 %: hoch über dem Hof ruft er einen Regen aus Säulen des Lichts herab – überall |
+| **Augenstrahlen** | aus seinen Augen fahren zwei Strahlen über den Boden, gegenläufig, mal nah, mal fern |
+| **Kometensturz** | er schießt in den Himmel – ein Kreis am Boden – und stürzt wie ein Komet darauf herab |
+| **Weltenriss** | sechs Risse laufen strahlenförmig von ihm aus über den Boden – dann bricht Licht aus ihnen. Zweimal |
+| **Neuschöpfung** | bei 25 %: er schwebt über der Mitte und **erschafft sich neu** – seine Leiste füllt sich wieder. Wer ihm genug Schaden zufügt, unterbricht ihn: Er stürzt, kniet und nimmt dann mehr Schaden („Unmöglich …!“) |
+
+Findet er niemanden mehr, ruht er über seinem Hof; außerhalb der Schöpfung (etwa aus dem Spawn-Ei) steigt er nach einer
+Minute ohne Gegner in einer Säule aus Licht empor und ist fort. Fallen alle, die gegen ihn stehen, vergeht der Hof – der
+Funke glüht weiter im Altar, und man kann es erneut wagen.
+
+**Sein Ende.** Besiegt (ein zweites Mal) brechen Risse aus Licht aus ihm, die Räder lösen sich, er sinkt langsam herab und
+spricht ein letztes Mal („So geht … und erschafft … eure eigene Welt.“); dann steigt eine Säule aus Licht in den Himmel, ein
+gleißender Blitz – und er ist fort. Vor dem Thron liegt seine Beute: das **Zepter des Schöpfers**, die **Schwingen des
+Schöpfers**, drei Herzkristalle, drei Manakristalle, zwei Nethersterne, zwei verzauberte goldene Äpfel, ein Totem der
+Unsterblichkeit, zwei verzauberte Bücher, Netheritbarren, Diamant- und Goldblöcke, Edelsteine und Goldmünzen – dazu 1.000
+Erfahrungspunkte; wie bei allen Kampfdimensionen landet alles am Altar, sobald man zurückkehrt. Der Funke ist verglüht.
+Und jeder, der dabei war, wird **Gottbezwinger**: Der Titel erscheint groß auf dem Bildschirm, alle erfahren davon, und er
+steht fortan in Violett vor dem Namen – über dem Kopf, im Chat und in der Spielerliste (er ersetzt den „Weltenretter“).
+
+**Das Zepter des Schöpfers** – ein langer Goldstab mit weißen Bändern und dem achtstrahligen Sonnenstern um einen blauen
+Himmelsstein; in der Hand ein echtes 3D-Modell, der Stern leuchtet:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schaden | 16, etwas mehr Reichweite |
+| **Lichtspeer** | Rechtsklick: Ein Speer aus Licht fliegt in Blickrichtung (12 Schaden, alle 0,7 Sekunden) |
+| **Säule des Lichts** | schleichend Rechtsklick: Auf die Stelle, die man ansieht (bis 32 Blöcke), fährt nach einem Augenblick eine Säule aus Licht herab – 20 Schaden für alle Feinde darin (alle 8 Sekunden) |
+| Haltbarkeit | unzerbrechlich, verzauberbar, episch, verbrennt nicht |
+
+**Die Schwingen des Schöpfers** – die mächtigsten aller Schwingen, weiße Federn mit goldenen Spitzen; hinter ihnen
+ziehen goldene Federn und Lichtfunken her:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Gleiten | wie Elytren |
+| **Schwingenschlag** | im Gleitflug **Springen** drücken: ein Stoß nach vorn, stärker als jede Feuerwerksrakete, mit ein wenig Auftrieb – alle anderthalb Sekunden, und er kostet nichts |
+| **Engelsschutz** | wer sie trägt, nimmt weder Fall- noch Aufprallschaden – die Schwingen fangen ihn auf |
+| Haltbarkeit | unzerbrechlich, episch, verbrennen nicht |
+
+Schöpferfunke, Altar, Zepter, Schwingen und die Spawn-Eier von Schrolli und dem Seraphling liegen im Kreativ-Reiter
+**„Die Schöpfung“**.
 
 ### Bauen und Einrichten
 
@@ -2944,14 +3068,17 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.73 – Der Weltenfresser** (fertig): Im Abgrund wartet im Schlund der Welten das Wesen, das der
      Zerbrochene König einst versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Wer es besiegt,
      erhält den **Weltenspeer**, den **Kopf des Weltenfressers** als Trophäe und den Titel **„Weltenretter“**;
-   - zuletzt **0.74 – Die Kampfdimensionen** (fertig): MissMystik, Malleus, Asteria, Anni der Troll, der Zerbrochene
+   - **0.74 – Die Kampfdimensionen** (fertig): MissMystik, Malleus, Asteria, Anni der Troll, der Zerbrochene
      König und der Weltenfresser ziehen ihre Gegner wie die Erzmagier in ihre eigene Welt – sechs Kampfdimensionen mit
-     eigenem Himmel; nach einer Niederlage erwacht der Boss wieder mit voller Kraft und in seiner ursprünglichen Gestalt.
+     eigenem Himmel; nach einer Niederlage erwacht der Boss wieder mit voller Kraft und in seiner ursprünglichen Gestalt;
+   - zuletzt **0.75 – Schrolli der Schöpfer** (fertig): der stärkste Gegner von allen, gerufen mit einem Schöpferfunken
+     am Altar des Schöpfers – in der Schöpfung, der größten Kampfdimension mit eigenem Himmel und eigener Musik; 26 Künste,
+     die Wahre Gestalt statt des Todes, das **Zepter** und die **Schwingen des Schöpfers** und der Titel **„Gottbezwinger“**.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
-   Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser.
+   Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
 
 ## Danksagung
 

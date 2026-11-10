@@ -57,13 +57,15 @@ final class SchrolliGameTests {
             ModGameTests.TEST_FUNCTIONS.register("schrolli_true_arts", () -> SchrolliGameTests::trueArts);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ALTAR =
             ModGameTests.TEST_FUNCTIONS.register("schrolli_altar", () -> SchrolliGameTests::altar);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> WINGS =
+            ModGameTests.TEST_FUNCTIONS.register("schrolli_wings", () -> SchrolliGameTests::wings);
 
     private SchrolliGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR)) {
+        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR, WINGS)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 2400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -454,5 +456,37 @@ final class SchrolliGameTests {
                 throw e;
             }
         });
+    }
+
+    // =====================================================================================
+    // Die Schwingen des Schöpfers
+    // =====================================================================================
+
+    /** Die Schwingen fangen Fall und Aufprall ab; der Schwingenschlag zündet nur im Gleitflug und hat eine Abklingzeit. */
+    private static void wings(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-creator-wings", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        try {
+            player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.wearing(player), "Die Schwingen sitzen nicht");
+            float hp = player.getHealth();
+            player.hurtServer(level, level.damageSources().fall(), 8.0f);
+            player.damageCooldownTime = 0;
+            player.hurtServer(level, level.damageSources().flyIntoWall(), 8.0f);
+            helper.assertTrue(player.getHealth() >= hp, "Fall oder Aufprall verletzen trotz der Schwingen");
+            helper.assertFalse(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.boost(player), "Schwingenschlag ohne Gleitflug");
+            player.startFallFlying();
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.boost(player), "Kein Schwingenschlag im Gleitflug");
+            helper.assertTrue(player.getCooldowns().isOnCooldown(player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST)),
+                    "Keine Abklingzeit nach dem Schwingenschlag");
+            helper.assertFalse(io.github.sirschrolli.kingdomsatwar.creator.CreatorWings.boost(player), "Zwei Schläge ohne Pause");
+            player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, ItemStack.EMPTY);
+            player.damageCooldownTime = 0;
+            player.hurtServer(level, level.damageSources().fall(), 4.0f);
+            helper.assertTrue(player.getHealth() < hp, "Ohne Schwingen schützt nichts vor dem Fall");
+            helper.succeed();
+        } finally {
+            level.getServer().getPlayerList().remove(player);
+        }
     }
 }

@@ -107,7 +107,7 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
                     state.shotState == DivineShotEntity.VORTEX ? 3.6f : 1.6f);
             case PLANET -> this.planet(state, poseStack, collector, camera, state.variant, 3.2f * state.scale,
                     state.variant == DivineShotEntity.PLANET_ICE || state.variant == DivineShotEntity.PLANET_VOID, 7.0f * state.scale);
-            case SUN -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 2.0f * state.scale, false, 4.8f * state.scale);
+            case SUN -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 2.6f * state.scale, false, 6.4f * state.scale);
             case STAR -> this.star(state, poseStack, collector, camera, 1.5f);
             case FIXED_STAR -> this.star(state, poseStack, collector, camera, 1.0f + Mth.sin(state.age * 0.5f) * 0.15f);
         }
@@ -174,7 +174,7 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
         collector.submitModelPart(this.planet, poseStack, PLANETS[variant], 0xF000F0, OverlayTexture.NO_OVERLAY, null);
         collector.order(1).submitModelPart(this.planet, poseStack, PLANETS_GLOW[variant], 0xF000F0, OverlayTexture.NO_OVERLAY, null);
         poseStack.popPose();
-        int alpha = variant == DivineShotEntity.PLANET_SUN ? 200 : 120;
+        int alpha = variant == DivineShotEntity.PLANET_SUN ? 235 : 120;
         billboard(poseStack, collector, camera, GLOW_DISC, glow, ARGB.color(alpha, PLANET_LIGHT[variant]), 0.0f);
         if (variant == DivineShotEntity.PLANET_SUN) {
             billboard(poseStack, collector, camera, STAR4, glow * 1.3f, ARGB.color(180, 0xFFF2C4), state.age * 1.5f);
