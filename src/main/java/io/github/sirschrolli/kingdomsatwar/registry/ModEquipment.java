@@ -92,6 +92,12 @@ public final class ModEquipment {
 
     private ModEquipment() {}
 
+    /** Rüstungswerkstoff für andere Register (z. B. die Monsterrüstungen in {@link MonsterGear}). */
+    static ArmorMaterial material(int durability, int boots, int legs, int chest, int helmet, int body, int enchantment,
+            Holder<SoundEvent> sound, float toughness, float knockback, TagKey<Item> repair, ResourceKey<EquipmentAsset> asset) {
+        return armor(durability, boots, legs, chest, helmet, body, enchantment, sound, toughness, knockback, repair, asset);
+    }
+
     private static ResourceKey<EquipmentAsset> asset(String name) {
         return ResourceKey.create(EquipmentAssets.ROOT_ID, KingdomsAtWar.id(name));
     }

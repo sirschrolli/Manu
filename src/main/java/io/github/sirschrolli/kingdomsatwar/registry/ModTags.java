@@ -218,6 +218,13 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_TIDE_SPEAR = mod("repairs_tide_spear");
         public static final TagKey<Item> REPAIRS_GLIDER = mod("repairs_wyvernit_glider");
         public static final TagKey<Item> REPAIRS_FAE_ELYTRA = mod("repairs_fae_elytra");
+        /** Reparieren die Waffen und Rüstungen aus Monsterteilen (0.70). */
+        public static final TagKey<Item> REPAIRS_CLAW_BLADE = mod("repairs_claw_blade");
+        public static final TagKey<Item> REPAIRS_BOG_CLUB = mod("repairs_bog_club");
+        public static final TagKey<Item> REPAIRS_EMBER_FANG = mod("repairs_ember_fang");
+        public static final TagKey<Item> REPAIRS_SOUL_SCYTHE = mod("repairs_soul_scythe");
+        public static final TagKey<Item> REPAIRS_PELT_ARMOR = mod("repairs_werewolf_pelt_armor");
+        public static final TagKey<Item> REPAIRS_EMBER_ARMOR = mod("repairs_ember_scale_armor");
         /** Womit sich der Glutspeer reparieren lässt (Netheritschrott). */
         public static final TagKey<Item> REPAIRS_GLUT_SPEAR = mod("repairs_glut_spear");
         /** Repariert die Sternenlanze (Sternsplitter). */
