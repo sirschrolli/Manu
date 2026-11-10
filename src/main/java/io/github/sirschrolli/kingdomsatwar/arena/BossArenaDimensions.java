@@ -126,7 +126,11 @@ public final class BossArenaDimensions {
                     .set(EnvironmentAttributes.SKY_LIGHT_COLOR, ARGB.vector3fFromRGB24(l.skyLightColor()))
                     .set(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, ARGB.vector3fFromRGB24(l.ambient()))
                     .set(EnvironmentAttributes.AMBIENT_PARTICLES, l.particles())
-                    .set(EnvironmentAttributes.BACKGROUND_MUSIC, new BackgroundMusic(l.music()))
+                    .set(EnvironmentAttributes.BACKGROUND_MUSIC, kind == BossArenaKind.CREATOR
+                            // in der Schöpfung spielt ihre Musik fast ohne Pause (auch im Kreativmodus)
+                            ? new BackgroundMusic(Optional.of(new net.minecraft.sounds.Music(l.music(), 200, 600, false)),
+                                    Optional.of(new net.minecraft.sounds.Music(l.music(), 200, 600, false)), Optional.empty())
+                            : new BackgroundMusic(l.music()))
                     .set(EnvironmentAttributes.AMBIENT_SOUNDS, new AmbientSounds(Optional.empty(),
                             Optional.of(new AmbientMoodSettings(l.mood(), 6000, 8, 2.0)), List.of()))
                     .set(EnvironmentAttributes.BED_RULE, new BedRule(BedRule.Rule.NEVER, BedRule.Rule.NEVER, false, false,

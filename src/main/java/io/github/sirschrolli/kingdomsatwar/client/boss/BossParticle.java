@@ -34,6 +34,10 @@ public class BossParticle extends SingleQuadParticle {
     public static final Style SEA_GLOW = new Style(16, 34, 0.09f, 0.05f, 0.86f, -0.0015f, true, true, 0.0f);
     /** Feenfunkeln: winzige Sterne, die funkeln, langsam aufsteigen und verlöschen. */
     public static final Style FAE_SPARK = new Style(20, 40, 0.11f, 0.05f, 0.9f, -0.0025f, true, true, 0.08f);
+    /** Göttlicher Funke: ein goldener, vierzackiger Stern, der aufleuchtet, sich dreht, langsam steigt und verlischt. */
+    public static final Style DIVINE_SPARK = new Style(16, 34, 0.2f, 0.06f, 0.9f, -0.002f, true, true, 0.12f);
+    /** Goldene Feder: trudelt langsam zu Boden. */
+    public static final Style DIVINE_FEATHER = new Style(50, 80, 0.22f, 0.2f, 0.94f, 0.0035f, false, true, 0.25f);
 
     private final SpriteSet sprites;
     private final Style style;

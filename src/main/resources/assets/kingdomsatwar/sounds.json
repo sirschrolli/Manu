@@ -2219,6 +2219,28 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.ambient.zap"
   },
+  "block.creator_altar.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/altar_awaken1",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.creator_altar.awaken"
+  },
+  "block.creator_altar.hum": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/altar_hum1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/altar_hum2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.block.creator_altar.hum"
+  },
   "block.dragon_egg.crack": {
     "sounds": [
       {
@@ -6105,6 +6127,468 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.rift_hound.step"
   },
+  "entity.schrolli.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/ambient1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/ambient2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/ambient3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.ambient"
+  },
+  "entity.schrolli.ascend": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/ascend1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.ascend"
+  },
+  "entity.schrolli.awaken": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/awaken1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.awaken"
+  },
+  "entity.schrolli.beam": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/beam1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/beam2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.beam"
+  },
+  "entity.schrolli.blast": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/blast1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:creator/blast2",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:creator/blast3",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.blast"
+  },
+  "entity.schrolli.blink": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/blink1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/blink2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.blink"
+  },
+  "entity.schrolli.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/charge1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/charge2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.charge"
+  },
+  "entity.schrolli.choir": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/choir1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/choir2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/choir3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.choir"
+  },
+  "entity.schrolli.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/death1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.death"
+  },
+  "entity.schrolli.feathers": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/feathers1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/feathers2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.feathers"
+  },
+  "entity.schrolli.halo": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/halo1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/halo2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.halo"
+  },
+  "entity.schrolli.heal": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/heal1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/heal2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.heal"
+  },
+  "entity.schrolli.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/hurt1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/hurt2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/hurt3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.hurt"
+  },
+  "entity.schrolli.impact": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/impact1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/impact2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/impact3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.impact"
+  },
+  "entity.schrolli.judgment": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/judgment1",
+        "attenuation_distance": 128
+      },
+      {
+        "name": "kingdomsatwar:creator/judgment2",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.judgment"
+  },
+  "entity.schrolli.orb": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/orb1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:creator/orb2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.orb"
+  },
+  "entity.schrolli.pillar": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/pillar1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/pillar2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/pillar3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.pillar"
+  },
+  "entity.schrolli.planet": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/planet1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/planet2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.planet"
+  },
+  "entity.schrolli.smite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/smite1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:creator/smite2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.smite"
+  },
+  "entity.schrolli.spear": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/spear1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/spear2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/spear3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.spear"
+  },
+  "entity.schrolli.spear_fly": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/spear_fly1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/spear_fly2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:creator/spear_fly3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.spear_fly"
+  },
+  "entity.schrolli.star": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/star1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/star2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/star3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.star"
+  },
+  "entity.schrolli.stun": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/stun1",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.stun"
+  },
+  "entity.schrolli.supernova": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/supernova1",
+        "attenuation_distance": 200
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.supernova"
+  },
+  "entity.schrolli.tick": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/tick1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:creator/tick2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.tick"
+  },
+  "entity.schrolli.time_resume": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/time_resume1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.time_resume"
+  },
+  "entity.schrolli.timestop": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/timestop1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.timestop"
+  },
+  "entity.schrolli.voice": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/voice1",
+        "attenuation_distance": 160
+      },
+      {
+        "name": "kingdomsatwar:creator/voice2",
+        "attenuation_distance": 160
+      },
+      {
+        "name": "kingdomsatwar:creator/voice3",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.voice"
+  },
+  "entity.schrolli.wings": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/wings1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/wings2",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:creator/wings3",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.wings"
+  },
+  "entity.schrolli.word": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/word1",
+        "attenuation_distance": 160
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.schrolli.word"
+  },
+  "entity.seraphling.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/seraph_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.seraphling.ambient"
+  },
+  "entity.seraphling.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/seraph_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.seraphling.death"
+  },
+  "entity.seraphling.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/seraph_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.seraphling.hurt"
+  },
+  "entity.seraphling.shoot": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/seraph_shoot1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_shoot2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:creator/seraph_shoot3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.seraphling.shoot"
+  },
   "entity.shard_warden.ambient": {
     "sounds": [
       {
@@ -7521,6 +8005,23 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.item.command_baton.command"
   },
+  "item.creator_scepter.cast": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:creator/scepter_cast1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/scepter_cast2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:creator/scepter_cast3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.item.creator_scepter.cast"
+  },
   "item.fae_elytra.flap": {
     "sounds": [
       {
@@ -7597,6 +8098,30 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.item.star_wings.boost"
+  },
+  "music.creation": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:music/creation",
+        "stream": true
+      }
+    ]
+  },
+  "music.creation_battle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:music/creation_battle",
+        "stream": true
+      }
+    ]
+  },
+  "music.creation_true": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:music/creation_true",
+        "stream": true
+      }
+    ]
   },
   "story.all_fallen.de": {
     "sounds": [

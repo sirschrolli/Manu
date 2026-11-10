@@ -110,6 +110,13 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     /** … und hier rollt die Welle los. */
     public static final int ASCEND_BLAST = 190;
     public static final int DEATH_TICKS = 260;
+    /** Die Zeit steht still: hier erstarren alle, hier läuft sie weiter (Ticks der Kunst). */
+    public static final int TIME_FREEZE = 20;
+    public static final int TIME_RESUME = 84;
+    /** „Es werde Licht!“: der Blitz. Supernova: der Knall. Urknall: der Knall. */
+    public static final int WORD_FLASH = 56;
+    public static final int NOVA_BLAST = 140;
+    public static final int GENESIS_BANG = 110;
     /** Wie weit (waagerecht) um die Mitte er Gegner sucht. */
     public static final double ARENA_RADIUS = 96.0;
 

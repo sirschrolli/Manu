@@ -31,8 +31,8 @@ import org.jspecify.annotations.Nullable;
  */
 final class SchrolliAttacks {
     /** Die Zeit steht still: hier erstarren alle, hier läuft sie weiter. */
-    static final int TIME_FREEZE = 20;
-    static final int TIME_RESUME = 84;
+    static final int TIME_FREEZE = SchrolliEntity.TIME_FREEZE;
+    static final int TIME_RESUME = SchrolliEntity.TIME_RESUME;
     /** So weit reichen die Strahlen des Sonnenrads. */
     static final double WHEEL_REACH = 36.0;
 
@@ -665,7 +665,7 @@ final class SchrolliAttacks {
             boss.announce(level, Component.translatable("entity.kingdomsatwar.schrolli.line.light").withColor(0xFFF2C4).withStyle(ChatFormatting.BOLD),
                     Component.translatable("entity.kingdomsatwar.schrolli.look_away").withColor(0xFFD24A), 30);
         }
-        if (t == 56) {
+        if (t == SchrolliEntity.WORD_FLASH) {
             Vec3 eyes = boss.eyes();
             for (int k = 0; k < 4; k++) {
                 DivineFx.flash(level, eyes, DivineFx.WHITE);
@@ -815,7 +815,7 @@ final class SchrolliAttacks {
                 boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 5.0f, 0.9f);
             }
         }
-        if (t == 140) {
+        if (t == SchrolliEntity.NOVA_BLAST) {
             Vec3 sunPos = boss.sun != null ? boss.sun.position() : boss.local(0.0, 12.0, 0.0);
             boss.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 8.0f, 1.0f);
             for (int k = 0; k < 6; k++) {
@@ -898,7 +898,7 @@ final class SchrolliAttacks {
                 boss.sound(level, ModSounds.SCHROLLI_ORB.get(), 4.0f, 0.5f + k * 0.5f);
             }
         }
-        if (t == 110) {
+        if (t == SchrolliEntity.GENESIS_BANG) {
             boss.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 7.0f, 1.3f);
             for (int k = 0; k < 4; k++) {
                 DivineFx.flash(level, hub.add(0.0, k, 0.0), k % 2 == 0 ? DivineFx.COSMIC : DivineFx.WHITE);

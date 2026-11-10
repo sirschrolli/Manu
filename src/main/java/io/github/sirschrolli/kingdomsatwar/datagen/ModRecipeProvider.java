@@ -58,7 +58,35 @@ public class ModRecipeProvider extends RecipeProvider {
         shadowTreasureRecipes();
         faeRecipes();
         monsterGearRecipes();
+        creatorRecipes();
         naturalChains();
+    }
+
+    // =====================================================================================
+    // Schrolli der Schöpfer (0.75)
+    // =====================================================================================
+
+    private void creatorRecipes() {
+        Item spark = io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SPARK.get();
+        // der Schöpferfunke: aus den Trophäen aller großen Gegner um einen Netherstern
+        Item heart = ModItems.HEART_CRYSTAL.get();
+        shaped(RecipeCategory.MISC, spark)
+                .pattern("HSH").pattern("GNV").pattern("FWM")
+                .define('H', heart)
+                .define('S', io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get())
+                .define('G', io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD.get())
+                .define('N', Items.NETHER_STAR)
+                .define('V', io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get())
+                .define('F', io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST.get())
+                .define('W', io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SEAM.get())
+                .define('M', io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.MOLTEN_GLOB.get())
+                .unlockedBy(getHasName(Items.NETHER_STAR), has(Items.NETHER_STAR)).save(output, key("creator_spark"));
+        // der Altar: Gold, Quarz, ein Diamantblock und ein Totem
+        shaped(RecipeCategory.MISC, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_ALTAR.get())
+                .pattern("GTG").pattern("QDQ").pattern("QQQ")
+                .define('G', Items.GOLD_BLOCK).define('T', Items.TOTEM_OF_UNDYING).define('D', Items.DIAMOND_BLOCK)
+                .define('Q', Items.CHISELED_QUARTZ_BLOCK)
+                .unlockedBy(getHasName(spark), has(spark)).save(output, key("creator_altar"));
     }
 
     // =====================================================================================

@@ -60,6 +60,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerLayers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.creator.CreatorRenderers.registerLayers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerLayers(event);
         event.registerLayerDefinition(io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer.LAYER,
                 io.github.sirschrolli.kingdomsatwar.client.armor.MonsterArmorLayer::createLayer);
@@ -194,6 +195,7 @@ public final class ClientSetup {
         io.github.sirschrolli.kingdomsatwar.client.renderer.rare.RareRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.nether.NetherRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.end.EndRenderers.registerRenderers(event);
+        io.github.sirschrolli.kingdomsatwar.client.renderer.creator.CreatorRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.siege.SiegeRenderers.registerRenderers(event);
         event.registerEntityRenderer(ModEntities.WILD_BOAR.get(), WildBoarRenderer::new);
         event.registerEntityRenderer(ModEntities.DEER.get(), DeerRenderer::new);
@@ -338,5 +340,7 @@ public final class ClientSetup {
         event.registerSpriteSet(ModParticles.FAE_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.FAE_SPARK));
         event.registerSpriteSet(ModParticles.CONFETTI.get(), io.github.sirschrolli.kingdomsatwar.client.fae.ConfettiParticle.Provider::new);
         event.registerSpriteSet(ModParticles.GLITCH_PIXEL.get(), io.github.sirschrolli.kingdomsatwar.client.glitch.GlitchPixelParticle.Provider::new);
+        event.registerSpriteSet(ModParticles.DIVINE_SPARK.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.DIVINE_SPARK));
+        event.registerSpriteSet(ModParticles.DIVINE_FEATHER.get(), sprites -> new BossParticle.Provider(sprites, BossParticle.DIVINE_FEATHER));
     }
 }

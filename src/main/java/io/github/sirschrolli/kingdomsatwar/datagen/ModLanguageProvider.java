@@ -1048,6 +1048,7 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("item.bannhammer.jolt", "Target jolts", "Ziel ruckelt");
         subtitle("item.bannhammer.ban", "Ban!", "Bann!");
         subtitle("item.glitch_wings.blink", "Blink", "Blinzeln");
+        creatorTexts();
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.EMBEDDED_TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_SPEAR, "Tide Spear", "Gezeiten-Speer");
         lore("tide_spear", "The spear of the last Tide King", "Der Speer des letzten Gezeitenkönigs");
@@ -1946,6 +1947,121 @@ public class ModLanguageProvider extends LanguageProvider {
         for (String[] name : names) {
             add(type.get().getDescriptionId() + "." + name[0], pick(name[1], name[2]));
         }
+    }
+
+    /** Schrolli der Schöpfer (0.75): der Boss, seine Zeilen, Altar, Funke, Zepter, Schwingen, Titel und Klänge. */
+    private void creatorTexts() {
+        creature(ModEntities.SCHROLLI, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.SCHROLLI_SPAWN_EGG, "Schrolli the Creator",
+                "Schrolli der Schöpfer", "Schrolli");
+        creature(ModEntities.SERAPHLING, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.SERAPHLING_SPAWN_EGG, "Seraphling", "Seraphling",
+                "Seraphling");
+        add(ModEntities.DIVINE_SHOT.get(), pick("Divine Light", "Göttliches Licht"));
+        text("itemGroup.kingdomsatwar.creation", "Kingdoms at War: Creation", "Kingdoms at War: Die Schöpfung");
+        text("boss.kingdomsatwar.schrolli", "Schrolli the Creator", "Schrolli der Schöpfer");
+        text("boss.kingdomsatwar.schrolli.title", "Creator of All Worlds", "Schöpfer aller Welten");
+        text("boss.kingdomsatwar.schrolli_true", "Schrolli the Creator – True Form", "Schrolli der Schöpfer – Wahre Gestalt");
+        text("boss.kingdomsatwar.schrolli_true.title", "The Creator reveals his true face", "Der Schöpfer zeigt sein wahres Antlitz");
+        text("boss.kingdomsatwar.schrolli.speaker", "[Schrolli]", "[Schrolli]");
+        String[][] lines = {
+                {"awaken", "Who dares to disturb the peace of creation?", "Wer wagt es, die Ruhe der Schöpfung zu stören?"},
+                {"creator", "I made your world. I can take it back.", "Ich habe eure Welt erschaffen. Ich kann sie auch wieder nehmen."},
+                {"dust", "You fight well … for creatures of dust.", "Ihr kämpft gut … für Geschöpfe aus Staub."},
+                {"enough", "Enough! Feel the might of the light!", "Genug! Spürt die Macht des Lichts!"},
+                {"time", "Time obeys me.", "Die Zeit gehorcht mir."},
+                {"light", "Let there be light!", "Es werde Licht!"},
+                {"shattered", "You have shattered my form …", "Ihr habt meine Gestalt zerbrochen …"},
+                {"true_face", "… so now behold my true face!", "… so seht nun mein wahres Antlitz!"},
+                {"stars", "I made the stars. I can shatter them as well!", "Ich erschuf die Sterne. Ich kann sie auch zerschmettern!"},
+                {"sun", "Perish in the light of the first sun!", "Vergeht im Licht der ersten Sonne!"},
+                {"beginning", "All returns to the beginning!", "Alles kehrt zum Anfang zurück!"},
+                {"last_judgment", "The Last Judgment has come!", "Das Jüngste Gericht ist gekommen!"},
+                {"anew", "I create myself anew!", "Ich erschaffe mich neu!"},
+                {"impossible", "Impossible …!", "Unmöglich …!"},
+                {"defeated", "You … have defeated … creation itself …", "Ihr … habt … die Schöpfung selbst … bezwungen …"},
+                {"farewell", "Then go … and create your own world.", "So geht … und erschafft … eure eigene Welt."},
+        };
+        for (String[] l : lines) {
+            text("entity.kingdomsatwar.schrolli.line." + l[0], l[1], l[2]);
+        }
+        text("entity.kingdomsatwar.schrolli.judged_you", "You have been judged! Let others share the light with you!",
+                "Du wurdest gerichtet! Lass andere das Licht mit dir teilen!");
+        text("entity.kingdomsatwar.schrolli.judged", "%s has been judged – step into the circle to share the judgment!",
+                "%s wurde gerichtet – tretet in den Kreis, um das Urteil zu teilen!");
+        text("entity.kingdomsatwar.schrolli.look_away", "Look away!", "Seht weg!");
+        text("entity.kingdomsatwar.schrolli.blinded", "Blinded by the light!", "Vom Licht geblendet!");
+        text("entity.kingdomsatwar.schrolli.looked_away", "You looked away – the light spares you.", "Du hast weggesehen – das Licht verschont dich.");
+        text("entity.kingdomsatwar.schrolli.time_stands", "Time stands still …", "Die Zeit steht still …");
+        text("entity.kingdomsatwar.schrolli.time_runs", "Time runs again – dodge the spears!", "Die Zeit läuft weiter – weicht den Speeren aus!");
+        text("entity.kingdomsatwar.schrolli.nova", "SUPERNOVA", "SUPERNOVA");
+        text("entity.kingdomsatwar.schrolli.nova.hint", "Hide behind a pillar – or flee as far as you can!",
+                "Versteckt euch hinter einer Säule – oder flieht, so weit ihr könnt!");
+        text("entity.kingdomsatwar.schrolli.nova.covered", "The pillar shielded you.", "Die Säule hat dich geschützt.");
+        text("entity.kingdomsatwar.schrolli.apocalypse", "THE LAST JUDGMENT", "DAS JÜNGSTE GERICHT");
+        text("entity.kingdomsatwar.schrolli.comet", "A comet is falling on you – run!", "Ein Komet stürzt auf dich herab – lauf!");
+        text("entity.kingdomsatwar.schrolli.recreation", "Re-creation … interrupt him! (%s %%)", "Neuschöpfung … unterbrecht ihn! (%s %%)");
+        text("entity.kingdomsatwar.schrolli.stunned", "The re-creation was interrupted – strike now!",
+                "Die Neuschöpfung wurde unterbrochen – schlagt jetzt zu!");
+        text("message.kingdomsatwar.schrolli.defeated", "Schrolli the Creator has been defeated!", "Schrolli der Schöpfer wurde bezwungen!");
+        text("title.kingdomsatwar.godslayer", "Godslayer", "Gottbezwinger");
+        text("title.kingdomsatwar.godslayer.sub", "Schrolli the Creator has fallen", "Schrolli der Schöpfer ist gefallen");
+        text("title.kingdomsatwar.godslayer.prefix", "Godslayer", "Gottbezwinger");
+        text("message.kingdomsatwar.godslayer", "%s has defeated the Creator and is now a Godslayer!",
+                "%s hat den Schöpfer bezwungen und ist nun ein Gottbezwinger!");
+        text("death.attack.kingdomsatwar.divine", "%1$s was erased by the Creator's light", "%1$s wurde vom Licht des Schöpfers ausgelöscht");
+        text("death.attack.kingdomsatwar.divine.player", "%1$s was erased by the light of %2$s", "%1$s wurde vom Licht von %2$s ausgelöscht");
+        // der Altar
+        block(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_ALTAR, "Altar of the Creator", "Altar des Schöpfers");
+        lore("creator_altar", "Place a Creator's Spark in it – then touch it", "Lege einen Schöpferfunken hinein – dann berühre ihn");
+        text(ModItems.loreKey("creator_altar", 2), "Calls Schrolli the Creator: everyone close by is lifted into Creation",
+                "Ruft Schrolli den Schöpfer: alle, die nahe stehen, werden in die Schöpfung gehoben");
+        text(ModItems.loreKey("creator_altar", 3), "The strongest foe of all – bring friends", "Der stärkste Gegner von allen – bringt Freunde mit");
+        text("block.kingdomsatwar.creator_altar.hint", "The altar waits for a Creator's Spark.", "Der Altar wartet auf einen Schöpferfunken.");
+        text("block.kingdomsatwar.creator_altar.armed", "The spark rests in the altar – touch it to call the Creator (sneak to take it back).",
+                "Der Funke ruht im Altar – berühre ihn, um den Schöpfer zu rufen (schleichend nimmst du ihn zurück).");
+        text("block.kingdomsatwar.creator_altar.taken", "You take the spark back.", "Du nimmst den Funken zurück.");
+        text("block.kingdomsatwar.creator_altar.creative", "Only survivors may challenge the Creator.", "Nur Überlebende dürfen den Schöpfer herausfordern.");
+        text("block.kingdomsatwar.creator_altar.calling", "The altar awakens! Whoever stands in the golden circle will be lifted into Creation …",
+                "Der Altar erwacht! Wer im goldenen Kreis steht, wird in die Schöpfung gehoben …");
+        text("block.kingdomsatwar.creator_altar.coming", "The Creator is coming …", "Der Schöpfer kommt …");
+        text("block.kingdomsatwar.creator_altar.awake", "The Creator is awake.", "Der Schöpfer ist erwacht.");
+        // Funke, Zepter, Schwingen
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SPARK, "Creator's Spark", "Schöpferfunke");
+        lore("creator_spark", "A splinter of the first light", "Ein Splitter des ersten Lichts");
+        text(ModItems.loreKey("creator_spark", 2), "Dropped by the World-Eater – or forged from the trophies of all great foes",
+                "Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet");
+        text(ModItems.loreKey("creator_spark", 3), "Place it in the Altar of the Creator", "Lege ihn in den Altar des Schöpfers");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER, "Scepter of the Creator", "Zepter des Schöpfers");
+        lore("creator_scepter", "The Creator's scepter – unbreakable", "Das Zepter des Schöpfers – unzerbrechlich");
+        text(ModItems.loreKey("creator_scepter", 2), "Right-click: hurl a spear of light", "Rechtsklick: einen Lichtspeer schleudern");
+        text(ModItems.loreKey("creator_scepter", 3), "Sneak + right-click: call a pillar of light where you look",
+                "Schleichen + Rechtsklick: eine Säule aus Licht herabrufen, wohin du siehst");
+        text(ModItems.loreKey("creator_scepter", 4), "Strikes harder than any sword", "Trifft härter als jedes Schwert");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS, "Wings of the Creator", "Schwingen des Schöpfers");
+        lore("creator_wings", "White feathers with golden tips – glide like elytra", "Weiße Federn mit goldenen Spitzen – gleiten wie Elytren");
+        text(ModItems.loreKey("creator_wings", 2), "They never break", "Sie zerbrechen nie");
+        for (String[] e : new String[][] {{"ambient", "The Creator hums", "Der Schöpfer summt"}, {"hurt", "The Creator hurts", "Der Schöpfer nimmt Schaden"},
+                {"death", "The Creator fades", "Der Schöpfer vergeht"}, {"awaken", "The Creator descends", "Der Schöpfer steigt herab"},
+                {"ascend", "The Creator ascends", "Der Schöpfer steigt auf"}, {"voice", "The Creator speaks", "Der Schöpfer spricht"},
+                {"spear", "Spear of light forms", "Lichtspeer entsteht"}, {"spear_fly", "Spear of light flies", "Lichtspeer fliegt"},
+                {"pillar", "Pillar of light strikes", "Säule aus Licht schlägt ein"}, {"charge", "Light gathers", "Licht sammelt sich"},
+                {"beam", "Beam of light", "Lichtstrahl"}, {"smite", "Scepter strikes", "Zepter schlägt zu"}, {"halo", "Halo whirs", "Heiligenschein surrt"},
+                {"orb", "Vortex roars", "Sog dröhnt"}, {"blast", "Light bursts", "Licht zerbirst"}, {"wings", "Wings beat", "Schwingen schlagen"},
+                {"feathers", "Feathers whirl", "Federn wirbeln"}, {"blink", "The Creator flashes", "Der Schöpfer blitzt"},
+                {"choir", "Angel choir", "Engelschor"}, {"judgment", "Bell of judgment", "Glocke des Gerichts"},
+                {"timestop", "Time stops", "Die Zeit hält an"}, {"time_resume", "Time runs again", "Die Zeit läuft weiter"},
+                {"tick", "Clock ticks", "Uhr tickt"}, {"word", "Light blazes", "Licht gleißt"}, {"supernova", "Supernova", "Supernova"},
+                {"planet", "A world forms", "Eine Welt entsteht"}, {"impact", "Heavy impact", "Schwerer Einschlag"},
+                {"star", "Star falls", "Stern fällt"}, {"stun", "The Creator falls", "Der Schöpfer stürzt"},
+                {"heal", "The Creator re-creates himself", "Der Schöpfer erschafft sich neu"}}) {
+            subtitle("entity.schrolli." + e[0], e[1], e[2]);
+        }
+        for (String[] e : new String[][] {{"ambient", "Seraphling hums", "Seraphling summt"}, {"hurt", "Seraphling hurts", "Seraphling nimmt Schaden"},
+                {"death", "Seraphling fades", "Seraphling vergeht"}, {"shoot", "Seraphling shoots", "Seraphling schießt"}}) {
+            subtitle("entity.seraphling." + e[0], e[1], e[2]);
+        }
+        subtitle("block.creator_altar.awaken", "Altar awakens", "Altar erwacht");
+        subtitle("block.creator_altar.hum", "Altar hums", "Altar summt");
+        subtitle("item.creator_scepter.cast", "Scepter casts", "Zepter wirkt");
     }
 
     private void creature(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, Supplier<? extends Item> egg,

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=east,phase=armed": {
+      "model": "kingdomsatwar:block/creator_altar_armed",
+      "y": 90
+    },
+    "facing=east,phase=awake": {
+      "model": "kingdomsatwar:block/creator_altar_awake",
+      "y": 90
+    },
+    "facing=east,phase=empty": {
+      "model": "kingdomsatwar:block/creator_altar",
+      "y": 90
+    },
+    "facing=north,phase=armed": {
+      "model": "kingdomsatwar:block/creator_altar_armed"
+    },
+    "facing=north,phase=awake": {
+      "model": "kingdomsatwar:block/creator_altar_awake"
+    },
+    "facing=north,phase=empty": {
+      "model": "kingdomsatwar:block/creator_altar"
+    },
+    "facing=south,phase=armed": {
+      "model": "kingdomsatwar:block/creator_altar_armed",
+      "y": 180
+    },
+    "facing=south,phase=awake": {
+      "model": "kingdomsatwar:block/creator_altar_awake",
+      "y": 180
+    },
+    "facing=south,phase=empty": {
+      "model": "kingdomsatwar:block/creator_altar",
+      "y": 180
+    },
+    "facing=west,phase=armed": {
+      "model": "kingdomsatwar:block/creator_altar_armed",
+      "y": 270
+    },
+    "facing=west,phase=awake": {
+      "model": "kingdomsatwar:block/creator_altar_awake",
+      "y": 270
+    },
+    "facing=west,phase=empty": {
+      "model": "kingdomsatwar:block/creator_altar",
+      "y": 270
+    }
+  }
+}

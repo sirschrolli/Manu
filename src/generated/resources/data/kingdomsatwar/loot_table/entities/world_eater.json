@@ -33,6 +33,19 @@
           "type": "minecraft:item",
           "modifier": {
             "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "kingdomsatwar:creator_spark"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
             "count": 2
           },
           "name": "kingdomsatwar:heart_crystal"

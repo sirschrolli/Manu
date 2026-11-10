@@ -1,0 +1,309 @@
+{
+  "parent": "minecraft:block/block",
+  "elements": [
+    {
+      "faces": {
+        "down": {
+          "texture": "#bottom"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#column"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        4,
+        16
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bottom"
+        },
+        "east": {
+          "texture": "#column"
+        },
+        "north": {
+          "texture": "#column"
+        },
+        "south": {
+          "texture": "#column"
+        },
+        "up": {
+          "texture": "#column"
+        },
+        "west": {
+          "texture": "#column"
+        }
+      },
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        12,
+        13
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            0.5,
+            3.0,
+            3.0
+          ]
+        },
+        "east": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            4.0,
+            3.0,
+            12.0
+          ]
+        },
+        "north": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            4.0,
+            3.0,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#top"
+        }
+      },
+      "from": [
+        0.5,
+        4,
+        0.5
+      ],
+      "to": [
+        3,
+        12,
+        3
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            0.5,
+            15.5,
+            3.0
+          ]
+        },
+        "east": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            4.0,
+            3.0,
+            12.0
+          ]
+        },
+        "north": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            4.0,
+            15.5,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#top"
+        }
+      },
+      "from": [
+        13,
+        4,
+        0.5
+      ],
+      "to": [
+        15.5,
+        12,
+        3
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            13.0,
+            3.0,
+            15.5
+          ]
+        },
+        "east": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            4.0,
+            15.5,
+            12.0
+          ]
+        },
+        "north": {
+          "texture": "#top",
+          "uv": [
+            0.5,
+            4.0,
+            3.0,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#top"
+        }
+      },
+      "from": [
+        0.5,
+        4,
+        13
+      ],
+      "to": [
+        3,
+        12,
+        15.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            13.0,
+            15.5,
+            15.5
+          ]
+        },
+        "east": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            4.0,
+            15.5,
+            12.0
+          ]
+        },
+        "north": {
+          "texture": "#top",
+          "uv": [
+            13.0,
+            4.0,
+            15.5,
+            12.0
+          ]
+        },
+        "south": {
+          "texture": "#top"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#top"
+        }
+      },
+      "from": [
+        13,
+        4,
+        13
+      ],
+      "to": [
+        15.5,
+        12,
+        15.5
+      ]
+    },
+    {
+      "faces": {
+        "down": {
+          "texture": "#bottom"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "west": {
+          "texture": "#side"
+        }
+      },
+      "from": [
+        1,
+        12,
+        1
+      ],
+      "to": [
+        15,
+        15,
+        15
+      ]
+    }
+  ],
+  "textures": {
+    "bottom": "kingdomsatwar:block/creator_altar_bottom",
+    "column": "kingdomsatwar:block/creator_altar_column",
+    "particle": "kingdomsatwar:block/creator_altar_side",
+    "side": "kingdomsatwar:block/creator_altar_side",
+    "spark": "kingdomsatwar:block/creator_altar_spark",
+    "top": "kingdomsatwar:block/creator_altar_top"
+  }
+}

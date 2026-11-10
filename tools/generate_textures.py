@@ -72,6 +72,7 @@ import star_textures  # noqa: E402
 import hoard_textures  # noqa: E402
 import mystik_textures  # noqa: E402
 import anni_textures  # noqa: E402
+import creator_textures  # noqa: E402
 import monster_gear_textures  # noqa: E402
 import sea_blocks  # noqa: E402
 import world_blocks  # noqa: E402
@@ -380,6 +381,7 @@ def build_all() -> dict[str, Image.Image]:
     hoard_textures.build(put)
     mystik_textures.build(put)
     anni_textures.build(put)
+    creator_textures.build(put)
     monster_gear_textures.build(put)
     equipment_textures.build_entity(put)
     armor_art.build(put)
@@ -413,7 +415,7 @@ def main() -> None:
     for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS}.items():
         meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-    for key, meta in abyss_textures.META.items():
+    for key, meta in {**abyss_textures.META, **creator_textures.META}.items():
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     print(f"{len(GENERATED)} Texturen geschrieben nach {TEXTURES}")
     if "--preview" in sys.argv:

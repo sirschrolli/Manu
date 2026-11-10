@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "F": "kingdomsatwar:fae_dust",
+    "G": "kingdomsatwar:glitch_shard",
+    "H": "kingdomsatwar:heart_crystal",
+    "M": "kingdomsatwar:molten_glob",
+    "N": "minecraft:nether_star",
+    "S": "kingdomsatwar:star_shard",
+    "V": "kingdomsatwar:void_shard",
+    "W": "kingdomsatwar:world_seam"
+  },
+  "pattern": [
+    "HSH",
+    "GNV",
+    "FWM"
+  ],
+  "result": {
+    "id": "kingdomsatwar:creator_spark"
+  }
+}

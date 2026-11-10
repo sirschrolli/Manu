@@ -337,6 +337,7 @@
     "kingdomsatwar:velvet_curtain_fringe",
     "kingdomsatwar:error_core",
     "kingdomsatwar:missing_block",
-    "kingdomsatwar:static_block"
+    "kingdomsatwar:static_block",
+    "kingdomsatwar:creator_altar"
   ]
 }

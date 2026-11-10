@@ -339,6 +339,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.VELVET_CURTAIN_FRINGE.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.MISSING_BLOCK.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_ALTAR.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.STATIC_BLOCK.get());
         add(FaeBlocks.SILK_STRANDS.get(), block -> createSilkTouchOrShearsDispatchTable(block, this.applyExplosionDecay(block,
                 LootItem.lootTableItem(net.minecraft.world.item.Items.STRING)

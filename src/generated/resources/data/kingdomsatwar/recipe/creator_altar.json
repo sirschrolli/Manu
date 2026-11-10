@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": "minecraft:diamond_block",
+    "G": "minecraft:gold_block",
+    "Q": "minecraft:chiseled_quartz_block",
+    "T": "minecraft:totem_of_undying"
+  },
+  "pattern": [
+    "GTG",
+    "QDQ",
+    "QQQ"
+  ],
+  "result": {
+    "id": "kingdomsatwar:creator_altar"
+  }
+}

@@ -14,6 +14,7 @@ import io.github.sirschrolli.kingdomsatwar.block.voidrealm.ThroneSealBlockEntity
 import io.github.sirschrolli.kingdomsatwar.entity.end.AsteriaEntity;
 import io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks;
+import io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.StarBlocks;
@@ -54,7 +55,7 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Tests zu den Kampfdimensionen der großen Bosse: die sechs Welten und ihre Regeln, das herausgerissene Stück Welt (ohne
+ * Tests zu den Kampfdimensionen der großen Bosse: die sieben Welten und ihre Regeln, das herausgerissene Stück Welt (ohne
  * Beute, Portale und Wesen, die Kopie steht still), jeder Hort zieht seine Gegner in sein Abbild und erwacht dort, nach
  * der Niederlage ruht der Hort wieder; ein ganzer Kampf mit Sieg (Beute und Spieler zurück, der Hort besiegt) und das
  * Zurücksetzen eines Bosses, dessen letzter Gegner gefallen ist.
@@ -149,11 +150,11 @@ final class BossArenaGameTests {
     }
 
     // =====================================================================================
-    // Die sechs Welten und ihre Regeln
+    // Die sieben Welten und ihre Regeln
     // =====================================================================================
 
     /**
-     * Sechs Kampfdimensionen, jede mit eigenem Typ (feste Zeit, hoch genug für ihren Hort) und eigenem Biom; jede bildet
+     * Sieben Kampfdimensionen, jede mit eigenem Typ (feste Zeit, hoch genug für ihren Hort) und eigenem Biom; jede bildet
      * eine Welt nach (Waffen, die dort stärker sind, sind es auch hier); in allen gilt das Bauverbot – außer im Kreativmodus.
      */
     private static void worlds(GameTestHelper helper) {
@@ -307,12 +308,17 @@ final class BossArenaGameTests {
                 }
                 return seal;
             }
+            case CREATOR -> {
+                floor(level, at.below(), 10, Blocks.SMOOTH_QUARTZ.defaultBlockState());
+                level.setBlock(at, CreatorBlocks.CREATOR_ALTAR.get().defaultBlockState(), Block.UPDATE_ALL);
+                return at;
+            }
         }
         return at;
     }
 
     /**
-     * Alle sechs Horte: Wer am Hort steht, landet im Abbild (in der Arena, nahe der Mitte), dort erwacht der Boss sofort
+     * Alle sieben Horte: Wer am Hort steht, landet im Abbild (in der Arena, nahe der Mitte), dort erwacht der Boss sofort
      * (gebunden an das Abbild), das Original wartet; steht niemand mehr in der Arena, ist der Kampf verloren – der Boss
      * vergeht, der Hort ruht wieder und ist bereit für einen neuen, unversehrten Boss.
      */
@@ -350,7 +356,8 @@ final class BossArenaGameTests {
                     continue;
                 }
                 BlockPos focus = lair.arenaFocus();
-                BlockPos arenaCenter = new BlockPos(center.getX(), focus.getY(), center.getZ());
+                // die Schöpfung steht immer gleich hoch (über dem Boden der Testwelt)
+                BlockPos arenaCenter = new BlockPos(center.getX(), kind.arenaY(focus.getY()), center.getZ());
                 Vec3 start = new Vec3(focus.getX() + 3.5, focus.getY() + (kind == BossArenaKind.ASTERIA || kind == BossArenaKind.ANNI ? -1 : 0),
                         focus.getZ() + 0.5);
                 if (kind == BossArenaKind.WORLD_EATER) {
