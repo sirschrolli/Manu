@@ -20,7 +20,9 @@ import org.jspecify.annotations.Nullable;
  *     <li>{@link #ASTERIA} – das Sternenzelt: die Sternwarte auf ihrer Endinsel, ringsum nur Sterne und ein leuchtendes Wolkenmeer;</li>
  *     <li>{@link #ANNI} – der Fehlerraum: die Fehlerzone als herausgerissener Chunk in einem Raum aus Bildrauschen;</li>
  *     <li>{@link #KING} – die Thronwelt: der Thron der Alten unter einem Himmel voller kalter Sterne;</li>
- *     <li>{@link #WORLD_EATER} – der Weltenschlund: der Schlund der Welten unter flammenden Rissen.</li>
+ *     <li>{@link #WORLD_EATER} – der Weltenschlund: der Schlund der Welten unter flammenden Rissen;</li>
+ *     <li>{@link #CREATOR} – die Schöpfung: der Hof Schrollis des Schöpfers, die größte von allen – ein Kreis aus Gold und
+ *     Licht über einem Meer aus goldenen Wolken, vier Welten ringsum, darüber die Räder des Himmels (eigener Himmel).</li>
  * </ul>
  */
 public enum BossArenaKind implements net.minecraft.util.StringRepresentable {
@@ -29,7 +31,8 @@ public enum BossArenaKind implements net.minecraft.util.StringRepresentable {
     ASTERIA("star_canopy", 40, 34, 22.0, 14.0, 4, 9),
     ANNI("error_space", 36, 28, 22.0, 14.0, 5, 10),
     KING("throne_realm", 48, 40, 26.0, 16.0, 6, 13),
-    WORLD_EATER("world_maw", 92, 48, 34.0, 18.0, 15, 24);
+    WORLD_EATER("world_maw", 92, 48, 34.0, 18.0, 15, 24),
+    CREATOR("creation", 132, 70, CreatorArena.CALL_RADIUS, 10.0, 16, 30);
 
     /** Abstand der Arenen voneinander (jeder Kampf bekommt seine eigene). */
     public static final int SPACING = 4096;
@@ -157,7 +160,16 @@ public enum BossArenaKind implements net.minecraft.util.StringRepresentable {
             case ANNI -> Level.OVERWORLD;
             case KING -> io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID;
             case WORLD_EATER -> io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS;
+            case CREATOR -> Level.OVERWORLD;
         };
+    }
+
+    /**
+     * In welcher Höhe die Mitte der Arena liegt: bei den Abbildern auf der Höhe des Horts, die Schöpfung (neu gebaut, frei
+     * schwebend) immer auf derselben Höhe.
+     */
+    public int arenaY(int focusY) {
+        return this == CREATOR ? CreatorArena.FLOOR_Y + 1 : focusY;
     }
 
     /** Die Mitte der Arena in diesem Platz – waagerecht; die Höhe ist die des Horts ({@code y}). */

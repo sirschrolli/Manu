@@ -21,6 +21,10 @@ public class ModDamageTypeTagsProvider extends DamageTypeTagsProvider {
     protected void addTags(HolderLookup.Provider registries) {
         this.tag(DamageTypeTags.IS_PROJECTILE).add(ModDamageTypes.SIEGE_STONE, ModDamageTypes.BALLISTA_BOLT);
         this.tag(DamageTypeTags.DAMAGES_HELMET).add(ModDamageTypes.SIEGE_STONE);
-        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ModDamageTypes.SIEGE_STONE, ModDamageTypes.BALLISTA_BOLT, ModDamageTypes.BATTERING_RAM);
+        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ModDamageTypes.SIEGE_STONE, ModDamageTypes.BALLISTA_BOLT, ModDamageTypes.BATTERING_RAM,
+                ModDamageTypes.DIVINE);
+        // das Licht des Schöpfers: durch jede Rüstung und jeden Schild (Verzauberungen und Widerstand helfen weiter)
+        this.tag(DamageTypeTags.BYPASSES_ARMOR).add(ModDamageTypes.DIVINE);
+        this.tag(DamageTypeTags.BYPASSES_SHIELD).add(ModDamageTypes.DIVINE);
     }
 }

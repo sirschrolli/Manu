@@ -73,6 +73,13 @@ final class RulesLang {
                 "Der Weltenfresser ist zerfallen – der Weltenschlund speit euch samt seinem Hort zurück.",
                 "The World Maw closes – the World-Eater sinks back into his hoard.",
                 "Der Weltenschlund schließt sich – der Weltenfresser sinkt zurück in seinen Hort.");
+        bossArena(text, "creation", "Creation", "Die Schöpfung",
+                "A pillar of light seizes you – you are lifted into Creation, the court of Schrolli the Creator!",
+                "Eine Säule aus Licht ergreift dich – du wirst in die Schöpfung gehoben, den Hof Schrollis des Schöpfers!",
+                "Schrolli the Creator has been defeated – Creation releases you, and his treasure with you.",
+                "Schrolli der Schöpfer ist bezwungen – die Schöpfung entlässt euch, und mit euch seinen Schatz.",
+                "Creation fades – the Creator rests again, and the spark still glows in the altar.",
+                "Die Schöpfung verblasst – der Schöpfer ruht wieder, und der Funke glüht noch im Altar.");
         // Verzauberungen: Name und Erklärung (im Tooltip verzauberter Bücher)
         enchantment(text, "dragonslayer", "Dragonslayer", "Drachentöter",
                 "Deals much more damage to dragons, dragon lords and lindworms.",

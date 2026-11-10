@@ -33,7 +33,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
-                              world_eater, world_eater_segment, world_eater_tail, world_chunk)
+                              world_eater, world_eater_segment, world_eater_tail, world_chunk,
+                              schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -422,6 +423,21 @@ def main():
                 "Geometrie der Giftblume (Stiel, Samenkapsel \"bulb\", sechs Blütenblätter petal0–petal5 mit Drehung i·60° um Y, "
                 "zeigen nach lokal -Z; öffnen/schließen über xRot; vier Blätter leaf0–leaf3 am Fuß).",
                 "spell/poison_flower", poison_flower.PALETTES, preview)
+    # Schrolli der Schöpfer (0.75)
+    write_model(schrolli, "SchrolliGeometry",
+                "Geometrie Schrollis des Schöpfers (im Spiel ×2, in der Wahren Gestalt ×2,6): Gewand, Brustpanzer, sechs Schwingen, "
+                "Heiligenschein, Lichtkrone, Zepter und Weltkugel; nur in der Wahren Gestalt sichtbar: true_rings (zwei Räder mit "
+                "Augen) und true_corona (Strahlenkranz).", "schrolli", schrolli.PALETTES, preview)
+    write_model(seraphling, "SeraphlingGeometry", "Geometrie des Seraphlings (Lichtbote Schrollis): Antlitz, Heiligenschein, "
+                "zwei Paar Schwingen.", "schrolli", seraphling.PALETTES, preview)
+    write_model(divine_spear, "DivineSpearGeometry", "Geometrie des Lichtspeers (Knochen \"spear\", Spitze bei -Z).", "schrolli/shots",
+                divine_spear.PALETTES, preview)
+    write_model(divine_feather, "DivineFeatherGeometry", "Geometrie der goldenen Feder (Knochen \"feather\", Spitze bei -Z).",
+                "schrolli/shots", divine_feather.PALETTES, preview)
+    write_model(divine_halo, "DivineHaloGeometry", "Geometrie des geworfenen Heiligenscheins (Knochen \"disc\", dreht um Y).",
+                "schrolli/shots", divine_halo.PALETTES, preview)
+    write_model(divine_planet, "DivinePlanetGeometry", "Geometrie einer Welt der Schöpfung (Knochen \"planet\" und \"ring\").",
+                "schrolli/planet", divine_planet.PALETTES, preview, same_seed=True)
 
 
 if __name__ == "__main__":

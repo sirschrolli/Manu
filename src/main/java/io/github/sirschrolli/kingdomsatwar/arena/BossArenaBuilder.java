@@ -64,6 +64,14 @@ public final class BossArenaBuilder {
                         ChunkPos.containing(piece), piece);
                 trigger = new BlockPos(piece.getX(), ThronePiece.FLOOR - 3, piece.getZ() + ThronePiece.THRONE_Z);
             }
+            case CREATOR -> {
+                // die Schöpfung wird immer gleich gebaut: nur wo noch kein Hof steht, erst den Platz leeren
+                BlockPos altar = new BlockPos(center.getX(), center.getY() + CreatorArena.DAIS_HEIGHT, center.getZ() + CreatorArena.ALTAR_Z);
+                if (!arena.getBlockState(altar).is(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_ALTAR.get())) {
+                    ArenaIsland.clear(arena, center, kind.reach(), 60, 90);
+                }
+                trigger = CreatorArena.build(arena, center);
+            }
             default -> {
                 Cut cut = cut(kind, from, lair, lairPos);
                 BlockPos focus = lair.arenaFocus();

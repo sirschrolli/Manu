@@ -31,6 +31,10 @@ public final class ModParticles {
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CONFETTI = simple("confetti");
     /** Fehlerpixel: kleine, leuchtende Quadrate in Rot, Grün, Blau, Magenta, Cyan, Gelb oder Weiß, die flackern (Anni der Troll). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> GLITCH_PIXEL = simple("glitch_pixel");
+    /** Göttlicher Funke: ein goldener Stern, der aufleuchtet, funkelt und verlischt (Schrolli der Schöpfer). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DIVINE_SPARK = simple("divine_spark");
+    /** Eine kleine goldene Feder, die trudelnd zu Boden sinkt (Schrolli der Schöpfer). */
+    public static final DeferredHolder<ParticleType<?>, SimpleParticleType> DIVINE_FEATHER = simple("divine_feather");
 
     private ModParticles() {}
 

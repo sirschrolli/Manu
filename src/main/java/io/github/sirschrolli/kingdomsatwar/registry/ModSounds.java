@@ -335,6 +335,45 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> BANNHAMMER_BAN = register("item.bannhammer.ban");
     public static final DeferredHolder<SoundEvent, SoundEvent> GLITCH_WINGS_BLINK = register("item.glitch_wings.blink");
 
+    // ---------------------------------------------------------------- Schrolli der Schöpfer (0.75)
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_AMBIENT = register("entity.schrolli.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_HURT = register("entity.schrolli.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_DEATH = register("entity.schrolli.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_AWAKEN = register("entity.schrolli.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_ASCEND = register("entity.schrolli.ascend");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_VOICE = register("entity.schrolli.voice");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SPEAR = register("entity.schrolli.spear");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SPEAR_FLY = register("entity.schrolli.spear_fly");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_PILLAR = register("entity.schrolli.pillar");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_CHARGE = register("entity.schrolli.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_BEAM = register("entity.schrolli.beam");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SMITE = register("entity.schrolli.smite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_HALO = register("entity.schrolli.halo");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_ORB = register("entity.schrolli.orb");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_BLAST = register("entity.schrolli.blast");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_WINGS = register("entity.schrolli.wings");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_FEATHERS = register("entity.schrolli.feathers");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_BLINK = register("entity.schrolli.blink");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_CHOIR = register("entity.schrolli.choir");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_JUDGMENT = register("entity.schrolli.judgment");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_TIMESTOP = register("entity.schrolli.timestop");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_TIME_RESUME = register("entity.schrolli.time_resume");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_TICK = register("entity.schrolli.tick");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_WORD = register("entity.schrolli.word");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_SUPERNOVA = register("entity.schrolli.supernova");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_PLANET = register("entity.schrolli.planet");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_IMPACT = register("entity.schrolli.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_STAR = register("entity.schrolli.star");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_STUN = register("entity.schrolli.stun");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SCHROLLI_HEAL = register("entity.schrolli.heal");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_AMBIENT = register("entity.seraphling.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_HURT = register("entity.seraphling.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_DEATH = register("entity.seraphling.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SERAPHLING_SHOOT = register("entity.seraphling.shoot");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CREATOR_ALTAR_AWAKEN = register("block.creator_altar.awaken");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CREATOR_ALTAR_HUM = register("block.creator_altar.hum");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CREATOR_SCEPTER_CAST = register("item.creator_scepter.cast");
+
     // ---------------------------------------------------------------- Held
     /** Streicheln (die drei Tätschel-Töne aus PatPat, siehe licenses/patpat/NOTICE.md). */
     public static final DeferredHolder<SoundEvent, SoundEvent> HERO_PAT = register("hero.pat");

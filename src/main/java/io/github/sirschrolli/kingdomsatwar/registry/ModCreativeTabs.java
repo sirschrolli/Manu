@@ -141,6 +141,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, ForgeBlocks.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATION = TABS.register("creation",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.creation"))
+                    .icon(() -> CreatorBlocks.CREATOR_ALTAR.toStack())
+                    .withTabsBefore(LEGENDS.key())
+                    .displayItems((parameters, output) -> accept(output, CreatorBlocks.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

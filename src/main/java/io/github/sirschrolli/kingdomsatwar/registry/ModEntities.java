@@ -598,6 +598,20 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldChunkEntity>> WORLD_CHUNK =
             ENTITIES.registerEntityType("world_chunk", io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldChunkEntity::new, MobCategory.MISC,
                     builder -> builder.sized(1.0f, 1.0f).noLootTable().clientTrackingRange(10).updateInterval(2));
+    // ---------------------------------------------------------------- Schrolli der Schöpfer (0.75)
+    /** Schrolli der Schöpfer: der stärkste Boss der Mod (zwei Gestalten), gerufen am Altar des Schöpfers. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity>> SCHROLLI =
+            ENTITIES.registerEntityType("schrolli", io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(2.4f, 5.8f).eyeHeight(4.9f).fireImmune().notInPeaceful().clientTrackingRange(24).updateInterval(1));
+    /** Seraphling: ein kleiner Lichtbote Schrollis. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creator.SeraphlingEntity>> SERAPHLING =
+            ENTITIES.registerEntityType("seraphling", io.github.sirschrolli.kingdomsatwar.entity.creator.SeraphlingEntity::new, MobCategory.MONSTER,
+                    builder -> builder.sized(0.8f, 1.2f).eyeHeight(0.85f).fireImmune().noLootTable().notInPeaceful().clientTrackingRange(12)
+                            .updateInterval(2));
+    /** Die Geschosse Schrollis: Lichtspeere, Federn, Lichtpfeile, Sterne, Heiligenscheine, die Weltkugel, Welten und die Sonne. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.creator.DivineShotEntity>> DIVINE_SHOT =
+            ENTITIES.registerEntityType("divine_shot", io.github.sirschrolli.kingdomsatwar.entity.creator.DivineShotEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.7f, 0.7f).fireImmune().noLootTable().noSave().clientTrackingRange(16).updateInterval(1));
     // ---------------------------------------------------------------- Wesen des Meeres
     /** Mantarochen: friedlicher Riese der warmen und tiefen Meere, springt aus dem Wasser. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity>> MANTA_RAY =
@@ -935,6 +949,8 @@ public final class ModEntities {
         event.put(STAR_RAY.get(), StarRayEntity.createAttributes().build());
         event.put(SHATTERED_KING.get(), ShatteredKingEntity.createAttributes().build());
         event.put(WORLD_EATER.get(), io.github.sirschrolli.kingdomsatwar.entity.abyss.WorldEaterEntity.createAttributes().build());
+        event.put(SCHROLLI.get(), io.github.sirschrolli.kingdomsatwar.entity.creator.SchrolliEntity.createAttributes().build());
+        event.put(SERAPHLING.get(), io.github.sirschrolli.kingdomsatwar.entity.creator.SeraphlingEntity.createAttributes().build());
         event.put(REEF_COLOSSUS.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.ReefColossusEntity.createAttributes().build());
         event.put(MANTA_RAY.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.MantaRayEntity.createAttributes().build());
         event.put(GLOW_JELLYFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GlowJellyfishEntity.createAttributes().build());

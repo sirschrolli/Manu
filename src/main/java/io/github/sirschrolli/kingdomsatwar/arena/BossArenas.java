@@ -106,7 +106,7 @@ public final class BossArenas {
             return null;
         }
         int slot = BossFights.of(level.getServer()).freeSlot(kind);
-        return pull(level, lairPos, arena, slot, BossArenaKind.center(slot, lair.arenaFocus().getY()));
+        return pull(level, lairPos, arena, slot, BossArenaKind.center(slot, kind.arenaY(lair.arenaFocus().getY())));
     }
 
     /** Wie {@link #pull(ServerLevel, BlockPos)}, mit Arena-Welt, Platz und Mitte (für Tests auch in der Oberwelt). */

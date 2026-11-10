@@ -43,6 +43,7 @@ public final class ModEquipment {
     public static final ResourceKey<EquipmentAsset> STAR_WINGS_ASSET = asset("star_wings");
     /** Fehlerflügel: Annis Beute (fehlende Textur mit Löchern und Farbsäumen). */
     public static final ResourceKey<EquipmentAsset> GLITCH_WINGS_ASSET = asset("glitch_wings");
+    public static final ResourceKey<EquipmentAsset> CREATOR_WINGS_ASSET = asset("creator_wings");
     public static final ResourceKey<EquipmentAsset> STEEL_DRAGON_ARMOR_ASSET = asset("steel_dragon_armor");
     public static final ResourceKey<EquipmentAsset> DRACONIUM_DRAGON_ARMOR_ASSET = asset("draconium_dragon_armor");
     public static final Map<DragonType, ResourceKey<EquipmentAsset>> SCALE_ASSETS = new EnumMap<>(DragonType.class);
