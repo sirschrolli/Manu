@@ -38,7 +38,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public class MonsterShot extends ThrowableItemProjectile {
     public enum Kind {
-        MUD, MAGMA, SOUL
+        MUD, MAGMA, SOUL, CHORUS
     }
 
     private static final EntityDataAccessor<Byte> DATA_KIND = SynchedEntityData.defineId(MonsterShot.class, EntityDataSerializers.BYTE);
@@ -57,6 +57,7 @@ public class MonsterShot extends ThrowableItemProjectile {
             case MUD -> new ItemStack(Items.MUD);
             case MAGMA -> new ItemStack(Items.FIRE_CHARGE);
             case SOUL -> ItemStack.EMPTY;
+            case CHORUS -> new ItemStack(Items.CHORUS_FRUIT);
         });
         shot.damage = damage;
         shot.setOwner(owner);
@@ -120,6 +121,11 @@ public class MonsterShot extends ThrowableItemProjectile {
                         level.addParticle(ParticleTypes.DRIPPING_LAVA, this.getX(), this.getY() - 0.1, this.getZ(), 0.0, 0.0, 0.0);
                     }
                 }
+                case CHORUS -> {
+                    if (this.random.nextInt(2) == 0) {
+                        level.addParticle(ParticleTypes.PORTAL, this.getX(), this.getY(), this.getZ(), -v.x * 0.2, -v.y * 0.2, -v.z * 0.2);
+                    }
+                }
                 case SOUL -> {
                     // ein Ball aus blauen Flammen mit einem Schweif
                     for (int i = 0; i < 3; i++) {
@@ -159,6 +165,11 @@ public class MonsterShot extends ThrowableItemProjectile {
                     living.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 24, 0), owner);
                 }
                 case MAGMA -> living.igniteForSeconds(5.0f);
+                case CHORUS -> {
+                    // wie nach einer Chorusfrucht: weg, an eine zufällige Stelle in der Nähe – und ihm wird übel
+                    ChorusMawEntity.chorusTeleport(level, living, 16.0);
+                    ChorusMawEntity.dizzy(living, owner);
+                }
                 case SOUL -> {
                     living.igniteForSeconds(3.0f);
                     living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 50, 0), owner);
@@ -196,6 +207,12 @@ public class MonsterShot extends ThrowableItemProjectile {
                 level.sendParticles(ParticleTypes.LAVA, p.x, p.y, p.z, 8, 0.3, 0.2, 0.3, 0.0);
                 level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 16, 0.3, 0.3, 0.3, 0.06);
                 level.playSound(null, p.x, p.y, p.z, SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 1.0f, 0.8f + this.random.nextFloat() * 0.2f);
+            }
+            case CHORUS -> {
+                level.sendParticles(ParticleTypes.REVERSE_PORTAL, p.x, p.y, p.z, 30, 0.3, 0.3, 0.3, 0.2);
+                level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.CHORUS_FLOWER.defaultBlockState()), p.x, p.y, p.z, 12, 0.2,
+                        0.2, 0.2, 0.1);
+                level.playSound(null, p.x, p.y, p.z, ModSounds.CHORUS_MAW_TELEPORT.get(), SoundSource.HOSTILE, 1.0f, 1.2f + this.random.nextFloat() * 0.2f);
             }
             case SOUL -> {
                 level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, p.x, p.y, p.z, 24, 0.25, 0.25, 0.25, 0.08);

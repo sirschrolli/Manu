@@ -288,6 +288,8 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> MIRE_SHAMBLER_SPAWNS = spawnModifier("add_mire_shambler_spawns");
     public static final ResourceKey<BiomeModifier> EMBER_WYRM_SPAWNS = spawnModifier("add_ember_wyrm_spawns");
     public static final ResourceKey<BiomeModifier> ASH_WRAITH_SPAWNS = spawnModifier("add_ash_wraith_spawns");
+    public static final ResourceKey<BiomeModifier> RIFT_HOUND_SPAWNS = spawnModifier("add_rift_hound_spawns");
+    public static final ResourceKey<BiomeModifier> CHORUS_MAW_SPAWNS = spawnModifier("add_chorus_maw_spawns");
     // eigene Wildtiere (E3b): Tausch gegen die Vanilla-Wildtiere, dazu neue Arten in neuen Gegenden
     public static final ResourceKey<BiomeModifier> SWAP_WILD_ANIMALS = spawnModifier("swap_vanilla_wild_animals");
     public static final ResourceKey<BiomeModifier> SWAP_MONSTERS = spawnModifier("swap_vanilla_monsters");
@@ -412,6 +414,9 @@ public final class ModWorldgen {
         context.register(MIRE_SHAMBLER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_MIRE_SHAMBLERS, ModEntities.MIRE_SHAMBLER.get(), 14, 1, 1));
         context.register(EMBER_WYRM_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_EMBER_WYRMS, ModEntities.EMBER_WYRM.get(), 6, 1, 1));
         context.register(ASH_WRAITH_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_ASH_WRAITHS, ModEntities.ASH_WRAITH.get(), 14, 1, 2));
+        // Monster des Ends (0.71)
+        context.register(RIFT_HOUND_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_RIFT_HOUNDS, ModEntities.RIFT_HOUND.get(), 6, 2, 2));
+        context.register(CHORUS_MAW_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CHORUS_MAWS, ModEntities.CHORUS_MAW.get(), 4, 1, 1));
 
         // Eigene Wildtiere: überall, wo Vanilla seine Wildtiere vorsieht, erscheinen mit gleichem Gewicht die eigenen
         context.register(SWAP_WILD_ANIMALS, new ReplaceSpawnsBiomeModifier(biomes.getOrThrow(ModTags.Biomes.REPLACES_VANILLA_ANIMALS),

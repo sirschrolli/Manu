@@ -128,7 +128,7 @@ public final class ShadowBiomes {
                         .fog(28.0f, 200.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.012f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY),
                 ShadowFeatures.wastes(placed, carvers),
-                new Spawns().stalkers(90).crawlers(20).nightWings(30), false, 1.2f, 0.0f));
+                new Spawns().stalkers(90).crawlers(20).nightWings(30).rams(25), false, 1.2f, 0.0f));
         context.register(CRYSTAL_CHASMS, biome(new Look(0x26306A, 0x34488A, 0x2E5AAA, 0x0E1C42, 0x4A68B4, 0x4A7AC4)
                         .fog(24.0f, 180.0f).particles(new AmbientParticle(ParticleTypes.END_ROD, 0.0009f))
                         .music(SoundEvents.MUSIC_BIOME_DRIPSTONE_CAVES),
@@ -138,12 +138,12 @@ public final class ShadowBiomes {
                         .fog(10.0f, 110.0f).particles(new AmbientParticle(ParticleTypes.SOUL, 0.0006f))
                         .music(SoundEvents.MUSIC_BIOME_SOUL_SAND_VALLEY),
                 ShadowFeatures.marsh(placed, carvers),
-                new Spawns().stalkers(80).crawlers(15).nightWings(10).moonStags(5).moths(35), true, 0.7f, 0.9f));
+                new Spawns().stalkers(80).crawlers(15).nightWings(10).moonStags(5).moths(35).herons(40), true, 0.7f, 0.9f));
         context.register(SHADOW_PEAKS, biome(new Look(0x323A62, 0x5A5E80, 0x4A5A8A, 0x121A34, 0x6A70A0, 0x5E6898)
                         .fog(32.0f, 240.0f).particles(new AmbientParticle(ParticleTypes.WHITE_ASH, 0.004f))
                         .music(SoundEvents.MUSIC_BIOME_JAGGED_PEAKS),
                 ShadowFeatures.peaks(placed, carvers),
-                new Spawns().nightWings(50).stalkers(60).crawlers(25), true, -0.6f, 0.4f));
+                new Spawns().nightWings(50).stalkers(60).crawlers(25).rams(40), true, -0.6f, 0.4f));
         context.register(GLIMMER_MEADOWS, biome(new Look(0x3A3C7A, 0x5A5C9E, 0x4A5CB8, 0x141A44, 0x7E88DC, 0x9A8ADA)
                         .fog(32.0f, 230.0f).particles(new AmbientParticle(ParticleTypes.FIREFLY, 0.0035f))
                         .music(SoundEvents.MUSIC_END),
@@ -234,6 +234,16 @@ public final class ShadowBiomes {
 
         Spawns moths(int weight) {
             this.builder.addSpawn(ModEntities.GLIMMER_MOTH.get(), weight, 2, 5);
+            return this;
+        }
+
+        Spawns herons(int weight) {
+            this.builder.addSpawn(ModEntities.SOUL_HERON.get(), weight, 1, 1);
+            return this;
+        }
+
+        Spawns rams(int weight) {
+            this.builder.addSpawn(ModEntities.NIGHT_RAM.get(), weight, 1, 2);
             return this;
         }
 

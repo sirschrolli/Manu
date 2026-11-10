@@ -32,7 +32,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
                               miss_mystik, light_dove, magic_sword, anni_troll,
-                              werewolf, mire_shambler, ember_wyrm, ash_wraith)
+                              werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -105,6 +105,11 @@ def main():
     write_model(ember_wyrm, "EmberWyrmGeometry", "Geometrie des Glutwurms (Schädel als Ursprung, sechs Glieder).", "ember_wyrm",
                 ember_wyrm.PALETTES, preview)
     write_model(ash_wraith, "AshWraithGeometry", "Geometrie des Aschengeists.", "ash_wraith", ash_wraith.PALETTES, preview)
+    # Monster der Schattenwelt und des Ends (0.71)
+    write_model(soul_heron, "SoulHeronGeometry", "Geometrie des Seelenreihers.", "soul_heron", soul_heron.PALETTES, preview)
+    write_model(night_ram, "NightRamGeometry", "Geometrie des Nachtwidders.", "night_ram", night_ram.PALETTES, preview)
+    write_model(rift_hound, "RiftHoundGeometry", "Geometrie des Rissjägers.", "rift_hound", rift_hound.PALETTES, preview)
+    write_model(chorus_maw, "ChorusMawGeometry", "Geometrie des Chorusschlunds.", "chorus_maw", chorus_maw.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)
     write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",

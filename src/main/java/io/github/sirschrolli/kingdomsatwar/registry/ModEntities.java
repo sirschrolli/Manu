@@ -527,7 +527,24 @@ public final class ModEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity>> ASH_WRAITH = ENTITIES.registerEntityType(
             "ash_wraith", io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity::new, MobCategory.MONSTER,
             builder -> builder.sized(0.9f, 2.2f).eyeHeight(1.9f).fireImmune().clientTrackingRange(10));
-    /** Geschosse der neuen Monster: Schlammklumpen, Magmabatzen, Seelenfeuer. */
+    // ---------------------------------------------------------------- Monster der Schattenwelt und des Ends (0.71)
+    /** Seelenreiher: watet durch die Seelensümpfe der Schattenwelt. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.SoulHeronEntity>> SOUL_HERON = ENTITIES.registerEntityType(
+            "soul_heron", io.github.sirschrolli.kingdomsatwar.entity.monster.SoulHeronEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(0.9f, 2.4f).eyeHeight(2.15f).clientTrackingRange(10));
+    /** Nachtwidder: stürmt über die Schattengipfel und die Bleiche Öde. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.NightRamEntity>> NIGHT_RAM = ENTITIES.registerEntityType(
+            "night_ram", io.github.sirschrolli.kingdomsatwar.entity.monster.NightRamEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.3f, 1.6f).eyeHeight(1.3f).clientTrackingRange(10));
+    /** Rissjäger: jagt zu zweit auf den äußeren End-Inseln. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.RiftHoundEntity>> RIFT_HOUND = ENTITIES.registerEntityType(
+            "rift_hound", io.github.sirschrolli.kingdomsatwar.entity.monster.RiftHoundEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(0.9f, 1.3f).eyeHeight(1.1f).clientTrackingRange(10));
+    /** Chorusschlund: eine fleischfressende Choruspflanze der äußeren End-Inseln. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.ChorusMawEntity>> CHORUS_MAW = ENTITIES.registerEntityType(
+            "chorus_maw", io.github.sirschrolli.kingdomsatwar.entity.monster.ChorusMawEntity::new, MobCategory.MONSTER,
+            builder -> builder.sized(1.0f, 2.3f).eyeHeight(1.9f).clientTrackingRange(10));
+    /** Geschosse der neuen Monster: Schlammklumpen, Magmabatzen, Seelenfeuer, Chorussamen. */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.monster.MonsterShot>> MONSTER_SHOT = ENTITIES.registerEntityType(
             "monster_shot", io.github.sirschrolli.kingdomsatwar.entity.monster.MonsterShot::new, MobCategory.MISC,
             builder -> builder.sized(0.4f, 0.4f).noLootTable().clientTrackingRange(6).updateInterval(10));
@@ -886,6 +903,10 @@ public final class ModEntities {
         event.put(MIRE_SHAMBLER.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity.createAttributes().build());
         event.put(EMBER_WYRM.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity.createAttributes().build());
         event.put(ASH_WRAITH.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity.createAttributes().build());
+        event.put(SOUL_HERON.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.SoulHeronEntity.createAttributes().build());
+        event.put(NIGHT_RAM.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.NightRamEntity.createAttributes().build());
+        event.put(RIFT_HOUND.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.RiftHoundEntity.createAttributes().build());
+        event.put(CHORUS_MAW.get(), io.github.sirschrolli.kingdomsatwar.entity.monster.ChorusMawEntity.createAttributes().build());
         event.put(PYRRHON.get(), PyrrhonEntity.createAttributes().build());
         event.put(GLACIARA.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.ice.GlaciaraEntity.createAttributes().build());
         event.put(VERDANTIS.get(), io.github.sirschrolli.kingdomsatwar.entity.boss.nature.VerdantisEntity.createAttributes().build());
@@ -1038,6 +1059,11 @@ public final class ModEntities {
         event.register(MIRE_SHAMBLER.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.MireShamblerEntity::checkShamblerSpawnRules, replace);
         event.register(EMBER_WYRM.get(), SpawnPlacementTypes.IN_LAVA, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.EmberWyrmEntity::checkWyrmSpawnRules, replace);
         event.register(ASH_WRAITH.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.AshWraithEntity::checkWraithSpawnRules, replace);
+        // Monster der Schattenwelt und des Ends (0.71)
+        event.register(SOUL_HERON.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.SoulHeronEntity::checkHeronSpawnRules, replace);
+        event.register(NIGHT_RAM.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.NightRamEntity::checkRamSpawnRules, replace);
+        event.register(RIFT_HOUND.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.RiftHoundEntity::checkHoundSpawnRules, replace);
+        event.register(CHORUS_MAW.get(), ground, surface, io.github.sirschrolli.kingdomsatwar.entity.monster.ChorusMawEntity::checkMawSpawnRules, replace);
         // Schattenwelt: Pirscher überall im Dunkeln, Kriecher in Höhlen und Schluchten, Schwingen und Falter in der Luft
         event.register(SHADE_STALKER.get(), ground, surface, ShadeStalkerEntity::checkStalkerSpawnRules, replace);
         event.register(CRYSTAL_CRAWLER.get(), ground, surface, CrystalCrawlerEntity::checkCrawlerSpawnRules, replace);

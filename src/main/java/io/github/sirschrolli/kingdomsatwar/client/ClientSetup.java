@@ -94,6 +94,10 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.MIRE_SHAMBLER, io.github.sirschrolli.kingdomsatwar.client.model.geom.MireShamblerGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.EMBER_WYRM, io.github.sirschrolli.kingdomsatwar.client.model.geom.EmberWyrmGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ASH_WRAITH, io.github.sirschrolli.kingdomsatwar.client.model.geom.AshWraithGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SOUL_HERON, io.github.sirschrolli.kingdomsatwar.client.model.geom.SoulHeronGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.NIGHT_RAM, io.github.sirschrolli.kingdomsatwar.client.model.geom.NightRamGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.RIFT_HOUND, io.github.sirschrolli.kingdomsatwar.client.model.geom.RiftHoundGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.CHORUS_MAW, io.github.sirschrolli.kingdomsatwar.client.model.geom.ChorusMawGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER_RANK,
                 () -> SoldierModel.createLayer(new net.minecraft.client.model.geom.builders.CubeDeformation(0.3f)));
@@ -241,6 +245,10 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.MIRE_SHAMBLER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MireShamblerRenderer::new);
         event.registerEntityRenderer(ModEntities.EMBER_WYRM.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.EmberWyrmRenderer::new);
         event.registerEntityRenderer(ModEntities.ASH_WRAITH.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.AshWraithRenderer::new);
+        event.registerEntityRenderer(ModEntities.SOUL_HERON.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.SoulHeronRenderer::new);
+        event.registerEntityRenderer(ModEntities.NIGHT_RAM.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.NightRamRenderer::new);
+        event.registerEntityRenderer(ModEntities.RIFT_HOUND.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.RiftHoundRenderer::new);
+        event.registerEntityRenderer(ModEntities.CHORUS_MAW.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.ChorusMawRenderer::new);
         event.registerEntityRenderer(ModEntities.MONSTER_SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
         event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,

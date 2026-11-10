@@ -211,6 +211,8 @@ final class Showcase {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.startsWith("beasts_")) {
                         BeastShowcase.beasts(steps, scene.substring(7));
+                    } else if (scene.equals("realm_beasts") || scene.startsWith("realm_beasts_")) {
+                        RealmBeastShowcase.beasts(steps, scene.equals("realm_beasts") ? "" : scene.substring(13));
                     } else if (scene.equals("fae_map")) {
                         FaeShowcase.map(steps);
                     } else if (scene.equals("fae_boss")) {

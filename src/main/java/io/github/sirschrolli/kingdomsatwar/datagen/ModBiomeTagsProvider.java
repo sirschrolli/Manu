@@ -90,6 +90,15 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(ModTags.Biomes.HAS_ASH_WRAITHS)
                 .add(Biomes.SOUL_SAND_VALLEY)
                 .add(Biomes.BASALT_DELTAS);
+        // Monster des Ends (0.71): nur auf den äußeren Inseln, nie auf der Hauptinsel des Drachen
+        this.tag(ModTags.Biomes.HAS_RIFT_HOUNDS)
+                .add(Biomes.END_HIGHLANDS)
+                .add(Biomes.END_MIDLANDS)
+                .add(Biomes.END_BARRENS)
+                .add(Biomes.SMALL_END_ISLANDS);
+        this.tag(ModTags.Biomes.HAS_CHORUS_MAWS)
+                .add(Biomes.END_HIGHLANDS)
+                .add(Biomes.END_MIDLANDS);
 
         // Drachennester (je eins pro Welt): jede Art in ihrem eigenen Gebiet – Eis im Eis-Biom, Wasser im tiefen Ozean
         var nests = ModTags.Biomes.HAS_DRAGON_NESTS;

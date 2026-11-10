@@ -140,6 +140,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_MIRE_SHAMBLERS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_mire_shamblers"));
         public static final TagKey<Biome> HAS_EMBER_WYRMS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_ember_wyrms"));
         public static final TagKey<Biome> HAS_ASH_WRAITHS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_ash_wraiths"));
+        public static final TagKey<Biome> HAS_RIFT_HOUNDS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_rift_hounds"));
+        public static final TagKey<Biome> HAS_CHORUS_MAWS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_chorus_maws"));
         /** Wo Drachennester der jeweiligen Art entstehen. */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, TagKey<Biome>> HAS_DRAGON_NESTS = nestTags();
         public static final TagKey<Biome> HAS_CASTLE_RUINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_castle_ruins"));

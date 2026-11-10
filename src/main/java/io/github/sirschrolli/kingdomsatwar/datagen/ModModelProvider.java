@@ -417,7 +417,8 @@ public class ModModelProvider extends ModelProvider {
         }
         for (DeferredItem<?> item : java.util.List.of(ModItems.WILD_BOAR_SPAWN_EGG, ModItems.DEER_SPAWN_EGG, ModItems.GOOSE_SPAWN_EGG,
                 ModItems.WILL_O_WISP_SPAWN_EGG, ModItems.CAVE_TROLL_SPAWN_EGG, ModItems.LINDWORM_SPAWN_EGG, ModItems.WEREWOLF_SPAWN_EGG,
-                ModItems.MIRE_SHAMBLER_SPAWN_EGG, ModItems.EMBER_WYRM_SPAWN_EGG, ModItems.ASH_WRAITH_SPAWN_EGG, ModItems.VENISON,
+                ModItems.MIRE_SHAMBLER_SPAWN_EGG, ModItems.EMBER_WYRM_SPAWN_EGG, ModItems.ASH_WRAITH_SPAWN_EGG,
+                ModItems.SOUL_HERON_SPAWN_EGG, ModItems.NIGHT_RAM_SPAWN_EGG, ModItems.RIFT_HOUND_SPAWN_EGG, ModItems.CHORUS_MAW_SPAWN_EGG, ModItems.VENISON,
                 ModItems.COOKED_VENISON, ModItems.WISP_DUST, ModItems.GARLIC_BREAD, ModItems.ALE, ModItems.WINE, ModItems.MEAD)) {
             flat(items, item.get());
         }

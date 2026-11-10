@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_rift_hounds",
+  "spawners": {
+    "type": "kingdomsatwar:rift_hound",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 2,
+      "min_inclusive": 2
+    },
+    "weight": 6
+  }
+}

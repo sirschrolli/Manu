@@ -268,6 +268,23 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
                 .withPool(rare(Items.GHAST_TEAR, 0.08f, 0.03f))
                 .withPool(drop(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.SOUL_ASH.get(), 1, 2))
                 .withPool(rare(io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.ASH_VEIL.get(), 0.3f, 0.06f)));
+        // Monster der Schattenwelt und des Ends (0.71)
+        this.add(ModEntities.SOUL_HERON.get(), LootTable.lootTable()
+                .withPool(drop(Items.FEATHER, 1, 3))
+                .withPool(drop(Items.BONE, 0, 1))
+                .withPool(rare(ShadowItems.SOUL_CRYSTAL.get(), 0.1f, 0.03f)));
+        this.add(ModEntities.NIGHT_RAM.get(), LootTable.lootTable()
+                .withPool(drop(Items.MUTTON, 1, 3))
+                .withPool(drop(Items.WOOL.pick(net.minecraft.world.item.DyeColor.BLACK), 0, 2))
+                .withPool(drop(ShadowItems.NIGHT_CRYSTAL_SHARD.get(), 1, 3)));
+        this.add(ModEntities.RIFT_HOUND.get(), LootTable.lootTable()
+                .withPool(rare(Items.ENDER_PEARL, 0.35f, 0.08f))
+                .withPool(drop(Items.AMETHYST_SHARD, 0, 2))
+                .withPool(rare(ShadowItems.SHADOW_ESSENCE.get(), 0.15f, 0.04f)));
+        this.add(ModEntities.CHORUS_MAW.get(), LootTable.lootTable()
+                .withPool(drop(Items.CHORUS_FRUIT, 1, 3))
+                .withPool(drop(Items.POPPED_CHORUS_FRUIT, 0, 1))
+                .withPool(rare(Items.CHORUS_FLOWER, 0.2f, 0.05f)));
 
         // Kreaturen der Schattenwelt
         this.add(ModEntities.SHADE_STALKER.get(), LootTable.lootTable()

@@ -69,6 +69,11 @@
                 "min_inclusive": 1
               },
               "weight": 10
+            },
+            {
+              "type": "kingdomsatwar:soul_heron",
+              "count": 1,
+              "weight": 40
             }
           ]
         }

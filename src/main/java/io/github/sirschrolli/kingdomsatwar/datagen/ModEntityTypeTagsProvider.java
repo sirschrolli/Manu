@@ -55,6 +55,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                     net.minecraft.resources.Identifier.withDefaultNamespace(name)));
         }
         coins.add(ModEntities.WEREWOLF.key()).add(ModEntities.MIRE_SHAMBLER.key()).add(ModEntities.EMBER_WYRM.key()).add(ModEntities.ASH_WRAITH.key());
+        coins.add(ModEntities.SOUL_HERON.key()).add(ModEntities.NIGHT_RAM.key()).add(ModEntities.RIFT_HOUND.key()).add(ModEntities.CHORUS_MAW.key());
+        this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.SOUL_HERON.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.ASH_WRAITH.key());
         coins.add(ModEntities.CAVE_TROLL.key()).add(ModEntities.LINDWORM.key()).add(ModEntities.SHADE_STALKER.key())
                 .add(ModEntities.CRYSTAL_CRAWLER.key()).add(ModEntities.NIGHT_WING.key());

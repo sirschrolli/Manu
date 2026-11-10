@@ -1548,6 +1548,11 @@ public class ModLanguageProvider extends LanguageProvider {
         creature(ModEntities.MIRE_SHAMBLER, ModItems.MIRE_SHAMBLER_SPAWN_EGG, "Mire Shambler", "Moorschlurfer", "Moorschlurfer");
         creature(ModEntities.EMBER_WYRM, ModItems.EMBER_WYRM_SPAWN_EGG, "Ember Wyrm", "Glutwurm", "Glutwurm");
         creature(ModEntities.ASH_WRAITH, ModItems.ASH_WRAITH_SPAWN_EGG, "Ash Wraith", "Aschengeist", "Aschengeist");
+        // Monster der Schattenwelt und des Ends (0.71)
+        creature(ModEntities.SOUL_HERON, ModItems.SOUL_HERON_SPAWN_EGG, "Soul Heron", "Seelenreiher", "Seelenreiher");
+        creature(ModEntities.NIGHT_RAM, ModItems.NIGHT_RAM_SPAWN_EGG, "Night Ram", "Nachtwidder", "Nachtwidder");
+        creature(ModEntities.RIFT_HOUND, ModItems.RIFT_HOUND_SPAWN_EGG, "Rift Hound", "Rissjäger", "Rissjäger");
+        creature(ModEntities.CHORUS_MAW, ModItems.CHORUS_MAW_SPAWN_EGG, "Chorus Maw", "Chorusschlund", "Chorusschlund");
         add(ModEntities.MONSTER_SHOT.get(), pick("Monster Missile", "Monstergeschoss"));
         for (String[] e : new String[][] {
                 {"werewolf.growl", "Werewolf growls", "Werwolf knurrt"}, {"werewolf.howl", "Werewolf howls", "Werwolf heult"},
@@ -1568,7 +1573,24 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"ash_wraith.ambient", "Ash wraith whispers", "Aschengeist flüstert"}, {"ash_wraith.hurt", "Ash wraith hurts", "Aschengeist wird verletzt"},
                 {"ash_wraith.death", "Ash wraith crumbles to ash", "Aschengeist zerfällt zu Asche"},
                 {"ash_wraith.cloud", "Ash billows", "Asche wallt auf"}, {"ash_wraith.bolt", "Soul fire hisses", "Seelenfeuer zischt"},
-                {"ash_wraith.fade", "Ash wraith fades", "Aschengeist verweht"}}) {
+                {"ash_wraith.fade", "Ash wraith fades", "Aschengeist verweht"},
+                {"soul_heron.call", "Soul heron croaks", "Seelenreiher krächzt"}, {"soul_heron.stab", "Soul heron stabs", "Seelenreiher stößt zu"},
+                {"soul_heron.wings", "Wings beat", "Flügel schlagen"}, {"soul_heron.hurt", "Soul heron hurts", "Seelenreiher wird verletzt"},
+                {"soul_heron.death", "Soul heron dies", "Seelenreiher stirbt"}, {"soul_heron.step", "Wading steps", "Watende Schritte"},
+                {"night_ram.ambient", "Night ram grunts", "Nachtwidder brummt"}, {"night_ram.bleat", "Night ram bellows", "Nachtwidder röhrt"},
+                {"night_ram.scrape", "Hoof scrapes", "Huf scharrt"}, {"night_ram.charge", "Night ram charges", "Nachtwidder stürmt los"},
+                {"night_ram.impact", "Horns crash", "Hörner krachen"}, {"night_ram.stomp", "Crystals shatter", "Kristalle bersten"},
+                {"night_ram.hurt", "Night ram hurts", "Nachtwidder wird verletzt"}, {"night_ram.death", "Night ram dies", "Nachtwidder stirbt"},
+                {"night_ram.step", "Hoofbeats", "Hufschläge"},
+                {"rift_hound.ambient", "Rift hound growls", "Rissjäger knurrt"}, {"rift_hound.howl", "Rift hound howls", "Rissjäger heult"},
+                {"rift_hound.phase", "Something tears through the void", "Etwas reißt durch die Leere"},
+                {"rift_hound.bite", "Rift hound bites", "Rissjäger beißt"}, {"rift_hound.hurt", "Rift hound hurts", "Rissjäger wird verletzt"},
+                {"rift_hound.death", "Rift hound dissolves", "Rissjäger zerfällt"}, {"rift_hound.step", "Footsteps", "Schritte"},
+                {"chorus_maw.ambient", "Chorus maw rustles", "Chorusschlund raschelt"}, {"chorus_maw.open", "A blossom opens", "Eine Blüte öffnet sich"},
+                {"chorus_maw.lash", "Vine lashes", "Ranke peitscht"}, {"chorus_maw.bite", "Chorus maw snaps", "Chorusschlund schnappt zu"},
+                {"chorus_maw.spit", "Chorus maw spits", "Chorusschlund spuckt"},
+                {"chorus_maw.teleport", "Chorus maw vanishes", "Chorusschlund verschwindet"},
+                {"chorus_maw.hurt", "Chorus maw hurts", "Chorusschlund wird verletzt"}, {"chorus_maw.death", "Chorus maw withers", "Chorusschlund welkt"}}) {
             subtitle("entity." + e[0], e[1], e[2]);
         }
 

@@ -97,6 +97,37 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_CLOUD = register("entity.ash_wraith.cloud");
     public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_BOLT = register("entity.ash_wraith.bolt");
     public static final DeferredHolder<SoundEvent, SoundEvent> ASH_WRAITH_FADE = register("entity.ash_wraith.fade");
+    // Monster der Schattenwelt und des Ends (0.71)
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_CALL = register("entity.soul_heron.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_STAB = register("entity.soul_heron.stab");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_WINGS = register("entity.soul_heron.wings");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_HURT = register("entity.soul_heron.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_DEATH = register("entity.soul_heron.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SOUL_HERON_STEP = register("entity.soul_heron.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_AMBIENT = register("entity.night_ram.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_BLEAT = register("entity.night_ram.bleat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_SCRAPE = register("entity.night_ram.scrape");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_CHARGE = register("entity.night_ram.charge");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_IMPACT = register("entity.night_ram.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_STOMP = register("entity.night_ram.stomp");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_HURT = register("entity.night_ram.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_DEATH = register("entity.night_ram.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> NIGHT_RAM_STEP = register("entity.night_ram.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_AMBIENT = register("entity.rift_hound.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_HOWL = register("entity.rift_hound.howl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_PHASE = register("entity.rift_hound.phase");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_BITE = register("entity.rift_hound.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_HURT = register("entity.rift_hound.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_DEATH = register("entity.rift_hound.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> RIFT_HOUND_STEP = register("entity.rift_hound.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_AMBIENT = register("entity.chorus_maw.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_OPEN = register("entity.chorus_maw.open");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_LASH = register("entity.chorus_maw.lash");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_BITE = register("entity.chorus_maw.bite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_SPIT = register("entity.chorus_maw.spit");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_TELEPORT = register("entity.chorus_maw.teleport");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_HURT = register("entity.chorus_maw.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> CHORUS_MAW_DEATH = register("entity.chorus_maw.death");
 
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_BREATH = register("entity.nyxar.breath");
     public static final DeferredHolder<SoundEvent, SoundEvent> NYXAR_SHRIEK = register("entity.nyxar.shriek");
