@@ -2710,6 +2710,92 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.anni_troll.windup"
   },
+  "entity.ash_wraith.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.ambient"
+  },
+  "entity.ash_wraith.bolt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_bolt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_bolt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_bolt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.bolt"
+  },
+  "entity.ash_wraith.cloud": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_cloud1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_cloud2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.cloud"
+  },
+  "entity.ash_wraith.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.death"
+  },
+  "entity.ash_wraith.fade": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_fade1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_fade2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.fade"
+  },
+  "entity.ash_wraith.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ash_wraith_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ash_wraith.hurt"
+  },
   "entity.asteria.ambient": {
     "sounds": [
       {
@@ -3874,6 +3960,105 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.step"
   },
+  "entity.ember_wyrm.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_ambient1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_ambient2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_ambient3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.ambient"
+  },
+  "entity.ember_wyrm.bite": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_bite1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_bite2",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.bite"
+  },
+  "entity.ember_wyrm.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_death1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.death"
+  },
+  "entity.ember_wyrm.dive": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_dive1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_dive2",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.dive"
+  },
+  "entity.ember_wyrm.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.hurt"
+  },
+  "entity.ember_wyrm.spit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_spit1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_spit2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_spit3",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.spit"
+  },
+  "entity.ember_wyrm.surface": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_surface1",
+        "attenuation_distance": 64
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/ember_wyrm_surface2",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_wyrm.surface"
+  },
   "entity.fairy.ambient": {
     "sounds": [
       {
@@ -4659,6 +4844,122 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.manta_ray.splash"
+  },
+  "entity.mire_shambler.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_ambient1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_ambient2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_ambient3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.ambient"
+  },
+  "entity.mire_shambler.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.death"
+  },
+  "entity.mire_shambler.grasp": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_grasp1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_grasp2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.grasp"
+  },
+  "entity.mire_shambler.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.hurt"
+  },
+  "entity.mire_shambler.rise": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_rise1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.rise"
+  },
+  "entity.mire_shambler.splat": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_splat1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_splat2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_splat3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.splat"
+  },
+  "entity.mire_shambler.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_step3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_step4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.step"
+  },
+  "entity.mire_shambler.throw": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_throw1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/mire_shambler_throw2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.throw"
   },
   "entity.miss_mystik.ambient": {
     "sounds": [
@@ -5953,6 +6254,100 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.warden_shard.hit"
+  },
+  "entity.werewolf.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_death1",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.death"
+  },
+  "entity.werewolf.growl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_growl1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_growl2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_growl3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.growl"
+  },
+  "entity.werewolf.howl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_howl1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_howl2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.howl"
+  },
+  "entity.werewolf.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_hurt1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_hurt2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_hurt3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.hurt"
+  },
+  "entity.werewolf.snarl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_snarl1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_snarl2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_snarl3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.snarl"
+  },
+  "entity.werewolf.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_step1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_step2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_step3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/monster/werewolf_step4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.werewolf.step"
   },
   "entity.wild_boar.ambient": {
     "sounds": [

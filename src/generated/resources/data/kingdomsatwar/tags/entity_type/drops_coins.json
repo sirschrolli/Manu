@@ -148,6 +148,10 @@
       "id": "minecraft:camel_husk",
       "required": false
     },
+    "kingdomsatwar:werewolf",
+    "kingdomsatwar:mire_shambler",
+    "kingdomsatwar:ember_wyrm",
+    "kingdomsatwar:ash_wraith",
     "kingdomsatwar:cave_troll",
     "kingdomsatwar:lindworm",
     "kingdomsatwar:shade_stalker",
