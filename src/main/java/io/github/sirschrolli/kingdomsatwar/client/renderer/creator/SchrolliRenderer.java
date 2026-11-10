@@ -30,7 +30,8 @@ import org.jspecify.annotations.Nullable;
  * Schrolli der Schöpfer, doppelt so groß wie sein Modell (in der Wahren Gestalt noch ein Drittel größer): Augen, Krone,
  * Heiligenschein, Sonne auf der Brust, Zepterstern und Federspitzen leuchten; das Gewand der Wahren Gestalt ist ein
  * leuchtendes Weltall. Beim Erscheinen, Aufsteigen, im Lichtsprung, bei der Neuschöpfung und im Vergehen leuchtet seine
- * ganze Gestalt in weißem (oder violettem) Licht auf.
+ * ganze Gestalt in weißem (oder violettem) Licht auf. Der Allmächtige (seit 0.78) glüht wie eine Sonne: das Gewand aus
+ * Glut, hinter ihm ein gewaltiger Lichthof, der atmet.
  *
  * <p>Am Boden zieht seine Klinge eine Spur aus Licht hinter sich her: ein Band, das der Schneide folgt und rasch verblasst
  * (golden-weiß, in der Wahren Gestalt violett und türkis). Die Spur wird aus seiner Bewegung berechnet – aus den Haltungen
@@ -45,6 +46,9 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
     public static volatile float debugWalk;
     private static final Identifier TEXTURE = tex("schrolli");
     private static final Identifier TEXTURE_TRUE = tex("schrolli_true");
+    private static final Identifier TEXTURE_ALMIGHTY = tex("schrolli_almighty");
+    private static final RenderType GLOW_ALMIGHTY = RenderTypes.eyes(tex("schrolli_almighty_glow"));
+    private static final RenderType FLASH_ALMIGHTY = RenderTypes.eyes(tex("schrolli_almighty_flash"));
     private static final RenderType GLOW = RenderTypes.eyes(tex("schrolli_glow"));
     private static final RenderType GLOW_TRUE = RenderTypes.eyes(tex("schrolli_true_glow"));
     private static final RenderType FLASH = RenderTypes.eyes(tex("schrolli_flash"));
@@ -75,9 +79,15 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
                 if ((state.flags & SchrolliEntity.FLAG_GLARE) != 0) {
                     glow = Math.min(1.0f, glow + 0.3f);
                 }
-                collector.order(1).submitModel(this.getParentModel(), state, poseStack, state.trueForm ? GLOW_TRUE : GLOW, light,
-                        OverlayTexture.NO_OVERLAY, ARGB.color(Math.round(Mth.clamp(glow, 0.0f, 1.0f) * 255.0f), 0xFFFFFF), null, state.outlineColor);
-                if (state.trueForm && state.deathTime <= 0.0f) {
+                collector.order(1).submitModel(this.getParentModel(), state, poseStack, state.almighty ? GLOW_ALMIGHTY : state.trueForm ? GLOW_TRUE
+                        : GLOW, light, OverlayTexture.NO_OVERLAY, ARGB.color(Math.round(Mth.clamp(glow, 0.0f, 1.0f) * 255.0f), 0xFFFFFF), null,
+                        state.outlineColor);
+                if (state.almighty && state.deathTime <= 0.0f) {
+                    // die Glut seines Gewands lodert ein zweites Mal, warm und rasch pulsierend
+                    float shine = 0.28f + Mth.sin(t * 0.13f) * 0.1f + Mth.sin(t * 0.47f) * 0.05f;
+                    collector.order(2).submitModel(this.getParentModel(), state, poseStack, GLOW_ALMIGHTY, light, OverlayTexture.NO_OVERLAY,
+                            ARGB.color(Math.round(shine * 255.0f), 0xFF9A40), null, state.outlineColor);
+                } else if (state.trueForm && state.deathTime <= 0.0f) {
                     // das Weltall seines Gewands schimmert ein zweites Mal, violett und langsam pulsierend
                     float shine = 0.35f + Mth.sin(t * 0.07f) * 0.15f;
                     collector.order(2).submitModel(this.getParentModel(), state, poseStack, GLOW_TRUE, light, OverlayTexture.NO_OVERLAY,
@@ -85,7 +95,8 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
                 }
                 if (state.flash > 0.01f) {
                     int tint = (state.flags & SchrolliEntity.FLAG_CHANNEL) != 0 ? 0xC890FF : 0xFFF6E0;
-                    collector.order(3).submitModel(this.getParentModel(), state, poseStack, state.trueForm ? FLASH_TRUE : FLASH, light,
+                    collector.order(3).submitModel(this.getParentModel(), state, poseStack, state.almighty ? FLASH_ALMIGHTY
+                            : state.trueForm ? FLASH_TRUE : FLASH, light,
                             OverlayTexture.NO_OVERLAY, ARGB.color(Math.round(Mth.clamp(state.flash, 0.0f, 1.0f) * 255.0f), tint), null,
                             state.outlineColor);
                 }
@@ -112,6 +123,9 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
             case AWAKEN -> Math.max(Mth.clamp(1.0f - a / 40.0f, 0.0f, 1.0f), Mth.clamp(1.0f - Math.abs(a - SchrolliEntity.AWAKEN_LAND) / 10.0f, 0.0f, 1.0f));
             case ASCEND -> a < SchrolliEntity.ASCEND_SHATTER ? Mth.clamp(a / SchrolliEntity.ASCEND_SHATTER, 0.0f, 1.0f)
                     : Mth.clamp(1.0f - (a - SchrolliEntity.ASCEND_REVEAL) / 40.0f, 0.0f, 1.0f);
+            case TRANSCEND -> a < SchrolliEntity.TRANSCEND_COLLAPSE ? Mth.clamp(a / SchrolliEntity.TRANSCEND_COLLAPSE, 0.0f, 0.8f)
+                    : Mth.clamp(1.0f - (a - SchrolliEntity.TRANSCEND_REVEAL) / 50.0f, 0.0f, 1.0f);
+            case SOLAR_JUDGMENT -> Mth.clamp(1.0f - Math.abs(a - SchrolliEntity.SOLAR_FINAL) / 12.0f, 0.0f, 0.8f);
             case BLINK -> Math.max(Mth.clamp(1.0f - Math.abs(a - 4.0f) / 4.0f, 0.0f, 1.0f), Mth.clamp(1.0f - Math.abs(a - 16.0f) / 5.0f, 0.0f, 1.0f));
             case RECREATION -> 0.3f + Mth.sin(age * 0.25f) * 0.18f;
             case WORD -> Mth.clamp((a - 20.0f) / 36.0f, 0.0f, 1.0f) * (a < 58.0f ? 0.8f : 0.0f);
@@ -125,7 +139,7 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
 
     @Override
     public Identifier getTextureLocation(SchrolliRenderState state) {
-        return state.trueForm ? TEXTURE_TRUE : TEXTURE;
+        return state.almighty ? TEXTURE_ALMIGHTY : state.trueForm ? TEXTURE_TRUE : TEXTURE;
     }
 
     @Override
@@ -154,6 +168,7 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
         state.attack = attack.ordinal();
         state.attackTime = entity.attackTime(partialTicks);
         state.trueForm = entity.isTrueForm();
+        state.almighty = entity.isAlmighty();
         state.flags = (entity.hasFlag(SchrolliEntity.FLAG_HALO) ? SchrolliEntity.FLAG_HALO : 0)
                 | (entity.hasFlag(SchrolliEntity.FLAG_ORB) ? SchrolliEntity.FLAG_ORB : 0)
                 | (entity.hasFlag(SchrolliEntity.FLAG_HIDDEN) ? SchrolliEntity.FLAG_HIDDEN : 0)
@@ -187,6 +202,23 @@ public class SchrolliRenderer extends MobRenderer<SchrolliEntity, SchrolliRender
     @Override
     public void submit(SchrolliRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         super.submit(state, poseStack, collector, camera);
+        if (state.almighty && !state.isInvisible) {
+            // der Lichthof der Sonne hinter ihm (atmet; im Vergehen erlischt er)
+            float fade = fade(state) * (state.deathTime > 0.0f ? Math.max(0.0f, 1.0f - state.deathTime / SchrolliEntity.DEATH_TICKS) : 1.0f);
+            float t = state.ageInTicks;
+            float size = (9.0f + Mth.sin(t * 0.07f) * 0.7f) * state.scale;
+            poseStack.pushPose();
+            // hinter seinem Rücken, auf Höhe des Heiligenscheins
+            float yaw = state.bodyRot * Mth.DEG_TO_RAD;
+            poseStack.translate(Mth.sin(yaw) * 1.6f * state.scale, 5.9f * state.scale, -Mth.cos(yaw) * 1.6f * state.scale);
+            DivineShotRenderer.billboard(poseStack, collector, camera, DivineShotRenderer.GLOW_DISC, size,
+                    ARGB.color(Math.round(120 * fade), 0xFFA040), 0.0f);
+            DivineShotRenderer.billboard(poseStack, collector, camera, DivineShotRenderer.GLOW_DISC, size * 0.55f,
+                    ARGB.color(Math.round(110 * fade), 0xFFF0C0), 0.0f);
+            DivineShotRenderer.billboard(poseStack, collector, camera, DivineShotRenderer.STAR4, size * 0.9f,
+                    ARGB.color(Math.round(90 * fade), 0xFFE0A0), t * 0.6f);
+            poseStack.popPose();
+        }
         if (state.ground > 0.9f && !state.isInvisible && state.deathTime <= 0.0f) {
             this.submitTrail(state, poseStack, collector);
         } else {

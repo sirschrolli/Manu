@@ -9,6 +9,8 @@ public class SchrolliRenderState extends LivingEntityRenderState {
     public float attackTime;
     /** Die Wahre Gestalt? */
     public boolean trueForm;
+    /** Der Allmächtige (seit 0.78)? */
+    public boolean almighty;
     /** Merker (Heiligenschein geworfen, Weltkugel geworfen, verborgen, Neuschöpfung, Taumeln, gleißende Augen). */
     public int flags;
     /** Phase des Flügelschlags. */

@@ -7,10 +7,13 @@ Die Musik der Schöpfung (0.75) – komponiert im Code (Partitur wie music.py) u
 * ``music/creation_battle`` – der Kampf gegen Schrolli den Schöpfer: Orgel, Chor, Streicher-Ostinato, Blechbläser mit dem
   Thema des Schöpfers, Pauken und Trommeln in d-Moll (136 BPM);
 * ``music/creation_true`` – die Wahre Gestalt: dasselbe Thema entfesselt, schneller, höher (e-Moll, 152 BPM), mit
-  Orchesterschlägen, Fanfaren und doppelter Trommel.
+  Orchesterschlägen, Fanfaren und doppelter Trommel;
+* ``music/creation_almighty`` (seit 0.78) – Schrolli der Allmächtige im Herzen der Sonne: das Thema als Hymne (fis-Moll,
+  164 BPM), Chor und Hörner eine Oktave höher, Trompeten in jedem Teil, Blech auf jedem Achtel, Trommeln in Sechzehnteln,
+  Glocken und Orchesterschläge.
 
 Aufruf (aus dem Projektordner):
-    python3 tools/audio/creator_music.py --sf2 /pfad/zu/FluidR3_GM.sf2 [--only creation creation_battle creation_true]
+    python3 tools/audio/creator_music.py --sf2 /pfad/zu/FluidR3_GM.sf2 [--only creation creation_battle creation_true creation_almighty]
 """
 from __future__ import annotations
 
@@ -144,9 +147,12 @@ THEME_B = [
 ]
 
 
-def compose_battle(true_form: bool, seed: int = 11) -> Score:
-    semis = 2 if true_form else 0
-    bpm = 152.0 if true_form else 136.0
+def compose_battle(level: int, seed: int = 11) -> Score:
+    """level 0: der Schöpfer, 1: die Wahre Gestalt, 2: der Allmächtige (seit 0.78)."""
+    true_form = level >= 1
+    almighty = level >= 2
+    semis = 4 if almighty else 2 if true_form else 0
+    bpm = 164.0 if almighty else 152.0 if true_form else 136.0
     sc = Score(bpm, seed)
     sc.track("organ", 0, ORGAN, pan=64, volume=88)
     sc.track("choir", 1, CHOIR, pan=64, volume=100)
@@ -185,10 +191,13 @@ def compose_battle(true_form: bool, seed: int = 11) -> Score:
             loud = 90 if name in ("a2", "bridge") else 80
             if true_form:
                 loud = min(118, loud + 14)
+            if almighty:
+                loud = min(124, loud + 6)
             # Orgel und Chor: getragene Akkorde
             for p in voices:
                 sc.note("organ", b, 4.0, p - 12, 62 if full else 50 + i * 6)
-                sc.note("choir", b, 4.0, p + (12 if true_form and name == "a2" else 0), loud - 12 if full else 46 + i * 8)
+                up = 12 if true_form and name == "a2" or almighty and full else 0
+                sc.note("choir", b, 4.0, p + up, loud - 12 if full else 46 + i * 8)
             sc.note("organ", b, 4.0, root - 12, 70)
             # Bass in Achteln (punktiert)
             if full:
@@ -205,7 +214,8 @@ def compose_battle(true_form: bool, seed: int = 11) -> Score:
                     sc.note("strings", b + k * 0.25, 0.22, p, 62 + (k % 4 == 0) * 14 + (8 if true_form else 0))
             # Blech: Akzente auf 1 und 3+
             if full:
-                for at in (0.0, 2.5) if not true_form else (0.0, 1.5, 2.5, 3.5):
+                accents = (0.0, 0.5, 1.5, 2.0, 2.5, 3.5) if almighty else (0.0, 1.5, 2.5, 3.5) if true_form else (0.0, 2.5)
+                for at in accents:
                     for p in voices[:3]:
                         sc.note("brass", b + at, 0.45, p - 12, loud - 6)
             # Pauken und Trommeln
@@ -218,21 +228,24 @@ def compose_battle(true_form: bool, seed: int = 11) -> Score:
                 sc.note("timpani", b, 1.0, root - 12, 100)
                 sc.note("timpani", b + 2.0, 1.0, root - 5, 92)
                 kick = [0, 1.5, 2, 3.5] if not true_form else [0, 0.75, 1.5, 2, 2.75, 3.5]
+                if almighty:
+                    kick = [0, 0.5, 0.75, 1.5, 2, 2.5, 2.75, 3.5]
                 for at in kick:
                     sc.note("drums", b + at, 0.3, 36, 104)
                 for at in (1.0, 3.0):
                     sc.note("drums", b + at, 0.3, 38, 96)
                 if true_form:
-                    for k in range(8):
-                        sc.note("drums", b + k * 0.5, 0.25, 42, 60 + (k % 2) * 10)
-                if i % 4 == 0:
+                    steps = 16 if almighty else 8
+                    for k in range(steps):
+                        sc.note("drums", b + k * 4.0 / steps, 0.2, 42, 56 + (k % 2) * 12)
+                if i % 4 == 0 or almighty and i % 2 == 0:
                     sc.note("drums", b, 1.0, 49, 112)
                     sc.note("hits", b, 0.5, voices[0], 100 if true_form else 80)
                 if i % 8 == 7:
                     for k, tom in enumerate((50, 48, 47, 45, 43, 41)):
                         sc.note("drums", b + 2.0 + k * 0.33, 0.3, tom, 90 + k * 3)
-            if i % 8 == 0 and full:
-                sc.note("bells", b, 3.0, voices[-1], 70)
+            if (i % 8 == 0 or almighty and i % 4 == 0) and full:
+                sc.note("bells", b, 3.0, voices[-1], 76 if almighty else 70)
             bar += 1
     # das Thema: Hörner (Teil A), Chor (Teil B), Trompeten in der Wiederholung
     starts = {"a": 4, "b": 20, "a2": 36}
@@ -245,10 +258,14 @@ def compose_battle(true_form: bool, seed: int = 11) -> Score:
                 if sec == "b":
                     sc.note("voices", at, dur * 0.95, p, 96 if true_form else 88)
                     sc.note("choir", at, dur * 0.95, p + 12, 70)
+                    if almighty:
+                        sc.note("trumpets", at, dur * 0.9, p, 90)
                 else:
                     sc.note("horns", at, dur * 0.9, p - 12 if not true_form else p, 104)
                     if sec == "a2" or true_form:
                         sc.note("trumpets", at, dur * 0.9, p, 96)
+                    if almighty:
+                        sc.note("voices", at, dur * 0.95, p + 12, 84)
     # Brücke: Fanfare der Trompeten
     fanfare = [(0, 0.5, "A4"), (0.5, 0.5, "A4"), (1, 1, "D5"), (2, 1, "F5"), (3, 1, "A5"), (4, 2, "G5"), (6, 2, "E5")]
     for rep in range(4):
@@ -308,8 +325,9 @@ def main() -> None:
     args = ap.parse_args()
     todo = {
         "creation": lambda: render(compose_creation(), args.sf2, "creation", -23.0, 3.6),
-        "creation_battle": lambda: render(compose_battle(False), args.sf2, "creation_battle", -20.5, 2.6),
-        "creation_true": lambda: render(compose_battle(True), args.sf2, "creation_true", -20.0, 2.4),
+        "creation_battle": lambda: render(compose_battle(0), args.sf2, "creation_battle", -20.5, 2.6),
+        "creation_true": lambda: render(compose_battle(1), args.sf2, "creation_true", -20.0, 2.4),
+        "creation_almighty": lambda: render(compose_battle(2), args.sf2, "creation_almighty", -19.5, 2.3),
     }
     for key, fn in todo.items():
         if not args.only or key in args.only:

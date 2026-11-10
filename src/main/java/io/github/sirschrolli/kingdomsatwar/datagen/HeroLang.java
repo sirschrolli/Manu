@@ -123,6 +123,8 @@ final class HeroLang {
         text.add("hero.kingdomsatwar.immortal.title", "The Light of Immortality", "Das Licht der Unsterblichkeit");
         text.add("hero.kingdomsatwar.immortal.subtitle", "You rise again – now the light rests for %s minutes",
                 "Du stehst wieder auf – nun ruht das Licht %s Minuten");
+        text.add("hero.kingdomsatwar.immortal.kept", "✦ The light of immortality keeps everything you carried – it awaits you when you rise again",
+                "✦ Das Licht der Unsterblichkeit bewahrt dein Hab und Gut – es wartet auf dich, wenn du wieder aufstehst");
         text.add("hero.kingdomsatwar.immortal.saved", "✦ The light of immortality saves you – now it rests for %s minutes",
                 "✦ Das Licht der Unsterblichkeit bewahrt dich – nun ruht es %s Minuten");
         text.add("hero.kingdomsatwar.rank_up", "New rank: %s – %s extra talent points!", "Neuer Rang: %s – %s Talentpunkte extra!");

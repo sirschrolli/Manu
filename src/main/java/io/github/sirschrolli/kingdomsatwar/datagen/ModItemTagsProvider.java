@@ -229,6 +229,19 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.MELEE_WEAPON_ENCHANTABLE, ModItems.TROLL_CLUB);
         add(Tags.Items.MELEE_WEAPON_TOOLS, ModItems.TROLL_CLUB);
         add(ItemTags.PIGLIN_LOVED, ModItems.GEMSTONE_CROWN);
+        // die Ausrüstung des Schöpfers (0.78): Rüstungsverzauberungen auf Heiligenschein, Schwingen und Rädern, Waffenverzauberungen auf dem Speer
+        add(ItemTags.HEAD_ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO);
+        add(ItemTags.CHEST_ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS);
+        add(ItemTags.LEG_ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS);
+        add(ItemTags.ARMOR_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO,
+                io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS);
+        add(ItemTags.EQUIPPABLE_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO,
+                io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS);
+        add(ItemTags.MELEE_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER);
+        add(ItemTags.SHARP_WEAPON_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER);
+        add(Tags.Items.MELEE_WEAPON_TOOLS, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER);
+        add(Tags.Items.ARMORS, io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO,
+                io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS);
 
         // --- Landwirtschaft ---
         add(ModTags.Items.SEEDS_TOMATO, ModItems.TOMATO_SEEDS);

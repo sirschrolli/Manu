@@ -178,6 +178,11 @@ public final class ArenaIsland {
 
     /** Räumt einen Zylinder (Halbmesser, Tiefe, Höhe um {@code center}) in {@code level} leer – schnell, Abschnitt für Abschnitt. */
     public static void clear(ServerLevel level, BlockPos center, int radius, int below, int above) {
+        clear(level, center, radius, below, above, null);
+    }
+
+    /** Wie {@link #clear(ServerLevel, BlockPos, int, int, int)}, nur bleibt der Block bei {@code keep} stehen (etwa ein Altar). */
+    public static void clear(ServerLevel level, BlockPos center, int radius, int below, int above, @Nullable BlockPos keep) {
         int y0 = Math.max(level.getMinY(), center.getY() - below);
         int y1 = Math.min(level.getMaxY(), center.getY() + above);
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -201,7 +206,8 @@ public final class ArenaIsland {
                                 int z = (cz << 4) + lz;
                                 int dx = x - center.getX();
                                 int dz = z - center.getZ();
-                                if (dx * dx + dz * dz > radius * radius || section.getBlockState(lx, ly, lz).isAir()) {
+                                if (dx * dx + dz * dz > radius * radius || section.getBlockState(lx, ly, lz).isAir()
+                                        || keep != null && keep.getX() == x && keep.getY() == y && keep.getZ() == z) {
                                     continue;
                                 }
                                 level.setBlock(pos.set(x, y, z), air, QUIET);

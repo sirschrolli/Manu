@@ -58,31 +58,78 @@ public final class CreatorBlocks {
                     .component(DataComponents.LORE, ModItems.lore("creator_spark", 3))));
 
     /**
-     * Das Zepter des Schöpfers: eine Waffe aus Gold und Licht, unzerbrechlich. Schlägt mächtig zu; Rechtsklick wirft einen
-     * Lichtspeer, schleichend ruft es eine Säule aus Licht herab.
+     * Der Speer des Schöpfers (bis 0.77 „Zepter des Schöpfers“, seit 0.78 stärker und ein Speer): ein langer Speer aus Gold
+     * und Licht, unzerbrechlich. Schlägt gewaltig zu (22 Schaden, große Reichweite), jeder dritte Treffer entfesselt eine
+     * Lichtwelle; Rechtsklick wirft einen Lichtspeer, schleichend ruft er eine Säule aus Licht herab.
      */
     public static final DeferredItem<CreatorScepterItem> CREATOR_SCEPTER = add(ModItems.ITEMS.registerItem("creator_scepter", CreatorScepterItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant().enchantable(22)
                     .component(DataComponents.UNBREAKABLE, Unit.INSTANCE)
                     .component(DataComponents.WEAPON, new Weapon(1, 0.0f))
                     .attributes(ItemAttributeModifiers.builder()
-                            .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, 15.0,
+                            .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, CreatorScepterItem.MELEE_DAMAGE - 1.0,
                                     AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                            .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.6,
+                            .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, -2.4,
                                     AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                            .add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(KingdomsAtWar.id("creator_scepter_reach"), 1.0,
+                            .add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(KingdomsAtWar.id("creator_scepter_reach"), 1.5,
                                     AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                             .build())
-                    .component(DataComponents.LORE, ModItems.lore("creator_scepter", 4))));
+                    .component(DataComponents.LORE, ModItems.lore("creator_scepter", 5))));
 
-    /** Die Schwingen des Schöpfers: weiße Federn mit goldenen Spitzen – gleiten wie Elytren und zerbrechen nie. */
+    /**
+     * Die Schwingen des Schöpfers: weiße Federn mit goldenen Spitzen – im Spiel echte Schwingen aus Federn (siehe
+     * CreatorGearLayer). Sie gleiten wie Elytren, zerbrechen nie und schützen seit 0.78 wie ein Harnisch (10 Rüstung,
+     * 4 Härte).
+     */
     public static final DeferredItem<Item> CREATOR_WINGS = add(ModItems.ITEMS.registerSimpleItem("creator_wings",
-            p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1)
+            p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1).enchantable(15)
                     .component(DataComponents.GLIDER, Unit.INSTANCE)
                     .component(DataComponents.UNBREAKABLE, Unit.INSTANCE)
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
-                            .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.CREATOR_WINGS_ASSET).setDamageOnHurt(false).build())
-                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 4))));
+                            .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.CREATOR_GEAR_ASSET).setDamageOnHurt(false).build())
+                    .attributes(gear(EquipmentSlotGroup.CHEST, "creator_wings", 10.0, 4.0).build())
+                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 5))));
+
+    /**
+     * Der Heiligenschein des Schöpfers (seit 0.78, Kopf): ein goldener Ring aus Licht über dem Kopf. Er schützt wie ein Helm
+     * (4 Rüstung, 3 Härte), lässt im Dunkeln sehen, hält Blindheit und Dunkelheit fern, segnet (ein wenig Leben alle drei
+     * Sekunden) und versengt Untote in der Nähe (siehe CreatorGear).
+     */
+    public static final DeferredItem<Item> CREATOR_HALO = add(ModItems.ITEMS.registerSimpleItem("creator_halo",
+            p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1).enchantable(15)
+                    .component(DataComponents.UNBREAKABLE, Unit.INSTANCE)
+                    .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
+                            .setEquipSound(SoundEvents.ARMOR_EQUIP_GOLD).setAsset(ModEquipment.CREATOR_GEAR_ASSET).setDamageOnHurt(false).build())
+                    .attributes(gear(EquipmentSlotGroup.HEAD, "creator_halo", 4.0, 3.0).build())
+                    .component(DataComponents.LORE, ModItems.lore("creator_halo", 5))));
+
+    /**
+     * Die Räder des Schöpfers (seit 0.78, Beine): zwei goldene Ringe voller Augen, die um die Hüften kreisen – die Ringe, die
+     * um den Schöpfer schwebten. Sie schützen wie Beinschienen (8 Rüstung, 3 Härte), machen schneller und tragen Stufen
+     * hinauf, ihre Augen enthüllen Feinde in der Nähe, und manches Geschoss prallt an ihnen ab (siehe CreatorGear).
+     */
+    public static final DeferredItem<Item> CREATOR_RINGS = add(ModItems.ITEMS.registerSimpleItem("creator_rings",
+            p -> p.rarity(Rarity.EPIC).fireResistant().stacksTo(1).enchantable(15)
+                    .component(DataComponents.UNBREAKABLE, Unit.INSTANCE)
+                    .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.LEGS)
+                            .setEquipSound(SoundEvents.ARMOR_EQUIP_GOLD).setAsset(ModEquipment.CREATOR_GEAR_ASSET).setDamageOnHurt(false).build())
+                    .attributes(gear(EquipmentSlotGroup.LEGS, "creator_rings", 8.0, 3.0)
+                            .add(Attributes.MOVEMENT_SPEED, new AttributeModifier(KingdomsAtWar.id("creator_rings_speed"), 0.12,
+                                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.LEGS)
+                            .add(Attributes.STEP_HEIGHT, new AttributeModifier(KingdomsAtWar.id("creator_rings_step"), 0.6,
+                                    AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.LEGS)
+                            .build())
+                    .component(DataComponents.LORE, ModItems.lore("creator_rings", 5))));
+
+    /** Rüstung und Härte eines Teils der Ausrüstung des Schöpfers. */
+    private static ItemAttributeModifiers.Builder gear(EquipmentSlotGroup slot, String name, double armor, double toughness) {
+        return ItemAttributeModifiers.builder()
+                .add(Attributes.ARMOR, new AttributeModifier(KingdomsAtWar.id(name + "_armor"), armor, AttributeModifier.Operation.ADD_VALUE), slot)
+                .add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(KingdomsAtWar.id(name + "_toughness"), toughness,
+                        AttributeModifier.Operation.ADD_VALUE), slot)
+                .add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(KingdomsAtWar.id(name + "_knockback"), 0.1,
+                        AttributeModifier.Operation.ADD_VALUE), slot);
+    }
 
     // ---------------------------------------------------------------- Spawn-Eier
     public static final DeferredItem<SpawnEggItem> SCHROLLI_SPAWN_EGG = egg("schrolli", () -> ModEntities.SCHROLLI.get());
@@ -92,9 +139,9 @@ public final class CreatorBlocks {
         return List.of(SCHROLLI_SPAWN_EGG, SERAPHLING_SPAWN_EGG);
     }
 
-    /** Die Gegenstände mit flachem Bild (das Zepter ist in der Hand ein 3D-Modell). */
+    /** Die Gegenstände mit flachem Bild (der Speer ist in der Hand ein 3D-Modell). */
     public static List<DeferredItem<Item>> flatItems() {
-        return List.of(CREATOR_SPARK, CREATOR_WINGS);
+        return List.of(CREATOR_SPARK, CREATOR_WINGS, CREATOR_HALO, CREATOR_RINGS);
     }
 
     private static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {

@@ -65,12 +65,19 @@ public final class BossArenaBuilder {
                 trigger = new BlockPos(piece.getX(), ThronePiece.FLOOR - 3, piece.getZ() + ThronePiece.THRONE_Z);
             }
             case CREATOR -> {
-                // die Schöpfung wird immer gleich gebaut: nur wo noch kein Hof steht, erst den Platz leeren
+                // die Schöpfung wird immer gleich gebaut: nur wo noch kein Hof steht, erst den Platz leeren – und steht noch
+                // eine andere Bühne vom letzten Kampf (Firmament, Herz der Sonne), verschwindet sie zuerst
                 BlockPos altar = new BlockPos(center.getX(), center.getY() + CreatorArena.DAIS_HEIGHT, center.getZ() + CreatorArena.ALTAR_Z);
                 if (!arena.getBlockState(altar).is(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_ALTAR.get())) {
                     ArenaIsland.clear(arena, center, kind.reach(), 60, 90);
+                } else if (arena.getBlockEntity(altar) instanceof io.github.sirschrolli.kingdomsatwar.block.creator.CreatorAltarBlockEntity be
+                        && be.arenaStage() != 0) {
+                    CreatorStages.clear(arena, center, altar);
                 }
                 trigger = CreatorArena.build(arena, center);
+                if (arena.getBlockEntity(trigger) instanceof io.github.sirschrolli.kingdomsatwar.block.creator.CreatorAltarBlockEntity be) {
+                    be.setArenaStage(0);
+                }
             }
             default -> {
                 Cut cut = cut(kind, from, lair, lairPos);

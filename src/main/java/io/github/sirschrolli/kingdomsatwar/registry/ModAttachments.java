@@ -130,6 +130,11 @@ public final class ModAttachments {
                     .serialize(com.mojang.serialization.Codec.STRING.listOf().fieldOf("biomes"))
                     .copyOnDeath()
                     .build());
+    /** Was ein Unsterblicher bei sich trug, als er in einer Kampfdimension fiel – liegt beim Wiedererscheinen wieder im Inventar. */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept>> KEPT_INVENTORY =
+            ATTACHMENTS.register("kept_inventory", () -> AttachmentType.builder(() -> io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept.NONE)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.hero.ImmortalKeep.Kept.CODEC.fieldOf("items"))
+                    .build());
     /** Wann das Licht der Unsterblichkeit den Spieler zuletzt bewahrt hat (Spielzeit; -1: nie) – bleibt nach dem Tod. */
     public static final Supplier<AttachmentType<Long>> HERO_IMMORTAL = ATTACHMENTS.register("hero_immortal",
             () -> AttachmentType.builder(() -> -1L)

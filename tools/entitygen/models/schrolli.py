@@ -17,6 +17,11 @@ und Gold, gut sechs Blöcke groß.
     Schnitt durch das Weltall). Knochen left_leg/right_leg (mit _shin, _foot) und blade (mit blade_edge); im Java-Modell
     anfangs unsichtbar.
 
+  * seit 0.78 die dritte Gestalt, Schrolli der Allmächtige (Variante schrolli_almighty): das Gewand eine glühende Sonne,
+    Federspitzen aus Flammen, Haar wie Feuer; dazu ein drittes Rad (almighty_ring, gewaltig, aufrecht hinter ihm) und ein Kranz aus
+    zweiunddreißig Flammen hinter dem Heiligenschein (almighty_flames) – im Java-Modell nur beim Allmächtigen sichtbar; das
+    dritte Rad steht aufrecht hinter ihm und dreht sich in seiner Ebene (almighty_ring_spin).
+
 Knochen-Namen werden in SchrolliModel (Java) animiert. Im Spiel ×2,0.
 """
 from __future__ import annotations
@@ -53,12 +58,31 @@ PALETTES = {
         "hair": [hexc(c) for c in ("#b08020", "#d8a830", "#f0c850", "#ffe080", "#fff0b0", "#ffffff")],
         "feather": ramp("#b0a8d0", "#ffffff", steps=7, hue_shift=-0.03),
     }),
+    # seit 0.78 die dritte Gestalt, Schrolli der Allmächtige: das Gewand eine glühende Sonne (Glut, Gold und weiße
+    # Sonnenfackeln), die Federn mit Spitzen aus Flammen, das Haar wie Feuer, Steine und Weltkugel sonnenrot
+    "schrolli_almighty": dict(_BASE, **{
+        "gold": [hexc(c) for c in ("#7a5010", "#b07a1c", "#e0aa30", "#ffd050", "#ffe890", "#fff6d0", "#ffffff")],
+        "light": [hexc(c) for c in ("#f0b040", "#ffd060", "#ffe8a0", "#fff4cc", "#fffbea", "#ffffff")],
+        "skin": ramp("#e0b48a", "#fff8ea", steps=7, hue_shift=-0.02),
+        "eye": [hexc(c) for c in ("#fff0a0", "#fff8d0", "#ffffff", "#ffffff")],
+        "hair": [hexc(c) for c in ("#c86010", "#e89020", "#ffc040", "#ffe080", "#fff4c0", "#ffffff")],
+        "feather": ramp("#c8b098", "#ffffff", steps=7, hue_shift=-0.02),
+        "gem": [hexc(c) for c in ("#5a0a0a", "#9a1a10", "#d83a18", "#ff7a30", "#ffc070", "#ffffff")],
+        "globe": [hexc(c) for c in ("#6a1a04", "#a03a08", "#d86a10", "#f8a020", "#ffd060", "#fff0a0")],
+        "space": [hexc(c) for c in ("#4a1404", "#7a2606", "#a8420c", "#d06814", "#ec9424", "#ffc048")],
+        "nebula": [hexc(c) for c in ("#ffb040", "#ff9020", "#ffd060", "#ff7020", "#ffc860", "#ffe090", "#fff0c0")],
+        "prism": [hexc(c) for c in ("#fff6c0", "#ffd060", "#ffa030", "#ff7020", "#ffd890", "#ffffff", "#ffe8a0")],
+        "shadow": [hexc(c) for c in ("#5a3420", "#7a4a2e", "#9a6a44")],
+    }),
 }
 
 # Teile, die nur die Wahre Gestalt zeigt (im Java-Modell anfangs unsichtbar)
 TRUE_RING_A = 15.0
 TRUE_RING_B = 17.5
 TRUE_CORONA = 13.6
+# Teile, die nur der Allmächtige zeigt (seit 0.78): ein drittes Rad, schräg und weit, und ein Flammenkranz (die Sonne)
+ALMIGHTY_RING = 23.0
+ALMIGHTY_FLAMES = 17.0
 
 # ---------------------------------------------------------------------------------------------
 # Maße
@@ -272,6 +296,28 @@ def build() -> Model:
         name = f"true_corona_{k}"
         m.bone(name, "true_corona", pivot=(math.cos(r) * TRUE_CORONA, math.sin(r) * TRUE_CORONA, 0), rotation=(0, 0, a - 90.0))
         m.cube(name, (-0.9, 0, 0), (1.8, length, 0), "corona")
+
+    # ---------------------------------------------------------------- nur der Allmächtige (seit 0.78)
+    # das dritte Rad: ein gewaltiges Rad voller Augen, aufrecht hinter ihm (es dreht sich in seiner Ebene – almighty_ring_spin)
+    m.bone("almighty_ring", "true_rings", pivot=(0, -1.0, 12.0), rotation=(90, 0, 0))
+    m.bone("almighty_ring_spin", "almighty_ring", pivot=(0, 0, 0))
+    count = 28
+    seg = 2 * math.pi * ALMIGHTY_RING / count + 0.45
+    for k in range(count):
+        a = 360.0 * k / count
+        r = math.radians(a)
+        name = f"almighty_ring_{k}"
+        m.bone(name, "almighty_ring_spin", pivot=(math.cos(r) * ALMIGHTY_RING, 0, math.sin(r) * ALMIGHTY_RING), rotation=(0, -(a + 90.0), 0))
+        m.cube(name, (-seg / 2, -1.4, -0.75), (seg, 2.8, 1.5), "ring_eye" if k % 3 == 0 else "ring_rune", tag=f"almighty_ring{k}")
+    # der Flammenkranz: zweiunddreißig Flammen hinter dem Heiligenschein, weit über den Strahlenkranz hinaus
+    m.bone("almighty_flames", "halo", pivot=(0, 0, 1.4))
+    for k in range(32):
+        a = 360.0 * k / 32
+        r = math.radians(a)
+        length = (15.0, 9.0, 12.0, 8.0)[k % 4]
+        name = f"almighty_flame_{k}"
+        m.bone(name, "almighty_flames", pivot=(math.cos(r) * ALMIGHTY_FLAMES, math.sin(r) * ALMIGHTY_FLAMES, 0), rotation=(0, 0, a - 90.0))
+        m.cube(name, (-1.6, 0, 0), (3.2, length, 0), "flame", tag=f"flame{k}")
     return m
 
 
@@ -292,7 +338,8 @@ def _n(ctx: Ctx, scale: float = 1.0, seed: int = 0) -> float:
 
 
 def _true(ctx: Ctx) -> bool:
-    return (ctx.params or {}).get("variant") == "schrolli_true"
+    """Wahre Gestalt oder Allmächtiger: das Gewand ein Himmel (Weltall bzw. glühende Sonne), schillernde Federspitzen."""
+    return (ctx.params or {}).get("variant") in ("schrolli_true", "schrolli_almighty")
 
 
 def _cosmos(ctx: Ctx, v: float) -> tuple:
@@ -371,6 +418,24 @@ def _corona(ctx: Ctx):
         return None
     col = pick(ctx.pal["light"], 0.98 - t * 0.5 - abs(s) * 0.6)
     ctx.glow = mix((0, 0, 0, 255), col, 1.0 - t * 0.45)
+    return col[:3] + (round(255 - t * 120),)
+
+
+_FIRE = [hexc(c) for c in ("#fffbe8", "#ffe070", "#ffb030", "#ff7a1a", "#e8460e", "#a82208")]
+
+
+def _flame(ctx: Ctx):
+    """Eine Flamme des Kranzes: unten weiß glühend, dann Gold, Orange und Rot, zur Spitze hin züngelnd und durchscheinend."""
+    t = (ctx.t + 0.5) / max(ctx.h, 1)
+    s = (ctx.s + 0.5) / max(ctx.w, 1) - 0.5
+    sway = math.sin(t * 7.0 + hash01(ctx.cube.tag, "sway") * 6.0) * 0.08 * t
+    width = 0.5 * (1.0 - t ** 1.4) + 0.04
+    if abs(s - sway) > width:
+        return None
+    core = 1.0 - abs(s - sway) / max(width, 0.01)
+    col = pick(_FIRE, min(1.0, t * 1.05 + (1.0 - core) * 0.18))
+    col = mix(col, _FIRE[0], core * core * 0.45 * (1.0 - t))
+    ctx.glow = mix((0, 0, 0, 255), col, 0.95 - t * 0.3)
     return col[:3] + (round(255 - t * 120),)
 
 
@@ -835,6 +900,7 @@ def materials(variant: str) -> dict:
         "bracer": _bracer, "staff": _staff, "globe": _globe, "robe": _robe, "robe_light": _robe_light,
         "wing_arm": _wing_arm, "covert": _covert, "feather": _feather, "primary": _primary,
         "ring_eye": _ring_eye, "ring_rune": _ring_rune, "corona": _corona, "robe_stole": _robe_stole, "cuff": _cuff,
+        "flame": _flame,
         "blade": _blade, "blade_core": _blade_core, "grip": _grip, "leg_cloth": _leg_cloth, "greave": _greave,
         "sabaton": _sabaton, "ankle_wing": _ankle_wing,
     }

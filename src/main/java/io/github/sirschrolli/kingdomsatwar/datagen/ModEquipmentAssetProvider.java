@@ -52,6 +52,11 @@ public class ModEquipmentAssetProvider extends EquipmentAssetProvider {
                         new EquipmentClientInfo.Layer(ModEquipment.GLITCH_WINGS_ASSET.identifier(), Optional.empty(), false))
                 .build());
         // Schwingen des Schöpfers: weiße Federn mit goldenen Spitzen (nicht vom Umhang des Spielers ersetzt)
+        // die Ausrüstung des Schöpfers: keine Rüstungsebenen am Menschen (die 3D-Teile zeichnet CreatorGearLayer); ein Asset
+        // braucht aber eine Ebene – die Ebene des Wolfspanzers zeichnet nur der Wolf
+        output.accept(ModEquipment.CREATOR_GEAR_ASSET, EquipmentClientInfo.builder()
+                .addLayers(EquipmentClientInfo.LayerType.WOLF_BODY, new EquipmentClientInfo.Layer(ModEquipment.CREATOR_WINGS_ASSET.identifier()))
+                .build());
         output.accept(ModEquipment.CREATOR_WINGS_ASSET, EquipmentClientInfo.builder()
                 .addLayers(EquipmentClientInfo.LayerType.WINGS,
                         new EquipmentClientInfo.Layer(ModEquipment.CREATOR_WINGS_ASSET.identifier(), Optional.empty(), false))

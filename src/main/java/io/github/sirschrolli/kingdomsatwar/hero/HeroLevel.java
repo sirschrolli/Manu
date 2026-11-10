@@ -825,9 +825,10 @@ public final class HeroLevel {
      * {@value #IMMORTAL_MINUTES} Minuten vor dem Tod – wie ein Totem (es wirkt erst, wenn kein Totem mehr hilft): Er steht mit
      * der Hälfte seiner Herzen wieder auf, Regeneration, Absorption und Feuerschutz, ein Lichtring und eine Lichtsäule, ein
  * Klang – und auf seinem Bildschirm die Szene des Lichts ({@code ImmortalOverlay}).
-     * Gegen /kill und die Leere hilft es nicht.
+     * Gegen /kill und die Leere hilft es nicht. Es kommt vor allem anderen, was ein Tod auslöst (etwa dem Verlust aller Habe in
+     * einer Kampfdimension): wen es rettet, der ist nicht gestorben.
      */
-    @SubscribeEvent
+    @SubscribeEvent(priority = net.neoforged.bus.api.EventPriority.HIGH)
     static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player) || player.isSpectator() || player.isCreative()) {
             return;

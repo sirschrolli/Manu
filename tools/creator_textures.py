@@ -622,7 +622,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("environment/creation_sky", creation_sky())
     put("entity/schrolli/glow_disc", glow_disc())
     put("entity/schrolli/star4", star4())
-    for name in ("schrolli", "schrolli_true"):
+    for name in ("schrolli", "schrolli_true", "schrolli_almighty"):
         img = flash_of(name)
         if img is not None:
             put(f"entity/schrolli/{name}_flash", img)
@@ -635,12 +635,7 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/creator_altar_bottom", altar_bottom())
     put("block/creator_altar_spark", altar_spark())
     put("item/creator_spark", spark_item())
-    put("item/creator_scepter", scepter_item())
-    model, glow = scepter_model()
-    put("item/creator_scepter_model", model)
-    put("item/creator_scepter_model_glow", glow)
-    put("item/creator_wings", wings_item())
-    put("entity/equipment/wings/creator_wings", creator_wings())
+    # Speer, Schwingen, Heiligenschein und Räder malt seit 0.78 tools/creator_gear.py
 
 
 if __name__ == "__main__":

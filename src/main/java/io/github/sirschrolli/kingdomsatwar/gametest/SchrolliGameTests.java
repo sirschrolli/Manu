@@ -83,7 +83,7 @@ final class SchrolliGameTests {
     // =====================================================================================
 
     /** Ein eigenes Feld hoch über der Welt: eine breite Plattform mit der Mitte bei {@code origin}. */
-    private record Field(ServerLevel level, BlockPos origin, int half, List<long[]> chunks) {
+    record Field(ServerLevel level, BlockPos origin, int half, List<long[]> chunks) {
         AABB area() {
             return new AABB(this.origin).inflate(80, 64, 80);
         }
@@ -104,7 +104,7 @@ final class SchrolliGameTests {
         }
     }
 
-    private static Field field(GameTestHelper helper, int slot, int half) {
+    static Field field(GameTestHelper helper, int slot, int half) {
         ServerLevel level = helper.getLevel();
         BlockPos base = helper.absolutePos(BlockPos.ZERO);
         BlockPos origin = new BlockPos(base.getX() - 24_000 + slot * 500, 230, base.getZ() + 18_000);
@@ -126,7 +126,7 @@ final class SchrolliGameTests {
     }
 
     /** Ein zäher Zuschauer (ein Ritter ohne eigenen Willen, 3000 Leben), auf den der Schöpfer losgeht. */
-    private static LivingEntity dummy(ServerLevel level, BlockPos at) {
+    static LivingEntity dummy(ServerLevel level, BlockPos at) {
         LivingEntity knight = ModEntities.SOLDIERS.get(SoldierType.KNIGHT).get().create(level, EntitySpawnReason.EVENT);
         if (knight == null) {
             throw new IllegalStateException("kein Ritter");
@@ -139,7 +139,7 @@ final class SchrolliGameTests {
         return knight;
     }
 
-    private static SchrolliEntity schrolli(ServerLevel level, BlockPos at) {
+    static SchrolliEntity schrolli(ServerLevel level, BlockPos at) {
         SchrolliEntity boss = ModEntities.SCHROLLI.get().create(level, EntitySpawnReason.EVENT);
         if (boss == null) {
             throw new IllegalStateException("kein Schrolli");
@@ -150,11 +150,11 @@ final class SchrolliGameTests {
         return boss;
     }
 
-    private static int shots(ServerLevel level, AABB area, DivineShotEntity.Kind kind) {
+    static int shots(ServerLevel level, AABB area, DivineShotEntity.Kind kind) {
         return level.getEntitiesOfClass(DivineShotEntity.class, area, s -> s.kind() == kind && !s.isRemoved()).size();
     }
 
-    private static int fx(ServerLevel level, AABB area, SpellFxEntity.Kind kind) {
+    static int fx(ServerLevel level, AABB area, SpellFxEntity.Kind kind) {
         return level.getEntitiesOfClass(SpellFxEntity.class, area, s -> s.kind() == kind).size();
     }
 
@@ -165,7 +165,8 @@ final class SchrolliGameTests {
     /**
      * Mehr Lebenskraft als jeder andere Gegner (3.200 je Gestalt, mit jedem weiteren Spieler ein Viertel mehr); beim Erscheinen
      * unverwundbar; der erste tödliche Treffer tötet ihn nicht – er steigt in die Wahre Gestalt auf (unverwundbar, größer,
-     * neue volle Leiste); der zweite besiegt ihn. /kill beendet ihn sofort.
+     * neue volle Leiste); der zweite macht ihn zum Allmächtigen (seit 0.78: unverwundbar, noch größer, dritte Leiste); erst
+     * der dritte besiegt ihn. /kill beendet ihn sofort.
      */
     private static void core(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -207,12 +208,30 @@ final class SchrolliGameTests {
                     helper.assertTrue(boss.isTrueForm(), "Keine Wahre Gestalt");
                     helper.assertTrue(boss.getScale() > 1.2f, "Die Wahre Gestalt ist nicht größer: " + boss.getScale());
                     helper.assertTrue(boss.getHealth() >= boss.getMaxHealth() - 0.5f, "Die neue Leiste ist nicht voll");
+                    float trueScale = boss.getScale();
                     boss.setHealth(5.0f);
                     boss.damageCooldownTime = 0;
                     boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
-                    helper.assertTrue(boss.isDeadOrDying(), "Ein zweites Mal steigt er auf");
-                    field.close();
-                    helper.succeed();
+                    helper.assertFalse(boss.isDeadOrDying(), "Der zweite tödliche Treffer tötet ihn");
+                    helper.assertTrue(boss.currentAttack() == Attack.TRANSCEND, "Kein Weg zum Allmächtigen: " + boss.currentAttack());
+                    helper.runAfterDelay(SchrolliEntity.TRANSCEND_COLLAPSE + 4, () -> {
+                        float hp2 = boss.getHealth();
+                        boss.damageCooldownTime = 0;
+                        boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
+                        helper.assertTrue(boss.getHealth() >= hp2 && !boss.isDeadOrDying(), "Auf dem Weg zum Allmächtigen verwundbar");
+                        helper.runAfterDelay(SchrolliEntity.TRANSCEND_TICKS - SchrolliEntity.TRANSCEND_COLLAPSE, () -> {
+                            helper.assertTrue(boss.isAlmighty() && boss.phase() == 3, "Kein Allmächtiger");
+                            helper.assertTrue(boss.getScale() > trueScale + 0.1f, "Der Allmächtige ist nicht größer: " + boss.getScale());
+                            helper.assertTrue(boss.getHealth() >= boss.getMaxHealth() - 0.5f, "Die dritte Leiste ist nicht voll");
+                            helper.assertTrue(boss.currentAttack() != Attack.TRANSCEND, "Der Weg zum Allmächtigen endet nicht");
+                            boss.setHealth(5.0f);
+                            boss.damageCooldownTime = 0;
+                            boss.hurtServer(level, level.damageSources().generic(), 1.0e6f);
+                            helper.assertTrue(boss.isDeadOrDying(), "Ein drittes Mal steht er auf");
+                            field.close();
+                            helper.succeed();
+                        });
+                    });
                 });
             });
         });
@@ -431,10 +450,10 @@ final class SchrolliGameTests {
                 helper.assertTrue(altar.state() == CreatorAltarBlockEntity.State.AWAKE, "Der Schöpfer kommt nicht: " + altar.state());
                 SchrolliEntity boss = level.getEntitiesOfClass(SchrolliEntity.class, field.area()).stream().findFirst().orElse(null);
                 helper.assertTrue(boss != null && altar.owns(boss), "Kein Schöpfer am Altar");
-                // zweimal gefällt: Aufstieg, dann Sieg
+                // dreimal gefällt: Aufstieg, der Allmächtige, dann Sieg
                 helper.assertTrue(boss.currentAttack() == Attack.AWAKEN, "Er erscheint nicht: " + boss.currentAttack());
                 boss.forceAttack(Attack.NONE);
-                boss.forceTrueForm();
+                boss.forceAlmighty();
                 boss.setHealth(5.0f);
                 boss.damageCooldownTime = 0;
                 boss.hurtServer(level, player.damageSources().playerAttack(player), 1.0e6f);
@@ -446,6 +465,8 @@ final class SchrolliGameTests {
                                 .map(net.minecraft.world.entity.item.ItemEntity::getItem).toList();
                         helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_SCEPTER.get())), "Kein Zepter in der Beute");
                         helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_WINGS.get())), "Keine Schwingen in der Beute");
+                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_HALO.get())), "Kein Heiligenschein in der Beute");
+                        helper.assertTrue(drops.stream().anyMatch(s -> s.is(CreatorBlocks.CREATOR_RINGS.get())), "Keine Räder in der Beute");
                         helper.assertTrue(Godslayer.is(player), "Wer dabei war, wird nicht Gottbezwinger");
                         helper.assertTrue(player.getDisplayName().toString().contains("title.kingdomsatwar.godslayer.prefix"),
                                 "Kein Titel vor dem Namen: " + player.getDisplayName());

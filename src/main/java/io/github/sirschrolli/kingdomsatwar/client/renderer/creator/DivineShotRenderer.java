@@ -32,8 +32,8 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
     private static final RenderType FEATHER_GLOW = RenderTypes.eyes(shot("divine_feather_glow"));
     private static final RenderType HALO = RenderTypes.entityTranslucent(shot("divine_halo"));
     private static final RenderType HALO_GLOW = RenderTypes.eyes(shot("divine_halo_glow"));
-    private static final RenderType GLOW_DISC = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/schrolli/glow_disc.png"));
-    private static final RenderType STAR4 = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/schrolli/star4.png"));
+    static final RenderType GLOW_DISC = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/schrolli/glow_disc.png"));
+    static final RenderType STAR4 = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/schrolli/star4.png"));
     private static final RenderType[] PLANETS = new RenderType[DivineShotEntity.PLANET_NAMES.length];
     private static final RenderType[] PLANETS_GLOW = new RenderType[DivineShotEntity.PLANET_NAMES.length];
     private static final int[] PLANET_LIGHT = {0x8AC8FF, 0xFF7A30, 0xC8F0FF, 0xC080FF, 0xFFE070, 0xFFD24A};
@@ -108,7 +108,14 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
             case PLANET -> this.planet(state, poseStack, collector, camera, state.variant, 3.2f * state.scale,
                     state.variant == DivineShotEntity.PLANET_ICE || state.variant == DivineShotEntity.PLANET_VOID, 7.0f * state.scale);
             case SUN -> this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 2.6f * state.scale, false, 6.4f * state.scale);
-            case STAR -> this.star(state, poseStack, collector, camera, 1.5f);
+            case STAR -> {
+                if (state.variant == DivineShotEntity.PLANET_SUN) {
+                    // eine stürzende Sonne (Sonnensturz des Allmächtigen)
+                    this.planet(state, poseStack, collector, camera, DivineShotEntity.PLANET_SUN, 1.25f, false, 3.6f);
+                } else {
+                    this.star(state, poseStack, collector, camera, 1.5f);
+                }
+            }
             case FIXED_STAR -> this.star(state, poseStack, collector, camera, 1.0f + Mth.sin(state.age * 0.5f) * 0.15f);
         }
         super.submit(state, poseStack, collector, camera);
@@ -191,7 +198,7 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
         poseStack.popPose();
     }
 
-    private static void billboard(PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera, RenderType type, float size, int color,
+    static void billboard(PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera, RenderType type, float size, int color,
             float spin) {
         poseStack.pushPose();
         poseStack.rotate(camera.orientation);

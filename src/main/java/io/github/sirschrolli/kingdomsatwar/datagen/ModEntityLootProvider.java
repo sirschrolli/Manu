@@ -428,6 +428,8 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.SCHROLLI.get(), LootTable.lootTable()
                 .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER.get(), 1))
                 .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO.get(), 1))
+                .withPool(exactly(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS.get(), 1))
                 .withPool(exactly(ModItems.HEART_CRYSTAL.get(), 3))
                 .withPool(exactly(ModItems.MANA_CRYSTAL.get(), 3))
                 .withPool(exactly(net.minecraft.world.item.Items.NETHER_STAR, 2))

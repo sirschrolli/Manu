@@ -638,6 +638,236 @@ final class SchrolliShowcase {
         steps.add(Step.quit());
     }
 
+    /** Tödlicher Treffer: Aufstieg (erstes Mal) oder der Weg zum Allmächtigen (zweites Mal). */
+    private static Step fell(Court s) {
+        return Step.server(any -> {
+            ServerLevel court = court(any.getServer());
+            clearEffects(court, s);
+            place(court, s, 12.0, 8.0);
+            if (boss(court, s) instanceof SchrolliEntity boss) {
+                boss.forceAttack(Attack.NONE);
+                boss.setHealth(5.0f);
+                boss.damageCooldownTime = 0;
+                boss.hurtServer(court, court.damageSources().generic(), 1.0e6f);
+            }
+        });
+    }
+
+    /**
+     * Schrolli der Allmächtige ({@code creator_almighty}, seit 0.78): Der Hof zerbricht zum Firmament (im weißen Licht steht
+     * sein Name), dort Lichtkäfig und Schwarzes Loch; dann der Weg zum Allmächtigen – das Schwarze Loch verschlingt alles,
+     * das Herz der Sonne, die Sonne, aus der er tritt, die Flammenwelle –, beide Bühnen von oben, der Allmächtige aus der
+     * Nähe und seine Künste.
+     */
+    static void almighty(Deque<Step> steps) {
+        Court s = new Court();
+        enter(steps, s);
+        steps.add(Step.server(any -> knight(court(any.getServer()), s)));
+        // ------------------------------------------------------------------ der Hof zerbricht: das Firmament
+        steps.add(fell(s));
+        steps.add(Step.hud(true));
+        steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_SHIFT + 6));
+        steps.add(shot("allmaechtig_firmament_licht"));
+        steps.add(Step.hud(false));
+        steps.add(attackAt(s, Attack.ASCEND, SchrolliEntity.ASCEND_TICKS + 2));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.waitForChunks(800));
+        steps.add(pose(s, 14.0));
+        steps.add(courtCam(s, 46.0, 34.0, 52.0, 0.0, 2.0, 0.0));
+        steps.add(Step.waitTicks(24));
+        steps.add(Step.waitForChunks(400));
+        steps.add(shot("allmaechtig_firmament"));
+        steps.add(courtCam(s, 0.0, 74.0, 8.0, 0.0, 0.0, 0.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_firmament_oben"));
+        steps.add(courtCam(s, 12.0, 5.0, -12.0, 0.0, 12.0, -38.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_firmament_sphaere"));
+        steps.add(release(s));
+        arts(steps, s, new String[][] {
+                {"LIGHT_CAGE", "40", "allmaechtig_lichtkaefig", "-50", "12", "6", "0.85"},
+                {"BLACK_HOLE", "84", "allmaechtig_schwarzes_loch", "-60", "17", "7", "0.8"},
+        });
+        // ------------------------------------------------------------------ der Weg zum Allmächtigen
+        steps.add(fell(s));
+        steps.add(attackAt(s, Attack.TRANSCEND, 64));
+        steps.add(courtLook(s, 30.0, 22.0, 36.0, true, 6.0));
+        steps.add(Step.waitTicks(1));
+        steps.add(shot("allmaechtig_finsternis"));
+        steps.add(Step.hud(true));
+        steps.add(attackAt(s, Attack.TRANSCEND, SchrolliEntity.TRANSCEND_SHIFT + 8));
+        steps.add(shot("allmaechtig_herz_licht"));
+        steps.add(Step.hud(false));
+        steps.add(attackAt(s, Attack.TRANSCEND, SchrolliEntity.TRANSCEND_REVEAL - 8));
+        steps.add(follow(s, -30.0, 20.0, 2.0, 0.0));
+        steps.add(Step.waitTicks(1));
+        steps.add(shot("allmaechtig_sonne"));
+        steps.add(Step.hud(true));
+        steps.add(attackAt(s, Attack.TRANSCEND, SchrolliEntity.TRANSCEND_REVEAL + 12));
+        steps.add(follow(s, -25.0, 19.0, -1.0, 0.0));
+        steps.add(Step.waitTicks(2));
+        steps.add(shot("allmaechtig_erscheint"));
+        steps.add(Step.hud(false));
+        steps.add(attackAt(s, Attack.TRANSCEND, SchrolliEntity.TRANSCEND_BLAST + 3));
+        steps.add(follow(s, -30.0, 32.0, 13.0, 0.0));
+        steps.add(Step.waitTicks(1));
+        steps.add(shot("allmaechtig_flammenwelle"));
+        steps.add(attackAt(s, Attack.TRANSCEND, SchrolliEntity.TRANSCEND_TICKS + 2));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.waitForChunks(800));
+        // ------------------------------------------------------------------ das Herz der Sonne
+        steps.add(pose(s, 14.0));
+        steps.add(courtCam(s, 46.0, 34.0, 52.0, 0.0, 4.0, 0.0));
+        steps.add(Step.waitTicks(24));
+        steps.add(Step.waitForChunks(400));
+        steps.add(shot("allmaechtig_herz_der_sonne"));
+        steps.add(courtCam(s, 0.0, 74.0, 8.0, 0.0, 0.0, 0.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_herz_oben"));
+        steps.add(courtCam(s, -16.0, 4.0, -8.0, 0.0, 14.0, -39.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_sonnenscheibe"));
+        steps.add(courtCam(s, 2.0, 2.0, -12.0, -12.0, 40.0, 30.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_himmel"));
+        // der Allmächtige aus der Nähe
+        steps.add(pose(s, 4.0));
+        steps.add(faceCam(s, 16.0, 5.0, 6.0, -16.0));
+        steps.add(Step.waitTicks(12));
+        steps.add(shot("allmaechtig_bild"));
+        steps.add(faceCam(s, 9.0, 9.4, 8.8, -10.0));
+        steps.add(Step.waitTicks(8));
+        steps.add(shot("allmaechtig_gesicht"));
+        steps.add(faceCam(s, 19.0, 7.0, 6.5, 160.0));
+        steps.add(Step.waitTicks(8));
+        steps.add(shot("allmaechtig_ruecken"));
+        steps.add(release(s));
+        steps.add(Step.hud(true));
+        steps.add(courtLook(s, 5.0, 3.0, 30.0, true, 6.0));
+        steps.add(Step.waitTicks(6));
+        steps.add(shot("allmaechtig_leiste"));
+        steps.add(Step.hud(false));
+        // ------------------------------------------------------------------ seine Künste
+        arts(steps, s, new String[][] {
+                {"SUNFALL", "54", "allmaechtig_sonnensturz", "-40", "24", "12", "0.6"},
+                {"PRISM", "72", "allmaechtig_prismenkaefig", "@", "30", "26", "34"},
+                {"BLADES", "30", "allmaechtig_klingenkranz", "-30", "10", "6", "0.95"},
+                {"FLARE", "42", "allmaechtig_sonneneruption", "@", "-30", "28", "40"},
+                {"SOLAR_JUDGMENT", "52", "allmaechtig_gericht_aussen", "@", "8", "30", "46", "hud"},
+                {"SOLAR_JUDGMENT", "101", "allmaechtig_gericht_innen", "@", "8", "30", "46"},
+                {"SOLAR_JUDGMENT", "196", "allmaechtig_gericht_licht", "@", "8", "34", "46", "hud"},
+                {"SUN_CLEAVE", "28", "allmaechtig_sonnenspalter_ruf", "-70", "17", "4", "0.3"},
+                {"SUN_CLEAVE", "47", "allmaechtig_sonnenspalter", "-100", "26", "11", "0.5"},
+        });
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.quit());
+    }
+
+    /**
+     * Die Ausrüstung des Schöpfers ({@code creator_gear}, seit 0.78): Heiligenschein, Schwingen, Räder und Speer am Spieler –
+     * von vorn, von hinten, schleichend, im Gleitflug und beim Schwingenschlag; dazu ein Rüstungsständer von der Seite und der
+     * Speer in der Hand.
+     */
+    static void gear(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "gamerule spawn_monsters false", "kill @e[type=!minecraft:player]", "clear", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            ServerLevel level = any.getServer().overworld();
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CreatorBlocks.CREATOR_SCEPTER.get()));
+            player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(CreatorBlocks.CREATOR_HALO.get()));
+            player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
+            player.setItemSlot(EquipmentSlot.LEGS, new ItemStack(CreatorBlocks.CREATOR_RINGS.get()));
+            player.setItemSlot(EquipmentSlot.FEET, new ItemStack(net.minecraft.world.item.Items.NETHERITE_BOOTS));
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            player.teleportTo(level, 0.5, top.getY(), 0.5, Set.of(), 0.0f, 5.0f, true);
+            // ein Rüstungsständer mit allem, schräg vor dem Spieler
+            net.minecraft.world.entity.decoration.ArmorStand stand = new net.minecraft.world.entity.decoration.ArmorStand(level, 3.5, top.getY(), 4.5);
+            stand.setYRot(150.0f);
+            stand.setYBodyRot(150.0f);
+            stand.setItemSlot(EquipmentSlot.HEAD, new ItemStack(CreatorBlocks.CREATOR_HALO.get()));
+            stand.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CreatorBlocks.CREATOR_WINGS.get()));
+            stand.setItemSlot(EquipmentSlot.LEGS, new ItemStack(CreatorBlocks.CREATOR_RINGS.get()));
+            stand.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CreatorBlocks.CREATOR_SCEPTER.get()));
+            stand.setShowArms(true);
+            level.addFreshEntity(stand);
+        }));
+        steps.add(Step.hud(true));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        steps.add(shot("gear_hand"));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = true));
+        steps.add(Step.server(any -> look(cam(any.getServer()), any.getServer().overworld(), new Vec3(0.5, 0, 0.5).add(0.0,
+                any.getServer().overworld().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0)).getY() + 1.6, 0.0),
+                new Vec3(3.5, any.getServer().overworld().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0)).getY() + 1.2, 4.5))));
+        steps.add(Step.waitTicks(10));
+        steps.add(shot("gear_stand"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.teleportTo(any.getServer().overworld(), 0.5, player.getY(), 0.5, Set.of(), 180.0f, 10.0f, true);
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(shot("gear_front"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.waitTicks(10));
+        steps.add(shot("gear_back"));
+        // schleichen: wie mit gedrückter Taste (der Spieler nimmt seine Haltung aus der Eingabe)
+        steps.add(Step.once(minecraft -> minecraft.options.keyShift.setDown(true)));
+        steps.add(Step.waitTicks(8));
+        steps.add(shot("gear_sneak"));
+        steps.add(Step.once(minecraft -> minecraft.options.keyShift.setDown(false)));
+        steps.add(Step.waitTicks(4));
+        // im Gleitflug, von hinten (wie die Szene der Schwingen im Hof: Überlebensmodus, nicht fliegen, dann losgleiten)
+        steps.add(Step.command("gamemode survival"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.getAbilities().flying = false;
+            player.getAbilities().mayfly = false;
+            player.onUpdateAbilities();
+            player.teleportTo(any.getServer().overworld(), 0.5, player.getY() + 30.0, 0.5, Set.of(), -135.0f, 12.0f, true);
+        }));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = cam(any.getServer());
+            player.startFallFlying();
+            player.setDeltaMovement(new Vec3(0.9, -0.15, -0.9));
+            player.needsSync = true;
+        }));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player != null) {
+                minecraft.player.setDeltaMovement(new Vec3(0.9, -0.15, -0.9));
+            }
+        }));
+        steps.add(Step.waitTicks(14));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player != null) {
+                KingdomsAtWar.LOGGER.info("[Showcase] Gleitflug: gleitet={} Boden={} fliegt={} y={}", minecraft.player.isFallFlying(),
+                        minecraft.player.onGround(), minecraft.player.getAbilities().flying, minecraft.player.getY());
+            }
+        }));
+        steps.add(shot("gear_glide"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.waitTicks(3));
+        steps.add(shot("gear_glide_front"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.player != null && minecraft.player.isFallFlying()) {
+                io.github.sirschrolli.kingdomsatwar.client.creator.CreatorWingsClient.boost(minecraft);
+            }
+        }));
+        steps.add(Step.waitTicks(4));
+        steps.add(shot("gear_flap"));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.quit());
+    }
+
     /**
      * Haltungsprobe ({@code creator_pose}): Schrolli in der flachen Welt, jede Haltung des Nahkampfs festgehalten (die
      * Zeichnung zeigt eine bestimmte Kunst zu einem bestimmten Augenblick), von schräg vorn gesehen.

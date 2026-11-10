@@ -27,6 +27,10 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class CreatorWingsClient {
+    /** Wann der eigene Spieler zuletzt die Schwingen schlug (für das Bild des Schlags). */
+    private static long boostAt = -1L;
+    /** So lange schlagen die Schwingen beim Schwingenschlag (Millisekunden). */
+    private static final long FLAP_MS = 650L;
     private static boolean wasJumping;
     private static boolean wasFlying;
 
@@ -48,9 +52,10 @@ public final class CreatorWingsClient {
         if (jumping && !wasJumping && flying && wasFlying && CreatorWings.wearing(player)) {
             ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
             if (!player.getCooldowns().isOnCooldown(chest)) {
-                player.getCooldowns().addCooldown(chest, CreatorWings.BOOST_COOLDOWN);
+                player.getCooldowns().addCooldown(chest, CreatorWings.cooldown(player));
                 player.setDeltaMovement(CreatorWings.boostVelocity(player.getDeltaMovement(), player.getLookAngle()));
                 player.playSound(ModSounds.SCHROLLI_WINGS.get(), 1.0f, 1.1f);
+                boostAt = net.minecraft.util.Util.getMillis();
                 burst(level, player);
                 ClientPacketDistributor.sendToServer(CreatorBoostPayload.INSTANCE);
             }
@@ -63,6 +68,34 @@ public final class CreatorWingsClient {
                 trail(level, other);
             }
         }
+    }
+
+    /** Löst den Schwingenschlag aus wie ein Druck auf Springen im Gleitflug (für die Vorführung). */
+    public static void boost(Minecraft mc) {
+        LocalPlayer player = mc.player;
+        if (player == null || !player.isFallFlying() || !CreatorWings.wearing(player)) {
+            return;
+        }
+        player.getCooldowns().addCooldown(player.getItemBySlot(EquipmentSlot.CHEST), CreatorWings.cooldown(player));
+        player.setDeltaMovement(CreatorWings.boostVelocity(player.getDeltaMovement(), player.getLookAngle()));
+        player.playSound(ModSounds.SCHROLLI_WINGS.get(), 1.0f, 1.1f);
+        boostAt = net.minecraft.util.Util.getMillis();
+        burst(mc.level, player);
+        ClientPacketDistributor.sendToServer(CreatorBoostPayload.INSTANCE);
+    }
+
+    /** Wie weit der Schwingenschlag des eigenen Spielers ist (0 – 1), am Bild des Spielers für die Schwingen. */
+    @SubscribeEvent
+    static void registerModifiers(net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent event) {
+        event.registerAvatarEntityModifier(new net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier() {
+            @Override
+            public <T extends net.minecraft.world.entity.Avatar & net.minecraft.client.entity.ClientAvatarEntity> void accept(T avatar,
+                    net.minecraft.client.renderer.entity.state.AvatarRenderState state) {
+                long elapsed = net.minecraft.util.Util.getMillis() - boostAt;
+                boolean own = avatar == Minecraft.getInstance().player;
+                state.setRenderData(CreatorGearLayer.FLAP, own && boostAt >= 0L && elapsed < FLAP_MS ? elapsed / (float) FLAP_MS : null);
+            }
+        });
     }
 
     /** Goldene Federn und Lichtfunken hinter den Schwingenspitzen. */

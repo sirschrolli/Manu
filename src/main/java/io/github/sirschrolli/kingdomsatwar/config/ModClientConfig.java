@@ -62,8 +62,8 @@ public final class ModClientConfig {
                 .translation("kingdomsatwar.configuration.biomeAmbienceVolume")
                 .defineInRange("biomeAmbienceVolume", 60, 0, 100);
         HERO_HEARTS = builder
-                .comment("Ab 21 Herzen zeigt die Lebensleiste eine einzige Reihe in farbigen Schichten (je zehn Herzen eine Farbe) und"
-                        + " daneben die Zahl der Herzen, statt die Herzen zu einer Wand aus Reihen zu stapeln.")
+                .comment("Ab 21 Herzen (oder 21 Rüstungspunkten) zeigt die Leiste eine einzige Reihe in farbigen Schichten (je zehn"
+                        + " Herzen bzw. zwanzig Punkte eine Farbe) und daneben die Zahl, statt die Herzen zu einer Wand aus Reihen zu stapeln.")
                 .translation("kingdomsatwar.configuration.heroHearts")
                 .define("heroHearts", true);
         SPEC = builder.build();

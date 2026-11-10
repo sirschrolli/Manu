@@ -48,6 +48,8 @@ public class CreatorAltarBlockEntity extends BlockEntity implements BossLair {
     private @Nullable UUID boss;
     private @Nullable Vec3 center;
     private boolean replica;
+    /** Im Hof: welche Bühne gerade steht (0 der Hof, 1 das Firmament, 2 das Herz der Sonne – seit 0.78, siehe CreatorStages). */
+    private int stage;
 
     public CreatorAltarBlockEntity(BlockPos pos, BlockState state) {
         super(CreatorBlocks.CREATOR_ALTAR_ENTITY.get(), pos, state);
@@ -70,6 +72,16 @@ public class CreatorAltarBlockEntity extends BlockEntity implements BossLair {
     /** Im Hof: wo seine Mitte liegt (der Bauplan des Hofs setzt sie). */
     public void setup(Vec3 center) {
         this.center = center;
+        this.setChanged();
+    }
+
+    /** Welche Bühne gerade steht (0 der Hof, 1 das Firmament, 2 das Herz der Sonne). */
+    public int arenaStage() {
+        return this.stage;
+    }
+
+    public void setArenaStage(int stage) {
+        this.stage = stage;
         this.setChanged();
     }
 
@@ -266,6 +278,9 @@ public class CreatorAltarBlockEntity extends BlockEntity implements BossLair {
         if (this.replica) {
             output.putBoolean("ArenaReplica", true);
         }
+        if (this.stage != 0) {
+            output.putInt("ArenaStage", this.stage);
+        }
     }
 
     @Override
@@ -283,6 +298,7 @@ public class CreatorAltarBlockEntity extends BlockEntity implements BossLair {
         this.boss = input.read("Boss", UUIDUtil.CODEC).orElse(null);
         this.center = input.read("Center", Vec3.CODEC).orElse(null);
         this.replica = input.getBooleanOr("ArenaReplica", false);
+        this.stage = input.getIntOr("ArenaStage", 0);
     }
 
     // =====================================================================================

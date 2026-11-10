@@ -80,6 +80,14 @@ final class SchrolliAttacks {
             case GUARD -> guard(boss, level, target, t);
             case COUNTER -> counter(boss, level, target, t);
             case WORLD_BLADE -> worldBlade(boss, level, target, t);
+            case LIGHT_CAGE -> lightCage(boss, level, target, t);
+            case BLACK_HOLE -> blackHole(boss, level, target, t);
+            case SUNFALL -> sunfall(boss, level, target, t);
+            case PRISM -> prism(boss, level, t);
+            case BLADES -> blades(boss, level, target, t);
+            case FLARE -> flare(boss, level, target, t);
+            case SOLAR_JUDGMENT -> solarJudgment(boss, level, t);
+            case SUN_CLEAVE -> sunCleave(boss, level, target, t);
             default -> {
             }
         }
@@ -1985,6 +1993,611 @@ final class SchrolliAttacks {
             double len = DivineFx.flat(a, b);
             for (double d = 4.0; d <= len; d += 3.0) {
                 pillar(boss, level, boss.ground(a.lerp(b, d / len)), 1.8f, 16.0f, 14.0f, d % 6.0 < 3.0 ? DivineFx.COSMIC : DivineFx.WHITE);
+            }
+        }
+    }
+
+    // =====================================================================================
+    // Seit 0.78: Lichtkäfig und Schwarzes Loch – und die Künste des Allmächtigen
+    // =====================================================================================
+
+    /** Lichtkäfig: Halbmesser des Käfigs, wann er sich schließt, wann er ganz zusammengezogen ist. */
+    static final double CAGE_RADIUS = 3.4;
+    static final int CAGE_SET = 10;
+    static final int CAGE_LOCK = 48;
+    static final int CAGE_CLOSE = 58;
+    /** Schwarzes Loch: hier zerbirst es. */
+    static final int HOLE_BURST = 124;
+    static final double HOLE_PULL = 24.0;
+    /** Prismenkäfig: hier werden die Strahlen tödlich, hier vergehen die Prismen. */
+    static final int PRISM_ARM = 32;
+    static final int PRISM_END = 162;
+    static final double PRISM_RADIUS = 21.0;
+    /** Klingenkranz: wann die Kränze erscheinen und wie lange sie schweben. */
+    static final int[] BLADE_WAVES = {8, 44, 78};
+    static final int[] BLADE_HOLD = {28, 24, 20};
+    /** Sonneneruption: zwei Wände (Beginn), Schritt (Ticks), Abstand der Säulen. */
+    static final int[] FLARE_WALLS = {12, 46};
+    static final int FLARE_STEP = 5;
+    static final double FLARE_SPACING = 5.0;
+    /** Gericht der Sonne: Warnung und Schlag – außen, innen, außen –, dann die vier Lichtkreise und der letzte Schlag. */
+    static final int SOLAR_OUTER_WARN = 24;
+    static final int SOLAR_OUTER = 64;
+    static final int SOLAR_INNER_WARN = 68;
+    static final int SOLAR_INNER = 100;
+    static final int SOLAR_OUTER2_WARN = 104;
+    static final int SOLAR_OUTER2 = 132;
+    static final int SOLAR_FINAL_WARN = 140;
+    static final int SOLAR_FINAL = SchrolliEntity.SOLAR_FINAL;
+    static final double SOLAR_SPLIT = 14.0;
+    static final double SOLAR_SAFE = 3.2;
+    /** Sonnenspalter: Warnlinien, Hieb, Ausbruch der Glut. */
+    static final int CLEAVE_WARN = 16;
+    static final int CLEAVE_CHOP = 34;
+    static final int CLEAVE_ERUPT = 44;
+    static final double CLEAVE_LENGTH = 36.0;
+
+    /**
+     * Lichtkäfig: Um jeden Gegner (bis zu sechs, beim Allmächtigen acht) wachsen acht Stäbe aus Licht im Kreis und werden
+     * dicker – wer noch drinsteht, wenn sich der Käfig schließt, verbrennt; dann zieht er sich zusammen, und aus seiner
+     * Mitte bricht eine Säule aus Licht.
+     */
+    private static void lightCage(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        keepNear(boss, target, 13.0, 9.0);
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 3.0f, 1.25f);
+        }
+        if (t == CAGE_SET) {
+            boss.points.clear();
+            List<LivingEntity> victims = sample(boss, level, boss.isAlmighty() ? 8 : 6);
+            if (victims.isEmpty() && target != null) {
+                victims = List.of(target);
+            }
+            for (LivingEntity e : victims) {
+                Vec3 c = boss.ground(e.position());
+                boss.points.add(c);
+                DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, c.add(0.0, 0.06, 0.0), DivineFx.HOLY, CAGE_LOCK - CAGE_SET, (float) CAGE_RADIUS).spawn();
+                for (int k = 0; k < 8; k++) {
+                    double a = k * Math.PI / 4.0;
+                    Vec3 bar = c.add(Math.cos(a) * CAGE_RADIUS, 0.0, Math.sin(a) * CAGE_RADIUS);
+                    boss.beams.add(DivineFx.fx(level, SpellFxEntity.Kind.BEAM, bar, k % 2 == 0 ? DivineFx.GOLD : DivineFx.HOLY,
+                            CAGE_CLOSE - CAGE_SET + 4, 0.12f).end(bar.add(0.0, 4.6, 0.0)).spawn());
+                }
+                DivineFx.sound(level, c, ModSounds.SCHROLLI_PILLAR.get(), 1.2f, 1.6f);
+            }
+        }
+        if (t > CAGE_SET && t < CAGE_LOCK) {
+            float k = (t - CAGE_SET) / (float) (CAGE_LOCK - CAGE_SET);
+            for (SpellFxEntity bar : boss.beams) {
+                bar.setSize(0.12f + 0.38f * k * k);
+            }
+            if (t % 8 == 0) {
+                for (Vec3 c : boss.points) {
+                    DivineFx.ring(level, ParticleTypes.END_ROD, c.add(0.0, 4.6, 0.0), CAGE_RADIUS, 12);
+                }
+            }
+        }
+        if (t == CAGE_LOCK) {
+            boss.sound(level, ModSounds.SCHROLLI_HALO.get(), 3.5f, 1.7f);
+            for (Vec3 c : boss.points) {
+                DivineFx.flash(level, c.add(0.0, 2.0, 0.0), DivineFx.GOLD);
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(c, c).inflate(CAGE_RADIUS, 5.0, CAGE_RADIUS),
+                        boss::canStrike)) {
+                    if (DivineFx.flat(e.position(), c) < CAGE_RADIUS - 0.15 && e.getY() - c.y < 4.5 && boss.strike(level, e, 14.0f, true)) {
+                        e.igniteForSeconds(3.0f);
+                        e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 2), boss);
+                        DivineFx.sparks(level, e.position().add(0.0, 1.0, 0.0), 14, 0.4, 0.12);
+                    }
+                }
+            }
+        }
+        if (t > CAGE_LOCK && t <= CAGE_CLOSE) {
+            // die Stäbe ziehen sich zur Mitte zusammen
+            double r = CAGE_RADIUS * (1.0 - (t - CAGE_LOCK) / (double) (CAGE_CLOSE - CAGE_LOCK));
+            for (int i = 0; i < boss.beams.size(); i++) {
+                Vec3 c = boss.points.get(Math.min(boss.points.size() - 1, i / 8));
+                double a = (i % 8) * Math.PI / 4.0 + (t - CAGE_LOCK) * 0.06;
+                Vec3 bar = c.add(Math.cos(a) * r, 0.0, Math.sin(a) * r);
+                SpellFxEntity fx = boss.beams.get(i);
+                fx.setPos(bar.x, bar.y, bar.z);
+                fx.moveEnd(bar.add(0.0, 4.6, 0.0));
+            }
+        }
+        if (t == CAGE_CLOSE) {
+            for (SpellFxEntity bar : boss.beams) {
+                if (!bar.isRemoved()) {
+                    bar.discard();
+                }
+            }
+            boss.beams.clear();
+            for (Vec3 c : boss.points) {
+                pillar(boss, level, c, 2.2f, 20.0f, 14.0f, DivineFx.HOLY);
+            }
+        }
+    }
+
+    /**
+     * Schwarzes Loch (ab der Wahren Gestalt): Nahe dem Ziel öffnet sich ein Loch, wandert ihm nach und zieht alles an – auch
+     * Pfeile; wer in seinen Kern gerät, wird zermalmt. Am Ende zerbirst es weithin (Abstand halten!).
+     */
+    private static void blackHole(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        keepNear(boss, target, 17.0, 12.0);
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_ORB.get(), 5.0f, 0.45f);
+            Vec3 at = target != null ? lead(boss, target, 14) : boss.ground(boss.center());
+            boss.mark = at.add(0.0, 3.0, 0.0);
+            boss.markFx = DivineFx.fx(level, SpellFxEntity.Kind.VORTEX, boss.mark, DivineFx.COSMIC, HOLE_BURST + 6, 1.0f).spawn();
+        }
+        if (t < HOLE_BURST && boss.markFx != null && !boss.markFx.isRemoved()) {
+            float grow = Mth.clamp(t / 34.0f, 0.0f, 1.0f);
+            boss.markFx.setSize(1.0f + 4.8f * grow);
+            if (target != null && t > 24) {
+                // es wandert seinem Ziel nach
+                Vec3 want = boss.ground(target.position()).add(0.0, 3.0, 0.0);
+                Vec3 to = want.subtract(boss.mark);
+                double speed = boss.isAlmighty() ? 0.14 : 0.1;
+                if (to.length() > 0.3) {
+                    boss.mark = boss.mark.add(to.normalize().scale(Math.min(speed, to.length())));
+                    boss.markFx.setPos(boss.mark.x, boss.mark.y, boss.mark.z);
+                }
+            }
+            if (t > 16) {
+                double pull = 0.03 + 0.055 * grow;
+                for (LivingEntity e : boss.enemies(level)) {
+                    Vec3 to = boss.mark.subtract(e.position().add(0.0, e.getBbHeight() * 0.5, 0.0));
+                    double d = to.length();
+                    if (d > HOLE_PULL || d < 0.4) {
+                        continue;
+                    }
+                    double f = pull * (0.5 + 0.5 * (1.0 - d / HOLE_PULL));
+                    e.push(to.x / d * f, to.y / d * f * 0.3, to.z / d * f);
+                    e.needsSync = true;
+                    if (d < 3.4 && !boss.hitCooldown.containsKey(e.getUUID())) {
+                        boss.hitCooldown.put(e.getUUID(), 10);
+                        if (boss.strike(level, e, 7.0f, true)) {
+                            e.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 1), boss);
+                        }
+                    }
+                }
+                for (Projectile shot : level.getEntitiesOfClass(Projectile.class, new AABB(boss.mark, boss.mark).inflate(HOLE_PULL),
+                        p -> !(p instanceof DivineShotEntity))) {
+                    Vec3 to = boss.mark.subtract(shot.position());
+                    double d = to.length();
+                    if (d < 1.0) {
+                        shot.discard();
+                        continue;
+                    }
+                    shot.setDeltaMovement(shot.getDeltaMovement().scale(0.93).add(to.scale(0.14 / d)));
+                    shot.needsSync = true;
+                }
+            }
+            if (t % 2 == 0) {
+                DivineFx.gather(level, boss.mark, 10.0 + 8.0 * grow, 8);
+            }
+            if (t % 5 == 0) {
+                DivineFx.ring(level, DivineFx.VIOLET_DUST, boss.ground(boss.mark).add(0.0, 0.3, 0.0), 6.0 + 3.0 * Math.sin(t * 0.2), 18);
+            }
+            if (t % 24 == 0) {
+                DivineFx.sound(level, boss.mark, ModSounds.SCHROLLI_ORB.get(), 3.0f, 0.5f + grow * 0.3f);
+            }
+            if (t == HOLE_BURST - 20) {
+                DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, boss.ground(boss.mark).add(0.0, 0.06, 0.0), DivineFx.COSMIC, 20, 10.0f).spawn();
+                boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 1.4f);
+            }
+        }
+        if (t == HOLE_BURST) {
+            Vec3 at = boss.mark;
+            if (boss.markFx != null && !boss.markFx.isRemoved()) {
+                boss.markFx.discard();
+            }
+            boss.markFx = null;
+            boss.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 5.0f, 1.5f);
+            DivineFx.flash(level, at, DivineFx.COSMIC);
+            DivineFx.flash(level, at, DivineFx.WHITE);
+            DivineFx.sparks(level, at, 200, 4.0, 0.6);
+            level.sendParticles(ParticleTypes.REVERSE_PORTAL, at.x, at.y, at.z, 200, 3.0, 2.0, 3.0, 0.8);
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, boss.ground(at).add(0.0, 0.1, 0.0), DivineFx.COSMIC, 30, 2.0f).param(1.1f).spawn();
+            for (LivingEntity e : boss.enemiesNear(level, at, 10.5)) {
+                double f = 1.0 - e.position().add(0.0, e.getBbHeight() * 0.5, 0.0).distanceTo(at) / 10.5;
+                if (boss.strike(level, e, (float) (26.0 * (0.35 + 0.65 * f)), true)) {
+                    SchrolliEntity.knock(e, at, 0.6 + 1.6 * f, 0.6);
+                }
+            }
+        }
+    }
+
+    /** Sonnensturz: Er reckt die Arme empor – kleine Sonnen stürzen nacheinander auf leuchtende Kreise und lassen Glut zurück. */
+    private static void sunfall(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        keepNear(boss, target, 14.0, 13.0);
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 0.8f);
+        }
+        if (t >= 16 && t <= 106 && (t - 16) % 9 == 0) {
+            List<LivingEntity> enemies = boss.enemies(level);
+            Vec3 mark;
+            if (!enemies.isEmpty() && boss.getRandom().nextInt(4) != 0) {
+                mark = lead(boss, enemies.get(boss.getRandom().nextInt(enemies.size())), 20);
+            } else {
+                double a = boss.getRandom().nextDouble() * Math.PI * 2.0;
+                double r = 4.0 + boss.getRandom().nextDouble() * 26.0;
+                mark = boss.ground(boss.center().add(Math.cos(a) * r, 0.0, Math.sin(a) * r));
+            }
+            DivineShotEntity.fallingSun(level, boss, mark, 30.0, 1.25, 18.0f * boss.power(), 4.6);
+            DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, mark.add(0.0, 0.06, 0.0), DivineFx.EMBER, 24, 4.6f).spawn();
+            boss.sound(level, ModSounds.SCHROLLI_TICK.get(), 2.0f, 0.7f + (t - 16) * 0.006f);
+        }
+    }
+
+    /** Wo das Prisma {@code i} gerade steht. */
+    private static Vec3 prismAt(SchrolliEntity boss, Vec3 hub, int i, int t) {
+        double r = PRISM_RADIUS + Math.sin(t * 0.045) * 5.0;
+        double a = Math.toRadians(boss.sweep + i * 60.0);
+        return hub.add(Math.cos(a) * r, 0.0, Math.sin(a) * r);
+    }
+
+    /**
+     * Prismenkäfig: Sechs Prismen erscheinen im Kreis um die Mitte, zwischen ihnen spannen sich Strahlen zu einem
+     * Sechsstern – erst dünn (Warnung), dann gleißend; der Stern dreht sich, wechselt die Richtung, atmet weiter und enger.
+     * Die Strahlen liegen dicht über dem Boden: drüberspringen!
+     */
+    private static void prism(SchrolliEntity boss, ServerLevel level, int t) {
+        Vec3 g = boss.ground(boss.center());
+        Vec3 hub = g.add(0.0, 0.7, 0.0);
+        boss.steer(g.add(0.0, 14.0, 0.0), 0.06, 0.5);
+        boss.turnTo(boss.getYRot() + 3.0f, 360.0f);
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 1.1f);
+            boss.sweep = boss.getRandom().nextDouble() * 60.0;
+            boss.sweepDir = boss.getRandom().nextBoolean() ? 1.0 : -1.0;
+            boss.held.clear();
+        }
+        if (t == 10) {
+            for (int i = 0; i < 6; i++) {
+                Vec3 at = prismAt(boss, hub, i, t);
+                boss.held.add(DivineShotEntity.fixedStar(level, boss, at, PRISM_END - t + 6));
+                DivineFx.flash(level, at, i % 2 == 0 ? DivineFx.CYAN : DivineFx.ROSE);
+            }
+            for (int i = 0; i < 6; i++) {
+                Vec3 a = prismAt(boss, hub, i, t);
+                Vec3 b = prismAt(boss, hub, (i + 2) % 6, t);
+                boss.beams.add(DivineFx.fx(level, SpellFxEntity.Kind.BEAM, a, DivineFx.GOLD, PRISM_ARM - 10, 0.1f).end(b).spawn());
+            }
+            boss.sound(level, ModSounds.SCHROLLI_HALO.get(), 3.0f, 1.8f);
+        }
+        if (t == PRISM_ARM) {
+            for (SpellFxEntity fx : boss.beams) {
+                if (!fx.isRemoved()) {
+                    fx.discard();
+                }
+            }
+            boss.beams.clear();
+            int[] colors = {DivineFx.CYAN, DivineFx.ROSE, DivineFx.GOLD, DivineFx.CYAN, DivineFx.ROSE, DivineFx.GOLD};
+            for (int i = 0; i < 6; i++) {
+                Vec3 a = prismAt(boss, hub, i, t);
+                Vec3 b = prismAt(boss, hub, (i + 2) % 6, t);
+                boss.beams.add(DivineFx.fx(level, SpellFxEntity.Kind.BEAM, a, colors[i], PRISM_END - PRISM_ARM, 0.7f).end(b).spawn());
+            }
+            boss.sound(level, ModSounds.SCHROLLI_BEAM.get(), 5.0f, 1.2f);
+        }
+        if (t > 10 && t < PRISM_END) {
+            if (t > PRISM_ARM) {
+                if (t == 96) {
+                    boss.sweepDir = -boss.sweepDir;
+                    boss.sound(level, ModSounds.SCHROLLI_HALO.get(), 3.0f, 1.4f);
+                }
+                boss.sweep += boss.sweepDir * (boss.isAlmighty() ? 1.35 : 1.0);
+            }
+            for (int i = 0; i < boss.held.size(); i++) {
+                Vec3 at = prismAt(boss, hub, i, t);
+                boss.held.get(i).setPos(at.x, at.y, at.z);
+            }
+            for (int i = 0; i < boss.beams.size(); i++) {
+                Vec3 a = prismAt(boss, hub, i, t);
+                Vec3 b = prismAt(boss, hub, (i + 2) % 6, t);
+                SpellFxEntity fx = boss.beams.get(i);
+                fx.setPos(a.x, a.y, a.z);
+                fx.moveEnd(b);
+                if (t > PRISM_ARM) {
+                    for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(a, b).inflate(1.5, 2.5, 1.5), boss::canStrike)) {
+                        if (e.getY() > g.y + 1.05 || boss.hitCooldown.containsKey(e.getUUID())) {
+                            continue;                       // drübergesprungen
+                        }
+                        if (DivineFx.distanceToSegment(new Vec3(e.getX(), a.y, e.getZ()), a, b) < 0.85) {
+                            boss.hitCooldown.put(e.getUUID(), 10);
+                            if (boss.strike(level, e, 10.0f, true)) {
+                                e.push(0.0, 0.55, 0.0);
+                                e.needsSync = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if (t > PRISM_ARM && (t - PRISM_ARM) % 30 == 0) {
+                boss.sound(level, ModSounds.SCHROLLI_BEAM.get(), 3.0f, 1.1f);
+            }
+        }
+        if (t == PRISM_END) {
+            for (DivineShotEntity star : boss.held) {
+                DivineFx.flash(level, star.position(), DivineFx.WHITE);
+                DivineFx.sparks(level, star.position(), 30, 0.8, 0.2);
+            }
+            boss.clearArtState();
+        }
+    }
+
+    /**
+     * Klingenkranz: Um jeden Gegner erscheint ein Kranz aus Speeren, alle auf ihn gerichtet – mit einer Lücke. Nach einem
+     * Atemzug stoßen alle zugleich hinein (und vergehen in der Mitte). Drei Kränze, jeder enger und schneller.
+     */
+    private static void blades(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        keepNear(boss, target, 15.0, 10.0);
+        for (int w = 0; w < BLADE_WAVES.length; w++) {
+            if (t != BLADE_WAVES[w]) {
+                continue;
+            }
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 3.0f, 1.3f + w * 0.15f);
+            double radius = 6.0 - w * 0.8;
+            int count = 16;
+            List<LivingEntity> victims = sample(boss, level, 5);
+            if (victims.isEmpty() && target != null) {
+                victims = List.of(target);
+            }
+            for (LivingEntity e : victims) {
+                Vec3 c = e.position().add(0.0, 1.0, 0.0);
+                int gap = boss.getRandom().nextInt(count);
+                for (int k = 0; k < count; k++) {
+                    if (k == gap || k == (gap + 1) % count) {
+                        continue;
+                    }
+                    double a = Math.PI * 2.0 * k / count;
+                    Vec3 at = c.add(Math.cos(a) * radius, 0.2 + (k % 2) * 0.5, Math.sin(a) * radius);
+                    DivineShotEntity.ringSpear(level, boss, at, c, BLADE_HOLD[w], 9.0f * boss.power(), 1.5 + w * 0.25);
+                }
+                // die Lücke leuchtet: dort hinaus!
+                double a = Math.PI * 2.0 * (gap + 0.5) / count;
+                Vec3 out = c.add(Math.cos(a) * radius, -0.9, Math.sin(a) * radius);
+                DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, boss.ground(out), DivineFx.CYAN, BLADE_HOLD[w], 0.9f).param(4.0f).spawn();
+                DivineFx.sparks(level, out.add(0.0, 1.0, 0.0), 12, 0.4, 0.05);
+            }
+        }
+    }
+
+    /**
+     * Sonneneruption: Wände aus Glutsäulen wandern über den Hof, eine nach der anderen aus anderer Richtung – jede mit einer
+     * Lücke, die langsam wandert. Durch die Lücke!
+     */
+    private static void flare(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        keepNear(boss, target, 16.0, 13.0);
+        Vec3 c = boss.center();
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 0.7f);
+            boss.marks.clear();
+            for (int w = 0; w < FLARE_WALLS.length; w++) {
+                // Richtung der Wand, Lage der Lücke, ihr Wandern
+                double yaw = boss.getRandom().nextDouble() * 360.0 + w * 90.0;
+                boss.marks.add(new Vec3(yaw, (boss.getRandom().nextDouble() - 0.5) * 30.0, boss.getRandom().nextBoolean() ? 1.0 : -1.0));
+            }
+        }
+        for (int w = 0; w < FLARE_WALLS.length && w < boss.marks.size(); w++) {
+            int step = t - FLARE_WALLS[w];
+            if (step < 0 || step % FLARE_STEP != 0 || step / FLARE_STEP > 12) {
+                continue;
+            }
+            int n = step / FLARE_STEP;
+            Vec3 spec = boss.marks.get(w);
+            Vec3 dir = DivineFx.dir(spec.x);
+            Vec3 side = new Vec3(-dir.z, 0.0, dir.x);
+            double along = -30.0 + n * 5.0;
+            double gap = spec.y + spec.z * n * 1.2;
+            for (double s = -40.0; s <= 40.0; s += FLARE_SPACING) {
+                if (Math.abs(s - gap) < FLARE_SPACING * 0.75) {
+                    continue;                                   // die Lücke
+                }
+                Vec3 p = c.add(dir.scale(along)).add(side.scale(s));
+                if (DivineFx.flat(p, c) > 41.0) {
+                    continue;
+                }
+                warnPillar(boss, level, boss.ground(p), 2.6f, 14, 14.0f, n % 2 == 0 ? DivineFx.EMBER : DivineFx.AMBER, 20.0f);
+            }
+            if (n % 3 == 0) {
+                boss.sound(level, ModSounds.SCHROLLI_TICK.get(), 2.5f, 0.6f + n * 0.04f);
+            }
+        }
+    }
+
+    /** Schlägt im Gericht der Sonne zu: außen (alles jenseits der Teilung) oder innen. */
+    private static void solarStrike(SchrolliEntity boss, ServerLevel level, Vec3 g, boolean outer) {
+        boss.sound(level, ModSounds.SCHROLLI_IMPACT.get(), 6.0f, outer ? 0.6f : 0.8f);
+        if (outer) {
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, g.add(0.0, 0.1, 0.0), DivineFx.EMBER, 30, (float) SOLAR_SPLIT).param(1.0f).spawn();
+            for (int k = 0; k < 16; k++) {
+                double a = Math.toRadians(k * 22.5);
+                double r = 20.0 + (k % 2) * 10.0;
+                DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, boss.ground(g.add(Math.cos(a) * r, 0.0, Math.sin(a) * r)), DivineFx.EMBER, 18, 3.4f)
+                        .param(22.0f).spawn();
+            }
+        } else {
+            DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, g, DivineFx.GOLD, 22, (float) SOLAR_SPLIT).param(30.0f).spawn();
+            DivineFx.flash(level, g.add(0.0, 3.0, 0.0), DivineFx.WHITE);
+        }
+        for (LivingEntity e : boss.enemies(level)) {
+            double d = DivineFx.flat(e.position(), g);
+            boolean hit = outer ? d > SOLAR_SPLIT + 0.4 : d < SOLAR_SPLIT - 0.4;
+            if (hit && e.getY() - g.y < 8.0 && boss.strike(level, e, 22.0f, true)) {
+                e.igniteForSeconds(4.0f);
+                SchrolliEntity.knock(e, g, outer ? -0.4 : 0.8, 0.5);
+            }
+        }
+    }
+
+    /**
+     * Gericht der Sonne (zu seiner Zeit, zweimal): Er schwebt über der Mitte. Erst brennt alles außerhalb des inneren Kreises
+     * (in den weißen Kreis!), dann der innere Kreis (hinaus!), dann wieder außen. Zuletzt erscheinen vier Kreise aus Licht –
+     * nur dort ist man sicher, wenn die Sonne über dem ganzen Hof zerbirst.
+     */
+    private static void solarJudgment(SchrolliEntity boss, ServerLevel level, int t) {
+        Vec3 c = boss.center();
+        Vec3 g = boss.ground(c);
+        boss.steer(g.add(0.0, 16.0, 0.0), 0.06, 0.5);
+        boss.turnTo(boss.getYRot() + 2.5f, 360.0f);
+        if (t == 1) {
+            boss.say(level, "solar_judgment");
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 5.0f, 0.5f);
+            boss.announce(level, Component.translatable("entity.kingdomsatwar.schrolli.solar").withColor(0xFF9A3A).withStyle(ChatFormatting.BOLD),
+                    Component.translatable("entity.kingdomsatwar.schrolli.solar.hint").withColor(0xFFE8A0), 70);
+            boss.sun = DivineShotEntity.sun(level, boss, boss.local(0.0, 9.0, 0.0), 0.6f);
+        }
+        if (boss.sun != null && t < SOLAR_FINAL) {
+            float k = t / (float) SOLAR_FINAL;
+            boss.sun.setVisualScale(0.6f + 3.4f * k);
+            Vec3 at = boss.local(0.0, 9.0 + 2.0 * k, 0.0);
+            boss.sun.setPos(at.x, at.y, at.z);
+            if (t % 3 == 0) {
+                DivineFx.gather(level, at, 12.0, 6);
+            }
+        }
+        if (t == SOLAR_OUTER_WARN || t == SOLAR_OUTER2_WARN) {
+            int fuse = t == SOLAR_OUTER_WARN ? SOLAR_OUTER - SOLAR_OUTER_WARN : SOLAR_OUTER2 - SOLAR_OUTER2_WARN;
+            DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, g.add(0.0, 0.05, 0.0), DivineFx.EMBER, fuse, 41.0f).spawn();
+            DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, g.add(0.0, 0.08, 0.0), DivineFx.WHITE, fuse, (float) SOLAR_SPLIT).spawn();
+            boss.tell(level, Component.translatable("entity.kingdomsatwar.schrolli.solar.in").withColor(0xFFF2C4));
+            boss.sound(level, ModSounds.SCHROLLI_TICK.get(), 3.0f, 0.6f);
+        }
+        if (t == SOLAR_OUTER || t == SOLAR_OUTER2) {
+            solarStrike(boss, level, g, true);
+        }
+        if (t == SOLAR_INNER_WARN) {
+            DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, g.add(0.0, 0.06, 0.0), DivineFx.EMBER, SOLAR_INNER - SOLAR_INNER_WARN, (float) SOLAR_SPLIT).spawn();
+            boss.tell(level, Component.translatable("entity.kingdomsatwar.schrolli.solar.out").withColor(0xFFF2C4));
+            boss.sound(level, ModSounds.SCHROLLI_TICK.get(), 3.0f, 0.8f);
+        }
+        if (t == SOLAR_INNER) {
+            solarStrike(boss, level, g, false);
+        }
+        if (t == SOLAR_FINAL_WARN) {
+            // vier Lichtkreise, einer in jedem Viertel
+            boss.points.clear();
+            double base = boss.getRandom().nextDouble() * 90.0;
+            for (int k = 0; k < 4; k++) {
+                double a = Math.toRadians(base + k * 90.0 + (boss.getRandom().nextDouble() - 0.5) * 30.0);
+                double r = 16.0 + boss.getRandom().nextDouble() * 9.0;
+                Vec3 spot = boss.ground(c.add(Math.cos(a) * r, 0.0, Math.sin(a) * r));
+                boss.points.add(spot);
+                DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, spot.add(0.0, 0.08, 0.0), DivineFx.WHITE, SOLAR_FINAL - SOLAR_FINAL_WARN,
+                        (float) SOLAR_SAFE).spawn();
+                DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, spot, DivineFx.HOLY, SOLAR_FINAL - SOLAR_FINAL_WARN, 0.6f).param(30.0f).spawn();
+            }
+            boss.announce(level, Component.translatable("entity.kingdomsatwar.schrolli.solar.light").withColor(0xFFF6D8).withStyle(ChatFormatting.BOLD),
+                    null, 50);
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 5.0f, 0.9f);
+        }
+        if (t > SOLAR_FINAL_WARN && t < SOLAR_FINAL && t % 10 == 0) {
+            boss.sound(level, ModSounds.SCHROLLI_TICK.get(), 3.0f, 0.6f + (t - SOLAR_FINAL_WARN) / 100.0f);
+            DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, g.add(0.0, 0.05, 0.0), DivineFx.AMBER, 10, 41.0f).spawn();
+        }
+        if (t == SOLAR_FINAL) {
+            Vec3 sunPos = boss.sun != null ? boss.sun.position() : boss.local(0.0, 11.0, 0.0);
+            boss.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 8.0f, 0.8f);
+            for (int k = 0; k < 6; k++) {
+                DivineFx.flash(level, sunPos.add((boss.getRandom().nextDouble() - 0.5) * 6.0, (boss.getRandom().nextDouble() - 0.5) * 6.0,
+                        (boss.getRandom().nextDouble() - 0.5) * 6.0), k % 2 == 0 ? DivineFx.WHITE : DivineFx.EMBER);
+            }
+            DivineFx.sparks(level, sunPos, 400, 8.0, 0.8);
+            level.sendParticles(ParticleTypes.FLAME, sunPos.x, sunPos.y, sunPos.z, 300, 10.0, 4.0, 10.0, 0.4);
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, g.add(0.0, 0.1, 0.0), DivineFx.EMBER, 50, 4.0f).param(1.6f).spawn();
+            for (LivingEntity e : boss.enemies(level)) {
+                boolean safe = false;
+                for (Vec3 spot : boss.points) {
+                    if (DivineFx.flat(e.position(), spot) <= SOLAR_SAFE + 0.4 && Math.abs(e.getY() - spot.y) < 3.0) {
+                        safe = true;
+                        break;
+                    }
+                }
+                if (safe) {
+                    if (e instanceof ServerPlayer sp) {
+                        sp.sendOverlayMessage(Component.translatable("entity.kingdomsatwar.schrolli.solar.safe").withColor(0xA8E8A8));
+                    }
+                    continue;
+                }
+                if (boss.strike(level, e, 38.0f, true)) {
+                    e.igniteForSeconds(6.0f);
+                    SchrolliEntity.knock(e, sunPos, 1.2, 0.5);
+                }
+            }
+            if (boss.sun != null) {
+                boss.sun.discard();
+                boss.sun = null;
+            }
+        }
+    }
+
+    /**
+     * Sonnenspalter (am Boden): Er hebt die Klinge über den Kopf, drei Linien aus Glut zeigen den Weg (ein Fächer zum Ziel)
+     * – dann der Hieb: Die Erde reißt entlang der Linien auf, und Säulen aus Glut brechen hervor. Danach steht er einen
+     * Augenblick still (jetzt zuschlagen!).
+     */
+    private static void sunCleave(SchrolliEntity boss, ServerLevel level, @Nullable LivingEntity target, int t) {
+        boss.walk(Vec3.ZERO);
+        if (t == 1) {
+            boss.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 0.7f);
+        }
+        if (t < CLEAVE_WARN && target != null) {
+            boss.face(target.position(), 12.0f);
+        }
+        if (t > 4 && t < CLEAVE_CHOP && t % 2 == 0) {
+            DivineFx.gather(level, boss.local(0.6, 9.0, 0.6), 4.0, 4);
+        }
+        if (t == CLEAVE_WARN) {
+            Vec3 a = boss.ground(boss.position());
+            boss.aim = a;
+            boss.marks.clear();
+            for (double off : new double[] {-24.0, 0.0, 24.0}) {
+                Vec3 b = boss.ground(a.add(DivineFx.dir(boss.getYRot() + off).scale(CLEAVE_LENGTH)));
+                boss.marks.add(b);
+                DivineFx.fx(level, SpellFxEntity.Kind.BEAM, a.add(0.0, 0.15, 0.0), DivineFx.EMBER, CLEAVE_CHOP - CLEAVE_WARN, 0.2f)
+                        .end(b.add(0.0, 0.15, 0.0)).spawn();
+            }
+            boss.sound(level, ModSounds.SCHROLLI_SWING.get(), 3.0f, 0.6f);
+        }
+        if (t == CLEAVE_CHOP) {
+            Vec3 a = boss.aim;
+            boss.sound(level, ModSounds.SCHROLLI_SLASH.get(), 4.0f, 0.6f);
+            boss.sound(level, ModSounds.SCHROLLI_IMPACT.get(), 6.0f, 0.5f);
+            Set<UUID> hit = new HashSet<>();
+            for (Vec3 b : boss.marks) {
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(a, b).inflate(3.0, 4.0, 3.0), boss::canStrike)) {
+                    if (hit.contains(e.getUUID())) {
+                        continue;
+                    }
+                    if (DivineFx.distanceToSegment(new Vec3(e.getX(), a.y, e.getZ()), a, b) < 2.0 && e.getY() - a.y < 3.0) {
+                        hit.add(e.getUUID());
+                        if (boss.strike(level, e, 22.0f, true)) {
+                            e.igniteForSeconds(4.0f);
+                            Vec3 dir = b.subtract(a);
+                            Vec3 side = new Vec3(-dir.z, 0.0, dir.x).normalize();
+                            double sign = Math.signum(e.position().subtract(a).dot(side));
+                            e.push(side.x * (sign == 0 ? 1 : sign) * 1.1, 0.6, side.z * (sign == 0 ? 1 : sign) * 1.1);
+                            e.needsSync = true;
+                        }
+                    }
+                }
+                DivineFx.fx(level, SpellFxEntity.Kind.FISSURE, a.add(0.0, 0.05, 0.0), DivineFx.EMBER, 60, 1.5f).param(CLEAVE_ERUPT - CLEAVE_CHOP)
+                        .end(b).spawn();
+            }
+            Vec3 strike = a.add(DivineFx.dir(boss.getYRot()).scale(reach(boss)));
+            DivineFx.flash(level, strike.add(0.0, 1.0, 0.0), DivineFx.WHITE);
+            DivineFx.flash(level, strike.add(0.0, 1.5, 0.0), DivineFx.EMBER);
+            DivineFx.sparks(level, strike.add(0.0, 0.5, 0.0), 80, 1.8, 0.35);
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, strike.add(0.0, 0.1, 0.0), DivineFx.EMBER, 26, 2.0f).param(0.7f).spawn();
+            dust(boss, level, strike, 2.8, 18);
+        }
+        if (t == CLEAVE_ERUPT) {
+            Vec3 a = boss.aim;
+            for (Vec3 b : boss.marks) {
+                double len = DivineFx.flat(a, b);
+                for (double d = 5.0; d <= len; d += 3.5) {
+                    pillar(boss, level, boss.ground(a.lerp(b, d / len)), 1.8f, 14.0f, 12.0f, d % 7.0 < 3.5 ? DivineFx.EMBER : DivineFx.GOLD);
+                }
             }
         }
     }

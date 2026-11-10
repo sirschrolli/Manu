@@ -236,6 +236,10 @@ final class Showcase {
                         SchrolliShowcase.boss(steps);
                     } else if (scene.equals("creator_hand")) {
                         SchrolliShowcase.hand(steps);
+                    } else if (scene.equals("creator_gear")) {
+                        SchrolliShowcase.gear(steps);
+                    } else if (scene.equals("creator_almighty")) {
+                        SchrolliShowcase.almighty(steps);
                     } else if (scene.equals("creator_pose")) {
                         SchrolliShowcase.poses(steps);
                     } else if (scene.equals("creator_melee")) {

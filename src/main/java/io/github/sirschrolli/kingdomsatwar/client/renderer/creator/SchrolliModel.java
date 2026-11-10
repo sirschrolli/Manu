@@ -13,7 +13,8 @@ import net.minecraft.util.Mth;
  * ausgeblendet): das Zepter emporgereckt, beide Arme zum Himmel, das Zepter auf sein Ziel gerichtet, den Heiligenschein
  * oder die Weltkugel geworfen, Schwingen gespreizt und geschlagen, die Arme weit ausgebreitet, kniend, wenn er taumelt.
  * In der Wahren Gestalt drehen sich die Räder mit den Augen um ihn, hinter dem Heiligenschein steht der Strahlenkranz,
- * und seine Krone ist größer.
+ * und seine Krone ist größer. Als Allmächtiger (seit 0.78) dreht sich ein gewaltiges drittes Rad aufrecht hinter ihm, und
+ * hinter dem Heiligenschein lodert ein Kranz aus zweiunddreißig Flammen, die züngeln.
  *
  * <p>Am Boden (seit 0.76) wachsen aus dem Saum Beine in goldenen Beinschienen, das Zepter wird zur Klinge aus Licht (die
  * Weltkugel vergeht), und er steht in Kampfhaltung: das linke Bein vor, die Klinge schräg nach vorn gerichtet, die
@@ -51,6 +52,11 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
     private final ModelPart rings;
     private final ModelPart ringA;
     private final ModelPart ringB;
+    // der Allmächtige (seit 0.78)
+    private final ModelPart ringC;
+    private final ModelPart ringCSpin;
+    private final ModelPart flames;
+    private final ModelPart[] flameParts = new ModelPart[32];
     // am Boden (seit 0.76)
     private final ModelPart blade;
     private final ModelPart bladeEdge;
@@ -98,6 +104,12 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         this.rings = this.body.getChild("true_rings");
         this.ringA = this.rings.getChild("true_ring_a");
         this.ringB = this.rings.getChild("true_ring_b");
+        this.ringC = this.rings.getChild("almighty_ring");
+        this.ringCSpin = this.ringC.getChild("almighty_ring_spin");
+        this.flames = this.halo.getChild("almighty_flames");
+        for (int k = 0; k < this.flameParts.length; k++) {
+            this.flameParts[k] = this.flames.getChild("almighty_flame_" + k);
+        }
         this.blade = this.foreR.getChild("blade");
         this.bladeEdge = this.blade.getChild("blade_edge");
         this.legL = root.getChild("left_leg");
@@ -219,13 +231,33 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         float death = Mth.clamp(state.deathTime / SchrolliEntity.DEATH_TICKS, 0.0f, 1.0f);
         boolean truly = state.trueForm;
 
-        // ---------------------------------------------------------- die Teile der Wahren Gestalt
+        // ---------------------------------------------------------- die Teile der Wahren Gestalt (und des Allmächtigen)
+        boolean almighty = state.almighty;
         this.rings.visible = truly;
         this.corona.visible = truly;
+        this.ringC.visible = almighty;
+        this.flames.visible = almighty;
+        if (almighty) {
+            // das große Rad hinter ihm dreht sich in seiner Ebene und wiegt sich ein wenig
+            this.ringCSpin.yRot += t * 0.02f;
+            this.ringC.zRot += Mth.sin(t * 0.011f) * 0.08f;
+            this.flames.zRot += t * 0.012f;
+            for (int k = 0; k < this.flameParts.length; k++) {
+                // die Flammen züngeln: jede lodert in ihrem eigenen Takt
+                this.flameParts[k].yScale = 0.8f + 0.28f * Mth.sin(t * 0.31f + k * 1.7f) + 0.1f * Mth.sin(t * 0.83f + k * 0.6f);
+                this.flameParts[k].zRot += Mth.sin(t * 0.21f + k * 2.3f) * 0.08f;
+            }
+            if (death > 0.0f) {
+                this.ringC.y += death * 30.0f;
+                this.ringC.xRot += death * 1.2f;
+                this.flames.xScale = 1.0f - death * 0.8f;
+                this.flames.yScale = 1.0f - death * 0.8f;
+            }
+        }
         this.halo.visible = (state.flags & SchrolliEntity.FLAG_HALO) == 0;
         this.orb.visible = (state.flags & SchrolliEntity.FLAG_ORB) == 0;
         if (truly) {
-            float k = 1.45f;
+            float k = almighty ? 1.7f : 1.45f;
             this.crown.xScale = k;
             this.crown.yScale = k;
             this.crown.zScale = k;
@@ -374,6 +406,38 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
                 bothUp = Anim.bump(a, 20.0f, 64.0f, 72.0f);
                 spread = Anim.bump(a - SchrolliEntity.ASCEND_REVEAL, 10.0f, 80.0f, 118.0f);
                 wingsUp = Math.max(bothUp, spread);
+            }
+            // seit 0.78
+            case TRANSCEND -> {
+                bothUp = Anim.bump(a, 20.0f, SchrolliEntity.TRANSCEND_COLLAPSE - 10.0f, SchrolliEntity.TRANSCEND_COLLAPSE);
+                spread = Anim.bump(a - SchrolliEntity.TRANSCEND_REVEAL, 10.0f, 100.0f, 138.0f);
+                wingsUp = Math.max(bothUp, spread);
+            }
+            case LIGHT_CAGE -> {
+                raise = Anim.bump(a, 8.0f, 50.0f, 64.0f);
+                stab = Anim.bump(a - 46.0f, 2.0f, 5.0f, 12.0f);
+            }
+            case BLACK_HOLE -> {
+                point = Anim.bump(a, 10.0f, 116.0f, 124.0f);
+                spread = Anim.bump(a - 122.0f, 2.0f, 10.0f, 26.0f);
+            }
+            case SUNFALL -> bothUp = Anim.bump(a, 10.0f, 108.0f, 124.0f);
+            case PRISM -> {
+                spread = Anim.bump(a, 12.0f, 150.0f, 170.0f);
+                sing = Anim.bump(a, 20.0f, 140.0f, 160.0f);
+            }
+            case BLADES -> {
+                raise = Anim.bump(a, 4.0f, 96.0f, 110.0f);
+                stab = Anim.bump(a - 6.0f, 2.0f, 4.0f, 10.0f) + Anim.bump(a - 42.0f, 2.0f, 4.0f, 10.0f) + Anim.bump(a - 76.0f, 2.0f, 4.0f, 10.0f);
+            }
+            case FLARE -> {
+                point = Anim.bump(a, 8.0f, 100.0f, 120.0f);
+                wingsUp = Anim.bump(a, 12.0f, 96.0f, 118.0f) * 0.6f;
+            }
+            case SOLAR_JUDGMENT -> {
+                bothUp = Anim.bump(a, 14.0f, SchrolliEntity.SOLAR_FINAL - 6.0f, SchrolliEntity.SOLAR_FINAL);
+                spread = Anim.bump(a - SchrolliEntity.SOLAR_FINAL, 2.0f, 8.0f, 22.0f);
+                wingsUp = bothUp;
             }
             default -> {
             }
@@ -557,8 +621,8 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
         }
 
         // ---------------------------------------------------------- der Aufstieg und das Vergehen
-        if (attack == Attack.ASCEND && a < SchrolliEntity.ASCEND_SHATTER) {
-            float shake = a / SchrolliEntity.ASCEND_SHATTER;
+        if (attack == Attack.ASCEND && a < SchrolliEntity.ASCEND_SHATTER || attack == Attack.TRANSCEND && a < SchrolliEntity.TRANSCEND_COLLAPSE) {
+            float shake = a / (attack == Attack.ASCEND ? SchrolliEntity.ASCEND_SHATTER : SchrolliEntity.TRANSCEND_COLLAPSE);
             this.body.xRot += Mth.sin(t * 2.3f) * 0.05f * shake;
             this.body.zRot += Mth.sin(t * 2.9f) * 0.05f * shake;
             add(this.head, shake, -28, 0, 0);
@@ -748,6 +812,21 @@ public class SchrolliModel extends EntityModel<SchrolliRenderState> {
                 toward(this.body, cut, 12.0f, 32.0f, 0.0f);
                 this.off(Math.max(wind, cut), -30.0f, 0.0f, -40.0f, -30.0f);
                 this.crouch(Math.max(wind, cut), 0.45f);
+            }
+            case SUN_CLEAVE -> {
+                // seit 0.78: die Klinge hoch über dem Kopf, dann mit aller Kraft hinab – die Erde reißt auf
+                float lift = Anim.bump(a - 2.0f, 12.0f, 29.0f, 32.0f);
+                float chop = Anim.bump(a - 32.0f, 1.5f, 22.0f, 46.0f);
+                this.sword(lift, -176.0f, 0.0f, 8.0f, -10.0f, 170.0f);
+                this.off(lift, -170.0f, 0.0f, -12.0f, -14.0f);
+                toward(this.body, lift, -10.0f, 0.0f, 0.0f);
+                toward(this.head, lift, -18.0f, 0.0f, 0.0f);
+                this.crouch(lift, 0.2f);
+                this.sword(chop, -58.0f, 0.0f, -6.0f, -12.0f, 196.0f);
+                this.off(chop, -60.0f, 0.0f, 16.0f, -14.0f);
+                toward(this.body, chop, 30.0f, 0.0f, 0.0f);
+                toward(this.head, chop, -16.0f, 0.0f, 0.0f);
+                this.crouch(chop, 0.75f);
             }
             case WORLD_BLADE -> {
                 float raise = Anim.bump(a - 2.0f, 10.0f, 40.0f, 44.0f);

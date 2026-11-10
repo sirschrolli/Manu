@@ -34,16 +34,20 @@ import org.jspecify.annotations.Nullable;
  *     <li>steht die Zeit still, wird alles grau und kalt;</li>
  *     <li>„Es werde Licht!“ – wer hinsieht, dem wird es gleißend weiß vor Augen; der Aufstieg in die Wahre Gestalt, die
  *     Supernova, der Urknall und sein Vergehen blenden alle kurz;</li>
- *     <li>die Musik: in seiner Nähe die Kampfmusik des Schöpfers, in der Wahren Gestalt ihre entfesselte Fassung (im Hof
- *     sonst die stille Musik der Schöpfung).</li>
+ *     <li>wechselt der Hof (seit 0.78, mit jeder neuen Gestalt), hüllt gleißendes Licht alles ein – in ihm erscheint der
+ *     Name der neuen Bühne („Das Firmament“, „Das Herz der Sonne“) –, dann klärt es sich;</li>
+ *     <li>die Musik: in seiner Nähe die Kampfmusik des Schöpfers, in der Wahren Gestalt ihre entfesselte Fassung, beim
+ *     Allmächtigen die Musik der Sonne (im Hof sonst die stille Musik der Schöpfung).</li>
  * </ul>
- * Außerdem merkt sich diese Klasse, wie weit der Himmel der Schöpfung „aufgerissen“ ist (für den {@link CreationSkyRenderer}).
+ * Außerdem merkt sich diese Klasse, wie weit der Himmel der Schöpfung „aufgerissen“ ist, wie dunkel ihn das Schwarze Loch
+ * macht und wie hell die Sonne des Allmächtigen brennt (für den {@link CreationSkyRenderer}).
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class CreatorClient {
     public static final Identifier LAYER = KingdomsAtWar.id("creator_overlay");
     private static final Music BATTLE = music("music.creation_battle");
     private static final Music TRUE = music("music.creation_true");
+    private static final Music ALMIGHTY = music("music.creation_almighty");
 
     private static @Nullable SchrolliEntity near;
     private static int lastAttack = -1;
@@ -57,6 +61,11 @@ public final class CreatorClient {
     private static float reveal;
     private static float revealO;
     private static float flare;
+    /** Die Sonne des Allmächtigen am Himmel (0 – 1) und die Finsternis des Schwarzen Lochs davor (0 – 1). */
+    private static float sunrise;
+    private static float sunriseO;
+    private static float eclipse;
+    private static float eclipseO;
 
     private CreatorClient() {}
 
@@ -78,6 +87,14 @@ public final class CreatorClient {
         return flare;
     }
 
+    public static float sunrise(float partialTicks) {
+        return Mth.lerp(partialTicks, sunriseO, sunrise);
+    }
+
+    public static float eclipse(float partialTicks) {
+        return Mth.lerp(partialTicks, eclipseO, eclipse);
+    }
+
     @SubscribeEvent
     static void registerLayers(RegisterGuiLayersEvent event) {
         event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, LAYER, CreatorClient::render);
@@ -91,6 +108,8 @@ public final class CreatorClient {
         greyO = grey;
         flashO = flash;
         revealO = reveal;
+        sunriseO = sunrise;
+        eclipseO = eclipse;
         flash = Math.max(0.0f, flash - 0.035f);
         flare = Math.max(0.0f, flare - 0.02f);
         if (player == null || level == null) {
@@ -111,6 +130,8 @@ public final class CreatorClient {
         near = boss;
         boolean frozen = false;
         float wantReveal = 0.0f;
+        float wantSunrise = 0.0f;
+        float wantEclipse = 0.0f;
         if (boss != null) {
             Attack attack = boss.currentAttack();
             float time = boss.attackTime(0.0f);
@@ -141,6 +162,20 @@ public final class CreatorClient {
             if (attack == Attack.APOCALYPSE) {
                 flare = Math.max(flare, 0.45f + Mth.sin(time * 0.3f) * 0.15f);
             }
+            if (attack == Attack.TRANSCEND && crossed(from, time, SchrolliEntity.TRANSCEND_COLLAPSE)) {
+                flash(0.9f, 0xD8B0FF);
+            }
+            if (attack == Attack.TRANSCEND && crossed(from, time, SchrolliEntity.TRANSCEND_REVEAL)) {
+                flash(1.0f, 0xFFD090);
+                flare = 1.0f;
+            }
+            if (attack == Attack.SOLAR_JUDGMENT && crossed(from, time, SchrolliEntity.SOLAR_FINAL)) {
+                flash(0.95f, 0xFFC880);
+                flare = 1.0f;
+            }
+            if (attack == Attack.TRANSCEND && time < SchrolliEntity.TRANSCEND_COLLAPSE) {
+                wantEclipse = Mth.clamp(time / (float) SchrolliEntity.TRANSCEND_COLLAPSE, 0.0f, 1.0f);
+            }
             if (boss.deathTime == SchrolliEntity.DEATH_TICKS - 16) {
                 flash(1.0f, 0xFFFFFF);
                 flare = 1.0f;
@@ -148,8 +183,11 @@ public final class CreatorClient {
             lastAttack = ordinal;
             lastTime = time;
             wantReveal = boss.isTrueForm() ? 1.0f : attack == Attack.ASCEND ? boss.ascension(0.0f) * 0.8f : 0.0f;
+            wantSunrise = boss.transcendence(0.0f);
             if (boss.deathTime > 0) {
-                wantReveal *= Math.max(0.0f, 1.0f - boss.deathTime / (float) SchrolliEntity.DEATH_TICKS);
+                float left = Math.max(0.0f, 1.0f - boss.deathTime / (float) SchrolliEntity.DEATH_TICKS);
+                wantReveal *= left;
+                wantSunrise *= left;
             }
         } else {
             lastAttack = -1;
@@ -157,6 +195,8 @@ public final class CreatorClient {
         }
         grey = frozen ? Math.min(1.0f, grey + 0.2f) : Math.max(0.0f, grey - 0.12f);
         reveal += (wantReveal - reveal) * 0.03f;
+        sunrise += (wantSunrise - sunrise) * 0.04f;
+        eclipse += (wantEclipse - eclipse) * (wantEclipse > eclipse ? 0.08f : 0.03f);
     }
 
     private static boolean crossed(float from, float to, float at) {
@@ -190,6 +230,83 @@ public final class CreatorClient {
         if (f > 0.0f) {
             graphics.fill(0, 0, width, height, ARGB.color(Math.round(Mth.clamp(f * f, 0.0f, 1.0f) * 235.0f), flashColor));
         }
+        whiteout(graphics, pt);
+    }
+
+    /**
+     * Der Wechsel des Hofs (seit 0.78): Gleißendes Licht hüllt alles ein (in ihm entsteht die neue Bühne), und in ihm steht
+     * ihr Name; dann klärt es sich. Beim Aufstieg weiß, auf dem Weg zum Allmächtigen golden.
+     */
+    private static void whiteout(GuiGraphicsExtractor graphics, float pt) {
+        SchrolliEntity boss = near;
+        if (boss == null || !boss.isAlive()) {
+            return;
+        }
+        Attack attack = boss.currentAttack();
+        float time = boss.attackTime(pt);
+        float in;
+        float full;
+        float hold;
+        float clear;
+        String stage;
+        int light;
+        int ink;
+        if (attack == Attack.ASCEND) {
+            in = SchrolliEntity.ASCEND_WHITE;
+            full = SchrolliEntity.ASCEND_SHIFT - 2;
+            hold = SchrolliEntity.ASCEND_SHIFT + 8;
+            clear = SchrolliEntity.ASCEND_CLEAR;
+            stage = "firmament";
+            light = 0xFFFDF4;
+            ink = 0x3A2A6A;
+        } else if (attack == Attack.TRANSCEND) {
+            in = SchrolliEntity.TRANSCEND_WHITE;
+            full = SchrolliEntity.TRANSCEND_SHIFT - 2;
+            hold = SchrolliEntity.TRANSCEND_SHIFT + 12;
+            clear = SchrolliEntity.TRANSCEND_CLEAR;
+            stage = "sun_heart";
+            light = 0xFFF1D2;
+            ink = 0x8A3008;
+        } else {
+            return;
+        }
+        if (time <= in || time >= clear) {
+            return;
+        }
+        float a = time < full ? (time - in) / (full - in) : time < hold ? 1.0f : 1.0f - (time - hold) / (clear - hold);
+        a = Mth.clamp(a, 0.0f, 1.0f);
+        a = a * a * (3.0f - 2.0f * a);
+        int width = graphics.guiWidth();
+        int height = graphics.guiHeight();
+        graphics.fill(0, 0, width, height, ARGB.color(Math.round(a * 255.0f), light));
+        // der Name der neuen Bühne, wenn das Licht am hellsten ist
+        float text = Mth.clamp((time - (full - 4.0f)) / 8.0f, 0.0f, 1.0f) * Mth.clamp((clear - 2.0f - time) / 8.0f, 0.0f, 1.0f);
+        if (text > 0.02f) {
+            net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
+            float cx = width / 2.0f;
+            float cy = height * 0.42f;
+            int alpha = Math.round(255.0f * text);
+            net.minecraft.network.chat.Component title = net.minecraft.network.chat.Component.translatable("arena.kingdomsatwar.creation." + stage);
+            io.github.sirschrolli.kingdomsatwar.client.hero.HeroGui.centered(graphics, font, title, cx, cy - 8.0f * (1.0f - text),
+                    ARGB.color(alpha, ink), 2.6f);
+            // zu beiden Seiten eine feine Linie, die nach außen verblasst, in der Mitte eine kleine Raute
+            float half = font.width(title) * 1.3f + 14.0f;
+            int line = Math.round(Math.min(width * 0.18f, 120.0f) * text);
+            int ly = Math.round(cy + 11.0f);
+            for (int k = 0; k < line; k++) {
+                int fadeOut = Math.round(alpha * 0.8f * (1.0f - k / (float) Math.max(1, line)));
+                graphics.fill(Math.round(cx + half) + k, ly, Math.round(cx + half) + k + 1, ly + 1, ARGB.color(fadeOut, ink));
+                graphics.fill(Math.round(cx - half) - k - 1, ly, Math.round(cx - half) - k, ly + 1, ARGB.color(fadeOut, ink));
+            }
+            for (int side : new int[] {-1, 1}) {
+                int dx = Math.round(cx + side * (half - 6.0f));
+                graphics.fill(dx - 1, ly - 2, dx + 2, ly + 3, ARGB.color(alpha, ink));
+                graphics.fill(dx - 2, ly - 1, dx + 3, ly + 2, ARGB.color(alpha, ink));
+            }
+            io.github.sirschrolli.kingdomsatwar.client.hero.HeroGui.centered(graphics, font,
+                    net.minecraft.network.chat.Component.translatable("arena.kingdomsatwar.creation." + stage + ".subtitle"), cx, cy + 30.0f,
+                    ARGB.color(Math.round(alpha * 0.85f), ink), 1.1f);
+        }
     }
 
     /**
@@ -204,7 +321,8 @@ public final class CreatorClient {
             return;
         }
         boolean truly = boss.isTrueForm() || boss.currentAttack() == Attack.ASCEND && boss.attackTime(0.0f) > SchrolliEntity.ASCEND_REVEAL;
-        event.overrideMusic(truly ? TRUE : BATTLE);
+        boolean almighty = boss.isAlmighty() || boss.currentAttack() == Attack.TRANSCEND && boss.attackTime(0.0f) > SchrolliEntity.TRANSCEND_SHIFT;
+        event.overrideMusic(almighty ? ALMIGHTY : truly ? TRUE : BATTLE);
     }
 
     /** Ist der Spieler in der Schöpfung? */

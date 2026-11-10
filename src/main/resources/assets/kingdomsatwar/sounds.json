@@ -8227,6 +8227,14 @@
       }
     ]
   },
+  "music.creation_almighty": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:music/creation_almighty",
+        "stream": true
+      }
+    ]
+  },
   "music.creation_battle": {
     "sounds": [
       {

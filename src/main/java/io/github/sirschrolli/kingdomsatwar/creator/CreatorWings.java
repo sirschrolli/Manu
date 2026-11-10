@@ -38,6 +38,11 @@ public final class CreatorWings {
         return entity.getItemBySlot(EquipmentSlot.CHEST).is(CreatorBlocks.CREATOR_WINGS.get());
     }
 
+    /** Abklingzeit des Schwingenschlags: als Ebenbild des Schöpfers (alle drei Teile) nur halb so lang. */
+    public static int cooldown(LivingEntity entity) {
+        return CreatorGear.image(entity) ? BOOST_COOLDOWN / 2 : BOOST_COOLDOWN;
+    }
+
     /** Geschwindigkeit nach einem Schlag: kräftig in Blickrichtung, dazu ein wenig Auftrieb. */
     public static Vec3 boostVelocity(Vec3 motion, Vec3 look) {
         Vec3 next = motion.add(look.scale(1.55)).add(0.0, 0.12, 0.0);
@@ -53,7 +58,7 @@ public final class CreatorWings {
         if (player.getCooldowns().isOnCooldown(chest)) {
             return false;
         }
-        player.getCooldowns().addCooldown(chest, BOOST_COOLDOWN);
+        player.getCooldowns().addCooldown(chest, cooldown(player));
         player.resetFallDistance();
         ServerLevel level = player.level();
         level.playSound(player, player.getX(), player.getY(), player.getZ(), ModSounds.SCHROLLI_WINGS.get(), SoundSource.PLAYERS, 1.2f, 1.1f);

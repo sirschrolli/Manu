@@ -78,8 +78,8 @@ import org.jspecify.annotations.Nullable;
  * und Gold mit sechs Schwingen, Heiligenschein, Lichtkrone, Zepter und Weltkugel. Er wird am Altar des Schöpfers gerufen
  * und zieht seine Herausforderer in seinen eigenen Hof, die Schöpfung.
  *
- * <p>Er kämpft in zwei Gestalten, jede mit einer eigenen, vollen Leiste (je 3.200 Lebenspunkte, mehr als jeder andere
- * Gegner – mit jedem weiteren Spieler ein Viertel mehr):
+ * <p>Er kämpft in drei Gestalten (seit 0.78), jede mit einer eigenen, vollen Leiste (je 3.200 Lebenspunkte, mehr als
+ * jeder andere Gegner – mit jedem weiteren Spieler ein Viertel mehr), und mit jeder Gestalt wechselt sein Hof:
  * <ol>
  *     <li><b>Schrolli der Schöpfer</b> – sechzehn Künste: Lichtspeere, Heiligenschein-Klinge, Säulen des Lichts,
  *     Sternenregen, Zepterschlag, Strahl der Schöpfung, Weltkugel, Federsturm, Göttliches Urteil, Seraphim, Lichtsprung,
@@ -87,8 +87,14 @@ import org.jspecify.annotations.Nullable;
  *     <li>statt zu sterben zerbricht seine Gestalt, und er steigt als <b>Wahre Gestalt</b> wieder auf (wie Anni 2.0): das
  *     Gewand ein Weltall, schillernde Schwingen, zwei Räder voller Augen um ihn, größer, schneller, härter – mit zehn
  *     weiteren Künsten: Weltenwurf, Supernova, Urknall, Sternbild, Doppelklinge, Jüngstes Gericht, Augenstrahlen,
- *     Kometensturz, Weltenriss und Neuschöpfung.</li>
+ *     Kometensturz, Weltenriss und Neuschöpfung. Der Hof zerbricht dabei: Man kämpft nun auf dem <b>Firmament</b>;</li>
+ *     <li>besiegt man auch die Wahre Gestalt, verschlingt ein Schwarzes Loch alles Licht – und aus ihm geht
+ *     <b>Schrolli der Allmächtige</b> hervor (seit 0.78): das Gewand eine glühende Sonne, drei Räder, ein Kranz aus
+ *     Flammen, noch größer, noch schneller, noch härter. Er reißt seine Herausforderer ins <b>Herz der Sonne</b> und kämpft
+ *     mit sechs eigenen Künsten: Sonnensturz, Prismenkäfig, Klingenkranz, Sonneneruption, Sonnenspalter (am Boden) und
+ *     dem Gericht der Sonne (zweimal, zu seiner Zeit).</li>
  * </ol>
+ * Seit 0.78 kennt schon die erste Gestalt den Lichtkäfig, ab der Wahren Gestalt öffnet er Schwarze Löcher.
  * Seit 0.76 kämpft er nicht nur aus der Luft: Immer wieder <b>landet</b> er (Warnkreis, Einschlag, Ring – springen!),
  * aus dem Licht seines Saums formen sich Beine in goldenen Beinschienen, und sein Zepter wird zur <b>Klinge aus Licht</b>.
  * Am Boden schreitet er auf sein Ziel zu und ficht: Klingenhieb (eine Folge von Hieben, zuletzt ein Spaltschlag),
@@ -106,8 +112,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     public static final float DESIGNED_HEALTH = 3200.0f;
     /** Erfahrung beim Sieg (fest, wie bei den anderen großen Gegnern). */
     public static final int XP_REWARD = 1000;
-    /** Um so viel wächst er in der Wahren Gestalt. */
+    /** Um so viel wächst er in der Wahren Gestalt – und als Allmächtiger noch einmal. */
     public static final double TRUE_GROWTH = 0.3;
+    public static final double ALMIGHTY_GROWTH = 0.25;
     public static final int AWAKEN_TICKS = 150;
     public static final int AWAKEN_LAND = 92;
     public static final int ASCEND_TICKS = 230;
@@ -118,6 +125,28 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     public static final int ASCEND_FILLED = 180;
     /** … und hier rollt die Welle los. */
     public static final int ASCEND_BLAST = 190;
+    /**
+     * Mit der Wahren Gestalt wechselt der Hof: ein weißes Licht hüllt alles ein (von hier bis voll), in ihm entsteht das
+     * Firmament, dann klärt es sich wieder (von hier bis klar) – siehe CreatorClient.
+     */
+    public static final int ASCEND_WHITE = 74;
+    public static final int ASCEND_SHIFT = 88;
+    public static final int ASCEND_CLEAR = 106;
+    /**
+     * Der Weg zum Allmächtigen (seit 0.78): ein Schwarzes Loch verschlingt ihn (bis hier), gleißendes Licht hüllt alles ein,
+     * in ihm wird der Hof zum Herzen der Sonne, das Licht klärt sich; aus der Sonne tritt der Allmächtige, seine Leiste
+     * füllt sich, und eine Flammenwelle rollt über das Herz der Sonne.
+     */
+    public static final int TRANSCEND_TICKS = 290;
+    public static final int TRANSCEND_COLLAPSE = 84;
+    public static final int TRANSCEND_WHITE = 88;
+    public static final int TRANSCEND_SHIFT = 104;
+    public static final int TRANSCEND_CLEAR = 130;
+    public static final int TRANSCEND_REVEAL = 150;
+    public static final int TRANSCEND_FILLED = 226;
+    public static final int TRANSCEND_BLAST = 240;
+    /** Gericht der Sonne: hier zerbirst die Sonne über dem ganzen Hof (nur in den vier Lichtkreisen ist man sicher). */
+    public static final int SOLAR_FINAL = 214;
     public static final int DEATH_TICKS = 260;
     /** Die Zeit steht still: hier erstarren alle, hier läuft sie weiter (Ticks der Kunst). */
     public static final int TIME_FREEZE = 20;
@@ -175,6 +204,26 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         /** Gegenschlag: nach einer Parade (Schwingenwehr). */
         COUNTER(30),
         WORLD_BLADE(134),
+        // ---------------------------------------------------------------- seit 0.78
+        /** Der Weg zum Allmächtigen: ein Zustand wie der Aufstieg (Schwarzes Loch, das Herz der Sonne, die dritte Leiste). */
+        TRANSCEND(TRANSCEND_TICKS),
+        /** Lichtkäfig: Gitter aus Licht um jeden Gegner – wer nicht hinausspringt, ehe sie sich schließen, verbrennt. */
+        LIGHT_CAGE(100),
+        /** Schwarzes Loch (ab der Wahren Gestalt): zieht alles zu sich; im Kern zermalmt es, und am Ende zerbirst es. */
+        BLACK_HOLE(150),
+        // ---------------------------------------------------------------- nur der Allmächtige
+        /** Sonnensturz: kleine Sonnen stürzen nacheinander auf leuchtende Kreise und hinterlassen Glut. */
+        SUNFALL(132),
+        /** Prismenkäfig: sechs Prismen umkreisen den Hof, Strahlen spannen sich zwischen ihnen und drehen sich (springen!). */
+        PRISM(176),
+        /** Klingenkranz: ein Kranz aus Speeren um jeden Gegner, mit einer Lücke – dann stoßen alle zugleich hinein. */
+        BLADES(112),
+        /** Sonneneruption: Wände aus Glut wandern über den Hof, jede mit einer Lücke. */
+        FLARE(124),
+        /** Gericht der Sonne (zu seiner Zeit, zweimal): außen, innen, außen – und am Ende schützen nur vier Lichtkreise. */
+        SOLAR_JUDGMENT(236),
+        /** Sonnenspalter (am Boden): ein gewaltiger Hieb, der eine Spalte aus Glut über den Hof reißt. */
+        SUN_CLEAVE(84),
         // ---------------------------------------------------------------- Zustände
         STUNNED(80),
         EXIT(64);
@@ -185,18 +234,30 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             this.duration = duration;
         }
 
-        /** Gehört diese Kunst nur der Wahren Gestalt? */
+        /** Gehört diese Kunst nur der Wahren Gestalt (oder dem Allmächtigen)? */
         public boolean trueOnly() {
-            return this.ordinal() >= PLANETS.ordinal() && this.ordinal() <= RECREATION.ordinal() || this == WORLD_BLADE;
+            return this.ordinal() >= PLANETS.ordinal() && this.ordinal() <= RECREATION.ordinal() || this == WORLD_BLADE || this == BLACK_HOLE
+                    || this.almightyOnly();
+        }
+
+        /** Gehört diese Kunst nur dem Allmächtigen (seit 0.78)? */
+        public boolean almightyOnly() {
+            return this.ordinal() >= SUNFALL.ordinal() && this.ordinal() <= SUN_CLEAVE.ordinal();
         }
 
         public boolean isArt() {
-            return this.ordinal() >= LANCES.ordinal() && this.ordinal() <= RECREATION.ordinal() || this.melee() && this != COUNTER;
+            return this.ordinal() >= LANCES.ordinal() && this.ordinal() <= RECREATION.ordinal() || this.melee() && this != COUNTER
+                    || this.ordinal() >= LIGHT_CAGE.ordinal() && this.ordinal() <= SOLAR_JUDGMENT.ordinal();
         }
 
         /** Eine Kunst am Boden, mit der Klinge (auch der Gegenschlag). */
         public boolean melee() {
-            return this.ordinal() >= STRIKE.ordinal() && this.ordinal() <= WORLD_BLADE.ordinal();
+            return this.ordinal() >= STRIKE.ordinal() && this.ordinal() <= WORLD_BLADE.ordinal() || this == SUN_CLEAVE;
+        }
+
+        /** Aufstieg oder der Weg zum Allmächtigen: ein Wechsel der Gestalt (unverwundbar, schwebend). */
+        public boolean shift() {
+            return this == ASCEND || this == TRANSCEND;
         }
     }
 
@@ -218,7 +279,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     private static final EntityDataAccessor<Integer> DATA_ATTACK = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_TRUE = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_FLAGS = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> DATA_ALMIGHTY = SynchedEntityData.defineId(SchrolliEntity.class, EntityDataSerializers.BOOLEAN);
     private static final Identifier GROWTH_ID = KingdomsAtWar.id("schrolli_true_form");
+    private static final Identifier ALMIGHTY_ID = KingdomsAtWar.id("schrolli_almighty");
     private static final Identifier PARTY_ID = KingdomsAtWar.id("schrolli_party");
 
     private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), Component.translatable("boss.kingdomsatwar.schrolli"),
@@ -233,8 +296,14 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     /** Der Altar, an den er gebunden ist, und die Mitte seines Hofs. */
     private @Nullable BlockPos altar;
     private @Nullable Vec3 center;
-    /** Ist er schon (oder gerade) in die Wahre Gestalt aufgestiegen? Dann stirbt er beim nächsten Mal wirklich. */
+    /** Ist er schon (oder gerade) in die Wahre Gestalt aufgestiegen? */
     private boolean ascended;
+    /** Ist er schon (oder gerade) zum Allmächtigen geworden? Dann stirbt er beim nächsten Mal wirklich. */
+    private boolean transcended;
+    /** Das Gericht der Sonne (bei zwei Dritteln und einem Viertel) – schon geschehen? */
+    boolean solarDone;
+    boolean solarDone2;
+    private boolean said50Almighty;
     private boolean said70;
     private boolean said40;
     private boolean said50True;
@@ -312,6 +381,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         builder.define(DATA_ATTACK, 0);
         builder.define(DATA_TRUE, false);
         builder.define(DATA_FLAGS, (byte) 0);
+        builder.define(DATA_ALMIGHTY, false);
     }
 
     // ------------------------------------------------------------------ Zustand
@@ -321,9 +391,19 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         return i >= 0 && i < Attack.values().length ? Attack.values()[i] : Attack.NONE;
     }
 
-    /** Die Wahre Gestalt (nach dem Aufstieg). */
+    /** Die Wahre Gestalt (nach dem Aufstieg; auch der Allmächtige ist es noch). */
     public boolean isTrueForm() {
         return this.entityData.get(DATA_TRUE);
+    }
+
+    /** Schrolli der Allmächtige – die dritte Gestalt (seit 0.78). */
+    public boolean isAlmighty() {
+        return this.entityData.get(DATA_ALMIGHTY);
+    }
+
+    /** Die Gestalt: 1 der Schöpfer, 2 die Wahre Gestalt, 3 der Allmächtige. */
+    public int phase() {
+        return this.isAlmighty() ? 3 : this.isTrueForm() ? 2 : 1;
     }
 
     public boolean hasFlag(int flag) {
@@ -351,13 +431,21 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         return this.isTrueForm() ? 1.0f : 0.0f;
     }
 
+    /** Wie weit der Weg zum Allmächtigen ist (0 – 1; auch im Client – für den Himmel und die Sonne). */
+    public float transcendence(float partialTicks) {
+        if (this.currentAttack() == Attack.TRANSCEND) {
+            return Mth.clamp((this.attackTime(partialTicks) - TRANSCEND_SHIFT) / (TRANSCEND_REVEAL - TRANSCEND_SHIFT), 0.0f, 1.0f);
+        }
+        return this.isAlmighty() ? 1.0f : 0.0f;
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (DATA_ATTACK.equals(key)) {
             this.clientAttackStart = this.tickCount;
         }
-        if (DATA_TRUE.equals(key)) {
+        if (DATA_TRUE.equals(key) || DATA_ALMIGHTY.equals(key)) {
             this.refreshDimensions();
         }
     }
@@ -432,7 +520,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.setFlag(FLAG_GROUND, on);
         this.stanceArts = 0;
         if (on) {
-            this.stanceBudget = 3 + this.random.nextInt(2) + (this.isTrueForm() ? 1 : 0);
+            this.stanceBudget = 3 + this.random.nextInt(2) + (this.isTrueForm() ? 1 : 0) + (this.isAlmighty() ? 1 : 0);
         } else {
             this.airArts = 0;
         }
@@ -443,6 +531,26 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.ascended = true;
         this.becomeTrue();
         this.setHealth(this.getMaxHealth());
+    }
+
+    /** Sofort der Allmächtige mit voller Leiste (für Tests und die Vorführung). */
+    public void forceAlmighty() {
+        this.ascended = true;
+        this.transcended = true;
+        this.becomeTrue();
+        this.becomeAlmighty();
+        this.setHealth(this.getMaxHealth());
+    }
+
+    /** Der Allmächtige: noch größer, neue Leiste, neuer Name. */
+    void becomeAlmighty() {
+        this.entityData.set(DATA_ALMIGHTY, true);
+        AttributeInstance scale = this.getAttribute(Attributes.SCALE);
+        if (scale != null && !scale.hasModifier(ALMIGHTY_ID)) {
+            scale.addPermanentModifier(new AttributeModifier(ALMIGHTY_ID, ALMIGHTY_GROWTH, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+        }
+        this.refreshDimensions();
+        this.nameBossBar();
     }
 
     /** Die Wahre Gestalt: größer, neue Leiste, neuer Name. */
@@ -460,9 +568,11 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (this.hasCustomName()) {
             this.bossBar.setName(this.getDisplayName());
         } else {
-            this.bossBar.setName(Component.translatable(this.isTrueForm() ? "boss.kingdomsatwar.schrolli_true" : "boss.kingdomsatwar.schrolli"));
+            this.bossBar.setName(Component.translatable(this.isAlmighty() ? "boss.kingdomsatwar.schrolli_almighty"
+                    : this.isTrueForm() ? "boss.kingdomsatwar.schrolli_true" : "boss.kingdomsatwar.schrolli"));
         }
-        this.bossBar.setColor(this.isTrueForm() ? BossEvent.BossBarColor.PURPLE : BossEvent.BossBarColor.YELLOW);
+        this.bossBar.setColor(this.isAlmighty() ? BossEvent.BossBarColor.RED : this.isTrueForm() ? BossEvent.BossBarColor.PURPLE
+                : BossEvent.BossBarColor.YELLOW);
     }
 
     void begin(Attack next) {
@@ -488,8 +598,8 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (next != Attack.STUNNED) {
             this.setFlag(FLAG_STUN, false);
         }
-        // Erscheinen, Aufstieg, Gehen und Taumeln geschehen schwebend
-        if (this.grounded && (next == Attack.AWAKEN || next == Attack.ASCEND || next == Attack.EXIT || next == Attack.STUNNED)) {
+        // Erscheinen, Aufstieg, der Weg zum Allmächtigen, Gehen und Taumeln geschehen schwebend
+        if (this.grounded && (next == Attack.AWAKEN || next.shift() || next == Attack.EXIT || next == Attack.STUNNED)) {
             this.setGrounded(false);
         }
     }
@@ -592,10 +702,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.nameBossBar();
     }
 
-    /** Unverwundbar beim Erscheinen, Aufsteigen, Gehen, im Lichtsprung und solange die Zeit stillsteht. */
+    /** Unverwundbar beim Erscheinen, Aufsteigen, auf dem Weg zum Allmächtigen, Gehen, im Lichtsprung und solange die Zeit stillsteht. */
     boolean untouchable() {
         Attack a = this.attack;
-        return a == Attack.AWAKEN || a == Attack.ASCEND || a == Attack.EXIT || this.hasFlag(FLAG_HIDDEN)
+        return a == Attack.AWAKEN || a.shift() || a == Attack.EXIT || this.hasFlag(FLAG_HIDDEN)
                 || a == Attack.TIMESTOP && this.attackTick >= SchrolliAttacks.TIME_FREEZE && this.attackTick < SchrolliAttacks.TIME_RESUME;
     }
 
@@ -629,8 +739,8 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
                 amount *= 1.3f;
             }
         }
-        // die Räder der Wahren Gestalt lenken manches Geschoss ab
-        if (this.isTrueForm() && source.getDirectEntity() instanceof Projectile shot && this.random.nextFloat() < 0.15f) {
+        // die Räder der Wahren Gestalt lenken manches Geschoss ab (die drei des Allmächtigen noch mehr)
+        if (this.isTrueForm() && source.getDirectEntity() instanceof Projectile shot && this.random.nextFloat() < (this.isAlmighty() ? 0.25f : 0.15f)) {
             this.deflect(level, shot);
             return false;
         }
@@ -734,7 +844,17 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             level.addParticle(io.github.sirschrolli.kingdomsatwar.registry.ModParticles.DIVINE_FEATHER.get(), this.getRandomX(1.5),
                     this.getY(0.4 + this.random.nextDouble() * 0.4), this.getRandomZ(1.5), 0.0, -0.02, 0.0);
         }
-        if (this.isTrueForm() && this.random.nextInt(2) == 0) {
+        if (this.isAlmighty()) {
+            // der Allmächtige glüht: Funken und Flammen steigen von ihm auf
+            if (this.random.nextInt(2) == 0) {
+                level.addParticle(this.random.nextInt(3) == 0 ? ParticleTypes.FLAME : ParticleTypes.END_ROD, this.getRandomX(2.4),
+                        this.getY(this.random.nextDouble()), this.getRandomZ(2.4), 0.0, 0.04, 0.0);
+            }
+            if (this.random.nextInt(4) == 0) {
+                level.addParticle(ParticleTypes.LAVA, this.getRandomX(1.6), this.getY(0.3 + this.random.nextDouble() * 0.5), this.getRandomZ(1.6),
+                        0.0, 0.0, 0.0);
+            }
+        } else if (this.isTrueForm() && this.random.nextInt(2) == 0) {
             level.addParticle(this.random.nextBoolean() ? ParticleTypes.END_ROD : ParticleTypes.REVERSE_PORTAL, this.getRandomX(2.2),
                     this.getY(this.random.nextDouble()), this.getRandomZ(2.2), 0.0, 0.0, 0.0);
         }
@@ -773,6 +893,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             }
             case ASCEND -> {
                 this.tickAscend(level);
+                return;
+            }
+            case TRANSCEND -> {
+                this.tickTranscend(level);
                 return;
             }
             case EXIT -> {
@@ -844,10 +968,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         }
         this.begin(Attack.NONE);
         float k = this.getHealth() / this.getMaxHealth();
-        int base = this.isTrueForm() ? 12 : k > 0.7f ? 30 : k > 0.4f ? 22 : 16;
+        int base = this.isAlmighty() ? 8 : this.isTrueForm() ? 12 : k > 0.7f ? 30 : k > 0.4f ? 22 : 16;
         // am Boden folgen die Hiebe dichter aufeinander
         if (this.grounded) {
-            base = this.isTrueForm() ? 8 : k > 0.7f ? 18 : 12;
+            base = this.isAlmighty() ? 5 : this.isTrueForm() ? 8 : k > 0.7f ? 18 : 12;
         }
         this.cooldown = base + this.random.nextInt(done == Attack.DESCEND ? 6 : 12);
     }
@@ -878,18 +1002,35 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
                 this.said40 = true;
                 this.say(level, "enough");
             }
-        } else if (!this.said50True && k < 0.5f) {
+        } else if (!this.isAlmighty() && !this.said50True && k < 0.5f) {
             this.said50True = true;
             this.say(level, "stars");
+        } else if (this.isAlmighty() && !this.said50Almighty && k < 0.5f) {
+            this.said50Almighty = true;
+            this.say(level, "sun_heart");
         }
     }
 
-    /** Künste, die zu ihrer Zeit kommen müssen: Supernova (60 %), Jüngstes Gericht (45 %), Neuschöpfung (25 %). */
+    /**
+     * Künste, die zu ihrer Zeit kommen müssen: in der Wahren Gestalt Supernova (60 %), Jüngstes Gericht (45 %) und
+     * Neuschöpfung (25 %); als Allmächtiger das Gericht der Sonne (bei zwei Dritteln und bei einem Viertel).
+     */
     private @Nullable Attack forcedArt() {
         if (!this.isTrueForm()) {
             return null;
         }
         float k = this.getHealth() / this.getMaxHealth();
+        if (this.isAlmighty()) {
+            if (!this.solarDone && k < 0.66f) {
+                this.solarDone = true;
+                return Attack.SOLAR_JUDGMENT;
+            }
+            if (!this.solarDone2 && k < 0.25f) {
+                this.solarDone2 = true;
+                return Attack.SOLAR_JUDGMENT;
+            }
+            return null;
+        }
         if (!this.novaDone && k < 0.6f) {
             this.novaDone = true;
             return Attack.SUPERNOVA;
@@ -911,6 +1052,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             return false;
         }
         float k = this.getHealth() / this.getMaxHealth();
+        if (this.isAlmighty()) {
+            return !this.solarDone && k < 0.66f || !this.solarDone2 && k < 0.25f;
+        }
         return !this.novaDone && k < 0.6f || !this.apocalypseDone && k < 0.45f || !this.recreationDone && k < 0.25f;
     }
 
@@ -947,6 +1091,21 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             if (this.sinceTimestop > 6) {
                 add(pool, Attack.TIMESTOP, 1);
             }
+        }
+        // seit 0.78: der Lichtkäfig (ab 85 %), ab der Wahren Gestalt das Schwarze Loch
+        if (k < 0.85f || truly) {
+            add(pool, Attack.LIGHT_CAGE, 2);
+        }
+        if (truly) {
+            add(pool, Attack.BLACK_HOLE, 1);
+        }
+        if (this.isAlmighty()) {
+            // der Allmächtige: vor allem seine eigenen Künste
+            add(pool, Attack.SUNFALL, 4);
+            add(pool, Attack.PRISM, 3);
+            add(pool, Attack.BLADES, 4);
+            add(pool, Attack.FLARE, 4);
+            add(pool, Attack.BLACK_HOLE, 1);
         }
         if (truly) {
             add(pool, Attack.PLANETS, 3);
@@ -994,6 +1153,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         }
         if (truly && this.stanceArts >= 1) {
             add(pool, Attack.WORLD_BLADE, 2);
+        }
+        if (this.isAlmighty()) {
+            add(pool, Attack.SUN_CLEAVE, this.stanceArts >= 1 ? 4 : 2);
         }
         pool.removeIf(a -> this.recent.stream().limit(2).anyMatch(r -> r == a));
         if (pool.isEmpty()) {
@@ -1078,9 +1240,9 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         return victim.hurtServer(level, source, amount * this.power());
     }
 
-    /** In der Wahren Gestalt trifft alles härter. */
+    /** In der Wahren Gestalt trifft alles härter, als Allmächtiger noch härter. */
     float power() {
-        return this.isTrueForm() ? 1.35f : 1.0f;
+        return this.isAlmighty() ? 1.6f : this.isTrueForm() ? 1.35f : 1.0f;
     }
 
     /** Stößt ein Wesen von {@code from} fort. */
@@ -1115,7 +1277,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (flat > 60.0) {
             want = new Vec3(c.x + off.x / flat * 60.0, want.y, c.z + off.z / flat * 60.0);
         }
-        this.steer(want, 0.06, this.isTrueForm() ? 0.85 : 0.65);
+        this.steer(want, 0.06, this.isAlmighty() ? 1.0 : this.isTrueForm() ? 0.85 : 0.65);
     }
 
     /** Hält die Füße am Boden (am Boden: jeden Takt nach der Bewegung). */
@@ -1213,7 +1375,8 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     /** Eine Zeile Schrollis, für alle im Hof (im Chat, golden), dazu ein Chorakkord. */
     void say(ServerLevel level, String line) {
         Component text = Component.empty()
-                .append(Component.translatable("boss.kingdomsatwar.schrolli.speaker").withColor(this.isTrueForm() ? 0xD8A8FF : 0xFFD24A)
+                .append(Component.translatable("boss.kingdomsatwar.schrolli.speaker").withColor(this.isAlmighty() ? 0xFF9A3A
+                        : this.isTrueForm() ? 0xD8A8FF : 0xFFD24A)
                         .withStyle(ChatFormatting.BOLD))
                 .append(Component.literal(" "))
                 .append(Component.translatable("entity.kingdomsatwar.schrolli.line." + line).withColor(0xFFF2C4).withStyle(ChatFormatting.ITALIC));
@@ -1222,7 +1385,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
                 player.sendSystemMessage(text);
             }
         }
-        this.sound(level, ModSounds.SCHROLLI_VOICE.get(), 4.0f, this.isTrueForm() ? 0.8f : 1.0f);
+        this.sound(level, ModSounds.SCHROLLI_VOICE.get(), 4.0f, this.isAlmighty() ? 0.7f : this.isTrueForm() ? 0.8f : 1.0f);
     }
 
     /** Beim ersten Mal ein paar Worte (Landung, Weltenklinge). */
@@ -1344,6 +1507,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
             this.sound(level, ModSounds.SCHROLLI_BLAST.get(), 6.0f, 0.6f);
             this.sun = DivineShotEntity.sun(level, this, heart, 1.4f);
         }
+        if (t == ASCEND_SHIFT) {
+            // im weißen Licht zerbricht der Hof – man steht auf dem Firmament
+            this.shiftArena(level, io.github.sirschrolli.kingdomsatwar.arena.CreatorStages.Stage.FIRMAMENT, 18.0);
+        }
         if (t > ASCEND_SHATTER && t < ASCEND_REVEAL) {
             if (this.sun != null) {
                 this.sun.setVisualScale(1.4f + (t - ASCEND_SHATTER) / (float) (ASCEND_REVEAL - ASCEND_SHATTER) * 2.4f);
@@ -1392,6 +1559,162 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (t >= ASCEND_TICKS) {
             this.begin(Attack.NONE);
             this.cooldown = 16;
+        }
+    }
+
+    /**
+     * Der Hof wechselt (im weißen Licht, seit 0.78): Nur in der Schöpfung, an einem Abbild des Altars, wird die neue Bühne
+     * gebaut (siehe CreatorStages); alle Gegner stehen danach am Rand der neuen Bühne, den Blick zur Mitte, und er schwebt
+     * {@code height} Blöcke über ihrer Mitte. Gibt zurück, ob die Bühne gewechselt hat.
+     */
+    boolean shiftArena(ServerLevel level, io.github.sirschrolli.kingdomsatwar.arena.CreatorStages.Stage stage, double height) {
+        Vec3 c = this.center();
+        BlockPos middle = BlockPos.containing(c);
+        List<LivingEntity> moved = new ArrayList<>(this.enemies(level));
+        boolean changed = false;
+        if (this.altar != null && io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.isArena(level)
+                && level.getBlockEntity(this.altar) instanceof CreatorAltarBlockEntity altarBe && altarBe.isArenaReplica()) {
+            io.github.sirschrolli.kingdomsatwar.arena.CreatorStages.transform(level, middle, stage, this.altar);
+            changed = true;
+        }
+        this.setPos(c.x, c.y + height, c.z);
+        this.setDeltaMovement(Vec3.ZERO);
+        if (this.sun != null) {
+            this.sun.setPos(c.x, c.y + height + 3.0, c.z);
+        }
+        if (changed) {
+            List<Vec3> spots = io.github.sirschrolli.kingdomsatwar.arena.BossArenaBuilder.spawnPoints(level, middle,
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.CREATOR, Math.max(1, moved.size()));
+            for (int i = 0; i < moved.size(); i++) {
+                LivingEntity e = moved.get(i);
+                Vec3 spot = spots.get(i % spots.size());
+                float yaw = (float) DivineFx.yaw(spot, c);
+                e.teleportTo(level, spot.x, spot.y, spot.z, Set.of(), yaw, 0.0f, true);
+                e.setDeltaMovement(Vec3.ZERO);
+                e.resetFallDistance();
+                e.needsSync = true;
+            }
+        }
+        return changed;
+    }
+
+    /**
+     * Der Weg zum Allmächtigen (seit 0.78): Er schwebt empor, über ihm öffnet sich ein Schwarzes Loch und verschlingt alles
+     * Licht – zuletzt ihn selbst. Gleißendes Licht hüllt alles ein, in ihm wird der Hof zum Herzen der Sonne; aus einer
+     * Sonne tritt der Allmächtige hervor, die dritte Leiste füllt sich, und eine Flammenwelle rollt über das Herz der Sonne
+     * (springen!).
+     */
+    private void tickTranscend(ServerLevel level) {
+        int t = ++this.attackTick;
+        Vec3 c = this.center();
+        Vec3 hole = c.add(0.0, 30.0, 0.0);
+        if (t == 1) {
+            this.sound(level, ModSounds.SCHROLLI_ASCEND.get(), 6.0f, 0.6f);
+            this.say(level, "transcend");
+            this.discardMinions(level);
+            this.setFlag(FLAG_HALO, false);
+            this.setFlag(FLAG_ORB, false);
+            this.markFx = DivineFx.fx(level, SpellFxEntity.Kind.VORTEX, hole, DivineFx.COSMIC, TRANSCEND_COLLAPSE + 8, 2.0f).spawn();
+        }
+        if (t < TRANSCEND_COLLAPSE) {
+            float k = t / (float) TRANSCEND_COLLAPSE;
+            this.steer(c.add(0.0, 20.0 + 8.0 * k, 0.0), 0.05, 0.35);
+            if (this.markFx != null && !this.markFx.isRemoved()) {
+                this.markFx.setSize(2.0f + 10.0f * k * k);
+            }
+            if (t % 2 == 0) {
+                // das Licht des Hofs strömt hinauf in das Loch
+                DivineFx.gather(level, hole, 18.0 + 10.0 * k, 10);
+                level.sendParticles(ParticleTypes.REVERSE_PORTAL, hole.x, hole.y, hole.z, 20, 6.0, 3.0, 6.0, 0.2);
+            }
+            if (t % 20 == 0) {
+                this.sound(level, ModSounds.SCHROLLI_CHARGE.get(), 4.0f, 0.4f + k * 0.4f);
+                DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, this.ground(c).add(0.0, 0.06, 0.0), DivineFx.COSMIC, 20, 38.0f).spawn();
+            }
+            // der Sog: wer im Hof ist, wird sanft zur Mitte gezogen (ohne Schaden)
+            if (t > 40 && t % 2 == 0) {
+                for (LivingEntity e : this.enemies(level)) {
+                    Vec3 to = c.subtract(e.position()).multiply(1.0, 0.0, 1.0);
+                    if (to.lengthSqr() > 9.0) {
+                        Vec3 pull = to.normalize().scale(0.006 * (t - 40));
+                        e.push(pull.x, 0.0, pull.z);
+                        e.needsSync = true;
+                    }
+                }
+            }
+        }
+        if (t == TRANSCEND_COLLAPSE) {
+            // das Loch verschlingt ihn – ein Blitz, dann nur noch Licht
+            this.setFlag(FLAG_HIDDEN, true);
+            DivineFx.flash(level, this.position().add(0.0, 4.0, 0.0), DivineFx.COSMIC);
+            DivineFx.flash(level, hole, DivineFx.WHITE);
+            DivineFx.sparks(level, hole, 300, 6.0, 0.6);
+            this.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 7.0f, 0.5f);
+            if (this.markFx != null && !this.markFx.isRemoved()) {
+                this.markFx.discard();
+            }
+            this.markFx = null;
+        }
+        if (t == TRANSCEND_SHIFT) {
+            this.shiftArena(level, io.github.sirschrolli.kingdomsatwar.arena.CreatorStages.Stage.SUN_HEART, 16.0);
+            this.sun = DivineShotEntity.sun(level, this, this.position().add(0.0, 4.0, 0.0), 0.8f);
+        }
+        if (t > TRANSCEND_SHIFT && t < TRANSCEND_REVEAL) {
+            float k = (t - TRANSCEND_SHIFT) / (float) (TRANSCEND_REVEAL - TRANSCEND_SHIFT);
+            if (this.sun != null) {
+                this.sun.setVisualScale(0.8f + k * 4.4f);
+            }
+            this.setDeltaMovement(Vec3.ZERO);
+            if (t % 2 == 0) {
+                DivineFx.gather(level, this.position().add(0.0, 4.0, 0.0), 16.0, 10);
+            }
+            if (t % 12 == 0) {
+                DivineFx.flash(level, this.position().add(0.0, 4.0, 0.0), DivineFx.EMBER);
+            }
+        }
+        if (t == TRANSCEND_REVEAL) {
+            if (this.sun != null) {
+                this.sun.discard();
+                this.sun = null;
+            }
+            this.becomeAlmighty();
+            this.setHealth(1.0f);
+            this.setFlag(FLAG_HIDDEN, false);
+            Vec3 heart = this.position().add(0.0, 4.0, 0.0);
+            DivineFx.flash(level, heart, DivineFx.EMBER);
+            DivineFx.flash(level, heart, DivineFx.GOLD);
+            DivineFx.flash(level, heart, DivineFx.WHITE);
+            DivineFx.sparks(level, heart, 400, 5.0, 0.5);
+            level.sendParticles(ParticleTypes.FLAME, heart.x, heart.y, heart.z, 160, 3.0, 3.0, 3.0, 0.25);
+            this.sound(level, ModSounds.SCHROLLI_SUPERNOVA.get(), 7.0f, 1.3f);
+            this.say(level, "almighty");
+            this.announce(level, Component.translatable("boss.kingdomsatwar.schrolli_almighty").withColor(0xFF9A3A).withStyle(ChatFormatting.BOLD),
+                    Component.translatable("boss.kingdomsatwar.schrolli_almighty.title").withColor(0xFFE8A0), 90);
+        }
+        if (t > TRANSCEND_REVEAL && t <= TRANSCEND_FILLED) {
+            float k = (t - TRANSCEND_REVEAL) / (float) (TRANSCEND_FILLED - TRANSCEND_REVEAL);
+            this.setHealth(Math.max(1.0f, this.getMaxHealth() * k));
+            if (t % 3 == 0) {
+                DivineFx.gather(level, this.position().add(0.0, 5.0, 0.0), 12.0, 6);
+            }
+        }
+        if (t == TRANSCEND_BLAST) {
+            this.setHealth(this.getMaxHealth());
+            this.sound(level, ModSounds.SCHROLLI_IMPACT.get(), 7.0f, 0.5f);
+            Vec3 g = this.ground(this.position());
+            Set<UUID> hit = new HashSet<>();
+            SpellFxEntity wave = DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, g.add(0.0, 0.1, 0.0), DivineFx.EMBER, 54, 2.0f).param(0.95f);
+            wave.onTick(fx -> SchrolliAttacks.ringHits(this, level, fx, g.y, 16.0f, false, hit)).spawn();
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, g.add(0.0, 0.15, 0.0), DivineFx.GOLD, 48, 1.4f).param(0.9f).spawn();
+            DivineFx.flash(level, g.add(0.0, 1.0, 0.0), DivineFx.EMBER);
+        }
+        Player nearest = level.getNearestPlayer(this, 96.0);
+        if (nearest != null && t > TRANSCEND_REVEAL) {
+            this.face(nearest.position(), 8.0f);
+        }
+        if (t >= TRANSCEND_TICKS) {
+            this.begin(Attack.NONE);
+            this.cooldown = 14;
         }
     }
 
@@ -1464,18 +1787,21 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
     }
 
     /**
-     * Beim ersten tödlichen Treffer stirbt er nicht: er steigt in die Wahre Gestalt auf (nicht bei Schaden, der jede
-     * Unverwundbarkeit durchschlägt, etwa /kill). Beim zweiten Mal vergeht er wirklich.
+     * Beim ersten tödlichen Treffer stirbt er nicht: er steigt in die Wahre Gestalt auf; beim zweiten wird er zum
+     * Allmächtigen (seit 0.78) – nicht bei Schaden, der jede Unverwundbarkeit durchschlägt, etwa /kill. Erst beim dritten
+     * Mal vergeht er wirklich.
      */
     @Override
     public void die(DamageSource source) {
-        if (!this.ascended && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.level() instanceof ServerLevel level
-                && !this.isRemoved()) {
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && this.level() instanceof ServerLevel && !this.isRemoved()
+                && (!this.ascended || !this.transcended)) {
+            boolean first = !this.ascended;
             this.ascended = true;
+            this.transcended = !first;
             this.setHealth(1.0f);
             this.deathTime = 0;
             this.clearArtState();
-            this.begin(Attack.ASCEND);
+            this.begin(first ? Attack.ASCEND : Attack.TRANSCEND);
             return;
         }
         super.die(source);
@@ -1507,7 +1833,7 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         Vec3 heart = this.position().add(0.0, this.getBbHeight() * 0.55, 0.0);
         if (t % 8 == 0) {
             Vec3 at = heart.add((this.random.nextDouble() - 0.5) * 3.0, (this.random.nextDouble() - 0.5) * 4.0, (this.random.nextDouble() - 0.5) * 3.0);
-            DivineFx.flash(level, at, this.isTrueForm() ? DivineFx.COSMIC : DivineFx.HOLY);
+            DivineFx.flash(level, at, this.isAlmighty() ? DivineFx.EMBER : this.isTrueForm() ? DivineFx.COSMIC : DivineFx.HOLY);
             DivineFx.sparks(level, at, 20, 0.5, 0.15);
             this.sound(level, ModSounds.SCHROLLI_BLAST.get(), 1.5f + t / 100.0f, 1.4f - t / 400.0f);
         }
@@ -1616,6 +1942,10 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         }
         output.putBoolean("Ascended", this.ascended || this.attack == Attack.ASCEND);
         output.putBoolean("TrueForm", this.isTrueForm() || this.attack == Attack.ASCEND);
+        output.putBoolean("Transcended", this.transcended || this.attack == Attack.TRANSCEND);
+        output.putBoolean("Almighty", this.isAlmighty() || this.attack == Attack.TRANSCEND);
+        output.putBoolean("SolarDone", this.solarDone);
+        output.putBoolean("SolarDone2", this.solarDone2);
         output.putBoolean("NovaDone", this.novaDone);
         output.putBoolean("ApocalypseDone", this.apocalypseDone);
         output.putBoolean("RecreationDone", this.recreationDone);
@@ -1634,8 +1964,15 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         if (input.getBooleanOr("Grounded", false)) {
             this.setGrounded(true);
         }
+        this.transcended = input.getBooleanOr("Transcended", false);
+        this.solarDone = input.getBooleanOr("SolarDone", false);
+        this.solarDone2 = input.getBooleanOr("SolarDone2", false);
         if (input.getBooleanOr("TrueForm", false)) {
             this.becomeTrue();
+            this.setHealth(Math.max(this.getHealth(), 1.0f));
+        }
+        if (input.getBooleanOr("Almighty", false)) {
+            this.becomeAlmighty();
             this.setHealth(Math.max(this.getHealth(), 1.0f));
         }
         this.nameBossBar();

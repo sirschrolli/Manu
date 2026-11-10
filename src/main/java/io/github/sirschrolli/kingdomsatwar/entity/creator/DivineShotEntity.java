@@ -133,6 +133,22 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         return shot;
     }
 
+    /**
+     * Ein Speer des Klingenkranzes (seit 0.78): schwebt bei {@code at}, die Spitze auf {@code mark}, stößt nach
+     * {@code delay} Ticks dorthin und vergeht gleich dahinter (so bleibt die Lücke im Kranz ein sicherer Weg hinaus).
+     */
+    public static DivineShotEntity ringSpear(ServerLevel level, LivingEntity owner, Vec3 at, Vec3 mark, int delay, float damage, double speed) {
+        DivineShotEntity shot = make(level, owner, Kind.SPEAR, at, damage);
+        shot.setState(HOLD);
+        shot.launchAt = Math.max(1, delay);
+        shot.speed = speed;
+        shot.goal = mark;
+        shot.life = shot.launchAt + (int) Math.ceil(at.distanceTo(mark) / speed) + 2;
+        shot.lookAlong(mark.subtract(at));
+        level.addFreshEntity(shot);
+        return shot;
+    }
+
     /** Ein Lichtspeer, der sofort fliegt (das Zepter des Schöpfers). */
     public static DivineShotEntity thrownSpear(ServerLevel level, LivingEntity owner, Vec3 at, Vec3 dir, double speed, float damage) {
         DivineShotEntity shot = make(level, owner, Kind.SPEAR, at, damage);
@@ -169,6 +185,22 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         shot.life = 100;
         level.addFreshEntity(shot);
         return shot;
+    }
+
+    /**
+     * Eine kleine Sonne, die wie ein Stern auf {@code mark} stürzt (Sonnensturz des Allmächtigen, seit 0.78): Sie zerbirst
+     * in Glut und lässt glühende Erde zurück.
+     */
+    public static DivineShotEntity fallingSun(ServerLevel level, LivingEntity owner, Vec3 mark, double height, double speed, float damage,
+            double radius) {
+        DivineShotEntity shot = star(level, owner, mark, height, speed, damage, radius);
+        shot.entityData.set(DATA_VARIANT, (byte) PLANET_SUN);
+        return shot;
+    }
+
+    /** Ist dies eine stürzende Sonne (und kein Stern)? */
+    public boolean isFallingSun() {
+        return this.kind() == Kind.STAR && this.variant() == PLANET_SUN;
     }
 
     /** Ein Heiligenschein, der nach {@code to} saust und zu seinem Werfer zurückkehrt. */
@@ -381,8 +413,13 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
                 double travel = aim.distanceTo(this.position()) / this.speed;
                 Vec3 v = target.getDeltaMovement();
                 dir = aim.add(v.x * travel * 0.7, 0.0, v.z * travel * 0.7).subtract(this.position());
+            } else if (this.goal.distanceToSqr(this.position()) > 1.0e-4 && !this.goal.equals(Vec3.ZERO)) {
+                dir = this.goal.subtract(this.position());
             } else {
-                dir = Vec3.directionFromRotation(-this.getXRot(), this.getYRot());
+                // die Richtung, in die er zeigt (Gier wie bei Pfeilen: atan2(x, z))
+                float yaw = this.getYRot() * Mth.DEG_TO_RAD;
+                float pitch = this.getXRot() * Mth.DEG_TO_RAD;
+                dir = new Vec3(Mth.sin(yaw) * Mth.cos(pitch), Mth.sin(pitch), Mth.cos(yaw) * Mth.cos(pitch));
             }
             this.fly(dir, this.speed);
             DivineFx.sound(level, this.position(), ModSounds.SCHROLLI_SPEAR_FLY.get(), 1.4f, 0.9f + this.random.nextFloat() * 0.3f);
@@ -592,6 +629,25 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         }
     }
 
+    /** Glühende Erde nach dem Sturz einer Sonne: wer darin steht, brennt (drei Sekunden lang). */
+    private void scorch(ServerLevel level, Vec3 at) {
+        Vec3 ground = at.add(0.0, 0.06, 0.0);
+        DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), DivineFx.EMBER, 16, 1.5f).param(0.45f).spawn();
+        SpellFxEntity glow = DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, ground, DivineFx.AMBER, 60, 3.2f);
+        glow.onTick(fx -> {
+            if (fx.tickCount % 10 == 0) {
+                for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(at, at).inflate(3.2, 2.0, 3.2), this::canHurt)) {
+                    if (DivineFx.flat(e.position(), at) <= 3.2) {
+                        e.hurtServer(level, this.divineSource(level), 3.0f);
+                        e.igniteForSeconds(2.0f);
+                    }
+                }
+                level.sendParticles(ParticleTypes.FLAME, at.x, at.y + 0.2, at.z, 6, 1.8, 0.1, 1.8, 0.01);
+                level.sendParticles(ParticleTypes.LAVA, at.x, at.y + 0.2, at.z, 2, 1.2, 0.1, 1.2, 0.0);
+            }
+        }).spawn();
+    }
+
     /** Zerspringt in Licht: wer im Umkreis steht, wird getroffen und fortgestoßen. */
     private void burst(ServerLevel level, Vec3 at, double radius, int color) {
         DivineFx.flash(level, at, color);
@@ -676,7 +732,10 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         super.onHit(result);
         if (this.level() instanceof ServerLevel level && !this.isRemoved()) {
             Vec3 at = result.getLocation();
-            if (this.kind() == Kind.STAR) {
+            if (this.isFallingSun()) {
+                this.burst(level, at, this.radius, DivineFx.EMBER);
+                this.scorch(level, at);
+            } else if (this.kind() == Kind.STAR) {
                 this.burst(level, at, this.radius, DivineFx.GOLD);
             } else {
                 DivineFx.sparks(level, at, this.kind() == Kind.SPEAR ? 14 : 5, 0.2, 0.08);
@@ -701,6 +760,10 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         Vec3 v = this.getDeltaMovement();
         switch (kind) {
             case SPEAR, STAR -> {
+                if (kind == Kind.STAR && this.variant() == PLANET_SUN) {
+                    level.addParticle(ParticleTypes.FLAME, this.getRandomX(0.6), this.getRandomY(), this.getRandomZ(0.6), -v.x * 0.05, -v.y * 0.05,
+                            -v.z * 0.05);
+                }
                 for (int i = 0; i < (kind == Kind.STAR ? 3 : 2); i++) {
                     double f = i * 0.4;
                     level.addParticle(ParticleTypes.END_ROD, this.getX() - v.x * f, this.getY() - v.y * f, this.getZ() - v.z * f, -v.x * 0.03,

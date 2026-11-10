@@ -372,10 +372,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("kingdomsatwar.configuration.spiderLook.detailed", "Detailed", "Detailliert");
         text("kingdomsatwar.configuration.spiderLook.classic", "Classic (Minecraft)", "Klassisch (Minecraft)");
         text("kingdomsatwar.configuration.spiderLook.moosling", "Mooslings (arachnophobia)", "Mooslinge (Arachnophobie)");
-        text("kingdomsatwar.configuration.heroHearts", "Hearts in layers", "Herzen in Schichten");
+        text("kingdomsatwar.configuration.heroHearts", "Hearts and armour in layers", "Herzen und Rüstung in Schichten");
         text("kingdomsatwar.configuration.heroHearts.tooltip",
-                "From 21 hearts on, the health bar shows a single row in coloured layers (one colour per ten hearts) with the number of hearts next to it, instead of stacking the hearts into a wall of rows.",
-                "Ab 21 Herzen zeigt die Lebensleiste eine einzige Reihe in farbigen Schichten (je zehn Herzen eine Farbe) und daneben die Zahl der Herzen, statt die Herzen zu einer Wand aus Reihen zu stapeln.");
+                "From 21 hearts (or 21 armour points) on, the bar shows a single row in coloured layers with the number next to it, instead of stacking rows into a wall (hearts) or cutting off at ten icons (armour).",
+                "Ab 21 Herzen (oder 21 Rüstungspunkten) zeigt die Leiste eine einzige Reihe in farbigen Schichten mit der Zahl daneben, statt Reihen zu einer Wand zu stapeln (Herzen) oder bei zehn Panzern aufzuhören (Rüstung).");
         text("kingdomsatwar.configuration.narratorVoice", "Narrator voice for chapters", "Erzählerstimme zu den Kapiteln");
         text("kingdomsatwar.configuration.narratorVoice.tooltip",
                 "The narrator speaks at the start of every chapter of the story (otherwise only his words appear).",
@@ -1965,6 +1965,14 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.schrolli.title", "Creator of All Worlds", "Schöpfer aller Welten");
         text("boss.kingdomsatwar.schrolli_true", "Schrolli the Creator – True Form", "Schrolli der Schöpfer – Wahre Gestalt");
         text("boss.kingdomsatwar.schrolli_true.title", "The Creator reveals his true face", "Der Schöpfer zeigt sein wahres Antlitz");
+        text("boss.kingdomsatwar.schrolli_almighty", "Schrolli the Almighty", "Schrolli der Allmächtige");
+        text("boss.kingdomsatwar.schrolli_almighty.title", "The heart of the sun beats", "Das Herz der Sonne schlägt");
+        // die Bühnen der Schöpfung (seit 0.78)
+        text("arena.kingdomsatwar.creation.firmament", "The Firmament", "Das Firmament");
+        text("arena.kingdomsatwar.creation.firmament.subtitle", "The court shatters – beneath you, the vault of heaven",
+                "Der Hof zerbricht – unter euch das Himmelszelt");
+        text("arena.kingdomsatwar.creation.sun_heart", "The Heart of the Sun", "Das Herz der Sonne");
+        text("arena.kingdomsatwar.creation.sun_heart.subtitle", "He has pulled you into his sun", "Er hat euch in seine Sonne gerissen");
         text("boss.kingdomsatwar.schrolli.speaker", "[Schrolli]", "[Schrolli]");
         String[][] lines = {
                 {"awaken", "Who dares to disturb the peace of creation?", "Wer wagt es, die Ruhe der Schöpfung zu stören?"},
@@ -1985,6 +1993,12 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"farewell", "Then go … and create your own world.", "So geht … und erschafft … eure eigene Welt."},
                 {"hand", "Now I shall test you with my own hand!", "Nun prüfe ich euch mit eigener Hand!"},
                 {"world_blade", "This blade parted night from day!", "Diese Klinge schied die Nacht vom Tag!"},
+                {"transcend", "You have broken even my true form … then all light shall fall into darkness!",
+                        "Ihr habt selbst meine Wahre Gestalt gebrochen … so falle alles Licht in die Finsternis!"},
+                {"almighty", "From the darkness I rise – as the sun itself. I am ALMIGHTY!",
+                        "Aus der Finsternis erhebe ich mich – als die Sonne selbst. Ich bin ALLMÄCHTIG!"},
+                {"sun_heart", "You stand in the heart of my sun – and still you fight?", "Ihr steht im Herzen meiner Sonne – und kämpft noch immer?"},
+                {"solar_judgment", "Be judged by the sun!", "Die Sonne richtet euch!"},
         };
         for (String[] l : lines) {
             text("entity.kingdomsatwar.schrolli.line." + l[0], l[1], l[2]);
@@ -2007,6 +2021,12 @@ public class ModLanguageProvider extends LanguageProvider {
         text("entity.kingdomsatwar.schrolli.nova.covered", "The pillar shielded you.", "Die Säule hat dich geschützt.");
         text("entity.kingdomsatwar.schrolli.apocalypse", "LAST JUDGMENT", "JÜNGSTES GERICHT");
         text("entity.kingdomsatwar.schrolli.true_title", "The True Form", "Die Wahre Gestalt");
+        text("entity.kingdomsatwar.schrolli.solar", "JUDGMENT OF THE SUN", "GERICHT DER SONNE");
+        text("entity.kingdomsatwar.schrolli.solar.hint", "Outside – inside – outside … and then into the light!", "Außen – innen – außen … und dann ins Licht!");
+        text("entity.kingdomsatwar.schrolli.solar.in", "Into the white circle!", "In den weißen Kreis!");
+        text("entity.kingdomsatwar.schrolli.solar.out", "Out of the circle!", "Hinaus aus dem Kreis!");
+        text("entity.kingdomsatwar.schrolli.solar.light", "INTO THE LIGHT!", "INS LICHT!");
+        text("entity.kingdomsatwar.schrolli.solar.safe", "The light shielded you.", "Das Licht hat dich geschützt.");
         text("entity.kingdomsatwar.schrolli.comet", "A comet is falling on you – run!", "Ein Komet stürzt auf dich herab – lauf!");
         text("entity.kingdomsatwar.schrolli.recreation", "Re-creation … interrupt him! (%s %%)", "Neuschöpfung … unterbrecht ihn! (%s %%)");
         text("entity.kingdomsatwar.schrolli.stunned", "The re-creation was interrupted – strike now!",
@@ -2040,19 +2060,38 @@ public class ModLanguageProvider extends LanguageProvider {
         text(ModItems.loreKey("creator_spark", 2), "Dropped by the World-Eater – or forged from the trophies of all great foes",
                 "Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet");
         text(ModItems.loreKey("creator_spark", 3), "Place it in the Altar of the Creator", "Lege ihn in den Altar des Schöpfers");
-        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER, "Scepter of the Creator", "Zepter des Schöpfers");
-        lore("creator_scepter", "The Creator's scepter – unbreakable", "Das Zepter des Schöpfers – unzerbrechlich");
-        text(ModItems.loreKey("creator_scepter", 2), "Right-click: hurl a spear of light", "Rechtsklick: einen Lichtspeer schleudern");
-        text(ModItems.loreKey("creator_scepter", 3), "Sneak + right-click: call a pillar of light where you look",
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SCEPTER, "Spear of the Creator", "Speer des Schöpfers");
+        lore("creator_scepter", "The Creator's spear of gold and light – unbreakable", "Der Speer des Schöpfers aus Gold und Licht – unzerbrechlich");
+        text(ModItems.loreKey("creator_scepter", 2), "Strikes harder than any sword – every third hit unleashes a wave of light",
+                "Trifft härter als jedes Schwert – jeder dritte Treffer entfesselt eine Lichtwelle");
+        text(ModItems.loreKey("creator_scepter", 3), "Right-click: hurl a spear of light", "Rechtsklick: einen Lichtspeer schleudern");
+        text(ModItems.loreKey("creator_scepter", 4), "Sneak + right-click: call a pillar of light where you look",
                 "Schleichen + Rechtsklick: eine Säule aus Licht herabrufen, wohin du siehst");
-        text(ModItems.loreKey("creator_scepter", 4), "Strikes harder than any sword", "Trifft härter als jedes Schwert");
+        text(ModItems.loreKey("creator_scepter", 5), "Wear halo, wings and rings: the Creator's image", "Mit Heiligenschein, Schwingen und Rädern: Ebenbild des Schöpfers");
         item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_WINGS, "Wings of the Creator", "Schwingen des Schöpfers");
-        lore("creator_wings", "White feathers with golden tips – glide like elytra", "Weiße Federn mit goldenen Spitzen – gleiten wie Elytren");
-        text(ModItems.loreKey("creator_wings", 2), "Jump while gliding: Wingbeat – a surge forward (every 1.5 seconds)",
+        lore("creator_wings", "Feathered wings, white with golden tips – they glide like elytra", "Schwingen aus Federn, weiß mit goldenen Spitzen – gleiten wie Elytren");
+        text(ModItems.loreKey("creator_wings", 2), "Protect like a chestplate: 10 armour, 4 toughness", "Schützen wie ein Harnisch: 10 Rüstung, 4 Härte");
+        text(ModItems.loreKey("creator_wings", 3), "Jump while gliding: Wingbeat – a surge forward (every 1.5 seconds)",
                 "Im Gleitflug springen: Schwingenschlag – ein Stoß nach vorn (alle 1,5 Sekunden)");
-        text(ModItems.loreKey("creator_wings", 3), "No fall or impact damage – the wings catch you",
+        text(ModItems.loreKey("creator_wings", 4), "No fall or impact damage – the wings catch you",
                 "Kein Fall- und Aufprallschaden – die Schwingen fangen dich auf");
-        text(ModItems.loreKey("creator_wings", 4), "They never break", "Sie zerbrechen nie");
+        text(ModItems.loreKey("creator_wings", 5), "They never break", "Sie zerbrechen nie");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_HALO, "Halo of the Creator", "Heiligenschein des Schöpfers");
+        lore("creator_halo", "A ring of golden light above your head – protects like a helmet (4 armour, 3 toughness)",
+                "Ein Ring aus goldenem Licht über dem Kopf – schützt wie ein Helm (4 Rüstung, 3 Härte)");
+        text(ModItems.loreKey("creator_halo", 2), "You see in the dark – no blindness, no darkness", "Du siehst im Dunkeln – keine Blindheit, keine Dunkelheit");
+        text(ModItems.loreKey("creator_halo", 3), "Blessing: half a heart every 3 seconds while wounded", "Segen: ein halbes Herz alle 3 Sekunden, solange du verwundet bist");
+        text(ModItems.loreKey("creator_halo", 4), "Undead nearby catch fire and burn", "Untote in der Nähe fangen Feuer und versengen");
+        text(ModItems.loreKey("creator_halo", 5), "It never breaks", "Er zerbricht nie");
+        item(io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_RINGS, "Wheels of the Creator", "Räder des Schöpfers");
+        lore("creator_rings", "Two golden rings full of eyes circle your hips – protect like leggings (8 armour, 3 toughness)",
+                "Zwei goldene Ringe voller Augen kreisen um deine Hüften – schützen wie Beinschienen (8 Rüstung, 3 Härte)");
+        text(ModItems.loreKey("creator_rings", 2), "12 % faster – and they carry you up steps", "12 % schneller – und sie tragen dich Stufen hinauf");
+        text(ModItems.loreKey("creator_rings", 3), "Their eyes reveal foes nearby – they glow through walls",
+                "Ihre Augen enthüllen Feinde in der Nähe – sie leuchten durch Wände");
+        text(ModItems.loreKey("creator_rings", 4), "Some projectiles bounce off and fly back", "Manches Geschoss prallt an ihnen ab und fliegt zurück");
+        text(ModItems.loreKey("creator_rings", 5), "Halo, wings and wheels together: Wingbeat twice as fast, blessing twice as strong",
+                "Heiligenschein, Schwingen und Räder zusammen: Schwingenschlag doppelt so schnell, Segen doppelt so stark");
         for (String[] e : new String[][] {{"ambient", "The Creator hums", "Der Schöpfer summt"}, {"hurt", "The Creator hurts", "Der Schöpfer nimmt Schaden"},
                 {"death", "The Creator fades", "Der Schöpfer vergeht"}, {"awaken", "The Creator descends", "Der Schöpfer steigt herab"},
                 {"ascend", "The Creator ascends", "Der Schöpfer steigt auf"}, {"voice", "The Creator speaks", "Der Schöpfer spricht"},
@@ -2079,7 +2118,7 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("block.creator_altar.awaken", "Altar awakens", "Altar erwacht");
         subtitle("block.creator_altar.hum", "Altar hums", "Altar summt");
-        subtitle("item.creator_scepter.cast", "Scepter casts", "Zepter wirkt");
+        subtitle("item.creator_scepter.cast", "Spear casts", "Speer wirkt");
     }
 
     private void creature(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, Supplier<? extends Item> egg,

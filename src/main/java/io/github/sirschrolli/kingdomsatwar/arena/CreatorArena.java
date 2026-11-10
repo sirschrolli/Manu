@@ -563,6 +563,12 @@ public final class CreatorArena {
     // Die Räder des Himmels und die schwebenden Felsen
     // =====================================================================================
 
+    /** Was alle Bühnen teilen (seit 0.78, siehe CreatorStages): die Räder des Himmels und die schwebenden Felsen. */
+    static void scenery(ServerLevel level, BlockPos floor) {
+        rings(level, floor);
+        rocks(level, floor);
+    }
+
     /** Drei Ringe aus Gold hoch über dem Hof, schräg gegeneinander geneigt (mit Lichtern darin). */
     private static void rings(ServerLevel level, BlockPos floor) {
         ring(level, floor.above(46), 64.0, 0.0, 0.0);

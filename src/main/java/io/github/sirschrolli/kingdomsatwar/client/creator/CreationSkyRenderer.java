@@ -34,7 +34,8 @@ import org.jspecify.annotations.Nullable;
  * <b>Galaxie</b>, ferne <b>Welten</b> (eine mit Ring) und Bündel aus <b>Lichtstrahlen</b> am Horizont; tief unten, unter dem
  * Meer aus Wolken, schimmern weitere Sterne. Erhebt sich der Schöpfer in seiner Wahren Gestalt, öffnet sich der Himmel: Ein
  * gewaltiges <b>Auge</b> aus Sternen erscheint im Zenit, Risse aus weißem Licht klaffen, und alles leuchtet heller; beim
- * Jüngsten Gericht und der Supernova flammt der ganze Himmel auf.
+ * Jüngsten Gericht und der Supernova flammt der ganze Himmel auf. Auf dem Weg zum Allmächtigen (seit 0.78) verschlingt ein
+ * Schwarzes Loch das Licht; dann brennt eine gewaltige <b>Sonne</b> im Zenit, und der ganze Himmel glüht.
  *
  * <p>Gezeichnet wird nach dem Himmel (vor dem Gelände) mit der Pipeline der Himmelskörper: Das Bild
  * ({@code textures/environment/creation_sky.png}, 4×4 Felder) wird additiv aufgetragen.
@@ -50,41 +51,54 @@ public final class CreationSkyRenderer {
      * Wahren Gestalt erscheint (dann wächst es mit ihr).
      */
     record Element(float yaw, float zenith, float roll, float halfWidth, float halfHeight, int cell, float brightness, float spin, float breathe,
-            boolean revealed) {}
+            boolean revealed, boolean sun) {}
 
     static final Element[] ELEMENTS = {
             // das Sonnenrad, hoch oben, und sein Lichthof
-            new Element(30, 22, 0, 46, 46, 12, 0.75f, 0.0f, 0.3f, false),
-            new Element(30, 22, 0, 30, 30, 0, 1.0f, 2.2f, 0.4f, false),
+            new Element(30, 22, 0, 46, 46, 12, 0.75f, 0.0f, 0.3f, false, false),
+            new Element(30, 22, 0, 30, 30, 0, 1.0f, 2.2f, 0.4f, false, false),
             // Nebel
-            new Element(150, 52, 20, 70, 48, 1, 0.75f, 0.0f, 0.15f, false),
-            new Element(260, 40, -30, 64, 46, 2, 0.7f, 0.0f, 0.2f, false),
-            new Element(340, 64, 10, 58, 38, 1, 0.55f, 0.0f, 0.18f, false),
-            new Element(80, 70, 40, 50, 34, 2, 0.5f, 0.0f, 0.22f, false),
+            new Element(150, 52, 20, 70, 48, 1, 0.75f, 0.0f, 0.15f, false, false),
+            new Element(260, 40, -30, 64, 46, 2, 0.7f, 0.0f, 0.2f, false, false),
+            new Element(340, 64, 10, 58, 38, 1, 0.55f, 0.0f, 0.18f, false, false),
+            new Element(80, 70, 40, 50, 34, 2, 0.5f, 0.0f, 0.22f, false, false),
             // eine Galaxie
-            new Element(205, 30, 35, 26, 26, 3, 0.85f, 0.6f, 0.1f, false),
+            new Element(205, 30, 35, 26, 26, 3, 0.85f, 0.6f, 0.1f, false, false),
             // ferne Welten
-            new Element(110, 38, 0, 9, 9, 4, 0.95f, 0.0f, 0.05f, false),
-            new Element(300, 30, 0, 6, 6, 5, 0.9f, 0.0f, 0.05f, false),
-            new Element(20, 60, 0, 5, 5, 6, 0.9f, 0.0f, 0.05f, false),
-            new Element(235, 66, 0, 4, 4, 5, 0.7f, 0.0f, 0.05f, false),
+            new Element(110, 38, 0, 9, 9, 4, 0.95f, 0.0f, 0.05f, false, false),
+            new Element(300, 30, 0, 6, 6, 5, 0.9f, 0.0f, 0.05f, false, false),
+            new Element(20, 60, 0, 5, 5, 6, 0.9f, 0.0f, 0.05f, false, false),
+            new Element(235, 66, 0, 4, 4, 5, 0.7f, 0.0f, 0.05f, false, false),
             // Strahlenbündel am Horizont
-            new Element(0, 84, 0, 60, 26, 7, 0.55f, 0.0f, 0.25f, false),
-            new Element(120, 86, 0, 52, 24, 7, 0.5f, 0.0f, 0.3f, false),
-            new Element(240, 84, 0, 56, 26, 7, 0.5f, 0.0f, 0.28f, false),
+            new Element(0, 84, 0, 60, 26, 7, 0.55f, 0.0f, 0.25f, false, false),
+            new Element(120, 86, 0, 52, 24, 7, 0.5f, 0.0f, 0.3f, false, false),
+            new Element(240, 84, 0, 56, 26, 7, 0.5f, 0.0f, 0.28f, false, false),
             // Sternhaufen
-            new Element(60, 48, 0, 30, 30, 11, 0.8f, 0.0f, 0.2f, false),
-            new Element(190, 74, 0, 34, 34, 11, 0.7f, 0.0f, 0.2f, false),
-            new Element(290, 56, 0, 28, 28, 11, 0.75f, 0.0f, 0.2f, false),
+            new Element(60, 48, 0, 30, 30, 11, 0.8f, 0.0f, 0.2f, false, false),
+            new Element(190, 74, 0, 34, 34, 11, 0.7f, 0.0f, 0.2f, false, false),
+            new Element(290, 56, 0, 28, 28, 11, 0.75f, 0.0f, 0.2f, false, false),
             // unter den Wolken
-            new Element(90, 140, 0, 60, 60, 11, 0.55f, 0.0f, 0.15f, false),
-            new Element(270, 150, 30, 70, 50, 2, 0.4f, 0.0f, 0.15f, false),
+            new Element(90, 140, 0, 60, 60, 11, 0.55f, 0.0f, 0.15f, false, false),
+            new Element(270, 150, 30, 70, 50, 2, 0.4f, 0.0f, 0.15f, false, false),
             // die Wahre Gestalt: das Auge der Schöpfung und Risse aus Licht
-            new Element(0, 0, 0, 58, 58, 9, 1.0f, -1.2f, 0.35f, true),
-            new Element(70, 34, 25, 44, 44, 10, 0.9f, 0.0f, 0.5f, true),
-            new Element(200, 42, -40, 40, 40, 10, 0.85f, 0.0f, 0.55f, true),
-            new Element(315, 38, 70, 36, 36, 10, 0.8f, 0.0f, 0.6f, true),
-            new Element(140, 70, 0, 50, 36, 8, 0.7f, 0.0f, 0.4f, true),
+            new Element(0, 0, 0, 58, 58, 9, 1.0f, -1.2f, 0.35f, true, false),
+            new Element(70, 34, 25, 44, 44, 10, 0.9f, 0.0f, 0.5f, true, false),
+            new Element(200, 42, -40, 40, 40, 10, 0.85f, 0.0f, 0.55f, true, false),
+            new Element(315, 38, 70, 36, 36, 10, 0.8f, 0.0f, 0.6f, true, false),
+            new Element(140, 70, 0, 50, 36, 8, 0.7f, 0.0f, 0.4f, true, false),
+            // der Allmächtige (seit 0.78): eine gewaltige Sonne im Zenit, ihr Kranz, und Glut über dem Horizont
+            new Element(30, 22, 0, 96, 96, 12, 1.0f, 0.0f, 0.5f, false, true),
+            new Element(30, 22, 0, 60, 60, 0, 1.0f, -4.0f, 0.6f, false, true),
+            new Element(30, 22, 15, 44, 44, 0, 0.8f, 6.5f, 0.7f, false, true),
+            new Element(60, 84, 0, 70, 30, 7, 0.8f, 0.0f, 0.35f, false, true),
+            new Element(180, 85, 0, 66, 28, 7, 0.75f, 0.0f, 0.4f, false, true),
+            new Element(300, 84, 0, 68, 30, 7, 0.8f, 0.0f, 0.38f, false, true),
+            // der ganze Himmel glüht: weite, weiche Lichthöfe rundum
+            new Element(0, 58, 0, 120, 100, 12, 0.5f, 0.0f, 0.2f, false, true),
+            new Element(72, 60, 0, 120, 100, 12, 0.45f, 0.0f, 0.22f, false, true),
+            new Element(144, 58, 0, 120, 100, 12, 0.5f, 0.0f, 0.18f, false, true),
+            new Element(216, 60, 0, 120, 100, 12, 0.45f, 0.0f, 0.24f, false, true),
+            new Element(288, 58, 0, 120, 100, 12, 0.5f, 0.0f, 0.2f, false, true),
     };
 
     private static @Nullable GpuBuffer vertices;
@@ -105,6 +119,8 @@ public final class CreationSkyRenderer {
         float seconds = (level.getGameTime() % 1_728_000L + partial) / 20.0f;
         float reveal = CreatorClient.reveal(partial);
         float flare = CreatorClient.flare();
+        float sunrise = CreatorClient.sunrise(partial);
+        float eclipse = CreatorClient.eclipse(partial);
         AbstractTexture texture = minecraft.getTextureManager().getTexture(TEXTURE);
         RenderSystem.AutoStorageIndexBuffer indices = RenderSystem.getSequentialBuffer(PrimitiveTopology.QUADS);
         GpuBuffer indexBuffer = indices.getBuffer(6);
@@ -121,13 +137,18 @@ public final class CreationSkyRenderer {
             for (int i = 0; i < ELEMENTS.length; i++) {
                 Element e = ELEMENTS[i];
                 float glow = e.brightness() * (0.88f + 0.12f * Mth.sin(seconds * e.breathe() * 2.0f + i * 1.7f));
-                if (e.revealed()) {
-                    glow *= reveal;
+                if (e.sun()) {
+                    glow *= sunrise;
+                } else if (e.revealed()) {
+                    // der Allmächtige verbrennt das Auge der Wahren Gestalt
+                    glow *= reveal * (1.0f - sunrise);
                 } else {
                     // in der Wahren Gestalt leuchtet alles heller (das Sonnenrad flammt violett-weiß)
                     glow *= 1.0f + 0.35f * reveal;
                 }
-                glow = Mth.clamp(glow + flare * 0.35f, 0.0f, 1.0f);
+                // das Schwarze Loch verschlingt das Licht des Himmels
+                glow *= 1.0f - 0.85f * eclipse;
+                glow = Mth.clamp(glow + flare * 0.35f * (1.0f - eclipse), 0.0f, 1.0f);
                 if (glow < 0.01f) {
                     continue;
                 }
@@ -141,10 +162,19 @@ public final class CreationSkyRenderer {
                 float r = 1.0f;
                 float g = 1.0f;
                 float b = 1.0f;
-                if (e.cell() == 0 || e.cell() == 12) {
-                    // das Sonnenrad wird in der Wahren Gestalt bleich-violett
-                    r = 1.0f - 0.15f * reveal;
-                    g = 1.0f - 0.25f * reveal;
+                if (e.sun()) {
+                    // die Sonne des Allmächtigen: weißgolden innen, glühend orange außen
+                    g = e.cell() == 12 ? 0.62f : 0.86f;
+                    b = e.cell() == 12 ? 0.3f : 0.55f;
+                } else if (e.cell() == 0 || e.cell() == 12) {
+                    // das Sonnenrad wird in der Wahren Gestalt bleich-violett (beim Allmächtigen glühend)
+                    r = 1.0f - 0.15f * reveal * (1.0f - sunrise);
+                    g = 1.0f - 0.25f * reveal * (1.0f - sunrise) - 0.2f * sunrise;
+                    b = 1.0f - 0.5f * sunrise;
+                } else {
+                    // alles wird warm
+                    g = 1.0f - 0.18f * sunrise;
+                    b = 1.0f - 0.45f * sunrise;
                 }
                 GpuBufferSlice transforms = RenderSystem.getDynamicUniforms().writeTransform(m, new Vector4f(r, g, b, glow));
                 pass.setUniform("DynamicTransforms", transforms);

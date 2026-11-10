@@ -197,6 +197,7 @@ public final class ModGameTests {
         HoardGameTests.init();    // der Schlund der Welten und der Weltenfresser
         BossArenaGameTests.init();    // die Kampfdimensionen der großen Bosse
         SchrolliGameTests.init();     // Schrolli der Schöpfer, Wahre Gestalt, Altar, Zepter, Schwingen, Gottbezwinger
+        AlmightyGameTests.init();     // seit 0.78: der Allmächtige, die drei Bühnen, die Ausrüstung, das bewahrte Hab und Gut
         UmbrerGameTests.init();   // und die der Umbrer
         EconomyGameTests.init();  // und die der Wirtschaft
         TownGameTests.init();     // und die der eigenen Siedlung
@@ -270,6 +271,7 @@ public final class ModGameTests {
         HoardGameTests.register(event, environment);
         BossArenaGameTests.register(event, environment);
         SchrolliGameTests.register(event, environment);
+        AlmightyGameTests.register(event, environment);
         UmbrerGameTests.register(event, environment);
         EconomyGameTests.register(event, environment);
         TownGameTests.register(event, environment);

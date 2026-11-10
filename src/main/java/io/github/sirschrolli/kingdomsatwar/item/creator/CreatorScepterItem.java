@@ -23,20 +23,29 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Das Zepter des Schöpfers (Beute Schrollis): ein langer Goldstab mit einem achtstrahligen Sonnenstern, unzerbrechlich.
+ * Der Speer des Schöpfers (Beute Schrollis; bis 0.77 „Zepter des Schöpfers“): ein langer Speer aus Gold und Licht mit einer
+ * leuchtenden Klinge, unzerbrechlich. Seit 0.78 stärker:
  * <ul>
- *     <li>Nahkampf: 16 Schaden, etwas mehr Reichweite;</li>
- *     <li>Rechtsklick: ein Lichtspeer fliegt in Blickrichtung (12 Schaden, alle 0,7 Sekunden);</li>
+ *     <li>Nahkampf: {@value #MELEE_DAMAGE} Schaden, große Reichweite; jeder dritte Treffer (in kurzer Folge) entfesselt eine
+ *     <b>Lichtwelle</b> – {@value #WAVE_DAMAGE} Schaden für alle Feinde ringsum, die zurückgeworfen werden;</li>
+ *     <li>Rechtsklick: ein Lichtspeer fliegt in Blickrichtung ({@value #SPEAR_DAMAGE} Schaden, alle halbe Sekunde);</li>
  *     <li>schleichend Rechtsklick: auf die Stelle, die man ansieht (bis 32 Blöcke), fährt nach einem Augenblick eine Säule
- *     aus Licht herab – 20 Schaden für alle Feinde darin (alle 8 Sekunden).</li>
+ *     aus Licht herab – {@value #PILLAR_DAMAGE} Schaden für alle Feinde darin (alle 6 Sekunden).</li>
  * </ul>
  */
 public class CreatorScepterItem extends Item {
-    public static final int SPEAR_COOLDOWN = 14;
-    public static final int PILLAR_COOLDOWN = 160;
-    public static final float SPEAR_DAMAGE = 12.0f;
-    public static final float PILLAR_DAMAGE = 20.0f;
-    public static final float PILLAR_RADIUS = 2.6f;
+    public static final double MELEE_DAMAGE = 22.0;
+    public static final int SPEAR_COOLDOWN = 10;
+    public static final int PILLAR_COOLDOWN = 120;
+    public static final float SPEAR_DAMAGE = 18.0f;
+    public static final float PILLAR_DAMAGE = 30.0f;
+    public static final float PILLAR_RADIUS = 3.2f;
+    public static final float WAVE_DAMAGE = 10.0f;
+    public static final double WAVE_RADIUS = 4.0;
+    /** So schnell müssen die drei Treffer aufeinander folgen (Ticks zwischen zweien). */
+    public static final int COMBO_WINDOW = 50;
+    /** Wer zuletzt wann getroffen hat und wie oft in Folge (nur auf dem Server). */
+    private static final java.util.Map<java.util.UUID, long[]> COMBO = new java.util.HashMap<>();
 
     public CreatorScepterItem(Item.Properties properties) {
         super(properties);
@@ -59,7 +68,7 @@ public class CreatorScepterItem extends Item {
             } else {
                 Vec3 dir = player.getLookAngle();
                 Vec3 from = player.getEyePosition().add(dir.scale(0.9)).add(0.0, -0.15, 0.0);
-                DivineShotEntity.thrownSpear(server, player, from, dir, 2.6, SPEAR_DAMAGE);
+                DivineShotEntity.thrownSpear(server, player, from, dir, 3.0, SPEAR_DAMAGE);
                 player.getCooldowns().addCooldown(stack, SPEAR_COOLDOWN);
             }
             server.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.CREATOR_SCEPTER_CAST.get(), SoundSource.PLAYERS, 1.0f,
@@ -68,10 +77,47 @@ public class CreatorScepterItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    /** Jeder dritte Treffer in kurzer Folge: eine Lichtwelle um das Ziel, die alle Feinde ringsum trifft und zurückwirft. */
+    @Override
+    public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        super.postHurtEnemy(stack, target, attacker);
+        if (!(attacker.level() instanceof ServerLevel level) || !(attacker instanceof Player player)) {
+            return;
+        }
+        long now = level.getGameTime();
+        long[] combo = COMBO.computeIfAbsent(player.getUUID(), id -> new long[] {now, 0});
+        combo[1] = now - combo[0] <= COMBO_WINDOW ? combo[1] + 1 : 1;
+        combo[0] = now;
+        if (combo[1] < 3) {
+            return;
+        }
+        combo[1] = 0;
+        lightWave(level, player, target.position());
+    }
+
+    /** Die Lichtwelle: ein goldener Ring läuft über den Boden, alle Feinde ringsum werden getroffen und zurückgeworfen. */
+    public static void lightWave(ServerLevel level, Player player, Vec3 at) {
+        DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), DivineFx.GOLD, 16, 0.6f).param(0.32f).spawn();
+        DivineFx.flash(level, at.add(0.0, 1.0, 0.0), DivineFx.HOLY);
+        DivineFx.sparks(level, at.add(0.0, 0.8, 0.0), 30, 1.2, 0.2);
+        level.sendParticles(ParticleTypes.END_ROD, at.x, at.y + 0.6, at.z, 20, 1.6, 0.3, 1.6, 0.08);
+        DivineFx.sound(level, at, ModSounds.SCHROLLI_BLAST.get(), 1.0f, 1.3f);
+        AABB box = new AABB(at, at).inflate(WAVE_RADIUS, 2.5, WAVE_RADIUS);
+        for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> foe(player, e))) {
+            if (DivineFx.flat(e.position(), at) <= WAVE_RADIUS && e.hurtServer(level, level.damageSources().indirectMagic(player, player), WAVE_DAMAGE)) {
+                Vec3 away = e.position().subtract(at).multiply(1.0, 0.0, 1.0);
+                away = away.lengthSqr() < 1.0e-4 ? player.getLookAngle().multiply(1.0, 0.0, 1.0) : away.normalize();
+                e.push(away.x * 0.9, 0.35, away.z * 0.9);
+                e.needsSync = true;
+            }
+        }
+    }
+
     /** Ein Warnkreis – dann eine Säule aus Licht, die alle Feinde darin trifft und hochschleudert. */
     public static void callPillar(ServerLevel level, Player player, Vec3 at) {
         DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, at.add(0.0, 0.06, 0.0), DivineFx.GOLD, 14, PILLAR_RADIUS).onExpire(fx -> {
-            DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, at, DivineFx.HOLY, 16, PILLAR_RADIUS).param(20.0f).spawn();
+            DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, at, DivineFx.HOLY, 18, PILLAR_RADIUS).param(24.0f).spawn();
+            DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), DivineFx.GOLD, 14, PILLAR_RADIUS).param(0.25f).spawn();
             DivineFx.flash(level, at.add(0.0, 1.0, 0.0), DivineFx.HOLY);
             level.sendParticles(ParticleTypes.END_ROD, at.x, at.y + 1.0, at.z, 16, 1.0, 2.0, 1.0, 0.2);
             DivineFx.sound(level, at, ModSounds.SCHROLLI_PILLAR.get(), 1.8f, 1.2f);

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.77 – Der Weg zum Unsterblichen.** Der Held kann jetzt bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
+> **Testversion 0.78 – Schrolli der Allmächtige.** Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**.
+> In 0.77 kam **der Weg zum Unsterblichen**: Der Held kann seitdem bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
 > In 0.76 griff **Schrolli der Schöpfer zur Klinge** – er kämpft nicht mehr nur aus der Luft: Immer wieder **landet** er – ein Warnkreis, der Einschlag, ein Ring rollt über den Hof (springen!) –, aus dem Licht seines Saums formen sich **Beine in goldenen Beinschienen**, und sein Zepter wird zur **Klinge aus Licht**. Am Boden schreitet er auf euch zu und ficht mit **sieben neuen Künsten**: **Klingenhieb** (schräge Schnitte, zuletzt ein Spaltschlag, der den Boden aufreißt), **Lichtsicheln** (über den Boden gleitend – springen!), **Sturmlauf** (eine goldene Linie zeigt den Weg), **Klingenwirbel**, **Himmelssturz** (danach steckt die Klinge im Boden – jetzt zuschlagen!), **Schwingenwehr** (er pariert alles von vorn und schlägt zurück – greift ihn von hinten an!) und in der Wahren Gestalt die **Weltenklinge**, die zu zwanzig Blöcken Länge wächst. Jeder Hieb zieht eine **Spur aus Licht**. Am Boden erreicht ihn jedes Schwert – leichte Hiebe fängt ein Schild ab, die goldenen nicht. Dazu **neue Klänge**: alle Klänge und die Musik des Schöpfers sind jetzt warm, tief und leiser – nichts gellt oder schrillt mehr.
 > In 0.75 kam **Schrolli der Schöpfer**, der stärkste Gegner von allen: Wer einen **Schöpferfunken** (Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet) in den **Altar des Schöpfers** legt und ihn berührt, wird mit allen, die im goldenen Kreis stehen, in **die Schöpfung** gehoben – die größte aller Kampfdimensionen: ein Kreis aus weißem Quarz und Gold über einem Meer aus Wolken, zwölf Säulen, der Thron mit der Sonnenscheibe, vier Brücken zu vier Welten, hoch darüber die Räder des Himmels – unter einem **eigenen Himmel** mit Sonnenrad, Nebeln, einer Galaxie und fernen Welten, dazu eigene Musik. In einer Säule aus Licht steigt **Schrolli der Schöpfer** herab: ein Seraph mit sechs Schwingen, Krone aus Lichtstrahlen und Heiligenschein, Zepter und Weltkugel – **3.200 Lebenspunkte**, und mit **26 eigenen Künsten** (Lichtspeere, Heiligenschein-Klinge, Säulen des Lichts, Sternenregen, Zepterschlag, Strahl der Schöpfung, Weltkugel, Federsturm, Göttliches Urteil, Seraphim, Lichtsprung, Schwingensturm, Sonnenrad, Engelschor, „Es werde Licht!“ und die **Zeit, die stillsteht**). Fällt er, stirbt er nicht: Er steigt in seine **Wahre Gestalt** auf – größer, das Gewand ein Weltall, Räder voller Augen um ihn, eine neue volle Leiste –, und der Himmel öffnet sich: ein **Auge aus Sternen** und Risse aus Licht. Dann wirft er **Welten**, entfacht die **Supernova** (nur hinter einer Säule ist man sicher), ruft den **Urknall**, Sternbilder, Kometen, das **Jüngste Gericht** und den **Weltenriss** – und versucht, sich **neu zu erschaffen** (unterbrecht ihn!). Wer ihn bezwingt, erhält das **Zepter des Schöpfers** (3D, Lichtspeere und Säulen aus Licht), die **Schwingen des Schöpfers** (Schwingenschlag im Gleitflug, kein Fall- und Aufprallschaden) und den höchsten Titel: **„Gottbezwinger“**.
 > In 0.74 kamen die Kampfdimensionen: Die sechs großen Bosse nach den Erzmagiern kämpfen jetzt wie die Erzmagier in ihrer eigenen Welt: Wer ihren Hort betritt, wird – mit allen Mitstreitern am Hort und ihren Soldaten – in die **Kampfdimension** des Bosses gezogen. Dort schwebt ein Abbild seines Horts unter einem fremden Himmel: MissMystiks **Mondbühne** (die Zauberbühne als Feeninsel unter dem Vollmond, tief unten ein rosa Wolkenmeer), Malleus' **Glutesse** (der Glutdom als Vulkan unter einem brennenden Himmel), Asterias **Sternenzelt** (die Sternwarte auf ihrer Endinsel zwischen unzähligen Sternen), Annis **Fehlerraum** (die Fehlerzone als herausgerissener Chunk im Bildrauschen), die **Thronwelt** des Zerbrochenen Königs und der **Weltenschlund** des Weltenfressers unter flammenden Rissen. Es gelten die Regeln der Arkanen Sphäre: nichts bauen, nichts abbauen, wer stirbt, verliert alles, was er bei sich trägt, wer abstürzt, wird zurückgeworfen – und wer später an den Hort kommt, folgt den anderen. Fällt der Boss, kehren alle mit Beute und Erfahrung an den Hort zurück. Fallen alle, die gegen ihn stehen, **vergeht der Boss und erwacht beim nächsten Mal mit voller Kraft und in seiner ursprünglichen Gestalt** – auch dann, wenn (etwa nach einem Angriff aus der Ferne) am Hort selbst gekämpft wird. Dazu: ein **Spawn-Ei des Weltenfressers**, und `/locate structure` findet jetzt den Schlund der Welten (im Abgrund) und den Thron der Alten (in der Leere).
@@ -363,6 +364,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
 | **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
 | **Schrolli der Schöpfer** (0.75): der stärkste Gegner – Schöpferfunke und Altar des Schöpfers, die Schöpfung (die größte Kampfdimension, eigener Himmel, eigene Musik), ein Seraph mit 26 Künsten, die Wahre Gestalt statt des Todes (der Himmel öffnet sich), Seraphlinge, eigene Bossleisten; Zepter des Schöpfers (3D), Schwingen des Schöpfers und der Titel „Gottbezwinger“ | ✅ fertig |
+| **Schrolli der Allmächtige** (0.78): die dritte Gestalt (Schwarzes Loch, Herz der Sonne, drei Räder, Flammenkranz, eigene Musik), sechs Künste des Allmächtigen, Lichtkäfig und Schwarzes Loch (jetzt 41 Künste), mit jeder Gestalt ein neuer Hof (Firmament, Herz der Sonne), neuer Speer, Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, Rüstung in Schichten bis 60, das Inventar bleibt auf Heldenstufe 200 | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -2535,7 +2537,9 @@ alle **20 Minuten** vor dem Tod: Wie bei einem Totem (es wirkt erst, wenn kein T
 deiner Herzen wieder auf, mit Regeneration, Absorption und Feuerschutz – ein goldener Lichtring, Licht steigt an dir auf.
 Auf deinem Bildschirm wird es weiß-golden, aus dem Licht tritt das Abzeichen des Unsterblichen mit schillernden
 Strahlen, Lichtfunken steigen auf. Danach ruht es; im Charakterfenster steht, wie lange noch. Gegen /kill und die Leere
-hilft es nicht.
+hilft es nicht. Und seit 0.78 bewahrt es auch dein **Hab und Gut**: Fällt ein Unsterblicher doch einmal in einer
+Kampfdimension (wo sonst alles verloren ist), liegt beim Wiedererscheinen alles wieder an seinem Platz – Inventar, Rüstung
+und Zweithand.
 
 **Der Aufstieg:** Eine Lichtwelle läuft über den Bildschirm, das Rangabzeichen springt herein, die Stufe zählt hoch,
 Strahlen drehen sich dahinter, Funken sprühen, darunter erscheinen Stufe, Rang und die neuen Talentpunkte; bei einem
@@ -2817,7 +2821,7 @@ und tief unten liegt ein Meer aus Wolken. Der **Himmel** ist ganz eigen: tiefes 
 goldenes **Sonnenrad**, das sich langsam dreht, Nebel in Violett, Rosa und Türkis, eine Galaxie, ferne Welten (eine mit
 Ring), Bündel aus Lichtstrahlen am Horizont; Lichtfunken schweben in der Luft. Dazu eigene **Musik**: ein Choral für den
 Hof, ein Kampfthema – und ein eigenes für die Wahre Gestalt. Es gelten die Regeln der Kampfdimensionen (nichts bauen, wer
-stirbt, verliert alles, wer stürzt, wird zurückgeworfen, Nachzügler folgen am Altar).
+stirbt, verliert alles – seit 0.78 außer einem Unsterblichen –, wer stürzt, wird zurückgeworfen, Nachzügler folgen am Altar).
 
 **Schrolli der Schöpfer** steigt in einer Säule aus Licht aus dem Himmel herab (solange er erscheint, ist er
 unverwundbar): ein schwebender **Seraph**, fast sechs Blöcke groß, mit **sechs Schwingen** – zwei erhoben, zwei weit
@@ -2913,40 +2917,114 @@ Sonnenrad, die die Richtung wechseln …), seine Räder lenken manches Geschoss 
 | **Weltenriss** | sechs Risse laufen strahlenförmig von ihm aus über den Boden – dann bricht Licht aus ihnen. Zweimal |
 | **Neuschöpfung** | bei 25 %: er schwebt über der Mitte und **erschafft sich neu** – seine Leiste füllt sich wieder. Wer ihm genug Schaden zufügt, unterbricht ihn: Er stürzt, kniet und nimmt dann mehr Schaden („Unmöglich …!“) |
 
+![Schrolli der Allmächtige – die dritte Gestalt, das Firmament, das Herz der Sonne, seine Künste und die Ausrüstung des Schöpfers](docs/bilder/schrolli_allmaechtig.jpg)
+
+**Schrolli der Allmächtige** (seit 0.78). Besiegt man auch die Wahre Gestalt, stirbt er noch immer nicht: „Ihr habt selbst
+meine Wahre Gestalt gebrochen … so falle alles Licht in die Finsternis!“ Er schwebt empor, über ihm öffnet sich ein
+**Schwarzes Loch**, der Himmel verdunkelt sich, alles wird zur Mitte gezogen – dann verschlingt das Loch ihn selbst. In
+gleißendem Licht steht ein Name: **„Das Herz der Sonne“** – der Hof hat sich verwandelt. Aus einer wachsenden Sonne tritt
+**Schrolli der Allmächtige**: noch einmal ein Viertel größer, das Gewand eine **glühende Sonne** (Glut, Gold und weiße
+Sonnenfackeln), Federspitzen aus Flammen, Haar wie Feuer, um ihn **drei Räder** voller Augen (das dritte weit und schräg),
+hinter dem Heiligenschein ein **Kranz aus zweiunddreißig Flammen**, die züngeln, und hinter ihm ein Lichthof wie von einer
+Sonne. Seine dritte Leiste füllt sich (rot, „Schrolli der Allmächtige“), eine **Flammenwelle** rollt über das Herz der Sonne
+(springen!), und der Himmel brennt: eine gewaltige Sonne im Zenit. Alles trifft jetzt mit 1,6-facher Kraft, er wartet
+kaum zwischen seinen Künsten, schreitet am Boden länger, lenkt jedes vierte Geschoss ab – und hat eine eigene Musik.
+
+| Kunst des Allmächtigen | Was geschieht |
+|---|---|
+| **Sonnensturz** | er reckt die Arme empor – elf kleine Sonnen stürzen nacheinander auf leuchtende Kreise und hinterlassen glühende Erde |
+| **Prismenkäfig** | sechs Prismen im Kreis um die Mitte, zwischen ihnen ein Sechsstern aus Strahlen dicht über dem Boden – erst dünn, dann gleißend; er dreht sich, wechselt die Richtung, atmet weiter und enger: **drüberspringen!** |
+| **Klingenkranz** | um jeden Gegner ein Kranz aus vierzehn Speeren, alle auf ihn gerichtet – mit einer **leuchtenden Lücke**; nach einem Atemzug stoßen alle zugleich hinein. Drei Kränze, jeder enger und schneller |
+| **Sonneneruption** | Wände aus Glutsäulen wandern über den Hof, aus wechselnden Richtungen – jede mit einer Lücke, die langsam wandert |
+| **Sonnenspalter** | am Boden: die Klinge hoch über dem Kopf, drei Linien aus Glut zeigen den Weg – dann reißt die Erde entlang der Linien auf, und Säulen aus Glut brechen hervor (danach steht er still: jetzt zuschlagen!) |
+| **Gericht der Sonne** | bei zwei Dritteln und bei einem Viertel: Über ihm wächst eine Sonne. Erst brennt alles **außerhalb** des weißen Kreises (hinein!), dann der Kreis **selbst** (hinaus!), dann wieder außen – zuletzt erscheinen **vier Kreise aus Licht**: nur dort ist man sicher, wenn die Sonne über dem ganzen Hof zerbirst |
+
+Dazu zwei Künste für die früheren Gestalten: den **Lichtkäfig** (schon die erste Gestalt, ab 85 %: um jeden Gegner wachsen
+acht Stäbe aus Licht und werden dicker – wer nicht hinausspringt, ehe sich der Käfig schließt, verbrennt; dann zieht er sich
+zusammen, und eine Säule aus Licht bricht aus seiner Mitte) und das **Schwarze Loch** (ab der Wahren Gestalt: es öffnet
+sich nahe seinem Ziel, wandert ihm nach und zieht alles an – auch Pfeile –, sein Kern zermalmt, und am Ende zerbirst es
+weithin). Insgesamt kennt der Schöpfer jetzt **41 Künste**.
+
+**Die drei Bühnen der Schöpfung** (seit 0.78). Mit jeder Gestalt **wechselt der Hof** – in einem weißen (beim Allmächtigen
+goldenen) Licht, in dem alles neu entsteht und groß sein Name steht; alle stehen danach am Rand der neuen Bühne. Der Altar,
+die Räder des Himmels, die Felsen und die vier Welten bleiben, die Brücken nicht:
+
+| Bühne | Gestalt | Wie sie aussieht |
+|---|---|---|
+| **Der Hof** | Schrolli der Schöpfer | Quarz und Gold, der Thron mit der Sonnenscheibe, zwölf Säulen, vier Brücken zu vier Welten (siehe oben) |
+| **Das Firmament** | die Wahre Gestalt | der Himmel selbst wird zum Boden: eine Scheibe aus Nacht mit einem **Polarstern**, dem Himmelsäquator aus Amethyst, **zwölf Sternbildern** und dem Band der **zwölf Zeichen**; **zwölf Obelisken** aus Obsidian (dort, wo die Säulen standen – Schutz vor der Supernova), hinter dem Altar eine **Armillarsphäre** aus Gold, ringsum schweben **fünf Welten** (eine Glutwelt, eine Meereswelt, eine Ringwelt, eine Eiswelt und ein Mond) |
+| **Das Herz der Sonne** | der Allmächtige | eine Scheibe aus **Sonnenglut**: ein weißer Kern, Körnung aus Gold, sechzehn Strahlen, Sonnenflecken, ein Kranz aus Flammen auf Kupfer; **acht Sonnenpylonen**, vier **Bögen aus Glut** am Rand, hinter dem Altar eine gewaltige **Sonnenscheibe** und hoch über allem eine **zweite Sonne** |
+
+Beim nächsten Kampf steht wieder der Hof.
+
 Findet er niemanden mehr, ruht er über seinem Hof; außerhalb der Schöpfung (etwa aus dem Spawn-Ei) steigt er nach einer
 Minute ohne Gegner in einer Säule aus Licht empor und ist fort. Fallen alle, die gegen ihn stehen, vergeht der Hof – der
 Funke glüht weiter im Altar, und man kann es erneut wagen.
 
-**Sein Ende.** Besiegt (ein zweites Mal) brechen Risse aus Licht aus ihm, die Räder lösen sich, er sinkt langsam herab und
+**Sein Ende.** Besiegt (ein drittes Mal) brechen Risse aus Licht aus ihm, die Räder lösen sich, er sinkt langsam herab und
 spricht ein letztes Mal („So geht … und erschafft … eure eigene Welt.“); dann steigt eine Säule aus Licht in den Himmel, ein
-gleißender Blitz – und er ist fort. Vor dem Thron liegt seine Beute: das **Zepter des Schöpfers**, die **Schwingen des
-Schöpfers**, drei Herzkristalle, drei Manakristalle, zwei Nethersterne, zwei verzauberte goldene Äpfel, ein Totem der
+gleißender Blitz – und er ist fort. Vor dem Thron liegt seine Beute: der **Speer des Schöpfers**, seine **Schwingen**, sein
+**Heiligenschein**, die **Räder**, die um ihn kreisten, drei Herzkristalle, drei Manakristalle, zwei Nethersterne, zwei verzauberte goldene Äpfel, ein Totem der
 Unsterblichkeit, zwei verzauberte Bücher, Netheritbarren, Diamant- und Goldblöcke, Edelsteine und Goldmünzen – dazu 1.000
 Erfahrungspunkte; wie bei allen Kampfdimensionen landet alles am Altar, sobald man zurückkehrt. Der Funke ist verglüht.
 Und jeder, der dabei war, wird **Gottbezwinger**: Der Titel erscheint groß auf dem Bildschirm, alle erfahren davon, und er
 steht fortan in Violett vor dem Namen – über dem Kopf, im Chat und in der Spielerliste (er ersetzt den „Weltenretter“).
 
-**Das Zepter des Schöpfers** – ein langer Goldstab mit weißen Bändern und dem achtstrahligen Sonnenstern um einen blauen
-Himmelsstein; in der Hand ein echtes 3D-Modell, der Stern leuchtet:
+**Der Speer des Schöpfers** (bis 0.77 das Zepter, seit 0.78 neu gestaltet und stärker) – ein langer Goldschaft mit weißen
+Bändern und umwickeltem Griff, am Kragen zwei kleine Flügel aus weißen Federn mit leuchtend goldenen Spitzen, ein blauer
+Stein und darüber die **Klinge aus Licht** in goldener Fassung mit weißem Grat, umgeben von einem **Ring aus Licht**; in der
+Hand ein echtes 3D-Modell, Klinge, Ring und Stein leuchten:
 
 | Eigenschaft | Wirkung |
 |---|---|
-| Schaden | 16, etwas mehr Reichweite |
-| **Lichtspeer** | Rechtsklick: Ein Speer aus Licht fliegt in Blickrichtung (12 Schaden, alle 0,7 Sekunden) |
-| **Säule des Lichts** | schleichend Rechtsklick: Auf die Stelle, die man ansieht (bis 32 Blöcke), fährt nach einem Augenblick eine Säule aus Licht herab – 20 Schaden für alle Feinde darin (alle 8 Sekunden) |
-| Haltbarkeit | unzerbrechlich, verzauberbar, episch, verbrennt nicht |
+| Schaden | 22, große Reichweite |
+| **Lichtwelle** | jeder dritte Treffer in kurzer Folge: eine Welle aus Licht um das Ziel – 10 Schaden für alle Feinde in vier Blöcken, die fortgestoßen werden |
+| **Lichtspeer** | Rechtsklick: Ein Speer aus Licht fliegt in Blickrichtung (18 Schaden, alle halbe Sekunde) |
+| **Säule des Lichts** | schleichend Rechtsklick: Auf die Stelle, die man ansieht (bis 32 Blöcke), fährt nach einem Augenblick eine Säule aus Licht herab – 30 Schaden für alle Feinde darin, mit einer Welle am Boden (alle 6 Sekunden) |
+| Haltbarkeit | unzerbrechlich, verzauberbar (wie ein Schwert), episch, verbrennt nicht |
 
-**Die Schwingen des Schöpfers** – die mächtigsten aller Schwingen, weiße Federn mit goldenen Spitzen; hinter ihnen
-ziehen goldene Federn und Lichtfunken her:
+**Die Schwingen des Schöpfers** – die mächtigsten aller Schwingen, seit 0.78 wie **echte Flügel**: weiße Federn mit goldenen
+Spitzen an goldenen Knochen, die sachte schimmern. Im Stehen liegen sie gefaltet auf dem Rücken und atmen, beim Schleichen
+legen sie sich eng an, im **Gleitflug breiten sie sich weit aus** (die Federn hängen ein wenig, die Spitzen heben sich wie
+beim Adler) und wiegen sich, beim Schwingenschlag schlagen sie einmal kräftig auf und nieder. Hinter ihnen ziehen goldene
+Federn und Lichtfunken her:
 
 | Eigenschaft | Wirkung |
 |---|---|
 | Gleiten | wie Elytren |
+| **Rüstung** | sie schützen wie ein Harnisch: 10 Rüstung, 4 Härte |
 | **Schwingenschlag** | im Gleitflug **Springen** drücken: ein Stoß nach vorn, stärker als jede Feuerwerksrakete, mit ein wenig Auftrieb – alle anderthalb Sekunden, und er kostet nichts |
 | **Engelsschutz** | wer sie trägt, nimmt weder Fall- noch Aufprallschaden – die Schwingen fangen ihn auf |
-| Haltbarkeit | unzerbrechlich, episch, verbrennen nicht |
+| Haltbarkeit | unzerbrechlich, verzauberbar, episch, verbrennen nicht |
 
-Schöpferfunke, Altar, Zepter, Schwingen und die Spawn-Eier von Schrolli und dem Seraphling liegen im Kreativ-Reiter
+**Der Heiligenschein des Schöpfers** (seit 0.78) – ein Ring aus goldenem Licht über dem Kopf, besetzt mit blauen Steinen, der
+sich langsam dreht:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schutz | wie ein Helm: 4 Rüstung, 3 Härte |
+| **Licht** | Nachtsicht ohne Flackern; weder Blindheit noch Dunkelheit wirken auf dich |
+| **Segen** | alle drei Sekunden ein halbes Herz, solange du verwundet bist |
+| **Heiliges Licht** | Untote in sechs Blöcken fangen Feuer und nehmen Schaden |
+
+**Die Räder des Schöpfers** (seit 0.78) – die zwei Räder voller Augen, die um ihn kreisten, kreisen jetzt um deine Hüften
+(gegenläufig, schräg) und schützen wie eine Hose:
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schutz | 8 Rüstung, 3 Härte, schneller, eine Stufe hinauf ohne Springen |
+| **Die Augen** | Feinde in zwanzig Blöcken leuchten (auch durch Wände) |
+| **Abprallen** | fast jedes dritte Geschoss prallt an den Rädern ab und fliegt zu seinem Schützen zurück |
+
+Wer **alle drei** trägt – Heiligenschein, Schwingen und Räder –, ist das **Ebenbild des Schöpfers**: Der Schwingenschlag
+lädt doppelt so schnell, der Segen heilt doppelt so viel.
+
+**Rüstung in Schichten.** Minecraft zählt höchstens 30 Rüstungspunkte und zeigt zehn Panzer – seit 0.78 zählen für Helden
+**bis 60**, und wer mehr als 20 hat, sieht die Rüstungsleiste in **Schichten** wie die Heldenherzen: über den silbernen
+Panzern eine Schicht in Gold, darüber eine in Diamantblau, links daneben die Zahl (abschaltbar zusammen mit den
+Heldenherzen in der Konfiguration).
+
+Schöpferfunke, Altar, Speer, Schwingen, Heiligenschein, Räder und die Spawn-Eier von Schrolli und dem Seraphling liegen im Kreativ-Reiter
 **„Die Schöpfung“**.
 
 ### Bauen und Einrichten
@@ -3155,9 +3233,13 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.76 – Schrolli greift zur Klinge** (fertig): der Schöpfer landet und ficht am Boden – Beine in goldenen
      Beinschienen, die Klinge aus Licht mit ihrer Lichtspur, sieben Künste der Klinge bis zur Weltenklinge (jetzt 33
      Künste); dazu warme, leisere Klänge und Musik;
-   - zuletzt **0.77 – Der Weg zum Unsterblichen** (fertig): Heldenstufe bis 200 mit fünf neuen Rängen, die Heldenkraft
+   - **0.77 – Der Weg zum Unsterblichen** (fertig): Heldenstufe bis 200 mit fünf neuen Rängen, die Heldenkraft
      je Stufe, Talente bis 40 Punkte, je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit und die Heldenherzen
-     (die Lebensleiste in farbigen Schichten).
+     (die Lebensleiste in farbigen Schichten);
+   - zuletzt **0.78 – Schrolli der Allmächtige** (fertig): die dritte Gestalt des Schöpfers mit sechs eigenen Künsten,
+     Lichtkäfig und Schwarzes Loch, mit jeder Gestalt ein neuer Hof (das Firmament, das Herz der Sonne), der neue Speer,
+     Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, die Rüstung in Schichten und das bewahrte
+     Inventar der Unsterblichen.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
