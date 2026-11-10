@@ -83,6 +83,11 @@ public final class ModAttachments {
             "arena_fights", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.arena.ArenaFights::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.arena.ArenaFights.CODEC.fieldOf("fights")).build());
 
+    /** Die laufenden Kämpfe in den Kampfdimensionen der großen Bosse (an der Oberwelt). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.arena.BossFights>> BOSS_FIGHTS = ATTACHMENTS.register(
+            "boss_fights", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.arena.BossFights::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.arena.BossFights.CODEC.fieldOf("fights")).build());
+
     /** Welche fremden Reiche der Spieler schon betreten hat (Kennungen; bleibt nach dem Tod). */
     public static final Supplier<AttachmentType<java.util.List<String>>> REALMS_SEEN = ATTACHMENTS.register("realms_seen",
             () -> AttachmentType.<java.util.List<String>>builder(() -> java.util.List.of())

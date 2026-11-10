@@ -541,7 +541,8 @@ public class ModLanguageProvider extends LanguageProvider {
         text("biome.kingdomsatwar.abyss_seam", "The Seam", "Die Naht");
 
         // Der Weltenfresser und der Schlund der Welten (0.73)
-        add(ModEntities.WORLD_EATER.get(), pick("The World-Eater", "Der Weltenfresser"));
+        creature(ModEntities.WORLD_EATER, io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_EATER_SPAWN_EGG,
+                "The World-Eater", "Der Weltenfresser", "Weltenfresser");
         add(ModEntities.WORLD_CHUNK.get(), pick("World Chunk", "Weltbrocken"));
         text("boss.kingdomsatwar.world_eater", "The World-Eater", "Der Weltenfresser");
         item(io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.WORLD_SPEAR, "World Spear", "Weltenspeer");

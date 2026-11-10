@@ -1,0 +1,69 @@
+{
+  "ambient_light": 0.08,
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music_disc.creator_music_box"
+      }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "error_message": {
+        "translate": "block.kingdomsatwar.bed.boss_arena"
+      }
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/nether_portal_spawns_piglin": false,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:gameplay/sky_light_level": 10.0,
+    "minecraft:visual/ambient_light_color": "#3a2a5c",
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "kingdomsatwar:fae_spark"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/cloud_color": "#e0f0a8e0",
+    "minecraft:visual/cloud_height": 34.0,
+    "minecraft:visual/fog_color": "#6a4a9a",
+    "minecraft:visual/fog_end_distance": 260.0,
+    "minecraft:visual/fog_start_distance": 48.0,
+    "minecraft:visual/moon_angle": 340.0,
+    "minecraft:visual/moon_phase": "full_moon",
+    "minecraft:visual/sky_color": "#2a1f5c",
+    "minecraft:visual/sky_light_color": "#c8b8ff",
+    "minecraft:visual/sky_light_factor": 0.85,
+    "minecraft:visual/star_angle": 20.0,
+    "minecraft:visual/star_brightness": 0.8,
+    "minecraft:visual/sun_angle": 100.0,
+    "minecraft:visual/sunrise_sunset_color": "#c0ff7ab8"
+  },
+  "coordinate_scale": 1.0,
+  "has_ceiling": false,
+  "has_ender_dragon_fight": false,
+  "has_fixed_time": true,
+  "has_skylight": true,
+  "height": 256,
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "logical_height": 256,
+  "min_y": 0,
+  "monster_spawn_block_light_limit": 0,
+  "monster_spawn_light_level": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 7,
+    "min_inclusive": 0
+  }
+}

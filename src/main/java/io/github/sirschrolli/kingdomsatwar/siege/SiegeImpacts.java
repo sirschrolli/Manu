@@ -322,7 +322,8 @@ public final class SiegeImpacts {
 
     /** Darf um diese Stelle überhaupt Mauerwerk zu Bruch gehen (Einstellung, Arkane Sphäre, Siegelkreis)? */
     static boolean blockDamageAllowed(ServerLevel level, Vec3 at) {
-        if (!ModServerConfig.SIEGE_BLOCK_DAMAGE.get() || level.dimension() == ArcaneSphere.LEVEL) {
+        if (!ModServerConfig.SIEGE_BLOCK_DAMAGE.get() || level.dimension() == ArcaneSphere.LEVEL
+                || io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.isArena(level)) {
             return false;
         }
         if (level == level.getServer().overworld()) {

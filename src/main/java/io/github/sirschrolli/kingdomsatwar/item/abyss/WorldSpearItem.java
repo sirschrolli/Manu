@@ -44,10 +44,11 @@ public class WorldSpearItem extends Item {
         super(properties);
     }
 
-    /** Im Abgrund oder in der Leere? */
+    /** Im Abgrund oder in der Leere (oder in ihren Kampfdimensionen, dem Weltenschlund und der Thronwelt)? */
     public static boolean worldly(Entity entity) {
         Level level = entity.level();
-        return level.dimension() == AbyssGate.THE_ABYSS || level.dimension() == VoidGate.THE_VOID;
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.counts(level, AbyssGate.THE_ABYSS)
+                || io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.counts(level, VoidGate.THE_VOID);
     }
 
     @Override

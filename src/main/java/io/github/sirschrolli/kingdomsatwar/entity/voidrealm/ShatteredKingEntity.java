@@ -70,7 +70,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Er ist bewusst schwächer als die Erzmagier (und die Drachen-Bosse sind die stärksten von allen).
  */
-public class ShatteredKingEntity extends Monster {
+public class ShatteredKingEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
     public static final byte EVENT_AWAKEN = 90;
     public static final byte EVENT_SLAM_LEFT = 91;
     public static final byte EVENT_SLAM_RIGHT = 92;
@@ -194,6 +194,12 @@ public class ShatteredKingEntity extends Monster {
         builder.define(DATA_BEAM_YAW, 0.0f);
         builder.define(DATA_BEAMING, false);
         builder.define(DATA_SLAM_POINT, new org.joml.Vector3f());
+    }
+
+    /** Wo sein Thronsiegel steht (für die Kampfdimension und das Zurücksetzen nach dem Tod seiner Gegner). */
+    @Override
+    public @Nullable BlockPos lairPos() {
+        return this.seal;
     }
 
     /** Verknüpft den König mit seinem Thron (Mitte des Platzes) und dem Siegel darunter. */

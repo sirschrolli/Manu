@@ -1,0 +1,18 @@
+{
+  "type": "kingdomsatwar:world_maw",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "kingdomsatwar:world_maw",
+      "features": false,
+      "lakes": false,
+      "layers": [
+        {
+          "block": "minecraft:air",
+          "height": 1
+        }
+      ],
+      "structure_overrides": []
+    }
+  }
+}

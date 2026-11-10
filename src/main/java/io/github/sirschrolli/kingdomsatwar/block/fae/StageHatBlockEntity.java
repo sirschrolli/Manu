@@ -31,7 +31,7 @@ import org.jspecify.annotations.Nullable;
  * springt heraus. Findet sie keine Zuschauer mehr, verschwindet sie wieder darin (der Zylinder wartet); nach ihrem Sieg
  * ist er leer, und Feenstaub hinein ruft sie sofort zurück.
  */
-public class StageHatBlockEntity extends BlockEntity {
+public class StageHatBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     /** So nah (waagerecht) am Zylinder beginnt die Vorstellung. */
     public static final double WAKE_RADIUS = 10.0;
     private static final double WARN_RADIUS = 40.0;
@@ -41,6 +41,8 @@ public class StageHatBlockEntity extends BlockEntity {
     private Phase phase = Phase.WAITING;
     private @Nullable UUID performer;
     private int missing;
+    /** Ein Abbild in MissMystiks Kampfdimension (der Mondbühne)? */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public StageHatBlockEntity(BlockPos pos, BlockState state) {
@@ -93,6 +95,11 @@ public class StageHatBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(s, player.getX(), player.getY(), player.getZ())) {
+                // sie holt ihr Publikum auf die Mondbühne (nur in Tests und im Abbild spielt sie hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.begin(level);
                 return;
             }
@@ -137,6 +144,16 @@ public class StageHatBlockEntity extends BlockEntity {
     }
 
     private void tickShow(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben auf der Mondbühne läuft die Vorstellung: wer jetzt an den Zylinder tritt, folgt den anderen
+            this.missing = 0;
+            for (ServerPlayer player : level.players()) {
+                if (counts(player) && wakes(this.worldPosition, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         MissMystikEntity entity = this.performer(level);
         if (entity != null) {
             this.missing = 0;
@@ -180,6 +197,10 @@ public class StageHatBlockEntity extends BlockEntity {
         this.setState(level, StageHatBlock.Phase.WAITING);
         level.sendParticles(ModParticles.FAE_SPARK.get(), this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.2,
                 this.worldPosition.getZ() + 0.5, 40, 0.4, 0.6, 0.4, 0.08);
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+            this.arenaAway(level);
+            return true;
+        }
         return this.begin(level) != null;
     }
 
@@ -218,6 +239,9 @@ public class StageHatBlockEntity extends BlockEntity {
         if (this.performer != null) {
             output.store("Performer", UUIDUtil.CODEC, this.performer);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -229,5 +253,73 @@ public class StageHatBlockEntity extends BlockEntity {
             this.phase = Phase.WAITING;
         }
         this.performer = input.read("Performer", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (die Mondbühne)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.MYSTIK;
+    }
+
+    @Override
+    public BlockPos arenaFocus() {
+        return this.worldPosition;
+    }
+
+    /** Vorn auf der Bühne, drei Schritte vor dem Zylinder. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.worldPosition.offset(0, 0, 3);
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.EMPTY;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.performer(level);
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.phase == Phase.WAITING ? this.begin(level) : this.performer(level);
+    }
+
+    @Override
+    public void arenaAway(ServerLevel level) {
+        MissMystikEntity entity = this.performer(level);
+        if (entity != null) {
+            entity.discard();
+        }
+        this.performer = null;
+        this.missing = 0;
+        this.setPhase(level, Phase.SHOW);
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onPerformerDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }

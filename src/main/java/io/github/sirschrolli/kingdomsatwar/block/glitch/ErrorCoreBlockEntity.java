@@ -32,7 +32,7 @@ import org.jspecify.annotations.Nullable;
  * setzt sich neben dem Kern zusammen. Findet er niemanden mehr, kehrt er in den Kern zurück (der wartet wieder); nach seinem
  * Absturz ist er erloschen, und erst ein Redstoneblock startet ihn neu.
  */
-public class ErrorCoreBlockEntity extends BlockEntity {
+public class ErrorCoreBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     public static final double WAKE_RADIUS = 12.0;
     private static final double WARN_RADIUS = 44.0;
 
@@ -41,6 +41,8 @@ public class ErrorCoreBlockEntity extends BlockEntity {
     private Phase phase = Phase.WAITING;
     private @Nullable UUID troll;
     private int missing;
+    /** Ein Abbild in Annis Kampfdimension (dem Fehlerraum)? */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public ErrorCoreBlockEntity(BlockPos pos, BlockState state) {
@@ -93,6 +95,11 @@ public class ErrorCoreBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(c, player.getX(), player.getY(), player.getZ())) {
+                // er lädt seine Gegner in den Fehlerraum (nur in Tests und im Abbild kämpft er hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.begin(level);
                 return;
             }
@@ -156,6 +163,16 @@ public class ErrorCoreBlockEntity extends BlockEntity {
     }
 
     private void tickRunning(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben im Fehlerraum wird gekämpft: wer jetzt an den Kern tritt, folgt den anderen
+            this.missing = 0;
+            for (ServerPlayer player : level.players()) {
+                if (counts(player) && wakes(this.worldPosition, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         AnniTrollEntity entity = this.troll(level);
         if (entity != null) {
             this.missing = 0;
@@ -198,6 +215,10 @@ public class ErrorCoreBlockEntity extends BlockEntity {
         this.phase = Phase.WAITING;
         this.setState(level, ErrorCoreBlock.Phase.WAITING);
         level.playSound(null, this.worldPosition, ModSounds.ERROR_CORE_ON.get(), SoundSource.BLOCKS, 2.0f, 1.0f);
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+            this.arenaAway(level);
+            return true;
+        }
         return this.begin(level) != null;
     }
 
@@ -236,6 +257,9 @@ public class ErrorCoreBlockEntity extends BlockEntity {
         if (this.troll != null) {
             output.store("Troll", UUIDUtil.CODEC, this.troll);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -247,5 +271,73 @@ public class ErrorCoreBlockEntity extends BlockEntity {
             this.phase = Phase.WAITING;
         }
         this.troll = input.read("Troll", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (der Fehlerraum)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.ANNI;
+    }
+
+    @Override
+    public BlockPos arenaFocus() {
+        return this.worldPosition;
+    }
+
+    /** Auf dem Boden der Arena, vier Schritte vor dem Sockel des Kerns. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.worldPosition.offset(0, -1, 4);
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.CRASHED;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.troll(level);
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.phase == Phase.WAITING ? this.begin(level) : this.troll(level);
+    }
+
+    @Override
+    public void arenaAway(ServerLevel level) {
+        AnniTrollEntity entity = this.troll(level);
+        if (entity != null) {
+            entity.discard();
+        }
+        this.troll = null;
+        this.missing = 0;
+        this.setPhase(level, Phase.RUNNING);
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onTrollDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }

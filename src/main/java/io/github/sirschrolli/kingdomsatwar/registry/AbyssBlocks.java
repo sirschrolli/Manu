@@ -145,6 +145,10 @@ public final class AbyssBlocks {
     // Gegenstände
     // =====================================================================================
 
+    /** Spawn-Ei des Weltenfressers (ohne Hort: er kreist um die Stelle, an der er erscheint). */
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> WORLD_EATER_SPAWN_EGG = item("world_eater_spawn_egg",
+            net.minecraft.world.item.SpawnEggItem::new, p -> p.spawnEgg(ModEntities.WORLD_EATER.get()));
+
     /** Werkstoff des Weltenspeers: härter und schärfer als die Sternenlanze; mit Weltennähten zu reparieren. */
     public static final net.minecraft.world.item.ToolMaterial WORLD_MATERIAL = new net.minecraft.world.item.ToolMaterial(
             net.minecraft.tags.BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 3600, 10.0f, 6.0f, 20, ModTags.Items.REPAIRS_WORLD_SPEAR);

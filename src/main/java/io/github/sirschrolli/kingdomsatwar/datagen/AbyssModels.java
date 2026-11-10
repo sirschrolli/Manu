@@ -63,6 +63,7 @@ final class AbyssModels {
                 .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(ew))));
 
         ModModelProvider.flat(items, AbyssBlocks.RIFT_KEY.get());
+        ModModelProvider.flat(items, AbyssBlocks.WORLD_EATER_SPAWN_EGG.get());
 
         // der Schlund der Welten: der Weltenspeer und die Trophäe
         worldSpear(items);

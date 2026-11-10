@@ -80,7 +80,8 @@ public final class VoidGate {
             player.sendOverlayMessage(Component.translatable("item.kingdomsatwar.shadow_heart.in_void").withStyle(ChatFormatting.DARK_PURPLE));
             return false;
         }
-        if (level.getServer().getLevel(THE_VOID) == null || io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.is(level)) {
+        if (level.getServer().getLevel(THE_VOID) == null || io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.is(level)
+                || io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.isArena(level)) {
             player.sendOverlayMessage(Component.translatable("item.kingdomsatwar.shadow_heart.cannot").withStyle(ChatFormatting.DARK_PURPLE));
             return false;
         }

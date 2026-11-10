@@ -89,7 +89,7 @@ import org.jspecify.annotations.Nullable;
  * Findet er niemanden mehr, zerfällt er nach einer halben Minute in Pixel und kehrt in seinen Fehlerkern zurück. Besiegt
  * stürzt er endgültig ab und zerfällt in Pixel; der Kern erlischt (ein Redstoneblock startet ihn neu).
  */
-public class AnniTrollEntity extends Monster {
+public class AnniTrollEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
     public static final float MAX_HEALTH = 1500.0f;
     public static final int SPAWN_TICKS = 90;
     /** In diesem Tick des Ladens setzt er sich zusammen (davor fliegen nur Pixel). */
@@ -316,6 +316,12 @@ public class AnniTrollEntity extends Monster {
     }
 
     public @Nullable BlockPos home() {
+        return this.home;
+    }
+
+    /** Wo sein Fehlerkern steht (für die Kampfdimension und das Zurücksetzen nach dem Tod seiner Gegner). */
+    @Override
+    public @Nullable BlockPos lairPos() {
         return this.home;
     }
 

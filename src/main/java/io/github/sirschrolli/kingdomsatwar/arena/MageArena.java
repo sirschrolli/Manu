@@ -53,7 +53,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Der Kampf in der Arkanen Sphäre: Betritt jemand das Sanktum, zieht der Erzmagier ihn, alle Mitspieler im Sanktum und
+ * Der Kampf in der Arkanen Sphäre (die Regeln – nichts bauen, nichts abbauen, Explosionen ohne Wirkung – gelten auch in den
+ * Kampfdimensionen der großen Bosse, siehe {@link BossArenas}): Betritt jemand das Sanktum, zieht der Erzmagier ihn, alle Mitspieler im Sanktum und
  * ihre Soldaten in der Nähe in seine Arena. Dort lässt sich nichts bauen und nichts abbauen; wer stirbt, verliert alles,
  * was er bei sich trägt. Wer vom Rand stürzt, wirft die Sphäre verletzt zurück. Fällt der Magier, kehren alle mit der
  * Beute in sein Sanktum zurück; fällt niemand mehr, der ihm die Stirn bietet, kehrt er geheilt in seinen Turm zurück.
@@ -466,14 +467,15 @@ public final class MageArena {
         return level instanceof Level l && forbidden(entity, l.dimension());
     }
 
-    /** Gilt in dieser Dimension für dieses Wesen das Bauverbot der Sphäre? */
+    /** Gilt in dieser Dimension für dieses Wesen das Bauverbot (in der Sphäre und in den Kampfdimensionen der Bosse)? */
     public static boolean forbidden(@Nullable Entity entity, ResourceKey<Level> dimension) {
-        return dimension == ArcaneSphere.LEVEL && !(entity instanceof Player player && player.isCreative());
+        return (dimension == ArcaneSphere.LEVEL || BossArenaKind.isArena(dimension)) && !(entity instanceof Player player && player.isCreative());
     }
 
     private static void refuse(@Nullable Entity entity) {
         if (entity instanceof ServerPlayer player) {
-            player.sendOverlayMessage(Component.translatable("message.kingdomsatwar.arena.forbidden").withStyle(ChatFormatting.LIGHT_PURPLE));
+            String key = BossArenaKind.isArena(player.level()) ? "message.kingdomsatwar.boss_arena.forbidden" : "message.kingdomsatwar.arena.forbidden";
+            player.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -524,7 +526,7 @@ public final class MageArena {
 
     @SubscribeEvent
     static void onExplosion(ExplosionEvent.Detonate event) {
-        if (ArcaneSphere.is(event.getLevel())) {
+        if (ArcaneSphere.is(event.getLevel()) || BossArenaKind.isArena(event.getLevel())) {
             event.getAffectedBlocks().clear();
         }
     }

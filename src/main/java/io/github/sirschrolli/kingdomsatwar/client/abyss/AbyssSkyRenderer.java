@@ -77,7 +77,8 @@ public final class AbyssSkyRenderer {
     static void afterSky(RenderLevelStageEvent.AfterSky event) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
-        if (level == null || level.dimension() != AbyssGate.THE_ABYSS) {
+        if (level == null || level.dimension() != AbyssGate.THE_ABYSS
+                && level.dimension() != io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.WORLD_EATER.level()) {
             return;
         }
         if (vertices == null) {

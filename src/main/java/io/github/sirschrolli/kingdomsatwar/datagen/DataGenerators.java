@@ -54,6 +54,7 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapType(context);
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenaDimensions.bootstrapTypes(context);
                 })
                 .add(Registries.LEVEL_STEM, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapStem(context);
@@ -61,6 +62,7 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapStem(context);
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenaDimensions.bootstrapStems(context);
                 })
                 .add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
                 .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)

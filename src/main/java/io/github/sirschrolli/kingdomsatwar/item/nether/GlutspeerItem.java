@@ -30,9 +30,9 @@ public class GlutspeerItem extends Item {
         super(properties);
     }
 
-    /** Im Nether – oder brennt der Träger? */
+    /** Im Nether (oder in der Glutesse des Schmieds) – oder brennt der Träger? */
     public static boolean blazing(Entity entity) {
-        return entity.level().dimension() == Level.NETHER || entity.isOnFire();
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.counts(entity.level(), Level.NETHER) || entity.isOnFire();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class GlutspeerItem extends Item {
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         super.inventoryTick(stack, level, owner, slot);
         if ((slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) && owner instanceof LivingEntity living
-                && level.dimension() == Level.NETHER && level.getGameTime() % 20 == 0) {
+                && io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.counts(level, Level.NETHER) && level.getGameTime() % 20 == 0) {
             living.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 0, true, false, true));
         }
     }

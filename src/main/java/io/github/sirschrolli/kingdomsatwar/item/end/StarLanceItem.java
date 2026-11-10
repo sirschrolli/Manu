@@ -33,10 +33,11 @@ public class StarLanceItem extends Item {
         super(properties);
     }
 
-    /** Im End – oder nachts unter freiem Himmel? */
+    /** Im End (oder in Asterias Sternenzelt) – oder nachts unter freiem Himmel? */
     public static boolean starlit(Entity entity) {
         Level level = entity.level();
-        return level.dimension() == Level.END || level.isDarkOutside() && level.canSeeSky(entity.blockPosition().above());
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.counts(level, Level.END)
+                || level.isDarkOutside() && level.canSeeSky(entity.blockPosition().above());
     }
 
     @Override

@@ -76,7 +76,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Findet er niemanden mehr, kehrt er an den Amboss zurück, legt den Speer darauf und schmiedet weiter.
  */
-public class GlutschmiedEntity extends Monster {
+public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
     public static final float MAX_HEALTH = 560.0f;
     public static final int AWAKEN_TICKS = 60;
     /** So lange (Ticks) dauert sein Sterben. */
@@ -195,6 +195,12 @@ public class GlutschmiedEntity extends Monster {
         if (DATA_ATTACK.equals(key)) {
             this.clientAttackStart = this.tickCount;
         }
+    }
+
+    /** Wo sein Glutamboss steht (für die Kampfdimension und das Zurücksetzen nach dem Tod seiner Gegner). */
+    @Override
+    public @Nullable BlockPos lairPos() {
+        return this.anvil;
     }
 
     /**

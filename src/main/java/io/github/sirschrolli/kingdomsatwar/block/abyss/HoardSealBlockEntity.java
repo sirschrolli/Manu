@@ -30,7 +30,7 @@ import org.jspecify.annotations.Nullable;
  * dem Schlund verbunden; wer sich nähert, spürt das Beben. Betritt jemand den Ring, erwacht er. Zieht er sich zurück
  * (niemand mehr am Ring), wartet der Schlund eine Minute, bevor er erneut erwachen kann; besiegt bleibt er still.
  */
-public class HoardSealBlockEntity extends BlockEntity {
+public class HoardSealBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     private static final double WARN_RADIUS = 110.0;
 
     public enum Phase { DORMANT, AWAKE, DEFEATED }
@@ -40,6 +40,8 @@ public class HoardSealBlockEntity extends BlockEntity {
     private @Nullable UUID eater;
     private int cooldown;
     private int missing;
+    /** Ein Abbild in der Kampfdimension des Weltenfressers (dem Weltenschlund)? */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public HoardSealBlockEntity(BlockPos pos, BlockState state) {
@@ -116,6 +118,11 @@ public class HoardSealBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(c, player.getX(), player.getY(), player.getZ())) {
+                // er reißt seine Gegner in den Weltenschlund (nur in Tests und im Abbild kämpft er hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.awaken(level);
                 return;
             }
@@ -153,6 +160,17 @@ public class HoardSealBlockEntity extends BlockEntity {
     }
 
     private void tickAwake(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben im Weltenschlund wird gekämpft: wer jetzt den Ring betritt, folgt den anderen
+            this.missing = 0;
+            BlockPos c = this.center();
+            for (ServerPlayer player : level.players()) {
+                if (!player.isSpectator() && !player.isCreative() && player.isAlive() && wakes(c, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         Entity entity = this.eater != null ? level.getEntity(this.eater) : null;
         if (entity instanceof WorldEaterEntity && entity.isAlive()) {
             this.missing = 0;
@@ -204,6 +222,9 @@ public class HoardSealBlockEntity extends BlockEntity {
         if (this.eater != null) {
             output.store("Eater", UUIDUtil.CODEC, this.eater);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -216,5 +237,75 @@ public class HoardSealBlockEntity extends BlockEntity {
             this.phase = Phase.DORMANT;
         }
         this.eater = input.read("Eater", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (der Weltenschlund)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.WORLD_EATER;
+    }
+
+    /** Die Mitte des Rings (über dem Schlund). */
+    @Override
+    public BlockPos arenaFocus() {
+        return this.center();
+    }
+
+    /** Auf dem Ring im Süden, zwischen den Kronensplittern und der Brüstung. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.center().offset(0, 0, 22);
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.DEFEATED;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.eater != null && level.getEntity(this.eater) instanceof WorldEaterEntity entity && entity.isAlive() ? entity : null;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.phase == Phase.DORMANT ? this.awaken(level) : (net.minecraft.world.entity.LivingEntity) this.arenaBoss(level);
+    }
+
+    @Override
+    public void arenaAway(ServerLevel level) {
+        if (this.eater != null && level.getEntity(this.eater) instanceof WorldEaterEntity entity) {
+            entity.discard();
+        }
+        this.eater = null;
+        this.missing = 0;
+        this.cooldown = 0;
+        this.phase = Phase.AWAKE;
+        this.setChanged();
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }

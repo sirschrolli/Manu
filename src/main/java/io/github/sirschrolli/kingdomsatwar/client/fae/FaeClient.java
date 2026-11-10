@@ -44,7 +44,8 @@ public final class FaeClient {
             @Override
             public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
                 ClientLevel world = Minecraft.getInstance().level;
-                if (world == null || world.dimension() != FaeGate.FAE_REALM) {
+                if (world == null || world.dimension() != FaeGate.FAE_REALM
+                        && world.dimension() != io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.MYSTIK.level()) {
                     return GRASS_FALLBACK;
                 }
                 return BiomeColors.getAverageGrassColor(level, pos);

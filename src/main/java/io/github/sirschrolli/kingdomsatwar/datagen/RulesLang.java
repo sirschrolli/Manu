@@ -23,6 +23,56 @@ final class RulesLang {
                 "Die Sphäre schließt sich – der Erzmagier kehrt in seinen Turm zurück.");
         text.add("block.kingdomsatwar.bed.arcane_sphere", "There is no rest in the Arcane Sphere.", "In der Arkanen Sphäre gibt es keine Ruhe.");
         text.add("dimension.kingdomsatwar.arcane_sphere", "Arcane Sphere", "Arkane Sphäre");
+        // Die Kampfdimensionen der großen Bosse
+        text.add("message.kingdomsatwar.boss_arena.forbidden", "This world does not allow it.", "Diese Welt lässt es nicht zu.");
+        text.add("message.kingdomsatwar.boss_arena.rescued", "The world hurls you back into the fight!",
+                "Die Welt schleudert dich zurück in den Kampf!");
+        text.add("message.kingdomsatwar.boss_arena.lost_everything", "Everything you carried is lost in this world.",
+                "Alles, was du bei dir trugst, ist in dieser Welt verloren.");
+        text.add("block.kingdomsatwar.bed.boss_arena", "There is no rest here – not while the fight rages.",
+                "Hier gibt es keine Ruhe – nicht, solange der Kampf tobt.");
+        bossArena(text, "moon_stage", "Moon Stage", "Mondbühne",
+                "MissMystik pulls you onto her Moon Stage – the show begins!",
+                "MissMystik holt dich auf ihre Mondbühne – die Vorstellung beginnt!",
+                "The curtain falls – MissMystik is defeated. The Moon Stage releases you, together with her treasure.",
+                "Der Vorhang fällt – MissMystik ist besiegt. Die Mondbühne entlässt euch samt ihrem Schatz.",
+                "The show is over – MissMystik vanishes into her hat and waits for a new audience.",
+                "Die Vorstellung ist vorbei – MissMystik verschwindet in ihrem Zylinder und wartet auf neues Publikum.");
+        bossArena(text, "ember_forge", "Ember Forge", "Glutesse",
+                "Malleus drags you into his Ember Forge!",
+                "Malleus reißt dich in seine Glutesse!",
+                "The forge grows cold – Malleus has fallen. You return with his treasure.",
+                "Die Esse erkaltet – Malleus ist gefallen. Ihr kehrt mit seiner Beute zurück.",
+                "The Ember Forge dies down – Malleus returns to his anvil.",
+                "Die Glutesse erlischt – Malleus kehrt an seinen Amboss zurück.");
+        bossArena(text, "star_canopy", "Star Canopy", "Sternenzelt",
+                "Asteria pulls you up into the Star Canopy!",
+                "Asteria zieht dich hinauf ins Sternenzelt!",
+                "Asteria burns out among the stars – the Star Canopy releases you, together with her treasure.",
+                "Asteria verglüht zwischen den Sternen – das Sternenzelt entlässt euch samt ihrem Schatz.",
+                "The Star Canopy closes – Asteria returns to the sky.",
+                "Das Sternenzelt schließt sich – Asteria kehrt in den Himmel zurück.");
+        bossArena(text, "error_space", "Error Space", "Fehlerraum",
+                "Anni loads you into the Error Space… ERROR 404: exit not found.",
+                "Anni lädt dich in den Fehlerraum … ERROR 404: Ausgang nicht gefunden.",
+                "Anni has crashed. The Error Space closes – you return with the loot.",
+                "Anni ist abgestürzt. Der Fehlerraum schließt sich – ihr kehrt mit der Beute zurück.",
+                "Connection lost. Anni resets himself.",
+                "Verbindung getrennt. Anni setzt sich zurück.");
+        bossArena(text, "throne_realm", "Throne Realm", "Thronwelt",
+                "The Shattered King summons you before his throne in the Throne Realm!",
+                "Der Zerbrochene König ruft dich vor seinen Thron in der Thronwelt!",
+                "The Shattered King has fallen – the Throne Realm crumbles, and you return with his treasure.",
+                "Der Zerbrochene König ist gefallen – die Thronwelt zerfällt, und ihr kehrt mit seiner Beute zurück.",
+                "The Throne Realm closes – the king returns to his throne.",
+                "Die Thronwelt schließt sich – der König kehrt auf seinen Thron zurück.");
+        bossArena(text, "world_maw", "World Maw", "Weltenschlund",
+                "The World-Eater swallows you – you fall into the World Maw!",
+                "Der Weltenfresser verschlingt dich – du stürzt in den Weltenschlund!",
+                "The World-Eater has crumbled – the World Maw spits you back out, together with his hoard.",
+                "Der Weltenfresser ist zerfallen – der Weltenschlund speit euch samt seinem Hort zurück.",
+                "The World Maw closes – the World-Eater sinks back into his hoard.",
+                "Der Weltenschlund schließt sich – der Weltenfresser sinkt zurück in seinen Hort.");
         // Verzauberungen: Name und Erklärung (im Tooltip verzauberter Bücher)
         enchantment(text, "dragonslayer", "Dragonslayer", "Drachentöter",
                 "Deals much more damage to dragons, dragon lords and lindworms.",
@@ -48,6 +98,15 @@ final class RulesLang {
         enchantment(text, "weight_curse", "Curse of Weight", "Fluch der Schwere",
                 "This armor drags you down: you move more slowly.",
                 "Diese Rüstung zieht dich nieder: Du bewegst dich langsamer.");
+    }
+
+    /** Name einer Kampfdimension und was man beim Hineinziehen, beim Sieg und bei der Niederlage liest. */
+    private static void bossArena(WarLang.Text text, String id, String nameEn, String nameDe, String pulledEn, String pulledDe,
+            String victoryEn, String victoryDe, String defeatEn, String defeatDe) {
+        text.add("dimension.kingdomsatwar." + id, nameEn, nameDe);
+        text.add("message.kingdomsatwar.boss_arena." + id + ".pulled", pulledEn, pulledDe);
+        text.add("message.kingdomsatwar.boss_arena." + id + ".victory", victoryEn, victoryDe);
+        text.add("message.kingdomsatwar.boss_arena." + id + ".defeat", defeatEn, defeatDe);
     }
 
     private static void enchantment(WarLang.Text text, String id, String nameEn, String nameDe, String descEn, String descDe) {

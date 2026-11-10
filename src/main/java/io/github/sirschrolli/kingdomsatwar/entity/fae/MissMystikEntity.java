@@ -84,7 +84,7 @@ import org.jspecify.annotations.Nullable;
  * verbeugt sie sich ein letztes Mal und vergeht in einem Regen aus Konfetti – der Zylinder ist dann leer (Feenstaub ruft
  * sie zurück).
  */
-public class MissMystikEntity extends Monster {
+public class MissMystikEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
     public static final float MAX_HEALTH = 520.0f;
     /** Ablauf des Auftritts: Trommelwirbel, im Tick {@link #APPEAR_BURST} springt sie heraus, danach die Verbeugung. */
     public static final int APPEAR_TICKS = 72;
@@ -239,6 +239,12 @@ public class MissMystikEntity extends Monster {
     }
 
     public @Nullable BlockPos home() {
+        return this.home;
+    }
+
+    /** Wo ihr Zauberzylinder steht (für die Kampfdimension und das Zurücksetzen nach dem Tod seiner Gegner). */
+    @Override
+    public @Nullable BlockPos lairPos() {
         return this.home;
     }
 

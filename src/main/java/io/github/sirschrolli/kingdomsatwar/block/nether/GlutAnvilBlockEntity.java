@@ -34,7 +34,7 @@ import org.jspecify.annotations.Nullable;
  * Glutspeer vom Amboss und kämpft. Findet er niemanden mehr, kehrt er an den Amboss zurück und schmiedet weiter (geheilt).
  * Nach seinem Sieg erkaltet der Amboss; ein Netheritbarren facht ihn wieder an und ruft den Schmied zurück.
  */
-public class GlutAnvilBlockEntity extends BlockEntity {
+public class GlutAnvilBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     /** So nah (waagerecht) am Amboss erwacht er. */
     public static final double WAKE_RADIUS = 7.0;
     /** Ab dieser Nähe kniet er schon am Amboss und schmiedet. */
@@ -46,6 +46,8 @@ public class GlutAnvilBlockEntity extends BlockEntity {
     private Phase phase = Phase.DORMANT;
     private @Nullable UUID smith;
     private int missing;
+    /** Ein Abbild in der Kampfdimension des Schmieds (der Glutesse)? */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public GlutAnvilBlockEntity(BlockPos pos, BlockState state) {
@@ -110,6 +112,11 @@ public class GlutAnvilBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(a, player.getX(), player.getY(), player.getZ())) {
+                // er zieht seine Gegner in die Glutesse (nur in Tests und im Abbild kämpft er hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.awaken(level);
                 return;
             }
@@ -197,6 +204,16 @@ public class GlutAnvilBlockEntity extends BlockEntity {
     }
 
     private void tickAwake(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben in der Glutesse wird gekämpft: wer jetzt an den Amboss tritt, folgt den anderen
+            this.missing = 0;
+            for (ServerPlayer player : level.players()) {
+                if (counts(player) && wakes(this.worldPosition, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         GlutschmiedEntity entity = this.smith(level);
         if (entity != null) {
             this.missing = 0;
@@ -243,6 +260,10 @@ public class GlutAnvilBlockEntity extends BlockEntity {
         level.playSound(null, this.worldPosition, ModSounds.GLUTSCHMIED_STOKE.get(), SoundSource.BLOCKS, 2.0f, 1.2f);
         level.sendParticles(ParticleTypes.FLAME, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0,
                 this.worldPosition.getZ() + 0.5, 40, 0.4, 0.4, 0.4, 0.06);
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+            this.arenaAway(level);
+            return true;
+        }
         return this.spawn(level, true) != null;
     }
 
@@ -280,6 +301,9 @@ public class GlutAnvilBlockEntity extends BlockEntity {
         if (this.smith != null) {
             output.store("Smith", UUIDUtil.CODEC, this.smith);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -291,5 +315,76 @@ public class GlutAnvilBlockEntity extends BlockEntity {
             this.phase = Phase.DORMANT;
         }
         this.smith = input.read("Smith", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (die Glutesse)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.MALLEUS;
+    }
+
+    @Override
+    public BlockPos arenaFocus() {
+        return this.worldPosition;
+    }
+
+    /** Wo der Schmied sonst kniet: auf dem Dach vor dem Amboss. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.workplace();
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.DEFEATED;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.smith(level);
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.awaken(level);
+    }
+
+    /** Der Schmied ist in seiner Glutesse: Wer hier noch kniete, ist fort, und der Speer liegt nicht mehr auf dem Amboss. */
+    @Override
+    public void arenaAway(ServerLevel level) {
+        GlutschmiedEntity entity = this.smith(level);
+        if (entity != null) {
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, entity.getX(), entity.getY(1.0), entity.getZ(), 30, 0.5, 0.8, 0.5, 0.03);
+            entity.discard();
+        }
+        this.smith = null;
+        this.missing = 0;
+        this.setPhase(level, Phase.AWAKE);
+        this.setState(level, GlutAnvilBlock.Phase.AWAKE);
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onSmithDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }

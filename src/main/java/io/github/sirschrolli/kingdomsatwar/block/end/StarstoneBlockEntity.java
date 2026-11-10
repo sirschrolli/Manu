@@ -33,7 +33,7 @@ import org.jspecify.annotations.Nullable;
  * Himmel herab und kämpft. Findet sie niemanden mehr, kehrt sie in den Himmel zurück (der Stein ruht wieder); nach ihrem
  * Sieg erlischt er, und ein Endkristall entzündet ihn neu – sie kehrt sofort zurück.
  */
-public class StarstoneBlockEntity extends BlockEntity {
+public class StarstoneBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     /** So nah (waagerecht) am Sternstein stößt sie herab. */
     public static final double WAKE_RADIUS = 9.0;
     private static final double WARN_RADIUS = 40.0;
@@ -43,6 +43,8 @@ public class StarstoneBlockEntity extends BlockEntity {
     private Phase phase = Phase.DORMANT;
     private @Nullable UUID rider;
     private int missing;
+    /** Ein Abbild in Asterias Kampfdimension (dem Sternenzelt)? */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public StarstoneBlockEntity(BlockPos pos, BlockState state) {
@@ -95,6 +97,11 @@ public class StarstoneBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(s, player.getX(), player.getY(), player.getZ())) {
+                // sie zieht ihre Gegner ins Sternenzelt (nur in Tests und im Abbild kämpft sie hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.descend(level);
                 return;
             }
@@ -143,6 +150,16 @@ public class StarstoneBlockEntity extends BlockEntity {
     }
 
     private void tickAwake(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben im Sternenzelt wird gekämpft: wer jetzt an den Stein tritt, folgt den anderen
+            this.missing = 0;
+            for (ServerPlayer player : level.players()) {
+                if (counts(player) && wakes(this.worldPosition, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         AsteriaEntity entity = this.rider(level);
         if (entity != null) {
             this.missing = 0;
@@ -189,6 +206,10 @@ public class StarstoneBlockEntity extends BlockEntity {
         level.playSound(null, this.worldPosition, ModSounds.ASTERIA_CONSTELLATION.get(), SoundSource.BLOCKS, 2.0f, 1.2f);
         level.sendParticles(ParticleTypes.END_ROD, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0,
                 this.worldPosition.getZ() + 0.5, 50, 0.3, 0.8, 0.3, 0.1);
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+            this.arenaAway(level);
+            return true;
+        }
         return this.descend(level) != null;
     }
 
@@ -227,6 +248,9 @@ public class StarstoneBlockEntity extends BlockEntity {
         if (this.rider != null) {
             output.store("Rider", UUIDUtil.CODEC, this.rider);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -238,5 +262,73 @@ public class StarstoneBlockEntity extends BlockEntity {
             this.phase = Phase.DORMANT;
         }
         this.rider = input.read("Rider", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (das Sternenzelt)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.ASTERIA;
+    }
+
+    @Override
+    public BlockPos arenaFocus() {
+        return this.worldPosition;
+    }
+
+    /** Auf dem Pflaster des Sternenhofs, drei Schritte vor dem Pfeiler des Sternsteins. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.worldPosition.offset(0, -1, 3);
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.DEFEATED;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.rider(level);
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.phase == Phase.DORMANT ? this.descend(level) : this.rider(level);
+    }
+
+    @Override
+    public void arenaAway(ServerLevel level) {
+        AsteriaEntity entity = this.rider(level);
+        if (entity != null) {
+            entity.discard();
+        }
+        this.rider = null;
+        this.missing = 0;
+        this.setPhase(level, Phase.AWAKE);
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onRiderDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }

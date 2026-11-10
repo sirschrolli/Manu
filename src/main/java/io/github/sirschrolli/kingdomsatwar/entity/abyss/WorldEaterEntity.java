@@ -79,7 +79,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Besiegt zerbricht er Glied um Glied; wer dabei war, ist fortan <b>Weltenretter</b>.
  */
-public class WorldEaterEntity extends Monster {
+public class WorldEaterEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
     public static final byte EVENT_AWAKEN = 90;
     public static final byte EVENT_ROAR = 91;
     public static final byte EVENT_WRATH = 92;
@@ -398,6 +398,12 @@ public class WorldEaterEntity extends Monster {
             return false;
         }
         return super.hurtServer(level, source, damage * part.damageFactor);
+    }
+
+    /** Wo das Siegel seines Horts steht (für die Kampfdimension und das Zurücksetzen nach dem Tod seiner Gegner). */
+    @Override
+    public @Nullable BlockPos lairPos() {
+        return this.seal;
     }
 
     /** Verknüpft ihn mit dem Schlund der Welten (Mitte des Rings, ein Block über dem Boden) und dem Siegel. */

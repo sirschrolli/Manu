@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
  * Thronplatz betritt, und merkt sich, ob er besiegt ist. Zieht er sich zurück (niemand mehr auf dem Platz), wartet der
  * Thron eine Minute, bevor er erneut erwachen kann.
  */
-public class ThroneSealBlockEntity extends BlockEntity {
+public class ThroneSealBlockEntity extends BlockEntity implements io.github.sirschrolli.kingdomsatwar.arena.BossLair {
     /** So nah (waagerecht) an der Mitte des Platzes erwacht der König. */
     public static final double WAKE_RADIUS = 18.0;
     private static final double WARN_RADIUS = 70.0;
@@ -38,6 +38,8 @@ public class ThroneSealBlockEntity extends BlockEntity {
     private @Nullable UUID king;
     private int cooldown;
     private int missing;
+    /** Ein Abbild in der Kampfdimension des Königs (der Thronwelt)? Dort reißt nach seinem Fall kein Riss auf. */
+    private boolean replica;
     private final Map<UUID, Long> warned = new HashMap<>();
 
     public ThroneSealBlockEntity(BlockPos pos, BlockState state) {
@@ -74,7 +76,11 @@ public class ThroneSealBlockEntity extends BlockEntity {
             case AWAKE -> this.tickAwake(level);
             // besiegt: hinter dem Thron steht der Riss in den Abgrund offen (auch in Welten, in denen der König schon vor
             // 0.72 fiel)
-            case DEFEATED -> io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), false);
+            case DEFEATED -> {
+                if (!this.replica) {
+                    io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), false);
+                }
+            }
         }
     }
 
@@ -89,6 +95,11 @@ public class ThroneSealBlockEntity extends BlockEntity {
                 continue;
             }
             if (wakes(c, player.getX(), player.getY(), player.getZ())) {
+                // er zieht seine Gegner in die Thronwelt (nur in Tests und im Abbild kämpft er hier)
+                if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.requestPull(level, this.worldPosition)) {
+                    this.arenaAway(level);
+                    return;
+                }
                 this.awaken(level);
                 return;
             }
@@ -129,6 +140,17 @@ public class ThroneSealBlockEntity extends BlockEntity {
     }
 
     private void tickAwake(ServerLevel level) {
+        if (!this.replica && io.github.sirschrolli.kingdomsatwar.arena.BossArenas.busy(level, this.worldPosition)) {
+            // drüben in der Thronwelt wird gekämpft: wer jetzt den Platz betritt, folgt den anderen
+            this.missing = 0;
+            BlockPos c = this.center();
+            for (ServerPlayer player : level.players()) {
+                if (!player.isSpectator() && !player.isCreative() && player.isAlive() && wakes(c, player.getX(), player.getY(), player.getZ())) {
+                    io.github.sirschrolli.kingdomsatwar.arena.BossArenas.join(level, this.worldPosition, player);
+                }
+            }
+            return;
+        }
         Entity entity = this.king != null ? level.getEntity(this.king) : null;
         if (entity instanceof ShatteredKingEntity && entity.isAlive()) {
             this.missing = 0;
@@ -147,8 +169,10 @@ public class ThroneSealBlockEntity extends BlockEntity {
         this.phase = Phase.DEFEATED;
         this.king = null;
         this.setChanged();
-        // hinter dem Thron reißt die Welt auf: der Weg in den Abgrund
-        io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), true);
+        // hinter dem Thron reißt die Welt auf: der Weg in den Abgrund (nicht im Abbild in der Thronwelt)
+        if (!this.replica) {
+            io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.ensureThroneGate(level, this.center(), true);
+        }
     }
 
     public void onKingSlumber() {
@@ -182,6 +206,9 @@ public class ThroneSealBlockEntity extends BlockEntity {
         if (this.king != null) {
             output.store("King", UUIDUtil.CODEC, this.king);
         }
+        if (this.replica) {
+            output.putBoolean("ArenaReplica", true);
+        }
     }
 
     @Override
@@ -194,5 +221,75 @@ public class ThroneSealBlockEntity extends BlockEntity {
             this.phase = Phase.DORMANT;
         }
         this.king = input.read("King", UUIDUtil.CODEC).orElse(null);
+        this.replica = input.getBooleanOr("ArenaReplica", false);
+    }
+
+    // =====================================================================================
+    // Die Kampfdimension (die Thronwelt)
+    // =====================================================================================
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind arenaKind() {
+        return io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.KING;
+    }
+
+    /** Die Mitte des Thronplatzes. */
+    @Override
+    public BlockPos arenaFocus() {
+        return this.center();
+    }
+
+    /** Mitten auf dem Thronplatz. */
+    @Override
+    public BlockPos arenaLootSpot() {
+        return this.center();
+    }
+
+    @Override
+    public boolean arenaDefeated() {
+        return this.phase == Phase.DEFEATED;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaBoss(ServerLevel level) {
+        return this.king != null && level.getEntity(this.king) instanceof ShatteredKingEntity entity && entity.isAlive() ? entity : null;
+    }
+
+    @Override
+    public net.minecraft.world.entity.@Nullable LivingEntity arenaAwaken(ServerLevel level) {
+        return this.phase == Phase.DORMANT ? this.awaken(level) : (net.minecraft.world.entity.LivingEntity) this.arenaBoss(level);
+    }
+
+    @Override
+    public void arenaAway(ServerLevel level) {
+        if (this.king != null && level.getEntity(this.king) instanceof ShatteredKingEntity entity) {
+            entity.discard();
+        }
+        this.king = null;
+        this.missing = 0;
+        this.cooldown = 0;
+        this.phase = Phase.AWAKE;
+        this.setChanged();
+    }
+
+    @Override
+    public void arenaVictory(ServerLevel level) {
+        this.onKingDefeated(level);
+    }
+
+    @Override
+    public void arenaReset(ServerLevel level) {
+        this.reset(level);
+    }
+
+    @Override
+    public void arenaPrepareReplica(ServerLevel level) {
+        this.replica = true;
+        this.reset(level);
+    }
+
+    @Override
+    public boolean isArenaReplica() {
+        return this.replica;
     }
 }
