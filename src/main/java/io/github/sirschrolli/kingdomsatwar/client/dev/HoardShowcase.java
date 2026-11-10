@@ -135,7 +135,7 @@ final class HoardShowcase {
             Vec3 h = s.head();
             Vec3 fwd = s.eater().heading();
             Vec3 side = horizontal(new Vec3(-fwd.z, 0, fwd.x));
-            return new Vec3[] {h.add(fwd.scale(15)).add(side.scale(8)).add(0, 3, 0), h.add(fwd.scale(-2))};
+            return new Vec3[] {h.add(fwd.scale(10)).add(side.scale(5)).add(0, 1.5, 0), h.add(fwd.scale(-1))};
         });
         steps.add(Step.waitTicks(30));
         shot(steps, eater, dummy, c, "eater_back", (s, f) -> {
@@ -233,23 +233,22 @@ final class HoardShowcase {
         steps.add(Step.waitTicks(40));
         steps.add(Step.screenshot("hoard_trophy"));
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(70)));
-        // der Weltenspeer in der Hand: von vorn (dritte Person) und aus der eigenen Sicht
-        steps.add(Step.command("gamemode creative"));
-        steps.add(Step.command("item replace entity @s weapon.mainhand with kingdomsatwar:world_spear"));
-        steps.add(Step.command("item replace entity @s armor.chest with minecraft:netherite_chestplate"));
-        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        // der Weltenspeer als 3D-Modell, groß über dem Ring (eine Gegenstandsanzeige, voll beleuchtet) …
         steps.add((minecraft, ticks) -> {
             minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT,
-                    "execute in %s run tp @s %.2f %.2f %.2f 200 -18", ABYSS, c[0] - 2.0, c[1], c[2] + 20.0));
+                    "execute in %s run summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"kingdomsatwar:world_spear\",count:1},"
+                            + "item_display:\"none\",brightness:{sky:15,block:15},transformation:{left_rotation:[0f,0f,0f,1f],"
+                            + "right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2.4f,2.4f,2.4f]}}",
+                    ABYSS, c[0] - 4.0, c[1] + 2.4, c[2] - 12.0));
             return true;
         });
-        steps.add(Step.once(minecraft -> minecraft.options.fov().set(30)));
-        steps.add(Step.waitTicks(40));
+        view(steps, c, -4.0, 2.4, -7.6, -4.0, 2.4, -12.0);
+        steps.add(Step.waitTicks(30));
         steps.add(Step.screenshot("hoard_spear"));
-        steps.add(Step.once(minecraft -> {
-            minecraft.options.fov().set(70);
-            minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON);
-        }));
+        steps.add(Step.command("kill @e[type=minecraft:item_display]"));
+        // … und in der Hand, aus der eigenen Sicht
+        steps.add(Step.command("gamemode creative"));
+        steps.add(Step.command("item replace entity @s weapon.mainhand with kingdomsatwar:world_spear"));
         steps.add((minecraft, ticks) -> {
             minecraft.player.connection.sendCommand(String.format(java.util.Locale.ROOT,
                     "execute in %s run tp @s %.2f %.2f %.2f 160 8", ABYSS, c[0] + 4.0, c[1], c[2] + 22.0));

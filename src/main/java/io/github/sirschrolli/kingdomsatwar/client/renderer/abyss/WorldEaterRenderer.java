@@ -35,7 +35,7 @@ public class WorldEaterRenderer extends EntityRenderer<WorldEaterEntity, WorldEa
     private static final RenderType SEGMENT_GLOW = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/world_eater/world_eater_segment_glow.png"));
     private static final RenderType TAIL_GLOW = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/world_eater/world_eater_tail_glow.png"));
     private static final Identifier BEAM = KingdomsAtWar.id("textures/entity/spell/beam.png");
-    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
+    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/soft_glow.png");
     private static final int EMBER = 0xFF7A2A;
     private static final int DEEP_EMBER = 0x9A240C;
     private static final int WHITE_HOT = 0xFFF0C8;

@@ -210,8 +210,25 @@ def seal_crystal() -> Image.Image:
     return img
 
 
+def soft_glow(size: int = 64) -> Image.Image:
+    """Ein weicher, runder Schein (für additive Lichthöfe): weiß, zum Rand hin ganz ausklingend, mit hellerem Kern."""
+    img = Image.new("RGBA", (size, size), CLEAR)
+    px = img.load()
+    c = (size - 1) / 2.0
+    for y in range(size):
+        for x in range(size):
+            r = math.hypot(x - c, y - c) / (size / 2.0)
+            if r >= 1.0:
+                continue
+            f = 0.72 * (1.0 - r) ** 2.4 + 0.28 * math.exp(-r * r * 18.0)
+            v = max(0, min(255, round(255 * f)))
+            px[x, y] = (v, v, v, v)
+    return img
+
+
 def build(put: Callable[[str, Image.Image], None]) -> None:
     put("entity/seal_crystal", seal_crystal())
+    put("entity/soft_glow", soft_glow())
     put("item/world_spear", world_spear_icon())
     model, model_glow = world_spear_model()
     put("item/world_spear_model", model)

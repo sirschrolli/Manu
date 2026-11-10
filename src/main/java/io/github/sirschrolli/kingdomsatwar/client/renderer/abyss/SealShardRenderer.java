@@ -33,7 +33,7 @@ public class SealShardRenderer implements BlockEntityRenderer<SealShardBlockEnti
     private static final Identifier CRYSTAL = KingdomsAtWar.id("textures/entity/seal_crystal.png");
     private static final RenderType CRYSTAL_TYPE = RenderTypes.entityCutout(CRYSTAL);
     private static final Identifier BEAM = KingdomsAtWar.id("textures/entity/spell/beam.png");
-    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
+    private static final Identifier HALO = KingdomsAtWar.id("textures/entity/soft_glow.png");
     private static final int FULL_BRIGHT = 0xF000F0;
     private static final int PALE = 0xF2E6FF;
     /** Höhe des Siegelsterns über der Mitte des Rings. */

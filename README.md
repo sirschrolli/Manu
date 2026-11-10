@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.72.0 – Der Abgrund.** Hinter der Leere liegt das reine Chaos: der **Abgrund**, eine neue Dimension aus Bruchstücken aller Welten – Wiesen und Wälder der Oberwelt, Netherrack mit Lavafällen, Endstein mit Chorus, Schattengras, Eis und Wüste –, gekippt, steil wie Wände oder ganz kopfüber, zusammengeschweißt von glühenden **Weltennähten**, unter einem Himmel voller weißglühender **Risse**, die langsam atmen und aufflammen. Fünf Biome (Bruchlande, Glutsturz, Sternentrümmer, Schattenschlund und die Naht) mit Monstern aus allen Welten und einer eigenen Klangwelt, in der die Welt in der Ferne weiterreißt. **Schwebekristalle** heben die Schwerkraft fast auf, über **Hebekristallen** wird man emporgetragen. Der Weg hinein öffnet sich, wenn der Zerbrochene König fällt: Hinter seinem Thron reißt ein **Abgrundriss** auf, und er lässt den **Rissschlüssel** fallen, mit dem man überall in der Leere einen Riss öffnen und wieder schließen kann. Wer ins Nichts stürzt, wird vom Abgrund ausgespien – zurück auf die nächste Ankerinsel, aber nicht unversehrt.
+> **Testversion 0.73.0 – Der Weltenfresser.** Im Abgrund schwebt der **Schlund der Welten**: ein Ring aus Chaosgestein in einem weiten, leer gefegten Auge des Chaos, in der Mitte ein Loch bis ins Nichts. Um den Schlund schweben sieben **Kronensplitter** – die Splitter der Krone, die der Zerbrochene König einst zerbrach, um das Wesen darunter zu versiegeln –, und Ketten aus Licht laufen von ihnen zu einem Siegelstern. Wer den Ring betritt, weckt den **Weltenfresser**: Die Splitter zerspringen, und aus dem Schlund bricht ein gewaltiger Wurm aus Chaosgestein mit einem Rachen wie eine Blüte und zwölf Gliedern, auf denen Stücke der Welten liegen, die er verschlungen hat – das **stärkste Wesen der Mod** (2.600 Lebenspunkte), mit Biss, Weltenhunger, Weltenspucke, Leibhieb, Rissatem, Schwerkraftsturz, Ruf der Welten und seinem **Zorn**, in dem der Himmel aufflammt und der Ring zerbricht. Besiegt hinterlässt er den **Weltenspeer** (3D, jeder Treffer trägt eine von vier Welten in sich, jeder vierte ruft einen Weltbrocken vom Himmel) und seinen **Kopf** als Trophäe – und wer dabei war, trägt fortan den Titel **„Weltenretter“** in Gold vor seinem Namen. Damit ist der Weg der Geschichte bis zum Ende gegangen.
+> In 0.72 kam der Abgrund: eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden **Weltennähten**, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller weißglühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt, **Schwebe- und Hebekristalle** der verdrehten Schwerkraft, der **Abgrundriss** hinter dem Thron des Zerbrochenen Königs und der **Rissschlüssel**, der Risse in der Leere öffnet.
 > In 0.71 kamen vier Monster in die Schattenwelt und ins End, jedes mit eigenem Modell, eigenen Animationen, Angriffen und Klängen: der **Seelenreiher** in den Seelensümpfen (Speerschnabel, Schwingenschlag und Sturzflug aus der Luft), der **Nachtwidder** auf den Schattengipfeln (scharrt und stürmt los – wer ausweicht, lässt ihn gegen die Wand krachen), die **Rissjäger** auf den äußeren End-Inseln (versinken in einem Riss und tauchen hinter ihrem Opfer auf) und der **Chorusschlund**, der zwischen den Chorusbäumen wie eine Knospe wartet, bis er zu einem Schlund mit Zähnen aufblüht.
 > In 0.70 kamen Waffen und Rüstungen aus Monsterteilen: vier Waffen – die **Krallenklinge** (nachts härter, Blutrausch nach jedem Sieg), die **Moorkeule** (Wurzeln packen zu), die **Glutzahn-Klinge** (setzt in Brand) und die **Seelensense** (Rechtsklick: **Verwehen**) – und zwei Rüstungen: der **Werwolfspelz** mit Wolfskopf, Umhang und Schwanz (voller Satz: nachts schneller, Nachtsicht) und der **Glutwurm-Panzer** mit glühenden Hörnern, Flossenkamm und Rückenstacheln (voller Satz: feuerfest, Angreifer fangen Feuer) – in der Hand und am Körper als echte 3D-Modelle.
 > In 0.69 kamen vier neue Monster in die Oberwelt und den Nether – mit eigenen Modellen, Animationen, Angriffen und Klängen. Der **Werwolf** streift nachts durch Wälder und Taiga (bei Vollmond öfter): Er heult und wird danach schneller und stärker, jagt auf allen vieren und springt sein Opfer aus mehreren Blöcken an – im Tageslicht wird er matt, und die **Mondsilberklinge** trifft ihn besonders hart. Der **Moorschlurfer** lauert halb versunken in Sümpfen und Mooren, steigt aus dem Schlamm, sobald man herankommt, schleudert Schlammklumpen (verlangsamen und blenden) und packt mit Wurzeln zu; in Wasser und Regen heilt er. Im Nether bricht der **Glutwurm** aus großen Lavaseen hervor, richtet sich wie eine Kobra auf, beißt zu oder spuckt Magma – an Land erkaltet er. Und durch das Seelensandtal schweben **Aschengeister**: Sie werfen Seelenfeuer, lassen Aschewolken aufwallen und verwehen zu Asche, um hinter ihrem Gegner wieder aufzutauchen.
@@ -356,6 +357,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Übrige Monster statt Vanilla: Gesetzlose (Wegelagerer, Schlächter, Beschwörer, Gaukler), Plagegeist, Verwüster, Riffwächter, Windgeist, Knorz, Tiefenhüter | ✅ fertig |
 | Neue Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist (0.69); Seelenreiher, Nachtwidder, Rissjäger, Chorusschlund in der Schattenwelt und im End (0.71) | ✅ fertig |
 | **Der Abgrund** (0.72): eine Dimension aus Bruchstücken aller Welten – gekippt, kopfüber, mit glühenden Weltennähten, Lava- und Wasserfällen ins Nichts – unter einem Himmel voller glühender Risse; fünf Biome mit Monstern aus allen Welten und eigener Klangwelt; Schwebe- und Hebekristalle der verdrehten Schwerkraft; der Abgrundriss hinter dem Thron des Zerbrochenen Königs und der Rissschlüssel | ✅ fertig |
+| **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
 | Eigene Wassertiere statt Vanilla: Fische, Tintenfische, Delfine, Schildkröten, Molche, Frösche, Nautilusse in 23 Gestalten | ✅ fertig |
 | Überarbeitung von Siedlung und Dörfern: Bauarbeiter, Häuser mit Baukosten, Lager, Sammler, Söldner, Münzen, Beute, Dorfanlagen | ✅ fertig |
 | Eigene Golems und Wichtel statt Vanilla: Eisenwächter (vier Gestalten, einer in jedem Dorf), Schneemann, Kupferknecht mit Statuen, Wichtel (vier Gestalten) | ✅ fertig |
@@ -725,7 +727,66 @@ der seine Bruchstücke stammen – Laub, Krähen und schabende Felsen in den Bru
 im Glutsturz, singende Kristalle in den Sternentrümmern, Klagen und Flüstern im Schattenschlund, knisternde Nähte und
 flackernde Bildfehler in der Naht.
 
-Was im Abgrund wartet, den **Weltenfresser**, bringt 0.73.
+Was im Abgrund wartet, steht im nächsten Abschnitt.
+
+### Der Weltenfresser
+
+![Der Weltenfresser: der Schlund der Welten, das Erwachen, seine Angriffe und die Beute](docs/bilder/der_weltenfresser.jpg)
+
+Einmal in jedem Abgrund, 500 bis 900 Blöcke von seiner Mitte entfernt, schwebt der **Schlund der Welten**: ein Ring aus
+poliertem Chaosgestein (56 Blöcke breit) in einem weiten, leer gefegten Auge des Chaos – an seinem Rand enden die
+Bruchstücke zerklüftet, ringsum treiben Trümmer verschlungener Welten. In der Mitte klafft der **Schlund**, ein Loch bis
+ins Nichts, gesäumt von einer glühenden Naht; sieben Weltennähte laufen wie Speichen über den Ring, außen eine niedrige,
+zerbrochene Brüstung, darunter ein zerklüfteter Kegel, von dessen Rand drei Lavafälle ins Nichts stürzen. Um den Schlund
+stehen sieben Sockel mit den **Kronensplittern** – den Splittern der Krone, die der Zerbrochene König einst zerbrach, um
+das Wesen darunter zu versiegeln: Über jeder Druse schwebt ein großer violetter Kristall, und von allen sieben laufen
+**Ketten aus Licht** zu einem Siegelstern hoch über dem Schlund. Der **Drachenkompass** zeigt im Abgrund den Weg dorthin;
+wer sich nähert, spürt, dass unter dem Ring etwas lauert.
+
+Wer den Ring betritt, weckt den **Weltenfresser**: Der Abgrund grollt, die Kronensplitter zerspringen einer nach dem
+anderen, Glut steigt aus der Tiefe – dann bricht er durch den Schlund empor und brüllt. Er ist **das stärkste Wesen der
+Mod**: ein gewaltiger Wurm aus Chaosgestein, vorn ein Kopf mit glühenden Augen, Hauern, einer Krone aus Kristallsplittern
+und einem Rachen aus acht Lippen, der sich wie eine Blüte öffnet – darin Zahnreihen und ein glühender Schlund. Dahinter
+folgen zwölf gepanzerte Glieder und ein Schwanz, durchzogen von glühenden Nähten, und auf jedem Glied liegt ein Stück
+einer Welt, die er verschlungen hat: eine Wiese mit Baum, Netherrack mit Pilzen, Endstein mit Chorus, Eis. Er umkreist
+den Ring, und dann und wann taucht er unter ihm hindurch und durch den Schlund wieder empor.
+
+| Angriff | Was geschieht |
+|---|---|
+| **Biss** | er bäumt sich hoch über dir auf, ein glühender Kreis warnt – dann stößt der Kopf herab und schlägt in den Ring |
+| **Weltenhunger** | er hängt sich an den Rand des Rings, reißt den Rachen auf und saugt alles an (Schleichen hält dagegen) – dann schnappt er zu |
+| **Weltenspucke** | er speit Brocken verschlungener Welten, die ringsum zerschellen: **Glut** setzt in Brand, **Frost** lähmt, **End** lässt schweben, **Schatten** blendet |
+| **Leibhieb** | eine glühende Bahn zeigt, wo sein Leib gleich über den Ring fegt – wer auf ihr steht, fliegt davon |
+| **Rissatem** (unter 75 %) | hoch über dem Schlund reißt er den Rachen auf: ein gewaltiger Strahl aus Glut fegt in Kreisen über den Ring |
+| **Schwerkraftsturz** (unter 70 %) | alle auf dem Ring schweben empor (Schleichen hält am Boden) – dann kehrt die Schwere mit aller Wucht zurück |
+| **Ruf der Welten** (bei 66 % und 33 %) | Risse reißen auf dem Ring auf, Zerrlinge und Rissjäger springen hervor |
+| **Zorn** (einmal, bei 50 %) | „Der Weltenfresser tobt – der Ring bricht!“: alle Risse am Himmel flammen auf, der äußere Rand des Rings bricht weg und stürzt ins Nichts; von da an ist er schneller und greift öfter an |
+
+Er hat 2.600 Lebenspunkte, Rüstung 20 mit Härte 12 und beißt mit bis zu 20 Schaden. Seine Glieder sind gepanzert (ein
+Treffer dort zählt nur gut die Hälfte), der Kopf ist die verwundbarste Stelle – am verwundbarsten, solange der Rachen
+offen steht. Verlässt jeder den Ring, sinkt er nach einer halben Minute zurück in den Schlund und kann erneut erwachen.
+Besiegt windet er sich, Glied um Glied zerbirst vom Schwanz zum Kopf, dann zerspringt der Kopf.
+
+**Beute und Titel:** Auf dem Ring bleiben der **Weltenspeer**, der **Kopf des Weltenfressers**, zwei Herz- und zwei
+Manakristalle, ein verzaubertes Buch der Arkanen, Goldmünzen, Weltennähte, gemeißeltes Chaosgestein, Edelsteine und
+500 Erfahrungspunkte – und alle, die dabei waren, werden **Weltenretter**: ein Titel in Gold vor ihrem Namen (im Chat,
+über dem Kopf und in der Spielerliste), auf dem Bildschirm „Weltenretter – Der Weltenfresser ist gefallen“, und alle
+Spieler erfahren davon.
+
+- Der **Weltenspeer** (in der Hand als 3D-Modell): aus dem Fangzahn des Weltenfressers geschmiedet – ein Schaft aus
+  Chaosgestein mit glühenden Nahtringen, am Kreuz vier Bruchstücke der Welten (Wiese, Netherrack, Endstein, Eis), am
+  Knauf und am Kragen Splitter der Königskrone. Ein Speer wie die Speere von Minecraft (Stoß und Ansturm, verzauberbar),
+  härter als die Sternenlanze (3.600 Haltbarkeit, mit Weltennähten zu reparieren). **Weltenkraft:** im Abgrund und in der
+  Leere trifft er um ein Drittel härter. **Weltenmal:** jeder Treffer trägt reihum eine Welt in sich – Glut setzt in
+  Brand, Frost lähmt, End hebt empor, Schatten blendet und schwächt. **Weltenbrocken:** jeder vierte Treffer reißt einen
+  Brocken dieser Welt vom Himmel, der auf das Ziel stürzt und ringsum zerschellt – den Träger und die Seinen verschont er.
+- Der **Kopf des Weltenfressers**: die Trophäe – der Kopf, auf ein Viertel geschrumpft, auf einem Sockel aus
+  Chaosgestein mit Goldband, in dessen Flanken gemeißelte Augen glimmen; seine Nähte glühen, der Rachen atmet langsam,
+  ab und zu steigt Glut aus ihm auf. Er blickt den an, der ihn aufstellt.
+
+**Klänge:** ein Grollen aus der Tiefe, Kronensplitter, die glockenhell zerspringen, ein Brüllen, das den Ring erbeben
+lässt, mahlendes Gestein, das Einsaugen und Zuschnappen des Rachens, das Fauchen des Rissatems und das Zerbersten seiner
+Glieder – alles eigene Klänge.
 
 ### Klänge der Welt
 
@@ -2809,7 +2870,7 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    100 Heldenstufen, sechs Rängen, Talenten und dem Streicheln der Legende sind fertig; seit 0.61 dauert das Leveln
    länger.
 5. **Neue Welten und neue Gegner** – die Leere, der Zerbrochene König, die fünf Meereswesen und die Tiefe des Meeres
-   (Landschaften am Meeresgrund, das Versunkene Atoll mit Karkinos und dem Gezeiten-Speer) sind fertig, als Nächstes:
+   (Landschaften am Meeresgrund, das Versunkene Atoll mit Karkinos und dem Gezeiten-Speer) sind fertig, ebenso:
    - **0.63 – Das Feenreich** (fertig): eine neue Dimension im ewigen Abendrot mit **Noctua, der Mottenkönigin**, und
      den **Feen-Elytren**;
    - **0.64 – Malleus, der Glutschmied** (fertig): der Boss auf dem Dach der Aschenesse mit dem **Glutspeer**;
@@ -2829,9 +2890,11 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.72 – Der Abgrund** (fertig): hinter der Leere das reine Chaos aus Bruchstücken aller Welten, mit verdrehter
      Schwerkraft und einem Himmel voller Risse; der Weg hinein öffnet sich, wenn der König fällt – ein Riss hinter dem
      Thron und der Rissschlüssel, der Risse in der Leere öffnet;
-   - zuletzt **0.73 – Der Weltenfresser:** Im Abgrund wartet das Wesen, das der Zerbrochene König einst versiegelte, als
-     er seine Krone zerbrach – das stärkste Wesen der Mod. Wer es besiegt, erhält einen legendären Speer, eine Trophäe
-     und den Titel **„Weltenretter“**.
+   - zuletzt **0.73 – Der Weltenfresser** (fertig): Im Abgrund wartet im Schlund der Welten das Wesen, das der
+     Zerbrochene König einst versiegelte, als er seine Krone zerbrach – das stärkste Wesen der Mod. Wer es besiegt,
+     erhält den **Weltenspeer**, den **Kopf des Weltenfressers** als Trophäe und den Titel **„Weltenretter“**.
+
+   Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser.

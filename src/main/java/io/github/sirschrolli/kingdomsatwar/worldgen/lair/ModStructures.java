@@ -232,12 +232,18 @@ public final class ModStructures {
                         .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
         // am Schlund der Welten erscheinen keine Wesen von selbst (dort wartet der Weltenfresser)
+        // ganz zum Schluss gebaut: so räumt der freie Raum auch Kristalle, Ranken und Bäume der Bruchstücke ab
         context.register(WORLD_EATER_HOARD_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.abyss.hoard.HoardStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_WORLD_EATER_HOARD))
                         .spawnOverrides(java.util.Map.of(
                                 net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of()),
+                                net.minecraft.world.entity.MobCategory.CREATURE, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                                         net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
                         .build()));
         // auf dem Thron der Alten erscheinen keine Wesen von selbst (dort wacht der König)
         context.register(VOID_THRONE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure(
