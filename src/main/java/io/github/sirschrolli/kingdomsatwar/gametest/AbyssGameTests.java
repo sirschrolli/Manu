@@ -224,7 +224,19 @@ final class AbyssGameTests {
             state.remove(stored);
         }
         state.save(overworld);
+        clearRift(overworld, bottom);
         helper.succeed();
+    }
+
+    /** Räumt Riss und Saum wieder weg – die Zacken ragen über den Testplatz hinaus zu den Nachbartests. */
+    private static void clearRift(ServerLevel level, BlockPos bottom) {
+        for (BlockPos pos : BlockPos.betweenClosed(bottom.offset(-9, -1, -2), bottom.offset(9, AbyssGate.RIFT_HEIGHT + 2, 2))) {
+            var state = level.getBlockState(pos);
+            if (state.is(AbyssBlocks.ABYSS_RIFT.get()) || state.is(AbyssBlocks.WORLD_SEAM.get()) || state.is(AbyssBlocks.CHAOS_STONE.base().get())
+                    || (state.is(AbyssBlocks.POLISHED_CHAOS_STONE.base().get()) && pos.getY() >= bottom.getY())) {
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            }
+        }
     }
 
     /**
