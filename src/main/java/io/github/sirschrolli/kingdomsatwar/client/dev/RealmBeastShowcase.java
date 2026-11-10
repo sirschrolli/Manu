@@ -117,8 +117,8 @@ final class RealmBeastShowcase {
             arrive(steps, SHADOW, PX + 0.3, SY + 0.3, PZ - 1.5, PX + 0.3, SY + 0.9, PZ + 3.6);
             steps.add(Step.server(o -> {
                 ServerLevel level = shadow(o);
-                m[0] = creature(level, ModEntities.NIGHT_RAM.get(), PX - 2.2, SY, PZ + 2.6, 210.0f, r -> { });
-                m[1] = creature(level, ModEntities.NIGHT_RAM.get(), PX + 2.6, SY, PZ + 4.6, 150.0f, r -> r.forceState(NightRamEntity.PREPARE));
+                m[0] = creature(level, ModEntities.NIGHT_RAM.get(), PX - 2.2, SY, PZ + 2.6, 245.0f, r -> { });
+                m[1] = creature(level, ModEntities.NIGHT_RAM.get(), PX + 2.6, SY, PZ + 4.6, 125.0f, r -> r.forceState(NightRamEntity.PREPARE));
             }));
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[1], NightRamEntity.EVENT_PREPARE)));
@@ -188,7 +188,7 @@ final class RealmBeastShowcase {
                 event(m[1], RiftHoundEntity.EVENT_PHASE_OUT);
                 event(m[0], RiftHoundEntity.EVENT_BITE);
             }));
-            steps.add(Step.waitTicks(3));
+            steps.add(Step.waitTicks(1));
             steps.add(Step.screenshot("realm_hound_phase"));
             // der Chorusschlund, offen, mit einem Rankenhieb nach einem Ritter
             steps.add(Step.server(o -> {

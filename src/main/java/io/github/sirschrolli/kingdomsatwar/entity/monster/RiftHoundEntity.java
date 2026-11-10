@@ -254,7 +254,7 @@ public class RiftHoundEntity extends Monster {
     /** Clientseitig: 0 ganz da … 1 fort – er versinkt im Riss und taucht danach rasch wieder daraus auf. */
     public float fade(float partialTicks) {
         if (this.fadedTicks > 0) {
-            return Math.min(1.0f, (PHASE_TICKS - this.fadedTicks + partialTicks) / 6.0f);
+            return Math.min(1.0f, (PHASE_TICKS - this.fadedTicks + partialTicks) / 8.0f);
         }
         if (this.appearTicks > 0) {
             return Math.max(0.0f, (this.appearTicks - partialTicks) / APPEAR_TICKS);

@@ -275,6 +275,10 @@ final class RealmGameTests {
         VillagerEntity villager = victim(helper, new BlockPos(4, 1, 6));
         SoulHeronEntity heron = helper.spawnWithNoFreeWill(ModEntities.SOUL_HERON.get(), new BlockPos(4, 1, 3));
         place(helper, heron, 4.5, 3.5, 4.5, 6.5);
+        // die größte Flughöhe mitschreiben (gleich zu Beginn anmelden – nicht erst in einem späteren Schritt, während die
+        // Testuhr ihre Aufgaben abarbeitet)
+        double[] top = {Double.NEGATIVE_INFINITY};
+        helper.onEachTick(() -> top[0] = Math.max(top[0], heron.getY()));
         heron.setTarget(villager);
         heron.forceStab();
         helper.assertTrue(heron.isStabbing(), "Er holt nicht zum Stoß aus");
@@ -296,13 +300,13 @@ final class RealmGameTests {
                     helper.assertTrue(villager.hasEffect(MobEffects.BLINDNESS), "Der Schwingenschlag blendet nicht");
                     helper.assertTrue(villager.distanceTo(heron) > before + 0.5, "Der Schwingenschlag treibt nicht zurück ("
                             + before + " → " + villager.distanceTo(heron) + ")");
-                    helper.runAfterDelay(SoulHeronEntity.BUFFET_TICKS, () -> flight(helper, heron, villager));
+                    helper.runAfterDelay(SoulHeronEntity.BUFFET_TICKS, () -> flight(helper, heron, villager, top));
                 });
             });
         });
     }
 
-    private static void flight(GameTestHelper helper, SoulHeronEntity heron, VillagerEntity villager) {
+    private static void flight(GameTestHelper helper, SoulHeronEntity heron, VillagerEntity villager, double[] top) {
         refresh(villager);
         Vec3 v = helper.absoluteVec(new Vec3(4.5, 1.0, 9.5));
         villager.teleportTo(v.x, v.y, v.z);
@@ -310,8 +314,7 @@ final class RealmGameTests {
         place(helper, heron, 4.5, 1.5, 4.5, 9.5);
         heron.setHealth(heron.getMaxHealth());
         double ground = heron.getY();
-        double[] top = {ground};
-        helper.onEachTick(() -> top[0] = Math.max(top[0], heron.getY()));
+        top[0] = ground;
         heron.forceTakeOff();
         helper.runAfterDelay(8, () -> helper.assertTrue(heron.isFlying() && heron.getY() > ground + 1.2, "Er hebt nicht ab (fliegt "
                 + heron.isFlying() + ", " + (heron.getY() - ground) + " hoch, Ziel " + heron.getTarget() + ")"));
