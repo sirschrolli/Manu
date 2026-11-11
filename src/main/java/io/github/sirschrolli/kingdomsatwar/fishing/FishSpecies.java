@@ -40,11 +40,13 @@ import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Fische des Angelns: <b>1708 Arten</b> (seit 0.89; 1628 seit 0.83, 1000 seit 0.81). 84 sind von Hand benannt – die Allerweltsfische der
- * Gewässer, die Fische von Minecraft (als ihre eigenen Gegenstände, mit ihrer gewohnten Wirkung) und die Legenden –, 1544
- * gehören einem Biom: zwanzig in jedem eigenen Biom der Mod, zehn oder zwölf in jedem Biom von Minecraft, auch in den Höhlen,
- * in der Lava des Nethers und in der Leere des Ends ({@code tools/fish_gen.py} berechnet sie in zwei Wellen; diese Klasse
- * liest sie beim Laden aus {@code data/kingdomsatwar/fishing/species.tsv}).
+ * Die Fische des Angelns: <b>1893 Arten</b> (seit 0.90; 1708 seit 0.89, 1628 seit 0.83, 1000 seit 0.81). 84 sind von Hand benannt –
+ * die Allerweltsfische der Gewässer, die Fische von Minecraft (als ihre eigenen Gegenstände, mit ihrer gewohnten Wirkung) und
+ * die fünfzehn Legenden aller Welten –, 1809 gehören einem Biom: einundzwanzig in jedem eigenen Biom der Mod, elf oder dreizehn
+ * in jedem Biom von Minecraft, auch in den Höhlen, in der Lava des Nethers und in der Leere des Ends, und vierzig in jedem Biom
+ * des Urmeers. In jedem Biom gibt es jede Seltenheit – gewöhnlich, ungewöhnlich, selten, mystisch und legendär (die Legende
+ * des Bioms; im Urmeer zwei). {@code tools/fish_gen.py} berechnet sie in Wellen; diese Klasse liest sie beim Laden aus
+ * {@code data/kingdomsatwar/fishing/species.tsv}.
  *
  * <p>Jede Art hat eine Seltenheit, eine Größe (was im Fischbuch als Rekord zählt), eine Schwierigkeit und ein Verhalten im
  * Drill (wie sie an der Schnur zieht) und eine Wirkung beim Essen – keine zwei wirken gleich. Wo eine Art beißt, sagt bei
@@ -187,7 +189,7 @@ public final class FishSpecies implements StringRepresentable {
         loadBiomeSpecies();
         VALUES = List.copyOf(ALL);
         GENERAL = List.copyOf(ALL.subList(0, NAMED));
-        LEGENDS = VALUES.stream().filter(species -> species.rarity == Rarity.LEGENDARY).toList();
+        LEGENDS = VALUES.stream().filter(species -> species.rarity == Rarity.LEGENDARY && species.biome == null).toList();
     }
 
     public static final Codec<FishSpecies> CODEC = Codec.STRING.comapFlatMap(id -> {
@@ -195,7 +197,10 @@ public final class FishSpecies implements StringRepresentable {
         return species == null ? DataResult.error(() -> "Unbekannte Fischart: " + id) : DataResult.success(species);
     }, FishSpecies::id);
 
-    /** Seltenheit: Gewicht beim Würfeln und Farbe im Fischbuch. */
+    /**
+     * Seltenheit: Gewicht beim Würfeln und Farbe im Fischbuch – gewöhnlich, ungewöhnlich, selten, mystisch ({@code EPIC}, bis
+     * 0.89 „episch“) und legendär.
+     */
     public enum Rarity {
         COMMON(100.0f, 0xFFFFFF), UNCOMMON(42.0f, 0x5ADC5A), RARE(13.0f, 0x58A8FF), EPIC(10.0f, 0xC878FF), LEGENDARY(0.9f, 0xFFC83A);
 
@@ -480,7 +485,7 @@ public final class FishSpecies implements StringRepresentable {
         return list == null ? List.of() : java.util.Collections.unmodifiableList(list);
     }
 
-    /** Die Legenden aller Welten. */
+    /** Die fünfzehn Legenden aller Welten (die Legenden der Biome stehen bei ihrem Biom). */
     public static List<FishSpecies> legends() {
         return LEGENDS;
     }
@@ -575,7 +580,7 @@ public final class FishSpecies implements StringRepresentable {
 
     /** In welchem Kapitel des Fischbuchs die Art steht. */
     public Chapter chapter() {
-        if (this.rarity == Rarity.LEGENDARY) {
+        if (this.rarity == Rarity.LEGENDARY && this.biome == null) {
             return Chapter.LEGENDS;
         }
         if (this.chapter != null) {

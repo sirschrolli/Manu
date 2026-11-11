@@ -81,6 +81,9 @@ public final class VillageTrades {
                         io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.STURGEON, 2, 8));
                 list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.EPIC,
                         io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.COELACANTH, 1, 10));
+                // seit 0.90: auch Legenden (die Legende jedes Bioms, die fünfzehn aller Welten)
+                list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.LEGENDARY,
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.GOLDSCALE, 1, 40));
                 list.add(Offer.sell(Items.STRING, 20, 8));
                 list.add(Offer.sell(Items.COAL, 10, 8));
                 list.add(Offer.sell(Items.COD, 15, 8));

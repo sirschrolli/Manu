@@ -52,7 +52,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Das Angeln (seit 0.79) auf dem Server. Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen –, aber:
  * <ul>
- *     <li>Was beißt, hängt vom Ort ab ({@link Habitat} und das Biom): 1708 Arten (seit 0.89; 1628 seit 0.83), in jedem Biom jeder Welt eigene.</li>
+ *     <li>Was beißt, hängt vom Ort ab ({@link Habitat} und das Biom): 1893 Arten (seit 0.90; 1708 seit 0.89), in jedem Biom jeder Welt eigene, von jeder Seltenheit mindestens eine.</li>
  *     <li>Der Schwimmer treibt auch in <b>Lava</b> (Nether, Abgrund) und in der <b>Leere</b> unter den Inseln des Ends, der Leere
  *     und des Abgrunds – wer den Haken über den Rand wirft, sieht ihn ein paar Blöcke tiefer schweben.</li>
  *     <li>Ein Fisch am Haken wird nicht herausgehoben, sondern <b>gedrillt</b> ({@link FishFight}). Entkommt er, bleibt der
@@ -98,6 +98,23 @@ public final class Fishing {
 
     public static FishLog log(Player player) {
         return player.getData(ModAttachments.FISH_LOG);
+    }
+
+    /**
+     * Taucht dieser Spieler – steht ihm das Wasser über den Augen (seit 0.90)? Dann bleibt sein Haken unter Wasser stehen,
+     * statt zur Oberfläche zu treiben. Gemessen wird hier statt mit dem Zustand des Spielers, damit Server und Spiel gleich
+     * urteilen.
+     */
+    public static boolean submerged(Player player) {
+        net.minecraft.world.level.Level level = player.level();
+        BlockPos eyes = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
+        net.minecraft.world.level.material.FluidState fluid = level.getFluidState(eyes);
+        return fluid.is(net.minecraft.tags.FluidTags.WATER) && player.getEyeY() < eyes.getY() + fluid.getHeight(level, eyes);
+    }
+
+    /** Steht dieser Haken unter Wasser (statt an der Oberfläche zu treiben)? */
+    public static boolean deep(FishingHook hook) {
+        return hook instanceof HookAccess access && access.kingdomsatwar$submerged();
     }
 
     /** Wird dieser Haken gerade gedrillt? */
@@ -271,7 +288,8 @@ public final class Fishing {
             }
             // aus dem Wasser fliegt der Fang im Bogen heran; aus Lava und Leere landet er gleich vor den Füßen (dort ginge
             // er sonst verloren) – nur was Feuer verträgt, darf auch aus der Lava fliegen
-            boolean fly = medium == Medium.WATER || (medium == Medium.LAVA && first && !stack.canBeHurtBy(level.damageSources().lava()));
+            // unter Wasser käme er nicht weit: Er landet gleich beim Taucher
+            boolean fly = (medium == Medium.WATER && !deep(hook)) || (medium == Medium.LAVA && first && !stack.canBeHurtBy(level.damageSources().lava()));
             ItemEntity entity;
             if (fly) {
                 entity = new ItemEntity(level, hook.getX(), hook.getY(), hook.getZ(), stack);
@@ -410,6 +428,12 @@ public final class Fishing {
 
     /** Der Klang, mit dem ein Fisch anbeißt (statt des Platschens von Minecraft, das nur zum Wasser passt). */
     public static void biteSound(FishingHook hook, Medium medium, float volume, float pitch) {
+        if (deep(hook)) {
+            // unter Wasser: ein dumpfes Blubbern statt des Platschers
+            hook.playSound(SoundEvents.BUBBLE_COLUMN_UPWARDS_INSIDE, 0.7f, 0.9f + (pitch - 1.0f) * 0.5f);
+            hook.playSound(SoundEvents.FISHING_BOBBER_SPLASH, volume * 0.6f, pitch * 0.55f);
+            return;
+        }
         switch (medium) {
             case WATER -> hook.playSound(SoundEvents.FISHING_BOBBER_SPLASH, volume, pitch);
             case LAVA -> {
@@ -424,6 +448,11 @@ public final class Fishing {
         double x = hook.getX();
         double y = hook.getY() + 0.2;
         double z = hook.getZ();
+        if (deep(hook)) {
+            level.sendParticles(ParticleTypes.BUBBLE, x, y, z, count * 2, 0.3, 0.3, 0.3, 0.15);
+            level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, x, y, z, count / 2, 0.2, 0.1, 0.2, 0.05);
+            return;
+        }
         switch (medium) {
             case WATER -> {
                 level.sendParticles(ParticleTypes.SPLASH, x, y, z, count * 2, 0.25, 0.05, 0.25, 0.1);
@@ -455,8 +484,13 @@ public final class Fishing {
             double y = hook.getY() + 0.25;
             switch (medium) {
                 case WATER -> {
-                    level.sendParticles(ParticleTypes.SPLASH, x, y, z, 2, 0.08, 0.0, 0.08, 0.05);
-                    level.sendParticles(ParticleTypes.FISHING, x, y, z, 1, 0.1, 0.0, 0.1, 0.1);
+                    if (deep(hook)) {
+                        // unter Wasser zerrt der Fisch in einer Wolke aus Bläschen
+                        level.sendParticles(ParticleTypes.BUBBLE, x, y, z, 3, 0.15, 0.15, 0.15, 0.08);
+                    } else {
+                        level.sendParticles(ParticleTypes.SPLASH, x, y, z, 2, 0.08, 0.0, 0.08, 0.05);
+                        level.sendParticles(ParticleTypes.FISHING, x, y, z, 1, 0.1, 0.0, 0.1, 0.1);
+                    }
                 }
                 case LAVA -> {
                     level.sendParticles(ParticleTypes.SMALL_FLAME, x, y, z, 1, 0.05, 0.05, 0.05, 0.01);
@@ -523,8 +557,17 @@ public final class Fishing {
 
     /** Der Haken treibt jetzt in der Leere: Alle in der Nähe erfahren die Höhe (ihr Bild des Hakens schwebt dort mit). */
     public static void anchored(FishingHook hook, double voidLevel) {
+        report(hook, voidLevel, false);
+    }
+
+    /** Der Haken steht jetzt unter Wasser (seit 0.90): Alle in der Nähe erfahren die Höhe. */
+    public static void held(FishingHook hook, double depthLevel) {
+        report(hook, depthLevel, true);
+    }
+
+    private static void report(FishingHook hook, double height, boolean depth) {
         if (hook.level() instanceof ServerLevel level) {
-            HookVoidPayload payload = new HookVoidPayload(hook.getId(), voidLevel);
+            HookVoidPayload payload = new HookVoidPayload(hook.getId(), height, depth);
             for (ServerPlayer player : level.players()) {
                 if (player.distanceToSqr(hook) < 96.0 * 96.0) {
                     ModNetwork.send(player, payload);

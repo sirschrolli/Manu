@@ -340,7 +340,7 @@ final class FishingLang {
         text.add("fishing.kingdomsatwar.rarity.common", "Common", "Gewöhnlich");
         text.add("fishing.kingdomsatwar.rarity.uncommon", "Uncommon", "Ungewöhnlich");
         text.add("fishing.kingdomsatwar.rarity.rare", "Rare", "Selten");
-        text.add("fishing.kingdomsatwar.rarity.epic", "Epic", "Episch");
+        text.add("fishing.kingdomsatwar.rarity.epic", "Mythic", "Mystisch");
         text.add("fishing.kingdomsatwar.rarity.legendary", "Legendary", "Legendär");
         text.add("fishing.kingdomsatwar.chapter.rivers", "Rivers & Lakes", "Flüsse & Seen");
         text.add("fishing.kingdomsatwar.chapter.sea", "The Sea", "Das Meer");
@@ -417,7 +417,8 @@ final class FishingLang {
         text.add("trade.kingdomsatwar.fish.common", "Common fish", "Gewöhnliche Fische");
         text.add("trade.kingdomsatwar.fish.uncommon", "Uncommon fish", "Ungewöhnliche Fische");
         text.add("trade.kingdomsatwar.fish.rare", "Rare fish", "Seltene Fische");
-        text.add("trade.kingdomsatwar.fish.epic", "Epic fish", "Epische Fische");
+        text.add("trade.kingdomsatwar.fish.epic", "Mythic fish", "Mystische Fische");
+        text.add("trade.kingdomsatwar.fish.legendary", "Legendary fish", "Legendäre Fische");
         text.add("trade.kingdomsatwar.fish.any", "Any species of this rarity", "Beliebige Arten dieser Seltenheit");
         text.add("trade.kingdomsatwar.fish.from", "From your inventory or your fish bag", "Aus dem Inventar oder dem Fischbeutel");
         text.add("gui.kingdomsatwar.trade.missing_bag", "You carry no fish bag", "Du trägst keinen Fischbeutel bei dir");

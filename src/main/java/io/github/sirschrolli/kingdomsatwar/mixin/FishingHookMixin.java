@@ -4,7 +4,10 @@ import io.github.sirschrolli.kingdomsatwar.fishing.Fishing;
 import io.github.sirschrolli.kingdomsatwar.fishing.HookAccess;
 import io.github.sirschrolli.kingdomsatwar.fishing.Medium;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
@@ -38,6 +41,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *     <li>Wer bei einem Biss anzieht, hebt den Fisch nicht heraus, sondern beginnt den Drill ({@link Fishing#onReel}) – der
  *     Haken bleibt draußen, der Biss hält an, bis der Drill entschieden ist.</li>
  *     <li>Köder verkürzen das Warten; in Lava und Leere gibt es eigene Spuren und Klänge statt der Wasserspritzer.</li>
+ *     <li><b>Unter Wasser</b> (seit 0.90): Wirft ein tauchender Angler aus, treibt der Haken nicht zur Oberfläche – er gleitet
+ *     ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie an der Oberfläche; statt Spritzern
+ *     steigen Bläschen auf, und der Fang landet gleich beim Taucher.</li>
  * </ul>
  */
 @Mixin(FishingHook.class)
@@ -69,6 +75,17 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
     private int kingdomsatwar$nibbleBefore;
     @Unique
     private boolean kingdomsatwar$idleBefore;
+    /** Unter Wasser: die Höhe, auf der der Haken steht (NaN: er treibt wie gewohnt an der Oberfläche). */
+    @Unique
+    private double kingdomsatwar$depthLevel = Double.NaN;
+    /** Unter Wasser: wie lange er schon gleitet (-1: noch nicht im Wasser, {@link #SURFACE}: er treibt an der Oberfläche). */
+    @Unique
+    private int kingdomsatwar$glide = -1;
+    @Unique
+    private static final int SURFACE = Integer.MAX_VALUE;
+    /** So lange gleitet ein unter Wasser ausgeworfener Haken höchstens, bevor er stehen bleibt. */
+    @Unique
+    private static final int GLIDE_TICKS = 14;
 
     protected FishingHookMixin(EntityType<? extends Projectile> type, Level level) {
         super(type, level);
@@ -87,7 +104,7 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
     private boolean kingdomsatwar$floats(FluidState state, TagKey<Fluid> water) {
         if (state.is(water)) {
             this.kingdomsatwar$medium = Medium.WATER;
-            this.kingdomsatwar$afloat = true;
+            this.kingdomsatwar$afloat = !this.kingdomsatwar$gliding();
         } else if (state.is(FluidTags.LAVA)) {
             this.kingdomsatwar$medium = Medium.LAVA;
             this.kingdomsatwar$afloat = true;
@@ -107,14 +124,61 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
         return this.kingdomsatwar$afloat || state.is(water);
     }
 
-    /** Die Höhe der Oberfläche im Block des Hakens – in der Leere liegt sie auf der gemerkten Höhe. */
+    /**
+     * Die Höhe der Oberfläche im Block des Hakens – in der Leere liegt sie auf der gemerkten Höhe, unter Wasser auf der Höhe,
+     * auf der er stehen geblieben ist (dorthin zieht es ihn zurück wie sonst zur Oberfläche).
+     */
     @Redirect(method = "tick", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/world/level/material/FluidState;getHeight(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F"))
     private float kingdomsatwar$surface(FluidState state, BlockGetter level, BlockPos pos) {
         if (this.kingdomsatwar$medium == Medium.VOID) {
             return (float) (this.kingdomsatwar$voidLevel - pos.getY());
         }
+        if (!Double.isNaN(this.kingdomsatwar$depthLevel)) {
+            return (float) (this.kingdomsatwar$depthLevel - pos.getY());
+        }
         return state.getHeight(level, pos);
+    }
+
+    /**
+     * Unter Wasser ausgeworfen? Taucht der Angler, wenn der Haken ins Wasser kommt, und steht über dem Haken noch Wasser, so
+     * treibt er nicht zur Oberfläche: Er gleitet ein Stück weiter (das Wasser bremst ihn rasch), solange schwimmt er nicht –
+     * dann bleibt er mitten in seinem Block stehen. Server und Spiel urteilen gleich; der Server meldet die Höhe dazu.
+     *
+     * @return {@code true}, solange er noch gleitet
+     */
+    @Unique
+    private boolean kingdomsatwar$gliding() {
+        if (!Double.isNaN(this.kingdomsatwar$depthLevel)) {
+            // wer erst später in die Nähe kommt, erfährt die Höhe auch noch
+            if (!this.level().isClientSide() && this.tickCount % 40 == 0) {
+                Fishing.held((FishingHook) (Object) this, this.kingdomsatwar$depthLevel);
+            }
+            return false;
+        }
+        if (this.kingdomsatwar$glide == SURFACE) {
+            return false;
+        }
+        if (this.kingdomsatwar$glide < 0) {
+            Player owner = this.getPlayerOwner();
+            if (this.hookedIn != null || owner == null || !Fishing.submerged(owner)
+                    || !this.level().getFluidState(this.blockPosition().above()).is(FluidTags.WATER)) {
+                this.kingdomsatwar$glide = SURFACE;
+                return false;
+            }
+            this.kingdomsatwar$glide = 0;
+        }
+        this.kingdomsatwar$glide++;
+        net.minecraft.world.phys.Vec3 motion = this.getDeltaMovement();
+        if (this.kingdomsatwar$glide < GLIDE_TICKS && motion.lengthSqr() > 0.004 && !this.horizontalCollision && !this.onGround()) {
+            this.setDeltaMovement(motion.scale(0.8));
+            return true;
+        }
+        this.kingdomsatwar$depthLevel = Math.floor(this.getY()) + 0.5;
+        if (!this.level().isClientSide()) {
+            Fishing.held((FishingHook) (Object) this, this.kingdomsatwar$depthLevel);
+        }
+        return false;
     }
 
     /** Treibt der Haken in der Leere (oder beginnt er gerade damit)? Das entscheidet der Server und meldet die Höhe. */
@@ -186,10 +250,24 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
         }
     }
 
-    /** Unter einer Decke beißt es bei Minecraft langsamer – in Lava und Leere soll das nicht gelten (dort gibt es keinen Himmel). */
+    /**
+     * Unter einer Decke beißt es bei Minecraft langsamer – in Lava und Leere soll das nicht gelten (dort gibt es keinen Himmel),
+     * und auch nicht tief unter Wasser (das Wasser selbst ist keine Decke).
+     */
     @Redirect(method = "catchingFish", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;canSeeSky(Lnet/minecraft/core/BlockPos;)Z"))
     private boolean kingdomsatwar$openSky(Level level, BlockPos pos) {
-        return this.kingdomsatwar$medium != Medium.WATER || level.canSeeSky(pos);
+        return this.kingdomsatwar$medium != Medium.WATER || !Double.isNaN(this.kingdomsatwar$depthLevel) || level.canSeeSky(pos);
+    }
+
+    /** Unter Wasser steigen statt der Spritzer und Wellen Bläschen auf (die Spur des nahenden Fischs, der Biss). */
+    @Redirect(method = "catchingFish", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/server/level/ServerLevel;sendParticles(Lnet/minecraft/core/particles/ParticleOptions;DDDIDDDD)I"))
+    private int kingdomsatwar$particles(ServerLevel level, ParticleOptions particle, double x, double y, double z, int count, double dx, double dy, double dz,
+            double speed) {
+        if (!Double.isNaN(this.kingdomsatwar$depthLevel) && (particle == ParticleTypes.FISHING || particle == ParticleTypes.SPLASH)) {
+            return level.sendParticles(ParticleTypes.BUBBLE, x, y, z, count, dx, dy, dz, speed);
+        }
+        return level.sendParticles(particle, x, y, z, count, dx, dy, dz, speed);
     }
 
     /** Das Platschen beim Biss passt nur zum Wasser. */
@@ -242,6 +320,16 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
     @Override
     public void kingdomsatwar$anchor(double voidLevel) {
         this.kingdomsatwar$voidLevel = voidLevel;
+    }
+
+    @Override
+    public void kingdomsatwar$hold(double depthLevel) {
+        this.kingdomsatwar$depthLevel = depthLevel;
+    }
+
+    @Override
+    public boolean kingdomsatwar$submerged() {
+        return !Double.isNaN(this.kingdomsatwar$depthLevel);
     }
 
     @Override

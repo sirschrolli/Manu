@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.89.0 – Das Urmeer.** Eine neue Dimension: das **Urmeer**, ein Meer ohne Küsten, so alt wie die Welt – mit vier Landschaften: die tiefen **Urmeer-Weiten** mit Tangwäldern und Felsnadeln, flache, warme **Korallenbänke**, dunkle **Tiefseegräben** aus Abgrundstein und die **Sturminseln** mit Stränden, Palmen und Klippen. Sein Fels ist der grünblaue **Gezeitenstein**; auf dem Grund liegen Gebeine von Seedrachen, Muschelfelder und Korallenpaläste, im Wasser leben Haie, Mantarochen, Delfine, Anglerfische und Riesenkrabben, und an der Angel warten **80 neue Fischarten**. Der Weg hinein führt durch den **Versunkenen Tempel** auf dem Grund der tiefen Ozeane: In der Mitte des runden Heiligtums mit seinen zwölf Säulen und der halb eingestürzten Kuppel wirbelt das **Gezeitentor** – hineinschwimmen, einen Moment bleiben, und man taucht im Urmeer auf einer Plattform über dem Wasser auf. Eigene Tore baut man aus **Gezeitensteinziegeln** und erweckt sie mit einem **Herz des Meeres**.
+> **Testversion 0.90.0 – Angeln.** **Alle Angeln sind jetzt 3D:** Die Angel von Minecraft und die sechs Angeln der Mod sind in der Hand echte Ruten mit Griff, Rollenhalter, Rolle und Kurbel, Ringen und farbigen Wicklungen – die Holzangel mit Bindfaden, die Eisenangel mit Lederwicklung, die Goldangel mit rotem Griff und Rubin, die Drachenangel mit Hörnern und Flossen, die Schattenangel mit leuchtenden Wicklungen, die **glühende Glutangel** und die Sternenangel mit einem Stern an der Spitze. Ruhend hängt an der Schnur ein Schwimmer oder Köder (Goldlöffel, Drachenschuppe, Schattenkristall, Glutperle, Stern) mit Haken; ausgeworfen biegt sich die Spitze, und die Schnur läuft von ihr bis zum Schwimmer. Im Inventar bleibt das gewohnte Bild. **Angeln unter Wasser:** Wer taucht und auswirft, dessen Haken treibt nicht mehr zur Oberfläche – er gleitet ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie oben, statt Spritzern steigen Bläschen auf, und der Fang landet gleich beim Taucher. **Fünf Seltenheiten:** Gewöhnlich, Ungewöhnlich, Selten, **Mystisch** (bisher „episch“) und **Legendär** – und in **jedem Biom gibt es jetzt jede Seltenheit**: **113 neue Legenden**, eine in jedem Biom und zwei in jedem Biom des Urmeers, etwa der **Kohlentitan** in den Lavaadern der Aschefelder, der **Kristallriese** in den Schmelzwasserseen der Frostgipfel, der **Donnergebieter**, der sich an der Sturmküste nur im Gewitter zeigt, und der **Türkishüter** über den Korallenbänken. Legenden sind riesig, schwer zu drillen, tragen ihren Namen in Gold, funkeln im Inventar und geben drei oder vier starke Wirkungen ohne Nebenwirkung. Das **Urmeer hat jetzt die meisten Fische**: **vierzig Arten in jedem Biom** (72 neue). Zusammen sind es **1893 Arten**. Der Fischer kauft jetzt auch Legenden (40 Bronze).
+> In 0.89 kam **das Urmeer**, eine neue Dimension: ein Meer ohne Küsten, so alt wie die Welt – mit vier Landschaften: die tiefen **Urmeer-Weiten** mit Tangwäldern und Felsnadeln, flache, warme **Korallenbänke**, dunkle **Tiefseegräben** aus Abgrundstein und die **Sturminseln** mit Stränden, Palmen und Klippen. Sein Fels ist der grünblaue **Gezeitenstein**; auf dem Grund liegen Gebeine von Seedrachen, Muschelfelder und Korallenpaläste, im Wasser leben Haie, Mantarochen, Delfine, Anglerfische und Riesenkrabben, und an der Angel warten **80 neue Fischarten**. Der Weg hinein führt durch den **Versunkenen Tempel** auf dem Grund der tiefen Ozeane: In der Mitte des runden Heiligtums mit seinen zwölf Säulen und der halb eingestürzten Kuppel wirbelt das **Gezeitentor** – hineinschwimmen, einen Moment bleiben, und man taucht im Urmeer auf einer Plattform über dem Wasser auf. Eigene Tore baut man aus **Gezeitensteinziegeln** und erweckt sie mit einem **Herz des Meeres**.
 > In 0.88 kamen **Waffen und Werkzeuge in 3D**: Die letzten flachen Waffen und Werkzeuge sind jetzt echte **3D-Modelle** wie die Waffenkammer: die Sätze aus **Stahl**, **Nachtstahl** und **Abyssit** (Schwert, Axt, Spitzhacke, Schaufel, Hacke), **Draconiumschwert** und **-axt** mit goldenen Schneiden und glühenden Adern, die **Mondsilberklinge**, die **Trollkeule** mit Eisenbändern und Nägeln, der **Kommandostab** und der rot-weiße **Vermessungsstab** – 21 Stücke. Sie liegen richtig in der Hand, aus eigener Sicht und von außen (F5); im Inventar bleibt das gewohnte Bild. Dazu sind **89 weitere Gegenstände plastisch**: Barren und Erze, Edelsteine und Splitter, Drachenschuppen, Runen und Zaubertafeln, Siegelsplitter, Münzen, Monsterteile, Hörner und Kronen, Speisen und Getränke – in der Hand, im Rahmen und am Boden haben sie Dicke statt wie Papier zu wirken.
 > In 0.87 kamen **Kampf, Wurf, Zauber und Angeln**: Die **Drachen** finden ihre Gegner seitdem sicher und kämpfen sauber: Eigene Drachen **verteidigen ihren Herrn von sich aus** gegen Monster, die ihn oder sie angreifen, kämpfen am Boden mit gezieltem Biss – auch nach unten und nach oben – und Feueratem, steigen gegen Schützen auf Säulen, gegen Flieger und im Wald in die Luft, kreisen dort, stoßen herab und speien aus der Luft. Sie halten Abstand zu ihrem Herrn, **landen sauber neben ihm** statt auf ihm und fliegen keine weiten Schleifen mehr. Die **Drachen-Bosse** fliegen über Mauern, wenn sie am Boden nicht weiterkommen, und treten beim Drehen auf der Stelle. **Speere, Lanzen und Dreizacke** fliegen jetzt **schnurgerade mit der Spitze voran** – auch im Bogen und beim Wurf aus dem Laufen –, und Glaciaras Eisspeer und Eiszapfen sind echte Modelle aus Eis. **Sieben neue Verzauberungen** gibt es am Zaubertisch und beim Bibliothekar: **Donnerschlag** (ein knisternder Funkenschlag fährt in den Getroffenen), **Giftzahn**, **Standhaft**, **Lebenskraft** (mehr Herzen), **Eulenauge** (Nachtsicht), **Hasenfuß** (höher springen, tiefer fallen) und **Drillmeister** (größere Fangzone beim Angeln). Die **Verzauberungen von Minecraft wirken etwas stärker** – Schärfe, Bann, Nemesis, Harpune, Stärke, Schutz, Effizienz und Köder –, aber nicht übertrieben. Und es gibt **sechs eigene Angeln**: die robuste **Eisenangel**, die glückbringende **Goldangel**, die **Drachenangel**, die alles ein wenig besser kann, die **Schattenangel** für Nacht und Dunkel, die **Glutangel** für die Lava und die **Sternenangel** für das End und die Leere.
 > In 0.86 kamen **weitere Wesen**: Vier weitere Tiere zogen in die Biome ein – wieder jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. In den **Aschefeldern** kriecht der **Glutsalamander** über Asche und Lava: schwarz wie erkaltete Schlacke, mit Flecken und Rissen, die **wie Glut leuchten** – auch im Dunkeln (orangerot und als gelb glühender Goldsalamander). Er ist feuerfest, **läuft über Lava wie über festen Boden**, sonnt sich an Lava und Magma und glüht dann heller; wer ihn schlägt, **verbrennt sich an seiner Haut**, Wasser verträgt er nicht, und mit Magmacreme zieht man Junge auf. Im **Nebelmoor** und in den Sümpfen lauert der **Moorschnapper**, eine riesige Schnappschildkröte mit gezacktem, bemoostem Panzer und Hakenschnabel: Reglos liegt er im flachen Wasser, nur Panzer und Kopf ragen heraus – und **schnappt blitzschnell zu**, wenn Spieler, Monster, Frösche, Hasen oder Hühner vor seiner Nase vorbeikommen. Wer sich nähert, den warnt er mit einem **Fauchen**; getroffen **zieht er sich in den Panzer zurück**, und dann richtet man kaum etwas aus. An der **Korallenküste** und in den Mangrovensümpfen waten **Flamingos** in Scharen durchs flache Wasser (Rosaflamingo und kräftig roter Kubaflamingo): Sie **gründeln mit dem Kopf nach unten**, ruhen **auf einem Bein**, stecken nachts den Kopf ins Gefieder und **fliegen auf**, wenn man ihnen zu nahe kommt – mit vorgestrecktem Hals, nach hinten gestreckten Beinen und rot-schwarzen Schwingen. Und über den **Königsauen**, Blumenwäldern, Wiesen, Sonnenblumenebenen und Kirschhainen gaukeln **Schmetterlinge** in **sechs Arten** (Tagpfauenauge, Zitronenfalter, Schwalbenschwanz, Bläuling, Admiral und Monarch): Sie setzen sich auf Blumen und Gräser, öffnen und schließen dort langsam die Flügel und flattern auf, wenn man ihnen zu nahe kommt; nachts und bei Regen sitzen sie still.
@@ -387,6 +388,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Kampf, Wurf, Zauber und Angeln** (0.87): Drachen finden ihre Gegner (Wache für den Herrn, Boden- und Luftkampf, gezielter Biss, sauberes Landen neben dem Herrn), Bosse fliegen über Mauern; Speere, Lanzen und Dreizacke fliegen mit der Spitze voran; sieben neue Verzauberungen am Zaubertisch (Donnerschlag, Giftzahn, Standhaft, Lebenskraft, Eulenauge, Hasenfuß, Drillmeister), etwas stärkere Verzauberungen von Minecraft; sechs eigene Angeln (Eisen, Gold, Drache, Schatten, Glut, Stern) | ✅ fertig |
 | **Waffen und Werkzeuge in 3D** (0.88): die Sätze aus Stahl, Nachtstahl und Abyssit, Draconiumschwert und -axt, Mondsilberklinge, Trollkeule, Kommandostab und Vermessungsstab als 3D-Modelle (richtig gehalten, auch mit F5); 89 weitere Gegenstände plastisch (Barren, Steine, Schuppen, Runen, Münzen, Monsterteile, Speisen) | ✅ fertig |
 | **Das Urmeer** (0.89): eine Meeresdimension mit vier Biomen (Urmeer-Weiten, Korallenbänke, Tiefseegraben, Sturminseln), Gezeitenstein, Klangwelten, 80 neuen Fischarten und den Bauwerken des Meeres; der Versunkene Tempel in den tiefen Ozeanen mit dem Gezeitentor; eigene Tore aus Gezeitensteinziegeln, mit dem Herz des Meeres erweckt | ✅ fertig |
+| **Angeln** (0.90): alle sieben Angeln in 3D (ruhend mit Schnur, Schwimmer oder Köder und Haken, ausgeworfen mit gebogener Spitze); Angeln unter Wasser; fünf Seltenheiten (Mystisch statt Episch) und in jedem Biom jede davon – 113 Legenden der Biome; das Urmeer mit vierzig Arten je Biom; zusammen 1893 Arten | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -447,7 +449,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.89.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.90.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -455,7 +457,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.89.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.90.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1902,8 +1904,22 @@ und ihre Vorteile kommen zu Ködern und Verzauberungen hinzu.
 
 ![Die sechs Angeln: groß, in der Hand und ausgeworfen über Wasser und Lava](docs/bilder/angeln_087.jpg)
 
+**In 3D (seit 0.90).** Alle Angeln – auch die von Minecraft – sind in der Hand echte Ruten: unten das Griffende mit Kappe
+(bei Gold, Drache, Schatten und Sternen mit einem Stein), der Griff (Bindfaden, Leder, rotes Leder, Schuppenleder), der
+Rollenhalter mit der **Rolle** darunter – eine runde Spule mit aufgewickelter Schnur und einer Kurbel mit Knauf –, darüber
+die Rute aus vier sich verjüngenden Gliedern mit **Ringen** und farbigen **Wicklungen**. Ruhend hängt von der Spitze die
+Schnur senkrecht herab, daran ein rot-weißer Schwimmer (Holz- und Eisenangel) oder der Köder der Angel – ein **Goldlöffel**
+mit rotem Auge, eine glühende **Drachenschuppe**, ein leuchtender **Schattenkristall**, eine **Glutperle** mit Flämmchen, ein
+**Stern** – und darunter der Haken mit Widerhaken. Ausgeworfen fehlt die Schnur am Modell (das Spiel zieht sie von der Spitze
+bis zum Schwimmer), und die Spitze biegt sich unter dem Zug. Die Drachenangel trägt zwei Hörner am Griffende und Flossen am
+Vordergriff, die Schattenangel leuchtende Wicklungen, die Glutangel ist ein **glühender Lohenstab**, die Sternenangel hat
+einen leuchtenden Stern an der Spitze und eine Schnur aus Sternenlicht. Im Inventar, am Boden und im Rahmen bleibt das
+gewohnte Bild; gehalten werden sie wie die Angel von Minecraft, damit die Schnur genau an der Spitze ansetzt.
+
+![Angeln 0.90: alle Angeln in 3D, Angeln unter Wasser, die Legenden der Biome im Fischbuch](docs/bilder/angeln_090.jpg)
+
 Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
-heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.89 **1708 Arten** in zehn Kapiteln – in jedem
+heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.90 **1893 Arten** in zehn Kapiteln – in jedem
 Gewässer, jedem Biom und jeder Welt eigene. Wer viel angelt, trägt einen **Fischbeutel**.
 
 **Der Drill.** Wer beim Biss anzieht, sieht neben der Angel eine Säule – Wasser, Lava oder Sternenhimmel, je nachdem,
@@ -1950,11 +1966,20 @@ auf einer Wasseroberfläche, und violette Funken ziehen auf ihn zu; der Fang lan
 fällt der Haken einfach hinab, und von einer Klippe der Oberwelt lässt sich so nicht angeln: In allen anderen Welten
 trägt die Leere ihn nur, wo bis zum Boden der Welt nichts mehr kommt.
 
-**Die 1708 Arten.** Es gibt zweierlei Fische. **84 Arten** sind nach **Lebensräumen** verteilt – die Allerweltsfische der
-Flüsse, Meere, Höhlen und Welten, die vier Fische von Minecraft und die fünfzehn Legenden; sie stehen in der ersten Tabelle.
-**1624 Arten** gehören einem **Biom** und beißen nur dort: zwanzig in jedem der 43 eigenen Biome der Mod, zehn oder zwölf
-in jedem der 66 Biome von Minecraft (916 kamen mit 0.81, 628 mit 0.83, 80 mit dem Urmeer in 0.89). An einem Angelplatz beißt also beides – in der
-Ebene etwa die Allerweltsfische der Flüsse und die zwölf Arten der Ebene, wobei die eigenen Arten eines Bioms (wie die der
+**Angeln unter Wasser (seit 0.90).** Wer taucht – das Wasser steht ihm über den Augen – und auswirft, dessen Haken treibt
+nicht zur Oberfläche: Er gleitet ein paar Blöcke weit durchs Wasser (es bremst ihn rasch) und bleibt dann **in der Tiefe
+stehen**, mitten in seinem Block, und schwankt dort sacht. Es beißt dort wie oben, auch über tiefem Wasser ohne Abzug
+(das Wasser selbst ist keine Decke); statt Spritzern und Wellen ziehen **Bläschen** auf den Haken zu, beim Biss blubbert es
+dumpf, und im Drill zerrt der Fisch in einer Wolke aus Bläschen. Der Fang fliegt nicht heran (unter Wasser käme er nicht
+weit), sondern **landet gleich beim Taucher**. Wer mit dem Kopf über Wasser auswirft, angelt wie gewohnt an der
+Oberfläche. Gut zusammen mit einem Trank der Unterwasseratmung – oder mit den Fischen, die einen atmen lassen.
+
+**Die 1893 Arten.** Es gibt zweierlei Fische. **84 Arten** sind nach **Lebensräumen** verteilt – die Allerweltsfische der
+Flüsse, Meere, Höhlen und Welten, die vier Fische von Minecraft und die fünfzehn Legenden aller Welten; sie stehen in der
+ersten Tabelle. **1809 Arten** gehören einem **Biom** und beißen nur dort: einundzwanzig in jedem der 39 eigenen Biome der
+Mod, elf oder dreizehn in jedem der 66 Biome von Minecraft und **vierzig in jedem der vier Biome des Urmeers** (916 kamen mit
+0.81, 628 mit 0.83, 80 mit dem Urmeer in 0.89, 185 mit 0.90: 72 fürs Urmeer und 113 Legenden). An einem Angelplatz beißt
+also beides – in der Ebene etwa die Allerweltsfische der Flüsse und die dreizehn Arten der Ebene, wobei die eigenen Arten eines Bioms (wie die der
 besonderen Orte: Sumpf, Dschungel, Höhle, Tiefsee …) fast doppelt so oft beißen und fast zwei Drittel des Fangs stellen.
 
 „Wann“ heißt: Zur anderen Tageszeit beißt die Art nur selten (etwa ein Achtel so oft); „gern bei Regen“ heißt bei Regen
@@ -1962,7 +1987,14 @@ gut doppelt so oft, sonst halb so oft; „nur bei Regen“ und „nur im Gewitte
 Nacht zählt die Tageszeit nicht. Seltenere Arten beißen entsprechend seltener. Eine **Legende** hängt an ihrem Ort und zu
 ihrer Zeit etwa bei jedem hundertsten Biss am Haken – überall gleich selten, ob dort drei Arten leben oder dreißig. Glück
 des Meeres III verdoppelt das, der Glühköder ebenso (bei allem, was im Dunkeln oder in Lava lebt), und die beiden
-Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
+Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft. Seit 0.90 hat **jedes Biom seine eigene Legende**
+(das Urmeer in jedem Biom zwei): Sie steht im Fischbuch bei ihrem Biom, die fünfzehn Legenden aller Welten in ihrem eigenen
+Kapitel.
+
+**Die fünf Seltenheiten.** Gewöhnlich (weiß), Ungewöhnlich (grün), Selten (blau), **Mystisch** (violett; bis 0.89 hieß sie
+„episch“) und **Legendär** (gold). In **jedem Biom gibt es jede Seltenheit** – Gewöhnliches, Ungewöhnliches, Seltenes,
+mindestens zwei mystische Fänge und seit 0.90 die Legende des Bioms. Legenden tragen ihren Namen in Gold und **funkeln**
+im Inventar wie verzauberte Dinge.
 
 *Die Allerweltsfische und die Legenden (84):*
 
@@ -2013,8 +2045,8 @@ Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
 | Riesenassel | ungewöhnlich | ★★☆☆☆ | 15–50 cm | die Tiefsee | immer | Resistenz II (1:00), Langsamkeit (1:00) |
 | Riemenfisch | selten | ★★★★☆ | 300–800 cm | die Tiefsee | immer | Meereskraft (1:00) |
 | Geisterhai | selten | ★★★★☆ | 60–150 cm | die Tiefsee | immer | Unsichtbarkeit (1:30) |
-| Quastenflosser | episch | ★★★★☆ | 100–200 cm | die Tiefsee | immer | Extraenergie III (5:00) |
-| Vampirkalmar | episch | ★★★★☆ | 15–30 cm | die Tiefsee | nachts | Direktheilung II, Dunkelheit (0:06) |
+| Quastenflosser | mystisch | ★★★★☆ | 100–200 cm | die Tiefsee | immer | Extraenergie III (5:00) |
+| Vampirkalmar | mystisch | ★★★★☆ | 15–30 cm | die Tiefsee | nachts | Direktheilung II, Dunkelheit (0:06) |
 | **Höhlen** (3) | | | | | | |
 | Höhlensalmler | ungewöhnlich | ★★☆☆☆ | 6–12 cm | Höhlengewässer | immer | Nachtsicht (4:00), Eile (0:30) |
 | Tropfsteinschmerle | gewöhnlich | ★★☆☆☆ | 8–18 cm | Höhlengewässer | immer | Eile II (0:30) |
@@ -2045,7 +2077,7 @@ Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
 | **Der Abgrund** (3) | | | | | | |
 | Glutwels | ungewöhnlich | ★★★☆☆ | 50–130 cm | der Abgrund | immer | Feuerresistenz (3:00), Stärke (1:00) |
 | Chaosflosse | selten | ★★★★☆ | 30–90 cm | der Abgrund | immer | versetzt wie eine Chorusfrucht, Schnelligkeit II (0:20) |
-| Rissaal | episch | ★★★★☆ | 80–220 cm | der Abgrund | immer | Schwebekraft (0:06), Sanfter Fall (0:30), Stärke II (1:00) |
+| Rissaal | mystisch | ★★★★☆ | 80–220 cm | der Abgrund | immer | Schwebekraft (0:06), Sanfter Fall (0:30), Stärke II (1:00) |
 | **Legenden** (15) | | | | | | |
 | Der Alte vom See | **legendär** | ★★★★★ | 140–220 cm | Flüsse und Seen | nachts | Glück II (10:00), Regeneration (1:00), Extraenergie II (10:00) |
 | Goldschuppe | **legendär** | ★★★★★ | 80–130 cm | Flüsse und Seen | tagsüber · nur bei Regen | Absorption IV (3:00), Glück III (5:00) |
@@ -2067,7 +2099,7 @@ Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
 
 ![Die 628 Arten der zweiten Welle (0.83): Flüsse und Seen, Meer, Tiefsee, Höhlen, Nether, End und Leere, Feenreich, Schattenwelt, Abgrund](docs/bilder/neue_fische.jpg)
 
-**Die Fische der Biome (1544).** Jedes Biom färbt seine Fische: In den Aschefeldern sind sie grau wie Schlacke und glühen
+**Die Fische der Biome (1809).** Jedes Biom färbt seine Fische: In den Aschefeldern sind sie grau wie Schlacke und glühen
 orange, in den Frostgipfeln eisblau, im Schattenwald violett mit hellen Augen, in den Sternenstaubfeldern tragen sie
 Sternenlicht. Was für Tiere dort leben, bestimmt das Gewässer – Forellen, Welse, Hechte und Krebse im Süßwasser, Thune,
 Haie, Rochen, Krabben, Quallen und Seesterne im Meer, Anglerfische, Vipernfische und Asseln in der Tiefe, Molche,
@@ -2075,10 +2107,11 @@ Schnecken und Panzerfische in den Höhlen. Seit 0.83 kommen neue Gestalten hinzu
 Sonnenbarsch in Flüssen und Seen; Rotfeuerfisch, Doktorfisch, Lipp- und Drückerfisch, Anemonenfisch, Knurrhahn, Hammerhai
 und Sägefisch im Meer; Sterngucker, Seegurken und Seeschlangen in der Tiefe; Seeigel und Muscheln (die selteneren mit
 Perle), Fadenschnecken und der Fangkrebs, der so schnell zuschlägt, dass das Wasser kocht. Je Biom sind es **Gewöhnliche,
-Ungewöhnliche, Seltene** und **zwei große Fänge** (episch): bei zwanzig Arten sieben, sechs, fünf und zwei, bei zwölf fünf,
-drei, zwei und zwei, bei zehn drei, drei, zwei und zwei. Die großen Räuber sind die
+Ungewöhnliche, Seltene**, **zwei große Fänge** (mystisch) und seit 0.90 die **Legende**: bei einundzwanzig Arten sieben,
+sechs, fünf, zwei und eine, bei dreizehn fünf, drei, zwei, zwei und eine, bei elf drei, drei, zwei, zwei und eine; im
+Urmeer bei vierzig Arten dreizehn, elf, neun, fünf und zwei. Die großen Räuber sind die
 seltenen, das Kleinzeug das gewöhnliche; je seltener, desto schwerer der Drill, desto größer das Tier und desto stärker
-die Wirkung – und **keine zwei der 1708 Arten wirken gleich**: Gewöhnliche geben eine oder zwei schwache Wirkungen, die
+die Wirkung – und **keine zwei der 1893 Arten wirken gleich**: Gewöhnliche geben eine oder zwei schwache Wirkungen, die
 großen Fänge drei starke (und manche haben ihren Preis). Die Wirkungen passen zum Biom: Feuerfische schützen vor Feuer und
 machen stark, Eisfische härten ab, Fische der Schattenwelt machen unsichtbar, die der Leere lassen schweben, einzelne aus
 dem End und der Naht **versetzen** wie eine Chorusfrucht, einige aus dem Feenreich **nehmen alle Leiden**.
@@ -2089,7 +2122,7 @@ Arten fürs Wasser und andere für die Lava, die Schwebenden Inseln fürs Wasser
 für alle drei. Lavafische sind feuerfest. Am Gegenstand steht die **Heimat** jedes Biom-Fischs; alles Weitere (Größe,
 Zeit, Wetter, Wirkung, eine Notiz) steht im Fischbuch – hier je Biom nur die beiden großen Fänge und eine Auswahl:
 
-| Biom | Arten | Die großen Fänge (episch): Größe, Zeit – Wirkung | Außerdem |
+| Biom | Arten | Die großen Fänge (mystisch): Größe, Zeit – Wirkung | Außerdem |
 |---|---|---|---|
 | **Flüsse & Seen** (51 Biome, 682 Arten) | | | |
 | Aschefelder (Lava, Wasser) | 20 | **Rauchhai** ★★★★☆, 66–273 cm, immer – Absorption III (1:50), Feuerresistenz (2:15), Stärke (1:00)<br>**Rauchhammerhai** ★★★★★, 198–593 cm, nachts – Eile III (1:10), Feuerresistenz (2:15), Schnelligkeit (1:00) | Rußwaller, Bimselritze, Rußseeschlange, Schlotsonnenbarsch, Kohlenmuschel … |
@@ -2206,10 +2239,144 @@ Zeit, Wetter, Wirkung, eine Notiz) steht im Fischbuch – hier je Biom nur die b
 | Schattenschlund (Lava, Leere, Wasser) | 20 | **Schwärzehummer** ★★★★☆, 22–66 cm, immer – Stärke II (1:15), Resistenz II (1:00), Schnelligkeit (1:00)<br>**Dunkelsogsägefisch** ★★★★★, 151–628 cm, immer – Nachtsicht (8:00), Resistenz (1:40), Stärke (0:40), Blindheit (0:06) | Dunkelsoghai, Abgrundbeilfisch, Abgrundhammerhai, Lichtfraßskorpionfisch, Sogknurrhahn … |
 | Die Naht (Lava, Leere, Wasser) | 20 | **Fadenquastenflosser** ★★★★☆, 97–243 cm, immer – Eile III (1:50), Glück II (1:50), Schnelligkeit (1:30), Feuerresistenz (0:50)<br>**Stichsägefisch** ★★★★☆, 147–611 cm, immer – Sprungkraft III (1:50), Schnelligkeit II (1:15), Absorption (1:20) | Stichtrilobit, Nahthornhecht, Nahthammerhai, Zwischendiademigel, Fadenfeilenfisch … |
 
+(Die Zahl der Arten je Biom in dieser Tabelle zählt ohne die Legende; seit 0.90 kommt in jedem Biom eine dazu.)
+
+**Die Legenden der Biome (seit 0.90).** In jedem Biom lebt eine Legende, im Urmeer in jedem Biom zwei – 113 zusammen. Sie
+heißen nach ihrem Biom und einem Titel (König, Kaiserin, Hüter, Titan, Koloss, Urahn …), sind anderthalbmal so groß wie
+ihresgleichen, im Drill fast so schwer wie die fünfzehn Legenden aller Welten (★★★★☆ bis ★★★★★), beißen wie diese etwa bei
+jedem hundertsten Biss und geben drei oder vier starke, lange Wirkungen – **ohne Nebenwirkung**; manche nehmen dazu alle
+Leiden oder versetzen. Ihre Bilder tragen goldene Flossensäume, leuchtende Punkte und einen funkelnden Stern.
+
+| Legende | Wo | Drill | Größe | Wann | Gegessen |
+|---|---|---|---|---|---|
+| **Flüsse & Seen** (51) | | | | | |
+| Kohlentitan | in den Lavaadern der Aschefelder | ★★★★★ | 111–389 cm | immer | Absorption III (3:00), Resistenz II (2:05), Eile (2:00), Feuerresistenz (1:00) |
+| Kristallriese | in den Schmelzwasserseen der Frostgipfel | ★★★★★ | 55–207 cm | nachts · gern bei Regen | Extraenergie III (4:35), Resistenz II (1:35), Nachtsicht (4:00), Unterwasseratmung (3:00) |
+| Lianenwächter | in den Waldseen des Urhains | ★★★★★ | 61–184 cm | immer | nimmt alle Leiden, Sprungkraft III (2:15), Glück II (3:45), Regeneration II (0:20), Extraenergie (4:00) |
+| Schottertitan | in den Wildbächen der Felsschluchten | ★★★★★ | 135–472 cm | tagsüber | Absorption III (2:25), Stärke II (1:40), Resistenz II (1:00) |
+| Purpurpatriarch | in den klaren Teichen der Königsauen | ★★★★☆ | 139–486 cm | nachts | nimmt alle Leiden, Eile III (2:45), Regeneration II (0:20), Resistenz II (1:35) |
+| Schlickherrin | in den Moorlöchern des Nebelmoors | ★★★★★ | 76–273 cm | nachts | Glück III (3:40), Unterwasseratmung (4:30), Sprungkraft (3:00) |
+| Obsidianfürst | in den Lavaseen der Aschelande | ★★★★☆ | 129–322 cm | nachts | Stärke III (1:50), Resistenz II (2:05), Absorption (4:00), Feuerresistenz (1:00) |
+| Polarpatriarch | unter dem Eis des Frostkessels | ★★★★★ | 60–179 cm | immer | Absorption III (2:25), Resistenz II (2:05), Extraenergie (6:00) |
+| Lehmkaiser | in den Spaltenseen der Zerklüfteten Weiten | ★★★★★ | 136–476 cm | gern bei Regen | Nachtsicht (12:00), Resistenz II (1:35), Eile II (1:15), Stärke (1:00) |
+| Haintitan | in den Quellteichen des Uralten Hains | ★★★★★ | 118–414 cm | immer | Eile III (2:45), Schnelligkeit II (2:30), Regeneration II (0:10) |
+| Leuchtherrin | in den Regenbecken der Sturmklippen | ★★★★★ | 120–420 cm | nur im Gewitter | Stärke III (1:30), Eile II (1:50), Sanfter Fall (3:00), Sprungkraft (1:30) |
+| Brisenkoloss | in den Bächen der Ebene | ★★★★★ | 32–95 cm | tagsüber | Sprungkraft III (1:50), Glück III (3:40), Extraenergie (4:00) |
+| Kernherrin | zwischen den Sonnenblumenfeldern | ★★★★★ | 80–289 cm | tagsüber · gern bei Regen | Sprungkraft III (1:50), Glück II (5:00), Stärke II (1:15) |
+| Lichtungspatriarch | in den Waldbächen | ★★★★★ | 74–267 cm | nachts | Nachtsicht (8:00), Schnelligkeit II (1:50), Glück II (2:30), Regeneration (0:15) |
+| Mohnkönig | in den Teichen des Blumenwalds | ★★★★★ | 122–427 cm | nachts | Sanfter Fall (4:00), Regeneration II (0:20), Extraenergie II (2:30), Sprungkraft (1:30) |
+| Weißrindenregent | in den Bächen des Birkenwalds | ★★★★★ | 68–256 cm | gern bei Regen | nimmt alle Leiden, Nachtsicht (10:00), Extraenergie II (5:00), Eile (3:00), Glück (3:00) |
+| Altbirkenkaiserin | in den stillen Weihern des Birken-Urwalds | ★★★★★ | 32–95 cm | nachts · nur bei Regen | Sprungkraft III (2:15), Glück II (5:00), Nachtsicht (6:00) |
+| Sprenkelkoloss | in den Bächen des Rotlaubwalds | ★★★★★ | 65–245 cm | immer | Eile III (2:15), Nachtsicht (8:00), Extraenergie (6:00), Schnelligkeit (2:00) |
+| Unheilmonarch | in den Tümpeln des Dunklen Walds | ★★★★★ | 52–157 cm | nachts | Nachtsicht (10:00), Eile III (1:20), Absorption (4:00), Resistenz (1:40) |
+| Welkfürst | in den reglosen Teichen des Blassen Gartens | ★★★★★ | 52–196 cm | gern bei Regen | Sanfter Fall (4:00), Resistenz II (1:35), Stärke II (1:15) |
+| Nadelwaldherrin | in den Bächen der Taiga | ★★★★★ | 57–170 cm | nachts | nimmt alle Leiden, Schnelligkeit III (2:15), Sprungkraft II (1:50), Nachtsicht (4:00), Glück (3:00) |
+| Riesenkieferkoloss | zwischen den Findlingen der Kiefern-Urtaiga | ★★★★★ | 54–203 cm | immer | Resistenz II (2:05), Absorption II (3:20), Nachtsicht (6:00) |
+| Hochtannurahn | in den dunklen Weihern der Fichten-Urtaiga | ★★★★★ | 81–293 cm | tagsüber | nimmt alle Leiden, Schnelligkeit III (1:50), Regeneration II (0:25), Sprungkraft (3:00), Eile (1:30) |
+| Kaltmooswächter | in den Eislöchern der Verschneiten Taiga | ★★★★★ | 66–246 cm | tagsüber | Sanfter Fall (4:00), Resistenz II (2:05), Extraenergie II (2:30), Absorption (2:40) |
+| Schneewehenurahn | unter dem Eis der Verschneiten Ebene | ★★★★★ | 41–149 cm | immer | Unterwasseratmung (7:30), Extraenergie II (5:00), Sanfter Fall (2:00), Absorption (2:40) |
+| Kristalleisriese | zwischen den Eisnadeln der Eiszapfentundra | ★★★★★ | 130–454 cm | tagsüber | Extraenergie III (4:35), Nachtsicht (8:00), Resistenz II (1:35), Stärke (1:00) |
+| Grundeiskoloss | unter dem Eis des Vereisten Flusses | ★★★★★ | 54–202 cm | immer | Extraenergie III (5:25), Nachtsicht (8:00), Absorption (4:00), Sanfter Fall (2:00) |
+| Wehrfürstin | in der Strömung der Flüsse | ★★★★★ | 30–90 cm | immer | Sprungkraft III (1:50), Extraenergie II (5:00), Regeneration II (0:10) |
+| Schlammhüter | im trüben Wasser des Sumpfs | ★★★★★ | 63–188 cm | nachts | Unterwasseratmung (6:00), Stärke III (0:55), Glück II (3:45), Regeneration (0:15) |
+| Wurzelbogenahn | zwischen den Stelzwurzeln des Mangrovensumpfs | ★★★★☆ | 21–63 cm | nachts | Sprungkraft III (2:45), Stärke III (1:15), Regeneration II (0:20) |
+| Tigerurahn | in den Flüssen des Dschungels | ★★★★★ | 63–238 cm | tagsüber | Extraenergie III (4:35), Regeneration II (0:25), Sprungkraft II (1:15) |
+| Dschungelrandmonarch | in den Wasserläufen des Lichten Dschungels | ★★★★★ | 31–94 cm | nachts | Glück III (4:35), Nachtsicht (8:00), Sprungkraft II (1:50), Regeneration (0:15) |
+| Zenurahn | zwischen den Halmen des Bambusdschungels | ★★★★★ | 31–94 cm | immer | Stärke III (1:15), Nachtsicht (8:00), Regeneration II (0:10), Sprungkraft (1:30) |
+| Trockengraskoloss | in den Wasserlöchern der Savanne | ★★★★★ | 24–71 cm | immer | Sprungkraft III (2:45), Eile II (1:50), Feuerresistenz (3:00), Schnelligkeit (2:00) |
+| Trockenkammfürstin | in den Wasserstellen der Savannenhochebene | ★★★★★ | 69–258 cm | nachts | Feuerresistenz (9:00), Glück II (3:45), Eile II (1:50) |
+| Fallbachhüter | in den Sturzbächen der Zerzausten Savanne | ★★★★★ | 27–81 cm | nur im Gewitter | Eile III (2:15), Sprungkraft III (1:50), Gunst des Delfins (1:40) |
+| Trugherrscher | in den Oasen der Wüste | ★★★★★ | 31–93 cm | tagsüber · gern bei Regen | Feuerresistenz (7:30), Sprungkraft III (1:50), Stärke (1:20), Eile (2:00) |
+| Rotsandfürst | in den Wasserlöchern der Tafelberge | ★★★★★ | 66–199 cm | nachts · gern bei Regen | Absorption III (3:00), Extraenergie II (3:45), Stärke II (0:50) |
+| Hoodoourahn | zwischen den Felsnadeln der Abgetragenen Tafelberge | ★★★★★ | 22–67 cm | immer | Eile III (2:15), Nachtsicht (6:00), Resistenz II (1:35), Stärke (1:20) |
+| Wurzeltonhüter | in den Tümpeln der Bewaldeten Tafelberge | ★★★★★ | 86–311 cm | nachts | Schnelligkeit III (2:15), Eile III (1:20), Glück II (3:45) |
+| Almhüter | in den Bergbächen der Alm | ★★★★★ | 125–439 cm | immer | Schnelligkeit III (2:45), Eile III (1:50), Regeneration (0:20), Glück (3:00) |
+| Rosaherrin | unter den Blüten des Kirschberghains | ★★★★★ | 57–171 cm | gern bei Regen | nimmt alle Leiden, Eile III (1:50), Sanfter Fall (3:00), Glück (4:00), Regeneration (0:15) |
+| Waldgrenzfürst | in den Quellen des Berghains | ★★★★★ | 62–231 cm | tagsüber | Stärke III (1:50), Eile II (1:50), Resistenz (2:30), Schnelligkeit (2:00) |
+| Ziegenhüter | in den Schmelzwasserrinnen der Verschneiten Hänge | ★★★★★ | 116–408 cm | immer | Stärke III (1:15), Resistenz II (1:35), Eile (2:00), Sprungkraft (1:30) |
+| Frostkronepatriarch | in den Gletscherseen der Vereisten Gipfel | ★★★★☆ | 81–291 cm | immer | Sanfter Fall (6:00), Extraenergie III (2:45), Absorption (2:40) |
+| Steinbockkaiserin | in den Karseen der Zerklüfteten Gipfel | ★★★★★ | 52–157 cm | immer | Sprungkraft III (1:50), Eile II (1:50), Schnelligkeit (2:00) |
+| Kargkönigin | in den Felsbecken der Steinigen Gipfel | ★★★★★ | 58–218 cm | immer | Resistenz II (2:05), Eile III (1:20), Absorption (2:40) |
+| Rauwindfürstin | in den Bächen der Zerzausten Hügel | ★★★★★ | 52–195 cm | tagsüber | Resistenz II (3:10), Eile II (1:50), Sprungkraft II (1:50), Regeneration (0:20) |
+| Flintkönigin | in den Rinnsalen der Zerzausten Geröllhügel | ★★★★★ | 68–256 cm | immer | Absorption III (2:25), Nachtsicht (6:00), Eile (2:00), Extraenergie (4:00) |
+| Windwaldahn | in den Bächen des Zerzausten Walds | ★★★★★ | 106–369 cm | immer | Schnelligkeit III (2:15), Eile III (1:20), Extraenergie (4:00), Sprungkraft (1:30) |
+| Pilzlandkaiser | in den Tümpeln des Pilzlands | ★★★★★ | 65–195 cm | immer | Resistenz II (2:35), Extraenergie III (3:40), Sprungkraft (2:00) |
+| **Das Meer** (18) | | | | | |
+| Donnergebieter | in der Brandung der Sturmküste | ★★★★★ | 135–472 cm | nur im Gewitter | Sprungkraft III (2:45), Schnelligkeit II (2:30), Gunst des Delfins (2:30), Sanfter Fall (1:30) |
+| Muscheltitan | zwischen den Riffen der Korallenküste | ★★★★★ | 207–862 cm | immer | Schnelligkeit III (1:50), Meereskraft (3:00), Regeneration II (0:20) |
+| Küstenhüter | im offenen Ozean | ★★★★★ | 262–664 cm | immer | Glück III (5:25), Unterwasseratmung (4:30), Stärke II (1:15), Regeneration (0:15) |
+| Nebelbankfürst | im Kalten Ozean | ★★★★★ | 180–751 cm | tagsüber | Resistenz II (2:35), Sanfter Fall (4:00), Extraenergie (6:00), Unterwasseratmung (3:00) |
+| Eiskantenpatriarch | zwischen den Eisbergen des Vereisten Ozeans | ★★★★★ | 81–337 cm | immer | Resistenz II (3:10), Absorption II (2:30), Extraenergie (4:00) |
+| Sandbankkoloss | im Lauwarmen Ozean | ★★★★★ | 211–534 cm | nachts | Stärke III (1:30), Meereskraft (4:00), Regeneration II (0:20), Glück (4:00) |
+| Blaulagunenmonarch | über den Korallen des Warmen Ozeans | ★★★★★ | 136–476 cm | immer | Stärke III (1:30), Regeneration II (0:25), Schnelligkeit (3:00) |
+| Strandhaferkönig | in der Brandung am Strand | ★★★★☆ | 13–58 cm | immer | Gunst des Delfins (4:10), Stärke III (1:15), Unterwasseratmung (4:30), Meereskraft (1:30) |
+| Kaltbrandunggebieter | vor dem Verschneiten Strand | ★★★★★ | 25–75 cm | immer | Unterwasseratmung (9:00), Extraenergie II (5:00), Nachtsicht (6:00) |
+| Klippenfußhüter | zwischen den Felsen der Steinigen Küste | ★★★★☆ | 11–48 cm | gern bei Regen | Resistenz II (2:05), Extraenergie II (5:00), Eile II (1:50), Absorption (2:40) |
+| Schwarmhüter | in den Weiten des Urmeers | ★★★★★ | 169–675 cm | gern bei Regen | Gunst des Delfins (3:20), Meereskraft (3:00), Glück (6:00), Regeneration (0:15) |
+| Hochseeherrin | in den Weiten des Urmeers | ★★★★★ | 175–731 cm | immer | Schnelligkeit III (2:45), Unterwasseratmung (6:00), Meereskraft (3:00), Stärke (1:00) |
+| Türkishüter | über den Korallenbänken des Urmeers | ★★★★★ | 250–566 cm | immer | Stärke III (1:15), Meereskraft (4:00), Unterwasseratmung (4:30), Schnelligkeit (2:00) |
+| Sonnenriffkaiserin | über den Korallenbänken des Urmeers | ★★★★★ | 231–692 cm | immer | Meereskraft (5:00), Schnelligkeit II (1:50), Regeneration (0:20) |
+| Schlundregent | in der Finsternis des Tiefseegrabens | ★★★★★ | 246–737 cm | immer | Stärke III (1:15), Unsichtbarkeit (2:30), Unterwasseratmung (3:00), Resistenz (1:40) |
+| Kluftkönigin | in der Finsternis des Tiefseegrabens | ★★★★★ | 119–297 cm | tagsüber | Meereskraft (6:00), Nachtsicht (8:00), Resistenz II (1:00), Stärke (1:00) |
+| Palmenherrin | an den Sturminseln des Urmeers | ★★★★★ | 25–100 cm | nur im Gewitter | Schnelligkeit III (1:50), Gunst des Delfins (2:30), Sanfter Fall (3:00), Stärke (1:00) |
+| Inselpatriarch | an den Sturminseln des Urmeers | ★★★★★ | 12–51 cm | nur im Gewitter | Schnelligkeit III (1:50), Stärke II (1:15), Eile II (1:15) |
+| **Die Tiefsee** (4) | | | | | |
+| Tiefseekönig | in der Tiefsee | ★★★★★ | 224–673 cm | nachts | Unterwasseratmung (9:00), Unsichtbarkeit (3:20), Meereskraft (2:00), Nachtsicht (4:00) |
+| Walgrundkaiser | in der Kalten Tiefsee | ★★★★★ | 114–286 cm | immer | Nachtsicht (8:00), Unsichtbarkeit (2:30), Meereskraft (2:00), Resistenz (1:40) |
+| Polartiefenfürstin | unter dem Eis der Vereisten Tiefsee | ★★★★★ | 114–285 cm | immer | Extraenergie III (5:25), Absorption III (2:25), Unterwasseratmung (3:00) |
+| Tiefrifftitan | in der Lauwarmen Tiefsee | ★★★★★ | 208–625 cm | immer | Schnelligkeit III (2:45), Gunst des Delfins (3:20), Meereskraft (3:00) |
+| **Die Höhlen** (5) | | | | | |
+| Tropfkoloss | in den stillen Wassern der Abgrundgrotte | ★★★★★ | 40–199 cm | nachts | Meereskraft (5:00), Nachtsicht (6:00), Unsichtbarkeit (2:30), Stärke (1:00) |
+| Kupferaderhüter | in den Sinterbecken der Tropfsteinhöhlen | ★★★★★ | 46–229 cm | immer | Nachtsicht (12:00), Unsichtbarkeit (2:30), Absorption (2:40), Resistenz (1:40) |
+| Leuchtbeerenkoloss | in den Lehmteichen der Üppigen Höhlen | ★★★★★ | 57–215 cm | immer | nimmt alle Leiden, Eile III (2:45), Nachtsicht (6:00), Schnelligkeit II (1:50), Regeneration (0:15) |
+| Sculkfürst | in den schwarzen Wassern des Tiefen Dunkels | ★★★★★ | 54–161 cm | immer | Schnelligkeit III (2:45), Unsichtbarkeit (2:30), Stärke (2:00), Resistenz (1:15) |
+| Gelbdunstherrscher | in den dampfenden Tümpeln der Schwefelhöhlen | ★★★★★ | 56–169 cm | immer | Resistenz II (2:05), Schnelligkeit II (2:30), Nachtsicht (4:00) |
+| **Der Nether** (5) | | | | | |
+| Ödlandwächter | in den Lavaseen des Nether-Ödlands | ★★★★★ | 133–465 cm | immer | Absorption III (3:40), Eile III (1:50), Stärke II (0:50), Feuerresistenz (1:00) |
+| Trauerrankenwächter | in der Lava des Karmesinwalds | ★★★★★ | 221–663 cm | immer | Feuerresistenz (7:30), Schnelligkeit II (1:50), Regeneration II (0:20) |
+| Wirrwarzenhüter | in der Lava des Wirrwalds | ★★★★★ | 256–767 cm | immer | Sprungkraft III (2:45), Unsichtbarkeit (2:30), Sanfter Fall (2:00), Feuerresistenz (3:00) |
+| Seelenerdriese | in der Lava des Seelensandtals | ★★★★★ | 200–599 cm | immer | Nachtsicht (10:00), Schnelligkeit II (1:50), Regeneration II (0:20) |
+| Rauchsäulenahn | in der Lava der Basaltdeltas | ★★★★★ | 134–334 cm | immer | Absorption III (3:40), Extraenergie II (5:00), Stärke II (0:50), Feuerresistenz (1:00) |
+| **End und Leere** (11) | | | | | |
+| Weitenriese | im Sternennichts, weit unter den letzten Inseln | ★★★★★ | 204–848 cm | immer | Absorption III (3:40), Schnelligkeit II (2:30), Unsichtbarkeit (2:30), Glück (4:00) |
+| Opaltitan | zwischen den Stämmen des Kristallwalds | ★★★★★ | 125–438 cm | immer | Absorption III (3:40), Extraenergie II (3:45), Resistenz II (1:00), Eile (2:00) |
+| Ewigkeitsherrin | zwischen den treibenden Mauern der Schwerelosen Ruinen | ★★★★★ | 168–673 cm | immer | Schnelligkeit III (2:45), Sanfter Fall (4:00), Absorption II (2:30), Nachtsicht (4:00) |
+| Plejadenkaiserin | im Glitzern der Sternenstaubfelder | ★★★★☆ | 115–289 cm | immer | versetzt ein Stück, Schnelligkeit III (1:50), Nachtsicht (6:00), Regeneration (0:30), Absorption (2:00) |
+| Spitzkaiser | in den Rissen der Splitterklippen | ★★★★★ | 158–631 cm | immer | Unsichtbarkeit (3:20), Schnelligkeit III (1:50), Eile II (1:50), Stärke (1:00) |
+| Eilandherrscher | zwischen den treibenden Brocken der Weltenreste | ★★★★☆ | 132–463 cm | immer | nimmt alle Leiden, Schnelligkeit III (1:50), Eile II (2:30), Nachtsicht (6:00), Regeneration (0:20) |
+| Enderregent | in der Leere um die Hauptinsel des Endes | ★★★★★ | 172–690 cm | immer | Sprungkraft III (2:45), Unsichtbarkeit (3:20), Absorption II (2:30) |
+| Hochinselfürst | in der Leere unter dem End-Hochland | ★★★★☆ | 137–343 cm | immer | versetzt weit, Stärke III (1:50), Absorption II (2:30), Glück II (2:30) |
+| Endhangmatriarchin | in der Leere unter dem End-Mittelland | ★★★★★ | 242–548 cm | immer | Stärke III (1:30), Sprungkraft II (2:30), Glück II (2:30) |
+| Endkrümelmatriarchin | in der Leere zwischen den Kleinen Endinseln | ★★★★★ | 138–345 cm | immer | Absorption III (3:00), Schnelligkeit III (1:20), Unsichtbarkeit (2:30), Glück (4:00) |
+| Letztlandpatriarch | in der Leere am Rand des End-Karglands | ★★★★★ | 248–562 cm | immer | versetzt weit, Absorption III (3:40), Schnelligkeit III (1:20), Sprungkraft (3:00), Sanfter Fall (2:00) |
+| **Das Feenreich** (5) | | | | | |
+| Tulpenwächter | in den Bächen der Blütenwiesen | ★★★★★ | 14–58 cm | immer | Sanfter Fall (5:00), Extraenergie III (3:40), Glück (6:00) |
+| Koboldherrscher | in den Weihern des Glimmerwalds | ★★★★★ | 213–483 cm | immer | Schnelligkeit III (1:50), Sprungkraft II (2:30), Extraenergie (6:00), Glück (4:00) |
+| Lamellenhüter | im Schatten der Riesenpilze des Pilzhains | ★★★★★ | 85–254 cm | immer | Sprungkraft III (2:45), Glück III (3:40), Resistenz (2:30), Regeneration (0:20) |
+| Silberwächter | im Silberwasser der Mondseen | ★★★★★ | 172–686 cm | immer | Glück III (5:25), Sanfter Fall (3:00), Unsichtbarkeit (2:30) |
+| Giftgebieter | in den Tümpeln der Dornenwildnis | ★★★★★ | 159–477 cm | immer | Resistenz II (2:35), Schnelligkeit II (2:30), Absorption II (1:40), Stärke (1:00) |
+| **Die Schattenwelt** (9) | | | | | |
+| Schwarzholzkaiserin | in den schwarzen Weihern des Schattenwalds | ★★★★★ | 132–329 cm | immer | Stärke III (1:30), Nachtsicht (8:00), Schnelligkeit (2:00), Unsichtbarkeit (1:40) |
+| Elfenbeinkönigin | in den Salztümpeln der Bleichen Öde | ★★★★★ | 166–692 cm | immer | Schnelligkeit III (2:45), Nachtsicht (6:00), Sanfter Fall (2:00), Resistenz (1:15) |
+| Schliffkönigin | in den spiegelnden Becken der Kristallschluchten | ★★★★★ | 207–621 cm | immer | Resistenz II (2:35), Glück III (3:40), Eile (3:00) |
+| Leichentuchkönig | im trüben Wasser des Seelensumpfs | ★★★★☆ | 151–452 cm | immer | Unsichtbarkeit (3:20), Nachtsicht (8:00), Sanfter Fall (3:00) |
+| Kaltwindfürstin | in den kalten Karseen der Schattengipfel | ★★★★☆ | 41–150 cm | immer | Sanfter Fall (4:00), Unsichtbarkeit (2:30), Stärke II (1:15), Nachtsicht (3:00) |
+| Glanzlichtkaiserin | in den leuchtenden Bächen der Glimmerweiten | ★★★★★ | 14–56 cm | immer | nimmt alle Leiden, Eile III (2:45), Extraenergie III (2:45), Sanfter Fall (3:00) |
+| Tintenmeertitan | in den lichtlosen Wassern des Abgrundmeers | ★★★★★ | 183–763 cm | immer | Meereskraft (6:00), Nachtsicht (6:00), Stärke II (1:15) |
+| Schwebefürst | im Nichts unter den Schwebenden Inseln | ★★★★★ | 167–694 cm | immer | versetzt weit, Absorption III (3:40), Nachtsicht (6:00), Unsichtbarkeit (2:30) |
+| Stummherrscher | in den Höhlenseen der Schattentiefen | ★★★★★ | 53–158 cm | immer | Resistenz II (2:05), Nachtsicht (8:00), Absorption II (2:30), Stärke (1:20) |
+| **Der Abgrund** (5) | | | | | |
+| Bebenmonarch | im Nichts zwischen den Schollen der Bruchlande | ★★★★★ | 143–570 cm | immer | Schnelligkeit III (2:45), Absorption II (2:30), Feuerresistenz (4:30) |
+| Hitzeherrscher | in den dampfenden Becken des Glutsturzes | ★★★★☆ | 168–673 cm | immer | Eile III (1:50), Resistenz II (1:35), Stärke (1:20), Absorption (2:40) |
+| Weltraumkaiser | in den Kraterseen der Sternentrümmer | ★★★★★ | 199–829 cm | immer | Schnelligkeit III (1:50), Glück III (3:40), Nachtsicht (6:00) |
+| Schwärzekönigin | in den schwarzen Lachen des Schattenschlunds | ★★★★☆ | 150–602 cm | immer | Unsichtbarkeit (3:20), Stärke II (1:40), Schnelligkeit II (1:15), Sanfter Fall (1:30) |
+| Wandelhüter | in den schillernden Lachen an der Naht | ★★★★★ | 209–871 cm | immer | versetzt weit, Schnelligkeit III (2:45), Unsichtbarkeit (3:20), Absorption (2:40), Stärke (1:20) |
+
 Die Arten der Biome berechnet `tools/fish_gen.py` aus Tabellen (Farbwelt, Gewässer, Wesen und Namensteile je Biom) – immer
 gleich, mit eigenem Zufallsgenerator; es schreibt die Bilder, die Namen und Notizen in beiden Sprachen und die Tabelle
-`data/kingdomsatwar/fishing/species.tsv`, die das Spiel beim Start liest. Ein Test prüft, dass keine zwei der 1708 Arten
-gleich heißen, gleich aussehen oder gleich wirken und dass jedes Biom seine Arten hat.
+`data/kingdomsatwar/fishing/species.tsv`, die das Spiel beim Start liest. Neue Wellen werden hinten angehängt, die älteren
+Arten bleiben Zeichen für Zeichen, wie sie waren. Ein Test prüft, dass keine zwei der 1893 Arten gleich heißen, gleich
+aussehen oder gleich wirken und dass jedes Biom seine Arten hat – von jeder Seltenheit mindestens eine.
 
 **Essen.** Jeder Fisch lässt sich roh essen – auch mit vollem Magen – und wirkt dann wie in der Tabelle (der Tooltip
 zeigt es, im Fischbuch aber erst nach dem ersten Fang). Manche haben ihren Preis: Der Piranha macht stark und hungrig,
@@ -2234,7 +2401,7 @@ Arten in Fächern (der Punkt in der Ecke verrät die Seltenheit), der Pfeil oben
 zurück. Rechts steht die gewählte Art: Seltenheit, Sterne, wie oft gefangen, Lebensraum oder Biom, Tageszeit, Wetter,
 Größe, der eigene **Rekord**, die Wirkung beim Essen und ein paar Zeilen über den Fisch. Was noch nie am Haken hing, ist
 ein **Schattenriss** ohne Namen – Biom, Zeit und Größe verrät das Buch trotzdem, damit man weiß, wo man suchen muss. Oben
-steht, wie viele der 1708 Arten man schon hat, unten, wie viele Fische und Schätze man gelandet hat. Der Fortschritt
+steht, wie viele der 1893 Arten man schon hat, unten, wie viele Fische und Schätze man gelandet hat. Der Fortschritt
 gehört zum Spieler und bleibt nach dem Tod erhalten.
 
 **Der Fischbeutel (seit 0.81).** Auf der Werkbank: oben links und rechts je ein **Faden**, in der Mitte eine **Truhe**,
@@ -2259,8 +2426,8 @@ sich trägt (dem in der Hand, sonst dem ersten im Inventar), sein Inhalt bleibt.
 
 (9 Bronze sind ein Silber, 81 ein Gold; wer im Dorf angesehen ist, zahlt wie überall weniger.) Der Fischer verkauft auch
 den Beutel selbst (24 Bronze) und **kauft den Fang auf**: 8 beliebige gewöhnliche Fische für 5 Bronze, 5 ungewöhnliche für
-7, 2 seltene für 8, einen epischen für 10 – lose aus dem Inventar oder gleich aus dem Beutel, von den Arten, von denen man
-am meisten hat. Legenden kauft er nicht. Die Erweiterung zählt nicht zur Handelsgrenze des Ladens – man kann so viele
+7, 2 seltene für 8, einen mystischen für 10 und seit 0.90 auch eine Legende für 40 – lose aus dem Inventar oder gleich
+aus dem Beutel, von den Arten, von denen man am meisten hat. Die Erweiterung zählt nicht zur Handelsgrenze des Ladens – man kann so viele
 Stufen auf einmal kaufen, wie die Börse hergibt.
 
 Für andere Mods: Jeder Fang löst wie bei Minecraft das Angel-Ereignis und die Fortschritte aus; die Fische stehen in
@@ -2379,8 +2546,9 @@ liegt hoch, der Grund gut vierzig Blöcke darunter; Tag und Nacht wechseln wie i
 Der Fels des Urmeers ist **Gezeitenstein** – grünblau, mit welligen Schichten und Muschelsplittern. Auf dem Grund liegen
 wie in der Oberwelt die Gebeine von **Seedrachen**, **Muschelfelder** und **Korallenpaläste**. Beim Angeln beißen die
 Fische des Salzwassers – über den Weiten und Gräben die der Tiefsee, an Riffen und Inseln die warmen – und in jeder der
-vier Landschaften **zwanzig eigene Arten** (80 neue, etwa Urmeerkalmar, Weitenhai, Perlmuttkrabbe, Sonnenriffkuhfisch,
-Nachtquastenflosser, Laternenkrake, Leuchtgrabenqualle, Palmenbarsch und Klippenflughahn). Jede Landschaft
+vier Landschaften eigene Arten – seit 0.90 **vierzig je Landschaft**, mehr als irgendwo sonst, darunter je zwei Legenden
+(etwa Urmeerkalmar, Weitenhai, Perlmuttkrabbe, Sonnenriffkuhfisch, Nachtquastenflosser, Laternenkrake, Leuchtgrabenqualle,
+Palmenbarsch, Klippenflughahn und der Türkishüter). Unter Wasser angeln geht hier besonders gut. Jede Landschaft
 hat ihre eigene Klangwelt (Wale und Delfine über den Weiten, Schildkröten über den Riffen, ein fernes Stöhnen über den
 Gräben, Brandung und Möwen an den Inseln).
 
@@ -3883,7 +4051,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.89.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.90.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4024,12 +4192,16 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      sechs eigene Angeln;
    - **0.88 – Waffen und Werkzeuge in 3D** (fertig): die letzten 21 flachen Waffen und Werkzeuge als 3D-Modelle,
      89 weitere Gegenstände plastisch;
-   - zuletzt **0.89 – Das Urmeer** (fertig): eine Meeresdimension mit vier Biomen, der Versunkene Tempel mit dem
-     Gezeitentor und eigene Tore aus Gezeitensteinziegeln.
+   - **0.89 – Das Urmeer** (fertig): eine Meeresdimension mit vier Biomen, der Versunkene Tempel mit dem
+     Gezeitentor und eigene Tore aus Gezeitensteinziegeln;
+   - zuletzt **0.90 – Angeln** (fertig): alle Angeln in 3D, Angeln unter Wasser, fünf Seltenheiten und in jedem Biom
+     jede davon (113 Legenden der Biome), das Urmeer mit vierzig Arten je Biom.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** der **Kraken** – ein riesiger Boss im Schlund des Urmeers –; getragene Rüstungen mit
+   **Als Nächstes geplant:** **0.91 – der Kraken**, ein riesiger Boss im Schlund des Urmeers (knapp unter Anni dem Troll),
+   der eine starke Angel fallen lässt; **0.92 – Unter Wasser**: mehrere Meereshölzer mit eigenen Holzsätzen, neue
+   Unterwasser-Biome im Urmeer und Meeresdörfer mit Meerjungfrauen; getragene Rüstungen mit
    3D-Teilen (Stacheln, Hörner, Platten); schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und
    bessere Klänge.
 

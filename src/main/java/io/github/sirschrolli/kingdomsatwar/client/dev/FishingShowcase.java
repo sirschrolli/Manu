@@ -777,6 +777,336 @@ final class FishingShowcase {
         level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack().withSuppressedOutput(), command);
     }
 
+    /** Die Angeln von 0.90 in 3D: Name im Bild und Gegenstand. */
+    private static final String[][] RODS_3D = {
+            {"holz", "minecraft:fishing_rod"}, {"eisen", "kingdomsatwar:iron_fishing_rod"}, {"gold", "kingdomsatwar:gold_fishing_rod"},
+            {"drache", "kingdomsatwar:dragon_fishing_rod"}, {"schatten", "kingdomsatwar:shadow_fishing_rod"},
+            {"glut", "kingdomsatwar:glut_fishing_rod"}, {"sterne", "kingdomsatwar:star_fishing_rod"}};
+
+    private static ItemStack stack(ServerLevel level, String id) {
+        return new ItemStack(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ITEM)
+                .getValue(net.minecraft.resources.Identifier.parse(id)));
+    }
+
+    /**
+     * Angeln 0.90 ({@code angeln_090}): alle Angeln in 3D – an der Wand, in der Hand (eigene Sicht und von vorn) und ausgeworfen;
+     * Angeln unter Wasser (der Haken bleibt in der Tiefe stehen, der Drill unter Wasser); die Legenden der Biome – funkelnd an der
+     * Wand, im Gepäck und im Fischbuch.
+     */
+    static void angeln090(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "effect clear @s", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        BlockPos[] top = new BlockPos[1];
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos at = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            // ein Ufer, davor ein tiefes Becken mit Seegras, Tang und Meereslaternen, dahinter eine Wand aus Brettern und Stein
+            net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(90L);
+            for (int x = -13; x <= 13; x++) {
+                for (int z = -3; z <= 19; z++) {
+                    for (int y = -8; y <= 9; y++) {
+                        BlockPos pos = at.offset(x, y, z);
+                        boolean pool = z >= 4 && z <= 15 && Math.abs(x) <= 9;
+                        net.minecraft.world.level.block.state.BlockState state;
+                        if (z == 18 && y >= 0 && y <= 8) {
+                            state = (y == 0 || y == 8 || Math.abs(x) == 13 ? Blocks.STRIPPED_DARK_OAK_LOG : Blocks.POLISHED_ANDESITE).defaultBlockState();
+                        } else if (y > 0) {
+                            state = Blocks.AIR.defaultBlockState();
+                        } else if (pool && y >= -6) {
+                            state = Blocks.WATER.defaultBlockState();
+                        } else if (pool && y == -7) {
+                            state = ((x + z) % 5 == 0 ? Blocks.SEA_LANTERN : random.nextInt(3) == 0 ? Blocks.GRAVEL : Blocks.SAND).defaultBlockState();
+                        } else if (pool) {
+                            state = Blocks.STONE.defaultBlockState();
+                        } else if (y == 0) {
+                            state = (z <= 3 && Math.abs(x) <= 3 ? Blocks.SPRUCE_PLANKS : Blocks.GRASS_BLOCK).defaultBlockState();
+                        } else {
+                            state = (Math.abs(x) == 10 || z == 3 || z == 16 ? Blocks.PRISMARINE_BRICKS : Blocks.STONE).defaultBlockState();
+                        }
+                        level.setBlock(pos, state, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            // Seegras und Tang auf dem Grund
+            for (int i = 0; i < 70; i++) {
+                BlockPos ground = at.offset(-9 + random.nextInt(19), -6, 4 + random.nextInt(12));
+                if (!level.getBlockState(ground.below()).is(Blocks.SEA_LANTERN)) {
+                    if (random.nextInt(3) == 0) {
+                        int height = 2 + random.nextInt(3);
+                        for (int k = 0; k < height; k++) {
+                            level.setBlock(ground.above(k), (k == height - 1 ? Blocks.KELP : Blocks.KELP_PLANT).defaultBlockState(),
+                                    net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                        }
+                    } else {
+                        level.setBlock(ground, Blocks.SEAGRASS.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    }
+                }
+            }
+            top[0] = at;
+            // die sieben Angeln in 3D vor der Wand, leicht gedreht (Blick nach Süden: Osten liegt links)
+            for (int i = 0; i < RODS_3D.length; i++) {
+                double x = at.getX() + 0.5 - (i - 3) * 2.75;
+                run(level, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"%s\",count:1},"
+                        + "item_display:\"none\",billboard:\"fixed\",Rotation:[180f,0f],brightness:{sky:15,block:15},"
+                        + "transformation:{left_rotation:[0f,0.17f,0f,0.985f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2.7f,2.7f,2.7f]}}",
+                        x, at.getY() + 3.9, at.getZ() + 17.3, RODS_3D[i][1]));
+            }
+            player.teleportTo(level, at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 1.5, Set.of(), 0.0f, 4.0f, true);
+        }));
+        steps.add(Step.until(() -> top[0] != null, 200));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = true;
+            if (!minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.screenshot("ruten3d_wand"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            BlockPos at = top[0];
+            // schwebend vor der Wand (sonst fiele er ins Becken)
+            player.getAbilities().mayfly = true;
+            player.getAbilities().flying = true;
+            player.onUpdateAbilities();
+            player.teleportTo(player.level(), at.getX() - 3.5, at.getY() + 2.6, at.getZ() + 12.6, Set.of(), 0.0f, 10.0f, true);
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("ruten3d_wand_nah"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            BlockPos at = top[0];
+            player.teleportTo(player.level(), at.getX() + 4.5, at.getY() + 2.6, at.getZ() + 12.6, Set.of(), 0.0f, 10.0f, true);
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("ruten3d_wand_nah2"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            player.getAbilities().flying = false;
+            player.getAbilities().mayfly = false;
+            player.onUpdateAbilities();
+            BlockPos at = top[0];
+            player.teleportTo(player.level(), at.getX() - 0.25, at.getY() + 1.0, at.getZ() - 1.2, Set.of(), 0.0f, 16.0f, true);
+        }));
+        // --- von der Seite: jede Angel in der Hand eines Rüstungsständers (der Blick des Spielers fällt auf ihn) ---
+        for (String[] rod : RODS_3D) {
+            steps.add(Step.server(any -> {
+                ServerLevel level = player(any).level();
+                BlockPos at = top[0];
+                // auf dem Server selbst aufräumen (ein Befehl vom Spiel käme womöglich erst nach dem neuen Ständer an)
+                run(level, "kill @e[type=minecraft:armor_stand]");
+                run(level, String.format(java.util.Locale.ROOT, "summon minecraft:armor_stand %.2f %.2f %.2f {ShowArms:1b,NoBasePlate:1b,"
+                        + "Rotation:[90f,0f],Pose:{RightArm:[-28f,0f,0f],LeftArm:[-10f,0f,-10f]},equipment:{mainhand:{id:\"%s\",count:1}}}",
+                        at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 1.0, rod[1]));
+            }));
+            steps.add(Step.waitTicks(8));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_seite"));
+        }
+        steps.add(Step.server(any -> run(player(any).level(), "kill @e[type=minecraft:armor_stand]")));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = false;
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+
+        // --- jede Angel in der Hand: eigene Sicht und von vorn ---
+        for (String[] rod : RODS_3D) {
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                BlockPos at = top[0];
+                if (player.fishing != null) {
+                    player.fishing.discard();
+                }
+                player.teleportTo(player.level(), at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 1.5, Set.of(), 0.0f, 10.0f, true);
+                player.setItemInHand(InteractionHand.MAIN_HAND, stack(player.level(), rod[1]));
+            }));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+            steps.add(Step.waitTicks(16));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_ich"));
+            steps.add(Step.hud(false));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+            steps.add(Step.waitTicks(4));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_vorn"));
+            steps.add(Step.hud(true));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        }
+        // --- ausgeworfen: die Schnur läuft von der Spitze zum Schwimmer ---
+        for (String[] rod : new String[][] {RODS_3D[3], RODS_3D[6]}) {
+            steps.add(Step.server(any -> player(any).setItemInHand(InteractionHand.MAIN_HAND, stack(player(any).level(), rod[1]))));
+            steps.add(cast(-1.5, -0.05, 5.5));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_wurf_ich"));
+            steps.add(Step.hud(false));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+            steps.add(Step.waitTicks(6));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_wurf_hinten"));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+            steps.add(Step.waitTicks(6));
+            steps.add(Step.screenshot("rute3d_" + rod[0] + "_wurf_vorn"));
+            steps.add(Step.hud(true));
+            steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        }
+
+        // --- unter Wasser: ausgeworfen wie mit der Angel, der Haken gleitet und bleibt in der Tiefe stehen ---
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = player.level();
+            BlockPos at = top[0];
+            if (player.fishing != null) {
+                player.fishing.discard();
+            }
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.NIGHT_VISION, 20 * 600, 0, false, false, false));
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WATER_BREATHING, 20 * 600, 0, false, false, false));
+            player.setItemInHand(InteractionHand.MAIN_HAND, stack(level, RODS_3D[6][1]));
+            player.teleportTo(level, at.getX() + 0.5, at.getY() - 5.0, at.getZ() + 5.5, Set.of(), 0.0f, 6.0f, true);
+        }));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            FishingHook hook = new FishingHook(player, player.level(), 0, 0);
+            player.level().addFreshEntity(hook);
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            LOGGER.info("[Showcase] Haken unter Wasser: {} – {} Blöcke vor dem Taucher, {} unter der Oberfläche", player.fishing != null
+                    && io.github.sirschrolli.kingdomsatwar.fishing.Fishing.deep(player.fishing), player.fishing == null ? -1 : player.fishing.distanceTo(player),
+                    player.fishing == null ? -1 : top[0].getY() - player.fishing.getY());
+        }));
+        steps.add(Step.screenshot("unterwasser_ich"));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK)));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.screenshot("unterwasser_hinten"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_FRONT)));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.screenshot("unterwasser_vorn"));
+        steps.add(Step.hud(true));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.waitTicks(4));
+        // der Biss unter Wasser: Bläschen statt Spritzer, dann der Drill
+        steps.add(biteAndReel());
+        steps.add(Step.until(() -> net.minecraft.client.Minecraft.getInstance().gui.screen() instanceof FishingScreen, 80));
+        steps.add(Step.waitTicks(24));
+        steps.add(Step.screenshot("unterwasser_drill"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            if (player.fishing != null) {
+                player.fishing.discard();
+            }
+            BlockPos at = top[0];
+            player.teleportTo(player.level(), at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 1.5, Set.of(), 0.0f, 4.0f, true);
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        }));
+
+        // --- die Legenden der Biome: funkelnd an der Wand ---
+        steps.add(Step.command("kill @e[type=minecraft:item_display]"));
+        steps.add(Step.server(any -> {
+            ServerLevel level = player(any).level();
+            BlockPos at = top[0];
+            java.util.List<FishSpecies> legends = new java.util.ArrayList<>();
+            for (FishSpecies species : FishSpecies.values()) {
+                if (species.biome() != null && species.rarity() == FishSpecies.Rarity.LEGENDARY && legends.size() < 300) {
+                    legends.add(species);
+                }
+            }
+            // sechzehn Legenden aus ganz verschiedenen Biomen: zwei Reihen zu acht
+            int step = Math.max(1, legends.size() / 16);
+            for (int i = 0; i < 16; i++) {
+                FishSpecies species = legends.get((i * step + 3) % legends.size());
+                double x = at.getX() + 0.5 - (i % 8 - 3.5) * 2.3;
+                double y = at.getY() + (i < 8 ? 5.4 : 2.9);
+                run(level, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"kingdomsatwar:fish_%s\",count:1},"
+                        + "item_display:\"gui\",billboard:\"fixed\",Rotation:[0f,0f],brightness:{sky:15,block:15},"
+                        + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2.2f,2.2f,2.2f]}}",
+                        x, y, at.getZ() + 17.4, species.id()));
+            }
+        }));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = true;
+            if (!minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.screenshot("legenden_wand"));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = false;
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        // im Gepäck: eine Legende unter der Maus (goldener Name, „Legendär“)
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            player.getInventory().clearContent();
+            java.util.List<FishSpecies> reef = new java.util.ArrayList<>(FishSpecies.ofBiome("kingdomsatwar:urmeer_reef"));
+            // die Legenden des Riffs vorn
+            reef.sort(java.util.Comparator.comparing(species -> species.rarity() != FishSpecies.Rarity.LEGENDARY));
+            int slot = 9;
+            for (FishSpecies species : reef) {
+                if (slot < 36) {
+                    player.getInventory().setItem(slot++, new ItemStack(species.item(), species.rarity() == FishSpecies.Rarity.COMMON ? 7 : 1));
+                }
+            }
+            player.getInventory().setItem(0, stack(player.level(), RODS_3D[3][1]));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screen(minecraft -> new InventoryScreen(minecraft.player)));
+        // die Maus auf der ersten Legende (oben links im Gepäck) – erst, wenn das Fenster offen ist und das Spiel die Maus
+        // freigegeben hat (das setzt sie in die Mitte), und noch einmal zur Sicherheit
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.once(minecraft -> hover(minecraft, -88 + 8 + 8, -83 + 84 + 8)));
+        steps.add(Step.waitTicks(4));
+        steps.add(Step.once(minecraft -> hover(minecraft, -88 + 8 + 8, -83 + 84 + 8)));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.screenshot("legende_gepaeck"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        // im Fischbuch: die Arten des Korallenriffs im Urmeer, aufgeschlagen bei seiner Legende
+        FishLog log = new FishLog();
+        int n = 0;
+        for (FishSpecies species : FishSpecies.values()) {
+            if (species.biome() != null && (species.biome().startsWith("kingdomsatwar:urmeer") || species.biome().equals("minecraft:plains")) && n % 4 != 3) {
+                log.record(species, species.minCm() + (species.maxCm() - species.minCm()) * (2 + n % 7) / 10);
+            }
+            n++;
+        }
+        for (String biome : new String[] {"kingdomsatwar:urmeer_reef", "minecraft:plains"}) {
+            for (FishSpecies species : FishSpecies.ofBiome(biome)) {
+                if (species.rarity() == FishSpecies.Rarity.LEGENDARY) {
+                    log.record(species, species.maxCm() - 3);
+                }
+            }
+        }
+        steps.add(Step.once(minecraft -> hover(minecraft, 150, 100)));
+        steps.add(Step.screen(minecraft -> new FishBookScreen(log)));
+        for (String[] page : new String[][] {{"buch_legende_riff", "SEA", "kingdomsatwar:urmeer_reef"}, {"buch_legende_ebene", "RIVERS", "minecraft:plains"},
+                {"buch_legende_graben", "SEA", "kingdomsatwar:urmeer_trench"}}) {
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof FishBookScreen book) {
+                    FishSpecies legend = FishSpecies.ofBiome(page[2]).stream().filter(s -> s.rarity() == FishSpecies.Rarity.LEGENDARY).findFirst()
+                            .orElse(FishSpecies.ofBiome(page[2]).getLast());
+                    book.open(FishSpecies.Chapter.valueOf(page[1]), legend);
+                }
+            }));
+            steps.add(Step.waitTicks(6));
+            steps.add(Step.screenshot(page[0]));
+        }
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.quit());
+    }
+
     /**
      * Die Angeln ({@code angeln_ruten}): alle sechs groß vor einer Bretterwand, einige in der Hand und ausgeworfen über Wasser
      * und Lava; dazu Donnerschlag (der Funkenschlag) und Eulenauge (eine dunkle Kammer ohne und mit dem Helm).

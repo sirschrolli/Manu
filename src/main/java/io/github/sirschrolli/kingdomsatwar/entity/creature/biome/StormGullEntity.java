@@ -257,7 +257,7 @@ public class StormGullEntity extends SoaringBird {
 
     // ------------------------------------------------------------------ Was sie stiehlt
 
-    /** Gewöhnliche Fische (und Fischfilets); seltene, epische und legendäre nie. */
+    /** Gewöhnliche Fische (und Fischfilets); seltene, mystische und legendäre nie. */
     public static boolean isStealable(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;

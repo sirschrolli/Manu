@@ -29,6 +29,19 @@ public class FishItem extends Item {
         return this.species;
     }
 
+    /** Legenden funkeln (seit 0.90). */
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return this.species.rarity() == FishSpecies.Rarity.LEGENDARY || super.isFoil(stack);
+    }
+
+    /** Der Name einer Legende steht in Gold (die Seltenheiten von Minecraft kennen kein Gold). */
+    @Override
+    public Component getName(ItemStack stack) {
+        Component name = super.getName(stack);
+        return this.species.rarity() == FishSpecies.Rarity.LEGENDARY ? name.copy().withStyle(ChatFormatting.GOLD) : name;
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
         if (isDisplay(stack)) {

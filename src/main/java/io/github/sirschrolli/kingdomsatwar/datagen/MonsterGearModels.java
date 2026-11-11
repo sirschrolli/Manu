@@ -71,6 +71,18 @@ final class MonsterGearModels {
                         t -> t.rotation(0, -90, 25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale))
                 .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
                         t -> t.rotation(0, 90, -25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale));
+        addParts(hand, parts);
+        Identifier inHand = hand.build().create(ModelLocationUtils.getModelLocation(item, "_in_hand"), textures, items.modelOutput);
+        var flat = ItemModelUtils.plainModel(items.createFlatItemModel(item, ModelTemplates.FLAT_HANDHELD_ITEM));
+        items.itemModelOutput.accept(item, ItemModelGenerators.createFlatModelDispatch(flat, ItemModelUtils.plainModel(inHand)),
+                new ClientItem.Properties(true, false, 1.0f));
+    }
+
+    /**
+     * Die Teile eines senkrecht gebauten Modells, schräg gelegt wie das Bild eines Schwerts (-45° um Z durch die Mitte); auch für
+     * die Angeln (0.90). Glühende Teile nehmen den Leuchtatlas und leuchten mit Stärke 15.
+     */
+    static void addParts(ExtendedModelTemplateBuilder hand, float[][] parts) {
         // je Teil: die eigene Drehung um seinen Drehpunkt und das Schräglegen (-45° um Z durch die Mitte) als EINE Drehung –
         // beide drehen zuerst um X/Y, zuletzt um Z, also addieren sich die Z-Winkel; der Drehpunkt wandert mit
         double tilt = Math.toRadians(-45.0);
@@ -105,9 +117,5 @@ final class MonsterGearModels {
                 e.rotation(r -> r.origin(px + tx, py + ty, pz).eulerXYZ(p[19], p[20], p[21] - 45.0f));
             });
         }
-        Identifier inHand = hand.build().create(ModelLocationUtils.getModelLocation(item, "_in_hand"), textures, items.modelOutput);
-        var flat = ItemModelUtils.plainModel(items.createFlatItemModel(item, ModelTemplates.FLAT_HANDHELD_ITEM));
-        items.itemModelOutput.accept(item, ItemModelGenerators.createFlatModelDispatch(flat, ItemModelUtils.plainModel(inHand)),
-                new ClientItem.Properties(true, false, 1.0f));
     }
 }

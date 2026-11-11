@@ -301,8 +301,19 @@ THEMES = {
 TELEPORT = {"void": "teleport_far", "end": "teleport_far", "chaos": "teleport_far", "warped": "teleport_near", "star": "teleport_near"}
 CLEANSE = ("soul", "moon", "fae", "royal", "forest")
 
-RARITIES = ("COMMON", "UNCOMMON", "RARE", "EPIC")
+RARITIES = ("COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY")
 SPLIT = {12: (4, 4, 3, 1), 7: (3, 2, 1, 1), 6: (2, 2, 1, 1)}
+
+# Die vierte Welle (seit 0.90): achtzehn weitere Arten je Biom des Urmeers (zusammen mit den zwei Legenden je Biom sind es dort
+# vierzig), verteilt auf gewöhnlich, ungewöhnlich, selten, mystisch
+URMEER_EXTRA = 18
+SPLIT3 = {18: (6, 5, 4, 3)}
+# Die Legenden der Biome (seit 0.90): je Biom eine, im Urmeer zwei – benannt nach ihrem Biom und einem Titel
+URMEER_LEGENDS = 2
+LEGEND_TITLES = [("König", "King"), ("Kaiser", "Emperor"), ("Fürst", "Lord"), ("Herrscher", "Sovereign"), ("Hüter", "Warden"),
+                 ("Ahn", "Elder"), ("Titan", "Titan"), ("Riese", "Giant"), ("Gebieter", "Overlord"), ("Monarch", "Monarch"),
+                 ("Wächter", "Sentinel"), ("Koloss", "Colossus"), ("Urahn", "Ancestor"), ("Königin", "Queen"), ("Kaiserin", "Empress"),
+                 ("Herrin", "Lady"), ("Fürstin", "Princess"), ("Matriarchin", "Matriarch"), ("Patriarch", "Patriarch"), ("Regent", "Regent")]
 
 # =============================================================================================
 # Die Biome
@@ -965,6 +976,59 @@ def name_for(biome: Biome, form: str, prefixes: list, k: int, rng: Rng, used_de:
     raise RuntimeError("kein Name frei: %s %s" % (biome.id, form))
 
 
+def legend_name(biome: Biome, k: int, rng: Rng, used_de: set, used_en: set, used_ids: set):
+    """Der Name einer Legende: eine Vorsilbe ihres Bioms und ein Titel („Glutkaiser“, „Walgesangkönig“)."""
+    prefixes = rng.shuffled(biome.prefixes)
+    titles = rng.shuffled(LEGEND_TITLES)
+    for attempt in range(len(prefixes)):
+        pde, pen = prefixes[(k + attempt) % len(prefixes)]
+        for i in range(len(titles)):
+            tde, ten = titles[(k * 3 + i) % len(titles)]
+            de = pde + tde.lower()
+            en = pen + " " + ten
+            ident = re.sub(r"[^a-z0-9]+", "_", en.lower()).strip("_")
+            if len(de) > MAX_NAME_DE or de.lower() in used_de or en.lower() in used_en or ident in used_ids:
+                continue
+            if shares(pde, tde) or shares(pen, ten) or clashes(pde, tde):
+                continue
+            used_de.add(de.lower())
+            used_en.add(en.lower())
+            used_ids.add(ident)
+            return ident, de, en
+    raise RuntimeError("kein Name für die Legende frei: " + biome.id)
+
+
+def legend_forms(biome: Biome, rng: Rng, count: int) -> list:
+    """Die Gestalten der Legenden eines Bioms: aus den größten seines Gewässers (Rang), in Biomen mit Lava oder Leere dort."""
+    if biome.media == "VW" or len(biome.media) == 1:
+        medium, pool = biome.media, biome.pool
+    elif biome.media == "WL":
+        medium, pool = "L", "lava"
+    elif biome.media == "WV":
+        medium, pool = "V", "void"
+    elif biome.media == "WLV":
+        medium, pool = rng.pick((("W", "shadow"), ("L", "lava"), ("V", "void")))
+    else:
+        raise ValueError(biome.media)
+    names = POOLS[pool].split() + POOLS2[pool].split()
+    if biome.media == "WLV":
+        names = POOLS["abyss"].split() + POOLS2["abyss"].split() + names
+    ranked = sorted(set(names), key=lambda f: (-FORMS[f][3], f))
+    top = ranked[:max(5, count + 3)]
+    return [(medium, form) for form in rng.shuffled(top)[:count]]
+
+
+def pick_forms3(biome: Biome, rng: Rng, taken: set, n: int) -> list:
+    """Die vierte Welle (Urmeer): zuerst Gestalten, die es im Biom noch nicht gibt, dann alle noch einmal."""
+    assert len(biome.media) == 1, biome.id
+    forms = []
+    for form in POOLS[biome.pool].split() + POOLS2[biome.pool].split():
+        if form not in forms:
+            forms.append(form)
+    order = rng.shuffled([f for f in forms if f not in taken]) + rng.shuffled(forms) + rng.shuffled(forms)
+    return [(biome.media, form) for form in order[:n]]
+
+
 def clashes(prefix: str, noun: str) -> bool:
     """Stoßen an der Fuge gleiche Selbstlaute („Pandaaal“) oder drei gleiche Mitlaute („Blatttrilobit“) zusammen?"""
     a, b = prefix.lower(), noun.lower()
@@ -1052,7 +1116,7 @@ def assign_effects(sp: Species, biome: Biome, rng: Rng, used: set) -> None:
                 effects.append(harm(bad_pool))
             if len(special_options) > 1 and rng.chance(0.25):
                 special = rng.pick(special_options[1:])
-        else:
+        elif r == 3:
             second, third = rest[0], rest[1]
             a1 = amp_for(first, 2 if rng.chance(0.5) else 1)
             a2 = amp_for(second, 1 if rng.chance(0.6) else 0)
@@ -1061,6 +1125,18 @@ def assign_effects(sp: Species, biome: Biome, rng: Rng, used: set) -> None:
             if rng.chance(0.3):
                 effects.append(harm(bad_pool))
             if len(special_options) > 1 and rng.chance(0.3):
+                special = rng.pick(special_options[1:])
+        else:
+            # die Legenden: drei oder vier starke, lange Wirkungen, keine Nebenwirkung
+            second, third, fourth = rest[0], rest[1], rest[2]
+            a1 = amp_for(first, 2)
+            a2 = amp_for(second, 2 if rng.chance(0.35) else 1)
+            a3 = amp_for(third, 1 if rng.chance(0.5) else 0)
+            effects = [(first, dur(first, rng.pick([8.0, 10.0, 12.0]), a1), a1), (second, dur(second, rng.pick([6.0, 8.0]), a2), a2),
+                       (third, dur(third, rng.pick([4.0, 6.0]), a3), a3)]
+            if rng.chance(0.55):
+                effects.append((fourth, dur(fourth, rng.pick([3.0, 4.0]), 0), 0))
+            if len(special_options) > 1 and rng.chance(0.35):
                 special = rng.pick(special_options[1:])
         # Lavafische schützen immer ein wenig vor Feuer – es sei denn, sie tun es ohnehin
         if "L" in sp.media and all(e[0] != "fire_resistance" for e in effects) and rng.chance(0.5):
@@ -1163,8 +1239,55 @@ def body_touches_border(img: Image.Image) -> bool:
     return line_pixels > 6
 
 
+GOLD = (255, 214, 96)
+
+
 def paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
+    """Das Bild einer Art – Legenden funkeln dazu wie ein Schatz."""
+    img = _paint(sp, biome, rng)
+    if sp.rarity == "LEGENDARY":
+        sparkle(img, rng)
+    return img
+
+
+def sparkle(img: Image.Image, rng: Rng) -> None:
+    """Ein vierstrahliger Stern in einer freien Ecke (wo nicht genug Platz ist, ein kleiner), dazu ein Glanzpunkt."""
+    px = img.load()
+
+    def free(x: int, y: int, r: int) -> bool:
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                if 0 <= x + dx < 16 and 0 <= y + dy < 16 and px[x + dx, y + dy][3]:
+                    return False
+        return True
+
+    core, ray, tip = (255, 252, 228, 255), (255, 220, 104, 255), (226, 160, 40, 255)
+    corners = rng.shuffled([(2, 2), (13, 13)])
+    placed = None
+    for size in (2, 1):
+        for corner in corners:
+            spots = [(x, y) for y in range(size, 16 - size) for x in range(size, 16 - size) if free(x, y, size + 1)]
+            if spots:
+                x, y = min(spots, key=lambda q: abs(q[0] - corner[0]) + abs(q[1] - corner[1]))
+                px[x, y] = core
+                for (dx, dy) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    px[x + dx, y + dy] = ray
+                    if size == 2:
+                        px[x + 2 * dx, y + 2 * dy] = tip
+                placed = (x, y)
+                break
+        if placed:
+            break
+    # ein Glanzpunkt fern vom Stern
+    spots = [(x, y) for y in range(1, 15) for x in range(1, 15) if free(x, y, 1)]
+    if spots:
+        far = max(spots, key=lambda q: (abs(q[0] - placed[0]) + abs(q[1] - placed[1])) if placed else 0)
+        px[far[0], far[1]] = ray
+
+
+def _paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
     form = sp.form
+    legend = sp.rarity == "LEGENDARY"
     c = colors_for(biome, rng)
     glow = rng.chance(biome.glow)
     glowcol = hx(bright(c["accent"]))
@@ -1173,6 +1296,12 @@ def paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
         eye = hx(bright(c["accent"]))
     elif lum(c["side"]) < 0.2:
         eye = hx(blend(c["light"], WHITE, 0.3))
+    if legend:
+        # Legenden leuchten immer, ihr Glanz ist golden, ihre Augen hell
+        glow = True
+        glowcol = hx(blend(bright(c["accent"]), GOLD, 0.5))
+        if lum(c["side"]) < 0.45:
+            eye = hx(blend(bright(c["accent"]), (255, 250, 220), 0.4))
     sp.glows = glow
     back, side, belly, fin = hx(c["back"]), hx(c["side"]), hx(c["belly"]), hx(c["fin"])
     line = hx(blend(c["back"], BLACK, 0.7))
@@ -1218,6 +1347,11 @@ def paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
             e["fintip"] = hx(blend(c["light"], WHITE, 0.3) if lum(c["fin"]) < 0.55 else dim(c["fin"], 0.5))
         if rng.chance(0.18):
             e["tailcol"] = hx(c["accent"] if dist(c["accent"], c["fin"]) > 60 else c["light"])
+        if legend:
+            e["fintip"] = hx(GOLD)
+            e["tailcol"] = hx(blend(c["accent"], GOLD, 0.35))
+            if form in ("ribbon", "serpent"):
+                e["crest"] = hx(GOLD)
         if glow:
             e["glow"] = glowcol
         if form == "angel":
@@ -1508,6 +1642,41 @@ def note(sp: Species, rng: Rng) -> tuple:
     return " ".join(p[0] for p in parts), " ".join(p[1] for p in parts)
 
 
+LEGEND_PLACE_NOTES = [
+    ("Herrscht {wo}.", "Rules {where}."),
+    ("Die Legende {wo}.", "The legend {where}."),
+    ("Nur ein einziges Tier dieser Art lebt {wo} – sagt man.", "Only a single one of its kind lives {where} – so they say."),
+    ("Der Schrecken jeder Angelschnur {wo}.", "The terror of every fishing line {where}."),
+    ("Zieht seit Menschengedenken {wo} seine Bahnen.", "Has drawn its circles {where} since time out of mind."),
+]
+LEGEND_LORE_NOTES = [
+    ("Älter als jede Karte, größer als jede Geschichte.", "Older than any map, bigger than any tale."),
+    ("Angler warten ein Leben lang auf diesen einen Biss.", "Anglers wait a lifetime for this one bite."),
+    ("Ein Fang, von dem noch die Enkel erzählen.", "A catch your grandchildren will still talk about."),
+    ("Zerbricht schwache Ruten wie Strohhalme.", "Snaps weak rods like straws."),
+    ("Glänzt im Wasser wie ein versunkener Schatz.", "Gleams in the water like sunken treasure."),
+    ("Zieht, als hinge die ganze Welt an der Schnur.", "Pulls as if the whole world hung on the line."),
+    ("Wer es sieht, glaubt seinen Augen nicht.", "Whoever sees it cannot believe their eyes."),
+]
+LEGEND_POWER_NOTE = ("Stärkt wie kein anderer Fisch.", "Strengthens like no other fish.")
+
+
+def note_legend(sp: Species, rng: Rng) -> tuple:
+    """Die Notiz einer Legende: wo sie herrscht, was man sich erzählt, wann sie sich zeigt und was sie gibt."""
+    medium = "V" if sp.media == "VW" else sp.media[0]
+    wo, where = sp.biome.where[medium]
+    de, en = rng.pick(LEGEND_PLACE_NOTES)
+    parts = [(de.replace("{wo}", wo), en.replace("{where}", where)), rng.pick(LEGEND_LORE_NOTES)]
+    if sp.weather != "ANY":
+        parts.append(rng.pick(WEATHER_NOTES[sp.weather]))
+    elif sp.time != "ANY":
+        parts.append(rng.pick(TIME_NOTES[sp.time]))
+    if sp.special != "none":
+        parts.append(SPECIAL_NOTES[sp.special])
+    parts.append(LEGEND_POWER_NOTE)
+    return " ".join(p[0] for p in parts), " ".join(p[1] for p in parts)
+
+
 # =============================================================================================
 # Alles zusammen
 # =============================================================================================
@@ -1518,16 +1687,21 @@ def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, pr
     sp = Species()
     sp.biome, sp.media, sp.form, sp.rarity = biome, medium, form, rarity
     r = RARITIES.index(sp.rarity)
-    sp.id, sp.de, sp.en = name_for(biome, form, prefixes, k, rng, used_de, used_en, used_ids)
+    legend = sp.rarity == "LEGENDARY"
+    if legend:
+        sp.id, sp.de, sp.en = legend_name(biome, k, rng, used_de, used_en, used_ids)
+    else:
+        sp.id, sp.de, sp.en = name_for(biome, form, prefixes, k, rng, used_de, used_en, used_ids)
     lo, hi, behaviors, _, _ = FORMS[form]
-    scale = rng.uni(0.75, 1.3) * (1.0 + 0.1 * r)
+    # Legenden werden kapital: gut anderthalbmal so groß wie ihresgleichen
+    scale = rng.uni(1.3, 1.75) if legend else rng.uni(0.75, 1.3) * (1.0 + 0.1 * r)
     sp.min = max(2, int(round(lo * scale)))
     sp.max = max(sp.min + 2, int(round(hi * scale)))
     sp.behavior = rng.pick(behaviors.split())
-    bands = ((0.16, 0.34), (0.34, 0.54), (0.54, 0.72), (0.72, 0.86))[r]
+    bands = ((0.16, 0.34), (0.34, 0.54), (0.54, 0.72), (0.72, 0.86), (0.85, 0.92))[r]
     bonus = 0.04 if form in ("sword", "sail", "shark", "tuna", "mahi", "pike", "gar", "hammer", "saw") else -0.05 if form in ("snail", "starfish", "jelly",
                                                                                                                        "clam", "urchin") else 0.0
-    sp.difficulty = round(max(0.12, min(0.88, rng.uni(*bands) + bonus)), 2)
+    sp.difficulty = round(max(0.12, min(0.93 if legend else 0.88, rng.uni(*bands) + bonus)), 2)
     if not biome.fixed:
         dark_place = biome.chapter in ("deep", "caves") or biome.theme in ("shadow", "cave", "swamp")
         roll = rng.f()
@@ -1537,7 +1711,7 @@ def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, pr
             sp.time = "DAY"
         if biome.chapter in ("rivers", "sea") and medium == "W":
             roll = rng.f()
-            if biome.theme == "storm" and sp.rarity == "EPIC":
+            if biome.theme == "storm" and sp.rarity in ("EPIC", "LEGENDARY"):
                 sp.weather = "THUNDER_ONLY"
                 sp.time = "ANY"
             elif roll < 0.03 and r >= 2:
@@ -1556,7 +1730,7 @@ def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, pr
     else:
         raise RuntimeError("kein eigenes Bild: " + sp.id)
     sp.image = img
-    sp.note_de, sp.note_en = (note if wave == 1 else note2)(sp, Rng("note:" + sp.id))
+    sp.note_de, sp.note_en = (note if wave == 1 else note2 if wave == 2 else note_legend)(sp, Rng("note:" + sp.id))
     return sp
 
 
@@ -1610,11 +1784,39 @@ def generate() -> list:
         prefixes = rng.shuffled(biome.prefixes)
         for k, (medium, form) in enumerate(forms):
             out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
+    # die vierte Welle (seit 0.90): das Urmeer bekommt die meisten Fische – achtzehn mehr je Biom
+    for biome in biomes(BIOME_TABLE_URMEER):
+        rng = Rng("fish4:" + biome.id)
+        taken = {s.form for s in out if s.biome.id == biome.id}
+        forms = pick_forms3(biome, rng, taken, URMEER_EXTRA)
+        rarity_of = rarities(forms, SPLIT3[len(forms)], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
+    # die Legenden der Biome (seit 0.90): in jedem Biom eine, im Urmeer zwei
+    for table, count in ((BIOME_TABLE, 1), (BIOME_TABLE_URMEER, URMEER_LEGENDS)):
+        for biome in biomes(table):
+            rng = Rng("legend:" + biome.id)
+            for k, (medium, form) in enumerate(legend_forms(biome, rng, count)):
+                out.append(make(biome, rng, k, medium, form, "LEGENDARY", biome.prefixes, used, images, 3))
     return out
 
 
 def check(species: list) -> None:
-    assert len(species) == 916 + 628 + 80, len(species)
+    legends = len(biomes()) + URMEER_LEGENDS * len(biomes(BIOME_TABLE_URMEER))
+    assert len(species) == 916 + 628 + 80 + URMEER_EXTRA * len(biomes(BIOME_TABLE_URMEER)) + legends, len(species)
+    assert sum(1 for s in species if s.rarity == "LEGENDARY") == legends
+    # in jedem Biom jede Seltenheit
+    by_biome = {}
+    for s in species:
+        by_biome.setdefault(s.biome.id, set()).add(s.rarity)
+    for biome, found in by_biome.items():
+        assert found == set(RARITIES), (biome, found)
+    # die Legenden: stark und ohne Nebenwirkung
+    for s in species:
+        if s.rarity == "LEGENDARY":
+            assert len(s.effects) >= 3 and all(e[0] in GOOD for e in s.effects), s.id
+            assert 0.85 <= s.difficulty <= 0.93, (s.id, s.difficulty)
     assert len(existing_signatures()) >= 70, len(existing_signatures())    # 80 Arten mit Wirkung; ohne die Dauer gleichen sich einige
     assert len({s.id for s in species}) == len(species)
     assert len({s.de for s in species}) == len(species)
@@ -1659,13 +1861,13 @@ def preview(species: list, folder: str) -> None:
     for chapter, items in by_chapter.items():
         rows = []
         for s in items:
-            if not rows or rows[-1][0] is not s.biome:
+            if not rows or rows[-1][0] is not s.biome or len(rows[-1][1]) == 21:
                 rows.append((s.biome, []))
             rows[-1][1].append(s)
         per_sheet = 14
         for part in range(0, len(rows), per_sheet):
             chunk = rows[part:part + per_sheet]
-            sheet = Image.new("RGBA", (12 * cell + 8, len(chunk) * (cell + 22) + 8), (36, 40, 48, 255))
+            sheet = Image.new("RGBA", (21 * cell + 8, len(chunk) * (cell + 22) + 8), (36, 40, 48, 255))
             draw = ImageDraw.Draw(sheet)
             for r, (biome, fishes) in enumerate(chunk):
                 y = 8 + r * (cell + 22)
@@ -1676,7 +1878,8 @@ def preview(species: list, folder: str) -> None:
                     tile.alpha_composite(s.image.resize((16 * scale, 16 * scale), Image.NEAREST))
                     x = 8 + i * cell
                     sheet.alpha_composite(tile, (x, y + 12))
-                    mark = {"COMMON": (255, 255, 255), "UNCOMMON": (90, 220, 90), "RARE": (88, 168, 255), "EPIC": (200, 120, 255)}[s.rarity]
+                    mark = {"COMMON": (255, 255, 255), "UNCOMMON": (90, 220, 90), "RARE": (88, 168, 255), "EPIC": (200, 120, 255),
+                            "LEGENDARY": (255, 200, 58)}[s.rarity]
                     draw.rectangle((x, y + 12, x + 5, y + 17), fill=mark + (255,))
             sheet.save(os.path.join(folder, "fish_%s_%d.png" % (chapter, part // per_sheet)))
     with open(os.path.join(folder, "names.txt"), "w", encoding="utf-8") as f:

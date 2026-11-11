@@ -86,7 +86,11 @@ public final class FishingClient {
         Minecraft minecraft = Minecraft.getInstance();
         Entity entity = minecraft.level == null ? null : minecraft.level.getEntity(payload.entity());
         if (entity instanceof HookAccess hook) {
-            hook.kingdomsatwar$anchor(payload.level());
+            if (payload.depth()) {
+                hook.kingdomsatwar$hold(payload.level());
+            } else {
+                hook.kingdomsatwar$anchor(payload.level());
+            }
         }
     }
 }

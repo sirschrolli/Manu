@@ -263,6 +263,8 @@ final class Showcase {
                         FishingShowcase.fishing(steps);
                     } else if (scene.equals("angeln_ruten")) {
                         FishingShowcase.rods(steps);
+                    } else if (scene.equals("angeln_090")) {
+                        FishingShowcase.angeln090(steps);
                     } else if (scene.equals("fishing_void")) {
                         FishingShowcase.voidOnly(steps);
                     } else if (scene.equals("fishbag")) {

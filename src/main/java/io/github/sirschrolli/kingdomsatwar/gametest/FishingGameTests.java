@@ -70,6 +70,8 @@ final class FishingGameTests {
             ModGameTests.TEST_FUNCTIONS.register("fishing_bag", () -> FishingGameTests::bag);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> RODS =
             ModGameTests.TEST_FUNCTIONS.register("fishing_rods", () -> FishingGameTests::rods);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> UNDERWATER =
+            ModGameTests.TEST_FUNCTIONS.register("fishing_underwater", () -> FishingGameTests::underwater);
 
     private FishingGameTests() {}
 
@@ -86,6 +88,8 @@ final class FishingGameTests {
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         event.registerTest(RODS.getId(), new FunctionGameTestInstance(RODS.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 120, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+        event.registerTest(UNDERWATER.getId(), new FunctionGameTestInstance(UNDERWATER.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     // =====================================================================================
@@ -124,7 +128,11 @@ final class FishingGameTests {
                     float there = species.weight(new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), species.biome(), medium), true, true, true, true, 0, Bait.NONE);
                     helper.assertTrue(there > 0.0f == species.media().contains(medium), "Medium passt nicht: " + id + " in " + medium);
                 }
-                helper.assertTrue(species.chapter() != FishSpecies.Chapter.LEGENDS && species.rarity() != FishSpecies.Rarity.LEGENDARY, "Legende im Biom: " + id);
+                // die Legende eines Bioms steht bei ihrem Biom, nicht bei den fünfzehn Legenden aller Welten
+                helper.assertTrue(species.chapter() != FishSpecies.Chapter.LEGENDS, "Biomart im Kapitel der Legenden: " + id);
+            } else {
+                helper.assertTrue(species.rarity() == FishSpecies.Rarity.LEGENDARY == (species.chapter() == FishSpecies.Chapter.LEGENDS),
+                        "Kapitel der Legenden: " + id);
             }
             for (int i = 0; i < 20; i++) {
                 int cm = species.rollSize(random, i % 2 == 0);
@@ -169,11 +177,12 @@ final class FishingGameTests {
             FishSpecies twin = effects.put(signature.toString(), species);
             helper.assertTrue(twin == null, "Zwei Fische wirken gleich: " + id + " und " + (twin == null ? "" : twin.id()));
         }
-        helper.assertTrue(FishSpecies.count() == 1708 && FishSpecies.NAMED == 84 && custom == 1704 && FishSpecies.legends().size() == 15,
+        helper.assertTrue(FishSpecies.count() == 1893 && FishSpecies.NAMED == 84 && custom == 1889 && FishSpecies.legends().size() == 15,
                 "Zahl der Arten: " + FishSpecies.count() + " / " + FishSpecies.NAMED + " / " + custom + " / " + FishSpecies.legends().size());
 
-        // jedes Biom hat eigene Arten: die Biome der Mod je zwanzig, die von Minecraft zehn oder zwölf (seit 0.83: zwei Wellen) – nur
-        // die Kampfarenen und das leere Nichts nicht (dort angelt niemand)
+        // jedes Biom hat eigene Arten: die Biome der Mod je einundzwanzig, die von Minecraft elf oder dreizehn (seit 0.83 zwei Wellen,
+        // seit 0.90 dazu die Legende des Bioms), die des Urmeers vierzig – nur die Kampfarenen und das leere Nichts nicht (dort angelt
+        // niemand)
         java.util.Set<String> arenas = java.util.Set.of("arcane_sphere", "creation", "ember_forge", "error_space", "moon_stage", "star_canopy",
                 "throne_realm", "world_maw");
         java.util.Set<String> known = new java.util.HashSet<>();
@@ -182,15 +191,22 @@ final class FishingGameTests {
             known.add(biome.toString());
             List<FishSpecies> local = FishSpecies.ofBiome(biome.toString());
             if (biome.getNamespace().equals(KingdomsAtWar.MODID)) {
-                helper.assertTrue(local.size() == (arenas.contains(biome.getPath()) ? 0 : 20), "Arten im Biom " + biome + ": " + local.size());
+                int expected = arenas.contains(biome.getPath()) ? 0 : biome.getPath().startsWith("urmeer_") ? 40 : 21;
+                helper.assertTrue(local.size() == expected, "Arten im Biom " + biome + ": " + local.size());
             } else if (biome.getNamespace().equals("minecraft")) {
-                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 10 || local.size() == 12,
+                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 11 || local.size() == 13,
                         "Arten im Biom " + biome + ": " + local.size());
             }
-            // in jedem Biom gibt es Gewöhnliches und zwei große Fänge (einen aus jeder Welle)
+            // in jedem Biom gibt es jede Seltenheit: Gewöhnliches, mindestens zwei mystische Fänge (einen aus jeder Welle) und die
+            // Legende des Bioms (im Urmeer zwei)
             if (!local.isEmpty()) {
+                for (FishSpecies.Rarity rarity : FishSpecies.Rarity.values()) {
+                    helper.assertTrue(local.stream().anyMatch(s -> s.rarity() == rarity), "Keine Art der Seltenheit " + rarity + " im Biom " + biome);
+                }
                 helper.assertTrue(local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.COMMON).count() >= 3
-                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.EPIC).count() == 2, "Seltenheiten im Biom " + biome);
+                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.EPIC).count() >= 2
+                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.LEGENDARY).count() == (biome.getPath().startsWith("urmeer_") ? 2 : 1),
+                        "Seltenheiten im Biom " + biome);
                 helper.assertTrue(german.has("biome." + biome.getNamespace() + "." + biome.getPath()) || biome.getNamespace().equals("minecraft"),
                         "Name des Bioms fehlt: " + biome);
             }
@@ -198,7 +214,8 @@ final class FishingGameTests {
         for (String biome : FishSpecies.biomes()) {
             helper.assertTrue(known.contains(biome), "Arten für ein Biom, das es nicht gibt: " + biome);
         }
-        // in der Ebene: die Allerweltsfische der Flüsse und die zwölf der Ebene – die eigenen stellen gut die Hälfte des Fangs
+        // in der Ebene: die Allerweltsfische der Flüsse und die dreizehn der Ebene (mit ihrer Legende) – die eigenen stellen gut die
+        // Hälfte des Fangs
         FishSpecies.Spot plains = new FishSpecies.Spot(EnumSet.of(Habitat.FRESH), "minecraft:plains", Medium.WATER);
         int localCatch = 0;
         java.util.Set<FishSpecies> seen = new java.util.HashSet<>();
@@ -211,7 +228,7 @@ final class FishingGameTests {
             }
         }
         KingdomsAtWar.LOGGER.info("Fang in der Ebene: {} von 4000 aus den {} eigenen Arten", localCatch, seen.size());
-        helper.assertTrue(localCatch > 2000 && localCatch < 3400 && seen.size() == 12, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
+        helper.assertTrue(localCatch > 2000 && localCatch < 3400 && seen.size() == 13, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
         // in der Lava der Aschefelder nur Lavafische, im Wasser dort keine
         for (Medium medium : new Medium[] {Medium.WATER, Medium.LAVA}) {
             FishSpecies.Spot ash = new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), "kingdomsatwar:ash_fields", medium);
@@ -539,6 +556,83 @@ final class FishingGameTests {
         end.getEntitiesOfClass(ItemEntity.class, new AABB(player.position(), player.position()).inflate(6.0)).forEach(ItemEntity::discard);
     }
 
+    /**
+     * Unter Wasser (seit 0.90): Ein Taucher wirft aus – der Haken gleitet ein paar Blöcke durchs Wasser und bleibt dann in der
+     * Tiefe stehen, statt zur Oberfläche zu treiben; dort beißt es, gedrillt wird wie oben, und der Fang landet beim Taucher.
+     * Wer mit dem Kopf über Wasser auswirft, angelt wie gewohnt an der Oberfläche.
+     */
+    private static void underwater(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // ein Becken, fünf Blöcke tief
+        for (int x = 0; x <= 8; x++) {
+            for (int z = 0; z <= 8; z++) {
+                for (int y = 1; y <= 5; y++) {
+                    boolean wall = x == 0 || x == 8 || z == 0 || z == 8;
+                    helper.setBlock(new BlockPos(x, y, z), wall ? Blocks.STONE : Blocks.WATER);
+                }
+            }
+        }
+        double surface = helper.absoluteVec(new Vec3(0.0, 6.0, 0.0)).y;
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.getAbilities().instabuild = false;
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.FISHING_ROD));
+        Vec3 diver = helper.absoluteVec(new Vec3(1.5, 1.2, 4.5));
+        try {
+            player.snapTo(diver.x, diver.y, diver.z, -90.0f, 0.0f);
+            helper.assertTrue(Fishing.submerged(player), "Der Taucher ist nicht unter Wasser");
+            FishingHook hook = null;
+            for (int attempt = 0; attempt < 12 && Fishing.sessionOf(player) == 0; attempt++) {
+                if (player.fishing != null) {
+                    player.fishing.discard();
+                }
+                // ausgeworfen wie mit der Angel: aus den Augen, in Blickrichtung
+                hook = new FishingHook(player, level, 0, 0);
+                level.addFreshEntity(hook);
+                for (int i = 0; i < 40 && hook.isAlive(); i++) {
+                    hook.tick();
+                }
+                helper.assertTrue(hook.isAlive() && Fishing.deep(hook), "Der Haken steht nicht unter Wasser: y=" + hook.getY());
+                helper.assertTrue(surface - hook.getY() > 2.0 && Math.abs(hook.getDeltaMovement().y) < 0.08,
+                        "Der Haken bleibt nicht in der Tiefe: " + (surface - hook.getY()) + " unter der Oberfläche, Fahrt " + hook.getDeltaMovement().y);
+                helper.assertTrue(hook.getX() - player.getX() > 2.0 && hook.getX() - player.getX() < 7.0,
+                        "Der Haken gleitet nicht ein Stück durchs Wasser: " + (hook.getX() - player.getX()));
+                ((HookAccess) hook).kingdomsatwar$forceBite();
+                hook.retrieve(player.getMainHandItem());
+            }
+            int session = Fishing.sessionOf(player);
+            FishSpecies species = Fishing.fighting(player);
+            helper.assertTrue(session != 0 && species != null && hook != null && Fishing.isFighting(hook), "Unter Wasser beginnt kein Drill");
+            helper.assertTrue(!species.ofLava(), "Unter Wasser hing ein Lavafisch am Haken: " + species.id());
+            Fishing.ageSession(player, 600);
+            Fishing.onResult(player, session, true, false, false);
+            helper.assertTrue(hook.isRemoved() && Fishing.log(player).has(species), "Der Fisch aus der Tiefe wurde nicht gefangen");
+            // der Fang landet gleich beim Taucher (er flöge unter Wasser nicht weit)
+            List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(player.position(), player.position()).inflate(1.5),
+                    e -> e.getItem().is(species.item()));
+            helper.assertTrue(!drops.isEmpty(), "Der Fang landet nicht beim Taucher");
+            drops.forEach(ItemEntity::discard);
+
+            // mit dem Kopf über Wasser: wie gewohnt an der Oberfläche
+            player.snapTo(diver.x, surface - 0.9, diver.z, -90.0f, 35.0f);
+            helper.assertTrue(!Fishing.submerged(player), "Mit dem Kopf über Wasser taucht der Angler");
+            FishingHook top = new FishingHook(player, level, 0, 0);
+            level.addFreshEntity(top);
+            for (int i = 0; i < 80 && top.isAlive(); i++) {
+                top.tick();
+            }
+            helper.assertTrue(top.isAlive() && !Fishing.deep(top) && Math.abs(top.getY() - (surface - 0.1)) < 0.4,
+                    "An der Oberfläche treibt der Schwimmer nicht oben: " + (top.getY() - surface));
+            top.discard();
+        } finally {
+            if (player.fishing != null) {
+                player.fishing.discard();
+            }
+            level.getEntitiesOfClass(ItemEntity.class, new AABB(diver, diver).inflate(8.0)).forEach(ItemEntity::discard);
+            level.getServer().getPlayerList().remove(player);
+        }
+        helper.succeed();
+    }
+
     // =====================================================================================
     // Der Fischbeutel
     // =====================================================================================
@@ -742,9 +836,17 @@ final class FishingGameTests {
                 }
             }
             for (String file : List.of("assets/kingdomsatwar/textures/item/" + type.id() + ".png", "assets/kingdomsatwar/textures/item/" + type.id() + "_cast.png",
-                    "assets/kingdomsatwar/items/" + type.id() + ".json", "data/kingdomsatwar/recipe/" + type.id() + ".json")) {
+                    "assets/kingdomsatwar/items/" + type.id() + ".json", "data/kingdomsatwar/recipe/" + type.id() + ".json",
+                    // seit 0.90 in der Hand in 3D, ruhend und ausgeworfen
+                    "assets/kingdomsatwar/models/item/" + type.id() + "_in_hand.json", "assets/kingdomsatwar/models/item/" + type.id() + "_cast_in_hand.json",
+                    "assets/kingdomsatwar/textures/item/" + type.id() + "_model.png")) {
                 helper.assertTrue(FishingGameTests.class.getResource("/" + file) != null, "Datei fehlt: " + file);
             }
+        }
+        // auch die Angel von Minecraft ist in der Hand 3D
+        for (String file : List.of("assets/minecraft/items/fishing_rod.json", "assets/kingdomsatwar/models/item/fishing_rod_in_hand.json",
+                "assets/kingdomsatwar/models/item/fishing_rod_cast_in_hand.json", "assets/kingdomsatwar/textures/item/fishing_rod_model.png")) {
+            helper.assertTrue(FishingGameTests.class.getResource("/" + file) != null, "Datei fehlt: " + file);
         }
         helper.assertTrue(new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON)).isValidRepairItem(new ItemStack(Items.IRON_INGOT))
                 && new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.DRAGON))
