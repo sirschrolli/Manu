@@ -13,8 +13,8 @@ import org.jspecify.annotations.Nullable;
  * ({@code /kaw zauberbuehne}), und Bäume, Pilze und Felsen lassen ihre Lichtung frei.
  */
 public final class MystikStage {
-    public static final int SPACING = 22;
-    public static final int SEPARATION = 7;
+    public static final int SPACING = 36;
+    public static final int SEPARATION = 16;
     public static final int SALT = 52_919;
     /** Um die Mitte bleibt dieser Umkreis frei von Bäumen, Pilzen, Felsen, Ruinen und Feenringen. */
     public static final int CLEARING = 26;

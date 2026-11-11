@@ -4,8 +4,8 @@
     {
       "type": "kingdomsatwar:spaced",
       "salt": 9163,
-      "separation": 6,
-      "spacing": 20
+      "separation": 14,
+      "spacing": 32
     },
     {
       "type": "minecraft:biome"

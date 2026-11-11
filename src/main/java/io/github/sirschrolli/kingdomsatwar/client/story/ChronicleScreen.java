@@ -144,7 +144,7 @@ public class ChronicleScreen extends Screen {
             }
             case CHRONICLE -> {
                 this.heading(false);
-                this.goal(Component.translatable("chronicle.kingdomsatwar.goal.read"), true);
+                this.goal(Component.translatable("chronicle.kingdomsatwar.goal.read", Component.keybind("key.kingdomsatwar.chronicle")), true);
                 boolean found = this.data.has(Flag.FOUND_CIRCLE) || this.done(part);
                 this.goal(Component.translatable("chronicle.kingdomsatwar.goal.find_circle"), found);
                 this.gap(4);
@@ -339,7 +339,8 @@ public class ChronicleScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (this.minecraft.options.keyInventory.matches(event)) {
+        if (this.minecraft.options.keyInventory.matches(event)
+                || io.github.sirschrolli.kingdomsatwar.client.ModKeyMappings.CHRONICLE.matches(event)) {
             this.onClose();
             return true;
         }

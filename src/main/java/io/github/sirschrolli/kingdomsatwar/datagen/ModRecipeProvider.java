@@ -53,6 +53,7 @@ public class ModRecipeProvider extends RecipeProvider {
         magicRecipes();
         cookVenison();
         sea();
+        fishing();
         shadowRecipes();
         voidRecipes();
         shadowTreasureRecipes();
@@ -757,6 +758,33 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_smoking");
         save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_campfire_cooking");
+    }
+
+    /** Das Angeln (seit 0.79): aus jedem eigenen Fisch wird gebraten ein Filet; Köder zum Selbermachen. */
+    private void fishing() {
+        Item fillet = io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET.get();
+        net.minecraft.tags.TagKey<Item> fish = io.github.sirschrolli.kingdomsatwar.registry.ModTags.Items.FISH;
+        save(SimpleCookingRecipeBuilder.smelting(tag(fish), RecipeCategory.FOOD, CookingBookCategory.FOOD, fillet, 0.35f, 200)
+                .unlockedBy("has_fish", has(fish)), "fish_fillet_cooked");
+        save(SimpleCookingRecipeBuilder.smoking(tag(fish), RecipeCategory.FOOD, fillet, 0.35f, 100)
+                .unlockedBy("has_fish", has(fish)), "fish_fillet_cooked_from_smoking");
+        save(SimpleCookingRecipeBuilder.campfireCooking(tag(fish), RecipeCategory.FOOD, fillet, 0.35f, 600)
+                .unlockedBy("has_fish", has(fish)), "fish_fillet_cooked_from_campfire_cooking");
+        // Köderwurm: was im Kompost kriecht – verrottetes Fleisch, Erde, Saat
+        Item worm = io.github.sirschrolli.kingdomsatwar.registry.FishingItems.BAIT_WORM.get();
+        shapeless(RecipeCategory.TOOLS, worm, 6)
+                .requires(Items.ROTTEN_FLESH).requires(Items.DIRT).requires(Items.WHEAT_SEEDS)
+                .unlockedBy(getHasName(Items.FISHING_ROD), has(Items.FISHING_ROD))
+                .save(output, key("bait_worm"));
+        // Glühköder: Würmer, in Leuchttinte und Glühbeeren getaucht
+        shapeless(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.BAIT_GLOW.get(), 4)
+                .requires(worm, 4).requires(Items.GLOW_INK_SAC).requires(Items.GLOW_BERRIES)
+                .unlockedBy(getHasName(worm), has(worm))
+                .save(output, key("bait_glow"));
+        shapeless(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.BAIT_GLOW.get(), 4)
+                .requires(worm, 4).requires(Items.GLOWSTONE_DUST).requires(Items.SPIDER_EYE)
+                .unlockedBy(getHasName(worm), has(worm))
+                .save(output, key("bait_glow_from_glowstone"));
     }
 
     /** Das Meer: Tiefseelaterne aus dem Leuchtköder, Pfeile mit Haizahnspitzen, gegartes Krabbenfleisch. */

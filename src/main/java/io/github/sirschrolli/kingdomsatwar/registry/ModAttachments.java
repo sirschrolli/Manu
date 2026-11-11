@@ -43,6 +43,11 @@ public final class ModAttachments {
             "fae_gates", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState.CODEC.fieldOf("gates")).build());
 
+    /** Das Fischbuch des Spielers (seit 0.79): welche Arten er gefangen hat, wie viele, und den größten jeder Art. */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.fishing.FishLog>> FISH_LOG = ATTACHMENTS.register("fish_log",
+            () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.fishing.FishLog::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.fishing.FishLog.CODEC.fieldOf("log")).copyOnDeath().build());
+
     /** Fortschritt des Spielers in der Geschichte „Das Siegel“. */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.story.StoryProgress>> STORY = ATTACHMENTS.register("story",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.story.StoryProgress::new)

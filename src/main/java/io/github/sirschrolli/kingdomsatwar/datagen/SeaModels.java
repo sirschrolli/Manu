@@ -80,7 +80,9 @@ final class SeaModels {
 
     /**
      * Der Speer als 3D-Modell: alle Teile gemeinsam um {@code origin} gedreht ({@code angles} wie im Spiel: x, y, z), um
-     * {@code lift} angehoben. In der Hand liegt er diagonal (wie die Speere von Minecraft), im Hügel steckt er schräg.
+     * {@code lift} angehoben. In der Hand liegt er diagonal wie die Speere von Minecraft – die Spitze oben <em>links</em>
+     * (Drehung +45° um Z), denn dafür sind deren Griffhaltungen gemacht: Bis 0.78 zeigte die Spitze nach oben rechts (wie
+     * bei einem Schwert), und der Speer stand beim Tragen senkrecht und lag beim Ansturm quer. Im Hügel steckt er schräg.
      */
     private static ExtendedModelTemplateBuilder spearElements(ExtendedModelTemplateBuilder b, float lift, float[] origin, float[] angles) {
         for (float[] p : SPEAR_PARTS) {
@@ -125,7 +127,7 @@ final class SeaModels {
                         t -> t.rotation(5, 270, -40).translation(0, 2, 2).scale(1.7f, 1.7f, 0.85f))
                 .transform(net.minecraft.world.item.ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
                         t -> t.rotation(5, -270, 40).translation(0, 2, 2).scale(1.7f, 1.7f, 0.85f));
-        spearElements(hand, 0.0f, new float[] {8, 8, 8}, new float[] {0, 0, -45});
+        spearElements(hand, 0.0f, new float[] {8, 8, 8}, new float[] {0, 0, 45});
         Identifier inHand = hand.build().create(net.minecraft.client.data.models.model.ModelLocationUtils.getModelLocation(spear, "_in_hand"),
                 spearTextures, items.modelOutput);
         net.minecraft.client.renderer.item.ItemModel.Unbaked flat = net.minecraft.client.data.models.model.ItemModelUtils.plainModel(

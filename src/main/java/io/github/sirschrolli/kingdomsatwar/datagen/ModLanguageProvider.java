@@ -35,6 +35,7 @@ public class ModLanguageProvider extends LanguageProvider {
         ArchitectLang.register(this::text);
         SiegeLang.register(this::text);
         HeroLang.register(this::text);
+        FishingLang.register(this::text);
         VeterancyLang.register(this::text);
         RulesLang.register(this::text);
         bosses();
@@ -361,11 +362,18 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Spielt beim ersten Betreten einer Welt das Erzähl-Intro ab. Mit /kaw intro kannst du es jederzeit wieder ansehen.");
         text("kingdomsatwar.configuration.spiderLook", "Spider look (arachnophobia mode)", "Aussehen der Spinnen (Arachnophobie-Modus)");
         text("kingdomsatwar.configuration.biomeAmbience", "Biome sounds", "Biom-Klänge");
-        text("kingdomsatwar.configuration.biomeAmbience.tooltip", "Wind, rustling leaves, birds, surf … – now and then, never permanently.",
-                "Wind, raschelndes Laub, Vögel, Brandung … – ab und zu, nie dauerhaft.");
+        text("kingdomsatwar.configuration.biomeAmbience.tooltip", "Wind, rustling leaves, birds, surf … – in every biome, as soon as you enter it.",
+                "Wind, raschelndes Laub, Vögel, Brandung … – in jedem Biom, sofort beim Betreten.");
         text("kingdomsatwar.configuration.biomeAmbienceVolume", "Biome sound volume (%)", "Lautstärke der Biom-Klänge (%)");
-        text("kingdomsatwar.configuration.biomeAmbienceVolume.tooltip", "0 = silent. Minecraft's \"Ambient/Environment\" slider also applies.",
-                "0 = stumm. Zusätzlich gilt der Minecraft-Regler „Umgebung“.");
+        text("kingdomsatwar.configuration.biomeAmbienceVolume.tooltip",
+                "0 = silent. The same value as the \"Biome sounds\" slider in Minecraft's Music & Sounds options.",
+                "0 = stumm. Derselbe Wert wie der Regler „Biom-Klänge“ in den Musik- und Toneinstellungen von Minecraft.");
+        // der eigene Regler in den Musik- und Toneinstellungen von Minecraft
+        text("kingdomsatwar.options.sounds", "Kingdoms at War", "Kingdoms at War");
+        text("kingdomsatwar.options.biomeAmbience", "Biome sounds", "Biom-Klänge");
+        text("kingdomsatwar.options.biomeAmbience.tooltip",
+                "Wind, leaves, birds, surf and the sounds of the other worlds. Independent of the \"Ambient/Environment\" slider.",
+                "Wind, Laub, Vögel, Brandung und die Klänge der fremden Welten. Unabhängig vom Regler „Umgebung“.");
         text("kingdomsatwar.configuration.spiderLook.tooltip",
                 "Detailed: the mod's lifelike spiders. Classic: Minecraft's plain spiders. Mooslings: arachnophobia mode – round, friendly moss balls without legs instead of spiders.",
                 "Detailliert: die lebensechten Spinnen der Mod. Klassisch: die schlichten Spinnen von Minecraft. Mooslinge: Arachnophobie-Modus – runde, freundliche Moosbälle ohne Beine statt Spinnen.");
@@ -1481,7 +1489,8 @@ public class ModLanguageProvider extends LanguageProvider {
 
         // Chronik
         item(ModItems.CHRONICLE, "Chronicle of the Seal", "Chronik des Siegels");
-        lore("chronicle", "The story of the seal – chapter by chapter", "Die Geschichte des Siegels – Kapitel für Kapitel");
+        lore("chronicle", "The story of the seal – chapter by chapter (also opens with the chronicle key)",
+                "Die Geschichte des Siegels – Kapitel für Kapitel (öffnet sich auch mit der Taste der Chronik)");
         text("gui.kingdomsatwar.chronicle.title", "Chronicle of the Seal", "Chronik des Siegels");
         text("chapter.kingdomsatwar.label", "Chapter %s", "Kapitel %s");
         text("chapter.kingdomsatwar.label.prolog", "Prologue", "Prolog");
@@ -1559,7 +1568,9 @@ public class ModLanguageProvider extends LanguageProvider {
         text("chronicle.kingdomsatwar.goals", "Goals", "Ziele");
         text("chronicle.kingdomsatwar.goal.town", "Found your settlement with a town banner", "Gründe deine Siedlung mit einem Stadtbanner");
         text("chronicle.kingdomsatwar.goal.recruit", "Hire your first citizen or soldier", "Heuere deinen ersten Bürger oder Soldaten an");
-        text("chronicle.kingdomsatwar.goal.read", "Read the chronicle", "Lies die Chronik");
+        text("chronicle.kingdomsatwar.goal.read", "Read the chronicle (key %s)", "Lies die Chronik (Taste %s)");
+        text("message.kingdomsatwar.story.chronicle_key", "Press %s to open the Chronicle of the Seal – it tells the story and shows your goals.",
+                "Drücke %s, um die Chronik des Siegels aufzuschlagen – sie erzählt die Geschichte und nennt deine Ziele.");
         text("chronicle.kingdomsatwar.goal.find_circle", "Find the Seal Circle", "Finde den Siegelkreis");
         text("chronicle.kingdomsatwar.goal.defeat", "Defeat the six dragons (%s/6)", "Besiege die sechs Drachen (%s/6)");
         text("chronicle.kingdomsatwar.goal.insert", "Place the seal shards in their monoliths (%s/6)",

@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "11";
+    private static final String PROTOCOL = "12";
 
     private ModNetwork() {}
 
@@ -27,6 +27,9 @@ public final class ModNetwork {
     static void register(RegisterPayloadHandlersEvent event) {
         event.registrar(PROTOCOL)
                 .playToServer(DragonBreathPayload.TYPE, DragonBreathPayload.STREAM_CODEC, DragonBreathPayload::handle)
+                .playToServer(RequestChroniclePayload.TYPE, RequestChroniclePayload.STREAM_CODEC, RequestChroniclePayload::handle)
+                .playToServer(RequestFishBookPayload.TYPE, RequestFishBookPayload.STREAM_CODEC, RequestFishBookPayload::handle)
+                .playToServer(FishingResultPayload.TYPE, FishingResultPayload.STREAM_CODEC, FishingResultPayload::handle)
                 .playToServer(HealPayload.TYPE, HealPayload.STREAM_CODEC, HealPayload::handle)
                 .playToServer(FaeFlapPayload.TYPE, FaeFlapPayload.STREAM_CODEC, FaeFlapPayload::handle)
                 .playToServer(StarBoostPayload.TYPE, StarBoostPayload.STREAM_CODEC, StarBoostPayload::handle)
@@ -53,6 +56,11 @@ public final class ModNetwork {
                 .playToClient(RecruitResultPayload.TYPE, RecruitResultPayload.STREAM_CODEC)
                 .playToClient(ScreenShakePayload.TYPE, ScreenShakePayload.STREAM_CODEC)
                 .playToClient(OpenChroniclePayload.TYPE, OpenChroniclePayload.STREAM_CODEC)
+                .playToClient(OpenFishBookPayload.TYPE, OpenFishBookPayload.STREAM_CODEC)
+                .playToClient(FishingStartPayload.TYPE, FishingStartPayload.STREAM_CODEC)
+                .playToClient(FishingCatchPayload.TYPE, FishingCatchPayload.STREAM_CODEC)
+                .playToClient(FishingEndPayload.TYPE, FishingEndPayload.STREAM_CODEC)
+                .playToClient(HookVoidPayload.TYPE, HookVoidPayload.STREAM_CODEC)
                 .playToClient(ChapterCardPayload.TYPE, ChapterCardPayload.STREAM_CODEC)
                 .playToClient(HeroLevelUpPayload.TYPE, HeroLevelUpPayload.STREAM_CODEC)
                 .playToClient(HeroImmortalPayload.TYPE, HeroImmortalPayload.STREAM_CODEC)

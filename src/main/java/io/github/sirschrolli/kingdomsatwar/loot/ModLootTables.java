@@ -20,6 +20,12 @@ public final class ModLootTables {
     /** Froschlichter: frisst ein eigener Frosch einen kleinen Magmawürfel (über einen globalen Loot-Modifier). */
     public static final ResourceKey<LootTable> FROGLIGHTS =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/froglights"));
+    /** Angeln (seit 0.79): die Truhe im Drill, wenn in Lava geangelt wird. */
+    public static final ResourceKey<LootTable> FISHING_TREASURE_LAVA =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/fishing/treasure_lava"));
+    /** Angeln: die Truhe im Drill, wenn in der Leere geangelt wird. */
+    public static final ResourceKey<LootTable> FISHING_TREASURE_VOID =
+            ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("gameplay/fishing/treasure_void"));
     /** Truhe in den Burgruinen. */
     public static final ResourceKey<LootTable> CASTLE_RUIN_CHEST =
             ResourceKey.create(Registries.LOOT_TABLE, KingdomsAtWar.id("chests/castle_ruin"));

@@ -128,7 +128,7 @@ final class ForgeModels {
                         t -> t.rotation(5, 270, -40).translation(0, 2, 2).scale(1.62f, 1.62f, 0.81f))
                 .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
                         t -> t.rotation(5, -270, 40).translation(0, 2, 2).scale(1.62f, 1.62f, 0.81f));
-        spearElements(hand, 0.0f, new float[] {8, 8, 8}, new float[] {0, 0, -45});
+        spearElements(hand, 0.0f, new float[] {8, 8, 8}, new float[] {0, 0, 45});
         Identifier inHand = hand.build().create(ModelLocationUtils.getModelLocation(spear, "_in_hand"), textures, items.modelOutput);
         var flat = ItemModelUtils.plainModel(items.createFlatItemModel(spear, ModelTemplates.FLAT_ITEM));
         items.itemModelOutput.accept(spear, ItemModelGenerators.createFlatModelDispatch(flat, ItemModelUtils.plainModel(inHand)),

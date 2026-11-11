@@ -52,15 +52,15 @@ public final class ModClientConfig {
                 .translation("kingdomsatwar.configuration.spiderLook")
                 .defineEnum("spiderLook", SpiderLook.DETAILED);
         BIOME_AMBIENCE = builder
-                .comment("Spielt die Klangwelten der Biome: Wind, rauschendes Laub, Vögel, Brandung, Grollen … – nie dauerhaft,"
-                        + " sondern ab und zu, mit langen ruhigen Pausen.")
+                .comment("Spielt die Klangwelten der Biome: Wind, rauschendes Laub, Vögel, Brandung, Grollen … – in jedem Biom,"
+                        + " sofort beim Betreten.")
                 .translation("kingdomsatwar.configuration.biomeAmbience")
                 .define("biomeAmbience", true);
         BIOME_AMBIENCE_VOLUME = builder
-                .comment("Lautstärke der Biom-Klänge in Prozent (0 = stumm). Zusätzlich gilt der Regler „Umgebung“ in den Musik- und"
-                        + " Toneinstellungen von Minecraft.")
+                .comment("Lautstärke der Biom-Klänge in Prozent (0 = stumm). Derselbe Wert wie der Regler „Biom-Klänge“ in den Musik-"
+                        + " und Toneinstellungen von Minecraft; der Regler „Umgebung“ gilt für sie nicht mehr.")
                 .translation("kingdomsatwar.configuration.biomeAmbienceVolume")
-                .defineInRange("biomeAmbienceVolume", 60, 0, 100);
+                .defineInRange("biomeAmbienceVolume", 70, 0, 100);
         HERO_HEARTS = builder
                 .comment("Ab 21 Herzen (oder 21 Rüstungspunkten) zeigt die Leiste eine einzige Reihe in farbigen Schichten (je zehn"
                         + " Herzen bzw. zwanzig Punkte eine Farbe) und daneben die Zahl, statt die Herzen zu einer Wand aus Reihen zu stapeln.")

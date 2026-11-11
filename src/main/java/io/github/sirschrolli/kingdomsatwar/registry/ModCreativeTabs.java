@@ -149,6 +149,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, CreatorBlocks.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FISHING = TABS.register("fishing",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.fishing"))
+                    .icon(() -> new net.minecraft.world.item.ItemStack(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.GOLDFISH.item()))
+                    .withTabsBefore(CREATION.key())
+                    .displayItems((parameters, output) -> accept(output, FishingItems.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

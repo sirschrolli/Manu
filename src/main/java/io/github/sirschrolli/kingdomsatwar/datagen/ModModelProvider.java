@@ -457,6 +457,15 @@ public class ModModelProvider extends ModelProvider {
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);
         CreatorModels.register(blocks, items);
+        // --- Angeln: die Fische (ihre Bilder liegen unter item/fish), Filet und Köder ---
+        for (var fish : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.fishes()) {
+            Identifier model = ModelTemplates.FLAT_ITEM.create(fish.get(), TextureMapping.layer0(
+                    new Material(KingdomsAtWar.id("item/fish/" + fish.get().species().id()))), items.modelOutput);
+            items.itemModelOutput.accept(fish.get(), net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model));
+        }
+        for (var item : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.flatItems()) {
+            flat(items, item.get());
+        }
         MonsterGearModels.register(items);
 
         // --- Frostkessel ---

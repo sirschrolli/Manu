@@ -17,8 +17,8 @@ import org.jspecify.annotations.Nullable;
  * ohne Suche finden – für {@code /kaw mondhain}, und damit Bäume, Pilze und Felsen die Lichtung freilassen.
  */
 public final class Mondhain {
-    public static final int SPACING = 20;
-    public static final int SEPARATION = 6;
+    public static final int SPACING = 32;
+    public static final int SEPARATION = 14;
     public static final int SALT = 9_163;
     /** Um die Mitte bleibt dieser Umkreis frei von Bäumen, Pilzen, Felsen, Ruinen und Feenringen. */
     public static final int CLEARING = 25;

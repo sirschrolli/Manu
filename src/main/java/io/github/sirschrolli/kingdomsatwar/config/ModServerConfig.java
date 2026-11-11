@@ -19,6 +19,8 @@ public final class ModServerConfig {
     public static final ModConfigSpec.BooleanValue REALM_RAIDS;
     /** So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen eines Reichs. */
     public static final ModConfigSpec.IntValue RAID_INTERVAL_DAYS;
+    /** Sprechen die eigenen Truppen (Anwerben, Befehle, Angriff, Sieg)? Seit 0.79 aus. */
+    public static final ModConfigSpec.BooleanValue SOLDIER_VOICES;
 
     static {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -46,6 +48,10 @@ public final class ModServerConfig {
                 .comment("So viele Spieltage vergehen mindestens zwischen zwei Heerhaufen desselben Reichs.")
                 .translation("kingdomsatwar.configuration.raidIntervalDays")
                 .defineInRange("raidIntervalDays", 3, 1, 30);
+        SOLDIER_VOICES = builder
+                .comment("Die eigenen Truppen sprechen (beim Anwerben, bei Befehlen, im Angriff, nach dem Sieg). Seit 0.79 aus: Sie salutieren und kämpfen stumm.")
+                .translation("kingdomsatwar.configuration.soldierVoices")
+                .define("soldierVoices", false);
         SPEC = builder.build();
     }
 

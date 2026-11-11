@@ -33,7 +33,7 @@ import net.minecraft.world.phys.Vec3;
  *     aus Licht herab – {@value #PILLAR_DAMAGE} Schaden für alle Feinde darin (alle 6 Sekunden).</li>
  * </ul>
  */
-public class CreatorScepterItem extends Item {
+public class CreatorScepterItem extends Item implements io.github.sirschrolli.kingdomsatwar.rules.AbilityWeapon {
     public static final double MELEE_DAMAGE = 22.0;
     public static final int SPEAR_COOLDOWN = 10;
     public static final int PILLAR_COOLDOWN = 120;
@@ -63,12 +63,12 @@ public class CreatorScepterItem extends Item {
                     return InteractionResult.FAIL;
                 }
                 Vec3 at = hit.getLocation();
-                callPillar(server, player, at);
+                callPillar(server, player, at, stack);
                 player.getCooldowns().addCooldown(stack, PILLAR_COOLDOWN);
             } else {
                 Vec3 dir = player.getLookAngle();
                 Vec3 from = player.getEyePosition().add(dir.scale(0.9)).add(0.0, -0.15, 0.0);
-                DivineShotEntity.thrownSpear(server, player, from, dir, 3.0, SPEAR_DAMAGE);
+                DivineShotEntity.thrownSpear(server, player, from, dir, 3.0, SPEAR_DAMAGE).weapon(stack);
                 player.getCooldowns().addCooldown(stack, SPEAR_COOLDOWN);
             }
             server.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.CREATOR_SCEPTER_CAST.get(), SoundSource.PLAYERS, 1.0f,
@@ -92,11 +92,16 @@ public class CreatorScepterItem extends Item {
             return;
         }
         combo[1] = 0;
-        lightWave(level, player, target.position());
+        lightWave(level, player, target.position(), stack);
     }
 
     /** Die Lichtwelle: ein goldener Ring läuft über den Boden, alle Feinde ringsum werden getroffen und zurückgeworfen. */
     public static void lightWave(ServerLevel level, Player player, Vec3 at) {
+        lightWave(level, player, at, ItemStack.EMPTY);
+    }
+
+    /** Die Lichtwelle des Speers {@code weapon}: Seine Verzauberungen verstärken sie. */
+    public static void lightWave(ServerLevel level, Player player, Vec3 at, ItemStack weapon) {
         DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), DivineFx.GOLD, 16, 0.6f).param(0.32f).spawn();
         DivineFx.flash(level, at.add(0.0, 1.0, 0.0), DivineFx.HOLY);
         DivineFx.sparks(level, at.add(0.0, 0.8, 0.0), 30, 1.2, 0.2);
@@ -104,7 +109,9 @@ public class CreatorScepterItem extends Item {
         DivineFx.sound(level, at, ModSounds.SCHROLLI_BLAST.get(), 1.0f, 1.3f);
         AABB box = new AABB(at, at).inflate(WAVE_RADIUS, 2.5, WAVE_RADIUS);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> foe(player, e))) {
-            if (DivineFx.flat(e.position(), at) <= WAVE_RADIUS && e.hurtServer(level, level.damageSources().indirectMagic(player, player), WAVE_DAMAGE)) {
+            net.minecraft.world.damagesource.DamageSource source = level.damageSources().indirectMagic(player, player);
+            if (DivineFx.flat(e.position(), at) <= WAVE_RADIUS
+                    && e.hurtServer(level, source, io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, weapon, e, source, WAVE_DAMAGE))) {
                 Vec3 away = e.position().subtract(at).multiply(1.0, 0.0, 1.0);
                 away = away.lengthSqr() < 1.0e-4 ? player.getLookAngle().multiply(1.0, 0.0, 1.0) : away.normalize();
                 e.push(away.x * 0.9, 0.35, away.z * 0.9);
@@ -115,6 +122,12 @@ public class CreatorScepterItem extends Item {
 
     /** Ein Warnkreis – dann eine Säule aus Licht, die alle Feinde darin trifft und hochschleudert. */
     public static void callPillar(ServerLevel level, Player player, Vec3 at) {
+        callPillar(level, player, at, ItemStack.EMPTY);
+    }
+
+    /** Die Lichtsäule des Speers {@code weapon}: Seine Verzauberungen verstärken sie. */
+    public static void callPillar(ServerLevel level, Player player, Vec3 at, ItemStack weapon) {
+        ItemStack held = weapon.copy();
         DivineFx.fx(level, SpellFxEntity.Kind.CIRCLE, at.add(0.0, 0.06, 0.0), DivineFx.GOLD, 14, PILLAR_RADIUS).onExpire(fx -> {
             DivineFx.fx(level, SpellFxEntity.Kind.PILLAR, at, DivineFx.HOLY, 18, PILLAR_RADIUS).param(24.0f).spawn();
             DivineFx.fx(level, SpellFxEntity.Kind.SHOCKWAVE, at.add(0.0, 0.1, 0.0), DivineFx.GOLD, 14, PILLAR_RADIUS).param(0.25f).spawn();
@@ -123,8 +136,9 @@ public class CreatorScepterItem extends Item {
             DivineFx.sound(level, at, ModSounds.SCHROLLI_PILLAR.get(), 1.8f, 1.2f);
             AABB box = new AABB(at.x - PILLAR_RADIUS, at.y - 1.0, at.z - PILLAR_RADIUS, at.x + PILLAR_RADIUS, at.y + 20.0, at.z + PILLAR_RADIUS);
             for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, box, e -> foe(player, e))) {
+                net.minecraft.world.damagesource.DamageSource source = level.damageSources().indirectMagic(player, player);
                 if (DivineFx.flat(e.position(), at) <= PILLAR_RADIUS + 0.3
-                        && e.hurtServer(level, level.damageSources().indirectMagic(player, player), PILLAR_DAMAGE)) {
+                        && e.hurtServer(level, source, io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, held, e, source, PILLAR_DAMAGE))) {
                     e.push(0.0, 0.8, 0.0);
                     e.needsSync = true;
                 }

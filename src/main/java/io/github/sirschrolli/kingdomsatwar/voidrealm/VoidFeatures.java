@@ -99,9 +99,9 @@ public final class VoidFeatures {
     static final Entry CRATER = entry(LOCAL, "stardust_crater", StardustCraterFeature::new, floor(RarityFilter.onAverageOnceEvery(3)));
 
     static final Entry RUIN = entry(STRUCTURES, "ruin", VoidRuinFeature::new,
-            List.of(new SpacedPlacement(3, 1, 7_311, 0), InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome()));
+            List.of(new SpacedPlacement(6, 3, 7_311, 0), InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome()));
     static final Entry RUIN_RARE = entry(STRUCTURES, "ruin_rare", VoidRuinFeature::new,
-            List.of(new SpacedPlacement(9, 4, 7_312, 0), InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome()));
+            List.of(new SpacedPlacement(14, 6, 7_312, 0), InSquarePlacement.spread(), AnySurfacePlacement.floor(), BiomeFilter.biome()));
     static final Entry DEBRIS = entry(STRUCTURES, "floating_debris", FloatingDebrisFeature::new, floor(RarityFilter.onAverageOnceEvery(2)));
     static final Entry REMNANTS = entry(STRUCTURES, "world_remnants", WorldRemnantFeature::new, floor(CountPlacement.of(2)));
 

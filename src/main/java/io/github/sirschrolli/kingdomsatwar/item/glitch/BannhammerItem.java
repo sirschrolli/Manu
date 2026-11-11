@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  *     Blöcken und wirft sie empor.</li>
  * </ul>
  */
-public class BannhammerItem extends Item {
+public class BannhammerItem extends Item implements io.github.sirschrolli.kingdomsatwar.rules.AbilityWeapon {
     private static final String HITS = KingdomsAtWar.MODID + ":bannhammer_hits";
     /** Wo Wesen vor einer Sekunde standen (für den Ruckler): je Wesen ein kurzer Verlauf (nur Server). */
     private static final Map<UUID, ArrayDeque<Vec3>> TRAILS = new HashMap<>();
@@ -55,7 +55,7 @@ public class BannhammerItem extends Item {
         data.putInt(HITS, hits >= 15 ? 0 : hits);
         level.sendParticles(ModParticles.GLITCH_PIXEL.get(), mob.getX(), mob.getY(0.6), mob.getZ(), 10, 0.3, 0.4, 0.3, 0.08);
         if (hits % 5 == 0) {
-            this.ban(level, mob, attacker);
+            this.ban(level, mob, attacker, stack);
         } else if (hits % 3 == 0) {
             this.jolt(level, mob, attacker);
         }
@@ -81,7 +81,7 @@ public class BannhammerItem extends Item {
     }
 
     /** Bann! Ein Knall aus Pixeln trifft alle Gegner ringsum und wirft sie empor. */
-    private void ban(ServerLevel level, LivingEntity mob, LivingEntity attacker) {
+    private void ban(ServerLevel level, LivingEntity mob, LivingEntity attacker, ItemStack hammer) {
         Vec3 c = mob.position();
         level.sendParticles(ModParticles.GLITCH_PIXEL.get(), c.x, c.y + 0.6, c.z, 60, 1.4, 0.4, 1.4, 0.2);
         level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFF800F8), c.x, c.y + 0.8, c.z, 1, 0.0, 0.0, 0.0, 0.0);
@@ -95,7 +95,8 @@ public class BannhammerItem extends Item {
             if (victim.distanceToSqr(c) > 3.5 * 3.5) {
                 continue;
             }
-            victim.hurtServer(level, level.damageSources().indirectMagic(attacker, attacker), 10.0f);
+            net.minecraft.world.damagesource.DamageSource source = level.damageSources().indirectMagic(attacker, attacker);
+            victim.hurtServer(level, source, io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, hammer, victim, source, 10.0f));
             victim.push(0.0, 0.7, 0.0);
             victim.needsSync = true;
         }

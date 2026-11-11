@@ -89,6 +89,8 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
     private static final EntityDataAccessor<Float> DATA_SCALE = SynchedEntityData.defineId(DivineShotEntity.class, EntityDataSerializers.FLOAT);
 
     private float damage = 8.0f;
+    /** Die Waffe, aus der das Geschoss stammt (leer: keine) – ihre Verzauberungen verstärken den Treffer. */
+    private net.minecraft.world.item.ItemStack weapon = net.minecraft.world.item.ItemStack.EMPTY;
     private double radius;
     private double speed = 1.5;
     private int launchAt = -1;
@@ -147,6 +149,12 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         shot.lookAlong(mark.subtract(at));
         level.addFreshEntity(shot);
         return shot;
+    }
+
+    /** Merkt sich die Waffe, aus der das Geschoss stammt: Ihre Verzauberungen (Schärfe …) verstärken den Treffer. */
+    public DivineShotEntity weapon(net.minecraft.world.item.ItemStack stack) {
+        this.weapon = stack.copy();
+        return this;
     }
 
     /** Ein Lichtspeer, der sofort fliegt (das Zepter des Schöpfers). */
@@ -717,7 +725,7 @@ public class DivineShotEntity extends AbstractHurtingProjectile {
         }
         Entity owner = this.getOwner();
         DamageSource source = this.damageSources().mobProjectile(this, owner instanceof LivingEntity l ? l : null);
-        if (victim.hurtServer(level, source, this.damage)) {
+        if (victim.hurtServer(level, source, io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, this.weapon, victim, source, this.damage))) {
             Vec3 v = this.getDeltaMovement().multiply(1.0, 0.0, 1.0);
             if (v.lengthSqr() > 1.0e-4) {
                 v = v.normalize();

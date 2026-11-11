@@ -4,8 +4,8 @@
     {
       "type": "kingdomsatwar:spaced",
       "salt": 7311,
-      "separation": 1,
-      "spacing": 3
+      "separation": 3,
+      "spacing": 6
     },
     {
       "type": "minecraft:in_square"

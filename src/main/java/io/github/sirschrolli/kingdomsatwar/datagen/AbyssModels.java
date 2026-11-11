@@ -139,7 +139,7 @@ final class AbyssModels {
                 if (glow) {
                     e.lightEmission(15);
                 }
-                e.rotation(r -> r.origin(8, 8, 8).eulerXYZ(0, 0, -45));
+                e.rotation(r -> r.origin(8, 8, 8).eulerXYZ(0, 0, 45));
             });
         }
         Identifier inHand = hand.build().create(net.minecraft.client.data.models.model.ModelLocationUtils.getModelLocation(spear, "_in_hand"),

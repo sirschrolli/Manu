@@ -4,7 +4,9 @@
   "package": "io.github.sirschrolli.kingdomsatwar.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "RangedAttributeMixin"
+    "FishingHookMixin",
+    "RangedAttributeMixin",
+    "ServerPlayerMixin"
   ],
   "client": [
     "client.SkullBlockRendererMixin"

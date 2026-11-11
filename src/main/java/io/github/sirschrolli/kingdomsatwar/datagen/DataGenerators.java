@@ -79,6 +79,7 @@ public final class DataGenerators {
                         new LootTableProvider.SubProviderEntry(ModEntityLootProvider::new, LootContextParamSets.ENTITY),
                         new LootTableProvider.SubProviderEntry(ModGameplayEntityLootProvider::new, LootContextParamSets.ENTITY),
                         new LootTableProvider.SubProviderEntry(ModChestLootProvider::new, LootContextParamSets.CHEST),
+                        new LootTableProvider.SubProviderEntry(ModFishingLootProvider::new, LootContextParamSets.FISHING),
                         new LootTableProvider.SubProviderEntry(ModArchaeologyLootProvider::new, LootContextParamSets.ARCHAEOLOGY))
                 .recipe(ModRecipeProvider::new);
         // Vanilla-Einträge, die die Mod ersetzt: die Oberwelt-Oberflächen, die Weltvoreinstellungen mit den eigenen Biomen

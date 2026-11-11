@@ -6,10 +6,10 @@ Bilder der Gegenstände (16×16): Heiligenschein, Räder, Schwingen und den Spee
 der Hand (32×32).
 
 Lage (Einheiten der Modelllage; siehe client/creator/CreatorGearLayer):
-  Federflächen (Vorderseite = Unterseite des Flügels, Rückseite = Oberseite, gespiegelt):
-    innen 7×10 bei (0,0)   Mitte 6×11 bei (0,11)   Spitze 10×17 bei (0,22)
-    Deckfedern: innen 7×5 bei (20,0), Mitte 6×6 bei (20,6), Spitze 6×7 bei (20,13)
-  Knochen: Oberarm (36,0) 16×2,5, Unterarm (36,3) 14×2,5, Hand (36,6) 10×2
+  Federn, jede einzeln (Vorderseite = Unterseite des Flügels, Rückseite = Oberseite gespiegelt daneben; Aufbau des Flügels in
+  tools/creator_wings.py): Handschwingen 3×16 bei (0,0), 3×14 bei (6,0), 3×12 bei (12,0); Armschwinge 3×12 bei (18,0);
+  Schirmfeder 3×10 bei (24,0); Deckfedern 3×7 bei (30,0) und 2×4 bei (36,0)
+  Arme der Glieder: Oberarm (0,20) 18×4, Unterarm (0,24) 16×4, Hand (0,28) 10×2
   Heiligenschein: Glied (64,0) 6×2, Stein (72,0) 4×2, innerer Lichtring (78,0) 4×1
   Räder: Glied (64,4), Auge (72,4), Rune (80,4) je 8×3
 
@@ -27,7 +27,7 @@ K = 4  # Pixel je Einheit
 W, H = 128 * K, 64 * K
 
 WHITE = [(118, 116, 140), (152, 150, 172), (186, 186, 204), (214, 214, 228), (234, 234, 244), (246, 246, 252), (255, 255, 255)]
-UNDER = [(112, 104, 118), (146, 138, 150), (178, 170, 180), (204, 198, 204), (224, 218, 222), (238, 234, 236)]
+UNDER = [(136, 128, 144), (168, 160, 174), (198, 190, 202), (220, 214, 222), (236, 230, 236), (247, 243, 246)]
 GOLD = [(90, 58, 16), (138, 94, 28), (184, 134, 42), (220, 174, 62), (242, 207, 98), (255, 232, 160), (255, 248, 220)]
 LIGHT = [(255, 214, 120), (255, 232, 160), (255, 244, 200), (255, 252, 236)]
 EYE = [(30, 80, 160), (60, 140, 230), (140, 210, 255), (230, 248, 255)]
@@ -45,100 +45,68 @@ def ramp(colors, t):
 
 
 # =====================================================================================
-# Federn
+# Federn (seit 0.78.2 jede einzeln – Aufbau des Flügels in tools/creator_wings.py)
 # =====================================================================================
 
-def feather_field(w, h, feathers, under=False, seed=1, tip_gold=0.22, covert=False):
-    """Eine Federfläche (w×h Einheiten): Federn hängen von oben herab – jede mit Kiel, heller Fahne, dunklem Saum und
-    goldener Spitze; die äußeren liegen über den inneren.
+def feather_sprite(w, length, kind, under):
+    """Eine einzelne Feder (w×length Einheiten), die Wurzel oben, die Spitze unten: schmaler Kiel, helle Fahne mit feinen
+    Ästen, weicher dunkler Saum, die Außenfahne (rechts) schmaler als die Innenfahne; Handschwingen laufen spitz zu und
+    tragen eine goldene Spitze, Arm- und Schirmfedern sind rund mit goldenem Saum, Deckfedern klein und weich.
 
-    feathers: Liste von (x Wurzel, Länge, Breite, Neigung nach außen in Grad) in Einheiten; die Fläche ist oben am Knochen.
+    under: die Unterseite des Flügels (matter, wärmer, weniger Gold).
     """
-    pw, ph = w * K, h * K
+    pw, ph = w * K, length * K
     img = Image.new("RGBA", (pw, ph), (0, 0, 0, 0))
     px = img.load()
-    rnd = random.Random(seed)
     base = UNDER if under else WHITE
-    for (fx, length, width, tilt) in feathers:
-        a = math.radians(tilt)
-        dx, dy = math.sin(a), math.cos(a)          # Richtung der Feder (nach unten, leicht nach außen)
-        nx, ny = dy, -dx                            # quer dazu
-        x0, y0 = fx * K, -0.6 * K
-        L = length * K
-        half = width * K / 2.0
-        shade = rnd.uniform(-0.03, 0.03)
-        for y in range(ph):
-            for x in range(pw):
-                rx, ry = x + 0.5 - x0, y + 0.5 - y0
-                s = rx * dx + ry * dy               # entlang der Feder
-                q = rx * nx + ry * ny               # quer (+: zur äußeren Seite)
-                if s < 0 or s > L:
-                    continue
-                t = s / L
-                # Umriss: schmale Wurzel, volle Fahne, die Außenfahne schmaler als die Innenfahne, rund zur Spitze
-                full = half * (0.62 + 0.38 * math.sin(math.pi * min(1.0, t * 1.1 + 0.1)))
-                side = full * (0.78 if q > 0 else 1.0)
-                if t > 0.8:
-                    side *= math.sqrt(max(0.0, 1.0 - ((t - 0.8) / 0.2) ** 2))
-                if abs(q) > side:
-                    continue
-                edge = abs(q) / max(side, 0.01)
-                # Fahne: oben hell, nach unten ein Hauch dunkler; feine schräge Äste
-                barbs = 0.035 * math.sin(s * 0.9 - abs(q) * 1.4)
-                v = 0.9 - 0.12 * t - 0.18 * edge ** 3 + barbs + shade - (0.06 if covert else 0.0)
-                c = ramp(base, v)
-                # der Kiel: eine helle Linie mit dunklem Rand
-                if abs(q) < 0.55 and t < 0.9:
-                    c = ramp(base, 0.97)
-                elif abs(q) < 1.15 and t < 0.9:
-                    c = lerp(c, base[3], 0.35)
-                # goldene Spitze
-                if t > 1.0 - tip_gold:
-                    g = (t - (1.0 - tip_gold)) / tip_gold
-                    c = lerp(c, ramp(GOLD, 0.62 + 0.36 * g - 0.3 * edge), min(1.0, g * 1.5))
-                # Saum
-                if edge > 0.84:
-                    c = lerp(c, base[1], 0.55)
-                px[x, y] = c + (255,)
+    family = kind[0]
+    gold = {"P": 0.2, "S": 0.11, "T": 0.07, "C": 0.0}[family] * (0.75 if under else 1.0)
+    rachis = pw * (0.58 if family in "PS" else 0.52)
+    for y in range(ph):
+        t = (y + 0.5) / ph
+        if family == "P":
+            f = min(1.0, 0.5 + 0.5 * t / 0.1) if t < 0.5 else max(0.0, 1.0 - ((t - 0.5) / 0.5) ** 2.3) ** 0.75
+        elif family == "C":
+            f = min(1.0, 0.62 + 0.38 * t / 0.2) if t < 0.58 else math.sqrt(max(0.0, 1.0 - ((t - 0.58) / 0.42) ** 2))
+        else:
+            f = min(1.0, 0.5 + 0.5 * t / 0.1) if t < 0.72 else math.sqrt(max(0.0, 1.0 - ((t - 0.72) / 0.28) ** 2))
+        right = (pw - rachis - 0.4) * f
+        left = (rachis - 0.4) * f
+        for x in range(pw):
+            dx = x + 0.5 - rachis
+            side = right if dx > 0 else left
+            if side <= 0.3 or abs(dx) > side:
+                continue
+            edge = abs(dx) / side
+            # die Fahne: zur Außenkante (rechts) heller – sie liegt frei –, zur Innenkante im Schatten der Nachbarfeder
+            barbs = 0.03 * math.sin(y * 0.85 - abs(dx) * 1.5)
+            v = 0.93 - 0.11 * t - 0.16 * edge ** 2.5 + barbs + (0.03 if dx > 0 else -0.05 * edge) - (0.05 if family == "C" else 0.0)
+            c = ramp(base, v)
+            # der Kiel: eine feine helle Linie mit weichem Schatten daneben
+            if abs(dx) < 0.55 and t < 0.9:
+                c = ramp(base, 1.0)
+            elif -1.6 < dx <= -0.55 and t < 0.9:
+                c = lerp(c, base[2], 0.4)
+            # goldene Spitze bzw. goldener Saum
+            if gold > 0.0 and t > 1.0 - gold:
+                g = (t - (1.0 - gold)) / gold
+                c = lerp(c, ramp(GOLD, 0.58 + 0.4 * g - 0.22 * edge), min(1.0, g * 1.7))
+            # Saum
+            if edge > 0.8 or (side - abs(dx)) < 0.9:
+                c = lerp(c, base[1] if t < 1.0 - gold * 0.6 or gold == 0.0 else GOLD[2], 0.5)
+            px[x, y] = c + (255,)
     return img
 
 
-def wing_planes():
-    """Die Federflächen der Schwingen: (Oberseite, Unterseite) je Teil."""
-    parts = {}
-    # innen: Armschwingen, fünf Federn, nach außen kaum geneigt
-    inner = [(0.6 + i * 1.35, 9.4 - i * 0.15, 2.4, -6 + i * 3) for i in range(5)]
-    # Mitte: vier Armschwingen, länger
-    mid = [(0.5 + i * 1.45, 10.6 - i * 0.2, 2.5, -2 + i * 4) for i in range(4)]
-    # Spitze: sechs Handschwingen, gefächert, die äußeren lang und schräg
-    tip = [(0.4 + i * 1.25, 12.0 + i * 0.9, 2.3 - i * 0.08, 6 + i * 9) for i in range(6)]
-    parts["inner"] = (7, 10, inner, 0.18)
-    parts["mid"] = (6, 11, mid, 0.2)
-    parts["tip"] = (10, 17, tip, 0.26)
-    # Deckfedern: zwei Reihen kurzer, runder Federn
-    parts["inner_cov"] = (7, 5, [(0.3 + i * 1.3, 4.4 - (i % 2) * 0.6, 2.2, -4 + i * 2) for i in range(6)], 0.12)
-    parts["mid_cov"] = (6, 6, [(0.3 + i * 1.3, 5.4 - (i % 2) * 0.7, 2.3, 0 + i * 3) for i in range(5)], 0.14)
-    parts["tip_cov"] = (6, 7, [(0.3 + i * 1.2, 6.3 - (i % 2) * 0.6, 2.2, 5 + i * 6) for i in range(5)], 0.16)
-    out = {}
-    for name, (w, h, feathers, gold) in parts.items():
-        covert = name.endswith("_cov")
-        top = feather_field(w, h, feathers, under=False, seed=sum(map(ord, name)), tip_gold=gold, covert=covert)
-        bottom = feather_field(w, h, feathers, under=True, seed=sum(map(ord, name)) + 7, tip_gold=gold * 0.8, covert=covert)
-        out[name] = (top, bottom, w, h)
-    return out
-
-
-# =====================================================================================
-# Die Textur der Teile
-# =====================================================================================
-
-def paste_plane(img, glow, at, top, bottom, w):
-    """Vorderseite (Unterseite des Flügels) bei at, Rückseite (Oberseite, gespiegelt) daneben."""
-    u, v = at
-    img.alpha_composite(bottom, (u * K, v * K))
-    img.alpha_composite(top.transpose(Image.FLIP_LEFT_RIGHT), ((u + w) * K, v * K))
-    # Leuchtebene: die Federn schimmern sacht (heilige Schwingen bleiben auch im Schatten hell), die goldenen Spitzen glühen
-    for src, ox in ((bottom, u), (top.transpose(Image.FLIP_LEFT_RIGHT), u + w)):
+def paste_feather(img, glow, kind):
+    """Vorderseite (Unterseite des Flügels) bei (u, v), Rückseite (Oberseite, gespiegelt) gleich daneben; dazu die
+    Leuchtebene: Die Federn schimmern sacht (heilige Schwingen bleiben auch im Schatten hell), das Gold glüht."""
+    from creator_wings import KINDS
+    w, length, u, v = KINDS[kind]
+    bottom = feather_sprite(w, length, kind, True)
+    top = feather_sprite(w, length, kind, False).transpose(Image.FLIP_LEFT_RIGHT)
+    for src, ox in ((bottom, u), (top, u + w)):
+        img.alpha_composite(src, (ox * K, v * K))
         sp = src.load()
         gp = glow.load()
         for y in range(src.height):
@@ -146,11 +114,34 @@ def paste_plane(img, glow, at, top, bottom, w):
                 r, g, b, a = sp[x, y]
                 if not a:
                     continue
-                if r > 200 and g > 150 and b < 140:
+                if r > 200 and g > 150 and b < 150:
                     gp[ox * K + x, v * K + y] = (min(255, r), min(255, g), min(255, b + 40), 150)
                 else:
                     lum = (r + g + b) / 3
-                    gp[ox * K + x, v * K + y] = (255, 254, 250, 70 if lum > 200 else 46)
+                    gp[ox * K + x, v * K + y] = (255, 254, 250, 104 if lum > 200 else 76)
+
+
+def arm_region(img, x0, y0, w, h):
+    """Der Arm eines Glieds: dicht mit kleinen, runden Federn besetzt – versetzte Reihen von Bögen, jeder oben hell und am
+    unteren Rand weich abgesetzt, wie Schindeln."""
+    px = img.load()
+    for y in range(int(y0 * K), int((y0 + h) * K)):
+        for x in range(int(x0 * K), int((x0 + w) * K)):
+            ly, lx = y - int(y0 * K), x - int(x0 * K)
+            best = None
+            # die Feder, deren Bogen diesen Punkt bedeckt: erst die eigene Reihe, sonst die darüber
+            for row in (ly // 4, ly // 4 - 1):
+                cx = ((lx + (row % 2) * 4) % 8) - 3.5
+                cy = ly - row * 4
+                if cy <= 6.4 - 0.26 * cx * cx:
+                    best = (cx, cy)
+                    break
+            if best is None:
+                best = (0.0, 0.0)
+            cx, cy = best
+            rim = cy > 5.2 - 0.26 * cx * cx
+            v = 0.97 - 0.035 * cy - 0.012 * abs(cx) - (0.2 if rim else 0.0)
+            px[x, y] = ramp(WHITE, v) + (255,)
 
 
 def fill_region(img, x0, y0, w, h, colors, pattern="band", glow=None, glow_alpha=0):
@@ -202,14 +193,14 @@ def rune_cell(img, glow, x0, y0, w, h):
 def gear_texture():
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    planes = wing_planes()
-    spots = {"inner": (0, 0), "mid": (0, 11), "tip": (0, 22), "inner_cov": (20, 0), "mid_cov": (20, 6), "tip_cov": (20, 13)}
-    for name, (top, bottom, w, h) in planes.items():
-        paste_plane(img, glow, spots[name], top, bottom, w)
-    # Knochen: weiß-goldene Vorderkante
-    fill_region(img, 36, 0, 16, 2.5, [WHITE[3], WHITE[5], GOLD[4], GOLD[5]])
-    fill_region(img, 36, 3, 14, 2.5, [WHITE[3], WHITE[5], GOLD[4], GOLD[5]])
-    fill_region(img, 36, 6, 10, 2, [GOLD[3], GOLD[4], GOLD[5], GOLD[6]])
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from creator_wings import ARMS, KINDS
+    for kind in KINDS:
+        paste_feather(img, glow, kind)
+    # die Arme der drei Glieder: weich befiedert (Lage wie ein Quader: 2·(Tiefe + Länge) breit, Tiefe + Höhe hoch)
+    for (length, thick, depth, u, v) in ARMS:
+        arm_region(img, u, v, 2 * (depth + length), depth + thick)
     # Heiligenschein: Gold, das leuchtet; Steine; innerer Lichtring
     fill_region(img, 64, 0, 6, 2, [GOLD[4], GOLD[5], GOLD[6], LIGHT[3]], glow=glow, glow_alpha=235)
     fill_region(img, 72, 0, 4, 2, [EYE[1], EYE[2], EYE[3]], pattern="gem", glow=glow, glow_alpha=255)

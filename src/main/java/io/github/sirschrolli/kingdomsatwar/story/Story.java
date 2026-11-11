@@ -85,14 +85,19 @@ public final class Story {
     // Ereignisse
     // =====================================================================================
 
-    /** Beim ersten Betreten der Welt bekommt der Spieler die Chronik. */
+    /**
+     * Beim ersten Betreten der Welt erfährt der Spieler, mit welcher Taste er die Chronik aufschlägt (seit 0.79 gibt es kein
+     * Buch mehr dazu: Die Chronik hat jeder immer bei sich).
+     */
     @SubscribeEvent
     static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             StoryProgress p = progress(player);
             if (!p.has(Flag.CHRONICLE_GIVEN)) {
                 p.set(Flag.CHRONICLE_GIVEN);
-                giveChronicle(player);
+                player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("message.kingdomsatwar.story.chronicle_key",
+                        net.minecraft.network.chat.Component.keybind("key.kingdomsatwar.chronicle")
+                                .withStyle(net.minecraft.ChatFormatting.GOLD)).withStyle(net.minecraft.ChatFormatting.YELLOW));
                 save(player, p);
             }
         }

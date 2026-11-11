@@ -242,6 +242,14 @@ final class Showcase {
                         SchrolliShowcase.almighty(steps);
                     } else if (scene.equals("boss_bars")) {
                         BossBarShowcase.bars(steps);
+                    } else if (scene.equals("fix_wings")) {
+                        WingFixShowcase.wings(steps);
+                    } else if (scene.equals("weapons_hand")) {
+                        WeaponShowcase.hand(steps);
+                    } else if (scene.equals("fishing")) {
+                        FishingShowcase.fishing(steps);
+                    } else if (scene.equals("fishing_void")) {
+                        FishingShowcase.voidOnly(steps);
                     } else if (scene.equals("creator_pose")) {
                         SchrolliShowcase.poses(steps);
                     } else if (scene.equals("creator_melee")) {

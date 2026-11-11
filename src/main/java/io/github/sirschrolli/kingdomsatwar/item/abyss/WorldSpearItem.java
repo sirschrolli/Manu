@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  *     ringsum zerschellt (er verschont den Träger und die Seinen).</li>
  * </ul>
  */
-public class WorldSpearItem extends Item {
+public class WorldSpearItem extends Item implements io.github.sirschrolli.kingdomsatwar.rules.AbilityWeapon {
     private static final String HITS = KingdomsAtWar.MODID + ":world_spear_hits";
     /** Farben der vier Welten (Glut, Frost, End, Schatten). */
     public static final int[] COLORS = {0xFF6A1A, 0x9ADCFF, 0xE8E0A0, 0x6A5AE0};
@@ -72,7 +72,7 @@ public class WorldSpearItem extends Item {
         hits = (hits + 1) % 4;
         data.putInt(HITS, hits);
         if (hits == 0) {
-            fallingChunk(level, mob, attacker, kind);
+            fallingChunk(level, mob, attacker, kind, stack);
         }
     }
 
@@ -103,6 +103,11 @@ public class WorldSpearItem extends Item {
 
     /** Weltenbrocken: ein Brocken der Welt {@code kind} stürzt vom Himmel auf das Ziel (unter Decken entsprechend tiefer). */
     public static void fallingChunk(ServerLevel level, LivingEntity mob, LivingEntity attacker, WorldChunkEntity.Kind kind) {
+        fallingChunk(level, mob, attacker, kind, ItemStack.EMPTY);
+    }
+
+    /** Der Weltenbrocken des Speers {@code weapon}: Seine Verzauberungen verstärken ihn. */
+    public static void fallingChunk(ServerLevel level, LivingEntity mob, LivingEntity attacker, WorldChunkEntity.Kind kind, ItemStack weapon) {
         Vec3 target = mob.position().add(0.0, mob.getBbHeight() * 0.5, 0.0);
         Vec3 drift = new Vec3((level.getRandom().nextDouble() - 0.5) * 3.0, 0.0, (level.getRandom().nextDouble() - 0.5) * 3.0);
         Vec3 top = target.add(drift).add(0.0, 13.0, 0.0);
@@ -110,7 +115,8 @@ public class WorldSpearItem extends Item {
         double room = roof.getType() == HitResult.Type.MISS ? 13.0 : roof.getLocation().distanceTo(target) - 1.2;
         Vec3 from = target.add(top.subtract(target).normalize().scale(Math.max(1.5, room)));
         Vec3 velocity = target.subtract(from).normalize().scale(1.25);
-        WorldChunkEntity.spit(level, attacker, kind, from, velocity, 10.0f);
+        WorldChunkEntity.spit(level, attacker, kind, from, velocity,
+                io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, weapon, mob, level.damageSources().indirectMagic(attacker, attacker), 10.0f));
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, from.x, from.y, from.z, 30, 0.6, 0.6, 0.6, 0.08);
         level.playSound(null, from.x, from.y, from.z, ModSounds.WORLD_EATER_RIFT.get(), SoundSource.PLAYERS, 1.0f, 1.4f);
     }

@@ -32,6 +32,8 @@ import org.jspecify.annotations.Nullable;
  */
 public final class AmbienceProfiles {
     private static final Map<ResourceKey<Biome>, AmbienceProfile> PROFILES = new HashMap<>();
+    /** Klangwelten nach Merkmalen, für Biome ohne eigene (siehe {@link #of(net.minecraft.core.Holder)}). */
+    private static final Map<String, AmbienceProfile> FALLBACKS = new HashMap<>();
 
     static {
         overworld();
@@ -41,6 +43,9 @@ public final class AmbienceProfiles {
         theVoid();
         faeRealm();
         abyss();
+        theEnd();
+        arenas();
+        fallbacks();
     }
 
     private AmbienceProfiles() {}
@@ -50,11 +55,55 @@ public final class AmbienceProfiles {
         return PROFILES.get(biome);
     }
 
+    /**
+     * Die Klangwelt eines Bioms – und für Biome ohne eigene (fremde Mods, künftige Biome) eine passende nach seinen
+     * Merkmalen: Wald, Nadelwald, Meer, Fluss, Strand, Gebirge, Trockenland, End oder Grasland. Nur der Nether bleibt bei
+     * Minecraft (er hat dort eigene Klangschleifen).
+     */
+    public static @Nullable AmbienceProfile of(net.minecraft.core.Holder<Biome> biome) {
+        AmbienceProfile own = biome.unwrapKey().map(PROFILES::get).orElse(null);
+        if (own != null) {
+            return own;
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_NETHER)) {
+            return null;
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_END)) {
+            return FALLBACKS.get("end");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_OCEAN) || biome.is(net.minecraft.tags.BiomeTags.IS_DEEP_OCEAN)) {
+            return FALLBACKS.get("sea");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_RIVER)) {
+            return FALLBACKS.get("river");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_BEACH)) {
+            return FALLBACKS.get("beach");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_TAIGA)) {
+            return FALLBACKS.get("conifers");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_FOREST) || biome.is(net.minecraft.tags.BiomeTags.IS_JUNGLE)) {
+            return FALLBACKS.get("woodland");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_MOUNTAIN) || biome.is(net.minecraft.tags.BiomeTags.IS_HILL)) {
+            return FALLBACKS.get("peaks");
+        }
+        if (biome.is(net.minecraft.tags.BiomeTags.IS_BADLANDS) || biome.is(net.minecraft.tags.BiomeTags.IS_SAVANNA)) {
+            return FALLBACKS.get("dry");
+        }
+        return FALLBACKS.get("grassland");
+    }
+
+    public static Map<String, AmbienceProfile> fallbackProfiles() {
+        return java.util.Collections.unmodifiableMap(FALLBACKS);
+    }
+
     public static Map<ResourceKey<Biome>, AmbienceProfile> all() {
         return Map.copyOf(PROFILES);
     }
 
-    /** Die Standard-Biome der Oberwelt, die eine Klangwelt bekommen (alle außer der Tiefen Finsternis). */
+    /** Die Standard-Biome der Oberwelt, die eine Klangwelt bekommen (alle außer dem Tiefen Dunkel). */
     public static final List<ResourceKey<Biome>> STANDARD = List.of(Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.MEADOW, Biomes.FOREST,
             Biomes.FLOWER_FOREST, Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.DARK_FOREST, Biomes.PALE_GARDEN,
             Biomes.CHERRY_GROVE, Biomes.TAIGA, Biomes.OLD_GROWTH_PINE_TAIGA, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.SNOWY_TAIGA,
@@ -66,6 +115,13 @@ public final class AmbienceProfiles {
             Biomes.LUKEWARM_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.DEEP_OCEAN, Biomes.COLD_OCEAN,
             Biomes.DEEP_COLD_OCEAN, Biomes.FROZEN_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.MUSHROOM_FIELDS, Biomes.DRIPSTONE_CAVES,
             Biomes.LUSH_CAVES);
+
+    /**
+     * Seit 0.79 auch die Biome, die bei Minecraft still sind: das End und das Tiefe Dunkel – und die Kampfdimensionen
+     * der Bosse.
+     */
+    public static final List<ResourceKey<Biome>> EXTRA = List.of(Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS,
+            Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS, Biomes.DEEP_DARK);
 
     private static void put(ResourceKey<Biome> biome, AmbienceProfile.Builder builder) {
         PROFILES.put(biome, builder.build());
@@ -668,5 +724,96 @@ public final class AmbienceProfiles {
                 .far("rumble", 0.4f, ALWAYS)
                 .far("void_choir", 0.25f, ALWAYS)
                 .close("whisper", 0.3f, ALWAYS));
+    }
+    // =====================================================================================
+    // Das End, das Tiefe Dunkel, die Kampfdimensionen und die Klangwelten nach Merkmalen (seit 0.79)
+    // =====================================================================================
+
+    private static void theEnd() {
+        putAll(List.of(Biomes.THE_END, Biomes.END_HIGHLANDS, Biomes.END_MIDLANDS, Biomes.SMALL_END_ISLANDS, Biomes.END_BARRENS), b -> b
+                .everywhere("void_hum", 0.3f, 0.5f)
+                .wind("void_wind", 0.22f)
+                .far("star_song", 0.4f, ALWAYS)
+                .spot("rock_grind", 0.4f, ALWAYS)
+                .spot("sparkle", 0.3f, ALWAYS)
+                .far("deep_moan", 0.2f, ALWAYS));
+        put(Biomes.DEEP_DARK, AmbienceProfile.builder()
+                .everywhere("drips", 0.16f, 1.0f)
+                .everywhere("earth_rumble", 0.12f, 1.0f)
+                .close("drip", 0.9f, ALWAYS)
+                .far("deep_moan", 0.5f, ALWAYS)
+                .close("whisper", 0.3f, ALWAYS)
+                .far("rumble", 0.3f, ALWAYS));
+    }
+
+    private static void arenas() {
+        put(io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.BIOME, AmbienceProfile.builder()
+                .everywhere("magic_grove", 0.22f, 1.0f)
+                .everywhere("void_hum", 0.14f, 1.0f)
+                .close("sparkle", 0.8f, ALWAYS)
+                .spot("crystal_chime", 0.7f, ALWAYS, 8, 24, -2, 8, false, 0.9f, 1.0f)
+                .spot("amethyst", 0.5f, ALWAYS, 8, 24, -2, 8, false, 0.9f, 1.0f));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.MYSTIK.biome(), AmbienceProfile.builder()
+                .everywhere("magic_grove", 0.22f, 1.0f)
+                .wind("wind_breeze", 0.14f)
+                .close("sparkle", 0.9f, ALWAYS)
+                .close("fireflies", 0.8f, ALWAYS)
+                .spot("bird_nightingale", 0.5f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.MALLEUS.biome(), AmbienceProfile.builder()
+                .everywhere("lava", 0.24f, 1.0f)
+                .everywhere("embers", 0.16f, 1.0f)
+                .spot("steam_vent", 0.8f, ALWAYS, 8, 26, -2, 6, false, 1.0f, 1.0f)
+                .spot("basalt", 0.6f, ALWAYS, 8, 26, -2, 6, false, 1.0f, 1.0f)
+                .far("rumble", 0.5f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.ASTERIA.biome(), AmbienceProfile.builder()
+                .everywhere("void_stardust", 0.24f, 1.0f)
+                .everywhere("void_hum", 0.16f, 1.0f)
+                .far("star_song", 0.7f, ALWAYS)
+                .close("sparkle", 0.7f, ALWAYS)
+                .spot("crystal_chime", 0.5f, ALWAYS, 8, 26, -2, 10, false, 0.9f, 1.0f));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.ANNI.biome(), AmbienceProfile.builder()
+                .everywhere("void_hum", 0.2f, 1.0f)
+                .spot("glitch_far", 1.4f, ALWAYS, 8, 26, -2, 8, false, 0.9f, 1.0f)
+                .spot("zap", 0.8f, ALWAYS, 8, 26, -2, 8, false, 0.8f, 1.0f)
+                .far("world_tear", 0.3f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.KING.biome(), AmbienceProfile.builder()
+                .everywhere("void_ruins", 0.26f, 1.0f)
+                .everywhere("void_hum", 0.18f, 1.0f)
+                .wind("void_wind", 0.14f)
+                .far("void_choir", 0.6f, ALWAYS)
+                .spot("rock_grind", 0.6f, ALWAYS, 10, 30, -2, 8, false, 1.0f, 1.0f)
+                .close("whisper", 0.3f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.WORLD_EATER.biome(), AmbienceProfile.builder()
+                .everywhere("abyss_chaos", 0.36f, 1.0f)
+                .wind("void_wind", 0.14f)
+                .far("world_tear", 0.8f, ALWAYS)
+                .far("rumble", 0.5f, ALWAYS)
+                .spot("rock_grind", 0.6f, ALWAYS, 10, 30, -2, 8, false, 1.0f, 1.0f)
+                .spot("pebbles", 0.5f, ALWAYS, 8, 24, -2, 6, false, 1.0f, 1.0f));
+        put(io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.CREATOR.biome(), AmbienceProfile.builder()
+                .everywhere("magic_grove", 0.2f, 1.0f)
+                .wind("wind_breeze", 0.16f)
+                .far("void_choir", 0.6f, ALWAYS)
+                .far("star_song", 0.4f, ALWAYS)
+                .close("sparkle", 0.8f, ALWAYS)
+                .spot("crystal_chime", 0.4f, ALWAYS, 8, 26, -2, 10, false, 0.9f, 1.0f));
+    }
+
+    private static void fallbacks() {
+        FALLBACKS.put("woodland", build(b -> woodland(b, 1.0f)));
+        FALLBACKS.put("grassland", build(AmbienceProfiles::grassland));
+        FALLBACKS.put("conifers", build(AmbienceProfiles::conifers));
+        FALLBACKS.put("sea", build(AmbienceProfiles::sea));
+        FALLBACKS.put("river", PROFILES.get(Biomes.RIVER));
+        FALLBACKS.put("beach", PROFILES.get(Biomes.BEACH));
+        FALLBACKS.put("peaks", PROFILES.get(Biomes.STONY_PEAKS));
+        FALLBACKS.put("dry", PROFILES.get(Biomes.SAVANNA));
+        FALLBACKS.put("end", PROFILES.get(Biomes.THE_END));
+    }
+
+    private static AmbienceProfile build(Consumer<AmbienceProfile.Builder> base) {
+        AmbienceProfile.Builder builder = AmbienceProfile.builder();
+        base.accept(builder);
+        return builder.build();
     }
 }

@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
  *     <li><b>Sternenfall:</b> wer sie in der Hand hält, sinkt sanft wie eine Sternschnuppe (kein Fallschaden).</li>
  * </ul>
  */
-public class StarLanceItem extends Item {
+public class StarLanceItem extends Item implements io.github.sirschrolli.kingdomsatwar.rules.AbilityWeapon {
     private static final String HITS = KingdomsAtWar.MODID + ":star_lance_hits";
 
     public StarLanceItem(Properties properties) {
@@ -67,7 +67,7 @@ public class StarLanceItem extends Item {
         // jeder dritte Treffer: ein kleiner Stern stürzt auf das Ziel
         StarfallEntity star = new StarfallEntity(level, attacker);
         star.setSmall(true);
-        star.setDamage(starlit(attacker) ? 8.0f : 6.0f);
+        star.setDamage(io.github.sirschrolli.kingdomsatwar.rules.WeaponPower.ability(level, stack, mob, level.damageSources().indirectMagic(attacker, attacker), starlit(attacker) ? 8.0f : 6.0f));
         star.dropOnto(mob.position().add(0.0, mob.getBbHeight() * 0.5, 0.0), 12.0);
         level.addFreshEntity(star);
     }

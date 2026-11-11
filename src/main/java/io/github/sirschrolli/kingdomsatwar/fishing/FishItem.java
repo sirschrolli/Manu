@@ -1,0 +1,73 @@
+package io.github.sirschrolli.kingdomsatwar.fishing;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+
+/**
+ * Ein gefangener Fisch. Roh gegessen wirkt jede Art anders (die Wirkung steht am Gegenstand); gebraten wird aus allen
+ * dasselbe sättigende Fischfilet – ohne Wirkung.
+ */
+public class FishItem extends Item {
+    private final FishSpecies species;
+
+    public FishItem(FishSpecies species, Item.Properties properties) {
+        super(properties);
+        this.species = species;
+    }
+
+    public FishSpecies species() {
+        return this.species;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+        builder.accept(Component.translatable(this.species.rarity().key()).withColor(this.species.rarity().color)
+                .append(Component.literal(" · " + this.species.minCm() + "–" + this.species.maxCm() + " cm").withStyle(ChatFormatting.GRAY)));
+        tooltip(this.species, builder);
+    }
+
+    /** Eine Zeile der Wirkung beim Essen: {@code kind} 0 = nützt, 1 = schadet, 2 = Besonderes. */
+    public record Effect(Component text, int kind) {}
+
+    /** Die Wirkung beim Essen, Zeile für Zeile (für den Gegenstand und das Fischbuch). */
+    public static List<Effect> effects(FishSpecies species) {
+        List<Effect> lines = new ArrayList<>();
+        if (species.special() != FishSpecies.Special.NONE) {
+            lines.add(new Effect(Component.translatable("fishing.kingdomsatwar.special." + species.special().name().toLowerCase(java.util.Locale.ROOT)), 2));
+        }
+        for (FishSpecies.Bite bite : species.bites()) {
+            MutableComponent line = Component.translatable(bite.effect().value().getDescriptionId());
+            if (bite.amplifier() > 0) {
+                line.append(" ").append(Component.translatable("potion.potency." + bite.amplifier()));
+            }
+            if (bite.seconds() > 0) {
+                line.append(" (" + MobEffectUtil.formatDuration(new MobEffectInstance(bite.effect(), bite.seconds() * 20), 1.0f, 20.0f).getString() + ")");
+            }
+            lines.add(new Effect(line, bite.effect().value().isBeneficial() ? 0 : 1));
+        }
+        return lines;
+    }
+
+    /** Die Wirkung beim Essen, wie sie am Gegenstand steht. */
+    public static void tooltip(FishSpecies species, Consumer<Component> builder) {
+        List<Effect> effects = effects(species);
+        if (effects.isEmpty()) {
+            return;
+        }
+        builder.accept(Component.translatable("fishing.kingdomsatwar.eaten").withStyle(ChatFormatting.DARK_PURPLE));
+        for (Effect effect : effects) {
+            builder.accept(Component.literal(" ").append(effect.text())
+                    .withStyle(effect.kind() == 0 ? ChatFormatting.BLUE : effect.kind() == 1 ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
+        }
+    }
+}

@@ -34,28 +34,38 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Spielt die Klangwelten der Biome ({@link AmbienceProfiles}) – der eigenen und, seit 0.61, auch der Standard-Biome.
+ * Spielt die Klangwelten der Biome ({@link AmbienceProfiles}) – der eigenen, der Standard-Biome und (seit 0.79) aller
+ * übrigen: Für jedes Biom ohne eigene Klangwelt gibt es eine nach seinen Merkmalen, nur der Nether bleibt bei Minecraft.
  *
- * <p>Die Teppiche sind <b>nie dauerhaft</b>: Jeder kommt und geht – er schwillt langsam an, klingt eine Weile (meist eine
- * halbe Minute) und verebbt dann für ein, zwei Minuten, bevor er wiederkommt. Solange er klingt, wird er nachgeregelt:
- * nach Tageszeit, nach Dach über dem Kopf (in Häusern und Höhlen wird der Wind zum Hauch), nach Regen, nach Höhe und unter
- * Wasser. Beim Wechsel des Bioms blenden die Klangwelten langsam ineinander. Einzelklänge erklingen nur ab und zu an einem
- * zufälligen Ort ringsum – rauschendes Laub, ein Vogel im Baum, ein Bussard hoch oben, ein Drache in der Ferne.
+ * <p>Seit 0.79 ist jedes Biom <b>sofort zu hören</b>: Wer es betritt, hört nach einer halben Sekunde seinen ersten
+ * Einzelklang, und seine Teppiche setzen gleich ein. Der Grundteppich eines Bioms (Wind, Brandung, das Dröhnen einer fremden
+ * Welt) verstummt nie ganz – er atmet nur, wird leiser und wieder lauter –, die übrigen kommen und gehen mit kurzen Pausen.
+ * Solange ein Teppich klingt, wird er nachgeregelt: nach Tageszeit, nach Dach über dem Kopf (in Häusern und Höhlen wird der
+ * Wind zum Hauch), nach Regen, nach Höhe und unter Wasser. Beim Wechsel des Bioms blenden die Klangwelten in zwei Sekunden
+ * ineinander. Einzelklänge erklingen alle paar Sekunden an einem zufälligen Ort ringsum – rauschendes Laub, ein Vogel im
+ * Baum, ein Bussard hoch oben, ein Drache in der Ferne.
  *
- * <p>Wie laut das alles ist (oder ob überhaupt), stellt man in den Einstellungen der Mod ein
- * ({@link ModClientConfig#BIOME_AMBIENCE}, {@link ModClientConfig#BIOME_AMBIENCE_VOLUME}).
+ * <p>Wie laut das alles ist, stellt ein eigener Regler ein: „Biom-Klänge“ in den Musik- und Toneinstellungen von Minecraft
+ * ({@code client.ambience.SoundSettings}; derselbe Wert steht in den Einstellungen der Mod,
+ * {@link ModClientConfig#BIOME_AMBIENCE_VOLUME}). Die Klänge hängen darum nicht mehr am Regler „Umgebung“.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID, value = Dist.CLIENT)
 public final class BiomeAmbience {
     /** So lange (Ticks) muss ein neues Biom unter den Füßen bleiben, bevor die Klangwelt wechselt. */
-    private static final int SETTLE_TICKS = 16;
+    private static final int SETTLE_TICKS = 8;
     /** Überblenden zwischen zwei Klangwelten (Anteil je Tick). */
-    private static final float BLEND_STEP = 1.0f / 60.0f;
+    private static final float BLEND_STEP = 1.0f / 40.0f;
     /** Mindestabstand zwischen zwei Einzelklängen (dazu bis zu anderthalbmal so viel zufällig) und zwischen zwei gleichen. */
-    private static final int SPOT_GAP = 160;
-    private static final int SAME_SPOT_GAP = 500;
+    private static final int SPOT_GAP = 60;
+    private static final int SAME_SPOT_GAP = 240;
+    /** Einzelklänge erklingen öfter, als ihre Rate je Minute sagt (seit 0.79: dichter). */
+    private static final float SPOT_DENSITY = 1.7f;
     /** Grundlautstärke der Teppiche (sie sollen tragen, nicht vordrängen). */
-    private static final float BED_GAIN = 0.6f;
+    private static final float BED_GAIN = 0.7f;
+    /** So leise wird der Grundteppich eines Bioms höchstens, wenn er gerade „aus“ ist (er verstummt nie ganz). */
+    private static final float PRIMARY_FLOOR = 0.4f;
+    /** In welcher Lautstärke-Gruppe die Biom-Klänge laufen: nur Gesamtlautstärke und der eigene Regler gelten. */
+    private static final SoundSource SOURCE = SoundSource.MASTER;
     /** Wann jeder Teppich gerade klingt (an/aus und bis wann). */
     private static final Map<String, Gate> GATES = new HashMap<>();
 
@@ -70,6 +80,8 @@ public final class BiomeAmbience {
     private static int candidateTicks;
     private static int ticks;
     private static int nextSpot;
+    /** Ein neues Biom wurde betreten: Der nächste Einzelklang ist sein Gruß (sofort, ohne Würfeln). */
+    private static boolean welcome;
     // geglättete Umstände
     private static float outdoor = 1.0f;
     private static float buried;
@@ -123,7 +135,14 @@ public final class BiomeAmbience {
         } else if (candidateTicks < SETTLE_TICKS) {
             candidateTicks++;
             if (candidateTicks == SETTLE_TICKS) {
-                current = key == null ? null : AmbienceProfiles.of(key);
+                AmbienceProfile next = key == null ? null : AmbienceProfiles.of(biome);
+                if (next != null && next != current) {
+                    // ein neues Biom ist sofort zu hören: seine Teppiche setzen ein, und gleich erklingt ein Einzelklang
+                    openGates(next, level.getRandom());
+                    welcome = true;
+                    nextSpot = Math.min(nextSpot, ticks + 6);
+                }
+                current = next;
                 if (DEBUG) {
                     KingdomsAtWar.LOGGER.info("[Ambience] Biom {} – Klangwelt {}", key, current != null);
                 }
@@ -184,7 +203,7 @@ public final class BiomeAmbience {
         try {
             return Mth.clamp(ModClientConfig.BIOME_AMBIENCE_VOLUME.get() / 100.0f, 0.0f, 1.0f);
         } catch (IllegalStateException e) {
-            return 0.6f;
+            return 0.7f;
         }
     }
 
@@ -194,39 +213,49 @@ public final class BiomeAmbience {
         int until;
     }
 
-    /** 1, solange der Teppich gerade klingen darf, sonst 0 (das Ein- und Ausblenden übernimmt {@link BedSound}). */
-    private static float gate(String sound, RandomSource random) {
+    /**
+     * 1, solange der Teppich gerade klingt, sonst 0 – der Grundteppich eines Bioms ({@code primary}) wird nur leiser
+     * (das Ein- und Ausblenden übernimmt {@link BedSound}). Ein Teppich, der zum ersten Mal gebraucht wird, klingt sofort.
+     */
+    private static float gate(String sound, boolean primary, RandomSource random) {
         Gate gate = GATES.get(sound);
         if (gate == null) {
             gate = new Gate();
-            gate.on = random.nextFloat() < 0.45f;
-            gate.until = ticks + duration(sound, gate.on, random);
+            gate.on = true;
+            gate.until = ticks + duration(sound, true, random);
             GATES.put(sound, gate);
         }
         if (ticks >= gate.until) {
             gate.on = !gate.on;
             gate.until = ticks + duration(sound, gate.on, random);
         }
-        return gate.on ? 1.0f : 0.0f;
+        return gate.on ? 1.0f : primary ? PRIMARY_FLOOR : 0.0f;
     }
 
-    /** Wie lange ein Teppich klingt bzw. schweigt (Ticks): Wind und Wasser öfter, Tierstimmen und Rauschen selten. */
+    /** Beim Betreten eines Bioms: Alle seine Teppiche dürfen sofort klingen. */
+    private static void openGates(AmbienceProfile profile, RandomSource random) {
+        for (AmbienceProfile.Bed bed : profile.beds()) {
+            Gate gate = GATES.computeIfAbsent(bed.sound(), k -> new Gate());
+            if (!gate.on) {
+                gate.on = true;
+                gate.until = ticks + duration(bed.sound(), true, random);
+            }
+        }
+    }
+
+    /** Wie lange ein Teppich klingt bzw. schweigt (Ticks): lange klingen, kurz schweigen. */
     private static int duration(String sound, boolean on, RandomSource random) {
         float lo;
         float hi;
         if (sound.startsWith("wind") || sound.equals("void_wind")) {
-            lo = on ? 20 : 35;
-            hi = on ? 45 : 95;
+            lo = on ? 35 : 8;
+            hi = on ? 80 : 20;
         } else if (sound.startsWith("surf") || sound.equals("lagoon") || sound.equals("deep_water")) {
-            lo = on ? 30 : 30;
-            hi = on ? 60 : 80;
-        } else if (sound.startsWith("birds") || sound.startsWith("crickets") || sound.equals("insects_day") || sound.equals("frogs")
-                || sound.equals("leaves") || sound.equals("reeds")) {
-            lo = on ? 12 : 100;
-            hi = on ? 25 : 220;
+            lo = on ? 45 : 8;
+            hi = on ? 90 : 18;
         } else {
-            lo = on ? 25 : 45;
-            hi = on ? 50 : 110;
+            lo = on ? 40 : 10;
+            hi = on ? 90 : 25;
         }
         return Math.round((lo + random.nextFloat() * (hi - lo)) * 20.0f);
     }
@@ -252,12 +281,14 @@ public final class BiomeAmbience {
         float master = master() * BED_GAIN;
         for (Map.Entry<AmbienceProfile, Float> entry : WEIGHTS.entrySet()) {
             float weight = entry.getValue();
+            boolean primary = true;
             for (AmbienceProfile.Bed bed : entry.getKey().beds()) {
                 float shelter = bed.indoor() >= 0.99f ? 1.0f : Mth.lerp(outdoor, bed.indoor(), 1.0f) * (1.0f - buried);
                 float volume = bed.volume() * weight * timeWeight(bed.time()) * shelter
                         * Mth.lerp(rain, 1.0f, bed.rain()) * (1.0f + bed.high() * altitude)
-                        * Mth.lerp(underwater, 1.0f, 0.12f) * master * gate(bed.sound(), random);
+                        * Mth.lerp(underwater, 1.0f, 0.12f) * master * gate(bed.sound(), primary, random);
                 targets.merge(bed.sound(), volume, Float::sum);
+                primary = false;
             }
         }
         // laufende Teppiche nachregeln, verstummte entfernen
@@ -301,7 +332,7 @@ public final class BiomeAmbience {
         private int silent;
 
         BedSound(SoundEvent event) {
-            super(event, SoundSource.AMBIENT, SoundInstance.createUnseededRandom());
+            super(event, SOURCE, SoundInstance.createUnseededRandom());
             this.looping = true;
             this.delay = 0;
             this.volume = 0.0f;
@@ -316,9 +347,9 @@ public final class BiomeAmbience {
 
         @Override
         public void tick() {
-            // langsam ein- und ausblenden (einige Sekunden), damit nichts plötzlich da ist oder abreißt
+            // weich ein- und ausblenden (gut eine Sekunde), damit nichts plötzlich da ist oder abreißt
             float diff = this.target - this.volume;
-            float step = Math.max(Math.abs(diff) * 0.02f, 0.0012f);
+            float step = Math.max(Math.abs(diff) * 0.05f, 0.004f);
             this.volume = Math.abs(diff) <= step ? this.target : this.volume + Math.signum(diff) * step;
             if (this.target <= 0.0f && this.volume <= 0.001f) {
                 if (++this.silent > 20) {
@@ -338,25 +369,44 @@ public final class BiomeAmbience {
         }
         RandomSource random = level.getRandom();
         float weight = WEIGHTS.getOrDefault(profile, 0.0f);
+        // der Gruß eines neuen Bioms: sein häufigster Einzelklang, der gerade passt – sofort, nicht erst nach dem Würfeln
+        AmbienceProfile.Spot greeting = null;
+        if (welcome) {
+            welcome = false;
+            float best = 0.0f;
+            for (AmbienceProfile.Spot spot : profile.spots()) {
+                float fit = spot.perMinute() * timeWeight(spot.time()) * (spot.outdoors() ? outdoor * (1.0f - buried) : 1.0f);
+                if (fit > best && AmbientSounds.has("ambient.spot." + spot.sound())) {
+                    best = fit;
+                    greeting = spot;
+                }
+            }
+        }
         for (AmbienceProfile.Spot spot : profile.spots()) {
-            float chance = spot.perMinute() / 1200.0f * timeWeight(spot.time()) * weight;
-            if (spot.outdoors()) {
-                chance *= outdoor * (1.0f - buried);
-            }
-            if (spot.time() == AmbienceProfile.Time.DAY) {
-                chance *= Mth.lerp(rain, 1.0f, 0.2f);
-            }
-            if (chance <= 0.0f || random.nextFloat() >= chance) {
-                continue;
-            }
-            if (ticks - LAST_SPOT.getOrDefault(spot.sound(), -SAME_SPOT_GAP) < SAME_SPOT_GAP
-                    || !AmbientSounds.has("ambient.spot." + spot.sound())) {
-                continue;
+            if (greeting != null) {
+                if (spot != greeting) {
+                    continue;
+                }
+            } else {
+                float chance = spot.perMinute() / 1200.0f * SPOT_DENSITY * timeWeight(spot.time()) * Math.max(weight, 0.5f);
+                if (spot.outdoors()) {
+                    chance *= outdoor * (1.0f - buried);
+                }
+                if (spot.time() == AmbienceProfile.Time.DAY) {
+                    chance *= Mth.lerp(rain, 1.0f, 0.2f);
+                }
+                if (chance <= 0.0f || random.nextFloat() >= chance) {
+                    continue;
+                }
+                if (ticks - LAST_SPOT.getOrDefault(spot.sound(), -SAME_SPOT_GAP) < SAME_SPOT_GAP
+                        || !AmbientSounds.has("ambient.spot." + spot.sound())) {
+                    continue;
+                }
             }
             Vec3 pos = place(level, player, spot, random);
             float volume = spot.volume() * (0.8f + random.nextFloat() * 0.2f) * master();
             float pitch = spot.pitch() * (0.94f + random.nextFloat() * 0.12f);
-            minecraft.getSoundManager().play(new SimpleSoundInstance(AmbientSounds.spot(spot.sound()), SoundSource.AMBIENT, volume, pitch,
+            minecraft.getSoundManager().play(new SimpleSoundInstance(AmbientSounds.spot(spot.sound()), SOURCE, volume, pitch,
                     SoundInstance.createUnseededRandom(), pos.x, pos.y, pos.z));
             LAST_SPOT.put(spot.sound(), ticks);
             if (DEBUG) {

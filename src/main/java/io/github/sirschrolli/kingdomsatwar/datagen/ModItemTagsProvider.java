@@ -293,6 +293,23 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
                 net.minecraft.world.item.Items.GOLDEN_APPLE.builtInRegistryHolder().key(),
                 net.minecraft.world.item.Items.ENCHANTED_GOLDEN_APPLE.builtInRegistryHolder().key(),
                 net.minecraft.world.item.Items.GOLDEN_CARROT.builtInRegistryHolder().key());
+        fishing();
+    }
+
+    /** Das Angeln (seit 0.79): die eigenen Fische, ihr Filet. */
+    private void fishing() {
+        TagAppender<Item> fish = tag(ModTags.Items.FISH);
+        TagAppender<Item> unfit = tag(ModTags.Items.UNFIT_FOOD);
+        for (var item : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.fishes()) {
+            fish.add(item.key());
+            // roh wirkt jeder Fisch anders – das ist nichts für Lager und Proviant (das Filet schon)
+            unfit.add(item.key());
+        }
+        tag(ItemTags.FISHES).addTag(ModTags.Items.FISH);
+        tag(Tags.Items.FOODS_RAW_FISH).addTag(ModTags.Items.FISH);
+        add(Tags.Items.FOODS_COOKED_FISH, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
+        add(ItemTags.CAT_FOOD, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
+        add(ItemTags.OCELOT_FOOD, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
     }
 
     @SafeVarargs

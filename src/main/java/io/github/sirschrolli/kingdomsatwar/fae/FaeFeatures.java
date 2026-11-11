@@ -152,7 +152,7 @@ public final class FaeFeatures {
 
     // --- Ruinen ---
     static final Entry RUINS = entry(STRUCTURES, "ruins", FaeRuinFeature::new,
-            List.of(new SpacedPlacement(6, 2, 7_411, 0), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0),
+            List.of(new SpacedPlacement(10, 4, 7_411, 0), InSquarePlacement.spread(), SurfaceWaterDepthFilter.forMaxDepth(0),
                     HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome(),
                     io.github.sirschrolli.kingdomsatwar.fae.Mondhain.Filter.INSTANCE));
 

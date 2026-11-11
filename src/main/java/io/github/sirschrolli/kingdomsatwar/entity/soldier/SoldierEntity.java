@@ -1338,7 +1338,10 @@ public class SoldierEntity extends PathfinderMob implements OwnableEntity, Range
      * hört sie in seiner Sprache (Deutsch oder Englisch); jeder Soldat hat eine leicht eigene Stimmlage.
      */
     public void speak(String category) {
-        if (!(this.level() instanceof ServerLevel level) || this.voiceCooldown > 0) {
+        // Seit 0.79 sprechen die Truppen nicht mehr (sie salutieren und kämpfen stumm) – wer sie wieder hören will, schaltet
+        // es in den Einstellungen der Welt ein (soldierVoices).
+        if (!io.github.sirschrolli.kingdomsatwar.config.ModServerConfig.SOLDIER_VOICES.get() || !(this.level() instanceof ServerLevel level)
+                || this.voiceCooldown > 0) {
             return;
         }
         this.voiceCooldown = 60;

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.78.1 – Schrolli der Allmächtige.** Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**. In 0.78.1 bekamen **der Allmächtige und der Weltenfresser eigene Bossleisten** (bisher zeigten beide nur die rote Leiste von Minecraft): der Allmächtige mit Schwingen aus brennenden Federn, einer Sonnenkrone aus Flammen und Strahlen, der Sonne hinter seinem Bildnis und einer Füllung wie das Plasma einer Sonne – der Weltenfresser mit einem Rahmen aus Chaosgestein und glühenden Fugen, den Welten auf seinem Rücken, seinem Gebiss, Kronensplittern, Hauer und Kristallflosse, seinem Rachen im Medaillon und der Glut seines Schlunds, durch die ein violetter Riss zieht.
+> **Testversion 0.79.0 – Petri Heil: das Angeln.** Angeln ist jetzt ein Spiel im Spiel: Wer beim Biss anzieht, **drillt** den Fisch – er zieht in einer Wassersäule auf und ab, und du hältst ihn mit Maustaste oder Leertaste in der **Fangzone**, bis die Leiste voll ist; bleibt er zu lange draußen, reißt er sich los. Jede Art kämpft anders (ruhig, zäh, zappelnd, in jähen Sprüngen), und manche sind **wirklich schwer zu halten**. Es gibt **76 Arten** – 72 neue und die vier von Minecraft –, **für jedes Biom und jede Welt**: Hecht, Wels und Stör in Flüssen und Seen, Piranha und Arapaima im Dschungel, den Sculk-Aal im Tiefen Dunkel, Thunfisch, Schwertfisch und Mondfisch im Meer, Anglerfisch, Riemenfisch und Quastenflosser über der Tiefsee … Und geangelt wird jetzt **überall**: im Nether **in Lava** (Magmakarpfen, Seelenaal, Glutrochen – jedes Biom des Nethers hat seinen Fisch), im End, in der Leere und im Abgrund **im Nichts** – wirf den Haken über den Rand einer Insel, und die Leere trägt ihn wie Wasser (Endlachs, Chorusfisch, Leerenrochen) –, dazu eigene Fische im Feenreich, in der Schattenwelt und im Abgrund. **Sieben Legenden** beißen nur unter besonderen Umständen: der Sturmsegler nur im Gewitter, Goldschuppe nur bei Regen, der Alte vom See nur nachts. **Jeder Fisch bewirkt beim Essen etwas anderes** – von Schnelligkeit und Nachtsicht über Absorption IV bis zur Wirrflosse, die dich ein paar Schritte versetzt, und dem Seelenfisch, der alle Leiden nimmt. Zwei **Köder** (Köderwurm und Glühköder) locken bestimmte Arten und lassen alles schneller beißen, im Drill treibt manchmal eine **Schatzkiste** vorbei, und das **Fischbuch** (Taste **H**) verzeichnet jeden Fang mit Rekordgröße, Fundort, Zeit und Wirkung – was noch nie am Haken hing, bleibt ein Schattenriss. Außerdem: Die **Schwingen des Schöpfers** sind neu aus einzelnen Federn gebaut (nichts ist mehr abgeschnitten, nichts flackert mehr); die **Klangwelten** gibt es jetzt in **jedem Biom** – auch im End, im Tiefen Dunkel, in den Kampfdimensionen und in Biomen anderer Mods –, sie setzen sofort ein und haben einen **eigenen Regler** unter *Optionen → Musik & Geräusche*; die **Chronik des Siegels** schlägt man mit der Taste **J** auf (das Buch zu Beginn entfällt); die **Truppen sprechen nicht mehr**; **alle Bauwerke stehen seltener und weiter auseinander** – in allen Dimensionen; **Schärfe, Bann und Nemesis** wirken auf den starken Waffen der Mod jetzt im Verhältnis zu ihrem Schaden und auch auf ihre Fähigkeiten (Lichtspeer, Lichtwelle, Lichtsäule, Sterne, Weltenbrocken …); und die **Speere** der Mod liegen richtig in der Hand.
+> In 0.78 kam **Schrolli der Allmächtige**: Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**. In 0.78.1 bekamen **der Allmächtige und der Weltenfresser eigene Bossleisten** (bisher zeigten beide nur die rote Leiste von Minecraft): der Allmächtige mit Schwingen aus brennenden Federn, einer Sonnenkrone aus Flammen und Strahlen, der Sonne hinter seinem Bildnis und einer Füllung wie das Plasma einer Sonne – der Weltenfresser mit einem Rahmen aus Chaosgestein und glühenden Fugen, den Welten auf seinem Rücken, seinem Gebiss, Kronensplittern, Hauer und Kristallflosse, seinem Rachen im Medaillon und der Glut seines Schlunds, durch die ein violetter Riss zieht.
 > In 0.77 kam **der Weg zum Unsterblichen**: Der Held kann seitdem bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
 > In 0.76 griff **Schrolli der Schöpfer zur Klinge** – er kämpft nicht mehr nur aus der Luft: Immer wieder **landet** er – ein Warnkreis, der Einschlag, ein Ring rollt über den Hof (springen!) –, aus dem Licht seines Saums formen sich **Beine in goldenen Beinschienen**, und sein Zepter wird zur **Klinge aus Licht**. Am Boden schreitet er auf euch zu und ficht mit **sieben neuen Künsten**: **Klingenhieb** (schräge Schnitte, zuletzt ein Spaltschlag, der den Boden aufreißt), **Lichtsicheln** (über den Boden gleitend – springen!), **Sturmlauf** (eine goldene Linie zeigt den Weg), **Klingenwirbel**, **Himmelssturz** (danach steckt die Klinge im Boden – jetzt zuschlagen!), **Schwingenwehr** (er pariert alles von vorn und schlägt zurück – greift ihn von hinten an!) und in der Wahren Gestalt die **Weltenklinge**, die zu zwanzig Blöcken Länge wächst. Jeder Hieb zieht eine **Spur aus Licht**. Am Boden erreicht ihn jedes Schwert – leichte Hiebe fängt ein Schild ab, die goldenen nicht. Dazu **neue Klänge**: alle Klänge und die Musik des Schöpfers sind jetzt warm, tief und leiser – nichts gellt oder schrillt mehr.
 > In 0.75 kam **Schrolli der Schöpfer**, der stärkste Gegner von allen: Wer einen **Schöpferfunken** (Beute des Weltenfressers – oder aus den Trophäen aller großen Gegner geschmiedet) in den **Altar des Schöpfers** legt und ihn berührt, wird mit allen, die im goldenen Kreis stehen, in **die Schöpfung** gehoben – die größte aller Kampfdimensionen: ein Kreis aus weißem Quarz und Gold über einem Meer aus Wolken, zwölf Säulen, der Thron mit der Sonnenscheibe, vier Brücken zu vier Welten, hoch darüber die Räder des Himmels – unter einem **eigenen Himmel** mit Sonnenrad, Nebeln, einer Galaxie und fernen Welten, dazu eigene Musik. In einer Säule aus Licht steigt **Schrolli der Schöpfer** herab: ein Seraph mit sechs Schwingen, Krone aus Lichtstrahlen und Heiligenschein, Zepter und Weltkugel – **3.200 Lebenspunkte**, und mit **26 eigenen Künsten** (Lichtspeere, Heiligenschein-Klinge, Säulen des Lichts, Sternenregen, Zepterschlag, Strahl der Schöpfung, Weltkugel, Federsturm, Göttliches Urteil, Seraphim, Lichtsprung, Schwingensturm, Sonnenrad, Engelschor, „Es werde Licht!“ und die **Zeit, die stillsteht**). Fällt er, stirbt er nicht: Er steigt in seine **Wahre Gestalt** auf – größer, das Gewand ein Weltall, Räder voller Augen um ihn, eine neue volle Leiste –, und der Himmel öffnet sich: ein **Auge aus Sternen** und Risse aus Licht. Dann wirft er **Welten**, entfacht die **Supernova** (nur hinter einer Säule ist man sicher), ruft den **Urknall**, Sternbilder, Kometen, das **Jüngste Gericht** und den **Weltenriss** – und versucht, sich **neu zu erschaffen** (unterbrecht ihn!). Wer ihn bezwingt, erhält das **Zepter des Schöpfers** (3D, Lichtspeere und Säulen aus Licht), die **Schwingen des Schöpfers** (Schwingenschlag im Gleitflug, kein Fall- und Aufprallschaden) und den höchsten Titel: **„Gottbezwinger“**.
@@ -325,7 +326,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | NeoForge-Projekt für Minecraft 26.3, Java 25, Gradle; Build und Tests auf GitHub | ✅ fertig |
 | Erzähltes Intro „Das Siegel“ beim ersten Betreten einer Welt (die sechs Drachen schmieden das Siegel, Musik, Erzähler DE/EN) | ✅ fertig |
 | Der Erzähler spricht zu jedem Kapitel der Geschichte (Stimme und Text, DE/EN) | ✅ fertig |
-| Geschichte „Das Siegel“: Chronik als Buch, Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelbruch, Schattentor | ✅ fertig |
+| Geschichte „Das Siegel“: Chronik (seit 0.79 per Taste J statt als Buch), Kapitel mit Titelkarten, Siegelkreis mit sechs Monolithen, Siegelbruch, Schattentor | ✅ fertig |
 | Sechs Drachen-Bosse (je ca. 25 Blöcke), jeder mit eigenem Körperbau, eigener Erweckung, eigenen Angriffen (je zwei große neue seit 0.56) und Bossleiste | ✅ fertig |
 | Sechs riesige Nester – genau eins je Art und Welt – mit eigenem Biom und neuen Blöcken; Drachenkompass | ✅ fertig |
 | Eigene Drachen: Eier nur von besiegten Bossen, fünf Wachstumsstufen, Reiten, Fliegen, Odem, Drachenpanzer, lebendige Bewegungen (Schritt und Galopp, Abheben, Landen, Kurvenflug, Sitzen, Launen) | ✅ fertig |
@@ -353,7 +354,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Bauwerke der Schattenwelt: Mondtempel mit Gruft, Kristallminen, Mondleuchttürme, Ruinen der alten Welt, Felsbrücken | ✅ fertig |
 | Wirtschaft: Münzen, Stadtbanner, Bürger mit acht Berufen, Baumeister und zwölf Gebäude, Handel, Ansehen, Krönung | ✅ fertig |
 | Acht eigene Oberwelt-Biome mit eigenem Boden, eigenen Bäumen, Pflanzen, Felsen, Farben und Klängen | ✅ fertig |
-| Klänge der Welt: eigene Klangwelt für alle 39 eigenen Biome und seit 0.61 für 53 Standard-Biome der Oberwelt (Tag/Nacht, drinnen/draußen, Regen, Höhe); die Klangteppiche kommen und gehen, Lautstärke und Ein/Aus in der Konfiguration | ✅ fertig |
+| Klänge der Welt: eigene Klangwelt für alle 39 eigenen Biome und seit 0.61 für 53 Standard-Biome der Oberwelt (Tag/Nacht, drinnen/draußen, Regen, Höhe); die Klangteppiche kommen und gehen; seit 0.79 in jedem Biom (auch End, Tiefes Dunkel, Kampfdimensionen und Biome anderer Mods), sofort beim Betreten, mit eigenem Regler unter Musik & Geräusche | ✅ fertig |
 | Eigene Dörfer in vier Bauweisen und vier Grundrissen, Dorfbewohner in 17 Berufen mit Tagesablauf, Handel, Gerüchten und Dorfwachen | ✅ fertig |
 | Keine Vanilla-Bauwerke mehr in der Oberwelt: 17 eigene Bauwerke an ihrer Stelle, alle wichtigen Funde bleiben erhältlich | ✅ fertig |
 | Eigene Hof- und Weidetiere statt Vanilla: Rind, Schwein, Schaf, Huhn, Pferd, Esel, Maultier, Ziege, Hase in 40 Rassen | ✅ fertig |
@@ -365,6 +366,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Weltenfresser** (0.73): der Schlund der Welten im Abgrund mit sieben schwebenden Kronensplittern und ihren Lichtketten; der Weltenfresser – zwölf Glieder mit Stücken verschlungener Welten, acht Angriffe und sein Zorn –; der Weltenspeer (3D), der Kopf des Weltenfressers als Trophäe und der Titel „Weltenretter“ | ✅ fertig |
 | **Schrolli der Schöpfer** (0.75): der stärkste Gegner – Schöpferfunke und Altar des Schöpfers, die Schöpfung (die größte Kampfdimension, eigener Himmel, eigene Musik), ein Seraph mit 26 Künsten, die Wahre Gestalt statt des Todes (der Himmel öffnet sich), Seraphlinge, eigene Bossleisten; Zepter des Schöpfers (3D), Schwingen des Schöpfers und der Titel „Gottbezwinger“ | ✅ fertig |
 | **Schrolli der Allmächtige** (0.78): die dritte Gestalt (Schwarzes Loch, Herz der Sonne, drei Räder, Flammenkranz, eigene Musik), sechs Künste des Allmächtigen, Lichtkäfig und Schwarzes Loch (jetzt 41 Künste), mit jeder Gestalt ein neuer Hof (Firmament, Herz der Sonne), neuer Speer, Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, Rüstung in Schichten bis 60, das Inventar bleibt auf Heldenstufe 200; seit 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser | ✅ fertig |
+| **Angeln** (0.79): der Drill als Minispiel (Fangzone, Leiste, perfekte Fänge, Schatzkisten), 76 Fischarten für jedes Biom und jede Welt, Angeln in Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung beim Essen, Köderwurm und Glühköder, das Fischbuch (H); dazu die Chronik per Taste (J), stumme Truppen, Bauwerke in allen Dimensionen weiter auseinander, Verzauberungen im Verhältnis zur Waffe und auf ihre Fähigkeiten, Speere richtig in der Hand | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -425,7 +427,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.26.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.79.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -433,7 +435,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.26.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.79.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -445,8 +447,9 @@ ansehen mit `/kaw intro`.
 
 ![Das neue Intro: „Das Siegel“](docs/bilder/intro_siegel.jpg)
 
-Danach bekommst du die **Chronik des Siegels** – sie erzählt die Geschichte und zeigt dir den nächsten Schritt.
-Im Kreativmodus gibt es sieben neue Tabs.
+Danach nennt dir das Spiel die Taste für die **Chronik des Siegels** (anfangs **J**) – sie erzählt die Geschichte und zeigt
+dir den nächsten Schritt. Ein Buch dafür gibt es seit 0.79 nicht mehr: Die Chronik hat jeder immer bei sich.
+Im Kreativmodus gibt es fünfzehn eigene Tabs.
 
 ---
 
@@ -454,7 +457,8 @@ Im Kreativmodus gibt es sieben neue Tabs.
 
 ### Die Geschichte: „Das Siegel“
 
-Die **Chronik des Siegels** ist ein aufgeschlagenes Buch: links die Kapitel (erreicht, aktuell, noch verborgen) und
+Die **Chronik des Siegels** schlägt man mit der Taste **J** auf (seit 0.79; vorher lag sie als Buch im Inventar). Sie ist
+ein aufgeschlagenes Buch: links die Kapitel (erreicht, aktuell, noch verborgen) und
 der Zustand des Siegels, rechts die Ziele des Kapitels, Hinweise und die Erzählung. Zu Beginn jedes Kapitels erscheint
 eine Titelkarte, und **der Erzähler spricht** (dieselbe Stimme wie im Intro, Deutsch oder Englisch je nach Spielsprache,
 seine Worte stehen auf der Karte): zum neuen Königreich, zur Chronik, zum Siegelkreis, zu jedem gefallenen Drachen mit
@@ -812,14 +816,19 @@ er erscheint), und `/locate structure kingdomsatwar:world_eater_hoard` findet de
 ![Klänge der Welt: Spektrogramme der Klangwelten](docs/bilder/klangwelten.jpg)
 
 Jedes eigene Biom – die acht Biome der Oberwelt, die sechs Drachennester, die neun Biome der Schattenwelt, die sechs
-Biome der Leere, die fünf des Feenreichs und die fünf des Abgrunds – und seit 0.61 auch **53 Standard-Biome der Oberwelt** haben ihre eigene Klangwelt. Die Stimmung tragen
-vor allem **Einzelklänge**, die ab und zu an einem Ort in der Nähe erklingen: rauschendes Laub im Baum, Wind im Gras, ein
+Biome der Leere, die fünf des Feenreichs und die fünf des Abgrunds – und seit 0.61 auch **53 Standard-Biome der Oberwelt** haben ihre eigene Klangwelt. **Seit 0.79 ist kein Biom mehr still:**
+Auch das End, das Tiefe Dunkel und die Kampfdimensionen der Bosse haben eine, und Biome ohne eigene Klangwelt – etwa die
+anderer Mods – bekommen eine nach ihren Merkmalen (Wald, Nadelwald, Meer, Fluss, Strand, Gebirge, Trockenland, End oder
+Grasland); nur der Nether behält die Klangschleifen von Minecraft. Die Stimmung tragen
+vor allem **Einzelklänge**, die alle paar Sekunden an einem Ort in der Nähe erklingen: rauschendes Laub im Baum, Wind im Gras, ein
 Specht, ein Bussard hoch über der Schlucht, Blubbern zu deinen Füßen, ein Drache in der Ferne – viele davon echte
-Naturaufnahmen von Minecraft. Darunter liegen nur noch leise Klangteppiche (Wind, Wasser, Brandung, Glut, Eis, das
-Dröhnen fremder Welten), und die **laufen nicht mehr dauernd**: Ein Teppich schwillt für 20 Sekunden bis eine Minute an
-und verklingt dann für eine halbe bis knapp zwei Minuten. Die künstlichen Teppiche aus Laubrauschen, Grillen,
-Insektensummen, Vogelchor, Schilf und Fröschen von 0.58 sind entfallen; zwischen zwei Einzelklängen liegen mindestens
-8 Sekunden, und derselbe Klang kehrt frühestens nach 25 Sekunden wieder.
+Naturaufnahmen von Minecraft. Darunter liegen leise Klangteppiche (Wind, Wasser, Brandung, Glut, Eis, das
+Dröhnen fremder Welten). Seit 0.79 ist jedes Biom **sofort zu hören**: Wer es betritt, hört nach einer halben Sekunde
+seinen ersten Einzelklang, und seine Teppiche setzen gleich ein. Der Grundteppich eines Bioms verstummt nie ganz – er
+atmet nur, wird leiser und wieder lauter –, die übrigen klingen eine halbe bis anderthalb Minuten und schweigen dann
+zehn bis fünfundzwanzig Sekunden. Die künstlichen Teppiche aus Laubrauschen, Grillen, Insektensummen, Vogelchor, Schilf
+und Fröschen von 0.58 sind entfallen; zwischen zwei Einzelklängen liegen mindestens 3 Sekunden, und derselbe Klang kehrt
+frühestens nach 12 Sekunden wieder.
 
 | Biom | Am Tag | In der Nacht |
 |---|---|---|
@@ -835,6 +844,9 @@ Insektensummen, Vogelchor, Schilf und Fröschen von 0.58 sind entfallen; zwische
 | **Schattenwelt** | Dröhnen und Flüstern im Schattenwald, singende Kristalle in den Schluchten, Seelenklagen im Sumpf, schwebende Klänge auf den Glimmerweiten, ein Herzschlag in den Tiefen | ewiges Zwielicht |
 | **Die Leere** | tiefes Dröhnen und Sternensirren, gläserne Akkorde im Kristallwald, rieselnder Sternenstaub, Chöre und schabende Steine in den Ruinen, dumpfe Erinnerungen über den Weltenresten, Gesang der Sternenrochen | ewige Nacht |
 | **Der Abgrund** | ein tiefes, schiefes Dröhnen, durch das ab und zu ein fernes Reißen geht; in der Ferne reißt die Welt (Splittern, Bersten, ein hohles Einatmen); dazu je Biom die Welt seiner Bruchstücke – Laub und Krähen, Lava und Glut, singende Kristalle, Klagen und Flüstern, knisternde Nähte | ewiges Rot |
+| **Das End** (seit 0.79) | ein tiefes Summen und der Wind der Leere, ferner Sternengesang, schabender Fels, Funkeln, ein Stöhnen aus der Tiefe | ewige Nacht |
+| **Das Tiefe Dunkel** (seit 0.79) | tropfendes Wasser, ein Grollen in der Erde, Flüstern, ein Stöhnen aus der Tiefe | ewige Finsternis |
+| **Kampfdimensionen** (seit 0.79) | jede klingt wie ihr Hort: Zauberhain und Funkeln in der Arkanen Sphäre und auf der Mondbühne, Lava, Glut und zischender Dampf in der Glutesse, Sternenstaub und Sternengesang im Sternenzelt, fernes Glitchen und Knistern im Fehlerraum, Chöre und schabende Steine in der Thronwelt, reißende Welten im Weltenschlund, Chöre und Kristallklang in der Schöpfung | ebenso |
 
 **Die Standard-Biome der Oberwelt** (neu in 0.61) klingen so:
 
@@ -852,13 +864,17 @@ Insektensummen, Vogelchor, Schilf und Fröschen von 0.58 sind entfallen; zwische
 | **Meere** | sanftes Plätschern, Seewind, Möwen, Delfine; über tiefem Wasser ferne Walgesänge, in kalten und gefrorenen Meeren Sturm und Eis |
 | **Pilzland, Tropfsteinhöhlen, Üppige Höhlen** | Wellen und Möwen um die Pilzinsel; in den Höhlen tropfendes Wasser und Blubbern |
 
-Nur die Tiefe Finsternis behält ihre eigene, bedrückende Stille von Minecraft.
+Das Tiefe Dunkel und das End, die bei Minecraft still sind, klingen seit 0.79 ebenfalls (siehe oben); nur der Nether behält
+die Klangschleifen von Minecraft.
 
 Die Klänge folgen den Umständen: Vögel singen am Tag und verstummen bei Regen, nachts summen die Glühwürmchen; in Häusern
 und Höhlen verklingen Laub und Vögel, vom Wind bleibt nur ein Hauch; auf Gipfeln pfeift der Wind lauter; unter Wasser
-wird es still. Beim Wechsel des Bioms blenden die Klangwelten sanft ineinander. Unter *Mods → Kingdoms at War →
-Konfiguration* lassen sich die **Biom-Klänge** ganz abschalten, und die **Lautstärke der Biom-Klänge** (0 bis 100 %,
-anfangs 60 %) stellt sie leiser; zusätzlich gilt der Schieberegler „Umgebung/Umwelt“ von Minecraft. Die Klangteppiche und
+wird es still. Beim Wechsel des Bioms blenden die Klangwelten in zwei Sekunden ineinander.
+
+**Der eigene Regler (seit 0.79):** Unter *Optionen → Musik & Geräusche* steht unter den Reglern von Minecraft die Zeile
+„Kingdoms at War“ mit dem Regler **Biom-Klänge** (0 % = aus, anfangs 70 %); er wirkt sofort. Derselbe Wert steht unter
+*Mods → Kingdoms at War → Konfiguration* (**Lautstärke der Biom-Klänge**; dort lassen sich die **Biom-Klänge** auch ganz
+abschalten). Der Regler „Atmosphäre/Umgebung“ von Minecraft gilt für sie nicht mehr – nur noch die Gesamtlautstärke. Die Klangteppiche und
 viele Einzelklänge sind eigens für die Mod erzeugt (`tools/audio/ambience.py`); die übrigen Einzelklänge verweisen auf
 Naturaufnahmen von Minecraft selbst.
 
@@ -1061,6 +1077,13 @@ Funde und Münzen – aber karg (siehe unten).
   Brunnenhäusern der Wasserstollen ein Fünftel. Was unter die Erde gehört, bleibt dort: Die Gänge der Wasserstollen
   haben überall mindestens sechs Blöcke Gestein über sich, nur zu manchen führt ein Brunnenhaus hinab, und das
   verschüttete Kloster liegt so tief, dass nur der Glockenturm herausschaut.
+- **Noch seltener seit 0.79 – in allen Dimensionen:** Die Felder, in denen je ein Bauwerk entsteht, sind rund 1,6-mal so breit
+  wie bisher (von den meisten Bauwerken gibt es damit nur noch etwa 40 % so viele), und zwei Bauwerke derselben Art halten
+  fast die halbe Feldbreite Abstand – nichts steht mehr dicht an dicht. Dörfer liegen jetzt in Feldern von 64 statt 40
+  Chunks, die Türme der Erzmagier in 74 statt 46, Burgruinen in 58 statt 36; im Nether teilen sich Festungen und
+  Bastionen Felder von 40 statt 27 Chunks, im End stehen die Endstädte in Feldern von 30 statt 20 – und ebenso weiter
+  auseinander liegen die Bauwerke des Feenreichs, der Schattenwelt und der Leere. Kein Bauwerk steht näher als zehn Chunks
+  an einer Stammburg. (Gilt für neu erzeugte Gebiete.)
 - **Karge Truhen:** In allen Truhen – in den eigenen Bauwerken, Dörfern und Türmen wie in den übrigen Vanilla-Bauwerken
   – bleibt nur ein Teil dessen liegen, was gezogen wurde: Knapp ein Drittel der Stapel fehlt, von Wertvollem
   (Diamanten, Smaragde, Gold, Netherit, Edelsteine, Verzaubertes, Ausrüstung) mehr als die Hälfte, und die übrigen
@@ -1144,7 +1167,7 @@ gewachsen und zerbrochen:
 - Ringsum liegen einzelne Knochen, der Sand ist hier und da zu Seelenerde geworden, und bei jedem zweiten Gerippe liegt
   ein **vertrockneter Ghast**. Keine Beute – die Gebeine sind ein Anblick, kein Schatz.
 - Finden mit `/locate structure kingdomsatwar:giant_bones`; sie haben die Plätze der Netherfossilien übernommen
-  (seltener: etwa alle vier Chunks eins).
+  (seltener: seit 0.79 etwa eins je Feld von zwölf Chunks, vorher von vier).
 
 ![Die Verlorene Pforte](docs/bilder/verlorene_pforte.jpg)
 
@@ -1296,6 +1319,10 @@ Münzen. Am **Feldherrentisch** (2 Smaragde, Buch, 3 Bretter, 2 Stöcke) heilst 
 | Belagerungsknecht | Söldnerhaus (ab 1 Gold 1 Silber) oder Ausbildung | lädt Belagerungswaffen um die Hälfte schneller nach und bessert sie aus |
 
 ![Die neuen Truppen: Speerträger, Schildträger, Belagerungsknecht, Lanzenreiter, Waffenknecht, Armbrustschütze](docs/bilder/truppen.jpg)
+
+Seit 0.79 **sprechen die Truppen nicht mehr**: Sie salutieren, gehorchen und kämpfen stumm (vorher riefen sie beim Anwerben, bei
+Befehlen, im Angriff und nach dem Sieg). Wer die Stimmen wiederhaben will, schaltet in den Einstellungen der Welt
+`soldierVoices` („Truppen sprechen“) ein.
 
 ![Rekrut, Veteran und Elite](docs/bilder/soldaten_raenge.jpg)
 
@@ -1520,6 +1547,20 @@ Buch erklärt im Tooltip, was sie tun.
 | Drachenschuppe I–IV | Rüstung | Schutz vor allem, was Drachen anrichten |
 | Windschritt I–II | Stiefel | 6 % schneller je Stufe |
 | Fluch der Schwere | Rüstung | 5 % langsamer je Teil – ein Fluch auf erbeuteter Rüstung |
+
+**Verzauberungen auf den Waffen der Mod (seit 0.79).** Schärfe, Bann und Nemesis der Gliederfüßer geben bei Minecraft einen
+festen Betrag dazu – Schärfe V drei Punkte, gleich ob die Waffe 7 oder 22 Schaden macht. Auf den starken Waffen der Mod war
+das kaum zu spüren, und ihre Fähigkeiten blieben davon ganz unberührt. Jetzt gilt:
+
+- **Im Nahkampf** wirkt eine Verzauberung auf jeder Waffe der Mod, die stärker ist als ein Diamantschwert, im selben
+  Verhältnis wie dort: Der Betrag wächst mit dem Schaden der Waffe (auf einer Waffe mit 14 Schaden gibt Schärfe V sechs
+  Punkte statt drei). Das gilt auch für **Drachentöter**.
+- **Fähigkeiten** – der geworfene Lichtspeer, die Lichtwelle und die Lichtsäule des Zepters und des Speers des Schöpfers,
+  die Sterne der Sternenlanze, die Weltenbrocken des Weltenspeers, der Bann des Bannhammers – treffen um denselben Anteil
+  härter, den ein Diamantschwert durch die Verzauberung gewinnt: mit Schärfe V um drei Siebtel (43 %), mit Bann V gegen
+  Untote um fast das Doppelte.
+- Der Tooltip der Waffe zeigt, was die Verzauberung auf ihr wirklich bringt („+6 Schaden durch Schärfe … und ihre
+  Fähigkeiten treffen 43 % härter“). Waffen von Minecraft und anderen Mods bleiben, wie sie sind.
 
 ### Münzen, Siedlung und Krönung
 
@@ -1750,6 +1791,179 @@ schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschi
 | **Kaulquappe** | Kaulquappe | – | golden gesprenkelt mit durchscheinendem Flossensaum; wird zum Frosch ihrer Gegend |
 | **Nautilus** | Nautilus | – | gestreiftes Perlboot mit Fangarmen; zähmbar, mit Sattel und Nautilus-Rüstung reitbar |
 | **Geisternautilus** | Zombienautilus | – | bleiches, rissiges Gehäuse mit Seepocken und Tang, seegrün glimmende Augen; trägt Wasserleichen |
+
+### Angeln (seit 0.79)
+
+![Angeln: der Drill in Wasser, Lava und Leere, das Fischbuch und die Wirkungen der Fische](docs/bilder/angeln.jpg)
+
+Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
+heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: **76 Arten** in neun Kapiteln, in jedem Gewässer und
+jeder Welt eigene.
+
+**Der Drill.** Wer beim Biss anzieht, sieht neben der Angel eine Säule – Wasser, Lava oder Sternenhimmel, je nachdem,
+worin der Schwimmer treibt. Darin zieht der Fisch auf und ab, und die grüne **Fangzone** gehört dir: Hältst du die
+Maustaste oder die Leertaste, steigt sie; lässt du los, sinkt sie. Solange der Fisch in der Fangzone schwimmt und die
+Schnur gespannt ist, füllt sich die Leiste daneben – ist sie voll, ist er gefangen. Schwimmt er hinaus, leert sie sich,
+und ist sie leer, reißt er sich los: Der Haken bleibt dann draußen und wartet auf den nächsten Biss. **Esc** gibt den
+Fisch frei.
+
+- **Wer nichts tut, fängt nichts**: Liegt die Fangzone ungehalten am Boden, hängt die Schnur durch, und die Leiste
+  wächst nicht – auch wenn der Fisch gerade dort unten steht.
+- **Jede Art kämpft anders**: Die einen ziehen ruhig ihre Bahn, andere drängen nach oben oder nach unten, zappeln oder
+  stehen still und schießen dann in jähen Sprüngen davon – und die größten wechseln mitten im Kampf die Laune. Die Sterne
+  einer Art (★ bis ★★★★★) sagen, wie schwer sie zu halten ist: Mit jedem Stern schrumpft die Fangzone, der Kampf
+  dauert länger, und die Leiste leert sich schneller. Bei einem Kabeljau misst die Fangzone ein gutes Drittel der
+  Säule, und knapp drei Sekunden darin genügen; bei einer Legende ist sie noch ein Fünftel der Säule, und es braucht
+  viereinhalb Sekunden darin – und schon eine gute Sekunde draußen kann sie kosten.
+- **Perfekter Fang**: Verlässt der Fisch die Fangzone kein einziges Mal, fällt er größer aus – das Spiel meldet es
+  mit einem eigenen Band („Perfekter Fang!“), ebenso jede **neue Art** und jeden **neuen Rekord**.
+- **Schatzkisten**: Bei etwa jedem zehnten Drill treibt eine Truhe mit in der Säule – möglichst weit weg vom Fisch.
+  Hält man die Fangzone 1,7 Sekunden über ihr, ist sie gehoben; behalten darf sie nur, wer danach auch den Fisch
+  landet. Im Wasser liegen darin die Schätze, die Minecraft sonst an die Angel hängt (verzauberte Bücher, Sättel,
+  Namensschilder, Nautilusschalen … – wie dort nur über offenem Wasser), in Lava Goldklumpen und -barren, Netherquarz,
+  Magmacreme, Lohenstaub, selten ein Goldener Apfel, Netheritplatten, Antiker Schrott oder die Schallplatte „Pigstep“,
+  im Nichts Enderperlen, Chorusfrüchte, Amethystscherben, Endstäbe, Phantomhaut, selten Enderaugen, Diamanten,
+  Echoscherben, Drachenatem oder eine Shulker-Schale.
+- **Größe und Rekord**: Jeder Fang hat eine Größe in Zentimetern; das Fischbuch merkt sich den größten jeder Art.
+- **Glück des Meeres** vergrößert die Fangzone (um 5 % je Stufe), lässt öfter eine Truhe mittreiben (5 Prozentpunkte
+  je Stufe), lockt seltene Arten und bringt weniger Kram. Die Verzauberung **Köder** verkürzt wie bisher das Warten.
+- **Kram** (alte Stiefel, Seerosen …) kommt im Wasser weiter ohne Drill an die Leine – etwa bei jedem zehnten Fang. Die
+  Erfahrung bleibt, wie sie war: eine Kugel je Fang.
+
+**Angeln in Lava.** Der Schwimmer treibt auch auf Lava – im Nether, im Abgrund und auf jedem Lavasee der Oberwelt. Er
+verbrennt nicht, und statt Blasen ziehen Flämmchen auf ihn zu. Jedes Biom des Nethers hat seinen eigenen Fisch
+(Karmesinschnapper, Wirrflosse, Seelenaal, Basalthecht), dazu überall Magmakarpfen und Glutrochen und als Legende den
+Infernokönig. Lavafische sind **feuerfest**: Sie verbrennen weder in Lava noch im Feuer und fliegen dir aus der Glut
+zu; der Schatz aus einer Truhe landet gleich vor deinen Füßen.
+
+**Angeln im Nichts.** Im End, in der Leere und im Abgrund wirft man den Haken über den Rand einer Insel: Fällt er fünf
+Blöcke unter deine Füße und ist unter ihm 24 Blöcke weit nichts als Luft, fängt ihn die Leere auf – er hängt dort wie
+auf einer Wasseroberfläche, und violette Funken ziehen auf ihn zu; der Fang landet vor deinen Füßen. Über festem Grund
+fällt der Haken einfach hinab, und von einer Klippe der Oberwelt lässt sich so nicht angeln: In allen anderen Welten
+trägt die Leere ihn nur, wo bis zum Boden der Welt nichts mehr kommt.
+
+**Die 76 Arten.** „Wo“ nennt alle Lebensräume einer Art. An besonderen Orten (Sumpf, Dschungel, Höhle, Tiefsee, die
+Biome des Nethers …) beißen die Arten, die dort zu Hause sind, fast doppelt so oft wie die Allerweltsfische. „Wann“
+heißt: Zur anderen Tageszeit beißt die Art nur selten (etwa ein Achtel so oft); „gern bei Regen“ heißt bei Regen gut
+doppelt so oft, sonst halb so oft; „nur bei Regen“ und „nur im Gewitter“ gelten ohne Ausnahme. In Welten ohne Tag und
+Nacht zählt die Tageszeit nicht. Seltenere Arten beißen entsprechend seltener. Eine **Legende** hängt an ihrem Ort und zu
+ihrer Zeit etwa bei jedem hundertsten Biss am Haken – überall gleich selten, ob dort drei Arten leben oder dreißig. Glück
+des Meeres III verdoppelt das, der Glühköder ebenso (beim Alten vom See, beim König der Tiefe und beim Infernokönig), und
+die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
+
+| Fisch | Seltenheit | Drill | Größe | Wo | Wann | Gegessen |
+|---|---|---|---|---|---|---|
+| **Flüsse & Seen** (21) | | | | | | |
+| Lachs | gewöhnlich | ★★☆☆☆ | 40–110 cm | Flüsse und Seen, kalte Gewässer, kalte Meere | immer | wie bei Minecraft |
+| Bachforelle | gewöhnlich | ★☆☆☆☆ | 20–45 cm | Flüsse und Seen | immer | Schnelligkeit (1:00) |
+| Flussbarsch | gewöhnlich | ★★☆☆☆ | 15–40 cm | Flüsse und Seen | tagsüber | Eile (1:00) |
+| Karpfen | gewöhnlich | ★★☆☆☆ | 30–80 cm | Flüsse und Seen, Sümpfe | immer | Regeneration (0:12) |
+| Hecht | ungewöhnlich | ★★★☆☆ | 45–120 cm | Flüsse und Seen | tagsüber | Stärke (0:45) |
+| Wels | ungewöhnlich | ★★★☆☆ | 60–200 cm | Flüsse und Seen, Sümpfe | nachts | Nachtsicht (2:00) |
+| Aal | ungewöhnlich | ★★★☆☆ | 40–110 cm | Flüsse und Seen | nachts · gern bei Regen | Gunst des Delfins (0:45) |
+| Stör | selten | ★★★☆☆ | 90–300 cm | Flüsse und Seen | immer | Absorption II (2:00) |
+| Goldfisch | selten | ★★☆☆☆ | 8–25 cm | Flüsse und Seen | tagsüber | Glück (5:00) |
+| Piranha | ungewöhnlich | ★★★☆☆ | 15–40 cm | Dschungelgewässer | immer | Stärke II (0:15), Hunger (0:15) |
+| Arapaima | selten | ★★★★☆ | 120–300 cm | Dschungelgewässer | immer | Extraenergie II (3:00) |
+| Schlammspringer | gewöhnlich | ★☆☆☆☆ | 8–20 cm | Sümpfe | immer | Sprungkraft II (1:00) |
+| Seesaibling | ungewöhnlich | ★★☆☆☆ | 25–70 cm | kalte Gewässer | immer | Resistenz (1:00) |
+| Regenbogenforelle | ungewöhnlich | ★★☆☆☆ | 25–70 cm | Bergbäche und Bergseen, Flüsse und Seen | tagsüber · gern bei Regen | Regeneration II (0:08) |
+| Wüstenkärpfling | ungewöhnlich | ★★☆☆☆ | 3–8 cm | Wasserlöcher in Wüste, Savanne und Tafelbergen | immer | Feuerresistenz (0:45), Schnelligkeit (0:45) |
+| Höhlensalmler | ungewöhnlich | ★★☆☆☆ | 6–12 cm | Höhlengewässer | immer | Nachtsicht (4:00), Eile (0:30) |
+| Tropfsteinschmerle | gewöhnlich | ★★☆☆☆ | 8–18 cm | Höhlengewässer | immer | Eile II (0:30) |
+| Sculk-Aal | selten | ★★★★☆ | 60–150 cm | das Tiefe Dunkel | immer | Dunkelheit (0:05), Unsichtbarkeit (1:00) |
+| Blütenkoi | selten | ★★★☆☆ | 30–70 cm | Kirschberghaine und Blumenwiesen | immer | Regeneration (0:30), Glück (1:00) |
+| Düsterhecht | ungewöhnlich | ★★★☆☆ | 50–110 cm | Dunkler Wald und Blasser Garten | immer | Unsichtbarkeit (0:45) |
+| Pilzbarsch | ungewöhnlich | ★★☆☆☆ | 15–35 cm | Pilzland | immer | Übelkeit (0:08) |
+| **Das Meer** (16) | | | | | | |
+| Kabeljau | gewöhnlich | ★☆☆☆☆ | 30–90 cm | Meer und Strand, kalte Meere | immer | wie bei Minecraft |
+| Tropenfisch | ungewöhnlich | ★★☆☆☆ | 5–20 cm | warme Meere, Dschungelgewässer | immer | wie bei Minecraft |
+| Kugelfisch | ungewöhnlich | ★★☆☆☆ | 10–40 cm | warme Meere, Meer und Strand | immer | wie bei Minecraft |
+| Hering | gewöhnlich | ★☆☆☆☆ | 15–40 cm | Meer und Strand | immer | Unterwasseratmung (1:30) |
+| Makrele | gewöhnlich | ★★☆☆☆ | 20–50 cm | Meer und Strand | tagsüber | Schnelligkeit II (0:20) |
+| Rotbarsch | gewöhnlich | ★★☆☆☆ | 25–60 cm | Meer und Strand, kalte Meere | immer | Absorption (1:00) |
+| Scholle | ungewöhnlich | ★★☆☆☆ | 25–70 cm | Meer und Strand | immer | Resistenz (1:30) |
+| Thunfisch | ungewöhnlich | ★★★☆☆ | 80–250 cm | Meer und Strand | tagsüber | Stärke (1:30), Schnelligkeit (1:30) |
+| Schwertfisch | selten | ★★★★☆ | 150–400 cm | Meer und Strand | immer | Stärke II (0:30) |
+| Mondfisch | selten | ★★★☆☆ | 100–300 cm | Meer und Strand | tagsüber | Sanfter Fall (1:30) |
+| Seepferdchen | ungewöhnlich | ★★☆☆☆ | 5–25 cm | warme Meere | immer | Gunst des Delfins (1:30) |
+| Papageifisch | ungewöhnlich | ★★☆☆☆ | 25–90 cm | warme Meere | tagsüber | Sprungkraft (2:00), Schnelligkeit (2:00) |
+| Rotfeuerfisch | selten | ★★★☆☆ | 20–45 cm | warme Meere | immer | Vergiftung II (0:06), Stärke II (1:00) |
+| Oktopus | ungewöhnlich | ★★★☆☆ | 30–120 cm | Meer und Strand | nachts | Unsichtbarkeit (0:30), Unterwasseratmung (0:30) |
+| Katzenhai | selten | ★★★★☆ | 50–160 cm | Meer und Strand, die Tiefsee | nachts | Stärke (1:00), Nachtsicht (1:00) |
+| Heilbutt | selten | ★★★☆☆ | 80–250 cm | kalte Meere | immer | Resistenz II (0:30) |
+| **Die Tiefsee** (10) | | | | | | |
+| Laternenfisch | gewöhnlich | ★★☆☆☆ | 5–15 cm | die Tiefsee | immer | Leuchten (0:30), Nachtsicht (1:00) |
+| Beilfisch | gewöhnlich | ★★☆☆☆ | 4–12 cm | die Tiefsee | immer | Schnelligkeit (0:30), Sanfter Fall (0:30) |
+| Anglerfisch | ungewöhnlich | ★★★☆☆ | 20–100 cm | die Tiefsee | nachts | Nachtsicht (5:00) |
+| Viperfisch | ungewöhnlich | ★★★☆☆ | 20–60 cm | die Tiefsee | immer | Stärke II (0:20), Verdorrung (0:04) |
+| Leuchtkalmar | ungewöhnlich | ★★☆☆☆ | 5–12 cm | die Tiefsee | nachts | Leuchten (1:00), Schnelligkeit II (0:30) |
+| Riesenassel | ungewöhnlich | ★★☆☆☆ | 15–50 cm | die Tiefsee | immer | Resistenz II (1:00), Langsamkeit (1:00) |
+| Riemenfisch | selten | ★★★★☆ | 300–800 cm | die Tiefsee | immer | Meereskraft (1:00) |
+| Geisterhai | selten | ★★★★☆ | 60–150 cm | die Tiefsee | immer | Unsichtbarkeit (1:30) |
+| Quastenflosser | episch | ★★★★☆ | 100–200 cm | die Tiefsee | immer | Extraenergie III (5:00) |
+| Vampirkalmar | episch | ★★★★☆ | 15–30 cm | die Tiefsee | nachts | Direktheilung II, Dunkelheit (0:06) |
+| **Der Nether** (6) | | | | | | |
+| Magmakarpfen | gewöhnlich | ★★☆☆☆ | 30–70 cm | Lava, überall | immer | Feuerresistenz (2:00) |
+| Karmesinschnapper | ungewöhnlich | ★★★☆☆ | 25–60 cm | Lava im Karmesinwald | immer | Stärke (2:00), Feuerresistenz (0:30) |
+| Wirrflosse | ungewöhnlich | ★★★☆☆ | 20–50 cm | Lava im Wirrwald | immer | versetzt ein paar Schritte, Feuerresistenz (0:30) |
+| Seelenaal | selten | ★★★☆☆ | 60–160 cm | Lava im Seelensandtal | immer | Schnelligkeit III (0:15), Verdorrung (0:03) |
+| Basalthecht | ungewöhnlich | ★★★☆☆ | 50–120 cm | Lava in den Basaltdeltas | immer | Resistenz (2:00), Feuerresistenz (1:00) |
+| Glutrochen | selten | ★★★★☆ | 60–140 cm | Lava, überall | immer | Feuerresistenz (5:00), Regeneration (0:20) |
+| **End & Leere** (5) | | | | | | |
+| Endlachs | gewöhnlich | ★★☆☆☆ | 30–70 cm | das End | immer | versetzt wie eine Chorusfrucht |
+| Chorusfisch | ungewöhnlich | ★★★☆☆ | 15–40 cm | das End | immer | Schwebekraft (0:04), Sanfter Fall (0:20) |
+| Leerenrochen | selten | ★★★★☆ | 80–200 cm | das End, die Leere | immer | Sanfter Fall (3:00) |
+| Sternstaub-Elritze | gewöhnlich | ★★☆☆☆ | 5–12 cm | die Leere | immer | Glück II (1:00) |
+| Kristallflosse | ungewöhnlich | ★★★☆☆ | 20–50 cm | die Leere | immer | Absorption III (1:30) |
+| **Das Feenreich** (4) | | | | | | |
+| Glimmerfisch | gewöhnlich | ★★☆☆☆ | 8–20 cm | das Feenreich | immer | Leuchten (0:20), Glück (2:00) |
+| Pilzschwimmer | ungewöhnlich | ★★☆☆☆ | 10–30 cm | das Feenreich | immer | Sprungkraft III (0:30) |
+| Mondlilien-Koi | selten | ★★★☆☆ | 30–80 cm | das Feenreich | immer | Regeneration II (0:15), Nachtsicht (1:00) |
+| Dornenhecht | selten | ★★★☆☆ | 40–100 cm | das Feenreich | immer | Stärke (2:00), Vergiftung (0:05) |
+| **Die Schattenwelt** (4) | | | | | | |
+| Nebelkarpfen | gewöhnlich | ★★☆☆☆ | 25–60 cm | die Schattenwelt | immer | Sanfter Fall (1:00), Unsichtbarkeit (0:20) |
+| Blindhecht | ungewöhnlich | ★★★☆☆ | 40–100 cm | die Schattenwelt | immer | Blindheit (0:05), Stärke III (0:20) |
+| Schattenaal | ungewöhnlich | ★★★☆☆ | 50–140 cm | die Schattenwelt | immer | Unsichtbarkeit (1:00), Schnelligkeit (1:00) |
+| Seelenfisch | selten | ★★★☆☆ | 20–50 cm | die Schattenwelt | immer | nimmt alle Leiden, Regeneration (0:10) |
+| **Der Abgrund** (3) | | | | | | |
+| Glutwels | ungewöhnlich | ★★★☆☆ | 50–130 cm | der Abgrund | immer | Feuerresistenz (3:00), Stärke (1:00) |
+| Chaosflosse | selten | ★★★★☆ | 30–90 cm | der Abgrund | immer | versetzt wie eine Chorusfrucht, Schnelligkeit II (0:20) |
+| Rissaal | episch | ★★★★☆ | 80–220 cm | der Abgrund | immer | Schwebekraft (0:06), Sanfter Fall (0:30), Stärke II (1:00) |
+| **Legenden** (7) | | | | | | |
+| Der Alte vom See | **legendär** | ★★★★★ | 140–220 cm | Flüsse und Seen | nachts | Glück II (10:00), Regeneration (1:00), Extraenergie II (10:00) |
+| Goldschuppe | **legendär** | ★★★★★ | 80–130 cm | Flüsse und Seen | tagsüber · nur bei Regen | Absorption IV (3:00), Glück III (5:00) |
+| Sturmsegler | **legendär** | ★★★★★ | 250–450 cm | Meer und Strand | nur im Gewitter | Schnelligkeit III (2:00), Stärke II (2:00) |
+| König der Tiefe | **legendär** | ★★★★★ | 120–200 cm | die Tiefsee | nachts | Nachtsicht (15:00), Stärke III (2:00), Resistenz II (2:00) |
+| Infernokönig | **legendär** | ★★★★★ | 200–350 cm | Lava, überall | immer | Feuerresistenz (10:00), Stärke III (1:00), Absorption IV (2:00) |
+| Drachenkoi | **legendär** | ★★★★★ | 90–160 cm | das End | immer | Stärke III (1:30), Resistenz II (1:30), Regeneration II (0:30) |
+| Mondschein-Koi | **legendär** | ★★★★★ | 60–110 cm | das Feenreich | immer | Regeneration III (0:30), Extraenergie III (10:00) |
+
+**Essen.** Jeder Fisch lässt sich roh essen – auch mit vollem Magen – und wirkt dann wie in der Tabelle (der Tooltip
+zeigt es, im Fischbuch aber erst nach dem ersten Fang). Manche haben ihren Preis: Der Piranha macht stark und hungrig,
+der Rotfeuerfisch vergiftet erst und stärkt dann, der Viperfisch lässt verdorren. Im Ofen, im Räucherofen oder am
+Lagerfeuer wird aus jedem Fisch der Mod ein **Gebratenes Fischfilet** (sättigt wie gebratener Lachs, ohne Wirkung). Die
+vier Fische von Minecraft bleiben, wie sie sind.
+
+**Köder.** Ein Köder in der Hand, die nicht die Angel hält, lässt alles um ein Viertel schneller beißen, halbiert den
+Kram und lockt bestimmte Arten; bei jedem Biss wird einer verbraucht.
+
+| Köder | Rezept (formlos) | lockt |
+|---|---|---|
+| **Köderwurm** (6 Stück) | Verrottetes Fleisch + Erde + Weizenkörner | die gewöhnlichen und ungewöhnlichen Fische der Flüsse und Seen (beißen 1,6-mal so oft) |
+| **Glühköder** (4 Stück) | 4 Köderwürmer + Leuchttintenbeutel + Leuchtbeeren – oder 4 Köderwürmer + Leuchtsteinstaub + Spinnenauge | alles, was im Dunkeln lebt: Nachtfische, Tiefsee, Höhlen, das Tiefe Dunkel, Lava (beißen 2,2-mal so oft) |
+
+**Das Fischbuch (Taste H).** Jeder hat es immer bei sich. Links neun Kapitel – Flüsse & Seen, Das Meer, Die Tiefsee, Der
+Nether, End & Leere, Das Feenreich, Die Schattenwelt, Der Abgrund, Legenden – mit einem Hinweis, wo und wie man dort
+angelt, und allen Arten des Kapitels; rechts die gewählte Art: Seltenheit, Sterne, wie oft gefangen, Lebensraum,
+Tageszeit, Wetter, Größe, der eigene **Rekord**, die Wirkung beim Essen und ein paar Zeilen über den Fisch. Was noch nie
+am Haken hing, ist ein **Schattenriss** ohne Namen – Lebensraum, Zeit und Größe verrät das Buch trotzdem, damit man weiß,
+wo man suchen muss. Unten steht, wie viele Fische und Schätze man schon gelandet hat. Der Fortschritt gehört zum
+Spieler und bleibt nach dem Tod erhalten.
+
+Für andere Mods: Jeder Fang löst wie bei Minecraft das Angel-Ereignis und die Fortschritte aus; die Fische stehen in
+`#minecraft:fishes`, `#c:foods/raw_fish` und `#kingdomsatwar:fish`. Im Kreativmodus liegen Fische und Köder im Tab
+**Kingdoms at War: Angeln**.
 
 ### Das lebendige Meer
 
@@ -3104,18 +3318,22 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
-| `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik geben |
+| `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | `/kaw realms` · `/kaw realms check` · `/kaw realms reset` | (nur Operatoren) Lage und Zustand der vier Reiche, prüfen, ob die Stammburgen in der Welt stehen, alle Reiche zurücksetzen |
 | `/kaw raid [Reich]` · `/kaw raid stop` | (nur Operatoren) sofort einen Heerhaufen gegen die eigene Siedlung schicken (das Reich erklärt dafür den Krieg), alle Heerhaufen abziehen |
 | **R** | Drachenodem beim Reiten (änderbar unter Optionen → Steuerung) |
 | **V** (halten) | Zauberkreis: Zauber des Aetherit-Stabs wählen (änderbar unter Optionen → Steuerung) |
 | **K** | Der Heldenweg (die Heldenstufe als Pfad); von dort Talente & Werte (änderbar unter Optionen → Steuerung) |
+| **J** | die Chronik des Siegels aufschlagen (seit 0.79 statt des Buchs; änderbar unter Optionen → Steuerung) |
+| **H** | das Fischbuch aufschlagen (änderbar unter Optionen → Steuerung) |
 | **G** / Schleichen + Rechtsklick | als Legende (Heldenstufe 100) das Wesen vor dir streicheln, gedrückt halten streichelt weiter (G änderbar unter Optionen → Steuerung) |
 | `showIntro` (Client) | Intro beim ersten Betreten einer Welt zeigen (Standard: an) |
 | `narratorVoice` (Client) | Der Erzähler spricht zu den Kapiteln der Geschichte (Standard: an; aus: nur der Text) |
 | `spiderLook` (Client) | Aussehen der Spinnen: `DETAILED` (eigenes Modell, Standard), `CLASSIC` (Minecrafts Spinne) oder `MOOSLING` (Arachnophobie-Modus: runde Moosbälle ohne Beine statt Spinnen) – im Spiel unter Mods → Kingdoms at War → Konfiguration |
+| `biomeAmbienceVolume` (Client) | Lautstärke der Biom-Klänge in Prozent (Standard: 70; derselbe Wert wie der Regler „Biom-Klänge“ unter Optionen → Musik & Geräusche) |
 | `armyLimit` (Server) | höchstens so viele Soldaten je Spieler (Standard: 32, je Kaserne 8 mehr) |
+| `soldierVoices` (Server) | die eigenen Truppen sprechen beim Anwerben, bei Befehlen, im Angriff und nach dem Sieg (Standard seit 0.79: aus) |
 | `tradesBeforePause` (Server) | so oft kann man mit einem Bürger oder Dorfbewohner handeln, bevor sein Laden Pause macht (Standard: 16) |
 | `tradePauseMinutes` (Server) | so lange dauert die Pause in echten Minuten (Standard: 180) |
 | `siegeBlockDamage` (Server) | Belagerungswaffen zerschlagen Mauern, Tore und Türen (Standard: an; nie in Siedlungen, am Siegelkreis oder am Reichsbanner) |
@@ -3130,7 +3348,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.26.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.79.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3242,12 +3460,22 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.77 – Der Weg zum Unsterblichen** (fertig): Heldenstufe bis 200 mit fünf neuen Rängen, die Heldenkraft
      je Stufe, Talente bis 40 Punkte, je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit und die Heldenherzen
      (die Lebensleiste in farbigen Schichten);
-   - zuletzt **0.78 – Schrolli der Allmächtige** (fertig): die dritte Gestalt des Schöpfers mit sechs eigenen Künsten,
+   - **0.78 – Schrolli der Allmächtige** (fertig): die dritte Gestalt des Schöpfers mit sechs eigenen Künsten,
      Lichtkäfig und Schwarzes Loch, mit jeder Gestalt ein neuer Hof (das Firmament, das Herz der Sonne), der neue Speer,
      Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, die Rüstung in Schichten und das bewahrte
-     Inventar der Unsterblichen; in 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser.
+     Inventar der Unsterblichen; in 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser;
+   - zuletzt **0.79 – Angeln** (fertig): der Drill als Minispiel, 76 Fischarten für jedes Biom und jede Welt, Angeln in
+     Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung, Köder, Schatzkisten und das Fischbuch; dazu
+     Klangwelten in jedem Biom mit eigenem Regler, die Chronik per Taste, Bauwerke weiter auseinander und Verzauberungen,
+     die auf den Waffen der Mod im Verhältnis wirken.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
+
+   **Als Nächstes geplant:** das **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit
+   einem riesigen Kraken als Boss –; neue **Totems** (Wirkung in der Zweithand, Wiederbelebung mit mehr Herzen); mächtige
+   **goldene Äpfel**, die sehr schwer herzustellen sind; viele neue **Waffen, Spitzhacken und Schilde** als 3D-Modelle, die
+   auch in der Außenansicht richtig in der Hand liegen; neue Wesen; Bosse, die besser auf Elytren reagieren; schönere
+   Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.

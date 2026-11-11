@@ -33,6 +33,13 @@ public final class ModKeyMappings {
     /** Streicheln, die Belohnung der Legende: das Wesen vor einem (Standard: G; gedrückt halten streichelt weiter). */
     public static final KeyMapping PAT = new KeyMapping("key.kingdomsatwar.pat", KeyConflictContext.IN_GAME,
             InputConstants.Type.KEYBOARD, InputConstants.KEY_G, HERO);
+    /** Die Chronik des Siegels aufschlagen – seit 0.79 ohne Buch im Gepäck (Standard: J). */
+    public static final KeyMapping CHRONICLE = new KeyMapping("key.kingdomsatwar.chronicle", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_J, HERO);
+
+    /** Das Fischbuch aufschlagen (Standard: H). */
+    public static final KeyMapping FISH_BOOK = new KeyMapping("key.kingdomsatwar.fish_book", KeyConflictContext.IN_GAME,
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_H, HERO);
 
     private ModKeyMappings() {}
 
@@ -45,6 +52,8 @@ public final class ModKeyMappings {
         event.registerCategory(HERO);
         event.register(CHARACTER);
         event.register(PAT);
+        event.register(CHRONICLE);
+        event.register(FISH_BOOK);
     }
 
     @SubscribeEvent
@@ -53,6 +62,16 @@ public final class ModKeyMappings {
         while (CHARACTER.consumeClick()) {
             if (minecraft.player != null && minecraft.gui.screen() == null) {
                 minecraft.gui.setScreen(new io.github.sirschrolli.kingdomsatwar.client.hero.HeroPathScreen());
+            }
+        }
+        while (CHRONICLE.consumeClick()) {
+            if (minecraft.player != null && minecraft.gui.screen() == null) {
+                ClientPacketDistributor.sendToServer(io.github.sirschrolli.kingdomsatwar.network.RequestChroniclePayload.INSTANCE);
+            }
+        }
+        while (FISH_BOOK.consumeClick()) {
+            if (minecraft.player != null && minecraft.gui.screen() == null) {
+                ClientPacketDistributor.sendToServer(io.github.sirschrolli.kingdomsatwar.network.RequestFishBookPayload.INSTANCE);
             }
         }
         while (DRAGON_BREATH.consumeClick()) {

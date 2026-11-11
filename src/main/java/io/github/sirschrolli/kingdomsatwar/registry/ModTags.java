@@ -305,6 +305,9 @@ public final class ModTags {
         public static final TagKey<Item> SEEDS_CABBAGE = common("seeds/cabbage");
         public static final TagKey<Item> SEEDS_BARLEY = common("seeds/barley");
 
+        /** Die eigenen Fische des Angelns (seit 0.79): Aus jedem wird gebraten ein Fischfilet. */
+        public static final TagKey<Item> FISH = mod("fish");
+
         private static TagKey<Item> mod(String path) {
             return TagKey.create(Registries.ITEM, KingdomsAtWar.id(path));
         }

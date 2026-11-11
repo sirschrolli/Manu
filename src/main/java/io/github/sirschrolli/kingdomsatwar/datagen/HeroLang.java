@@ -35,6 +35,7 @@ final class HeroLang {
         text.add("key.category.kingdomsatwar.hero", "Kingdoms at War: Hero", "Kingdoms at War: Held");
         text.add("key.kingdomsatwar.character", "Hero's path & character", "Heldenweg & Charakter");
         text.add("key.kingdomsatwar.pat", "Pat (Legend reward)", "Streicheln (Belohnung der Legende)");
+        text.add("key.kingdomsatwar.chronicle", "Open the Chronicle of the Seal", "Chronik des Siegels aufschlagen");
         text.add("gui.kingdomsatwar.character.title", "Character", "Charakter");
         text.add("gui.kingdomsatwar.character.level", "Hero Level %s", "Heldenstufe %s");
         text.add("gui.kingdomsatwar.character.experience", "%s / %s", "%s / %s");

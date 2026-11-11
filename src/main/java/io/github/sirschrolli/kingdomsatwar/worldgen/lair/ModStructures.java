@@ -324,9 +324,9 @@ public final class ModStructures {
      * Mindestabstand.
      */
     private static void siteSets(BootstrapContext<StructureSet> context, HolderGetter<Structure> structures, HolderGetter<Biome> biomes) {
-        // kein Bauwerk näher als sechs Chunks an einer Stammburg
+        // kein Bauwerk näher als zehn Chunks an einer Stammburg
         var castles = java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
-                .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(REALM_CASTLES), 6));
+                .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(REALM_CASTLES), 10));
         for (var kind : io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.values()) {
             var structure = structures.getOrThrow(site(kind));
             StructurePlacement placement = switch (kind) {
@@ -335,12 +335,12 @@ public final class ModStructures {
                 case AQUEDUCT -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         net.minecraft.core.Vec3i.ZERO,
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_3,
-                        0.0015f, 71_404_413, castles, 1, 0,
+                        0.0009f, 71_404_413, castles, 1, 0,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
                 case TIDE_SHRINE -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         new net.minecraft.core.Vec3i(9, 0, 9),
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.LEGACY_TYPE_2,
-                        0.007f, 50_918_377, castles, 1, 0,
+                        0.003f, 50_918_377, castles, 1, 0,
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
                 case SEA_DRAGON -> spread(32, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 165_745_311, castles);
                 case CARAVANSERAI -> spread(40, 12, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 14_357_631, castles);
@@ -350,7 +350,7 @@ public final class ModStructures {
                 case BANDIT_CAMP -> new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(
                         net.minecraft.core.Vec3i.ZERO,
                         net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
-                        0.25f, 165_745_297, castles, 40, 12,
+                        0.25f, 165_745_297, castles, wider(40), gap(wider(40)),
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR);
                 case CHARCOAL_CAMP -> spread(50, 14, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 91_231_129, castles);
                 case EMBER_GATE -> spread(56, 20, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 34_222_647, castles);
@@ -378,12 +378,30 @@ public final class ModStructures {
         }
     }
 
-    /** Zufallsraster wie Vanilla „random_spread“, mit Sperrzone. */
+    /**
+     * Seit 0.79 stehen alle Bauwerke seltener und weiter auseinander: Jedes Feld ist um diesen Faktor breiter als bisher, und
+     * zwei Bauwerke derselben Art halten mindestens {@link #SPREAD_GAP} der Feldbreite Abstand.
+     */
+    public static final float SPREAD_WIDER = 1.6f;
+    public static final float SPREAD_GAP = 0.45f;
+
+    /** Feldbreite (Chunks) eines Bauwerks nach der Verbreiterung. */
+    public static int wider(int spacing) {
+        return Math.round(spacing * SPREAD_WIDER);
+    }
+
+    /** Mindestabstand (Chunks) zweier Bauwerke derselben Art in Feldern der Breite {@code spacing}. */
+    public static int gap(int spacing) {
+        return Math.max(1, Math.round(spacing * SPREAD_GAP));
+    }
+
+    /** Zufallsraster wie Vanilla „random_spread“, mit Sperrzone – {@code spacing} ist die Feldbreite vor der Verbreiterung. */
     private static StructurePlacement spread(int spacing, int separation, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType type,
             int salt, java.util.Optional<net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.ExclusionZone> exclusion) {
+        int field = wider(spacing);
         return new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
                 net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT, 1.0f,
-                salt, exclusion, spacing, separation, type);
+                salt, exclusion, field, Math.max(separation, gap(field)), type);
     }
 
     /** Wer an den eigenen Bauwerken auftaucht: Hexen (und eine Katze) am Hexenbaum, Wegelagerer im Räuberlager. */
@@ -455,7 +473,7 @@ public final class ModStructures {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         context.register(ALL_LAIRS, new StructureSet(java.util.List.of(), new AnyNestPlacement()));
         context.register(UMBRER_VILLAGES, new StructureSet(structures.getOrThrow(UMBRER_VILLAGE_STRUCTURE),
-                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(28, 10,
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(wider(28), gap(wider(28)),
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 73_419_211)));
         // Felder von 18 Chunks, mindestens 9 Chunks zwischen zwei Bauwerken (weiter, als zwei Bauplätze reichen)
         java.util.List<StructureSet.StructureSelectionEntry> sites = new java.util.ArrayList<>();
@@ -463,7 +481,7 @@ public final class ModStructures {
             sites.add(StructureSet.entry(structures.getOrThrow(shadowSite(kind)), siteWeight(kind)));
         }
         context.register(SHADOW_SITES_SET, new StructureSet(sites,
-                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(18, 9,
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(wider(18), gap(wider(18)),
                         net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 61_442_917)));
         context.register(SHADOW_CITADEL_SET, new StructureSet(structures.getOrThrow(SHADOW_CITADEL_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.citadel.CitadelPlacement(900, 1700,
@@ -485,10 +503,10 @@ public final class ModStructures {
         for (var style : io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle.values()) {
             villageEntries.add(StructureSet.entry(structures.getOrThrow(village(style))));
         }
-        context.register(VILLAGES, new StructureSet(villageEntries, new io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement(40, 12,
+        context.register(VILLAGES, new StructureSet(villageEntries, new io.github.sirschrolli.kingdomsatwar.worldgen.village.VillagePlacement(wider(40), gap(wider(40)),
                 10_387_312, java.util.Optional.empty(), 28, 10)));
         var villages = context.lookup(Registries.STRUCTURE_SET).getOrThrow(VILLAGES);
-        context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(46, 16,
+        context.register(MAGE_TOWERS, new StructureSet(towers, new io.github.sirschrolli.kingdomsatwar.worldgen.tower.MageTowerPlacement(wider(46), gap(wider(46)),
                 47_719_163, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
                         .ExclusionZone(villages, 7)), 14)));
         siteSets(context, structures, biomes);

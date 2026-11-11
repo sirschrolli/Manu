@@ -215,6 +215,8 @@ public final class ModGameTests {
         VillageLayoutGameTests.init(); // Grundrisse der Dörfer
         GolemGameTests.init();     // Golems und Wichtel
         AmbienceGameTests.init();  // Klangwelten der Biome
+        FishingGameTests.init();   // das Angeln
+        WeaponGameTests.init();    // Verzauberungen auf den Waffen der Mod
         RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
         NetherGameTests.init();    // Nether-Volk
         EndGameTests.init();       // Wesen des Ends
@@ -279,6 +281,8 @@ public final class ModGameTests {
         MageGameTests.register(event, environment);
         OverworldGameTests.register(event, environment);
         AmbienceGameTests.register(event, environment);
+        FishingGameTests.register(event, environment);
+        WeaponGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
         WarGameTests.register(event, environment);

@@ -5,6 +5,11 @@ final class RulesLang {
     private RulesLang() {}
 
     static void register(WarLang.Text text) {
+        // Verzauberungen auf den Waffen der Mod (seit 0.79): was Schärfe, Bann und Nemesis bringen
+        text.add("tooltip.kingdomsatwar.enchant.sharpness", "+%s damage from Sharpness", "+%s Schaden durch Schärfe");
+        text.add("tooltip.kingdomsatwar.enchant.smite", "+%s damage against the undead", "+%s Schaden gegen Untote");
+        text.add("tooltip.kingdomsatwar.enchant.bane", "+%s damage against arthropods", "+%s Schaden gegen Gliederfüßer");
+        text.add("tooltip.kingdomsatwar.enchant.ability", " …and its abilities hit %s%% harder", " … und ihre Fähigkeiten treffen %s %% härter");
         // Härte
         text.add("message.kingdomsatwar.hardness.weakened", "Death still lingers in your bones – your blows are weaker for a while.",
                 "Der Tod steckt dir noch in den Knochen – deine Schläge sind eine Weile schwächer.");

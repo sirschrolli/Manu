@@ -57,6 +57,12 @@ final class AmbienceGameTests {
         biomes.addAll(io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes.ALL);
         // seit 0.61 haben auch die Standard-Biome der Oberwelt eine Klangwelt
         biomes.addAll(AmbienceProfiles.STANDARD);
+        // seit 0.79 auch das End, das Tiefe Dunkel und die Kampfdimensionen
+        biomes.addAll(AmbienceProfiles.EXTRA);
+        biomes.add(io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.BIOME);
+        for (io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind kind : io.github.sirschrolli.kingdomsatwar.arena.BossArenaKind.values()) {
+            biomes.add(kind.biome());
+        }
         helper.assertTrue(AmbienceProfiles.all().keySet().containsAll(biomes) && biomes.containsAll(AmbienceProfiles.all().keySet()),
                 "Klangwelten und Biomlisten passen nicht zusammen");
         Set<String> usedBeds = new HashSet<>();
@@ -77,6 +83,15 @@ final class AmbienceGameTests {
         for (String bed : AmbientSounds.BEDS) {
             helper.assertTrue(usedBeds.contains(bed), "Teppich wird nirgends gespielt: " + bed);
         }
+        // seit 0.79 ist jedes Biom zu hören: Wer keine eigene Klangwelt hat, bekommt eine nach seinen Merkmalen – nur der
+        // Nether bleibt bei Minecraft
+        helper.assertTrue(AmbienceProfiles.fallbackProfiles().size() == 9
+                        && AmbienceProfiles.fallbackProfiles().values().stream().noneMatch(java.util.Objects::isNull),
+                "Klangwelten nach Merkmalen unvollständig: " + AmbienceProfiles.fallbackProfiles().keySet());
+        helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME).listElements().forEach(biome -> {
+            boolean nether = biome.is(net.minecraft.tags.BiomeTags.IS_NETHER);
+            helper.assertTrue((AmbienceProfiles.of(biome) != null) != nether, "Klangwelt fehlt (oder im Nether zu viel): " + biome.key().identifier());
+        });
         // jedes Klangereignis ist angemeldet und steht mit seinen Dateien in sounds.json
         JsonObject sounds = readSoundsJson(helper);
         List<String> events = new ArrayList<>();

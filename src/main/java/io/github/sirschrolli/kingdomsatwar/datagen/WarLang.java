@@ -50,6 +50,10 @@ final class WarLang {
         text.add("command.kingdomsatwar.raid.running", "A war band is already marching on your town", "Gegen deine Siedlung zieht schon ein Heerhaufen");
         text.add("command.kingdomsatwar.raid.conquered", "That realm is conquered", "Dieses Reich ist erobert");
         text.add("command.kingdomsatwar.raid.no_room", "No room for a war band to gather near your town", "Kein Platz für einen Heerhaufen bei deiner Siedlung");
+        text.add("kingdomsatwar.configuration.soldierVoices", "Troops speak", "Truppen sprechen");
+        text.add("kingdomsatwar.configuration.soldierVoices.tooltip",
+                "Your troops speak when recruited, commanded, attacking and victorious. Off since 0.79: they salute and fight in silence.",
+                "Deine Truppen sprechen beim Anwerben, bei Befehlen, im Angriff und nach dem Sieg. Seit 0.79 aus: Sie salutieren und kämpfen stumm.");
         text.add("kingdomsatwar.configuration.realmRaids", "War bands of the realms", "Heerhaufen der Reiche");
         text.add("kingdomsatwar.configuration.realmRaids.tooltip",
                 "Realms you are at war with send war bands against your town (only while you are there).",
