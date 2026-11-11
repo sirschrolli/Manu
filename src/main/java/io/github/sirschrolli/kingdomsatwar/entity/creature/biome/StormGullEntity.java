@@ -164,6 +164,11 @@ public class StormGullEntity extends SoaringBird {
         this.entityData.set(DATA_CARRIED, stack);
     }
 
+    /** Für Tests: wie lange sie noch wartet, bevor sie wieder einen Fisch stiehlt. */
+    public void setStealCooldown(int ticks) {
+        this.stealCooldown = Math.max(0, ticks);
+    }
+
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason reason,
             @Nullable SpawnGroupData groupData) {

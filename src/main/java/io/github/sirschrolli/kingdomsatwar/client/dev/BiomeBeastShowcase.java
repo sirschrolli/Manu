@@ -56,7 +56,7 @@ final class BiomeBeastShowcase {
 
     private BiomeBeastShowcase() {}
 
-    /** {@code only}: nur diese Bühne (leopard) – oder alle. */
+    /** {@code only}: nur diese Bühnen (z. B. "elk_gull") – oder alle. */
     static void beasts(Deque<Step> steps, String only) {
         Mob[] m = new Mob[8];
         steps.add(Step.command("difficulty normal"));
@@ -67,7 +67,7 @@ final class BiomeBeastShowcase {
         steps.add(Step.once(minecraft -> minecraft.options.fov().set(55)));
 
         // ------------------------------------------------------------------ Schneeleopard
-        if (only.isEmpty() || only.equals("leopard")) {
+        if (only.isEmpty() || only.contains("leopard")) {
             build(steps, level -> frost(level, LX, SY, LZ), OverworldBiomes.FROST_PEAKS, LX, SY, LZ);
             // zwei Leoparden: der helle oben auf dem Felsen, der rauchgraue im Schnee davor
             arrive(steps, LX + 0.6, SY + 0.9, LZ - 1.2, LX - 1.0, SY + 1.0, LZ + 4.2);
@@ -128,7 +128,7 @@ final class BiomeBeastShowcase {
         }
 
         // ------------------------------------------------------------------ Urelch
-        if (only.isEmpty() || only.equals("elk")) {
+        if (only.isEmpty() || only.contains("elk")) {
             build(steps, level -> grove(level, EX, SY, EZ), OverworldBiomes.PRIMEVAL_FOREST, EX, SY, EZ);
             // die Herde: der Bulle vorn, eine grasende Kuh und ein Kalb dahinter
             arrive(steps, EX + 1.8, SY + 0.6, EZ - 3.0, EX - 1.2, SY + 1.6, EZ + 4.2);
@@ -192,7 +192,7 @@ final class BiomeBeastShowcase {
                 clear(o, EX, SY, EZ);
                 m[0] = creature(o, BiomeBeasts.PRIMEVAL_ELK.get(), EX + 0.5, SY, EZ + 3.2, 215.0f, e -> e.setBull(true));
             }));
-            look(steps, EX + 1.8, SY + 1.4, EZ + 0.4, EX + 0.5, SY + 2.3, EZ + 3.2);
+            look(steps, EX + 3.4, SY + 1.0, EZ - 1.2, EX + 0.5, SY + 2.2, EZ + 3.2);
             steps.add(Step.waitTicks(40));
             steps.add(Step.screenshot("beast_elk_dusk"));
             steps.add(Step.command("time set 1000"));
@@ -200,16 +200,16 @@ final class BiomeBeastShowcase {
         }
 
         // ------------------------------------------------------------------ Sturmmöwe
-        if (only.isEmpty() || only.equals("gull")) {
+        if (only.isEmpty() || only.contains("gull")) {
             build(steps, level -> coast(level, GX, SY, GZ), OverworldBiomes.STORM_COAST, GX, SY, GZ, 120, 170);
             // der Schwarm über dem Steg: drei in der Luft, eine auf dem Pfahl, eine dunkle auf dem Wasser
-            arrive(steps, GX - 0.5, SY + 0.3, GZ - 5.0, GX + 1.2, SY + 3.0, GZ + 8.0);
+            arrive(steps, GX + 0.2, SY + 0.5, GZ - 1.2, GX + 0.8, SY + 2.6, GZ + 6.0);
             steps.add(Step.server(o -> {
-                m[0] = gull(o, GX - 0.8, SY + 2.7, GZ + 2.8, 150.0f, 0, true);
-                m[1] = gull(o, GX + 3.2, SY + 5.0, GZ + 9.5, 95.0f, 1, true);
-                m[2] = gull(o, GX - 3.6, SY + 4.3, GZ + 12.5, 290.0f, 0, true);
+                m[0] = gull(o, GX - 0.5, SY + 2.3, GZ + 2.6, 150.0f, 0, true);
+                m[1] = gull(o, GX + 2.4, SY + 3.6, GZ + 6.5, 95.0f, 1, true);
+                m[2] = gull(o, GX - 2.6, SY + 3.4, GZ + 7.5, 290.0f, 0, true);
                 m[3] = gull(o, GX + 3.5, SY + 2.0, GZ + 6.5, 200.0f, 0, false);
-                m[4] = gull(o, GX - 2.5, SY - 0.32, GZ + 8.5, 160.0f, 1, false);
+                m[4] = gull(o, GX - 1.6, SY - 0.32, GZ + 6.5, 160.0f, 1, false);
             }));
             steps.add(Step.waitTicks(45));
             steps.add(Step.screenshot("beast_gull_flock"));
@@ -218,7 +218,7 @@ final class BiomeBeastShowcase {
                 clear(o, GX, SY, GZ);
                 m[0] = gull(o, GX + 3.5, SY + 2.0, GZ + 6.5, 70.0f, 0, false);
             }));
-            look(steps, GX + 1.1, SY + 0.75, GZ + 4.7, GX + 3.5, SY + 2.45, GZ + 6.5);
+            look(steps, GX + 2.1, SY + 1.15, GZ + 5.2, GX + 3.5, SY + 2.35, GZ + 6.5);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[0], StormGullEntity.EVENT_CALL)));
             steps.add(Step.waitTicks(9));
@@ -228,9 +228,9 @@ final class BiomeBeastShowcase {
                 clear(o, GX, SY, GZ);
                 m[0] = gull(o, GX + 1.0, SY + 2.6, GZ + 4.6, 128.0f, 0, true);
                 ((StormGullEntity) m[0]).setCarried(new ItemStack(Items.COD));
-                m[1] = gull(o, GX + 3.4, SY + 3.5, GZ + 8.8, 140.0f, 1, true);
+                m[1] = gull(o, GX + 2.6, SY + 3.3, GZ + 7.4, 140.0f, 1, true);
             }));
-            look(steps, GX + 3.4, SY + 0.9, GZ + 0.4, GX + 1.6, SY + 2.9, GZ + 5.4);
+            look(steps, GX + 2.7, SY + 1.3, GZ + 2.3, GX + 1.4, SY + 2.8, GZ + 5.0);
             steps.add(Step.waitTicks(40));
             steps.add(Step.screenshot("beast_gull_thief"));
             // am Felsen: eine helle pickt, die dunkle Mantelmöwe schaut zu
@@ -239,7 +239,7 @@ final class BiomeBeastShowcase {
                 m[0] = gull(o, GX - 5.0, SY + 1.0, GZ + 3.1, 105.0f, 0, false);
                 m[1] = gull(o, GX - 6.4, SY + 1.0, GZ + 3.7, 235.0f, 1, false);
             }));
-            look(steps, GX - 3.2, SY + 0.35, GZ + 0.1, GX - 5.6, SY + 1.5, GZ + 3.4);
+            look(steps, GX - 4.0, SY + 0.9, GZ + 1.2, GX - 5.6, SY + 1.4, GZ + 3.4);
             steps.add(Step.waitTicks(30));
             steps.add(Step.server(o -> event(m[0], StormGullEntity.EVENT_PECK)));
             steps.add(Step.waitTicks(3));
@@ -248,23 +248,20 @@ final class BiomeBeastShowcase {
         }
 
         // ------------------------------------------------------------------ Greif
-        if (only.isEmpty() || only.equals("griffin")) {
+        if (only.isEmpty() || only.contains("griffin")) {
             build(steps, level -> gorge(level, KX, SY, KZ), OverworldBiomes.ROCK_GORGES, KX, SY, KZ);
-            // auf seiner Felsnadel sitzend, von unten; der Rostgreif auf einem Felsen daneben
-            arrive(steps, KX - 3.6, SY + 0.2, KZ - 4.6, KX + 0.6, SY + 6.6, KZ + 7.0);
-            steps.add(Step.server(o -> {
-                m[0] = griffin(o, KX + 2.5, SY + 9.0, KZ + 6.5, 150.0f, 0, false, g -> g.setResting(true));
-                m[1] = griffin(o, KX - 4.5, SY + 3.0, KZ + 9.5, 205.0f, 1, false, g -> { });
-            }));
+            // auf seiner Felsnadel sitzend, ein wenig von unten
+            arrive(steps, KX + 4.4, SY + 8.4, KZ + 9.2, KX + 6.5, SY + 10.8, KZ + 13.5);
+            steps.add(Step.server(o -> m[0] = griffin(o, KX + 6.5, SY + 10.0, KZ + 13.5, 160.0f, 0, false, g -> g.setResting(true))));
             steps.add(Step.waitTicks(50));
             steps.add(Step.screenshot("beast_griffin_perch"));
             // hoch über der Schlucht: der goldene schlägt, der Rostgreif segelt weiter hinten
             steps.add(Step.server(o -> {
                 clear(o, KX, SY, KZ);
-                m[0] = griffin(o, KX + 0.5, SY + 8.0, KZ + 8.0, 250.0f, 0, true, g -> { });
-                m[1] = griffin(o, KX - 7.0, SY + 13.0, KZ + 22.0, 75.0f, 1, true, g -> { });
+                m[0] = griffin(o, KX + 0.5, SY + 5.5, KZ + 5.0, 250.0f, 0, true, g -> { });
+                m[1] = griffin(o, KX - 4.0, SY + 9.0, KZ + 14.0, 70.0f, 1, true, g -> { });
             }));
-            look(steps, KX - 2.0, SY + 1.5, KZ - 3.0, KX - 0.6, SY + 9.6, KZ + 10.0);
+            look(steps, KX - 0.8, SY + 2.4, KZ + 0.2, KX + 0.2, SY + 6.4, KZ + 5.6);
             steps.add(Step.waitTicks(40));
             steps.add(Step.screenshot("beast_griffin_soar"));
             // der Sturzflug auf einen Hasen: Schwingen zurück, Nase hinab, die Fänge voran
@@ -276,7 +273,7 @@ final class BiomeBeastShowcase {
                     g.setXRot(52.0f);
                 });
             }));
-            look(steps, KX + 6.6, SY + 1.0, KZ + 3.4, KX + 0.4, SY + 3.4, KZ + 4.4);
+            look(steps, KX + 6.6, SY + 1.3, KZ + 3.4, KX + 0.4, SY + 4.2, KZ + 4.6);
             steps.add(Step.waitTicks(40));
             steps.add(Step.screenshot("beast_griffin_dive"));
             // der Zugriff: Fänge vor, die Schwingen bremsen
@@ -293,7 +290,7 @@ final class BiomeBeastShowcase {
             // der Schrei: Kopf hoch, Schnabel auf, die Schwingen gelüpft
             steps.add(Step.server(o -> {
                 clear(o, KX, SY, KZ);
-                m[0] = griffin(o, KX + 0.5, SY, KZ + 4.2, 140.0f, 0, false, g -> { });
+                m[0] = griffin(o, KX + 0.5, SY, KZ + 4.2, 195.0f, 0, false, g -> { });
             }));
             look(steps, KX - 2.4, SY + 0.5, KZ + 0.4, KX + 0.4, SY + 2.0, KZ + 4.2);
             steps.add(Step.waitTicks(30));
@@ -670,8 +667,8 @@ final class BiomeBeastShowcase {
     }
 
     /**
-     * Eine Felsschlucht: trockenes Gras, grober Boden und Geröll, gebänderte Felsnadeln, hinten die Schluchtwand, Akazien. Vorn
-     * rechts eine hohe Nadel mit flacher Kuppe (darauf sitzt der Greif), links ein niedriger Felsen und ein Felsblock.
+     * Eine Felsschlucht: trockenes Gras, grober Boden und Geröll, gebänderte Felsnadeln, hinten die Schluchtwand, Akazien. Rechts
+     * hinten eine hohe Nadel mit flacher Kuppe (darauf sitzt der Greif), links ein niedriger Felsen und ein Felsblock.
      */
     private static void gorge(ServerLevel level, int cx, int y, int cz) {
         clearAbove(level, cx, y, cz);
@@ -698,9 +695,9 @@ final class BiomeBeastShowcase {
             }
         }
         // die Felsnadel des Greifen: rund, nach oben schmaler, oben eine flache Kuppe (3×3)
-        spire(level, cx + 2, y, cz + 6, 9, 2.6, 1.6, random);
-        Showcase.fill(level, new BlockPos(cx + 1, y + 9, cz + 5), new BlockPos(cx + 3, y + 9, cz + 7), Blocks.AIR.defaultBlockState());
-        Showcase.fill(level, new BlockPos(cx + 1, y + 8, cz + 5), new BlockPos(cx + 3, y + 8, cz + 7), ModBlocks.SHALE.base().get().defaultBlockState());
+        spire(level, cx + 6, y, cz + 13, 10, 2.2, 1.5, random);
+        Showcase.fill(level, new BlockPos(cx + 5, y + 10, cz + 12), new BlockPos(cx + 7, y + 13, cz + 14), Blocks.AIR.defaultBlockState());
+        Showcase.fill(level, new BlockPos(cx + 5, y + 9, cz + 12), new BlockPos(cx + 7, y + 9, cz + 14), ModBlocks.SHALE.base().get().defaultBlockState());
         // links ein niedriger Felsen (3 hoch) und ein flacher Block (1 hoch)
         for (int dx = -6; dx <= -3; dx++) {
             for (int dz = 8; dz <= 11; dz++) {
@@ -722,7 +719,7 @@ final class BiomeBeastShowcase {
         for (int i = 0; i < 26; i++) {
             int x = cx - 44 + random.nextInt(89);
             int z = cz + 12 + random.nextInt(40);
-            if (Math.abs(x - cx) < 8 && z < cz + 20) {
+            if (Math.abs(x - cx) < 8 && z < cz + 20 || Math.abs(x - cx - 6) < 6 && Math.abs(z - cz - 13) < 6) {
                 continue;
             }
             spire(level, x, y, z, 8 + random.nextInt(z > cz + 30 ? 22 : 12), 1.6 + random.nextDouble() * 2.4, 0.8 + random.nextDouble(), random);
@@ -756,7 +753,7 @@ final class BiomeBeastShowcase {
             double r = r0 + (r1 - r0) * t;
             for (int dx = -reach; dx <= reach; dx++) {
                 for (int dz = -reach; dz <= reach; dz++) {
-                    double d = Math.sqrt(dx * dx + dz * dz) + (random.nextDouble() - 0.5) * 0.6;
+                    double d = Math.sqrt(dx * dx + dz * dz) + (random.nextDouble() - 0.5) * 0.35;
                     if (d <= r) {
                         set(level, x + dx, y + dy, z + dz, strata(dy));
                     }

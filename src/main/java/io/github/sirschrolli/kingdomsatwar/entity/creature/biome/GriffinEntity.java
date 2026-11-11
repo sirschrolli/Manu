@@ -64,7 +64,7 @@ public class GriffinEntity extends SoaringBird {
     /** So lange (Takte) ist er nach einer Mahlzeit satt. */
     public static final int FULL_TICKS = 4800;
     /** Schaden des Sturzflugs im Verhältnis zum Prankenhieb. */
-    public static final float DIVE_FACTOR = 1.4f;
+    public static final float DIVE_FACTOR = 1.25f;
 
     private static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(GriffinEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_DIVING = SynchedEntityData.defineId(GriffinEntity.class, EntityDataSerializers.BOOLEAN);
@@ -438,7 +438,8 @@ public class GriffinEntity extends SoaringBird {
             if (target == null || !target.isAlive() || griffin.eatTicks > 0 || !griffin.canAttack(target)) {
                 return false;
             }
-            return griffin.isFlying() || griffin.distanceToSqr(target) > 5.0 * 5.0;
+            // Beute schlägt er immer aus der Luft; Gegner am Boden nur, wenn sie weiter weg sind (sonst die Krallen)
+            return griffin.isFlying() || isPrey(target) || griffin.distanceToSqr(target) > 5.0 * 5.0;
         }
 
         @Override
@@ -500,10 +501,10 @@ public class GriffinEntity extends SoaringBird {
             }
             switch (this.phase) {
                 case CLIMB -> {
-                    // über dem Ziel kreisen, bis er hoch genug ist
-                    this.angle += 0.06;
-                    double x = target.getX() + Math.cos(this.angle) * 6.0;
-                    double z = target.getZ() + Math.sin(this.angle) * 6.0;
+                    // eng über dem Ziel kreisen, bis er hoch genug ist
+                    this.angle += 0.07;
+                    double x = target.getX() + Math.cos(this.angle) * 3.5;
+                    double z = target.getZ() + Math.sin(this.angle) * 3.5;
                     double y = Math.max(target.getY() + 9.0, griffin.groundY(x, z) + 4.0);
                     griffin.flyTo(x, y, z, 1.15);
                     if (this.phaseTicks > 30 && griffin.getY() - target.getY() > 5.0 && griffin.hasLineOfSight(target)) {

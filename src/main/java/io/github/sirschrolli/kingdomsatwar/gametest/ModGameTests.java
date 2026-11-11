@@ -236,6 +236,7 @@ public final class ModGameTests {
         HeroGameTests.init();      // der eigene Held: Herz- und Manakristalle
         VeterancyGameTests.init(); // Kampferfahrung der Truppen: Stufen, Meister, Legende
         ArmoryGameTests.init();    // die Waffenkammer: Waffen, Spitzhacken, Schilde
+        BiomeBeastGameTests.init();    // die Tiere der eigenen Biome: Schneeleopard, Urelch, Sturmmöwe, Greif
         AuditGameTests.init();     // Bauprüfung aller Gebäude (Betten, Türen, Halt)
         DragonAttackGameTests.init(); // die großen eigenen Angriffe der Drachen-Bosse
     }
@@ -303,6 +304,7 @@ public final class ModGameTests {
         HeroGameTests.register(event, environment);
         VeterancyGameTests.register(event, environment);
         ArmoryGameTests.register(event, environment);
+        BiomeBeastGameTests.register(event, environment);
         AuditGameTests.register(event, environment);
         DragonAttackGameTests.register(event, environment);
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg

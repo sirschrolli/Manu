@@ -165,6 +165,11 @@ public class SnowLeopardEntity extends TamableAnimal {
     }
 
     /** Duckt sich und schleicht sich an. */
+    /** Für Tests und die Vorführung: hungrig (oder satt) machen. */
+    public void setHungry(boolean hungry) {
+        this.fullTicks = hungry ? 0 : FULL_TICKS;
+    }
+
     public boolean isStalking() {
         return this.entityData.get(DATA_STALKING);
     }

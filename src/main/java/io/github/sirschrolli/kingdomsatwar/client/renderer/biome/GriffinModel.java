@@ -200,9 +200,11 @@ public class GriffinModel extends EntityModel<GriffinRenderState> {
             this.hindRShin.xRot += 2.44f * rest;
             this.hindLPaw.xRot += -1.48f * rest;
             this.hindRPaw.xRot += -1.48f * rest;
+            // der Schwanz liegt seitlich um die Hinterpranken
+            this.tail.yRot += 0.44f * rest;
             this.tail2.xRot += 0.73f * rest;
-            this.tail2.yRot += 0.96f * rest;
-            this.tailTuft.yRot += 0.35f * rest;
+            this.tail2.yRot += 1.66f * rest;
+            this.tailTuft.yRot += 0.52f * rest;
         }
 
         // ------------------------------------------------------------ Schrei: Hals und Kopf hoch, Schnabel auf, Schwingen gelüpft
