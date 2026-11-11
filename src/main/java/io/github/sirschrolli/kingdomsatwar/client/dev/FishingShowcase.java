@@ -272,6 +272,203 @@ final class FishingShowcase {
         steps.add(Step.quit());
     }
 
+    private static FishSpecies byId(String id) {
+        FishSpecies species = FishSpecies.byId(id);
+        if (species == null) {
+            LOGGER.error("[Showcase] Unbekannte Art: {}", id);
+            return FishSpecies.PIKE;
+        }
+        return species;
+    }
+
+    /**
+     * Die zweite Welle der Biom-Fische ({@code newfish}, seit 0.83): neue Arten im Drill (der nur noch mit der Maus gespielt wird),
+     * das Band zu einer neuen Art, ein echter Drill im Teich, das Fischbuch mit einem Biom je Kapitel (zwanzig, zwölf oder zehn
+     * Arten) und neue Fische im Gepäck mit ihrem Hinweis.
+     */
+    static void newFish(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        int guiScale = Integer.getInteger("kingdomsatwar.showcaseGuiScale", 0);
+        if (guiScale > 0) {
+            steps.add(Step.once(minecraft -> {
+                minecraft.options.guiScale().set(guiScale);
+                minecraft.resizeGui();
+            }));
+        }
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            for (int x = -9; x <= 9; x++) {
+                for (int z = -2; z <= 14; z++) {
+                    for (int y = -3; y <= 6; y++) {
+                        BlockPos pos = top.offset(x, y, z);
+                        boolean pond = z >= 4 && z <= 13 && Math.abs(x) <= 7;
+                        if (y > 0) {
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        } else if (pond && y >= -2) {
+                            level.setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
+                        } else {
+                            level.setBlockAndUpdate(pos, (y < 0 ? Blocks.STONE : z <= 3 && Math.abs(x) <= 3 ? Blocks.SPRUCE_PLANKS : Blocks.GRASS_BLOCK).defaultBlockState());
+                        }
+                    }
+                }
+            }
+            player.teleportTo(level, top.getX() + 0.5, top.getY() + 1.0, top.getZ() + 1.5, Set.of(), 0.0f, 18.0f, true);
+            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.FISHING_ROD));
+        }));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+
+        // --- gestellte Bilder des Drills mit neuen Arten ---
+        steps.add(posed(byId("tropic_mantis_shrimp"), Medium.WATER, true, 0.4f, 0.55f, 0.7f, 0.12f, 0.55f));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("neu_drill_wasser"));
+        steps.add(posed(byId("smoke_hammerhead"), Medium.LAVA, false, 0.2f, 0.33f, 0.42f, -1.0f, 0.0f));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("neu_drill_lava"));
+        steps.add(posed(byId("glitter_wyrm"), Medium.VOID, true, 0.56f, 0.7f, 0.86f, -1.0f, 0.0f));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("neu_drill_leere"));
+        steps.add(posed(byId("jewel_hammerhead"), Medium.WATER, true, 0.3f, 0.42f, 0.95f, -1.0f, 0.0f));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof FishingScreen screen) {
+                screen.devCaught(388, 2, true);
+            }
+        }));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("neu_fang_band"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+
+        // --- die Maus im echten Drill: Jeder Klick gibt der Zone einen Schubs (geprüft an einem offenen, laufenden Drill) ---
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(new FishingScreen(0, byId("reef_triggerfish"), Medium.WATER, true, false, 0.0f))));
+        steps.add(Step.waitTicks(16));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof FishingScreen screen) {
+                float before = screen.devFight().zonePos();
+                for (int i = 0; i < 4; i++) {
+                    screen.mouseClicked(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(0, 0)), false);
+                    screen.mouseReleased(new net.minecraft.client.input.MouseButtonEvent(0.0, 0.0, new net.minecraft.client.input.MouseButtonInfo(0, 0)));
+                }
+                LOGGER.info("[Showcase] Vier Klicks: Zone bei {}, Schwung {}, Klicks gezählt {}", before, screen.devFight().zoneVel(), screen.devFight().kicks());
+            }
+        }));
+        steps.add(Step.waitTicks(6));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof FishingScreen screen) {
+                LOGGER.info("[Showcase] Nach den Klicks: Zone bei {} (gestiegen: {})", screen.devFight().zonePos(), screen.devFight().zonePos() > 0.02f);
+            }
+        }));
+        steps.add(Step.screenshot("neu_klick_drill"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.waitTicks(10));
+
+        // --- echt: Wurf in den Teich, Biss, Drill, Fang (bis zu drei Würfe, falls Kram am Haken hängt) ---
+        for (int attempt = 0; attempt < 3; attempt++) {
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                if (io.github.sirschrolli.kingdomsatwar.fishing.Fishing.fighting(player) == null) {
+                    ServerLevel level = player.level();
+                    if (player.fishing != null) {
+                        player.fishing.discard();
+                    }
+                    FishingHook hook = new FishingHook(player, level, 0, 0);
+                    hook.snapTo(player.getX(), player.getY() + 0.2, player.getZ() + 6.0, 0.0f, 0.0f);
+                    hook.setDeltaMovement(0.0, -0.05, 0.0);
+                    level.addFreshEntity(hook);
+                }
+            }));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                if (io.github.sirschrolli.kingdomsatwar.fishing.Fishing.fighting(player) == null && player.fishing != null) {
+                    ((HookAccess) player.fishing).kingdomsatwar$forceBite();
+                    player.fishing.retrieve(player.getMainHandItem());
+                }
+            }));
+            steps.add(Step.waitTicks(15));
+        }
+        steps.add(Step.until(() -> net.minecraft.client.Minecraft.getInstance().gui.screen() instanceof FishingScreen, 60));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof FishingScreen screen) {
+                LOGGER.info("[Showcase] Drill offen: {}", screen.species().id());
+                screen.devAuto(true);
+            } else {
+                LOGGER.error("[Showcase] Kein Drill – nach drei Würfen nur Kram am Haken");
+            }
+        }));
+        steps.add(Step.waitTicks(45));
+        steps.add(Step.screenshot("neu_echt_drill"));
+        steps.add(Step.until(() -> !(net.minecraft.client.Minecraft.getInstance().gui.screen() instanceof FishingScreen screen)
+                || (screen.outcome() != 0 && (screen.outcome() < 0 || screen.confirmed())), 700));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.screen() instanceof FishingScreen screen) {
+                LOGGER.info("[Showcase] Drill beendet: {} – {}", screen.species().id(), screen.outcome() > 0 ? "gefangen" : "entkommen");
+            }
+        }));
+        steps.add(Step.waitTicks(12));
+        steps.add(Step.screenshot("neu_echt_fang"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.waitTicks(10));
+
+        // --- das Fischbuch: je Kapitel ein Biom mit seinen neuen Arten ---
+        FishLog log = wellFilledLog();
+        String[] shown = {"tropic_mantis_shrimp", "magma_scallop", "icedepth_lindworm", "bloodred_triggerfish", "glitter_wyrm", "rose_clownfish",
+                "jewel_hammerhead", "forge_mantis_shrimp", "coral_nudibranch", "reef_triggerfish", "ember_sea_urchin", "volcano_lindworm"};
+        for (String id : shown) {
+            FishSpecies species = byId(id);
+            log.record(species, species.minCm() + (species.maxCm() - species.minCm()) * 7 / 10);
+        }
+        steps.add(Step.once(minecraft -> hover(minecraft, 400, 300)));
+        steps.add(Step.screen(minecraft -> new FishBookScreen(log)));
+        record Page(String name, String species) {}
+        for (Page page : new Page[] {new Page("neu_buch_korallenkueste", "tropic_mantis_shrimp"), new Page("neu_buch_aschelande", "volcano_lindworm"),
+                new Page("neu_buch_tiefsee", "icedepth_lindworm"), new Page("neu_buch_karmesinwald", "bloodred_triggerfish"),
+                new Page("neu_buch_sternenstaub", "glitter_wyrm"), new Page("neu_buch_feenwiesen", "rose_clownfish"),
+                new Page("neu_buch_kristallschluchten", "jewel_hammerhead"), new Page("neu_buch_glutfaelle", "forge_mantis_shrimp")}) {
+            steps.add(Step.once(minecraft -> {
+                if (minecraft.gui.screen() instanceof FishBookScreen book) {
+                    FishSpecies species = byId(page.species());
+                    book.open(species.chapter(), species);
+                }
+            }));
+            steps.add(Step.waitTicks(6));
+            steps.add(Step.screenshot(page.name()));
+        }
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+
+        // --- neue Fische im Gepäck: lauter Arten der zweiten Welle, dazu ihr Hinweis ---
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            player.getInventory().clearContent();
+            java.util.List<FishSpecies> second = FishSpecies.values().stream().filter(sp -> sp.ordinal() >= 1000).toList();
+            for (int slot = 0; slot < 36; slot++) {
+                FishSpecies species = second.get((slot * 17 + 3) % second.size());
+                player.getInventory().setItem(slot, new ItemStack(species.item(), 1 + slot % 4));
+            }
+            player.getInventory().setItem(13, new ItemStack(byId("tropic_mantis_shrimp").item()));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screen(minecraft -> new InventoryScreen(minecraft.player)));
+        steps.add(Step.once(minecraft -> hover(minecraft, -88 + 8 + 18 * 4 + 8, -83 + 84 + 18 + 8)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("neu_gepaeck"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.quit());
+    }
+
     /** Mauszeiger auf eine Stelle des Bildschirms (in Oberflächen-Koordinaten, von der Mitte aus gerechnet). */
     private static void hover(net.minecraft.client.Minecraft minecraft, int fromCenterX, int fromCenterY) {
         double scale = minecraft.getWindow().getGuiScale();

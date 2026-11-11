@@ -165,11 +165,11 @@ final class FishingGameTests {
             FishSpecies twin = effects.put(signature.toString(), species);
             helper.assertTrue(twin == null, "Zwei Fische wirken gleich: " + id + " und " + (twin == null ? "" : twin.id()));
         }
-        helper.assertTrue(FishSpecies.count() == 1000 && FishSpecies.NAMED == 84 && custom == 996 && FishSpecies.legends().size() == 15,
+        helper.assertTrue(FishSpecies.count() == 1628 && FishSpecies.NAMED == 84 && custom == 1624 && FishSpecies.legends().size() == 15,
                 "Zahl der Arten: " + FishSpecies.count() + " / " + FishSpecies.NAMED + " / " + custom + " / " + FishSpecies.legends().size());
 
-        // jedes Biom hat eigene Arten: die Biome der Mod je zwölf, die von Minecraft sechs oder sieben – nur die Kampfarenen und
-        // das leere Nichts nicht (dort angelt niemand)
+        // jedes Biom hat eigene Arten: die Biome der Mod je zwanzig, die von Minecraft zehn oder zwölf (seit 0.83: zwei Wellen) – nur
+        // die Kampfarenen und das leere Nichts nicht (dort angelt niemand)
         java.util.Set<String> arenas = java.util.Set.of("arcane_sphere", "creation", "ember_forge", "error_space", "moon_stage", "star_canopy",
                 "throne_realm", "world_maw");
         java.util.Set<String> known = new java.util.HashSet<>();
@@ -178,15 +178,15 @@ final class FishingGameTests {
             known.add(biome.toString());
             List<FishSpecies> local = FishSpecies.ofBiome(biome.toString());
             if (biome.getNamespace().equals(KingdomsAtWar.MODID)) {
-                helper.assertTrue(local.size() == (arenas.contains(biome.getPath()) ? 0 : 12), "Arten im Biom " + biome + ": " + local.size());
+                helper.assertTrue(local.size() == (arenas.contains(biome.getPath()) ? 0 : 20), "Arten im Biom " + biome + ": " + local.size());
             } else if (biome.getNamespace().equals("minecraft")) {
-                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 6 || local.size() == 7,
+                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 10 || local.size() == 12,
                         "Arten im Biom " + biome + ": " + local.size());
             }
-            // in jedem Biom gibt es Gewöhnliches und mindestens einen großen Fang
+            // in jedem Biom gibt es Gewöhnliches und zwei große Fänge (einen aus jeder Welle)
             if (!local.isEmpty()) {
-                helper.assertTrue(local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.COMMON).count() >= 2
-                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.EPIC).count() == 1, "Seltenheiten im Biom " + biome);
+                helper.assertTrue(local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.COMMON).count() >= 3
+                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.EPIC).count() == 2, "Seltenheiten im Biom " + biome);
                 helper.assertTrue(german.has("biome." + biome.getNamespace() + "." + biome.getPath()) || biome.getNamespace().equals("minecraft"),
                         "Name des Bioms fehlt: " + biome);
             }
@@ -194,7 +194,7 @@ final class FishingGameTests {
         for (String biome : FishSpecies.biomes()) {
             helper.assertTrue(known.contains(biome), "Arten für ein Biom, das es nicht gibt: " + biome);
         }
-        // in der Ebene: die Allerweltsfische der Flüsse und die sieben der Ebene – die eigenen stellen gut die Hälfte des Fangs
+        // in der Ebene: die Allerweltsfische der Flüsse und die zwölf der Ebene – die eigenen stellen gut die Hälfte des Fangs
         FishSpecies.Spot plains = new FishSpecies.Spot(EnumSet.of(Habitat.FRESH), "minecraft:plains", Medium.WATER);
         int localCatch = 0;
         java.util.Set<FishSpecies> seen = new java.util.HashSet<>();
@@ -206,7 +206,8 @@ final class FishingGameTests {
                 seen.add(bite);
             }
         }
-        helper.assertTrue(localCatch > 1600 && localCatch < 3000 && seen.size() == 7, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
+        KingdomsAtWar.LOGGER.info("Fang in der Ebene: {} von 4000 aus den {} eigenen Arten", localCatch, seen.size());
+        helper.assertTrue(localCatch > 2000 && localCatch < 3400 && seen.size() == 12, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
         // in der Lava der Aschefelder nur Lavafische, im Wasser dort keine
         for (Medium medium : new Medium[] {Medium.WATER, Medium.LAVA}) {
             FishSpecies.Spot ash = new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), "kingdomsatwar:ash_fields", medium);
@@ -349,6 +350,37 @@ final class FishingGameTests {
         return new int[] {fight.result(), fight.perfect() ? 1 : 0, steps};
     }
 
+    /**
+     * Ein Angler, der nur antippt (seit 0.83 steuert die Maus, jeder Klick ein Schubs): sieht den Fisch mit {@code delay}
+     * Sekunden Verzug und klickt höchstens alle {@code gap} Sekunden – immer dann, wenn die Zone sonst unter dem Fisch zum
+     * Stehen käme.
+     */
+    private static int[] tap(FishSpecies species, long seed, float delay, float gap) {
+        FishFight fight = new FishFight(species.behavior(), species.difficulty(), 0.0f, false, RandomSource.create(seed));
+        ArrayDeque<float[]> seen = new ArrayDeque<>();
+        int lag = Math.round(delay / FishFight.STEP);
+        int wait = 0;
+        int steps = 0;
+        while (fight.result() == 0 && steps < 120 * 150) {
+            seen.addLast(new float[] {fight.fishPos(), fight.fishVel()});
+            if (seen.size() > lag + 1) {
+                seen.removeFirst();
+            }
+            if (--wait <= 0) {
+                float[] fish = seen.peekFirst();
+                float center = fight.zonePos() + fight.zoneSize() / 2.0f;
+                float stop = center + Math.max(0.0f, fight.zoneVel()) * fight.zoneVel() / (2.0f * 2.1f) + Math.min(0.0f, fight.zoneVel()) * 0.1f;
+                if (stop < fish[0] + fish[1] * delay * 0.7f || (fight.zonePos() <= 0.004f && fight.inZone())) {
+                    fight.kick();
+                    wait = Math.round(gap / FishFight.STEP);
+                }
+            }
+            fight.step(false);
+            steps++;
+        }
+        return new int[] {fight.result(), fight.perfect() ? 1 : 0, steps};
+    }
+
     private static void fight(GameTestHelper helper) {
         StringBuilder table = new StringBuilder();
         List<FishSpecies> all = FishSpecies.values();
@@ -377,6 +409,15 @@ final class FishingGameTests {
             // kein Fang geht schneller, als der Server ihn glaubt
             if (wins > 0) {
                 helper.assertTrue(fastest / 6 >= FishFight.minTicks(species.difficulty()), "Fang schneller als die Mindestzeit: " + species.id());
+            }
+            // nur mit Klicks (höchstens sechs in der Sekunde) geht es auch
+            if (species.difficulty() <= 0.4f) {
+                int taps = 0;
+                for (int seed = 0; seed < 12; seed++) {
+                    taps += tap(species, 2000 + seed, 0.2f, 0.16f)[0] == 1 ? 1 : 0;
+                }
+                table.append(String.format("  geklickt %2d/12", taps));
+                helper.assertTrue(taps >= 10, "Nur mit Klicks nicht zu fangen: " + species.id() + " " + taps + "/12");
             }
             if (species.difficulty() <= 0.5f) {
                 helper.assertTrue(wins == runs, "Leichter Fisch entkommt einem geübten Angler: " + species.id() + " " + wins + "/" + runs);

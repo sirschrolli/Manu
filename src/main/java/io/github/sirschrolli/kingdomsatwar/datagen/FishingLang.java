@@ -305,8 +305,8 @@ final class FishingLang {
         text.add("itemGroup.kingdomsatwar.fishing", "Kingdoms at War: Fishing", "Kingdoms at War: Angeln");
         text.add("key.kingdomsatwar.fish_book", "Open the fish book", "Fischbuch aufschlagen");
         text.add("gui.kingdomsatwar.fishing.title", "Fish on the line", "Fisch an der Leine");
-        text.add("gui.kingdomsatwar.fishing.hint", "Hold mouse or space: the zone rises. Keep the fish inside!",
-                "Maus oder Leertaste halten hebt die Zone – halte den Fisch darin!");
+        text.add("gui.kingdomsatwar.fishing.hint", "Hold or click the mouse: the zone rises. Keep the fish inside!",
+                "Maus halten oder klicken hebt die Zone – halte den Fisch darin!");
         text.add("gui.kingdomsatwar.fishing.perfect_so_far", "Flawless so far – keep it up!", "Bisher makellos – weiter so!");
         text.add("gui.kingdomsatwar.fishing.bite", "A bite!", "Biss!");
         text.add("gui.kingdomsatwar.fishing.escaped", "It got away …", "Entkommen …");

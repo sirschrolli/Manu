@@ -6,7 +6,8 @@ import net.minecraft.util.RandomSource;
 /**
  * Der Drill (seit 0.79): Beißt ein Fisch und der Spieler zieht an, wird er nicht einfach herausgehoben – er muss gehalten
  * werden. In einer Wassersäule schwimmt der Fisch auf und ab, jede Art auf ihre Weise ({@link FishSpecies.Behavior}); der
- * Spieler hebt die <b>Fangzone</b>, solange er die Taste hält, und lässt sie sinken, wenn er loslässt. Liegt der Fisch in der
+ * Spieler hebt die <b>Fangzone</b>, solange er die Maustaste hält, und lässt sie sinken, wenn er loslässt – jeder Klick gibt
+ * ihr dazu einen kleinen Schubs nach oben ({@link #kick()}, seit 0.83), so lässt sie sich auch antippen. Liegt der Fisch in der
  * Zone, füllt sich die Leiste – sonst leert sie sich. Voll: gefangen. Leer: entkommen (der Haken bleibt im Wasser). Liegt
  * die Zone ungehalten am Boden, hängt die Schnur durch und nichts füllt sich: Wer nichts tut, fängt nichts.
  *
@@ -28,6 +29,8 @@ public final class FishFight {
     private static final float LIFT = 2.5f;
     private static final float GRAVITY = 2.1f;
     private static final float MAX_SPEED = 1.5f;
+    /** So viel Schwung gibt ein Klick der Zone nach oben (seit 0.83). */
+    public static final float KICK = 0.45f;
     /** Zu Beginn sinkt die Leiste noch nicht (Sekunden). */
     private static final float GRACE = 0.6f;
     /** Der Fisch zählt noch als gehalten, wenn er so weit (Anteil der Säule) über den Rand der Zone ragt. */
@@ -81,6 +84,7 @@ public final class FishFight {
     private float time;
     private int result;
     private float dart;
+    private int kicks;
 
     public FishFight(FishSpecies.Behavior behavior, float difficulty, float zoneBonus, boolean chest, RandomSource random) {
         this.base = behavior;
@@ -152,6 +156,23 @@ public final class FishFight {
             this.progress = 0.0f;
             this.result = -1;
         }
+    }
+
+    /**
+     * Ein Klick: Die Zone bekommt einen kleinen Schubs nach oben – fällt sie gerade, fängt der Schubs sie ab. So lässt sie sich
+     * auch durch Antippen führen; wer die Taste hält, steigt wie bisher.
+     */
+    public void kick() {
+        if (this.result != 0) {
+            return;
+        }
+        this.zoneVel = Math.min(MAX_SPEED, Math.max(this.zoneVel, 0.0f) + KICK);
+        this.kicks++;
+    }
+
+    /** So oft wurde schon geklickt (für Klänge). */
+    public int kicks() {
+        return this.kicks;
     }
 
     private float between(float min, float max) {

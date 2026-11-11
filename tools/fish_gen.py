@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """
-Die Fische der Biome (seit 0.81): 916 Arten – für jedes eigene Biom der Mod zwölf, für jedes Biom von Minecraft sechs oder
-sieben. Zusammen mit den 84 von Hand benannten Arten (tools/fish_textures.py, FishSpecies.java) sind es genau 1000.
+Die Fische der Biome: 1544 Arten in zwei Wellen. Die erste (seit 0.81, 916 Arten) gibt jedem eigenen Biom der Mod zwölf, jedem
+Biom von Minecraft sechs oder sieben; die zweite (seit 0.83, 628 Arten) jedem eigenen Biom acht mehr, jedem von Minecraft vier
+oder fünf – mit neuen Gestalten (Dorsch, Hering, Schmerle, Sonnenbarsch, Rotfeuerfisch, Doktorfisch, Lippfisch, Drückerfisch,
+Hammerhai, Sägefisch, Sterngucker, Seeschlange, Anemonenfisch, Knurrhahn, Seeigel, Muschel, Seegurke, Fadenschnecke,
+Fangkrebs). Zusammen mit den 84 von Hand benannten Arten (tools/fish_textures.py, FishSpecies.java) sind es 1628.
 
 Jede Art entsteht aus ihrem Biom: Die Farbwelt des Bioms färbt sie, sein Gewässer bestimmt die Gestalt (Forelle, Wels, Hai,
 Rochen, Krabbe, Qualle …), sein Wesen die Wirkung beim Essen. Keine zwei Arten heißen gleich, sehen gleich aus oder wirken
 gleich. Alles wird aus festen Tabellen und einem eigenen Zufallsgenerator (unabhängig von der Python-Version) berechnet –
-derselbe Aufruf ergibt immer dieselben Arten, neue Biome hängt man hinten an.
+derselbe Aufruf ergibt immer dieselben Arten, neue Biome und Wellen hängt man hinten an (die erste Welle bleibt Zeichen für
+Zeichen, wie sie war: Ihre Tabellen werden nicht verändert, die zweite hat eigene).
 
 Geschrieben werden:
     src/main/resources/data/kingdomsatwar/fishing/species.tsv        die Arten (liest FishSpecies.java beim Laden)
@@ -194,6 +198,55 @@ POOLS = {
     "abyss": "armored viper angler shark moray ray coel piranha squid isopod trilobite nautilus crab jelly ribbon hatchet lobster",
     "ash": "carp perch pike catfish small eel gar snail lobster bream piranha olm",
 }
+
+# Die Gestalten der zweiten Welle (seit 0.83) – nur dort verwendet, die erste kennt sie nicht
+FORMS.update({
+    "cod": (30, 110, "STEADY SINKER", 2.0, "Dorsch/Codling Schellfisch/Haddock Wittling/Whiting Seelachs/Pollock Leng/Ling Lumb/Tusk Pollack/Pollack"),
+    "herring": (15, 40, "STEADY DARTER", 0.5, "Hering/Herring Alse/Shad Maifisch/Allis_Shad Finte/Twaite Pilchard/Pilchard Menhaden/Menhaden"),
+    "loach": (8, 30, "JITTER SINKER", 0.5, "Schmerle/Loach Steinbeißer/Spined_Loach Schlammpeitzger/Weatherfish Dornauge/Kuhli Prachtschmerle/Clown_Loach"),
+    "sunperch": (10, 35, "STEADY JITTER", 1.0, "Sonnenbarsch/Pumpkinseed Forellenbarsch/Largemouth Schwarzbarsch/Black_Bass Blaubarsch/Bluegill "
+                 "Steinbarsch/Rock_Bass"),
+    "lion": (15, 45, "FLOATER MIXED", 2.5, "Rotfeuerfisch/Lionfish Skorpionfisch/Scorpionfish Drachenkopf/Rockfish Steinfisch/Stonefish Feuerfisch/Firefish"),
+    "tang": (12, 45, "STEADY FLOATER", 1.5, "Doktorfisch/Surgeonfish Halfterfisch/Moorish_Idol Kaninchenfisch/Rabbitfish Einhornfisch/Unicornfish Seebader/Tang"),
+    "wrasse": (15, 120, "STEADY MIXED", 2.0, "Lippfisch/Wrasse Papageifisch/Parrotfish Junker/Rainbow_Wrasse Putzerfisch/Cleaner_Wrasse Napoleonfisch/Humphead"),
+    "trigger": (20, 60, "JITTER DARTER", 2.0, "Drückerfisch/Triggerfish Feilenfisch/Filefish Picassofisch/Picassofish"),
+    "hammer": (150, 450, "DARTER MIXED", 5.0, "Hammerhai/Hammerhead Schaufelhai/Bonnethead Flügelkopfhai/Winghead"),
+    "saw": (120, 500, "SINKER DARTER", 5.0, "Sägefisch/Sawfish Sägehai/Sawshark Sägerochen/Sawray"),
+    "stargazer": (15, 60, "SINKER CALM", 2.5, "Sterngucker/Stargazer Himmelsgucker/Skygazer Petermännchen/Weever"),
+    "serpent": (100, 400, "MIXED DARTER", 4.5, "Seeschlange/Sea_Serpent Lindwurm/Lindworm Wyrm/Wyrm Tatzelwurm/Tatzelwurm"),
+    "clown": (6, 15, "JITTER FLOATER", 0.5, "Anemonenfisch/Clownfish Riffbarsch/Damselfish Preußenfisch/Dascyllus Sergeant/Sergeant_Major"),
+    "gurnard": (20, 60, "SINKER STEADY", 2.0, "Knurrhahn/Gurnard Flughahn/Flying_Gurnard Seehahn/Sea_Robin"),
+    "urchin": (5, 20, "CALM", 0.5, "Seeigel/Sea_Urchin Lanzenigel/Pencil_Urchin Diademigel/Diadem_Urchin Herzigel/Heart_Urchin"),
+    "clam": (5, 60, "CALM SINKER", 1.0, "Muschel/Clam Auster/Oyster Jakobsmuschel/Scallop Miesmuschel/Mussel Herzmuschel/Cockle Riesenmuschel/Giant_Clam"),
+    "cucumber": (10, 50, "CALM SINKER", 1.5, "Seegurke/Sea_Cucumber Seeapfel/Sea_Apple Seeschwein/Sea_Pig"),
+    "slug": (3, 20, "CALM FLOATER", 1.5, "Fadenschnecke/Nudibranch Seehase/Sea_Hare Sternschnecke/Sea_Lemon Prachtschnecke/Sea_Slug"),
+    "mantis": (8, 35, "DARTER JITTER", 3.0, "Fangkrebs/Mantis_Shrimp Heuschreckenkrebs/Stomatopod"),
+})
+
+# Gewässer -> die neuen Gestalten der zweiten Welle (zuerst gewählt; reicht es nicht, kommen Gestalten der ersten hinzu)
+POOLS2 = {
+    "fresh": "loach sunperch herring clam",
+    "fresh_cold": "loach herring clam cod",
+    "fresh_warm": "loach sunperch clam herring",
+    "swamp": "loach sunperch clam",
+    "mountain": "loach herring clam cod",
+    "dry": "loach sunperch clam",
+    "sea": "cod herring lion tang wrasse trigger hammer saw stargazer clown gurnard urchin clam cucumber slug mantis",
+    "sea_cold": "cod herring stargazer gurnard urchin clam cucumber",
+    "sea_warm": "lion tang wrasse trigger hammer saw clown urchin clam cucumber slug mantis",
+    "beach": "clam urchin herring stargazer gurnard slug mantis clown",
+    "deep": "cucumber stargazer serpent urchin saw cod hammer",
+    "cave": "loach clam",
+    "lava": "serpent lion trigger urchin clam stargazer hammer gurnard",
+    "void": "serpent tang clown herring urchin slug cucumber trigger",
+    "fae": "clown tang slug sunperch loach clam serpent herring",
+    "shadow": "serpent stargazer lion saw hammer urchin cucumber cod",
+    "abyss": "serpent saw hammer stargazer urchin lion mantis cucumber",
+    "ash": "loach sunperch clam serpent",
+}
+# so viele Arten bringt die zweite Welle je Biom (nach der Zahl der ersten) und so verteilen sie sich auf die Seltenheiten
+WAVE2 = {12: 8, 7: 5, 6: 4}
+SPLIT2 = {8: (3, 2, 2, 1), 5: (2, 1, 1, 1), 4: (1, 1, 1, 1)}
 
 # =============================================================================================
 # Wirkungen beim Essen
@@ -833,6 +886,39 @@ def pick_forms(biome: Biome, rng: Rng) -> list:
     return out
 
 
+def pick_forms2(biome: Biome, rng: Rng, taken: set) -> list:
+    """Die zweite Welle: zuerst die neuen Gestalten des Gewässers, dann solche, die es im Biom noch nicht gibt."""
+    n = WAVE2[biome.n]
+    if biome.media == "VW" or len(biome.media) == 1:
+        groups = [(biome.media, n, biome.pool)]
+    elif biome.media == "WL":
+        groups = [("W", 5, biome.pool if biome.pool != "lava" else "ash"), ("L", 3, "lava")]
+    elif biome.media == "WV":
+        groups = [("W", 5, biome.pool), ("V", 3, "void")]
+    elif biome.media == "WLV":
+        groups = [("W", 3, "shadow"), ("L", 3, "lava"), ("V", 2, "void")]
+    else:
+        raise ValueError(biome.media)
+    assert sum(g[1] for g in groups) == n, biome.id
+    out, used = [], set()
+    for medium, count, pool in groups:
+        fresh = POOLS2[pool].split()
+        if biome.media == "WLV":
+            fresh = POOLS2["abyss"].split() + fresh
+        old = POOLS[pool].split()
+        order = rng.shuffled(fresh) + rng.shuffled([f for f in old if f not in taken]) + rng.shuffled(old)
+        chosen = []
+        for form in order:
+            if form not in used and form not in chosen:
+                chosen.append(form)
+            if len(chosen) == count:
+                break
+        assert len(chosen) == count, (biome.id, medium)
+        used.update(chosen)
+        out += [(medium, form) for form in chosen]
+    return out
+
+
 def name_for(biome: Biome, form: str, prefixes: list, k: int, rng: Rng, used_de: set, used_en: set, used_ids: set):
     nouns = []
     for pair in FORMS[form][4].split():
@@ -1116,7 +1202,45 @@ def paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
         if form == "angel":
             # die hohen Flossen brauchen eine eigene Farbe, sonst verschmilzt die Gestalt
             fin = hx(c["accent"] if dist(c["accent"], c["side"]) > 90 else c["dark"])
+        # --- die Gestalten der zweiten Welle (seit 0.83) ---
+        if form == "cod":
+            e["barbels"] = 1
+        if form == "loach":
+            e["whiskers"] = hx(blend(c["belly"], c["fin"], 0.3))
+        if form == "sunperch":
+            e["earspot"] = hx(blend(c["dark"], BLACK, 0.5))
+        if form == "lion":
+            e["spines"] = fin
+            e["fans"] = hx(blend(c["light"], WHITE, 0.25) if lum(c["side"]) < 0.6 else c["accent"])
+        if form == "tang":
+            e["scalpel"] = hx(bright(c["accent"]))
+        if form == "wrasse" and rng.chance(0.55):
+            e["beak"] = "#f4f0e0"
+        if form == "trigger":
+            e["spike"] = hx(c["dark"])
+        if form == "hammer":
+            e["hammer"] = True
+        if form == "saw":
+            e["bill"] = round(rng.uni(3.8, 4.6), 1)
+            e["sawteeth"] = hx(blend(c["light"], WHITE, 0.45))
+        if form == "stargazer":
+            e["eye_up"] = 0.5
+            e["big_eye"] = True
+            e["grin"] = True
+        if form == "serpent":
+            e["crest"] = hx(c["accent"])
+            e["frill"] = hx(c["accent"] if rng.chance(0.6) else c["light"])
+            if rng.chance(0.5):
+                e["teeth"] = 2
+        if form == "gurnard":
+            e["wings"] = hx(c["accent"] if dist(c["accent"], c["side"]) > 80 else c["light"])
+        if form in ("herring", "clown") and rng.chance(0.4):
+            e["big_eye"] = True
         pattern = pattern_for(form, c, rng)
+        if form == "clown":
+            # der Anemonenfisch trägt immer seine hellen Bänder, die Flossen dunkel gesäumt
+            pattern = ("bars", hx(blend(c["light"], WHITE, 0.6) if lum(c["side"]) < 0.7 else c["dark"]), rng.pick((3, 3, 4)))
+            e["fintip"] = hx(blend(c["dark"], BLACK, 0.3))
         # die Gestalt leicht abwandeln
         widest = max(w for _, w in base["body"])
         ws = rng.uni(0.92, 1.1) if widest < 2.9 else rng.uni(0.94, 1.02)
@@ -1168,6 +1292,21 @@ def paint(sp: Species, biome: Biome, rng: Rng) -> Image.Image:
                            hx(blend(c["side"], c["belly"], 0.7)), line, eyec)
     if form == "trilobite":
         return ft.trilobite(side, belly, hx(blend(c["side"], c["back"], 0.35)), hx(blend(c["belly"], c["side"], 0.3)), back, line, eyec)
+    # --- die Wesen der zweiten Welle (seit 0.83) ---
+    if form == "urchin":
+        return ft.urchin(side, back, hx(blend(c["light"], WHITE, 0.3)), line=line, long=rng.chance(0.4), glow=glowcol if glow else None)
+    if form == "clam":
+        fan = rng.chance(0.55)
+        if fan:
+            return ft.clam(side, back, belly, hx(c["accent"]), line=line, fan=True)
+        return ft.clam(side, back, belly, hx(blend(c["accent"], WHITE, 0.3)), line=line, fan=False,
+                       pearl="#f8f4ff" if (sp.rarity in ("RARE", "EPIC") or rng.chance(0.2)) else None)
+    if form == "cucumber":
+        return ft.cucumber(side, back, belly, hx(c["accent"]), line=line, spots=glowcol if glow else None)
+    if form == "slug":
+        return ft.slug(side, hx(c["accent"]), hx(bright(c["accent"])), belly, line=line, eye_col=eyec if eyec != "#101018" else None)
+    if form == "mantis":
+        return ft.mantis(side, back, belly, hx(c["accent"]), eye=hx(bright(c["accent"])) if eyec == "#101018" else eyec, line=line)
     raise ValueError(form)
 
 
@@ -1252,6 +1391,68 @@ SPECIAL_NOTES = {
 }
 
 
+FORM_NOTES2 = {
+    "cod": [("Ein Bartfaden am Kinn verrät ihn.", "A barbel on its chin gives it away."), ("Lebt in großen Schwärmen.", "Lives in great shoals.")],
+    "herring": [("Zieht in silbernen Schwärmen.", "Travels in silver shoals."), ("Glänzt wie eine frisch geprägte Münze.", "Gleams like a freshly struck coin.")],
+    "loach": [("Wühlt am Grund und tastet mit seinen Barteln.", "Roots along the bottom, feeling with its barbels."),
+              ("Spürt ein Unwetter, bevor es kommt.", "Senses a storm before it comes.")],
+    "sunperch": [("Bewacht sein Nest im flachen Wasser.", "Guards its nest in the shallows."), ("Ein dunkler Fleck am Kiemendeckel.", "A dark spot on the gill cover.")],
+    "lion": [("Seine Stacheln sind giftig – vorsichtig vom Haken lösen!", "Its spines are venomous – unhook it carefully!"),
+             ("Breitet die Flossen aus wie einen Fächer.", "Spreads its fins like a fan.")],
+    "tang": [("Am Schwanzstiel trägt er ein scharfes Skalpell.", "Carries a sharp scalpel at the base of its tail."),
+             ("Weidet Algen von den Felsen.", "Grazes algae off the rocks.")],
+    "wrasse": [("Knackt Muscheln mit seinem Schnabel.", "Cracks shells with its beak."), ("Schläft nachts in einem Schleimkokon.", "Sleeps at night in a cocoon of mucus.")],
+    "trigger": [("Stellt seinen Rückenstachel auf und verkeilt sich in Spalten.", "Raises its dorsal spine and wedges itself into cracks."),
+                ("Verteidigt sein Revier gegen jeden – auch gegen Taucher.", "Defends its territory against all comers – divers too.")],
+    "hammer": [("Sein Kopf ist breit wie ein Hammer.", "Its head is as broad as a hammer."), ("Spürt Beute selbst unter dem Sand.", "Senses prey even beneath the sand.")],
+    "saw": [("Fegt mit seiner Säge durch die Schwärme.", "Sweeps through shoals with its saw."), ("Seine Säge ist mit Zähnen besetzt.", "Its saw is lined with teeth.")],
+    "stargazer": [("Liegt im Sand vergraben, nur die Augen schauen hervor.", "Lies buried in the sand, only its eyes peeking out."),
+                  ("Blickt immer nach oben – zu den Sternen.", "Always looks upward – to the stars.")],
+    "serpent": [("Seeleute erzählen sich von ihm.", "Sailors tell tales of it."), ("Windet sich wie eine Schlange durchs Wasser.", "Winds through the water like a snake.")],
+    "clown": [("Wohnt zwischen den Nesseln einer Anemone.", "Lives among the stinging arms of an anemone."), ("Klein, bunt und furchtlos.", "Small, colourful and fearless.")],
+    "gurnard": [("Läuft auf seinen Flossen über den Grund.", "Walks across the bottom on its fins."), ("Knurrt, wenn man ihn aus dem Wasser zieht.", "Grunts when pulled from the water.")],
+    "urchin": [("Stachelig – nur mit Handschuhen anfassen.", "Prickly – handle only with gloves."), ("Kriecht auf winzigen Saugfüßchen.", "Crawls on tiny tube feet.")],
+    "clam": [("Manchmal steckt eine Perle darin.", "Sometimes there is a pearl inside."), ("Klappt zu, sobald man sie berührt.", "Snaps shut the moment it is touched.")],
+    "cucumber": [("Spuckt bei Gefahr klebrige Fäden.", "Spits sticky threads when threatened."), ("Kriecht gemächlich über den Grund.", "Creeps leisurely across the bottom.")],
+    "slug": [("Trägt die Farben einer Warnung.", "Wears the colours of a warning."), ("Atmet durch die Fäden auf seinem Rücken.", "Breathes through the threads on its back.")],
+    "mantis": [("Schlägt so schnell zu, dass das Wasser kocht.", "Strikes so fast the water boils."), ("Sieht Farben, die kein anderes Wesen kennt.", "Sees colours no other creature knows.")],
+}
+
+
+def note2(sp: Species, rng: Rng) -> tuple:
+    """Die Notiz einer Art der zweiten Welle: wie bei der ersten, dazu Sätze über die neuen Gestalten."""
+    medium = "V" if sp.media == "VW" else sp.media[0]
+    wo, where = sp.biome.where[medium]
+    de, en = rng.pick(PLACE_NOTES)
+    parts = [(de.replace("{wo}", wo), en.replace("{where}", where))]
+    if sp.weather != "ANY":
+        parts.append(rng.pick(WEATHER_NOTES[sp.weather]))
+    elif sp.time != "ANY":
+        parts.append(rng.pick(TIME_NOTES[sp.time]))
+    else:
+        options = [rng.pick(BEHAVIOR_NOTES[sp.behavior])]
+        if sp.form in FORM_NOTES2:
+            options += FORM_NOTES2[sp.form]
+        if sp.rarity in RARITY_NOTES:
+            options.append(rng.pick(RARITY_NOTES[sp.rarity]))
+        if sp.max >= 260:
+            options.append(BIG_NOTE)
+        if sp.max <= 12:
+            options.append(TINY_NOTE)
+        if sp.glows:
+            options.append(GLOW_NOTE)
+        parts.append(rng.pick(options))
+    if sp.special != "none":
+        parts.append(SPECIAL_NOTES[sp.special])
+    else:
+        parts.append(rng.pick(EFFECT_NOTES[sp.effects[0][0]]))
+    for (e, _, _) in sp.effects:
+        if e in BAD_NOTES:
+            parts.append(BAD_NOTES[e])
+            break
+    return " ".join(p[0] for p in parts), " ".join(p[1] for p in parts)
+
+
 def note(sp: Species, rng: Rng) -> tuple:
     medium = "V" if sp.media == "VW" else sp.media[0]
     wo, where = sp.biome.where[medium]
@@ -1290,72 +1491,94 @@ def note(sp: Species, rng: Rng) -> tuple:
 # Alles zusammen
 # =============================================================================================
 
+def make(biome: Biome, rng: Rng, k: int, medium: str, form: str, rarity: str, prefixes: list, used: tuple, images: set, wave: int) -> Species:
+    """Eine Art: Name, Größe, Drill, Zeit und Wetter, Wirkung, Bild und Notiz."""
+    used_de, used_en, used_ids, used_sig = used
+    sp = Species()
+    sp.biome, sp.media, sp.form, sp.rarity = biome, medium, form, rarity
+    r = RARITIES.index(sp.rarity)
+    sp.id, sp.de, sp.en = name_for(biome, form, prefixes, k, rng, used_de, used_en, used_ids)
+    lo, hi, behaviors, _, _ = FORMS[form]
+    scale = rng.uni(0.75, 1.3) * (1.0 + 0.1 * r)
+    sp.min = max(2, int(round(lo * scale)))
+    sp.max = max(sp.min + 2, int(round(hi * scale)))
+    sp.behavior = rng.pick(behaviors.split())
+    bands = ((0.16, 0.34), (0.34, 0.54), (0.54, 0.72), (0.72, 0.86))[r]
+    bonus = 0.04 if form in ("sword", "sail", "shark", "tuna", "mahi", "pike", "gar", "hammer", "saw") else -0.05 if form in ("snail", "starfish", "jelly",
+                                                                                                                       "clam", "urchin") else 0.0
+    sp.difficulty = round(max(0.12, min(0.88, rng.uni(*bands) + bonus)), 2)
+    if not biome.fixed:
+        dark_place = biome.chapter in ("deep", "caves") or biome.theme in ("shadow", "cave", "swamp")
+        roll = rng.f()
+        if roll < (0.4 if dark_place else 0.22):
+            sp.time = "NIGHT"
+        elif roll < (0.5 if dark_place else 0.42):
+            sp.time = "DAY"
+        if biome.chapter in ("rivers", "sea") and medium == "W":
+            roll = rng.f()
+            if biome.theme == "storm" and sp.rarity == "EPIC":
+                sp.weather = "THUNDER_ONLY"
+                sp.time = "ANY"
+            elif roll < 0.03 and r >= 2:
+                sp.weather = "RAIN_ONLY"
+            elif roll < 0.12:
+                sp.weather = "RAIN"
+    # eigener Zufall je Art: Wie oft hier gewürfelt wird, hängt davon ab, welche Wirkungen schon vergeben sind –
+    # das darf die übrigen Eigenschaften (und die Arten danach) nicht verschieben
+    assign_effects(sp, biome, Rng("effects:" + sp.id), used_sig)
+    for attempt in range(8):
+        img = paint(sp, biome, Rng("paint:%s:%d" % (sp.id, attempt)))
+        digest = hashlib.md5(img.tobytes()).hexdigest()
+        if digest not in images:
+            images.add(digest)
+            break
+    else:
+        raise RuntimeError("kein eigenes Bild: " + sp.id)
+    sp.image = img
+    sp.note_de, sp.note_en = (note if wave == 1 else note2)(sp, Rng("note:" + sp.id))
+    return sp
+
+
+def rarities(forms: list, split: tuple, rng: Rng) -> dict:
+    """Seltenheit nach Rang der Gestalt (mit etwas Zufall): kleine Fische sind gewöhnlich, große Räuber selten."""
+    ranked = sorted(range(len(forms)), key=lambda i: FORMS[forms[i][1]][3] + rng.uni(-1.3, 1.3))
+    rarity_of = {}
+    pos = 0
+    for r, count in enumerate(split):
+        for i in ranked[pos:pos + count]:
+            rarity_of[i] = RARITIES[r]
+        pos += count
+    return rarity_of
+
+
 def generate() -> list:
     used_de, used_en, used_ids = existing_names()
-    used_sig = existing_signatures()
+    used = (used_de, used_en, used_ids, existing_signatures())
     out = []
     images = set()
+    # die erste Welle (seit 0.81)
     for biome in biomes():
         rng = Rng("fish:" + biome.id)
         forms = pick_forms(biome, rng)
-        # Seltenheit nach Rang der Gestalt (mit etwas Zufall): kleine Fische sind gewöhnlich, große Räuber selten
-        ranked = sorted(range(len(forms)), key=lambda i: FORMS[forms[i][1]][3] + rng.uni(-1.3, 1.3))
-        split = SPLIT[biome.n]
-        rarity_of = {}
-        pos = 0
-        for r, count in enumerate(split):
-            for i in ranked[pos:pos + count]:
-                rarity_of[i] = RARITIES[r]
-            pos += count
+        rarity_of = rarities(forms, SPLIT[biome.n], rng)
         prefixes = rng.shuffled(biome.prefixes)
         for k, (medium, form) in enumerate(forms):
-            sp = Species()
-            sp.biome, sp.media, sp.form, sp.rarity = biome, medium, form, rarity_of[k]
-            r = RARITIES.index(sp.rarity)
-            sp.id, sp.de, sp.en = name_for(biome, form, prefixes, k, rng, used_de, used_en, used_ids)
-            lo, hi, behaviors, _, _ = FORMS[form]
-            scale = rng.uni(0.75, 1.3) * (1.0 + 0.1 * r)
-            sp.min = max(2, int(round(lo * scale)))
-            sp.max = max(sp.min + 2, int(round(hi * scale)))
-            sp.behavior = rng.pick(behaviors.split())
-            bands = ((0.16, 0.34), (0.34, 0.54), (0.54, 0.72), (0.72, 0.86))[r]
-            bonus = 0.04 if form in ("sword", "sail", "shark", "tuna", "mahi", "pike", "gar") else -0.05 if form in ("snail", "starfish", "jelly") else 0.0
-            sp.difficulty = round(max(0.12, min(0.88, rng.uni(*bands) + bonus)), 2)
-            if not biome.fixed:
-                dark_place = biome.chapter in ("deep", "caves") or biome.theme in ("shadow", "cave", "swamp")
-                roll = rng.f()
-                if roll < (0.4 if dark_place else 0.22):
-                    sp.time = "NIGHT"
-                elif roll < (0.5 if dark_place else 0.42):
-                    sp.time = "DAY"
-                if biome.chapter in ("rivers", "sea") and medium == "W":
-                    roll = rng.f()
-                    if biome.theme == "storm" and sp.rarity == "EPIC":
-                        sp.weather = "THUNDER_ONLY"
-                        sp.time = "ANY"
-                    elif roll < 0.03 and r >= 2:
-                        sp.weather = "RAIN_ONLY"
-                    elif roll < 0.12:
-                        sp.weather = "RAIN"
-            # eigener Zufall je Art: Wie oft hier gewürfelt wird, hängt davon ab, welche Wirkungen schon vergeben sind –
-            # das darf die übrigen Eigenschaften (und die Arten danach) nicht verschieben
-            assign_effects(sp, biome, Rng("effects:" + sp.id), used_sig)
-            for attempt in range(8):
-                img = paint(sp, biome, Rng("paint:%s:%d" % (sp.id, attempt)))
-                digest = hashlib.md5(img.tobytes()).hexdigest()
-                if digest not in images:
-                    images.add(digest)
-                    break
-            else:
-                raise RuntimeError("kein eigenes Bild: " + sp.id)
-            sp.image = img
-            sp.note_de, sp.note_en = note(sp, Rng("note:" + sp.id))
-            out.append(sp)
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 1))
+    first = len(out)
+    # die zweite Welle (seit 0.83): hinten angehängt, mit eigenem Zufall – die erste bleibt, wie sie war
+    for biome in biomes():
+        rng = Rng("fish2:" + biome.id)
+        taken = {s.form for s in out[:first] if s.biome.id == biome.id}
+        forms = pick_forms2(biome, rng, taken)
+        rarity_of = rarities(forms, SPLIT2[len(forms)], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
     return out
 
 
 def check(species: list) -> None:
-    assert len(species) == 916, len(species)
+    assert len(species) == 916 + 628, len(species)
     assert len(existing_signatures()) >= 70, len(existing_signatures())    # 80 Arten mit Wirkung; ohne die Dauer gleichen sich einige
     assert len({s.id for s in species}) == len(species)
     assert len({s.de for s in species}) == len(species)

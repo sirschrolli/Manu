@@ -52,7 +52,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Das Angeln (seit 0.79) auf dem Server. Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen –, aber:
  * <ul>
- *     <li>Was beißt, hängt vom Ort ab ({@link Habitat} und das Biom): 1000 Arten, in jedem Biom jeder Welt eigene.</li>
+ *     <li>Was beißt, hängt vom Ort ab ({@link Habitat} und das Biom): 1628 Arten (seit 0.83), in jedem Biom jeder Welt eigene.</li>
  *     <li>Der Schwimmer treibt auch in <b>Lava</b> (Nether, Abgrund) und in der <b>Leere</b> unter den Inseln des Ends, der Leere
  *     und des Abgrunds – wer den Haken über den Rand wirft, sieht ihn ein paar Blöcke tiefer schweben.</li>
  *     <li>Ein Fisch am Haken wird nicht herausgehoben, sondern <b>gedrillt</b> ({@link FishFight}). Entkommt er, bleibt der

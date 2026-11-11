@@ -1,6 +1,5 @@
 package io.github.sirschrolli.kingdomsatwar.client.fishing;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishFight;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies;
@@ -9,7 +8,6 @@ import io.github.sirschrolli.kingdomsatwar.network.FishingResultPayload;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -28,7 +26,8 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * noch nicht im Fischbuch steht –, Seltenheit, Schwierigkeit), in der Mitte die Säule (Wasser, Lava oder Leere) mit dem
  * Fisch, der Fangzone und manchmal einer Truhe, rechts die Leiste des Fortschritts.
  *
- * <p>Gehalten wird mit der Maus (jede Taste) oder der Leertaste; Esc gibt auf. Die Welt läuft weiter.
+ * <p>Gesteuert wird mit der Maus (seit 0.83 nur noch mit ihr): Halten hebt die Zone, jeder Klick gibt ihr einen kleinen
+ * Schubs nach oben – beides mit jeder Maustaste. Esc gibt auf. Die Welt läuft weiter.
  */
 public class FishingScreen extends Screen {
     private static final Identifier ATLAS = KingdomsAtWar.id("textures/gui/fishing/minigame.png");
@@ -59,8 +58,8 @@ public class FishingScreen extends Screen {
     private long lastFrame = Util.getMillis();
     private float age;
     private float pending;
-    private int mouseButtons;
-    private boolean keyHeld;
+    /** Die Maustasten, die in diesem Fenster gedrückt wurden (je ein Bit) – eine schon vorher gehaltene zählt erst nach neuem Druck. */
+    private int pressed;
     /** Nur für Vorführungen: gilt als gehalten. */
     private boolean devHeld;
     private boolean devAuto;
@@ -147,7 +146,13 @@ public class FishingScreen extends Screen {
             float aim = f.chestPos() >= 0.0f && f.progress() > 0.55f ? f.chestPos() : f.fishPos() + f.fishVel() * 0.1f;
             return stop < aim || (f.zonePos() <= 0.004f && f.inZone());
         }
-        return this.devHeld || this.mouseButtons > 0 || this.keyHeld;
+        if (this.devHeld) {
+            return true;
+        }
+        // nur, was hier gedrückt wurde und noch gedrückt ist (so bleibt nichts hängen, wenn das Loslassen verloren ging)
+        var mouse = this.minecraft.mouseHandler;
+        this.pressed &= (mouse.isLeftPressed() ? 1 : 0) | (mouse.isRightPressed() ? 2 : 0) | (mouse.isMiddlePressed() ? 4 : 0) | ~7;
+        return this.pressed != 0;
     }
 
     private void play(SoundEvent sound, float pitch, float volume) {
@@ -248,36 +253,23 @@ public class FishingScreen extends Screen {
             }
             return true;
         }
-        this.mouseButtons++;
+        this.pressed |= bit(event.button());
+        if (this.age >= INTRO && !this.frozen) {
+            // jeder Klick ein kleiner Schubs nach oben
+            this.fight.kick();
+            this.play(SoundEvents.WOODEN_BUTTON_CLICK_ON, 1.5f + this.random.nextFloat() * 0.2f, 0.18f);
+        }
         return true;
     }
 
     @Override
     public boolean mouseReleased(MouseButtonEvent event) {
-        this.mouseButtons = Math.max(0, this.mouseButtons - 1);
+        this.pressed &= ~bit(event.button());
         return true;
     }
 
-    private boolean holdKey(KeyEvent event) {
-        return event.key() == InputConstants.KEY_SPACE || this.minecraft.options.keyJump.matches(event) || this.minecraft.options.keyUse.matches(event);
-    }
-
-    @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (this.holdKey(event)) {
-            this.keyHeld = true;
-            return true;
-        }
-        return super.keyPressed(event);
-    }
-
-    @Override
-    public boolean keyReleased(KeyEvent event) {
-        if (this.holdKey(event)) {
-            this.keyHeld = false;
-            return true;
-        }
-        return super.keyReleased(event);
+    private static int bit(int button) {
+        return button >= 0 && button < 3 ? 1 << button : 8;
     }
 
     @Override
@@ -545,6 +537,11 @@ public class FishingScreen extends Screen {
     /** Der Drill läuft von selbst. */
     public void devAuto(boolean auto) {
         this.devAuto = auto;
+    }
+
+    /** Nur für Vorführungen: der Drill selbst. */
+    public FishFight devFight() {
+        return this.fight;
     }
 
     /** 0: läuft, 1: gefangen, -1: entkommen. */

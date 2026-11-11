@@ -91,6 +91,21 @@ SHAPES = {
     "whale": dict(len=17.5, body=[(0, .5), (.2, 1.6), (.5, 2.9), (.8, 3.3), (1, 2.1)], tail=(2.8, 3.5, .6), dorsal=(.3, .42, .9), anal=(.0, .0, .0)),
     "moray": dict(len=18.0, body=[(0, .5), (.3, 1.3), (.75, 1.6), (1, 1.05)], tail=(0.7, 0.5, .0), dorsal=(.05, .9, .7), anal=(.05, .6, .45), wave=1.5),
     "gar": dict(len=15.5, body=[(0, .4), (.2, .95), (.6, 1.15), (.86, 1.0), (1, .4)], tail=(2.6, 2.0, .45), dorsal=(.1, .24, 1.2), anal=(.08, .22, 1.0)),
+    # seit 0.83 (die zweite Welle der Biome)
+    "cod": dict(len=17.0, body=[(0, .5), (.2, 1.55), (.5, 2.25), (.78, 2.1), (1, 1.0)], tail=(2.7, 2.2, .05), dorsal=(.28, .8, 1.1), anal=(.18, .55, .8)),
+    "herring": dict(len=16.5, body=[(0, .38), (.2, 1.3), (.5, 1.8), (.8, 1.5), (1, .5)], tail=(3.1, 2.7, .78), dorsal=(.44, .6, 1.25), anal=(.14, .3, .6)),
+    "loach": dict(len=17.5, body=[(0, .5), (.3, 1.0), (.7, 1.15), (.9, 1.1), (1, .75)], tail=(2.1, 1.6, .0), dorsal=(.44, .58, .9), anal=(.18, .3, .6)),
+    "sunperch": dict(len=14.5, body=[(0, .6), (.2, 2.3), (.5, 3.1), (.8, 2.5), (1, .95)], tail=(2.8, 2.2, .3), dorsal=(.3, .85, 1.4), anal=(.18, .45, 1.1)),
+    "lion": dict(len=15.0, body=[(0, .55), (.2, 1.7), (.5, 2.3), (.8, 1.9), (1, .7)], tail=(2.6, 2.0, .1), dorsal=(.22, .85, 1.0), anal=(.2, .45, .8)),
+    "tang": dict(len=12.5, body=[(0, .6), (.25, 2.2), (.55, 2.85), (.82, 2.35), (1, .9)], tail=(2.6, 2.4, .55), dorsal=(.15, .9, 1.0), anal=(.15, .8, .9)),
+    "wrasse": dict(len=16.0, body=[(0, .6), (.2, 1.9), (.5, 2.45), (.8, 2.15), (1, 1.05)], tail=(2.6, 2.2, .1), dorsal=(.2, .85, 1.0), anal=(.15, .5, .8)),
+    "trigger": dict(len=14.0, body=[(0, .6), (.25, 2.4), (.5, 3.0), (.75, 2.6), (1, 1.0)], tail=(2.4, 2.1, .3), dorsal=(.1, .42, 1.3), anal=(.1, .42, 1.3)),
+    "hammer": dict(len=17.0, body=[(0, .4), (.25, 1.2), (.55, 1.85), (.8, 1.55), (1, .7)], tail=(3.0, 2.6, .55, 1.6), dorsal=(.48, .62, 2.1), anal=(.2, .3, .8)),
+    "saw": dict(len=13.0, body=[(0, .35), (.25, 1.2), (.55, 1.75), (.82, 1.6), (1, 1.0)], tail=(2.6, 2.0, .3, 1.4), dorsal=(.45, .58, 1.6), anal=(.15, .25, .6)),
+    "stargazer": dict(len=14.5, body=[(0, .45), (.3, 1.5), (.65, 2.3), (.88, 2.75), (1, 2.3)], tail=(2.4, 1.8, .1), dorsal=(.35, .6, .8), anal=(.15, .45, .7)),
+    "serpent": dict(len=18.5, body=[(0, .35), (.2, 1.0), (.6, 1.4), (.85, 1.55), (1, 1.15)], tail=(1.6, 1.6, .0), dorsal=(.05, .95, 1.1), anal=(.05, .5, .5), wave=1.45),
+    "clown": dict(len=13.0, body=[(0, .6), (.2, 1.8), (.5, 2.3), (.8, 1.9), (1, .8)], tail=(2.4, 2.0, .15), dorsal=(.3, .8, 1.2), anal=(.2, .42, .9)),
+    "gurnard": dict(len=16.5, body=[(0, .45), (.25, 1.4), (.6, 1.9), (.85, 2.0), (1, 1.35)], tail=(2.6, 2.0, .2), dorsal=(.3, .8, 1.3), anal=(.2, .45, .7)),
 }
 
 
@@ -135,7 +150,7 @@ def fish(shape: str, back: str, side: str, belly: str, fin: str, pattern=None, e
                             if sweep:
                                 hgt = dh * (1.0 - k) ** 0.8
                             else:
-                                hgt = dh * (math.sin(math.pi * min(1.0, k * 1.15)) ** 0.6 if shape not in ("sword", "shark", "sail") else (k ** 0.7))
+                                hgt = dh * (math.sin(math.pi * min(1.0, k * 1.15)) ** 0.6 if shape not in ("sword", "shark", "sail", "hammer", "saw") else (k ** 0.7))
                             if -v <= w + hgt:
                                 kind = ("fin", u, (-v - w) / max(hgt, 0.01), a)
                         a0, a1, ah = sp["anal"]
@@ -192,12 +207,15 @@ def fish(shape: str, back: str, side: str, belly: str, fin: str, pattern=None, e
                 col = mix(cs, cb, 0.4)
             px[x, y] = col
     extras(img, sp, extra, length, tail_len, cb, cs, cl, cf, line, center)
+    extras2(img, sp, extra, length, tail_len, cb, cs, cl, cf, line, center, eye)
     # Auge
     ea = length - max(1.6, 0.14 * body_len) - extra.get("eye_back", 0.0)
-    ev = -0.25 * interp(sp["body"], (ea - tail_len) / body_len) + center(ea)
+    ev = -extra.get("eye_up", 0.25) * interp(sp["body"], (ea - tail_len) / body_len) + center(ea)
     ex = TAIL[0] + (ea + ev) * R2
     ey = TAIL[1] + (-ea + ev) * R2
     exi, eyi = int(ex), int(ey)
+    if extra.get("hammer"):
+        exi = -1                                    # die Augen sitzen an den Enden des Hammers (siehe extras)
     if 0 <= exi < S and 0 <= eyi < S and px[exi, eyi][3]:
         px[exi, eyi] = hexc(eye)
         if extra.get("big_eye") and exi > 0 and px[exi - 1, eyi][3]:
@@ -321,6 +339,89 @@ def extras(img, sp, extra, length, tail_len, cb, cs, cl, cf, line, center):
             w = interp(sp["body"], (a - tail_len) / body_len)
             for j in range(-2, 3):
                 put(img, *at(a, j * w * 0.42), col)
+
+
+def extras2(img, sp, extra, length, tail_len, cb, cs, cl, cf, line, center, eye):
+    """Besonderheiten der zweiten Welle (seit 0.83)."""
+    body_len = length - tail_len
+    w_head = interp(sp["body"], 0.95)
+    if extra.get("hammer"):
+        # der Kopf als Querbalken, an den Enden die Augen
+        col = cb
+        a = length - 0.9
+        for k in range(-7, 8):
+            v = k * 0.5
+            put(img, *at(a + 0.2 * abs(v) * 0.0, v), mix(col, cs, 0.35) if abs(k) < 5 else col)
+            put(img, *at(a - 0.6, v), col)
+        put(img, *at(a - 0.3, -3.5), hexc(eye))
+        put(img, *at(a - 0.3, 3.5), hexc(eye))
+    if extra.get("sawteeth"):
+        col = hexc(extra["sawteeth"])
+        bill = extra.get("bill", 0.0)
+        for k in range(1, int(bill) + 1):
+            a = length + k - 0.2
+            put(img, *at(a, -0.95), col)
+            put(img, *at(a, 0.75), col)
+    if extra.get("fans"):
+        # die langen Strahlen der Brustflossen (Rotfeuerfisch): fächern nach unten und hinten
+        col = hexc(extra["fans"])
+        a0 = length - 3.6
+        w = interp(sp["body"], (a0 - tail_len) / body_len)
+        for k, (da, dv) in enumerate(((-0.8, 2.6), (-2.2, 3.2), (-3.8, 3.1), (-5.2, 2.4))):
+            for j in range(1, 5):
+                t = j / 4.0
+                put(img, *at(a0 + da * t, w * 0.6 + dv * t + 0.4), col if j < 4 else mix(col, (255, 255, 255, 255), 0.45))
+    if extra.get("wings"):
+        # große, bunte Brustflossen (Knurrhahn): ein Fächer unter dem Leib
+        col = hexc(extra["wings"])
+        edge = mix(col, line, 0.45)
+        a0 = length - 3.2
+        w = interp(sp["body"], (a0 - tail_len) / body_len)
+        for j in range(1, 5):
+            for da in (-0.5, -1.5, -2.5, -3.5, -4.5):
+                if -da > j * 1.4 + 0.5:
+                    continue
+                put(img, *at(a0 + da, w + j * 0.8), edge if j == 4 or -da > j * 1.4 - 0.6 else col)
+    if extra.get("spike"):
+        # der aufgestellte Stachel (Drückerfisch)
+        col = hexc(extra["spike"])
+        a = tail_len + body_len * 0.78
+        w = interp(sp["body"], 0.78)
+        for k in range(3):
+            put(img, *at(a - k * 0.25, -w - 0.9 - k * 0.9), col)
+    if extra.get("beak"):
+        # der Schnabel (Papageifisch): helle Zahnplatten vorn
+        col = hexc(extra["beak"])
+        put(img, *at(length - 0.2, -0.3), col)
+        put(img, *at(length - 0.2, 0.5), mix(col, line, 0.25))
+    if extra.get("earspot"):
+        # der dunkle Kiemenfleck mit hellem Rand (Sonnenbarsch)
+        col = hexc(extra["earspot"])
+        a = length - max(1.6, 0.14 * body_len) - 1.4
+        put(img, *at(a, -0.2 * w_head), col)
+        put(img, *at(a - 0.8, -0.2 * w_head), mix(col, cl, 0.5))
+    if extra.get("scalpel"):
+        # das helle Skalpell am Schwanzstiel (Doktorfisch)
+        col = hexc(extra["scalpel"])
+        put(img, *at(tail_len + 0.6, 0.0), col)
+        put(img, *at(tail_len + 1.2, -0.2), col)
+    if extra.get("frill"):
+        # Kragen hinter dem Kopf (Seeschlange)
+        col = hexc(extra["frill"])
+        a = length - 2.4
+        w = interp(sp["body"], (a - tail_len) / body_len)
+        for k in range(3):
+            put(img, *at(a - k * 0.7, -w - 0.6 - (1 if k == 1 else 0) + center(a)), col)
+            put(img, *at(a - k * 0.7, w + 0.6 + (1 if k == 1 else 0) + center(a)), mix(col, line, 0.25))
+    if extra.get("grin"):
+        # das nach oben gerichtete Maul (Sterngucker): eine dunkle Kerbe vorn oben
+        put(img, *at(length - 0.3, -0.9 * w_head), line)
+        put(img, *at(length - 1.1, -0.6 * w_head), line)
+    if extra.get("whiskers"):
+        # lange Barteln (Schmerle): drei feine Fäden am Maul
+        col = hexc(extra["whiskers"])
+        for (da, dv) in ((0.6, 0.9), (1.3, 1.5), (0.4, 1.9)):
+            put(img, *at(length + da - 0.4, w_head * 0.4 + dv * 0.6), col)
 
 
 def glows(img, extra):
@@ -706,6 +807,125 @@ def olm(body, dark, light, gills, eye="#101018", line="#1c1014"):
     p.ellipse(11.8, 5.0, 2.2, 1.8, body, rot=-45)
     p.dot(12, 4, eye)
     return p.render(line=line)
+
+
+def urchin(body, dark, tips, line="#14101c", long=False, glow=None):
+    """Ein Seeigel: eine runde Schale, rundum Stacheln mit hellen Spitzen."""
+    p = Painter()
+    cx, cy = 8.0, 8.6
+    n = 12 if not long else 10
+    reach = 6.9 if not long else 7.4
+    for k in range(n):
+        a = math.radians(k * 360.0 / n + 8.0)
+        p.stroke([(cx + math.cos(a) * 2.8, cy + math.sin(a) * 2.8), (cx + math.cos(a) * reach, cy + math.sin(a) * reach)],
+                 1.6 if not long else 1.3, 0.7, dark if k % 2 else body)
+    p.ellipse(cx, cy, 4.2, 3.9, body)
+    p.ellipse(cx - 1.0, cy - 1.2, 2.0, 1.3, tips, rot=-25)
+    for k in range(n):
+        a = math.radians(k * 360.0 / n + 8.0)
+        p.dot(int(round(cx + math.cos(a) * (reach - 0.6))), int(round(cy + math.sin(a) * (reach - 0.6))), tips)
+    if glow:
+        for (x, y) in ((6, 9), (9, 7), (10, 10)):
+            p.dot(x, y, glow)
+    return p.render(line=line, shade=0.18)
+
+
+def clam(shell, dark, light, inner, line="#1c1410", fan=True, pearl=None):
+    """Eine Muschel: als Fächer mit Rippen (Jakobsmuschel) oder als Oval mit Zuwachsringen, leicht geöffnet."""
+    p = Painter()
+    if fan:
+        hx_, hy = 8.0, 13.2
+        p.ellipse(5.6, 13.0, 1.6, 1.0, dark)            # die Öhrchen am Schloss
+        p.ellipse(10.4, 13.0, 1.6, 1.0, dark)
+        for k in range(9):
+            a = math.radians(-160 + k * 17.5)
+            p.stroke([(hx_, hy), (hx_ + math.cos(a) * 7.0, hy + math.sin(a) * 7.6)], 0.9, 2.2, shell if k % 2 else light)
+        img = p.render(line=line, shade=0.2)
+        px = img.load()
+        # die Rippen dunkel gefasst
+        for y in range(S):
+            for x in range(S):
+                if px[x, y][3] and px[x, y] == hexc(shell) and (x + y) % 3 == 0:
+                    px[x, y] = mix(px[x, y], hexc(dark), 0.35)
+        return img
+    # das Oval: zwei Schalen, dazwischen ein Spalt mit Perle oder Fleisch
+    p.ellipse(8.0, 8.2, 6.6, 4.6, shell, rot=-30)
+    for k, r in enumerate((5.2, 3.8, 2.4)):
+        p.ellipse(7.4 - k * 0.3, 7.6 - k * 0.3, r, r * 0.7, light if k % 2 else dark, rot=-30)
+        p.ellipse(7.4 - k * 0.3, 7.6 - k * 0.3, r - 0.8, (r - 0.8) * 0.7, shell, rot=-30)
+    p.stroke([(2.4, 12.2), (8.4, 10.6), (13.8, 6.4)], 1.4, 1.4, inner)
+    if pearl:
+        p.dot(8, 10, pearl).dot(9, 10, pearl)
+    return p.render(line=line, shade=0.2)
+
+
+def cucumber(body, dark, light, crown, line="#1c1014", spots=None):
+    """Eine Seegurke, schräg wie die Fische: ein dicker, warziger Leib, oben rechts der Kranz der Fühler."""
+    p = Painter()
+    for k, (dx, dy) in enumerate(((1.0, -3.2), (2.6, -2.6), (3.4, -1.0), (3.2, 0.6), (-0.6, -3.2))):
+        p.stroke([(11.8, 5.2), (11.8 + dx, 5.2 + dy)], 1.1, 0.9, crown)
+    p.stroke([(2.4, 13.6), (4.8, 11.4), (7.8, 8.6), (10.6, 6.0), (12.2, 4.8)], 2.8, 3.0, body)
+    p.ellipse(7.4, 9.0, 4.6, 2.7, body, rot=-45)
+    p.stroke([(3.6, 12.0), (6.4, 9.2), (9.4, 6.4)], 1.0, 1.1, light)
+    img = p.render(line=line, shade=0.2)
+    px = img.load()
+    # Warzen: kleine Höcker am Rand und Tupfen auf dem Leib
+    src = img.copy().load()
+    out_col = hexc(line)
+    for y in range(1, S - 1):
+        for x in range(1, S - 1):
+            if src[x, y] == out_col and h01(x, y, 91) < 0.34 and x + y < 22 and x - y > -12:
+                # ein Höcker: nach außen gesetzter Punkt in Leibfarbe, mit Rand dahinter
+                for nx, ny in ((x - 1, y), (x, y - 1), (x + 1, y), (x, y + 1)):
+                    if not src[nx, ny][3]:
+                        px[x, y] = mix(hexc(body), (255, 255, 255, 255), 0.12)
+                        px[nx, ny] = out_col
+                        break
+    for y in range(S):
+        for x in range(S):
+            if src[x, y][3] and src[x, y] != out_col and src[x, y] != hexc(crown):
+                v = h01(x, y, 83)
+                if v < 0.14:
+                    px[x, y] = hexc(spots) if spots else mix(src[x, y], hexc(dark), 0.6)
+                elif v > 0.9:
+                    px[x, y] = mix(src[x, y], (255, 255, 255, 255), 0.3)
+    return img
+
+
+def slug(body, cerata, tips, foot, line="#1c1014", eye_col=None):
+    """Eine Fadenschnecke, schräg wie die Fische: ein flacher Leib, darauf Reihen fingerförmiger Fortsätze mit bunten Spitzen."""
+    p = Painter()
+    p.stroke([(1.8, 14.2), (5.0, 11.2), (8.6, 7.8), (12.0, 4.6)], 2.6, 3.2, foot)
+    p.stroke([(12.0, 4.6), (13.2, 2.0)], 0.9, 0.8, cerata)        # die Fühler am Kopf
+    p.stroke([(12.4, 5.2), (15.0, 4.0)], 0.9, 0.8, cerata)
+    for k in range(6):
+        bx, by = 3.6 + k * 1.6, 12.4 - k * 1.6
+        p.stroke([(bx, by), (bx - 1.6, by - 2.0)], 1.3, 0.9, cerata)
+        p.stroke([(bx + 0.4, by + 0.4), (bx + 2.2, by + 1.6)], 1.3, 0.9, cerata)
+    p.stroke([(2.6, 13.2), (6.0, 10.0), (9.4, 6.8), (12.2, 4.4)], 1.6, 2.0, body)
+    for k in range(6):
+        bx, by = 3.6 + k * 1.6, 12.4 - k * 1.6
+        p.dot(int(bx - 1.4), int(by - 1.9), tips)
+        p.dot(int(bx + 2.0), int(by + 1.5), tips)
+    if eye_col:
+        p.dot(12, 4, eye_col)
+    return p.render(line=line, shade=0.16)
+
+
+def mantis(body, dark, light, accent, eye="#3af0c8", line="#1c1014"):
+    """Ein Fangschreckenkrebs, schräg wie die Fische: gegliederter Leib, gestielte Augen, zusammengelegte Fangarme."""
+    p = Painter()
+    p.stroke([(12.0, 4.6), (13.4, 1.8)], 0.9, 0.7, dark)           # Augenstiele
+    p.stroke([(12.6, 5.2), (15.0, 3.6)], 0.9, 0.7, dark)
+    for k in range(4):                                               # Laufbeine
+        p.stroke([(5.6 + k * 1.5, 11.4 - k * 1.5), (7.0 + k * 1.5, 12.8 - k * 1.5)], 0.9, 0.7, dark)
+    p.stroke([(10.6, 7.6), (12.6, 8.8), (11.6, 10.2)], 1.5, 1.2, accent)   # die Fangarme
+    p.ellipse(2.4, 13.6, 2.0, 1.5, accent, rot=-45)                 # Schwanzfächer
+    p.stroke([(3.4, 12.6), (5.6, 10.8), (8.0, 8.6), (10.0, 6.6), (11.6, 5.2)], 2.8, 3.4, body)
+    p.stroke([(3.8, 11.6), (6.2, 9.4), (8.8, 6.8), (10.8, 5.0)], 0.9, 1.2, light)
+    p.ellipse(12.0, 4.8, 1.8, 1.5, body, rot=-45)
+    p.dot(13, 1, eye).dot(15, 3, eye)
+    return bands(p.render(line=line), 2, 0.34, skip=(hexc(eye), hexc(accent)))
 
 
 # =============================================================================================
