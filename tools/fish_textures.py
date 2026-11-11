@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Die Fische des Angelns (seit 0.79): Bilder der Gegenstände (16×16) und ihre Schattenrisse für das Fischbuch.
+Die Fische des Angelns (seit 0.79): Bilder der Gegenstände (16×16) der 80 von Hand gestalteten Arten. Die 916 Arten der
+Biome (seit 0.81) malt tools/fish_gen.py mit denselben Werkzeugen; Schattenrisse braucht es nicht mehr – das Fischbuch färbt
+das Bild einer noch nie gefangenen Art dunkel ein.
 
 Jeder Fisch liegt schräg im Bild wie die Fische von Minecraft: der Schwanz unten links, der Kopf oben rechts, der Rücken
 oben links, der Bauch unten rechts. Gezeichnet wird er aus wenigen Angaben – Umriss des Leibs (Halbbreite entlang der
@@ -80,20 +82,31 @@ SHAPES = {
     "skipper": dict(len=13.0, body=[(0, .45), (.3, 1.1), (.7, 1.5), (.9, 1.7), (1, 1.2)], tail=(2.4, 1.6, .0), dorsal=(.4, .7, 2.0), anal=(.2, .4, .5)),
     "armored": dict(len=17.5, body=[(0, .5), (.25, 1.6), (.55, 2.6), (.8, 3.2), (1, 2.2)], tail=(3.0, 2.4, .3, 1.4), dorsal=(.3, .46, 1.4), anal=(.15, .3, 1.0)),
     "sail": dict(len=14.5, body=[(0, .3), (.2, 1.3), (.5, 1.9), (.8, 1.6), (1, .5)], tail=(2.4, 3.1, .85), dorsal=(.3, .86, 3.4), anal=(.2, .32, 1.0)),
+    # seit 0.81 (die Arten der Biome)
+    "bream": dict(len=15.0, body=[(0, .55), (.2, 2.2), (.5, 3.3), (.8, 2.6), (1, .9)], tail=(3.0, 2.6, .5), dorsal=(.3, .76, 1.3), anal=(.15, .45, 1.1)),
+    "angel": dict(len=12.0, body=[(0, .5), (.3, 1.8), (.55, 2.4), (.82, 2.0), (1, .8)], tail=(2.6, 1.9, .3), dorsal=(.36, .6, 4.6), anal=(.34, .56, 4.2), sweep=True),
+    "flyer": dict(len=15.0, body=[(0, .35), (.25, 1.1), (.55, 1.5), (.8, 1.25), (1, .5)], tail=(2.9, 2.7, .7), dorsal=(.46, .84, 3.1), anal=(.42, .72, 2.3)),
+    "box": dict(len=12.5, body=[(0, .9), (.15, 2.5), (.5, 2.75), (.85, 2.55), (1, 1.6)], tail=(2.2, 1.5, .0), dorsal=(.14, .28, 1.0), anal=(.12, .26, .9)),
+    "mahi": dict(len=17.0, body=[(0, .35), (.3, 1.3), (.7, 2.25), (.9, 2.55), (1, 1.7)], tail=(2.8, 3.0, .8), dorsal=(.14, .96, 1.2), anal=(.14, .5, .8)),
+    "whale": dict(len=17.5, body=[(0, .5), (.2, 1.6), (.5, 2.9), (.8, 3.3), (1, 2.1)], tail=(2.8, 3.5, .6), dorsal=(.3, .42, .9), anal=(.0, .0, .0)),
+    "moray": dict(len=18.0, body=[(0, .5), (.3, 1.3), (.75, 1.6), (1, 1.05)], tail=(0.7, 0.5, .0), dorsal=(.05, .9, .7), anal=(.05, .6, .45), wave=1.5),
+    "gar": dict(len=15.5, body=[(0, .4), (.2, .95), (.6, 1.15), (.86, 1.0), (1, .4)], tail=(2.6, 2.0, .45), dorsal=(.1, .24, 1.2), anal=(.08, .22, 1.0)),
 }
 
 
 def fish(shape: str, back: str, side: str, belly: str, fin: str, pattern=None, eye="#101018", **extra) -> Image.Image:
-    """Zeichnet einen Fisch. pattern: (Art, Farbe[, Wert]); extra: bill, barbels, lure, teeth, spines, glow, tailcol, finlets."""
+    """Zeichnet einen Fisch. pattern: (Art, Farbe[, Wert]); extra: bill, barbels, lure, teeth, spines, glow, tailcol, fintip, finlets."""
     sp = dict(SHAPES[shape])
-    sp.update({k: v for k, v in extra.items() if k in ("len", "body", "tail", "dorsal", "anal", "wave")})
+    sp.update({k: v for k, v in extra.items() if k in ("len", "body", "tail", "dorsal", "anal", "wave", "sweep")})
     cb, cs, cl, cf = hexc(back), hexc(side), hexc(belly), hexc(fin)
     ctail = hexc(extra.get("tailcol", fin))
+    ctip = hexc(extra["fintip"]) if extra.get("fintip") else None
     length = sp["len"]
     tail = sp["tail"]
     tail_len, tail_spread, fork = tail[0], tail[1], tail[2]
     upper = tail[3] if len(tail) > 3 else 1.0       # oberer Schwanzlappen länger (Stör, Hai)
     wave = sp.get("wave", 0.0)
+    sweep = sp.get("sweep", False)      # Flossen wie Wimpel: hinten am höchsten, nach vorn auslaufend
     seed = sum(map(ord, shape + back + side))
     line = mix(cb, (8, 8, 14, 255), 0.62)
     body_len = length - tail_len
@@ -119,13 +132,16 @@ def fish(shape: str, back: str, side: str, belly: str, fin: str, pattern=None, e
                         d0, d1, dh = sp["dorsal"]
                         if dh and d0 <= u <= d1 and v < 0:
                             k = (u - d0) / max(1e-6, d1 - d0)
-                            hgt = dh * (math.sin(math.pi * min(1.0, k * 1.15)) ** 0.6 if shape not in ("sword", "shark", "sail") else (k ** 0.7))
+                            if sweep:
+                                hgt = dh * (1.0 - k) ** 0.8
+                            else:
+                                hgt = dh * (math.sin(math.pi * min(1.0, k * 1.15)) ** 0.6 if shape not in ("sword", "shark", "sail") else (k ** 0.7))
                             if -v <= w + hgt:
                                 kind = ("fin", u, (-v - w) / max(hgt, 0.01), a)
                         a0, a1, ah = sp["anal"]
                         if kind is None and ah and a0 <= u <= a1 and v > 0:
                             k = (u - a0) / max(1e-6, a1 - a0)
-                            hgt = ah * math.sin(math.pi * k) ** 0.6
+                            hgt = ah * ((1.0 - k) ** 0.8 if sweep else math.sin(math.pi * k) ** 0.6)
                             if v <= w + hgt:
                                 kind = ("fin", u, (v - w) / max(hgt, 0.01), a)
                 if kind is None and a <= tail_len + 0.5:
@@ -165,11 +181,11 @@ def fish(shape: str, back: str, side: str, belly: str, fin: str, pattern=None, e
                     col = mix(cb, cs, 0.6)
                 col = paint_pattern(pattern, col, cb, cs, cl, u, t, a, x, y, seed)
             elif name == "fin":
-                col = mix(cf, line, 0.35) if t > 0.7 else cf
+                col = (ctip if ctip else mix(cf, line, 0.35)) if t > 0.7 else cf
                 if int(a * 1.6) % 2 == 0:
                     col = mix(col, line, 0.16)
             elif name == "tail":
-                col = mix(ctail, line, 0.3) if (u > 0.72 or t > 0.82) else ctail
+                col = (ctip if ctip else mix(ctail, line, 0.3)) if (u > 0.72 or t > 0.82) else ctail
                 if int(t * 3.0) % 2 == 1:
                     col = mix(col, line, 0.14)
             else:
@@ -222,6 +238,25 @@ def paint_pattern(pattern, col, cb, cs, cl, u, t, a, x, y, seed):
         return mix(col, pc, max(0.0, 1.0 - u * 2.2))
     elif kind == "headfade":
         return mix(col, pc, max(0.0, (u - 0.55) * 2.0))
+    elif kind == "saddle":
+        n = val or 4
+        if t < -0.05 and int(u * n * 2) % 2 == 1 and 0.1 < u < 0.9:
+            return mix(col, pc, 0.9)
+    elif kind == "stripes":
+        if (-0.62 <= t <= -0.36 or 0.0 <= t <= 0.24) and 0.06 < u < 0.92:
+            return pc
+    elif kind == "collar":
+        if (val or 0.56) <= u <= (val or 0.56) + 0.16:
+            return pc
+    elif kind == "mask":
+        if u > 0.78:
+            return mix(col, pc, 0.85)
+    elif kind == "backline":
+        if t < -0.5 and 0.05 < u < 0.95:
+            return pc
+    elif kind == "halves":
+        if u < 0.5:
+            return mix(col, pc, 0.8)
     return col
 
 
@@ -379,6 +414,11 @@ class Painter:
         self.dots.append((x, y, hexc(col)))
         return self
 
+    def dome(self, cx, cy, rx, ry, col):
+        """Die obere Hälfte einer Ellipse (eine Kuppel mit geradem Rand bei cy)."""
+        self.shapes.append((lambda x, y: y <= cy and ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1.0, hexc(col)))
+        return self
+
     def render(self, line="#14121c", shade=0.22) -> Image.Image:
         img = Image.new("RGBA", (S, S), CLEAR)
         px = img.load()
@@ -445,16 +485,16 @@ def squid(body, dark, light, eye="#101018", glow=None, fins=True, cloak=None):
     return p.render(line="#16101c")
 
 
-def seahorse():
+def seahorse(body="#e8a02a", head="#f0b43a", snout="#d8902a", light="#f8d870", crest="#c87a1e", line="#5a2e0a", eye="#101018"):
     p = Painter()
-    p.stroke([(8.6, 6.4), (8.0, 8.4), (8.6, 10.6), (7.6, 12.6), (6.0, 13.4), (5.0, 12.4), (5.8, 11.4)], 3.0, 1.0, "#e8a02a")
-    p.stroke([(8.4, 6.0), (9.6, 4.6)], 2.6, 2.6, "#e8a02a")
-    p.ellipse(9.4, 3.8, 2.0, 1.7, "#f0b43a")
-    p.stroke([(10.4, 4.2), (13.2, 5.2)], 1.3, 1.0, "#d8902a")
-    p.stroke([(7.0, 7.6), (5.4, 8.6), (5.6, 10.0)], 1.2, 0.8, "#f8d870")
-    p.stroke([(8.6, 2.2), (9.0, 1.2)], 1.0, 0.8, "#c87a1e")
-    p.dot(9, 3, "#101018").dot(8, 8, "#f8d870").dot(8, 10, "#f8d870")
-    return p.render(line="#5a2e0a")
+    p.stroke([(8.6, 6.4), (8.0, 8.4), (8.6, 10.6), (7.6, 12.6), (6.0, 13.4), (5.0, 12.4), (5.8, 11.4)], 3.0, 1.0, body)
+    p.stroke([(8.4, 6.0), (9.6, 4.6)], 2.6, 2.6, body)
+    p.ellipse(9.4, 3.8, 2.0, 1.7, head)
+    p.stroke([(10.4, 4.2), (13.2, 5.2)], 1.3, 1.0, snout)
+    p.stroke([(7.0, 7.6), (5.4, 8.6), (5.6, 10.0)], 1.2, 0.8, light)
+    p.stroke([(8.6, 2.2), (9.0, 1.2)], 1.0, 0.8, crest)
+    p.dot(9, 3, eye).dot(8, 8, light).dot(8, 10, light)
+    return p.render(line=line)
 
 
 def bands(img: Image.Image, every: int, strength: float, skip=()) -> Image.Image:
@@ -468,17 +508,17 @@ def bands(img: Image.Image, every: int, strength: float, skip=()) -> Image.Image
     return img
 
 
-def isopod():
+def isopod(body="#b8a8ba", light="#d8cad8", head="#c8bac8", legs="#8a7a90", feelers="#7a6a80", line="#3a3040", eye="#101018"):
     p = Painter()
-    p.stroke([(12.6, 3.6), (14.6, 1.4)], 1.0, 0.8, "#7a6a80")
-    p.stroke([(13.0, 4.8), (15.2, 3.8)], 1.0, 0.8, "#7a6a80")
+    p.stroke([(12.6, 3.6), (14.6, 1.4)], 1.0, 0.8, feelers)
+    p.stroke([(13.0, 4.8), (15.2, 3.8)], 1.0, 0.8, feelers)
     for k in range(4):
-        p.stroke([(3.6 + k * 1.9, 13.4 - k * 1.9), (5.4 + k * 1.9, 14.6 - k * 1.9)], 1.0, 0.8, "#8a7a90")
-    p.ellipse(7.6, 8.4, 5.9, 3.4, "#b8a8ba", rot=-45)
-    p.ellipse(6.4, 7.2, 4.6, 1.5, "#d8cad8", rot=-45)
-    p.ellipse(11.2, 4.8, 2.3, 2.7, "#c8bac8", rot=-45)
-    p.dot(11, 3, "#101018").dot(13, 5, "#101018")
-    return bands(p.render(line="#3a3040"), 3, 0.38, skip=(hexc("#101018"),))
+        p.stroke([(3.6 + k * 1.9, 13.4 - k * 1.9), (5.4 + k * 1.9, 14.6 - k * 1.9)], 1.0, 0.8, legs)
+    p.ellipse(7.6, 8.4, 5.9, 3.4, body, rot=-45)
+    p.ellipse(6.4, 7.2, 4.6, 1.5, light, rot=-45)
+    p.ellipse(11.2, 4.8, 2.3, 2.7, head, rot=-45)
+    p.dot(11, 3, eye).dot(13, 5, eye)
+    return bands(p.render(line=line), 3, 0.38, skip=(hexc(eye),))
 
 
 def vampire_squid():
@@ -497,29 +537,29 @@ def vampire_squid():
     return p.render(line="#22060c")
 
 
-def nautilus():
+def nautilus(shell="#f4ecdc", stripe="#c8582a", flesh="#e8b89a", arm_a="#e0a888", arm_b="#f0c8a8", line="#4a2a1a", eye="#101018"):
     p = Painter()
     for k, (ex, ey) in enumerate(((2.0, 9.6), (2.4, 11.6), (3.8, 13.2), (5.8, 13.8))):
-        p.stroke([(6.6, 10.0), (ex, ey)], 1.3, 0.7, "#f0c8a8" if k % 2 else "#e0a888")
-    p.ellipse(9.2, 7.2, 5.2, 4.9, "#f4ecdc")
+        p.stroke([(6.6, 10.0), (ex, ey)], 1.3, 0.7, arm_b if k % 2 else arm_a)
+    p.ellipse(9.2, 7.2, 5.2, 4.9, shell)
     for k in range(5):
         a = math.radians(-150 + k * 42)
-        p.stroke([(9.2 + math.cos(a) * 1.4, 7.2 + math.sin(a) * 1.4), (9.2 + math.cos(a) * 5.0, 7.2 + math.sin(a) * 5.0)], 1.5, 1.9, "#c8582a")
-    p.ellipse(8.6, 7.8, 1.5, 1.4, "#f4ecdc")
-    p.ellipse(6.2, 9.8, 1.9, 1.6, "#e8b89a")
-    p.dot(6, 9, "#101018").dot(9, 7, "#c8582a")
-    return p.render(line="#4a2a1a")
+        p.stroke([(9.2 + math.cos(a) * 1.4, 7.2 + math.sin(a) * 1.4), (9.2 + math.cos(a) * 5.0, 7.2 + math.sin(a) * 5.0)], 1.5, 1.9, stripe)
+    p.ellipse(8.6, 7.8, 1.5, 1.4, shell)
+    p.ellipse(6.2, 9.8, 1.9, 1.6, flesh)
+    p.dot(6, 9, eye).dot(9, 7, stripe)
+    return p.render(line=line)
 
 
-def trilobite():
+def trilobite(body="#7a6a52", ridge="#a8967c", head="#8e7c62", brow="#b4a288", tail="#4e4232", line="#2a2218", eye="#101018"):
     p = Painter()
-    p.stroke([(3.0, 13.6), (1.4, 15.0)], 0.9, 0.6, "#4e4232")
-    p.ellipse(7.4, 8.6, 5.7, 3.6, "#7a6a52", rot=-45)
-    p.ellipse(7.4, 8.6, 5.0, 1.3, "#a8967c", rot=-45)
-    p.ellipse(10.8, 5.2, 3.0, 3.6, "#8e7c62", rot=-45)
-    p.ellipse(11.4, 4.6, 1.5, 1.9, "#b4a288", rot=-45)
-    p.dot(9, 4, "#101018").dot(12, 7, "#101018")
-    return bands(p.render(line="#2a2218"), 2, 0.3, skip=(hexc("#101018"),))
+    p.stroke([(3.0, 13.6), (1.4, 15.0)], 0.9, 0.6, tail)
+    p.ellipse(7.4, 8.6, 5.7, 3.6, body, rot=-45)
+    p.ellipse(7.4, 8.6, 5.0, 1.3, ridge, rot=-45)
+    p.ellipse(10.8, 5.2, 3.0, 3.6, head, rot=-45)
+    p.ellipse(11.4, 4.6, 1.5, 1.9, brow, rot=-45)
+    p.dot(9, 4, eye).dot(12, 7, eye)
+    return bands(p.render(line=line), 2, 0.3, skip=(hexc(eye),))
 
 
 def krakling():
@@ -553,6 +593,118 @@ def ray(body, light, edge, dots=(), dot="#fff4b0", eye="#101018", line="#14121c"
     p.dot(10, 4, eye).dot(12, 6, eye)
     for (x, y) in dots:
         p.dot(x, y, dot)
+    return p.render(line=line)
+
+
+def crab(body, dark, light, claw=None, eye="#101018", line="#1c1014"):
+    """Eine Krabbe von vorn: der Panzer in der Mitte, die Scheren erhoben, drei Beinpaare."""
+    p = Painter()
+    claw = claw or body
+    for k in range(3):
+        p.stroke([(5.2 - k * 0.2, 10.0 + k * 0.7), (2.9 - k * 0.1, 11.0 + k * 1.0), (1.9 + k * 0.7, 13.0 + k * 0.6)], 1.2, 0.8, dark)
+        p.stroke([(10.8 + k * 0.2, 10.0 + k * 0.7), (13.1 + k * 0.1, 11.0 + k * 1.0), (14.1 - k * 0.7, 13.0 + k * 0.6)], 1.2, 0.8, dark)
+    p.stroke([(4.6, 8.4), (2.6, 7.0), (2.8, 5.0)], 1.5, 1.3, dark)
+    p.stroke([(11.4, 8.4), (13.4, 7.0), (13.2, 5.0)], 1.5, 1.3, dark)
+    p.ellipse(3.3, 3.7, 2.0, 1.6, claw, rot=-35)
+    p.ellipse(12.7, 3.7, 2.0, 1.6, claw, rot=35)
+    p.ellipse(8.0, 9.6, 4.5, 3.1, body)
+    p.ellipse(8.0, 8.5, 3.1, 1.2, light)
+    p.stroke([(6.5, 7.2), (6.3, 5.9)], 0.9, 0.9, dark)
+    p.stroke([(9.5, 7.2), (9.7, 5.9)], 0.9, 0.9, dark)
+    p.dot(6, 5, eye).dot(9, 5, eye)
+    p.dot(4, 2, "#00000000").dot(12, 2, "#00000000")
+    img = p.render(line=line)
+    px = img.load()
+    # die Scherenkerbe
+    for (x, y) in ((3, 2), (12, 2)):
+        if px[x, y][3]:
+            px[x, y] = hexc(line)
+    return img
+
+
+def shrimp(body, dark, light, claws=False, eye="#101018", line="#1c1014", feeler=None):
+    """Garnele oder Krebs, schräg wie die Fische: der Schwanzfächer unten links, die Fühler oben rechts."""
+    p = Painter()
+    feeler = feeler or dark
+    p.stroke([(11.6, 5.0), (13.6, 2.4), (15.2, 1.6)], 0.9, 0.7, feeler)
+    p.stroke([(12.2, 5.8), (14.6, 4.6), (15.4, 5.6)], 0.9, 0.7, feeler)
+    for k in range(4):
+        p.stroke([(5.6 + k * 1.5, 11.4 - k * 1.5), (7.0 + k * 1.5, 12.8 - k * 1.5)], 0.9, 0.7, dark)
+    if claws:
+        p.stroke([(10.4, 7.8), (12.6, 9.0)], 1.3, 1.2, dark)
+        p.stroke([(9.0, 6.0), (10.2, 3.6)], 1.3, 1.2, dark)
+        p.ellipse(13.6, 9.6, 1.7, 1.3, body, rot=30)
+        p.ellipse(10.6, 2.6, 1.3, 1.7, body, rot=20)
+    p.ellipse(2.6, 13.4, 1.9, 1.5, dark, rot=-45)
+    p.stroke([(3.4, 12.6), (5.4, 11.0), (7.6, 9.2), (9.4, 7.2), (10.8, 5.8)], 2.4, 3.6, body)
+    p.stroke([(3.8, 11.6), (6.0, 9.6), (8.4, 7.2), (10.2, 5.2)], 0.9, 1.3, light)
+    p.ellipse(11.4, 5.2, 1.9, 1.6, body, rot=-45)
+    p.dot(12, 4, eye)
+    return bands(p.render(line=line), 3, 0.3, skip=(hexc(eye),))
+
+
+def jelly(bell, dark, light, glow=None, line="#16101c", arms=5):
+    """Eine Qualle: die Glocke oben, darunter wehende Fäden."""
+    p = Painter()
+    xs = (3.6, 5.8, 8.0, 10.2, 12.4) if arms == 5 else (4.4, 6.8, 9.2, 11.6)
+    for k, x in enumerate(xs):
+        sway = 0.9 if k % 2 else -0.9
+        p.stroke([(x, 8.2), (x + sway, 10.4), (x - sway * 0.6, 12.6), (x + sway * 0.8, 14.6 - (k % 2) * 0.8)], 1.2, 0.7, dark if k % 2 else bell)
+    p.dome(8.0, 8.6, 5.6, 7.0, bell)
+    p.ellipse(7.0, 4.4, 2.6, 1.5, light, rot=-20)
+    p.stroke([(3.2, 8.0), (12.8, 8.0)], 1.3, 1.3, dark)
+    img = p.render(line=line, shade=0.16)
+    if glow:
+        px = img.load()
+        for (x, y) in ((5, 5), (8, 3), (11, 5), (6, 11), (10, 12)):
+            if px[x, y][3]:
+                px[x, y] = hexc(glow)
+    return img
+
+
+def snail(shell, stripe, flesh, light, eye="#101018", line="#1c1410"):
+    """Eine Schnecke von der Seite: das gewundene Haus, darunter der Fuß, vorn die Fühler."""
+    p = Painter()
+    p.stroke([(2.0, 13.2), (6.0, 13.6), (11.0, 13.4), (13.6, 12.2)], 2.0, 2.4, flesh)
+    p.stroke([(12.6, 11.4), (13.4, 8.8)], 1.0, 0.9, flesh)
+    p.stroke([(13.8, 11.8), (15.0, 9.6)], 1.0, 0.9, flesh)
+    p.ellipse(7.4, 8.0, 5.0, 4.6, shell)
+    p.ellipse(7.6, 8.2, 3.3, 3.0, stripe)
+    p.ellipse(7.8, 8.4, 2.1, 1.9, shell)
+    p.ellipse(8.0, 8.6, 0.9, 0.8, stripe)
+    p.ellipse(5.6, 5.4, 1.7, 1.0, light, rot=-30)
+    p.dot(13, 8, eye).dot(15, 9, eye)
+    return p.render(line=line)
+
+
+def starfish(body, dark, light, line="#1c1014", arms=5):
+    """Ein Seestern: fünf Arme, gepunktet."""
+    p = Painter()
+    cx, cy = 8.0, 8.4
+    tips = []
+    for k in range(arms):
+        a = math.radians(-90 + k * 360.0 / arms)
+        tips.append((cx + math.cos(a) * 6.6, cy + math.sin(a) * 6.6))
+        p.stroke([(cx, cy), tips[-1]], 3.6, 1.0, body)
+    p.ellipse(cx, cy, 2.4, 2.4, body)
+    p.ellipse(cx - 0.4, cy - 0.5, 1.2, 1.1, light)
+    for (tx, ty) in tips:
+        p.dot(int(cx + (tx - cx) * 0.55), int(cy + (ty - cy) * 0.55), dark)
+    return p.render(line=line)
+
+
+def olm(body, dark, light, gills, eye="#101018", line="#1c1014"):
+    """Molch oder Olm, schräg wie die Fische: der Ruderschwanz unten links, vorn die Kiemenbüschel."""
+    p = Painter()
+    for (x, y, dx, dy) in ((5.6, 11.6, 1.6, 1.4), (4.6, 10.4, -1.5, -1.3), (10.0, 7.2, 1.6, 1.4), (9.0, 6.0, -1.5, -1.3)):
+        p.stroke([(x, y), (x + dx, y + dy)], 1.0, 0.8, dark)
+    p.stroke([(1.4, 14.6), (2.8, 13.0), (4.4, 12.0)], 0.9, 2.2, dark)
+    p.stroke([(4.0, 12.2), (6.2, 10.4), (8.4, 8.2), (10.4, 6.4)], 2.4, 2.9, body)
+    p.stroke([(4.6, 11.2), (7.0, 9.0), (9.6, 6.6)], 0.8, 1.0, light)
+    for k, (gx, gy) in enumerate(((9.2, 3.6), (10.2, 2.8), (13.0, 6.8), (13.8, 5.8))):
+        p.stroke([(11.2, 5.2), (gx, gy)], 0.9, 0.8, gills)
+    p.ellipse(11.8, 5.0, 2.2, 1.8, body, rot=-45)
+    p.dot(12, 4, eye)
     return p.render(line=line)
 
 
@@ -643,6 +795,18 @@ def species() -> dict:
         "dragon_koi": lambda: f("carp", "#1a1030", "#5a2a9a", "#e0c0ff", "#e87af8", ("scales", "#c89aff"), barbels=3, crest="#ffd24a", eye="#ffd24a",
                                 glow="#f0b0ff", len=17.8),
         "moonshine_koi": lambda: f("carp", "#a8c8f0", "#e8f4ff", "#ffffff", "#9ad8ff", ("patches", "#5a9ae8", 0.35), glow="#ffffff", barbels=1),
+        # Legenden seit 0.81
+        "night_sovereign": lambda: f("catfish", "#0e0a1a", "#2a1a4a", "#6a48a0", "#1a1030", ("mottle", "#b46cff", 0.2), barbels=3, eye="#e8d0ff", glow="#c89aff",
+                                     len=17.8),
+        "rift_leviathan": lambda: f("moray", "#1c1420", "#4a2c5a", "#ff7a2a", "#a47cf0", ("saddle", "#ff9a3a", 6), teeth=3, crest="#ffd24a", eye="#ffe08a",
+                                    glow="#ffb86a"),
+        "star_whale": lambda: f("whale", "#141438", "#34348a", "#c8c8f4", "#22225a", ("spots", "#fff8c0", 0.14), glow="#fff8c0", eye="#ffffff"),
+        "lightless_one": lambda: olm("#f4e4e0", "#d0b0b0", "#ffffff", "#e83a5a", eye="#f4e4e0", line="#4a2a30"),
+        "frost_emperor": lambda: f("sturgeon", "#2a4a8a", "#7ab8f0", "#f0faff", "#b48cf0", ("backline", "#ffffff"), scutes="#ffffff", eye="#101830", glow="#e0f8ff"),
+        "reef_queen": lambda: f("goldfish", "#c8287a", "#ff6aa8", "#ffe4a0", "#3ad8d0", ("bars", "#7a1a5a", 4), fintip="#ffe04a", crest="#ffd24a", glow="#fff0a0"),
+        "bog_mother": lambda: f("catfish", "#2a3a1e", "#5a6a32", "#c8c88a", "#3a4a26", ("mottle", "#8aa04a", 0.35), barbels=3, eye="#e8e060", len=17.6,
+                                body=[(0, .55), (.3, 1.55), (.6, 2.25), (.86, 2.5), (1, 1.45)]),
+        "sun_king": lambda: f("arapaima", "#c8701a", "#ffc02a", "#fff4b0", "#e84a1a", ("scales", "#fff0a0"), fintip="#ffe890", eye="#5a1a0a", glow="#fff4b0"),
     }
 
 
@@ -654,31 +818,6 @@ def later() -> dict:
         "krakling": krakling,
         "primal_fish": lambda: fish("armored", "#4a3a2a", "#7a6648", "#c8b890", "#5a4a36", plates="#3a2e22", teeth=3),
     }
-
-
-# Schattenrisse der vier Fische von Minecraft (eigene Formen – ihre Bilder kommen aus dem Spiel selbst)
-VANILLA_SHAPES = {
-    "cod": lambda: f_plain("trout"),
-    "salmon": lambda: f_plain("tuna"),
-    "tropical_fish": lambda: f_plain("goldfish"),
-    "pufferfish": lambda: f_plain("round"),
-}
-
-
-def f_plain(shape):
-    return fish(shape, "#404858", "#404858", "#404858", "#404858")
-
-
-def silhouette(img: Image.Image) -> Image.Image:
-    out = Image.new("RGBA", (S, S), CLEAR)
-    src, px = img.load(), out.load()
-    for y in range(S):
-        for x in range(S):
-            if not src[x, y][3]:
-                continue
-            rim = any(not (0 <= nx < S and 0 <= ny < S) or not src[nx, ny][3] for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)))
-            px[x, y] = (30, 36, 50, 255) if rim else (52, 62, 84, 255)
-    return out
 
 
 def items() -> dict:
@@ -736,17 +875,33 @@ def items() -> dict:
         "......OO........",
         "................",
     ], {"O": "#1e4a4a", "H": "#f0ffff", "L": "#9af8f0", "M": "#4ad8d0", "D": "#2a9a9a", "G": "#c8fffa", "S": "#b8b8c0"})
-    return {"item/fish_fillet_cooked": fillet, "item/bait_worm": worm, "item/bait_glow": glow}
+    # der Fischbeutel (seit 0.81): ein Beutel aus Segeltuch mit Zugkordel, aus dem ein Fischschwanz ragt
+    bag = ascii_sprite([
+        "................",
+        "..........O..O..",
+        ".........OTOOTO.",
+        "....OO...OTTTTO.",
+        "...ORROO..OTtO..",
+        "...OrRRROOOtO...",
+        "....OOoooottO...",
+        "...OHLLLLLMO....",
+        "..OHLLLLLLMDO...",
+        "..OLLLLFFLMDO...",
+        ".OHLFLFFFFLMDO..",
+        ".OLLFFFFFfFMDO..",
+        ".OLLFLFFFFMDDO..",
+        ".OLMMMMFFMDDDO..",
+        "..OMDDDDDDDDO...",
+        "...OOOOOOOOO....",
+    ], {"O": "#1e2a26", "H": "#a8d0b8", "L": "#7aae96", "M": "#568a76", "D": "#3a6456", "o": "#284038", "R": "#e8c88a", "r": "#b08a4a",
+        "T": "#b8d8ec", "t": "#6a9ac0", "F": "#f0f0d8", "f": "#2a4a40"})
+    return {"item/fish_fillet_cooked": fillet, "item/bait_worm": worm, "item/bait_glow": glow, "item/fish_bag": bag}
 
 
 def build_all() -> dict:
     out = {}
     for name, make in species().items():
-        img = make()
-        out[f"item/fish/{name}"] = img
-        out[f"gui/fishing/silhouette/{name}"] = silhouette(img)
-    for name, make in VANILLA_SHAPES.items():
-        out[f"gui/fishing/silhouette/{name}"] = silhouette(make())
+        out[f"item/fish/{name}"] = make()
     out.update(items())
     return out
 

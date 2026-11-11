@@ -42,6 +42,8 @@ ITEMS: dict[str, tuple[str, float, float]] = {
     "star_apple": ("minecraft:item/generated", 3.5, 0.75),
     "shadow_apple": ("minecraft:item/generated", 3.5, 0.75),
     "immortal_apple": ("minecraft:item/generated", 3.5, 0.75),
+    # Fischbeutel (0.81): prall gefüllt
+    "fish_bag": ("minecraft:item/generated", 3.0, 0.75),
 }
 
 
@@ -55,6 +57,11 @@ def held(rotation, translation, scale) -> dict:
 TOTEM_HELD = held((78, 0, 0), (0, 3.5, 1.5), 0.6)
 APPLE_HELD = held((75, 0, 0), (0, 2.5, 0.5), 0.45)
 DISPLAY: dict[str, dict] = {name: (TOTEM_HELD if name.startswith("totem_") else APPLE_HELD) for name in ITEMS}
+# Der Fischbeutel ist prall: In der eigenen Hand säße er sonst zu groß im Bild – etwas kleiner und tiefer, in beiden Händen.
+DISPLAY["fish_bag"] = dict(held((75, 0, 0), (0, 2.5, 0.5), 0.5), **{
+    "firstperson_righthand": {"rotation": [0, -90, 25], "translation": [1.13, 2.4, 1.13], "scale": [0.54, 0.54, 0.54]},
+    "firstperson_lefthand": {"rotation": [0, 90, -25], "translation": [1.13, 2.4, 1.13], "scale": [0.54, 0.54, 0.54]},
+})
 
 
 def distance(mask: set[tuple[int, int]]) -> dict[tuple[int, int], float]:

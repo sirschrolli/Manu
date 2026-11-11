@@ -4,7 +4,30 @@ import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
 
 /** Texte des Angelns (seit 0.79): die Arten und ihre Notizen im Fischbuch, der Drill, Köder, Lebensräume. */
 final class FishingLang {
+    private static final String TABLE = "/data/kingdomsatwar/fishing/species_lang.tsv";
+
     private FishingLang() {}
+
+    /** Die 916 Arten der Biome: Kennung, Name (englisch, deutsch), Notiz (englisch, deutsch) – je Zeile eine Art. */
+    private static void biomeSpecies(HeroLang.Text text) {
+        try (java.io.InputStream in = FishingLang.class.getResourceAsStream(TABLE)) {
+            if (in == null) {
+                throw new IllegalStateException("Die Namen der Fischarten fehlen: " + TABLE);
+            }
+            java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+                String[] f = line.split("\t", -1);
+                text.add("item.kingdomsatwar.fish_" + f[0], f[1], f[2]);
+                text.add("fishing.kingdomsatwar.note." + f[0], f[3], f[4]);
+            }
+        } catch (java.io.IOException e) {
+            throw new java.io.UncheckedIOException(e);
+        }
+    }
 
     static void register(HeroLang.Text text) {
         // --- die Arten: Name (die vier Fische von Minecraft heißen, wie sie heißen) und Notiz im Fischbuch ---
@@ -232,6 +255,41 @@ final class FishingLang {
         text.add("item.kingdomsatwar.fish_moonshine_koi", "Moonshine Koi", "Mondschein-Koi");
         text.add("fishing.kingdomsatwar.note.moonshine_koi", "Made of moonlight, the fae say. Whoever eats it grows a second heart for a while.",
                 "Aus Mondlicht gemacht, sagen die Feen. Wer ihn isst, dem wächst für eine Weile ein zweites Herz.");
+        // --- die Legenden seit 0.81 ---
+        text.add("item.kingdomsatwar.fish_night_sovereign", "Night Sovereign", "Nachtfürst");
+        text.add("fishing.kingdomsatwar.note.night_sovereign",
+                "The master of the black waters of the Shadow World. Older than the Seal, they say, and no friend of light.",
+                "Der Herr der schwarzen Wasser der Schattenwelt. Älter als das Siegel, sagt man, und kein Freund des Lichts.");
+        text.add("item.kingdomsatwar.fish_rift_leviathan", "Rift Leviathan", "Rissleviathan");
+        text.add("fishing.kingdomsatwar.note.rift_leviathan",
+                "Swims where the worlds were torn apart – through water, embers and the nothing between. Its back glows like the Seam itself.",
+                "Schwimmt, wo die Welten zerrissen wurden – durch Wasser, Glut und das Nichts dazwischen. Sein Rücken glüht wie die Naht selbst.");
+        text.add("item.kingdomsatwar.fish_star_whale", "Star Whale", "Sternenwal");
+        text.add("fishing.kingdomsatwar.note.star_whale",
+                "Drifts through the Void with a whole night sky on its back. Small for a whale – vast for a fishing line.",
+                "Treibt durch die Leere, einen ganzen Nachthimmel auf dem Rücken. Klein für einen Wal – gewaltig für eine Angelschnur.");
+        text.add("item.kingdomsatwar.fish_lightless_one", "The Lightless One", "Der Lichtlose");
+        text.add("fishing.kingdomsatwar.note.lightless_one",
+                "A pale giant that has never seen the sun. It lives wherever water stands deep below the ground – and lends its senses to whoever eats it.",
+                "Ein bleicher Riese, der die Sonne nie gesehen hat. Lebt überall, wo tief unter der Erde Wasser steht – und leiht seine Sinne dem, der ihn isst.");
+        text.add("item.kingdomsatwar.fish_frost_emperor", "Frost Emperor", "Eiskaiser");
+        text.add("fishing.kingdomsatwar.note.frost_emperor",
+                "Rules beneath the ice of cold lakes and seas. Its armour of frost passes to whoever lands it.",
+                "Herrscht unter dem Eis der kalten Seen und Meere. Sein Panzer aus Frost geht auf den über, der ihn landet.");
+        text.add("item.kingdomsatwar.fish_reef_queen", "Reef Queen", "Riffkönigin");
+        text.add("fishing.kingdomsatwar.note.reef_queen",
+                "Every reef has a hundred colours – she wears them all. She shows herself only by day, above the corals of warm seas.",
+                "Jedes Riff hat hundert Farben – sie trägt alle. Zeigt sich nur am Tag, über den Korallen der warmen Meere.");
+        text.add("item.kingdomsatwar.fish_bog_mother", "Bog Mother", "Moormutter");
+        text.add("fishing.kingdomsatwar.note.bog_mother",
+                "As old as the swamp itself. The witches leave her offerings; at night she comes to fetch them.",
+                "So alt wie der Sumpf selbst. Die Hexen bringen ihr Gaben; nachts kommt sie, sie zu holen.");
+        text.add("item.kingdomsatwar.fish_sun_king", "Sun King", "Sonnenkönig");
+        text.add("fishing.kingdomsatwar.note.sun_king",
+                "Gold in a waterhole: it lives where water is rarest, and bites when the sun stands highest.",
+                "Gold im Wasserloch: lebt, wo Wasser am seltensten ist, und beißt, wenn die Sonne am höchsten steht.");
+        // --- die Arten der Biome (0.81): Namen und Notizen aus der Tabelle von tools/fish_gen.py ---
+        biomeSpecies(text);
         // --- Köder, Filet, Drill, Fischbuch ---
         text.add("item.kingdomsatwar.bait_worm", "Bait Worm", "Köderwurm");
         text.add(ModItems.loreKey("bait_worm", 1), "In your other hand while fishing: bites come sooner",
@@ -267,6 +325,7 @@ final class FishingLang {
         text.add("fishing.kingdomsatwar.chapter.rivers", "Rivers & Lakes", "Flüsse & Seen");
         text.add("fishing.kingdomsatwar.chapter.sea", "The Sea", "Das Meer");
         text.add("fishing.kingdomsatwar.chapter.deep", "The Deep Sea", "Die Tiefsee");
+        text.add("fishing.kingdomsatwar.chapter.caves", "Caves", "Höhlen");
         text.add("fishing.kingdomsatwar.chapter.nether", "The Nether", "Der Nether");
         text.add("fishing.kingdomsatwar.chapter.end", "End & Void", "End & Leere");
         text.add("fishing.kingdomsatwar.chapter.fae", "The Fae Realm", "Das Feenreich");
@@ -295,27 +354,68 @@ final class FishingLang {
         text.add("fishing.kingdomsatwar.habitat.lava_basalt", "lava in the basalt deltas", "Lava in den Basaltdeltas");
         text.add("fishing.kingdomsatwar.habitat.end", "the End", "das End");
         text.add("fishing.kingdomsatwar.habitat.void", "the Void", "die Leere");
-        text.add("fishing.kingdomsatwar.chapter.rivers.tip", "In rivers, lakes and ponds – many only in their own biome.",
-                "In Flüssen, Seen und Teichen – viele nur in ihrem Biom.");
-        text.add("fishing.kingdomsatwar.chapter.sea.tip", "By the sea and on its shores. Warm and cold seas have their own.",
-                "Am Meer und an seinen Stränden. Warme und kalte Meere haben eigene Arten.");
+        text.add("fishing.kingdomsatwar.chapter.rivers.tip",
+                "Rivers, lakes and ponds of the Overworld. Some fish bite everywhere – every biome has its own besides.",
+                "Flüsse, Seen und Teiche der Oberwelt. Manche Fische beißen überall – dazu hat jedes Biom seine eigenen.");
+        text.add("fishing.kingdomsatwar.chapter.sea.tip", "The seas and their shores. Every ocean, every beach and both coasts have their own species.",
+                "Die Meere und ihre Küsten. Jeder Ozean, jeder Strand und beide Küsten haben eigene Arten.");
         text.add("fishing.kingdomsatwar.chapter.deep.tip", "Above the deep oceans. More bites at night – and with glow bait in your other hand.",
                 "Über den tiefen Ozeanen. Nachts beißt mehr – und mit Glühköder in der anderen Hand.");
+        text.add("fishing.kingdomsatwar.chapter.caves.tip",
+                "Water deep below the ground: in any cave, and with species of their own in the cave biomes. Glow bait helps.",
+                "Wasser tief unter der Erde: in jeder Höhle, und mit eigenen Arten in den Höhlenbiomen. Glühköder hilft.");
         text.add("fishing.kingdomsatwar.chapter.nether.tip",
                 "The bobber floats on lava, too. Every biome of the Nether has its own fish – and they do not burn.",
-                "Der Schwimmer treibt auch auf Lava. Jedes Biom des Nethers hat seinen Fisch – und der verbrennt nicht.");
+                "Der Schwimmer treibt auch auf Lava. Jedes Biom des Nethers hat eigene Fische – und die verbrennen nicht.");
         text.add("fishing.kingdomsatwar.chapter.end.tip",
-                "Cast the hook over the edge of an island: a few blocks down, the void carries it like water.",
-                "Wirf den Haken über den Rand einer Insel: Ein paar Blöcke tiefer trägt ihn die Leere wie Wasser.");
-        text.add("fishing.kingdomsatwar.chapter.fae.tip", "In the waters of the Fae Realm, beyond the fae portal.",
-                "In den Wassern des Feenreichs, jenseits des Feenportals.");
-        text.add("fishing.kingdomsatwar.chapter.shadow.tip", "In the still, dark waters of the Shadow World.",
-                "In den stillen, dunklen Wassern der Schattenwelt.");
+                "Cast the hook over the edge of an island: a few blocks down, the void carries it like water. The End and the Void, biome by biome.",
+                "Wirf den Haken über den Rand einer Insel: Ein paar Blöcke tiefer trägt ihn die Leere wie Wasser. End und Leere, Biom für Biom.");
+        text.add("fishing.kingdomsatwar.chapter.fae.tip", "In the waters of the Fae Realm, beyond the fae portal – each of its lands has its own.",
+                "In den Wassern des Feenreichs, jenseits des Feenportals – jede seiner Landschaften hat eigene Arten.");
+        text.add("fishing.kingdomsatwar.chapter.shadow.tip", "In the still, dark waters of the Shadow World – from the Shadow Forest down to the Shadow Depths.",
+                "In den stillen, dunklen Wassern der Schattenwelt – vom Schattenwald bis hinab in die Schattentiefen.");
         text.add("fishing.kingdomsatwar.chapter.abyss.tip", "In the Abyss – in its water, its lava, and the void between its islands.",
                 "Im Abgrund – in seinem Wasser, seiner Lava und der Leere zwischen seinen Inseln.");
         text.add("fishing.kingdomsatwar.chapter.legends.tip",
-                "One in every world. Very rare, hardly to be held – Luck of the Sea draws them and widens the catch zone.",
-                "In jeder Welt eine. Sehr selten, kaum zu halten – Glück des Meeres lockt sie und vergrößert die Fangzone.");
+                "Fifteen in all the worlds. Very rare, hardly to be held – Luck of the Sea draws them and widens the catch zone.",
+                "Fünfzehn in allen Welten. Sehr selten, kaum zu halten – Glück des Meeres lockt sie und vergrößert die Fangzone.");
+        text.add("fishing.kingdomsatwar.book.everywhere", "Everywhere", "Überall");
+        text.add("fishing.kingdomsatwar.book.all_worlds", "In all the worlds", "In allen Welten");
+        text.add("fishing.kingdomsatwar.medium.lava", " (in lava)", " (in Lava)");
+        text.add("fishing.kingdomsatwar.medium.void", " (in the void)", " (in der Leere)");
+        // --- der Fischbeutel (0.81) ---
+        text.add("item.kingdomsatwar.fish_bag", "Fish Bag", "Fischbeutel");
+        text.add("item.kingdomsatwar.fish_bag.level", "Level %s", "Stufe %s");
+        text.add("item.kingdomsatwar.fish_bag.fill", "%1$s / %2$s fish", "%1$s / %2$s Fische");
+        text.add("item.kingdomsatwar.fish_bag.more", " … and %s more species", " … und %s weitere Arten");
+        text.add("item.kingdomsatwar.fish_bag.hint.catch", "Carried along: every catch goes inside", "Dabei getragen: Jeder Fang wandert hinein");
+        text.add("item.kingdomsatwar.fish_bag.hint.open", "Right-click: open and take fish out", "Rechtsklick: öffnen und Fische entnehmen");
+        text.add("item.kingdomsatwar.fish_bag.hint.upgrade", "The fisher in the village sells more room", "Mehr Platz verkauft der Fischer im Dorf");
+        text.add("item.kingdomsatwar.fish_bag.upgrade_hint", "For the bag you carry – its contents stay inside",
+                "Für den Beutel, den du bei dir trägst – der Inhalt bleibt darin");
+        text.add("trade.kingdomsatwar.fish_bag_upgrade", "Bag extension: level %1$s (%2$s fish)", "Beutel-Erweiterung: Stufe %1$s (%2$s Fische)");
+        text.add("trade.kingdomsatwar.fish.common", "Common fish", "Gewöhnliche Fische");
+        text.add("trade.kingdomsatwar.fish.uncommon", "Uncommon fish", "Ungewöhnliche Fische");
+        text.add("trade.kingdomsatwar.fish.rare", "Rare fish", "Seltene Fische");
+        text.add("trade.kingdomsatwar.fish.epic", "Epic fish", "Epische Fische");
+        text.add("trade.kingdomsatwar.fish.any", "Any species of this rarity", "Beliebige Arten dieser Seltenheit");
+        text.add("trade.kingdomsatwar.fish.from", "From your inventory or your fish bag", "Aus dem Inventar oder dem Fischbeutel");
+        text.add("gui.kingdomsatwar.trade.missing_bag", "You carry no fish bag", "Du trägst keinen Fischbeutel bei dir");
+        text.add("message.kingdomsatwar.fish_bag.inventory_full", "No room in your inventory", "Kein Platz im Inventar");
+        text.add("message.kingdomsatwar.fish_bag.full", "Your fish bag is full – the fisher in the village sells more room",
+                "Dein Fischbeutel ist voll – mehr Platz verkauft der Fischer im Dorf");
+        text.add("item.kingdomsatwar.fish.home", "Home: %s", "Heimat: %s");
+        text.add("gui.kingdomsatwar.fishing.into_bag", " → bag", " → Beutel");
+        text.add("gui.kingdomsatwar.fish_bag.title", "Fish Bag", "Fischbeutel");
+        text.add("gui.kingdomsatwar.fish_bag.level", "Level %s", "Stufe %s");
+        text.add("gui.kingdomsatwar.fish_bag.fill", "%1$s / %2$s", "%1$s / %2$s");
+        text.add("gui.kingdomsatwar.fish_bag.empty", "The bag is empty. Whatever you catch goes in here.",
+                "Der Beutel ist leer. Was du angelst, wandert hinein.");
+        text.add("gui.kingdomsatwar.fish_bag.take_all", "Take all", "Alles entnehmen");
+        text.add("gui.kingdomsatwar.fish_bag.book", "Fish book", "Fischbuch");
+        text.add("gui.kingdomsatwar.fish_bag.hint", "Click: a stack · Shift-click: all · Right-click: one",
+                "Klick: ein Stapel · Umschalt-Klick: alle · Rechtsklick: einer");
+        text.add("gui.kingdomsatwar.fish_bag.next", "Room for %s at the fisher's:", "Platz für %s beim Fischer:");
         text.add("fishing.kingdomsatwar.habitat.fae", "the Fae Realm", "das Feenreich");
         text.add("fishing.kingdomsatwar.habitat.shadow", "the Shadow World", "die Schattenwelt");
         text.add("fishing.kingdomsatwar.habitat.abyss", "the Abyss", "der Abgrund");

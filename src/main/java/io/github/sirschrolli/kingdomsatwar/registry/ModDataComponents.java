@@ -67,5 +67,12 @@ public final class ModDataComponents {
                     .persistent(io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.CODEC)
                     .networkSynchronized(io.github.sirschrolli.kingdomsatwar.magic.KnownSpells.STREAM_CODEC));
 
+    /** Fischbeutel (seit 0.81): seine Stufe und die Fische darin, je Art gezählt. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<io.github.sirschrolli.kingdomsatwar.fishing.FishBag>> FISH_BAG =
+            COMPONENTS.registerComponentType("fish_bag", builder -> builder
+                    .persistent(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.CODEC)
+                    .networkSynchronized(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.STREAM_CODEC)
+                    .cacheEncoding());
+
     private ModDataComponents() {}
 }

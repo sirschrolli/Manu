@@ -5,6 +5,8 @@ import io.github.sirschrolli.kingdomsatwar.economy.Coins;
 import io.github.sirschrolli.kingdomsatwar.economy.Reputation;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Profession;
 import io.github.sirschrolli.kingdomsatwar.economy.town.Town;
+import io.github.sirschrolli.kingdomsatwar.fishing.FishBag;
+import io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies;
 import io.github.sirschrolli.kingdomsatwar.network.OpenTradePayload;
 import io.github.sirschrolli.kingdomsatwar.registry.ModBlocks;
 import io.github.sirschrolli.kingdomsatwar.registry.ModItems;
@@ -186,11 +188,46 @@ public final class Trading {
         boolean free = trader.givesFreely(player);
         List<Offer> priced = new ArrayList<>();
         for (Offer o : trader.baseOffers()) {
+            if (o.special().equals(FishBag.UPGRADE_OFFER)) {
+                priced.add(bagUpgrade(player, discount, free));
+                continue;
+            }
             int pay = free ? 0 : o.giveCoins() <= 0 ? 0 : Math.max(1, Math.round(o.giveCoins() * (100 - discount) / 100.0f));
             int earn = o.getCoins() <= 0 ? 0 : Math.round(o.getCoins() * (100 + discount / 2) / 100.0f);
             priced.add(new Offer(o.give(), pay, o.get(), earn, o.special()));
         }
         return priced;
+    }
+
+    /**
+     * Die Erweiterung des Fischbeutels (beim Fischer): Preis und Bild richten sich nach dem Beutel, den dieser Spieler bei sich
+     * trägt – jede Stufe kostet mehr als die vorige ({@link FishBag#upgradePrice}).
+     */
+    private static Offer bagUpgrade(Player player, int discount, boolean free) {
+        ItemStack bag = FishBag.forUpgrade(player);
+        int level = bag.isEmpty() ? 0 : FishBag.of(bag).level();
+        int pay = free ? 0 : Math.max(1, Math.round(FishBag.upgradePrice(level) * (100 - discount) / 100.0f));
+        return new Offer(ItemStack.EMPTY, pay, bagUpgradeIcon(level), 0, FishBag.UPGRADE_OFFER);
+    }
+
+    /** Das Bild der Erweiterung von {@code level} auf die nächste Stufe. */
+    public static ItemStack bagUpgradeIcon(int level) {
+        ItemStack shown = new ItemStack(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get());
+        shown.set(io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.FISH_BAG.get(), new FishBag(level + 1, java.util.Map.of()));
+        shown.set(net.minecraft.core.component.DataComponents.ITEM_NAME,
+                Component.translatable("trade.kingdomsatwar.fish_bag_upgrade", level + 2, FishBag.capacity(level + 1)));
+        return shown;
+    }
+
+    /** Der Fischer kauft Fänge auf: {@code count} beliebige Fische dieser Seltenheit (aus Inventar oder Fischbeutel) für {@code price}. */
+    public static Offer fishSale(FishSpecies.Rarity rarity, FishSpecies icon, int count, int price) {
+        String key = rarity.name().toLowerCase(java.util.Locale.ROOT);
+        ItemStack shown = new ItemStack(icon.item(), count);
+        shown.set(net.minecraft.core.component.DataComponents.ITEM_NAME, Component.translatable("trade.kingdomsatwar.fish." + key).withColor(rarity.color));
+        shown.set(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(List.of(
+                Component.translatable("trade.kingdomsatwar.fish.any").withStyle(style -> style.withItalic(false).withColor(ChatFormatting.GRAY)),
+                Component.translatable("trade.kingdomsatwar.fish.from").withStyle(style -> style.withItalic(false).withColor(ChatFormatting.DARK_GRAY)))));
+        return new Offer(shown, 0, ItemStack.EMPTY, price, FishBag.SELL_OFFER + key);
     }
 
     // =====================================================================================
@@ -235,7 +272,14 @@ public final class Trading {
             return Result.NOTHING;
         }
         Offer offer = offers.get(index);
-        if (!offer.give().isEmpty() && !player.hasInfiniteMaterials()
+        boolean bagUpgrade = offer.special().equals(FishBag.UPGRADE_OFFER);
+        FishSpecies.Rarity fishSale = FishBag.sellRarity(offer.special());
+        if (fishSale != null) {
+            // „beliebige Fische dieser Seltenheit“: lose im Inventar oder im Fischbeutel
+            if (!player.hasInfiniteMaterials() && FishBag.countFish(player, fishSale) < offer.give().getCount()) {
+                return Result.MISSING_ITEMS;
+            }
+        } else if (!offer.give().isEmpty() && !player.hasInfiniteMaterials()
                 && player.getInventory().countItem(offer.give().getItem()) < offer.give().getCount()) {
             return Result.MISSING_ITEMS;
         }
@@ -243,18 +287,35 @@ public final class Trading {
             return Result.MISSING_COINS;
         }
         ItemStack goods = offer.get().copy();
-        if (!offer.special().isEmpty()) {
+        if (bagUpgrade) {
+            if (FishBag.forUpgrade(player).isEmpty()) {
+                player.sendOverlayMessage(Component.translatable("gui.kingdomsatwar.trade.missing_bag").withStyle(ChatFormatting.GRAY));
+                return Result.NOTHING;
+            }
+            goods = ItemStack.EMPTY;
+        } else if (fishSale != null) {
+            goods = ItemStack.EMPTY;
+        } else if (!offer.special().isEmpty()) {
             goods = special(player, citizen, offer.special());
             if (goods.isEmpty()) {
                 return Result.NOTHING;
             }
         }
         // bezahlen
-        if (!offer.give().isEmpty() && !player.hasInfiniteMaterials()) {
+        if (fishSale != null) {
+            if (!player.hasInfiniteMaterials()) {
+                FishBag.removeFish(player, fishSale, offer.give().getCount());
+            }
+        } else if (!offer.give().isEmpty() && !player.hasInfiniteMaterials()) {
             player.getInventory().clearOrCountMatchingItems(stack -> stack.is(offer.give().getItem()), false, offer.give().getCount(),
                     player.inventoryMenu.getCraftSlots());
         }
         Coins.pay(player, offer.giveCoins());
+        if (bagUpgrade) {
+            // der Beutel wächst, sein Inhalt bleibt
+            FishBag.upgrade(player);
+            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_LEATHER.value(), SoundSource.PLAYERS, 0.9f, 0.8f);
+        }
         // bekommen
         if (!goods.isEmpty()) {
             player.getInventory().placeItemBackInInventory(goods, Prediction.SERVER_ONLY);
@@ -262,7 +323,10 @@ public final class Trading {
         if (offer.getCoins() > 0) {
             Coins.give(player, offer.getCoins());
         }
-        citizen.recordTrade(limit(), pauseMillis());
+        if (!bagUpgrade) {
+            // die Erweiterung des Fischbeutels ist kein Warenhandel: Sie zählt nicht zur Handelsgrenze des Ladens
+            citizen.recordTrade(limit(), pauseMillis());
+        }
         Reputation.add(player, Reputation.TRADE);
         citizen.level().playSound(null, citizen.getX(), citizen.getY(), citizen.getZ(), SoundEvents.VILLAGER_YES, SoundSource.NEUTRAL, 0.6f, 1.0f);
         citizen.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CHAIN_HIT, SoundSource.PLAYERS, 0.5f, 1.7f);

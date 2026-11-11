@@ -216,6 +216,8 @@ public final class ShowcaseRunner {
             // drei Ticks warten, damit Änderungen (HUD aus, Chat geleert) sicher im Bild angekommen sind
             return (minecraft, ticks) -> {
                 if (ticks < 3) {
+                    // Hinweise wie „Rezept freigeschaltet“ gehören nicht ins Bild
+                    minecraft.gui.toastManager().clear();
                     return false;
                 }
                 LOGGER.info("[Showcase] Screenshot {}", name);

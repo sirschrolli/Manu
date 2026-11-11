@@ -110,7 +110,7 @@ public enum Habitat {
         if (deepDark) {
             set.add(SCULK);
         }
-        if (deepDark || biome.is(Biomes.LUSH_CAVES) || biome.is(Biomes.DRIPSTONE_CAVES)
+        if (deepDark || biome.is(Biomes.LUSH_CAVES) || biome.is(Biomes.DRIPSTONE_CAVES) || biome.is(Biomes.SULFUR_CAVES)
                 || (pos.getY() < level.getSeaLevel() - 12 && !level.canSeeSky(pos.above()))) {
             set.add(CAVE);
         }

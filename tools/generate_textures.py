@@ -35,6 +35,7 @@ import creature_textures  # noqa: E402
 import crops  # noqa: E402
 import equipment_textures  # noqa: E402
 import farm_textures  # noqa: E402
+import fish_gen  # noqa: E402
 import fish_textures  # noqa: E402
 import fishing_gui  # noqa: E402
 import relic_textures  # noqa: E402
@@ -360,6 +361,7 @@ def build_all() -> dict[str, Image.Image]:
     farm_textures.build(put)
     boss_textures.build(put)
     fish_textures.build(put)
+    fish_gen.build(put)
     fishing_gui.build(put)
     relic_textures.build(put)
     lair_textures.build(put)

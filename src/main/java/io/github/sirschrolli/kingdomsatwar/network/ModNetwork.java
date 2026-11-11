@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class ModNetwork {
     /** Erhöhen, wenn sich Nachrichten ändern – Client und Server müssen zusammenpassen. */
-    private static final String PROTOCOL = "13";
+    private static final String PROTOCOL = "14";
 
     private ModNetwork() {}
 
@@ -30,6 +30,7 @@ public final class ModNetwork {
                 .playToServer(RequestChroniclePayload.TYPE, RequestChroniclePayload.STREAM_CODEC, RequestChroniclePayload::handle)
                 .playToServer(RequestFishBookPayload.TYPE, RequestFishBookPayload.STREAM_CODEC, RequestFishBookPayload::handle)
                 .playToServer(FishingResultPayload.TYPE, FishingResultPayload.STREAM_CODEC, FishingResultPayload::handle)
+                .playToServer(FishBagTakePayload.TYPE, FishBagTakePayload.STREAM_CODEC, FishBagTakePayload::handle)
                 .playToServer(HealPayload.TYPE, HealPayload.STREAM_CODEC, HealPayload::handle)
                 .playToServer(FaeFlapPayload.TYPE, FaeFlapPayload.STREAM_CODEC, FaeFlapPayload::handle)
                 .playToServer(StarBoostPayload.TYPE, StarBoostPayload.STREAM_CODEC, StarBoostPayload::handle)
@@ -57,6 +58,7 @@ public final class ModNetwork {
                 .playToClient(ScreenShakePayload.TYPE, ScreenShakePayload.STREAM_CODEC)
                 .playToClient(OpenChroniclePayload.TYPE, OpenChroniclePayload.STREAM_CODEC)
                 .playToClient(OpenFishBookPayload.TYPE, OpenFishBookPayload.STREAM_CODEC)
+                .playToClient(OpenFishBagPayload.TYPE, OpenFishBagPayload.STREAM_CODEC)
                 .playToClient(FishingStartPayload.TYPE, FishingStartPayload.STREAM_CODEC)
                 .playToClient(FishingCatchPayload.TYPE, FishingCatchPayload.STREAM_CODEC)
                 .playToClient(FishingEndPayload.TYPE, FishingEndPayload.STREAM_CODEC)

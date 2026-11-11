@@ -70,6 +70,17 @@ public final class VillageTrades {
                 list.add(Offer.buy(ModItems.GARLIC.get(), 4, 5));
             }
             case FISHER -> {
+                // der Fischbeutel und seine Erweiterung (deren Preis mit jeder Stufe steigt), und der Fischer kauft den Fang auf
+                list.add(Offer.buy(io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get(), 1, 24));
+                list.add(Offer.special(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.UPGRADE_OFFER, Trading.bagUpgradeIcon(0), 12));
+                list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.COMMON,
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.BROOK_TROUT, 8, 5));
+                list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.UNCOMMON,
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.PIKE, 5, 7));
+                list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.RARE,
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.STURGEON, 2, 8));
+                list.add(Trading.fishSale(io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity.EPIC,
+                        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.COELACANTH, 1, 10));
                 list.add(Offer.sell(Items.STRING, 20, 8));
                 list.add(Offer.sell(Items.COAL, 10, 8));
                 list.add(Offer.sell(Items.COD, 15, 8));

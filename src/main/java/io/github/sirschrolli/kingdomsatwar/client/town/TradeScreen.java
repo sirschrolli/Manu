@@ -154,10 +154,24 @@ public class TradeScreen extends Screen {
         if (player.hasInfiniteMaterials()) {
             return true;
         }
+        io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies.Rarity fishSale = io.github.sirschrolli.kingdomsatwar.fishing.FishBag.sellRarity(offer.special());
+        if (fishSale != null) {
+            // „beliebige Fische dieser Seltenheit“: lose im Inventar oder im Fischbeutel
+            return io.github.sirschrolli.kingdomsatwar.fishing.FishBag.countFish(player, fishSale) >= offer.give().getCount();
+        }
+        if (this.needsBag(offer)) {
+            return false;
+        }
         if (!offer.give().isEmpty() && player.getInventory().countItem(offer.give().getItem()) < offer.give().getCount()) {
             return false;
         }
         return Coins.total(player) >= offer.giveCoins();
+    }
+
+    /** Die Erweiterung des Fischbeutels – und der Spieler trägt keinen bei sich. */
+    private boolean needsBag(Trading.Offer offer) {
+        return offer.special().equals(io.github.sirschrolli.kingdomsatwar.fishing.FishBag.UPGRADE_OFFER) && this.minecraft.player != null
+                && io.github.sirschrolli.kingdomsatwar.fishing.FishBag.forUpgrade(this.minecraft.player).isEmpty();
     }
 
     // =====================================================================================
@@ -231,8 +245,8 @@ public class TradeScreen extends Screen {
                 if (!shown.isEmpty() && (mouseX >= x + 4 && mouseX < x + 20 || mouseX >= x + 106 && mouseX < x + 122)) {
                     g.setTooltipForNextFrame(this.font, shown, mouseX, mouseY);
                 } else if (!can && !closed) {
-                    g.setTooltipForNextFrame(this.font, Component.translatable(!offer.give().isEmpty()
-                            ? "gui.kingdomsatwar.trade.missing_items" : "gui.kingdomsatwar.trade.missing_coins"), mouseX, mouseY);
+                    g.setTooltipForNextFrame(this.font, Component.translatable(this.needsBag(offer) ? "gui.kingdomsatwar.trade.missing_bag"
+                            : !offer.give().isEmpty() ? "gui.kingdomsatwar.trade.missing_items" : "gui.kingdomsatwar.trade.missing_coins"), mouseX, mouseY);
                 }
             }
         }

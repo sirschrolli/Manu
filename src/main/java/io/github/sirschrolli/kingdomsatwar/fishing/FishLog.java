@@ -3,7 +3,6 @@ package io.github.sirschrolli.kingdomsatwar.fishing;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.netty.buffer.ByteBuf;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -39,27 +38,27 @@ public final class FishLog {
             int species = ByteBufCodecs.VAR_INT.decode(buf);
             int count = ByteBufCodecs.VAR_INT.decode(buf);
             int best = ByteBufCodecs.VAR_INT.decode(buf);
-            if (species >= 0 && species < FishSpecies.values().length) {
-                log.entries.put(FishSpecies.values()[species], new Entry(count, best));
+            if (species >= 0 && species < FishSpecies.count()) {
+                log.entries.put(FishSpecies.byIndex(species), new Entry(count, best));
             }
         }
         log.treasures = ByteBufCodecs.VAR_INT.decode(buf);
         return log;
     });
 
-    private final EnumMap<FishSpecies, Entry> entries = new EnumMap<>(FishSpecies.class);
+    private final Map<FishSpecies, Entry> entries = new HashMap<>();
     private int treasures;
 
     public FishLog() {}
 
     /** Aus dem Spielstand: unbekannte Arten (aus späteren Versionen entfernt) werden übergangen. */
     private FishLog(Map<String, Entry> raw, int treasures) {
-        for (FishSpecies species : FishSpecies.values()) {
-            Entry entry = raw.get(species.id());
-            if (entry != null) {
+        raw.forEach((id, entry) -> {
+            FishSpecies species = FishSpecies.byId(id);
+            if (species != null) {
                 this.entries.put(species, entry);
             }
-        }
+        });
         this.treasures = treasures;
     }
 

@@ -72,6 +72,8 @@ public class FishingScreen extends Screen {
     private int cm;
     private int news = -1;
     private boolean gotChest;
+    /** Der Fang ist gleich in den Fischbeutel gewandert. */
+    private boolean bagged;
     private boolean wasInZone = true;
     private boolean hadChest;
     private float reelClock;
@@ -107,13 +109,14 @@ public class FishingScreen extends Screen {
     // Vom Server
     // =====================================================================================
 
-    void caught(int session, int cm, int news, boolean chest) {
+    void caught(int session, int cm, int news, boolean chest, boolean bagged) {
         if (session != this.session) {
             return;
         }
         this.cm = cm;
         this.news = news;
         this.gotChest = chest;
+        this.bagged = bagged;
         if (this.outcome != 1) {
             this.outcome = 1;
             this.outcomeAge = 0.0f;
@@ -371,8 +374,8 @@ public class FishingScreen extends Screen {
             g.pose().pushMatrix();
             g.pose().translate(cx + COL_W / 2.0f, fishY - escape);
             g.pose().rotate(wobble);
-            Identifier sprite = this.known ? FishingClient.sprite(this.species) : FishingClient.silhouette(this.species);
-            g.blit(RenderPipelines.GUI_TEXTURED, sprite, -8, -8, 0.0f, 0.0f, 16, 16, 16, 16);
+            g.blit(RenderPipelines.GUI_TEXTURED, FishingClient.sprite(this.species), -8, -8, 0.0f, 0.0f, 16, 16, 16, 16,
+                    this.known ? -1 : FishingClient.shadow(0xFF));
             g.pose().popMatrix();
             if (f.dart() > 0.3f) {
                 int alpha = Math.round(f.dart() * 200.0f);
@@ -414,8 +417,8 @@ public class FishingScreen extends Screen {
     private void drawCard(GuiGraphicsExtractor g, int x, int y) {
         g.blit(RenderPipelines.GUI_TEXTURED, ATLAS, x, y, 256.0f, 0.0f, CARD_W, CARD_H, TEX_W, TEX_H);
         g.blit(RenderPipelines.GUI_TEXTURED, ATLAS, x + 8, y + 8, 376.0f, 0.0f, 36, 36, TEX_W, TEX_H);
-        Identifier sprite = this.known || this.outcome > 0 ? FishingClient.sprite(this.species) : FishingClient.silhouette(this.species);
-        g.blit(RenderPipelines.GUI_TEXTURED, sprite, x + 10, y + 10, 0.0f, 0.0f, 32, 32, 16, 16, 16, 16);
+        g.blit(RenderPipelines.GUI_TEXTURED, FishingClient.sprite(this.species), x + 10, y + 10, 0.0f, 0.0f, 32, 32, 16, 16, 16, 16,
+                this.known || this.outcome > 0 ? -1 : FishingClient.shadow(0xFF));
 
         int tx = x + 49;
         int tw = CARD_W - 49 - 8;
@@ -492,6 +495,9 @@ public class FishingScreen extends Screen {
                 : Component.translatable("gui.kingdomsatwar.fishing.size", FishingClient.name(this.species), this.cm);
         if (this.gotChest) {
             detail = detail.copy().append(Component.translatable("gui.kingdomsatwar.fishing.with_chest"));
+        }
+        if (this.bagged) {
+            detail = detail.copy().append(Component.translatable("gui.kingdomsatwar.fishing.into_bag"));
         }
         int width = this.font.width(detail);
         float scale = width > 150 ? 150.0f / width : 1.0f;

@@ -31,9 +31,29 @@ public class FishItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
+        if (isDisplay(stack)) {
+            // ein Schaustück mit eigenem Namen (im Handelsfenster steht es für „beliebige Fische dieser Seltenheit“)
+            return;
+        }
         builder.accept(Component.translatable(this.species.rarity().key()).withColor(this.species.rarity().color)
                 .append(Component.literal(" · " + this.species.minCm() + "–" + this.species.maxCm() + " cm").withStyle(ChatFormatting.GRAY)));
+        String biome = this.species.biome();
+        if (biome != null) {
+            // die Arten der Biome: wo sie zu Hause sind
+            int colon = biome.indexOf(':');
+            builder.accept(Component.translatable("item.kingdomsatwar.fish.home",
+                    Component.translatable("biome." + biome.substring(0, colon) + "." + biome.substring(colon + 1))).withStyle(ChatFormatting.DARK_AQUA));
+        }
         tooltip(this.species, builder);
+    }
+
+    /**
+     * Ein Schaustück: Es trägt einen anderen Namen als sein Gegenstand (so zeigt das Handelsfenster Sammelangebote wie
+     * „beliebige gewöhnliche Fische“ oder die Erweiterung des Fischbeutels).
+     */
+    public static boolean isDisplay(ItemStack stack) {
+        return !java.util.Objects.equals(stack.get(net.minecraft.core.component.DataComponents.ITEM_NAME),
+                stack.getItem().components().get(net.minecraft.core.component.DataComponents.ITEM_NAME));
     }
 
     /** Eine Zeile der Wirkung beim Essen: {@code kind} 0 = nützt, 1 = schadet, 2 = Besonderes. */

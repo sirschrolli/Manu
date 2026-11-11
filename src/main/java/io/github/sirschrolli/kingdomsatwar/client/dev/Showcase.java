@@ -250,6 +250,8 @@ final class Showcase {
                         FishingShowcase.fishing(steps);
                     } else if (scene.equals("fishing_void")) {
                         FishingShowcase.voidOnly(steps);
+                    } else if (scene.equals("fishbag")) {
+                        FishingShowcase.bagAndBook(steps);
                     } else if (scene.equals("relics")) {
                         RelicShowcase.relics(steps);
                     } else if (scene.equals("relics_pose")) {

@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.80.0 – Totems und Äpfel der Macht.** Neun neue **Totems**: Jedes wirkt **in der Zweithand** dauernd – und hält den Tod auf wie das Totem der Unsterblichkeit, nur stehst du **mit mehr Herzen wieder auf** (8 bis 12 statt eines halben) und entfesselst die Kraft seines Elements. Sechs gehören den Drachen (je vier ihrer Schuppen um ein Totem der Unsterblichkeit): **Glut** (feuerfest, Angreifer brennen – Feuernova), **Frost** (kein Erfrieren, Angreifer erstarren – Frostnova), **Sturm** (schneller laufen und schlagen – Blitze fahren in die Feinde), **Fels** (Rüstung, Härte, fester Stand – Erdstoß und zehn Extraherzen), **Hain** (heilt langsam, kein Gift – zwölf Herzen und Heilung für Tiere und Truppen), **Gezeiten** (Meereskraft – Flutwelle). Dazu das **Totem der Schatten** (Nachtsicht, Feinde bemerken dich erst aus halber Entfernung – beim Tod verschwindest du), das **Totem der Leere** (kein Fallschaden – und es **rettet auch aus dem Nichts** unter der Welt, zurück auf den letzten festen Boden) und das **Totem des Schöpfers** aus den sechs Totems der Drachen und einem Schöpferfunken: fünf Herzen mehr, beim Tod **alle Herzen** und eine Lichtnova – und es hält **dreimal**. Vier **Äpfel der Macht**, weit stärker als der verzauberte goldene Apfel und sehr schwer herzustellen: **Drachenapfel** (die Schuppen aller sechs Drachen), **Sternenapfel**, **Schattenapfel** und der **Apfel der Unsterblichkeit** aus den drei anderen und einem Schöpferfunken – mit zwanzig Extraherzen, zehn Herzen mehr und dem **Zweiten Leben**: Zehn Minuten lang kann dich einmal nichts töten. Totems und Äpfel liegen **plastisch in der Hand** – aufrecht wie ein Götzenbild, auch in der Außenansicht, im Rahmen und am Boden –, als erste Gegenstände mit dem neuen Verfahren, das nach und nach alle Gegenstände bekommen.
+> **Testversion 0.81.0 – Tausend Fische.** In **jedem Biom** beißen jetzt eigene Fische: zwölf Arten in jedem der 39 eigenen Biome der Mod, sechs oder sieben in jedem Biom von Minecraft – auch in den **Höhlen** (Tropfsteinhöhlen, Üppige Höhlen, Schwefelhöhlen, Tiefes Dunkel, Abgrundgrotte, Schattentiefen), in der **Lava** des Nethers und in der **Leere** des Ends. Mit den bisherigen sind es genau **1000 Arten**: Jede hat ihr eigenes Bild, ihren Namen, ihre Größe und ihren Drill, und **keine zwei wirken beim Essen gleich**. Neben Fischen gehen Krabben, Krebse, Garnelen, Quallen, Schnecken, Seesterne, Molche, Rochen und Kalmare an den Haken; in jedem Biom gibt es Gewöhnliches und einen **großen Fang** (episch, schwer zu halten), dazu **acht neue Legenden** (Nachtfürst, Rissleviathan, Sternenwal, Der Lichtlose, Eiskaiser, Riffkönigin, Moormutter, Sonnenkönig). Das **Fischbuch** (Taste H) führt zehn Kapitel und zeigt in jedem die **Gewässer**: „Überall“ und jedes Biom mit seinem Stand (gefangen / vorhanden), ein Stern für jedes vollständige. Neu ist der **Fischbeutel** (Leder, Faden, Truhe): Wer ihn bei sich trägt, dem **wandert jeder Fang hinein**; ein Rechtsklick öffnet ihn, und man nimmt die Fische einzeln, stapelweise oder alle wieder heraus. Er fasst 64 Fische, und sein Platz lässt sich **ohne Obergrenze erweitern** – jede Stufe bringt 32 Plätze und kostet mehr als die vorige (12 Bronze für die erste, 53 für die elfte, über 1000 für die einunddreißigste). Die Erweiterung verkauft der **Fischer in den Dörfern**; er verkauft auch den Beutel selbst und **kauft den Fang auf** – beliebige Fische nach Seltenheit, auch direkt aus dem Beutel.
+> In 0.80 kamen **Totems und Äpfel der Macht**: Neun neue **Totems**: Jedes wirkt **in der Zweithand** dauernd – und hält den Tod auf wie das Totem der Unsterblichkeit, nur stehst du **mit mehr Herzen wieder auf** (8 bis 12 statt eines halben) und entfesselst die Kraft seines Elements. Sechs gehören den Drachen (je vier ihrer Schuppen um ein Totem der Unsterblichkeit): **Glut** (feuerfest, Angreifer brennen – Feuernova), **Frost** (kein Erfrieren, Angreifer erstarren – Frostnova), **Sturm** (schneller laufen und schlagen – Blitze fahren in die Feinde), **Fels** (Rüstung, Härte, fester Stand – Erdstoß und zehn Extraherzen), **Hain** (heilt langsam, kein Gift – zwölf Herzen und Heilung für Tiere und Truppen), **Gezeiten** (Meereskraft – Flutwelle). Dazu das **Totem der Schatten** (Nachtsicht, Feinde bemerken dich erst aus halber Entfernung – beim Tod verschwindest du), das **Totem der Leere** (kein Fallschaden – und es **rettet auch aus dem Nichts** unter der Welt, zurück auf den letzten festen Boden) und das **Totem des Schöpfers** aus den sechs Totems der Drachen und einem Schöpferfunken: fünf Herzen mehr, beim Tod **alle Herzen** und eine Lichtnova – und es hält **dreimal**. Vier **Äpfel der Macht**, weit stärker als der verzauberte goldene Apfel und sehr schwer herzustellen: **Drachenapfel** (die Schuppen aller sechs Drachen), **Sternenapfel**, **Schattenapfel** und der **Apfel der Unsterblichkeit** aus den drei anderen und einem Schöpferfunken – mit zwanzig Extraherzen, zehn Herzen mehr und dem **Zweiten Leben**: Zehn Minuten lang kann dich einmal nichts töten. Totems und Äpfel liegen **plastisch in der Hand** – aufrecht wie ein Götzenbild, auch in der Außenansicht, im Rahmen und am Boden –, als erste Gegenstände mit dem neuen Verfahren, das nach und nach alle Gegenstände bekommen.
 > In 0.79 kam **das Angeln** („Petri Heil“): Angeln ist seitdem ein Spiel im Spiel: Wer beim Biss anzieht, **drillt** den Fisch – er zieht in einer Wassersäule auf und ab, und du hältst ihn mit Maustaste oder Leertaste in der **Fangzone**, bis die Leiste voll ist; bleibt er zu lange draußen, reißt er sich los. Jede Art kämpft anders (ruhig, zäh, zappelnd, in jähen Sprüngen), und manche sind **wirklich schwer zu halten**. Es gibt **76 Arten** – 72 neue und die vier von Minecraft –, **für jedes Biom und jede Welt**: Hecht, Wels und Stör in Flüssen und Seen, Piranha und Arapaima im Dschungel, den Sculk-Aal im Tiefen Dunkel, Thunfisch, Schwertfisch und Mondfisch im Meer, Anglerfisch, Riemenfisch und Quastenflosser über der Tiefsee … Und geangelt wird jetzt **überall**: im Nether **in Lava** (Magmakarpfen, Seelenaal, Glutrochen – jedes Biom des Nethers hat seinen Fisch), im End, in der Leere und im Abgrund **im Nichts** – wirf den Haken über den Rand einer Insel, und die Leere trägt ihn wie Wasser (Endlachs, Chorusfisch, Leerenrochen) –, dazu eigene Fische im Feenreich, in der Schattenwelt und im Abgrund. **Sieben Legenden** beißen nur unter besonderen Umständen: der Sturmsegler nur im Gewitter, Goldschuppe nur bei Regen, der Alte vom See nur nachts. **Jeder Fisch bewirkt beim Essen etwas anderes** – von Schnelligkeit und Nachtsicht über Absorption IV bis zur Wirrflosse, die dich ein paar Schritte versetzt, und dem Seelenfisch, der alle Leiden nimmt. Zwei **Köder** (Köderwurm und Glühköder) locken bestimmte Arten und lassen alles schneller beißen, im Drill treibt manchmal eine **Schatzkiste** vorbei, und das **Fischbuch** (Taste **H**) verzeichnet jeden Fang mit Rekordgröße, Fundort, Zeit und Wirkung – was noch nie am Haken hing, bleibt ein Schattenriss. Außerdem: Die **Schwingen des Schöpfers** sind neu aus einzelnen Federn gebaut (nichts ist mehr abgeschnitten, nichts flackert mehr); die **Klangwelten** gibt es jetzt in **jedem Biom** – auch im End, im Tiefen Dunkel, in den Kampfdimensionen und in Biomen anderer Mods –, sie setzen sofort ein und haben einen **eigenen Regler** unter *Optionen → Musik & Geräusche*; die **Chronik des Siegels** schlägt man mit der Taste **J** auf (das Buch zu Beginn entfällt); die **Truppen sprechen nicht mehr**; **alle Bauwerke stehen seltener und weiter auseinander** – in allen Dimensionen; **Schärfe, Bann und Nemesis** wirken auf den starken Waffen der Mod jetzt im Verhältnis zu ihrem Schaden und auch auf ihre Fähigkeiten (Lichtspeer, Lichtwelle, Lichtsäule, Sterne, Weltenbrocken …); und die **Speere** der Mod liegen richtig in der Hand.
 > In 0.78 kam **Schrolli der Allmächtige**: Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**. In 0.78.1 bekamen **der Allmächtige und der Weltenfresser eigene Bossleisten** (bisher zeigten beide nur die rote Leiste von Minecraft): der Allmächtige mit Schwingen aus brennenden Federn, einer Sonnenkrone aus Flammen und Strahlen, der Sonne hinter seinem Bildnis und einer Füllung wie das Plasma einer Sonne – der Weltenfresser mit einem Rahmen aus Chaosgestein und glühenden Fugen, den Welten auf seinem Rücken, seinem Gebiss, Kronensplittern, Hauer und Kristallflosse, seinem Rachen im Medaillon und der Glut seines Schlunds, durch die ein violetter Riss zieht.
 > In 0.77 kam **der Weg zum Unsterblichen**: Der Held kann seitdem bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
@@ -369,6 +370,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Schrolli der Allmächtige** (0.78): die dritte Gestalt (Schwarzes Loch, Herz der Sonne, drei Räder, Flammenkranz, eigene Musik), sechs Künste des Allmächtigen, Lichtkäfig und Schwarzes Loch (jetzt 41 Künste), mit jeder Gestalt ein neuer Hof (Firmament, Herz der Sonne), neuer Speer, Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, Rüstung in Schichten bis 60, das Inventar bleibt auf Heldenstufe 200; seit 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser | ✅ fertig |
 | **Angeln** (0.79): der Drill als Minispiel (Fangzone, Leiste, perfekte Fänge, Schatzkisten), 76 Fischarten für jedes Biom und jede Welt, Angeln in Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung beim Essen, Köderwurm und Glühköder, das Fischbuch (H); dazu die Chronik per Taste (J), stumme Truppen, Bauwerke in allen Dimensionen weiter auseinander, Verzauberungen im Verhältnis zur Waffe und auf ihre Fähigkeiten, Speere richtig in der Hand | ✅ fertig |
 | **Totems und Äpfel der Macht** (0.80): neun Totems (Glut, Frost, Sturm, Fels, Hain, Gezeiten, Schatten, Leere, Schöpfer) mit Wirkung in der Zweithand, mehr Herzen beim Aufstehen und der Kraft ihres Elements; vier Äpfel (Drachen-, Sternen-, Schattenapfel, Apfel der Unsterblichkeit mit dem Zweiten Leben); plastische Modelle für Hand, Rahmen und Boden | ✅ fertig |
+| **Tausend Fische** (0.81): eigene Arten für jedes Biom (105 Biome – auch Höhlen, Lava und Leere), mit den bisherigen genau 1000, jede mit eigenem Bild, eigenem Namen und eigener Wirkung; acht neue Legenden; das Fischbuch mit den Gewässern je Kapitel; der Fischbeutel (der Fang wandert hinein, Platz unbegrenzt erweiterbar) und der Fischer im Dorf als Händler dafür | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -429,7 +431,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.80.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.81.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -437,7 +439,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.80.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.81.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1004,7 +1006,7 @@ Münzen, wie bei den Bürgern deiner Siedlung; dein Ansehen senkt die Preise, na
 |---|---|---|
 | Tagelöhner | Wohnhaus, Gasthaus | – (erzählt dafür gern) |
 | Bauer | großem Haus, Windmühle, Scheune, Feld | Feldfrüchten, Saatgut und Brot |
-| Fischer | Fischerhütte | Fisch, Eimern, Angel (auch verzaubert) und Booten |
+| Fischer | Fischerhütte | Fisch, Eimern, Angel (auch verzaubert) und Booten; verkauft den **Fischbeutel** und dessen Erweiterungen und kauft Fänge nach Seltenheit auf (seit 0.81) |
 | Schäfer | Schafweide | Wolle, Farben, Betten, Bannern, Gemälden und dem Webstuhl |
 | Bogner | Bogner | Pfeilen, Bögen und Armbrüsten (auch verzaubert) und Trankpfeilen |
 | Schreiber | Schreibstube | verzauberten Büchern, Uhr, Kompass und Namensschild |
@@ -1798,9 +1800,11 @@ schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschi
 
 ![Angeln: der Drill in Wasser, Lava und Leere, das Fischbuch und die Wirkungen der Fische](docs/bilder/angeln.jpg)
 
+![Tausend Fische: das Fischbuch mit den Gewässern, die Arten der Biome, der Fischbeutel und der Fischer](docs/bilder/fischbeutel.jpg)
+
 Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
-heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: **76 Arten** in neun Kapiteln, in jedem Gewässer und
-jeder Welt eigene.
+heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.81 **1000 Arten** in zehn Kapiteln – in jedem
+Gewässer, jedem Biom und jeder Welt eigene. Wer viel angelt, trägt einen **Fischbeutel**.
 
 **Der Drill.** Wer beim Biss anzieht, sieht neben der Angel eine Säule – Wasser, Lava oder Sternenhimmel, je nachdem,
 worin der Schwimmer treibt. Darin zieht der Fisch auf und ab, und die grüne **Fangzone** gehört dir: Hältst du die
@@ -1833,9 +1837,10 @@ Fisch frei.
   Erfahrung bleibt, wie sie war: eine Kugel je Fang.
 
 **Angeln in Lava.** Der Schwimmer treibt auch auf Lava – im Nether, im Abgrund und auf jedem Lavasee der Oberwelt. Er
-verbrennt nicht, und statt Blasen ziehen Flämmchen auf ihn zu. Jedes Biom des Nethers hat seinen eigenen Fisch
-(Karmesinschnapper, Wirrflosse, Seelenaal, Basalthecht), dazu überall Magmakarpfen und Glutrochen und als Legende den
-Infernokönig. Lavafische sind **feuerfest**: Sie verbrennen weder in Lava noch im Feuer und fliegen dir aus der Glut
+verbrennt nicht, und statt Blasen ziehen Flämmchen auf ihn zu. Jedes Biom des Nethers hat seine eigenen Fische (je einen
+Allerweltsfisch – Karmesinschnapper, Wirrflosse, Seelenaal, Basalthecht – und sieben weitere Arten), dazu überall
+Magmakarpfen und Glutrochen und als Legende den Infernokönig; auch die Lava der Aschefelder, der Aschelande und des
+Abgrunds hat eigene Arten. Lavafische sind **feuerfest**: Sie verbrennen weder in Lava noch im Feuer und fliegen dir aus der Glut
 zu; der Schatz aus einer Truhe landet gleich vor deinen Füßen.
 
 **Angeln im Nichts.** Im End, in der Leere und im Abgrund wirft man den Haken über den Rand einer Insel: Fällt er fünf
@@ -1844,18 +1849,25 @@ auf einer Wasseroberfläche, und violette Funken ziehen auf ihn zu; der Fang lan
 fällt der Haken einfach hinab, und von einer Klippe der Oberwelt lässt sich so nicht angeln: In allen anderen Welten
 trägt die Leere ihn nur, wo bis zum Boden der Welt nichts mehr kommt.
 
-**Die 76 Arten.** „Wo“ nennt alle Lebensräume einer Art. An besonderen Orten (Sumpf, Dschungel, Höhle, Tiefsee, die
-Biome des Nethers …) beißen die Arten, die dort zu Hause sind, fast doppelt so oft wie die Allerweltsfische. „Wann“
-heißt: Zur anderen Tageszeit beißt die Art nur selten (etwa ein Achtel so oft); „gern bei Regen“ heißt bei Regen gut
-doppelt so oft, sonst halb so oft; „nur bei Regen“ und „nur im Gewitter“ gelten ohne Ausnahme. In Welten ohne Tag und
+**Die 1000 Arten.** Es gibt zweierlei Fische. **84 Arten** sind nach **Lebensräumen** verteilt – die Allerweltsfische der
+Flüsse, Meere, Höhlen und Welten, die vier Fische von Minecraft und die fünfzehn Legenden; sie stehen in der ersten Tabelle.
+**916 Arten** gehören einem **Biom** und beißen nur dort: zwölf in jedem der 39 eigenen Biome der Mod, sechs oder sieben
+in jedem der 66 Biome von Minecraft. An einem Angelplatz beißt also beides – in der Ebene etwa die Allerweltsfische der
+Flüsse und die sieben Arten der Ebene, wobei die eigenen Arten eines Bioms (wie die der besonderen Orte: Sumpf, Dschungel,
+Höhle, Tiefsee …) fast doppelt so oft beißen und gut die Hälfte des Fangs stellen.
+
+„Wann“ heißt: Zur anderen Tageszeit beißt die Art nur selten (etwa ein Achtel so oft); „gern bei Regen“ heißt bei Regen
+gut doppelt so oft, sonst halb so oft; „nur bei Regen“ und „nur im Gewitter“ gelten ohne Ausnahme. In Welten ohne Tag und
 Nacht zählt die Tageszeit nicht. Seltenere Arten beißen entsprechend seltener. Eine **Legende** hängt an ihrem Ort und zu
 ihrer Zeit etwa bei jedem hundertsten Biss am Haken – überall gleich selten, ob dort drei Arten leben oder dreißig. Glück
-des Meeres III verdoppelt das, der Glühköder ebenso (beim Alten vom See, beim König der Tiefe und beim Infernokönig), und
-die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
+des Meeres III verdoppelt das, der Glühköder ebenso (bei allem, was im Dunkeln oder in Lava lebt), und die beiden
+Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so oft.
+
+*Die Allerweltsfische und die Legenden (84):*
 
 | Fisch | Seltenheit | Drill | Größe | Wo | Wann | Gegessen |
 |---|---|---|---|---|---|---|
-| **Flüsse & Seen** (21) | | | | | | |
+| **Flüsse & Seen** (18) | | | | | | |
 | Lachs | gewöhnlich | ★★☆☆☆ | 40–110 cm | Flüsse und Seen, kalte Gewässer, kalte Meere | immer | wie bei Minecraft |
 | Bachforelle | gewöhnlich | ★☆☆☆☆ | 20–45 cm | Flüsse und Seen | immer | Schnelligkeit (1:00) |
 | Flussbarsch | gewöhnlich | ★★☆☆☆ | 15–40 cm | Flüsse und Seen | tagsüber | Eile (1:00) |
@@ -1871,9 +1883,6 @@ die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so of
 | Seesaibling | ungewöhnlich | ★★☆☆☆ | 25–70 cm | kalte Gewässer | immer | Resistenz (1:00) |
 | Regenbogenforelle | ungewöhnlich | ★★☆☆☆ | 25–70 cm | Bergbäche und Bergseen, Flüsse und Seen | tagsüber · gern bei Regen | Regeneration II (0:08) |
 | Wüstenkärpfling | ungewöhnlich | ★★☆☆☆ | 3–8 cm | Wasserlöcher in Wüste, Savanne und Tafelbergen | immer | Feuerresistenz (0:45), Schnelligkeit (0:45) |
-| Höhlensalmler | ungewöhnlich | ★★☆☆☆ | 6–12 cm | Höhlengewässer | immer | Nachtsicht (4:00), Eile (0:30) |
-| Tropfsteinschmerle | gewöhnlich | ★★☆☆☆ | 8–18 cm | Höhlengewässer | immer | Eile II (0:30) |
-| Sculk-Aal | selten | ★★★★☆ | 60–150 cm | das Tiefe Dunkel | immer | Dunkelheit (0:05), Unsichtbarkeit (1:00) |
 | Blütenkoi | selten | ★★★☆☆ | 30–70 cm | Kirschberghaine und Blumenwiesen | immer | Regeneration (0:30), Glück (1:00) |
 | Düsterhecht | ungewöhnlich | ★★★☆☆ | 50–110 cm | Dunkler Wald und Blasser Garten | immer | Unsichtbarkeit (0:45) |
 | Pilzbarsch | ungewöhnlich | ★★☆☆☆ | 15–35 cm | Pilzland | immer | Übelkeit (0:08) |
@@ -1905,6 +1914,10 @@ die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so of
 | Geisterhai | selten | ★★★★☆ | 60–150 cm | die Tiefsee | immer | Unsichtbarkeit (1:30) |
 | Quastenflosser | episch | ★★★★☆ | 100–200 cm | die Tiefsee | immer | Extraenergie III (5:00) |
 | Vampirkalmar | episch | ★★★★☆ | 15–30 cm | die Tiefsee | nachts | Direktheilung II, Dunkelheit (0:06) |
+| **Höhlen** (3) | | | | | | |
+| Höhlensalmler | ungewöhnlich | ★★☆☆☆ | 6–12 cm | Höhlengewässer | immer | Nachtsicht (4:00), Eile (0:30) |
+| Tropfsteinschmerle | gewöhnlich | ★★☆☆☆ | 8–18 cm | Höhlengewässer | immer | Eile II (0:30) |
+| Sculk-Aal | selten | ★★★★☆ | 60–150 cm | das Tiefe Dunkel | immer | Dunkelheit (0:05), Unsichtbarkeit (1:00) |
 | **Der Nether** (6) | | | | | | |
 | Magmakarpfen | gewöhnlich | ★★☆☆☆ | 30–70 cm | Lava, überall | immer | Feuerresistenz (2:00) |
 | Karmesinschnapper | ungewöhnlich | ★★★☆☆ | 25–60 cm | Lava im Karmesinwald | immer | Stärke (2:00), Feuerresistenz (0:30) |
@@ -1932,7 +1945,7 @@ die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so of
 | Glutwels | ungewöhnlich | ★★★☆☆ | 50–130 cm | der Abgrund | immer | Feuerresistenz (3:00), Stärke (1:00) |
 | Chaosflosse | selten | ★★★★☆ | 30–90 cm | der Abgrund | immer | versetzt wie eine Chorusfrucht, Schnelligkeit II (0:20) |
 | Rissaal | episch | ★★★★☆ | 80–220 cm | der Abgrund | immer | Schwebekraft (0:06), Sanfter Fall (0:30), Stärke II (1:00) |
-| **Legenden** (7) | | | | | | |
+| **Legenden** (15) | | | | | | |
 | Der Alte vom See | **legendär** | ★★★★★ | 140–220 cm | Flüsse und Seen | nachts | Glück II (10:00), Regeneration (1:00), Extraenergie II (10:00) |
 | Goldschuppe | **legendär** | ★★★★★ | 80–130 cm | Flüsse und Seen | tagsüber · nur bei Regen | Absorption IV (3:00), Glück III (5:00) |
 | Sturmsegler | **legendär** | ★★★★★ | 250–450 cm | Meer und Strand | nur im Gewitter | Schnelligkeit III (2:00), Stärke II (2:00) |
@@ -1940,6 +1953,156 @@ die beiden Wetterlegenden beißen in ihrem Wetter zweieinhalb- bis viermal so of
 | Infernokönig | **legendär** | ★★★★★ | 200–350 cm | Lava, überall | immer | Feuerresistenz (10:00), Stärke III (1:00), Absorption IV (2:00) |
 | Drachenkoi | **legendär** | ★★★★★ | 90–160 cm | das End | immer | Stärke III (1:30), Resistenz II (1:30), Regeneration II (0:30) |
 | Mondschein-Koi | **legendär** | ★★★★★ | 60–110 cm | das Feenreich | immer | Regeneration III (0:30), Extraenergie III (10:00) |
+| Nachtfürst | **legendär** | ★★★★★ | 160–260 cm | die Schattenwelt | immer | Unsichtbarkeit (5:00), Stärke III (2:00), Schnelligkeit II (2:00) |
+| Rissleviathan | **legendär** | ★★★★★ | 300–520 cm | der Abgrund | immer | Stärke III (1:30), Feuerresistenz (10:00), Sanfter Fall (5:00) |
+| Sternenwal | **legendär** | ★★★★★ | 400–700 cm | die Leere | immer | Sanfter Fall (10:00), Glück III (5:00), Absorption IV (3:00) |
+| Der Lichtlose | **legendär** | ★★★★★ | 90–160 cm | Höhlengewässer | immer | Nachtsicht (20:00), Eile III (3:00), Resistenz II (2:00) |
+| Eiskaiser | **legendär** | ★★★★★ | 180–320 cm | kalte Gewässer, kalte Meere | immer | Resistenz II (3:00), Absorption III (4:00), Unterwasseratmung (10:00) |
+| Riffkönigin | **legendär** | ★★★★★ | 60–120 cm | warme Meere | tagsüber | Unterwasseratmung (15:00), Gunst des Delfins (5:00), Regeneration II (0:30) |
+| Moormutter | **legendär** | ★★★★★ | 150–260 cm | Sümpfe | nachts | nimmt alle Leiden, Extraenergie III (10:00), Resistenz (3:00) |
+| Sonnenkönig | **legendär** | ★★★★★ | 80–150 cm | Wasserlöcher in Wüste, Savanne und Tafelbergen | tagsüber | Feuerresistenz (15:00), Schnelligkeit II (3:00), Eile II (3:00) |
+
+![Die 996 eigenen Fischbilder: oben die von Hand gestalteten, dann die Arten der Biome – Flüsse und Seen, Meer, Tiefsee, Höhlen, Nether, End und Leere, Feenreich, Schattenwelt, Abgrund](docs/bilder/tausend_fische.jpg)
+
+**Die Fische der Biome (916).** Jedes Biom färbt seine Fische: In den Aschefeldern sind sie grau wie Schlacke und glühen
+orange, in den Frostgipfeln eisblau, im Schattenwald violett mit hellen Augen, in den Sternenstaubfeldern tragen sie
+Sternenlicht. Was für Tiere dort leben, bestimmt das Gewässer – Forellen, Welse, Hechte und Krebse im Süßwasser, Thune,
+Haie, Rochen, Krabben, Quallen und Seesterne im Meer, Anglerfische, Vipernfische und Asseln in der Tiefe, Molche,
+Schnecken und Panzerfische in den Höhlen. Je Biom sind es **Gewöhnliche, Ungewöhnliche, Seltene** und ein **großer Fang**
+(episch): bei zwölf Arten vier, vier, drei und einer, bei sieben drei, zwei, einer und einer. Die großen Räuber sind die
+seltenen, das Kleinzeug das gewöhnliche; je seltener, desto schwerer der Drill, desto größer das Tier und desto stärker
+die Wirkung – und **keine zwei der 1000 Arten wirken gleich**: Gewöhnliche geben eine oder zwei schwache Wirkungen, die
+großen Fänge drei starke (und manche haben ihren Preis). Die Wirkungen passen zum Biom: Feuerfische schützen vor Feuer und
+machen stark, Eisfische härten ab, Fische der Schattenwelt machen unsichtbar, die der Leere lassen schweben, einzelne aus
+dem End und der Naht **versetzen** wie eine Chorusfrucht, einige aus dem Feenreich **nehmen alle Leiden**.
+
+Womit ein Biom-Fisch gefangen wird, sagt sein Biom: im Wasser – in den Biomen des Nethers in der **Lava**, im End und in
+der Leere im **Nichts** unter den Inseln (dort auch in Wasser, falls welches da ist). Aschefelder und Aschelande haben
+Arten fürs Wasser und andere für die Lava, die Schwebenden Inseln fürs Wasser und fürs Nichts, die fünf Biome des Abgrunds
+für alle drei. Lavafische sind feuerfest. Am Gegenstand steht die **Heimat** jedes Biom-Fischs; alles Weitere (Größe,
+Zeit, Wetter, Wirkung, eine Notiz) steht im Fischbuch – hier je Biom nur der große Fang und eine Auswahl:
+
+| Biom | Arten | Der große Fang (episch) | Wann | Gegessen | Außerdem |
+|---|---|---|---|---|---|
+| **Flüsse & Seen** (51 Biome, 403 Arten) | | | | | |
+| Aschefelder (Lava, Wasser) | 12 | **Rauchhai** ★★★★☆, 66–273 cm | immer | Absorption III (1:50), Feuerresistenz (2:15), Stärke (1:00) | Rußwaller, Brandkrebs, Bimselritze, Schlackenmolch … |
+| Frostgipfel | 12 | **Gipfelsterlet** ★★★★☆, 130–454 cm | nachts | Unterwasseratmung (6:00), Nachtsicht (3:00), Sanfter Fall (1:00), Abbaulähmung (0:20) | Hagelmolch, Winterwels, Firngarnele, Eisnapfschnecke … |
+| Urhain | 12 | **Eichenstör** ★★★★☆, 107–373 cm | immer | Extraenergie II (3:45), Glück II (2:30), Nachtsicht (3:00) | Uraal, Harzhecht, Dickichtwaller, Farnschleie … |
+| Felsschluchten | 12 | **Schieferhausen** ★★★★☆, 95–333 cm | immer | Resistenz II (2:05), Extraenergie (4:00), Absorption (2:00), Abbaulähmung (0:20) | Steinknochenhecht, Geröllforelle, Wildwasserelritze, Kieselbrasse … |
+| Königsauen | 12 | **Hofsterlet** ★★★★☆, 107–376 cm | tagsüber | Resistenz II (1:20), Extraenergie (3:00), Regeneration (0:10) | Goldaal, Kronwels, Ritterbarsch, Wappenkrebs … |
+| Nebelmoor | 12 | **Wollgrasarapaima** ★★★★☆, 143–430 cm | nachts | Stärke III (0:45), Nachtsicht (4:00), Sprungkraft (1:30) | Mooraal, Schwadenkrebs, Irrlichtmolch, Nebelspringer … |
+| Aschelande (Lava, Wasser) | 12 | **Lavalungenfisch** ★★★★☆, 103–258 cm | immer | Feuerresistenz (6:00), Stärke (1:00), Schnelligkeit (1:30), Hunger (0:16) | Feuerbarrakuda, Vulkankrebs, Kraterneunauge, Lohennapfschnecke … |
+| Frostkessel | 12 | **Dauerfrosthornhecht** ★★★★★, 52–196 cm | nachts | Nachtsicht (6:00), Sanfter Fall (2:00), Absorption (1:20), Langsamkeit (0:23) | Nordlichtstör, Glaseisaal, Kältelanguste, Winterherzsaibling … |
+| Zerklüftete Weiten | 12 | **Topaskrebs** ★★★★☆, 32–95 cm | immer | Nachtsicht (5:00), Absorption II (1:40), Resistenz (0:50) | Quarzhornhecht, Lehmsaibling, Erzwaller, Karststichling … |
+| Uralter Hain | 12 | **Grünlichtstör** ★★★★☆, 82–288 cm | immer | Eile III (1:20), Nachtsicht (4:00), Extraenergie (3:00) | Jadeolm, Tauwels, Samenelritze, Altholzhummer … |
+| Sturmklippen | 12 | **Leuchthornhecht** ★★★★★, 41–153 cm | nur im Gewitter | Stärke III (0:55), Sanfter Fall (2:00), Eile (1:00) | Gewitterforelle, Voltkarpfen, Windbruchbrasse, Regengusswels … |
+| Ebene | 7 | **Grasolm** ★★★★☆, 14–48 cm | nachts · nur bei Regen | Glück III (2:15), Schnelligkeit II (1:15), Eile (1:00) | Brisenbarrakuda, Heuschleierschwanz, Feldwels … |
+| Sonnenblumenebene | 7 | **Strahlenstör** ★★★★☆, 84–293 cm | immer | Stärke III (0:55), Glück (4:00), Sprungkraft (1:00) | Bienenkrebs, Kornelritze, Mittagskarpfen … |
+| Wald | 7 | **Reisigwels** ★★★★☆, 59–211 cm | immer | Regeneration II (0:20), Nachtsicht (3:00), Schnelligkeit (1:30) | Waldlurch, Buschforelle, Spechtbrasse … |
+| Blumenwald | 7 | **Mohnbarrakuda** ★★★★☆, 41–122 cm | immer | Extraenergie III (2:45), Schnelligkeit (1:30), Sprungkraft (1:30) | Margeritenhornhecht, Blumenwaller, Fliederaal … |
+| Birkenwald | 7 | **Lichtwaldhornhecht** ★★★★☆, 61–227 cm | immer | nimmt alle Leiden, Glück III (3:40), Extraenergie (4:00), Schnelligkeit (1:30) | Birkenmeerbrasse, Kätzchenmolch, Weißrindenstichling … |
+| Birken-Urwald | 6 | **Hochstammschmerle** ★★★★☆, 41–123 cm | nachts · gern bei Regen | Glück III (3:40), Schnelligkeit II (1:15), Nachtsicht (2:00) | Weißriesenforelle, Altbirkenkampffisch, Säulenwaldhornhecht … |
+| Rotlaubwald | 7 | **Laubfallschleierschwanz** ★★★★☆, 9–33 cm | immer | nimmt alle Leiden, Nachtsicht (5:00), Schnelligkeit II (0:55), Sprungkraft (1:30) | Ahornwaller, Flecklichtbarsch, Rotlaubelritze … |
+| Dunkler Wald | 7 | **Düsterolm** ★★★★☆, 16–55 cm | immer | Nachtsicht (6:00), Stärke II (0:50), Resistenz (1:15), Blindheit (0:04) | Rotpilzwels, Eulenkrebs, Wolfsstichling … |
+| Blasser Garten | 7 | **Bleichmooswels** ★★★★☆, 52–186 cm | tagsüber | Resistenz II (1:20), Schnelligkeit II (0:55), Stärke (1:00), Blindheit (0:04) | Knarznadelfisch, Augenblütennapfschnecke, Welkschleierschwanz … |
+| Taiga | 7 | **Fuchssalamander** ★★★★☆, 11–38 cm | immer | Extraenergie III (2:45), Nachtsicht (4:00), Glück (2:00), Hunger (0:15) | Fichtenaal, Taigabrasse, Tannenschleie … |
+| Kiefern-Urtaiga | 7 | **Podsolkrebs** ★★★★☆, 32–96 cm | nachts | Eile II (2:30), Absorption II (1:40), Extraenergie (2:00) | Bärenwaldbarsch, Nadelstreuforelle, Kiefernwaller … |
+| Fichten-Urtaiga | 6 | **Urtaigakrebs** ★★★★☆, 21–62 cm | nachts | nimmt alle Leiden, Glück III (3:40), Eile (1:30), Nachtsicht (3:00) | Altfichtenaal, Riesenfichtenkarpfen, Dunkeltannhornhecht … |
+| Verschneite Taiga | 7 | **Eisnadelstör** ★★★★☆, 88–309 cm | tagsüber | Resistenz II (1:35), Absorption (2:00), Extraenergie (2:00) | Schlittennadelfisch, Weißtannhecht, Kaltmoosforelle … |
+| Verschneite Ebene | 7 | **Schneewehenstör** ★★★★☆, 109–382 cm | tagsüber | Extraenergie III (3:40), Unterwasseratmung (3:00), Resistenz (1:15) | Schneefeldhecht, Harschsaibling, Pulverschneebrasse … |
+| Eiszapfentundra | 7 | **Eisstachelforelle** ★★★★☆, 21–62 cm | immer | Absorption III (2:25), Glück II (1:50), Extraenergie (3:00) | Blaufrostbrasse, Kristalleisolm, Eisdornnapfschnecke … |
+| Vereister Fluss | 7 | **Grundeisbarrakuda** ★★★★☆, 54–162 cm | tagsüber | Unterwasseratmung (6:00), Resistenz II (1:00), Nachtsicht (3:00), Abbaulähmung (0:20) | Eislochhornhecht, Eisrandbarsch, Eisflusskrebs … |
+| Fluss | 7 | **Furtstör** ★★★★☆, 108–380 cm | nachts | Eile III (1:20), Extraenergie II (2:30), Glück (3:00), Hunger (0:15) | Flusslanguste, Altarmaal, Uferschmerle … |
+| Sumpf | 7 | **Faulwasserarapaima** ★★★★☆, 140–421 cm | immer | Resistenz II (1:20), Nachtsicht (3:00), Regeneration (0:15), Hunger (0:18) | Entengrützebarsch, Schilfmolch, Morastkrebs … |
+| Mangrovensumpf | 7 | **Stelzwurzelarapaima** ★★★★☆, 117–352 cm | nachts | Stärke III (1:15), Glück (4:00), Unterwasseratmung (1:30) | Gezeitenwaldhornhecht, Wurzelbogenneunauge, Propagelmolch … |
+| Dschungel | 7 | **Tigeraal** ★★★★☆, 45–136 cm | immer | Schnelligkeit III (1:10), Nachtsicht (4:00), Sprungkraft (1:30) | Dschungelkarpfen, Orchideenpiranha, Tukanspringer … |
+| Lichter Dschungel | 6 | **Wildfruchtknochenhecht** ★★★★☆, 57–213 cm | immer | Schnelligkeit III (1:10), Extraenergie II (1:50), Regeneration (0:15), Vergiftung (0:06) | Waldsaumwaller, Buschlandhummer, Ozelotspringer … |
+| Bambusdschungel | 7 | **Sprossenhummer** ★★★★☆, 28–83 cm | nachts | Schnelligkeit III (1:10), Stärke II (0:40), Nachtsicht (3:00) | Halmwaldhornhecht, Pandaneunauge, Schößlingspringer … |
+| Savanne | 7 | **Akazienhecht** ★★★★☆, 57–171 cm | immer | Stärke II (1:15), Glück II (2:30), Feuerresistenz (1:30) | Savannenhummer, Löwenbrasse, Dürrhüpfer … |
+| Savannenhochebene | 6 | **Weitblickhummer** ★★★★☆, 21–64 cm | nachts | Eile II (2:30), Feuerresistenz (2:15), Glück (2:00), Hunger (0:20) | Rotgraskarpfen, Fernblickkletterfisch, Trockenkammbarrakuda … |
+| Zerzauste Savanne | 6 | **Schiefwuchsneunauge** ★★★★☆, 47–141 cm | nur im Gewitter | Gunst des Delfins (2:30), Sanfter Fall (2:00), Eile (1:00) | Wehwindhornhecht, Fallbachgoldfisch, Überhangbrasse … |
+| Wüste | 7 | **Truggoldfisch** ★★★★☆, 8–32 cm | nachts | Stärke II (1:40), Sprungkraft (2:00), Eile (1:30) | Karawanenpacu, Zisternennapfschnecke, Kaktuswels … |
+| Tafelberge | 7 | **Rotsandhornhecht** ★★★★☆, 49–186 cm | tagsüber | Stärke III (1:15), Eile II (0:55), Absorption (2:00) | Rostbarrakuda, Tafelbergpiranha, Canyonaal … |
+| Abgetragene Tafelberge | 6 | **Felsnadelkrebs** ★★★★☆, 28–85 cm | nachts | Resistenz II (1:20), Eile (1:30), Stärke (1:00) | Säulensteinneunauge, Erosionsschnecke, Hoodookarpfen … |
+| Bewaldete Tafelberge | 6 | **Tafelwaldolm** ★★★★☆, 14–47 cm | immer | Nachtsicht (5:00), Sprungkraft II (0:55), Eile (1:00) | Wurzeltonpacu, Lehmwaldaal, Roterdewels … |
+| Alm | 7 | **Edelweißsterlet** ★★★★☆, 115–404 cm | tagsüber | Extraenergie III (2:15), Regeneration (0:20), Glück (3:00) | Enziannadelfisch, Almrauschschleimaal, Kräuterkarpfen … |
+| Kirschberghain | 7 | **Rosastör** ★★★★☆, 131–457 cm | immer | Sanfter Fall (2:30), Schnelligkeit II (0:55), Eile (1:00) | Hanamikrebs, Zartrosaschwebgarnele, Blütenschneehornhecht … |
+| Berghain | 7 | **Waldgrenzsterlet** ★★★★☆, 91–317 cm | tagsüber | Sprungkraft II (1:35), Stärke (1:00), Eile (1:00), Hunger (0:17) | Bergfichtenkrebs, Stiebnapfschnecke, Tannichtstichling … |
+| Verschneite Hänge | 7 | **Ziegenbarrakuda** ★★★★☆, 51–152 cm | immer | Eile II (2:30), Sanfter Fall (1:30), Schnelligkeit (1:30) | Wechtennadelfisch, Firnfeldschnecke, Rutschforelle … |
+| Vereiste Gipfel | 7 | **Eisgipfelsterlet** ★★★★☆, 108–379 cm | immer | Extraenergie II (3:10), Nachtsicht (4:00), Absorption (2:00) | Nordwandbarsch, Hocheisstichling, Frostkroneaal … |
+| Zerklüftete Gipfel | 7 | **Felszahnsterlet** ★★★★☆, 115–402 cm | immer | Regeneration II (0:20), Eile (2:00), Sprungkraft (1:00) | Hochgratolm, Steinbockschleie, Gipfelkreuzaal … |
+| Steinige Gipfel | 7 | **Trockenfelsstör** ★★★★☆, 118–413 cm | tagsüber | Eile II (2:30), Stärke II (0:40), Nachtsicht (3:00) | Kahlfelsbrasse, Steingipfelforelle, Geröllhangwels … |
+| Zerzauste Hügel | 7 | **Wetterseitenquappe** ★★★★☆, 56–200 cm | immer | Resistenz II (1:35), Schnelligkeit II (1:15), Sanfter Fall (1:30) | Heidesterlet, Kuppenkrebs, Zugwindforelle … |
+| Zerzauste Geröllhügel | 6 | **Splittpfeilhecht** ★★★★☆, 40–119 cm | immer | Eile III (1:10), Nachtsicht (4:00), Stärke (1:00), Abbaulähmung (0:17) | Flintmeerbrasse, Steinschlagkaulbarsch, Rollsteinsaibling … |
+| Zerzauster Wald | 6 | **Hangwaldsterlet** ★★★★☆, 111–388 cm | immer | Schnelligkeit II (2:30), Regeneration (0:20), Nachtsicht (2:00), Hunger (0:12) | Krummholzwels, Sturmholzkrebs, Bergwaldschnecke … |
+| Pilzland | 7 | **Rotkappenstör** ★★★★☆, 102–357 cm | immer | Regeneration II (0:25), Resistenz (1:15), Sprungkraft (1:00), Übelkeit (0:10) | Hutlandknochenhecht, Sporenwindschleie, Mooshroomaal … |
+| **Das Meer** (10 Biome, 79 Arten) | | | | | |
+| Sturmküste | 12 | **Wettersterlet** ★★★★☆, 103–361 cm | nur im Gewitter | Eile III (1:10), Sanfter Fall (1:30), Stärke (1:00) | Blitzrochen, Böenquastenflosser, Klippenseestern, Donnerscholle … |
+| Korallenküste | 12 | **Sonnenfahnenfisch** ★★★★☆, 209–474 cm | immer | Stärke III (1:15), Meereskraft (2:00), Glück (3:00) | Türkismuräne, Riffmondfisch, Korallenschlangenstern, Atollelritze … |
+| Ozean | 7 | **Dünungkrake** ★★★★☆, 37–183 cm | nachts | Meereskraft (3:00), Schnelligkeit (1:30), Unterwasseratmung (2:15) | Wellendornhai, Meeresgarnele, Blauwasserflugfisch … |
+| Kalter Ozean | 7 | **Grauwasserscheibenfisch** ★★★★☆, 82–288 cm | nachts | Absorption III (2:25), Nachtsicht (4:00), Resistenz (1:15) | Nordmeerbandfisch, Fjordhai, Walfängerkrebs … |
+| Vereister Ozean | 7 | **Polarmeermanta** ★★★★☆, 59–294 cm | tagsüber | Resistenz II (2:05), Unterwasseratmung (3:00), Extraenergie (2:00) | Frostseelungenfisch, Eismeerkrabbe, Eisbergtintenfisch … |
+| Lauwarmer Ozean | 7 | **Sandbankbandfisch** ★★★★☆, 140–584 cm | tagsüber | Meereskraft (2:30), Glück II (1:50), Stärke (0:40) | Seichtwasserthun, Delfinbrasse, Tangwaldgarnele … |
+| Warmer Ozean | 7 | **Sonnenriffglatthai** ★★★★★, 97–403 cm | nachts | Meereskraft (4:00), Gunst des Delfins (1:40), Stärke (0:40) | Palmenmondfisch, Blaulagunenkugelfisch, Schildkrötengarnele … |
+| Strand | 7 | **Strandqualle** ★★★★☆, 16–195 cm | tagsüber | Stärke II (1:40), Unterwasseratmung (2:15), Glück (3:00) | Sandburgflunder, Strandhaferschnecke, Flutseestern … |
+| Verschneiter Strand | 6 | **Eisstrandrochen** ★★★★☆, 78–389 cm | immer | Sanfter Fall (2:30), Resistenz II (0:45), Extraenergie (2:00), Abbaulähmung (0:13) | Frostküstenkrebs, Eisschaumschnecke, Schneestrandbarsch … |
+| Steinige Küste | 7 | **Seepockenseenadel** ★★★★☆, 7–42 cm | immer | Extraenergie II (3:45), Stärke II (0:50), Eile (1:30) | Felsküstenmanta, Steinküstenkrebs, Tangfelsscholle … |
+| **Die Tiefsee** (4 Biome, 27 Arten) | | | | | |
+| Tiefsee | 7 | **Grabendornhai** ★★★★☆, 72–300 cm | immer | Unterwasseratmung (4:30), Stärke (1:00), Resistenz (1:15) | Tiefenstromsäbelzahn, Dunkelseescholle, Lotkalmar … |
+| Kalte Tiefsee | 7 | **Eistiefenhai** ★★★★★, 97–402 cm | tagsüber | Unterwasseratmung (6:00), Resistenz II (1:00), Stärke (0:40), Dunkelheit (0:08) | Dunkelfjordpfeilschwanz, Kaltgrundscholle, Nordtiefenbeilfisch … |
+| Vereiste Tiefsee | 6 | **Polartiefenlungenfisch** ★★★★☆, 125–313 cm | immer | Sanfter Fall (2:30), Absorption II (1:40), Resistenz (0:50) | Dunkelschollenbandfisch, Schelfeiskalmar, Ewigeisammonit … |
+| Lauwarme Tiefsee | 7 | **Dämmerzonenflösselhecht** ★★★★☆, 116–289 cm | nachts | Unterwasseratmung (6:00), Meereskraft (1:30), Glück (3:00) | Blautiefenassel, Warmtiefenviperfisch, Tiefstromelritze … |
+| **Höhlen** (5 Biome, 40 Arten) | | | | | |
+| Abgrundgrotte | 12 | **Dämmerpanzerassel** ★★★★☆, 9–48 cm | nachts | Nachtsicht (5:00), Unsichtbarkeit (1:15), Resistenz (1:15) | Schleierwaller, Hallhecht, Grottenschnecke, Sirenenolm … |
+| Tropfsteinhöhlen | 7 | **Stalaktitenpfeilschwanz** ★★★★☆, 7–45 cm | immer | Absorption III (1:30), Eile (2:00), Resistenz (0:50) | Stalagmitenhornhecht, Spitzsteinbarrakuda, Tropfsteinschnecke … |
+| Üppige Höhlen | 7 | **Höhlenrankenschildfisch** ★★★★☆, 49–246 cm | immer | Eile III (1:10), Extraenergie (4:00), Sprungkraft (1:30) | Wuchertrilobit, Azaleenhornhecht, Lehmteichassel … |
+| Tiefes Dunkel | 7 | **Lauschhecht** ★★★★★, 63–189 cm | immer | Resistenz II (1:35), Schnelligkeit II (0:55), Unsichtbarkeit (1:15) | Sensorzwergwels, Tiefdunkelmolch, Wärterharnischwels … |
+| Schwefelhöhlen | 7 | **Geysirhecht** ★★★★☆, 66–199 cm | immer | Resistenz II (2:05), Eile II (1:15), Schnelligkeit (1:00), Vergiftung (0:04) | Fumarolenpanzerfisch, Brodelmolch, Gelbdunsthummer … |
+| **Der Nether** (5 Biome, 35 Arten) | | | | | |
+| Nether-Ödland (Lava) | 7 | **Netherdornhai** ★★★★☆, 67–281 cm | immer | Eile II (1:50), Absorption II (1:15), Feuerresistenz (2:15) | Rotnebelmeeraal, Lavaseebrasse, Ghasthornhecht … |
+| Karmesinwald (Lava) | 7 | **Blutrotstör** ★★★★☆, 122–428 cm | immer | Extraenergie II (3:45), Schnelligkeit (1:30), Feuerresistenz (1:30), Hunger (0:12) | Netherwarzenpanzerfisch, Karmesinwels, Nyliumkrebs … |
+| Wirrwald (Lava) | 7 | **Zwirbelangler** ★★★★☆, 29–145 cm | immer | versetzt ein paar Schritte, Sanfter Fall (4:00), Sprungkraft II (1:15), Schnelligkeit (1:00), Feuerresistenz (0:50) | Wirrwarzenpanzerfisch, Türkisstielkrabbe, Blaunebelviperfisch … |
+| Seelensandtal (Lava) | 7 | **Gebeintalzahnfisch** ★★★★☆, 20–81 cm | immer | Schnelligkeit II (2:30), Nachtsicht (4:00), Unsichtbarkeit (0:50), Verdorrung (0:04) | Klagetalhecht, Fossilkaulbarsch, Seelensandknochenhecht … |
+| Basaltdeltas (Lava) | 7 | **Grausteindornhai** ★★★★★, 88–365 cm | immer | Feuerresistenz (6:00), Resistenz II (1:00), Eile (1:00), Langsamkeit (0:10) | Deltaquastenflosser, Magmawürfelsterlet, Säulenbasalthecht … |
+| **End & Leere** (11 Biome, 104 Arten) | | | | | |
+| Sternennichts (Leere) | 12 | **Vakuumsegelfisch** ★★★★☆, 166–376 cm | immer | versetzt wie eine Chorusfrucht, Unsichtbarkeit (3:20), Absorption II (1:40), Glück (2:00) | Außenmanta, Schwarzraummondfisch, Horizontkofferfisch, Leerenaal … |
+| Kristallwald (Leere) | 12 | **Saphirsegelfisch** ★★★★★, 207–468 cm | immer | Stärke II (1:40), Glück (4:00), Extraenergie (3:00) | Opalmondfisch, Glaslaubtrilobit, Lichtbruchrochen, Quarzlichtgleiter … |
+| Schwerelose Ruinen (Leere) | 12 | **Reliktlungenfisch** ★★★★☆, 85–213 cm | immer | Sanfter Fall (3:00), Nachtsicht (4:00), Glück (2:00) | Säulenfahnenfisch, Trümmertrilobit, Vorzeitstichling, Tempelammonit … |
+| Sternenstaubfelder (Leere) | 12 | **Sternenstaubfächerfisch** ★★★★☆, 236–535 cm | immer | versetzt ein paar Schritte, Nachtsicht (5:00), Glück II (2:30), Regeneration (0:10), Leuchten (0:56) | Glitzermondfisch, Sternschnuppentrilobit, Novakalmar, Goldstaubseestern … |
+| Splitterklippen (Leere) | 12 | **Schartenflösselhecht** ★★★★☆, 82–204 cm | immer | Sprungkraft II (1:50), Schnelligkeit (2:00), Stärke (0:40) | Scherbengoldmakrele, Bruchglasthun, Stachelflugfisch, Spaltmondfisch … |
+| Weltenreste (Leere) | 12 | **Erinnerungslungenfisch** ★★★★☆, 128–320 cm | immer | nimmt alle Leiden, Nachtsicht (5:00), Schnelligkeit (2:00), Regeneration (0:15) | Weltenmondfisch, Eilandfächerfisch, Überresttintenfisch, Treibstechrochen … |
+| Das Ende (Leere) | 7 | **Kristallturmdorade** ★★★★☆, 83–250 cm | immer | Schnelligkeit III (1:50), Stärke (1:00), Unsichtbarkeit (0:50) | Obsidiansäulensegler, Drachentintenfisch, Portalthun … |
+| End-Hochland (Leere) | 7 | **Chorusblütenbandfisch** ★★★★☆, 138–573 cm | immer | Sanfter Fall (2:30), Stärke II (0:50), Sprungkraft (1:30) | Endstadtkalmar, Hochinseltrilobit, Shulkerkofferfisch … |
+| End-Mittelland (Leere) | 6 | **Gelbsteinkofferfisch** ★★★★☆, 15–58 cm | immer | Absorption III (1:50), Unsichtbarkeit (1:15), Sprungkraft (1:00) | Randlandriemenfisch, Endhangseenadel, Endflankenperlboot … |
+| Kleine Endinseln (Leere) | 6 | **Streuriemenfisch** ★★★★☆, 153–639 cm | immer | Glück III (2:45), Absorption II (1:40), Sprungkraft (1:30), Übelkeit (0:07) | Endkrümelqualle, Inselchenelritze, Splitterinselrochen … |
+| End-Kargland (Leere) | 6 | **Ödsteinsegelfisch** ★★★★★, 249–564 cm | immer | Sprungkraft III (1:50), Glück II (2:30), Absorption (2:00), Schwebekraft (0:05) | Endödmondfisch, Endrandflatterfisch, Letztlandskalar … |
+| **Das Feenreich** (5 Biome, 60 Arten) | | | | | |
+| Blütenwiesen | 12 | **Sommersegelfisch** ★★★★☆, 220–499 cm | immer | Schnelligkeit II (2:30), Eile II (1:15), Glück (3:00) | Zuckerdorade, Falterskalar, Pollenzander, Honigkugelfisch … |
+| Glimmerwald | 12 | **Leuchtmoossegelfisch** ★★★★★, 176–400 cm | immer | nimmt alle Leiden, Eile III (1:10), Extraenergie II (2:30), Sprungkraft (1:30) | Scheinseepferdchen, Wunderqualle, Traumschleie, Zaubermolch … |
+| Pilzhain | 12 | **Hexenringsegelfisch** ★★★★☆, 241–545 cm | immer | Extraenergie III (2:45), Nachtsicht (4:00), Resistenz (0:50) | Myzelflugfisch, Täublingkofferfisch, Fliegenpilznapfschnecke, Stäublingolm … |
+| Mondseen | 12 | **Lotussegelfisch** ★★★★☆, 243–550 cm | immer | Sanfter Fall (3:00), Nachtsicht (3:00), Extraenergie (3:00), Leuchten (0:24) | Perlmondkofferfisch, Mondstaubskalar, Seerosenelritze, Silbergoldfisch … |
+| Dornenwildnis | 12 | **Kratzarowana** ★★★★☆, 142–426 cm | immer | Resistenz II (1:20), Schnelligkeit II (1:15), Stärke (1:00) | Brombeerschmerle, Giftknochenhecht, Distelelritze, Wildrosenkrebs … |
+| **Die Schattenwelt** (9 Biome, 108 Arten) | | | | | |
+| Schattenwald | 12 | **Trauerbandfisch** ★★★★☆, 154–641 cm | immer | Unsichtbarkeit (3:20), Schnelligkeit II (1:15), Nachtsicht (2:00) | Zwielichtquastenflosser, Finsterdornhai, Schattenmolch, Tintenassel … |
+| Bleiche Öde | 12 | **Knochenbandfisch** ★★★★☆, 150–623 cm | immer | Unsichtbarkeit (2:05), Stärke II (0:50), Resistenz (0:50) | Salzrochen, Geisterviperfisch, Kalkkarpfen, Fahlknochenhecht … |
+| Kristallschluchten | 12 | **Glanzquastenflosser** ★★★★☆, 130–326 cm | immer | Extraenergie II (5:00), Eile II (1:15), Nachtsicht (2:00), Leuchten (0:28) | Schliffmuräne, Funkelkalmar, Nachtkristallbarsch, Juwelenviperfisch … |
+| Seelensumpf | 12 | **Grabarowana** ★★★★☆, 144–431 cm | immer | Unsichtbarkeit (3:20), Regeneration (0:20), Absorption (2:00) | Wiedergängerhummer, Totenhornhecht, Leichentuchkarpfen, Spukbrasse … |
+| Schattengipfel | 12 | **Mondsteinhornhecht** ★★★★★, 43–162 cm | immer | Resistenz II (1:20), Nachtsicht (3:00), Unsichtbarkeit (0:50) | Dunkelfirnmolch, Höhenbarsch, Abhangneunauge, Zinnenkarpfen … |
+| Glimmerweiten | 12 | **Sanftlichtdorade** ★★★★☆, 73–220 cm | immer | Sprungkraft II (1:50), Eile (2:00), Extraenergie (2:00) | Glühseenadel, Phosphorballonfisch, Nachtblütengoldfisch, Leuchtkäferschnecke … |
+| Abgrundmeer | 12 | **Untiefenpanzerfisch** ★★★★☆, 36–182 cm | immer | Nachtsicht (5:00), Stärke II (0:40), Unterwasseratmung (1:30), Langsamkeit (0:11) | Schweigeviperfisch, Leviathanmuräne, Malstromtintenfisch, Schwarzhimmelaxtfisch … |
+| Schwebende Inseln (Leere, Wasser) | 12 | **Saumlungenfisch** ★★★★☆, 95–237 cm | immer | Absorption II (3:20), Nachtsicht (3:00), Schnelligkeit (1:30), Übelkeit (0:09) | Federballonfisch, Segelwindbandfisch, Ätherkarpfen, Himmelsriffseepferdchen … |
+| Schattentiefen | 12 | **Blindpfeilschwanz** ★★★★☆, 5–30 cm | immer | Unsichtbarkeit (2:05), Absorption II (1:40), Resistenz (0:50), Blindheit (0:05) | Gruftpanzerfisch, Unterweltwels, Schachtpanzerassel, Kriechneunauge … |
+| **Der Abgrund** (5 Biome, 60 Arten) | | | | | |
+| Bruchlande (Lava, Leere, Wasser) | 12 | **Bruchlungenfisch** ★★★★☆, 132–331 cm | immer | Sanfter Fall (2:30), Absorption II (1:15), Feuerresistenz (1:30), Verdorrung (0:04) | Verwerfungsbandfisch, Grenzhai, Kippbeilfisch, Zerfallschleimaal … |
+| Glutsturz (Lava, Leere, Wasser) | 12 | **Schmelzflussrochen** ★★★★☆, 78–389 cm | immer | Eile II (1:35), Schnelligkeit II (0:55), Feuerresistenz (1:30), Hunger (0:17) | Tropfglutpanzerfisch, Sturzgluthai, Lavafallkarausche, Gießmuräne … |
+| Sternentrümmer (Lava, Leere, Wasser) | 12 | **Sternwrackperlboot** ★★★★☆, 17–33 cm | immer | versetzt ein paar Schritte, Glück III (2:15), Eile II (1:15), Nachtsicht (2:00), Leuchten (0:47) | Fallsternkalmar, Himmelseisenviperfisch, Sternenerztaschenkrebs, Sternmetallpiranha … |
+| Schattenschlund (Lava, Leere, Wasser) | 12 | **Schwärzehummer** ★★★★☆, 22–66 cm | immer | Stärke II (1:15), Resistenz II (1:00), Schnelligkeit (1:00) | Dunkelsoghai, Fraßtaschenkrebs, Abgrundbeilfisch, Tiefschattenkalmar … |
+| Die Naht (Lava, Leere, Wasser) | 12 | **Fadenquastenflosser** ★★★★☆, 97–243 cm | immer | Eile III (1:50), Glück II (1:50), Schnelligkeit (1:30), Feuerresistenz (0:50) | Stichtrilobit, Chaosrochen, Nahthornhecht, Knotenbeilfisch … |
+
+Die Arten der Biome berechnet `tools/fish_gen.py` aus Tabellen (Farbwelt, Gewässer, Wesen und Namensteile je Biom) – immer
+gleich, mit eigenem Zufallsgenerator; es schreibt die Bilder, die Namen und Notizen in beiden Sprachen und die Tabelle
+`data/kingdomsatwar/fishing/species.tsv`, die das Spiel beim Start liest. Ein Test prüft, dass keine zwei der 1000 Arten
+gleich heißen, gleich aussehen oder gleich wirken und dass jedes Biom seine Arten hat.
 
 **Essen.** Jeder Fisch lässt sich roh essen – auch mit vollem Magen – und wirkt dann wie in der Tabelle (der Tooltip
 zeigt es, im Fischbuch aber erst nach dem ersten Fang). Manche haben ihren Preis: Der Piranha macht stark und hungrig,
@@ -1955,16 +2118,46 @@ Kram und lockt bestimmte Arten; bei jedem Biss wird einer verbraucht.
 | **Köderwurm** (6 Stück) | Verrottetes Fleisch + Erde + Weizenkörner | die gewöhnlichen und ungewöhnlichen Fische der Flüsse und Seen (beißen 1,6-mal so oft) |
 | **Glühköder** (4 Stück) | 4 Köderwürmer + Leuchttintenbeutel + Leuchtbeeren – oder 4 Köderwürmer + Leuchtsteinstaub + Spinnenauge | alles, was im Dunkeln lebt: Nachtfische, Tiefsee, Höhlen, das Tiefe Dunkel, Lava (beißen 2,2-mal so oft) |
 
-**Das Fischbuch (Taste H).** Jeder hat es immer bei sich. Links neun Kapitel – Flüsse & Seen, Das Meer, Die Tiefsee, Der
-Nether, End & Leere, Das Feenreich, Die Schattenwelt, Der Abgrund, Legenden – mit einem Hinweis, wo und wie man dort
-angelt, und allen Arten des Kapitels; rechts die gewählte Art: Seltenheit, Sterne, wie oft gefangen, Lebensraum,
-Tageszeit, Wetter, Größe, der eigene **Rekord**, die Wirkung beim Essen und ein paar Zeilen über den Fisch. Was noch nie
-am Haken hing, ist ein **Schattenriss** ohne Namen – Lebensraum, Zeit und Größe verrät das Buch trotzdem, damit man weiß,
-wo man suchen muss. Unten steht, wie viele Fische und Schätze man schon gelandet hat. Der Fortschritt gehört zum
-Spieler und bleibt nach dem Tod erhalten.
+**Das Fischbuch (Taste H).** Jeder hat es immer bei sich. Links stecken zehn Lesezeichen – Flüsse & Seen, Das Meer, Die
+Tiefsee, Höhlen, Der Nether, End & Leere, Das Feenreich, Die Schattenwelt, Der Abgrund, Legenden –; hält man die Maus
+darauf, steht dort, wo und wie man in diesem Kapitel angelt. Die linke Seite zeigt die **Gewässer** des Kapitels: zuoberst
+„Überall“ (die Allerweltsfische), darunter jedes Biom mit seinem Stand – etwa „Korallenküste 7/12“ –, vollständige in
+Gold mit einem Stern; mit dem Mausrad blättert man durch die Liste. Ein Klick schlägt ein Gewässer auf und zeigt seine
+Arten in Fächern (der Punkt in der Ecke verrät die Seltenheit), der Pfeil oben, ein Rechtsklick oder die Rücktaste führt
+zurück. Rechts steht die gewählte Art: Seltenheit, Sterne, wie oft gefangen, Lebensraum oder Biom, Tageszeit, Wetter,
+Größe, der eigene **Rekord**, die Wirkung beim Essen und ein paar Zeilen über den Fisch. Was noch nie am Haken hing, ist
+ein **Schattenriss** ohne Namen – Biom, Zeit und Größe verrät das Buch trotzdem, damit man weiß, wo man suchen muss. Oben
+steht, wie viele der 1000 Arten man schon hat, unten, wie viele Fische und Schätze man gelandet hat. Der Fortschritt
+gehört zum Spieler und bleibt nach dem Tod erhalten.
+
+**Der Fischbeutel (seit 0.81).** Auf der Werkbank: oben links und rechts je ein **Faden**, in der Mitte eine **Truhe**,
+links und rechts von ihr und in der ganzen unteren Reihe **Leder** (fünf Stück). Wer einen Fischbeutel bei sich trägt –
+in der Hand oder irgendwo im Inventar –, dem **wandert jeder geangelte Fisch gleich hinein** (der Drill meldet „→ Beutel“);
+ist der Beutel voll, fliegt der Fisch wie bisher heran, und das Spiel sagt es. Ein **Rechtsklick** mit dem Beutel in der
+Hand öffnet ihn: je Art ein Fach mit der Zahl, darüber Stufe und Füllung. Ein Klick nimmt **einen Stapel** heraus,
+Umschalt-Klick **alle** dieser Art, ein Rechtsklick **einen einzelnen**, der Knopf „Alles entnehmen“ leert den Beutel –
+immer nur so weit, wie im Inventar Platz ist; nichts fällt zu Boden. Im Inventar lassen sich Fische auch von Hand
+hineinlegen (Fisch auf den Beutel klicken oder mit dem Beutel auf den Fisch). Der Beutel merkt sich Art und Zahl; ein
+Fisch mit eigenem Namen vom Amboss bleibt deshalb draußen. Ein Beutel fasst **64 Fische**, gleich wie viele Arten, und
+jede **Stufe 32 mehr** – ohne Obergrenze. In der Hand ist er prall und plastisch wie die Totems.
+
+**Beim Fischer.** Die Erweiterung gibt es bei den **Fischern in den Dörfern**: Das Angebot gilt dem Beutel, den man bei
+sich trägt (dem in der Hand, sonst dem ersten im Inventar), sein Inhalt bleibt. **Jede Stufe kostet mehr als die vorige**
+– die erste 12 Bronze, jede weitere rund ein Sechstel mehr:
+
+| Stufe | 2 | 3 | 6 | 11 | 16 | 21 | 31 | 41 | 51 |
+|---|---|---|---|---|---|---|---|---|---|
+| fasst | 96 | 128 | 224 | 384 | 544 | 704 | 1024 | 1344 | 1664 |
+| kostet (Bronze) | 12 | 14 | 25 | 53 | 111 | 234 | 1030 | 4545 | 20 048 |
+
+(9 Bronze sind ein Silber, 81 ein Gold; wer im Dorf angesehen ist, zahlt wie überall weniger.) Der Fischer verkauft auch
+den Beutel selbst (24 Bronze) und **kauft den Fang auf**: 8 beliebige gewöhnliche Fische für 5 Bronze, 5 ungewöhnliche für
+7, 2 seltene für 8, einen epischen für 10 – lose aus dem Inventar oder gleich aus dem Beutel, von den Arten, von denen man
+am meisten hat. Legenden kauft er nicht. Die Erweiterung zählt nicht zur Handelsgrenze des Ladens – man kann so viele
+Stufen auf einmal kaufen, wie die Börse hergibt.
 
 Für andere Mods: Jeder Fang löst wie bei Minecraft das Angel-Ereignis und die Fortschritte aus; die Fische stehen in
-`#minecraft:fishes`, `#c:foods/raw_fish` und `#kingdomsatwar:fish`. Im Kreativmodus liegen Fische und Köder im Tab
+`#minecraft:fishes`, `#c:foods/raw_fish` und `#kingdomsatwar:fish`. Im Kreativmodus liegen Fischbeutel, Fische und Köder im Tab
 **Kingdoms at War: Angeln**.
 
 ### Das lebendige Meer
@@ -3399,7 +3592,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.80.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.81.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3413,6 +3606,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/audio/void_creatures.py` | Stimmen der Wesen der Leere und des Zerbrochenen Königs neu erzeugen |
 | `python3 tools/audio/sea_creatures.py` | Stimmen der Meereswesen neu erzeugen (`--preview ordner` legt Hörproben als WAV ab) |
 | `python3 tools/sea_textures.py` | Gegenstände, Laterne und Leuchthof der Meereswesen (wird von `generate_textures.py` mit aufgerufen) |
+| `python3 tools/fish_gen.py` | Die 916 Fischarten der Biome neu berechnen: Bilder, Namen, Notizen und die Tabelle `species.tsv` (`--preview ordner` für Übersichtsbilder, `--check` prüft nur) |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
@@ -3519,17 +3713,17 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung, Köder, Schatzkisten und das Fischbuch; dazu
      Klangwelten in jedem Biom mit eigenem Regler, die Chronik per Taste, Bauwerke weiter auseinander und Verzauberungen,
      die auf den Waffen der Mod im Verhältnis wirken;
-   - zuletzt **0.80 – Totems und Äpfel der Macht** (fertig): neun Totems mit Wirkung in der Zweithand, mehr Herzen beim
-     Aufstehen und der Kraft ihres Elements, vier Äpfel der Macht mit dem Zweiten Leben, plastische Modelle.
+   - **0.80 – Totems und Äpfel der Macht** (fertig): neun Totems mit Wirkung in der Zweithand, mehr Herzen beim
+     Aufstehen und der Kraft ihres Elements, vier Äpfel der Macht mit dem Zweiten Leben, plastische Modelle;
+   - zuletzt **0.81 – Tausend Fische** (fertig): eigene Arten für jedes der 105 Biome (mit den bisherigen genau 1000), acht
+     neue Legenden, das Fischbuch mit den Gewässern je Kapitel, der Fischbeutel und seine Erweiterungen beim Fischer.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** **eigene Fische für jedes Biom** (auch für Höhlenbiome) – mehrere hundert Arten –, dazu ein
-   **Fischbeutel**, in den der Fang von selbst wandert und dessen Platz sich beim Angler in den Dörfern unbegrenzt erweitern
-   lässt; danach Bosse, die besser auf Elytren reagieren; viele neue **Waffen, Spitzhacken und Schilde** als 3D-Modelle, die
-   auch in der Außenansicht richtig in der Hand liegen; das **Urmeer** – eine Meeresdimension, die man durch einen
-   versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –; neue Wesen; schönere Bossleisten; neue Bosse, Erze und
-   Bauwerke für alle Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** Bosse, die besser auf Elytren reagieren; viele neue **Waffen, Spitzhacken und Schilde** als
+   3D-Modelle, die auch in der Außenansicht richtig in der Hand liegen, und plastische Modelle für alle Gegenstände; das
+   **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –;
+   neue Wesen; schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.

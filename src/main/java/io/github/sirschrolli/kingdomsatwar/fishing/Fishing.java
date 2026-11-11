@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -53,7 +52,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * Das Angeln (seit 0.79) auf dem Server. Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen –, aber:
  * <ul>
- *     <li>Was beißt, hängt vom Ort ab ({@link Habitat}): 76 Arten, in jedem Gewässer und jeder Welt eigene.</li>
+ *     <li>Was beißt, hängt vom Ort ab ({@link Habitat} und das Biom): 1000 Arten, in jedem Biom jeder Welt eigene.</li>
  *     <li>Der Schwimmer treibt auch in <b>Lava</b> (Nether, Abgrund) und in der <b>Leere</b> unter den Inseln des Ends, der Leere
  *     und des Abgrunds – wer den Haken über den Rand wirft, sieht ihn ein paar Blöcke tiefer schweben.</li>
  *     <li>Ein Fisch am Haken wird nicht herausgehoben, sondern <b>gedrillt</b> ({@link FishFight}). Entkommt er, bleibt der
@@ -147,9 +146,9 @@ public final class Fishing {
                 return deliver(player, hook, rod, junk, medium);
             }
         }
-        Set<Habitat> here = Habitat.at(level, pos, medium);
+        FishSpecies.Spot spot = spot(level, pos, medium);
         boolean rain = level.isRainingAt(pos.above());
-        FishSpecies species = FishSpecies.pick(here, level.isBrightOutside(), level.dimensionType().hasFixedTime(), rain,
+        FishSpecies species = FishSpecies.pick(spot, level.isBrightOutside(), level.dimensionType().hasFixedTime(), rain,
                 rain && level.isThundering(), luck, bait, random);
         if (species == null) {
             return null;
@@ -164,6 +163,12 @@ public final class Fishing {
         ModNetwork.send(player, new FishingStartPayload(session.id, species.ordinal(), medium.ordinal(), log(player).has(species), chest,
                 Math.min(0.2f, 0.05f * luck)));
         return 0;
+    }
+
+    /** Der Angelplatz an dieser Stelle: Lebensräume, Biom und worin der Schwimmer treibt. */
+    public static FishSpecies.Spot spot(net.minecraft.world.level.Level level, BlockPos pos, Medium medium) {
+        String biome = level.getBiome(pos).unwrapKey().map(key -> key.identifier().toString()).orElse("");
+        return new FishSpecies.Spot(Habitat.at(level, pos, medium), biome, medium);
     }
 
     private static List<ItemStack> loot(ServerLevel level, ResourceKey<LootTable> table, ServerPlayer player, FishingHook hook, ItemStack rod, int luck) {
@@ -182,6 +187,11 @@ public final class Fishing {
      * Erfahrungskugel, der Haken ist eingeholt. @return der Schaden an der Angel
      */
     private static int deliver(ServerPlayer player, FishingHook hook, ItemStack rod, List<ItemStack> items, Medium medium) {
+        return deliver(player, hook, rod, items, medium, null);
+    }
+
+    /** @param bagged wird auf {@code true} gesetzt, wenn der Fang (ganz) in einen Fischbeutel gewandert ist */
+    private static int deliver(ServerPlayer player, FishingHook hook, ItemStack rod, List<ItemStack> items, Medium medium, boolean @Nullable [] bagged) {
         ServerLevel level = player.level();
         ItemFishedEvent event = new ItemFishedEvent(items, hook.onGround() ? 2 : 1, hook);
         NeoForge.EVENT_BUS.post(event);
@@ -194,6 +204,25 @@ public final class Fishing {
         for (ItemStack stack : items) {
             if (stack.is(ItemTags.FISHES)) {
                 player.awardStat(Stats.FISH_CAUGHT, 1);
+            }
+            // wer einen Fischbeutel bei sich trägt, dem wandert der Fisch gleich hinein (solange Platz ist)
+            FishSpecies fish = FishBag.speciesOf(stack);
+            if (fish != null) {
+                int put = FishBag.deposit(player, fish, stack.getCount());
+                if (put == 0 && !FishBag.carried(player).isEmpty()) {
+                    player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("message.kingdomsatwar.fish_bag.full")
+                            .withStyle(net.minecraft.ChatFormatting.GOLD));
+                }
+                if (put > 0) {
+                    stack.shrink(put);
+                    if (stack.isEmpty()) {
+                        if (bagged != null) {
+                            bagged[0] = true;
+                        }
+                        first = false;
+                        continue;
+                    }
+                }
             }
             // aus dem Wasser fliegt der Fang im Bogen heran; aus Lava und Leere landet er gleich vor den Füßen (dort ginge
             // er sonst verloren) – nur was Feuer verträgt, darf auch aus der Lava fliegen
@@ -267,7 +296,8 @@ public final class Fishing {
         }
         burst(level, hook, session.medium, 16);
         level.playSound(null, hook.getX(), hook.getY(), hook.getZ(), splashSound(session.medium), SoundSource.NEUTRAL, 0.6f, 1.0f);
-        int damage = deliver(player, hook, rod, items, session.medium);
+        boolean[] bagged = {false};
+        int damage = deliver(player, hook, rod, items, session.medium, bagged);
         rod.hurtAndBreak(damage, player, session.hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         FishLog log = log(player).copy();
         int news = log.record(species, cm);
@@ -275,7 +305,10 @@ public final class Fishing {
             log.addTreasure();
         }
         player.setData(ModAttachments.FISH_LOG, log);
-        ModNetwork.send(player, new FishingCatchPayload(session.id, species.ordinal(), cm, news, chest));
+        ModNetwork.send(player, new FishingCatchPayload(session.id, species.ordinal(), cm, news, chest, bagged[0]));
+        if (bagged[0]) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BUNDLE_INSERT, SoundSource.PLAYERS, 0.7f, 1.0f);
+        }
     }
 
     private static ResourceKey<LootTable> treasureTable(Medium medium) {

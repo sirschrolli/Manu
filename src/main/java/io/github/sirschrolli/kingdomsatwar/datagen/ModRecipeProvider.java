@@ -847,6 +847,13 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_fish", has(fish)), "fish_fillet_cooked_from_smoking");
         save(SimpleCookingRecipeBuilder.campfireCooking(tag(fish), RecipeCategory.FOOD, fillet, 0.35f, 600)
                 .unlockedBy("has_fish", has(fish)), "fish_fillet_cooked_from_campfire_cooking");
+        // Fischbeutel: Leder, eine Truhe als Futter, oben die Zugschnur
+        Item bag = io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get();
+        shaped(RecipeCategory.TOOLS, bag)
+                .pattern("S S").pattern("LCL").pattern("LLL")
+                .define('S', Items.STRING).define('L', Items.LEATHER).define('C', Items.CHEST)
+                .unlockedBy(getHasName(Items.FISHING_ROD), has(Items.FISHING_ROD))
+                .save(output, key("fish_bag"));
         // Köderwurm: was im Kompost kriecht – verrottetes Fleisch, Erde, Saat
         Item worm = io.github.sirschrolli.kingdomsatwar.registry.FishingItems.BAIT_WORM.get();
         shapeless(RecipeCategory.TOOLS, worm, 6)

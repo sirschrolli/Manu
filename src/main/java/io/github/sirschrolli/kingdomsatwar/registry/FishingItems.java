@@ -3,8 +3,9 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishItem;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies;
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
@@ -22,13 +23,13 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
- * Das Angeln (seit 0.79): ein Gegenstand je Fischart (die vier Fische von Minecraft bleiben, was sie sind), das gebratene
- * Fischfilet und die Köder.
+ * Das Angeln (seit 0.79): ein Gegenstand je Fischart (die vier Fische von Minecraft bleiben, was sie sind) – seit 0.81 sind es
+ * 996 –, das gebratene Fischfilet, die Köder und der Fischbeutel.
  */
 public final class FishingItems {
     /** Reihenfolge im Kreativ-Reiter „Angeln“. */
     static final List<Supplier<? extends ItemLike>> TAB = new ArrayList<>();
-    private static final EnumMap<FishSpecies, DeferredItem<FishItem>> FISH = new EnumMap<>(FishSpecies.class);
+    private static final Map<FishSpecies, DeferredItem<FishItem>> FISH = new LinkedHashMap<>();
 
     /** Köderwurm: lockt die häufigen Fische der Flüsse und Seen, der Biss kommt schneller. */
     public static final DeferredItem<Item> BAIT_WORM = add(ModItems.ITEMS.registerSimpleItem("bait_worm",
@@ -39,6 +40,14 @@ public final class FishingItems {
     /** Gebratenes Fischfilet: aus jedem der eigenen Fische (Ofen, Räucherofen, Lagerfeuer) – sättigt wie gebratener Lachs. */
     public static final DeferredItem<Item> COOKED_FILLET = add(ModItems.ITEMS.registerSimpleItem("fish_fillet_cooked",
             p -> p.food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8f).build())));
+
+    /**
+     * Fischbeutel (seit 0.81): Der Fang wandert hinein, im Fenster des Beutels nimmt man ihn wieder heraus. Fasst 64 Fische und
+     * mit jeder Stufe 32 mehr; die Stufen verkauft der Fischer im Dorf.
+     */
+    public static final DeferredItem<io.github.sirschrolli.kingdomsatwar.fishing.FishBagItem> FISH_BAG = add(ModItems.ITEMS.registerItem("fish_bag",
+            io.github.sirschrolli.kingdomsatwar.fishing.FishBagItem::new,
+            p -> p.stacksTo(1).component(ModDataComponents.FISH_BAG.get(), io.github.sirschrolli.kingdomsatwar.fishing.FishBag.EMPTY)));
 
     static {
         for (FishSpecies species : FishSpecies.values()) {

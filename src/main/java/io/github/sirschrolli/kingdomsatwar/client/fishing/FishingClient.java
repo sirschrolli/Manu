@@ -31,6 +31,8 @@ public final class FishingClient {
         event.register(FishingCatchPayload.TYPE, FishingClient::onCatch);
         event.register(FishingEndPayload.TYPE, FishingClient::onEnd);
         event.register(OpenFishBookPayload.TYPE, FishingClient::onBook);
+        event.register(io.github.sirschrolli.kingdomsatwar.network.OpenFishBagPayload.TYPE, (payload, context) -> Minecraft.getInstance().gui.setScreen(
+                new FishBagScreen(payload.mainHand() ? net.minecraft.world.InteractionHand.MAIN_HAND : net.minecraft.world.InteractionHand.OFF_HAND)));
         event.register(HookVoidPayload.TYPE, FishingClient::onVoid);
     }
 
@@ -40,9 +42,12 @@ public final class FishingClient {
                 : KingdomsAtWar.id("textures/item/fish/" + species.id() + ".png");
     }
 
-    /** Der Schattenriss einer Art (für noch nie gefangene). */
-    public static Identifier silhouette(FishSpecies species) {
-        return KingdomsAtWar.id("textures/gui/fishing/silhouette/" + species.id() + ".png");
+    /**
+     * Die Farbe, mit der das Bild einer noch nie gefangenen Art zum Schattenriss wird: fast schwarz, in dieser Deckkraft
+     * (0–255). Helle Stellen des Bilds bleiben eine Spur heller – man ahnt die Zeichnung, erkennt sie aber nicht.
+     */
+    public static int shadow(int alpha) {
+        return (alpha << 24) | 0x222A3A;
     }
 
     public static Component name(FishSpecies species) {
@@ -63,7 +68,7 @@ public final class FishingClient {
 
     private static void onCatch(FishingCatchPayload payload, IPayloadContext context) {
         if (Minecraft.getInstance().gui.screen() instanceof FishingScreen screen) {
-            screen.caught(payload.session(), payload.cm(), payload.news(), payload.chest());
+            screen.caught(payload.session(), payload.cm(), payload.news(), payload.chest(), payload.bagged());
         }
     }
 

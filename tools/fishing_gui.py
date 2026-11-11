@@ -838,7 +838,10 @@ ICONS = {
     "legends": (["............", "............", ".Y...YY...Y.", ".YH..YH..YH.", ".YHY.YH.YHY.", ".YHHYYHYYHD.", ".YHHHHHHHHD.", ".YHRHHGHHBD.", ".YHHHHHHHDD.", ".DDDDDDDDDD.", "............", "............"],
                 {"Y": "#f4c22a", "H": "#ffe684", "D": "#a8700a", "R": "#e83a2a", "G": "#3ac85a", "B": "#3a8ae8"}),
 }
-ICON_ORDER = ("rivers", "sea", "deep", "nether", "end", "fae", "shadow", "abyss", "legends")
+ICONS["caves"] = (["............", "...DDDDDD...", ".DDMMMMMMDD.", "DMMKMKKMKMMD", "DMKKMKKKKKMD", "DMKKKKKKKKMD", "DMKKKKKYKKMD", "DMKKKKKKKKMD", "DMBLBBLBBLMD",
+                   "DMBBLBBLBBMD", "DDDDDDDDDDDD", "............"],
+                  {"D": "#2a2018", "M": "#9a8262", "K": "#16121c", "B": "#2e8cc0", "L": "#7ccaf0", "Y": "#7af0ff"})
+ICON_ORDER = ("rivers", "sea", "deep", "caves", "nether", "end", "fae", "shadow", "abyss", "legends")
 
 SYMBOLS = {
     # kleine Zeichen der Angaben, 9 × 9: Ort, Zeit, Wetter, Größe, Rekord, Anzahl, Wirkung
@@ -905,10 +908,63 @@ def book() -> Image.Image:
     return atlas
 
 
+def button(w: int, h: int, hover: bool) -> Image.Image:
+    """Ein Knopf: dunkles Holz in Messing gefasst (unter der Maus heller)."""
+    theme = THEMES["water"]
+    img = Image.new("RGBA", (w, h), CLEAR)
+    px = img.load()
+    trim = theme["trim"]
+    for y in range(h):
+        for x in range(w):
+            rx, ry = min(x, w - 1 - x), min(y, h - 1 - y)
+            if rx == 0 and ry == 0:
+                continue
+            if rx == 0 or ry == 0:
+                c = mix(theme["body"][0], (0, 0, 0, 255), 0.5)
+            elif rx == 1 or ry == 1:
+                c = trim[3 if (x == 1 or y == 1) else 1]
+                if hover:
+                    c = trim[4 if (x == 1 or y == 1) else 2]
+            else:
+                v = 0.62 - (y / (h - 1)) * 0.34 + (h01(x // 5, y * 3, w) - 0.5) * 0.12 + (0.14 if hover else 0.0)
+                c = pa.pick_dither(theme["body"], max(0.0, min(0.999, v)), x, y, 0.5)
+            px[x, y] = c
+    return img
+
+
+def bag_gui() -> Image.Image:
+    """
+    Das Fenster des Fischbeutels (seit 0.81), 256 × 256: links oben die Tafel (196 × 186) mit dem Band für den Titel, der Leiste
+    für die Füllung und acht mal vier Fächern; daneben und darunter Einzelteile (Fach unter der Maus, Fach einer Legende,
+    Füllung der Leiste, Knöpfe).
+    """
+    atlas = Image.new("RGBA", (256, 256), CLEAR)
+    atlas.alpha_composite(plate(196, 186, 8100), (0, 0))
+    atlas.alpha_composite(ribbon(128, 17), (34, 5))
+    atlas.alpha_composite(bar(172, 8, False), (12, 37))
+    for row in range(4):
+        for col in range(8):
+            atlas.alpha_composite(slot("normal"), (10 + col * 22, 49 + row * 22))
+    atlas.alpha_composite(slot("hover"), (200, 0))
+    atlas.alpha_composite(slot("legend"), (224, 0))
+    atlas.alpha_composite(bar(170, 6, True), (0, 190))
+    full = bar(170, 6, True)
+    fp = full.load()
+    for y in range(full.height):                 # voll: dieselbe Füllung in Rot
+        for x in range(full.width):
+            r, g, b, a = fp[x, y]
+            fp[x, y] = (min(255, b + 40), g // 2, r // 2 + 20, a)
+    atlas.alpha_composite(full, (0, 198))
+    atlas.alpha_composite(button(84, 16, False), (0, 208))
+    atlas.alpha_composite(button(84, 16, True), (88, 208))
+    return atlas
+
+
 def build(put) -> None:
     """Für tools/generate_textures.py."""
     put("gui/fishing/minigame", minigame())
     put("gui/fishing/book", book())
+    put("gui/fishing/bag", bag_gui())
 
 
 def main() -> None:
@@ -916,6 +972,7 @@ def main() -> None:
     os.makedirs(out, exist_ok=True)
     minigame().save(os.path.join(out, "minigame.png"))
     book().save(os.path.join(out, "book.png"))
+    bag_gui().save(os.path.join(out, "bag.png"))
     print("geschrieben nach", out)
 
 

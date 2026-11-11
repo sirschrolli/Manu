@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.fishing.Bait;
+import io.github.sirschrolli.kingdomsatwar.fishing.FishBag;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishFight;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishItem;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishLog;
@@ -65,6 +66,8 @@ final class FishingGameTests {
             ModGameTests.TEST_FUNCTIONS.register("fishing_fight", () -> FishingGameTests::fight);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLOW =
             ModGameTests.TEST_FUNCTIONS.register("fishing_flow", () -> FishingGameTests::flow);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BAG =
+            ModGameTests.TEST_FUNCTIONS.register("fishing_bag", () -> FishingGameTests::bag);
 
     private FishingGameTests() {}
 
@@ -77,6 +80,8 @@ final class FishingGameTests {
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         event.registerTest(FLOW.getId(), new FunctionGameTestInstance(FLOW.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+        event.registerTest(BAG.getId(), new FunctionGameTestInstance(BAG.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     // =====================================================================================
@@ -88,22 +93,39 @@ final class FishingGameTests {
         JsonObject english = lang(helper, "en_us");
         RandomSource random = RandomSource.create(79);
         Map<String, FishSpecies> effects = new HashMap<>();
+        Map<String, FishSpecies> names = new HashMap<>();
+        Map<String, FishSpecies> images = new HashMap<>();
         int custom = 0;
         for (FishSpecies species : FishSpecies.values()) {
             String id = species.id();
-            helper.assertTrue(!species.habitats().isEmpty(), "Art ohne Lebensraum: " + id);
+            boolean local = species.biome() != null;
+            // entweder nach Lebensräumen verteilt (die von Hand benannten) oder an ein Biom und ein Medium gebunden
+            helper.assertTrue(local ? species.habitats().isEmpty() && !species.media().isEmpty() : !species.habitats().isEmpty() && species.media().isEmpty(),
+                    "Art ohne Lebensraum: " + id);
+            helper.assertTrue(local == species.ordinal() >= FishSpecies.NAMED && FishSpecies.byIndex(species.ordinal()) == species
+                    && FishSpecies.byId(id) == species, "Reihenfolge der Arten: " + id);
             helper.assertTrue(species.minCm() > 0 && species.maxCm() > species.minCm(), "Größe falsch: " + id);
             helper.assertTrue(species.difficulty() > 0.1f && species.difficulty() < 1.0f, "Schwierigkeit außerhalb: " + id);
             // irgendwann, irgendwo beißt jede
-            float weight = species.weight(EnumSet.copyOf(species.habitats()), species.time() != FishSpecies.Time.NIGHT, false,
+            FishSpecies.Spot home = local ? new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), species.biome(), species.media().iterator().next())
+                    : FishSpecies.Spot.of(EnumSet.copyOf(species.habitats()));
+            float weight = species.weight(home, species.time() != FishSpecies.Time.NIGHT, false,
                     species.weather() != FishSpecies.Weather.ANY, species.weather() == FishSpecies.Weather.THUNDER_ONLY, 0, Bait.NONE);
             helper.assertTrue(weight > 0.0f, "Art beißt nie: " + id);
+            if (local) {
+                // … und zwar nur in ihrem Biom und ihrem Medium
+                helper.assertTrue(species.weight(new FishSpecies.Spot(EnumSet.allOf(Habitat.class), "minecraft:the_void", Medium.WATER), true, true, true, true,
+                        0, Bait.NONE) == 0.0f, "Art beißt außerhalb ihres Bioms: " + id);
+                for (Medium medium : Medium.values()) {
+                    float there = species.weight(new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), species.biome(), medium), true, true, true, true, 0, Bait.NONE);
+                    helper.assertTrue(there > 0.0f == species.media().contains(medium), "Medium passt nicht: " + id + " in " + medium);
+                }
+                helper.assertTrue(species.chapter() != FishSpecies.Chapter.LEGENDS && species.rarity() != FishSpecies.Rarity.LEGENDARY, "Legende im Biom: " + id);
+            }
             for (int i = 0; i < 20; i++) {
                 int cm = species.rollSize(random, i % 2 == 0);
                 helper.assertTrue(cm >= species.minCm() && cm <= species.maxCm(), "Größe außerhalb der Spanne: " + id + " " + cm);
             }
-            helper.assertTrue(FishingGameTests.class.getResource("/assets/kingdomsatwar/textures/gui/fishing/silhouette/" + id + ".png") != null,
-                    "Schattenriss fehlt: " + id);
             for (JsonObject lang : List.of(german, english)) {
                 helper.assertTrue(lang.has(species.noteKey()) && lang.get(species.noteKey()).getAsString().length() > 20, "Notiz fehlt: " + id);
             }
@@ -121,6 +143,18 @@ final class FishingGameTests {
             helper.assertTrue(FishingGameTests.class.getResource("/assets/kingdomsatwar/models/item/fish_" + id + ".json") != null, "Modell fehlt: " + id);
             for (JsonObject lang : List.of(german, english)) {
                 helper.assertTrue(lang.has("item.kingdomsatwar.fish_" + id), "Name fehlt: " + id);
+                // keine zwei heißen gleich (in keiner der beiden Sprachen)
+                String name = (lang == german ? "de:" : "en:") + lang.get("item.kingdomsatwar.fish_" + id).getAsString().toLowerCase(java.util.Locale.ROOT);
+                FishSpecies namesake = names.put(name, species);
+                helper.assertTrue(namesake == null, "Zwei Fische heißen gleich: " + name + " (" + id + " und " + (namesake == null ? "" : namesake.id()) + ")");
+            }
+            // keine zwei sehen gleich aus
+            try (InputStream in = FishingGameTests.class.getResourceAsStream("/assets/kingdomsatwar/textures/item/fish/" + id + ".png")) {
+                String digest = java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("MD5").digest(in.readAllBytes()));
+                FishSpecies lookalike = images.put(digest, species);
+                helper.assertTrue(lookalike == null, "Zwei Fische sehen gleich aus: " + id + " und " + (lookalike == null ? "" : lookalike.id()));
+            } catch (java.io.IOException | java.security.NoSuchAlgorithmException e) {
+                throw new IllegalStateException(e);
             }
             // jeder wirkt anders
             List<FishItem.Effect> lines = FishItem.effects(species);
@@ -131,7 +165,56 @@ final class FishingGameTests {
             FishSpecies twin = effects.put(signature.toString(), species);
             helper.assertTrue(twin == null, "Zwei Fische wirken gleich: " + id + " und " + (twin == null ? "" : twin.id()));
         }
-        helper.assertTrue(FishSpecies.values().length == 76 && custom == 72, "Zahl der Arten: " + FishSpecies.values().length + " / " + custom);
+        helper.assertTrue(FishSpecies.count() == 1000 && FishSpecies.NAMED == 84 && custom == 996 && FishSpecies.legends().size() == 15,
+                "Zahl der Arten: " + FishSpecies.count() + " / " + FishSpecies.NAMED + " / " + custom + " / " + FishSpecies.legends().size());
+
+        // jedes Biom hat eigene Arten: die Biome der Mod je zwölf, die von Minecraft sechs oder sieben – nur die Kampfarenen und
+        // das leere Nichts nicht (dort angelt niemand)
+        java.util.Set<String> arenas = java.util.Set.of("arcane_sphere", "creation", "ember_forge", "error_space", "moon_stage", "star_canopy",
+                "throne_realm", "world_maw");
+        java.util.Set<String> known = new java.util.HashSet<>();
+        helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME).listElementIds().forEach(key -> {
+            Identifier biome = key.identifier();
+            known.add(biome.toString());
+            List<FishSpecies> local = FishSpecies.ofBiome(biome.toString());
+            if (biome.getNamespace().equals(KingdomsAtWar.MODID)) {
+                helper.assertTrue(local.size() == (arenas.contains(biome.getPath()) ? 0 : 12), "Arten im Biom " + biome + ": " + local.size());
+            } else if (biome.getNamespace().equals("minecraft")) {
+                helper.assertTrue(biome.getPath().equals("the_void") ? local.isEmpty() : local.size() == 6 || local.size() == 7,
+                        "Arten im Biom " + biome + ": " + local.size());
+            }
+            // in jedem Biom gibt es Gewöhnliches und mindestens einen großen Fang
+            if (!local.isEmpty()) {
+                helper.assertTrue(local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.COMMON).count() >= 2
+                        && local.stream().filter(s -> s.rarity() == FishSpecies.Rarity.EPIC).count() == 1, "Seltenheiten im Biom " + biome);
+                helper.assertTrue(german.has("biome." + biome.getNamespace() + "." + biome.getPath()) || biome.getNamespace().equals("minecraft"),
+                        "Name des Bioms fehlt: " + biome);
+            }
+        });
+        for (String biome : FishSpecies.biomes()) {
+            helper.assertTrue(known.contains(biome), "Arten für ein Biom, das es nicht gibt: " + biome);
+        }
+        // in der Ebene: die Allerweltsfische der Flüsse und die sieben der Ebene – die eigenen stellen gut die Hälfte des Fangs
+        FishSpecies.Spot plains = new FishSpecies.Spot(EnumSet.of(Habitat.FRESH), "minecraft:plains", Medium.WATER);
+        int localCatch = 0;
+        java.util.Set<FishSpecies> seen = new java.util.HashSet<>();
+        for (int i = 0; i < 4000; i++) {
+            FishSpecies bite = FishSpecies.pick(plains, i % 2 == 0, false, i % 5 == 0, false, 0, Bait.NONE, random);
+            helper.assertTrue(bite != null && (bite.biome() == null || bite.biome().equals("minecraft:plains")), "Falscher Fang in der Ebene");
+            if (bite.biome() != null) {
+                localCatch++;
+                seen.add(bite);
+            }
+        }
+        helper.assertTrue(localCatch > 1600 && localCatch < 3000 && seen.size() == 7, "Fang in der Ebene: " + localCatch + " eigene, " + seen.size() + " Arten");
+        // in der Lava der Aschefelder nur Lavafische, im Wasser dort keine
+        for (Medium medium : new Medium[] {Medium.WATER, Medium.LAVA}) {
+            FishSpecies.Spot ash = new FishSpecies.Spot(EnumSet.noneOf(Habitat.class), "kingdomsatwar:ash_fields", medium);
+            for (int i = 0; i < 300; i++) {
+                FishSpecies bite = FishSpecies.pick(ash, true, false, false, false, 0, Bait.NONE, random);
+                helper.assertTrue(bite != null && bite.media().contains(medium) && bite.ofLava() == (medium == Medium.LAVA), "Fang in den Aschefeldern: " + medium);
+            }
+        }
 
         // überall beißt etwas: in jedem allgemeinen Lebensraum bei Tag und Nacht, und jeder besondere hat eigene Arten
         for (Habitat habitat : Habitat.values()) {
@@ -142,15 +225,15 @@ final class FishingGameTests {
             helper.assertTrue(own, "Lebensraum ohne Art: " + habitat);
             if (!habitat.special()) {
                 for (boolean day : new boolean[] {true, false}) {
-                    helper.assertTrue(FishSpecies.pick(EnumSet.of(habitat), day, false, false, false, 0, Bait.NONE, random) != null,
+                    helper.assertTrue(FishSpecies.pick(FishSpecies.Spot.of(EnumSet.of(habitat)), day, false, false, false, 0, Bait.NONE, random) != null,
                             "Hier beißt nichts: " + habitat + (day ? " am Tag" : " in der Nacht"));
                 }
             }
         }
         // Legenden sind selten – etwa eine je hundert Bisse an ihrem Ort, mit Glück des Meeres III doppelt so oft –, und zwar
         // überall gleich selten: im Gewimmel der Tiefsee nicht seltener als im See
-        EnumSet<Habitat> lake = EnumSet.of(Habitat.FRESH);
-        EnumSet<Habitat> deepSea = EnumSet.of(Habitat.SALT, Habitat.DEEP);
+        FishSpecies.Spot lake = FishSpecies.Spot.of(EnumSet.of(Habitat.FRESH));
+        FishSpecies.Spot deepSea = FishSpecies.Spot.of(EnumSet.of(Habitat.SALT, Habitat.DEEP));
         int legends = 0;
         int lucky = 0;
         int byDay = 0;
@@ -175,13 +258,14 @@ final class FishingGameTests {
                 && FishSpecies.OLD_ONE.legendChance(deepSea, false, false, false, false, 3, Bait.NONE) == 0.0f
                 && FishSpecies.GOLDSCALE.legendChance(lake, true, false, false, false, 0, Bait.NONE) == 0.0f
                 && FishSpecies.GOLDSCALE.legendChance(lake, true, false, true, false, 0, Bait.NONE) > FishSpecies.LEGEND_CHANCE
-                && FishSpecies.STORMSAIL.legendChance(EnumSet.of(Habitat.SALT), true, false, true, false, 0, Bait.NONE) == 0.0f
-                && FishSpecies.STORMSAIL.legendChance(EnumSet.of(Habitat.SALT), true, false, true, true, 0, Bait.NONE) > FishSpecies.LEGEND_CHANCE,
+                && FishSpecies.STORMSAIL.legendChance(FishSpecies.Spot.of(EnumSet.of(Habitat.SALT)), true, false, true, false, 0, Bait.NONE) == 0.0f
+                && FishSpecies.STORMSAIL.legendChance(FishSpecies.Spot.of(EnumSet.of(Habitat.SALT)), true, false, true, true, 0, Bait.NONE)
+                        > FishSpecies.LEGEND_CHANCE,
                 "Die Chancen der Legenden");
         // Goldschuppe nur bei Regen, Sturmsegler nur im Gewitter
         helper.assertTrue(FishSpecies.GOLDSCALE.weight(lake, true, false, false, false, 0, Bait.NONE) == 0.0f
                 && FishSpecies.GOLDSCALE.weight(lake, true, false, true, false, 0, Bait.NONE) > 0.0f, "Goldschuppe und der Regen");
-        EnumSet<Habitat> sea = EnumSet.of(Habitat.SALT);
+        FishSpecies.Spot sea = FishSpecies.Spot.of(EnumSet.of(Habitat.SALT));
         helper.assertTrue(FishSpecies.STORMSAIL.weight(sea, true, false, true, false, 0, Bait.NONE) == 0.0f
                 && FishSpecies.STORMSAIL.weight(sea, true, false, true, true, 0, Bait.NONE) > 0.0f, "Sturmsegler und das Gewitter");
         // Köder
@@ -193,11 +277,12 @@ final class FishingGameTests {
         int total = 0;
         for (FishSpecies.Chapter chapter : FishSpecies.Chapter.values()) {
             int size = FishSpecies.of(chapter).size();
-            helper.assertTrue(size >= 3 && size <= 25, "Kapitel " + chapter + " hat " + size + " Arten");
+            helper.assertTrue(size >= 15, "Kapitel " + chapter + " hat " + size + " Arten");
+            helper.assertTrue(german.has(chapter.key() + ".tip") && english.has(chapter.key() + ".tip"), "Hinweis zum Kapitel fehlt: " + chapter);
             helper.assertTrue(german.has(chapter.key()) && english.has(chapter.key()), "Kapitelname fehlt: " + chapter);
             total += size;
         }
-        helper.assertTrue(total == FishSpecies.values().length, "Kapitel decken nicht alle Arten ab");
+        helper.assertTrue(total == FishSpecies.count(), "Kapitel decken nicht alle Arten ab");
         for (Habitat habitat : Habitat.values()) {
             helper.assertTrue(german.has(habitat.key()) && english.has(habitat.key()), "Name des Lebensraums fehlt: " + habitat);
         }
@@ -266,7 +351,13 @@ final class FishingGameTests {
 
     private static void fight(GameTestHelper helper) {
         StringBuilder table = new StringBuilder();
-        for (FishSpecies species : FishSpecies.values()) {
+        List<FishSpecies> all = FishSpecies.values();
+        for (int n = 0; n < all.size(); n++) {
+            // alle von Hand benannten Arten und jede achte der Biome (der Drill hängt nur an Verhalten und Schwierigkeit)
+            if (n >= FishSpecies.NAMED && n % 8 != 0) {
+                continue;
+            }
+            FishSpecies species = all.get(n);
             // wer nichts tut, verliert – immer
             int[] idle = play(species, 7, 0.2f, true);
             helper.assertTrue(idle[0] == -1, "Ohne Zutun gefangen: " + species.id());
@@ -387,7 +478,9 @@ final class FishingGameTests {
         ((HookAccess) hook).kingdomsatwar$forceBite();
         helper.assertTrue(hook.retrieve(player.getMainHandItem()) == 0 && Fishing.isFighting(hook), "In der Leere beginnt kein Drill");
         FishSpecies species = Fishing.fighting(player);
-        helper.assertTrue(species != null && species.habitats().contains(Habitat.END), "In der Leere des Ends hing kein Endfisch am Haken: " + species);
+        // ein Allerweltsfisch des Ends – oder eine Art des Bioms, über dem der Haken hängt (die beißen nur in der Leere)
+        helper.assertTrue(species != null && (species.habitats().contains(Habitat.END) || (species.biome() != null && species.media().contains(Medium.VOID)
+                && species.chapter() == FishSpecies.Chapter.END)), "In der Leere des Ends hing kein Endfisch am Haken: " + species);
         Fishing.ageSession(player, 600);
         Fishing.onResult(player, Fishing.sessionOf(player), true, false, false);
         helper.assertTrue(hook.isRemoved() && Fishing.log(player).has(species), "Der Fisch aus der Leere wurde nicht gefangen");
@@ -399,6 +492,184 @@ final class FishingGameTests {
         helper.assertTrue(((HookAccess) dry).kingdomsatwar$medium() != Medium.VOID && dry.getY() > 90.5, "Über festem Grund treibt der Schwimmer in der Leere");
         dry.discard();
         end.getEntitiesOfClass(ItemEntity.class, new AABB(player.position(), player.position()).inflate(6.0)).forEach(ItemEntity::discard);
+    }
+
+    // =====================================================================================
+    // Der Fischbeutel
+    // =====================================================================================
+
+    private static int fishCount(ServerPlayer player, FishSpecies species) {
+        int n = player.getInventory().countItem(species.item());
+        for (ItemStack bag : FishBag.carried(player)) {
+            n += FishBag.of(bag).count(species);
+        }
+        return n;
+    }
+
+    /** Der Fischbeutel: Fassungsvermögen und Preise, einlegen und entnehmen, der Fang wandert hinein, Erweiterung und Verkauf beim Fischer. */
+    private static void bag(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // jede Stufe fasst mehr und kostet mehr – ohne Ende
+        helper.assertTrue(FishBag.capacity(0) == 64 && FishBag.capacity(1) == 96 && FishBag.capacity(10) == 384 && FishBag.capacity(1000) == 32064,
+                "Fassungsvermögen");
+        helper.assertTrue(FishBag.upgradePrice(0) == 12 && FishBag.upgradePrice(10) == 53 && FishBag.upgradePrice(20) == 234, "Preise der Stufen: "
+                + FishBag.upgradePrice(0) + ", " + FishBag.upgradePrice(10) + ", " + FishBag.upgradePrice(20));
+        for (int l = 0; l < 70; l++) {
+            helper.assertTrue(FishBag.upgradePrice(l + 1) > FishBag.upgradePrice(l) && FishBag.capacity(l + 1) == FishBag.capacity(l) + FishBag.STEP,
+                    "Stufe " + (l + 1) + " ist nicht teurer oder nicht größer");
+        }
+        helper.assertTrue(FishBag.upgradePrice(5000) == 1_000_000 && FishBag.capacity(Integer.MAX_VALUE) == Integer.MAX_VALUE, "Sehr hohe Stufen");
+
+        // einlegen, bis er voll ist
+        ItemStack bag = new ItemStack(FishingItems.FISH_BAG.get());
+        helper.assertTrue(FishBag.of(bag).equals(FishBag.EMPTY) && bag.getMaxStackSize() == 1 && FishBag.isBag(bag) && !bag.isBarVisible(), "Neuer Beutel");
+        helper.assertTrue(FishBag.insert(bag, FishSpecies.PIKE, 40) == 40 && FishBag.insert(bag, FishSpecies.COD, 40) == 24
+                && FishBag.insert(bag, FishSpecies.CARP, 1) == 0, "Einlegen bis zum Rand");
+        FishBag contents = FishBag.of(bag);
+        helper.assertTrue(contents.total() == 64 && contents.free() == 0 && contents.count(FishSpecies.PIKE) == 40 && contents.count(FishSpecies.COD) == 24
+                && contents.count(FishSpecies.CARP) == 0 && contents.entries().size() == 2 && contents.entries().getFirst().species() == FishSpecies.COD,
+                "Inhalt des Beutels");
+        helper.assertTrue(bag.isBarVisible() && bag.getBarWidth() == 13, "Leiste am vollen Beutel");
+        // speichern, laden, verschicken
+        FishBag bigger = contents.upgraded();
+        FishBag loaded = FishBag.CODEC.parse(JsonOps.INSTANCE, FishBag.CODEC.encodeStart(JsonOps.INSTANCE, bigger).getOrThrow()).getOrThrow();
+        ByteBuf buffer = Unpooled.buffer();
+        FishBag.STREAM_CODEC.encode(buffer, bigger);
+        FishBag sent = FishBag.STREAM_CODEC.decode(buffer);
+        helper.assertTrue(loaded.equals(bigger) && sent.equals(bigger) && loaded.level() == 1 && loaded.capacity() == 96 && loaded.free() == 32
+                && !bigger.equals(contents), "Beutel nach dem Laden");
+        // was ein Fisch ist
+        ItemStack named = new ItemStack(FishSpecies.PIKE.item());
+        named.set(DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("Hugo"));
+        FishSpecies local = FishSpecies.ofBiome("kingdomsatwar:coral_coast").getFirst();
+        helper.assertTrue(FishBag.speciesOf(new ItemStack(Items.COD)) == FishSpecies.COD && FishBag.speciesOf(new ItemStack(FishSpecies.PIKE.item())) == FishSpecies.PIKE
+                && FishBag.speciesOf(new ItemStack(local.item())) == local && FishBag.speciesOf(new ItemStack(Items.STICK)) == null
+                && FishBag.speciesOf(new ItemStack(FishingItems.COOKED_FILLET.get())) == null && FishBag.speciesOf(named) == null, "Was in den Beutel gehört");
+
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.getAbilities().instabuild = false;
+        BlockPos spot = helper.absolutePos(new BlockPos(4, 1, 4));
+        player.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, 0.0f, 0.0f);
+        io.github.sirschrolli.kingdomsatwar.entity.villager.VillagerEntity fisher =
+                io.github.sirschrolli.kingdomsatwar.registry.ModEntities.VILLAGER.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+        try {
+            player.getInventory().clearContent();
+            // zwei Beutel: einer im Inventar, einer in der Hand – der in der Hand füllt sich zuerst
+            ItemStack stored = new ItemStack(FishingItems.FISH_BAG.get());
+            ItemStack held = new ItemStack(FishingItems.FISH_BAG.get());
+            player.getInventory().setItem(9, stored);
+            player.setItemInHand(InteractionHand.MAIN_HAND, held);
+            helper.assertTrue(FishBag.carried(player).size() == 2 && FishBag.carried(player).getFirst() == held && FishBag.forUpgrade(player) == held,
+                    "Beutel am Spieler");
+            helper.assertTrue(FishBag.deposit(player, FishSpecies.EEL, 70) == 70 && FishBag.of(held).count(FishSpecies.EEL) == 64
+                    && FishBag.of(stored).count(FishSpecies.EEL) == 6, "Verteilen auf zwei Beutel");
+            helper.assertTrue(FishBag.deposit(player, local, 100) == 58 && FishBag.of(stored).free() == 0 && FishBag.deposit(player, local, 1) == 0,
+                    "Volle Beutel nehmen nichts mehr");
+            // entnehmen: einer, ein Stapel, alle – nie mehr, als das Inventar fasst
+            helper.assertTrue(FishBag.take(player, InteractionHand.MAIN_HAND, FishSpecies.EEL, FishBag.TAKE_ONE) == 1
+                    && player.getInventory().countItem(FishSpecies.EEL.item()) == 1 && FishBag.of(held).count(FishSpecies.EEL) == 63, "Einen Fisch entnehmen");
+            held.set(io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.FISH_BAG.get(), new FishBag(10, Map.of("pike", 200, "cod", 30)));
+            helper.assertTrue(FishBag.take(player, InteractionHand.MAIN_HAND, FishSpecies.PIKE, FishBag.TAKE_STACK) == 64
+                    && FishBag.take(player, InteractionHand.MAIN_HAND, FishSpecies.PIKE, FishBag.TAKE_ALL) == 136
+                    && player.getInventory().countItem(FishSpecies.PIKE.item()) == 200 && FishBag.of(held).count(FishSpecies.PIKE) == 0
+                    && FishBag.of(held).count(FishSpecies.COD) == 30, "Stapel und alle einer Art entnehmen");
+            helper.assertTrue(FishBag.take(player, InteractionHand.OFF_HAND, FishSpecies.COD, FishBag.TAKE_ALL) == 0, "Entnehmen ohne Beutel in der Hand");
+            // das Inventar bis auf einen halben Stapel Kabeljau füllen: Nur was hineinpasst, verlässt den Beutel – nichts geht verloren
+            for (int i = 0; i < 36; i++) {
+                if (player.getInventory().getItem(i).isEmpty()) {
+                    player.getInventory().setItem(i, new ItemStack(i == 30 ? Items.COD : Items.DIRT, i == 30 ? 54 : 64));
+                }
+            }
+            int codBefore = fishCount(player, FishSpecies.COD);
+            helper.assertTrue(FishBag.take(player, InteractionHand.MAIN_HAND, null, FishBag.TAKE_ALL) == 10 && FishBag.of(held).count(FishSpecies.COD) == 20
+                    && fishCount(player, FishSpecies.COD) == codBefore, "Alles entnehmen bei vollem Inventar");
+            helper.assertTrue(FishBag.take(player, InteractionHand.MAIN_HAND, null, FishBag.TAKE_ALL) == 0 && FishBag.of(held).total() == 20, "Volles Inventar");
+            for (int i = 0; i < 36; i++) {
+                if (player.getInventory().getItem(i).is(Items.DIRT)) {
+                    player.getInventory().setItem(i, ItemStack.EMPTY);
+                }
+            }
+
+            // beim Fischer: Erweiterung (der Preis steigt mit der Stufe) und Verkauf des Fangs
+            fisher.setup(io.github.sirschrolli.kingdomsatwar.entity.villager.VillageProfession.FISHER, 0, "Test", spot, "Testdorf", null, null, 81L);
+            fisher.snapTo(spot.getX() + 1.5, spot.getY(), spot.getZ() + 0.5, 0.0f, 0.0f);
+            fisher.setNoAi(true);
+            level.addFreshEntity(fisher);
+            List<io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Offer> offers =
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.offers(player, fisher);
+            int upgrade = -1;
+            int sale = -1;
+            int buyBag = -1;
+            for (int i = 0; i < offers.size(); i++) {
+                if (offers.get(i).special().equals(FishBag.UPGRADE_OFFER)) {
+                    upgrade = i;
+                } else if (offers.get(i).special().equals(FishBag.SELL_OFFER + "uncommon")) {
+                    sale = i;
+                } else if (offers.get(i).special().isEmpty() && FishBag.isBag(offers.get(i).get())) {
+                    buyBag = i;
+                }
+            }
+            helper.assertTrue(upgrade >= 0 && sale >= 0 && buyBag >= 0, "Der Fischer bietet Beutel, Erweiterung und Aufkauf nicht an");
+            int discount = io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.discount(player, fisher);
+            int price = Math.max(1, Math.round(FishBag.upgradePrice(10) * (100 - discount) / 100.0f));
+            helper.assertTrue(offers.get(upgrade).giveCoins() == price && FishBag.of(offers.get(upgrade).get()).level() == 11,
+                    "Preis der Erweiterung: " + offers.get(upgrade).giveCoins() + " statt " + price);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), upgrade),
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.MISSING_COINS, "Erweiterung ohne Geld");
+            io.github.sirschrolli.kingdomsatwar.economy.Coins.give(player, price + 3);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), upgrade),
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.DONE, "Erweiterung kaufen");
+            helper.assertTrue(FishBag.of(held).level() == 11 && FishBag.of(held).count(FishSpecies.COD) == 20 && FishBag.of(stored).level() == 0
+                    && io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == 3, "Nach der Erweiterung");
+            helper.assertTrue(fisher.tradesUsed() == 0, "Die Erweiterung zählt zur Handelsgrenze des Ladens");
+            int next = io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.offers(player, fisher).get(upgrade).giveCoins();
+            helper.assertTrue(next > price, "Die nächste Stufe ist nicht teurer: " + next + " nach " + price);
+            // Verkauf: fünf ungewöhnliche Fische – erst die losen aus dem Inventar, dann aus den Beuteln
+            int uncommon = FishBag.countFish(player, FishSpecies.Rarity.UNCOMMON);
+            helper.assertTrue(uncommon == player.getInventory().countItem(FishSpecies.PIKE.item()) + player.getInventory().countItem(FishSpecies.EEL.item())
+                    + FishBag.of(stored).entries().stream().filter(e -> e.species().rarity() == FishSpecies.Rarity.UNCOMMON).mapToInt(FishBag.Entry::count).sum(),
+                    "Zählen der Fische einer Seltenheit");
+            io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Offer selling = offers.get(sale);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), sale),
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.DONE, "Fang verkaufen");
+            helper.assertTrue(FishBag.countFish(player, FishSpecies.Rarity.UNCOMMON) == uncommon - selling.give().getCount()
+                    && io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == 3 + selling.getCoins() && fisher.tradesUsed() == 1, "Nach dem Verkauf");
+            helper.assertTrue(!FishBag.removeFish(player, FishSpecies.Rarity.LEGENDARY, 1) && FishBag.removeFish(player, FishSpecies.Rarity.UNCOMMON, uncommon - 5)
+                    && FishBag.countFish(player, FishSpecies.Rarity.UNCOMMON) == 0, "Fische abgeben");
+            // ohne Beutel gibt es keine Erweiterung
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            player.getInventory().setItem(9, ItemStack.EMPTY);
+            io.github.sirschrolli.kingdomsatwar.economy.Coins.give(player, 500);
+            int coins = io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player);
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), upgrade),
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.NOTHING, "Erweiterung ohne Beutel");
+            helper.assertTrue(io.github.sirschrolli.kingdomsatwar.economy.Coins.total(player) == coins, "Ohne Beutel wurde trotzdem bezahlt");
+            helper.assertValueEqual(io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.trade(player, fisher.getId(), buyBag),
+                    io.github.sirschrolli.kingdomsatwar.economy.citizen.Trading.Result.DONE, "Beutel kaufen");
+            helper.assertTrue(FishBag.carried(player).size() == 1 && FishBag.of(FishBag.carried(player).getFirst()).equals(FishBag.EMPTY), "Gekaufter Beutel");
+        } finally {
+            fisher.discard();
+            level.getServer().getPlayerList().remove(player);
+        }
+        // Rezept und Texte
+        helper.assertTrue(level.getServer().getRecipeManager().recipeMap().byKey(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.RECIPE, KingdomsAtWar.id("fish_bag"))) != null, "Rezept des Fischbeutels fehlt");
+        JsonObject german = lang(helper, "de_de");
+        for (String key : List.of("item.kingdomsatwar.fish_bag", "item.kingdomsatwar.fish_bag.level", "item.kingdomsatwar.fish_bag.fill",
+                "item.kingdomsatwar.fish_bag.more", "item.kingdomsatwar.fish_bag.hint.catch", "item.kingdomsatwar.fish_bag.hint.open",
+                "item.kingdomsatwar.fish_bag.hint.upgrade", "item.kingdomsatwar.fish_bag.upgrade_hint", "trade.kingdomsatwar.fish_bag_upgrade",
+                "trade.kingdomsatwar.fish.common", "trade.kingdomsatwar.fish.uncommon", "trade.kingdomsatwar.fish.rare", "trade.kingdomsatwar.fish.epic",
+                "trade.kingdomsatwar.fish.any", "trade.kingdomsatwar.fish.from", "gui.kingdomsatwar.trade.missing_bag",
+                "message.kingdomsatwar.fish_bag.inventory_full", "gui.kingdomsatwar.fishing.into_bag", "gui.kingdomsatwar.fish_bag.title",
+                "gui.kingdomsatwar.fish_bag.level", "gui.kingdomsatwar.fish_bag.fill", "gui.kingdomsatwar.fish_bag.empty", "gui.kingdomsatwar.fish_bag.take_all",
+                "gui.kingdomsatwar.fish_bag.book", "gui.kingdomsatwar.fish_bag.hint", "gui.kingdomsatwar.fish_bag.next", "fishing.kingdomsatwar.book.everywhere",
+                "fishing.kingdomsatwar.medium.lava", "fishing.kingdomsatwar.medium.void")) {
+            helper.assertTrue(german.has(key), "Text fehlt: " + key);
+        }
+        for (String file : List.of("textures/item/fish_bag.png", "textures/gui/fishing/bag.png", "models/item/relief/fish_bag.json", "items/fish_bag.json")) {
+            helper.assertTrue(FishingGameTests.class.getResource("/assets/kingdomsatwar/" + file) != null, "Datei fehlt: " + file);
+        }
+        helper.succeed();
     }
 
     private static void flow(GameTestHelper helper) {
@@ -468,6 +739,18 @@ final class FishingGameTests {
                         e -> e.getItem().is(species.item()));
                 helper.assertTrue(!drops.isEmpty(), "Der Fisch fliegt nicht heraus");
                 drops.forEach(ItemEntity::discard);
+                // ab jetzt trägt der Angler einen Fischbeutel: Der nächste Fang wandert hinein, statt heranzufliegen
+                player.getInventory().setItem(10, new ItemStack(FishingItems.FISH_BAG.get()));
+                hook[0] = hookFish(helper, level, player, pond);
+                FishSpecies bagged = Fishing.fighting(player);
+                Fishing.ageSession(player, 600);
+                Fishing.onResult(player, Fishing.sessionOf(player), true, false, false);
+                helper.assertTrue(bagged != null && FishBag.of(player.getInventory().getItem(10)).count(bagged) == 1
+                        && FishBag.of(player.getInventory().getItem(10)).total() == 1, "Der Fang ist nicht im Fischbeutel");
+                helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, new AABB(pond, pond).inflate(4.0), e -> e.getItem().is(bagged.item())).isEmpty(),
+                        "Der Fisch fliegt heraus, obwohl er im Beutel liegt");
+                helper.assertTrue(Fishing.log(player).count(bagged) >= 1, "Der Fang im Beutel steht nicht im Fischbuch");
+                player.getInventory().setItem(10, ItemStack.EMPTY);
                 // und nun in die Lava
                 hook[0] = cast(level, player, pit);
             } catch (RuntimeException e) {

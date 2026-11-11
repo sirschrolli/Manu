@@ -466,6 +466,8 @@ public class ModModelProvider extends ModelProvider {
         for (var item : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.flatItems()) {
             flat(items, item.get());
         }
+        // der Fischbeutel (0.81): im Inventar das Bild, in der Hand prall und plastisch
+        relief(items, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get());
         MonsterGearModels.register(items);
         // --- Totems und Äpfel der Macht (0.80): im Inventar das Bild, sonst das plastische Modell ---
         for (var totem : io.github.sirschrolli.kingdomsatwar.registry.RelicItems.totems()) {

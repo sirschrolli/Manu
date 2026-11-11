@@ -24,9 +24,8 @@ public enum Bait {
     public float factor(FishSpecies species) {
         return switch (this) {
             case NONE -> 1.0f;
-            case WORM -> species.habitats().contains(Habitat.FRESH) && species.rarity().ordinal() <= FishSpecies.Rarity.UNCOMMON.ordinal() ? 1.6f : 1.0f;
-            case GLOW -> species.time() == FishSpecies.Time.NIGHT || species.habitats().contains(Habitat.DEEP) || species.habitats().contains(Habitat.CAVE)
-                    || species.habitats().contains(Habitat.SCULK) || species.ofLava() ? 2.2f : 1.0f;
+            case WORM -> species.likesWorm() ? 1.6f : 1.0f;
+            case GLOW -> species.likesGlow() ? 2.2f : 1.0f;
         };
     }
 
