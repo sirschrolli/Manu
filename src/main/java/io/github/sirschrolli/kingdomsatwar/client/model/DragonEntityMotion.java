@@ -67,7 +67,7 @@ public final class DragonEntityMotion extends DragonMotion {
         }
         float bite = Anim.seconds(d.biteAnimation, d.ageInTicks);
         if (bite >= 0.0f && bite < 0.7f) {
-            this.snapBite(p, bite);
+            this.snapBite(p, bite, d.biteDip);
         }
     }
 
@@ -194,15 +194,21 @@ public final class DragonEntityMotion extends DragonMotion {
         p.flapAmp *= 1.0f - 0.4f * e * air;
     }
 
-    /** Biss: kurz zurück, dann schnellt der Kopf mit offenem Maul vor und schnappt zu. */
-    private void snapBite(DragonPose p, float a) {
+    /**
+     * Biss: kurz zurück, dann schnellt der Kopf mit offenem Maul vor und schnappt zu – hinab zu einem kleinen Gegner vor
+     * den Füßen ({@code dip} -1: der Hals beugt sich tief, die Brust senkt sich), hinauf zu einem fliegenden (+1).
+     */
+    private void snapBite(DragonPose p, float a, float dip) {
         float back = env(a, 0.0f, 0.07f, 0.09f, 0.16f);
         float lunge = env(a, 0.07f, 0.16f, 0.26f, 0.6f);
         float open = env(a, 0.0f, 0.1f, 0.13f, 0.22f);
-        p.neckBend += -0.15f * back + 0.6f * lunge;
-        p.headPitch += -0.12f * back - 0.25f * lunge;
+        float down = Math.max(0.0f, -dip);
+        float up = Math.max(0.0f, dip);
+        p.neckBend += -0.15f * back + (0.6f + 0.55f * down - 0.5f * up) * lunge;
+        p.headPitch += -0.12f * back + (-0.25f + 0.3f * down - 0.2f * up) * lunge;
         p.jaw += 1.1f * open;
-        p.bodyPitch += 0.05f * lunge;
+        p.bodyPitch += (0.05f + 0.1f * down - 0.12f * up) * lunge;
+        p.bodyY += 1.2f * down * lunge;
         p.headRoll += wobble(a, 0.22f, 3.0f, 6.0f) * 0.06f;
     }
 }

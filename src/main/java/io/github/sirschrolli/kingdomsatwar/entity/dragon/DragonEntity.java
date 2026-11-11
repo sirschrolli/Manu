@@ -43,7 +43,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -88,10 +87,14 @@ public class DragonEntity extends TamableAnimal {
     /** Eigene Entity-Ereignisse (weit oberhalb der von Minecraft benutzten Nummern). */
     private static final byte EVENT_ROAR = 110;
     private static final byte EVENT_BITE = 111;
+    /** Biss mit Richtung: 112 tief hinab … 114 geradeaus … 116 hoch hinauf. */
+    private static final byte EVENT_BITE_AIMED = 114;
 
     // Animationen (Client)
     public final AnimationState roarAnimation = new AnimationState();
     public final AnimationState biteAnimation = new AnimationState();
+    /** Wohin der letzte Biss ging: -1 hinab, 0 geradeaus, 1 hinauf (Client). */
+    public float biteDip;
     public float flapPhase;
     public float flapPhaseO;
     /** 0 = am Boden (Flügel angelegt), 1 = in der Luft – weich, damit Abheben und Landen fließen. */
@@ -129,7 +132,7 @@ public class DragonEntity extends TamableAnimal {
     private int roarCooldown = 200;
     private @Nullable Vec3 breathDirection;
     private @Nullable MoveControl groundMoveControl;
-    private @Nullable FlyingMoveControl<DragonEntity> flyingMoveControl;
+    private @Nullable DragonFlyControl flyingMoveControl;
     private @Nullable PathNavigation groundNavigation;
     private @Nullable PathNavigation flyingNavigation;
     /** Kriegsbefehl (Drachenhorn): das Ziel des Angriffs bzw. der Ort des Luftangriffs, sein Umkreis und bis wann er gilt. */
@@ -143,8 +146,9 @@ public class DragonEntity extends TamableAnimal {
     public DragonEntity(EntityType<? extends DragonEntity> type, Level level, DragonType dragonType) {
         super(type, level);
         this.dragonType = dragonType;
+        this.moveControl = new DragonWalkControl(this);
         this.groundMoveControl = this.moveControl;
-        this.flyingMoveControl = new FlyingMoveControl<>(this, 12, false);
+        this.flyingMoveControl = new DragonFlyControl(this);
         this.groundNavigation = this.navigation;
         FlyingPathNavigation flying = new FlyingPathNavigation(this, level);
         flying.setCanFloat(true);
@@ -352,7 +356,8 @@ public class DragonEntity extends TamableAnimal {
     public void travel(Vec3 input) {
         if (this.isFlying()) {
             float speed = (float) this.getAttributeValue(Attributes.FLYING_SPEED);
-            this.travelFlying(input, speed * (this.isVehicle() ? 1.0f : 0.6f));
+            // ohne Reiter fliegt er gemächlicher (sonst schösse er mit fast dreißig Blöcken je Sekunde in weiten Bögen umher)
+            this.travelFlying(input, speed * (this.isVehicle() ? 1.0f : 0.36f));
             this.calculateEntityAnimation(true);
         } else {
             super.travel(input);
@@ -478,11 +483,24 @@ public class DragonEntity extends TamableAnimal {
         DragonBreath.tick(level, this, this.headPosition(), dir.normalize(), left);
     }
 
-    /** Ungefähre Lage des Mauls (für Odem und Partikel). */
+    /** Ungefähre Lage des Mauls (für Odem, Biss und Partikel): gut drei Blöcke vor der Mitte, der Hals reicht weit. */
     public Vec3 headPosition() {
         float scale = this.getStage().scale();
         Vec3 forward = Vec3.directionFromRotation(0, this.yBodyRot);
-        return this.position().add(forward.scale(1.9 * scale)).add(0, 2.0 * scale, 0);
+        double up = this.isInSittingPose() ? 2.6 : 1.7;
+        return this.position().add(forward.scale(3.2 * scale)).add(0, up * scale, 0);
+    }
+
+    /** Erreicht das Maul {@code target} (vor dem Drachen, auch ein Stück darunter oder unter dem Hals)? */
+    public boolean canBite(LivingEntity target) {
+        float scale = this.getStage().scale();
+        Vec3 mouth = this.headPosition();
+        net.minecraft.world.phys.AABB box = target.getBoundingBox();
+        double dx = Math.max(box.minX - mouth.x, Math.max(0.0, mouth.x - box.maxX));
+        double dz = Math.max(box.minZ - mouth.z, Math.max(0.0, mouth.z - box.maxZ));
+        double dy = Math.max(box.minY - mouth.y, Math.max(0.0, mouth.y - box.maxY));
+        return dx * dx + dz * dz < Math.pow(1.7 * scale + 0.5, 2) && dy < 1.8 * scale + 0.5
+                || this.isWithinMeleeAttackRange(target);
     }
 
     public int getBreathTicks() {
@@ -756,6 +774,21 @@ public class DragonEntity extends TamableAnimal {
         if (!this.getStage().isLast() && this.tickCount % 20 == 0) {
             this.addGrowth(20);
         }
+        if (this.isFlying() && !this.isVehicle() && !this.onWarOrder() && this.getTarget() == null && this.flyingMoveControl != null) {
+            // ohne Flugziel bleibt er nicht in der Luft stehen (kurz über dem Boden schwebend, mit schlagenden Flügeln):
+            // er sinkt sanft und landet
+            int idle = this.tickCount - this.flyingMoveControl.lastMoveTick;
+            double above = this.getY() - this.groundAt(this.getX(), this.getZ());
+            if (idle > 3) {
+                // ohne Ziel nicht weitergleiten (sonst triebe er noch Blöcke weit, etwa in seinen Herrn hinein)
+                Vec3 v = this.getDeltaMovement();
+                this.setDeltaMovement(v.x * 0.72, v.y, v.z * 0.72);
+            }
+            if (idle > 6 && (above < 6.0 || idle > 40)) {
+                Vec3 v = this.getDeltaMovement();
+                this.setDeltaMovement(v.x, Math.max(v.y - 0.04, -0.35), v.z);
+            }
+        }
         if (this.isFlying()) {
             this.flightTicks++;
             boolean riderWantsUp = this.getControllingPassenger() instanceof Player p && p.isJumping();
@@ -789,7 +822,8 @@ public class DragonEntity extends TamableAnimal {
     public void handleEntityEvent(byte id) {
         if (id == EVENT_ROAR) {
             this.roarAnimation.start(this.tickCount);
-        } else if (id == EVENT_BITE) {
+        } else if (id == EVENT_BITE || id >= EVENT_BITE_AIMED - 2 && id <= EVENT_BITE_AIMED + 2) {
+            this.biteDip = id == EVENT_BITE ? 0.0f : (id - EVENT_BITE_AIMED) / 2.0f;
             this.biteAnimation.start(this.tickCount);
         } else {
             super.handleEntityEvent(id);
@@ -798,7 +832,10 @@ public class DragonEntity extends TamableAnimal {
 
     @Override
     public boolean doHurtTarget(ServerLevel level, Entity target) {
-        level.broadcastEntityEvent(this, EVENT_BITE);
+        // der Kopf schnellt dorthin, wo das Ziel ist: hinab zu kleinen Gegnern, hinauf zu fliegenden
+        double dy = target.getBoundingBox().getCenter().y - this.headPosition().y;
+        int aim = (int) Math.round(Mth.clamp(dy / (1.5 * this.getStage().scale()), -1.0, 1.0) * 2.0);
+        level.broadcastEntityEvent(this, (byte) (EVENT_BITE_AIMED + aim));
         this.playSound(ModSounds.DRAGON_BITE.get(), 1.0f, this.getVoicePitch());
         return super.doHurtTarget(level, target);
     }
@@ -945,18 +982,140 @@ public class DragonEntity extends TamableAnimal {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new WarFlightGoal(this));
-        this.goalSelector.addGoal(2, new BreathAttackGoal(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2, true));
+        // seit 0.87 ein eigener Kampf am Boden und in der Luft (Biss und Odem) statt des Nahkampfs von Minecraft, der
+        // für einen so großen, fliegenden Gegner keinen Weg fand
+        this.goalSelector.addGoal(2, new FightGoal(this));
         this.goalSelector.addGoal(4, new FollowOwnerGoal(this));
         this.goalSelector.addGoal(6, new FlyAroundGoal(this));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 10.0f));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        // im Kampf schlendert und gafft der Drache nicht herum
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8) {
+            @Override
+            public boolean canUse() {
+                return DragonEntity.this.getTarget() == null && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 10.0f) {
+            @Override
+            public boolean canUse() {
+                return DragonEntity.this.getTarget() == null && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return DragonEntity.this.getTarget() == null && super.canUse();
+            }
+        });
         // Drachen sind friedlich: Sie verteidigen ihren Herrn und sich selbst, greifen aber nie von sich aus Spieler an
         // (wilde Drachen gibt es nicht mehr – jeder Drache schlüpft bei einem Spieler und gehört ihm)
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
+        // Wache: Monster, die es auf den Herrn oder den Drachen abgesehen haben, stellt er, bevor sie zuschlagen
+        this.targetSelector.addGoal(4, new GuardGoal(this));
+    }
+
+    /** Wache: nur Monster, die den Herrn oder den Drachen gerade angreifen (nie Spieler). */
+    public static class GuardGoal extends net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<net.minecraft.world.entity.Mob> {
+        GuardGoal(DragonEntity dragon) {
+            super(dragon, net.minecraft.world.entity.Mob.class, 10, false, false, (target, level) -> dragon.threatens(target));
+        }
+    }
+
+    /** Bedroht {@code target} den Herrn oder den Drachen (ein Monster, das sie gerade angreift)? */
+    private boolean threatens(LivingEntity target) {
+        if (!this.isTame() || this.getMode() != MODE_FOLLOW || this.isInSittingPose() || this.onWarOrder()
+                || !(target instanceof net.minecraft.world.entity.monster.Enemy) || !(target instanceof net.minecraft.world.entity.Mob mob)) {
+            return false;
+        }
+        LivingEntity owner = this.getOwner();
+        LivingEntity aim = mob.getTarget();
+        return aim != null && (aim == this || aim == owner) && (owner == null || target.distanceToSqr(owner) < 20.0 * 20.0);
+    }
+
+    /**
+     * Abstand, den der Drache zu seinem Herrn hält (Mitte zu Mitte): Hals und Schwanz reichen weit über den Rumpf hinaus –
+     * näher heran, und der Kopf stünde im Herrn oder der Schwanz fegte über ihn.
+     */
+    double keepDistance() {
+        return 2.0 + this.getBbWidth() + 3.4 * this.getStage().scale();
+    }
+
+    /** Wie weit der Drache in einem Tick höchstens wendet (Grad): je größer, desto gemächlicher, in der Luft weiter ausholend. */
+    float maxTurn(boolean flying) {
+        float scale = this.getStage().scale();
+        return flying ? Mth.clamp(13.0f / scale, 8.0f, 30.0f) : Mth.clamp(24.0f / scale, 14.0f, 45.0f);
+    }
+
+    /** Höhe des Bodens (oder Wassers) an einer Stelle. */
+    double groundAt(double x, double z) {
+        return this.level().getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(x), Mth.floor(z));
+    }
+
+    /** Begrenzt die Drehung seit {@code before} auf {@code max} Grad. */
+    static void limitTurn(net.minecraft.world.entity.Mob mob, float before, float max) {
+        float d = Mth.wrapDegrees(mob.getYRot() - before);
+        if (Math.abs(d) > max) {
+            mob.setYRot(before + Math.copySign(max, d));
+        }
+    }
+
+    /** Laufen mit gemächlichem Wenden: Ein großer Drache reißt nicht in einem Tick herum, in engen Kurven bremst er. */
+    static class DragonWalkControl extends MoveControl {
+        private final DragonEntity dragon;
+
+        DragonWalkControl(DragonEntity dragon) {
+            super(dragon);
+            this.dragon = dragon;
+        }
+
+        @Override
+        public void tick() {
+            float before = this.dragon.getYRot();
+            boolean moving = this.operation == Operation.MOVE_TO;
+            super.tick();
+            if (moving && !this.dragon.isVehicle()) {
+                float wanted = Mth.wrapDegrees(this.dragon.getYRot() - before);
+                float max = this.dragon.maxTurn(false);
+                if (Math.abs(wanted) > max) {
+                    limitTurn(this.dragon, before, max);
+                    if (Math.abs(wanted) > 60.0f) {
+                        this.dragon.setSpeed(this.dragon.getSpeed() * 0.35f);
+                    }
+                }
+            }
+        }
+    }
+
+    /** Fliegen mit weiten Kurven; merkt sich, wann der Drache zuletzt ein Flugziel hatte (sonst landet er). */
+    static class DragonFlyControl extends FlyingMoveControl<DragonEntity> {
+        private final DragonEntity dragon;
+        int lastMoveTick = -1000;
+
+        DragonFlyControl(DragonEntity dragon) {
+            super(dragon, 10, false);
+            this.dragon = dragon;
+        }
+
+        @Override
+        public void tick() {
+            float before = this.dragon.getYRot();
+            boolean moving = this.operation == Operation.MOVE_TO;
+            double dist = Math.sqrt(this.dragon.distanceToSqr(this.wantedX, this.wantedY, this.wantedZ));
+            super.tick();
+            if (moving) {
+                this.lastMoveTick = this.dragon.tickCount;
+                if (!this.dragon.isVehicle()) {
+                    limitTurn(this.dragon, before, this.dragon.maxTurn(true));
+                    // nah am Ziel abbremsen (statt darüber hinwegzuschießen und in großem Bogen zurückzukommen)
+                    float brake = (float) Mth.clamp(dist / 7.0, 0.18, 1.0);
+                    if (brake < 1.0f) {
+                        this.dragon.setSpeed(this.dragon.getSpeed() * brake);
+                        this.dragon.setYya(this.dragon.yya * brake);
+                    }
+                }
+            }
+        }
     }
 
     /** Nie den eigenen Herrn, seine Tiere, seine Soldaten oder andere Verbündete angreifen (auch nicht nach einem Versehen). */
@@ -1075,7 +1234,7 @@ public class DragonEntity extends TamableAnimal {
             if (owner == null || owner.isSpectator() || this.dragon.unableToMoveToOwner() || this.dragon.getMode() != MODE_FOLLOW) {
                 return false;
             }
-            if (this.dragon.distanceToSqr(owner) < sq(4 + this.dragon.getBbWidth())) {
+            if (this.dragon.distanceToSqr(owner) < sq(this.dragon.keepDistance() + 2.5)) {
                 return false;
             }
             this.owner = owner;
@@ -1085,7 +1244,7 @@ public class DragonEntity extends TamableAnimal {
         @Override
         public boolean canContinueToUse() {
             return this.owner != null && !this.dragon.unableToMoveToOwner() && this.dragon.getMode() == MODE_FOLLOW
-                    && this.dragon.distanceToSqr(this.owner) > sq(2.5 + this.dragon.getBbWidth());
+                    && this.dragon.distanceToSqr(this.owner) > sq(this.dragon.keepDistance());
         }
 
         @Override
@@ -1097,6 +1256,11 @@ public class DragonEntity extends TamableAnimal {
         public void stop() {
             this.owner = null;
             this.dragon.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
         }
 
         @Override
@@ -1114,14 +1278,21 @@ public class DragonEntity extends TamableAnimal {
                 this.dragon.tryToTeleportToOwner();
                 return;
             }
-            if (--this.recalc <= 0) {
+            if (this.dragon.isFlying()) {
+                // in der Luft jeden Tick nachsteuern (sonst ruckt der Flug); nah beim Herrn, der am Boden steht, landet er
+                // neben ihm statt über ihm zu schweben
+                double flat = this.owner.position().subtract(this.dragon.position()).horizontalDistance();
+                boolean ownerGrounded = this.owner.onGround() || this.owner.getY() - this.dragon.groundAt(this.owner.getX(), this.owner.getZ()) < 0.6;
+                double up = flat > 12.0 ? 3.0 : ownerGrounded && flat < 10.0 ? -0.5 : 1.5;
+                // neben dem Herrn landen, nicht auf ihm: mit Abstand (der Hals reicht weit nach vorn)
+                Vec3 away = flat > 1.0 ? this.dragon.position().subtract(this.owner.position()).multiply(1, 0, 1).normalize()
+                        : Vec3.directionFromRotation(0.0f, this.dragon.getYRot() + 90.0f);
+                Vec3 side = away.scale(this.dragon.keepDistance() + 1.0);
+                Vec3 target = this.owner.position().add(side).add(0, up, 0);
+                this.dragon.getMoveControl().setWantedPosition(target.x, target.y, target.z, flat > 12.0 ? 1.2 : 0.8);
+            } else if (--this.recalc <= 0) {
                 this.recalc = this.adjustedTickDelay(10);
-                if (this.dragon.isFlying()) {
-                    Vec3 target = this.owner.position().add(0, dist > 10 * 10 ? 3.0 : 0.5, 0);
-                    this.dragon.getMoveControl().setWantedPosition(target.x, target.y, target.z, 1.2);
-                } else {
-                    this.dragon.getNavigation().moveTo(this.owner, 1.1);
-                }
+                this.dragon.getNavigation().moveTo(this.owner, 1.1);
             }
         }
     }
@@ -1169,6 +1340,11 @@ public class DragonEntity extends TamableAnimal {
         public boolean canContinueToUse() {
             return this.dragon.isFlying() && this.ticks < 600 && !this.dragon.isInSittingPose() && this.dragon.getTarget() == null
                     && !this.dragon.isVehicle();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
         }
 
         @Override
@@ -1337,46 +1513,217 @@ public class DragonEntity extends TamableAnimal {
         }
     }
 
-    /** Odem-Angriff auf das aktuelle Ziel, wenn es nicht zu nah und nicht zu weit weg ist. */
-    static class BreathAttackGoal extends Goal {
+    /**
+     * Kampf aus eigenem Antrieb (den Herrn verteidigen, ihm helfen, sich wehren): am Boden hingehen und beißen, dazu der
+     * Odem. Ist das Ziel zu hoch (es fliegt, steht auf einer Säule), findet der Drache keinen Weg, steckt er fest – oder
+     * fliegt er schon –, kämpft er aus der Luft: Er kreist um das Ziel und speit, stößt herab und beißt, steigt wieder auf.
+     */
+    static class FightGoal extends Goal {
+        private static final int CIRCLE = 0;
+        private static final int SWOOP = 1;
         private final DragonEntity dragon;
+        private boolean air;
+        private int phase;
+        private int phaseTicks;
+        private int recalc;
+        private int biteCooldown;
+        private int noPath;
+        private int stuck;
+        private float orbit;
+        private Vec3 lastPos = Vec3.ZERO;
 
-        BreathAttackGoal(DragonEntity dragon) {
+        FightGoal(DragonEntity dragon) {
             this.dragon = dragon;
-            this.setFlags(EnumSet.of(Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK, Goal.Flag.JUMP));
+        }
+
+        private static boolean valid(@Nullable LivingEntity target) {
+            return target != null && target.isAlive() && !(target instanceof Player p && (p.isCreative() || p.isSpectator()));
         }
 
         @Override
         public boolean canUse() {
-            LivingEntity target = this.dragon.getTarget();
-            if (target == null || !target.isAlive() || !this.dragon.getStage().canBreathe() || this.dragon.isVehicle()
-                    || this.dragon.onWarOrder()) {
-                return false;
-            }
-            double dist = this.dragon.distanceTo(target);
-            return dist > 3 && dist < this.dragon.getStage().breathRange() && this.dragon.hasLineOfSight(target)
-                    && this.dragon.breathCooldown <= 0 && this.dragon.getRandom().nextInt(10) == 0;
-        }
-
-        @Override
-        public void start() {
-            LivingEntity target = this.dragon.getTarget();
-            if (target != null) {
-                this.dragon.getLookControl().setLookAt(target, 30, 30);
-                this.dragon.startBreath(target.getEyePosition().subtract(this.dragon.headPosition()).normalize());
-            }
+            DragonEntity d = this.dragon;
+            return valid(d.getTarget()) && !d.onWarOrder() && !d.isVehicle() && !d.isInSittingPose() && !d.isOrderedToSit();
         }
 
         @Override
         public boolean canContinueToUse() {
-            return this.dragon.isBreathing();
+            return this.canUse() && this.dragon.distanceToSqr(this.dragon.getTarget()) < 48.0 * 48.0;
+        }
+
+        @Override
+        public void start() {
+            this.air = this.dragon.isFlying();
+            this.phase = CIRCLE;
+            this.phaseTicks = 0;
+            this.recalc = 0;
+            this.noPath = 0;
+            this.stuck = 0;
+            this.lastPos = this.dragon.position();
+            LivingEntity target = this.dragon.getTarget();
+            this.orbit = target == null ? 0.0f
+                    : (float) Mth.atan2(this.dragon.getZ() - target.getZ(), this.dragon.getX() - target.getX());
+        }
+
+        @Override
+        public void stop() {
+            this.dragon.getNavigation().stop();
+        }
+
+        @Override
+        public boolean requiresUpdateEveryTick() {
+            return true;
         }
 
         @Override
         public void tick() {
-            LivingEntity target = this.dragon.getTarget();
-            if (target != null) {
-                this.dragon.getLookControl().setLookAt(target, 30, 30);
+            DragonEntity d = this.dragon;
+            LivingEntity target = d.getTarget();
+            if (target == null) {
+                return;
+            }
+            if (this.biteCooldown > 0) {
+                this.biteCooldown--;
+            }
+            this.phaseTicks++;
+            d.getLookControl().setLookAt(target, 30.0f, 40.0f);
+            double dist = d.distanceTo(target);
+            boolean canFly = d.getStage().canFly();
+            double lift = target.getY() - d.groundAt(target.getX(), target.getZ());
+            boolean high = lift > 2.5 || target.getY() - d.getY() > 4.0;
+            if (!this.air && canFly && (high || this.noPath >= 3 || this.stuck >= 40)) {
+                // zu hoch, kein Weg oder festgefahren: hinauf und aus der Luft weiterkämpfen
+                this.air = true;
+                this.phase(CIRCLE);
+                d.getNavigation().stop();
+                d.takeOff();
+            }
+            if (this.air && !canFly) {
+                this.air = false;
+            }
+            if (this.air) {
+                if (!d.isFlying()) {
+                    d.takeOff();
+                }
+                this.air(target);
+            } else {
+                this.ground(target, dist);
+            }
+            this.breathe(target, dist);
+            this.bite(target);
+        }
+
+        private void phase(int phase) {
+            this.phase = phase;
+            this.phaseTicks = 0;
+        }
+
+        /** Am Boden: hingehen (mit Weg), nah am Ziel stehen bleiben und sich ihm zuwenden. */
+        private void ground(LivingEntity target, double dist) {
+            DragonEntity d = this.dragon;
+            // so weit heran, dass das Ziel vor dem Maul steht (nicht unter dem Hals)
+            double reach = 3.0 * d.getStage().scale() + target.getBbWidth() * 0.5 + 0.4;
+            if (--this.recalc <= 0) {
+                this.recalc = 5;
+                if (dist > reach && !d.canBite(target)) {
+                    boolean ok = d.getNavigation().moveTo(target, 1.2);
+                    net.minecraft.world.level.pathfinder.Path path = d.getNavigation().getPath();
+                    this.noPath = ok && path != null && path.canReach() ? 0 : this.noPath + 1;
+                    this.stuck = d.position().distanceToSqr(this.lastPos) < 0.25 * 0.25 ? this.stuck + 5 : 0;
+                } else {
+                    d.getNavigation().stop();
+                    this.noPath = 0;
+                    this.stuck = 0;
+                }
+                this.lastPos = d.position();
+            }
+            double flat = target.position().subtract(d.position()).horizontalDistance();
+            if (flat < 3.0 * d.getStage().scale() - 0.6 && d.onGround()) {
+                // das Ziel steht unter dem Hals: ein, zwei Schritte zurück, damit es wieder vor dem Maul ist
+                d.getNavigation().stop();
+                d.getMoveControl().strafe(-0.55f, 0.0f);
+            }
+            if (dist <= reach + 1.5 || d.getNavigation().isDone()) {
+                // dem Ziel zuwenden (der Odem kommt aus dem Maul)
+                Vec3 to = target.position().subtract(d.position());
+                float yaw = (float) (Mth.atan2(to.z, to.x) * Mth.RAD_TO_DEG) - 90.0f;
+                float body = Mth.approachDegrees(d.getYRot(), yaw, d.maxTurn(false));
+                d.setYRot(body);
+                d.yBodyRot = body;
+            }
+        }
+
+        /** In der Luft: um das Ziel kreisen (und speien), dann herabstoßen und beißen, wieder hinauf. */
+        private void air(LivingEntity target) {
+            DragonEntity d = this.dragon;
+            Vec3 t = target.position();
+            float scale = d.getStage().scale();
+            if (this.phase == CIRCLE) {
+                this.orbit += 0.045f;
+                double r = 6.0 + 4.0 * scale;
+                double h = 3.5 + 2.5 * scale;
+                // der Punkt auf dem Kreis ein Stück voraus: so fliegt er den Kreis entlang, statt einem Punkt nachzujagen
+                double x = t.x + Mth.cos(this.orbit + 0.6f) * r;
+                double z = t.z + Mth.sin(this.orbit + 0.6f) * r;
+                this.flyTo(x, Math.max(t.y, d.groundAt(x, z)) + h, z, 1.1);
+                boolean breathed = d.breathCooldown > 0 && !d.isBreathing();
+                if (this.phaseTicks > 30 && breathed || this.phaseTicks > 70) {
+                    this.phase(SWOOP);
+                }
+            } else {
+                // herab: auf Kopfhöhe des Ziels
+                this.flyTo(t.x, t.y + target.getBbHeight() * 0.4, t.z, 1.4);
+                if (this.phaseTicks > 60) {
+                    this.climb(target);
+                }
+            }
+        }
+
+        private void climb(LivingEntity target) {
+            this.phase(CIRCLE);
+            this.orbit = (float) Mth.atan2(this.dragon.getZ() - target.getZ(), this.dragon.getX() - target.getX());
+        }
+
+        private void flyTo(double x, double y, double z, double speed) {
+            double floor = this.dragon.groundAt(x, z) + 1.2;
+            this.dragon.getMoveControl().setWantedPosition(x, Math.max(y, floor), z, speed);
+        }
+
+        /** Der Odem, wenn das Ziel in Reichweite und vor dem Maul ist. */
+        private void breathe(LivingEntity target, double dist) {
+            DragonEntity d = this.dragon;
+            if (!d.getStage().canBreathe() || d.breathCooldown > 0 || d.isBreathing()) {
+                return;
+            }
+            double range = d.getStage().breathRange();
+            if (dist < 2.5 || dist > range + 2.0 || !d.hasLineOfSight(target)) {
+                return;
+            }
+            Vec3 to = target.getEyePosition().subtract(d.headPosition());
+            Vec3 heading = Vec3.directionFromRotation(0.0f, d.yBodyRot);
+            Vec3 flat = new Vec3(to.x, 0.0, to.z);
+            // am Boden muss er sich zuwenden; im Flug dreht er den Hals weit zur Seite
+            if (flat.lengthSqr() > 1.0e-4 && heading.dot(flat.normalize()) < (this.air ? 0.1 : 0.45)) {
+                return;
+            }
+            if (d.getRandom().nextInt(5) == 0) {
+                d.startBreath(to.normalize());
+            }
+        }
+
+        /** Der Biss, wenn das Ziel in Reichweite ist. */
+        private void bite(LivingEntity target) {
+            DragonEntity d = this.dragon;
+            if (this.biteCooldown > 0 || d.isBreathing() || !(d.level() instanceof ServerLevel level)) {
+                return;
+            }
+            if (d.canBite(target) && d.getSensing().hasLineOfSight(target)) {
+                this.biteCooldown = 20;
+                d.doHurtTarget(level, target);   // mit Biss-Animation
+                if (this.air && this.phase == SWOOP) {
+                    this.climb(target);
+                }
             }
         }
     }

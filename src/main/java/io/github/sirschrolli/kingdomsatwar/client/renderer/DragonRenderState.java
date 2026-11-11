@@ -29,4 +29,6 @@ public class DragonRenderState extends BossRenderState {
     public ItemStack armor = ItemStack.EMPTY;
     public final AnimationState roarAnimation = new AnimationState();
     public final AnimationState biteAnimation = new AnimationState();
+    /** Wohin der Biss geht: -1 hinab, 0 geradeaus, 1 hinauf. */
+    public float biteDip;
 }

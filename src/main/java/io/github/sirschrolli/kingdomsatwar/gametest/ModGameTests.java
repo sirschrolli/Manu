@@ -232,6 +232,7 @@ public final class ModGameTests {
         RaidGameTests.init();      // Heerhaufen der Reiche gegen die eigene Siedlung
         TroopGameTests.init();     // die neuen Truppen (Speerträger bis Belagerungsknecht)
         DragonWarGameTests.init(); // Drachen im Krieg (Drachenhorn, Sturzangriff, Luftangriff)
+        DragonCombatGameTests.init(); // Drachen im Kampf: Herrn verteidigen, helfen, Schützen, Glutgeist, Boss
         ArchitectGameTests.init(); // Dragon Architect (Vermessen, eigene Baupläne, Nachbau)
         HeroGameTests.init();      // der eigene Held: Herz- und Manakristalle
         VeterancyGameTests.init(); // Kampferfahrung der Truppen: Stufen, Meister, Legende
@@ -299,7 +300,9 @@ public final class ModGameTests {
         // eigene Testgruppe: die Felder der Truppentests laden viele Chunks (wie die Schießplätze) – nicht gleichzeitig
         // mit den übrigen Tests, die sonst auf ihre Chunks warten
         TroopGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("troops")));
-        DragonWarGameTests.register(event, event.registerEnvironment(KingdomsAtWar.id("dragonwar")));
+        var dragonwar = event.registerEnvironment(KingdomsAtWar.id("dragonwar"));
+        DragonWarGameTests.register(event, dragonwar);
+        DragonCombatGameTests.register(event, dragonwar);
         ArchitectGameTests.register(event);
         HeroGameTests.register(event, environment);
         VeterancyGameTests.register(event, environment);
@@ -684,7 +687,8 @@ public final class ModGameTests {
         DragonEntity adult = helper.spawnWithNoFreeWill(ModEntities.DRAGONS.get(DragonType.EARTH).get(), new BlockPos(2, 1, 7));
         adult.applyStage(DragonStage.ADULT, true);
         boolean hunts = adult.targetSelector.getAvailableGoals().stream()
-                .anyMatch(goal -> goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<?>);
+                .anyMatch(goal -> goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<?>
+                        && !(goal.getGoal() instanceof DragonEntity.GuardGoal));
         helper.assertFalse(hunts, "Ein Drache ohne Herrn jagt Spieler");
         // 4) Blitzschlag ohne Zeugen: das Ei wartet kurz vor dem Schlüpfen (sofern wirklich niemand in der Nähe ist)
         BlockPos far = new BlockPos(1, 1, 1);

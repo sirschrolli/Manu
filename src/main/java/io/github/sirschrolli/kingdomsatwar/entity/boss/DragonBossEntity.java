@@ -104,6 +104,9 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     private int attackTick;
     private int stateTicks;
     private int idleTicks = 40;
+    /** Wie lange der Boss schon gegen ein Hindernis anläuft (Ticks); dann fliegt er darüber (oder springt). */
+    private int blockedTicks;
+    private @Nullable Vec3 walkCheck;
     private int noTargetTicks;
     private int modeTicks;
     private int retargetTicks;
@@ -908,8 +911,12 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     }
 
     private void tryStartAttack(ServerLevel level, LivingEntity target) {
-        // Wechsel zwischen Boden und Luft
-        if (this.canFly() && this.getMoveMode() == MoveMode.GROUND && this.modeTicks > this.groundDuration() && this.onGround()) {
+        // Wechsel zwischen Boden und Luft – auch früher, wenn er am Boden festsitzt oder das Ziel hoch oben steht
+        boolean blocked = this.blockedTicks >= 40;
+        boolean high = target.getY() - this.getY() > 6.0 && target.onGround();
+        if (this.canFly() && this.getMoveMode() == MoveMode.GROUND && this.onGround()
+                && (this.modeTicks > this.groundDuration() || blocked || high)) {
+            this.blockedTicks = 0;
             BossAttack takeOff = this.findAttack(BossAnims.TAKE_OFF);
             if (takeOff != null) {
                 this.startAttack(level, takeOff, target);
@@ -1074,9 +1081,39 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
         double reach = 5.5 + this.getBbWidth() * 0.5;
         if (distance > reach && angle < 60.0f) {
             this.walkForward(distance > 18 ? 1.25 : 0.8);
+            this.checkProgress();
         } else {
             this.zza = 0;
+            this.blockedTicks = 0;
+            this.walkCheck = null;
         }
+    }
+
+    /**
+     * Läuft der Boss gegen ein Hindernis (eine Mauer, Bäume), merkt er es: Wer fliegen kann, fliegt bald darüber; wer
+     * nicht fliegen kann, springt.
+     */
+    private void checkProgress() {
+        if (this.tickCount % 10 != 0) {
+            return;
+        }
+        Vec3 now = this.position();
+        if (this.walkCheck != null && now.subtract(this.walkCheck).horizontalDistanceSqr() < 0.6 * 0.6) {
+            this.blockedTicks += 10;
+            if (!this.canFly() && this.onGround() && this.blockedTicks >= 30) {
+                this.jumpFromGround();
+            }
+        } else {
+            this.blockedTicks = 0;
+        }
+        this.walkCheck = now;
+    }
+
+    /** Dreht sich der Boss auf der Stelle, treten die Beine mit (statt dass er sich wie auf einer Drehscheibe dreht). */
+    @Override
+    protected void updateWalkAnimation(float distance) {
+        float turn = Math.abs(Mth.wrapDegrees(this.yBodyRot - this.yBodyRotO)) * Mth.DEG_TO_RAD;
+        super.updateWalkAnimation(this.isFlying() ? distance : distance + turn * this.getBbWidth() * 0.35f);
     }
 
     public void walkForward(double speedFactor) {

@@ -209,6 +209,8 @@ final class Showcase {
                         AnimShowcase.more(steps, scene.equals("anim2") ? "" : scene.substring(6));
                     } else if (scene.equals("anim") || scene.startsWith("anim_")) {
                         AnimShowcase.review(steps, scene.equals("anim") ? "" : scene.substring(5));
+                    } else if (scene.equals("drachen_kampf") || scene.startsWith("drachen_kampf_")) {
+                        DragonFightShowcase.fights(steps, scene.equals("drachen_kampf") ? "" : scene.substring(14));
                     } else if (scene.startsWith("dragon_attacks_")) {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.startsWith("beasts_")) {

@@ -77,6 +77,7 @@ public class DragonRenderer extends MobRenderer<DragonEntity, DragonRenderState,
         state.armor = entity.getBodyArmorItem();
         state.roarAnimation.copyFrom(entity.roarAnimation);
         state.biteAnimation.copyFrom(entity.biteAnimation);
+        state.biteDip = entity.biteDip;
         // Eingaben der Bewegungslehre (weich, mit Bruchteil des Ticks)
         state.flapPhase = Mth.lerp(partialTicks, entity.flapPhaseO, entity.flapPhase);
         state.airBlend = Mth.lerp(partialTicks, entity.airBlendO, entity.airBlend);
