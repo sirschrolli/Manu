@@ -86,6 +86,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
                 .add(ModEntities.FARM_DONKEY.key()).add(ModEntities.FARM_MULE.key()).add(ModEntities.FARM_GOAT.key())
                 .add(ModEntities.HARE.key());
         this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(ModEntities.HARE.key());
+        // der Schneeleopard läuft über Pulverschnee, ohne einzusinken (0.85)
+        this.tag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS).add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.SNOW_LEOPARD.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.FARM_CHICKEN.key());
         this.tag(EntityTypeTags.FALL_DAMAGE_IMMUNE).add(ModEntities.NIGHT_WING.key()).add(ModEntities.GLIMMER_MOTH.key());
         // Eigene Wildtiere verhalten sich wie die Vanilla-Wildtiere, die sie ersetzen
@@ -99,6 +101,8 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
         this.tag(EntityTypeTags.ARTHROPOD).add(ModEntities.BEE.key());
         this.tag(EntityTypeTags.BEEHIVE_INHABITORS).add(ModEntities.BEE.key());
         this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(ModEntities.CAMEL.key());
+        // der Urelch trägt einen Sattel (0.85)
+        this.tag(EntityTypeTags.CAN_EQUIP_SADDLE).add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.PRIMEVAL_ELK.key());
         this.tag(EntityTypeTags.CAN_FLOAT_WHILE_RIDDEN).add(ModEntities.CAMEL.key());
         this.tag(EntityTypeTags.DISMOUNTS_UNDERWATER).add(ModEntities.CAMEL.key()).add(ModEntities.LLAMA.key())
                 .add(ModEntities.TRADER_LLAMA.key());

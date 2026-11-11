@@ -212,6 +212,8 @@ final class Showcase {
                         DragonAttackShowcase.attacks(steps, scene.substring(15));
                     } else if (scene.startsWith("beasts_")) {
                         BeastShowcase.beasts(steps, scene.substring(7));
+                    } else if (scene.equals("biome_beasts") || scene.startsWith("biome_beasts_")) {
+                        BiomeBeastShowcase.beasts(steps, scene.equals("biome_beasts") ? "" : scene.substring(13));
                     } else if (scene.equals("realm_beasts") || scene.startsWith("realm_beasts_")) {
                         RealmBeastShowcase.beasts(steps, scene.equals("realm_beasts") ? "" : scene.substring(13));
                     } else if (scene.equals("boss_arenas") || scene.startsWith("boss_arena_")) {

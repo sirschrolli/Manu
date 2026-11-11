@@ -34,7 +34,8 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               miss_mystik, light_dove, magic_sword, anni_troll,
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
-                              schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet)
+                              schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet,
+                              snow_leopard, primeval_elk, storm_gull, griffin)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -123,6 +124,15 @@ def main():
     write_model(world_chunk, "WorldChunkGeometry", "Geometrie eines Weltbrockens (Glut, Frost, End, Schatten).", "world_chunk",
                 world_chunk.PALETTES, preview)
     write_model(lindworm, "LindwormGeometry", "Geometrie des Lindwurms.", "lindworm", lindworm.PALETTES, preview)
+    # Tiere der eigenen Biome (0.85)
+    write_model(snow_leopard, "SnowLeopardGeometry", "Geometrie des Schneeleoparden (Frostgipfel).", "snow_leopard",
+                snow_leopard.PALETTES, preview)
+    write_model(primeval_elk, "PrimevalElkGeometry", "Geometrie des Urelchs (Urhain; Sattel, Zaumzeug und Truhen als eigene Knochen).",
+                "primeval_elk", primeval_elk.PALETTES, preview)
+    write_model(storm_gull, "StormGullGeometry", "Geometrie der Sturmmöwe (Ruhehaltung: Flügel ausgebreitet).", "storm_gull",
+                storm_gull.PALETTES, preview, same_seed=True)
+    write_model(griffin, "GriffinGeometry", "Geometrie des Greifen (Ruhehaltung: Schwingen ausgebreitet).", "griffin",
+                griffin.PALETTES, preview, same_seed=True)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)
     write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",
                 cattle.PALETTES, preview)

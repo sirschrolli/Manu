@@ -409,6 +409,35 @@ public final class ModSounds {
     /** Der Flugbann endet: die Schwingen tragen wieder. */
     public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_RELEASE = register("boss.sky_ward.release");
 
+    // ---------------------------------------------------------------- Tiere der eigenen Biome (0.85)
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_AMBIENT = register("entity.snow_leopard.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_PURR = register("entity.snow_leopard.purr");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_HISS = register("entity.snow_leopard.hiss");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_EAT = register("entity.snow_leopard.eat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_HURT = register("entity.snow_leopard.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_DEATH = register("entity.snow_leopard.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> SNOW_LEOPARD_STEP = register("entity.snow_leopard.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_AMBIENT = register("entity.primeval_elk.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_BUGLE = register("entity.primeval_elk.bugle");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_ANGRY = register("entity.primeval_elk.angry");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_IMPACT = register("entity.primeval_elk.impact");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_EAT = register("entity.primeval_elk.eat");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_HURT = register("entity.primeval_elk.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_DEATH = register("entity.primeval_elk.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> PRIMEVAL_ELK_STEP = register("entity.primeval_elk.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_GULL_CALL = register("entity.storm_gull.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_GULL_HURT = register("entity.storm_gull.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_GULL_DEATH = register("entity.storm_gull.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_GULL_FLAP = register("entity.storm_gull.flap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> STORM_GULL_STEP = register("entity.storm_gull.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_SCREECH = register("entity.griffin.screech");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_GROWL = register("entity.griffin.growl");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_WINGS = register("entity.griffin.wings");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_HURT = register("entity.griffin.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_DEATH = register("entity.griffin.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_STRIKE = register("entity.griffin.strike");
+    public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_STEP = register("entity.griffin.step");
+
     private ModSounds() {}
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {

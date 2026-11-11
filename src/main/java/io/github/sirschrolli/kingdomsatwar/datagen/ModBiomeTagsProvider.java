@@ -42,6 +42,26 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(OverworldBiomes.ROYAL_MEADOWS)
                 .add(Biomes.MEADOW)
                 .add(Biomes.CHERRY_GROVE);
+        // Tiere der eigenen Biome (0.85): der Schneeleopard auf den Frostgipfeln und den Hängen darunter
+        this.tag(ModTags.Biomes.HAS_SNOW_LEOPARDS)
+                .add(OverworldBiomes.FROST_PEAKS)
+                .add(Biomes.SNOWY_SLOPES)
+                .add(Biomes.JAGGED_PEAKS)
+                .add(Biomes.GROVE);
+        // der Urelch im Urhain und in den alten Taigawäldern
+        this.tag(ModTags.Biomes.HAS_PRIMEVAL_ELKS)
+                .add(OverworldBiomes.PRIMEVAL_FOREST)
+                .add(Biomes.OLD_GROWTH_PINE_TAIGA)
+                .add(Biomes.OLD_GROWTH_SPRUCE_TAIGA);
+        // die Sturmmöwe an der Sturmküste, an den steinigen Ufern und an den Stränden
+        this.tag(ModTags.Biomes.HAS_STORM_GULLS)
+                .add(OverworldBiomes.STORM_COAST)
+                .add(Biomes.STONY_SHORE)
+                .add(Biomes.BEACH);
+        // der Greif in den Felsschluchten und über den zerklüfteten Savannen
+        this.tag(ModTags.Biomes.HAS_GRIFFINS)
+                .add(OverworldBiomes.ROCK_GORGES)
+                .add(Biomes.WINDSWEPT_SAVANNA);
         this.tag(ModTags.Biomes.HAS_GEESE)
                 .addTag(BiomeTags.IS_RIVER)
                 .addTag(Tags.Biomes.IS_SWAMP)

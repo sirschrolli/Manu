@@ -9,18 +9,19 @@ import net.minecraft.world.entity.AnimationState;
 public final class Anim {
     public static final float DEG = Mth.DEG_TO_RAD;
 
-    /** Weiche Werte je Wesen (Wert und Zeitpunkt, bis zu vier je Wesen); verschwindet mit dem Wesen. */
+    /** Weiche Werte je Wesen (Wert und Zeitpunkt, bis zu acht je Wesen); verschwindet mit dem Wesen. */
     private static final Map<Object, float[]> FOLLOW = new WeakHashMap<>();
 
     private Anim() {}
 
     /**
      * Weicher Übergang je Wesen: der Wert folgt {@code target} mit {@code rate} je Sekunde (bei jeder Bildrate gleich
-     * schnell), so springt eine Haltung nicht von einem Bild aufs nächste um. {@code slot} (0..3) trennt mehrere Werte
+     * schnell), so springt eine Haltung nicht von einem Bild aufs nächste um. {@code slot} (0..7) trennt mehrere Werte
      * desselben Wesens.
      */
     public static float follow(Object entity, int slot, float target, float ageInTicks, float rate) {
-        float[] v = FOLLOW.computeIfAbsent(entity, e -> new float[] {Float.NaN, 0, Float.NaN, 0, Float.NaN, 0, Float.NaN, 0});
+        float[] v = FOLLOW.computeIfAbsent(entity, e -> new float[] {Float.NaN, 0, Float.NaN, 0, Float.NaN, 0, Float.NaN, 0, Float.NaN, 0,
+                Float.NaN, 0, Float.NaN, 0, Float.NaN, 0});
         int i = slot * 2;
         float time = ageInTicks / 20.0f;
         float dt = time - v[i + 1];

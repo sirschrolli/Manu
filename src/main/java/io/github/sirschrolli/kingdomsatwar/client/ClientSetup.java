@@ -99,6 +99,10 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.NIGHT_RAM, io.github.sirschrolli.kingdomsatwar.client.model.geom.NightRamGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.RIFT_HOUND, io.github.sirschrolli.kingdomsatwar.client.model.geom.RiftHoundGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.CHORUS_MAW, io.github.sirschrolli.kingdomsatwar.client.model.geom.ChorusMawGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.SNOW_LEOPARD, io.github.sirschrolli.kingdomsatwar.client.model.geom.SnowLeopardGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.PRIMEVAL_ELK, io.github.sirschrolli.kingdomsatwar.client.model.geom.PrimevalElkGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.STORM_GULL, io.github.sirschrolli.kingdomsatwar.client.model.geom.StormGullGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.GRIFFIN, io.github.sirschrolli.kingdomsatwar.client.model.geom.GriffinGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER, SoldierModel::createLayer);
         event.registerLayerDefinition(ModModelLayers.SOLDIER_RANK,
                 () -> SoldierModel.createLayer(new net.minecraft.client.model.geom.builders.CubeDeformation(0.3f)));
@@ -267,6 +271,14 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.NIGHT_RAM.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.NightRamRenderer::new);
         event.registerEntityRenderer(ModEntities.RIFT_HOUND.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.RiftHoundRenderer::new);
         event.registerEntityRenderer(ModEntities.CHORUS_MAW.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.monster.ChorusMawRenderer::new);
+        event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.SNOW_LEOPARD.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.biome.SnowLeopardRenderer::new);
+        event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.PRIMEVAL_ELK.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.biome.PrimevalElkRenderer::new);
+        event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.STORM_GULL.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.biome.StormGullRenderer::new);
+        event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.GRIFFIN.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.biome.GriffinRenderer::new);
         event.registerEntityRenderer(ModEntities.MONSTER_SHOT.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
         // Drachen-Bosse (Modell in Grundgröße, im Spiel ×2,1)
         event.registerEntityRenderer(ModEntities.PYRRHON.get(), context -> new DragonBossRenderer<>(context,

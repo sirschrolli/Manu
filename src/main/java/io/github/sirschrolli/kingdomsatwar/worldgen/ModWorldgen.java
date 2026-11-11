@@ -283,6 +283,10 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> FEW_HARE_SPAWNS = spawnModifier("add_few_hare_spawns");
     public static final ResourceKey<BiomeModifier> WILD_BOAR_SPAWNS = spawnModifier("add_wild_boar_spawns");
     public static final ResourceKey<BiomeModifier> DEER_SPAWNS = spawnModifier("add_deer_spawns");
+    public static final ResourceKey<BiomeModifier> SNOW_LEOPARD_SPAWNS = spawnModifier("add_snow_leopard_spawns");
+    public static final ResourceKey<BiomeModifier> PRIMEVAL_ELK_SPAWNS = spawnModifier("add_primeval_elk_spawns");
+    public static final ResourceKey<BiomeModifier> STORM_GULL_SPAWNS = spawnModifier("add_storm_gull_spawns");
+    public static final ResourceKey<BiomeModifier> GRIFFIN_SPAWNS = spawnModifier("add_griffin_spawns");
     public static final ResourceKey<BiomeModifier> GOOSE_SPAWNS = spawnModifier("add_goose_spawns");
     public static final ResourceKey<BiomeModifier> WILL_O_WISP_SPAWNS = spawnModifier("add_will_o_wisp_spawns");
     public static final ResourceKey<BiomeModifier> CAVE_TROLL_SPAWNS = spawnModifier("add_cave_troll_spawns");
@@ -408,6 +412,17 @@ public final class ModWorldgen {
         // Wilde Kreaturen
         context.register(WILD_BOAR_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILD_BOARS, ModEntities.WILD_BOAR.get(), 8, 2, 4));
         context.register(DEER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_DEER, ModEntities.DEER.get(), 8, 2, 4));
+        // Tiere der eigenen Biome (0.85): Schneeleoparden selten, allein oder zu zweit
+        context.register(SNOW_LEOPARD_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_SNOW_LEOPARDS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.SNOW_LEOPARD.get(), 4, 1, 2));
+        // Urelche: kleine Herden aus Kühen, Kälbern und einem Bullen
+        context.register(PRIMEVAL_ELK_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_PRIMEVAL_ELKS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.PRIMEVAL_ELK.get(), 5, 2, 4));
+        // Sturmmöwen: Schwärme von drei bis sechs
+        context.register(STORM_GULL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_STORM_GULLS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.STORM_GULL.get(), 10, 3, 6));
+        context.register(GRIFFIN_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_GRIFFINS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.GRIFFIN.get(), 3, 1, 2));
         context.register(GOOSE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_GEESE, ModEntities.GOOSE.get(), 7, 3, 5));
         context.register(WILL_O_WISP_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILL_O_WISPS, ModEntities.WILL_O_WISP.get(), 12, 1, 3));
         context.register(CAVE_TROLL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CAVE_TROLLS, ModEntities.CAVE_TROLL.get(), 6, 1, 1));

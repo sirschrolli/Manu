@@ -3832,11 +3832,6 @@
         "name": "minecraft:mob/goat/impact2",
         "pitch": 0.6,
         "volume": 0.8
-      },
-      {
-        "name": "minecraft:mob/goat/impact3",
-        "pitch": 0.6,
-        "volume": 0.8
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.breath.earth"
@@ -4852,6 +4847,121 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.goose.hurt"
+  },
+  "entity.griffin.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_death1",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.death"
+  },
+  "entity.griffin.growl": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_growl1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_growl2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_growl3",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.growl"
+  },
+  "entity.griffin.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_hurt1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_hurt2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_hurt3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.hurt"
+  },
+  "entity.griffin.screech": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_screech1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_screech2",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_screech3",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.screech"
+  },
+  "entity.griffin.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_step1",
+        "attenuation_distance": 14
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_step2",
+        "attenuation_distance": 14
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_step3",
+        "attenuation_distance": 14
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_step4",
+        "attenuation_distance": 14
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.step"
+  },
+  "entity.griffin.strike": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_strike1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_strike2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_strike3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.strike"
+  },
+  "entity.griffin.wings": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_wings1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_wings2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/griffin_wings3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.griffin.wings"
   },
   "entity.lindworm.ambient": {
     "sounds": [
@@ -5878,6 +5988,346 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.nyxar.shriek"
+  },
+  "entity.primeval_elk.ambient": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cow/say1",
+        "pitch": 0.55,
+        "volume": 0.75
+      },
+      {
+        "name": "minecraft:mob/cow/say2",
+        "pitch": 0.55,
+        "volume": 0.75
+      },
+      {
+        "name": "minecraft:mob/cow/say3",
+        "pitch": 0.55,
+        "volume": 0.75
+      },
+      {
+        "name": "minecraft:mob/cow/say4",
+        "pitch": 0.55,
+        "volume": 0.75
+      },
+      {
+        "name": "minecraft:mob/camel/ambient1",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient2",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient3",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient4",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient5",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient6",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient7",
+        "pitch": 0.62,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/camel/ambient8",
+        "pitch": 0.62,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.ambient"
+  },
+  "entity.primeval_elk.angry": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/horse/angry1",
+        "pitch": 0.55,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry1",
+        "pitch": 0.75,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry2",
+        "pitch": 0.75,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry3",
+        "pitch": 0.75,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry4",
+        "pitch": 0.75,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry5",
+        "pitch": 0.75,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/hoglin/angry6",
+        "pitch": 0.75,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.angry"
+  },
+  "entity.primeval_elk.bugle": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cow/moody/ambient1",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient2",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient3",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient4",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient5",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient6",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient7",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient8",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/cow/moody/ambient9",
+        "pitch": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle1",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle2",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle3",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle4",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle5",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle6",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle7",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      },
+      {
+        "name": "minecraft:mob/ravager/idle8",
+        "pitch": 1.15,
+        "volume": 0.5,
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.bugle"
+  },
+  "entity.primeval_elk.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/camel/death1",
+        "pitch": 0.66
+      },
+      {
+        "name": "minecraft:mob/camel/death2",
+        "pitch": 0.66
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.death"
+  },
+  "entity.primeval_elk.eat": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/camel/eat1",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/camel/eat2",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/camel/eat3",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/camel/eat4",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/camel/eat5",
+        "pitch": 0.8,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.eat"
+  },
+  "entity.primeval_elk.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/camel/hurt1",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/camel/hurt2",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/camel/hurt3",
+        "pitch": 0.72
+      },
+      {
+        "name": "minecraft:mob/camel/hurt4",
+        "pitch": 0.72
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.hurt"
+  },
+  "entity.primeval_elk.impact": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/goat/impact1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/goat/impact2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/ravager/step1",
+        "pitch": 0.6,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/ravager/step2",
+        "pitch": 0.6,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/ravager/step3",
+        "pitch": 0.6,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/ravager/step4",
+        "pitch": 0.6,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/ravager/step5",
+        "pitch": 0.6,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.impact"
+  },
+  "entity.primeval_elk.step": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/camel/step1",
+        "pitch": 0.85,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/camel/step2",
+        "pitch": 0.85,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/camel/step3",
+        "pitch": 0.85,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/camel/step4",
+        "pitch": 0.85,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/camel/step5",
+        "pitch": 0.85,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/camel/step6",
+        "pitch": 0.85,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.primeval_elk.step"
   },
   "entity.reef_colossus.ambient": {
     "sounds": [
@@ -7135,6 +7585,199 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.shattered_king.sweep"
   },
+  "entity.snow_leopard.ambient": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/ocelot/idle1",
+        "pitch": 0.62,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/cat/ocelot/idle2",
+        "pitch": 0.62,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/cat/ocelot/idle3",
+        "pitch": 0.62,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/cat/ocelot/idle4",
+        "pitch": 0.62,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:mob/cat/stray/idle1",
+        "pitch": 0.55,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/cat/stray/idle2",
+        "pitch": 0.55,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/cat/stray/idle3",
+        "pitch": 0.55,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/cat/stray/idle4",
+        "pitch": 0.55,
+        "volume": 0.55
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.ambient"
+  },
+  "entity.snow_leopard.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/ocelot/death1",
+        "pitch": 0.62
+      },
+      {
+        "name": "minecraft:mob/cat/ocelot/death2",
+        "pitch": 0.62
+      },
+      {
+        "name": "minecraft:mob/cat/ocelot/death3",
+        "pitch": 0.62
+      },
+      {
+        "name": "minecraft:mob/cat/royal/death",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.death"
+  },
+  "entity.snow_leopard.eat": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/eat1",
+        "pitch": 0.7,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/cat/eat2",
+        "pitch": 0.7,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.eat"
+  },
+  "entity.snow_leopard.hiss": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/hiss1",
+        "pitch": 0.58,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/cat/hiss2",
+        "pitch": 0.58,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/cat/hiss3",
+        "pitch": 0.58,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/wolf/big/growl1",
+        "pitch": 1.15,
+        "volume": 0.45
+      },
+      {
+        "name": "minecraft:mob/wolf/big/growl2",
+        "pitch": 1.15,
+        "volume": 0.45
+      },
+      {
+        "name": "minecraft:mob/wolf/big/growl3",
+        "pitch": 1.15,
+        "volume": 0.45
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.hiss"
+  },
+  "entity.snow_leopard.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/royal/hurt1",
+        "pitch": 0.66
+      },
+      {
+        "name": "minecraft:mob/cat/royal/hurt2",
+        "pitch": 0.66
+      },
+      {
+        "name": "minecraft:mob/cat/royal/hurt3",
+        "pitch": 0.66
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.hurt"
+  },
+  "entity.snow_leopard.purr": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/purr1",
+        "pitch": 0.62,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/cat/purr2",
+        "pitch": 0.62,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/cat/purr3",
+        "pitch": 0.62,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/cat/purreow1",
+        "pitch": 0.6,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:mob/cat/purreow2",
+        "pitch": 0.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.purr"
+  },
+  "entity.snow_leopard.step": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/wolf/step1",
+        "pitch": 0.9,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:mob/wolf/step2",
+        "pitch": 0.9,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:mob/wolf/step3",
+        "pitch": 0.9,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:mob/wolf/step4",
+        "pitch": 0.9,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:mob/wolf/step5",
+        "pitch": 0.9,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.snow_leopard.step"
+  },
   "entity.soldier.armor": {
     "sounds": [
       {
@@ -7329,6 +7972,87 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.star_ray.hurt"
+  },
+  "entity.storm_gull.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_call1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_call2",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_call3",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.storm_gull.call"
+  },
+  "entity.storm_gull.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_death1",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.storm_gull.death"
+  },
+  "entity.storm_gull.flap": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_flap1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_flap2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_flap3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.storm_gull.flap"
+  },
+  "entity.storm_gull.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_hurt1",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_hurt2",
+        "attenuation_distance": 20
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_hurt3",
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.storm_gull.hurt"
+  },
+  "entity.storm_gull.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_step1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_step2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_step3",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/storm_gull_step4",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.storm_gull.step"
   },
   "entity.thorn_wight.volley": {
     "sounds": [

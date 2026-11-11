@@ -132,6 +132,11 @@ public final class ModTags {
                 KingdomsAtWar.id("replaces_vanilla_animals"));
         public static final TagKey<Biome> HAS_WILD_BOARS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_wild_boars"));
         public static final TagKey<Biome> HAS_DEER = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_deer"));
+        /** Tiere der eigenen Biome (0.85). */
+        public static final TagKey<Biome> HAS_SNOW_LEOPARDS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_snow_leopards"));
+        public static final TagKey<Biome> HAS_PRIMEVAL_ELKS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_primeval_elks"));
+        public static final TagKey<Biome> HAS_STORM_GULLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_storm_gulls"));
+        public static final TagKey<Biome> HAS_GRIFFINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_griffins"));
         public static final TagKey<Biome> HAS_GEESE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_geese"));
         public static final TagKey<Biome> HAS_WILL_O_WISPS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_will_o_wisps"));
         public static final TagKey<Biome> HAS_CAVE_TROLLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_cave_trolls"));

@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_primeval_elks",
+  "spawners": {
+    "type": "kingdomsatwar:primeval_elk",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "weight": 5
+  }
+}

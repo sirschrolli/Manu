@@ -120,7 +120,7 @@ EVENTS: dict[str, dict] = {
     "entity.dragon.breath.earth": event(
         "entity.dragon.breath.earth",
         v("dig/gravel", 4, pitch=0.5),
-        v("mob/goat/impact", 3, pitch=0.6, volume=0.8),
+        v("mob/goat/impact", 2, pitch=0.6, volume=0.8),
     ),
     "entity.dragon.breath.water": event(
         "entity.dragon.breath.water",
@@ -183,6 +183,56 @@ EVENTS: dict[str, dict] = {
     "entity.goose.hiss": event("entity.goose.hiss", v("mob/cat/hiss", 3, pitch=1.3, volume=0.7)),
     "entity.goose.hurt": event("entity.goose.hurt", v("mob/parrot/hurt", 2, pitch=0.7)),
     "entity.goose.death": event("entity.goose.death", v("mob/parrot/death", 4, pitch=0.7)),
+    # --- Tiere der eigenen Biome (0.85) ---
+    # Schneeleopard: tiefe Katzenstimmen (Ozelot, Streuner, Königskatze), Fauchen und Schnurren tiefer gestimmt
+    "entity.snow_leopard.ambient": event(
+        "entity.snow_leopard.ambient",
+        v("mob/cat/ocelot/idle", 4, pitch=0.62, volume=0.7),
+        v("mob/cat/stray/idle", 4, pitch=0.55, volume=0.55),
+    ),
+    "entity.snow_leopard.purr": event(
+        "entity.snow_leopard.purr",
+        v("mob/cat/purr", 3, pitch=0.62, volume=0.8),
+        v("mob/cat/purreow", 2, pitch=0.6, volume=0.5),
+    ),
+    "entity.snow_leopard.hiss": event(
+        "entity.snow_leopard.hiss",
+        v("mob/cat/hiss", 3, pitch=0.58, volume=0.9),
+        v("mob/wolf/big/growl", 3, pitch=1.15, volume=0.45),
+    ),
+    "entity.snow_leopard.eat": event("entity.snow_leopard.eat", v("mob/cat/eat", 2, pitch=0.7, volume=0.8)),
+    "entity.snow_leopard.hurt": event("entity.snow_leopard.hurt", v("mob/cat/royal/hurt", 3, pitch=0.66)),
+    "entity.snow_leopard.death": event(
+        "entity.snow_leopard.death",
+        v("mob/cat/ocelot/death", 3, pitch=0.62),
+        v("mob/cat/royal/death", 0, pitch=0.6),
+    ),
+    "entity.snow_leopard.step": event("entity.snow_leopard.step", v("mob/wolf/step", 5, pitch=0.9, volume=0.5)),
+    # Urelch: tiefe Rufe (Rind, Kamel), der Brunftruf des Bullen, Schnauben, schwere Schritte
+    "entity.primeval_elk.ambient": event(
+        "entity.primeval_elk.ambient",
+        v("mob/cow/say", 4, pitch=0.55, volume=0.75),
+        v("mob/camel/ambient", 8, pitch=0.62, volume=0.6),
+    ),
+    "entity.primeval_elk.bugle": event(
+        "entity.primeval_elk.bugle",
+        v("mob/cow/moody/ambient", 9, pitch=0.5, volume=1.0, attenuation=48),
+        v("mob/ravager/idle", 8, pitch=1.15, volume=0.5, attenuation=48),
+    ),
+    "entity.primeval_elk.angry": event(
+        "entity.primeval_elk.angry",
+        v("mob/horse/angry", 1, pitch=0.55, volume=0.9),
+        v("mob/hoglin/angry", 6, pitch=0.75, volume=0.7),
+    ),
+    "entity.primeval_elk.impact": event(
+        "entity.primeval_elk.impact",
+        v("mob/goat/impact", 2, pitch=0.6),
+        v("mob/ravager/step", 5, pitch=0.6, volume=0.8),
+    ),
+    "entity.primeval_elk.eat": event("entity.primeval_elk.eat", v("mob/camel/eat", 5, pitch=0.8, volume=0.8)),
+    "entity.primeval_elk.hurt": event("entity.primeval_elk.hurt", v("mob/camel/hurt", 4, pitch=0.72)),
+    "entity.primeval_elk.death": event("entity.primeval_elk.death", v("mob/camel/death", 2, pitch=0.66)),
+    "entity.primeval_elk.step": event("entity.primeval_elk.step", v("mob/camel/step", 6, pitch=0.85, volume=0.9)),
     "entity.will_o_wisp.ambient": event(
         "entity.will_o_wisp.ambient",
         v("block/amethyst/resonate", 4, pitch=1.6, volume=0.35),

@@ -52,6 +52,11 @@ public final class ModModelLayers {
     public static final ModelLayerLocation NIGHT_RAM = new ModelLayerLocation(KingdomsAtWar.id("night_ram"), "main");
     public static final ModelLayerLocation RIFT_HOUND = new ModelLayerLocation(KingdomsAtWar.id("rift_hound"), "main");
     public static final ModelLayerLocation CHORUS_MAW = new ModelLayerLocation(KingdomsAtWar.id("chorus_maw"), "main");
+    // Tiere der eigenen Biome (0.85)
+    public static final ModelLayerLocation SNOW_LEOPARD = new ModelLayerLocation(KingdomsAtWar.id("snow_leopard"), "main");
+    public static final ModelLayerLocation PRIMEVAL_ELK = new ModelLayerLocation(KingdomsAtWar.id("primeval_elk"), "main");
+    public static final ModelLayerLocation STORM_GULL = new ModelLayerLocation(KingdomsAtWar.id("storm_gull"), "main");
+    public static final ModelLayerLocation GRIFFIN = new ModelLayerLocation(KingdomsAtWar.id("griffin"), "main");
 
     /** Zauberwirkungen und Zaubergeschosse. */
     public static final ModelLayerLocation PHOENIX = new ModelLayerLocation(KingdomsAtWar.id("phoenix"), "main");

@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_storm_gulls",
+  "spawners": {
+    "type": "kingdomsatwar:storm_gull",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 6,
+      "min_inclusive": 3
+    },
+    "weight": 10
+  }
+}

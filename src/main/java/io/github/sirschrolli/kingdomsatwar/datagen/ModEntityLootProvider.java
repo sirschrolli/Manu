@@ -219,6 +219,17 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.NAUTILUS.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.NAUTILUS));
         this.add(ModEntities.ZOMBIE_NAUTILUS.get(), vanillaLoot(net.minecraft.world.entity.EntityTypes.ZOMBIE_NAUTILUS));
 
+        // Tiere der eigenen Biome (0.85): der Schneeleopard lässt nichts zurück
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.SNOW_LEOPARD.get(), LootTable.lootTable());
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.PRIMEVAL_ELK.get(), LootTable.lootTable()
+                .withPool(meat(ModItems.VENISON.get(), 2, 4))
+                .withPool(drop(Items.LEATHER, 1, 3)));
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.STORM_GULL.get(), LootTable.lootTable()
+                .withPool(drop(Items.FEATHER, 0, 2)));
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.GRIFFIN.get(), LootTable.lootTable()
+                .withPool(drop(Items.FEATHER, 2, 5))
+                .withPool(drop(Items.LEATHER, 0, 2)));
+
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()
                 .withPool(meat(Items.PORKCHOP, 1, 3))

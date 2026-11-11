@@ -50,6 +50,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.init();
         io.github.sirschrolli.kingdomsatwar.registry.Armory.init();
+        io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.init();
         io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.MystikBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.init();
@@ -82,6 +83,8 @@ public final class KingdomsAtWar {
         modBus.addListener(ModGameTests::registerTests);
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(ModEntities::registerSpawnPlacements);
+        modBus.addListener(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts::registerAttributes);
+        modBus.addListener(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts::registerSpawnPlacements);
         modBus.addListener(this::commonSetup);
         container.registerConfig(ModConfig.Type.CLIENT, ModClientConfig.SPEC);
         container.registerConfig(ModConfig.Type.SYNCED, ModServerConfig.SPEC);

@@ -41,21 +41,24 @@ def _bone_world(bone):
     if bone.parent is None:
         return np.eye(3), np.zeros(3)
     pr, pt = _bone_world(bone.parent)
-    extra, scale = POSE.get(bone.name, ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)))
+    extra, scale, shift = POSE.get(bone.name, ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (0.0, 0.0, 0.0)))
     rot = tuple(a + b for a, b in zip(bone.rotation, extra))
     r = pr @ _rot(rot) @ np.diag(scale)
-    t = pt + pr @ np.array(bone.pivot, dtype=float)
+    t = pt + pr @ (np.array(bone.pivot, dtype=float) + np.array(shift, dtype=float))
     return r, t
 
 
 def _parse_pose(text: str) -> dict:
+    """"knochen:rx,ry,rz[@sx,sy,sz][#dx,dy,dz]" – Zusatzdrehung (Grad), Skalierung, Verschiebung des Drehpunkts."""
     pose = {}
     for item in text.split():
         name, _, rest = item.partition(":")
+        rest, _, sh = rest.partition("#")
         rot, _, sc = rest.partition("@")
         r = tuple(float(v) for v in rot.split(",")) if rot else (0.0, 0.0, 0.0)
         k = tuple(float(v) for v in sc.split(",")) if sc else (1.0, 1.0, 1.0)
-        pose[name] = (r, k)
+        d = tuple(float(v) for v in sh.split(",")) if sh else (0.0, 0.0, 0.0)
+        pose[name] = (r, k, d)
     return pose
 
 

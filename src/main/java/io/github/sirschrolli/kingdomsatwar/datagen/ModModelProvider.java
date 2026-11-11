@@ -423,6 +423,8 @@ public class ModModelProvider extends ModelProvider {
             flat(items, item.get());
         }
         flat(items, ModItems.DRACONIUM_DRAGON_ARMOR.get());
+        // Tiere der eigenen Biome (0.85)
+        io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.spawnEggs().forEach(egg -> flat(items, egg.get()));
 
         // --- Magie ---
         staffModel(items, ModItems.AETHERIT_STAFF.get());
