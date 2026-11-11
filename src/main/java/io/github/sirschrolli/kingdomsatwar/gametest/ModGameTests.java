@@ -186,6 +186,7 @@ public final class ModGameTests {
         SeaGameTests.init();      // meldet die Tests des Meeres an
         ReefGameTests.init();     // Meeresgrund, Versunkenes Atoll, Karkinos
         FaeGameTests.init();      // das Feenreich, der Mondhain, Noctua
+        UrmeerGameTests.init();   // seit 0.89: das Urmeer und die Gezeitentore
         ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
         StarGameTests.init();     // Asteria, die Sternenreiterin, Sternenlanze und Sternenschwingen
         MystikGameTests.init();   // MissMystik, die Feen-Zauberkünstlerin, Kartendeck, Zylinder, Zauberbühne
@@ -267,6 +268,7 @@ public final class ModGameTests {
         SeaGameTests.register(event, environment);
         ReefGameTests.register(event, environment);
         FaeGameTests.register(event, environment);
+        UrmeerGameTests.register(event, environment);
         ForgeGameTests.register(event, environment);
         StarGameTests.register(event, environment);
         MystikGameTests.register(event, environment);

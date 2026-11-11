@@ -973,6 +973,32 @@ public class ModRecipeProvider extends RecipeProvider {
 
     /** Das Meer: Tiefseelaterne aus dem Leuchtköder, Pfeile mit Haizahnspitzen, gegartes Krabbenfleisch. */
     private void sea() {
+        // das Urmeer (0.89): Gezeitenstein aus Stein und Prismarinscherben, daraus Ziegel und gemeißelter Gezeitenstein
+        ItemLike tideStone = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_STONE.base().get();
+        ItemLike tideBricks = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_STONE_BRICKS.base().get();
+        ItemLike chiseledTide = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE.get();
+        shaped(RecipeCategory.BUILDING_BLOCKS, tideStone, 4)
+                .pattern(" S ")
+                .pattern("SPS")
+                .pattern(" S ")
+                .define('S', Blocks.STONE)
+                .define('P', Items.PRISMARINE_SHARD)
+                .unlockedBy(getHasName(Items.PRISMARINE_SHARD), has(Items.PRISMARINE_SHARD))
+                .save(output, key("tide_stone"));
+        shaped(RecipeCategory.BUILDING_BLOCKS, tideBricks, 4)
+                .pattern("##")
+                .pattern("##")
+                .define('#', tideStone)
+                .unlockedBy(getHasName(tideStone), has(tideStone))
+                .save(output, key("tide_stone_bricks"));
+        stonecut(tideBricks, 1, tideStone);
+        shaped(RecipeCategory.BUILDING_BLOCKS, chiseledTide)
+                .pattern("#")
+                .pattern("#")
+                .define('#', io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_STONE_BRICKS.slab().get())
+                .unlockedBy(getHasName(tideBricks), has(tideBricks))
+                .save(output, key("chiseled_tide_stone"));
+        stonecut(chiseledTide, 1, tideStone, tideBricks);
         Item lure = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ANGLER_LURE.get();
         shaped(RecipeCategory.DECORATIONS, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get())
                 .pattern("NPN")

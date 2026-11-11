@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "kingdomsatwar:tide_stone",
+  "result": {
+    "count": 2,
+    "id": "kingdomsatwar:tide_stone_slab"
+  }
+}

@@ -42,6 +42,18 @@ final class SeaModels {
 
     static void register(BlockModelGenerators blocks, ItemModelGenerators items) {
         blocks.createLantern(SeaBlocks.DEEP_SEA_LANTERN.get());
+        // das Urmeer (0.89): gemeißelter Gezeitenstein mit leuchtender Welle, der Schleier des Gezeitentors (wie beim
+        // Feenportal eine dünne, leuchtende Scheibe mit bewegter, durchscheinender Textur)
+        ModModelProvider.glowingCube(blocks, SeaBlocks.CHISELED_TIDE_STONE.get());
+        Block gate = SeaBlocks.TIDE_GATE.get();
+        net.minecraft.client.resources.model.sprite.Material gateTexture = TextureMapping.getBlockTexture(gate).withForceTranslucent(true);
+        TextureMapping gateMapping = new TextureMapping().put(FaeModels.PORTAL, gateTexture).put(TextureSlot.PARTICLE, gateTexture);
+        Identifier gateNs = FaeModels.PORTAL_NS.create(gate, gateMapping, blocks.modelOutput);
+        Identifier gateEw = FaeModels.PORTAL_EW.create(gate, gateMapping, blocks.modelOutput);
+        blocks.blockStateOutput.accept(MultiVariantGenerator.dispatch(gate).with(PropertyDispatch.initial(
+                        io.github.sirschrolli.kingdomsatwar.block.sea.TideGateBlock.AXIS)
+                .select(Direction.Axis.X, BlockModelGenerators.plainVariant(gateNs))
+                .select(Direction.Axis.Z, BlockModelGenerators.plainVariant(gateEw))));
         for (var item : SeaBlocks.flatItems()) {
             ModModelProvider.flat(items, item.get());
         }

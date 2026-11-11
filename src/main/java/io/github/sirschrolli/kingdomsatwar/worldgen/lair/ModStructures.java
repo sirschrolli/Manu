@@ -371,6 +371,8 @@ public final class ModStructures {
                 case STARWATCH -> null;
                 // die Fehlerzone (Anni der Troll): selten, ein Fund für sich
                 case ERROR_ZONE -> spread(56, 18, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 40_404_404, castles);
+                // der Versunkene Tempel: das Tor ins Urmeer – nicht zu selten, damit man es findet
+                case SUNKEN_TEMPLE -> spread(24, 8, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR, 58_913_117, castles);
             };
             if (placement != null) {
                 context.register(siteSet(kind), new StructureSet(structure, placement));
@@ -419,7 +421,7 @@ public final class ModStructures {
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(
                                     io.github.sirschrolli.kingdomsatwar.registry.ModEntities.CAT.get(),
                                     new net.minecraft.util.valueproviders.ConstantInt(1)))));
-            case CORAL_PALACE -> java.util.Map.of(
+            case SUNKEN_TEMPLE, CORAL_PALACE -> java.util.Map.of(
                     net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                             net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                             net.minecraft.util.random.WeightedList.of(new net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData(

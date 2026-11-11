@@ -43,6 +43,11 @@ public final class ModAttachments {
             "fae_gates", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState::new)
                     .serialize(io.github.sirschrolli.kingdomsatwar.fae.FaeGateState.CODEC.fieldOf("gates")).build());
 
+    /** Die Gezeitentore der Welt (Oberwelt und Urmeer, seit 0.89). */
+    public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.urmeer.TideGateState>> TIDE_GATES = ATTACHMENTS.register(
+            "tide_gates", () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.urmeer.TideGateState::new)
+                    .serialize(io.github.sirschrolli.kingdomsatwar.urmeer.TideGateState.CODEC.fieldOf("gates")).build());
+
     /** Das Fischbuch des Spielers (seit 0.79): welche Arten er gefangen hat, wie viele, und den größten jeder Art. */
     public static final Supplier<AttachmentType<io.github.sirschrolli.kingdomsatwar.fishing.FishLog>> FISH_LOG = ATTACHMENTS.register("fish_log",
             () -> AttachmentType.builder(io.github.sirschrolli.kingdomsatwar.fishing.FishLog::new)

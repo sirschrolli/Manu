@@ -748,6 +748,27 @@ V: in der Leere am Rand des End-Karglands | in the void at the rim of the End ba
 """
 
 
+# Die dritte Welle (seit 0.89): die Biome des Urmeers – je zwölf Arten wie in der ersten Welle und acht wie in der zweiten.
+# Eigene Tabelle, ganz hinten berechnet: So bleiben alle älteren Arten Zeichen für Zeichen, wie sie waren.
+BIOME_TABLE_URMEER = """
+kingdomsatwar:urmeer_deep | sea | 12 | W | #2a6a9a #0a1e3a #5ad0e0 #d8f0ff | deep | sea | glow=.15
+Urmeer/Primordial Weiten/Expanse Hochsee/Highsea Walgesang/Whalesong Strömungs/Current Tiefblau/Deepblue Nadelfels/Spirerock Weltmeer/Worldsea Dünungs/Swell Schwarm/Swarm Uralt/Ancient Seetang/Seawrack
+W: in den Weiten des Urmeers | in the expanse of the Primordial Sea
+
+kingdomsatwar:urmeer_reef | sea | 12 | W | #2ab8c0 #0e4a5a #ff7a5a #fff4d8 | sea_warm | sea | glow=.1
+Korallenbank/Coralbank Lagunen/Lagoon Perlmutt/Nacre Anemonen/Anemone Türkis/Turquoise Sonnenriff/Sunreef Schwamm/Sponge Muschelbank/Shellbank Fächer/Fan Bunt/Painted Atoll/Atoll Flachwasser/Shallows
+W: über den Korallenbänken des Urmeers | over the coral banks of the Primordial Sea
+
+kingdomsatwar:urmeer_trench | sea | 12 | W | #1a2a4a #04060e #3af0c0 #a8c8e8 | deep | deep | glow=.55 | eyes
+Graben/Trench Hadal/Hadal Druck/Pressure Kluft/Rift Finster/Murk Laternen/Lantern Schwarzwasser/Blackwater Tiefen/Depth Schlund/Gulf Nacht/Night Kalt/Cold Leuchtgraben/Glowtrench
+W: in der Finsternis des Tiefseegrabens | in the darkness of the Deep Sea Trench
+
+kingdomsatwar:urmeer_isles | sea | 12 | W | #4a9ab0 #1a3a4a #f0c84a #f0f4e0 | beach | storm
+Insel/Isle Brandungs/Breaker Palmen/Palm Klippen/Cliff Strand/Strand Gezeitenpfuhl/Tidepool Böen/Squall Möwen/Gull Kiesel/Pebble Felsen/Rocky Wellen/Wave Seeluft/Seabreeze
+W: an den Sturminseln des Urmeers | at the Storm Isles of the Primordial Sea
+"""
+
+
 class Biome:
     def __init__(self, block: str):
         lines = [ln.strip() for ln in block.strip().split("\n") if ln.strip()]
@@ -783,8 +804,8 @@ class Biome:
         self.own = self.id.startswith("kingdomsatwar:")
 
 
-def biomes() -> list:
-    return [Biome(block) for block in BIOME_TABLE.strip().split("\n\n")]
+def biomes(table: str = BIOME_TABLE) -> list:
+    return [Biome(block) for block in table.strip().split("\n\n")]
 
 
 # =============================================================================================
@@ -1574,11 +1595,26 @@ def generate() -> list:
         prefixes = rng.shuffled(biome.prefixes)
         for k, (medium, form) in enumerate(forms):
             out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
+    # die dritte Welle (seit 0.89): die Biome des Urmeers, je beide Teile – ganz hinten, die älteren bleiben, wie sie waren
+    for biome in biomes(BIOME_TABLE_URMEER):
+        rng = Rng("fish:" + biome.id)
+        forms = pick_forms(biome, rng)
+        rarity_of = rarities(forms, SPLIT[biome.n], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 1))
+        rng = Rng("fish2:" + biome.id)
+        taken = {s.form for s in out if s.biome.id == biome.id}
+        forms = pick_forms2(biome, rng, taken)
+        rarity_of = rarities(forms, SPLIT2[len(forms)], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
     return out
 
 
 def check(species: list) -> None:
-    assert len(species) == 916 + 628, len(species)
+    assert len(species) == 916 + 628 + 80, len(species)
     assert len(existing_signatures()) >= 70, len(existing_signatures())    # 80 Arten mit Wirkung; ohne die Dauer gleichen sich einige
     assert len({s.id for s in species}) == len(species)
     assert len({s.de for s in species}) == len(species)

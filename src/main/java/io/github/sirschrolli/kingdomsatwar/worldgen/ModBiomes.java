@@ -79,6 +79,7 @@ public final class ModBiomes {
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidBiomes.bootstrap(context);
         io.github.sirschrolli.kingdomsatwar.abyss.AbyssBiomes.bootstrap(context);
         io.github.sirschrolli.kingdomsatwar.fae.FaeBiomes.bootstrap(context);
+        io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.bootstrap(context);
         context.register(io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.BIOME, io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.biome());
         io.github.sirschrolli.kingdomsatwar.arena.BossArenaDimensions.bootstrapBiomes(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldBiomes.bootstrap(context);

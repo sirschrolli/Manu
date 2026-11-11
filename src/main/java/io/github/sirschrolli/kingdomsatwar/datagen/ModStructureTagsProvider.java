@@ -41,6 +41,8 @@ public class ModStructureTagsProvider extends TagsProvider<Structure> {
         this.tag(StructureTags.OCEAN_RUIN).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));
         this.tag(StructureTags.ON_OCEAN_RUIN_WARM_MAPS).replace().add(ModStructures.site(SiteKind.CLAM_FIELD));
         this.tag(StructureTags.ON_OCEAN_MONUMENT_MAPS).replace().add(ModStructures.site(SiteKind.CORAL_PALACE));
+        // Delfine führen auch zum Versunkenen Tempel (0.89)
+        this.tag(StructureTags.DOLPHIN_LOCATED).add(ModStructures.site(SiteKind.SUNKEN_TEMPLE));
         this.tag(StructureTags.ON_ANCIENT_CITY_MAPS).replace().add(ModStructures.site(SiteKind.SILENT_CATHEDRAL));
         this.tag(StructureTags.ON_BURIED_TRIAL_CHAMBERS_MAPS).replace().add(ModStructures.site(SiteKind.TRIAL_ARENA));
         this.tag(StructureTags.ON_WOODLAND_MANSION_MAPS).replace().add(ModStructures.site(SiteKind.ROBBER_CASTLE));

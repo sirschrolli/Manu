@@ -84,6 +84,7 @@ import monster_gear_textures  # noqa: E402
 import armory_textures  # noqa: E402
 import armory_shields  # noqa: E402
 import sea_blocks  # noqa: E402
+import urmeer_textures  # noqa: E402
 import world_blocks  # noqa: E402
 from pixelart import Color, hexc  # noqa: E402
 
@@ -389,6 +390,7 @@ def build_all() -> dict[str, Image.Image]:
     abyss_textures.build(put)
     sea_textures.build(put)
     sea_blocks.build(put)
+    urmeer_textures.build(put)
     fae_textures.build(put)
     forge_textures.build(put)
     star_textures.build(put)
@@ -430,7 +432,7 @@ def main() -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         img.save(target)
     # Bildfolgen der Meeresblöcke: .mcmeta daneben
-    for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS}.items():
+    for key, (frames, frametime, interpolate) in {**sea_blocks.ANIMATIONS, **urmeer_textures.ANIMATIONS, **fae_textures.ANIMATIONS, **abyss_textures.ANIMATIONS}.items():
         meta = {"animation": {"frametime": frametime, "interpolate": interpolate}}
         (TEXTURES / f"{key}.png.mcmeta").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     for key, meta in {**abyss_textures.META, **creator_textures.META}.items():

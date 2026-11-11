@@ -91,6 +91,16 @@ public enum Habitat {
         if (dim == Level.END) {
             return EnumSet.of(END);
         }
+        // das Urmeer (0.89): überall Salzwasser; über den Weiten und Gräben die Fische der Tiefe, an Riffen und Inseln die warmen
+        if (dim == io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.LEVEL) {
+            set.add(SALT);
+            if (biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP) || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.TRENCH)) {
+                set.add(DEEP);
+            } else {
+                set.add(SALT_WARM);
+            }
+            return set;
+        }
         boolean cold = biome.is(Tags.Biomes.IS_COLD_OVERWORLD) || biome.is(Tags.Biomes.IS_SNOWY);
         if (biome.is(BiomeTags.IS_OCEAN) || biome.is(BiomeTags.IS_DEEP_OCEAN) || biome.is(BiomeTags.IS_BEACH)) {
             set.add(SALT);

@@ -49,6 +49,13 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.STONE_PILLAR);
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN);
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK);
+        // das Urmeer (0.89)
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE);
+        add(BlockTags.PORTALS, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_GATE);
+        add(BlockTags.DRAGON_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_GATE);
+        add(BlockTags.WITHER_IMMUNE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_GATE);
+        // Gezeitenstein bewusst nicht als natürlicher Fels der Oberwelt: sonst würfelten die Erzadern (Granit, Kies, Erde …) die
+        // Säulen des Versunkenen Tempels durcheinander
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.SULFUR_CRUST);
         add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.HYDROTHERMAL_VENT);
         add(BlockTags.MINEABLE_WITH_PICKAXE, ModBlocks.HEART_CRYSTAL_FORMATION);

@@ -122,6 +122,15 @@ public final class SiteSamples {
                         origin.getZ() + h + 1));
     }
 
+    /** Höhe der Mitte des Gezeitentors im Versunkenen Tempel (über dem Ursprung). */
+    public static final int SUNKEN_TEMPLE_GATE_Y = SunkenTemple.GATE_Y;
+
+    /** Ein Versunkener Tempel mit der Mitte bei {@code origin} (y = direkt über dem Grund); das Tor entlang {@code axis}. */
+    public static SitePiece sunkenTemple(BlockPos origin, net.minecraft.core.Direction.Axis axis, int ruin) {
+        return new SitePiece(SiteKind.SUNKEN_TEMPLE, 0, origin, Rotation.NONE, 0x7E3A1L, new int[] {axis == net.minecraft.core.Direction.Axis.Z ? 1 : 0, ruin},
+                SunkenTemple.box(origin));
+    }
+
     /** Ein verschüttetes Kloster mit der Mitte des Kreuzgangs bei {@code origin} (Boden); die Erde liegt {@code surface} höher. */
     public static SitePiece buriedAbbey(BlockPos origin, int surface) {
         return new SitePiece(SiteKind.BURIED_ABBEY, 0, origin, Rotation.NONE, 0xAB3L, new int[] {surface},

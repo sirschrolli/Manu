@@ -78,7 +78,12 @@ public enum SiteKind implements StringRepresentable {
      * ausgestanzte Schächte, gestreckte Blöcke und lose Pixel; in der Mitte der Fehlerkern, aus dem Anni der Troll geladen
      * wird (ein eigenes Bauwerk, an keiner Vanilla-Stelle). Zuletzt gebaut, damit auch die Bäume ringsum „kaputtgehen“.
      */
-    ERROR_ZONE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION);
+    ERROR_ZONE(GenerationStep.Decoration.TOP_LAYER_MODIFICATION),
+    /**
+     * Versunkener Tempel (seit 0.89): das runde Heiligtum des Meervolks auf dem Grund der tiefen Ozeane, mit Säulen, halb
+     * eingestürzter Kuppel und dem Gezeitentor ins Urmeer in der Mitte (ein eigenes Bauwerk, an keiner Vanilla-Stelle).
+     */
+    SUNKEN_TEMPLE(GenerationStep.Decoration.SURFACE_STRUCTURES);
 
     public static final Codec<SiteKind> CODEC = StringRepresentable.fromEnum(SiteKind::values);
 

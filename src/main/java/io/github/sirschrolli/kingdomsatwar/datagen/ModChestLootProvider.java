@@ -241,6 +241,18 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.5f))));
+        // Versunkener Tempel (0.89): die Gaben des Meervolks – Perlmutt, Gold, Gezeitenstein, selten ein Herz des Meeres (für
+        // ein eigenes Gezeitentor), ein verzaubertes Buch
+        this.output.accept(ModLootTables.SITE_SUNKEN_TEMPLE, coins(LootTable.lootTable().withPool(crystals(15, 12)), 2, 8, 2, 6, 0.5f)
+                .withPool(pool(3, 6, item(Items.PRISMARINE_CRYSTALS, 6, 2, 6), item(Items.PRISMARINE_SHARD, 6, 3, 8),
+                        item(Items.GOLD_INGOT, 4, 1, 4), item(Items.GOLD_NUGGET, 6, 4, 12), item(Items.NAUTILUS_SHELL, 4, 1, 2),
+                        item(ModItems.GEMSTONE.get(), 3, 1, 3), item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE.get(), 3, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_STONE_BRICKS.base().get(), 4, 4, 12),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.DEEP_SEA_LANTERN.get(), 2, 1, 2),
+                        item(Items.HEART_OF_THE_SEA, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.4f))));
         // Seedrache: die verschluckte Fracht eines Schiffs (Seekarte, Vorräte, Schatz)
         this.output.accept(ModLootTables.SITE_SEA_DRAGON_MAP, coins(vanilla(net.minecraft.world.level.storage.loot.BuiltInLootTables.SHIPWRECK_MAP),
                 1, 5, 0, 1, 0.0f));

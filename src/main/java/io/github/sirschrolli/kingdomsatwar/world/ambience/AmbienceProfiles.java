@@ -43,6 +43,7 @@ public final class AmbienceProfiles {
         theVoid();
         faeRealm();
         abyss();
+        urmeer();
         theEnd();
         arenas();
         fallbacks();
@@ -725,6 +726,42 @@ public final class AmbienceProfiles {
                 .far("void_choir", 0.25f, ALWAYS)
                 .close("whisper", 0.3f, ALWAYS));
     }
+    // =====================================================================================
+    // Das Urmeer (seit 0.89)
+    // =====================================================================================
+
+    /**
+     * Das Urmeer: überall Seewind und sanftes Plätschern, Möwen am Tag; über den Weiten rufen Wale und spielen Delfine, über
+     * den Korallenbänken auch Schildkröten; über den Gräben stöhnt es fern aus der Tiefe; an den Sturminseln bricht die
+     * Brandung an den Felsen.
+     */
+    private static void urmeer() {
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP, AmbienceProfile.builder()
+                .outside("lagoon", 0.16f)
+                .wind("wind_coast", 0.3f)
+                .spot("bird_gull", 0.4f, DAY)
+                .spot("dolphin", 0.5f, ALWAYS)
+                .far("whale", 0.45f, ALWAYS)
+                .far("whale_far", 0.35f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.REEF, AmbienceProfile.builder()
+                .outside("lagoon", 0.2f)
+                .wind("wind_breeze", 0.2f)
+                .spot("bird_gull", 0.6f, DAY)
+                .spot("dolphin", 0.8f, ALWAYS)
+                .spot("turtle", 0.3f, DAY));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.TRENCH, AmbienceProfile.builder()
+                .outside("lagoon", 0.12f)
+                .wind("wind_gale", 0.26f)
+                .far("whale_far", 0.4f, ALWAYS)
+                .far("deep_moan", 0.3f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.ISLES, AmbienceProfile.builder()
+                .everywhere("surf_storm", 0.26f, 0.2f)
+                .wind("wind_coast", 0.32f)
+                .spot("bird_gull", 1.2f, DAY)
+                .spot("pebbles", 0.5f, ALWAYS)
+                .spot("leaves_rustle", 0.4f, ALWAYS));
+    }
+
     // =====================================================================================
     // Das End, das Tiefe Dunkel, die Kampfdimensionen und die Klangwelten nach Merkmalen (seit 0.79)
     // =====================================================================================

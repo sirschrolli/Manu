@@ -82,6 +82,8 @@ final class SiteGameTests {
             ModGameTests.TEST_FUNCTIONS.register("site_clam_field", () -> SiteGameTests::clamField);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> CORAL_PALACE =
             ModGameTests.TEST_FUNCTIONS.register("site_coral_palace", () -> SiteGameTests::coralPalace);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SUNKEN_TEMPLE =
+            ModGameTests.TEST_FUNCTIONS.register("site_sunken_temple", () -> SiteGameTests::sunkenTemple);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BURIED_ABBEY =
             ModGameTests.TEST_FUNCTIONS.register("site_buried_abbey", () -> SiteGameTests::buriedAbbey);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SILENT_CATHEDRAL =
@@ -131,6 +133,7 @@ final class SiteGameTests {
         add(event, environment, EMBER_GATE, 100);
         add(event, environment, CLAM_FIELD, 100);
         add(event, environment, CORAL_PALACE, 100);
+        add(event, environment, SUNKEN_TEMPLE, 100);
         add(event, environment, BURIED_ABBEY, 100);
         add(event, environment, SILENT_CATHEDRAL, 100);
         add(event, environment, TRIAL_ARENA, 100);
@@ -801,6 +804,52 @@ final class SiteGameTests {
             problems.add("alte Wächter: " + keepers.size());
         }
         keepers.forEach(Entity::discard);
+        helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
+        helper.succeed();
+    }
+
+    /**
+     * Der Versunkene Tempel (0.89): ein Sockel aus Gezeitenstein, Säulen, die Kuppel; in der Mitte das Gezeitentor mit
+     * 37 gefluteten Schleierblöcken in einem Ring aus Gezeitensteinziegeln mit leuchtenden Schlusssteinen; zwei Truhen mit
+     * Beute daneben. Über dem Sockel bleibt alles Wasser (nirgends Luft).
+     */
+    private static void sunkenTemple(GameTestHelper helper) {
+        clear(helper);
+        fill(helper, new BlockPos(0, 1, 0), new BlockPos(47, 1, 47), Blocks.SAND.defaultBlockState());
+        fill(helper, new BlockPos(0, 2, 0), new BlockPos(47, 29, 47), Blocks.WATER.defaultBlockState());
+        BlockPos o = helper.absolutePos(new BlockPos(24, 4, 24));
+        build(helper, SiteSamples.sunkenTemple(o, net.minecraft.core.Direction.Axis.X, 3));
+        List<String> problems = new ArrayList<>();
+        BlockPos lo = o.offset(-14, -3, -14);
+        BlockPos hi = o.offset(14, 20, 14);
+        var gate = io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_GATE.get();
+        int veil = count(helper, lo, hi, s -> s.is(gate) && s.getValue(io.github.sirschrolli.kingdomsatwar.block.sea.TideGateBlock.WATERLOGGED));
+        if (veil != 37) {
+            problems.add("Schleier: " + veil);
+        }
+        int keystones = count(helper, lo, hi, s -> s.is(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE.get()));
+        if (keystones < 5) {
+            problems.add("gemeißelter Gezeitenstein: " + keystones);
+        }
+        int bricks = count(helper, lo, hi, s -> s.is(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_STONE_BRICKS.base().get()));
+        if (bricks < 250) {
+            problems.add("Gezeitensteinziegel: " + bricks);
+        }
+        int chests = lootChests(helper, lo, hi, s -> s.is(Blocks.CHEST) && s.getValue(BlockStateProperties.WATERLOGGED));
+        if (chests != 2) {
+            problems.add("Truhen: " + chests);
+        }
+        int air = count(helper, o.offset(-12, 2, -12), o.offset(12, 19, 12), BlockState::isAir);
+        if (air > 0) {
+            problems.add("Luft im Tempel: " + air);
+        }
+        // der Schleier hält: ein Block-Update am Ring lässt ihn stehen
+        BlockPos center = o.above(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteSamples.SUNKEN_TEMPLE_GATE_Y);
+        helper.getLevel().getBlockState(center).updateShape(helper.getLevel(), helper.getLevel(), center, net.minecraft.core.Direction.UP,
+                center.above(), helper.getLevel().getBlockState(center.above()), RandomSource.create(1));
+        if (!helper.getLevel().getBlockState(center).is(gate)) {
+            problems.add("kein Schleier in der Mitte");
+        }
         helper.assertTrue(problems.isEmpty(), String.join("; ", problems));
         helper.succeed();
     }

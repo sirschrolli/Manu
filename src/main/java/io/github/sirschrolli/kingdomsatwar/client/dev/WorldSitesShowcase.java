@@ -491,6 +491,17 @@ final class WorldSitesShowcase {
                 add(views, first, 26, 14, -22, 0, 10, -8);
                 add(views, first, 0.5, -5, -9.5, 0.5, -4, -13);
             }
+            case SUNKEN_TEMPLE -> {
+                // das Tor steht quer zur Richtung "heraus" (Achse X: Blick von Süden, Achse Z: von Osten)
+                boolean alongZ = first.data(0) == 1;
+                double ox = alongZ ? 1 : 0;
+                double oz = alongZ ? 0 : 1;
+                add(views, first, -24, 17, -22, 0, 6, 0);
+                add(views, first, ox * 11 + 0.5, 4, oz * 11 + 0.5, 0.5, 6, 0.5);
+                add(views, first, ox * 5 + 0.5, 6, oz * 5 + 0.5, 0.5, 6, 0.5);
+                add(views, first, 5, 4, -5, -3, 14, 3);
+                add(views, first, 18, 4, 6, 0, 5, 0);
+            }
             case TIDE_SHRINE -> {
                 add(views, first, 8, 5, 8, 0, 2, 0);
                 add(views, first, -10, 3, 3, 0, 3, 0);

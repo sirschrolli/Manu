@@ -668,6 +668,18 @@ public class ModLanguageProvider extends LanguageProvider {
         text("message.kingdomsatwar.reef_colossus.tide", "Karkinos calls the tide!", "Karkinos ruft die Flut!");
         text("atoll.kingdomsatwar.warning", "Something stirs beneath the sand of the lagoon …", "Unter dem Sand der Lagune regt sich etwas …");
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.ATOLL_CORE, "Heart of the Atoll", "Herz des Atolls");
+        // Das Urmeer (0.89)
+        text("dimension.kingdomsatwar.urmeer", "The Primordial Sea", "Das Urmeer");
+        text("biome.kingdomsatwar.urmeer_deep", "Primordial Expanse", "Urmeer-Weiten");
+        text("biome.kingdomsatwar.urmeer_reef", "Coral Banks", "Korallenbänke");
+        text("biome.kingdomsatwar.urmeer_trench", "Deep Sea Trench", "Tiefseegraben");
+        text("biome.kingdomsatwar.urmeer_isles", "Storm Isles", "Sturminseln");
+        set("tide_stone", "tide_stone", "Tide Stone", "Gezeitenstein", "Tide Stone", "Gezeitenstein");
+        set("tide_stone_bricks", "tide_stone_brick", "Tide Stone Bricks", "Gezeitensteinziegel", "Tide Stone Brick", "Gezeitensteinziegel");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE, "Chiseled Tide Stone", "Gemeißelter Gezeitenstein");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TIDE_GATE, "Tide Gate", "Gezeitentor");
+        text("block.kingdomsatwar.tide_gate.no_frame", "The heart of the sea needs a complete frame of tide stone bricks.",
+                "Das Herz des Meeres braucht einen vollständigen Rahmen aus Gezeitensteinziegeln.");
         // Das Feenreich (0.63)
         text("itemGroup.kingdomsatwar.the_fae_realm", "Kingdoms at War: The Fae Realm", "Kingdoms at War: Das Feenreich");
         text("itemGroup.kingdomsatwar.legends", "Kingdoms at War: Legends", "Kingdoms at War: Legenden");

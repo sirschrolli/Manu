@@ -94,6 +94,8 @@ public final class ModLootTables {
     public static final ResourceKey<LootTable> SITE_AQUEDUCT_ALCOVE = site("aqueduct_alcove");
     public static final ResourceKey<LootTable> SITE_AQUEDUCT_CISTERN = site("aqueduct_cistern");
     public static final ResourceKey<LootTable> SITE_TIDE_SHRINE = site("tide_shrine");
+    /** Die Gaben des Meervolks im Versunkenen Tempel (seit 0.89). */
+    public static final ResourceKey<LootTable> SITE_SUNKEN_TEMPLE = site("sunken_temple");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_MAP = site("sea_dragon_map");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_CARGO = site("sea_dragon_cargo");
     public static final ResourceKey<LootTable> SITE_SEA_DRAGON_HOARD = site("sea_dragon_hoard");

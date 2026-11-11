@@ -10,6 +10,7 @@ import io.github.sirschrolli.kingdomsatwar.block.sea.GlowAlgaeBlock;
 import io.github.sirschrolli.kingdomsatwar.block.sea.HydrothermalVentBlock;
 import io.github.sirschrolli.kingdomsatwar.block.sea.SeaAnemoneBlock;
 import io.github.sirschrolli.kingdomsatwar.block.sea.SeashellBlock;
+import io.github.sirschrolli.kingdomsatwar.block.sea.TideGateBlock;
 import io.github.sirschrolli.kingdomsatwar.block.sea.TubeWormsBlock;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +128,30 @@ public final class SeaBlocks {
     public static final DeferredBlock<EmbeddedSpearBlock> EMBEDDED_TIDE_SPEAR = ModBlocks.BLOCKS.registerBlock("embedded_tide_spear",
             EmbeddedSpearBlock::new, p -> p.mapColor(MapColor.COLOR_CYAN).strength(-1.0f, 3_600_000.0f).noLootTable().noOcclusion()
                     .sound(SoundType.AMETHYST).lightLevel(s -> 10).pushReaction(PushReaction.IMMOVEABLE));
+
+    // =====================================================================================
+    // Das Urmeer (seit 0.89)
+    // =====================================================================================
+
+    /** Gezeitenstein: grünblauer Fels mit feinen, welligen Schichten und Muschelsplittern – der Grund des Urmeers. */
+    public static final BuildingSet TIDE_STONE = ModBlocks.stoneSet("tide_stone", "tide_stone", MapColor.COLOR_CYAN, SoundType.STONE,
+            1.5f, TAB);
+    /** Gezeitensteinziegel: der Baustoff des versunkenen Meervolks – aus ihnen sind die Gezeitentore gebaut. */
+    public static final BuildingSet TIDE_STONE_BRICKS = ModBlocks.stoneSet("tide_stone_bricks", "tide_stone_brick", MapColor.COLOR_CYAN,
+            SoundType.STONE, 1.8f, TAB);
+    /** Gemeißelter Gezeitenstein: eine leuchtende Welle, die sich zur Spirale einrollt. */
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> CHISELED_TIDE_STONE = ModBlocks.blockWithItem("chiseled_tide_stone",
+            net.minecraft.world.level.block.Block::new,
+            p -> p.mapColor(MapColor.COLOR_CYAN).instrument(net.minecraft.world.level.block.state.properties.NoteBlockInstrument.BASEDRUM)
+                    .requiresCorrectToolForDrops().strength(1.8f, 6.0f).sound(SoundType.STONE).lightLevel(s -> 8),
+            UnaryOperator.identity(), TAB);
+    /**
+     * Der Schleier eines Gezeitentors (ohne Gegenstand): wirbelndes, leuchtendes Wasser. Entsteht im Versunkenen Tempel von
+     * selbst – oder wenn man einen Rahmen aus Gezeitensteinziegeln mit einem Herz des Meeres berührt.
+     */
+    public static final DeferredBlock<TideGateBlock> TIDE_GATE = ModBlocks.BLOCKS.registerBlock("tide_gate", TideGateBlock::new,
+            p -> p.mapColor(MapColor.COLOR_CYAN).noCollision().strength(-1.0f).sound(SoundType.AMETHYST).lightLevel(s -> 11).noLootTable()
+                    .pushReaction(PushReaction.IMMOVEABLE));
 
     public static List<DeferredBlock<SeaAnemoneBlock>> anemones() {
         return List.of(PURPLE_SEA_ANEMONE, RED_SEA_ANEMONE, GREEN_SEA_ANEMONE, ORANGE_SEA_ANEMONE);

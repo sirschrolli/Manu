@@ -28,18 +28,21 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapNoises(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssTerrain.bootstrapNoises(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeTerrain.bootstrapNoises(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerTerrain.bootstrapNoises(context);
                 })
                 .add(Registries.DENSITY_FUNCTION, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowTerrain.bootstrapDensityFunctions(context);
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapDensityFunctions(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssTerrain.bootstrapDensityFunctions(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeTerrain.bootstrapDensityFunctions(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerTerrain.bootstrapDensityFunctions(context);
                 })
                 .add(Registries.MATERIAL_RULE, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowSurface.bootstrap(context);
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidSurface.bootstrap(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssSurface.bootstrap(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeSurface.bootstrap(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerSurface.bootstrap(context);
                     io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldSurface.bootstrap(context);
                 })
                 .add(Registries.NOISE_SETTINGS, context -> {
@@ -47,12 +50,14 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidTerrain.bootstrapSettings(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssTerrain.bootstrapSettings(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeTerrain.bootstrapSettings(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerTerrain.bootstrapSettings(context);
                 })
                 .add(Registries.DIMENSION_TYPE, context -> {
                     io.github.sirschrolli.kingdomsatwar.shadow.ShadowDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeDimension.bootstrapType(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapType(context);
                     io.github.sirschrolli.kingdomsatwar.arena.BossArenaDimensions.bootstrapTypes(context);
                 })
@@ -61,6 +66,7 @@ public final class DataGenerators {
                     io.github.sirschrolli.kingdomsatwar.voidrealm.VoidDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.abyss.AbyssDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.fae.FaeDimension.bootstrapStem(context);
+                    io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.arena.ArcaneSphere.bootstrapStem(context);
                     io.github.sirschrolli.kingdomsatwar.arena.BossArenaDimensions.bootstrapStems(context);
                 })

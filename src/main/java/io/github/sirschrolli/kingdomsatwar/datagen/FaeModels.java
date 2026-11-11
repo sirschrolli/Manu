@@ -23,7 +23,7 @@ final class FaeModels {
     private FaeModels() {}
 
     private static final TextureSlot GRASS_OVERLAY = TextureSlot.create("overlay");
-    private static final TextureSlot PORTAL = TextureSlot.create("portal");
+    static final TextureSlot PORTAL = TextureSlot.create("portal");
     private static final TextureSlot PAD = TextureSlot.create("pad");
     private static final TextureSlot FLOWER = TextureSlot.create("flower");
     private static final TextureSlot FLOWER_GLOW = TextureSlot.create("flower_glow");
@@ -42,8 +42,8 @@ final class FaeModels {
     static final int GRASS_ITEM_TINT = 0xFF8FE6B4;
 
     /** Der Schleier des Portals: eine dünne, leuchtende Scheibe in der Mitte des Blocks (wie beim Netherportal). */
-    private static final ModelTemplate PORTAL_NS = portalTemplate(true);
-    private static final ModelTemplate PORTAL_EW = portalTemplate(false);
+    static final ModelTemplate PORTAL_NS = portalTemplate(true);
+    static final ModelTemplate PORTAL_EW = portalTemplate(false);
 
     private static ModelTemplate portalTemplate(boolean northSouth) {
         return ExtendedModelTemplateBuilder.builder()

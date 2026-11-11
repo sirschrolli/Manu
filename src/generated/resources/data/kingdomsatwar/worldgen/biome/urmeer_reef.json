@@ -1,0 +1,122 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.under_water"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "kingdomsatwar:turtle",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 3
+            },
+            {
+              "type": "kingdomsatwar:giant_crab",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 3
+            }
+          ],
+          "water_ambient": [
+            {
+              "type": "kingdomsatwar:tropical_fish",
+              "count": 8,
+              "weight": 25
+            },
+            {
+              "type": "kingdomsatwar:pufferfish",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            },
+            {
+              "type": "kingdomsatwar:glow_jellyfish",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 6
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "kingdomsatwar:manta_ray",
+              "count": 1,
+              "weight": 2
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:underwater"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#a8dce4",
+    "minecraft:visual/sky_color": "#56a8d8",
+    "minecraft:visual/water_fog_color": "#145a78"
+  },
+  "carvers": [],
+  "downfall": 0.7,
+  "effects": {
+    "dry_foliage_color": "#8a9a4a",
+    "foliage_color": "#4fae4a",
+    "grass_color": "#6abf5a",
+    "water_color": "#2ea6c8"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:overworld/standard/ocean/warm_sea_stacks"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:overworld/coral_coast/reefs",
+      "kingdomsatwar:overworld/coral_coast/coral_gardens",
+      "kingdomsatwar:overworld/standard/ocean/anemone_gardens",
+      "kingdomsatwar:overworld/standard/ocean/shell_beds",
+      "minecraft:warm_ocean_vegetation",
+      "minecraft:seagrass_warm",
+      "minecraft:sea_pickle"
+    ]
+  ],
+  "has_precipitation": true,
+  "temperature": 0.6
+}

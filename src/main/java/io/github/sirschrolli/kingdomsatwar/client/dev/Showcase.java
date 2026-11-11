@@ -227,6 +227,12 @@ final class Showcase {
                         HoardShowcase.hoard(steps, scene.equals("abyss_hoard") ? "" : scene.substring(12));
                     } else if (scene.equals("abyss_tour") || scene.startsWith("abyss_tour_")) {
                         AbyssShowcase.tour(steps, scene.equals("abyss_tour") ? "" : scene.substring(11));
+                    } else if (scene.equals("urmeer_map")) {
+                        UrmeerShowcase.map(steps);
+                    } else if (scene.equals("urmeer_gate")) {
+                        UrmeerShowcase.gate(steps);
+                    } else if (scene.equals("urmeer") || scene.startsWith("urmeer_")) {
+                        UrmeerShowcase.views(steps, scene.equals("urmeer") ? "" : scene.substring(7));
                     } else if (scene.equals("fae_map")) {
                         FaeShowcase.map(steps);
                     } else if (scene.equals("fae_boss")) {

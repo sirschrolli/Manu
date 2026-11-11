@@ -40,7 +40,7 @@ import net.minecraft.world.item.Items;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Die Fische des Angelns: <b>1628 Arten</b> (seit 0.83; 1000 seit 0.81). 84 sind von Hand benannt – die Allerweltsfische der
+ * Die Fische des Angelns: <b>1708 Arten</b> (seit 0.89; 1628 seit 0.83, 1000 seit 0.81). 84 sind von Hand benannt – die Allerweltsfische der
  * Gewässer, die Fische von Minecraft (als ihre eigenen Gegenstände, mit ihrer gewohnten Wirkung) und die Legenden –, 1544
  * gehören einem Biom: zwanzig in jedem eigenen Biom der Mod, zehn oder zwölf in jedem Biom von Minecraft, auch in den Höhlen,
  * in der Lava des Nethers und in der Leere des Ends ({@code tools/fish_gen.py} berechnet sie in zwei Wellen; diese Klasse

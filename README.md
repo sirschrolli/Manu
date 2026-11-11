@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.88.0 – Waffen und Werkzeuge in 3D.** Die letzten flachen Waffen und Werkzeuge sind jetzt echte **3D-Modelle** wie die Waffenkammer: die Sätze aus **Stahl**, **Nachtstahl** und **Abyssit** (Schwert, Axt, Spitzhacke, Schaufel, Hacke), **Draconiumschwert** und **-axt** mit goldenen Schneiden und glühenden Adern, die **Mondsilberklinge**, die **Trollkeule** mit Eisenbändern und Nägeln, der **Kommandostab** und der rot-weiße **Vermessungsstab** – 21 Stücke. Sie liegen richtig in der Hand, aus eigener Sicht und von außen (F5); im Inventar bleibt das gewohnte Bild. Dazu sind **89 weitere Gegenstände plastisch**: Barren und Erze, Edelsteine und Splitter, Drachenschuppen, Runen und Zaubertafeln, Siegelsplitter, Münzen, Monsterteile, Hörner und Kronen, Speisen und Getränke – in der Hand, im Rahmen und am Boden haben sie Dicke statt wie Papier zu wirken.
+> **Testversion 0.89.0 – Das Urmeer.** Eine neue Dimension: das **Urmeer**, ein Meer ohne Küsten, so alt wie die Welt – mit vier Landschaften: die tiefen **Urmeer-Weiten** mit Tangwäldern und Felsnadeln, flache, warme **Korallenbänke**, dunkle **Tiefseegräben** aus Abgrundstein und die **Sturminseln** mit Stränden, Palmen und Klippen. Sein Fels ist der grünblaue **Gezeitenstein**; auf dem Grund liegen Gebeine von Seedrachen, Muschelfelder und Korallenpaläste, im Wasser leben Haie, Mantarochen, Delfine, Anglerfische und Riesenkrabben, und an der Angel warten **80 neue Fischarten**. Der Weg hinein führt durch den **Versunkenen Tempel** auf dem Grund der tiefen Ozeane: In der Mitte des runden Heiligtums mit seinen zwölf Säulen und der halb eingestürzten Kuppel wirbelt das **Gezeitentor** – hineinschwimmen, einen Moment bleiben, und man taucht im Urmeer auf einer Plattform über dem Wasser auf. Eigene Tore baut man aus **Gezeitensteinziegeln** und erweckt sie mit einem **Herz des Meeres**.
+> In 0.88 kamen **Waffen und Werkzeuge in 3D**: Die letzten flachen Waffen und Werkzeuge sind jetzt echte **3D-Modelle** wie die Waffenkammer: die Sätze aus **Stahl**, **Nachtstahl** und **Abyssit** (Schwert, Axt, Spitzhacke, Schaufel, Hacke), **Draconiumschwert** und **-axt** mit goldenen Schneiden und glühenden Adern, die **Mondsilberklinge**, die **Trollkeule** mit Eisenbändern und Nägeln, der **Kommandostab** und der rot-weiße **Vermessungsstab** – 21 Stücke. Sie liegen richtig in der Hand, aus eigener Sicht und von außen (F5); im Inventar bleibt das gewohnte Bild. Dazu sind **89 weitere Gegenstände plastisch**: Barren und Erze, Edelsteine und Splitter, Drachenschuppen, Runen und Zaubertafeln, Siegelsplitter, Münzen, Monsterteile, Hörner und Kronen, Speisen und Getränke – in der Hand, im Rahmen und am Boden haben sie Dicke statt wie Papier zu wirken.
 > In 0.87 kamen **Kampf, Wurf, Zauber und Angeln**: Die **Drachen** finden ihre Gegner seitdem sicher und kämpfen sauber: Eigene Drachen **verteidigen ihren Herrn von sich aus** gegen Monster, die ihn oder sie angreifen, kämpfen am Boden mit gezieltem Biss – auch nach unten und nach oben – und Feueratem, steigen gegen Schützen auf Säulen, gegen Flieger und im Wald in die Luft, kreisen dort, stoßen herab und speien aus der Luft. Sie halten Abstand zu ihrem Herrn, **landen sauber neben ihm** statt auf ihm und fliegen keine weiten Schleifen mehr. Die **Drachen-Bosse** fliegen über Mauern, wenn sie am Boden nicht weiterkommen, und treten beim Drehen auf der Stelle. **Speere, Lanzen und Dreizacke** fliegen jetzt **schnurgerade mit der Spitze voran** – auch im Bogen und beim Wurf aus dem Laufen –, und Glaciaras Eisspeer und Eiszapfen sind echte Modelle aus Eis. **Sieben neue Verzauberungen** gibt es am Zaubertisch und beim Bibliothekar: **Donnerschlag** (ein knisternder Funkenschlag fährt in den Getroffenen), **Giftzahn**, **Standhaft**, **Lebenskraft** (mehr Herzen), **Eulenauge** (Nachtsicht), **Hasenfuß** (höher springen, tiefer fallen) und **Drillmeister** (größere Fangzone beim Angeln). Die **Verzauberungen von Minecraft wirken etwas stärker** – Schärfe, Bann, Nemesis, Harpune, Stärke, Schutz, Effizienz und Köder –, aber nicht übertrieben. Und es gibt **sechs eigene Angeln**: die robuste **Eisenangel**, die glückbringende **Goldangel**, die **Drachenangel**, die alles ein wenig besser kann, die **Schattenangel** für Nacht und Dunkel, die **Glutangel** für die Lava und die **Sternenangel** für das End und die Leere.
 > In 0.86 kamen **weitere Wesen**: Vier weitere Tiere zogen in die Biome ein – wieder jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. In den **Aschefeldern** kriecht der **Glutsalamander** über Asche und Lava: schwarz wie erkaltete Schlacke, mit Flecken und Rissen, die **wie Glut leuchten** – auch im Dunkeln (orangerot und als gelb glühender Goldsalamander). Er ist feuerfest, **läuft über Lava wie über festen Boden**, sonnt sich an Lava und Magma und glüht dann heller; wer ihn schlägt, **verbrennt sich an seiner Haut**, Wasser verträgt er nicht, und mit Magmacreme zieht man Junge auf. Im **Nebelmoor** und in den Sümpfen lauert der **Moorschnapper**, eine riesige Schnappschildkröte mit gezacktem, bemoostem Panzer und Hakenschnabel: Reglos liegt er im flachen Wasser, nur Panzer und Kopf ragen heraus – und **schnappt blitzschnell zu**, wenn Spieler, Monster, Frösche, Hasen oder Hühner vor seiner Nase vorbeikommen. Wer sich nähert, den warnt er mit einem **Fauchen**; getroffen **zieht er sich in den Panzer zurück**, und dann richtet man kaum etwas aus. An der **Korallenküste** und in den Mangrovensümpfen waten **Flamingos** in Scharen durchs flache Wasser (Rosaflamingo und kräftig roter Kubaflamingo): Sie **gründeln mit dem Kopf nach unten**, ruhen **auf einem Bein**, stecken nachts den Kopf ins Gefieder und **fliegen auf**, wenn man ihnen zu nahe kommt – mit vorgestrecktem Hals, nach hinten gestreckten Beinen und rot-schwarzen Schwingen. Und über den **Königsauen**, Blumenwäldern, Wiesen, Sonnenblumenebenen und Kirschhainen gaukeln **Schmetterlinge** in **sechs Arten** (Tagpfauenauge, Zitronenfalter, Schwalbenschwanz, Bläuling, Admiral und Monarch): Sie setzen sich auf Blumen und Gräser, öffnen und schließen dort langsam die Flügel und flattern auf, wenn man ihnen zu nahe kommt; nachts und bei Regen sitzen sie still.
 > In 0.85 kamen **neue Wesen in den eigenen Biomen**: Vier Tiere leben seitdem dort, wo bisher keins war – jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. Auf den **Frostgipfeln** schleicht der **Schneeleopard**: rauchweiß mit dunklen Rosetten und einem buschigen Schwanz, fast so lang wie er selbst. Er duckt sich, pirscht an Ziegen und Hasen heran und **springt sie aus bis zu sieben Blöcken an**; mit rohem Hammel-, Hasen- oder Hirschfleisch lässt er sich **zähmen** und folgt dir dann, kämpft an deiner Seite und legt sich neben dich (zwei Fellarten, auch als Junges). Im **Urhain** zieht der **Urelch** über die Lichtungen: riesig, mit hohem Buckel und Kinnbart, die Bullen mit gewaltigen **bemoosten Schaufeln, an denen Leuchtbeeren glühen**. Zähm ihn, leg ihm einen **Sattel** auf und schnall ihm eine **Truhe** um – dann trägt er dich und dein Gepäck; greift man einen wilden Bullen an, **stürmt er mit gesenkten Schaufeln** los. An der **Sturmküste** kreisen **Sturmmöwen** (hell und als dunkle Mantelmöwe) über Strand und Brandung, landen auf Pfählen, Felsen und dem Wasser, picken und lachen – und wer einen gewöhnlichen **Fisch in der Hand** hält, dem **schnappt eine Möwe ihn weg** und fliegt damit davon (triff sie, dann lässt sie ihn fallen; seltene und legendäre Fische sind sicher). Über den **Felsschluchten** kreist der **Greif**: vorn Adler mit weißem Kopf, gelbem Hakenschnabel und schwarzen Krallen, hinten Löwe, mit Schwingen von **fast fünf Blöcken Spannweite** (golden und als Rostgreif). Er sitzt aufrecht wie ein Wappentier auf den höchsten Felsnadeln, jagt Hasen, Hühner und Gürteltiere im **Sturzflug** und frisst sie nach der Landung; wer ihn angreift, auf den **stößt er immer wieder aus der Luft herab**, und wer ihm beim Ruhen zu nahe kommt, den warnt er mit einem Schrei.
@@ -385,6 +386,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Weitere Wesen** (0.86): Glutsalamander (Aschefelder; feuerfest, läuft über Lava, glüht, verbrennt Angreifer), Moorschnapper (Nebelmoor und Sümpfe; lauert im Wasser, schnappt zu, faucht, zieht sich in den Panzer zurück), Flamingos (Korallenküste und Mangroven; Scharen, gründeln, ruhen auf einem Bein, fliegen auf) und Schmetterlinge (Königsauen, Blumenwälder, Wiesen; sechs Arten, setzen sich auf Blumen) – je mit Modell, Animationen, Verhalten, Klängen und Spawn-Ei | ✅ fertig |
 | **Kampf, Wurf, Zauber und Angeln** (0.87): Drachen finden ihre Gegner (Wache für den Herrn, Boden- und Luftkampf, gezielter Biss, sauberes Landen neben dem Herrn), Bosse fliegen über Mauern; Speere, Lanzen und Dreizacke fliegen mit der Spitze voran; sieben neue Verzauberungen am Zaubertisch (Donnerschlag, Giftzahn, Standhaft, Lebenskraft, Eulenauge, Hasenfuß, Drillmeister), etwas stärkere Verzauberungen von Minecraft; sechs eigene Angeln (Eisen, Gold, Drache, Schatten, Glut, Stern) | ✅ fertig |
 | **Waffen und Werkzeuge in 3D** (0.88): die Sätze aus Stahl, Nachtstahl und Abyssit, Draconiumschwert und -axt, Mondsilberklinge, Trollkeule, Kommandostab und Vermessungsstab als 3D-Modelle (richtig gehalten, auch mit F5); 89 weitere Gegenstände plastisch (Barren, Steine, Schuppen, Runen, Münzen, Monsterteile, Speisen) | ✅ fertig |
+| **Das Urmeer** (0.89): eine Meeresdimension mit vier Biomen (Urmeer-Weiten, Korallenbänke, Tiefseegraben, Sturminseln), Gezeitenstein, Klangwelten, 80 neuen Fischarten und den Bauwerken des Meeres; der Versunkene Tempel in den tiefen Ozeanen mit dem Gezeitentor; eigene Tore aus Gezeitensteinziegeln, mit dem Herz des Meeres erweckt | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -445,7 +447,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.88.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.89.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -453,7 +455,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.88.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.89.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1901,7 +1903,7 @@ und ihre Vorteile kommen zu Ködern und Verzauberungen hinzu.
 ![Die sechs Angeln: groß, in der Hand und ausgeworfen über Wasser und Lava](docs/bilder/angeln_087.jpg)
 
 Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
-heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.83 **1628 Arten** in zehn Kapiteln – in jedem
+heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.89 **1708 Arten** in zehn Kapiteln – in jedem
 Gewässer, jedem Biom und jeder Welt eigene. Wer viel angelt, trägt einen **Fischbeutel**.
 
 **Der Drill.** Wer beim Biss anzieht, sieht neben der Angel eine Säule – Wasser, Lava oder Sternenhimmel, je nachdem,
@@ -1948,10 +1950,10 @@ auf einer Wasseroberfläche, und violette Funken ziehen auf ihn zu; der Fang lan
 fällt der Haken einfach hinab, und von einer Klippe der Oberwelt lässt sich so nicht angeln: In allen anderen Welten
 trägt die Leere ihn nur, wo bis zum Boden der Welt nichts mehr kommt.
 
-**Die 1628 Arten.** Es gibt zweierlei Fische. **84 Arten** sind nach **Lebensräumen** verteilt – die Allerweltsfische der
+**Die 1708 Arten.** Es gibt zweierlei Fische. **84 Arten** sind nach **Lebensräumen** verteilt – die Allerweltsfische der
 Flüsse, Meere, Höhlen und Welten, die vier Fische von Minecraft und die fünfzehn Legenden; sie stehen in der ersten Tabelle.
-**1544 Arten** gehören einem **Biom** und beißen nur dort: zwanzig in jedem der 39 eigenen Biome der Mod, zehn oder zwölf
-in jedem der 66 Biome von Minecraft (916 kamen mit 0.81, 628 mit 0.83). An einem Angelplatz beißt also beides – in der
+**1624 Arten** gehören einem **Biom** und beißen nur dort: zwanzig in jedem der 43 eigenen Biome der Mod, zehn oder zwölf
+in jedem der 66 Biome von Minecraft (916 kamen mit 0.81, 628 mit 0.83, 80 mit dem Urmeer in 0.89). An einem Angelplatz beißt also beides – in der
 Ebene etwa die Allerweltsfische der Flüsse und die zwölf Arten der Ebene, wobei die eigenen Arten eines Bioms (wie die der
 besonderen Orte: Sumpf, Dschungel, Höhle, Tiefsee …) fast doppelt so oft beißen und fast zwei Drittel des Fangs stellen.
 
@@ -2076,7 +2078,7 @@ Perle), Fadenschnecken und der Fangkrebs, der so schnell zuschlägt, dass das Wa
 Ungewöhnliche, Seltene** und **zwei große Fänge** (episch): bei zwanzig Arten sieben, sechs, fünf und zwei, bei zwölf fünf,
 drei, zwei und zwei, bei zehn drei, drei, zwei und zwei. Die großen Räuber sind die
 seltenen, das Kleinzeug das gewöhnliche; je seltener, desto schwerer der Drill, desto größer das Tier und desto stärker
-die Wirkung – und **keine zwei der 1628 Arten wirken gleich**: Gewöhnliche geben eine oder zwei schwache Wirkungen, die
+die Wirkung – und **keine zwei der 1708 Arten wirken gleich**: Gewöhnliche geben eine oder zwei schwache Wirkungen, die
 großen Fänge drei starke (und manche haben ihren Preis). Die Wirkungen passen zum Biom: Feuerfische schützen vor Feuer und
 machen stark, Eisfische härten ab, Fische der Schattenwelt machen unsichtbar, die der Leere lassen schweben, einzelne aus
 dem End und der Naht **versetzen** wie eine Chorusfrucht, einige aus dem Feenreich **nehmen alle Leiden**.
@@ -2206,7 +2208,7 @@ Zeit, Wetter, Wirkung, eine Notiz) steht im Fischbuch – hier je Biom nur die b
 
 Die Arten der Biome berechnet `tools/fish_gen.py` aus Tabellen (Farbwelt, Gewässer, Wesen und Namensteile je Biom) – immer
 gleich, mit eigenem Zufallsgenerator; es schreibt die Bilder, die Namen und Notizen in beiden Sprachen und die Tabelle
-`data/kingdomsatwar/fishing/species.tsv`, die das Spiel beim Start liest. Ein Test prüft, dass keine zwei der 1628 Arten
+`data/kingdomsatwar/fishing/species.tsv`, die das Spiel beim Start liest. Ein Test prüft, dass keine zwei der 1708 Arten
 gleich heißen, gleich aussehen oder gleich wirken und dass jedes Biom seine Arten hat.
 
 **Essen.** Jeder Fisch lässt sich roh essen – auch mit vollem Magen – und wirkt dann wie in der Tabelle (der Tooltip
@@ -2232,7 +2234,7 @@ Arten in Fächern (der Punkt in der Ecke verrät die Seltenheit), der Pfeil oben
 zurück. Rechts steht die gewählte Art: Seltenheit, Sterne, wie oft gefangen, Lebensraum oder Biom, Tageszeit, Wetter,
 Größe, der eigene **Rekord**, die Wirkung beim Essen und ein paar Zeilen über den Fisch. Was noch nie am Haken hing, ist
 ein **Schattenriss** ohne Namen – Biom, Zeit und Größe verrät das Buch trotzdem, damit man weiß, wo man suchen muss. Oben
-steht, wie viele der 1628 Arten man schon hat, unten, wie viele Fische und Schätze man gelandet hat. Der Fortschritt
+steht, wie viele der 1708 Arten man schon hat, unten, wie viele Fische und Schätze man gelandet hat. Der Fortschritt
 gehört zum Spieler und bleibt nach dem Tod erhalten.
 
 **Der Fischbeutel (seit 0.81).** Auf der Werkbank: oben links und rechts je ein **Faden**, in der Mitte eine **Truhe**,
@@ -2358,6 +2360,51 @@ In der Hand siehst du ihn als echtes 3D-Modell, im Inventar als Bild.
 Alle neuen Blöcke (Anemonen, Muscheln, Röhrenwürmer, Schlotgestein, Schwefelkruste, heiße Quelle, Leuchtalgen,
 Riesentang) und das Spawn-Ei von Karkinos liegen im Kreativ-Reiter **„Das Meer“**. Muscheln werden in der Werkbank zu
 Knochenmehl.
+
+### Das Urmeer
+
+![Das Urmeer: Sturminseln, Korallenbänke, Tangwälder, ein Tiefseegraben, der Versunkene Tempel und das Gezeitentor](docs/bilder/urmeer_089.jpg)
+
+Seit 0.89 gibt es eine weitere Dimension: das **Urmeer** – ein Meer ohne Küsten, so alt wie die Welt. Der Meeresspiegel
+liegt hoch, der Grund gut vierzig Blöcke darunter; Tag und Nacht wechseln wie in der Oberwelt. Vier Landschaften:
+
+- **Urmeer-Weiten** – das offene, tiefe Meer: Wälder aus Riesentang, Seegraswiesen und Felsnadeln, die vom Grund fast bis
+  ans Licht ragen; Haie, Mantarochen, Delfine, Kalmare und Schwärme von Leuchtquallen.
+- **Korallenbänke** – flache, warme Riffe knapp unter der Oberfläche, voller Korallen, Anemonen und Muscheln; bunte
+  Fische, Kugelfische, Schildkröten und Riesenkrabben.
+- **Tiefseegraben** – Schluchten im Grund aus Abgrundstein und Abgrundsand, bis fast hinab zum Grundgestein, mit
+  Leuchtfeldern und heißen Schloten; Anglerfische und Leuchtkalmare.
+- **Sturminseln** – Felsinseln über dem Meer mit Stränden, Palmen und Klippen; Riesenkrabben am Strand, Möwen und Brandung.
+
+Der Fels des Urmeers ist **Gezeitenstein** – grünblau, mit welligen Schichten und Muschelsplittern. Auf dem Grund liegen
+wie in der Oberwelt die Gebeine von **Seedrachen**, **Muschelfelder** und **Korallenpaläste**. Beim Angeln beißen die
+Fische des Salzwassers – über den Weiten und Gräben die der Tiefsee, an Riffen und Inseln die warmen – und in jeder der
+vier Landschaften **zwanzig eigene Arten** (80 neue, etwa Urmeerkalmar, Weitenhai, Perlmuttkrabbe, Sonnenriffkuhfisch,
+Nachtquastenflosser, Laternenkrake, Leuchtgrabenqualle, Palmenbarsch und Klippenflughahn). Jede Landschaft
+hat ihre eigene Klangwelt (Wale und Delfine über den Weiten, Schildkröten über den Riffen, ein fernes Stöhnen über den
+Gräben, Brandung und Möwen an den Inseln).
+
+**Der Weg hinein: der Versunkene Tempel.** Auf dem Grund der tiefen Ozeane der Oberwelt steht das Heiligtum eines
+Meervolks, das vor langer Zeit ins Urmeer gezogen ist: ein runder Tempel auf einem gestuften Sockel, ringsum zwölf Säulen
+(einige gebrochen und umgestürzt), darüber eine halb eingestürzte Kuppel mit dunklen Rippen. In der Mitte steht auf einem
+Podest das **Gezeitentor** – ein Ring aus Gezeitensteinziegeln, elf Blöcke hoch, mit leuchtenden Schlusssteinen, in dem
+das Wasser türkis wirbelt. Schwimm hinein und bleib einen Moment darin: Du tauchst im Urmeer auf einer Plattform über dem
+Wasser auf, vor einem gleichen Tor, das dich zurückbringt. Neben dem Tor stehen zwei Truhen mit den Gaben des Meervolks
+(Perlmutt, Gold, Gezeitenstein, Tiefseelaternen, verzauberte Bücher, selten ein Herz des Meeres); Wächter bewachen die
+Ruine. **Delfine** führen auch zum Tempel.
+
+**Eigene Tore:** Ein Rahmen aus **Gezeitensteinziegeln** wie ein Netherportal (innen 2 bis 21 Blöcke breit und 3 bis 21
+hoch, die Ecken dürfen fehlen – auch unter Wasser) wird zum Tor, wenn du ihn mit einem **Herz des Meeres** berührst; das
+Herz bleibt dabei ganz. Die Reise führt an dieselbe Stelle der anderen Welt: Steht dort in der Nähe schon ein Tor, kommst
+du dort an, sonst entsteht ein rundes Tor auf einer Plattform. Bricht der Rahmen, erlischt das Tor.
+
+| Gegenstand | Rezept |
+|---|---|
+| **Gezeitenstein** (4) | vier Steine um eine Prismarinscherbe |
+| **Gezeitensteinziegel** (4) | vier Gezeitenstein im Quadrat (oder Steinsäge) |
+| **Gemeißelter Gezeitenstein** | zwei Gezeitensteinziegel-Stufen übereinander (oder Steinsäge) – eine leuchtende Welle, die sich zur Spirale einrollt |
+
+Treppen, Stufen und Mauern gibt es aus beiden Steinen.
 
 ### Das Feenreich
 
@@ -3836,7 +3883,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.88.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.89.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3975,14 +4022,16 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
    - **0.87 – Kampf, Wurf, Zauber und Angeln** (fertig): Drachen, die ihre Gegner sicher finden und sauber
      kämpfen, Speere und Dreizacke, die mit der Spitze voran fliegen, sieben neue und etwas stärkere Verzauberungen und
      sechs eigene Angeln;
-   - zuletzt **0.88 – Waffen und Werkzeuge in 3D** (fertig): die letzten 21 flachen Waffen und Werkzeuge als 3D-Modelle,
-     89 weitere Gegenstände plastisch.
+   - **0.88 – Waffen und Werkzeuge in 3D** (fertig): die letzten 21 flachen Waffen und Werkzeuge als 3D-Modelle,
+     89 weitere Gegenstände plastisch;
+   - zuletzt **0.89 – Das Urmeer** (fertig): eine Meeresdimension mit vier Biomen, der Versunkene Tempel mit dem
+     Gezeitentor und eigene Tore aus Gezeitensteinziegeln.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** getragene Rüstungen mit 3D-Teilen (Stacheln, Hörner, Platten); das
-   **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –;
-   schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** der **Kraken** – ein riesiger Boss im Schlund des Urmeers –; getragene Rüstungen mit
+   3D-Teilen (Stacheln, Hörner, Platten); schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und
+   bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.

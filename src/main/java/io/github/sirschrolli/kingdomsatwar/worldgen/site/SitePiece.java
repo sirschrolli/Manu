@@ -127,6 +127,7 @@ public class SitePiece extends StructurePiece {
             case LOST_GATE -> LostGate.build(b, this);
             case STARWATCH -> Starwatch.build(b, this);
             case ERROR_ZONE -> ErrorZone.build(b, this);
+            case SUNKEN_TEMPLE -> SunkenTemple.build(b, this);
         }
         b.finish();
     }
