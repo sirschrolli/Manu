@@ -68,6 +68,8 @@ final class FishingGameTests {
             ModGameTests.TEST_FUNCTIONS.register("fishing_flow", () -> FishingGameTests::flow);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BAG =
             ModGameTests.TEST_FUNCTIONS.register("fishing_bag", () -> FishingGameTests::bag);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> RODS =
+            ModGameTests.TEST_FUNCTIONS.register("fishing_rods", () -> FishingGameTests::rods);
 
     private FishingGameTests() {}
 
@@ -82,6 +84,8 @@ final class FishingGameTests {
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         event.registerTest(BAG.getId(), new FunctionGameTestInstance(BAG.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+        event.registerTest(RODS.getId(), new FunctionGameTestInstance(RODS.key(),
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 120, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     // =====================================================================================
@@ -711,6 +715,88 @@ final class FishingGameTests {
             helper.assertTrue(FishingGameTests.class.getResource("/assets/kingdomsatwar/" + file) != null, "Datei fehlt: " + file);
         }
         helper.succeed();
+    }
+
+    /**
+     * Die Angeln der Mod (seit 0.87): jede da, mit Bild, Namen, Rezept, Haltbarkeit und den Verzauberungen der Angel; ihre
+     * Vorteile (Biss, Fangzone, Glück) wirken dort, wo sie sollen – und zusammen mit Köder, Drillmeister und „Köder“. Die
+     * Glutangel in der Lava: Der Fisch beißt doppelt so schnell.
+     */
+    private static void rods(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        JsonObject german = lang(helper, "de_de");
+        JsonObject english = lang(helper, "en_us");
+        for (io.github.sirschrolli.kingdomsatwar.fishing.RodType type : io.github.sirschrolli.kingdomsatwar.fishing.RodType.values()) {
+            ItemStack rod = new ItemStack(FishingItems.rod(type));
+            helper.assertTrue(rod.getItem() instanceof io.github.sirschrolli.kingdomsatwar.fishing.ModFishingRodItem item && item.type() == type
+                    && rod.canPerformAction(net.neoforged.neoforge.common.ItemAbilities.FISHING_ROD_CAST), "Keine Angel: " + type);
+            helper.assertTrue(rod.getMaxDamage() == type.durability() && rod.getMaxDamage() > new ItemStack(Items.FISHING_ROD).getMaxDamage() / 2,
+                    "Haltbarkeit von " + type + ": " + rod.getMaxDamage());
+            helper.assertTrue(rod.has(DataComponents.DAMAGE_RESISTANT) == type.fireproof(), "Feuerfest stimmt nicht: " + type);
+            helper.assertTrue(rod.is(ItemTags.FISHING_ENCHANTABLE) && rod.is(ItemTags.DURABILITY_ENCHANTABLE), "Nicht wie eine Angel verzauberbar: " + type);
+            helper.assertTrue(rod.isValidRepairItem(new ItemStack(Items.STRING)) == false, "Mit Schnur ausbesserbar: " + type);
+            for (JsonObject lang : List.of(german, english)) {
+                for (String key : List.of("item.kingdomsatwar." + type.id(), io.github.sirschrolli.kingdomsatwar.registry.ModItems.loreKey(type.id(), 1),
+                        io.github.sirschrolli.kingdomsatwar.registry.ModItems.loreKey(type.id(), 2))) {
+                    helper.assertTrue(lang.has(key), "Text fehlt: " + key);
+                }
+            }
+            for (String file : List.of("assets/kingdomsatwar/textures/item/" + type.id() + ".png", "assets/kingdomsatwar/textures/item/" + type.id() + "_cast.png",
+                    "assets/kingdomsatwar/items/" + type.id() + ".json", "data/kingdomsatwar/recipe/" + type.id() + ".json")) {
+                helper.assertTrue(FishingGameTests.class.getResource("/" + file) != null, "Datei fehlt: " + file);
+            }
+        }
+        helper.assertTrue(new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON)).isValidRepairItem(new ItemStack(Items.IRON_INGOT))
+                && new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.DRAGON))
+                        .isValidRepairItem(new ItemStack(io.github.sirschrolli.kingdomsatwar.registry.ModItems.DRACONIUM.get())), "Nicht mit dem Werkstoff ausbesserbar");
+
+        // die Vorteile: wo sie wirken und wo nicht
+        var water = new io.github.sirschrolli.kingdomsatwar.fishing.RodType.Place(Medium.WATER, false, false);
+        var night = new io.github.sirschrolli.kingdomsatwar.fishing.RodType.Place(Medium.WATER, true, false);
+        var lava = new io.github.sirschrolli.kingdomsatwar.fishing.RodType.Place(Medium.LAVA, false, false);
+        var voidPlace = io.github.sirschrolli.kingdomsatwar.fishing.RodType.Place.of(level, helper.absolutePos(BlockPos.ZERO), Medium.VOID);
+        helper.assertTrue(voidPlace.dark() && voidPlace.end(), "Die Leere ist nicht dunkel oder zählt nicht wie das End");
+        var types = io.github.sirschrolli.kingdomsatwar.fishing.RodType.class;
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT.haste(lava) == 0.5f
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT.haste(water) == 0.0f
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.SHADOW.haste(night) > 0.0f
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.SHADOW.haste(water) == 0.0f
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR.zone(voidPlace) > io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR.zone(water)
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.GOLD.luck(water) == 2
+                && io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON.zone(water) > 0.0f, "Die Vorteile der Angeln stimmen nicht: " + types);
+        helper.assertTrue(Fishing.zoneBonus(0, 0, null, water) == 0.0f && Math.abs(Fishing.zoneBonus(0, 3, null, water) - 0.3f) < 1.0e-4f
+                        && Math.abs(Fishing.zoneBonus(2, 1, io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON, water) - 0.3f) < 1.0e-4f
+                        && Fishing.zoneBonus(10, 3, io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT, lava) == Fishing.ZONE_CAP,
+                "Fangzone: " + Fishing.zoneBonus(2, 1, io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON, water));
+        helper.assertTrue(Math.abs(Fishing.haste(0.25f, 0.5f, 3) - (1.0f - 0.75f * 0.5f * 0.82f)) < 1.0e-4f && Fishing.haste(0.0f, 0.0f, 0) == 0.0f,
+                "Köder, Angel und Verzauberung wirken nicht zusammen: " + Fishing.haste(0.25f, 0.5f, 3));
+
+        // die Glutangel über der Lava
+        for (int x = 0; x <= 4; x++) {
+            for (int z = 0; z <= 4; z++) {
+                boolean inner = x >= 1 && x <= 3 && z >= 1 && z <= 3;
+                helper.setBlock(new BlockPos(x, 1, z), inner ? Blocks.LAVA : Blocks.STONE);
+            }
+        }
+        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        player.getAbilities().instabuild = false;
+        Vec3 stand = helper.absoluteVec(new Vec3(2.5, 2.0, 5.5));
+        player.snapTo(stand.x, stand.y, stand.z, 180.0f, 0.0f);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT)));
+        FishingHook hook = cast(level, player, helper.absoluteVec(new Vec3(2.5, 2.4, 2.5)));
+        helper.runAfterDelay(25, () -> {
+            try {
+                helper.assertTrue(hook.isAlive() && ((HookAccess) hook).kingdomsatwar$medium() == Medium.LAVA, "Der Haken treibt nicht auf der Lava");
+                helper.assertTrue(Math.abs(Fishing.haste(hook) - 0.5f) < 1.0e-4f, "Die Glutangel beschleunigt den Biss in der Lava nicht: " + Fishing.haste(hook));
+                // mit der Angel von Minecraft: kein Vorteil
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.FISHING_ROD));
+                helper.assertTrue(Fishing.haste(hook) == 0.0f, "Die Angel von Minecraft beschleunigt: " + Fishing.haste(hook));
+            } finally {
+                hook.discard();
+                level.getServer().getPlayerList().remove(player);
+            }
+            helper.succeed();
+        });
     }
 
     private static void flow(GameTestHelper helper) {

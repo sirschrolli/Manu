@@ -317,6 +317,11 @@ public final class ModTags {
         /** Die eigenen Fische des Angelns (seit 0.79): Aus jedem wird gebraten ein Fischfilet. */
         public static final TagKey<Item> FISH = mod("fish");
 
+        /** Womit sich eine Angel der Mod am Amboss ausbessern lässt (seit 0.87). */
+        public static TagKey<Item> rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType type) {
+            return mod("repairs_" + type.id());
+        }
+
         private static TagKey<Item> mod(String path) {
             return TagKey.create(Registries.ITEM, KingdomsAtWar.id(path));
         }

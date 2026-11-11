@@ -2,7 +2,10 @@ package io.github.sirschrolli.kingdomsatwar.registry;
 
 import io.github.sirschrolli.kingdomsatwar.fishing.FishItem;
 import io.github.sirschrolli.kingdomsatwar.fishing.FishSpecies;
+import io.github.sirschrolli.kingdomsatwar.fishing.ModFishingRodItem;
+import io.github.sirschrolli.kingdomsatwar.fishing.RodType;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +27,20 @@ import net.neoforged.neoforge.registries.DeferredItem;
 
 /**
  * Das Angeln (seit 0.79): ein Gegenstand je Fischart (die vier Fische von Minecraft bleiben, was sie sind) – seit 0.81 sind es
- * 996 –, das gebratene Fischfilet, die Köder und der Fischbeutel.
+ * 996 –, das gebratene Fischfilet, die Köder und der Fischbeutel; seit 0.87 sechs eigene Angeln.
  */
 public final class FishingItems {
     /** Reihenfolge im Kreativ-Reiter „Angeln“. */
     static final List<Supplier<? extends ItemLike>> TAB = new ArrayList<>();
     private static final Map<FishSpecies, DeferredItem<FishItem>> FISH = new LinkedHashMap<>();
+    private static final Map<RodType, DeferredItem<ModFishingRodItem>> RODS = new EnumMap<>(RodType.class);
+
+    // die Angeln (seit 0.87) stehen vorn im Reiter
+    static {
+        for (RodType type : RodType.values()) {
+            RODS.put(type, add(ModItems.ITEMS.registerItem(type.id(), p -> new ModFishingRodItem(type, p), p -> rodProperties(type, p))));
+        }
+    }
 
     /** Köderwurm: lockt die häufigen Fische der Flüsse und Seen, der Biss kommt schneller. */
     public static final DeferredItem<Item> BAIT_WORM = add(ModItems.ITEMS.registerSimpleItem("bait_worm",
@@ -66,6 +77,16 @@ public final class FishingItems {
         return FISH.get(species).get();
     }
 
+    /** Eine Angel der Mod. */
+    public static ModFishingRodItem rod(RodType type) {
+        return RODS.get(type).get();
+    }
+
+    /** Alle Angeln der Mod (für Modelle, Rezepte und Merkmale). */
+    public static List<DeferredItem<ModFishingRodItem>> rods() {
+        return List.copyOf(RODS.values());
+    }
+
     /** Alle eigenen Fische (für Modelle, Rezepte und Merkmale). */
     public static List<DeferredItem<FishItem>> fishes() {
         return List.copyOf(FISH.values());
@@ -74,6 +95,15 @@ public final class FishingItems {
     /** Alle schlichten Gegenstände neben den Fischen (flaches Modell). */
     public static List<DeferredItem<? extends Item>> flatItems() {
         return List.of(BAIT_WORM, BAIT_GLOW, COOKED_FILLET);
+    }
+
+    private static Item.Properties rodProperties(RodType type, Item.Properties properties) {
+        properties.durability(type.durability()).enchantable(type.enchantability()).repairable(ModTags.Items.rodRepair(type))
+                .rarity(type.rarity()).component(DataComponents.LORE, ModItems.lore(type.id(), 2));
+        if (type.fireproof()) {
+            properties.fireResistant();
+        }
+        return properties;
     }
 
     private static Item.Properties properties(FishSpecies species, Item.Properties properties) {

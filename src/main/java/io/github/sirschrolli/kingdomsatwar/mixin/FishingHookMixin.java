@@ -173,9 +173,9 @@ public abstract class FishingHookMixin extends Projectile implements HookAccess 
     @Inject(method = "catchingFish", at = @At("TAIL"))
     private void kingdomsatwar$afterCatching(BlockPos pos, CallbackInfo ci) {
         FishingHook self = (FishingHook) (Object) this;
-        // eine neue Wartezeit hat begonnen: Köder verkürzen sie
+        // eine neue Wartezeit hat begonnen: Köder, die Angeln der Mod und die Verzauberung „Köder“ verkürzen sie
         if (this.kingdomsatwar$idleBefore && this.timeUntilLured > 0) {
-            float haste = Fishing.baitHaste(self);
+            float haste = Fishing.haste(self);
             if (haste > 0.0f) {
                 this.timeUntilLured = Math.max(20, Math.round(this.timeUntilLured * (1.0f - haste)));
             }

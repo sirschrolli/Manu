@@ -1,6 +1,7 @@
 package io.github.sirschrolli.kingdomsatwar.client.rules;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower;
 import io.github.sirschrolli.kingdomsatwar.rules.WeaponPower;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -51,13 +52,13 @@ public final class RulesClient {
             float flat;
             if (enchantment.is(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS)) {
                 kind = "sharpness";
-                flat = 0.5f * level + 0.5f;
+                flat = 0.5f * level + 0.5f + EnchantPower.SHARPNESS_EXTRA * level;
             } else if (enchantment.is(net.minecraft.world.item.enchantment.Enchantments.SMITE)) {
                 kind = "smite";
-                flat = 2.5f * level;
+                flat = (2.5f + EnchantPower.SLAYER_EXTRA) * level;
             } else if (enchantment.is(net.minecraft.world.item.enchantment.Enchantments.BANE_OF_ARTHROPODS)) {
                 kind = "bane";
-                flat = 2.5f * level;
+                flat = (2.5f + EnchantPower.SLAYER_EXTRA) * level;
             } else {
                 continue;
             }
@@ -78,11 +79,17 @@ public final class RulesClient {
         if (stored == null || stored.isEmpty()) {
             return;
         }
+        boolean boosted = false;
         for (Holder<Enchantment> enchantment : stored.keySet()) {
+            boosted |= enchantment.unwrapKey().filter(EnchantPower.BOOSTED::contains).isPresent();
             enchantment.unwrapKey()
                     .filter(key -> key.identifier().getNamespace().equals(KingdomsAtWar.MODID))
                     .ifPresent(key -> event.getToolTip().add(Component.translatable(
                             "enchantment." + KingdomsAtWar.MODID + "." + key.identifier().getPath() + ".desc").withStyle(ChatFormatting.DARK_GRAY)));
+        }
+        // Schärfe, Schutz, Effizienz … wirken in dieser Mod etwas stärker (EnchantPower)
+        if (boosted) {
+            event.getToolTip().add(Component.translatable("tooltip.kingdomsatwar.enchant.boost").withStyle(ChatFormatting.DARK_GREEN));
         }
     }
 }

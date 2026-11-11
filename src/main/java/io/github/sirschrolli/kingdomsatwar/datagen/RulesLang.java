@@ -110,6 +110,30 @@ final class RulesLang {
         enchantment(text, "weight_curse", "Curse of Weight", "Fluch der Schwere",
                 "This armor drags you down: you move more slowly.",
                 "Diese Rüstung zieht dich nieder: Du bewegst dich langsamer.");
+        // seit 0.87
+        enchantment(text, "thunderstrike", "Thunderstrike", "Donnerschlag",
+                "Now and then a crackling bolt strikes the one you hit – it hurts on top of the blow.",
+                "Ab und zu fährt ein knisternder Funkenschlag in den Getroffenen – er schmerzt zusätzlich zum Hieb.");
+        enchantment(text, "venom", "Venom", "Giftzahn",
+                "Every hit poisons the target for a few seconds.",
+                "Jeder Treffer vergiftet das Ziel für ein paar Sekunden.");
+        enchantment(text, "steadfast", "Steadfast", "Standhaft",
+                "Blows and blasts push you back less far.",
+                "Hiebe und Druckwellen werfen dich weniger weit zurück.");
+        enchantment(text, "vitality", "Vitality", "Lebenskraft",
+                "One more heart for every level.",
+                "Ein Herz mehr für jede Stufe.");
+        enchantment(text, "owl_eye", "Owl's Eye", "Eulenauge",
+                "You see clearly even in the dark.",
+                "Du siehst auch im Dunkeln klar.");
+        enchantment(text, "leaping", "Leaping", "Hasenfuß",
+                "You jump higher and can fall further without getting hurt.",
+                "Du springst höher und fällst tiefer, ohne dich zu verletzen.");
+        enchantment(text, "angler", "Master Angler", "Drillmeister",
+                "A larger catch zone when reeling in a fish.",
+                "Eine größere Fangzone beim Drill.");
+        // stärkere Verzauberungen von Minecraft (seit 0.87)
+        text.add("tooltip.kingdomsatwar.enchant.boost", "Stronger than usual in Kingdoms at War", "In Kingdoms at War stärker als gewohnt");
     }
 
     /** Name einer Kampfdimension und was man beim Hineinziehen, beim Sieg und bei der Niederlage liest. */

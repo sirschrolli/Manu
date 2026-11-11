@@ -468,6 +468,10 @@ public class ModModelProvider extends ModelProvider {
         for (var item : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.flatItems()) {
             flat(items, item.get());
         }
+        // die Angeln (0.87): ruhend mit Schnur und Haken, ausgeworfen gebogen – wie die Angel von Minecraft
+        for (var rod : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rods()) {
+            items.generateFishingRod(rod.get());
+        }
         // der Fischbeutel (0.81): im Inventar das Bild, in der Hand prall und plastisch
         relief(items, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.FISH_BAG.get());
         MonsterGearModels.register(items);

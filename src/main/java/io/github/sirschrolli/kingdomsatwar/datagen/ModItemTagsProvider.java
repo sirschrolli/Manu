@@ -323,7 +323,27 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.FOODS_RAW_FISH).addTag(ModTags.Items.FISH);
         add(Tags.Items.FOODS_COOKED_FISH, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
         add(ItemTags.CAT_FOOD, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
+        // die Angeln (seit 0.87): Köder, Glück des Meeres, Drillmeister, Haltbarkeit, Reparatur … wie bei der Angel von Minecraft
+        for (var rod : io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rods()) {
+            tag(ItemTags.FISHING_ENCHANTABLE).add(rod.key());
+            tag(ItemTags.DURABILITY_ENCHANTABLE).add(rod.key());
+            tag(Tags.Items.TOOLS_FISHING_ROD).add(rod.key());
+            tag(Tags.Items.TOOLS).add(rod.key());
+        }
+        tag(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON)).add(vanilla(net.minecraft.world.item.Items.IRON_INGOT));
+        tag(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GOLD)).add(vanilla(net.minecraft.world.item.Items.GOLD_INGOT));
+        add(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.DRAGON), ModItems.DRACONIUM);
+        add(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.SHADOW),
+                io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT);
+        add(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT),
+                io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE);
+        add(ModTags.Items.rodRepair(io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR),
+                io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD);
         add(ItemTags.OCELOT_FOOD, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.COOKED_FILLET);
+    }
+
+    private static net.minecraft.resources.ResourceKey<Item> vanilla(Item item) {
+        return net.minecraft.core.registries.BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow();
     }
 
     @SafeVarargs

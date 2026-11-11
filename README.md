@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.86.0 – Weitere Wesen.** Vier weitere Tiere ziehen in die Biome ein – wieder jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. In den **Aschefeldern** kriecht der **Glutsalamander** über Asche und Lava: schwarz wie erkaltete Schlacke, mit Flecken und Rissen, die **wie Glut leuchten** – auch im Dunkeln (orangerot und als gelb glühender Goldsalamander). Er ist feuerfest, **läuft über Lava wie über festen Boden**, sonnt sich an Lava und Magma und glüht dann heller; wer ihn schlägt, **verbrennt sich an seiner Haut**, Wasser verträgt er nicht, und mit Magmacreme zieht man Junge auf. Im **Nebelmoor** und in den Sümpfen lauert der **Moorschnapper**, eine riesige Schnappschildkröte mit gezacktem, bemoostem Panzer und Hakenschnabel: Reglos liegt er im flachen Wasser, nur Panzer und Kopf ragen heraus – und **schnappt blitzschnell zu**, wenn Spieler, Monster, Frösche, Hasen oder Hühner vor seiner Nase vorbeikommen. Wer sich nähert, den warnt er mit einem **Fauchen**; getroffen **zieht er sich in den Panzer zurück**, und dann richtet man kaum etwas aus. An der **Korallenküste** und in den Mangrovensümpfen waten **Flamingos** in Scharen durchs flache Wasser (Rosaflamingo und kräftig roter Kubaflamingo): Sie **gründeln mit dem Kopf nach unten**, ruhen **auf einem Bein**, stecken nachts den Kopf ins Gefieder und **fliegen auf**, wenn man ihnen zu nahe kommt – mit vorgestrecktem Hals, nach hinten gestreckten Beinen und rot-schwarzen Schwingen. Und über den **Königsauen**, Blumenwäldern, Wiesen, Sonnenblumenebenen und Kirschhainen gaukeln **Schmetterlinge** in **sechs Arten** (Tagpfauenauge, Zitronenfalter, Schwalbenschwanz, Bläuling, Admiral und Monarch): Sie setzen sich auf Blumen und Gräser, öffnen und schließen dort langsam die Flügel und flattern auf, wenn man ihnen zu nahe kommt; nachts und bei Regen sitzen sie still.
+> **Testversion 0.87.0 – Kampf, Wurf, Zauber und Angeln.** Die **Drachen** finden ihre Gegner jetzt sicher und kämpfen sauber: Eigene Drachen **verteidigen ihren Herrn von sich aus** gegen Monster, die ihn oder sie angreifen, kämpfen am Boden mit gezieltem Biss – auch nach unten und nach oben – und Feueratem, steigen gegen Schützen auf Säulen, gegen Flieger und im Wald in die Luft, kreisen dort, stoßen herab und speien aus der Luft. Sie halten Abstand zu ihrem Herrn, **landen sauber neben ihm** statt auf ihm und fliegen keine weiten Schleifen mehr. Die **Drachen-Bosse** fliegen über Mauern, wenn sie am Boden nicht weiterkommen, und treten beim Drehen auf der Stelle. **Speere, Lanzen und Dreizacke** fliegen jetzt **schnurgerade mit der Spitze voran** – auch im Bogen und beim Wurf aus dem Laufen –, und Glaciaras Eisspeer und Eiszapfen sind echte Modelle aus Eis. **Sieben neue Verzauberungen** gibt es am Zaubertisch und beim Bibliothekar: **Donnerschlag** (ein knisternder Funkenschlag fährt in den Getroffenen), **Giftzahn**, **Standhaft**, **Lebenskraft** (mehr Herzen), **Eulenauge** (Nachtsicht), **Hasenfuß** (höher springen, tiefer fallen) und **Drillmeister** (größere Fangzone beim Angeln). Die **Verzauberungen von Minecraft wirken etwas stärker** – Schärfe, Bann, Nemesis, Harpune, Stärke, Schutz, Effizienz und Köder –, aber nicht übertrieben. Und es gibt **sechs eigene Angeln**: die robuste **Eisenangel**, die glückbringende **Goldangel**, die **Drachenangel**, die alles ein wenig besser kann, die **Schattenangel** für Nacht und Dunkel, die **Glutangel** für die Lava und die **Sternenangel** für das End und die Leere.
+> In 0.86 kamen **weitere Wesen**: Vier weitere Tiere zogen in die Biome ein – wieder jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. In den **Aschefeldern** kriecht der **Glutsalamander** über Asche und Lava: schwarz wie erkaltete Schlacke, mit Flecken und Rissen, die **wie Glut leuchten** – auch im Dunkeln (orangerot und als gelb glühender Goldsalamander). Er ist feuerfest, **läuft über Lava wie über festen Boden**, sonnt sich an Lava und Magma und glüht dann heller; wer ihn schlägt, **verbrennt sich an seiner Haut**, Wasser verträgt er nicht, und mit Magmacreme zieht man Junge auf. Im **Nebelmoor** und in den Sümpfen lauert der **Moorschnapper**, eine riesige Schnappschildkröte mit gezacktem, bemoostem Panzer und Hakenschnabel: Reglos liegt er im flachen Wasser, nur Panzer und Kopf ragen heraus – und **schnappt blitzschnell zu**, wenn Spieler, Monster, Frösche, Hasen oder Hühner vor seiner Nase vorbeikommen. Wer sich nähert, den warnt er mit einem **Fauchen**; getroffen **zieht er sich in den Panzer zurück**, und dann richtet man kaum etwas aus. An der **Korallenküste** und in den Mangrovensümpfen waten **Flamingos** in Scharen durchs flache Wasser (Rosaflamingo und kräftig roter Kubaflamingo): Sie **gründeln mit dem Kopf nach unten**, ruhen **auf einem Bein**, stecken nachts den Kopf ins Gefieder und **fliegen auf**, wenn man ihnen zu nahe kommt – mit vorgestrecktem Hals, nach hinten gestreckten Beinen und rot-schwarzen Schwingen. Und über den **Königsauen**, Blumenwäldern, Wiesen, Sonnenblumenebenen und Kirschhainen gaukeln **Schmetterlinge** in **sechs Arten** (Tagpfauenauge, Zitronenfalter, Schwalbenschwanz, Bläuling, Admiral und Monarch): Sie setzen sich auf Blumen und Gräser, öffnen und schließen dort langsam die Flügel und flattern auf, wenn man ihnen zu nahe kommt; nachts und bei Regen sitzen sie still.
 > In 0.85 kamen **neue Wesen in den eigenen Biomen**: Vier Tiere leben seitdem dort, wo bisher keins war – jedes mit eigenem Modell, eigenen Bewegungen, eigenem Verhalten und eigenen Klängen. Auf den **Frostgipfeln** schleicht der **Schneeleopard**: rauchweiß mit dunklen Rosetten und einem buschigen Schwanz, fast so lang wie er selbst. Er duckt sich, pirscht an Ziegen und Hasen heran und **springt sie aus bis zu sieben Blöcken an**; mit rohem Hammel-, Hasen- oder Hirschfleisch lässt er sich **zähmen** und folgt dir dann, kämpft an deiner Seite und legt sich neben dich (zwei Fellarten, auch als Junges). Im **Urhain** zieht der **Urelch** über die Lichtungen: riesig, mit hohem Buckel und Kinnbart, die Bullen mit gewaltigen **bemoosten Schaufeln, an denen Leuchtbeeren glühen**. Zähm ihn, leg ihm einen **Sattel** auf und schnall ihm eine **Truhe** um – dann trägt er dich und dein Gepäck; greift man einen wilden Bullen an, **stürmt er mit gesenkten Schaufeln** los. An der **Sturmküste** kreisen **Sturmmöwen** (hell und als dunkle Mantelmöwe) über Strand und Brandung, landen auf Pfählen, Felsen und dem Wasser, picken und lachen – und wer einen gewöhnlichen **Fisch in der Hand** hält, dem **schnappt eine Möwe ihn weg** und fliegt damit davon (triff sie, dann lässt sie ihn fallen; seltene und legendäre Fische sind sicher). Über den **Felsschluchten** kreist der **Greif**: vorn Adler mit weißem Kopf, gelbem Hakenschnabel und schwarzen Krallen, hinten Löwe, mit Schwingen von **fast fünf Blöcken Spannweite** (golden und als Rostgreif). Er sitzt aufrecht wie ein Wappentier auf den höchsten Felsnadeln, jagt Hasen, Hühner und Gürteltiere im **Sturzflug** und frisst sie nach der Landung; wer ihn angreift, auf den **stößt er immer wieder aus der Luft herab**, und wer ihm beim Ruhen zu nahe kommt, den warnt er mit einem Schrei.
 > In 0.84 kam **die Waffenkammer**: Dreizehn neue Stücke zum Kämpfen, Graben und Blocken – alle als **3D-Modelle**, richtig gehalten in der eigenen Sicht und mit F5 von vorn und hinten, die Schilde auch beim Blocken. **Fünf Waffen:** die **Stahl-Hellebarde** (reicht 4,5 Blöcke weit und **durchbohrt** bis zu zwei Gegner hinter dem Ziel), der **Draconium-Kriegshammer** (Benutzen halten und loslassen: der **Erdstoß** schleudert alle Gegner ringsum fort und setzt sie in Brand), der **Nachtstahl-Dolch** (sehr schnell, **von hinten doppelter Schaden**), das **Abyssit-Großschwert** (ein voller Schlag **spaltet** alles im Halbkreis vor dir) und die **Stahl-Doppelaxt** (legt Schilde **zehn Sekunden** lahm). **Vier Spitzhacken:** der **Bergmannshammer** (baut **drei mal drei** Blöcke ab), die **Glutspitzhacke** (Erze kommen **geschmolzen** heraus), der **Adernbrecher** (bricht eine **ganze Erzader** auf einmal) und der **Erzspürer** (Erze im Umkreis **leuchten durch die Wände**). **Vier Schilde:** der **Stahl-Rundschild** (gleich beim Heben geblockt ist **pariert** – der Angreifer fliegt zurück und ist geschwächt), der **Drachenschild** (wer dagegen schlägt, **brennt**), der **Turmschild** (deckt auch die **Flanken** und steht fest, macht aber etwas langsamer) und der **Spiegelschild** (Geschosse **prallen zurück** – dorthin, wohin du schaust).
 > In 0.83 kamen **sechshundert neue Fische**: **628 neue Arten** beißen jetzt in den Biomen: acht mehr in jedem der 39 eigenen Biome der Mod (dort sind es nun **zwanzig**), vier oder fünf mehr in jedem Biom von Minecraft (**zehn oder zwölf**) – auch in den Höhlen, in der Lava des Nethers und in der Leere des Ends. Mit ihnen kommen **19 neue Gestalten** an den Haken: Dorsch und Schellfisch, Hering und Alse, Schmerlen mit langen Barteln, Sonnenbarsche, giftstachelige **Rotfeuerfische**, Doktorfische mit Skalpell, Lipp- und Papageifische mit Schnabel, Drückerfische, **Hammerhaie**, **Sägefische**, Sterngucker, **Seeschlangen und Lindwürmer**, bunte Anemonenfische, Knurrhähne mit Flügelflossen, **Seeigel**, **Muscheln** (manche mit Perle), Seegurken, leuchtende Fadenschnecken und der **Fangkrebs**. Jedes Biom hat jetzt **zwei große Fänge** (episch). Zusammen sind es **1628 Arten** – jede mit eigenem Bild, Namen, Notiz im Fischbuch und eigener Wirkung, keine zwei wirken gleich. Außerdem: Das **Angel-Minispiel** wird nur noch mit der **Maus** gespielt – Maustaste halten hebt die Fangzone wie bisher, und **jeder Klick gibt ihr einen kleinen Schubs nach oben**, so lässt sie sich auch antippen; die Leertaste hat ausgedient.
@@ -381,6 +382,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Die Waffenkammer** (0.84): fünf Waffen (Stahl-Hellebarde, Draconium-Kriegshammer mit Erdstoß, Nachtstahl-Dolch, Abyssit-Großschwert, Stahl-Doppelaxt), vier Spitzhacken (Bergmannshammer 3×3, Glutspitzhacke, Adernbrecher, Erzspürer) und vier Schilde (Stahl-Rundschild mit Parade, Drachenschild, Turmschild, Spiegelschild) – alle in 3D, jede mit eigener Fähigkeit | ✅ fertig |
 | **Neue Wesen in den eigenen Biomen** (0.85): Schneeleopard (Frostgipfel; pirscht, springt an, zähmbar), Urelch (Urhain; Bullen mit bemoosten, leuchtenden Schaufeln, Sattel und Truhe, Ansturm), Sturmmöwe (Sturmküste; Schwärme, schwimmt, klaut Fisch aus der Hand) und Greif (Felsschluchten; sitzt auf Felsnadeln, jagt im Sturzflug) – je mit Modell, Animationen, Verhalten, Klängen und Spawn-Ei | ✅ fertig |
 | **Weitere Wesen** (0.86): Glutsalamander (Aschefelder; feuerfest, läuft über Lava, glüht, verbrennt Angreifer), Moorschnapper (Nebelmoor und Sümpfe; lauert im Wasser, schnappt zu, faucht, zieht sich in den Panzer zurück), Flamingos (Korallenküste und Mangroven; Scharen, gründeln, ruhen auf einem Bein, fliegen auf) und Schmetterlinge (Königsauen, Blumenwälder, Wiesen; sechs Arten, setzen sich auf Blumen) – je mit Modell, Animationen, Verhalten, Klängen und Spawn-Ei | ✅ fertig |
+| **Kampf, Wurf, Zauber und Angeln** (0.87): Drachen finden ihre Gegner (Wache für den Herrn, Boden- und Luftkampf, gezielter Biss, sauberes Landen neben dem Herrn), Bosse fliegen über Mauern; Speere, Lanzen und Dreizacke fliegen mit der Spitze voran; sieben neue Verzauberungen am Zaubertisch (Donnerschlag, Giftzahn, Standhaft, Lebenskraft, Eulenauge, Hasenfuß, Drillmeister), etwas stärkere Verzauberungen von Minecraft; sechs eigene Angeln (Eisen, Gold, Drache, Schatten, Glut, Stern) | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -441,7 +443,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.86.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.87.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -449,7 +451,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.86.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.87.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1269,6 +1271,17 @@ und der Schlüpfling gehört dem, der dabei war, und folgt ihm. **Drachen sind f
 Spieler an, verteidigen ihren Herrn und verschonen ihn, seine Soldaten und seine Tiere selbst nach einem
 versehentlichen Treffer. Ein Drache aus dem Spawn-Ei gehört dem, der das Ei benutzt.
 
+**Im Kampf (seit 0.87).** Ein eigener Drache, der seinem Herrn folgt, **hält Wache**: Greift ein Monster den Herrn oder den
+Drachen an – auch ein Schütze aus der Ferne –, stellt er sich ihm von selbst (bis 20 Blöcke um den Herrn). Am Boden läuft
+er heran, beißt **gezielt** – Kopf und Hals senken sich zu kleinen Gegnern und heben sich zu größeren –, weicht zurück,
+wenn ihm einer unter den Hals gerät, und speit Feuer, Frost oder Gift, sobald er den Gegner vor sich hat. Steht der Gegner
+erhöht (auf einer Säule, einer Mauer), fliegt er selbst oder findet der Drache keinen Weg (Wald, Gräben), **steigt er auf**:
+Er kreist um den Gegner, speit aus der Luft und stößt herab, um zuzubeißen. Folgt er seinem Herrn, fliegt er ohne weite
+Schleifen herbei, bremst rechtzeitig, hält Abstand und **landet neben ihm**, nicht auf ihm. Die Drachen-Bosse **fliegen über
+Mauern**, wenn sie am Boden nicht weiterkommen, und treten beim Drehen auf der Stelle, statt zu gleiten.
+
+![Drachen im Kampf und gerade fliegende Speere (0.87)](docs/bilder/drachen_kampf_087.jpg)
+
 | Drachenart | Zum Ausbrüten … | Odem |
 |---|---|---|
 | Feuerdrache | nahe Lava oder Feuer legen | Flammen, setzen in Brand |
@@ -1567,14 +1580,45 @@ festen Betrag dazu – Schärfe V drei Punkte, gleich ob die Waffe 7 oder 22 Sch
 das kaum zu spüren, und ihre Fähigkeiten blieben davon ganz unberührt. Jetzt gilt:
 
 - **Im Nahkampf** wirkt eine Verzauberung auf jeder Waffe der Mod, die stärker ist als ein Diamantschwert, im selben
-  Verhältnis wie dort: Der Betrag wächst mit dem Schaden der Waffe (auf einer Waffe mit 14 Schaden gibt Schärfe V sechs
-  Punkte statt drei). Das gilt auch für **Drachentöter**.
+  Verhältnis wie dort: Der Betrag wächst mit dem Schaden der Waffe (auf einer Waffe mit 14 Schaden gibt Schärfe V doppelt
+  so viel wie auf dem Diamantschwert). Das gilt auch für **Drachentöter**.
 - **Fähigkeiten** – der geworfene Lichtspeer, die Lichtwelle und die Lichtsäule des Zepters und des Speers des Schöpfers,
   die Sterne der Sternenlanze, die Weltenbrocken des Weltenspeers, der Bann des Bannhammers – treffen um denselben Anteil
-  härter, den ein Diamantschwert durch die Verzauberung gewinnt: mit Schärfe V um drei Siebtel (43 %), mit Bann V gegen
-  Untote um fast das Doppelte.
-- Der Tooltip der Waffe zeigt, was die Verzauberung auf ihr wirklich bringt („+6 Schaden durch Schärfe … und ihre
-  Fähigkeiten treffen 43 % härter“). Waffen von Minecraft und anderen Mods bleiben, wie sie sind.
+  härter, den ein Diamantschwert durch die Verzauberung gewinnt: mit Schärfe V um 61 %, mit Bann V gegen Untote auf gut
+  das Dreifache.
+- Der Tooltip der Waffe zeigt, was die Verzauberung auf ihr wirklich bringt („+8,5 Schaden durch Schärfe … und ihre
+  Fähigkeiten treffen 61 % härter“). Waffen von Minecraft und anderen Mods bekommen nur den Zuschlag unten.
+
+**Sieben Verzauberungen am Zaubertisch (seit 0.87).** Diese gibt es am Zaubertisch, beim Bibliothekar und auf zufällig
+verzauberter Beute; ihr Buch erklärt im Tooltip, was sie tun.
+
+| Verzauberung | für | Wirkung |
+|---|---|---|
+| Donnerschlag I–II | Schwerter, Äxte | bei 15 % (II: 22 %) der Treffer fährt ein knisternder Funkenschlag von oben in den Getroffenen – 2,5 (II: 4) Schaden zusätzlich zum Hieb |
+| Giftzahn I–II | Schwerter, Äxte | Treffer vergiften für zwei bis drei (II: drei bis viereinhalb) Sekunden |
+| Standhaft I–III | Brustpanzer | 15 % weniger Rückstoß je Stufe |
+| Lebenskraft I–III | Brustpanzer | ein Herz mehr je Stufe (nicht zusammen mit Standhaft) |
+| Eulenauge | Helme | Nachtsicht, solange der Helm getragen wird – ruhig, ohne Partikel und ohne Flackern |
+| Hasenfuß I–II | Stiefel | höher springen (mit II über Zäune), je Stufe ein Block mehr Fallhöhe ohne Schaden |
+| Drillmeister I–III | Angeln | die Fangzone im Drill wird je Stufe um 10 % größer |
+
+Feuer (Verbrennung), Frost (Frostklinge), Donner und Gift schließen einander aus – eine Klinge trägt nur ein Element.
+
+![Donnerschlag und Eulenauge](docs/bilder/verzauberungen_087.jpg)
+
+**Die Verzauberungen von Minecraft wirken etwas stärker (seit 0.87)** – spürbar, aber nicht übertrieben; ihre Bücher
+sagen „In Kingdoms at War stärker als gewohnt“:
+
+| Verzauberung | bei Minecraft | hier |
+|---|---|---|
+| Schärfe | +0,5 Schaden je Stufe und 0,5 (V: +3) | +0,75 je Stufe und 0,5 (V: +4,25) |
+| Bann, Nemesis der Gliederfüßer, Harpune | +2,5 je Stufe gegen ihre Ziele (V: +12,5) | +3 je Stufe (V: +15) |
+| Stärke | +0,5 je Stufe und 0,5 auf den Grundschaden des Pfeils | +0,65 je Stufe und 0,5 – ein voll gespannter Schuss mit Stärke V trifft um 15 % härter |
+| Schutz, Feuerschutz, Explosionsschutz, Schusssicher, Federfall | – | wirken um 15 % stärker; mehr als 80 % hält Rüstung wie bei Minecraft nie ab |
+| Effizienz | – | zusätzlich 6 % schneller abbauen je Stufe |
+| Köder | – | zusätzlich beißt der Fisch je Stufe 6 % schneller |
+
+Das gilt für Spieler wie für Ritter, Soldaten und Monster mit verzauberten Waffen und Rüstungen.
 
 ### Münzen, Siedlung und Krönung
 
@@ -1837,6 +1881,22 @@ schwimmen nur Dorsche, Schwertwale ziehen eher durch kalte Gewässer, Karettschi
 ![Tausend Fische: das Fischbuch mit den Gewässern, die Arten der Biome, der Fischbeutel und der Fischer](docs/bilder/fischbeutel.jpg)
 
 ![Sechshundert neue Fische: Hammerhai, Seeschlange und Fangkrebs im Drill, das Fischbuch mit zwanzig Arten je Biom](docs/bilder/neue_fische_083.jpg)
+
+**Die Angeln (seit 0.87).** Neben der Angel von Minecraft gibt es sechs eigene – jede mit ihrer Stärke. Gebaut werden sie
+wie die Angel von Minecraft (zweimal der Werkstoff schräg nach oben, unten links der Griff, rechts zwei Fäden), ausgebessert
+am Amboss mit dem Werkstoff; Köder, Glück des Meeres, Drillmeister, Haltbarkeit und Reparatur wirken auf ihnen wie gewohnt,
+und ihre Vorteile kommen zu Ködern und Verzauberungen hinzu.
+
+| Angel | Werkstoff und Griff | Haltbarkeit | Stärke |
+|---|---|---|---|
+| **Eisenangel** | Eisenbarren, Stock | 192 (Minecraft: 64) | die Fangzone im Drill ist 10 % größer – leichter einzuholen |
+| **Goldangel** | Goldbarren, Stock | 48 | +2 Glück: seltenere Fische, öfter ein Schatz, weniger Kram; sehr gut zu verzaubern |
+| **Drachenangel** | Draconium, Drachenschuppe | 640, verbrennt nicht | von allem etwas: der Biss kommt 30 % schneller, die Fangzone ist 15 % größer, +1 Glück |
+| **Schattenangel** | Nachtstahlbarren, Mondsilberbarren | 384 | im Dunkeln (nachts, unter Tage, in der Leere): Biss 40 % schneller, Fangzone 10 % größer, +2 Glück |
+| **Glutangel** | Lohenruten, Glutwurmschuppe | 512, verbrennt nicht | in der Lava: der Fisch beißt doppelt so schnell, die Fangzone ist 25 % größer, +1 Glück |
+| **Sternenangel** | Sternsplitter, Stock | 512 | im End und in der Leere: Biss doppelt so schnell, Fangzone 25 % größer; überall +1 Glück |
+
+![Die sechs Angeln: groß, in der Hand und ausgeworfen über Wasser und Lava](docs/bilder/angeln_087.jpg)
 
 Geangelt wird wie immer – auswerfen, warten, beim Biss anziehen. Aber seit 0.79 hebt man den Fisch nicht mehr einfach
 heraus: Er wird **gedrillt**. Und es beißt überall etwas anderes: seit 0.83 **1628 Arten** in zehn Kapiteln – in jedem
@@ -3751,7 +3811,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.86.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.87.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3886,13 +3946,14 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      eigenen Fähigkeiten (Durchbohren, Erdstoß, Stich von hinten, Spaltschlag, drei mal drei, Schmelzen, ganze Adern,
      Erze durch Wände sehen, Parade, Feuer, Flankenschutz, zurückgeworfene Geschosse);
    - **0.85 – Neue Wesen in den eigenen Biomen** (fertig): Schneeleopard, Urelch, Sturmmöwe und Greif;
-   - zuletzt **0.86 – Weitere Wesen** (fertig): Glutsalamander, Moorschnapper, Flamingos und Schmetterlinge.
+   - **0.86 – Weitere Wesen** (fertig): Glutsalamander, Moorschnapper, Flamingos und Schmetterlinge;
+   - zuletzt **0.87 – Kampf, Wurf, Zauber und Angeln** (fertig): Drachen, die ihre Gegner sicher finden und sauber
+     kämpfen, Speere und Dreizacke, die mit der Spitze voran fliegen, sieben neue und etwas stärkere Verzauberungen und
+     sechs eigene Angeln.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** **0.87** – Drachen, die ihre Gegner sicher finden und sauber kämpfen, Speere und
-   Dreizacke, die schnurgerade mit der Spitze voran fliegen, neue und etwas stärkere Verzauberungen und eigene Angeln aus
-   verschiedenen Materialien; danach plastische Modelle für alle Gegenstände; das
+   **Als Nächstes geplant:** plastische Modelle für alle Gegenstände; das
    **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –;
    schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
 

@@ -84,7 +84,12 @@ public final class Fishing {
     }
 
     /** Ein laufender Drill. */
-    private record Session(int id, FishingHook hook, FishSpecies species, Medium medium, InteractionHand hand, boolean chest, long start) {}
+    private record Session(int id, FishingHook hook, FishSpecies species, Medium medium, InteractionHand hand, boolean chest, long start, int luck) {}
+
+    /** Um wie viel größer die Fangzone je Stufe Drillmeister wird (seit 0.87). */
+    public static final float ANGLER_ZONE = 0.1f;
+    /** Mehr als so viel größer wird die Fangzone nie (Glück, Drillmeister und Angel zusammen). */
+    public static final float ZONE_CAP = 0.6f;
 
     private static final Map<UUID, Session> SESSIONS = new HashMap<>();
     private static int nextId = 1;
@@ -117,10 +122,46 @@ public final class Fishing {
         return main.canPerformAction(ItemAbilities.FISHING_ROD_CAST) ? player.getOffhandItem() : main;
     }
 
-    /** Um welchen Anteil ein Köder die Wartezeit dieses Hakens verkürzt. */
-    public static float baitHaste(FishingHook hook) {
+    /** Die Angel in der Hand dieses Spielers (die Hand, die auswirft). */
+    public static ItemStack rodStack(Player player) {
+        ItemStack main = player.getMainHandItem();
+        return main.canPerformAction(ItemAbilities.FISHING_ROD_CAST) ? main : player.getOffhandItem();
+    }
+
+    /** Welche Angel der Mod das ist ({@code null} für die Angel von Minecraft und alle anderen). */
+    public static @Nullable RodType rodType(ItemStack rod) {
+        return rod.getItem() instanceof ModFishingRodItem item ? item.type() : null;
+    }
+
+    /** Der Angelplatz dieses Hakens, wie ihn die Angeln der Mod sehen. */
+    public static RodType.Place place(FishingHook hook) {
+        return RodType.Place.of(hook.level(), hook.blockPosition(), ((HookAccess) hook).kingdomsatwar$medium());
+    }
+
+    /**
+     * Um welchen Anteil die Wartezeit dieses Hakens kürzer ist: Köder, die Angel selbst (seit 0.87) und die Verzauberung
+     * „Köder“ (zusätzlich zu dem, was sie bei Minecraft ohnehin abzieht) wirken nacheinander.
+     */
+    public static float haste(FishingHook hook) {
         Player owner = hook.getPlayerOwner();
-        return owner == null ? 0.0f : Bait.of(baitStack(owner)).haste();
+        if (owner == null) {
+            return 0.0f;
+        }
+        ItemStack rod = rodStack(owner);
+        RodType type = rodType(rod);
+        return haste(Bait.of(baitStack(owner)).haste(), type == null ? 0.0f : type.haste(place(hook)),
+                io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.level(rod, net.minecraft.world.item.enchantment.Enchantments.LURE));
+    }
+
+    /** Köder, Angel und Verzauberung „Köder“ zusammen (jede kürzt, was die vorige übrig lässt). */
+    public static float haste(float bait, float rod, int lure) {
+        float lureHaste = io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.LURE_EXTRA * lure;
+        return 1.0f - (1.0f - bait) * (1.0f - rod) * (1.0f - lureHaste);
+    }
+
+    /** Um wie viel größer die Fangzone im Drill ist: Glück, Drillmeister und die Angel der Mod zusammen. */
+    public static float zoneBonus(int luck, int angler, @Nullable RodType type, RodType.Place place) {
+        return Math.min(ZONE_CAP, Math.min(0.2f, 0.05f * luck) + ANGLER_ZONE * angler + (type == null ? 0.0f : type.zone(place)));
     }
 
     // =====================================================================================
@@ -134,7 +175,10 @@ public final class Fishing {
     public static @Nullable Integer onReel(ServerPlayer player, FishingHook hook, ItemStack rod, int hookLuck, Medium medium) {
         ServerLevel level = player.level();
         RandomSource random = player.getRandom();
-        int luck = Math.max(0, hookLuck + Math.round(player.getLuck()));
+        // die Angeln der Mod bringen hier ihr eigenes Glück mit (seit 0.87)
+        RodType type = rodType(rod);
+        RodType.Place place = RodType.Place.of(level, hook.blockPosition(), medium);
+        int luck = Math.max(0, hookLuck + Math.round(player.getLuck()) + (type == null ? 0 : type.luck(place)));
         InteractionHand hand = player.getMainHandItem() == rod ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
         ItemStack baitStack = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
         Bait bait = Bait.of(baitStack);
@@ -158,10 +202,11 @@ public final class Fishing {
         }
         // eine Truhe treibt mit: im Wasser nur über offenem Wasser (wie die Schätze von Minecraft), sonst immer möglich
         boolean chest = (medium != Medium.WATER || hook.isOpenWaterFishing()) && random.nextFloat() < Math.min(0.45f, 0.10f + 0.05f * luck);
-        Session session = new Session(nextId++, hook, species, medium, hand, chest, level.getGameTime());
+        Session session = new Session(nextId++, hook, species, medium, hand, chest, level.getGameTime(), luck);
         SESSIONS.put(player.getUUID(), session);
+        int angler = io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.level(rod, io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.ANGLER);
         ModNetwork.send(player, new FishingStartPayload(session.id, species.ordinal(), medium.ordinal(), log(player).has(species), chest,
-                Math.min(0.2f, 0.05f * luck)));
+                zoneBonus(luck, angler, type, place)));
         return 0;
     }
 
@@ -291,8 +336,7 @@ public final class Fishing {
         List<ItemStack> items = new ArrayList<>();
         items.add(new ItemStack(species.item()));
         if (chest) {
-            int luck = Math.max(0, Math.round(player.getLuck()));
-            items.addAll(loot(level, treasureTable(session.medium), player, hook, rod, luck));
+            items.addAll(loot(level, treasureTable(session.medium), player, hook, rod, session.luck));
         }
         burst(level, hook, session.medium, 16);
         level.playSound(null, hook.getX(), hook.getY(), hook.getZ(), splashSound(session.medium), SoundSource.NEUTRAL, 0.6f, 1.0f);
@@ -506,7 +550,7 @@ public final class Fishing {
         Session session = SESSIONS.get(player.getUUID());
         if (session != null) {
             SESSIONS.put(player.getUUID(), new Session(session.id, session.hook, session.species, session.medium, session.hand, session.chest,
-                    session.start - ticks));
+                    session.start - ticks, session.luck));
         }
     }
 }

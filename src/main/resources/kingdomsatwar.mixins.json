@@ -4,6 +4,7 @@
   "package": "io.github.sirschrolli.kingdomsatwar.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "EnchantmentHelperMixin",
     "FishingHookMixin",
     "RangedAttributeMixin",
     "ServerPlayerMixin"

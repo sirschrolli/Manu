@@ -56,11 +56,22 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  *     <li><b>Windschritt</b> (Stiefel, I–II): schneller laufen</li>
  *     <li><b>Fluch der Schwere</b> (Rüstung): langsamer – ein Fluch, der auf erbeuteter Rüstung lauern kann</li>
  * </ul>
+ * Seit 0.87 dazu sieben, die es auch am Zaubertisch und beim Bibliothekar gibt ({@link #TABLE}):
+ * <ul>
+ *     <li><b>Donnerschlag</b> (Schwerter, Äxte, I–II): manchmal fährt ein Funkenschlag in den Getroffenen</li>
+ *     <li><b>Giftzahn</b> (Schwerter, Äxte, I–II): Treffer vergiften</li>
+ *     <li><b>Standhaft</b> (Brustpanzer, I–III): kaum noch zurückgestoßen</li>
+ *     <li><b>Lebenskraft</b> (Brustpanzer, I–III): mehr Herzen</li>
+ *     <li><b>Eulenauge</b> (Helme, I): sieht im Dunkeln</li>
+ *     <li><b>Hasenfuß</b> (Stiefel, I–II): höher springen, tiefer fallen ohne Schaden</li>
+ *     <li><b>Drillmeister</b> (Angeln, I–III): eine größere Fangzone im Drill</li>
+ * </ul>
  */
 public final class ModEnchantments {
     public static final DeferredRegister<MapCodec<? extends EnchantmentEntityEffect>> EFFECTS =
             DeferredRegister.create(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, KingdomsAtWar.MODID);
     public static final Supplier<MapCodec<HealEffect>> HEAL = EFFECTS.register("heal", () -> HealEffect.CODEC);
+    public static final Supplier<MapCodec<ThunderstrikeEffect>> THUNDERSTRIKE_EFFECT = EFFECTS.register("thunderstrike", () -> ThunderstrikeEffect.CODEC);
 
     public static final ResourceKey<Enchantment> DRAGONSLAYER = key("dragonslayer");
     public static final ResourceKey<Enchantment> FROSTBITE = key("frostbite");
@@ -70,10 +81,20 @@ public final class ModEnchantments {
     public static final ResourceKey<Enchantment> DRAGONSCALE = key("dragonscale");
     public static final ResourceKey<Enchantment> WINDSTRIDE = key("windstride");
     public static final ResourceKey<Enchantment> WEIGHT_CURSE = key("weight_curse");
+    // seit 0.87, am Zaubertisch
+    public static final ResourceKey<Enchantment> THUNDERSTRIKE = key("thunderstrike");
+    public static final ResourceKey<Enchantment> VENOM = key("venom");
+    public static final ResourceKey<Enchantment> STEADFAST = key("steadfast");
+    public static final ResourceKey<Enchantment> VITALITY = key("vitality");
+    public static final ResourceKey<Enchantment> OWL_EYE = key("owl_eye");
+    public static final ResourceKey<Enchantment> LEAPING = key("leaping");
+    public static final ResourceKey<Enchantment> ANGLER = key("angler");
 
-    /** Alle Verzauberungen der Mod. */
+    /** Die Schätze der Mod (nur als Beute). */
     public static final List<ResourceKey<Enchantment>> ALL = List.of(DRAGONSLAYER, FROSTBITE, LIFESTEAL, ARMOR_BREAKER, VOLLEY, DRAGONSCALE,
             WINDSTRIDE, WEIGHT_CURSE);
+    /** Die Verzauberungen der Mod, die es auch am Zaubertisch und beim Bibliothekar gibt (seit 0.87). */
+    public static final List<ResourceKey<Enchantment>> TABLE = List.of(THUNDERSTRIKE, VENOM, STEADFAST, VITALITY, OWL_EYE, LEAPING, ANGLER);
 
     private ModEnchantments() {}
 
@@ -141,6 +162,62 @@ public final class ModEnchantments {
                         EquipmentSlotGroup.FEET))
                 .withEffect(EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(KingdomsAtWar.id("enchantment.windstride"),
                         Attributes.MOVEMENT_SPEED, LevelBasedValue.perLevel(0.06f), AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
+
+        // ---------------------------------------------------------------- seit 0.87, am Zaubertisch
+        // Feuer, Frost, Donner und Gift schließen einander aus: eine Klinge trägt nur ein Element
+        register(context, THUNDERSTRIKE, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), items.getOrThrow(ItemTags.MELEE_WEAPON_ENCHANTABLE),
+                        2, 2, Enchantment.dynamicCost(12, 18), Enchantment.dynamicCost(62, 18), 4, EquipmentSlotGroup.MAINHAND))
+                .exclusiveWith(HolderSet.direct(enchantments.getOrThrow(Enchantments.FIRE_ASPECT), enchantments.getOrThrow(FROSTBITE)))
+                .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+                        new ThunderstrikeEffect(LevelBasedValue.perLevel(0.15f, 0.07f), LevelBasedValue.perLevel(2.5f, 1.5f)),
+                        DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().isDirect(true))));
+
+        register(context, VENOM, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), items.getOrThrow(ItemTags.MELEE_WEAPON_ENCHANTABLE),
+                        3, 2, Enchantment.dynamicCost(10, 15), Enchantment.dynamicCost(55, 15), 2, EquipmentSlotGroup.MAINHAND))
+                .exclusiveWith(HolderSet.direct(enchantments.getOrThrow(Enchantments.FIRE_ASPECT), enchantments.getOrThrow(FROSTBITE),
+                        enchantments.getOrThrow(THUNDERSTRIKE)))
+                .withEffect(EnchantmentEffectComponents.POST_ATTACK, EnchantmentTarget.ATTACKER, EnchantmentTarget.VICTIM,
+                        AllOf.entityEffects(
+                                new ApplyMobEffect(HolderSet.direct(MobEffects.POISON), LevelBasedValue.perLevel(2.0f, 1.0f),
+                                        LevelBasedValue.perLevel(3.0f, 1.5f), LevelBasedValue.constant(0.0f), LevelBasedValue.constant(0.0f)),
+                                new SpawnParticlesEffect(ParticleTypes.ITEM_SLIME, SpawnParticlesEffect.inBoundingBox(), SpawnParticlesEffect.inBoundingBox(),
+                                        SpawnParticlesEffect.fixedVelocity(UniformFloat.of(-0.05f, 0.05f)),
+                                        SpawnParticlesEffect.fixedVelocity(UniformFloat.of(0.0f, 0.1f)), ConstantFloat.of(0.02f))),
+                        DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().isDirect(true))));
+
+        register(context, STEADFAST, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.CHEST_ARMOR_ENCHANTABLE), 4, 3, Enchantment.dynamicCost(8, 10), Enchantment.dynamicCost(38, 10), 2,
+                        EquipmentSlotGroup.CHEST))
+                // Standhaft und Lebenskraft schließen einander aus (das steht bei Lebenskraft; es gilt in beide Richtungen)
+                .withEffect(EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(KingdomsAtWar.id("enchantment.steadfast"),
+                        Attributes.KNOCKBACK_RESISTANCE, LevelBasedValue.perLevel(0.15f), AttributeModifier.Operation.ADD_VALUE)));
+
+        register(context, VITALITY, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.CHEST_ARMOR_ENCHANTABLE), 2, 3, Enchantment.dynamicCost(14, 12), Enchantment.dynamicCost(50, 12), 4,
+                        EquipmentSlotGroup.CHEST))
+                .exclusiveWith(HolderSet.direct(enchantments.getOrThrow(STEADFAST)))
+                .withEffect(EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(KingdomsAtWar.id("enchantment.vitality"),
+                        Attributes.MAX_HEALTH, LevelBasedValue.perLevel(2.0f), AttributeModifier.Operation.ADD_VALUE)));
+
+        // die Nachtsicht selbst gibt EnchantPower (ohne Wirbel aus Partikeln, ohne Flackern am Ende)
+        register(context, OWL_EYE, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.HEAD_ARMOR_ENCHANTABLE), 2, 1, Enchantment.constantCost(18), Enchantment.constantCost(50), 4,
+                        EquipmentSlotGroup.HEAD)));
+
+        register(context, LEAPING, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.FOOT_ARMOR_ENCHANTABLE), 3, 2, Enchantment.dynamicCost(10, 12), Enchantment.dynamicCost(40, 12), 2,
+                        EquipmentSlotGroup.FEET))
+                .withEffect(EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(KingdomsAtWar.id("enchantment.leaping"),
+                        Attributes.JUMP_STRENGTH, LevelBasedValue.perLevel(0.04f), AttributeModifier.Operation.ADD_VALUE))
+                .withEffect(EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(KingdomsAtWar.id("enchantment.leaping_fall"),
+                        Attributes.SAFE_FALL_DISTANCE, LevelBasedValue.perLevel(1.0f), AttributeModifier.Operation.ADD_VALUE)));
+
+        // die größere Fangzone gibt das Angeln selbst (Fishing.onReel)
+        register(context, ANGLER, Enchantment.enchantment(Enchantment.definition(
+                        items.getOrThrow(ItemTags.FISHING_ENCHANTABLE), 3, 3, Enchantment.dynamicCost(12, 9), Enchantment.dynamicCost(50, 9), 2,
+                        EquipmentSlotGroup.MAINHAND)));
 
         register(context, WEIGHT_CURSE, Enchantment.enchantment(Enchantment.definition(
                         items.getOrThrow(ItemTags.ARMOR_ENCHANTABLE), 1, 1, Enchantment.constantCost(25), Enchantment.constantCost(50), 8,

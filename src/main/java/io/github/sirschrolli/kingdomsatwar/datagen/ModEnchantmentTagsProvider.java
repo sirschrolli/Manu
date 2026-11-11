@@ -29,6 +29,15 @@ public class ModEnchantmentTagsProvider extends EnchantmentTagsProvider {
             treasure.add(enchantment);
             order.add(enchantment);
         }
+        // seit 0.87: am Zaubertisch, beim Bibliothekar und auf zufällig verzauberter Beute
+        for (ResourceKey<Enchantment> enchantment : ModEnchantments.TABLE) {
+            this.tag(EnchantmentTags.NON_TREASURE).add(enchantment);
+            this.tag(EnchantmentTags.IN_ENCHANTING_TABLE).add(enchantment);
+            this.tag(EnchantmentTags.TRADEABLE).add(enchantment);
+            this.tag(EnchantmentTags.ON_RANDOM_LOOT).add(enchantment);
+            this.tag(EnchantmentTags.ON_TRADED_EQUIPMENT).add(enchantment);
+            order.add(enchantment);
+        }
         this.tag(EnchantmentTags.DAMAGE_EXCLUSIVE).add(ModEnchantments.DRAGONSLAYER);
         this.tag(EnchantmentTags.ARMOR_EXCLUSIVE).add(ModEnchantments.DRAGONSCALE);
         this.tag(EnchantmentTags.CURSE).add(ModEnchantments.WEIGHT_CURSE);

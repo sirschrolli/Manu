@@ -255,6 +255,8 @@ final class Showcase {
                         WeaponShowcase.hand(steps);
                     } else if (scene.equals("fishing")) {
                         FishingShowcase.fishing(steps);
+                    } else if (scene.equals("angeln_ruten")) {
+                        FishingShowcase.rods(steps);
                     } else if (scene.equals("fishing_void")) {
                         FishingShowcase.voidOnly(steps);
                     } else if (scene.equals("fishbag")) {

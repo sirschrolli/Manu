@@ -767,4 +767,185 @@ final class FishingShowcase {
         steps.add(biteAndReel());
         realFight(steps, "angeln_echt_leere");
     }
+
+    // =====================================================================================
+    // Die Angeln und die neuen Verzauberungen (0.87)
+    // =====================================================================================
+
+    /** Führt einen Befehl auf dem Server aus (mit festen Koordinaten, die erst hier bekannt sind). */
+    private static void run(ServerLevel level, String command) {
+        level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack().withSuppressedOutput(), command);
+    }
+
+    /**
+     * Die Angeln ({@code angeln_ruten}): alle sechs groß vor einer Bretterwand, einige in der Hand und ausgeworfen über Wasser
+     * und Lava; dazu Donnerschlag (der Funkenschlag) und Eulenauge (eine dunkle Kammer ohne und mit dem Helm).
+     */
+    static void rods(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "effect clear @s", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        BlockPos[] top = new BlockPos[1];
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos at = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, new BlockPos(0, 0, 0));
+            // Teich links, Lava rechts, dahinter eine Wand aus dunklen Brettern
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -2; z <= 15; z++) {
+                    for (int y = -3; y <= 8; y++) {
+                        BlockPos pos = at.offset(x, y, z);
+                        boolean basin = z >= 3 && z <= 12 && Math.abs(x) <= 7;
+                        if (z == 14 && y >= 0 && y <= 7) {
+                            level.setBlockAndUpdate(pos, (y == 0 || y == 7 || Math.abs(x) == 10 ? Blocks.STRIPPED_DARK_OAK_LOG : Blocks.POLISHED_ANDESITE)
+                                    .defaultBlockState());
+                        } else if (y > 0) {
+                            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                        } else if (basin && y >= -2 && x != 0) {
+                            level.setBlockAndUpdate(pos, (x < 0 ? Blocks.WATER : Blocks.LAVA).defaultBlockState());
+                        } else {
+                            level.setBlockAndUpdate(pos, (basin || y < 0 ? Blocks.STONE_BRICKS : Blocks.GRASS_BLOCK).defaultBlockState());
+                        }
+                    }
+                }
+            }
+            top[0] = at;
+            // die sechs Angeln, groß und hell vor der Wand: zwei Reihen zu drei
+            int i = 0;
+            for (io.github.sirschrolli.kingdomsatwar.fishing.RodType type : io.github.sirschrolli.kingdomsatwar.fishing.RodType.values()) {
+                // Blick nach Süden: Osten liegt links – die erste Angel jeder Reihe kommt nach links
+                double x = at.getX() + 0.5 - (i % 3 - 1) * 3.45;
+                double y = at.getY() + (i < 3 ? 5.3 : 2.35);
+                run(level, String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"kingdomsatwar:%s\",count:1},"
+                        + "item_display:\"gui\",billboard:\"fixed\",Rotation:[0f,0f],brightness:{sky:15,block:15},"
+                        + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],scale:[2.9f,2.9f,2.9f]}}",
+                        x, y, at.getZ() + 13.4, type.id()));
+                i++;
+            }
+            player.teleportTo(level, at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 6.8, Set.of(), 0.0f, -10.0f, true);
+        }));
+        steps.add(Step.until(() -> top[0] != null, 200));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = true;
+            if (!minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.screenshot("ruten_reihe"));
+        steps.add(Step.command("kill @e[type=minecraft:item_display]"));
+        steps.add(Step.once(minecraft -> {
+            ShowcaseRunner.hideHand = false;
+            // ohne HUD blendet das Spiel auch die Hand aus
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+
+        // in der Hand und ausgeworfen: über dem Teich (links) und über der Lava (rechts)
+        Object[][] shots = {{"IRON", -3.0}, {"GOLD", -3.0}, {"DRAGON", -3.0}, {"SHADOW", -3.0}, {"STAR", -3.0}, {"GLUT", 4.0}};
+        for (Object[] shot : shots) {
+            var type = io.github.sirschrolli.kingdomsatwar.fishing.RodType.valueOf((String) shot[0]);
+            double side = (Double) shot[1];
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                if (player.fishing != null) {
+                    player.fishing.discard();
+                }
+                BlockPos at = top[0];
+                // Blick schräg auf den Teich (links, Westen) oder die Lava (rechts, Osten)
+                player.teleportTo(player.level(), at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 1.5, Set.of(), side < 0 ? 34.0f : -34.0f, 22.0f, true);
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(FishingItems.rod(type)));
+            }));
+            steps.add(Step.waitTicks(14));
+            steps.add(Step.screenshot("rute_" + type.name().toLowerCase(java.util.Locale.ROOT) + "_hand"));
+            steps.add(cast(side < 0 ? -2.6 : 2.8, side < 0 ? 0.2 : 0.5, 5.0));
+            steps.add(Step.waitTicks(30));
+            steps.add(Step.screenshot("rute_" + type.name().toLowerCase(java.util.Locale.ROOT) + "_wurf"));
+        }
+        // die Glutangel von hinten: die Schnur zum Schwimmer auf der Lava
+        steps.add(Step.once(minecraft -> {
+            minecraft.options.setCameraType(net.minecraft.client.CameraType.THIRD_PERSON_BACK);
+            if (!minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("rute_glut_hinten"));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(net.minecraft.client.CameraType.FIRST_PERSON)));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            if (player.fishing != null) {
+                player.fishing.discard();
+            }
+        }));
+
+        // Donnerschlag: der Funkenschlag fährt in einen zähen Wiedergänger
+        net.minecraft.world.entity.LivingEntity[] target = new net.minecraft.world.entity.LivingEntity[1];
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = player.level();
+            BlockPos at = top[0];
+            player.teleportTo(level, at.getX() + 0.5, at.getY() + 1.0, at.getZ() - 1.0, Set.of(), 0.0f, 8.0f, true);
+            ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+            sword.enchant(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                    .getOrThrow(io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.THUNDERSTRIKE), 2);
+            player.setItemInHand(InteractionHand.MAIN_HAND, sword);
+            var zombie = io.github.sirschrolli.kingdomsatwar.registry.ModEntities.ZOMBIE.get().create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            zombie.snapTo(at.getX() + 0.5, at.getY() + 1.0, at.getZ() + 2.0, 180.0f, 0.0f);
+            zombie.setNoAi(true);
+            zombie.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(500.0);
+            zombie.setHealth(500.0f);
+            zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+            level.addFreshEntity(zombie);
+            target[0] = zombie;
+        }));
+        steps.add(Step.until(() -> target[0] != null, 200));
+        steps.add(Step.waitTicks(20));
+        steps.add(Step.server(any -> io.github.sirschrolli.kingdomsatwar.enchant.ThunderstrikeEffect.strike(player(any).level(), target[0], player(any), 3.0f)));
+        steps.add(Step.record("donnerschlag", 8, minecraft -> { }));
+        steps.add(Step.command("kill @e[type=!minecraft:player]"));
+
+        // Eulenauge: eine dunkle Kammer unter der Erde – ohne Helm, dann mit
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = player.level();
+            BlockPos room = top[0].offset(30, -22, 0);
+            for (int x = -6; x <= 6; x++) {
+                for (int z = -6; z <= 6; z++) {
+                    for (int y = -1; y <= 5; y++) {
+                        boolean wall = Math.abs(x) == 6 || Math.abs(z) == 6 || y == -1 || y == 5;
+                        level.setBlockAndUpdate(room.offset(x, y, z), wall ? Blocks.DEEPSLATE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+                    }
+                }
+            }
+            level.setBlockAndUpdate(room.offset(-3, 0, 4), Blocks.CHEST.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(-2, 0, 4), Blocks.CRAFTING_TABLE.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(3, 0, 4), Blocks.BARREL.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(4, 1, 6), Blocks.DEEPSLATE_DIAMOND_ORE.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(-4, 2, 6), Blocks.DEEPSLATE_GOLD_ORE.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(1, 3, 6), Blocks.DEEPSLATE_IRON_ORE.defaultBlockState());
+            level.setBlockAndUpdate(room.offset(-1, 0, 5), Blocks.COBBLED_DEEPSLATE.defaultBlockState());
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            player.teleportTo(level, room.getX() + 0.5, room.getY(), room.getZ() - 4.0, Set.of(), 0.0f, 10.0f, true);
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(300));
+        steps.add(Step.screenshot("eulenauge_ohne"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ItemStack helmet = new ItemStack(Items.IRON_HELMET);
+            helmet.enchant(player.level().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                    .getOrThrow(io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.OWL_EYE), 1);
+            player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, helmet);
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("eulenauge_mit"));
+    }
 }

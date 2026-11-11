@@ -62,6 +62,8 @@ final class RulesGameTests {
             ModGameTests.TEST_FUNCTIONS.register("rules_hardness", () -> RulesGameTests::hardness);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ENCHANTMENTS =
             ModGameTests.TEST_FUNCTIONS.register("rules_enchantments", () -> RulesGameTests::enchantments);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ENCHANTMENTS_TABLE =
+            ModGameTests.TEST_FUNCTIONS.register("rules_enchantments_table", () -> RulesGameTests::enchantmentsTable);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MAGE_GROUND =
             ModGameTests.TEST_FUNCTIONS.register("rules_mage_ground", () -> RulesGameTests::mageGround);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> DIMENSION_COMMAND =
@@ -72,7 +74,8 @@ final class RulesGameTests {
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(MOD_GUARD, COORDINATES, HARDNESS, ENCHANTMENTS, MAGE_GROUND, DIMENSION_COMMAND)) {
+        for (var test : List.of(MOD_GUARD, COORDINATES, HARDNESS, ENCHANTMENTS, ENCHANTMENTS_TABLE, MAGE_GROUND,
+                DIMENSION_COMMAND)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -257,13 +260,13 @@ final class RulesGameTests {
             if (Math.abs(vsDragon - 14.0f) > 0.01f || vsZombie != 5.0f) {
                 problems.add("Drachentöter: " + vsDragon + " / " + vsZombie);
             }
-            // Drachenschuppe IV: 10 Punkte Schutz gegen Drachen, keiner gegen andere
+            // Drachenschuppe IV: 10 Punkte Schutz gegen Drachen (seit 0.87 wie aller Schutz um 15 % mehr), keiner gegen andere
             ItemStack chest = new ItemStack(Items.IRON_CHESTPLATE);
             chest.enchant(registry.getOrThrow(ModEnchantments.DRAGONSCALE), 4);
             zombie.setItemSlot(EquipmentSlot.CHEST, chest);
             float fromDragon = EnchantmentHelper.getDamageProtection(level, zombie, level.damageSources().mobAttack(dragon));
             float fromZombie = EnchantmentHelper.getDamageProtection(level, zombie, level.damageSources().mobAttack(attacker));
-            if (Math.abs(fromDragon - 10.0f) > 0.01f || fromZombie != 0.0f) {
+            if (Math.abs(fromDragon - 10.0f * io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.PROTECTION) > 0.01f || fromZombie != 0.0f) {
                 problems.add("Drachenschuppe: " + fromDragon + " / " + fromZombie);
             }
             // Lebensraub III: der Angreifer heilt 1,5 Leben
@@ -309,6 +312,176 @@ final class RulesGameTests {
             attacker.discard();
         }
         helper.assertTrue(problems.isEmpty(), "Verzauberungen: " + problems);
+        helper.succeed();
+    }
+
+    /**
+     * Seit 0.87: sieben Verzauberungen am Zaubertisch und beim Bibliothekar (keine Schätze) – Donnerschlag, Giftzahn,
+     * Standhaft, Lebenskraft, Eulenauge, Hasenfuß, Drillmeister – und die etwas stärkeren Verzauberungen von Minecraft:
+     * Schärfe, Bann, Stärke, Schutz und Effizienz. Feuer, Frost, Donner und Gift passen nicht zusammen auf eine Klinge.
+     */
+    private static void enchantmentsTable(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        HolderLookup.RegistryLookup<Enchantment> registry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        List<String> problems = new ArrayList<>();
+        for (var key : ModEnchantments.TABLE) {
+            var holder = registry.get(key);
+            if (holder.isEmpty()) {
+                problems.add("fehlt: " + key.identifier());
+                continue;
+            }
+            if (holder.get().is(EnchantmentTags.TREASURE) || !holder.get().is(EnchantmentTags.IN_ENCHANTING_TABLE)
+                    || !holder.get().is(EnchantmentTags.TRADEABLE) || !holder.get().is(EnchantmentTags.NON_TREASURE)) {
+                problems.add(key.identifier().getPath() + " gibt es nicht am Zaubertisch oder im Handel");
+            }
+        }
+        if (!problems.isEmpty()) {
+            helper.fail("Verzauberungen: " + problems);
+            return;
+        }
+        var fire = registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.FIRE_ASPECT);
+        var frost = registry.getOrThrow(ModEnchantments.FROSTBITE);
+        var thunder = registry.getOrThrow(ModEnchantments.THUNDERSTRIKE);
+        var venom = registry.getOrThrow(ModEnchantments.VENOM);
+        List<Holder<Enchantment>> elements = List.of(fire, frost, thunder, venom);
+        for (int i = 0; i < elements.size(); i++) {
+            for (int j = i + 1; j < elements.size(); j++) {
+                if (Enchantment.areCompatible(elements.get(i), elements.get(j))) {
+                    problems.add(elements.get(i).getRegisteredName() + " passt zu " + elements.get(j).getRegisteredName());
+                }
+            }
+        }
+        if (Enchantment.areCompatible(registry.getOrThrow(ModEnchantments.STEADFAST), registry.getOrThrow(ModEnchantments.VITALITY))) {
+            problems.add("Standhaft und Lebenskraft passen zusammen");
+        }
+        if (!Enchantment.areCompatible(thunder, registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS))) {
+            problems.add("Donnerschlag verträgt sich nicht mit Schärfe");
+        }
+
+        BlockPos at = helper.absolutePos(new BlockPos(4, 1, 4));
+        Mob zombie = ModEntities.ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        Mob attacker = ModEntities.ZOMBIE.get().create(level, EntitySpawnReason.MOB_SUMMONED);
+        Mob pig = net.minecraft.world.entity.EntityTypes.PIG.create(level, EntitySpawnReason.MOB_SUMMONED);
+        Mob dummy = net.minecraft.world.entity.EntityTypes.PIG.create(level, EntitySpawnReason.MOB_SUMMONED);
+        var arrow = net.minecraft.world.entity.EntityTypes.ARROW.create(level, EntitySpawnReason.MOB_SUMMONED);
+        Player player = helper.makeMockServerPlayerInLevel();
+        try {
+            for (var mob : List.of(zombie, attacker, pig, dummy, arrow)) {
+                mob.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0.0f, 0.0f);
+            }
+            DamageSource hit = level.damageSources().mobAttack(attacker);
+            // Schärfe V: 3 + 1,25; Bann V gegen Untote: 12,5 + 2,5 (gegen ein Schwein nichts)
+            ItemStack sharp = new ItemStack(Items.IRON_SWORD);
+            sharp.enchant(registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS), 5);
+            float sharpDamage = EnchantmentHelper.modifyDamage(level, sharp, pig, hit, 6.0f);
+            if (Math.abs(sharpDamage - 10.25f) > 0.01f) {
+                problems.add("Schärfe V: " + sharpDamage + " statt 10.25");
+            }
+            ItemStack smite = new ItemStack(Items.IRON_SWORD);
+            smite.enchant(registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SMITE), 5);
+            float smiteUndead = EnchantmentHelper.modifyDamage(level, smite, zombie, hit, 6.0f);
+            float smitePig = EnchantmentHelper.modifyDamage(level, smite, pig, hit, 6.0f);
+            if (Math.abs(smiteUndead - 21.0f) > 0.01f || smitePig != 6.0f) {
+                problems.add("Bann V: " + smiteUndead + " / " + smitePig);
+            }
+            // Stärke V: der Pfeil 2 + 3 + 0,75 Grundschaden
+            ItemStack bow = new ItemStack(Items.BOW);
+            bow.enchant(registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.POWER), 5);
+            float power = EnchantmentHelper.modifyDamage(level, bow, pig, level.damageSources().arrow(arrow, attacker), 2.0f);
+            if (Math.abs(power - 5.75f) > 0.01f) {
+                problems.add("Stärke V: " + power + " statt 5.75");
+            }
+            // Schutz IV: 4 Punkte, hier 4,6
+            ItemStack plate = new ItemStack(Items.IRON_CHESTPLATE);
+            plate.enchant(registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.PROTECTION), 4);
+            dummy.setItemSlot(EquipmentSlot.CHEST, plate);
+            float protection = EnchantmentHelper.getDamageProtection(level, dummy, hit);
+            if (Math.abs(protection - 4.6f) > 0.01f) {
+                problems.add("Schutz IV: " + protection + " statt 4.6");
+            }
+            // Effizienz V: 30 % schneller abbauen, aber nur mit dem passenden Werkzeug
+            ItemStack pick = new ItemStack(Items.DIAMOND_PICKAXE);
+            pick.enchant(registry.getOrThrow(net.minecraft.world.item.enchantment.Enchantments.EFFICIENCY), 5);
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, pick);
+            var stone = new net.neoforged.neoforge.event.entity.player.PlayerEvent.BreakSpeed(player,
+                    net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 10.0f, at);
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(stone);
+            var dirt = new net.neoforged.neoforge.event.entity.player.PlayerEvent.BreakSpeed(player,
+                    net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState(), 1.0f, at);
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(dirt);
+            if (Math.abs(stone.getNewSpeed() - 13.0f) > 0.01f || dirt.getNewSpeed() != 1.0f) {
+                problems.add("Effizienz V: " + stone.getNewSpeed() + " / " + dirt.getNewSpeed());
+            }
+
+            // Donnerschlag: der Funkenschlag trifft auch in der Schonzeit nach dem Hieb (vom Spieler: Gegner treffen härter)
+            pig.hurtServer(level, hit, 3.0f);
+            float before = pig.getHealth();
+            io.github.sirschrolli.kingdomsatwar.enchant.ThunderstrikeEffect.strike(level, pig, player, 2.5f);
+            if (Math.abs(before - pig.getHealth() - 2.5f) > 0.01f) {
+                problems.add("Donnerschlag: " + (before - pig.getHealth()) + " statt 2.5 Schaden");
+            }
+            // Giftzahn: der Getroffene ist vergiftet
+            ItemStack fang = new ItemStack(Items.IRON_SWORD);
+            fang.enchant(venom, 2);
+            attacker.setItemSlot(EquipmentSlot.MAINHAND, fang);
+            EnchantmentHelper.doPostAttackEffects(level, dummy, level.damageSources().mobAttack(attacker));
+            if (!dummy.hasEffect(MobEffects.POISON)) {
+                problems.add("Giftzahn: kein Gift");
+            }
+            // Standhaft III und Lebenskraft III am Brustpanzer, Hasenfuß II an den Stiefeln
+            ItemStack chest = new ItemStack(Items.IRON_CHESTPLATE);
+            chest.enchant(registry.getOrThrow(ModEnchantments.STEADFAST), 3);
+            ItemStack heart = new ItemStack(Items.IRON_CHESTPLATE);
+            heart.enchant(registry.getOrThrow(ModEnchantments.VITALITY), 3);
+            ItemStack boots = new ItemStack(Items.IRON_BOOTS);
+            boots.enchant(registry.getOrThrow(ModEnchantments.LEAPING), 2);
+            double[] sum = new double[4];
+            EnchantmentHelper.forEachModifier(chest, EquipmentSlot.CHEST, (attribute, modifier) -> {
+                if (attribute.is(Attributes.KNOCKBACK_RESISTANCE)) {
+                    sum[0] += modifier.amount();
+                }
+            });
+            EnchantmentHelper.forEachModifier(heart, EquipmentSlot.CHEST, (attribute, modifier) -> {
+                if (attribute.is(Attributes.MAX_HEALTH)) {
+                    sum[1] += modifier.amount();
+                }
+            });
+            EnchantmentHelper.forEachModifier(boots, EquipmentSlot.FEET, (attribute, modifier) -> {
+                if (attribute.is(Attributes.JUMP_STRENGTH)) {
+                    sum[2] += modifier.amount();
+                } else if (attribute.is(Attributes.SAFE_FALL_DISTANCE)) {
+                    sum[3] += modifier.amount();
+                }
+            });
+            if (Math.abs(sum[0] - 0.45) > 0.001 || Math.abs(sum[1] - 6.0) > 0.001 || Math.abs(sum[2] - 0.08) > 0.001 || Math.abs(sum[3] - 2.0) > 0.001) {
+                problems.add("Standhaft/Lebenskraft/Hasenfuß: " + java.util.Arrays.toString(sum));
+            }
+            // Eulenauge: Nachtsicht ohne Partikel, solange der Helm getragen wird; ein Trank bleibt unberührt
+            ItemStack helmet = new ItemStack(Items.IRON_HELMET);
+            helmet.enchant(registry.getOrThrow(ModEnchantments.OWL_EYE), 1);
+            player.setItemSlot(EquipmentSlot.HEAD, helmet);
+            io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.owlEye(player);
+            MobEffectInstance sight = player.getEffect(MobEffects.NIGHT_VISION);
+            if (sight == null || sight.isVisible() || sight.getDuration() < 220) {
+                problems.add("Eulenauge: keine ruhige Nachtsicht " + sight);
+            }
+            player.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+            io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.owlEye(player);
+            if (player.hasEffect(MobEffects.NIGHT_VISION)) {
+                problems.add("Eulenauge: die Nachtsicht bleibt ohne Helm");
+            }
+            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0));
+            io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.owlEye(player);
+            if (!player.hasEffect(MobEffects.NIGHT_VISION)) {
+                problems.add("Eulenauge: nimmt den Trank weg");
+            }
+        } finally {
+            for (var mob : List.of(zombie, attacker, pig, dummy, arrow)) {
+                mob.discard();
+            }
+            level.getServer().getPlayerList().remove((net.minecraft.server.level.ServerPlayer) player);
+        }
+        helper.assertTrue(problems.isEmpty(), "Verzauberungen seit 0.87: " + problems);
         helper.succeed();
     }
 

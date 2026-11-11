@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "#kingdomsatwar:dragon_scales",
+    "L": "minecraft:string",
+    "M": "kingdomsatwar:draconium"
+  },
+  "pattern": [
+    "  M",
+    " ML",
+    "G L"
+  ],
+  "result": {
+    "id": "kingdomsatwar:dragon_fishing_rod"
+  }
+}

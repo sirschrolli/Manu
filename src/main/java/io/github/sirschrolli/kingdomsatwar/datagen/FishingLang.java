@@ -302,6 +302,26 @@ final class FishingLang {
         text.add(ModItems.loreKey("bait_glow", 2), "Lures what lives in the dark: night fish, deep sea, caves, lava",
                 "Lockt, was im Dunkeln lebt: Nachtfische, Tiefsee, Höhlen, Lava");
         text.add("item.kingdomsatwar.fish_fillet_cooked", "Cooked Fish Fillet", "Gebratenes Fischfilet");
+        // --- die Angeln (0.87) ---
+        rod(text, "iron_fishing_rod", "Iron Fishing Rod", "Eisenangel",
+                "Sturdy: lasts three times as long", "Robust: hält dreimal so lange",
+                "Larger catch zone when reeling in", "Größere Fangzone im Drill");
+        rod(text, "gold_fishing_rod", "Golden Fishing Rod", "Goldangel",
+                "Brings luck: rarer fish, more treasure, less junk", "Bringt Glück: seltenere Fische, öfter Schätze, weniger Kram",
+                "Fragile, but takes enchantments well", "Zerbrechlich, aber gut zu verzaubern");
+        rod(text, "dragon_fishing_rod", "Dragon Fishing Rod", "Drachenangel",
+                "Faster bites, larger catch zone, more luck", "Schnellerer Biss, größere Fangzone, mehr Glück",
+                "Lasts longest and cannot burn", "Hält am längsten und verbrennt nicht");
+        rod(text, "shadow_fishing_rod", "Shadow Fishing Rod", "Schattenangel",
+                "In the dark (at night, underground, in the void): faster bites and more luck",
+                "Im Dunkeln (nachts, unter Tage, in der Leere): schnellerer Biss und mehr Glück",
+                "…and a larger catch zone there", "… und dort eine größere Fangzone");
+        rod(text, "glut_fishing_rod", "Glut Fishing Rod", "Glutangel",
+                "Made for lava: bites twice as fast, much easier reeling", "Für die Lava gemacht: Biss doppelt so schnell, Drill viel leichter",
+                "Cannot burn", "Verbrennt nicht");
+        rod(text, "star_fishing_rod", "Star Fishing Rod", "Sternenangel",
+                "In the End and the void: bites twice as fast, much easier reeling", "Im End und in der Leere: Biss doppelt so schnell, Drill viel leichter",
+                "A little luck everywhere", "Überall ein wenig Glück");
         text.add("itemGroup.kingdomsatwar.fishing", "Kingdoms at War: Fishing", "Kingdoms at War: Angeln");
         text.add("key.kingdomsatwar.fish_book", "Open the fish book", "Fischbuch aufschlagen");
         text.add("gui.kingdomsatwar.fishing.title", "Fish on the line", "Fisch an der Leine");
@@ -438,5 +458,12 @@ final class FishingLang {
         text.add("fishing.kingdomsatwar.special.teleport_near", "Shifts you a few steps", "Versetzt dich ein paar Schritte");
         text.add("fishing.kingdomsatwar.special.cleanse", "Lifts all ailments", "Nimmt alle Leiden");
         text.add("fishing.kingdomsatwar.book.treasures", "%1$s fish caught · %2$s treasures", "%1$s Fische gefangen · %2$s Schätze");
+    }
+
+    /** Name und zwei Zeilen zu einer Angel. */
+    private static void rod(HeroLang.Text text, String id, String en, String de, String en1, String de1, String en2, String de2) {
+        text.add("item.kingdomsatwar." + id, en, de);
+        text.add(ModItems.loreKey(id, 1), en1, de1);
+        text.add(ModItems.loreKey(id, 2), en2, de2);
     }
 }

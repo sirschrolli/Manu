@@ -36,8 +36,8 @@ import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
- * Prüft die Verzauberungen auf den Waffen der Mod (seit 0.79): Schärfe gibt auf einem Diamantschwert und auf schwächeren
- * Waffen drei Punkte dazu wie immer, auf stärkeren Waffen der Mod entsprechend mehr – und verstärkt die Fähigkeiten
+ * Prüft die Verzauberungen auf den Waffen der Mod (seit 0.79): Schärfe V gibt auf einem Diamantschwert und auf schwächeren
+ * Waffen 4,25 Punkte dazu (seit 0.87, Minecraft drei), auf stärkeren Waffen der Mod entsprechend mehr – und verstärkt die Fähigkeiten
  * (Lichtspeer, Lichtwelle, Lichtsäule) um denselben Anteil.
  */
 final class WeaponGameTests {
@@ -103,15 +103,16 @@ final class WeaponGameTests {
         player.snapTo(target.getX() - 1.6, target.getY(), target.getZ(), -90.0f, 0.0f);
         Item spear = CreatorBlocks.CREATOR_SCEPTER.get();
         try {
-            // das Maß: auf dem Diamantschwert bleibt alles, wie es ist – Schärfe V gibt drei Punkte
+            // das Maß: auf dem Diamantschwert gibt Schärfe V 4,25 Punkte (Minecraft drei, seit 0.87 etwas mehr – EnchantPower)
+            float sharp5 = 3.0f + 5 * io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.SHARPNESS_EXTRA;
             float diamond = strike(helper, player, new ItemStack(Items.DIAMOND_SWORD));
             float diamondSharp = strike(helper, player, enchanted(level, Items.DIAMOND_SWORD, Enchantments.SHARPNESS, 5));
-            helper.assertTrue(Math.abs(diamond - WeaponPower.REFERENCE) < 0.05f && Math.abs(diamondSharp - diamond - 3.0f) < 0.05f,
+            helper.assertTrue(Math.abs(diamond - WeaponPower.REFERENCE) < 0.05f && Math.abs(diamondSharp - diamond - sharp5) < 0.05f,
                     "Diamantschwert: " + diamond + " und mit Schärfe V " + diamondSharp);
-            // eine schwächere Waffe der Mod: ebenfalls drei Punkte
+            // eine schwächere Waffe der Mod: ebenso viel
             float steel = strike(helper, player, new ItemStack(ModItems.STEEL_SWORD.get()));
             float steelSharp = strike(helper, player, enchanted(level, ModItems.STEEL_SWORD.get(), Enchantments.SHARPNESS, 5));
-            helper.assertTrue(WeaponPower.scale(new ItemStack(ModItems.STEEL_SWORD.get())) == 1.0f && Math.abs(steelSharp - steel - 3.0f) < 0.05f,
+            helper.assertTrue(WeaponPower.scale(new ItemStack(ModItems.STEEL_SWORD.get())) == 1.0f && Math.abs(steelSharp - steel - sharp5) < 0.05f,
                     "Stahlschwert: " + steel + " und mit Schärfe V " + steelSharp);
             // der Speer des Schöpfers: so viel mehr, wie er stärker ist als ein Diamantschwert
             float plain = strike(helper, player, new ItemStack(spear));
@@ -119,23 +120,23 @@ final class WeaponGameTests {
             float scale = WeaponPower.scale(new ItemStack(spear));
             helper.assertTrue(Math.abs(plain - (float) CreatorScepterItem.MELEE_DAMAGE) < 0.05f && scale > 2.5f,
                     "Speer des Schöpfers: Schlag " + plain + ", Maß " + scale);
-            helper.assertTrue(Math.abs(sharp - plain - 3.0f * scale) < 0.1f, "Schärfe V auf dem Speer des Schöpfers: " + plain + " -> " + sharp
-                    + " (erwartet +" + 3.0f * scale + ")");
+            helper.assertTrue(Math.abs(sharp - plain - sharp5 * scale) < 0.1f, "Schärfe V auf dem Speer des Schöpfers: " + plain + " -> " + sharp
+                    + " (erwartet +" + sharp5 * scale + ")");
             // Bann wirkt nur gegen Untote – gegen ein Schwein bringt er nichts
             float smite = strike(helper, player, enchanted(level, spear, Enchantments.SMITE, 5));
             helper.assertTrue(Math.abs(smite - plain) < 0.05f, "Bann trifft ein Schwein härter: " + smite);
 
-            // Fähigkeiten: mit Schärfe V um drei Siebtel stärker (wie der Schlag eines Diamantschwerts); ohne Verzauberung unverändert
+            // Fähigkeiten: mit Schärfe V um 4,25 Siebtel stärker (wie der Schlag eines Diamantschwerts); ohne Verzauberung unverändert
             DamageSource magic = level.damageSources().indirectMagic(player, player);
             ItemStack sharpSpear = enchanted(level, spear, Enchantments.SHARPNESS, 5);
             helper.assertTrue(WeaponPower.ability(level, new ItemStack(spear), target, magic, 18.0f) == 18.0f
-                    && Math.abs(WeaponPower.ability(level, sharpSpear, target, magic, 14.0f) - 20.0f) < 0.01f
+                    && Math.abs(WeaponPower.ability(level, sharpSpear, target, magic, 14.0f) - 22.5f) < 0.01f
                     && WeaponPower.ability(level, ItemStack.EMPTY, target, magic, 18.0f) == 18.0f, "Fähigkeit mit Schärfe V: "
                     + WeaponPower.ability(level, sharpSpear, target, magic, 18.0f));
             var zombie = helper.spawnWithNoFreeWill(ModEntities.ZOMBIE.get(), new BlockPos(7, 1, 7));
             ItemStack smiteSpear = enchanted(level, spear, Enchantments.SMITE, 5);
             helper.assertTrue(WeaponPower.ability(level, smiteSpear, target, magic, 16.0f) == 16.0f
-                    && Math.abs(WeaponPower.ability(level, smiteSpear, zombie, magic, 14.0f) - 39.0f) < 0.01f, "Fähigkeit mit Bann V gegen Untote: "
+                    && Math.abs(WeaponPower.ability(level, smiteSpear, zombie, magic, 14.0f) - 44.0f) < 0.01f, "Fähigkeit mit Bann V gegen Untote: "
                     + WeaponPower.ability(level, smiteSpear, zombie, magic, 14.0f));
             zombie.discard();
 
@@ -153,7 +154,8 @@ final class WeaponGameTests {
         helper.runAfterDelay(12, () -> {
             try {
                 float lost = mark[0].getMaxHealth() - mark[0].getHealth();
-                float expected = CreatorScepterItem.SPEAR_DAMAGE * (1.0f + 3.0f / WeaponPower.REFERENCE);
+                float sharp5 = 3.0f + 5 * io.github.sirschrolli.kingdomsatwar.enchant.EnchantPower.SHARPNESS_EXTRA;
+                float expected = CreatorScepterItem.SPEAR_DAMAGE * (1.0f + sharp5 / WeaponPower.REFERENCE);
                 helper.assertTrue(Math.abs(lost - expected) < 0.1f, "Der Lichtspeer mit Schärfe V kostet " + lost + " statt " + expected);
             } finally {
                 level.getServer().getPlayerList().remove(player);

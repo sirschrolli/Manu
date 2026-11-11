@@ -932,6 +932,19 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STRING).define('L', Items.LEATHER).define('C', Items.CHEST)
                 .unlockedBy(getHasName(Items.FISHING_ROD), has(Items.FISHING_ROD))
                 .save(output, key("fish_bag"));
+        // die Angeln (0.87): wie die Angel von Minecraft gebaut – oben der Werkstoff, unten der Griff, rechts die Schnur
+        rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.IRON, Items.IRON_INGOT, Items.STICK);
+        rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GOLD, Items.GOLD_INGOT, Items.STICK);
+        rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.SHADOW, io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_INGOT.get());
+        rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.GLUT, Items.BLAZE_ROD, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.EMBER_SCALE.get());
+        rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.STAR, io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get(), Items.STICK);
+        // die Drachenangel: Draconium, der Griff eine Drachenschuppe
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType.DRAGON))
+                .pattern("  M").pattern(" ML").pattern("G L")
+                .define('M', ModItems.DRACONIUM.get()).define('G', ModTags.Items.DRAGON_SCALES).define('L', Items.STRING)
+                .unlockedBy("has_draconium", has(ModItems.DRACONIUM.get()))
+                .save(output, key(io.github.sirschrolli.kingdomsatwar.fishing.RodType.DRAGON.id()));
         // Köderwurm: was im Kompost kriecht – verrottetes Fleisch, Erde, Saat
         Item worm = io.github.sirschrolli.kingdomsatwar.registry.FishingItems.BAIT_WORM.get();
         shapeless(RecipeCategory.TOOLS, worm, 6)
@@ -947,6 +960,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(worm, 4).requires(Items.GLOWSTONE_DUST).requires(Items.SPIDER_EYE)
                 .unlockedBy(getHasName(worm), has(worm))
                 .save(output, key("bait_glow_from_glowstone"));
+    }
+
+    /** Eine Angel der Mod: zweimal der Werkstoff schräg nach oben, unten links der Griff, rechts zwei Fäden Schnur. */
+    private void rod(io.github.sirschrolli.kingdomsatwar.fishing.RodType type, Item material, Item grip) {
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.FishingItems.rod(type))
+                .pattern("  M").pattern(" ML").pattern("G L")
+                .define('M', material).define('G', grip).define('L', Items.STRING)
+                .unlockedBy(getHasName(material), has(material))
+                .save(output, key(type.id()));
     }
 
     /** Das Meer: Tiefseelaterne aus dem Leuchtköder, Pfeile mit Haizahnspitzen, gegartes Krabbenfleisch. */
