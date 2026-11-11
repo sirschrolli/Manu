@@ -182,6 +182,20 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.DURABILITY_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ItemTags.EQUIPPABLE_ENCHANTABLE, ModItems.WYVERNIT_GLIDER, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_ELYTRA);
         add(ModTags.Items.REPAIRS_FAE_ELYTRA, io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_DUST);
+        // die Waffenkammer (0.84): Schwerter, Äxte und Spitzhacken wie die von Minecraft (verzauberbar, Reparatur am Werkstoff)
+        add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_HALBERD,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.DRACONIUM_WARHAMMER, io.github.sirschrolli.kingdomsatwar.registry.Armory.NIGHTSTEEL_DAGGER,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.ABYSSITE_GREATSWORD);
+        add(ItemTags.AXES, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_DOUBLE_AXE);
+        add(ItemTags.PICKAXES, io.github.sirschrolli.kingdomsatwar.registry.Armory.MINER_HAMMER,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.EMBER_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.Armory.VEIN_BREAKER,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.ORE_SEEKER);
+        add(Tags.Items.TOOLS_SHIELD, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_BUCKLER,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.DRAGON_SHIELD, io.github.sirschrolli.kingdomsatwar.registry.Armory.TOWER_SHIELD,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.MIRROR_SHIELD);
+        add(ItemTags.DURABILITY_ENCHANTABLE, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_BUCKLER,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.DRAGON_SHIELD, io.github.sirschrolli.kingdomsatwar.registry.Armory.TOWER_SHIELD,
+                io.github.sirschrolli.kingdomsatwar.registry.Armory.MIRROR_SHIELD);
         // Waffen und Rüstungen aus Monsterteilen (0.70)
         add(ModTags.Items.REPAIRS_CLAW_BLADE, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW);
         add(ModTags.Items.REPAIRS_BOG_CLUB, io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.BOG_ROOT);

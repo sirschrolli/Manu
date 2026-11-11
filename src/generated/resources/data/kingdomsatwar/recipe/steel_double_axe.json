@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "R": "minecraft:stick",
+    "S": "kingdomsatwar:steel_ingot"
+  },
+  "pattern": [
+    "SRS",
+    "SRS",
+    " R "
+  ],
+  "result": {
+    "id": "kingdomsatwar:steel_double_axe"
+  }
+}

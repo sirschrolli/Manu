@@ -82,7 +82,7 @@ final class HoardGameTests {
         }
         // der Kampf dauert: Erwachen, Biss, Weltenspucke, Treffer an den Gliedern, Zerfall
         event.registerTest(WORLD_EATER_FIGHT.getId(), new FunctionGameTestInstance(WORLD_EATER_FIGHT.key(),
-                new TestData<>(environment, Level.OVERWORLD, ARENA, 1600, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
+                new TestData<>(environment, Level.OVERWORLD, ARENA, 1700, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
     }
 
     private static void floor(GameTestHelper helper, int size) {
@@ -219,7 +219,8 @@ final class HoardGameTests {
         BlockPos center = field.center();
         BlockPos sealPos = center.offset(0, -2, 4);
         level.setBlock(sealPos, AbyssBlocks.HOARD_SEAL.get().defaultBlockState(), Block.UPDATE_ALL);
-        field.guard(() -> {
+        // frisch erzeugte Chunks nehmen Wesen erst auf, wenn ihre Karten verarbeitet sind (ein paar Takte später)
+        await(helper, field, () -> level.isPositionEntityTicking(center), 100, () -> "Das Feld des Weltenfressers lädt nicht", () -> {
             if (!(level.getBlockEntity(sealPos) instanceof HoardSealBlockEntity seal)) {
                 throw new IllegalStateException("Das Siegel des Horts hat keine Blockentität");
             }
@@ -267,7 +268,7 @@ final class HoardGameTests {
                     }));
                 }));
             });
-        }).run();
+        });
     }
 
     /** Wie {@link #await}, räumt bei einem Fehlschlag das Feld. */

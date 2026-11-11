@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "N": "kingdomsatwar:nightsteel_ingot",
+    "S": "minecraft:shield"
+  },
+  "pattern": [
+    "NNN",
+    "NSN",
+    " N "
+  ],
+  "result": {
+    "id": "kingdomsatwar:tower_shield"
+  }
+}

@@ -47,6 +47,16 @@ final class MonsterGearModels {
     }
 
     private static void weapon(ItemModelGenerators items, Item item, String name, float[][] parts) {
+        weapon(items, item, name, parts, 0.68f, 0.0f);
+    }
+
+    /**
+     * Auch für die Waffenkammer (0.84): Bild im Inventar, das schräg gelegte 3D-Modell in der Hand. Lange Waffen dürfen aus
+     * eigener Sicht kleiner erscheinen ({@code firstPersonScale}, Minecraft: 0.68) und ein Stück zur Bildmitte rücken
+     * ({@code firstPersonShift}, in Sechzehntel Blöcken), sonst ragen ihre Köpfe aus dem Bild.
+     */
+    static void weapon(ItemModelGenerators items, Item item, String name, float[][] parts, float firstPersonScale, float firstPersonShift) {
+        float handX = 1.13f - firstPersonShift;
         TextureMapping textures = new TextureMapping()
                 .put(MODEL, tex("item/" + name + "_model"))
                 .put(MODEL_GLOW, tex("item/" + name + "_model_glow"))
@@ -58,9 +68,9 @@ final class MonsterGearModels {
                 .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, t -> t.rotation(0, -90, 55).translation(0, 4.0f, 0.5f).scale(0.85f, 0.85f, 0.85f))
                 .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, t -> t.rotation(0, 90, -55).translation(0, 4.0f, 0.5f).scale(0.85f, 0.85f, 0.85f))
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND,
-                        t -> t.rotation(0, -90, 25).translation(1.13f, 3.2f, 1.13f).scale(0.68f, 0.68f, 0.68f))
+                        t -> t.rotation(0, -90, 25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale))
                 .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND,
-                        t -> t.rotation(0, 90, -25).translation(1.13f, 3.2f, 1.13f).scale(0.68f, 0.68f, 0.68f));
+                        t -> t.rotation(0, 90, -25).translation(handX, 3.2f, 1.13f).scale(firstPersonScale, firstPersonScale, firstPersonScale));
         // je Teil: die eigene Drehung um seinen Drehpunkt und das Schräglegen (-45° um Z durch die Mitte) als EINE Drehung –
         // beide drehen zuerst um X/Y, zuletzt um Z, also addieren sich die Z-Winkel; der Drehpunkt wandert mit
         double tilt = Math.toRadians(-45.0);

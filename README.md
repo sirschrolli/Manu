@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.83.0 – Sechshundert neue Fische.** **628 neue Arten** beißen jetzt in den Biomen: acht mehr in jedem der 39 eigenen Biome der Mod (dort sind es nun **zwanzig**), vier oder fünf mehr in jedem Biom von Minecraft (**zehn oder zwölf**) – auch in den Höhlen, in der Lava des Nethers und in der Leere des Ends. Mit ihnen kommen **19 neue Gestalten** an den Haken: Dorsch und Schellfisch, Hering und Alse, Schmerlen mit langen Barteln, Sonnenbarsche, giftstachelige **Rotfeuerfische**, Doktorfische mit Skalpell, Lipp- und Papageifische mit Schnabel, Drückerfische, **Hammerhaie**, **Sägefische**, Sterngucker, **Seeschlangen und Lindwürmer**, bunte Anemonenfische, Knurrhähne mit Flügelflossen, **Seeigel**, **Muscheln** (manche mit Perle), Seegurken, leuchtende Fadenschnecken und der **Fangkrebs**. Jedes Biom hat jetzt **zwei große Fänge** (episch). Zusammen sind es **1628 Arten** – jede mit eigenem Bild, Namen, Notiz im Fischbuch und eigener Wirkung, keine zwei wirken gleich. Außerdem: Das **Angel-Minispiel** wird nur noch mit der **Maus** gespielt – Maustaste halten hebt die Fangzone wie bisher, und **jeder Klick gibt ihr einen kleinen Schubs nach oben**, so lässt sie sich auch antippen; die Leertaste hat ausgedient.
+> **Testversion 0.84.0 – Die Waffenkammer.** Dreizehn neue Stücke zum Kämpfen, Graben und Blocken – alle als **3D-Modelle**, richtig gehalten in der eigenen Sicht und mit F5 von vorn und hinten, die Schilde auch beim Blocken. **Fünf Waffen:** die **Stahl-Hellebarde** (reicht 4,5 Blöcke weit und **durchbohrt** bis zu zwei Gegner hinter dem Ziel), der **Draconium-Kriegshammer** (Benutzen halten und loslassen: der **Erdstoß** schleudert alle Gegner ringsum fort und setzt sie in Brand), der **Nachtstahl-Dolch** (sehr schnell, **von hinten doppelter Schaden**), das **Abyssit-Großschwert** (ein voller Schlag **spaltet** alles im Halbkreis vor dir) und die **Stahl-Doppelaxt** (legt Schilde **zehn Sekunden** lahm). **Vier Spitzhacken:** der **Bergmannshammer** (baut **drei mal drei** Blöcke ab), die **Glutspitzhacke** (Erze kommen **geschmolzen** heraus), der **Adernbrecher** (bricht eine **ganze Erzader** auf einmal) und der **Erzspürer** (Erze im Umkreis **leuchten durch die Wände**). **Vier Schilde:** der **Stahl-Rundschild** (gleich beim Heben geblockt ist **pariert** – der Angreifer fliegt zurück und ist geschwächt), der **Drachenschild** (wer dagegen schlägt, **brennt**), der **Turmschild** (deckt auch die **Flanken** und steht fest, macht aber etwas langsamer) und der **Spiegelschild** (Geschosse **prallen zurück** – dorthin, wohin du schaust).
+> In 0.83 kamen **sechshundert neue Fische**: **628 neue Arten** beißen jetzt in den Biomen: acht mehr in jedem der 39 eigenen Biome der Mod (dort sind es nun **zwanzig**), vier oder fünf mehr in jedem Biom von Minecraft (**zehn oder zwölf**) – auch in den Höhlen, in der Lava des Nethers und in der Leere des Ends. Mit ihnen kommen **19 neue Gestalten** an den Haken: Dorsch und Schellfisch, Hering und Alse, Schmerlen mit langen Barteln, Sonnenbarsche, giftstachelige **Rotfeuerfische**, Doktorfische mit Skalpell, Lipp- und Papageifische mit Schnabel, Drückerfische, **Hammerhaie**, **Sägefische**, Sterngucker, **Seeschlangen und Lindwürmer**, bunte Anemonenfische, Knurrhähne mit Flügelflossen, **Seeigel**, **Muscheln** (manche mit Perle), Seegurken, leuchtende Fadenschnecken und der **Fangkrebs**. Jedes Biom hat jetzt **zwei große Fänge** (episch). Zusammen sind es **1628 Arten** – jede mit eigenem Bild, Namen, Notiz im Fischbuch und eigener Wirkung, keine zwei wirken gleich. Außerdem: Das **Angel-Minispiel** wird nur noch mit der **Maus** gespielt – Maustaste halten hebt die Fangzone wie bisher, und **jeder Klick gibt ihr einen kleinen Schubs nach oben**, so lässt sie sich auch antippen; die Leertaste hat ausgedient.
 > In 0.82 kam **die Himmelswacht**: Die Bosse lassen sich nicht mehr aus der Luft austanzen: **Jeder Boss wacht im Kampf über den Himmel.** Wer in seiner Nähe länger als zwei Sekunden gleitet – mit Elytren oder mit den Schwingen der Bosse –, den nimmt er **ins Visier**: Über ihm lädt ein Runensiegel mit durchgestrichener Schwinge, eine Lichtlinie zeigt auf den Flieger, ein Warnton schlägt an, und um das Fadenkreuz ziehen sich vier Winkel zusammen („IM VISIER – Jetzt landen!“). Wer jetzt landet, dem geschieht nichts. Sonst löst sich der **Bannpfeil**: Er hält vor und jagt dem Flieger nach, wendet aber nur begrenzt scharf – ein Haken im letzten Moment lässt ihn vorbeischießen, eine Anzeige weist die Richtung, aus der er kommt, und wie weit er noch ist. Trifft er, endet das Gleiten, und der **Flugbann** hält den Getroffenen acht bis zwölf Sekunden am Boden (der Sturz tut dabei um 60 % weniger weh, Milch hilft nicht). Jeder Boss hat seine eigene Farbe und seine eigene Zugabe: Pyrrhons Pfeil setzt in Brand, Glaciaras lässt erstarren, Malleus reißt an der Kette zu sich, der Weltenfresser saugt in den Schlund – und Anni stellt den Flieger kurzerhand auf den Boden zurück: „Fliegen ist auf diesem Server nicht erlaubt.“ Gute Schwingen verkürzen den Bann (Feen-Elytren um 15 %, Sternenschwingen um 30 %, Fehlerflügel um 40 %, die Schwingen des Schöpfers um 60 %).
 > In 0.81 kamen **tausend Fische**: In **jedem Biom** beißen jetzt eigene Fische: zwölf Arten in jedem der 39 eigenen Biome der Mod, sechs oder sieben in jedem Biom von Minecraft – auch in den **Höhlen** (Tropfsteinhöhlen, Üppige Höhlen, Schwefelhöhlen, Tiefes Dunkel, Abgrundgrotte, Schattentiefen), in der **Lava** des Nethers und in der **Leere** des Ends. Mit den bisherigen sind es genau **1000 Arten**: Jede hat ihr eigenes Bild, ihren Namen, ihre Größe und ihren Drill, und **keine zwei wirken beim Essen gleich**. Neben Fischen gehen Krabben, Krebse, Garnelen, Quallen, Schnecken, Seesterne, Molche, Rochen und Kalmare an den Haken; in jedem Biom gibt es Gewöhnliches und einen **großen Fang** (episch, schwer zu halten), dazu **acht neue Legenden** (Nachtfürst, Rissleviathan, Sternenwal, Der Lichtlose, Eiskaiser, Riffkönigin, Moormutter, Sonnenkönig). Das **Fischbuch** (Taste H) führt zehn Kapitel und zeigt in jedem die **Gewässer**: „Überall“ und jedes Biom mit seinem Stand (gefangen / vorhanden), ein Stern für jedes vollständige. Neu ist der **Fischbeutel** (Leder, Faden, Truhe): Wer ihn bei sich trägt, dem **wandert jeder Fang hinein**; ein Rechtsklick öffnet ihn, und man nimmt die Fische einzeln, stapelweise oder alle wieder heraus. Er fasst 64 Fische, und sein Platz lässt sich **ohne Obergrenze erweitern** – jede Stufe bringt 32 Plätze und kostet mehr als die vorige (12 Bronze für die erste, 53 für die elfte, über 1000 für die einunddreißigste). Die Erweiterung verkauft der **Fischer in den Dörfern**; er verkauft auch den Beutel selbst und **kauft den Fang auf** – beliebige Fische nach Seltenheit, auch direkt aus dem Beutel.
 > In 0.80 kamen **Totems und Äpfel der Macht**: Neun neue **Totems**: Jedes wirkt **in der Zweithand** dauernd – und hält den Tod auf wie das Totem der Unsterblichkeit, nur stehst du **mit mehr Herzen wieder auf** (8 bis 12 statt eines halben) und entfesselst die Kraft seines Elements. Sechs gehören den Drachen (je vier ihrer Schuppen um ein Totem der Unsterblichkeit): **Glut** (feuerfest, Angreifer brennen – Feuernova), **Frost** (kein Erfrieren, Angreifer erstarren – Frostnova), **Sturm** (schneller laufen und schlagen – Blitze fahren in die Feinde), **Fels** (Rüstung, Härte, fester Stand – Erdstoß und zehn Extraherzen), **Hain** (heilt langsam, kein Gift – zwölf Herzen und Heilung für Tiere und Truppen), **Gezeiten** (Meereskraft – Flutwelle). Dazu das **Totem der Schatten** (Nachtsicht, Feinde bemerken dich erst aus halber Entfernung – beim Tod verschwindest du), das **Totem der Leere** (kein Fallschaden – und es **rettet auch aus dem Nichts** unter der Welt, zurück auf den letzten festen Boden) und das **Totem des Schöpfers** aus den sechs Totems der Drachen und einem Schöpferfunken: fünf Herzen mehr, beim Tod **alle Herzen** und eine Lichtnova – und es hält **dreimal**. Vier **Äpfel der Macht**, weit stärker als der verzauberte goldene Apfel und sehr schwer herzustellen: **Drachenapfel** (die Schuppen aller sechs Drachen), **Sternenapfel**, **Schattenapfel** und der **Apfel der Unsterblichkeit** aus den drei anderen und einem Schöpferfunken – mit zwanzig Extraherzen, zehn Herzen mehr und dem **Zweiten Leben**: Zehn Minuten lang kann dich einmal nichts töten. Totems und Äpfel liegen **plastisch in der Hand** – aufrecht wie ein Götzenbild, auch in der Außenansicht, im Rahmen und am Boden –, als erste Gegenstände mit dem neuen Verfahren, das nach und nach alle Gegenstände bekommen.
@@ -375,6 +376,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Tausend Fische** (0.81): eigene Arten für jedes Biom (105 Biome – auch Höhlen, Lava und Leere), mit den bisherigen genau 1000, jede mit eigenem Bild, eigenem Namen und eigener Wirkung; acht neue Legenden; das Fischbuch mit den Gewässern je Kapitel; der Fischbeutel (der Fang wandert hinein, Platz unbegrenzt erweiterbar) und der Fischer im Dorf als Händler dafür | ✅ fertig |
 | **Die Himmelswacht** (0.82): Jeder Boss nimmt Flieger ins Visier (Siegel, Ziellinie, Warnanzeige) und holt sie mit einem verfolgenden Bannpfeil herunter; die Wirkung Flugbann (kein Gleiten, gedämpfter Sturz), 17 Themen mit eigener Farbe und Zugabe für alle Bosse, gute Schwingen verkürzen den Bann | ✅ fertig |
 | **Sechshundert neue Fische** (0.83): 628 neue Arten (zwanzig in jedem eigenen Biom, zehn oder zwölf in jedem von Minecraft), 19 neue Gestalten (Hammerhai, Sägefisch, Seeschlange, Rotfeuerfisch, Seeigel, Muscheln, Fangkrebs …), zwei große Fänge je Biom, zusammen 1628 Arten; das Angel-Minispiel nur noch mit der Maus (halten oder klicken) | ✅ fertig |
+| **Die Waffenkammer** (0.84): fünf Waffen (Stahl-Hellebarde, Draconium-Kriegshammer mit Erdstoß, Nachtstahl-Dolch, Abyssit-Großschwert, Stahl-Doppelaxt), vier Spitzhacken (Bergmannshammer 3×3, Glutspitzhacke, Adernbrecher, Erzspürer) und vier Schilde (Stahl-Rundschild mit Parade, Drachenschild, Turmschild, Spiegelschild) – alle in 3D, jede mit eigener Fähigkeit | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -435,7 +437,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.83.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.84.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -443,7 +445,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.83.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.84.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -3147,6 +3149,51 @@ solche Modelle.
 - **Aus Monsterteilen** (seit 0.70): Krallenklinge, Moorkeule, Glutzahn-Klinge und Seelensense, Werwolfspelz und
   Glutwurm-Panzer – als 3D-Modelle, mit eigenen Kräften und Satzboni (siehe
   [Waffen und Rüstungen aus Monsterteilen](#waffen-und-rüstungen-aus-monsterteilen-seit-070)).
+- **Die Waffenkammer** (seit 0.84): fünf Waffen, vier Spitzhacken und vier Schilde mit eigenen Fähigkeiten, alle in 3D
+  (siehe [Die Waffenkammer](#die-waffenkammer-seit-084)).
+
+### Die Waffenkammer (seit 0.84)
+
+![Die Waffenkammer: Waffen, Spitzhacken und Schilde auf Rüstungsständern, Erdstoß, Erzspürer und Schilde beim Blocken](docs/bilder/waffenkammer.jpg)
+
+Dreizehn neue Stücke, alle als **3D-Modelle** gebaut: In der Hand liegen sie richtig – aus eigener Sicht und mit F5 von vorn
+und hinten –, im Inventar zeigen Waffen und Spitzhacken ihr Bild, die Schilde sich selbst. Jedes kann etwas, das kein anderes
+kann; geschmiedet werden sie an der Werkbank aus Stahl, Draconium, Nachtstahl und Abyssit.
+
+**Waffen** (Schaden je Schlag, Schläge je Sekunde):
+
+| Waffe | Werte | Fähigkeit | Rezept |
+|---|---|---|---|
+| **Stahl-Hellebarde** | 7,5 · 1,0 | reicht **4,5 Blöcke** weit (ein Schwert 3); ein voller Schlag **durchbohrt** bis zu zwei Gegner hinter dem Ziel (60 % Schaden) | 3 Stahlbarren, 2 Stöcke |
+| **Draconium-Kriegshammer** | 11 · 0,7 | Benutzen halten (0,8 s) und loslassen: der **Erdstoß** – 8 Schaden für alle Gegner im Umkreis von 4,5 Blöcken, sie fliegen fort und brennen 4 s; danach 8 s Ruhe | 4 Draconium, Goldbarren, 2 Lohenruten |
+| **Nachtstahl-Dolch** | 5,5 · 2,6 | sehr schnell; **von hinten** (das Ziel schaut weg) doppelter Schaden | Nachtstahlbarren, Leder |
+| **Abyssit-Großschwert** | 12 · 0,8 | ein voller Schlag **spaltet**: alles im Halbkreis vor dir (3,5 Blöcke) bekommt 75 % des Schadens | 2 Abyssitbarren, 2 Nachtstahlbarren, Stock |
+| **Stahl-Doppelaxt** | 10,5 · 0,8 | ein geblockter Hieb legt den Schild **zehn Sekunden** lahm (eine Axt fünf); fällt Bäume wie eine Axt | 4 Stahlbarren, 3 Stöcke |
+
+Hellebarde, Großschwert, Kriegshammer und Dolch schwingen nicht seitlich wie ein Schwert – ihre Fähigkeit ersetzt den Schwung.
+
+**Spitzhacken:**
+
+| Spitzhacke | Fähigkeit | Rezept |
+|---|---|---|
+| **Bergmannshammer** (Stahl) | baut **drei mal drei** Blöcke ab – die Fläche quer zur Seite, auf die du schlägst (Stollen, Böden, Decken); nur, was eine Spitzhacke abbauen darf und nicht viel härter ist als die Mitte; schleichend nur einen Block | 2 Stahlbarren, Stahlblock, 2 Stöcke |
+| **Glutspitzhacke** (Draconium) | Erze und Rohstoffe kommen **geschmolzen** heraus (Roheisen wird zu Eisenbarren, mit Glück entsprechend mehr); Stein bleibt Bruchstein | 3 Draconium, 2 Lohenruten |
+| **Adernbrecher** (Nachtstahl) | trifft er ein Erz, bricht die **ganze Ader** – alle zusammenhängenden Blöcke derselben Erzsorte, auch über Ecken (bis 48); schleichend nur einen Block | 3 Nachtstahlbarren, 2 Amethystscherben, 2 Stöcke |
+| **Erzspürer** (Abyssit) | Benutzen: alle Erze im Umkreis von **zwölf Blöcken** leuchten acht Sekunden **durch die Wände**, jedes in seiner Farbe – nur für dich; danach 10 s Ruhe | 2 Abyssitbarren, Enderauge, 2 Stöcke |
+
+Jeder abgebaute Block kostet die Spitzhacke wie gewohnt einen Punkt Haltbarkeit; Verzauberungen (Glück, Behutsamkeit) wirken
+auf jeden Block.
+
+**Schilde** (in der Zweithand, blocken wie der Schild von Minecraft):
+
+| Schild | Fähigkeit | Rezept |
+|---|---|---|
+| **Stahl-Rundschild** | klein und schnell oben (0,1 s statt 0,25 s); wer einen Hieb in den ersten 0,35 s nach dem Heben fängt, **pariert**: Der Angreifer wird zurückgestoßen, drei Sekunden geschwächt und kurz verlangsamt | 4 Stahlbarren, Bretter |
+| **Drachenschild** | Draconium mit goldener Drachenmaske und glühenden Augen; wer gegen ihn schlägt, **brennt** vier Sekunden; feuerfest | Schild, 5 Draconium, Goldbarren |
+| **Turmschild** | groß und gewölbt; deckt **135°** nach jeder Seite (auch die Flanken), nutzt sich halb so schnell ab und gibt dir halbe Standfestigkeit gegen Rückstoß – in der Hand aber 10 % langsamer; hebt sich träger (0,4 s) | Schild, 6 Nachtstahlbarren |
+| **Spiegelschild** | Geschosse, die von vorn treffen – Pfeile, Feuerbälle, Dreizacke –, **prallen zurück**, dorthin, wohin du schaust, und gehören nun dir; feuerfest | Schild, 5 Abyssitbarren, getöntes Glas |
+
+![Der Erdstoß des Kriegshammers, der Stollen des Bergmannshammers und eine Felswand vor und nach dem Erzspürer](docs/bilder/waffenkammer_faehigkeiten.jpg)
 
 ### Magie
 
@@ -3676,7 +3723,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.83.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.84.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3805,15 +3852,17 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      neue Legenden, das Fischbuch mit den Gewässern je Kapitel, der Fischbeutel und seine Erweiterungen beim Fischer;
    - **0.82 – Die Himmelswacht** (fertig): Jeder Boss nimmt Flieger ins Visier und holt sie mit einem verfolgenden
      Bannpfeil herunter; der Flugbann hält sie am Boden; jeder Boss mit eigener Farbe und eigener Zugabe;
-   - zuletzt **0.83 – Sechshundert neue Fische** (fertig): 628 neue Arten mit 19 neuen Gestalten, zwanzig Arten in jedem
-     eigenen Biom, zwei große Fänge je Biom (zusammen 1628 Arten); das Angel-Minispiel nur noch mit der Maus.
+   - **0.83 – Sechshundert neue Fische** (fertig): 628 neue Arten mit 19 neuen Gestalten, zwanzig Arten in jedem
+     eigenen Biom, zwei große Fänge je Biom (zusammen 1628 Arten); das Angel-Minispiel nur noch mit der Maus;
+   - zuletzt **0.84 – Die Waffenkammer** (fertig): fünf Waffen, vier Spitzhacken und vier Schilde, alle in 3D und mit
+     eigenen Fähigkeiten (Durchbohren, Erdstoß, Stich von hinten, Spaltschlag, drei mal drei, Schmelzen, ganze Adern,
+     Erze durch Wände sehen, Parade, Feuer, Flankenschutz, zurückgeworfene Geschosse).
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** viele neue **Waffen, Spitzhacken und Schilde** als
-   3D-Modelle, die auch in der Außenansicht richtig in der Hand liegen, und plastische Modelle für alle Gegenstände; das
+   **Als Nächstes geplant:** neue Wesen; plastische Modelle für alle Gegenstände; das
    **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –;
-   neue Wesen; schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
+   schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.

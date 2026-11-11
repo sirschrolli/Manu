@@ -79,6 +79,8 @@ import mystik_textures  # noqa: E402
 import anni_textures  # noqa: E402
 import creator_textures  # noqa: E402
 import monster_gear_textures  # noqa: E402
+import armory_textures  # noqa: E402
+import armory_shields  # noqa: E402
 import sea_blocks  # noqa: E402
 import world_blocks  # noqa: E402
 from pixelart import Color, hexc  # noqa: E402
@@ -393,6 +395,8 @@ def build_all() -> dict[str, Image.Image]:
     anni_textures.build(put)
     creator_textures.build(put)
     monster_gear_textures.build(put)
+    armory_textures.build(put)
+    armory_shields.build(put)
     equipment_textures.build_entity(put)
     armor_art.build(put)
     plants()

@@ -235,6 +235,7 @@ public final class ModGameTests {
         ArchitectGameTests.init(); // Dragon Architect (Vermessen, eigene Baupläne, Nachbau)
         HeroGameTests.init();      // der eigene Held: Herz- und Manakristalle
         VeterancyGameTests.init(); // Kampferfahrung der Truppen: Stufen, Meister, Legende
+        ArmoryGameTests.init();    // die Waffenkammer: Waffen, Spitzhacken, Schilde
         AuditGameTests.init();     // Bauprüfung aller Gebäude (Betten, Türen, Halt)
         DragonAttackGameTests.init(); // die großen eigenen Angriffe der Drachen-Bosse
     }
@@ -301,6 +302,7 @@ public final class ModGameTests {
         ArchitectGameTests.register(event);
         HeroGameTests.register(event, environment);
         VeterancyGameTests.register(event, environment);
+        ArmoryGameTests.register(event, environment);
         AuditGameTests.register(event, environment);
         DragonAttackGameTests.register(event, environment);
         // eigene Gruppe: die Siedlungstests räumen zwischendurch alle Siedlungen weg

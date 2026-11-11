@@ -254,6 +254,10 @@ final class Showcase {
                         FishingShowcase.bagAndBook(steps);
                     } else if (scene.equals("newfish")) {
                         FishingShowcase.newFish(steps);
+                    } else if (scene.equals("armory")) {
+                        ArmoryShowcase.armory(steps);
+                    } else if (scene.equals("armory_shields")) {
+                        ArmoryShowcase.shieldsFirstPerson(steps);
                     } else if (scene.equals("skyward")) {
                         SkyWardShowcase.skyward(steps);
                     } else if (scene.equals("relics")) {

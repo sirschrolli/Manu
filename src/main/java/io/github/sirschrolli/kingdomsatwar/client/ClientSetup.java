@@ -193,6 +193,9 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.CITIZEN.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.CitizenRenderer::new);
         event.registerEntityRenderer(ModEntities.VILLAGER.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.VillagerRenderer::new);
         event.registerEntityRenderer(ModEntities.BANDIT_ARCHER.get(), BanditRenderer::new);
+        // das Leuchten des Erzspürers (0.84): ein gewöhnliches Blockbild
+        event.registerEntityRenderer(io.github.sirschrolli.kingdomsatwar.registry.Armory.ORE_GLOW.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.OreGlowRenderer::new);
         io.github.sirschrolli.kingdomsatwar.client.renderer.farm.FarmRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.wild.WildRenderers.registerRenderers(event);
         io.github.sirschrolli.kingdomsatwar.client.renderer.monster.MonsterRenderers.registerRenderers(event);

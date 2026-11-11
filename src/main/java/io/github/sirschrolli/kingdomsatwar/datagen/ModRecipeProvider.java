@@ -60,6 +60,7 @@ public class ModRecipeProvider extends RecipeProvider {
         shadowTreasureRecipes();
         faeRecipes();
         monsterGearRecipes();
+        armoryRecipes();
         creatorRecipes();
         naturalChains();
     }
@@ -94,6 +95,83 @@ public class ModRecipeProvider extends RecipeProvider {
     // =====================================================================================
     // Waffen und Rüstungen aus Monsterteilen (0.70)
     // =====================================================================================
+
+    // =====================================================================================
+    // Die Waffenkammer (0.84)
+    // =====================================================================================
+
+    private void armoryRecipes() {
+        Item steel = ModItems.STEEL_INGOT.get();
+        Item steelBlock = ModBlocks.STEEL_BLOCK.get().asItem();
+        Item draconium = ModItems.DRACONIUM.get();
+        Item nightsteel = io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_INGOT.get();
+        Item abyssite = io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_INGOT.get();
+        // Stahl-Hellebarde: Axtblatt und Stoßklinge aus Stahl an einer langen Stange
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_HALBERD.get())
+                .pattern(" SS").pattern(" RS").pattern("R  ")
+                .define('S', steel).define('R', Items.STICK)
+                .unlockedBy(getHasName(steel), has(steel)).save(output, key("steel_halberd"));
+        // Draconium-Kriegshammer: ein Draconiumblock mit Goldkappen auf Lohenruten
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.DRACONIUM_WARHAMMER.get())
+                .pattern("DGD").pattern("DBD").pattern(" B ")
+                .define('D', draconium).define('G', Items.GOLD_INGOT).define('B', Items.BLAZE_ROD)
+                .unlockedBy(getHasName(draconium), has(draconium)).save(output, key("draconium_warhammer"));
+        // Nachtstahl-Dolch: eine kurze Klinge, ein Lederheft
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.NIGHTSTEEL_DAGGER.get())
+                .pattern(" N").pattern("L ")
+                .define('N', nightsteel).define('L', Items.LEATHER)
+                .unlockedBy(getHasName(nightsteel), has(nightsteel)).save(output, key("nightsteel_dagger"));
+        // Abyssit-Großschwert: eine Klinge aus Abyssit, die Parierstange aus Nachtstahl
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.ABYSSITE_GREATSWORD.get())
+                .pattern(" A ").pattern(" A ").pattern("NRN")
+                .define('A', abyssite).define('N', nightsteel).define('R', Items.STICK)
+                .unlockedBy(getHasName(abyssite), has(abyssite)).save(output, key("abyssite_greatsword"));
+        // Stahl-Doppelaxt: zwei Blätter beiderseits des Stiels
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_DOUBLE_AXE.get())
+                .pattern("SRS").pattern("SRS").pattern(" R ")
+                .define('S', steel).define('R', Items.STICK)
+                .unlockedBy(getHasName(steel), has(steel)).save(output, key("steel_double_axe"));
+        // Bergmannshammer: ein Stahlblock zwischen zwei Barren, auf einem kräftigen Stiel
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.Armory.MINER_HAMMER.get())
+                .pattern("SBS").pattern(" R ").pattern(" R ")
+                .define('S', steel).define('B', steelBlock).define('R', Items.STICK)
+                .unlockedBy(getHasName(steel), has(steel)).save(output, key("miner_hammer"));
+        // Glutspitzhacke: eine Draconium-Picke auf Lohenruten
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.Armory.EMBER_PICKAXE.get())
+                .pattern("DDD").pattern(" B ").pattern(" B ")
+                .define('D', draconium).define('B', Items.BLAZE_ROD)
+                .unlockedBy(getHasName(draconium), has(draconium)).save(output, key("ember_pickaxe"));
+        // Adernbrecher: Nachtstahl mit Amethyst, der den Adern folgt
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.Armory.VEIN_BREAKER.get())
+                .pattern("NNN").pattern("ARA").pattern(" R ")
+                .define('N', nightsteel).define('A', Items.AMETHYST_SHARD).define('R', Items.STICK)
+                .unlockedBy(getHasName(nightsteel), has(nightsteel)).save(output, key("vein_breaker"));
+        // Erzspürer: Abyssit um ein Enderauge
+        shaped(RecipeCategory.TOOLS, io.github.sirschrolli.kingdomsatwar.registry.Armory.ORE_SEEKER.get())
+                .pattern("AEA").pattern(" R ").pattern(" R ")
+                .define('A', abyssite).define('E', Items.ENDER_EYE).define('R', Items.STICK)
+                .unlockedBy(getHasName(abyssite), has(abyssite)).save(output, key("ore_seeker"));
+        // Stahl-Rundschild: Stahl um eine Holzscheibe
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.STEEL_BUCKLER.get())
+                .pattern(" S ").pattern("SPS").pattern(" S ")
+                .define('S', steel).define('P', net.minecraft.tags.ItemTags.PLANKS)
+                .unlockedBy(getHasName(steel), has(steel)).save(output, key("steel_buckler"));
+        // Drachenschild: ein Schild, mit Draconium beschlagen, die Maske aus Gold
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.DRAGON_SHIELD.get())
+                .pattern("DGD").pattern("DSD").pattern(" D ")
+                .define('D', draconium).define('G', Items.GOLD_INGOT).define('S', Items.SHIELD)
+                .unlockedBy(getHasName(draconium), has(draconium)).save(output, key("dragon_shield"));
+        // Turmschild: ein Schild, mit Nachtstahl verlängert und beschlagen
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.TOWER_SHIELD.get())
+                .pattern("NNN").pattern("NSN").pattern(" N ")
+                .define('N', nightsteel).define('S', Items.SHIELD)
+                .unlockedBy(getHasName(nightsteel), has(nightsteel)).save(output, key("tower_shield"));
+        // Spiegelschild: poliertes Abyssit (getöntes Glas) auf einem Schild
+        shaped(RecipeCategory.COMBAT, io.github.sirschrolli.kingdomsatwar.registry.Armory.MIRROR_SHIELD.get())
+                .pattern("AGA").pattern("ASA").pattern(" A ")
+                .define('A', abyssite).define('G', Items.TINTED_GLASS).define('S', Items.SHIELD)
+                .unlockedBy(getHasName(abyssite), has(abyssite)).save(output, key("mirror_shield"));
+    }
 
     private void monsterGearRecipes() {
         Item claw = io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.WEREWOLF_CLAW.get();
