@@ -89,7 +89,7 @@ import org.jspecify.annotations.Nullable;
  * Findet er niemanden mehr, zerfällt er nach einer halben Minute in Pixel und kehrt in seinen Fehlerkern zurück. Besiegt
  * stürzt er endgültig ab und zerfällt in Pixel; der Kern erlischt (ein Redstoneblock startet ihn neu).
  */
-public class AnniTrollEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class AnniTrollEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final float MAX_HEALTH = 1500.0f;
     public static final int SPAWN_TICKS = 90;
     /** In diesem Tick des Ladens setzt er sich zusammen (davor fliegen nur Pixel). */
@@ -1694,5 +1694,17 @@ public class AnniTrollEntity extends Monster implements io.github.sirschrolli.ki
             this.setHealth(this.getMaxHealth());
         }
         this.nameBossBar();
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.GLITCH;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return !this.isHidden() && this.getTarget() != null && this.getTarget().isAlive();
     }
 }

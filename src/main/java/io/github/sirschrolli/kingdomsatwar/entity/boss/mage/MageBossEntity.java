@@ -78,7 +78,7 @@ import org.jspecify.annotations.Nullable;
  * Phasenwechsel stößt er alle von sich und ist einen Moment unverwundbar. Läuft man davon, kehrt er nach einer Weile
  * zurück, heilt sich und meditiert wieder.
  */
-public class MageBossEntity extends Monster implements Enemy, ElementalBoss, MageLike {
+public class MageBossEntity extends Monster implements Enemy, ElementalBoss, MageLike, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public enum State { DORMANT, AWAKENING, FIGHT, DYING }
 
     /** Gesten (Animationen), synchronisiert. */
@@ -1610,5 +1610,17 @@ public class MageBossEntity extends Monster implements Enemy, ElementalBoss, Mag
         super.onRemovedFromLevel();
         this.bossEvent.removeAllPlayers();
         this.barPlayers.clear();
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.of(this.element);
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return this.state() == State.FIGHT;
     }
 }

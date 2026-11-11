@@ -88,7 +88,7 @@ public final class CreatorBlocks {
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
                             .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.CREATOR_GEAR_ASSET).setDamageOnHurt(false).build())
                     .attributes(gear(EquipmentSlotGroup.CHEST, "creator_wings", 10.0, 4.0).build())
-                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 5))));
+                    .component(DataComponents.LORE, ModItems.lore("creator_wings", 6))));
 
     /**
      * Der Heiligenschein des Schöpfers (seit 0.78, Kopf): ein goldener Ring aus Licht über dem Kopf. Er schützt wie ein Helm

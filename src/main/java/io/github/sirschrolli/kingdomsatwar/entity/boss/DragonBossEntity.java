@@ -68,7 +68,7 @@ import org.jspecify.annotations.Nullable;
  * dazu Angriffe, Erweckung und Todeseffekte. Bewegt wird ohne Wegfindung: am Boden lenkend, in der Luft mit
  * weichen Kurven um das Nest.
  */
-public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBoss {
+public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBoss, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public enum State { AWAKENING, FIGHT, RETURNING, SLUMBER, DYING }
 
     public enum MoveMode { GROUND, AIR, WATER, BURROW }
@@ -1432,5 +1432,17 @@ public abstract class DragonBossEntity extends Mob implements Enemy, ElementalBo
     protected float attackHeadReach() {
         int anim = this.getAttackAnim();
         return anim == BossAnims.BITE ? 2.5f : anim == BossAnims.BREATH ? 1.0f : 0.0f;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return this.element != null ? io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.of(this.element) : io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.SHADOW;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return this.getBossState() == State.FIGHT;
     }
 }

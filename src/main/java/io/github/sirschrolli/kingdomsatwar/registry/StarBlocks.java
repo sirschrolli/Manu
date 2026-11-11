@@ -61,7 +61,7 @@ public final class StarBlocks {
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
                             .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.STAR_WINGS_ASSET).setDamageOnHurt(false).build())
                     .repairable(ModTags.Items.REPAIRS_STAR_WINGS)
-                    .component(DataComponents.LORE, ModItems.lore("star_wings", 4))));
+                    .component(DataComponents.LORE, ModItems.lore("star_wings", 5))));
     /** Sternsplitter: ein Splitter gefallenen Sternenlichts – Beute Asterias, repariert Sternenlanze und Sternenschwingen. */
     public static final DeferredItem<Item> STAR_SHARD = add(ModItems.ITEMS.registerSimpleItem("star_shard",
             p -> p.rarity(Rarity.UNCOMMON).component(DataComponents.LORE, ModItems.lore("star_shard", 1))));

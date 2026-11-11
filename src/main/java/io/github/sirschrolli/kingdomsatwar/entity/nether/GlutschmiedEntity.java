@@ -76,7 +76,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Findet er niemanden mehr, kehrt er an den Amboss zurück, legt den Speer darauf und schmiedet weiter.
  */
-public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final float MAX_HEALTH = 560.0f;
     public static final int AWAKEN_TICKS = 60;
     /** So lange (Ticks) dauert sein Sterben. */
@@ -1093,5 +1093,12 @@ public class GlutschmiedEntity extends Monster implements io.github.sirschrolli.
     @Override
     protected float getSoundVolume() {
         return 2.5f;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.FORGE;
     }
 }

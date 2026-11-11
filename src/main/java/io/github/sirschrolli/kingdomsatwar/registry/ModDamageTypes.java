@@ -18,6 +18,8 @@ public final class ModDamageTypes {
     public static final ResourceKey<DamageType> BATTERING_RAM = key("battering_ram");
     /** Göttliches Licht (Schrolli der Schöpfer): geht durch jede Rüstung, nicht aber durch Verzauberungen. */
     public static final ResourceKey<DamageType> DIVINE = key("divine");
+    /** Der Bannpfeil der Himmelswacht (seit 0.82): „… wurde von Pyrrhon vom Himmel geholt“. */
+    public static final ResourceKey<DamageType> SKY_BOLT = key("sky_bolt");
 
     private ModDamageTypes() {}
 
@@ -26,6 +28,7 @@ public final class ModDamageTypes {
         context.register(BALLISTA_BOLT, new DamageType(KingdomsAtWar.MODID + ".ballista_bolt", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f));
         context.register(BATTERING_RAM, new DamageType(KingdomsAtWar.MODID + ".battering_ram", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f));
         context.register(DIVINE, new DamageType(KingdomsAtWar.MODID + ".divine", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.0f));
+        context.register(SKY_BOLT, new DamageType(KingdomsAtWar.MODID + ".sky_bolt", DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER, 0.1f));
     }
 
     private static ResourceKey<DamageType> key(String name) {

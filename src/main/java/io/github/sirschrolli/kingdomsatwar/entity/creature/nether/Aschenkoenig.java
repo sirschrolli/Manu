@@ -14,8 +14,20 @@ import net.minecraft.world.level.Level;
  * aus allen drei Köpfen, verdorrt, heilt sich, zerbricht Blöcke, hüllt sich bei halber Kraft in einen Seelenschild, gegen
  * den Pfeile nichts ausrichten, und lässt einen Netherstern zurück.
  */
-public class Aschenkoenig extends WitherBoss implements ReplacesVanilla {
+public class Aschenkoenig extends WitherBoss implements ReplacesVanilla, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public Aschenkoenig(EntityType<? extends WitherBoss> type, Level level) {
         super(type, level);
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.ASH;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return this.getInvulnerableTicks() <= 0 && this.getTarget() != null && this.getTarget().isAlive();
     }
 }

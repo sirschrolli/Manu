@@ -26,5 +26,8 @@ public class ModDamageTypeTagsProvider extends DamageTypeTagsProvider {
         // das Licht des Schöpfers: durch jede Rüstung und jeden Schild (Verzauberungen und Widerstand helfen weiter)
         this.tag(DamageTypeTags.BYPASSES_ARMOR).add(ModDamageTypes.DIVINE);
         this.tag(DamageTypeTags.BYPASSES_SHIELD).add(ModDamageTypes.DIVINE);
+        // der Bannpfeil der Himmelswacht: ein Geschoss (Schusssicher hilft), der Sturz kommt vom Flugbann, nicht vom Stoß
+        this.tag(DamageTypeTags.IS_PROJECTILE).add(ModDamageTypes.SKY_BOLT);
+        this.tag(DamageTypeTags.NO_KNOCKBACK).add(ModDamageTypes.SKY_BOLT);
     }
 }

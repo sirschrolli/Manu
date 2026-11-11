@@ -218,6 +218,7 @@ public final class ModGameTests {
         FishingGameTests.init();   // das Angeln
         WeaponGameTests.init();    // Verzauberungen auf den Waffen der Mod
         RelicGameTests.init();     // Totems und Äpfel der Macht
+        SkyWardGameTests.init();   // die Himmelswacht der Bosse
         RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
         NetherGameTests.init();    // Nether-Volk
         EndGameTests.init();       // Wesen des Ends
@@ -285,6 +286,7 @@ public final class ModGameTests {
         FishingGameTests.register(event, environment);
         WeaponGameTests.register(event, environment);
         RelicGameTests.register(event, environment);
+        SkyWardGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
         WarGameTests.register(event, environment);

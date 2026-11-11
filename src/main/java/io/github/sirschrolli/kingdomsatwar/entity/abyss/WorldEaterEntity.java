@@ -79,7 +79,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Besiegt zerbricht er Glied um Glied; wer dabei war, ist fortan <b>Weltenretter</b>.
  */
-public class WorldEaterEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class WorldEaterEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final byte EVENT_AWAKEN = 90;
     public static final byte EVENT_ROAR = 91;
     public static final byte EVENT_WRATH = 92;
@@ -164,6 +164,8 @@ public class WorldEaterEntity extends Monster implements io.github.sirschrolli.k
     private final List<UUID> summoned = new ArrayList<>();
     /** Für Tests und die Vorführung: feste Ziele und keine selbst gewählten Angriffe. */
     private @Nullable LivingEntity debugTarget;
+    /** Hat er gerade einen Gegner? (nur dann wacht er über den Himmel) */
+    private boolean hasFoe;
     private boolean debugHold;
 
     public WorldEaterEntity(EntityType<? extends WorldEaterEntity> type, Level level) {
@@ -501,6 +503,7 @@ public class WorldEaterEntity extends Monster implements io.github.sirschrolli.k
             this.gravityCooldown--;
         }
         LivingEntity target = this.findTarget(level);
+        this.hasFoe = target != null;
         if (target == null && this.phase == Phase.CIRCLE && !this.debugHold) {
             if (++this.lonely > 600) {
                 this.slumber(level);
@@ -1438,5 +1441,17 @@ public class WorldEaterEntity extends Monster implements io.github.sirschrolli.k
     @Override
     public SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.MAW;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return !this.isAwakening() && this.hasFoe;
     }
 }

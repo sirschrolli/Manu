@@ -91,7 +91,7 @@ public final class AnniBlocks {
                     .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
                             .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.GLITCH_WINGS_ASSET).setDamageOnHurt(false).build())
                     .repairable(ModTags.Items.REPAIRS_GLITCH_GEAR)
-                    .component(DataComponents.LORE, ModItems.lore("glitch_wings", 3))));
+                    .component(DataComponents.LORE, ModItems.lore("glitch_wings", 4))));
 
     // ---------------------------------------------------------------- Spawn-Ei
     public static final DeferredItem<SpawnEggItem> ANNI_TROLL_SPAWN_EGG = egg("anni_troll", () -> ModEntities.ANNI_TROLL.get());

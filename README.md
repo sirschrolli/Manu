@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.81.0 – Tausend Fische.** In **jedem Biom** beißen jetzt eigene Fische: zwölf Arten in jedem der 39 eigenen Biome der Mod, sechs oder sieben in jedem Biom von Minecraft – auch in den **Höhlen** (Tropfsteinhöhlen, Üppige Höhlen, Schwefelhöhlen, Tiefes Dunkel, Abgrundgrotte, Schattentiefen), in der **Lava** des Nethers und in der **Leere** des Ends. Mit den bisherigen sind es genau **1000 Arten**: Jede hat ihr eigenes Bild, ihren Namen, ihre Größe und ihren Drill, und **keine zwei wirken beim Essen gleich**. Neben Fischen gehen Krabben, Krebse, Garnelen, Quallen, Schnecken, Seesterne, Molche, Rochen und Kalmare an den Haken; in jedem Biom gibt es Gewöhnliches und einen **großen Fang** (episch, schwer zu halten), dazu **acht neue Legenden** (Nachtfürst, Rissleviathan, Sternenwal, Der Lichtlose, Eiskaiser, Riffkönigin, Moormutter, Sonnenkönig). Das **Fischbuch** (Taste H) führt zehn Kapitel und zeigt in jedem die **Gewässer**: „Überall“ und jedes Biom mit seinem Stand (gefangen / vorhanden), ein Stern für jedes vollständige. Neu ist der **Fischbeutel** (Leder, Faden, Truhe): Wer ihn bei sich trägt, dem **wandert jeder Fang hinein**; ein Rechtsklick öffnet ihn, und man nimmt die Fische einzeln, stapelweise oder alle wieder heraus. Er fasst 64 Fische, und sein Platz lässt sich **ohne Obergrenze erweitern** – jede Stufe bringt 32 Plätze und kostet mehr als die vorige (12 Bronze für die erste, 53 für die elfte, über 1000 für die einunddreißigste). Die Erweiterung verkauft der **Fischer in den Dörfern**; er verkauft auch den Beutel selbst und **kauft den Fang auf** – beliebige Fische nach Seltenheit, auch direkt aus dem Beutel.
+> **Testversion 0.82.0 – Die Himmelswacht.** Die Bosse lassen sich nicht mehr aus der Luft austanzen: **Jeder Boss wacht im Kampf über den Himmel.** Wer in seiner Nähe länger als zwei Sekunden gleitet – mit Elytren oder mit den Schwingen der Bosse –, den nimmt er **ins Visier**: Über ihm lädt ein Runensiegel mit durchgestrichener Schwinge, eine Lichtlinie zeigt auf den Flieger, ein Warnton schlägt an, und um das Fadenkreuz ziehen sich vier Winkel zusammen („IM VISIER – Jetzt landen!“). Wer jetzt landet, dem geschieht nichts. Sonst löst sich der **Bannpfeil**: Er hält vor und jagt dem Flieger nach, wendet aber nur begrenzt scharf – ein Haken im letzten Moment lässt ihn vorbeischießen, eine Anzeige weist die Richtung, aus der er kommt, und wie weit er noch ist. Trifft er, endet das Gleiten, und der **Flugbann** hält den Getroffenen acht bis zwölf Sekunden am Boden (der Sturz tut dabei um 60 % weniger weh, Milch hilft nicht). Jeder Boss hat seine eigene Farbe und seine eigene Zugabe: Pyrrhons Pfeil setzt in Brand, Glaciaras lässt erstarren, Malleus reißt an der Kette zu sich, der Weltenfresser saugt in den Schlund – und Anni stellt den Flieger kurzerhand auf den Boden zurück: „Fliegen ist auf diesem Server nicht erlaubt.“ Gute Schwingen verkürzen den Bann (Feen-Elytren um 15 %, Sternenschwingen um 30 %, Fehlerflügel um 40 %, die Schwingen des Schöpfers um 60 %).
+> In 0.81 kamen **tausend Fische**: In **jedem Biom** beißen jetzt eigene Fische: zwölf Arten in jedem der 39 eigenen Biome der Mod, sechs oder sieben in jedem Biom von Minecraft – auch in den **Höhlen** (Tropfsteinhöhlen, Üppige Höhlen, Schwefelhöhlen, Tiefes Dunkel, Abgrundgrotte, Schattentiefen), in der **Lava** des Nethers und in der **Leere** des Ends. Mit den bisherigen sind es genau **1000 Arten**: Jede hat ihr eigenes Bild, ihren Namen, ihre Größe und ihren Drill, und **keine zwei wirken beim Essen gleich**. Neben Fischen gehen Krabben, Krebse, Garnelen, Quallen, Schnecken, Seesterne, Molche, Rochen und Kalmare an den Haken; in jedem Biom gibt es Gewöhnliches und einen **großen Fang** (episch, schwer zu halten), dazu **acht neue Legenden** (Nachtfürst, Rissleviathan, Sternenwal, Der Lichtlose, Eiskaiser, Riffkönigin, Moormutter, Sonnenkönig). Das **Fischbuch** (Taste H) führt zehn Kapitel und zeigt in jedem die **Gewässer**: „Überall“ und jedes Biom mit seinem Stand (gefangen / vorhanden), ein Stern für jedes vollständige. Neu ist der **Fischbeutel** (Leder, Faden, Truhe): Wer ihn bei sich trägt, dem **wandert jeder Fang hinein**; ein Rechtsklick öffnet ihn, und man nimmt die Fische einzeln, stapelweise oder alle wieder heraus. Er fasst 64 Fische, und sein Platz lässt sich **ohne Obergrenze erweitern** – jede Stufe bringt 32 Plätze und kostet mehr als die vorige (12 Bronze für die erste, 53 für die elfte, über 1000 für die einunddreißigste). Die Erweiterung verkauft der **Fischer in den Dörfern**; er verkauft auch den Beutel selbst und **kauft den Fang auf** – beliebige Fische nach Seltenheit, auch direkt aus dem Beutel.
 > In 0.80 kamen **Totems und Äpfel der Macht**: Neun neue **Totems**: Jedes wirkt **in der Zweithand** dauernd – und hält den Tod auf wie das Totem der Unsterblichkeit, nur stehst du **mit mehr Herzen wieder auf** (8 bis 12 statt eines halben) und entfesselst die Kraft seines Elements. Sechs gehören den Drachen (je vier ihrer Schuppen um ein Totem der Unsterblichkeit): **Glut** (feuerfest, Angreifer brennen – Feuernova), **Frost** (kein Erfrieren, Angreifer erstarren – Frostnova), **Sturm** (schneller laufen und schlagen – Blitze fahren in die Feinde), **Fels** (Rüstung, Härte, fester Stand – Erdstoß und zehn Extraherzen), **Hain** (heilt langsam, kein Gift – zwölf Herzen und Heilung für Tiere und Truppen), **Gezeiten** (Meereskraft – Flutwelle). Dazu das **Totem der Schatten** (Nachtsicht, Feinde bemerken dich erst aus halber Entfernung – beim Tod verschwindest du), das **Totem der Leere** (kein Fallschaden – und es **rettet auch aus dem Nichts** unter der Welt, zurück auf den letzten festen Boden) und das **Totem des Schöpfers** aus den sechs Totems der Drachen und einem Schöpferfunken: fünf Herzen mehr, beim Tod **alle Herzen** und eine Lichtnova – und es hält **dreimal**. Vier **Äpfel der Macht**, weit stärker als der verzauberte goldene Apfel und sehr schwer herzustellen: **Drachenapfel** (die Schuppen aller sechs Drachen), **Sternenapfel**, **Schattenapfel** und der **Apfel der Unsterblichkeit** aus den drei anderen und einem Schöpferfunken – mit zwanzig Extraherzen, zehn Herzen mehr und dem **Zweiten Leben**: Zehn Minuten lang kann dich einmal nichts töten. Totems und Äpfel liegen **plastisch in der Hand** – aufrecht wie ein Götzenbild, auch in der Außenansicht, im Rahmen und am Boden –, als erste Gegenstände mit dem neuen Verfahren, das nach und nach alle Gegenstände bekommen.
 > In 0.79 kam **das Angeln** („Petri Heil“): Angeln ist seitdem ein Spiel im Spiel: Wer beim Biss anzieht, **drillt** den Fisch – er zieht in einer Wassersäule auf und ab, und du hältst ihn mit Maustaste oder Leertaste in der **Fangzone**, bis die Leiste voll ist; bleibt er zu lange draußen, reißt er sich los. Jede Art kämpft anders (ruhig, zäh, zappelnd, in jähen Sprüngen), und manche sind **wirklich schwer zu halten**. Es gibt **76 Arten** – 72 neue und die vier von Minecraft –, **für jedes Biom und jede Welt**: Hecht, Wels und Stör in Flüssen und Seen, Piranha und Arapaima im Dschungel, den Sculk-Aal im Tiefen Dunkel, Thunfisch, Schwertfisch und Mondfisch im Meer, Anglerfisch, Riemenfisch und Quastenflosser über der Tiefsee … Und geangelt wird jetzt **überall**: im Nether **in Lava** (Magmakarpfen, Seelenaal, Glutrochen – jedes Biom des Nethers hat seinen Fisch), im End, in der Leere und im Abgrund **im Nichts** – wirf den Haken über den Rand einer Insel, und die Leere trägt ihn wie Wasser (Endlachs, Chorusfisch, Leerenrochen) –, dazu eigene Fische im Feenreich, in der Schattenwelt und im Abgrund. **Sieben Legenden** beißen nur unter besonderen Umständen: der Sturmsegler nur im Gewitter, Goldschuppe nur bei Regen, der Alte vom See nur nachts. **Jeder Fisch bewirkt beim Essen etwas anderes** – von Schnelligkeit und Nachtsicht über Absorption IV bis zur Wirrflosse, die dich ein paar Schritte versetzt, und dem Seelenfisch, der alle Leiden nimmt. Zwei **Köder** (Köderwurm und Glühköder) locken bestimmte Arten und lassen alles schneller beißen, im Drill treibt manchmal eine **Schatzkiste** vorbei, und das **Fischbuch** (Taste **H**) verzeichnet jeden Fang mit Rekordgröße, Fundort, Zeit und Wirkung – was noch nie am Haken hing, bleibt ein Schattenriss. Außerdem: Die **Schwingen des Schöpfers** sind neu aus einzelnen Federn gebaut (nichts ist mehr abgeschnitten, nichts flackert mehr); die **Klangwelten** gibt es jetzt in **jedem Biom** – auch im End, im Tiefen Dunkel, in den Kampfdimensionen und in Biomen anderer Mods –, sie setzen sofort ein und haben einen **eigenen Regler** unter *Optionen → Musik & Geräusche*; die **Chronik des Siegels** schlägt man mit der Taste **J** auf (das Buch zu Beginn entfällt); die **Truppen sprechen nicht mehr**; **alle Bauwerke stehen seltener und weiter auseinander** – in allen Dimensionen; **Schärfe, Bann und Nemesis** wirken auf den starken Waffen der Mod jetzt im Verhältnis zu ihrem Schaden und auch auf ihre Fähigkeiten (Lichtspeer, Lichtwelle, Lichtsäule, Sterne, Weltenbrocken …); und die **Speere** der Mod liegen richtig in der Hand.
 > In 0.78 kam **Schrolli der Allmächtige**: Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**. In 0.78.1 bekamen **der Allmächtige und der Weltenfresser eigene Bossleisten** (bisher zeigten beide nur die rote Leiste von Minecraft): der Allmächtige mit Schwingen aus brennenden Federn, einer Sonnenkrone aus Flammen und Strahlen, der Sonne hinter seinem Bildnis und einer Füllung wie das Plasma einer Sonne – der Weltenfresser mit einem Rahmen aus Chaosgestein und glühenden Fugen, den Welten auf seinem Rücken, seinem Gebiss, Kronensplittern, Hauer und Kristallflosse, seinem Rachen im Medaillon und der Glut seines Schlunds, durch die ein violetter Riss zieht.
@@ -371,6 +372,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Angeln** (0.79): der Drill als Minispiel (Fangzone, Leiste, perfekte Fänge, Schatzkisten), 76 Fischarten für jedes Biom und jede Welt, Angeln in Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung beim Essen, Köderwurm und Glühköder, das Fischbuch (H); dazu die Chronik per Taste (J), stumme Truppen, Bauwerke in allen Dimensionen weiter auseinander, Verzauberungen im Verhältnis zur Waffe und auf ihre Fähigkeiten, Speere richtig in der Hand | ✅ fertig |
 | **Totems und Äpfel der Macht** (0.80): neun Totems (Glut, Frost, Sturm, Fels, Hain, Gezeiten, Schatten, Leere, Schöpfer) mit Wirkung in der Zweithand, mehr Herzen beim Aufstehen und der Kraft ihres Elements; vier Äpfel (Drachen-, Sternen-, Schattenapfel, Apfel der Unsterblichkeit mit dem Zweiten Leben); plastische Modelle für Hand, Rahmen und Boden | ✅ fertig |
 | **Tausend Fische** (0.81): eigene Arten für jedes Biom (105 Biome – auch Höhlen, Lava und Leere), mit den bisherigen genau 1000, jede mit eigenem Bild, eigenem Namen und eigener Wirkung; acht neue Legenden; das Fischbuch mit den Gewässern je Kapitel; der Fischbeutel (der Fang wandert hinein, Platz unbegrenzt erweiterbar) und der Fischer im Dorf als Händler dafür | ✅ fertig |
+| **Die Himmelswacht** (0.82): Jeder Boss nimmt Flieger ins Visier (Siegel, Ziellinie, Warnanzeige) und holt sie mit einem verfolgenden Bannpfeil herunter; die Wirkung Flugbann (kein Gleiten, gedämpfter Sturz), 17 Themen mit eigener Farbe und Zugabe für alle Bosse, gute Schwingen verkürzen den Bann | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -431,7 +433,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.81.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.82.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -439,7 +441,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.81.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.82.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -2602,6 +2604,77 @@ Fäuste steigen über sein Haupt) und eigene Klänge: ein saugender, immer schne
 Zusammensturz mit gewaltigem Schlag, das helle Zischen der Sicheln, Klauen, die über Stein schrammen, das Knistern der
 Risse, der Ausbruch der Leere und das Donnern des Bebens.
 
+### Die Himmelswacht der Bosse (seit 0.82)
+
+![Die Himmelswacht: das Siegel über dem Boss, die Ziellinie, der Bannpfeil, der Flugbann und die Siegel aller Bosse](docs/bilder/himmelswacht.jpg)
+
+Mit Elytren – und erst recht mit den Schwingen, die man den Bossen abnimmt – ließ sich bisher über jedem Boss kreisen,
+ohne dass er etwas dagegen tun konnte. Seit 0.82 **wacht jeder Boss im Kampf über den Himmel**:
+
+1. **Flugzeit.** Wer im Umkreis von 64 Blöcken um einen kämpfenden Boss gleitet, sammelt Flugzeit. Ein kurzer Satz durch
+   die Luft bleibt folgenlos; die Flugzeit baut sich doppelt so schnell wieder ab, wie sie wächst. Ein Boss, der noch
+   schläft oder gerade erst erwacht, lässt jeden über sich hinwegziehen.
+2. **Im Visier.** Nach **zwei Sekunden** (ist der Boss unter halber Lebenskraft: nach gut einer) nimmt er den Flieger
+   ins Visier: Über seinem Kopf wächst ein **Runensiegel** mit einer durchgestrichenen Schwinge, eine **Lichtlinie**,
+   über die Pulse laufen, zeigt vom Siegel auf den Flieger, und der hört den Warnton. Auf seinem Bildschirm ziehen sich
+   vier Winkel um das Fadenkreuz zusammen – so lange lädt das Siegel (anderthalb Sekunden, unter halber Lebenskraft gut
+   eine) –, darunter steht **„IM VISIER – Jetzt landen!“**, und vom Bildrand glimmt die Farbe des Bosses.
+   **Wer jetzt landet, dem geschieht nichts:** Das Siegel erlischt, und der Boss braucht einen Moment, bis er ein neues
+   laden kann.
+3. **Der Bannpfeil.** Sonst löst sich aus dem Siegel ein Pfeil aus Licht und jagt dem Flieger nach. Er **hält vor** –
+   wer geradeaus weiterfliegt, wird beim ersten Anflug getroffen –, **wendet aber nur begrenzt scharf**: Ein Haken im
+   letzten Moment lässt ihn vorbeischießen, und er braucht eine weite Kehre für den nächsten Anflug. Die Anzeige weist
+   mit einem Pfeil um das Fadenkreuz die Richtung, aus der er kommt, darunter steht die Entfernung, und ein Ton schlägt
+   umso schneller an, je näher er ist. **Landet der Flieger, verliert ihn der Pfeil** und verpufft; an Blöcken zerschellt
+   er, und nach sechs Sekunden Flug erlischt er von selbst. Danach braucht der Boss vier Sekunden bis zum nächsten Siegel.
+4. **Der Treffer.** Der Pfeil richtet Schaden an (Schusssicher hilft), das Gleiten endet, der Schwung bricht – und der
+   Getroffene trägt den **Flugbann**.
+
+**Flugbann** ist eine eigene Wirkung (ein Paar Schwingen, rot durchgestrichen): Solange sie anhält, **tragen weder
+Elytren noch Schwingen** – man kann nicht losgleiten. Damit der Sturz nicht gleich das Ende ist, **tut er um 60 % weniger
+weh**. Milch und Totems heben den Bann nicht auf; er läuft ab, und ein heller Ton meldet, dass die Schwingen wieder
+tragen. Gute Schwingen verkürzen ihn (es steht an den Schwingen):
+
+| Schwingen | Elytren | Feen-Elytren | Sternenschwingen | Fehlerflügel | Schwingen des Schöpfers |
+|---|---|---|---|---|---|
+| Flugbann endet | – | 15 % früher | 30 % früher | 40 % früher | 60 % früher |
+
+Je später ein Boss in der Geschichte steht, desto stärker ist sein Pfeil:
+
+| Stufe | Schaden | Flugbann | Tempo des Pfeils | wendet je Tick |
+|---|---|---|---|---|
+| 1 – Drachen, Erzmagier, Karkinos, Noctua, Aschenkönig | 8 | 8 Sekunden | 38 Blöcke je Sekunde | 5,5° |
+| 2 – MissMystik, Malleus, Asteria, Sternenfresser, Anni, Zerbrochener König | 10 | 10 Sekunden | 42 Blöcke je Sekunde | 6,5° |
+| 3 – Weltenfresser, Schrolli | 12 | 12 Sekunden | 46 Blöcke je Sekunde | 7,5° |
+
+(Zum Vergleich: Mit Feuerwerk fliegt man etwa 34 Blöcke je Sekunde. Wer davonfliegt, entkommt also knapp – verlässt damit
+aber auch den Kampf.)
+
+Jeder Boss hat seine Farbe, seine Funken und seine **Zugabe**, wenn der Pfeil trifft:
+
+| Boss | Siegel und Pfeil | Der Treffer bringt außerdem |
+|---|---|---|
+| Pyrrhon, Feuermagier | orange, Flammen | Brand (5 s) |
+| Glaciara, Eismagier | eisblau, Frost | Erstarren und Langsamkeit II (5 s) |
+| Voltarion, Blitzmagier | gelb, Funken | Schwäche und Leuchten (6 s) |
+| Verdantis, Naturmagier | grün, Sporen | Vergiftung II (5 s) |
+| Terragon, Erdmagier | sandbraun, Staub | Langsamkeit III (4 s), und es geht steiler abwärts |
+| Thalassa, Wassermagier | türkis, Tropfen | löscht Feuer, Langsamkeit (6 s) |
+| Nyxar | violett, Schatten | Dunkelheit (5 s) |
+| Karkinos | seegrün, Meeresleuchten | Langsamkeit II (5 s) |
+| Noctua | silberviolett, Feenfunken | Seide: Langsamkeit IV (3 s) |
+| Aschenkönig | seelenblau, Seelenfeuer | Verdorren (6 s) |
+| MissMystik | pink, Konfetti | ein Knall, Rauch: Blindheit (2,5 s) |
+| Malleus | glutorange, Flammen | Brand (4 s) und ein Ruck zu ihm hin – die Kette |
+| Asteria, Sternenfresser | sternweiß, Lichtfunken | Leuchten (8 s) und ein Ruck zu ihr hin |
+| Anni der Troll | cyan und magenta, Pixel | der Rückruck: Der Flieger steht wieder auf dem Boden – „Fliegen ist auf diesem Server nicht erlaubt.“ |
+| Zerbrochener König | leerenviolett, Leerenfunken | Verdorren II (5 s) |
+| Weltenfresser | rot, Schatten | ein starker Sog zum Schlund |
+| Schrolli | gold, Lichtfunken | Fesseln aus Licht: Schwäche II und Leuchten (8 s) |
+
+Im Kreativ- und im Zuschauermodus beachtet einen kein Boss. Fällt jemand durch einen Bannpfeil, heißt es in der
+Todesmeldung, der Boss habe ihn **„vom Himmel geholt“**.
+
 ### Golems und Wichtel
 
 ![Eisenwächter, Schneemänner, Kupferknechte und Wichtel](docs/bilder/golems.jpg)
@@ -3592,7 +3665,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.81.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.82.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3607,6 +3680,8 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 | `python3 tools/audio/sea_creatures.py` | Stimmen der Meereswesen neu erzeugen (`--preview ordner` legt Hörproben als WAV ab) |
 | `python3 tools/sea_textures.py` | Gegenstände, Laterne und Leuchthof der Meereswesen (wird von `generate_textures.py` mit aufgerufen) |
 | `python3 tools/fish_gen.py` | Die 916 Fischarten der Biome neu berechnen: Bilder, Namen, Notizen und die Tabelle `species.tsv` (`--preview ordner` für Übersichtsbilder, `--check` prüft nur) |
+| `python3 tools/sky_textures.py --preview bild.png` | Siegel, Bannpfeil, Lichtlinie, Lichthof, das Symbol des Flugbanns und der Richtungspfeil der Himmelswacht (wird von `generate_textures.py` mit aufgerufen) |
+| `python3 tools/audio/sky_sounds.py` | Die Klänge der Himmelswacht: Warnton, Aufladen, Lösen, Treffer, Verpuffen, Annäherungston und das Ende des Flugbanns |
 
 Unter Windows statt `./gradlew` einfach `gradlew.bat` verwenden. Java 25 wird benötigt (lädt Gradle bei Bedarf selbst).
 
@@ -3715,12 +3790,14 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      die auf den Waffen der Mod im Verhältnis wirken;
    - **0.80 – Totems und Äpfel der Macht** (fertig): neun Totems mit Wirkung in der Zweithand, mehr Herzen beim
      Aufstehen und der Kraft ihres Elements, vier Äpfel der Macht mit dem Zweiten Leben, plastische Modelle;
-   - zuletzt **0.81 – Tausend Fische** (fertig): eigene Arten für jedes der 105 Biome (mit den bisherigen genau 1000), acht
-     neue Legenden, das Fischbuch mit den Gewässern je Kapitel, der Fischbeutel und seine Erweiterungen beim Fischer.
+   - **0.81 – Tausend Fische** (fertig): eigene Arten für jedes der 105 Biome (mit den bisherigen genau 1000), acht
+     neue Legenden, das Fischbuch mit den Gewässern je Kapitel, der Fischbeutel und seine Erweiterungen beim Fischer;
+   - zuletzt **0.82 – Die Himmelswacht** (fertig): Jeder Boss nimmt Flieger ins Visier und holt sie mit einem verfolgenden
+     Bannpfeil herunter; der Flugbann hält sie am Boden; jeder Boss mit eigener Farbe und eigener Zugabe.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** Bosse, die besser auf Elytren reagieren; viele neue **Waffen, Spitzhacken und Schilde** als
+   **Als Nächstes geplant:** viele neue **Waffen, Spitzhacken und Schilde** als
    3D-Modelle, die auch in der Außenansicht richtig in der Hand liegen, und plastische Modelle für alle Gegenstände; das
    **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –;
    neue Wesen; schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.

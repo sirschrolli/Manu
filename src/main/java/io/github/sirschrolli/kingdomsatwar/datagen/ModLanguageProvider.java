@@ -37,6 +37,7 @@ public class ModLanguageProvider extends LanguageProvider {
         HeroLang.register(this::text);
         FishingLang.register(this::text);
         RelicLang.register(this::text);
+        SkyLang.register(this::text);
         VeterancyLang.register(this::text);
         RulesLang.register(this::text);
         bosses();

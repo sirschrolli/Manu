@@ -63,7 +63,7 @@ import org.jspecify.annotations.Nullable;
  * Schwertkämpfer. Unter halber Kraft wird sie rasend: schneller, mehr Falter, mehr Strahlen. Besiegt hinterlässt sie die
  * Feen-Elytren, und im Mondhain spinnt sich ein neuer Kokon.
  */
-public class MothQueenEntity extends Monster {
+public class MothQueenEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final float MAX_HEALTH = 360.0f;
     public static final int AWAKEN_TICKS = 80;
     /** Mondfinsternis: Dauer, erster Mondstrahl, Abstand der Strahlen, Vorwarnzeit eines Kreises. */
@@ -852,5 +852,17 @@ public class MothQueenEntity extends Monster {
     @Override
     protected float getSoundVolume() {
         return 3.0f;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.MOTH;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return this.attack != Attack.AWAKEN && this.getTarget() != null && this.getTarget().isAlive();
     }
 }

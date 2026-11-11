@@ -39,6 +39,7 @@ import fish_gen  # noqa: E402
 import fish_textures  # noqa: E402
 import fishing_gui  # noqa: E402
 import relic_textures  # noqa: E402
+import sky_textures  # noqa: E402
 import frost_textures  # noqa: E402
 import grove_textures  # noqa: E402
 import earth_textures  # noqa: E402
@@ -364,6 +365,7 @@ def build_all() -> dict[str, Image.Image]:
     fish_gen.build(put)
     fishing_gui.build(put)
     relic_textures.build(put)
+    sky_textures.build(put)
     lair_textures.build(put)
     ashlands_textures.build(put)
     seal_textures.build(put)

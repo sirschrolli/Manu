@@ -78,7 +78,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Er ist ein früher Boss: schwächer als die Erzmagier, die Drachen und der Zerbrochene König.
  */
-public class ReefColossusEntity extends Monster {
+public class ReefColossusEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final byte EVENT_AWAKEN = 100;
     public static final byte EVENT_SLAM = 101;
     public static final byte EVENT_GRAB = 102;
@@ -1563,5 +1563,17 @@ public class ReefColossusEntity extends Monster {
         static SoundEvent stun() {
             return net.minecraft.sounds.SoundEvents.RAVAGER_STUNNED;
         }
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.REEF;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return this.attack != Attack.AWAKEN && this.getTarget() != null && this.getTarget().isAlive();
     }
 }

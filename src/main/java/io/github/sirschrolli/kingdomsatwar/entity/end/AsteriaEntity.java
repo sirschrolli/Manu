@@ -82,7 +82,7 @@ import org.jspecify.annotations.Nullable;
  * Findet sie niemanden mehr, kehrt sie in den Himmel zurück (und kommt geheilt wieder). Besiegt sinkt sie in einer Spirale
  * hinab und vergeht in Sternenlicht; der Sternstein erlischt (ein Endkristall ruft sie zurück).
  */
-public class AsteriaEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class AsteriaEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final float MAX_HEALTH = 700.0f;
     public static final int AWAKEN_TICKS = 90;
     /** So lange (Ticks) dauert ihr Sterben. */
@@ -1335,5 +1335,12 @@ public class AsteriaEntity extends Monster implements io.github.sirschrolli.king
         } else {
             super.onBelowWorld();
         }
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.STAR;
     }
 }

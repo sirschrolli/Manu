@@ -70,7 +70,7 @@ import org.jspecify.annotations.Nullable;
  * </ul>
  * Er ist bewusst schwächer als die Erzmagier (und die Drachen-Bosse sind die stärksten von allen).
  */
-public class ShatteredKingEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class ShatteredKingEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final byte EVENT_AWAKEN = 90;
     public static final byte EVENT_SLAM_LEFT = 91;
     public static final byte EVENT_SLAM_RIGHT = 92;
@@ -1280,5 +1280,17 @@ public class ShatteredKingEntity extends Monster implements io.github.sirschroll
     @Override
     public SoundSource getSoundSource() {
         return SoundSource.HOSTILE;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.VOID;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return !this.isAwakening() && this.getTarget() != null && this.getTarget().isAlive();
     }
 }

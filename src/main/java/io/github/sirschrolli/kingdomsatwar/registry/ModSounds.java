@@ -393,6 +393,22 @@ public final class ModSounds {
         }
     }
 
+    // ---------------------------------------------------------------- Himmelswacht der Bosse (0.82)
+    /** Ins Visier genommen: ein aufsteigender Warnton beim Flieger. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_MARK = register("boss.sky_ward.mark");
+    /** Das Siegel über dem Boss lädt sich auf. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_CHARGE = register("boss.sky_ward.charge");
+    /** Der Bannpfeil löst sich. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_LAUNCH = register("boss.sky_ward.launch");
+    /** Treffer: die Schwingen versagen. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_HIT = register("boss.sky_ward.hit");
+    /** Der Bannpfeil verpufft (Ziel gelandet, Wand getroffen, zu alt). */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_FIZZLE = register("boss.sky_ward.fizzle");
+    /** Annäherungston in der Warnanzeige, je näher der Pfeil, desto schneller. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_PING = register("boss.sky_ward.ping");
+    /** Der Flugbann endet: die Schwingen tragen wieder. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> SKY_WARD_RELEASE = register("boss.sky_ward.release");
+
     private ModSounds() {}
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {

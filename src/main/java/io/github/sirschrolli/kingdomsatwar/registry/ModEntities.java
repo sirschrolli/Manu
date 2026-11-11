@@ -691,6 +691,11 @@ public final class ModEntities {
             BossProjectile::new, MobCategory.MISC,
             builder -> builder.sized(1.0f, 1.0f).fireImmune().noLootTable().clientTrackingRange(10).updateInterval(1));
 
+    /** Bannpfeil der Himmelswacht (0.82): lädt als Siegel über dem Boss und jagt dann einem Flieger nach. Wird nicht gespeichert. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyBoltEntity>> SKY_BOLT =
+            ENTITIES.registerEntityType("sky_bolt", io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyBoltEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.6f, 0.6f).fireImmune().noLootTable().noSave().clientTrackingRange(16).updateInterval(1));
+
     // ---------------------------------------------------------------- Erzmagier
     /** Ein Erzmagier je Element (wacht in der Spitze seines Turms). */
     public static final Map<DragonType, DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.boss.mage.MageBossEntity>>>

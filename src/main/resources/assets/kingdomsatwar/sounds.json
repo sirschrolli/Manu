@@ -2351,6 +2351,94 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.block.fae_portal.travel"
   },
+  "boss.sky_ward.charge": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/charge1",
+        "attenuation_distance": 80
+      },
+      {
+        "name": "kingdomsatwar:sky/charge2",
+        "attenuation_distance": 80
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.charge"
+  },
+  "boss.sky_ward.fizzle": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/fizzle1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:sky/fizzle2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "kingdomsatwar:sky/fizzle3",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.fizzle"
+  },
+  "boss.sky_ward.hit": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/hit1",
+        "attenuation_distance": 48
+      },
+      {
+        "name": "kingdomsatwar:sky/hit2",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.hit"
+  },
+  "boss.sky_ward.launch": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/launch1",
+        "attenuation_distance": 96
+      },
+      {
+        "name": "kingdomsatwar:sky/launch2",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.launch"
+  },
+  "boss.sky_ward.mark": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/mark1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "kingdomsatwar:sky/mark2",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.mark"
+  },
+  "boss.sky_ward.ping": {
+    "sounds": [
+      "kingdomsatwar:sky/ping1"
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.ping"
+  },
+  "boss.sky_ward.release": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:sky/release1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:sky/release2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.boss.sky_ward.release"
+  },
   "entity.anglerfish.ambient": {
     "sounds": [
       {

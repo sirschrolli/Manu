@@ -281,7 +281,7 @@ public final class FaeBlocks {
                                     .setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(ModEquipment.FAE_ELYTRA_ASSET)
                                     .setDamageOnHurt(false).build())
                     .repairable(ModTags.Items.REPAIRS_FAE_ELYTRA)
-                    .component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("fae_elytra", 4))));
+                    .component(net.minecraft.core.component.DataComponents.LORE, ModItems.lore("fae_elytra", 5))));
 
     // ---------------------------------------------------------------- Hilfen
 

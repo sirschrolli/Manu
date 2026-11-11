@@ -84,7 +84,7 @@ import org.jspecify.annotations.Nullable;
  * verbeugt sie sich ein letztes Mal und vergeht in einem Regen aus Konfetti – der Zylinder ist dann leer (Feenstaub ruft
  * sie zurück).
  */
-public class MissMystikEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound {
+public class MissMystikEntity extends Monster implements io.github.sirschrolli.kingdomsatwar.arena.BossLair.Bound, io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyWarden {
     public static final float MAX_HEALTH = 520.0f;
     /** Ablauf des Auftritts: Trommelwirbel, im Tick {@link #APPEAR_BURST} springt sie heraus, danach die Verbeugung. */
     public static final int APPEAR_TICKS = 72;
@@ -1500,5 +1500,17 @@ public class MissMystikEntity extends Monster implements io.github.sirschrolli.k
     @Override
     protected float getSoundVolume() {
         return 2.5f;
+    }
+
+    // ------------------------------------------------------------------ Himmelswacht (0.82)
+
+    @Override
+    public io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme skyTheme() {
+        return io.github.sirschrolli.kingdomsatwar.entity.boss.sky.SkyTheme.MYSTIK;
+    }
+
+    @Override
+    public boolean guardsSky() {
+        return !this.isHidden() && this.getTarget() != null && this.getTarget().isAlive();
     }
 }
