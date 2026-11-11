@@ -170,9 +170,9 @@ final class SealModels {
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(portal, BlockModelGenerators.plainVariant(portalModel)));
 
         // Gegenstände
-        items.generateFlatItem(ModItems.CHRONICLE.get(), ModelTemplates.FLAT_ITEM);
+        ModModelProvider.flat(items, ModItems.CHRONICLE.get());
         for (DragonType type : DragonType.values()) {
-            items.generateFlatItem(ModItems.SEAL_SHARDS.get(type).get(), ModelTemplates.FLAT_ITEM);
+            ModModelProvider.flat(items, ModItems.SEAL_SHARDS.get(type).get());
         }
     }
 

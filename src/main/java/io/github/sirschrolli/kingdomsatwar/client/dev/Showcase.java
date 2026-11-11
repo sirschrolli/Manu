@@ -265,6 +265,10 @@ final class Showcase {
                         FishingShowcase.newFish(steps);
                     } else if (scene.equals("armory")) {
                         ArmoryShowcase.armory(steps);
+                    } else if (scene.equals("gegenstaende_relief")) {
+                        ArmoryShowcase.reliefs(steps);
+                    } else if (scene.equals("werkzeuge_3d")) {
+                        ArmoryShowcase.toolsets(steps);
                     } else if (scene.equals("armory_shields")) {
                         ArmoryShowcase.shieldsFirstPerson(steps);
                     } else if (scene.equals("skyward")) {

@@ -46,6 +46,50 @@ ITEMS: dict[str, tuple[str, float, float]] = {
     "fish_bag": ("minecraft:item/generated", 3.0, 0.75),
 }
 
+# Seit 0.88: die übrigen Gegenstände, die man in die Hand nimmt – Barren, Steine, Schuppen, Monsterteile, Runen, Münzen,
+# Essen und Trinken, Hörner, Kronen, Laternen … (nicht: Fische, Spawn-Eier, Pflanzen, Saatgut, Bausätze, Pläne und Papier).
+# Gruppe -> (größte halbe Dicke, Zuwachs je Pixel Abstand vom Rand), dann die Gegenstände der Gruppe.
+GROUPS: dict[tuple[float, float], list[str]] = {
+    (1.25, 0.5): [  # Barren und Erze: kantig, gleichmäßig dick
+        "abyssite_ingot", "moonsilver_ingot", "nightsteel_ingot", "steel_ingot", "raw_moonsilver", "raw_nightsteel", "steel_blend",
+        "draconium", "konterit", "carbon", "wyvernit", "aetherit", "moonsilver_nugget", "reinforced_handle", "siege_stone",
+    ],
+    (1.5, 0.5): [   # Steine, Kristalle, Splitter
+        "gemstone", "abyssite_shard", "star_shard", "void_shard", "glitch_shard", "night_crystal_shard", "soul_crystal",
+        "mana_crystal", "heart_crystal",
+        "molten_glob", "shadow_heart", "bog_heart", "aether_core", "shadow_essence", "creator_spark",
+        "earth_seal_shard", "fire_seal_shard", "ice_seal_shard", "lightning_seal_shard", "nature_seal_shard", "water_seal_shard",
+    ],
+    (1.0, 0.5): [   # flache Dinge: Schuppen, Münzen, Runen, Tafeln, Muscheln
+        "earth_dragon_scale", "fire_dragon_scale", "ice_dragon_scale", "lightning_dragon_scale", "nature_dragon_scale",
+        "water_dragon_scale", "ember_scale", "bronze_coin", "silver_coin", "gold_coin",
+        "earth_rune", "fire_rune", "ice_rune", "lightning_rune", "nature_rune", "water_rune",
+        "earth_spell_tablet", "fire_spell_tablet", "ice_spell_tablet", "lightning_spell_tablet", "nature_spell_tablet",
+        "water_spell_tablet", "creator_halo", "creator_rings",
+    ],
+    (1.75, 0.5): [  # Essen und Trinken
+        "apple_pie", "bread_roll", "cooked_crab_meat", "cooked_venison", "crab_meat", "dusk_bread", "garlic_bread", "meat_pie",
+        "venison", "ale", "mead", "wine", "vegetable_stew", "dragon_food",
+    ],
+    (2.0, 0.6): [   # Rundes: Gemüse und Früchte
+        "cabbage", "tomato", "moth_cocoon",
+    ],
+    (1.25, 0.45): [  # Gerät und Schmuck
+        "ember_fang", "werewolf_claw", "crab_claw", "shark_tooth", "bog_root", "dragon_horn", "tide_horn", "gemstone_crown",
+        "shattered_crown", "rift_key", "angler_lure",
+        "chronicle",
+    ],
+}
+for (_half, _slope), _names in GROUPS.items():
+    for _name in _names:
+        ITEMS.setdefault(_name, ("minecraft:item/generated", _half, _slope))
+
+# Aus eigener Sicht wären die dicken Gegenstände sonst klobig: etwas kleiner und tiefer in der Hand (Minecraft: 0.68)
+_FIRST_PERSON = {
+    "firstperson_righthand": {"rotation": [0, -90, 25], "translation": [1.13, 2.8, 1.13], "scale": [0.58, 0.58, 0.58]},
+    "firstperson_lefthand": {"rotation": [0, 90, -25], "translation": [1.13, 2.8, 1.13], "scale": [0.58, 0.58, 0.58]},
+}
+
 
 def held(rotation, translation, scale) -> dict:
     """Haltung in der Hand eines anderen (dritte Person); die linke Hand spiegelt Minecraft selbst."""
@@ -62,6 +106,11 @@ DISPLAY["fish_bag"] = dict(held((75, 0, 0), (0, 2.5, 0.5), 0.5), **{
     "firstperson_righthand": {"rotation": [0, -90, 25], "translation": [1.13, 2.4, 1.13], "scale": [0.54, 0.54, 0.54]},
     "firstperson_lefthand": {"rotation": [0, 90, -25], "translation": [1.13, 2.4, 1.13], "scale": [0.54, 0.54, 0.54]},
 })
+
+
+for _names in GROUPS.values():
+    for _name in _names:
+        DISPLAY[_name] = {**DISPLAY.get(_name, {}), **_FIRST_PERSON}
 
 
 def distance(mask: set[tuple[int, int]]) -> dict[tuple[int, int], float]:
@@ -162,6 +211,21 @@ def build() -> dict[str, dict]:
     return out
 
 
+JAVA = os.path.join(ROOT, "src/main/java/io/github/sirschrolli/kingdomsatwar/datagen/ReliefNames.java")
+
+
+def java() -> str:
+    names = sorted(ITEMS)
+    lines = ["package io.github.sirschrolli.kingdomsatwar.datagen;", "", "import java.util.Set;", "", "/**",
+             " * Die Gegenstände mit plastischem Modell (item/relief/&lt;name&gt;): im Inventar das Bild, sonst das Modell.",
+             " *", " * <p>ERZEUGT von tools/relief_models.py – nicht von Hand ändern.", " */", "final class ReliefNames {",
+             "    private ReliefNames() {}", "", "    static final Set<String> NAMES = Set.of("]
+    for i, n in enumerate(names):
+        lines.append(f'            "{n}"' + ("," if i < len(names) - 1 else ");"))
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     models = build()
     for name, data in models.items():
@@ -169,6 +233,8 @@ def main() -> None:
     if "--check" in sys.argv:
         return
     os.makedirs(MODELS, exist_ok=True)
+    with open(JAVA, "w", encoding="utf-8") as f:
+        f.write(java())
     for name, data in models.items():
         with open(os.path.join(MODELS, name + ".json"), "w", encoding="utf-8") as f:
             json.dump(data, f, separators=(",", ":"))

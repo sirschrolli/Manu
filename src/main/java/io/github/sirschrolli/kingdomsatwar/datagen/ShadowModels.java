@@ -126,11 +126,7 @@ final class ShadowModels {
         for (var egg : ShadowItems.spawnEggs()) {
             ModModelProvider.flat(items, egg.get());
         }
-        for (var tool : java.util.List.of(ShadowItems.NIGHTSTEEL_SWORD, ShadowItems.NIGHTSTEEL_PICKAXE, ShadowItems.NIGHTSTEEL_AXE,
-                ShadowItems.NIGHTSTEEL_SHOVEL, ShadowItems.NIGHTSTEEL_HOE, ShadowItems.ABYSSITE_SWORD, ShadowItems.ABYSSITE_PICKAXE,
-                ShadowItems.ABYSSITE_AXE, ShadowItems.ABYSSITE_SHOVEL, ShadowItems.ABYSSITE_HOE, ShadowItems.MOONSILVER_BLADE)) {
-            items.generateFlatItem(tool.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
-        }
+        // die Werkzeuge aus Nachtstahl und Abyssit und die Mondsilberklinge: seit 0.88 in 3D (ToolsetModels)
         ModModelProvider.armor(items, ShadowItems.NIGHTSTEEL_HELMET.get(), ShadowItems.NIGHTSTEEL_CHESTPLATE.get(),
                 ShadowItems.NIGHTSTEEL_LEGGINGS.get(), ShadowItems.NIGHTSTEEL_BOOTS.get());
         ModModelProvider.armor(items, ShadowItems.ABYSSITE_HELMET.get(), ShadowItems.ABYSSITE_CHESTPLATE.get(),

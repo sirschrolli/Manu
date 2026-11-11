@@ -347,8 +347,7 @@ public class ModModelProvider extends ModelProvider {
         flat(items, ModItems.BANDIT_SPAWN_EGG.get());
         flat(items, ModItems.VILLAGER_SPAWN_EGG.get());
         flat(items, ModItems.BANDIT_ARCHER_SPAWN_EGG.get());
-        items.generateFlatItem(ModItems.COMMAND_BATON.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
-        items.generateFlatItem(ModItems.DRAGON_HORN.get(), ModelTemplates.FLAT_ITEM);
+        flat(items, ModItems.DRAGON_HORN.get());
         // Belagerungswaffen: Munition und Bausätze
         flat(items, ModItems.HEART_CRYSTAL.get());
         flat(items, ModItems.MANA_CRYSTAL.get());
@@ -370,16 +369,12 @@ public class ModModelProvider extends ModelProvider {
                         io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.CUSTOM_PLAN.get()),
                 net.minecraft.client.data.models.model.ItemModelUtils.plainModel(customBlueprint),
                 net.minecraft.client.data.models.model.ItemModelUtils.plainModel(plainBlueprint)));
-        items.generateFlatItem(ModItems.SURVEYORS_ROD.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         for (io.github.sirschrolli.kingdomsatwar.economy.Coin coin : io.github.sirschrolli.kingdomsatwar.economy.Coin.values()) {
             coinModel(items, coin.item(), coin.id() + "_coin");
         }
 
-        // --- Werkzeuge, Waffen und Rüstungen ---
-        for (DeferredItem<?> tool : java.util.List.of(ModItems.STEEL_SWORD, ModItems.STEEL_PICKAXE, ModItems.STEEL_AXE,
-                ModItems.STEEL_SHOVEL, ModItems.STEEL_HOE, ModItems.DRACONIUM_SWORD, ModItems.DRACONIUM_AXE)) {
-            items.generateFlatItem(tool.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
-        }
+        // --- Werkzeuge, Waffen und Rüstungen (die Werkzeuge und Waffen seit 0.88 in 3D, siehe ToolsetModels) ---
+        ToolsetModels.register(items);
         armor(items, ModItems.STEEL_HELMET.get(), ModItems.STEEL_CHESTPLATE.get(), ModItems.STEEL_LEGGINGS.get(),
                 ModItems.STEEL_BOOTS.get());
         armor(items, ModItems.KONTERIT_HELMET.get(), ModItems.KONTERIT_CHESTPLATE.get(), ModItems.KONTERIT_LEGGINGS.get(),
@@ -389,7 +384,6 @@ public class ModModelProvider extends ModelProvider {
         items.generateElytra(ModItems.WYVERNIT_GLIDER.get());
         flat(items, ModItems.GEMSTONE_CROWN.get());
         flat(items, ModItems.STEEL_DRAGON_ARMOR.get());
-        items.generateFlatItem(ModItems.TROLL_CLUB.get(), ModelTemplates.FLAT_HANDHELD_ITEM);
         for (DeferredItem<?> item : java.util.List.of(ModItems.CATTLE_SPAWN_EGG, ModItems.PIG_SPAWN_EGG, ModItems.SHEEP_SPAWN_EGG,
                 ModItems.CHICKEN_SPAWN_EGG, ModItems.HORSE_SPAWN_EGG, ModItems.DONKEY_SPAWN_EGG, ModItems.MULE_SPAWN_EGG,
                 ModItems.GOAT_SPAWN_EGG, ModItems.HARE_SPAWN_EGG, ModItems.WOLF_SPAWN_EGG, ModItems.FOX_SPAWN_EGG, ModItems.BEAR_SPAWN_EGG,
@@ -649,6 +643,10 @@ public class ModModelProvider extends ModelProvider {
 
     /** Münze: immer dieselbe einzelne Münze, egal wie viele im Stapel liegen (die Zahl steht ja daneben). */
     private static void coinModel(ItemModelGenerators items, Item coin, String name) {
+        if (ReliefNames.NAMES.contains(name) && net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(coin).getPath().equals(name)) {
+            relief(items, coin);
+            return;
+        }
         Identifier model = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(coin),
                 TextureMapping.layer0(new Material(KingdomsAtWar.id("item/" + name))), items.modelOutput);
         items.itemModelOutput.accept(coin, net.minecraft.client.data.models.model.ItemModelUtils.plainModel(model));
@@ -732,6 +730,11 @@ public class ModModelProvider extends ModelProvider {
     }
 
     static void flat(ItemModelGenerators items, Item item) {
+        // seit 0.88: was man in die Hand nimmt (Barren, Steine, Schuppen, Essen …), ist außerhalb des Inventars plastisch
+        if (ReliefNames.NAMES.contains(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item).getPath())) {
+            relief(items, item);
+            return;
+        }
         items.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
     }
 

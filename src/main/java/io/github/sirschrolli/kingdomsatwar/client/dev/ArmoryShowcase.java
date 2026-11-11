@@ -374,6 +374,216 @@ final class ArmoryShowcase {
     }
 
     /** Eigene Sicht (mit Anzeige), F5 von vorn und von hinten (ohne – sie verdeckte die Füße und den Schild). */
+    /** Die 21 Werkzeuge und Waffen, die seit 0.88 in 3D sind (Name im Bild -> Gegenstand). */
+    private static Map<String, Supplier<? extends Item>> toolsets() {
+        Map<String, Supplier<? extends Item>> map = new LinkedHashMap<>();
+        map.put("stahlschwert", io.github.sirschrolli.kingdomsatwar.registry.ModItems.STEEL_SWORD);
+        map.put("stahlaxt", io.github.sirschrolli.kingdomsatwar.registry.ModItems.STEEL_AXE);
+        map.put("stahlspitzhacke", io.github.sirschrolli.kingdomsatwar.registry.ModItems.STEEL_PICKAXE);
+        map.put("stahlschaufel", io.github.sirschrolli.kingdomsatwar.registry.ModItems.STEEL_SHOVEL);
+        map.put("stahlhacke", io.github.sirschrolli.kingdomsatwar.registry.ModItems.STEEL_HOE);
+        map.put("nachtstahlschwert", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_SWORD);
+        map.put("nachtstahlaxt", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_AXE);
+        map.put("nachtstahlspitzhacke", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_PICKAXE);
+        map.put("nachtstahlschaufel", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_SHOVEL);
+        map.put("nachtstahlhacke", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.NIGHTSTEEL_HOE);
+        map.put("abyssitschwert", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SWORD);
+        map.put("abyssitaxt", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_AXE);
+        map.put("abyssitspitzhacke", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_PICKAXE);
+        map.put("abyssitschaufel", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_SHOVEL);
+        map.put("abyssithacke", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.ABYSSITE_HOE);
+        map.put("draconiumschwert", io.github.sirschrolli.kingdomsatwar.registry.ModItems.DRACONIUM_SWORD);
+        map.put("draconiumaxt", io.github.sirschrolli.kingdomsatwar.registry.ModItems.DRACONIUM_AXE);
+        map.put("mondsilberklinge", io.github.sirschrolli.kingdomsatwar.registry.ShadowItems.MOONSILVER_BLADE);
+        map.put("trollkeule", io.github.sirschrolli.kingdomsatwar.registry.ModItems.TROLL_CLUB);
+        map.put("kommandostab", io.github.sirschrolli.kingdomsatwar.registry.ModItems.COMMAND_BATON);
+        map.put("vermessungsstab", io.github.sirschrolli.kingdomsatwar.registry.ModItems.SURVEYORS_ROD);
+        return map;
+    }
+
+    /**
+     * Werkzeuge und Waffen in 3D ({@code werkzeuge_3d}, 0.88): jedes Stück aus eigener Sicht und mit F5 von vorn und hinten, dann
+     * alle auf Rüstungsständern (drei Reihen) und im Gepäck.
+     */
+    static void toolsets(Deque<Step> steps) {
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.CAMERA_DISTANCE).setBaseValue(2.3);
+            BlockPos top = origin(level);
+            fill(level, top.offset(-14, -1, -14), top.offset(14, -1, 14), Blocks.STONE_BRICKS.defaultBlockState());
+            fill(level, top.offset(-14, 0, -14), top.offset(14, 8, 14), Blocks.AIR.defaultBlockState());
+            player.teleportTo(level, top.getX() + 0.5, top.getY(), top.getZ() + 0.5, Set.of(), 0.0f, 4.0f, true);
+        }));
+        steps.add(Step.hud(false));
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        for (Map.Entry<String, Supplier<? extends Item>> tool : toolsets().entrySet()) {
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(tool.getValue().get()));
+                player.setItemInHand(InteractionHand.OFF_HAND, ItemStack.EMPTY);
+            }));
+            views(steps, "w3d_" + tool.getKey());
+        }
+        // alle an einer Wand: drei Reihen zu sieben, als 3D-Modelle (Darstellung „Kopf“: das Modell, wie es gebaut ist)
+        List<Supplier<? extends Item>> all = List.copyOf(toolsets().values());
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = player.level();
+            BlockPos top = origin(level);
+            fill(level, top.offset(-14, 0, -14), top.offset(14, 8, 14), Blocks.AIR.defaultBlockState());
+            fill(level, top.offset(-9, 0, 7), top.offset(9, 7, 7), Blocks.POLISHED_ANDESITE.defaultBlockState());
+            fill(level, top.offset(-9, 7, 7), top.offset(9, 7, 7), Blocks.STRIPPED_DARK_OAK_LOG.defaultBlockState());
+            for (int i = 0; i < all.size(); i++) {
+                int row = i / 7;
+                int col = i % 7;
+                // Blick nach Süden: Osten liegt links
+                double x = top.getX() + 0.5 - (col - 3) * 2.35;
+                double y = top.getY() + 5.75 - row * 2.3;
+                String id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(all.get(i).get()).toString();
+                level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack().withSuppressedOutput(),
+                        String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"%s\",count:1},"
+                                + "item_display:\"head\",billboard:\"fixed\",Rotation:[0f,0f],brightness:{sky:15,block:15},"
+                                + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],"
+                                + "scale:[1.8f,1.8f,1.8f]}}", x, y, top.getZ() + 6.4, id));
+            }
+            player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            player.teleportTo(level, top.getX() + 0.5, top.getY() + 1.2, top.getZ() - 2.2, Set.of(), 0.0f, -5.0f, true);
+        }));
+        steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
+        steps.add(Step.hud(false));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("w3d_wand"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            BlockPos top = origin(player.level());
+            player.teleportTo(player.level(), top.getX() + 3.0, top.getY() + 1.6, top.getZ() + 2.2, Set.of(), 24.0f, -8.0f, true);
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("w3d_wand_schraeg"));
+        steps.add(Step.hud(true));
+        steps.add(Step.command("kill @e[type=minecraft:item_display]"));
+        // im Gepäck: alles beisammen
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            player.removeAllEffects();
+            player.getInventory().clearContent();
+            int slot = 9;
+            for (Supplier<? extends Item> item : all) {
+                player.getInventory().setItem(slot++, new ItemStack(item.get()));
+            }
+            player.getInventory().setItem(0, new ItemStack(all.getFirst().get()));
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screen(minecraft -> new InventoryScreen(minecraft.player)));
+        steps.add(Step.waitTicks(8));
+        steps.add(Step.screenshot("w3d_gepaeck"));
+        steps.add(Step.once(minecraft -> minecraft.gui.setScreen(null)));
+        steps.add(Step.quit());
+    }
+
+    /**
+     * Die plastischen Gegenstände ({@code gegenstaende_relief}, 0.88): eine Wand voller Barren, Steine, Schuppen, Runen, Münzen und
+     * Speisen (Darstellung wie im Rahmen, leicht gedreht, damit man die Dicke sieht), dazu einige in der Hand und am Boden.
+     */
+    static void reliefs(Deque<Step> steps) {
+        String[] wall = {"steel_ingot", "nightsteel_ingot", "moonsilver_ingot", "abyssite_ingot", "draconium", "konterit", "wyvernit",
+                "gemstone", "star_shard", "void_shard", "soul_crystal", "mana_crystal", "heart_crystal", "glitch_shard",
+                "fire_dragon_scale", "ice_dragon_scale", "water_dragon_scale", "nature_dragon_scale", "ember_scale", "ember_fang", "werewolf_claw",
+                "fire_rune", "water_rune", "fire_seal_shard", "bronze_coin", "silver_coin", "gold_coin", "dragon_horn",
+                "meat_pie", "apple_pie", "bread_roll", "cooked_venison", "cabbage", "tomato", "ale"};
+        steps.add(Step.once(minecraft -> ShowcaseRunner.hideHand = false));
+        for (String command : new String[] {"gamerule advance_time false", "time set 6000", "weather clear", "gamerule spawn_mobs false",
+                "kill @e[type=!minecraft:player]", "clear", "gamemode survival"}) {
+            steps.add(Step.command(command));
+        }
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = any.getServer().overworld();
+            player.getAbilities().invulnerable = true;
+            player.onUpdateAbilities();
+            BlockPos top = origin(level);
+            fill(level, top.offset(-14, -1, -14), top.offset(14, -1, 14), Blocks.STONE_BRICKS.defaultBlockState());
+            fill(level, top.offset(-14, 0, -14), top.offset(14, 8, 14), Blocks.AIR.defaultBlockState());
+            fill(level, top.offset(-9, 0, 7), top.offset(9, 6, 7), Blocks.SPRUCE_PLANKS.defaultBlockState());
+            fill(level, top.offset(-9, 6, 7), top.offset(9, 6, 7), Blocks.STRIPPED_DARK_OAK_LOG.defaultBlockState());
+            for (int i = 0; i < wall.length; i++) {
+                int row = i / 7;
+                int col = i % 7;
+                double x = top.getX() + 0.5 - (col - 3) * 1.55;
+                double y = top.getY() + 5.0 - row * 1.1;
+                level.getServer().getCommands().performPrefixedCommand(level.getServer().createCommandSourceStack().withSuppressedOutput(),
+                        String.format(java.util.Locale.ROOT, "summon minecraft:item_display %.2f %.2f %.2f {item:{id:\"kingdomsatwar:%s\",count:1},"
+                                + "item_display:\"fixed\",billboard:\"fixed\",Rotation:[%df,0f],brightness:{sky:15,block:15},"
+                                + "transformation:{left_rotation:[0f,0f,0f,1f],right_rotation:[0f,0f,0f,1f],translation:[0f,0f,0f],"
+                                + "scale:[1.05f,1.05f,1.05f]}}", x, y, top.getZ() + 6.45, wall[i], 160 + (col - 3) * 6));
+            }
+            player.teleportTo(level, top.getX() + 0.5, top.getY() + 1.0, top.getZ() + 0.6, Set.of(), 0.0f, -14.0f, true);
+        }));
+        steps.add(Step.hud(false));
+        steps.add(Step.waitTicks(40));
+        steps.add(Step.waitForChunks(400));
+        steps.add(Step.screenshot("relief_wand"));
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            BlockPos top = origin(player.level());
+            player.teleportTo(player.level(), top.getX() + 4.0, top.getY() + 1.2, top.getZ() + 3.0, Set.of(), 35.0f, -6.0f, true);
+        }));
+        steps.add(Step.waitTicks(10));
+        steps.add(Step.screenshot("relief_wand_schraeg"));
+        steps.add(Step.command("kill @e[type=minecraft:item_display]"));
+        // am Boden liegend
+        steps.add(Step.server(any -> {
+            ServerPlayer player = player(any);
+            ServerLevel level = player.level();
+            BlockPos top = origin(level);
+            String[] ground = {"steel_ingot", "gemstone", "gold_coin", "meat_pie", "fire_dragon_scale", "star_shard", "tomato", "ember_fang"};
+            for (int i = 0; i < ground.length; i++) {
+                var item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id(ground[i]));
+                var entity = new net.minecraft.world.entity.item.ItemEntity(level, top.getX() + 0.5 + (i % 4 - 1.5) * 0.9,
+                        top.getY() + 0.1, top.getZ() + 2.6 + (i / 4) * 0.9, new ItemStack(item));
+                entity.setDeltaMovement(0, 0, 0);
+                entity.setNeverPickUp();
+                entity.setUnlimitedLifetime();
+                level.addFreshEntity(entity);
+            }
+            player.teleportTo(level, top.getX() + 0.5, top.getY(), top.getZ() + 0.3, Set.of(), 0.0f, 48.0f, true);
+        }));
+        steps.add(Step.waitTicks(30));
+        steps.add(Step.screenshot("relief_boden"));
+        steps.add(Step.command("kill @e[type=minecraft:item]"));
+        // in der Hand (eigene Sicht und F5 von vorn)
+        steps.add(Step.once(minecraft -> {
+            if (minecraft.gui.hud.isHidden()) {
+                minecraft.gui.hud.toggle();
+            }
+        }));
+        for (String held : new String[] {"steel_ingot", "gemstone", "meat_pie", "dragon_horn"}) {
+            steps.add(Step.server(any -> {
+                ServerPlayer player = player(any);
+                BlockPos top = origin(player.level());
+                player.teleportTo(player.level(), top.getX() + 0.5, top.getY(), top.getZ() + 0.5, Set.of(), 180.0f, 6.0f, true);
+                var item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(io.github.sirschrolli.kingdomsatwar.KingdomsAtWar.id(held));
+                player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(item));
+            }));
+            views(steps, "relief_" + held);
+        }
+        steps.add(Step.quit());
+    }
+
     private static void views(Deque<Step> steps, String name) {
         steps.add(Step.once(minecraft -> minecraft.options.setCameraType(CameraType.FIRST_PERSON)));
         // nach dem Wechsel hebt sich die Waffe erst, wenn sie wieder ausgeholt hat (langsame Waffen gut eine Sekunde)
