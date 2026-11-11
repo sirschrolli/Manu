@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.79.0 – Petri Heil: das Angeln.** Angeln ist jetzt ein Spiel im Spiel: Wer beim Biss anzieht, **drillt** den Fisch – er zieht in einer Wassersäule auf und ab, und du hältst ihn mit Maustaste oder Leertaste in der **Fangzone**, bis die Leiste voll ist; bleibt er zu lange draußen, reißt er sich los. Jede Art kämpft anders (ruhig, zäh, zappelnd, in jähen Sprüngen), und manche sind **wirklich schwer zu halten**. Es gibt **76 Arten** – 72 neue und die vier von Minecraft –, **für jedes Biom und jede Welt**: Hecht, Wels und Stör in Flüssen und Seen, Piranha und Arapaima im Dschungel, den Sculk-Aal im Tiefen Dunkel, Thunfisch, Schwertfisch und Mondfisch im Meer, Anglerfisch, Riemenfisch und Quastenflosser über der Tiefsee … Und geangelt wird jetzt **überall**: im Nether **in Lava** (Magmakarpfen, Seelenaal, Glutrochen – jedes Biom des Nethers hat seinen Fisch), im End, in der Leere und im Abgrund **im Nichts** – wirf den Haken über den Rand einer Insel, und die Leere trägt ihn wie Wasser (Endlachs, Chorusfisch, Leerenrochen) –, dazu eigene Fische im Feenreich, in der Schattenwelt und im Abgrund. **Sieben Legenden** beißen nur unter besonderen Umständen: der Sturmsegler nur im Gewitter, Goldschuppe nur bei Regen, der Alte vom See nur nachts. **Jeder Fisch bewirkt beim Essen etwas anderes** – von Schnelligkeit und Nachtsicht über Absorption IV bis zur Wirrflosse, die dich ein paar Schritte versetzt, und dem Seelenfisch, der alle Leiden nimmt. Zwei **Köder** (Köderwurm und Glühköder) locken bestimmte Arten und lassen alles schneller beißen, im Drill treibt manchmal eine **Schatzkiste** vorbei, und das **Fischbuch** (Taste **H**) verzeichnet jeden Fang mit Rekordgröße, Fundort, Zeit und Wirkung – was noch nie am Haken hing, bleibt ein Schattenriss. Außerdem: Die **Schwingen des Schöpfers** sind neu aus einzelnen Federn gebaut (nichts ist mehr abgeschnitten, nichts flackert mehr); die **Klangwelten** gibt es jetzt in **jedem Biom** – auch im End, im Tiefen Dunkel, in den Kampfdimensionen und in Biomen anderer Mods –, sie setzen sofort ein und haben einen **eigenen Regler** unter *Optionen → Musik & Geräusche*; die **Chronik des Siegels** schlägt man mit der Taste **J** auf (das Buch zu Beginn entfällt); die **Truppen sprechen nicht mehr**; **alle Bauwerke stehen seltener und weiter auseinander** – in allen Dimensionen; **Schärfe, Bann und Nemesis** wirken auf den starken Waffen der Mod jetzt im Verhältnis zu ihrem Schaden und auch auf ihre Fähigkeiten (Lichtspeer, Lichtwelle, Lichtsäule, Sterne, Weltenbrocken …); und die **Speere** der Mod liegen richtig in der Hand.
+> **Testversion 0.80.0 – Totems und Äpfel der Macht.** Neun neue **Totems**: Jedes wirkt **in der Zweithand** dauernd – und hält den Tod auf wie das Totem der Unsterblichkeit, nur stehst du **mit mehr Herzen wieder auf** (8 bis 12 statt eines halben) und entfesselst die Kraft seines Elements. Sechs gehören den Drachen (je vier ihrer Schuppen um ein Totem der Unsterblichkeit): **Glut** (feuerfest, Angreifer brennen – Feuernova), **Frost** (kein Erfrieren, Angreifer erstarren – Frostnova), **Sturm** (schneller laufen und schlagen – Blitze fahren in die Feinde), **Fels** (Rüstung, Härte, fester Stand – Erdstoß und zehn Extraherzen), **Hain** (heilt langsam, kein Gift – zwölf Herzen und Heilung für Tiere und Truppen), **Gezeiten** (Meereskraft – Flutwelle). Dazu das **Totem der Schatten** (Nachtsicht, Feinde bemerken dich erst aus halber Entfernung – beim Tod verschwindest du), das **Totem der Leere** (kein Fallschaden – und es **rettet auch aus dem Nichts** unter der Welt, zurück auf den letzten festen Boden) und das **Totem des Schöpfers** aus den sechs Totems der Drachen und einem Schöpferfunken: fünf Herzen mehr, beim Tod **alle Herzen** und eine Lichtnova – und es hält **dreimal**. Vier **Äpfel der Macht**, weit stärker als der verzauberte goldene Apfel und sehr schwer herzustellen: **Drachenapfel** (die Schuppen aller sechs Drachen), **Sternenapfel**, **Schattenapfel** und der **Apfel der Unsterblichkeit** aus den drei anderen und einem Schöpferfunken – mit zwanzig Extraherzen, zehn Herzen mehr und dem **Zweiten Leben**: Zehn Minuten lang kann dich einmal nichts töten. Totems und Äpfel liegen **plastisch in der Hand** – aufrecht wie ein Götzenbild, auch in der Außenansicht, im Rahmen und am Boden –, als erste Gegenstände mit dem neuen Verfahren, das nach und nach alle Gegenstände bekommen.
+> In 0.79 kam **das Angeln** („Petri Heil“): Angeln ist seitdem ein Spiel im Spiel: Wer beim Biss anzieht, **drillt** den Fisch – er zieht in einer Wassersäule auf und ab, und du hältst ihn mit Maustaste oder Leertaste in der **Fangzone**, bis die Leiste voll ist; bleibt er zu lange draußen, reißt er sich los. Jede Art kämpft anders (ruhig, zäh, zappelnd, in jähen Sprüngen), und manche sind **wirklich schwer zu halten**. Es gibt **76 Arten** – 72 neue und die vier von Minecraft –, **für jedes Biom und jede Welt**: Hecht, Wels und Stör in Flüssen und Seen, Piranha und Arapaima im Dschungel, den Sculk-Aal im Tiefen Dunkel, Thunfisch, Schwertfisch und Mondfisch im Meer, Anglerfisch, Riemenfisch und Quastenflosser über der Tiefsee … Und geangelt wird jetzt **überall**: im Nether **in Lava** (Magmakarpfen, Seelenaal, Glutrochen – jedes Biom des Nethers hat seinen Fisch), im End, in der Leere und im Abgrund **im Nichts** – wirf den Haken über den Rand einer Insel, und die Leere trägt ihn wie Wasser (Endlachs, Chorusfisch, Leerenrochen) –, dazu eigene Fische im Feenreich, in der Schattenwelt und im Abgrund. **Sieben Legenden** beißen nur unter besonderen Umständen: der Sturmsegler nur im Gewitter, Goldschuppe nur bei Regen, der Alte vom See nur nachts. **Jeder Fisch bewirkt beim Essen etwas anderes** – von Schnelligkeit und Nachtsicht über Absorption IV bis zur Wirrflosse, die dich ein paar Schritte versetzt, und dem Seelenfisch, der alle Leiden nimmt. Zwei **Köder** (Köderwurm und Glühköder) locken bestimmte Arten und lassen alles schneller beißen, im Drill treibt manchmal eine **Schatzkiste** vorbei, und das **Fischbuch** (Taste **H**) verzeichnet jeden Fang mit Rekordgröße, Fundort, Zeit und Wirkung – was noch nie am Haken hing, bleibt ein Schattenriss. Außerdem: Die **Schwingen des Schöpfers** sind neu aus einzelnen Federn gebaut (nichts ist mehr abgeschnitten, nichts flackert mehr); die **Klangwelten** gibt es jetzt in **jedem Biom** – auch im End, im Tiefen Dunkel, in den Kampfdimensionen und in Biomen anderer Mods –, sie setzen sofort ein und haben einen **eigenen Regler** unter *Optionen → Musik & Geräusche*; die **Chronik des Siegels** schlägt man mit der Taste **J** auf (das Buch zu Beginn entfällt); die **Truppen sprechen nicht mehr**; **alle Bauwerke stehen seltener und weiter auseinander** – in allen Dimensionen; **Schärfe, Bann und Nemesis** wirken auf den starken Waffen der Mod jetzt im Verhältnis zu ihrem Schaden und auch auf ihre Fähigkeiten (Lichtspeer, Lichtwelle, Lichtsäule, Sterne, Weltenbrocken …); und die **Speere** der Mod liegen richtig in der Hand.
 > In 0.78 kam **Schrolli der Allmächtige**: Der Schöpfer hat eine **dritte Gestalt**: Besiegt man auch seine Wahre Gestalt, verschlingt ein **Schwarzes Loch** alles Licht – und aus einer Sonne tritt **Schrolli der Allmächtige** hervor: das Gewand eine glühende Sonne, Federspitzen aus Flammen, **drei Räder** voller Augen, ein **Kranz aus zweiunddreißig Flammen** und ein Lichthof hinter ihm, noch größer, schneller und härter, mit eigener Musik und einer dritten vollen Leiste. Er kämpft mit **sechs eigenen Künsten** – **Sonnensturz** (kleine Sonnen stürzen auf leuchtende Kreise und hinterlassen Glut), **Prismenkäfig** (sechs Prismen spannen einen drehenden Sechsstern aus Strahlen – springen!), **Klingenkranz** (ein Kranz aus Speeren um jeden Gegner, mit einer leuchtenden Lücke), **Sonneneruption** (wandernde Wände aus Glut), **Sonnenspalter** (am Boden: drei Spalten aus Glut) und zweimal dem **Gericht der Sonne** (außen – innen – außen, und am Ende schützen nur vier Lichtkreise) –; dazu kennt schon die erste Gestalt den **Lichtkäfig** und die Wahre Gestalt das **Schwarze Loch** (jetzt 41 Künste). Und mit **jeder Gestalt wechselt der Hof**: In gleißendem Licht zerbricht er zum **Firmament** (eine Scheibe aus Nacht mit Sternbildern, Obelisken, einer Armillarsphäre und fünf schwebenden Welten) und dann zum **Herzen der Sonne** (Sonnenglut mit Pylonen, Glutbögen, einer Sonnenscheibe und einer zweiten Sonne über allem) – und der Himmel brennt. Seine Beute ist neu: der **Speer des Schöpfers** (schöner, stärker: Klinge aus Licht in goldener Fassung mit Ring und Federflügeln; jeder dritte Treffer eine Lichtwelle), die **Schwingen** sehen jetzt aus wie **echte Flügel** (sie falten sich, breiten sich im Gleitflug aus, schlagen) und schützen wie ein Harnisch, dazu der **Heiligenschein** (Nachtsicht, keine Blindheit, Segen, Untote brennen) und die **Räder des Schöpfers** als Beinschutz (sie enthüllen Feinde und lenken Geschosse zurück); alle drei zusammen: das **Ebenbild des Schöpfers**. Hat ein Held mehr als 20 Rüstungspunkte, zeigt die Leiste sie **in Schichten** wie die Heldenherzen (bis 60 zählen). Und wer auf **Heldenstufe 200** in einer Kampfdimension fällt, **behält jetzt sein Inventar**. In 0.78.1 bekamen **der Allmächtige und der Weltenfresser eigene Bossleisten** (bisher zeigten beide nur die rote Leiste von Minecraft): der Allmächtige mit Schwingen aus brennenden Federn, einer Sonnenkrone aus Flammen und Strahlen, der Sonne hinter seinem Bildnis und einer Füllung wie das Plasma einer Sonne – der Weltenfresser mit einem Rahmen aus Chaosgestein und glühenden Fugen, den Welten auf seinem Rücken, seinem Gebiss, Kronensplittern, Hauer und Kristallflosse, seinem Rachen im Medaillon und der Glut seines Schlunds, durch die ein violetter Riss zieht.
 > In 0.77 kam **der Weg zum Unsterblichen**: Der Held kann seitdem bis **Heldenstufe 200** aufsteigen (bisher 100) – hinter der Legende warten fünf neue Ränge mit eigenen Abzeichen und Wahrzeichen: **Mythos** (120), **Halbgott** (140), **Titan** (160), **Sternenwanderer** (180) und der **Unsterbliche** (200), den einmal alle 20 Minuten das **Licht der Unsterblichkeit** vor dem Tod bewahrt. Jede Stufe macht jetzt auch **von selbst stärker** – die **Heldenkraft**: alle zehn Stufen ein Herz, dazu Schaden, Mana, schnellere Erholung des Manas und alle 25 Stufen Rüstungshärte (auf Stufe 200: 19 Herzen, fast 8 Schaden, 398 Mana, 7 Härte mehr). Jedes Talent fasst **40 Punkte** statt 20 – die zweiten zwanzig sind die **Meisterschaft** und leuchten golden –, und du kannst **25 Herz- und 25 Manakristalle** aufnehmen statt je zehn. Die Heldenerfahrung für Monster, Bosse, Erz und Entdeckungen bleibt genau gleich; Stufe 100 braucht wie bisher rund 1,17 Millionen, jede Stufe danach wächst nur sanft (Stufe 200: rund 4,3 Millionen). Ab 21 Herzen zeigt die Lebensleiste die **Heldenherzen**: eine Reihe in farbigen Schichten statt einer Wand aus Herzreihen.
 > In 0.76 griff **Schrolli der Schöpfer zur Klinge** – er kämpft nicht mehr nur aus der Luft: Immer wieder **landet** er – ein Warnkreis, der Einschlag, ein Ring rollt über den Hof (springen!) –, aus dem Licht seines Saums formen sich **Beine in goldenen Beinschienen**, und sein Zepter wird zur **Klinge aus Licht**. Am Boden schreitet er auf euch zu und ficht mit **sieben neuen Künsten**: **Klingenhieb** (schräge Schnitte, zuletzt ein Spaltschlag, der den Boden aufreißt), **Lichtsicheln** (über den Boden gleitend – springen!), **Sturmlauf** (eine goldene Linie zeigt den Weg), **Klingenwirbel**, **Himmelssturz** (danach steckt die Klinge im Boden – jetzt zuschlagen!), **Schwingenwehr** (er pariert alles von vorn und schlägt zurück – greift ihn von hinten an!) und in der Wahren Gestalt die **Weltenklinge**, die zu zwanzig Blöcken Länge wächst. Jeder Hieb zieht eine **Spur aus Licht**. Am Boden erreicht ihn jedes Schwert – leichte Hiebe fängt ein Schild ab, die goldenen nicht. Dazu **neue Klänge**: alle Klänge und die Musik des Schöpfers sind jetzt warm, tief und leiser – nichts gellt oder schrillt mehr.
@@ -367,6 +368,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Schrolli der Schöpfer** (0.75): der stärkste Gegner – Schöpferfunke und Altar des Schöpfers, die Schöpfung (die größte Kampfdimension, eigener Himmel, eigene Musik), ein Seraph mit 26 Künsten, die Wahre Gestalt statt des Todes (der Himmel öffnet sich), Seraphlinge, eigene Bossleisten; Zepter des Schöpfers (3D), Schwingen des Schöpfers und der Titel „Gottbezwinger“ | ✅ fertig |
 | **Schrolli der Allmächtige** (0.78): die dritte Gestalt (Schwarzes Loch, Herz der Sonne, drei Räder, Flammenkranz, eigene Musik), sechs Künste des Allmächtigen, Lichtkäfig und Schwarzes Loch (jetzt 41 Künste), mit jeder Gestalt ein neuer Hof (Firmament, Herz der Sonne), neuer Speer, Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, Rüstung in Schichten bis 60, das Inventar bleibt auf Heldenstufe 200; seit 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser | ✅ fertig |
 | **Angeln** (0.79): der Drill als Minispiel (Fangzone, Leiste, perfekte Fänge, Schatzkisten), 76 Fischarten für jedes Biom und jede Welt, Angeln in Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung beim Essen, Köderwurm und Glühköder, das Fischbuch (H); dazu die Chronik per Taste (J), stumme Truppen, Bauwerke in allen Dimensionen weiter auseinander, Verzauberungen im Verhältnis zur Waffe und auf ihre Fähigkeiten, Speere richtig in der Hand | ✅ fertig |
+| **Totems und Äpfel der Macht** (0.80): neun Totems (Glut, Frost, Sturm, Fels, Hain, Gezeiten, Schatten, Leere, Schöpfer) mit Wirkung in der Zweithand, mehr Herzen beim Aufstehen und der Kraft ihres Elements; vier Äpfel (Drachen-, Sternen-, Schattenapfel, Apfel der Unsterblichkeit mit dem Zweiten Leben); plastische Modelle für Hand, Rahmen und Boden | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -427,7 +429,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.79.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.80.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -435,7 +437,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.79.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.80.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -449,7 +451,7 @@ ansehen mit `/kaw intro`.
 
 Danach nennt dir das Spiel die Taste für die **Chronik des Siegels** (anfangs **J**) – sie erzählt die Geschichte und zeigt
 dir den nächsten Schritt. Ein Buch dafür gibt es seit 0.79 nicht mehr: Die Chronik hat jeder immer bei sich.
-Im Kreativmodus gibt es fünfzehn eigene Tabs.
+Im Kreativmodus gibt es sechzehn eigene Tabs.
 
 ---
 
@@ -2806,6 +2808,55 @@ weiter; wer selbst gestreichelt wird, dem wackelt kurz das Bild. Alle in der Nä
 gezähmte Tiere und Drachen bekommen dabei ein halbes Herz zurück (höchstens alle drei Sekunden). Unter Stufe 100
 benutzt Schleichen + Rechtsklick die Wesen wie immer.
 
+### Totems und Äpfel der Macht (seit 0.80)
+
+![Totems und Äpfel der Macht: in der Hand, im Rahmen, beim Tod](docs/bilder/totems.jpg)
+
+Neun **Totems** und vier **Äpfel der Macht** – alle sehr teuer, alle aus der Beute der Drachen und der fremden Welten.
+
+**Die Totems.** Jedes tut zweierlei. **In der Zweithand** wirkt es dauernd, solange man es dort hält (in der Haupthand
+nicht). Und **wenn der Tod kommt**, hält es ihn auf wie das Totem der Unsterblichkeit – in jeder Hand, mit demselben Bild
+und Klang –, nur steht man **mit mehr Herzen** wieder auf (8 bis 12 statt eines halben, mit dem Totem des Schöpfers mit
+allen) und entfesselt die Kraft seines Elements gegen alle Feinde ringsum: gegen Monster und alles, was einen gerade
+angreift – eigene Tiere und Truppen trifft sie nie. Gegen `/kill` hilft kein Totem, und aus dem Nichts unter der Welt
+rettet nur das Totem der Leere.
+
+Hergestellt werden sie auf der Werkbank um ein **Totem der Unsterblichkeit** in der Mitte: die erste Zutat an die vier
+Kanten, die zweite in die vier Ecken.
+
+| Totem | Kanten · Ecken | In der Zweithand | Wenn der Tod kommt |
+|---|---|---|---|
+| **Totem der Glut** | 4 Feuerdrachen-Schuppen · 4 Lohenruten | Feuerresistenz; wer dich im Nahkampf trifft, brennt | 8 Herzen, Regeneration II, Absorption II, 2 Minuten feuerfest – **Feuernova**: 10 Schaden im Umkreis von 6 Blöcken, Feinde brennen 8 Sekunden |
+| **Totem des Frosts** | 4 Eisdrachen-Schuppen · 4 Frostkristalle | +2 Rüstung, kein Erfrieren; wer dich trifft, wird langsam | 8 Herzen, Regeneration II, Resistenz II, Absorption II – **Frostnova**: 6 Schaden, Feinde erstarren 6 Sekunden |
+| **Totem des Sturms** | 4 Blitzdrachen-Schuppen · 4 Sturmkristalle | +15 % Lauftempo, +10 % Angriffstempo | 8 Herzen, Regeneration II, Schnelligkeit II, Eile II – **Blitze** fahren in bis zu sechs Feinde im Umkreis von 8 Blöcken (je 12 Schaden) |
+| **Totem des Felsens** | 4 Erddrachen-Schuppen · 4 Edelsteine | +3 Rüstung, +2 Härte, 40 % weniger Rückstoß | 10 Herzen und zehn Extraherzen (Absorption V, 1 Minute), Resistenz III – **Erdstoß**: 6 Schaden, Feinde werden emporgeschleudert |
+| **Totem des Hains** | 4 Naturdrachen-Schuppen · 4 Bernsteinkristalle | heilt alle 5 Sekunden ein halbes Herz; Gift haftet nicht | 12 Herzen, Regeneration III, satt – deine Tiere und Truppen im Umkreis von 10 Blöcken werden um 10 Herzen geheilt |
+| **Totem der Gezeiten** | 4 Wasserdrachen-Schuppen · 4 Nautilusschalen | Meereskraft (atmen, sehen, graben unter Wasser), schnelleres Schwimmen | 8 Herzen, Regeneration II, 3 Minuten Meereskraft und Wasseratmung, Gunst des Delfins – **Flutwelle**: Feuer erlischt, Feinde im Umkreis von 7 Blöcken werden fortgespült |
+| **Totem der Schatten** | 4 Schattenessenz · 4 Nachtkristallsplitter | Nachtsicht; Feinde bemerken dich erst aus halber Entfernung | 8 Herzen, Regeneration II, 20 Sekunden unsichtbar und schnell – Feinde im Umkreis von 10 Blöcken verlieren dich aus den Augen und erlahmen |
+| **Totem der Leere** | 4 Leerensplitter · 4 Enderperlen | kein Fallschaden | 8 Herzen, Regeneration II, Sanfter Fall, ein Stück fort von der Gefahr – und es **rettet aus dem Nichts**: Wer unter die Welt stürzt, steht wieder auf dem festen Boden, auf dem er zuletzt stand |
+| **Totem des Schöpfers** | die sechs Totems der Drachen, 1 Schöpferfunke, 2 Herzkristalle | +5 Herzen | **alle Herzen**, Regeneration III, Absorption V, Resistenz II, feuerfest – **Lichtnova**: 16 Schaden im Umkreis von 8 Blöcken – und es kehrt mit einer Ladung weniger in die Hand zurück, bis es **dreimal** gehalten hat |
+
+**Die Äpfel der Macht.** Weit stärker als der verzauberte goldene Apfel – und jeder braucht einen solchen (den es nur
+als Beute gibt) oder die drei anderen Äpfel. Was ein Apfel gibt, steht an ihm.
+
+| Apfel | Zutaten | Wirkung |
+|---|---|---|
+| **Drachenapfel** | verzauberter goldener Apfel, je eine Schuppe aller sechs Drachen, 2 Goldblöcke | Regeneration III (0:40), Absorption VI – zwölf Extraherzen –, Resistenz II und Stärke II (5:00), Feuerresistenz (10:00) |
+| **Sternenapfel** | verzauberter goldener Apfel, 4 Sternsplitter, 4 Leerensplitter | Schnelligkeit III, Eile III, Sprungkraft II und Absorption IV (5:00), Nachtsicht und Glück II (10:00), Regeneration II (0:20) |
+| **Schattenapfel** | verzauberter goldener Apfel, 4 Schattenessenz, 4 Seelenkristalle | Unsichtbarkeit und Absorption IV (5:00), Stärke III und Resistenz II (3:00), Nachtsicht (10:00), Regeneration II (0:20) |
+| **Apfel der Unsterblichkeit** | Drachenapfel, Sternenapfel, Schattenapfel, Schöpferfunke, Netherstern, 2 Herzkristalle, 2 Manakristalle | Regeneration IV (1:00), Absorption X – zwanzig Extraherzen – und Extraenergie V – zehn Herzen mehr – (10:00), Resistenz III und Stärke III (5:00), Schnelligkeit II und Feuerresistenz (10:00) und das **Zweite Leben** (10:00) |
+
+**Das Zweite Leben.** Solange es wirkt, kann einen einmal nichts töten – kein Schlag, kein Sturz, kein Feuer: Man steht
+mit allen Herzen wieder auf, was schadete, fällt ab, und das Zweite Leben ist verbraucht. Es greift erst, wenn kein Totem
+mehr hilft (ein Totem nimmt zwar alle anderen Zustände, das Zweite Leben aber nicht) und vor dem Licht der
+Unsterblichkeit. Gegen `/kill` und das Nichts unter der Welt hilft es nicht.
+
+**Plastisch in der Hand.** Totems und Äpfel sind die ersten Gegenstände, die nicht mehr wie ein Stück Papier in der Hand
+liegen: Aus ihrem Bild entsteht ein Körper mit Tiefe (`tools/relief_models.py`) – am Rand ein Pixel stark, zur Mitte hin
+gewölbt. Man hält sie aufrecht vor sich wie ein Götzenbild (Minecraft hält flache Gegenstände waagerecht), im Rahmen und
+am Boden sind sie ebenso plastisch, im Inventar bleibt das gewohnte Bild. Nach und nach bekommen alle Gegenstände der Mod
+solche Modelle.
+
 ### Ausrüstung
 
 ![Rüstungen aus Stahl, Konterit und Drachenschuppen](docs/bilder/ausruestung.jpg)
@@ -3348,7 +3399,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.79.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.80.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -3464,18 +3515,21 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Lichtkäfig und Schwarzes Loch, mit jeder Gestalt ein neuer Hof (das Firmament, das Herz der Sonne), der neue Speer,
      Schwingen wie echte Flügel, Heiligenschein und Räder des Schöpfers, die Rüstung in Schichten und das bewahrte
      Inventar der Unsterblichen; in 0.78.1 eigene Bossleisten für den Allmächtigen und den Weltenfresser;
-   - zuletzt **0.79 – Angeln** (fertig): der Drill als Minispiel, 76 Fischarten für jedes Biom und jede Welt, Angeln in
+   - **0.79 – Angeln** (fertig): der Drill als Minispiel, 76 Fischarten für jedes Biom und jede Welt, Angeln in
      Lava und im Nichts, sieben Legenden, jede Art mit eigener Wirkung, Köder, Schatzkisten und das Fischbuch; dazu
      Klangwelten in jedem Biom mit eigenem Regler, die Chronik per Taste, Bauwerke weiter auseinander und Verzauberungen,
-     die auf den Waffen der Mod im Verhältnis wirken.
+     die auf den Waffen der Mod im Verhältnis wirken;
+   - zuletzt **0.80 – Totems und Äpfel der Macht** (fertig): neun Totems mit Wirkung in der Zweithand, mehr Herzen beim
+     Aufstehen und der Kraft ihres Elements, vier Äpfel der Macht mit dem Zweiten Leben, plastische Modelle.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** das **Urmeer** – eine Meeresdimension, die man durch einen versunkenen Tempel betritt, mit
-   einem riesigen Kraken als Boss –; neue **Totems** (Wirkung in der Zweithand, Wiederbelebung mit mehr Herzen); mächtige
-   **goldene Äpfel**, die sehr schwer herzustellen sind; viele neue **Waffen, Spitzhacken und Schilde** als 3D-Modelle, die
-   auch in der Außenansicht richtig in der Hand liegen; neue Wesen; Bosse, die besser auf Elytren reagieren; schönere
-   Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
+   **Als Nächstes geplant:** **eigene Fische für jedes Biom** (auch für Höhlenbiome) – mehrere hundert Arten –, dazu ein
+   **Fischbeutel**, in den der Fang von selbst wandert und dessen Platz sich beim Angler in den Dörfern unbegrenzt erweitern
+   lässt; danach Bosse, die besser auf Elytren reagieren; viele neue **Waffen, Spitzhacken und Schilde** als 3D-Modelle, die
+   auch in der Außenansicht richtig in der Hand liegen; das **Urmeer** – eine Meeresdimension, die man durch einen
+   versunkenen Tempel betritt, mit einem riesigen Kraken als Boss –; neue Wesen; schönere Bossleisten; neue Bosse, Erze und
+   Bauwerke für alle Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.

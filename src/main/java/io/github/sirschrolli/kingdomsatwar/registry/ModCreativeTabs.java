@@ -157,6 +157,14 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> accept(output, FishingItems.TAB))
                     .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> RELICS = TABS.register("relics",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable("itemGroup.kingdomsatwar.relics"))
+                    .icon(() -> new net.minecraft.world.item.ItemStack(RelicItems.totem(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.CREATOR)))
+                    .withTabsBefore(FISHING.key())
+                    .displayItems((parameters, output) -> accept(output, RelicItems.TAB))
+                    .build());
+
     private ModCreativeTabs() {}
 
     private static void accept(CreativeModeTab.Output output, List<Supplier<? extends ItemLike>> entries) {

@@ -54,9 +54,12 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.FishingItems.init();
+        io.github.sirschrolli.kingdomsatwar.registry.RelicItems.init();
         ModBlocks.BLOCKS.register(modBus);
         io.github.sirschrolli.kingdomsatwar.registry.ModDataComponents.COMPONENTS.register(modBus);
         ModItems.ITEMS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.ModEffects.EFFECTS.register(modBus);
+        io.github.sirschrolli.kingdomsatwar.registry.RelicItems.CONSUME_EFFECTS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         io.github.sirschrolli.kingdomsatwar.enchant.ModEnchantments.EFFECTS.register(modBus);
         ModParticles.PARTICLE_TYPES.register(modBus);

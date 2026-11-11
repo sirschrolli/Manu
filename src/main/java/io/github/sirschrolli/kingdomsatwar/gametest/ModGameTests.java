@@ -217,6 +217,7 @@ public final class ModGameTests {
         AmbienceGameTests.init();  // Klangwelten der Biome
         FishingGameTests.init();   // das Angeln
         WeaponGameTests.init();    // Verzauberungen auf den Waffen der Mod
+        RelicGameTests.init();     // Totems und Äpfel der Macht
         RareGameTests.init();      // seltene Wesen, Dorfbewohner, fahrender Händler
         NetherGameTests.init();    // Nether-Volk
         EndGameTests.init();       // Wesen des Ends
@@ -283,6 +284,7 @@ public final class ModGameTests {
         AmbienceGameTests.register(event, environment);
         FishingGameTests.register(event, environment);
         WeaponGameTests.register(event, environment);
+        RelicGameTests.register(event, environment);
         VillageGameTests.register(event, environment);
         SiteGameTests.register(event, environment);
         WarGameTests.register(event, environment);

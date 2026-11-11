@@ -467,6 +467,13 @@ public class ModModelProvider extends ModelProvider {
             flat(items, item.get());
         }
         MonsterGearModels.register(items);
+        // --- Totems und Äpfel der Macht (0.80): im Inventar das Bild, sonst das plastische Modell ---
+        for (var totem : io.github.sirschrolli.kingdomsatwar.registry.RelicItems.totems()) {
+            relief(items, totem.get());
+        }
+        for (var apple : io.github.sirschrolli.kingdomsatwar.registry.RelicItems.apples()) {
+            relief(items, apple.get());
+        }
 
         // --- Frostkessel ---
         Block frostCrystal = ModBlocks.FROST_CRYSTAL.get();
@@ -717,6 +724,21 @@ public class ModModelProvider extends ModelProvider {
 
     static void flat(ItemModelGenerators items, Item item) {
         items.generateFlatItem(item, ModelTemplates.FLAT_ITEM);
+    }
+
+    /**
+     * Im Inventar das flache Bild, überall sonst (Hand, Boden, Rahmen, Regal) das plastische Modell
+     * {@code item/relief/<name>}, das {@code tools/relief_models.py} aus demselben Bild baut.
+     */
+    static void relief(ItemModelGenerators items, Item item) {
+        net.minecraft.client.renderer.item.ItemModel.Unbaked flat = net.minecraft.client.data.models.model.ItemModelUtils.plainModel(
+                items.createFlatItemModel(item, ModelTemplates.FLAT_ITEM));
+        Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        net.minecraft.client.renderer.item.ItemModel.Unbaked relief = net.minecraft.client.data.models.model.ItemModelUtils.plainModel(
+                Identifier.fromNamespaceAndPath(id.getNamespace(), "item/relief/" + id.getPath()));
+        items.itemModelOutput.accept(item, net.minecraft.client.data.models.model.ItemModelUtils.select(
+                new net.minecraft.client.renderer.item.properties.select.DisplayContext(), relief,
+                net.minecraft.client.data.models.model.ItemModelUtils.when(java.util.List.of(net.minecraft.world.item.ItemDisplayContext.GUI), flat)));
     }
 
     static void ore(BlockModelGenerators blocks, DeferredBlock<? extends Block> ore, Block baseRock, String material) {

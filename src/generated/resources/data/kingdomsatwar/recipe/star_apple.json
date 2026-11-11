@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "minecraft:enchanted_golden_apple",
+    "S": "kingdomsatwar:star_shard",
+    "V": "kingdomsatwar:void_shard"
+  },
+  "pattern": [
+    "VSV",
+    "SAS",
+    "VSV"
+  ],
+  "result": {
+    "id": "kingdomsatwar:star_apple"
+  }
+}

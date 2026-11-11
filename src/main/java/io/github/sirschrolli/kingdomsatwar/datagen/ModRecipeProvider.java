@@ -54,6 +54,7 @@ public class ModRecipeProvider extends RecipeProvider {
         cookVenison();
         sea();
         fishing();
+        relics();
         shadowRecipes();
         voidRecipes();
         shadowTreasureRecipes();
@@ -758,6 +759,82 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_smoking");
         save(SimpleCookingRecipeBuilder.campfireCooking(Ingredient.of(raw), RecipeCategory.FOOD, cooked, 0.35f, 600)
                 .unlockedBy(getHasName(raw), has(raw)), "cooked_venison_from_campfire_cooking");
+    }
+
+    /**
+     * Totems und Äpfel der Macht (seit 0.80) – alle sehr teuer: Jedes Totem braucht ein Totem der Unsterblichkeit und Beute
+     * eines Drachen oder einer fremden Welt, das Totem des Schöpfers die sechs Totems der Drachen und einen Schöpferfunken;
+     * der Drachenapfel einen verzauberten goldenen Apfel und die Schuppen aller sechs Drachen, der Apfel der Unsterblichkeit
+     * die drei anderen Äpfel.
+     */
+    private void relics() {
+        java.util.function.Function<io.github.sirschrolli.kingdomsatwar.relic.TotemKind, Item> totem =
+                io.github.sirschrolli.kingdomsatwar.registry.RelicItems::totem;
+        java.util.function.Function<io.github.sirschrolli.kingdomsatwar.dragon.DragonType, Item> scale = type -> ModItems.DRAGON_SCALES.get(type).get();
+        record Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind kind, ItemLike edge, ItemLike corner) {}
+        for (Ring ring : List.of(
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.EMBER, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.FIRE), Items.BLAZE_ROD),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.FROST, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.ICE), ModBlocks.FROST_CRYSTAL.get()),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.STORM, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.LIGHTNING), ModBlocks.STORM_CRYSTAL.get()),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.STONE, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.EARTH), ModItems.GEMSTONE.get()),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.GROVE, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.NATURE), ModBlocks.AMBER_CRYSTAL.get()),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.TIDE, scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.WATER), Items.NAUTILUS_SHELL),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.SHADOW, ShadowItems.SHADOW_ESSENCE.get(), ShadowItems.NIGHT_CRYSTAL_SHARD.get()),
+                new Ring(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.VOID, io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get(), Items.ENDER_PEARL))) {
+            Item result = totem.apply(ring.kind());
+            shaped(RecipeCategory.COMBAT, result)
+                    .pattern("CEC").pattern("ETE").pattern("CEC")
+                    .define('T', Items.TOTEM_OF_UNDYING).define('E', ring.edge()).define('C', ring.corner())
+                    .unlockedBy(getHasName(ring.edge()), has(ring.edge())).save(output, key(ring.kind().itemName()));
+        }
+        Item heart = ModItems.HEART_CRYSTAL.get();
+        Item spark = io.github.sirschrolli.kingdomsatwar.registry.CreatorBlocks.CREATOR_SPARK.get();
+        // das Totem des Schöpfers: die sechs Totems der Drachen, vereint durch einen Schöpferfunken
+        shaped(RecipeCategory.COMBAT, totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.CREATOR))
+                .pattern("EFS").pattern("HCH").pattern("RGT")
+                .define('E', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.EMBER))
+                .define('F', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.FROST))
+                .define('S', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.STORM))
+                .define('R', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.STONE))
+                .define('G', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.GROVE))
+                .define('T', totem.apply(io.github.sirschrolli.kingdomsatwar.relic.TotemKind.TIDE))
+                .define('H', heart).define('C', spark)
+                .unlockedBy(getHasName(spark), has(spark)).save(output, key("totem_creator"));
+
+        java.util.function.Function<io.github.sirschrolli.kingdomsatwar.relic.PowerApple, Item> apple =
+                io.github.sirschrolli.kingdomsatwar.registry.RelicItems::apple;
+        // Drachenapfel: ein verzauberter goldener Apfel zwischen den Schuppen aller sechs Drachen
+        shaped(RecipeCategory.FOOD, apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.DRAGON))
+                .pattern("FGI").pattern("LAN").pattern("EGW")
+                .define('A', Items.ENCHANTED_GOLDEN_APPLE).define('G', Items.GOLD_BLOCK)
+                .define('F', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.FIRE))
+                .define('I', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.ICE))
+                .define('L', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.LIGHTNING))
+                .define('N', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.NATURE))
+                .define('E', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.EARTH))
+                .define('W', scale.apply(io.github.sirschrolli.kingdomsatwar.dragon.DragonType.WATER))
+                .unlockedBy(getHasName(Items.ENCHANTED_GOLDEN_APPLE), has(Items.ENCHANTED_GOLDEN_APPLE)).save(output, key("dragon_apple"));
+        // Sternenapfel: Sternsplitter der Sternenreiterin und Splitter der Leere
+        Item star = io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get();
+        shaped(RecipeCategory.FOOD, apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.STAR))
+                .pattern("VSV").pattern("SAS").pattern("VSV")
+                .define('A', Items.ENCHANTED_GOLDEN_APPLE).define('S', star)
+                .define('V', io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.VOID_SHARD.get())
+                .unlockedBy(getHasName(star), has(star)).save(output, key("star_apple"));
+        // Schattenapfel: Schattenessenz und Seelenkristalle
+        Item essence = ShadowItems.SHADOW_ESSENCE.get();
+        shaped(RecipeCategory.FOOD, apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.SHADOW))
+                .pattern("KSK").pattern("SAS").pattern("KSK")
+                .define('A', Items.ENCHANTED_GOLDEN_APPLE).define('S', essence).define('K', ShadowItems.SOUL_CRYSTAL.get())
+                .unlockedBy(getHasName(essence), has(essence)).save(output, key("shadow_apple"));
+        // Apfel der Unsterblichkeit: die drei Äpfel, ein Schöpferfunke, ein Netherstern, Herz- und Manakristalle
+        shaped(RecipeCategory.FOOD, apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.IMMORTAL))
+                .pattern("HDM").pattern("SCX").pattern("MNH")
+                .define('D', apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.DRAGON))
+                .define('S', apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.STAR))
+                .define('X', apple.apply(io.github.sirschrolli.kingdomsatwar.relic.PowerApple.SHADOW))
+                .define('C', spark).define('N', Items.NETHER_STAR).define('H', heart).define('M', ModItems.MANA_CRYSTAL.get())
+                .unlockedBy(getHasName(spark), has(spark)).save(output, key("immortal_apple"));
     }
 
     /** Das Angeln (seit 0.79): aus jedem eigenen Fisch wird gebraten ein Filet; Köder zum Selbermachen. */
