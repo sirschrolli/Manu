@@ -65,6 +65,7 @@ public final class ModModelLayers {
     /** Zauberwirkungen und Zaubergeschosse. */
     public static final ModelLayerLocation PHOENIX = new ModelLayerLocation(KingdomsAtWar.id("phoenix"), "main");
     public static final ModelLayerLocation ICE_LANCE = new ModelLayerLocation(KingdomsAtWar.id("ice_lance"), "main");
+    public static final ModelLayerLocation ICICLE = new ModelLayerLocation(KingdomsAtWar.id("icicle"), "main");
     public static final ModelLayerLocation ICE_PRISON = new ModelLayerLocation(KingdomsAtWar.id("ice_prison"), "main");
     public static final ModelLayerLocation STONE_SPIKE = new ModelLayerLocation(KingdomsAtWar.id("stone_spike"), "main");
     public static final ModelLayerLocation STONE_FIST = new ModelLayerLocation(KingdomsAtWar.id("stone_fist"), "main");

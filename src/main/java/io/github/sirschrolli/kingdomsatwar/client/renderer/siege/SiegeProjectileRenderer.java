@@ -20,6 +20,7 @@ import net.minecraft.resources.Identifier;
  * Flug, der Ballistenbolzen zeigt in Flugrichtung und bleibt so stecken, wie er eingeschlagen ist.
  */
 public class SiegeProjectileRenderer extends EntityRenderer<SiegeProjectile, SiegeProjectileRenderer.State> {
+    private final float[] aim = new float[2];
     private static final Identifier STONE = KingdomsAtWar.id("textures/entity/siege/siege_stone/siege_stone.png");
     private static final Identifier BOLT = KingdomsAtWar.id("textures/entity/siege/ballista_bolt/ballista_bolt.png");
     /** Das Steinmodell misst zehn Einheiten; im Löffel des Katapults liegen sechs, in der Schlinge des Triboks 7,6. */
@@ -55,8 +56,10 @@ public class SiegeProjectileRenderer extends EntityRenderer<SiegeProjectile, Sie
     public void extractRenderState(SiegeProjectile entity, State state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
         state.siege = entity.siege();
-        state.yRot = entity.getYRot(partialTicks);
-        state.xRot = entity.getXRot(partialTicks);
+        // Bolzen genau in Flugrichtung (aus der Bahn, nicht aus der nachhinkenden Drehung); steckt er, bleibt seine Richtung
+        io.github.sirschrolli.kingdomsatwar.client.renderer.FlightAim.aim(entity, partialTicks, false, false, this.aim);
+        state.yRot = this.aim[0];
+        state.xRot = this.aim[1];
         state.age = entity.tickCount + partialTicks;
         state.stuck = entity.stuck();
         state.spin = (entity.getId() * 37 % 360);

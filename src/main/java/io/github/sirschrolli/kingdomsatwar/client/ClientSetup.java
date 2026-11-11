@@ -145,6 +145,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.PHOENIX, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhoenixGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ICE_LANCE, io.github.sirschrolli.kingdomsatwar.client.model.geom.IceLanceGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.ICICLE, io.github.sirschrolli.kingdomsatwar.client.model.geom.IcicleGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ICE_PRISON, io.github.sirschrolli.kingdomsatwar.client.model.geom.IcePrisonGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_SPIKE, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneSpikeGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.STONE_FIST, io.github.sirschrolli.kingdomsatwar.client.model.geom.StoneFistGeometry::createLayer);
@@ -324,6 +325,9 @@ public final class ClientSetup {
         event.registerEntityRenderer(ModEntities.VINELING.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.creature.VinelingRenderer::new);
         event.registerEntityRenderer(ModEntities.BOSS_PROJECTILE.get(), BossProjectileRenderer::new);
+        // der geworfene Dreizack fliegt schnurgerade mit den Zinken voran (statt der nachhinkenden Drehung von Minecraft)
+        event.registerEntityRenderer(net.minecraft.world.entity.EntityTypes.TRIDENT,
+                io.github.sirschrolli.kingdomsatwar.client.renderer.StraightTridentRenderer::new);
         event.registerEntityRenderer(ModEntities.SKY_BOLT.get(), io.github.sirschrolli.kingdomsatwar.client.renderer.sky.SkyBoltRenderer::new);
         event.registerEntityRenderer(ModEntities.SEAL_BREAK.get(), io.github.sirschrolli.kingdomsatwar.client.story.SealBreakRenderer::new);
         event.registerEntityRenderer(ModEntities.INTRO_VISION.get(), io.github.sirschrolli.kingdomsatwar.client.intro.IntroVisionRenderer::new);

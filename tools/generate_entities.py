@@ -27,7 +27,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               enderman, endermite, shulker, shulker_bullet, ender_dragon,
                               crystal_crawler, deer, dragon, dragon_armor, glimmer_moth, goose, lindworm, moosling, night_wing,
                               shade_stalker, umbrer, vineling, wild_boar, will_o_wisp,
-                              ice_lance, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
+                              ice_lance, icicle, ice_prison, phoenix, poison_flower, stone_fist, stone_spike, thorn_vine,
                               void_maw, shard_warden, distortling, star_ray, warden_shard, shattered_king,
                               shattered_crown, manta_ray, glow_jellyfish, shark, anglerfish, giant_crab, reef_colossus,
                               fairy, mushroomling, thorn_wight, moth_queen, glutschmied, asteria,
@@ -424,6 +424,9 @@ def main():
     write_model(ice_lance, "IceLanceGeometry",
                 "Geometrie der Eislanze (Geschoss des Eiszaubers, ein Knochen \"lance\", Spitze bei -Z, Mitte im Ursprung; "
                 "durchscheinend).", "spell/ice_lance", ice_lance.PALETTES, preview)
+    write_model(icicle, "IcicleGeometry",
+                "Geometrie des Eiszapfens (Geschoss Glaciaras, ein Knochen \"icicle\", Spitze bei -Z, Mitte im Ursprung; "
+                "durchscheinend).", "boss/icicle", icicle.PALETTES, preview)
     write_model(ice_prison, "IcePrisonGeometry",
                 "Geometrie des Eisgefängnisses (acht Kristalle shard0–shard7 mit Drehpunkt am Fuß auf dem Boden, dazu der "
                 "Kristallknoten \"cap\"; durchscheinend, die Kristalle wachsen einzeln aus dem Boden).",

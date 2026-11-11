@@ -60,6 +60,7 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
         public float age;
     }
 
+    private final float[] aim = new float[2];
     private final ModelPart spear;
     private final ModelPart feather;
     private final ModelPart halo;
@@ -87,8 +88,15 @@ public class DivineShotRenderer extends EntityRenderer<DivineShotEntity, DivineS
         state.shotState = entity.state();
         state.variant = Mth.clamp(entity.variant(), 0, PLANETS.length - 1);
         state.scale = entity.visualScale();
-        state.yRot = entity.getYRot(partialTicks);
-        state.xRot = entity.getXRot(partialTicks);
+        if (state.kind == Kind.SPEAR || state.kind == Kind.BOLT || state.kind == Kind.FEATHER) {
+            // Spitze genau in Flugrichtung (schwebt der Speer noch und zielt, gilt seine eigene Drehung)
+            io.github.sirschrolli.kingdomsatwar.client.renderer.FlightAim.aim(entity, partialTicks, false, true, this.aim);
+            state.yRot = this.aim[0];
+            state.xRot = this.aim[1];
+        } else {
+            state.yRot = entity.getYRot(partialTicks);
+            state.xRot = entity.getXRot(partialTicks);
+        }
         state.age = entity.tickCount + partialTicks;
     }
 

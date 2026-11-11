@@ -113,6 +113,7 @@ final class Showcase {
                 case "siege" -> SiegeShowcase.siege(steps);
                 case "vehicles" -> VehicleShowcase.vehicles(steps);
                 case "fixes" -> FixShowcase.fixes(steps);
+                case "wurf_flug" -> FlightShowcase.flight(steps);
                 case "dragon_attacks" -> DragonAttackShowcase.attacks(steps, "");
                 case "raid" -> RaidShowcase.raid(steps);
                 case "troops" -> TroopShowcase.troops(steps);

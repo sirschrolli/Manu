@@ -26,6 +26,7 @@ import net.minecraft.world.phys.Vec3;
  * als Modelle (in Flugrichtung gedreht, mit Leuchtebene und einem Schein darum).
  */
 public class SpellProjectileRenderer extends EntityRenderer<SpellProjectile, SpellProjectileRenderer.State> {
+    private final float[] aim = new float[2];
     private static final int FULL_BRIGHT = 0xF000F0;
     private static final Identifier FIREBALL = KingdomsAtWar.id("textures/entity/boss/projectile_fireball.png");
     private static final Identifier HALO = KingdomsAtWar.id("textures/entity/mage/missile.png");
@@ -62,8 +63,10 @@ public class SpellProjectileRenderer extends EntityRenderer<SpellProjectile, Spe
         super.extractRenderState(entity, state, partialTicks);
         state.kind = entity.kind();
         state.age = entity.tickCount + partialTicks;
-        state.yRot = entity.getYRot(partialTicks);
-        state.xRot = entity.getXRot(partialTicks);
+        // Lanze und Phönix genau in Flugrichtung (aus der Bahn, nicht aus der nachhinkenden Drehung)
+        io.github.sirschrolli.kingdomsatwar.client.renderer.FlightAim.aim(entity, partialTicks, false, false, this.aim);
+        state.yRot = this.aim[0];
+        state.xRot = this.aim[1];
         state.motion = entity.getDeltaMovement();
     }
 

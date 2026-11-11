@@ -22,6 +22,7 @@ import net.minecraft.resources.Identifier;
  * selbst wirbelnd; die Kristallspitze leuchtet, den Schweif zeichnen die Teilchen.
  */
 public class CometLanceRenderer extends EntityRenderer<CometLanceEntity, CometLanceRenderer.State> {
+    private final float[] aim = new float[2];
     private static final Identifier TEXTURE = KingdomsAtWar.id("textures/entity/asteria/asteria.png");
     private static final RenderType SOLID = RenderTypes.entityTranslucent(TEXTURE);
     private static final RenderType GLOW = RenderTypes.eyes(KingdomsAtWar.id("textures/entity/asteria/asteria_glow.png"));
@@ -51,8 +52,10 @@ public class CometLanceRenderer extends EntityRenderer<CometLanceEntity, CometLa
     @Override
     public void extractRenderState(CometLanceEntity entity, State state, float partialTicks) {
         super.extractRenderState(entity, state, partialTicks);
-        state.yRot = entity.getYRot(partialTicks);
-        state.xRot = entity.getXRot(partialTicks);
+        // Spitze genau in Flugrichtung (aus der Bahn, nicht aus der nachhinkenden Drehung)
+        io.github.sirschrolli.kingdomsatwar.client.renderer.FlightAim.aim(entity, partialTicks, false, false, this.aim);
+        state.yRot = this.aim[0];
+        state.xRot = this.aim[1];
         state.age = entity.tickCount + partialTicks;
     }
 
