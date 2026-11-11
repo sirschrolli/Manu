@@ -229,6 +229,14 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.GRIFFIN.get(), LootTable.lootTable()
                 .withPool(drop(Items.FEATHER, 2, 5))
                 .withPool(drop(Items.LEATHER, 0, 2)));
+        // 0.86
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.EMBER_SALAMANDER.get(), LootTable.lootTable()
+                .withPool(drop(Items.MAGMA_CREAM, 0, 1)));
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.MIRE_SNAPPER.get(), LootTable.lootTable()
+                .withPool(drop(Items.TURTLE_SCUTE, 0, 1)));
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.FLAMINGO.get(), LootTable.lootTable()
+                .withPool(drop(Items.FEATHER, 0, 2)));
+        this.add(io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.BUTTERFLY.get(), LootTable.lootTable());
 
         // Wilde Kreaturen
         this.add(ModEntities.WILD_BOAR.get(), LootTable.lootTable()

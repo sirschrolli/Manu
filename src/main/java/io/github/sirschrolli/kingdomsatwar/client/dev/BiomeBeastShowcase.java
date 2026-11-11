@@ -313,12 +313,12 @@ final class BiomeBeastShowcase {
     // Bühnen
     // =====================================================================================
 
-    private static void build(Deque<Step> steps, Consumer<ServerLevel> stage, ResourceKey<Biome> biome, int cx, int y, int cz) {
+    static void build(Deque<Step> steps, Consumer<ServerLevel> stage, ResourceKey<Biome> biome, int cx, int y, int cz) {
         build(steps, stage, biome, cx, y, cz, 48, 60);
     }
 
     /** Baut die Bühne und setzt das Biom (in Scheiben, damit keine das Befehlslimit überschreitet). */
-    private static void build(Deque<Step> steps, Consumer<ServerLevel> stage, ResourceKey<Biome> biome, int cx, int y, int cz, int rx, int zMax) {
+    static void build(Deque<Step> steps, Consumer<ServerLevel> stage, ResourceKey<Biome> biome, int cx, int y, int cz, int rx, int zMax) {
         boolean[] ready = new boolean[1];
         steps.add(Step.server(o -> {
             stage.accept(o);
@@ -334,7 +334,7 @@ final class BiomeBeastShowcase {
         steps.add(Step.until(() -> ready[0], 6000));
     }
 
-    private static void clearAbove(ServerLevel level, int cx, int y, int cz) {
+    static void clearAbove(ServerLevel level, int cx, int y, int cz) {
         Showcase.fill(level, new BlockPos(cx - 46, y, cz - 30), new BlockPos(cx + 46, y + 30, cz + 58), Blocks.AIR.defaultBlockState());
     }
 
@@ -481,7 +481,7 @@ final class BiomeBeastShowcase {
         }
     }
 
-    private static void spruce(ServerLevel level, int x, int y, int z, int height) {
+    static void spruce(ServerLevel level, int x, int y, int z, int height) {
         for (int dy = 0; dy < height; dy++) {
             set(level, x, y + dy, z, Blocks.SPRUCE_LOG.defaultBlockState());
         }
@@ -652,7 +652,7 @@ final class BiomeBeastShowcase {
     }
 
     /** Gebänderter Fels wie in den Wänden der Felsschluchten (Tuff, Schiefer, Stein, Kalzit, Andesit, Terrakotta, Tropfstein, Basalt). */
-    private static BlockState strata(int dy) {
+    static BlockState strata(int dy) {
         Block[] bands = {Blocks.TUFF, ModBlocks.SHALE.base().get(), Blocks.STONE, Blocks.CALCITE, Blocks.ANDESITE, ModBlocks.SHALE.base().get(),
                 Blocks.TERRACOTTA, Blocks.TUFF, Blocks.DRIPSTONE_BLOCK, Blocks.STONE, ModBlocks.SHALE.base().get(), Blocks.SMOOTH_BASALT};
         int[] thickness = {3, 2, 4, 1, 2, 3, 2, 3, 1, 3, 2, 1};
@@ -746,7 +746,7 @@ final class BiomeBeastShowcase {
     }
 
     /** Eine Felsnadel aus gebändertem Fels: unten {@code r0}, oben {@code r1} breit, mit etwas Unruhe im Umriss. */
-    private static void spire(ServerLevel level, int x, int y, int z, int height, double r0, double r1, RandomSource random) {
+    static void spire(ServerLevel level, int x, int y, int z, int height, double r0, double r1, RandomSource random) {
         int reach = (int) Math.ceil(r0) + 1;
         for (int dy = -1; dy < height; dy++) {
             double t = Math.max(0, dy) / (double) Math.max(1, height - 1);
@@ -763,7 +763,7 @@ final class BiomeBeastShowcase {
     }
 
     /** Eine Akazie: schräger Stamm, flache Schirmkrone. */
-    private static void acacia(ServerLevel level, int x, int y, int z, RandomSource random) {
+    static void acacia(ServerLevel level, int x, int y, int z, RandomSource random) {
         BlockState log = Blocks.ACACIA_LOG.defaultBlockState();
         BlockState leaves = Blocks.ACACIA_LEAVES.defaultBlockState().setValue(BlockStateProperties.PERSISTENT, true);
         int h = 4 + random.nextInt(3);
@@ -794,7 +794,7 @@ final class BiomeBeastShowcase {
         return Math.abs(x - cx) < 10 && z > cz - 14 && z < cz + 10;
     }
 
-    private static void set(ServerLevel level, int x, int y, int z, BlockState state) {
+    static void set(ServerLevel level, int x, int y, int z, BlockState state) {
         level.setBlock(new BlockPos(x, y, z), state, Block.UPDATE_CLIENTS);
     }
 
@@ -802,7 +802,7 @@ final class BiomeBeastShowcase {
     // Hilfen
     // =====================================================================================
 
-    private static <T extends Mob> T creature(ServerLevel level, EntityType<T> type, double x, double y, double z, float yaw, Consumer<T> setup) {
+    static <T extends Mob> T creature(ServerLevel level, EntityType<T> type, double x, double y, double z, float yaw, Consumer<T> setup) {
         T mob = type.create(level, EntitySpawnReason.COMMAND);
         if (mob == null) {
             throw new IllegalStateException("Wesen lässt sich nicht erzeugen: " + type);
@@ -834,20 +834,20 @@ final class BiomeBeastShowcase {
         });
     }
 
-    private static void event(Entity entity, byte id) {
+    static void event(Entity entity, byte id) {
         if (entity.level() instanceof ServerLevel level) {
             level.broadcastEntityEvent(entity, id);
         }
     }
 
-    private static void clear(ServerLevel level, int cx, int y, int cz) {
+    static void clear(ServerLevel level, int cx, int y, int cz) {
         AABB all = new AABB(cx - 50, y - 10, cz - 34, cx + 50, y + 34, cz + 62);
         for (Entity e : level.getEntitiesOfClass(Entity.class, all, e -> e.entityTags().contains(STAGE_TAG))) {
             e.discard();
         }
     }
 
-    private static void arrive(Deque<Step> steps, double x, double y, double z, double tx, double ty, double tz) {
+    static void arrive(Deque<Step> steps, double x, double y, double z, double tx, double ty, double tz) {
         look(steps, x, y, z, tx, ty, tz);
         steps.add(Step.waitTicks(60));
         steps.add(Step.waitForChunks(600));
@@ -855,7 +855,7 @@ final class BiomeBeastShowcase {
     }
 
     /** Kamera mit den Füßen bei (x, y, z), Blick auf (tx, ty, tz). */
-    private static void look(Deque<Step> steps, double x, double y, double z, double tx, double ty, double tz) {
+    static void look(Deque<Step> steps, double x, double y, double z, double tx, double ty, double tz) {
         steps.add(Step.once(minecraft -> {
             double lx = tx - x;
             double ly = ty - (y + 1.62);

@@ -45,5 +45,26 @@ final class BeastLang {
         subtitle(text, "entity.griffin.death", "Griffin dies", "Greif stirbt");
         subtitle(text, "entity.griffin.strike", "Talons strike", "Krallen schlagen zu");
         subtitle(text, "entity.griffin.step", "Talons click", "Krallen klicken");
+        // 0.86
+        beast(text, "ember_salamander", "Ember Salamander", "Glutsalamander", "Glutsalamander");
+        subtitle(text, "entity.ember_salamander.ambient", "Ember Salamander squeaks", "Glutsalamander quiekt");
+        subtitle(text, "entity.ember_salamander.hurt", "Ember Salamander hurts", "Glutsalamander wird verletzt");
+        subtitle(text, "entity.ember_salamander.death", "Ember Salamander dies", "Glutsalamander stirbt");
+        subtitle(text, "entity.ember_salamander.step", "Ember Salamander scurries", "Glutsalamander huscht");
+        subtitle(text, "entity.ember_salamander.ignite", "Glowing skin burns", "Glühende Haut brennt");
+        beast(text, "mire_snapper", "Mire Snapper", "Moorschnapper", "Moorschnapper");
+        subtitle(text, "entity.mire_snapper.ambient", "Mire Snapper grunts", "Moorschnapper brummt");
+        subtitle(text, "entity.mire_snapper.hiss", "Mire Snapper hisses", "Moorschnapper faucht");
+        subtitle(text, "entity.mire_snapper.snap", "Jaws snap shut", "Kiefer schnappen zu");
+        subtitle(text, "entity.mire_snapper.hurt", "Mire Snapper hurts", "Moorschnapper wird verletzt");
+        subtitle(text, "entity.mire_snapper.death", "Mire Snapper dies", "Moorschnapper stirbt");
+        subtitle(text, "entity.mire_snapper.step", "Mire Snapper crawls", "Moorschnapper kriecht");
+        beast(text, "flamingo", "Flamingo", "Flamingo", "Flamingo");
+        subtitle(text, "entity.flamingo.call", "Flamingo honks", "Flamingo schnattert");
+        subtitle(text, "entity.flamingo.hurt", "Flamingo hurts", "Flamingo wird verletzt");
+        subtitle(text, "entity.flamingo.death", "Flamingo dies", "Flamingo stirbt");
+        subtitle(text, "entity.flamingo.flap", "Wings flutter", "Flügel flattern");
+        subtitle(text, "entity.flamingo.step", "Water splashes", "Wasser plätschert");
+        beast(text, "butterfly", "Butterfly", "Schmetterling", "Schmetterlings");
     }
 }

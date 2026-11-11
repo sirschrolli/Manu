@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#kingdomsatwar:has_mire_snappers",
+  "spawners": {
+    "type": "kingdomsatwar:mire_snapper",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 1,
+      "min_inclusive": 1
+    },
+    "weight": 4
+  }
+}

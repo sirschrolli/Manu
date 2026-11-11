@@ -57,6 +57,10 @@ public final class ModModelLayers {
     public static final ModelLayerLocation PRIMEVAL_ELK = new ModelLayerLocation(KingdomsAtWar.id("primeval_elk"), "main");
     public static final ModelLayerLocation STORM_GULL = new ModelLayerLocation(KingdomsAtWar.id("storm_gull"), "main");
     public static final ModelLayerLocation GRIFFIN = new ModelLayerLocation(KingdomsAtWar.id("griffin"), "main");
+    public static final ModelLayerLocation EMBER_SALAMANDER = new ModelLayerLocation(KingdomsAtWar.id("ember_salamander"), "main");
+    public static final ModelLayerLocation MIRE_SNAPPER = new ModelLayerLocation(KingdomsAtWar.id("mire_snapper"), "main");
+    public static final ModelLayerLocation FLAMINGO = new ModelLayerLocation(KingdomsAtWar.id("flamingo"), "main");
+    public static final ModelLayerLocation BUTTERFLY = new ModelLayerLocation(KingdomsAtWar.id("butterfly"), "main");
 
     /** Zauberwirkungen und Zaubergeschosse. */
     public static final ModelLayerLocation PHOENIX = new ModelLayerLocation(KingdomsAtWar.id("phoenix"), "main");

@@ -437,6 +437,23 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_DEATH = register("entity.griffin.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_STRIKE = register("entity.griffin.strike");
     public static final DeferredHolder<SoundEvent, SoundEvent> GRIFFIN_STEP = register("entity.griffin.step");
+    // Wesen der eigenen Biome (0.86): Glutsalamander, Moorschnapper, Flamingo
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_SALAMANDER_AMBIENT = register("entity.ember_salamander.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_SALAMANDER_HURT = register("entity.ember_salamander.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_SALAMANDER_DEATH = register("entity.ember_salamander.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_SALAMANDER_STEP = register("entity.ember_salamander.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> EMBER_SALAMANDER_IGNITE = register("entity.ember_salamander.ignite");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_AMBIENT = register("entity.mire_snapper.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_HISS = register("entity.mire_snapper.hiss");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_SNAP = register("entity.mire_snapper.snap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_HURT = register("entity.mire_snapper.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_DEATH = register("entity.mire_snapper.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MIRE_SNAPPER_STEP = register("entity.mire_snapper.step");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAMINGO_CALL = register("entity.flamingo.call");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAMINGO_HURT = register("entity.flamingo.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAMINGO_DEATH = register("entity.flamingo.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAMINGO_FLAP = register("entity.flamingo.flap");
+    public static final DeferredHolder<SoundEvent, SoundEvent> FLAMINGO_STEP = register("entity.flamingo.step");
 
     private ModSounds() {}
 

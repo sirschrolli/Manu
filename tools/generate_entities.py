@@ -35,7 +35,7 @@ from entitygen.models import (boss_earth, boss_fire, boss_ice, boss_lightning, b
                               werewolf, mire_shambler, ember_wyrm, ash_wraith, soul_heron, night_ram, rift_hound, chorus_maw,
                               world_eater, world_eater_segment, world_eater_tail, world_chunk,
                               schrolli, seraphling, divine_spear, divine_feather, divine_halo, divine_planet,
-                              snow_leopard, primeval_elk, storm_gull, griffin)
+                              snow_leopard, primeval_elk, storm_gull, griffin, ember_salamander, mire_snapper, flamingo, butterfly)
 from entitygen.paint import paint_model  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -133,6 +133,14 @@ def main():
                 storm_gull.PALETTES, preview, same_seed=True)
     write_model(griffin, "GriffinGeometry", "Geometrie des Greifen (Ruhehaltung: Schwingen ausgebreitet).", "griffin",
                 griffin.PALETTES, preview, same_seed=True)
+    write_model(ember_salamander, "EmberSalamanderGeometry", "Geometrie des Glutsalamanders.", "ember_salamander",
+                ember_salamander.PALETTES, preview, same_seed=True)
+    write_model(mire_snapper, "MireSnapperGeometry", "Geometrie des Moorschnappers.", "mire_snapper",
+                mire_snapper.PALETTES, preview, same_seed=True)
+    write_model(flamingo, "FlamingoGeometry", "Geometrie des Flamingos (Ruhehaltung: Flügel ausgebreitet).", "flamingo",
+                flamingo.PALETTES, preview, same_seed=True)
+    write_model(butterfly, "ButterflyGeometry", "Geometrie der Schmetterlinge (Flügelform in der Textur).", "butterfly",
+                butterfly.PALETTES, preview, same_seed=True)
     # Eigene Tiere (ersetzen die Vanilla-Tiere)
     write_model(cattle, "CattleGeometry", "Geometrie des Hausrinds (Hörner, Schopf und Pilze je Rasse).", "cattle",
                 cattle.PALETTES, preview)

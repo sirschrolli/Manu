@@ -287,6 +287,10 @@ public final class ModWorldgen {
     public static final ResourceKey<BiomeModifier> PRIMEVAL_ELK_SPAWNS = spawnModifier("add_primeval_elk_spawns");
     public static final ResourceKey<BiomeModifier> STORM_GULL_SPAWNS = spawnModifier("add_storm_gull_spawns");
     public static final ResourceKey<BiomeModifier> GRIFFIN_SPAWNS = spawnModifier("add_griffin_spawns");
+    public static final ResourceKey<BiomeModifier> EMBER_SALAMANDER_SPAWNS = spawnModifier("add_ember_salamander_spawns");
+    public static final ResourceKey<BiomeModifier> MIRE_SNAPPER_SPAWNS = spawnModifier("add_mire_snapper_spawns");
+    public static final ResourceKey<BiomeModifier> FLAMINGO_SPAWNS = spawnModifier("add_flamingo_spawns");
+    public static final ResourceKey<BiomeModifier> BUTTERFLY_SPAWNS = spawnModifier("add_butterfly_spawns");
     public static final ResourceKey<BiomeModifier> GOOSE_SPAWNS = spawnModifier("add_goose_spawns");
     public static final ResourceKey<BiomeModifier> WILL_O_WISP_SPAWNS = spawnModifier("add_will_o_wisp_spawns");
     public static final ResourceKey<BiomeModifier> CAVE_TROLL_SPAWNS = spawnModifier("add_cave_troll_spawns");
@@ -423,6 +427,14 @@ public final class ModWorldgen {
                 io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.STORM_GULL.get(), 10, 3, 6));
         context.register(GRIFFIN_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_GRIFFINS,
                 io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.GRIFFIN.get(), 3, 1, 2));
+        context.register(EMBER_SALAMANDER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_EMBER_SALAMANDERS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.EMBER_SALAMANDER.get(), 8, 1, 3));
+        context.register(MIRE_SNAPPER_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_MIRE_SNAPPERS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.MIRE_SNAPPER.get(), 4, 1, 1));
+        context.register(FLAMINGO_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_FLAMINGOS,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.FLAMINGO.get(), 10, 4, 8));
+        context.register(BUTTERFLY_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_BUTTERFLIES,
+                io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.BUTTERFLY.get(), 20, 2, 4));
         context.register(GOOSE_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_GEESE, ModEntities.GOOSE.get(), 7, 3, 5));
         context.register(WILL_O_WISP_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_WILL_O_WISPS, ModEntities.WILL_O_WISP.get(), 12, 1, 3));
         context.register(CAVE_TROLL_SPAWNS, spawns(biomes, ModTags.Biomes.HAS_CAVE_TROLLS, ModEntities.CAVE_TROLL.get(), 6, 1, 1));

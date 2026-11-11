@@ -233,6 +233,33 @@ EVENTS: dict[str, dict] = {
     "entity.primeval_elk.hurt": event("entity.primeval_elk.hurt", v("mob/camel/hurt", 4, pitch=0.72)),
     "entity.primeval_elk.death": event("entity.primeval_elk.death", v("mob/camel/death", 2, pitch=0.66)),
     "entity.primeval_elk.step": event("entity.primeval_elk.step", v("mob/camel/step", 6, pitch=0.85, volume=0.9)),
+    # --- Wesen der eigenen Biome (0.86) ---
+    # Glutsalamander: quiekende Molchlaute (tiefer), dazu leises Knistern; Fußtapsen wie ein Frosch
+    "entity.ember_salamander.ambient": event(
+        "entity.ember_salamander.ambient",
+        v("mob/axolotl/idle_air", 5, pitch=0.78, volume=0.55),
+        v("block/campfire/crackle", 6, pitch=1.25, volume=0.4),
+    ),
+    "entity.ember_salamander.hurt": event("entity.ember_salamander.hurt", v("mob/axolotl/hurt", 4, pitch=0.8, volume=0.8)),
+    "entity.ember_salamander.death": event(
+        "entity.ember_salamander.death",
+        v("mob/axolotl/death", 2, pitch=0.78),
+    ),
+    "entity.ember_salamander.step": event("entity.ember_salamander.step", v("mob/frog/step", 4, pitch=1.3, volume=0.35)),
+    "entity.ember_salamander.ignite": event("entity.ember_salamander.ignite", v("fire/ignite", 0, pitch=1.15, volume=0.8)),
+    # Moorschnapper: tiefe Schildkrötenlaute, Fauchen, das Zuschnappen der Kiefer, schwere Schritte
+    "entity.mire_snapper.ambient": event("entity.mire_snapper.ambient", v("mob/turtle/idle", 3, pitch=0.55, volume=0.8)),
+    "entity.mire_snapper.hiss": event(
+        "entity.mire_snapper.hiss",
+        v("mob/cat/hiss", 3, pitch=0.45, volume=0.9),
+    ),
+    "entity.mire_snapper.snap": event("entity.mire_snapper.snap", v("mob/evocation_illager/fangs", 0, pitch=1.15, volume=0.9)),
+    "entity.mire_snapper.hurt": event("entity.mire_snapper.hurt", v("mob/turtle/hurt", 5, pitch=0.6)),
+    "entity.mire_snapper.death": event("entity.mire_snapper.death", v("mob/turtle/death", 3, pitch=0.6)),
+    "entity.mire_snapper.step": event("entity.mire_snapper.step", v("mob/turtle/walk", 5, pitch=0.7, volume=0.6)),
+    # Flamingo: Verletzt und Tod wie ein Papagei, tiefer (der Ruf und die Flügel sind eigene Klänge, siehe beast_sounds.py)
+    "entity.flamingo.hurt": event("entity.flamingo.hurt", v("mob/parrot/hurt", 2, pitch=0.62)),
+    "entity.flamingo.death": event("entity.flamingo.death", v("mob/parrot/death", 4, pitch=0.6)),
     "entity.will_o_wisp.ambient": event(
         "entity.will_o_wisp.ambient",
         v("block/amethyst/resonate", 4, pitch=1.6, volume=0.35),

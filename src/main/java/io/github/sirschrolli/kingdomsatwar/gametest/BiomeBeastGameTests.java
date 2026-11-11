@@ -2,7 +2,11 @@ package io.github.sirschrolli.kingdomsatwar.gametest;
 
 import com.mojang.authlib.GameProfile;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.ButterflyEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.EmberSalamanderEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.FlamingoEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.GriffinEntity;
+import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.MireSnapperEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.PrimevalElkEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.SnowLeopardEntity;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.biome.StormGullEntity;
@@ -33,11 +37,13 @@ import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import io.github.sirschrolli.kingdomsatwar.entity.creature.farm.Hare;
 import net.minecraft.world.entity.player.Player;
@@ -81,6 +87,21 @@ final class BiomeBeastGameTests {
             ModGameTests.TEST_FUNCTIONS.register("biome_beast_griffin_hunt", () -> BiomeBeastGameTests::griffinHunt);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> GRIFFIN_DEFEND =
             ModGameTests.TEST_FUNCTIONS.register("biome_beast_griffin_defend", () -> BiomeBeastGameTests::griffinDefend);
+    // 0.86
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BASICS_86 =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_basics_86", () -> BiomeBeastGameTests::basics86);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SALAMANDER_LAVA =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_salamander_lava", () -> BiomeBeastGameTests::salamanderLava);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SALAMANDER_BURNS =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_salamander_burns", () -> BiomeBeastGameTests::salamanderBurns);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SNAPPER_SNAP =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_snapper_snap", () -> BiomeBeastGameTests::snapperSnap);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SNAPPER_SHELL =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_snapper_shell", () -> BiomeBeastGameTests::snapperShell);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLAMINGO_WADE =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_flamingo_wade", () -> BiomeBeastGameTests::flamingoWade);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BUTTERFLY_PERCH =
+            ModGameTests.TEST_FUNCTIONS.register("biome_beast_butterfly_perch", () -> BiomeBeastGameTests::butterflyPerch);
 
     private BiomeBeastGameTests() {}
 
@@ -89,11 +110,11 @@ final class BiomeBeastGameTests {
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
         event.registerTest(BASICS.getId(), new FunctionGameTestInstance(BASICS.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 100, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
-        for (var test : List.of(LEOPARD_TAME, ELK_RIDE, GULL_FLEE)) {
+        for (var test : List.of(LEOPARD_TAME, ELK_RIDE, GULL_FLEE, BASICS_86, SALAMANDER_LAVA, SALAMANDER_BURNS, SNAPPER_SHELL, FLAMINGO_WADE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 200, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
-        for (var test : List.of(LEOPARD_HUNT, ELK_CHARGE, GULL_STEAL, GRIFFIN_HUNT, GRIFFIN_DEFEND)) {
+        for (var test : List.of(LEOPARD_HUNT, ELK_CHARGE, GULL_STEAL, GRIFFIN_HUNT, GRIFFIN_DEFEND, SNAPPER_SNAP, BUTTERFLY_PERCH)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -345,6 +366,160 @@ final class BiomeBeastGameTests {
             helper.assertTrue(attacker.getHealth() < before || !attacker.isAlive(), "Der Greif wehrt sich nicht"
                     + (target == null ? " (kein Ziel)" : ""));
             cleanup(helper, griffin);
+        });
+    }
+
+    // =====================================================================================
+    // 0.86: Glutsalamander, Moorschnapper, Flamingo, Schmetterlinge
+    // =====================================================================================
+
+    /** Werte, Gruppen, Spawn-Eier, Feuerfestigkeit und Biome der vier Wesen von 0.86. */
+    private static void basics86(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        List<EntityType<? extends Mob>> types = List.of(BiomeBeasts.EMBER_SALAMANDER.get(), BiomeBeasts.MIRE_SNAPPER.get(),
+                BiomeBeasts.FLAMINGO.get(), BiomeBeasts.BUTTERFLY.get());
+        double[] health = {12.0, 30.0, 10.0, 2.0};
+        for (int i = 0; i < types.size(); i++) {
+            EntityType<? extends Mob> type = types.get(i);
+            String name = BuiltInRegistries.ENTITY_TYPE.getKey(type).getPath();
+            helper.assertTrue(type.getCategory() == (i == 3 ? MobCategory.AMBIENT : MobCategory.CREATURE), name + ": falsche Gruppe");
+            helper.assertTrue(type.getDefaultLootTable().isPresent(), name + ": keine Beute");
+            helper.assertTrue(BuiltInRegistries.ITEM.containsKey(KingdomsAtWar.id(name + "_spawn_egg")), name + ": kein Spawn-Ei");
+            Mob mob = helper.spawnWithNoFreeWill(type, new BlockPos(1 + i * 2, 1, 4));
+            helper.assertTrue(Math.abs(mob.getAttributeValue(Attributes.MAX_HEALTH) - health[i]) < 1.0e-3,
+                    name + ": Lebenspunkte " + mob.getAttributeValue(Attributes.MAX_HEALTH) + " statt " + health[i]);
+        }
+        helper.assertTrue(BiomeBeasts.EMBER_SALAMANDER.get().fireImmune(), "Der Glutsalamander brennt");
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
+        expect(helper, biomes, OverworldBiomes.ASH_FIELDS, ModTags.Biomes.HAS_EMBER_SALAMANDERS, true);
+        expect(helper, biomes, Biomes.PLAINS, ModTags.Biomes.HAS_EMBER_SALAMANDERS, false);
+        expect(helper, biomes, OverworldBiomes.MIST_MOOR, ModTags.Biomes.HAS_MIRE_SNAPPERS, true);
+        expect(helper, biomes, Biomes.SWAMP, ModTags.Biomes.HAS_MIRE_SNAPPERS, true);
+        expect(helper, biomes, Biomes.DESERT, ModTags.Biomes.HAS_MIRE_SNAPPERS, false);
+        expect(helper, biomes, OverworldBiomes.CORAL_COAST, ModTags.Biomes.HAS_FLAMINGOS, true);
+        expect(helper, biomes, Biomes.MANGROVE_SWAMP, ModTags.Biomes.HAS_FLAMINGOS, true);
+        expect(helper, biomes, Biomes.TAIGA, ModTags.Biomes.HAS_FLAMINGOS, false);
+        expect(helper, biomes, OverworldBiomes.ROYAL_MEADOWS, ModTags.Biomes.HAS_BUTTERFLIES, true);
+        expect(helper, biomes, Biomes.FLOWER_FOREST, ModTags.Biomes.HAS_BUTTERFLIES, true);
+        expect(helper, biomes, Biomes.SNOWY_PLAINS, ModTags.Biomes.HAS_BUTTERFLIES, false);
+        // natürliches Auftreten in Gruppen (wie der Spawner: die Gruppendaten werden weitergereicht)
+        List<EntityType<? extends Mob>> all = List.of(BiomeBeasts.SNOW_LEOPARD.get(), BiomeBeasts.PRIMEVAL_ELK.get(),
+                BiomeBeasts.STORM_GULL.get(), BiomeBeasts.GRIFFIN.get(), BiomeBeasts.EMBER_SALAMANDER.get(),
+                BiomeBeasts.MIRE_SNAPPER.get(), BiomeBeasts.FLAMINGO.get(), BiomeBeasts.BUTTERFLY.get());
+        BlockPos at = helper.absolutePos(new BlockPos(4, 1, 4));
+        for (EntityType<? extends Mob> type : all) {
+            SpawnGroupData group = null;
+            for (int n = 0; n < 4; n++) {
+                Mob mob = type.create(level, EntitySpawnReason.NATURAL);
+                helper.assertTrue(mob != null, BuiltInRegistries.ENTITY_TYPE.getKey(type).getPath() + ": nicht erzeugt");
+                mob.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0.0f, 0.0f);
+                group = mob.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.NATURAL, group);
+                mob.discard();
+            }
+        }
+        cleanup(helper);
+        helper.succeed();
+    }
+
+    /** Der Glutsalamander läuft über Lava und nimmt keinen Schaden. */
+    private static void salamanderLava(GameTestHelper helper) {
+        pen(helper, Blocks.STONE);
+        for (int x = 1; x < 8; x++) {
+            for (int z = 1; z < 8; z++) {
+                helper.setBlock(x, 0, z, Blocks.LAVA);
+            }
+        }
+        EmberSalamanderEntity salamander = helper.spawn(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 4));
+        double floor = helper.absoluteVec(Vec3.ZERO).y + 0.4;                    // er steht einen halben Block tief auf der Lava
+        helper.runAfterDelay(100, () -> {
+            helper.assertTrue(salamander.isAlive(), "Der Salamander ist in der Lava umgekommen");
+            helper.assertTrue(salamander.getHealth() >= salamander.getMaxHealth() - 1.0e-3, "Die Lava hat ihm geschadet");
+            helper.assertTrue(salamander.getY() > floor, "Er ist in der Lava versunken (y=" + salamander.getY() + ")");
+            cleanup(helper, salamander);
+            helper.succeed();
+        });
+    }
+
+    /** Wer ihn mit der Hand schlägt, verbrennt sich an seiner glühenden Haut. */
+    private static void salamanderBurns(GameTestHelper helper) {
+        pen(helper, Blocks.STONE);
+        EmberSalamanderEntity salamander = helper.spawnWithNoFreeWill(BiomeBeasts.EMBER_SALAMANDER.get(), new BlockPos(4, 1, 5));
+        ServerPlayer player = survivor(helper, new BlockPos(4, 1, 3), 0.0f);
+        helper.runAfterDelay(5, () -> {
+            player.attack(salamander);
+            helper.assertTrue(player.getRemainingFireTicks() > 0, "Der Spieler brennt nicht");
+            remove(helper, player);
+            cleanup(helper);
+            helper.succeed();
+        });
+    }
+
+    /** Der Moorschnapper schnappt nach dem, der vor seine Nase gerät. */
+    private static void snapperSnap(GameTestHelper helper) {
+        pen(helper, Blocks.MUD);
+        MireSnapperEntity snapper = helper.spawn(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 3));
+        Vec3 at = helper.absoluteVec(Vec3.atBottomCenterOf(new BlockPos(4, 1, 3)));
+        snapper.snapTo(at.x, at.y, at.z, 0.0f, 0.0f);
+        snapper.setYBodyRot(0.0f);
+        snapper.setYHeadRot(0.0f);
+        Mob victim = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 5));
+        float before = victim.getHealth();
+        helper.succeedWhen(() -> {
+            helper.assertTrue(victim.getHealth() < before || !victim.isAlive(), "Er hat nicht zugeschnappt");
+            cleanup(helper, snapper);
+        });
+    }
+
+    /** Getroffen zieht er sich in den Panzer zurück; dort richtet man kaum etwas aus. */
+    private static void snapperShell(GameTestHelper helper) {
+        pen(helper, Blocks.MUD);
+        MireSnapperEntity snapper = helper.spawnWithNoFreeWill(BiomeBeasts.MIRE_SNAPPER.get(), new BlockPos(4, 1, 4));
+        Mob attacker = helper.spawnWithNoFreeWill(ModEntities.HUSK.get(), new BlockPos(4, 1, 7));
+        ServerLevel level = helper.getLevel();
+        helper.runAfterDelay(5, () -> {
+            snapper.hurtServer(level, level.damageSources().mobAttack(attacker), 4.0f);
+            helper.assertTrue(snapper.isWithdrawn(), "Er zieht sich nicht in den Panzer zurück");
+            float full = snapper.getHealth();
+            helper.runAfterDelay(12, () -> {
+                snapper.hurtServer(level, level.damageSources().mobAttack(attacker), 10.0f);
+                float lost = full - snapper.getHealth();
+                helper.assertTrue(lost > 0.0f && lost < 5.0f, "Im Panzer verliert er zu viel (" + lost + ")");
+                cleanup(helper);
+                helper.succeed();
+            });
+        });
+    }
+
+    /** Der Flamingo steht im flachen Wasser (schwimmt nicht auf). */
+    private static void flamingoWade(GameTestHelper helper) {
+        pen(helper, Blocks.SAND);
+        for (int x = 1; x < 8; x++) {
+            for (int z = 1; z < 8; z++) {
+                helper.setBlock(x, 1, z, Blocks.WATER);
+            }
+        }
+        FlamingoEntity flamingo = helper.spawn(BiomeBeasts.FLAMINGO.get(), new BlockPos(4, 1, 4));
+        double bottom = helper.absoluteVec(Vec3.ZERO).y + 1.0;
+        helper.runAfterDelay(80, () -> {
+            helper.assertFalse(flamingo.isFlying(), "Er ist aufgeflogen");
+            helper.assertTrue(flamingo.getY() < bottom + 0.4, "Er schwimmt, statt zu stehen (y=" + (flamingo.getY() - bottom) + ")");
+            cleanup(helper, flamingo);
+            helper.succeed();
+        });
+    }
+
+    /** Ein Schmetterling setzt sich bald auf eine Blume. */
+    private static void butterflyPerch(GameTestHelper helper) {
+        pen(helper, Blocks.GRASS_BLOCK);
+        for (int x = 1; x < 8; x++) {
+            for (int z = 1; z < 8; z++) {
+                helper.setBlock(x, 1, z, (x + z) % 2 == 0 ? Blocks.POPPY : Blocks.DANDELION);
+            }
+        }
+        ButterflyEntity butterfly = helper.spawn(BiomeBeasts.BUTTERFLY.get(), new BlockPos(4, 3, 4));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(butterfly.isPerched(), "Er setzt sich nicht");
+            cleanup(helper, butterfly);
         });
     }
 }

@@ -137,6 +137,10 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_PRIMEVAL_ELKS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_primeval_elks"));
         public static final TagKey<Biome> HAS_STORM_GULLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_storm_gulls"));
         public static final TagKey<Biome> HAS_GRIFFINS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_griffins"));
+        public static final TagKey<Biome> HAS_EMBER_SALAMANDERS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_ember_salamanders"));
+        public static final TagKey<Biome> HAS_MIRE_SNAPPERS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_mire_snappers"));
+        public static final TagKey<Biome> HAS_FLAMINGOS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_flamingos"));
+        public static final TagKey<Biome> HAS_BUTTERFLIES = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_butterflies"));
         public static final TagKey<Biome> HAS_GEESE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_geese"));
         public static final TagKey<Biome> HAS_WILL_O_WISPS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_will_o_wisps"));
         public static final TagKey<Biome> HAS_CAVE_TROLLS = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_cave_trolls"));

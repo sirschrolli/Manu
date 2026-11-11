@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Erzeugt die Klänge der Tiere der eigenen Biome (0.85), für die Minecraft keine passenden Laute hat: das lachende
+Erzeugt die Klänge der Tiere der eigenen Biome (0.85/0.86), für die Minecraft keine passenden Laute hat: das lachende
 "kjau-kjau-kjau" der Sturmmöwe, ihr Kreischen und Flügelklatschen, der durchdringende Adlerschrei des Greifs, sein
-löwenhaftes Grollen und seine schweren Schwingenschläge. Alles entsteht aus Rauschen und Tönen (Bausteine aus
+löwenhaftes Grollen und seine schweren Schwingenschläge, das nasale Schnattern der Flamingos. Alles entsteht aus Rauschen und Tönen (Bausteine aus
 monster_sounds.py und ambience_dsp.py); es werden keine Minecraft-Dateien kopiert.
 
 Aufruf (aus dem Projektordner):
@@ -178,6 +178,53 @@ def griffin_step(seed: int) -> np.ndarray:
 
 
 # =====================================================================================
+# Flamingo (0.86)
+# =====================================================================================
+
+def _honk(seed: int, f0: float, dur: float, shape, vowel: str = "a") -> np.ndarray:
+    """Ein nasaler Gänselaut: tiefe Pulse, enger Rachen ("ä"), etwas Rauheit."""
+    r = rng(seed)
+    n = int(dur * SR)
+    f = f0 * curve(n, shape)
+    amp = curve(n, [(0, 0), (0.08, 1), (0.6, 0.9), (1, 0)])
+    return pulse_voice(f, amp, seed, vowel=vowel, size=1.25, jitter=0.05, shimmer=0.18, sub=0.3, breath=0.08,
+                       bright=3200 + r.uniform(-200, 200))
+
+
+def flamingo_call(seed: int) -> np.ndarray:
+    """Das Schnattern einer Schar: zwei bis vier kurze, nasale "ga-gag", dazwischen ein längeres "gaaag"."""
+    r = rng(seed)
+    y = np.zeros(int(1.6 * SR))
+    t = 0.02
+    base = r.uniform(300, 360)
+    for k in range(2 + int(r.integers(0, 3))):
+        long = k == 1
+        dur = r.uniform(0.24, 0.3) if long else r.uniform(0.09, 0.12)
+        shape = [(0, 0.95), (0.3, 1.12), (1, 0.85)] if long else [(0, 1.0), (0.5, 1.1), (1, 0.9)]
+        mix_at(y, _honk(seed + k, base * r.uniform(0.95, 1.08), dur, shape), t, 1.0 if long else 0.8)
+        t += dur + r.uniform(0.06, 0.12)
+    return y
+
+
+def flamingo_flap(seed: int) -> np.ndarray:
+    """Aufflattern: weiche, tiefere Flügelschläge."""
+    r = rng(seed)
+    y = np.zeros(int(1.0 * SR))
+    for k in range(3 + int(r.integers(0, 2))):
+        mix_at(y, swept(0.16, [(0, 450), (0.5, 1100), (1, 700)], 1.1, [(0, 0), (0.3, 1), (1, 0)], seed + k, flicker=0.4,
+                        flicker_rate=(40.0, 55.0)), k * r.uniform(0.17, 0.2), 1.0 - k * 0.1)
+    return y
+
+
+def flamingo_step(seed: int) -> np.ndarray:
+    """Ein Schritt im flachen Wasser: ein leises Plätschern."""
+    r = rng(seed)
+    y = swept(0.12, [(0, 900), (0.4, 2400), (1, 1500)], 1.4, [(0, 0), (0.1, 1), (0.4, 0.5), (1, 0)], seed, flicker=0.6,
+              flicker_rate=(30.0, 60.0))
+    return y * r.uniform(0.8, 1.0)
+
+
+# =====================================================================================
 # Ausgabe
 # =====================================================================================
 
@@ -195,12 +242,16 @@ SYNTH = {
     "griffin_death": (griffin_death, 1, (1.8, 0.3), -14.0),
     "griffin_strike": (griffin_strike, 3, (0.5, 0.1), -15.0),
     "griffin_step": (griffin_step, 4, None, -23.0),
+    "flamingo_call": (flamingo_call, 4, (0.9, 0.15), -15.0),
+    "flamingo_flap": (flamingo_flap, 3, (0.4, 0.08), -18.0),
+    "flamingo_step": (flamingo_step, 4, None, -26.0),
 }
 
 # Wesen: {Klang: Reichweite in Blöcken}
 REACH = {
     "storm_gull": {"call": 48, "hurt": 20, "death": 24, "flap": 16, "step": 10},
     "griffin": {"screech": 96, "growl": 24, "wings": 32, "hurt": 32, "death": 48, "strike": 20, "step": 14},
+    "flamingo": {"call": 40, "flap": 16, "step": 10},
 }
 
 EVENTS = {f"entity.{creature}.{sound}": ([f"{creature}_{sound}"], reach)

@@ -62,6 +62,22 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         this.tag(ModTags.Biomes.HAS_GRIFFINS)
                 .add(OverworldBiomes.ROCK_GORGES)
                 .add(Biomes.WINDSWEPT_SAVANNA);
+        // 0.86: der Glutsalamander in den Aschefeldern, der Moorschnapper im Nebelmoor und in den Sümpfen, Flamingos an der
+        // Korallenküste und in den Mangroven, Schmetterlinge auf den Blumenwiesen
+        this.tag(ModTags.Biomes.HAS_EMBER_SALAMANDERS)
+                .add(OverworldBiomes.ASH_FIELDS);
+        this.tag(ModTags.Biomes.HAS_MIRE_SNAPPERS)
+                .add(OverworldBiomes.MIST_MOOR)
+                .add(Biomes.SWAMP);
+        this.tag(ModTags.Biomes.HAS_FLAMINGOS)
+                .add(OverworldBiomes.CORAL_COAST)
+                .add(Biomes.MANGROVE_SWAMP);
+        this.tag(ModTags.Biomes.HAS_BUTTERFLIES)
+                .add(OverworldBiomes.ROYAL_MEADOWS)
+                .add(Biomes.FLOWER_FOREST)
+                .add(Biomes.MEADOW)
+                .add(Biomes.SUNFLOWER_PLAINS)
+                .add(Biomes.CHERRY_GROVE);
         this.tag(ModTags.Biomes.HAS_GEESE)
                 .addTag(BiomeTags.IS_RIVER)
                 .addTag(Tags.Biomes.IS_SWAMP)

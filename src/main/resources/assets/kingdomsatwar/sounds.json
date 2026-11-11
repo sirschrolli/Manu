@@ -4213,6 +4213,139 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.dragon.step"
   },
+  "entity.ember_salamander.ambient": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/axolotl/idle_air1",
+        "pitch": 0.78,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/axolotl/idle_air2",
+        "pitch": 0.78,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/axolotl/idle_air3",
+        "pitch": 0.78,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/axolotl/idle_air4",
+        "pitch": 0.78,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:mob/axolotl/idle_air5",
+        "pitch": 0.78,
+        "volume": 0.55
+      },
+      {
+        "name": "minecraft:block/campfire/crackle1",
+        "pitch": 1.25,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block/campfire/crackle2",
+        "pitch": 1.25,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block/campfire/crackle3",
+        "pitch": 1.25,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block/campfire/crackle4",
+        "pitch": 1.25,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block/campfire/crackle5",
+        "pitch": 1.25,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block/campfire/crackle6",
+        "pitch": 1.25,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_salamander.ambient"
+  },
+  "entity.ember_salamander.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/axolotl/death1",
+        "pitch": 0.78
+      },
+      {
+        "name": "minecraft:mob/axolotl/death2",
+        "pitch": 0.78
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_salamander.death"
+  },
+  "entity.ember_salamander.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/axolotl/hurt1",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/axolotl/hurt2",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/axolotl/hurt3",
+        "pitch": 0.8,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/axolotl/hurt4",
+        "pitch": 0.8,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_salamander.hurt"
+  },
+  "entity.ember_salamander.ignite": {
+    "sounds": [
+      {
+        "name": "minecraft:fire/ignite",
+        "pitch": 1.15,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_salamander.ignite"
+  },
+  "entity.ember_salamander.step": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/frog/step1",
+        "pitch": 1.3,
+        "volume": 0.35
+      },
+      {
+        "name": "minecraft:mob/frog/step2",
+        "pitch": 1.3,
+        "volume": 0.35
+      },
+      {
+        "name": "minecraft:mob/frog/step3",
+        "pitch": 1.3,
+        "volume": 0.35
+      },
+      {
+        "name": "minecraft:mob/frog/step4",
+        "pitch": 1.3,
+        "volume": 0.35
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.ember_salamander.step"
+  },
   "entity.ember_wyrm.ambient": {
     "sounds": [
       {
@@ -4367,6 +4500,99 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.fairy.hurt"
+  },
+  "entity.flamingo.call": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_call1",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_call2",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_call3",
+        "attenuation_distance": 40
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_call4",
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.flamingo.call"
+  },
+  "entity.flamingo.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/parrot/death1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/parrot/death2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/parrot/death3",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/parrot/death4",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.flamingo.death"
+  },
+  "entity.flamingo.flap": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_flap1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_flap2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_flap3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.flamingo.flap"
+  },
+  "entity.flamingo.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/parrot/hurt1",
+        "pitch": 0.62
+      },
+      {
+        "name": "minecraft:mob/parrot/hurt2",
+        "pitch": 0.62
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.flamingo.hurt"
+  },
+  "entity.flamingo.step": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_step1",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_step2",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_step3",
+        "attenuation_distance": 10
+      },
+      {
+        "name": "kingdomsatwar:entity/beast/flamingo_step4",
+        "attenuation_distance": 10
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.flamingo.step"
   },
   "entity.giant_crab.clack": {
     "sounds": [
@@ -5328,6 +5554,128 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.mire_shambler.throw"
+  },
+  "entity.mire_snapper.ambient": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/turtle/idle1",
+        "pitch": 0.55,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/turtle/idle2",
+        "pitch": 0.55,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:mob/turtle/idle3",
+        "pitch": 0.55,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.ambient"
+  },
+  "entity.mire_snapper.death": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/turtle/death1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/death2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/death3",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.death"
+  },
+  "entity.mire_snapper.hiss": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/cat/hiss1",
+        "pitch": 0.45,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/cat/hiss2",
+        "pitch": 0.45,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:mob/cat/hiss3",
+        "pitch": 0.45,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.hiss"
+  },
+  "entity.mire_snapper.hurt": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/turtle/hurt1",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/hurt2",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/hurt3",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/hurt4",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/hurt5",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.hurt"
+  },
+  "entity.mire_snapper.snap": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/evocation_illager/fangs",
+        "pitch": 1.15,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.snap"
+  },
+  "entity.mire_snapper.step": {
+    "sounds": [
+      {
+        "name": "minecraft:mob/turtle/walk1",
+        "pitch": 0.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/walk2",
+        "pitch": 0.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/walk3",
+        "pitch": 0.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/walk4",
+        "pitch": 0.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:mob/turtle/walk5",
+        "pitch": 0.7,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mire_snapper.step"
   },
   "entity.miss_mystik.ambient": {
     "sounds": [
