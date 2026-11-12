@@ -176,7 +176,7 @@ final class SoulShepherdGameTests {
                     skulls++;
                 } else if (s.is(Blocks.CHEST)) {
                     chests++;
-                } else if (s.is(Blocks.SOUL_CAMPFIRE)) {
+                } else if (s.is(Blocks.SOUL_FIRE)) {
                     fires++;
                 } else if (s.is(ShadowGear.DUSK_QUARTZ_ORE.get())) {
                     quartz++;

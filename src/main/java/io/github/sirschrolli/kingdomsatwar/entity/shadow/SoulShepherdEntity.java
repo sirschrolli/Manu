@@ -348,7 +348,7 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
                     0.0, 0.04, 0.0);
         }
         if (this.walkAnimation.speed() > 0.2f && this.random.nextInt(3) == 0) {
-            level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getRandomX(0.8), this.getY() + 0.1, this.getRandomZ(0.8), 0.0, 0.004, 0.0);
+            level.addParticle(new DustParticleOptions(0x6A6E78, 1.4f), this.getRandomX(0.8), this.getY() + 0.15, this.getRandomZ(0.8), 0.0, 0.0, 0.0);
         }
     }
 
@@ -566,9 +566,10 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
 
     /** Sumpfnebel und Seelen an einer Stelle. */
     private void fog(ServerLevel level, Vec3 at, int count) {
-        level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, at.x, at.y + 1.2, at.z, count / 2, 0.8, 1.0, 0.8, 0.02);
+        level.sendParticles(ParticleTypes.POOF, at.x, at.y + 1.2, at.z, count / 3, 0.7, 1.0, 0.7, 0.02);
         level.sendParticles(ParticleTypes.SOUL, at.x, at.y + 1.4, at.z, count / 3, 0.8, 1.2, 0.8, 0.04);
-        level.sendParticles(new DustParticleOptions(0x4FB8B0, 1.6f), at.x, at.y + 1.2, at.z, count / 3, 1.0, 1.2, 1.0, 0.0);
+        level.sendParticles(new DustParticleOptions(0x4FB8B0, 1.6f), at.x, at.y + 1.2, at.z, count / 2, 1.0, 1.2, 1.0, 0.0);
+        level.sendParticles(new DustParticleOptions(0x8A8C96, 2.2f), at.x, at.y + 0.8, at.z, count / 3, 1.0, 0.8, 1.0, 0.0);
     }
 
     // ------------------------------------------------------------------ Andacht und Erwachen
@@ -849,7 +850,7 @@ public class SoulShepherdEntity extends Monster implements io.github.sirschrolli
         SpellFxEntity.create(level, SpellFxEntity.Kind.FISSURE, hit.add(0.0, 0.05, 0.0), null, 0x6FE8D8, 30, 0.6f).param(0.0f)
                 .end(hit.add(dir.scale(3.5)).add(0.0, 0.05, 0.0)).spawn();
         level.sendParticles(ParticleTypes.SOUL, hit.x, this.getY() + 0.3, hit.z, 24, 0.8, 0.2, 0.8, 0.06);
-        level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, hit.x, this.getY() + 0.3, hit.z, 12, 0.8, 0.2, 0.8, 0.02);
+        level.sendParticles(ParticleTypes.POOF, hit.x, this.getY() + 0.3, hit.z, 12, 0.8, 0.2, 0.8, 0.03);
         float damage = this.isEnraged() ? CRASH_DAMAGE + 2.0f : CRASH_DAMAGE;
         for (LivingEntity victim : this.victims(level, new AABB(hit, hit).inflate(3.0, 2.5, 3.0))) {
             if (victim.distanceToSqr(hit.x, victim.getY(), hit.z) > 3.0 * 3.0 || victim.getY() < this.getY() - 1.5) {

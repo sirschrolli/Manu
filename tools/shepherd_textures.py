@@ -26,7 +26,7 @@ N = 16
 CLEAR = (0, 0, 0, 0)
 
 #: angelaufene Bronze (dunkel -> hell)
-BRONZE = vs.tones("#3e4a3a", 7, spread=0.58, cool=190, warm=70, hue=16, sat=0.07)
+BRONZE = vs.tones("#6a5a38", 7, spread=0.6, cool=200, warm=60, hue=18, sat=0.1)
 VERDIGRIS = [hexc("#1c463c"), hexc("#2c6656"), hexc("#46907a"), hexc("#78bea4")]
 IRON = [hexc("#121316"), hexc("#1d1f24"), hexc("#2b2e35"), hexc("#3b3f48"), hexc("#50555f"), hexc("#6a707b"), hexc("#8a919c")]
 SOUL = [hexc("#06302e"), hexc("#0c5a54"), hexc("#16908a"), hexc("#2ac8bc"), hexc("#6af0e0"), hexc("#b8fff2"), hexc("#f0fffc")]
@@ -46,7 +46,7 @@ _RUNES = ({(0, 0), (1, 1), (2, 0)}, {(1, 0), (0, 1), (2, 1)}, {(0, 0), (0, 1), (
 
 
 def bell_side() -> Image.Image:
-    """Der Aufriss der Glocke (Zeilen 3–4 Schulter, 5–10 Flanke mit dem Runenband in 7–8, 11–12 Schlagring)."""
+    """Der Aufriss der Glocke (Zeilen 3–4 Schulter, 5–11 Flanke mit dem Runenband in 7–8, 12–13 Schlagring)."""
     n = _noise(5201)
     img = Image.new("RGBA", (N, N), CLEAR)
     for y in range(N):
@@ -57,13 +57,13 @@ def bell_side() -> Image.Image:
                 lv += 1                                          # Licht von links
             elif x >= 14:
                 lv -= 1
-            if y in (3, 11):
+            if y in (3, 12):
                 lv = 5                                           # die Wülste im Licht
-            elif y in (4, 12):
+            elif y in (4, 13):
                 lv = 2
             elif y in (6, 9):
                 lv = 2                                           # die Linien um das Runenband
-            elif y == 10:
+            elif y == 11:
                 lv -= 1
             img.putpixel((x, y), BRONZE[max(0, min(6, lv))])
     # das Runenband (Zeilen 7–8): eingraviert, in den Rillen ein Hauch Seelenlicht
@@ -76,12 +76,12 @@ def bell_side() -> Image.Image:
         for (dx, dy) in rune:
             x, y = x0 + dx, 7 + dy
             if x < N:
-                img.putpixel((x, y), pa.mix(BRONZE[1], SOUL[3], 0.7))
-    # Grünspan: ein paar Flecken unter den Wülsten, kurze Tropfen
-    for (x, y0, length) in ((2, 4, 2), (11, 4, 3), (6, 10, 1), (13, 12, 2)):
+                img.putpixel((x, y), pa.mix(BRONZE[1], SOUL[3], 0.75))
+    # Grünspan: Flecken unter den Wülsten, kurze Tropfen
+    for (x, y0, length) in ((2, 4, 2), (11, 4, 3), (5, 10, 2), (9, 10, 1), (13, 13, 2), (6, 13, 1)):
         for i in range(length):
             if y0 + i < N:
-                img.putpixel((x, y0 + i), VERDIGRIS[max(0, 2 - i)])
+                img.putpixel((x, y0 + i), VERDIGRIS[max(0, 3 - i)])
     return img
 
 

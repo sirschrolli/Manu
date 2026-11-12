@@ -38,7 +38,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class SoulBellBlock extends Block implements EntityBlock {
     public static final EnumProperty<Phase> PHASE = EnumProperty.create("phase", Phase.class);
-    private static final VoxelShape SHAPE = Shapes.or(Block.box(4, 4, 4, 12, 13, 12), Block.box(3, 3, 3, 13, 5, 13), Block.box(6, 13, 6, 10, 16, 10));
+    private static final VoxelShape SHAPE = Shapes.or(Block.box(2, 4, 2, 14, 11, 14), Block.box(1, 2, 1, 15, 4, 15), Block.box(4, 11, 4, 12, 13, 12),
+            Block.box(6, 13, 6, 10, 16, 10));
 
     /** Der Hirte steht in Andacht (oder ist noch nicht da), er kämpft, er ist besiegt. */
     public enum Phase implements StringRepresentable {

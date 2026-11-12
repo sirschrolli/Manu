@@ -251,6 +251,8 @@ final class Showcase {
                         KeeperShowcase.boss(steps);
                     } else if (scene.equals("sea_witch")) {
                         SeaWitchShowcase.boss(steps);
+                    } else if (scene.equals("soul_shepherd")) {
+                        SoulShepherdShowcase.boss(steps);
                     } else if (scene.equals("anni_boss")) {
                         AnniShowcase.boss(steps);
                     } else if (scene.equals("creator_boss")) {

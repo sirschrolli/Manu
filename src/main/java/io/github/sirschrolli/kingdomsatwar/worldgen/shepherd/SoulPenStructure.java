@@ -26,6 +26,8 @@ public class SoulPenStructure extends Structure {
     public static final int MAX_ROUGHNESS = 9;
     /** Abstand der Messpunkte (5 × 5 Punkte, also gut der ganze Pferch). */
     public static final int SPREAD = 7;
+    /** So weit ringsum muss auch Sumpf sein (an drei von vier Punkten). */
+    public static final int EDGE = 18;
 
     public SoulPenStructure(Structure.StructureSettings settings) {
         super(settings);
@@ -106,8 +108,14 @@ public class SoulPenStructure extends Structure {
             return null;
         }
         int floor = floor(ground, sea);
-        Holder<Biome> biome = biomes.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(floor), QuartPos.fromBlock(z));
-        return valid.test(biome) ? new BlockPos(x, floor, z) : null;
+        // auch ringsum Sumpf (mindestens drei der vier Punkte), damit der Pferch nicht am Rand des Sumpfs steht
+        int marsh = 0;
+        for (int[] d : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+            if (valid.test(biomes.getNoiseBiome(QuartPos.fromBlock(x + d[0] * EDGE), QuartPos.fromBlock(floor), QuartPos.fromBlock(z + d[1] * EDGE)))) {
+                marsh++;
+            }
+        }
+        return marsh >= 3 ? new BlockPos(x, floor, z) : null;
     }
 
     /** Die Höhe, auf der man im Pferch steht: auf dem Sumpf, aber immer über dem Wasser. */

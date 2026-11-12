@@ -52,24 +52,24 @@ final class ShadowModels {
         // die Krone (oben an den Balken des Glockenstuhls)
         b.element(e -> e.from(6, 13, 6).to(10, 16, 10).allFaces((dir, face) -> face.uvs(6, 0, 10, 3).texture(BELL_CROWN)));
         // die Schulter: Seiten aus den Zeilen 3–5 des Aufrisses, oben die Schulter von oben
-        b.element(e -> e.from(5, 11, 5).to(11, 13, 11).allFaces((dir, face) -> {
+        b.element(e -> e.from(4, 11, 4).to(12, 13, 12).allFaces((dir, face) -> {
             if (dir == net.minecraft.core.Direction.UP) {
-                face.uvs(5, 5, 11, 11).texture(TextureSlot.TOP);
+                face.uvs(4, 4, 12, 12).texture(TextureSlot.TOP);
             } else if (dir == net.minecraft.core.Direction.DOWN) {
-                face.uvs(5, 5, 11, 11).texture(BELL_INSIDE);
+                face.uvs(4, 4, 12, 12).texture(BELL_INSIDE);
             } else {
-                face.uvs(5, 3, 11, 5).texture(TextureSlot.SIDE);
+                face.uvs(4, 3, 12, 5).texture(TextureSlot.SIDE);
             }
         }));
         // die Flanke mit dem Runenband; unten (zum Mund hin) das Seelenfeuer
         b.element(e -> {
-            e.from(4, 5, 4).to(12, 11, 12).allFaces((dir, face) -> {
+            e.from(2, 4, 2).to(14, 11, 14).allFaces((dir, face) -> {
                 if (dir == net.minecraft.core.Direction.UP) {
-                    face.uvs(4, 4, 12, 12).texture(TextureSlot.TOP);
+                    face.uvs(2, 2, 14, 14).texture(TextureSlot.TOP);
                 } else if (dir == net.minecraft.core.Direction.DOWN) {
-                    face.uvs(4, 4, 12, 12).texture(BELL_MOUTH);
+                    face.uvs(2, 2, 14, 14).texture(BELL_MOUTH);
                 } else {
-                    face.uvs(4, 5, 12, 11).texture(TextureSlot.SIDE);
+                    face.uvs(2, 5, 14, 12).texture(TextureSlot.SIDE);
                 }
             });
             if (lit) {
@@ -77,25 +77,25 @@ final class ShadowModels {
             }
         });
         // der Schlagring: vier Wände (außen der Aufriss, innen das Dunkel, unten die Kante)
-        int[][] walls = {{3, 3, 3, 13, 5, 4}, {3, 3, 12, 13, 5, 13}, {3, 3, 4, 4, 5, 12}, {12, 3, 4, 13, 5, 12}};
+        int[][] walls = {{1, 2, 1, 15, 4, 2}, {1, 2, 14, 15, 4, 15}, {1, 2, 2, 2, 4, 14}, {14, 2, 2, 15, 4, 14}};
         for (int[] w : walls) {
             b.element(e -> e.from(w[0], w[1], w[2]).to(w[3], w[4], w[5]).allFaces((dir, face) -> {
                 boolean outer = switch (dir) {
-                    case NORTH -> w[2] == 3;
-                    case SOUTH -> w[5] == 13;
-                    case WEST -> w[0] == 3;
-                    case EAST -> w[3] == 13;
+                    case NORTH -> w[2] == 1;
+                    case SOUTH -> w[5] == 15;
+                    case WEST -> w[0] == 1;
+                    case EAST -> w[3] == 15;
                     default -> false;
                 };
                 if (dir.getAxis() == net.minecraft.core.Direction.Axis.Y) {
                     face.uvs(w[0], w[2], w[3], w[5]).texture(BELL_LIP);
                 } else {
-                    face.uvs(3, 11, 13, 13).texture(outer ? TextureSlot.SIDE : BELL_INSIDE);
+                    face.uvs(1, 12, 15, 14).texture(outer ? TextureSlot.SIDE : BELL_INSIDE);
                 }
             }));
         }
         // der Klöppel
-        b.element(e -> e.from(7, 2, 7).to(9, 5, 9).allFaces((dir, face) -> face.uvs(7, 10, 9, 13).texture(BELL_CROWN)));
+        b.element(e -> e.from(7, 0, 7).to(9, 4, 9).allFaces((dir, face) -> face.uvs(7, 10, 9, 14).texture(BELL_CROWN)));
         return b.build();
     }
 

@@ -89,7 +89,7 @@ public final class ShowcaseRunner {
             boolean structures = !flat || SCENES.contains("village") || SCENES.contains("citadel") || SCENES.contains("nyxar")
                     || SCENES.contains("siteworld") || SCENES.contains("void_throne") || SCENES.contains("forge_boss") || SCENES.contains("star_boss")
                     || SCENES.contains("abyss_hoard") || SCENES.contains("boss_arena") || SCENES.contains("kraken")
-                    || SCENES.contains("sea_witch");
+                    || SCENES.contains("sea_witch") || SCENES.contains("soul_shepherd");
             WorldOptions options = new WorldOptions("kingdoms at war".hashCode(), structures, false);
             WorldOpenFlows flows = minecraft.createWorldOpenFlows();
             LOGGER.info("[Showcase] Erzeuge Welt '{}' (flach: {})", folder, flat);

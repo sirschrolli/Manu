@@ -141,7 +141,7 @@ public class SoulBellBlockEntity extends BlockEntity {
         this.setPhase(level, awake ? SoulBellBlock.Phase.AWAKE : SoulBellBlock.Phase.SLEEPING);
         if (awake) {
             level.playSound(null, home, ModSounds.SOUL_SHEPHERD_AWAKEN.get(), SoundSource.HOSTILE, 3.0f, 1.0f);
-            level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, home.getX() + 0.5, home.getY() + 1.2, home.getZ() + 0.5, 60, 1.0, 1.4, 1.0, 0.03);
+            level.sendParticles(ParticleTypes.POOF, home.getX() + 0.5, home.getY() + 1.2, home.getZ() + 0.5, 30, 1.0, 1.4, 1.0, 0.03);
             level.sendParticles(ParticleTypes.SOUL, home.getX() + 0.5, home.getY() + 1.5, home.getZ() + 0.5, 50, 1.0, 1.4, 1.0, 0.06);
             level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 0.3,
                     this.worldPosition.getZ() + 0.5, 30, 0.3, 0.3, 0.3, 0.05);

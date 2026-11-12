@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.97.0 – Die Meerhexe.** Am Grund des Urmeers liegen jetzt **Hexengrotten**: buckelige Kuppeln aus Gezeitenstein in einer **toten Zone**, in der nichts mehr wächst, mit einem Eingang durch die **Rippen eines Wals**, Knochensäulen mit Seelenlaternen, zwei Blasensäulen, Nischen voller Hexenkram, Laternen an Ketten, dem Wrack eines Bootes und zwei Truhen. In der Mitte brodelt der **Hexenkessel** – und über ihm schwebt in Trance **die Meerhexe**, eine verstoßene Meerjungfrau mit einer Krone aus schwarzer Koralle, Haar aus Tang und einem Aalschwanz, gebändert wie ein Feuerfisch. Wer ihr zu nahe kommt, weckt sie: **Tintengeschosse**, **Strudel**, **Sirenengesang** (wegsehen!), **Blasengefängnis**, **Haie**, **Korallenspieße**, **Schwanzhieb**, im Zorn der **Fluch der Tiefe** und eine **Woge aus Tinte**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Hexenstab** (in 3D, Rechtsklick: drei Tintenkugeln, die dem Ziel folgen); den erkalteten Kessel weckt eine **Perle**. Neu ist auch **Aquamarinerz** am Meeresgrund (Aquamarin, Aquamarinblock) und daraus die **Taucherrüstung** – länger atmen, schneller schwimmen und abbauen, mit dem vollen Satz klare Sicht unter Wasser; in 3D mit Taucherhelm und Bullaugen, Luftflaschen, Bleigürtel und Flossen.
+> **Testversion 0.98.0 – Der Seelenhirte.** Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
+> In 0.97 kam **die Meerhexe**: Am Grund des Urmeers liegen jetzt **Hexengrotten**: buckelige Kuppeln aus Gezeitenstein in einer **toten Zone**, in der nichts mehr wächst, mit einem Eingang durch die **Rippen eines Wals**, Knochensäulen mit Seelenlaternen, zwei Blasensäulen, Nischen voller Hexenkram, Laternen an Ketten, dem Wrack eines Bootes und zwei Truhen. In der Mitte brodelt der **Hexenkessel** – und über ihm schwebt in Trance **die Meerhexe**, eine verstoßene Meerjungfrau mit einer Krone aus schwarzer Koralle, Haar aus Tang und einem Aalschwanz, gebändert wie ein Feuerfisch. Wer ihr zu nahe kommt, weckt sie: **Tintengeschosse**, **Strudel**, **Sirenengesang** (wegsehen!), **Blasengefängnis**, **Haie**, **Korallenspieße**, **Schwanzhieb**, im Zorn der **Fluch der Tiefe** und eine **Woge aus Tinte**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Hexenstab** (in 3D, Rechtsklick: drei Tintenkugeln, die dem Ziel folgen); den erkalteten Kessel weckt eine **Perle**. Neu ist auch **Aquamarinerz** am Meeresgrund (Aquamarin, Aquamarinblock) und daraus die **Taucherrüstung** – länger atmen, schneller schwimmen und abbauen, mit dem vollen Satz klare Sicht unter Wasser; in 3D mit Taucherhelm und Bullaugen, Luftflaschen, Bleigürtel und Flossen.
 > In 0.96 kam **der Steinhüter**: Im Feenreich liegen jetzt **alte Mondsteinbrüche**: runde Gruben, zwölf Blöcke tief, in drei Stufen abgebaut, mit Rampen an den Wänden, offenen **Adern aus Mondsteinerz**, gemeißelten Lampen, überhängendem Moos mit Leuchtranken, zwei Gerüsten aus Glimmerholz, einem **Kran**, an dessen Kette noch ein behauener Block hängt, und der **Hütte des Vorarbeiters** mit einer Truhe. Am Grund kniet vor dem leuchtenden **Hüterstein** der **Steinhüter** und schläft – ein Riese aus Feenstein mit Lavendelmoos, Mondsteinkristallen und einem pulsierenden Herzen. Wer hinabsteigt, weckt ihn: **Faustschlag**, **Stampfer**, **Felswurf**, **Kristallspur**, **Felssprung** (er folgt dir auf die Terrassen) und im Zorn der **Mondstrahl**; unter halber Kraft wächst ihm ein **Kristallpanzer**, der zerspringt – dann ist er benommen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hüterhammer** (in 3D, Rechtsklick: eine Spur aus Mondsteinkristallen); der erloschene Stein ruft mit einem **Mondstein** einen neuen Hüter. Neu ist auch das **Mondsteinerz** im ganzen Feenreich (Mondstein, Mondsteinblock) und die **Mondsteinrüstung** der Zauberer – Schutz wie Eisen, sehr gut verzauberbar, **mehr Mana** und schnellere Erholung (der volle Satz 80 Mana mehr), in 3D mit Stirnreif, Sternenmantel, Schulterstücken mit Mondsicheln und spitzen Zauberschuhen.
 > In 0.95 kamen **Rüstungen in 3D**: Getragene Rüstungen haben jetzt **echte 3D-Teile passend zu ihrem Material** – an Spielern und auf Rüstungsständern, für **alle Rüstungen der Mod und die von Minecraft**. Die **Stahlrüstung** ist ein Ritter: Kamm und roter **Helmbusch**, Schulterstücke aus drei Platten mit Goldsaum, Ellbogenkacheln, Beintaschen, Kniebuckel und goldene **Sporen**. **Konterit** (leicht und schnell) trägt **Flügel an den Schläfen und Knöcheln**, einen Stirnstein, sichelförmige Schulterstücke und einen **kurzen Umhang**. **Nachtstahl** hat eine **Krone aus Nachtkristallen** und Kristallstacheln auf Schultern, Rücken, Knien und Fersen, deren Spitzen leuchten. **Abyssit** hat zwei große **Hörner** mit leuchtenden Adern, einen Stirnkristall, schwere Schulterstücke und leuchtende Kristalle. Die **Drachenschuppen** tragen die **Hörner ihres Drachen** (Feuer geschwungen mit Glut, Eis aus Kristall, Blitz gezackt, Natur ein **Geweih mit Blättern**, Erde **Widderhörner**, Wasser **Flossen**), Rückenstacheln (Blätter, ein Flossensaum, Steinplatten), Schulterschuppen mit Kralle, Krallen an den Stiefeln und zu den Beinschienen einen **Drachenschwanz** mit der Spitze ihres Elements (eine glühende Flamme, ein Eiskristall, eine Blitzklinge, ein Blatt, eine Steinkeule mit Bernstein, eine Flosse). Die **Edelsteinkrone** bekommt Zacken mit Perlen und Edelsteine. Und die Rüstungen von Minecraft: **Leder** (Feder, Pelzkragen, Gürtel mit Tasche, Pelzstulpen), **Kettenhemd** (Kettenkragen, Kettenschultern, Kettenschurz), **Kupfer** (Helmspitze, Platten mit Grünspan), **Eisen** (Nasenschutz, Schulterstücke, Kniebuckel), **Gold** (Strahlenkamm, Rubine, Sonnenscheibe), **Diamant** (Kamm und Schultern aus Diamantsplittern), **Netherit** (Hörner, schwere Schulterstücke mit Dornen) und der **Schildkrötenpanzer**. Verzauberte Rüstungen schimmern auch an ihren 3D-Teilen.
 > In 0.94 kamen **schönere Bossleisten**: Die Leisten aller Bosse leben jetzt: Erscheint ein Boss, **senkt sich seine Leiste herab**, das **Namensband entrollt sich** (ein Band mit Borte, Ziersteinen und Schwalbenschwänzen in den Farben des Bosses) und die Füllung **lädt sich auf** – die Phasen-Edelsteine leuchten auf, sobald sie erreicht sind. Die Edelsteine sitzen jetzt **genau bei den Kampfphasen** jedes Bosses (beim Kraken bei zwei Dritteln und einem Drittel, beim Weltenfresser dreimal, bei der Wahren Gestalt Schrollis bei Nova, Apokalypse und Neuschöpfung, bei Noctua, Malleus, Asteria und Anni bei der Hälfte …), mit einer **Kerbe** in der Leiste. **Treffer** lassen den Rahmen beben, das verlorene Stück weiß aufblitzen und das Bildnis rot; **Heilung** schimmert. Ein **Glanz** zieht über die Rahmen, um jede Leiste schweben **Teilchen ihres Bosses** – Glut, Schneeflocken, Funken, Blätter, Staub, Luftblasen, Schattenrauch, Sterne, Flügelstaub, Konfetti, Störpixel oder Tinte –, **mit jeder Phase mehr**. Erreicht ein Boss eine Phase, **zerspringt ihr Edelstein** klirrend in Splitter, Rahmen und Namensband blitzen auf; in der **letzten Phase** strömt und pulsiert die Füllung schneller, der Rahmen glüht, das Bildnis färbt sich vor Wut rot. **Der Kraken** hat jetzt seine eigene Leiste (bisher zeigte er nur die Leiste von Minecraft): Bronze mit Patina und Seepocken, zwei purpurrote Arme mit Saugnäpfen klammern sich an den Rahmen, als Spitze ein eingerollter Arm, darunter Tang und Tinte, im Medaillon sein Bildnis mit den goldenen Augen und eine Füllung aus wirbelnder Tinte mit leuchtenden Punkten. Bosse mit **Namensschild** behalten ihre eigene Leiste.
@@ -403,6 +404,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Rüstungen in 3D** (0.95): getragene Rüstungen mit 3D-Teilen passend zum Material – Stahl (Helmbusch, Schulterstücke, Sporen), Konterit (Flügel, Umhang), Nachtstahl (Kristallkrone und Stacheln), Abyssit (Hörner, Kristalle), Drachenschuppen je Element (Hörner oder Geweih, Rückenstacheln, Drachenschwanz, Krallen), Edelsteinkrone; dazu Leder, Kettenhemd, Kupfer, Eisen, Gold, Diamant, Netherit und Schildkrötenpanzer | ✅ fertig |
 | **Der Steinhüter** (0.96): der alte Mondsteinbruch im Feenreich (drei Stufen, Rampen, Erzadern, Lampen, Gerüste, Kran, Hütte mit Truhe); der Steinhüter als Boss (schläft vor dem Hüterstein, sieben Angriffe, Kristallpanzer, Benommenheit, eigene Bossleiste und Klänge, Rückruf mit Mondstein); der Hüterhammer in 3D; Mondsteinerz, Mondstein, Mondsteinblock und die Mondsteinrüstung (mehr Mana, in 3D) | ✅ fertig |
 | **Die Meerhexe** (0.97): die Hexengrotte im Urmeer (Kuppel aus Gezeitenstein in einer toten Zone, Eingang durch die Rippen eines Wals, Knochensäulen, Blasensäulen, Nischen, Wrack, zwei Truhen); die Meerhexe als Boss (schwebt in Trance über ihrem Kessel, acht Angriffe und der Zorn mit der Woge aus Tinte, eigene Bossleiste und Klänge, Rückruf mit einer Perle); der Hexenstab in 3D; Aquamarinerz, Aquamarin, Aquamarinblock und die Taucherrüstung (länger atmen, schneller schwimmen und abbauen, klare Sicht, in 3D) | ✅ fertig |
+| **Der Seelenhirte** (0.98): der Seelenpferch im Seelensumpf der Schattenwelt (runder Pferch mit Zaun, Seelenlaternen und Schafsschädeln, Glockenstuhl mit der Seelenglocke, Feuerschalen, Stege auf Stelzen, Hütte mit Truhe); der Seelenhirte als Boss (steht in Andacht vor seiner Glocke, sieben Angriffe, im Zorn der Seelensturm, eigene Bossleiste und Klänge, Rückruf mit einem Seelenkristall); der Hirtenstab in 3D; Dämmerquarz, Dämmerquarzblock und die Dämmerrüstung (schwerer zu entdecken, schneller schleichen, weiche Landung, Nachtsicht beim Schleichen, in 3D) | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -463,7 +465,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.97.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.98.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -471,7 +473,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.97.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.98.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -640,6 +642,106 @@ Im ewigen Zwielicht leuchtet vieles, was wächst – und aus manchem steigen ab 
 | **Seelenschilf** (neu) | an den Ufern und im flachen Wasser der Seelensümpfe | türkis leuchtende Samenstände |
 
 Knochenmehl auf Schattengras lässt Schattenhalme, Geisterpilze, Sternblüten und Mondfarne sprießen.
+
+### Der Seelenhirte und der Seelenpferch (seit 0.98)
+
+![Der Seelenhirte in seinem Seelenpferch, seine Angriffe, der Hirtenstab und die Dämmerrüstung](docs/bilder/seelenhirte.jpg)
+
+Seit 0.98 liegen im **Seelensumpf** der Schattenwelt **Seelenpferche** – dort, wo der Sumpf eben genug ist und nicht zu tief
+unter Wasser steht (der Pferch sucht sich seinen Platz bis knapp hundert Blöcke weit). Ein Pferch ist ein runder,
+**aufgeschütteter Grund** mitten im Sumpf, knapp dreißig Blöcke breit: oben Seelenerde, gestampfter Schlamm, Schattenerde und
+am Rand Moos, darin halb versunkene Knochen, ein paar Schädel und Schattensprossen; an der Böschung Schlamm und Moos, über die
+das schwarze Wasser leckt. Rundherum läuft ein **Steg** aus Schattenholz, auf dem ein **Zaun** steht – auf den Pfosten
+**Seelenlaternen** und **Schafsschädel**, an den vier Toren höhere Pfosten mit Laternen. Bäume wachsen dort nicht; Schilf und
+Sprossen weichen. Vom Süd-, Ost- und Westtor führen **Stege auf Stelzen** mit Geländer und Laternenpfosten hinaus über den
+Sumpf, jeder endet an einer Plattform. Im Norden steht auf Stelzen die **Hütte des Hirten**: Schattenholz mit einem steilen
+Giebeldach, Fenstern und einer Tür zum Pferch; innen ein Heulager mit einem Schaffell, ein Fass mit einer Laterne, Kerzen, ein
+Block Dämmerquarz, eine Laterne an einer Kette – und eine **Truhe** (Dämmerquarz, Seelenkristalle, Mondsilber, Schattenessenz,
+Dämmerbrot, Wolle, Leinen, Knochen, Seelenfackeln und -laternen, Kerzen, Münzen – mit etwas Glück eine Dämmerkapuze,
+Dämmerstiefel oder ein verzaubertes Buch).
+
+In der Mitte steht auf einem **Podest** aus Schlammziegeln (an den Ecken leuchtet **Dämmerquarz**) der **Glockenstuhl**: zwei
+Pfosten, ein Balken mit Streben, ein kleines Giebeldach, zwei Seelenlaternen an Ketten – und unter dem Balken die
+**Seelenglocke**, eine schwere Glocke aus dunkler, grün angelaufener Bronze mit einem Band aus Seelenrunen; in ihrem Mund
+wirbelt **Seelenfeuer**. Rings um das Podest brennen vier **Feuerschalen** mit Seelenfeuer. Höchstens ein Pferch je Gebiet von
+gut 220 × 220 Blöcken, fern von Nyxars Zitadelle und den Dörfern der Umbrer (Finden: `/kaw seelenpferch` in der Schattenwelt,
+mit `tp`, `awaken` und `reset`).
+
+Vor der Glocke steht in Andacht **der Seelenhirte**. Einst führte er die Seelen der Toten ins Licht; seit das Siegel die
+Schattenwelt verschloss, hütet er die Verlorenen in seinem Pferch – und wartet. Er ist ein hagerer, vorgebeugter Riese, gut
+dreieinhalb Blöcke hoch: eine lange, aschgraue **Kutte**, die nach unten weiter wird und am Saum in Fetzen hängt (knapp darüber
+glimmt ein Band aus **Seelenrunen**), über den Schultern ein zotteliges **Schaffell**, hinten ein zerrissener Umhang bis fast
+zum Boden. Unter der tiefen **Kapuze** ist kein Gesicht, sondern ein **Widderschädel**: die lange Schnauze ragt aus der Kapuze,
+in den tiefen, schrägen Augenhöhlen brennt **türkises Seelenlicht**, und zwei schwere, gerippte **Widderhörner** rollen sich
+seitlich um die Kapuze. Lange, knochige Arme mit weiten Ärmeln, dürre Finger mit dunklen Krallen, um die Hüfte ein Strick mit
+**Talismanen** (ein Knochen, ein Schädelchen, ein Fläschchen mit einer gefangenen Seele). In der Rechten hält er seinen
+**Hirtenstab** aus Sumpfeiche – oben ein eiserner Haken, an dem an einer Kette eine **Laterne voll Seelenfeuer** hängt (sie
+pendelt und hängt immer lotrecht, wie er den Stab auch schwingt) –, in der Linken eine **Handglocke** aus angelaufener Bronze.
+Drei **Irrlichter** kreisen um ihn. In Andacht hält er den Schädel tief gesenkt, das Licht in seinen Augen glimmt nur, die
+Irrlichter ziehen langsam und tief ihre Bahnen. Wer sich dem Pferch nähert, hört von fern die Glocke („Irgendwo im Nebel läutet
+eine Glocke … jemand wacht über diesen Sumpf.“). Wer ihm näher als zwölf Blöcke kommt (oder ihn schlägt), weckt ihn: Er hebt
+den Schädel, die Augen und die Laterne lodern auf, er reckt den Stab empor – und läutet seine Glocke, ein Ring aus Seelenlicht
+läuft über den Grund. In Andacht und beim Erwachen ist er unverwundbar.
+
+Er steht in der Reihe der Bosse **zwischen den Drachen und Asteria** (900 Lebenspunkte, Rüstung 10, Zähigkeit 4, lässt sich
+kaum wegstoßen; Feuer, Stürze und Wände schaden ihm nicht, seine eigenen Irrlichter auch nicht). Er geht schwer auf den Stab
+gestützt auf seine Gegner zu und greift abwechselnd an. Wer ihn aus dem Pferch fortlockt, dem entkommt er im **Sumpfnebel**
+zurück zu seiner Glocke. Eigene Bossleiste (geschwärztes Eisen und Bein, hinter dem Medaillon zwei gerippte Widderhörner, unter
+der Leiste hängen Talismane an Ketten – ein Knochen, ein Schädelchen mit leuchtenden Augen, ein Laternchen –, über dem Rahmen
+treiben Irrlichter, als Spitze der Haken seines Stabs mit der Laterne; die Füllung züngelt wie Seelenfeuer), eigene Klänge
+(sein hohler Atem durch den Schädel, die Glocke, die klirrende Kette, fauchendes Seelenfeuer, gläserne Irrlichter, Stimmen im
+Sturm).
+
+| Angriff | Was geschieht |
+|---|---|
+| **Hakenzug** | er holt aus, der Haken schnellt an einer **Kette aus Seelenlicht** vor (bis 18 Blöcke weit) und reißt sein Ziel zu ihm – kurz verlangsamt –, dann schlägt er zu |
+| **Laternenschwung** | er schwingt die Laterne über die Schulter und in einem weiten Bogen vor sich her: Seelenfeuer, wer davor steht, brennt und fliegt zurück |
+| **Irrlichter** | er reckt die Laterne empor, und seine Irrlichter fliegen davon: vier (im Zorn sechs) Lichter, die kurz schweben und dann ihrem Ziel nachjagen – Schaden, und man verdorrt ein wenig |
+| **Seelenglocke** | er hebt die Handglocke und läutet: ein **Ring** läuft über den Grund – wer darin steht (und nicht springt), wird getroffen, ist langsam und schwach |
+| **Nebelgang** | er duckt sich in seinen Umhang und zerfließt zu Sumpfnebel – im nächsten Augenblick steht er **hinter seinem Ziel** und schlägt zu (kurz Blindheit) |
+| **Pferch** | er zieht mit der Laterne einen Kreis in die Luft, ein leuchtender Kreis warnt – dann schließt ein **Ring aus Seelenfeuer** sein Ziel drei Sekunden lang ein: wer die Flammen berührt, brennt und wird zurück in den Pferch gestoßen |
+| **Hirtenstoß** | den Stab hoch über den Kopf – und mit aller Wucht vor ihm in den Grund: ein Riss läuft über den Boden, wer davor steht, fliegt |
+| **Seelensturm** | nur im Zorn: die Arme weit ausgebreitet wirbeln die Seelen um ihn und **ziehen alle in seine Nähe** – wer ihm zu nahe kommt, verdorrt |
+
+Unter halber Kraft wirft er den Schädel zurück, reißt das Maul auf – und **läutet dreimal im Zorn**: drei Ringe laufen
+nacheinander über den Grund. Danach ist er schneller, mehr Irrlichter folgen ihm, und der Seelensturm kommt hinzu. Findet er
+niemanden mehr, kehrt er zu seiner Glocke zurück und versinkt nach einer Weile wieder in Andacht – geheilt und ohne Zorn.
+Besiegt sinkt er in die Knie, der Schädel fällt, die Laterne erlischt – und er **zerfällt zu Nebel**, die Seelen steigen frei
+auf. Er hinterlässt den **Hirtenstab**, einen **Herzkristall**, Dämmerquarz, Seelenkristalle, Schattenessenz, Mondsilber und
+Münzen. Die Glocke **verstummt** (das Seelenfeuer in ihr erlischt) – ein **Seelenkristall** an ihr (Rechtsklick) ruft ihn zurück,
+und er erwacht sofort.
+
+**Der Hirtenstab** – Sumpfeiche mit eisernem Fuß und Strick am Griff, oben der eiserne Haken mit der Laterne voll Seelenfeuer
+und ein Knochen an einer Schnur (in der Hand in 3D):
+
+| Eigenschaft | Wirkung |
+|---|---|
+| Schlag | wie ein Schwert: 8 Schaden, 1,2 Schläge je Sekunde |
+| **Hakenzug** | Rechtsklick: eine **Kette aus Seelenlicht** hakt das anvisierte Wesen (bis 16 Blöcke weit), es nimmt 4 Schaden (mit Schärfe mehr), wird kurz verlangsamt und **zu dir gerissen** – schwere Wesen bewegen sich kaum; danach ruht er drei Sekunden |
+| Haltbarkeit | 900, mit **Dämmerquarz** zu reparieren, gut verzauberbar, episch |
+
+**Dämmerquarz:** **Dämmerquarzerz** – violette, gläserne Kristalle mit einem glimmenden Kern – steckt in Adern im Schattenstein
+und im tiefen Schattenstein der ganzen Schattenwelt (und leuchtet ein wenig). Mit einer **Eisenspitzhacke** abgebaut gibt es
+**Dämmerquarz** (Glück bringt mehr, das Erz lässt sich auch schmelzen): ein violetter Stein, in dem die Dämmerung gefangen ist.
+Neun ergeben einen **Dämmerquarzblock** mit Facetten, durch die ein Leuchten zieht.
+
+**Die Dämmerrüstung** aus Leder und Dämmerquarz – Schutz wie Eisen, sehr gut verzauberbar, für alle, die lieber ungesehen
+bleiben:
+
+| Teil | Rezept | Wirkung |
+|---|---|---|
+| **Dämmerkapuze** | zwei Leder und drei Dämmerquarz | beim Schleichen **Nachtsicht** (endet, sobald man aufsteht) |
+| **Dämmerumhang** | drei Leder und fünf Dämmerquarz | – |
+| **Dämmerbeinlinge** | drei Leder und vier Dämmerquarz | schneller schleichen |
+| **Dämmerstiefel** | zwei Leder und zwei Dämmerquarz | schneller schleichen, **weiche Landung** (zwei Blöcke mehr Fallhöhe ohne Schaden) |
+
+Jeder Teil lässt Monster einen erst später bemerken (mit allen vier Teilen nur noch auf gut die halbe Reichweite); wer den
+**vollen Satz** trägt und **schleicht**, wird fast nur noch aus nächster Nähe entdeckt. In 3D trägt sie eine tiefe **Kapuze**
+mit herabhängendem Zipfel und eine Halbmaske, einen **Umhang** mit einer Schließe aus Dämmerquarz, Wickel um Arme und Beine,
+einen Gürtel mit **Taschen** und einem **Dolch**, Knieschützer und Stulpen an den Stiefeln.
+
+Dämmerquarzerz, Dämmerquarz, Dämmerquarzblock, die Rüstung, die Seelenglocke, der Hirtenstab und das Spawn-Ei des Seelenhirten
+liegen im Kreativ-Reiter **„Schattenwelt“**.
 
 ### Die Leere
 
@@ -4393,6 +4495,7 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 | `/kaw zauberbuehne` · `/kaw zauberbuehne tp` · `/kaw zauberbuehne awaken` · `/kaw zauberbuehne reset` | (nur Operatoren) Lage der nächsten Zauberbühne im Feenreich anzeigen (`/locate` findet sie nicht), in den Zuschauergang reisen (auch aus einer anderen Welt), MissMystiks Vorstellung beginnen, den Zylinder wieder füllen |
 | `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
 | `/kaw hexengrotte` · `/kaw hexengrotte tp` · `/kaw hexengrotte awaken` · `/kaw hexengrotte reset` | (nur Operatoren) Lage der nächsten Hexengrotte im Urmeer anzeigen, vor ihren Eingang reisen (auch aus einer anderen Welt), die Meerhexe aus ihrer Trance wecken, sie wieder in Trance versetzen (der Kessel brodelt wieder) |
+| `/kaw seelenpferch` · `/kaw seelenpferch tp` · `/kaw seelenpferch awaken` · `/kaw seelenpferch reset` | (nur Operatoren) Lage des nächsten Seelenpferchs in der Schattenwelt anzeigen, ans Ende des Stegs vor dem Haupttor reisen (auch aus einer anderen Welt), den Seelenhirten wecken (oder einen neuen rufen), ihn wieder in Andacht versinken lassen (die Glocke ruht wieder) |
 | `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
 | `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
@@ -4425,7 +4528,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.97.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.98.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4583,15 +4686,18 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      Rüstungen der Mod und die von Minecraft;
    - **0.96 – Der Steinhüter** (fertig): der alte Mondsteinbruch im Feenreich mit dem Steinhüter als
      Boss, der Hüterhammer, Mondsteinerz und die Mondsteinrüstung der Zauberer;
-   - zuletzt **0.97 – Die Meerhexe** (fertig): die Hexengrotte im Urmeer mit der Meerhexe als Boss, der
-     Hexenstab, Aquamarinerz und die Taucherrüstung.
+   - **0.97 – Die Meerhexe** (fertig): die Hexengrotte im Urmeer mit der Meerhexe als Boss, der
+     Hexenstab, Aquamarinerz und die Taucherrüstung;
+   - zuletzt **0.98 – Der Seelenhirte** (fertig): der Seelenpferch im Seelensumpf der Schattenwelt mit dem
+     Seelenhirten als Boss, der Hirtenstab, Dämmerquarz und die Dämmerrüstung.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
    **Als Nächstes geplant:** weitere Bosse, Erze und Bauwerke für die anderen Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Steinhüter → Erzmagier → MissMystik →
-   Malleus → Meerhexe → Drachen → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
+   Malleus → Meerhexe → Drachen → Seelenhirte → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser →
+   Schrolli der Schöpfer.
 
 ## Danksagung
 

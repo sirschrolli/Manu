@@ -16,7 +16,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.CrossCollisionBlock;
@@ -43,13 +42,13 @@ import org.jspecify.annotations.Nullable;
  * <ol>
  *     <li>Eine <b>Lichtung</b> im Sumpf: Schilf, Sprossen und Farne weichen (Bäume wachsen hier gar nicht erst, siehe
  *     {@link #inClearing}).</li>
- *     <li>Der <b>Pferch</b>: ein runder, aufgeschütteter Grund aus Seelenerde, gestampftem Schlamm und Schattenerde, darin
- *     halb versunkene Knochen und ein paar Schädel; ringsum ein Steg aus Schattenholz und ein <b>Zaun</b> mit Pfosten, auf
+ *     <li>Der <b>Pferch</b>: ein runder, aufgeschütteter Grund, eine Weide aus Schattengras mit zertretenen Flecken aus
+ *     Seelenerde und Schlamm, Wegen von den Toren zum Podest, halb versunkenen Knochen und ein paar Schädeln; ringsum ein Steg aus Schattenholz und ein <b>Zaun</b> mit Pfosten, auf
  *     denen Seelenlaternen und Schafsschädel stehen. Vier Tore (Süden, Osten, Westen, Norden).</li>
  *     <li>In der Mitte ein <b>Podest</b> aus Schlammziegeln mit Dämmerquarz an den Ecken, darüber der <b>Glockenstuhl</b>:
  *     zwei Pfosten, ein Balken, ein kleines Giebeldach, zwei Laternen an Ketten – und unter dem Balken die
  *     <b>Seelenglocke</b>. Vor ihr steht der Seelenhirte in Andacht (mit Blick zum Südtor).</li>
- *     <li>Vier <b>Feuerschalen</b> mit Seelenfeuer auf Sockeln aus Schlammziegeln.</li>
+ *     <li>Vier <b>Feuerschalen</b>: Säulen aus Schlammziegeln, oben Seelenerde mit Seelenfeuer.</li>
  *     <li><b>Stege</b> auf Stelzen nach Süden, Osten und Westen hinaus über den Sumpf, mit Geländer, Laternenpfosten und einer
  *     Plattform am Ende.</li>
  *     <li>Im Norden die <b>Hütte des Hirten</b> auf Stelzen: Schattenholz mit Giebeldach, ein Heulager, ein Fass, Kerzen,
@@ -66,7 +65,7 @@ public class SoulPenPiece extends StructurePiece {
     /** … und so weit das ganze Bauwerk samt Lichtung. */
     public static final int REACH = 30;
     /** Die Glocke hängt so hoch über dem Boden … */
-    public static final int BELL_Y = 6;
+    public static final int BELL_Y = 5;
     /** … die Mitte der Hütte liegt so weit nördlich. */
     public static final int HUT = 21;
     /** Das Haupttor (der Hirte blickt dorthin). */
@@ -319,23 +318,35 @@ public class SoulPenPiece extends StructurePiece {
             }
         }
 
-        /** Der Boden im Pferch: Seelenerde in Flecken, dazwischen gestampfter Schlamm und Schattenerde, am Rand moosig. */
+        /**
+         * Der Boden im Pferch: eine Weide aus Schattengras, darin zertretene Flecken aus Seelenerde und Schlamm, am Rand Moos;
+         * von jedem Tor führt ein Weg aus gestampftem Schlamm und Schlammziegeln zum Podest.
+         */
         private BlockState surface(int x, int z, double d) {
             if (d > ARENA + 0.5) {
                 return ShadowBlocks.SHADOW_PLANKS.base().get().defaultBlockState();
             }
-            double n = this.ctx.noise(x, z, 0.22, 37);
-            double m = this.ctx.noise(x, z, 0.5, 39);
-            if (n < 0.42) {
-                return Blocks.SOUL_SOIL.defaultBlockState();
+            int dx = Math.abs(x - this.cx);
+            int dz = Math.abs(z - this.cz);
+            if ((dx <= 1 || dz <= 1) && d > 3.0) {
+                // die Wege: in der Mitte Ziegel, am Rand gestampfter Schlamm, hier und da ein loser Stein
+                boolean middle = dx == 0 || dz == 0;
+                double r = this.rand(x, z, 43);
+                return (middle ? (r < 0.75 ? Blocks.MUD_BRICKS : Blocks.PACKED_MUD) : (r < 0.7 ? Blocks.PACKED_MUD : Blocks.MUD_BRICKS))
+                        .defaultBlockState();
             }
-            if (n < 0.6) {
-                return (m < 0.5 ? Blocks.PACKED_MUD : Blocks.MUD).defaultBlockState();
+            double n = this.ctx.noise(x, z, 0.24, 37);
+            double m = this.ctx.noise(x, z, 0.55, 39);
+            if (n < 0.3) {
+                return (m < 0.55 ? Blocks.SOUL_SOIL : Blocks.MUD).defaultBlockState();                 // zertreten
             }
-            if (d > ARENA - 2.0 && m > 0.55) {
+            if (n < 0.38) {
+                return ShadowBlocks.SHADOW_SOIL.get().defaultBlockState();
+            }
+            if (d > ARENA - 2.0 && m > 0.6) {
                 return Blocks.MOSS_BLOCK.defaultBlockState();
             }
-            return ShadowBlocks.SHADOW_SOIL.get().defaultBlockState();
+            return ShadowBlocks.SHADOW_GRASS.get().defaultBlockState();
         }
 
         /** Der Steg am Zaun entlang (Bohlen aus Schattenholz, an den Stößen Platten). */
@@ -494,15 +505,21 @@ public class SoulPenPiece extends StructurePiece {
             }
         }
 
-        /** Vier Feuerschalen mit Seelenfeuer auf Sockeln aus Schlammziegeln. */
+        /** Vier Feuerschalen: Säulen aus Schlammziegeln mit einer Schale aus Seelenerde, in der Seelenfeuer brennt. */
         private void braziers() {
             for (int i = 0; i < 4; i++) {
                 double a = Math.PI / 4.0 + i * Math.PI / 2.0;
                 int x = this.cx + (int) Math.round(Math.cos(a) * 8.0);
                 int z = this.cz + (int) Math.round(Math.sin(a) * 8.0);
+                // eine Säule aus Schlammziegeln, oben eine Schale aus Seelenerde, darin brennt Seelenfeuer (ohne Rauch)
                 this.set(x, this.f - 1, z, Blocks.MUD_BRICKS);
                 this.set(x, this.f, z, Blocks.MUD_BRICK_WALL.defaultBlockState());
-                this.set(x, this.f + 1, z, Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true));
+                this.set(x, this.f + 1, z, Blocks.SOUL_SOIL);
+                this.set(x, this.f + 2, z, Blocks.SOUL_FIRE);
+                for (Direction d : Direction.Plane.HORIZONTAL) {
+                    this.set(x + d.getStepX(), this.f + 1, z + d.getStepZ(), Blocks.MUD_BRICK_SLAB.defaultBlockState()
+                            .setValue(SlabBlock.TYPE, SlabType.TOP));
+                }
             }
         }
 
