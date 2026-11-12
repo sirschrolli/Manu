@@ -44,6 +44,11 @@ ITEMS: dict[str, tuple[str, float, float]] = {
     "immortal_apple": ("minecraft:item/generated", 3.5, 0.75),
     # Fischbeutel (0.81): prall gefüllt
     "fish_bag": ("minecraft:item/generated", 3.0, 0.75),
+    # der Sternenbogen (0.99): ruhend und drei Stufen gespannt, gehalten wie der Bogen von Minecraft
+    "star_bow": ("minecraft:item/bow", 0.75, 0.5),
+    "star_bow_pulling_0": ("minecraft:item/bow", 0.75, 0.5),
+    "star_bow_pulling_1": ("minecraft:item/bow", 0.75, 0.5),
+    "star_bow_pulling_2": ("minecraft:item/bow", 0.75, 0.5),
 }
 
 # Seit 0.88: die übrigen Gegenstände, die man in die Hand nimmt – Barren, Steine, Schuppen, Monsterteile, Runen, Münzen,

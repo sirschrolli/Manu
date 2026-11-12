@@ -3,11 +3,8 @@ package io.github.sirschrolli.kingdomsatwar.item.monster;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.MonsterGear;
 import java.util.List;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -60,24 +57,15 @@ public final class MonsterGearEvents {
         return true;
     }
 
-    /** Die Kraft des vollen Satzes (jede Sekunde für drei Sekunden erneuert; Nachtsicht länger, damit sie nicht flackert). */
-    public static void applySetBonus(LivingEntity entity, ArmorSet set) {
-        switch (set) {
-            case PELT -> {
-                if (entity.level().isDarkOutside()) {
-                    effect(entity, MobEffects.SPEED, 0, 60);
-                    effect(entity, MobEffects.NIGHT_VISION, 0, 260);
-                }
-            }
-            case EMBER -> effect(entity, MobEffects.FIRE_RESISTANCE, 0, 60);
-        }
-    }
-
-    private static void effect(LivingEntity entity, Holder<MobEffect> effect, int amplifier, int ticks) {
-        MobEffectInstance current = entity.getEffect(effect);
-        if (current == null || current.getDuration() < ticks - 20 || current.getAmplifier() < amplifier) {
-            entity.addEffect(new MobEffectInstance(effect, ticks, amplifier, true, false, true));
-        }
+    /**
+     * Die Kraft des vollen Satzes (jede Sekunde geprüft): still, ohne Symbol; legt man den Satz ab (oder wird es beim Pelz
+     * Tag), endet sie sofort. {@code set} null: kein voller Satz.
+     */
+    public static void applySetBonus(LivingEntity entity, @org.jspecify.annotations.Nullable ArmorSet set) {
+        boolean night = set == ArmorSet.PELT && entity.level().isDarkOutside();
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.SPEED, 0, "werewolf_pelt", night);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.NIGHT_VISION, 0, "werewolf_pelt", night);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.FIRE_RESISTANCE, 0, "ember_scale", set == ArmorSet.EMBER);
     }
 
     @SubscribeEvent
@@ -86,10 +74,7 @@ public final class MonsterGearEvents {
         if (player.level().isClientSide() || player.tickCount % 20 != 0 || !player.isAlive()) {
             return;
         }
-        ArmorSet set = fullSet(player);
-        if (set != null) {
-            applySetBonus(player, set);
-        }
+        applySetBonus(player, fullSet(player));
     }
 
     /** Krallenklinge: wer mit ihr ein Wesen besiegt, gerät in einen Blutrausch. */

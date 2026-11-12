@@ -73,6 +73,7 @@ import shadow_textures  # noqa: E402
 import shadow_gear_textures  # noqa: E402
 import dusk_textures  # noqa: E402
 import sky_iron_textures  # noqa: E402
+import weaver_textures  # noqa: E402
 import shepherd_textures  # noqa: E402
 import void_textures  # noqa: E402
 import abyss_textures  # noqa: E402
@@ -393,6 +394,7 @@ def build_all() -> dict[str, Image.Image]:
     shadow_gear_textures.build(put)
     dusk_textures.build(put)
     sky_iron_textures.build(put)
+    weaver_textures.build(put)
     shepherd_textures.build(put)
     void_textures.build(put)
     abyss_textures.build(put)

@@ -445,6 +445,7 @@ public class ModModelProvider extends ModelProvider {
         // --- Schattenwelt ---
         ShadowModels.register(blocks, items);
         VoidModels.register(blocks, items);
+        WeaverModels.register(blocks, items);
         AbyssModels.register(blocks, items);
         SeaModels.register(blocks, items);
         FaeModels.register(blocks, items);

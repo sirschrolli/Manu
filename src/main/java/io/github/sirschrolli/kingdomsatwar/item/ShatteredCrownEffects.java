@@ -2,7 +2,6 @@ package io.github.sirschrolli.kingdomsatwar.item;
 
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -24,13 +23,11 @@ public final class ShatteredCrownEffects {
         if (player.level().isClientSide() || player.tickCount % 5 != 0) {
             return;
         }
-        if (!player.getItemBySlot(EquipmentSlot.HEAD).is(VoidBlocks.SHATTERED_CROWN.get())) {
-            return;
-        }
-        boolean falling = !player.onGround() && !player.isInWater() && !player.getAbilities().flying && !player.isFallFlying()
-                && !player.isPassenger() && player.getDeltaMovement().y < -0.35 && player.fallDistance > 2.5;
-        if (falling && !player.isShiftKeyDown()) {
-            player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 30, 0, true, false, true));
-        }
+        boolean crown = player.getItemBySlot(EquipmentSlot.HEAD).is(VoidBlocks.SHATTERED_CROWN.get());
+        boolean falling = crown && !player.onGround() && !player.isInWater() && !player.getAbilities().flying && !player.isFallFlying()
+                && !player.isPassenger() && (player.getDeltaMovement().y < -0.35 && player.fallDistance > 2.5
+                || player.hasEffect(MobEffects.SLOW_FALLING));
+        // still (ohne Symbol); endet beim Aufsetzen, beim Schleichen und wenn die Krone abgelegt wird
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.SLOW_FALLING, 0, "shattered_crown", falling && !player.isShiftKeyDown());
     }
 }

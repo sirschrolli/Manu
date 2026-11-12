@@ -53,8 +53,8 @@ public final class MysticTopHatEffects {
             return false;
         }
         data.putLong(READY, now + COOLDOWN);
-        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 80, 0, false, true, true));
-        player.addEffect(new MobEffectInstance(MobEffects.SPEED, 80, 1, false, true, true));
+        player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 80, 0, false, true, false));
+        player.addEffect(new MobEffectInstance(MobEffects.SPEED, 80, 1, false, true, false));
         level.sendParticles(SMOKE, player.getX(), player.getY(1.0), player.getZ(), 40, 0.5, 0.8, 0.5, 0.02);
         level.sendParticles(ParticleTypes.POOF, player.getX(), player.getY(0.6), player.getZ(), 16, 0.4, 0.6, 0.4, 0.04);
         level.sendParticles(ModParticles.CONFETTI.get(), player.getX(), player.getY(1.0), player.getZ(), 30, 0.4, 0.3, 0.4, 0.2);

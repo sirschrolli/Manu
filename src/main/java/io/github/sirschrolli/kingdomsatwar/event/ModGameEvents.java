@@ -110,6 +110,11 @@ public final class ModGameEvents {
                         .then(Commands.literal("tp").executes(context -> soulPen(context.getSource(), "tp")))
                         .then(Commands.literal("awaken").executes(context -> soulPen(context.getSource(), "awaken")))
                         .then(Commands.literal("reset").executes(context -> soulPen(context.getSource(), "reset"))))
+                .then(Commands.literal("sternennetz").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .executes(context -> starWeb(context.getSource(), ""))
+                        .then(Commands.literal("tp").executes(context -> starWeb(context.getSource(), "tp")))
+                        .then(Commands.literal("awaken").executes(context -> starWeb(context.getSource(), "awaken")))
+                        .then(Commands.literal("reset").executes(context -> starWeb(context.getSource(), "reset"))))
                 .then(Commands.literal("mondsteinbruch").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(context -> moonstoneQuarry(context.getSource(), ""))
                         .then(Commands.literal("tp").executes(context -> moonstoneQuarry(context.getSource(), "tp")))
@@ -736,6 +741,81 @@ public final class ModGameEvents {
     }
 
     /** Sucht die Seelenglocke über der Mitte des Pferchs (von oben nach unten). */
+    /**
+     * {@code /kaw sternennetz}: Lage des nächsten Sternennetzes in der Leere; {@code tp} bringt einen auf den Rand der
+     * Netzplatte (auch aus einer anderen Welt), {@code awaken} weckt die Sternenweberin (oder lockt eine neue), {@code reset} lässt
+     * sie wieder in Andacht an ihrem Faden hängen (das Gelege leuchtet wieder).
+     */
+    private static int starWeb(net.minecraft.commands.CommandSourceStack source, String mode) throws
+            com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerLevel realm = source.getServer().getLevel(io.github.sirschrolli.kingdomsatwar.voidrealm.VoidGate.THE_VOID);
+        if (realm == null || (source.getLevel() != realm && mode.isEmpty())) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.sternennetz.not_void"));
+            return 0;
+        }
+        BlockPos from = source.getLevel() == realm ? BlockPos.containing(source.getPosition()) : BlockPos.ZERO;
+        var structure = realm.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .get(io.github.sirschrolli.kingdomsatwar.worldgen.lair.ModStructures.STAR_WEB_STRUCTURE);
+        var found = structure.isEmpty() ? null : realm.getChunkSource().getGenerator().findNearestMapStructure(realm,
+                net.minecraft.core.HolderSet.direct(structure.get()), from, 100, false);
+        if (found == null) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.sternennetz.none"));
+            return 0;
+        }
+        BlockPos corner = found.getFirst();
+        // die Mitte des Netzes steht im Bauwerk (die Suche kann es vom Chunk der Verteilung fortgerückt haben)
+        BlockPos center = null;
+        var start = realm.getChunk(corner.getX() >> 4, corner.getZ() >> 4).getStartForStructure(structure.get().value());
+        if (start != null) {
+            for (var piece : start.getPieces()) {
+                if (piece instanceof io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece web) {
+                    center = web.center();
+                }
+            }
+        }
+        if (center == null) {
+            center = new BlockPos((corner.getX() & ~15) + 8, io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebStructure.HEIGHTS[0],
+                    (corner.getZ() & ~15) + 8);
+        }
+        BlockPos c = center;
+        int distance = (int) Math.sqrt(Math.pow(c.getX() - from.getX(), 2) + Math.pow(c.getZ() - from.getZ(), 2));
+        Component where = Component.literal(c.getX() + ", " + c.getY() + ", " + c.getZ()).withStyle(net.minecraft.ChatFormatting.AQUA);
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.sternennetz.where", where, distance), false);
+        if (mode.isEmpty()) {
+            return 1;
+        }
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int dz = -3; dz <= 3; dz++) {
+                realm.getChunk((c.getX() >> 4) + dx, (c.getZ() >> 4) + dz);
+            }
+        }
+        if (mode.equals("tp")) {
+            ServerPlayer player = source.getPlayerOrException();
+            // auf den Südrand der Netzplatte, mit Blick zur Mitte
+            player.teleportTo(realm, c.getX() + 0.5, c.getY(), c.getZ() + 0.5 + io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece.DISC - 1.5,
+                    java.util.Set.of(), 180.0f, 10.0f, true);
+            return 1;
+        }
+        BlockPos nest = io.github.sirschrolli.kingdomsatwar.worldgen.weaver.StarWebPiece.nest(c);
+        if (!(realm.getBlockEntity(nest) instanceof io.github.sirschrolli.kingdomsatwar.block.voidrealm.WeaverNestBlockEntity be)) {
+            source.sendFailure(Component.translatable("command.kingdomsatwar.sternennetz.no_nest"));
+            return 0;
+        }
+        if (mode.equals("reset")) {
+            be.reset(realm);
+            source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.sternennetz.reset"), true);
+            return 1;
+        }
+        io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity weaver = be.weaver(realm);
+        if (weaver == null) {
+            weaver = be.spawn(realm, true);
+        } else {
+            weaver.awaken();
+        }
+        source.sendSuccess(() -> Component.translatable("command.kingdomsatwar.sternennetz.awakened"), true);
+        return weaver != null ? 1 : 0;
+    }
+
     private static @org.jspecify.annotations.Nullable BlockPos findSoulBell(ServerLevel level, int x, int z) {
         int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
         for (int y = top + 2; y > top - 24; y--) {
@@ -954,10 +1034,7 @@ public final class ModGameEvents {
         if (player.level().isClientSide() || player.tickCount % 20 != 0 || !player.isAlive()) {
             return;
         }
-        DragonType element = DragonScaleArmorItem.fullSet(player);
-        if (element != null) {
-            DragonScaleArmorItem.applySetBonus(player, element);
-        }
+        DragonScaleArmorItem.applySetBonus(player, DragonScaleArmorItem.fullSet(player));
     }
 
     /** Blitzeinschläge in der Nähe lassen Blitzdrachen-Eier schneller schlüpfen. */

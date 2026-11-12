@@ -71,6 +71,8 @@ public final class CreatorGear {
         long t = level.getGameTime();
         if (halo(player)) {
             haloTick(level, player, t);
+        } else {
+            io.github.sirschrolli.kingdomsatwar.item.GearEffects.drop(player, MobEffects.NIGHT_VISION, "creator_halo");
         }
         if (rings(player) && (t + player.getId()) % 20 == 0) {
             eyes(level, player);
@@ -79,10 +81,7 @@ public final class CreatorGear {
 
     /** Der Heiligenschein: Nachtsicht ohne Flackern, Segen, Untote versengen. */
     private static void haloTick(ServerLevel level, ServerPlayer player, long t) {
-        MobEffectInstance sight = player.getEffect(MobEffects.NIGHT_VISION);
-        if (sight == null || sight.getDuration() < 260 && sight.getDuration() >= 0 && !sight.isInfiniteDuration()) {
-            player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, true, false, true));
-        }
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.keep(player, MobEffects.NIGHT_VISION, 0, "creator_halo");
         if (player.hasEffect(MobEffects.BLINDNESS)) {
             player.removeEffect(MobEffects.BLINDNESS);
         }

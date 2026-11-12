@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -48,10 +47,6 @@ public final class EnchantPower {
     public static final Set<ResourceKey<Enchantment>> BOOSTED = Set.of(Enchantments.SHARPNESS, Enchantments.SMITE, Enchantments.BANE_OF_ARTHROPODS,
             Enchantments.IMPALING, Enchantments.POWER, Enchantments.PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.BLAST_PROTECTION,
             Enchantments.PROJECTILE_PROTECTION, Enchantments.FEATHER_FALLING, Enchantments.EFFICIENCY, Enchantments.LURE);
-
-    /** Wie lange die Nachtsicht des Eulenauges noch mindestens reicht (darunter flackerte sie wie ein auslaufender Trank). */
-    private static final int OWL_KEEP = 260;
-    private static final int OWL_DURATION = 320;
 
     private EnchantPower() {}
 
@@ -126,14 +121,6 @@ public final class EnchantPower {
     /** Gibt die Nachtsicht des Eulenauges oder nimmt sie wieder (nur die eigene – ein Trank bleibt unberührt). */
     public static void owlEye(Player player) {
         boolean worn = level(player.getItemBySlot(EquipmentSlot.HEAD), ModEnchantments.OWL_EYE) > 0;
-        MobEffectInstance current = player.getEffect(MobEffects.NIGHT_VISION);
-        boolean ours = current != null && current.isAmbient() && !current.isVisible() && current.getDuration() <= OWL_DURATION;
-        if (worn) {
-            if (current == null || ours && current.getDuration() < OWL_KEEP) {
-                player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, OWL_DURATION, 0, true, false, true));
-            }
-        } else if (ours) {
-            player.removeEffect(MobEffects.NIGHT_VISION);
-        }
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.NIGHT_VISION, 0, "owl_eye", worn);
     }
 }

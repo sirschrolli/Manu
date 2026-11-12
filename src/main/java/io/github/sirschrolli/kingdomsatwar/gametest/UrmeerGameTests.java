@@ -302,9 +302,28 @@ final class UrmeerGameTests {
         helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.pieces(player) == 4, "Der volle Satz zählt nicht");
         helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player), "Keine klare Sicht unter Wasser");
         var sight = player.getEffect(net.minecraft.world.effect.MobEffects.NIGHT_VISION);
-        helper.assertTrue(sight != null && sight.isAmbient(), "Die klare Sicht fehlt: " + sight);
+        helper.assertTrue(sight != null && sight.isAmbient() && !sight.showIcon() && sight.getDuration() > 200,
+                "Die klare Sicht fehlt (oder zeigt ein Symbol, oder flackert bald): " + sight);
+        // seit 0.99: der volle Satz lässt unter Wasser atmen – still, ohne Symbol
+        var breath = player.getEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING);
+        helper.assertTrue(breath != null && !breath.showIcon() && !breath.isVisible(), "Keine stille Wasseratmung mit dem vollen Satz: " + breath);
         player.teleportTo(level, pool.getX() + 0.5, pool.getY() + 6, pool.getZ() + 0.5, java.util.Set.of(), 0.0f, 0.0f, true);
         helper.assertFalse(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player), "Klare Sicht auch über Wasser");
+        helper.assertTrue(player.getEffect(net.minecraft.world.effect.MobEffects.NIGHT_VISION) == null, "Die klare Sicht endet nicht beim Auftauchen");
+        helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING), "Die Wasseratmung endet schon beim Auftauchen");
+        // ein schwächerer, langer Trank wartet unter dem Zustand der Rüstung und bleibt, wenn sie abgelegt wird
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WATER_BREATHING, 4800, 0));
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, net.minecraft.world.item.ItemStack.EMPTY);
+        io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player);
+        var potion = player.getEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING);
+        helper.assertTrue(potion != null && potion.getDuration() > 4000, "Die Rüstung nimmt einen Trank der Wasseratmung weg: " + potion);
+        player.removeEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING);
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new net.minecraft.world.item.ItemStack(set.get(3).get()));
+        io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player);
+        helper.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING), "Keine Wasseratmung nach dem Anlegen");
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, net.minecraft.world.item.ItemStack.EMPTY);
+        io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player);
+        helper.assertTrue(player.getEffect(net.minecraft.world.effect.MobEffects.WATER_BREATHING) == null, "Die Wasseratmung endet nicht beim Ablegen");
         for (BlockPos p : BlockPos.betweenClosed(pool, pool.above(2))) {
             level.setBlock(p, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
         }

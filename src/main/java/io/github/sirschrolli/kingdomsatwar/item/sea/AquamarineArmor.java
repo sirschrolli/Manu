@@ -5,7 +5,6 @@ import io.github.sirschrolli.kingdomsatwar.registry.SeaGear;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,13 +18,13 @@ import net.neoforged.neoforge.registries.DeferredItem;
 /**
  * Die Taucherrüstung aus Aquamarin (seit 0.97): Jeder Teil hilft unter Wasser (über seine Attribute – der Helm lässt länger
  * atmen und schneller abbauen, der Harnisch mit den Luftflaschen lässt noch länger atmen, Beinschutz und Flossen lassen
- * schneller schwimmen). Wer den vollen Satz trägt, sieht unter Wasser klar ({@link #CLEAR_SIGHT}: Nachtsicht, solange der
- * Kopf unter Wasser ist, und noch ein paar Sekunden danach).
+ * schneller schwimmen). Wer den vollen Satz trägt, atmet unter Wasser (seit 0.99) und sieht dort klar (Nachtsicht, solange der
+ * Kopf unter Wasser ist) – beides still, ohne Symbol.
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class AquamarineArmor {
-    /** So lange (Ticks) hält die klare Sicht nach dem Auftauchen höchstens nach. */
-    public static final int CLEAR_SIGHT = 300;
+    /** So lange (Ticks) gibt die Rüstung die klare Sicht auf einmal (sie wird erneuert, solange der Kopf unter Wasser ist). */
+    public static final int CLEAR_SIGHT = io.github.sirschrolli.kingdomsatwar.item.GearEffects.HOLD;
     private static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private AquamarineArmor() {}
@@ -63,17 +62,15 @@ public final class AquamarineArmor {
     }
 
     /**
-     * Gibt dem Wesen klare Sicht, wenn es den vollen Satz trägt und die Augen unter Wasser hat (eine Nachtsicht, die von
-     * selbst ausläuft; eigene, längere Nachtsicht bleibt unberührt). Gibt zurück, ob es klare Sicht hat.
+     * Der volle Satz: Wasseratmung (seit 0.99) und, solange die Augen unter Wasser sind, klare Sicht (Nachtsicht) – beides still
+     * (ohne Symbol) und sofort fort, wenn der Satz abgelegt wird oder der Kopf auftaucht (sie läuft nicht flackernd aus); ein
+     * Trank bleibt unberührt. Gibt zurück, ob es klare Sicht hat.
      */
     public static boolean refresh(LivingEntity entity) {
-        if (!fullSet(entity) || !eyesInWater(entity)) {
-            return false;
-        }
-        MobEffectInstance current = entity.getEffect(MobEffects.NIGHT_VISION);
-        if (current == null || (current.isAmbient() && current.getDuration() < CLEAR_SIGHT - 40)) {
-            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, CLEAR_SIGHT, 0, true, false, true));
-        }
-        return true;
+        boolean full = fullSet(entity);
+        boolean sight = full && eyesInWater(entity);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.WATER_BREATHING, 0, "aquamarine", full);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.NIGHT_VISION, 0, "aquamarine", sight);
+        return sight;
     }
 }

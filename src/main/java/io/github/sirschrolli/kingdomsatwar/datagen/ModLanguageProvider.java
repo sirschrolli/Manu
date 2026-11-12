@@ -767,8 +767,8 @@ public class ModLanguageProvider extends LanguageProvider {
         item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS, "Aquamarine Flippers", "Aquamarin-Flossen");
         lore("aquamarine_armor", "Under water: breathe longer (helmet, harness), swim faster (leggings, flippers)",
                 "Unter Wasser: länger atmen (Helm, Harnisch), schneller schwimmen (Beinschutz, Flossen)");
-        text(ModItems.loreKey("aquamarine_armor", 2), "Full set: clear sight under water",
-                "Voller Satz: klare Sicht unter Wasser");
+        text(ModItems.loreKey("aquamarine_armor", 2), "Full set: water breathing and clear sight under water",
+                "Voller Satz: Wasseratmung und klare Sicht unter Wasser");
         // Dämmerquarz und die Dämmerrüstung (0.98)
         block(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, "Dusk Quartz Ore", "Dämmerquarzerz");
         block(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, "Deep Dusk Quartz Ore", "Tiefes Dämmerquarzerz");

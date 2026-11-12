@@ -1,13 +1,10 @@
 package io.github.sirschrolli.kingdomsatwar.item;
 
 import io.github.sirschrolli.kingdomsatwar.dragon.DragonType;
-import net.minecraft.core.Holder;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.effect.MobEffectInstance;
 
 /**
  * Rüstung aus Drachenschuppen. Wer alle vier Teile derselben Drachenart trägt, erhält die Kraft ihres Elements:
@@ -41,25 +38,18 @@ public class DragonScaleArmorItem extends Item {
         return found;
     }
 
-    /** Die Wirkung des vollständigen Satzes (wird jede Sekunde für 3 Sekunden erneuert). */
-    public static void applySetBonus(Player player, DragonType element) {
-        switch (element) {
-            case FIRE -> effect(player, MobEffects.FIRE_RESISTANCE, 0);
-            case ICE -> effect(player, MobEffects.SPEED, 0);       // Frost-Unempfindlichkeit über das Tag freeze_immune_wearables
-            case LIGHTNING -> effect(player, MobEffects.SPEED, 1);
-            case NATURE -> effect(player, MobEffects.REGENERATION, 0);
-            case EARTH -> effect(player, MobEffects.RESISTANCE, 0);
-            case WATER -> {
-                effect(player, MobEffects.WATER_BREATHING, 0);
-                effect(player, MobEffects.DOLPHINS_GRACE, 0);
-            }
-        }
-    }
-
-    private static void effect(Player player, Holder<MobEffect> effect, int amplifier) {
-        MobEffectInstance current = player.getEffect(effect);
-        if (current == null || current.getDuration() < 40 || current.getAmplifier() < amplifier) {
-            player.addEffect(new MobEffectInstance(effect, 60 + (effect == MobEffects.REGENERATION ? 40 : 0), amplifier, true, false, true));
-        }
+    /**
+     * Die Wirkung des vollständigen Satzes (jede Sekunde geprüft): still, ohne Symbol; legt man ihn ab, endet sie sofort.
+     * {@code element} null: kein voller Satz. (Frost-Unempfindlichkeit über das Tag freeze_immune_wearables.)
+     */
+    public static void applySetBonus(Player player, @org.jspecify.annotations.Nullable DragonType element) {
+        String source = "dragon_scale";
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.FIRE_RESISTANCE, 0, source, element == DragonType.FIRE);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.SPEED, element == DragonType.LIGHTNING ? 1 : 0, source,
+                element == DragonType.ICE || element == DragonType.LIGHTNING);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.REGENERATION, 0, source, element == DragonType.NATURE);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.RESISTANCE, 0, source, element == DragonType.EARTH);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.WATER_BREATHING, 0, source, element == DragonType.WATER);
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(player, MobEffects.DOLPHINS_GRACE, 0, source, element == DragonType.WATER);
     }
 }

@@ -3,7 +3,6 @@ package io.github.sirschrolli.kingdomsatwar.item.shadow;
 import io.github.sirschrolli.kingdomsatwar.KingdomsAtWar;
 import io.github.sirschrolli.kingdomsatwar.registry.ShadowGear;
 import java.util.List;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +27,7 @@ public final class DuskArmor {
     /** Mit dem vollen Satz beim Schleichen noch einmal so viel (zusammen mit dem Schleichen selbst gut ein Sechstel). */
     public static final double FULL_SNEAK_VISIBILITY = 0.4;
     /** Nachtsicht der Kapuze (Ticks) – beim Schleichen ständig erneuert, länger als zehn Sekunden, damit sie nicht flackert. */
-    public static final int SIGHT = 260;
+    public static final int SIGHT = io.github.sirschrolli.kingdomsatwar.item.GearEffects.HOLD;
     private static final EquipmentSlot[] SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
     private DuskArmor() {}
@@ -82,27 +81,8 @@ public final class DuskArmor {
      * die eigene, kurze Nachtsicht der Kapuze; ein Trank bleibt. Gibt zurück, ob die Kapuze gerade Nachtsicht schenkt.
      */
     public static boolean refresh(LivingEntity entity) {
-        boolean hood = entity.getItemBySlot(EquipmentSlot.HEAD).is(ShadowGear.DUSK_HOOD.get());
-        boolean given = entity.getPersistentData().getBooleanOr(SIGHT_KEY, false);
-        if (!hood && !given) {
-            return false;
-        }
-        MobEffectInstance current = entity.getEffect(MobEffects.NIGHT_VISION);
-        boolean ours = given && current != null && current.isAmbient() && !current.isVisible() && current.getDuration() <= SIGHT;
-        if (hood && entity.isShiftKeyDown()) {
-            if (current == null || (ours && current.getDuration() < SIGHT - 20)) {
-                entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, SIGHT, 0, true, false, true));
-                entity.getPersistentData().putBoolean(SIGHT_KEY, true);
-            }
-            return true;
-        }
-        if (ours) {
-            entity.removeEffect(MobEffects.NIGHT_VISION);
-        }
-        entity.getPersistentData().remove(SIGHT_KEY);
-        return false;
+        boolean sight = entity.getItemBySlot(EquipmentSlot.HEAD).is(ShadowGear.DUSK_HOOD.get()) && entity.isShiftKeyDown();
+        io.github.sirschrolli.kingdomsatwar.item.GearEffects.set(entity, MobEffects.NIGHT_VISION, 0, "dusk_hood", sight);
+        return sight;
     }
-
-    /** Merkt sich, dass die Nachtsicht von der Kapuze stammt (und nicht von einem Trank oder der Taucherrüstung). */
-    private static final String SIGHT_KEY = "kingdomsatwar_dusk_sight";
 }
