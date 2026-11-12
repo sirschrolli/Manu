@@ -22,6 +22,17 @@ public class ModEntityTypeTagsProvider extends TagsProvider<EntityType<?>> {
 
     @Override
     protected void addTags(HolderLookup.Provider registries) {
+        // vor diesen flieht das Meervolk, die Tritonwachen jagen sie aus dem Dorf (seit 0.93)
+        this.tag(ModTags.EntityTypes.MERFOLK_THREATS)
+                .add(ModEntities.SHARK.key())
+                .add(ModEntities.ANGLERFISH.key())
+                .add(net.minecraft.world.entity.EntityTypes.DROWNED.builtInRegistryHolder().key())
+                .add(net.minecraft.world.entity.EntityTypes.GUARDIAN.builtInRegistryHolder().key())
+                .add(net.minecraft.world.entity.EntityTypes.ELDER_GUARDIAN.builtInRegistryHolder().key())
+                // die Wesen der Mod, die die von Minecraft ersetzen
+                .add(ModEntities.DROWNED.key())
+                .add(ModEntities.GUARDIAN.key())
+                .add(ModEntities.ELDER_GUARDIAN.key());
         // Werwesen: Mondsilber trifft sie besonders hart
         this.tag(ModTags.EntityTypes.WEREBEASTS).add(ModEntities.WEREWOLF.key());
         this.tag(ModTags.EntityTypes.SHADOW_CREATURES)

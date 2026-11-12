@@ -5674,6 +5674,92 @@
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.manta_ray.splash"
   },
+  "entity.mermaid.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_ambient1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_ambient2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_ambient3",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_ambient4",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.ambient"
+  },
+  "entity.mermaid.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_death1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.death"
+  },
+  "entity.mermaid.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_hurt1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_hurt2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_hurt3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.hurt"
+  },
+  "entity.mermaid.no": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_no1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_no2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.no"
+  },
+  "entity.mermaid.trade": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_trade1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_trade2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.trade"
+  },
+  "entity.mermaid.yes": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_yes1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/mermaid_yes2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.mermaid.yes"
+  },
   "entity.mire_shambler.ambient": {
     "sounds": [
       {
@@ -8649,6 +8735,45 @@
       }
     ],
     "subtitle": "subtitles.kingdomsatwar.entity.thorn_wight.volley"
+  },
+  "entity.triton.ambient": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/triton_ambient1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/triton_ambient2",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/triton_ambient3",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.triton.ambient"
+  },
+  "entity.triton.death": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/triton_death1",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.triton.death"
+  },
+  "entity.triton.hurt": {
+    "sounds": [
+      {
+        "name": "kingdomsatwar:entity/sea/triton_hurt1",
+        "attenuation_distance": 16
+      },
+      {
+        "name": "kingdomsatwar:entity/sea/triton_hurt2",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.kingdomsatwar.entity.triton.hurt"
   },
   "entity.void_maw.ambient": {
     "sounds": [

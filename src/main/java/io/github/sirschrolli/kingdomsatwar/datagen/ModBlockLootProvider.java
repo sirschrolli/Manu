@@ -371,7 +371,11 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
                     .add(this.applyExplosionDecay(block, LootItem.lootTableItem(block)
                             .apply(java.util.List.of(2, 3), count -> SetItemCountFunction.setCount(ContextIntProviders.exactly(count))
                                     .when(MatchBlock.blockMatches(this.blocks, block, StatePropertiesPredicate.Builder.properties()
-                                            .hasProperty(io.github.sirschrolli.kingdomsatwar.block.sea.SeashellBlock.SHELLS, count.intValue()))))))));
+                                            .hasProperty(io.github.sirschrolli.kingdomsatwar.block.sea.SeashellBlock.SHELLS, count.intValue())))))))
+                    // seit 0.93: in mancher Muschel steckt eine Perle (die Währung des Meervolks)
+                    .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                            .add(LootItem.lootTableItem(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get()))
+                            .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.12f))));
         }
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TUBE_WORMS.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.VENT_ROCK.get());

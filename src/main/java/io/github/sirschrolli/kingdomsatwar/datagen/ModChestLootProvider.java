@@ -253,6 +253,22 @@ public class ModChestLootProvider implements LootTableSubProvider {
                 .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                         .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
                         .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.6f))));
+        // Meeresdorf (0.93): was das Meervolk in seinen Häusern aufbewahrt – Perlen, Perlmutt, Setzlinge der Meeresbäume, Tang,
+        // Prismarin, gefangene Fische, selten eine Nautilusschale, ein Herz des Meeres oder ein Buch mit einer Verzauberung
+        this.output.accept(io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillagePiece.CHEST, LootTable.lootTable()
+                .withPool(pool(1, 2, item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get(), 8, 2, 7)))
+                .withPool(pool(3, 6, item(ModBlocks.NACRE_BLOCK.get(), 5, 1, 4), item(Items.PRISMARINE_SHARD, 5, 2, 6),
+                        item(Items.PRISMARINE_CRYSTALS, 4, 1, 4), item(Items.KELP, 5, 3, 9), item(Items.DRIED_KELP, 4, 2, 6),
+                        item(Items.COD, 5, 1, 4), item(Items.SALMON, 4, 1, 3), item(Items.TROPICAL_FISH, 3, 1, 2),
+                        item(Items.SEA_PICKLE, 4, 1, 4), item(Items.INK_SAC, 3, 1, 3), item(Items.SEA_LANTERN, 2, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.KELP.sapling.get(), 2, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.CORAL.sapling.get(), 2, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.PEARL.sapling.get(), 2, 1, 2),
+                        item(io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ABYSS.sapling.get(), 1, 1, 1),
+                        item(Items.NAUTILUS_SHELL, 1, 1, 1), item(Items.HEART_OF_THE_SEA, 1, 1, 1)))
+                .withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
+                        .add(LootItem.lootTableItem(Items.BOOK).apply(EnchantRandomlyFunction.randomApplicableEnchantment(this.enchantments)))
+                        .when(net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition.randomChance(0.25f))));
         // Versunkener Tempel (0.89): die Gaben des Meervolks – Perlmutt, Gold, Gezeitenstein, selten ein Herz des Meeres (für
         // ein eigenes Gezeitentor), ein verzaubertes Buch
         this.output.accept(ModLootTables.SITE_SUNKEN_TEMPLE, coins(LootTable.lootTable().withPool(crystals(15, 12)), 2, 8, 2, 6, 0.5f)

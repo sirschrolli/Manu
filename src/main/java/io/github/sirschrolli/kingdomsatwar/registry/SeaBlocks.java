@@ -194,6 +194,8 @@ public final class SeaBlocks {
             .component(DataComponents.LORE, ModItems.lore("angler_lure", 1)));
     /** Haizahn: dreieckig und scharf – mit Stock und Feder ergibt er sechs Pfeile. */
     public static final DeferredItem<Item> SHARK_TOOTH = item("shark_tooth", p -> p.component(DataComponents.LORE, ModItems.lore("shark_tooth", 1)));
+    /** Perle (seit 0.93): die Währung des Meervolks – aus Muscheln, aus den Truhen der Meeresdörfer und als Lohn im Tausch. */
+    public static final DeferredItem<Item> PEARL = item("pearl", p -> p.component(DataComponents.LORE, ModItems.lore("pearl", 1)));
     /** Krabbenschere: in der Zweithand greift man anderthalb Blöcke weiter (und einen Block weiter nach Wesen). */
     public static final DeferredItem<Item> CRAB_CLAW = item("crab_claw", p -> p.stacksTo(1).rarity(Rarity.UNCOMMON)
             .component(DataComponents.LORE, ModItems.lore("crab_claw", 1))
@@ -230,15 +232,17 @@ public final class SeaBlocks {
     public static final DeferredItem<SpawnEggItem> GIANT_CRAB_SPAWN_EGG = egg("giant_crab", () -> ModEntities.GIANT_CRAB.get());
     public static final DeferredItem<SpawnEggItem> REEF_COLOSSUS_SPAWN_EGG = egg("reef_colossus", () -> ModEntities.REEF_COLOSSUS.get());
     public static final DeferredItem<SpawnEggItem> KRAKEN_SPAWN_EGG = egg("kraken", () -> ModEntities.KRAKEN.get());
+    public static final DeferredItem<SpawnEggItem> MERMAID_SPAWN_EGG = egg("mermaid", () -> ModEntities.MERMAID.get());
+    public static final DeferredItem<SpawnEggItem> TRITON_SPAWN_EGG = egg("triton", () -> ModEntities.TRITON.get());
 
     public static List<DeferredItem<SpawnEggItem>> spawnEggs() {
         return List.of(MANTA_RAY_SPAWN_EGG, GLOW_JELLYFISH_SPAWN_EGG, SHARK_SPAWN_EGG, ANGLERFISH_SPAWN_EGG, GIANT_CRAB_SPAWN_EGG,
-                REEF_COLOSSUS_SPAWN_EGG, KRAKEN_SPAWN_EGG);
+                REEF_COLOSSUS_SPAWN_EGG, KRAKEN_SPAWN_EGG, MERMAID_SPAWN_EGG, TRITON_SPAWN_EGG);
     }
 
     /** Alle schlichten Gegenstände (flaches Modell). */
     public static List<DeferredItem<? extends Item>> flatItems() {
-        return List.of(GLOW_JELLY, ANGLER_LURE, SHARK_TOOTH, CRAB_CLAW, CRAB_MEAT, COOKED_CRAB_MEAT, GLOW_JELLYFISH_BUCKET, TIDE_HORN);
+        return List.of(GLOW_JELLY, ANGLER_LURE, SHARK_TOOTH, CRAB_CLAW, CRAB_MEAT, COOKED_CRAB_MEAT, GLOW_JELLYFISH_BUCKET, TIDE_HORN, PEARL);
     }
 
     private static DeferredItem<SpawnEggItem> egg(String name, Supplier<EntityType<? extends Mob>> type) {

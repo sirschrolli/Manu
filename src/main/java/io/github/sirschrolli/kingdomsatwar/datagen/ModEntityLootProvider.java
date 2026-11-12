@@ -488,6 +488,10 @@ public class ModEntityLootProvider extends EntityLootSubProvider {
         this.add(ModEntities.UMBRER.get(), LootTable.lootTable());
         this.add(ModEntities.UMBRER_GUARD.get(), LootTable.lootTable()
                 .withPool(drop(ShadowItems.MOONSILVER_NUGGET.get(), 0, 3)));
+        // das Meervolk (0.93): Meerjungfrauen lassen nichts fallen, Tritonwachen ein paar Prismarinscherben
+        this.add(ModEntities.MERMAID.get(), LootTable.lootTable());
+        this.add(ModEntities.TRITON.get(), LootTable.lootTable()
+                .withPool(drop(net.minecraft.world.item.Items.PRISMARINE_SHARD, 0, 3)));
     }
 
     /** Fleisch: wird gebraten, wenn das Tier brennend stirbt; Plünderung bringt mehr. */

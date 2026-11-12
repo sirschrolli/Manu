@@ -648,6 +648,16 @@ public final class ModEntities {
             WardenShardEntity::new, MobCategory.MISC,
             builder -> builder.sized(0.4f, 0.4f).noLootTable().clientTrackingRange(8).updateInterval(1));
 
+    // ---------------------------------------------------------------- Das Meervolk (seit 0.93)
+    /** Meerjungfrau: Bewohnerin der Meeresdörfer im Urmeer, tauscht gegen Perlen (Beruf und Gestalt je Tier). */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidEntity>> MERMAID =
+            ENTITIES.registerEntityType("mermaid", io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.75f, 2.0f).eyeHeight(1.75f).clientTrackingRange(10));
+    /** Tritonwache: schützt die Meeresdörfer mit dem Dreizack. */
+    public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.merfolk.TritonEntity>> TRITON =
+            ENTITIES.registerEntityType("triton", io.github.sirschrolli.kingdomsatwar.entity.merfolk.TritonEntity::new, MobCategory.MISC,
+                    builder -> builder.sized(0.75f, 2.0f).eyeHeight(1.75f).clientTrackingRange(10));
+
     // ---------------------------------------------------------------- Die Umbrer (Volk der Schattenwelt)
     /** Umbrer: Bewohner der Dörfer, tauschen gegen Mondsilber (Beruf je Tier). */
     public static final DeferredHolder<EntityType<?>, EntityType<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>> UMBRER =
@@ -969,6 +979,8 @@ public final class ModEntities {
         event.put(ANGLERFISH.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.AnglerfishEntity.createAttributes().build());
         event.put(GIANT_CRAB.get(), io.github.sirschrolli.kingdomsatwar.entity.sea.GiantCrabEntity.createAttributes().build());
         event.put(UMBRER.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity.createAttributes().build());
+        event.put(MERMAID.get(), io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidEntity.createAttributes().build());
+        event.put(TRITON.get(), io.github.sirschrolli.kingdomsatwar.entity.merfolk.TritonEntity.createAttributes().build());
         event.put(UMBRER_GUARD.get(), io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity.createAttributes().build());
     }
 

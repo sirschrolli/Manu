@@ -678,6 +678,33 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.kraken.reset", "The Kraken's maw has been reset.", "Der Krakenschlund wurde zurückgesetzt.");
         text("boss.kingdomsatwar.kraken.title", "Lord of the Primordial Sea", "Herr des Urmeers");
         text("kraken.kingdomsatwar.warning", "The water above the maw is eerily still …", "Das Wasser über dem Schlund ist unheimlich still …");
+        // das Meervolk und die Meeresdörfer (0.93)
+        creature(ModEntities.MERMAID, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.MERMAID_SPAWN_EGG, "Mermaid", "Meerjungfrau",
+                "Meerjungfrauen");
+        creature(ModEntities.TRITON, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.TRITON_SPAWN_EGG, "Triton Guard", "Tritonwache",
+                "Tritonwachen");
+        text("entity.kingdomsatwar.mermaid.pearl_diver", "Pearl Diver", "Perlentaucherin");
+        text("entity.kingdomsatwar.mermaid.coral_gardener", "Coral Gardener", "Korallengärtnerin");
+        text("entity.kingdomsatwar.mermaid.shell_builder", "Shell Builder", "Muschelbauerin");
+        text("entity.kingdomsatwar.mermaid.tide_singer", "Tide Singer", "Gezeitensängerin");
+        text("entity.kingdomsatwar.mermaid.guard", "Triton Guard", "Tritonwache");
+        text("entity.kingdomsatwar.triton.greeting1", "Welcome to our village, land-walker.", "Willkommen in unserem Dorf, Landgänger.");
+        text("entity.kingdomsatwar.triton.greeting2", "Pearls buy everything here – and our friendship.", "Perlen kaufen hier alles – auch unsere Freundschaft.");
+        text("entity.kingdomsatwar.triton.greeting3", "Mind the sharks beyond the gardens.", "Hüte dich vor den Haien hinter den Gärten.");
+        text("entity.kingdomsatwar.triton.greeting4", "Deep down the Kraken sleeps. Do not wake it lightly.",
+                "Tief unten schläft der Kraken. Weck ihn nicht leichtfertig.");
+        text("entity.kingdomsatwar.triton.greeting5", "Listen – the tide singer is singing again.", "Hör nur – die Gezeitensängerin singt wieder.");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL, "Pearl", "Perle");
+        lore("pearl", "Currency of the merfolk", "Die Währung des Meervolks");
+        subtitle("entity.mermaid.ambient", "Mermaid hums", "Meerjungfrau summt");
+        subtitle("entity.mermaid.trade", "Mermaid sings", "Meerjungfrau singt");
+        subtitle("entity.mermaid.yes", "Mermaid agrees", "Meerjungfrau stimmt zu");
+        subtitle("entity.mermaid.no", "Mermaid disagrees", "Meerjungfrau lehnt ab");
+        subtitle("entity.mermaid.hurt", "Mermaid hurts", "Meerjungfrau nimmt Schaden");
+        subtitle("entity.mermaid.death", "Mermaid dies", "Meerjungfrau stirbt");
+        subtitle("entity.triton.ambient", "Triton Guard hums", "Tritonwache brummt");
+        subtitle("entity.triton.hurt", "Triton Guard hurts", "Tritonwache nimmt Schaden");
+        subtitle("entity.triton.death", "Triton Guard dies", "Tritonwache stirbt");
         text("item.kingdomsatwar.tide_horn.kraken_recalled", "Deep below, something huge begins to stir …",
                 "Tief unten regt sich etwas Gewaltiges …");
         text("atoll.kingdomsatwar.warning", "Something stirs beneath the sand of the lagoon …", "Unter dem Sand der Lagune regt sich etwas …");

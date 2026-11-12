@@ -227,6 +227,16 @@ public final class ModSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_DEATH = register("entity.kraken.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_RISE = register("entity.kraken.rise");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_ROAR = register("entity.kraken.roar");
+    // Das Meervolk (seit 0.93): Summen und Singen der Meerjungfrauen, die tiefen Stimmen der Tritonwachen
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_AMBIENT = register("entity.mermaid.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_TRADE = register("entity.mermaid.trade");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_YES = register("entity.mermaid.yes");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_NO = register("entity.mermaid.no");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_HURT = register("entity.mermaid.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> MERMAID_DEATH = register("entity.mermaid.death");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TRITON_AMBIENT = register("entity.triton.ambient");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TRITON_HURT = register("entity.triton.hurt");
+    public static final DeferredHolder<SoundEvent, SoundEvent> TRITON_DEATH = register("entity.triton.death");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_WAVE = register("entity.kraken.wave");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_SWEEP = register("entity.kraken.sweep");
     public static final DeferredHolder<SoundEvent, SoundEvent> KRAKEN_GRAB = register("entity.kraken.grab");

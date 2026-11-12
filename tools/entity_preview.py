@@ -8,7 +8,8 @@ z. B.  python3 tools/entity_preview.py soul_heron
        python3 tools/entity_preview.py soul_heron "pose=neck1:84,0,0 left_wing:90,0,84@1,1.12,1.3" "views=-35,12;90,0"
 
 pose: je Knochen eine Zusatzdrehung in Grad (x,y,z), wahlweise mit Skalierung @x,y,z – wie die Animation in Java, die zu
-den Ruhewinkeln addiert. views: Blickrichtungen (Gierwinkel,Neigung) durch Semikolon getrennt.
+den Ruhewinkeln addiert. views: Blickrichtungen (Gierwinkel,Neigung) durch Semikolon getrennt. hide=a,b blendet Knochen aus;
+gear=<beruf> zeigt bei Modellen mit Zubehör je Beruf (GEAR) nur das des Berufs.
 """
 from __future__ import annotations
 
@@ -34,6 +35,16 @@ def _rot(deg):
 
 
 POSE: dict = {}
+# Knochen, die nicht gezeichnet werden (samt Kindern) – "hide=a,b" oder "gear=<beruf>" bei Modellen mit GEAR/ALL_GEAR
+HIDDEN: set = set()
+
+
+def _hidden(bone) -> bool:
+    while bone is not None:
+        if bone.name in HIDDEN:
+            return True
+        bone = bone.parent
+    return False
 
 
 def _bone_world(bone):
@@ -73,6 +84,8 @@ def render(model, tex: Image.Image, glow: Image.Image, yaw: float, pitch: float,
     view = _rot((pitch, yaw, 0))
     quads = []
     for cube in model.all_cubes():
+        if _hidden(cube.bone):
+            continue
         r, t = _bone_world(cube.bone)
         for face, (u0, v0, fw, fh) in face_rects(cube).items():
             if cube.faces and face not in cube.faces:
@@ -139,7 +152,16 @@ def render(model, tex: Image.Image, glow: Image.Image, yaw: float, pitch: float,
 
 def main(argv: list[str]) -> None:
     views = [(-35, 12, False), (90, 0, False), (180 + 30, 15, False), (-35, 12, True)]
+    gear = None
     for a in list(argv):
+        if a.startswith("hide="):
+            HIDDEN.update(a[5:].split(","))
+            argv.remove(a)
+            continue
+        if a.startswith("gear="):
+            gear = a[5:]
+            argv.remove(a)
+            continue
         if a.startswith("pose="):
             POSE.update(_parse_pose(a[5:]))
             argv.remove(a)
@@ -150,6 +172,8 @@ def main(argv: list[str]) -> None:
     module = importlib.import_module(f"entitygen.models.{name}")
     variant = argv[1] if len(argv) > 1 and not argv[1].endswith(".png") else next(iter(module.PALETTES))
     out = next((a for a in argv[1:] if a.endswith(".png")), f"/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/view/prev_{name}.png")
+    if gear is not None and hasattr(module, "GEAR"):
+        HIDDEN.update(set(module.ALL_GEAR) - set(module.GEAR[gear]))
     model = module.build()
     model.pack()
     tex, glow = paint_model(model, module.materials(variant), module.PALETTES[variant], seed=100, params={"variant": variant})

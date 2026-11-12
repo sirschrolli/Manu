@@ -75,6 +75,9 @@ public final class ModTags {
         /** Wesen der Schattenwelt (die Mondsilberklinge trifft sie besonders hart). */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> SHADOW_CREATURES = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("shadow_creatures"));
+        /** Wovor das Meervolk flieht und was die Tritonwachen vom Dorf fernhalten (seit 0.93): Haie, Ertrunkene, Wächter … */
+        public static final TagKey<net.minecraft.world.entity.EntityType<?>> MERFOLK_THREATS = TagKey.create(Registries.ENTITY_TYPE,
+                KingdomsAtWar.id("merfolk_threats"));
         /** Monster, die Münzen fallen lassen, wenn ein Spieler sie besiegt. */
         public static final TagKey<net.minecraft.world.entity.EntityType<?>> DROPS_COINS = TagKey.create(Registries.ENTITY_TYPE,
                 KingdomsAtWar.id("drops_coins"));
@@ -176,6 +179,8 @@ public final class ModTags {
         public static final TagKey<Biome> HAS_SUNKEN_ATOLL = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sunken_atoll"));
         /** Wo der Krakenschlund liegen kann (0.91): das offene, tiefe Urmeer. */
         public static final TagKey<Biome> HAS_KRAKEN_MAW = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_kraken_maw"));
+        /** Wo Meeresdörfer stehen (seit 0.93): die Landschaften unter Wasser und die offenen Weiten des Urmeers. */
+        public static final TagKey<Biome> HAS_SEA_VILLAGE = TagKey.create(Registries.BIOME, KingdomsAtWar.id("has_sea_village"));
         /** Wo Dörfer der jeweiligen Bauweise entstehen (Fachwerk, nordisch, Lehm, Pfahlbau). */
         public static final java.util.Map<io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageStyle, TagKey<Biome>> HAS_VILLAGE = villageTags();
         /** Wo die eigenen Bauwerke der Oberwelt stehen können (je Art). */

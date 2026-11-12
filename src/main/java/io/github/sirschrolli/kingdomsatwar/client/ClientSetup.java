@@ -143,6 +143,7 @@ public final class ClientSetup {
         event.registerLayerDefinition(ModModelLayers.KRAKEN, io.github.sirschrolli.kingdomsatwar.client.model.geom.KrakenGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.SHATTERED_CROWN, io.github.sirschrolli.kingdomsatwar.client.model.geom.ShatteredCrownGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.UMBRER, io.github.sirschrolli.kingdomsatwar.client.model.geom.UmbrerGeometry::createLayer);
+        event.registerLayerDefinition(ModModelLayers.MERMAID, io.github.sirschrolli.kingdomsatwar.client.model.geom.MermaidGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.MAGE, io.github.sirschrolli.kingdomsatwar.client.model.geom.MageGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.PHOENIX, io.github.sirschrolli.kingdomsatwar.client.model.geom.PhoenixGeometry::createLayer);
         event.registerLayerDefinition(ModModelLayers.ICE_LANCE, io.github.sirschrolli.kingdomsatwar.client.model.geom.IceLanceGeometry::createLayer);
@@ -363,6 +364,11 @@ public final class ClientSetup {
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerEntity>::new);
         event.registerEntityRenderer(ModEntities.UMBRER_GUARD.get(),
                 io.github.sirschrolli.kingdomsatwar.client.renderer.umbrer.UmbrerRenderer<io.github.sirschrolli.kingdomsatwar.entity.umbrer.UmbrerGuardEntity>::new);
+        // das Meervolk (seit 0.93)
+        event.registerEntityRenderer(ModEntities.MERMAID.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.merfolk.MermaidRenderer<io.github.sirschrolli.kingdomsatwar.entity.merfolk.MermaidEntity>::new);
+        event.registerEntityRenderer(ModEntities.TRITON.get(),
+                io.github.sirschrolli.kingdomsatwar.client.renderer.merfolk.MermaidRenderer<io.github.sirschrolli.kingdomsatwar.entity.merfolk.TritonEntity>::new);
     }
 
     @SubscribeEvent

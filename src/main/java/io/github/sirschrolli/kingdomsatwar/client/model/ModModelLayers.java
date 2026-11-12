@@ -98,6 +98,8 @@ public final class ModModelLayers {
     public static final ModelLayerLocation NIGHT_WING = new ModelLayerLocation(KingdomsAtWar.id("night_wing"), "main");
     public static final ModelLayerLocation GLIMMER_MOTH = new ModelLayerLocation(KingdomsAtWar.id("glimmer_moth"), "main");
     public static final ModelLayerLocation UMBRER = new ModelLayerLocation(KingdomsAtWar.id("umbrer"), "main");
+    /** Das Meervolk (seit 0.93): Meerjungfrauen und Tritonwachen. */
+    public static final ModelLayerLocation MERMAID = new ModelLayerLocation(KingdomsAtWar.id("mermaid"), "main");
     // Wesen der Leere
     public static final ModelLayerLocation VOID_MAW = new ModelLayerLocation(KingdomsAtWar.id("void_maw"), "main");
     public static final ModelLayerLocation SHARD_WARDEN = new ModelLayerLocation(KingdomsAtWar.id("shard_warden"), "main");

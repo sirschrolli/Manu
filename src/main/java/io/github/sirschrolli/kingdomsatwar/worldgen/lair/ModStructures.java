@@ -83,6 +83,11 @@ public final class ModStructures {
             KRAKEN_MAW = TYPES.register("kraken_maw", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> KRAKEN_MAW_PIECE =
             PIECES.register("kraken_maw", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPiece::new);
+    // die Meeresdörfer (0.93): das Meervolk auf dem Grund des Urmeers
+    public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillageStructure>>
+            SEA_VILLAGE = TYPES.register("sea_village", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillageStructure.CODEC);
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> SEA_VILLAGE_PIECE =
+            PIECES.register("sea_village", () -> (StructurePieceType.ContextlessType) io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillagePiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure>>
             VOID_THRONE = TYPES.register("void_throne", () -> () -> io.github.sirschrolli.kingdomsatwar.worldgen.throne.ThroneStructure.CODEC);
     public static final DeferredHolder<StructurePieceType, StructurePieceType> VOID_THRONE_PIECE =
@@ -183,6 +188,8 @@ public final class ModStructures {
     public static final ResourceKey<StructureSet> SUNKEN_ATOLL_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sunken_atoll"));
     public static final ResourceKey<Structure> KRAKEN_MAW_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("kraken_maw"));
     public static final ResourceKey<StructureSet> KRAKEN_MAW_SET = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("kraken_maw"));
+    public static final ResourceKey<Structure> SEA_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("sea_village"));
+    public static final ResourceKey<StructureSet> SEA_VILLAGES = ResourceKey.create(Registries.STRUCTURE_SET, KingdomsAtWar.id("sea_villages"));
 
     /** Die Dörfer der Umbrer in der Schattenwelt. */
     public static final ResourceKey<Structure> UMBRER_VILLAGE_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, KingdomsAtWar.id("umbrer_village"));
@@ -280,6 +287,16 @@ public final class ModStructures {
         // im Krakenschlund erscheinen keine Monster von selbst (dort schläft der Kraken)
         context.register(KRAKEN_MAW_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawStructure(
                 new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_KRAKEN_MAW))
+                        .spawnOverrides(java.util.Map.of(
+                                net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
+                                        net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
+                                        net.minecraft.util.random.WeightedList.of())))
+                        .generationStep(GenerationStep.Decoration.TOP_LAYER_MODIFICATION)
+                        .terrainAdapation(TerrainAdjustment.NONE)
+                        .build()));
+        // die Meeresdörfer: nach Bäumen und Tang gebaut (die im Dorf weichen); keine Monster im Dorf
+        context.register(SEA_VILLAGE_STRUCTURE, new io.github.sirschrolli.kingdomsatwar.worldgen.merfolk.SeaVillageStructure(
+                new Structure.StructureSettings.Builder(biomes.getOrThrow(ModTags.Biomes.HAS_SEA_VILLAGE))
                         .spawnOverrides(java.util.Map.of(
                                 net.minecraft.world.entity.MobCategory.MONSTER, new net.minecraft.world.level.levelgen.structure.StructureSpawnOverride(
                                         net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType.STRUCTURE,
@@ -517,6 +534,13 @@ public final class ModStructures {
         context.register(KRAKEN_MAW_SET, new StructureSet(structures.getOrThrow(KRAKEN_MAW_STRUCTURE),
                 new io.github.sirschrolli.kingdomsatwar.worldgen.kraken.KrakenMawPlacement(350, 900, biomes.getOrThrow(ModTags.Biomes.HAS_KRAKEN_MAW),
                         91_113)));
+        // Meeresdörfer: Felder von 22 Chunks, mindestens 9 Chunks Abstand, 7 Chunks fern des Krakenschlunds
+        context.register(SEA_VILLAGES, new StructureSet(structures.getOrThrow(SEA_VILLAGE_STRUCTURE),
+                new net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement(net.minecraft.core.Vec3i.ZERO,
+                        net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod.DEFAULT,
+                        1.0f, 93_311_207, java.util.Optional.of(new net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement
+                                .ExclusionZone(context.lookup(Registries.STRUCTURE_SET).getOrThrow(KRAKEN_MAW_SET), 7)),
+                        22, 9, net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType.LINEAR)));
         // Magiertürme: Felder von 46 Chunks, mindestens 16 Chunks Abstand; fern von Dörfern, Nestern und dem Siegelkreis
         java.util.List<StructureSet.StructureSelectionEntry> towers = new java.util.ArrayList<>();
         for (DragonType type : DragonType.values()) {

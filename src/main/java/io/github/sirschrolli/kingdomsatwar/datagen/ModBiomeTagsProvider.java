@@ -181,6 +181,10 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
         // (seit 0.92 auch in den Landschaften, die aus den Weiten wurden: so liegt der Schlund dort, wo er in 0.91 lag)
+        this.tag(ModTags.Biomes.HAS_SEA_VILLAGE).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP);
         this.tag(ModTags.Biomes.HAS_KRAKEN_MAW).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)

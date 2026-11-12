@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.92.0 – Unter Wasser.** Im Urmeer wachsen jetzt Wälder unter Wasser: **vier Meereshölzer** – das olivbraune, faserige **Tangholz**, das rosarote **Korallenholz**, das helle, schimmernde **Perlholz** und das dunkle **Tiefseeholz** mit leuchtenden Adern –, jedes mit Stamm, Holz, entrindeten Stämmen, Brettern, Treppen, Stufen, Tür, Falltür, Zaun, Zauntor, Blättern und Setzling. Die Setzlinge wachsen **unter Wasser** (auf Sand, Kies, Ton, Schlamm oder Erde, auch ohne Licht) zu **Meeresbäumen**: Der Tangbaum schwankt bis zu zwanzig Blöcke hoch und trägt Wedel voller goldener Schwimmblasen, der Korallenbaum verzweigt sich zu Fächern, der Perlbaum neigt sich unter seiner runden, schimmernden Krone, und der Tiefseebaum windet sich und lässt leuchtende Vorhänge herabhängen. Dazu kommen **vier neue Landschaften im Urmeer**: der **Tangwald**, der **Korallengarten**, die **Perlmuttgründe** und die **Leuchtende Tiefe** – jede mit ihren Bäumen, eigenen Tieren und Klängen und **vierzig eigenen Fischarten** in allen fünf Seltenheiten, darunter zwei Legenden (etwa der **Dämmergrünkaiser** im Tangwald und die **Scheinkaiserin** in der Leuchtenden Tiefe). Zusammen sind es jetzt **2053 Arten**.
+> **Testversion 0.93.0 – Meeresdörfer.** Im Urmeer lebt jetzt **das Meervolk**: Auf dem Grund der Tangwälder, Korallengärten, Perlmuttgründe und Weiten stehen **Meeresdörfer** – ein Platz aus Prismarin und Perlmutt mit einer **Dreizacksäule**, deren Zinken leuchten, ringsum **Muschelhäuser** (runde Kuppeln aus dem Holz der Landschaft mit Bullaugen und einer leuchtenden Perle obenauf), der gewundene **Gesangsturm** aus Perlmutt, Tanggärten, Korallenbeete und Marktstände. Dort wohnen **Meerjungfrauen** in sechs Gestalten (Koralle, Tang, Perle, Lagune, Gold und die leuchtende Tiefsee): Sie treten Wasser, wenn sie stehen, schwimmen waagrecht wie Delfine, summen kleine Melodien und tauschen gegen **Perlen** – die **Perlentaucherin** (Perlmutt, Nautilusschalen, ein Herz des Meeres), die **Korallengärtnerin** (die Setzlinge der Meeresbäume, Korallen), die **Muschelbauerin** (Meereshölzer, Türen, Laternen, Prismarin) und die **Gezeitensängerin** (Tränke, Bücher mit den Verzauberungen des Wassers, ein Aquisitor). **Tritonwachen** mit Flossenhelm und Dreizack halten Haie und Ertrunkene fern und werfen ihren Dreizack nach jedem, der eine Meerjungfrau angreift. Perlen gibt es für Fisch, Tang, Prismarin und Tinte, in den Truhen der Dörfer und manchmal in Muscheln.
+> In 0.92 kamen **Wälder unter Wasser**: **vier Meereshölzer** – das olivbraune, faserige **Tangholz**, das rosarote **Korallenholz**, das helle, schimmernde **Perlholz** und das dunkle **Tiefseeholz** mit leuchtenden Adern –, jedes mit Stamm, Holz, entrindeten Stämmen, Brettern, Treppen, Stufen, Tür, Falltür, Zaun, Zauntor, Blättern und Setzling. Die Setzlinge wachsen **unter Wasser** (auf Sand, Kies, Ton, Schlamm oder Erde, auch ohne Licht) zu **Meeresbäumen**: Der Tangbaum schwankt bis zu zwanzig Blöcke hoch und trägt Wedel voller goldener Schwimmblasen, der Korallenbaum verzweigt sich zu Fächern, der Perlbaum neigt sich unter seiner runden, schimmernden Krone, und der Tiefseebaum windet sich und lässt leuchtende Vorhänge herabhängen. Dazu kommen **vier neue Landschaften im Urmeer**: der **Tangwald**, der **Korallengarten**, die **Perlmuttgründe** und die **Leuchtende Tiefe** – jede mit ihren Bäumen, eigenen Tieren und Klängen und **vierzig eigenen Fischarten** in allen fünf Seltenheiten, darunter zwei Legenden (etwa der **Dämmergrünkaiser** im Tangwald und die **Scheinkaiserin** in der Leuchtenden Tiefe). Zusammen sind es jetzt **2053 Arten**.
 > In 0.91 kam **der Kraken**, der Herr des Urmeers – nach Anni dem Troll der stärkste Boss der Mod. Er schläft im **Krakenschlund**: Mitten im offenen Meer senkt sich der Grund zu einem weiten Becken, in dessen Mitte ein Trichter aus Abgrundstein gut siebzig Blöcke in die Tiefe stürzt, gesäumt von Meereslaternen wie Augen; im Becken liegen das Gerippe eines Seedrachens und ein Wrack mit einer Truhe, ringsum ragen zwölf schiefe Brandungsfelsen hoch über das Wasser. Wer den Felsenring betritt, weckt ihn: Er steigt aus der Tiefe empor und kämpft mit acht Armen und zwei Fangarmen – **Tentakelschlag**, **Armfeger**, **Würgegriff** (wer ihn hart genug trifft, befreit die Beute), **Tintenwolke**, **Strudel**, **Ruf der Tiefe** (Haie) und im Zorn die **Flutwelle**. Besiegt lässt er die **Krakenangel** fallen, die stärkste Angel im Wasser – in 3D mit Saugnäpfen, Bronzebeschlägen und einem leuchtenden Auge als Köder. Das Gezeitenhorn zeigt im Urmeer den Weg zum Schlund.
 > In 0.90 kam **das Angeln in 3D**: **Alle Angeln sind jetzt 3D:** Die Angel von Minecraft und die sechs Angeln der Mod sind in der Hand echte Ruten mit Griff, Rollenhalter, Rolle und Kurbel, Ringen und farbigen Wicklungen – die Holzangel mit Bindfaden, die Eisenangel mit Lederwicklung, die Goldangel mit rotem Griff und Rubin, die Drachenangel mit Hörnern und Flossen, die Schattenangel mit leuchtenden Wicklungen, die **glühende Glutangel** und die Sternenangel mit einem Stern an der Spitze. Ruhend hängt an der Schnur ein Schwimmer oder Köder (Goldlöffel, Drachenschuppe, Schattenkristall, Glutperle, Stern) mit Haken; ausgeworfen biegt sich die Spitze, und die Schnur läuft von ihr bis zum Schwimmer. Im Inventar bleibt das gewohnte Bild. **Angeln unter Wasser:** Wer taucht und auswirft, dessen Haken treibt nicht mehr zur Oberfläche – er gleitet ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie oben, statt Spritzern steigen Bläschen auf, und der Fang landet gleich beim Taucher. **Fünf Seltenheiten:** Gewöhnlich, Ungewöhnlich, Selten, **Mystisch** (bisher „episch“) und **Legendär** – und in **jedem Biom gibt es jetzt jede Seltenheit**: **113 neue Legenden**, eine in jedem Biom und zwei in jedem Biom des Urmeers, etwa der **Kohlentitan** in den Lavaadern der Aschefelder, der **Kristallriese** in den Schmelzwasserseen der Frostgipfel, der **Donnergebieter**, der sich an der Sturmküste nur im Gewitter zeigt, und der **Türkishüter** über den Korallenbänken. Legenden sind riesig, schwer zu drillen, tragen ihren Namen in Gold, funkeln im Inventar und geben drei oder vier starke Wirkungen ohne Nebenwirkung. Das **Urmeer hat jetzt die meisten Fische**: **vierzig Arten in jedem Biom** (72 neue). Zusammen sind es **1893 Arten**. Der Fischer kauft jetzt auch Legenden (40 Bronze).
 > In 0.89 kam **das Urmeer**, eine neue Dimension: ein Meer ohne Küsten, so alt wie die Welt – mit vier Landschaften: die tiefen **Urmeer-Weiten** mit Tangwäldern und Felsnadeln, flache, warme **Korallenbänke**, dunkle **Tiefseegräben** aus Abgrundstein und die **Sturminseln** mit Stränden, Palmen und Klippen. Sein Fels ist der grünblaue **Gezeitenstein**; auf dem Grund liegen Gebeine von Seedrachen, Muschelfelder und Korallenpaläste, im Wasser leben Haie, Mantarochen, Delfine, Anglerfische und Riesenkrabben, und an der Angel warten **80 neue Fischarten**. Der Weg hinein führt durch den **Versunkenen Tempel** auf dem Grund der tiefen Ozeane: In der Mitte des runden Heiligtums mit seinen zwölf Säulen und der halb eingestürzten Kuppel wirbelt das **Gezeitentor** – hineinschwimmen, einen Moment bleiben, und man taucht im Urmeer auf einer Plattform über dem Wasser auf. Eigene Tore baut man aus **Gezeitensteinziegeln** und erweckt sie mit einem **Herz des Meeres**.
@@ -393,6 +394,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Angeln** (0.90): alle sieben Angeln in 3D (ruhend mit Schnur, Schwimmer oder Köder und Haken, ausgeworfen mit gebogener Spitze); Angeln unter Wasser; fünf Seltenheiten (Mystisch statt Episch) und in jedem Biom jede davon – 113 Legenden der Biome; das Urmeer mit vierzig Arten je Biom; zusammen 1893 Arten | ✅ fertig |
 | **Der Kraken** (0.91): ein Boss im Urmeer knapp unter Anni dem Troll (sieben Angriffe, Würgegriff mit Befreiung, Haie, Flutwelle, eigene Bossleiste und Klänge); der Krakenschlund mit Trichter, Becken, Wrack, Gerippe und Felsenring; die Krakenangel in 3D als Beute | ✅ fertig |
 | **Unter Wasser** (0.92): vier Meereshölzer (Tangholz, Korallenholz, Perlholz, Tiefseeholz) mit allen Holzblöcken; Setzlinge, die unter Wasser zu Meeresbäumen wachsen; vier neue Landschaften im Urmeer (Tangwald, Korallengarten, Perlmuttgründe, Leuchtende Tiefe) mit je vierzig Fischarten; zusammen 2053 Arten | ✅ fertig |
+| **Meeresdörfer** (0.93): das Meervolk im Urmeer – Meerjungfrauen in sechs Gestalten und vier Berufen (Perlentaucherin, Korallengärtnerin, Muschelbauerin, Gezeitensängerin), die gegen Perlen tauschen, Tritonwachen mit Dreizack; Meeresdörfer mit Dreizacksäule, Muschelhäusern, Gesangsturm, Gärten und Marktständen; Perlen als Währung | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -453,7 +455,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.92.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.93.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -461,7 +463,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.92.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.93.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -2567,7 +2569,8 @@ liegt hoch, der Grund gut vierzig Blöcke darunter; Tag und Nacht wechseln wie i
   herabhängen lassen, mit Leuchtfeldern und heißen Schloten; Anglerfische, Leuchtkalmare und Leuchtquallen.
 
 Der Fels des Urmeers ist **Gezeitenstein** – grünblau, mit welligen Schichten und Muschelsplittern. Auf dem Grund liegen
-wie in der Oberwelt die Gebeine von **Seedrachen**, **Muschelfelder** und **Korallenpaläste**. Beim Angeln beißen die
+wie in der Oberwelt die Gebeine von **Seedrachen**, **Muschelfelder** und **Korallenpaläste**, und seit 0.93 stehen dort
+die **Meeresdörfer** des Meervolks (siehe unten). Beim Angeln beißen die
 Fische des Salzwassers – über den Weiten und Gräben die der Tiefsee, an Riffen und Inseln die warmen – und in jeder der
 acht Landschaften eigene Arten – **vierzig je Landschaft** (seit 0.90, in den neuen seit 0.92), mehr als irgendwo sonst,
 darunter je zwei Legenden (etwa Urmeerkalmar, Weitenhai, Perlmuttkrabbe, Sonnenriffkuhfisch, Nachtquastenflosser,
@@ -2661,6 +2664,44 @@ fallen aus dem Laub, wie bei jedem Baum.
 Aus jedem Meeresholz gibt es Stamm und Holz, beides auch entrindet (mit der Axt), Bretter, Treppen,
 Stufen, Tür (mit einem Bullauge), Falltür, Zaun und Zauntor; die Setzlinge passen in Blumentöpfe. Die Rezepte sind die
 gewohnten (vier Bretter aus einem Stamm, drei Holz aus vier Stämmen …), und alles brennt wie Holz.
+
+### Das Meervolk und die Meeresdörfer
+
+![Das Meervolk: Meerjungfrauen in sechs Gestalten, eine Tritonwache und ein Meeresdorf im Urmeer](docs/bilder/meervolk_093.jpg)
+
+Seit 0.93 lebt im Urmeer das **Meervolk**. Seine **Meeresdörfer** stehen auf dem Grund der Tangwälder, Korallengärten,
+Perlmuttgründe und Weiten – wo der Grund eben genug und das Wasser mindestens fünfzehn Blöcke tief ist, nie in der Nähe
+des Krakenschlunds (`/locate structure kingdomsatwar:sea_village` findet das nächste):
+
+- In der Mitte der **Dorfplatz** aus Prismarin mit Speichen aus Perlmutt, darauf die **Dreizacksäule**, deren drei Zinken
+  leuchten; in ihrem Becken glimmen Meeresgurken, am Rand stehen Laternenpfähle mit Tiefseelaternen.
+- Ringsum sieben oder acht **Muschelhäuser**: runde Kuppeln aus dem Holz der Landschaft (Tangholz im Tangwald,
+  Korallenholz im Korallengarten, Perlholz über den Perlmuttgründen) mit einem Band aus Perlholz, Bullaugen, einem
+  offenen Bogen zum Platz und einer leuchtenden Perle obenauf; innen je nach Beruf eingerichtet, immer mit einer Truhe
+  (Perlen, Perlmutt, Setzlinge der Meeresbäume, Fisch, selten eine Nautilusschale, ein Herz des Meeres oder ein
+  verzaubertes Buch).
+- Der **Gesangsturm** der Gezeitensängerin: ein gewundenes Muschelhorn aus Perlmutt, bis zu siebzehn Blöcke hoch.
+- **Tanggärten** und **Korallenbeete** hinter Zäunen, **Marktstände** und Wege aus Sandstein mit eingelassenen
+  Meereslaternen.
+
+**Die Meerjungfrauen** treten Wasser, wenn sie stehen – das Haar treibt, die Arme rudern, der Schwanz schlägt ruhig –,
+und schwimmen sie schnell, liegen sie waagrecht im Wasser wie ein Delfin. Es gibt sie in sechs Gestalten: Koralle, Tang,
+Perle, Lagune, Gold und Tiefsee (mit leuchtenden Augen, Flecken und Flossenrändern); welche häufiger sind, hängt davon ab,
+wo das Dorf liegt. Jede trägt ein Oberteil aus zwei Muscheln, eine Perlenkette, Armreifen und das Zeichen ihres Berufs, und
+sie summen und singen kleine Melodien. Gezahlt wird in **Perlen**: Die Meerjungfrauen geben sie für Fisch, Tang,
+Knochenmehl, Prismarin und Tinte, sie liegen in den Truhen der Dörfer, und in mancher Muschel steckt eine (etwa in jeder achten).
+
+| Beruf | Zeichen | Kauft (für Perlen) | Verkauft (gegen Perlen) |
+|---|---|---|---|
+| **Perlentaucherin** | Stirnband mit Perle, Netzbeutel voller Perlen | Kabeljau, Tropenfische, Haizähne | Perlmutt, Nautilusschalen, einen Schildkrötenpanzer, einmal ein Herz des Meeres (40 Perlen) |
+| **Korallengärtnerin** | Krone aus Korallenzweigen, Seeanemone im Haar | Knochenmehl, Seetang, Seegras | die Setzlinge aller vier Meereshölzer, Korallenblöcke, Meeresgurken, Riesentang, Seeanemonen |
+| **Muschelbauerin** | Kamm aus einer Jakobsmuschel, Gürtel mit Muschelhammer | Prismarinscherben, Ton | Meereshölzer, Bretter, Türen mit Bullauge, Meeres- und Tiefseelaternen, Prismarin, Gezeitensteinziegel |
+| **Gezeitensängerin** | Seestern im Haar, Muschelhorn an der Hüfte | Tintenbeutel, Leuchttintenbeutel, Leuchtgelee, Prismarinkristalle | Tränke (Unterwasseratmung, Nachtsicht, Heilung), Bücher mit den Verzauberungen des Wassers, einmal einen Aquisitor (32 Perlen) |
+
+**Die Tritonwachen** tragen einen Bronzehelm mit Flossenkamm, einen Schuppenpanzer und einen Dreizack. Sie halten Haie,
+Anglerfische, Ertrunkene und Wächter vom Dorf fern – aus der Nähe mit Stößen, auf Abstand werfen sie den Dreizack – und
+eilen herbei, wenn jemand eine Meerjungfrau angreift. Mit Spielern tauschen sie nicht; sie grüßen nur. Beide gibt es als
+Spawn-Ei.
 
 ### Das Feenreich
 
@@ -4139,7 +4180,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.92.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.93.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4286,13 +4327,14 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      jede davon (113 Legenden der Biome), das Urmeer mit vierzig Arten je Biom;
    - **0.91 – Der Kraken** (fertig): ein Boss im Krakenschlund des Urmeers, knapp unter Anni dem Troll, mit
      sieben Angriffen; die Krakenangel als Beute;
-   - zuletzt **0.92 – Unter Wasser** (fertig): vier Meereshölzer, deren Setzlinge unter Wasser zu Meeresbäumen
-     wachsen, und vier neue Landschaften im Urmeer mit je vierzig Fischarten.
+   - **0.92 – Unter Wasser** (fertig): vier Meereshölzer, deren Setzlinge unter Wasser zu Meeresbäumen
+     wachsen, und vier neue Landschaften im Urmeer mit je vierzig Fischarten;
+   - zuletzt **0.93 – Meeresdörfer** (fertig): das Meervolk – Meerjungfrauen, die gegen Perlen tauschen, und
+     Tritonwachen – in Dörfern auf dem Grund des Urmeers.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
-   **Als Nächstes geplant:** **0.93 – Meeresdörfer**: Dörfer auf dem Grund des Urmeers aus Meereshölzern, Korallen
-   und Perlmutt, in denen Meerjungfrauen leben; getragene Rüstungen mit
+   **Als Nächstes geplant:** getragene Rüstungen mit
    3D-Teilen (Stacheln, Hörner, Platten); schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und
    bessere Klänge.
 

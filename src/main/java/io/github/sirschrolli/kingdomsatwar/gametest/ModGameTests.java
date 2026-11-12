@@ -187,6 +187,7 @@ public final class ModGameTests {
         ReefGameTests.init();     // Meeresgrund, Versunkenes Atoll, Karkinos
         KrakenGameTests.init();   // seit 0.91: der Kraken und sein Schlund im Urmeer
         UnderwaterGameTests.init();   // seit 0.92: Meereshölzer, Meeresbäume und die Landschaften unter Wasser
+        MerfolkGameTests.init();      // seit 0.93: das Meervolk und die Meeresdörfer
         FaeGameTests.init();      // das Feenreich, der Mondhain, Noctua
         UrmeerGameTests.init();   // seit 0.89: das Urmeer und die Gezeitentore
         ForgeGameTests.init();    // Malleus, der Glutschmied, und der Glutspeer
@@ -271,6 +272,7 @@ public final class ModGameTests {
         ReefGameTests.register(event, environment);
         KrakenGameTests.register(event, environment);
         UnderwaterGameTests.register(event, environment);
+        MerfolkGameTests.register(event, environment);
         FaeGameTests.register(event, environment);
         UrmeerGameTests.register(event, environment);
         ForgeGameTests.register(event, environment);
