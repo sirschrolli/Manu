@@ -22,7 +22,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
@@ -703,9 +702,10 @@ public final class RealmWar {
             if (center == null) {
                 continue;
             }
-            String tp = "/tp @s " + center.getX() + " " + (center.getY() + 30) + " " + (center.getZ() + 60);
-            Component where = Component.literal(center.getX() + " " + center.getZ()).withStyle(style -> style.withUnderlined(true)
-                    .withClickEvent(new ClickEvent.SuggestCommand(tp)));
+            // anklickbar: man reist vor das Tor der Burg (auch aus einer anderen Dimension)
+            Component where = io.github.sirschrolli.kingdomsatwar.command.KawLocate.coordinates(overworld,
+                    io.github.sirschrolli.kingdomsatwar.command.KawPlaces.REALM_CASTLE,
+                    new io.github.sirschrolli.kingdomsatwar.command.KawPlaces.Spot(center, false, null));
             String status = state.isConquered(realm) ? "conquered" : state.isLordFallen(realm) ? "leaderless" : "ruled";
             Component line = Component.translatable("command.kingdomsatwar.realms.entry", realm.displayName(), where,
                     Component.translatable("command.kingdomsatwar.realms." + status, realm.ruler()), state.fallen(realm));

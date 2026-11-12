@@ -42,6 +42,7 @@ public class ModLanguageProvider extends LanguageProvider {
         SkyLang.register(this::text);
         VeterancyLang.register(this::text);
         RulesLang.register(this::text);
+        PlaceLang.register(this::text);
         bosses();
         shadowWorld();
         voidWorld();
@@ -671,12 +672,6 @@ public class ModLanguageProvider extends LanguageProvider {
         // (der Name der Kreatur ohne Artikel – sonst hieße es „von Der Kraken getötet“; die Bossleiste sagt „Der Kraken“)
         creature(ModEntities.KRAKEN, io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.KRAKEN_SPAWN_EGG, "Kraken", "Kraken", "Kraken");
         text("boss.kingdomsatwar.kraken", "The Kraken", "Der Kraken");
-        text("command.kingdomsatwar.kraken.none", "This world has no Primordial Sea with a Kraken's maw.", "Diese Welt hat kein Urmeer mit einem Krakenschlund.");
-        text("command.kingdomsatwar.kraken.at", "The Kraken's maw lies in the Primordial Sea at %s %s %s.", "Der Krakenschlund liegt im Urmeer bei %s %s %s.");
-        text("command.kingdomsatwar.kraken.no_core", "The heart of the maw is missing.", "Das Herz des Schlunds fehlt.");
-        text("command.kingdomsatwar.kraken.awake", "The Kraken is already awake.", "Der Kraken ist schon wach.");
-        text("command.kingdomsatwar.kraken.awakened", "The Kraken rises from the maw.", "Der Kraken steigt aus dem Schlund empor.");
-        text("command.kingdomsatwar.kraken.reset", "The Kraken's maw has been reset.", "Der Krakenschlund wurde zurückgesetzt.");
         text("boss.kingdomsatwar.kraken.title", "Lord of the Primordial Sea", "Herr des Urmeers");
         text("kraken.kingdomsatwar.warning", "The water above the maw is eerily still …", "Das Wasser über dem Schlund ist unheimlich still …");
         // das Meervolk und die Meeresdörfer (0.93)
@@ -1036,12 +1031,6 @@ public class ModLanguageProvider extends LanguageProvider {
                 {"storm", "Souls whirl", "Seelen wirbeln"}, {"fury", "Soul Shepherd screams", "Seelenhirte schreit"}}) {
             subtitle("entity.soul_shepherd." + e[0], e[1], e[2]);
         }
-        text("command.kingdomsatwar.seelenpferch.where", "Nearest Soul Pen: %s (%s blocks)", "Nächster Seelenpferch: %s (%s Blöcke)");
-        text("command.kingdomsatwar.seelenpferch.not_shadow", "Soul pens only exist in the Shadow World.", "Seelenpferche gibt es nur in der Schattenwelt.");
-        text("command.kingdomsatwar.seelenpferch.none", "No Soul Pen nearby.", "Kein Seelenpferch in der Nähe.");
-        text("command.kingdomsatwar.seelenpferch.no_bell", "There is no Soul Bell in this pen.", "In diesem Pferch hängt keine Seelenglocke.");
-        text("command.kingdomsatwar.seelenpferch.awakened", "The Soul Shepherd awakens!", "Der Seelenhirte erwacht!");
-        text("command.kingdomsatwar.seelenpferch.reset", "The Soul Shepherd sinks back into prayer.", "Der Seelenhirte versinkt wieder in Andacht.");
         // die Sternenweberin und das Sternennetz (0.99)
         creature(ModEntities.STAR_WEAVER, io.github.sirschrolli.kingdomsatwar.registry.StarWeaver.STAR_WEAVER_SPAWN_EGG, "Star Weaver", "Sternenweberin", "Sternenweberin");
         add(ModEntities.STAR_SPIDERLING.get(), pick("Star Spiderling", "Sternspinnling"));
@@ -1132,46 +1121,6 @@ public class ModLanguageProvider extends LanguageProvider {
         }
         subtitle("item.minute_hand.hour", "The hour strikes", "Die Stunde schlägt");
         subtitle("item.minute_hand.jump", "Time Leap", "Zeitsprung");
-        text("command.kingdomsatwar.uhrturm.where", "Nearest Clock Tower: %s (%s blocks)", "Nächster Uhrturm: %s (%s Blöcke)");
-        text("command.kingdomsatwar.uhrturm.not_abyss", "Clock towers only exist in the Abyss.", "Uhrtürme gibt es nur im Abgrund.");
-        text("command.kingdomsatwar.uhrturm.none", "No Clock Tower nearby.", "Kein Uhrturm in der Nähe.");
-        text("command.kingdomsatwar.uhrturm.no_heart", "There is no Clockwork Heart in this dial.", "In diesem Zifferblatt sitzt kein Uhrwerkherz.");
-        text("command.kingdomsatwar.uhrturm.awakened", "The Hour Warden awakens!", "Der Stundenwächter erwacht!");
-        text("command.kingdomsatwar.uhrturm.reset", "The Hour Warden freezes again.", "Der Stundenwächter erstarrt wieder.");
-        text("command.kingdomsatwar.sternennetz.where", "Nearest Star Web: %s (%s blocks)", "Nächstes Sternennetz: %s (%s Blöcke)");
-        text("command.kingdomsatwar.sternennetz.not_void", "Star webs only exist in the Void.", "Sternennetze gibt es nur in der Leere.");
-        text("command.kingdomsatwar.sternennetz.none", "No Star Web nearby.", "Kein Sternennetz in der Nähe.");
-        text("command.kingdomsatwar.sternennetz.no_nest", "There is no clutch in this web.", "In diesem Netz liegt kein Gelege.");
-        text("command.kingdomsatwar.sternennetz.awakened", "The Star Weaver awakens!", "Die Sternenweberin erwacht!");
-        text("command.kingdomsatwar.sternennetz.reset", "The Star Weaver sinks back into her vigil.", "Die Sternenweberin versinkt wieder in Andacht.");
-        text("command.kingdomsatwar.hexengrotte.where", "Nearest Witch's Grotto: %s (%s blocks)", "Nächste Hexengrotte: %s (%s Blöcke)");
-        text("command.kingdomsatwar.hexengrotte.not_sea", "Witch's grottos only exist in the Primordial Sea.", "Hexengrotten gibt es nur im Urmeer.");
-        text("command.kingdomsatwar.hexengrotte.none", "No Witch's Grotto nearby.", "Keine Hexengrotte in der Nähe.");
-        text("command.kingdomsatwar.mondsteinbruch.where", "Nearest Old Moonstone Quarry: %s (%s blocks)",
-                "Nächster alter Mondsteinbruch: %s (%s Blöcke)");
-        text("command.kingdomsatwar.mondsteinbruch.not_fae", "Moonstone quarries only exist in the Fae Realm.",
-                "Mondsteinbrüche gibt es nur im Feenreich.");
-        text("command.kingdomsatwar.mondsteinbruch.none", "No moonstone quarry nearby.", "Kein Mondsteinbruch in der Nähe.");
-        text("command.kingdomsatwar.mondsteinbruch.no_stone", "There is no Keeper Stone in this quarry.", "In diesem Bruch steht kein Hüterstein.");
-        text("command.kingdomsatwar.mondsteinbruch.awakened", "The Keeper rises!", "Der Hüter erhebt sich!");
-        text("command.kingdomsatwar.mondsteinbruch.reset", "The Keeper sleeps again.", "Der Hüter schläft wieder.");
-        text("command.kingdomsatwar.mondhain.where", "Nearest Moon Grove: %s (%s blocks)", "Nächster Mondhain: %s (%s Blöcke)");
-        text("command.kingdomsatwar.zauberbuehne.where", "Nearest Magic Stage: %s (%s blocks)", "Nächste Zauberbühne: %s (%s Blöcke)");
-        text("command.kingdomsatwar.zauberbuehne.not_fae", "Magic Stages only exist in the Fae Realm.", "Zauberbühnen gibt es nur im Feenreich.");
-        text("command.kingdomsatwar.zauberbuehne.none", "No Magic Stage nearby.", "Keine Zauberbühne in der Nähe.");
-        text("command.kingdomsatwar.zauberbuehne.no_hat", "There is no waiting top hat on the stage.", "Auf der Bühne wartet kein Zylinder.");
-        text("command.kingdomsatwar.zauberbuehne.awakened", "The show begins!", "Die Vorstellung beginnt!");
-        text("command.kingdomsatwar.zauberbuehne.reset", "The top hat waits again.", "Der Zylinder wartet wieder.");
-        text("command.kingdomsatwar.fehlerzone.where", "Nearest Error Zone: %s (%s blocks)", "Nächste Fehlerzone: %s (%s Blöcke)");
-        text("command.kingdomsatwar.fehlerzone.none", "No Error Zone found nearby.", "Keine Fehlerzone in der Nähe gefunden.");
-        text("command.kingdomsatwar.fehlerzone.no_core", "The error core cannot be found (or it is not waiting).",
-                "Der Fehlerkern ist nicht zu finden (oder er wartet nicht).");
-        text("command.kingdomsatwar.fehlerzone.awakened", "Loading Anni …", "Anni wird geladen …");
-        text("command.kingdomsatwar.fehlerzone.reset", "The error core waits again.", "Der Fehlerkern wartet wieder.");
-        text("command.kingdomsatwar.mondhain.not_fae", "Moon Groves only exist in the Fae Realm.", "Mondhaine gibt es nur im Feenreich.");
-        text("command.kingdomsatwar.mondhain.awakened", "The Moth Queen awakens.", "Die Mottenkönigin erwacht.");
-        text("command.kingdomsatwar.mondhain.no_cocoon", "There is no cocoon on the altar (is the queen already awake?).",
-                "Auf dem Altar liegt kein Kokon (ist die Königin schon wach?).");
         // Malleus, der Glutschmied (0.64)
         creature(ModEntities.GLUTSCHMIED, io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.GLUTSCHMIED_SPAWN_EGG,
                 "Malleus, the Ember Smith", "Malleus, der Glutschmied", "Glutschmied");
@@ -1746,7 +1695,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.SEAL_BREAK.get(), pick("Seal Break", "Siegelbruch"));
         add(ModEntities.INTRO_VISION.get(), pick("Vision of the Seal", "Vision des Siegels"));
         text("command.kingdomsatwar.boss.summoned", "%s awakens!", "%s erwacht!");
-        text("command.kingdomsatwar.citadel.none", "There is no Shadow Citadel in this world.", "In dieser Welt gibt es keine Schattenzitadelle.");
         text("command.kingdomsatwar.dim.done", "You are now %s (%s, %s, %s).", "Du bist jetzt %s (%s, %s, %s).");
         text("command.kingdomsatwar.dim.already", "You are already %s.", "Du bist schon %s.");
         text("command.kingdomsatwar.dim.missing", "This dimension does not exist in this world.", "Diese Dimension gibt es in dieser Welt nicht.");
@@ -1757,22 +1705,6 @@ public class ModLanguageProvider extends LanguageProvider {
         text("command.kingdomsatwar.dim.name.leere", "in the Void", "in der Leere");
         text("command.kingdomsatwar.dim.name.sphaere", "in the Arcane Sphere", "in der Arkanen Sphäre");
         text("command.kingdomsatwar.dim.name.other", "in %s", "in %s");
-        text("command.kingdomsatwar.atoll.none", "There is no Sunken Atoll in this world.", "In dieser Welt gibt es kein Versunkenes Atoll.");
-        text("command.kingdomsatwar.atoll.at", "The Sunken Atoll lies at x %s, y %s, z %s.", "Das Versunkene Atoll liegt bei x %s, y %s, z %s.");
-        text("command.kingdomsatwar.atoll.no_core", "The heart of the atoll has not been generated yet – travel there first.",
-                "Das Herz des Atolls ist noch nicht entstanden – reise erst einmal hin.");
-        text("command.kingdomsatwar.atoll.awake", "Karkinos is already awake.", "Karkinos ist schon wach.");
-        text("command.kingdomsatwar.atoll.awakened", "Karkinos awakens!", "Karkinos erwacht!");
-        text("command.kingdomsatwar.atoll.reset", "The mound is heaped up again – Karkinos sleeps.", "Der Hügel ist wieder aufgeschüttet – Karkinos schläft.");
-        text("command.kingdomsatwar.throne.none", "There is no Throne of the Ancients in this world.",
-                "In dieser Welt gibt es keinen Thron der Alten.");
-        text("command.kingdomsatwar.throne.at", "The Throne of the Ancients hovers at x %s, y %s, z %s (the Void).",
-                "Der Thron der Alten schwebt bei x %s, y %s, z %s (Die Leere).");
-        text("command.kingdomsatwar.throne.reset", "The Shattered King sleeps again.", "Der Zerbrochene König schläft wieder.");
-        text("command.kingdomsatwar.throne.no_seal", "The throne seal has not been generated yet.",
-                "Das Thronsiegel ist noch nicht erzeugt.");
-        text("command.kingdomsatwar.citadel.at", "The Shadow Citadel lies at x %s, z %s (Shadow World).",
-                "Die Schattenzitadelle liegt bei x %s, z %s (Schattenwelt).");
         lairs();
         story();
     }
@@ -1820,18 +1752,6 @@ public class ModLanguageProvider extends LanguageProvider {
             text("direction.kingdomsatwar." + d[0], d[1], d[2]);
         }
 
-        text("command.kingdomsatwar.lair.header", "Dragon lairs of this world:", "Drachennester dieser Welt:");
-        text("command.kingdomsatwar.lair.entry", "%s at %s, %s – %s", "%s bei %s, %s – %s");
-        text("command.kingdomsatwar.lair.unexplored", "not yet discovered", "noch nicht erkundet");
-        text("command.kingdomsatwar.lair.phase.dormant", "asleep", "schlafend");
-        text("command.kingdomsatwar.lair.phase.awake", "awake", "erwacht");
-        text("command.kingdomsatwar.lair.phase.defeated", "defeated", "besiegt");
-        text("command.kingdomsatwar.lair.none", "This world has no dragon lairs.", "In dieser Welt gibt es keine Drachennester.");
-        text("command.kingdomsatwar.lair.no_core", "There is no lair core near you.", "In deiner Nähe gibt es keinen Nestkern.");
-        text("command.kingdomsatwar.lair.awakened", "The dragon of %s awakens!", "Der Drache von %s erwacht!");
-        text("command.kingdomsatwar.lair.cannot_awaken", "This dragon cannot awaken (yet).", "Dieser Drache kann (noch) nicht erwachen.");
-        text("command.kingdomsatwar.lair.reset", "%s sleeps again – its dragon can be challenged anew.",
-                "%s schläft wieder – sein Drache kann erneut herausgefordert werden.");
     }
 
     /** Die Geschichte „Das Siegel“: Siegelkreis, Splitter, Chronik, Kapitel, Nachrichten und Befehle. */

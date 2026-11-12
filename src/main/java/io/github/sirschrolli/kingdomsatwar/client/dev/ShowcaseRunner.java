@@ -80,7 +80,7 @@ public final class ShowcaseRunner {
                 || SCENES.contains("castleworld") || SCENES.contains("conquest")
                 || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor") || SCENES.contains("forge_boss")
                 || SCENES.contains("star_boss") || SCENES.contains("anni_boss") || SCENES.contains("boss_arena")
-                || SCENES.contains("creator_boss") || SCENES.contains("creator_melee"));
+                || SCENES.contains("creator_boss") || SCENES.contains("creator_melee") || SCENES.contains("kaw_reise"));
         try {
             String folder = FileUtil.findAvailableName(minecraft.getLevelSource().getBaseDir(), "Showcase", "");
             LevelSettings settings = new LevelSettings("Showcase", GameType.CREATIVE,
@@ -192,6 +192,11 @@ public final class ShowcaseRunner {
                         : net.minecraft.world.entity.player.ChatVisiblity.HIDDEN);
                 if (!visible) {
                     minecraft.gui.hud.getChat().clearMessages(false);
+                }
+                // was der Chat empfängt, hängt an dieser Einstellung – auch auf dem Server, der sonst keine Nachrichten mehr schickt
+                minecraft.options.broadcastOptions();
+                if (minecraft.player != null) {
+                    minecraft.player.refreshChatAbilities();
                 }
             });
         }

@@ -235,6 +235,7 @@ public final class ModGameTests {
         IdentityGameTests.init();  // die eigenen Wesen gelten für Vanilla als die ersetzten
         WarGameTests.init();       // Krieg der Königreiche: Stammburgen und ihre Besatzung
         RulesGameTests.init();     // Regeln: Mod-Sperre, Koordinaten, Härte, Verzauberungen
+        KawCommandGameTests.init(); // /kaw: Dimensionen, Bosse, Bauwerke, Landeplätze, Reisen per Klick
         ArenaGameTests.init();     // die Arkane Sphäre: Arena, Bauverbot, Kampf
         SpellGameTests.init();     // Meisterzauber und Fähigkeiten der Erzmagier, der Aetherit-Stab
         SiegeGameTests.init();     // Belagerungswaffen und ihre Mannschaften
@@ -312,6 +313,7 @@ public final class ModGameTests {
         SiteGameTests.register(event, environment);
         WarGameTests.register(event, environment);
         RulesGameTests.register(event, environment);
+        KawCommandGameTests.register(event, environment);
         ArenaGameTests.register(event, environment);
         SpellGameTests.register(event, environment);
         SiegeGameTests.register(event, environment);

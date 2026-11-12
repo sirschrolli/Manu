@@ -11,7 +11,6 @@ import java.util.Set;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.DimensionArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -33,10 +32,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /**
- * {@code /kaw dim <oberwelt|nether|end|schattenwelt|leere|abgrund>} (oder eine beliebige Dimension als ID): wechselt sofort in
- * eine andere Dimension – für den Kreativmodus (und für alle mit Cheats). Man landet an derselben Stelle (im Nether an
- * einem Achtel der Koordinaten, wie bei einem Portal) auf sicherem Boden: im Nether in einer Höhle mit festem Grund, im
- * End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück (sonst auf einer kleinen Plattform).
+ * {@code /kaw dim <oberwelt|nether|end|schattenwelt|leere|abgrund|urmeer|feenreich>}: wechselt sofort in eine andere Dimension
+ * – für den Kreativmodus (und für alle mit Cheats). Vorgeschlagen werden nur die Namen der Dimensionen (seit 1.1.2; die
+ * Kampfdimensionen der Bosse betritt man nur im Kampf). Man landet an derselben Stelle (im Nether an einem Achtel der
+ * Koordinaten, wie bei einem Portal) auf sicherem Boden: im Nether in einer Höhle mit festem Grund, im End auf der
+ * Obsidianplattform, in der Leere auf dem nächsten Bruchstück (sonst auf einer kleinen Plattform).
  */
 @EventBusSubscriber(modid = KingdomsAtWar.MODID)
 public final class DimensionCommand {
@@ -50,6 +50,8 @@ public final class DimensionCommand {
         NAMES.put("schattenwelt", ShadowGate.SHADOW_WORLD);
         NAMES.put("leere", VoidGate.THE_VOID);
         NAMES.put("abgrund", io.github.sirschrolli.kingdomsatwar.abyss.AbyssGate.THE_ABYSS);
+        NAMES.put("urmeer", io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.LEVEL);
+        NAMES.put("feenreich", io.github.sirschrolli.kingdomsatwar.fae.FaeGate.FAE_REALM);
     }
 
     private DimensionCommand() {}
@@ -68,8 +70,6 @@ public final class DimensionCommand {
         for (Map.Entry<String, ResourceKey<Level>> entry : NAMES.entrySet()) {
             dim.then(Commands.literal(entry.getKey()).executes(context -> travel(context.getSource().getPlayerOrException(), entry.getValue())));
         }
-        dim.then(Commands.argument("dimension", DimensionArgument.dimension()).executes(context ->
-                travel(context.getSource().getPlayerOrException(), DimensionArgument.getDimension(context, "dimension").dimension())));
         return dim;
     }
 
@@ -106,7 +106,13 @@ public final class DimensionCommand {
         return 1;
     }
 
-    private static Component name(ResourceKey<Level> key) {
+    /** Die Namen der Dimensionen für den Befehl, in der Reihenfolge der Vorschläge. */
+    public static java.util.Set<String> names() {
+        return java.util.Collections.unmodifiableSet(NAMES.keySet());
+    }
+
+    /** „in der Oberwelt“, „im Abgrund“ … (für Meldungen). */
+    public static Component name(ResourceKey<Level> key) {
         for (Map.Entry<String, ResourceKey<Level>> entry : NAMES.entrySet()) {
             if (entry.getValue() == key || entry.getValue().equals(key)) {
                 return Component.translatable("command.kingdomsatwar.dim.name." + entry.getKey());

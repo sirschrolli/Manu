@@ -516,9 +516,10 @@ final class RulesGameTests {
         var kaw = server.getCommands().getDispatcher().getRoot().getChild("kaw");
         helper.assertTrue(kaw != null && kaw.getChild("dim") != null, "Der Befehl /kaw dim fehlt");
         var dim = kaw.getChild("dim");
-        for (String name : new String[] {"oberwelt", "nether", "end", "schattenwelt", "leere"}) {
+        for (String name : new String[] {"oberwelt", "nether", "end", "schattenwelt", "leere", "abgrund", "urmeer", "feenreich"}) {
             helper.assertTrue(dim.getChild(name) != null, "Ziel fehlt: " + name);
         }
+        helper.assertValueEqual(dim.getChildren().size(), 8, "Nur die Namen der Dimensionen unter /kaw dim");
         ServerLevel nether = server.getLevel(Level.NETHER);
         if (nether != null) {
             BlockPos spot = io.github.sirschrolli.kingdomsatwar.command.DimensionCommand.safeSpot(nether, 40, -24);

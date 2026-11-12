@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.1.1 – Der Stundenwächter.** Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück. Seit 1.1.1 hängt die Schnur der Angeln in 3D auch von außen gesehen (bei anderen Spielern und in der Ansicht mit F5) an der Rutenspitze statt in der Luft.
+> **Version 1.1.2 – Der Stundenwächter.** Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück. Seit 1.1.1 hängt die Schnur der Angeln in 3D auch von außen gesehen (bei anderen Spielern und in der Ansicht mit F5) an der Rutenspitze statt in der Luft. Seit 1.1.2 ist **`/kaw` nach Art geordnet**: `/kaw dim` zeigt nur die Dimensionen (jetzt auch Abgrund, Urmeer und Feenreich), `/kaw boss` nur die Bosse (finden, hinreisen, wecken, zurücksetzen), `/kaw structure` nur die Bauwerke (alle 60) – und die **Koordinaten lassen sich anklicken**: Man reist sofort hin, auch in eine andere Dimension.
 > In 1.0.0 erwachte **der Kraken**: Der Herr des Urmeers bleibt nicht mehr an seinem Platz: **Der Kraken schwimmt** jetzt schwer und träge durch sein Becken, zieht Kreise um seine Feinde (nie über den Felsenring hinaus), wechselt dabei die Richtung, neigt den Kopf in die Fahrt, schiebt eine **Bugwelle** vor sich her und zieht **Kielwasser** hinter sich; seine Arme strömen nach hinten und rudern im Takt. Und er hat **vier neue Angriffe**: den **Rammstoß** (er saugt Wasser in den Mantel, Warnkreise zeigen die Bahn – dann schießt er mit einem Wasserstrahl quer durchs Becken und überrollt, wer im Weg ist), den **Ausbruch aus der Tiefe** (er taucht ab und ist dann unverwundbar, nur Blasen und ein dunkler Schatten verraten, wo er schwimmt; unter seinem Ziel steigt ein Ring aus Blasen auf – dann bricht er hoch aus dem Wasser und schleudert alles empor), das **Geysirfeld** (rings um seine Feinde brodelt es, dann schießen Geysire empor – ab zwei Dritteln gleich zweimal) und den **Tentakelkäfig** (sieben Arme brechen rings um sein Ziel aus dem Wasser, kreisen und ziehen sich zusammen, wer sie berührt, wird zurückgestoßen; wer die Lücke nicht findet, wird zermalmt – ein harter Schlag trennt einen Arm ab, und der Kraken spürt es). Dazu sechs neue Klänge.
 > In 0.99 kam **die Sternenweberin**: In den leeren Weiten der **Leere** hängen jetzt **Sternennetze**: eine runde Netzplatte aus leuchtender **Sternenseide** (acht Speichen, vier Ringe) und **Sternengewebe**, durch das man ins Nichts hinabsieht, am Rand offen; sechs **Ankerfelsen** mit Adern aus Himmelseisen halten das Netz an durchhängenden Tauen, hoch darüber die **Sternenkrone**, an den Tauen und unter dem Rand **Sternenkokons** (zerschlagen geben sie frei, was sich verfing), auf dem größten Anker eine Truhe. In der Mitte liegt das **Sternengelege** – und darüber hängt kopfüber an ihrem Faden **die Sternenweberin**: eine riesige Spinne aus nachtblauem Chitin mit acht Sternenaugen, auf dem Hinterleib eine **Spiralgalaxie**, aus dem Rücken wachsen Kristalle der Leere. Wer ihr zu nahe kommt, weckt sie: **Giftbiss**, **Fangfaden**, **Netzwurf**, **Sternbild**, **Sternschnuppen**, **Umgarnen**, **Brut** (Sternspinnlinge), **Abseilen** und im Zorn die **Spindel**. Eigene Bossleiste, eigene Klänge. Sie hinterlässt den **Sternenbogen** (schwerelose, schnellere Pfeile; im Schleichen ein **Netzpfeil**, der sein Ziel einspinnt); ein **Himmelseisenbarren** im erloschenen Gelege ruft eine neue Weberin. Neu ist auch **Himmelseisen** (Erz in der ganzen Leere, im Kern gefallener Sterne) und daraus die **Rüstung der Sternwandler** – leichter, Sternenschweben, Sternenanker. Außerdem: **Rüstungen ohne offene Stellen** (Kragen, Ellbogen, Masken mit Sehschlitzen), Rüstungs-Effekte wirken **still ohne Symbol** und die Nachtsicht **flackert nicht mehr**, die volle **Taucherausrüstung gibt Wasseratmung**, die **Meerjungfrauen handeln wie alle anderen Händler** (Münzen, gleiches Handelsfenster), **8369 Fischarten** (die meisten im Urmeer), **seltene Fische sind schwerer zu drillen**, und im Urmeer gibt es **keine Lava** und **kein Trockenlegen mit Schwämmen**.
 > In 0.98 kam **der Seelenhirte**: Im **Seelensumpf** der Schattenwelt liegen jetzt **Seelenpferche**: ein runder Pferch auf aufgeschüttetem Grund mitten im Sumpf, umgeben von einem Zaun aus Schattenholz mit **Seelenlaternen** und **Schafsschädeln** auf den Pfosten, vier Feuerschalen mit Seelenfeuer, **Stege auf Stelzen** hinaus über den Sumpf und im Norden die **Hütte des Hirten** mit einer Truhe. In der Mitte hängt unter einem Glockenstuhl die **Seelenglocke** – und vor ihr steht in Andacht **der Seelenhirte**: ein hagerer, gebeugter Riese in zerschlissener Kutte, ein Schaffell über den Schultern, unter der Kapuze ein **Widderschädel** mit gerollten Hörnern und türkis glimmenden Augen, in der Rechten ein **Hirtenstab**, an dessen Haken eine Laterne voll Seelenfeuer hängt, in der Linken eine Handglocke; drei **Irrlichter** kreisen um ihn. Wer ihm zu nahe kommt, weckt ihn: **Hakenzug**, **Laternenschwung**, **Irrlichter**, **Seelenglocke**, **Nebelgang**, ein **Pferch aus Seelenfeuer**, der **Hirtenstoß** und im Zorn der **Seelensturm**; unter halber Kraft läutet er dreimal. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Hirtenstab** (in 3D, Rechtsklick: eine Kette aus Seelenlicht reißt das Ziel heran); die verstummte Glocke ruft mit einem **Seelenkristall** einen neuen Hirten. Neu ist auch **Dämmerquarz** in der ganzen Schattenwelt (Dämmerquarz, Dämmerquarzblock) und daraus die **Dämmerrüstung** der Schleicher – Monster bemerken dich später, mit dem vollen Satz beim Schleichen kaum noch, du schleichst schneller, landest weich und siehst beim Schleichen im Dunkeln; in 3D mit Kapuze, Halbmaske, Umhang, Quarzschließe, Gürteltaschen und Dolch.
@@ -410,7 +410,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Seelenhirte** (0.98): der Seelenpferch im Seelensumpf der Schattenwelt (runder Pferch mit Zaun, Seelenlaternen und Schafsschädeln, Glockenstuhl mit der Seelenglocke, Feuerschalen, Stege auf Stelzen, Hütte mit Truhe); der Seelenhirte als Boss (steht in Andacht vor seiner Glocke, sieben Angriffe, im Zorn der Seelensturm, eigene Bossleiste und Klänge, Rückruf mit einem Seelenkristall); der Hirtenstab in 3D; Dämmerquarz, Dämmerquarzblock und die Dämmerrüstung (schwerer zu entdecken, schneller schleichen, weiche Landung, Nachtsicht beim Schleichen, in 3D) | ✅ fertig |
 | **Die Sternenweberin** (0.99): das Sternennetz in den leeren Weiten der Leere (Netzplatte aus Sternenseide und Sternengewebe, sechs Ankerfelsen mit Tauen, Sternenkrone, Kokons, Truhe); die Sternenweberin als Boss (hängt in Andacht über ihrem Gelege, acht Angriffe, im Zorn die Spindel, eigene Bossleiste und Klänge, Rückruf mit einem Himmelseisenbarren); der Sternenbogen mit Netzpfeil; Himmelseisen und die Rüstung der Sternwandler; Rüstungen ohne offene Stellen, stille Rüstungs-Effekte, Wasseratmung der Taucherausrüstung; Handel der Meerjungfrauen wie bei allen Händlern; 8369 Fischarten, Drill nach Seltenheit; keine Lava und kein Trockenlegen im Urmeer | ✅ fertig |
 | **Der Kraken erwacht** (1.0): der Kraken schwimmt in seinem Becken umher (Kreise um sein Ziel, Bugwelle und Kielwasser, Ruderschlag der Arme); vier neue Angriffe – Rammstoß, Ausbruch aus der Tiefe, Geysirfeld und Tentakelkäfig mit abschlagbaren Armen; sechs neue Klänge | ✅ fertig |
-| **Der Stundenwächter** (1.1): der Uhrturm im Abgrund (großes Zifferblatt mit römischen Ziffern und Zeigern aus Uhrbronze, Turm mit Treppe, Pendel, Uhrwerkkammer und Glockenstube, schwebende Zahnräder, zwei Truhen); der Stundenwächter als Boss (steht erstarrt über dem Uhrwerkherz, neun Angriffe mit Zeitstopp, Rückspulen und Taumeln, die Zwölfte Stunde, eigene Bossleiste und Klänge, Rückruf mit Chronit); der Minutenzeiger; Chronit und die Rüstung der Zeitwächter mit Zweiter Chance; `/kaw uhrturm` | ✅ fertig |
+| **Der Stundenwächter** (1.1): der Uhrturm im Abgrund (großes Zifferblatt mit römischen Ziffern und Zeigern aus Uhrbronze, Turm mit Treppe, Pendel, Uhrwerkkammer und Glockenstube, schwebende Zahnräder, zwei Truhen); der Stundenwächter als Boss (steht erstarrt über dem Uhrwerkherz, neun Angriffe mit Zeitstopp, Rückspulen und Taumeln, die Zwölfte Stunde, eigene Bossleiste und Klänge, Rückruf mit Chronit); der Minutenzeiger; Chronit und die Rüstung der Zeitwächter mit Zweiter Chance; `/kaw boss stundenwaechter` | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -471,7 +471,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.1.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.2.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -479,7 +479,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.1.1.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.1.2.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -670,8 +670,8 @@ In der Mitte steht auf einem **Podest** aus Schlammziegeln (an den Ecken leuchte
 Pfosten, ein Balken mit Streben, ein kleines Giebeldach, zwei Seelenlaternen an Ketten – und unter dem Balken die
 **Seelenglocke**, eine schwere Glocke aus dunkler, grün angelaufener Bronze mit einem Band aus Seelenrunen; in ihrem Mund
 wirbelt **Seelenfeuer**. Rings um das Podest brennen vier **Feuerschalen** mit Seelenfeuer. Höchstens ein Pferch je Gebiet von
-gut 220 × 220 Blöcken, fern von Nyxars Zitadelle und den Dörfern der Umbrer (Finden: `/kaw seelenpferch` in der Schattenwelt,
-mit `tp`, `awaken` und `reset`).
+gut 220 × 220 Blöcken, fern von Nyxars Zitadelle und den Dörfern der Umbrer (Finden: `/kaw structure seelenpferch`, den Hirten
+wecken oder zurücksetzen: `/kaw boss seelenhirte awaken|reset`).
 
 Vor der Glocke steht in Andacht **der Seelenhirte**. Einst führte er die Seelen der Toten ins Licht; seit das Siegel die
 Schattenwelt verschloss, hütet er die Verlorenen in seinem Pferch – und wartet. Er ist ein hagerer, vorgebeugter Riese, gut
@@ -754,8 +754,8 @@ liegen im Kreativ-Reiter **„Schattenwelt“**.
 ![Die Sternenweberin in ihrem Sternennetz, ihre Angriffe, der Sternenbogen und die Rüstung der Sternwandler](docs/bilder/sternenweberin.jpg)
 
 Seit 0.99 hängen in den leeren Weiten der **Leere** (im Sternennichts zwischen den Archipelen) **Sternennetze** – frei im
-Nichts, dort, wo kein Bruchstück in das Netz ragt (`/kaw sternennetz` in der Leere findet das nächste, mit `tp`, `awaken` und
-`reset`). Ein Sternennetz ist eine runde **Netzplatte**, gut dreißig Blöcke breit: acht Speichen und vier Ringe aus
+Nichts, dort, wo kein Bruchstück in das Netz ragt (`/kaw structure sternennetz` findet das nächste, `/kaw boss sternenweberin`
+mit `tp`, `awaken` und `reset`). Ein Sternennetz ist eine runde **Netzplatte**, gut dreißig Blöcke breit: acht Speichen und vier Ringe aus
 leuchtender **Sternenseide**, dazwischen **Sternengewebe** – man geht darauf wie auf festem Grund und sieht hindurch ins
 Nichts. Am Rand wird das Netz offen (nur noch Speichen und der äußere Ring – Vorsicht!). Sechs **Ankerfelsen** aus
 Leerenstein mit Moos, Kristallen und Adern aus **Himmelseisen** stehen ringsum, sechs durchhängende **Taue** aus Sternenseide
@@ -1045,7 +1045,8 @@ er erscheint), und `/locate structure kingdomsatwar:world_eater_hoard` findet de
 Als die Welten zerbrachen, blieb in einer von ihnen die große Uhr stehen – **eine Minute vor Mitternacht**. Ihr Turm
 stürzte in den Abgrund, wo die Zeit stillsteht, und mit ihm ihr Wächter. Seit 1.1 treiben im **Abgrund** (in jedem seiner
 Biome, weit verstreut und fern des Schlunds der Welten) **Uhrtürme** – frei schwebend in einem leer gefegten Auge des
-Chaos, auf verschiedenen Höhen (`/kaw uhrturm` im Abgrund findet den nächsten, mit `tp`, `awaken` und `reset`).
+Chaos, auf verschiedenen Höhen (`/kaw structure uhrturm` findet den nächsten, `/kaw boss stundenwaechter` mit `tp`, `awaken`
+und `reset`).
 
 **Der Uhrturm:** In der Mitte liegt das **große Zifferblatt**, gut dreißig Blöcke breit – altes Email mit feinen Rissen,
 ein Ring der Stunden mit **römischen Ziffern** (XII, III, VI und IX) und Balken, eine dunkle Minutenbahn mit leuchtendem
@@ -2773,8 +2774,8 @@ lebenden Korallen. Durch drei Durchlässe strömt das Meer in die türkise Lagun
 Anemonen. In ihrer Mitte liegt der Tempelplatz des Meeresvolks aus Prismarin – sechs Säulen, manche zerbrochen,
 Seelaternen und eine Truhe. Auf dem Platz ein **Sandhügel, aus dem der leuchtende Gezeiten-Speer ragt**. Wer ihm zu nahe
 kommt, weckt, was darunter schläft. Das **Gezeitenhorn** (zwei Wellhornschnecken, ein Goldbarren und ein
-Prismarinkristall) verrät, aus welcher Richtung und wie weit entfernt das Meer antwortet (Operatoren finden es mit
-`/kaw atoll`).
+Prismarinkristall) verrät, aus welcher Richtung und wie weit entfernt das Meer antwortet (mit Cheats findet man es mit
+`/kaw structure atoll`, Karkinos mit `/kaw boss karkinos`).
 
 **Karkinos, der Riffkoloss** – eine Krabbe, groß wie ein Haus, auf deren Rücken ein ganzes Riff wächst, mit leuchtenden
 Stielaugen, einer Brecherschere und einer Greifschere. In seiner Kuppel steckt der Speer des letzten Gezeitenkönigs. Er ist
@@ -2920,7 +2921,7 @@ Wer den Felsenring verlässt, den lässt er ziehen und sinkt nach einer Weile zu
 die Haie ziehen ab, und er versinkt; er lässt die **Krakenangel** fallen, dazu ein Herz des Meeres, einen Herzkristall,
 Tintenbeutel und Leuchttintenbeutel, Nautilusschalen, Prismarinkristalle, Diamanten, Edelsteine und Goldmünzen. Mit dem
 **Gezeitenhorn** und einem Herz des Meeres in der anderen Hand rufst du ihn über dem Schlund zurück; im übrigen Urmeer zeigt
-das Horn den Weg zum Schlund (Operatoren finden ihn mit `/kaw kraken`).
+das Horn den Weg zum Schlund (mit Cheats findet man ihn mit `/kaw structure krakenschlund` oder `/kaw boss kraken`).
 
 **Die Krakenangel** ist die stärkste Angel im Wasser: Der Biss kommt 35 % schneller, die Fangzone ist 20 % größer, +2 Glück –
 und unter Wasser und im Urmeer kommt der Biss doppelt so schnell, die Fangzone ist 30 % größer, +3 Glück. Sie hält 960
@@ -3009,7 +3010,7 @@ an den Wänden **Nischen** mit Braustand, Kerzen, Schädeln, Töpfen und Seegurk
 Leuchtflechten überziehen sie. Hinten liegt das **Wrack** eines Bootes (Rumpf und Mast) mit einer Truhe, eine zweite Truhe
 steht hinter dem Kessel (Aquamarin, Perlen, Tinte, Prismarin, Flaschen, Gold, Münzen – mit etwas Glück ein Taucherhelm, Flossen,
 ein Herz des Meeres oder ein verzaubertes Buch). Höchstens eine Grotte je Gebiet von knapp 500 × 500 Blöcken, nie zu nahe am
-Schlund des Kraken (Finden: `/kaw hexengrotte` im Urmeer, mit `tp`, `awaken` und `reset`).
+Schlund des Kraken (Finden: `/kaw structure hexengrotte`, die Meerhexe: `/kaw boss meerhexe` mit `tp`, `awaken` und `reset`).
 
 Über dem Kessel schwebt in Trance **die Meerhexe** – eine verstoßene Meerjungfrau, die dort unten ihre Zauber braut: oben eine
 hagere Frau mit fahler, graugrüner Haut, schmalem Gesicht, leuchtenden Augen und dunklen Lippen, einer **Krone aus schwarzer
@@ -3123,7 +3124,7 @@ Glimmerriesen), Riesenpilze und die Pflanzen – liegen im Kreativ-Reiter **„D
 **Mottenseide** und langen **Seidenfäden**. Ein Kreis aus fünf Trilithen aus Mondstein (einer ist eingestürzt) umgibt
 einen Pfadring, vier Wege führen zum Altar in der Mitte – und auf ihm liegt ein mannshoher **Kokon**, in dem es leise
 pulsiert. Streust du **Feenstaub** darauf, reißt er auf, und **Noctua, die Mottenkönigin** steigt empor (Operatoren
-finden den nächsten Mondhain mit `/kaw mondhain`).
+finden den nächsten Mondhain mit `/kaw structure mondhain`, Noctua mit `/kaw boss noctua`).
 
 **Noctua, die Mottenkönigin** – ein riesiger Mondfalter mit mondgrünen und fliederfarbenen Flügeln, leuchtenden
 Augenflecken, gefiederten Fühlern und einer goldenen Mondsichel-Krone. Sie ist wie Karkinos ein **früher Boss**
@@ -3279,7 +3280,7 @@ Feenhof mit ihren Tricks; seit das Siegel zerbrach, ist ihr Publikum fort – un
 Schon von Weitem weht Musik über die Lichtung („Musik weht über die Lichtung … irgendwo wartet eine Bühne auf ihr
 Publikum.“). Mitten auf der Bühne steht der **Große Zauberzylinder**, und in ihm raschelt es. Trittst du näher als zehn
 Blöcke heran, ertönt ein Trommelwirbel, Funken kreisen um den Hut – dann ein Knall, Konfetti, und sie springt heraus,
-wirbelt empor, verbeugt sich und lacht (Finden: `/kaw zauberbuehne` im Feenreich).
+wirbelt empor, verbeugt sich und lacht (Finden: `/kaw structure zauberbuehne` oder `/kaw boss missmystik`).
 
 MissMystik trägt einen Zylinder mit Feder und Feenrose, eine Maske, einen violetten Frack mit goldenen Knöpfen und
 Schößen, eine Fliege, weiße Handschuhe, einen Rock und hohe Stiefel; in der rechten Hand den Zauberstab, in der linken
@@ -3343,7 +3344,7 @@ und an seiner Kette hängt noch ein behauener Block. Im Südwesten steht die **H
 Steinsäge, Werkbank und einer **Truhe** (Mondstein, Ziegel, Werkzeug, Proviant – mit etwas Glück ein Teil der
 Mondsteinrüstung); überall gestapelte Quader, Geröll, lose Brocken Mondsteinerz und Lampenpilze im Moos. Höchstens ein
 Bruch je Gebiet von gut 500 × 500 Blöcken, nie zu nahe an einem Mondhain oder einer Zauberbühne; Bäume und Felsen lassen
-ihn frei (Finden: `/kaw mondsteinbruch` im Feenreich, mit `tp`, `awaken` und `reset`).
+ihn frei (Finden: `/kaw structure mondsteinbruch`, den Steinhüter: `/kaw boss steinhueter` mit `tp`, `awaken` und `reset`).
 
 Am Grund steht auf einem Sockel aus Mondsteinziegeln der **Hüterstein** – ein gemeißeltes Auge über einer Mondsichel,
 unzerstörbar, bläulich leuchtend –, und vor ihm **kniet der Steinhüter** und schläft: ein Riese aus behauenen Quadern
@@ -3415,7 +3416,7 @@ Schwarz) und **Bildrauschen**; manche Felder sind um einen Block verrutscht. Rin
 der Arena liegt eine Truhe mit Fundstücken (Fehlersplitter, Fehlerblöcke, Redstone, Smaragde, mit Glück ein Diamant).
 Nachts leuchten fehlende Textur und Bildrauschen. Wer sich nähert, merkt es schon von Weitem („Die Welt flimmert … hier
 ist etwas kaputt.“). Fehlerzonen liegen auf eher flachem Land – Wiesen, Wälder, Savannen, Schnee, Wüste und Tafelberge
-(Finden: `/kaw fehlerzone`).
+(Finden: `/kaw structure fehlerzone` oder `/kaw boss anni`).
 
 Mitten in der Arena flimmert auf einem Sockel aus fehlender Textur der **Fehlerkern**. Trittst du näher als zwölf Blöcke
 heran, erscheint „Lade Anni …“, Pixel strömen von allen Seiten herbei und kreisen – dann setzt er sich mit einem Ruck
@@ -4658,23 +4659,18 @@ Zahn und Scharte. Der **Kronleuchter** hängt an der Decke.
 
 ## Befehle, Tasten, Einstellungen
 
+![/kaw boss und /kaw structure im Chat, ein Klick auf die Koordinaten und wo man an den Bauwerken landet](docs/bilder/kaw_befehle.jpg)
+
 | | |
 |---|---|
 | `/kaw intro` | das Intro noch einmal ansehen |
 | `/kaw army <swordsman\|archer\|knight\|captain> [Anzahl]` | (nur Operatoren) Soldaten sofort in den Dienst stellen, z. B. `/kaw army knight 4` |
 | `/kaw army xp <Menge>` | (mit Cheats) allen eigenen Soldaten in der Nähe Kampferfahrung geben |
 | `/kaw hero` · `/kaw hero xp add <Menge> [Spieler]` · `/kaw hero xp set <Menge> [Spieler]` · `/kaw hero level <Stufe> [Spieler]` · `/kaw hero reset [Spieler]` | (mit Cheats) Heldenstufe anzeigen, Heldenerfahrung geben oder setzen (mit Aufstiegs-Szene), auf eine Heldenstufe springen, von vorn anfangen |
-| `/kaw lair` · `/kaw lair awaken` · `/kaw lair reset` | (nur Operatoren) Lage aller Nester anzeigen, den Drachen im Nest wecken, ein Nest zurücksetzen |
-| `/kaw citadel` · `/kaw citadel tp` · `/kaw boss nyxar` | (nur Operatoren) Lage der Schattenzitadelle anzeigen, an den Fuß ihrer Freitreppe reisen, Nyxar vor sich erwecken |
-| `/kaw atoll` · `/kaw atoll tp` · `/kaw atoll awaken` · `/kaw atoll reset` | (nur Operatoren) Lage des Versunkenen Atolls anzeigen (`/locate` findet es nicht), an den Rand der Lagune reisen, Karkinos wecken, den Hügel wieder aufschütten |
-| `/kaw mondhain` · `/kaw mondhain tp` · `/kaw mondhain awaken` | (nur Operatoren) Lage des nächsten Mondhains im Feenreich anzeigen (`/locate` findet ihn nicht), dorthin reisen (auch aus einer anderen Welt), die Mottenkönigin aus ihrem Kokon wecken |
-| `/kaw zauberbuehne` · `/kaw zauberbuehne tp` · `/kaw zauberbuehne awaken` · `/kaw zauberbuehne reset` | (nur Operatoren) Lage der nächsten Zauberbühne im Feenreich anzeigen (`/locate` findet sie nicht), in den Zuschauergang reisen (auch aus einer anderen Welt), MissMystiks Vorstellung beginnen, den Zylinder wieder füllen |
-| `/kaw fehlerzone` · `/kaw fehlerzone tp` · `/kaw fehlerzone awaken` · `/kaw fehlerzone reset` | (nur Operatoren) Lage der nächsten Fehlerzone in der Oberwelt anzeigen, an ihren Rand reisen (auch aus einer anderen Welt), Anni den Troll aus dem Fehlerkern laden, den Kern zurücksetzen |
-| `/kaw hexengrotte` · `/kaw hexengrotte tp` · `/kaw hexengrotte awaken` · `/kaw hexengrotte reset` | (nur Operatoren) Lage der nächsten Hexengrotte im Urmeer anzeigen, vor ihren Eingang reisen (auch aus einer anderen Welt), die Meerhexe aus ihrer Trance wecken, sie wieder in Trance versetzen (der Kessel brodelt wieder) |
-| `/kaw seelenpferch` · `/kaw seelenpferch tp` · `/kaw seelenpferch awaken` · `/kaw seelenpferch reset` | (nur Operatoren) Lage des nächsten Seelenpferchs in der Schattenwelt anzeigen, ans Ende des Stegs vor dem Haupttor reisen (auch aus einer anderen Welt), den Seelenhirten wecken (oder einen neuen rufen), ihn wieder in Andacht versinken lassen (die Glocke ruht wieder) |
-| `/kaw uhrturm` · `/kaw uhrturm tp` · `/kaw uhrturm awaken` · `/kaw uhrturm reset` | (nur Operatoren) Lage des nächsten Uhrturms im Abgrund anzeigen (`/locate` findet ihn nicht), an den Südrand seines Zifferblatts reisen (auch aus einer anderen Welt), den Stundenwächter wecken, das Uhrwerkherz zurücksetzen (beim nächsten Besuch steht ein neuer Wächter erstarrt da) |
-| `/kaw throne` · `/kaw throne tp` · `/kaw throne reset` | (nur Operatoren) Lage des Throns der Alten in der Leere anzeigen, an seinen Rand reisen, den Zerbrochenen König wieder schlafen legen |
-| `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere>` · `/kaw dim <Dimension>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
+| `/kaw dim <oberwelt\|nether\|end\|schattenwelt\|leere\|abgrund\|urmeer\|feenreich>` | (im Kreativmodus oder mit Cheats) sofort in eine andere Dimension wechseln – vorgeschlagen werden nur die Namen der Dimensionen (seit 1.1.2 auch Abgrund, Urmeer und Feenreich); man landet an derselben Stelle (im Nether bei einem Achtel der Koordinaten) auf sicherem Boden: im Nether in einer Höhle, im End auf der Obsidianplattform, in der Leere auf dem nächsten Bruchstück |
+| `/kaw boss <Boss>` · `/kaw boss <Boss> tp` · `… awaken` · `… reset` · `/kaw boss pyrrhon\|nyxar summon` | (mit Cheats, seit 1.1.2) nur die Bosse: zeigt, wo der Hort des Bosses liegt – aus jeder Dimension heraus (z. B. findet `/kaw boss stundenwaechter` in der Oberwelt den nächsten Uhrturm im Abgrund); `tp` bringt einen hin, `awaken` weckt den Boss, `reset` setzt seinen Hort zurück, `summon` lässt Pyrrhon oder Nyxar vor einem erwachen. Die Bosse: `pyrrhon`, `glaciara`, `voltarion`, `verdantis`, `terragon`, `thalassa`, `nyxar`, `karkinos`, `anni`, `malleus`, `asteria`, `noctua`, `missmystik`, `steinhueter`, `seelenhirte`, `koenig`, `sternenweberin`, `weltenfresser`, `stundenwaechter`, `kraken`, `meerhexe` und die Erzmagier `ignatius`, `isolde`, `fulgor`, `sylvana`, `gorvan`, `marena` (nur `tp`) |
+| `/kaw structure <Bauwerk>` · `/kaw structure <Bauwerk> tp` | (mit Cheats, seit 1.1.2) nur die Bauwerke: zeigt, wo das nächste liegt – aus jeder Dimension heraus, auch die, die `/locate` nicht findet (Atoll, Zitadelle, Nester, Lichtungen im Feenreich); `tp` bringt einen hin – sicher auf festen Boden vor das Bauwerk, mit freiem Blick darauf (in Bauwerke unter der Erde hinein, zu Bauwerken am Meeresgrund taucht man hinab und bekommt eine Weile Luft). Alle 60 Bauwerke der Mod, z. B. `uhrturm`, `sternennetz`, `thron`, `schlund_der_welten`, `zitadelle`, `seelenpferch`, `atoll`, `krakenschlund`, `hexengrotte`, `mondhain`, `zauberbuehne`, `mondsteinbruch`, `aschenesse`, `hortfeste`, `sternwarte`, `fehlerzone`, `sternensturz`, die sechs Nester (`vulkankrater`, `gletscherkessel`, `sturmgipfel`, `uralter_hain`, `felsschlucht`, `versunkene_grotte`), die Magiertürme (`magierturm_feuer` …), die Dörfer (`fachwerkdorf`, `nordisches_dorf`, `lehmdorf`, `pfahldorf`, `meeresdorf`, `umbrerdorf`), `stammburg` und `siegelkreis` |
+| **Koordinaten anklicken** | (mit Cheats, seit 1.1.2) die grünen Koordinaten in der Ausgabe von `/kaw boss`, `/kaw structure`, `/kaw seal` und `/kaw realms` anklicken – man reist sofort hin, auch in eine andere Dimension (ohne Cheats passiert nichts) |
 | `/kaw story reset\|card <Kapitel>\|chronicle` | (nur Operatoren) Geschichte zurücksetzen, eine Titelkarte zeigen, die Chronik als Buch geben (seit 0.79 sonst nur noch per Taste J) |
 | `/kaw seal` · `/kaw seal shard\|insert <Element>` · `/kaw seal break\|reset` | (nur Operatoren) Zustand des Siegels, Splitter geben oder einsetzen, das Siegel brechen oder zurücksetzen |
 | `/kaw realms` · `/kaw realms check` · `/kaw realms reset` | (nur Operatoren) Lage und Zustand der vier Reiche, prüfen, ob die Stammburgen in der Welt stehen, alle Reiche zurücksetzen |
@@ -4705,7 +4701,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.1.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.2.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

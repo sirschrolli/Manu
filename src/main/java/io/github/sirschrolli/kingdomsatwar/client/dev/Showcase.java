@@ -283,6 +283,8 @@ final class Showcase {
                         FishingShowcase.rods(steps);
                     } else if (scene.equals("angel_schnur")) {
                         FishingShowcase.line(steps);
+                    } else if (scene.equals("kaw_reise")) {
+                        KawShowcase.tour(steps);
                     } else if (scene.equals("angeln_090")) {
                         FishingShowcase.angeln090(steps);
                     } else if (scene.equals("fishing_void")) {
