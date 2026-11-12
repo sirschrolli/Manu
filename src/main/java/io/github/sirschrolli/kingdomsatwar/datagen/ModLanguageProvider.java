@@ -712,6 +712,8 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.KRAKEN_CORE, "Heart of the Maw", "Herz des Schlunds");
         // Das Urmeer (0.89)
         text("dimension.kingdomsatwar.urmeer", "The Primordial Sea", "Das Urmeer");
+        text("message.kingdomsatwar.urmeer_no_lava", "In the Primordial Sea, lava hisses out at once",
+                "Im Urmeer erlischt die Lava zischend");
         text("biome.kingdomsatwar.urmeer_deep", "Primordial Expanse", "Urmeer-Weiten");
         text("biome.kingdomsatwar.urmeer_reef", "Coral Banks", "Korallenbänke");
         text("biome.kingdomsatwar.urmeer_kelp_forest", "Kelp Forest", "Tangwald");

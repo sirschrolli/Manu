@@ -6,7 +6,9 @@ Getragene Rüstungen, von Hand gepixelt (Fläche für Fläche als Zeichnung), in
     Platten glatt und weich statt gekachelt,
   * innen ein sanfter Verlauf von oben links (hell) nach unten rechts mit kleinem Glanzfleck,
   * wenige, bewusst gesetzte Details je Satz (Kamm, Visier, Mondsichel, glühende Nähte, Kristallkanten, Schuppen,
-    Bauchplatten, Hörner).
+    Bauchplatten, Hörner),
+  * ohne offene Stellen (seit 0.99): Kragen statt Halsausschnitt, Ellbogenkachel statt Lücke, und wo das Gesicht frei
+    lag, eine Maske mit Sehschlitzen (je Satz mit dunklen, leuchtenden oder Bernsteinaugen oder einem Glasvisier).
 
 Alle Sätze teilen sich dieselben Grundzeichnungen (BASE); darüber liegt je Satz eine Zeichnung mit seinen Details
 ('.' = Grundzeichnung behalten, ',' = durchsichtig machen). Zeichen: Ziffern 0-6 = Hauptmaterial (A), a-g = Saum (B),
@@ -179,15 +181,16 @@ BASE: dict[str, Art] = {
         "34443333",
         "33333333",
     ],
-    "head_front_open": [
+    # seit 0.99 ohne offene Stellen: Wo früher das Gesicht frei blieb, liegt eine Maske mit zwei Sehschlitzen auf Augenhöhe
+    "head_front_mask": [
         "33233233",
         "35554443",
         "35544443",
-        "354,,443",
-        "34,,,,33",
-        "34,,,,33",
-        "34,,,,33",
-        "33,,,,33",
+        "34444433",
+        "30044003",
+        "34444433",
+        "34422433",
+        "33333333",
     ],
     "head_side": [
         "33233233",
@@ -210,9 +213,9 @@ BASE: dict[str, Art] = {
         "33233233",
     ],
     "body_front": [
-        "33,,,,33",
-        "35,,,,43",
-        "354,,443",
+        "33222233",
+        "35233243",
+        "35422443",
         "35544443",
         "35544443",
         "35444443",
@@ -224,9 +227,9 @@ BASE: dict[str, Art] = {
         ",,,,,,,,",
     ],
     "body_back": [
-        "33,,,,33",
-        "35,,,,43",
-        "355,,443",
+        "33222233",
+        "35233243",
+        "35522443",
         "35544443",
         "35444433",
         "34444433",
@@ -263,9 +266,9 @@ BASE: dict[str, Art] = {
         "3553",
         "3443",
         "3333",
-        ",,,,",
-        ",,,,",
-        ",,,,",
+        "2332",
+        "3443",
+        "2332",
         "3223",
         "3553",
         "3443",
@@ -337,7 +340,7 @@ class Design:
     """Detailzeichnungen eines Satzes; fehlende Einträge = glatte Grundplatte."""
     name: str
     ramps: dict[str, st.Ramp]
-    open_face: bool = False
+    mask: bool = False                      # Maske mit Sehschlitzen (statt des geschlossenen Visiers)
     texture: str = ""                       # "" | "scales" | "facets" | "fur"
     d: dict[str, Art] = field(default_factory=dict)
 
@@ -427,7 +430,7 @@ def facet(art: Art, key: str) -> Art:
 
 
 def parts(design: Design) -> tuple[Part, Part, Part, Part, Part, Part]:
-    head_front = "head_front_open" if design.open_face else "head_front_closed"
+    head_front = "head_front_mask" if design.mask else "head_front_closed"
     side = _art(design, "head_side")
     head = {
         "top": _art(design, "head_top"),
@@ -511,9 +514,9 @@ def steel() -> Design:
 
 
 def nightsteel() -> Design:
-    """Nachtstahl: offener Helm mit Mondsichel-Kamm und Silberstirnband, Mondsichel mit Nachtkristall auf der Brust."""
+    """Nachtstahl: Helm mit Mondsichel-Kamm, Silberstirnband und Maske, Mondsichel mit Nachtkristall auf der Brust."""
     return Design("nightsteel", {"A": st.ramp("#4a4d8c", dark=0.16, light=0.82, chroma_light=0.55, hue_light=4, cool=285),
-                                 "B": gear.MOONSILVER, "E": gear.NIGHT_GEM}, open_face=True, d={
+                                 "B": gear.MOONSILVER, "E": gear.NIGHT_GEM}, mask=True, d={
         "head_top": [".", ".", ".", "...ff...", "...fe...", ".", ".", "..e..d.."],
         "head_front": ["..e..d..", "...fe...", "fffeeddc"],
         "head_side": [".", ".", "feeeddcc", ".", ".", ".....f..", ".", "."],
@@ -573,9 +576,9 @@ def dragon(kind: str) -> Design:
     """Drachenschuppen: Schuppen, helle Bauchplatten, Stirnplatte mit Stein, Hornansätze und Stachelkamm, Krallen."""
     ramps = icons.dragon_ramps(kind)
     belly = [".", ".", ".", "..feed..", "..edcc..", "..feed..", "..edcc..", "..feed..", "..edcc..", "...dc..."]
-    return Design(f"{kind}_dragon_scale", ramps, open_face=True, texture="scales", d={
+    return Design(f"{kind}_dragon_scale", ramps, mask=True, texture="scales", d={
         "head_top": ["...mk...", ".", "...mk...", ".", "...lk...", ".", "...lk...", "nm....lk"],
-        "head_front": ["nm....lk", "m......k", "eeetseed"],
+        "head_front": ["nm....lk", "m......k", "eeetseed", ".", ".ts..st."],
         "head_side": ["......lm", ".......l", ".", ".", ".", ".", ".", "."],
         "head_side_left": ["......kl", ".......k"],
         "head_back": ["...lk...", ".", "...lk...", ".", "...kj..."],
@@ -589,15 +592,15 @@ def dragon(kind: str) -> Design:
 
 
 def werewolf_pelt() -> Design:
-    """Werwolfspelz: dunkles, strähniges Fell mit hellerer Brust; eine Haube mit offenem Gesicht und Bernsteinaugen (der
+    """Werwolfspelz: dunkles, strähniges Fell mit hellerer Brust; eine Haube, deren Maske Bernsteinaugen hat (der
     Wolfskopf darüber kommt als 3D-Teil), Lederriemen über der Brust mit Klauen als Schmuck, Pelzsäume an Armen und Stiefeln."""
     return Design("werewolf_pelt", {"A": st.ramp("#5c5047", dark=0.16, light=0.68, cool=290, chroma_light=0.35),
                                     "B": st.ramp("#6a4428", dark=0.15, light=0.8, cool=20),
                                     "C": st.ramp("#e2d8c0", dark=0.35, light=0.98),
                                     "D": st.ramp("#8a7c6c", dark=0.24, light=0.8, cool=290, chroma_light=0.35),
                                     "E": st.fixed("#3a2406", "#6a3c08", "#a8600c", "#e08a16", "#ffb02a", "#ffd060", "#fff0b0")},
-                  open_face=True, texture="fur", d={
-        "head_front": [".", ".a....a.", ".", "."],
+                  mask=True, texture="fur", d={
+        "head_front": [".", ".a....a.", ".", ".", ".EF..FE."],
         "head_top": [".", ".", ".", ".", ".", ".", ".", "."],
         "body_front": [".", ".d....b.", "..d..b..", "...dc...", "...cb...", "...lm...", ".", ".", ".", ".", "..dccb.."],
         "arm_side": [".", ".", ".", ".", ".", ".", ".", ".", "dccb"],
@@ -614,9 +617,9 @@ def ember_scale() -> Design:
     (Hörner und Rückenstacheln kommen als 3D-Teile)."""
     return Design("ember_scale", {"A": st.ramp("#3c3232", dark=0.1, light=0.66, cool=300, chroma_dark=1.0),
                                   "C": st.ramp("#2a2222", dark=0.08, light=0.5, cool=300),
-                                  "D": st.ramp("#ff7a1a", dark=0.35, light=1.0, cool=20, warm=90)}, open_face=True, texture="scales", d={
+                                  "D": st.ramp("#ff7a1a", dark=0.35, light=1.0, cool=20, warm=90)}, mask=True, texture="scales", d={
         "head_top": ["...ts...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr...", "...sr..."],
-        "head_front": ["...ts...", "kjjjjjjk", "."],
+        "head_front": ["...ts...", "kjjjjjjk", ".", ".", ".sr..rs."],
         "head_back": ["...sr...", "...sr...", "...rq..."],
         "body_front": [".", ".", "...ts...", "...sr...", "..s..r..", ".s....r.", "...sr...", "...sr...", "...sr...", "...rq...",
                        "..rqqp.."],
@@ -632,10 +635,10 @@ def ember_scale() -> Design:
 
 def moonstone() -> Design:
     """Mondstein (die Rüstung der Zauberer): milchig-blaue Platten mit Mondsilbersäumen; ein Stirnreif mit Mondstein und
-    Mondsichel (offenes Gesicht), auf der Brust ein großer Mondstein über einer Silberborte wie an einer Robe, auf dem Rücken
+    Mondsichel über einer Maske, auf der Brust ein großer Mondstein über einer Silberborte wie an einer Robe, auf dem Rücken
     eine Mondsichel (Diadem, Umhang und Robenschöße kommen als 3D-Teile)."""
     return Design("moonstone", {"A": icons.MOON_PLATE, "B": gear.MOONSILVER, "D": icons.MOON_GLOW, "E": icons.MOON_GEM},
-                  open_face=True, d={
+                  mask=True, d={
         "head_front": ["...ts...", "..eGFd..", "fffeeddc"],
         "head_side": [".", ".", "feeeddcc"],
         "head_back": [".", ".", "eeddddcc"],
@@ -653,13 +656,13 @@ def moonstone() -> Design:
 
 
 def aquamarine() -> Design:
-    """Aquamarin (die Taucherrüstung): meerblaue Kristallplatten mit Messingsäumen. Der Helm ist offen (darüber sitzt der
-    Taucherhelm als 3D-Teil, durch sein Fenster sieht man das Gesicht), auf der Brust Messinggurte mit Druckanzeige, auf
+    """Aquamarin (die Taucherrüstung): meerblaue Kristallplatten mit Messingsäumen. Unter dem Taucherhelm (3D-Teil) liegt ein
+    dunkles Glasvisier, auf der Brust Messinggurte mit Druckanzeige, auf
     dem Rücken die Halterung der Luftflaschen, ein Bleigürtel mit Messingschnalle, Knieplatten mit Messingsaum (Helm,
     Luftflaschen, Schlauch und Flossen kommen als 3D-Teile)."""
     return Design("aquamarine", {"A": icons.AQUA_PLATE, "B": gear.BRASS, "D": icons.AQUA_GLINT, "E": icons.AQUA_LEAD},
-                  open_face=True, texture="facets", d={
-        "head_front": [".", ".", "feeddddc"],
+                  mask=True, texture="facets", d={
+        "head_front": [".", ".", "feeddddc", ".u21112.", ".t11111.", ".211111.", ".222222."],
         "head_side": [".", ".", "feeeddcc"],
         "head_back": [".", ".", "eeddddcc"],
         "body_front": [".", ".", ".e....c.", ".e.ed.c.", ".e.eu.c.", ".e.dc.c.", ".e....c.", ".e....c.", ".edddcc.", ".",
@@ -677,11 +680,11 @@ def aquamarine() -> Design:
 
 def dusk() -> Design:
     """Dämmerrüstung (die Rüstung der Schleicher, 0.98): rauchviolettes Tuch mit Lederriemen und Dämmerquarz. Die Kapuze
-    lässt die Augen frei, darunter eine Halbmaske aus Leder; über die Brust läuft ein Riemen mit Quarzschließe, auf dem
+    hat Sehschlitze, darunter eine Halbmaske aus Leder; über die Brust läuft ein Riemen mit Quarzschließe, auf dem
     Rücken kreuzt er sich, Wickelriemen an Armen und Stiefeln, am Gürtel eine Quarzschnalle (Kapuzenspitze, Umhang,
     Schulterwickel, Gürteltaschen und Stiefelriemen kommen als 3D-Teile)."""
     return Design("dusk", {"A": dusk_tex.CLOTH, "B": dusk_tex.LEATHER, "D": dusk_tex.EMBER, "E": dusk_tex.QUARTZ},
-                  open_face=True, d={
+                  mask=True, d={
         "head_front": [".", ".", "dccccccb", ".", ".", "..edcb..", "..dccb..", "..cbba.."],
         "head_side": [".", ".", "dccccccb"],
         "head_back": [".", ".", "dccccccb"],

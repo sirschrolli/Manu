@@ -55,11 +55,43 @@ final class UrmeerGameTests {
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_AQUAMARINE =
             ModGameTests.TEST_FUNCTIONS.register("urmeer_aquamarine", () -> UrmeerGameTests::aquamarine);
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_NO_LAVA =
+            ModGameTests.TEST_FUNCTIONS.register("urmeer_no_lava", () -> UrmeerGameTests::noLava);
+
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE, URMEER_AQUAMARINE)) {
+        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE, URMEER_AQUAMARINE, URMEER_NO_LAVA)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
+    }
+
+    /**
+     * Keine Lava im Urmeer (seit 0.99): Dort erlischt ein ausgegossener Eimer Lava (der Eimer bleibt voll), anderswo fließt sie
+     * wie gewohnt. Gibt es das Urmeer auf dem Testserver nicht, wird nur die Regel und das Ausgießen in der Oberwelt geprüft.
+     */
+    private static void noLava(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.forbidden(UrmeerDimension.LEVEL), "Lava ist im Urmeer erlaubt");
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.forbidden(Level.OVERWORLD), "Lava ist in der Oberwelt verboten");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.holdsLava(new net.minecraft.world.item.ItemStack(
+                net.minecraft.world.item.Items.LAVA_BUCKET)), "Ein Lavaeimer enthält keine Lava");
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerLava.holdsLava(new net.minecraft.world.item.ItemStack(
+                net.minecraft.world.item.Items.WATER_BUCKET)), "Ein Wassereimer enthält Lava");
+        var bucket = (net.minecraft.world.item.BucketItem) net.minecraft.world.item.Items.LAVA_BUCKET;
+        BlockPos here = helper.absolutePos(new BlockPos(4, 2, 4));
+        helper.assertTrue(bucket.emptyContents(null, level, here, null, new net.minecraft.world.item.ItemStack(bucket)),
+                "In der Oberwelt lässt sich keine Lava mehr ausgießen");
+        helper.assertTrue(level.getFluidState(here).is(net.minecraft.tags.FluidTags.LAVA), "Keine Lava in der Oberwelt");
+        level.setBlock(here, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        ServerLevel sea = level.getServer().getLevel(UrmeerDimension.LEVEL);
+        if (sea != null) {
+            BlockPos up = new BlockPos(0, UrmeerTerrain.SEA_LEVEL + 40, 0);
+            sea.getChunk(up);
+            helper.assertFalse(bucket.emptyContents(null, sea, up, null, new net.minecraft.world.item.ItemStack(bucket)),
+                    "Im Urmeer lässt sich Lava ausgießen");
+            helper.assertFalse(sea.getFluidState(up).is(net.minecraft.tags.FluidTags.LAVA), "Lava im Urmeer");
+        }
+        helper.succeed();
     }
 
     /**
