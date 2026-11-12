@@ -180,7 +180,11 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.PALE_WASTES)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SHADOW_FOREST)
                 .add(io.github.sirschrolli.kingdomsatwar.shadow.ShadowBiomes.SOUL_MARSH);
-        this.tag(ModTags.Biomes.HAS_KRAKEN_MAW).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP);
+        // (seit 0.92 auch in den Landschaften, die aus den Weiten wurden: so liegt der Schlund dort, wo er in 0.91 lag)
+        this.tag(ModTags.Biomes.HAS_KRAKEN_MAW).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN);
         this.tag(ModTags.Biomes.HAS_SUNKEN_ATOLL)
                 .add(net.minecraft.world.level.biome.Biomes.WARM_OCEAN)
                 .add(net.minecraft.world.level.biome.Biomes.LUKEWARM_OCEAN)
@@ -267,7 +271,9 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
         // die Bauwerke des Meeres auch im Urmeer (0.89): Gebeine von Seedrachen, Muschelfelder, Korallenpaläste
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SEA_DRAGON)).addTag(BiomeTags.IS_OCEAN)
                 .addTag(BiomeTags.IS_BEACH).add(OverworldBiomes.CORAL_COAST).add(OverworldBiomes.STORM_COAST)
-                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.ISLES);
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.ISLES)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CARAVANSERAI)).add(net.minecraft.world.level.biome.Biomes.DESERT);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.SERPENT_TEMPLE)).addTag(BiomeTags.IS_JUNGLE);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.WITCH_TREE)).add(net.minecraft.world.level.biome.Biomes.SWAMP)
@@ -287,7 +293,9 @@ public class ModBiomeTagsProvider extends TagsProvider<Biome> {
                 .add(net.minecraft.world.level.biome.Biomes.PALE_GARDEN).add(OverworldBiomes.PRIMEVAL_FOREST);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.EMBER_GATE)).addTag(BiomeTags.IS_OVERWORLD);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CLAM_FIELD)).addTag(BiomeTags.IS_OCEAN)
-                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.REEF);
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP).add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.REEF)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
+                .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN);
         this.tag(has.get(io.github.sirschrolli.kingdomsatwar.worldgen.site.SiteKind.CORAL_PALACE)).addTag(BiomeTags.IS_DEEP_OCEAN)
                 .add(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP);
         // der Versunkene Tempel mit dem Gezeitentor (0.89): auf dem Grund der tiefen Ozeane

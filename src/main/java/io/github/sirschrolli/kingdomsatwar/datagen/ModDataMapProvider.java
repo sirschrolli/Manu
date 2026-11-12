@@ -68,6 +68,15 @@ public class ModDataMapProvider extends DataMapProvider {
         }
         flammable.add(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.THORNBRIAR.key(),
                 new Flammable(FireBlock.IGNITE_INSTANT, FireBlock.BURN_INSTANT), false);
+        // die Meereshölzer (0.92): an Land brennen sie wie gewöhnliches Holz
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood sea : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            for (var wood : java.util.List.of(sea.log, sea.wood, sea.strippedLog, sea.strippedWood)) {
+                flammable.add(wood.key(), LIKE_LOGS, false);
+            }
+            flammable.add(sea.fence.key(), LIKE_PLANKS, false);
+            flammable.add(sea.fenceGate.key(), LIKE_PLANKS, false);
+            flammable.add(sea.leaves.key(), new Flammable(FireBlock.IGNITE_EASY, FireBlock.BURN_EASY), false);
+        }
 
         // Eigene Monster wie ihre Vanilla-Gegenstücke: Papageien ahmen sie nach, Dorfbewohner halten Abstand
         var imitations = builder(NeoForgeDataMaps.PARROT_IMITATIONS);
@@ -104,6 +113,10 @@ public class ModDataMapProvider extends DataMapProvider {
         transform.add(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD.key(), Transformable.stripping(
                 io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_WOOD.get(),
                 io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.STRIPPED_GLIMMERWOOD_WOOD.get()), false);
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood sea : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            transform.add(sea.log.key(), Transformable.stripping(sea.log.get(), sea.strippedLog.get()), false);
+            transform.add(sea.wood.key(), Transformable.stripping(sea.wood.get(), sea.strippedWood.get()), false);
+        }
         for (var soil : java.util.List.of(ShadowBlocks.SHADOW_SOIL, ShadowBlocks.SHADOW_GRASS)) {
             Block block = soil.get();
             transform.add(soil.key(), new Transformable(java.util.Map.of(

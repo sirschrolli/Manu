@@ -103,6 +103,9 @@ public final class ModFeatureTypes {
             FEATURE_TYPES.register("sea_stack", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.SeaStackFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature>> KELP_FOREST =
             FEATURE_TYPES.register("kelp_forest", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.KelpForestFeature.CODEC);
+    /** Die Bäume der Meereshölzer (0.92). */
+    public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature>> SEA_TREE =
+            FEATURE_TYPES.register("sea_tree", () -> io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.AnemoneGardenFeature>> ANEMONE_GARDEN =
             FEATURE_TYPES.register("anemone_garden", () -> io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.AnemoneGardenFeature.CODEC);
     public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.ShellBedFeature>> SHELL_BED =

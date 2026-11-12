@@ -94,7 +94,10 @@ public enum Habitat {
         // das Urmeer (0.89): überall Salzwasser; über den Weiten und Gräben die Fische der Tiefe, an Riffen und Inseln die warmen
         if (dim == io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerDimension.LEVEL) {
             set.add(SALT);
-            if (biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP) || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.TRENCH)) {
+            if (biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.DEEP) || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.TRENCH)
+                    || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST)
+                    || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS)
+                    || biome.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.GLOW_DEPTHS)) {
                 set.add(DEEP);
             } else {
                 set.add(SALT_WARM);

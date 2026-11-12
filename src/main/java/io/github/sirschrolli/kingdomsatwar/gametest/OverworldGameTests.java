@@ -232,7 +232,8 @@ final class OverworldGameTests {
             BlockPos origin = new BlockPos(60_000 + index * 80, y0, 60_000);
             index++;
             Feature feature = features.getOrThrow(entry.featureKey()).value();
-            boolean sea = entry.name().startsWith("standard/ocean/");
+            // die Landschaften des Meeresgrunds und die Meeresbäume des Urmeers (seit 0.92) wachsen unter Wasser
+            boolean sea = entry.name().startsWith("standard/ocean/") || entry.name().startsWith("urmeer/");
             int seaLevel = y0 + seaDepth(entry.name());
             if (sea) {
                 // ein Stück Meer, so tief, wie die Landschaft es braucht (die flache Testwelt hat ihren Meeresspiegel tief unten)
@@ -261,6 +262,10 @@ final class OverworldGameTests {
 
     /** Wie tief das Wasser für eine Landschaft des Meeresgrunds sein muss (heiße Quellen und Leuchtfelder nur in der Tiefe). */
     private static int seaDepth(String name) {
+        if (name.startsWith("urmeer/")) {
+            // ein Meeresbaum braucht Platz bis drei Blöcke unter der Oberfläche
+            return 26;
+        }
         if (name.endsWith("vent_fields") || name.endsWith("glow_fields")) {
             return 20;
         }

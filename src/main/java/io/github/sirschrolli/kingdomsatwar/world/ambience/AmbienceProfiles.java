@@ -760,6 +760,31 @@ public final class AmbienceProfiles {
                 .spot("bird_gull", 1.2f, DAY)
                 .spot("pebbles", 0.5f, ALWAYS)
                 .spot("leaves_rustle", 0.4f, ALWAYS));
+        // seit 0.92 die Landschaften unter Wasser: über dem Tangwald und den Perlmuttgründen wie über den Weiten, über dem
+        // Korallengarten wie über den Riffen, über der Leuchtenden Tiefe wie über den Gräben
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.KELP_FOREST, AmbienceProfile.builder()
+                .outside("lagoon", 0.16f)
+                .wind("wind_coast", 0.28f)
+                .spot("bird_gull", 0.4f, DAY)
+                .spot("dolphin", 0.6f, ALWAYS)
+                .far("whale_far", 0.35f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.CORAL_GARDEN, AmbienceProfile.builder()
+                .outside("lagoon", 0.2f)
+                .wind("wind_breeze", 0.2f)
+                .spot("bird_gull", 0.5f, DAY)
+                .spot("dolphin", 0.7f, ALWAYS)
+                .spot("turtle", 0.4f, DAY));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.PEARL_GROUNDS, AmbienceProfile.builder()
+                .outside("lagoon", 0.18f)
+                .wind("wind_breeze", 0.24f)
+                .spot("bird_gull", 0.5f, DAY)
+                .spot("dolphin", 0.6f, ALWAYS)
+                .far("whale", 0.4f, ALWAYS));
+        put(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerBiomes.GLOW_DEPTHS, AmbienceProfile.builder()
+                .outside("lagoon", 0.12f)
+                .wind("wind_gale", 0.22f)
+                .far("whale_far", 0.4f, ALWAYS)
+                .far("deep_moan", 0.35f, ALWAYS));
     }
 
     // =====================================================================================

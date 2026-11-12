@@ -1,5 +1,9 @@
 {
   "values": [
+    "kingdomsatwar:kelpwood_door",
+    "kingdomsatwar:coralwood_door",
+    "kingdomsatwar:pearlwood_door",
+    "kingdomsatwar:abysswood_door",
     "kingdomsatwar:shadow_door",
     "kingdomsatwar:glimmerwood_door",
     "kingdomsatwar:castle_door"

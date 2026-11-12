@@ -177,7 +177,7 @@ final class FishingGameTests {
             FishSpecies twin = effects.put(signature.toString(), species);
             helper.assertTrue(twin == null, "Zwei Fische wirken gleich: " + id + " und " + (twin == null ? "" : twin.id()));
         }
-        helper.assertTrue(FishSpecies.count() == 1893 && FishSpecies.NAMED == 84 && custom == 1889 && FishSpecies.legends().size() == 15,
+        helper.assertTrue(FishSpecies.count() == 2053 && FishSpecies.NAMED == 84 && custom == 2049 && FishSpecies.legends().size() == 15,
                 "Zahl der Arten: " + FishSpecies.count() + " / " + FishSpecies.NAMED + " / " + custom + " / " + FishSpecies.legends().size());
 
         // jedes Biom hat eigene Arten: die Biome der Mod je einundzwanzig, die von Minecraft elf oder dreizehn (seit 0.83 zwei Wellen,

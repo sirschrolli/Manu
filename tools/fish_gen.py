@@ -779,6 +779,26 @@ Insel/Isle Brandungs/Breaker Palmen/Palm Klippen/Cliff Strand/Strand Gezeitenpfu
 W: an den Sturminseln des Urmeers | at the Storm Isles of the Primordial Sea
 """
 
+# Die fünfte Welle (seit 0.92): die vier Landschaften unter Wasser des Urmeers – je vierzig Arten wie in den übrigen Biomen des
+# Urmeers (zwölf, acht, achtzehn und zwei Legenden). Ganz hinten berechnet: Alle älteren Arten bleiben Zeichen für Zeichen.
+BIOME_TABLE_URMEER2 = """
+kingdomsatwar:urmeer_kelp_forest | sea | 12 | W | #4a7a34 #16301a #e0b84a #d8f0b8 | sea | forest | glow=.1
+Tangwald/Kelpforest Wedel/Frond Blasentang/Wrack Algen/Algae Grünlicht/Greenlight Schwebe/Drift Lichtfleck/Sunfleck Dickicht/Thicket Stängel/Stalk Wogen/Surge Dämmergrün/Duskgreen Schwimmblasen/Bladder
+W: im Tangwald des Urmeers | in the kelp forest of the Primordial Sea
+
+kingdomsatwar:urmeer_coral_garden | sea | 12 | W | #e86a7a #5a1a2a #ffb84a #fff0e8 | sea_warm | sea | glow=.1
+Korallengarten/Coralgarden Rosen/Rose Hirschhorn/Staghorn Hirnkorallen/Braincoral Röhren/Tube Feuerkorallen/Firecoral Gorgonien/Gorgonian Polypen/Polyp Pastell/Pastel Kelch/Chalice Zweig/Branch Blüten/Bloom
+W: im Korallengarten des Urmeers | in the coral garden of the Primordial Sea
+
+kingdomsatwar:urmeer_pearl_grounds | sea | 12 | W | #c8c0d8 #3a3a5a #f0a8d8 #ffffff | sea | crystal | glow=.2
+Perl/Pearl Schimmer/Shimmer Silbersand/Silversand Austern/Oyster Opal/Opal Glanz/Lustre Schiller/Iris Weißgrund/Whiteground Kleinod/Jewel Schalen/Shell Seiden/Silk Lichtsand/Lightsand
+W: über den Perlmuttgründen des Urmeers | over the pearl grounds of the Primordial Sea
+
+kingdomsatwar:urmeer_glow_depths | sea | 12 | W | #0e2a4a #02060e #3affd8 #b8f0ff | deep | deep | glow=.7 | eyes
+Biolicht/Biolight Funken/Spark Schein/Gleam Phosphor/Phosphor Lumen/Lumen Neon/Neon Nachtglanz/Nightgleam Blaulicht/Bluelight Tiefenschein/Deepgleam Sternstaub/Stardust Lichtfaden/Lightthread Irrschein/Wisplight
+W: in der Leuchtenden Tiefe des Urmeers | in the Glowing Depths of the Primordial Sea
+"""
+
 
 class Biome:
     def __init__(self, block: str):
@@ -1799,12 +1819,38 @@ def generate() -> list:
             rng = Rng("legend:" + biome.id)
             for k, (medium, form) in enumerate(legend_forms(biome, rng, count)):
                 out.append(make(biome, rng, k, medium, form, "LEGENDARY", biome.prefixes, used, images, 3))
+    # die fünfte Welle (seit 0.92): die Landschaften unter Wasser, je vierzig Arten wie die übrigen Biome des Urmeers
+    for biome in biomes(BIOME_TABLE_URMEER2):
+        rng = Rng("fish:" + biome.id)
+        forms = pick_forms(biome, rng)
+        rarity_of = rarities(forms, SPLIT[biome.n], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 1))
+        rng = Rng("fish2:" + biome.id)
+        taken = {s.form for s in out if s.biome.id == biome.id}
+        forms = pick_forms2(biome, rng, taken)
+        rarity_of = rarities(forms, SPLIT2[len(forms)], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
+        rng = Rng("fish4:" + biome.id)
+        taken = {s.form for s in out if s.biome.id == biome.id}
+        forms = pick_forms3(biome, rng, taken, URMEER_EXTRA)
+        rarity_of = rarities(forms, SPLIT3[len(forms)], rng)
+        prefixes = rng.shuffled(biome.prefixes)
+        for k, (medium, form) in enumerate(forms):
+            out.append(make(biome, rng, k, medium, form, rarity_of[k], prefixes, used, images, 2))
+        rng = Rng("legend:" + biome.id)
+        for k, (medium, form) in enumerate(legend_forms(biome, rng, URMEER_LEGENDS)):
+            out.append(make(biome, rng, k, medium, form, "LEGENDARY", biome.prefixes, used, images, 3))
     return out
 
 
 def check(species: list) -> None:
-    legends = len(biomes()) + URMEER_LEGENDS * len(biomes(BIOME_TABLE_URMEER))
-    assert len(species) == 916 + 628 + 80 + URMEER_EXTRA * len(biomes(BIOME_TABLE_URMEER)) + legends, len(species)
+    legends = len(biomes()) + URMEER_LEGENDS * (len(biomes(BIOME_TABLE_URMEER)) + len(biomes(BIOME_TABLE_URMEER2)))
+    assert len(species) == 916 + 628 + 80 + URMEER_EXTRA * len(biomes(BIOME_TABLE_URMEER)) + legends + 38 * len(biomes(BIOME_TABLE_URMEER2)), \
+        len(species)
     assert sum(1 for s in species if s.rarity == "LEGENDARY") == legends
     # in jedem Biom jede Seltenheit
     by_biome = {}

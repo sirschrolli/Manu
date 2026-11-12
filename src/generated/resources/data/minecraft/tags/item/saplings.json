@@ -1,5 +1,9 @@
 {
   "values": [
+    "kingdomsatwar:kelpwood_sapling",
+    "kingdomsatwar:coralwood_sapling",
+    "kingdomsatwar:pearlwood_sapling",
+    "kingdomsatwar:abysswood_sapling",
     "kingdomsatwar:shadow_sapling",
     "kingdomsatwar:glimmerwood_sapling"
   ]

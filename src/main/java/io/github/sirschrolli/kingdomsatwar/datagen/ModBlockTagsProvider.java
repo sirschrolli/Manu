@@ -35,6 +35,7 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         motionBlocking();
+        seaWoods();
         // --- Baublöcke ---
         for (BuildingSet set : ModBlocks.BUILDING_SETS) {
             TagKey<Block> tool = set.tool() == BuildingSet.Tool.AXE ? BlockTags.MINEABLE_WITH_AXE : BlockTags.MINEABLE_WITH_PICKAXE;
@@ -492,6 +493,29 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
             }
         }
         KingdomsAtWar.LOGGER.info("[Datagen] {} feste Blöcke in #blocks_motion_no_leaves", count);
+    }
+
+    /** Die Meereshölzer (0.92): wie Glimmerholz in alle Holz-Tags. */
+    private void seaWoods() {
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood wood : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            add(BlockTags.MINEABLE_WITH_HOE, wood.leaves);
+            add(BlockTags.MINEABLE_WITH_AXE, wood.log, wood.wood, wood.strippedLog, wood.strippedWood, wood.door, wood.trapdoor, wood.fence,
+                    wood.fenceGate);
+            add(BlockTags.SWORD_EFFICIENT, wood.leaves, wood.sapling);
+            add(wood.logsTag, wood.log, wood.wood, wood.strippedLog, wood.strippedWood);
+            tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(wood.logsTag);
+            tag(BlockTags.LOGS).addTag(wood.logsTag);
+            add(BlockItemTags.PLANKS.block(), wood.planks.base());
+            add(BlockItemTags.WOODEN_STAIRS.block(), wood.planks.stairs());
+            add(BlockItemTags.WOODEN_SLABS.block(), wood.planks.slab());
+            add(BlockItemTags.WOODEN_DOORS.block(), wood.door);
+            add(BlockItemTags.WOODEN_TRAPDOORS.block(), wood.trapdoor);
+            add(BlockItemTags.WOODEN_FENCES.block(), wood.fence);
+            add(BlockItemTags.FENCE_GATES.block(), wood.fenceGate);
+            add(BlockTags.LEAVES, wood.leaves);
+            add(BlockItemTags.SAPLINGS.block(), wood.sapling);
+            add(BlockTags.FLOWER_POTS, wood.pottedSapling);
+        }
     }
 
     @SafeVarargs

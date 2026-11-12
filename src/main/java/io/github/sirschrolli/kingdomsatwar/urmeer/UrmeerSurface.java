@@ -61,6 +61,11 @@ public final class UrmeerSurface {
         MaterialRule reefBed = MaterialRules.sequence(
                 MaterialRules.ifTrue(MaterialRules.noiseCondition2d(UrmeerTerrain.PATCHES, 0.45), calcite),
                 sand);
+        // die Perlmuttgründe (0.92): heller Sand mit Kalkflecken
+        MaterialRule pearlBed = MaterialRules.sequence(
+                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(UrmeerTerrain.PATCHES, 0.2), calcite),
+                MaterialRules.ifTrue(MaterialRules.noiseCondition2d(UrmeerTerrain.SURFACE, 0.35, 0.6), state(Blocks.SMOOTH_SANDSTONE)),
+                sand);
         MaterialRule trenchBed = MaterialRules.sequence(
                 MaterialRules.ifTrue(steep, abyssStone),
                 MaterialRules.ifTrue(MaterialRules.noiseCondition2d(UrmeerTerrain.PATCHES, 0.35), abyssStone),
@@ -72,15 +77,16 @@ public final class UrmeerSurface {
                 sand);
 
         MaterialRule floor = MaterialRules.sequence(
-                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.TRENCH), trenchBed),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.TRENCH, UrmeerBiomes.GLOW_DEPTHS), trenchBed),
                 MaterialRules.ifTrue(deepDown, trenchBed),
                 MaterialRules.ifTrue(notUnderwater, island),
                 MaterialRules.ifTrue(steep, stone),
-                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.REEF), reefBed),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.REEF, UrmeerBiomes.CORAL_GARDEN), reefBed),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.PEARL_GROUNDS), pearlBed),
                 seabed);
         MaterialRule under = MaterialRules.sequence(
                 MaterialRules.ifTrue(steep, stone),
-                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.TRENCH), abyssStone),
+                MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.TRENCH, UrmeerBiomes.GLOW_DEPTHS), abyssStone),
                 MaterialRules.ifTrue(deepDown, abyssStone),
                 MaterialRules.ifTrue(MaterialRules.isBiome(biomes, UrmeerBiomes.ISLES), MaterialRules.sequence(
                         MaterialRules.ifTrue(beachHigh, sandstone), dirt)),

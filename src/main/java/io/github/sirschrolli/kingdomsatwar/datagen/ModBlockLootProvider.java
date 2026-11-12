@@ -143,6 +143,7 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         this.dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.CHISELED_TIDE_STONE.get());
         sea();
         fae();
+        seaWoods();
         for (DeferredBlock<? extends Block> block : java.util.List.of(io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CRACKED_VOID_STONE_BRICKS,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.CHISELED_VOID_STONE,
                 io.github.sirschrolli.kingdomsatwar.registry.VoidBlocks.ASTRAL_PILLAR,
@@ -314,6 +315,19 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
      * Das Feenreich (0.63): Gestein, Holz, Pilze und Blumen wie gewohnt; Feengras gibt Feenerde, Laub manchmal Setzlinge,
      * Halme, Leuchtranken und Dornenhecken nur mit Schere oder Behutsamkeit; die Sternspitze aus der unteren Hälfte.
      */
+    /** Die Meereshölzer (0.92): alles gibt sich selbst, das Laub manchmal einen Setzling, die Tür nur aus der unteren Hälfte. */
+    private void seaWoods() {
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood wood : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            for (DeferredBlock<? extends Block> block : java.util.List.of(wood.log, wood.wood, wood.strippedLog, wood.strippedWood, wood.trapdoor,
+                    wood.fence, wood.fenceGate, wood.sapling)) {
+                dropSelf(block.get());
+            }
+            add(wood.leaves.get(), block -> createLeavesDrops(block, wood.sapling.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+            dropPottedContents(wood.pottedSapling.get());
+            add(wood.door.get(), this::createDoorTable);
+        }
+    }
+
     private void fae() {
         for (DeferredBlock<? extends Block> block : java.util.List.of(FaeBlocks.MOSSY_FAESTONE_BRICKS, FaeBlocks.CHISELED_MOONSTONE,
                 FaeBlocks.FAE_SOIL, FaeBlocks.FAE_MOSS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD,

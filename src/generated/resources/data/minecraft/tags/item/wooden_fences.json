@@ -1,5 +1,9 @@
 {
   "values": [
+    "kingdomsatwar:kelpwood_fence",
+    "kingdomsatwar:coralwood_fence",
+    "kingdomsatwar:pearlwood_fence",
+    "kingdomsatwar:abysswood_fence",
     "kingdomsatwar:shadow_fence",
     "kingdomsatwar:glimmerwood_fence"
   ]

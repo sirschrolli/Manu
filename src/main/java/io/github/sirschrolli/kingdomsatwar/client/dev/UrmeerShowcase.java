@@ -29,7 +29,12 @@ final class UrmeerShowcase {
      * Eine Ansicht: wo (Biom und eine Bedingung an die Höhe des Grunds), ob unter Wasser, wie weit weg und wie hoch über
      * dem Grund die Kamera steht, aus welcher Richtung.
      */
-    private record View(String name, ResourceKey<Biome> biome, IntPredicate ground, boolean under, double distance, double height, float turn) {
+    private record View(String name, ResourceKey<Biome> biome, IntPredicate ground, boolean under, double distance, double height, float turn,
+            boolean dark) {
+        View(String name, ResourceKey<Biome> biome, IntPredicate ground, boolean under, double distance, double height, float turn) {
+            this(name, biome, ground, under, distance, height, turn, false);
+        }
+
         /** Blick zum Horizont (die Kamera steht am Ort selbst, schaut flach in Richtung {@code turn}). */
         boolean horizon() {
             return this.distance <= 0;
@@ -45,7 +50,14 @@ final class UrmeerShowcase {
             new View("urmeer_reef", UrmeerBiomes.REEF, h -> h > SEA - 9 && h < SEA - 3, true, 9, 3, 60),
             new View("urmeer_kelp", UrmeerBiomes.DEEP, h -> h > UrmeerTerrain.FLOOR - 4 && h < UrmeerTerrain.FLOOR + 6, true, 16, 12, 140),
             new View("urmeer_trench", UrmeerBiomes.TRENCH, h -> h < 24, true, 12, 22, 250),
-            new View("urmeer_overview", UrmeerBiomes.ISLES, h -> h > SEA + 8, false, 110, 70, 35));
+            new View("urmeer_overview", UrmeerBiomes.ISLES, h -> h > SEA + 8, false, 110, 70, 35),
+            // seit 0.92 die Landschaften unter Wasser
+            new View("urmeer_kelpforest", UrmeerBiomes.KELP_FOREST, h -> h > UrmeerTerrain.FLOOR - 6 && h < SEA - 24, true, 18, 13, 150),
+            new View("urmeer_coralgarden", UrmeerBiomes.CORAL_GARDEN, h -> h > SEA - 26 && h < SEA - 10, true, 12, 6, 120),
+            new View("urmeer_pearlgrounds", UrmeerBiomes.PEARL_GROUNDS, h -> h > UrmeerTerrain.FLOOR - 6 && h < SEA - 24, true, 14, 8, 200),
+            new View("urmeer_glowdepths", UrmeerBiomes.GLOW_DEPTHS, h -> h < 30, true, 16, 6, 120),
+            // dieselbe Tiefe ohne Nachtsicht: nur das Leuchten der Bäume und Felder
+            new View("urmeer_glowdepths_dark", UrmeerBiomes.GLOW_DEPTHS, h -> h < 30, true, 16, 6, 120, true));
 
     static void views(Deque<Step> steps, String only) {
         steps.add(Step.hud(false));
@@ -95,7 +107,17 @@ final class UrmeerShowcase {
                 // bzw. ringsum suchen
                 for (int tries = 0; tries < 24; tries++) {
                     int hx = generator.getBaseHeight((int) Math.floor(cam[0]), (int) Math.floor(cam[2]), Heightmap.Types.OCEAN_FLOOR_WG, level, random);
-                    boolean ok = view.under() ? hx < SEA - 8 : view.horizon() || hx < SEA - 1;
+                    // unter Wasser auch nicht über einem Hügel oder in einer Baumkrone, von wo die Kamera steil nach unten sähe
+                    boolean ok;
+                    if (view.under()) {
+                        int qx = (int) Math.floor(cam[0]);
+                        int qz = (int) Math.floor(cam[2]);
+                        level.getChunk(qx >> 4, qz >> 4);
+                        int top = level.getHeight(Heightmap.Types.OCEAN_FLOOR, qx, qz);
+                        ok = hx < SEA - 8 && top <= at.getY() + view.height() - 2;
+                    } else {
+                        ok = view.horizon() || hx < SEA - 1;
+                    }
                     if (ok) {
                         break;
                     }
@@ -137,13 +159,21 @@ final class UrmeerShowcase {
                 ready[0] = true;
             }));
             steps.add(Step.until(() -> ready[0], 6000));
+            if (view.dark()) {
+                steps.add(Step.command("effect clear @s minecraft:night_vision"));
+                steps.add(Step.command("effect clear @s minecraft:conduit_power"));
+            }
             steps.add(Step.once(minecraft -> minecraft.player.connection.sendCommand(String.format(Locale.ROOT,
                     "execute in kingdomsatwar:urmeer run tp @s %.1f %.1f %.1f %.1f %.1f", cam[0], cam[1], cam[2], cam[3], cam[4]))));
             steps.add(arrived(cam));
             steps.add(Step.waitTicks(40));
             steps.add(Step.waitForChunks(800));
-            steps.add(Step.waitTicks(80));
+            steps.add(Step.waitTicks(view.dark() ? 160 : 80));
             steps.add(Step.screenshot(view.name()));
+            if (view.dark()) {
+                steps.add(Step.command("effect give @s minecraft:night_vision infinite 0 true"));
+                steps.add(Step.command("effect give @s minecraft:conduit_power infinite 0 true"));
+            }
         }
     }
 

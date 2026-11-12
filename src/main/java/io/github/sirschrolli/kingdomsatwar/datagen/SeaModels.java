@@ -62,6 +62,20 @@ final class SeaModels {
         }
         seafloor(blocks);
         atoll(blocks, items);
+        seaWoods(blocks);
+    }
+
+    /** Die Meereshölzer (0.92): wie Glimmerholz – Stamm, Holz, Laub, Setzling, Tür, Falltür, Zaun und Zauntor. */
+    private static void seaWoods(BlockModelGenerators blocks) {
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood wood : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            blocks.woodProvider(wood.log.get()).logWithHorizontal(wood.log.get()).wood(wood.wood.get());
+            blocks.woodProvider(wood.strippedLog.get()).logWithHorizontal(wood.strippedLog.get()).wood(wood.strippedWood.get());
+            blocks.createTrivialBlock(wood.leaves.get(), net.minecraft.client.data.models.model.TexturedModel.LEAVES);
+            blocks.createPlantWithDefaultItem(wood.sapling.get(), wood.pottedSapling.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+            blocks.createDoor(wood.door.get());
+            blocks.createOrientableTrapdoor(wood.trapdoor.get());
+            blocks.familyWithExistingFullBlock(wood.planks.base().get()).fence(wood.fence.get()).fenceGate(wood.fenceGate.get());
+        }
     }
 
     // =====================================================================================

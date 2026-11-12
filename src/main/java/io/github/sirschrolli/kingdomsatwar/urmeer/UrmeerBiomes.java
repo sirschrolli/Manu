@@ -41,6 +41,13 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
  *     Anglerfische und Leuchtkraken;</li>
  *     <li><b>Sturminseln</b> – Felseninseln über dem Meer mit Stränden und Palmen, um sie Felsnadeln; Riesenkrabben am Strand.</li>
  * </ul>
+ * Seit 0.92 vier weitere Landschaften unter Wasser, jede mit ihrem Meeresholz:
+ * <ul>
+ *     <li><b>Tangwald</b> – in den Weiten, wo es grünt: hohe Tangbäume, dazwischen Riesentang und Seegras;</li>
+ *     <li><b>Korallengarten</b> – an den Flanken der Korallenbänke: Korallenbäume, Korallen und Anemonen;</li>
+ *     <li><b>Perlmuttgründe</b> – helle Gründe aus Sand und Kalk: Perlbäume, Muschelbänke und Perlmuttfelsen;</li>
+ *     <li><b>Leuchtende Tiefe</b> – die Hälfte der Gräben, in der alles leuchtet: Tiefseebäume, Leuchtfelder, heiße Schlote.</li>
+ * </ul>
  */
 public final class UrmeerBiomes {
     public static final ResourceKey<Biome> DEEP = key("urmeer_deep");
@@ -48,7 +55,21 @@ public final class UrmeerBiomes {
     public static final ResourceKey<Biome> TRENCH = key("urmeer_trench");
     public static final ResourceKey<Biome> ISLES = key("urmeer_isles");
 
-    public static final List<ResourceKey<Biome>> ALL = List.of(DEEP, REEF, TRENCH, ISLES);
+    public static final ResourceKey<Biome> KELP_FOREST = key("urmeer_kelp_forest");
+    public static final ResourceKey<Biome> CORAL_GARDEN = key("urmeer_coral_garden");
+    public static final ResourceKey<Biome> PEARL_GROUNDS = key("urmeer_pearl_grounds");
+    public static final ResourceKey<Biome> GLOW_DEPTHS = key("urmeer_glow_depths");
+
+    public static final List<ResourceKey<Biome>> ALL = List.of(DEEP, REEF, TRENCH, ISLES, KELP_FOREST, CORAL_GARDEN, PEARL_GROUNDS, GLOW_DEPTHS);
+    /** Die vier Landschaften unter Wasser (seit 0.92). */
+    public static final List<ResourceKey<Biome>> UNDERWATER = List.of(KELP_FOREST, CORAL_GARDEN, PEARL_GROUNDS, GLOW_DEPTHS);
+
+    /** Grenzen in der Pflanzen-Noise (der "Feuchte"): darüber Tangwald, darunter Perlmuttgründe; in den Gräben die Leuchtende Tiefe. */
+    public static final float KELP_EDGE = 0.2f;
+    public static final float PEARL_EDGE = -0.24f;
+    public static final float GLOW_EDGE = 0.05f;
+    /** So breit ist der Korallengarten am Rand der Korallenbänke (in der Riff-Noise). */
+    public static final float GARDEN_WIDTH = 0.1f;
 
     private static final Climate.Parameter FULL = Climate.Parameter.span(-2.0f, 2.0f);
 
@@ -67,16 +88,26 @@ public final class UrmeerBiomes {
         List<Pair<Climate.ParameterPoint, Holder<Biome>>> list = new ArrayList<>();
         Climate.Parameter sea = Climate.Parameter.span(-2.0f, UrmeerTerrain.ISLAND_EDGE);
         Climate.Parameter flat = Climate.Parameter.span(UrmeerTerrain.TRENCH_EDGE, 2.0f);
-        add(list, biomes, ISLES, FULL, Climate.Parameter.span(UrmeerTerrain.ISLAND_EDGE, 2.0f), FULL);
-        add(list, biomes, TRENCH, FULL, sea, Climate.Parameter.span(-2.0f, UrmeerTerrain.TRENCH_EDGE));
-        add(list, biomes, REEF, Climate.Parameter.span(UrmeerTerrain.REEF_EDGE, 2.0f), sea, flat);
-        add(list, biomes, DEEP, Climate.Parameter.span(-2.0f, UrmeerTerrain.REEF_EDGE), sea, flat);
+        Climate.Parameter trench = Climate.Parameter.span(-2.0f, UrmeerTerrain.TRENCH_EDGE);
+        Climate.Parameter open = Climate.Parameter.span(-2.0f, UrmeerTerrain.REEF_EDGE - GARDEN_WIDTH);
+        add(list, biomes, ISLES, FULL, FULL, Climate.Parameter.span(UrmeerTerrain.ISLAND_EDGE, 2.0f), FULL);
+        add(list, biomes, GLOW_DEPTHS, FULL, Climate.Parameter.span(GLOW_EDGE, 2.0f), sea, trench);
+        add(list, biomes, TRENCH, FULL, Climate.Parameter.span(-2.0f, GLOW_EDGE), sea, trench);
+        add(list, biomes, REEF, Climate.Parameter.span(UrmeerTerrain.REEF_EDGE, 2.0f), FULL, sea, flat);
+        add(list, biomes, CORAL_GARDEN, Climate.Parameter.span(UrmeerTerrain.REEF_EDGE - GARDEN_WIDTH, UrmeerTerrain.REEF_EDGE), FULL, sea, flat);
+        add(list, biomes, KELP_FOREST, open, Climate.Parameter.span(KELP_EDGE, 2.0f), sea, flat);
+        add(list, biomes, PEARL_GROUNDS, open, Climate.Parameter.span(-2.0f, PEARL_EDGE), sea, flat);
+        add(list, biomes, DEEP, open, Climate.Parameter.span(PEARL_EDGE, KELP_EDGE), sea, flat);
         return new Climate.ParameterList<>(list);
     }
 
     private static void add(List<Pair<Climate.ParameterPoint, Holder<Biome>>> list, HolderGetter<Biome> biomes, ResourceKey<Biome> biome,
-            Climate.Parameter temperature, Climate.Parameter continentalness, Climate.Parameter erosion) {
-        list.add(Pair.of(Climate.parameters(temperature, FULL, continentalness, erosion, FULL, FULL, 0.0f), biomes.getOrThrow(biome)));
+            Climate.Parameter temperature, Climate.Parameter humidity, Climate.Parameter continentalness, Climate.Parameter erosion) {
+        list.add(Pair.of(Climate.parameters(temperature, humidity, continentalness, erosion, FULL, FULL, 0.0f), biomes.getOrThrow(biome)));
+    }
+
+    private static ResourceKey<PlacedFeature> tree(String wood) {
+        return ResourceKey.create(Registries.PLACED_FEATURE, KingdomsAtWar.id("overworld/urmeer/" + wood + "_tree"));
     }
 
     // =====================================================================================
@@ -114,6 +145,29 @@ public final class UrmeerBiomes {
                         AquaticPlacements.SEAGRASS_NORMAL, AquaticPlacements.KELP_WARM),
                 spawns().add(ModEntities.GIANT_CRAB.get(), 8, 2, 4).add(ModEntities.TURTLE.get(), 4, 1, 3)
                         .add(ModEntities.COD.get(), 6, 2, 4).add(ModEntities.DOLPHIN.get(), 2, 1, 3).build()));
+        // seit 0.92: die Landschaften unter Wasser, jede mit ihren Bäumen (die Reihenfolge der Features passt zu den übrigen
+        // Biomen: die Bäume immer zuerst)
+        context.register(KELP_FOREST, biome(0x4A9A88, 0x9CCAB8, 0x2A8A6A, 0x0E3A2C, features(placed, carvers,
+                        tree("kelpwood"), own("standard/ocean/kelp_forests"), own("standard/ocean/cold_kelp_forests"), own("standard/ocean/sea_stacks"),
+                        AquaticPlacements.SEAGRASS_DEEP, AquaticPlacements.KELP_COLD),
+                spawns().add(ModEntities.SQUID.get(), 4, 2, 4).add(ModEntities.SALMON.get(), 10, 3, 6).add(ModEntities.COD.get(), 10, 3, 6)
+                        .add(ModEntities.MANTA_RAY.get(), 2, 1, 2).add(ModEntities.SHARK.get(), 1, 1, 1).add(ModEntities.DOLPHIN.get(), 2, 2, 3)
+                        .build()));
+        context.register(CORAL_GARDEN, biome(0x5AA8D8, 0xACDCE4, 0x3AB0C8, 0x1A6078, features(placed, carvers,
+                        tree("coralwood"), own("coral_coast/coral_gardens"), own("standard/ocean/anemone_gardens"),
+                        AquaticPlacements.WARM_OCEAN_VEGETATION, AquaticPlacements.SEAGRASS_WARM, AquaticPlacements.SEA_PICKLE),
+                spawns().add(ModEntities.TROPICAL_FISH.get(), 25, 8, 8).add(ModEntities.PUFFERFISH.get(), 8, 1, 3)
+                        .add(ModEntities.TURTLE.get(), 2, 1, 2).add(ModEntities.GLOW_JELLYFISH.get(), 4, 2, 4).build()));
+        context.register(PEARL_GROUNDS, biome(0x6AA8D8, 0xC8E0EC, 0x4AA8D0, 0x1A5070, features(placed, carvers,
+                        tree("pearlwood"), own("standard/ocean/anemone_gardens"), own("standard/ocean/shell_beds"), own("coral_coast/nacre_rocks"),
+                        AquaticPlacements.SEAGRASS_NORMAL),
+                spawns().add(ModEntities.MANTA_RAY.get(), 4, 1, 2).add(ModEntities.GLOW_JELLYFISH.get(), 8, 3, 6)
+                        .add(ModEntities.GIANT_CRAB.get(), 2, 1, 2).add(ModEntities.COD.get(), 8, 3, 6).add(ModEntities.DOLPHIN.get(), 2, 2, 4)
+                        .build()));
+        context.register(GLOW_DEPTHS, biome(0x2A5898, 0x4A7AA8, 0x10406A, 0x020C1A, features(placed, carvers,
+                        tree("abysswood"), own("standard/ocean/glow_fields"), own("standard/ocean/vent_fields"), AquaticPlacements.SEAGRASS_DEEP_COLD),
+                spawns().add(ModEntities.ANGLERFISH.get(), 8, 1, 2).add(ModEntities.GLOW_SQUID.get(), 14, 1, 3)
+                        .add(ModEntities.GLOW_JELLYFISH.get(), 14, 3, 6).build()));
     }
 
     @SafeVarargs

@@ -138,6 +138,11 @@ public final class OverworldFeatures {
         return List.of(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, CountPlacement.of(count), BiomeFilter.biome());
     }
 
+    /** Am Grund des Meeres, egal wie tief (die Meeresbäume des Urmeers). */
+    private static List<PlacementModifier> underwater(PlacementModifier frequency) {
+        return List.of(frequency, InSquarePlacement.spread(), HeightmapPlacement.onHeightmap(Heightmap.Types.OCEAN_FLOOR), BiomeFilter.biome());
+    }
+
     /** An der Oberfläche (Wasseroberfläche eingeschlossen). */
     private static List<PlacementModifier> anywhere(PlacementModifier frequency) {
         return List.of(frequency, InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome());
@@ -462,6 +467,20 @@ public final class OverworldFeatures {
             io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.VentFieldFeature::new, ground(rare(22), 64));
     static final Entry STD_GLOW_FIELDS = own(VEGETATION, "standard/ocean/glow_fields",
             io.github.sirschrolli.kingdomsatwar.worldgen.overworld.feature.GlowFieldFeature::new, ground(rare(7), 64));
+
+    // --- die Meeresbäume (0.92): in den Landschaften unter Wasser des Urmeers; ihre Setzlinge wachsen zu denselben Bäumen ---
+    static final Entry URMEER_KELPWOOD_TREES = own(VEGETATION, "urmeer/kelpwood_tree",
+            () -> new io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature.Kind.KELP), underwater(count(5)));
+    static final Entry URMEER_CORALWOOD_TREES = own(VEGETATION, "urmeer/coralwood_tree",
+            () -> new io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature.Kind.CORAL), underwater(count(4)));
+    static final Entry URMEER_PEARLWOOD_TREES = own(VEGETATION, "urmeer/pearlwood_tree",
+            () -> new io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature.Kind.PEARL), underwater(count(2)));
+    static final Entry URMEER_ABYSSWOOD_TREES = own(VEGETATION, "urmeer/abysswood_tree",
+            () -> new io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature(
+                    io.github.sirschrolli.kingdomsatwar.urmeer.feature.SeaTreeFeature.Kind.ABYSS), underwater(count(3)));
 
     // =====================================================================================
     // Registrierung (Datengenerierung)

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#kingdomsatwar:kelpwood_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "kingdomsatwar:kelpwood_planks"
+  }
+}

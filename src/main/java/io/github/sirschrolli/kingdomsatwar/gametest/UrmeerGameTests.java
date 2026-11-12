@@ -116,8 +116,9 @@ final class UrmeerGameTests {
                 }
             }
         }
-        KingdomsAtWar.LOGGER.info("[Urmeer] {} Proben: Land {}, tiefes Meer {}; Weiten {}, Korallenbänke {}, Gräben {}, Sturminseln {}", samples, land, deep,
-                found[0], found[1], found[2], found[3]);
+        KingdomsAtWar.LOGGER.info("[Urmeer] {} Proben: Land {}, tiefes Meer {}; Weiten {}, Korallenbänke {}, Gräben {}, Sturminseln {}, Tangwald {}, "
+                + "Korallengarten {}, Perlmuttgründe {}, Leuchtende Tiefe {}", samples, land, deep, found[0], found[1], found[2], found[3], found[4],
+                found[5], found[6], found[7]);
         for (int i = 0; i < found.length; i++) {
             helper.assertTrue(found[i] > 0, "Biom nirgends gefunden: " + UrmeerBiomes.ALL.get(i).identifier());
         }

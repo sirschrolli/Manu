@@ -706,6 +706,24 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, key("glimmerwood_fence"));
         fenceGateBuilder(FaeBlocks.GLIMMERWOOD_FENCE_GATE.get(), glimmerPlanks).unlockedBy(getHasName(planks), has(planks))
                 .save(output, key("glimmerwood_fence_gate"));
+
+        // die Meereshölzer (0.92): Bretter, Holz, Tür, Falltür, Zaun und Zauntor wie bei jedem Holz
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood sea : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            ItemLike seaPlanks = sea.planks.base().get();
+            shapeless(RecipeCategory.BUILDING_BLOCKS, seaPlanks, 4)
+                    .requires(sea.logsItemTag)
+                    .unlockedBy("has_" + sea.name + "_log", has(sea.logsItemTag))
+                    .save(output, key(sea.name + "_planks"));
+            wood(sea.wood.get(), sea.log.get(), sea.name + "_wood");
+            wood(sea.strippedWood.get(), sea.strippedLog.get(), "stripped_" + sea.name + "_wood");
+            Ingredient seaIngredient = Ingredient.of(seaPlanks);
+            doorBuilder(sea.door.get(), seaIngredient).unlockedBy(getHasName(seaPlanks), has(seaPlanks)).save(output, key(sea.name + "_door"));
+            trapdoorBuilder(sea.trapdoor.get(), seaIngredient).unlockedBy(getHasName(seaPlanks), has(seaPlanks))
+                    .save(output, key(sea.name + "_trapdoor"));
+            fenceBuilder(sea.fence.get(), seaIngredient).unlockedBy(getHasName(seaPlanks), has(seaPlanks)).save(output, key(sea.name + "_fence"));
+            fenceGateBuilder(sea.fenceGate.get(), seaIngredient).unlockedBy(getHasName(seaPlanks), has(seaPlanks))
+                    .save(output, key(sea.name + "_fence_gate"));
+        }
     }
 
     /** Erze, Barren, Werkzeuge, Rüstungen und die Abyssit-Aufwertung der Schattenwelt. */

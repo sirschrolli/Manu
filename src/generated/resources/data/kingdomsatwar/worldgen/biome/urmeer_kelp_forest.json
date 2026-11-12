@@ -1,0 +1,122 @@
+{
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "block_search_extent": 8,
+        "offset": 2.0,
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "max_delay": 24000,
+        "min_delay": 12000,
+        "sound": "minecraft:music.under_water"
+      }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "water_ambient": [
+            {
+              "type": "kingdomsatwar:salmon",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 6,
+                "min_inclusive": 3
+              },
+              "weight": 10
+            },
+            {
+              "type": "kingdomsatwar:cod",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 6,
+                "min_inclusive": 3
+              },
+              "weight": 10
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "kingdomsatwar:squid",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 4
+            },
+            {
+              "type": "kingdomsatwar:manta_ray",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 2
+            },
+            {
+              "type": "kingdomsatwar:shark",
+              "count": 1,
+              "weight": 1
+            },
+            {
+              "type": "kingdomsatwar:dolphin",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "weight": 2
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:underwater"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#9ccab8",
+    "minecraft:visual/sky_color": "#4a9a88",
+    "minecraft:visual/water_fog_color": "#0e3a2c"
+  },
+  "carvers": [],
+  "downfall": 0.7,
+  "effects": {
+    "dry_foliage_color": "#8a9a4a",
+    "foliage_color": "#4fae4a",
+    "grass_color": "#6abf5a",
+    "water_color": "#2a8a6a"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "kingdomsatwar:overworld/standard/ocean/sea_stacks"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "kingdomsatwar:overworld/urmeer/kelpwood_tree",
+      "kingdomsatwar:overworld/standard/ocean/kelp_forests",
+      "kingdomsatwar:overworld/standard/ocean/cold_kelp_forests",
+      "minecraft:seagrass_deep",
+      "minecraft:kelp_cold"
+    ]
+  ],
+  "has_precipitation": true,
+  "temperature": 0.6
+}

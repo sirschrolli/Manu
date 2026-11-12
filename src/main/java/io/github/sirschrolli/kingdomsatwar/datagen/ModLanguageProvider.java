@@ -687,6 +687,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("dimension.kingdomsatwar.urmeer", "The Primordial Sea", "Das Urmeer");
         text("biome.kingdomsatwar.urmeer_deep", "Primordial Expanse", "Urmeer-Weiten");
         text("biome.kingdomsatwar.urmeer_reef", "Coral Banks", "Korallenbänke");
+        text("biome.kingdomsatwar.urmeer_kelp_forest", "Kelp Forest", "Tangwald");
+        text("biome.kingdomsatwar.urmeer_coral_garden", "Coral Garden", "Korallengarten");
+        text("biome.kingdomsatwar.urmeer_pearl_grounds", "Pearl Grounds", "Perlmuttgründe");
+        text("biome.kingdomsatwar.urmeer_glow_depths", "Glowing Depths", "Leuchtende Tiefe");
         text("biome.kingdomsatwar.urmeer_trench", "Deep Sea Trench", "Tiefseegraben");
         text("biome.kingdomsatwar.urmeer_isles", "Storm Isles", "Sturminseln");
         set("tide_stone", "tide_stone", "Tide Stone", "Gezeitenstein", "Tide Stone", "Gezeitenstein");
@@ -729,6 +733,7 @@ public class ModLanguageProvider extends LanguageProvider {
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.GLIMMERWOOD_SAPLING, "Glimmerwood Sapling", "Glimmerholzsetzling");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.POTTED_GLIMMERWOOD_SAPLING, "Potted Glimmerwood Sapling",
                 "Eingetopfter Glimmerholzsetzling");
+        seaWoods();
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MUSHROOM_STEM, "Giant Mushroom Stem", "Riesenpilzstiel");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.ROSE_MUSHROOM_CAP, "Rose Mushroom Cap", "Rosenpilzhut");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.AZURE_MUSHROOM_CAP, "Sky Mushroom Cap", "Himmelspilzhut");
@@ -2170,6 +2175,32 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("block.creator_altar.awaken", "Altar awakens", "Altar erwacht");
         subtitle("block.creator_altar.hum", "Altar hums", "Altar summt");
         subtitle("item.creator_scepter.cast", "Spear casts", "Speer wirkt");
+    }
+
+    /** Die Meereshölzer (0.92): Tangholz, Korallenholz, Perlholz, Tiefseeholz – je Stamm, Holz, Bretter, Laub, Setzling … */
+    private void seaWoods() {
+        for (io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.SeaWood wood : io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.ALL) {
+            String en = wood.english;
+            String de = wood.german;
+            block(wood.log, en + " Log", de + "stamm");
+            block(wood.wood, en, de);
+            block(wood.strippedLog, "Stripped " + en + " Log", "Entrindeter " + de + "stamm");
+            block(wood.strippedWood, "Stripped " + en, "Entrindetes " + de);
+            roof(wood.name + "_planks", wood.name + "_plank", en + " Planks", de + "bretter", en, de);
+            block(wood.door, en + " Door", de + "tür");
+            block(wood.trapdoor, en + " Trapdoor", de + "falltür");
+            block(wood.fence, en + " Fence", de + "zaun");
+            block(wood.fenceGate, en + " Fence Gate", de + "zauntor");
+            String[] leaves = switch (wood.name) {
+                case "kelpwood" -> new String[] {"Kelp Fronds", "Tangwedel"};
+                case "coralwood" -> new String[] {"Coral Fans", "Korallenfächer"};
+                case "pearlwood" -> new String[] {"Pearl Leaves", "Perlblätter"};
+                default -> new String[] {"Glowfronds", "Leuchtwedel"};
+            };
+            block(wood.leaves, leaves[0], leaves[1]);
+            block(wood.sapling, en + " Sapling", de + "setzling");
+            block(wood.pottedSapling, "Potted " + en + " Sapling", "Eingetopfter " + de + "setzling");
+        }
     }
 
     private void creature(Supplier<? extends net.minecraft.world.entity.EntityType<?>> type, Supplier<? extends Item> egg,
