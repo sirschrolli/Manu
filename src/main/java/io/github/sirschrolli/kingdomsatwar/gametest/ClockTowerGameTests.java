@@ -853,7 +853,8 @@ final class ClockTowerGameTests {
         helper.assertTrue(warden.isDeadOrDying(), "Der Wächter stirbt nicht");
         helper.runAfterDelay(HourWardenEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(warden.isRemoved(), "Der Wächter zerspringt nicht");
-            for (var drop : List.of(ModItems.HEART_CRYSTAL.get(), AbyssGear.CHRONIT.get())) {
+            // (seit 1.2 fällt der Herzkristall nur selten – das prüft die Beute-Statistik)
+            for (var drop : List.of(AbyssGear.CHRONIT.get())) {
                 helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(drop)).isEmpty(), "Er lässt nicht fallen: " + drop);
             }
             BlockState stopped = level.getBlockState(heartPos);

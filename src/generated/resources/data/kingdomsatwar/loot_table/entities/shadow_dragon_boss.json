@@ -19,14 +19,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 2
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
           },
           "name": "kingdomsatwar:heart_crystal"
         }
       ],
-      "rolls": 1
+      "rolls": 2
     },
     {
       "entries": [

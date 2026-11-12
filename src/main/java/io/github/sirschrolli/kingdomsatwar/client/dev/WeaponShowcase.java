@@ -55,6 +55,7 @@ final class WeaponShowcase {
         map.put("stahlschwert", ModItems.STEEL_SWORD);
         map.put("stahlspitzhacke", ModItems.STEEL_PICKAXE);
         map.put("diamantschwert", () -> Items.DIAMOND_SWORD);
+        map.put("flammenpeitsche", io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP);
         return map;
     }
 

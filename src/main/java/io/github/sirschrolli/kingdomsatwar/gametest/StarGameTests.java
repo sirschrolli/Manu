@@ -189,7 +189,7 @@ final class StarGameTests {
                     helper.runAfterDelay(AsteriaEntity.DEATH_TICKS + 5, () -> {
                         helper.assertTrue(asteria.isRemoved(), "Sie vergeht nicht");
                         var drops = level.getEntitiesOfClass(ItemEntity.class, area, e -> true);
-                        helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())), "Sie lässt keinen Herzkristall fallen");
+                        helper.assertTrue(drops.stream().anyMatch(e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.StarBlocks.STAR_SHARD.get())), "Sie lässt keinen Sternsplitter fallen");
                         drops.forEach(Entity::discard);
                         // ein Endkristall entzündet den Stein neu
                         helper.assertTrue(stone.rekindle(level, null), "Der Endkristall entzündet den Stein nicht");

@@ -578,9 +578,6 @@ final class StarWeaverGameTests {
         helper.assertTrue(weaver.isDeadOrDying(), "Die Weberin stirbt nicht");
         helper.runAfterDelay(io.github.sirschrolli.kingdomsatwar.entity.voidrealm.StarWeaverEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(weaver.isRemoved(), "Die Weberin zerfällt nicht");
-            boolean crystal = !level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, around,
-                    e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty();
-            helper.assertTrue(crystal, "Sie lässt keinen Herzkristall fallen");
             helper.assertTrue(level.getBlockState(nestPos).getValue(io.github.sirschrolli.kingdomsatwar.block.voidrealm.WeaverNestBlock.PHASE)
                     == io.github.sirschrolli.kingdomsatwar.block.voidrealm.WeaverNestBlock.Phase.DEFEATED, "Das Gelege erlischt nicht");
             helper.assertTrue(nest.recall(level, null), "Ein Himmelseisenbarren ruft sie nicht zurück");

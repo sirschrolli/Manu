@@ -130,6 +130,8 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
     private int cooldown = 30;
     private int calls;
     private int idleTicks;
+    /** Für Tests: nur wer so nah ist, wird getroffen (siehe {@link #confine}). */
+    private double confine = Double.MAX_VALUE;
     private int orbit = 1;
     private @Nullable BlockPos home;
     private @Nullable BlockPos altar;
@@ -479,7 +481,13 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
     }
 
     private List<LivingEntity> victims(ServerLevel level, AABB area) {
-        return level.getEntitiesOfClass(LivingEntity.class, area, this::canStrike);
+        return level.getEntitiesOfClass(LivingEntity.class, area, e -> this.canStrike(e)
+                && e.distanceToSqr(this.getX(), e.getY(), this.getZ()) <= this.confine * this.confine);
+    }
+
+    /** Für Tests: Ihre Angriffe treffen nur, wer so nah (waagerecht) bei ihr ist – sonst träfen sie die Nachbartests. */
+    public void confine(double radius) {
+        this.confine = radius;
     }
 
     private @Nullable LivingEntity findTarget(ServerLevel level) {
@@ -490,7 +498,7 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
         if (current != null && current.isAlive() && current.distanceToSqr(this) < 44.0 * 44.0 && this.canStrike(current)) {
             return current;
         }
-        return level.getNearestPlayer(this.getX(), this.getY(), this.getZ(), 32.0,
+        return level.getNearestPlayer(this.getX(), this.getY(), this.getZ(), Math.min(32.0, this.confine),
                 e -> e instanceof Player p && !p.isCreative() && !p.isSpectator() && p.isAlive());
     }
 
@@ -502,9 +510,19 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
         return this.home != null ? Vec3.atBottomCenterOf(this.home) : this.position();
     }
 
-    /** Die Höhe des Bodens, über dem sie schwebt (ihr Platz, sonst wo sie ist). */
+    /** Die Höhe des Bodens, über dem sie schwebt (ihr Platz; ohne Platz – etwa aus dem Spawn-Ei – der Boden unter ihr). */
     public double floorY() {
-        return this.home != null ? this.home.getY() : this.getY() - HOVER;
+        if (this.home != null) {
+            return this.home.getY();
+        }
+        BlockPos.MutableBlockPos p = this.blockPosition().mutable();
+        for (int i = 0; i < 12; i++) {
+            p.move(net.minecraft.core.Direction.DOWN);
+            if (!this.level().getBlockState(p).getCollisionShape(this.level(), p).isEmpty()) {
+                return p.getY() + 1;
+            }
+        }
+        return this.getY() - HOVER;
     }
 
     private Vec3 forward() {
@@ -1053,8 +1071,13 @@ public class IgnaraEntity extends Monster implements io.github.sirschrolli.kingd
             return;
         }
         if (t <= 26 && this.diveFrom != null && this.diveTo != null) {
+            // waagerecht gleichmäßig beschleunigt und gebremst, senkrecht stürzt sie gleich zu Beginn hinab (sonst flöge sie über
+            // ihr Ziel hinweg)
             double k = (t - 12) / 14.0;
-            Vec3 at = this.diveFrom.lerp(this.diveTo, k * k * (3.0 - 2.0 * k));
+            double s = k * k * (3.0 - 2.0 * k);
+            double down = 1.0 - (1.0 - k) * (1.0 - k) * (1.0 - k);
+            Vec3 at = new Vec3(Mth.lerp(s, this.diveFrom.x, this.diveTo.x), Mth.lerp(down, this.diveFrom.y, this.diveTo.y),
+                    Mth.lerp(s, this.diveFrom.z, this.diveTo.z));
             this.setDeltaMovement(at.subtract(this.position()));
             level.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(0.5), this.getZ(), 10, 0.5, 0.5, 0.5, 0.04);
             if (t % 2 == 0) {

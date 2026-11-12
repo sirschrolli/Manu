@@ -199,6 +199,7 @@ public final class ModGameTests {
         StarWeaverGameTests.init(); // seit 0.99: Himmelseisen, die Rüstung der Sternwandler, das Sternennetz, die Sternenweberin
         ClockTowerGameTests.init(); // seit 1.1: Chronit, die Rüstung der Zeitwächter, der Uhrturm, der Stundenwächter
         FlameGameTests.init(); // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
+        IgnaraGameTests.init(); // seit 1.2: Ignara, die Flammenpriesterin, ihr Altar, die Flammenpeitsche, das Flammenheiligtum
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -292,6 +293,7 @@ public final class ModGameTests {
         StarWeaverGameTests.register(event, environment);
         ClockTowerGameTests.register(event, environment);
         FlameGameTests.register(event, environment);
+        IgnaraGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);

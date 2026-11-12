@@ -178,6 +178,31 @@ public final class SiteSamples {
         return AshForge.bridge(center, Rotation.NONE, 0xA5E6L + variant, len, rock ? AshForge.END_ROCK : AshForge.END_TOWER, exit, variant);
     }
 
+    /** Das Flammenheiligtum (1.2) mit der Mitte der Plattform bei {@code center} (y = Höhe über dem Boden), ein Steg nach vorn. */
+    public static SitePiece flameSanctum(BlockPos center) {
+        return flameSanctum(center, Rotation.NONE);
+    }
+
+    /** Das Flammenheiligtum, gedreht (der Steg und der Blick des Altars drehen mit). */
+    public static SitePiece flameSanctum(BlockPos center, Rotation rotation) {
+        return FlameSanctum.sanctum(center, rotation, 0xF1A3L, 1);
+    }
+
+    /** Ein Steg des Flammenheiligtums nach vorn (+z): {@code tunnel} > 0 endet im Fels, sonst an einer Anlegestelle. */
+    public static SitePiece flameSanctumBridge(BlockPos center, int len, int tunnel) {
+        return FlameSanctum.bridgePiece(center, Rotation.NONE, 0xF1A4L, len, tunnel);
+    }
+
+    /** Ein Punkt im Rahmen des Flammenheiligtums (Mitte bei 0, 0, 0; vorn ist +z) in Weltkoordinaten. */
+    public static BlockPos flameSanctumAt(SitePiece sanctum, int x, int y, int z) {
+        return sanctum.origin().offset(new BlockPos(x, y, z).rotate(sanctum.rotation()));
+    }
+
+    /** Wo im Flammenheiligtum der Flammenaltar steht. */
+    public static BlockPos flameSanctumAltar(SitePiece sanctum) {
+        return flameSanctumAt(sanctum, FlameSanctum.ALTAR[0], FlameSanctum.ALTAR[1], FlameSanctum.ALTAR[2]);
+    }
+
     /** Die Hortfeste mit der Mitte ihres Sockels bei {@code center} (Oberfläche des Sockels eine Schicht darunter). */
     public static SitePiece hortfeste(BlockPos center) {
         return Hortfeste.piece(center.below(), Rotation.NONE, 0x4F27L);

@@ -34,7 +34,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -382,8 +381,6 @@ final class ReefGameTests {
         helper.runAfterDelay(ReefColossusEntity.DEATH_TICKS + 8, () -> {
             helper.assertTrue(core.phase() == AtollCoreBlockEntity.Phase.DEFEATED, "Das Atoll merkt den Sieg nicht");
             AABB area = new AABB(center).inflate(40);
-            helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
-                    "Karkinos lässt keinen Herzkristall fallen");
             helper.assertTrue(level.getEntitiesOfClass(GiantCrabEntity.class, area, net.minecraft.world.entity.Entity::isAlive).isEmpty(),
                     "Die Brut bleibt nach seinem Tod");
             // das Gezeitenhorn ruft ihn zurück

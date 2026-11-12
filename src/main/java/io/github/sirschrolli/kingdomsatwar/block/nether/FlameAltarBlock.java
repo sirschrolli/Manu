@@ -71,6 +71,17 @@ public class FlameAltarBlock extends Block implements EntityBlock {
         builder.add(FACING, PHASE);
     }
 
+    /** Gedreht (etwa in einem gedrehten Bauwerk) blickt der Altar mit – sonst schwebte die Priesterin hinter ihm. */
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());

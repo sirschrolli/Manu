@@ -131,6 +131,8 @@ final class BossLootGameTests {
                 new Boss(ModEntities.ANNI_TROLL.get(), List.of(AnniBlocks.BANNHAMMER.get(), AnniBlocks.GLITCH_WINGS.get()), List.of(), heart, 1,
                         List.of(), 3, null),
                 new Boss(ModEntities.GLUTSCHMIED.get(), List.of(ForgeBlocks.GLUT_SPEAR.get()), List.of(), heart, 1, List.of(), 2, null),
+                new Boss(ModEntities.IGNARA.get(), List.of(io.github.sirschrolli.kingdomsatwar.registry.FlameSanctuary.FLAME_WHIP.get()), List.of(),
+                        heart, 1, List.of(), 0, List.of(new Material(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get(), 2, 4))),
                 new Boss(ModEntities.ASTERIA.get(), List.of(StarBlocks.STAR_LANCE.get(), StarBlocks.STAR_WINGS.get()), List.of(), heart, 1,
                         List.of(), 3, null),
                 new Boss(ModEntities.MOTH_QUEEN.get(), List.of(FaeBlocks.FAE_ELYTRA.get()), List.of(), heart, 1, List.of(), 2, null),
@@ -164,12 +166,21 @@ final class BossLootGameTests {
                     player.getStats().setValue(player, Stats.ENTITY_KILLED.get(boss.type()), Math.max(1, stat));
                     int rolls = 400;
                     Map<Item, Integer> seen = new HashMap<>();
+                    boolean hearts = boss.crystal() == ModItems.HEART_CRYSTAL.get();
+                    int heartCount = 0;
                     for (int roll = 0; roll < rolls; roll++) {
                         Map<Item, Integer> loot = roll(table, params(level, player, withPlayer));
-                        // Kristalle: beim ersten eigenen Sieg genau so viele, sonst nie
                         int crystals = loot.getOrDefault(boss.crystal(), 0);
-                        helper.assertTrue(crystals == (first ? boss.crystals() : 0),
-                                name + ": " + crystals + " Kristalle (" + (first ? "erster Sieg" : "danach") + ") – " + loot);
+                        if (hearts) {
+                            // Herzkristalle (seit 1.2): bei jedem Sieg eines Spielers, aber jeder nur selten; ohne Spieler nie
+                            helper.assertTrue(crystals <= (withPlayer ? boss.crystals() : 0),
+                                    name + ": " + crystals + " Herzkristalle (" + (withPlayer ? "Sieg" : "ohne Spieler") + ") – " + loot);
+                            heartCount += crystals;
+                        } else {
+                            // Manakristalle: beim ersten eigenen Sieg genau so viele, sonst nie
+                            helper.assertTrue(crystals == (first ? boss.crystals() : 0),
+                                    name + ": " + crystals + " Kristalle (" + (first ? "erster Sieg" : "danach") + ") – " + loot);
+                        }
                         for (Item item : boss.firstOnly()) {
                             helper.assertTrue(first == loot.containsKey(item),
                                     name + ": " + item + (first ? " fehlt beim ersten Sieg" : " fällt auch danach") + " – " + loot);
@@ -186,6 +197,12 @@ final class BossLootGameTests {
                             armorOnly(helper, name, boss, loot);
                         }
                     }
+                    if (hearts && withPlayer) {
+                        double rate = heartCount / (double) (rolls * boss.crystals());
+                        helper.assertTrue(rate > BossLoot.HEART_CHANCE * 0.5 && rate < BossLoot.HEART_CHANCE * 1.6,
+                                name + ": Herzkristalle fallen " + (first ? "beim ersten Sieg" : "danach") + " zu " + Math.round(rate * 100)
+                                        + " % (erwartet etwa " + Math.round(BossLoot.HEART_CHANCE * 100) + " %)");
+                    }
                     // Sonderstücke (und anderes Seltene): bei jedem Sieg selten – auch beim ersten
                     for (Item item : seen.keySet()) {
                         double rate = seen.get(item) / (double) rolls;
@@ -195,11 +212,18 @@ final class BossLootGameTests {
                     }
                 }
             }
-            // die Drachen kommen nur einmal: ihre Beute bleibt, wie sie war (auch ohne Spieler am Ende der langen Todesfolge)
+            // die Drachen kommen nur einmal: ihre Beute bleibt, wie sie war (auch ohne Spieler am Ende der langen Todesfolge) –
+            // nur der Herzkristall fällt seit 1.2 bloß noch etwa jedes zweite Mal
             LootTable pyrrhon = level.getServer().reloadableRegistries().getLootTable(ModEntities.PYRRHON.get().getDefaultLootTable().orElseThrow());
-            Map<Item, Integer> loot = roll(pyrrhon, params(level, player, false));
-            helper.assertTrue(loot.getOrDefault(ModItems.HEART_CRYSTAL.get(), 0) == 1 && loot.getOrDefault(ModItems.DRACONIUM.get(), 0) >= 3,
-                    "Pyrrhons Beute hat sich verändert: " + loot);
+            int dragonHearts = 0;
+            for (int roll = 0; roll < 400; roll++) {
+                Map<Item, Integer> loot = roll(pyrrhon, params(level, player, false));
+                helper.assertTrue(loot.getOrDefault(ModItems.HEART_CRYSTAL.get(), 0) <= 1 && loot.getOrDefault(ModItems.DRACONIUM.get(), 0) >= 3,
+                        "Pyrrhons Beute hat sich verändert: " + loot);
+                dragonHearts += loot.getOrDefault(ModItems.HEART_CRYSTAL.get(), 0);
+            }
+            helper.assertTrue(dragonHearts > 400 * BossLoot.HEART_CHANCE_ONCE * 0.7 && dragonHearts < 400 * BossLoot.HEART_CHANCE_ONCE * 1.3,
+                    "Pyrrhon lässt den Herzkristall " + dragonHearts + " von 400 Mal fallen (erwartet etwa die Hälfte)");
         } finally {
             level.getServer().getPlayerList().remove(player);
         }

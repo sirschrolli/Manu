@@ -42,7 +42,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -361,8 +360,6 @@ final class KrakenGameTests {
                 .thenExecuteAfter(KrakenEntity.DEATH_TICKS + 8, () -> {
                     helper.assertTrue(core.phase() == KrakenCoreBlockEntity.Phase.DEFEATED, "Der Schlund merkt den Sieg nicht");
                     AABB area = new AABB(center).inflate(40.0);
-                    helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
-                            "Der Kraken lässt keinen Herzkristall fallen");
                     helper.assertTrue(level.getEntitiesOfClass(SharkEntity.class, area, Entity::isAlive).isEmpty(), "Die Haie bleiben nach seinem Tod");
                     helper.assertTrue(level.getEntitiesOfClass(KrakenEntity.class, area, Entity::isAlive).isEmpty(), "Der Kraken bleibt nach dem Tod");
                     // das Gezeitenhorn ruft ihn zurück

@@ -499,8 +499,6 @@ final class FaeGameTests {
                     helper.assertTrue(queen.isDeadOrDying(), "Noctua fällt nicht");
                     helper.runAfterDelay(25, () -> {
                         AABB area = new AABB(home).inflate(40);
-                        helper.assertFalse(level.getEntitiesOfClass(ItemEntity.class, area, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty(),
-                                "Sie lässt keinen Herzkristall fallen");
                         helper.assertTrue(level.getEntitiesOfClass(MoonMothEntity.class, area, MoonMothEntity::isAlive).isEmpty(),
                                 "Ihre Falter bleiben nach ihrem Tod");
                         helper.assertTrue(level.getBlockState(home).is(FaeBlocks.MOTH_COCOON.get()), "Es spinnt sich kein neuer Kokon");

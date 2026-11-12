@@ -243,6 +243,8 @@ final class Showcase {
                         FaeShowcase.boss(steps);
                     } else if (scene.equals("forge_boss")) {
                         ForgeShowcase.boss(steps);
+                    } else if (scene.equals("ignara_boss")) {
+                        IgnaraShowcase.boss(steps);
                     } else if (scene.equals("star_boss")) {
                         StarShowcase.boss(steps);
                     } else if (scene.equals("mystik_boss")) {

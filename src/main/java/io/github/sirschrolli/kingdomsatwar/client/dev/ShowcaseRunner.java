@@ -78,7 +78,7 @@ public final class ShowcaseRunner {
         boolean flat = !(SCENES.contains("terrain") || SCENES.contains("lair") || SCENES.contains("seal") || SCENES.contains("tower")
                 || SCENES.contains("magefight") || SCENES.contains("biome") || SCENES.contains("villages") || SCENES.contains("worldsite")
                 || SCENES.contains("castleworld") || SCENES.contains("conquest")
-                || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor") || SCENES.contains("forge_boss")
+                || SCENES.contains("crystals") || SCENES.contains("atoll") || SCENES.contains("seafloor") || SCENES.contains("forge_boss") || SCENES.contains("ignara_boss")
                 || SCENES.contains("star_boss") || SCENES.contains("anni_boss") || SCENES.contains("boss_arena")
                 || SCENES.contains("creator_boss") || SCENES.contains("creator_melee") || SCENES.contains("kaw_reise"));
         try {
@@ -87,7 +87,7 @@ public final class ShowcaseRunner {
                     new LevelSettings.DifficultySettings(Difficulty.PEACEFUL, false, false), true, WorldDataConfiguration.DEFAULT);
             // Bauwerke: in echten Welten immer, in der flachen Testwelt nur für Szenen, die sie brauchen (z. B. Dörfer)
             boolean structures = !flat || SCENES.contains("village") || SCENES.contains("citadel") || SCENES.contains("nyxar")
-                    || SCENES.contains("siteworld") || SCENES.contains("void_throne") || SCENES.contains("forge_boss") || SCENES.contains("star_boss")
+                    || SCENES.contains("siteworld") || SCENES.contains("void_throne") || SCENES.contains("forge_boss") || SCENES.contains("ignara_boss") || SCENES.contains("star_boss")
                     || SCENES.contains("abyss_hoard") || SCENES.contains("boss_arena") || SCENES.contains("kraken")
                     || SCENES.contains("sea_witch") || SCENES.contains("soul_shepherd") || SCENES.contains("star_weaver")
                     || SCENES.contains("hour_warden");

@@ -493,9 +493,10 @@ final class SchrolliGameTests {
                         List<ItemStack> drops = level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, field.area()).stream()
                                 .map(net.minecraft.world.entity.item.ItemEntity::getItem).toList();
                         // seit 1.1.5 fallen Zepter, Schwingen, Heiligenschein und Räder nur selten (auch beim ersten Sieg); sicher
-                        // sind beim ersten eigenen Sieg nur je drei Herz- und Manakristalle (und der Netherstern bei jedem)
-                        helper.assertTrue(count(drops, io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get()) == 3,
-                                "Keine drei Herzkristalle in der Beute: " + drops);
+                        // sind beim ersten eigenen Sieg nur drei Manakristalle (und der Netherstern bei jedem); seit 1.2 sind
+                        // auch die drei Herzkristalle nur selten
+                        helper.assertTrue(count(drops, io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get()) <= 3,
+                                "Mehr als drei Herzkristalle in der Beute: " + drops);
                         helper.assertTrue(count(drops, io.github.sirschrolli.kingdomsatwar.registry.ModItems.MANA_CRYSTAL.get()) == 3,
                                 "Keine drei Manakristalle in der Beute: " + drops);
                         helper.assertTrue(count(drops, net.minecraft.world.item.Items.NETHER_STAR) >= 1, "Kein Netherstern in der Beute: " + drops);

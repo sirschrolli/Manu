@@ -257,8 +257,8 @@ final class HeroGameTests {
 
     /**
      * Beute: In der Schatzkammer der Stammburg liegen Herz- und Manakristalle, im Allerheiligsten des Magierturms vor
-     * allem Manakristalle; jeder Drachenboss lässt einen Herzkristall fallen (Nyxar zwei und einen Manakristall), jeder
-     * Erzmagier einen Manakristall.
+     * allem Manakristalle; jeder Drachenboss lässt etwa jedes zweite Mal einen Herzkristall fallen (Nyxar je zur Hälfte zwei
+     * und sicher einen Manakristall), jeder Erzmagier beim ersten Sieg einen Manakristall.
      */
     private static void crystalLoot(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -281,12 +281,16 @@ final class HeroGameTests {
                     .create(LootContextParamSets.ENTITY);
             List<EntityType<?>> bosses = new ArrayList<>(List.of(ModEntities.PYRRHON.get(), ModEntities.GLACIARA.get(), ModEntities.VERDANTIS.get(),
                     ModEntities.TERRAGON.get(), ModEntities.VOLTARION.get(), ModEntities.THALASSA.get()));
+            // seit 1.2 ist der Herzkristall nie sicher: die Drachen (je einer) und Nyxar (zwei) lassen jeden nur etwa jedes zweite
+            // Mal fallen
             for (EntityType<?> boss : bosses) {
-                int[] loot = count(table(level, boss), death, 1);
-                helper.assertTrue(loot[0] == 1 && loot[1] == 0, boss + " lässt nicht genau einen Herzkristall fallen: " + loot[0] + "/" + loot[1]);
+                int[] loot = count(table(level, boss), death, 200);
+                helper.assertTrue(loot[0] >= 70 && loot[0] <= 130 && loot[1] == 0, boss + " lässt den Herzkristall nicht etwa jedes zweite Mal fallen: "
+                        + loot[0] + "/" + loot[1] + " in 200 Siegen");
             }
-            int[] nyxar = count(table(level, ModEntities.NYXAR.get()), death, 1);
-            helper.assertTrue(nyxar[0] == 2 && nyxar[1] == 1, "Nyxar lässt nicht zwei Herz- und einen Manakristall fallen: " + nyxar[0] + "/" + nyxar[1]);
+            int[] nyxar = count(table(level, ModEntities.NYXAR.get()), death, 200);
+            helper.assertTrue(nyxar[0] >= 140 && nyxar[0] <= 260 && nyxar[1] == 200, "Nyxar lässt nicht im Schnitt einen Herz- und sicher einen "
+                    + "Manakristall fallen: " + nyxar[0] + "/" + nyxar[1] + " in 200 Siegen");
             // die Erzmagier (in jedem ihrer Türme einer): der Manakristall nur beim ersten eigenen Sieg (seit 1.1.3)
             for (var mage : ModEntities.MAGES.values()) {
                 victim.getStats().setValue(victim, net.minecraft.stats.Stats.ENTITY_KILLED.get(mage.get()), 1);

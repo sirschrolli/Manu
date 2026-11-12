@@ -8,7 +8,7 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.1.6 – Feueropal und die Rüstung der Glutwandler.** Im **Nether** wächst jetzt **Feueropal**: kleine, glühende Knollen im **Netherrack** und im **Schwarzstein**, überall im Nether, am häufigsten um die Höhe des Lavameers (ab einer Diamantspitzhacke). Der Stein ist rot und gold wie die Lava, darin blitzt das **grüne und blaue Farbenspiel** des Opals; er verbrennt nicht. Neun ergeben einen **Feueropalblock** – geschliffene Opale in Schwarzgold, in denen das Feuer wogt und leuchtet. Aus Feueropal und Netheritschrott entsteht die **Rüstung der Glutwandler** (Schutz wie Diamant, etwas härter, verbrennt nicht): geschwärzter Stahl mit Glutrissen, ein **Kamm aus Flammen** über dem Helm, ein großer Feueropal auf der Brust, glühende Fugen an den Schultern und **Glutsohlen**. Jeder Teil nimmt **ein Fünftel des Feuer- und Lavaschadens**; mit dem **Helm siehst du in der Lava weit** (statt einer Armlänge), und mit den **Stiefeln gehst du über Lava**: Wo du sie betrittst, erstarrt sie zu einer **Glutkruste**, die trägt – bleibst du stehen, hält sie, gehst du weiter, bricht sie hinter dir wieder auf und schmilzt.
+> **Version 1.2 – Ignara, die Flammenpriesterin, und das Flammenheiligtum.** Mitten im **Lavameer des Nethers** steht jetzt das **Flammenheiligtum**: eine runde Plattform aus Schwarzstein auf Basaltstelzen, mit einer goldenen Sonne im Mosaikboden, acht Säulen mit **ewigem Feuer**, Stegen zum Fels und dem **Flammenaltar**. Vor ihm schwebt **Ignara** und betet – wer ihr zu nahe kommt, weckt sie. Sie kämpft mit ihrer **Flammenpeitsche** (Hieb, Flammenschlinge, die dich heranreißt), lässt eine **Lavawoge** über das Heiligtum rollen, **Feuersäulen** aus dem Boden brechen und **Feueropale vom Himmel regnen**, ruft **Glutgeister** – und unter halber Kraft wird sie zum **Phönix** mit Schwingen aus Flammen und stürzt sich auf dich. Ihre Beute: selten die **Flammenpeitsche** (reicht weiter als ein Schwert, setzt in Brand; Rechtsklick: der **Peitschenschlag**, der das erste Wesen bis zehn Blöcke weit trifft und heranreißt), sonst **Feueropale**. Ein Feueropal entzündet den erloschenen Altar und ruft sie zurück. Außerdem: **Herzkristalle sind nie mehr sicher** – Bosse, die wiederkommen, lassen sie bei jedem Sieg nur zu **25 %** fallen, einmalige Bosse (Drachen, Nyxar, Zerbrochener König, Weltenfresser) je Kristall zu **50 %**.
 > In 1.1.5 wurde **die Beute der Bosse, die wiederkommen,** knapper: Ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) fällt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen; sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**, und **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
 > In 1.1.4 kamen **neue Tierstimmen**: Wo sich Tiere bisher Laute von Minecraft liehen, die nicht zu ihnen passten, haben sie jetzt **eigene Stimmen**: Der **Hirsch** fiept leise durch die Nase und schnaubt, der **Urelch** grunzt tief, und sein **Brunftruf** schwingt sich von einem Grollen zu einem langen, hellen Pfeifen auf, das weit über das Land hallt; die **Gans** ruft ihr nasales „a-honk“ und faucht mit offenem Schnabel, der **Flamingo** schreit in seiner eigenen Stimme, der **Moorschnapper** knarrt kehlig, faucht und lässt den Hornschnabel zuschlagen. Im Meer beißen **Hai** und **Anglerfisch** mit Sog, Zähnen und Blasen, der **Mantarochen** schnellt mit Gischt aus dem Wasser und klatscht schwer zurück, die **Riesenkrabbe** tippt mit spitzen Beinen, und das Leuchten der **Leuchtqualle** erlischt in gläsernen Tönen; der **Leerenschlund** beißt, heult und fällt in sich zusammen. Der **Kommandostab** gibt ein kurzes **Hornsignal**, und der Drache, den man **in der Ferne** brüllen und mit schweren **Schwingen** über das Land ziehen hört, klingt jetzt wie die Drachen der Mod. Sehr tiefe Klänge – die Schritte und Schläge der großen Bosse, das Gebrüll des Kraken und des Karkinos, die Künste des Schöpfers – sind jetzt auch auf **kleinen Lautsprechern** (Laptop, Fernseher) gut zu hören, und zu leise Klänge (der Schmerz des Steinhüters, der Tod der Riesenkrabbe) sind lauter.
 > In 1.1.3 kamen **Beute, Speere, Schnur und neue Stimmen**: **Bosse, die mehrfach kommen** (die man neu weckt, zurückruft oder in jedem ihrer Bauwerke findet) geben ihr **Sonderstück** – Waffe, Schwingen, Zylinder, Angel – und ihren **Herzkristall** nur beim **ersten eigenen Sieg** sicher; danach fällt das Sonderstück nur noch in einem von fünf Kämpfen, Kristalle gar nicht mehr, und die übrige Beute ist kleiner. Bosse mit **eigener Rüstung** (Steinhüter, Meerhexe, Seelenhirte, Sternenweberin, Stundenwächter) lassen außer ihrem Sonderstück nur noch den **Werkstoff ihrer Rüstung** fallen – etwa genug für ein Teil je Sieg. Die Erfahrung bleibt, wie sie war. Die **Speere** der Mod liegen jetzt so in der Hand wie die Speere von Minecraft: in ihrer Länge und in der Mitte gegriffen – sie ragen nicht mehr weit über den Kopf, und aus der eigenen Sicht ist die Spitze ganz im Bild. Die **Angelschnur** beginnt in jeder Sicht genau an der Rutenspitze – aus der eigenen Sicht auch bei anderem Bildformat und Sichtfeld, von außen auch beim Gehen, Schleichen und mit der Angel in der linken Hand. Und **eigene Klänge** statt geliehener: Drachen (Stimme, Schwingen, Schritte, Biss, Atem aller sechs Elemente, das Ei), Kraken (Schnabel, Schmerz, Tinte, Tentakelschlag, Woge, Strudel), Karkinos (Graben, Ausbruch, Panzer, Gezeitenlanze, Scherenschlag, Schritte, Gezeitenkraft), Nyxar (Schattenatem, Schrei), der Höhlentroll (Grummeln, Grunzen, Tod, Versteinern, Keulenschlag, Schritte) und der Lindwurm (Zischen, Biss, Schrei, Tod, Schuppengleiten).
@@ -360,6 +360,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
 | **Feueropal** im Nether (Netherrack und Schwarzstein) und die **Rüstung der Glutwandler**: weniger Feuerschaden je Teil, weite Sicht in der Lava (Helm), über Lava gehen auf einer Glutkruste (Stiefel), 3D-Teile mit Flammenkamm und Glutsohlen (seit 1.1.6) | ✅ fertig |
+| **Ignara, die Flammenpriesterin** im **Flammenheiligtum** (Lavameer des Nethers): Gebet und Erwachen, Peitschenhieb, Flammenschlinge, Lavawoge, Feuersäulen, Opalregen, Glutgeister, Phönixgestalt mit Sturzflug; Flammenaltar, **Flammenpeitsche** mit Peitschenschlag (seit 1.2) | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -476,7 +477,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.6.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.2.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -484,7 +485,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.1.6.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.2.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1422,6 +1423,51 @@ den Armreifen glüht es ebenso, am Gürtel eine Opalschnalle, an den Knien Feuer
   (sie heilt sogar ein wenig); gehst du weiter, bricht sie hinter dir in drei Stufen auf, ihre Risse glühen heller, dann
   schmilzt sie wieder zu Lava. Im Sprung und wenn du schon in der Lava schwimmst, erstarrt nichts; wer die Kruste
   zerschlägt, steht wieder vor Lava (es geht keine verloren, und es entsteht keine).
+
+### Ignara, die Flammenpriesterin, und das Flammenheiligtum (seit 1.2)
+
+![Das Flammenheiligtum im Lavameer, Ignara im Gebet vor dem Flammenaltar, ihre Angriffe, die Phönixgestalt und die Flammenpeitsche](docs/bilder/flammenheiligtum.jpg)
+
+**Das Flammenheiligtum** liegt mitten im **Lavameer des Nethers** – wo die Lava unter Fels liegt, hat die Hitze eine
+Kuppel aus dem Gestein geschmolzen. Auf Stelzen aus Basalt ruht eine runde Plattform aus poliertem Schwarzstein: im
+Boden eine **Sonne aus vergoldetem Schwarzstein**, von der acht Strahlen aus roten Netherziegeln ausgehen, ein goldener
+Ring, ein Rand aus Ziegeln mit einer niedrigen Brüstung. **Acht Säulen tragen Feuerschalen**, in denen ewiges Feuer
+brennt. Auf einem Podest steht der **Flammenaltar** – ein Sockel aus Schwarzsteinziegeln, ein Schaft mit eingelegten
+Flammenzeichen und einem Feueropal, darauf ein goldenes Becken voller Glut, über der zwei Flammen lodern; dahinter eine
+Wand mit einem **Fenster aus Pilzlicht** in der Gestalt einer Flamme. Neben dem Altar stehen zwei **Truhen mit den Gaben
+der Pilger** (Feueropale, Gold, Lohenstaub, Kerzen, selten ein Kristall), Kerzen brennen. **Stege** führen über die
+Lava bis zum Fels und enden in einem Stollen mit Torbogen (findet keiner Fels, endet der vordere an einer Anlegestelle).
+
+**Ignara, die Flammenpriesterin** schwebt vor dem Altar und betet; dann und wann singt sie einen leisen Hymnus, und wer
+sich nähert, hört ihren Gesang über die Lava wehen. In dieser Zeit ist sie unverwundbar – wer ihr auf zwölf Blöcke
+nahekommt (oder sie angreift), **weckt sie**: Sie hebt das Haupt, breitet die Arme aus, ihr Flammenhaar lodert auf, die
+Peitsche entrollt sich, und die Flammen des Altars schlagen hoch. Sie trägt eine goldene Maske und eine Strahlenkrone,
+ein karminrotes Gewand mit einem Saum aus Flammen, in der einen Hand eine Feuerkugel, in der anderen ihre
+**Flammenpeitsche**; hinter ihren Schultern kreist ein Rad aus Opalsplittern. Feuer und Lava schaden ihr nie.
+- **Peitschenhieb:** ein weiter Bogen aus Flammen vor ihr (als Phönix schlägt sie zurück).
+- **Flammenschlinge:** Die Peitsche kreist über ihrem Kopf, dann schleudert sie sie – wen sie erwischt (bis 18 Blöcke,
+  freie Sicht), den reißt sie heran und empfängt ihn mit einem Hieb. Deckung hilft.
+- **Lavawoge:** Sie schlägt die Feuerkugel auf den Boden, ein Ring aus Glut rollt über das ganze Heiligtum – wer am Boden
+  steht, brennt und fliegt (darüber springen!).
+- **Feuersäulen:** Unter dir (und daneben) glühen Kreise auf, dann brechen Säulen aus Feuer hervor.
+- **Opalregen:** Splitter aus Feueropal stürzen aus der Höhe dorthin, wo du gleich sein wirst, und zerspringen in Flammen.
+- **Ruf der Glutgeister:** zwei Glutgeister treten aus den Flammen (höchstens dreimal).
+- **Phönixgestalt** (unter halber Kraft): Sie steigt auf, Schwingen aus Flammen brechen aus ihrem Rücken, eine Druckwelle
+  wirft alle fort – danach ist sie schneller, ihr Feuer brennt alle in ihrer Nähe, ihre Angriffe treffen härter, und sie
+  stürzt sich im **Sturzflug** quer durch das Heiligtum.
+
+Lockt man sie aus dem Heiligtum, kehrt sie in einer Flammensäule vor den Altar zurück; findet sie niemanden mehr, heilt
+das ewige Feuer sie, und sie betet wieder. Besiegt **erlischt das ewige Feuer** (im Becken liegt kalte Asche); sie lässt
+selten ihre **Flammenpeitsche** fallen (zu einem Fünftel, auch beim ersten Sieg) und sonst nur **zwei bis vier
+Feueropale** – den Werkstoff der Glutwandler-Rüstung –, einen Herzkristall nur zu einem Viertel. **Ein Feueropal** in
+der kalten Schale entzündet den Altar neu und ruft sie zurück.
+
+**Die Flammenpeitsche** (episch, verzauberbar wie ein Schwert, mit Feueropal auszubessern, verbrennt nicht): im Inventar
+das Bild, in der Hand ein 3D-Modell – Opalknauf, Lederwicklung, Goldringe, die geflochtene Schnur in einer Welle, ihr
+Ende glüht, an der Spitze brennt eine Flamme. Sie trifft wie ein gutes Schwert, **reicht zwei Blöcke weiter** und setzt
+jedes Ziel in Brand. **Rechtsklick: der Peitschenschlag** – die Schnur schnellt in Blickrichtung (bis zehn Blöcke, bis
+zur nächsten Wand), das erste Wesen auf ihrem Weg brennt, nimmt Schaden und wird **herangerissen** (alle anderthalb
+Sekunden).
 
 ### Bauwerke des Nethers
 
@@ -4750,7 +4796,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.6.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.2.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

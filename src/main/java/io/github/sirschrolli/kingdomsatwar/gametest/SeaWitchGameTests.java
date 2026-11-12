@@ -34,7 +34,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -389,8 +388,6 @@ final class SeaWitchGameTests {
         helper.assertTrue(witch.isDeadOrDying(), "Die Hexe stirbt nicht");
         helper.runAfterDelay(SeaWitchEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(witch.isRemoved(), "Die Hexe zerfließt nicht");
-            boolean crystal = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty();
-            helper.assertTrue(crystal, "Sie lässt keinen Herzkristall fallen");
             long sharks = level.getEntitiesOfClass(LivingEntity.class, around, e -> e.entityTags().contains(SeaWitchEntity.SHARK_TAG)).size();
             helper.assertTrue(sharks == 0, "Ihre Haie bleiben: " + sharks);
             helper.assertTrue(level.getBlockState(cauldronPos).getValue(WitchCauldronBlock.PHASE) == WitchCauldronBlock.Phase.DEFEATED,

@@ -34,7 +34,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -482,8 +481,6 @@ final class SoulShepherdGameTests {
         helper.assertTrue(shepherd.isDeadOrDying(), "Der Hirte stirbt nicht");
         helper.runAfterDelay(SoulShepherdEntity.DEATH_TICKS + 6, () -> {
             helper.assertTrue(shepherd.isRemoved(), "Der Hirte zerfällt nicht");
-            boolean crystal = !level.getEntitiesOfClass(ItemEntity.class, around, e -> e.getItem().is(io.github.sirschrolli.kingdomsatwar.registry.ModItems.HEART_CRYSTAL.get())).isEmpty();
-            helper.assertTrue(crystal, "Er lässt keinen Herzkristall fallen");
             helper.assertTrue(level.getBlockState(bellPos).getValue(SoulBellBlock.PHASE) == SoulBellBlock.Phase.DEFEATED,
                     "Die Glocke verstummt nicht");
             helper.assertTrue(bell.recall(level, null), "Ein Seelenkristall ruft ihn nicht zurück");

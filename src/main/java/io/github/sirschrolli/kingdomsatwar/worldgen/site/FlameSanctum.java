@@ -108,15 +108,10 @@ final class FlameSanctum {
             mask = 1;
         }
         List<SitePiece> pieces = new ArrayList<>();
-        pieces.add(new SitePiece(SiteKind.FLAME_SANCTUARY, SANCTUM, origin, rotation, seed, new int[] {mask},
-                new BoundingBox(origin.getX() - REACH, origin.getY() - DEPTH - 4, origin.getZ() - REACH, origin.getX() + REACH,
-                        origin.getY() + DOME_HEIGHT + 4, origin.getZ() + REACH)));
+        pieces.add(sanctum(origin, rotation, seed, mask));
         for (int[] bridge : bridges) {
             Rotation r = rotation.getRotated(Rotation.values()[bridge[0]]);
-            int len = bridge[1];
-            int tunnel = bridge[2];
-            pieces.add(new SitePiece(SiteKind.FLAME_SANCTUARY, BRIDGE, origin, r, seed + 31L * (bridge[0] + 1), new int[] {len, tunnel},
-                    SitePiece.box(origin, r, -4, -DEPTH - 4, R - 1, 4, 6, len + Math.max(tunnel, 6) + 2)));
+            pieces.add(bridgePiece(origin, r, seed + 31L * (bridge[0] + 1), bridge[1], Math.max(0, bridge[2])));
         }
         return Optional.of(new Structure.GenerationStub(origin, builder -> pieces.forEach(builder::addPiece)));
     }
@@ -142,7 +137,7 @@ final class FlameSanctum {
      */
     private static int[] reach(SiteTerrain terrain, BlockPos origin, Rotation r) {
         int walk = origin.getY();
-        for (int t = (int) DOME - 2; t <= MAX_BRIDGE; t++) {
+        for (int t = (int) DOME + 3; t <= MAX_BRIDGE; t++) {
             BlockPos p = origin.offset(new BlockPos(0, 0, t).rotate(r));
             int solid = 0;
             for (int dy = 0; dy <= 2; dy++) {
@@ -164,6 +159,19 @@ final class FlameSanctum {
             }
         }
         return null;
+    }
+
+    /** Das Heiligtum (ohne Stege) mit der Mitte der Plattform bei {@code origin}; {@code bridges}: Öffnungen der Brüstung. */
+    static SitePiece sanctum(BlockPos origin, Rotation rotation, long seed, int bridges) {
+        return new SitePiece(SiteKind.FLAME_SANCTUARY, SANCTUM, origin, rotation, seed, new int[] {bridges},
+                new BoundingBox(origin.getX() - REACH, origin.getY() - DEPTH - 4, origin.getZ() - REACH, origin.getX() + REACH,
+                        origin.getY() + DOME_HEIGHT + 4, origin.getZ() + REACH));
+    }
+
+    /** Ein Steg nach eigenem +z (Länge bis zum Fels, Stollen – 0: Anlegestelle). */
+    static SitePiece bridgePiece(BlockPos origin, Rotation rotation, long seed, int len, int tunnel) {
+        return new SitePiece(SiteKind.FLAME_SANCTUARY, BRIDGE, origin, rotation, seed, new int[] {len, tunnel},
+                SitePiece.box(origin, rotation, -4, -DEPTH - 4, R - 1, 4, 6, len + Math.max(tunnel, 6) + 2));
     }
 
     /** Der Halbmesser der Kuppel in Richtung {@code angle}: 21 bis 27 Blöcke, unregelmäßig. */

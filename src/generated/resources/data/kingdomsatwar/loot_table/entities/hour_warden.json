@@ -16,26 +16,14 @@
     },
     {
       "condition": {
-        "type": "minecraft:entity_properties",
-        "entity": "attacking_player",
-        "predicate": {
-          "minecraft:type_specific/player": {
-            "stats": [
-              {
-                "type": "minecraft:killed",
-                "stat": "kingdomsatwar:hour_warden",
-                "value": 1
-              }
-            ]
-          }
-        }
+        "type": "minecraft:killed_by_player"
       },
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": 1
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.25
           },
           "name": "kingdomsatwar:heart_crystal"
         }
