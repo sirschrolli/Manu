@@ -47,6 +47,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.AbyssBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.SeaWoods.init();
+        io.github.sirschrolli.kingdomsatwar.registry.SeaGear.init();
         io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.FaeGear.init();
         io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.init();

@@ -16,6 +16,10 @@
   * Mondstein (seit 0.96, die Rüstung der Zauberer): ein Stirnreif aus Mondsilber mit leuchtender Mondsichel und Mondstein,
     ein langer Sternenmantel bis an die Knie, Mondsicheln auf den Schultern, Armreife mit Mondsteinen, ein Gürtel mit
     Sichelschnalle, Robenschöße über den Beinen und spitze, aufgebogene Schuhe mit Mondsicheln an den Knöcheln
+  * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
+    Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
+    zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
+    Schulterplatten und Armreife; ein Bleigürtel mit Messingschnalle, Knieplatten; Flossen an den Schuhen
 
 Knochen: <satz>_<platz>_<knochen> (z. B. steel_chest_left_arm), je im Raum des gleichnamigen Knochens des Spielers
 (Drehpunkt 0) – ArmorPartsLayer.java hängt sie an Kopf, Körper, Arme und Beine. Die Oberfläche der flachen Rüstung liegt
@@ -29,7 +33,7 @@ from ..geometry import Model
 from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
-        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone"]
+        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -92,6 +96,15 @@ PALETTES = {
         "moon_gem": ramp("#6c78c4", "#ffffff", 6),
         "moon_cloth": ramp("#0a0c2a", "#3e4ca6", 7),
         "moon_star": ramp("#9a9ae8", "#fffef0", 4),
+        # Aquamarin (0.97)
+        "aqua": ramp("#05497a", "#a4f2ff", 8),
+        "brass": ramp("#4a2c06", "#ffeaa4", 8, hue_shift=0.02),
+        "aqua_glass": ramp("#06222e", "#4aa8be", 6),
+        "aqua_gem": ramp("#1f78a8", "#e6fdff", 6),
+        "rubber": ramp("#101418", "#4e5a64", 6),
+        "lead": ramp("#25282e", "#a0a6b2", 7),
+        "aqua_fin": ramp("#063c44", "#7fe4e0", 8),
+        "dial": ramp("#b8b0a0", "#fffcf2", 4),
     }
 }
 
@@ -511,6 +524,97 @@ def _moonstone(m: Model) -> None:
         _crescent(m, f, f"moon_ankle_{bone}", (3.35 * side, 9.8, 0.4), (0.0, 90.0 * side, 0.0), 0.62)
 
 
+# ------------------------------------------------------------------ Aquamarin (0.97): die Taucherrüstung
+
+#: das große Sichtfenster vorn im Taucherhelm (Knochenraum des Kopfes): x, y von – bis
+VISOR = (-2.4, 2.4, -7.3, -2.1)
+#: so weit liegt die Vorderseite der Helmschale vor dem Kopf
+DOME = 5.7
+
+
+def _aquamarine(m: Model) -> None:
+    h = _slot(m, "aquamarine", "head", "head")
+    # die Schale: ein runder Helm aus Stufen (die Vorderseite der großen Stufe hat das Sichtfenster), seitlich gewölbt
+    m.cube(h, (-DOME, -8.6, -DOME), (2 * DOME, 8.0, 2 * DOME), {"front": "aqua_visor", "*": "aqua_shell"})
+    m.cube(h, (-5.0, -9.6, -5.0), (10.0, 1.0, 10.0), "aqua_shell")
+    m.cube(h, (-3.7, -10.4, -3.7), (7.4, 0.8, 7.4), "aqua_shell")
+    for side in (1, -1):
+        m.cube(h, (_mx(DOME, 0.5, side), -7.8, -4.4), (0.5, 6.4, 8.8), "aqua_shell")
+    m.cube(h, (-4.4, -7.8, DOME), (8.8, 6.4, 0.5), "aqua_shell")
+    # oben das Ventil mit Griff
+    m.cube(h, (-0.8, -11.4, -0.8), (1.6, 1.0, 1.6), "aqua_brass")
+    m.cube(h, (-1.9, -11.9, -0.35), (3.8, 0.5, 0.7), "aqua_brass")
+    # der Messingkragen mit Schrauben
+    m.cube(h, (-6.1, -1.0, -6.1), (12.2, 1.3, 12.2), "aqua_collar")
+    # der Rahmen des Sichtfensters (vorstehend, mit abgerundeten Ecken)
+    x0, x1, y0, y1 = VISOR
+    m.cube(h, (x0, y0 - 0.8, -DOME - 0.8), (x1 - x0, 0.8, 0.8), "aqua_brass")
+    m.cube(h, (x0, y1, -DOME - 0.8), (x1 - x0, 0.8, 0.8), "aqua_brass")
+    m.cube(h, (x0 - 0.8, y0, -DOME - 0.8), (0.8, y1 - y0, 0.8), "aqua_brass")
+    m.cube(h, (x1, y0, -DOME - 0.8), (0.8, y1 - y0, 0.8), "aqua_brass")
+    for cx, cy in ((x0, y0), (x1 - 0.7, y0), (x0, y1 - 0.7), (x1 - 0.7, y1 - 0.7)):
+        m.cube(h, (cx, cy, -DOME - 0.55), (0.7, 0.7, 0.55), "aqua_brass")
+    # die Bullaugen an den Seiten
+    for side in (1, -1):
+        wx = DOME + 0.5
+        m.cube(h, (_mx(wx, 0.3, side), -6.3, -1.5), (0.3, 3.0, 3.0), "aqua_glass")
+        m.cube(h, (_mx(wx, 0.6, side), -6.9, -2.1), (0.6, 0.6, 4.2), "aqua_brass")
+        m.cube(h, (_mx(wx, 0.6, side), -3.3, -2.1), (0.6, 0.6, 4.2), "aqua_brass")
+        m.cube(h, (_mx(wx, 0.6, side), -6.3, -2.1), (0.6, 3.0, 0.6), "aqua_brass")
+        m.cube(h, (_mx(wx, 0.6, side), -6.3, 1.5), (0.6, 3.0, 0.6), "aqua_brass")
+    # hinten der Anschluss des Luftschlauchs, der Schlauch hängt hinab zu den Flaschen
+    m.cube(h, (0.9, -3.4, DOME + 0.5), (1.6, 1.6, 0.9), "aqua_brass")
+    m.cube(h, (1.15, -2.0, DOME + 0.75), (1.1, 2.6, 1.1), "aqua_hose")
+
+    b = _slot(m, "aquamarine", "chest", "body")
+    # zwei Luftflaschen auf dem Rücken, gefasst von zwei Messingbändern; oben die Ventile mit Handrad
+    for side in (1, -1):
+        tx = _mx(0.6, 3.0, side)
+        m.cube(b, (tx, 1.2, 3.2), (3.0, 8.0, 2.8), "aqua_tank")
+        m.cube(b, (tx + 0.3, 0.6, 3.5), (2.4, 0.6, 2.2), "aqua_tank")
+        m.cube(b, (tx + 0.3, 9.2, 3.5), (2.4, 0.5, 2.2), "aqua_tank")
+        m.cube(b, (tx + 1.0, -0.1, 4.1), (1.0, 0.7, 1.0), "aqua_brass")
+        m.cube(b, (_mx(3.4, 0.6, side), 0.0, 4.15), (0.6, 0.6, 0.9), "aqua_brass")
+    for y in (2.2, 7.2):
+        m.cube(b, (-3.8, y, 3.0), (7.6, 0.7, 3.2), "aqua_brass")
+    # der Schlauch vom rechten Ventil nach hinten oben (dort hängt der Schlauch des Helms)
+    m.cube(b, (1.55, -0.6, 5.0), (1.1, 1.0, 1.8), "aqua_hose")
+    # die Druckanzeige auf der Brust
+    m.cube(b, (1.1, 1.6, -3.75), (3.0, 3.0, 0.6), {"front": "aqua_dial", "*": "aqua_brass"})
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "aquamarine", "chest", bone)
+        p = f"aqua_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.0, 0.0), (0.0, 0.0, 10.0 * side))
+        m.cube(p, (_mx(-2.6, 6.0, side), -1.3, -3.4), (6.0, 1.6, 6.8), "aqua_plate")
+        m.cube(p, (_mx(-1.6, 5.0, side), 0.3, -3.5), (5.0, 1.0, 7.0), "aqua_plate")
+        # Armreif mit Aquamarin
+        m.cube(a, (_mx(-2.25, 6.5, side), 6.2, -3.25), (6.5, 1.5, 6.5), "aqua_brass")
+        m.cube(a, (_mx(0.4, 1.2, side), 6.35, -3.7), (1.2, 1.2, 0.5), "aqua_gem")
+
+    t = _slot(m, "aquamarine", "legs", "body")
+    # der Bleigürtel: vier Bleistücke, vorn die Messingschnalle
+    m.cube(t, (-4.6, 10.3, -3.55), (2.4, 1.9, 0.75), "aqua_lead")
+    m.cube(t, (2.2, 10.3, -3.55), (2.4, 1.9, 0.75), "aqua_lead")
+    for side in (1, -1):
+        m.cube(t, (_mx(4.6, 0.75, side), 10.3, -1.3), (0.75, 1.9, 2.6), "aqua_lead")
+    m.cube(t, (-1.1, 10.5, -3.6), (2.2, 1.5, 0.6), "aqua_brass")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "aquamarine", "legs", bone)
+        # Knieplatte mit Messingsaum und einem Aquamarin
+        m.cube(g, (-2.3, 3.6, -3.05), (4.6, 2.6, 0.6), "aqua_plate")
+        m.cube(g, (-0.55, 4.35, -3.4), (1.1, 1.1, 0.4), "aqua_gem")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "aquamarine", "feet", bone)
+        # ein Riemen um den Schuh, außen die Schnalle
+        m.cube(f, (-2.55, 9.3, -2.55), (5.1, 0.9, 5.1), "aqua_strap")
+        m.cube(f, (_mx(2.55, 0.45, side), 9.15, -0.7), (0.45, 1.2, 1.4), "aqua_brass")
+        # die Flosse: breit, nach vorn, zur Spitze leicht aufgebogen und breiter
+        _chain(m, f, f"aqua_fin_{bone}", (0.0, 11.75, -2.0),
+               [(4.6, 3.4, 0.45, (90.0, 0.0, 0.0)), (5.4, 3.2, 0.4, (-5.0, 0.0, 0.0)), (6.0, 2.6, 0.35, (-9.0, 0.0, 0.0))],
+               "aqua_fin", overlap=0.15)
+
+
 # ------------------------------------------------------------------ die Rüstungen von Minecraft
 
 def _leather(m: Model) -> None:
@@ -702,6 +806,7 @@ def build() -> Model:
     _copper(m)
     _turtle(m)
     _moonstone(m)
+    _aquamarine(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1078,6 +1183,134 @@ def _star_cloth(ctx: Ctx):
     return col
 
 
+def _aqua_shell(ctx: Ctx):
+    """Die Helmschale aus Aquamarin: glatt und glänzend, oben hell, unten tief meerblau; ein heller Lichtstreif läuft schräg
+    über jede Seite, feine Schliffkanten an den Rändern."""
+    ry = rel_y(ctx)
+    v = 0.74 - 0.4 * ry
+    if ctx.face == "top":
+        v = 0.86
+    elif ctx.face == "bottom":
+        v = 0.3
+    if ctx.s == 0 or ctx.t == 0:
+        v += 0.1
+    if ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1:
+        v -= 0.12
+    k = (ctx.s + ctx.t) / max(1.0, (ctx.w + ctx.h) * 0.5)
+    if 0.42 < k < 0.56 and ctx.face not in ("top", "bottom"):
+        v += 0.16
+    v += (_noise(ctx, 101) - 0.5) * 0.05
+    return pick(ctx.pal["aqua"], v)
+
+
+def _aqua_visor(ctx: Ctx):
+    """Die Vorderseite der Helmschale: im Sichtfenster durchsichtig (nur zwei schräge Glanzstriche auf dem Glas)."""
+    x, y = ctx.local[0], ctx.local[1]
+    x0, x1, y0, y1 = VISOR
+    if x0 <= x <= x1 and y0 <= y <= y1:
+        u, w = x - x0, y - y0
+        d = u + w
+        if (1.4 < d < 2.0 and u < 2.4) or (2.6 < d < 2.95 and u < 1.9):
+            return mix(pick(ctx.pal["aqua_glass"], 0.99), (255, 255, 255, 255), 0.55)
+        return None
+    return _aqua_shell(ctx)
+
+
+def _aqua_brass(ctx: Ctx):
+    """Messing: warm glänzend, oben hell, an den Kanten Glanz, unten dunkel."""
+    ry = rel_y(ctx)
+    v = 0.7 - 0.36 * ry
+    if ctx.face == "top":
+        v = 0.86
+    elif ctx.face == "bottom":
+        v = 0.3
+    if ctx.s == 0 or ctx.t == 0:
+        v += 0.12
+    if ctx.s == ctx.w - 1 or ctx.t == ctx.h - 1:
+        v -= 0.14
+    v += (_noise(ctx, 103) - 0.5) * 0.06
+    return pick(ctx.pal["brass"], v)
+
+
+def _aqua_collar(ctx: Ctx):
+    """Der Kragen: Messing mit einer Reihe Schrauben (heller Kopf, dunkler Schatten darunter)."""
+    col = _aqua_brass(ctx)
+    if ctx.face not in ("top", "bottom") and ctx.h >= 2:
+        if ctx.t == ctx.h // 2 and ctx.s % 5 == 2:
+            return pick(ctx.pal["brass"], 0.97)
+        if ctx.t == ctx.h // 2 + 1 and ctx.s % 5 == 2:
+            return pick(ctx.pal["brass"], 0.25)
+    return col
+
+
+def _aqua_glass(ctx: Ctx):
+    """Das Glas der Bullaugen: dunkles Meerblau, oben links ein Glanz."""
+    v = 0.3 + 0.25 * (1.0 - rel_y(ctx))
+    if ctx.s + ctx.t <= 1:
+        return mix(pick(ctx.pal["aqua_glass"], 0.99), (255, 255, 255, 255), 0.5)
+    return pick(ctx.pal["aqua_glass"], v)
+
+
+def _aqua_tank(ctx: Ctx):
+    """Die Luftflaschen: rund (seitlich hell zur Mitte, dunkel zu den Kanten), Aquamarin-Lack, oben und unten Messingringe."""
+    if ctx.face in ("top", "bottom"):
+        return pick(ctx.pal["aqua"], 0.62 if ctx.face == "top" else 0.3)
+    across = math.sin(math.pi * (ctx.s + 0.5) / max(1, ctx.w))
+    v = 0.22 + 0.5 * across - 0.1 * rel_y(ctx)
+    if ctx.face in ("west", "east"):
+        v -= 0.06
+    col = pick(ctx.pal["aqua"], v)
+    if ctx.cube.size[1] > 4.0:
+        ry = rel_y(ctx)
+        if ry < 0.08 or ry > 0.92:
+            col = pick(ctx.pal["brass"], 0.3 + 0.55 * across)
+        elif 0.5 < ctx.s / max(1, ctx.w) < 0.68 and 0.12 < ry < 0.86:
+            col = mix(col, (255, 255, 255, 255), 0.18)   # Glanz längs der Flasche
+    return col
+
+
+def _aqua_hose(ctx: Ctx):
+    """Der Schlauch: dunkler Gummi mit Rippen."""
+    along = ctx.local[1] if ctx.cube.size[1] >= ctx.cube.size[2] else ctx.local[2]
+    rib = (along * 2.5) % 1.0 < 0.35
+    v = 0.45 - 0.2 * rel_y(ctx) + (0.18 if rib else 0.0)
+    return pick(ctx.pal["rubber"], v)
+
+
+def _aqua_dial(ctx: Ctx):
+    """Die Druckanzeige: ein helles Zifferblatt im Messingring, ein roter Zeiger, kleine Striche."""
+    cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+    dx, dy = ctx.s - cx, ctx.t - cy
+    r = math.hypot(dx, dy)
+    if r > min(cx, cy) - 0.35:
+        return _aqua_brass(ctx)
+    # der Zeiger: von der Mitte schräg nach oben rechts
+    if dx >= -0.6 and dy <= 0.6 and abs(dx + dy) < 0.8 and r < min(cx, cy) - 0.9:
+        return (200, 44, 34, 255)
+    col = pick(ctx.pal["dial"], 0.92 - 0.35 * (r / max(cx, 1.0)))
+    if r > min(cx, cy) - 1.4 and (ctx.s * 3 + ctx.t * 5) % 4 == 0:
+        col = pick(ctx.pal["rubber"], 0.35)
+    return col
+
+
+def _aqua_strap(ctx: Ctx):
+    """Der Riemen der Flossen: dunkler Gummi."""
+    return pick(ctx.pal["rubber"], 0.38 + 0.18 * (1.0 - rel_y(ctx)) + (_noise(ctx, 107) - 0.5) * 0.06)
+
+
+def _aqua_fin(ctx: Ctx):
+    """Das Flossenblatt: Rippen längs (dunkler), dazwischen das Blatt, zu den Rändern und zur Spitze heller."""
+    t = _seg_t(ctx)
+    ox, w = ctx.cube.origin[0], ctx.cube.size[0]
+    tx = (ctx.local[0] - ox) / w if w > 0 else 0.5
+    edge = min(tx, 1.0 - tx)
+    rib = ((ctx.local[0] + 0.3) % 1.25) < 0.32
+    v = 0.4 + 0.3 * t + (0.2 if edge < 0.08 else 0.0) - (0.18 if rib and edge >= 0.08 else 0.0)
+    if ctx.face == "bottom":
+        v -= 0.15
+    return pick(ctx.pal["aqua_fin"], v)
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1130,6 +1363,19 @@ def materials(variant: str) -> dict:
         "moon_gem": _moon_gem,
         "moon_crescent": _moon_crescent,
         "moon_cloth": _star_cloth,
+        "aqua_shell": _aqua_shell,
+        "aqua_visor": _aqua_visor,
+        "aqua_brass": _aqua_brass,
+        "aqua_collar": _aqua_collar,
+        "aqua_glass": _aqua_glass,
+        "aqua_tank": _aqua_tank,
+        "aqua_hose": _aqua_hose,
+        "aqua_dial": _aqua_dial,
+        "aqua_strap": _aqua_strap,
+        "aqua_fin": _aqua_fin,
+        "aqua_plate": _metal("aqua", rim="brass", rim_from=0.8),
+        "aqua_lead": _metal("lead"),
+        "aqua_gem": _gem("aqua_gem"),
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

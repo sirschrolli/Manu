@@ -172,3 +172,6 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     put("block/chiseled_tide_stone_glow", glow)
     put("block/tide_gate", tide_gate())
     ANIMATIONS["block/tide_gate"] = (32, 2, True)
+    # Aquamarin (0.97): der Block mit dem Lichtnetz und der Kristall
+    import aquamarine_textures
+    aquamarine_textures.build(put, ANIMATIONS)

@@ -100,6 +100,27 @@ MOON_STONES = [
     "................",
 ]
 
+# Aquamarin-Erz (0.97): schlanke, sechseckige Säulen in kleinen Büscheln, die schräg aus dem Gezeitenstein wachsen – die
+# linke Kante im Licht, die rechte im Schatten, oben die helle Endfläche
+AQUA_PRISMS = [
+    "................",
+    "...4.......4....",
+    "...43.....43....",
+    ".4.432...432....",
+    ".43.32...32.....",
+    "..32.21.32......",
+    "..21..1.21......",
+    "...1............",
+    "................",
+    "...........4....",
+    "....4......43...",
+    "...432......32.4",
+    "...32...4...2143",
+    "..32...434...432",
+    "..21...321...32.",
+    "........1....1..",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -168,6 +189,7 @@ SOUL = tones("#0e5c58", "#18a69c", "#58e4d6", "#dafff8")
 ABYSSITE = tones("#4c0c48", "#8c1a82", "#e04ad2", "#ffc4f4")
 MOONSTONE = tones("#34509c", "#6f8fdc", "#b4d0fa", "#f2f8ff")
 MOONSTONE_LILAC = tones("#523e9e", "#8e74d8", "#cbb6f6", "#faf0ff")
+AQUAMARINE = tones("#17406e", "#2f86c0", "#78d2ee", "#dcfcff")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -192,6 +214,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     moon = overlay(MOON_STONES, MOONSTONE, MOONSTONE_LILAC)
     put("block/moonstone_ore_overlay", moon)
     put("block/moonstone_ore_glow", glow_of(moon, MOONSTONE[2:] + MOONSTONE_LILAC[2:]))
+    aqua = overlay(AQUA_PRISMS, AQUAMARINE)
+    put("block/aquamarine_ore_overlay", aqua)
+    put("block/aquamarine_ore_glow", glow_of(aqua, AQUAMARINE[3:]))
 
 
 if __name__ == "__main__":

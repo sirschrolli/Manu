@@ -461,6 +461,142 @@ MOON_GLOW = st.ramp("#5aa6ff", dark=0.42, light=1.0, cool=225, chroma_light=0.5)
 MOON_GEM = st.ramp("#d2dcf6", dark=0.45, light=1.0, cool=235, chroma_light=0.3)
 
 # =============================================================================
+# Aquamarin (0.97): die Taucherrüstung – meerblaue Platten mit Messing; ein runder Taucherhelm mit Sichtfenster und
+# Kragen, ein Harnisch mit Luftflaschen (die Ventile ragen über die Schultern) und Druckanzeige, ein Beinschutz mit
+# Bleigürtel und Knieplatten, Flossen
+# =============================================================================
+
+AQUA_PLATE = st.ramp("#4fb0d0", dark=0.28, light=0.97, cool=252, hue_dark=14, chroma_dark=1.2, warm=185, hue_light=8, chroma_light=0.4)
+AQUA_GLASS = st.ramp("#1b6278", dark=0.16, light=0.92, cool=245, warm=185, chroma_light=0.3)
+AQUA_GLINT = st.ramp("#c8f6ff", dark=0.5, light=1.0, cool=230, warm=190, chroma_light=0.2)
+AQUA_LEAD = st.ramp("#505664", dark=0.18, light=0.78, cool=260, chroma_dark=1.2)
+AQUA_FIN = st.ramp("#168a8e", dark=0.2, light=0.88, cool=245, hue_dark=14, chroma_dark=1.2, warm=165, chroma_light=0.5)
+
+DIVE_HELMET = """
+................
+................
+......####......
+....########....
+...##########...
+..############..
+..############..
+..############..
+..############..
+..############..
+...##########...
+...##########...
+................
+................
+................
+................
+"""
+
+FLIPPERS = """
+................
+................
+...###....###...
+...###....###...
+...###....###...
+...###....###...
+..####....####..
+..####....####..
+.#####....#####.
+.######..######.
+#######..#######
+#######..#######
+#######..#######
+######....######
+#####......#####
+.###........###.
+"""
+
+#: wo an den Flossen das Flossenblatt beginnt (Zeile)
+FIN_FROM = 9
+#: die Rippen der Flossenblätter (Spalten)
+FIN_RIBS = (1, 3, 5, 10, 12, 14)
+
+
+def aquamarine_icons(put: Callable[[str, Image.Image], None]) -> None:
+    ramps = {"A": AQUA_PLATE, "B": gear.BRASS, "C": AQUA_GLASS, "D": AQUA_GLINT, "E": AQUA_LEAD, "F": AQUA_FIN}
+
+    # --- der Taucherhelm: gewölbt, vorn ein rundes Sichtfenster im Messingring, unten der Kragen mit Nieten, oben ein Ventil
+    s = base(DIVE_HELMET)
+    cx, cy = 7.5, 7.0
+    for y in range(16):
+        for x in range(16):
+            d = ((x + 0.5 - cx - 0.5) ** 2 + (y + 0.5 - cy - 0.5) ** 2) ** 0.5
+            if d < 2.35:
+                lv = 2 if (x + y) > 15 else 3
+                s.set(x, y, ("C", lv))
+            elif d < 3.35 and s.opaque(x, y):
+                light = (x - cx) + (y - cy) < 0
+                s.set(x, y, ("B", 5 if light else 3))
+    for x, y in ((6, 6), (7, 6), (6, 7)):
+        s.set(x, y, ("D", 6))
+    s.set(9, 9, ("D", 4))
+    for x in range(2, 14):
+        s.set(x, 12, ("B", 5 if x < 8 else 4))
+        s.set(x, 13, ("B", 3 if x < 8 else 2))
+    for x in (3, 6, 9, 12):
+        s.set(x, 12, ("B", 6))
+    for x, y in ((7, 1), (8, 1)):
+        s.set(x, y, ("B", 4 if x == 7 else 3))
+    s.set(7, 0, ("B", 5))
+    for x, y in ((3, 7), (12, 7)):
+        s.set(x, y, ("B", 5))
+    put("item/aquamarine_helmet", s.outline(prefer=("A", "B", "C", "D"), override={"D": "C"}).image(ramps))
+
+    # --- der Harnisch: Messinggurte, die Ventile der Luftflaschen über den Schultern, eine Druckanzeige, ein Aquamarin
+    s = base(CHESTPLATE)
+    for y in range(2, 13):
+        for x in (4, 11):
+            if s.opaque(x, y):
+                s.set(x, y, ("B", 4 if x == 4 else 3))
+    for x, y, lv in ((3, 0, 5), (4, 0, 4), (3, 1, 4), (4, 1, 3), (11, 0, 5), (12, 0, 4), (11, 1, 4), (12, 1, 3)):
+        s.set(x, y, ("B", lv))
+    for x, y, px in ((7, 4, ("B", 5)), (8, 4, ("B", 4)), (6, 5, ("B", 5)), (9, 5, ("B", 3)), (6, 6, ("B", 4)), (9, 6, ("B", 2)),
+                     (7, 7, ("B", 3)), (8, 7, ("B", 2)), (7, 5, ("D", 6)), (8, 5, ("D", 5)), (7, 6, ("D", 5)), (8, 6, ("C", 2))):
+        s.set(x, y, px)
+    for x, y, px in ((7, 10, ("B", 5)), (8, 10, ("B", 4)), (7, 11, ("B", 3)), (8, 11, ("B", 2))):
+        s.set(x, y, px)
+    put("item/aquamarine_chestplate", s.outline(prefer=("A", "B", "C", "D"), override={"D": "C"}).image(ramps))
+
+    # --- der Beinschutz: ein Bleigürtel mit Messingschnalle, Knieplatten mit Messingsaum
+    s = base(LEGGINGS)
+    for x in range(2, 14):
+        s.set(x, 2, ("E", 4 if x < 8 else 3))
+        s.set(x, 3, ("E", 3 if x < 8 else 2))
+    for x0 in (2, 11):
+        for dx in range(3):
+            s.set(x0 + dx, 2, ("E", 5 if dx == 0 else 4))
+            s.set(x0 + dx, 3, ("E", 3 if dx < 2 else 2))
+    for x, y, lv in ((7, 2, 6), (8, 2, 4), (7, 3, 4), (8, 3, 3)):
+        s.set(x, y, ("B", lv))
+    for x0 in (2, 10):
+        for x in range(x0, x0 + 4):
+            s.set(x, 8, ("B", 5 if x < x0 + 2 else 4))
+            s.set(x, 9, ("A", 6 if x == x0 + 1 else 5))
+            s.set(x, 10, ("B", 3))
+    put("item/aquamarine_leggings", s.outline(prefer=("A", "B", "E"), override={"E": "A"}).image(ramps))
+
+    # --- die Flossen: der Schuh aus Aquamarin, ein Messingriemen, darunter das breite Flossenblatt mit Rippen
+    s = base(FLIPPERS)
+    for x, y, (sl, lv) in list(s.cells()):
+        if y >= FIN_FROM:
+            fl = 5 if (x < 8 and x + (15 - y) < 9) or (x >= 8 and (15 - x) + (15 - y) < 9) else 4
+            if x in FIN_RIBS:
+                fl = 2
+            if y == 15 or (y == 14 and x in (0, 15)):
+                fl = 6                              # der helle Saum an der Kante des Blatts
+            if (x < 8 and x > 4 and y < 12) or (x >= 8 and x < 11 and y < 12):
+                fl = min(fl, 3)                     # der Schatten unter dem Schuh
+            s.set(x, y, ("F", fl))
+    for x in (3, 4, 5, 10, 11, 12):
+        s.set(x, 6, ("B", 5 if x in (3, 10) else 4))
+    put("item/aquamarine_boots", s.outline(prefer=("A", "F", "B"), override={"B": "A"}).image(ramps))
+
+
+# =============================================================================
 # Drachenschuppen
 # =============================================================================
 
@@ -568,6 +704,8 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
 
     plate("moonstone", {"A": MOON_PLATE, "B": gear.MOONSILVER, "D": MOON_GLOW, "E": MOON_GEM},
           (MOON_HELMET, MOON_CHEST, MOON_LEGS, MOON_BOOTS), OPEN_HELMET, override={"D": "A", "E": "B"})
+
+    aquamarine_icons(put)
 
     for kind in DRAGONS:
         ramps = dragon_ramps(kind)

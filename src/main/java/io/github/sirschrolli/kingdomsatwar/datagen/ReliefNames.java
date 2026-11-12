@@ -18,6 +18,7 @@ final class ReliefNames {
             "ale",
             "angler_lure",
             "apple_pie",
+            "aquamarine",
             "bog_heart",
             "bog_root",
             "bread_roll",

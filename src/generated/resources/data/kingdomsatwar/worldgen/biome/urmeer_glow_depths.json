@@ -79,11 +79,15 @@
   "features": [
     [],
     [],
+    [
+      "kingdomsatwar:urmeer/aquamarine_rocks"
+    ],
     [],
     [],
     [],
-    [],
-    [],
+    [
+      "kingdomsatwar:urmeer/ore_aquamarine"
+    ],
     [],
     [],
     [

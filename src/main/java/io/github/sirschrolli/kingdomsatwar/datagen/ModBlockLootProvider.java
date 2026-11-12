@@ -330,6 +330,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
 
     private void fae() {
         ore(FaeBlocks.MOONSTONE_ORE, FaeBlocks.MOONSTONE.get());
+        // Aquamarin (0.97)
+        ore(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK.get());
         for (DeferredBlock<? extends Block> block : java.util.List.of(FaeBlocks.MOSSY_FAESTONE_BRICKS, FaeBlocks.CHISELED_MOONSTONE,
                 FaeBlocks.MOONSTONE_BLOCK,
                 FaeBlocks.FAE_SOIL, FaeBlocks.FAE_MOSS, FaeBlocks.GLIMMERWOOD_LOG, FaeBlocks.GLIMMERWOOD_WOOD,

@@ -98,12 +98,15 @@
     [],
     [],
     [
+      "kingdomsatwar:urmeer/aquamarine_rocks",
       "kingdomsatwar:overworld/coral_coast/nacre_rocks"
     ],
     [],
     [],
     [],
-    [],
+    [
+      "kingdomsatwar:urmeer/ore_aquamarine"
+    ],
     [],
     [],
     [

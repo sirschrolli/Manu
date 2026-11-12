@@ -66,6 +66,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(ModTags.Blocks.ORES_ABYSSITE, ModTags.Items.ORES_ABYSSITE);
         copy(ModTags.Blocks.ORES_MOONSTONE, ModTags.Items.ORES_MOONSTONE);
         copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSTONE, ModTags.Items.STORAGE_BLOCKS_MOONSTONE);
+        copy(ModTags.Blocks.ORES_AQUAMARINE, ModTags.Items.ORES_AQUAMARINE);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_AQUAMARINE, ModTags.Items.STORAGE_BLOCKS_AQUAMARINE);
         copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER, ModTags.Items.STORAGE_BLOCKS_MOONSILVER);
         copy(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ModTags.Items.STORAGE_BLOCKS_NIGHTSTEEL);
         copy(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ModTags.Items.STORAGE_BLOCKS_SOUL_CRYSTAL);
@@ -242,6 +244,17 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_LEGGINGS);
         add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FaeGear.MOONSTONE_BOOTS);
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.FaeGear.moonstoneSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
+        // Aquamarin (0.97): Edelstein, repariert die Taucherrüstung; die Rüstung lässt sich besetzen
+        add(ModTags.Items.GEMS_AQUAMARINE, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_AQUAMARINE);
+        add(ModTags.Items.REPAIRS_AQUAMARINE_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.SeaGear.aquamarineSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
         add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);

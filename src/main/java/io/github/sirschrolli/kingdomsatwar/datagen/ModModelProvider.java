@@ -39,7 +39,7 @@ public class ModModelProvider extends ModelProvider {
     private static final TextureSlot OVERLAY = TextureSlot.create("overlay");
     private static final TextureSlot GLOW = TextureSlot.create("glow");
     /** Erze mit selbstleuchtendem Kern (eigene Glow-Textur, im Dunkeln voll hell). */
-    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite", "moonstone");
+    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite", "moonstone", "aquamarine");
 
     /**
      * Erz-Modell aus zwei Schichten: unten die echte Vanilla-Textur (Stein oder Tiefenschiefer),

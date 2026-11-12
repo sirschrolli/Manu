@@ -174,6 +174,9 @@ public final class UrmeerBiomes {
     private static BiomeGenerationSettings features(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers,
             ResourceKey<PlacedFeature>... vegetation) {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(placed, carvers);
+        // seit 0.97: Aquamarinerz in jedem Biom des Urmeers (Adern und Findlinge am Grund)
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, UrmeerFeatures.ORE_AQUAMARINE_PLACED);
+        builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, UrmeerFeatures.AQUAMARINE_ROCKS_PLACED);
         for (ResourceKey<PlacedFeature> key : vegetation) {
             String path = key.identifier().getPath();
             GenerationStep.Decoration step = path.contains("sea_stacks") || path.contains("boulders") || path.contains("rocks")

@@ -205,6 +205,7 @@ public final class ModWorldgen {
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidFeatures.bootstrapFeatures(context);
         io.github.sirschrolli.kingdomsatwar.abyss.AbyssFeatures.bootstrapFeatures(context);
         io.github.sirschrolli.kingdomsatwar.fae.FaeFeatures.bootstrapFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.bootstrapFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.tree.ModTrees.bootstrapModFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapFeatures(context);
     }
@@ -259,6 +260,7 @@ public final class ModWorldgen {
         io.github.sirschrolli.kingdomsatwar.voidrealm.VoidFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.abyss.AbyssFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.fae.FaeFeatures.bootstrapPlacedFeatures(context);
+        io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.overworld.OverworldFeatures.bootstrapPlacedFeatures(context);
         io.github.sirschrolli.kingdomsatwar.worldgen.village.VillageTrees.bootstrapPlacedFeatures(context);
     }

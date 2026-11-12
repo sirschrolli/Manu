@@ -650,8 +650,32 @@ def moonstone() -> Design:
     })
 
 
+def aquamarine() -> Design:
+    """Aquamarin (die Taucherrüstung): meerblaue Kristallplatten mit Messingsäumen. Der Helm ist offen (darüber sitzt der
+    Taucherhelm als 3D-Teil, durch sein Fenster sieht man das Gesicht), auf der Brust Messinggurte mit Druckanzeige, auf
+    dem Rücken die Halterung der Luftflaschen, ein Bleigürtel mit Messingschnalle, Knieplatten mit Messingsaum (Helm,
+    Luftflaschen, Schlauch und Flossen kommen als 3D-Teile)."""
+    return Design("aquamarine", {"A": icons.AQUA_PLATE, "B": gear.BRASS, "D": icons.AQUA_GLINT, "E": icons.AQUA_LEAD},
+                  open_face=True, texture="facets", d={
+        "head_front": [".", ".", "feeddddc"],
+        "head_side": [".", ".", "feeeddcc"],
+        "head_back": [".", ".", "eeddddcc"],
+        "body_front": [".", ".", ".e....c.", ".e.ed.c.", ".e.eu.c.", ".e.dc.c.", ".e....c.", ".e....c.", ".edddcc.", ".",
+                       "..dccb.."],
+        "body_back": [".", ".e....c.", ".edddcc.", ".e....c.", ".e....c.", ".edddcc.", ".e....c.", ".e....c.", "."],
+        "arm_side": TRIM_ARM,
+        "boot_side": TRIM_BOOT,
+        "boot_front": TRIM_BOOT,
+        "belt_front": ["."] * 7 + ["EDDfeEDC", "DCCdcDCB"],
+        "belt_back": ["."] * 7 + ["EDDDDDDC", "DCCCCCCB"],
+        "belt_side": ["."] * 7 + ["EDDC", "DCCB"],
+        "thigh_front": [".", ".", ".", "edcb", "e65c", "dccb"],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone()] + [dragon(k) for k in icons.DRAGONS]
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine()] + \
+        [dragon(k) for k in icons.DRAGONS]
 
 
 # =============================================================================

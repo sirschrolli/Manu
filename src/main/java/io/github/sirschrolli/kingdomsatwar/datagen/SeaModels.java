@@ -63,6 +63,12 @@ final class SeaModels {
         seafloor(blocks);
         atoll(blocks, items);
         seaWoods(blocks);
+        // Aquamarin (0.97): Erz im Gezeitenstein, Block im Treppenschliff, der Edelstein, die Taucherrüstung
+        ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE, SeaBlocks.TIDE_STONE.base().get(), "aquamarine");
+        ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK.get());
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get());
+        ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_HELMET.get(), io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_CHESTPLATE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_LEGGINGS.get(), io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS.get());
     }
 
     /** Die Meereshölzer (0.92): wie Glimmerholz – Stamm, Holz, Laub, Setzling, Tür, Falltür, Zaun und Zauntor. */

@@ -114,12 +114,15 @@
     [],
     [],
     [
+      "kingdomsatwar:urmeer/aquamarine_rocks",
       "kingdomsatwar:overworld/standard/ocean/sea_stacks"
     ],
     [],
     [],
     [],
-    [],
+    [
+      "kingdomsatwar:urmeer/ore_aquamarine"
+    ],
     [],
     [],
     [

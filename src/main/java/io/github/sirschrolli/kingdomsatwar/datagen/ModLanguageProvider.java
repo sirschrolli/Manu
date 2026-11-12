@@ -756,6 +756,19 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Speichert Mondlicht: jeder Teil +15 Mana und 10 % schnellere Erholung");
         text(ModItems.loreKey("moonstone_armor", 2), "Full set: another +20 mana and 10 % more",
                 "Voller Satz: noch einmal +20 Mana und 10 % mehr");
+        // Aquamarin (0.97)
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE, "Aquamarine Ore", "Aquamarinerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK, "Block of Aquamarine", "Aquamarinblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE, "Aquamarine", "Aquamarin");
+        lore("aquamarine", "A clear stone the colour of the sea over pale sand", "Ein klarer Stein in der Farbe des Meeres über hellem Sand");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_HELMET, "Aquamarine Diving Helmet", "Aquamarin-Taucherhelm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_CHESTPLATE, "Aquamarine Diving Harness", "Aquamarin-Taucherharnisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_LEGGINGS, "Aquamarine Leggings", "Aquamarin-Beinschutz");
+        item(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS, "Aquamarine Flippers", "Aquamarin-Flossen");
+        lore("aquamarine_armor", "Under water: breathe longer (helmet, harness), swim faster (leggings, flippers)",
+                "Unter Wasser: länger atmen (Helm, Harnisch), schneller schwimmen (Beinschutz, Flossen)");
+        text(ModItems.loreKey("aquamarine_armor", 2), "Full set: clear sight under water",
+                "Voller Satz: klare Sicht unter Wasser");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

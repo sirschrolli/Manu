@@ -99,12 +99,15 @@
     [],
     [],
     [
+      "kingdomsatwar:urmeer/aquamarine_rocks",
       "kingdomsatwar:overworld/standard/ocean/warm_sea_stacks"
     ],
     [],
     [],
     [],
-    [],
+    [
+      "kingdomsatwar:urmeer/ore_aquamarine"
+    ],
     [],
     [],
     [

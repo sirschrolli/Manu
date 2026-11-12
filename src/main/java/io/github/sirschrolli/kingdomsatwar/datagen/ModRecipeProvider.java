@@ -683,6 +683,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(gem), has(gem))
                 .save(output, key("moonstone_bricks_from_moonstone"));
         this.moonstoneArmor(gem);
+        // Aquamarin (0.97): Block, Erz schmelzen, die Taucherrüstung
+        Item aquamarine = io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get();
+        storage(aquamarine, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK.get());
+        smeltOre(aquamarine, 1.0f, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE.get());
+        this.aquamarineArmor(aquamarine);
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
@@ -1126,6 +1131,21 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_leggings"));
         shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("MDM").pattern("M M")
                 .define('M', gem).define('D', dust).unlockedBy(has, has(gem)).save(output, key("moonstone_boots"));
+    }
+
+    /** Die Taucherrüstung aus Aquamarin: der Helm mit Sichtfenster (Glasscheibe), der Harnisch mit Perle, Flossen mit Tang. */
+    private void aquamarineArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.SeaGear.aquamarineSet();
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("AAA").pattern("AGA")
+                .define('A', gem).define('G', net.minecraft.world.item.Items.GLASS_PANE).unlockedBy(has, has(gem)).save(output, key("aquamarine_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("APA").pattern("AAA").pattern("AAA")
+                .define('A', gem).define('P', io.github.sirschrolli.kingdomsatwar.registry.SeaBlocks.PEARL.get()).unlockedBy(has, has(gem))
+                .save(output, key("aquamarine_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("AAA").pattern("A A").pattern("A A")
+                .define('A', gem).unlockedBy(has, has(gem)).save(output, key("aquamarine_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("A A").pattern("K K").pattern("A A")
+                .define('A', gem).define('K', net.minecraft.world.item.Items.DRIED_KELP).unlockedBy(has, has(gem)).save(output, key("aquamarine_boots"));
     }
 
     /** Drachenschuppen-Rüstung: Schuppen rund um das passende Stück Stahlrüstung genietet. */

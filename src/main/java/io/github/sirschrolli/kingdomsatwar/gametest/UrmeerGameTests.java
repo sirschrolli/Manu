@@ -22,11 +22,13 @@ import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.portal.TeleportTransition;
@@ -50,8 +52,11 @@ final class UrmeerGameTests {
     /** Lädt die Klasse (meldet die Testfunktionen an). */
     static void init() {}
 
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> URMEER_AQUAMARINE =
+            ModGameTests.TEST_FUNCTIONS.register("urmeer_aquamarine", () -> UrmeerGameTests::aquamarine);
+
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE)) {
+        for (var test : java.util.List.of(URMEER_WORLD, URMEER_TIDE_GATE, URMEER_AQUAMARINE)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -133,6 +138,142 @@ final class UrmeerGameTests {
             sea.getChunk(probe.getX() >> 4, probe.getZ() >> 4);
             helper.assertTrue(Habitat.at(sea, probe, Medium.WATER).contains(Habitat.SALT), "Im Urmeer beißen keine Salzwasserfische");
         }
+        helper.succeed();
+    }
+
+    /**
+     * Aquamarin (0.97): das Erz braucht eine Eisenspitzhacke und gibt Aquamarin; jedes Biom des Urmeers hat Adern und Findlinge;
+     * eine Ader wächst im Gezeitenstein, ein Findling auf dem Grund (mit Aquamarin darin); die Taucherrüstung hilft unter
+     * Wasser (Atem, Schwimmen, Abbauen – und die Rüstung selbst bleibt), der volle Satz schenkt unter Wasser klare Sicht.
+     */
+    private static void aquamarine(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var ore = io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE.get().defaultBlockState();
+        helper.assertTrue(ore.requiresCorrectToolForDrops(), "Aquamarinerz fällt auch ohne Werkzeug");
+        helper.assertFalse(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.STONE_PICKAXE).isCorrectToolForDrops(ore),
+                "Eine Steinspitzhacke reicht für Aquamarinerz");
+        helper.assertTrue(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE).isCorrectToolForDrops(ore),
+                "Eine Eisenspitzhacke reicht nicht für Aquamarinerz");
+        BlockPos orePos = helper.absolutePos(new BlockPos(1, 1, 1));
+        level.setBlock(orePos, ore, net.minecraft.world.level.block.Block.UPDATE_ALL);
+        var drops = net.minecraft.world.level.block.Block.getDrops(ore, level, orePos, null, null,
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE));
+        helper.assertTrue(drops.stream().anyMatch(st -> st.is(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE.get())),
+                "Aquamarinerz gibt keinen Aquamarin: " + drops);
+        level.setBlock(orePos, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+
+        // in jedem Biom: Adern und Findlinge
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
+        for (ResourceKey<Biome> key : UrmeerBiomes.ALL) {
+            var settings = biomes.getOrThrow(key).value().getGenerationSettings();
+            boolean veins = false;
+            boolean rocks = false;
+            for (var step : settings.features()) {
+                for (var placed : step) {
+                    veins |= placed.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.ORE_AQUAMARINE_PLACED);
+                    rocks |= placed.is(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.AQUAMARINE_ROCKS_PLACED);
+                }
+            }
+            helper.assertTrue(veins, "Keine Aquamarinadern im Biom " + key.identifier());
+            helper.assertTrue(rocks, "Keine Aquamarinfindlinge im Biom " + key.identifier());
+        }
+
+        // eine Ader im Gezeitenstein, ein Findling auf Sand
+        var features = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        var generator = level.getChunkSource().getGenerator();
+        BlockPos center = helper.absolutePos(new BlockPos(4, 4, 4));
+        var tide = SeaBlocks.TIDE_STONE.base().get().defaultBlockState();
+        for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+            level.setBlock(p, tide, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+        int veinOre = 0;
+        for (int seed = 0; seed < 4 && veinOre == 0; seed++) {
+            features.getOrThrow(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.ORE_AQUAMARINE).value().place(level, generator,
+                    net.minecraft.util.RandomSource.create(seed), center);
+            for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+                veinOre += level.getBlockState(p).is(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE.get()) ? 1 : 0;
+            }
+        }
+        helper.assertTrue(veinOre > 0, "Keine Ader im Gezeitenstein gewachsen");
+        for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+        BlockPos rockAt = helper.absolutePos(new BlockPos(4, 2, 4));
+        for (BlockPos p : BlockPos.betweenClosed(rockAt.offset(-7, -1, -7), rockAt.offset(7, -1, 7))) {
+            level.setBlock(p, Blocks.SAND.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+        int rockStone = 0;
+        int rockOre = 0;
+        for (int seed = 0; seed < 6 && rockOre == 0; seed++) {
+            features.getOrThrow(io.github.sirschrolli.kingdomsatwar.urmeer.UrmeerFeatures.AQUAMARINE_ROCKS).value().place(level, generator,
+                    net.minecraft.util.RandomSource.create(100 + seed), rockAt);
+            rockStone = 0;
+            for (BlockPos p : BlockPos.betweenClosed(rockAt.offset(-7, -4, -7), rockAt.offset(7, 7, 7))) {
+                BlockState st = level.getBlockState(p);
+                rockStone += st.is(SeaBlocks.TIDE_STONE.base().get()) ? 1 : 0;
+                rockOre += st.is(io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE.get()) ? 1 : 0;
+            }
+        }
+        helper.assertTrue(rockStone >= 6, "Kein Findling aus Gezeitenstein: " + rockStone);
+        helper.assertTrue(rockOre > 0, "Kein Aquamarin im Findling");
+        for (BlockPos p : BlockPos.betweenClosed(rockAt.offset(-7, -4, -7), rockAt.offset(7, 7, 7))) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+
+        // die Taucherrüstung: unter Wasser helfen die Teile, die Rüstung selbst bleibt
+        var set = io.github.sirschrolli.kingdomsatwar.registry.SeaGear.aquamarineSet();
+        double[] oxygen = new double[1];
+        double[] swim = new double[1];
+        double[] mining = new double[1];
+        double[] armor = new double[1];
+        net.minecraft.world.entity.EquipmentSlot[] slots = {net.minecraft.world.entity.EquipmentSlot.HEAD, net.minecraft.world.entity.EquipmentSlot.CHEST,
+                net.minecraft.world.entity.EquipmentSlot.LEGS, net.minecraft.world.entity.EquipmentSlot.FEET};
+        for (int i = 0; i < set.size(); i++) {
+            var piece = set.get(i);
+            var modifiers = new net.minecraft.world.item.ItemStack(piece.get()).getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS,
+                    net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY);
+            double before = armor[0];
+            modifiers.forEach(slots[i], (attribute, modifier) -> {
+                if (attribute.is(net.minecraft.world.entity.ai.attributes.Attributes.OXYGEN_BONUS)) {
+                    oxygen[0] += modifier.amount();
+                } else if (attribute.is(net.minecraft.world.entity.ai.attributes.Attributes.WATER_MOVEMENT_EFFICIENCY)) {
+                    swim[0] += modifier.amount();
+                } else if (attribute.is(net.minecraft.world.entity.ai.attributes.Attributes.SUBMERGED_MINING_SPEED)) {
+                    mining[0] += modifier.amount();
+                } else if (attribute.is(net.minecraft.world.entity.ai.attributes.Attributes.ARMOR)) {
+                    armor[0] += modifier.amount();
+                }
+            });
+            helper.assertTrue(armor[0] > before, "Ein Teil der Taucherrüstung schützt nicht: " + piece.getId());
+        }
+        helper.assertTrue(Math.abs(oxygen[0] - 2.5) < 0.01, "Helm und Harnisch lassen nicht länger atmen: " + oxygen[0]);
+        helper.assertTrue(Math.abs(swim[0] - 0.66) < 0.01, "Beinschutz und Flossen lassen nicht schneller schwimmen: " + swim[0]);
+        helper.assertTrue(mining[0] > 0.3, "Der Helm lässt unter Wasser nicht schneller abbauen: " + mining[0]);
+        helper.assertTrue(armor[0] >= 15.0, "Die Taucherrüstung schützt zu wenig: " + armor[0]);
+
+        // klare Sicht: nur mit dem vollen Satz und den Augen unter Wasser
+        BlockPos pool = helper.absolutePos(new BlockPos(6, 1, 6));
+        for (BlockPos p : BlockPos.betweenClosed(pool, pool.above(2))) {
+            level.setBlock(p, Blocks.WATER.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+        ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-aquamarine-diver", new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        player.teleportTo(level, pool.getX() + 0.5, pool.getY(), pool.getZ() + 0.5, java.util.Set.of(), 0.0f, 0.0f, true);
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.eyesInWater(player), "Der Taucher hat die Augen nicht unter Wasser");
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new net.minecraft.world.item.ItemStack(set.get(0).get()));
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player), "Klare Sicht schon mit einem Teil");
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new net.minecraft.world.item.ItemStack(set.get(1).get()));
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new net.minecraft.world.item.ItemStack(set.get(2).get()));
+        player.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new net.minecraft.world.item.ItemStack(set.get(3).get()));
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.pieces(player) == 4, "Der volle Satz zählt nicht");
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player), "Keine klare Sicht unter Wasser");
+        var sight = player.getEffect(net.minecraft.world.effect.MobEffects.NIGHT_VISION);
+        helper.assertTrue(sight != null && sight.isAmbient(), "Die klare Sicht fehlt: " + sight);
+        player.teleportTo(level, pool.getX() + 0.5, pool.getY() + 6, pool.getZ() + 0.5, java.util.Set.of(), 0.0f, 0.0f, true);
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.item.sea.AquamarineArmor.refresh(player), "Klare Sicht auch über Wasser");
+        for (BlockPos p : BlockPos.betweenClosed(pool, pool.above(2))) {
+            level.setBlock(p, Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        }
+        level.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
 
