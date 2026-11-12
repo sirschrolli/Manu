@@ -564,13 +564,16 @@ public class SchrolliEntity extends Monster implements io.github.sirschrolli.kin
         this.nameBossBar();
     }
 
+    /** Der Name auf seiner Bossleiste (für Prüfungen). */
+    public Component bossBarName() {
+        return this.bossBar.getName();
+    }
+
     private void nameBossBar() {
-        if (this.hasCustomName()) {
-            this.bossBar.setName(this.getDisplayName());
-        } else {
-            this.bossBar.setName(Component.translatable(this.isAlmighty() ? "boss.kingdomsatwar.schrolli_almighty"
-                    : this.isTrueForm() ? "boss.kingdomsatwar.schrolli_true" : "boss.kingdomsatwar.schrolli"));
-        }
+        String key = this.isAlmighty() ? "boss.kingdomsatwar.schrolli_almighty"
+                : this.isTrueForm() ? "boss.kingdomsatwar.schrolli_true" : "boss.kingdomsatwar.schrolli";
+        // mit Namensschild: sein Name, aber weiter seine eigene Leiste
+        this.bossBar.setName(this.hasCustomName() ? Component.translatable(key + ".named", this.getDisplayName()) : Component.translatable(key));
         this.bossBar.setColor(this.isAlmighty() ? BossEvent.BossBarColor.RED : this.isTrueForm() ? BossEvent.BossBarColor.PURPLE
                 : BossEvent.BossBarColor.YELLOW);
     }

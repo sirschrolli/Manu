@@ -825,7 +825,8 @@ public class MothQueenEntity extends Monster implements io.github.sirschrolli.ki
         input.getLong("Home").ifPresent(h -> this.home = BlockPos.of(h));
         this.entityData.set(DATA_ENRAGED, input.getBooleanOr("Enraged", false));
         if (this.hasCustomName()) {
-            this.bossBar.setName(this.getDisplayName());
+            // mit Namensschild: ihr Name, aber weiter ihre eigene Leiste
+            this.bossBar.setName(Component.translatable("boss.kingdomsatwar.moth.named", this.getDisplayName()));
         }
     }
 

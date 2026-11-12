@@ -259,6 +259,8 @@ final class Showcase {
                         SchrolliShowcase.almighty(steps);
                     } else if (scene.equals("boss_bars")) {
                         BossBarShowcase.bars(steps);
+                    } else if (scene.equals("bossleisten")) {
+                        BossBarShowcase.gallery(steps);
                     } else if (scene.equals("fix_wings")) {
                         WingFixShowcase.wings(steps);
                     } else if (scene.equals("weapons_hand")) {

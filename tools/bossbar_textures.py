@@ -19,6 +19,10 @@ Aufbau einer Textur (256 x 256), siehe BossBarRenderer.java:
   (204, 58)    9 x 9   Edelstein leuchtend      (214, 58) Edelstein zersprungen
   (0, 80)    240 x 44  Aura (letzte Phase)
   (0, 128)    64 x 64  Bildnis (wird auf 32 x 32 gezeichnet)
+  (64, 128)   16 x 15  Namensband, Mittelstück (kachelbar)
+  (80, 128)   16 x 18  Namensband, linkes Ende mit Schwalbenschwanz   (96, 128) rechtes Ende
+
+Seit 0.94 sitzen die Edelsteine genau bei den Kampfphasen des jeweiligen Bosses (PHASES, wie in BossBarRenderer.java).
 """
 from __future__ import annotations
 
@@ -35,7 +39,25 @@ from pixelart import CLEAR, hexc, mix  # noqa: E402
 FRAME_W, FRAME_H = 240, 44
 BAR_X, BAR_Y, BAR_W, BAR_H = 48, 18, 182, 9
 EMB_X, EMB_Y, EMB_R = 21, 22, 20.0
+# die Edelsteine der Leiste, die gerade entsteht (frame() setzt sie je Boss aus PHASES)
 GEMS = (0.6, 0.3)
+# Kampfphasen je Boss: bei diesem Anteil des Lebens beginnt die nächste Phase – dort sitzt je ein Edelstein, der im Spiel
+# zerspringt, sobald die Phase erreicht ist. Muss mit den Stilen in BossBarRenderer.java übereinstimmen.
+PHASES = {
+    "fire": (0.6, 0.3), "ice": (0.6, 0.3), "lightning": (0.6, 0.3), "nature": (0.6, 0.3), "earth": (0.6, 0.3),
+    "water": (0.6, 0.3), "shadow": (0.6, 0.3),
+    "void": (0.5, 0.25),                 # Zorn bei der Hälfte, unter einem Viertel neun Kronensplitter
+    "reef": (0.66, 0.4),                 # Ruf ins Riff, dann die Flut
+    "kraken": (0.67, 0.34),              # zweimal ruft er die Tiefe, beim zweiten Mal gerät er in Raserei
+    "moth": (0.5,), "forge": (0.5,), "star": (0.5,), "anni": (0.5,), "anni2": (0.5,),
+    "mystic": (0.6, 0.3),                # Zugabe und großes Finale
+    "schrolli": (0.7, 0.4),              # erste Gestalt: zweimal schneller
+    "schrolli_true": (0.6, 0.45, 0.25),  # Nova, Apokalypse, Neuschöpfung
+    "schrolli_almighty": (0.66, 0.25),   # zweimal das Sonnengericht
+    "world_eater": (0.66, 0.5, 0.33),    # Ruf der Welten, Zorn, Ruf der Welten
+}
+# die Erzmagier wechseln bei zwei Dritteln und einem Drittel die Phase
+MAGE_PHASES = (0.66, 0.33)
 
 # Metall dunkel / mittel / hell, Akzent, Leuchten, dunkler Grund
 ELEMENTS = {
@@ -134,6 +156,15 @@ ELEMENTS = {
                         netherrack_dark="#481010", magma="#ff8a2a", magma_light="#ffe08a", fungus="#d8342a",
                         fungus_light="#ff7a5a", endstone="#e0daa4", endstone_dark="#a49e66", chorus="#7a4a86",
                         chorus_light="#d0a8d8", ice="#a8ccf4", ice_dark="#5a86c4", ice_light="#f0f8ff"),
+    # der Kraken (seit 0.94): Bronze mit grüner Patina und Seepocken; zwei purpurrote Arme liegen auf dem Rahmen und
+    # klammern sich mit den Spitzen daran fest, als Spitze ein eingerollter Arm, unter der Leiste Tang und Tinte; Füllung wie
+    # seine Tinte – wirbelnde Schlieren in Purpur, darin türkis leuchtende Punkte wie auf seiner Haut
+    "kraken": dict(m0="#0f1517", m1="#38494a", m2="#9cbab0", acc="#36dcd2", glow="#d6fff8", deep="#160409",
+                   f0="#26040e", f1="#6a1428", f2="#c43c4a", f3="#ffd2c6", gold="#c8a050", gold_dark="#6a4a1e",
+                   skin0="#22060e", skin1="#561422", skin2="#7e2230", skin3="#a43a40", skin4="#c8584e",
+                   under0="#9a4e5a", under1="#cc7e88", under2="#eab0b0", sucker="#f6d8d6", sucker_dark="#6e2a38",
+                   spot="#3ad0e0", spot_light="#a8faff", barnacle="#d8d2c2", barnacle_dark="#6a665c",
+                   weed="#3e5a2c", weed_light="#6e8a3e", ink="#1c0818", ink_light="#4a1a3e"),
 }
 
 OUTLINE = (12, 10, 12, 255)
@@ -1872,8 +1903,9 @@ def deco_world_eater(img: Image.Image, pal: dict) -> None:
     wput(cx - 6, surface_y(cx - 6, cx, w, h, s), g["grass_light"])
     wput(cx + 6, surface_y(cx + 6, cx, w, h, s), (255, 214, 64, 255))
 
-    # Netherrack mit einem Becken aus Magma, einem Karmesinpilz und Flämmchen
-    cx, w, h, s = 131, 17, 4, 2
+    # Netherrack mit einem Becken aus Magma, einem Karmesinpilz und Flämmchen (zwischen den Edelsteinen bei einem Drittel und
+    # der Hälfte)
+    cx, w, h, s = 124, 13, 4, 2
     chunk(cx, w, h, g["netherrack"], g["fungus"], g["netherrack"], g["netherrack_dark"], s)
     for x in range(cx - 1, cx + 4):
         y = surface_y(x, cx, w, h, s) + 1
@@ -1921,7 +1953,8 @@ def deco_world_eater(img: Image.Image, pal: dict) -> None:
     px = img.load()
     # Glut zwischen den Welten
     for i, x in enumerate(range(BAR_X + 6, BAR_X + BAR_W - 4, 7)):
-        if hash01(x, 441) > 0.62 and not any(abs(x - X) < 11 for X in (75, 131, 186, 215, 103, 157)):
+        if hash01(x, 441) > 0.62 and not any(abs(x - X) < 11 for X in (75, 124, 186, 215)) \
+                and not any(abs(x - (BAR_X + round(BAR_W * f))) < 8 for f in GEMS):
             y = top - 2 - round(4 * hash01(x, 443))
             put(px, img, x, y, g["seam2"] if hash01(x, 445) > 0.5 else g["seam1"])
 
@@ -1988,17 +2021,318 @@ def post_world_eater(img: Image.Image, pal: dict) -> None:
                 px[x, y] = seam2 if EMB_R - 3.0 < d <= EMB_R - 2.0 else seam1
 
 
+# =============================================================================================
+# Der Kraken (seit 0.94)
+# =============================================================================================
+
+def _arm(pts: list, radius, pal: dict, side: int, seed: int) -> Image.Image:
+    """Ein Krakenarm als Schlauch entlang der (dicht liegenden) Punkte pts, radius(t) von 0 (Ansatz) bis 1 (Spitze).
+    side = +1: die blasse Unterseite mit den Saugnäpfen liegt rechts der Laufrichtung (im Bild), -1 links – so zeigen die
+    Saugnäpfe zur Leiste und in jeder Krümmung nach innen. Oben purpurrote Haut mit Glanzstreif und türkis leuchtenden
+    Punkten, dunkle Kontur."""
+    layer = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
+    lp = layer.load()
+    skin = [c(pal, f"skin{k}") for k in range(5)]
+    under0, under1, under2 = c(pal, "under0"), c(pal, "under1"), c(pal, "under2")
+    sucker, sucker_dark = c(pal, "sucker"), c(pal, "sucker_dark")
+    spot, spot_light = c(pal, "spot"), c(pal, "spot_light")
+    lengths = [0.0]
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        lengths.append(lengths[-1] + math.hypot(x1 - x0, y1 - y0))
+    total = lengths[-1]
+    best: dict = {}
+    for i, (cx, cy) in enumerate(pts):
+        j0, j1 = max(0, i - 1), min(len(pts) - 1, i + 1)
+        tx, ty = pts[j1][0] - pts[j0][0], pts[j1][1] - pts[j0][1]
+        tl = math.hypot(tx, ty) or 1.0
+        tx, ty = tx / tl, ty / tl
+        nx, ny = -ty * side, tx * side
+        t = lengths[i] / total
+        r = radius(t)
+        for y in range(int(cy - r - 2), int(cy + r + 3)):
+            for x in range(int(cx - r - 2), int(cx + r + 3)):
+                ox, oy = x + 0.5 - cx, y + 0.5 - cy
+                along = ox * tx + oy * ty
+                across = ox * nx + oy * ny
+                if abs(along) > 0.55 or abs(across) > r:
+                    continue
+                d = abs(across)
+                if (x, y) not in best or d < best[(x, y)][0]:
+                    best[(x, y)] = (d, across / max(r, 0.01), t, lengths[i], r)
+    for (x, y), (d, v, t, s, r) in best.items():
+        if not (0 <= x < FRAME_W and 0 <= y < FRAME_H):
+            continue
+        if r < 1.3:
+            col = under1 if v > 0.35 else (skin[3] if v > -0.4 else skin[2])
+        elif v > 0.28:
+            col = under0
+            phase = (s + 1.7 * hash01(seed, 3)) % 3.6
+            if phase < 2.0 and v < 0.98:
+                # Saugnäpfe: ein heller Ring, zur Kante hin die dunkle Öffnung
+                col = sucker if (v < 0.64 or phase < 0.55 or phase > 1.45) else sucker_dark
+        elif v > -0.12:
+            col = skin[2]
+        elif v > -0.58:
+            col = skin[4] if (t < 0.85 and -0.42 < v < -0.24) else skin[3]
+        else:
+            col = skin[1]
+        if r >= 1.3 and -0.6 < v < 0.1 and hash01(int(s // 3.0), seed, 7) > 0.84 and (s % 3.0) < 1.0:
+            col = spot_light if hash01(int(s // 3.0), seed, 9) > 0.6 else spot
+        if v > 0.3 and t > 0.92:
+            col = under2
+        lp[x, y] = col
+    _outline(layer, (20, 4, 10, 255))
+    return layer
+
+
+def deco_kraken(img: Image.Image, pal: dict) -> None:
+    """Der Kraken greift nach der Leiste: ein Arm kommt oben hinter dem Medaillon hervor, liegt in Wellen auf dem Rahmen und
+    klammert sich mit der Spitze an ihm fest, ein zweiter tut es unten; auf dem Rahmen Seepocken, darüber Luftblasen, unter
+    der Leiste hängen Tangfäden und Tropfen seiner Tinte."""
+    px = img.load()
+    top, bottom = BAR_Y - 3, BAR_Y + BAR_H + 2
+    barnacle, barnacle_dark = c(pal, "barnacle"), c(pal, "barnacle_dark")
+    weed, weed_light = c(pal, "weed"), c(pal, "weed_light")
+    ink, ink_light = c(pal, "ink"), c(pal, "ink_light")
+    acc, glow = c(pal, "acc"), c(pal, "glow")
+
+    # Tangfäden unter der Leiste (rechte Hälfte), sie wiegen sich leicht
+    for k, x in enumerate(range(BAR_X + 112, BAR_X + BAR_W - 4, 10)):
+        length = 4 + round(5 * hash01(x, 31))
+        for dy in range(length):
+            sx = x + round(0.9 * math.sin(dy * 0.9 + k))
+            put(px, img, sx, bottom + 1 + dy, weed_light if dy % 3 == 0 else weed)
+    # Tintentropfen
+    for x in (BAR_X + 127, BAR_X + 147, BAR_X + 171):
+        h = 2 + round(2 * hash01(x, 37))
+        for dy in range(h):
+            put(px, img, x, bottom + 1 + dy, ink)
+        put(px, img, x, bottom + 1 + h, ink_light)
+        put(px, img, x - 1, bottom + 1 + h, ink)
+        put(px, img, x + 1, bottom + 1 + h, ink)
+        put(px, img, x, bottom + 2 + h, ink)
+    # Luftblasen über dem Rahmen (rechts, wo der Arm nicht liegt)
+    for x in range(BAR_X + 62, BAR_X + BAR_W - 6, 9):
+        if hash01(x, 41) < 0.35 or any(abs(x - (BAR_X + round(BAR_W * f))) < 7 for f in GEMS):
+            continue
+        y = 2 + round(hash01(x, 43) * 9)
+        if hash01(x, 47) > 0.55:
+            for dx, dy in ((0, -1), (1, 0), (0, 1), (-1, 0)):
+                put(px, img, x + dx, y + dy, mix(acc, glow, 0.4))
+            put(px, img, x - 1, y - 1, glow)
+        else:
+            put(px, img, x, y, mix(acc, glow, 0.6))
+
+    # oben: der Arm kommt hinter dem Medaillon hervor, liegt in Wellen auf dem Rahmen und hakt sich vor dem ersten Edelstein
+    # mit der Spitze ein
+    end = BAR_X + round(BAR_W * min(GEMS)) - 12
+    pts = []
+    x = 30.0
+    while x <= end:
+        rise = max(0.0, (40.0 - x) / 10.0)
+        pts.append((x, 10.2 + 1.2 * math.sin((x - 30.0) / 10.0) - 3.0 * rise))
+        x += 0.25
+    hx, hy, hr = float(end), 14.4, 4.2
+    for k in range(1, 61):
+        ang = math.radians(-90.0 + 128.0 * k / 60)
+        pts.append((hx + hr * math.cos(ang), hy + 0.2 + hr * math.sin(ang)))
+    img.alpha_composite(_arm(pts, lambda t: 3.3 - 2.3 * t ** 0.85, pal, 1, 3))
+    # unten: der zweite Arm, länger, hakt sich von unten ein
+    pts = []
+    x = 32.0
+    while x <= 150.0:
+        drop = max(0.0, (40.0 - x) / 8.0)
+        pts.append((x, 34.4 + 1.2 * math.sin((x - 32.0) / 11.0 + 1.2) + 2.5 * drop))
+        x += 0.25
+    hx, hy, hr = 150.0, 29.8, 3.8
+    for k in range(1, 61):
+        ang = math.radians(90.0 - 128.0 * k / 60)
+        pts.append((hx + hr * math.cos(ang), hy + hr * math.sin(ang)))
+    img.alpha_composite(_arm(pts, lambda t: 3.1 - 2.1 * t ** 0.85, pal, -1, 5))
+
+    # Seepocken auf dem Rahmen: kleine Kegel mit dunkler Öffnung
+    def barnacle_at(bx: int, by: int, up: bool):
+        d = -1 if up else 1
+        put(px, img, bx - 1, by, barnacle_dark)
+        put(px, img, bx, by, barnacle)
+        put(px, img, bx + 1, by, mix(barnacle, barnacle_dark, 0.5))
+        put(px, img, bx, by + d, OUTLINE)
+        put(px, img, bx - 1, by + d, barnacle)
+        put(px, img, bx + 1, by + d, barnacle_dark)
+    for x in (BAR_X + 76, BAR_X + 84, BAR_X + 136, BAR_X + 150, BAR_X + 176):
+        barnacle_at(x, top - 1, True)
+    for x in (BAR_X + 112, BAR_X + 166):
+        barnacle_at(x, bottom + 1, False)
+
+
+def post_kraken(img: Image.Image, pal: dict) -> None:
+    """Nach dem Rahmen: die Spitze – ein eingerollter Arm am Ende der Leiste – und Seepocken auf dem Ring des Medaillons."""
+    px = img.load()
+    pts = []
+    cx, cy = 234.6, 22.0
+    turns = 1.25
+    for k in range(0, 241):
+        t = k / 240
+        ang = math.radians(150.0 + 360.0 * turns * t)
+        r = 6.2 - 4.4 * t
+        pts.append((cx + r * math.cos(ang) * 0.82, cy + r * math.sin(ang)))
+    # Ansatz am Rahmen: ein kurzes Stück von links
+    lead = [(229.0 + 0.25 * k, 26.5 + 0.2 * k) for k in range(0, 4)]
+    tip = _arm(lead + pts, lambda t: 2.3 - 1.5 * t, pal, 1, 11)
+    tp = tip.load()
+    for y in range(FRAME_H):
+        for x in range(BAR_X + BAR_W, FRAME_W):
+            if tp[x, y][3]:
+                px[x, y] = tp[x, y]
+    barnacle, barnacle_dark = c(pal, "barnacle"), c(pal, "barnacle_dark")
+    for ang in (-150, -112, 160, 128):
+        a = math.radians(ang)
+        x = round(EMB_X + math.cos(a) * (EMB_R - 2.5))
+        y = round(EMB_Y + math.sin(a) * (EMB_R - 2.5))
+        put(px, img, x, y, barnacle)
+        put(px, img, x + 1, y, barnacle_dark)
+        put(px, img, x, y + 1, barnacle_dark)
+
+
+def fill_strip_kraken() -> Image.Image:
+    """Füllung des Kraken: seine Tinte – wirbelnde Schlieren in Purpurrot, dunkle Flecken wie auf seiner Haut, dazwischen
+    einzelne türkis leuchtende Punkte."""
+    pal = ELEMENTS["kraken"]
+    f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
+    spot, spot_light = c(pal, "spot"), c(pal, "spot_light")
+    tau = math.tau
+    img = Image.new("RGBA", (256, BAR_H), CLEAR)
+    px = img.load()
+    for y in range(BAR_H):
+        top = 1.0 - y / (BAR_H - 1)
+        for x in range(256):
+            swirl = 0.5 + 0.5 * math.sin(tau * x / 64 + 2.3 * math.sin(tau * y / 18 + tau * x / 32))
+            curl = 0.5 + 0.5 * math.sin(tau * x / 32 - 1.6 * math.cos(tau * y / 9 + tau * x / 128))
+            d1, _ = _worley(x, y * 1.4, 8.0, 32, 517)
+            blot = max(0.0, 1.0 - d1 / 2.4)
+            v = 0.25 + 0.45 * swirl + 0.2 * curl - 0.35 * blot
+            col = mix(mix(f0, f1, 0.3 + 0.6 * top), f2, max(0.0, v - 0.3) * 1.25)
+            if swirl > 0.92 and curl > 0.5:
+                col = mix(col, f3, 0.55)
+            h = hash01(x, y, 521)
+            if h > 0.982 and 1 <= y <= BAR_H - 2:
+                col = spot_light if h > 0.992 else spot
+            if y == 1:
+                col = mix(col, f3, 0.3)
+            if y == BAR_H - 1:
+                col = mix(col, f0, 0.55)
+            px[x, y] = col
+    return img
+
+
+# =============================================================================================
+# Namensband (seit 0.94)
+# =============================================================================================
+
+BAN_H, BAN_TAIL_H, BAN_CAP, BAN_TILE = 15, 18, 16, 16
+# Abweichungen vom Standard (dunkler Stoff im Ton des Bosses, Borte aus Gold oder hellem Metall)
+BANNER_COLORS = {
+    "anni": dict(trim="#f800f8", trim_dark="#22d8e8", fabric="#14101c"),
+    "anni2": dict(trim="#ff2040", trim_dark="#ff8a30", fabric="#1a0a10"),
+    "world_eater": dict(trim="#e8541a", trim_dark="#54444e", fabric="#1c0a0a"),
+}
+
+
+def banner_colors(element: str) -> dict:
+    pal = ELEMENTS[element]
+    deep, acc, glow = c(pal, "deep"), c(pal, "acc"), c(pal, "glow")
+    out = dict(fabric=mix(mix(deep, acc, 0.16), OUTLINE, 0.12), gem=acc, gem_light=glow,
+               trim=c(pal, "gold") if "gold" in pal else c(pal, "m2"),
+               trim_dark=c(pal, "gold_dark") if "gold_dark" in pal else c(pal, "m1"))
+    for key, value in BANNER_COLORS.get(element, {}).items():
+        out[key] = hexc(value)
+    out["fabric_light"] = mix(out["fabric"], acc, 0.22)
+    out["fabric_dark"] = mix(out["fabric"], OUTLINE, 0.55)
+    return out
+
+
+def _band_pixel(bc: dict, x: int, y: int):
+    """Farbe des Bandes in Zeile y: Kontur, Borte (hell, dunkel), Stoff mit sanftem Verlauf, Borte, Kontur."""
+    if y in (0, BAN_H - 1):
+        return OUTLINE
+    if y == 1:
+        return mix(bc["trim"], (255, 255, 255, 255), 0.45) if x % 8 == 3 else bc["trim"]
+    if y == BAN_H - 2:
+        return bc["trim"]
+    if y in (2, BAN_H - 3):
+        return bc["trim_dark"]
+    t = (y - 3) / (BAN_H - 7)
+    col = mix(bc["fabric_light"], bc["fabric_dark"], 0.1 + 0.75 * t ** 1.2)
+    if (x + y) % 8 == 0:
+        col = mix(col, bc["fabric_light"], 0.12)                # feines Webmuster
+    return col
+
+
+def banner_tile(element: str) -> Image.Image:
+    bc = banner_colors(element)
+    img = Image.new("RGBA", (BAN_TILE, BAN_H), CLEAR)
+    px = img.load()
+    for y in range(BAN_H):
+        for x in range(BAN_TILE):
+            px[x, y] = _band_pixel(bc, x, y)
+    return img
+
+
+def banner_cap(element: str) -> Image.Image:
+    """Linkes Ende des Bandes: dahinter ein Schwalbenschwanz, der drei Zeilen tiefer hängt, vorn die Kante des Bandes mit
+    Borte und einem kleinen Zierstein. Das rechte Ende ist das Spiegelbild."""
+    bc = banner_colors(element)
+    img = Image.new("RGBA", (BAN_CAP, BAN_TAIL_H), CLEAR)
+    px = img.load()
+    t0, t1 = 3, BAN_TAIL_H - 1
+    mid = (t0 + t1) / 2
+    for y in range(t0, t1 + 1):
+        notch = round(4.0 * (1.0 - abs(y - mid) / ((t1 - t0) / 2)))
+        for x in range(notch, 11):
+            if y in (t0, t1) or x == notch:
+                col = OUTLINE
+            elif y in (t0 + 1, t1 - 1):
+                col = bc["trim_dark"]
+            else:
+                col = mix(bc["fabric"], bc["fabric_dark"], 0.3 + 0.5 * (y - t0) / (t1 - t0))
+            if y >= BAN_H and x >= 6:
+                col = mix(col, OUTLINE, 0.4)                     # Schatten unter dem Band
+            px[x, y] = col
+    for y in range(BAN_H):
+        for x in range(8, BAN_CAP):
+            if x == 8:
+                col = OUTLINE
+            elif x == 9 and 0 < y < BAN_H - 1:
+                col = bc["trim"]
+            elif x == 10 and 1 < y < BAN_H - 2:
+                col = bc["trim_dark"]
+            else:
+                col = _band_pixel(bc, x, y)
+            px[x, y] = col
+    gx, gy = 13, BAN_H // 2
+    for y in range(gy - 2, gy + 3):
+        for x in range(gx - 2, gx + 3):
+            d = abs(x - gx) + abs(y - gy)
+            if d == 2:
+                px[x, y] = OUTLINE
+            elif d < 2:
+                px[x, y] = bc["gem_light"] if (x - gx, y - gy) in ((-1, 0), (0, -1)) else bc["gem"]
+    return img
+
+
 POST = {"schrolli": post_schrolli, "schrolli_true": post_schrolli, "schrolli_almighty": post_almighty,
-        "world_eater": post_world_eater}
+        "world_eater": post_world_eater, "kraken": post_kraken}
 BORDERS = {"world_eater": frame_border_stone}
 
 
 DECOS = {"schrolli": deco_schrolli, "schrolli_true": deco_schrolli, "schrolli_almighty": deco_almighty,
          "world_eater": deco_world_eater, "anni": deco_anni, "anni2": deco_anni, "mystic": deco_mystic, "star": deco_star, "forge": deco_forge, "moth": deco_moth, "void": deco_void, "reef": deco_reef, "shadow": deco_shadow, "fire": deco_fire, "ice": deco_ice, "lightning": deco_lightning, "nature": deco_nature, "earth": deco_earth,
-         "water": deco_water}
+         "water": deco_water, "kraken": deco_kraken}
 
 
-def frame(element: str) -> Image.Image:
+def frame(element: str, phases: tuple | None = None) -> Image.Image:
+    global GEMS
+    GEMS = phases or PHASES[element]
     pal = ELEMENTS[element]
     img = Image.new("RGBA", (FRAME_W, FRAME_H), CLEAR)
     DECOS[element](img, pal)
@@ -2121,6 +2455,9 @@ def fill_value(element: str, x: int, y: int) -> float:
         d1, d2 = _worley(x, y * 1.35, 256 / 24, 24, 451)
         crack = d2 - d1
         return 0.95 if crack < 0.75 else (0.7 if crack < 1.9 else 0.3 + 0.1 * math.sin(tau * x / 64) + 0.06 * hash01(x, y, 453))
+    if element == "kraken":
+        # Schlieren der Tinte
+        return 0.5 + 0.5 * math.sin(tau * x / 64 + 2.3 * math.sin(tau * y / 18 + tau * x / 32))
     if element == "shadow":
         # wabernder Rauch, durch den einzelne Seelen ziehen
         smoke = 0.42 + 0.22 * math.sin(tau * x / 64 + 2.0 * math.sin(tau * y / 9 + tau * x / 32))
@@ -2170,6 +2507,8 @@ def fill_strip_world_eater() -> Image.Image:
 def fill_strip(element: str) -> Image.Image:
     if element == "world_eater":
         return fill_strip_world_eater()
+    if element == "kraken":
+        return fill_strip_kraken()
     pal = ELEMENTS[element]
     f0, f1, f2, f3 = (c(pal, k) for k in ("f0", "f1", "f2", "f3"))
     img = Image.new("RGBA", (256, BAR_H), CLEAR)
@@ -2240,8 +2579,8 @@ def aura(element: str, frame_img: Image.Image) -> Image.Image:
     solid = [[src[x, y][3] > 0 for y in range(FRAME_H)] for x in range(FRAME_W)]
     for y in range(FRAME_H):
         for x in range(FRAME_W):
-            if solid[x][y]:
-                continue
+            if solid[x][y] or (BAR_X <= x < BAR_X + BAR_W and BAR_Y <= y < BAR_Y + BAR_H):
+                continue                                # nicht über der Füllung (die leuchtet selbst)
             best = 99.0
             for dy in range(-4, 5):
                 for dx in range(-4, 5):
@@ -2296,14 +2635,15 @@ def portrait(element: str) -> Image.Image:
     """Kopf des Bosses schräg von vorn, aus dem Modell gerendert und auf 64 x 64 verkleinert, kreisrund beschnitten,
     mit dunkler Kontur (2 Pixel = 1 Pixel im Spiel), damit er sich vom Grund des Medaillons abhebt."""
     from entitygen.models import (asteria, boss_earth, boss_fire, boss_ice, boss_lightning, boss_nature, boss_shadow, boss_water,
-                                  glutschmied, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll, schrolli,
-                                  world_eater)
+                                  glutschmied, kraken, miss_mystik, moth_queen, reef_colossus, shattered_king, anni_troll,
+                                  schrolli, world_eater)
     from entitygen.paint import paint_model
     from entitygen.preview import render
     mod = {"fire": boss_fire, "ice": boss_ice, "lightning": boss_lightning, "nature": boss_nature, "earth": boss_earth,
            "water": boss_water, "shadow": boss_shadow, "void": shattered_king, "reef": reef_colossus, "moth": moth_queen,
            "forge": glutschmied, "star": asteria, "mystic": miss_mystik, "anni": anni_troll, "anni2": anni_troll,
-           "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater}[element]
+           "schrolli": schrolli, "schrolli_true": schrolli, "schrolli_almighty": schrolli, "world_eater": world_eater,
+           "kraken": kraken}[element]
     m = mod.build()
     m.pack()
     variant = "anni_troll_v2" if element == "anni2" else element if element.startswith("schrolli") else next(iter(mod.PALETTES))
@@ -2368,6 +2708,18 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_mystic(child)
         strip_mystic(m.root)
+    if element == "kraken":
+        # von schräg unten: der Kopf mit den goldenen Augen, darüber der Ansatz des Mantels, darunter die Arme, die sich
+        # ausbreiten (ohne Fangarme, Flossen und die langen Armglieder)
+        def strip_kraken(bone):
+            name = bone.name
+            if name.startswith(("tentacle", "fin")) or (name.startswith("arm") and "_" in name and int(name.split("_")[1]) >= 3):
+                bone.cubes.clear()
+            if name == "mantle":
+                del bone.cubes[5:]
+            for child in bone.children:
+                strip_kraken(child)
+        strip_kraken(m.root)
     if element in ("anni", "anni2"):
         # Kopf mit Grinsen, Bildschirmauge, Ohren und Haarschopf (ohne Leib, Arme und Hammer)
         def strip_anni(bone):
@@ -2379,15 +2731,15 @@ def portrait(element: str) -> Image.Image:
             for child in bone.children:
                 strip_anni(child)
         strip_anni(m.root)
-    zoom = {"schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
+    zoom = {"kraken": 1.5, "schrolli": 1.0, "schrolli_true": 1.0, "schrolli_almighty": 1.0, "world_eater": 1.35, "nature": 0.82, "earth": 1.15, "water": 1.1, "void": 1.05, "reef": 1.25, "moth": 0.8, "forge": 0.86, "star": 0.92, "mystic": 0.95,
             "anni": 1.0, "anni2": 1.0}.get(element, 1.2)
-    yaw = {"schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
+    yaw = {"kraken": -20, "schrolli": -22, "schrolli_true": -22, "schrolli_almighty": -22, "world_eater": -6, "water": -50, "earth": -38, "void": -26, "reef": -20, "moth": -8, "forge": -14, "star": -24, "mystic": -22, "anni": -24,
            "anni2": -24}.get(element, -42)
-    pitch = {"schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
+    pitch = {"kraken": -18, "schrolli": 4, "schrolli_true": 4, "schrolli_almighty": 4, "world_eater": 4, "reef": 8, "moth": 4, "forge": 4, "star": 4, "mystic": 2, "anni": 2, "anni2": 2}.get(element, 6)
     big = render(m, tex, glow, yaw, pitch, 448, pose=getattr(mod, "FOLD_POSE", None), background=(0, 0, 0, 0), zoom=zoom,
-                 focus=["body"] if element == "reef" else ["helm"] if element == "star" else ["head"])
+                 focus=["body"] if element in ("reef", "kraken") else ["helm"] if element == "star" else ["head"])
     img = big.resize((64, 64), Image.LANCZOS)
-    img = ImageEnhance.Brightness(img).enhance({"fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
+    img = ImageEnhance.Brightness(img).enhance({"kraken": 1.85, "fire": 1.9, "earth": 1.5, "lightning": 1.9, "nature": 1.6, "shadow": 2.4,
                                                  "void": 1.0, "reef": 1.35, "moth": 1.25, "forge": 1.65, "star": 1.15, "mystic": 1.2,
                                                  "anni": 1.45, "anni2": 1.45, "schrolli": 1.5, "schrolli_true": 1.5,
                                                  "schrolli_almighty": 1.45, "world_eater": 2.0}.get(element, 1.4))
@@ -2473,16 +2825,15 @@ def mage_portrait(element: str) -> Image.Image:
 
 
 def mage_bossbar(element: str) -> Image.Image:
-    """Bossleiste eines Erzmagiers: Rahmen und Füllung seines Elements, im Medaillon sein Bildnis."""
-    img = bossbar(element)
-    img.paste((0, 0, 0, 0), (0, 128, 64, 192))
-    img.alpha_composite(mage_portrait(element), (0, 128))
+    """Bossleiste eines Erzmagiers: Rahmen und Füllung seines Elements (Edelsteine bei seinen Phasen), im Medaillon sein
+    Bildnis."""
+    img = bossbar(element, MAGE_PHASES, portrait_img=mage_portrait(element))
     return img
 
 
-def bossbar(element: str) -> Image.Image:
+def bossbar(element: str, phases: tuple | None = None, portrait_img: Image.Image | None = None) -> Image.Image:
     img = Image.new("RGBA", (256, 256), CLEAR)
-    fr = frame(element)
+    fr = frame(element, phases)
     img.alpha_composite(fr, (0, 0))
     img.alpha_composite(fill_strip(element), (0, 48))
     img.alpha_composite(empty_strip(element), (0, 58))
@@ -2491,35 +2842,52 @@ def bossbar(element: str) -> Image.Image:
     img.alpha_composite(gem(ELEMENTS[element], False), (204, 58))
     img.alpha_composite(gem(ELEMENTS[element], True), (214, 58))
     img.alpha_composite(aura(element, fr), (0, 80))
-    img.alpha_composite(portrait(element), (0, 128))
+    img.alpha_composite(portrait_img if portrait_img is not None else portrait(element), (0, 128))
+    img.alpha_composite(banner_tile(element), (64, 128))
+    cap = banner_cap(element)
+    img.alpha_composite(cap, (80, 128))
+    img.alpha_composite(cap.transpose(Image.FLIP_LEFT_RIGHT), (96, 128))
     return img
 
 
-def preview(target: str) -> None:
-    """Vorschau: alle Leisten zusammengesetzt (wie im Spiel, bei 70 % und 25 % Leben), dreifach vergrößert."""
-    out = Image.new("RGBA", (FRAME_W * 3 * 2 + 30, len(ELEMENTS) * 3 * (FRAME_H + 10) + 20), (46, 52, 60, 255))
-    for i, element in enumerate(ELEMENTS):
+def preview(target: str, only: list | None = None) -> None:
+    """Vorschau: die Leisten zusammengesetzt (wie im Spiel, bei 70 % und 25 % Leben, mit Namensband), dreifach vergrößert."""
+    elements = only or list(ELEMENTS)
+    top = 6
+    scene_h = top + 13 + FRAME_H + 2
+    out = Image.new("RGBA", (FRAME_W * 3 * 2 + 30, len(elements) * 3 * (scene_h + 4) + 20), (46, 52, 60, 255))
+    for i, element in enumerate(elements):
         tex = bossbar(element)
         for j, hp in enumerate((0.7, 0.25)):
-            scene = Image.new("RGBA", (FRAME_W, FRAME_H + 8), (0, 0, 0, 0))
-            scene.alpha_composite(tex.crop((0, 58, BAR_W, 58 + BAR_H)), (BAR_X, BAR_Y + 8))
+            scene = Image.new("RGBA", (FRAME_W, scene_h), (0, 0, 0, 0))
+            # Namensband (Platz für einen Namen von 96 Pixeln)
+            cx = BAR_X + BAR_W // 2
+            x0, x1 = cx - 48 - 4, cx + 48 + 4
+            scene.alpha_composite(tex.crop((80, 128, 96, 128 + BAN_TAIL_H)), (x0 - BAN_CAP, top - 4))
+            for x in range(x0, x1, BAN_TILE):
+                w = min(BAN_TILE, x1 - x)
+                scene.alpha_composite(tex.crop((64, 128, 64 + w, 128 + BAN_H)), (x, top - 4))
+            scene.alpha_composite(tex.crop((96, 128, 112, 128 + BAN_TAIL_H)), (x1, top - 4))
+            fy = top + 13
+            scene.alpha_composite(tex.crop((0, 58, BAR_W, 58 + BAR_H)), (BAR_X, fy + BAR_Y))
             fill = round(BAR_W * hp)
             trail = min(BAR_W, fill + 18)
-            scene.alpha_composite(tex.crop((0, 68, trail, 68 + BAR_H)), (BAR_X, BAR_Y + 8))
-            scene.alpha_composite(tex.crop((20, 48, 20 + fill, 48 + BAR_H)), (BAR_X, BAR_Y + 8))
+            scene.alpha_composite(tex.crop((0, 68, trail, 68 + BAR_H)), (BAR_X, fy + BAR_Y))
+            scene.alpha_composite(tex.crop((20, 48, 20 + fill, 48 + BAR_H)), (BAR_X, fy + BAR_Y))
             if hp < 0.3:
-                scene.alpha_composite(tex.crop((0, 80, FRAME_W, 80 + FRAME_H)), (0, 8))
-            scene.alpha_composite(tex.crop((0, 0, FRAME_W, FRAME_H)), (0, 8))
+                scene.alpha_composite(tex.crop((0, 80, FRAME_W, 80 + FRAME_H)), (0, fy))
+            scene.alpha_composite(tex.crop((0, 0, FRAME_W, FRAME_H)), (0, fy))
             p = tex.crop((0, 128, 64, 192)).resize((32, 32), Image.NEAREST)
-            scene.alpha_composite(p, (EMB_X - 16, EMB_Y - 16 + 8))
+            scene.alpha_composite(p, (EMB_X - 16, fy + EMB_Y - 16))
             for f in GEMS:
                 gx = BAR_X + round(BAR_W * f)
                 g = tex.crop((214, 58, 223, 67)) if hp < f else tex.crop((204, 58, 213, 67))
-                scene.alpha_composite(g, (gx - 4, BAR_Y - 3 - 7 + 8))
+                scene.alpha_composite(g, (gx - 4, fy + BAR_Y - 3 - 7))
             big = scene.resize((scene.width * 3, scene.height * 3), Image.NEAREST)
-            out.alpha_composite(big, (10 + j * (FRAME_W * 3 + 10), 10 + i * 3 * (FRAME_H + 10)))
+            out.alpha_composite(big, (10 + j * (FRAME_W * 3 + 10), 10 + i * 3 * (scene_h + 4)))
     out.save(target)
 
 
 if __name__ == "__main__":
-    preview(sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/v2/bars_new.png")
+    preview(sys.argv[1] if len(sys.argv) > 1 else "/tmp/claude-0/-home-claude/50786bb5-6cc3-5907-a25e-13bee43305bb/scratchpad/v2/bars_new.png",
+            sys.argv[2].split(",") if len(sys.argv) > 2 else None)

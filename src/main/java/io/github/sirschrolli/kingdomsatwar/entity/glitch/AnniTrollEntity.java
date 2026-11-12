@@ -372,11 +372,9 @@ public class AnniTrollEntity extends Monster implements io.github.sirschrolli.ki
     }
 
     private void nameBossBar() {
-        if (this.hasCustomName()) {
-            this.bossBar.setName(this.getDisplayName());
-        } else {
-            this.bossBar.setName(Component.translatable(this.isVersion2() ? "boss.kingdomsatwar.anni2" : "boss.kingdomsatwar.anni"));
-        }
+        String key = this.isVersion2() ? "boss.kingdomsatwar.anni2" : "boss.kingdomsatwar.anni";
+        // mit Namensschild: sein Name, aber weiter seine eigene Leiste
+        this.bossBar.setName(this.hasCustomName() ? Component.translatable(key + ".named", this.getDisplayName()) : Component.translatable(key));
         this.bossBar.setColor(this.isVersion2() ? BossEvent.BossBarColor.RED : BossEvent.BossBarColor.PINK);
     }
 

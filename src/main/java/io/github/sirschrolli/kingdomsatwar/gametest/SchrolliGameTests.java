@@ -66,13 +66,15 @@ final class SchrolliGameTests {
             ModGameTests.TEST_FUNCTIONS.register("schrolli_guard", () -> SchrolliGameTests::guard);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> STANCE =
             ModGameTests.TEST_FUNCTIONS.register("schrolli_stance", () -> SchrolliGameTests::stance);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> BAR_NAME =
+            ModGameTests.TEST_FUNCTIONS.register("schrolli_bar_name", () -> SchrolliGameTests::barName);
 
     private SchrolliGameTests() {}
 
     static void init() {}
 
     static void register(RegisterGameTestsEvent event, Holder<TestEnvironmentDefinition<?>> environment) {
-        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR, WINGS, MELEE, GUARD, STANCE)) {
+        for (var test : List.of(CORE, ARTS, TRUE_ARTS, ALTAR, WINGS, MELEE, GUARD, STANCE, BAR_NAME)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 2400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -156,6 +158,29 @@ final class SchrolliGameTests {
 
     static int fx(ServerLevel level, AABB area, SpellFxEntity.Kind kind) {
         return level.getEntitiesOfClass(SpellFxEntity.class, area, s -> s.kind() == kind).size();
+    }
+
+    /**
+     * Mit Namensschild behält Schrolli seine eigene Bossleiste (seit 0.94): auf ihr steht sein Name, aber unter dem Schlüssel
+     * {@code boss.kingdomsatwar.schrolli.named} – daran erkennt die Anzeige, welche Leiste sie zeichnet. Ohne Namen wieder der
+     * gewohnte Schlüssel.
+     */
+    private static void barName(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Field field = field(helper, 11, 8);
+        SchrolliEntity boss = schrolli(level, field.origin());
+        boss.setCustomName(net.minecraft.network.chat.Component.literal("Bob"));
+        net.minecraft.network.chat.Component named = boss.bossBarName();
+        boolean ok = named.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                && t.getKey().equals("boss.kingdomsatwar.schrolli.named") && t.getArgs().length == 1;
+        boss.setCustomName(null);
+        net.minecraft.network.chat.Component plain = boss.bossBarName();
+        boolean back = plain.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                && t.getKey().equals("boss.kingdomsatwar.schrolli");
+        field.close();
+        helper.assertTrue(ok, "Leiste mit Namensschild: " + named);
+        helper.assertTrue(back, "Leiste ohne Namensschild: " + plain);
+        helper.succeed();
     }
 
     // =====================================================================================

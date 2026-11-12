@@ -807,6 +807,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Noctua, the Moth Queen", "Noctua, die Mottenkönigin", "Mottenkönigin");
         add(ModEntities.MOON_MOTH.get(), pick("Moon Moth", "Mondfalter"));
         text("boss.kingdomsatwar.moth", "Noctua, the Moth Queen", "Noctua, die Mottenkönigin");
+        text("boss.kingdomsatwar.moth.named", "%s", "%s");
         text("boss.kingdomsatwar.moth.title", "Mistress of the Moon Grove", "Herrin des Mondhains");
         text("message.kingdomsatwar.moth_queen.lullaby", "Don't look at her while she sings!", "Sieh nicht hin, wenn sie singt!");
         text("message.kingdomsatwar.moth_queen.eclipse", "The moon goes dark … watch the glowing rings!",
@@ -1060,6 +1061,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(ModEntities.SCANLINE.get(), pick("Scanline Error", "Zeilenfehler"));
         add(ModEntities.AFTERIMAGE.get(), pick("Afterimage", "Nachbild"));
         text("boss.kingdomsatwar.anni", "Anni the Troll", "Anni der Troll");
+        text("boss.kingdomsatwar.anni.named", "%s", "%s");
         text("boss.kingdomsatwar.anni.title", "Error 404: mercy not found", "Fehler 404: Gnade nicht gefunden");
         text("entity.kingdomsatwar.anni_troll.loading", "Loading Anni … ██████░░░░ 60 %", "Lade Anni … ██████░░░░ 60 %");
         text("entity.kingdomsatwar.anni_troll.disconnect", "Anni lost the connection.", "Anni hat die Verbindung verloren.");
@@ -1069,6 +1071,7 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Anni wird neu gestartet … – spring, wenn die Welle kommt!");
         text("entity.kingdomsatwar.anni_troll.game_over", "GAME OVER – Anni crashed for good.", "GAME OVER – Anni ist endgültig abgestürzt.");
         text("boss.kingdomsatwar.anni2", "Anni the Troll 2.0", "Anni der Troll 2.0");
+        text("boss.kingdomsatwar.anni2.named", "%s", "%s");
         text("boss.kingdomsatwar.anni2.title", "Now with even more bugs!", "Jetzt mit noch mehr Fehlern!");
         text("entity.kingdomsatwar.anni_troll.fatal", "Fatal exception – Anni.exe has stopped.", "Schwerer Ausnahmefehler – Anni.exe wurde beendet.");
         text("entity.kingdomsatwar.anni_troll.searching", "Searching for a backup …", "Suche nach einer Sicherung …");
@@ -2050,6 +2053,10 @@ public class ModLanguageProvider extends LanguageProvider {
         text("boss.kingdomsatwar.schrolli_true.title", "The Creator reveals his true face", "Der Schöpfer zeigt sein wahres Antlitz");
         text("boss.kingdomsatwar.schrolli_almighty", "Schrolli the Almighty", "Schrolli der Allmächtige");
         text("boss.kingdomsatwar.schrolli_almighty.title", "The heart of the sun beats", "Das Herz der Sonne schlägt");
+        // mit Namensschild: der Name, aber weiter die eigene Bossleiste
+        text("boss.kingdomsatwar.schrolli.named", "%s", "%s");
+        text("boss.kingdomsatwar.schrolli_true.named", "%s", "%s");
+        text("boss.kingdomsatwar.schrolli_almighty.named", "%s", "%s");
         // die Bühnen der Schöpfung (seit 0.78)
         text("arena.kingdomsatwar.creation.firmament", "The Firmament", "Das Firmament");
         text("arena.kingdomsatwar.creation.firmament.subtitle", "The court shatters – beneath you, the vault of heaven",

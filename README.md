@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Testversion 0.93.0 – Meeresdörfer.** Im Urmeer lebt jetzt **das Meervolk**: Auf dem Grund der Tangwälder, Korallengärten, Perlmuttgründe und Weiten stehen **Meeresdörfer** – ein Platz aus Prismarin und Perlmutt mit einer **Dreizacksäule**, deren Zinken leuchten, ringsum **Muschelhäuser** (runde Kuppeln aus dem Holz der Landschaft mit Bullaugen und einer leuchtenden Perle obenauf), der gewundene **Gesangsturm** aus Perlmutt, Tanggärten, Korallenbeete und Marktstände. Dort wohnen **Meerjungfrauen** in sechs Gestalten (Koralle, Tang, Perle, Lagune, Gold und die leuchtende Tiefsee): Sie treten Wasser, wenn sie stehen, schwimmen waagrecht wie Delfine, summen kleine Melodien und tauschen gegen **Perlen** – die **Perlentaucherin** (Perlmutt, Nautilusschalen, ein Herz des Meeres), die **Korallengärtnerin** (die Setzlinge der Meeresbäume, Korallen), die **Muschelbauerin** (Meereshölzer, Türen, Laternen, Prismarin) und die **Gezeitensängerin** (Tränke, Bücher mit den Verzauberungen des Wassers, ein Aquisitor). **Tritonwachen** mit Flossenhelm und Dreizack halten Haie und Ertrunkene fern und werfen ihren Dreizack nach jedem, der eine Meerjungfrau angreift. Perlen gibt es für Fisch, Tang, Prismarin und Tinte, in den Truhen der Dörfer und manchmal in Muscheln.
+> **Testversion 0.94.0 – Schönere Bossleisten.** Die Leisten aller Bosse leben jetzt: Erscheint ein Boss, **senkt sich seine Leiste herab**, das **Namensband entrollt sich** (ein Band mit Borte, Ziersteinen und Schwalbenschwänzen in den Farben des Bosses) und die Füllung **lädt sich auf** – die Phasen-Edelsteine leuchten auf, sobald sie erreicht sind. Die Edelsteine sitzen jetzt **genau bei den Kampfphasen** jedes Bosses (beim Kraken bei zwei Dritteln und einem Drittel, beim Weltenfresser dreimal, bei der Wahren Gestalt Schrollis bei Nova, Apokalypse und Neuschöpfung, bei Noctua, Malleus, Asteria und Anni bei der Hälfte …), mit einer **Kerbe** in der Leiste. **Treffer** lassen den Rahmen beben, das verlorene Stück weiß aufblitzen und das Bildnis rot; **Heilung** schimmert. Ein **Glanz** zieht über die Rahmen, um jede Leiste schweben **Teilchen ihres Bosses** – Glut, Schneeflocken, Funken, Blätter, Staub, Luftblasen, Schattenrauch, Sterne, Flügelstaub, Konfetti, Störpixel oder Tinte –, **mit jeder Phase mehr**. Erreicht ein Boss eine Phase, **zerspringt ihr Edelstein** klirrend in Splitter, Rahmen und Namensband blitzen auf; in der **letzten Phase** strömt und pulsiert die Füllung schneller, der Rahmen glüht, das Bildnis färbt sich vor Wut rot. **Der Kraken** hat jetzt seine eigene Leiste (bisher zeigte er nur die Leiste von Minecraft): Bronze mit Patina und Seepocken, zwei purpurrote Arme mit Saugnäpfen klammern sich an den Rahmen, als Spitze ein eingerollter Arm, darunter Tang und Tinte, im Medaillon sein Bildnis mit den goldenen Augen und eine Füllung aus wirbelnder Tinte mit leuchtenden Punkten. Bosse mit **Namensschild** behalten ihre eigene Leiste.
+> In 0.93 kamen **Meeresdörfer**: Im Urmeer lebt jetzt **das Meervolk**: Auf dem Grund der Tangwälder, Korallengärten, Perlmuttgründe und Weiten stehen **Meeresdörfer** – ein Platz aus Prismarin und Perlmutt mit einer **Dreizacksäule**, deren Zinken leuchten, ringsum **Muschelhäuser** (runde Kuppeln aus dem Holz der Landschaft mit Bullaugen und einer leuchtenden Perle obenauf), der gewundene **Gesangsturm** aus Perlmutt, Tanggärten, Korallenbeete und Marktstände. Dort wohnen **Meerjungfrauen** in sechs Gestalten (Koralle, Tang, Perle, Lagune, Gold und die leuchtende Tiefsee): Sie treten Wasser, wenn sie stehen, schwimmen waagrecht wie Delfine, summen kleine Melodien und tauschen gegen **Perlen** – die **Perlentaucherin** (Perlmutt, Nautilusschalen, ein Herz des Meeres), die **Korallengärtnerin** (die Setzlinge der Meeresbäume, Korallen), die **Muschelbauerin** (Meereshölzer, Türen, Laternen, Prismarin) und die **Gezeitensängerin** (Tränke, Bücher mit den Verzauberungen des Wassers, ein Aquisitor). **Tritonwachen** mit Flossenhelm und Dreizack halten Haie und Ertrunkene fern und werfen ihren Dreizack nach jedem, der eine Meerjungfrau angreift. Perlen gibt es für Fisch, Tang, Prismarin und Tinte, in den Truhen der Dörfer und manchmal in Muscheln.
 > In 0.92 kamen **Wälder unter Wasser**: **vier Meereshölzer** – das olivbraune, faserige **Tangholz**, das rosarote **Korallenholz**, das helle, schimmernde **Perlholz** und das dunkle **Tiefseeholz** mit leuchtenden Adern –, jedes mit Stamm, Holz, entrindeten Stämmen, Brettern, Treppen, Stufen, Tür, Falltür, Zaun, Zauntor, Blättern und Setzling. Die Setzlinge wachsen **unter Wasser** (auf Sand, Kies, Ton, Schlamm oder Erde, auch ohne Licht) zu **Meeresbäumen**: Der Tangbaum schwankt bis zu zwanzig Blöcke hoch und trägt Wedel voller goldener Schwimmblasen, der Korallenbaum verzweigt sich zu Fächern, der Perlbaum neigt sich unter seiner runden, schimmernden Krone, und der Tiefseebaum windet sich und lässt leuchtende Vorhänge herabhängen. Dazu kommen **vier neue Landschaften im Urmeer**: der **Tangwald**, der **Korallengarten**, die **Perlmuttgründe** und die **Leuchtende Tiefe** – jede mit ihren Bäumen, eigenen Tieren und Klängen und **vierzig eigenen Fischarten** in allen fünf Seltenheiten, darunter zwei Legenden (etwa der **Dämmergrünkaiser** im Tangwald und die **Scheinkaiserin** in der Leuchtenden Tiefe). Zusammen sind es jetzt **2053 Arten**.
 > In 0.91 kam **der Kraken**, der Herr des Urmeers – nach Anni dem Troll der stärkste Boss der Mod. Er schläft im **Krakenschlund**: Mitten im offenen Meer senkt sich der Grund zu einem weiten Becken, in dessen Mitte ein Trichter aus Abgrundstein gut siebzig Blöcke in die Tiefe stürzt, gesäumt von Meereslaternen wie Augen; im Becken liegen das Gerippe eines Seedrachens und ein Wrack mit einer Truhe, ringsum ragen zwölf schiefe Brandungsfelsen hoch über das Wasser. Wer den Felsenring betritt, weckt ihn: Er steigt aus der Tiefe empor und kämpft mit acht Armen und zwei Fangarmen – **Tentakelschlag**, **Armfeger**, **Würgegriff** (wer ihn hart genug trifft, befreit die Beute), **Tintenwolke**, **Strudel**, **Ruf der Tiefe** (Haie) und im Zorn die **Flutwelle**. Besiegt lässt er die **Krakenangel** fallen, die stärkste Angel im Wasser – in 3D mit Saugnäpfen, Bronzebeschlägen und einem leuchtenden Auge als Köder. Das Gezeitenhorn zeigt im Urmeer den Weg zum Schlund.
 > In 0.90 kam **das Angeln in 3D**: **Alle Angeln sind jetzt 3D:** Die Angel von Minecraft und die sechs Angeln der Mod sind in der Hand echte Ruten mit Griff, Rollenhalter, Rolle und Kurbel, Ringen und farbigen Wicklungen – die Holzangel mit Bindfaden, die Eisenangel mit Lederwicklung, die Goldangel mit rotem Griff und Rubin, die Drachenangel mit Hörnern und Flossen, die Schattenangel mit leuchtenden Wicklungen, die **glühende Glutangel** und die Sternenangel mit einem Stern an der Spitze. Ruhend hängt an der Schnur ein Schwimmer oder Köder (Goldlöffel, Drachenschuppe, Schattenkristall, Glutperle, Stern) mit Haken; ausgeworfen biegt sich die Spitze, und die Schnur läuft von ihr bis zum Schwimmer. Im Inventar bleibt das gewohnte Bild. **Angeln unter Wasser:** Wer taucht und auswirft, dessen Haken treibt nicht mehr zur Oberfläche – er gleitet ein paar Blöcke durchs Wasser und bleibt dann in der Tiefe stehen. Dort beißt es wie oben, statt Spritzern steigen Bläschen auf, und der Fang landet gleich beim Taucher. **Fünf Seltenheiten:** Gewöhnlich, Ungewöhnlich, Selten, **Mystisch** (bisher „episch“) und **Legendär** – und in **jedem Biom gibt es jetzt jede Seltenheit**: **113 neue Legenden**, eine in jedem Biom und zwei in jedem Biom des Urmeers, etwa der **Kohlentitan** in den Lavaadern der Aschefelder, der **Kristallriese** in den Schmelzwasserseen der Frostgipfel, der **Donnergebieter**, der sich an der Sturmküste nur im Gewitter zeigt, und der **Türkishüter** über den Korallenbänken. Legenden sind riesig, schwer zu drillen, tragen ihren Namen in Gold, funkeln im Inventar und geben drei oder vier starke Wirkungen ohne Nebenwirkung. Das **Urmeer hat jetzt die meisten Fische**: **vierzig Arten in jedem Biom** (72 neue). Zusammen sind es **1893 Arten**. Der Fischer kauft jetzt auch Legenden (40 Bronze).
@@ -395,6 +396,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | **Der Kraken** (0.91): ein Boss im Urmeer knapp unter Anni dem Troll (sieben Angriffe, Würgegriff mit Befreiung, Haie, Flutwelle, eigene Bossleiste und Klänge); der Krakenschlund mit Trichter, Becken, Wrack, Gerippe und Felsenring; die Krakenangel in 3D als Beute | ✅ fertig |
 | **Unter Wasser** (0.92): vier Meereshölzer (Tangholz, Korallenholz, Perlholz, Tiefseeholz) mit allen Holzblöcken; Setzlinge, die unter Wasser zu Meeresbäumen wachsen; vier neue Landschaften im Urmeer (Tangwald, Korallengarten, Perlmuttgründe, Leuchtende Tiefe) mit je vierzig Fischarten; zusammen 2053 Arten | ✅ fertig |
 | **Meeresdörfer** (0.93): das Meervolk im Urmeer – Meerjungfrauen in sechs Gestalten und vier Berufen (Perlentaucherin, Korallengärtnerin, Muschelbauerin, Gezeitensängerin), die gegen Perlen tauschen, Tritonwachen mit Dreizack; Meeresdörfer mit Dreizacksäule, Muschelhäusern, Gesangsturm, Gärten und Marktständen; Perlen als Währung | ✅ fertig |
+| **Schönere Bossleisten** (0.94): die Leisten aller Bosse leben – Erscheinen mit entrollendem Namensband und Aufladen, Phasen-Edelsteine genau bei den Kampfphasen jedes Bosses (sie zerspringen in Splitter), Beben und Aufblitzen bei Treffern, Schimmer bei Heilung, ein Glanz über dem Rahmen, Teilchen je Boss und Phase, die letzte Phase pulsierend; die eigene Leiste des Kraken; mit Namensschild bleibt die eigene Leiste | ✅ fertig |
 | **Der Weg zum Unsterblichen** (0.77): Heldenstufe bis 200, fünf neue Ränge (Mythos, Halbgott, Titan, Sternenwanderer, Unsterblicher) mit Abzeichen und Wahrzeichen, Heldenkraft je Stufe, Talente bis 40 Punkte (Meisterschaft), je 25 Herz- und Manakristalle, das Licht der Unsterblichkeit, Heldenherzen in Schichten | ✅ fertig |
 | **Schrolli greift zur Klinge** (0.76): Nahkampf am Boden – Landung, Beine in goldenen Beinschienen, die Klinge aus Licht mit Lichtspur, sieben Künste der Klinge (Klingenhieb, Lichtsicheln, Sturmlauf, Klingenwirbel, Himmelssturz, Schwingenwehr mit Gegenschlag, Weltenklinge), jetzt 33 Künste; warme, leisere Klänge und Musik | ✅ fertig |
 | **Die Kampfdimensionen** (0.74): Mondbühne, Glutesse, Sternenzelt, Fehlerraum, Thronwelt und Weltenschlund – die sechs großen Bosse ziehen ihre Gegner in ein Abbild ihres Horts unter einem fremden Himmel (Regeln wie in der Arkanen Sphäre, Nachzügler folgen); nach der Niederlage erwacht der Boss unversehrt in seiner ursprünglichen Gestalt; Spawn-Ei des Weltenfressers; `/locate` findet Schlund und Thron | ✅ fertig |
@@ -455,7 +457,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.93.0.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-0.94.0.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -463,7 +465,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-0.93.0.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-0.94.0.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -546,8 +548,9 @@ Ausführen, Erholen).
   Wasserfontänen), jede mit leuchtendem Warnkreis; in der letzten Phase doppelt so oft, dazu eine Wut-Aura. Unter
   12 % bäumt er sich ein letztes Mal auf. Die Lebensleiste wächst mit dem Schwierigkeitsgrad und der Zahl der Spieler.
 - **Bossleisten:** Jedes Element hat einen eigenen Rahmen (Flammen, Eiskristalle, Blitze, Ranken, Felsen, Wellen) mit
-  dem Bildnis des Drachen, zwei Edelsteinen für die Phasen (sie zerspringen), strömender Füllung, einer Spur für
-  erlittenen Schaden und Wut-Glühen in der letzten Phase.
+  dem Bildnis des Drachen, zwei Edelsteinen für die Phasen bei 60 % und 30 % (sie zerspringen), strömender Füllung,
+  einer Spur für erlittenen Schaden und Wut-Glühen in der letzten Phase – seit 0.94 lebendig (siehe
+  [Die Bossleisten](#die-bossleisten-seit-094)).
 - **Gemacht für den Kampf mit dem eigenen Heer:** Die Drachen greifen auch Soldaten an, Flächenangriffe treffen alle.
 - Verlassen alle Spieler das Nest, kehrt der Drache in seinen Schlaf zurück und heilt sich.
 - **Sieg:** Auf dem Nest-Altar erscheint im Lichtstrahl ein **reines Drachenei**, darüber schwebt der
@@ -3051,6 +3054,50 @@ Fäuste steigen über sein Haupt) und eigene Klänge: ein saugender, immer schne
 Zusammensturz mit gewaltigem Schlag, das helle Zischen der Sicheln, Klauen, die über Stein schrammen, das Knistern der
 Risse, der Ausbruch der Leere und das Donnern des Bebens.
 
+### Die Bossleisten (seit 0.94)
+
+![Die Bossleisten: alle Leisten, die des Kraken, das Erscheinen, ein Treffer, ein zerspringender Edelstein und die letzte Phase](docs/bilder/bossleisten_094.jpg)
+
+Jeder Boss hat seine eigene Leiste: einen verzierten Rahmen in seinen Farben (Flammen, Eiskristalle, ein Korallenriff,
+Mottenflügel, Zauberkarten, Stücke verschlungener Welten, die Arme des Kraken …), links ein Medaillon mit seinem
+Bildnis, über der Leiste je Kampfphase einen Edelstein und darüber sein Name auf einem **Namensband** – mit Borte,
+zwei Ziersteinen und Schwalbenschwänzen in den Farben des Bosses. Seit 0.94 leben die Leisten:
+
+- **Erscheinen:** Die Leiste senkt sich herab, das Namensband entrollt sich von der Mitte aus, dann **lädt sich die
+  Füllung auf** – mit einer hellen Kante, und jeder Phasen-Edelstein leuchtet auf, sobald die Füllung ihn erreicht.
+- **Phasen:** Die Edelsteine sitzen genau dort, wo der Boss seine nächste Phase beginnt, dazu eine Kerbe in der Leiste.
+  Ist eine Phase erreicht, **zerspringt ihr Edelstein** klirrend in Splitter, ein Funkenring breitet sich aus, Rahmen,
+  Namensband und Name blitzen auf. Ist der nächste Edelstein nah, pulsiert er.
+- **Treffer und Heilung:** Ein Treffer lässt den Rahmen beben (je härter, desto stärker), das verlorene Stück blitzt
+  weiß auf und bleibt als helle Spur kurz stehen, ehe es nachschmilzt; das Bildnis blitzt rot. Heilung schimmert hell,
+  Funken steigen auf.
+- **Bewegung:** Die Füllung strömt, ein Glanz läuft über sie, alle paar Sekunden zieht ein schräger **Glanz über den
+  Rahmen**, die Edelsteine funkeln. Um jede Leiste schweben **Teilchen ihres Bosses** – mit jeder Phase mehr.
+- **Letzte Phase:** Die Füllung strömt doppelt so schnell und pulsiert hell, der Rahmen glüht im Takt, das Bildnis färbt
+  sich vor Wut rot, die Teilchen werden zum Sturm.
+- Bosse mit **Namensschild** zeigen ihren Namen, behalten aber ihre eigene Leiste.
+
+| Boss | Phasen (Edelsteine) | Teilchen |
+|---|---|---|
+| Die sechs Drachen, Nyxar | 60 %, 30 % | Glut, Schneeflocken und Sternchen, Funken, Blätter und Pollen, Staub und Steinchen, Luftblasen; bei Nyxar Schattenrauch |
+| Die sechs Erzmagier | 66 %, 33 % | wie der Drache ihres Elements |
+| Karkinos, der Riffkoloss | 66 %, 40 % | Luftblasen |
+| Der Kraken | 67 %, 34 % | Luftblasen, Tintentropfen |
+| Noctua, Malleus, Asteria | 50 % | Flügelstaub; Funkenbögen und Glut; Sterne |
+| MissMystik | 60 %, 30 % | Konfetti und Funkeln |
+| Anni der Troll (auch 2.0) | 50 % | Störpixel |
+| Der Zerbrochene König | 50 %, 25 % | Sterne und Kristallsplitter |
+| Der Weltenfresser | 66 %, 50 %, 33 % | Glut und violette Splitter |
+| Schrolli der Schöpfer | 70 %, 40 % | goldenes Licht |
+| Schrolli – Wahre Gestalt | 60 %, 45 %, 25 % | Sterne |
+| Schrolli der Allmächtige | 66 %, 25 % | Sonnenglut und Funken |
+
+**Die Leiste des Kraken** (neu in 0.94; bisher zeigte er nur die Leiste von Minecraft): Bronze mit grüner Patina und
+Seepocken, zwei purpurrote Arme mit Saugnäpfen und türkis leuchtenden Punkten liegen in Wellen auf dem Rahmen und
+klammern sich mit den Spitzen daran fest, als Spitze ein eingerollter Arm, unter der Leiste Tangfäden und Tropfen seiner
+Tinte, darüber Luftblasen; im Medaillon sein Bildnis von schräg unten mit den goldenen Augen; die Füllung ist seine
+Tinte – wirbelnde Schlieren in Purpurrot mit dunklen Flecken und leuchtenden Punkten.
+
 ### Die Himmelswacht der Bosse (seit 0.82)
 
 ![Die Himmelswacht: das Siegel über dem Boss, die Ziellinie, der Bannpfeil, der Flugbann und die Siegel aller Bosse](docs/bilder/himmelswacht.jpg)
@@ -4180,7 +4227,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.93.0.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-0.94.0.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |
@@ -4329,14 +4376,16 @@ Der ganze Plan steht in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md):
      sieben Angriffen; die Krakenangel als Beute;
    - **0.92 – Unter Wasser** (fertig): vier Meereshölzer, deren Setzlinge unter Wasser zu Meeresbäumen
      wachsen, und vier neue Landschaften im Urmeer mit je vierzig Fischarten;
-   - zuletzt **0.93 – Meeresdörfer** (fertig): das Meervolk – Meerjungfrauen, die gegen Perlen tauschen, und
-     Tritonwachen – in Dörfern auf dem Grund des Urmeers.
+   - **0.93 – Meeresdörfer** (fertig): das Meervolk – Meerjungfrauen, die gegen Perlen tauschen, und
+     Tritonwachen – in Dörfern auf dem Grund des Urmeers;
+   - zuletzt **0.94 – Schönere Bossleisten** (fertig): die Leisten aller Bosse leben (Erscheinen, Namensband,
+     Edelsteine bei den echten Phasen, die zerspringen, Treffer, Glanz, Teilchen, letzte Phase), dazu die eigene
+     Leiste des Kraken.
 
    Damit ist der Weg der Geschichte vollständig – vom Siegel der sechs Drachen bis zum Weltenfresser im Abgrund.
 
    **Als Nächstes geplant:** getragene Rüstungen mit
-   3D-Teilen (Stacheln, Hörner, Platten); schönere Bossleisten; neue Bosse, Erze und Bauwerke für alle Dimensionen und
-   bessere Klänge.
+   3D-Teilen (Stacheln, Hörner, Platten); neue Bosse, Erze und Bauwerke für alle Dimensionen und bessere Klänge.
 
    Die Bosse werden in dieser Reihenfolge stärker: Karkinos und Noctua (früh im Spiel) → Erzmagier → MissMystik →
    Malleus → Drachen → Asteria → Kraken → Anni der Troll → Zerbrochener König → Weltenfresser → Schrolli der Schöpfer.
