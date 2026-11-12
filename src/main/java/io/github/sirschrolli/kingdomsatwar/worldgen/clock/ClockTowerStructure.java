@@ -45,7 +45,8 @@ public class ClockTowerStructure extends Structure {
     public static @Nullable BlockPos site(BiomeResolver biomes, Predicate<Holder<Biome>> valid, ChunkPos chunk, long seed) {
         int x = chunk.getMiddleBlockX();
         int z = chunk.getMiddleBlockZ();
-        int y = HEIGHTS[(int) Math.floorMod(seed >>> 21, (long) HEIGHTS.length)];
+        // die Bits des Zufalls gut gemischt (auch nah beieinanderliegende Werte ergeben verschiedene Höhen)
+        int y = HEIGHTS[(int) Math.floorMod((seed * 0x9E3779B97F4A7C15L) >>> 40, (long) HEIGHTS.length)];
         if (!valid.test(biomes.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(y), QuartPos.fromBlock(z)))) {
             return null;
         }

@@ -528,8 +528,9 @@ public class HourWardenEntity extends Monster implements io.github.sirschrolli.k
         if (this.tickCount % 10 == 0 && this.attack != Attack.BLINK && this.attack != Attack.TIME_STOP) {
             this.keepOnDial(level);
         }
+        // unter halber Kraft die Zwölfte Stunde (wer ihn taumeln lässt, behält das Taumeln bis zum Ende)
         if (!this.isEnraged() && this.attack != Attack.FURY && this.attack != Attack.TOLLS && this.attack != Attack.REWIND
-                && this.getHealth() < this.getMaxHealth() * 0.5f) {
+                && this.attack != Attack.STAGGER && this.getHealth() < this.getMaxHealth() * 0.5f) {
             this.getNavigation().stop();
             this.begin(Attack.FURY);
         }
