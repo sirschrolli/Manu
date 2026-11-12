@@ -47,6 +47,7 @@ final class ReliefNames {
             "ember_fang",
             "ember_scale",
             "fire_dragon_scale",
+            "fire_opal",
             "fire_rune",
             "fire_seal_shard",
             "fire_spell_tablet",

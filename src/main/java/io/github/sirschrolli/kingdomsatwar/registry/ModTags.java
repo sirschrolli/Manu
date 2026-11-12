@@ -37,6 +37,7 @@ public final class ModTags {
         public static final TagKey<Block> ORES_SKY_IRON = common("ores/sky_iron");
         /** Chronit-Erz (Abgrund, seit 1.1). */
         public static final TagKey<Block> ORES_CHRONIT = common("ores/chronit");
+        public static final TagKey<Block> ORES_FIRE_OPAL = common("ores/fire_opal");
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
         public static final TagKey<Block> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
         public static final TagKey<Block> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
@@ -46,6 +47,7 @@ public final class ModTags {
         public static final TagKey<Block> STORAGE_BLOCKS_DUSK_QUARTZ = common("storage_blocks/dusk_quartz");
         public static final TagKey<Block> STORAGE_BLOCKS_SKY_IRON = common("storage_blocks/sky_iron");
         public static final TagKey<Block> STORAGE_BLOCKS_CHRONIT = common("storage_blocks/chronit");
+        public static final TagKey<Block> STORAGE_BLOCKS_FIRE_OPAL = common("storage_blocks/fire_opal");
         public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
         public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
@@ -261,6 +263,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_DUSK_ARMOR = mod("repairs_dusk_armor");
         public static final TagKey<Item> REPAIRS_STARWALKER_ARMOR = mod("repairs_starwalker_armor");
         public static final TagKey<Item> REPAIRS_TIMEWARDEN_ARMOR = mod("repairs_timewarden_armor");
+        public static final TagKey<Item> REPAIRS_EMBERWALKER_ARMOR = mod("repairs_emberwalker_armor");
         public static final TagKey<Item> REPAIRS_MINUTE_HAND = mod("repairs_minute_hand");
         public static final TagKey<Item> REPAIRS_STAR_BOW = mod("repairs_star_bow");
         public static final TagKey<Item> REPAIRS_SHEPHERD_CROOK = mod("repairs_shepherd_crook");
@@ -314,6 +317,9 @@ public final class ModTags {
         public static final TagKey<Item> ORES_CHRONIT = common("ores/chronit");
         public static final TagKey<Item> GEMS_CHRONIT = common("gems/chronit");
         public static final TagKey<Item> STORAGE_BLOCKS_CHRONIT = common("storage_blocks/chronit");
+        public static final TagKey<Item> ORES_FIRE_OPAL = common("ores/fire_opal");
+        public static final TagKey<Item> GEMS_FIRE_OPAL = common("gems/fire_opal");
+        public static final TagKey<Item> STORAGE_BLOCKS_FIRE_OPAL = common("storage_blocks/fire_opal");
         public static final TagKey<Item> RAW_MATERIALS_SKY_IRON = common("raw_materials/sky_iron");
         public static final TagKey<Item> INGOTS_SKY_IRON = common("ingots/sky_iron");
         public static final TagKey<Item> INGOTS_MOONSILVER = common("ingots/moonsilver");

@@ -39,7 +39,8 @@ public class ModModelProvider extends ModelProvider {
     private static final TextureSlot OVERLAY = TextureSlot.create("overlay");
     private static final TextureSlot GLOW = TextureSlot.create("glow");
     /** Erze mit selbstleuchtendem Kern (eigene Glow-Textur, im Dunkeln voll hell). */
-    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite", "moonstone", "aquamarine", "dusk_quartz", "sky_iron", "chronit");
+    private static final java.util.Set<String> GLOWING_ORES = java.util.Set.of("aetherit", "draconium", "soul_crystal", "abyssite", "moonstone", "aquamarine", "dusk_quartz", "sky_iron", "chronit",
+            "fire_opal");
 
     /**
      * Erz-Modell aus zwei Schichten: unten die echte Vanilla-Textur (Stein oder Tiefenschiefer),
@@ -450,6 +451,7 @@ public class ModModelProvider extends ModelProvider {
         SeaModels.register(blocks, items);
         FaeModels.register(blocks, items);
         ForgeModels.register(blocks, items);
+        FlameModels.register(blocks, items);
         StarModels.register(blocks, items);
         MystikModels.register(blocks, items);
         AnniModels.register(blocks, items);
@@ -719,6 +721,14 @@ public class ModModelProvider extends ModelProvider {
     static void glowingCube(BlockModelGenerators blocks, Block block) {
         Identifier model = glowingCubeModel(blocks, block);
         blocks.blockStateOutput.accept(BlockModelGenerators.createSimpleBlock(block, BlockModelGenerators.plainVariant(model)));
+    }
+
+    /** Modell eines Würfels mit Leuchtebene für eine Stufe des Blocks: Texturen {@code <name><suffix>} und {@code <name><suffix>_glow}. */
+    static Identifier glowingCubeModel(BlockModelGenerators blocks, Block block, String suffix) {
+        Material all = TextureMapping.getBlockTexture(block, suffix);
+        TextureMapping mapping = new TextureMapping().put(TextureSlot.ALL, all).put(TextureSlot.PARTICLE, all)
+                .put(GLOW, TextureMapping.getBlockTexture(block, suffix + "_glow"));
+        return CUBE_GLOW.createWithSuffix(block, suffix, mapping, blocks.modelOutput);
     }
 
     /** Nur das Modell eines Würfels mit Leuchtebene ({@code <name>_glow}), ohne Blockzustand. */

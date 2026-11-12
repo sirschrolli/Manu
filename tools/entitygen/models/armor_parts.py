@@ -29,6 +29,11 @@
     Zahnräder an den Schläfen; auf der Brust ein Zifferblatt mit zwei Zeigern und leuchtender Nabe, im Rücken ein Pendel mit
     einem Gewicht aus Chronit, Schulterplatten aus Uhrbronze mit Zahnrädern, Armreife mit Bernstein; eine Zahnradschnalle
     am Gürtel, Kniekacheln mit Chronit; Stiefel mit Messingkappen und Zahnrädern an den Knöcheln
+  * Feueropal (seit 1.1.6, die Rüstung der Glutwandler): ein Kamm aus drei Flammenzungen über dem Helm auf einem goldenen
+    Grat, über der Stirn ein Feueropal in Gold; auf der Brust ein großer Feueropal in Gold gefasst, Schulterplatten aus
+    zwei Schollen geschwärzten Stahls mit einer glühenden Fuge dazwischen und einem Opal obenauf, Armreife mit Glutfuge;
+    eine Opalschnalle am Gürtel, Kniekacheln mit Feueropal; Stiefel mit dicken Glutsohlen, goldenen Kappen und kleinen
+    Flammen an den Fersen
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -47,7 +52,7 @@ from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
         "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk", "starwalker",
-        "timewarden"]
+        "timewarden", "emberwalker"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -132,6 +137,13 @@ PALETTES = {
         "tw_bronze": ramp("#2e1a0a", "#e8b884", 8),
         "tw_amber": ramp("#a8480a", "#fff4c8", 6),
         "tw_dial": ramp("#c49a62", "#fffaee", 5),
+        # Feueropal (1.1.6): die Rüstung der Glutwandler
+        "ew_steel": ramp("#141012", "#7c6c70", 8),
+        "ew_gold": ramp("#4a2a06", "#ffd98a", 8, hue_shift=0.02),
+        # Glut und Opal von Hand gestuft (der lineare Verlauf von Dunkelrot nach Gelb würde braun)
+        "ew_opal": [hexc(c) for c in ("#6a1002", "#b02408", "#f0500e", "#ff8020", "#ffb040", "#ffe07a", "#fff6c8")],
+        "ew_ember": [hexc(c) for c in ("#5c1404", "#a02806", "#de4a0c", "#ff7418", "#ff9c2c", "#ffc860", "#fff0b0")],
+        "ew_flash": ramp("#1e8a52", "#c8ffd8", 4),
     }
 }
 
@@ -696,6 +708,62 @@ def _timewarden(m: Model) -> None:
         _tw_gear(m, f, f"tw_ankle_{bone}", (3.05 * side, 8.4, 0.4), (0.0, 90.0 * side, 0.0), 2.2, 0.5)
 
 
+# ------------------------------------------------------------------ Feueropal (1.1.6): die Rüstung der Glutwandler
+
+def _ew_tongue(m: Model, parent: str, name: str, pivot, rot, height: float, width: float) -> None:
+    """Eine Flammenzunge: drei Stufen, nach oben schmaler (die Spitze malt der Pinsel spitz)."""
+    m.bone(name, parent, pivot, rot)
+    m.cube(name, (-width / 2, -height * 0.45, -width / 2), (width, height * 0.45, width), "ew_flame")
+    m.cube(name, (-width * 0.36, -height * 0.78, -width * 0.36), (width * 0.72, height * 0.36, width * 0.72), "ew_flame")
+    m.cube(name, (-width * 0.2, -height, -width * 0.2), (width * 0.4, height * 0.26, width * 0.4), "ew_flame")
+
+
+def _emberwalker(m: Model) -> None:
+    h = _slot(m, "emberwalker", "head", "head")
+    # der Flammenkamm: drei Zungen auf einem goldenen Grat, nach hinten geneigt, die mittlere am höchsten
+    m.cube(h, (-0.7, -9.8, -4.4), (1.4, 0.85, 8.8), "ew_gold")
+    _ew_tongue(m, h, "ew_crest_front", (0.0, -9.6, -2.9), (-10.0, 0.0, 0.0), 3.8, 2.1)
+    _ew_tongue(m, h, "ew_crest_mid", (0.0, -9.6, -0.1), (-20.0, 0.0, 0.0), 5.4, 2.5)
+    _ew_tongue(m, h, "ew_crest_back", (0.0, -9.6, 2.7), (-32.0, 0.0, 0.0), 4.2, 2.1)
+    # der Feueropal über der Stirn in seiner goldenen Fassung
+    m.cube(h, (-1.5, -8.3, -5.5), (3.0, 2.2, 0.55), "ew_gold")
+    m.cube(h, (-1.0, -8.0, -5.95), (2.0, 1.6, 0.5), "ew_opal")
+
+    b = _slot(m, "emberwalker", "chest", "body")
+    # der große Feueropal auf der Brust
+    m.cube(b, (-2.0, 2.2, -3.5), (4.0, 3.6, 0.55), "ew_gold")
+    m.cube(b, (-1.45, 2.65, -4.0), (2.9, 2.7, 0.6), "ew_opal")
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "emberwalker", "chest", bone)
+        p = f"ew_pauldron_{bone}"
+        m.bone(p, a, (1.0 * side, -3.1, 0.0), (0.0, 0.0, 14.0 * side))
+        # zwei Schollen aus geschwärztem Stahl, dazwischen eine glühende Fuge
+        m.cube(p, (_mx(-3.0, 6.7, side), -1.8, -3.6), (6.7, 1.7, 7.2), "ew_plate")
+        m.cube(p, (_mx(-2.1, 6.0, side), 0.2, -3.7), (6.0, 1.4, 7.4), "ew_plate")
+        m.cube(p, (_mx(-2.3, 6.2, side), -0.15, -3.65), (6.2, 0.4, 7.3), "ew_seam")
+        m.cube(p, (_mx(0.6, 1.5, side), -2.5, -0.75), (1.5, 0.75, 1.5), "ew_opal")        # ein Opal obenauf
+        # der Armreif mit Glutfuge
+        m.cube(a, (_mx(-2.3, 6.6, side), 5.9, -3.3), (6.6, 1.8, 6.6), "ew_plate")
+        m.cube(a, (_mx(-2.35, 6.7, side), 6.65, -3.35), (6.7, 0.35, 6.7), "ew_seam")
+
+    t = _slot(m, "emberwalker", "legs", "body")
+    # die Opalschnalle am Gürtel
+    m.cube(t, (-1.3, 10.0, -3.5), (2.6, 2.2, 0.45), "ew_gold")
+    m.cube(t, (-0.8, 10.35, -3.9), (1.6, 1.5, 0.5), "ew_opal")
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "emberwalker", "legs", bone)
+        # Kniekachel mit Feueropal
+        m.cube(g, (-2.2, 3.5, -3.15), (4.4, 2.9, 0.75), "ew_plate")
+        m.cube(g, (-0.65, 4.2, -3.65), (1.3, 1.3, 0.55), "ew_opal")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "emberwalker", "feet", bone)
+        # die dicke Glutsohle, eine goldene Kappe vorn und hinten an der Ferse eine kleine Flamme
+        m.cube(f, (-2.75, 11.6, -3.4), (5.5, 1.0, 6.4), "ew_sole")
+        m.cube(f, (-2.5, 10.2, -4.1), (5.0, 1.6, 1.3), "ew_gold")
+        _ew_tongue(m, f, f"ew_heel_{bone}", (0.9 * side, 11.2, 3.1), (-55.0, 0.0, 0.0), 3.0, 1.6)
+
+
 # ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
 
 def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
@@ -1056,6 +1124,7 @@ def build() -> Model:
     _dusk(m)
     _starwalker(m)
     _timewarden(m)
+    _emberwalker(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1737,6 +1806,72 @@ def _tw_bob(ctx: Ctx):
     return col
 
 
+def _ew_plate(ctx: Ctx):
+    """Geschwärzter Stahl mit feinen Glutrissen, wie erkaltende Lava; unten ein goldener Saum (oben nicht heller als die
+    Seiten – geschwärzter Stahl glänzt kaum)."""
+    if ctx.face == "top":
+        col = pick(ctx.pal["ew_steel"], 0.5 + (_noise(ctx, 3) - 0.5) * 0.08 + (0.1 if ctx.s == 0 or ctx.t == 0 else 0.0))
+    else:
+        col = _metal("ew_steel", rim="ew_gold", rim_from=0.84)(ctx)
+    if ctx.face in ("top", "front", "back", "left", "right") and rel_y(ctx) < 0.84:
+        n = noise3(ctx.local[0] * 1.7, ctx.local[1] * 1.7, ctx.local[2] * 1.7, 17)
+        if abs(n - 0.5) < 0.035:
+            col = pick(ctx.pal["ew_ember"], 0.55 + (0.035 - abs(n - 0.5)) * 8.0)
+            ctx.glow = col
+    return col
+
+
+def _ew_seam(ctx: Ctx):
+    """Die glühende Fuge zwischen zwei Schollen: Glut, zur Mitte heller."""
+    col = pick(ctx.pal["ew_ember"], 0.7 + 0.25 * (1.0 - abs(rel_y(ctx) - 0.5) * 2.0))
+    ctx.glow = col
+    return col
+
+
+def _ew_opal(ctx: Ctx):
+    """Feueropal: gewölbt, oben links ein Glanz, unten rechts das Glühen im Innern; hier und da ein grüner Blitz."""
+    if ctx.face not in ("front", "top"):
+        return pick(ctx.pal["ew_opal"], 0.35)
+    cx, cy = (ctx.w - 1) / 2.0, (ctx.h - 1) / 2.0
+    u = (ctx.s - cx) / max(cx, 0.5)
+    v = (ctx.t - cy) / max(cy, 0.5)
+    if ctx.s == 0 and ctx.t == 0:
+        col = pick(ctx.pal["ew_opal"], 1.0)
+    else:
+        col = pick(ctx.pal["ew_opal"], 0.56 - 0.12 * (u + v) * 0.5 + 0.22 * max(0.0, 1.0 - math.hypot(u - 0.4, v - 0.4)))
+    if hash01(ctx.s * 7 + ctx.t * 13, 5) > 0.86 and abs(u) < 0.8 and abs(v) < 0.8:
+        col = pick(ctx.pal["ew_flash"], 0.7)
+    ctx.glow = mix((0, 0, 0, 255), col, 0.8)
+    return col
+
+
+def _ew_flame(ctx: Ctx):
+    """Eine Flammenzunge: unten fast weiß-gelb, nach oben orange und rot; die oberste Stufe läuft spitz zu."""
+    ry = rel_y(ctx)
+    oy, h = ctx.cube.origin[1], ctx.cube.size[1]
+    tip = ctx.cube.size[0] < 1.0
+    if tip and ctx.face not in ("top", "bottom") and abs(ctx.s - (ctx.w - 1) / 2.0) > (ry * ctx.w * 0.5 + 0.2):
+        return None
+    t = 0.72 - 0.4 * (1.0 - ry) if not tip else 0.3 - 0.22 * (1.0 - ry)
+    if ctx.face in ("front", "back", "left", "right") and (ctx.s == 0 or ctx.s == ctx.w - 1):
+        t -= 0.12                                           # die Ränder der Zunge etwas röter
+    col = pick(ctx.pal["ew_ember"], t)
+    ctx.glow = col
+    return col
+
+
+def _ew_sole(ctx: Ctx):
+    """Die Glutsohle: oben geschwärzter Stahl, an den Seiten und unten Glut, in der Glut dunkle Schollen."""
+    if ctx.face == "top":
+        return pick(ctx.pal["ew_steel"], 0.3)
+    n = noise3(ctx.local[0] * 1.3, ctx.local[1] * 1.3, ctx.local[2] * 1.3, 23)
+    if n > 0.58 or ctx.face == "bottom" and n > 0.45:
+        return pick(ctx.pal["ew_steel"], 0.18)
+    col = pick(ctx.pal["ew_ember"], 0.3 + 0.35 * (1.0 - abs(n - 0.4)))
+    ctx.glow = col
+    return col
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1821,6 +1956,12 @@ def materials(variant: str) -> dict:
         "tw_gear": _tw_gear_paint,
         "tw_dial": _tw_dial_paint,
         "tw_bob": _tw_bob,
+        "ew_plate": _ew_plate,
+        "ew_seam": _ew_seam,
+        "ew_gold": _gold("ew_gold"),
+        "ew_opal": _ew_opal,
+        "ew_flame": _ew_flame,
+        "ew_sole": _ew_sole,
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

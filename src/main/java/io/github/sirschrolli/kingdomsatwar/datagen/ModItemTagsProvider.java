@@ -290,6 +290,20 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_CHRONIT);
         add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ModTags.Items.REPAIRS_TIMEWARDEN_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
+        // Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
+        copy(ModTags.Blocks.ORES_FIRE_OPAL, ModTags.Items.ORES_FIRE_OPAL);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_FIRE_OPAL, ModTags.Items.STORAGE_BLOCKS_FIRE_OPAL);
+        add(ModTags.Items.GEMS_FIRE_OPAL, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_FIRE_OPAL);
+        add(ItemTags.BEACON_PAYMENT_ITEMS, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL);
+        add(ModTags.Items.REPAIRS_EMBERWALKER_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_HELMET);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_CHESTPLATE);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.FlameGear.emberwalkerSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
         // der Minutenzeiger (1.1): ein Schwert, mit Chronit auszubessern
         add(ModTags.Items.REPAIRS_MINUTE_HAND, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT);
         add(ItemTags.SWORDS, io.github.sirschrolli.kingdomsatwar.registry.ClockTower.MINUTE_HAND);

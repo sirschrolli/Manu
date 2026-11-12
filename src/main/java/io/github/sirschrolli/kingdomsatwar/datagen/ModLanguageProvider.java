@@ -829,6 +829,24 @@ public class ModLanguageProvider extends LanguageProvider {
         subtitle("item.timewarden.rewind", "Time turns back", "Die Zeit spult zurück");
         subtitle("item.timewarden.tick", "Time falters", "Die Zeit stockt");
         subtitle("item.timewarden.ready", "A clock ticks again", "Eine Uhr tickt wieder");
+        // Feueropal und die Rüstung der Glutwandler (1.1.6)
+        block(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE, "Fire Opal Ore", "Feueropal-Erz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE, "Blackstone Fire Opal Ore", "Schwarzstein-Feueropal-Erz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK, "Block of Fire Opal", "Feueropalblock");
+        block(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.LAVA_CRUST, "Lava Crust", "Glutkruste");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL, "Fire Opal", "Feueropal");
+        lore("fire_opal", "Red and gold like the lava around it – and full of green and blue flashes",
+                "Rot und gold wie die Lava ringsum – und voller grüner und blauer Blitze");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_HELMET, "Emberwalker Helm", "Glutwandlerhelm");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_CHESTPLATE, "Emberwalker Cuirass", "Glutwandlerharnisch");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_LEGGINGS, "Emberwalker Greaves", "Glutwandlerbeinschienen");
+        item(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.EMBERWALKER_BOOTS, "Emberwalker Boots", "Glutwandlerstiefel");
+        lore("emberwalker_armor", "Each piece: a fifth less harm from fire and lava",
+                "Jeder Teil: ein Fünftel weniger Schaden durch Feuer und Lava");
+        text(ModItems.loreKey("emberwalker_armor", 2), "Helm: you see far inside lava",
+                "Helm: In der Lava siehst du weit");
+        text(ModItems.loreKey("emberwalker_armor", 3), "Boots: lava hardens beneath your steps – walk across it",
+                "Stiefel: Lava erstarrt unter deinen Schritten – du gehst darüber");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

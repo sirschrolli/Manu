@@ -184,6 +184,27 @@ CHRONIT_POINTS = [
     "..21............",
 ]
 
+# Feueropal-Erz (1.1.6): runde Knollen aus Feueropal im Netherrack und Schwarzstein (1-4, oben links der Glanz), darin das
+# grüne Farbenspiel des Opals (5-8)
+FIRE_OPAL_NODES = [
+    "................",
+    "..344...........",
+    ".34443..........",
+    ".34743.....34...",
+    ".23332....3443..",
+    "..121....34732..",
+    "..........2321..",
+    "...........1....",
+    "................",
+    ".....344........",
+    "....34444.......",
+    "....346432...34.",
+    "....237321..3432",
+    ".....1221...2321",
+    "..............1.",
+    "................",
+]
+
 # Edelstein-Erz: grüne (1-4) und violette (5-8) Steine
 GEM_MIXED = [
     "................",
@@ -259,6 +280,8 @@ SKY_IRON = tones("#3c4660", "#6f7ea2", "#aebfe0", "#f0f6ff")
 SKY_CRUST = tones("#141018", "#2a2229", "#463a40", "#6a5a5a")
 CHRONIT = tones("#7a3a0c", "#c8701e", "#f2aa40", "#ffe6a6")
 CHRONIT_SPARK = tones("#ffd27a", "#fff2c8", "#fff2c8", "#ffffff")
+FIRE_OPAL = tones("#a8260c", "#e85e18", "#ffa02e", "#ffe27a")
+FIRE_OPAL_FLASH = tones("#14784a", "#2fc070", "#7ff0a8", "#e6fff0")
 
 
 def build(put: Callable[[str, Image.Image], None]) -> None:
@@ -295,6 +318,9 @@ def build(put: Callable[[str, Image.Image], None]) -> None:
     chronit = overlay(CHRONIT_POINTS, CHRONIT, CHRONIT_SPARK)
     put("block/chronit_ore_overlay", chronit)
     put("block/chronit_ore_glow", glow_of(chronit, CHRONIT[2:] + CHRONIT_SPARK))
+    opal = overlay(FIRE_OPAL_NODES, FIRE_OPAL, FIRE_OPAL_FLASH)
+    put("block/fire_opal_ore_overlay", opal)
+    put("block/fire_opal_ore_glow", glow_of(opal, FIRE_OPAL[2:] + FIRE_OPAL_FLASH[1:]))
 
 
 if __name__ == "__main__":

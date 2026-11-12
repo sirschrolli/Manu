@@ -198,6 +198,7 @@ public final class ModGameTests {
         SoulShepherdGameTests.init(); // seit 0.98: der Seelenhirte, der Seelenpferch, der Hirtenstab
         StarWeaverGameTests.init(); // seit 0.99: Himmelseisen, die Rüstung der Sternwandler, das Sternennetz, die Sternenweberin
         ClockTowerGameTests.init(); // seit 1.1: Chronit, die Rüstung der Zeitwächter, der Uhrturm, der Stundenwächter
+        FlameGameTests.init(); // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
         AnniGameTests.init();     // Anni der Troll, Fehlerkern, Wiederherstellung als Anni 2.0, Bannhammer, Fehlerflügel
         BeastGameTests.init();    // die neuen Monster: Werwolf, Moorschlurfer, Glutwurm, Aschengeist
         GearGameTests.init();     // Waffen und Rüstungen aus Monsterteilen
@@ -290,6 +291,7 @@ public final class ModGameTests {
         SoulShepherdGameTests.register(event, environment);
         StarWeaverGameTests.register(event, environment);
         ClockTowerGameTests.register(event, environment);
+        FlameGameTests.register(event, environment);
         AnniGameTests.register(event, environment);
         BeastGameTests.register(event, environment);
         GearGameTests.register(event, environment);
@@ -372,13 +374,14 @@ public final class ModGameTests {
         helper.succeed();
     }
 
-    /** Jeder Block hat eine Loot-Table, die vom Server geladen wurde (außer dem unzerstörbaren Nestkern). */
+    /** Jeder Block hat eine Loot-Table, die vom Server geladen wurde (außer den unzerstörbaren, dem Baugerüst und der Glutkruste). */
     private static void lootTables(GameTestHelper helper) {
         var registries = helper.getLevel().getServer().reloadableRegistries();
         for (DeferredHolder<Block, ? extends Block> holder : ModBlocks.BLOCKS.getEntries()) {
             Block block = holder.value();
-            if (block.defaultDestroyTime() < 0.0f || block == ModBlocks.BUILDER_SCAFFOLD.get()) {
-                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises) oder Baugerüst: ohne Beute
+            if (block.defaultDestroyTime() < 0.0f || block == ModBlocks.BUILDER_SCAFFOLD.get()
+                    || block == io.github.sirschrolli.kingdomsatwar.registry.FlameGear.LAVA_CRUST.get()) {
+                continue;   // unzerstörbar (Nestkern, Teile des Siegelkreises), Baugerüst oder Glutkruste (wird wieder Lava): ohne Beute
             }
             ResourceKey<LootTable> key = block.getLootTable().orElseThrow(
                     () -> helper.assertionException("Block ohne Loot-Table: %s", holder.getId()));

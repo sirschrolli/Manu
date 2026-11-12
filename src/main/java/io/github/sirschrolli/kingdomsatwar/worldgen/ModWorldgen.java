@@ -134,6 +134,18 @@ public final class ModWorldgen {
             new OreVein("wyvernit", ModBlocks.WYVERNIT_ORE, null,
                     4, 0.0f, 8, false, 100, 320, BiomeTags.IS_MOUNTAIN));
 
+    /**
+     * Feueropal (seit 1.1.6): kleine Knollen im Netherrack und im Schwarzstein, überall im Nether – am häufigsten um die Höhe
+     * des Lavameers (wie Gold im Nether, aber seltener: etwa vier Adern je Chunk zu höchstens fünf Knollen).
+     */
+    public static final ResourceKey<Feature> ORE_FIRE_OPAL = ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id("ore_fire_opal"));
+    public static final ResourceKey<PlacedFeature> ORE_FIRE_OPAL_PLACED = ResourceKey.create(Registries.PLACED_FEATURE,
+            KingdomsAtWar.id("ore_fire_opal"));
+    public static final ResourceKey<BiomeModifier> ADD_ORE_FIRE_OPAL = ResourceKey.create(NeoForgeRegistries.Keys.BIOME_MODIFIERS,
+            KingdomsAtWar.id("add_ore_fire_opal"));
+    public static final int FIRE_OPAL_VEINS = 4;
+    public static final int FIRE_OPAL_SIZE = 5;
+
     /** Wilde Zierblumen (Bild "Nahrung & Pflanzen", Abschnitt 5). */
     public static final List<FlowerPatch> FLOWER_PATCHES = List.of(
             new FlowerPatch("lavender", ModBlocks.LAVENDER, 6, Tags.Biomes.IS_PLAINS),
@@ -190,6 +202,13 @@ public final class ModWorldgen {
             context.register(vein.featureKey(), new OreFeature(targets, vein.veinSize(), vein.airExposureDiscard()));
         }
 
+        context.register(ORE_FIRE_OPAL, new OreFeature(List.of(
+                BlockReplacement.replace(new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
+                        net.minecraft.world.level.block.Blocks.NETHERRACK), io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE.get().defaultBlockState()),
+                BlockReplacement.replace(new net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest(
+                        net.minecraft.world.level.block.Blocks.BLACKSTONE), io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE.get().defaultBlockState())),
+                FIRE_OPAL_SIZE, 0.2f));
+
         for (FlowerPatch patch : FLOWER_PATCHES) {
             context.register(patch.featureKey(), new SimpleBlockFeature(BlockStateProvider.of(patch.flower().get())));
         }
@@ -223,6 +242,12 @@ public final class ModWorldgen {
                     BiomeFilter.biome());
             context.register(vein.placedKey(), new PlacedFeature(features.getOrThrow(vein.featureKey()), placement));
         }
+
+        context.register(ORE_FIRE_OPAL_PLACED, new PlacedFeature(features.getOrThrow(ORE_FIRE_OPAL), List.of(
+                CountPlacement.of(FIRE_OPAL_VEINS),
+                InSquarePlacement.spread(),
+                HeightRangePlacement.triangle(VerticalAnchor.absolute(8), VerticalAnchor.absolute(112)),
+                BiomeFilter.biome())));
 
         for (FlowerPatch patch : FLOWER_PATCHES) {
             List<PlacementModifier> placement = List.of(
@@ -355,6 +380,11 @@ public final class ModWorldgen {
                     HolderSet.direct(placed.getOrThrow(vein.placedKey())),
                     GenerationStep.Decoration.UNDERGROUND_ORES));
         }
+
+        context.register(ADD_ORE_FIRE_OPAL, new BiomeModifiers.AddFeaturesBiomeModifier(
+                biomes.getOrThrow(BiomeTags.IS_NETHER),
+                HolderSet.direct(placed.getOrThrow(ORE_FIRE_OPAL_PLACED)),
+                GenerationStep.Decoration.UNDERGROUND_ORES));
 
         for (CrystalVein vein : CRYSTAL_VEINS) {
             context.register(vein.modifierKey(), new BiomeModifiers.AddFeaturesBiomeModifier(

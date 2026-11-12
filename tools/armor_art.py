@@ -30,6 +30,7 @@ import items_gear as gear
 import dusk_textures as dusk_tex
 import sky_iron_textures as sky_tex
 import chronit_textures as tw_tex
+import flame_textures as ew_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -749,9 +750,32 @@ def timewarden() -> Design:
     })
 
 
+def emberwalker() -> Design:
+    """Glutwandler (die Rüstung aus Feueropal, 1.1.6): Platten aus geschwärztem Stahl, über die Risse voller Glut laufen wie
+    über erkaltende Lava, Säume aus Schwarzgold. Der Helm ist geschlossen, sein T-Sehschlitz glüht, über der Stirn sitzt ein
+    Feueropal im goldenen Reif; auf der Brust ein großer Feueropal in Gold gefasst, von dem die Risse ausgehen, am Gürtel
+    eine Opalschnalle, an den Knien Feueropale, an den Stiefeln glühende Sohlen (Flammenkamm, Schulterplatten,
+    Glutsohlen und Fersenflammen kommen als 3D-Teile)."""
+    return Design("emberwalker", {"A": ew_tex.BLACKSTEEL, "B": ew_tex.DARK_GOLD, "D": ew_tex.EMBER, "E": ew_tex.OPAL}, d={
+        "head_top": [".", ".", "...ed...", "...fd...", "...fd...", "...ed..."],
+        "head_front": [".", ".eeGFdc.", ".", "3rsttsr3", "...sr...", "...rq...", ".", "."],
+        "head_side": [".", ".", ".", ".", "....q...", ".....q..", ".", "bccccccb"],
+        "head_back": [".", ".", "eeddddcc", ".", ".", "...q....", "....q...", "."],
+        "body_front": [".edccde.", ".f....d.", "...ed...", "..eGFd..", "..dFEc..", "...dc...", "..q..q..", ".q....q.", "."],
+        "body_back": [".", ".", ".", "...q....", "....q...", "....q...", ".....q..", "."],
+        "arm_side": [".", ".", ".", "edcb", ".", "..q.", ".", ".", "dccb"],
+        "boot_side": ["."] * 6 + ["edcb", ".", ".", "..q.", ".", "rssr"],
+        "boot_front": ["."] * 6 + ["edcb", ".", ".", ".q..", ".", "rssr"],
+        "belt_front": ["."] * 7 + ["fedGFdcb"],
+        "belt_back": TRIM_BELT,
+        "belt_side": TRIM_BELT_SIDE,
+        "thigh_front": [".", ".", ".", ".", ".GF.", ".FE.", "..q."],
+    })
+
+
 def designs() -> list[Design]:
     return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk(), starwalker(),
-            timewarden()] + \
+            timewarden(), emberwalker()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

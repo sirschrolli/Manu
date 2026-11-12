@@ -8,7 +8,8 @@ seinem Herzen. Gründe dein Königreich, wirb Ritter und Soldaten an, baue deine
 Drachen auf und bezwinge sie. Aus jedem besiegten Drachen bleibt ein Ei, aus dem dein eigener Drache schlüpft – und
 ein Splitter des Siegels. Der sechste Splitter bricht das Siegel …
 
-> **Version 1.1.5 – Weniger Beute bei Bossen, die wiederkommen.** Bosse, die mehrfach kommen, geben ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) jetzt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen. Sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**. **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken; Schrolli gibt keine doppelten Schätze mehr beim ersten Sieg, Goldapfel und Totem nur noch selten. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
+> **Version 1.1.6 – Feueropal und die Rüstung der Glutwandler.** Im **Nether** wächst jetzt **Feueropal**: kleine, glühende Knollen im **Netherrack** und im **Schwarzstein**, überall im Nether, am häufigsten um die Höhe des Lavameers (ab einer Diamantspitzhacke). Der Stein ist rot und gold wie die Lava, darin blitzt das **grüne und blaue Farbenspiel** des Opals; er verbrennt nicht. Neun ergeben einen **Feueropalblock** – geschliffene Opale in Schwarzgold, in denen das Feuer wogt und leuchtet. Aus Feueropal und Netheritschrott entsteht die **Rüstung der Glutwandler** (Schutz wie Diamant, etwas härter, verbrennt nicht): geschwärzter Stahl mit Glutrissen, ein **Kamm aus Flammen** über dem Helm, ein großer Feueropal auf der Brust, glühende Fugen an den Schultern und **Glutsohlen**. Jeder Teil nimmt **ein Fünftel des Feuer- und Lavaschadens**; mit dem **Helm siehst du in der Lava weit** (statt einer Armlänge), und mit den **Stiefeln gehst du über Lava**: Wo du sie betrittst, erstarrt sie zu einer **Glutkruste**, die trägt – bleibst du stehen, hält sie, gehst du weiter, bricht sie hinter dir wieder auf und schmilzt.
+> In 1.1.5 wurde **die Beute der Bosse, die wiederkommen,** knapper: Ihr **Sonderstück** (Waffe, Schwingen, Zylinder, Angel, Zaubertafel) fällt **nie mehr sicher** – auch beim ersten Sieg nur in etwa einem von fünf Kämpfen; sicher ist beim ersten eigenen Sieg nur noch der **Herz- oder Manakristall**, und **Münzen, Gold, Edelsteine** und die übrigen Schätze sind etwa auf die Hälfte gesunken. Die Drachen und die anderen einmaligen Bosse bleiben, wie sie waren, ebenso die Erfahrung.
 > In 1.1.4 kamen **neue Tierstimmen**: Wo sich Tiere bisher Laute von Minecraft liehen, die nicht zu ihnen passten, haben sie jetzt **eigene Stimmen**: Der **Hirsch** fiept leise durch die Nase und schnaubt, der **Urelch** grunzt tief, und sein **Brunftruf** schwingt sich von einem Grollen zu einem langen, hellen Pfeifen auf, das weit über das Land hallt; die **Gans** ruft ihr nasales „a-honk“ und faucht mit offenem Schnabel, der **Flamingo** schreit in seiner eigenen Stimme, der **Moorschnapper** knarrt kehlig, faucht und lässt den Hornschnabel zuschlagen. Im Meer beißen **Hai** und **Anglerfisch** mit Sog, Zähnen und Blasen, der **Mantarochen** schnellt mit Gischt aus dem Wasser und klatscht schwer zurück, die **Riesenkrabbe** tippt mit spitzen Beinen, und das Leuchten der **Leuchtqualle** erlischt in gläsernen Tönen; der **Leerenschlund** beißt, heult und fällt in sich zusammen. Der **Kommandostab** gibt ein kurzes **Hornsignal**, und der Drache, den man **in der Ferne** brüllen und mit schweren **Schwingen** über das Land ziehen hört, klingt jetzt wie die Drachen der Mod. Sehr tiefe Klänge – die Schritte und Schläge der großen Bosse, das Gebrüll des Kraken und des Karkinos, die Künste des Schöpfers – sind jetzt auch auf **kleinen Lautsprechern** (Laptop, Fernseher) gut zu hören, und zu leise Klänge (der Schmerz des Steinhüters, der Tod der Riesenkrabbe) sind lauter.
 > In 1.1.3 kamen **Beute, Speere, Schnur und neue Stimmen**: **Bosse, die mehrfach kommen** (die man neu weckt, zurückruft oder in jedem ihrer Bauwerke findet) geben ihr **Sonderstück** – Waffe, Schwingen, Zylinder, Angel – und ihren **Herzkristall** nur beim **ersten eigenen Sieg** sicher; danach fällt das Sonderstück nur noch in einem von fünf Kämpfen, Kristalle gar nicht mehr, und die übrige Beute ist kleiner. Bosse mit **eigener Rüstung** (Steinhüter, Meerhexe, Seelenhirte, Sternenweberin, Stundenwächter) lassen außer ihrem Sonderstück nur noch den **Werkstoff ihrer Rüstung** fallen – etwa genug für ein Teil je Sieg. Die Erfahrung bleibt, wie sie war. Die **Speere** der Mod liegen jetzt so in der Hand wie die Speere von Minecraft: in ihrer Länge und in der Mitte gegriffen – sie ragen nicht mehr weit über den Kopf, und aus der eigenen Sicht ist die Spitze ganz im Bild. Die **Angelschnur** beginnt in jeder Sicht genau an der Rutenspitze – aus der eigenen Sicht auch bei anderem Bildformat und Sichtfeld, von außen auch beim Gehen, Schleichen und mit der Angel in der linken Hand. Und **eigene Klänge** statt geliehener: Drachen (Stimme, Schwingen, Schritte, Biss, Atem aller sechs Elemente, das Ei), Kraken (Schnabel, Schmerz, Tinte, Tentakelschlag, Woge, Strudel), Karkinos (Graben, Ausbruch, Panzer, Gezeitenlanze, Scherenschlag, Schritte, Gezeitenkraft), Nyxar (Schattenatem, Schrei), der Höhlentroll (Grummeln, Grunzen, Tod, Versteinern, Keulenschlag, Schritte) und der Lindwurm (Zischen, Biss, Schrei, Tod, Schuppengleiten).
 > In 1.1 kam **der Stundenwächter**: Im **Abgrund** treiben jetzt **Uhrtürme**: In einem leer gefegten Auge des Chaos schwebt ein **großes Zifferblatt** – gut dreißig Blöcke breit, mit römischen Ziffern, Zeigern aus **Uhrbronze** und **Chronit** an jeder Stunde –, im Norden der **Turm** mit Zifferblättern auf allen Seiten, einer Treppe um den hohlen Kern, in dem das große Pendel hängt, der **Uhrwerkkammer** und der **Glockenstube** (je eine Truhe), ringsum schweben riesige **Zahnräder**. In der Nabe des Zifferblatts sitzt das **Uhrwerkherz**, und darüber steht erstarrt – eine Minute vor zwölf – **der Stundenwächter**: ein Ritter aus Uhrbronze, so groß wie zwei Männer, ein Zifferblatt als Heiligenschein, zwei Klingen wie Zeiger. Wer ihm zu nahe kommt, setzt seine Zeiger in Gang: **Zeigerhieb**, **Stundenschlag** (ein Glockenschlag rollt als Ring davon – springen!), **Zahnradwurf**, **Zeitstopp** (wer ihn ansieht, erstarrt – wer wegschaut, nicht), **Pendelschwung**, **Sanduhr**, **Zeitsprung**, **Rückspulen** (er heilt – wer ihn dabei hart trifft, bringt ihn ins Taumeln) und unter halber Kraft **die Zwölfte Stunde** mit zwölf Glockenschlägen. Eigene Bossleiste, eigene Klänge. Er hinterlässt den **Minutenzeiger** (jeder zwölfte Treffer schlägt die Stunde, Rechtsklick: Zeitsprung); Chronit im stillstehenden Herzen weckt einen neuen Wächter. Neu ist auch **Chronit** (gerinnt an den Weltennähten des Abgrunds) und daraus die **Rüstung der Zeitwächter** – Die Zeit stockt, und mit dem vollen Satz eine **Zweite Chance**: Ein tödlicher Treffer spult die Zeit drei Sekunden zurück. Seit 1.1.1 hängt die Schnur der Angeln in 3D auch von außen gesehen (bei anderen Spielern und in der Ansicht mit F5) an der Rutenspitze statt in der Luft. Seit 1.1.2 ist **`/kaw` nach Art geordnet**: `/kaw dim` zeigt nur die Dimensionen (jetzt auch Abgrund, Urmeer und Feenreich), `/kaw boss` nur die Bosse (finden, hinreisen, wecken, zurücksetzen), `/kaw structure` nur die Bauwerke (alle 60) – und die **Koordinaten lassen sich anklicken**: Man reist sofort hin, auch in eine andere Dimension.
@@ -358,6 +359,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 | Ritter und Soldaten: Söldnerhaus in den Dörfern, Feldherrentisch mit Heilen, Ausbildung, Rängen und Proviant, Garnison und Schlachtzug, Kommandostab, Banditen | ✅ fertig |
 | Wilde Kreaturen: Wildschwein, Rothirsch, Gans, Irrlicht, Höhlentroll, Lindwurm | ✅ fertig |
 | Erze mit Bestimmung: Stahl, Konterit, Aetherit, Draconium, Wyvernit, Edelstein | ✅ fertig |
+| **Feueropal** im Nether (Netherrack und Schwarzstein) und die **Rüstung der Glutwandler**: weniger Feuerschaden je Teil, weite Sicht in der Lava (Helm), über Lava gehen auf einer Glutkruste (Stiefel), 3D-Teile mit Flammenkamm und Glutsohlen (seit 1.1.6) | ✅ fertig |
 | Ausrüstung: Stahl, Konterit, Draconium, Drachenschuppen (mit Set-Bonus), Gleiter, Krone, Trollkeule; Waffen und Rüstungen aus Monsterteilen (3D) | ✅ fertig |
 | Magie: Aetherit-Stab, sieben Zauber in drei Stufen, Zaubertafeln, Magietisch, Zauberkreis (Radialmenü) | ✅ fertig |
 | Sechs Erzmagier als Bosse, jeder in seinem eigenen Magierturm (sechs Bauweisen, je Element im passenden Land) | ✅ fertig |
@@ -474,7 +476,7 @@ großen Umbaus in [docs/DAS_SIEGEL.md](docs/DAS_SIEGEL.md).
 
 1. Auf GitHub oben auf **Actions** klicken.
 2. Den neuesten erfolgreichen Lauf von **Build** öffnen (grüner Haken).
-3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.5.jar** herunterladen
+3. Unten bei **Artifacts** die Datei **kingdomsatwar-1.1.6.jar** herunterladen
    (dafür musst du bei GitHub angemeldet sein).
 
 Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
@@ -482,7 +484,7 @@ Sobald es ein Release gibt, liegt die JAR auch dauerhaft unter **Releases**.
 **Installieren**
 
 1. NeoForge für 26.3 installieren und das NeoForge-Profil einmal im Launcher starten.
-2. Die Datei `kingdomsatwar-1.1.5.jar` in den Ordner `mods` kopieren
+2. Die Datei `kingdomsatwar-1.1.6.jar` in den Ordner `mods` kopieren
    (Windows: `%appdata%\.minecraft\mods`).
 3. Minecraft mit dem NeoForge-Profil starten und eine **neue** Welt anlegen: Die neuen Biome gibt es nur in neu
    angelegten Welten; Dörfer, die neuen Bauwerke, Erze, Kreaturen, Blumen, der Siegelkreis, die Drachennester und
@@ -1392,6 +1394,34 @@ Funde und Münzen – aber karg (siehe unten).
   Stapel schrumpfen auf drei Fünftel.
   Ganz leer ist keine Truhe, und was man für den Fortgang braucht, liegt immer darin: das Herz des Meeres, die Netherit-
   und die Abyssit-Vorlage, der Drachenkompass, die Zaubertafeln und die Prüfungsschlüssel.
+
+### Feueropal und die Rüstung der Glutwandler (seit 1.1.6)
+
+![Feueropal im Netherrack und Schwarzstein, der Feueropalblock, die Rüstung der Glutwandler, die Glutkruste über Lava und der Blick in der Lava mit dem Helm](docs/bilder/feueropal.jpg)
+
+Wo im Nether die Hitze das Gestein über Äonen gebrannt hat, ist Kieselgel zu Opal erstarrt – rot und gold wie die Lava,
+die es umschließt, und doch voller grüner und blauer Blitze. **Feueropal-Erz** findet man als kleine, schwach glühende
+Knollen im **Netherrack** und im **Schwarzstein** (in den Basaltdeltas und um die Hortfesten), überall im Nether, am
+häufigsten um die Höhe des Lavameers – etwa vier kleine Adern je Chunk. Es braucht eine **Diamantspitzhacke** und gibt
+einen **Feueropal** (Glück wirkt; schmelzen geht auch). Der Stein **verbrennt nicht** und zahlt am Leuchtfeuer; neun
+ergeben einen **Feueropalblock** – geschliffene Feueropale in Schwarzgold gefasst, in denen das Feuer langsam wogt
+(Lichtstärke 9, taugt als Sockel für ein Leuchtfeuer).
+
+**Die Rüstung der Glutwandler** – Feueropal in geschwärztem Stahl (aus Feueropal und Netheritschrott, die Stiefel mit
+Magmacreme; Schutz wie Diamant, etwas härter, verbrennt nicht, mit Feueropal auszubessern, mit Rüstungsbesatz zu
+schmücken). Über die Platten laufen Risse voller Glut wie über erkaltende Lava; in 3D trägt der Helm einen **Kamm aus
+drei Flammenzungen** auf einem goldenen Grat und einen Feueropal über der Stirn, sein T-Sehschlitz glüht; auf der Brust
+sitzt ein großer **Feueropal** in Gold, die Schulterplatten sind zwei Schollen mit einer **glühenden Fuge** dazwischen, an
+den Armreifen glüht es ebenso, am Gürtel eine Opalschnalle, an den Knien Feueropale, und die Stiefel stehen auf dicken
+**Glutsohlen** mit einer kleinen Flamme an jeder Ferse.
+- **Glutfest** (jeder Teil): Feuer, Lava, Brennen und glühende Böden schaden **um ein Fünftel weniger** – mit allen vier
+  Teilen nur noch ein Fünftel.
+- **Glutblick** (Helm): **In der Lava siehst du weit** – achtzehn Blöcke statt einer Armlänge, mit Feuerresistenz dreißig.
+- **Glutwandeln** (Stiefel): **Wo du Lava betrittst, erstarrt sie** in einem Kreis von drei Blöcken zu einer
+  **Glutkruste**, die trägt und niemanden verbrennt – so gehst du über das Lavameer. Bleibst du stehen, hält die Kruste
+  (sie heilt sogar ein wenig); gehst du weiter, bricht sie hinter dir in drei Stufen auf, ihre Risse glühen heller, dann
+  schmilzt sie wieder zu Lava. Im Sprung und wenn du schon in der Lava schwimmst, erstarrt nichts; wer die Kruste
+  zerschlägt, steht wieder vor Lava (es geht keine verloren, und es entsteht keine).
 
 ### Bauwerke des Nethers
 
@@ -3878,6 +3908,7 @@ Angriffen und eigenen Klängen.
 | Aetheriterz (leuchtet) | Höhe −48 bis 48 | Eisenspitzhacke | **Magie**: Aetherit-Stab, Runen, Aetheritlaterne |
 | Draconiumerz (leuchtet) | ganz tief, sehr selten | Diamantspitzhacke | **Draconium-Waffen** (setzen in Brand), Drachenpanzer |
 | Wyverniterz | hohe Berge, ab Höhe 100 | Eisenspitzhacke | **Wyvernit-Gleiter** |
+| Feueropal-Erz (leuchtet) | Nether, im Netherrack und Schwarzstein, am häufigsten um das Lavameer | Diamantspitzhacke | **Rüstung der Glutwandler**, Feueropalblock |
 
 **Stahl:** 1 Eisenbarren + 2 Kohlenstoff → Stahlmischung → im Hochofen → Stahlbarren (auch Kohlenstoff aus Holzkohle).
 Aus 9 Rohstoffen wird jeweils ein Speicherblock.
@@ -4719,7 +4750,7 @@ Das Projekt ist ein normales NeoForge-Projekt mit [ModDevGradle](https://github.
 
 | Befehl | Wirkung |
 |---|---|
-| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.5.jar` |
+| `./gradlew build` | Mod bauen → `build/libs/kingdomsatwar-1.1.6.jar` |
 | `./gradlew runClient` | Minecraft mit der Mod zum Testen starten |
 | `./gradlew runData` | Modelle, Rezepte, Loot-Tables, Tags, Weltgenerierung und Übersetzungen neu erzeugen |
 | `./gradlew runGameTestServer` | Automatische Tests in einem Minecraft-Server ausführen |

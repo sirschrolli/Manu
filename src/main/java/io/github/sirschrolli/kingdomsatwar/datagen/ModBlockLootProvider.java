@@ -106,6 +106,10 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.VoidGear.SKY_IRON_BLOCK.get());
         ore(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
+        // Feueropal (seit 1.1.6)
+        ore(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get());
+        ore(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK.get());
         // der Uhrturm (1.1)
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCKWORK.get());
         dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_FACE.get());

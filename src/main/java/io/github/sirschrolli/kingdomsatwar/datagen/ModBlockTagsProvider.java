@@ -311,6 +311,20 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_CHRONIT);
         add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
         add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK);
+        // Feueropal (seit 1.1.6): im Netherrack und im Schwarzstein, ab einer Diamantspitzhacke
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE,
+                io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK);
+        add(BlockTags.NEEDS_DIAMOND_TOOL, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE,
+                io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK);
+        add(ModTags.Blocks.ORES_FIRE_OPAL, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE,
+                io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE);
+        tag(Tags.BlockItems.ORES.block()).addTag(ModTags.Blocks.ORES_FIRE_OPAL);
+        tag(BlockItemTags.ORES.block()).addTag(ModTags.Blocks.ORES_FIRE_OPAL);
+        add(Tags.Blocks.ORES_IN_GROUND_NETHERRACK, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE);
+        add(ModTags.Blocks.STORAGE_BLOCKS_FIRE_OPAL, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK);
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_FIRE_OPAL);
+        add(BlockTags.BEACON_BASE_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK);
+        add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK);
         add(BlockTags.MINEABLE_WITH_SHOVEL, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
         add(BlockTags.MINEABLE_WITH_HOE, FaeBlocks.FAE_MOSS, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES,
                 FaeBlocks.THORN_HEDGE);

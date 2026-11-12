@@ -702,6 +702,12 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(chronit, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_BLOCK.get());
         smeltOre(chronit, 1.4f, io.github.sirschrolli.kingdomsatwar.registry.AbyssGear.CHRONIT_ORE.get());
         this.timewardenArmor(chronit);
+        // Feueropal und die Rüstung der Glutwandler (1.1.6)
+        Item fireOpal = io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL.get();
+        storage(fireOpal, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_BLOCK.get());
+        smeltOre(fireOpal, 1.2f, io.github.sirschrolli.kingdomsatwar.registry.FlameGear.FIRE_OPAL_ORE.get(),
+                io.github.sirschrolli.kingdomsatwar.registry.FlameGear.BLACKSTONE_FIRE_OPAL_ORE.get());
+        this.emberwalkerArmor(fireOpal);
         // der Uhrturm (1.1): Uhrbronze aus Kupfer und Gold, Uhrwerk aus Uhrbronze und Chronit, Zifferblatt aus Kalzit und Knochenmehl
         ItemLike clockBronze = io.github.sirschrolli.kingdomsatwar.registry.ClockTower.CLOCK_BRONZE.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, clockBronze, 4).pattern("CGC").pattern("GCG").pattern("CGC")
@@ -1189,6 +1195,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('C', gem).define('G', gold).unlockedBy(has, has(gem)).save(output, key("timewarden_leggings"));
         shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("C C").pattern("G G")
                 .define('C', gem).define('G', gold).unlockedBy(has, has(gem)).save(output, key("timewarden_boots"));
+    }
+
+    /** Die Rüstung der Glutwandler (1.1.6): Feueropal in Netheritschrott gefasst, in den Stiefeln Magmacreme für die Glutsohlen. */
+    private void emberwalkerArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.FlameGear.emberwalkerSet();
+        Item scrap = net.minecraft.world.item.Items.NETHERITE_SCRAP;
+        Item magma = net.minecraft.world.item.Items.MAGMA_CREAM;
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("FSF").pattern("F F")
+                .define('F', gem).define('S', scrap).unlockedBy(has, has(gem)).save(output, key("emberwalker_helmet"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("F F").pattern("FSF").pattern("FFF")
+                .define('F', gem).define('S', scrap).unlockedBy(has, has(gem)).save(output, key("emberwalker_chestplate"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("FSF").pattern("F F").pattern("F F")
+                .define('F', gem).define('S', scrap).unlockedBy(has, has(gem)).save(output, key("emberwalker_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("F F").pattern("M M")
+                .define('F', gem).define('M', magma).unlockedBy(has, has(gem)).save(output, key("emberwalker_boots"));
     }
 
     /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */

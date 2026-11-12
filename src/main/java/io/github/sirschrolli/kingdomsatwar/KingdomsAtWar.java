@@ -58,6 +58,7 @@ public final class KingdomsAtWar {
         io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.init();
         io.github.sirschrolli.kingdomsatwar.registry.FaeGear.init();
         io.github.sirschrolli.kingdomsatwar.registry.ForgeBlocks.init();
+        io.github.sirschrolli.kingdomsatwar.registry.FlameGear.init();   // seit 1.1.6: Feueropal und die Rüstung der Glutwandler
         io.github.sirschrolli.kingdomsatwar.registry.MonsterGear.init();
         io.github.sirschrolli.kingdomsatwar.registry.Armory.init();
         io.github.sirschrolli.kingdomsatwar.registry.BiomeBeasts.init();

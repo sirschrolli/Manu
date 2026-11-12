@@ -273,6 +273,8 @@ final class Showcase {
                         BossBarShowcase.gallery(steps);
                     } else if (scene.equals("ruestungen3d")) {
                         ArmorPartsShowcase.armor(steps);
+                    } else if (scene.equals("flame_gear")) {
+                        FlameShowcase.gear(steps);
                     } else if (scene.equals("fix_wings")) {
                         WingFixShowcase.wings(steps);
                     } else if (scene.equals("weapons_hand")) {
