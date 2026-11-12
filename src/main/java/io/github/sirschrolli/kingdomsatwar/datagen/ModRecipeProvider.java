@@ -688,6 +688,10 @@ public class ModRecipeProvider extends RecipeProvider {
         storage(aquamarine, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK.get());
         smeltOre(aquamarine, 1.0f, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_ORE.get());
         this.aquamarineArmor(aquamarine);
+        Item duskQuartz = io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get();
+        storage(duskQuartz, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
+        smeltOre(duskQuartz, 1.0f, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE.get());
+        this.duskArmor(duskQuartz);
         ItemLike faestone = FaeBlocks.FAESTONE.base().get();
         ItemLike faeBricks = FaeBlocks.FAESTONE_BRICKS.base().get();
         shaped(RecipeCategory.BUILDING_BLOCKS, faeBricks, 4)
@@ -1134,6 +1138,21 @@ public class ModRecipeProvider extends RecipeProvider {
     }
 
     /** Die Taucherrüstung aus Aquamarin: der Helm mit Sichtfenster (Glasscheibe), der Harnisch mit Perle, Flossen mit Tang. */
+    /** Die Dämmerrüstung (0.98): Dämmerquarz mit weichem Leder. */
+    private void duskArmor(Item gem) {
+        String has = getHasName(gem);
+        var set = io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.duskSet();
+        net.minecraft.world.item.Item leather = net.minecraft.world.item.Items.LEATHER;
+        shaped(RecipeCategory.COMBAT, set.get(0).get()).pattern("LQL").pattern("Q Q")
+                .define('Q', gem).define('L', leather).unlockedBy(has, has(gem)).save(output, key("dusk_hood"));
+        shaped(RecipeCategory.COMBAT, set.get(1).get()).pattern("L L").pattern("QQQ").pattern("QLQ")
+                .define('Q', gem).define('L', leather).unlockedBy(has, has(gem)).save(output, key("dusk_cloak"));
+        shaped(RecipeCategory.COMBAT, set.get(2).get()).pattern("QLQ").pattern("Q Q").pattern("L L")
+                .define('Q', gem).define('L', leather).unlockedBy(has, has(gem)).save(output, key("dusk_leggings"));
+        shaped(RecipeCategory.COMBAT, set.get(3).get()).pattern("Q Q").pattern("L L")
+                .define('Q', gem).define('L', leather).unlockedBy(has, has(gem)).save(output, key("dusk_boots"));
+    }
+
     private void aquamarineArmor(Item gem) {
         String has = getHasName(gem);
         var set = io.github.sirschrolli.kingdomsatwar.registry.SeaGear.aquamarineSet();

@@ -277,6 +277,15 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
         add(ModTags.Blocks.STORAGE_BLOCKS_AQUAMARINE, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK);
         tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_AQUAMARINE);
         add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BLOCK);
+        // Dämmerquarz (0.98)
+        add(BlockTags.MINEABLE_WITH_PICKAXE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK);
+        add(BlockTags.NEEDS_IRON_TOOL, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK);
+        add(ModTags.Blocks.ORES_DUSK_QUARTZ, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE);
+        tag(Tags.BlockItems.ORES.block()).addTag(ModTags.Blocks.ORES_DUSK_QUARTZ);
+        tag(BlockItemTags.ORES.block()).addTag(ModTags.Blocks.ORES_DUSK_QUARTZ);
+        add(ModTags.Blocks.STORAGE_BLOCKS_DUSK_QUARTZ, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK);
+        tag(Tags.BlockItems.STORAGE_BLOCKS.block()).addTag(ModTags.Blocks.STORAGE_BLOCKS_DUSK_QUARTZ);
+        add(BlockTags.CRYSTAL_SOUND_BLOCKS, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK);
         add(BlockTags.MINEABLE_WITH_SHOVEL, FaeBlocks.FAE_SOIL, FaeBlocks.FAE_GRASS);
         add(BlockTags.MINEABLE_WITH_HOE, FaeBlocks.FAE_MOSS, FaeBlocks.ROSE_GLIMMER_LEAVES, FaeBlocks.AZURE_GLIMMER_LEAVES,
                 FaeBlocks.THORN_HEDGE);

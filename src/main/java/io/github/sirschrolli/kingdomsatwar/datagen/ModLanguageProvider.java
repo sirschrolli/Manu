@@ -769,6 +769,23 @@ public class ModLanguageProvider extends LanguageProvider {
                 "Unter Wasser: länger atmen (Helm, Harnisch), schneller schwimmen (Beinschutz, Flossen)");
         text(ModItems.loreKey("aquamarine_armor", 2), "Full set: clear sight under water",
                 "Voller Satz: klare Sicht unter Wasser");
+        // Dämmerquarz und die Dämmerrüstung (0.98)
+        block(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, "Dusk Quartz Ore", "Dämmerquarzerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, "Deep Dusk Quartz Ore", "Tiefes Dämmerquarzerz");
+        block(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK, "Block of Dusk Quartz", "Dämmerquarzblock");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ, "Dusk Quartz", "Dämmerquarz");
+        lore("dusk_quartz", "A smoky quartz holding the colours of dusk – night above, a last red glow below",
+                "Ein rauchiger Quarz mit den Farben der Dämmerung – oben Nacht, unten ein letztes Abendrot");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_HOOD, "Dusk Hood", "Dämmerkapuze");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_CLOAK, "Dusk Cloak", "Dämmermantel");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_LEGGINGS, "Dusk Leggings", "Dämmerbeinlinge");
+        item(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_BOOTS, "Dusk Boots", "Dämmerstiefel");
+        lore("dusk_armor", "Each piece: monsters notice you later",
+                "Jeder Teil: Monster bemerken dich später");
+        text(ModItems.loreKey("dusk_armor", 2), "Sneak faster (leggings, boots), soft landing (boots), see in the dark while sneaking (hood)",
+                "Schneller schleichen (Beinlinge, Stiefel), sanft landen (Stiefel), beim Schleichen im Dunkeln sehen (Kapuze)");
+        text(ModItems.loreKey("dusk_armor", 3), "Full set while sneaking: almost unseen",
+                "Voller Satz beim Schleichen: fast unsichtbar");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_SOIL, "Fae Soil", "Feenerde");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_GRASS, "Fae Grass Block", "Feengrasblock");
         block(io.github.sirschrolli.kingdomsatwar.registry.FaeBlocks.FAE_MOSS, "Fae Moss", "Feenmoos");

@@ -101,6 +101,8 @@ final class ShadowGameTests {
             ModGameTests.TEST_FUNCTIONS.register("rock_bridge", () -> ShadowGameTests::rockBridge);
     static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_PLANTS =
             ModGameTests.TEST_FUNCTIONS.register("shadow_plants", () -> ShadowGameTests::shadowPlants);
+    static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> SHADOW_DUSK_QUARTZ =
+            ModGameTests.TEST_FUNCTIONS.register("shadow_dusk_quartz", () -> ShadowGameTests::duskQuartz);
 
     private ShadowGameTests() {}
 
@@ -115,7 +117,7 @@ final class ShadowGameTests {
         event.registerTest(NYXAR_LIFECYCLE.getId(), new FunctionGameTestInstance(NYXAR_LIFECYCLE.key(),
                 new TestData<>(environment, Level.OVERWORLD, ARENA, 900, 0, true, Rotation.NONE, false, 1, 1, true, 56)));
         for (var test : List.of(SHADOW_WORLD, SHADOW_SAPLING, SHADOW_GEAR, SHADOW_CREATURES, SHADE_STALKER_HUNTS, CRYSTAL_CRAWLER_SHARDS,
-                SHADOW_CITADEL, SHADOW_SITES, ROCK_BRIDGE, SHADOW_PLANTS)) {
+                SHADOW_CITADEL, SHADOW_SITES, ROCK_BRIDGE, SHADOW_PLANTS, SHADOW_DUSK_QUARTZ)) {
             event.registerTest(test.getId(), new FunctionGameTestInstance(test.key(),
                     new TestData<>(environment, Level.OVERWORLD, ARENA, 400, 0, true, Rotation.NONE, false, 1, 1, true, 0)));
         }
@@ -558,6 +560,118 @@ final class ShadowGameTests {
         BlockState abyssite = ShadowBlocks.ABYSSITE_ORE.get().defaultBlockState();
         helper.assertFalse(new ItemStack(Items.IRON_PICKAXE).isCorrectToolForDrops(abyssite), "Abyssit lässt sich mit Eisen abbauen");
         helper.assertTrue(new ItemStack(Items.DIAMOND_PICKAXE).isCorrectToolForDrops(abyssite), "Abyssit lässt sich nicht mit Diamant abbauen");
+        helper.succeed();
+    }
+
+    /**
+     * Dämmerquarz (0.98): Erz ab Eisen, gibt Dämmerquarz; Adern in jedem Biom der Schattenwelt, oben im Schattenstein und
+     * unten im Tiefschattenstein. Die Dämmerrüstung: schützt wie Eisen, Beinlinge und Stiefel lassen schneller schleichen,
+     * die Stiefel fangen Stürze ab; jeder Teil lässt einen später bemerken, der volle Satz beim Schleichen fast gar nicht;
+     * die Kapuze schenkt beim Schleichen Nachtsicht, die endet, sobald man aufsteht (ein Trank bleibt).
+     */
+    private static void duskQuartz(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (var ore : List.of(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE,
+                io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE)) {
+            BlockState state = ore.get().defaultBlockState();
+            helper.assertFalse(new ItemStack(Items.STONE_PICKAXE).isCorrectToolForDrops(state), "Eine Steinspitzhacke reicht für Dämmerquarzerz");
+            helper.assertTrue(new ItemStack(Items.IRON_PICKAXE).isCorrectToolForDrops(state), "Eine Eisenspitzhacke reicht nicht für Dämmerquarzerz");
+            BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
+            level.setBlock(at, state, net.minecraft.world.level.block.Block.UPDATE_ALL);
+            var drops = net.minecraft.world.level.block.Block.getDrops(state, level, at, null, null, new ItemStack(Items.IRON_PICKAXE));
+            helper.assertTrue(drops.stream().anyMatch(st -> st.is(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get())),
+                    "Dämmerquarzerz gibt keinen Dämmerquarz: " + drops);
+            level.setBlock(at, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+        }
+
+        // in jedem Biom der Schattenwelt
+        var placedKey = ResourceKey.create(Registries.PLACED_FEATURE, KingdomsAtWar.id("shadow/ore_dusk_quartz"));
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
+        for (var key : ShadowBiomes.ALL) {
+            boolean found = false;
+            for (var step : biomes.getOrThrow(key).value().getGenerationSettings().features()) {
+                for (var placed : step) {
+                    found |= placed.is(placedKey);
+                }
+            }
+            helper.assertTrue(found, "Kein Dämmerquarz im Biom " + key.identifier());
+        }
+
+        // eine Ader im Schattenstein und eine im Tiefschattenstein
+        var feature = level.registryAccess().lookupOrThrow(Registries.FEATURE)
+                .getOrThrow(ResourceKey.create(Registries.FEATURE, KingdomsAtWar.id("shadow/ore_dusk_quartz"))).value();
+        var generator = level.getChunkSource().getGenerator();
+        BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
+        for (var rock : List.of(ShadowBlocks.SHADOW_STONE.base().get(), ShadowBlocks.DEEP_SHADOW_STONE.get())) {
+            for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+                level.setBlock(p, rock.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+            var expected = rock == ShadowBlocks.SHADOW_STONE.base().get() ? io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE.get()
+                    : io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE.get();
+            int grown = 0;
+            for (int seed = 0; seed < 6 && grown == 0; seed++) {
+                feature.place(level, generator, net.minecraft.util.RandomSource.create(seed), center);
+                for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+                    grown += level.getBlockState(p).is(expected) ? 1 : 0;
+                }
+            }
+            helper.assertTrue(grown > 0, "Keine Dämmerquarzader in " + rock);
+            for (BlockPos p : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+                level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+            }
+        }
+
+        // die Rüstung: Schutz und Attribute
+        var set = io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.duskSet();
+        EquipmentSlot[] slots = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+        double[] armor = new double[1];
+        double[] sneak = new double[1];
+        double[] fall = new double[1];
+        for (int i = 0; i < set.size(); i++) {
+            var modifiers = new ItemStack(set.get(i).get()).getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS,
+                    net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY);
+            modifiers.forEach(slots[i], (attribute, modifier) -> {
+                if (attribute.is(Attributes.ARMOR)) {
+                    armor[0] += modifier.amount();
+                } else if (attribute.is(Attributes.SNEAKING_SPEED)) {
+                    sneak[0] += modifier.amount();
+                } else if (attribute.is(Attributes.SAFE_FALL_DISTANCE)) {
+                    fall[0] += modifier.amount();
+                }
+            });
+        }
+        helper.assertTrue(armor[0] >= 15.0, "Die Dämmerrüstung schützt zu wenig: " + armor[0]);
+        helper.assertTrue(Math.abs(sneak[0] - 0.3) < 0.01, "Beinlinge und Stiefel lassen nicht schneller schleichen: " + sneak[0]);
+        helper.assertTrue(fall[0] >= 2.0, "Die Stiefel fangen keine Stürze ab: " + fall[0]);
+
+        // gesehen werden: je Teil weniger, der volle Satz beim Schleichen kaum noch
+        net.minecraft.server.level.ServerPlayer player = MageGameTests.survivalPlayer(helper, "test-dusk-sneaker",
+                new io.netty.channel.embedded.EmbeddedChannel[1], 0);
+        Mob zombie = EntityTypes.ZOMBIE.create(level, EntitySpawnReason.EVENT);
+        helper.assertTrue(zombie != null, "Kein Zombie");
+        zombie.snapTo(player.getX() + 4.0, player.getY(), player.getZ(), 0.0f, 0.0f);
+        double plain = player.getVisibilityPercent(level, zombie);
+        for (int i = 0; i < set.size(); i++) {
+            player.setItemSlot(slots[i], new ItemStack(set.get(i).get()));
+        }
+        double dressed = player.getVisibilityPercent(level, zombie);
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.shadow.DuskArmor.pieces(player) == 4, "Der volle Satz zählt nicht");
+        helper.assertTrue(dressed < plain * 0.6, "Mit der Rüstung sieht man ihn nicht später: " + plain + " → " + dressed);
+        player.setShiftKeyDown(true);
+        double sneaking = player.getVisibilityPercent(level, zombie);
+        helper.assertTrue(sneaking < plain * 0.2, "Beim Schleichen mit dem vollen Satz sieht man ihn noch: " + sneaking);
+
+        // die Kapuze: Nachtsicht beim Schleichen, endet beim Aufstehen
+        helper.assertTrue(io.github.sirschrolli.kingdomsatwar.item.shadow.DuskArmor.refresh(player), "Keine Nachtsicht beim Schleichen");
+        var sight = player.getEffect(MobEffects.NIGHT_VISION);
+        helper.assertTrue(sight != null && sight.isAmbient() && sight.getDuration() > 200, "Die Nachtsicht der Kapuze fehlt: " + sight);
+        player.setShiftKeyDown(false);
+        helper.assertFalse(io.github.sirschrolli.kingdomsatwar.item.shadow.DuskArmor.refresh(player), "Nachtsicht auch im Stehen");
+        helper.assertTrue(player.getEffect(MobEffects.NIGHT_VISION) == null, "Die Nachtsicht der Kapuze endet nicht beim Aufstehen");
+        player.addEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.NIGHT_VISION, 3600));
+        io.github.sirschrolli.kingdomsatwar.item.shadow.DuskArmor.refresh(player);
+        helper.assertTrue(player.getEffect(MobEffects.NIGHT_VISION) != null, "Die Kapuze nimmt einen Nachtsichttrank weg");
+        level.getServer().getPlayerList().remove(player);
         helper.succeed();
     }
 

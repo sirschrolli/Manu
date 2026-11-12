@@ -33,12 +33,14 @@ public final class ModTags {
         /** Mondsteinerz (Feenreich, seit 0.96). */
         public static final TagKey<Block> ORES_MOONSTONE = common("ores/moonstone");
         public static final TagKey<Block> ORES_AQUAMARINE = common("ores/aquamarine");
+        public static final TagKey<Block> ORES_DUSK_QUARTZ = common("ores/dusk_quartz");
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
         public static final TagKey<Block> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
         public static final TagKey<Block> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
         public static final TagKey<Block> STORAGE_BLOCKS_ABYSSITE = common("storage_blocks/abyssite");
         public static final TagKey<Block> STORAGE_BLOCKS_MOONSTONE = common("storage_blocks/moonstone");
         public static final TagKey<Block> STORAGE_BLOCKS_AQUAMARINE = common("storage_blocks/aquamarine");
+        public static final TagKey<Block> STORAGE_BLOCKS_DUSK_QUARTZ = common("storage_blocks/dusk_quartz");
         public static final TagKey<Block> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Block> ORES_GEMSTONE = common("ores/gemstone");
         public static final TagKey<Block> ORES_KONTERIT = common("ores/konterit");
@@ -247,6 +249,7 @@ public final class ModTags {
         public static final TagKey<Item> REPAIRS_MOONSTONE_ARMOR = mod("repairs_moonstone_armor");
         public static final TagKey<Item> REPAIRS_KEEPER_MAUL = mod("repairs_keeper_maul");
         public static final TagKey<Item> REPAIRS_AQUAMARINE_ARMOR = mod("repairs_aquamarine_armor");
+        public static final TagKey<Item> REPAIRS_DUSK_ARMOR = mod("repairs_dusk_armor");
         public static final TagKey<Item> REPAIRS_SEA_WITCH_STAFF = mod("repairs_sea_witch_staff");
         /** Reparieren die Waffen und Rüstungen aus Monsterteilen (0.70). */
         public static final TagKey<Item> REPAIRS_CLAW_BLADE = mod("repairs_claw_blade");
@@ -292,6 +295,7 @@ public final class ModTags {
         public static final TagKey<Item> ORES_ABYSSITE = common("ores/abyssite");
         public static final TagKey<Item> ORES_MOONSTONE = common("ores/moonstone");
         public static final TagKey<Item> ORES_AQUAMARINE = common("ores/aquamarine");
+        public static final TagKey<Item> ORES_DUSK_QUARTZ = common("ores/dusk_quartz");
         public static final TagKey<Item> INGOTS_MOONSILVER = common("ingots/moonsilver");
         public static final TagKey<Item> INGOTS_NIGHTSTEEL = common("ingots/nightsteel");
         public static final TagKey<Item> INGOTS_ABYSSITE = common("ingots/abyssite");
@@ -301,12 +305,14 @@ public final class ModTags {
         public static final TagKey<Item> GEMS_SOUL_CRYSTAL = common("gems/soul_crystal");
         public static final TagKey<Item> GEMS_MOONSTONE = common("gems/moonstone");
         public static final TagKey<Item> GEMS_AQUAMARINE = common("gems/aquamarine");
+        public static final TagKey<Item> GEMS_DUSK_QUARTZ = common("gems/dusk_quartz");
         public static final TagKey<Item> STORAGE_BLOCKS_MOONSILVER = common("storage_blocks/moonsilver");
         public static final TagKey<Item> STORAGE_BLOCKS_NIGHTSTEEL = common("storage_blocks/nightsteel");
         public static final TagKey<Item> STORAGE_BLOCKS_SOUL_CRYSTAL = common("storage_blocks/soul_crystal");
         public static final TagKey<Item> STORAGE_BLOCKS_ABYSSITE = common("storage_blocks/abyssite");
         public static final TagKey<Item> STORAGE_BLOCKS_MOONSTONE = common("storage_blocks/moonstone");
         public static final TagKey<Item> STORAGE_BLOCKS_AQUAMARINE = common("storage_blocks/aquamarine");
+        public static final TagKey<Item> STORAGE_BLOCKS_DUSK_QUARTZ = common("storage_blocks/dusk_quartz");
         public static final TagKey<Item> DRAGON_SCALES = mod("dragon_scales");
         public static final TagKey<Item> ORES_CARBON = common("ores/carbon");
         public static final TagKey<Item> ORES_GEMSTONE = common("ores/gemstone");

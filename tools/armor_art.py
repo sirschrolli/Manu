@@ -25,6 +25,7 @@ from PIL import Image
 import item_style as st
 import items_armor as icons
 import items_gear as gear
+import dusk_textures as dusk_tex
 
 Rect = tuple[int, int, int, int]  # x, y, Breite, Höhe
 
@@ -673,8 +674,31 @@ def aquamarine() -> Design:
     })
 
 
+def dusk() -> Design:
+    """Dämmerrüstung (die Rüstung der Schleicher, 0.98): rauchviolettes Tuch mit Lederriemen und Dämmerquarz. Die Kapuze
+    lässt die Augen frei, darunter eine Halbmaske aus Leder; über die Brust läuft ein Riemen mit Quarzschließe, auf dem
+    Rücken kreuzt er sich, Wickelriemen an Armen und Stiefeln, am Gürtel eine Quarzschnalle (Kapuzenspitze, Umhang,
+    Schulterwickel, Gürteltaschen und Stiefelriemen kommen als 3D-Teile)."""
+    return Design("dusk", {"A": dusk_tex.CLOTH, "B": dusk_tex.LEATHER, "D": dusk_tex.EMBER, "E": dusk_tex.QUARTZ},
+                  open_face=True, d={
+        "head_front": [".", ".", "dccccccb", ".", ".", "..edcb..", "..dccb..", "..cbba.."],
+        "head_side": [".", ".", "dccccccb"],
+        "head_back": [".", ".", "dccccccb"],
+        "body_front": [".", "d.......", ".d......", "..dGF...", "..cFE...", "....cb..", ".....cb.", "......cb", ".", ".",
+                       "dccbbccb"],
+        "body_back": [".", "dc....cb", ".dc..cb.", "..dccb..", "..dccb..", ".dc..cb.", "dc....cb"],
+        "arm_side": [".", ".", ".", "dccb", ".", ".", "dccb", ".", "."],
+        "boot_side": ["."] * 3 + ["dccb", ".", "dccb"],
+        "boot_front": ["."] * 3 + ["dccb", ".", "dccb", ".", ".", ".", ".", "b..b"],
+        "belt_front": ["."] * 7 + ["dccFEccb"],
+        "belt_back": ["."] * 7 + ["dccccccb"],
+        "belt_side": ["."] * 7 + ["dccb"],
+        "thigh_front": [".", ".", ".", "dccb", ".", "dccb"],
+    })
+
+
 def designs() -> list[Design]:
-    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine()] + \
+    return [steel(), nightsteel(), abyssite(), konterit(), werewolf_pelt(), ember_scale(), moonstone(), aquamarine(), dusk()] + \
         [dragon(k) for k in icons.DRAGONS]
 
 

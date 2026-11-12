@@ -129,6 +129,10 @@ public final class ShadowFeatures {
             ore(ShadowBlocks.MOONSILVER_ORE, ShadowBlocks.DEEP_MOONSILVER_ORE, 9, 0.0f), ores(14, -40, 170, true));
     static final Entry ORE_NIGHTSTEEL = entry(ORES, "ore_nightsteel",
             ore(ShadowBlocks.NIGHTSTEEL_ORE, ShadowBlocks.DEEP_NIGHTSTEEL_ORE, 7, 0.0f), ores(8, -64, 72, true));
+    /** Dämmerquarz (seit 0.98): in kleinen Adern, oben im Schattenstein wie unten im Tiefschattenstein. */
+    static final Entry ORE_DUSK_QUARTZ = entry(ORES, "ore_dusk_quartz",
+            ore(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE,
+                    io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, 6, 0.0f), ores(9, -48, 110, true));
     static final Entry ORE_SOUL_CRYSTAL = entry(ORES, "ore_soul_crystal",
             ore(null, ShadowBlocks.SOUL_CRYSTAL_ORE, 5, 0.25f), ores(4, -64, 4, false));
     /** Abyssit nur ganz unten und nur ganz im Gestein eingeschlossen (wie antiker Schutt). */
@@ -224,7 +228,7 @@ public final class ShadowFeatures {
     private static BiomeGenerationSettings settings(HolderGetter<PlacedFeature> placed, HolderGetter<WorldCarver> carvers, Entry... chosen) {
         BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder(placed, carvers);
         List<Entry> wanted = new ArrayList<>(List.of(chosen));
-        wanted.addAll(List.of(ORE_MOONSILVER, ORE_NIGHTSTEEL, ORE_SOUL_CRYSTAL, ORE_ABYSSITE, VINES_CAVES));
+        wanted.addAll(List.of(ORE_MOONSILVER, ORE_NIGHTSTEEL, ORE_DUSK_QUARTZ, ORE_SOUL_CRYSTAL, ORE_ABYSSITE, VINES_CAVES));
         Map<GenerationStep.Decoration, List<Entry>> byStep = new EnumMap<>(GenerationStep.Decoration.class);
         for (Entry entry : ENTRIES) {   // feste Reihenfolge
             if (wanted.contains(entry)) {

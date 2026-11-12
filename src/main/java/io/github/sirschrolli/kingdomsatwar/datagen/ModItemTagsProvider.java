@@ -68,6 +68,8 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSTONE, ModTags.Items.STORAGE_BLOCKS_MOONSTONE);
         copy(ModTags.Blocks.ORES_AQUAMARINE, ModTags.Items.ORES_AQUAMARINE);
         copy(ModTags.Blocks.STORAGE_BLOCKS_AQUAMARINE, ModTags.Items.STORAGE_BLOCKS_AQUAMARINE);
+        copy(ModTags.Blocks.ORES_DUSK_QUARTZ, ModTags.Items.ORES_DUSK_QUARTZ);
+        copy(ModTags.Blocks.STORAGE_BLOCKS_DUSK_QUARTZ, ModTags.Items.STORAGE_BLOCKS_DUSK_QUARTZ);
         copy(ModTags.Blocks.STORAGE_BLOCKS_MOONSILVER, ModTags.Items.STORAGE_BLOCKS_MOONSILVER);
         copy(ModTags.Blocks.STORAGE_BLOCKS_NIGHTSTEEL, ModTags.Items.STORAGE_BLOCKS_NIGHTSTEEL);
         copy(ModTags.Blocks.STORAGE_BLOCKS_SOUL_CRYSTAL, ModTags.Items.STORAGE_BLOCKS_SOUL_CRYSTAL);
@@ -257,6 +259,17 @@ public class ModItemTagsProvider extends BlockTagCopyingItemTagProvider {
         add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_LEGGINGS);
         add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.SeaGear.AQUAMARINE_BOOTS);
         for (var piece : io.github.sirschrolli.kingdomsatwar.registry.SeaGear.aquamarineSet()) {
+            add(ItemTags.TRIMMABLE_ARMOR, piece);
+        }
+        // Dämmerquarz und die Dämmerrüstung (0.98)
+        add(ModTags.Items.GEMS_DUSK_QUARTZ, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ);
+        tag(Tags.Items.GEMS).addTag(ModTags.Items.GEMS_DUSK_QUARTZ);
+        add(ModTags.Items.REPAIRS_DUSK_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ);
+        add(ItemTags.HEAD_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_HOOD);
+        add(ItemTags.CHEST_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_CLOAK);
+        add(ItemTags.LEG_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_LEGGINGS);
+        add(ItemTags.FOOT_ARMOR, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_BOOTS);
+        for (var piece : io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.duskSet()) {
             add(ItemTags.TRIMMABLE_ARMOR, piece);
         }
         add(ModTags.Items.REPAIRS_GLITCH_GEAR, io.github.sirschrolli.kingdomsatwar.registry.AnniBlocks.GLITCH_SHARD);

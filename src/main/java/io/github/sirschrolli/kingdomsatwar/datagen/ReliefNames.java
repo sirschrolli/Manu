@@ -38,6 +38,7 @@ final class ReliefNames {
             "dragon_food",
             "dragon_horn",
             "dusk_bread",
+            "dusk_quartz",
             "earth_dragon_scale",
             "earth_rune",
             "earth_seal_shard",

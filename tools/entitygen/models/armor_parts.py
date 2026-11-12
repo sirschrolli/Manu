@@ -16,6 +16,10 @@
   * Mondstein (seit 0.96, die Rüstung der Zauberer): ein Stirnreif aus Mondsilber mit leuchtender Mondsichel und Mondstein,
     ein langer Sternenmantel bis an die Knie, Mondsicheln auf den Schultern, Armreife mit Mondsteinen, ein Gürtel mit
     Sichelschnalle, Robenschöße über den Beinen und spitze, aufgebogene Schuhe mit Mondsicheln an den Knöcheln
+  * Dämmerquarz (seit 0.98, die Rüstung der Schleicher): eine tiefe Kapuze mit langem Zipfel, der über den Rücken fällt,
+    eine Halbmaske aus Stoff über Mund und Nase; ein kurzer, unten zerschlissener Schulterumhang mit einer Schließe aus
+    zwei Quarzspitzen, Lederwickel an den Oberarmen und Handgelenken; ein Gürtel mit zwei Taschen und einem Dolch im
+    Rücken, Knieschützer aus Leder mit Quarzniete; weiche Stiefel mit umgeschlagenem Schaft und Wickelriemen
   * Aquamarin (seit 0.97, die Taucherrüstung): ein runder Taucherhelm aus Aquamarin mit Messingkragen, vorn ein großes
     Sichtfenster (man sieht das Gesicht dahinter), an den Seiten kleine Bullaugen, oben ein Ventil, hinten der Schlauch;
     zwei Luftflaschen auf dem Rücken mit Ventilen und Messingbändern, eine Druckanzeige auf der Brust, flache
@@ -33,7 +37,7 @@ from ..geometry import Model
 from ..paint import Ctx, along, hash01, hexc, mix, noise3, pick, ramp, rel_y
 
 SETS = ["steel", "konterit", "nightsteel", "abyssite", "fire", "ice", "lightning", "nature", "earth", "water", "crown",
-        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine"]
+        "leather", "chainmail", "iron", "gold", "diamond", "netherite", "copper", "turtle", "moonstone", "aquamarine", "dusk"]
 SLOTS = {"head": ["head"], "chest": ["body", "left_arm", "right_arm"], "legs": ["body", "left_leg", "right_leg"],
          "feet": ["left_leg", "right_leg"]}
 
@@ -105,6 +109,11 @@ PALETTES = {
         "lead": ramp("#25282e", "#a0a6b2", 7),
         "aqua_fin": ramp("#063c44", "#7fe4e0", 8),
         "dial": ramp("#b8b0a0", "#fffcf2", 4),
+        # Dämmerquarz (0.98): die Rüstung der Schleicher
+        "dusk_cloth": ramp("#16121f", "#7a6e96", 8),
+        "dusk_leather": ramp("#1e130c", "#9a7658", 7),
+        "dusk_quartz": ramp("#2a1d4a", "#efe6ff", 7),
+        "dusk_ember": ramp("#5c2434", "#ffcaa4", 6),
     }
 }
 
@@ -524,6 +533,80 @@ def _moonstone(m: Model) -> None:
         _crescent(m, f, f"moon_ankle_{bone}", (3.35 * side, 9.8, 0.4), (0.0, 90.0 * side, 0.0), 0.62)
 
 
+# ------------------------------------------------------------------ Dämmerquarz (0.98): die Rüstung der Schleicher
+
+def _quartz_points(m: Model, parent: str, name: str, pivot, rot, scale: float = 1.0) -> None:
+    """Eine kleine Druse aus zwei Quarzspitzen (Schließe, Niete)."""
+    _spike(m, parent, f"{name}_a", pivot, rot, 2.2 * scale, 1.0 * scale, "dusk_gem")
+    _spike(m, parent, f"{name}_b", (pivot[0] + 0.7 * scale, pivot[1] + 0.2, pivot[2]), (rot[0], rot[1], rot[2] - 38.0),
+           1.5 * scale, 0.8 * scale, "dusk_gem")
+
+
+def _dusk(m: Model) -> None:
+    h = _slot(m, "dusk", "head", "head")
+    # die Kapuze: oben, an den Seiten und hinten etwas weiter als der Kopf, vorn offen; darüber ein Saum um das Gesicht
+    m.cube(h, (-5.5, -9.7, -5.3), (11.0, 1.1, 10.8), "dusk_cloth")
+    for side in (1, -1):
+        m.cube(h, (_mx(5.0, 0.55, side), -8.8, -5.3), (0.55, 8.4, 10.8), "dusk_cloth")
+    m.cube(h, (-5.0, -8.8, 5.0), (10.0, 8.6, 0.55), "dusk_cloth")
+    m.cube(h, (-5.55, -9.2, -5.85), (11.1, 1.5, 0.6), "dusk_hood_rim")       # der Saum oben über der Stirn
+    for side in (1, -1):
+        m.cube(h, (_mx(4.3, 1.25, side), -8.0, -5.85), (1.25, 6.4, 0.6), "dusk_hood_rim")   # die Seiten des Saums
+    # die Halbmaske über Mund und Nase (Stoff, in der Mitte eine Falte)
+    m.cube(h, (-3.3, -3.6, -5.55), (6.6, 2.8, 0.55), "dusk_mask")
+    m.cube(h, (-0.45, -3.75, -5.75), (0.9, 3.0, 0.35), "dusk_mask")
+    # der Zipfel: fällt vom Hinterkopf über den Nacken
+    _chain(m, h, "dusk_hood_tip", (0.0, -8.4, 5.3),
+           [(4.6, 2.6, 1.0, (62.0, 0.0, 0.0)), (3.4, 2.8, 0.9, (-30.0, 0.0, 0.0)), (2.4, 2.8, 0.8, (-22.0, 0.0, 0.0)),
+            (1.4, 2.4, 0.7, (-12.0, 0.0, 0.0))], "dusk_cloth", kind="down")
+
+    b = _slot(m, "dusk", "chest", "body")
+    # der Schulterumhang: über die Schultern gelegt, hinten bis zur Taille, unten zerschlissen
+    m.cube(b, (-5.4, -0.55, -3.55), (10.8, 1.1, 7.1), "dusk_cloth")
+    m.bone("dusk_cape", b, (0.0, 0.2, 3.25), (6.0, 0.0, 0.0))
+    m.cube("dusk_cape", (-5.2, 0.0, 0.0), (10.4, 6.8, 0.6), "dusk_cape")
+    for i, x in enumerate((-5.2, -2.7, -0.2, 2.3)):
+        m.cube("dusk_cape", (x, 6.8, 0.02), (2.2, 1.2 + (0.9 if i % 2 == 0 else 0.0), 0.56), "dusk_cape")
+    # die Schließe vorn an der linken Schulter: zwei Quarzspitzen in einer Lederfassung
+    m.cube(b, (2.0, 0.2, -3.75), (2.2, 2.0, 0.5), "dusk_leather")
+    _quartz_points(m, b, "dusk_clasp", (3.0, 1.8, -4.0), (-12.0, 0.0, 14.0), 0.9)
+    # der Riemen schräg über die Brust (über der flachen Rüstung)
+    for i in range(5):
+        m.cube(b, (-3.9 + i * 1.55, 2.4 + i * 1.6, -3.45), (1.7, 1.2, 0.35), "dusk_leather")
+    for side, bone in ((1, "left_arm"), (-1, "right_arm")):
+        a = _slot(m, "dusk", "chest", bone)
+        # Lederwickel am Oberarm und am Handgelenk
+        m.cube(a, (_mx(-2.35, 6.7, side), 1.2, -3.35), (6.7, 1.3, 6.7), "dusk_wrap")
+        m.cube(a, (_mx(-2.35, 6.7, side), 2.9, -3.35), (6.7, 1.0, 6.7), "dusk_wrap")
+        m.cube(a, (_mx(-2.3, 6.6, side), 7.6, -3.3), (6.6, 1.6, 6.6), "dusk_wrap")
+
+    t = _slot(m, "dusk", "legs", "body")
+    # der Gürtel mit zwei Taschen an der rechten Hüfte und einem Dolch quer im Rücken
+    m.cube(t, (-4.4, 10.2, -3.45), (2.2, 2.4, 1.0), "dusk_leather")
+    m.cube(t, (-4.6, 10.1, -1.0), (0.9, 2.2, 2.0), "dusk_leather")
+    m.cube(t, (-4.3, 9.9, -3.6), (1.6, 0.6, 1.2), "dusk_leather")
+    m.cube(t, (-0.7, 10.4, -3.6), (1.4, 1.4, 0.45), "dusk_buckle")
+    m.bone("dusk_dagger", t, (0.0, 11.0, 3.3), (0.0, 0.0, 74.0))
+    m.cube("dusk_dagger", (-0.45, -2.5, 0.0), (0.9, 3.0, 0.7), "dusk_leather")        # die Scheide
+    m.cube("dusk_dagger", (-0.7, -3.0, -0.05), (1.4, 0.5, 0.8), "dusk_buckle")         # die Parierstange
+    m.cube("dusk_dagger", (-0.3, -4.6, 0.05), (0.6, 1.6, 0.6), "dusk_leather")         # der Griff
+    m.cube("dusk_dagger", (-0.4, -5.1, 0.0), (0.8, 0.6, 0.7), "dusk_gem")              # ein Quarz als Knauf
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        g = _slot(m, "dusk", "legs", bone)
+        # Knieschutz aus Leder, darauf eine Quarzniete
+        m.cube(g, (-2.35, 3.4, -3.05), (4.7, 2.8, 0.6), "dusk_leather")
+        m.cube(g, (-0.55, 4.25, -3.4), (1.1, 1.1, 0.45), "dusk_gem")
+        m.cube(g, (-2.4, 7.0, -2.4), (4.8, 0.9, 4.8), "dusk_wrap")
+
+    for side, bone in ((1, "left_leg"), (-1, "right_leg")):
+        f = _slot(m, "dusk", "feet", bone)
+        # der umgeschlagene Schaft der weichen Stiefel und zwei Wickelriemen
+        m.cube(f, (-2.55, 6.4, -2.55), (5.1, 1.5, 5.1), "dusk_cloth")
+        m.cube(f, (-2.45, 8.6, -2.45), (4.9, 0.8, 4.9), "dusk_wrap")
+        m.cube(f, (-2.45, 10.0, -2.45), (4.9, 0.8, 4.9), "dusk_wrap")
+        m.cube(f, (_mx(2.4, 0.4, side), 8.4, -0.6), (0.4, 1.2, 1.2), "dusk_buckle")
+
+
 # ------------------------------------------------------------------ Aquamarin (0.97): die Taucherrüstung
 
 #: das große Sichtfenster vorn im Taucherhelm (Knochenraum des Kopfes): x, y von – bis
@@ -807,6 +890,7 @@ def build() -> Model:
     _turtle(m)
     _moonstone(m)
     _aquamarine(m)
+    _dusk(m)
     # Plätze ohne eigene Teile bekommen leere Knochen, damit Java jeden Namen findet
     for s in SETS:
         for slot, bones in SLOTS.items():
@@ -1311,6 +1395,68 @@ def _aqua_fin(ctx: Ctx):
     return pick(ctx.pal["aqua_fin"], v)
 
 
+def _dusk_cloth(ctx: Ctx):
+    """Tuch der Dämmerrüstung: rauchviolett, weiche Falten, ein wenig fleckig."""
+    ry = rel_y(ctx)
+    fold = 0.5 + 0.5 * math.sin((ctx.local[0] + ctx.local[2]) * 1.3 + ctx.local[1] * 0.4)
+    v = 0.3 + 0.3 * fold - 0.1 * ry + (_noise(ctx, 131) - 0.5) * 0.08
+    if ctx.face == "bottom":
+        v -= 0.12
+    return pick(ctx.pal["dusk_cloth"], v)
+
+
+def _dusk_cape(ctx: Ctx):
+    """Der Schulterumhang: wie das Tuch, innen dunkler, am Rand eine Lederborte."""
+    v = 0.28 + 0.3 * (0.5 + 0.5 * math.sin(ctx.local[0] * 1.7)) - 0.1 * rel_y(ctx)
+    if ctx.face == "front":
+        v -= 0.14                                         # Innenseite
+    return pick(ctx.pal["dusk_cloth"], v + (_noise(ctx, 137) - 0.5) * 0.06)
+
+
+def _dusk_hood_rim(ctx: Ctx):
+    """Der Saum der Kapuze: doppelt gelegtes Tuch, außen heller, mit einer feinen Naht."""
+    v = 0.48 + 0.12 * (1.0 - rel_y(ctx))
+    if ctx.t == 0 or ctx.s == 0:
+        v -= 0.16
+    return pick(ctx.pal["dusk_cloth"], v)
+
+
+def _dusk_mask(ctx: Ctx):
+    """Die Halbmaske: dunkles Tuch, quer gefaltet."""
+    v = 0.22 + 0.18 * (0.5 + 0.5 * math.sin(ctx.local[1] * 3.4))
+    return pick(ctx.pal["dusk_cloth"], v)
+
+
+def _dusk_leather(ctx: Ctx):
+    """Leder: warmes Dunkelbraun, Kanten heller, feine Stiche."""
+    v = 0.4 + 0.2 * (1.0 - rel_y(ctx)) + (_noise(ctx, 139) - 0.5) * 0.1
+    if (ctx.s + ctx.t) % 5 == 0 and ctx.face not in ("top", "bottom"):
+        v += 0.14                                         # Stiche
+    return pick(ctx.pal["dusk_leather"], v)
+
+
+def _dusk_wrap(ctx: Ctx):
+    """Wickelriemen: schräg übereinanderliegende Lederbänder."""
+    band = ((ctx.local[0] + ctx.local[2] + ctx.local[1] * 2.0) % 1.6) < 0.5
+    v = 0.32 + (0.16 if band else 0.0) + (_noise(ctx, 149) - 0.5) * 0.08
+    return pick(ctx.pal["dusk_leather"], v)
+
+
+def _dusk_gem(ctx: Ctx):
+    """Dämmerquarz: zur Spitze nachtviolett und hell, am Fuß ein Rest Abendrot; die Spitze glimmt."""
+    t = _seg_t(ctx)
+    facet = ((ctx.s + ctx.t) // 2) % 3
+    v = 0.32 + 0.55 * t + (0.12 if facet == 0 else -0.04 if facet == 1 else 0.0)
+    if ctx.face in ("west", "front"):
+        v += 0.08
+    col = pick(ctx.pal["dusk_quartz"], v)
+    if t < 0.3:
+        col = mix(col, pick(ctx.pal["dusk_ember"], 0.45 + t), 0.55 * (1.0 - t / 0.3))
+    if t > 0.72:
+        ctx.glow = mix((0, 0, 0, 255), col, 0.7)
+    return col
+
+
 def materials(variant: str) -> dict:
     out = {
         "fur": _fur,
@@ -1376,6 +1522,14 @@ def materials(variant: str) -> dict:
         "aqua_plate": _metal("aqua", rim="brass", rim_from=0.8),
         "aqua_lead": _metal("lead"),
         "aqua_gem": _gem("aqua_gem"),
+        "dusk_cloth": _dusk_cloth,
+        "dusk_cape": _dusk_cape,
+        "dusk_hood_rim": _dusk_hood_rim,
+        "dusk_mask": _dusk_mask,
+        "dusk_leather": _dusk_leather,
+        "dusk_wrap": _dusk_wrap,
+        "dusk_gem": _dusk_gem,
+        "dusk_buckle": _metal("silver"),
     }
     for e in DRAGON:
         out["dragon_scale_" + e] = _scale(DRAGON[e][0])

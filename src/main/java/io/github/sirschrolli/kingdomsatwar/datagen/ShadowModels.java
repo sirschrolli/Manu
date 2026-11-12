@@ -99,6 +99,12 @@ final class ShadowModels {
         ModModelProvider.ore(blocks, ShadowBlocks.DEEP_NIGHTSTEEL_ORE, deep, "nightsteel");
         ModModelProvider.ore(blocks, ShadowBlocks.SOUL_CRYSTAL_ORE, deep, "soul_crystal");
         ModModelProvider.ore(blocks, ShadowBlocks.ABYSSITE_ORE, deep, "abyssite");
+        // Dämmerquarz (0.98)
+        ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, stone, "dusk_quartz");
+        ModModelProvider.ore(blocks, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, deep, "dusk_quartz");
+        ModModelProvider.glowingCube(blocks, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
+        ModModelProvider.flat(items, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get());
+        ModModelProvider.armor(items, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_HOOD.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_CLOAK.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_LEGGINGS.get(), io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_BOOTS.get());
 
         // Speicherblöcke, Laterne, Setzling
         blocks.createTrivialCube(ShadowBlocks.MOONSILVER_BLOCK.get());

@@ -99,6 +99,9 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         ore(ShadowBlocks.NIGHTSTEEL_ORE, ShadowItems.RAW_NIGHTSTEEL.get());
         ore(ShadowBlocks.DEEP_NIGHTSTEEL_ORE, ShadowItems.RAW_NIGHTSTEEL.get());
         ore(ShadowBlocks.SOUL_CRYSTAL_ORE, ShadowItems.SOUL_CRYSTAL.get());
+        ore(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get());
+        ore(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DEEP_DUSK_QUARTZ_ORE, io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ.get());
+        dropSelf(io.github.sirschrolli.kingdomsatwar.registry.ShadowGear.DUSK_QUARTZ_BLOCK.get());
         for (DeferredBlock<? extends Block> block : java.util.List.of(ShadowBlocks.ABYSSITE_ORE, ShadowBlocks.MOONSILVER_BLOCK,
                 ShadowBlocks.NIGHTSTEEL_BLOCK, ShadowBlocks.SOUL_CRYSTAL_BLOCK, ShadowBlocks.ABYSSITE_BLOCK, ShadowBlocks.MOON_LANTERN,
                 ShadowBlocks.SHADOW_SAPLING)) {
